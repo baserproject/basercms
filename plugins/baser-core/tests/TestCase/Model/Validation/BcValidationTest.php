@@ -11,8 +11,9 @@
 
 namespace BaserCore\Test\TestCase\Model\Validation;
 
-use BaserCore\Model\Validation\BcValidation;
+use Cake\Routing\Router;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Model\Validation\BcValidation;
 
 /**
  * Class BcValidationTest
@@ -22,6 +23,16 @@ use BaserCore\TestSuite\BcTestCase;
 class BcValidationTest extends BcTestCase
 {
 
+    /**
+     * Fixtures
+     *
+     * @var array
+     */
+    protected $fixtures = [
+        'plugin.BaserCore.Users',
+        'plugin.BaserCore.UserGroups',
+        'plugin.BaserCore.UsersUserGroups',
+    ];
     /**
      * Test subject
      *
@@ -48,6 +59,7 @@ class BcValidationTest extends BcTestCase
     public function tearDown(): void
     {
         unset($this->BcValidation);
+        Router::reload();
         parent::tearDown();
     }
 
@@ -450,9 +462,28 @@ class BcValidationTest extends BcTestCase
      * Test containsScript
      *
      * @return void
+     * @dataProvider containsScriptDataProvider
      */
-    public function testContainsScript()
+    public function testContainsScript($value, $expect)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        if ($expect) Router::setRequest($this->loginAdmin($this->getRequest()));
+        $result = $this->BcValidation->containsScript($value);
+        $this->assertEquals($expect, $result);
+    }
+
+    public function containsScriptDataProvider()
+    {
+        return [
+            // phpコードの場合
+            ['<?php echo $test; ?>', false],
+            // jsコードの場合
+            ['<script type="text/javascript">', false],
+            // イベントが入ってる場合
+            ['<input type="text" onclick="select()"/>', false],
+            // jsコードへのリンクがある場合
+            ['<a href="javascript:doSomething();">click me</a>', false],
+            // アドミンユーザーでログインしてる場合
+            ['<a href="javascript:doSomething();">click me</a>', true],
+        ];
     }
 }

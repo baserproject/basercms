@@ -1,23 +1,32 @@
 <?php
-// TODO : コード確認要
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.Test.Case.Model.Behavior
- * @since           baserCMS v 3.0.6
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
+namespace BaserCore\Test\TestCase\Model\Behavior;
+
+use ArrayObject;
+use Cake\ORM\Entity;
+use ReflectionClass;
+use Cake\Filesystem\File;
+use BaserCore\TestSuite\BcTestCase;
+use Laminas\Diactoros\UploadedFile;
+use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Model\Table\ContentsTable;
+use BaserCore\Model\Behavior\BcUploadBehavior;
+use BaserCore\Service\ContentServiceInterface;
 
 /**
  * Class BcSearchIndexManagerBehavioreTest
  *
  * @package Baser.Test.Case.Model
  */
-class BcSearchIndexManagerBehaviorTest extends BaserTestCase
+class BcSearchIndexManagerBehaviorTest extends BcTestCase
 {
 
     public $fixtures = [];
@@ -27,7 +36,7 @@ class BcSearchIndexManagerBehaviorTest extends BaserTestCase
      *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
     }
@@ -37,7 +46,7 @@ class BcSearchIndexManagerBehaviorTest extends BaserTestCase
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
     }
