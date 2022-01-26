@@ -288,24 +288,6 @@ class PagesController extends BcAdminAppController
 	}
 
 	/**
-	 * 削除
-	 *
-	 * Controller::requestAction() で呼び出される
-	 *
-	 * @return bool
-	 */
-	public function admin_delete()
-	{
-		if (empty($this->request->data['entityId'])) {
-			return false;
-		}
-		if ($this->Page->delete($this->request->data['entityId'])) {
-			return true;
-		}
-		return false;
-	}
-
-	/**
 	 * [ADMIN] 固定ページファイルを登録する
 	 *
 	 * @return void

@@ -69,6 +69,7 @@ class BcFrontContentsComponent extends Component
      * フロントエンドのセットアップ
      *
      * @checked
+     * @unitTest
      */
     public function setupFront()
     {
@@ -89,8 +90,9 @@ class BcFrontContentsComponent extends Component
         // 表示設定
         if (!empty($request->getAttributes())) {
             // レイアウトテンプレート設定
-            $controller->viewBuilder()->setLayout($request->getParam('Content.layout_template'));
-            if (!$controller->viewBuilder()->getLayout()) {
+            $viewBuilder = $controller->viewBuilder();
+            $viewBuilder->setLayout($request->getParam('Content.layout_template'));
+            if (!$viewBuilder->getLayout()) {
                 $controller->viewBuilder()->setLayout($this->ContentService->getParentLayoutTemplate($request->getParam('Content.id')));
             }
             // パンくず

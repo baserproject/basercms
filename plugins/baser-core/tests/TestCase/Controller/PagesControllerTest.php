@@ -11,9 +11,10 @@
 
 namespace BaserCore\Test\TestCase\Controller;
 
-use BaserCore\TestSuite\BcTestCase;
 use Cake\ORM\TableRegistry;
+use BaserCore\TestSuite\BcTestCase;
 use Cake\TestSuite\IntegrationTestTrait;
+use BaserCore\Controller\PagesController;
 
 /**
  * PagesController
@@ -35,7 +36,11 @@ class PagesControllerTest extends BcTestCase
         'plugin.BaserCore.Sites',
         'plugin.BaserCore.Contents',
         'plugin.BaserCore.Pages',
+        'plugin.BaserCore.ContentFolders',
         'plugin.BaserCore.Plugins',
+        'plugin.BaserCore.Users',
+        'plugin.BaserCore.UserGroups',
+        'plugin.BaserCore.UsersUserGroups',
     ];
 
     /**
@@ -45,7 +50,9 @@ class PagesControllerTest extends BcTestCase
      */
     public function setUp(): void
     {
+
         parent::setUp();
+        $this->PagesController = new PagesController($this->getRequest());
     }
 
     /**
@@ -58,9 +65,23 @@ class PagesControllerTest extends BcTestCase
         parent::tearDown();
     }
 
+    /**
+     * testInitialize
+     *
+     * @return void
+     */
+    public function testInitialize()
+    {
+        $this->assertNotEmpty($this->PagesController->BcFrontContents);
+    }
+
+    /**
+     * testDisplay
+     *
+     * @return void
+     */
     public function testDisplay(): void
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->get('/');
         $this->assertResponseOk();
     }

@@ -12,9 +12,12 @@
 namespace BaserCore\Test\TestCase\Controller\Component;
 
 use Cake\Routing\Router;
+use BaserCore\Service\PageService;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Service\ContentService;
 use Cake\Controller\ComponentRegistry;
 use BaserCore\Controller\BcAppController;
+use BaserCore\Controller\PagesController;
 use BaserCore\Controller\Component\BcFrontContentsComponent;
 
 
@@ -50,6 +53,7 @@ class BcFrontContentsComponentTest extends BcTestCase
     protected $fixtures = [
         'plugin.BaserCore.Contents',
         'plugin.BaserCore.Sites',
+        'plugin.BaserCore.Pages',
     ];
 
     /**
@@ -63,6 +67,8 @@ class BcFrontContentsComponentTest extends BcTestCase
         $this->Controller = new BcFrontContentsTestController();
         $this->ComponentRegistry = new ComponentRegistry($this->Controller);
         $this->BcFrontContents = new BcFrontContentsComponent($this->ComponentRegistry);
+        $this->PageService = new PageService();
+        $this->ContentService = new ContentService();
     }
 
     /**
@@ -76,9 +82,27 @@ class BcFrontContentsComponentTest extends BcTestCase
         Router::reload();
         parent::tearDown();
     }
+
+    /**
+     * testSetupFront
+     * コントローラーがPagesControllerの場合
+     * ※ NOTE ucmitz: プレビュー時のテスト未完了
+     * @return void
+     */
     public function testSetupFront()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $page = $this->PageService->get(2);
+        $request = $this->getRequest()->withParam('Content', $page->content);
+        $Controller = new PagesController($request);
+        $ComponentRegistry = new ComponentRegistry($Controller);
+        $BcFrontContents = new BcFrontContentsComponent($ComponentRegistry);
+        $BcFrontContents->setupFront();
+        $layout = $Controller->viewBuilder()->getLayout();
+        $vars = $Controller->viewBuilder()->getVars();
+        $this->assertEquals($this->ContentService->getParentLayoutTemplate($page->content->id), $layout);
+        $this->assertIsString($vars['description']);
+        $this->assertIsString($vars['title']);
+
     }
 
     public function testGetCrumbs()
