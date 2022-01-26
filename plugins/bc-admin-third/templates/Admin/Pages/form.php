@@ -15,7 +15,7 @@ use BaserCore\View\BcAdminAppView;
  * @var BcAdminAppView $this
  */
 $this->BcBaser->css('admin/ckeditor/editor', ['inline' => true]);
-$this->BcBaser->js('admin/pages/edit', false);
+// $this->BcBaser->js('admin/pages/edit.bundle', false);
 $this->BcAdmin->setTitle(__d('baser', '固定ページ情報編集'));
 $this->BcAdmin->setHelp('pages_form');
 ?>
@@ -31,14 +31,17 @@ $this->BcAdmin->setHelp('pages_form');
 
 <?php echo $this->BcFormTable->dispatchBefore() ?>
 <div class="bca-section bca-section-editor-area">
-  <?php echo $this->BcAdminForm->editor('Page.contents', array_merge([
-    'editor' => $editor,
-    'editorUseDraft' => true,
-    'editorDraftField' => 'draft',
-    'editorWidth' => 'auto',
-    'editorHeight' => '480px',
-    'editorEnterBr' => $editor_enter_br
-  ], $editorOptions)); ?>
+  <?php
+  // TODO ucmitz: 適切な形式になってないためPost時に失敗するため一旦コメントアウト
+  // echo $this->BcAdminForm->editor('Page.contents', array_merge([
+  //   'editor' => $editor,
+  //   'editorUseDraft' => true,
+  //   'editorDraftField' => 'draft',
+  //   'editorWidth' => 'auto',
+  //   'editorHeight' => '480px',
+  //   'editorEnterBr' => $editor_enter_br
+  // ], $editorOptions));
+  ?>
   <?php echo $this->BcAdminForm->error('Page.contents') ?>
   <?php echo $this->BcAdminForm->error('Page.draft') ?>
 </div>

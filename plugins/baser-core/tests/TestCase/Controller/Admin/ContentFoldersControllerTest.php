@@ -96,14 +96,13 @@ class ContentFoldersControllerTest extends BcTestCase
      */
     public function testEdit()
     {
-        $this->setUnlockedFields(['ContentFolder.content.eyecatch', 'ContentFolder.content.eyecatch_', 'ContentFolder.content.eyecatch_delete']);
         $this->enableSecurityToken();
         $this->enableCsrfToken();
         $data = $this->ContentFolderService->getIndex(['folder_template' => "testEdit"])->first();
         $data->folder_template = 'testEditテンプレート';
         $data->content->name = "contentFolderTestUpdate";
         $id = $data->id;
-        $this->post('/baser/admin/baser-core/content_folders/edit/' . $id, ['ContentFolder' => $data->toArray(), "Content" => ['title' => $data->content->name]]);
+        $this->post('/baser/admin/baser-core/content_folders/edit/' . $id, ['ContentFolder' => $data->toArray(), "Content" => ['title' => $data->content->name, 'parent_id' => $data->content->parent_id]]);
         $this->assertResponseSuccess();
         $this->assertRedirect('/baser/admin/baser-core/content_folders/edit/' . $id);
         $this->assertEquals('testEditテンプレート', $this->ContentFolderService->get($id)->folder_template);
