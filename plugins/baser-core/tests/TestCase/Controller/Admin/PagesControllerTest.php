@@ -11,7 +11,10 @@
 
 namespace BaserCore\Test\TestCase\Controller\Admin;
 
+use Cake\Event\Event;
+use BaserCore\Service\PageService;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Controller\Admin\PagesController;
 
 /**
  * Class PagesControllerTest
@@ -23,6 +26,23 @@ class PagesControllerTest extends BcTestCase
 {
 
     /**
+     * Fixtures
+     *
+     * @var array
+     */
+    public $fixtures = [
+        'plugin.BaserCore.Sites',
+        'plugin.BaserCore.SiteConfigs',
+        'plugin.BaserCore.Contents',
+        'plugin.BaserCore.Pages',
+        'plugin.BaserCore.ContentFolders',
+        'plugin.BaserCore.Plugins',
+        'plugin.BaserCore.Users',
+        'plugin.BaserCore.UserGroups',
+        'plugin.BaserCore.UsersUserGroups',
+    ];
+
+    /**
      * set up
      *
      * @return void
@@ -30,6 +50,8 @@ class PagesControllerTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->PagesController = new PagesController($this->getRequest());
+        $this->PageService = new PageService();
     }
 
     /**
@@ -43,11 +65,23 @@ class PagesControllerTest extends BcTestCase
     }
 
     /**
+     * testInitialize
+     *
+     * @return void
+     */
+    public function testInitialize()
+    {
+        $this->assertNotEmpty($this->PagesController->BcAdminContents);
+    }
+    /**
      * beforeFilter
      */
     public function testBeforeFilter()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $event = new Event('Controller.beforeFilter', $this->PagesController);
+        $this->PagesController->beforeFilter($event);
+        $helpers = $this->PagesController->viewBuilder()->getHelpers();
+        $this->assertCount(4, $helpers);
     }
 
     /**
@@ -61,9 +95,20 @@ class PagesControllerTest extends BcTestCase
     /**
      * [ADMIN] 固定ページ情報編集
      */
-    public function testAdmin_edit()
+    public function testEdit()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $data = $this->PageService->getIndex(['folder_template' => "testEdit"])->first();
+        $data->folder_template = 'testEditテンプレート';
+        $data->content->name = "pageTestUpdate";
+        $id = $data->id;
+        $this->post('/baser/admin/baser-core/content_folders/edit/' . $id, ['ContentFolder' => $data->toArray(), "Content" => ['title' => $data->content->name]]);
+        $this->assertResponseSuccess();
+        $this->assertRedirect('/baser/admin/baser-core/content_folders/edit/' . $id);
+        $this->assertEquals('testEditテンプレート', $this->ContentFolderService->get($id)->folder_template);
+        $this->assertEquals('contentFolderTestUpdate', $this->ContentFolderService->get($id)->content->name);
     }
 
     /**

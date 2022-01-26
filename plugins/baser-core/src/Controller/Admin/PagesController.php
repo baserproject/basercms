@@ -41,6 +41,9 @@ class PagesController extends BcAdminAppController
     /**
      * initialize
      * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function initialize(): void
     {
@@ -52,6 +55,9 @@ class PagesController extends BcAdminAppController
 	 * beforeFilter
 	 *
 	 * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
 	 */
 	public function beforeFilter(EventInterface $event)
 	{

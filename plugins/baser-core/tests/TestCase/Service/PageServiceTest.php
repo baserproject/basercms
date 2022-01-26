@@ -120,18 +120,16 @@ class PageServiceTest extends BcTestCase
      */
     public function testGetIndex()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $request = $this->getRequest('/');
-        $Pages = $this->PageService->getIndex($request->getQueryParams());
-        $this->assertEquals('Pages test message1', $Pages->first()->message);
-
-        $request = $this->getRequest('/?message=message2');
-        $Pages = $this->PageService->getIndex($request->getQueryParams());
-        $this->assertEquals('Pages test message2', $Pages->first()->message);
-
-        $request = $this->getRequest('/?user_id=3');
-        $Pages = $this->PageService->getIndex($request->getQueryParams());
-        $this->assertEquals('Pages test message3', $Pages->first()->message);
+        // 条件無しで一覧を取得した場合
+        $pages = $this->PageService->getIndex();
+        $this->assertEquals(6, $pages->all()->count());
+        $this->assertRegExp('/<section class="mainHeadline">/', $pages->first()->contents);
+        // 条件無しで数を制限し、一覧を取得した場合
+        $pages2 = $this->PageService->getIndex(['limit' => 3]);
+        $this->assertEquals(3, $pages2->all()->count());
+        // // 条件ありで一覧を取得した場合
+        $pages = $this->PageService->getIndex(['contents' => 'mainHeadline']);
+        $this->assertEquals(1, $pages->all()->count());
     }
 
     /**
