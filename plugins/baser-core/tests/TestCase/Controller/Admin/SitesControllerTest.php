@@ -194,6 +194,60 @@ class SitesControllerTest extends BcTestCase
     }
 
     /**
+     * 公開状態にする
+     */
+    public function testPublish()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        $sites = $this->getTableLocator()->get('Sites');
+        $site = $sites->find()->order(['id' => 'ASC'])->last();
+        $siteId = $site->id;
+        $site->status = false;
+        $sites->save($site);
+
+        // getは更新不可
+        $this->get('/baser/admin/baser-core/sites/publish/' . $site->id);
+        $this->assertRedirect('/baser/admin/baser-core/sites/index');
+        $site = $sites->find()->where(['id' => $siteId])->last();
+        $this->assertFalse($site->status);
+
+        // postは更新可
+        $this->post('/baser/admin/baser-core/sites/publish/' . $site->id);
+        $this->assertRedirect('/baser/admin/baser-core/sites/index');
+        $site = $sites->find()->where(['id' => $siteId])->last();
+        $this->assertTrue($site->status);
+    }
+
+    /**
+     * 非公開状態にする
+     */
+    public function testUnpublish()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        $sites = $this->getTableLocator()->get('Sites');
+        $site = $sites->find()->order(['id' => 'ASC'])->last();
+        $siteId = $site->id;
+        $site->status = true;
+        $sites->save($site);
+
+        // getは更新不可
+        $this->get('/baser/admin/baser-core/sites/publish/' . $site->id);
+        $this->assertRedirect('/baser/admin/baser-core/sites/index');
+        $site = $sites->find()->where(['id' => $siteId])->last();
+        $this->assertTrue($site->status);
+
+        // postは更新可
+        $this->post('/baser/admin/baser-core/sites/unpublish/' . $site->id);
+        $this->assertRedirect('/baser/admin/baser-core/sites/index');
+        $site = $sites->find()->where(['id' => $siteId])->last();
+        $this->assertFalse($site->status);
+    }
+
+    /**
      * 削除する
      */
     public function testDelete()

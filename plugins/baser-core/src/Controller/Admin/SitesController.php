@@ -147,6 +147,50 @@ class SitesController extends BcAdminAppController
     }
 
     /**
+     * 有効状態にする
+     *
+     * @param $siteId
+     * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function publish(SiteServiceInterface $siteService, $siteId)
+    {
+        $site = $siteService->get($siteId);
+
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            if ($siteService->publish($siteId)) {
+                $this->BcMessage->setSuccess(sprintf(__d('baser', 'サイト「%s」を公開しました。'),
+                    $site->name));
+            }
+        }
+        return $this->redirect(['action' => 'index']);
+    }
+
+    /**
+     * 無効状態にする
+     *
+     * @param $siteId
+     * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function unpublish(SiteServiceInterface $siteService, $siteId)
+    {
+        $site = $siteService->get($siteId);
+
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            if ($siteService->unpublish($siteId)) {
+                $this->BcMessage->setSuccess(sprintf(__d('baser', 'サイト「%s」を非公開にしました。'),
+                    $site->name));
+            }
+        }
+        return $this->redirect(['action' => 'index']);
+    }
+
+    /**
      * 削除する
      * @checked
      * @noTodo

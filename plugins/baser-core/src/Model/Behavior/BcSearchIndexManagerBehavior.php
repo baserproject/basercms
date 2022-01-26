@@ -1,16 +1,23 @@
 <?php
-// TODO : コード確認要
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.Model.Behavior
- * @since           baserCMS v 4.0.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
+namespace BaserCore\Model\Behavior;
+
+use ArrayObject;
+use Cake\ORM\Behavior;
+use Cake\Utility\Inflector;
+use Cake\Event\EventInterface;
+use Cake\Datasource\EntityInterface;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
 
 /**
  * Class BcSearchIndexManagerBehavior
@@ -19,7 +26,7 @@ return;
  *
  * @package Baser.Model.Behavior
  */
-class BcSearchIndexManagerBehavior extends ModelBehavior
+class BcSearchIndexManagerBehavior extends Behavior
 {
 
     /**

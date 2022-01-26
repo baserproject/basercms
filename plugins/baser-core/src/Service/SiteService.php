@@ -130,6 +130,38 @@ class SiteService implements SiteServiceInterface
     }
 
     /**
+     * 公開状態にする
+     *
+     * @param int $id
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function publish($id): bool
+    {
+        $site = $this->get($id);
+        $site->status = true;
+        return ($this->Sites->save($site)) ? true: false;
+    }
+
+    /**
+     * 非公開状態にする
+     *
+     * @param int $id
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function unpublish($id): bool
+    {
+        $site = $this->get($id);
+        $site->status = false;
+        return ($this->Sites->save($site)) ? true: false;
+    }
+
+    /**
      * サイト情報を削除する
      * @param int $id
      * @return bool

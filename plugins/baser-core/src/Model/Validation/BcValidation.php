@@ -515,8 +515,11 @@ class BcValidation extends Validation
      * - 管理グループの場合は無条件に true を返却
      * - 管理グループ以外の場合に許可されている場合は無条件に true を返却
      *
-     * @param array $value
+     * @param string $value
      * @return boolean
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public static function containsScript($value)
     {

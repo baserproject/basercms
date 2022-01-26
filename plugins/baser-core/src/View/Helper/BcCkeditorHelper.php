@@ -10,7 +10,9 @@
  */
 namespace BaserCore\View\Helper;
 
-use Cake\View\Helper;
+use Cake\Core\Configure;
+use Cake\Utility\Inflector;
+use BaserCore\View\Helper\BcAppHelper;
 use BaserCore\Event\BcEventDispatcherTrait;
 
 
@@ -19,7 +21,7 @@ use BaserCore\Event\BcEventDispatcherTrait;
  *
  * @package Baser.View.Helper
  */
-class BcCkeditorHelper extends Helper
+class BcCkeditorHelper extends BcAppHelper
 {
     /**
      * Trait
@@ -30,7 +32,7 @@ class BcCkeditorHelper extends Helper
      * ヘルパー
      * @var array
      */
-    public $helpers = ['BcHtml', 'BcForm', 'JqueryEngine'];
+    public $helpers = ['BcHtml', 'BcAdminForm', 'Url'];
 
     /**
      * スクリプト
@@ -283,8 +285,9 @@ class BcCkeditorHelper extends Helper
             $field .= '_tmp';
             $fieldName .= '_tmp';
         }
+        $dom = explode('.', $fieldName);
 
-        $domId = $this->domId($fieldName);
+        $domId = Inflector::camelize($dom[0]) . Inflector::camelize($dom[1]);
 
         if (!$this->_script) {
             $this->_script = true;
@@ -293,12 +296,12 @@ class BcCkeditorHelper extends Helper
 
         if ($editorUseDraft) {
             $lastBar = $options['toolbar'][count($options['toolbar']) - 1];
-            $lastBar = am($lastBar, ['-', 'Publish', '-', 'Draft']);
+            $lastBar = array_merge($lastBar, ['-', 'Publish', '-', 'Draft']);
             if (!$editorDisableCopyDraft) {
-                $lastBar = am($lastBar, ['-', 'CopyDraft']);
+                $lastBar = array_merge($lastBar, ['-', 'CopyDraft']);
             }
             if (!$editorDisableCopyPublish) {
-                $lastBar = am($lastBar, ['-', 'CopyPublish']);
+                $lastBar = array_merge($lastBar, ['-', 'CopyPublish']);
             }
             $options['toolbar'][count($options['toolbar']) - 1] = $lastBar;
         }
@@ -306,20 +309,20 @@ class BcCkeditorHelper extends Helper
         $this->BcHtml->scriptBlock("var editor_" . $field . ";", ["inline" => false]);
         $jscode = "$(window).load(function(){";
         if (!$this->inited) {
-            $jscode .= "CKEDITOR.addStylesSet('basercms'," . $this->JqueryEngine->object($this->style) . ");";
+            $jscode .= "CKEDITOR.addStylesSet('basercms'," . json_encode(($this->style)) .");";
             $this->inited = true;
         } else {
             $jscode .= '';
         }
         if (!$this->_initedStyles && $editorStyles) {
             foreach($editorStyles as $key => $style) {
-                $jscode .= "CKEDITOR.addStylesSet('" . $key . "'," . $this->JqueryEngine->object($style) . ");";
+                $jscode .= "CKEDITOR.addStylesSet('" . $key . "'," . json_encode(($style)) .");";
             }
             $this->_initedStyles = true;
         }
 
         if ($editorUseTemplates) {
-            $jscode .= "CKEDITOR.config.templates_files = [ '" . $this->url(['admin' => true, 'plugin' => null, 'controller' => 'editor_templates', 'action' => 'js']) . "' ];";
+            $jscode .= "CKEDITOR.config.templates_files = [ '" . $this->url(['controller' => 'editor_templates', 'action' => 'js']) . "' ];";
         }
         $jscode .= "CKEDITOR.config.allowedContent = true;";
         $jscode .= "CKEDITOR.config.extraPlugins = 'draft,showprotected';";
@@ -374,7 +377,7 @@ class BcCkeditorHelper extends Helper
             }
         }
 
-        $jscode .= "editor_" . $field . " = CKEDITOR.replace('" . $domId . "'," . $this->JqueryEngine->object($options) . ");";
+        $jscode .= "editor_" . $field . " = CKEDITOR.replace('" . $domId . "'," . json_encode(($options)) .");";
         $jscode .= "editor_{$field}.on('pluginsLoaded', function(event) {";
         if ($editorUseDraft) {
             if ($draftAreaId) {
@@ -449,7 +452,7 @@ EOL;
         if (!empty($options['editorUseDraft']) && !empty($options['editorDraftField']) && strpos($fieldName, '.')) {
             [$model] = explode('.', $fieldName);
             $inputFieldName = $fieldName . '_tmp';
-            $hidden = $this->BcForm->hidden($fieldName) . $this->BcForm->hidden($model . '.' . $options['editorDraftField']);
+            $hidden = $this->BcAdminForm->hidden($fieldName) . $this->BcAdminForm->hidden($model . '.' . $options['editorDraftField']);
         } else {
             $inputFieldName = $fieldName;
             $hidden = '';

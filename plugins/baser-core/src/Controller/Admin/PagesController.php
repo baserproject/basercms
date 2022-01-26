@@ -38,6 +38,16 @@ class PagesController extends BcAdminAppController
 	public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure', 'BcEmail', 'BcContents' => ['useForm' => true, 'useViewCache' => true]];
     <<< */
 
+    /**
+     * initialize
+     * @return void
+     */
+    public function initialize(): void
+    {
+        parent::initialize();
+        $this->loadComponent('BaserCore.BcAdminContents');
+    }
+
 	/**
 	 * beforeFilter
 	 *
@@ -266,10 +276,14 @@ class PagesController extends BcAdminAppController
 			$theme[] = $site->theme;
 		}
 		$pageTemplateList = $pageService->getPageTemplateList($page->content->id, $theme);
-		$this->set(compact('editorOptions', 'pageTemplateList', 'publishLink'));
+        $contentEntities = [
+            'Page' => $page,
+            'Content' => $page->content,
+        ];
+        $editor = $siteConfigService->getValue('editor');
+        $editor_enter_br = $siteConfigService->getValue('editor_enter_br');
+		$this->set(compact('editorOptions', 'pageTemplateList', 'publishLink', 'contentEntities', 'page', 'editor', 'editor_enter_br'));
 
-		$this->pageTitle = __d('baser', '固定ページ情報編集');
-		$this->help = 'pages_form';
 		$this->render('form');
 	}
 

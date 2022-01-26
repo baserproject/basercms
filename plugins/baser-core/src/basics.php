@@ -399,70 +399,6 @@ function amr($a, $b)
 }
 
 /**
- * URLにセッションIDを付加する
- * 既に付加されている場合は重複しない
- *
- * @param mixed $url
- * @return mixed
- */
-function addSessionId($url, $force = false)
-{
-    if (BcUtil::isAdminSystem()) {
-        return $url;
-    }
-    $sessionId = session_id();
-    if (!$sessionId) {
-        return $url;
-    }
-
-    $site = null;
-    if (!Configure::read('BcRequest.isUpdater')) {
-        $currentUrl = \Cake\Routing\Router::getRequest()->getPath();
-        $sites = \Cake\ORM\TableRegistry::getTableLocator()->get('BaserCore.Sites');
-        $site = $sites->findByUrl($currentUrl);
-    }
-    // use_trans_sid が有効になっている場合、２重で付加されてしまう
-    if ($site && $site->device == 'mobile' && Configure::read('BcAgent.mobile.sessionId') && (!ini_get('session.use_trans_sid') || $force)) {
-        if (is_array($url)) {
-            $url["?"][session_name()] = $sessionId;
-        } else {
-            if (strpos($url, '?') !== false) {
-                $args = [];
-                $_url = explode('?', $url);
-                if (!empty($_url[1])) {
-                    if (strpos($_url[1], '&') !== false) {
-                        $aryUrl = explode('&', $_url[1]);
-                        foreach($aryUrl as $pass) {
-                            if (strpos($pass, '=') !== false) {
-                                [$key, $value] = explode('=', $pass);
-                                $args[$key] = $value;
-                            }
-                        }
-                    } else {
-                        if (strpos($_url[1], '=') !== false) {
-                            [$key, $value] = explode('=', $_url[1]);
-                            $args[$key] = $value;
-                        }
-                    }
-                }
-                $args[session_name()] = $sessionId;
-                $pass = '';
-                foreach($args as $key => $value) {
-                    if ($pass) {
-                        $pass .= '&';
-                    }
-                    $pass .= $key . '=' . $value;
-                }
-                $url = $_url[0] . '?' . $pass;
-            } else {
-                $url .= '?' . session_name() . '=' . $sessionId;
-            }
-        }
-    }
-    return $url;
-}
-
-/**
  * 利用可能なプラグインのリストを取得する
  *
  * ClassRegistry::removeObject('Plugin'); で一旦 Plugin オブジェクトを削除
@@ -769,16 +705,6 @@ function base64UrlsafeDecode($val)
 {
     $val = str_replace(['_', '-', '.'], ['+', '/', '='], $val);
     return base64_decode($val);
-}
-
-/**
- * 実行環境のOSがWindowsであるかどうかを返す
- *
- * @return bool
- */
-function isWindows()
-{
-    return DIRECTORY_SEPARATOR == '\\';
 }
 
 /**

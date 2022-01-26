@@ -1,18 +1,22 @@
 <?php
-// TODO : コード確認要
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.View.Helper
- * @since           baserCMS v 0.1.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
+namespace BaserCore\View\Helper;
 
-App::uses('Helper', 'View');
+use Cake\Core\App;
+use Cake\Core\Plugin;
+use Cake\View\Helper;
+use Cake\Core\Configure;
+use Cake\Routing\Router;
+use Cake\Utility\Inflector;
+use BaserCore\Utility\BcUtil;
 
 /**
  * Helper 拡張クラス
@@ -22,6 +26,12 @@ App::uses('Helper', 'View');
 class BcAppHelper extends Helper
 {
 
+    /**
+     * Other helpers used by FormHelper
+     *
+     * @var array
+     */
+    protected $helpers = ['Url'];
     /**
      * Checks if a file exists when theme is used, if no file is found default location is returned
      *
@@ -58,11 +68,12 @@ class BcAppHelper extends Helper
         // $file に設定された場合でもパス解決ができるようにした。
         //
         // >>>
-        //$webPath = "{$this->request->webroot}" . $asset[0];
+        //$webPath = "{$webroot}" . $asset[0];
         // ---
         $asset[0] = preg_replace('/^\//', '', $asset[0]);
-        if ($this->request->webroot && $this->request->webroot != '/') {
-            $filePath = preg_replace('/' . preg_quote($this->request->webroot, '/') . '/', '', $asset[0]);
+        $webroot = $this->Url->webroot($file);
+        if ($webroot && $webroot != '/') {
+            $filePath = preg_replace('/' . preg_quote($webroot, '/') . '/', '', $asset[0]);
         } else {
             $filePath = $asset[0];
         }
@@ -70,7 +81,7 @@ class BcAppHelper extends Helper
 
         $docRoot = BcUtil::docRoot();
         if (file_exists(WWW_ROOT . $filePath)) {
-            $webPath = $this->request->webroot . $asset[0];
+            $webPath = $webroot . $asset[0];
         } elseif (file_exists($docRoot . DS . $filePath) && strpos($docRoot . DS . $filePath, ROOT . DS) !== false) {
             // ※ ファイルのパスが ROOT 配下にある事が前提
             $webPath = $asset[0];
@@ -80,39 +91,38 @@ class BcAppHelper extends Helper
         // <<<
 
         $file = $asset[0];
-
-        if (!empty($this->theme)) {
+        if (!empty($this->getView()->getTheme())) {
             $file = trim($file, '/');
-            $theme = $this->theme . '/';
+            $theme = $this->getView()->getTheme() . '/';
 
             if (DS === '\\') {
                 $file = str_replace('/', '\\', $file);
             }
 
-            if (file_exists(Configure::read('App.www_root') . 'theme' . DS . $this->theme . DS . $file)) {
+            if (file_exists(Configure::read('App.www_root') . 'theme' . DS . $this->getView()->getTheme() . DS . $file)) {
                 // CUSTOMIZE MODIFY 2017/9/27 ryuring
                 // >>>
-                //$webPath = "{$this->request->webroot}theme/" . $theme . $asset[0];
+                //$webPath = "{$webroot}theme/" . $theme . $asset[0];
                 // ---
                 if (!preg_match('/^files\//', $file)) {
-                    $webPath = "{$this->request->webroot}theme/" . $theme . $asset[0];
+                    $webPath = "{$webroot}theme/" . $theme . $asset[0];
                 }
                 // <<<
             } else {
-                $themePath = App::themePath($this->theme);
+                $themePath = Plugin::path($this->getView()->getTheme());
                 $path = $themePath . 'webroot' . DS . $file;
                 if (file_exists($path)) {
                     // CUSTOMIZE 2013/6/18 ryuring
                     // >>>
-                    //	$webPath = Configure::read('App.baseUrl')."{$this->request->webroot}theme/" . $theme . $asset[0];
+                    //	$webPath = Configure::read('App.baseUrl')."{$webroot}theme/" . $theme . $asset[0];
                     //}
                     // ---
-                    if ($baseUrl) {
+                    if (isset($baseUrl)) {
                         // スマートURLオフ
                         $webPath = Configure::read('App.baseUrl') . "/theme/" . $theme . $asset[0];
                     } else {
                         // スマートURLオン
-                        $webPath = "{$this->request->webroot}theme/" . $theme . $asset[0];
+                        $webPath = "{$webroot}theme/" . $theme . $asset[0];
                     }
                 } else {
 
@@ -125,7 +135,7 @@ class BcAppHelper extends Helper
                                 $webPath = Configure::read('App.baseUrl') . "/theme/" . $adminTheme . $asset[0];
                             } else {
                                 // スマートURLオン
-                                $webPath = "{$this->request->webroot}theme/" . $adminTheme . $asset[0];
+                                $webPath = "{$webroot}theme/" . $adminTheme . $asset[0];
                             }
                         }
                     }
@@ -165,7 +175,7 @@ class BcAppHelper extends Helper
     public function url($url = null, $full = false, $sessionId = true)
     {
         if ($sessionId) {
-            $url = addSessionId($url);
+            $url = BcUtil::addSessionId($url);
         }
 
         //======================================================================
@@ -177,7 +187,8 @@ class BcAppHelper extends Helper
             unset($url['id']);
         }
 
-        if (is_array($url) && !isset($url['admin']) && $this->request->getParam('prefix') === 'Admin') {
+        $request = $this->getView()->getRequest();
+        if (is_array($url) && !isset($url['admin']) && $request->getParam('prefix') === 'Admin') {
             $url = array_merge($url, ['admin' => true]);
         }
 
@@ -186,7 +197,7 @@ class BcAppHelper extends Helper
         } elseif (!is_array($url) && preg_match('/\/(img|css|js|files)/', $url)) {
             return $this->webroot($url);
         } else {
-            $url = parent::url($url, $full);
+            $url = h(Router::url($url, $full));
             $params = explode('?', $url);
             $url = preg_replace('/\/index$/', '/', $params[0]);
             if (!empty($params[1])) {
@@ -203,6 +214,8 @@ class BcAppHelper extends Helper
      */
     public function afterLayout($layoutFile)
     {
+        // TODO ucmitz: 一時措置
+        return;
         parent::afterLayout($layoutFile);
         // 出力時にインデント用のタブを除去
         // インデントの調整がちゃんとできてないので取り急ぎ除去するようにした

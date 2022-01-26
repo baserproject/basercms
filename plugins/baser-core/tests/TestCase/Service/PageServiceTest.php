@@ -33,6 +33,8 @@ class PageServiceTest extends BcTestCase
         'plugin.BaserCore.Contents',
         'plugin.BaserCore.Sites',
         'plugin.BaserCore.Users',
+        'plugin.BaserCore.UserGroups',
+        'plugin.BaserCore.UsersUserGroups',
         'plugin.BaserCore.ContentFolders',
     ];
 
@@ -46,6 +48,7 @@ class PageServiceTest extends BcTestCase
         parent::setUp();
         $this->PageService = new PageService();
         $this->Pages = $this->getTableLocator()->get('Pages');
+        $this->Contents = $this->getTableLocator()->get('Contents');
     }
 
     /**
@@ -91,11 +94,25 @@ class PageServiceTest extends BcTestCase
      */
     public function testCreate()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->getRequest();
-        $Page = $this->PageService->create('Test Message');
+        $this->loginAdmin($this->getRequest('/'));
+        $data = [
+            'cotnents' => '<p>test</p>',
+            'draft' => '<p>test</p>',
+            'page_template' => 'test',
+            'code' => 'test',
+            'content' => [
+                "parent_id" => "1",
+                "title" => "新しい フォルダー",
+                "plugin" => 'BaserCore',
+                "type" => "ContentFolder",
+                "site_id" => "0",
+                "alias_id" => "",
+                "entity_id" => "",
+            ],
+        ];
+        $Page = $this->PageService->create($data);
         $savedPage = $this->Pages->get($Page->id);
-        $this->assertEquals('Test Message', $savedPage->message);
+        $this->assertEquals('test', $savedPage->code);
     }
 
     /**
@@ -115,6 +132,35 @@ class PageServiceTest extends BcTestCase
         $request = $this->getRequest('/?user_id=3');
         $Pages = $this->PageService->getIndex($request->getQueryParams());
         $this->assertEquals('Pages test message3', $Pages->first()->message);
+    }
+
+    /**
+     * Test update
+     */
+    public function testUpdate()
+    {
+        // containsScriptを通すためアドミンとしてログイン
+        $this->loginAdmin($this->getRequest());
+        $newPage = $this->PageService->get(2);
+        $newPage->draft = "testUpdate";
+        $oldPage = $this->PageService->get(2);
+        $result = $this->PageService->update($oldPage, $newPage->toArray());
+        $this->assertEquals("testUpdate", $result->draft);
+    }
+
+    /**
+     * Test delete
+     *
+     * @return void
+     */
+    public function testDelete()
+    {
+        $content = $this->Contents->find()->where(['type' => 'Page'])->first();
+        $this->assertTrue($this->PageService->delete($content->entity_id));
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        $this->PageService->get($content->entity_id);
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        $this->Contents->get($content->id);
     }
 
 

@@ -24,6 +24,7 @@ use Cake\Datasource\EntityInterface;
 use BaserCore\Model\Table\PagesTable;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Service\ContentFolderService;
+use Cake\ORM\Exception\PersistenceFailedException;
 use BaserCore\Service\ContentFolderServiceInterface;
 use Cake\Datasource\Exception\RecordNotFoundException;
 
@@ -113,29 +114,51 @@ class PageService implements PageServiceInterface
     }
 
     /**
-     * ユーザー登録
+     * 固定ページ登録
      * @param array $data
+     * @param array $options
      * @return \Cake\Datasource\EntityInterface
      * @throws \Cake\ORM\Exception\PersistenceFailedException
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    // public function create(array $postData)
-    // {
-    //     $page = $this->Pages->newEmptyEntity();
-    //     $page = $this->Pages->patchEntity($page, $postData, ['validate' => 'new']);
-    //     return $this->Pages->saveOrFail($page);
-    // }
+    public function create(array $postData, $options=[])
+    {
+        $page = $this->Pages->newEmptyEntity();
+        $page = $this->Pages->patchEntity($page, $postData, $options);
+        return $this->Pages->saveOrFail($page);
+    }
 
     /**
-     * ユーザー情報を更新する
+     * ページ情報を更新する
      * @param EntityInterface $target
-     * @param array $postData
+     * @param array $pageData
+     * @param array $options
      * @return EntityInterface
      * @throws \Cake\ORM\Exception\PersistenceFailedException
+     * @checked
+     * @noTodo
      */
-    public function update(EntityInterface $target, array $postData)
+    public function update(EntityInterface $target, array $pageData, $options = [])
     {
-        $page = $this->Pages->patchEntity($target, $postData);
-        return $this->Pages->saveOrFail($page);
+        $options = array_merge(['associated' => ['Contents' => ['validate' => 'default']]], $options);
+        $page = $this->Pages->patchEntity($target, $pageData, $options);
+        return $this->Pages->saveOrFail($page, ['atomic' => false]);
+    }
+
+    /**
+     * 固定ページを削除する
+     * @param int $id
+     * @return bool
+     * @checked
+     * @unitTest
+     * @noTodo
+     */
+    public function delete($id)
+    {
+        $Page = $this->get($id);
+        return $this->Pages->delete($Page);
     }
 
     /**
@@ -144,23 +167,23 @@ class PageService implements PageServiceInterface
      * @param int $id
      * @return bool
      */
-    public function delete($id)
-    {
-        $page = $this->get($id);
-        if ($page->isAdmin()) {
-            $count = $this->Pages
-                ->find('all', ['conditions' => ['PagesUserGroups.user_group_id' => Configure::read('BcApp.adminGroupId')]])
-                ->join(['table' => 'users_user_groups',
-                    'alias' => 'PagesUserGroups',
-                    'type' => 'inner',
-                    'conditions' => 'PagesUserGroups.user_id = Pages.id'])
-                ->count();
-            if ($count === 1) {
-                throw new Exception(__d('baser', '最後のシステム管理者は削除できません'));
-            }
-        }
-        return $this->Pages->delete($page);
-    }
+    // public function delete($id)
+    // {
+    //     $page = $this->get($id);
+    //     if ($page->isAdmin()) {
+    //         $count = $this->Pages
+    //             ->find('all', ['conditions' => ['PagesUserGroups.user_group_id' => Configure::read('BcApp.adminGroupId')]])
+    //             ->join(['table' => 'users_user_groups',
+    //                 'alias' => 'PagesUserGroups',
+    //                 'type' => 'inner',
+    //                 'conditions' => 'PagesUserGroups.user_id = Pages.id'])
+    //             ->count();
+    //         if ($count === 1) {
+    //             throw new Exception(__d('baser', '最後のシステム管理者は削除できません'));
+    //         }
+    //     }
+    //     return $this->Pages->delete($page);
+    // }
 
     /**
 	 * 本文にbaserが管理するタグを追加する

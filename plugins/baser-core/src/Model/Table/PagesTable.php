@@ -13,18 +13,20 @@ namespace BaserCore\Model\Table;
 
 use ArrayObject;
 use Cake\ORM\Table;
+use Cake\Core\Configure;
 use Cake\Filesystem\File;
 use Cake\ORM\TableRegistry;
 use BaserCore\Utility\BcUtil;
+use BaserCore\Annotation\Note;
 use Cake\Event\EventInterface;
 use Cake\Validation\Validator;
-use Cake\Datasource\EntityInterface;
-use BaserCore\Utility\BcContainerTrait;
-use BaserCore\Event\BcEventDispatcherTrait;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
-use BaserCore\Annotation\Note;
+use Cake\Datasource\EntityInterface;
+use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Event\BcEventDispatcherTrait;
+use BaserCore\Service\ContentServiceInterface;
 
 /**
  * Class PagesTable
@@ -36,22 +38,6 @@ class PagesTable extends Table
      */
     use BcEventDispatcherTrait;
     use BcContainerTrait;
-
-    /**
-     * 更新前のページファイルのパス
-     *
-     * @var string
-     */
-    public $oldPath = '';
-
-    /**
-     * ファイル保存可否
-     * true の場合、ページデータ保存の際、ページテンプレートファイルにも内容を保存する
-     * テンプレート読み込み時などはfalseにして保存しないようにする
-     *
-     * @var boolean
-     */
-    public $fileSave = true;
 
     /**
      * 検索テーブルへの保存可否
@@ -114,7 +100,7 @@ class PagesTable extends Table
         $validator
         ->integer('id')
         ->numeric('id', __d('baser', 'IDに不正な値が利用されています。'), 'update')
-        ->requirePresence('id', true);
+        ->requirePresence('id', 'update');
 
         $validator
         ->scalar('contents')
@@ -167,42 +153,6 @@ class PagesTable extends Table
     }
 
     /**
-     * Before Save
-     * @param EventInterface $event
-     * @param EntityInterface $entity
-     * @param ArrayObject $options
-     * @return bool
-     */
-    public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
-    {
-        if (!$this->fileSave) {
-            return true;
-        }
-
-        // 保存前のページファイルのパスを取得
-        $ContentService = $this->getService(ContentServiceInterface::class);
-        if ($ContentService->exists($entity->content->id) && !empty($entity->content)) {
-            $this->oldPath = $this->getPageFilePath(
-                $this->find('first', [
-                        'conditions' => ['Page.id' => $entity->id],
-                        'recursive' => 0]
-                )
-            );
-        } else {
-            $this->oldPath = '';
-        }
-
-        // 新しいページファイルのパスが開けるかチェックする
-        $result = true;
-        if (!empty($entity->content)) {
-            if (!$this->checkOpenPageFile($entity)) {
-                $result = false;
-            }
-        }
-        return $result;
-    }
-
-    /**
      * afterSave
      *
      * @param  EventInterface $event
@@ -212,21 +162,10 @@ class PagesTable extends Table
      */
     public function afterSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
-
-        // parent::afterSave($created, $options);
-
-        if (empty($entity->id)) {
-            $data = $this->read(null, $this->id);
-        } else {
-            $data = $this->read(null, $entity->id);
-        }
-
-        if ($this->fileSave) {
-            $this->createPageTemplate($data);
-        }
-
         // 検索用テーブルに登録
         if ($this->searchIndexSaving) {
+            // TODO ucmitz: BcSearchIndexManagerBehaviorが追加されていないため一旦スキップ
+            return;
             if (empty($entity->content->exclude_search)) {
                 $this->saveSearchIndex($this->createSearchIndex($entity));
             } else {
@@ -410,17 +349,21 @@ class PagesTable extends Table
     /**
      * PHP構文チェック
      *
-     * @param array $check チェック対象文字列
+     * @param string $check チェック対象文字列
      * @return bool
+     * @checked
+     * @unitTest
+     * @note(value="BcApp.validSyntaxWithPageがsetting.phpに定義されていないためコメントアウト")
      */
     public function phpValidSyntax($check)
     {
-        if (empty($check[key($check)])) {
+        if (empty($check)) {
             return true;
         }
-        if (!Configure::read('BcApp.validSyntaxWithPage')) {
-            return true;
-        }
+        // TODO ucmitz: note
+        // if (!Configure::read('BcApp.validSyntaxWithPage')) {
+        //     return true;
+        // }
         if (!function_exists('exec')) {
             return true;
         }
@@ -430,18 +373,18 @@ class PagesTable extends Table
             return true;
         }
 
-        if (isWindows()) {
+        if (BcUtil::isWindows()) {
             $tmpName = tempnam(TMP, "syntax");
             $tmp = new File($tmpName);
             $tmp->open("w");
-            $tmp->write($check[key($check)]);
+            $tmp->write($check);
             $tmp->close();
             $command = sprintf("php -l %s 2>&1", escapeshellarg($tmpName));
             exec($command, $output, $exit);
             $tmp->delete();
         } else {
             $format = 'echo %s | php -l 2>&1';
-            $command = sprintf($format, escapeshellarg($check[key($check)]));
+            $command = sprintf($format, escapeshellarg($check));
             exec($command, $output, $exit);
         }
 
