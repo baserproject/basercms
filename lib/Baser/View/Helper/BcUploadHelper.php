@@ -88,8 +88,8 @@ class BcUploadHelper extends BcAppHelper
 		}
 
 		if (is_array($value)) {
-			$sessionKey = $this->getSourceValue($fieldName . '_tmp');
-			if (!$sessionKey && empty($value['name'])) {
+			$sessionKey = $this->value($fieldName . '_tmp');
+			if (!$sessionKey && !empty($value['name'])) {
 				$data = $Model->find('first', [
 					'conditions' => [
 						$Model->alias . '.' . $Model->primaryKey => $Model->id
@@ -129,7 +129,7 @@ class BcUploadHelper extends BcAppHelper
 				} else {
 					$figcaptionOptions['class'] = 'file-name';
 				}
-				if ($uploadSettings['type'] == 'image' || in_array($ext, $Model->Behaviors->BcUpload->imgExts)) {
+				if ($uploadSettings['type'] == 'image' || in_array($ext, $Model->Behaviors->BcUpload->BcFileUploader[$Model->alias]->imgExts)) {
 					$imgOptions = array_merge([
 						'imgsize' => $options['imgsize'],
 						'rel' => $options['rel'],
@@ -251,14 +251,10 @@ class BcUploadHelper extends BcAppHelper
 			unset($linkOptions['class']);
 		}
 
-		if (is_array($fileName)) {
-			$sessionKey = $this->value($fieldName . '_tmp');
-			if ($sessionKey) {
-				$fileName = $sessionKey;
-				$options['tmp'] = true;
-			} else {
-				return '';
-			}
+		$sessionKey = $this->value($fieldName . '_tmp');
+		if ($sessionKey) {
+			$fileName = $sessionKey;
+			$options['tmp'] = true;
 		}
 
 		if ($options['noimage']) {

@@ -390,6 +390,7 @@ class BlogController extends BlogAppController
 				// プレビュー
 				if ($this->BcContents->preview) {
 					if (!empty($this->request->data['BlogPost'])) {
+						$this->request->data['BlogContent'] = $this->blogContent['BlogContent'];
 						$this->request->data = $this->BlogPost->saveTmpFiles($this->request->data, mt_rand(0, 99999999));
 						$post = $this->BlogPost->createPreviewData($this->request->data);
 

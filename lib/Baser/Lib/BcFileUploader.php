@@ -11,9 +11,9 @@
  */
 
 /**
- * Class BcUploadBehavior
+ * Class BcFileUploader
  */
-class BcUpload
+class BcFileUploader
 {
 
     /**
@@ -209,10 +209,12 @@ class BcUpload
         foreach($this->settings['fields'] as $setting) {
             $name = $setting['name'];
             if (isset($data[$name . '_tmp']) && $this->moveFileSessionToTmp($data, $name)) {
+            	$data[$setting['name']] = $this->getUploadingFiles()[$setting['name']];
                 // セッションに一時ファイルが保存されている場合は復元する
                 unset($data[$setting['name'] . '_tmp']);
             }
         }
+        return $data;
     }
 
     /**
@@ -457,6 +459,7 @@ class BcUpload
         $uploadInfo['size'] = $fileSize;
         $uploadInfo['type'] = $fileType;
         $uploadInfo['uploadable'] = true;
+        $uploadInfo['ext'] = decodeContent($fileType, $fileName);
         $uploadedFile[$fieldName] = $uploadInfo;
         $this->setUploadingFiles($uploadedFile);
         return true;
@@ -1022,6 +1025,9 @@ class BcUpload
         $files = $this->getUploadingFiles();
         foreach($this->settings['fields'] as $setting) {
             $entity[$setting['name']] = $files[$setting['name']] = $this->saveTmpFile($setting, $files[$setting['name']], $data);
+            if(!empty($entity[$setting['name']])) {
+            	$entity[$setting['name'] . '_tmp'] = $entity[$setting['name']];
+			}
         }
         $this->setUploadingFiles($files);
         return $entity;
@@ -1049,7 +1055,6 @@ class BcUpload
         $this->Session->write('Upload.' . $name, $setting);
         $this->Session->write('Upload.' . $name . '.type', $file['type']);
         $this->Session->write('Upload.' . $name . '.data', base64_encode(file_get_contents($file['tmp_name'])));
-        $entity[$setting['name'] . '_tmp'] = $fileName;
         return $fileName;
     }
 

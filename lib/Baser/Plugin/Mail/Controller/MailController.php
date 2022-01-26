@@ -598,7 +598,7 @@ class MailController extends MailAppController
 		}
 
 		$attachments = [];
-		$settings = $this->MailMessage->Behaviors->BcUpload->settings['MailMessage'];
+		$settings = $this->MailMessage->Behaviors->BcUpload->BcUpload['MailMessage']->settings;
 		foreach($this->dbDatas['mailFields'] as $mailField) {
 			$field = $mailField['MailField']['field_name'];
 			if (!isset($data['message'][$field])) {
@@ -705,7 +705,7 @@ class MailController extends MailAppController
 	{
 		if (!isset($this->dbDatas['mailFields'])
 			|| !is_array($this->dbDatas['mailFields'])
-			|| empty($this->MailMessage->Behaviors->BcUpload->settings['MailMessage'])) {
+			|| empty($this->MailMessage->Behaviors->BcUpload->BcUpload['MailMessage']->settings)) {
 			return false;
 		}
 

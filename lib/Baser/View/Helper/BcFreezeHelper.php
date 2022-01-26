@@ -407,7 +407,7 @@ class BcFreezeHelper extends BcFormHelper
 		if ($this->freezed) {
 			$value = $this->value($fieldName);
 			$sessionKey = $this->value($fieldName . '_tmp');
-			if (is_array($value) && $sessionKey) {
+			if ($sessionKey) {
 				return parent::hidden($fieldName . "_tmp", ['value' => $sessionKey]) . $this->BcUpload->fileLink($fieldName, $options);
 			} else {
 				if (!is_array($value)) {
