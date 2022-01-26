@@ -164,6 +164,8 @@ class PagesTable extends Table
     {
         // 検索用テーブルに登録
         if ($this->searchIndexSaving) {
+            // TODO ucmitz: BcSearchIndexManagerBehaviorが追加されていないため一旦スキップ
+            return;
             if (empty($entity->content->exclude_search)) {
                 $this->saveSearchIndex($this->createSearchIndex($entity));
             } else {
