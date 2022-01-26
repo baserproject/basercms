@@ -254,7 +254,6 @@ class BcUploadTest extends BcTestCase
         $entity = $this->table->patchEntity($this->table->newEmptyEntity(), $this->uploadedData);
         $this->BcUpload->tmpId = 1;
         $this->BcUpload->saveTmpFile($this->BcUpload->settings['fields']['eyecatch'], $this->uploadedData['eyecatch'], $entity);
-        $this->assertEquals("00000001_eyecatch.png", $entity->eyecatch_tmp);
         $this->assertNotEmpty($_SESSION['Upload']['00000001_eyecatch_png']);
     }
 
@@ -531,7 +530,8 @@ class BcUploadTest extends BcTestCase
             'tmp_name' => $targetPath,
             'size' => 5,
             'type' => 'basercms',
-            'uploadable' => true
+            'uploadable' => true,
+            'ext' => 'png'
         ];
         $this->assertEquals($expected, $result, 'アップロードされたデータとしてデータを復元できません');
 

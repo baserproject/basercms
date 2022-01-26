@@ -265,7 +265,7 @@ class MailMessagesController extends MailAppController
         $args = func_get_args();
         unset($args[0]);
         $file = implode('/', $args);
-        $settings = $this->MailMessage->Behaviors->BcUpload->settings['MailMessage'];
+        $settings = $this->MailMessage->getBehavior('BcUpload')->BcUpload['MailMessage']->settings;
         $filePath = WWW_ROOT . 'files' . DS . $settings['saveDir'] . DS . $file;
         $ext = decodeContent(null, $file);
         $mineType = 'application/octet-stream';

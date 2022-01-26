@@ -123,10 +123,10 @@ class BcUploadBehavior extends Behavior
      * @noTodo
      * @unitTest
      */
-    public function beforeMarshal(EventInterface $event, ArrayObject $data): void
+    public function beforeMarshal(EventInterface $event, ArrayObject $data)
     {
-        $this->BcUpload[$this->table()->getAlias()]->setupTmpData($data);
         $this->BcUpload[$this->table()->getAlias()]->setupRequestData($data);
+        $this->BcUpload[$this->table()->getAlias()]->setupTmpData($data);
     }
 
     /**
@@ -157,7 +157,7 @@ class BcUploadBehavior extends Behavior
      * @noTodo
      * @unitTest
      */
-    public function afterSave(EventInterface $event, EntityInterface $entity): void
+    public function afterSave(EventInterface $event, EntityInterface $entity)
     {
         if ($this->BcUpload[$this->table()->getAlias()]->isUploaded()) {
             $this->BcUpload[$this->table()->getAlias()]->renameToBasenameFields($entity);

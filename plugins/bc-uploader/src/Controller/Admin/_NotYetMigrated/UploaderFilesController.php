@@ -127,7 +127,7 @@ class UploaderFilesController extends AppController
         $this->set('installMessage', $this->checkInstall());
 
         if ($this->RequestHandler->isAjax()) {
-            $settings = $this->UploaderFile->Behaviors->BcUpload->settings;
+            $settings = $this->UploaderFile->getBehavior('BcUpload')->BcUpload['UploaderFile']->settings;
             $this->set('listId', $id);
             $this->set('imageSettings', $settings['UploaderFile']['fields']['name']['imagecopy']);
         } else {
