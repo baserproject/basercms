@@ -192,7 +192,7 @@ class BlogPost extends BlogAppModel
             $imagecopy[$size]['height'] = $blogContent['eye_catch_size_' . $size . '_height'];
         }
 
-        $settings = $this->Behaviors->BcUpload->settings['BlogPost'];
+        $settings = $this->Behaviors->BcUpload->BcUpload['BlogPost']->settings;
         if (empty($settings['saveDir']) || !preg_match('/^' . preg_quote("blog" . DS . $blogContent['id'], '/') . '\//', $settings['saveDir'])) {
             $settings['saveDir'] = "blog" . DS . $blogContent['id'] . DS . "blog_posts";
         }

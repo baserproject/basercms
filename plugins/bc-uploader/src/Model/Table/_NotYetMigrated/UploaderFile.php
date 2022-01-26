@@ -232,9 +232,9 @@ class UploaderFile extends AppModel
     {
         $data = $this->read(null, $this->id);
         if (!empty($data['UploaderFile']['publish_begin']) || !empty($data['UploaderFile']['publish_end'])) {
-            $this->Behaviors->BcUpload->savePath['UploaderFile'] .= 'limited' . DS;
+            $this->Behaviors->BcUpload->BcUpload['UploaderFile']->savePath .= 'limited' . DS;
         } else {
-            $this->Behaviors->BcUpload->savePath['UploaderFile'] = preg_replace('/' . preg_quote('limited' . DS, '/') . '$/', '', $this->Behaviors->BcUpload->savePath['UploaderFile']);
+            $this->Behaviors->BcUpload->BcUpload['UploaderFile']->savePath = preg_replace('/' . preg_quote('limited' . DS, '/') . '$/', '', $this->Behaviors->BcUpload->savePath['UploaderFile']);
         }
         return parent::beforeDelete($cascade);
     }
