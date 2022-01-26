@@ -277,7 +277,7 @@ class BcUploadHelper  extends Helper
             unset($linkOptions['class']);
         }
 
-        $sessionKey = $this->getSourceValue($fieldName . '_tmp');
+        $sessionKey = $this->BcAdminForm->getSourceValue($fieldName . '_tmp');
         if ($sessionKey) {
             $fileName = $sessionKey;
             $options['tmp'] = true;

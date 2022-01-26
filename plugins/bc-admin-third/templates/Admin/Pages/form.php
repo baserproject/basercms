@@ -31,18 +31,16 @@ $this->BcAdmin->setHelp('pages_form');
 
 <?php echo $this->BcFormTable->dispatchBefore() ?>
 <div class="bca-section bca-section-editor-area">
-<?php /* TODO ucmitz: BcAdminForm->editorを修正する
   <?php echo $this->BcAdminForm->editor('Page.contents', array_merge([
-    'editor' => @$siteConfig['editor'],
+    'editor' => $editor,
     'editorUseDraft' => true,
     'editorDraftField' => 'draft',
     'editorWidth' => 'auto',
     'editorHeight' => '480px',
-    'editorEnterBr' => @$siteConfig['editor_enter_br']
+    'editorEnterBr' => $editor_enter_br
   ], $editorOptions)); ?>
   <?php echo $this->BcAdminForm->error('Page.contents') ?>
   <?php echo $this->BcAdminForm->error('Page.draft') ?>
-*/ ?>
 </div>
 
 <?php if (BcUtil::isAdminUser()): ?>
