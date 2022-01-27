@@ -11,6 +11,7 @@
 namespace BaserCore\View\Helper;
 
 use Cake\Core\Configure;
+use Cake\Error\Debugger;
 use Cake\Utility\Inflector;
 use BaserCore\View\Helper\BcAppHelper;
 use BaserCore\Event\BcEventDispatcherTrait;
@@ -20,6 +21,7 @@ use BaserCore\Event\BcEventDispatcherTrait;
  * Class BcCkeditorHelper
  *
  * @package Baser.View.Helper
+ * @property BcAdminFormHelper $BcAdminForm
  */
 class BcCkeditorHelper extends BcAppHelper
 {
@@ -291,7 +293,7 @@ class BcCkeditorHelper extends BcAppHelper
 
         if (!$this->_script) {
             $this->_script = true;
-            $this->BcHtml->script('vendor/ckeditor/ckeditor.js', ["inline" => false]);
+            $this->BcHtml->script('vendor/ckeditor/ckeditor.js', ["block" => true]);
         }
 
         if ($editorUseDraft) {
@@ -448,11 +450,13 @@ EOL;
      */
     public function editor($fieldName, $options = [])
     {
-
         if (!empty($options['editorUseDraft']) && !empty($options['editorDraftField']) && strpos($fieldName, '.')) {
             [$model] = explode('.', $fieldName);
             $inputFieldName = $fieldName . '_tmp';
-            $hidden = $this->BcAdminForm->hidden($fieldName) . $this->BcAdminForm->hidden($model . '.' . $options['editorDraftField']);
+            $hiddenIdElement = pluginSplit($fieldName);
+            $hiddenId = $hiddenIdElement[0] . Inflector::camelize($hiddenIdElement[1]);
+
+            $hidden = $this->BcAdminForm->hidden($fieldName, ['id' => $hiddenId]) . $this->BcAdminForm->hidden($model . '.' . $options['editorDraftField']);
         } else {
             $inputFieldName = $fieldName;
             $hidden = '';
@@ -464,7 +468,8 @@ EOL;
                 $_options[$key] = $option;
             }
         }
+        $textIdElement = pluginSplit($inputFieldName);
+        $_options['id'] = $textIdElement[0] . Inflector::camelize($textIdElement[1]);
         return $this->BcAdminForm->control($inputFieldName, $_options) . $hidden . $this->_build($fieldName, $options);
     }
-
 }

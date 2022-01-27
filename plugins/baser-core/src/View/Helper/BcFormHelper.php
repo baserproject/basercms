@@ -2019,8 +2019,8 @@ DOC_END;
             'style' => 'width:99%;height:540px'
         ], $options);
         [$plugin, $editor] = pluginSplit($options['editor']);
-        if (!empty($this->_View->{$editor})) {
-            return $this->_View->{$editor}->editor($fieldName, $options);
+        if (!empty($this->getView()->{$editor})) {
+            return $this->getView()->{$editor}->editor($fieldName, $options);
         } elseif ($editor == 'none') {
             $_options = [];
             foreach($options as $key => $value) {
@@ -2030,7 +2030,7 @@ DOC_END;
             }
             return $this->input($fieldName, array_merge(['type' => 'textarea'], $_options));
         } else {
-            return $this->_View->BcCkeditor->editor($fieldName, $options);
+            return $this->getView()->BcCkeditor->editor($fieldName, $options);
         }
     }
 

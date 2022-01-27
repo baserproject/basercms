@@ -31,16 +31,15 @@ $this->BcAdmin->setHelp('pages_form');
 
 <?php echo $this->BcFormTable->dispatchBefore() ?>
 <div class="bca-section bca-section-editor-area">
-  <?php
-  // TODO ucmitz: 適切な形式になってないためPost時に失敗するため一旦コメントアウト
-  // echo $this->BcAdminForm->editor('Page.contents', array_merge([
-  //   'editor' => $editor,
-  //   'editorUseDraft' => true,
-  //   'editorDraftField' => 'draft',
-  //   'editorWidth' => 'auto',
-  //   'editorHeight' => '480px',
-  //   'editorEnterBr' => $editor_enter_br
-  // ], $editorOptions));
+  <?php echo $this->BcAdminForm->editor('Page.contents', array_merge([
+
+    'editor' => $editor,
+    'editorUseDraft' => true,
+    'editorDraftField' => 'draft',
+    'editorWidth' => 'auto',
+    'editorHeight' => '480px',
+    'editorEnterBr' => $editor_enter_br
+  ], $editorOptions));
   ?>
   <?php echo $this->BcAdminForm->error('Page.contents') ?>
   <?php echo $this->BcAdminForm->error('Page.draft') ?>
