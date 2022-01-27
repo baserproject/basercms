@@ -183,7 +183,7 @@ class MailMessage extends MailAppModel
 	 */
 	protected function _setValidate()
 	{
-		foreach($this->mailFields as $mailField) {
+		foreach($this->mailFields as $i => $mailField) {
 			$mailField = $mailField['MailField'];
 			if ($mailField['valid'] && !empty($mailField['use_field'])) {
 				// 必須項目
@@ -196,6 +196,9 @@ class MailMessage extends MailAppModel
 								'required' => true
 							]];
 						}
+					} elseif ($mailField['type'] === 'multi_check') {
+						// チェックボックス未入力チェックで判別する
+						$this->mailFields[$i]['MailField']['valid_ex'] = 'VALID_NOT_UNCHECKED';
 					} else {
 						$this->validate[$mailField['field_name']] = ['notBlank' => [
 							'rule' => ['notBlank'],

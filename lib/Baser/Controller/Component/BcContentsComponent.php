@@ -316,18 +316,12 @@ class BcContentsComponent extends Component
 			$data['Site']['relate_main_site'] && $data['Content']['main_site_content_id'] && $data['Content']['type'] == 'ContentFolder') {
 			$related = true;
 		}
-		$disableEditContent = false;
 		$controller->request->data = $data;
-		if (!BcUtil::isAdminUser() || ($controller->request->data['Site']['relate_main_site'] && $controller->request->data['Content']['main_site_content_id'] &&
-				($controller->request->data['Content']['alias_id'] || $controller->request->data['Content']['type'] == 'ContentFolder'))) {
-			$disableEditContent = true;
-		}
 		$currentSiteId = $siteId = $controller->request->data['Site']['id'];
 		if (is_null($currentSiteId)) {
 			$currentSiteId = 0;
 		}
 		$controller->set('currentSiteId', $currentSiteId);
-		$controller->set('disableEditContent', $disableEditContent);
 		$controller->set('related', $related);
 	}
 

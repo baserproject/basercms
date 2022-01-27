@@ -1030,7 +1030,7 @@ class BcAppController extends Controller
 			if (!empty($this->siteConfigs['email'])) {
 				$from = $this->siteConfigs['email'];
 				if (strpos($from, ',') !== false) {
-					$from = explode(',', $from);
+					$from = strstr($from, ',', true);
 				}
 			} else {
 				$from = $toAddress;

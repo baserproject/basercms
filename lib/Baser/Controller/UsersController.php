@@ -3,11 +3,11 @@
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.Controller
- * @since           baserCMS v 0.1.0
- * @license         https://basercms.net/license/index.html
+ * @copyright Copyright (c) baserCMS Users Community
+ * @link      https://basercms.net baserCMS Project
+ * @package   Baser.Controller
+ * @since     baserCMS v 0.1.0
+ * @license   https://basercms.net/license/index.html
  */
 
 /**
@@ -67,8 +67,20 @@ class UsersController extends AppController
 	{
 		parent::__construct($request, $response);
 		$this->crumbs = [
-			['name' => __d('baser', 'システム設定'), 'url' => ['controller' => 'site_configs', 'action' => 'form']],
-			['name' => __d('baser', 'ユーザー管理'), 'url' => ['controller' => 'users', 'action' => 'index']]
+			[
+				'name' => __d('baser', 'システム設定'),
+				'url'  => [
+					'controller' => 'site_configs',
+					'action' => 'form'
+				]
+			],
+			[
+				'name' => __d('baser', 'ユーザー管理'),
+				'url'  => [
+					'controller' => 'users',
+					'action' => 'index'
+				]
+			]
 		];
 	}
 
@@ -83,7 +95,11 @@ class UsersController extends AppController
 			/* 認証設定 */
 			// parent::beforeFilterの前に記述する必要あり
 			$this->BcAuth->allow(
-				'admin_login', 'admin_logout', 'admin_login_exec', 'admin_reset_password'
+				'admin_login',
+				'admin_logout',
+				'admin_login_exec',
+				'admin_reset_password',
+				'admin_send_activate_url'
 			);
 			if (isset($this->UserGroup)) {
 				$this->set('usePermission', $this->UserGroup->checkOtherAdmins());
@@ -92,7 +108,13 @@ class UsersController extends AppController
 
 		parent::beforeFilter();
 
-		$this->BcReplacePrefix->allow('login', 'logout', 'login_exec', 'reset_password');
+		$this->BcReplacePrefix->allow(
+			'login',
+			'logout',
+			'login_exec',
+			'reset_password',
+			'send_activate_url'
+		);
 	}
 
 	/**
@@ -132,52 +154,56 @@ class UsersController extends AppController
 			$this->request->data = $event->result === true ? $event->data['user'] : $event->result;
 		}
 
-		if ($this->request->data) {
+		if ($this->request->is('post')) {
 			$this->BcAuth->login();
-			$user = $this->BcAuth->user();
-			$userModel = $this->BcAuth->authenticate['Form']['userModel'];
-			if ($user && $this->isAuthorized($user)) {
-				if (!empty($this->request->data[$userModel]['saved'])) {
-					if (!$this->request->is('mobile')) {
-						$this->setAuthCookie($this->request->data);
-					} else {
-						$this->BcAuth->saveSerial();
-					}
-					unset($this->request->data[$userModel]['save']);
-				} else {
-					$this->Cookie->destroy();
-				}
-				App::uses('BcBaserHelper', 'View/Helper');
-				$BcBaser = new BcBaserHelper(new View());
-				$this->BcMessage->setInfo(sprintf(__d('baser', 'ようこそ、%s さん。'), $BcBaser->getUserName($user)));
+		}
+		$user = $this->BcAuth->user();
 
-				// EVENT Users.afterLogin
-				$this->dispatchEvent('afterLogin', [
-					'user' => $this->BcAuth->user(),
-					'loginRedirect' => $this->BcAuth->redirect(),
-				]);
-
-				$this->redirect($this->BcAuth->redirect());
-			} else {
-				$this->BcMessage->setError(__d('baser', 'アカウント名、パスワードが間違っています。'));
+		if ($this->request->is('post')) {
+			if($this->_set_auth($user)) {
+				$this->redirect($this->BcAuth->redirectUrl());
+				return;
 			}
+			$this->BcMessage->setError(__d('baser', 'アカウント名、パスワードが間違っています。'));
 		} else {
-			$user = $this->BcAuth->user();
 			if ($user && $this->isAuthorized($user)) {
 				$this->redirect($this->BcAuth->redirectUrl());
+				return;
 			}
-		}
-
-		$pageTitle = __d('baser', 'ログイン');
-		$prefixAuth = Configure::read('BcAuthPrefix.' . $this->request->params['prefix']);
-		if ($prefixAuth && isset($prefixAuth['loginTitle'])) {
-			$pageTitle = $prefixAuth['loginTitle'];
 		}
 
 		/* 表示設定 */
 		$this->crumbs = [];
 		$this->subMenuElements = '';
-		$this->pageTitle = $pageTitle;
+		$prefixAuth = Configure::read('BcAuthPrefix.' . $this->request->prefix);
+		if (Hash::get($prefixAuth, 'loginTitle')) {
+			$this->pageTitle = $prefixAuth['loginTitle'];
+		} else {
+			$this->pageTitle = __d('baser', 'ログイン');
+		}
+	}
+
+	private function _set_auth($user) {
+		if (!$user || !$this->isAuthorized($user)) {
+			return false;
+		}
+		$userModel = $this->BcAuth->authenticate['Form']['userModel'];
+		if ($this->request->data($userModel . '.saved')) {
+			if ($this->request->is('mobile')) {
+				$this->BcAuth->saveSerial();
+			} else {
+				$this->setAuthCookie($this->request->data);
+			}
+			unset($this->request->data[$userModel]['save']);
+		} else {
+			$this->Cookie->destroy();
+		}
+		App::uses('BcBaserHelper', 'View/Helper');
+		$BcBaser = new BcBaserHelper(new View());
+		$this->BcMessage->setInfo(
+			sprintf(__d('baser', 'ようこそ、%s さん。'), $BcBaser->getUserName($user))
+		);
+		return true;
 	}
 
 	/**
@@ -193,10 +219,15 @@ class UsersController extends AppController
 			$this->Session->write('AuthAgent', $beforeUser);
 		}
 
-		$result = $this->User->find('first', ['conditions' => ['User.id' => $id], 'recursive' => 0]);
+		$result = $this->User->find(
+			'first',
+			[
+				'conditions' => ['User.id' => $id],
+				'recursive' => 0
+			]
+		);
 		$user = $result['User'];
-		unset($user['password']);
-		unset($result['User']);
+		unset($user['password'], $result['User']);
 		$user = array_merge($user, $result);
 
 		// EVENT Users.beforeAgentLogin
@@ -284,12 +315,17 @@ class UsersController extends AppController
 		$cookie = [];
 		foreach($data[$userModel] as $key => $val) {
 			// savedは除外
-			if ($key !== "saved") {
+			if ($key !== 'saved') {
 				$cookie[$key] = $val;
 			}
 		}
 		$this->Cookie->httpOnly = true;
-		$this->Cookie->write(Inflector::camelize(str_replace('.', '', BcAuthComponent::$sessionKey)), $cookie, true, '+2 weeks');    // 3つめの'true'で暗号化
+		$this->Cookie->write(
+			Inflector::camelize(str_replace('.', '', BcAuthComponent::$sessionKey)),
+			$cookie,
+			true,
+			'+2 weeks'
+		);	// 3つめの'true'で暗号化
 	}
 
 	/**
@@ -305,7 +341,9 @@ class UsersController extends AppController
 		]);
 
 		$logoutRedirect = $this->BcAuth->logout();
-		$this->Cookie->delete(Inflector::camelize(str_replace('.', '', BcAuthComponent::$sessionKey)));
+		$this->Cookie->delete(
+			Inflector::camelize(str_replace('.', '', BcAuthComponent::$sessionKey))
+		);
 		$this->BcMessage->setInfo(__d('baser', 'ログアウトしました'));
 
 		// EVENT Users.afterLogout
@@ -337,14 +375,25 @@ class UsersController extends AppController
 		];
 
 		// EVENT Users.searchIndex
-		$event = $this->getEventManager()->dispatch(new CakeEvent('Controller.Users.searchIndex', $this, [
-			'options' => $options
-		]));
-		if ($event !== false) {
-			$options = ($event->result === null || $event->result === true)? $event->data['options'] : $event->result;
+		$event = $this->getEventManager()->dispatch(
+			new CakeEvent(
+				'Controller.Users.searchIndex',
+				$this,
+				[
+					'options' => $options
+				]
+			)
+		);
+		if ($event === false) {
+			$this->paginate = $options;
+		} else {
+			if ($event->result === null || $event->result === true) {
+				$this->paginate = $event->data['options'];
+			} else {
+				$this->paginate = $event->result;
+			}
 		}
 
-		$this->paginate = $options;
 		$dbDatas = $this->paginate();
 
 		if ($dbDatas) {
@@ -398,11 +447,19 @@ class UsersController extends AppController
 			if ($this->User->save()) {
 
 				$this->request->data['User']['id'] = $this->User->id;
-				$this->getEventManager()->dispatch(new CakeEvent('Controller.Users.afterAdd', $this, [
-					'user' => $this->request->data
-				]));
+				$this->getEventManager()->dispatch(
+					new CakeEvent(
+						'Controller.Users.afterAdd',
+						$this,
+						[
+							'user' => $this->request->data
+						]
+					)
+				);
 
-				$this->BcMessage->setSuccess('ユーザー「' . $this->request->data['User']['name'] . '」を追加しました。');
+				$this->BcMessage->setSuccess(
+					sprintf('ユーザー「%s」を追加しました。', $this->request->data['User']['name'])
+				);
 				$this->redirect(['action' => 'edit', $this->User->getInsertID()]);
 			} else {
 				$this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
@@ -471,7 +528,7 @@ class UsersController extends AppController
 			if (!$updatable) {
 				$this->BcMessage->setError(__d('baser', '指定されたページへのアクセスは許可されていません。'));
 
-				// 自身のアカウントは変更出来ないようにチェック
+			// 自身のアカウントは変更できないようにチェック
 			} elseif ($selfUpdate && $user['user_group_id'] != $this->request->data['User']['user_group_id']) {
 				$this->BcMessage->setError(__d('baser', '自分のアカウントのグループは変更できません。'));
 
@@ -481,14 +538,22 @@ class UsersController extends AppController
 
 				if ($this->User->save()) {
 
-					$this->getEventManager()->dispatch(new CakeEvent('Controller.Users.afterEdit', $this, [
-						'user' => $this->request->data
-					]));
+					$this->getEventManager()->dispatch(
+						new CakeEvent(
+							'Controller.Users.afterEdit',
+							$this,
+							[
+								'user' => $this->request->data
+							]
+						)
+					);
 
 					if ($selfUpdate) {
 						$this->admin_logout();
 					}
-					$this->BcMessage->setSuccess('ユーザー「' . $this->request->data['User']['name'] . '」を更新しました。');
+					$this->BcMessage->setSuccess(
+						sprintf('ユーザー「%s」を更新しました。', $this->request->data['User']['name'])
+					);
 					$this->redirect(['action' => 'edit', $id]);
 				} else {
 
@@ -565,9 +630,17 @@ class UsersController extends AppController
 			$this->redirect(['action' => 'index']);
 		}
 
+		$admin_user_count = $this->User->find(
+			'count',
+			[
+				'conditions' => [
+					'User.user_group_id' => Configure::read('BcApp.adminGroupId')
+				]
+			]
+		);
 		// 最後のユーザーの場合は削除はできない
 		if ($this->User->field('user_group_id', ['User.id' => $id]) == Configure::read('BcApp.adminGroupId') &&
-			$this->User->find('count', ['conditions' => ['User.user_group_id' => Configure::read('BcApp.adminGroupId')]]) == 1) {
+			$admin_user_count == 1) {
 			$this->BcMessage->setError(__d('baser', '最後の管理者ユーザーは削除する事はできません。'));
 			$this->redirect(['action' => 'index']);
 		}
@@ -577,7 +650,7 @@ class UsersController extends AppController
 
 		/* 削除処理 */
 		if ($this->User->delete($id)) {
-			$this->BcMessage->setSuccess('ユーザー: ' . $user['User']['name'] . ' を削除しました。');
+			$this->BcMessage->setSuccess(sprintf('ユーザー: %s を削除しました。', $user['User']['name']));
 		} else {
 			$this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。'));
 		}
@@ -593,58 +666,141 @@ class UsersController extends AppController
 	 */
 	public function admin_reset_password()
 	{
-		if ((empty($this->params['prefix']) && !Configure::read('BcAuthPrefix.front'))) {
+		if (!$this->request->param('prefix') && !Configure::read('BcAuthPrefix.front')) {
 			$this->notFound();
 		}
-		if ($this->BcAuth->user()) {
-			$this->redirect(['controller' => 'dashboard', 'action' => 'index']);
-		}
-		$this->pageTitle = __d('baser', 'パスワードのリセット');
+		$this->BcAuth->logout();
+
+		$this->pageTitle = __d('baser', 'パスワード再発行');
 		$userModel = $this->BcAuth->authenticate['Form']['userModel'];
 		if (strpos($userModel, '.') !== false) {
 			list(, $userModel) = explode('.', $userModel);
 		}
-		if (!$this->request->data) {
+		$activate_key = $this->request->query('key');
+		if (!$activate_key) {
+			$this->BcMessage->setError('無効なリセットURLです。');
+			$this->render('send_activate_url');
+			return;
+		}
+		$user = $this->{$userModel}->find(
+			'first', [
+				'conditions' => [$userModel.'.activate_key' => $activate_key]
+			]
+		);
+		if (!$user) {
+			$this->BcMessage->setError('無効なリセットURLです。');
+			$this->render('send_activate_url');
+			return;
+		}
+		if(strtotime(Hash::get($user, $userModel.'.activate_expire', 0)) < env('REQUEST_TIME')) {
+			$this->BcMessage->setError('有効期限切れのリセットURLです。');
+			$this->render('send_activate_url');
+			return;
+		}
+		$new_password = $this->generatePassword();
+		$user[$userModel]['password'] = $new_password;
+		$user[$userModel]['activate_key'] = null;
+		$user[$userModel]['activate_expire'] = null;
+		$this->{$userModel}->set($user);
+		if (!$this->{$userModel}->save(null, ['validate' => false])) {
+			$this->BcMessage->setError('新しいパスワードをデータベースに保存できませんでした。');
+			$this->render('send_activate_url');
+			return;
+		}
+		$this->set('new_password', $new_password);
+		$this->BcAuth->login($user[$userModel]);
+		$this->_set_auth($this->BcAuth->user());
+	}
+	/**
+	 * パスワードリセットのためアクティベーション処理を行なう
+	 * アクティベーション画面のURLを指定したメールアドレス宛に送信する
+	 *
+	 * @return void
+	 */
+	public function admin_send_activate_url() {
+		if (!$this->request->param('prefix') && !Configure::read('BcAuthPrefix.front')) {
+			$this->notFound();
+		}
+		if($this->BcAuth->user()) {
+			$this->redirect(['controller' => 'dashboard', 'action' => 'index']);
+		}
+		$this->pageTitle = __d('baser', 'パスワードのリセット');
+
+		if (!$this->request->is('post')) {
 			return;
 		}
 
-		$email = isset($this->request->data[$userModel]['email'])? $this->request->data[$userModel]['email'] : '';
+		$userModel = $this->BcAuth->authenticate['Form']['userModel'];
+		if(strpos($userModel, '.') !== false) {
+			list(, $userModel) = explode('.', $userModel);
+		}
 
-		if (mb_strlen($email) === 0) {
+		$email = $this->request->data($userModel . '.email') ?: '';
+
+		if (!$email) {
 			$this->BcMessage->setError('メールアドレスを入力してください。');
 			return;
 		}
-		$user = $this->{$userModel}->findByEmail($email);
-		if ($user) {
-			$email = $user[$userModel]['email'];
-		}
-		if (!$user || mb_strlen($email) === 0) {
+		$find = $this->{$userModel}->find(
+			'all',
+			[
+				'conditions' => [
+					'email' => $email
+				]
+			]
+		);
+		if (!$find) {
 			$this->BcMessage->setError('送信されたメールアドレスは登録されていません。');
 			return;
 		}
-		$password = $this->generatePassword();
-		$user[$userModel]['password'] = $password;
-		$this->{$userModel}->set($user);
-
-		$dataSource = $this->{$userModel}->getDataSource();
-		$dataSource->begin();
-
-		if (!$this->{$userModel}->save(null, ['validate' => false])) {
-			$dataSource->roolback();
-			$this->BcMessage->setError('新しいパスワードをデータベースに保存できませんでした。');
+		$users = Hash::combine(
+			Hash::remove($find, '{n}.User.password'),
+			'{n}.User.id',
+			'{n}.User'
+		);
+		$data = [];
+		$activate_expire = date('Y-m-d H:i:s', strtotime(Configure::read('BcSecurity.passwordChangeExpire')));
+		foreach ($users as $user_id => $user) {
+			$activate_key = CakeText::uuid();
+			$data[] = [
+				'id'              => $user_id,
+				'activate_key'    => $activate_key,
+				'activate_expire' => $activate_expire
+			];
+			$users[$user_id]['activate_key'] = $activate_key;
+		}
+		$result = $this->{$userModel}->saveAll($data);
+		if (!$result) {
+			$this->BcMessage->setError('アクティベートメールを送信できませんでした。');
 			return;
 		}
-		$body = ['email' => $email, 'password' => $password];
-		if (!$this->sendMail($email, __d('baser', 'パスワードを変更しました'), $body, ['template' => 'reset_password'])) {
-			$dataSource->roolback();
+		$result = $this->sendMail(
+			$email,
+			__d('baser', 'パスワード変更リクエストを受け付けました'),
+			[
+				'action_url' => Router::url(
+					[
+						'prefix'     => $this->request->param('prefix'),
+						'controller' => 'users',
+						'action'     => 'reset_password'
+					]
+					, true
+				),
+				'expire' => $activate_expire,
+				'email'  => $email,
+				'users'  => 1<count($users) ? $users : array_pop($users)
+			],
+			['template' => 1<count($users) ? 'send_activate_urls' : 'send_activate_url']
+		);
+		if (!$result) {
 			$this->BcMessage->setError('メール送信時にエラーが発生しました。');
 			return;
 		}
 
-		$dataSource->commit();
-
-		$this->BcMessage->setSuccess($email . ' 宛に新しいパスワードを送信しました。');
-		$this->request->data = [];
+		$this->BcMessage->setSuccess(
+			$email . ' 宛てにパスワード再発行手順を送信しました。'
+		);
+		$this->render('sent_activate_url');
 	}
 
 }

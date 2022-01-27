@@ -11,25 +11,29 @@
  */
 
 /**
- * [ADMIN] パスワードリセット画面
+ * [ADMIN] パスワード再生成画面
  */
-$userModel = Configure::read('BcAuthPrefix.' . $currentPrefix . '.userModel');
-if (!$userModel) {
-	$userModel = 'User';
-}
 ?>
 
 
 <div class="section">
-	<p><?php echo __d('baser', 'パスワードを忘れた方は、登録されているメールアドレスを送信してください。<br />新しいパスワードをメールでお知らせします。') ?></p>
-	<?php if ($currentPrefix == 'front'): ?>
-		<?php echo $this->BcForm->create($userModel, ['url' => ['action' => 'reset_password']]) ?>
-	<?php else: ?>
-		<?php echo $this->BcForm->create($userModel, ['url' => ['action' => 'reset_password', $this->request->params['prefix'] => true]]) ?>
-	<?php endif ?>
-	<div class="submit">
-		<?php echo $this->BcForm->input($userModel . '.email', ['type' => 'text', 'size' => 34]) ?>
-		<?php echo $this->BcForm->submit(__d('baser', '送信'), ['div' => false, 'class' => 'btn-red button bca-btn', 'data-bca-btn-status' => 'warning']) ?>
-	</div>
-	<?php echo $this->BcForm->end() ?>
+	<h2>新しいパスワードを発行しました。</h2>
+	<p>
+		新しいパスワード : <?= $this->get('new_password') ?>
+	</p>
+	<p>
+		任意のパスワードを設定したい場合は
+		<?php
+			$this->BcBaser->link(
+				__d('baser', 'アカウント設定'),
+				[
+					SessionHelper::read('Auth.Admin.id'),
+					'admin' => true,
+					'plugin' => null,
+					'controller' => 'users',
+					'action' => 'edit'
+				]
+			);
+		?>で変更してください。
+	</p>
 </div>

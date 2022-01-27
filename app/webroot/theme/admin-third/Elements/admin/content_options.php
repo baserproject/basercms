@@ -12,14 +12,11 @@
 
 /**
  * コンテンツオプション
- * @var bool $disableEditContent コンテンツ編集不可かどうか
+ * @var bool $editable コンテンツ編集不可かどうか
  * @var array $authors 作成者リスト
  * @var array $layoutTemplates レイアウトテンプレートリスト
  */
-$disableEdit = false;
-if ($this->BcContents->isEditable()) {
-	$disableEdit = true;
-}
+$editable = $this->BcContents->isEditable();
 ?>
 
 
@@ -34,7 +31,7 @@ if ($this->BcContents->isEditable()) {
 			<tr>
 				<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('Content.description', __d('baser', '説明文')) ?></th>
 				<td class="col-input bca-form-table__input">
-					<?php if (!$disableEdit): ?>
+					<?php if ($editable): ?>
 						<?php echo $this->BcForm->input('Content.description', ['type' => 'textarea', 'cols' => 36, 'rows' => 4, 'data-input-text-size' => 'full-counter']) ?>
 					<?php else: ?>
 						<?php if ($this->BcForm->value('Content.exclude_search')): ?>
@@ -50,7 +47,7 @@ if ($this->BcContents->isEditable()) {
 			<tr>
 				<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('Content.eyecatch', __d('baser', 'アイキャッチ')) ?></th>
 				<td class="col-input bca-form-table__input">
-					<?php if (!$disableEdit): ?>
+					<?php if ($editable): ?>
 						<?php echo $this->BcForm->input('Content.eyecatch', ['type' => 'file', 'imgsize' => 'thumb']) ?>
 					<?php else: ?>
 						<?php echo $this->BcUpload->uploadImage('Content.eyecatch', $this->BcForm->value('Content.eyecatch'), ['imgsize' => 'thumb']) ?>
@@ -61,7 +58,7 @@ if ($this->BcContents->isEditable()) {
 			<tr>
 				<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('Content.author_id', __d('baser', '作成者')) ?></th>
 				<td class="col-input bca-form-table__input">
-					<?php if (!$disableEdit): ?>
+					<?php if ($editable): ?>
 						<?php echo $this->BcForm->input('Content.author_id', ['type' => 'select', 'options' => $authors]) ?>　
 						<small>[<?php echo __d('baser', '作成日') ?>
 							]</small> <?php echo $this->BcForm->input('Content.created_date', ['type' => 'dateTimePicker', 'size' => 12, 'maxlength' => 10]) ?>　
@@ -94,7 +91,7 @@ if ($this->BcContents->isEditable()) {
 			<tr>
 				<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('Content.exclude_search', __d('baser', 'その他設定')) ?></th>
 				<td class="col-input bca-form-table__input">
-					<?php if (!$disableEdit): ?>
+					<?php if ($editable): ?>
 						<span
 							style="white-space: nowrap"><?php echo $this->BcForm->input('Content.exclude_search', ['type' => 'checkbox', 'label' => __d('baser', 'サイト内検索の検索結果より除外する')]) ?></span>　
 						<span
