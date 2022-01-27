@@ -205,6 +205,8 @@ class PagesController extends BcAdminAppController
 	 * @param SiteServiceInterface $siteService
 	 * @param SiteConfigServiceInterface $siteConfigService
 	 * @return void
+     * @checked
+     * @unitTest
 	 */
 	public function edit($id, PageServiceInterface $pageService, ContentServiceInterface $contentService, SiteServiceInterface $siteService, SiteConfigServiceInterface $siteConfigService)
 	{
@@ -241,7 +243,7 @@ class PagesController extends BcAdminAppController
 				$url = $contentService->getUrl($page->content->url, true, $site->useSubDomain);
 				// EVENT Pages.afterEdit
 				$this->dispatchEvent('afterEdit', [
-					'data' => $page
+					'request' => $this->request,
 				]);
                 $this->BcMessage->setSuccess(sprintf(__d('baser', "固定ページ「%s」を更新しました。\n%s"), rawurldecode($page->content->name), urldecode($url)));
 				// 同固定ページへリダイレクト
@@ -289,7 +291,6 @@ class PagesController extends BcAdminAppController
         $editor = $siteConfigService->getValue('editor');
         $editor_enter_br = $siteConfigService->getValue('editor_enter_br');
 		$this->set(compact('editorOptions', 'pageTemplateList', 'publishLink', 'contentEntities', 'page', 'editor', 'editor_enter_br'));
-
 		$this->render('form');
 	}
 

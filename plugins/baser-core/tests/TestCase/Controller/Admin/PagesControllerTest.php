@@ -97,18 +97,21 @@ class PagesControllerTest extends BcTestCase
      */
     public function testEdit()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loginAdmin($this->getRequest('/'));
         $this->enableSecurityToken();
         $this->enableCsrfToken();
-        $data = $this->PageService->getIndex(['folder_template' => "testEdit"])->first();
-        $data->folder_template = 'testEditテンプレート';
+        $data = $this->PageService->getIndex()->first();
+        $data->code = 'testEdit';
         $data->content->name = "pageTestUpdate";
         $id = $data->id;
-        $this->post('/baser/admin/baser-core/content_folders/edit/' . $id, ['ContentFolder' => $data->toArray(), "Content" => ['title' => $data->content->name]]);
+        $this->post('/baser/admin/baser-core/pages/edit/' . $id, [
+            'Page' => $data->toArray(),
+            "Content" => ['title' => $data->content->name, 'parent_id' => $data->content->parent_id]
+        ]);
         $this->assertResponseSuccess();
-        $this->assertRedirect('/baser/admin/baser-core/content_folders/edit/' . $id);
-        $this->assertEquals('testEditテンプレート', $this->ContentFolderService->get($id)->folder_template);
-        $this->assertEquals('contentFolderTestUpdate', $this->ContentFolderService->get($id)->content->name);
+        $this->assertRedirect('/baser/admin/baser-core/pages/edit/' . $id);
+        $this->assertEquals('testEdit', $this->PageService->get($id)->code);
+        $this->assertEquals('pageTestUpdate', $this->PageService->get($id)->content->name);
     }
 
     /**
