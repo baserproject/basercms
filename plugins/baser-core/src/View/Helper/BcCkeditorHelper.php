@@ -93,42 +93,42 @@ class BcCkeditorHelper extends BcAppHelper
     ];
 
     /**
-     * BcCkeditorHelper constructor.
-     * @param View $View
-     * @param array $settings
+     * initialize
+     *
+     * @return void
      */
-    // public function __construct(View $View, $settings = [])
-    // {
-    //     parent::__construct($View, $settings);
-    //     $this->style = [
-    //         ['name' => __d('baser', '青見出し') . '(h3)',
-    //             'element' => 'h3',
-    //             'styles' => ['color' => 'Blue']],
-    //         ['name' => __d('baser', '赤見出し') . '(h3)',
-    //             'element' => 'h3',
-    //             'styles' => ['color' => 'Red']],
-    //         ['name' => __d('baser', '黄マーカー') . '(span)',
-    //             'element' => 'span',
-    //             'styles' => ['background-color' => 'Yellow']],
-    //         ['name' => __d('baser', '緑マーカー') . '(span)',
-    //             'element' => 'span',
-    //             'styles' => ['background-color' => 'Lime']],
-    //         ['name' => __d('baser', '大文字') . '(big)',
-    //             'element' => 'big'],
-    //         ['name' => __d('baser', '小文字') . '(small)',
-    //             'element' => 'small'],
-    //         ['name' => __d('baser', 'コード') . '(code)',
-    //             'element' => 'code'],
-    //         ['name' => __d('baser', '削除文') . '(del)',
-    //             'element' => 'del'],
-    //         ['name' => __d('baser', '挿入文') . '(ins)',
-    //             'element' => 'ins'],
-    //         ['name' => __d('baser', '引用') . '(cite)',
-    //             'element' => 'cite'],
-    //         ['name' => __d('baser', 'インライン') . '(q)',
-    //             'element' => 'q']
-    //     ];
-    // }
+    public function initialize($config): void
+    {
+        $this->style = [
+            ['name' => __d('baser', '青見出し') . '(h3)',
+                'element' => 'h3',
+                'styles' => ['color' => 'Blue']],
+            ['name' => __d('baser', '赤見出し') . '(h3)',
+                'element' => 'h3',
+                'styles' => ['color' => 'Red']],
+            ['name' => __d('baser', '黄マーカー') . '(span)',
+                'element' => 'span',
+                'styles' => ['background-color' => 'Yellow']],
+            ['name' => __d('baser', '緑マーカー') . '(span)',
+                'element' => 'span',
+                'styles' => ['background-color' => 'Lime']],
+            ['name' => __d('baser', '大文字') . '(big)',
+                'element' => 'big'],
+            ['name' => __d('baser', '小文字') . '(small)',
+                'element' => 'small'],
+            ['name' => __d('baser', 'コード') . '(code)',
+                'element' => 'code'],
+            ['name' => __d('baser', '削除文') . '(del)',
+                'element' => 'del'],
+            ['name' => __d('baser', '挿入文') . '(ins)',
+                'element' => 'ins'],
+            ['name' => __d('baser', '引用') . '(cite)',
+                'element' => 'cite'],
+            ['name' => __d('baser', 'インライン') . '(q)',
+                'element' => 'q']
+        ];
+        parent::initialize($config);
+    }
 
     /**
      * CKEditor のスクリプトを構築する
@@ -293,7 +293,7 @@ class BcCkeditorHelper extends BcAppHelper
 
         if (!$this->_script) {
             $this->_script = true;
-            $this->BcHtml->script('vendor/ckeditor/ckeditor.js', ["block" => true]);
+            $this->BcHtml->script(['vendor/ckeditor/ckeditor'], ["block" => true]);
         }
 
         if ($editorUseDraft) {
@@ -308,8 +308,8 @@ class BcCkeditorHelper extends BcAppHelper
             $options['toolbar'][count($options['toolbar']) - 1] = $lastBar;
         }
 
-        $this->BcHtml->scriptBlock("var editor_" . $field . ";", ["inline" => false]);
-        $jscode = "$(window).load(function(){";
+        $jscode = "var editor_{$field} = 'test';\n";
+        $jscode .= "$(window).load(function(){";
         if (!$this->inited) {
             $jscode .= "CKEDITOR.addStylesSet('basercms'," . json_encode(($this->style)) .");";
             $this->inited = true;
@@ -438,7 +438,7 @@ EOL;
         $jscode .= " });";
         $jscode .= "});";
 
-        return $this->BcHtml->scriptBlock($jscode) . '<input type="hidden" id="DraftMode' . $fieldCamelize . '" value="' . $draftMode . '">';
+        return $this->BcHtml->scriptBlock($jscode, ['type' => 'text/javascript', 'block' => true]) . '<input type="hidden" id="DraftMode' . $fieldCamelize . '" value="' . $draftMode . '">';
     }
 
     /**
@@ -455,8 +455,7 @@ EOL;
             $inputFieldName = $fieldName . '_tmp';
             $hiddenIdElement = pluginSplit($fieldName);
             $hiddenId = $hiddenIdElement[0] . Inflector::camelize($hiddenIdElement[1]);
-
-            $hidden = $this->BcAdminForm->hidden($fieldName, ['id' => $hiddenId]) . $this->BcAdminForm->hidden($model . '.' . $options['editorDraftField']);
+            $hidden = $this->BcAdminForm->hidden($fieldName, ['id' => $hiddenId]) . $this->BcAdminForm->hidden($model . '.' . $options['editorDraftField'] , ['id' => $hiddenIdElement[0] . 'Draft']);
         } else {
             $inputFieldName = $fieldName;
             $hidden = '';
