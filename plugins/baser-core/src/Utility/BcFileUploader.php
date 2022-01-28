@@ -26,9 +26,9 @@ use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 
 /**
- * Class BcUploadBehavior
+ * Class BcFileUploader
  */
-class BcUpload
+class BcFileUploader
 {
 
     /**
