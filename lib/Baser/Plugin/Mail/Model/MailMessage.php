@@ -108,7 +108,7 @@ class MailMessage extends MailAppModel
 	public function setupUpload($name)
 	{
 
-		$settings = $this->Behaviors->BcUpload->BcUpload['MailMessage']->settings;
+		$settings = $this->Behaviors->BcUpload->BcFileUploader['MailMessage']->settings;
 		$settings['fields'] = [];
 		foreach($this->mailFields as $mailField) {
 			$mailField = $mailField['MailField'];
