@@ -91,24 +91,25 @@ class PageService implements PageServiceInterface
 
     /**
      * ユーザー管理の一覧用のデータを取得
-     * @param array $queryParams
+     * @param array|null $queryParams
      * @return Query
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function getIndex(array $queryParams): Query
+    public function getIndex(array $queryParams=[]): Query
     {
-        $query = $this->Pages->find('all')->contain('UserGroups');
-
+        $query = $this->Pages->find('all')->contain('Contents');
         if (!empty($queryParams['limit'])) {
             $query->limit($queryParams['limit']);
         }
 
-        if (!empty($queryParams['user_group_id'])) {
-            $query->matching('UserGroups', function($q) use ($queryParams) {
-                return $q->where(['UserGroups.id' => $queryParams['user_group_id']]);
-            });
-        }
-        if (!empty($queryParams['name'])) {
-            $query->where(['name LIKE' => '%' . $queryParams['name'] . '%']);
+        $queryList = ['contents', 'draft', 'code'];
+
+        foreach ($queryParams as $key => $value) {
+            if (in_array($key, $queryList)) {
+                $query->where(["$key LIKE" => '%' . $value . '%']);
+            }
         }
         return $query;
     }

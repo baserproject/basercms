@@ -143,16 +143,17 @@ $editable = $this->BcContents->isEditable();
     </tr>
     <tr>
       <th class="col-head bca-form-table__label">
-        <?php echo $this->BcAdminForm->label("ContentFolder.content.title", __d('baser', 'タイトル')) ?>&nbsp;<span class="bca-label"
-                                                                                            data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
+        <?php echo $this->BcAdminForm->label("Content.title", __d('baser', 'タイトル')) ?>
+        &nbsp;
+        <span class="bca-label"  data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
       </th>
       <td class="col-input bca-form-table__input">
         <?php if ($editable): ?>
-          <?php echo $this->BcAdminForm->control("ContentFolder.content.title", ['type' => 'text', 'size' => 50]) ?>
-          <?php echo $this->BcAdminForm->error("ContentFolder.content.title") ?>
+          <?php echo $this->BcAdminForm->control("Content.title", ['type' => 'text', 'size' => 50]) ?>
+          <?php echo $this->BcAdminForm->error("Content.title") ?>
         <?php else: ?>
-          <?php echo h($this->BcAdminForm->getSourceValue("ContentFolder.content.title")) ?>
-          <?php echo $this->BcAdminForm->hidden("ContentFolder.content.title") ?>
+          <?php echo h($this->BcAdminForm->getSourceValue("Content.title")) ?>
+          <?php echo $this->BcAdminForm->hidden("Content.title") ?>
         <?php endif ?>
       </td>
     </tr>

@@ -20,6 +20,10 @@ use BaserCore\Service\SiteServiceInterface;
 use BaserCore\Service\ContentServiceInterface;
 use BaserCore\Service\SiteConfigServiceInterface;
 use BaserCore\Controller\Admin\BcAdminAppController;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\Note;
 /**
  * PagesController
  */
@@ -41,6 +45,9 @@ class PagesController extends BcAdminAppController
     /**
      * initialize
      * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function initialize(): void
     {
@@ -52,6 +59,9 @@ class PagesController extends BcAdminAppController
 	 * beforeFilter
 	 *
 	 * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
 	 */
 	public function beforeFilter(EventInterface $event)
 	{
@@ -195,6 +205,8 @@ class PagesController extends BcAdminAppController
 	 * @param SiteServiceInterface $siteService
 	 * @param SiteConfigServiceInterface $siteConfigService
 	 * @return void
+     * @checked
+     * @unitTest
 	 */
 	public function edit($id, PageServiceInterface $pageService, ContentServiceInterface $contentService, SiteServiceInterface $siteService, SiteConfigServiceInterface $siteConfigService)
 	{
@@ -208,8 +220,6 @@ class PagesController extends BcAdminAppController
 				$this->BcMessage->setError(__d('baser', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size')));
 				$this->redirect(['action' => 'edit', $id]);
 			}
-			$isChangedStatus = $contentService->isChangedStatus($id, $this->request->getData());
-
 			// EVENT Pages.beforeEdit
 			$event = $this->dispatchEvent('beforeEdit', [
 				'request' => $this->request,
@@ -218,31 +228,29 @@ class PagesController extends BcAdminAppController
 				$this->request = ($event->getResult() === null || $event->getResult() === true)? $event->getData('request') : $event->getResult();
 			}
 
-			$this->Page->set($this->request->data);
-			if ($data = $this->Page->save()) {
-				// タイトル、URL、公開状態が更新された場合、全てビューキャッシュを削除する
-				if ($isChangedStatus) {
-					clearViewCache();
+            try {
+                $this->request = $this->request->withData('Page.content', $this->request->getData('Content'));
+                $page = $pageService->update($page, $this->request->getData('Page'));
+                // TODO cumitz: clearViewCache()がないため一時的にコメントアウト
+                if ($contentService->isChangedStatus($id, $this->request->getData('Content'))) {
+					// clearViewCache();
 				} else {
-					clearViewCache($this->request->data['Content']['url']);
+					// clearViewCache($this->request->getData('Content.url'));
 				}
 
 				// 完了メッセージ
-				$site = $siteService->findById($data['Content']['site_id'])->first();
-				$url = $contentService->getUrl($data['Content']['url'], true, $site->useSubDomain);
-				$this->BcMessage->setSuccess(sprintf(__d('baser', "固定ページ「%s」を更新しました。\n%s"), rawurldecode($data['Content']['name']), urldecode($url)));
-
+				$site = $siteService->findById($page->content->site_id)->first();
+				$url = $contentService->getUrl($page->content->url, true, $site->useSubDomain);
 				// EVENT Pages.afterEdit
 				$this->dispatchEvent('afterEdit', [
-					'data' => $data
+					'request' => $this->request,
 				]);
-
+                $this->BcMessage->setSuccess(sprintf(__d('baser', "固定ページ「%s」を更新しました。\n%s"), rawurldecode($page->content->name), urldecode($url)));
 				// 同固定ページへリダイレクト
-				$this->redirect(['action' => 'edit', $id]);
-				return;
-			}
-
-			$this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
+				return $this->redirect(['action' => 'edit', $id]);
+            }  catch (\Exception $e) {
+                $this->BcMessage->setError('保存中にエラーが発生しました。入力内容を確認してください。');
+            }
 		} else {
 			$this->request = $this->request->withData("Page", $page);
 			if (!$this->request->getData()) {
@@ -283,26 +291,7 @@ class PagesController extends BcAdminAppController
         $editor = $siteConfigService->getValue('editor');
         $editor_enter_br = $siteConfigService->getValue('editor_enter_br');
 		$this->set(compact('editorOptions', 'pageTemplateList', 'publishLink', 'contentEntities', 'page', 'editor', 'editor_enter_br'));
-
 		$this->render('form');
-	}
-
-	/**
-	 * 削除
-	 *
-	 * Controller::requestAction() で呼び出される
-	 *
-	 * @return bool
-	 */
-	public function admin_delete()
-	{
-		if (empty($this->request->data['entityId'])) {
-			return false;
-		}
-		if ($this->Page->delete($this->request->data['entityId'])) {
-			return true;
-		}
-		return false;
 	}
 
 	/**

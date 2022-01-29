@@ -46,6 +46,9 @@ class PagesController extends AppController
     /**
      * initialize
      * @return void
+     * @checked
+     * @unitTest
+     * @noTodo
      */
     public function initialize(): void
     {
@@ -62,6 +65,7 @@ class PagesController extends AppController
 	 * @throws NotFoundException When the view file could not be found
 	 *   or MissingViewException in debug mode.
      * @checked
+     * @unitTest
      * @noTodo
 	 */
 	public function display(PageServiceInterface $pageService, ContentFolderServiceInterface $contentFolderService)
@@ -75,7 +79,7 @@ class PagesController extends AppController
 		}
 
 		if ($this->request->getParam('Content')->alias) {
-		    $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
+            $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
 			$site = $sites->findByUrl($urlTmp);
 			if ($site && ($site->alias == $this->request->getParam('Site')->alias)) {
 				$urlTmp = preg_replace('/^\/' . preg_quote($site->alias, '/') . '\//', '/' . $this->request->getParam('Site')->name . '/', $urlTmp);
