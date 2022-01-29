@@ -16,7 +16,7 @@ use BaserCore\View\BcAdminAppView;
  */
 $this->BcBaser->css('admin/ckeditor/editor', ['inline' => true]);
 // $this->BcBaser->js('admin/pages/edit.bundle', false);
-$this->BcBaser->js('src/admin/pages/applyCkeditor', false);
+$this->BcBaser->js('admin/pages/applyCkeditor.bundle', false);
 $this->BcAdmin->setTitle(__d('baser', '固定ページ情報編集'));
 $this->BcAdmin->setHelp('pages_form');
 ?>
@@ -33,7 +33,6 @@ $this->BcAdmin->setHelp('pages_form');
 <?php echo $this->BcFormTable->dispatchBefore() ?>
 <div class="bca-section bca-section-editor-area">
   <?php echo $this->BcAdminForm->editor('Page.contents', array_merge([
-
     'editor' => $editor,
     'editorUseDraft' => true,
     'editorDraftField' => 'draft',

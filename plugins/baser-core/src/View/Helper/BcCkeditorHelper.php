@@ -275,7 +275,7 @@ class BcCkeditorHelper extends BcAppHelper
         }
         $options = $_options;
 
-        $jscode = $model = $domId = '';
+        $jscode = $model = $editorDomId = '';
         if (strpos($fieldName, '.')) {
             [$model, $field] = explode('.', $fieldName);
         } else {
@@ -289,7 +289,7 @@ class BcCkeditorHelper extends BcAppHelper
         }
         $dom = explode('.', $fieldName);
 
-        $domId = Inflector::camelize($dom[0]) . Inflector::camelize($dom[1]);
+        $editorDomId = Inflector::camelize($dom[0]) . Inflector::camelize($dom[1]);
 
         if (!$this->_script) {
             $this->_script = true;
@@ -345,33 +345,38 @@ class BcCkeditorHelper extends BcAppHelper
         $this->theme = $theme;
         $fieldCamelize = Inflector::camelize($field);
         $draftMode = $editorDisablePublish ? 'draft' :  'publish';
-        // applyCkeditorで使う変数のみ定義する
+        // applyCkeditor.jsで使う変数のみ定義する
         $jscode;
         $stringVars = [
-            'ckeditor_field' => "editor_{$field}",
-            'editor_styles_set' => $editorStylesSet,
-            'editor_enter_br' => $editorEnterBr,
-            'editor_dom_id' => $domId,
-            'use_draft' => $editorUseDraft,
-            'draft_area_id' => $draftAreaId,
-            'publish_area_id' => $publishAreaId,
-            'editor_readonly_publish' => $editorReadOnlyPublish,
-            'editor_disable_draft' => $editorDisableDraft,
-            'editor_disable_publish' => $editorDisablePublish,
-            'field_camelize' => $fieldCamelize,
+            'ckeditorField' => "editor_{$field}",
+            'editorStylesSet' => $editorStylesSet,
+            'editorEnterBr' => $editorEnterBr,
+            'editorDomId' => $editorDomId,
+            'editorUseDraft' => $editorUseDraft,
+            'draftAreaId' => $draftAreaId,
+            'publishAreaId' => $publishAreaId,
+            'editorReadonlyPublish' => $editorReadOnlyPublish,
+            'editorDisableDraft' => $editorDisableDraft,
+            'editorDisablePublish' => $editorDisablePublish,
+            'fieldCamelize' => $fieldCamelize,
         ];
         foreach ($stringVars as $varName => $varValue) {
-            $jscode .= "var {$varName}='{$varValue}';\n";
+            if (is_bool($varValue)) {
+                $varValue = $varValue ? 1 : 0;
+                $jscode .= "var {$varName}={$varValue};\n";
+            } else {
+                $jscode .= "var {$varName}='{$varValue}';\n";
+            }
         }
         if ($editorUseTemplates) {
             $editorUrl = $this->url(['controller' => 'editor_templates', 'action' => 'js']);
-            $jscode .= "var editor_url='{$editorUrl}';";
+            $jscode .= "var editorUrl='{$editorUrl}';";
         }
         $arrayVars = [
-            'initial_style' => $this->style,
-            'editor_style' => $editorStyles,
-            'theme_editor_csses' => $themeEditorCsses,
-            'editor_options' => $options,
+            'initialStyle' => $this->style,
+            'editorStyle' => $editorStyles,
+            'themeEditorCsses' => $themeEditorCsses,
+            'editorOptions' => $options,
         ];
         foreach ($arrayVars as $varName => $varValue) {
             $jscode .= "var {$varName}=" . json_encode($varValue) .  ";\n";

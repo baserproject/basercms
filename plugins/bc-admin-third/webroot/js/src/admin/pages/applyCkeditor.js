@@ -1,30 +1,19 @@
-window.onload = function() {
-    let field = ckeditor_field;
-    let initStatus = false;
-    let styleInitStatus = false;
-    const initialStyle = initial_style;
-    const editorStyle = editor_style;
-    const editorUrl = editor_url;
-    const editorStylesSet = editor_styles_set;
-    const editorEnterBr = parseInt(editor_enter_br);
-    const themeEditorCsses = theme_editor_csses;
-    const editorDomId = editor_dom_id;
-    const editorOptions = editor_options;
-    const editorUseDraft = Boolean(use_draft);
-    const draftAreaId = draft_area_id;
-    const publishAreaId = publish_area_id;
-    const editorReadOnlyPublish = editor_readonly_publish;
-    const fieldCamelize = field_camelize;
-    const editorDisableDraft = editor_disable_draft;
-    const editorDisablePublish = editor_disable_publish;
-
-    $(window).on('load', function() {
+window.addEventListener('DOMContentLoaded', function() {
+    // すでにvar宣言されている変数をjavascript用に変換
+    editorEnterBr = parseInt(editorEnterBr);
+    editorUseDraft = Boolean(editorUseDraft);
+    editorReadonlyPublish = Boolean(editorReadonlyPublish);
+    editorDisableDraft = Boolean(editorDisableDraft);
+    editorDisablePublish = Boolean(editorDisablePublish);
+    var  initStatus = false;
+    var  styleInitStatus = false;
+    $(function() {
         if (!initStatus) {
             CKEDITOR.addStylesSet('basercms', initialStyle);
             initStatus = true;
         }
         if (!styleInitStatus && editorStyle) {
-            editorStyle.map((key, editor) => CKEDITOR.addStylesSet(key, editor));
+            editorStyle[editorStylesSet].map((editor, key) => CKEDITOR.addStylesSet(key, editor));
             styleInitStatus = true;
         }
         if (editorUrl) {
@@ -41,33 +30,40 @@ window.onload = function() {
         if (editorEnterBr) {
             CKEDITOR.config.enterMode = CKEDITOR.ENTER_BR;
         }
-        // TODO ucmitz: contentcssに複数入ってるか確認する
-        themeEditorCsses.map((css) => CKEDITOR.config.contentsCss = [css]);
-        field = CKEDITOR.replace(editorDomId, editorOptions);
-        field.on('pluginsLoaded', function(event) {
+        // 複数入ることを前提に配列型に変更
+        if (typeof CKEDITOR.config.contentsCss === 'string') {
+            CKEDITOR.config.contentsCss = [CKEDITOR.config.contentsCss];
+        }
+        themeEditorCsses.map((css) => {
+            if (Array.isArray(CKEDITOR.config.contentsCss)) {
+                CKEDITOR.config.contentsCss.push(css);
+            }
+        });
+        CKEDITOR[ckeditorField] = CKEDITOR.replace(editorDomId, editorOptions);
+        CKEDITOR[ckeditorField].on('pluginsLoaded', function(event) {
             if (editorUseDraft) {
                 if (draftAreaId) {
-                    field.draftDraftAreaId = draftAreaId;
+                    CKEDITOR[ckeditorField].draftDraftAreaId = draftAreaId;
                 }
                 if (publishAreaId) {
-                    field.draftPublishAreaId = publishAreaId;
+                    CKEDITOR[ckeditorField].draftPublishAreaId = publishAreaId;
                 }
-                if (editorReadOnlyPublish) {
-                    field.draftReadOnlyPublish = true;
+                if (editorReadonlyPublish) {
+                    CKEDITOR[ckeditorField].draftReadOnlyPublish = true;
                 }
             }
         });
         if (editorUseDraft) {
-            field.on('instanceReady', function(event) {
+            CKEDITOR[ckeditorField].on('instanceReady', function(event) {
                 if (editorDisableDraft) {
-                    field.execCommand('changePublish');
-                    field.execCommand('disableDraft');
+                    CKEDITOR[ckeditorField].execCommand('changePublish');
+                    CKEDITOR[ckeditorField].execCommand('disableDraft');
                 }
                 if (editorDisablePublish) {
-                    field.execCommand('changeDraft');
-                    field.execCommand('disablePublish');
+                    CKEDITOR[ckeditorField].execCommand('changeDraft');
+                    CKEDITOR[ckeditorField].execCommand('disablePublish');
                 }
-                field.on('beforeCommandExec', function( ev ){
+                CKEDITOR[ckeditorField].on('beforeCommandExec', function( ev ){
                     if(ev.data.name === 'changePublish' || ev.data.name === 'copyPublish') {
                         $(`#DraftMode${fieldCamelize}`).val('publish');
                     } else if(ev.data.name === 'changeDraft' || ev.data.name === 'copyDraft') {
@@ -76,10 +72,10 @@ window.onload = function() {
                 });
             });
         }
-        field.on('instanceReady', function(event) {
-            if(field.getCommand('maximize').uiItems.length > 0) {
+        CKEDITOR[ckeditorField].on('instanceReady', function(event) {
+            if(CKEDITOR[ckeditorField].getCommand('maximize').uiItems.length > 0) {
                 // ツールバーの表示を切り替え
-                $field.getCommand('maximize').on( 'state' ,
+                CKEDITOR[ckeditorField].getCommand('maximize').on( 'state' ,
                 (e) => {
                     if(this.state == 1) {
                         $("#ToolBar").hide();
@@ -90,4 +86,4 @@ window.onload = function() {
             }
         });
     });
-}
+});
