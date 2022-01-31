@@ -101,6 +101,9 @@ class BcCkeditorHelper extends BcAppHelper
      * initialize
      *
      * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function initialize($config): void
     {
@@ -282,7 +285,7 @@ class BcCkeditorHelper extends BcAppHelper
         }
         $options = $_options;
 
-        $jscode = $model = $editorDomId = '';
+        $jscode = $model = $editorDomId = $publishAreaId = $draftAreaId = '';
         if (strpos($fieldName, '.')) {
             [$model, $field] = explode('.', $fieldName);
         } else {
@@ -399,6 +402,9 @@ class BcCkeditorHelper extends BcAppHelper
      * @param string $fieldName エディタのid, nameなどの名前を指定
      * @param array $options
      * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function editor($fieldName, $options = [])
     {

@@ -82,6 +82,7 @@ class PagesControllerTest extends BcTestCase
         $this->PagesController->beforeFilter($event);
         $helpers = $this->PagesController->viewBuilder()->getHelpers();
         $this->assertCount(4, $helpers);
+        $this->assertEquals($this->PagesController->Security->getConfig('unlockedFields'), ['Page.contents']);
     }
 
     /**

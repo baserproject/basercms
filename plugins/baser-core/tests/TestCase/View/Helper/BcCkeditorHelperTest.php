@@ -54,30 +54,29 @@ class BcCkeditorHelperTest extends BcTestCase
     }
 
     /**
+     * testInitialize
+     *
+     * @return void
+     */
+    public function testInitialize()
+    {
+        $this->assertnotEmpty($this->BcCkeditor->style);
+    }
+    /**
      * CKEditorのテキストエリアを出力する
      *
      * @param string $fieldName エディタのid, nameなどの名前を指定
      * @param array $options
      * @param boolean $expected 期待値
-     * @dataProvider editorDataProvider
      */
-    public function testEditor($fieldName, $options, $expected)
+    public function testEditor()
     {
-
-        $expected = '/' . $expected . '/';
-        $result = $this->BcCkeditor->editor($fieldName, $options);
-
-        $this->assertRegExp($expected, $result);
-    }
-
-    public function editorDataProvider()
-    {
-        return [
-            ['test', [], 'test'],
-            ['test', ['editorLanguage' => 'en'], '"language":"en"'],
-            ['test', ['editorSkin' => 'office2013'], '"skin":"office2013"'],
-            ['test', ['editorToolbar' => ['test' => '[Anchor]']], '"test":"\[Anchor\]"'],
-        ];
+        $fieldName = 'Page.test';
+        $result = $this->BcCkeditor->editor($fieldName, []);
+        $tagList = ['/<span class="bca-textarea"/', '/<textarea name="Page\[test\]"/', '/<input type="hidden" id="DraftModeTest"/'];
+        foreach ($tagList as $requiredTag) {
+            $this->assertRegExp($requiredTag, $result);
+        }
     }
 
     /**
