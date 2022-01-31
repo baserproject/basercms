@@ -11,10 +11,14 @@
 namespace BaserCore\View\Helper;
 
 use Cake\Core\Configure;
-use Cake\Error\Debugger;
 use Cake\Utility\Inflector;
 use BaserCore\View\Helper\BcAppHelper;
+use BaserCore\View\Helper\BcHtmlHelper;
 use BaserCore\Event\BcEventDispatcherTrait;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
+
 
 
 /**
@@ -22,6 +26,7 @@ use BaserCore\Event\BcEventDispatcherTrait;
  *
  * @package Baser.View.Helper
  * @property BcAdminFormHelper $BcAdminForm
+ * @property BcHtmlHelper $BcHtml
  */
 class BcCkeditorHelper extends BcAppHelper
 {
@@ -203,10 +208,12 @@ class BcCkeditorHelper extends BcAppHelper
      * @param string $fieldName
      * @param array $options
      * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    function _build($fieldName, $options = [])
+    protected function buildTmpScript($fieldName, $options = [])
     {
-
         $options = array_merge([
             'editorLanguage' => 'ja', // 言語
             'editorSkin' => 'moono', // スキン
@@ -294,6 +301,7 @@ class BcCkeditorHelper extends BcAppHelper
         if (!$this->_script) {
             $this->_script = true;
             $this->BcHtml->script(['vendor/ckeditor/ckeditor'], ["block" => true]);
+            $this->BcHtml->script(['admin/pages/applyCkeditor.bundle'], ["block" => true]);
         }
 
         if ($editorUseDraft) {
@@ -369,7 +377,7 @@ class BcCkeditorHelper extends BcAppHelper
             }
         }
         if ($editorUseTemplates) {
-            $editorUrl = $this->url(['controller' => 'editor_templates', 'action' => 'js']);
+            $editorUrl = $this->url(['plugin' => 'BaserCore', 'prefix' => 'Admin', 'controller' => 'editor_templates', 'action' => 'js']);
             $jscode .= "var editorUrl='{$editorUrl}';";
         }
         $arrayVars = [
@@ -413,6 +421,6 @@ class BcCkeditorHelper extends BcAppHelper
         }
         $textIdElement = pluginSplit($inputFieldName);
         $_options['id'] = $textIdElement[0] . Inflector::camelize($textIdElement[1]);
-        return $this->BcAdminForm->control($inputFieldName, $_options) . $hidden . $this->_build($fieldName, $options);
+        return $this->BcAdminForm->control($inputFieldName, $_options) . $hidden . $this->buildTmpScript($fieldName, $options);
     }
 }

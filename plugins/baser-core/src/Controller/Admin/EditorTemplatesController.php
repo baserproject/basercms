@@ -1,18 +1,18 @@
 <?php
-// TODO : コード確認要
-use BaserCore\Utility\BcSiteConfig;
-
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.Controller
- * @since           baserCMS v 0.1.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
+
+namespace BaserCore\Controller\Admin;
+
+use Cake\Event\EventInterface;
+use BaserCore\Controller\Admin\BcAdminAppController;
 
 /**
  * Class EditorTemplatesController
@@ -23,7 +23,7 @@ return;
  *
  * @package Baser.Controller
  */
-class EditorTemplatesController extends AppController
+class EditorTemplatesController extends BcAdminAppController
 {
 
     /**
@@ -52,8 +52,9 @@ class EditorTemplatesController extends AppController
      *
      * @return void
      */
-    public function beforeFilter()
+    public function beforeFilter(EventInterface $event)
     {
+        return // TODO : 一時措置
         parent::beforeFilter();
         $this->crumbs = [
             ['name' => __d('baser', 'システム設定'), 'url' => ['controller' => 'site_configs', 'action' => 'form']],

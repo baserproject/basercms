@@ -69,6 +69,7 @@ class PagesController extends BcAdminAppController
         if (BcSiteConfig::get('editor') && BcSiteConfig::get('editor') !== 'none') {
             $this->viewBuilder()->setHelpers(["BaserCore." . BcSiteConfig::get('editor'), 'BaserCore.BcGooglemaps', 'BaserCore.BcText', 'BaserCore.BcFreeze']);
         }
+        $this->Security->setConfig('unlockedFields', ['Page.contents']);
 	}
 
 	/**
