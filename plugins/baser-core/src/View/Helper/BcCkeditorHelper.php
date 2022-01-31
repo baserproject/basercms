@@ -10,14 +10,15 @@
  */
 namespace BaserCore\View\Helper;
 
+use Cake\View\Helper;
+use Cake\Routing\Asset;
 use Cake\Core\Configure;
 use Cake\Utility\Inflector;
-use BaserCore\View\Helper\BcAppHelper;
-use BaserCore\View\Helper\BcHtmlHelper;
-use BaserCore\Event\BcEventDispatcherTrait;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use BaserCore\View\Helper\BcHtmlHelper;
+use BaserCore\Event\BcEventDispatcherTrait;
 
 
 
@@ -28,7 +29,7 @@ use BaserCore\Annotation\UnitTest;
  * @property BcAdminFormHelper $BcAdminForm
  * @property BcHtmlHelper $BcHtml
  */
-class BcCkeditorHelper extends BcAppHelper
+class BcCkeditorHelper extends Helper
 {
     /**
      * Trait
@@ -329,12 +330,12 @@ class BcCkeditorHelper extends BcAppHelper
         if ($theme) {
             $themeEditorCsses[] = [
                 'path' => BASER_THEMES . Configure::read('BcSite.theme') . DS . 'css' . DS . 'editor.css',
-                'url' => $this->webroot('/css/editor.css')
+                'url' => $this->Url->webroot('/css/editor.css')
             ];
         }
         $themeEditorCsses[] = [
             'path' => BASER_VIEWS . 'webroot' . DS . 'css' . DS . 'admin' . DS . 'ckeditor' . DS . 'contents.css',
-            'url' => $this->webroot('/css/admin/ckeditor/contents.css')
+            'url' => $this->Url->webroot('/css/admin/ckeditor/contents.css')
         ];
         foreach($themeEditorCsses as $key => $themeEditorCss) {
             if (!file_exists($themeEditorCss['path'])) {
@@ -349,7 +350,7 @@ class BcCkeditorHelper extends BcAppHelper
             if ($sitePrefix) {
                 array_unshift($themeEditorCsses, [
                     'path' => BASER_THEMES . Configure::read('BcSite.theme') . DS . 'css' . DS . $sitePrefix . DS . 'editor.css',
-                    'url' => $this->webroot('/css/' . $sitePrefix . '/editor.css')
+                    'url' => $this->Url->webroot('/css/' . $sitePrefix . '/editor.css')
                 ]);
             }
         }
@@ -380,7 +381,7 @@ class BcCkeditorHelper extends BcAppHelper
             }
         }
         if ($editorUseTemplates) {
-            $editorUrl = $this->url(['plugin' => 'BaserCore', 'prefix' => 'Admin', 'controller' => 'editor_templates', 'action' => 'js']);
+            $editorUrl = $this->Url->build(['plugin' => 'BaserCore', 'prefix' => 'Admin', 'controller' => 'editor_templates', 'action' => 'js']);
             $jscode .= "var editorUrl='{$editorUrl}';";
         }
         $arrayVars = [
