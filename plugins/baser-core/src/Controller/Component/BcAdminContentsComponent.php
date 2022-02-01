@@ -125,7 +125,7 @@ class BcAdminContentsComponent extends Component
             if (in_array($parentTemplate, $templates)) {
                 unset($templates[$parentTemplate]);
             }
-            array_unshift($templates, ['' => __d('baser', '親フォルダの設定に従う') . '（' . $parentTemplate . '）']);
+            $templates = array_merge($templates, ['' => __d('baser', '親フォルダの設定に従う') . '（' . $parentTemplate . '）']);
         }
         $controller->set('layoutTemplates', $templates);
 

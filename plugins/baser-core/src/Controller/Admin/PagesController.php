@@ -228,8 +228,9 @@ class PagesController extends BcAdminAppController
 			if ($event !== false) {
 				$this->request = ($event->getResult() === null || $event->getResult() === true)? $event->getData('request') : $event->getResult();
 			}
-
             try {
+                // contents_tmpをcontentsに反映
+                $this->request = $this->request->withData('Page.contents', $this->request->getData('Page.contents_tmp'));
                 $this->request = $this->request->withData('Page.content', $this->request->getData('Content'));
                 $page = $pageService->update($page, $this->request->getData('Page'));
                 // TODO cumitz: clearViewCache()がないため一時的にコメントアウト
