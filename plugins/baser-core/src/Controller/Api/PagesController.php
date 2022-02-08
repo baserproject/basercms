@@ -46,7 +46,7 @@ class PagesController extends BcApiController
     /**
      * 固定ページ取得
      * @param PageServiceInterface $Pages
-     * @param $id
+     * @param int $id
      * @checked
      * @noTodo
      * @unitTest
@@ -88,7 +88,7 @@ class PagesController extends BcApiController
     /**
      * 固定ページ削除
      * @param PageServiceInterface $Pages
-     * @param $id
+     * @param int $id
      * @checked
      * @noTodo
      * @unitTest
@@ -113,8 +113,8 @@ class PagesController extends BcApiController
 
     /**
      * 固定ページー情報編集
-     * @param PageServiceInterface $contents
-     * @param $id
+     * @param PageServiceInterface $pages
+     * @param int $id
      * @checked
      * @noTodo
      * @unitTest
@@ -136,4 +136,33 @@ class PagesController extends BcApiController
         ]);
         $this->viewBuilder()->setOption('serialize', ['page', 'message', 'errors']);
     }
+
+    /**
+	 * コピー
+	 * @param PageServiceInterface $pages
+	 */
+	public function ajax_copy(PageServiceInterface $pages)
+	{
+        // TODO umictz: 一時措置
+        return;
+		if (!$this->request->getData()) {
+			$this->ajaxError(500, __d('baser', '無効な処理です。'));
+		}
+		$user = $this->BcAuth->user();
+		$data = $this->Page->copy(
+			$this->request->getData('entityId'),
+			$this->request->getData('parentId'),
+			$this->request->getData('title'),
+			$user['id'],
+			$this->request->getData('siteId')
+		);
+		if (!$data) {
+			$this->ajaxError(500, $this->Page->validationErrors);
+			return false;
+		}
+
+		$message = sprintf(__d('baser', '固定ページのコピー「%s」を追加しました。'), $this->request->data['title']);
+		$this->BcMessage->setSuccess($message, true, false);
+		return json_encode($data['Content']);
+	}
 }

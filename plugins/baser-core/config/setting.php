@@ -472,9 +472,9 @@ return [
                             'action' => 'display'
                         ],
                         'copy' => [
-                            'prefix' => 'Admin',
+                            'prefix' => 'Api',
                             'controller' => 'Pages',
-                            'action' => 'ajax_copy'
+                            'action' => 'copy'
                         ]
                     ]
                 ],

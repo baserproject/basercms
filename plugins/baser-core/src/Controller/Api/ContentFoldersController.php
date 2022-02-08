@@ -113,7 +113,7 @@ class ContentFoldersController extends BcApiController
 
     /**
      * コンテンツフォルダー情報編集
-     * @param ContentFolderServiceInterface $contents
+     * @param ContentFolderServiceInterface $contentFolders
      * @param $id
      * @checked
      * @noTodo

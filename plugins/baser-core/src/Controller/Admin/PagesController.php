@@ -205,35 +205,6 @@ class PagesController extends BcAdminAppController
 	}
 
 	/**
-	 * コピー
-	 *
-	 * @return bool
-	 */
-	public function admin_ajax_copy()
-	{
-		$this->autoRender = false;
-		if (!$this->request->data) {
-			$this->ajaxError(500, __d('baser', '無効な処理です。'));
-		}
-		$user = $this->BcAuth->user();
-		$data = $this->Page->copy(
-			$this->request->data['entityId'],
-			$this->request->data['parentId'],
-			$this->request->data['title'],
-			$user['id'],
-			$this->request->data['siteId']
-		);
-		if (!$data) {
-			$this->ajaxError(500, $this->Page->validationErrors);
-			return false;
-		}
-
-		$message = sprintf(__d('baser', '固定ページのコピー「%s」を追加しました。'), $this->request->data['title']);
-		$this->BcMessage->setSuccess($message, true, false);
-		return json_encode($data['Content']);
-	}
-
-	/**
 	 * 一覧の表示用データをセットする
 	 *
 	 * @return void

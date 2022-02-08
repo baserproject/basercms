@@ -863,11 +863,6 @@
             if ((!$.bcTree.settings[data.contentType]['multiple'] && $.bcTree.settings[data.contentType]['exists']) || data.contentAliasId) {
                 url = $.bcUtil.apiBaseUrl + 'baser-core' + '/contents/add_alias';
                 data.alias = true;
-                // TODO ucmitz: aliasの場合を再確認する
-                var postData = {
-                    aliasId: data.contentAliasId,
-                    aliasName: data.contentTitle,
-                };
             } else {
                 url = $.bcTree.settings[data.contentType]['url']['add'];
             }
@@ -899,7 +894,7 @@
                         },
                         dataType: 'json',
                         beforeSend: function () {
-                            this.data = $.bcTree.fillExtraData(this.data, data.contentType);
+                            this.data = $.bcTree.fillExtraData(this.data, data);
                             $.bcUtil.hideMessage();
                             $.bcUtil.showLoader();
                         },
@@ -934,12 +929,12 @@
         /**
          * ポスト用のデータにコンテンツの種類に基づいた不足データを追加する
          *
-         * @param postData 送信データ
-         * @param type コンテンツタイプ
+         * @param postData 送信用データ
+         * @param settingData 保持してるデータ
          */
-        fillExtraData: function (postData, type) {
+        fillExtraData: function (postData, settingData) {
             const extra = (() => {
-                switch (type) {
+                switch (settingData.contentType) {
                     case "ContentFolder":
                         return {
                             folder_template: "",
@@ -958,6 +953,13 @@
             })();
             if (extra) {
                 postData  += '&' +  encodeURI($.param(extra));
+            }
+            if (settingData.alias) {
+                const alias =  {
+                    aliasId: settingData.contentAliasId,
+                    aliasName: settingData.contentTitle,
+                };
+                postData  += '&' +  encodeURI($.param(alias));
             }
             return postData;
         },
@@ -1016,7 +1018,6 @@
          * @param node
          */
         copyContent: function (parent, node) {
-            var url = '';
             var data = $.extend(true, {}, node.data.jstree);
 
             data.contentTitle = bcI18n.bcTreeCopyTitle.sprintf(data.contentTitle);
