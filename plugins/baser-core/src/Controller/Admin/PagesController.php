@@ -77,20 +77,20 @@ class PagesController extends BcAdminAppController
 	 *
 	 * @return mixed json|false
 	 */
-	public function admin_ajax_add()
+	public function ajax_add(PageServiceInterface $pageService, ContentServiceInterface $contentService, SiteServiceInterface $siteService)
 	{
-		$this->autoRender = false;
-		if (!$this->request->data) {
+		$this->disableAutoRender();
+		if (!$this->request->getData()) {
 			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 		}
 
 		// EVENT Pages.beforeAdd
 		$event = $this->dispatchEvent('beforeAdd', [
-			'data' => $this->request->data
+			'request' => $this->request
 		]);
-		if ($event !== false) {
-			$this->request->data = $event->result === true? $event->data['data'] : $event->result;
-		}
+        if ($event !== false) {
+            $this->request = ($event->getResult() === null || $event->getResult() === true)? $event->getData('request') : $event->getResult();
+        }
 
 		$data = $this->Page->save($this->request->data);
 		if (!$data) {
@@ -99,16 +99,16 @@ class PagesController extends BcAdminAppController
 		}
 		// EVENT Pages.afterAdd
 		$this->dispatchEvent('afterAdd', [
-			'data' => $data
+			'request' => $this->request
 		]);
 		$site = $siteService->findById($data['Content']['site_id'])->first();
-		$url = $this->Content->getUrl($data['Content']['url'], true, $site->useSubDomain);
+		$url = $contentService->getUrl($data['Content']['url'], true, $site->useSubDomain);
 		$message = sprintf(
 			__d(
 				'baser',
 				"固定ページ「%s」を追加しました。\n%s"
 			),
-			$this->request->data['Content']['title'],
+			$this->request->getData('Content.title'),
 			urldecode($url)
 		);
 		$this->BcMessage->setSuccess($message, true, false);
@@ -121,7 +121,7 @@ class PagesController extends BcAdminAppController
 	 * @param int $parentContentId 親コンテンツID
 	 * @return void
 	 */
-	public function admin_add($parentContentId, $name = '')
+	public function add($parentContentId, $name = '')
 	{
 		if (!$parentContentId) {
 			$this->BcMessage->setError(__d('baser', '無効なIDです。'));
