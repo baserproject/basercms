@@ -68,11 +68,10 @@ class PagesControllerTest extends BcTestCase
      */
     public function testIndex()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->get('/baser/api/baser-core/pages/index.json?token=' . $this->accessToken);
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
-        $this->assertEquals("baserCMSサンプル", $result->pages[0]->folder_template);
+        $this->assertRegExp('/<section class="mainHeadline">/', $result->pages[0]->contents);
     }
 
     /**
@@ -80,11 +79,10 @@ class PagesControllerTest extends BcTestCase
      */
     public function testView()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->get('/baser/api/baser-core/pages/view/1.json?token=' . $this->accessToken);
+        $this->get('/baser/api/baser-core/pages/view/2.json?token=' . $this->accessToken);
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
-        $this->assertEquals("baserCMSサンプル", $result->pages->folder_template);
+        $this->assertRegExp('/<section class="mainHeadline">/', $result->pages->contents);
     }
 
     /**
@@ -123,7 +121,6 @@ class PagesControllerTest extends BcTestCase
      */
     public function testDelete()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->enableSecurityToken();
         $this->enableCsrfToken();
         $this->delete('/baser/api/baser-core/pages/delete/1.json?token=' . $this->accessToken);
@@ -137,15 +134,15 @@ class PagesControllerTest extends BcTestCase
      */
     public function testEdit()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->enableSecurityToken();
         $this->enableCsrfToken();
-        $data = $this->PageService->getIndex(['folder_template' => "testEdit"])->first();
+        $data = $this->PageService->getIndex(['contents' => '<section class="mainHeadline">'])->first();
         $data->content->name = "pageTestUpdate";
+        $data->contents = "pageTestUpdate";
         $id = $data->id;
         $this->post("/baser/api/baser-core/pages/edit/${id}.json?token=". $this->accessToken, $data->toArray());
         $this->assertResponseSuccess();
-        $query = $this->PageService->getIndex(['folder_template' => $data['folder_template']]);
+        $query = $this->PageService->getIndex(['contents' => $data->contents]);
         $this->assertEquals(1, $query->all()->count());
         $this->assertEquals("pageTestUpdate", $query->all()->first()->content->name);
     }

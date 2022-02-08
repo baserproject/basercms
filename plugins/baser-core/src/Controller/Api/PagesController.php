@@ -101,7 +101,7 @@ class PagesController extends BcApiController
             if ($Pages->delete($id)) {
                 $message = __d('baser', '固定ページ: {0} を削除しました。', $pages->name);
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $message = __d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
         }
         $this->set([

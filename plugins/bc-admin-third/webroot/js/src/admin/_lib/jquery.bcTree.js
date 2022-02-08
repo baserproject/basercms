@@ -555,7 +555,7 @@
                                                                 nodes.push($.bcTree.jsTree.get_node(this));
                                                             });
                                                             $.bcTree.jsTree.delete_node(nodes);
-                                                            $.bcUtil.showNoticeMessage(decodeURI(result.message));
+                                                            $.bcUtil.showNoticeMessage(result.message);
                                                             $("#DataList").html('<div class="tree-empty">' + bcI18n.bcTreeInfoMessage1 + '</div>');
                                                         }
                                                     },
@@ -968,7 +968,6 @@
          * @param node
          */
         deleteContent: function (node) {
-            var url = '';
             var data = node.data.jstree;
             $.bcToken.check(function () {
                 return $.ajax({

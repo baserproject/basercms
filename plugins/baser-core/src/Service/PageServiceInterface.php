@@ -36,6 +36,13 @@ interface PageServiceInterface
     public function getTrash($id);
 
     /**
+     * ユーザー管理の一覧用のデータを取得
+     * @param array|null $queryParams
+     * @return Query
+     */
+    public function getIndex(array $queryParams=[]): Query;
+
+    /**
      * 固定ページ登録
      * @param array $data
      * @param array $options
@@ -43,6 +50,13 @@ interface PageServiceInterface
      * @throws \Cake\ORM\Exception\PersistenceFailedException
      */
     public function create(array $postData, $options=[]);
+
+    /**
+     * 固定ページを削除する
+     * @param int $id
+     * @return bool
+     */
+    public function delete($id);
 
     /**
      * ページ情報を更新する
