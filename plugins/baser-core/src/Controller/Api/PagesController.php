@@ -77,7 +77,6 @@ class PagesController extends BcApiController
             $this->set('content', $pages->content);
         } catch (\Exception $e) {
             $pages = $e->getEntity();
-            $a = $pages->getErrors();
             $message = __d('baser', "入力エラーです。内容を修正してください。\n");
             $this->set(['errors' => $pages->getErrors()]);
             $this->setResponse($this->response->withStatus(400));
