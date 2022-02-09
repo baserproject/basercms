@@ -589,41 +589,6 @@ class PagesTableTest extends BcTestCase
     }
 
     /**
-     * ページデータをコピーする
-     *
-     * @param int $id ページID
-     * @param int $newParentId 新しい親コンテンツID
-     * @param string $newTitle 新しいタイトル
-     * @param int $newAuthorId 新しい作成者ID
-     * @param int $newSiteId 新しいサイトID
-     * @param string $message テストが失敗した時に表示されるメッセージ
-     * @dataProvider copyDataProvider
-     */
-    public function testCopy($id, $newParentId, $newTitle, $newAuthorId, $newSiteId, $message = null)
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->loginAdmin($this->getRequest());
-        $result = $this->Pages->copy($id, $newParentId, $newTitle, $newAuthorId, $newSiteId);
-
-        // コピーしたファイル存在チェック
-        $path = APP . 'View' . DS . 'Pages' . $result['Content']['url'] . '.php';
-        $this->assertFileExists($path, $message);
-        @unlink($path);
-
-        // DBに書き込まれているかチェック
-        $exists = $this->Pages->exists($result['Page']['id']);
-        $this->assertTrue($exists);
-    }
-
-    public function copyDataProvider()
-    {
-        return [
-            [1, 1, 'hoge1', 1, 0, 'ページデータをコピーできません'],
-            [3, 1, 'hoge', 1, 0, 'ページデータをコピーできません']
-        ];
-    }
-
-    /**
      * PHP構文チェック
      * 成功時
      *

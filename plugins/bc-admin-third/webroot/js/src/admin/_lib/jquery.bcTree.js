@@ -555,7 +555,7 @@
                                                                 nodes.push($.bcTree.jsTree.get_node(this));
                                                             });
                                                             $.bcTree.jsTree.delete_node(nodes);
-                                                            $.bcUtil.showNoticeMessage(decodeURI(result.message));
+                                                            $.bcUtil.showNoticeMessage(result.message);
                                                             $("#DataList").html('<div class="tree-empty">' + bcI18n.bcTreeInfoMessage1 + '</div>');
                                                         }
                                                     },
@@ -863,19 +863,8 @@
             if ((!$.bcTree.settings[data.contentType]['multiple'] && $.bcTree.settings[data.contentType]['exists']) || data.contentAliasId) {
                 url = $.bcUtil.apiBaseUrl + 'baser-core' + '/contents/add_alias';
                 data.alias = true;
-                var postData = {
-                    aliasId: data.contentAliasId,
-                    aliasName: data.contentTitle,
-                };
             } else {
-                // TODO: api-url設定を追加する
-                // url = $.bcTree.settings[data.contentType]['url']['add'];
-                 // NOTE:一旦コンテンツフォルダの場合で試す
-                url = $.bcUtil.apiBaseUrl + 'baser-core' + '/contentFolders/add';
-                var postData = {
-                    folder_template : '',
-                    page_template : '',
-                };
+                url = $.bcTree.settings[data.contentType]['url']['add'];
             }
             var nodeId = $.bcTree.jsTree.create_node(parent, {
                 text: data.contentTitle,
@@ -883,27 +872,29 @@
             });
             var node = $.bcTree.jsTree.get_node(nodeId);
             $.bcTree.jsTree.edit(node, data.contentTitle, function (editNode) {
-                let content = {
-                    parent_id: data.contentParentId,
-                    title: editNode.text,
-                    plugin: data.contentPlugin,
-                    type: data.contentType,
-                    site_id: data.contentSiteId,
-                    alias_id: data.contentAliasId,
-                    entity_id: data.contentEntityId
-                };
-                postData.content = content;
                 $.bcToken.check(function () {
-                    postData._csrfToken = $.bcToken.key;
+                    const content = {
+                        parent_id: data.contentParentId,
+                        title: editNode.text,
+                        plugin: data.contentPlugin,
+                        type: data.contentType,
+                        site_id: data.contentSiteId,
+                        alias_id: data.contentAliasId,
+                        entity_id: data.contentEntityId
+                    };
                     return $.ajax({
                         url: url,
                         headers: {
                             "Authorization": $.bcJwt.accessToken,
                         },
                         type: 'POST',
-                        data: postData,
+                        data: {
+                            _csrfToken: $.bcToken.key,
+                            content: content,
+                        },
                         dataType: 'json',
                         beforeSend: function () {
+                            this.data = $.bcTree.fillExtraData(this.data, data);
                             $.bcUtil.hideMessage();
                             $.bcUtil.showLoader();
                         },
@@ -935,6 +926,43 @@
                 , {hideLoader: false});
             });
         },
+        /**
+         * ポスト用のデータにコンテンツの種類に基づいた不足データを追加する
+         *
+         * @param postData 送信用データ
+         * @param settingData 保持してるデータ
+         */
+        fillExtraData: function (postData, settingData) {
+            const extra = (() => {
+                switch (settingData.contentType) {
+                    case "ContentFolder":
+                        return {
+                            folder_template: "",
+                            page_template : ""
+                        };
+                    case "Page":
+                        return {
+                            contents: "",
+                            draft: "",
+                            page_template: "",
+                            code: ""
+                        };
+                    default:
+                        break;
+                }
+            })();
+            if (extra) {
+                postData  += '&' +  encodeURI($.param(extra));
+            }
+            if (settingData.alias) {
+                const alias =  {
+                    aliasId: settingData.contentAliasId,
+                    aliasName: settingData.contentTitle,
+                };
+                postData  += '&' +  encodeURI($.param(alias));
+            }
+            return postData;
+        },
 
         /**
          * Delete Content
@@ -942,7 +970,6 @@
          * @param node
          */
         deleteContent: function (node) {
-            var url = '';
             var data = node.data.jstree;
             $.bcToken.check(function () {
                 return $.ajax({
@@ -991,9 +1018,7 @@
          * @param node
          */
         copyContent: function (parent, node) {
-            var url = '';
             var data = $.extend(true, {}, node.data.jstree);
-
             data.contentTitle = bcI18n.bcTreeCopyTitle.sprintf(data.contentTitle);
             data.status = false;
             $.bcToken.check(function () {
@@ -1046,6 +1071,7 @@
                             }
                             $.bcUtil.hideLoader();
                             $.bcTree.renameContent(newNode, data.contentTitle, true);
+                            location.reload();
                         });
                     },
                     error: function (XMLHttpRequest, textStatus, errorThrown) {

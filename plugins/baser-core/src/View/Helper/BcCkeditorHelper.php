@@ -10,11 +10,16 @@
  */
 namespace BaserCore\View\Helper;
 
+use Cake\View\Helper;
+use Cake\Routing\Asset;
 use Cake\Core\Configure;
-use Cake\Error\Debugger;
 use Cake\Utility\Inflector;
-use BaserCore\View\Helper\BcAppHelper;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\View\Helper\BcHtmlHelper;
 use BaserCore\Event\BcEventDispatcherTrait;
+
 
 
 /**
@@ -22,8 +27,9 @@ use BaserCore\Event\BcEventDispatcherTrait;
  *
  * @package Baser.View.Helper
  * @property BcAdminFormHelper $BcAdminForm
+ * @property BcHtmlHelper $BcHtml
  */
-class BcCkeditorHelper extends BcAppHelper
+class BcCkeditorHelper extends Helper
 {
     /**
      * Trait
@@ -96,6 +102,9 @@ class BcCkeditorHelper extends BcAppHelper
      * initialize
      *
      * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function initialize($config): void
     {
@@ -203,10 +212,12 @@ class BcCkeditorHelper extends BcAppHelper
      * @param string $fieldName
      * @param array $options
      * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    function _build($fieldName, $options = [])
+    protected function buildTmpScript($fieldName, $options = [])
     {
-
         $options = array_merge([
             'editorLanguage' => 'ja', // 言語
             'editorSkin' => 'moono', // スキン
@@ -275,7 +286,7 @@ class BcCkeditorHelper extends BcAppHelper
         }
         $options = $_options;
 
-        $jscode = $model = $editorDomId = '';
+        $jscode = $model = $editorDomId = $publishAreaId = $draftAreaId = '';
         if (strpos($fieldName, '.')) {
             [$model, $field] = explode('.', $fieldName);
         } else {
@@ -294,6 +305,7 @@ class BcCkeditorHelper extends BcAppHelper
         if (!$this->_script) {
             $this->_script = true;
             $this->BcHtml->script(['vendor/ckeditor/ckeditor'], ["block" => true]);
+            $this->BcHtml->script(['admin/pages/applyCkeditor.bundle'], ["block" => true]);
         }
 
         if ($editorUseDraft) {
@@ -318,12 +330,12 @@ class BcCkeditorHelper extends BcAppHelper
         if ($theme) {
             $themeEditorCsses[] = [
                 'path' => BASER_THEMES . Configure::read('BcSite.theme') . DS . 'css' . DS . 'editor.css',
-                'url' => $this->webroot('/css/editor.css')
+                'url' => $this->Url->webroot('/css/editor.css')
             ];
         }
         $themeEditorCsses[] = [
             'path' => BASER_VIEWS . 'webroot' . DS . 'css' . DS . 'admin' . DS . 'ckeditor' . DS . 'contents.css',
-            'url' => $this->webroot('/css/admin/ckeditor/contents.css')
+            'url' => $this->Url->webroot('/css/admin/ckeditor/contents.css')
         ];
         foreach($themeEditorCsses as $key => $themeEditorCss) {
             if (!file_exists($themeEditorCss['path'])) {
@@ -338,7 +350,7 @@ class BcCkeditorHelper extends BcAppHelper
             if ($sitePrefix) {
                 array_unshift($themeEditorCsses, [
                     'path' => BASER_THEMES . Configure::read('BcSite.theme') . DS . 'css' . DS . $sitePrefix . DS . 'editor.css',
-                    'url' => $this->webroot('/css/' . $sitePrefix . '/editor.css')
+                    'url' => $this->Url->webroot('/css/' . $sitePrefix . '/editor.css')
                 ]);
             }
         }
@@ -369,7 +381,7 @@ class BcCkeditorHelper extends BcAppHelper
             }
         }
         if ($editorUseTemplates) {
-            $editorUrl = $this->url(['controller' => 'editor_templates', 'action' => 'js']);
+            $editorUrl = $this->Url->build(['plugin' => 'BaserCore', 'prefix' => 'Admin', 'controller' => 'editor_templates', 'action' => 'js']);
             $jscode .= "var editorUrl='{$editorUrl}';";
         }
         $arrayVars = [
@@ -391,6 +403,9 @@ class BcCkeditorHelper extends BcAppHelper
      * @param string $fieldName エディタのid, nameなどの名前を指定
      * @param array $options
      * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function editor($fieldName, $options = [])
     {
@@ -413,6 +428,6 @@ class BcCkeditorHelper extends BcAppHelper
         }
         $textIdElement = pluginSplit($inputFieldName);
         $_options['id'] = $textIdElement[0] . Inflector::camelize($textIdElement[1]);
-        return $this->BcAdminForm->control($inputFieldName, $_options) . $hidden . $this->_build($fieldName, $options);
+        return $this->BcAdminForm->control($inputFieldName, $_options) . $hidden . $this->buildTmpScript($fieldName, $options);
     }
 }

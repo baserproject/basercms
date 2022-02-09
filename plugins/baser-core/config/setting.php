@@ -397,17 +397,17 @@ return [
                     'omitViewAction' => true,
                     'routes' => [
                         'add' => [
-                            'admin' => true,
+                            'prefix' => 'Admin',
                             'controller' => 'Contents',
                             'action' => 'add'
                         ],
                         'edit' => [
-                            'admin' => true,
+                            'prefix' => 'Admin',
                             'controller' => 'Contents',
                             'action' => 'edit'
                         ],
                         'delete' => [
-                            'admin' => true,
+                            'prefix' => 'Admin',
                             'controller' => 'Contents',
                             'action' => 'empty'
                         ],
@@ -424,17 +424,17 @@ return [
                     'title' => __d('baser', 'フォルダー'),
                     'routes' => [
                         'add' => [
-                            'admin' => true,
+                            'prefix' => 'Api',
                             'controller' => 'ContentFolders',
                             'action' => 'add'
                         ],
                         'edit' => [
-                            'admin' => true,
+                            'prefix' => 'Admin',
                             'controller' => 'ContentFolders',
                             'action' => 'edit'
                         ],
                         'delete' => [
-                            'admin' => true,
+                            'prefix' => 'Admin',
                             'controller' => 'ContentFolders',
                             'action' => 'delete'
                         ],
@@ -453,17 +453,17 @@ return [
                     'omitViewAction' => true,
                     'routes' => [
                         'add' => [
-                            'admin' => true,
+                            'prefix' => 'Api',
                             'controller' => 'Pages',
-                            'action' => 'ajax_add'
+                            'action' => 'add'
                         ],
                         'edit' => [
-                            'admin' => true,
+                            'prefix' => 'Admin',
                             'controller' => 'Pages',
                             'action' => 'edit'
                         ],
                         'delete' => [
-                            'admin' => true,
+                            'prefix' => 'Admin',
                             'controller' => 'Pages',
                             'action' => 'delete'
                         ],
@@ -472,9 +472,9 @@ return [
                             'action' => 'display'
                         ],
                         'copy' => [
-                            'admin' => true,
+                            'prefix' => 'Api',
                             'controller' => 'Pages',
-                            'action' => 'ajax_copy'
+                            'action' => 'copy'
                         ]
                     ]
                 ],
@@ -484,13 +484,13 @@ return [
                     'icon' => 'bca-icon--alias',
                     'routes' => [
                         'add' => [
-                            'admin' => true,
+                            'prefix' => 'Admin',
                             'controller' => 'Contents',
                             'action' => 'add',
                             1
                         ],
                         'edit' => [
-                            'admin' => true,
+                            'prefix' => 'Admin',
                             'controller' => 'Contents',
                             'action' => 'edit_alias'
                         ]
@@ -502,17 +502,17 @@ return [
                     'omitViewAction' => true,
                     'routes' => [
                         'add' => [
-                            'admin' => true,
+                            'prefix' => 'Admin',
                             'controller' => 'ContentLinks',
                             'action' => 'add'
                         ],
                         'edit' => [
-                            'admin' => true,
+                            'prefix' => 'Admin',
                             'controller' => 'ContentLinks',
                             'action' => 'edit'
                         ],
                         'delete' => [
-                            'admin' => true,
+                            'prefix' => 'Admin',
                             'controller' => 'ContentLinks',
                             'action' => 'delete'
                         ],

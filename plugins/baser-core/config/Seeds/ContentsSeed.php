@@ -61,7 +61,7 @@ class ContentsSeed extends AbstractSeed
                 'name' => 'index',
                 'plugin' => 'BaserCore',
                 'type' => 'Page',
-                'entity_id' => '1',
+                'entity_id' => '2',
                 'url' => '/index',
                 'site_id' => '1',
                 'alias_id' => NULL,

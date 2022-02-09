@@ -51,7 +51,7 @@ $(function () {
         form.submit();
         form.attr('target', '_self');
         form.attr('action', action);
-        $.get($.baseUrl() + '/bc_form/ajax_get_token?requestview=false', function (result) {
+        $.get('/baser/baser-core/bc_form/get_token?requestview=false', function (result) {
             $('input[name="_csrfToken"]').val(result);
         });
         return false;
@@ -97,9 +97,7 @@ $(function () {
                     type: 'POST',
                     data: {
                         data: {url: targetUrl},
-                        _Token: {
-                            key: $.bcToken.key
-                        }
+                        _csrfToken: $.bcToken.key,
                     },
                     beforeSend: function () {
                         $.bcUtil.showLoader();
@@ -115,9 +113,7 @@ $(function () {
                                     },
                                     type: 'POST',
                                     data: $.extend(data, {
-                                        _Token: {
-                                            key: $.bcToken.key
-                                        }
+                                        _csrfToken: $.bcToken.key,
                                     }),
                                     dataType: 'json',
                                     beforeSend: function () {
@@ -172,9 +168,7 @@ $(function () {
                     type: 'POST',
                     data: {
                         data: {url: targetUrl},
-                        _Token: {
-                            key: $.bcToken.key
-                        }
+                        _csrfToken: $.bcToken.key,
                     },
                     beforeSend: function () {
                         $.bcUtil.showLoader();
@@ -190,9 +184,7 @@ $(function () {
                                     },
                                     type: 'POST',
                                     data: $.extend(data, {
-                                        _Token: {
-                                            key: $.bcToken.key
-                                        }
+                                        _csrfToken: $.bcToken.key,
                                     }),
                                     dataType: 'json',
                                     beforeSend: function () {

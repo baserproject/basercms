@@ -23,6 +23,7 @@ use Cake\Datasource\EntityInterface;
 use Cake\View\Form\ContextInterface;
 use BaserCore\View\Helper\BcUploadHelper;
 use BaserCore\Event\BcEventDispatcherTrait;
+use BaserCore\View\Helper\BcCkeditorHelper;
 
 /**
  * FormHelper 拡張クラス
@@ -2030,7 +2031,9 @@ DOC_END;
             }
             return $this->input($fieldName, array_merge(['type' => 'textarea'], $_options));
         } else {
-            return $this->getView()->BcCkeditor->editor($fieldName, $options);
+            /** @var BcCkeditorHelper $bcCkeditor  */
+            $bcCkeditor = $this->getView()->BcCkeditor;
+            return $bcCkeditor->editor($fieldName, $options);
         }
     }
 

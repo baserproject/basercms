@@ -72,132 +72,6 @@ class PagesController extends BcAdminAppController
 	}
 
 	/**
-	 * 固定ページ情報登録
-	 *
-	 * @return mixed json|false
-	 */
-	public function admin_ajax_add()
-	{
-		$this->autoRender = false;
-		if (!$this->request->data) {
-			$this->ajaxError(500, __d('baser', '無効な処理です。'));
-		}
-
-		// EVENT Pages.beforeAdd
-		$event = $this->dispatchEvent('beforeAdd', [
-			'data' => $this->request->data
-		]);
-		if ($event !== false) {
-			$this->request->data = $event->result === true? $event->data['data'] : $event->result;
-		}
-
-		$data = $this->Page->save($this->request->data);
-		if (!$data) {
-			$this->ajaxError(500, $this->Page->validationErrors);
-			return false;
-		}
-		// EVENT Pages.afterAdd
-		$this->dispatchEvent('afterAdd', [
-			'data' => $data
-		]);
-		$site = $siteService->findById($data['Content']['site_id'])->first();
-		$url = $this->Content->getUrl($data['Content']['url'], true, $site->useSubDomain);
-		$message = sprintf(
-			__d(
-				'baser',
-				"固定ページ「%s」を追加しました。\n%s"
-			),
-			$this->request->data['Content']['title'],
-			urldecode($url)
-		);
-		$this->BcMessage->setSuccess($message, true, false);
-		return json_encode($data['Content']);
-	}
-
-	/**
-	 * 固定ページ新規追加
-	 *
-	 * @param int $parentContentId 親コンテンツID
-	 * @return void
-	 */
-	public function admin_add($parentContentId, $name = '')
-	{
-		if (!$parentContentId) {
-			$this->BcMessage->setError(__d('baser', '無効なIDです。'));
-			$this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);
-		}
-
-		if ($this->request->is(['post', 'put'])) {
-			if ($this->Page->isOverPostSize()) {
-				$this->BcMessage->setError(__d('baser', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size')));
-				$this->redirect(['contents', 'action' => 'index']);
-			}
-
-			// EVENT Pages.beforeAdd
-			$event = $this->dispatchEvent('beforeAdd', [
-				'data' => $this->request->data
-			]);
-			if ($event !== false) {
-				$this->request->data = $event->result === true? $event->data['data'] : $event->result;
-			}
-
-			$this->Page->set($this->request->data);
-			if ($data = $this->Page->save()) {
-
-				// 完了メッセージ
-				$site = $siteService->findById($data['Content']['site_id'])->first();
-				$url = $this->Content->getUrl($data['Content']['url'], true, $site->useSubDomain);
-				$this->BcMessage->setSuccess(sprintf(__d('baser', "固定ページ「%s」を登録しました。\n%s"), $data['Content']['name'], urldecode($url)));
-
-				// EVENT Pages.afterAdd
-				$this->dispatchEvent('afterAdd', [
-					'data' => $data
-				]);
-
-				// 同固定ページへリダイレクト
-				$this->redirect(['action' => 'edit', $this->Page->id]);
-				return;
-			}
-
-			$this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
-		} else {
-			$this->request->data = $this->Page->getDefaultValue($parentContentId, $name);
-			if(!$this->request->data) {
-				$this->BcMessage->setError(__d('baser', '無効な処理です。'));
-				$this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);
-				return;
-			}
-		}
-
-		// エディタオプション
-		$editorOptions = ['editorDisableDraft' => true];
-		if (BcSiteConfig::get('editor_styles')) {
-			App::uses('CKEditorStyleParser', 'Vendor');
-			$CKEditorStyleParser = new CKEditorStyleParser();
-			$editorOptions = array_merge($editorOptions, [
-				'editorStylesSet' => 'default',
-				'editorStyles' => [
-					'default' => $CKEditorStyleParser->parse(BcSiteConfig::get('editor_styles'))
-				]
-			]);
-		}
-
-		// ページテンプレートリスト
-		$theme = [BcSiteConfig::get('theme')];
-		$site = $siteService->findById($this->request->data['Content']['site_id'])->first();
-		if (!empty($site) && $site->theme && $site->theme != BcSiteConfig::get('theme')) {
-			$theme[] = $site->theme;
-		}
-		$pageTemplateList = [];
-		$publishLink = '';
-		$this->set(compact('editorOptions', 'pageTemplateList', 'publishLink'));
-
-		$this->pageTitle = __d('baser', '固定ページ情報新規追加');
-		$this->help = 'pages_form';
-		$this->render('form');
-	}
-
-	/**
 	 * [ADMIN] 固定ページ情報編集
      * @param int $id (page_id)
 	 * @param PageServiceInterface $pageService
@@ -227,8 +101,9 @@ class PagesController extends BcAdminAppController
 			if ($event !== false) {
 				$this->request = ($event->getResult() === null || $event->getResult() === true)? $event->getData('request') : $event->getResult();
 			}
-
             try {
+                // contents_tmpをcontentsに反映
+                $this->request = $this->request->withData('Page.contents', $this->request->getData('Page.contents_tmp'));
                 $this->request = $this->request->withData('Page.content', $this->request->getData('Content'));
                 $page = $pageService->update($page, $this->request->getData('Page'));
                 // TODO cumitz: clearViewCache()がないため一時的にコメントアウト
@@ -326,35 +201,6 @@ class PagesController extends BcAdminAppController
 		}
 		clearViewCache();
 		$this->redirect(['controller' => 'tools', 'action' => 'index']);
-	}
-
-	/**
-	 * コピー
-	 *
-	 * @return bool
-	 */
-	public function admin_ajax_copy()
-	{
-		$this->autoRender = false;
-		if (!$this->request->data) {
-			$this->ajaxError(500, __d('baser', '無効な処理です。'));
-		}
-		$user = $this->BcAuth->user();
-		$data = $this->Page->copy(
-			$this->request->data['entityId'],
-			$this->request->data['parentId'],
-			$this->request->data['title'],
-			$user['id'],
-			$this->request->data['siteId']
-		);
-		if (!$data) {
-			$this->ajaxError(500, $this->Page->validationErrors);
-			return false;
-		}
-
-		$message = sprintf(__d('baser', '固定ページのコピー「%s」を追加しました。'), $this->request->data['title']);
-		$this->BcMessage->setSuccess($message, true, false);
-		return json_encode($data['Content']);
 	}
 
 	/**

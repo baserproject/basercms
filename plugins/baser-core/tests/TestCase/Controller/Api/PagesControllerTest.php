@@ -11,14 +11,15 @@
 
 namespace BaserCore\Test\TestCase\Controller\Api;
 
+use Cake\Routing\Router;
+use BaserCore\Service\PageService;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\TestSuite\IntegrationTestTrait;
-use BaserCore\Service\ContentFolderService;
 
 /**
- * BaserCore\Controller\Api\ContentFoldersController Test Case
+ * BaserCore\Controller\Api\PagesController Test Case
  */
-class ContentFoldersControllerTest extends BcTestCase
+class PagesControllerTest extends BcTestCase
 {
     use IntegrationTestTrait;
 
@@ -30,7 +31,7 @@ class ContentFoldersControllerTest extends BcTestCase
     public $fixtures = [
         'plugin.BaserCore.Users',
         'plugin.BaserCore.UsersUserGroups',
-        'plugin.BaserCore.ContentFolders',
+        'plugin.BaserCore.Pages',
         'plugin.BaserCore.UserGroups',
         'plugin.BaserCore.Contents',
         'plugin.BaserCore.Sites',
@@ -58,7 +59,7 @@ class ContentFoldersControllerTest extends BcTestCase
         $token = $this->apiLoginAdmin(1);
         $this->accessToken = $token['access_token'];
         $this->refreshToken = $token['refresh_token'];
-        $this->ContentFolderService = new ContentFolderService();
+        $this->PageService = new PageService();
     }
 
     /**
@@ -68,10 +69,10 @@ class ContentFoldersControllerTest extends BcTestCase
      */
     public function testIndex()
     {
-        $this->get('/baser/api/baser-core/content_folders/index.json?token=' . $this->accessToken);
+        $this->get('/baser/api/baser-core/pages/index.json?token=' . $this->accessToken);
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
-        $this->assertEquals("baserCMSサンプル", $result->contentFolders[0]->folder_template);
+        $this->assertRegExp('/<section class="mainHeadline">/', $result->pages[0]->contents);
     }
 
     /**
@@ -79,10 +80,10 @@ class ContentFoldersControllerTest extends BcTestCase
      */
     public function testView()
     {
-        $this->get('/baser/api/baser-core/content_folders/view/1.json?token=' . $this->accessToken);
+        $this->get('/baser/api/baser-core/pages/view/2.json?token=' . $this->accessToken);
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
-        $this->assertEquals("baserCMSサンプル", $result->contentFolders->folder_template);
+        $this->assertRegExp('/<section class="mainHeadline">/', $result->pages->contents);
     }
 
     /**
@@ -94,21 +95,21 @@ class ContentFoldersControllerTest extends BcTestCase
     {
         $this->loginAdmin($this->getRequest());
         $data = [
-            'folder_template' => 'テストcreate',
+            'code' => 'テストcreate',
             'content' => [
                 "parent_id" => "1",
                 "title" => "新しい フォルダー",
                 "plugin" => 'BaserCore',
-                "type" => "ContentFolder",
+                "type" => "Page",
                 "site_id" => "0",
                 "alias_id" => "",
                 "entity_id" => "",
             ]
         ];
-        $this->post('/baser/api/baser-core/content_folders/add.json?token=' . $this->accessToken, $data);
+        $this->post('/baser/api/baser-core/pages/add.json?token=' . $this->accessToken, $data);
         $this->assertResponseOk();
-        $ContentFolders = $this->getTableLocator()->get('ContentFolders');
-        $query = $ContentFolders->find()->where(['folder_template' => $data['folder_template']]);
+        $Pages = $this->getTableLocator()->get('Pages');
+        $query = $Pages->find()->where(['code' => $data['code']]);
         $this->assertEquals(1, $query->count());
     }
 
@@ -119,7 +120,7 @@ class ContentFoldersControllerTest extends BcTestCase
      */
     public function testDelete()
     {
-        $this->delete('/baser/api/baser-core/content_folders/delete/1.json?token=' . $this->accessToken);
+        $this->delete('/baser/api/baser-core/pages/delete/2.json?token=' . $this->accessToken);
         $this->assertResponseSuccess();
     }
 
@@ -130,13 +131,33 @@ class ContentFoldersControllerTest extends BcTestCase
      */
     public function testEdit()
     {
-        $data = $this->ContentFolderService->getIndex(['folder_template' => "testEdit"])->first();
-        $data->content->name = "contentFolderTestUpdate";
+        $data = $this->PageService->getIndex(['contents' => '<section class="mainHeadline">'])->first();
+        $data->content->name = "pageTestUpdate";
+        $data->contents = "pageTestUpdate";
         $id = $data->id;
-        $this->post("/baser/api/baser-core/content_folders/edit/${id}.json?token=". $this->accessToken, $data->toArray());
+        $this->post("/baser/api/baser-core/pages/edit/${id}.json?token=". $this->accessToken, $data->toArray());
         $this->assertResponseSuccess();
-        $query = $this->ContentFolderService->getIndex(['folder_template' => $data['folder_template']]);
+        $query = $this->PageService->getIndex(['contents' => $data->contents]);
         $this->assertEquals(1, $query->all()->count());
-        $this->assertEquals("contentFolderTestUpdate", $query->all()->first()->content->name);
+        $this->assertEquals("pageTestUpdate", $query->all()->first()->content->name);
+    }
+
+    /**
+     * testCopy
+     *
+     * @return void
+     */
+    public function testCopy()
+    {
+        $data = [
+            'contentId' =>4,
+            'entityId' =>2,
+            'parentId' =>1,
+            'title' => 'hoge1',
+            'siteId' =>1
+        ];
+        $this->post("/baser/api/baser-core/pages/copy/2.json?token=". $this->accessToken, $data);
+        $this->assertResponseSuccess();
+        $this->assertFalse($this->PageService->getIndex(['title' => $data['title']])->isEmpty());
     }
 }
