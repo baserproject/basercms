@@ -1071,6 +1071,7 @@
                             }
                             $.bcUtil.hideLoader();
                             $.bcTree.renameContent(newNode, data.contentTitle, true);
+                            location.reload();
                         });
                     },
                     error: function (XMLHttpRequest, textStatus, errorThrown) {
