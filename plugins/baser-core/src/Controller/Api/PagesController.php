@@ -11,12 +11,13 @@
 
 namespace BaserCore\Controller\Api;
 
-use BaserCore\Service\PageServiceInterface;
-use Cake\Core\Exception\Exception;
-use BaserCore\Annotation\UnitTest;
+use BaserCore\Utility\BcUtil;
+use BaserCore\Annotation\Note;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
-use BaserCore\Annotation\Note;
+use BaserCore\Annotation\UnitTest;
+use Cake\Core\Exception\Exception;
+use BaserCore\Service\PageServiceInterface;
 
 /**
  * Class PagesController
@@ -112,7 +113,7 @@ class PagesController extends BcApiController
     }
 
     /**
-     * 固定ページー情報編集
+     * 固定ページ情報編集
      * @param PageServiceInterface $pages
      * @param int $id
      * @checked
@@ -124,7 +125,7 @@ class PagesController extends BcApiController
         $this->request->allowMethod(['post', 'put', 'patch']);
         try {
             $page = $pages->update($pages->get($id), $this->request->getData());
-            $message = __d('baser', 'フォルダー「{0}」を更新しました。', $page->name);
+            $message = __d('baser', '固定ページ 「{0}」を更新しました。', $page->name);
         } catch (\Exception $e) {
             $this->setResponse($this->response->withStatus(400));
             $message = __d('baser', '入力エラーです。内容を修正してください。');
@@ -141,28 +142,24 @@ class PagesController extends BcApiController
 	 * コピー
 	 * @param PageServiceInterface $pages
 	 */
-	public function ajax_copy(PageServiceInterface $pages)
+	public function copy(PageServiceInterface $pages)
 	{
-        // TODO umictz: 一時措置
-        return;
-		if (!$this->request->getData()) {
-			$this->ajaxError(500, __d('baser', '無効な処理です。'));
-		}
-		$user = $this->BcAuth->user();
-		$data = $this->Page->copy(
-			$this->request->getData('entityId'),
-			$this->request->getData('parentId'),
-			$this->request->getData('title'),
-			$user['id'],
-			$this->request->getData('siteId')
-		);
-		if (!$data) {
-			$this->ajaxError(500, $this->Page->validationErrors);
-			return false;
-		}
+        $this->request->allowMethod(['post', 'put', 'patch']);
+        try {
+            // copy 中にデータを入れる
+            $this->request = $this->request->withData('authorId', BcUtil::loginUser());
+            $page = $pages->copy($this->request->getData());
+            $message = __d('baser', '固定ページのコピー「%s」を追加しました。', $page->name);
+        } catch (\Exception $e) {
+            $this->setResponse($this->response->withStatus(400));
+            $message = __d('baser', '入力エラーです。内容を修正してください。');
+        }
+        $this->set([
+            'message' => $message,
+            'page' => $page,
+            'errors' => $page->getErrors(),
+        ]);
 
-		$message = sprintf(__d('baser', '固定ページのコピー「%s」を追加しました。'), $this->request->data['title']);
-		$this->BcMessage->setSuccess($message, true, false);
-		return json_encode($data['Content']);
+        $this->viewBuilder()->setOption('serialize', ['page', 'message', 'errors']);
 	}
 }

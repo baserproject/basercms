@@ -204,7 +204,7 @@ class ContentsTable extends AppTable
         ]);
         $validator
         ->allowEmptyDateTime('created_date');
-        // TODO: %Y-%m-%d形式か%Y/%m/%d形式か判断して、書き換える
+        // TODO ucmitz: %Y-%m-%d形式か%Y/%m/%d形式か判断して、書き換える
         // ->add('created_date', [
         //     'checkDate' => [
         //         'rule' => ['checkDate'],
@@ -213,14 +213,15 @@ class ContentsTable extends AppTable
         //     ]
         // ]);
         $validator
-        ->allowEmptyDateTime('modified_date')
-        ->add('modified_date', [
-            'checkDate' => [
-                'rule' => ['checkDate'],
-                'provider' => 'bc',
-                'message' => __d('baser', '更新日に不正な文字列が入っています。')
-            ]
-        ]);
+        ->allowEmptyDateTime('modified_date');
+        // TODO ucmitz: frozenTime形式に書き換える
+        // ->add('modified_date', [
+        //     'checkDate' => [
+        //         'rule' => ['checkDate'],
+        //         'provider' => 'bc',
+        //         'message' => __d('baser', '更新日に不正な文字列が入っています。')
+        //     ]
+        // ]);
         return $validator;
     }
 
@@ -767,7 +768,7 @@ class ContentsTable extends AppTable
         unset($path[0]);
         $parentId = $this->Sites->getRootContentId($targetSiteId);
         /* @var ContentFolder $ContentFolder */
-        $ContentFolder = TableRegistry::getTableLocator()->get('ContentFolder');
+        $ContentFolder = TableRegistry::getTableLocator()->get('BaserCore.ContentFolders');
         foreach($path as $currentContentFolder) {
             if ($currentContentFolder->type != 'ContentFolder') {
                 break;

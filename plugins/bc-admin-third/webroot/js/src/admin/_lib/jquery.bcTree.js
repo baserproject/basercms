@@ -1019,7 +1019,6 @@
          */
         copyContent: function (parent, node) {
             var data = $.extend(true, {}, node.data.jstree);
-
             data.contentTitle = bcI18n.bcTreeCopyTitle.sprintf(data.contentTitle);
             data.status = false;
             $.bcToken.check(function () {

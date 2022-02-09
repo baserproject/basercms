@@ -213,4 +213,45 @@ class PageServiceTest extends BcTestCase
             [11, ['BcFront', 'BcAdminThrid'], ['' => '親フォルダの設定に従う（サービスページ）', 'default' => 'default']]
         ];
     }
+
+        /**
+     * ページデータをコピーする
+     *
+     * @param array $postData 送信するデータ
+     * @dataProvider copyDataProvider
+     */
+    public function testCopy($postData)
+    {
+        $this->loginAdmin($this->getRequest());
+        $result = $this->PageService->copy($postData);
+        $page = $this->PageService->get($result->id);
+        $this->assertStringContainsString("_2", $page->content->name);
+        $this->assertEquals("hoge1", $page->content->title);
+        $this->assertEquals(10, $page->content->author_id);
+    }
+
+    public function copyDataProvider()
+    {
+        return [
+            [
+                [
+                'contentId' =>4,
+                'entityId' =>2,
+                'parentId' =>1,
+                'title' => 'hoge1',
+                'authorId' => 10,
+                'siteId' =>1
+                ],
+            ],
+            // [
+            //     [
+            //     'contentId' =>3,
+            //     'parentId' =>1,
+            //     'title' => 'hoge',
+            //     'authorId' =>1,
+            //     'siteId' =>0
+            //     ],
+            // ],
+        ];
+    }
 }
