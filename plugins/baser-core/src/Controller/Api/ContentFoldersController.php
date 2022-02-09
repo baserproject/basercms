@@ -101,7 +101,8 @@ class ContentFoldersController extends BcApiController
             if ($ContentFolders->delete($id)) {
                 $message = __d('baser', 'コンテンツフォルダ: {0} を削除しました。', $contentFolders->name);
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
+            $contentFolders = $e->getEntity();
             $message = __d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
         }
         $this->set([
@@ -126,6 +127,7 @@ class ContentFoldersController extends BcApiController
             $contentFolder = $contentFolders->update($contentFolders->get($id), $this->request->getData());
             $message = __d('baser', 'フォルダー「{0}」を更新しました。', $contentFolder->name);
         } catch (\Exception $e) {
+            $contentFolders = $e->getEntity();
             $this->setResponse($this->response->withStatus(400));
             $message = __d('baser', '入力エラーです。内容を修正してください。');
         }

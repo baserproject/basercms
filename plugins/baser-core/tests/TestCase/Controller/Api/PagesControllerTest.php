@@ -11,9 +11,10 @@
 
 namespace BaserCore\Test\TestCase\Controller\Api;
 
+use Cake\Routing\Router;
+use BaserCore\Service\PageService;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\TestSuite\IntegrationTestTrait;
-use BaserCore\Service\PageService;
 
 /**
  * BaserCore\Controller\Api\PagesController Test Case
@@ -93,8 +94,6 @@ class PagesControllerTest extends BcTestCase
     public function testAdd()
     {
         $this->loginAdmin($this->getRequest());
-        $this->enableSecurityToken();
-        $this->enableCsrfToken();
         $data = [
             'code' => 'テストcreate',
             'content' => [
@@ -121,9 +120,7 @@ class PagesControllerTest extends BcTestCase
      */
     public function testDelete()
     {
-        $this->enableSecurityToken();
-        $this->enableCsrfToken();
-        $this->delete('/baser/api/baser-core/pages/delete/1.json?token=' . $this->accessToken);
+        $this->delete('/baser/api/baser-core/pages/delete/2.json?token=' . $this->accessToken);
         $this->assertResponseSuccess();
     }
 
@@ -134,8 +131,6 @@ class PagesControllerTest extends BcTestCase
      */
     public function testEdit()
     {
-        $this->enableSecurityToken();
-        $this->enableCsrfToken();
         $data = $this->PageService->getIndex(['contents' => '<section class="mainHeadline">'])->first();
         $data->content->name = "pageTestUpdate";
         $data->contents = "pageTestUpdate";
@@ -145,5 +140,24 @@ class PagesControllerTest extends BcTestCase
         $query = $this->PageService->getIndex(['contents' => $data->contents]);
         $this->assertEquals(1, $query->all()->count());
         $this->assertEquals("pageTestUpdate", $query->all()->first()->content->name);
+    }
+
+    /**
+     * testCopy
+     *
+     * @return void
+     */
+    public function testCopy()
+    {
+        $data = [
+            'contentId' =>4,
+            'entityId' =>2,
+            'parentId' =>1,
+            'title' => 'hoge1',
+            'siteId' =>1
+        ];
+        $this->post("/baser/api/baser-core/pages/copy/2.json?token=". $this->accessToken, $data);
+        $this->assertResponseSuccess();
+        $this->assertFalse($this->PageService->getIndex(['title' => $data['title']])->isEmpty());
     }
 }

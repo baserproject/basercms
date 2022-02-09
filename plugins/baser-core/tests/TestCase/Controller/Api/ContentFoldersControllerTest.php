@@ -93,8 +93,6 @@ class ContentFoldersControllerTest extends BcTestCase
     public function testAdd()
     {
         $this->loginAdmin($this->getRequest());
-        $this->enableSecurityToken();
-        $this->enableCsrfToken();
         $data = [
             'folder_template' => 'テストcreate',
             'content' => [
@@ -121,8 +119,6 @@ class ContentFoldersControllerTest extends BcTestCase
      */
     public function testDelete()
     {
-        $this->enableSecurityToken();
-        $this->enableCsrfToken();
         $this->delete('/baser/api/baser-core/content_folders/delete/1.json?token=' . $this->accessToken);
         $this->assertResponseSuccess();
     }
@@ -134,8 +130,6 @@ class ContentFoldersControllerTest extends BcTestCase
      */
     public function testEdit()
     {
-        $this->enableSecurityToken();
-        $this->enableCsrfToken();
         $data = $this->ContentFolderService->getIndex(['folder_template' => "testEdit"])->first();
         $data->content->name = "contentFolderTestUpdate";
         $id = $data->id;

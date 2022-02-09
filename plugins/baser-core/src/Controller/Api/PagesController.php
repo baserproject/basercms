@@ -103,6 +103,7 @@ class PagesController extends BcApiController
                 $message = __d('baser', '固定ページ: {0} を削除しました。', $pages->name);
             }
         } catch (\Exception $e) {
+            $pages = $e->getEntity();
             $message = __d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
         }
         $this->set([
@@ -128,6 +129,7 @@ class PagesController extends BcApiController
             $message = __d('baser', '固定ページ 「{0}」を更新しました。', $page->name);
         } catch (\Exception $e) {
             $this->setResponse($this->response->withStatus(400));
+            $pages = $e->getEntity();
             $message = __d('baser', '入力エラーです。内容を修正してください。');
         }
         $this->set([
@@ -141,17 +143,20 @@ class PagesController extends BcApiController
     /**
 	 * コピー
 	 * @param PageServiceInterface $pages
+     * @checked
+     * @noTodo
+     * @unitTest
 	 */
 	public function copy(PageServiceInterface $pages)
 	{
         $this->request->allowMethod(['post', 'put', 'patch']);
         try {
-            // copy 中にデータを入れる
             $this->request = $this->request->withData('authorId', BcUtil::loginUser());
             $page = $pages->copy($this->request->getData());
             $message = __d('baser', '固定ページのコピー「%s」を追加しました。', $page->name);
         } catch (\Exception $e) {
-            $this->setResponse($this->response->withStatus(400));
+            $this->setResponse($this->response->withStatus(500));
+            $page = $e->getEntity();
             $message = __d('baser', '入力エラーです。内容を修正してください。');
         }
         $this->set([

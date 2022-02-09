@@ -64,6 +64,10 @@ class BcUtil
         $result = $authenticator->getResult();
         if (isset($result) && $result->isValid()) {
             $user = $result->getData();
+            if (is_null($user->user_groups)) {
+                $userTable = TableRegistry::getTableLocator()->get('BaserCore.Users');
+                $user = $userTable->get($user->id, ['contain' => ['UserGroups']]);
+            }
             return $user;
         } else {
             return false;
