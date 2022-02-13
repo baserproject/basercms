@@ -95,7 +95,7 @@ class PagesControllerTest extends BcTestCase
     {
         $this->loginAdmin($this->getRequest());
         $data = [
-            'code' => 'テストcreate',
+            'page_template' => 'テストcreate',
             'content' => [
                 "parent_id" => "1",
                 "title" => "新しい フォルダー",
@@ -109,7 +109,7 @@ class PagesControllerTest extends BcTestCase
         $this->post('/baser/api/baser-core/pages/add.json?token=' . $this->accessToken, $data);
         $this->assertResponseOk();
         $Pages = $this->getTableLocator()->get('Pages');
-        $query = $Pages->find()->where(['code' => $data['code']]);
+        $query = $Pages->find()->where(['page_template' => $data['page_template']]);
         $this->assertEquals(1, $query->count());
     }
 

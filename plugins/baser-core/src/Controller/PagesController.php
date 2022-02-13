@@ -220,7 +220,6 @@ class PagesController extends AppController
 			$contents,
 			$data['Content']['title'],
 			$data['Content']['description'],
-			$data['Page']['code']
 		);
 		$uuid = Text::uuid();
 		$path = TMP . 'pages_preview_' . $uuid . Configure::read('BcApp.templateExt');

@@ -134,21 +134,6 @@ class PagesTable extends Table
             ]
         ]);
 
-        $validator
-        ->scalar('code')
-        ->allowEmptyString('code', null)
-        ->add('code', 'custom', [
-            'rule' => [$this, 'phpValidSyntax'],
-            'message' => __d('baser', '本稿欄でPHPの構文エラーが発生しました。')
-        ])
-        ->add('code', [
-            'containsScript' => [
-                'rule' => ['containsScript'],
-                'provider' => 'bc',
-                'message' => __d('baser', '本稿欄でスクリプトの入力は許可されていません。')
-            ]
-        ]);
-
         return $validator;
     }
 

@@ -20,7 +20,6 @@ class CreatePages extends AbstractMigration
                 ->addColumn('contents', 'text', ['null' => true, 'default' => null, 'limit' => null])
                 ->addColumn('draft', 'text', ['null' => true, 'default' => null, 'limit' => null])
                 ->addColumn('page_template', 'string', ['null' => true, 'default' => null, 'limit' => null])
-                ->addColumn('code', 'text', ['null' => true, 'default' => null, 'limit' => null])
                 ->addColumn('modified', 'datetime', ['null' => true, 'default' => null, 'limit' => null])
                 ->addColumn('created', 'datetime', ['null' => true, 'default' => null, 'limit' => null])
                 ->create();

@@ -99,7 +99,6 @@ class PageServiceTest extends BcTestCase
             'cotnents' => '<p>test</p>',
             'draft' => '<p>test</p>',
             'page_template' => 'test',
-            'code' => 'test',
             'content' => [
                 "parent_id" => "1",
                 "title" => "新しい フォルダー",
@@ -112,7 +111,7 @@ class PageServiceTest extends BcTestCase
         ];
         $Page = $this->PageService->create($data);
         $savedPage = $this->Pages->get($Page->id);
-        $this->assertEquals('test', $savedPage->code);
+        $this->assertEquals('test', $savedPage->page_template);
     }
 
     /**
@@ -169,22 +168,21 @@ class PageServiceTest extends BcTestCase
      * @param string $contents 本文
      * @param string $title タイトル
      * @param string $description 説明文
-     * @param string $code コード
      * @param array $expected 期待値
      * @param string $message テストが失敗した時に表示されるメッセージ
      * @dataProvider addBaserPageTagDataProvider
      */
-    public function testAddBaserPageTag($id, $contents, $title, $description, $code, $expected, $message = null)
+    public function testAddBaserPageTag($id, $contents, $title, $description, $expected, $message = null)
     {
-        $result = $this->PageService->addBaserPageTag($id, $contents, $title, $description, $code);
+        $result = $this->PageService->addBaserPageTag($id, $contents, $title, $description);
         $this->assertRegExp('/' . $expected . '/s', $result, $message);
     }
 
     public function addBaserPageTagDataProvider()
     {
         return [
-            [1, 'contentdayo', 'titledayo', 'descriptiondayo', 'codedayo',
-                "<!-- BaserPageTagBegin -->.*setTitle\('titledayo'\).*setDescription\('descriptiondayo'\).*setPageEditLink\(1\).*codedayo.*contentdayo",
+            [1, 'contentdayo', 'titledayo', 'descriptiondayo',
+                "<!-- BaserPageTagBegin -->.*setTitle\('titledayo'\).*setDescription\('descriptiondayo'\).*setPageEditLink\(1\).*contentdayo",
                 '本文にbaserが管理するタグを追加できません'],
         ];
     }
