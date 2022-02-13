@@ -154,7 +154,7 @@ if ($loginUser) {
                         'admin' => true,
                         'controller' => 'contents',
                         'action' => 'index',
-                        '?' => ['current_site_id' => $key]
+                        '?' => ['site_id' => $key]
                       ]) ?>
                     </li>
                   <?php endforeach ?>

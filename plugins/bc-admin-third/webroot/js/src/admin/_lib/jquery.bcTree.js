@@ -71,6 +71,11 @@
         beforePosition: null,
 
         /**
+         * 現在のサイトid
+         */
+        currentSiteId: 1,
+
+        /**
          * 設定
          */
         config: {
@@ -103,14 +108,13 @@
             if (!$.bcTree._inited) {
                 return;
             }
-            var mode = $("#viewsetting-mode").val();
-            var url;
+            const mode = $("#viewsetting-mode").val();
+            let url;
             if (mode == 'index') {
-                var siteId = $("#viewsetting-site-id").val();
-                if (siteId == undefined) {
-                    siteId = 0;
-                }
-                url = $.bcUtil.adminBaseUrl + 'baser-core' + '/contents/index?site_id=' + siteId + '&list_type=1';
+                const urlSearchParams = new URLSearchParams(window.location.search);
+                const params = Object.fromEntries(urlSearchParams.entries());
+                if (params.site_id !== 'undefined') $.bcTree.currentSiteId = params.site_id;
+                url = $.bcUtil.adminBaseUrl + 'baser-core' + '/contents/index?site_id=' + $.bcTree.currentSiteId + '&list_type=1';
             } else if (mode == 'trash') {
                 url = $.bcUtil.adminBaseUrl + 'baser-core' + '/contents/trash_index';
             }
@@ -226,6 +230,7 @@
          * ツリー構造を生成する
          */
         createTree: function () {
+
             // ツリービュー生成
             $.bcTree.treeDom.jstree({
                 'core': {
@@ -269,7 +274,7 @@
                     "folder": {}
                 },
                 "state": {
-                    "key": 'jstree-' + $("#viewsetting-site-id").val(),
+                    "key": 'jstree-' + $.bcTree.currentSiteId,
                     "events": "open_all.jstree close_all.jstree changed.jstree open_node.jstree close_node.jstree check_node.jstree uncheck_node.jstree"
                 },
                 "contextmenu": {

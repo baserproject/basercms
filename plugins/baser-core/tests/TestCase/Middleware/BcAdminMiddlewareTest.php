@@ -57,7 +57,7 @@ class BcAdminMiddlewareTest extends BcTestCase
      */
     public function testProcess(): void
     {
-        $request = $this->getRequest('/baser/admin/?current_site_id=3');
+        $request = $this->getRequest('/baser/admin/?site_id=3');
         $request = $this->execPrivateMethod($this->BcAdminMiddleware, 'setCurrentSite', [$request]);
         $this->assertEquals(3, $request->getAttribute('currentSite')->id);
     }
