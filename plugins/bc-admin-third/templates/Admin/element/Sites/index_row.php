@@ -61,7 +61,7 @@ $url = $this->BcAdminContent->getUrl('/' . $site->alias . '/', true, $site->use_
   </td>
   <td class="row-tools bca-table-listup__tbody-td bca-table-listup__tbody-td--actions" style="width:15%">
     <?php if ($site->status) : ?>
-      <?php echo $this->BcForm->postLink(
+      <?php echo $this->BcAdminForm->postLink(
         '',
         ['action' => 'unpublish', $site->id],
         ['title' => __d('baser', '非公開'),
@@ -71,7 +71,7 @@ $url = $this->BcAdminContent->getUrl('/' . $site->alias . '/', true, $site->use_
       ) ?>
       <?php $this->BcBaser->link('', $url, ['title' => __d('baser', '確認'), 'target' => '_blank', 'class' => 'bca-btn-icon', 'data-bca-btn-type' => 'preview', 'data-bca-btn-size' => 'lg']) ?>
     <?php else: ?>
-      <?php echo $this->BcForm->postLink(
+      <?php echo $this->BcAdminForm->postLink(
         '',
         ['action' => 'publish', $site->id],
         ['title' => __d('baser', '公開'),

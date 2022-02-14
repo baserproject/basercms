@@ -39,7 +39,7 @@ use BaserCore\View\AppView;
       <?php $this->BcBaser->link('', ['controller' => 'permissions', 'action' => 'index', $userGroup->id], ['title' => __d('baser', '制限'), 'class' => 'bca-btn-icon', 'data-bca-btn-type' => 'permission', 'data-bca-btn-size' => 'lg']) ?>
     <?php endif ?>
     <?php $this->BcBaser->link('', ['action' => 'edit', $userGroup->id], ['title' => __d('baser', '編集'), 'class' => 'bca-btn-icon', 'data-bca-btn-type' => 'edit', 'data-bca-btn-size' => 'lg']) ?>
-    <?php echo $this->BcForm->postLink(
+    <?php echo $this->BcAdminForm->postLink(
       '',
       ['action' => 'copy', $userGroup->id],
       ['title' => __d('baser', 'コピー'),
@@ -48,7 +48,7 @@ use BaserCore\View\AppView;
         'data-bca-btn-size' => 'lg']
     ) ?>
     <?php if ($userGroup->name != 'admins'): ?>
-      <?= $this->BcForm->postLink(
+      <?= $this->BcAdminForm->postLink(
         '',
         ['action' => 'delete', $userGroup->id],
         ['block' => true,
