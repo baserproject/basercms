@@ -341,32 +341,31 @@ class SitesTable extends AppTable
         // >>>
         return;
         // <<<
-        App::uses('AuthComponent', 'Controller/Component');
-        $user = AuthComponent::user();
-        $ContentFolder = ClassRegistry::init('ContentFolder');
-        if ($created) {
+        $ContentFolder = TableRegistry::getTableLocator()->get('BaserCore.ContentFolders');
+        if ($entity->isNew()) {
             $ContentFolder->saveSiteRoot(null, [
                 'site_id' => $this->id,
-                'name' => ($this->data['Site']['alias'])? $this->data['Site']['alias'] : $this->data['Site']['name'],
+                'name' => ($entity->alias) ? $entity->alias : $entity->name,
                 'parent_id' => 1,
-                'title' => $this->data['Site']['title'],
-                'self_status' => $this->data['Site']['status'],
-                'author_id' => $user['id'],
+                'title' => $entity->title,
+                'self_status' => $entity->status,
                 'site_root' => true,
                 'layout_template' => 'default'
             ]);
         } else {
             $ContentFolder->saveSiteRoot($this->id, [
-                'name' => ($this->data['Site']['alias'])? $this->data['Site']['alias'] : $this->data['Site']['name'],
-                'title' => $this->data['Site']['title'],
-                'self_status' => $this->data['Site']['status'],
+                'name' => ($entity->alias) ? $entity->alias : $entity->name,
+                'title' => $entity->title,
+                'self_status' => $entity->status,
             ], $this->__changedAlias);
+            // FIXME: $this->__changedAliasを抜く
         }
-        if (!empty($this->data['Site']['main'])) {
-            $data = $this->find('first', ['conditions' => ['Site.main' => true, 'Site.id <>' => $this->id], 'recursive' => -1]);
-            if ($data) {
-                $data['Site']['main'] = false;
-                $this->save($data, ['validate' => false, 'callbacks' => false]);
+        if (!empty($entity->main)) {
+            $site = $this->find()->where(['Site.main' => true, 'Site.id <>' => $this->id])->first();
+            if ($site) {
+                $site->main = false;
+                $this->getEventManager()->off('Model.afterSave');
+                $this->save($site, ['validate' => false]);
             }
         }
         $this->__changedAlias = false;

@@ -11,6 +11,8 @@
 
 namespace BaserCore\Test\TestCase\Service;
 
+use Cake\Routing\Router;
+use Cake\ORM\TableRegistry;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Model\Table\ContentsTable;
 use BaserCore\Service\ContentFolderService;
@@ -221,5 +223,20 @@ class ContentFolderServiceTest extends BcTestCase
             // プラグインが存在する場合
             [4, 'BcFront', ['' => "親フォルダの設定に従う（baserCMSサンプル）", 'default' => 'default']],
         ];
+    }
+
+
+    /**
+     * testSaveSiteRoot
+     *
+     * @return void
+     */
+    public function testSaveSiteRoot(): void
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        Router::setRequest($this->loginAdmin($this->getRequest()));
+        $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
+        $site = $sites->get(1);
+        $result = $this->ContentFolderService->saveSiteRoot($site);
     }
 }

@@ -1288,6 +1288,7 @@ class ContentsTable extends AppTable
      */
     public function updateChildrenUrl($id)
     {
+        // TODO ucmitz: ORM形式で記述する
         set_time_limit(0);
         $children = $this->children($id, false, ['url', 'id'], 'Content.lft', null, null, -1);
         $db = $this->getDataSource();

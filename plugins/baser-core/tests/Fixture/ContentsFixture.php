@@ -35,7 +35,7 @@ class ContentsFixture extends TestFixture
                 'site_id' => 1,
                 'alias_id' => null,
                 'main_site_content_id' => null,
-                'parent_id' => null,
+                'parent_id' => 0,
                 'lft' => 1,
                 'rght' => 38,
                 'level' => 0,
