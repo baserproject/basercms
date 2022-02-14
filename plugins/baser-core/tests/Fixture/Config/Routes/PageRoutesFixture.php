@@ -25,7 +25,6 @@ class PageRoutesFixture extends BaserTestFixture
             'id' => 1,
             'contents' => '',
             'draft' => '',
-            'code' => '',
             'modified' => null,
             'created' => '2014-10-20'
         ],
@@ -33,7 +32,6 @@ class PageRoutesFixture extends BaserTestFixture
             'id' => 2,
             'contents' => '',
             'draft' => '',
-            'code' => '',
             'modified' => null,
             'created' => '2014-10-20'
         ],
@@ -41,7 +39,6 @@ class PageRoutesFixture extends BaserTestFixture
             'id' => 3,
             'contents' => '',
             'draft' => '',
-            'code' => '',
             'modified' => null,
             'created' => '2014-10-20'
         ],
@@ -49,7 +46,6 @@ class PageRoutesFixture extends BaserTestFixture
             'id' => 4,
             'contents' => '',
             'draft' => '',
-            'code' => '',
             'modified' => null,
             'created' => '2014-10-20'
         ],
@@ -57,7 +53,6 @@ class PageRoutesFixture extends BaserTestFixture
             'id' => 5,
             'contents' => '',
             'draft' => '',
-            'code' => '',
             'modified' => null,
             'created' => '2014-10-20'
         ],
@@ -65,7 +60,6 @@ class PageRoutesFixture extends BaserTestFixture
             'id' => 6,
             'contents' => '',
             'draft' => '',
-            'code' => '',
             'modified' => null,
             'created' => '2014-10-20'
         ],
@@ -73,7 +67,6 @@ class PageRoutesFixture extends BaserTestFixture
             'id' => 7,
             'contents' => '',
             'draft' => '',
-            'code' => '',
             'modified' => null,
             'created' => '2014-10-20'
         ],
@@ -81,7 +74,6 @@ class PageRoutesFixture extends BaserTestFixture
             'id' => 8,
             'contents' => '',
             'draft' => '',
-            'code' => '',
             'modified' => null,
             'created' => '2014-10-20'
         ]

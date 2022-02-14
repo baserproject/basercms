@@ -89,7 +89,7 @@ class PagesTableTest extends BcTestCase
         foreach($validator->getIterator() as $key => $value) {
             $fields[] = $key;
         }
-        $this->assertEquals(['id','contents', 'draft', 'code'], $fields);
+        $this->assertEquals(['id','contents', 'draft'], $fields);
     }
 
     public function test既存ページチェック正常()

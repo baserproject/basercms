@@ -101,7 +101,7 @@ class PagesControllerTest extends BcTestCase
         $this->enableSecurityToken();
         $this->enableCsrfToken();
         $data = $this->PageService->getIndex()->first();
-        $data->code = 'testEdit';
+        $data->page_template = 'testEdit';
         $data->content->name = "pageTestUpdate";
         $id = $data->id;
         $this->post('/baser/admin/baser-core/pages/edit/' . $id, [
@@ -110,7 +110,7 @@ class PagesControllerTest extends BcTestCase
         ]);
         $this->assertResponseSuccess();
         $this->assertRedirect('/baser/admin/baser-core/pages/edit/' . $id);
-        $this->assertEquals('testEdit', $this->PageService->get($id)->code);
+        $this->assertEquals('testEdit', $this->PageService->get($id)->page_template);
         $this->assertEquals('pageTestUpdate', $this->PageService->get($id)->content->name);
     }
 

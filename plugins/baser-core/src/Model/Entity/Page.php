@@ -24,7 +24,6 @@ use BaserCore\Annotation\Checked;
  * @property string $contents
  * @property string $draft
  * @property string $page_template
- * @property string $code
  * @property TimeAlias $created
  * @property TimeAlias $modified
  */

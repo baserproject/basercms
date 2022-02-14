@@ -53,7 +53,6 @@ class PagesFixture extends TestFixture
 </section>
 </div><!-- /information -->',
             'draft' => '',
-            'code' => '',
             'modified' => null,
             'created' => '2015-01-27 12:56:52'
         ],
@@ -99,7 +98,6 @@ class PagesFixture extends TestFixture
 </article>
 <?php $this->BcBaser->googleMaps(array("width" => "100%","height" => 500)) ?></div>',
             'draft' => '',
-            'code' => '',
             'modified' => null,
             'created' => '2015-01-27 12:56:52'
         ],
@@ -120,7 +118,6 @@ class PagesFixture extends TestFixture
 </article>
 </div>',
             'draft' => '',
-            'code' => '',
             'modified' => null,
             'created' => '2015-01-27 12:56:52'
         ],
@@ -174,7 +171,6 @@ class PagesFixture extends TestFixture
 // </article>
 // </div>',
 //             'draft' => '',
-//             'code' => '',
 //             'modified' => null,
 //             'created' => '2015-01-27 12:56:52'
 //         ],
@@ -198,7 +194,6 @@ class PagesFixture extends TestFixture
 <hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;" />
 <?php $this->BcBaser->feed(1) ?>',
             'draft' => '',
-            'code' => '',
             'modified' => null,
             'created' => '2015-01-27 12:56:52'
         ],
@@ -220,7 +215,6 @@ class PagesFixture extends TestFixture
 </div>
 </div>',
             'draft' => '',
-            'code' => '',
             'modified' => null,
             'created' => '2015-01-27 12:56:52'
         ],
@@ -244,7 +238,6 @@ WEBシステム開発事業（ダミー）</td></tr>
 <?php $this->BcBaser->googleMaps(array("width" => 585)) ?>
 </div>',
             'draft' => '',
-            'code' => '',
             'modified' => null,
             'created' => '2015-01-27 12:56:52'
         ],
@@ -278,7 +271,6 @@ TODO ucmitz: コンテンツFixtureと整合性がとれないため一旦コメ
 </p>
 </div>',
             'draft' => '',
-            'code' => '',
             'modified' => null,
             'created' => '2015-01-27 12:56:52'
         ],
@@ -291,7 +283,6 @@ TODO ucmitz: コンテンツFixtureと整合性がとれないため一旦コメ
 	<li><?php $this->BcBaser->link("お問い合わせ","/s/contact/index") ?>	</li>
 </ul>',
             'draft' => '',
-            'code' => '',
             'modified' => null,
             'created' => '2015-01-27 12:56:52'
         ],
@@ -393,7 +384,6 @@ TODO ucmitz: コンテンツFixtureと整合性がとれないため一旦コメ
 <p style="text-align: center;">
 	<?php $this->BcBaser->img(\'icons/about_007.png\', array(\'style\' => \'width: 656px; height: 278px;\')) ?></p>',
             'draft' => '',
-            'code' => '',
             'modified' => null,
             'created' => '2015-01-27 12:56:52'
         ],
@@ -416,7 +406,6 @@ WEBシステム開発事業（ダミー）</td></tr>
 <?php $this->BcBaser->googleMaps(array("width" => 585)) ?>
 </div>',
             'draft' => '',
-            'code' => '',
             'modified' => null,
             'created' => '2015-01-27 12:56:52'
         ],

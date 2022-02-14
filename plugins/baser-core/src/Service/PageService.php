@@ -106,7 +106,7 @@ class PageService implements PageServiceInterface
             $query->limit($queryParams['limit']);
         }
 
-        $queryList = ['contents', 'draft', 'code'];
+        $queryList = ['contents', 'draft'];
 
         foreach ($queryParams as $key => $value) {
             if (in_array($key, $queryList)) {
@@ -171,10 +171,9 @@ class PageService implements PageServiceInterface
 	 * @param string $contents 本文
 	 * @param string $title タイトル
 	 * @param string $description 説明文
-	 * @param string $code コード
 	 * @return string 本文の先頭にbaserCMSが管理するタグを付加したデータ
 	 */
-	public function addBaserPageTag($id, $contents, $title, $description, $code)
+	public function addBaserPageTag($id, $contents, $title, $description)
 	{
 		$tag = [];
 		$tag[] = '<!-- BaserPageTagBegin -->';
@@ -185,9 +184,6 @@ class PageService implements PageServiceInterface
 
 		if ($id) {
 			$tag[] = '<?php $this->BcBaser->setPageEditLink(' . $id . ') ?>';
-		}
-		if ($code) {
-			$tag[] = trim($code);
 		}
 		$tag[] = '<!-- BaserPageTagEnd -->';
 		return implode("\n", $tag) . "\n\n" . $contents;

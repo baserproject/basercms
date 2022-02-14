@@ -63,27 +63,10 @@ $this->BcAdmin->setHelp('pages_form');
             <?php echo $this->BcAdminForm->error('Page.page_template') ?>
           </td>
         </tr>
-        <tr>
-          <th class="bca-form-table__label"><?php echo $this->BcAdminForm->label('Page.code', __d('baser', 'コード')) ?></th>
-          <td class="col-input bca-form-table__input">
-            <?php echo $this->BcAdminForm->control('Page.code', [
-              'type' => 'textarea',
-              'cols' => 36,
-              'rows' => 5,
-              'style' => 'font-size:14px;font-family:Verdana,Arial,sans-serif;'
-            ]); ?>
-            <i class="bca-icon--question-circle btn help bca-help"></i>
-            <div
-              class="helptext"><?php echo __d('baser', '固定ページの本文には、ソースコードに切り替えてPHPやJavascriptのコードを埋め込む事ができますが、ユーザーが間違って削除してしまわないようにこちらに入力しておく事もできます。<br>入力したコードは、自動的にコンテンツ本体の上部に差し込みます。') ?></div>
-            <?php echo $this->BcAdminForm->error('Page.code') ?>
-          </td>
-        </tr>
         <?php echo $this->BcAdminForm->dispatchAfterForm() ?>
       </table>
     </div>
   </section>
-<?php else: ?>
-  <?php echo $this->BcAdminForm->control('Page.code', ['type' => 'hidden']) ?>
 <?php endif ?>
 
 <?php echo $this->BcFormTable->dispatchAfter() ?>

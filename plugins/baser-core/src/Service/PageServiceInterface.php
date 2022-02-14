@@ -82,10 +82,9 @@ interface PageServiceInterface
 	 * @param string $contents 本文
 	 * @param string $title タイトル
 	 * @param string $description 説明文
-	 * @param string $code コード
 	 * @return string 本文の先頭にbaserCMSが管理するタグを付加したデータ
 	 */
-	public function addBaserPageTag($id, $contents, $title, $description, $code);
+	public function addBaserPageTag($id, $contents, $title, $description);
 
     /**
      * 固定ページテンプレートリストを取得する
