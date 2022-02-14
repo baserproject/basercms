@@ -15,7 +15,6 @@
 $(function () {
 
     var contentsIndexSearchOpened = $("#SearchBoxOpened").html();
-
     $.bcTree.init({
         isAdmin: $("#AdminContentsIndexScript").attr('data-isAdmin'),
         isUseMoveContents: $("#AdminContentsIndexScript").attr('data-isUseMoveContents'),
@@ -26,17 +25,6 @@ $(function () {
 
     // マウスダウンイベント
     $(window).bind("mousedown", $.bcTree.updateShiftAndCtrlOnAnchor);
-
-    // サイト変更時
-    $("#viewsetting-site-id").change(function () {
-        $.bcUtil.showLoader();
-        var siteId = $("#viewsetting-site-id").val();
-        if (siteId == undefined) {
-            siteId = 0;
-        }
-        // メニューを再構築する必要があるため、ajax ではなく遷移させる
-        location.href = $.bcUtil.adminBaseUrl + 'baser-core' + '/contents/index?current_site_id=' + siteId + '\&list_type=1';
-    });
 
     if (location.pathname === "/baser/admin/baser-core/contents/index" && $("input[name='ViewSetting[list_type]']:checked").val() == 1) {
         // 初回indexアクセス時
@@ -143,6 +131,9 @@ $(function () {
         }
         var mode = $("#viewsetting-mode").val();
         var listType = $("input[name='ViewSetting[list_type]']:checked").val();
+        const urlSearchParams = new URLSearchParams(window.location.search);
+        const params = Object.fromEntries(urlSearchParams.entries());
+        const currentSiteId = params.site_id ?? 1;
         if (listType == undefined || mode == 'trash') {
             listType = "1";
         }
@@ -158,7 +149,7 @@ $(function () {
                 $("#GrpChangeTreeOpenClose").show();
                 break;
             case "2":
-                loadTable();
+                loadTable(currentSiteId);
                 $("#BtnAddContent").parent().hide();
                 if (contentsIndexSearchOpened) {
                     $("#Search").show();
@@ -172,9 +163,10 @@ $(function () {
 
     /**
      * 表形式のリストをロードする
+     * @param siteId 現在のサイトID
      */
-    function loadTable() {
-        let url = $.bcUtil.adminBaseUrl + 'baser-core' + '/contents/index?site_id=' + $("#viewsetting-site-id").val() + '\&list_type=2';
+    function loadTable(siteId) {
+        let url = $.bcUtil.adminBaseUrl + 'baser-core' + '/contents/index?site_id=' + siteId + '\&list_type=2';
         let queryParams = decodeURI($("#ContentIndexForm").serialize());
         location.href = url + '&' + queryParams;
     }

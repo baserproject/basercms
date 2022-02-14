@@ -58,7 +58,7 @@ class BcAdminMiddleware implements MiddlewareInterface
     {
         $session = $request->getSession();
         $currentSiteId = 1;
-        $queryCurrentSiteId = $request->getQuery('current_site_id');
+        $queryCurrentSiteId = $request->getQuery('site_id');
         if (!$session->check('BcApp.Admin.currentSite') || $queryCurrentSiteId) {
             if ($queryCurrentSiteId) {
                 $currentSiteId = $queryCurrentSiteId;
