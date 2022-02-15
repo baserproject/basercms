@@ -227,13 +227,17 @@ class ContentFolderService implements ContentFolderServiceInterface
      * @param Site $site
      * @param bool $isUpdateChildrenUrl 子のコンテンツのURLを一括更新するかどうか
      * @return ContentFolder contentFolder
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function saveSiteRoot($site, $isUpdateChildrenUrl = false)
     {
         if ($site->isNew()) {
             $data = [
-                'layout_template' => 'default',
+                'folder_template' => 'default',
                 'content' => [
+                    'layout_template' => 'default',
                     'site_id' => $site->id,
                     'name' => ($site->alias) ? $site->alias : $site->name,
                     'parent_id' => 1,
@@ -244,7 +248,6 @@ class ContentFolderService implements ContentFolderServiceInterface
             ];
             $contentFolder = $this->create($data);
         } else {
-            // FIXME: $this->__changedAlias
             $contentFolder = $this->ContentFolders->find()->where(['Contents.site_id' => $site->id, 'Contents.site_root' => true])->contain(['Contents'])->first();
             $data = [
                 'content' => [
@@ -255,9 +258,9 @@ class ContentFolderService implements ContentFolderServiceInterface
                 ]
             ];
             $contentFolder = $this->update($contentFolder, $data);
-        }
-        if ($isUpdateChildrenUrl) {
-            $this->Contents->updateChildrenUrl($contentFolder->content->id);
+            if ($isUpdateChildrenUrl) {
+                $this->Contents->updateChildrenUrl($contentFolder->content->id);
+            }
         }
         return $contentFolder;
     }

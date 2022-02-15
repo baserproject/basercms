@@ -71,6 +71,7 @@ class ContentFolderServiceTest extends BcTestCase
     public function tearDown(): void
     {
         unset($this->ContentFolderService);
+        Router::reload();
         parent::tearDown();
     }
 
@@ -120,7 +121,7 @@ class ContentFolderServiceTest extends BcTestCase
      */
     public function testCreate()
     {
-        $this->loginAdmin($this->getRequest());
+        Router::setRequest($this->loginAdmin($this->getRequest()));
         $data = [
             'folder_template' => 'テストcreate',
             'content' => [
@@ -161,6 +162,7 @@ class ContentFolderServiceTest extends BcTestCase
      */
     public function testUpdate()
     {
+        Router::setRequest($this->loginAdmin($this->getRequest()));
         $newContentFolder = $this->ContentFolderService->getIndex(['folder_template' => "testEdit"])->first();
         $newContentFolder->folder_template = "testUpdate";
         $newContentFolder->content->title = "contentFolderTestUpdate";
@@ -233,10 +235,20 @@ class ContentFolderServiceTest extends BcTestCase
      */
     public function testSaveSiteRoot(): void
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         Router::setRequest($this->loginAdmin($this->getRequest()));
         $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
+        // サイト新規作成の場合
         $site = $sites->get(1);
-        $result = $this->ContentFolderService->saveSiteRoot($site);
+        $site->setNew(true);
+        $site->alias = 'create';
+        $contentFolder = $this->ContentFolderService->saveSiteRoot($site);
+        $this->assertEquals('create', $contentFolder->content->name);
+        // サイト更新の場合
+        $site = $sites->get(1);
+        $site->alias = 'update';
+        $contentFolder = $this->ContentFolderService->saveSiteRoot($site, true);
+        $this->assertEquals('update', $contentFolder->content->name);
+        $updatedChild = $this->Contents->get(20);
+        $this->assertEquals('/ツリー階層削除用フォルダー(親)/ツリー階層削除用フォルダー(子)/ツリー階層削除用フォルダー(孫)/', $updatedChild->url);
     }
 }

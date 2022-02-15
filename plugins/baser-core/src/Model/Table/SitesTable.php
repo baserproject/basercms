@@ -17,20 +17,21 @@ use Cake\ORM\TableRegistry;
 use BaserCore\Model\AppTable;
 use BaserCore\Utility\BcLang;
 use BaserCore\Utility\BcUtil;
+use BaserCore\Annotation\Note;
 use BaserCore\Utility\BcAgent;
 use Cake\Event\EventInterface;
 use Cake\Validation\Validator;
+use BaserCore\Annotation\NoTodo;
 use BaserCore\Model\Entity\Site;
+use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
 use Cake\Datasource\EntityInterface;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Datasource\ResultSetInterface;
 use BaserCore\Service\SiteConfigService;
 use BaserCore\Utility\BcAbstractDetector;
 use BaserCore\Event\BcEventDispatcherTrait;
-use BaserCore\Annotation\Checked;
-use BaserCore\Annotation\NoTodo;
-use BaserCore\Annotation\UnitTest;
-use BaserCore\Annotation\Note;
+use BaserCore\Service\ContentFolderServiceInterface;
 
 /**
  * Class Site
@@ -333,33 +334,12 @@ class SitesTable extends AppTable
      * @param EntityInterface $entity
      * @param ArrayObject $options
      * @checked
-     * @note(value="ContentFolder実装後に対応する")
      */
     public function afterSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
-        // TODO ucmitz 未確認のため暫定措置
-        // >>>
         return;
-        // <<<
-        $ContentFolder = TableRegistry::getTableLocator()->get('BaserCore.ContentFolders');
-        if ($entity->isNew()) {
-            $ContentFolder->saveSiteRoot(null, [
-                'site_id' => $this->id,
-                'name' => ($entity->alias) ? $entity->alias : $entity->name,
-                'parent_id' => 1,
-                'title' => $entity->title,
-                'self_status' => $entity->status,
-                'site_root' => true,
-                'layout_template' => 'default'
-            ]);
-        } else {
-            $ContentFolder->saveSiteRoot($this->id, [
-                'name' => ($entity->alias) ? $entity->alias : $entity->name,
-                'title' => $entity->title,
-                'self_status' => $entity->status,
-            ], $this->__changedAlias);
-            // FIXME: $this->__changedAliasを抜く
-        }
+        $contentFolderService = $this->getService(ContentFolderServiceInterface::class);
+        $contentFolderService->saveSiteRoot($entity, $this->__changedAlias);
         if (!empty($entity->main)) {
             $site = $this->find()->where(['Site.main' => true, 'Site.id <>' => $this->id])->first();
             if ($site) {
