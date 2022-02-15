@@ -54,7 +54,7 @@ class SitesTable extends AppTable
      *
      * @var bool
      */
-    private $__changedAlias = false;
+    private $changedAlias = false;
 
     /**
      * Initialize
@@ -334,21 +334,23 @@ class SitesTable extends AppTable
      * @param EntityInterface $entity
      * @param ArrayObject $options
      * @checked
+     * @noTodo
+     * @unitTest
      */
     public function afterSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
-        return;
         $contentFolderService = $this->getService(ContentFolderServiceInterface::class);
-        $contentFolderService->saveSiteRoot($entity, $this->__changedAlias);
+        $contentFolderService->saveSiteRoot($entity, $this->changedAlias);
+        $this->getEventManager()->off('Model.beforeSave');
+        $this->getEventManager()->off('Model.afterSave');
         if (!empty($entity->main)) {
             $site = $this->find()->where(['Site.main' => true, 'Site.id <>' => $this->id])->first();
             if ($site) {
                 $site->main = false;
-                $this->getEventManager()->off('Model.afterSave');
                 $this->save($site, ['validate' => false]);
             }
         }
-        $this->__changedAlias = false;
+        $this->changedAlias = false;
     }
 
     /**
@@ -743,7 +745,7 @@ class SitesTable extends AppTable
         if ($entity->id && $entity->alias) {
             $oldSite = $this->find()->where(['id' => $entity->id])->first();
             if ($oldSite && $oldSite->alias !== $entity->alias) {
-                $this->__changedAlias = true;
+                $this->changedAlias = true;
             }
         }
         return true;

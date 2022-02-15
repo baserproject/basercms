@@ -135,7 +135,8 @@ class ContentsTable extends AppTable
         $validator
         ->integer('id')
         ->allowEmptyString('id', null, 'create')
-        ->numeric('id', __d('baser', 'IDに不正な値が利用されています。'), 'update');
+        ->numeric('id', __d('baser', 'IDに不正な値が利用されています。'), 'update')
+        ->requirePresence('id', 'update', __d('baser', 'IDに不正な値が利用されています。'));
 
         $validator
         ->scalar('name')
@@ -319,6 +320,9 @@ class ContentsTable extends AppTable
                 }
                 if (!isset($data['content']['author_id'])) {
                     $user = BcUtil::loginUser();
+                    if (is_null($user)) {
+                        throw new \Exception('aaaa');
+                    }
                     $data['content']['author_id'] = $user['id'];
                 }
             } else {

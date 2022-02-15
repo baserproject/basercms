@@ -89,7 +89,8 @@ interface ContentFolderServiceInterface
      *
      * @param Site $site
      * @param bool $isUpdateChildrenUrl 子のコンテンツのURLを一括更新するかどうか
-     * @return ContentFolder contentFolder
+     * @return false|ContentFolder contentFolder
+     * @throws RecordNotFoundException
      */
     public function saveSiteRoot($site, $isUpdateChildrenUrl = false);
 }

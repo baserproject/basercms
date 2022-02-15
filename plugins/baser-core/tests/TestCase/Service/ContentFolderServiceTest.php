@@ -114,7 +114,7 @@ class ContentFolderServiceTest extends BcTestCase
     {
         $contentFolders = $this->ContentFolderService->getIndex();
         $this->assertEquals('baserCMSサンプル', $contentFolders->first()->folder_template);
-        $this->assertEquals(8, $contentFolders->count());
+        $this->assertEquals(9, $contentFolders->count());
     }
     /**
      * Test create
@@ -237,18 +237,28 @@ class ContentFolderServiceTest extends BcTestCase
     {
         Router::setRequest($this->loginAdmin($this->getRequest()));
         $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
-        // サイト新規作成の場合
+        // 初期サイトIDの場合はfalse
         $site = $sites->get(1);
+        $this->assertFalse($this->ContentFolderService->saveSiteRoot($site, true));
+        // サイト新規作成の場合
+        $site = $sites->get(2);
         $site->setNew(true);
         $site->alias = 'create';
         $contentFolder = $this->ContentFolderService->saveSiteRoot($site);
         $this->assertEquals('create', $contentFolder->content->name);
         // サイト更新の場合
-        $site = $sites->get(1);
+        $site = $sites->get(2);
         $site->alias = 'update';
         $contentFolder = $this->ContentFolderService->saveSiteRoot($site, true);
         $this->assertEquals('update', $contentFolder->content->name);
-        $updatedChild = $this->Contents->get(20);
-        $this->assertEquals('/ツリー階層削除用フォルダー(親)/ツリー階層削除用フォルダー(子)/ツリー階層削除用フォルダー(孫)/', $updatedChild->url);
+        $updatedChild = $this->Contents->get(24);
+        $this->assertEquals('/update/サイトID2の固定ページ', $updatedChild->url);
+        // エラーが出る場合
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        $this->expectExceptionMessage('Record not found in table "content_folders"');
+        $site = $sites->get(6);
+        $site->alias = 'update';
+        $contentFolder = $this->ContentFolderService->saveSiteRoot($site, true);
+
     }
 }

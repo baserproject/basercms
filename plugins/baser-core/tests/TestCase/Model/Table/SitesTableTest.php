@@ -35,6 +35,10 @@ class SitesTableTest extends BcTestCase
         'plugin.BaserCore.Sites',
         'plugin.BaserCore.SiteConfigs',
         'plugin.BaserCore.Contents',
+        'plugin.BaserCore.ContentFolders',
+        'plugin.BaserCore.Users',
+        'plugin.BaserCore.UserGroups',
+        'plugin.BaserCore.UsersUserGroups',
     ];
 
     /**
@@ -44,6 +48,7 @@ class SitesTableTest extends BcTestCase
     {
         parent::setUp();
         $this->Sites = $this->getTableLocator()->get('BaserCore.Sites');
+        $this->Contents = $this->getTableLocator()->get('BaserCore.Contents');
     }
 
     /**
@@ -135,13 +140,11 @@ class SitesTableTest extends BcTestCase
      */
     public function testAfterSave()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $content = $this->Contents->get(6); // サービスフォルダ
-        $content->self_status = false;
-        $this->Contents->dispatchEvent('Model.afterSave', [$content, new ArrayObject()]);
-        $content = $this->Contents->get(6);
-        // updateSystemDataが適応されてるかテスト
-        $this->assertFalse($content->status);
+        $this->loginAdmin($this->getRequest());
+        $site = $this->Sites->get(2);
+        $this->Sites->dispatchEvent('Model.afterSave', [$site, new ArrayObject()]);
+        $updatedContent = $this->Contents->find()->where(['site_id' => 2, 'site_root' => true])->first();
+        $this->assertEquals($updatedContent->name, $site->alias);
     }
 
     /**
@@ -304,7 +307,7 @@ class SitesTableTest extends BcTestCase
         $site->alias = 'm';
         $this->Sites->beforeSave(new Event('beforeSave'), $site, new ArrayObject());
         $reflectionClass = new ReflectionClass(get_class($this->Sites));
-        $property = $reflectionClass->getProperty('__changedAlias');
+        $property = $reflectionClass->getProperty('changedAlias');
         $property->setAccessible(true);
         $this->assertTrue($property->getValue($this->Sites));
     }

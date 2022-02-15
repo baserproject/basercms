@@ -121,7 +121,7 @@ class PageServiceTest extends BcTestCase
     {
         // 条件無しで一覧を取得した場合
         $pages = $this->PageService->getIndex();
-        $this->assertEquals(6, $pages->all()->count());
+        $this->assertEquals(7, $pages->all()->count());
         $this->assertRegExp('/<section class="mainHeadline">/', $pages->first()->contents);
         // 条件無しで数を制限し、一覧を取得した場合
         $pages2 = $this->PageService->getIndex(['limit' => 3]);

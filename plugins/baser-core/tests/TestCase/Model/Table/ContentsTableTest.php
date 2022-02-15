@@ -392,10 +392,10 @@ class ContentsTableTest extends BcTestCase
     public function testDeleteRelateSubSiteContentWithAlias()
     {
         $content = $this->Contents->get(6);
-        $mockContent = $this->Contents->save(new Content(['site_id' => 6, 'main_site_content_id' => 6, 'alias_id' => 23, 'plugin' => 'BaserCore', 'type' => 'test']));
+        $mockContent = $this->Contents->save(new Content(['site_id' => 6, 'main_site_content_id' => 6, 'alias_id' => 25, 'plugin' => 'BaserCore', 'type' => 'test']));
         $this->execPrivateMethod($this->Contents, 'deleteRelateSubSiteContent', [$content]);
         $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
-        $this->Contents->get($mockContent->id);
+        $a = $this->Contents->get($mockContent->id);
     }
     /**
      * メインサイトの場合、連携設定がされている子サイトのエイリアス削除する

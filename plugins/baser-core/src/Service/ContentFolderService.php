@@ -13,7 +13,6 @@
 namespace BaserCore\Service;
 
 use Cake\ORM\Query;
-use Cake\Utility\Hash;
 use Cake\ORM\TableRegistry;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Annotation\Note;
@@ -226,13 +225,15 @@ class ContentFolderService implements ContentFolderServiceInterface
      *
      * @param Site $site
      * @param bool $isUpdateChildrenUrl 子のコンテンツのURLを一括更新するかどうか
-     * @return ContentFolder contentFolder
+     * @return false|ContentFolder contentFolder
+     * @throws RecordNotFoundException
      * @checked
      * @noTodo
      * @unitTest
      */
     public function saveSiteRoot($site, $isUpdateChildrenUrl = false)
     {
+        if ($site->id === 1) return false;
         if ($site->isNew()) {
             $data = [
                 'folder_template' => 'default',
@@ -249,8 +250,10 @@ class ContentFolderService implements ContentFolderServiceInterface
             $contentFolder = $this->create($data);
         } else {
             $contentFolder = $this->ContentFolders->find()->where(['Contents.site_id' => $site->id, 'Contents.site_root' => true])->contain(['Contents'])->first();
+            if (is_null($contentFolder)) throw new RecordNotFoundException('Record not found in table "content_folders"');
             $data = [
                 'content' => [
+                    'id' => $contentFolder->content->id,
                     'name' => ($site->alias) ? $site->alias : $site->name,
                     'title' => $site->title,
                     'self_status' => $site->status,
