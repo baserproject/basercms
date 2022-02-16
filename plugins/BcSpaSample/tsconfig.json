@@ -1,8 +1,8 @@
 {
     "compilerOptions": {
-      "target": "es2020",
-      "module": "esnext",
-      "lib": ["es2020", "dom"],
+        "target": "es5",
+        "module": "es2015",
+      "lib": ["es5", "dom"],
       "sourceMap": true,
       "outDir": "./webroot/js",
       "rootDir": "./webroot/src/js",
