@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+      "target": "es2020",
+      "module": "esnext",
+      "lib": ["es2020", "dom"],
+      "sourceMap": true,
+      "outDir": "./webroot/js",
+      "rootDir": "./webroot/src/js",
+      "strict": true,
+      "moduleResolution": "node",
+    //   "baseUrl": "src",
+      "esModuleInterop": true,
+      "experimentalDecorators": true,
+      "emitDecoratorMetadata": true,
+      "skipLibCheck": true,
+      "forceConsistentCasingInFileNames": true
+    },
+    // "include": ["src/**/*"],
+    // "exclude": ["dist", "node_modules"],
+    "compileOnSave": false
+  }

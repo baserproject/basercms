@@ -27,7 +27,7 @@
                 </span>
                     <div class="error-wrap" v-if="errors.name">
                         <ul>
-                            <li class="error-message" v-for="(message) in errors.name">{{ message }}</li>
+                            <li class="error-message" v-for="(message) in errors.name" :key="message">{{ message }}</li>
                         </ul>
                     </div>
                 </td>
@@ -61,7 +61,7 @@
                 </span>
                     <div class="error-wrap" v-if="errors.real_name_1">
                         <ul>
-                            <li class="error-message" v-for="(message) in errors.real_name_1">{{ message }}</li>
+                            <li class="error-message" v-for="(message) in errors.real_name_1" :key="message">{{ message }}</li>
                         </ul>
                     </div>
                 </td>
@@ -90,7 +90,7 @@
                 <td class="col-input bca-form-table__input">
                 <span class="bca-checkbox-group">
                     <input type="hidden" name="user_groups[_ids]" value=""/>
-                    <span v-for="(title, id) in this.userGroups" class="bca-checkbox">
+                    <span v-for="(title, id) in this.userGroups" class="bca-checkbox" :key="title-id">
                         <input type="checkbox"
                                name="user_groups[_ids][]"
                                :value="id"
@@ -104,7 +104,7 @@
                 </span>
                     <div class="error-wrap" v-if="errors.user_groups">
                         <ul>
-                            <li class="error-message" v-for="(message) in errors.user_groups">{{ message }}</li>
+                            <li class="error-message" v-for="(message) in errors.user_groups" :key="message">{{ message }}</li>
                         </ul>
                     </div>
                 </td>
@@ -128,7 +128,7 @@
                 </span>
                     <div class="error-wrap" v-if="errors.email">
                         <ul>
-                            <li class="error-message" v-for="(message) in errors.email">{{ message }}</li>
+                            <li class="error-message" v-for="(message) in errors.email" :key="message">{{ message }}</li>
                         </ul>
                     </div>
                 </td>
@@ -163,7 +163,7 @@
                 </span>
                     <div class="error-wrap" v-if="errors.password">
                         <ul>
-                            <li class="error-message" v-for="(message) in errors.password">{{ message }}</li>
+                            <li class="error-message" v-for="(message) in errors.password" :key="message">{{ message }}</li>
                         </ul>
                     </div>
                 </td>

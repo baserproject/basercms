@@ -103,9 +103,9 @@
 
 </template>
 
-<script>
+<script lang="ts">
 
-import axios from "axios"
+import axios from "axios";
 
 export default {
 
