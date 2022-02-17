@@ -201,7 +201,9 @@ class BcAdminSiteHelper extends Helper
      */
     public function getCurrentSite(): ?Site
     {
-        return $this->_View->getRequest()->getAttribute('currentSite');
+        return $this->SiteService->get(
+            $this->_View->getRequest()->getAttribute('currentSite')->id
+        );
     }
 
     /**
