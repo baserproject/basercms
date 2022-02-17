@@ -1,6 +1,8 @@
 import Vue from 'vue';
 import axios from 'axios';
 
+let aaa = "aaa";
+aaa = 100;
 const userLogin =  Vue.extend({
     /**
      * Name

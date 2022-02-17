@@ -48,4 +48,4 @@
     </div>
 </template>
 
-<script lang="ts" src="./index.ts"></script>
+<script lang="ts" src="./Login.ts"></script>
