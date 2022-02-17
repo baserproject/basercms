@@ -13,9 +13,11 @@ namespace BaserCore\Test\TestCase\View\Helper;
 
 use BaserCore\Model\Entity\Site;
 use BaserCore\Service\SiteConfigServiceInterface;
+use BaserCore\Service\SiteService;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\View\BcAdminAppView;
 use BaserCore\View\Helper\BcAdminSiteHelper;
+use Cake\Http\ServerRequest;
 
 /**
  * Class BcAdminSiteHelperTest
@@ -115,4 +117,24 @@ class BcAdminSiteHelperTest extends \BaserCore\TestSuite\BcTestCase
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
 
+    /**
+     * Test getCurrentSite
+     */
+    public function testGetCurrentSite()
+    {
+        $request = $this->getRequest('/');
+        $service = new SiteService();
+        $site = $service->create([
+            'main_site_id' => 2,
+            'display_name' => 'beforeChange',
+            'alias' => 'test',
+            'name'  => 'test',
+            'title' => 'test',
+        ]);
+        $request = $request->withAttribute('currentSite', $service->get($site->id));
+        $this->BcAdminSite = new BcAdminSiteHelper(new BcAdminAppView($request));
+        $this->assertEquals('beforeChange', $this->BcAdminSite->getCurrentSite()->display_name);
+        $service->update($site,['display_name' => 'afterChange']);
+        $this->assertEquals('afterChange', $this->BcAdminSite->getCurrentSite()->display_name);
+    }
 }
