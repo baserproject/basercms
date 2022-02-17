@@ -1,9 +1,20 @@
 import Vue from 'vue';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 
-let aaa = "aaa";
-aaa = 100;
-const userLogin =  Vue.extend({
+
+export type DataType = {
+    isError: boolean,
+    message? : string,
+    name? : string,
+    password? : string
+};
+
+interface loginToken {
+    'access_token': string,
+    'refresh_token': string
+}
+
+export default Vue.extend({
     /**
      * Name
      */
@@ -16,14 +27,13 @@ const userLogin =  Vue.extend({
     },
     /**
      * Data
-     * @returns {{password: null, isError: boolean, name: null}}
      */
-    data: () => {
+    data: (): DataType => {
         return {
             isError: false,
-            message : null,
-            name: null,
-            password: null
+            message : undefined,
+            name: undefined,
+            password: undefined
         }
     },
     /**
@@ -36,32 +46,31 @@ const userLogin =  Vue.extend({
      * Methods
      */
     methods: {
-        login,
+        /**
+         * Login
+         */
+        login: function(): void {
+            this.isError = false;
+            const postData = {
+                email: this.name,
+                password: this.password
+            };
+            axios.post<loginToken>('/baser/api/baser-core/users/login.json', postData)
+            .then((response) => {
+                if (response.data) {
+                    this.$emit('set-login', response.data.access_token, response.data.refresh_token)
+                    this.$router.push('user_index')
+                }
+            })
+            .catch((error: AxiosError) => {
+                if (error.response) {
+                    if(error.response.status === 401) {
+                        this.message = 'アカウント名、パスワードが間違っています。'
+                    } else {
+                        this.message = error.response.data.message
+                    }
+                }
+            });
+        }
     }
 });
-
-/**
- * Login
- */
-function login() {
-    this.isError = false
-    axios.post('/baser/api/baser-core/users/login.json', {
-        email: this.name,
-        password: this.password
-    }).then(function (response) {
-        if (response.data) {
-            this.$emit('set-login', response.data.access_token, response.data.refresh_token)
-            this.$router.push('user_index')
-        }
-    }.bind(this))
-    .catch(function (error) {
-        this.isError = true
-        if(error.response.status === 401) {
-            this.message = 'アカウント名、パスワードが間違っています。'
-        } else {
-            this.message = error.response.data.message
-        }
-    }.bind(this))
-}
-
-export {userLogin};

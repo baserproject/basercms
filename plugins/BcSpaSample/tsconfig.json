@@ -8,14 +8,23 @@
       "rootDir": "./webroot/src/js",
       "strict": true,
       "moduleResolution": "node",
-    //   "baseUrl": "src",
+      "baseUrl": ".",
       "esModuleInterop": true,
       "experimentalDecorators": true,
       "emitDecoratorMetadata": true,
       "skipLibCheck": true,
       "forceConsistentCasingInFileNames": true
     },
-    // "include": ["src/**/*"],
-    // "exclude": ["dist", "node_modules"],
-    "compileOnSave": false
+    // "include": [
+    //     "webroot/src/js/**/*.ts",
+    //     "webroot/src/js/**/*.js",
+    //     "webroot/src/js/**/*.vue",
+    //   ],
+    // "exclude": ["node_modules"],
+    // "compileOnSave": false,
+    // "paths": {
+    //     "@/*": [
+    //         "webroot/src/js/*"
+    //     ]
+    //   },
   }

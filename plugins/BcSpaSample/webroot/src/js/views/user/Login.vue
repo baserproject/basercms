@@ -47,5 +47,4 @@
         </div>
     </div>
 </template>
-
 <script lang="ts" src="./Login.ts"></script>
