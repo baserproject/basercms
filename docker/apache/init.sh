@@ -1,8 +1,9 @@
-if [ ! -e '/var/www/html/docker/check' ]; then
-    rm -rf /var/www/html/tmp
-    rm -rf /var/www/html/logs
-	rm /var/www/html/config/jwt.key
-	rm /var/www/html/config/jwt.pem
+if [ ! -e '/var/www/shared/docker/check' ]; then
+    rm -rf /var/www/shared/tmp
+    rm -rf /var/www/shared/logs
+	rm /var/www/shared/config/jwt.key
+	rm /var/www/shared/config/jwt.pem
+    rsync -av /var/www/shared/ /var/www/html --exclude='node_modules' --exclude='tmp' --exclude='.git' --exclude='.idea' --exclude='.DS_Store' --exclude='docker'
     composer install --no-plugins
     cp /var/www/html/config/.env.example /var/www/html/config/.env
     sleep 10
@@ -12,8 +13,9 @@ if [ ! -e '/var/www/html/docker/check' ]; then
     openssl genrsa -out /var/www/html/config/jwt.key 1024
     openssl rsa -in /var/www/html/config/jwt.key -outform PEM -pubout -out /var/www/html/config/jwt.pem
     chown www-data.www-data /var/www/html/config/jwt.key
-    touch /var/www/html/docker/check
     chmod 777 -R /var/www/html/tmp
     chmod 777 -R /var/www/html/logs
+    touch /var/www/shared/docker/check
     echo "container setup is complete"
 fi
+service lsyncd start

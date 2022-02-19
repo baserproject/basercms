@@ -31,7 +31,6 @@
             "BcBlog\\": "plugins/bc-blog/src/",
             "BcFront\\": "plugins/bc-front/src/",
             "BcMail\\": "plugins/bc-mail/src/",
-            "BcPage\\": "plugins/bc-page/src/",
             "BcSpaSample\\": "plugins/BcSpaSample/src/",
             "BcUploader\\": "plugins/bc-uploader/src/",
             "Cake\\Routing\\": "plugins/baser-core/src/Routing"

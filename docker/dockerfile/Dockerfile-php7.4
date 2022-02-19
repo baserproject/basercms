@@ -30,6 +30,8 @@ RUN apt-get update \
 		libreadline5 \
 		libonig-dev \
 		libpq-dev \
+		rsync \
+		lsyncd \
     && docker-php-ext-install -j$(nproc) iconv pdo_mysql pdo_pgsql mbstring exif xml tokenizer zip intl \
     && docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/ \
     && docker-php-ext-install -j$(nproc) gd \
@@ -45,6 +47,9 @@ COPY apache/ssl/ssl-cert-snakeoil.pem /etc/ssl/certs/
 RUN chmod 400 /etc/ssl/private/ssl-cert-snakeoil.key \
 	&& chmod 400 /etc/ssl/certs/ssl-cert-snakeoil.pem
 RUN groupmod -g 1000 www-data && usermod -u 1000 www-data
+
+# lsyncd
+COPY lsyncd/lsyncd.conf.lua /etc/lsyncd/lsyncd.conf.lua
 
 # php
 RUN echo 'sendmail_path = "/usr/bin/msmtp -t"' > /usr/local/etc/php/conf.d/mail.ini \
