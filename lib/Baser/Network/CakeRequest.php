@@ -25,6 +25,11 @@ App::uses('Hash', 'Utility');
  *
  * `$request['controller']` or `$request->controller`.
  *
+ * @property string $plugin     The plugin handling the request. Will be `null` when there is no plugin.
+ * @property string $controller The controller handling the current request.
+ * @property string $action     The action handling the current request.
+ * @property array $named       Array of named parameters parsed from the URL.
+ * @property array $pass        Array of passed arguments parsed from the URL.
  * @package       Cake.Network
  */
 class CakeRequest implements ArrayAccess {
@@ -253,13 +258,15 @@ class CakeRequest implements ArrayAccess {
 			} else {
 				// CUSTOMIZE MODIFY 2019/09/18 CUiwamoto
 				// urlのアクション部分にフルパスが来るとトップページに遷移してしまう為、404となるように修正
+				// CUSTOMIZE MODIFY 2021/10/07 Yamamoto
+				// オリジナルCakePHPの修正に揃える(得られる結果は同じ)
+				// https://github.com/cakephp/cakephp/commit/63d708118acd3db9c1286d8bbb86c9a3cd5aae66
 				// >>>
-				// $uri = substr($_SERVER['REQUEST_URI'], strlen(Configure::read('App.fullBaseUrl')));
-				// ---
-				if (strpos($_SERVER['REQUEST_URI'], Configure::read('App.fullBaseUrl')) === 0) {
-					$uri = substr($_SERVER['REQUEST_URI'], strlen(Configure::read('App.fullBaseUrl')));
+				$baseUrl = Configure::read('App.fullBaseUrl');
+				if (substr($_SERVER['REQUEST_URI'], 0, strlen($baseUrl)) === $baseUrl) {
+					$uri = substr($_SERVER['REQUEST_URI'], strlen($baseUrl));
 				} else {
-					$uri = $_SERVER['REQUEST_URI'];
+					$uri = $_SERVER['REQUEST_URI']; // ここだけオリジナルCakePHPと違う by Yamamoto
 				}
 				// <<<
 			}
