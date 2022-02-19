@@ -1,10 +1,6 @@
 #
 # test.yml
 #
-# コンテナ起動時に、composer install を実行するが、Github Actions では、非同期で処理が走るため
-# composer の処理が完了する前にテストが行われてしまい、テストが失敗する。
-# そのため、composer install を同期処理とするため、ジョブの steps に composer の処理を追加している
-#
 
 name: Test
 
@@ -30,12 +26,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Validate composer.json and composer.lock
-        run: composer validate
-
-      - name: Install dependencies
-        run: composer install --prefer-dist --no-progress --no-suggest
-
       - name: Run compose
         run: |
           cd docker
@@ -52,4 +42,6 @@ jobs:
           docker-compose logs
 
       - name: Run test suite
-        run: docker exec bc5-php composer run-script test
+        run: |
+          cd docker
+          docker exec bc5-php composer run-script test
