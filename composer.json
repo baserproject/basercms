@@ -21,7 +21,6 @@
     },
     "require": {
         "php": ">=5.6",
-        "ext-mcrypt": "*",
         "ext-json": "*"
     },
     "require-dev": {
