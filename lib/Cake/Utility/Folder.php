@@ -225,12 +225,30 @@ class Folder {
 			ksort($files);
 		}
 
+		/// >>> CUSTMIZE MODIFY gondoh PHP8名前ありarray対応
+		// if ($dirs) {
+		// 	$dirs = call_user_func_array('array_merge', $dirs);
+		// }
+		// if ($files) {
+		// 	$files = call_user_func_array('array_merge', $files);
+		// }
+		// ---
 		if ($dirs) {
-			$dirs = call_user_func_array('array_merge', $dirs);
+			$nlist = [];
+			foreach($dirs as $key => $val) {
+				$nlist[] = $val;
+			}
+			$dirs = call_user_func_array('array_merge', $nlist);
 		}
 		if ($files) {
-			$files = call_user_func_array('array_merge', $files);
+			$nlist = [];
+			foreach($files as $key => $val) {
+				$nlist[] = $val;
+			}
+			$files = call_user_func_array('array_merge', $nlist);
 		}
+		// <<<
+
 		return array($dirs, $files);
 	}
 
