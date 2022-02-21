@@ -1,3 +1,9 @@
+#
+# init.sh
+# コンテナの初期化
+# /var/www/shared と /var/www/html の同期、マイグレーション、書き込み権限の変更などを行う
+# マイグレーションを実行する際、DBの起動より先に実行すると失敗してしまうため sleep で待つようにしている
+#
 if [ ! -e '/var/www/shared/docker/check' ]; then
     if [ -d '/var/www/shared/tmp' ]; then
         rm -rf /var/www/shared/tmp
