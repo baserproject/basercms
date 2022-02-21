@@ -14,7 +14,7 @@ if [ ! -e '/var/www/shared/docker/check' ]; then
     rsync -a /var/www/shared/ /var/www/html --exclude='node_modules' --exclude='tmp' --exclude='.git' --exclude='.idea' --exclude='.DS_Store' --exclude='docker'
     composer install --no-plugins
     cp /var/www/html/config/.env.example /var/www/html/config/.env
-    sleep 15
+    sleep 12
 	/var/www/html/bin/cake migrations migrate --plugin BaserCore
 	/var/www/html/bin/cake migrations seed --plugin BaserCore
 	/var/www/html/bin/cake plugin assets symlink
