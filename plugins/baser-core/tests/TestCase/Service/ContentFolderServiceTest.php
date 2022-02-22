@@ -252,7 +252,7 @@ class ContentFolderServiceTest extends BcTestCase
         $contentFolder = $this->ContentFolderService->saveSiteRoot($site, true);
         $this->assertEquals('update', $contentFolder->content->name);
         $updatedChild = $this->Contents->get(24);
-        $this->assertEquals('/update/サイトID2の固定ページ', $updatedChild->url);
+        $this->assertEquals('/update/サイトID3の固定ページ', $updatedChild->url);
         // エラーが出る場合
         $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
         $this->expectExceptionMessage('Record not found in table "content_folders"');

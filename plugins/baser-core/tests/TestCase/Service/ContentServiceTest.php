@@ -766,4 +766,15 @@ class ContentServiceTest extends BcTestCase
             ]
         ];
     }
+
+    /**
+     * testSetTreeConfig
+     *
+     * @return void
+     */
+    public function testSetTreeConfig()
+    {
+        $treeBehavior = $this->ContentService->setTreeConfig('scope', ['country_name' => 'France']);
+        $this->assertEquals($treeBehavior->getConfig('scope'), ['country_name' => 'France']);
+    }
 }

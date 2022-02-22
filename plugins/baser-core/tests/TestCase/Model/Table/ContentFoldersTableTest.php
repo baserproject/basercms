@@ -67,6 +67,7 @@ class ContentFoldersTableTest extends BcTestCase
     public function testInitialize(): void
     {
         $this->assertTrue($this->ContentFolders->hasBehavior('BcContents'));
+        $this->assertTrue($this->ContentFolders->hasBehavior('Timestamp'));
     }
 
     /**

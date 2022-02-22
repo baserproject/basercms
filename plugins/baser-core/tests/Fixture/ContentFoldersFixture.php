@@ -84,7 +84,7 @@ class ContentFoldersFixture extends TestFixture
             ],
             [
                 'id' => '17',
-                'folder_template' => 'site2のフォルダ',
+                'folder_template' => 'default',
                 'page_template' => '',
                 'created' => '2016-08-10 02:17:28',
                 'modified' => null

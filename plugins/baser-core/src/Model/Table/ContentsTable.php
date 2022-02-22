@@ -320,9 +320,6 @@ class ContentsTable extends AppTable
                 }
                 if (!isset($data['content']['author_id'])) {
                     $user = BcUtil::loginUser();
-                    if (is_null($user)) {
-                        throw new \Exception('aaaa');
-                    }
                     $data['content']['author_id'] = $user['id'];
                 }
             } else {

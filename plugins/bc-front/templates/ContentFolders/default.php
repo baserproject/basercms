@@ -20,15 +20,15 @@
 ?>
 
 
-<h2 class="bs-contents-title"><?php echo $this->request->params['Content']['title'] ?></h2>
+<h2 class="bs-contents-title"><?php echo $this->request->getParam('Content.title'); ?></h2>
 
 <?php if($children): ?>
 <ul class="bs-contents-list">
 	<?php foreach($children as $child): ?>
 	<li class="bs-contents-list__item">
 		<?php $this->BcBaser->link(
-			$child['Content']['title'],
-			$child['Content']['url'],
+			$child->title,
+			$child->url,
 			['class' => 'bs-contents-list__item-title']
 		) ?>
 	</li>

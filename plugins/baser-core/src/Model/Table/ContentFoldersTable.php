@@ -62,6 +62,7 @@ class ContentFoldersTable extends AppTable
     {
         parent::initialize($config);
         $this->addBehavior('BaserCore.BcContents');
+        $this->addBehavior('Timestamp');
     }
 
     /**
