@@ -21,7 +21,7 @@ $(function () {
                 'message': bcI18n.confirmMessage2,
                 'ok': function () {
                     $.bcUtil.showLoader();
-                    $("#SiteAdminEditForm").submit();
+                    $("#BtnSave").parents("form").submit();
                 }
             });
             return false;
