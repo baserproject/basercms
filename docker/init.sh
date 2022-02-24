@@ -4,6 +4,7 @@
 # /var/www/shared と /var/www/html の同期、マイグレーション、書き込み権限の変更などを行う
 # マイグレーションを実行する際、DBの起動より先に実行すると失敗してしまうため sleep で待つようにしている
 #
+rsync -a /var/www/shared/ /var/www/html --exclude='node_modules' --exclude='tmp' --exclude='.git' --exclude='.idea' --exclude='.DS_Store' --exclude='docker'
 if [ ! -e '/var/www/shared/docker/check' ]; then
     if [ -d '/var/www/shared/tmp' ]; then
         rm -rf /var/www/shared/tmp
@@ -17,7 +18,6 @@ if [ ! -e '/var/www/shared/docker/check' ]; then
 	if [ -e '/var/www/shared/config/jwt.pem' ]; then
 	    rm /var/www/shared/config/jwt.pem
 	fi
-    rsync -a /var/www/shared/ /var/www/html --exclude='node_modules' --exclude='tmp' --exclude='.git' --exclude='.idea' --exclude='.DS_Store' --exclude='docker'
     composer install --no-plugins
     cp /var/www/html/config/.env.example /var/www/html/config/.env
     sleep 15
