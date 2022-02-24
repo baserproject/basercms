@@ -320,7 +320,7 @@ class ContentsTable extends AppTable
                 }
                 if (!isset($data['content']['author_id'])) {
                     $user = BcUtil::loginUser();
-                    $data['content']['author_id'] = $user['id'];
+                    if ($user) $data['content']['author_id'] = $user['id'];
                 }
             } else {
                 if (empty($data['content']['modified_date'])) {
