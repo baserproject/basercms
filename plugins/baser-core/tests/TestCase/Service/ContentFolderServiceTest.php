@@ -114,7 +114,7 @@ class ContentFolderServiceTest extends BcTestCase
     {
         $contentFolders = $this->ContentFolderService->getIndex();
         $this->assertEquals('baserCMSサンプル', $contentFolders->first()->folder_template);
-        $this->assertEquals(9, $contentFolders->count());
+        $this->assertEquals(10, $contentFolders->count());
     }
     /**
      * Test create
@@ -241,13 +241,13 @@ class ContentFolderServiceTest extends BcTestCase
         $site = $sites->get(1);
         $this->assertFalse($this->ContentFolderService->saveSiteRoot($site, true));
         // サイト新規作成の場合
-        $site = $sites->get(2);
+        $site = $sites->get(3);
         $site->setNew(true);
         $site->alias = 'create';
         $contentFolder = $this->ContentFolderService->saveSiteRoot($site);
         $this->assertEquals('create', $contentFolder->content->name);
         // サイト更新の場合
-        $site = $sites->get(2);
+        $site = $sites->get(3);
         $site->alias = 'update';
         $contentFolder = $this->ContentFolderService->saveSiteRoot($site, true);
         $this->assertEquals('update', $contentFolder->content->name);

@@ -204,7 +204,7 @@ class SitesControllerTest extends BcTestCase
         $this->enableCsrfToken();
 
         $sites = $this->getTableLocator()->get('Sites');
-        $siteId = 2;
+        $siteId = 3;
         $site = $sites->get($siteId);
         $site->status = false;
         $sites->save($site);
@@ -231,7 +231,7 @@ class SitesControllerTest extends BcTestCase
         $this->enableCsrfToken();
 
         $sites = $this->getTableLocator()->get('Sites');
-        $siteId = 2;
+        $siteId = 3;
         $site = $sites->get($siteId);
         $site->status = true;
         $sites->save($site);
