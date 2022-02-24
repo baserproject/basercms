@@ -100,37 +100,4 @@ class ContentFoldersController extends BcAdminAppController
         ];
         $this->set('contentEntities', $contentEntities);
     }
-
-    /**
-     * コンテンツを表示する
-     *
-     * @return void
-     */
-    public function view()
-    {
-        if (empty($this->request->getParam('entityId'))) {
-            $this->notFound();
-        }
-        $data = $this->ContentFolder->find('first', ['conditions' => ['ContentFolder.id' => $this->request->getParam('entityId')]]);
-        if (empty($data)) {
-            $this->notFound();
-        }
-        $this->ContentFolder->Content->Behaviors->Tree->settings['Content']['scope'] = ['Content.site_root' => false] + $this->ContentFolder->Content->getConditionAllowPublish();
-        // 公開期間を条件に入れている為、キャッシュをオフにしないとキャッシュが無限増殖してしまう
-        $this->ContentFolder->Content->Behaviors->unload('BcCache');
-        $children = $this->ContentFolder->Content->children($data['Content']['id'], true, [], 'lft');
-        $this->ContentFolder->Content->Behaviors->load('BcCache');
-        $this->ContentFolder->Content->Behaviors->Tree->settings['Content']['scope'] = null;
-        if ($this->BcAdminContents->preview && !empty($this->request->getData('Content'))) {
-            $data['Content'] = $this->request->getData('Content');
-        }
-        $this->set(compact('data', 'children'));
-        $folderTemplate = $data['ContentFolder']['folder_template'];
-        if (!$folderTemplate) {
-            $folderTemplate = $this->ContentFolder->getParentTemplate($data['Content']['id'], 'folder');
-        }
-        $this->set('editLink', ['admin' => true, 'plugin' => '', 'controller' => 'content_folders', 'action' => 'edit', $data['ContentFolder']['id'], 'content_id' => $data['Content']['id']]);
-        $this->render($folderTemplate);
-    }
-
 }

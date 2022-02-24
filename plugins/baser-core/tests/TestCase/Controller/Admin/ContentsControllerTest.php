@@ -205,7 +205,7 @@ class ContentsControllerTest extends BcTestCase
             'author_id' => '',
         ];
         return [
-            ['index', '1', [], "Cake\ORM\Query", 15],
+            ['index', '1', [], "Cake\ORM\Query", 18],
             ['index', '2', $search, 'Cake\ORM\ResultSet', 15],
             ['trash_index', '1', [], 'Cake\ORM\Query', 4],
             // 足りない場合は空のindexを返す
@@ -483,7 +483,7 @@ class ContentsControllerTest extends BcTestCase
         $this->ContentsController->setRequest($this->request);
         $response = $this->ContentsController->trash_empty($this->ContentService);
         $this->assertTrue($this->ContentService->getTrashIndex(['type' => "ContentFolder"])->isEmpty());
-        $this->assertEquals(6, $this->ContentFolderService->getIndex()->count());
+        $this->assertEquals(8, $this->ContentFolderService->getIndex()->count());
         $this->assertStringContainsString("/baser/admin/baser-core/contents/trash_index", $response->getHeaderLine('Location'));
     }
 

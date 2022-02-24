@@ -80,6 +80,13 @@ class BcContentsBehavior extends Behavior
             if ($contentEntity->hasErrors() && empty($data['content']['id'])) {
                 return false;
             }
+            [$plugin, $type] = pluginSplit($this->table->getRegistryAlias());
+            if (!isset($data['content']['plugin'])) {
+                $data['content']['plugin'] = $plugin;
+            }
+            if (!isset($data['content']['type'])) {
+                $data['content']['type'] = Inflector::classify($type);
+            }
             $this->Contents->beforeMarshal($event, $data, $options);
         }
     }

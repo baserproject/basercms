@@ -17,20 +17,21 @@ use Cake\ORM\TableRegistry;
 use BaserCore\Model\AppTable;
 use BaserCore\Utility\BcLang;
 use BaserCore\Utility\BcUtil;
+use BaserCore\Annotation\Note;
 use BaserCore\Utility\BcAgent;
 use Cake\Event\EventInterface;
 use Cake\Validation\Validator;
+use BaserCore\Annotation\NoTodo;
 use BaserCore\Model\Entity\Site;
+use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
 use Cake\Datasource\EntityInterface;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Datasource\ResultSetInterface;
 use BaserCore\Service\SiteConfigService;
 use BaserCore\Utility\BcAbstractDetector;
 use BaserCore\Event\BcEventDispatcherTrait;
-use BaserCore\Annotation\Checked;
-use BaserCore\Annotation\NoTodo;
-use BaserCore\Annotation\UnitTest;
-use BaserCore\Annotation\Note;
+use BaserCore\Service\ContentFolderServiceInterface;
 
 /**
  * Class Site
@@ -53,7 +54,7 @@ class SitesTable extends AppTable
      *
      * @var bool
      */
-    private $__changedAlias = false;
+    private $changedAlias = false;
 
     /**
      * Initialize
@@ -333,43 +334,23 @@ class SitesTable extends AppTable
      * @param EntityInterface $entity
      * @param ArrayObject $options
      * @checked
-     * @note(value="ContentFolder実装後に対応する")
+     * @noTodo
+     * @unitTest
      */
     public function afterSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
-        // TODO ucmitz 未確認のため暫定措置
-        // >>>
-        return;
-        // <<<
-        App::uses('AuthComponent', 'Controller/Component');
-        $user = AuthComponent::user();
-        $ContentFolder = ClassRegistry::init('ContentFolder');
-        if ($created) {
-            $ContentFolder->saveSiteRoot(null, [
-                'site_id' => $this->id,
-                'name' => ($this->data['Site']['alias'])? $this->data['Site']['alias'] : $this->data['Site']['name'],
-                'parent_id' => 1,
-                'title' => $this->data['Site']['title'],
-                'self_status' => $this->data['Site']['status'],
-                'author_id' => $user['id'],
-                'site_root' => true,
-                'layout_template' => 'default'
-            ]);
-        } else {
-            $ContentFolder->saveSiteRoot($this->id, [
-                'name' => ($this->data['Site']['alias'])? $this->data['Site']['alias'] : $this->data['Site']['name'],
-                'title' => $this->data['Site']['title'],
-                'self_status' => $this->data['Site']['status'],
-            ], $this->__changedAlias);
-        }
-        if (!empty($this->data['Site']['main'])) {
-            $data = $this->find('first', ['conditions' => ['Site.main' => true, 'Site.id <>' => $this->id], 'recursive' => -1]);
-            if ($data) {
-                $data['Site']['main'] = false;
-                $this->save($data, ['validate' => false, 'callbacks' => false]);
+        $contentFolderService = $this->getService(ContentFolderServiceInterface::class);
+        $contentFolderService->saveSiteRoot($entity, $this->changedAlias);
+        $this->getEventManager()->off('Model.beforeSave');
+        $this->getEventManager()->off('Model.afterSave');
+        if (!empty($entity->main)) {
+            $site = $this->find()->where(['Site.main' => true, 'Site.id <>' => $this->id])->first();
+            if ($site) {
+                $site->main = false;
+                $this->save($site, ['validate' => false]);
             }
         }
-        $this->__changedAlias = false;
+        $this->changedAlias = false;
     }
 
     /**
@@ -764,7 +745,7 @@ class SitesTable extends AppTable
         if ($entity->id && $entity->alias) {
             $oldSite = $this->find()->where(['id' => $entity->id])->first();
             if ($oldSite && $oldSite->alias !== $entity->alias) {
-                $this->__changedAlias = true;
+                $this->changedAlias = true;
             }
         }
         return true;

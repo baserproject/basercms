@@ -51,7 +51,7 @@ use BaserCore\View\BcAdminAppView;
   </td>
   <td class="bca-table-listup__tbody-td bca-table-listup__tbody-td--actions">
     <?php if ($data->status): ?>
-    <?= $this->BcForm->postLink(
+    <?= $this->BcAdminForm->postLink(
       '',
       ['action' => 'unpublish', $data->id],
       ['block' => true,
@@ -61,7 +61,7 @@ use BaserCore\View\BcAdminAppView;
         'data-bca-btn-size' => 'lg']
     ) ?>
     <?php else: ?>
-    <?= $this->BcForm->postLink(
+    <?= $this->BcAdminForm->postLink(
       '',
       ['action' => 'publish', $data->id],
       ['block' => true,
@@ -72,7 +72,7 @@ use BaserCore\View\BcAdminAppView;
     ) ?>
     <?php endif; ?>
     <?php $this->BcBaser->link('', ['action' => 'edit', $currentUserGroup->id, $data->id], ['title' => __d('baser', '編集'), 'class' => ' bca-btn-icon', 'data-bca-btn-type' => 'edit', 'data-bca-btn-size' => 'lg']) ?>
-    <?= $this->BcForm->postLink(
+    <?= $this->BcAdminForm->postLink(
       '',
       ['action' => 'copy', $data->id],
       ['block' => true,
@@ -82,7 +82,7 @@ use BaserCore\View\BcAdminAppView;
         'data-bca-btn-type' => 'copy',
         'data-bca-btn-size' => 'lg']
     ) ?>
-    <?= $this->BcForm->postLink(
+    <?= $this->BcAdminForm->postLink(
       '',
       ['action' => 'delete', $data->id],
       ['block' => true,

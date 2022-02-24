@@ -307,4 +307,20 @@ interface ContentServiceInterface
      * @return bool
      */
     public function isChangedStatus($id, $newData);
+
+    /**
+     * TreeBehaviorの設定値を更新する
+     *
+     * @param  string $targetConfig
+     * @param  array $conditions
+     * @return TreeBehavior
+     */
+    public function setTreeConfig($targetConfig, $conditions);
+
+    /**
+     * 公開済の conditions を取得
+     *
+     * @return array 公開条件（conditions 形式）
+     */
+    public function getConditionAllowPublish();
 }

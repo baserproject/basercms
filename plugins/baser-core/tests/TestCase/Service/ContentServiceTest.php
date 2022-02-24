@@ -207,15 +207,15 @@ class ContentServiceTest extends BcTestCase
         // softDeleteの場合
         $request = $this->getRequest('/?status=1');
         $contents = $this->ContentService->getIndex($request->getQueryParams());
-        $this->assertEquals(14, $contents->all()->count());
+        $this->assertEquals(17, $contents->all()->count());
         // ゴミ箱を含むの場合
         $request = $this->getRequest('/?status=1&withTrash=true');
         $contents = $this->ContentService->getIndex($request->getQueryParams());
-        $this->assertEquals(17, $contents->all()->count());
+        $this->assertEquals(20, $contents->all()->count());
         // 否定の場合
         $request = $this->getRequest('/?status=1&type!=Page');
         $contents = $this->ContentService->getIndex($request->getQueryParams());
-        $this->assertEquals(9, $contents->all()->count());
+        $this->assertEquals(11, $contents->all()->count());
         // フォルダIDを指定する場合
         $request = $this->getRequest('/?status=1&folder_id=6');
         $contents = $this->ContentService->getIndex($request->getQueryParams());
@@ -334,7 +334,7 @@ class ContentServiceTest extends BcTestCase
      */
     public function testDeleteAll(): void
     {
-        $this->assertEquals(15, $this->ContentService->deleteAll());
+        $this->assertEquals(18, $this->ContentService->deleteAll());
         $contents = $this->ContentService->getIndex();
         $this->assertEquals(0, $contents->all()->count());
     }
@@ -765,5 +765,16 @@ class ContentServiceTest extends BcTestCase
                 true
             ]
         ];
+    }
+
+    /**
+     * testSetTreeConfig
+     *
+     * @return void
+     */
+    public function testSetTreeConfig()
+    {
+        $treeBehavior = $this->ContentService->setTreeConfig('scope', ['country_name' => 'France']);
+        $this->assertEquals($treeBehavior->getConfig('scope'), ['country_name' => 'France']);
     }
 }

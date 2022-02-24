@@ -13,15 +13,17 @@
 namespace BaserCore\Service;
 
 use Cake\ORM\Query;
-use Cake\Utility\Hash;
 use Cake\ORM\TableRegistry;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Annotation\Note;
 use BaserCore\Annotation\NoTodo;
+use BaserCore\Model\Entity\Site;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use Cake\Datasource\EntityInterface;
 use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Model\Table\ContentsTable;
+use BaserCore\Model\Entity\ContentFolder;
 use Cake\Database\Expression\QueryExpression;
 use BaserCore\Model\Table\ContentFoldersTable;
 use Cake\Datasource\Exception\RecordNotFoundException;
@@ -44,6 +46,12 @@ class ContentFolderService implements ContentFolderServiceInterface
      * @var ContentFoldersTable
      */
     public $ContentFolders;
+
+    /**
+     * ContentFolders Table
+     * @var ContentsTable
+     */
+    public $Contents;
 
     /**
      * ContentFolderService constructor.
@@ -210,5 +218,53 @@ class ContentFolderService implements ContentFolderServiceInterface
         }
         $parentTemplate = !empty($template) ? $template : 'default';
         return $parentTemplate;
+    }
+
+    /**
+     * サイトルートフォルダを保存
+     *
+     * @param Site $site
+     * @param bool $isUpdateChildrenUrl 子のコンテンツのURLを一括更新するかどうか
+     * @return false|ContentFolder contentFolder
+     * @throws RecordNotFoundException
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function saveSiteRoot($site, $isUpdateChildrenUrl = false)
+    {
+        if ($site->id === 1) return false;
+        if ($site->isNew()) {
+            $data = [
+                'folder_template' => 'default',
+                'content' => [
+                    'layout_template' => 'default',
+                    'site_id' => $site->id,
+                    'name' => ($site->alias) ? $site->alias : $site->name,
+                    'parent_id' => 1,
+                    'title' => $site->title,
+                    'self_status' => $site->status,
+                    'site_root' => true,
+                ]
+            ];
+            $contentFolder = $this->create($data);
+        } else {
+            $contentFolder = $this->ContentFolders->find()->where(['Contents.site_id' => $site->id, 'Contents.site_root' => true])->contain(['Contents'])->first();
+            if (is_null($contentFolder)) throw new RecordNotFoundException('Record not found in table "content_folders"');
+            $data = [
+                'content' => [
+                    'id' => $contentFolder->content->id,
+                    'name' => ($site->alias) ? $site->alias : $site->name,
+                    'title' => $site->title,
+                    'self_status' => $site->status,
+                    'parent_id' => $contentFolder->content->parent_id
+                ]
+            ];
+            $contentFolder = $this->update($contentFolder, $data);
+            if ($isUpdateChildrenUrl) {
+                $this->Contents->updateChildrenUrl($contentFolder->content->id);
+            }
+        }
+        return $contentFolder;
     }
 }

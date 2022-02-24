@@ -29,7 +29,7 @@ if (!$data['MailField']['use_field']) {
     <?php if ($this->request->getQuery('sortmode')): ?>
       <span class="sort-handle"><i class="bca-btn-icon-text"
                                   data-bca-btn-type="draggable"></i><?php echo __d('baser', 'ドラッグ可能') ?></span>
-      <?php echo $this->BcForm->hidden('Sort.id' . $data['MailField']['id'], ['class' => 'id', 'value' => $data['MailField']['id']]) ?>
+      <?php echo $this->BcAdminForm->hidden('Sort.id' . $data['MailField']['id'], ['class' => 'id', 'value' => $data['MailField']['id']]) ?>
     <?php endif ?>
   </td>
   <td class="bca-table-listup__tbody-td"><?php echo $data['MailField']['no'] ?></td>

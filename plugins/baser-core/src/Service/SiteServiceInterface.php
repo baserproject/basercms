@@ -123,4 +123,19 @@ interface SiteServiceInterface
      */
     public function getThemeList(Site $site): array;
 
+    /**
+     * 公開状態にする
+     *
+     * @param int $id
+     * @return bool
+     */
+    public function publish($id): bool;
+
+    /**
+     * 非公開状態にする
+     *
+     * @param int $id
+     * @return bool
+     */
+    public function unpublish($id): bool;
 }
