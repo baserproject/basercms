@@ -123,14 +123,6 @@ class ContentFolderTest extends BaserTestCase
     }
 
     /**
-     * サイトルートフォルダを保存
-     */
-    public function testSaveSiteRoot()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
-    /**
      * フォルダのテンプレートリストを取得する
      */
     public function testGetFolderTemplateList()

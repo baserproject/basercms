@@ -31,7 +31,6 @@
             "BcBlog\\": "plugins/bc-blog/src/",
             "BcFront\\": "plugins/bc-front/src/",
             "BcMail\\": "plugins/bc-mail/src/",
-            "BcPage\\": "plugins/bc-page/src/",
             "BcSpaSample\\": "plugins/BcSpaSample/src/",
             "BcUploader\\": "plugins/bc-uploader/src/",
             "Cake\\Routing\\": "plugins/baser-core/src/Routing"
@@ -65,7 +64,10 @@
         "cs-check": "phpcs --colors -p  src/ tests/",
         "cs-fix": "phpcbf --colors -p src/ tests/",
         "stan": "phpstan analyse src/",
-        "test": "vendor/bin/phpunit --colors=always"
+        "test": [
+            "Composer\\Config::disableProcessTimeout",
+            "vendor/bin/phpunit --colors=always"
+        ]
     },
     "suggest": {
         "markstory/asset_compress": "An asset compression plugin which provides file concatenation and a flexible filter system for preprocessing and minification.",

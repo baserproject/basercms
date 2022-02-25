@@ -83,6 +83,16 @@ interface ContentFolderServiceInterface
      * @param string $type folder|page
      */
     public function getParentTemplate($id, $type);
+
+    /**
+     * サイトルートフォルダを保存
+     *
+     * @param Site $site
+     * @param bool $isUpdateChildrenUrl 子のコンテンツのURLを一括更新するかどうか
+     * @return false|ContentFolder contentFolder
+     * @throws RecordNotFoundException
+     */
+    public function saveSiteRoot($site, $isUpdateChildrenUrl = false);
 }
 
 

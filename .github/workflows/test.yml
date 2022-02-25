@@ -1,9 +1,8 @@
 #
 # test.yml
-#
-# コンテナ起動時に、composer install を実行するが、Github Actions では、非同期で処理が走るため
-# composer の処理が完了する前にテストが行われてしまい、テストが失敗する。
-# そのため、composer install を同期処理とするため、ジョブの steps に composer の処理を追加している
+# ユニットテストの実行
+# コンテナの初期化が完了する前にユニットテストを実行すると失敗してしまうので sleep で待つようにしている
+# /docker/init.sh に記載している sleep の秒数プラス 5秒を目安として設定する
 #
 
 name: Test
@@ -30,12 +29,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Validate composer.json and composer.lock
-        run: composer validate
-
-      - name: Install dependencies
-        run: composer install --prefer-dist --no-progress --no-suggest
-
       - name: Run compose
         run: |
           cd docker
@@ -43,8 +36,8 @@ jobs:
           sed -i -e "s/basercms:5-php7.4/basercms:5-php${{ matrix.php-version }}/g" docker-compose.yml;
           docker-compose up -d
 
-      - name: Sleep for 10 seconds
-        run: sleep 10
+      - name: Sleep for 20 seconds
+        run: sleep 20
 
       - name: Compose log
         run:  |
@@ -52,4 +45,6 @@ jobs:
           docker-compose logs
 
       - name: Run test suite
-        run: docker exec bc5-php composer run-script test
+        run: |
+          cd docker
+          docker exec bc5-php composer run-script test

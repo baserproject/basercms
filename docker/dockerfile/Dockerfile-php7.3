@@ -1,29 +1,39 @@
 FROM php:7.3.6-apache-stretch
 
-RUN echo "deb http://deb.debian.org/debian jessie main" > /etc/apt/sources.list &&\
-    echo "deb http://security.debian.org jessie/updates main" >> /etc/apt/sources.list
+RUN echo "deb http://security.debian.org jessie/updates main" >> /etc/apt/sources.list
 
 # install
 RUN apt-get update \
     && apt-get install -y --allow-downgrades \
-    	zlib1g=1:1.2.8.dfsg-2+deb8u1 \
+    	dialog \
+    	zlib1g \
     	zlib1g-dev \
-        libfreetype6-dev \
-        libjpeg62-turbo-dev \
-        libmcrypt-dev \
-        libpng-dev \
-        openssl libssl-dev \
-        libxml2=2.9.1+dfsg1-5+deb8u8 \
-        libxml2-dev \
-        zip unzip \
-        libzip-dev \
-        git \
-        vim \
-        libicu-dev \
-        ssmtp \
-        mailutils \
-    && docker-php-ext-install -j$(nproc) iconv pdo_mysql mbstring exif xml tokenizer zip intl \
-    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+    	libfreetype6-dev \
+    	libfreetype6 \
+		libjpeg62-turbo-dev \
+		libmcrypt-dev \
+		libpng16-16 \
+		openssl \
+		libssl1.1 \
+		libxml2 \
+		libxml2-dev \
+		zip unzip \
+		libzip-dev \
+		git \
+		vim \
+		libicu-dev \
+		msmtp \
+		msmtp-mta \
+		mailutils \
+		guile-2.0-libs \
+		libncurses5 \
+		libreadline5 \
+		libonig-dev \
+		libpq-dev \
+		rsync \
+		lsyncd \
+    && docker-php-ext-install -j$(nproc) iconv pdo_mysql pdo_pgsql mbstring exif xml tokenizer zip intl \
+    && docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/ \
     && docker-php-ext-install -j$(nproc) gd \
 	&& apt-get clean \
 	&& rm -rf /var/lib/apt/lists/*
@@ -38,8 +48,11 @@ RUN chmod 400 /etc/ssl/private/ssl-cert-snakeoil.key \
 	&& chmod 400 /etc/ssl/certs/ssl-cert-snakeoil.pem
 RUN groupmod -g 1000 www-data && usermod -u 1000 www-data
 
+# lsyncd
+COPY lsyncd/lsyncd.conf.lua /etc/lsyncd/lsyncd.conf.lua
+
 # php
-RUN echo 'sendmail_path = "/usr/sbin/ssmtp -t"' > /usr/local/etc/php/conf.d/mail.ini \
+RUN echo 'sendmail_path = "/usr/bin/msmtp -t"' > /usr/local/etc/php/conf.d/mail.ini \
 	&& echo "memory_limit = 256M" >> /usr/local/etc/php/php.ini \
     && echo "post_max_size = 256M" >> /usr/local/etc/php/php.ini \
     && echo "upload_max_filesize = 256M" >> /usr/local/etc/php/php.ini \
@@ -48,15 +61,14 @@ RUN echo 'sendmail_path = "/usr/sbin/ssmtp -t"' > /usr/local/etc/php/conf.d/mail
     && echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/xdebug.ini \
     && echo "xdebug.discover_client_host=1" >> /usr/local/etc/php/conf.d/xdebug.ini \
 	&& echo "xdebug.idekey=BASERCMS" >> /usr/local/etc/php/conf.d/xdebug.ini \
-	&& echo "xdebug.client_host=10.0.2.2" >> /usr/local/etc/php/conf.d/xdebug.ini \
+	&& echo "xdebug.client_host=host.docker.internal" >> /usr/local/etc/php/conf.d/xdebug.ini \
 	&& echo "xdebug.client_port=9000" >> /usr/local/etc/php/conf.d/xdebug.ini \
 	&& echo "xdebug.start_with_request=yes" >> /usr/local/etc/php/conf.d/xdebug.ini \
 	&& echo "xdebug.mode=debug,develop" >> /usr/local/etc/php/conf.d/xdebug.ini \
     && echo "extension=mcrypt.so" >> /usr/local/etc/php/conf.d/mcrypt.ini
 
-# ssmtp
-RUN echo "FromLineOverride=YES" > /etc/ssmtp/ssmtp.conf \
- 	&& echo "Mailhub=bc-smtp:1025" >> /etc/ssmtp/ssmtp.conf
+# msmtp
+COPY msmtp/msmtprc /etc/msmtprc
 
 # composer
 RUN curl -sS https://getcomposer.org/installer | php \

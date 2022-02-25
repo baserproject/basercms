@@ -22,11 +22,12 @@ use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
 use Cake\Http\ServerRequest;
 use BaserCore\Utility\BcUtil;
+use BaserCore\Annotation\Note;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
-use BaserCore\Annotation\Note;
 use BaserCore\Model\Entity\Content;
+use Cake\ORM\Behavior\TreeBehavior;
 use Cake\Datasource\EntityInterface;
 use BaserCore\Model\Table\SitesTable;
 use Cake\Datasource\ConnectionManager;
@@ -1094,5 +1095,33 @@ class ContentService implements ContentServiceInterface
             return true;
         }
         return false;
+    }
+
+    /**
+     * TreeBehaviorの設定値を更新する
+     *
+     * @param  string $targetConfig
+     * @param  array $conditions
+     * @return TreeBehavior
+     * @checked
+     * @unitTest
+     * @noTodo
+     */
+    public function setTreeConfig($targetConfig, $conditions)
+    {
+        return $this->Contents->behaviors()->Tree->setConfig($targetConfig, $conditions);
+    }
+
+    /**
+     * 公開済の conditions を取得
+     *
+     * @return array 公開条件（conditions 形式）
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getConditionAllowPublish()
+    {
+        return $this->Contents->getConditionAllowPublish();
     }
 }

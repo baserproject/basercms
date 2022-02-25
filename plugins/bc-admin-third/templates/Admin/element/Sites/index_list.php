@@ -124,7 +124,7 @@ $siteList = $this->BcAdminSite->getSiteList();
   </tr>
   </thead>
   <tbody class="bca-table-listup__tbody">
-  <?php if (!empty($sites)): ?>
+  <?php if (!$sites->isEmpty()): ?>
     <?php foreach($sites as $key => $site): ?>
       <?php $this->BcBaser->element('Sites/index_row', [
         'site' => $site,

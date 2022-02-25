@@ -11,6 +11,7 @@
 
 namespace BaserCore\Test\TestCase\View\Helper;
 
+use Cake\Routing\Router;
 use BaserCore\View\BcAdminAppView;
 use BaserCore\View\Helper\BcAdminContentHelper;
 
@@ -57,6 +58,7 @@ class BcAdminContentHelperTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function tearDown(): void
     {
+        Router::reload();
         unset($this->BcAdminContent);
         parent::tearDown();
     }
@@ -97,7 +99,7 @@ class BcAdminContentHelperTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function testIsContentDeletable($id, $expected): void
     {
-        $this->loginAdmin($this->getRequest(), $id);
+        Router::setRequest($this->loginAdmin($this->getRequest(), $id));
         $this->assertEquals($expected, $this->BcAdminContent->isContentDeletable());
     }
     public function isContentDeletableDataProvider()
@@ -128,7 +130,7 @@ class BcAdminContentHelperTest extends \BaserCore\TestSuite\BcTestCase
             // 存在するサイトID（0~2）を指定した場合
             [1, 1],
             // 存在しないサイトIDを指定した場合
-            [3, false],
+            [4, false],
         ];
     }
 }

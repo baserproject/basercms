@@ -8,14 +8,16 @@
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
  */
+use Cake\ORM\Query;
 use BaserCore\Utility\BcUtil;
 /**
  * 関連コンテンツ
  * @var string $mainSiteDisplayName メインサイト表示名称
  * @var array $relatedContents 関連コンテンツ
- * @var array $sites サイトリスト
+ * @var Query $sites サイトリスト
  * @var int $currentSiteId 現在のサイトID
  */
+$sites = isset($sites) ? $sites->toArray() : [];
 $pureUrl = $this->BcContents->getPureUrl($content->url, $content->site_id);
 ?>
 

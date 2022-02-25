@@ -41,7 +41,7 @@ use BaserCore\View\AppView;
     <?php echo $this->BcTime->format($user->modified, 'yyyy-MM-dd') ?></td>
   <td class="row-tools bca-table-listup__tbody-td bca-table-listup__tbody-td--actions">
     <?php $this->BcBaser->link('', ['action' => 'edit', $user->id], ['title' => __d('baser', '編集'), 'class' => ' bca-btn-icon', 'data-bca-btn-type' => 'edit', 'data-bca-btn-size' => 'lg']) ?>
-    <?= $this->BcForm->postLink(
+    <?= $this->BcAdminForm->postLink(
       '',
       ['action' => 'delete', $user->id],
       ['block' => true,

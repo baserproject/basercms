@@ -21,7 +21,7 @@ services:
     container_name: bc5-php
     image: baserproject/basercms:5-php7.4
     volumes:
-      - ../:/var/www/html:delegated
+      - ../:/var/www/shared:delegated
     environment:
       PHP_IDE_CONFIG: "serverName=localhost"
       COMPOSER_ALLOW_SUPERUSER: 1
@@ -30,7 +30,7 @@ services:
       - "443:443"
     depends_on:
       - bc5-db
-    command: bash -c "/var/www/html/docker/apache/init.sh && apache2-foreground"
+    command: bash -c "/var/www/shared/docker/init.sh && apache2-foreground"
   bc5-smtp:
     container_name: bc5-smtp
     image: schickling/mailcatcher

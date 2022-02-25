@@ -90,7 +90,7 @@ $class = ' class="' . implode(' ', $classies) . '"';
       ]); ?>
     <?php endif; ?>
     <?php if ($plugin->status): ?>
-      <?= $this->BcForm->postLink(
+      <?= $this->BcAdminForm->postLink(
         '',
         ['action' => 'detach', $plugin->name],
         ['block' => true,
@@ -111,7 +111,7 @@ $class = ' class="' . implode(' ', $classies) . '"';
         ]); ?>
     <?php endif ?>
     <?php if (!$plugin->status): ?>
-      <?= $this->BcForm->postLink(
+      <?= $this->BcAdminForm->postLink(
         '',
         ['action' => 'uninstall', $plugin->name],
         ['block' => true,

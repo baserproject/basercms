@@ -11,6 +11,8 @@
 
 namespace BaserCore\Test\TestCase\Service;
 
+use Cake\Routing\Router;
+use Cake\ORM\TableRegistry;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Model\Table\ContentsTable;
 use BaserCore\Service\ContentFolderService;
@@ -69,6 +71,7 @@ class ContentFolderServiceTest extends BcTestCase
     public function tearDown(): void
     {
         unset($this->ContentFolderService);
+        Router::reload();
         parent::tearDown();
     }
 
@@ -111,14 +114,14 @@ class ContentFolderServiceTest extends BcTestCase
     {
         $contentFolders = $this->ContentFolderService->getIndex();
         $this->assertEquals('baserCMSサンプル', $contentFolders->first()->folder_template);
-        $this->assertEquals(8, $contentFolders->count());
+        $this->assertEquals(10, $contentFolders->count());
     }
     /**
      * Test create
      */
     public function testCreate()
     {
-        $this->loginAdmin($this->getRequest());
+        Router::setRequest($this->loginAdmin($this->getRequest()));
         $data = [
             'folder_template' => 'テストcreate',
             'content' => [
@@ -159,6 +162,7 @@ class ContentFolderServiceTest extends BcTestCase
      */
     public function testUpdate()
     {
+        Router::setRequest($this->loginAdmin($this->getRequest()));
         $newContentFolder = $this->ContentFolderService->getIndex(['folder_template' => "testEdit"])->first();
         $newContentFolder->folder_template = "testUpdate";
         $newContentFolder->content->title = "contentFolderTestUpdate";
@@ -221,5 +225,40 @@ class ContentFolderServiceTest extends BcTestCase
             // プラグインが存在する場合
             [4, 'BcFront', ['' => "親フォルダの設定に従う（baserCMSサンプル）", 'default' => 'default']],
         ];
+    }
+
+
+    /**
+     * testSaveSiteRoot
+     *
+     * @return void
+     */
+    public function testSaveSiteRoot(): void
+    {
+        Router::setRequest($this->loginAdmin($this->getRequest()));
+        $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
+        // 初期サイトIDの場合はfalse
+        $site = $sites->get(1);
+        $this->assertFalse($this->ContentFolderService->saveSiteRoot($site, true));
+        // サイト新規作成の場合
+        $site = $sites->get(3);
+        $site->setNew(true);
+        $site->alias = 'create';
+        $contentFolder = $this->ContentFolderService->saveSiteRoot($site);
+        $this->assertEquals('create', $contentFolder->content->name);
+        // サイト更新の場合
+        $site = $sites->get(3);
+        $site->alias = 'update';
+        $contentFolder = $this->ContentFolderService->saveSiteRoot($site, true);
+        $this->assertEquals('update', $contentFolder->content->name);
+        $updatedChild = $this->Contents->get(25);
+        $this->assertEquals('/update/サイトID3の固定ページ', $updatedChild->url);
+        // エラーが出る場合
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        $this->expectExceptionMessage('Record not found in table "content_folders"');
+        $site = $sites->get(6);
+        $site->alias = 'update';
+        $contentFolder = $this->ContentFolderService->saveSiteRoot($site, true);
+
     }
 }

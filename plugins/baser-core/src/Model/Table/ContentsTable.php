@@ -135,7 +135,8 @@ class ContentsTable extends AppTable
         $validator
         ->integer('id')
         ->allowEmptyString('id', null, 'create')
-        ->numeric('id', __d('baser', 'IDに不正な値が利用されています。'), 'update');
+        ->numeric('id', __d('baser', 'IDに不正な値が利用されています。'), 'update')
+        ->requirePresence('id', 'update', __d('baser', 'IDに不正な値が利用されています。'));
 
         $validator
         ->scalar('name')
@@ -319,7 +320,7 @@ class ContentsTable extends AppTable
                 }
                 if (!isset($data['content']['author_id'])) {
                     $user = BcUtil::loginUser();
-                    $data['content']['author_id'] = $user['id'];
+                    if ($user) $data['content']['author_id'] = $user['id'];
                 }
             } else {
                 if (empty($data['content']['modified_date'])) {
@@ -1285,23 +1286,22 @@ class ContentsTable extends AppTable
     /**
      * 指定したコンテンツ配下のコンテンツのURLを一括更新する
      * @param $id
+     * @checked
+     * @unitTest
+     * @noTodo
      */
     public function updateChildrenUrl($id)
     {
         set_time_limit(0);
-        $children = $this->children($id, false, ['url', 'id'], 'Content.lft', null, null, -1);
-        $db = $this->getDataSource();
+        $children = $this->find('children', ['for' => $id])->select(['url', 'id'])->order('lft');
+        /** @var \Cake\Database\Connection $connection */
+        $connection = ConnectionManager::get('default');
         if ($children) {
-            foreach($children as $key => $child) {
+            foreach($children as $child) {
                 // サイト全体を更新する為、サイト規模によってはかなり時間がかかる為、SQLを利用
-                $sql = 'UPDATE ' . $this->tablePrefix . 'contents SET url = ' . $db->value($this->createUrl($child['Content']['id']), 'integer') . ' WHERE id = ' . $db->value($child['Content']['id'], 'integer');
-                if (!$db->execute($sql)) {
-                    $this->getDataSource()->rollback();
-                    return false;
-                }
+                $connection->update('contents', ['url' => $this->createUrl($child->id)], ['id' => $child->id]);
             }
         }
-        $this->getDataSource()->commit();
         return true;
     }
 

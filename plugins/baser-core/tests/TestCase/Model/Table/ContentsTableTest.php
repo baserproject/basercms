@@ -392,7 +392,7 @@ class ContentsTableTest extends BcTestCase
     public function testDeleteRelateSubSiteContentWithAlias()
     {
         $content = $this->Contents->get(6);
-        $mockContent = $this->Contents->save(new Content(['site_id' => 6, 'main_site_content_id' => 6, 'alias_id' => 23, 'plugin' => 'BaserCore', 'type' => 'test']));
+        $mockContent = $this->Contents->save(new Content(['site_id' => 6, 'main_site_content_id' => 6, 'alias_id' => 26, 'plugin' => 'BaserCore', 'type' => 'test']));
         $this->execPrivateMethod($this->Contents, 'deleteRelateSubSiteContent', [$content]);
         $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
         $this->Contents->get($mockContent->id);
@@ -870,7 +870,9 @@ class ContentsTableTest extends BcTestCase
      */
     public function testUpdateChildrenUrl()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->assertTrue($this->Contents->updateChildrenUrl(19));
+        $child = $this->Contents->find('children', ['for' => 19])->select(['url', 'id'])->order('lft')->first();
+        $this->assertEquals('/ツリー階層削除用フォルダー(親)/ツリー階層削除用フォルダー(子)/ツリー階層削除用フォルダー(孫)/', $child->url);
     }
 
     /**

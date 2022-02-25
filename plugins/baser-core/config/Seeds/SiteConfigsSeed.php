@@ -31,7 +31,7 @@ class SiteConfigsSeed extends AbstractSeed
             [
                 'id' => '2',
                 'name' => 'theme',
-                'value' => 'nada-icons',
+                'value' => 'BcFront',
                 'created' => '2021-01-27 12:56:52',
                 'modified' => '2021-01-27 12:58:25'
             ],

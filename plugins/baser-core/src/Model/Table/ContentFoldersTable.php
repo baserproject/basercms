@@ -62,6 +62,7 @@ class ContentFoldersTable extends AppTable
     {
         parent::initialize($config);
         $this->addBehavior('BaserCore.BcContents');
+        $this->addBehavior('Timestamp');
     }
 
     /**
@@ -183,68 +184,6 @@ class ContentFoldersTable extends AppTable
         if ($record->content->url) {
             $this->beforeUrl = $record->content->url;
             $this->beforeStatus = $record->content->status;
-        }
-    }
-
-    // NOTE: 以前までapp/View/Pages/about.phpなど固定ページの内容をphpファイルで維持していたが、廃止になったのでメソッド削除
-    // /**
-    //  * 固定ページテンプレートを移動する
-    //  * @param string $afterUrl
-    //  * @return bool
-    //  */
-    // public function movePageTemplates($afterUrl)
-    // {
-    //     if ($this->beforeUrl && $this->beforeUrl != $afterUrl) {
-    //         $basePath = APP . 'View' . DS . 'Pages' . DS;
-    //         if (is_dir($basePath . $this->beforeUrl)) {
-    //             (new Folder())->move([
-    //                 'to' => $basePath . $afterUrl,
-    //                 'from' => $basePath . $this->beforeUrl,
-    //                 'chmod' => 0777
-    //             ]);
-    //         }
-    //     }
-    //     $this->beforeUrl = null;
-    //     return true;
-    // }
-
-    /**
-     * サイトルートフォルダを保存
-     *
-     * @param null $siteId
-     * @param array $data
-     * @param bool $isUpdateChildrenUrl 子のコンテンツのURLを一括更新するかどうか
-     * @return bool
-     */
-    public function saveSiteRoot($siteId = null, $data = [], $isUpdateChildrenUrl = false)
-    {
-        if (!isset($data['Content'])) {
-            $_data = $data;
-            unset($data);
-            $data['Content'] = $_data;
-        }
-        if (!is_null($siteId)) {
-
-            // エイリアスが変更となっているかどうかの判定が必要
-            $_data = $this->find('first', ['conditions' => [
-                'Content.site_id' => $siteId,
-                'Content.site_root' => true
-            ]]);
-            $_data['Content'] = array_merge($_data['Content'], $data['Content']);
-            $data = $_data;
-            $this->set($data);
-        } else {
-            $this->create($data);
-        }
-        $this->Content->updatingRelated = false;
-        if ($this->save()) {
-            // エイリアスを変更した場合だけ更新
-            if ($isUpdateChildrenUrl) {
-                $this->Content->updateChildrenUrl($data['Content']['id']);
-            }
-            return true;
-        } else {
-            return false;
         }
     }
 }
