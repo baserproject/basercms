@@ -12,10 +12,10 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import Login from '../views/user/Login.vue';
 // import UserIndex from '../views/UserIndex.vue';
-// import UserEdit from '../views/UserEdit.vue';
-// import UserAdd from '../views/UserAdd.vue';
+import Edit from '../views/user/Edit.vue';
+import Add from '../views/user/Add.vue';
 
-Vue.use(Router)
+Vue.use(Router);
 
 export default new Router({
     routes: [
@@ -27,13 +27,13 @@ export default new Router({
         //     path: '/user_index',
         //     component: UserIndex
         // },
-        // {
-        //     path: '/user_edit/:id',
-        //     component: UserEdit
-        // },
-        // {
-        //     path: '/user_add',
-        //     component: UserAdd
-        // }
+        {
+            path: '/user_edit/:id',
+            component: Edit
+        },
+        {
+            path: '/user_add',
+            component: Add
+        }
     ]
 })

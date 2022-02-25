@@ -2,13 +2,12 @@ import Vue from 'vue';
 import axios, { AxiosError } from 'axios';
 
 
-export type DataType = {
+type DataType = {
     isError: boolean,
     message? : string,
     name? : string,
     password? : string
 };
-
 interface loginToken {
     'access_token': string,
     'refresh_token': string
@@ -55,7 +54,7 @@ export default Vue.extend({
                 email: this.name,
                 password: this.password
             };
-            axios.post<loginToken>('/baser/api/baser-core/users/login.json', postData)
+            axios.post('/baser/api/baser-core/users/login.json', postData)
             .then((response) => {
                 if (response.data) {
                     this.$emit('set-login', response.data.access_token, response.data.refresh_token)

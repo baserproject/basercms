@@ -9,6 +9,9 @@ module.exports = (env, argv) => {
             filename: 'bundle.js',
             path: path.join(__dirname, 'webroot/js')
         },
+        resolve: {
+            extensions: [".ts", ".js"],
+        },
         plugins: [
             new VueLoaderPlugin()
         ],
@@ -22,6 +25,18 @@ module.exports = (env, argv) => {
                             loader: 'babel-loader',
                             options: {
                                 presets: [['@babel/preset-env', {modules: false}]]
+                            }
+                        }
+                    ]
+                },
+                {
+                    test: /\.ts$/,
+                    exclude: /node_modules/,
+                    use: [
+                        {
+                            loader: 'babel-loader',
+                            options: {
+                                presets: [['@babel/preset-flow']]
                             }
                         }
                     ]
