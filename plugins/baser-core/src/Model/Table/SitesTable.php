@@ -302,8 +302,6 @@ class SitesTable extends AppTable
      */
     public function isMain(int $id)
     {
-        // return is_null($this->find()->where(['id' => $id])->first()->main_site_id);
-        // NOTE: 上記だと、メインサイトを持つかどうかのメソッドになってるため
         return !$this->find()->where(['main_site_id' => $id])->isEmpty();
     }
 
@@ -421,6 +419,7 @@ class SitesTable extends AppTable
      *
      * @param $id
      * @return int
+     * @throws Cake\Datasource\Exception\RecordNotFoundException
      * @checked
      * @noTodo
      * @unitTest
@@ -431,8 +430,7 @@ class SitesTable extends AppTable
             return 1;
         }
         $Contents = TableRegistry::getTableLocator()->get('BaserCore.Contents');
-        // NOTE: なければ1を返す
-        return $Contents->find()->select(['id'])->where(['Contents.site_root' => true, 'Contents.site_id' => $id])->first()->id ?? 1;
+        return $Contents->find()->select(['id'])->where(['Contents.site_root' => true, 'Contents.site_id' => $id])->firstOrFail()->id;
     }
 
     /**
@@ -500,6 +498,9 @@ class SitesTable extends AppTable
      * URLに関連するメインサイトを取得する
      * @param $url
      * @return array|EntityInterface|null
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getMainByUrl($url)
     {
