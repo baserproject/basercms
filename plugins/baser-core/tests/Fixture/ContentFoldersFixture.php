@@ -90,7 +90,7 @@ class ContentFoldersFixture extends TestFixture
                 'modified' => null
             ],
             [
-                'id' => '19',
+                'id' => '18',
                 'folder_template' => 'default',
                 'page_template' => '',
                 'created' => '2016-08-10 02:17:28',

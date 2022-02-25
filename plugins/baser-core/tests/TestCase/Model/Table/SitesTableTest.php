@@ -113,7 +113,11 @@ class SitesTableTest extends BcTestCase
      */
     public function testGetRelatedContents()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $list = $this->Sites->getRelatedContents(24);
+        $this->assertCount(6, $list);
+        $sample = array_shift($list);
+        $this->assertNotEmpty($sample['Site']);
+        $this->assertNotEmpty($sample['Content']);
     }
 
     /**
@@ -152,7 +156,18 @@ class SitesTableTest extends BcTestCase
      */
     public function testAfterDelete()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loginAdmin($this->getRequest());
+        $site = $this->Sites->get(3);
+        $contents = $this->Contents->find()->where(['site_id' => 3])->all();
+        $enSiteFolder = $contents->first();
+        $enSitePage = $contents->last();
+        $this->Sites->dispatchEvent('Model.afterDelete', [$site, new ArrayObject()]);
+        // 削除対象のサイトIDがページでメインサイトに書き換わっているか | また論理削除されてるかを確認
+        $page = $this->Contents->find()->where(['id' => $enSitePage->id, 'deleted_date IS NOT' => null])->applyOptions(['withDeleted'])->first();
+        $this->assertEquals(1, $page->site_id);
+        // 削除対象サイトIDのフォルダーが完全に削除されてるか
+        $folder = $this->Contents->find()->where(['id' => $enSiteFolder->id, 'deleted_date IS NOT' => null])->applyOptions(['withDeleted'])->first();
+        $this->assertNull($folder);
     }
 
     /**
@@ -170,9 +185,12 @@ class SitesTableTest extends BcTestCase
      */
     public function testGetRootContentId()
     {
-        $this->assertEquals(1, $this->Sites->getRootContentId(1));
         $this->assertEquals(1, $this->Sites->getRootContentId(0));
-        $this->assertEquals(1, $this->Sites->getRootContentId(100));
+        $this->assertEquals(1, $this->Sites->getRootContentId(1));
+        $this->assertEquals(23, $this->Sites->getRootContentId(2));
+        $this->assertEquals(24, $this->Sites->getRootContentId(3));
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        $this->Sites->getRootContentId(100);
     }
 
     /**

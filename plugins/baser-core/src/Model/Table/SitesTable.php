@@ -28,9 +28,11 @@ use BaserCore\Annotation\UnitTest;
 use Cake\Datasource\EntityInterface;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Datasource\ResultSetInterface;
+use BaserCore\Model\Table\ContentsTable;
 use BaserCore\Service\SiteConfigService;
 use BaserCore\Utility\BcAbstractDetector;
 use BaserCore\Event\BcEventDispatcherTrait;
+use BaserCore\Service\ContentServiceInterface;
 use BaserCore\Service\ContentFolderServiceInterface;
 
 /**
@@ -48,6 +50,13 @@ class SitesTable extends AppTable
      */
     use BcEventDispatcherTrait;
     use BcContainerTrait;
+
+    /**
+     * Contents
+     *
+     * @var ContentsTable $Contents
+     */
+    public $Contents;
 
     /**
      * 保存時にエイリアスが変更されたかどうか
@@ -73,6 +82,7 @@ class SitesTable extends AppTable
         $this->setPrimaryKey('id');
         $this->addBehavior('Timestamp');
         $this->setDisplayField('display_name');
+        $this->Contents = TableRegistry::getTableLocator()->get("BaserCore.Contents");
     }
 
     /**
@@ -235,60 +245,49 @@ class SitesTable extends AppTable
      * コンテンツに関連したコンテンツをサイト情報と一緒に全て取得する
      *
      * @param $contentId
-     * @return array|null
+     * @return array|null $list
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getRelatedContents($contentId)
     {
-        // TODO ucmitz 未実装
-        // >>>
-        return [];
-        // <<<
-        $Content = ClassRegistry::init('Content');
-        $data = $Content->find('first', ['conditions' => ['Content.id' => $contentId]]);
-        $isMainSite = $this->isMain($data['Site']['id']);
-
-        $conditions = ['Site.status' => true];
-        if (is_null($data['Site']['main_site_id'])) {
-            $conditions['Site.main_site_id'] = 0;
-            $mainSiteContentId = $data['Content']['id'];
+        $content = $this->Contents->get($contentId, ['contain' => ['Sites']]);
+        $isMainSite = $this->isMain($content->site->id);
+        $mainSiteContentId = $isMainSite ? $content->site->id : $content->site->main_site_id;
+        $fields = ['id', 'name', 'alias', 'display_name', 'main_site_id'];
+        $conditions = ['Sites.status' => true];
+        if (is_null($content->site->main_site_id)) {
+            $mainSiteContentId = $content->id;
+            $conditions['Sites.main_site_id'] = 1;
         } else {
             $conditions['or'] = [
-                ['Site.main_site_id' => $data['Site']['main_site_id']],
-                ['Site.id' => $data['Site']['main_site_id']]
+                    ['Sites.main_site_id' => $mainSiteContentId],
+                    ['Sites.id' => $content->site->main_site_id]
             ];
-            if ($isMainSite) {
-                $conditions['or'][] = ['Site.main_site_id' => $data['Site']['id']];
-            }
-            if ($data['Content']['main_site_content_id']) {
-                $mainSiteContentId = $data['Content']['main_site_content_id'];
-            } else {
-                $mainSiteContentId = $data['Content']['id'];
-            }
         }
-        $fields = ['id', 'name', 'alias', 'display_name', 'main_site_id'];
-        $sites = $this->find('all', ['fields' => $fields, 'conditions' => $conditions, 'order' => 'main_site_id']);
-        if ($data['Site']['main_site_id'] == 0) {
-            $sites = array_merge([$this->getRootMain(['fields' => $fields])], $sites);
+        $sites = $this->find()->select($fields)->where($conditions)->order('main_site_id')->toArray();
+        if ($content->site->main_site_id === 1) {
+            $sites = array_merge($sites, [$this->getRootMain(['fields' => $fields])]);
         }
         $conditions = [
             'or' => [
-                ['Content.id' => $mainSiteContentId],
-                ['Content.main_site_content_id' => $mainSiteContentId]
+                ['Contents.id' => $mainSiteContentId],
+                ['Contents.main_site_content_id' => $mainSiteContentId]
             ]
         ];
-        if ($isMainSite) {
-            $conditions['or'][] = ['Content.main_site_content_id' => $data['Content']['id']];
-        }
-        $relatedContents = $Content->find('all', ['conditions' => $conditions, 'recursive' => -1]);
+        $list= [];
+        $relatedContents = $this->Contents->find()->where($conditions)->toArray();
         foreach($relatedContents as $relatedContent) {
             foreach($sites as $key => $site) {
-                if ($relatedContent['Content']['site_id'] == $site['Site']['id']) {
-                    $sites[$key]['Content'] = $relatedContent['Content'];
+                $list[$key]['Site'] = $site;
+                if ($relatedContent->site_id == $site->id) {
+                    $list[$key]['Content'] = $relatedContent;
                     break;
                 }
             }
         }
-        return $sites;
+        return $list;
     }
 
     /**
@@ -302,8 +301,6 @@ class SitesTable extends AppTable
      */
     public function isMain(int $id)
     {
-        // return is_null($this->find()->where(['id' => $id])->first()->main_site_id);
-        // NOTE: 上記だと、メインサイトを持つかどうかのメソッドになってるため
         return !$this->find()->where(['main_site_id' => $id])->isEmpty();
     }
 
@@ -360,36 +357,27 @@ class SitesTable extends AppTable
      * @param EntityInterface $entity
      * @param ArrayObject $options
      * @checked
-     * @note(value="コンテンツ管理実装後に対応する")
+     * @noTodo
+     * @unitTest
      */
     public function afterDelete(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
-        // TODO ucmitz 未確認のため暫定措置
-        // >>>
-        return;
-        // <<<
-        $Content = ClassRegistry::init('Content');
-        $id = $Content->field('id', [
-            'Content.site_id' => $this->id,
-            'Content.site_root' => true
-        ]);
+        $contentService = $this->getService(ContentServiceInterface::class);
+        $content = $this->Contents->find()->where(['Contents.site_id' => $entity->id, 'Contents.site_root' => true])->first();
 
-        $children = $Content->children($id, false);
-        foreach($children as $child) {
-            $child['Content']['site_id'] = 1;
-            // バリデートすると name が変換されてしまう
-            $Content->save($child, false);
+        $children = $contentService->getChildren($content->id);
+        if (isset($children)) {
+            foreach($children as $child) {
+                $child->site_id = 1;
+                // バリデートすると name が変換されてしまう
+                $this->Contents->save($child, false);
+            }
+            $children = $contentService->getChildren($content->id);
+            foreach($children as $child) {
+                $contentService->deleteRecursive($child->id);
+            }
         }
-
-        $children = $Content->children($id, true);
-        foreach($children as $child) {
-            $Content->softDeleteFromTree($child['Content']['id']);
-        }
-
-        $softDelete = $Content->softDelete(null);
-        $Content->softDelete(false);
-        $Content->removeFromTree($id, true);
-        $Content->softDelete($softDelete);
+        if (!$this->Contents->hardDelete($content)) return false;
     }
 
     /**
@@ -421,6 +409,7 @@ class SitesTable extends AppTable
      *
      * @param $id
      * @return int
+     * @throws Cake\Datasource\Exception\RecordNotFoundException
      * @checked
      * @noTodo
      * @unitTest
@@ -431,8 +420,7 @@ class SitesTable extends AppTable
             return 1;
         }
         $Contents = TableRegistry::getTableLocator()->get('BaserCore.Contents');
-        // NOTE: なければ1を返す
-        return $Contents->find()->select(['id'])->where(['Contents.site_root' => true, 'Contents.site_id' => $id])->first()->id ?? 1;
+        return $Contents->find()->select(['id'])->where(['Contents.site_root' => true, 'Contents.site_id' => $id])->firstOrFail()->id;
     }
 
     /**
@@ -500,6 +488,9 @@ class SitesTable extends AppTable
      * URLに関連するメインサイトを取得する
      * @param $url
      * @return array|EntityInterface|null
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getMainByUrl($url)
     {
@@ -517,6 +508,9 @@ class SitesTable extends AppTable
      * @param BcAbstractDetector|null $agent
      * @param BcAbstractDetector|null $lang
      * @return mixed|null
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getSubByUrl(
         $url,
