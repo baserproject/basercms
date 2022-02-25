@@ -15,7 +15,7 @@ import Login from '../views/user/Login.vue';
 // import UserEdit from '../views/UserEdit.vue';
 // import UserAdd from '../views/UserAdd.vue';
 
-Vue.use(Router)
+Vue.use(Router);
 
 export default new Router({
     routes: [

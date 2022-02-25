@@ -2092,9 +2092,203 @@ module.exports = {
 
 /***/ }),
 
-/***/ "./webroot/src/js/router/index.js":
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-2[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./webroot/src/js/App.vue?vue&type=script&lang=ts&":
+/*!*************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-2[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./webroot/src/js/App.vue?vue&type=script&lang=ts& ***!
+  \*************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  /**
+   * Name
+   */
+  name: 'App',
+
+  /**
+   * Data
+   */
+  data: function () {
+    return {
+      accessToken: null,
+      mount: false,
+      pageTitle: '　',
+      loginId: null,
+      loginName: null,
+      message: null,
+      isError: false,
+      addLink: null,
+      isFlash: false
+    };
+  },
+
+  /**
+   * Mounted
+   */
+  mounted() {
+    if (this.accessToken || this.$route.path === '/') {
+      this.mount = true;
+    }
+
+    if (!localStorage.refreshToken) {
+      if (this.$route.path !== '/') {
+        this.$router.push('/');
+      }
+    } else {
+      this.getToken(localStorage.refreshToken).then(() => {
+        this.mount = true;
+        this.setUser(this.accessToken);
+      });
+    }
+
+    this.$router.beforeEach((to, from, next) => {
+      if (!this.isFlash) {
+        this.message = null;
+        this.isError = false;
+      } else {
+        this.isFlash = false;
+      }
+
+      this.addLink = null;
+      next();
+    }).bind(this);
+  },
+
+  /**
+   * Methods
+   */
+  methods: {
+    /**
+     * Set Title
+     * @param title
+     */
+    setTitle: function (title) {
+      this.pageTitle = title;
+    },
+
+    /**
+     * Set Login
+     * @param accessToken
+     * @param refreshToken
+     */
+    setLogin: function (accessToken, refreshToken) {
+      this.setToken(accessToken, refreshToken);
+      this.setUser(accessToken);
+    },
+
+    /**
+     * Set User
+     * @param accessToken
+     */
+    setUser: function (accessToken) {
+      axios__WEBPACK_IMPORTED_MODULE_0___default().get('/baser/api/baser-core/users/view/1.json', {
+        headers: {
+          "Authorization": accessToken
+        },
+        data: {}
+      }).then(function (response) {
+        if (response.data.user) {
+          this.loginId = response.data.user.id;
+          this.loginName = response.data.user.name;
+        }
+      }.bind(this));
+    },
+
+    /**
+     * Set Token
+     * @param accessToken
+     * @param refreshToken
+     */
+    setToken: function (accessToken, refreshToken) {
+      this.accessToken = accessToken;
+      localStorage.refreshToken = refreshToken;
+    },
+
+    /**
+     * Get Token
+     * @param refreshToken
+     * @returns {Promise<void>}
+     */
+    getToken: async function (refreshToken) {
+      await axios__WEBPACK_IMPORTED_MODULE_0___default().get('/baser/api/baser-core/users/refresh_token.json', {
+        headers: {
+          "Authorization": refreshToken
+        },
+        data: {}
+      }).then(function (response) {
+        if (response.data) {
+          this.setToken(response.data.access_token, response.data.refresh_token);
+        } else {
+          this.$router.push('/');
+        }
+      }.bind(this)).catch(function (error) {
+        if (error.response.status === 401) {
+          localStorage.refreshToken = '';
+        }
+      });
+    },
+
+    /**
+     * Remove Token
+     */
+    removeToken: function () {
+      localStorage.refreshToken = null;
+      this.accessToken = null;
+    },
+
+    /**
+     * Logout
+     */
+    logout: function () {
+      this.removeToken();
+      this.loginId = null;
+      this.loginName = null;
+      this.$router.push('/');
+    },
+
+    /**
+     * Set Message
+     * @param message
+     * @param isError
+     * @param isFlash
+     */
+    setMessage: function (message, isError, isFlash) {
+      this.message = message;
+      this.isError = isError;
+      this.isFlash = isFlash;
+    },
+
+    /**
+     * Clear Message
+     */
+    clearMessage: function () {
+      this.message = null;
+      this.isError = false;
+      this.isFlash = false;
+    },
+
+    /**
+     * Set Add Link
+     * @param link
+     */
+    setAddLink: function (link) {
+      this.addLink = link;
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./webroot/src/js/router/index.ts":
 /*!****************************************!*\
-  !*** ./webroot/src/js/router/index.js ***!
+  !*** ./webroot/src/js/router/index.ts ***!
   \****************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -2139,6 +2333,87 @@ vue__WEBPACK_IMPORTED_MODULE_1__["default"].use(vue_router__WEBPACK_IMPORTED_MOD
   //     component: UserAdd
   // }
   ]
+}));
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-2[0].rules[0].use[0]!./webroot/src/js/views/user/Login.ts?vue&type=script&lang=ts&":
+/*!**************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-2[0].rules[0].use[0]!./webroot/src/js/views/user/Login.ts?vue&type=script&lang=ts& ***!
+  \**************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.runtime.esm.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (vue__WEBPACK_IMPORTED_MODULE_1__["default"].extend({
+  /**
+   * Name
+   */
+  name: 'Login',
+
+  /**
+   * Props
+   */
+  props: {
+    accessToken: String
+  },
+
+  /**
+   * Data
+   */
+  data: () => {
+    return {
+      isError: false,
+      message: undefined,
+      name: undefined,
+      password: undefined
+    };
+  },
+
+  /**
+   * Mounted
+   */
+  mounted() {
+    this.$emit('set-title', 'ログイン');
+  },
+
+  /**
+   * Methods
+   */
+  methods: {
+    /**
+     * Login
+     */
+    login: function () {
+      this.isError = false;
+      const postData = {
+        email: this.name,
+        password: this.password
+      };
+      (axios__WEBPACK_IMPORTED_MODULE_0___default().post) < loginToken > ('/baser/api/baser-core/users/login.json', postData).then(response => {
+        if (response.data) {
+          this.$emit('set-login', response.data.access_token, response.data.refresh_token);
+          this.$router.push('user_index');
+        }
+      }).catch(error => {
+        if (error.response) {
+          if (error.response.status === 401) {
+            this.message = 'アカウント名、パスワードが間違っています。';
+          } else {
+            this.message = error.response.data.message;
+          }
+        }
+      });
+    }
+  }
 }));
 
 /***/ }),
@@ -12002,306 +12277,6 @@ component.options.__file = "webroot/src/js/App.vue"
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/index.js??vue-loader-options!./webroot/src/js/App.vue?vue&type=script&lang=ts&":
-/*!********************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/index.js??vue-loader-options!./webroot/src/js/App.vue?vue&type=script&lang=ts& ***!
-  \********************************************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-
-    /**
-     * Name
-     */
-    name: 'App',
-
-    /**
-     * Data
-     */
-    data: function () {
-        return {
-            accessToken: null,
-            mount: false,
-            pageTitle: '　',
-            loginId: null,
-            loginName: null,
-            message: null,
-            isError: false,
-            addLink: null,
-            isFlash: false
-        }
-    },
-
-    /**
-     * Mounted
-     */
-    mounted() {
-        if (this.accessToken || this.$route.path === '/') {
-            this.mount = true
-        }
-        if (!localStorage.refreshToken) {
-            if (this.$route.path !== '/') {
-                this.$router.push('/')
-            }
-        } else {
-            this.getToken(localStorage.refreshToken).then(() => {
-                this.mount = true
-                this.setUser(this.accessToken)
-            })
-        }
-        this.$router.beforeEach((to, from, next) => {
-            if (!this.isFlash) {
-                this.message = null
-                this.isError = false
-            } else {
-                this.isFlash = false
-            }
-            this.addLink = null
-            next()
-        }).bind(this)
-    },
-
-    /**
-     * Methods
-     */
-    methods: {
-
-        /**
-         * Set Title
-         * @param title
-         */
-        setTitle: function (title) {
-            this.pageTitle = title
-        },
-
-        /**
-         * Set Login
-         * @param accessToken
-         * @param refreshToken
-         */
-        setLogin: function (accessToken, refreshToken) {
-            this.setToken(accessToken, refreshToken)
-            this.setUser(accessToken)
-        },
-
-        /**
-         * Set User
-         * @param accessToken
-         */
-        setUser: function (accessToken) {
-            axios__WEBPACK_IMPORTED_MODULE_0___default().get('/baser/api/baser-core/users/view/1.json', {
-                headers: {"Authorization": accessToken},
-                data: {}
-            }).then(function (response) {
-                if (response.data.user) {
-                    this.loginId = response.data.user.id
-                    this.loginName = response.data.user.name
-                }
-            }.bind(this))
-        },
-
-        /**
-         * Set Token
-         * @param accessToken
-         * @param refreshToken
-         */
-        setToken: function (accessToken, refreshToken) {
-            this.accessToken = accessToken
-            localStorage.refreshToken = refreshToken
-        },
-
-        /**
-         * Get Token
-         * @param refreshToken
-         * @returns {Promise<void>}
-         */
-        getToken: async function (refreshToken) {
-            await axios__WEBPACK_IMPORTED_MODULE_0___default().get('/baser/api/baser-core/users/refresh_token.json', {
-                headers: {"Authorization": refreshToken},
-                data: {}
-            }).then(function (response) {
-                if (response.data) {
-                    this.setToken(response.data.access_token, response.data.refresh_token)
-                } else {
-                    this.$router.push('/')
-                }
-            }.bind(this))
-                .catch(function (error) {
-                    if (error.response.status === 401) {
-                        localStorage.refreshToken = ''
-                    }
-                })
-        },
-
-        /**
-         * Remove Token
-         */
-        removeToken: function () {
-            localStorage.refreshToken = null
-            this.accessToken = null
-        },
-
-        /**
-         * Logout
-         */
-        logout: function () {
-            this.removeToken()
-            this.loginId = null
-            this.loginName = null
-            this.$router.push('/')
-        },
-
-        /**
-         * Set Message
-         * @param message
-         * @param isError
-         * @param isFlash
-         */
-        setMessage: function (message, isError, isFlash) {
-            this.message = message
-            this.isError = isError
-            this.isFlash = isFlash
-        },
-
-        /**
-         * Clear Message
-         */
-        clearMessage: function () {
-            this.message = null
-            this.isError = false
-            this.isFlash = false
-        },
-
-        /**
-         * Set Add Link
-         * @param link
-         */
-        setAddLink: function (link) {
-            this.addLink = link
-        }
-
-    }
-});
-
-
-/***/ }),
-
 /***/ "./webroot/src/js/views/user/Login.vue":
 /*!*********************************************!*\
   !*** ./webroot/src/js/views/user/Login.vue ***!
@@ -12314,10 +12289,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _Login_vue_vue_type_template_id_0fe4cbaa___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Login.vue?vue&type=template&id=0fe4cbaa& */ "./webroot/src/js/views/user/Login.vue?vue&type=template&id=0fe4cbaa&");
-/* harmony import */ var _Login_ts_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Login.ts?vue&type=script&lang=ts& */ "./webroot/src/js/views/user/Login.ts?vue&type=script&lang=ts&?f6ef");
-/* harmony reexport (unknown) */ var __WEBPACK_REEXPORT_OBJECT__ = {};
-/* harmony reexport (unknown) */ for(const __WEBPACK_IMPORT_KEY__ in _Login_ts_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== "default") __WEBPACK_REEXPORT_OBJECT__[__WEBPACK_IMPORT_KEY__] = () => _Login_ts_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_1__[__WEBPACK_IMPORT_KEY__]
-/* harmony reexport (unknown) */ __webpack_require__.d(__webpack_exports__, __WEBPACK_REEXPORT_OBJECT__);
+/* harmony import */ var _Login_ts_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Login.ts?vue&type=script&lang=ts& */ "./webroot/src/js/views/user/Login.ts?vue&type=script&lang=ts&");
 /* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -12344,6 +12316,22 @@ component.options.__file = "webroot/src/js/views/user/Login.vue"
 
 /***/ }),
 
+/***/ "./webroot/src/js/views/user/Login.ts?vue&type=script&lang=ts&":
+/*!*********************************************************************!*\
+  !*** ./webroot/src/js/views/user/Login.ts?vue&type=script&lang=ts& ***!
+  \*********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_2_0_rules_0_use_0_Login_ts_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-2[0].rules[0].use[0]!./Login.ts?vue&type=script&lang=ts& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-2[0].rules[0].use[0]!./webroot/src/js/views/user/Login.ts?vue&type=script&lang=ts&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_2_0_rules_0_use_0_Login_ts_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
 /***/ "./webroot/src/js/App.vue?vue&type=script&lang=ts&":
 /*!*********************************************************!*\
   !*** ./webroot/src/js/App.vue?vue&type=script&lang=ts& ***!
@@ -12355,8 +12343,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _node_modules_vue_loader_lib_index_js_vue_loader_options_App_vue_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./App.vue?vue&type=script&lang=ts& */ "./node_modules/vue-loader/lib/index.js??vue-loader-options!./webroot/src/js/App.vue?vue&type=script&lang=ts&");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_vue_loader_lib_index_js_vue_loader_options_App_vue_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_2_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_App_vue_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-2[0].rules[0].use[0]!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./App.vue?vue&type=script&lang=ts& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-2[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./webroot/src/js/App.vue?vue&type=script&lang=ts&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_2_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_App_vue_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
@@ -12391,26 +12379,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Login_vue_vue_type_template_id_0fe4cbaa___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Login.vue?vue&type=template&id=0fe4cbaa& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./webroot/src/js/views/user/Login.vue?vue&type=template&id=0fe4cbaa&");
 
-
-/***/ }),
-
-/***/ "./webroot/src/js/views/user/Login.ts?vue&type=script&lang=ts&?f6ef":
-/*!*********************************************************************!*\
-  !*** ./webroot/src/js/views/user/Login.ts?vue&type=script&lang=ts& ***!
-  \*********************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _Login_ts_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!./Login.ts?vue&type=script&lang=ts& */ "./webroot/src/js/views/user/Login.ts?vue&type=script&lang=ts&?33f8");
-/* harmony import */ var _Login_ts_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_Login_ts_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_0__);
-/* harmony reexport (unknown) */ var __WEBPACK_REEXPORT_OBJECT__ = {};
-/* harmony reexport (unknown) */ for(const __WEBPACK_IMPORT_KEY__ in _Login_ts_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== "default") __WEBPACK_REEXPORT_OBJECT__[__WEBPACK_IMPORT_KEY__] = () => _Login_ts_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_0__[__WEBPACK_IMPORT_KEY__]
-/* harmony reexport (unknown) */ __webpack_require__.d(__webpack_exports__, __WEBPACK_REEXPORT_OBJECT__);
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((_Login_ts_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_0___default())); 
 
 /***/ }),
 
@@ -24628,16 +24596,6 @@ if (inBrowser) {
 
 /***/ }),
 
-/***/ "./webroot/src/js/views/user/Login.ts?vue&type=script&lang=ts&?33f8":
-/*!*********************************************************************!*\
-  !*** ./webroot/src/js/views/user/Login.ts?vue&type=script&lang=ts& ***!
-  \*********************************************************************/
-/***/ (() => {
-
-throw new Error("Module parse failed: Unexpected token (5:7)\nYou may need an appropriate loader to handle this file type, currently no loaders are configured to process this file. See https://webpack.js.org/concepts#loaders\n| \n| \n> export type DataType = {\n|     isError: boolean,\n|     message? : string,");
-
-/***/ }),
-
 /***/ "./node_modules/axios/package.json":
 /*!*****************************************!*\
   !*** ./node_modules/axios/package.json ***!
@@ -24760,7 +24718,7 @@ _global["default"]._babelPolyfill = true;
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.runtime.esm.js");
 /* harmony import */ var _App_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./App.vue */ "./webroot/src/js/App.vue");
-/* harmony import */ var _router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./router */ "./webroot/src/js/router/index.js");
+/* harmony import */ var _router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./router */ "./webroot/src/js/router/index.ts");
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS User Community <https://basercms.net/community/>
@@ -24773,15 +24731,11 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
-
-vue__WEBPACK_IMPORTED_MODULE_2__["default"].config.productionTip = false
-
+vue__WEBPACK_IMPORTED_MODULE_2__["default"].config.productionTip = false;
 new vue__WEBPACK_IMPORTED_MODULE_2__["default"]({
   router: _router__WEBPACK_IMPORTED_MODULE_1__["default"],
-  render: h => h(_App_vue__WEBPACK_IMPORTED_MODULE_0__["default"]),
-}).$mount('#app')
-
+  render: h => h(_App_vue__WEBPACK_IMPORTED_MODULE_0__["default"])
+}).$mount('#app');
 })();
 
 /******/ })()
