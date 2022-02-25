@@ -28,9 +28,11 @@ use BaserCore\Annotation\UnitTest;
 use Cake\Datasource\EntityInterface;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Datasource\ResultSetInterface;
+use BaserCore\Model\Table\ContentsTable;
 use BaserCore\Service\SiteConfigService;
 use BaserCore\Utility\BcAbstractDetector;
 use BaserCore\Event\BcEventDispatcherTrait;
+use BaserCore\Service\ContentServiceInterface;
 use BaserCore\Service\ContentFolderServiceInterface;
 
 /**
@@ -48,6 +50,13 @@ class SitesTable extends AppTable
      */
     use BcEventDispatcherTrait;
     use BcContainerTrait;
+
+    /**
+     * Contents
+     *
+     * @var ContentsTable $Contents
+     */
+    public $Contents;
 
     /**
      * 保存時にエイリアスが変更されたかどうか
@@ -73,6 +82,7 @@ class SitesTable extends AppTable
         $this->setPrimaryKey('id');
         $this->addBehavior('Timestamp');
         $this->setDisplayField('display_name');
+        $this->Contents = TableRegistry::getTableLocator()->get("BaserCore.Contents");
     }
 
     /**
@@ -239,50 +249,37 @@ class SitesTable extends AppTable
      */
     public function getRelatedContents($contentId)
     {
-        // TODO ucmitz 未実装
-        // >>>
+        // TODO ucmitz:
         return [];
-        // <<<
-        $Content = ClassRegistry::init('Content');
-        $data = $Content->find('first', ['conditions' => ['Content.id' => $contentId]]);
-        $isMainSite = $this->isMain($data['Site']['id']);
-
-        $conditions = ['Site.status' => true];
-        if (is_null($data['Site']['main_site_id'])) {
-            $conditions['Site.main_site_id'] = 0;
-            $mainSiteContentId = $data['Content']['id'];
-        } else {
-            $conditions['or'] = [
-                ['Site.main_site_id' => $data['Site']['main_site_id']],
-                ['Site.id' => $data['Site']['main_site_id']]
-            ];
-            if ($isMainSite) {
-                $conditions['or'][] = ['Site.main_site_id' => $data['Site']['id']];
-            }
-            if ($data['Content']['main_site_content_id']) {
-                $mainSiteContentId = $data['Content']['main_site_content_id'];
-            } else {
-                $mainSiteContentId = $data['Content']['id'];
-            }
-        }
+        $content = $this->Contents->get($contentId, ['contain' => ['Sites']]);
+        $isMainSite = $this->isMain($content->site->id);
+        $mainSiteContentId = $isMainSite ? $content->site->id : $content->site->main_site_id;
         $fields = ['id', 'name', 'alias', 'display_name', 'main_site_id'];
-        $sites = $this->find('all', ['fields' => $fields, 'conditions' => $conditions, 'order' => 'main_site_id']);
-        if ($data['Site']['main_site_id'] == 0) {
-            $sites = array_merge([$this->getRootMain(['fields' => $fields])], $sites);
+        if (is_null($content->site->main_site_id)) {
+            $mainSiteContentId = $content->id;
+            $site = $this->getRootMain(['fields' => $fields])->toArray();
+        } else {
+            // sites用conditions
+            $conditions = [
+                'Sites.status' => true,
+                'or' => [
+                    ['Sites.main_site_id' => $mainSiteContentId],
+                    ['Sites.id' => $content->site->main_site_id]
+                ]
+            ];
+            $sites = $this->find()->select($fields)->where($conditions)->order('main_site_id')->toArray();
         }
+        // contents用$condition
         $conditions = [
             'or' => [
-                ['Content.id' => $mainSiteContentId],
-                ['Content.main_site_content_id' => $mainSiteContentId]
+                ['Contents.id' => $mainSiteContentId],
+                ['Contents.main_site_content_id' => $mainSiteContentId]
             ]
         ];
-        if ($isMainSite) {
-            $conditions['or'][] = ['Content.main_site_content_id' => $data['Content']['id']];
-        }
-        $relatedContents = $Content->find('all', ['conditions' => $conditions, 'recursive' => -1]);
+        $relatedContents = $this->Contents->find()->where($conditions)->toArray();
         foreach($relatedContents as $relatedContent) {
             foreach($sites as $key => $site) {
-                if ($relatedContent['Content']['site_id'] == $site['Site']['id']) {
+                if ($relatedContent->site_id == $site->id) {
                     $sites[$key]['Content'] = $relatedContent['Content'];
                     break;
                 }
@@ -358,36 +355,25 @@ class SitesTable extends AppTable
      * @param EntityInterface $entity
      * @param ArrayObject $options
      * @checked
-     * @note(value="コンテンツ管理実装後に対応する")
+     * @noTodo
+     * @unitTest
      */
     public function afterDelete(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
-        // TODO ucmitz 未確認のため暫定措置
-        // >>>
-        return;
-        // <<<
-        $Content = ClassRegistry::init('Content');
-        $id = $Content->field('id', [
-            'Content.site_id' => $this->id,
-            'Content.site_root' => true
-        ]);
+        $contentService = $this->getService(ContentServiceInterface::class);
+        $content = $this->Contents->find()->where(['Contents.site_id' => $entity->id, 'Contents.site_root' => true])->first();
 
-        $children = $Content->children($id, false);
+        $children = $contentService->getChildren($content->id);
         foreach($children as $child) {
-            $child['Content']['site_id'] = 1;
+            $child->site_id = 1;
             // バリデートすると name が変換されてしまう
-            $Content->save($child, false);
+            $this->Contents->save($child, false);
         }
-
-        $children = $Content->children($id, true);
+        $children = $contentService->getChildren($content->id);
         foreach($children as $child) {
-            $Content->softDeleteFromTree($child['Content']['id']);
+            $contentService->deleteRecursive($child->id);
         }
-
-        $softDelete = $Content->softDelete(null);
-        $Content->softDelete(false);
-        $Content->removeFromTree($id, true);
-        $Content->softDelete($softDelete);
+        if (!$this->Contents->hardDelete($content)) return false;
     }
 
     /**
@@ -518,6 +504,9 @@ class SitesTable extends AppTable
      * @param BcAbstractDetector|null $agent
      * @param BcAbstractDetector|null $lang
      * @return mixed|null
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getSubByUrl(
         $url,

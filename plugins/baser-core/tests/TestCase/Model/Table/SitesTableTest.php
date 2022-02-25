@@ -113,6 +113,7 @@ class SitesTableTest extends BcTestCase
      */
     public function testGetRelatedContents()
     {
+        $a = $this->Sites->getRelatedContents(1);
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
 
@@ -152,7 +153,18 @@ class SitesTableTest extends BcTestCase
      */
     public function testAfterDelete()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loginAdmin($this->getRequest());
+        $site = $this->Sites->get(3);
+        $contents = $this->Contents->find()->where(['site_id' => 3])->all();
+        $enSiteFolder = $contents->first();
+        $enSitePage = $contents->last();
+        $this->Sites->dispatchEvent('Model.afterDelete', [$site, new ArrayObject()]);
+        // 削除対象のサイトIDがページでメインサイトに書き換わっているか | また論理削除されてるかを確認
+        $page = $this->Contents->find()->where(['id' => $enSitePage->id, 'deleted_date IS NOT' => null])->applyOptions(['withDeleted'])->first();
+        $this->assertEquals(1, $page->site_id);
+        // 削除対象サイトIDのフォルダーが完全に削除されてるか
+        $folder = $this->Contents->find()->where(['id' => $enSiteFolder->id, 'deleted_date IS NOT' => null])->applyOptions(['withDeleted'])->first();
+        $this->assertNull($folder);
     }
 
     /**
