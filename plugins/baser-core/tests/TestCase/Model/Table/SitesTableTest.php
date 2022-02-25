@@ -113,8 +113,11 @@ class SitesTableTest extends BcTestCase
      */
     public function testGetRelatedContents()
     {
-        $a = $this->Sites->getRelatedContents(1);
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $list = $this->Sites->getRelatedContents(24);
+        $this->assertCount(6, $list);
+        $sample = array_shift($list);
+        $this->assertNotEmpty($sample['Site']);
+        $this->assertNotEmpty($sample['Content']);
     }
 
     /**
@@ -184,8 +187,8 @@ class SitesTableTest extends BcTestCase
     {
         $this->assertEquals(1, $this->Sites->getRootContentId(0));
         $this->assertEquals(1, $this->Sites->getRootContentId(1));
-        $this->assertEquals(25, $this->Sites->getRootContentId(2));
-        $this->assertEquals(23, $this->Sites->getRootContentId(3));
+        $this->assertEquals(23, $this->Sites->getRootContentId(2));
+        $this->assertEquals(24, $this->Sites->getRootContentId(3));
         $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
         $this->Sites->getRootContentId(100);
     }

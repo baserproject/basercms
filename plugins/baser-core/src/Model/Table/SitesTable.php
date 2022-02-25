@@ -245,47 +245,49 @@ class SitesTable extends AppTable
      * コンテンツに関連したコンテンツをサイト情報と一緒に全て取得する
      *
      * @param $contentId
-     * @return array|null
+     * @return array|null $list
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getRelatedContents($contentId)
     {
-        // TODO ucmitz:
-        return [];
         $content = $this->Contents->get($contentId, ['contain' => ['Sites']]);
         $isMainSite = $this->isMain($content->site->id);
         $mainSiteContentId = $isMainSite ? $content->site->id : $content->site->main_site_id;
         $fields = ['id', 'name', 'alias', 'display_name', 'main_site_id'];
+        $conditions = ['Sites.status' => true];
         if (is_null($content->site->main_site_id)) {
             $mainSiteContentId = $content->id;
-            $site = $this->getRootMain(['fields' => $fields])->toArray();
+            $conditions['Sites.main_site_id'] = 1;
         } else {
-            // sites用conditions
-            $conditions = [
-                'Sites.status' => true,
-                'or' => [
+            $conditions['or'] = [
                     ['Sites.main_site_id' => $mainSiteContentId],
                     ['Sites.id' => $content->site->main_site_id]
-                ]
             ];
-            $sites = $this->find()->select($fields)->where($conditions)->order('main_site_id')->toArray();
         }
-        // contents用$condition
+        $sites = $this->find()->select($fields)->where($conditions)->order('main_site_id')->toArray();
+        if ($content->site->main_site_id === 1) {
+            $sites = array_merge($sites, [$this->getRootMain(['fields' => $fields])]);
+        }
         $conditions = [
             'or' => [
                 ['Contents.id' => $mainSiteContentId],
                 ['Contents.main_site_content_id' => $mainSiteContentId]
             ]
         ];
+        $list= [];
         $relatedContents = $this->Contents->find()->where($conditions)->toArray();
         foreach($relatedContents as $relatedContent) {
             foreach($sites as $key => $site) {
+                $list[$key]['Site'] = $site;
                 if ($relatedContent->site_id == $site->id) {
-                    $sites[$key]['Content'] = $relatedContent['Content'];
+                    $list[$key]['Content'] = $relatedContent;
                     break;
                 }
             }
         }
-        return $sites;
+        return $list;
     }
 
     /**
@@ -364,14 +366,16 @@ class SitesTable extends AppTable
         $content = $this->Contents->find()->where(['Contents.site_id' => $entity->id, 'Contents.site_root' => true])->first();
 
         $children = $contentService->getChildren($content->id);
-        foreach($children as $child) {
-            $child->site_id = 1;
-            // バリデートすると name が変換されてしまう
-            $this->Contents->save($child, false);
-        }
-        $children = $contentService->getChildren($content->id);
-        foreach($children as $child) {
-            $contentService->deleteRecursive($child->id);
+        if (isset($children)) {
+            foreach($children as $child) {
+                $child->site_id = 1;
+                // バリデートすると name が変換されてしまう
+                $this->Contents->save($child, false);
+            }
+            $children = $contentService->getChildren($content->id);
+            foreach($children as $child) {
+                $contentService->deleteRecursive($child->id);
+            }
         }
         if (!$this->Contents->hardDelete($content)) return false;
     }
