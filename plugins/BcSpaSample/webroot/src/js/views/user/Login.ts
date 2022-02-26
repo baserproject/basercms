@@ -17,7 +17,7 @@ export default Vue.extend({
     /**
      * Name
      */
-    name: 'Login',
+    name: 'UserLogin',
     /**
      * Props
      */
@@ -54,6 +54,8 @@ export default Vue.extend({
                 email: this.name,
                 password: this.password
             };
+            // TODO: vue側でエラーが出るため一旦コメントアウト
+            // axios.post<loginToken>('/baser/api/baser-core/users/login.json', postData)
             axios.post('/baser/api/baser-core/users/login.json', postData)
             .then((response) => {
                 if (response.data) {
