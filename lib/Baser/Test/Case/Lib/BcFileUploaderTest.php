@@ -226,7 +226,7 @@ class BcFileUploaderTest extends BaserTestCase
 		touch($templatePath);
 
 		// 削除を実行
-		$this->BcFileUploader->deleteFiles($this->EditorTemplate->data['EditorTemplate']);
+		$this->BcFileUploader->deleteFiles(['id' => $id, 'image' => 'template' . $id . '.gif'], $this->EditorTemplate->data['EditorTemplate']);
 
 		$this->assertFileNotExists($templatePath, $message);
 
@@ -976,7 +976,7 @@ class BcFileUploaderTest extends BaserTestCase
 		$savePath = $this->BcFileUploader->savePath;
 		touch($savePath . 'template1.gif');
 		$file = ['name' => $fileName, 'ext' => 'gif'];
-		$result = $this->BcFileUploader->getUniqueFileName($setting, $file);
+		$result = $this->BcFileUploader->getUniqueFileName($setting, $file, ['id' => null]);
 		$this->assertEquals($expected, $result, $message);
 
 		@unlink($savePath . 'template1.gif');
