@@ -45,6 +45,7 @@ node_modules/
 /docker/pgadmin/
 /docker/volumes/
 /docker/docker-compose.yml
+/docker/check
 /volumes/*
 /docker/.docker-sync/
 !app/webroot/theme/admin-third
