@@ -414,9 +414,15 @@ class ContentsTableTest extends BcTestCase
      */
     public function testUpdateRelateSubSiteContent()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $content = $this->Contents->get(21);
-        $this->Contents->updateRelateSubSiteContent($content);
+        $id = 1;
+        $content = $this->Contents->get($id);
+        $result = $this->execPrivateMethod($this->Contents, 'updateRelateSubSiteContent', [$content]);
+        $this->assertTrue($result);
+        // content ID1のデータが反映されてるかテスト
+        $contents = $this->Contents->find()->contain('Sites')->where(['Contents.main_site_content_id' => $id, 'Sites.relate_main_site' => true]);
+        foreach ($contents as $relatedContent) {
+            $this->assertEquals($content->title, $relatedContent->title);
+        }
     }
 
     /**
