@@ -199,7 +199,7 @@ class BlogPostTest extends BaserTestCase
 
 		// protectedな値にアクセスするため配列にキャストする
 		$behaviors = (array)$this->BlogPost->Behaviors;
-		$result = $behaviors["\0*\0_loaded"]['BcUpload']->settings['BlogPost'];
+		$result = $behaviors["\0*\0_loaded"]['BcUpload']->BcFileUploader['BlogPost']->settings;
 
 		$imagecopy = $result['fields']['eye_catch']['imagecopy'];
 		$expected = [

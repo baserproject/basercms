@@ -108,7 +108,7 @@ class MailMessage extends MailAppModel
 	public function setupUpload($name)
 	{
 
-		$settings = $this->Behaviors->BcUpload->settings['MailMessage'];
+		$settings = $this->Behaviors->BcUpload->BcFileUploader['MailMessage']->settings;
 		$settings['fields'] = [];
 		foreach($this->mailFields as $mailField) {
 			$mailField = $mailField['MailField'];
@@ -766,10 +766,6 @@ class MailMessage extends MailAppModel
 				if (!empty($dbData['message'][$mailField['field_name']]) && !is_array($dbData['message'][$mailField['field_name']])) {
 					$dbData['message'][$mailField['field_name']] = explode("|", $dbData['message'][$mailField['field_name']]);
 				}
-			}
-			if ($mailField['type'] === 'file' && isset($dbData['message'][$mailField['field_name'] . '_tmp'])) {
-				$dbData['message'][$mailField['field_name']] = $dbData['message'][$mailField['field_name'] . '_tmp'];
-				unset($dbData['message'][$mailField['field_name'] . '_tmp']);
 			}
 		}
 

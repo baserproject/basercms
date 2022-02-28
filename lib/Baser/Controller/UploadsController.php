@@ -102,7 +102,7 @@ class UploadsController extends AppController
 			$data = file_get_contents($path);
 			unlink($path);
 		}
-
+		$this->Session->delete('Upload.'. $sessioName);
 		if ($ext !== 'gif' && $ext !== 'jpg' && $ext !== 'png') {
 			Header("Content-disposition: attachment; filename=" . $name);
 		}

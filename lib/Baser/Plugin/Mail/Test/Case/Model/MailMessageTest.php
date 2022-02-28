@@ -56,7 +56,7 @@ class MailMessageTest extends BaserTestCase
 		$this->assertEquals('mail_message_1', $this->MailMessage->createTableName(1), 'テーブルを正しく設定できません');
 
 		// setupUpload
-		$saveDir = $this->MailMessage->Behaviors->BcUpload->settings['MailMessage']['saveDir'];
+		$saveDir = $this->MailMessage->Behaviors->BcUpload->BcFileUploader['MailMessage']->settings['saveDir'];
 		$expected = "mail" . DS . "limited" . DS . '1' . DS . "messages";
 		$this->assertEquals($expected, $saveDir, 'アップロード設定を正しく設定できません');
 	}
@@ -342,9 +342,6 @@ class MailMessageTest extends BaserTestCase
 				'value' => '<br><br />hoge',
 			]
 		];
-		if ($type == 'file') {
-			$dbData['message']['value_tmp'] = 'hoge_tmp';
-		}
 
 
 		// 実行
@@ -370,9 +367,6 @@ class MailMessageTest extends BaserTestCase
 			$expectedMessage = "<br><br />hoge";
 			$this->assertEquals($expectedMessage, $result['message']['value'][0]);
 
-		} else if ($type == 'file') {
-			$expectedMessage = 'hoge_tmp';
-			$this->assertEquals($expectedMessage, $result['message']['value']);
 		}
 
 	}
@@ -382,8 +376,7 @@ class MailMessageTest extends BaserTestCase
 		return [
 			[0, null],
 			[1, null],
-			[0, 'multi_check'],
-			[0, 'file'],
+			[0, 'multi_check']
 		];
 	}
 

@@ -98,7 +98,7 @@ class BcEventListener extends CakeObject implements CakeEventListener
 	 * コントローラー名、アクション名をキャメルケースに変換する前提で、ドットで結合した文字列とする
 	 * （例）Users.AdminIndex
 	 *
-	 * @param string $action アクションを特定する為の文字列
+	 * @param string|array $action アクションを特定する為の文字列
 	 * @param bool $isContainController コントローラー名を含むかどうか（初期値：true）
 	 * @param bool $currentRequest 現在のリクエストかどうか（初期値：false）
 	 *        ※ Controller::requestAction() を利用時に、その対象のリクエストについて判定する場合は、trueを指定する
