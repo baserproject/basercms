@@ -2,29 +2,17 @@
     "compilerOptions": {
         "target": "es5",
         "module": "es2015",
-      "lib": ["es5", "dom"],
-      "sourceMap": true,
-      "outDir": "./webroot/js",
-      "rootDir": "./webroot/src/js",
-      "strict": true,
-      "moduleResolution": "node",
-      "baseUrl": ".",
-      "esModuleInterop": true,
-      "experimentalDecorators": true,
-      "emitDecoratorMetadata": true,
-      "skipLibCheck": true,
-      "forceConsistentCasingInFileNames": true
+        "lib": ["es5", "dom"],
+        "sourceMap": true,
+        "outDir": "./webroot/js",
+        "rootDir": "./webroot/src/js",
+        "strict": true,
+        "moduleResolution": "node",
+        "baseUrl": ".",
+        "esModuleInterop": true,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true
     },
-    // "include": [
-    //     "webroot/src/js/**/*.ts",
-    //     "webroot/src/js/**/*.js",
-    //     "webroot/src/js/**/*.vue",
-    //   ],
-    // "exclude": ["node_modules"],
-    // "compileOnSave": false,
-    // "paths": {
-    //     "@/*": [
-    //         "webroot/src/js/*"
-    //     ]
-    //   },
-  }
+}
