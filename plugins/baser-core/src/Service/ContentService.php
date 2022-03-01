@@ -721,6 +721,7 @@ class ContentService implements ContentServiceInterface
      * @param  EntityInterface $content
      * @param  array $contentData
      * @return EntityInterface
+     * @throws \Cake\ORM\Exception\PersistenceFailedException
      * @checked
      * @unitTest
      * @noTodo
@@ -728,7 +729,7 @@ class ContentService implements ContentServiceInterface
     public function update($content, $contentData)
     {
         $content = $this->Contents->patchEntity($content, $contentData);
-        return ($result = $this->Contents->save($content, ['atomic' => false])) ? $result : $content;
+        return $this->Contents->saveOrFail($content, ['atomic' => false]);
     }
 
     /**

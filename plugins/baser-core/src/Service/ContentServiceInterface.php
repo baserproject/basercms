@@ -227,6 +227,7 @@ interface ContentServiceInterface
      * @param  EntityInterface $content
      * @param  array $contentData
      * @return EntityInterface
+     * @throws \Cake\ORM\Exception\PersistenceFailedException
      */
     public function update($content, $contentData);
 

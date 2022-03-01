@@ -166,7 +166,7 @@ class ContentsTableTest extends BcTestCase
     }
 
     /**
-     * testInvalidValue
+     * 不適切な値がvalueとして渡される場合
      *
      * @return void
      */
