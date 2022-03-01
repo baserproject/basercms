@@ -302,10 +302,10 @@ class BcFileUploaderTest extends BcTestCase
         $this->BcFileUploader->setUploadingFiles($file);
         $targetPath = $this->savePath . $fileName;
         touch($targetPath);
-        $this->BcFileUploader->deleteFiles($this->ContentService->get(6));
+        $this->BcFileUploader->deleteFiles($this->ContentService->get(6), new Content());
         $this->assertFileNotExists($targetPath);
         touch($targetPath);
-        $this->BcFileUploader->deleteFiles(new Content());
+        $this->BcFileUploader->deleteFiles(new Content(), new Content());
         $this->assertFileExists($targetPath);
         @unlink($targetPath);
     }
@@ -365,11 +365,19 @@ class BcFileUploaderTest extends BcTestCase
         $this->eyecatchField['ext'] = 'png';
         $filePath = $this->savePath . $this->uploadedData['eyecatch']['name'];
         // nameが空の場合 新規画像なしでの保存など
-        $this->BcFileUploader->saveFileWhileChecking($this->eyecatchField, ["eyecatch" => ['name' => '']]);
+        $this->BcFileUploader->saveFileWhileChecking(
+            $this->eyecatchField,
+            ["eyecatch" => ['name' => '']],
+            new Content()
+        );
         $this->assertFileNotExists($filePath);
         // nameがある場合 新規画像保存の場合
         touch($this->uploadedData['eyecatch']['tmp_name']);
-        $this->BcFileUploader->saveFileWhileChecking($this->eyecatchField, $this->uploadedData['eyecatch']);
+        $this->BcFileUploader->saveFileWhileChecking(
+            $this->eyecatchField,
+            $this->uploadedData['eyecatch'],
+            new Content()
+        );
         $this->assertFileExists($filePath);
         $this->assertFileNotExists($this->uploadedData['eyecatch']['tmp_name']);
         unlink($filePath);
@@ -996,7 +1004,7 @@ class BcFileUploaderTest extends BcTestCase
         $file = ['name' => $fileName, 'ext' => 'gif'];
         $setting = ['name' => $fieldName];
         touch($this->savePath . 'template1.gif');
-        $result = $this->BcFileUploader->getUniqueFileName($setting, $file);
+        $result = $this->BcFileUploader->getUniqueFileName($setting, $file, new Content());
         $this->assertEquals($expected, $result, $message);
         @unlink($this->savePath . 'template1.gif');
     }
@@ -1071,6 +1079,7 @@ class BcFileUploaderTest extends BcTestCase
         $uploaded = [
             'name' => $fileName . '.' . $this->eyecatchField['ext'],
             'tmp_name' => TMP . $fileName . '.' . $this->eyecatchField['ext'],
+            'uploadable' => true
         ];
         $this->BcFileUploader->setUploadingFiles(['eyecatch' => $uploaded]);
         $this->BcFileUploader->settings['fields']['eyecatch'] = $this->eyecatchField;
@@ -1169,7 +1178,7 @@ class BcFileUploaderTest extends BcTestCase
     {
         $this->assertFalse($this->BcFileUploader->isUploaded());
         touch($this->uploadedData['eyecatch']['tmp_name']);
-        $this->BcFileUploader->saveFileWhileChecking($this->eyecatchField, $this->uploadedData['eyecatch']);
+        $this->BcFileUploader->saveFileWhileChecking($this->eyecatchField, $this->uploadedData['eyecatch'], new Content());
         $this->assertTrue($this->BcFileUploader->isUploaded());
         $this->BcFileUploader->resetUploaded();
         $this->assertFalse($this->BcFileUploader->isUploaded());

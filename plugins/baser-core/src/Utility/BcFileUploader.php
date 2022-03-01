@@ -13,6 +13,7 @@ namespace BaserCore\Utility;
 
 use ArrayObject;
 use Cake\Http\Session;
+use Cake\ORM\Entity;
 use Cake\ORM\Table;
 use Cake\Routing\Router;
 use Cake\Utility\Hash;
@@ -131,7 +132,7 @@ class BcFileUploader
      * @noTodo
      * @unitTest
      */
-    public function getSettings($config): array
+    public function getSettings(array $config): array
     {
         $setting = Hash::merge([
             'saveDir' => '',
@@ -193,24 +194,30 @@ class BcFileUploader
             if (!empty($data[$name]) && is_array($data[$name])) {
                 $file = $data[$name];
                 $file['uploadable'] = $this->isUploadable($setting['type'], $file['type'], $file);
-            } else {
-                continue;
+                $file['ext'] = BcUtil::decodeContent($file['type'], @$file['name']);
+                if ($file['uploadable']) {
+                    // arrayをstringとして変換
+                    $data[$name] = $file['name'];
+                } elseif (isset($file['error']) && $file['error'] === UPLOAD_ERR_NO_FILE) {
+                    if (isset($data[$name . '_'])) {
+                        // 新しいデータが送信されず、既存データを引き継ぐ場合は、元のフィールド名に戻す
+                        $data[$name] = $data[$name . '_'];
+                    } else {
+                        $data[$name] = '';
+                    }
+                }
+                if(isset($data[$setting['name'] . '_'])) unset($data[$setting['name'] . '_']);
             }
-            if ($file['uploadable']) {
-                // arrayをstringとして変換
-                $data[$name] = $file['name'];
-            } elseif (isset($data[$name . '_']) && isset($file['error']) && $file['error'] === UPLOAD_ERR_NO_FILE) {
-                // 新しいデータが送信されず、既存データを引き継ぐ場合は、元のフィールド名に戻す
-                $data[$name] = $data[$name . '_'];
-                unset($data[$setting['name'] . '_']);
+            if(isset($data[$name . '_delete'])) {
+            	$file['delete'] = $data[$name . '_delete'];
+            	unset($data[$name . '_delete']);
             } else {
-                $data[$name] = '';
+            	$file['delete'] = null;
             }
-            $file['ext'] = BcUtil::decodeContent($file['type'], @$file['name']);
-            $file['delete'] = $data[$name . '_delete'] ?? null;
             $files[$name] = $file;
         }
         $this->setUploadingFiles($files);
+        return $data;
     }
 
     /**
@@ -281,9 +288,12 @@ class BcFileUploader
         $this->uploaded = false;
         foreach($this->settings['fields'] as $setting) {
             $file = $files[$setting['name']] ?? [];
-            $files[$setting['name']] = $this->saveFileWhileChecking($setting, $file);
-            if(!empty($files[$setting['name']]['name'])) {
-                $entity->{$setting['name']} = $files[$setting['name']]['name'];
+            $result = $this->saveFileWhileChecking($setting, $file, $entity);
+            if($result) {
+                $files[$setting['name']] = $result;
+                if(!empty($files[$setting['name']]['name'])) {
+                    $entity->{$setting['name']} = $files[$setting['name']]['name'];
+                }
             }
         }
         $this->setUploadingFiles($files);
@@ -300,22 +310,24 @@ class BcFileUploader
      * @noTodo
      * @unitTest
      */
-    public function saveFileWhileChecking($setting, $file, $options = [])
+    public function saveFileWhileChecking($setting, $file, $entity, $options = [])
     {
-        if (empty($file['uploadable'])) return $file;
+        if (empty($file['uploadable'])) return false;
         $options = array_merge([
             'deleteTmpFiles' => true
         ], $options);
         if ($setting['getUniqueFileName']) {
-            $file['name'] = $this->getUniqueFileName($setting, $file);
+            $file['name'] = $this->getUniqueFileName($setting, $file, $entity);
         }
         $fileName = $this->saveFile($setting, $file);
         if ($fileName) {
             $file['name'] = $fileName;
-            $this->copyImages($setting, $file);
-            if (!empty($setting['imageresize'])) {
-                $filePath = $this->savePath . $fileName;
-                $this->resizeImage($filePath, $filePath, $setting['imageresize']['width'], $setting['imageresize']['height'], $setting['imageresize']['thumb']);
+            if (($setting['type'] == 'all' || $setting['type'] == 'image') && !empty($setting['imagecopy']) && in_array($file['ext'], $this->imgExts)) {
+                $this->copyImages($setting, $file);
+                if (!empty($setting['imageresize'])) {
+                    $filePath = $this->savePath . $fileName;
+                    $this->resizeImage($filePath, $filePath, $setting['imageresize']['width'], $setting['imageresize']['height'], $setting['imageresize']['thumb']);
+                }
             }
             if ($options['deleteTmpFiles']) {
                 @unlink($file['tmp_name']);
@@ -339,6 +351,7 @@ class BcFileUploader
      */
     public function saveFile($setting, $file)
     {
+    	if(empty($file['tmp_name'])) return false;
         $fileName = $this->getSaveFileName($setting, $file);
         $filePath = $this->savePath . $fileName;
         $this->rotateImage($file['tmp_name']);
@@ -358,20 +371,14 @@ class BcFileUploader
      * @noTodo
      * @unitTest
      */
-    public function deleteFiles($entity, $force = false)
+    public function deleteFiles($oldEntity, $newEntity, $force = false)
     {
-        if (!$entity->id) return;
         $files = $this->getUploadingFiles();
-        $query = $this->table->find()->where(['id' => $entity->id]);
-        if ($entity instanceof \BaserCore\Model\Entity\Content) {
-            $oldEntity = $query->applyOptions(['withDeleted'])->first();
-        } else {
-            $oldEntity = $query->first();
-        }
         foreach($this->settings['fields'] as $setting) {
             $file = $files[$setting['name']] ?? [];
-            $this->deleteFileWhileChecking($setting, $file, $entity, $oldEntity, $force);
+            $newEntity = $this->deleteFileWhileChecking($setting, $file, $newEntity, $oldEntity, $force);
         }
+        return $newEntity;
     }
 
     /**
@@ -388,10 +395,11 @@ class BcFileUploader
      */
     public function deleteFileWhileChecking($setting, $file, $newEntity, $oldEntity, $force = false)
     {
-        if (!empty($file['delete']) || $force) {
+        if ((!empty($file['delete']) || $force) && !empty($oldEntity->{$setting['name']})) {
             $this->deleteFile($setting, $oldEntity->{$setting['name']});
             $newEntity->{$setting['name']} = '';
         }
+        return $newEntity;
     }
 
     /**
@@ -409,7 +417,7 @@ class BcFileUploader
      */
     public function deleteFile($setting, $file, $delImagecopy = true)
     {
-        if (!$file) return true;
+        if (!$file || is_array($file)) return true;
         $prefix = (!empty($setting['prefix']))? $setting['prefix'] : '';
         $suffix = (!empty($setting['suffix']))? $setting['suffix'] : '';
         $pathinfo = pathinfo($file);
@@ -486,11 +494,13 @@ class BcFileUploader
      */
     public function getSaveFileName($setting, $file)
     {
+    	if(empty($file['name'])) return '';
         $name = $file['name'];
         $ext = $file['ext'];
         $prefix = (!empty($setting['prefix']))? $setting['prefix'] : '';
         $suffix = (!empty($setting['suffix']))? $setting['suffix'] : '';
-        $basename = preg_replace("/\." . $ext . "$/is", '', $name);
+        $pathinfo = pathinfo($name);
+        $basename = $pathinfo['filename'];
         $fileName = $prefix . $basename . $suffix . '.' . $ext;
         if ($this->isFileExists($fileName)) {
             if (preg_match('/(.+_)([0-9]+)$/', $basename, $matches)) {
@@ -660,10 +670,6 @@ class BcFileUploader
                 $entity->{$setting['name']} = $value;
             }
         }
-        // 保存時にbeforeSaveとafterSaveのループを防ぐ
-        $this->table->getEventManager()->off('Model.beforeSave');
-        $this->table->getEventManager()->off('Model.afterSave');
-        $this->table->save($entity, ['validate' => false]);
     }
 
     /**
@@ -680,12 +686,16 @@ class BcFileUploader
      */
     public function renameToBasenameField($setting, $file, $entity, $copy = false)
     {
-        if (empty($setting['namefield']) || empty($file)) {
+        if (empty($setting['namefield']) || empty($file) || !empty($file['delete'])) {
             return false;
         }
-        $oldName = $file['name'];
-        if (is_array($oldName)) {
+        $oldName = @$file['name'];
+        if (!$oldName || is_array($oldName)) {
             return false;
+        }
+        if(!empty($file['ext'])) {
+        	$pathInfo = pathinfo($oldName);
+        	$oldName = $pathInfo['filename'] . '.' . $file['ext'];
         }
         $saveDir = $this->savePath;
         $saveDirInTheme = $this->getSaveDir(true);
@@ -750,8 +760,8 @@ class BcFileUploader
     public function getFieldBasename($setting, $file, $entity)
     {
         if (empty($setting['namefield'])) return false;
-        if (is_null($entity[$setting['namefield']])) return false;
-        $basename = $entity[$setting['namefield']];
+        if (is_null($entity->{$setting['namefield']})) return false;
+        $basename = $entity->{$setting['namefield']};
         if (!empty($setting['nameformat'])) {
             $basename = sprintf($setting['nameformat'], $basename);
         }
@@ -771,6 +781,10 @@ class BcFileUploader
                 $Folder->create($path);
                 $Folder->chmod($path, 0777);
             }
+        }
+        if(empty($file['ext'])) {
+        	$pathInfo = pathinfo($entity->{$setting['name']});
+        	$file['ext'] = $pathInfo['extension'];
         }
         return $subdir . $basename . '.' . $file['ext'];
     }
@@ -816,7 +830,7 @@ class BcFileUploader
      * @noTodo
      * @unitTest
      */
-    public function getBasename($setting, $filename)
+    public function getBasename(array $setting, string $filename): string
     {
         $pattern = "/^" . $setting['prefix'] . "(.*?)" . $setting['suffix'] . "\.[a-zA-Z0-9]*$/is";
         if (preg_match($pattern, $filename, $maches)) {
@@ -830,19 +844,28 @@ class BcFileUploader
      * 一意のファイル名を取得する
      *
      * @param array $setting 一意の名前を取得する元となるフィールド名
-     * @param array $fileName 対象のファイル名
+     * @param array $file 対象のファイル
+     * @param EntityInterface $entity
      * @return string
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function getUniqueFileName($setting, $file)
+    public function getUniqueFileName(array $setting, array $file, EntityInterface $entity): string
     {
+    	if(!empty($this->settings['getUniqueFileName']) && method_exists($this->table, $this->settings['getUniqueFileName'])) {
+    		return $this->table->{$this->settings['getUniqueFileName']}($setting, $file, $entity);
+    	}
+		if(!isset($file['name'])) return '';
         $ext = $file['ext'];
-        $basename = preg_replace("/\." . $ext . "$/is", '', $file['name']);
+        $pathInfo = pathinfo($file['name']);
+        $basename = $pathInfo['filename'];
         // 先頭が同じ名前のリストを取得し、後方プレフィックス付きのフィールド名を取得する
-        $conditions[$setting['name'] . ' LIKE'] = $basename . '%' . $ext;
-        $records = $this->table->find()->where([$conditions])->select($setting['name'])->all()->toArray();
+        $where = [$setting['name'] . ' LIKE' => $basename . '%' . $ext];
+        if($entity->id) {
+            $where = array_merge($where, ['id <>' => $entity->id]);
+        }
+        $records = $this->table->find()->where($where)->select($setting['name'])->all()->toArray();
         $numbers = [];
         if ($records) {
             foreach($records as $data) {
@@ -879,11 +902,12 @@ class BcFileUploader
      * 保存先のフォルダを設定し、取得する
      * @param bool $isTheme
      * @param bool $limited
+     * @return string
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function getSaveDir($isTheme = false, $limited = false): string
+    public function getSaveDir(bool $isTheme = false, bool $limited = false): string
     {
         if (!$isTheme) {
             $basePath = WWW_ROOT . 'files' . DS;
@@ -911,11 +935,12 @@ class BcFileUploader
      * ファイルが重複しているかをチェックする
      *
      * @param string $fileName
+     * @return bool
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function isFileExists($fileName): bool
+    public function isFileExists(string $fileName): bool
     {
         $duplicates = $this->existsCheckDirs;
         if ($duplicates) {
@@ -934,18 +959,20 @@ class BcFileUploader
      * アップロード中のフィールドにおいて既に存在する画像を全て削除する
      *
      * @param EntityInterface $oldEntity
+     * @param bool $force
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function deleteExistingFiles($entity): void
+    public function deleteExistingFiles($oldEntity, $force = false): void
     {
-        $oldEntity = $this->table->find()->where(['id' => $entity->id])->first();
         if (!$oldEntity) return;
         $files = $this->getUploadingFiles();
         if (!$files) return;
         foreach($files as $name => $file) {
-            $this->deleteExistingFile($name, $file, $oldEntity);
+            if(!empty($file['uploadable']) || $force) {
+                $this->deleteExistingFile($name, $file, $oldEntity, $force);
+            }
         }
     }
 
@@ -955,13 +982,14 @@ class BcFileUploader
      * @param string $name
      * @param array $file
      * @param EntityInterface $entity
+     * @param bool $force
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function deleteExistingFile($name, $file, $entity)
+    public function deleteExistingFile(string $name, array $file, EntityInterface $entity, bool $force = false)
     {
-        if (!empty($file['tmp_name']) && $entity->{$name}) {
+        if ((!empty($file['tmp_name']) || $force) && $entity->{$name}) {
             $this->deleteFile($this->settings['fields'][$name], $entity->{$name});
         }
     }
@@ -973,7 +1001,7 @@ class BcFileUploader
      * @checked
      * @unitTest
      */
-    public function copyImages($setting, $file): void
+    public function copyImages(array $setting, array $file): void
     {
         if (($setting['type'] == 'all' || $setting['type'] == 'image') && !empty($setting['imagecopy']) && in_array($file['ext'], $this->imgExts)) {
             foreach($setting['imagecopy'] as $copy) {
@@ -991,7 +1019,7 @@ class BcFileUploader
      * @noTodo
      * @unitTest
      */
-    public function setUploadingFiles($files): void
+    public function setUploadingFiles(array $files): void
     {
         $this->uploadingFiles = $files;
     }
@@ -1012,7 +1040,7 @@ class BcFileUploader
      *
      * @param array $data
      * @param string $tmpId
-     * @return mixed false|array
+     * @return false|EntityInterface
      * @checked
      * @noTodo
      * @unitTest
@@ -1021,15 +1049,24 @@ class BcFileUploader
     {
         $this->Session->delete('Upload');
         $this->tmpId = $tmpId;
-        $this->setupRequestData($data);
-        $entity = $this->table->patchEntity($this->table->newEmptyEntity(), $data);
+        $data = $this->setupRequestData($data);
         $files = $this->getUploadingFiles();
+        $entity = new Entity($data);
         foreach($this->settings['fields'] as $setting) {
-            $entity[$setting['name']] = $files[$setting['name']] = $this->saveTmpFile($setting, $files[$setting['name']], $entity);
-            if(!empty($entity->{$setting['name']})) {
-            	$entity[$setting['name'] . '_tmp'] = $entity[$setting['name']];
+            $fileName = $this->saveTmpFile($setting, $files[$setting['name']], $entity);
+            if($fileName) {
+                $entity[$setting['name']] = $files[$setting['name']] = $fileName;
+                $entity[$setting['name'] . '_tmp'] = $entity[$setting['name']];
+            } elseif($fileName === false) {
+                $entity[$setting['name']] = $files[$setting['name']] = '';
 			}
         }
+		// 削除するチェックボックスにチェックが入っている場合の処理
+		foreach ($files as $field => $value) {
+			if(!empty($value['delete'])) {
+				unset($entity[$field]);
+			}
+		}
         $this->setUploadingFiles($files);
         return $entity;
     }
@@ -1037,9 +1074,9 @@ class BcFileUploader
     /**
      * ファイルを保存する
      *
-     * @param EntityInterface $entity
-     * @param array $file
      * @param array $setting 画像保存対象フィールドの設定
+     * @param array $file
+     * @param EntityInterface $entity
      * @return string|false ファイル名
      * @checked
      * @noTodo
@@ -1047,9 +1084,14 @@ class BcFileUploader
      */
     public function saveTmpFile($setting, $file, $entity)
     {
-        if (empty($file['tmp_name']) || (!empty($file['error']) && $file['error'] !== 0)) {
-            return false;
-        }
+        if (empty($file['tmp_name'])) return '';
+    	if(!empty($file['error'])) {
+    		if($file['error'] === UPLOAD_ERR_NO_FILE) {
+    			return '';
+    		} else {
+    			return false;
+    		}
+		}
         $fileName = $this->getSaveTmpFileName($setting, $file, $entity);
         $this->rotateImage($file['tmp_name']);
         $name = str_replace(['.', '/'], ['_', '_'], $fileName);
@@ -1072,7 +1114,7 @@ class BcFileUploader
     public function getSaveTmpFileName($setting, $file, $entity)
     {
         if (!empty($setting['namefield'])) {
-            $entity->{$setting['namefield']} = $this->tmpId;
+            $entity[$setting['namefield']] = $this->tmpId;
             $fileName = $this->getFieldBasename($setting, $file, $entity);
         } else {
             $fileName = $this->tmpId . '_' . $setting['name'] . '.' . $file['ext'];

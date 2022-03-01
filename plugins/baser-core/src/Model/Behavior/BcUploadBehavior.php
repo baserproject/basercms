@@ -87,17 +87,16 @@ class BcUploadBehavior extends Behavior
 {
 
     /**
-     * 設定
-     *
-     * @var array
-     */
-    public $settings = null;
-
-    /**
      * BcFileUploader
      * @var BcFileUploader[]
      */
     public $BcFileUploader = [];
+
+    /**
+     * Old Entity
+     * @var EntityInterface
+     */
+    public $oldEntity = null;
 
     /**
      * Initialize
@@ -115,7 +114,6 @@ class BcUploadBehavior extends Behavior
 
     /**
      * Before Marshal
-     *
      * アップロード用のリクエストデータを変換する
      * @param EventInterface $event
      * @param ArrayObject $data
@@ -127,30 +125,11 @@ class BcUploadBehavior extends Behavior
     {
         $this->BcFileUploader[$this->table()->getAlias()]->setupRequestData($data);
         $this->BcFileUploader[$this->table()->getAlias()]->setupTmpData($data);
-    }
-
-    /**
-     * Before Save
-     * @param EventInterface $event
-     * @param EntityInterface $entity
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function beforeSave(EventInterface $event, EntityInterface $entity)
-    {
-        if ($entity->id) {
-            $this->BcFileUploader[$this->table()->getAlias()]->deleteExistingFiles($entity);
-        }
-        $this->BcFileUploader[$this->table()->getAlias()]->saveFiles($entity);
-        if ($entity->id) {
-            $this->BcFileUploader[$this->table()->getAlias()]->deleteFiles($entity);
-        }
+        $this->oldEntity = (!empty($data['id']))? $this->getOldEntity($data['id']) : null;
     }
 
     /**
      * After Save
-     *
      * @param EventInterface $event
      * @param EntityInterface $entity
      * @checked
@@ -159,9 +138,33 @@ class BcUploadBehavior extends Behavior
      */
     public function afterSave(EventInterface $event, EntityInterface $entity)
     {
+        if ($entity->id) {
+            $this->BcFileUploader[$this->table()->getAlias()]->deleteExistingFiles($entity);
+        }
+        $this->BcFileUploader[$this->table()->getAlias()]->saveFiles($entity);
+        if ($entity->id) {
+            $this->BcFileUploader[$this->table()->getAlias()]->deleteFiles($this->oldEntity, $entity);
+        }
         if ($this->BcFileUploader[$this->table()->getAlias()]->isUploaded()) {
             $this->BcFileUploader[$this->table()->getAlias()]->renameToBasenameFields($entity);
             $this->BcFileUploader[$this->table()->getAlias()]->resetUploaded();
+        }
+        // 保存時にbeforeSaveとafterSaveのループを防ぐ
+        $eventManager = $this->table()->getEventManager();
+        $beforeSaveListeners = $eventManager->listeners('Model.beforeSave');
+        $afterSaveListeners = $eventManager->listeners('Model.afterSave');
+        $eventManager->off('Model.beforeSave');
+        $eventManager->off('Model.afterSave');
+        $this->table()->save($entity, ['validate' => false]);
+        foreach($beforeSaveListeners as $listener) {
+            if(get_class($listener['callable'][0]) !== 'BaserCore\Event\BcModelEventDispatcher' ) {
+                $eventManager->on('Model.beforeSave', [], $listener['callable']);
+            }
+        }
+        foreach($afterSaveListeners as $listener) {
+            if(get_class($listener['callable'][0]) !== 'BaserCore\Event\BcModelEventDispatcher' ) {
+                $eventManager->on('Model.afterSave', [], $listener['callable']);
+            }
         }
     }
 
@@ -177,12 +180,12 @@ class BcUploadBehavior extends Behavior
      */
     public function beforeDelete(EventInterface $event, EntityInterface $entity)
     {
-        $this->BcFileUploader[$this->table()->getAlias()]->deleteFiles($entity, true);
+        $oldEntity = $this->getOldEntity($entity->id);
+        $this->BcFileUploader[$this->table()->getAlias()]->deleteFiles($oldEntity, $entity, true);
     }
 
     /**
      * 一時ファイルとして保存する
-     *
      * @param array $data
      * @param string $tmpId
      * @return mixed false|array
@@ -227,10 +230,46 @@ class BcUploadBehavior extends Behavior
      * @param false $isTheme
      * @param false $limited
      * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getSaveDir($isTheme = false, $limited = false)
     {
         return $this->BcFileUploader[$this->table()->getAlias()]->getSaveDir($isTheme, $limited);
     }
+
+	/**
+     * getFileUploader
+	 * @param $modelName
+	 * @return BcFileUploader|false
+     * @checked
+     * @noTodo
+     * @unitTest
+	 */
+	public function getFileUploader()
+	{
+		return (isset($this->BcFileUploader[$this->table()->getAlias()]))? $this->BcFileUploader[$this->table()->getAlias()] : false;
+	}
+
+	/**
+	 * getOldEntity
+	 * @param int $id
+	 * @return EntityInterface|null
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+	public function getOldEntity($id)
+	{
+	    $table = $this->table();
+        $query = $table->find()->where(['id' => $id]);
+        if ($table instanceof \BaserCore\Model\Table\ContentsTable) {
+            $oldEntity = $query->applyOptions(['withDeleted'])->first();
+        } else {
+            $oldEntity = $query->first();
+        }
+		return ($oldEntity)?: null;
+	}
 
 }

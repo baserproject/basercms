@@ -126,11 +126,13 @@ class BcUploadBehaviorTest extends BcTestCase
     }
 
     /**
-     * Before save
+     * After save
+     *
+     * @return boolean
      */
-    public function testBeforeSave()
+    public function testAfterSave()
     {
-        // 画像を新規追加する場合
+       // 画像を新規追加する場合
         $imgPath = ROOT . '/plugins/bc-admin-third/webroot/img/';
         $fileName = 'baser.power';
         $this->eyecatchField['width'] = 100;
@@ -149,45 +151,13 @@ class BcUploadBehaviorTest extends BcTestCase
         $this->BcUploadBehavior->BcFileUploader[$this->table->getAlias()]->settings['fields']['eyecatch'] = $this->eyecatchField;
         // 新規保存の場合
         $entity = new Entity(['id' => 6, 'eyecatch' => 'baser.power.gif']);
-        $return = $this->table->dispatchEvent('Model.beforeSave', ['entity' => $entity, 'options' => new ArrayObject()]);
-        $this->assertTrue($return->getResult());
+        $this->table->dispatchEvent('Model.afterSave', ['entity' => $entity, 'options' => new ArrayObject()]);
         $this->assertFileExists($this->savePath . 'baser.power.gif');
         // 削除の場合
-        $uploadedFile = [
-            'eyecatch' => [
-                'name' => '',
-                'tmp_name' => '',
-                'ext' => $this->eyecatchField['ext'],
-                'uploadable' => false,
-                'delete' => 1
-            ]
-        ];
-        copy($imgPath . $fileName . '.' . $this->eyecatchField['ext'], $this->savePath . '00000006_eyecatch.gif');
-        $this->BcUploadBehavior->BcFileUploader[$this->table->getAlias()]->setUploadingFiles($uploadedFile);
-        $return = $this->table->dispatchEvent('Model.beforeSave', ['entity' => $entity, 'options' => new ArrayObject()]);
-        $this->assertTrue($return->getResult());
-        $this->assertEmpty($return->getData('entity')->eyecatch);
-        $this->assertFileNotExists($this->savePath . '00000006_eyecatch.gif');
-        unlink($this->savePath . 'baser.power.gif');
-    }
-
-    /**
-     * After save
-     *
-     * @return boolean
-     */
-    public function testAfterSave()
-    {
-        $this->getRequest('/baser/admin/');
-        touch($this->savePath . 'test.png');
-        $this->BcUploadBehavior->BcFileUploader[$this->table->getAlias()]->setUploadingFiles(['eyecatch' => ['name' => 'test.png', 'ext' => 'png']]);
-        $this->BcUploadBehavior->BcFileUploader[$this->table->getAlias()]->uploaded = true;
-        $entity = $this->table->get(1);
-        $entity->eyecatch = 'test.png';
+        $this->table->dispatchEvent('Model.beforeMarshal', ['data' => new ArrayObject(['id' => 6, 'eyecatch_delete' => true]), 'options' => new ArrayObject()]);
         $return = $this->table->dispatchEvent('Model.afterSave', ['entity' => $entity, 'options' => new ArrayObject()]);
-        $this->assertNull($return->getResult());
-        $this->assertEquals($return->getData('entity')->eyecatch, "00000001_eyecatch.png");
-        unlink($this->savePath . "00000001_eyecatch.png");
+        $this->assertEquals('', $return->getData('entity')->eyecatch);
+        $this->assertFileNotExists($this->savePath . 'baser.power.gif');
     }
 
     /**
@@ -199,9 +169,9 @@ class BcUploadBehaviorTest extends BcTestCase
         touch($this->uploadedData['eyecatch']['tmp_name']);
         $entity = $this->BcUploadBehavior->saveTmpFiles($this->uploadedData, 1);
         $tmpId = $this->BcUploadBehavior->BcFileUploader[$this->table->getAlias()]->tmpId;
-        $this->assertEquals("00000001_eyecatch.png", $entity->eyecatch_tmp, 'saveTmpFiles()の返り値が正しくありません');
+        $this->assertEquals("00000001_eyecatch.png", $entity['eyecatch_tmp'], 'saveTmpFiles()の返り値が正しくありません');
         $this->assertEquals(1, $tmpId, 'tmpIdが正しく設定されていません');
-        @unlink($this->uploadedData['tmp_name']);
+        @unlink($this->uploadedData['eyecatch']['tmp_name']);
     }
 
     /**
@@ -243,6 +213,24 @@ class BcUploadBehaviorTest extends BcTestCase
     {
         $dir = $this->BcUploadBehavior->getSaveDir();
         $this->assertEquals('/var/www/html/webroot/files/contents/', $dir);
+    }
+
+    /**
+     * test getFileUploader
+     */
+    public function testGetFileUploader()
+    {
+        $fileUploader = $this->BcUploadBehavior->getFileUploader();
+        $this->assertEquals('BaserCore\Utility\BcFileUploader', get_class($fileUploader));
+    }
+
+    /**
+     * test getOldEntity
+     */
+    public function testGetOldEntity()
+    {
+        $result = $this->BcUploadBehavior->getOldEntity(1);
+        $this->assertEmpty($result->name);
     }
 
 }
