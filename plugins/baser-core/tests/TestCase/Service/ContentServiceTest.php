@@ -585,6 +585,7 @@ class ContentServiceTest extends BcTestCase
         $request = $this->loginAdmin($this->getRequest('/'));
         Router::setRequest($request);
         $request = $request->withParsedBody([
+            // 'name' => 'aaa',
             'parent_id' => '1',
             'plugin' => 'BaserCore',
             'type' => 'ContentFolder',

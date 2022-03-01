@@ -339,6 +339,7 @@ class ContentService implements ContentServiceInterface
      * @param  int $id
      * @param  array $postData
      * @return \Cake\Datasource\EntityInterface
+     * @throws \Cake\ORM\Exception\PersistenceFailedException
      * @checked
      * @noTodo
      * @unitTest
@@ -357,7 +358,7 @@ class ContentService implements ContentServiceInterface
         $alias->created_date = FrozenTime::now();
         $alias->author_id = BcUtil::loginUser()->id ?? null;
         $alias = $this->Contents->patchEntity($alias, $postData, ['validate' => 'default']);
-        return ($result = $this->Contents->save($alias)) ? $result : $alias;
+        return $this->Contents->saveOrFail($alias);
     }
 
     /**
