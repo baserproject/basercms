@@ -370,7 +370,6 @@ class SitesTable extends AppTable
             foreach($children as $child) {
                 $child->site_id = 1;
                 // バリデートすると name が変換されてしまう
-                $this->Contents->getEventManager()->off('Model.afterSave');
                 $this->Contents->save($child, false);
             }
             $children = $contentService->getChildren($content->id);
@@ -410,6 +409,7 @@ class SitesTable extends AppTable
      *
      * @param $id
      * @return int
+     * @throws Cake\Datasource\Exception\RecordNotFoundException
      * @checked
      * @noTodo
      * @unitTest
@@ -420,8 +420,7 @@ class SitesTable extends AppTable
             return 1;
         }
         $Contents = TableRegistry::getTableLocator()->get('BaserCore.Contents');
-        $contents = $Contents->find()->select(['id'])->where(['Contents.site_root' => true, 'Contents.site_id' => $id]);
-        if (!$contents->isEmpty()) return $contents->first()->id;
+        return $Contents->find()->select(['id'])->where(['Contents.site_root' => true, 'Contents.site_id' => $id])->firstOrFail()->id;
     }
 
     /**

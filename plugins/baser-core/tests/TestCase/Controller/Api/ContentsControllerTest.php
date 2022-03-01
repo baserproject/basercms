@@ -198,9 +198,9 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
         $data->site->name = 'ucmitz'; // site側でエラーが出るため
         $this->post("/baser/api/baser-core/contents/edit/${id}.json?token=" . $this->accessToken, $data->toArray());
         $this->assertResponseSuccess();
-        // updateRelateSubSiteContentにより、連携されてるサイトに同コンテンツが生成されるため2個となる
         $query = $this->ContentService->getIndex(['name' => 'ControllerEdit']);
-        $this->assertEquals(2, $query->count());
+        $a = $query->toArray();
+        $this->assertEquals(1, $query->count());
     }
 
     /**

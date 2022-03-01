@@ -593,9 +593,8 @@ class ContentsTable extends AppTable
             }
             // 同階層に同名のコンテンツがあるか確認
             foreach($sites as $site) {
-                $contents = $this->find()->where(['site_id' => $site->id, 'main_site_content_id' => $content->id]);
-                if (!$contents->isEmpty()) {
-                    $content = $contents->first();
+                $content = $this->find()->where(['site_id' => $site->id, 'main_site_content_id' => $content->id])->first();
+                if ($content) {
                     // afterDelete・afterSaveのループを防ぐ
                     foreach (['afterSave', 'afterDelete'] as $eventName) {
                         $event = $this->getEventManager()->matchingListeners($eventName);
@@ -619,8 +618,6 @@ class ContentsTable extends AppTable
      * @param Content $data
      * @return bool
      * @checked
-     * @noTodo
-     * @unitTest
      */
     protected function updateRelateSubSiteContent($data)
     {
@@ -643,7 +640,8 @@ class ContentsTable extends AppTable
         if ($this->find()->where(['site_id' => $sites->first()->id])->isEmpty()) {
             return true;
         }
-        $_data = $this->findById($data->id)->applyOptions(['withDeleted'])->first();
+
+        $_data = $this->find()->where(['id' => $data->id])->first();
         if ($_data) {
             $data = $this->patchEntity($_data, $data->toArray(), ['validate' => false]);
         }
@@ -652,6 +650,13 @@ class ContentsTable extends AppTable
         if (!$data->url) {
             return true;
         }
+
+        // TODO ucmitz: 未確認
+        // $CreateModel = $this;
+        // if ($isContentFolder) {
+        //     $CreateModel = TableRegistry::getTableLocator()->get('BaserCore.ContentFolder');
+        // }
+
         $pureUrl = $this->pureUrl($data->url, $data->site_id);
         // 同階層に同名のコンテンツがあるか確認
         $result = true;
@@ -691,13 +696,10 @@ class ContentsTable extends AppTable
                     if ($content->type == 'ContentFolder') {
                         $url = preg_replace('/\/[^\/]+\/$/', '/', $url);
                     }
-                    if ($this->copyContentFolderPath($url, $site->id) !== $content->id) {
-                        $content->parent_id = $this->copyContentFolderPath($url, $site->id);
-                    }
+                    $content->parent_id = $this->copyContentFolderPath($url, $site->id);
                 } else {
                     $content->name = urldecode($data->name);
                 }
-                $this->getEventManager()->off('Model.afterSave');
                 if (!$this->save($content)) {
                     $result = false;
                 }
@@ -725,11 +727,8 @@ class ContentsTable extends AppTable
                 } else {
                     $content->alias_id = $data->id;
                 }
-                if ($this->copyContentFolderPath($url, $site->id) !== $content->id) {
-                    $content->parent_id = $this->copyContentFolderPath($url, $site->id);
-                }
+                $content->parent_id = $this->copyContentFolderPath($url, $site->id);
                 $content = $this->newEntity($content->toArray(), ['validate' => false]);
-                $this->getEventManager()->off('Model.afterSave');
                 if (!$this->save($content)) {
                     $result = false;
                 }
