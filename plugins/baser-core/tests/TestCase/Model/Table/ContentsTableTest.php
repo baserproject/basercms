@@ -419,7 +419,7 @@ class ContentsTableTest extends BcTestCase
         $result = $this->execPrivateMethod($this->Contents, 'updateRelateSubSiteContent', [$content]);
         $this->assertTrue($result);
         // content ID1のデータが反映されてるかテスト
-        $contents = $this->Contents->find()->contain('Sites')->where(['Contents.main_site_content_id' => $id, 'Sites.relate_main_site' => true]);
+        $contents = $this->Contents->find()->contain('Sites')->where(['Contents.main_site_content_id' => $id, 'Sites.relate_main_site' => true, 'Sites.status' => true]);
         foreach ($contents as $relatedContent) {
             $this->assertEquals($content->title, $relatedContent->title);
         }

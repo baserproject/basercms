@@ -189,8 +189,7 @@ class SitesTableTest extends BcTestCase
         $this->assertEquals(1, $this->Sites->getRootContentId(1));
         $this->assertEquals(23, $this->Sites->getRootContentId(2));
         $this->assertEquals(24, $this->Sites->getRootContentId(3));
-        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
-        $this->Sites->getRootContentId(100);
+        $site = $this->Sites->getRootContentId(100);
     }
 
     /**

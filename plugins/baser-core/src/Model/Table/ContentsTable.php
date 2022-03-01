@@ -593,8 +593,9 @@ class ContentsTable extends AppTable
             }
             // 同階層に同名のコンテンツがあるか確認
             foreach($sites as $site) {
-                $content = $this->find()->where(['site_id' => $site->id, 'main_site_content_id' => $content->id])->first();
-                if ($content) {
+                $contents = $this->find()->where(['site_id' => $site->id, 'main_site_content_id' => $content->id]);
+                if (!$contents->isEmpty()) {
+                    $content = $contents->first();
                     // afterDelete・afterSaveのループを防ぐ
                     foreach (['afterSave', 'afterDelete'] as $eventName) {
                         $event = $this->getEventManager()->matchingListeners($eventName);
@@ -642,8 +643,7 @@ class ContentsTable extends AppTable
         if ($this->find()->where(['site_id' => $sites->first()->id])->isEmpty()) {
             return true;
         }
-
-        $_data = $this->get($data->id);
+        $_data = $this->findById($data->id)->applyOptions(['withDeleted'])->first();
         if ($_data) {
             $data = $this->patchEntity($_data, $data->toArray(), ['validate' => false]);
         }
@@ -697,6 +697,7 @@ class ContentsTable extends AppTable
                 } else {
                     $content->name = urldecode($data->name);
                 }
+                $this->getEventManager()->off('Model.afterSave');
                 if (!$this->save($content)) {
                     $result = false;
                 }
@@ -724,14 +725,11 @@ class ContentsTable extends AppTable
                 } else {
                     $content->alias_id = $data->id;
                 }
-                if ($content->parent_id === 0) {
-                    $content->parent_id = 1;
-                } else {
-                    if ($this->copyContentFolderPath($url, $site->id) !== $content->id) {
-                        $content->parent_id = $this->copyContentFolderPath($url, $site->id);
-                    }
+                if ($this->copyContentFolderPath($url, $site->id) !== $content->id) {
+                    $content->parent_id = $this->copyContentFolderPath($url, $site->id);
                 }
                 $content = $this->newEntity($content->toArray(), ['validate' => false]);
+                $this->getEventManager()->off('Model.afterSave');
                 if (!$this->save($content)) {
                     $result = false;
                 }
