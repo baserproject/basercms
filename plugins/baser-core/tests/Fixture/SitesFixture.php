@@ -61,7 +61,7 @@ class SitesFixture extends TestFixture
             'keyword' => '',
             'description' => '',
             'use_subdomain' => false,
-            'relate_main_site' => false,
+            'relate_main_site' => true,
             'device' => 'smartphone',
             'lang' => '',
             'same_main_url' => false,
