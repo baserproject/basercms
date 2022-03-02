@@ -154,17 +154,27 @@ class ContentsTableTest extends BcTestCase
         return [
             [
                 [
-                    'id' => 'aaa', // 空の場合通る
                     'name' => '',
                     'title' => '',
                 ],
                 [
-                    'id' => ['integer' => "The provided value is invalid"],
                     'name' => ['_empty' => 'スラッグを入力してください。'],
                     'title' => ['_empty' => 'タイトルを入力してください。'],
                 ]
             ]
         ];
+    }
+
+    /**
+     * 不適切な値がvalueとして渡される場合
+     *
+     * @return void
+     */
+    public function testInvalidIdSupplied(): void
+    {
+        $this->loadFixtures('Contents');
+        $this->expectException('InvalidArgumentException');
+        $contents = $this->Contents->newEntity(['id' => 'aaa']);
     }
 
 

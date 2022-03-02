@@ -140,6 +140,7 @@ class ContentsTable extends AppTable
 
         $validator
         ->scalar('name')
+        // ->requirePresence('name', 'create', __d('baser', 'URLを入力してください。'))
         ->notEmptyString('name', __d('baser', 'URLを入力してください。'))
         ->maxLength('name', 230, __d('baser', '名前は230文字以内で入力してください。'))
         ->add('name', [
@@ -158,6 +159,7 @@ class ContentsTable extends AppTable
         ]);
         $validator
         ->scalar('title')
+        // ->requirePresence('title', 'create', __d('baser', 'タイトルを入力してください。'))
         ->notEmptyString('title', __d('baser', 'タイトルを入力してください。'))
         ->maxLength('title', 230, __d('baser', 'タイトルは230文字以内で入力してください。'))
         ->regex('title', '/\A(?!.*(\t)).*\z/', __d('baser', 'タイトルはタブを含む名前は付けられません。'))

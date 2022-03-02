@@ -68,7 +68,7 @@ class SitesController extends BcApiController
         try {
             $site = $sites->create($this->request->getData());
             $message = __d('baser', 'サイト「{0}」を追加しました。', $site->name);
-        } catch (\Exception $e) {
+        } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
             $site = $e->getEntity();
             $this->setResponse($this->response->withStatus(400));
             $message = __d('baser', '入力エラーです。内容を修正してください。');

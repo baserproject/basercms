@@ -89,7 +89,7 @@ class SitesController extends BcAdminAppController
 
                 $this->BcMessage->setSuccess(sprintf(__d('baser', 'サイト「%s」を追加しました。'), $site->display_name));
                 return $this->redirect(['action' => 'edit', $site->id]);
-            } catch (\Exception $e) {
+            } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
                 $site = $e->getEntity();
                 $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
             }

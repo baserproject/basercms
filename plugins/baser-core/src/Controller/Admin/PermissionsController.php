@@ -102,7 +102,7 @@ class PermissionsController extends BcAdminAppController
                 $permission = $permissionService->create($this->request->withData('user_group_id', $currentUserGroup->id)->getData());
                 $this->BcMessage->setSuccess(sprintf(__d('baser', '新規アクセス制限設定「%s」を追加しました。'), $permission->name));
                 return $this->redirect(['action' => 'index', $userGroupId]);
-            } catch (\Exception $e) {
+            } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
                 $permission = $e->getEntity();
                 $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
             }

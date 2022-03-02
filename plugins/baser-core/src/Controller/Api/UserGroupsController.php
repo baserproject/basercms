@@ -71,7 +71,7 @@ class UserGroupsController extends BcApiController
             try {
                 $userGroups = $UserGroups->create($this->request->getData());
                 $message = __d('baser', 'ユーザーグループ「{0}」を追加しました。', $userGroups->name);
-            } catch (\Exception $e) {
+            } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
                 $userGroups = $e->getEntity();
                 $this->setResponse($this->response->withStatus(400));
                 $message = __d('baser', '入力エラーです。内容を修正してください。');

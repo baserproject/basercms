@@ -121,7 +121,7 @@ class UsersController extends BcApiController
         try {
             $user = $users->create($this->request->getData());
             $message = __d('baser', 'ユーザー「{0}」を追加しました。', $user->name);
-        } catch (\Exception $e) {
+        } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
             $user = $e->getEntity();
             $this->setResponse($this->response->withStatus(400));
             $message = __d('baser', '入力エラーです。内容を修正してください。');
