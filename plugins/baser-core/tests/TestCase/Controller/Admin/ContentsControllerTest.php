@@ -360,7 +360,7 @@ class ContentsControllerTest extends BcTestCase
     public function testBatchPublish()
     {
         $this->enableCsrfToken();
-        $this->ContentService->update($this->ContentService->get(1), ['status' => false]);
+        $this->ContentService->update($this->ContentService->get(1), ['status' => false, 'name' => 'test']);
         // publish
         $data = [
             'ListTool' => [

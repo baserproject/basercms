@@ -196,8 +196,8 @@ class AppTable extends Table
     {
         if ($this->getRegistryAlias() === 'Contents') {
             $options = array_merge($options, ['isNew' => true]);
-            return parent::newEntity($data, $options);
         }
+        return parent::newEntity($data, $options);
     }
 
     /**

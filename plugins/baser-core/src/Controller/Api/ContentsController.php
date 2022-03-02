@@ -350,7 +350,7 @@ class ContentsController extends BcApiController
             $oldContent = $contentService->get($this->request->getData('id'));
             $oldTitle = $oldContent->title;
             try {
-                $newContent = $contentService->update($oldContent, ['title' => $this->request->getData('title')]);
+                $newContent = $contentService->update($oldContent, ['title' => $this->request->getData('title')], ['validate' => false]);
                 $this->setResponse($this->response->withStatus(200));
                 $url = $contentService->getUrlById($this->request->getData('title'));
                 $this->set(['url' => $url]);

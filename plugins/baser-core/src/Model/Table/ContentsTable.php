@@ -140,7 +140,6 @@ class ContentsTable extends AppTable
 
         $validator
         ->scalar('name')
-        ->requirePresence('name', 'create', __d('baser', 'URLを入力してください。'))
         ->notEmptyString('name', __d('baser', 'URLを入力してください。'))
         ->maxLength('name', 230, __d('baser', '名前は230文字以内で入力してください。'))
         ->add('name', [
