@@ -357,7 +357,7 @@ class ContentService implements ContentServiceInterface
         $alias->alias_id = $id;
         $alias->created_date = FrozenTime::now();
         $alias->author_id = BcUtil::loginUser()->id ?? null;
-        $alias = $this->Contents->patchEntity($alias, $postData, ['validate' => 'default']);
+        $alias = $this->Contents->patchEntity($alias, $postData, ['validate' => 'default', 'isNew' => true]);
         return $this->Contents->saveOrFail($alias);
     }
 

@@ -12,6 +12,7 @@
 namespace BaserCore\Test\TestCase\Controller\Api;
 
 use Cake\Core\Configure;
+use BaserCore\Utility\BcUtil;
 use BaserCore\Service\ContentService;
 use Cake\TestSuite\IntegrationTestTrait;
 
@@ -309,7 +310,7 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
         $this->post("/baser/api/baser-core/contents/add_alias.json?token=" . $this->accessToken, $data);
         $this->assertResponseOk();
         $this->assertNotEmpty(json_decode($this->_response->getBody())->content);
-        $this->assertEquals("テストエイリアス を作成しました。", json_decode($this->_response->getBody())->message);
+        $this->assertEquals(BcUtil::urlencode("テストエイリアス") . " を作成しました。", json_decode($this->_response->getBody())->message);
     }
 
     /**

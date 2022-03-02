@@ -90,7 +90,8 @@ class BcContentsBehavior extends Behavior
             if (!isset($data['content']['type'])) {
                 $data['content']['type'] = Inflector::classify($type);
             }
-            $this->Contents->beforeMarshal($event, new ArrayObject($data['content']), $options);
+            $options = array_merge((array) $options, ['isNew' => true]);
+            $data['content'] = $this->Contents->beforeMarshal($event, new ArrayObject($data['content']), new ArrayObject($options));
         }
     }
 

@@ -215,17 +215,17 @@ class ContentsTableTest extends BcTestCase
     /**
      * testBeforeMarshal
      *
-     * @param  array $data
+     * @param  array $content
      * @param  array $expected
      * @return void
      * @dataProvider beforeMarshalDataProvider
      */
-    public function testBeforeMarshal($data, $expected)
+    public function testBeforeMarshal($content, $expected)
     {
         $this->loginAdmin($this->getRequest());
-        $result = $this->Contents->dispatchEvent('Model.beforeMarshal', ['data' => new ArrayObject($data), 'options' => new ArrayObject()]);
-        $this->assertNull($result->getResult());
-        $content = (array) $result->getData('data');
+        $result = $this->Contents->dispatchEvent('Model.beforeMarshal', ['data' => new ArrayObject($content), 'options' => new ArrayObject()]);
+        $this->assertNotEmpty($result->getResult());
+        $content = (array) $result->getData('content');
         if (isset($fields['title'])) {
             $this->assertEquals($expected['limit'][0], strlen($content['title']));
             $this->assertEquals($expected['limit'][1], strlen($content['name']));
@@ -309,6 +309,7 @@ class ContentsTableTest extends BcTestCase
         $data = [
             "name" => "test",
             "created" => $time,
+            "parent_id" => 1,
         ];
         $marshall = new Marshaller($this->Contents);
 
@@ -472,7 +473,7 @@ class ContentsTableTest extends BcTestCase
      */
     public function testCreateContent()
     {
-        $content = ['title' => 'hoge', 'parent_id' => '', 'site_id' => 1, 'url' => '/hoge'];
+        $content = ['title' => 'hoge', 'parent_id' => 1, 'site_id' => 1, 'url' => '/hoge'];
         // $type = 'ContentFolder';
         $type = 'Contents';
         $result = $this->Contents->createContent($content, 'BaserCore', $type);

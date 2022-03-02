@@ -141,7 +141,7 @@ class ContentsTable extends AppTable
         $validator
         ->scalar('name')
         // ->requirePresence('name', 'create', __d('baser', 'URLを入力してください。'))
-        ->notEmptyString('name', __d('baser', 'URLを入力してください。'))
+        ->notEmptyString('name', __d('baser', 'URLを入力してください。'), 'create')
         ->maxLength('name', 230, __d('baser', '名前は230文字以内で入力してください。'))
         ->add('name', [
             'bcUtileUrlencodeBlank' => [
@@ -150,7 +150,7 @@ class ContentsTable extends AppTable
                 'message' => __d('baser', 'URLはスペース、全角スペース及び、指定の記号(\\\'|`^"(){}[];/?:@&=+$,%<>#!)だけの名前は付けられません。')
             ]
         ])
-        ->notEmptyString('name', __d('baser', 'スラッグを入力してください。'))
+        ->notEmptyString('name', __d('baser', 'スラッグを入力してください。'), 'create')
         ->add('name', [
             'duplicateRelatedSiteContent' => [
                 'rule' => [$this, 'duplicateRelatedSiteContent'],
@@ -281,63 +281,66 @@ class ContentsTable extends AppTable
      * Before Marshal
      *
      * @param EventInterface $event
-     * @param ArrayObject $data
+     * @param ArrayObject $content
      * @param ArrayObject $options
-     * @return void
+     * @return array $content
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function beforeMarshal(EventInterface $event, ArrayObject $data, ArrayObject $options)
+    public function beforeMarshal(EventInterface $event, ArrayObject $content, ArrayObject $options)
     {
-        $create = empty($data['id']);
+        // $createはdefault false
+        $isNew = $options['isNew'] ?? false;
+        $create = empty($content['id']) && $isNew;
         // タイトルは強制的に255文字でカット
-        if (!empty($data['title'])) {
-            $data['title'] = mb_substr($data['title'], 0, 254, 'UTF-8');
+        if (!empty($content['title'])) {
+            $content['title'] = mb_substr($content['title'], 0, 254, 'UTF-8');
         }
         if ($create) {
             // IEのURL制限が2083文字のため、全て全角文字を想定し231文字でカット
-            if (!isset($data['name'])) {
-                $data['name'] = BcUtil::urlencode(mb_substr($data['title'], 0, 230, 'UTF-8'));
+            if (!isset($content['name'])) {
+                $content['name'] = BcUtil::urlencode(mb_substr($content['title'], 0, 230, 'UTF-8'));
             }
-            if (!isset($data['self_status'])) {
-                $data['self_status'] = false;
+            if (!isset($content['self_status'])) {
+                $content['self_status'] = false;
             }
-            if (!isset($data['self_publish_begin'])) {
-                $data['self_publish_begin'] = null;
+            if (!isset($content['self_publish_begin'])) {
+                $content['self_publish_begin'] = null;
             }
-            if (!isset($data['self_publish_end'])) {
-                $data['self_publish_end'] = null;
+            if (!isset($content['self_publish_end'])) {
+                $content['self_publish_end'] = null;
             }
-            if (!isset($data['created_date'])) {
-                $data['created_date'] = FrozenTime::now();
+            if (!isset($content['created_date'])) {
+                $content['created_date'] = FrozenTime::now();
             }
-            if (!isset($data['site_root'])) {
-                $data['site_root'] = 0;
+            if (!isset($content['site_root'])) {
+                $content['site_root'] = 0;
             }
-            if (!isset($data['exclude_search'])) {
-                $data['exclude_search'] = 0;
+            if (!isset($content['exclude_search'])) {
+                $content['exclude_search'] = 0;
             }
-            if (!isset($data['author_id'])) {
+            if (!isset($content['author_id'])) {
                 $user = BcUtil::loginUser();
-                if ($user) $data['author_id'] = $user['id'];
+                if ($user) $content['author_id'] = $user['id'];
             }
         } else {
-            if (empty($data['modified_date'])) {
-                $data['modified_date'] = FrozenTime::now();
+            if (empty($content['modified_date'])) {
+                $content['modified_date'] = FrozenTime::now();
             }
-            if (isset($data['name'])) {
-                $data['name'] = BcUtil::urlencode(mb_substr($data['name'], 0, 230, 'UTF-8'));
+            if (isset($content['name'])) {
+                $content['name'] = BcUtil::urlencode(mb_substr($content['name'], 0, 230, 'UTF-8'));
             }
         }
         // name の 重複チェック＆リネーム
-        if (!empty($data['name'])) {
+        if (!empty($content['name'])) {
             $contentId = null;
-            if (!empty($data['id'])) {
-                $contentId = $data['id'];
+            if (!empty($content['id'])) {
+                $contentId = $content['id'];
             }
-            $data['name'] = $this->getUniqueName($data['name'], $data['parent_id'], $contentId);
+            $content['name'] = $this->getUniqueName($content['name'], $content['parent_id'] ?? null, $contentId);
         }
+        return (array) $content;
     }
 
     /**
@@ -409,7 +412,8 @@ class ContentsTable extends AppTable
     {
 
         // 先頭が同じ名前のリストを取得し、後方プレフィックス付きのフィールド名を取得する
-        $query = $this->find()->where(['name LIKE' => $name . '%', 'parent_id' => $parentId]);
+        $query = $this->find()->where(['name LIKE' => $name . '%']);
+        if (isset($parentId)) $query = $query->andWhere(['parent_id' => $parentId]);
         if ($contentId) {
             $query = $query->andWhere(['id <>' => $contentId]);
         }
