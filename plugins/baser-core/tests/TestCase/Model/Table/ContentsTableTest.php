@@ -483,6 +483,22 @@ class ContentsTableTest extends BcTestCase
     }
 
     /**
+     * testNewEntity
+     *
+     * @return void
+     */
+    public function testNewEntity()
+    {
+        $newContent = $this->Contents->newEntity([
+            'title' => 'relatedMainContent',
+            'name' => 'relatedMainContent',
+            'url' => '/test/',
+            'site_id' => 1,
+        ]);
+        $this->assertNotEmpty($newContent->created_date);
+    }
+
+    /**
      * testCreateUrl
      *
      * @param int $id コンテンツID
@@ -599,6 +615,7 @@ class ContentsTableTest extends BcTestCase
         $new = $this->Contents->newEntity([
             'id' => 101,
             'title' => 'relatedMainContent',
+            'name' => 'relatedMainContent',
             'url' => '/test/',
             'site_id' => 1,
         ]);

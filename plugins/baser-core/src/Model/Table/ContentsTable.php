@@ -140,8 +140,8 @@ class ContentsTable extends AppTable
 
         $validator
         ->scalar('name')
-        // ->requirePresence('name', 'create', __d('baser', 'URLを入力してください。'))
-        ->notEmptyString('name', __d('baser', 'URLを入力してください。'), 'create')
+        ->requirePresence('name', 'create', __d('baser', 'URLを入力してください。'))
+        ->notEmptyString('name', __d('baser', 'URLを入力してください。'))
         ->maxLength('name', 230, __d('baser', '名前は230文字以内で入力してください。'))
         ->add('name', [
             'bcUtileUrlencodeBlank' => [
@@ -150,7 +150,7 @@ class ContentsTable extends AppTable
                 'message' => __d('baser', 'URLはスペース、全角スペース及び、指定の記号(\\\'|`^"(){}[];/?:@&=+$,%<>#!)だけの名前は付けられません。')
             ]
         ])
-        ->notEmptyString('name', __d('baser', 'スラッグを入力してください。'), 'create')
+        ->notEmptyString('name', __d('baser', 'スラッグを入力してください。'))
         ->add('name', [
             'duplicateRelatedSiteContent' => [
                 'rule' => [$this, 'duplicateRelatedSiteContent'],
@@ -159,7 +159,7 @@ class ContentsTable extends AppTable
         ]);
         $validator
         ->scalar('title')
-        // ->requirePresence('title', 'create', __d('baser', 'タイトルを入力してください。'))
+        ->requirePresence('title', 'create', __d('baser', 'タイトルを入力してください。'))
         ->notEmptyString('title', __d('baser', 'タイトルを入力してください。'))
         ->maxLength('title', 230, __d('baser', 'タイトルは230文字以内で入力してください。'))
         ->regex('title', '/\A(?!.*(\t)).*\z/', __d('baser', 'タイトルはタブを含む名前は付けられません。'))
@@ -290,7 +290,7 @@ class ContentsTable extends AppTable
      */
     public function beforeMarshal(EventInterface $event, ArrayObject $content, ArrayObject $options)
     {
-        // $createはdefault false
+        // $createはデフォルトfalse
         $isNew = $options['isNew'] ?? false;
         $create = empty($content['id']) && $isNew;
         // タイトルは強制的に255文字でカット
@@ -749,7 +749,6 @@ class ContentsTable extends AppTable
      * @param $targetSiteId
      * @return bool|null
      * @checked
-     * @noTodo
      * @unitTest
      */
     public function copyContentFolderPath($currentUrl, $targetSiteId)
@@ -802,6 +801,7 @@ class ContentsTable extends AppTable
                     ]
                 ];
                 $ContentFolder->create($data);
+                // TODO ucmitz: saveがおかしいので修正する
                 if ($ContentFolder->save()) {
                     $parentId = $ContentFolder->Content->id;
                 } else {
