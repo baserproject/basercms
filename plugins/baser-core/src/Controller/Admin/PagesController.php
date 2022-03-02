@@ -67,7 +67,7 @@ class PagesController extends BcAdminAppController
 	{
 		parent::beforeFilter($event);
         if (BcSiteConfig::get('editor') && BcSiteConfig::get('editor') !== 'none') {
-            $this->viewBuilder()->setHelpers(["BaserCore." . BcSiteConfig::get('editor'), 'BaserCore.BcGooglemaps', 'BaserCore.BcText', 'BaserCore.BcFreeze']);
+            $this->viewBuilder()->setHelpers([BcSiteConfig::get('editor'), 'BaserCore.BcGooglemaps', 'BaserCore.BcText', 'BaserCore.BcFreeze']);
         }
 	}
 

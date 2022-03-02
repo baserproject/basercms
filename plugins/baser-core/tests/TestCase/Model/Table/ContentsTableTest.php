@@ -215,18 +215,17 @@ class ContentsTableTest extends BcTestCase
     /**
      * testBeforeMarshal
      *
-     * @param  array $fields
+     * @param  array $data
      * @param  array $expected
      * @return void
      * @dataProvider beforeMarshalDataProvider
      */
-    public function testBeforeMarshal($fields, $expected)
+    public function testBeforeMarshal($data, $expected)
     {
         $this->loginAdmin($this->getRequest());
-        $data = ['content' => $fields];
         $result = $this->Contents->dispatchEvent('Model.beforeMarshal', ['data' => new ArrayObject($data), 'options' => new ArrayObject()]);
         $this->assertNull($result->getResult());
-        $content = (array) $result->getData('data')['content'];
+        $content = (array) $result->getData('data');
         if (isset($fields['title'])) {
             $this->assertEquals($expected['limit'][0], strlen($content['title']));
             $this->assertEquals($expected['limit'][1], strlen($content['name']));
