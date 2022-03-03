@@ -1,40 +1,30 @@
 <?php
-// TODO : コード確認要
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.Model
- * @since           baserCMS v 4.0.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
+
+namespace BaserCore\Model\Table;
+
+use Cake\ORM\TableRegistry;
+use BaserCore\Model\AppTable;
 
 /**
- * Class SearchIndex
- *
- * 検索インデックスモデル
- *
- * @package Baser.Model
+ * SerachIndexesTable
  */
-class SearchIndex extends AppModel
+class SerachIndexesTable extends AppTable
 {
-
     /**
      * クラス名
      *
      * @var string
      */
     public $name = 'SearchIndex';
-
-    /**
-     * ビヘイビア
-     *
-     * @var array
-     */
-    public $actsAs = ['BcCache'];
 
     /**
      * 検索インデックス再構築
@@ -44,29 +34,21 @@ class SearchIndex extends AppModel
      */
     public function reconstruct($parentContentId = null)
     {
-        /* @var Content $contentModel */
-        $contentModel = ClassRegistry::init('Content');
+        /* @var Content $Contents */
+        $Contents = TableRegistry::getTableLocator()->get('BaserCore.Contents');;
         $conditions = [
             'OR' => [
                 ['Site.status' => null],
                 ['Site.status' => true]
             ]];
         if ($parentContentId) {
-            $parentContent = $contentModel->find('first', [
-                'fields' => ['lft', 'rght'],
-                'conditions' => ['id' => $parentContentId],
-                'recursive' => -1
-            ]);
+            $parentContent = $Contents->find()->select(['lft', 'rght'])->where(['id' => $parentContentId])->first();
             $conditions = array_merge($conditions, [
-                'lft >' => $parentContent['Content']['lft'],
-                'rght <' => $parentContent['Content']['rght']
+                'lft >' => $parentContent->lft,
+                'rght <' => $parentContent->rght
             ]);
         }
-        $contents = $contentModel->find('all', [
-            'conditions' => $conditions,
-            'order' => 'lft',
-            'recursive' => 2
-        ]);
+        $contents = $Contents->find()->where($conditions)->orderby('lft')->all();
         $models = [];
         $db = $this->getDataSource();
         $this->begin();
