@@ -27,6 +27,20 @@ class SerachIndexesTable extends AppTable
     public $name = 'SearchIndex';
 
     /**
+     * Initialize
+     *
+     * @param array $config テーブル設定
+     * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function initialize(array $config): void
+    {
+        parent::initialize($config);
+    }
+
+    /**
      * 検索インデックス再構築
      *
      * @param int $parentContentId 親となるコンテンツID
@@ -34,7 +48,6 @@ class SerachIndexesTable extends AppTable
      */
     public function reconstruct($parentContentId = null)
     {
-        /* @var Content $Contents */
         $Contents = TableRegistry::getTableLocator()->get('BaserCore.Contents');;
         $conditions = [
             'OR' => [

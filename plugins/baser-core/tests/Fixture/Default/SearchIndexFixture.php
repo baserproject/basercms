@@ -1,13 +1,22 @@
 <?php
-// TODO : コード確認要
-return;
+declare(strict_types=1);
+
+namespace BaserCore\Test\Fixture;
+
+use Cake\TestSuite\Fixture\TestFixture;
 
 /**
  * SearchIndexFixture
  */
-class SearchIndexFixture extends BaserTestFixture
+class SearchIndexesFixture extends TestFixture
 {
 
+    /**
+     * Import
+     *
+     * @var array
+     */
+    public $import = ['table' => 'search_indexes'];
     /**
      * Records
      *
