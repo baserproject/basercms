@@ -73,11 +73,14 @@ class BcContentsBehavior extends Behavior
     {
         if (!empty($data['content'])) {
             if (!empty($data['content']['id'])) {
+                // 更新の場合
                 if (!$this->Contents->findById($data['content']['id'])->first()->isNew()) return;
             }
+            // 新規作成の場合
             $validateOptions = ['validate' => $options['validate'] ?? 'default'];
-            $contentEntity = $this->Contents->newEntity($data['content'], $validateOptions);
-            if ($contentEntity->hasErrors() && empty($data['content']['id'])) {
+            // errorをチェックするための使い捨てエンティティ
+            $errorChecker = $this->Contents->newEntity($data['content'], $validateOptions);
+            if ($errorChecker->hasErrors() && empty($data['content']['id'])) {
                 return false;
             }
             [$plugin, $type] = pluginSplit($this->table->getRegistryAlias());
@@ -87,7 +90,8 @@ class BcContentsBehavior extends Behavior
             if (!isset($data['content']['type'])) {
                 $data['content']['type'] = Inflector::classify($type);
             }
-            $this->Contents->beforeMarshal($event, $data, $options);
+            $options = array_merge((array) $options, ['isNew' => true]);
+            $data['content'] = $this->Contents->beforeMarshal($event, new ArrayObject($data['content']), new ArrayObject($options));
         }
     }
 

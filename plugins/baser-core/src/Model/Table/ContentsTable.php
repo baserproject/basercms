@@ -140,7 +140,6 @@ class ContentsTable extends AppTable
 
         $validator
         ->scalar('name')
-        // ->requirePresence('name', 'create', __d('baser', 'URLを入力してください。'))
         ->notEmptyString('name', __d('baser', 'URLを入力してください。'))
         ->maxLength('name', 230, __d('baser', '名前は230文字以内で入力してください。'))
         ->add('name', [
@@ -159,7 +158,7 @@ class ContentsTable extends AppTable
         ]);
         $validator
         ->scalar('title')
-        // ->requirePresence('title', 'create', __d('baser', 'タイトルを入力してください。'))
+        ->requirePresence('title', 'create', __d('baser', 'タイトルを入力してください。'))
         ->notEmptyString('title', __d('baser', 'タイトルを入力してください。'))
         ->maxLength('title', 230, __d('baser', 'タイトルは230文字以内で入力してください。'))
         ->regex('title', '/\A(?!.*(\t)).*\z/', __d('baser', 'タイトルはタブを含む名前は付けられません。'))
@@ -281,66 +280,84 @@ class ContentsTable extends AppTable
      * Before Marshal
      *
      * @param EventInterface $event
-     * @param ArrayObject $data
+     * @param ArrayObject $content
      * @param ArrayObject $options
-     * @return void
+     * @return array $content
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function beforeMarshal(EventInterface $event, ArrayObject $data, ArrayObject $options)
+    public function beforeMarshal(EventInterface $event, ArrayObject $content, ArrayObject $options)
     {
-        if (!empty($data['content'])) {
-            // コンテンツ一覧にて、コンテンツを登録した直後のリネーム処理までは新規追加とみなして処理を行う為、$create で判定させる
-            $create = empty($data['content']['id']);
-            // タイトルは強制的に255文字でカット
-            if (!empty($data['content']['title'])) {
-                $data['content']['title'] = mb_substr($data['content']['title'], 0, 254, 'UTF-8');
+        // $createはデフォルトfalse
+        $isNew = $options['isNew'] ?? false;
+        $create = empty($content['id']) && $isNew;
+        // タイトルは強制的に255文字でカット
+        if (!empty($content['title'])) {
+            $content['title'] = mb_substr($content['title'], 0, 254, 'UTF-8');
+        }
+        if ($create) {
+            // IEのURL制限が2083文字のため、全て全角文字を想定し231文字でカット
+            if (!isset($content['name'])) {
+                $content['name'] = BcUtil::urlencode(mb_substr($content['title'], 0, 230, 'UTF-8'));
             }
-            if ($create) {
-                // IEのURL制限が2083文字のため、全て全角文字を想定し231文字でカット
-                if (!isset($data['content']['name'])) {
-                    $data['content']['name'] = BcUtil::urlencode(mb_substr($data['content']['title'], 0, 230, 'UTF-8'));
-                }
-                if (!isset($data['content']['self_status'])) {
-                    $data['content']['self_status'] = false;
-                }
-                if (!isset($data['content']['self_publish_begin'])) {
-                    $data['content']['self_publish_begin'] = null;
-                }
-                if (!isset($data['content']['self_publish_end'])) {
-                    $data['content']['self_publish_end'] = null;
-                }
-                if (!isset($data['content']['created_date'])) {
-                    $data['content']['created_date'] = FrozenTime::now();
-                }
-                if (!isset($data['content']['site_root'])) {
-                    $data['content']['site_root'] = 0;
-                }
-                if (!isset($data['content']['exclude_search'])) {
-                    $data['content']['exclude_search'] = 0;
-                }
-                if (!isset($data['content']['author_id'])) {
-                    $user = BcUtil::loginUser();
-                    if ($user) $data['content']['author_id'] = $user['id'];
-                }
-            } else {
-                if (empty($data['content']['modified_date'])) {
-                    $data['content']['modified_date'] = FrozenTime::now();
-                }
-                if (isset($data['content']['name'])) {
-                    $data['content']['name'] = BcUtil::urlencode(mb_substr($data['content']['name'], 0, 230, 'UTF-8'));
-                }
+            if (!isset($content['self_status'])) {
+                $content['self_status'] = false;
             }
-            // name の 重複チェック＆リネーム
-            if (!empty($data['content']['name'])) {
-                $contentId = null;
-                if (!empty($data['content']['id'])) {
-                    $contentId = $data['content']['id'];
-                }
-                $data['content']['name'] = $this->getUniqueName($data['content']['name'], $data['content']['parent_id'], $contentId);
+            if (!isset($content['self_publish_begin'])) {
+                $content['self_publish_begin'] = null;
+            }
+            if (!isset($content['self_publish_end'])) {
+                $content['self_publish_end'] = null;
+            }
+            if (!isset($content['created_date'])) {
+                $content['created_date'] = FrozenTime::now();
+            }
+            if (!isset($content['site_root'])) {
+                $content['site_root'] = 0;
+            }
+            if (!isset($content['exclude_search'])) {
+                $content['exclude_search'] = 0;
+            }
+            if (!isset($content['author_id'])) {
+                $user = BcUtil::loginUser();
+                if ($user) $content['author_id'] = $user['id'];
+            }
+        } else {
+            if (empty($content['modified_date'])) {
+                $content['modified_date'] = FrozenTime::now();
+            }
+            if (isset($content['name'])) {
+                $content['name'] = BcUtil::urlencode(mb_substr($content['name'], 0, 230, 'UTF-8'));
             }
         }
+        // name の 重複チェック＆リネーム
+        if (!empty($content['name'])) {
+            $contentId = null;
+            if (!empty($content['id'])) {
+                $contentId = $content['id'];
+            }
+            $content['name'] = $this->getUniqueName($content['name'], $content['parent_id'] ?? null, $contentId);
+        }
+        return (array) $content;
+    }
+
+    /**
+    * ContentTableのbeforeMarshal内で新規作成の場合isNewオプションを設定する
+    * @param array $data The data to build an entity with.
+    * @param array $options A list of options for the object hydration.
+    * @return \Cake\Datasource\EntityInterface
+    * @see \Cake\ORM\Marshaller::one()
+     * @checked
+     * @noTodo
+     * @unitTest
+    */
+    public function newEntity(array $data, array $options = []): EntityInterface
+    {
+        if ($this->getRegistryAlias() === 'Contents') {
+            $options = array_merge($options, ['isNew' => true]);
+        }
+        return parent::newEntity($data, $options);
     }
 
     /**
@@ -412,7 +429,8 @@ class ContentsTable extends AppTable
     {
 
         // 先頭が同じ名前のリストを取得し、後方プレフィックス付きのフィールド名を取得する
-        $query = $this->find()->where(['name LIKE' => $name . '%', 'parent_id' => $parentId]);
+        $query = $this->find()->where(['name LIKE' => $name . '%']);
+        if (isset($parentId)) $query = $query->andWhere(['parent_id' => $parentId]);
         if ($contentId) {
             $query = $query->andWhere(['id <>' => $contentId]);
         }
@@ -748,7 +766,6 @@ class ContentsTable extends AppTable
      * @param $targetSiteId
      * @return bool|null
      * @checked
-     * @noTodo
      * @unitTest
      */
     public function copyContentFolderPath($currentUrl, $targetSiteId)
@@ -801,6 +818,7 @@ class ContentsTable extends AppTable
                     ]
                 ];
                 $ContentFolder->create($data);
+                // TODO ucmitz: saveがおかしいので修正する
                 if ($ContentFolder->save()) {
                     $parentId = $ContentFolder->Content->id;
                 } else {

@@ -12,6 +12,7 @@
 namespace BaserCore\Test\TestCase\Controller\Api;
 
 use Cake\Core\Configure;
+use BaserCore\Utility\BcUtil;
 use BaserCore\Service\ContentService;
 use Cake\TestSuite\IntegrationTestTrait;
 
@@ -236,7 +237,7 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function testChange_status_toPublish()
     {
-        $this->ContentService->update($this->ContentService->get(1), ['status' => false]);
+        $this->ContentService->update($this->ContentService->get(1), ['status' => false, 'name' => 'test']);
         $data = ['id' => 1, 'status' => 'publish'];
         $this->patch("/baser/api/baser-core/contents/change_status.json?token=" . $this->accessToken, $data);
         $this->assertResponseOk();
@@ -309,7 +310,7 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
         $this->post("/baser/api/baser-core/contents/add_alias.json?token=" . $this->accessToken, $data);
         $this->assertResponseOk();
         $this->assertNotEmpty(json_decode($this->_response->getBody())->content);
-        $this->assertEquals("テストエイリアス を作成しました。", json_decode($this->_response->getBody())->message);
+        $this->assertEquals(BcUtil::urlencode("テストエイリアス") . " を作成しました。", json_decode($this->_response->getBody())->message);
     }
 
     /**

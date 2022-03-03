@@ -13,6 +13,7 @@ namespace BaserCore\Test\TestCase\Controller\Admin;
 
 use Cake\Event\Event;
 use Cake\Http\ServerRequest;
+use BaserCore\Utility\BcUtil;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Service\ContentService;
 use BaserCore\Utility\BcContainerTrait;
@@ -359,7 +360,7 @@ class ContentsControllerTest extends BcTestCase
     public function testBatchPublish()
     {
         $this->enableCsrfToken();
-        $this->ContentService->update($this->ContentService->get(1), ['status' => false]);
+        $this->ContentService->update($this->ContentService->get(1), ['status' => false, 'name' => 'test']);
         // publish
         $data = [
             'ListTool' => [
@@ -386,7 +387,7 @@ class ContentsControllerTest extends BcTestCase
         $this->post('/baser/admin/baser-core/contents/edit_alias/' . $data->id, ["Content" => $data->toArray()]);
         $this->assertResponseSuccess();
         $this->assertRedirect('/baser/admin/baser-core/contents/edit_alias/' . $data->id);
-        $this->assertEquals('ControllerEditエイリアス', $this->ContentService->get($data->id)->name);
+        $this->assertEquals(BcUtil::urlencode('ControllerEditエイリアス'), $this->ContentService->get($data->id)->name);
     }
 
     /**
