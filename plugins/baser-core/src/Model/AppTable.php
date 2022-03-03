@@ -182,23 +182,6 @@ class AppTable extends Table
         }
         return $data;
     }
-    /**
-    * ContentTableのbeforeMarshal内で新規作成の場合isNewオプションを設定する
-    * @param array $data The data to build an entity with.
-    * @param array $options A list of options for the object hydration.
-    * @return \Cake\Datasource\EntityInterface
-    * @see \Cake\ORM\Marshaller::one()
-     * @checked
-     * @noTodo
-     * @unitTest
-    */
-    public function newEntity(array $data, array $options = []): EntityInterface
-    {
-        if ($this->getRegistryAlias() === 'Contents') {
-            $options = array_merge($options, ['isNew' => true]);
-        }
-        return parent::newEntity($data, $options);
-    }
 
     /**
      * データベースログを記録する
