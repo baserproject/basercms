@@ -256,6 +256,7 @@ class PluginService implements PluginServiceInterface
      * @return void
      * @checked
      * @unitTest
+     * @note(value="フロント認証実装時に対応")
      */
     public function allow($data): void
     {
