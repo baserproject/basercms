@@ -76,7 +76,7 @@ class PagesController extends BcApiController
             $message = __d('baser', '固定ページ「{0}」を追加しました。', $pages->content->name);
             $this->set("page", $pages);
             $this->set('content', $pages->content);
-        } catch (\Exception $e) {
+        } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
             $pages = $e->getEntity();
             $message = __d('baser', "入力エラーです。内容を修正してください。\n");
             $this->set(['errors' => $pages->getErrors()]);
@@ -102,7 +102,7 @@ class PagesController extends BcApiController
             if ($Pages->delete($id)) {
                 $message = __d('baser', '固定ページ: {0} を削除しました。', $pages->name);
             }
-        } catch (\Exception $e) {
+        } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
             $pages = $e->getEntity();
             $message = __d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
         }
@@ -127,7 +127,7 @@ class PagesController extends BcApiController
         try {
             $page = $pages->update($pages->get($id), $this->request->getData());
             $message = __d('baser', '固定ページ 「{0}」を更新しました。', $page->name);
-        } catch (\Exception $e) {
+        } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
             $this->setResponse($this->response->withStatus(400));
             $pages = $e->getEntity();
             $message = __d('baser', '入力エラーです。内容を修正してください。');
@@ -154,7 +154,7 @@ class PagesController extends BcApiController
             $this->request = $this->request->withData('authorId', BcUtil::loginUser());
             $page = $pages->copy($this->request->getData());
             $message = __d('baser', '固定ページのコピー「%s」を追加しました。', $page->name);
-        } catch (\Exception $e) {
+        } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
             $this->setResponse($this->response->withStatus(500));
             $page = $e->getEntity();
             $message = __d('baser', '入力エラーです。内容を修正してください。');

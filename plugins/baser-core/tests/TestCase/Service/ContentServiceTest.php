@@ -287,7 +287,7 @@ class ContentServiceTest extends BcTestCase
         $this->assertNotNull($contents->deleted_date);
         // aliasの場合
         $content = $this->ContentService->get(5);
-        $this->ContentService->update($content, ['alias_id' => 5]);
+        $this->ContentService->update($content, ['alias_id' => 5, 'name' => 'test']);
         $this->assertTrue($this->ContentService->delete(5));
         // ゴミ箱行きではなくちゃんと削除されてるか確認
         $this->assertTrue($this->ContentService->getIndex(['withTrash' => true, 'id' => 5])->isEmpty());
@@ -585,6 +585,7 @@ class ContentServiceTest extends BcTestCase
         $request = $this->loginAdmin($this->getRequest('/'));
         Router::setRequest($request);
         $request = $request->withParsedBody([
+            // 'name' => 'aaa',
             'parent_id' => '1',
             'plugin' => 'BaserCore',
             'type' => 'ContentFolder',

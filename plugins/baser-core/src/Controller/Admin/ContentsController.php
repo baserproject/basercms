@@ -268,16 +268,16 @@ class ContentsController extends BcAdminAppController
             $this->BcMessage->setError(__d('baser', '無効な処理です。'));
             return $this->redirect(['action' => 'index']);
         }
-
         $content = $contentService->get($id);
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $content = $contentService->update($content, $this->request->getData('Content'));
-            if (!$content->hasErrors()) {
+            try {
+                $content = $contentService->update($content, $this->request->getData('Content'));
                 $message = Configure::read('BcContents.items.' . $this->request->getData('Content.plugin') . '.' . $this->request->getData('Content.type') . '.title') .
                 sprintf(__d('baser', '「%s」を更新しました。'), $this->request->getData('Content.title'));
                 $this->BcMessage->setSuccess($message);
                 return $this->redirect(['action' => 'edit', $content->id]);
-            } else {
+            } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
+                $content = $e->getEntity();
                 $this->BcMessage->setError('保存中にエラーが発生しました。入力内容を確認してください。');
             }
         }
@@ -311,17 +311,14 @@ class ContentsController extends BcAdminAppController
             // }
             try {
                 $newAlias = $contentService->update($alias, $this->request->getData('Content'));
-                if (!$newAlias->hasErrors()) {
-                    $content = $contentService->get($newAlias->alias_id);
-                    $message = Configure::read('BcContents.items.' . $content->plugin . '.' . $content->type . '.title') .
-                    sprintf(__d('baser', '「%s」のエイリアス「%s」を編集しました。'), $content->title, $newAlias->title);
-                    $this->BcMessage->setSuccess($message);
-                    $this->redirect(['action' => 'edit_alias', $id]);
-                } else {
-                    $this->BcMessage->setError($newAlias->getErrors());
-                }
-            } catch (\Exception $e) {
-                $this->BcMessage->setError("保存中にエラーが発生しました。入力内容を確認してください。\n" . $e->getMessage());
+                $content = $contentService->get($newAlias->alias_id);
+                $message = Configure::read('BcContents.items.' . $content->plugin . '.' . $content->type . '.title') .
+                sprintf(__d('baser', '「%s」のエイリアス「%s」を編集しました。'), $content->title, $newAlias->title);
+                $this->BcMessage->setSuccess($message);
+                $this->redirect(['action' => 'edit_alias', $id]);
+            } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
+                $content = $e->getEntity();
+                $this->BcMessage->setError("保存中にエラーが発生しました。入力内容を確認してください。\n" . $content->getErrors());
             }
         } else {
             $this->request = $this->request->withData('Content', $alias);

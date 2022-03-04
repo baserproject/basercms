@@ -339,6 +339,7 @@ class ContentService implements ContentServiceInterface
      * @param  int $id
      * @param  array $postData
      * @return \Cake\Datasource\EntityInterface
+     * @throws \Cake\ORM\Exception\PersistenceFailedException
      * @checked
      * @noTodo
      * @unitTest
@@ -356,8 +357,8 @@ class ContentService implements ContentServiceInterface
         $alias->alias_id = $id;
         $alias->created_date = FrozenTime::now();
         $alias->author_id = BcUtil::loginUser()->id ?? null;
-        $alias = $this->Contents->patchEntity($alias, $postData, ['validate' => 'default']);
-        return ($result = $this->Contents->save($alias)) ? $result : $alias;
+        $alias = $this->Contents->patchEntity($alias, $postData, ['validate' => 'default', 'isNew' => true]);
+        return $this->Contents->saveOrFail($alias);
     }
 
     /**
@@ -719,15 +720,17 @@ class ContentService implements ContentServiceInterface
      *
      * @param  EntityInterface $content
      * @param  array $contentData
+     * @param  array $options
      * @return EntityInterface
+     * @throws \Cake\ORM\Exception\PersistenceFailedException
      * @checked
      * @unitTest
      * @noTodo
      */
-    public function update($content, $contentData)
+    public function update($content, $contentData, $options = [])
     {
-        $content = $this->Contents->patchEntity($content, $contentData);
-        return ($result = $this->Contents->save($content, ['atomic' => false])) ? $result : $content;
+        $content = $this->Contents->patchEntity($content, $contentData, $options);
+        return $this->Contents->saveOrFail($content, ['atomic' => false]);
     }
 
     /**

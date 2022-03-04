@@ -154,17 +154,27 @@ class ContentsTableTest extends BcTestCase
         return [
             [
                 [
-                    'id' => 'aaa', // 空の場合通る
                     'name' => '',
                     'title' => '',
                 ],
                 [
-                    'id' => ['integer' => "The provided value is invalid"],
                     'name' => ['_empty' => 'スラッグを入力してください。'],
                     'title' => ['_empty' => 'タイトルを入力してください。'],
                 ]
             ]
         ];
+    }
+
+    /**
+     * 不適切な値がvalueとして渡される場合
+     *
+     * @return void
+     */
+    public function testInvalidIdSupplied(): void
+    {
+        $this->loadFixtures('Contents');
+        $this->expectException('InvalidArgumentException');
+        $contents = $this->Contents->newEntity(['id' => 'aaa']);
     }
 
 
@@ -205,18 +215,17 @@ class ContentsTableTest extends BcTestCase
     /**
      * testBeforeMarshal
      *
-     * @param  array $fields
+     * @param  array $content
      * @param  array $expected
      * @return void
      * @dataProvider beforeMarshalDataProvider
      */
-    public function testBeforeMarshal($fields, $expected)
+    public function testBeforeMarshal($content, $expected)
     {
         $this->loginAdmin($this->getRequest());
-        $data = ['content' => $fields];
-        $result = $this->Contents->dispatchEvent('Model.beforeMarshal', ['data' => new ArrayObject($data), 'options' => new ArrayObject()]);
-        $this->assertNull($result->getResult());
-        $content = (array) $result->getData('data')['content'];
+        $result = $this->Contents->dispatchEvent('Model.beforeMarshal', ['data' => new ArrayObject($content), 'options' => new ArrayObject()]);
+        $this->assertNotEmpty($result->getResult());
+        $content = (array) $result->getData('content');
         if (isset($fields['title'])) {
             $this->assertEquals($expected['limit'][0], strlen($content['title']));
             $this->assertEquals($expected['limit'][1], strlen($content['name']));
@@ -300,6 +309,7 @@ class ContentsTableTest extends BcTestCase
         $data = [
             "name" => "test",
             "created" => $time,
+            "parent_id" => 1,
         ];
         $marshall = new Marshaller($this->Contents);
 
@@ -463,13 +473,29 @@ class ContentsTableTest extends BcTestCase
      */
     public function testCreateContent()
     {
-        $content = ['title' => 'hoge', 'parent_id' => '', 'site_id' => 1, 'url' => '/hoge'];
+        $content = ['title' => 'hoge', 'parent_id' => 1, 'site_id' => 1, 'url' => '/hoge'];
         // $type = 'ContentFolder';
         $type = 'Contents';
         $result = $this->Contents->createContent($content, 'BaserCore', $type);
 
         $this->assertEquals($content['title'], $result->title);
         $this->assertEquals($type, $result->type);
+    }
+
+    /**
+     * testNewEntity
+     *
+     * @return void
+     */
+    public function testNewEntity()
+    {
+        $newContent = $this->Contents->newEntity([
+            'title' => 'relatedMainContent',
+            'name' => 'relatedMainContent',
+            'url' => '/test/',
+            'site_id' => 1,
+        ]);
+        $this->assertNotEmpty($newContent->created_date);
     }
 
     /**
@@ -589,6 +615,7 @@ class ContentsTableTest extends BcTestCase
         $new = $this->Contents->newEntity([
             'id' => 101,
             'title' => 'relatedMainContent',
+            'name' => 'relatedMainContent',
             'url' => '/test/',
             'site_id' => 1,
         ]);

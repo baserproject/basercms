@@ -116,6 +116,7 @@ interface ContentServiceInterface
      * @param  int $id
      * @param  array $postData
      * @return \Cake\Datasource\EntityInterface
+     * @throws \Cake\ORM\Exception\PersistenceFailedException
      */
     public function alias(int $id, array $postData);
 
@@ -225,9 +226,11 @@ interface ContentServiceInterface
      *
      * @param  EntityInterface $content
      * @param  array $contentData
+     * @param  array $options
      * @return EntityInterface
+     * @throws \Cake\ORM\Exception\PersistenceFailedException
      */
-    public function update($content, $contentData);
+    public function update($content, $contentData, $options = []);
 
     /**
      * 公開状態にする
