@@ -129,6 +129,7 @@ class ContentsTable extends AppTable
      * @return Validator
      * @checked
      * @unitTest
+     * @note(value="荒川に内容確認")
      */
     public function validationDefault(Validator $validator): Validator
     {

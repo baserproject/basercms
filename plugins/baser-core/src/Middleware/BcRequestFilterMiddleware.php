@@ -67,6 +67,7 @@ class BcRequestFilterMiddleware implements MiddlewareInterface
      * @return ResponseInterface|void
      * @checked
      * @unitTest
+     * @note(value="マイルストーン３が終わってから動作確認する")
      */
     public function redirectIfIsDeviceFile(
         ServerRequestInterface  $request,
