@@ -23,6 +23,7 @@ use Cake\Utility\Inflector;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\Note;
 use BaserCore\Utility\BcUtil;
 use Cake\Http\Exception\NotFoundException;
 
