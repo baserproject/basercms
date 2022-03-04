@@ -11,6 +11,7 @@
 
 namespace BaserCore\View;
 
+use BaserCore\View\Helper\BcAdminDashboardHelper;
 use Cake\Utility\Hash;
 use Cake\Core\Configure;
 use Cake\Utility\Inflector;
@@ -55,6 +56,7 @@ use BaserCore\View\Helper\BcAdminContentFolderHelper;
  * @property BcAdminUserHelper $BcAdminUser
  * @property BcAdminPluginHelper $BcAdminPlugin
  * @property BcAdminSiteHelper $BcAdminSite
+ * @property BcAdminDashboardHelper $BcAdminDashboard
  * @property BcAdminPermissionHelper $BcAdminPermission
  * @property BcAdminSiteConfigHelper $BcAdminSiteConfig
  * @property BcContentsHelper $BcContents
@@ -85,6 +87,7 @@ class BcAdminAppView extends AppView
         $this->loadHelper('BaserCore.BcAdminSiteConfig');
         $this->loadHelper('BaserCore.BcAdminPage');
         $this->loadHelper('BaserCore.BcAdminSite');
+        $this->loadHelper('BaserCore.BcAdminDashboard');
         $this->loadHelper('BaserCore.BcContents');
         $this->loadHelper('BaserCore.BcListTable');
         $this->loadHelper('BaserCore.BcAdminContent');

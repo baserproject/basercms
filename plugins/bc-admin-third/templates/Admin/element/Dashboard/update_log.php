@@ -1,19 +1,25 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.View
- * @since           baserCMS v 0.1.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
 
+use BaserCore\View\BcAdminAppView;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
+
 /**
- * @var BcAppView $this
+ * @var BcAdminAppView $this
+ * @checked
+ * @noTodo
  */
-$dblogs = $this->BcAdmin->getDblogs(5);
+$dblogs = $this->BcAdminDashboard->getDblogs(5);
 ?>
 
 <h2 class="bca-panel-box__title"><?php echo __d('baser', '最近の動き') ?></h2>
@@ -39,7 +45,10 @@ $dblogs = $this->BcAdmin->getDblogs(5);
     </div>
     <?php if ($dblogs->count()): ?>
       <div class="align-right">
-        <?php $this->BcBaser->link(__d('baser', '> 全てのログを見る'), ['controller' => 'dblogs', 'action' => 'index']) ?>
+        <?php $this->BcBaser->link(__d('baser', '> 全てのログを見る'), [
+          'controller' => 'dblogs',
+          'action' => 'index'
+        ]) ?>
       </div>
     <?php endif ?>
   <?php endif ?>

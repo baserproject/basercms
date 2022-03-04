@@ -13,6 +13,7 @@ namespace BaserCore\Service;
 
 use BaserCore\Utility\BcUtil;
 use Cake\Datasource\EntityInterface;
+use Cake\Datasource\ResultSetInterface;
 use Cake\ORM\TableRegistry;
 use Cake\ORM\Query;
 use BaserCore\Annotation\UnitTest;
@@ -99,7 +100,7 @@ class DblogService implements DblogServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function getDblogs(int $limit): object
+    public function getDblogs(int $limit): ResultSetInterface
     {
         return $this->Dblogs
             ->find('all')

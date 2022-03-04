@@ -10,13 +10,14 @@
  */
 
 /**
- * [ADMIN] ダッシュボード
+ * ダッシュボード
+ * @var array $panels
+ * @var \BaserCore\View\BcAdminAppView $this
  */
-$this->BcBaser->js(['admin/dashboard/index'], false);
+$this->BcBaser->js(['admin/dashboard/index.bundle'], false);
+$this->BcAdmin->setHelp('dashboard_index');
 ?>
 
-
-<div id="AlertMessage" class="message" style="display:none"></div>
 
 <div class="bca-panel">
   <?php if ($panels): ?>
@@ -24,7 +25,7 @@ $this->BcBaser->js(['admin/dashboard/index'], false);
       <?php foreach($templates as $template): ?>
         <div class="panel-box bca-panel-box">
           <?php if ($template): ?>
-            <?php echo $this->BcBaser->element("Dashboard/" . $template) ?>
+            <?php $this->BcBaser->element("Dashboard/" . $template) ?>
           <?php endif ?>
         </div>
       <?php endforeach ?>

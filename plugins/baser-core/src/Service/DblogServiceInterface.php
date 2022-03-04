@@ -12,6 +12,7 @@
 namespace BaserCore\Service;
 
 use Cake\Datasource\EntityInterface;
+use Cake\Datasource\ResultSetInterface;
 use Cake\ORM\Query;
 
 /**
@@ -40,7 +41,7 @@ interface DblogServiceInterface
      * 最新のDBログ一覧を取得
      * @param int $limit
      */
-    public function getDblogs(int $limit): object;
+    public function getDblogs(int $limit): ResultSetInterface;
 
     /**
      * DBログをすべて削除

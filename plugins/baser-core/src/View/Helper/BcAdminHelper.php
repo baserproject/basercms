@@ -373,19 +373,4 @@ class BcAdminHelper extends Helper
         ]);
     }
 
-    /**
-     * 最近の動きを取得
-     *
-     * @param int limit
-     * @return object
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function getDblogs($limit): object
-    {
-        $DblogService = $this->getService(DblogServiceInterface::class);
-        return $DblogService->getDblogs($limit);
-    }
-
 }

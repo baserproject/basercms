@@ -58,7 +58,6 @@ class DashboardController extends BcAdminAppController
             }
         }
         $this->set('panels', $panels);
-        $this->setHelp('dashboard_index');
     }
 
 }

@@ -640,7 +640,7 @@ class BcUtil
     public static function getTemplateList($path, $plugins)
     {
         if (!$plugins) return [];
-    if (!is_array($plugins)) $plugins = [$plugins];
+        if (!is_array($plugins)) $plugins = [$plugins];
 
         $_templates = [];
         foreach($plugins as $plugin) {

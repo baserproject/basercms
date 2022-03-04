@@ -249,16 +249,4 @@ class BcAdminContentHelper extends Helper
         return $folderLinkedUrl;
     }
 
-    /**
-     * コンテンツ情報を取得する
-     *
-     * @return array
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function getContentsInfo()
-    {
-        return $this->ContentService->getContentsInfo();
-    }
 }

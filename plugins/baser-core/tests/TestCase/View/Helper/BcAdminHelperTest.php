@@ -355,12 +355,4 @@ class BcAdminHelperTest extends BcTestCase
         ];
     }
 
-    /**
-     * Test getDblogs
-     */
-    public function testGetDblogs()
-    {
-        $dblogs = $this->BcAdmin->getDblogs(2);
-        $this->assertEquals(2, count($dblogs));
-    }
 }
