@@ -70,6 +70,7 @@ class BcFrontContentsComponent extends Component
      *
      * @checked
      * @unitTest
+     * @noTodo
      */
     public function setupFront()
     {
@@ -79,9 +80,8 @@ class BcFrontContentsComponent extends Component
         if (!empty($request->getQuery('preview'))) {
             $this->preview = $request->getQuery('preview');
             if (!empty($request->getData())) {
-                // TODO ucmitz request が protected になったため代入できない
                 // 何か他の方法を考える、本当にその処理が必要かも確認
-                $controller->request = $request->withParam('Content', $request->getData());
+                $controller->setRequest($request->withParam('Content', $request->getData()));
                 $controller->Security->validatePost = false;
                 $controller->Security->csrfCheck = false;
             }

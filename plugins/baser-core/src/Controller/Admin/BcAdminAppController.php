@@ -42,6 +42,7 @@ class BcAdminAppController extends BcAppController
      * Initialize
      * @checked
      * @unitTest
+     * @note(value="インストーラーを実装してから対応する")
      */
     public function initialize(): void
     {
