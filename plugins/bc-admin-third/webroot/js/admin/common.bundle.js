@@ -1,9 +1,9 @@
 !function(e){function t(t){for(var r,a,i=t[0],s=t[1],l=t[2],b=0,u=[];b<i.length;b++)a=i[b],Object.prototype.hasOwnProperty.call(o,a)&&o[a]&&u.push(o[a][0]),o[a]=0;for(r in s)Object.prototype.hasOwnProperty.call(s,r)&&(e[r]=s[r]);for(d&&d(t);u.length;)u.shift()();return c.push.apply(c,l||[]),n()}function n(){for(var e,t=0;t<c.length;t++){for(var n=c[t],r=!0,i=1;i<n.length;i++){var s=n[i];0!==o[s]&&(r=!1)}r&&(c.splice(t--,1),e=a(a.s=n[0]))}return e}var r={},o={0:0},c=[];function a(t){if(r[t])return r[t].exports;var n=r[t]={i:t,l:!1,exports:{}};return e[t].call(n.exports,n,n.exports,a),n.l=!0,n.exports}a.m=e,a.c=r,a.d=function(e,t,n){a.o(e,t)||Object.defineProperty(e,t,{enumerable:!0,get:n})},a.r=function(e){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:!0})},a.t=function(e,t){if(1&t&&(e=a(e)),8&t)return e;if(4&t&&"object"==typeof e&&e&&e.__esModule)return e;var n=Object.create(null);if(a.r(n),Object.defineProperty(n,"default",{enumerable:!0,value:e}),2&t&&"string"!=typeof e)for(var r in e)a.d(n,r,function(t){return e[t]}.bind(null,r));return n},a.n=function(e){var t=e&&e.__esModule?function(){return e.default}:function(){return e};return a.d(t,"a",t),t},a.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},a.p="";var i=window.webpackJsonp=window.webpackJsonp||[],s=i.push.bind(i);i.push=t,i=i.slice();for(var l=0;l<i.length;l++)t(i[l]);var d=s;c.push([0,18]),n()}([function(e,t,n){"use strict";n.r(t);n(1),n(5),n(6),n(7),n(8),n(9),n(10),n(11),n(12),n(13),n(14)},,,,,,function(e,t){
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
@@ -11,9 +11,9 @@
 !function(e){e.baseUrl=function(){return e("#AdminScript").attr("data-baseUrl")}}(jQuery)},function(e,t){
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
@@ -21,9 +21,9 @@
 !function(e){e.bcUtil={disabledHideMessage:!1,baseUrl:null,baserCorePrefix:null,adminPrefix:null,adminBaseUrl:null,apiBaseUrl:null,ajaxLoaderPath:null,ajaxLoaderSmallPath:null,init:function(t){var n=e("#AdminScript");e.bcUtil.baseUrl=n.attr("data-baseUrl"),e.bcUtil.baserCorePrefix=n.attr("data-baserCorePrefix"),e.bcUtil.adminPrefix=n.attr("data-adminPrefix"),e.bcUtil.ajaxLoaderPath=n.attr("data-ajaxLoaderPath"),e.bcUtil.ajaxLoaderSmallPath=n.attr("data-ajaxLoaderSmallPath"),e.bcUtil.frontFullUrl=n.attr("data-frontFullUrl"),void 0!==t.baseUrl&&(e.bcUtil.baseUrl=t.baseUrl),void 0!==t.baserCorePrefix&&(e.bcUtil.baserCorePrefix=t.baserCorePrefix),void 0!==t.adminPrefix&&(e.bcUtil.adminPrefix=t.adminPrefix),void 0!==t.ajaxLoaderPath&&(e.bcUtil.ajaxLoaderPath=t.ajaxLoaderPath),void 0!==t.ajaxLoaderSmallPath&&(e.bcUtil.ajaxLoaderSmallPath=t.ajaxLoaderSmallPath),e.bcUtil.adminBaseUrl=e.bcUtil.baseUrl+e.bcUtil.baserCorePrefix+e.bcUtil.adminPrefix+"/",e.bcUtil.apiBaseUrl=e.bcUtil.baseUrl+e.bcUtil.baserCorePrefix+"/api/"},showAlertMessage:function(t){e.bcUtil.hideMessage(),e("#BcSystemMessage").removeClass("notice-messge alert-message").addClass("alert-message").html(t),e("#BcMessageBox").fadeIn(500)},showNoticeMessage:function(t){e.bcUtil.hideMessage(),e("#BcSystemMessage").removeClass("notice-messge alert-message").addClass("notice-message").html(decodeURI(t)),e("#BcMessageBox").fadeIn(500)},hideMessage:function(){e.bcUtil.disabledHideMessage||(e("#BcMessageBox").fadeOut(200),e("#AlertMessage").fadeOut(200),e("#MessageBox").fadeOut(200))},showLoader:function(t,n,r){switch((null==t||"none"!=t&&null==n)&&(t="over"),t){case"over":e("#Waiting").show();break;case"inner":var o=e("<div>").css({"text-align":"center"}).attr("id",r),c=e("<img>").attr("src",e.bcUtil.ajaxLoaderPath);o.html(c),e(n).html(o);break;case"after":c=e("<img>").attr("src",e.bcUtil.ajaxLoaderSmallPath).attr("id",r);e(n).after(c);break;case"target":e(n).show()}},hideLoader:function(t,n,r){switch((null==t||"none"!=t&&null==n)&&(t="over"),t){case"over":e("#Waiting").hide();break;case"inner":case"after":e("#"+r).remove();break;case"target":e(n).show()}},ajax:function(t,n,r){var o,c,a;r||(r={});var i=!0;void 0!==r.loaderType&&(o=r.loaderType,delete r.loaderType),void 0!==r.loaderSelector&&(c=r.loaderSelector,delete r.loaderSelector,a=c.replace(/\./g,"").replace(/#/g,"").replace(/\s/g,"")+"loaderkey"),void 0!==r.hideLoader&&(i=r.hideLoader,delete r.loaderType);var s={url:t,headers:{Authorization:e.bcJwt.accessToken},type:"POST",dataType:"html",beforeSend:function(){e.bcUtil.showLoader(o,c,a)},complete:function(){i&&e.bcUtil.hideLoader(o,c,a)},error:function(t,n,r){e.bcUtil.showAjaxError("処理に失敗しました。",t,r)},success:n};return r&&e.extend(s,r),e.ajax(s)},showAjaxError:function(t,n,r){var o="";void 0!==n&&n.status&&(o="<br />("+n.status+") "),void 0!==n&&n.responseJSON&&(o+=n.responseJSON.message),void 0!==n&&n.responseText?o+=n.responseText:void 0!==r&&(o+=r),e.bcUtil.showAlertMessage(t+o)}}}(jQuery)},function(e,t){
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
@@ -31,9 +31,9 @@
 !function(e){e.bcToken={key:null,requested:!1,requesting:!1,url:null,defaultUrl:"/baser/baser-core/bc_form/get_token?requestview=false",init:function(){this.setTokenUrl()},check:function(t,n){if(this.requesting)var r=setInterval((function(){e.bcToken.requesting||(clearInterval(r),t&&e.bcToken.execCallback(t,n))}),100);else this.key?t&&this.execCallback(t,n):this.update(n).done((function(){t&&e.bcToken.execCallback(t,n)}))},execCallback:function(t,n){var r={useUpdate:!0};n=void 0!==n?e.extend(r,n):r;var o=t();n.useUpdate&&(n.hideLoader=!0,n.loaderType="none",o?o.always((function(){e.bcToken.update(n)})):this.update(n))},update:function(t){var n={type:"GET"};return t=void 0!==t?e.extend(n,t):n,this.requesting=!0,e.bcUtil.ajax(e.baseUrl()+this.url,(function(t){e.bcToken.key=t,e.bcToken.requesting=!1,e('input[name="_csrfToken"]').val(e.bcToken.key)}),e.extend(!0,{},t))},getForm:function(t,n,r){var o=e("<form/>");o.attr("action",t).attr("method","post"),this.check((function(){o.append(e.bcToken.getHiddenToken()),n(o)}),r)},getHiddenToken:function(){return e('<input name="_csrfToken" type="hidden">').val(this.key)},submitToken:function(t){this.getForm(t,(function(t){e("body").append(t),t.submit()}),{useUpdate:!1,hideLoader:!1})},replaceLinkToSubmitToken:function(t){e(t).each((function(){if(e(this).attr("onclick")){var t=e(this).attr("onclick").match(/if \(confirm\("(.+?)"\)/);t&&(e(this).attr("data-confirm-message",t[1]),e(this).get(0).onclick="",e(this).removeAttr("onclick"))}})),e(t).click((function(){if(e(this).attr("data-confirm-message")){var t=e(this).attr("data-confirm-message");if(t=JSON.parse('"'+t+'"').replace(/\\n/g,"\n"),!confirm(t))return!1}return e.bcToken.submitToken(e(this).attr("href")),!1}))},setTokenUrl:function(e){return this.url=null!=e?e:this.defaultUrl,this}}}(jQuery)},function(e,t){
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
@@ -71,9 +71,9 @@
 !function(e){e.bcConfirm={config:{title:bcI18n.bcConfirmTitle1,message:bcI18n.bcConfirmAlertMessage1,defaultCancel:!0,ok:null},show:function(t){e.extend(e.bcConfirm.config,t),e("<div />").html(e.bcConfirm.config.message).dialog({modal:!0,title:e.bcConfirm.config.title,width:"50%",buttons:{"キャンセル":function(){e(this).dialog("close")},OK:function(){e(this).dialog("close"),"function"==typeof e.bcConfirm.config.ok?e.bcConfirm.config.ok():alert(bcI18n.bcConfirmAlertMessage2)}}})}}}(jQuery)},function(e,t){
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
@@ -81,9 +81,9 @@
 !function(e){e.bcJwt={accessToken:null,init:function(){var e=localStorage.getItem("refreshToken");e&&"null"!==e&&this.getToken(e)},login:function(t,n,r,o,c){e.ajax({url:e.bcUtil.apiBaseUrl+"baser-core/users/login.json",type:"post",data:{email:t,password:n,saved:void 0!==r&&r?1:""},dataType:"json"}).done(function(e){e&&(this.setToken(e.access_token,e.refresh_token),o&&o(e))}.bind(this)).fail((function(){c&&c()}))},getToken:function(t){t&&e.ajax({url:e.bcUtil.apiBaseUrl+"baser-core/users/refresh_token.json",type:"get",async:!1,headers:{Authorization:t,"Content-Type":"application/json"},dataType:"json"}).done(function(e){e?this.setToken(e.access_token,e.refresh_token):alert("APIトークンが取得できませんでした。ブラウザをリロードしてください。")}.bind(this)).fail((function(e){401===e.response.status&&localStorage.setItem("refreshToken","")}))},setToken:function(e,t){this.accessToken=e,localStorage.setItem("refreshToken",t)},logout:function(){this.removeToken()},removeToken:function(){localStorage.setItem("refreshToken",null),this.accessToken=null}}}(jQuery)},function(e,t){
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
