@@ -15,16 +15,16 @@ use Cake\ORM\TableRegistry;
 use BaserCore\Model\AppTable;
 
 /**
- * SerachIndexesTable
+ * SearchIndexesTable
  */
-class SerachIndexesTable extends AppTable
+class SearchIndexesTable extends AppTable
 {
-    /**
-     * クラス名
-     *
-     * @var string
-     */
-    public $name = 'SearchIndex';
+    // /**
+    //  * クラス名
+    //  *
+    //  * @var string
+    //  */
+    // public $name = 'SearchIndex';
 
     /**
      * Initialize
