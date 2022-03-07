@@ -30,7 +30,7 @@ if [ ! -e '/var/www/shared/docker/check' ]; then
 	fi
     composer install --no-plugins
     cp /var/www/html/config/.env.example /var/www/html/config/.env
-    sleep 15
+    sleep 20
 	/var/www/html/bin/cake migrations migrate --plugin BaserCore
 	/var/www/html/bin/cake migrations seed --plugin BaserCore
 	/var/www/html/bin/cake plugin assets symlink
