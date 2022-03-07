@@ -12,6 +12,7 @@ namespace BaserCore\View\Helper;
 
 use Cake\View\Helper;
 use Cake\ORM\TableRegistry;
+use Cake\Utility\Hash;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -93,19 +94,22 @@ class BcAdminContentHelper extends Helper
      *
      * @return bool
      * @checked
+     * @noTodo
      * @unitTest
      */
     public function isContentDeletable(): bool
     {
         $userGroups = BcUtil::loginUser()->user_groups;
+
         if ($userGroups) {
-            foreach ($userGroups as $userGroup) {
-                // TODO ucmitz: ユーザグループを配列で全て渡すよう変更が必要
-                if ($this->PermissionService->check(BcUtil::getPrefix() . '/baser-core/contents/delete', [$userGroup->id])) {
-                    return true;
-                }
+
+            $userGroupIds = Hash::extract($userGroups, '{n}.id');
+
+            if ($this->PermissionService->check(BcUtil::getPrefix() . '/baser-core/contents/delete', $userGroupIds)) {
+                return true;
             }
         }
+
         return false;
     }
 

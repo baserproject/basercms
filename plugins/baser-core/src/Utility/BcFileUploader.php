@@ -999,6 +999,7 @@ class BcFileUploader
      * @param array $setting
      * @param array $file
      * @checked
+     * @noTodo
      * @unitTest
      */
     public function copyImages(array $setting, array $file): void
