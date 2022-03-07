@@ -229,19 +229,20 @@ class UserGroupsTable extends AppTable
      *
      * @param int $id ユーザーグループID
      * @return    string
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function getAuthPrefix($id)
+    public function getAuthPrefix(int $id) : ?string
     {
-        $data = $this->find('first', [
-            'conditions' => ['UserGroup.id' => $id],
-            'fields' => ['UserGroup.auth_prefix'],
-            'recursive' => -1
-        ]);
-        if (isset($data['UserGroup']['auth_prefix'])) {
-            return $data['UserGroup']['auth_prefix'];
-        } else {
-            return '';
+
+        $userGroup = $this->find()->where(['id' => $id])->first();
+
+        if(isset($userGroup->auth_prefix)){
+            return $userGroup->auth_prefix;
         }
+
+        return null;
     }
 
 }

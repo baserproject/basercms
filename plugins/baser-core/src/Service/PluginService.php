@@ -12,6 +12,7 @@
 namespace BaserCore\Service;
 
 use BaserCore\Model\Table\PluginsTable;
+use BaserCore\Model\Table\UserGroupsTable;
 use Cake\Cache\Cache;
 use Cake\Http\Client;
 use Cake\ORM\TableRegistry;
@@ -50,6 +51,7 @@ class PluginService implements PluginServiceInterface
     public function __construct()
     {
         $this->Plugins = TableRegistry::getTableLocator()->get('BaserCore.Plugins');
+        $this->UserGroups = TableRegistry::getTableLocator()->get('BaserCore.UserGroups');
     }
 
     /**
@@ -255,8 +257,8 @@ class PluginService implements PluginServiceInterface
      * @param array $data リクエストデータ
      * @return void
      * @checked
+     * @noTodo
      * @unitTest
-     * @note(value="フロント認証実装時に対応")
      */
     public function allow($data): void
     {
@@ -267,9 +269,8 @@ class PluginService implements PluginServiceInterface
         }
 
         foreach($userGroups as $userGroup) {
-            //$permissionAuthPrefix = $Permission->UserGroup->getAuthPrefix($userGroup['UserGroup']['id']);
-            // TODO ucmitz 現在 admin 固定、今後、mypage 等にも対応する
-            $permissionAuthPrefix = 'admin';
+
+            $permissionAuthPrefix = $this->UserGroups->getAuthPrefix($userGroup->id);
             $url = '/baser/' . $permissionAuthPrefix . '/' . Inflector::underscore($data['name']) . '/*';
 
             $prePermissions = $permissions->find()->where(['url' => $url])->first();
