@@ -1,9 +1,9 @@
 <?php
 /**
  * baserCMS :  Based Webcontent Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
@@ -350,7 +350,7 @@ class ContentsController extends BcApiController
             $oldContent = $contentService->get($this->request->getData('id'));
             $oldTitle = $oldContent->title;
             try {
-                $newContent = $contentService->update($oldContent, ['title' => $this->request->getData('title')]);
+                $newContent = $contentService->update($oldContent, ['title' => $this->request->getData('title')], ['validate' => false]);
                 $this->setResponse($this->response->withStatus(200));
                 $url = $contentService->getUrlById($this->request->getData('title'));
                 $this->set(['url' => $url]);

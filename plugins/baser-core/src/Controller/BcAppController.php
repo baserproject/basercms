@@ -1,9 +1,9 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
@@ -106,11 +106,6 @@ class BcAppController extends AppController
 
         // セキュリティ設定
         $this->Security->blackHoleCallback = '_blackHoleCallback';
-        $csrfExpires = Configure::read('BcSecurity.csrfExpires');
-        if (!$csrfExpires) {
-            $csrfExpires = "+4 hours";
-        }
-        $this->Security->csrfExpires = $csrfExpires;
         if (!BC_INSTALLED || $this->getRequest()->is('update')) {
             $this->Security->validatePost = false;
         }

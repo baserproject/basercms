@@ -1,9 +1,9 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
@@ -371,21 +371,6 @@ class BcAdminHelper extends Helper
             'isLogin' => (bool)(BcUtil::loginUser()),
             'isSuperUser' => BcUtil::isSuperUser()
         ]);
-    }
-
-    /**
-     * 最近の動きを取得
-     *
-     * @param int limit
-     * @return object
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function getDblogs($limit): object
-    {
-        $DblogService = $this->getService(DblogServiceInterface::class);
-        return $DblogService->getDblogs($limit);
     }
 
 }

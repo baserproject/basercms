@@ -1,9 +1,9 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
@@ -23,6 +23,7 @@ use Cake\Utility\Inflector;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\Note;
 use BaserCore\Utility\BcUtil;
 use Cake\Http\Exception\NotFoundException;
 
@@ -42,6 +43,7 @@ class BcAdminAppController extends BcAppController
      * Initialize
      * @checked
      * @unitTest
+     * @note(value="インストーラーを実装してから対応する")
      */
     public function initialize(): void
     {

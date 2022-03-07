@@ -1,22 +1,23 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
  */
 
 /**
- * [ADMIN] ダッシュボード
+ * ダッシュボード
+ * @var array $panels
+ * @var \BaserCore\View\BcAdminAppView $this
  */
-$this->BcBaser->js(['admin/dashboard/index'], false);
+$this->BcBaser->js(['admin/dashboard/index.bundle'], false);
+$this->BcAdmin->setHelp('dashboard_index');
 ?>
 
-
-<div id="AlertMessage" class="message" style="display:none"></div>
 
 <div class="bca-panel">
   <?php if ($panels): ?>
@@ -24,7 +25,7 @@ $this->BcBaser->js(['admin/dashboard/index'], false);
       <?php foreach($templates as $template): ?>
         <div class="panel-box bca-panel-box">
           <?php if ($template): ?>
-            <?php echo $this->BcBaser->element("Dashboard/" . $template) ?>
+            <?php $this->BcBaser->element("Dashboard/" . $template) ?>
           <?php endif ?>
         </div>
       <?php endforeach ?>

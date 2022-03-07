@@ -1,9 +1,9 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
@@ -65,11 +65,11 @@ class PermissionsControllerTest extends BcTestCase
     public function testBeforeFilter()
     {
         $event = new Event('Controller.beforeFilter', $this->PermissionsController);
-        
+
         $this->PermissionsController->beforeFilter($event);
         $this->assertNotEmpty($this->PermissionsController->Permissions);
         $this->assertNotEmpty($this->PermissionsController->viewBuilder()->getHelpers('BcTime'));
-        
+
         $unLockActions = $this->PermissionsController->Security->getConfig("unlockedActions");
         $this->assertEquals($unLockActions, [
             0 => 'update_sort',
@@ -118,10 +118,10 @@ class PermissionsControllerTest extends BcTestCase
     {
         $this->enableSecurityToken();
         $this->enableCsrfToken();
-        
+
         $this->post('/baser/admin/baser-core/permissions/ajax_add');
         $this->assertResponseFailure();
-        
+
         $data = [
             'user_group_id' => '2',
             'name' => 'テストルール名',
@@ -130,7 +130,7 @@ class PermissionsControllerTest extends BcTestCase
         ];
         $this->post('/baser/admin/baser-core/permissions/ajax_add', $data);
         $this->assertResponseSuccess();
-        
+
         $permissions = $this->getTableLocator()->get('Permissions');
         $permission = $permissions->find()->order(['id' => 'DESC'])->first();
         $this->assertEquals('テストルール名', $permission->name);
@@ -231,7 +231,7 @@ class PermissionsControllerTest extends BcTestCase
         $permission = $permissions->find()->where(['id' => $permissionId])->last();
         $this->assertTrue($permission->status);
     }
-    
+
     /**
      * 一括処理
      *
@@ -240,11 +240,11 @@ class PermissionsControllerTest extends BcTestCase
     {
         $this->enableCsrfToken();
         $permissions = $this->getTableLocator()->get('Permissions');
-        
+
         // 空データ送信
         $this->post('/baser/admin/baser-core/permissions/batch', []);
         $this->assertResponseEmpty();
-        
+
         // unpublish
         $data = [
             'ListTool' => [
@@ -254,10 +254,10 @@ class PermissionsControllerTest extends BcTestCase
         ];
         $this->post('/baser/admin/baser-core/permissions/batch', $data);
         $this->assertResponseNotEmpty();
-        
+
         $permission = $permissions->find()->where(['id' => 1])->last();
         $this->assertFalse($permission->status);
-       
+
         // publish
         $data = [
             'ListTool' => [
@@ -267,10 +267,10 @@ class PermissionsControllerTest extends BcTestCase
         ];
         $this->post('/baser/admin/baser-core/permissions/batch', $data);
         $this->assertResponseNotEmpty();
-        
+
         $permission = $permissions->find()->where(['id' => 1])->last();
         $this->assertTrue($permission->status);
-        
+
         // delete
         $data = [
             'ListTool' => [
@@ -280,11 +280,11 @@ class PermissionsControllerTest extends BcTestCase
         ];
         $this->post('/baser/admin/baser-core/permissions/batch', $data);
         $this->assertResponseNotEmpty();
-        
+
         $permission = $permissions->find()->where(['id' => 1])->last();
         $this->assertNull($permission);
     }
-    
+
     /**
      * 表示順変更
      */
@@ -294,8 +294,8 @@ class PermissionsControllerTest extends BcTestCase
         $this->enableCsrfToken();
         $this->post('/baser/admin/baser-core/permissions/update_sort/2');
         $this->assertResponseFailure();
-        
-        
+
+
         $data = [
             'Sort' => [
                 'id' => 1,
@@ -320,14 +320,14 @@ class PermissionsControllerTest extends BcTestCase
             ->select('id')
             ->limit(3)
             ->all();
-        
+
         $afterOrderId = [];
         foreach($permissionList as $permission) {
             $afterOrderId[] = $permission->id;
         }
         $this->assertNotEquals($beforeOrderId, $afterOrderId);
     }
-    
+
 
 
 }

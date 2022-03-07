@@ -1,9 +1,9 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
@@ -287,7 +287,7 @@ class ContentServiceTest extends BcTestCase
         $this->assertNotNull($contents->deleted_date);
         // aliasの場合
         $content = $this->ContentService->get(5);
-        $this->ContentService->update($content, ['alias_id' => 5]);
+        $this->ContentService->update($content, ['alias_id' => 5, 'name' => 'test']);
         $this->assertTrue($this->ContentService->delete(5));
         // ゴミ箱行きではなくちゃんと削除されてるか確認
         $this->assertTrue($this->ContentService->getIndex(['withTrash' => true, 'id' => 5])->isEmpty());

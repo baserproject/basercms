@@ -1,9 +1,9 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
@@ -23,6 +23,7 @@ use Psr\Http\Server\MiddlewareInterface;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\Note;
 
 /**
  * BcRequestFilterMiddleware
@@ -67,6 +68,7 @@ class BcRequestFilterMiddleware implements MiddlewareInterface
      * @return ResponseInterface|void
      * @checked
      * @unitTest
+     * @note(value="マイルストーン３が終わってから動作確認する")
      */
     public function redirectIfIsDeviceFile(
         ServerRequestInterface  $request,
