@@ -13,6 +13,10 @@ namespace BaserCore\Model\Table;
 
 use Cake\ORM\TableRegistry;
 use BaserCore\Model\AppTable;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\Note;
 
 /**
  * SearchIndexesTable
