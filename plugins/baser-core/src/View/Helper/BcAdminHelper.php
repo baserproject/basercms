@@ -216,10 +216,9 @@ class BcAdminHelper extends Helper
         $adminMenuGroups = $this->getAdminMenuGroups();
         if($adminMenuGroups === false) return null;
 
-        // TODO ucmitz : 要実装 BcUtil::loginUserGroup()で代用可能?
-        // if(empty($this->_View->viewVars['user']['user_group_id'])) {
-        //     return null;
-        // }
+        $loginUserGroup = BcUtil::loginUserGroup();
+        if($loginUserGroup === false) return null;
+
         $currentSiteId = 1;
         if($currentSite = $this->_View->getRequest()->getAttribute('currentSite')) {
             $currentSiteId = $currentSite->id;
