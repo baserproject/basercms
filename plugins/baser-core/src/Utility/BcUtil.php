@@ -318,6 +318,7 @@ class BcUtil
      * @return void
      * @checked
      * @unitTest
+     * @note(value="viewキャッシュ／dataキャッシュ実装時に対応")
      */
     public static function clearAllCache(): void
     {
