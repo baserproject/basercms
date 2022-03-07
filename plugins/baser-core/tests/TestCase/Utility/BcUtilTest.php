@@ -351,10 +351,42 @@ class BcUtilTest extends BcTestCase
 
     /**
      * 現在ログインしているユーザーのユーザーグループ情報を取得する
+     * @param string $id ユーザーid
+     * @param bool $expect 期待値
+     * @return void
+     * @dataProvider loginUserGroupDataProvider
      */
-    public function testLoginUserGroup()
+    public function testLoginUserGroup($id, $expect): void
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $sessionKey = Configure::read('BcPrefixAuth.Admin.sessionKey');
+        $session = $this->request->getSession();
+        $user = $this->getUser($id);
+        $session->write($sessionKey, $user);
+        if ($expect) {
+            $this->loginAdmin($this->getRequest(), $id);
+        }
+        $result = BcUtil::loginUserGroup();
+
+        if($result === false){
+            $result = [];
+        }
+
+        $this->assertCount($expect, $result);
+    }
+
+    /**
+     * isAdminUser用データプロバイダ
+     *
+     * @return array
+     */
+    public function loginUserGroupDataProvider()
+    {
+        return [
+            // ログイン
+            [1, true],
+            // 非ログイン
+            [0, false],
+        ];
     }
 
     /**
