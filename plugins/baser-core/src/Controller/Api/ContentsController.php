@@ -107,11 +107,11 @@ class ContentsController extends BcApiController
         $children = $contentService->getChildren($id);
         try {
             if($contentService->deleteRecursive($id)) {
-                $text = "コンテンツ: " . $content->name . "を削除しました。";
+                $text = "コンテンツ: " . $content->title . "を削除しました。";
                 if ($children) {
                     $content = array_merge([$content], $children->toArray());
                     foreach ($children as $child) {
-                        $text .= "\nコンテンツ: " . $child->name . "を削除しました。";
+                        $text .= "\nコンテンツ: " . $child->title . "を削除しました。";
                     }
                 }
                 $message = __d('baser', $text);
@@ -140,7 +140,7 @@ class ContentsController extends BcApiController
         $trash = $contentService->getTrash($id);
         try {
             if ($contentService->hardDeleteWithAssoc($id)) {
-                $message = __d('baser', 'ゴミ箱: {0} を削除しました。', $trash->name);
+                $message = __d('baser', 'ゴミ箱: {0} を削除しました。', $trash->title);
             }
         } catch (Exception $e) {
             $this->setResponse($this->response->withStatus(500));
@@ -169,7 +169,7 @@ class ContentsController extends BcApiController
         try {
             foreach ($trash as $entity) {
                 if ($contentService->hardDeleteWithAssoc($entity->id)) {
-                    $text .=  "$entity->name($entity->type)" . "を削除しました。";
+                    $text .=  "$entity->title($entity->type)" . "を削除しました。";
                     }
             }
             $message = __d('baser', $text);
@@ -196,7 +196,7 @@ class ContentsController extends BcApiController
         $this->request->allowMethod(['post', 'put']);
         try {
             $content = $contents->update($contents->get($id), $this->request->getData());
-            $message = __d('baser', 'コンテンツ「{0}」を更新しました。', $content->name);
+            $message = __d('baser', 'コンテンツ「{0}」を更新しました。', $content->title);
         } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
             $this->setResponse($this->response->withStatus(400));
             $message = __d('baser', '入力エラーです。内容を修正してください。');
@@ -224,7 +224,7 @@ class ContentsController extends BcApiController
         $this->request->allowMethod(['get', 'head']);
         try {
             if ($restored = $contents->restore($id)) {
-                $message = __d('baser', 'ゴミ箱: {0} を元に戻しました。', $restored->name);
+                $message = __d('baser', 'ゴミ箱: {0} を元に戻しました。', $restored->title);
             } else {
                 $message = __d('baser', 'ゴミ箱の復元に失敗しました');
             }
@@ -255,11 +255,11 @@ class ContentsController extends BcApiController
                 switch($this->request->getData('status')) {
                     case 'publish':
                         $content = $contentService->publish($this->request->getData('id'));
-                        $message = __d('baser', 'コンテンツ: {0} を公開しました。', $content->name);
+                        $message = __d('baser', 'コンテンツ: {0} を公開しました。', $content->title);
                         break;
                     case 'unpublish':
                         $content = $contentService->unpublish($this->request->getData('id'));
-                        $message = __d('baser', 'コンテンツ: {0} を非公開にしました。', $content->name);
+                        $message = __d('baser', 'コンテンツ: {0} を非公開にしました。', $content->title);
                         break;
                 }
             } catch (\Exception $e) {
@@ -393,7 +393,7 @@ class ContentsController extends BcApiController
         $this->request->allowMethod(['post']);
         try {
             $alias = $contentService->alias($this->request->getData('aliasId'), $this->request->getData('content'));
-            $message = __d('baser', '{0} を作成しました。', $alias->name);
+            $message = __d('baser', '{0} を作成しました。', $alias->title);
         } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
             $alias = $e->getEntity();
             $this->setResponse($this->response->withStatus(400));

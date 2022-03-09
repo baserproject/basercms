@@ -300,7 +300,7 @@ class ContentsTable extends AppTable
         if ($create) {
             // IEのURL制限が2083文字のため、全て全角文字を想定し231文字でカット
             if (!isset($content['name'])) {
-                $content['name'] = BcUtil::urlencode(mb_substr($content['title'], 0, 230, 'UTF-8'));
+                $content['name'] = $content['title'];
             }
             if (!isset($content['self_status'])) {
                 $content['self_status'] = false;
@@ -329,7 +329,7 @@ class ContentsTable extends AppTable
                 $content['modified_date'] = FrozenTime::now();
             }
             if (isset($content['name'])) {
-                $content['name'] = BcUtil::urlencode(mb_substr($content['name'], 0, 230, 'UTF-8'));
+                $content['name'] = $content['name'];
             }
         }
         // name の 重複チェック＆リネーム
@@ -355,9 +355,7 @@ class ContentsTable extends AppTable
     */
     public function newEntity(array $data, array $options = []): EntityInterface
     {
-        if ($this->getRegistryAlias() === 'Contents') {
-            $options = array_merge($options, ['isNew' => true]);
-        }
+        $options = array_merge($options, ['isNew' => true]);
         return parent::newEntity($data, $options);
     }
 
@@ -484,6 +482,7 @@ class ContentsTable extends AppTable
         if (!empty($entity->id)) {
             $this->beforeSaveParentId = $entity->parent_id;
         }
+        $entity->name = BcUtil::urlencode(mb_substr($entity->name, 0, 230, 'UTF-8'));
         return parent::beforeSave($event, $entity, $options);
     }
 

@@ -120,7 +120,7 @@ class PagesController extends BcAdminAppController
 				$this->dispatchEvent('afterEdit', [
 					'request' => $this->request,
 				]);
-                $this->BcMessage->setSuccess(sprintf(__d('baser', "固定ページ「%s」を更新しました。\n%s"), rawurldecode($page->content->name), urldecode($url)));
+                $this->BcMessage->setSuccess(sprintf(__d('baser', "固定ページ「%s」を更新しました。\n%s"), $page->content->title, urldecode($url)));
 				// 同固定ページへリダイレクト
 				return $this->redirect(['action' => 'edit', $id]);
             }  catch (\Exception $e) {

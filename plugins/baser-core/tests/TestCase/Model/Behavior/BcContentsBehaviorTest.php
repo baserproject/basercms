@@ -105,7 +105,7 @@ class BcContentsBehaviorTest extends BcTestCase
                     "title" => "新しい フォルダー",
                     "plugin" => 'BaserCore',
                     "type" => "ContentFolder",
-                    "site_id" => "0",
+                    "site_id" => "1",
                     "alias_id" => "",
                     "entity_id" => "",
                 ]
@@ -156,7 +156,7 @@ class BcContentsBehaviorTest extends BcTestCase
                     "title" => "新しい フォルダー",
                     "plugin" => 'BaserCore',
                     "type" => "ContentFolder",
-                    "site_id" => "0",
+                    "site_id" => "1",
                     "alias_id" => "",
                     "entity_id" => "",
                 ]
@@ -186,7 +186,7 @@ class BcContentsBehaviorTest extends BcTestCase
                 "title" => "新しい フォルダー",
                 "plugin" => 'BaserCore',
                 "type" => "ContentFolder",
-                "site_id" => "0",
+                "site_id" => "1",
                 "alias_id" => "",
                 "entity_id" => "",
             ]
