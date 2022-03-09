@@ -593,10 +593,32 @@ class BcUtilTest extends BcTestCase
      * URL用に文字列を変換する
      *
      * できるだけ可読性を高める為、不要な記号は除外する
+     * @param  string $value
+     * @param  bool $isEncoded
+     * @return void
+     * @dataProvider testUrlencodeDataProvider
      */
-    public function testUrlencode()
+    public function testUrlencode($value, $isEncoded)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $firstEncoded = BcUtil::urlencode($value);
+        $secondEncoded = BcUtil::urlencode($firstEncoded);
+        // すでにエンコーディングされてる場合は同じ値が返るか
+        $this->assertEquals($secondEncoded, $firstEncoded);
+        // デコードされた結果が同じになるか
+        if ($isEncoded) {
+            $this->assertEquals(urldecode($value), urldecode($secondEncoded));
+        } else {
+            $this->assertEquals($value, urldecode($secondEncoded));
+        }
+    }
+
+    public function testUrlencodeDataProvider()
+    {
+        return [
+            ['あああ', false],
+            ['test', false],
+            ['%E3%81%84%E3%81%84%E3%81%84', true]
+        ];
     }
 
     /**

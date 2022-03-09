@@ -603,16 +603,23 @@ class BcUtil
      *
      * @param $value
      * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public static function urlencode($value)
     {
-        $value = str_replace([
-            ' ', '　', '	', '\\', '\'', '|', '`', '^', '"', ')', '(', '}', '{', ']', '[', ';',
-            '/', '?', ':', '@', '&', '=', '+', '$', ',', '%', '<', '>', '#', '!'
-        ], '_', $value);
-        $value = preg_replace('/\_{2,}/', '_', $value);
-        $value = preg_replace('/(^_|_$)/', '', $value);
-        return urlencode($value);
+        // すでにエンコードされてる場合はそのまま返す
+        if (urlencode(urldecode($value)) !== $value) {
+            $value = str_replace([
+                ' ', '　', '	', '\\', '\'', '|', '`', '^', '"', ')', '(', '}', '{', ']', '[', ';',
+                '/', '?', ':', '@', '&', '=', '+', '$', ',', '%', '<', '>', '#', '!'
+            ], '_', $value);
+            $value = preg_replace('/\_{2,}/', '_', $value);
+            $value = preg_replace('/(^_|_$)/', '', $value);
+            $value = urlencode($value);
+        }
+        return $value;
     }
 
     /**
