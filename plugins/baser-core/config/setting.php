@@ -66,7 +66,7 @@ return [
         // お名前ドットコムの場合、CLI版PHPの存在確認の段階で固まってしまう
         'validSyntaxWithPage' => true,
         // 管理者以外のPHPコードを許可するかどうか
-        'allowedPhpOtherThanAdmins' => true,
+        'allowedPhpOtherThanAdmins' => false,
         /**
          * コアパッケージ名
          * プラグイン一覧に表示しないようにする
