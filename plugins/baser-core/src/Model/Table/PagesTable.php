@@ -257,17 +257,16 @@ class PagesTable extends Table
      * @return bool
      * @checked
      * @unitTest
-     * @note(value="BcApp.validSyntaxWithPageがsetting.phpに定義されていないためコメントアウト")
+     * @noTodo
      */
     public function phpValidSyntax($check)
     {
         if (empty($check)) {
             return true;
         }
-        // TODO ucmitz: note
-        // if (!Configure::read('BcApp.validSyntaxWithPage')) {
-        //     return true;
-        // }
+        if (!Configure::read('BcApp.validSyntaxWithPage')) {
+            return true;
+        }
         if (!function_exists('exec')) {
             return true;
         }
