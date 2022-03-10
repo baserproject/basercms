@@ -124,7 +124,7 @@ class RouteCollection
      */
     public function parse(string $url, string $method = ''): array
     {
-        $decoded = urldecode($url);
+        $decoded = rawurldecode($url);
 
         // Sort path segments matching longest paths first.
         krsort($this->_paths);
@@ -173,7 +173,7 @@ class RouteCollection
     public function parseRequest(ServerRequestInterface $request): array
     {
         $uri = $request->getUri();
-        $urlPath = urldecode($uri->getPath());
+        $urlPath = rawurldecode($uri->getPath());
 
         // Sort path segments matching longest paths first.
         krsort($this->_paths);

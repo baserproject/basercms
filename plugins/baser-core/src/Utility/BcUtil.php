@@ -610,16 +610,15 @@ class BcUtil
     public static function urlencode($value)
     {
         // すでにエンコードされてる場合はそのまま返す
-        if (urlencode(urldecode($value)) !== $value) {
+        if (!preg_match('/\%[0-9A-Z][0-9A-Z]\%[0-9A-Z][0-9A-Z]/', $value)) {
             $value = str_replace([
                 ' ', '　', '	', '\\', '\'', '|', '`', '^', '"', ')', '(', '}', '{', ']', '[', ';',
                 '/', '?', ':', '@', '&', '=', '+', '$', ',', '%', '<', '>', '#', '!'
             ], '_', $value);
             $value = preg_replace('/\_{2,}/', '_', $value);
             $value = preg_replace('/(^_|_$)/', '', $value);
-            $value = urlencode($value);
         }
-        return $value;
+        return rawurlencode($value);
     }
 
     /**

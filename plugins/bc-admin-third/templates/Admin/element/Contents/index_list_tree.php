@@ -53,7 +53,7 @@ $deleteDisabled = !$this->BcAdminContent->isContentDeletable();
     ?>
     <li id="node-<?= $content->id ?>" data-jstree='{
 	"icon":"<?php echo $icon ?>",
-	"name":"<?php echo urldecode($content->name) ?>",
+	"name":"<?php echo rawurldecode($content->name) ?>",
 	"type":"<?php echo $treeItemType ?>",
 	"status":"<?php echo (bool)$status ?>",
 	"alias":"<?php echo (bool)$alias ?>",

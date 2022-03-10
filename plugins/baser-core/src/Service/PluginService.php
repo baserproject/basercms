@@ -190,7 +190,7 @@ class PluginService implements PluginServiceInterface
     public function uninstall(string $name, $connection = 'default'): void
     {
         $options = ['connection' => $connection];
-        $name = urldecode($name);
+        $name = rawurldecode($name);
         BcUtil::includePluginClass($name);
         $plugins = CakePlugin::getCollection();
         $plugin = $plugins->create($name);
@@ -308,7 +308,7 @@ class PluginService implements PluginServiceInterface
      */
     public function getInstallStatusMessage($pluginName): string
     {
-        $pluginName = urldecode($pluginName);
+        $pluginName = rawurldecode($pluginName);
         $installedPlugin = $this->Plugins->find()->where([
             'name' => $pluginName,
             'status' => true,

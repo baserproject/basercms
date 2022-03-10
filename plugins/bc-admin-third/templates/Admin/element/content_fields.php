@@ -103,7 +103,7 @@ $editable = $this->BcContents->isEditable();
   <span class="bca-post__url">
 	  <a href="<?php echo h($fullUrl) ?>" class="bca-text-url" target="_blank" data-toggle="tooltip"
        data-placement="top" title="<?php echo __d('baser', '公開URLを開きます') ?>"><i
-        class="bca-icon--globe"></i><?php echo urldecode($fullUrl) ?></a>
+        class="bca-icon--globe"></i><?php echo rawurldecode($fullUrl) ?></a>
 	  <?php echo $this->BcAdminForm->button('', [
       'id' => 'BtnCopyUrl',
       'class' => 'bca-btn',

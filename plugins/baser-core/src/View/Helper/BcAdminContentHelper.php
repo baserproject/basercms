@@ -244,7 +244,7 @@ class BcAdminContentHelper extends Helper
         foreach($urlArray as $key => $value) {
             $checkUrl .= $value . '/';
             $entityId = $Content->find()->select('entity_id')->where(['url' => $checkUrl])->first()->entity_id;
-            $urlArray[$key] = $this->BcBaser->getLink(urldecode($value), ['admin' => true, 'plugin' => 'BaserCore', 'controller' => 'content_folders', 'action' => 'edit', $entityId], ['forceTitle' => true]);
+            $urlArray[$key] = $this->BcBaser->getLink(rawurldecode($value), ['admin' => true, 'plugin' => 'BaserCore', 'controller' => 'content_folders', 'action' => 'edit', $entityId], ['forceTitle' => true]);
         }
         $folderLinkedUrl = $host;
         if ($urlArray) {

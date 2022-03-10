@@ -598,26 +598,20 @@ class BcUtilTest extends BcTestCase
      * @return void
      * @dataProvider testUrlencodeDataProvider
      */
-    public function testUrlencode($value, $isEncoded)
+    public function testUrlencode($value, $encodedExpected, $decodedExpected)
     {
-        $firstEncoded = BcUtil::urlencode($value);
-        $secondEncoded = BcUtil::urlencode($firstEncoded);
-        // すでにエンコーディングされてる場合は同じ値が返るか
-        $this->assertEquals($secondEncoded, $firstEncoded);
-        // デコードされた結果が同じになるか
-        if ($isEncoded) {
-            $this->assertEquals(urldecode($value), urldecode($secondEncoded));
-        } else {
-            $this->assertEquals($value, urldecode($secondEncoded));
-        }
+        $encoded = BcUtil::urlencode($value);
+        $this->assertEquals($encodedExpected, $encoded);
+        $this->assertEquals($decodedExpected, rawurldecode($encoded));
     }
 
     public function testUrlencodeDataProvider()
     {
         return [
-            ['あああ', false],
-            ['test', false],
-            ['%E3%81%84%E3%81%84%E3%81%84', true]
+            ['あああ', '%E3%81%82%E3%81%82%E3%81%82', 'あああ'],
+            ['______%%%あああ', '%E3%81%82%E3%81%82%E3%81%82', 'あああ'],
+            ['test', 'test', 'test'],
+            ['%E3%81%82%E3%81%82%E3%81%82', '%25E3%2581%2582%25E3%2581%2582%25E3%2581%2582', '%E3%81%82%E3%81%82%E3%81%82']
         ];
     }
 

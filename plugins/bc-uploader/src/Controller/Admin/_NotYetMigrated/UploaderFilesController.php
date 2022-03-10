@@ -197,7 +197,7 @@ class UploaderFilesController extends AppController
             $this->request = $this->request->withData('Filter.uploader_type',  'all');
         }
         if (!empty($this->request->getData('Filter.name'))) {
-            $this->request = $this->request->withData('Filter.name',  urldecode($this->request->getData('Filter.name')));
+            $this->request = $this->request->withData('Filter.name',  rawurldecode($this->request->getData('Filter.name')));
         }
 
         // =====================================================================
@@ -345,7 +345,7 @@ class UploaderFilesController extends AppController
     public function admin_ajax_image($name, $size = 'small')
     {
 
-        $file = $this->UploaderFile->findByName(urldecode($name));
+        $file = $this->UploaderFile->findByName(rawurldecode($name));
         $this->set('file', $file);
         $this->set('size', $size);
     }

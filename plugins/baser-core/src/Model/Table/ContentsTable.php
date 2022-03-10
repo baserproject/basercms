@@ -695,7 +695,7 @@ class ContentsTable extends AppTable
                 // 存在する場合は、自身のエイリアスかどうか確認し、エイリアスの場合は、公開状態とタイトル、説明文、アイキャッチ、更新日を更新
                 // フォルダの場合も更新する
                 if ($content->alias_id == $data->id || ($content->type == 'ContentFolder' && $isContentFolder)) {
-                    $content->name = urldecode($data->name);
+                    $content->name = rawurldecode($data->name);
                     $content->title = $data->title;
                     $content->description = $data->description;
                     $content->self_status = $data->self_status;
@@ -715,7 +715,7 @@ class ContentsTable extends AppTable
                         $content->parent_id = $this->copyContentFolderPath($url, $site->id);
                     }
                 } else {
-                    $content->name = urldecode($data->name);
+                    $content->name = rawurldecode($data->name);
                 }
                 $this->getEventManager()->off('Model.afterSave');
                 if (!$this->save($content)) {
