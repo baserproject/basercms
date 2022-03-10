@@ -16,6 +16,7 @@ use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Annotation\NoTodo;
+use BaserCore\Error\BcException;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 
@@ -39,6 +40,9 @@ class BcSearchIndexManagerBehavior extends Behavior
     public function initialize(array $config): void
     {
         $this->table = $this->table();
+        if (!array_key_exists("BaserCore\Model\Behavior\BcSearchIndexManagerInterface", class_implements($this->table))) {
+            throw new BcException("BcSearchIndexManagerInterfaceが実装されてません");
+        }
         /** @var BaserCore\Model\Table\ContentsTable $Contents  */
         $this->Contents = TableRegistry::getTableLocator()->get('BaserCore.Contents');
         /** @var BaserCore\Model\Table\SearchIndexesTable $SearchIndexes  */
