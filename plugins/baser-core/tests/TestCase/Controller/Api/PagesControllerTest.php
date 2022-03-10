@@ -101,7 +101,7 @@ class PagesControllerTest extends BcTestCase
                 "title" => "新しい フォルダー",
                 "plugin" => 'BaserCore',
                 "type" => "Page",
-                "site_id" => "0",
+                "site_id" => "1",
                 "alias_id" => "",
                 "entity_id" => "",
             ]

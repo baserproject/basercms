@@ -597,25 +597,6 @@ class BcUtil
     }
 
     /**
-     * URL用に文字列を変換する
-     *
-     * できるだけ可読性を高める為、不要な記号は除外する
-     *
-     * @param $value
-     * @return string
-     */
-    public static function urlencode($value)
-    {
-        $value = str_replace([
-            ' ', '　', '	', '\\', '\'', '|', '`', '^', '"', ')', '(', '}', '{', ']', '[', ';',
-            '/', '?', ':', '@', '&', '=', '+', '$', ',', '%', '<', '>', '#', '!'
-        ], '_', $value);
-        $value = preg_replace('/\_{2,}/', '_', $value);
-        $value = preg_replace('/(^_|_$)/', '', $value);
-        return urlencode($value);
-    }
-
-    /**
      * コンソールから実行されているかチェックする
      *
      * @return bool

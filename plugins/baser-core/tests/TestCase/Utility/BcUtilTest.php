@@ -590,16 +590,6 @@ class BcUtilTest extends BcTestCase
     }
 
     /**
-     * URL用に文字列を変換する
-     *
-     * できるだけ可読性を高める為、不要な記号は除外する
-     */
-    public function testUrlencode()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
-    /**
      * コンソールから実行されてるかどうかチェックする
      *
      *

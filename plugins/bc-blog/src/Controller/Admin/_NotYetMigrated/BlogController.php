@@ -401,13 +401,13 @@ class BlogController extends BlogAppController
             case 'tag':
                 $tag = isset($pass[1]) ? $pass[1] : '';
                 $existsTag = $this->BlogTag->hasAny(
-                    ['name' => urldecode($tag)]
+                    ['name' => rawurldecode($tag)]
                 );
                 if (empty($this->blogContent['BlogContent']['tag_use']) || $existsTag === false) {
                     $this->notFound();
                 }
                 $posts = $this->_getBlogPosts(['tag' => $tag]);
-                $this->setTitle(urldecode($tag));
+                $this->setTitle(rawurldecode($tag));
                 $template = $this->blogContent['BlogContent']['template'] . DS . 'archives';
 
                 $this->set('blogArchiveType', $type);
@@ -849,7 +849,7 @@ class BlogController extends BlogAppController
             'tag' => $tag,
             'num' => $num
         ]);
-        $this->setTitle(urldecode($tag));
+        $this->setTitle(rawurldecode($tag));
         $this->set('posts', $posts);
     }
 }

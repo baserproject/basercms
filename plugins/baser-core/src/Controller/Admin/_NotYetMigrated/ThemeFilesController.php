@@ -308,14 +308,14 @@ class ThemeFilesController extends AppController
             $this->notFound();
         }
 
-        $filename = urldecode(basename($path));
+        $filename = rawurldecode(basename($path));
 
         if (!$this->request->data) {
 
             $file = new File($fullpath);
             $pathinfo = pathinfo($fullpath);
-            $this->request = $this->request->withData('ThemeFile.name', urldecode(basename($file->name, '.' . $pathinfo['extension'])));
-            $this->request = $this->request->withData('ThemeFile.type', $this->_getFileType(urldecode(basename($file->name))));
+            $this->request = $this->request->withData('ThemeFile.name', rawurldecode(basename($file->name, '.' . $pathinfo['extension'])));
+            $this->request = $this->request->withData('ThemeFile.type', $this->_getFileType(rawurldecode(basename($file->name))));
             $this->request = $this->request->withData('ThemeFile.ext', $pathinfo['extension']);
             $this->request = $this->request->withData('ThemeFile.parent', dirname($fullpath) . DS);
             if ($this->request->getData('ThemeFile.type') === 'text') {
@@ -326,8 +326,8 @@ class ThemeFilesController extends AppController
             $this->ThemeFile->set($this->request->data);
             if ($this->ThemeFile->validates()) {
 
-                $oldPath = urldecode($fullpath);
-                $newPath = dirname($fullpath) . DS . urldecode($this->request->getData('ThemeFile.name'));
+                $oldPath = rawurldecode($fullpath);
+                $newPath = dirname($fullpath) . DS . rawurldecode($this->request->getData('ThemeFile.name'));
                 if ($this->request->getData('ThemeFile.ext')) {
                     $newPath .= '.' . $this->request->getData('ThemeFile.ext');
                 }
@@ -565,11 +565,11 @@ class ThemeFilesController extends AppController
             $result = $folder->copy(['from' => $fullpath, 'to' => $newPath, 'chmod' => 0777, 'skip' => ['_notes']]);
             $folder = null;
             $target = 'フォルダ';
-            $themeFile['name'] = basename(urldecode($newPath));
+            $themeFile['name'] = basename(rawurldecode($newPath));
             $themeFile['type'] = 'folder';
         } else {
             $pathinfo = pathinfo($fullpath);
-            $newPath = $pathinfo['dirname'] . DS . urldecode(basename($fullpath, '.' . $pathinfo['extension'])) . '_copy';
+            $newPath = $pathinfo['dirname'] . DS . rawurldecode(basename($fullpath, '.' . $pathinfo['extension'])) . '_copy';
             while(true) {
                 if (!file_exists($newPath . '.' . $pathinfo['extension'])) {
                     $newPath .= '.' . $pathinfo['extension'];
@@ -577,22 +577,22 @@ class ThemeFilesController extends AppController
                 }
                 $newPath .= '_copy';
             }
-            $result = @copy(urldecode($fullpath), $newPath);
+            $result = @copy(rawurldecode($fullpath), $newPath);
             if ($result) {
                 chmod($newPath, 0666);
             }
             $target = 'ファイル';
-            $themeFile['name'] = basename(urldecode($newPath));
+            $themeFile['name'] = basename(rawurldecode($newPath));
             $themeFile['type'] = $this->_getFileType($themeFile['name']);
         }
 
         if (!$result) {
-            $this->ThemeFile->saveDblog($target . ' ' . urldecode($path) . ' のコピーに失敗しました。');
+            $this->ThemeFile->saveDblog($target . ' ' . rawurldecode($path) . ' のコピーに失敗しました。');
             $this->ajaxError(500, __d('baser', '上位フォルダのアクセス権限を見直してください。'));
             return;
         }
 
-        $this->ThemeFile->saveDblog($target . ' ' . urldecode($path) . ' をコピーしました。');
+        $this->ThemeFile->saveDblog($target . ' ' . rawurldecode($path) . ' をコピーしました。');
         $this->set('fullpath', $fullpath);
         $this->set('path', dirname($path));
         $this->set('theme', $theme);
@@ -808,7 +808,7 @@ class ThemeFilesController extends AppController
 
         if (!empty($args)) {
             $data['path'] = implode(DS, $args);
-            $data['path'] = urldecode($data['path']);
+            $data['path'] = rawurldecode($data['path']);
         }
 
         if ($data['plugin']) {
