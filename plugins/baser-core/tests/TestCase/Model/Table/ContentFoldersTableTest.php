@@ -83,6 +83,10 @@ class ContentFoldersTableTest extends BcTestCase
                 'integer' => 'The provided value is invalid',
                 'valid' => 'IDに不正な値が利用されています。'
             ],
+            // BcContentsBehaviorのafterMarshalにて、contentを他のフィールド同様必要前提としている
+            'content' => [
+                '_required' => '関連するコンテンツがありません'
+            ]
         ], $contentFolder->getErrors());
     }
 

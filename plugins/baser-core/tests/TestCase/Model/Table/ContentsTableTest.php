@@ -326,12 +326,17 @@ class ContentsTableTest extends BcTestCase
      */
     public function testBeforeSave()
     {
+        $value = "テスト";
         $data = new Entity([
             'id' => 100,
             'parent_id' => 6,
+            'name' => $value
         ]);
-        $this->Contents->dispatchEvent('Model.beforeSave', ['entity' => $data, 'options' => new ArrayObject()]);
+        $result = $this->Contents->dispatchEvent('Model.beforeSave', ['entity' => $data, 'options' => new ArrayObject()]);
         $this->assertEquals(6, $this->Contents->beforeSaveParentId);
+        // nameフィールドがエンコードされてるかをテスト
+        $entity = $result->getData('entity');
+        $this->assertEquals(urlencode($value), $entity->name);
     }
 
     /**
@@ -339,16 +344,12 @@ class ContentsTableTest extends BcTestCase
      */
     public function testAfterSave()
     {
-        $value = "テスト";
         $content = $this->Contents->get(6); // サービスフォルダ
         $content->self_status = false;
-        $content->name = $value;
         $this->Contents->dispatchEvent('Model.afterSave', [$content, new ArrayObject()]);
         $content = $this->Contents->get(6);
         // updateSystemDataが適応されてるかテスト
         $this->assertFalse($content->status);
-        // nameフィールドがエンコードされてるかをテスト
-        $this->assertEquals(urlencode($value), $content->name);
     }
 
     /**
@@ -487,22 +488,6 @@ class ContentsTableTest extends BcTestCase
     }
 
     /**
-     * testNewEntity
-     *
-     * @return void
-     */
-    public function testNewEntity()
-    {
-        $newContent = $this->Contents->newEntity([
-            'title' => 'relatedMainContent',
-            'name' => 'relatedMainContent',
-            'url' => '/test/',
-            'site_id' => 1,
-        ]);
-        $this->assertNotEmpty($newContent->created_date);
-    }
-
-    /**
      * testCreateUrl
      *
      * @param int $id コンテンツID
@@ -585,15 +570,17 @@ class ContentsTableTest extends BcTestCase
             'id' => 100,
             'site_id' => 1,
             'name' => 'test',
+            'title' => 'test',
             'status' => null,
             'publish_begin' => null,
             'publish_end' => null,
             'self_status' => true,
-            'self_publish_begin' => FrozenTime::now(),
+            'self_publish_begin' => FrozenTime::yesterday(),
             'self_publish_end' => FrozenTime::now(),
             'parent_id' => 1,
         ];
-        $content = new Content($data);
+        $content = $this->Contents->patchEntity($this->Contents->newEmptyEntity(), $data, ['validate' => false]);
+        $content = $this->Contents->save($content);
         $this->execPrivateMethod($this->Contents, 'updateSystemData', [$content]);
         $content = $this->Contents->get(100);
         $this->assertTrue($content->status);

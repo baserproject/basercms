@@ -53,8 +53,8 @@ class ContentsTable extends AppTable
     public function initialize(array $config): void
     {
         // TODO ucmitz:
-        FrozenTime::setToStringFormat('yyyy-MM-dd HH:mm:ss');
-        // FrozenTime::setToStringFormat('yyyy/MM/dd HH:mm:ss');
+        // FrozenTime::setToStringFormat('yyyy-MM-dd HH:mm:ss');
+        FrozenTime::setToStringFormat('yyyy/MM/dd HH:mm:ss');
         parent::initialize($config);
         $this->addBehavior('Tree', ['level' => 'level']);
         $this->addBehavior('BaserCore.BcUpload', [
@@ -292,16 +292,14 @@ class ContentsTable extends AppTable
      */
     public function beforeMarshal(EventInterface $event, ArrayObject $content, ArrayObject $options)
     {
-        // $createはデフォルトfalse
-        $isNew = $options['isNew'] ?? false;
-        $create = empty($content['id']) && $isNew;
         // タイトルは強制的に255文字でカット
         if (!empty($content['title'])) {
             $content['title'] = mb_substr($content['title'], 0, 254, 'UTF-8');
         }
-        if ($create) {
+        $isNew = empty($content['id']) && !isset($content['created']);
+        if ($isNew) {
             // IEのURL制限が2083文字のため、全て全角文字を想定し231文字でカット
-            if (!isset($content['name'])) {
+            if (!isset($content['name']) && !empty($content['title'])) {
                 $content['name'] = $content['title'];
             }
             if (!isset($content['self_status'])) {
@@ -343,22 +341,6 @@ class ContentsTable extends AppTable
             $content['name'] = $this->getUniqueName($content['name'], $content['parent_id'] ?? null, $contentId);
         }
         return (array) $content;
-    }
-
-    /**
-    * ContentTableのbeforeMarshal内で新規作成の場合isNewオプションを設定する
-    * @param array $data The data to build an entity with.
-    * @param array $options A list of options for the object hydration.
-    * @return \Cake\Datasource\EntityInterface
-    * @see \Cake\ORM\Marshaller::one()
-     * @checked
-     * @noTodo
-     * @unitTest
-    */
-    public function newEntity(array $data, array $options = []): EntityInterface
-    {
-        $options = array_merge($options, ['isNew' => true]);
-        return parent::newEntity($data, $options);
     }
 
     /**
