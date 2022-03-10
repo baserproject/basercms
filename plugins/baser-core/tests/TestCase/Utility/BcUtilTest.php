@@ -562,12 +562,6 @@ class BcUtilTest extends BcTestCase
      */
     public function testSerialize()
     {
-
-        // TODO ucmitz移行時に未実装のため代替措置
-        // >>>
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        // <<<
-
         // BcUtil::serialize()でシリアライズした場合
         $serialized = BcUtil::serialize('hoge');
         $result = BcUtil::unserialize($serialized);
@@ -577,7 +571,6 @@ class BcUtilTest extends BcTestCase
         $serialized = serialize('hoge');
         $result = BcUtil::unserialize($serialized);
         $this->assertEquals('hoge', $result, 'serializeのみで正しくシリアライズ/アンシリアライズできません');
-
     }
 
     /**

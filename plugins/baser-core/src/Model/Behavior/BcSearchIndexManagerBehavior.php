@@ -8,13 +8,13 @@
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
  */
+
 namespace BaserCore\Model\Behavior;
 
-use ArrayObject;
 use Cake\ORM\Behavior;
+use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
-use Cake\Event\EventInterface;
-use Cake\Datasource\EntityInterface;
+use BaserCore\Utility\BcUtil;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
@@ -28,13 +28,24 @@ use BaserCore\Annotation\UnitTest;
  */
 class BcSearchIndexManagerBehavior extends Behavior
 {
-
     /**
-     * SearchIndex Model
-     *
-     * @var SearchIndex
+     * initialize
+     * @param  array $config
+     * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public $SearchIndex = null;
+    public function initialize(array $config): void
+    {
+        $this->table = $this->table();
+        /** @var BaserCore\Model\Table\ContentsTable $Contents  */
+        $this->Contents = TableRegistry::getTableLocator()->get('BaserCore.Contents');
+        /** @var BaserCore\Model\Table\SearchIndexesTable $SearchIndexes  */
+        $this->SearchIndexes = TableRegistry::getTableLocator()->get('BaserCore.SearchIndexes');
+        /** @var BaserCore\Model\Table\SiteConfigsTable $SiteConfigs  */
+        $this->SiteConfigs = TableRegistry::getTableLocator()->get('BaserCore.SiteConfigs');
+    }
 
     /**
      * 検索インデクスデータを登録する
@@ -56,54 +67,54 @@ class BcSearchIndexManagerBehavior extends Behavior
      *        'publish_end' => '公開終了日'
      * ]]
      *
-     * @param Model $model
-     * @param array $data
+     * @param array $searchIndex
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function saveSearchIndex(Model $model, $data)
+    public function saveSearchIndex($searchIndex)
     {
-        if (!$data) {
+        if (!$searchIndex) {
             return false;
         }
 
-        if (!empty($data['SearchIndex']['content_id'])) {
-            $Content = ClassRegistry::init('Content');
-            $content = $Content->find('first', ['fields' => ['lft', 'rght'], 'conditions' => ['Content.id' => $data['SearchIndex']['content_id']], 'recursive' => 1]);
-            $data['SearchIndex']['lft'] = $content['Content']['lft'];
-            $data['SearchIndex']['rght'] = $content['Content']['rght'];
+        if (!empty($searchIndex['content_id'])) {
+            $content = $this->Contents->find()->select(['lft', 'rght'])->where(['id' => $searchIndex['content_id']])->first();
+            $searchIndex['lft'] = $content->lft;
+            $searchIndex['rght'] = $content->rght;
         } else {
-            $data['SearchIndex']['lft'] = 0;
-            $data['SearchIndex']['rght'] = 0;
+            $searchIndex['lft'] = 0;
+            $searchIndex['rght'] = 0;
         }
-        $data['SearchIndex']['model'] = $model->alias;
+        $searchIndex['model'] = Inflector::classify($this->table->getAlias());
         // タグ、空白を除外
-        $data['SearchIndex']['detail'] = str_replace(["\r\n", "\r", "\n", "\t", "\s"], '', trim(strip_tags($data['SearchIndex']['detail'])));
+        $searchIndex['detail'] = str_replace(["\r\n", "\r", "\n", "\t", "\s"], '', trim(strip_tags($searchIndex['detail'])));
 
         // 検索用データとして保存
-        $this->SearchIndex = ClassRegistry::init('SearchIndex');
         $before = false;
-        if (!empty($data['SearchIndex']['model_id'])) {
-            $before = $this->SearchIndex->find('first', [
-                'fields' => ['SearchIndex.id', 'SearchIndex.content_id'],
-                'conditions' => [
-                    'SearchIndex.model' => $data['SearchIndex']['model'],
-                    'SearchIndex.model_id' => $data['SearchIndex']['model_id']
-                ]]);
+        if (!empty($searchIndex['model_id'])) {
+            $before = $this->SearchIndexes->find()
+                ->select(['id', 'content_id'])
+                ->where([
+                    'model' => $searchIndex['model'],
+                    'model_id' => $searchIndex['model_id']
+                ])->first();
         }
         if ($before) {
-            $data['SearchIndex']['id'] = $before['SearchIndex']['id'];
-            $this->SearchIndex->set($data);
+            $searchIndex['id'] = $before->id;
+            $searchIndex = $this->SearchIndexes->patchEntity($before, $searchIndex);
         } else {
-            if (empty($data['SearchIndex']['priority'])) {
-                $data['SearchIndex']['priority'] = '0.5';
+            if (empty($searchIndex['priority'])) {
+                $searchIndex['priority'] = '0.5';
             }
-            $this->SearchIndex->create($data);
+            $searchIndex = $this->SearchIndexes->newEntity($searchIndex);
         }
-        $result = $this->SearchIndex->save();
+        $result = $this->SearchIndexes->save($searchIndex);
 
         // カテゴリを site_configsに保存
         if ($result) {
-            return $this->updateSearchIndexMeta($model);
+            return $this->updateSearchIndexMeta();
         }
 
         return $result;
@@ -112,36 +123,37 @@ class BcSearchIndexManagerBehavior extends Behavior
     /**
      * コンテンツデータを削除する
      *
-     * @param Model $model
      * @param string $id
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function deleteSearchIndex(Model $model, $id)
+    public function deleteSearchIndex($id)
     {
-        $this->SearchIndex = ClassRegistry::init('SearchIndex');
-        if ($this->SearchIndex->deleteAll(['SearchIndex.model' => $model->alias, 'SearchIndex.model_id' => $id])) {
-            return $this->updateSearchIndexMeta($model);
+        if ($this->SearchIndexes->deleteAll(['model' => Inflector::classify($this->table->getAlias()), 'model_id' => $id])) {
+            return $this->updateSearchIndexMeta();
         }
     }
 
     /**
      * コンテンツメタ情報を更新する
      *
-     * @param Model $model
      * @return boolean
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function updateSearchIndexMeta(Model $model)
+    public function updateSearchIndexMeta()
     {
-        $db = ConnectionManager::getDataSource('default');
         $contentTypes = [];
-        $searchIndexes = $this->SearchIndex->find('all', ['fields' => ['SearchIndex.type'], 'group' => ['SearchIndex.type'], 'conditions' => ['SearchIndex.status' => true]]);
+        $searchIndexes = $this->SearchIndexes->find()->select('type')->group('type')->where(['status' => true]);
         foreach($searchIndexes as $searchIndex) {
-            if ($searchIndex['SearchIndex']['type']) {
-                $contentTypes[$searchIndex['SearchIndex']['type']] = $searchIndex['SearchIndex']['type'];
+            if ($searchIndex->type) {
+                $contentTypes[$searchIndex->type] = $searchIndex->type;
             }
         }
-        $siteConfigs['SiteConfig']['content_types'] = BcUtil::serialize($contentTypes);
-        $SiteConfig = ClassRegistry::init('SiteConfig');
-        return $SiteConfig->saveKeyValue($siteConfigs);
+        return $this->SiteConfigs->saveValue('content_types', BcUtil::serialize($contentTypes));
     }
 
 }

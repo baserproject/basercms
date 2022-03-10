@@ -36,6 +36,7 @@ class PagesControllerTest extends BcTestCase
         'plugin.BaserCore.Contents',
         'plugin.BaserCore.Sites',
         'plugin.BaserCore.SiteConfigs',
+        'plugin.BaserCore.SearchIndexes',
     ];
 
     /**

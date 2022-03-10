@@ -572,6 +572,9 @@ class BcUtil
      *
      * @param mixed $value 対象文字列
      * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public static function serialize($value)
     {

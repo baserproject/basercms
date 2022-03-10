@@ -66,7 +66,7 @@ class SearchIndexesTableTest extends BcTestCase
      */
     public function testInitialize()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->assertTrue($this->SearchIndexes->hasBehavior('Timestamp'));
     }
 
 	/**

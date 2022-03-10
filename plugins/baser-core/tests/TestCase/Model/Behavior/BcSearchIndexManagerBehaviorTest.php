@@ -16,10 +16,12 @@ use ReflectionClass;
 use Cake\Filesystem\File;
 use BaserCore\TestSuite\BcTestCase;
 use Laminas\Diactoros\UploadedFile;
+use BaserCore\Model\Table\PagesTable;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Model\Table\ContentsTable;
-use BaserCore\Model\Behavior\BcUploadBehavior;
+use BaserCore\Model\Behavior\BcSearchIndexManager;
 use BaserCore\Service\ContentServiceInterface;
+use BaserCore\Model\Behavior\BcSearchIndexManagerBehavior;
 
 /**
  * Class BcSearchIndexManagerBehavioreTest
@@ -29,7 +31,19 @@ use BaserCore\Service\ContentServiceInterface;
 class BcSearchIndexManagerBehaviorTest extends BcTestCase
 {
 
-    public $fixtures = [];
+    public $fixtures = [
+        'plugin.BaserCore.Pages',
+        'plugin.BaserCore.Contents',
+        'plugin.BaserCore.Sites',
+        'plugin.BaserCore.ContentFolders',
+        'plugin.BaserCore.SearchIndexes',
+        'plugin.BaserCore.SiteConfigs',
+    ];
+
+    /**
+     * @var PagesTable|BcSearchIndexManagerBehavior
+     */
+    public $table;
 
     /**
      * setUp
@@ -38,6 +52,10 @@ class BcSearchIndexManagerBehaviorTest extends BcTestCase
      */
     public function setUp(): void
     {
+        $this->table = $this->getTableLocator()->get('BaserCore.Pages');
+        $this->table->setPrimaryKey(['id']);
+        $this->table->addBehavior('BaserCore.BcSearchIndexManager');
+        $this->BcSearchIndexManager = $this->table->getBehavior('BcSearchIndexManager');
         parent::setUp();
     }
 
@@ -48,7 +66,21 @@ class BcSearchIndexManagerBehaviorTest extends BcTestCase
      */
     public function tearDown(): void
     {
+        unset($this->table, $this->BcSearchIndexManager);
         parent::tearDown();
+    }
+
+    /**
+     * testInitialize
+     *
+     * @return void
+     */
+    public function testInitialize(): void
+    {
+        $this->assertNotEmpty($this->BcSearchIndexManager->Contents);
+        $this->assertNotEmpty($this->BcSearchIndexManager->SearchIndexes);
+        $this->assertNotEmpty($this->BcSearchIndexManager->SiteConfigs);
+        $this->assertInstanceOf("BaserCore\Model\Table\PagesTable", $this->BcSearchIndexManager->table);
     }
 
 
@@ -61,7 +93,20 @@ class BcSearchIndexManagerBehaviorTest extends BcTestCase
      */
     public function testSaveSearchIndex()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $page = $this->table->find()->contain(['Contents' => ['Sites']])->first();
+        // 新規の場合
+        $pageSearchIndex = $this->table->createSearchIndex($page);
+        unset($pageSearchIndex['model_id']); // model_idがない場合は新規追加
+        $this->assertTrue($this->table->saveSearchIndex($pageSearchIndex));
+        // SearchIndexesが新規で追加されているかを確認
+        $this->assertCount(8, $this->BcSearchIndexManager->SearchIndexes->find()->all());
+        // 更新の場合
+        $pageSearchIndex = $this->table->createSearchIndex($page);
+        $this->assertTrue($this->table->saveSearchIndex($pageSearchIndex));
+        $searchIndex = $this->BcSearchIndexManager->SearchIndexes->findByModelId($page->id)->first();
+        $content = $this->BcSearchIndexManager->Contents->findById($page->content->id)->first();
+        // searchIndexが新規のcontentに合わせて書き換わってるかを確認する
+        $this->assertEquals($content->title, $searchIndex->title);
     }
 
     /**
@@ -69,7 +114,8 @@ class BcSearchIndexManagerBehaviorTest extends BcTestCase
      */
     public function testDeleteSearchIndex()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->assertTrue($this->table->deleteSearchIndex(2));
+        $this->assertTrue($this->BcSearchIndexManager->SearchIndexes->findByModelId(2)->isEmpty());
     }
 
     /**
@@ -77,7 +123,9 @@ class BcSearchIndexManagerBehaviorTest extends BcTestCase
      */
     public function testUpdateSearchIndexMeta()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->BcSearchIndexManager->SiteConfigs->saveValue('content_types', '');
+        $this->assertTrue($this->table->updateSearchIndexMeta());
+        $this->assertNotEmpty($this->BcSearchIndexManager->SiteConfigs->getValue('content_types'));
     }
 
 }

@@ -26,9 +26,9 @@ use BaserCore\Utility\BcUtil;
  *
  * システム設定モデル
  *
- * @package Baser.Model
- * @mixin BcKeyValueBehavior
+ * @package BaserCore\Model\Table
  * @method SiteConfig newEntity($data = null, array $options = [])
+ * @method BcKeyValueBehavior setValue($key, $value)
  */
 class SiteConfigsTable extends AppTable
 {
