@@ -47,12 +47,14 @@ class ContentsTable extends AppTable
      * @param array $config テーブル設定
      * @return void
      * @checked
-     * @noTodo
+     * @note(value="yyyy/MM/dd型に所定の場所で変換する")
      * @unitTest
      */
     public function initialize(array $config): void
     {
-        FrozenTime::setToStringFormat('yyyy/MM/dd HH:mm:ss');
+        // TODO ucmitz:
+        FrozenTime::setToStringFormat('yyyy-MM-dd HH:mm:ss');
+        // FrozenTime::setToStringFormat('yyyy/MM/dd HH:mm:ss');
         parent::initialize($config);
         $this->addBehavior('Tree', ['level' => 'level']);
         $this->addBehavior('BaserCore.BcUpload', [
@@ -665,6 +667,7 @@ class ContentsTable extends AppTable
         }
         $_data = $this->findById($data->id)->applyOptions(['withDeleted'])->first();
         if ($_data) {
+            $this->getEventManager()->off('Model.beforeMarshal');
             $data = $this->patchEntity($_data, $data->toArray(), ['validate' => false]);
         }
 
@@ -1021,6 +1024,7 @@ class ContentsTable extends AppTable
         }
         $event = $this->getEventManager()->matchingListeners('afterSave');
         if ($event) $this->getEventManager()->off('Model.afterSave');
+        $this->getEventManager()->off('Model.beforeSave');
         return $this->save($content, ['validate' => false]);
     }
 

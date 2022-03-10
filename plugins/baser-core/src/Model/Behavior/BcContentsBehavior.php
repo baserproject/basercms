@@ -56,12 +56,51 @@ class BcContentsBehavior extends Behavior
         $this->Contents = $this->table->getAssociation('Contents');
     }
 
+    // TODO ucmitz: 構成を変更するため一旦コメントアウト
+    // /**
+    //  * BeforeMarshal
+    //  *
+    //  * 新規のデータの場合時のみContent のバリデーションを実行し、エラーがある場合は中止する
+    //  * $data['content']がある場合のみ実行する
+    //  * @param EventInterface $event
+    //  * @param ArrayObject $data
+    //  * @param ArrayObject $options
+    //  * @return void
+    //  * @checked
+    //  * @noTodo
+    //  * @unitTest
+    //  */
+    // public function beforeMarshal(EventInterface $event, ArrayObject $data, ArrayObject $options)
+    // {
+    //     if (!empty($data['content'])) {
+    //         if (!empty($data['content']['id'])) {
+    //             // 更新の場合
+    //             if (!$this->Contents->findById($data['content']['id'])->first()->isNew()) return;
+    //         }
+    //         // 新規作成の場合
+    //         $validateOptions = ['validate' => $options['validate'] ?? 'default'];
+    //         // errorをチェックするための使い捨てエンティティ
+    //         $errorChecker = $this->Contents->newEntity($data['content'], $validateOptions);
+    //         if ($errorChecker->hasErrors() && empty($data['content']['id'])) {
+    //             return false;
+    //         }
+    //         [$plugin, $type] = pluginSplit($this->table->getRegistryAlias());
+    //         if (!isset($data['content']['plugin'])) {
+    //             $data['content']['plugin'] = $plugin;
+    //         }
+    //         if (!isset($data['content']['type'])) {
+    //             $data['content']['type'] = Inflector::classify($type);
+    //         }
+    //         $options = array_merge((array) $options, ['isNew' => true]);
+    //         $data['content'] = $this->Contents->beforeMarshal($event, new ArrayObject($data['content']), new ArrayObject($options));
+    //     }
+    // }
+
     /**
-     * BeforeMarshal
-     *
-     * 新規のデータの場合時のみContent のバリデーションを実行し、エラーがある場合は中止する
-     * $data['content']がある場合のみ実行する
+     * afterMarshal
+     * contentの項目がない場合エラーをセットする
      * @param EventInterface $event
+     * @param EventInterface $entity
      * @param ArrayObject $data
      * @param ArrayObject $options
      * @return void
@@ -69,29 +108,10 @@ class BcContentsBehavior extends Behavior
      * @noTodo
      * @unitTest
      */
-    public function beforeMarshal(EventInterface $event, ArrayObject $data, ArrayObject $options)
+    public function afterMarshal(EventInterface $event, EntityInterface $entity, ArrayObject $data, ArrayObject $options)
     {
-        if (!empty($data['content'])) {
-            if (!empty($data['content']['id'])) {
-                // 更新の場合
-                if (!$this->Contents->findById($data['content']['id'])->first()->isNew()) return;
-            }
-            // 新規作成の場合
-            $validateOptions = ['validate' => $options['validate'] ?? 'default'];
-            // errorをチェックするための使い捨てエンティティ
-            $errorChecker = $this->Contents->newEntity($data['content'], $validateOptions);
-            if ($errorChecker->hasErrors() && empty($data['content']['id'])) {
-                return false;
-            }
-            [$plugin, $type] = pluginSplit($this->table->getRegistryAlias());
-            if (!isset($data['content']['plugin'])) {
-                $data['content']['plugin'] = $plugin;
-            }
-            if (!isset($data['content']['type'])) {
-                $data['content']['type'] = Inflector::classify($type);
-            }
-            $options = array_merge((array) $options, ['isNew' => true]);
-            $data['content'] = $this->Contents->beforeMarshal($event, new ArrayObject($data['content']), new ArrayObject($options));
+        if (!isset($data['content'])) {
+            $entity->setError('content', ['_required' => '関連するコンテンツがありません']);
         }
     }
 
