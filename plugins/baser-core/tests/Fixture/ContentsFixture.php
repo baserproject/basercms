@@ -659,7 +659,7 @@ class ContentsFixture extends TestFixture
                 'plugin' => 'BaserCore',
                 'name' => 'サイトID2のフォルダ',
                 'type' => "ContentFolder",
-                'url' => '/s',
+                'url' => '/s/',
                 'entity_id' => 17,
                 'deleted_date' => null,
                 'parent_id' => 1,

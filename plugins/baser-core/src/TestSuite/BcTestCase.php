@@ -21,7 +21,6 @@ use BaserCore\Utility\BcApiUtil;
 use Cake\Core\Configure;
 use Cake\Event\EventManager;
 use Cake\Http\Response;
-use Cake\Http\Runner;
 use Cake\Http\ServerRequest;
 use Cake\Http\ServerRequestFactory;
 use Cake\ORM\TableRegistry;
@@ -147,7 +146,7 @@ class BcTestCase extends TestCase
             Router::setRequest($request);
             $params = Router::parseRequest($request);
         } catch (\Exception $e) {
-            return $request;
+            throw $e;
         }
 
         $request = $request->withAttribute('params', $params);

@@ -18,7 +18,6 @@ use BaserCore\Annotation\UnitTest;
 use BaserCore\Service\ContentFolderService;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Service\ContentFolderServiceInterface;
-use BaserCore\Service\PermissionServiceInterface;
 
 /**
  * BcAdminContentFolderHelper

@@ -11,6 +11,7 @@
 
 namespace BaserCore\Service;
 
+use Authentication\AuthenticationService;
 use Authentication\Identity;
 use BaserCore\Model\Entity\User;
 use BaserCore\Model\Table\LoginStoresTable;
@@ -321,6 +322,7 @@ class UserService implements UserServiceInterface
      */
     public function checkAutoLogin(ServerRequest $request, ResponseInterface $response): ResponseInterface
     {
+        /* @var AuthenticationService $authentication */
         $authentication = $request->getAttribute('authentication');
         if(!$authentication) {
             return $response;
@@ -417,7 +419,7 @@ class UserService implements UserServiceInterface
             return true;
         }
         try {
-            $user = $this->get($sessionUser->id);
+            $user = $this->Users->find('available')->where(['id' => $sessionUser->id])->first();
             $session = $request->getSession();
             $sessionKey = Configure::read('BcPrefixAuth.' . $prefix . '.sessionKey');
             $session->write($sessionKey, $user);

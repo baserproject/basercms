@@ -319,7 +319,7 @@ return [
     'BcAgent' => [
         'mobile' => [
             'name' => __d('baser', 'ケータイ'),
-            'helper' => 'BcMobile',
+            'helper' => 'BaserCore.BcMobile',
             'agents' => [
                 'Googlebot-Mobile',
                 'Y!J-SRD',
@@ -334,7 +334,7 @@ return [
         ],
         'smartphone' => [
             'name' => __d('baser', 'スマートフォン'),
-            'helper' => 'BcSmartphone',
+            'helper' => 'BaserCore.BcSmartphone',
             'agents' => [
                 'iPhone',            // Apple iPhone
                 'iPod',                // Apple iPod touch

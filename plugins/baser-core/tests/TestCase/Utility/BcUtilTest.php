@@ -17,14 +17,8 @@ use Cake\Core\Plugin;
 use Cake\Core\Configure;
 use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
-use Cake\ORM\TableRegistry;
 use BaserCore\Utility\BcUtil;
 use BaserCore\TestSuite\BcTestCase;
-use Authentication\AuthenticationService;
-use BaserCore\Service\ContentFolderService;
-use Authentication\Authenticator\FormAuthenticator;
-use Authentication\Identifier\IdentifierCollection;
-use Authentication\Authenticator\SessionAuthenticator;
 
 /**
  * TODO: $this->getRequest();などをsetupに統一する
@@ -601,13 +595,13 @@ class BcUtilTest extends BcTestCase
 
     /**
      * コンソールから実行されてるかどうかチェックする
-     *
-     *
      */
     public function testIsConsole()
     {
-        // テストはCliから実行するためtrue
         $this->assertTrue(BcUtil::isConsole());
+        $_ENV['IS_CONSOLE'] = false;
+        $this->assertFalse(BcUtil::isConsole());
+        $_ENV['IS_CONSOLE'] = true;
     }
 
     /**
@@ -895,7 +889,6 @@ class BcUtilTest extends BcTestCase
 
     /**
      * WebサイトのベースとなるURLを取得する
-     * TODO BC_DEPLOY_PATTERNで分岐した場合のテストの追加
      *
      * @param string $script App.baseUrlの値
      * @param string $script $_SERVER['SCRIPT_FILENAME']の値
@@ -904,15 +897,11 @@ class BcUtilTest extends BcTestCase
      */
     public function testBaseUrl($baseUrl, $expect)
     {
-        // 初期化
         Configure::write('App.baseUrl', $baseUrl);
-        if (BcUtil::isConsole()) {
-            $_SERVER['SCRIPT_FILENAME'] = APP . 'Console' . DS . 'cake.php';
-            $_SERVER['SCRIPT_NAME'] = APP . 'Console' . DS . 'cake.php';
-        }
+        $_SERVER['SCRIPT_NAME'] = DS . 'webroot' . DS . 'index.php';
+        $_SERVER['SCRIPT_FILENAME'] = ROOT . $_SERVER['SCRIPT_NAME'];
         $result = BcUtil::baseUrl();
         $this->assertEquals($expect, $result, 'WebサイトのベースとなるURLを正しく取得できません');
-
     }
 
     public function baseUrlDataProvider()
@@ -930,19 +919,14 @@ class BcUtilTest extends BcTestCase
      */
     public function testDocRoot()
     {
-        $_SERVER['SCRIPT_FILENAME'] = WWW_ROOT . 'test.php';
-
-        if (BcUtil::isConsole()) {
-            $expected = str_replace('app' . DS . 'Console' . DS . 'cake.php', '', $_SERVER['SCRIPT_NAME']);
-
-        } else {
-            $path = explode('/', $_SERVER['SCRIPT_NAME']);
-            krsort($path);
-            $expected = $_SERVER['SCRIPT_FILENAME'];
-            foreach($path as $value) {
-                $reg = "/\/" . $value . "$/";
-                $expected = preg_replace($reg, '', $expected);
-            }
+        $_SERVER['SCRIPT_NAME'] = DS . 'webroot' . DS . 'index.php';
+        $_SERVER['SCRIPT_FILENAME'] = ROOT . $_SERVER['SCRIPT_NAME'];
+        $path = explode('/', $_SERVER['SCRIPT_NAME']);
+        krsort($path);
+        $expected = $_SERVER['SCRIPT_FILENAME'];
+        foreach($path as $value) {
+            $reg = "/\/" . $value . "$/";
+            $expected = preg_replace($reg, '', $expected);
         }
         $result = BcUtil::docRoot();
         $this->assertEquals($expected, $result);
