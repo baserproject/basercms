@@ -382,12 +382,12 @@ class ContentsControllerTest extends BcTestCase
         $this->enableSecurityToken();
         $this->enableCsrfToken();
         $data = $this->ContentService->getIndex(['name' => 'testEditのエイリアス'])->first();
-        $data->name = 'ControllerEditエイリアス';
+        $data->title = 'ControllerEditエイリアス';
         $data->site->name = 'ucmitz'; // site側でエラーが出るため
         $this->post('/baser/admin/baser-core/contents/edit_alias/' . $data->id, ["Content" => $data->toArray()]);
         $this->assertResponseSuccess();
         $this->assertRedirect('/baser/admin/baser-core/contents/edit_alias/' . $data->id);
-        $this->assertEquals(BcUtil::urlencode('ControllerEditエイリアス'), $this->ContentService->get($data->id)->name);
+        $this->assertEquals('ControllerEditエイリアス', $this->ContentService->get($data->id)->title);
     }
 
     /**

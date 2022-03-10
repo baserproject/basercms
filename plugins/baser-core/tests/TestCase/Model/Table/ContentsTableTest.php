@@ -339,12 +339,16 @@ class ContentsTableTest extends BcTestCase
      */
     public function testAfterSave()
     {
+        $value = "テスト";
         $content = $this->Contents->get(6); // サービスフォルダ
         $content->self_status = false;
+        $content->name = $value;
         $this->Contents->dispatchEvent('Model.afterSave', [$content, new ArrayObject()]);
         $content = $this->Contents->get(6);
         // updateSystemDataが適応されてるかテスト
         $this->assertFalse($content->status);
+        // nameフィールドがエンコードされてるかをテスト
+        $this->assertEquals(urlencode($value), $content->name);
     }
 
     /**
@@ -632,7 +636,7 @@ class ContentsTableTest extends BcTestCase
     {
         $this->Contents->updateChildren(18);
         // 孫のurlが更新されてるか確認
-        $this->assertEquals("/ツリー階層削除用フォルダー(親)/ツリー階層削除用フォルダー(子)/ツリー階層削除用フォルダー(孫)/", $this->Contents->get(20)->url);
+        $this->assertEquals("/ツリー階層削除用フォルダー(親)/ツリー階層削除用フォルダー(子)/ツリー階層削除用フォルダー(孫)/", rawurldecode($this->Contents->get(20)->url));
     }
 
     /**

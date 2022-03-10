@@ -13,25 +13,29 @@ namespace BaserCore\Model\Table;
 
 use ArrayObject;
 use Cake\ORM\Table;
+use Cake\ORM\Entity;
 use Cake\Core\Configure;
 use Cake\Filesystem\File;
 use Cake\ORM\TableRegistry;
+use Cake\Utility\Inflector;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Annotation\Note;
 use Cake\Event\EventInterface;
 use Cake\Validation\Validator;
 use BaserCore\Annotation\NoTodo;
+use BaserCore\Model\Entity\Page;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use Cake\Datasource\EntityInterface;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Event\BcEventDispatcherTrait;
 use BaserCore\Service\ContentServiceInterface;
+use BaserCore\Model\Behavior\BcSearchIndexManagerInterface;
 
 /**
  * Class PagesTable
  */
-class PagesTable extends Table
+class PagesTable extends Table implements BcSearchIndexManagerInterface
 {
     /**
      * Trait
@@ -83,7 +87,9 @@ class PagesTable extends Table
     {
         parent::initialize($config);
         $this->addBehavior('BaserCore.BcContents');
-        // $this->addBehavior('BaserCore.BcSearchIndexManager');
+        $this->addBehavior('BaserCore.BcSearchIndexManager');
+        $this->addBehavior('Timestamp');
+        $this->Sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
     }
 
     /**
@@ -144,57 +150,56 @@ class PagesTable extends Table
      * @param  EntityInterface $entity
      * @param  ArrayObject $options
      * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function afterSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
         // 検索用テーブルに登録
         if ($this->searchIndexSaving) {
-            // TODO ucmitz: BcSearchIndexManagerBehaviorが追加されていないため一旦スキップ
-            return;
             if (empty($entity->content->exclude_search)) {
                 $this->saveSearchIndex($this->createSearchIndex($entity));
             } else {
                 $this->deleteSearchIndex($entity->id);
             }
         }
-
     }
 
     /**
      * 検索用データを生成する
      *
-     * @param array $data
+     * @param Page $page
      * @return array|false
+     * @checked
+     * @unitTest
+     * @noTodo
      */
-    public function createSearchIndex($data)
+    public function createSearchIndex($page)
     {
-        if (!isset($data['Page']['id']) || !isset($data['Content']['id'])) {
+        if (!isset($page->id) || !isset($page->content->id)) {
             return false;
         }
-        $page = $data['Page'];
-        $content = $data['Content'];
-        if (!isset($content['publish_begin'])) {
-            $content['publish_begin'] = '';
+        $content = $page->content;
+        if (!isset($content->publish_begin)) {
+            $content->publish_begin = '';
         }
-        if (!isset($content['publish_end'])) {
-            $content['publish_end'] = '';
-        }
-
-        if (!$content['title']) {
-            $content['title'] = Inflector::camelize($content['name']);
+        if (!isset($content->publish_end)) {
+            $content->publish_end = '';
         }
 
-        // $this->idに値が入ってない場合もあるので
-        if (!empty($page['id'])) {
-            $modelId = $page['id'];
-        } else {
-            $modelId = $this->id;
+        if (!$content->title) {
+            $content->title = Inflector::camelize($content->name);
         }
+        $modelId = $page->id;
 
         $host = '';
-        $url = $content['url'];
-        $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
-        $site = $sites->findById($content['site_id'])->first();
+        $url = $content->url;
+        if (!$content->site) {
+            $site = $this->Sites->get($content->site_id);
+        } else {
+            $site = $content->site;
+        }
         if ($site->useSubDomain) {
             $host = $site->alias;
             if ($site->domainType == 1) {
@@ -202,29 +207,23 @@ class PagesTable extends Table
             }
             $url = preg_replace('/^\/' . preg_quote($site->alias, '/') . '/', '', $url);
         }
-        $parameters = explode('/', preg_replace("/^\//", '', $url));
-        $detail = $this->requestAction(['admin' => false, 'plugin' => false, 'controller' => 'pages', 'action' => 'display'], ['?' => [
-            'force' => 'true',
-            'host' => $host
-        ], 'pass' => $parameters, 'return']);
-
-        $detail = preg_replace('/<!-- BaserPageTagBegin -->.*?<!-- BaserPageTagEnd -->/is', '', $detail);
+        $detail = $page->contents;
         $description = '';
-        if (!empty($content['description'])) {
-            $description = $content['description'];
+        if (!empty($content->description)) {
+            $description = $content->description;
         }
-        return ['SearchIndex' => [
+        return [
             'model_id' => $modelId,
             'type' => __d('baser', 'ページ'),
-            'content_id' => $content['id'],
-            'site_id' => $content['site_id'],
-            'title' => $content['title'],
+            'content_id' => $content->id,
+            'site_id' => $content->site_id,
+            'title' => $content->title,
             'detail' => $description . ' ' . $detail,
             'url' => $url,
-            'status' => $content['status'],
-            'publish_begin' => $content['publish_begin'],
-            'publish_end' => $content['publish_end']
-        ]];
+            'status' => $content->status,
+            'publish_begin' => $content->publish_begin,
+            'publish_end' => $content->publish_end
+        ];
     }
 
     /**
@@ -257,17 +256,16 @@ class PagesTable extends Table
      * @return bool
      * @checked
      * @unitTest
-     * @note(value="BcApp.validSyntaxWithPageがsetting.phpに定義されていないためコメントアウト")
+     * @noTodo
      */
     public function phpValidSyntax($check)
     {
         if (empty($check)) {
             return true;
         }
-        // TODO ucmitz: note
-        // if (!Configure::read('BcApp.validSyntaxWithPage')) {
-        //     return true;
-        // }
+        if (!Configure::read('BcApp.validSyntaxWithPage')) {
+            return true;
+        }
         if (!function_exists('exec')) {
             return true;
         }

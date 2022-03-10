@@ -20,6 +20,7 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Model\Entity\Page;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\Note;
 use Cake\Core\Exception\Exception;
 use Cake\Datasource\EntityInterface;
 use BaserCore\Model\Table\PagesTable;
@@ -226,6 +227,7 @@ class PageService implements PageServiceInterface
      * @return Page $result
      * @checked
      * @unitTest
+     * @note(value="サービス内でイベント処理をどうするか")
      */
     public function copy($postData)
     {

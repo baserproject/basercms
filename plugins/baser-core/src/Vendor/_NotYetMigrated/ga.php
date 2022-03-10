@@ -131,13 +131,13 @@ function trackPageView()
     if (empty($documentReferer) && $documentReferer !== "0") {
         $documentReferer = "-";
     } else {
-        $documentReferer = urldecode($documentReferer);
+        $documentReferer = rawurldecode($documentReferer);
     }
     $documentPath = $_GET["utmp"];
     if (empty($documentPath)) {
         $documentPath = "";
     } else {
-        $documentPath = urldecode($documentPath);
+        $documentPath = rawurldecode($documentPath);
     }
 
     $account = $_GET["utmac"];

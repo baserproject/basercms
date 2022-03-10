@@ -129,7 +129,7 @@ class BcAdminContentsComponent extends Component
         }
         $controller->set('layoutTemplates', $templates);
 
-        $content->name = urldecode($content->name);
+        $content->name = rawurldecode($content->name);
         if (Configure::read('BcApp.autoUpdateContentCreatedDate')) {
             $content->modified_date = date('Y-m-d H:i:s');
         }

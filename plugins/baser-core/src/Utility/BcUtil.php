@@ -572,6 +572,9 @@ class BcUtil
      *
      * @param mixed $value 対象文字列
      * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public static function serialize($value)
     {
@@ -594,25 +597,6 @@ class BcUtil
             $value = unserialize($_value);
         }
         return $value;
-    }
-
-    /**
-     * URL用に文字列を変換する
-     *
-     * できるだけ可読性を高める為、不要な記号は除外する
-     *
-     * @param $value
-     * @return string
-     */
-    public static function urlencode($value)
-    {
-        $value = str_replace([
-            ' ', '　', '	', '\\', '\'', '|', '`', '^', '"', ')', '(', '}', '{', ']', '[', ';',
-            '/', '?', ':', '@', '&', '=', '+', '$', ',', '%', '<', '>', '#', '!'
-        ], '_', $value);
-        $value = preg_replace('/\_{2,}/', '_', $value);
-        $value = preg_replace('/(^_|_$)/', '', $value);
-        return urlencode($value);
     }
 
     /**
