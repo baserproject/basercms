@@ -636,7 +636,7 @@ class ContentsTableTest extends BcTestCase
     {
         $this->Contents->updateChildren(18);
         // 孫のurlが更新されてるか確認
-        $this->assertEquals("/ツリー階層削除用フォルダー(親)/ツリー階層削除用フォルダー_子/ツリー階層削除用フォルダー(孫)/", rawurldecode($this->Contents->get(20)->url));
+        $this->assertEquals("/ツリー階層削除用フォルダー(親)/ツリー階層削除用フォルダー(子)/ツリー階層削除用フォルダー(孫)/", rawurldecode($this->Contents->get(20)->url));
     }
 
     /**
