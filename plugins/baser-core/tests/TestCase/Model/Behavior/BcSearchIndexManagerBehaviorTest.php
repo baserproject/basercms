@@ -81,6 +81,9 @@ class BcSearchIndexManagerBehaviorTest extends BcTestCase
         $this->assertNotEmpty($this->BcSearchIndexManager->SearchIndexes);
         $this->assertNotEmpty($this->BcSearchIndexManager->SiteConfigs);
         $this->assertInstanceOf("BaserCore\Model\Table\PagesTable", $this->BcSearchIndexManager->table);
+        $Contents = $this->getTableLocator()->get('BaserCore.Contents');
+        $this->expectExceptionMessage("BcSearchIndexManagerInterfaceが実装されてません");
+        $Contents->addBehavior('BaserCore.BcSearchIndexManager');
     }
 
 
