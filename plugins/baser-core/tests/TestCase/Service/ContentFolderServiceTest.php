@@ -209,6 +209,36 @@ class ContentFolderServiceTest extends BcTestCase
     }
 
     /**
+     * testUpdateWithFailure
+     * 新規作成時に失敗した場合をテスト
+     * @param  array $postData
+     * @param  array $errors
+     * @return void
+     * @dataProvider updateWithFailureDataProvider
+     */
+    public function testUpdateWithFailure($postData, $errors)
+    {
+        Router::setRequest($this->loginAdmin($this->getRequest()));
+        try {
+            $contentFolder = $this->ContentFolderService->getIndex(['folder_template' => "testEdit"])->first();
+            $contentFolder = $this->ContentFolderService->update($contentFolder, $postData);
+        } catch (PersistenceFailedException $e) {
+            $contentFolder = $e->getEntity();
+        }
+        $this->assertEquals($errors, $contentFolder->getErrors());
+    }
+    public function updateWithFailureDataProvider()
+    {
+        return [
+            // contentがフィールドとして存在しない場合
+            [
+                ['folder_template' => 'テストupdate'],
+                ['content' => ['_required' => '関連するコンテンツがありません']]
+            ],
+        ];
+    }
+
+    /**
      * 親のテンプレートを取得する
      * @param  int $id
      * @param  string $type
