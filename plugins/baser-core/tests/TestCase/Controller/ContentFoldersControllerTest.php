@@ -82,7 +82,7 @@ class ContentFoldersControllerTest extends BcTestCase
      */
     public function testView(): void
     {
-        $this->get("/en");
+        $this->get("/en/");
         $this->assertResponseOk();
     }
 
