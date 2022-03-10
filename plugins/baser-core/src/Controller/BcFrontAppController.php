@@ -45,7 +45,6 @@ class BcFrontAppController extends AppController
      * Before Render
      * @param EventInterface $event
      * @checked
-     * @noTodo
      * @unitTest
      */
     public function beforeRender(EventInterface $event): void
@@ -55,7 +54,8 @@ class BcFrontAppController extends AppController
         $subDir = $this->getRequest()->getParam('Site.name');
         if ($subDir) {
             $this->viewBuilder()->setLayoutPath($subDir);
-            $this->viewBuilder()->setTemplatePath($subDir);
+            // TODO ucmitz サイト名でサブフォルダを設定し、サブフォルダが存在しない場合は、通常のフォルダを参照できるようにする
+            // $this->viewBuilder()->setTemplatePath($this->getName() . DS . $subDir);
         }
     }
 

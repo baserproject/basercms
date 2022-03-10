@@ -91,3 +91,12 @@ if (function_exists('mb_detect_order')) {
  * BcUtil::isConsole で利用
  */
 $_ENV['IS_CONSOLE'] = (substr(php_sapi_name(), 0, 3) === 'cli');
+
+/**
+ * fullBaseUrl
+ * コンソールの場合、CakePHP の ShellDispatcher において、
+ * http://localhost で設定されるため https に書き換える
+ */
+if(BcUtil::isConsole()) {
+    Configure::write('App.fullBaseUrl', 'https://localhost');
+}

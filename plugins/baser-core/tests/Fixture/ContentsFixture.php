@@ -692,7 +692,7 @@ class ContentsFixture extends TestFixture
             [
                 'id' => 24,
                 'plugin' => 'BaserCore',
-                'url' => '/en',
+                'url' => '/en/',
                 'name' => 'サイトID3のフォルダ',
                 'type' => "ContentFolder",
                 'entity_id' => 18,

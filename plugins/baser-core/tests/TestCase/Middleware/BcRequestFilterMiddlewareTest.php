@@ -31,7 +31,9 @@ class BcRequestFilterMiddlewareTest extends BcTestCase
     protected $fixtures = [
         'plugin.BaserCore.Sites',
         'plugin.BaserCore.Contents',
+        'plugin.BaserCore.ContentFolders',
         'plugin.BaserCore.Pages',
+        'plugin.BaserCore.SiteConfigs',
     ];
 
     /**

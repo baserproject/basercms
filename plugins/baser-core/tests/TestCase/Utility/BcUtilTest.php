@@ -838,7 +838,7 @@ class BcUtilTest extends BcTestCase
     public function testTopLevelUrl()
     {
         if (BcUtil::isConsole()) {
-            $this->assertEquals('http://localhost', BcUtil::topLevelUrl());
+            $this->assertEquals('https://localhost', BcUtil::topLevelUrl());
         } else {
             $this->assertRegExp('/^http:\/\/.*\/$/', BcUtil::topLevelUrl());
             $this->assertRegExp('/^http:\/\/.*[^\/]$/', BcUtil::topLevelUrl(false));
@@ -855,7 +855,7 @@ class BcUtilTest extends BcTestCase
     public function testSiteUrl()
     {
         if (BcUtil::isConsole()) {
-            $this->assertEquals('http://localhost/', BcUtil::siteUrl());
+            $this->assertEquals('https://localhost/', BcUtil::siteUrl());
         } else {
             $topLevelUrl = BcUtil::topLevelUrl(false);
 

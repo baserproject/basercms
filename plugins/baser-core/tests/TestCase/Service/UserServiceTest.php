@@ -261,8 +261,8 @@ class UserServiceTest extends BcTestCase
 
         // 削除
         $users->delete($user);
-        $deleteRealaodUser = $this->Users->reload($request);
-        $this->assertFalse($deleteRealaodUser);
+        $this->Users->reload($request);
+        $this->assertSessionNotHasKey('AuthAdmin');
     }
 
     /**

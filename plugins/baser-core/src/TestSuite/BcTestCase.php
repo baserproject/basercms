@@ -146,7 +146,7 @@ class BcTestCase extends TestCase
             Router::setRequest($request);
             $params = Router::parseRequest($request);
         } catch (\Exception $e) {
-            throw $e;
+            return $request;
         }
 
         $request = $request->withAttribute('params', $params);
