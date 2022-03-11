@@ -469,8 +469,8 @@ class BcUploadHelper  extends Helper
     protected function initField($fieldName)
     {
         $targetField = explode('.', $fieldName);
-        $table = array_shift($targetField);
         $field = array_pop($targetField);
+        $table = array_pop($targetField);
         if (is_null($this->table)) {
             $this->table = TableRegistry::getTableLocator()->get('BaserCore.' . Inflector::pluralize($table));
         }
