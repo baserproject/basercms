@@ -470,7 +470,10 @@ class BcUploadHelper  extends Helper
     {
         $targetField = explode('.', $fieldName);
         $field = array_pop($targetField);
-        $table = array_pop($targetField);
+        while (true) {
+            $table = array_pop($targetField);
+            if (!is_numeric($table)) break;
+        }
         if (is_null($this->table)) {
             $this->table = TableRegistry::getTableLocator()->get('BaserCore.' . Inflector::pluralize($table));
         }

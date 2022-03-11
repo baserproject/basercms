@@ -175,7 +175,11 @@ class BcUploadHelperTest extends BcTestCase
     public function testInitField()
     {
         $this->assertEquals('eyecatch', $this->execPrivateMethod($this->BcUpload, 'initField', ['Contents.eyecatch']));
+        // タグにより別々の入力がある場合 (belongsToMany)
+        $this->assertEquals('eyecatch', $this->execPrivateMethod($this->BcUpload, 'initField', ['Contents.0.eyecatch']));
+        $this->assertEquals('eyecatch', $this->execPrivateMethod($this->BcUpload, 'initField', ['Contents.1.0.eyecatch']));
         $this->assertEquals('eyecatch', $this->execPrivateMethod($this->BcUpload, 'initField', ['ContentFolder.content.eyecatch']));
+        $this->assertEquals('eyecatch', $this->execPrivateMethod($this->BcUpload, 'initField', ['ContentFolder.content.0.eyecatch']));
         $this->assertNotEmpty($this->BcUpload->table);
     }
 
