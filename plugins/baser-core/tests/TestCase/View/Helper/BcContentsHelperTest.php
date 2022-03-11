@@ -637,12 +637,7 @@ class BcContentsHelperTest extends BcTestCase
     {
         if ($adminLogin) $this->loginAdmin($this->getRequest());
         $content = $id ? $this->BcContents->ContentService->get($id) : [];
-        $contentEntities = [
-            'Content' => $content
-        ];
-        $view = $this->BcContents->getView();
-        $view->set('contentEntities', $contentEntities);
-        $this->assertEquals($result, $this->BcContents->isEditable());
+        $this->assertEquals($result, $this->BcContents->isEditable($content));
     }
 
     public function isEditableDataProvider()

@@ -148,10 +148,6 @@ class BcAdminContentsComponentTest extends BcTestCase
         $contentFolder = $this->ContentFolderService->get(1);
         $Controller->set('contentFolder', $contentFolder);
         $Controller->set('content', $contentFolder->content);
-        $Controller->set('contentEntities', [
-            'ContentFolder' => $contentFolder,
-            'Content' => $contentFolder->content,
-        ]);
         $ComponentRegistry = new ComponentRegistry($Controller);
         $BcAdminContents = new BcAdminContentsComponent($ComponentRegistry);
         $BcAdminContents->settingForm();
@@ -165,32 +161,5 @@ class BcAdminContentsComponentTest extends BcTestCase
         $this->assertInstanceOf("Cake\ORM\Query", $vars["sites"]);
         $this->assertNotNull($vars["layoutTemplates"]);
         $this->assertIsString($vars["publishLink"]);
-    }
-
-    /**
-     * testCheckContentEntities
-     *
-     * @return void
-     */
-    public function testCheckContentEntities()
-    {
-        // contentEntitiesの順番が適切でない場合順番が入れ替わってるかチェック
-        $entities = ['Content' => 'test', 'ContentFolder' => 'test'];
-        $this->Controller->viewBuilder()->setVar('contentEntities', $entities);
-        $this->execPrivateMethod($this->BcAdminContents, 'checkContentEntities', [$this->Controller]);
-        $entities = $this->Controller->viewBuilder()->getVar('contentEntities');
-        $this->assertNotEquals('Content', array_key_first($entities));
-    }
-
-    /**
-     * testCheckContentEntities
-     *
-     * @return void
-     */
-    public function testCheckContentEntitiesWithError()
-    {
-        // contentEntitiesが適切でない場合エラーができるかチェック
-        $this->expectExceptionMessage('contentEntitiesが適切に設定されていません');
-        $this->execPrivateMethod($this->BcAdminContents, 'checkContentEntities', [$this->Controller]);
     }
 }

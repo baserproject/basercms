@@ -237,7 +237,8 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function testChange_status_toPublish()
     {
-        $this->ContentService->update($this->ContentService->get(1), ['status' => false, 'name' => 'test']);
+        $content = $this->ContentService->get(1);
+        $this->ContentService->update($content, ['id' => $content->id, 'status' => false, 'name' => 'test']);
         $data = ['id' => 1, 'status' => 'publish'];
         $this->patch("/baser/api/baser-core/contents/change_status.json?token=" . $this->accessToken, $data);
         $this->assertResponseOk();

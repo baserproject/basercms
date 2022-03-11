@@ -412,7 +412,7 @@ class ContentsFixture extends TestFixture
             [
                 'id' => 16,
                 'plugin' => 'BaserCore',
-                'url' => '/content_folder_deleted',
+                'url' => '/content_folder_deleted/',
                 'name' => '削除済みフォルダー(親)',
                 'type' => "ContentFolder",
                 'entity_id' => 10,
@@ -448,7 +448,7 @@ class ContentsFixture extends TestFixture
                 'id' => 17,
                 'plugin' => 'BaserCore',
                 'name' => '削除済みフォルダー(子)',
-                'url' => '/content_folder_deleted/content_folder_child',
+                'url' => '/content_folder_deleted/content_folder_child/',
                 'type' => "ContentFolder",
                 'entity_id' => 11,
                 'deleted_date' => '2021-09-03 13:10:08',
@@ -482,7 +482,7 @@ class ContentsFixture extends TestFixture
             [
                 'id' => 18,
                 'plugin' => 'BaserCore',
-                'url' => '/tree_deleted',
+                'url' => '/tree_deleted/',
                 'name' => 'ツリー階層削除用フォルダー(親)',
                 'type' => "ContentFolder",
                 'entity_id' => 12,
@@ -517,7 +517,7 @@ class ContentsFixture extends TestFixture
             [
                 'id' => 19,
                 'plugin' => 'BaserCore',
-                'url' => '/tree_deleted/tree_child',
+                'url' => '/tree_deleted/tree_child/',
                 'name' => 'ツリー階層削除用フォルダー(子)',
                 'type' => "ContentFolder",
                 'entity_id' => 13,
@@ -552,7 +552,7 @@ class ContentsFixture extends TestFixture
             [
                 'id' => 20,
                 'plugin' => 'BaserCore',
-                'url' => '/tree_deleted/tree_child/tree_grandchild',
+                'url' => '/tree_deleted/tree_child/tree_grandchild/',
                 'name' => 'ツリー階層削除用フォルダー(孫)',
                 'type' => "ContentFolder",
                 'entity_id' => 14,
@@ -586,7 +586,7 @@ class ContentsFixture extends TestFixture
             ],
             [
                 'id' => 21,
-                'url' => '/test_edit',
+                'url' => '/test_edit/',
                 'plugin' => 'BaserCore',
                 'name' => 'testEdit',
                 'type' => "ContentFolder",
@@ -621,7 +621,7 @@ class ContentsFixture extends TestFixture
             ],
             [
                 'id' => 22,
-                'url' => '/test_edit',
+                'url' => '/test_edit/',
                 'plugin' => 'BaserCore',
                 'name' => 'testEditのエイリアス',
                 'type' => "ContentFolder",
