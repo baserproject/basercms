@@ -16,7 +16,7 @@
  * @var bool $editableContent コンテンツ編集不可かどうか
  * @var array $layoutTemplates レイアウトテンプレートリスト
  */
-$editable = $this->BcContents->isEditable();
+$editable = $this->BcContents->isEditable($content);
 $authors = $this->BcAdminContent->getAuthors();
 $created_date = $this->BcAdminForm->getSourceValue($entityName . "created_date");
 $modified_date = $this->BcAdminForm->getSourceValue($entityName . "modified_date");

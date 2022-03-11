@@ -80,7 +80,7 @@ if ($site->use_subdomain) {
   }
 }
 $linkedFullUrl = $this->BcAdminContent->getCurrentFolderLinkedUrl($content) . $contentsName;
-$editable = $this->BcContents->isEditable();
+$editable = $this->BcContents->isEditable($content);
 ?>
 
 
