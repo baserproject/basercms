@@ -761,6 +761,32 @@ class ContentsTableTest extends BcTestCase
         ];
     }
 
+        /**
+     * URL用に文字列を変換する
+     *
+     * できるだけ可読性を高める為、不要な記号は除外する
+     * @param  string $value
+     * @param  bool $isEncoded
+     * @return void
+     * @dataProvider testUrlencodeDataProvider
+     */
+    public function testUrlencode($value, $encodedExpected, $decodedExpected)
+    {
+        $encoded = $this->execPrivateMethod($this->Contents, 'urlEncode', [$value]);
+        $this->assertEquals($encodedExpected, $encoded);
+        $this->assertEquals($decodedExpected, rawurldecode($encoded));
+    }
+
+    public function testUrlencodeDataProvider()
+    {
+        return [
+            ['あああ', '%E3%81%82%E3%81%82%E3%81%82', 'あああ'],
+            ['______%%%あああ', '%E3%81%82%E3%81%82%E3%81%82', 'あああ'],
+            ['test', 'test', 'test'],
+            ['%E3%81%82%E3%81%82%E3%81%82', '%25E3%2581%2582%25E3%2581%2582%25E3%2581%2582', '%E3%81%82%E3%81%82%E3%81%82']
+        ];
+    }
+
     /**
      * オフセットを元にコンテンツを移動する
      * @param  mixed $id

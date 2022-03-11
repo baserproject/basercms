@@ -466,7 +466,7 @@ class ContentsTable extends AppTable
         if (!empty($entity->id)) {
             $this->beforeSaveParentId = $entity->parent_id;
         }
-        $entity->name = rawurlencode(mb_substr($entity->name, 0, 230, 'UTF-8'));
+        $entity->name = $this->urlEncode(mb_substr($entity->name, 0, 230, 'UTF-8'));
         return parent::beforeSave($event, $entity, $options);
     }
 
@@ -571,6 +571,45 @@ class ContentsTable extends AppTable
                 }
             }
         }
+    }
+
+    /**
+     * URL用に文字列を変換する
+     *
+     *
+     * @param $value
+     * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    protected function urlEncode($value)
+    {
+        // すでにエンコードされてる場合はそのまま返す
+        if (!preg_match('/\%[0-9A-Z][0-9A-Z]\%[0-9A-Z][0-9A-Z]/', $value)) {
+            $value = $this->textFormatting($value);
+        }
+        return rawurlencode($value);
+    }
+
+    /**
+     * できるだけ可読性を高める為、不要な記号は除外する
+     *
+     * @param $value
+     * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    protected function textFormatting($value)
+    {
+        $value = str_replace([
+            ' ', '　', '	', '\\', '\'', '|', '`', '^', '"', ')', '(', '}', '{', ']', '[', ';',
+            '/', '?', ':', '@', '&', '=', '+', '$', ',', '%', '<', '>', '#', '!'
+        ], '_', $value);
+        $value = preg_replace('/\_{2,}/', '_', $value);
+        $value = preg_replace('/(^_|_$)/', '', $value);
+        return $value;
     }
 
     /**
