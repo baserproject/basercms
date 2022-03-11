@@ -171,7 +171,8 @@ class BcAppController extends AppController
     public function beforeRender(EventInterface $event): void
     {
         parent::beforeRender($event);
-
+        // TODO ucmitz 未確認
+        return;
         $favoriteBoxOpened = false;
         if (BcUtil::isAdminSystem()) {
             $this->__updateFirstAccess();
