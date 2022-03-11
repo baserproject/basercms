@@ -159,13 +159,9 @@ class PagesController extends BcAdminAppController
 			$theme[] = $site->theme;
 		}
 		$pageTemplateList = $pageService->getPageTemplateList($page->content->id, $theme);
-        $contentEntities = [
-            'Page' => $page,
-            'Content' => $page->content,
-        ];
         $editor = $siteConfigService->getValue('editor');
         $editor_enter_br = $siteConfigService->getValue('editor_enter_br');
-		$this->set(compact('editorOptions', 'pageTemplateList', 'publishLink', 'contentEntities', 'page', 'editor', 'editor_enter_br'));
+		$this->set(compact('editorOptions', 'pageTemplateList', 'publishLink', 'page', 'editor', 'editor_enter_br'));
 		$this->render('form');
 	}
 }
