@@ -68,7 +68,7 @@ class ContentFoldersController extends AppController
             $contentFolder->content = $this->request->getData('Content');
         }
         $this->set(compact('contentFolder', 'children'));
-        $folderTemplate = $contentFolder->folder_template ?? $contentFolderService->getParentTemplate($this->request->getParam('Content.id'), 'folder');
+        $folderTemplate = !empty($contentFolder->folder_template) ? $contentFolder->folder_template : $contentFolderService->getParentTemplate($this->request->getParam('Content.id'), 'folder');
         $this->set('editLink', ['admin' => true, 'plugin' => 'BaserCore', 'controller' => 'content_folders', 'action' => 'edit', $contentFolder->id, 'content_id' => $contentFolder->content->id]);
         $this->render($folderTemplate);
     }

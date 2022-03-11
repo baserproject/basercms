@@ -57,7 +57,7 @@ $pureUrl = $this->BcContents->getPureUrl($content->url, $content->site_id);
           } else {
             $editUrl = '/' . BcUtil::getAdminPrefix() . '/contents/edit_alias/' . $relatedContent['Content']['id'] . '#RelatedContentsSetting';
           }
-          if ($this->request->getData('Content.id') == $relatedContent['Content']['id']) {
+          if ($this->request->getData($entityName . 'id') == $relatedContent['Content']['id']) {
             $current = true;
             $class = ' class="bca-currentrow"';
           }

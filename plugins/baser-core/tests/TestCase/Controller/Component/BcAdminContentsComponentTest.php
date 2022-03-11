@@ -148,10 +148,6 @@ class BcAdminContentsComponentTest extends BcTestCase
         $contentFolder = $this->ContentFolderService->get(1);
         $Controller->set('contentFolder', $contentFolder);
         $Controller->set('content', $contentFolder->content);
-        $Controller->set('contentEntities', [
-            'ContentFolder' => $contentFolder,
-            'Content' => $contentFolder->content,
-        ]);
         $ComponentRegistry = new ComponentRegistry($Controller);
         $BcAdminContents = new BcAdminContentsComponent($ComponentRegistry);
         $BcAdminContents->settingForm();

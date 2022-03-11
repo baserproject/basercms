@@ -466,7 +466,11 @@ class ContentsTable extends AppTable
         if (!empty($entity->id)) {
             $this->beforeSaveParentId = $entity->parent_id;
         }
-        $entity->name = $this->urlEncode(mb_substr($entity->name, 0, 230, 'UTF-8'));
+        if ($entity->isNew()) {
+            $entity->name = $this->urlEncode(mb_substr($entity->name, 0, 230, 'UTF-8'));
+        } else {
+            $entity->name = $this->urlEncode(mb_substr(rawurldecode($entity->name), 0, 230, 'UTF-8'));
+        }
         return parent::beforeSave($event, $entity, $options);
     }
 

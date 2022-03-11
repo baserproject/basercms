@@ -96,7 +96,6 @@ class ContentFoldersControllerTest extends BcTestCase
      */
     public function testEdit()
     {
-        $this->markTestIncomplete('コンテンツ管理の構造の解決を完了してから再テストする');
         $this->enableSecurityToken();
         $this->enableCsrfToken();
         $data = $this->ContentFolderService->getIndex(['folder_template' => "testEdit"])->first();

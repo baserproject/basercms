@@ -221,14 +221,14 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
      * testChange_status
      * NOTE: publishとunPublishのテストを同じ場所に書くとupdateDataが走らないため分離
      * @return void
-    //  */
-    // public function testChange_status_toUnpublish()
-    // {
-    //     $data = ['id' => 1, 'status' => 'unpublish'];
-    //     $this->patch("/baser/api/baser-core/contents/change_status.json?token=" . $this->accessToken, $data);
-    //     $this->assertResponseOk();
-    //     $this->assertFalse($this->ContentService->get($data['id'])->status);
-    // }
+     */
+    public function testChange_status_toUnpublish()
+    {
+        $data = ['id' => 1, 'status' => 'unpublish'];
+        $this->patch("/baser/api/baser-core/contents/change_status.json?token=" . $this->accessToken, $data);
+        $this->assertResponseOk();
+        $this->assertFalse($this->ContentService->get($data['id'])->status);
+    }
 
     /**
      * testChange_status
