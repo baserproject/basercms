@@ -24,7 +24,7 @@ $this->BcAdmin->setHelp('pages_form');
   <div id="Action"><?php echo $this->request->action ?></div>
 </div>
 
-<?php echo $this->BcAdminForm->create($contentEntities, ['novalidate' => true]) ?>
+<?php echo $this->BcAdminForm->create($page, ['novalidate' => true]) ?>
 <?php echo $this->BcAdminForm->control('Page.mode', ['type' => 'hidden']) ?>
 <?php echo $this->BcAdminForm->control('Page.id', ['type' => 'hidden']) ?>
 

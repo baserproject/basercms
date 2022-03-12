@@ -16,15 +16,15 @@ use BaserCore\View\BcAdminAppView;
  * @var BcAdminAppView $this
  */
 $this->BcAdmin->setTitle(__d('baser', 'エイリアス編集'));
-$site = $this->BcAdminSite->findById($this->request->getData('Content.site_id'))->first();
-$this->set('publishLink', $this->BcAdminContent->getUrl($this->request->getData('Content.url'), true, $site->useSubDomain));
+$site = $this->BcAdminSite->findById($this->request->getData($entityName . 'site_id'))->first();
+$this->set('publishLink', $this->BcAdminContent->getUrl($this->request->getData($entityName . 'url'), true, $site->useSubDomain));
 ?>
 
 
-<?php echo $this->BcAdminForm->create($content, ['url' => ['content_id' => $this->BcAdminForm->getSourceValue('Content.id')]]) ?>
+<?php echo $this->BcAdminForm->create($content, ['url' => ['content_id' => $this->BcAdminForm->getSourceValue($entityName . 'id')]]) ?>
 <?php echo $this->BcFormTable->dispatchBefore() ?>
-<?php echo $this->BcAdminForm->control('Content.alias_id', ['type' => 'hidden']) ?>
-<?php echo $this->BcAdminForm->control('Content.site_id', ['type' => 'hidden']) ?>
+<?php echo $this->BcAdminForm->control($entityName . 'alias_id', ['type' => 'hidden']) ?>
+<?php echo $this->BcAdminForm->control($entityName . 'site_id', ['type' => 'hidden']) ?>
 
 <?php $this->BcBaser->element('Contents/form_alias') ?>
 
