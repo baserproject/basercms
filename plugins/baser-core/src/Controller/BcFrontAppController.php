@@ -85,9 +85,11 @@ class BcFrontAppController extends AppController
             unset($params['Site']);
             $url = Router::reverse($params, false);
             $webroot = $this->request->getAttributes()['webroot'];
-            $webrootReg = '/^\/' . preg_quote($webroot, '/') . '/';
-            $url = preg_replace($webrootReg, '', $url);
-            return $this->redirect($siteUrl . $url);
+            if($webroot) {
+                $webrootReg = '/^\/' . preg_quote($webroot, '/') . '/';
+                $url = preg_replace($webrootReg, '', $url);
+            }
+            return $this->redirect(preg_replace('/\/$/', '', $siteUrl) . $url);
         }
     }
 }

@@ -768,7 +768,7 @@ class ContentsTableTest extends BcTestCase
      * @param  string $value
      * @param  bool $isEncoded
      * @return void
-     * @dataProvider testUrlencodeDataProvider
+     * @dataProvider urlencodeDataProvider
      */
     public function testUrlencode($value, $encodedExpected, $decodedExpected)
     {
@@ -777,7 +777,7 @@ class ContentsTableTest extends BcTestCase
         $this->assertEquals($decodedExpected, rawurldecode($encoded));
     }
 
-    public function testUrlencodeDataProvider()
+    public function urlencodeDataProvider()
     {
         return [
             ['あああ', '%E3%81%82%E3%81%82%E3%81%82', 'あああ'],
