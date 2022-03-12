@@ -1,9 +1,9 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
@@ -95,87 +95,7 @@ class BcAppController extends AppController
     public function beforeFilter(EventInterface $event)
     {
         parent::beforeFilter($event);
-
-        $response = $this->redirectIfIsNotSameSite();
-        if($response) return $response;
-
-        $response = $this->redirectIfIsRequireMaintenance();
-        if($response) return $response;
-
         return;
-
-        // セキュリティ設定
-        $this->Security->blackHoleCallback = '_blackHoleCallback';
-        $csrfExpires = Configure::read('BcSecurity.csrfExpires');
-        if (!$csrfExpires) {
-            $csrfExpires = "+4 hours";
-        }
-        $this->Security->csrfExpires = $csrfExpires;
-        if (!BC_INSTALLED || $this->getRequest()->is('update')) {
-            $this->Security->validatePost = false;
-        }
-
-        $isAdmin = $this->getRequest()->is('admin');
-        if ($isAdmin) {
-            $this->Security->validatePost = false;
-            $corePlugins = Configure::read('BcApp.corePlugins');
-            if (BC_INSTALLED && (!$this->plugin || in_array($this->plugin, $corePlugins)) && Configure::read('debug') === 0) {
-                $this->Security->csrfCheck = true;
-            } else {
-                $this->Security->csrfCheck = false;
-            }
-            // SSLリダイレクト設定
-            if (Configure::read('BcApp.adminSsl')) {
-                $adminSslMethods = array_filter(get_class_methods(get_class($this)), [$this, '_adminSslMethods']);
-                if ($adminSslMethods) {
-                    $this->Security->requireSecure = $adminSslMethods;
-                }
-            }
-        }
-        // 検索ボタンがtype=imageで作成されている場合は座標情報のパラメータ、
-        // fileアップロードボタンにサイズ制限指定がなされている場合はhiddenで生成されるMAX_FILE_SIZE値が、
-        // セキュリティコンポーネントにより制限されるため解除対象フィールドに設定する
-        $this->Security->unlockedFields = array_merge($this->Security->unlockedFields, ['x', 'y', 'MAX_FILE_SIZE']);
-
-        // 送信データの文字コードを内部エンコーディングに変換
-        $this->__convertEncodingHttpInput();
-
-        // $this->request->query['url'] の調整
-        // 環境によって？キーにamp;が付加されてしまうため
-        $query = $this->request->getQuery();
-        if (is_array($query)) {
-            foreach($query as $key => $val) {
-                if (strpos($key, 'amp;') === 0) {
-                    $query[substr($key, 4)] = $val;
-                    unset($query[$key]);
-                }
-            }
-        }
-        $this->request = $this->request->withQueryParams($query);
-
-        // コンソールから利用される場合、$isInstall だけでは判定できないので、BC_INSTALLED も判定に入れる
-        if ((!BC_INSTALLED || $this->getRequest()->is('install') || $this->getRequest()->is('update')) && $this->name !== 'CakeError') {
-            $this->theme = Configure::read('BcApp.defaultAdminTheme');
-            return;
-        }
-
-        // テーマ内プラグインのテンプレートをテーマに梱包できるようにプラグインパスにテーマのパスを追加
-        // ===============================================================================
-        // 実際には、プラグインの場合も下記パスがテンプレートの検索対象となっている為不要だが、
-        // ビューが存在しない場合に、プラグインテンプレートの正規のパスがエラーメッセージに
-        // 表示されてしまうので明示的に指定している。
-        // （例）
-        // [変更後] app/webroot/theme/demo/blog/news/index.php
-        // [正　規] app/plugins/blog/views/theme/demo/blog/news/index.php
-        // 但し、CakePHPの仕様としてはテーマ内にプラグインのテンプレートを梱包できる仕様となっていないので
-        // 将来的には、blog / mail / feed をプラグインではなくコアへのパッケージングを検討する必要あり。
-        // ※ AppView::_pathsも関連している
-        // ===============================================================================
-        $pluginThemePath = WWW_ROOT . 'theme' . DS . $this->theme . DS;
-        $pluginPaths = Configure::read('pluginPaths');
-        if ($pluginPaths && !in_array($pluginThemePath, $pluginPaths)) {
-            Configure::write('pluginPaths', am([$pluginThemePath], $pluginPaths));
-        }
 
         // 認証設定
         if (isset($this->BcAuthConfigure)) {
@@ -241,126 +161,6 @@ class BcAppController extends AppController
             }
         }
 
-        if ($this->request->is('ajax') || isset($this->BcAuth) && $this->BcAuth->user()) {
-            // キャッシュ対策
-            $this->response->header([
-                'Cache-Control' => 'no-cache, must-revalidate, post-check=0, pre-check=0',
-                'Pragma' => 'no-cache',
-            ]);
-        }
-
-        if (!$this->getRequest()->is('requestview')) {
-            return;
-        }
-
-        // テーマ、レイアウトとビュー用サブディレクトリの設定
-        $this->setAdminTheme();
-        $this->setTheme();
-        if ($this->request->getParam('prefix') && $this->name !== 'CakeError') {
-            $this->layoutPath = str_replace('_', '/', $this->request->getParam('prefix'));
-            $this->subDir = str_replace('_', '/', $this->request->getParam('prefix'));
-        }
-        if (!$isAdmin && !empty($this->request->getParam('Site.name'))) {
-            $agentSetting = Configure::read('BcAgent.' . $this->request->getParam('Site.device'));
-            if ($agentSetting && !empty($agentSetting['helper'])) {
-                $this->helpers[] = $agentSetting['helper'];
-            }
-            if ($this->request->getParam('Site')) {
-                $this->layoutPath = $this->request->getParam('Site.name');
-                $this->subDir = $this->request->getParam('Site.name');
-            }
-        }
-
-        // 権限チェック
-        if (!isset($this->BcAuth)) {
-            return;
-        }
-        if (!isset($User->belongsTo['UserGroup'])) {
-            return;
-        }
-        if ($this->request->getParam('prefix')) {
-            return;
-        }
-        if ($this->request->getParam('action')) {
-            return;
-        }
-        if (!empty($this->request->getParam('Site.name')) || !empty($this->request->getParam('requested'))) {
-            return;
-        }
-
-        if ($this->BcAuth->allowedActions && in_array($this->request->getParam('action'), $this->BcAuth->allowedActions)) {
-            return;
-        }
-
-        $user = $this->BcAuth->user();
-        $Permission = ClassRegistry::init('Permission');
-        if (!$user) {
-            return;
-        }
-        // TODO: サービス注入に変更する
-        if (!$Permission->check($this->request->url, $user['user_group_id'])) {
-            $this->BcMessage->setError(__d('baser', '指定されたページへのアクセスは許可されていません。'));
-            $this->redirect($this->BcAuth->loginRedirect);
-        }
-    }
-
-    /**
-     * テーマをセットする
-     * $this->theme にセットする事
-     *
-     * 優先順位
-     * $this->request->getParam('Site.theme') > $site->theme > BcSiteConfig::get('theme')
-     *
-     * @return void
-     */
-    protected function setTheme()
-    {
-        $theme = null;
-        if (!empty($this->request->getParam('Site.theme'))) {
-            $theme = $this->request->getParam('Site.theme');
-        }
-        if (!$theme) {
-            $site = $this->getRequest()->getAttribute('currentSite');
-            if (!empty($site->theme)) {
-                $theme = $site->theme;
-            }
-        }
-        if (!$theme && !empty(BcSiteConfig::get('theme'))) {
-            $theme = BcSiteConfig::get('theme');
-        }
-        if (!$theme && BcUtil::isAdminSystem() && $this->adminTheme) {
-            $theme = $this->adminTheme;
-        }
-        $this->theme = $theme;
-    }
-
-    /**
-     * 管理画面用テーマをセットする
-     * $this->adminTheme にセットする事
-     *
-     * 優先順位
-     * BcSiteConfig::get('admin_theme') > Configure::read('BcApp.adminTheme')
-     *
-     * @return void
-     */
-    protected function setAdminTheme()
-    {
-        $adminTheme = Configure::read('BcApp.adminTheme');
-        if (!$adminTheme && !empty(BcSiteConfig::get('admin_theme'))) {
-            $adminTheme = BcSiteConfig::get('admin_theme');
-        }
-        $this->adminTheme = $adminTheme;
-    }
-
-    /**
-     * 管理画面用のメソッドを取得（コールバックメソッド）
-     *
-     * @param string $var
-     * @return bool
-     */
-    protected function _adminSslMethods($var)
-    {
-        return strpos($var, 'admin_') === 0;
     }
 
     /**
@@ -432,32 +232,6 @@ class BcAppController extends AppController
     }
 
     /**
-     * Securityコンポーネントのブラックホールからのコールバック
-     *
-     * フォーム改ざん対策・CSRF対策・SSL制限・HTTPメソッド制限などへの違反が原因で
-     * Securityコンポーネントに"ブラックホールされた"場合の動作を指定する
-     *
-     * @param string $err エラーの種類
-     * @return void
-     * @throws BadRequestException
-     */
-    public function _blackHoleCallback($err)
-    {
-
-        $errorMessages = [
-            'auth' => __d('baser', 'バリデーションエラーまたはコントローラ/アクションの不一致によるエラーです。'),
-        ];
-
-        $message = __d('baser', '不正なリクエストと判断されました。');
-
-        if (array_key_exists($err, $errorMessages)) {
-            $message .= "(type:{$err})" . $errorMessages[$err];
-        }
-
-        throw new BadRequestException($message);
-    }
-
-    /**
      * NOT FOUNDページを出力する
      *
      * @return    void
@@ -466,39 +240,6 @@ class BcAppController extends AppController
     public function notFound()
     {
         throw new NotFoundException(__d('baser', '見つかりませんでした。'));
-    }
-
-    /**
-     * 配列の文字コードを変換する
-     *
-     * @param array $data 変換前データ
-     * @param string $outenc 変換後の文字コード
-     * @return array 変換後データ
-     */
-    protected function _autoConvertEncodingByArray($data, $outenc)
-    {
-        foreach($data as $key => $value) {
-
-            if (is_array($value)) {
-                $data[$key] = $this->_autoConvertEncodingByArray($value, $outenc);
-                continue;
-            }
-
-            if ($this->request->getParam('prefix') !== 'mobile') {
-                $inenc = mb_detect_encoding($value);
-            } else {
-                $inenc = 'SJIS';
-            }
-
-            if ($inenc != $outenc) {
-                // 半角カナは一旦全角に変換する
-                $value = mb_convert_kana($value, 'KV', $inenc);
-                $value = mb_convert_encoding($value, $outenc, $inenc);
-                $data[$key] = $value;
-            }
-        }
-
-        return $data;
     }
 
     /**
@@ -625,25 +366,6 @@ class BcAppController extends AppController
             return false;
         }
         return $version;
-    }
-
-    /**
-     * http経由で送信されたデータを変換する
-     * とりあえず、UTF-8で固定
-     *
-     * @return    void
-     * @access    private
-     */
-    private function __convertEncodingHttpInput()
-    {
-        // TODO Cakeマニュアルに合わせた方がよいかも
-        if ($this->request->getParam('form')) {
-            $this->request = $this->request->withParam('form', $this->_autoConvertEncodingByArray($this->request->getParam('form'), 'UTF-8'));
-        }
-
-        if ($this->request->getParam('data')) {
-            $this->request = $this->request->withParam('data', $this->_autoConvertEncodingByArray($this->request->getParam('data'), 'UTF-8'));
-        }
     }
 
     /**

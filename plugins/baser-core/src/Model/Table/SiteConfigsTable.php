@@ -1,9 +1,9 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
@@ -26,9 +26,9 @@ use BaserCore\Utility\BcUtil;
  *
  * システム設定モデル
  *
- * @package Baser.Model
- * @mixin BcKeyValueBehavior
+ * @package BaserCore\Model\Table
  * @method SiteConfig newEntity($data = null, array $options = [])
+ * @method BcKeyValueBehavior setValue($key, $value)
  */
 class SiteConfigsTable extends AppTable
 {

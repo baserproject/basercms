@@ -1,9 +1,9 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
@@ -67,7 +67,7 @@ class PagesController extends BcAdminAppController
 	{
 		parent::beforeFilter($event);
         if (BcSiteConfig::get('editor') && BcSiteConfig::get('editor') !== 'none') {
-            $this->viewBuilder()->setHelpers(["BaserCore." . BcSiteConfig::get('editor'), 'BaserCore.BcGooglemaps', 'BaserCore.BcText', 'BaserCore.BcFreeze']);
+            $this->viewBuilder()->setHelpers([BcSiteConfig::get('editor'), 'BaserCore.BcGooglemaps', 'BaserCore.BcText', 'BaserCore.BcFreeze']);
         }
 	}
 
@@ -104,10 +104,9 @@ class PagesController extends BcAdminAppController
             try {
                 // contents_tmpをcontentsに反映
                 $this->request = $this->request->withData('Page.contents', $this->request->getData('Page.contents_tmp'));
-                $this->request = $this->request->withData('Page.content', $this->request->getData('Content'));
                 $page = $pageService->update($page, $this->request->getData('Page'));
                 // TODO cumitz: clearViewCache()がないため一時的にコメントアウト
-                if ($contentService->isChangedStatus($id, $this->request->getData('Content'))) {
+                if ($contentService->isChangedStatus($id, $this->request->getData('Page.content'))) {
 					// clearViewCache();
 				} else {
 					// clearViewCache($this->request->getData('Content.url'));
@@ -120,7 +119,7 @@ class PagesController extends BcAdminAppController
 				$this->dispatchEvent('afterEdit', [
 					'request' => $this->request,
 				]);
-                $this->BcMessage->setSuccess(sprintf(__d('baser', "固定ページ「%s」を更新しました。\n%s"), rawurldecode($page->content->name), urldecode($url)));
+                $this->BcMessage->setSuccess(sprintf(__d('baser', "固定ページ「%s」を更新しました。\n%s"), $page->content->title, rawurldecode($url)));
 				// 同固定ページへリダイレクト
 				return $this->redirect(['action' => 'edit', $id]);
             }  catch (\Exception $e) {
@@ -159,13 +158,9 @@ class PagesController extends BcAdminAppController
 			$theme[] = $site->theme;
 		}
 		$pageTemplateList = $pageService->getPageTemplateList($page->content->id, $theme);
-        $contentEntities = [
-            'Page' => $page,
-            'Content' => $page->content,
-        ];
         $editor = $siteConfigService->getValue('editor');
         $editor_enter_br = $siteConfigService->getValue('editor_enter_br');
-		$this->set(compact('editorOptions', 'pageTemplateList', 'publishLink', 'contentEntities', 'page', 'editor', 'editor_enter_br'));
+		$this->set(compact('editorOptions', 'pageTemplateList', 'publishLink', 'page', 'editor', 'editor_enter_br'));
 		$this->render('form');
 	}
 }

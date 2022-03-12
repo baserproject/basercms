@@ -1,9 +1,9 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
@@ -268,16 +268,16 @@ class ContentsController extends BcAdminAppController
             $this->BcMessage->setError(__d('baser', '無効な処理です。'));
             return $this->redirect(['action' => 'index']);
         }
-
         $content = $contentService->get($id);
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $content = $contentService->update($content, $this->request->getData('Content'));
-            if (!$content->hasErrors()) {
+            try {
+                $content = $contentService->update($content, $this->request->getData('Content'));
                 $message = Configure::read('BcContents.items.' . $this->request->getData('Content.plugin') . '.' . $this->request->getData('Content.type') . '.title') .
                 sprintf(__d('baser', '「%s」を更新しました。'), $this->request->getData('Content.title'));
                 $this->BcMessage->setSuccess($message);
                 return $this->redirect(['action' => 'edit', $content->id]);
-            } else {
+            } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
+                $content = $e->getEntity();
                 $this->BcMessage->setError('保存中にエラーが発生しました。入力内容を確認してください。');
             }
         }
@@ -305,23 +305,20 @@ class ContentsController extends BcAdminAppController
         }
         $alias = $contentService->get($id);
         if ($this->request->is(['post', 'put'])) {
-            // if ($this->Content->isOverPostSize()) {
-            //     $this->BcMessage->setError(__d('baser', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size')));
-            //     $this->redirect(['action' => 'edit_alias', $id]);
-            // }
+            if (BcUtil::isOverPostSize()) {
+                $this->BcMessage->setError(__d('baser', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size')));
+                $this->redirect(['action' => 'edit_alias', $id]);
+            }
             try {
-                $newAlias = $contentService->update($alias, $this->request->getData('Content'));
-                if (!$newAlias->hasErrors()) {
-                    $content = $contentService->get($newAlias->alias_id);
-                    $message = Configure::read('BcContents.items.' . $content->plugin . '.' . $content->type . '.title') .
-                    sprintf(__d('baser', '「%s」のエイリアス「%s」を編集しました。'), $content->title, $newAlias->title);
-                    $this->BcMessage->setSuccess($message);
-                    $this->redirect(['action' => 'edit_alias', $id]);
-                } else {
-                    $this->BcMessage->setError($newAlias->getErrors());
-                }
-            } catch (\Exception $e) {
-                $this->BcMessage->setError("保存中にエラーが発生しました。入力内容を確認してください。\n" . $e->getMessage());
+                $alias = $contentService->update($alias, $this->request->getData('Content'));
+                $content = $contentService->get($alias->alias_id);
+                $message = Configure::read('BcContents.items.' . $content->plugin . '.' . $content->type . '.title') .
+                sprintf(__d('baser', '「%s」のエイリアス「%s」を編集しました。'), $content->title, $alias->title);
+                $this->BcMessage->setSuccess($message);
+                $this->redirect(['action' => 'edit_alias', $id]);
+            } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
+                $alias = $e->getEntity();
+                $this->BcMessage->setError("保存中にエラーが発生しました。入力内容を確認してください。\n" . $alias->getErrors());
             }
         } else {
             $this->request = $this->request->withData('Content', $alias);
@@ -329,10 +326,8 @@ class ContentsController extends BcAdminAppController
                 $this->BcMessage->setError(__d('baser', '無効な処理です。'));
                 $this->redirect(['action' => 'index']);
             }
-            $content = $contentService->get($alias->alias_id);
         }
-        $this->set('content', $content);
-        $this->BcAdminContents->settingForm($this, $this->request->getData('Content.site_id'), $this->request->getData('Content.id'));
+        $this->set('content', $alias);
     }
 
     /**

@@ -1,9 +1,9 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
@@ -105,5 +105,22 @@ class UserGroupsTableTest extends BcTestCase
         $this->assertEquals(1, $query->count());
         $this->assertEquals(4, $copied->id);
     }
+
+    /**
+     * Test getAuthPrefix
+     *
+     * @return void
+     */
+    public function testGetAuthPrefix()
+    {
+
+        $result = $this->UserGroups->getAuthPrefix(1);
+        $this->assertEquals('admin', $result);
+
+        $result = $this->UserGroups->getAuthPrefix(999);
+        $this->assertEquals(null, $result);
+
+    }
+
 
 }

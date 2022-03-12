@@ -1,19 +1,19 @@
 <?php
-// TODO : コード確認要
-use BaserCore\Event\BcEventDispatcherTrait;
-use BaserCore\Service\BcFrontServiceInterface;
-
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.View.Helper
- * @since           baserCMS v 0.1.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) NPO baser foundation
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
+
+namespace BaserCore\View\Helper;
+
+use BaserCore\Event\BcEventDispatcherTrait;
+use BaserCore\Utility\BcContainerTrait;
+use Cake\View\Helper;
 
 /**
  * スマホヘルパー
@@ -22,11 +22,12 @@ return;
  */
 class BcSmartphoneHelper extends Helper
 {
+
     /**
      * Trait
      */
     use BcEventDispatcherTrait;
-    use \BaserCore\Utility\BcContainerTrait;
+    use BcContainerTrait;
 
     /**
      * ヘルパ
@@ -42,6 +43,9 @@ class BcSmartphoneHelper extends Helper
      */
     public function afterLayout($layoutFile)
     {
+
+        // TODO ucmitz 代替措置
+        return;
 
         if ($this->request->getParam('ext') === 'rss') {
             $rss = true;

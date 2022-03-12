@@ -1,9 +1,9 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
@@ -15,6 +15,7 @@ use BaserCore\Service\SiteConfigServiceInterface;
 use BaserCore\Utility\BcContainer;
 use Cake\Core\Configure;
 use Cake\Event\Event;
+use Cake\Http\Response;
 use Cake\TestSuite\IntegrationTestTrait;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Controller\AppController;
@@ -85,6 +86,63 @@ class AppControllerTest extends BcTestCase
         $this->assertNotEmpty($this->AppController->BcMessage);
         $this->assertNotEmpty($this->AppController->Security);
         $this->assertNotEmpty($this->AppController->Paginator);
+        $this->assertEquals('_blackHoleCallback', $this->AppController->Security->getConfig('blackHoleCallback'));
+        $this->assertTrue($this->AppController->Security->getConfig('validatePost'));
+        $this->assertFalse($this->AppController->Security->getConfig('requireSecure'));
+        $this->assertEquals(['x', 'y', 'MAX_FILE_SIZE'], $this->AppController->Security->getConfig('unlockedFields'));
+    }
+
+    /**
+     * test beforeFilter
+     */
+    public function testBeforeFilter()
+    {
+        $expectCache = 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0';
+
+        // Ajaxの場合はノーキャッシュヘッダーを付ける
+        $_SERVER['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest';
+        $this->AppController->setResponse(new Response());
+        $this->AppController->beforeFilter(new Event('beforeFilter'));
+        unset($_SERVER['HTTP_X_REQUESTED_WITH']);
+        $this->assertEquals($expectCache, $this->AppController->getResponse()->getHeader('Cache-Control')[0]);
+
+        // ログインしている場合はノーキャッシュヘッダーを付ける
+        $this->loginAdmin($this->getRequest());
+        $this->AppController->setResponse(new Response());
+        $this->AppController->beforeFilter(new Event('beforeFilter'));
+        $this->assertEquals($expectCache, $this->AppController->getResponse()->getHeader('Cache-Control')[0]);
+
+        // requestview が false の場合は、ログインしていてもノーキャッシュヘッダーを付けない
+        $this->AppController->setRequest($this->getRequest('/?requestview=false'));
+        $this->AppController->setResponse(new Response());
+        $this->AppController->beforeFilter(new Event('beforeFilter'));
+        $this->assertEmpty($this->AppController->getResponse()->getHeader('Cache-Control'));
+
+        // インストーラー、アップデーターでない場合はここでテーマをセットしない
+        $this->assertEquals('', $this->AppController->viewBuilder()->getTheme());
+
+        // TODO ucmitz インストーラー実装後に対応する（ルーティングが解決できない）
+//        $this->AppController->setRequest($this->getRequest('/baser/installations/index'));
+//        $this->assertEquals('BcAdminThird', $this->AppController->viewBuilder()->getTheme());
+        // TODO ucmitz アップデーター実装後に対応する（ルーティングが解決できない）
+//        $this->AppController->setRequest($this->getRequest('/baser/updaters/index'));
+//        $this->assertEquals('BcAdminThird', $this->AppController->viewBuilder()->getTheme());
+    }
+
+    /**
+     * test blackHoleCallback
+     */
+    public function test_blackHoleCallback()
+    {
+        $this->enableCsrfToken();
+        $logPath = ROOT . DS . 'logs' . DS . 'cli-error.log';
+        unlink($logPath);
+        $this->post('/', [
+            'name' => 'Test_test_Man'
+        ]);
+        $log = file_get_contents($logPath);
+        $this->assertRegExp('/不正なリクエストと判断されました。/', $log);
+        unlink($logPath);
     }
 
     /**
@@ -95,6 +153,13 @@ class AppControllerTest extends BcTestCase
         $this->AppController->beforeRender(new Event('beforeRender'));
         $this->assertEquals('BaserCore.App', $this->AppController->viewBuilder()->getClassName());
         $this->assertEquals('BcFront', $this->AppController->viewBuilder()->getTheme());
+        $request = $this->AppController->getRequest();
+        $site = $request->getParam('Site');
+        $site['theme'] = 'test';
+        $request = $request->withParam('Site', $site);
+        $this->AppController->setRequest($request);
+        $this->AppController->beforeRender(new Event('beforeRender'));
+        $this->assertEquals('test', $this->AppController->viewBuilder()->getTheme());
     }
 
     /**
@@ -111,22 +176,6 @@ class AppControllerTest extends BcTestCase
         $vars->setAccessible(true);
         $actual = $vars->getValue($this->AppController->viewBuilder())['title'];
         $this->assertEquals($template, $actual);
-    }
-
-    /**
-     * test redirectIfIsNotSameSite
-     */
-    public function testRedirectIfIsNotSameSite()
-    {
-        $this->getRequest('https://localhost/index');
-        $this->_response = $this->AppController->redirectIfIsNotSameSite();
-        $this->assertNull($this->_response);
-        $this->getRequest('http://localhost/index');
-        $this->_response = $this->AppController->redirectIfIsNotSameSite();
-        $this->assertRedirect('https://localhost/index');
-        $this->AppController->setRequest($this->getRequest('https://localhost/baser/admin'));
-        $this->_response = $this->AppController->redirectIfIsNotSameSite();
-        $this->assertNull($this->_response);
     }
 
     /**
@@ -153,6 +202,46 @@ class AppControllerTest extends BcTestCase
         $this->_response = $this->AppController->redirectIfIsRequireMaintenance();
         $this->assertNull($this->_response);
         Configure::write('debug', true);
+    }
+
+    /**
+     * test _autoConvertEncodingByArray
+     */
+    public function test_autoConvertEncodingByArray()
+    {
+        $data = [
+            'test' => [
+                'test' => mb_convert_encoding('あいうえお', 'SJIS-win')
+            ]
+        ];
+        $result = $this->execPrivateMethod($this->AppController, '_autoConvertEncodingByArray', [$data, 'UTF-8']);
+        $this->assertEquals('あいうえお', $result['test']['test']);
+    }
+
+    /**
+     * test __convertEncodingHttpInput
+     */
+    public function test__convertEncodingHttpInput()
+    {
+        $data = [
+            'test' => [
+                'test' => mb_convert_encoding('あいうえお', 'SJIS-win')
+            ]
+        ];
+        $this->AppController->setRequest($this->AppController->getRequest()->withParsedBody($data));
+        $this->execPrivateMethod($this->AppController, '__convertEncodingHttpInput');
+        $this->assertEquals('あいうえお', $this->AppController->getRequest()->getData('test.test'));
+    }
+
+    /**
+     * test __cleanupQueryParams
+     */
+    public function test__cleanupQueryParams()
+    {
+        $this->AppController->setRequest($this->getRequest('/index?a=1&amp;b=2'));
+        $this->execPrivateMethod($this->AppController, '__cleanupQueryParams');
+        $result = $this->AppController->getRequest()->getQueryParams();
+        $this->assertEquals(['a' => '1', 'b' => '2'], $result);
     }
 
 }

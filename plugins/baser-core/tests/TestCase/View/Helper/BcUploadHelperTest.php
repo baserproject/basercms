@@ -1,9 +1,9 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
@@ -174,7 +174,12 @@ class BcUploadHelperTest extends BcTestCase
      */
     public function testInitField()
     {
-        $this->assertEquals('name', $this->execPrivateMethod($this->BcUpload, 'initField', ['Contents.name']));
+        $this->assertEquals('eyecatch', $this->execPrivateMethod($this->BcUpload, 'initField', ['Contents.eyecatch']));
+        // タグにより別々の入力がある場合 (belongsToMany)
+        $this->assertEquals('eyecatch', $this->execPrivateMethod($this->BcUpload, 'initField', ['Contents.0.eyecatch']));
+        $this->assertEquals('eyecatch', $this->execPrivateMethod($this->BcUpload, 'initField', ['Contents.1.0.eyecatch']));
+        $this->assertEquals('eyecatch', $this->execPrivateMethod($this->BcUpload, 'initField', ['ContentFolder.content.eyecatch']));
+        $this->assertEquals('eyecatch', $this->execPrivateMethod($this->BcUpload, 'initField', ['ContentFolder.content.0.eyecatch']));
         $this->assertNotEmpty($this->BcUpload->table);
     }
 

@@ -1,9 +1,9 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
@@ -20,6 +20,7 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Model\Entity\Page;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\Note;
 use Cake\Core\Exception\Exception;
 use Cake\Datasource\EntityInterface;
 use BaserCore\Model\Table\PagesTable;
@@ -226,6 +227,7 @@ class PageService implements PageServiceInterface
      * @return Page $result
      * @checked
      * @unitTest
+     * @note(value="サービス内でイベント処理をどうするか")
      */
     public function copy($postData)
     {

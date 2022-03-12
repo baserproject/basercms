@@ -39,5 +39,7 @@ Schemeファイルから作りたいカラムの配列をコピペする
 ->addColumn('status', 'boolean', ['null' => true, 'default' => null, 'limit' => null])
 ->addColumn('modified', 'datetime', ['null' => true, 'default' => null, 'limit' => null])
 ->addColumn('created', 'datetime', ['null' => true, 'default' => null, 'limit' => null])
+
+※ $this->table('permissions', ['id' => false])['id' => false]の追加がないとマイグレーションエラーが生じるため注意
 ```
 

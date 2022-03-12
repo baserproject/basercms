@@ -1,9 +1,9 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
@@ -12,6 +12,7 @@
 namespace BaserCore\Test\TestCase\Controller\Api;
 
 use Cake\Core\Configure;
+use BaserCore\Utility\BcUtil;
 use BaserCore\Service\ContentService;
 use Cake\TestSuite\IntegrationTestTrait;
 
@@ -141,7 +142,7 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
         $this->post('/baser/api/baser-core/contents/delete.json?token=' . $this->accessToken, $data);
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
-        $this->assertEquals("コンテンツ: indexを削除しました。", $result->message);
+        $this->assertEquals("コンテンツ: トップページを削除しました。", $result->message);
         $this->get('/baser/api/baser-core/contents/view/4.json?token=' . $this->accessToken);
         $this->assertResponseError();
         // 子要素を持つ場合
@@ -198,9 +199,9 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
         $data->site->name = 'ucmitz'; // site側でエラーが出るため
         $this->post("/baser/api/baser-core/contents/edit/${id}.json?token=" . $this->accessToken, $data->toArray());
         $this->assertResponseSuccess();
+        // updateRelateSubSiteContentにより、連携されてるサイトに同コンテンツが生成されるため2個となる
         $query = $this->ContentService->getIndex(['name' => 'ControllerEdit']);
-        $a = $query->toArray();
-        $this->assertEquals(1, $query->count());
+        $this->assertEquals(2, $query->count());
     }
 
     /**
@@ -236,7 +237,8 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function testChange_status_toPublish()
     {
-        $this->ContentService->update($this->ContentService->get(1), ['status' => false]);
+        $content = $this->ContentService->get(1);
+        $this->ContentService->update($content, ['id' => $content->id, 'status' => false, 'name' => 'test']);
         $data = ['id' => 1, 'status' => 'publish'];
         $this->patch("/baser/api/baser-core/contents/change_status.json?token=" . $this->accessToken, $data);
         $this->assertResponseOk();

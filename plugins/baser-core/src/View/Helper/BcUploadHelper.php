@@ -1,9 +1,9 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
@@ -469,8 +469,11 @@ class BcUploadHelper  extends Helper
     protected function initField($fieldName)
     {
         $targetField = explode('.', $fieldName);
-        $table = array_shift($targetField);
         $field = array_pop($targetField);
+        while (true) {
+            $table = array_pop($targetField);
+            if (!is_numeric($table)) break;
+        }
         if (is_null($this->table)) {
             $this->table = TableRegistry::getTableLocator()->get('BaserCore.' . Inflector::pluralize($table));
         }

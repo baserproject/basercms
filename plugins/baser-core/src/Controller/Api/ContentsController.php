@@ -1,9 +1,9 @@
 <?php
 /**
  * baserCMS :  Based Webcontent Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
@@ -107,11 +107,11 @@ class ContentsController extends BcApiController
         $children = $contentService->getChildren($id);
         try {
             if($contentService->deleteRecursive($id)) {
-                $text = "コンテンツ: " . $content->name . "を削除しました。";
+                $text = "コンテンツ: " . $content->title . "を削除しました。";
                 if ($children) {
                     $content = array_merge([$content], $children->toArray());
                     foreach ($children as $child) {
-                        $text .= "\nコンテンツ: " . $child->name . "を削除しました。";
+                        $text .= "\nコンテンツ: " . $child->title . "を削除しました。";
                     }
                 }
                 $message = __d('baser', $text);
@@ -140,7 +140,7 @@ class ContentsController extends BcApiController
         $trash = $contentService->getTrash($id);
         try {
             if ($contentService->hardDeleteWithAssoc($id)) {
-                $message = __d('baser', 'ゴミ箱: {0} を削除しました。', $trash->name);
+                $message = __d('baser', 'ゴミ箱: {0} を削除しました。', $trash->title);
             }
         } catch (Exception $e) {
             $this->setResponse($this->response->withStatus(500));
@@ -169,7 +169,7 @@ class ContentsController extends BcApiController
         try {
             foreach ($trash as $entity) {
                 if ($contentService->hardDeleteWithAssoc($entity->id)) {
-                    $text .=  "$entity->name($entity->type)" . "を削除しました。";
+                    $text .=  "$entity->title($entity->type)" . "を削除しました。";
                     }
             }
             $message = __d('baser', $text);
@@ -194,10 +194,10 @@ class ContentsController extends BcApiController
     public function edit(ContentServiceInterface $contents, $id)
     {
         $this->request->allowMethod(['post', 'put']);
-        $content = $contents->update($contents->get($id), $this->request->getData());
-        if (!$content->getErrors()) {
-            $message = __d('baser', 'コンテンツ「{0}」を更新しました。', $content->name);
-        } else {
+        try {
+            $content = $contents->update($contents->get($id), $this->request->getData());
+            $message = __d('baser', 'コンテンツ「{0}」を更新しました。', $content->title);
+        } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
             $this->setResponse($this->response->withStatus(400));
             $message = __d('baser', '入力エラーです。内容を修正してください。');
         }
@@ -224,7 +224,7 @@ class ContentsController extends BcApiController
         $this->request->allowMethod(['get', 'head']);
         try {
             if ($restored = $contents->restore($id)) {
-                $message = __d('baser', 'ゴミ箱: {0} を元に戻しました。', $restored->name);
+                $message = __d('baser', 'ゴミ箱: {0} を元に戻しました。', $restored->title);
             } else {
                 $message = __d('baser', 'ゴミ箱の復元に失敗しました');
             }
@@ -255,11 +255,11 @@ class ContentsController extends BcApiController
                 switch($this->request->getData('status')) {
                     case 'publish':
                         $content = $contentService->publish($this->request->getData('id'));
-                        $message = __d('baser', 'コンテンツ: {0} を公開しました。', $content->name);
+                        $message = __d('baser', 'コンテンツ: {0} を公開しました。', $content->title);
                         break;
                     case 'unpublish':
                         $content = $contentService->unpublish($this->request->getData('id'));
-                        $message = __d('baser', 'コンテンツ: {0} を非公開にしました。', $content->name);
+                        $message = __d('baser', 'コンテンツ: {0} を非公開にしました。', $content->title);
                         break;
                 }
             } catch (\Exception $e) {
@@ -349,11 +349,8 @@ class ContentsController extends BcApiController
         }else {
             $oldContent = $contentService->get($this->request->getData('id'));
             $oldTitle = $oldContent->title;
-            $newContent = $contentService->update($oldContent, ['title' => $this->request->getData('title')]);
-            if ($newContent->hasErrors()) {
-                $this->setResponse($this->response->withStatus(500));
-                $message = $newContent->getErrors();
-            } else {
+            try {
+                $newContent = $contentService->update($oldContent, ['title' => $this->request->getData('title')], ['validate' => false]);
                 $this->setResponse($this->response->withStatus(200));
                 $url = $contentService->getUrlById($this->request->getData('title'));
                 $this->set(['url' => $url]);
@@ -372,6 +369,10 @@ class ContentsController extends BcApiController
                         $newContent->title
                     )
                 );
+            } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
+                $content = $e->getEntity();
+                $this->setResponse($this->response->withStatus(500));
+                $message = $content->getErrors();
             }
         }
         $this->set(['message' => $message]);
@@ -392,18 +393,13 @@ class ContentsController extends BcApiController
         $this->request->allowMethod(['post']);
         try {
             $alias = $contentService->alias($this->request->getData('aliasId'), $this->request->getData('content'));
-            if(!$alias->hasErrors()) {
-                $message = __d('baser', '{0} を作成しました。', $alias->name);
-                $this->set('content', $alias);
-            } else {
-                $this->setResponse($this->response->withStatus(400));
-                $message = __d('baser', '保存中にエラーが発生しました。');
-            }
-        } catch (Exception $e) {
-            $this->setResponse($this->response->withStatus(500));
-            $message = __d('baser', "無効な処理です。\n" . $e->getMessage());
+            $message = __d('baser', '{0} を作成しました。', $alias->title);
+        } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
+            $alias = $e->getEntity();
+            $this->setResponse($this->response->withStatus(400));
+            $message = __d('baser', "無効な処理です。\n" . $alias->getErrors());
         }
-        $this->set(['message' => $message]);
+        $this->set(['content' => $alias, 'message' => $message]);
         $this->viewBuilder()->setOption('serialize', ['message', 'content']);
     }
 
@@ -495,7 +491,7 @@ class ContentsController extends BcApiController
                 if ($afterEvent !== false) {
                     $this->request = ($afterEvent->getResult() === null || $afterEvent->getResult() === true)? $afterEvent->getData('result') : $afterEvent->getResult();
                 }
-                $message = sprintf(__d('baser', "コンテンツ「%s」の配置を移動しました。\n%s > %s"), $result->title, urldecode($beforeUrl), urldecode($result->url));
+                $message = sprintf(__d('baser', "コンテンツ「%s」の配置を移動しました。\n%s > %s"), $result->title, rawurldecode($beforeUrl), rawurldecode($result->url));
                 $url = $contentService->getUrlById($result->id, true);
                 $this->set(['url' => $url]);
                 $this->set(['content' => $result]);

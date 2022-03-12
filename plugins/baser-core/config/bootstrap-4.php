@@ -78,23 +78,6 @@ Configure::write('Dispatcher.filters',
 );
 
 /**
- * 配置パターン
- * Windows対策として、「\」を「/」へ変換してチェックする
- */
-if (!defined('BC_DEPLOY_PATTERN')) {
-    if (!preg_match('/' . preg_quote(str_replace('\\', '/', BcUtil::docRoot()), '/') . '/', str_replace('\\', '/', ROOT))) {
-        // CakePHP標準の配置
-        define('BC_DEPLOY_PATTERN', 3);
-    } elseif (ROOT . DS == WWW_ROOT) {
-        // webrootをドキュメントルートにして、その中に app / baser / cake を配置
-        define('BC_DEPLOY_PATTERN', 2);
-    } else {
-        // baserCMS配布時の配置
-        define('BC_DEPLOY_PATTERN', 1);
-    }
-}
-
-/**
  * baserUrl取得
  * BC_DEPLOY_PATTERN の定義より後に実行
  */
@@ -360,13 +343,6 @@ if (BC_INSTALLED && !$isUpdater && !$isMaintenance) {
             include $themeBootstrap;
         }
     }
-}
-
-/**
- * 文字コードの検出順を指定
- */
-if (function_exists('mb_detect_order')) {
-    mb_detect_order(Configure::read('BcEncode.detectOrder'));
 }
 
 /**

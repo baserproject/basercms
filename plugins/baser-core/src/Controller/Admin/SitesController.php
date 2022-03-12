@@ -1,9 +1,9 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
@@ -89,7 +89,7 @@ class SitesController extends BcAdminAppController
 
                 $this->BcMessage->setSuccess(sprintf(__d('baser', 'サイト「%s」を追加しました。'), $site->display_name));
                 return $this->redirect(['action' => 'edit', $site->id]);
-            } catch (\Exception $e) {
+            } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
                 $site = $e->getEntity();
                 $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
             }

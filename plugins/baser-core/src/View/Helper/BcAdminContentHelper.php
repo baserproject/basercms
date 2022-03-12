@@ -1,9 +1,9 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
@@ -12,6 +12,7 @@ namespace BaserCore\View\Helper;
 
 use Cake\View\Helper;
 use Cake\ORM\TableRegistry;
+use Cake\Utility\Hash;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -93,19 +94,22 @@ class BcAdminContentHelper extends Helper
      *
      * @return bool
      * @checked
+     * @noTodo
      * @unitTest
      */
     public function isContentDeletable(): bool
     {
         $userGroups = BcUtil::loginUser()->user_groups;
+
         if ($userGroups) {
-            foreach ($userGroups as $userGroup) {
-                // TODO ucmitz: ユーザグループを配列で全て渡すよう変更が必要
-                if ($this->PermissionService->check(BcUtil::getPrefix() . '/baser-core/contents/delete', [$userGroup->id])) {
-                    return true;
-                }
+
+            $userGroupIds = Hash::extract($userGroups, '{n}.id');
+
+            if ($this->PermissionService->check(BcUtil::getPrefix() . '/baser-core/contents/delete', $userGroupIds)) {
+                return true;
             }
         }
+
         return false;
     }
 
@@ -240,7 +244,7 @@ class BcAdminContentHelper extends Helper
         foreach($urlArray as $key => $value) {
             $checkUrl .= $value . '/';
             $entityId = $Content->find()->select('entity_id')->where(['url' => $checkUrl])->first()->entity_id;
-            $urlArray[$key] = $this->BcBaser->getLink(urldecode($value), ['admin' => true, 'plugin' => 'BaserCore', 'controller' => 'content_folders', 'action' => 'edit', $entityId], ['forceTitle' => true]);
+            $urlArray[$key] = $this->BcBaser->getLink(rawurldecode($value), ['admin' => true, 'plugin' => 'BaserCore', 'controller' => 'content_folders', 'action' => 'edit', $entityId], ['forceTitle' => true]);
         }
         $folderLinkedUrl = $host;
         if ($urlArray) {
@@ -249,16 +253,4 @@ class BcAdminContentHelper extends Helper
         return $folderLinkedUrl;
     }
 
-    /**
-     * コンテンツ情報を取得する
-     *
-     * @return array
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function getContentsInfo()
-    {
-        return $this->ContentService->getContentsInfo();
-    }
 }

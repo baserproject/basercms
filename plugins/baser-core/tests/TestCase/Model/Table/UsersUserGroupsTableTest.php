@@ -1,0 +1,69 @@
+<?php
+/**
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
+ *
+ * @copyright     Copyright (c) NPO baser foundation
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
+ */
+
+namespace BaserCore\Test\TestCase\Model\Table;
+
+use BaserCore\TestSuite\BcTestCase;
+
+/**
+ * Class UsersUserGroupsTableTest
+ *
+ * @package BaserCore\Model\Table\UsersUserGroupsTable
+ * @property UsersUserGroupsTable $UsersUserGroups
+ */
+class UsersUserGroupsTableTest extends BcTestCase
+{
+    public $fixtures = [
+        'plugin.BaserCore.Users',
+        'plugin.BaserCore.UserGroups',
+        'plugin.BaserCore.UsersUserGroups',
+    ];
+
+    /**
+     * Auto Fixtures
+     * @var bool
+     */
+    public $autoFixtures = false;
+
+    /**
+     * set up
+     *
+     * @return void
+     */
+    public function setUp(): void
+    {
+        $this->loadFixtures('Users', 'UserGroups', 'UsersUserGroups');
+        parent::setUp();
+        $config = $this->getTableLocator()->exists('UsersUserGroups')? [] : ['className' => 'BaserCore\Model\Table\UsersUserGroupsTable'];
+        $this->UsersUserGroups = $this->getTableLocator()->get('UsersUserGroups', $config);
+    }
+
+    /**
+     * Tear Down
+     *
+     * @return void
+     */
+    public function tearDown(): void
+    {
+        unset($this->UsersUserGroups);
+        parent::tearDown();
+    }
+
+    /**
+     * testInitialize
+     *
+     * @return void
+     */
+    public function testInitialize()
+    {;
+        $this->assertTrue($this->UsersUserGroups->hasBehavior('Timestamp'));
+    }
+}

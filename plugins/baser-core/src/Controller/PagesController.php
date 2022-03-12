@@ -1,9 +1,9 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
@@ -16,10 +16,7 @@ use Cake\Core\Configure;
 use Cake\Filesystem\File;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
-use BaserCore\Annotation\NoTodo;
 use BaserCore\Model\Entity\Page;
-use BaserCore\Annotation\Checked;
-use BaserCore\Annotation\UnitTest;
 use BaserCore\Model\Table\PagesTable;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Http\Exception\NotFoundException;
@@ -28,13 +25,16 @@ use Cake\Http\Exception\ForbiddenException;
 use Cake\View\Exception\MissingViewException;
 use BaserCore\Service\ContentFolderServiceInterface;
 use BaserCore\Controller\Component\BcFrontContentsComponent;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
 
 /**
  * PagesController
  * @property PagesTable $Pages
  * @property BcFrontContentsComponent $BcFrontContents
  */
-class PagesController extends AppController
+class PagesController extends BcFrontAppController
 {
 
     /**

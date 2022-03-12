@@ -1,9 +1,9 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
@@ -83,6 +83,10 @@ class ContentFoldersTableTest extends BcTestCase
                 'integer' => 'The provided value is invalid',
                 'valid' => 'IDに不正な値が利用されています。'
             ],
+            // BcContentsBehaviorのafterMarshalにて、contentを他のフィールド同様必要前提としている
+            'content' => [
+                '_required' => '関連するコンテンツがありません'
+            ]
         ], $contentFolder->getErrors());
     }
 

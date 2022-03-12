@@ -1,9 +1,9 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
@@ -370,6 +370,7 @@ class SitesTable extends AppTable
             foreach($children as $child) {
                 $child->site_id = 1;
                 // バリデートすると name が変換されてしまう
+                $this->Contents->getEventManager()->off('Model.afterSave');
                 $this->Contents->save($child, false);
             }
             $children = $contentService->getChildren($content->id);
@@ -409,7 +410,6 @@ class SitesTable extends AppTable
      *
      * @param $id
      * @return int
-     * @throws Cake\Datasource\Exception\RecordNotFoundException
      * @checked
      * @noTodo
      * @unitTest
@@ -420,7 +420,8 @@ class SitesTable extends AppTable
             return 1;
         }
         $Contents = TableRegistry::getTableLocator()->get('BaserCore.Contents');
-        return $Contents->find()->select(['id'])->where(['Contents.site_root' => true, 'Contents.site_id' => $id])->firstOrFail()->id;
+        $contents = $Contents->find()->select(['id'])->where(['Contents.site_root' => true, 'Contents.site_id' => $id]);
+        if (!$contents->isEmpty()) return $contents->first()->id;
     }
 
     /**

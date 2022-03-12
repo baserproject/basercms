@@ -1,9 +1,9 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
@@ -47,11 +47,13 @@ class ContentsTable extends AppTable
      * @param array $config テーブル設定
      * @return void
      * @checked
-     * @noTodo
+     * @note(value="yyyy/MM/dd型に所定の場所で変換する")
      * @unitTest
      */
     public function initialize(array $config): void
     {
+        // TODO ucmitz:
+        // FrozenTime::setToStringFormat('yyyy-MM-dd HH:mm:ss');
         FrozenTime::setToStringFormat('yyyy/MM/dd HH:mm:ss');
         parent::initialize($config);
         $this->addBehavior('Tree', ['level' => 'level']);
@@ -129,6 +131,7 @@ class ContentsTable extends AppTable
      * @return Validator
      * @checked
      * @unitTest
+     * @note(value="荒川に内容確認")
      */
     public function validationDefault(Validator $validator): Validator
     {
@@ -158,6 +161,7 @@ class ContentsTable extends AppTable
         ]);
         $validator
         ->scalar('title')
+        ->requirePresence('title', 'create', __d('baser', 'タイトルを入力してください。'))
         ->notEmptyString('title', __d('baser', 'タイトルを入力してください。'))
         ->maxLength('title', 230, __d('baser', 'タイトルは230文字以内で入力してください。'))
         ->regex('title', '/\A(?!.*(\t)).*\z/', __d('baser', 'タイトルはタブを含む名前は付けられません。'))
@@ -279,66 +283,64 @@ class ContentsTable extends AppTable
      * Before Marshal
      *
      * @param EventInterface $event
-     * @param ArrayObject $data
+     * @param ArrayObject $content
      * @param ArrayObject $options
-     * @return void
+     * @return array $content
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function beforeMarshal(EventInterface $event, ArrayObject $data, ArrayObject $options)
+    public function beforeMarshal(EventInterface $event, ArrayObject $content, ArrayObject $options)
     {
-        if (!empty($data['content'])) {
-            // コンテンツ一覧にて、コンテンツを登録した直後のリネーム処理までは新規追加とみなして処理を行う為、$create で判定させる
-            $create = empty($data['content']['id']);
-            // タイトルは強制的に255文字でカット
-            if (!empty($data['content']['title'])) {
-                $data['content']['title'] = mb_substr($data['content']['title'], 0, 254, 'UTF-8');
+        // タイトルは強制的に255文字でカット
+        if (!empty($content['title'])) {
+            $content['title'] = mb_substr($content['title'], 0, 254, 'UTF-8');
+        }
+        $isNew = empty($content['id']) && !isset($content['created']);
+        if ($isNew) {
+            // IEのURL制限が2083文字のため、全て全角文字を想定し231文字でカット
+            if (!isset($content['name']) && !empty($content['title'])) {
+                $content['name'] = $content['title'];
             }
-            if ($create) {
-                // IEのURL制限が2083文字のため、全て全角文字を想定し231文字でカット
-                if (!isset($data['content']['name'])) {
-                    $data['content']['name'] = BcUtil::urlencode(mb_substr($data['content']['title'], 0, 230, 'UTF-8'));
-                }
-                if (!isset($data['content']['self_status'])) {
-                    $data['content']['self_status'] = false;
-                }
-                if (!isset($data['content']['self_publish_begin'])) {
-                    $data['content']['self_publish_begin'] = null;
-                }
-                if (!isset($data['content']['self_publish_end'])) {
-                    $data['content']['self_publish_end'] = null;
-                }
-                if (!isset($data['content']['created_date'])) {
-                    $data['content']['created_date'] = FrozenTime::now();
-                }
-                if (!isset($data['content']['site_root'])) {
-                    $data['content']['site_root'] = 0;
-                }
-                if (!isset($data['content']['exclude_search'])) {
-                    $data['content']['exclude_search'] = 0;
-                }
-                if (!isset($data['content']['author_id'])) {
-                    $user = BcUtil::loginUser();
-                    if ($user) $data['content']['author_id'] = $user['id'];
-                }
-            } else {
-                if (empty($data['content']['modified_date'])) {
-                    $data['content']['modified_date'] = FrozenTime::now();
-                }
-                if (isset($data['content']['name'])) {
-                    $data['content']['name'] = BcUtil::urlencode(mb_substr($data['content']['name'], 0, 230, 'UTF-8'));
-                }
+            if (!isset($content['self_status'])) {
+                $content['self_status'] = false;
             }
-            // name の 重複チェック＆リネーム
-            if (!empty($data['content']['name'])) {
-                $contentId = null;
-                if (!empty($data['content']['id'])) {
-                    $contentId = $data['content']['id'];
-                }
-                $data['content']['name'] = $this->getUniqueName($data['content']['name'], $data['content']['parent_id'], $contentId);
+            if (!isset($content['self_publish_begin'])) {
+                $content['self_publish_begin'] = null;
+            }
+            if (!isset($content['self_publish_end'])) {
+                $content['self_publish_end'] = null;
+            }
+            if (!isset($content['created_date'])) {
+                $content['created_date'] = FrozenTime::now();
+            }
+            if (!isset($content['site_root'])) {
+                $content['site_root'] = 0;
+            }
+            if (!isset($content['exclude_search'])) {
+                $content['exclude_search'] = 0;
+            }
+            if (!isset($content['author_id'])) {
+                $user = BcUtil::loginUser();
+                if ($user) $content['author_id'] = $user['id'];
+            }
+        } else {
+            if (empty($content['modified_date'])) {
+                $content['modified_date'] = FrozenTime::now();
+            }
+            if (isset($content['name'])) {
+                $content['name'] = $content['name'];
             }
         }
+        // name の 重複チェック＆リネーム
+        if (!empty($content['name'])) {
+            $contentId = null;
+            if (!empty($content['id'])) {
+                $contentId = $content['id'];
+            }
+            $content['name'] = $this->getUniqueName($content['name'], $content['parent_id'] ?? null, $contentId);
+        }
+        return (array) $content;
     }
 
     /**
@@ -410,7 +412,8 @@ class ContentsTable extends AppTable
     {
 
         // 先頭が同じ名前のリストを取得し、後方プレフィックス付きのフィールド名を取得する
-        $query = $this->find()->where(['name LIKE' => $name . '%', 'parent_id' => $parentId]);
+        $query = $this->find()->where(['name LIKE' => $name . '%']);
+        if (isset($parentId)) $query = $query->andWhere(['parent_id' => $parentId]);
         if ($contentId) {
             $query = $query->andWhere(['id <>' => $contentId]);
         }
@@ -462,6 +465,11 @@ class ContentsTable extends AppTable
     {
         if (!empty($entity->id)) {
             $this->beforeSaveParentId = $entity->parent_id;
+        }
+        if ($entity->isNew()) {
+            $entity->name = $this->urlEncode(mb_substr($entity->name, 0, 230, 'UTF-8'));
+        } else {
+            $entity->name = $this->urlEncode(mb_substr(rawurldecode($entity->name), 0, 230, 'UTF-8'));
         }
         return parent::beforeSave($event, $entity, $options);
     }
@@ -570,6 +578,45 @@ class ContentsTable extends AppTable
     }
 
     /**
+     * URL用に文字列を変換する
+     *
+     *
+     * @param $value
+     * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    protected function urlEncode($value)
+    {
+        // すでにエンコードされてる場合はそのまま返す
+        if (!preg_match('/\%[0-9A-Z][0-9A-Z]\%[0-9A-Z][0-9A-Z]/', $value)) {
+            $value = $this->textFormatting($value);
+        }
+        return rawurlencode($value);
+    }
+
+    /**
+     * できるだけ可読性を高める為、不要な記号は除外する
+     *
+     * @param $value
+     * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    protected function textFormatting($value)
+    {
+        $value = str_replace([
+            ' ', '　', '	', '\\', '\'', '|', '`', '^', '"', ')', '(', '}', '{', ']', '[', ';',
+            '/', '?', ':', '@', '&', '=', '+', '$', ',', '%', '<', '>', '#', '!'
+        ], '_', $value);
+        $value = preg_replace('/\_{2,}/', '_', $value);
+        $value = preg_replace('/(^_|_$)/', '', $value);
+        return $value;
+    }
+
+    /**
      * メインサイトの場合、連携設定がされている子サイトのエイリアス削除する
      *
      * @param Content $content
@@ -593,8 +640,9 @@ class ContentsTable extends AppTable
             }
             // 同階層に同名のコンテンツがあるか確認
             foreach($sites as $site) {
-                $content = $this->find()->where(['site_id' => $site->id, 'main_site_content_id' => $content->id])->first();
-                if ($content) {
+                $contents = $this->find()->where(['site_id' => $site->id, 'main_site_content_id' => $content->id]);
+                if (!$contents->isEmpty()) {
+                    $content = $contents->first();
                     // afterDelete・afterSaveのループを防ぐ
                     foreach (['afterSave', 'afterDelete'] as $eventName) {
                         $event = $this->getEventManager()->matchingListeners($eventName);
@@ -618,6 +666,8 @@ class ContentsTable extends AppTable
      * @param Content $data
      * @return bool
      * @checked
+     * @noTodo
+     * @unitTest
      */
     protected function updateRelateSubSiteContent($data)
     {
@@ -640,9 +690,9 @@ class ContentsTable extends AppTable
         if ($this->find()->where(['site_id' => $sites->first()->id])->isEmpty()) {
             return true;
         }
-
-        $_data = $this->find()->where(['id' => $data->id])->first();
+        $_data = $this->findById($data->id)->applyOptions(['withDeleted'])->first();
         if ($_data) {
+            $this->getEventManager()->off('Model.beforeMarshal');
             $data = $this->patchEntity($_data, $data->toArray(), ['validate' => false]);
         }
 
@@ -650,13 +700,6 @@ class ContentsTable extends AppTable
         if (!$data->url) {
             return true;
         }
-
-        // TODO ucmitz: 未確認
-        // $CreateModel = $this;
-        // if ($isContentFolder) {
-        //     $CreateModel = TableRegistry::getTableLocator()->get('BaserCore.ContentFolder');
-        // }
-
         $pureUrl = $this->pureUrl($data->url, $data->site_id);
         // 同階層に同名のコンテンツがあるか確認
         $result = true;
@@ -680,7 +723,7 @@ class ContentsTable extends AppTable
                 // 存在する場合は、自身のエイリアスかどうか確認し、エイリアスの場合は、公開状態とタイトル、説明文、アイキャッチ、更新日を更新
                 // フォルダの場合も更新する
                 if ($content->alias_id == $data->id || ($content->type == 'ContentFolder' && $isContentFolder)) {
-                    $content->name = urldecode($data->name);
+                    $content->name = rawurldecode($data->name);
                     $content->title = $data->title;
                     $content->description = $data->description;
                     $content->self_status = $data->self_status;
@@ -696,10 +739,13 @@ class ContentsTable extends AppTable
                     if ($content->type == 'ContentFolder') {
                         $url = preg_replace('/\/[^\/]+\/$/', '/', $url);
                     }
-                    $content->parent_id = $this->copyContentFolderPath($url, $site->id);
+                    if ($this->copyContentFolderPath($url, $site->id) !== $content->id) {
+                        $content->parent_id = $this->copyContentFolderPath($url, $site->id);
+                    }
                 } else {
-                    $content->name = urldecode($data->name);
+                    $content->name = rawurldecode($data->name);
                 }
+                $this->getEventManager()->off('Model.afterSave');
                 if (!$this->save($content)) {
                     $result = false;
                 }
@@ -727,8 +773,11 @@ class ContentsTable extends AppTable
                 } else {
                     $content->alias_id = $data->id;
                 }
-                $content->parent_id = $this->copyContentFolderPath($url, $site->id);
+                if ($this->copyContentFolderPath($url, $site->id) !== $content->id) {
+                    $content->parent_id = $this->copyContentFolderPath($url, $site->id);
+                }
                 $content = $this->newEntity($content->toArray(), ['validate' => false]);
+                $this->getEventManager()->off('Model.afterSave');
                 if (!$this->save($content)) {
                     $result = false;
                 }
@@ -745,7 +794,6 @@ class ContentsTable extends AppTable
      * @param $targetSiteId
      * @return bool|null
      * @checked
-     * @noTodo
      * @unitTest
      */
     public function copyContentFolderPath($currentUrl, $targetSiteId)
@@ -798,6 +846,7 @@ class ContentsTable extends AppTable
                     ]
                 ];
                 $ContentFolder->create($data);
+                // TODO ucmitz: saveがおかしいので修正する
                 if ($ContentFolder->save()) {
                     $parentId = $ContentFolder->Content->id;
                 } else {
@@ -1000,6 +1049,7 @@ class ContentsTable extends AppTable
         }
         $event = $this->getEventManager()->matchingListeners('afterSave');
         if ($event) $this->getEventManager()->off('Model.afterSave');
+        $this->getEventManager()->off('Model.beforeSave');
         return $this->save($content, ['validate' => false]);
     }
 

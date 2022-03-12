@@ -1,9 +1,9 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
@@ -24,7 +24,7 @@ $this->BcAdmin->setHelp('pages_form');
   <div id="Action"><?php echo $this->request->action ?></div>
 </div>
 
-<?php echo $this->BcAdminForm->create($contentEntities, ['novalidate' => true]) ?>
+<?php echo $this->BcAdminForm->create($page, ['novalidate' => true]) ?>
 <?php echo $this->BcAdminForm->control('Page.mode', ['type' => 'hidden']) ?>
 <?php echo $this->BcAdminForm->control('Page.id', ['type' => 'hidden']) ?>
 

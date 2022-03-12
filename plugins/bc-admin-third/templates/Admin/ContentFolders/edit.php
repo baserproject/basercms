@@ -1,9 +1,9 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
@@ -32,7 +32,7 @@ $pageTemplateList = $this->BcAdminPage->getPageTemplateList($contentFolder->cont
 ?>
 
 
-<?php echo $this->BcAdminForm->create($contentEntities, ['novalidate' => true]) ?>
+<?php echo $this->BcAdminForm->create($contentFolder, ['novalidate' => true]) ?>
 <?php echo $this->BcFormTable->dispatchBefore() ?>
 <?php echo $this->BcAdminForm->hidden('ContentFolder.id') ?>
 <table class="form-table bca-form-table" data-bca-table-type="type2">

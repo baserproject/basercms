@@ -1,9 +1,9 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
@@ -127,8 +127,8 @@ class PluginsController extends BcAdminAppController
             $this->BcMessage->setError(__d('baser', '無効な処理です。'));
             return $this->redirect(['action' => 'index']);
         }
-        if ($pluginService->detach(urldecode($name))) {
-            $this->BcMessage->setSuccess(sprintf(__d('baser', 'プラグイン「%s」を無効にしました。'), urldecode($name)));
+        if ($pluginService->detach(rawurldecode($name))) {
+            $this->BcMessage->setSuccess(sprintf(__d('baser', 'プラグイン「%s」を無効にしました。'), rawurldecode($name)));
         } else {
             $this->BcMessage->setError(__d('baser', 'プラグインの無効化に失敗しました。'));
         }
@@ -154,7 +154,7 @@ class PluginsController extends BcAdminAppController
             return $this->redirect(['action' => 'index']);
         }
         try {
-            $pluginService->uninstall(urldecode($name), $this->request->getData('connection'));
+            $pluginService->uninstall(rawurldecode($name), $this->request->getData('connection'));
             $this->BcMessage->setSuccess(sprintf(__d('baser', 'プラグイン「%s」を削除しました。'), $name));
         } catch (\Exception $e) {
             $this->BcMessage->setError(__d('baser', 'プラグインの削除に失敗しました。' . $e->getMessage()));

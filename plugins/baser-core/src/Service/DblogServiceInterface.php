@@ -1,9 +1,9 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
@@ -12,6 +12,7 @@
 namespace BaserCore\Service;
 
 use Cake\Datasource\EntityInterface;
+use Cake\Datasource\ResultSetInterface;
 use Cake\ORM\Query;
 
 /**
@@ -40,7 +41,7 @@ interface DblogServiceInterface
      * 最新のDBログ一覧を取得
      * @param int $limit
      */
-    public function getDblogs(int $limit): object;
+    public function getDblogs(int $limit): ResultSetInterface;
 
     /**
      * DBログをすべて削除

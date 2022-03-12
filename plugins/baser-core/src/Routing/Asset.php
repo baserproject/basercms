@@ -248,7 +248,7 @@ class Asset
             $filepath = preg_replace(
                 '/^' . preg_quote(static::requestWebroot(), '/') . '/',
                 '',
-                urldecode($path)
+                rawurldecode($path)
             );
             $webrootPath = Configure::read('App.wwwRoot') . str_replace('/', DIRECTORY_SEPARATOR, $filepath);
             if (is_file($webrootPath)) {

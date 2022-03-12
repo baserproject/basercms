@@ -1,9 +1,9 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
@@ -72,14 +72,14 @@ class PagesController extends BcApiController
     {
         $this->request->allowMethod(['post', 'put', 'patch']);
         try {
-            $pages = $Pages->create($this->request->getData());
-            $message = __d('baser', '固定ページ「{0}」を追加しました。', $pages->content->name);
-            $this->set("page", $pages);
-            $this->set('content', $pages->content);
-        } catch (\Exception $e) {
-            $pages = $e->getEntity();
+            $page = $Pages->create($this->request->getData());
+            $message = __d('baser', '固定ページ「{0}」を追加しました。', $page->content->title);
+            $this->set("page", $page);
+            $this->set('content', $page->content);
+        } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
+            $page = $e->getEntity();
             $message = __d('baser', "入力エラーです。内容を修正してください。\n");
-            $this->set(['errors' => $pages->getErrors()]);
+            $this->set(['errors' => $page->getErrors()]);
             $this->setResponse($this->response->withStatus(400));
         }
         $this->set(['message' => $message]);
@@ -97,20 +97,20 @@ class PagesController extends BcApiController
     public function delete(PageServiceInterface $Pages, $id)
     {
         $this->request->allowMethod(['delete']);
-        $pages = $Pages->get($id);
+        $page = $Pages->get($id);
         try {
             if ($Pages->delete($id)) {
-                $message = __d('baser', '固定ページ: {0} を削除しました。', $pages->name);
+                $message = __d('baser', '固定ページ: {0} を削除しました。', $page->content->title);
             }
-        } catch (\Exception $e) {
-            $pages = $e->getEntity();
+        } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
+            $page = $e->getEntity();
             $message = __d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
         }
         $this->set([
             'message' => $message,
-            'pages' => $pages
+            'page' => $page
         ]);
-        $this->viewBuilder()->setOption('serialize', ['pages', 'message']);
+        $this->viewBuilder()->setOption('serialize', ['page', 'message']);
     }
 
     /**
@@ -126,10 +126,10 @@ class PagesController extends BcApiController
         $this->request->allowMethod(['post', 'put', 'patch']);
         try {
             $page = $pages->update($pages->get($id), $this->request->getData());
-            $message = __d('baser', '固定ページ 「{0}」を更新しました。', $page->name);
-        } catch (\Exception $e) {
+            $message = __d('baser', '固定ページ 「{0}」を更新しました。', $page->content->title);
+        } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
             $this->setResponse($this->response->withStatus(400));
-            $pages = $e->getEntity();
+            $page = $e->getEntity();
             $message = __d('baser', '入力エラーです。内容を修正してください。');
         }
         $this->set([
@@ -153,8 +153,8 @@ class PagesController extends BcApiController
         try {
             $this->request = $this->request->withData('authorId', BcUtil::loginUser());
             $page = $pages->copy($this->request->getData());
-            $message = __d('baser', '固定ページのコピー「%s」を追加しました。', $page->name);
-        } catch (\Exception $e) {
+            $message = __d('baser', '固定ページのコピー「%s」を追加しました。', $page->content->title);
+        } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
             $this->setResponse($this->response->withStatus(500));
             $page = $e->getEntity();
             $message = __d('baser', '入力エラーです。内容を修正してください。');

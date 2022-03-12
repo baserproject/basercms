@@ -1,9 +1,9 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
@@ -189,8 +189,7 @@ class SitesTableTest extends BcTestCase
         $this->assertEquals(1, $this->Sites->getRootContentId(1));
         $this->assertEquals(23, $this->Sites->getRootContentId(2));
         $this->assertEquals(24, $this->Sites->getRootContentId(3));
-        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
-        $this->Sites->getRootContentId(100);
+        $site = $this->Sites->getRootContentId(100);
     }
 
     /**

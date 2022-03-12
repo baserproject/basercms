@@ -1,9 +1,9 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
@@ -13,16 +13,21 @@ namespace BaserCore\Controller\Admin;
 
 use Authentication\Controller\Component\AuthenticationComponent;
 use BaserCore\Controller\BcAppController;
+use BaserCore\Service\PermissionServiceInterface;
 use BaserCore\Service\UserServiceInterface;
 use BaserCore\Service\UserService;
 use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Utility\BcSiteConfig;
 use Cake\Core\Configure;
 use Cake\Event\EventInterface;
+use Cake\Http\Response;
 use Cake\Routing\Router;
+use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\Note;
 use BaserCore\Utility\BcUtil;
 use Cake\Http\Exception\NotFoundException;
 
@@ -42,13 +47,18 @@ class BcAdminAppController extends BcAppController
      * Initialize
      * @checked
      * @unitTest
+     * @note(value="インストーラーを実装してから対応する")
      */
     public function initialize(): void
     {
         parent::initialize();
+
         $this->loadComponent('Authentication.Authentication', [
             'logoutRedirect' => Router::url(Configure::read('BcPrefixAuth.Admin.loginAction'), true),
         ]);
+
+        $this->Security->setConfig('validatePost', false);
+        if (Configure::read('BcApp.adminSsl') && !BcUtil::isConsole()) $this->Security->requireSecure();
 
         // TODO ucmitz 未移行のためコメントアウト
         // >>>
@@ -62,6 +72,27 @@ class BcAdminAppController extends BcAppController
         // ログインユーザ再読込
         if (!$userService->reload($this->request)) {
             $this->redirect($this->Authentication->logout());
+        }
+    }
+
+
+    /**
+     * Before Filter
+     * @param EventInterface $event
+     * @return Response|void
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function beforeFilter(EventInterface $event)
+    {
+        parent::beforeFilter($event);
+        $user = BcUtil::loginUser();
+        /* @var PermissionServiceInterface $permission */
+        $permission = $this->getService(PermissionServiceInterface::class);
+        if ($user && !$permission->check($this->getRequest()->getPath(), Hash::extract($user->toArray()['user_groups'], '{n}.id'))) {
+            $this->BcMessage->setError(__d('baser', '指定されたページへのアクセスは許可されていません。'));
+            $this->redirect($this->Authentication->getLoginRedirect());
         }
     }
 
@@ -244,8 +275,28 @@ class BcAdminAppController extends BcAppController
     {
         if (!isset($this->RequestHandler) || !$this->RequestHandler->prefers('json')) {
             $this->viewBuilder()->setClassName('BaserCore.BcAdminApp');
+            $this->setAdminTheme();
         }
-        $this->viewBuilder()->setTheme('BcAdminThird');
+    }
+
+    /**
+     * 管理画面用テーマをセットする
+     *
+     * 優先順位
+     * BcSiteConfig::get('admin_theme') > Configure::read('BcApp.adminTheme')
+     *
+     * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    protected function setAdminTheme()
+    {
+        $adminTheme = Inflector::camelize(Inflector::underscore(Configure::read('BcApp.defaultAdminTheme')));
+        if (!empty(BcSiteConfig::get('admin_theme'))) {
+            $adminTheme = BcSiteConfig::get('admin_theme');
+        }
+        $this->viewBuilder()->setTheme($adminTheme);
     }
 
     /**

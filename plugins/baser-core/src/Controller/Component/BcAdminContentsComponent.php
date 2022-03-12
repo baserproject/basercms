@@ -1,9 +1,9 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
@@ -113,9 +113,11 @@ class BcAdminContentsComponent extends Component
 
         if ($entityName === "content") {
             $content = $controller->viewBuilder()->getVar($entityName);
+            $entityName = Inflector::classify($entityName) . ".";
         } else {
             $associated = $controller->viewBuilder()->getVar($entityName);
             $content = $associated->content;
+            $entityName = Inflector::classify($entityName) . ".content.";
         }
         $site = $content->site;
         $theme = $site->theme;
@@ -129,7 +131,7 @@ class BcAdminContentsComponent extends Component
         }
         $controller->set('layoutTemplates', $templates);
 
-        $content->name = urldecode($content->name);
+        $content->name = rawurldecode($content->name);
         if (Configure::read('BcApp.autoUpdateContentCreatedDate')) {
             $content->modified_date = date('Y-m-d H:i:s');
         }
@@ -144,33 +146,10 @@ class BcAdminContentsComponent extends Component
             $related = true;
         }
         if (!$entityName === "content") $associated->content = $content;
-        // ContentController以外の場合適切にformIdを生成するためcontentEntitiesを確認
-        if ($controller->getName() !== 'Contents') $this->checkContentEntities($controller);
         $controller->set('content', $content);
         $controller->set('currentSiteId', $content->site_id);
         $controller->set('related', $related);
         $controller->set('publishLink', $this->ContentService->getUrl($content->url, true, $site->useSubDomain));
-    }
-
-    /**
-     * 適切にContentEntitiesが設定されてるか確認する
-     *
-     * @return void
-     * @throws BcException
-     * @checked
-     * @unitTest
-     * @noTodo
-     */
-    protected function checkContentEntities($controller)
-    {
-        $entities = $controller->viewBuilder()->getVar('contentEntities');
-        if (is_array($entities) && count($entities) === 2 && array_key_exists('Content', $entities)) {
-            if (array_key_first($entities) === 'Content') {
-                $entities = array_reverse($entities);
-                $controller->set('contentEntities', $entities);
-            }
-        } else {
-            throw new BcException(__d('baser', 'contentEntitiesが適切に設定されていません'));
-        }
+        $controller->set('entityName', $entityName);
     }
 }

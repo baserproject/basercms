@@ -1,9 +1,9 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
@@ -31,7 +31,9 @@ class BcRequestFilterMiddlewareTest extends BcTestCase
     protected $fixtures = [
         'plugin.BaserCore.Sites',
         'plugin.BaserCore.Contents',
+        'plugin.BaserCore.ContentFolders',
         'plugin.BaserCore.Pages',
+        'plugin.BaserCore.SiteConfigs',
     ];
 
     /**

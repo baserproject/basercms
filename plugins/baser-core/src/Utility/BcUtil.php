@@ -1,9 +1,9 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
@@ -318,6 +318,7 @@ class BcUtil
      * @return void
      * @checked
      * @unitTest
+     * @note(value="viewキャッシュ／dataキャッシュ実装時に対応")
      */
     public static function clearAllCache(): void
     {
@@ -571,6 +572,9 @@ class BcUtil
      *
      * @param mixed $value 対象文字列
      * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public static function serialize($value)
     {
@@ -596,27 +600,9 @@ class BcUtil
     }
 
     /**
-     * URL用に文字列を変換する
-     *
-     * できるだけ可読性を高める為、不要な記号は除外する
-     *
-     * @param $value
-     * @return string
-     */
-    public static function urlencode($value)
-    {
-        $value = str_replace([
-            ' ', '　', '	', '\\', '\'', '|', '`', '^', '"', ')', '(', '}', '{', ']', '[', ';',
-            '/', '?', ':', '@', '&', '=', '+', '$', ',', '%', '<', '>', '#', '!'
-        ], '_', $value);
-        $value = preg_replace('/\_{2,}/', '_', $value);
-        $value = preg_replace('/(^_|_$)/', '', $value);
-        return urlencode($value);
-    }
-
-    /**
      * コンソールから実行されているかチェックする
-     *
+     * $_ENV は、bootstrap にて設定
+     * ユニットテストで状態を変更できる仕様とする
      * @return bool
      * @checked
      * @noTodo
@@ -624,7 +610,7 @@ class BcUtil
      */
     public static function isConsole()
     {
-        return substr(php_sapi_name(), 0, 3) == 'cli';
+        return (bool) $_ENV['IS_CONSOLE'];
     }
 
     /**
@@ -640,7 +626,7 @@ class BcUtil
     public static function getTemplateList($path, $plugins)
     {
         if (!$plugins) return [];
-    if (!is_array($plugins)) $plugins = [$plugins];
+        if (!is_array($plugins)) $plugins = [$plugins];
 
         $_templates = [];
         foreach($plugins as $plugin) {
@@ -1079,7 +1065,6 @@ class BcUtil
         }
     }
 
-
     /**
      * WebサイトのベースとなるURLを取得する
      *
@@ -1092,7 +1077,6 @@ class BcUtil
      */
     public static function baseUrl()
     {
-
         $baseUrl = Configure::read('App.baseUrl');
         if ($baseUrl) {
             if (!preg_match('/\/$/', $baseUrl)) {
@@ -1100,20 +1084,13 @@ class BcUtil
             }
         } else {
             $script = $_SERVER['SCRIPT_FILENAME'];
-            if (BcUtil::isConsole()) {
-                $script = str_replace('app' . DS . 'Console' . DS . 'cake.php', '', $script);
-            }
             $script = str_replace(['\\', '/'], DS, $script);
             $docroot = BcUtil::docRoot();
             $script = str_replace($docroot, '', $script);
-            if (BC_DEPLOY_PATTERN == 1) {
-                $baseUrl = preg_replace('/' . preg_quote('app' . DS . 'webroot' . DS . 'index.php', '/') . '/', '', $script);
-                $baseUrl = preg_replace('/' . preg_quote('app' . DS . 'webroot' . DS . 'test.php', '/') . '/', '', $baseUrl);
-                // ↓ Windows Azure 対策 SCRIPT_FILENAMEに期待した値が入ってこない為
-                $baseUrl = preg_replace('/index\.php/', '', $baseUrl);
-            } elseif (BC_DEPLOY_PATTERN == 2) {
-                $baseUrl = preg_replace('/' . preg_quote(basename($_SERVER['SCRIPT_FILENAME']), '/') . '/', '', $script);
-            }
+            $baseUrl = preg_replace('/' . preg_quote('webroot' . DS . 'index.php', '/') . '/', '', $script);
+            $baseUrl = preg_replace('/' . preg_quote('webroot' . DS . 'test.php', '/') . '/', '', $baseUrl);
+            // ↓ Windows Azure 対策 SCRIPT_FILENAMEに期待した値が入ってこない為
+            $baseUrl = preg_replace('/index\.php/', '', $baseUrl);
             $baseUrl = preg_replace("/index$/", '', $baseUrl);
         }
 
@@ -1122,7 +1099,6 @@ class BcUtil
             $baseUrl = '/';
         }
         return $baseUrl;
-
     }
 
     /**
@@ -1135,16 +1111,9 @@ class BcUtil
      */
     public static function docRoot()
     {
-
         if (empty($_SERVER['SCRIPT_NAME'])) {
             return '';
         }
-
-        if (BcUtil::isConsole()) {
-            $script = $_SERVER['SCRIPT_NAME'];
-            return str_replace('app' . DS . 'Console' . DS . 'cake.php', '', $script);
-        }
-
         if (strpos($_SERVER['SCRIPT_NAME'], '.php') === false) {
             // さくらの場合、/index を呼びだすと、拡張子が付加されない
             $scriptName = $_SERVER['SCRIPT_NAME'] . '.php';

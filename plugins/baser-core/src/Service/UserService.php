@@ -1,9 +1,9 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
@@ -11,6 +11,7 @@
 
 namespace BaserCore\Service;
 
+use Authentication\AuthenticationService;
 use Authentication\Identity;
 use BaserCore\Model\Entity\User;
 use BaserCore\Model\Table\LoginStoresTable;
@@ -321,6 +322,7 @@ class UserService implements UserServiceInterface
      */
     public function checkAutoLogin(ServerRequest $request, ResponseInterface $response): ResponseInterface
     {
+        /* @var AuthenticationService $authentication */
         $authentication = $request->getAttribute('authentication');
         if(!$authentication) {
             return $response;
@@ -416,15 +418,21 @@ class UserService implements UserServiceInterface
         if ($sessionUser === false) {
             return true;
         }
+        $session = $request->getSession();
+        $sessionKey = Configure::read('BcPrefixAuth.' . $prefix . '.sessionKey');
         try {
-            $user = $this->get($sessionUser->id);
-            $session = $request->getSession();
-            $sessionKey = Configure::read('BcPrefixAuth.' . $prefix . '.sessionKey');
-            $session->write($sessionKey, $user);
+            $user = $this->Users->find('available')->where(['id' => $sessionUser->id])->first();
+            if($user) {
+                $session->write($sessionKey, $user);
+                return true;
+            } else {
+                $session->delete($sessionKey);
+                return false;
+            }
         } catch (Exception $e) {
+            $session->delete($sessionKey);
             return false;
         }
-        return true;
     }
 
     /**

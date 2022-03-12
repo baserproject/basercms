@@ -1,9 +1,9 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
@@ -122,6 +122,9 @@ class PluginTest extends BcTestCase
         $service = $this->Plugin->getAuthenticationService($request);
         if($config) {
             foreach ($config as $key => $value) {
+                if($key === 'unauthenticatedRedirect') {
+                    $value = Router::url($value, true);
+                }
                 $this->assertEquals($service->getConfig($key), $value);
             }
         }
@@ -139,7 +142,7 @@ class PluginTest extends BcTestCase
             // APIの場合
             ['Api', ['Jwt', 'Form'], 'JwtSubject', []],
             // Adminの場合
-            ['Admin', ['Session', 'Form'], 'Password', ['unauthenticatedRedirect' => Router::url('/baser/admin/baser-core/users/login', true)]],
+            ['Admin', ['Session', 'Form'], 'Password', ['unauthenticatedRedirect' => '/baser/admin/baser-core/users/login']],
             // // それ以外の場合
             ['', ['Form'], '', []]
         ];

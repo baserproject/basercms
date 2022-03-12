@@ -1,9 +1,9 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
@@ -154,17 +154,27 @@ class ContentsTableTest extends BcTestCase
         return [
             [
                 [
-                    'id' => 'aaa', // 空の場合通る
                     'name' => '',
                     'title' => '',
                 ],
                 [
-                    'id' => ['integer' => "The provided value is invalid"],
                     'name' => ['_empty' => 'スラッグを入力してください。'],
                     'title' => ['_empty' => 'タイトルを入力してください。'],
                 ]
             ]
         ];
+    }
+
+    /**
+     * 不適切な値がvalueとして渡される場合
+     *
+     * @return void
+     */
+    public function testInvalidIdSupplied(): void
+    {
+        $this->loadFixtures('Contents');
+        $this->expectException('InvalidArgumentException');
+        $contents = $this->Contents->newEntity(['id' => 'aaa']);
     }
 
 
@@ -205,18 +215,17 @@ class ContentsTableTest extends BcTestCase
     /**
      * testBeforeMarshal
      *
-     * @param  array $fields
+     * @param  array $content
      * @param  array $expected
      * @return void
      * @dataProvider beforeMarshalDataProvider
      */
-    public function testBeforeMarshal($fields, $expected)
+    public function testBeforeMarshal($content, $expected)
     {
         $this->loginAdmin($this->getRequest());
-        $data = ['content' => $fields];
-        $result = $this->Contents->dispatchEvent('Model.beforeMarshal', ['data' => new ArrayObject($data), 'options' => new ArrayObject()]);
-        $this->assertNull($result->getResult());
-        $content = (array) $result->getData('data')['content'];
+        $result = $this->Contents->dispatchEvent('Model.beforeMarshal', ['data' => new ArrayObject($content), 'options' => new ArrayObject()]);
+        $this->assertNotEmpty($result->getResult());
+        $content = (array) $result->getData('content');
         if (isset($fields['title'])) {
             $this->assertEquals($expected['limit'][0], strlen($content['title']));
             $this->assertEquals($expected['limit'][1], strlen($content['name']));
@@ -300,6 +309,7 @@ class ContentsTableTest extends BcTestCase
         $data = [
             "name" => "test",
             "created" => $time,
+            "parent_id" => 1,
         ];
         $marshall = new Marshaller($this->Contents);
 
@@ -316,12 +326,17 @@ class ContentsTableTest extends BcTestCase
      */
     public function testBeforeSave()
     {
+        $value = "テスト";
         $data = new Entity([
             'id' => 100,
             'parent_id' => 6,
+            'name' => $value
         ]);
-        $this->Contents->dispatchEvent('Model.beforeSave', ['entity' => $data, 'options' => new ArrayObject()]);
+        $result = $this->Contents->dispatchEvent('Model.beforeSave', ['entity' => $data, 'options' => new ArrayObject()]);
         $this->assertEquals(6, $this->Contents->beforeSaveParentId);
+        // nameフィールドがエンコードされてるかをテスト
+        $entity = $result->getData('entity');
+        $this->assertEquals(urlencode($value), $entity->name);
     }
 
     /**
@@ -414,9 +429,15 @@ class ContentsTableTest extends BcTestCase
      */
     public function testUpdateRelateSubSiteContent()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $content = $this->Contents->get(21);
-        $this->Contents->updateRelateSubSiteContent($content);
+        $id = 1;
+        $content = $this->Contents->get($id);
+        $result = $this->execPrivateMethod($this->Contents, 'updateRelateSubSiteContent', [$content]);
+        $this->assertTrue($result);
+        // content ID1のデータが反映されてるかテスト
+        $contents = $this->Contents->find()->contain('Sites')->where(['Contents.main_site_content_id' => $id, 'Sites.relate_main_site' => true, 'Sites.status' => true]);
+        foreach ($contents as $relatedContent) {
+            $this->assertEquals($content->title, $relatedContent->title);
+        }
     }
 
     /**
@@ -457,7 +478,7 @@ class ContentsTableTest extends BcTestCase
      */
     public function testCreateContent()
     {
-        $content = ['title' => 'hoge', 'parent_id' => '', 'site_id' => 1, 'url' => '/hoge'];
+        $content = ['title' => 'hoge', 'parent_id' => 1, 'site_id' => 1, 'url' => '/hoge'];
         // $type = 'ContentFolder';
         $type = 'Contents';
         $result = $this->Contents->createContent($content, 'BaserCore', $type);
@@ -549,15 +570,17 @@ class ContentsTableTest extends BcTestCase
             'id' => 100,
             'site_id' => 1,
             'name' => 'test',
+            'title' => 'test',
             'status' => null,
             'publish_begin' => null,
             'publish_end' => null,
             'self_status' => true,
-            'self_publish_begin' => FrozenTime::now(),
+            'self_publish_begin' => FrozenTime::yesterday(),
             'self_publish_end' => FrozenTime::now(),
             'parent_id' => 1,
         ];
-        $content = new Content($data);
+        $content = $this->Contents->patchEntity($this->Contents->newEmptyEntity(), $data, ['validate' => false]);
+        $content = $this->Contents->save($content);
         $this->execPrivateMethod($this->Contents, 'updateSystemData', [$content]);
         $content = $this->Contents->get(100);
         $this->assertTrue($content->status);
@@ -583,6 +606,7 @@ class ContentsTableTest extends BcTestCase
         $new = $this->Contents->newEntity([
             'id' => 101,
             'title' => 'relatedMainContent',
+            'name' => 'relatedMainContent',
             'url' => '/test/',
             'site_id' => 1,
         ]);
@@ -599,7 +623,7 @@ class ContentsTableTest extends BcTestCase
     {
         $this->Contents->updateChildren(18);
         // 孫のurlが更新されてるか確認
-        $this->assertEquals("/ツリー階層削除用フォルダー(親)/ツリー階層削除用フォルダー(子)/ツリー階層削除用フォルダー(孫)/", $this->Contents->get(20)->url);
+        $this->assertEquals("/ツリー階層削除用フォルダー(親)/ツリー階層削除用フォルダー(子)/ツリー階層削除用フォルダー(孫)/", rawurldecode($this->Contents->get(20)->url));
     }
 
     /**
@@ -734,6 +758,32 @@ class ContentsTableTest extends BcTestCase
             [false, 6, 7, true],    // フォルダを移動、同じ名称が存在しない
             [true, 2, 7, false],    // ファイルを移動、別サイトに同じファイル名が存在
             [true, 6, 7, false],    // フォルダを移動、別サイトに同じファイル名が存在
+        ];
+    }
+
+        /**
+     * URL用に文字列を変換する
+     *
+     * できるだけ可読性を高める為、不要な記号は除外する
+     * @param  string $value
+     * @param  bool $isEncoded
+     * @return void
+     * @dataProvider testUrlencodeDataProvider
+     */
+    public function testUrlencode($value, $encodedExpected, $decodedExpected)
+    {
+        $encoded = $this->execPrivateMethod($this->Contents, 'urlEncode', [$value]);
+        $this->assertEquals($encodedExpected, $encoded);
+        $this->assertEquals($decodedExpected, rawurldecode($encoded));
+    }
+
+    public function testUrlencodeDataProvider()
+    {
+        return [
+            ['あああ', '%E3%81%82%E3%81%82%E3%81%82', 'あああ'],
+            ['______%%%あああ', '%E3%81%82%E3%81%82%E3%81%82', 'あああ'],
+            ['test', 'test', 'test'],
+            ['%E3%81%82%E3%81%82%E3%81%82', '%25E3%2581%2582%25E3%2581%2582%25E3%2581%2582', '%E3%81%82%E3%81%82%E3%81%82']
         ];
     }
 

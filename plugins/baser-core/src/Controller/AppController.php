@@ -1,9 +1,9 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
@@ -12,12 +12,14 @@
 namespace BaserCore\Controller;
 
 use App\Controller\AppController as BaseController;
+use Authentication\Controller\Component\AuthenticationComponent;
 use BaserCore\Controller\Component\BcMessageComponent;
 use BaserCore\Event\BcEventDispatcherTrait;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\Note;
+use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcSiteConfig;
 use BaserCore\Utility\BcUtil;
 use Cake\Controller\Component\PaginatorComponent;
@@ -26,16 +28,18 @@ use Cake\Controller\ComponentRegistry;
 use Cake\Core\Configure;
 use Cake\Event\EventInterface;
 use Cake\Event\EventManagerInterface;
+use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
 use Cake\ORM\TableRegistry;
-use Cake\Routing\Router;
+use Cake\Utility\Inflector;
 
 /**
  * Class AppController
  * @property BcMessageComponent $BcMessage
  * @property SecurityComponent $Security
  * @property PaginatorComponent $Paginator
+ * @property AuthenticationComponent $Authentication
  */
 class AppController extends BaseController
 {
@@ -43,6 +47,7 @@ class AppController extends BaseController
      * Trait
      */
     use BcEventDispatcherTrait;
+    use BcContainerTrait;
 
     /**
      * BcAppController constructor.
@@ -55,11 +60,11 @@ class AppController extends BaseController
      * @note(value="BcRequestFilterをミドルウェアに移行してから実装する")
      */
     public function __construct(
-        ?ServerRequest $request = null,
-        ?Response $response = null,
-        ?string $name = null,
+        ?ServerRequest         $request = null,
+        ?Response              $response = null,
+        ?string                $name = null,
         ?EventManagerInterface $eventManager = null,
-        ?ComponentRegistry $components = null
+        ?ComponentRegistry     $components = null
     )
     {
         parent::__construct($request, $response, $name, $eventManager, $components);
@@ -84,20 +89,56 @@ class AppController extends BaseController
      * Initialize
      * @checked
      * @unitTest
-     * @noTodo
      */
     public function initialize(): void
     {
         parent::initialize();
         $this->loadComponent('BaserCore.BcMessage');
-        $this->loadComponent('Security');
         $this->loadComponent('Paginator');
+        $this->loadComponent('Security', [
+            'blackHoleCallback' => '_blackHoleCallback',
+            'validatePost' => true,
+            'requireSecure' => false,
+            'unlockedFields' => ['x', 'y', 'MAX_FILE_SIZE']
+        ]);
 
         // TODO ucmitz 未移行のためコメントアウト
         // >>>
 //        $this->loadComponent('BaserCore.Flash');
 //        $this->loadComponent('BaserCore.BcEmail');
         // <<<
+    }
+
+    /**
+     * Before Filter
+     * @param EventInterface $event
+     * @return Response|void
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function beforeFilter(EventInterface $event)
+    {
+        parent::beforeFilter($event);
+
+        if (!$this->getRequest()->is('requestview')) return;
+
+        $response = $this->redirectIfIsRequireMaintenance();
+        if ($response) return $response;
+
+        $this->__convertEncodingHttpInput();
+        $this->__cleanupQueryParams();
+
+        // インストーラー、アップデーターの場合はテーマを設定して終了
+        // コンソールから利用される場合、$isInstall だけでは判定できないので、BC_INSTALLED も判定に入れる
+        if ((!BC_INSTALLED || $this->getRequest()->is('install') || $this->getRequest()->is('update')) && !in_array($this->getName(), ['Error', 'BcError'])) {
+            $this->viewBuilder()->setTheme(Configure::read('BcApp.defaultAdminTheme'));
+            return;
+        }
+
+        if ($this->request->is('ajax') || BcUtil::loginUser()) {
+            $this->setResponse($this->getResponse()->withDisabledCache());
+        }
     }
 
     /**
@@ -112,13 +153,102 @@ class AppController extends BaseController
     {
         if (!isset($this->RequestHandler) || !$this->RequestHandler->prefers('json')) {
             $this->viewBuilder()->setClassName('BaserCore.App');
+            $theme = Inflector::camelize(Inflector::underscore(Configure::read('BcApp.defaultFrontTheme')));
             $site = $this->getRequest()->getParam('Site');
-            if(!$site) {
+            if (!$site) {
                 $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
                 $site = $sites->getRootMain();
             }
-            $this->viewBuilder()->setTheme($site->theme);
+            if ($site->theme) {
+                $theme = $site->theme;
+            }
+            $this->viewBuilder()->setTheme($theme);
         }
+    }
+
+    /**
+     * Securityコンポーネントのブラックホールからのコールバック
+     *
+     * フォーム改ざん対策・CSRF対策・SSL制限・HTTPメソッド制限などへの違反が原因で
+     * Securityコンポーネントに"ブラックホールされた"場合の動作を指定する
+     *
+     * @param string $err エラーの種類
+     * @return void
+     * @throws BadRequestException
+     * @uses _blackHoleCallback
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function _blackHoleCallback($err)
+    {
+        throw new BadRequestException($message = __d('baser', '不正なリクエストと判断されました。'));
+    }
+
+    /**
+     * http経由で送信されたデータを変換する
+     * とりあえず、UTF-8で固定
+     *
+     * @return    void
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    private function __convertEncodingHttpInput(): void
+    {
+        if ($this->getRequest()->getData()) {
+            $this->setRequest($this->request->withParsedBody($this->_autoConvertEncodingByArray($this->getRequest()->getData(), 'UTF-8')));
+        }
+    }
+
+    /**
+     * 配列の文字コードを変換する
+     *
+     * @param array $data 変換前データ
+     * @param string $outenc 変換後の文字コード
+     * @return array 変換後データ
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    protected function _autoConvertEncodingByArray($data, $outenc = 'UTF-8'): array
+    {
+        if (!$data) return [];
+        foreach($data as $key => $value) {
+            if (is_array($value)) {
+                $data[$key] = $this->_autoConvertEncodingByArray($value, $outenc);
+                continue;
+            }
+            $inenc = mb_detect_encoding($value);
+            if ($inenc !== $outenc) {
+                // 半角カナは一旦全角に変換する
+                $value = mb_convert_kana($value, 'KV', $inenc);
+                $value = mb_convert_encoding($value, $outenc, $inenc);
+                $data[$key] = $value;
+            }
+        }
+        return $data;
+    }
+
+    /**
+     * クエリーパラメーターの調整
+     * 環境によって？キーにamp;が付加されてしまうため
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    private function __cleanupQueryParams(): void
+    {
+        $query = $this->request->getQueryParams();
+        if (is_array($query)) {
+            foreach($query as $key => $val) {
+                if (strpos($key, 'amp;') === 0) {
+                    $query[substr($key, 4)] = $val;
+                    unset($query[$key]);
+                }
+            }
+        }
+        $this->request = $this->request->withQueryParams($query);
     }
 
     /**
@@ -134,58 +264,30 @@ class AppController extends BaseController
     }
 
     /**
-     * siteUrlや、sslUrlと現在のURLが違う場合には、そちらのURLにリダイレクトを行う
-     * setting.php にて、cmsUrlとして、cmsUrlを定義した場合にはそちらを優先する
-     * @return Response|void|null
-     */
-    public function redirectIfIsNotSameSite()
-    {
-        if($this->getRequest()->is('admin')) {
-            return;
-        }
-        if (Configure::read('BcEnv.cmsUrl')) {
-            $siteUrl = Configure::read('BcEnv.cmsUrl');
-        } elseif ($this->getRequest()->is('ssl')) {
-            $siteUrl = Configure::read('BcEnv.sslUrl');
-        } else {
-            $siteUrl = Configure::read('BcEnv.siteUrl');
-        }
-        if(!$siteUrl) {
-            return;
-        }
-        if (BcUtil::siteUrl() !== $siteUrl) {
-            $params = $this->getRequest()->getAttributes()['params'];
-            unset($params['Content']);unset($params['Site']);
-            $url = Router::reverse($params, false);
-            $webroot = $this->request->getAttributes()['webroot'];
-            $webrootReg = '/^\/' . preg_quote($webroot, '/') . '/';
-            $url = preg_replace($webrootReg, '', $url);
-            return $this->redirect($siteUrl . $url);
-        }
-    }
-
-    /**
      * メンテナンス画面へのリダイレクトが必要な場合にリダイレクトする
      * @return Response|void|null
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function redirectIfIsRequireMaintenance()
     {
         if ($this->request->is('ajax')) {
             return;
         }
-        if(empty(BcSiteConfig::get('maintenance'))){
+        if (empty(BcSiteConfig::get('maintenance'))) {
             return;
         }
-        if(Configure::read('debug')) {
+        if (Configure::read('debug')) {
             return;
         }
-        if($this->getRequest()->is('maintenance')) {
+        if ($this->getRequest()->is('maintenance')) {
             return;
         }
-        if($this->getRequest()->is('admin')) {
+        if ($this->getRequest()->is('admin')) {
             return;
         }
-        if(BcUtil::isAdminUser()) {
+        if (BcUtil::isAdminUser()) {
             return;
         }
 

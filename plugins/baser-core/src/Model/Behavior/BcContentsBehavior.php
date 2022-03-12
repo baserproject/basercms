@@ -1,9 +1,9 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
@@ -57,11 +57,10 @@ class BcContentsBehavior extends Behavior
     }
 
     /**
-     * BeforeMarshal
-     *
-     * 新規のデータの場合時のみContent のバリデーションを実行し、エラーがある場合は中止する
-     * $data['content']がある場合のみ実行する
+     * afterMarshal
+     * contentの項目がない場合エラーをセットする
      * @param EventInterface $event
+     * @param EventInterface $entity
      * @param ArrayObject $data
      * @param ArrayObject $options
      * @return void
@@ -69,25 +68,10 @@ class BcContentsBehavior extends Behavior
      * @noTodo
      * @unitTest
      */
-    public function beforeMarshal(EventInterface $event, ArrayObject $data, ArrayObject $options)
+    public function afterMarshal(EventInterface $event, EntityInterface $entity, ArrayObject $data, ArrayObject $options)
     {
-        if (!empty($data['content'])) {
-            if (!empty($data['content']['id'])) {
-                if (!$this->Contents->findById($data['content']['id'])->first()->isNew()) return;
-            }
-            $validateOptions = ['validate' => $options['validate'] ?? 'default'];
-            $contentEntity = $this->Contents->newEntity($data['content'], $validateOptions);
-            if ($contentEntity->hasErrors() && empty($data['content']['id'])) {
-                return false;
-            }
-            [$plugin, $type] = pluginSplit($this->table->getRegistryAlias());
-            if (!isset($data['content']['plugin'])) {
-                $data['content']['plugin'] = $plugin;
-            }
-            if (!isset($data['content']['type'])) {
-                $data['content']['type'] = Inflector::classify($type);
-            }
-            $this->Contents->beforeMarshal($event, $data, $options);
+        if (!isset($data['content'])) {
+            $entity->setError('content', ['_required' => '関連するコンテンツがありません']);
         }
     }
 

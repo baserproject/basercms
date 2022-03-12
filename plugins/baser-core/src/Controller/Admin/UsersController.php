@@ -1,9 +1,9 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
@@ -172,7 +172,7 @@ class UsersController extends BcAdminAppController
                 ]);
                 $this->BcMessage->setSuccess(__d('baser', 'ユーザー「{0}」を追加しました。', $user->name));
                 return $this->redirect(['action' => 'edit', $user->id]);
-            } catch (\Exception $e) {
+            } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
                 $user = $e->getEntity();
                 $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
             }

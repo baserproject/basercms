@@ -1,9 +1,9 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
@@ -13,6 +13,7 @@ namespace BaserCore\Test\TestCase\Controller\Admin;
 
 use Cake\Event\Event;
 use Cake\Http\ServerRequest;
+use BaserCore\Utility\BcUtil;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Service\ContentService;
 use BaserCore\Utility\BcContainerTrait;
@@ -359,7 +360,8 @@ class ContentsControllerTest extends BcTestCase
     public function testBatchPublish()
     {
         $this->enableCsrfToken();
-        $this->ContentService->update($this->ContentService->get(1), ['status' => false]);
+        $content = $this->ContentService->get(1);
+        $this->ContentService->update($content, ['id' => $content->id, 'status' => false, 'name' => 'test']);
         // publish
         $data = [
             'ListTool' => [
@@ -381,12 +383,12 @@ class ContentsControllerTest extends BcTestCase
         $this->enableSecurityToken();
         $this->enableCsrfToken();
         $data = $this->ContentService->getIndex(['name' => 'testEditのエイリアス'])->first();
-        $data->name = 'ControllerEditエイリアス';
+        $data->title = 'ControllerEditエイリアス';
         $data->site->name = 'ucmitz'; // site側でエラーが出るため
         $this->post('/baser/admin/baser-core/contents/edit_alias/' . $data->id, ["Content" => $data->toArray()]);
         $this->assertResponseSuccess();
         $this->assertRedirect('/baser/admin/baser-core/contents/edit_alias/' . $data->id);
-        $this->assertEquals('ControllerEditエイリアス', $this->ContentService->get($data->id)->name);
+        $this->assertEquals('ControllerEditエイリアス', $this->ContentService->get($data->id)->title);
     }
 
     /**

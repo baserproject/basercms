@@ -1,9 +1,9 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
@@ -36,6 +36,7 @@ class PagesControllerTest extends BcTestCase
         'plugin.BaserCore.Contents',
         'plugin.BaserCore.Sites',
         'plugin.BaserCore.SiteConfigs',
+        'plugin.BaserCore.SearchIndexes',
     ];
 
     /**
@@ -101,7 +102,7 @@ class PagesControllerTest extends BcTestCase
                 "title" => "新しい フォルダー",
                 "plugin" => 'BaserCore',
                 "type" => "Page",
-                "site_id" => "0",
+                "site_id" => "1",
                 "alias_id" => "",
                 "entity_id" => "",
             ]

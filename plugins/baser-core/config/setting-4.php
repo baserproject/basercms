@@ -418,13 +418,6 @@ $config['BcShortCode']['BaserCore'] = [
 ];
 
 /**
- * セキュリティ設定
- */
-$config['BcSecurity'] = [
-    'csrfExpires' => '+4 hours'
-];
-
-/**
  * ウィジェット
  */
 $config['BcWidget'] = [

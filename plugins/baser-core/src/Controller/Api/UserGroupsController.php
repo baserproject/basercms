@@ -1,9 +1,9 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
@@ -71,7 +71,7 @@ class UserGroupsController extends BcApiController
             try {
                 $userGroups = $UserGroups->create($this->request->getData());
                 $message = __d('baser', 'ユーザーグループ「{0}」を追加しました。', $userGroups->name);
-            } catch (\Exception $e) {
+            } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
                 $userGroups = $e->getEntity();
                 $this->setResponse($this->response->withStatus(400));
                 $message = __d('baser', '入力エラーです。内容を修正してください。');

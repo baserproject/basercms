@@ -1,9 +1,9 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
@@ -41,6 +41,7 @@ class ContentFoldersControllerTest extends BcTestCase
         'plugin.BaserCore.Users',
         'plugin.BaserCore.UserGroups',
         'plugin.BaserCore.UsersUserGroups',
+        'plugin.BaserCore.SiteConfigs',
     ];
 
     /**
@@ -82,7 +83,7 @@ class ContentFoldersControllerTest extends BcTestCase
      */
     public function testView(): void
     {
-        $this->get("/en");
+        $this->get("/en/");
         $this->assertResponseOk();
     }
 

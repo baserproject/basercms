@@ -1,9 +1,9 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
@@ -12,6 +12,7 @@
 namespace BaserCore\Service;
 
 use BaserCore\Model\Table\PluginsTable;
+use BaserCore\Model\Table\UserGroupsTable;
 use Cake\Cache\Cache;
 use Cake\Http\Client;
 use Cake\ORM\TableRegistry;
@@ -50,6 +51,7 @@ class PluginService implements PluginServiceInterface
     public function __construct()
     {
         $this->Plugins = TableRegistry::getTableLocator()->get('BaserCore.Plugins');
+        $this->UserGroups = TableRegistry::getTableLocator()->get('BaserCore.UserGroups');
     }
 
     /**
@@ -188,7 +190,7 @@ class PluginService implements PluginServiceInterface
     public function uninstall(string $name, $connection = 'default'): void
     {
         $options = ['connection' => $connection];
-        $name = urldecode($name);
+        $name = rawurldecode($name);
         BcUtil::includePluginClass($name);
         $plugins = CakePlugin::getCollection();
         $plugin = $plugins->create($name);
@@ -255,6 +257,7 @@ class PluginService implements PluginServiceInterface
      * @param array $data リクエストデータ
      * @return void
      * @checked
+     * @noTodo
      * @unitTest
      */
     public function allow($data): void
@@ -266,9 +269,8 @@ class PluginService implements PluginServiceInterface
         }
 
         foreach($userGroups as $userGroup) {
-            //$permissionAuthPrefix = $Permission->UserGroup->getAuthPrefix($userGroup['UserGroup']['id']);
-            // TODO ucmitz 現在 admin 固定、今後、mypage 等にも対応する
-            $permissionAuthPrefix = 'admin';
+
+            $permissionAuthPrefix = $this->UserGroups->getAuthPrefix($userGroup->id);
             $url = '/baser/' . $permissionAuthPrefix . '/' . Inflector::underscore($data['name']) . '/*';
 
             $prePermissions = $permissions->find()->where(['url' => $url])->first();
@@ -306,7 +308,7 @@ class PluginService implements PluginServiceInterface
      */
     public function getInstallStatusMessage($pluginName): string
     {
-        $pluginName = urldecode($pluginName);
+        $pluginName = rawurldecode($pluginName);
         $installedPlugin = $this->Plugins->find()->where([
             'name' => $pluginName,
             'status' => true,
