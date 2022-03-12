@@ -70,7 +70,7 @@ class BcAdminSiteHelper extends Helper
     }
 
     /**
-     * デバイスリストを取得
+     * 言語リストを取得
      * @return array
      * @checked
      * @noTodo

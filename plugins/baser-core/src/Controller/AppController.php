@@ -89,6 +89,7 @@ class AppController extends BaseController
      * Initialize
      * @checked
      * @unitTest
+     * @note(value="BcEmailを実装したあとに確認")
      */
     public function initialize(): void
     {
@@ -104,7 +105,6 @@ class AppController extends BaseController
 
         // TODO ucmitz 未移行のためコメントアウト
         // >>>
-//        $this->loadComponent('BaserCore.Flash');
 //        $this->loadComponent('BaserCore.BcEmail');
         // <<<
     }
