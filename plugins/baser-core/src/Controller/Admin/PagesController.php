@@ -81,6 +81,7 @@ class PagesController extends BcAdminAppController
 	 * @return void
      * @checked
      * @unitTest
+     * @noTodo
 	 */
 	public function edit($id, PageServiceInterface $pageService, ContentServiceInterface $contentService, SiteServiceInterface $siteService, SiteConfigServiceInterface $siteConfigService)
 	{
@@ -105,12 +106,6 @@ class PagesController extends BcAdminAppController
                 // contents_tmpをcontentsに反映
                 $this->request = $this->request->withData('Page.contents', $this->request->getData('Page.contents_tmp'));
                 $page = $pageService->update($page, $this->request->getData('Page'));
-                // TODO cumitz: clearViewCache()がないため一時的にコメントアウト
-                if ($contentService->isChangedStatus($id, $this->request->getData('Page.content'))) {
-					// clearViewCache();
-				} else {
-					// clearViewCache($this->request->getData('Content.url'));
-				}
 
 				// 完了メッセージ
 				$site = $siteService->findById($page->content->site_id)->first();

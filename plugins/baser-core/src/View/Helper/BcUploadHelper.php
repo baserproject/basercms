@@ -207,6 +207,7 @@ class BcUploadHelper  extends Helper
      * @return string
      * @checked
      * @unitTest
+     * @noTodo
      */
     public function uploadImage($fieldName, $fileName, $options = [])
     {

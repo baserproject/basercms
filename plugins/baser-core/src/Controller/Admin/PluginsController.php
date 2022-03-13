@@ -13,18 +13,10 @@ namespace BaserCore\Controller\Admin;
 
 use BaserCore\Service\PluginServiceInterface;
 use BaserCore\Controller\Component\BcMessageComponent;
-use BaserCore\Error\BcException;
 use BaserCore\Model\Table\PluginsTable;
 use BaserCore\Service\UserServiceInterface;
-use BaserCore\Utility\BcUtil;
-use Cake\Cache\Cache;
-use Cake\Core\Configure;
-use Cake\Core\Exception\Exception;
-use Cake\Core\Plugin;
 use Cake\Event\EventInterface;
-use Cake\Http\Client;
 use Cake\Http\Response;
-use Cake\Utility\Xml;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -163,52 +155,6 @@ class PluginsController extends BcAdminAppController
     }
 
     /**
-     * プラグインファイルを削除する
-     *
-     * @param string $pluginName プラグイン名
-     * @return void
-     */
-    private function __deletePluginFile($pluginName)
-    {
-        $paths = App::path('Plugin');
-        foreach($paths as $path) {
-            $pluginPath = $path . $pluginName;
-            if (is_dir($pluginPath)) {
-                break;
-            }
-        }
-
-        $tmpPath = TMP . 'schemas' . DS . 'uninstall' . DS;
-        $folder = new Folder();
-        $folder->delete($tmpPath);
-        $folder->create($tmpPath);
-
-        // インストール用スキーマをdropスキーマとして一時フォルダに移動
-        $path = BcUtil::getSchemaPath($pluginName);
-        $folder = new Folder($path);
-        $files = $folder->read(true, true);
-        if (is_array($files[1])) {
-            foreach($files[1] as $file) {
-                if (preg_match('/\.php$/', $file)) {
-                    $from = $path . DS . $file;
-                    $to = $tmpPath . 'drop_' . $file;
-                    copy($from, $to);
-                    chmod($to, 0666);
-                }
-            }
-        }
-
-        // テーブルを削除
-        $this->Plugin->loadSchema('default', $tmpPath);
-
-        // プラグインフォルダを削除
-        $folder->delete($pluginPath);
-
-        // 一時フォルダを削除
-        $folder->delete($tmpPath);
-    }
-
-    /**
      * プラグインをアップロードしてインストールする
      *
      * @return void
@@ -284,7 +230,7 @@ class PluginsController extends BcAdminAppController
     }
 
     /**
-     * 並び替えを更新する
+     * 優先順位の並び替えを更新する
      * @return void|Response
      * @checked
      * @noTodo

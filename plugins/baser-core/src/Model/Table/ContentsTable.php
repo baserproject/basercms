@@ -795,6 +795,7 @@ class ContentsTable extends AppTable
      * @return bool|null
      * @checked
      * @unitTest
+     * @note(value="荒川さんに確認")
      */
     public function copyContentFolderPath($currentUrl, $targetSiteId)
     {
