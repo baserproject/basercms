@@ -17,6 +17,7 @@ use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Model\Table\ContentsTable;
 use BaserCore\Service\ContentFolderService;
 use BaserCore\Model\Table\ContentFoldersTable;
+use Cake\ORM\Exception\PersistenceFailedException;
 
 /**
  * BaserCore\Model\Table\ContentFoldersTable Test Case
@@ -129,7 +130,7 @@ class ContentFolderServiceTest extends BcTestCase
                 "title" => "新しい フォルダー",
                 "plugin" => 'BaserCore',
                 "type" => "ContentFolder",
-                "site_id" => "0",
+                "site_id" => "1",
                 "alias_id" => "",
                 "entity_id" => "",
             ],
@@ -140,6 +141,40 @@ class ContentFolderServiceTest extends BcTestCase
         $contentExpected = $this->Contents->find()->last();
         $this->assertEquals($folderExpected->name, $result->name);
         $this->assertEquals("新しい フォルダー", $contentExpected->title);
+    }
+
+    /**
+     * testCreateWithFailure
+     * 新規作成時に失敗した場合をテスト
+     * @param  array $postData
+     * @param  array $errors
+     * @return void
+     * @dataProvider createWithFailureDataProvider
+     */
+    public function testCreateWithFailure($postData, $errors)
+    {
+        Router::setRequest($this->loginAdmin($this->getRequest()));
+        try {
+            $contentFolder = $this->ContentFolderService->create($postData);
+        } catch (PersistenceFailedException $e) {
+            $contentFolder = $e->getEntity();
+        }
+        $this->assertEquals($errors, $contentFolder->getErrors());
+    }
+    public function createWithFailureDataProvider()
+    {
+        return [
+            // contentがフィールドとして存在しない場合
+            [
+                ['folder_template' => 'テストcreate'],
+                ['content' => ['_required' => '関連するコンテンツがありません']]
+            ],
+            // contentの中身が足りない場合
+            [
+                ['folder_template' => 'テストcreate', 'content' => []],
+                ['content' => ['title' => ['_required' => "タイトルを入力してください。"]]]
+            ],
+        ];
     }
 
     /**
@@ -171,6 +206,36 @@ class ContentFolderServiceTest extends BcTestCase
         $result = $this->ContentFolderService->update($oldContentFolder, $newContentFolder->toArray());
         $this->assertEquals("testUpdate", $result->folder_template);
         $this->assertEquals("contentFolderTestUpdate", $result->content->name);
+    }
+
+    /**
+     * testUpdateWithFailure
+     * 新規作成時に失敗した場合をテスト
+     * @param  array $postData
+     * @param  array $errors
+     * @return void
+     * @dataProvider updateWithFailureDataProvider
+     */
+    public function testUpdateWithFailure($postData, $errors)
+    {
+        Router::setRequest($this->loginAdmin($this->getRequest()));
+        try {
+            $contentFolder = $this->ContentFolderService->getIndex(['folder_template' => "testEdit"])->first();
+            $contentFolder = $this->ContentFolderService->update($contentFolder, $postData);
+        } catch (PersistenceFailedException $e) {
+            $contentFolder = $e->getEntity();
+        }
+        $this->assertEquals($errors, $contentFolder->getErrors());
+    }
+    public function updateWithFailureDataProvider()
+    {
+        return [
+            // contentがフィールドとして存在しない場合
+            [
+                ['folder_template' => 'テストupdate'],
+                ['content' => ['_required' => '関連するコンテンツがありません']]
+            ],
+        ];
     }
 
     /**

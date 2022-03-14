@@ -15,7 +15,7 @@ class CreateSearchIndexes extends AbstractMigration
     public function change()
     {
         $table = $this->table('search_indexes',['id' => false])
-            ->addColumn('id', 'integer', ['null' => false, 'default' => null, 'limit' => 8])
+            ->addColumn('id', 'integer', ['null' => false, 'default' => null, 'limit' => 8, 'autoIncrement' => true])
             ->addPrimaryKey(['id'])
             ->addColumn('type', 'string', ['null' => true, 'default' => null, 'limit' => 100])
             ->addColumn('model', 'string', ['null' => true, 'default' => null, 'limit' => 50])

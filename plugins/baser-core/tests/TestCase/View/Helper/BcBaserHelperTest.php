@@ -438,7 +438,7 @@ class BcBaserHelperTest extends BcTestCase
         ob_start();
         $this->BcBaser->url($url, true);
         $result = ob_get_clean();
-        $this->assertEquals("http://localhost/sampletest", $result);
+        $this->assertEquals("https://localhost/sampletest", $result);
     }
 
     /**
@@ -446,7 +446,7 @@ class BcBaserHelperTest extends BcTestCase
      *
      * @return void
      */
-    public function testi18nScript()
+    public function testI18nScript()
     {
         $this->BcBaser->i18nScript([
             'commonCancel' => __d('baser', 'キャンセル'),
@@ -685,7 +685,7 @@ class BcBaserHelperTest extends BcTestCase
         $this->assertEquals('/sampletest', $result);
         // フルパスかどうか
         $result = $this->BcBaser->getUrl($url, true);
-        $this->assertEquals("http://localhost/sampletest", $result);
+        $this->assertEquals("https://localhost/sampletest", $result);
     }
 
     /**

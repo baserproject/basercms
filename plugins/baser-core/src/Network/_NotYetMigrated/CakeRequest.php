@@ -225,7 +225,7 @@ class CakeRequest implements ArrayAccess
             $query = $_GET;
         }
 
-        $unsetUrl = '/' . str_replace(['.', ' '], '_', urldecode($this->url));
+        $unsetUrl = '/' . str_replace(['.', ' '], '_', rawurldecode($this->url));
         unset($query[$unsetUrl]);
         unset($query[$this->base . $unsetUrl]);
         if (strpos($this->url, '?') !== false) {
@@ -375,12 +375,10 @@ class CakeRequest implements ArrayAccess
         $docRootContainsWebroot = strpos($docRoot, $dir . DS . $webroot);
 
         // CUSTOMIZE MODIFY 2013/11/25 ryuring
-        // BC_DEPLOY_PATTERN が 2 の場合は、上位階層に、app/webroot/ という階層を持たない為、
-        // $this->webroot に、 app/webroot/ を付加しない
         // >>>
         //if (!empty($base) || !$docRootContainsWebroot) {
         // ---
-        if ((!empty($base) || !$docRootContainsWebroot) && BC_DEPLOY_PATTERN != 2) {
+        if ((!empty($base) || !$docRootContainsWebroot)) {
             // <<<
             if (strpos($this->webroot, '/' . $dir . '/') === false) {
                 $this->webroot .= $dir . '/';

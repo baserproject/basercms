@@ -11,6 +11,8 @@
 
 namespace BaserCore\Test\TestCase\Controller\Admin;
 
+use BaserCore\Service\SiteConfigServiceInterface;
+use BaserCore\Utility\BcContainerTrait;
 use ReflectionClass;
 use Cake\Event\Event;
 use Cake\Core\Configure;
@@ -25,7 +27,12 @@ use BaserCore\Controller\Admin\BcAdminAppController;
  */
 class BcAdminAppControllerTest extends BcTestCase
 {
+
+    /**
+     * Trait
+     */
     use IntegrationTestTrait;
+    use BcContainerTrait;
 
     /**
      * Fixtures
@@ -36,8 +43,17 @@ class BcAdminAppControllerTest extends BcTestCase
         'plugin.BaserCore.Users',
         'plugin.BaserCore.UsersUserGroups',
         'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.Sites'
+        'plugin.BaserCore.Sites',
+        'plugin.BaserCore.Contents',
+        'plugin.BaserCore.SiteConfigs',
+        'plugin.BaserCore.Permissions',
     ];
+
+    /**
+     * BcAdminApp
+     * @var BcAdminAppController $BcAdminApp
+     */
+    public $BcAdminApp;
 
     /**
      * set up
@@ -73,7 +89,26 @@ class BcAdminAppControllerTest extends BcTestCase
         $this->assertNotEmpty($this->BcAdminApp->BcMessage);
         $this->assertNotEmpty($this->BcAdminApp->Authentication);
         $this->assertNotEmpty($this->BcAdminApp->Paginator);
-        // ログインしているユーザが削除された場合ログアウトされる
+        $this->assertFalse($this->BcAdminApp->Security->getConfig('validatePost'));
+        $this->assertFalse($this->BcAdminApp->Security->getConfig('requireSecure'));
+        $components = $this->BcAdminApp->components();
+        $components->unload('Security');
+        $_ENV['IS_CONSOLE'] = false;
+        $this->BcAdminApp->initialize();
+        $this->assertEquals([0 => '*'], $this->BcAdminApp->Security->getConfig('requireSecure'));
+    }
+
+    /**
+     * test beforeFilter
+     */
+    public function testBeforeFilter()
+    {
+        $this->loginAdmin($this->BcAdminApp->getRequest());
+        $this->BcAdminApp->beforeFilter(new Event('beforeFilter'));
+        $this->assertFalse(isset($_SESSION['Flash']['flash'][0]['message']));
+        $this->loginAdmin($this->BcAdminApp->getRequest(), 2);
+        $this->BcAdminApp->beforeFilter(new Event('beforeFilter'));
+        $this->assertEquals('指定されたページへのアクセスは許可されていません。', $_SESSION['Flash']['flash'][0]['message']);
     }
 
     /**
@@ -264,4 +299,19 @@ class BcAdminAppControllerTest extends BcTestCase
             ["http://www.example.com/", 'error'],
         ];
     }
+
+    /**
+     * test setAdminTheme
+     */
+    public function testSetAdminTheme()
+    {
+        $this->execPrivateMethod($this->BcAdminApp, 'setAdminTheme');
+        $this->assertEquals('BcAdminThird', $this->BcAdminApp->viewBuilder()->getTheme());
+        /* @var \BaserCore\Service\SiteConfigServiceInterface $siteConfigService */
+        $siteConfigService = $this->getService(SiteConfigServiceInterface::class);
+        $siteConfigService->setValue('admin_theme', 'test');
+        $this->execPrivateMethod($this->BcAdminApp, 'setAdminTheme');
+        $this->assertEquals('test', $this->BcAdminApp->viewBuilder()->getTheme());
+    }
+
 }

@@ -72,7 +72,7 @@ class ContentFoldersController extends BcApiController
         $this->request->allowMethod(['post', 'put', 'patch']);
         try {
             $contentFolders = $ContentFolders->create($this->request->getData());
-            $message = __d('baser', 'コンテンツフォルダ「{0}」を追加しました。', $contentFolders->content->name);
+            $message = __d('baser', 'コンテンツフォルダ「{0}」を追加しました。', $contentFolders->content->title);
             $this->set("contentFolder", $contentFolders);
             $this->set('content', $contentFolders->content);
         } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
@@ -99,7 +99,7 @@ class ContentFoldersController extends BcApiController
         $contentFolders = $ContentFolders->get($id);
         try {
             if ($ContentFolders->delete($id)) {
-                $message = __d('baser', 'コンテンツフォルダ: {0} を削除しました。', $contentFolders->name);
+                $message = __d('baser', 'コンテンツフォルダ: {0} を削除しました。', $contentFolders->content->title);
             }
         } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
             $contentFolders = $e->getEntity();
@@ -125,7 +125,7 @@ class ContentFoldersController extends BcApiController
         $this->request->allowMethod(['post', 'put', 'patch']);
         try {
             $contentFolder = $contentFolders->update($contentFolders->get($id), $this->request->getData());
-            $message = __d('baser', 'フォルダー「{0}」を更新しました。', $contentFolder->name);
+            $message = __d('baser', 'フォルダー「{0}」を更新しました。', $contentFolder->content->title);
         } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
             $contentFolders = $e->getEntity();
             $this->setResponse($this->response->withStatus(400));

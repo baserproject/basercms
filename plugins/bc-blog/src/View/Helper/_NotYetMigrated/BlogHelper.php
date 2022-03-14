@@ -582,7 +582,7 @@ class BlogHelper extends AppHelper
         $path = ['category'];
         if ($categoryPath) {
             foreach ($categoryPath as $category) {
-                $path[] = urldecode($category['BlogCategory']['name']);
+                $path[] = rawurldecode($category['BlogCategory']['name']);
             }
         }
         if ($options['named']) {
@@ -965,7 +965,7 @@ class BlogHelper extends AppHelper
 
         $tagNames = [];
         foreach ($post['BlogTag'] as $tag) {
-            $tagNames[] = urldecode($tag['name']);
+            $tagNames[] = rawurldecode($tag['name']);
         }
         $BlogTag = ClassRegistry::init('BcBlog.BlogTag');
         $tags = $BlogTag->find('all', [
@@ -1980,7 +1980,7 @@ class BlogHelper extends AppHelper
             $pass = $this->request->getParam('pass');
             $name = isset($pass[1]) ? $pass[1] : '';
             $BlogTagModel = ClassRegistry::init('Blog.BlogTag');
-            $blogTag = $BlogTagModel->getByName(urldecode($name));
+            $blogTag = $BlogTagModel->getByName(rawurldecode($name));
         }
         return $blogTag;
     }

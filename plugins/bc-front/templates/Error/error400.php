@@ -19,7 +19,7 @@
 ?>
 
 
-<h2 class="bs-error-title"><?php echo h($message) ?></h2>
+<h2 class="bs-error-title"><?php echo $message ?></h2>
 <div class="bs-error-body">
 	<strong><?php echo __('エラー'); ?>: </strong>
 	<?php printf(

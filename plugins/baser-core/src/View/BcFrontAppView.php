@@ -9,31 +9,34 @@
  * @license       http://basercms.net/license/index.html MIT License
  */
 
-namespace BaserCore\Model\Table;
+namespace BaserCore\View;
 
-use Cake\ORM\Table;
+use Cake\Core\Configure;
+use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
-use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\Note;
 
 /**
- * Class UsersUserGroupsTable
+ * BcFrontAppView
+ * @uses BcFrontAppView
  */
-class UsersUserGroupsTable extends Table
+class BcFrontAppView extends AppView
 {
+
     /**
-     * Initialize
-     *
-     * @param array $config テーブル設定
-     * @return void
+     * initialize
      * @checked
-     * @noTodo
      * @unitTest
+     * @noTodo
      */
-    public function initialize(array $config): void
+    public function initialize(): void
     {
-        parent::initialize($config);
-        $this->addBehavior('Timestamp');
+        parent::initialize();
+        if (!empty($this->getRequest()->getParam('Site.device'))) {
+            $agentHelper = Configure::read('BcAgent.' . $this->getRequest()->getParam('Site.device') . '.helper');
+            if ($agentHelper) $this->loadHelper($agentHelper);
+        }
     }
+
 }

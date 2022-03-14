@@ -63,6 +63,10 @@ return [
         'adminGroup' => ['admins'],
         // 管理者グループID
         'adminGroupId' => 1,
+        // お名前ドットコムの場合、CLI版PHPの存在確認の段階で固まってしまう
+        'validSyntaxWithPage' => true,
+        // 管理者以外のPHPコードを許可するかどうか
+        'allowedPhpOtherThanAdmins' => false,
         /**
          * コアパッケージ名
          * プラグイン一覧に表示しないようにする
@@ -319,7 +323,7 @@ return [
     'BcAgent' => [
         'mobile' => [
             'name' => __d('baser', 'ケータイ'),
-            'helper' => 'BcMobile',
+            'helper' => 'BaserCore.BcMobile',
             'agents' => [
                 'Googlebot-Mobile',
                 'Y!J-SRD',
@@ -334,7 +338,7 @@ return [
         ],
         'smartphone' => [
             'name' => __d('baser', 'スマートフォン'),
-            'helper' => 'BcSmartphone',
+            'helper' => 'BaserCore.BcSmartphone',
             'agents' => [
                 'iPhone',            // Apple iPhone
                 'iPod',                // Apple iPod touch

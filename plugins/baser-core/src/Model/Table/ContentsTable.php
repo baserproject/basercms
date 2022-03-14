@@ -47,11 +47,13 @@ class ContentsTable extends AppTable
      * @param array $config テーブル設定
      * @return void
      * @checked
-     * @noTodo
+     * @note(value="yyyy/MM/dd型に所定の場所で変換する")
      * @unitTest
      */
     public function initialize(array $config): void
     {
+        // TODO ucmitz:
+        // FrozenTime::setToStringFormat('yyyy-MM-dd HH:mm:ss');
         FrozenTime::setToStringFormat('yyyy/MM/dd HH:mm:ss');
         parent::initialize($config);
         $this->addBehavior('Tree', ['level' => 'level']);
@@ -290,17 +292,15 @@ class ContentsTable extends AppTable
      */
     public function beforeMarshal(EventInterface $event, ArrayObject $content, ArrayObject $options)
     {
-        // $createはデフォルトfalse
-        $isNew = $options['isNew'] ?? false;
-        $create = empty($content['id']) && $isNew;
         // タイトルは強制的に255文字でカット
         if (!empty($content['title'])) {
             $content['title'] = mb_substr($content['title'], 0, 254, 'UTF-8');
         }
-        if ($create) {
+        $isNew = empty($content['id']) && !isset($content['created']);
+        if ($isNew) {
             // IEのURL制限が2083文字のため、全て全角文字を想定し231文字でカット
-            if (!isset($content['name'])) {
-                $content['name'] = BcUtil::urlencode(mb_substr($content['title'], 0, 230, 'UTF-8'));
+            if (!isset($content['name']) && !empty($content['title'])) {
+                $content['name'] = $content['title'];
             }
             if (!isset($content['self_status'])) {
                 $content['self_status'] = false;
@@ -329,7 +329,7 @@ class ContentsTable extends AppTable
                 $content['modified_date'] = FrozenTime::now();
             }
             if (isset($content['name'])) {
-                $content['name'] = BcUtil::urlencode(mb_substr($content['name'], 0, 230, 'UTF-8'));
+                $content['name'] = $content['name'];
             }
         }
         // name の 重複チェック＆リネーム
@@ -341,24 +341,6 @@ class ContentsTable extends AppTable
             $content['name'] = $this->getUniqueName($content['name'], $content['parent_id'] ?? null, $contentId);
         }
         return (array) $content;
-    }
-
-    /**
-    * ContentTableのbeforeMarshal内で新規作成の場合isNewオプションを設定する
-    * @param array $data The data to build an entity with.
-    * @param array $options A list of options for the object hydration.
-    * @return \Cake\Datasource\EntityInterface
-    * @see \Cake\ORM\Marshaller::one()
-     * @checked
-     * @noTodo
-     * @unitTest
-    */
-    public function newEntity(array $data, array $options = []): EntityInterface
-    {
-        if ($this->getRegistryAlias() === 'Contents') {
-            $options = array_merge($options, ['isNew' => true]);
-        }
-        return parent::newEntity($data, $options);
     }
 
     /**
@@ -484,6 +466,11 @@ class ContentsTable extends AppTable
         if (!empty($entity->id)) {
             $this->beforeSaveParentId = $entity->parent_id;
         }
+        if ($entity->isNew()) {
+            $entity->name = $this->urlEncode(mb_substr($entity->name, 0, 230, 'UTF-8'));
+        } else {
+            $entity->name = $this->urlEncode(mb_substr(rawurldecode($entity->name), 0, 230, 'UTF-8'));
+        }
         return parent::beforeSave($event, $entity, $options);
     }
 
@@ -591,6 +578,45 @@ class ContentsTable extends AppTable
     }
 
     /**
+     * URL用に文字列を変換する
+     *
+     *
+     * @param $value
+     * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    protected function urlEncode($value)
+    {
+        // すでにエンコードされてる場合はそのまま返す
+        if (!preg_match('/\%[0-9A-Z][0-9A-Z]\%[0-9A-Z][0-9A-Z]/', $value)) {
+            $value = $this->textFormatting($value);
+        }
+        return rawurlencode($value);
+    }
+
+    /**
+     * できるだけ可読性を高める為、不要な記号は除外する
+     *
+     * @param $value
+     * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    protected function textFormatting($value)
+    {
+        $value = str_replace([
+            ' ', '　', '	', '\\', '\'', '|', '`', '^', '"', ')', '(', '}', '{', ']', '[', ';',
+            '/', '?', ':', '@', '&', '=', '+', '$', ',', '%', '<', '>', '#', '!'
+        ], '_', $value);
+        $value = preg_replace('/\_{2,}/', '_', $value);
+        $value = preg_replace('/(^_|_$)/', '', $value);
+        return $value;
+    }
+
+    /**
      * メインサイトの場合、連携設定がされている子サイトのエイリアス削除する
      *
      * @param Content $content
@@ -666,6 +692,7 @@ class ContentsTable extends AppTable
         }
         $_data = $this->findById($data->id)->applyOptions(['withDeleted'])->first();
         if ($_data) {
+            $this->getEventManager()->off('Model.beforeMarshal');
             $data = $this->patchEntity($_data, $data->toArray(), ['validate' => false]);
         }
 
@@ -696,7 +723,7 @@ class ContentsTable extends AppTable
                 // 存在する場合は、自身のエイリアスかどうか確認し、エイリアスの場合は、公開状態とタイトル、説明文、アイキャッチ、更新日を更新
                 // フォルダの場合も更新する
                 if ($content->alias_id == $data->id || ($content->type == 'ContentFolder' && $isContentFolder)) {
-                    $content->name = urldecode($data->name);
+                    $content->name = rawurldecode($data->name);
                     $content->title = $data->title;
                     $content->description = $data->description;
                     $content->self_status = $data->self_status;
@@ -716,7 +743,7 @@ class ContentsTable extends AppTable
                         $content->parent_id = $this->copyContentFolderPath($url, $site->id);
                     }
                 } else {
-                    $content->name = urldecode($data->name);
+                    $content->name = rawurldecode($data->name);
                 }
                 $this->getEventManager()->off('Model.afterSave');
                 if (!$this->save($content)) {
@@ -768,6 +795,7 @@ class ContentsTable extends AppTable
      * @return bool|null
      * @checked
      * @unitTest
+     * @note(value="荒川さんに確認")
      */
     public function copyContentFolderPath($currentUrl, $targetSiteId)
     {
@@ -1022,6 +1050,7 @@ class ContentsTable extends AppTable
         }
         $event = $this->getEventManager()->matchingListeners('afterSave');
         if ($event) $this->getEventManager()->off('Model.afterSave');
+        $this->getEventManager()->off('Model.beforeSave');
         return $this->save($content, ['validate' => false]);
     }
 

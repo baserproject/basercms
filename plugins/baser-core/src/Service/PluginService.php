@@ -12,7 +12,6 @@
 namespace BaserCore\Service;
 
 use BaserCore\Model\Table\PluginsTable;
-use BaserCore\Model\Table\UserGroupsTable;
 use Cake\Cache\Cache;
 use Cake\Http\Client;
 use Cake\ORM\TableRegistry;
@@ -190,7 +189,7 @@ class PluginService implements PluginServiceInterface
     public function uninstall(string $name, $connection = 'default'): void
     {
         $options = ['connection' => $connection];
-        $name = urldecode($name);
+        $name = rawurldecode($name);
         BcUtil::includePluginClass($name);
         $plugins = CakePlugin::getCollection();
         $plugin = $plugins->create($name);
@@ -298,7 +297,7 @@ class PluginService implements PluginServiceInterface
     }
 
     /**
-     * インストール可能かチェックする
+     * インストールに関するメッセージを取得する
      *
      * @param $pluginName
      * @return string
@@ -308,7 +307,7 @@ class PluginService implements PluginServiceInterface
      */
     public function getInstallStatusMessage($pluginName): string
     {
-        $pluginName = urldecode($pluginName);
+        $pluginName = rawurldecode($pluginName);
         $installedPlugin = $this->Plugins->find()->where([
             'name' => $pluginName,
             'status' => true,

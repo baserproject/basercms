@@ -1047,7 +1047,7 @@ class BlogPost extends BlogAppModel
             $tag = [$tag];
         }
         foreach ($tag as $key => $value) {
-            $tag[$key] = urldecode($value);
+            $tag[$key] = rawurldecode($value);
         }
         $tags = $this->BlogTag->find('all', [
             'conditions' => ['BlogTag.name' => $tag],
@@ -1077,7 +1077,7 @@ class BlogPost extends BlogAppModel
             $keywords = [$keyword];
         }
         foreach ($keywords as $key => $value) {
-            $value = h(urldecode($value));
+            $value = h(rawurldecode($value));
             $conditions['and'][$key]['or'][] = ['BlogPost.name LIKE' => "%{$value}%"];
             $conditions['and'][$key]['or'][] = ['BlogPost.content LIKE' => "%{$value}%"];
             $conditions['and'][$key]['or'][] = ['BlogPost.detail LIKE' => "%{$value}%"];

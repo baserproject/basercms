@@ -14,7 +14,6 @@ namespace BaserCore\View\Helper;
 use BaserCore\Event\BcEventDispatcherTrait;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Utility\BcContainerTrait;
-use BaserCore\Service\DblogServiceInterface;
 use Cake\Core\Configure;
 use Cake\Routing\Router;
 use Cake\View\Helper;
@@ -210,15 +209,14 @@ class BcAdminHelper extends Helper
      * @return string
      * @checked
      * @unitTest
+     * @noTodo
      */
     public function getJsonMenu()
     {
         $adminMenuGroups = $this->getAdminMenuGroups();
-        if($adminMenuGroups === false) return null;
-
+        if($adminMenuGroups === false || !BcUtil::isAdminUser()) return null;
         $loginUserGroup = BcUtil::loginUserGroup();
         if($loginUserGroup === false) return null;
-
         $currentSiteId = 1;
         if($currentSite = $this->_View->getRequest()->getAttribute('currentSite')) {
             $currentSiteId = $currentSite->id;

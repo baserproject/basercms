@@ -29,7 +29,8 @@ class AnalyseControllerTest extends BcTestCase
      * @var array
      */
     protected $fixtures = [
-        'plugin.BaserCore.Sites'
+        'plugin.BaserCore.Sites',
+        'plugin.BaserCore.SiteConfigs'
     ];
 
     /**

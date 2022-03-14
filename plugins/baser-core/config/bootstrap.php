@@ -79,7 +79,24 @@ if(is_null(Configure::read('BcRequest.isInstalled'))) {
     Configure::write('BcRequest.isInstalled', BC_INSTALLED); // UnitTest用
 }
 
-// TODO ucmitz 最終的に削除する
-if(!defined('BC_DEPLOY_PATTERN')) {
-    define('BC_DEPLOY_PATTERN', 1);
+/**
+ * 文字コードの検出順を指定
+ */
+if (function_exists('mb_detect_order')) {
+    mb_detect_order(Configure::read('BcEncode.detectOrder'));
+}
+
+/**
+ * コンソール判定
+ * BcUtil::isConsole で利用
+ */
+$_ENV['IS_CONSOLE'] = (substr(php_sapi_name(), 0, 3) === 'cli');
+
+/**
+ * fullBaseUrl
+ * コンソールの場合、CakePHP の ShellDispatcher において、
+ * http://localhost で設定されるため https に書き換える
+ */
+if(BcUtil::isConsole()) {
+    Configure::write('App.fullBaseUrl', 'https://localhost');
 }

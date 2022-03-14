@@ -221,7 +221,6 @@ class BcAdminHelperTest extends BcTestCase
      */
     public function testGetJsonMenu(): void
     {
-
         // 未ログイン
         $result = $this->BcAdmin->getJsonMenu();
         $this->assertNull($result);

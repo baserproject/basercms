@@ -146,9 +146,10 @@ class PermissionsControllerTest extends BcTestCase
         $permissions = $this->getTableLocator()->get('Permissions');
         $permission = $permissions->find()->order(['id' => 'ASC'])->last();
         $permissionBeforeName = $permission->name;
-        $permissionUgi = $permission->user_group_id;
         $permission->name .= '変更';
-        $this->post('/baser/admin/baser-core/permissions/edit/2/' . $permission->id, $permission->toArray());
+        $permissionArray = $permission->toArray();
+        unset($permissionArray['created'], $permissionArray['modified']);
+        $this->post('/baser/admin/baser-core/permissions/edit/2/' . $permission->id, $permissionArray);
         $this->assertResponseSuccess();
 
         $permission = $permissions->find()->order(['id' => 'ASC'])->last();

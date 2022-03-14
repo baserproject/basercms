@@ -78,9 +78,9 @@ if ($content->self_status) {
   </td>
   <td class="bca-table-listup__tbody-td" style="word-break: break-all;">
     <?php if ($isPublish): ?>
-      <?php $this->BcBaser->link(urldecode($fullUrl), $fullUrl, ['target' => '_blank']) ?><br>
+      <?php $this->BcBaser->link(rawurldecode($fullUrl), $fullUrl, ['target' => '_blank']) ?><br>
     <?php else: ?>
-      <?= urldecode($fullUrl); ?><br>
+      <?= rawurldecode($fullUrl); ?><br>
     <?php endif; ?>
     <?= h($content->title) ?>
   </td>
