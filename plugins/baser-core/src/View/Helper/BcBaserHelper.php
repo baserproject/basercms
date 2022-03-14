@@ -210,6 +210,7 @@ class BcBaserHelper extends Helper
      * @return string エレメントのレンダリング結果
      * @checked
      * @unitTest
+     * @note(value="beforeElement/afterElement要実装")
      */
     public function getElement($name, $data = [], $options = [])
     {
@@ -678,6 +679,7 @@ class BcBaserHelper extends Helper
      * @return string
      * @checked
      * @unitTest
+     * @note(value="コンテンツ名を取得して返却")
      */
     public function getContentsName($detail = false, $options = [])
     {
@@ -863,6 +865,7 @@ class BcBaserHelper extends Helper
      * @return string URL
      * @checked
      * @unitTest
+     * @note(value="$sessionId について実装検討要")
      */
     public function getUrl($url = null, $full = false, $sessionId = true)
     {
