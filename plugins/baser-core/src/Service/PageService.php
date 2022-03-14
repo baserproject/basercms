@@ -143,6 +143,7 @@ class PageService implements PageServiceInterface
      * @throws \Cake\ORM\Exception\PersistenceFailedException
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function update(EntityInterface $target, array $pageData, $options = [])
     {
