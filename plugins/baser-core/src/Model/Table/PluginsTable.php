@@ -21,6 +21,7 @@ use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\Note;
+use Cake\Validation\Validator;
 
 /**
  * Class PluginsTable
@@ -35,31 +36,6 @@ class PluginsTable extends AppTable
     use BcEventDispatcherTrait;
 
     /**
-     * Plugin constructor.
-     *
-     * @param bool $id
-     * @param null $table
-     * @param null $ds
-     * @checked
-     */
-    public function __construct($config)
-    {
-        parent::__construct($config);
-        // TODO 暫定措置
-        // >>>
-        return;
-        // <<<
-        $this->validate = [
-            'name' => [
-                ['rule' => ['alphaNumericPlus'], 'message' => __d('baser', 'プラグイン名は半角英数字、ハイフン、アンダースコアのみが利用可能です。'), 'required' => true],
-                ['rule' => ['isUnique'], 'on' => 'create', 'message' => __d('baser', '指定のプラグインは既に使用されています。')],
-                ['rule' => ['maxLength', 50], 'message' => __d('baser', 'プラグイン名は50文字以内としてください。')]],
-            'title' => [
-                ['rule' => ['maxLength', 50], 'message' => __d('baser', 'プラグインタイトルは50文字以内とします。')]]
-        ];
-    }
-
-    /**
      * Initialize
      *
      * @param array $config テーブル設定
@@ -72,6 +48,45 @@ class PluginsTable extends AppTable
     {
         parent::initialize($config);
         $this->addBehavior('Timestamp');
+    }
+
+  /**
+     * Validation Default
+     *
+     * @param Validator $validator
+     * @return Validator
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function validationDefault(Validator $validator): Validator
+    {
+        $validator
+            ->integer('id')
+            ->allowEmptyString('id', null, 'create');
+
+        $validator
+            ->scalar('name')
+            ->maxLength('name', 50, __d('baser', 'プラグイン名は50文字以内としてください。'))
+            ->notEmptyString('name', __d('baser', 'プラグイン名は必須です。'))
+            ->add('name', [
+                'nameUnique' => [
+                    'rule' => 'validateUnique',
+                    'provider' => 'table',
+                    'message' => __d('baser', '指定のプラグインは既に使用されています。')
+            ]])
+            ->add('name', [
+                'nameAlphaNumericPlus' => [
+                    'rule' => ['alphaNumericPlus'],
+                    'provider' => 'bc',
+                    'message' => __d('baser', 'プラグイン名は半角英数字とハイフン、アンダースコアのみが利用可能です。')
+            ]]);
+
+        $validator
+            ->scalar('title')
+            ->maxLength('title', 50, __d('baser', 'プラグインタイトルは50文字以内としてください。'));
+
+        return $validator;
     }
 
     /**

@@ -15,6 +15,7 @@ use BaserCore\Model\Table\PluginsTable;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\Core\App;
 use Cake\Filesystem\Folder;
+use Cake\Validation\Validator;
 
 /**
  * Class PluginsTableTest
@@ -113,6 +114,21 @@ class PluginsTableTest extends BcTestCase
         $this->assertEquals(3, $this->Plugins->get(1)->priority);
         $this->Plugins->changePriority(2, -1);
         $this->assertEquals(1, $this->Plugins->get(2)->priority);
+    }
+
+    /**
+     * Test validationDefault
+     *
+     * @return void
+     */
+    public function testValidationDefault()
+    {
+        $validator = $this->Plugins->validationDefault(new Validator());
+        $fields = [];
+        foreach($validator->getIterator() as $key => $value) {
+            $fields[] = $key;
+        }
+        $this->assertEquals(['id', 'name', 'title'], $fields);
     }
 
 }
