@@ -215,10 +215,11 @@ class BcAdminContentHelper extends Helper
      * フォルダ名称部分にはフォルダ編集画面へのリンクを付与する
      * コンテンツ編集画面で利用
      *
-     * @param EntityInterface $content コンテンツデータ
+     * @param Content $content コンテンツデータ
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getFolderLinkedUrl(EntityInterface $content)
     {
@@ -240,11 +241,19 @@ class BcAdminContentHelper extends Helper
         }
 
         $checkUrl = '/';
-        $Content = TableRegistry::getTableLocator()->get('BaserCore.Contents');
+        $contentsTable = TableRegistry::getTableLocator()->get('BaserCore.Contents');
         foreach($urlArray as $key => $value) {
             $checkUrl .= $value . '/';
-            $entityId = $Content->find()->select('entity_id')->where(['url' => $checkUrl])->first()->entity_id;
-            $urlArray[$key] = $this->BcBaser->getLink(rawurldecode($value), ['admin' => true, 'plugin' => 'BaserCore', 'controller' => 'content_folders', 'action' => 'edit', $entityId], ['forceTitle' => true]);
+            $target = $contentsTable->find()->select('entity_id')->where(['url' => $checkUrl])->first();
+            /* @var Content $target */
+            $entityId = $target->entity_id;
+            $urlArray[$key] = $this->BcBaser->getLink(rawurldecode($value), [
+                'admin' => true,
+                'plugin' => 'BaserCore',
+                'controller' => 'content_folders',
+                'action' => 'edit',
+                $entityId
+            ], ['forceTitle' => true]);
         }
         $folderLinkedUrl = $host;
         if ($urlArray) {
