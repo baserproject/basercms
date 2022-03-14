@@ -99,6 +99,7 @@ class BcFormHelper extends FormHelper
      * @param string $type フォームのタイプ タイプごとにイベントの登録ができる
      * @return string 行データ
      * @checked
+     * @note(value="フォームの最後のフィールドの後に発動するイベント")
      */
     public function dispatchAfterForm($type = ''): string
     {
@@ -408,6 +409,7 @@ SCRIPT_END;
      * @return string A closing FORM tag.
      * @link https://book.cakephp.org/4/en/views/helpers/form.html#closing-the-form
      * @checked
+     * @note(value="beforeEndイベントにて引き渡すオプション値について要検討")
      */
     public function end(array $secureAttributes = []): string
     {
@@ -781,6 +783,7 @@ DOC_END;
      * @return string An HTML text input element.
      * @link https://book.cakephp.org/2.0/en/core-libraries/helpers/form.html#options-for-select-checkbox-and-radio-inputs
      * @checked
+     * @note(value="未実装につき継承元のコントロールを返却している")
      */
     public function checkbox($fieldName, $options = [])
     {
@@ -872,6 +875,7 @@ DOC_END;
      * @return string A generated hidden input
      * @link https://book.cakephp.org/2.0/en/core-libraries/helpers/form.html#FormHelper::hidden
      * @checked
+     * @note(value="未実装につき継承元のコントロールを返却している")
      */
     public function hidden($fieldName, $options = []): string
     {
@@ -1279,6 +1283,7 @@ DOC_END;
      * @return string Formatted SELECT element
      * @link http://book.cakephp.org/2.0/en/core-libraries/helpers/form.html#options-for-select-checkbox-and-radio-inputs
      * @checked
+     * @note(value="未実装につき継承元のコントロールを返却している")
      */
     public function select($fieldName, $options = [], $attributes = []): string
     {
@@ -2265,6 +2270,7 @@ DOC_END;
      * @param array $options
      * @return string
      * @checked
+     * @note(value="アップロード先のテーブル名をContentsでハードコーディングしているので要対応")
      */
     public function file($fieldName, $options = []): string
     {
