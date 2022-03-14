@@ -9,7 +9,7 @@
  * @license       http://basercms.net/license/index.html MIT License
  */
 
-namespace BaserCore\Test\Fixture\Model\Content;
+namespace BaserCore\Test\Fixture\Model\Table\Content;
 
 use Cake\TestSuite\Fixture\TestFixture;
 

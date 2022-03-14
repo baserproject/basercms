@@ -37,7 +37,7 @@ class ContentsTableTest extends BcTestCase
         'plugin.BaserCore.Sites',
         'plugin.BaserCore.Contents',
         // 'baser.Model.Content.ContentIsMovable',
-        'plugin.BaserCore.Model/Content/ContentStatusCheck',
+        'plugin.BaserCore.Model/Table/Content/ContentStatusCheck',
         // 'baser.Routing.Route.BcContentsRoute.SiteBcContentsRoute',
         // 'baser.Routing.Route.BcContentsRoute.ContentBcContentsRoute',
         // 'baser.Default.SiteConfig',
@@ -949,7 +949,7 @@ class ContentsTableTest extends BcTestCase
      */
     public function testFindByUrl($expected, $url, $publish = true, $extend = false, $sameUrl = false, $useSubDomain = false)
     {
-        $this->loadFixtures('Model\Content\ContentStatusCheck', 'Sites');
+        $this->loadFixtures('Model\Table\Content\ContentStatusCheck', 'Sites');
         $result = (bool)$this->Contents->findByUrl($url, $publish, $extend, $sameUrl, $useSubDomain);
         $this->assertEquals($expected, $result);
     }
