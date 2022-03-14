@@ -120,26 +120,6 @@ class BcAuthHelper extends Helper
         return in_array('admin', $this->getCurrentUserPrefixSettings());
     }
 
-    /**
-     * 現在のユーザーのログインアクションを取得する
-     *
-     * @return string
-     * @checked
-     */
-    public function getCurrentLoginAction(): string
-    {
-        // TODO ucmitz 未実装
-        // >>>
-        return '';
-        // <<<
-//        $currentAuthPrefixSetting = $this->BcAuth->getCurrentPrefixSetting();
-//        if ($this->isCurrentUserAdminAvailable()) {
-//            $logoutAction = Configure::read('BcPrefixAuth.Admin.logoutAction');
-//        } else {
-//            $logoutAction = $currentAuthPrefixSetting['logoutAction'];
-//        }
-//        return $logoutAction;
-    }
 
     /**
      * 認証名を取得する
