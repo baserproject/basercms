@@ -1,23 +1,30 @@
 import Vue from 'vue';
 import axios from 'axios';
 
-type UserGroup = number;
+type UserGroup = {
+    1?: string;
+    2?: string;
+};
 
-type User = {
-    id: number,
-    name: string,
-    real_name_1: string,
-    real_name_2: string,
-    nickname: string,
-    user_groups: UserGroup[],
-    email: string,
-    password_1: string,
-    password_2: string,
+type User =  {
+    id?: number,
+    name?: string,
+    real_name_1?: string,
+    real_name_2?: string,
+    email?: string,
+    nickname?: string,
+    created?: Date,
+    modified?: Date,
+    status?: boolean,
+    user_groups?: number[],
+    password_1?: string,
+    password_2?: string,
+    login_user_id?: number,
 };
 
 type DataType = {
     user?: User,
-    userGroups: string[],
+    userGroups?: UserGroup,
     errors: string[]
 };
 
@@ -33,7 +40,7 @@ export default Vue.extend({
     props: {
         userId: Number,
         accessToken: String,
-        loginUserId: Number
+        loginUserId: Number,
     },
 
     /**
@@ -43,7 +50,7 @@ export default Vue.extend({
     data: (): DataType => {
         return {
             user: undefined,
-            userGroups: [],
+            userGroups: undefined,
             errors: []
         }
     },
@@ -79,10 +86,13 @@ export default Vue.extend({
                 }).then((response) => {
                     if (response.data.user) {
                         this.user = response.data.user;
+                        if (this.user?.login_user_id) {
+                            this.user.login_user_id = Number(response.data.user.login_user_id);
+                        }
                         if (this.user !== undefined) {
-                            let userGroups: UserGroup[] = [];
-                            this.user.user_groups.forEach((userGroup) => {
-                                userGroups.push(userGroup.id);
+                            let userGroups:number[] = [];
+                            this.user.user_groups?.forEach((userGroup) => {
+                                userGroups.push(userGroup);
                             })
                             this.user.user_groups = userGroups;
                         }
@@ -109,14 +119,14 @@ export default Vue.extend({
             this.errors = [];
             let endPoint = '/baser/api/baser-core/users/';
             let user: User = {
-                name: this.user.name,
-                real_name_1: this.user.name,
-                real_name_2: this.user.real_name_2,
-                nickname: this.user.nickname,
-                user_groups: {_ids: this.user.user_groups},
-                email: this.user.email,
-                password_1: this.user.password_1,
-                password_2: this.user.password_2,
+                name:  this.user?.name,
+                real_name_1: this.user?.name,
+                real_name_2: this.user?.real_name_2,
+                nickname: this.user?.nickname,
+                user_groups: this.user?.user_groups,
+                email: this.user?.email,
+                password_1: this.user?.password_1,
+                password_2: this.user?.password_2,
                 login_user_id: this.loginUserId
             }
             if (id !== undefined) {

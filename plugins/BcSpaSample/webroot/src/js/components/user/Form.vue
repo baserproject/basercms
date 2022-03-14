@@ -61,7 +61,7 @@
                 </span>
                     <div class="error-wrap" v-if="errors.real_name_1">
                         <ul>
-                            <li class="error-message" v-for="(message) in errors.real_name_1" :key="message">{{ message }}</li>
+                            <li class="error-message" v-for="(message, id) in errors.real_name_1" :key="message-id">{{ message }}</li>
                         </ul>
                     </div>
                 </td>
@@ -104,7 +104,7 @@
                 </span>
                     <div class="error-wrap" v-if="errors.user_groups">
                         <ul>
-                            <li class="error-message" v-for="(message) in errors.user_groups" :key="message">{{ message }}</li>
+                            <li class="error-message" v-for="(message, id) in errors.user_groups" :key="message-id">{{ message }}</li>
                         </ul>
                     </div>
                 </td>
@@ -128,7 +128,7 @@
                 </span>
                     <div class="error-wrap" v-if="errors.email">
                         <ul>
-                            <li class="error-message" v-for="(message) in errors.email" :key="message">{{ message }}</li>
+                            <li class="error-message" v-for="(message, id) in errors.email" :key="message-id">{{ message }}</li>
                         </ul>
                     </div>
                 </td>
@@ -163,7 +163,7 @@
                 </span>
                     <div class="error-wrap" v-if="errors.password">
                         <ul>
-                            <li class="error-message" v-for="(message) in errors.password" :key="message">{{ message }}</li>
+                            <li class="error-message" v-for="(message, id) in errors.password" :key="message-id">{{ message }}</li>
                         </ul>
                     </div>
                 </td>

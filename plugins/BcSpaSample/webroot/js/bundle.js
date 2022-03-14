@@ -2329,7 +2329,7 @@ __webpack_require__.r(__webpack_exports__);
   data: () => {
     return {
       user: undefined,
-      userGroups: [],
+      userGroups: undefined,
       errors: []
     };
   },
@@ -2371,10 +2371,14 @@ __webpack_require__.r(__webpack_exports__);
           if (response.data.user) {
             this.user = response.data.user;
 
+            if (this.user?.login_user_id) {
+              this.user.login_user_id = Number(response.data.user.login_user_id);
+            }
+
             if (this.user !== undefined) {
               let userGroups = [];
-              this.user.user_groups.forEach(userGroup => {
-                userGroups.push(userGroup.id);
+              this.user.user_groups?.forEach(userGroup => {
+                userGroups.push(userGroup);
               });
               this.user.user_groups = userGroups;
             }
@@ -2402,16 +2406,14 @@ __webpack_require__.r(__webpack_exports__);
       this.errors = [];
       let endPoint = '/baser/api/baser-core/users/';
       let user = {
-        name: this.user.name,
-        real_name_1: this.user.name,
-        real_name_2: this.user.real_name_2,
-        nickname: this.user.nickname,
-        user_groups: {
-          _ids: this.user.user_groups
-        },
-        email: this.user.email,
-        password_1: this.user.password_1,
-        password_2: this.user.password_2,
+        name: this.user?.name,
+        real_name_1: this.user?.name,
+        real_name_2: this.user?.real_name_2,
+        nickname: this.user?.nickname,
+        user_groups: this.user?.user_groups,
+        email: this.user?.email,
+        password_1: this.user?.password_1,
+        password_2: this.user?.password_2,
         login_user_id: this.loginUserId
       };
 
@@ -13480,10 +13482,10 @@ var render = function () {
                 ? _c("div", { staticClass: "error-wrap" }, [
                     _c(
                       "ul",
-                      _vm._l(_vm.errors.real_name_1, function (message) {
+                      _vm._l(_vm.errors.real_name_1, function (message, id) {
                         return _c(
                           "li",
-                          { key: message, staticClass: "error-message" },
+                          { key: message - id, staticClass: "error-message" },
                           [_vm._v(_vm._s(message))]
                         )
                       }),
@@ -13629,10 +13631,10 @@ var render = function () {
                 ? _c("div", { staticClass: "error-wrap" }, [
                     _c(
                       "ul",
-                      _vm._l(_vm.errors.user_groups, function (message) {
+                      _vm._l(_vm.errors.user_groups, function (message, id) {
                         return _c(
                           "li",
-                          { key: message, staticClass: "error-message" },
+                          { key: message - id, staticClass: "error-message" },
                           [_vm._v(_vm._s(message))]
                         )
                       }),
@@ -13691,10 +13693,10 @@ var render = function () {
                 ? _c("div", { staticClass: "error-wrap" }, [
                     _c(
                       "ul",
-                      _vm._l(_vm.errors.email, function (message) {
+                      _vm._l(_vm.errors.email, function (message, id) {
                         return _c(
                           "li",
-                          { key: message, staticClass: "error-message" },
+                          { key: message - id, staticClass: "error-message" },
                           [_vm._v(_vm._s(message))]
                         )
                       }),
@@ -13799,10 +13801,10 @@ var render = function () {
                 ? _c("div", { staticClass: "error-wrap" }, [
                     _c(
                       "ul",
-                      _vm._l(_vm.errors.password, function (message) {
+                      _vm._l(_vm.errors.password, function (message, id) {
                         return _c(
                           "li",
-                          { key: message, staticClass: "error-message" },
+                          { key: message - id, staticClass: "error-message" },
                           [_vm._v(_vm._s(message))]
                         )
                       }),
@@ -14036,7 +14038,7 @@ var render = function () {
     attrs: {
       "access-token": _vm.accessToken,
       loginUserId: _vm.loginUserId,
-      "user-id": _vm.$route.params.id,
+      "user-id": Number(_vm.$route.params.id),
     },
     on: {
       "set-message": function (message, isError, isFlash) {
