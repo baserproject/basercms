@@ -134,15 +134,6 @@ class BcAuthHelperTest extends BcTestCase
     }
 
     /**
-     * Test getCurrentLoginAction
-     * @return void
-     */
-    public function testGetCurrentLoginAction()
-    {
-        $this->markTestIncomplete('テスト対象のメソッドが未実装です');
-    }
-
-    /**
      * Test getCurrentName
      * @return void
      */
