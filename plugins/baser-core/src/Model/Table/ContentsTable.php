@@ -52,8 +52,6 @@ class ContentsTable extends AppTable
      */
     public function initialize(array $config): void
     {
-        // TODO ucmitz:
-        // FrozenTime::setToStringFormat('yyyy-MM-dd HH:mm:ss');
         FrozenTime::setToStringFormat('yyyy/MM/dd HH:mm:ss');
         parent::initialize($config);
         $this->addBehavior('Tree', ['level' => 'level']);
@@ -130,8 +128,9 @@ class ContentsTable extends AppTable
      * @param Validator $validator
      * @return Validator
      * @checked
+     * @noTodo
      * @unitTest
-     * @note(value="荒川に内容確認")
+     *
      */
     public function validationDefault(Validator $validator): Validator
     {
@@ -143,6 +142,7 @@ class ContentsTable extends AppTable
 
         $validator
         ->scalar('name')
+        ->requirePresence('name', 'create', __d('baser', 'nameフィールドが存在しません。'))
         ->notEmptyString('name', __d('baser', 'URLを入力してください。'))
         ->maxLength('name', 230, __d('baser', '名前は230文字以内で入力してください。'))
         ->add('name', [
@@ -182,6 +182,7 @@ class ContentsTable extends AppTable
             ]
         ]);
         $validator
+        ->dateTime('self_publish_begin')
         ->allowEmptyDateTime('self_publish_begin')
         ->add('self_publish_begin', [
             'checkDate' => [
@@ -192,6 +193,7 @@ class ContentsTable extends AppTable
         ]);
 
         $validator
+        ->dateTime('self_publish_end')
         ->allowEmptyDateTime('self_publish_end')
         ->add('self_publish_end', [
             'checkDate' => [
@@ -208,25 +210,26 @@ class ContentsTable extends AppTable
             ]
         ]);
         $validator
-        ->allowEmptyDateTime('created_date');
-        // TODO ucmitz: %Y-%m-%d形式か%Y/%m/%d形式か判断して、書き換える
-        // ->add('created_date', [
-        //     'checkDate' => [
-        //         'rule' => ['checkDate'],
-        //         'provider' => 'bc',
-        //         'message' => __d('baser', '作成日に不正な文字列が入っています。')
-        //     ]
-        // ]);
+        ->dateTime('created_date')
+        ->requirePresence('created_date', 'create', __d('baser', '作成日がありません。'))
+        ->notEmptyDateTime('created_date', __d('baser', '作成日が空になってます。'))
+        ->add('created_date', [
+            'checkDate' => [
+                'rule' => ['checkDate'],
+                'provider' => 'bc',
+                'message' => __d('baser', '作成日が正しくありません。')
+            ]
+        ]);
         $validator
-        ->allowEmptyDateTime('modified_date');
-        // TODO ucmitz: frozenTime形式に書き換える
-        // ->add('modified_date', [
-        //     'checkDate' => [
-        //         'rule' => ['checkDate'],
-        //         'provider' => 'bc',
-        //         'message' => __d('baser', '更新日に不正な文字列が入っています。')
-        //     ]
-        // ]);
+        ->datetime('modified_date')
+        ->notEmptyDateTime('modified_date', __d('baser', '更新日が空になってます。'))
+        ->add('modified_date', [
+            'checkDate' => [
+                'rule' => ['checkDate'],
+                'provider' => 'bc',
+                'message' => __d('baser', '更新日が正しくありません。')
+            ]
+        ]);
         return $validator;
     }
 
@@ -327,6 +330,9 @@ class ContentsTable extends AppTable
         } else {
             if (empty($content['modified_date'])) {
                 $content['modified_date'] = FrozenTime::now();
+            }
+            if (isset($content['created_date'])) {
+                $content['created_date'] = new FrozenTime($content['created_date']);
             }
             if (isset($content['name'])) {
                 $content['name'] = $content['name'];

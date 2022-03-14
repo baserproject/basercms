@@ -156,12 +156,21 @@ class ContentsTableTest extends BcTestCase
                 [
                     'name' => '',
                     'title' => '',
+                    'created_date' => '',
                 ],
                 [
                     'name' => ['_empty' => 'スラッグを入力してください。'],
                     'title' => ['_empty' => 'タイトルを入力してください。'],
+                    'created_date' => ['_empty' => '作成日が空になってます。'],
                 ]
-            ]
+            ],
+            [
+                [],
+                [
+                    'name' => ['_required' => 'nameフィールドが存在しません。'],
+                    'title' => ['_required' => 'タイトルを入力してください。'],
+                ]
+            ],
         ];
     }
 
@@ -609,6 +618,7 @@ class ContentsTableTest extends BcTestCase
             'name' => 'relatedMainContent',
             'url' => '/test/',
             'site_id' => 1,
+            'created_date' => FrozenTime::now()
         ]);
         $mainContent = $this->Contents->save($new);
         $this->execPrivateMethod($this->Contents, 'updateSystemData', [$subContent]);
