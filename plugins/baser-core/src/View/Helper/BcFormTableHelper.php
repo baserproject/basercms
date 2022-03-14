@@ -35,6 +35,7 @@ class BcFormTableHelper extends Helper
      *
      * @return string
      * @checked
+     * @note(value="テーブル生成前イベント未実装")
      */
     public function dispatchBefore()
     {
@@ -60,6 +61,7 @@ class BcFormTableHelper extends Helper
      *
      * @return string
      * @checked
+     * @note(value="テーブル生成後イベント未実装")
      */
     public function dispatchAfter()
     {
