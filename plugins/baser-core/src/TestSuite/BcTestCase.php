@@ -70,6 +70,7 @@ class BcTestCase extends TestCase
      * Set Up
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function setUp(): void
     {

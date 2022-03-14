@@ -54,6 +54,17 @@ class BcTestCaseTest extends BcTestCase
     }
 
     /**
+     * test setup
+     */
+    public function testSetup()
+    {
+        $this->assertEquals('App\Application', get_class($this->Application));
+        $plugins = $this->Application->getPlugins();
+        $this->assertTrue($plugins->has('BaserCore'));
+        $this->assertEquals('BaserCore\Plugin', get_class($this->BaserCore));
+    }
+
+    /**
      * Request を取得するテスト
      *
      * @return void
