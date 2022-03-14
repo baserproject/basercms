@@ -221,6 +221,7 @@ class BcAdminHelperTest extends BcTestCase
      */
     public function testGetJsonMenu(): void
     {
+        $this->loginAdmin($this->getRequest('/baser/admin'));
         $jsonMenu = json_decode($this->BcAdmin->getJsonMenu());
         // $currentSiteIdのテスト
         $this->assertEquals($jsonMenu->currentSiteId, 1);

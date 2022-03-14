@@ -45,7 +45,6 @@ class BcFrontAppController extends AppController
      * Before Render
      * @param EventInterface $event
      * @checked
-     * @unitTest
      * @note(value="マイルストーン２が終わってから確認する")
      */
     public function beforeRender(EventInterface $event): void
