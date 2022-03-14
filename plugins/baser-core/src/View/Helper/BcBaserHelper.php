@@ -362,6 +362,7 @@ class BcBaserHelper extends Helper
      * @return string
      * @checked
      * @unitTest
+     * @note(value="未実装につき継承元のコントロールを返却している")
      */
     public function getLink($title, $url = null, $options = [], $confirmMessage = false)
     {
