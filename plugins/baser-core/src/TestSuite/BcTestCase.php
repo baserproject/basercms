@@ -90,6 +90,7 @@ class BcTestCase extends TestCase
      * Tear Down
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function tearDown(): void
     {
