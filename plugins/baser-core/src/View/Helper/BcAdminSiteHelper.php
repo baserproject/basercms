@@ -105,7 +105,7 @@ class BcAdminSiteHelper extends Helper
      */
     public function getThemeList($site): array
     {
-        $themes = $this->SiteService->getThemeList($site);
+        $themes = $this->SiteService->getThemeList();
         if(!$this->isMainOnCurrentDisplay($site)) {
             $defaultThemeName = __d('baser', 'メインサイトに従う');
             $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');

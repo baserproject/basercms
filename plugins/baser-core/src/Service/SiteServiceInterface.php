@@ -118,10 +118,9 @@ interface SiteServiceInterface
 
     /**
      * テーマのリストを取得する
-     * @param Site $site
      * @return array
      */
-    public function getThemeList(Site $site): array;
+    public function getThemeList(): array;
 
     /**
      * 公開状態にする
