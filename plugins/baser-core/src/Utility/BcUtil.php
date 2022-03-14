@@ -669,19 +669,30 @@ class BcUtil
     /**
      * 全てのテーマを取得する
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public static function getAllThemeList()
     {
-        $paths = [WWW_ROOT . 'theme', BASER_VIEWS . 'Themed'];
+        $themeTypes = ['Theme', 'AdminTheme'];
+        $paths = [ROOT . DS . 'plugins'];
         $themes = [];
         foreach($paths as $path) {
             $folder = new Folder($path);
             $files = $folder->read(true, true);
-            if ($files[0]) {
-                foreach($files[0] as $theme) {
-                    if ($theme !== 'core' && $theme !== '_notes') {
-                        $themes[$theme] = $theme;
-                    }
+            if (!$files[0]) {
+                continue;
+            }
+            foreach($files[0] as $name) {
+                $appConfigPath = BcUtil::getPluginPath($name) . 'config.php';
+                if ($name === '_notes' || !file_exists($appConfigPath)) {
+                    continue;
+                }
+                $config = include $appConfigPath;
+                if(!empty($config['type']) && in_array($config['type'], $themeTypes)) {
+                    $name = Inflector::camelize(Inflector::underscore($name));
+                    $themes[$name] = $name;
                 }
             }
         }
@@ -692,14 +703,16 @@ class BcUtil
      * テーマリストを取得する
      *
      * @return array
+     * @checked
+     * @notodo
+     * @unitTest
      */
     public static function getThemeList()
     {
         $themes = self::getAllThemeList();
         foreach($themes as $key => $theme) {
-            if (preg_match('/^admin\-/', $theme)) {
-                unset($themes[$key]);
-            }
+            $config = include BcUtil::getPluginPath($theme) . 'config.php';
+            if($config['type'] !== 'Theme') unset($themes[$key]);
         }
         return $themes;
     }
@@ -708,14 +721,16 @@ class BcUtil
      * テーマリストを取得する
      *
      * @return array
+     * @checked
+     * @notodo
+     * @unitTest
      */
     public static function getAdminThemeList()
     {
         $themes = self::getAllThemeList();
         foreach($themes as $key => $theme) {
-            if (!preg_match('/^admin\-/', $theme)) {
-                unset($themes[$key]);
-            }
+            $config = include BcUtil::getPluginPath($theme) . 'config.php';
+            if($config['type'] !== 'AdminTheme') unset($themes[$key]);
         }
         return $themes;
     }

@@ -617,15 +617,23 @@ class BcUtilTest extends BcTestCase
      */
     public function testGetAllThemeList()
     {
-
-        // TODO ucmitz移行時に未実装のため代替措置
-        // >>>
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        // <<<
-
+        $themePath = ROOT . DS . 'plugins' . DS . 'TestTheme';
+        $themeConfigPath = $themePath . DS . 'config.php';
+        $folder = new Folder();
+        $folder->create(ROOT . DS . 'plugins' . DS . 'TestTheme');
+        $file = new File($themeConfigPath);
+        $file->write('
+            <?php
+            return [
+                \'type\' => \'Theme\'
+            ];
+        ');
+        $file->close();
         $themes = BcUtil::getAllThemeList();
-        $this->assertTrue(in_array('nada-icons', $themes));
-        $this->assertTrue(in_array('admin-third', $themes));
+        $this->assertTrue(in_array('BcFront', $themes));
+        $this->assertTrue(in_array('BcAdminThird', $themes));
+        $this->assertTrue(in_array('TestTheme', $themes));
+        $folder->delete($themePath);
     }
 
     /**
@@ -633,15 +641,9 @@ class BcUtilTest extends BcTestCase
      */
     public function testGetThemeList()
     {
-
-        // TODO ucmitz移行時に未実装のため代替措置
-        // >>>
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        // <<<
-
         $themes = BcUtil::getThemeList();
-        $this->assertTrue(in_array('nada-icons', $themes));
-        $this->assertFalse(in_array('admin-third', $themes));
+        $this->assertTrue(in_array('BcFront', $themes));
+        $this->assertFalse(in_array('BcAdminThird', $themes));
     }
 
     /**
@@ -649,15 +651,9 @@ class BcUtilTest extends BcTestCase
      */
     public function testGetAdminThemeList()
     {
-
-        // TODO ucmitz移行時に未実装のため代替措置
-        // >>>
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        // <<<
-
         $themes = BcUtil::getAdminThemeList();
-        $this->assertFalse(in_array('nada-icons', $themes));
-        $this->assertTrue(array_key_exists('admin-third', $themes));
+        $this->assertFalse(in_array('BcFront', $themes));
+        $this->assertTrue(array_key_exists('BcAdminThird', $themes));
     }
 
     /**
