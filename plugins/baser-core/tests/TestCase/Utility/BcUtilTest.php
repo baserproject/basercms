@@ -389,9 +389,9 @@ class BcUtilTest extends BcTestCase
     {
         return [
             // ログイン
-            [1, true],
+            [1, 1],
             // 非ログイン
-            [0, false],
+            [0, 0],
         ];
     }
 
