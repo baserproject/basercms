@@ -215,7 +215,8 @@ class BcAdminHelper extends Helper
     {
         $adminMenuGroups = $this->getAdminMenuGroups();
         if($adminMenuGroups === false || !BcUtil::isAdminUser()) return null;
-
+        $loginUserGroup = BcUtil::loginUserGroup();
+        if($loginUserGroup === false) return null;
         $currentSiteId = 1;
         if($currentSite = $this->_View->getRequest()->getAttribute('currentSite')) {
             $currentSiteId = $currentSite->id;
