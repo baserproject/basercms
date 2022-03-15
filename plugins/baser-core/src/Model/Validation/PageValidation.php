@@ -35,7 +35,7 @@ class PageValidation extends Validation
      * @unitTest
      * @noTodo
      */
-    public function phpValidSyntax($check)
+    public static function phpValidSyntax($check)
     {
         if (empty($check)) {
             return true;

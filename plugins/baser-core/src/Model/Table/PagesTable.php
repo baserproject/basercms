@@ -102,7 +102,7 @@ class PagesTable extends Table implements BcSearchIndexManagerInterface
      */
     public function validationDefault(Validator $validator): Validator
     {
-        $validator->setProvider('site', 'BaserCore\Model\Validation\PageValidation');
+        $validator->setProvider('page', 'BaserCore\Model\Validation\PageValidation');
 
         $validator
         ->integer('id')
@@ -114,7 +114,8 @@ class PagesTable extends Table implements BcSearchIndexManagerInterface
         ->allowEmptyString('contents', null)
         ->maxLengthBytes('contents', 64000, __d('baser', '本稿欄に保存できるデータ量を超えています。'))
         ->add('contents', 'custom', [
-            'rule' => [$this, 'phpValidSyntax'],
+            'rule' => ['phpValidSyntax'],
+            'provider' => 'page',
             'message' => __d('baser', '本稿欄でPHPの構文エラーが発生しました。')
         ])
         ->add('contents', [
@@ -130,7 +131,8 @@ class PagesTable extends Table implements BcSearchIndexManagerInterface
         ->allowEmptyString('draft', null)
         ->maxLengthBytes('draft', 64000, __d('baser', '本稿欄に保存できるデータ量を超えています。'))
         ->add('draft', 'custom', [
-            'rule' => [$this, 'phpValidSyntax'],
+            'rule' => ['phpValidSyntax'],
+            'provider' => 'page',
             'message' => __d('baser', '本稿欄でPHPの構文エラーが発生しました。')
         ])
         ->add('draft', [
