@@ -151,7 +151,7 @@ class ContentsControllerTest extends BcTestCase
 
         if ($action === 'index' && $listType === 2) {
             // イベント設定
-            $this->entryControllerEventToMock('Controller.BaserCore.Contents.searchIndex', function(Event $event) {
+            $this->entryEventToMock(self::EVENT_LAYER_CONTROLLER, 'BaserCore.Contents.searchIndex', function(Event $event) {
                 $this->request = $event->getData('request');
                 return $this->request->withQueryParams(array_merge($this->request->getQueryParams(), ['num' => 1]));
             });
@@ -415,12 +415,12 @@ class ContentsControllerTest extends BcTestCase
     public function testDeleteWithEvent()
     {
         // beforeDeleteイベントテスト(id1の代わりに4が削除されるか)
-        $this->entryControllerEventToMock('Controller.BaserCore.Contents.beforeDelete', function(Event $event) {
+        $this->entryEventToMock(self::EVENT_LAYER_CONTROLLER, 'BaserCore.Contents.beforeDelete', function(Event $event) {
             $id = 4;
             return $id;
         });
         // afterDeleteイベントテスト(削除されたコンテンツの名前をイベントで更新できるか)
-        $this->entryControllerEventToMock('Controller.BaserCore.Contents.afterDelete', function(Event $event) {
+        $this->entryEventToMock(self::EVENT_LAYER_CONTROLLER, 'BaserCore.Contents.afterDelete', function(Event $event) {
             $content = $event->getData('content');
             $content = $this->ContentService->update($content, ['name' => 'testAfterDelete']);
             return $content;
