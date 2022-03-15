@@ -56,10 +56,11 @@ class BcUtil
     public static function loginUser()
     {
         $request = Router::getRequest();
-        if(!$request) {
-            return false;
-        }
+        if(!$request) return false;
+
         $authenticator =  $request->getAttribute('authentication');
+        if(!$authenticator) return false;
+
         /** @var Result $result */
         $result = $authenticator->getResult();
         if (isset($result) && $result->isValid()) {
@@ -379,12 +380,16 @@ class BcUtil
      *
      * @param string $prefix ログイン認証プレフィックス
      * @return bool|mixed ユーザーグループ情報
+     * @checked
+     * @notodo
+     * @unitTest
      */
-    public static function loginUserGroup($prefix = 'Admin')
+    public static function loginUserGroup()
     {
-        $loginUser = self::loginUser($prefix);
-        if (!empty($loginUser['UserGroup'])) {
-            return $loginUser['UserGroup'];
+        $loginUser = self::loginUser();
+
+        if (!empty($loginUser->user_groups)) {
+            return $loginUser->user_groups;
         } else {
             return false;
         }
