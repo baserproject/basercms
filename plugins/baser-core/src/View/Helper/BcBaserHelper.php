@@ -210,21 +210,11 @@ class BcBaserHelper extends Helper
      * @return string エレメントのレンダリング結果
      * @checked
      * @unitTest
-     * @note(value="beforeElement/afterElement要実装")
+     * @noTodo
      */
-    public function getElement($name, $data = [], $options = [])
+    public function getElement(string $name, array $data = [], array $options = [])
     {
-        $options = array_merge([
-            'subDir' => true
-        ], $options);
-
-        if (isset($options['plugin']) && !$options['plugin']) {
-            unset($options['plugin']);
-        }
-
-        /*** beforeElement ***/
-        // TODO ucmitz 未実装
-        /* >>>
+        // EVENT beforeElement
         $event = $this->dispatchLayerEvent('beforeElement', [
             'name' => $name,
             'data' => $data,
@@ -233,11 +223,8 @@ class BcBaserHelper extends Helper
         if ($event !== false) {
             $options = ($event->getResult() === null || $event->getResult() === true)? $event->getData('options') : $event->getResult();
         }
-        <<< */
 
-        /*** Controller.beforeElement ***/
-        // TODO ucmitz 未実装
-        /* >>>
+        // EVENT ControllerName.beforeElement
         $event = $this->dispatchLayerEvent('beforeElement', [
             'name' => $name,
             'data' => $data,
@@ -246,27 +233,10 @@ class BcBaserHelper extends Helper
         if ($event !== false) {
             $options = ($event->getResult() === null || $event->getResult() === true)? $event->getData('options') : $event->getResult();
         }
-        <<< */
-
-        // TODO ucmitz 未実装
-        /* >>>
-        if ($options['subDir'] === false) {
-            if (!$this->_subDir && $this->_View->subDir) {
-                $this->_subDir = $this->_View->subDir;
-            }
-            $this->_View->subDir = null;
-        } else {
-            if ($this->_subDir) {
-                $this->_View->subDir = $this->_subDir;
-            }
-        }
-        <<< */
 
         $out = $this->_View->element($name, $data, $options);
 
-        /*** afterElement ***/
-        // TODO ucmitz 未実装
-        /* >>>
+        // EVENT afterElement
         $event = $this->dispatchLayerEvent('afterElement', [
             'name' => $name,
             'out' => $out
@@ -274,11 +244,8 @@ class BcBaserHelper extends Helper
         if ($event !== false) {
             $out = ($event->getResult() === null || $event->getResult() === true)? $event->getData('out') : $event->getResult();
         }
-        <<< */
 
-        /*** Controller.afterElement ***/
-        // TODO ucmitz 未実装
-        /* >>>
+        // EVENT ControllerName.afterElement
         $event = $this->dispatchLayerEvent('afterElement', [
             'name' => $name,
             'out' => $out
@@ -286,7 +253,6 @@ class BcBaserHelper extends Helper
         if ($event !== false) {
             $out = ($event->getResult() === null || $event->getResult() === true)? $event->getData('out') : $event->getResult();
         }
-        <<< */
 
         return $out;
     }

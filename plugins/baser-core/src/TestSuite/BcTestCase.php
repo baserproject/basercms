@@ -13,12 +13,12 @@ namespace BaserCore\TestSuite;
 
 use App\Application;
 use Authentication\Authenticator\Result;
-use BaserCore\Event\BcControllerEventListener;
 use BaserCore\Middleware\BcAdminMiddleware;
 use BaserCore\Middleware\BcRequestFilterMiddleware;
 use BaserCore\Plugin;
 use BaserCore\Utility\BcApiUtil;
 use Cake\Core\Configure;
+use Cake\Event\EventListenerInterface;
 use Cake\Event\EventManager;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
@@ -56,6 +56,16 @@ class BcTestCase extends TestCase
      * @var Plugin
      */
     public $BaserCore;
+
+    /**
+     * イベントレイヤー
+     * entryEventToMock() の引数として利用
+     * @var string
+     */
+    const EVENT_LAYER_CONTROLLER = 'Controller';
+    const EVENT_LAYER_VIEW = 'View';
+    const EVENT_LAYER_MODEL = 'Model';
+    const EVENT_LAYER_HELPER = 'Helper';
 
     /**
      * detectors
@@ -234,20 +244,20 @@ class BcTestCase extends TestCase
      * モックにコントローラーのイベントを登録する
      * @param $eventName
      * @param $callback
-     * @return BcControllerEventListener|\PHPUnit\Framework\MockObject\MockObject
+     * @return EventListenerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
-    protected function entryControllerEventToMock($eventName, $callback)
+    protected function entryEventToMock($layer, $eventName, $callback)
     {
         $aryEventName = explode('.', $eventName);
         $methodName = Inflector::variable(implode('_', $aryEventName));
         // モック作成
-        $listener = $this->getMockBuilder(BcControllerEventListener::class)
+        $listener = $this->getMockBuilder('\BaserCore\Event\Bc' . $layer . 'EventListener')
             ->onlyMethods(['implementedEvents'])
             ->addMethods([$methodName])
             ->getMock();
         // イベント定義
         $listener->method('implementedEvents')
-            ->willReturn([$eventName => ['callable' => $methodName]]);
+            ->willReturn([$layer . '.' . $eventName => ['callable' => $methodName]]);
         // コールバック定義
         $listener->method($methodName)
             ->willReturn($this->returnCallback($callback));
