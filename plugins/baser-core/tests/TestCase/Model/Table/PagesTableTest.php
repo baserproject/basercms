@@ -213,47 +213,4 @@ class PagesTableTest extends BcTestCase
         $result = $this->Pages->createSearchIndex($page);
         $this->assertEquals($expected, $result, '検索用データを正しく生成できません');
     }
-
-    /**
-     * PHP構文チェック
-     * 成功時
-     *
-     * @param string $code PHPのコード
-     * @return void
-     * @dataProvider phpValidSyntaxDataProvider
-     */
-    public function testPhpValidSyntax($code)
-    {
-        $this->assertTrue($this->Pages->phpValidSyntax($code));
-    }
-
-    public function phpValidSyntaxDataProvider()
-    {
-        return [
-            [''],
-            ['<?php $this->BcBaser->setTitle(\'test\');'],
-        ];
-    }
-
-    /**
-     * PHP構文チェック
-     * 失敗時
-     *
-     * @param string $line エラーが起こる行
-     * @param string $code PHPコード
-     * @return void
-     * @dataProvider phpValidSyntaxWithInvalidDataProvider
-     */
-    public function testPhpValidSyntaxWithInvalid($line, $code)
-    {
-        $this->assertStringContainsString("on line {$line}", $this->Pages->phpValidSyntax($code));
-    }
-
-    public function phpValidSyntaxWithInvalidDataProvider()
-    {
-        return [
-            [1, '<?php echo \'test'],
-            [2, '<?php echo \'test\';' . PHP_EOL . 'echo \'hoge']
-        ];
-    }
 }
