@@ -1,7 +1,4 @@
 <?php
-// TODO : コード確認要
-return;
-
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
@@ -11,6 +8,11 @@ return;
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
  */
+
+namespace BaserCore\Test\TestCase\View\Helper;
+use BaserCore\View\AppView;
+use BaserCore\TestSuite\BcTestCase;
+use BaserCore\View\Helper\BcPageHelper;
 
 /**
  * BcPage helper library.
@@ -23,53 +25,34 @@ class BcPageHelperTest extends BcTestCase
      * @var array
      */
     public $fixtures = [
-        'baser.View.Helper.BcPageHelper.PageBcPageHelper',
-        'baser.Default.SearchIndex',
-        'baser.Default.SiteConfig',
-        'baser.Default.User',
-        'baser.Default.UserGroup',
-        'baser.Default.Favorite',
-        'baser.Default.Permission',
-        'baser.Default.ThemeConfig',
-        'baser.View.Helper.BcContentsHelper.ContentBcContentsHelper',
-        'baser.Default.Site',
+        // 'baser.View.Helper.BcPageHelper.PageBcPageHelper',
+        // 'baser.Default.Favorite',
+        // 'baser.Default.ThemeConfig',
+        // 'baser.View.Helper.BcContentsHelper.ContentBcContentsHelper',
+        'plugin.BaserCore.Users',
+        'plugin.BaserCore.UserGroups',
+        'plugin.BaserCore.UsersUserGroups',
+        'plugin.BaserCore.Permissions',
+        'plugin.BaserCore.SiteConfigs',
+        'plugin.BaserCore.SearchIndexes',
+        'plugin.BaserCore.Sites'
     ];
-
-    /**
-     * View
-     *
-     * @var View
-     */
-    protected $_View;
-
-    /**
-     * __construct
-     *
-     * @param string $name
-     * @param array $data
-     * @param string $dataName
-     */
-    public function __construct($name = null, $data = [], $dataName = '')
-    {
-        parent::__construct($name, $data, $dataName);
-    }
 
     /**
      * setUp
      *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
-        $this->_View = new BcAppView();
-        $this->_View->helpers = ['BcBaser', 'BcPage'];
-        $this->_View->loadHelpers();
-        $this->Page = ClassRegistry::init('Page');
-        $this->BcContents = $this->_View->BcContents;
-        $this->BcBaser = $this->_View->BcBaser;
-        $this->BcPage = $this->_View->BcPage;
-        $this->BcPage->BcBaser = $this->_View->BcBaser;
+        $this->Pages = $this->getTableLocator()->get('BaserCore.Pages');
+        $this->BcPage = new BcPageHelper(new AppView());
+        // $this->AppView = new AppView();
+        // $this->BcContents = $this->AppView->BcContents;
+        // $this->BcBaser = $this->AppView->BcBaser;
+        // $this->BcPage = $this->AppView->BcPage;
+        // $this->BcPage->BcBaser = $this->AppView->BcBaser;
     }
 
     /**
@@ -77,9 +60,9 @@ class BcPageHelperTest extends BcTestCase
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
-        Router::reload();
+        unset($this->Pages, $this->BcPage);
         parent::tearDown();
     }
 
@@ -113,6 +96,7 @@ class BcPageHelperTest extends BcTestCase
      */
     public function testGetUrl($pageId, $expected, $message = null)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         // 固定ページのデータ取得
         $conditions = ['Page.id' => $pageId];
         $fields = ['Content.url'];
@@ -146,6 +130,7 @@ class BcPageHelperTest extends BcTestCase
      */
     public function testAllowPublish($status, $begin, $end, $expected, $message)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $data = [
             'Page' => [
                 'status' => $status,
@@ -183,6 +168,7 @@ class BcPageHelperTest extends BcTestCase
      */
     public function testGetNextLink($url, $title, $options, $expected)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->BcPage->request = $this->_getRequest($url);
         $result = $this->BcPage->getNextLink($title, $options);
         $this->assertEquals($expected, $result);
@@ -221,6 +207,7 @@ class BcPageHelperTest extends BcTestCase
      */
     public function testGetPrevLink($url, $title, $options, $expected)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->BcPage->request = $this->_getRequest($url);
         $result = $this->BcPage->getPrevLink($title, $options);
         $this->assertEquals($expected, $result);
@@ -253,6 +240,7 @@ class BcPageHelperTest extends BcTestCase
      */
     public function testGetPageList($id, $expects)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $result = $this->BcPage->GetPageList($id);
         $result = Hash::extract($result, '{n}.Content.type');
         $this->assertEquals($expects, $result);
