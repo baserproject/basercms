@@ -226,29 +226,6 @@ class PagesTable extends Table implements BcSearchIndexManagerInterface
     }
 
     /**
-     * コントロールソースを取得する
-     *
-     * @param string $field フィールド名
-     * @param array $options
-     * @return mixed $controlSource コントロールソース
-     */
-    public function getControlSource($field, $options = [])
-    {
-        switch($field) {
-            case 'user_id':
-            case 'author_id':
-                $controlSources[$field] = $this->Content->User->getUserList($options);
-                break;
-        }
-
-        if (isset($controlSources[$field])) {
-            return $controlSources[$field];
-        } else {
-            return false;
-        }
-    }
-
-    /**
      * PHP構文チェック
      *
      * @param string $check チェック対象文字列

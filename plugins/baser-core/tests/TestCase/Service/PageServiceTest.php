@@ -254,4 +254,28 @@ class PageServiceTest extends BcTestCase
             // ],
         ];
     }
+
+    /**
+     * コントロールソースを取得する
+     *
+     * MEMO: $optionのテストについては、UserTest でテスト済み
+     *
+     * @param string $field フィールド名
+     * @param array $options
+     * @param array $expected 期待値
+     * @param string $message テストが失敗した時に表示されるメッセージ
+     * @dataProvider getControlSourceDataProvider
+     */
+    public function testGetControlSource($field, $expected, $message = null)
+    {
+        $result = $this->PageService->getControlSource($field);
+        $this->assertEquals($expected, $result, $message);
+    }
+
+    public function getControlSourceDataProvider()
+    {
+        return [
+            ['author_id', [1 => 'ニックネーム1', 2 => 'ニックネーム2', 3 => 'ニックネーム3'], 'コントロールソースを取得できません'],
+        ];
+    }
 }

@@ -56,6 +56,7 @@ class PageService implements PageServiceInterface
     {
         $this->Pages = TableRegistry::getTableLocator()->get('BaserCore.Pages');
         $this->Contents = TableRegistry::getTableLocator()->get('BaserCore.Contents');
+        $this->Users = TableRegistry::getTableLocator()->get('BaserCore.Users');
     }
 
     /**
@@ -263,5 +264,23 @@ class PageService implements PageServiceInterface
         //     'oldId' => $id,
         //     'oldData' => $oldData,
         // ]);
+    }
+
+    /**
+     * コントロールソースを取得する
+     *
+     * @param string $field フィールド名
+     * @param array $conditions
+     * @return array|false $controlSource コントロールソース
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getControlSource($field, $conditions = [])
+    {
+        if (in_array($field, ['user_id', 'author_id'])) {
+            $controlSources[$field] = $this->Users->getUserList($conditions);
+        }
+        return isset($controlSources[$field]) ? $controlSources[$field] : false;
     }
 }

@@ -471,31 +471,6 @@ class PagesTableTest extends BcTestCase
 
 
     /**
-     * コントロールソースを取得する
-     *
-     * MEMO: $optionのテストについては、UserTest でテスト済み
-     *
-     * @param string $field フィールド名
-     * @param array $options
-     * @param array $expected 期待値
-     * @param string $message テストが失敗した時に表示されるメッセージ
-     * @dataProvider getControlSourceDataProvider
-     */
-    public function testGetControlSource($field, $expected, $message = null)
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $result = $this->Pages->getControlSource($field);
-        $this->assertEquals($expected, $result, $message);
-    }
-
-    public function getControlSourceDataProvider()
-    {
-        return [
-            ['author_id', [1 => 'basertest', 2 => 'basertest2'], 'コントロールソースを取得できません'],
-        ];
-    }
-
-    /**
      * ページファイルを登録する
      * ※ 再帰処理
      *
