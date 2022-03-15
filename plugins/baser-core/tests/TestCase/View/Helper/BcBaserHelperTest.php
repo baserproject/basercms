@@ -1849,8 +1849,7 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testIsPage($expected, $requestUrl)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->BcBaser->request = $this->_getRequest($requestUrl);
+        $this->BcBaser->setRequest($this->getRequest($requestUrl));
         // TODO プリフィックス付きURLもテストが必要
         $this->assertEquals($expected, $this->BcBaser->isPage());
     }

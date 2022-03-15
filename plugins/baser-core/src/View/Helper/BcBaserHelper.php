@@ -2143,6 +2143,7 @@ END_FLASH;
      */
     public function isPage()
     {
+        $a = $this->_View->getRequest();
         return ($this->_View->getRequest()->getParam('controller') == 'pages' && $this->_View->getRequest()->getParam('action') == 'display');
     }
 

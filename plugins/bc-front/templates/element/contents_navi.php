@@ -8,6 +8,7 @@
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
  */
+
 use BaserCore\View\AppView;
 /**
  * コンテンツナビ
@@ -18,6 +19,8 @@ use BaserCore\View\AppView;
  *
  * @var AppView $this
  */
+$a = $this->BcBaser->isPage();
+$b = $this->BcBaser->isHome();
 ?>
 
 

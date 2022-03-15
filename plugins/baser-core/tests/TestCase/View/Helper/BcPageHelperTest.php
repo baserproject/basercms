@@ -207,7 +207,7 @@ class BcPageHelperTest extends BcTestCase
      */
     public function testGetPrevLink($url, $title, $options, $expected)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+
         $this->BcPage->request = $this->_getRequest($url);
         $result = $this->BcPage->getPrevLink($title, $options);
         $this->assertEquals($expected, $result);

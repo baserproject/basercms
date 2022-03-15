@@ -22,6 +22,7 @@ use BaserCore\Annotation\Checked;
  * Class AppView
  * @package BaserCore\View
  * @property BcPageHelper $BcPage
+ * @property BcBaserHelper $BcBaser
  */
 class AppView extends View
 {
