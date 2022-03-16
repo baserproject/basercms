@@ -2278,9 +2278,8 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testContentsNavi()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->BcBaser->request = $this->_getRequest('/about');
-        $this->expectOutputRegex('/<div class=\"contents-navi\">/');
+        $this->BcBaser->getView()->setRequest($this->getRequest('/about'));
+        $this->expectOutputRegex('/<div class=\"bs-contents-navi\">/');
         $this->BcBaser->contentsNavi();
     }
 

@@ -19,8 +19,6 @@ use BaserCore\View\AppView;
  *
  * @var AppView $this
  */
-$a = $this->BcBaser->isPage();
-$b = $this->BcBaser->isHome();
 ?>
 
 
