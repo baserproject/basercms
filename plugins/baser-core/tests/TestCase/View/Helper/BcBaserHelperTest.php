@@ -1208,9 +1208,7 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testIsHome($expected, $url)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-
-        $this->BcBaser->request = $this->_getRequest($url);
+        $this->BcBaser->getView()->setRequest($this->getRequest($url));
         $this->assertEquals($expected, $this->BcBaser->isHome());
     }
 
@@ -1221,17 +1219,19 @@ class BcBaserHelperTest extends BcTestCase
             [true, '/'],
             [true, '/index'],
             [false, '/news/index'],
-
+            // 英語ページ
+            [true, '/en/'],
+            [true, '/en/index'],
+            [false, '/en/news/index'],
             // モバイルページ
-            [true, '/m/'],
-            [true, '/m/index'],
-            [false, '/m/news/index'],
-
+            // [true, '/m/'],
+            // [true, '/m/index'],
+            // [false, '/m/news/index'],
             // スマートフォンページ
-            [true, '/s/'],
-            [true, '/s/index'],
-            [false, '/s/news/index'],
-            [false, '/s/news/index']
+            // [true, '/s/'],
+            // [true, '/s/index'],
+            // [false, '/s/news/index'],
+            // [false, '/s/news/index']
         ];
     }
 
