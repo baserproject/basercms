@@ -778,4 +778,27 @@ class ContentServiceTest extends BcTestCase
         $treeBehavior = $this->ContentService->setTreeConfig('scope', ['country_name' => 'France']);
         $this->assertEquals($treeBehavior->getConfig('scope'), ['country_name' => 'France']);
     }
+
+    /**
+     * testGetNeighbors
+     *
+     * @param  mixed $options
+     * @return void
+     */
+    public function testGetNeighbors()
+    {
+        $content = $this->ContentService->get(5);
+        $conditions = array_merge($this->ContentService->getConditionAllowPublish(), [
+            'Contents.type <>' => 'ContentFolder',
+            'Contents.site_id' => $content->site_id
+        ]);
+        $options = [
+            'field' => 'lft',
+            'value' => $content->lft,
+            'conditions' => $conditions,
+        ];
+        $neighbors = $this->ContentService->getNeighbors($options);
+        $this->assertEquals("お問い合わせ(※関連Fixture未完了)", $neighbors->next->title);
+        $this->assertEquals("NEWS(※関連Fixture未完了)", $neighbors->prev->title);
+    }
 }

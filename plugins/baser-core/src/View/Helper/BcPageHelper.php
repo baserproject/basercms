@@ -227,8 +227,8 @@ class BcPageHelper extends Helper
         $overCategory = $options['overCategory'];
         unset($options['arrow']);
         unset($options['overCategory']);
-
-        $content = $this->_getPageByNextOrPrev($request->getParam('Content.lft'), $request->getParam('Content.parent_id'), 'prev', $overCategory);
+        $content = $request->getParam('Content');
+        $content = $this->_getPageByNextOrPrev($content, 'prev', $overCategory);
 
         if ($content) {
             if (!$title) {
@@ -260,33 +260,30 @@ class BcPageHelper extends Helper
     /**
      * 指定した固定ページデータの次、または、前のデータを取得する
      *
-     * @param array $page 固定ページデータ
-     * @param string $type next Or prev
+     * @param Content $content
      * @param bool $overCategory カテゴリをまたがるかどうか
      * @return array 次、または、前の固定ページデータ
      */
-    protected function _getPageByNextOrPrev($lft, $parentId, $type, $overCategory = false)
+    protected function _getPageByNextOrPrev($content, $type, $overCategory = false)
     {
-        $conditions = array_merge($Content->getConditionAllowPublish(), [
+        $conditions = array_merge($this->ContentService->getConditionAllowPublish(), [
             'Content.type <>' => 'ContentFolder',
-            'Content.site_id' => $this->request->params['Content']['site_id']
+            'Content.site_id' => $content->site_id
         ]);
         if ($overCategory !== true) {
-            $conditions['Content.parent_id'] = $parentId;
+            $conditions['Content.parent_id'] = $content->parent_id;
         }
-        $data = $Content->find('neighbors', [
+        $options = [
             'field' => 'lft',
-            'value' => $lft,
+            'value' => $content->lft,
             'conditions' => $conditions,
             'order' => ['Content.lft'],
-            'recursive' => 0,
-            'cache' => false
-        ]);
-        if ($data && !empty($data[$type])) {
-            return $data[$type];
+        ];
+        $neighbors = $this->getNeighbors($options);
+        if ($neighbors && !empty($neighbors->$type)) {
+            return $neighbors->$type;
         } else {
             return false;
         }
     }
-
 }

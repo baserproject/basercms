@@ -13,6 +13,7 @@ namespace BaserCore\Service;
 
 use Exception;
 use Cake\ORM\Query;
+use Cake\ORM\Entity;
 use Cake\Utility\Hash;
 use Cake\Core\Configure;
 use Cake\Routing\Router;
@@ -1126,5 +1127,35 @@ class ContentService implements ContentServiceInterface
     public function getConditionAllowPublish()
     {
         return $this->Contents->getConditionAllowPublish();
+    }
+
+    /**
+     * 条件に基づいて指定したフィールドの隣のデータを所得する
+     *
+     * @param  array $options
+     * @return Entity $neighbors
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getNeighbors(array $options)
+    {
+        $neighbors = new Entity();
+        $fieldName = $options['field'];
+        $previous = $this->Contents->find()
+            ->contain('Sites')
+            ->order(['Contents.id' => 'DESC'])
+            ->where($options['conditions'])
+            ->andWhere(['Contents.' . $fieldName . ' <' => $options['value']])
+            ->first();
+        $next = $this->Contents->find()
+            ->contain('Sites')
+            ->order(['Contents.id' => 'ASC'])
+            ->where($options['conditions'])
+            ->andWhere(['Contents.' . $fieldName . ' >' => $options['value']])
+            ->first();
+        $neighbors->prev = $previous;
+        $neighbors->next = $next;
+        return $neighbors;
     }
 }

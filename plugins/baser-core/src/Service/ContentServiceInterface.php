@@ -326,4 +326,12 @@ interface ContentServiceInterface
      * @return array 公開条件（conditions 形式）
      */
     public function getConditionAllowPublish();
+
+    /**
+     * 条件に基づいて指定したフィールドの隣のデータを所得する
+     *
+     * @param  array $options
+     * @return Entity $neighbors
+     */
+    public function getNeighbors(array $options);
 }
