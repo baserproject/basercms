@@ -178,6 +178,8 @@ class BcPageHelper extends Helper
      */
     public function nextLink($title = '', $options = [])
     {
+        // TODO ucmitz: isPage && isHomeが完了後に着手する
+        return;
         echo $this->getNextLink($title, $options);
     }
 
@@ -235,6 +237,8 @@ class BcPageHelper extends Helper
      */
     public function prevLink($title = '', $options = [])
     {
+        // TODO ucmitz: isPage && isHomeが完了後に着手する
+        return;
         echo $this->getPrevLink($title, $options);
     }
 

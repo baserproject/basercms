@@ -11,12 +11,13 @@
 
 namespace BaserCore\View;
 
-use BaserCore\Event\BcEventDispatcherTrait;
-use BaserCore\View\Helper\BcPageHelper;
 use Cake\View\View;
-use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\View\Helper\BcPageHelper;
+use BaserCore\View\Helper\BcBaserHelper;
+use BaserCore\Event\BcEventDispatcherTrait;
 
 /**
  * Class AppView

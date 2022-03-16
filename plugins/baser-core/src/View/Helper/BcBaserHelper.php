@@ -2106,11 +2106,14 @@ END_FLASH;
      * 現在のページが固定ページかどうかを判定する
      *
      * @return bool 固定ページの場合は true を返す
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function isPage()
     {
-        $a = $this->_View->getRequest();
-        return ($this->_View->getRequest()->getParam('controller') == 'pages' && $this->_View->getRequest()->getParam('action') == 'display');
+        $request = $this->_View->getRequest();
+        return ($request->getParam('controller') === 'Pages' && $request->getParam('action') == 'display');
     }
 
     /**
