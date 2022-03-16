@@ -453,21 +453,17 @@ class BcValidation extends Validation
     /**
      * 指定した日付よりも新しい日付かどうかチェックする
      *
-     * @param mixed $value 対象となる日付
-     * @param string $field フィールド名
+     * @param FrozenTime $fieldValue 対象となる日付
      * @param array $context
-     * @return boolean
+     * @return bool
      * @checked
      * @noTodo
      * @unitTest
      */
-    public static function checkDateAfterThan($value, $field, $context)
+    public static function checkDateAfterThan($fieldValue, $target, $context)
     {
-        $value = (is_array($value))? current($value) : $value;
-        if ($value && !empty($context['data'][$field])) {
-            if (strtotime($value) <= strtotime($context['data'][$field])) {
-                return false;
-            }
+        if ($fieldValue instanceof FrozenTime && !empty($context['data'][$target])) {
+            return $fieldValue->greaterThan($context['data'][$target]);
         }
         return true;
     }

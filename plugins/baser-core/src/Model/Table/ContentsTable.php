@@ -201,14 +201,14 @@ class ContentsTable extends AppTable
                 'provider' => 'bc',
                 'message' => __d('baser', '公開終了日に不正な文字列が入っています。')
             ]
+        ])
+        ->add('self_publish_end', [
+            'checkDateAfterThan' => [
+                'rule' => ['checkDateAfterThan', 'self_publish_begin'],
+                'provider' => 'bc',
+                'message' => __d('baser', '公開終了日は、公開開始日より新しい日付で入力してください。')
+            ]
         ]);
-        // ->add('self_publish_end', [
-        //     'checkDateAfterThan' => [
-        //         'rule' => ['checkDateAfterThan'],
-        //         'provider' => 'bc',
-        //         'message' => __d('baser', '公開終了日は、公開開始日より新しい日付で入力してください。')
-        //     ]
-        // ]);
         $validator
         ->dateTime('created_date')
         ->requirePresence('created_date', 'create', __d('baser', '作成日がありません。'))
@@ -1059,18 +1059,23 @@ class ContentsTable extends AppTable
      *
      * @param  Content $content
      * @return Content $content
+     * @checked
+     * @unitTest
+     * @noTodo
      */
     protected function updatePublishDate($content)
     {
-        $oldContent = $this->get($content->id);
-        foreach (['publish_begin', 'publish_end'] as $date) {
-            if ($oldContent["self_" . $date] !== $content["self_" . $date]) {
-                if ($oldContent["self_" . $date] instanceof FrozenTime && $content["self_" . $date] instanceof FrozenTime) {
-                    if ($oldContent["self_" . $date]->__toString() !== $content["self_" . $date]->__toString()) {
+        if (!$this->findById($content->id)->isEmpty()) {
+            $oldContent = $this->findById($content->id)->first();
+            foreach (['publish_begin', 'publish_end'] as $date) {
+                if ($oldContent["self_" . $date] !== $content["self_" . $date]) {
+                    if ($oldContent["self_" . $date] instanceof FrozenTime && $content["self_" . $date] instanceof FrozenTime) {
+                        if ($oldContent["self_" . $date]->__toString() !== $content["self_" . $date]->__toString()) {
+                            $content->$date = $content["self_" . $date];
+                        }
+                    } else {
                         $content->$date = $content["self_" . $date];
                     }
-                } else {
-                    $content->$date = $content["self_" . $date];
                 }
             }
         }
