@@ -1160,6 +1160,9 @@ class BcBaserHelper extends Helper
      * MEMO: BcRequest.(agent).aliasは廃止
      *
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function isHome()
     {
@@ -1175,7 +1178,7 @@ class BcBaserHelper extends Helper
             return $path === "/" || $path === "/index";
         } else {
             // サブサイトの場合
-            return $path === $site->alias . "/" || $path === $site->alias . "/index";
+            return $path === "/$site->alias/" || $path === "/$site->alias/index";
         }
     }
 
