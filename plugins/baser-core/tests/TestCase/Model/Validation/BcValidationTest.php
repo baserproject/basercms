@@ -451,10 +451,10 @@ class BcValidationTest extends BcTestCase
     public function checkDataAfterThanDataProvider()
     {
         return [
-            ['2015-01-01 00:00:00', '2015-01-01 00:00:00', false],
-            ['2015-01-01 24:00:01', '2015-01-02 00:00:00', true],
-            ['2015-01-01 00:00:00', '2015-01-02 00:00:00', false],
-            ['2015-01-02 00:00:00', '2015-01-01 00:00:00', true],
+            [new FrozenTime('2015-01-01 00:00:00'), new FrozenTime('2015-01-01 00:00:00'), false],
+            [new FrozenTime('2015-01-01 24:00:01'), new FrozenTime('2015-01-02 00:00:00'), true],
+            [new FrozenTime('2015-01-01 00:00:00'), new FrozenTime('2015-01-02 00:00:00'), false],
+            [new FrozenTime('2015-01-02 00:00:00'), new FrozenTime('2015-01-01 00:00:00'), true],
         ];
     }
 

@@ -204,7 +204,7 @@ class ContentsTable extends AppTable
         ])
         ->add('self_publish_end', [
             'checkDateAfterThan' => [
-                'rule' => ['checkDateAfterThan'],
+                'rule' => ['checkDateAfterThan', 'self_publish_begin'],
                 'provider' => 'bc',
                 'message' => __d('baser', '公開終了日は、公開開始日より新しい日付で入力してください。')
             ]
@@ -1019,13 +1019,7 @@ class ContentsTable extends AppTable
         if (isset($content->self_status)) {
             $content->status = $content->self_status;
         }
-        // null の場合、isset で判定できないので array_key_exists を利用
-        if (isset($content->self_publish_begin)) {
-            $content->publish_begin = $content->self_publish_begin;
-        }
-        if (isset($content->self_publish_end)) {
-            $content->publish_end = $content->self_publish_end;
-        }
+        $content = $this->updatePublishDate($content);
         if (!empty($content->parent_id)) {
             $parent = $this->find()->select(['name', 'status', 'publish_begin', 'publish_end'])->where(['id' => $content->parent_id])->first();
             if (!$parent->status || $parent->publish_begin || $parent->publish_begin) {
@@ -1058,6 +1052,34 @@ class ContentsTable extends AppTable
         if ($event) $this->getEventManager()->off('Model.afterSave');
         $this->getEventManager()->off('Model.beforeSave');
         return $this->save($content, ['validate' => false]);
+    }
+
+    /**
+     * 公開・非公開の日時を更新する
+     *
+     * @param  Content $content
+     * @return Content $content
+     * @checked
+     * @unitTest
+     * @noTodo
+     */
+    protected function updatePublishDate($content)
+    {
+        if (!$this->findById($content->id)->isEmpty()) {
+            $oldContent = $this->findById($content->id)->first();
+            foreach (['publish_begin', 'publish_end'] as $date) {
+                if ($oldContent["self_" . $date] !== $content["self_" . $date]) {
+                    if ($oldContent["self_" . $date] instanceof FrozenTime && $content["self_" . $date] instanceof FrozenTime) {
+                        if ($oldContent["self_" . $date]->__toString() !== $content["self_" . $date]->__toString()) {
+                            $content->$date = $content["self_" . $date];
+                        }
+                    } else {
+                        $content->$date = $content["self_" . $date];
+                    }
+                }
+            }
+        }
+        return $content;
     }
 
     /**
@@ -1476,6 +1498,20 @@ class ContentsTable extends AppTable
                 ['Sites.use_subdomain' => $useSubDomain]
             ]);
         });
+        // $b = [
+        //     // 'Contents.status' => true,
+        //     ['or' => [
+        //         ['Contents.publish_begin <=' => date('Y-m-d H:i:s')],
+        //         // ['Contents.publish_begin IS' => null],
+        //         // ['Contents.publish_begin' => '0000-00-00 00:00:00']
+        //     ]],
+        //     ['or' => [
+        //         // ['Contents.publish_end >=' => date('Y-m-d H:i:s')],
+        //         // ['Contents.publish_end IS' => null],
+        //         // ['Contents.publish_end' => '0000-00-00 00:00:00']
+        //     ]]
+        // ];
+        // $a = $query->where($b)->first()->toArray();
         if ($publish) {
             $query->where($this->getConditionAllowPublish());
         }

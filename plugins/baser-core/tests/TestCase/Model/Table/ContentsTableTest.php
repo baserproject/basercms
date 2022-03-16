@@ -709,6 +709,66 @@ class ContentsTableTest extends BcTestCase
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
 
+    /**
+     * testUpdatePublishDate
+     *
+     * @return void
+     * @dataProvider updatePublishDateDataProvider
+     */
+    public function testUpdatePublishDate($date, $expected)
+    {
+        $content = $this->Contents->get(1);
+        $_content = $this->Contents->patchEntity($content, [
+            'publish_begin' => new FrozenTime('2015/01/01 00:00:00'),
+            'self_publish_begin' => new FrozenTime('2015/01/01 00:00:00'),
+            'self_publish_end' => new FrozenTime('2015/08/30 12:59:59'),
+            'publish_end' => new FrozenTime('2015/08/30 12:59:59')
+        ]);
+        $this->Contents->getEventManager()->off('Model.beforeMarshal');
+        $this->Contents->getEventManager()->off('Model.beforeSave');
+        $this->Contents->getEventManager()->off('Model.afterSave');
+        $content = $this->Contents->save($_content);
+        foreach ($date as $dateKey => $dateValue) {
+            $content->$dateKey = $dateValue;
+        }
+        $content = $this->execPrivateMethod($this->Contents, 'updatePublishDate', [$content]);
+        foreach ($expected as $expectedKey => $expectedValue) {
+            if ($expectedValue !== null) {
+                $this->assertEquals($expectedValue, $content->{$expectedKey}->__toString());
+            } else {
+                $this->assertNull($content->{$expectedKey});
+            }
+        }
+    }
+
+    public function updatePublishDateDataProvider()
+    {
+        return [
+            // 日付更新の場合
+            [
+                [
+                    'self_publish_begin' => new FrozenTime('2022/12/01 00:00:00'),
+                    'self_publish_end' => new FrozenTime('2022/12/30 00:00:00'),
+                ],
+                [
+                    'publish_begin' => '2022/12/01 00:00:00',
+                    'publish_end' => '2022/12/30 00:00:00',
+                ]
+            ],
+            // nullになる場合
+            [
+                [
+                    'self_publish_begin' => null,
+                    'self_publish_end' => null,
+                ],
+                [
+                    'publish_begin' => null,
+                    'publish_end' => null,
+                ]
+            ],
+        ];
+    }
+
 
     /**
      * データが公開済みかどうかチェックする
