@@ -67,6 +67,15 @@ class BcPageHelperTest extends BcTestCase
     }
 
     /**
+     * Test initialize
+     */
+    public function testInitialize()
+    {
+        $this->assertNotEmpty($this->BcPage->ContentService);
+        $this->assertNotEmpty($this->BcPage->PageService);
+    }
+
+    /**
      * テスト用に固定ページのデータを取得する
      *
      * @return array 固定ページのデータ
@@ -208,7 +217,7 @@ class BcPageHelperTest extends BcTestCase
     public function testGetPrevLink($url, $title, $options, $expected)
     {
 
-        $this->BcPage->request = $this->_getRequest($url);
+        $this->BcPage->getView()->setRequest($this->getRequest($url));
         $result = $this->BcPage->getPrevLink($title, $options);
         $this->assertEquals($expected, $result);
     }

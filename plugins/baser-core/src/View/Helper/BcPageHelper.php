@@ -11,10 +11,12 @@
 
 namespace BaserCore\View\Helper;
 
-use BaserCore\Event\BcEventDispatcherTrait;
-use Cake\View\Helper;
 use Cake\View\View;
-use Throwable;
+use Cake\View\Helper;
+use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Event\BcEventDispatcherTrait;
+use BaserCore\Service\PageServiceInterface;
+use BaserCore\Service\ContentServiceInterface;
 
 /**
  * BcPageHelper
@@ -26,7 +28,7 @@ class BcPageHelper extends Helper
      * Trait
      */
     use BcEventDispatcherTrait;
-
+    use BcContainerTrait;
     /**
      * ページモデル
      *
@@ -63,6 +65,20 @@ class BcPageHelper extends Helper
             $this->Page = ClassRegistry::init('Page', 'Model');
         }
         <<< */
+    }
+
+    /**
+     * initialize
+     * @param array $config
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function initialize(array $config): void
+    {
+        parent::initialize($config);
+        $this->ContentService = $this->getService(ContentServiceInterface::class);
+        $this->PageService = $this->getService(PageServiceInterface::class);
     }
 
     /**
@@ -196,7 +212,8 @@ class BcPageHelper extends Helper
      */
     public function getPrevLink($title = '', $options = [])
     {
-        if (empty($this->request->getParam('Content.id')) || empty($this->request->params['Content']['parent_id'])) {
+        $request = $this->getView()->getRequest();
+        if (empty($request->getParam('Content.id')) || empty($request->getParam('Content.parent_id'))) {
             return false;
         }
         $options = array_merge([
@@ -211,7 +228,7 @@ class BcPageHelper extends Helper
         unset($options['arrow']);
         unset($options['overCategory']);
 
-        $content = $this->_getPageByNextOrPrev($this->request->getParam('Content.lft'), $this->request->params['Content']['parent_id'], 'prev', $overCategory);
+        $content = $this->_getPageByNextOrPrev($request->getParam('Content.lft'), $request->getParam('Content.parent_id'), 'prev', $overCategory);
 
         if ($content) {
             if (!$title) {
@@ -237,8 +254,6 @@ class BcPageHelper extends Helper
      */
     public function prevLink($title = '', $options = [])
     {
-        // TODO ucmitz: isPage && isHomeが完了後に着手する
-        return;
         echo $this->getPrevLink($title, $options);
     }
 
@@ -252,7 +267,6 @@ class BcPageHelper extends Helper
      */
     protected function _getPageByNextOrPrev($lft, $parentId, $type, $overCategory = false)
     {
-        $Content = ClassRegistry::init('Content');
         $conditions = array_merge($Content->getConditionAllowPublish(), [
             'Content.type <>' => 'ContentFolder',
             'Content.site_id' => $this->request->params['Content']['site_id']
