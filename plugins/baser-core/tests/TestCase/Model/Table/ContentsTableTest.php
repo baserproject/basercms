@@ -718,19 +718,8 @@ class ContentsTableTest extends BcTestCase
     public function testUpdatePublishDate($date, $expected)
     {
         $content = $this->Contents->get(1);
-        $_content = $this->Contents->patchEntity($content, [
-            'publish_begin' => new FrozenTime('2015/01/01 00:00:00'),
-            'self_publish_begin' => new FrozenTime('2015/01/01 00:00:00'),
-            'self_publish_end' => new FrozenTime('2015/08/30 12:59:59'),
-            'publish_end' => new FrozenTime('2015/08/30 12:59:59')
-        ]);
-        $this->Contents->getEventManager()->off('Model.beforeMarshal');
-        $this->Contents->getEventManager()->off('Model.beforeSave');
-        $this->Contents->getEventManager()->off('Model.afterSave');
-        $content = $this->Contents->save($_content);
-        foreach ($date as $dateKey => $dateValue) {
-            $content->$dateKey = $dateValue;
-        }
+        $content->self_publish_begin = $date['self_publish_begin'];
+        $content->self_publish_end = $date['self_publish_end'];
         $content = $this->execPrivateMethod($this->Contents, 'updatePublishDate', [$content]);
         foreach ($expected as $expectedKey => $expectedValue) {
             if ($expectedValue !== null) {
