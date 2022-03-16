@@ -48,6 +48,7 @@ class BcBaserHelperTest extends BcTestCase
         'plugin.BaserCore.UserGroups',
         'plugin.BaserCore.UsersUserGroups',
         'plugin.BaserCore.Sites',
+        'plugin.BaserCore.Contents',
 
         // TODO: basercms4系より移植
         // 'baser.Default.Page',    // メソッド内で読み込む
@@ -1881,13 +1882,14 @@ class BcBaserHelperTest extends BcTestCase
 
     /**
      * 現在のページが固定ページかどうかを判定する
+     * @param  bool $expected
+     * @param  string $requestUrl
      * @return void
      * @dataProvider getIsPageProvider
      */
     public function testIsPage($expected, $requestUrl)
     {
-        $this->BcBaser->setRequest($this->getRequest($requestUrl));
-        // TODO プリフィックス付きURLもテストが必要
+        $this->BcBaser->getView()->setRequest($this->getRequest($requestUrl));
         $this->assertEquals($expected, $this->BcBaser->isPage());
     }
 
