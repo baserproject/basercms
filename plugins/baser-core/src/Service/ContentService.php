@@ -1145,17 +1145,21 @@ class ContentService implements ContentServiceInterface
         $previous = $this->Contents->find()
             ->contain('Sites')
             ->order(['Contents.id' => 'DESC'])
-            ->where($options['conditions'])
-            ->andWhere(['Contents.' . $fieldName . ' <' => $options['value']])
-            ->first();
+            ->where(['Contents.' . $fieldName . ' <' => $options['value']]);
         $next = $this->Contents->find()
             ->contain('Sites')
             ->order(['Contents.id' => 'ASC'])
-            ->where($options['conditions'])
-            ->andWhere(['Contents.' . $fieldName . ' >' => $options['value']])
-            ->first();
-        $neighbors->prev = $previous;
-        $neighbors->next = $next;
+            ->where(['Contents.' . $fieldName . ' >' => $options['value']]);
+        if (isset($options['conditions'])) {
+            $previous = $previous->where($options['conditions']);
+            $next = $next->where($options['conditions']);
+        }
+        if (isset($options['order'])) {
+            $previous = $previous->order($options['order']);
+            $next = $next->order($options['order']);
+        }
+        $neighbors->prev = $previous->first();
+        $neighbors->next = $next->first();
         return $neighbors;
     }
 }

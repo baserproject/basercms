@@ -35,7 +35,9 @@ class BcPageHelperTest extends BcTestCase
         'plugin.BaserCore.Permissions',
         'plugin.BaserCore.SiteConfigs',
         'plugin.BaserCore.SearchIndexes',
-        'plugin.BaserCore.Sites'
+        'plugin.BaserCore.Sites',
+        'plugin.BaserCore.Contents',
+        'plugin.BaserCore.ContentFolders',
     ];
 
     /**
@@ -269,4 +271,17 @@ class BcPageHelperTest extends BcTestCase
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
 
+
+    /**
+     * testGetPageByNextOrPrev
+     *
+     * @return void
+     */
+    public function testGetPageNeighbors()
+    {
+        $content = $this->BcPage->ContentService->getIndex(['name' => 'about'])->first();
+        $neighbors = $this->execPrivateMethod($this->BcPage, 'getPageNeighbors', [$content]);
+        $this->assertEquals($neighbors->prev->title, "NEWS(※関連Fixture未完了)");
+        $this->assertEquals($neighbors->next->title, "お問い合わせ(※関連Fixture未完了)");
+    }
 }
