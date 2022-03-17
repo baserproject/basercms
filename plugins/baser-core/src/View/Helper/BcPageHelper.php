@@ -17,6 +17,10 @@ use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Event\BcEventDispatcherTrait;
 use BaserCore\Service\PageServiceInterface;
 use BaserCore\Service\ContentServiceInterface;
+use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\Note;
 
 /**
  * BcPageHelper
@@ -263,6 +267,9 @@ class BcPageHelper extends Helper
      * @param Content $content
      * @param bool $overCategory カテゴリをまたがるかどうか
      * @return Entity 次、または、前の固定ページデータ
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     protected function getPageNeighbors($content, $overCategory = false)
     {
