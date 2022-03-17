@@ -227,8 +227,8 @@ class BcPageHelperTest extends BcTestCase
     public function getPrevLinkDataProvider()
     {
         return [
-            ['/company', '', ['overCategory' => false], false], // PC
-            ['/company', '前のページへ', ['overCategory' => false], false], // PC
+            // ['/company', '', ['overCategory' => false], false], // PC
+            // ['/company', '前のページへ', ['overCategory' => false], false], // PC
             ['/about', '', ['overCategory' => true], '<a href="/" class="prev-link">≪ トップページ</a>'], // PC
             ['/about', '前のページへ', ['overCategory' => true], '<a href="/" class="prev-link">前のページへ</a>'], // PC
             ['/s/about', '', ['overCategory' => false], '<a href="/s/" class="prev-link">≪ トップページ</a>'], // smartphone
@@ -282,6 +282,6 @@ class BcPageHelperTest extends BcTestCase
         $content = $this->BcPage->ContentService->getIndex(['name' => 'about'])->first();
         $neighbors = $this->execPrivateMethod($this->BcPage, 'getPageNeighbors', [$content]);
         $this->assertEquals($neighbors->prev->title, "NEWS(※関連Fixture未完了)");
-        $this->assertEquals($neighbors->next->title, "お問い合わせ(※関連Fixture未完了)");
+        $this->assertEquals($neighbors->next->title, "サービス１");
     }
 }

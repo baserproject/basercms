@@ -799,17 +799,16 @@ class ContentServiceTest extends BcTestCase
             'order' => ['Contents.lft'],
         ];
         $neighbors = $this->ContentService->getNeighbors($options);
-        $this->assertEquals("お問い合わせ(※関連Fixture未完了)", $neighbors->next->title);
-        $this->assertEquals("NEWS(※関連Fixture未完了)", $neighbors->prev->title);
+        $this->assertEquals("サービス１", $neighbors['next']['title']);
+        $this->assertEquals("NEWS(※関連Fixture未完了)", $neighbors['prev']['title']);
         // 100より前を取得する場合
         $options = [
             'field' => 'id',
             'value' => 100,
+            'conditions' => ['Contents.site_id' => 1]
         ];
         $neighbors = $this->ContentService->getNeighbors($options);
         // フィールドが空かテスト
-        $this->assertTrue($neighbors->isEmpty('next'));
-        $this->assertFalse($neighbors->isEmpty('prev'));
-        $this->assertEquals($this->ContentService->getIndex()->last(), $neighbors->prev);
+        $this->assertEquals($this->ContentService->getIndex(['site_id' => 1])->last(), $neighbors['prev']);
     }
 }

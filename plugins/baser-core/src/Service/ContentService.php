@@ -25,6 +25,7 @@ use Cake\Http\ServerRequest;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Annotation\Note;
 use BaserCore\Annotation\NoTodo;
+use BaserCore\Error\BcException;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Model\Entity\Content;
@@ -1133,22 +1134,25 @@ class ContentService implements ContentServiceInterface
      * 条件に基づいて指定したフィールドの隣のデータを所得する
      *
      * @param  array $options
-     * @return Entity $neighbors
+     * @return array $neighbors
+     * @throws BcException site_idがない場合Exceptionを投げる
      * @checked
      * @noTodo
      * @unitTest
      */
     public function getNeighbors(array $options)
     {
-        $neighbors = new Entity();
+        if (empty($options['conditions']) || !array_key_exists('Contents.site_id', $options['conditions'])) {
+            throw new BcException(__d('baser', 'site_idを指定してください。'));
+        };
         $fieldName = $options['field'];
         $previous = $this->Contents->find()
             ->contain('Sites')
-            ->order(['Contents.id' => 'DESC'])
+            ->order(['Contents.lft' => 'DESC'])
             ->where(['Contents.' . $fieldName . ' <' => $options['value']]);
         $next = $this->Contents->find()
             ->contain('Sites')
-            ->order(['Contents.id' => 'ASC'])
+            ->order(['Contents.lft' => 'ASC'])
             ->where(['Contents.' . $fieldName . ' >' => $options['value']]);
         if (isset($options['conditions'])) {
             $previous = $previous->where($options['conditions']);
@@ -1158,8 +1162,6 @@ class ContentService implements ContentServiceInterface
             $previous = $previous->order($options['order']);
             $next = $next->order($options['order']);
         }
-        $neighbors->prev = $previous->first();
-        $neighbors->next = $next->first();
-        return $neighbors;
+        return ['prev' => $previous->first(), 'next' => $next->first()];
     }
 }

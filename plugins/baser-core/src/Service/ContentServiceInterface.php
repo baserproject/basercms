@@ -331,7 +331,8 @@ interface ContentServiceInterface
      * 条件に基づいて指定したフィールドの隣のデータを所得する
      *
      * @param  array $options
-     * @return Entity $neighbors
+     * @return array $neighbors
+     * @throws BcException site_idがない場合Exceptionを投げる
      */
     public function getNeighbors(array $options);
 }

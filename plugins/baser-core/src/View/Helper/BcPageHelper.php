@@ -174,13 +174,13 @@ class BcPageHelper extends Helper
 
         $neighbors = $this->getPageNeighbors($this->request->getParam('Content'), $overCategory);
 
-        if ($neighbors->isEmpty('next')) {
+        if (empty($neighbors['next'])) {
             return false;
         } else {
             if (!$title) {
-                $title = $neighbors->next->title . $arrow;
+                $title = $neighbors['next']['title'] . $arrow;
             }
-            $url = $neighbors->next->url;
+            $url = $neighbors['next']['url'];
             return $this->BcBaser->getLink($title, $url, $options);
         }
     }
@@ -234,13 +234,13 @@ class BcPageHelper extends Helper
         $content = $request->getParam('Content');
         $neighbors = $this->getPageNeighbors($content, $overCategory);
 
-        if ($neighbors->isEmpty('prev')) {
+        if (empty($neighbors['prev'])) {
             return false;
         } else {
             if (!$title) {
-                $title = $arrow . $neighbors->prev->title;
+                $title = $arrow . $neighbors['prev']['title'];
             }
-            $url = $neighbors->prev->url;
+            $url = $neighbors['prev']['url'];
             return $this->BcBaser->getLink($title, $url, $options);
         }
     }
@@ -266,7 +266,7 @@ class BcPageHelper extends Helper
      *
      * @param Content $content
      * @param bool $overCategory カテゴリをまたがるかどうか
-     * @return Entity 次、または、前の固定ページデータ
+     * @return array 次、または、前の固定ページデータ
      * @checked
      * @noTodo
      * @unitTest
