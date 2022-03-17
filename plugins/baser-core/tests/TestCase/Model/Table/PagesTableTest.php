@@ -31,16 +31,16 @@ class PagesTableTest extends BcTestCase
         // 'plugin.BaserCore.BlogPosts',
         // 'plugin.BaserCore.BlogPostsBlogTags',
         // 'plugin.BaserCore.BlogTags',
-        // 'plugin.BaserCore.SearchIndexs',
         'plugin.BaserCore.SiteConfigs',
         // 'baser.Model.Page.PagePageModel',
         'plugin.BaserCore.Permissions',
         'plugin.BaserCore.Plugins',
         'plugin.BaserCore.Users',
+        'plugin.BaserCore.UsersUserGroups',
+        'plugin.BaserCore.UserGroups',
         'plugin.BaserCore.Sites',
         'plugin.BaserCore.Contents',
         'plugin.BaserCore.ContentFolders',
-        'plugin.BaserCore.UserGroups',
         'plugin.BaserCore.Pages',
         'plugin.BaserCore.SearchIndexes',
         // 'plugin.BaserCore.Favorites'
@@ -212,5 +212,46 @@ class PagesTableTest extends BcTestCase
         ];
         $result = $this->Pages->createSearchIndex($page);
         $this->assertEquals($expected, $result, '検索用データを正しく生成できません');
+    }
+
+            /**
+     * ページデータをコピーする
+     *
+     * @param array $postData 送信するデータ
+     * @dataProvider copyDataProvider
+     */
+    public function testCopy($postData)
+    {
+        $this->loginAdmin($this->getRequest());
+        $result = $this->Pages->copy($postData);
+        $page = $this->Pages->get($result->id, ['contain' => ['Contents' => ['Sites']]]);
+        $this->assertStringContainsString("_2", $page->content->name);
+        $this->assertEquals("hoge1", $page->content->title);
+        $this->assertEquals(10, $page->content->author_id);
+    }
+
+    public function copyDataProvider()
+    {
+        return [
+            [
+                [
+                'contentId' =>4,
+                'entityId' =>2,
+                'parentId' =>1,
+                'title' => 'hoge1',
+                'authorId' => 10,
+                'siteId' =>1
+                ],
+            ],
+            // [
+            //     [
+            //     'contentId' =>3,
+            //     'parentId' =>1,
+            //     'title' => 'hoge',
+            //     'authorId' =>1,
+            //     'siteId' =>0
+            //     ],
+            // ],
+        ];
     }
 }

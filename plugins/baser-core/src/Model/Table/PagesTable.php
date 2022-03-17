@@ -89,6 +89,7 @@ class PagesTable extends Table implements BcSearchIndexManagerInterface
         $this->addBehavior('BaserCore.BcSearchIndexManager');
         $this->addBehavior('Timestamp');
         $this->Sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
+        $this->Contents = TableRegistry::getTableLocator()->get('BaserCore.Contents');
     }
 
     /**
@@ -227,5 +228,54 @@ class PagesTable extends Table implements BcSearchIndexManagerInterface
             'publish_begin' => $content->publish_begin,
             'publish_end' => $content->publish_end
         ];
+    }
+
+    /**
+     * ページデータをコピーする
+     *
+     * 固定ページテンプレートの生成処理を実行する必要がある為、
+     * Content::copy() は利用しない
+     *
+     * @param array $postData
+     * @return Page $result
+     * @checked
+     * @unitTest
+     * @noTodo
+     */
+    public function copy($postData)
+    {
+        $page = $this->get($postData['entityId'], ['contain' => ['Contents' => ['Sites']]]);
+        $oldPage = $page;
+        $oldSiteId = $page->content->site_id;
+        unset($postData['entityId'], $postData['contentId'], $page->id, $page->content->id, $page->created, $page->modified);
+        foreach ($postData as $key => $value) {
+            $page->content->{Inflector::underscore($key)} = $value;
+        }
+        // EVENT Page.beforeCopy
+        $event = $this->dispatchLayerEvent('beforeCopy', [
+            'page' => $page,
+        ]);
+        if ($event !== false) {
+            $page = $event->getResult() === true? $event->getData('page') : $event->getResult();
+            unset($event);
+        }
+        if (!is_null($postData['siteId']) && $postData['siteId'] !== $oldSiteId) {
+            $page->content->parent_id = $this->Contents->copyContentFolderPath($page->content->url, $page->content->site_id);
+        }
+        $newPage = $this->patchEntity($this->newEmptyEntity(), $page->toArray());
+        $page = $this->saveOrFail($newPage);
+        if ($page->content->eyecatch) {
+            $content = $this->Contents->renameToBasenameFields($page->content, true);
+            $page->content = $content;
+        }
+        // EVENT Page.afterCopy
+        $event = $this->dispatchLayerEvent('afterCopy', [
+            'page' => $page,
+            'oldPage' => $oldPage,
+        ]);
+        if ($event !== false) {
+            $page = $event->getResult() === true? $event->getData('page') : $event->getResult();
+        }
+        return $page;
     }
 }

@@ -229,41 +229,11 @@ class PageService implements PageServiceInterface
      * @return Page $result
      * @checked
      * @unitTest
-     * @note(value="サービス内でイベント処理をどうするか")
+     * @noTodo
      */
     public function copy($postData)
     {
-        $page = $this->get($postData['entityId']);
-        $oldSiteId = $page->content->site_id;
-        unset($postData['entityId'], $postData['contentId'], $page->id, $page->content->id, $page->created, $page->modified);
-        foreach ($postData as $key => $value) {
-            $page->content->{Inflector::underscore($key)} = $value;
-        }
-        // EVENT Page.beforeCopy
-        // $event = $this->dispatchLayerEvent('beforeCopy', [
-        //     'data' => $data,
-        //     'id' => $id,
-        // ]);
-        // if ($event !== false) {
-        //     $data = $event->getResult() === true? $event->getData('data') : $event->getResult();
-        // }
-        if (!is_null($postData['siteId']) && $postData['siteId'] !== $oldSiteId) {
-            $page->content->parent_id = $this->Contents->copyContentFolderPath($page->content->url, $page->content->site_id);
-        }
-        $newPage = $this->Pages->patchEntity($this->Pages->newEmptyEntity(), $page->toArray());
-        $result = $this->Pages->saveOrFail($newPage);
-        if ($result->content->eyecatch) {
-            $content = $this->Contents->renameToBasenameFields($result->content, true);
-            $result->content = $content;
-        }
-        return $result;
-        // EVENT Page.afterCopy
-        // $event = $this->dispatchLayerEvent('afterCopy', [
-        //     'data' => $data,
-        //     'id' => $data['Page']['id'],
-        //     'oldId' => $id,
-        //     'oldData' => $oldData,
-        // ]);
+        return $this->Contents->copy($postData);
     }
 
     /**
