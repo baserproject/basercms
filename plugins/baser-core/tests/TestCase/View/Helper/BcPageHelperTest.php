@@ -179,8 +179,7 @@ class BcPageHelperTest extends BcTestCase
      */
     public function testGetNextLink($url, $title, $options, $expected)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->BcPage->request = $this->_getRequest($url);
+        $this->BcPage->getView()->setRequest($this->getRequest($url));
         $result = $this->BcPage->getNextLink($title, $options);
         $this->assertEquals($expected, $result);
     }
@@ -190,12 +189,13 @@ class BcPageHelperTest extends BcTestCase
         return [
             ['/company', '', ['overCategory' => false], false], // PC
             ['/company', '次のページへ', ['overCategory' => false], false], // PC
-            ['/about', '', ['overCategory' => true], '<a href="/icons" class="next-link">アイコンの使い方 ≫</a>'], // PC
-            ['/about', '次のページへ', ['overCategory' => true], '<a href="/icons" class="next-link">次のページへ</a>'], // PC
-            ['/s/about', '', ['overCategory' => false], '<a href="/s/icons" class="next-link">アイコンの使い方 ≫</a>'], // smartphone
-            ['/s/about', '次のページへ', ['overCategory' => false], '<a href="/s/icons" class="next-link">次のページへ</a>'], // smartphone
-            ['/s/sitemap', '', ['overCategory' => true], '<a href="/s/contact/" class="next-link">お問い合わせ ≫</a>'], // smartphone
-            ['/s/sitemap', '次のページへ', ['overCategory' => true], '<a href="/s/contact/" class="next-link">次のページへ</a>'], // smartphone
+            ['/about', '', ['overCategory' => true], '<a href="/service/service1" class="next-link">サービス１ ≫</a>'], // PC
+            ['/about', '次のページへ', ['overCategory' => true], '<a href="/service/service1" class="next-link">次のページへ</a>'], // PC
+            ['/en/サイトID3の固定ページ2', '', ['overCategory' => false], '<a href="/en/サイトID3の固定ページ3" class="next-link">サイトID3の固定ページ3 ≫</a>'], // smartphone
+            // ['/s/about', '', ['overCategory' => false], '<a href="/s/icons" class="next-link">アイコンの使い方 ≫</a>'], // smartphone
+            // ['/s/about', '次のページへ', ['overCategory' => false], '<a href="/s/icons" class="next-link">次のページへ</a>'], // smartphone
+            // ['/s/sitemap', '', ['overCategory' => true], '<a href="/s/contact/" class="next-link">お問い合わせ ≫</a>'], // smartphone
+            // ['/s/sitemap', '次のページへ', ['overCategory' => true], '<a href="/s/contact/" class="next-link">次のページへ</a>'], // smartphone
         ];
     }
     /**
@@ -203,6 +203,19 @@ class BcPageHelperTest extends BcTestCase
      *
      *    public function testNextLink($url, $title, $options, $expected) { }
      */
+    /**
+      * testNextLink
+      *
+      * @return void
+      */
+    public function testNextLink()
+    {
+        $this->BcPage->getView()->setRequest($this->getRequest('/about'));
+        ob_start();
+        $this->BcPage->nextLink('次のページへ', ['overCategory' => false]);
+        $result = ob_get_clean();
+        $this->assertRegExp('/<a href="\/contact\/" class="next-link">/', $result);
+    }
 
     /**
      * ページカテゴリ間の前の記事へのリンクを取得する

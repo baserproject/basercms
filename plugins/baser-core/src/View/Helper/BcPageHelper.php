@@ -153,11 +153,14 @@ class BcPageHelper extends Helper
      *        ※ overCategory が true の場合は、BcPageHelper::contentsNaviAvailable() が false だとしても強制的に出力する
      *    - `escape` : エスケープするかどうか
      * @return mixed コンテンツナビが無効かつオプションoverCategoryがtrueでない場合はfalseを返す
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getNextLink($title = '', $options = [])
     {
-
-        if (empty($this->request->getParam('Content.id')) || empty($this->request->params['Content']['parent_id'])) {
+        $request = $this->getView()->getRequest();
+        if (empty($request->getParam('Content.id')) || empty($request->getParam('Content.parent_id'))) {
             return false;
         }
         $options = array_merge([
@@ -172,7 +175,7 @@ class BcPageHelper extends Helper
         unset($options['arrow']);
         unset($options['overCategory']);
 
-        $neighbors = $this->getPageNeighbors($this->request->getParam('Content'), $overCategory);
+        $neighbors = $this->getPageNeighbors($request->getParam('Content'), $overCategory);
 
         if (empty($neighbors['next'])) {
             return false;
@@ -195,11 +198,12 @@ class BcPageHelper extends Helper
      *    - `overCategory` : 固定ページのカテゴリをまたいで次の記事のリンクを取得するかどうか（初期値 : false）
      *        ※ overCategory が true の場合は、BcPageHelper::contentsNaviAvailable() が false だとしても強制的に出力する
      * @return @return void コンテンツナビが無効かつオプションoverCategoryがtrueでない場合はfalseを出力する
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function nextLink($title = '', $options = [])
     {
-        // TODO ucmitz: isPage && isHomeが完了後に着手する
-        return;
         echo $this->getNextLink($title, $options);
     }
 
