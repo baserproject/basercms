@@ -168,16 +168,16 @@ class BcPageHelper extends Helper
         unset($options['arrow']);
         unset($options['overCategory']);
 
-        $content = $this->_getPageByNextOrPrev($this->request->getParam('Content.lft'), $this->request->params['Content']['parent_id'], 'next', $overCategory);
+        $neighbors = $this->getPageNeighbors($this->request->getParam('Content'), $overCategory);
 
-        if ($content) {
-            if (!$title) {
-                $title = $content['Content']['title'] . $arrow;
-            }
-            $url = $content['Content']['url'];
-            return $this->BcBaser->getLink($title, $url, $options);
-        } else {
+        if ($neighbors->isEmpty('next')) {
             return false;
+        } else {
+            if (!$title) {
+                $title = $neighbors->next->title . $arrow;
+            }
+            $url = $neighbors->next->url;
+            return $this->BcBaser->getLink($title, $url, $options);
         }
     }
 
@@ -228,16 +228,16 @@ class BcPageHelper extends Helper
         unset($options['arrow']);
         unset($options['overCategory']);
         $content = $request->getParam('Content');
-        $content = $this->_getPageByNextOrPrev($content, 'prev', $overCategory);
+        $neighbors = $this->getPageNeighbors($content, $overCategory);
 
-        if ($content) {
-            if (!$title) {
-                $title = $arrow . $content['Content']['title'];
-            }
-            $url = $content['Content']['url'];
-            return $this->BcBaser->getLink($title, $url, $options);
-        } else {
+        if ($neighbors->isEmpty('prev')) {
             return false;
+        } else {
+            if (!$title) {
+                $title = $arrow . $neighbors->prev->title;
+            }
+            $url = $neighbors->prev->url;
+            return $this->BcBaser->getLink($title, $url, $options);
         }
     }
 
@@ -262,28 +262,23 @@ class BcPageHelper extends Helper
      *
      * @param Content $content
      * @param bool $overCategory カテゴリをまたがるかどうか
-     * @return array 次、または、前の固定ページデータ
+     * @return Entity 次、または、前の固定ページデータ
      */
-    protected function _getPageByNextOrPrev($content, $type, $overCategory = false)
+    protected function getPageNeighbors($content, $overCategory = false)
     {
         $conditions = array_merge($this->ContentService->getConditionAllowPublish(), [
-            'Content.type <>' => 'ContentFolder',
-            'Content.site_id' => $content->site_id
+            'Contents.type <>' => 'ContentFolder',
+            'Contents.site_id' => $content->site_id
         ]);
         if ($overCategory !== true) {
-            $conditions['Content.parent_id'] = $content->parent_id;
+            $conditions['Contents.parent_id'] = $content->parent_id;
         }
         $options = [
             'field' => 'lft',
             'value' => $content->lft,
             'conditions' => $conditions,
-            'order' => ['Content.lft'],
+            'order' => ['Contents.lft'],
         ];
-        $neighbors = $this->getNeighbors($options);
-        if ($neighbors && !empty($neighbors->$type)) {
-            return $neighbors->$type;
-        } else {
-            return false;
-        }
+        return $this->ContentService->getNeighbors($options);
     }
 }
