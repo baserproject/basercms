@@ -213,6 +213,9 @@ class BcPageHelper extends Helper
      *    - `overCategory` : 固定ページのカテゴリをまたいで次の記事のリンクを取得するかどうか（初期値 : false）
      *    - `escape` : エスケープするかどうか
      * @return string|false
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getPrevLink($title = '', $options = [])
     {
