@@ -239,6 +239,20 @@ class BcPageHelperTest extends BcTestCase
     }
 
     /**
+     * testPrevLink
+     *
+     * @return void
+     */
+    public function testPrevLink()
+    {
+        $this->BcPage->getView()->setRequest($this->getRequest('/about'));
+        ob_start();
+        $this->BcPage->prevLink('前のページへ', ['overCategory' => false]);
+        $result = ob_get_clean();
+        $this->assertRegExp('/<a href="\/news\/" class="prev-link">/', $result);
+    }
+
+    /**
      * ページカテゴリ間の前の記事へのリンクを出力する
      *
      * public function testPrevLink($url, $title, $options, $expected) { }

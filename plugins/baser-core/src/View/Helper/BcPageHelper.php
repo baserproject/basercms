@@ -258,6 +258,9 @@ class BcPageHelper extends Helper
      *    - `overCategory` : 固定ページのカテゴリをまたいで次の記事のリンクを取得するかどうか（初期値 : false）
      *        ※ overCategory が true の場合は、BcPageHelper::contentsNaviAvailable() が false だとしても強制的に出力する
      * @return void コンテンツナビが無効かつオプションoverCategoryがtrueでない場合はfalseを返す
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function prevLink($title = '', $options = [])
     {
