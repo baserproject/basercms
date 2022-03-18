@@ -28,6 +28,7 @@ use BaserCore\Service\ContentService;
 use BaserCore\Service\UserGroupService;
 use BaserCore\Service\PermissionService;
 use BaserCore\Service\SiteConfigService;
+use BaserCore\Service\SearchIndexService;
 use BaserCore\Service\ContentFolderService;
 use BaserCore\Service\PageServiceInterface;
 use BaserCore\Service\SiteServiceInterface;
@@ -40,6 +41,7 @@ use BaserCore\Service\ContentServiceInterface;
 use BaserCore\Service\UserGroupServiceInterface;
 use BaserCore\Service\PermissionServiceInterface;
 use BaserCore\Service\SiteConfigServiceInterface;
+use BaserCore\Service\SearchIndexServiceInterface;
 use BaserCore\Service\ContentFolderServiceInterface;
 
 /**
@@ -67,7 +69,8 @@ class BcServiceProvider extends ServiceProvider
         ContentServiceInterface::class,
         ContentFolderServiceInterface::class,
         PageServiceInterface::class,
-        PagesDisplayServiceInterface::class
+        PagesDisplayServiceInterface::class,
+        SearchIndexServiceInterface::class,
     ];
 
     /**
@@ -102,7 +105,10 @@ class BcServiceProvider extends ServiceProvider
         $container->add(ContentFolderServiceInterface::class, ContentFolderService::class, true);
         // Pagesサービス
         $container->add(PageServiceInterface::class, PageService::class, true);
+        // PagesDisplayサービス
         $container->add(PagesDisplayServiceInterface::class, PagesDisplayService::class, true);
+        // SearchIndexesサービス
+        $container->add(SearchIndexServiceInterface::class, SearchIndexService::class, true);
 
     }
 

@@ -195,13 +195,14 @@ class Site extends EntityAlias
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function shouldRedirects(ServerRequest $request)
     {
         if (!$this->status || !$this->existsUrl($request)) {
             return false;
         }
-        if (!$this->status || !$this->autoRedirect) {
+        if (!$this->status || !$this->auto_redirect) {
             return false;
         }
         $autoRedirectKey = "{$this->name}_auto_redirect";

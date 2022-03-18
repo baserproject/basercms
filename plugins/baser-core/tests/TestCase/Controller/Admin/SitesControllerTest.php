@@ -77,7 +77,7 @@ class SitesControllerTest extends BcTestCase
         $this->get('/baser/admin/baser-core/sites/');
         $this->assertResponseOk();
         // イベントテスト
-        $this->entryControllerEventToMock('Controller.BaserCore.Sites.searchIndex', function(Event $event) {
+        $this->entryEventToMock(self::EVENT_LAYER_CONTROLLER, 'BaserCore.Sites.searchIndex', function(Event $event) {
             $request = $event->getData('request');
             return $request->withQueryParams(['num' => 1]);
         });
@@ -115,7 +115,7 @@ class SitesControllerTest extends BcTestCase
     {
         $this->enableSecurityToken();
         $this->enableCsrfToken();
-        $this->entryControllerEventToMock('Controller.BaserCore.Sites.beforeAdd', function(Event $event) {
+        $this->entryEventToMock(self::EVENT_LAYER_CONTROLLER, 'BaserCore.Sites.beforeAdd', function(Event $event) {
             $data = $event->getData('data');
             $data['name'] = 'etc';
             $event->setData('data', $data);
@@ -140,7 +140,7 @@ class SitesControllerTest extends BcTestCase
     {
         $this->enableSecurityToken();
         $this->enableCsrfToken();
-        $this->entryControllerEventToMock('Controller.BaserCore.Sites.afterAdd', function(Event $event) {
+        $this->entryEventToMock(self::EVENT_LAYER_CONTROLLER, 'BaserCore.Sites.afterAdd', function(Event $event) {
             $site = $event->getData('site');
             $sites = $this->getTableLocator()->get('Sites');
             $site->name = 'etc';
@@ -173,7 +173,7 @@ class SitesControllerTest extends BcTestCase
         $this->assertResponseSuccess();
 
         // イベントテスト
-        $this->entryControllerEventToMock('Controller.BaserCore.Sites.afterEdit', function(Event $event) {
+        $this->entryEventToMock(self::EVENT_LAYER_CONTROLLER, 'BaserCore.Sites.afterEdit', function(Event $event) {
             $site = $event->getData('site');
             $sites = $this->getTableLocator()->get('BaserCore.Sites');
             $site->display_name = 'etc';

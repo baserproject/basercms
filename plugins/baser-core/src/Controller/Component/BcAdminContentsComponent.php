@@ -16,16 +16,15 @@ use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
 use Cake\Event\EventManager;
 use BaserCore\Utility\BcUtil;
-use BaserCore\Annotation\Note;
 use Cake\Controller\Component;
-use BaserCore\Annotation\NoTodo;
-use BaserCore\Error\BcException;
-use BaserCore\Annotation\Checked;
-use BaserCore\Annotation\UnitTest;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Event\BcContentsEventListener;
 use BaserCore\Service\ContentServiceInterface;
 use BaserCore\Service\SiteConfigServiceInterface;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\Note;
 
 /**
  * Class BcContentsComponent
@@ -113,9 +112,11 @@ class BcAdminContentsComponent extends Component
 
         if ($entityName === "content") {
             $content = $controller->viewBuilder()->getVar($entityName);
+            $entityName = Inflector::classify($entityName) . ".";
         } else {
             $associated = $controller->viewBuilder()->getVar($entityName);
             $content = $associated->content;
+            $entityName = Inflector::classify($entityName) . ".content.";
         }
         $site = $content->site;
         $theme = $site->theme;
@@ -144,33 +145,10 @@ class BcAdminContentsComponent extends Component
             $related = true;
         }
         if (!$entityName === "content") $associated->content = $content;
-        // ContentController以外の場合適切にformIdを生成するためcontentEntitiesを確認
-        if ($controller->getName() !== 'Contents') $this->checkContentEntities($controller);
         $controller->set('content', $content);
         $controller->set('currentSiteId', $content->site_id);
         $controller->set('related', $related);
         $controller->set('publishLink', $this->ContentService->getUrl($content->url, true, $site->useSubDomain));
-    }
-
-    /**
-     * 適切にContentEntitiesが設定されてるか確認する
-     *
-     * @return void
-     * @throws BcException
-     * @checked
-     * @unitTest
-     * @noTodo
-     */
-    protected function checkContentEntities($controller)
-    {
-        $entities = $controller->viewBuilder()->getVar('contentEntities');
-        if (is_array($entities) && count($entities) === 2 && array_key_exists('Content', $entities)) {
-            if (array_key_first($entities) === 'Content') {
-                $entities = array_reverse($entities);
-                $controller->set('contentEntities', $entities);
-            }
-        } else {
-            throw new BcException(__d('baser', 'contentEntitiesが適切に設定されていません'));
-        }
+        $controller->set('entityName', $entityName);
     }
 }

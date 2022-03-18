@@ -29,7 +29,15 @@ class SiteTest extends BcTestCase
     protected $fixtures = [
         'plugin.BaserCore.Sites',
         'plugin.BaserCore.Contents',
+        'plugin.BaserCore.Model/Entity/Site/ContentShouldRedirects',
+        'plugin.BaserCore.Model/Entity/Site/SiteShouldRedirects'
     ];
+
+    /**
+     * autoFixtures
+     * @var bool
+     */
+    public $autoFixtures = false;
 
     /**
      * @var Site
@@ -45,6 +53,12 @@ class SiteTest extends BcTestCase
     {
         parent::setUp();
         $this->Sites = $this->getTableLocator()->get('BaserCore.Sites');
+        if (!preg_match('/^testShouldRedirects/', $this->getName())) {
+            $this->loadFixtures(
+                'Sites',
+                'Contents'
+            );
+        }
     }
 
     /**
@@ -184,25 +198,24 @@ class SiteTest extends BcTestCase
      */
     public function testShouldRedirects($expect, $url, array $query = [])
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loadFixtures(
+            'Model\Entity\Site\ContentShouldRedirects',
+            'Model\Entity\Site\SiteShouldRedirects'
+        );
         $request = $this->getRequest($url);
         $request = $request->withQueryParams($query);
-        $this->assertEquals($expect, $this->Sites->get(1)->shouldRedirects($request));
+        $this->assertEquals($expect, $this->Sites->get(2)->shouldRedirects($request));
     }
 
     public function shouldRedirectsDataProvider()
     {
         return [
-            [false, '/s/'],
-            [false, '/s/news/index'],
-            [false, '/s/service', ['smartphone' => 'on']],
             [true, '/'],
             [true, '/news/index'],
-            [true, '/service'],
             [false, '/news/index', ['smartphone' => 'off']],
-            [true, '/m/'],
-            [true, '/m/service/index'],
-            [false, '/m/service/index', ['smartphone' => 'off']]
+            [true, '/news/index', ['smartphone' => 'on']],
+            [false, '/s/'],
+            [false, '/s/news/index'],
         ];
     }
 

@@ -47,7 +47,7 @@ class ContentsTable extends AppTable
      * @param array $config テーブル設定
      * @return void
      * @checked
-     * @noTodo
+     * @note(value="yyyy/MM/dd型に所定の場所で変換する")
      * @unitTest
      */
     public function initialize(array $config): void
@@ -128,8 +128,9 @@ class ContentsTable extends AppTable
      * @param Validator $validator
      * @return Validator
      * @checked
+     * @noTodo
      * @unitTest
-     * @note(value="荒川に内容確認")
+     *
      */
     public function validationDefault(Validator $validator): Validator
     {
@@ -141,6 +142,7 @@ class ContentsTable extends AppTable
 
         $validator
         ->scalar('name')
+        ->requirePresence('name', 'create', __d('baser', 'nameフィールドが存在しません。'))
         ->notEmptyString('name', __d('baser', 'URLを入力してください。'))
         ->maxLength('name', 230, __d('baser', '名前は230文字以内で入力してください。'))
         ->add('name', [
@@ -180,6 +182,7 @@ class ContentsTable extends AppTable
             ]
         ]);
         $validator
+        ->dateTime('self_publish_begin')
         ->allowEmptyDateTime('self_publish_begin')
         ->add('self_publish_begin', [
             'checkDate' => [
@@ -190,6 +193,7 @@ class ContentsTable extends AppTable
         ]);
 
         $validator
+        ->dateTime('self_publish_end')
         ->allowEmptyDateTime('self_publish_end')
         ->add('self_publish_end', [
             'checkDate' => [
@@ -200,31 +204,32 @@ class ContentsTable extends AppTable
         ])
         ->add('self_publish_end', [
             'checkDateAfterThan' => [
-                'rule' => ['checkDateAfterThan'],
+                'rule' => ['checkDateAfterThan', 'self_publish_begin'],
                 'provider' => 'bc',
                 'message' => __d('baser', '公開終了日は、公開開始日より新しい日付で入力してください。')
             ]
         ]);
         $validator
-        ->allowEmptyDateTime('created_date');
-        // TODO ucmitz: %Y-%m-%d形式か%Y/%m/%d形式か判断して、書き換える
-        // ->add('created_date', [
-        //     'checkDate' => [
-        //         'rule' => ['checkDate'],
-        //         'provider' => 'bc',
-        //         'message' => __d('baser', '作成日に不正な文字列が入っています。')
-        //     ]
-        // ]);
+        ->dateTime('created_date')
+        ->requirePresence('created_date', 'create', __d('baser', '作成日がありません。'))
+        ->notEmptyDateTime('created_date', __d('baser', '作成日が空になってます。'))
+        ->add('created_date', [
+            'checkDate' => [
+                'rule' => ['checkDate'],
+                'provider' => 'bc',
+                'message' => __d('baser', '作成日が正しくありません。')
+            ]
+        ]);
         $validator
-        ->allowEmptyDateTime('modified_date');
-        // TODO ucmitz: frozenTime形式に書き換える
-        // ->add('modified_date', [
-        //     'checkDate' => [
-        //         'rule' => ['checkDate'],
-        //         'provider' => 'bc',
-        //         'message' => __d('baser', '更新日に不正な文字列が入っています。')
-        //     ]
-        // ]);
+        ->datetime('modified_date')
+        ->notEmptyDateTime('modified_date', __d('baser', '更新日が空になってます。'))
+        ->add('modified_date', [
+            'checkDate' => [
+                'rule' => ['checkDate'],
+                'provider' => 'bc',
+                'message' => __d('baser', '更新日が正しくありません。')
+            ]
+        ]);
         return $validator;
     }
 
@@ -290,16 +295,14 @@ class ContentsTable extends AppTable
      */
     public function beforeMarshal(EventInterface $event, ArrayObject $content, ArrayObject $options)
     {
-        // $createはデフォルトfalse
-        $isNew = $options['isNew'] ?? false;
-        $create = empty($content['id']) && $isNew;
         // タイトルは強制的に255文字でカット
         if (!empty($content['title'])) {
             $content['title'] = mb_substr($content['title'], 0, 254, 'UTF-8');
         }
-        if ($create) {
+        $isNew = empty($content['id']) && !isset($content['created']);
+        if ($isNew) {
             // IEのURL制限が2083文字のため、全て全角文字を想定し231文字でカット
-            if (!isset($content['name'])) {
+            if (!isset($content['name']) && !empty($content['title'])) {
                 $content['name'] = $content['title'];
             }
             if (!isset($content['self_status'])) {
@@ -328,6 +331,9 @@ class ContentsTable extends AppTable
             if (empty($content['modified_date'])) {
                 $content['modified_date'] = FrozenTime::now();
             }
+            if (isset($content['created_date'])) {
+                $content['created_date'] = new FrozenTime($content['created_date']);
+            }
             if (isset($content['name'])) {
                 $content['name'] = $content['name'];
             }
@@ -341,22 +347,6 @@ class ContentsTable extends AppTable
             $content['name'] = $this->getUniqueName($content['name'], $content['parent_id'] ?? null, $contentId);
         }
         return (array) $content;
-    }
-
-    /**
-    * ContentTableのbeforeMarshal内で新規作成の場合isNewオプションを設定する
-    * @param array $data The data to build an entity with.
-    * @param array $options A list of options for the object hydration.
-    * @return \Cake\Datasource\EntityInterface
-    * @see \Cake\ORM\Marshaller::one()
-     * @checked
-     * @noTodo
-     * @unitTest
-    */
-    public function newEntity(array $data, array $options = []): EntityInterface
-    {
-        $options = array_merge($options, ['isNew' => true]);
-        return parent::newEntity($data, $options);
     }
 
     /**
@@ -482,7 +472,11 @@ class ContentsTable extends AppTable
         if (!empty($entity->id)) {
             $this->beforeSaveParentId = $entity->parent_id;
         }
-        $entity->name = rawurlencode(mb_substr($entity->name, 0, 230, 'UTF-8'));
+        if ($entity->isNew()) {
+            $entity->name = $this->urlEncode(mb_substr($entity->name, 0, 230, 'UTF-8'));
+        } else {
+            $entity->name = $this->urlEncode(mb_substr(rawurldecode($entity->name), 0, 230, 'UTF-8'));
+        }
         return parent::beforeSave($event, $entity, $options);
     }
 
@@ -590,6 +584,45 @@ class ContentsTable extends AppTable
     }
 
     /**
+     * URL用に文字列を変換する
+     *
+     *
+     * @param $value
+     * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    protected function urlEncode($value)
+    {
+        // すでにエンコードされてる場合はそのまま返す
+        if (!preg_match('/\%[0-9A-Z][0-9A-Z]\%[0-9A-Z][0-9A-Z]/', $value)) {
+            $value = $this->textFormatting($value);
+        }
+        return rawurlencode($value);
+    }
+
+    /**
+     * できるだけ可読性を高める為、不要な記号は除外する
+     *
+     * @param $value
+     * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    protected function textFormatting($value)
+    {
+        $value = str_replace([
+            ' ', '　', '	', '\\', '\'', '|', '`', '^', '"', ')', '(', '}', '{', ']', '[', ';',
+            '/', '?', ':', '@', '&', '=', '+', '$', ',', '%', '<', '>', '#', '!'
+        ], '_', $value);
+        $value = preg_replace('/\_{2,}/', '_', $value);
+        $value = preg_replace('/(^_|_$)/', '', $value);
+        return $value;
+    }
+
+    /**
      * メインサイトの場合、連携設定がされている子サイトのエイリアス削除する
      *
      * @param Content $content
@@ -665,6 +698,7 @@ class ContentsTable extends AppTable
         }
         $_data = $this->findById($data->id)->applyOptions(['withDeleted'])->first();
         if ($_data) {
+            $this->getEventManager()->off('Model.beforeMarshal');
             $data = $this->patchEntity($_data, $data->toArray(), ['validate' => false]);
         }
 
@@ -767,6 +801,7 @@ class ContentsTable extends AppTable
      * @return bool|null
      * @checked
      * @unitTest
+     * @note(value="荒川さんに確認")
      */
     public function copyContentFolderPath($currentUrl, $targetSiteId)
     {
@@ -984,13 +1019,7 @@ class ContentsTable extends AppTable
         if (isset($content->self_status)) {
             $content->status = $content->self_status;
         }
-        // null の場合、isset で判定できないので array_key_exists を利用
-        if (isset($content->self_publish_begin)) {
-            $content->publish_begin = $content->self_publish_begin;
-        }
-        if (isset($content->self_publish_end)) {
-            $content->publish_end = $content->self_publish_end;
-        }
+        $content = $this->updatePublishDate($content);
         if (!empty($content->parent_id)) {
             $parent = $this->find()->select(['name', 'status', 'publish_begin', 'publish_end'])->where(['id' => $content->parent_id])->first();
             if (!$parent->status || $parent->publish_begin || $parent->publish_begin) {
@@ -1021,7 +1050,33 @@ class ContentsTable extends AppTable
         }
         $event = $this->getEventManager()->matchingListeners('afterSave');
         if ($event) $this->getEventManager()->off('Model.afterSave');
+        $this->getEventManager()->off('Model.beforeSave');
         return $this->save($content, ['validate' => false]);
+    }
+
+    /**
+     * 公開・非公開の日時を更新する
+     *
+     * @param  Content $content
+     * @return Content $content
+     * @checked
+     * @unitTest
+     * @noTodo
+     */
+    protected function updatePublishDate($content)
+    {
+        foreach (['publish_begin', 'publish_end'] as $date) {
+            if ($content[$date] !== $content["self_" . $date]) {
+                if ($content[$date] instanceof FrozenTime && $content["self_" . $date] instanceof FrozenTime) {
+                    if ($content[$date]->__toString() !== $content["self_" . $date]->__toString()) {
+                        $content->$date = $content["self_" . $date];
+                    }
+                } else {
+                    $content->$date = $content["self_" . $date];
+                }
+            }
+        }
+        return $content;
     }
 
     /**

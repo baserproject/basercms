@@ -11,6 +11,7 @@
 
 namespace BaserCore\Test\TestCase\TestSuite;
 
+use BaserCore\Utility\BcContainer;
 use Cake\Http\Session;
 use Cake\Core\Configure;
 use Cake\Routing\Router;
@@ -51,6 +52,26 @@ class BcTestCaseTest extends BcTestCase
     public function tearDown(): void
     {
         parent::tearDown();
+    }
+
+    /**
+     * test setup
+     */
+    public function testSetup()
+    {
+        $this->assertEquals('App\Application', get_class($this->Application));
+        $plugins = $this->Application->getPlugins();
+        $this->assertTrue($plugins->has('BaserCore'));
+        $this->assertEquals('BaserCore\Plugin', get_class($this->BaserCore));
+    }
+
+    /**
+     * test tearDown
+     */
+    public function testTearDown()
+    {
+        $this->tearDown();
+        $this->assertNull(BcContainer::$container);
     }
 
     /**

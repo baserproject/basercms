@@ -11,15 +11,16 @@
 
 namespace BaserCore\Model\Validation;
 
-use Cake\Validation\Validation;
-use Cake\Core\Configure;
 use Cake\Log\Log;
 use Cake\Utility\Hash;
-use BaserCore\Utility\BcUtil;
+use Cake\Core\Configure;
+use Cake\I18n\FrozenTime;
 use BaserCore\Model\AppTable;
-use BaserCore\Annotation\UnitTest;
+use BaserCore\Utility\BcUtil;
+use Cake\Validation\Validation;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
 
 /**
  * Class BcValidation
@@ -420,46 +421,7 @@ class BcValidation extends Validation
      */
     public static function checkDate($value)
     {
-        if (!$value) {
-            return true;
-        }
-        $time = '';
-        if (strpos($value, ' ') !== false) {
-            [$date, $time] = explode(' ', $value);
-        } else {
-            $date = $value;
-        }
-        if (DS != '\\') {
-            if ($time) {
-                if (!strptime($value, '%Y-%m-%d %H:%M')) {
-                    return false;
-                }
-            } else {
-                if (!strptime($value, '%Y-%m-%d')) {
-                    return false;
-                }
-            }
-        }
-        [$Y, $m, $d] = explode('-', $date);
-        if (checkdate($m, $d, $Y) !== true) {
-            return false;
-        }
-        // TODO checktime未実装の為コメントアウト
-        /* >>>
-        if ($time) {
-            if (strpos($value, ':') !== false) {
-                list($H, $i) = explode(':', $time);
-                if (checktime($H, $i) !== true) {
-                    return false;
-                }
-            } else {
-                return false;
-            }
-        }
-        <<< */
-        if (date('Y-m-d H:i:s', strtotime($value)) == '1970-01-01 09:00:00') {
-            return false;
-        }
+        if (!$value instanceOf FrozenTime) return false;
         return true;
     }
 
@@ -491,21 +453,17 @@ class BcValidation extends Validation
     /**
      * 指定した日付よりも新しい日付かどうかチェックする
      *
-     * @param mixed $value 対象となる日付
-     * @param string $field フィールド名
+     * @param FrozenTime $fieldValue 対象となる日付
      * @param array $context
-     * @return boolean
+     * @return bool
      * @checked
      * @noTodo
      * @unitTest
      */
-    public static function checkDateAfterThan($value, $field, $context)
+    public static function checkDateAfterThan($fieldValue, $target, $context)
     {
-        $value = (is_array($value))? current($value) : $value;
-        if ($value && !empty($context['data'][$field])) {
-            if (strtotime($value) <= strtotime($context['data'][$field])) {
-                return false;
-            }
+        if ($fieldValue instanceof FrozenTime && !empty($context['data'][$target])) {
+            return $fieldValue->greaterThan($context['data'][$target]);
         }
         return true;
     }

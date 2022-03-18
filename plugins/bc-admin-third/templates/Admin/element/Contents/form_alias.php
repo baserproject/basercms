@@ -40,9 +40,9 @@ if ((!empty($this->BcContents->getConfig('items')[$content->type]))) {
 <table class="form-table bca-form-table">
   <tr>
     <th
-      class=" bca-form-table__label"><?php echo $this->BcForm->label('Content.alias_id', __d('baser', '元コンテンツ')) ?></th>
+      class=" bca-form-table__label"><?php echo $this->BcForm->label($entityName . 'alias_id', __d('baser', '元コンテンツ')) ?></th>
     <td class="bca-form-table__input">
-      <?php echo $this->BcAdminForm->control('Content.alias_id', ['type' => 'hidden']) ?>
+      <?php echo $this->BcAdminForm->control($entityName . 'alias_id', ['type' => 'hidden']) ?>
       <small>[<?php echo $title ?>]</small>&nbsp;
       &nbsp;
       <?php $this->BcBaser->link($content->title, $editLink, ['target' => '_blank']) ?>

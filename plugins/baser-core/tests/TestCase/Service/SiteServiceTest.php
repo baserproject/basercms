@@ -10,7 +10,7 @@
  */
 
 namespace BaserCore\Test\TestCase\Service;
-use BaserCore\Service\BcAdminServiceInterface;
+
 use BaserCore\Service\SiteService;
 use BaserCore\Utility\BcContainerTrait;
 
@@ -223,8 +223,9 @@ class SiteServiceTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function testGetThemeList()
     {
-        // TODO BcUtil::getAllThemeList() を実装しないとテストができない
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $themes = $this->Sites->getThemeList();
+        $this->assertTrue(in_array('BcFront', $themes));
+        $this->assertFalse(in_array('BcAdminThird', $themes));
     }
 
 }

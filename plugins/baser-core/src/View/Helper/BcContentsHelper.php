@@ -157,6 +157,7 @@ class BcContentsHelper extends Helper
      * @param int $entityId コンテンツを特定するID
      * @checked
      * @unitTest
+     * @noTodo
      */
     public function isActionAvailable($type, $action, $entityId) : bool
     {
@@ -167,11 +168,12 @@ class BcContentsHelper extends Helper
         $url = $this->getConfig('items')[$type]['url'][$action] . '/' . $entityId;
         if (isset($user->user_groups)) {
             $userGroups = $user->user_groups;
+            $userGroupIds = [];
             foreach ($userGroups as $group) {
-                // TODO ucmitz: ユーザグループを配列で全て渡すよう変更が必要
-                if ($this->PermissionService->check($url, [$group->id])) {
-                    return true;
-                }
+                $userGroupIds[] = $group->id;
+            }
+            if ($this->PermissionService->check($url, $userGroupIds)) {
+                return true;
             }
         }
         return false;
@@ -473,35 +475,21 @@ class BcContentsHelper extends Helper
     /**
      * コンテンツが編集可能かどうか確認
      *
-     * @param array $data コンテンツ、サイト情報を格納した配列
+     * @param Content $content コンテンツ、サイト情報を格納した配列
      * @return bool
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function isEditable($data = null)
+    public function isEditable($content)
     {
-        if (!$data) {
-            if ($contentEntities = $this->getView()->get('contentEntities')) {
-                $content = $contentEntities['Content'];
-            }
-            if (empty($content)) return false;
-
+        if (isset($content) && isset($content->site)) {
             $site = $content->site;
         } else {
-            if (isset($data['Content'])) {
-                $content = $data['Content'];
-            } else {
-                return false;
-            }
-            if (isset($data['Site'])) {
-                $site = $data['Site'];
-            } else {
-                return false;
-            }
+            return false;
         }
         // サイトルートの場合は編集不可
-        if ($content['site_root']) {
+        if ($content->site_root) {
             return false;
         }
         // サイトルート以外で、管理ユーザーの場合は、強制的に編集可
@@ -509,9 +497,9 @@ class BcContentsHelper extends Helper
             return true;
         }
         // エイリアスを利用してメインサイトと自動連携する場合、親サイトに関連しているコンテンツ（＝子サイト）
-        if ($site['relate_main_site'] && $content['main_site_content_id']) {
+        if ($site->relate_main_site && $content->main_site_content_id) {
             // エイリアス、または、フォルダの場合は編集不可
-            if ($content['alias_id'] || $content['type'] == 'ContentFolder') {
+            if ($content->alias_id || $content->type == 'ContentFolder') {
                 return false;
             }
         }

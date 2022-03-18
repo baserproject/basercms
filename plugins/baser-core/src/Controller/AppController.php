@@ -89,6 +89,7 @@ class AppController extends BaseController
      * Initialize
      * @checked
      * @unitTest
+     * @note(value="BcEmailを実装したあとに確認")
      */
     public function initialize(): void
     {
@@ -104,7 +105,6 @@ class AppController extends BaseController
 
         // TODO ucmitz 未移行のためコメントアウト
         // >>>
-//        $this->loadComponent('BaserCore.Flash');
 //        $this->loadComponent('BaserCore.BcEmail');
         // <<<
     }
@@ -181,9 +181,10 @@ class AppController extends BaseController
      * @noTodo
      * @unitTest
      */
-    public function _blackHoleCallback($err)
+    public function _blackHoleCallback($err, $exception)
     {
-        throw new BadRequestException($message = __d('baser', '不正なリクエストと判断されました。'));
+        $message = __d('baser', '不正なリクエストと判断されました。') . '<br>' . $exception->getMessage();
+        throw new BadRequestException($message);
     }
 
     /**

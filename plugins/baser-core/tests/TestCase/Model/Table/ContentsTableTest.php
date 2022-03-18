@@ -37,7 +37,7 @@ class ContentsTableTest extends BcTestCase
         'plugin.BaserCore.Sites',
         'plugin.BaserCore.Contents',
         // 'baser.Model.Content.ContentIsMovable',
-        'plugin.BaserCore.Model/Content/ContentStatusCheck',
+        'plugin.BaserCore.Model/Table/Content/ContentStatusCheck',
         // 'baser.Routing.Route.BcContentsRoute.SiteBcContentsRoute',
         // 'baser.Routing.Route.BcContentsRoute.ContentBcContentsRoute',
         // 'baser.Default.SiteConfig',
@@ -156,12 +156,21 @@ class ContentsTableTest extends BcTestCase
                 [
                     'name' => '',
                     'title' => '',
+                    'created_date' => '',
                 ],
                 [
                     'name' => ['_empty' => 'スラッグを入力してください。'],
                     'title' => ['_empty' => 'タイトルを入力してください。'],
+                    'created_date' => ['_empty' => '作成日が空になってます。'],
                 ]
-            ]
+            ],
+            [
+                [],
+                [
+                    'name' => ['_required' => 'nameフィールドが存在しません。'],
+                    'title' => ['_required' => 'タイトルを入力してください。'],
+                ]
+            ],
         ];
     }
 
@@ -326,12 +335,17 @@ class ContentsTableTest extends BcTestCase
      */
     public function testBeforeSave()
     {
+        $value = "テスト";
         $data = new Entity([
             'id' => 100,
             'parent_id' => 6,
+            'name' => $value
         ]);
-        $this->Contents->dispatchEvent('Model.beforeSave', ['entity' => $data, 'options' => new ArrayObject()]);
+        $result = $this->Contents->dispatchEvent('Model.beforeSave', ['entity' => $data, 'options' => new ArrayObject()]);
         $this->assertEquals(6, $this->Contents->beforeSaveParentId);
+        // nameフィールドがエンコードされてるかをテスト
+        $entity = $result->getData('entity');
+        $this->assertEquals(urlencode($value), $entity->name);
     }
 
     /**
@@ -339,16 +353,12 @@ class ContentsTableTest extends BcTestCase
      */
     public function testAfterSave()
     {
-        $value = "テスト";
         $content = $this->Contents->get(6); // サービスフォルダ
         $content->self_status = false;
-        $content->name = $value;
         $this->Contents->dispatchEvent('Model.afterSave', [$content, new ArrayObject()]);
         $content = $this->Contents->get(6);
         // updateSystemDataが適応されてるかテスト
         $this->assertFalse($content->status);
-        // nameフィールドがエンコードされてるかをテスト
-        $this->assertEquals(urlencode($value), $content->name);
     }
 
     /**
@@ -406,7 +416,7 @@ class ContentsTableTest extends BcTestCase
     public function testDeleteRelateSubSiteContentWithAlias()
     {
         $content = $this->Contents->get(6);
-        $mockContent = $this->Contents->save(new Content(['site_id' => 6, 'main_site_content_id' => 6, 'alias_id' => 26, 'plugin' => 'BaserCore', 'type' => 'test']));
+        $mockContent = $this->Contents->save(new Content(['site_id' => 6, 'main_site_content_id' => 6, 'alias_id' => 28, 'plugin' => 'BaserCore', 'type' => 'test']));
         $this->execPrivateMethod($this->Contents, 'deleteRelateSubSiteContent', [$content]);
         $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
         $this->Contents->get($mockContent->id);
@@ -484,22 +494,6 @@ class ContentsTableTest extends BcTestCase
 
         $this->assertEquals($content['title'], $result->title);
         $this->assertEquals($type, $result->type);
-    }
-
-    /**
-     * testNewEntity
-     *
-     * @return void
-     */
-    public function testNewEntity()
-    {
-        $newContent = $this->Contents->newEntity([
-            'title' => 'relatedMainContent',
-            'name' => 'relatedMainContent',
-            'url' => '/test/',
-            'site_id' => 1,
-        ]);
-        $this->assertNotEmpty($newContent->created_date);
     }
 
     /**
@@ -585,15 +579,17 @@ class ContentsTableTest extends BcTestCase
             'id' => 100,
             'site_id' => 1,
             'name' => 'test',
+            'title' => 'test',
             'status' => null,
             'publish_begin' => null,
             'publish_end' => null,
             'self_status' => true,
-            'self_publish_begin' => FrozenTime::now(),
+            'self_publish_begin' => FrozenTime::yesterday(),
             'self_publish_end' => FrozenTime::now(),
             'parent_id' => 1,
         ];
-        $content = new Content($data);
+        $content = $this->Contents->patchEntity($this->Contents->newEmptyEntity(), $data, ['validate' => false]);
+        $content = $this->Contents->save($content);
         $this->execPrivateMethod($this->Contents, 'updateSystemData', [$content]);
         $content = $this->Contents->get(100);
         $this->assertTrue($content->status);
@@ -622,6 +618,7 @@ class ContentsTableTest extends BcTestCase
             'name' => 'relatedMainContent',
             'url' => '/test/',
             'site_id' => 1,
+            'created_date' => FrozenTime::now()
         ]);
         $mainContent = $this->Contents->save($new);
         $this->execPrivateMethod($this->Contents, 'updateSystemData', [$subContent]);
@@ -661,7 +658,7 @@ class ContentsTableTest extends BcTestCase
     {
         return [
             ['BcMail.MailContent', null, 9],    // entityId指定なし
-            ['BcBlog.BlogContent', 21, 10],    // entityId指定あり
+            ['BcBlog.BlogContent', 31, 10],    // entityId指定あり
             ['ContentFolder', 1, 1],                // プラグイン指定なし
             ['BcBlog.BlogComment', null, null],    // 存在しないタイプ
             [false, null, null]                // 異常系
@@ -710,6 +707,55 @@ class ContentsTableTest extends BcTestCase
     public function testExistsPublishUrl()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * testUpdatePublishDate
+     *
+     * @return void
+     * @dataProvider updatePublishDateDataProvider
+     */
+    public function testUpdatePublishDate($date, $expected)
+    {
+        $content = $this->Contents->get(1);
+        $content->self_publish_begin = $date['self_publish_begin'];
+        $content->self_publish_end = $date['self_publish_end'];
+        $content = $this->execPrivateMethod($this->Contents, 'updatePublishDate', [$content]);
+        foreach ($expected as $expectedKey => $expectedValue) {
+            if ($expectedValue !== null) {
+                $this->assertEquals($expectedValue, $content->{$expectedKey}->__toString());
+            } else {
+                $this->assertNull($content->{$expectedKey});
+            }
+        }
+    }
+
+    public function updatePublishDateDataProvider()
+    {
+        return [
+            // 日付更新の場合
+            [
+                [
+                    'self_publish_begin' => new FrozenTime('2022/12/01 00:00:00'),
+                    'self_publish_end' => new FrozenTime('2022/12/30 00:00:00'),
+                ],
+                [
+                    'publish_begin' => '2022/12/01 00:00:00',
+                    'publish_end' => '2022/12/30 00:00:00',
+                ]
+            ],
+            // nullになる場合
+            [
+                [
+                    'self_publish_begin' => null,
+                    'self_publish_end' => null,
+                ],
+                [
+                    'publish_begin' => null,
+                    'publish_end' => null,
+                ]
+            ],
+        ];
     }
 
 
@@ -771,6 +817,32 @@ class ContentsTableTest extends BcTestCase
             [false, 6, 7, true],    // フォルダを移動、同じ名称が存在しない
             [true, 2, 7, false],    // ファイルを移動、別サイトに同じファイル名が存在
             [true, 6, 7, false],    // フォルダを移動、別サイトに同じファイル名が存在
+        ];
+    }
+
+        /**
+     * URL用に文字列を変換する
+     *
+     * できるだけ可読性を高める為、不要な記号は除外する
+     * @param  string $value
+     * @param  bool $isEncoded
+     * @return void
+     * @dataProvider urlencodeDataProvider
+     */
+    public function testUrlencode($value, $encodedExpected, $decodedExpected)
+    {
+        $encoded = $this->execPrivateMethod($this->Contents, 'urlEncode', [$value]);
+        $this->assertEquals($encodedExpected, $encoded);
+        $this->assertEquals($decodedExpected, rawurldecode($encoded));
+    }
+
+    public function urlencodeDataProvider()
+    {
+        return [
+            ['あああ', '%E3%81%82%E3%81%82%E3%81%82', 'あああ'],
+            ['______%%%あああ', '%E3%81%82%E3%81%82%E3%81%82', 'あああ'],
+            ['test', 'test', 'test'],
+            ['%E3%81%82%E3%81%82%E3%81%82', '%25E3%2581%2582%25E3%2581%2582%25E3%2581%2582', '%E3%81%82%E3%81%82%E3%81%82']
         ];
     }
 
@@ -936,7 +1008,7 @@ class ContentsTableTest extends BcTestCase
      */
     public function testFindByUrl($expected, $url, $publish = true, $extend = false, $sameUrl = false, $useSubDomain = false)
     {
-        $this->loadFixtures('Model\Content\ContentStatusCheck', 'Sites');
+        $this->loadFixtures('Model\Table\Content\ContentStatusCheck', 'Sites');
         $result = (bool)$this->Contents->findByUrl($url, $publish, $extend, $sameUrl, $useSubDomain);
         $this->assertEquals($expected, $result);
     }

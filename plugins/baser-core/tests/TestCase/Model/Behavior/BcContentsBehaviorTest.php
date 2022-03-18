@@ -82,43 +82,17 @@ class BcContentsBehaviorTest extends BcTestCase
     }
 
     /**
-    * Test beforeMarshal
-    */
-    public function testBeforeMarshal()
+     * testAfterMarshal
+     *
+     * エラーがセットされているかをテスト
+     * @return void
+     */
+    public function testAfterMarshal()
     {
-        $this->loginAdmin($this->getRequest());
-        // 更新の場合はreturnされる
-        $data = [
-            'folder_template' => 'テストBeforeSave',
-            'content' => ["id" => 1]
-            ];
-        $return = $this->table->dispatchEvent('Model.beforeMarshal', ['data' => new ArrayObject($data), 'options' => new ArrayObject()]);
-        $this->assertNull($return->getResult());
-        // コンテンツのバリデーションに失敗する時はfalseが返る
-        $notEmptyResult = ["" => false, "test" => null];
-        foreach ($notEmptyResult as $nameField => $result) {
-            $data = [
-                'folder_template' => 'テストBeforeSave',
-                'content' => [
-                    "name" => $nameField,
-                    "parent_id" => "1",
-                    "title" => "新しい フォルダー",
-                    "plugin" => 'BaserCore',
-                    "type" => "ContentFolder",
-                    "site_id" => "1",
-                    "alias_id" => "",
-                    "entity_id" => "",
-                ]
-            ];
-            $data = $this->table->dispatchEvent('Model.beforeMarshal', [
-                'data' => new ArrayObject($data),
-                'options' => new ArrayObject(),
-            ]);
-            $this->assertEquals($result, $data->getResult());
-        }
-        // Contents->beforeMarshalでデータが補填されているかを確認する
-        $array = (array) $data->getData('data')['content'];
-        $this->assertEquals(15, count($array));
+        $contentFolder = $this->table->find()->first();
+        $result = $this->table->dispatchEvent('Model.afterMarshal', ['entity' => $contentFolder, 'data' => new ArrayObject($contentFolder->toArray()), 'options' => new ArrayObject()]);
+        $contentFolder = $result->getData('entity');
+        $this->assertEquals(['content' => ['_required' => "関連するコンテンツがありません"]], $contentFolder->getErrors());
     }
 
     /**

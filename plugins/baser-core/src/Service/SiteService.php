@@ -292,8 +292,9 @@ class SiteService implements SiteServiceInterface
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
-    public function getThemeList(Site $site): array
+    public function getThemeList(): array
     {
         return BcUtil::getThemeList();
     }

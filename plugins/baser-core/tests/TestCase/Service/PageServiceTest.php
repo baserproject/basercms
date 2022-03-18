@@ -36,6 +36,8 @@ class PageServiceTest extends BcTestCase
         'plugin.BaserCore.UserGroups',
         'plugin.BaserCore.UsersUserGroups',
         'plugin.BaserCore.ContentFolders',
+        'plugin.BaserCore.SearchIndexes',
+        'plugin.BaserCore.SiteConfigs',
     ];
 
     /**
@@ -121,7 +123,7 @@ class PageServiceTest extends BcTestCase
     {
         // 条件無しで一覧を取得した場合
         $pages = $this->PageService->getIndex();
-        $this->assertEquals(7, $pages->all()->count());
+        $this->assertEquals(9, $pages->all()->count());
         $this->assertRegExp('/<section class="mainHeadline">/', $pages->first()->contents);
         // 条件無しで数を制限し、一覧を取得した場合
         $pages2 = $this->PageService->getIndex(['limit' => 3]);
@@ -212,44 +214,27 @@ class PageServiceTest extends BcTestCase
         ];
     }
 
-        /**
-     * ページデータをコピーする
+    /**
+     * コントロールソースを取得する
      *
-     * @param array $postData 送信するデータ
-     * @dataProvider copyDataProvider
+     * MEMO: $optionのテストについては、UserTest でテスト済み
+     *
+     * @param string $field フィールド名
+     * @param array $options
+     * @param array $expected 期待値
+     * @param string $message テストが失敗した時に表示されるメッセージ
+     * @dataProvider getControlSourceDataProvider
      */
-    public function testCopy($postData)
+    public function testGetControlSource($field, $expected, $message = null)
     {
-        $this->loginAdmin($this->getRequest());
-        $result = $this->PageService->copy($postData);
-        $page = $this->PageService->get($result->id);
-        $this->assertStringContainsString("_2", $page->content->name);
-        $this->assertEquals("hoge1", $page->content->title);
-        $this->assertEquals(10, $page->content->author_id);
+        $result = $this->PageService->getControlSource($field);
+        $this->assertEquals($expected, $result, $message);
     }
 
-    public function copyDataProvider()
+    public function getControlSourceDataProvider()
     {
         return [
-            [
-                [
-                'contentId' =>4,
-                'entityId' =>2,
-                'parentId' =>1,
-                'title' => 'hoge1',
-                'authorId' => 10,
-                'siteId' =>1
-                ],
-            ],
-            // [
-            //     [
-            //     'contentId' =>3,
-            //     'parentId' =>1,
-            //     'title' => 'hoge',
-            //     'authorId' =>1,
-            //     'siteId' =>0
-            //     ],
-            // ],
+            ['author_id', [1 => 'ニックネーム1', 2 => 'ニックネーム2', 3 => 'ニックネーム3'], 'コントロールソースを取得できません'],
         ];
     }
 }

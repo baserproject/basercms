@@ -11,6 +11,9 @@
 
 namespace BaserCore\Test\TestCase\View\Helper;
 
+use Cake\Event\Event;
+use Cake\Event\EventManager;
+use Cake\Filesystem\File;
 use Cake\View\Helper\HtmlHelper;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\View\BcAdminAppView;
@@ -18,6 +21,7 @@ use BaserCore\View\Helper\BcBaserHelper;
 use Cake\View\Helper\FlashHelper;
 use Cake\View\Helper\UrlHelper;
 use Cake\Routing\Router;
+use ReflectionClass;
 
 
 // use BaserCore\View\BcAdminAppView;
@@ -43,6 +47,8 @@ class BcBaserHelperTest extends BcTestCase
         'plugin.BaserCore.Users',
         'plugin.BaserCore.UserGroups',
         'plugin.BaserCore.UsersUserGroups',
+        'plugin.BaserCore.Sites',
+        'plugin.BaserCore.Contents',
 
         // TODO: basercms4系より移植
         // 'baser.Default.Page',    // メソッド内で読み込む
@@ -95,7 +101,10 @@ class BcBaserHelperTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->BcAdminAppView = new BcAdminAppView($this->getRequest());
+        $this->BcAdminAppView = new BcAdminAppView($this->getRequest(), null, null, [
+            'name' => 'Pages',
+            'plugin' => 'BaserCore'
+        ]);
         $this->BcBaser = new BcBaserHelper($this->BcAdminAppView);
         $this->Html = new HtmlHelper($this->BcAdminAppView);
         $this->Flash = new FlashHelper($this->BcAdminAppView);
@@ -195,35 +204,64 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testGetElement()
     {
-        $element = 'flash/default';
-        $result = $this->BcBaser->getElement($element, ['message' => 'sampletest']);
-        $expected = $this->BcAdminAppView->element($element, ['message' => 'sampletest']);
-        $this->assertEquals($expected, $result);
-    }
-
-    /**
-     * エレメントテンプレートのレンダリング結果を取得する
-     * @return void
-     */
-    public function testGetElement_Version4()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-
         // フロント
-        $result = $this->BcBaser->getElement('site_search_form');
-        $this->assertTextContains('<div class="section search-box">', $result);
+        $this->assertTextContains('<span class="bs-footer__banner">', $this->BcBaser->getElement('footer'));
 
-        // ### 管理画面
-        $View = new BcAppView();
-        $View->request = $this->_getRequest('/admin');
-        $View->subDir = 'admin';
+        // 管理画面
+        $view = $this->BcBaser->getView();
+        $view->setRequest($this->getRequest('/baser/admin'));
+        $view->setTheme('BcAdminThird');
+        $reflectionClass = new ReflectionClass($view);
+        $pathsForPlugin = $reflectionClass->getProperty('_pathsForPlugin');
+        $pathsForPlugin->setAccessible(true);
+        $pathsForPlugin->setValue($view, []);
+        $this->assertTextContains('<div id="Footer" class="bca-footer" data-loggedin="">', $this->BcBaser->getElement('footer'));
+
         // 管理画面用のテンプレートがなくフロントのテンプレートがある場合
-        // ※ フロントが存在する場合にはフロントのテンプレートを利用する
-        $result = $this->BcBaser->getElement(('site_search_form'));
-        $this->assertTextContains('<div class="section search-box">', $result);
-        // 強制的にフロントのテンプレートに切り替えた場合
-        $result = $this->BcBaser->getElement('crumbs', [], ['subDir' => false]);
-        $this->assertTextContains('ホーム', $result);
+        $templateDir = ROOT . DS . 'plugins' . DS . 'bc-admin-third' . DS . 'templates'. DS;
+        $fileFront = new File($templateDir . 'element' . DS . 'test.php');
+        $fileFront->create();
+        $fileFront->write('front');
+        $this->assertTextContains('front', $this->BcBaser->getElement('test'));
+
+        // 管理画面用のテンプレートとフロントのテンプレートの両方がある場合
+        $fileAdmin = new File($templateDir . 'Admin' . DS . 'element' . DS . 'test.php');
+        $fileAdmin->create();
+        $fileAdmin->write('admin');
+        $this->assertTextContains('admin', $this->BcBaser->getElement('test'));
+        $fileFront->delete();
+        $fileAdmin->delete();
+
+        // View.beforeElement でテーマを変更した場合
+        $listener = $this->entryEventToMock(self::EVENT_LAYER_VIEW, 'beforeElement', function(Event $event) {
+            $event->getSubject()->setTheme('BcFront');
+            $options = $event->getData('options');
+            $options['plugin'] = false; // 現在のプラグイン BaserCore のテンプレートを対象外にする
+            $event->setData('options', $options);
+        });
+        $this->assertTextContains('<span class="bs-footer__banner">', $this->BcBaser->getElement('footer'));
+        EventManager::instance()->off($listener);
+
+        // View.Pages.beforeElement でテーマを変更した場合
+        $this->entryEventToMock(self::EVENT_LAYER_VIEW, 'BaserCore.Pages.beforeElement', function(Event $event) {
+            $event->getSubject()->setTheme('BcFront');
+            $options = $event->getData('options');
+            $options['plugin'] = false;
+            $event->setData('options', $options);
+        });
+        $this->assertTextContains('<span class="bs-footer__banner">', $this->BcBaser->getElement('footer'));
+
+        // View.afterElement 結果を書き換えた場合
+        $this->entryEventToMock(self::EVENT_LAYER_VIEW, 'afterElement', function(Event $event) {
+            $event->setData('out', '');
+        });
+        $this->assertEmpty('', $this->BcBaser->getElement('footer'));
+
+        // View.Pages.afterElement でテーマを変更した場合
+        $this->entryEventToMock(self::EVENT_LAYER_VIEW, 'BaserCore.Pages.afterElement', function(Event $event) {
+            $event->setData('out', 'hoge');
+        });
+        $this->assertEquals('hoge', $this->BcBaser->getElement('footer'));
     }
 
     /**
@@ -370,7 +408,7 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testIsAdminUser($id, $expected)
     {
-        $this->loginAdmin($this->getRequest());
+        $this->loginAdmin($this->getRequest('/baser/admin'));
         $user = $id? $this->getuser($id) : null;
         $result = $this->BcBaser->isAdminUser($user);
         $this->assertEquals($expected, $result);
@@ -1170,9 +1208,7 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testIsHome($expected, $url)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-
-        $this->BcBaser->request = $this->_getRequest($url);
+        $this->BcBaser->getView()->setRequest($this->getRequest($url));
         $this->assertEquals($expected, $this->BcBaser->isHome());
     }
 
@@ -1183,17 +1219,19 @@ class BcBaserHelperTest extends BcTestCase
             [true, '/'],
             [true, '/index'],
             [false, '/news/index'],
-
+            // 英語ページ
+            [true, '/en/'],
+            [true, '/en/index'],
+            [false, '/en/news/index'],
             // モバイルページ
-            [true, '/m/'],
-            [true, '/m/index'],
-            [false, '/m/news/index'],
-
+            // [true, '/m/'],
+            // [true, '/m/index'],
+            // [false, '/m/news/index'],
             // スマートフォンページ
-            [true, '/s/'],
-            [true, '/s/index'],
-            [false, '/s/news/index'],
-            [false, '/s/news/index']
+            // [true, '/s/'],
+            // [true, '/s/index'],
+            // [false, '/s/news/index'],
+            // [false, '/s/news/index']
         ];
     }
 
@@ -1844,14 +1882,14 @@ class BcBaserHelperTest extends BcTestCase
 
     /**
      * 現在のページが固定ページかどうかを判定する
+     * @param  bool $expected
+     * @param  string $requestUrl
      * @return void
      * @dataProvider getIsPageProvider
      */
     public function testIsPage($expected, $requestUrl)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->BcBaser->request = $this->_getRequest($requestUrl);
-        // TODO プリフィックス付きURLもテストが必要
+        $this->BcBaser->getView()->setRequest($this->getRequest($requestUrl));
         $this->assertEquals($expected, $this->BcBaser->isPage());
     }
 
@@ -2240,9 +2278,8 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testContentsNavi()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->BcBaser->request = $this->_getRequest('/about');
-        $this->expectOutputRegex('/<div class=\"contents-navi\">/');
+        $this->BcBaser->getView()->setRequest($this->getRequest('/about'));
+        $this->expectOutputRegex('/<div class=\"bs-contents-navi\">/');
         $this->BcBaser->contentsNavi();
     }
 

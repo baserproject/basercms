@@ -21,6 +21,7 @@ use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\Note;
+use Cake\Validation\Validator;
 
 /**
  * Class PluginsTable
@@ -35,31 +36,6 @@ class PluginsTable extends AppTable
     use BcEventDispatcherTrait;
 
     /**
-     * Plugin constructor.
-     *
-     * @param bool $id
-     * @param null $table
-     * @param null $ds
-     * @checked
-     */
-    public function __construct($config)
-    {
-        parent::__construct($config);
-        // TODO 暫定措置
-        // >>>
-        return;
-        // <<<
-        $this->validate = [
-            'name' => [
-                ['rule' => ['alphaNumericPlus'], 'message' => __d('baser', 'プラグイン名は半角英数字、ハイフン、アンダースコアのみが利用可能です。'), 'required' => true],
-                ['rule' => ['isUnique'], 'on' => 'create', 'message' => __d('baser', '指定のプラグインは既に使用されています。')],
-                ['rule' => ['maxLength', 50], 'message' => __d('baser', 'プラグイン名は50文字以内としてください。')]],
-            'title' => [
-                ['rule' => ['maxLength', 50], 'message' => __d('baser', 'プラグインタイトルは50文字以内とします。')]]
-        ];
-    }
-
-    /**
      * Initialize
      *
      * @param array $config テーブル設定
@@ -72,6 +48,45 @@ class PluginsTable extends AppTable
     {
         parent::initialize($config);
         $this->addBehavior('Timestamp');
+    }
+
+  /**
+     * Validation Default
+     *
+     * @param Validator $validator
+     * @return Validator
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function validationDefault(Validator $validator): Validator
+    {
+        $validator
+            ->integer('id')
+            ->allowEmptyString('id', null, 'create');
+
+        $validator
+            ->scalar('name')
+            ->maxLength('name', 50, __d('baser', 'プラグイン名は50文字以内としてください。'))
+            ->notEmptyString('name', __d('baser', 'プラグイン名は必須です。'))
+            ->add('name', [
+                'nameUnique' => [
+                    'rule' => 'validateUnique',
+                    'provider' => 'table',
+                    'message' => __d('baser', '指定のプラグインは既に使用されています。')
+            ]])
+            ->add('name', [
+                'nameAlphaNumericPlus' => [
+                    'rule' => ['alphaNumericPlus'],
+                    'provider' => 'bc',
+                    'message' => __d('baser', 'プラグイン名は半角英数字とハイフン、アンダースコアのみが利用可能です。')
+            ]]);
+
+        $validator
+            ->scalar('title')
+            ->maxLength('title', 50, __d('baser', 'プラグインタイトルは50文字以内としてください。'));
+
+        return $validator;
     }
 
     /**
@@ -136,12 +151,6 @@ class PluginsTable extends AppTable
             $this->patchEntity($pluginRecord, include $appConfigPath);
         }
         return $pluginRecord;
-    }
-
-
-    public function isDbInit($name)
-    {
-
     }
 
     /**
@@ -218,75 +227,6 @@ class PluginsTable extends AppTable
     }
 
     /**
-     * データベースを初期化する
-     * 既存のテーブルは上書きしない
-     *
-     * @param string $pluginName プラグイン名
-     * @param array $options CSVファイル読込するかどうか
-     * @return bool
-     */
-    public function initDb($pluginName = '', $options = [])
-    {
-        $options = array_merge([
-            'loadCsv' => true,
-            'filterTable' => '',
-            'filterType' => 'create',
-            'dbDataPattern' => ''
-        ], $options);
-        return parent::initDb($pluginName, [
-            'loadCsv' => $options['loadCsv'],
-            'filterTable' => $options['filterTable'],
-            'filterType' => $options['filterType'],
-            'dbDataPattern' => $options['dbDataPattern']
-        ]);
-    }
-
-    /**
-     * 指定したフィールドに重複値があるかチェック
-     *
-     * @param string $fieldName チェックするフィールド名
-     * @return bool
-     */
-    public function hasDuplicateValue($fieldName)
-    {
-        $this->cacheQueries = false;
-
-        $duplication = $this->find('all', [
-            'fields' => [
-                "{$this->alias}.{$fieldName}"
-            ],
-            'group' => [
-                "{$this->alias}.{$fieldName} HAVING COUNT({$this->alias}.id) > 1"
-            ]
-        ]);
-
-        return !empty($duplication);
-    }
-
-    /**
-     * 優先順位を連番で振り直す
-     *
-     * @return bool
-     */
-    public function rearrangePriorities()
-    {
-        $this->cacheQueries = false;
-        $datas = $this->find('all', [
-            'order' => 'Plugin.priority'
-        ]);
-
-        $count = count($datas);
-        for($i = 0; $i < $count; $i++) {
-            $datas[$i]['Plugin']['priority'] = $i + 1;
-        }
-
-        if (!$this->saveMany($datas)) {
-            return false;
-        }
-        return true;
-    }
-
-    /**
      * 優先順位を変更する
      *
      * @param string|int $id 起点となるプラグインのID
@@ -339,157 +279,6 @@ class PluginsTable extends AppTable
         }
 
         return true;
-    }
-
-    /**
-     * プラグイン情報を取得する
-     *
-     * @param array $datas プラグインのデータ配列
-     * @param string $file プラグインファイルのパス
-     * @return array
-     */
-    public function getPluginInfo($datas, $file)
-    {
-        $plugin = basename($file);
-        $pluginData = [];
-        $exists = false;
-        foreach($datas as $data) {
-            if ($plugin == $data['Plugin']['name']) {
-                $pluginData = $data;
-                $exists = true;
-                break;
-            }
-        }
-
-        // プラグインのバージョンを取得
-        $corePlugins = Configure::read('BcApp.corePlugins');
-        $core = false;
-        if (in_array($plugin, $corePlugins)) {
-            $core = true;
-            $version = getVersion();
-        } else {
-            $version = getVersion($plugin);
-        }
-
-        // 設定ファイル読み込み
-        $title = $description = $author = $url = $adminLink = '';
-
-        // TODO 互換性のため古いパスも対応
-        $oldAppConfigPath = $file . DS . 'Config' . DS . 'config.php';
-        $appConfigPath = $file . DS . 'config.php';
-        if (!file_exists($appConfigPath)) {
-            $appConfigPath = $oldAppConfigPath;
-        }
-
-        if (file_exists($appConfigPath)) {
-            include $appConfigPath;
-        } elseif (file_exists($oldAppConfigPath)) {
-            include $oldAppConfigPath;
-        }
-
-        if (isset($title)) {
-            $pluginData['Plugin']['title'] = $title;
-        }
-        if (isset($description)) {
-            $pluginData['Plugin']['description'] = $description;
-        }
-        if (isset($author)) {
-            $pluginData['Plugin']['author'] = $author;
-        }
-        if (isset($url)) {
-            $pluginData['Plugin']['url'] = $url;
-        }
-
-        $pluginData['Plugin']['update'] = false;
-        $pluginData['Plugin']['old_version'] = false;
-        $pluginData['Plugin']['core'] = $core;
-
-        if ($exists) {
-
-            if (isset($adminLink)) {
-                $pluginData['Plugin']['admin_link'] = $adminLink;
-            }
-            // バージョンにBaserから始まるプラグイン名が入っている場合は古いバージョン
-            if (!$pluginData['Plugin']['version'] && preg_match('/^Baser[a-zA-Z]+\s([0-9\.]+)$/', $version, $matches)) {
-                $pluginData['Plugin']['version'] = $matches[1];
-                $pluginData['Plugin']['old_version'] = true;
-            } elseif (verpoint($pluginData['Plugin']['version']) < verpoint($version) && !in_array($pluginData['Plugin']['name'], Configure::read('BcApp.corePlugins'))) {
-                $pluginData['Plugin']['update'] = true;
-            }
-            $pluginData['Plugin']['registered'] = true;
-        } else {
-            // バージョンにBaserから始まるプラグイン名が入っている場合は古いバージョン
-            if (preg_match('/^Baser[a-zA-Z]+\s([0-9\.]+)$/', $version, $matches)) {
-                $version = $matches[1];
-                $pluginData['Plugin']['old_version'] = true;
-            }
-            $pluginData['Plugin']['id'] = '';
-            $pluginData['Plugin']['name'] = $plugin;
-            $pluginData['Plugin']['created'] = '';
-            $pluginData['Plugin']['version'] = $version;
-            $pluginData['Plugin']['status'] = false;
-            $pluginData['Plugin']['modified'] = '';
-            $pluginData['Plugin']['admin_link'] = '';
-            $pluginData['Plugin']['registered'] = false;
-        }
-        return $pluginData;
-    }
-
-    /**
-     * プラグイン管理のリンクを指定したユーザーのお気に入りに追加
-     *
-     * @param string $pluginName プラグイン名
-     * @param array $user ユーザーデータの配列
-     * @return void
-     */
-    public function addFavoriteAdminLink($pluginName, $user)
-    {
-        $plugin = $this->findByName($pluginName);
-        $dirPath = Plugin::path($pluginName);
-        $pluginInfo = $this->getPluginInfo([$plugin], $dirPath);
-
-        //リンクが設定されていない
-        if (empty($pluginInfo['Plugin']['admin_link'])) {
-            return;
-        }
-
-        if (ClassRegistry::isKeySet('Favorite')) {
-            $this->Favorite = ClassRegistry::getObject('Favorite');
-        } else {
-            $this->Favorite = ClassRegistry::init('Favorite');
-        }
-
-        $adminLinkUrl = Router::url($pluginInfo['Plugin']['admin_link']);
-        if (isset($pluginInfo['Plugin']['admin_link']['action']) &&
-            $pluginInfo['Plugin']['admin_link']['action'] == 'index') {
-            $adminLinkUrl .= '/';
-        }
-        $baseUrl = Configure::read('App.baseUrl');
-        if ($baseUrl) {
-            $adminLinkUrl = preg_replace('/^' . preg_quote($baseUrl, '/') . '/', '', $adminLinkUrl);
-        }
-        $request = Router::getRequest();
-        if ($request) {
-            $base = $request->base;
-            if ($request->base) {
-                $adminLinkUrl = preg_replace('/^' . preg_quote($request->base, '/') . '/', '', $adminLinkUrl);
-            }
-        }
-
-        //すでにお気に入りにリンクが含まれている場合
-        if ($this->Favorite->find('count', ['conditions' => ['Favorite.url' => $adminLinkUrl, 'Favorite.user_id' => $user['id']]]) > 0) {
-            return;
-        }
-
-        $favorite = [
-            'name' => sprintf('%s 管理', $pluginInfo['Plugin']['title']),
-            'url' => $adminLinkUrl,
-            'sort' => $this->Favorite->getMax('sort') + 1,
-            'user_id' => $user['id'],
-        ];
-
-        $this->Favorite->create($favorite);
-        $this->Favorite->save();
     }
 
 }

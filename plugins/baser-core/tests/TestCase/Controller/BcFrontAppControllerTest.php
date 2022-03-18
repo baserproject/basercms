@@ -68,15 +68,15 @@ class BcFrontAppControllerTest extends BcTestCase
 
     /**
      * test beforeRender
+     * TODO 本体側の実装要
      */
-    public function testBeforeRender()
-    {
-        $this->BcFrontAppController->setRequest($this->getRequest('/en/サイトID3の固定ページ'));
-        $this->BcFrontAppController->beforeRender(new Event('beforeRender'));
-        // TODO 本体側の実装要
+//    public function testBeforeRender()
+//    {
+//        $this->BcFrontAppController->setRequest($this->getRequest('/en/サイトID3の固定ページ'));
+//        $this->BcFrontAppController->beforeRender(new Event('beforeRender'));
 //        $this->assertEquals('en', $this->BcFrontAppController->viewBuilder()->getLayoutPath());
 //        $this->assertEquals('en', $this->BcFrontAppController->viewBuilder()->getTemplatePath());
-    }
+//    }
 
     /**
      * test redirectIfIsNotSameSite

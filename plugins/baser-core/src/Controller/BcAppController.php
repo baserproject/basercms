@@ -91,6 +91,7 @@ class BcAppController extends AppController
      *
      * @return void
      * @checked
+     * @note(value="マイルストーン２が終わってから確認する")
      */
     public function beforeFilter(EventInterface $event)
     {
