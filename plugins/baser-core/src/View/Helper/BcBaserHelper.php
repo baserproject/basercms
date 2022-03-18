@@ -1160,28 +1160,25 @@ class BcBaserHelper extends Helper
      * MEMO: BcRequest.(agent).aliasは廃止
      *
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function isHome()
     {
-        if (empty($this->_View->getRequest()->getParam('Site'))) {
+        $request = $this->_View->getRequest();
+        if (empty($request->getParam('Site'))) {
             return false;
-        }
-        // TODO ucmitz 未実装のため代替措置
-        // >>>
-        return false;
-        // <<<
-
-        $site = $this->_View->getRequest()->getAttribute('currentSite');
-        if (!$site->alias || $site->same_main_url || $site->use_subdomain) {
-            return (
-                $this->_View->getRequest()->url == false ||
-                $this->_View->getRequest()->url == 'index'
-            );
         } else {
-            return (
-                $this->_View->getRequest()->url == $site->alias . '/' ||
-                $this->_View->getRequest()->url == $site->alias . '/index'
-            );
+            $site = $request->getParam('Site');
+            $path = $request->getUri()->getPath();
+        }
+        if (empty($site->alias) || $site->same_main_url || $site->use_subdomain) {
+            // メインサイトの場合
+            return $path === "/" || $path === "/index";
+        } else {
+            // サブサイトの場合
+            return $path === "/$site->alias/" || $path === "/$site->alias/index";
         }
     }
 
@@ -2106,10 +2103,14 @@ END_FLASH;
      * 現在のページが固定ページかどうかを判定する
      *
      * @return bool 固定ページの場合は true を返す
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function isPage()
     {
-        return ($this->_View->getRequest()->getParam('controller') == 'pages' && $this->_View->getRequest()->getParam('action') == 'display');
+        $request = $this->_View->getRequest();
+        return ($request->getParam('controller') === 'Pages' && $request->getParam('action') == 'display');
     }
 
     /**
@@ -2600,6 +2601,9 @@ END_FLASH;
      * @param array $options オプション（初期値 : array()）
      *    ※ その他のパラメータについては、View::element() を参照
      * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function contentsNavi($data = [], $options = [])
     {

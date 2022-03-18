@@ -207,11 +207,11 @@ class ContentServiceTest extends BcTestCase
         // softDeleteの場合
         $request = $this->getRequest('/?status=1');
         $contents = $this->ContentService->getIndex($request->getQueryParams());
-        $this->assertEquals(17, $contents->all()->count());
+        $this->assertEquals(19, $contents->all()->count());
         // ゴミ箱を含むの場合
         $request = $this->getRequest('/?status=1&withTrash=true');
         $contents = $this->ContentService->getIndex($request->getQueryParams());
-        $this->assertEquals(20, $contents->all()->count());
+        $this->assertEquals(22, $contents->all()->count());
         // 否定の場合
         $request = $this->getRequest('/?status=1&type!=Page');
         $contents = $this->ContentService->getIndex($request->getQueryParams());
@@ -334,7 +334,7 @@ class ContentServiceTest extends BcTestCase
      */
     public function testDeleteAll(): void
     {
-        $this->assertEquals(18, $this->ContentService->deleteAll());
+        $this->assertEquals(20, $this->ContentService->deleteAll());
         $contents = $this->ContentService->getIndex();
         $this->assertEquals(0, $contents->all()->count());
     }
@@ -777,5 +777,38 @@ class ContentServiceTest extends BcTestCase
     {
         $treeBehavior = $this->ContentService->setTreeConfig('scope', ['country_name' => 'France']);
         $this->assertEquals($treeBehavior->getConfig('scope'), ['country_name' => 'France']);
+    }
+
+    /**
+     * testGetNeighbors
+     *
+     * @param  mixed $options
+     * @return void
+     */
+    public function testGetNeighbors()
+    {
+        $content = $this->ContentService->get(5);
+        $conditions = array_merge($this->ContentService->getConditionAllowPublish(), [
+            'Contents.type <>' => 'ContentFolder',
+            'Contents.site_id' => $content->site_id
+        ]);
+        $options = [
+            'field' => 'lft',
+            'value' => $content->lft,
+            'conditions' => $conditions,
+            'order' => ['Contents.lft'],
+        ];
+        $neighbors = $this->ContentService->getNeighbors($options);
+        $this->assertEquals("サービス１", $neighbors['next']['title']);
+        $this->assertEquals("NEWS(※関連Fixture未完了)", $neighbors['prev']['title']);
+        // 100より前を取得する場合
+        $options = [
+            'field' => 'id',
+            'value' => 100,
+            'conditions' => ['Contents.site_id' => 1]
+        ];
+        $neighbors = $this->ContentService->getNeighbors($options);
+        // フィールドが空かテスト
+        $this->assertEquals($this->ContentService->getIndex(['site_id' => 1])->last(), $neighbors['prev']);
     }
 }

@@ -1065,17 +1065,14 @@ class ContentsTable extends AppTable
      */
     protected function updatePublishDate($content)
     {
-        if (!$this->findById($content->id)->isEmpty()) {
-            $oldContent = $this->findById($content->id)->first();
-            foreach (['publish_begin', 'publish_end'] as $date) {
-                if ($oldContent["self_" . $date] !== $content["self_" . $date]) {
-                    if ($oldContent["self_" . $date] instanceof FrozenTime && $content["self_" . $date] instanceof FrozenTime) {
-                        if ($oldContent["self_" . $date]->__toString() !== $content["self_" . $date]->__toString()) {
-                            $content->$date = $content["self_" . $date];
-                        }
-                    } else {
+        foreach (['publish_begin', 'publish_end'] as $date) {
+            if ($content[$date] !== $content["self_" . $date]) {
+                if ($content[$date] instanceof FrozenTime && $content["self_" . $date] instanceof FrozenTime) {
+                    if ($content[$date]->__toString() !== $content["self_" . $date]->__toString()) {
                         $content->$date = $content["self_" . $date];
                     }
+                } else {
+                    $content->$date = $content["self_" . $date];
                 }
             }
         }
@@ -1498,20 +1495,6 @@ class ContentsTable extends AppTable
                 ['Sites.use_subdomain' => $useSubDomain]
             ]);
         });
-        // $b = [
-        //     // 'Contents.status' => true,
-        //     ['or' => [
-        //         ['Contents.publish_begin <=' => date('Y-m-d H:i:s')],
-        //         // ['Contents.publish_begin IS' => null],
-        //         // ['Contents.publish_begin' => '0000-00-00 00:00:00']
-        //     ]],
-        //     ['or' => [
-        //         // ['Contents.publish_end >=' => date('Y-m-d H:i:s')],
-        //         // ['Contents.publish_end IS' => null],
-        //         // ['Contents.publish_end' => '0000-00-00 00:00:00']
-        //     ]]
-        // ];
-        // $a = $query->where($b)->first()->toArray();
         if ($publish) {
             $query->where($this->getConditionAllowPublish());
         }

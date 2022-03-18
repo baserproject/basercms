@@ -89,6 +89,7 @@ class PagesTable extends Table implements BcSearchIndexManagerInterface
         $this->addBehavior('BaserCore.BcSearchIndexManager');
         $this->addBehavior('Timestamp');
         $this->Sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
+        $this->Contents = TableRegistry::getTableLocator()->get('BaserCore.Contents');
     }
 
     /**
@@ -102,6 +103,8 @@ class PagesTable extends Table implements BcSearchIndexManagerInterface
      */
     public function validationDefault(Validator $validator): Validator
     {
+        $validator->setProvider('page', 'BaserCore\Model\Validation\PageValidation');
+
         $validator
         ->integer('id')
         ->numeric('id', __d('baser', 'IDに不正な値が利用されています。'), 'update')
@@ -112,7 +115,8 @@ class PagesTable extends Table implements BcSearchIndexManagerInterface
         ->allowEmptyString('contents', null)
         ->maxLengthBytes('contents', 64000, __d('baser', '本稿欄に保存できるデータ量を超えています。'))
         ->add('contents', 'custom', [
-            'rule' => [$this, 'phpValidSyntax'],
+            'rule' => ['phpValidSyntax'],
+            'provider' => 'page',
             'message' => __d('baser', '本稿欄でPHPの構文エラーが発生しました。')
         ])
         ->add('contents', [
@@ -128,7 +132,8 @@ class PagesTable extends Table implements BcSearchIndexManagerInterface
         ->allowEmptyString('draft', null)
         ->maxLengthBytes('draft', 64000, __d('baser', '本稿欄に保存できるデータ量を超えています。'))
         ->add('draft', 'custom', [
-            'rule' => [$this, 'phpValidSyntax'],
+            'rule' => ['phpValidSyntax'],
+            'provider' => 'page',
             'message' => __d('baser', '本稿欄でPHPの構文エラーが発生しました。')
         ])
         ->add('draft', [
@@ -226,73 +231,51 @@ class PagesTable extends Table implements BcSearchIndexManagerInterface
     }
 
     /**
-     * コントロールソースを取得する
+     * ページデータをコピーする
      *
-     * @param string $field フィールド名
-     * @param array $options
-     * @return mixed $controlSource コントロールソース
-     */
-    public function getControlSource($field, $options = [])
-    {
-        switch($field) {
-            case 'user_id':
-            case 'author_id':
-                $controlSources[$field] = $this->Content->User->getUserList($options);
-                break;
-        }
-
-        if (isset($controlSources[$field])) {
-            return $controlSources[$field];
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * PHP構文チェック
+     * 固定ページテンプレートの生成処理を実行する必要がある為、
+     * Content::copy() は利用しない
      *
-     * @param string $check チェック対象文字列
-     * @return bool
+     * @param array $postData
+     * @return Page $result
      * @checked
      * @unitTest
      * @noTodo
      */
-    public function phpValidSyntax($check)
+    public function copy($postData)
     {
-        if (empty($check)) {
-            return true;
+        $page = $this->get($postData['entityId'], ['contain' => ['Contents' => ['Sites']]]);
+        $oldPage = $page;
+        $oldSiteId = $page->content->site_id;
+        unset($postData['entityId'], $postData['contentId'], $page->id, $page->content->id, $page->created, $page->modified);
+        foreach ($postData as $key => $value) {
+            $page->content->{Inflector::underscore($key)} = $value;
         }
-        if (!Configure::read('BcApp.validSyntaxWithPage')) {
-            return true;
+        // EVENT Page.beforeCopy
+        $event = $this->dispatchLayerEvent('beforeCopy', [
+            'page' => $page,
+        ]);
+        if ($event !== false) {
+            $page = $event->getResult() === true? $event->getData('page') : $event->getResult();
+            unset($event);
         }
-        if (!function_exists('exec')) {
-            return true;
+        if (!is_null($postData['siteId']) && $postData['siteId'] !== $oldSiteId) {
+            $page->content->parent_id = $this->Contents->copyContentFolderPath($page->content->url, $page->content->site_id);
         }
-        // CL版 php がインストールされてない場合はシンタックスチェックできないので true を返す
-        exec('php --version 2>&1', $output, $exit);
-        if ($exit !== 0) {
-            return true;
+        $newPage = $this->patchEntity($this->newEmptyEntity(), $page->toArray());
+        $page = $this->saveOrFail($newPage);
+        if ($page->content->eyecatch) {
+            $content = $this->Contents->renameToBasenameFields($page->content, true);
+            $page->content = $content;
         }
-
-        if (BcUtil::isWindows()) {
-            $tmpName = tempnam(TMP, "syntax");
-            $tmp = new File($tmpName);
-            $tmp->open("w");
-            $tmp->write($check);
-            $tmp->close();
-            $command = sprintf("php -l %s 2>&1", escapeshellarg($tmpName));
-            exec($command, $output, $exit);
-            $tmp->delete();
-        } else {
-            $format = 'echo %s | php -l 2>&1';
-            $command = sprintf($format, escapeshellarg($check));
-            exec($command, $output, $exit);
+        // EVENT Page.afterCopy
+        $event = $this->dispatchLayerEvent('afterCopy', [
+            'page' => $page,
+            'oldPage' => $oldPage,
+        ]);
+        if ($event !== false) {
+            $page = $event->getResult() === true? $event->getData('page') : $event->getResult();
         }
-
-        if ($exit === 0) {
-            return true;
-        }
-        $message = __d('baser', 'PHPの構文エラーです') . '： ' . PHP_EOL . implode(' ' . PHP_EOL, $output);
-        return $message;
+        return $page;
     }
 }

@@ -13,6 +13,7 @@ namespace BaserCore\Service;
 
 use Exception;
 use Cake\ORM\Query;
+use Cake\ORM\Entity;
 use Cake\Utility\Hash;
 use Cake\Core\Configure;
 use Cake\Routing\Router;
@@ -24,6 +25,7 @@ use Cake\Http\ServerRequest;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Annotation\Note;
 use BaserCore\Annotation\NoTodo;
+use BaserCore\Error\BcException;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Model\Entity\Content;
@@ -1126,5 +1128,40 @@ class ContentService implements ContentServiceInterface
     public function getConditionAllowPublish()
     {
         return $this->Contents->getConditionAllowPublish();
+    }
+
+    /**
+     * 条件に基づいて指定したフィールドの隣のデータを所得する
+     *
+     * @param  array $options
+     * @return array $neighbors
+     * @throws BcException site_idがない場合Exceptionを投げる
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getNeighbors(array $options)
+    {
+        if (empty($options['conditions']) || !array_key_exists('Contents.site_id', $options['conditions'])) {
+            throw new BcException(__d('baser', 'site_idを指定してください。'));
+        };
+        $fieldName = $options['field'];
+        $previous = $this->Contents->find()
+            ->contain('Sites')
+            ->order(['Contents.lft' => 'DESC'])
+            ->where(['Contents.' . $fieldName . ' <' => $options['value']]);
+        $next = $this->Contents->find()
+            ->contain('Sites')
+            ->order(['Contents.lft' => 'ASC'])
+            ->where(['Contents.' . $fieldName . ' >' => $options['value']]);
+        if (isset($options['conditions'])) {
+            $previous = $previous->where($options['conditions']);
+            $next = $next->where($options['conditions']);
+        }
+        if (isset($options['order'])) {
+            $previous = $previous->order($options['order']);
+            $next = $next->order($options['order']);
+        }
+        return ['prev' => $previous->first(), 'next' => $next->first()];
     }
 }

@@ -48,6 +48,7 @@ class BcBaserHelperTest extends BcTestCase
         'plugin.BaserCore.UserGroups',
         'plugin.BaserCore.UsersUserGroups',
         'plugin.BaserCore.Sites',
+        'plugin.BaserCore.Contents',
 
         // TODO: basercms4系より移植
         // 'baser.Default.Page',    // メソッド内で読み込む
@@ -1207,9 +1208,7 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testIsHome($expected, $url)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-
-        $this->BcBaser->request = $this->_getRequest($url);
+        $this->BcBaser->getView()->setRequest($this->getRequest($url));
         $this->assertEquals($expected, $this->BcBaser->isHome());
     }
 
@@ -1220,17 +1219,19 @@ class BcBaserHelperTest extends BcTestCase
             [true, '/'],
             [true, '/index'],
             [false, '/news/index'],
-
+            // 英語ページ
+            [true, '/en/'],
+            [true, '/en/index'],
+            [false, '/en/news/index'],
             // モバイルページ
-            [true, '/m/'],
-            [true, '/m/index'],
-            [false, '/m/news/index'],
-
+            // [true, '/m/'],
+            // [true, '/m/index'],
+            // [false, '/m/news/index'],
             // スマートフォンページ
-            [true, '/s/'],
-            [true, '/s/index'],
-            [false, '/s/news/index'],
-            [false, '/s/news/index']
+            // [true, '/s/'],
+            // [true, '/s/index'],
+            // [false, '/s/news/index'],
+            // [false, '/s/news/index']
         ];
     }
 
@@ -1881,14 +1882,14 @@ class BcBaserHelperTest extends BcTestCase
 
     /**
      * 現在のページが固定ページかどうかを判定する
+     * @param  bool $expected
+     * @param  string $requestUrl
      * @return void
      * @dataProvider getIsPageProvider
      */
     public function testIsPage($expected, $requestUrl)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->BcBaser->request = $this->_getRequest($requestUrl);
-        // TODO プリフィックス付きURLもテストが必要
+        $this->BcBaser->getView()->setRequest($this->getRequest($requestUrl));
         $this->assertEquals($expected, $this->BcBaser->isPage());
     }
 
@@ -2277,9 +2278,8 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testContentsNavi()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->BcBaser->request = $this->_getRequest('/about');
-        $this->expectOutputRegex('/<div class=\"contents-navi\">/');
+        $this->BcBaser->getView()->setRequest($this->getRequest('/about'));
+        $this->expectOutputRegex('/<div class=\"bs-contents-navi\">/');
         $this->BcBaser->contentsNavi();
     }
 
