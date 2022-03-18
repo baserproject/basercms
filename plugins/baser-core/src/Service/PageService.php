@@ -233,7 +233,7 @@ class PageService implements PageServiceInterface
      */
     public function copy($postData)
     {
-        return $this->Contents->copy($postData);
+        return $this->Pages->copy($postData);
     }
 
     /**
