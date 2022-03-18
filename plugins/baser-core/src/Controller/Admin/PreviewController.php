@@ -2,12 +2,13 @@
 
 namespace BaserCore\Controller\Admin;
 
-use BaserCore\Utility\BcContainerTrait;
 use Cake\Core\Configure;
-use Cake\Http\ServerRequest;
-use Cake\Http\ServerRequestFactory;
 use Cake\Routing\Router;
 use Cake\Utility\Inflector;
+use Cake\Http\ServerRequest;
+use Cake\Http\ServerRequestFactory;
+use BaserCore\Utility\BcContainerTrait;
+use Cake\Http\Exception\ForbiddenException;
 
 class PreviewController extends BcAdminAppController
 {
@@ -24,16 +25,26 @@ class PreviewController extends BcAdminAppController
         parent::initialize();
     }
 
-    public function view($url)
+    public function view(...$path)
     {
-        $query = $this->getRequest()->getQueryParams();
-        // $url = $query['url'];
-        $request = $this->createRequest("/" . $url);
-        $serviceName = $request->getParam('plugin') . '\\Service\\' . $request->getParam('controller') . Inflector::camelize($request->getParam('action')) . 'ServiceInterface';
-        $service = $this->getService($serviceName);
-        $this->set($service->getPreviewData($this->getRequest()));
-        $this->viewBuilder()->setTemplate($request->getParam('action'));
-        $this->viewBuilder()->setTemplatePath($request->getParam('controller'));
+        if (!$path) {
+            $this->BcMessage->setError('プレビューが適切ではありません。');
+            return $this->redirect($this->referer());
+        }
+        if (in_array('..', $path, true) || in_array('.', $path, true)) {
+            throw new ForbiddenException();
+        }
+
+        if ($this->getRequest()->getData()) {
+            $request = $this->createRequest("/$path[0]");
+            $serviceName = $request->getParam('plugin') . '\\Service\\' . $request->getParam('controller') . Inflector::camelize($request->getParam('action')) . 'ServiceInterface';
+            $service = $this->getService($serviceName);
+            $this->set($service->getPreviewData($this->getRequest()));
+            $this->viewBuilder()->setTemplate($request->getParam('action'));
+            $this->viewBuilder()->setTemplatePath($request->getParam('controller'));
+        } else {
+            return;
+        }
     }
 
     public function createRequest($url): ServerRequest

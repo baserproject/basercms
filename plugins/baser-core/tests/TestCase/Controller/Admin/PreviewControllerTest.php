@@ -36,7 +36,7 @@ class PreviewControllerTest extends BcTestCase
         'plugin.BaserCore.Sites',
         'plugin.BaserCore.SiteConfigs',
         'plugin.BaserCore.Contents',
-        'plugin.BaserCore.Preview',
+        'plugin.BaserCore.Pages',
         'plugin.BaserCore.ContentFolders',
         'plugin.BaserCore.Plugins',
         'plugin.BaserCore.Users',
@@ -81,5 +81,17 @@ class PreviewControllerTest extends BcTestCase
     public function testBeforeFilter()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * testCreateRequest
+     *
+     * @return void
+     */
+    public function testCreateRequest()
+    {
+        // $url = '/固定ページ';
+        $url = '/about';
+        $result = $this->PreviewController->createRequest($url);
     }
 }
