@@ -27,23 +27,24 @@ class PreviewController extends BcAdminAppController
 
     public function view(...$path)
     {
-        if (!$path) {
-            $this->BcMessage->setError('プレビューが適切ではありません。');
-            return $this->redirect($this->referer());
-        }
         if (in_array('..', $path, true) || in_array('.', $path, true)) {
             throw new ForbiddenException();
         }
-
-        if ($this->getRequest()->getData()) {
+        if ($path && $this->getRequest()->getData()) {
             $request = $this->createRequest("/$path[0]");
             $serviceName = $request->getParam('plugin') . '\\Service\\' . $request->getParam('controller') . Inflector::camelize($request->getParam('action')) . 'ServiceInterface';
             $service = $this->getService($serviceName);
+            $this->setRequest($request);
+            $a = $service->getPreviewData($this->getRequest());
             $this->set($service->getPreviewData($this->getRequest()));
+            $this->set('pageContent', $this->getRequest()->getParam('Page.contents'));
             $this->viewBuilder()->setTemplate($request->getParam('action'));
             $this->viewBuilder()->setTemplatePath($request->getParam('controller'));
+            // $template = !empty($this->getRequest()->getParam('Page.page_template')) ? $this->getRequest()->getParam('Page.page_template') : "default";
+            return $this->render();
         } else {
-            return;
+            $this->BcMessage->setError('プレビューが適切ではありません。');
+            return $this->redirect($this->referer());
         }
     }
 
@@ -70,6 +71,8 @@ class PreviewController extends BcAdminAppController
         }
         $defaultConfig = array_merge($defaultConfig, $config);
         $request = new ServerRequest($defaultConfig);
+        // TODO ucmitz: webrootの解析ロジックを反映させる
+        $request = $request->withAttribute('webroot', '/');
         try {
             Router::setRequest($request);
             $params = Router::parseRequest($request);
