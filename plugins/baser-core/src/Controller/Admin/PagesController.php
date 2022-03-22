@@ -19,7 +19,6 @@ use BaserCore\Service\PageServiceInterface;
 use BaserCore\Service\SiteServiceInterface;
 use BaserCore\Service\ContentServiceInterface;
 use BaserCore\Service\SiteConfigServiceInterface;
-use BaserCore\Controller\Admin\BcAdminAppController;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
