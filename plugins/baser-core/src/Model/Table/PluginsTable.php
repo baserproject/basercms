@@ -13,7 +13,6 @@ namespace BaserCore\Model\Table;
 
 use BaserCore\Event\BcEventDispatcherTrait;
 use BaserCore\Utility\BcUtil;
-use Cake\Core\Plugin;
 use Cake\Core\Configure;
 use BaserCore\Model\AppTable;
 use Cake\Utility\Inflector;
