@@ -54,6 +54,7 @@ class PreviewControllerTest extends BcTestCase
         parent::setUp();
         $this->PreviewController = new PreviewController($this->getRequest());
         $this->PreviewService = new PagesDisplayService();
+        $this->Pages = $this->getTableLocator()->get('BaserCore.Pages');
     }
 
     /**
@@ -73,14 +74,24 @@ class PreviewControllerTest extends BcTestCase
      */
     public function testInitialize()
     {
-        $this->assertNotEmpty($this->PreviewController->BcFrontContents);
+        $this->assertNotEmpty($this->PreviewController->BcFrontContents, $this->Pages);
     }
     /**
      * beforeFilter
      */
-    public function testBeforeFilter()
+    public function testView()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // getリクエストの場合既存のデータを返す
+        $this->loginAdmin($this->getRequest('/baser/admin'));
+        $this->get('/baser/admin/baser-core/preview/view/index?preview=default');
+        $this->assertResponseOk();
+        // postの際はcontents_tmpが反映されているかを確認
+        $page = $this->Pages->find()->contain('Contents')->first();
+        $page->contents_tmp = "<p>test</p>";
+        $this->enableCsrfToken();
+        $this->post('/baser/admin/baser-core/preview/view/index?preview=default', ['Page' => $page->toArray()]);
+        $this->assertResponseOk();
+        $this->assertEquals($page->contents_tmp, $this->viewVariable('page')['contents']);
     }
 
     /**

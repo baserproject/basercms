@@ -37,6 +37,9 @@ class PreviewController extends BcAdminAppController
      *
      * @param  mixed $path
      * @return void
+     * @checked
+     * @unitTest
+     * @noTodo
      */
     public function view(...$path)
     {
