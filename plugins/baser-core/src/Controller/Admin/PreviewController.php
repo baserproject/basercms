@@ -23,25 +23,32 @@ class PreviewController extends BcAdminAppController
     public function initialize(): void
     {
         parent::initialize();
+        $this->loadComponent('BaserCore.BcFrontContents');
     }
 
+    /**
+     * view
+     *
+     * @param  mixed $path
+     * @return void
+     */
     public function view(...$path)
     {
         if (in_array('..', $path, true) || in_array('.', $path, true)) {
             throw new ForbiddenException();
         }
-        if ($path && $this->getRequest()->getData()) {
-            $request = $this->createRequest("/$path[0]");
-            $serviceName = $request->getParam('plugin') . '\\Service\\' . $request->getParam('controller') . Inflector::camelize($request->getParam('action')) . 'ServiceInterface';
-            $service = $this->getService($serviceName);
+
+        $request = $this->createRequest("/$path[0]");
+        $serviceName = $request->getParam('plugin') . '\\Service\\' . $request->getParam('controller') . Inflector::camelize($request->getParam('action')) . 'ServiceInterface';
+        $service = $this->getService($serviceName);
+        $previewData = $service->getPreviewData($this->getRequest());
+        if ($previewData) {
             $this->setRequest($request);
-            $a = $service->getPreviewData($this->getRequest());
-            $this->set($service->getPreviewData($this->getRequest()));
-            $this->set('pageContent', $this->getRequest()->getParam('Page.contents'));
+            $this->set(strtolower(Inflector::singularize($request->getParam('controller'))), $previewData);
+            $this->viewBuilder()->setLayout('default');
             $this->viewBuilder()->setTemplate($request->getParam('action'));
             $this->viewBuilder()->setTemplatePath($request->getParam('controller'));
-            // $template = !empty($this->getRequest()->getParam('Page.page_template')) ? $this->getRequest()->getParam('Page.page_template') : "default";
-            return $this->render();
+            return $this->render('/' . $request->getParam('controller') .'/default');
         } else {
             $this->BcMessage->setError('プレビューが適切ではありません。');
             return $this->redirect($this->referer());
