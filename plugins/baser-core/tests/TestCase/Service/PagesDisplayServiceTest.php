@@ -61,14 +61,44 @@ class PagesDisplayServiceTest extends BcTestCase
     }
 
     /**
-     * Test getPreviewData
+     * ポストデータが存在する場合のgetPreviewData
+     *
+     * @return void
+     * @dataProvider getPreviewDataDataProvider
+     */
+    public function testGetPreviewData($previewType, $tmp, $isError)
+    {
+        $request = $this->getRequest('/baser/admin/baser-core/preview/view/test?preview=' . $previewType);
+        $page = $this->PagesDisplayService->Pages->find()->contain('Contents')->first();
+        $page->{$previewType === 'default' ? 'contents_tmp' : $previewType } = $tmp;
+        $request = $request->withData('Page', $page->toArray());
+        if ($isError) {
+            $this->expectException("Cake\Http\Exception\NotFoundException");
+            $this->expectExceptionMessage("本稿欄でスクリプトの入力は許可されていません。");
+        }
+        $pagesDisplay = $this->PagesDisplayService->getPreviewData($request);
+        $this->assertEquals($pagesDisplay['contents'], $tmp);
+    }
+
+    public function getPreviewDataDataProvider()
+    {
+        return [
+            ['default', '<p>test</p>', false],
+            ['draft', '<p>test</p>', false],
+            ['draft', '<script type="text/javascript">', true],
+        ];
+    }
+
+    /**
+     * ポストデータが存在しない場合のGetPreviewData
      *
      * @return void
      */
-    public function testGetPreviewData()
+    public function testGetPreviewDataWithoutData()
     {
-        $request = $this->getRequest('/baser/admin');
+        $request = $this->getRequest('/baser/admin/baser-core/preview/view/test?preview=default');
+        $this->expectException("Cake\Http\Exception\NotFoundException");
+        $this->expectExceptionMessage("プレビューが適切ではありません。");
         $pagesDisplay = $this->PagesDisplayService->getPreviewData($request);
-        $this->assertEquals([], $pagesDisplay);
     }
 }

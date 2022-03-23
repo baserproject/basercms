@@ -41,16 +41,17 @@ class PreviewController extends BcAdminAppController
         $request = $this->createRequest("/$path[0]");
         $serviceName = $request->getParam('plugin') . '\\Service\\' . $request->getParam('controller') . Inflector::camelize($request->getParam('action')) . 'ServiceInterface';
         $service = $this->getService($serviceName);
-        $previewData = $service->getPreviewData($this->getRequest());
-        if ($previewData) {
+
+        try {
+            $previewData = $service->getPreviewData($this->getRequest());
             $this->setRequest($request);
             $this->set(strtolower(Inflector::singularize($request->getParam('controller'))), $previewData);
             $this->viewBuilder()->setLayout('default');
             $this->viewBuilder()->setTemplate($request->getParam('action'));
             $this->viewBuilder()->setTemplatePath($request->getParam('controller'));
             return $this->render('/' . $request->getParam('controller') .'/default');
-        } else {
-            $this->BcMessage->setError('プレビューが適切ではありません。');
+        } catch (\Cake\Http\Exception\NotFoundException $e) {
+            $this->BcMessage->setError(__d('baser', $e->getMessage()));
             return $this->redirect($this->referer());
         }
     }
