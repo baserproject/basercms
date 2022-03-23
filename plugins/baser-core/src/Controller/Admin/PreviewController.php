@@ -9,6 +9,9 @@ use Cake\Http\ServerRequest;
 use Cake\Http\ServerRequestFactory;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Http\Exception\ForbiddenException;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
 
 class PreviewController extends BcAdminAppController
 {
@@ -19,6 +22,9 @@ class PreviewController extends BcAdminAppController
      * initialize
      *
      * @return void
+     * @checked
+     * @unitTest
+     * @noTodo
      */
     public function initialize(): void
     {
@@ -38,10 +44,9 @@ class PreviewController extends BcAdminAppController
             throw new ForbiddenException();
         }
 
-        $request = $this->createRequest("/$path[0]");
+        $request = $this->createRequest("/" . rawurlencode(rawurldecode($path[0])));
         $serviceName = $request->getParam('plugin') . '\\Service\\' . $request->getParam('controller') . Inflector::camelize($request->getParam('action')) . 'ServiceInterface';
         $service = $this->getService($serviceName);
-
         try {
             $previewData = $service->getPreviewData($this->getRequest());
             $this->setRequest($request);
@@ -56,7 +61,16 @@ class PreviewController extends BcAdminAppController
         }
     }
 
-    public function createRequest($url): ServerRequest
+    /**
+     * createRequest
+     *
+     * @param  string $url
+     * @return ServerRequest
+     * @checked
+     * @unitTest
+     * @noTodo
+     */
+    protected function createRequest($url): ServerRequest
     {
         $config = [];
         $method = 'GET';

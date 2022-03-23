@@ -73,7 +73,7 @@ class PreviewControllerTest extends BcTestCase
      */
     public function testInitialize()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->assertNotEmpty($this->PreviewController->BcFrontContents);
     }
     /**
      * beforeFilter
@@ -87,11 +87,27 @@ class PreviewControllerTest extends BcTestCase
      * testCreateRequest
      *
      * @return void
+     * @dataProvider createRequestDataProvider
      */
-    public function testCreateRequest()
+    public function testCreateRequest($url, $expected)
     {
-        // $url = '/固定ページ';
-        $url = '/about';
-        $result = $this->PreviewController->createRequest($url);
+        $result = $this->execPrivateMethod($this->PreviewController, 'createRequest', [$url]);
+        $this->assertEquals($result->getParam('controller'), $expected['controller']);
+        $this->assertEquals($result->getParam('action'), $expected['action']);
+        $this->assertEquals($result->getParam('Content.id'), $expected['id']);
+    }
+
+    public function createRequestDataProvider()
+    {
+        return [
+            [
+                '/about',
+                ['controller' => "Pages", 'action' => 'display', 'id' => 5]
+            ],
+            [
+                '/en/サイトID3の固定ページ',
+                ['controller' => "Pages", 'action' => 'display', 'id' => 25]
+            ],
+        ];
     }
 }
