@@ -94,6 +94,7 @@ class BcTestCase extends TestCase
         $this->BaserCore = $this->Application->getPlugins()->get('BaserCore');
         $container = BcContainer::get();
         $container->addServiceProvider(new BcServiceProvider());
+        EventManager::instance(new EventManager());
     }
 
     /**

@@ -32,13 +32,6 @@ use Cake\Event\EventManager;
 use Cake\Validation\Validator;
 
 /**
- * bootstrap 読み込み確認
- * 一つのプロセスにて一回しか読み込まれないようにする
- * ユニットテストでコントローラーのテストを行う際、２回読み込まれてしまうため
- */
-if(defined('BOOTSTRAP_LOADED')) return;
-
-/**
  * キャッシュ設定
  * ユニットテスト時に重複して設定するとエラーとなるため判定を入れている
  */
@@ -108,4 +101,3 @@ if(BcUtil::isConsole()) {
     Configure::write('App.fullBaseUrl', 'https://localhost');
 }
 
-define('BOOTSTRAP_LOADED', true);

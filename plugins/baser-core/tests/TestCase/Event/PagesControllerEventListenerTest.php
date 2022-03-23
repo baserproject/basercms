@@ -11,6 +11,7 @@
 
 namespace BaserCore\Test\TestCase\Event;
 
+use BaserCore\Event\PagesControllerEventListener;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\Event\EventManager;
 
@@ -62,7 +63,8 @@ class PagesControllerEventListenerTest extends BcTestCase
     public function test__construct()
     {
         $event = EventManager::instance();
-        $listeners = $event->listeners('Controller.Contents.afterMove');
+        $event->on(new PagesControllerEventListener());
+        $listeners = $event->listeners('Controller.BaserCore.Contents.afterMove');
         $listener = $listeners[0]['callable'][0];
         $this->assertEquals('BaserCore\Model\Table\PagesTable', get_class($listener->Pages));
     }
