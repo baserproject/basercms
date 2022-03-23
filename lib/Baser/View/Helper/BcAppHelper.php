@@ -76,6 +76,12 @@ class BcAppHelper extends Helper
 		// >>>
 		//$webPath = "{$this->request->webroot}" . $asset[0];
 		// ---
+		// CUSTOMIZE MODIFY 2022/03/23 kato
+		// $this->Blog->getPostImg($post)など「/サブフォルダ名」で始まるパスは正しく置換できず、$webPathの先頭の「/」がなくなるため、事前に置換
+		if ($this->request->webroot && $this->request->webroot != '/' && strpos($asset[0], '/') === 0) {
+			$asset[0] = str_replace($this->request->webroot, '', $asset[0]);
+		}
+		// >>>
 		$asset[0] = preg_replace('/^\//', '', $asset[0]);
 		if ($this->request->webroot && $this->request->webroot != '/') {
 			$filePath = preg_replace('/' . preg_quote($this->request->webroot, '/') . '/', '', $asset[0]);
