@@ -36,12 +36,10 @@ class ContentsTableTest extends BcTestCase
         'plugin.BaserCore.UsersUserGroups',
         'plugin.BaserCore.Sites',
         'plugin.BaserCore.Contents',
-        // 'baser.Model.Content.ContentIsMovable',
-        'plugin.BaserCore.Model/Table/Content/ContentStatusCheck',
-        // 'baser.Routing.Route.BcContentsRoute.SiteBcContentsRoute',
-        // 'baser.Routing.Route.BcContentsRoute.ContentBcContentsRoute',
-        // 'baser.Default.SiteConfig',
-        // 'baser.Default.User',
+        'plugin.BaserCore.ContentFolders',
+        'plugin.BaserCore.Pages',
+        'plugin.BaserCore.SearchIndexes',
+        'plugin.BaserCore.SiteConfigs',
     ];
 
     /**
@@ -455,10 +453,44 @@ class ContentsTableTest extends BcTestCase
      */
     public function testCopyContentFolderPath()
     {
+        // 他サイトにフォルダが存在する場合
+        $this->loadFixtures('ContentFolders', 'Pages', 'SearchIndexes', 'SiteConfigs');
         $parent_id = $this->Contents->copyContentFolderPath('/service/service1', 1);
         $this->assertEquals(6, $parent_id);
+        // 他サイトのフォルダが不要な場合
         $parent_id = $this->Contents->copyContentFolderPath('/about', 1);
         $this->assertEquals(1, $parent_id);
+        // 他サイトにフォルダが存在しない場合
+        $contentFoldersTable = $this->getTableLocator()->get('BaserCore.ContentFolders');
+        $contentFolder = $contentFoldersTable->patchEntity($contentFoldersTable->newEmptyEntity(), [
+            'content' => [
+                'name' => 'test',
+                'title' => 'test',
+                'parent_id' => 6,
+                'plugin' => 'BaserCore',
+                'type' => 'ContentFolder',
+                'site_id' => 1,
+                'self_status' => true,
+                'created_date' => FrozenTime::now()
+            ]
+        ]);
+        $result = $contentFoldersTable->save($contentFolder);
+        $pagesTable = $this->getTableLocator()->get('BaserCore.Pages');
+        $page = $pagesTable->patchEntity($pagesTable->newEmptyEntity(), [
+            'content' => [
+                'name' => 'test1',
+                'title' => 'test1',
+                'parent_id' => $result->content->id,
+                'plugin' => 'BaserCore',
+                'type' => 'Page',
+                'site_id' => 1,
+                'self_status' => true,
+                'created_date' => FrozenTime::now()
+            ]
+        ]);
+        $pagesTable->save($page);
+        $parent_id = $this->Contents->copyContentFolderPath('/service/test/test1', 1);
+        $this->assertEquals(28, $parent_id);
     }
 
     /**

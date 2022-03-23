@@ -18,18 +18,25 @@ use BaserCore\Annotation\Note;
  * bootstrap
  *
  * @checked
- * @note(value="固定ページを実装するまではTODO消化できない")
  */
 
 use BaserCore\Event\BcContainerEventListener;
 use BaserCore\Event\BcControllerEventDispatcher;
 use BaserCore\Event\BcModelEventDispatcher;
 use BaserCore\Event\BcViewEventDispatcher;
+use BaserCore\Event\PagesControllerEventListener;
 use BaserCore\Utility\BcUtil;
 use Cake\Cache\Cache;
 use Cake\Core\Configure;
 use Cake\Event\EventManager;
 use Cake\Validation\Validator;
+
+/**
+ * bootstrap 読み込み確認
+ * 一つのプロセスにて一回しか読み込まれないようにする
+ * ユニットテストでコントローラーのテストを行う際、２回読み込まれてしまうため
+ */
+if(defined('BOOTSTRAP_LOADED')) return;
 
 /**
  * キャッシュ設定
@@ -55,10 +62,10 @@ $event->on(new BcControllerEventDispatcher());
 $event->on(new BcModelEventDispatcher());
 $event->on(new BcViewEventDispatcher());
 $event->on(new BcContainerEventListener());
+$event->on(new PagesControllerEventListener());
 
 // TODO 未実装
 // >>>
-//$event->on(new PagesControllerEventListener());
 //$event->on(new ContentFoldersControllerEventListener());
 // <<<
 
@@ -100,3 +107,5 @@ $_ENV['IS_CONSOLE'] = (substr(php_sapi_name(), 0, 3) === 'cli');
 if(BcUtil::isConsole()) {
     Configure::write('App.fullBaseUrl', 'https://localhost');
 }
+
+define('BOOTSTRAP_LOADED', true);

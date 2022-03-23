@@ -34,7 +34,7 @@ class SearchIndexesFixture extends TestFixture
             'id' => 1,
             'type' => 'ページ',
             'model' => 'Page',
-            'model_id' => 2,
+            'model_id' => 16,
             'site_id' => null,
             'content_id' => null,
             'content_filter_id' => null,

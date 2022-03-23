@@ -43,6 +43,13 @@ class AppTable extends Table
     public $useDbConfig = 'default';
 
     /**
+     * 一時イベント
+     * イベントを一時にオフにする場合に対象のコールバック処理を一時的に格納する
+     * @var array
+     */
+    public $tmpEvents = [];
+
+    /**
      * 公開状態のフィールド
      * AppTable::getConditionAllowPublish() で利用
      * @var string
@@ -1354,6 +1361,35 @@ class AppTable extends Table
             [$this->alias . '.' . $this->publishEndField => null],
             [$this->alias . '.' . $this->publishEndField => '0000-00-00 00:00:00']]];
         return $conditions;
+    }
+
+    /**
+     * イベントを一時的にオフにする
+     * @param string $eventKey
+     */
+    public function offEvent($eventKey) {
+        $eventManager = $this->getEventManager();
+        $this->tmpEvents[$eventKey] = $eventManager->listeners($eventKey);
+        $eventManager->off($eventKey);
+    }
+
+    /**
+     * 一時的にオフにしたイベントをオンにする
+     * BcModelEventDispatcherは対象外とする
+     * @param string $eventKey
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function onEvent($eventKey) {
+        if(!isset($this->tmpEvents[$eventKey])) return;
+        $eventManager = $this->getEventManager();
+        foreach($this->tmpEvents[$eventKey] as $listener) {
+            if(get_class($listener['callable'][0]) !== 'BaserCore\Event\BcModelEventDispatcher' ) {
+                $eventManager->on('Model.beforeSave', [], $listener['callable']);
+            }
+        }
+        unset($this->tmpEvents[$eventKey]);
     }
 
 }

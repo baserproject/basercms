@@ -471,10 +471,10 @@ class ContentsController extends BcApiController
     {
             // EVENT Contents.beforeMove
             $beforeEvent = $this->dispatchLayerEvent('beforeMove', [
-                'request' => $this->request
+                'data' => $this->getRequest()->getData()
             ]);
             if ($beforeEvent !== false) {
-                $this->request = ($beforeEvent->getResult() === null || $beforeEvent->getResult() === true)? $beforeEvent->getData('request') : $beforeEvent->getResult();
+                $this->getRequest()->withParsedBody(($beforeEvent->getResult() === null || $beforeEvent->getResult() === true)? $beforeEvent->getData('data') : $beforeEvent->getResult());
             }
             $content = $contentService->get($this->request->getData('origin.id'));
             $beforeUrl = $content->url;
@@ -485,12 +485,9 @@ class ContentsController extends BcApiController
                     $siteConfig->updateContentsSortLastModified();
                 }
                 // EVENT Contents.afterMove
-                $afterEvent = $this->dispatchLayerEvent('afterMove', [
-                    'result' => $result
+                $this->dispatchLayerEvent('afterMove', [
+                    'data' => $result
                 ]);
-                if ($afterEvent !== false) {
-                    $this->request = ($afterEvent->getResult() === null || $afterEvent->getResult() === true)? $afterEvent->getData('result') : $afterEvent->getResult();
-                }
                 $message = sprintf(__d('baser', "コンテンツ「%s」の配置を移動しました。\n%s > %s"), $result->title, rawurldecode($beforeUrl), rawurldecode($result->url));
                 $url = $contentService->getUrlById($result->id, true);
                 $this->set(['url' => $url]);

@@ -1,26 +1,26 @@
 <?php
-// TODO : コード確認要
-use Cake\Event\Event;
-
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.Event
- * @since           baserCMS v 4.0.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) NPO baser foundation
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
 
-App::uses('BcEventListener', 'Event');
+namespace BaserCore\Event;
+
+use BaserCore\Model\Entity\Content;
+use BaserCore\Model\Table\PagesTable;
+use Cake\Event\Event;
+use Cake\ORM\TableRegistry;
+use Exception;
 
 /**
  * Class PagesControllerEventListener
  *
- * @package Baser.Event
- * @property Page $Page
+ * @property PagesTable $Pages
  */
 class PagesControllerEventListener extends BcControllerEventListener
 {
@@ -31,27 +31,18 @@ class PagesControllerEventListener extends BcControllerEventListener
      * @var array
      */
     public $events = [
-        'Contents.beforeMove',
-        'Contents.afterMove',
-        'Contents.beforeDelete',
-        'Contents.afterTrashReturn',
-        'Contents.afterChangeStatus'
+        'BaserCore.Contents.afterMove',
+        'BaserCore.Contents.beforeDelete',
+        'BaserCore.Contents.afterTrashReturn',
+        'BaserCore.Contents.afterChangeStatus'
     ];
-
-    /**
-     * 古いテンプレートのパス
-     *
-     * コンテンツのフォルダ間移動の際に利用
-     * @var null
-     */
-    public $oldPath = null;
 
     /**
      * ページモデル
      *
      * @var bool|null|object
      */
-    public $Page = null;
+    public $Pages = null;
 
     /**
      * PagesControllerEventListener constructor.
@@ -61,98 +52,75 @@ class PagesControllerEventListener extends BcControllerEventListener
         parent::__construct();
         // DB接続ができない場合、処理がコントローラーまで行き着かない為、try で実行
         try {
-            $this->Page = ClassRegistry::init('Page');
+            $this->Pages = TableRegistry::getTableLocator()->get('BaserCore.Pages');
         } catch (Exception $e) {
         }
     }
 
     /**
-     * Contents Before Move
-     *
-     * oldPath を取得する事が目的
-     *
-     * @param Event $event
-     * @return bool|void
-     */
-    public function contentsBeforeMove(Event $event)
-    {
-        if ($event->getData('data.currentType') != 'Page') {
-            return true;
-        }
-        $Controller = $event->getSubject();
-        $entityId = $Controller->Content->field('entity_id', [
-            'Content.id' => $event->getData('data.currentId')
-        ]);
-        $this->oldPath = $this->Page->getPageFilePath(
-            $this->Page->find('first', [
-                    'conditions' => ['Page.id' => $entityId],
-                    'recursive' => 0]
-            )
-        );
-        return true;
-    }
-
-    /**
      * Contents After Move
      *
-     * テンプレートの移動が目的
+     * 検索インデックスの生成が目的
      *
      * @param Event $event
+     * @uses baserCoreContentsAfterMove()
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function contentsAfterMove(Event $event)
+    public function baserCoreContentsAfterMove(Event $event)
     {
-        if ($event->getData('data.Content.type') != 'Page') {
+        $content = $event->getData('data');
+        if ($content->type !== 'Page') {
             return;
         }
-        if (empty($event->getData('data.Content.entity_id'))) {
-            $Controller = $event->getSubject();
-            $entityId = $Controller->Content->field('entity_id', [
-                'Content.id' => $event->getData('data.Content.id')
-            ]);
+        if (empty($content->entity_id)) {
+            $contentsTable = TableRegistry::getTableLocator()->get('BaserCore.Contents');
+            /* @var Content $contentTmp */
+            $contentTmp = $contentsTable->find()->where(['id' => $content->id])->first();
+            $entityId = $contentTmp->entity_id;
         } else {
-            $entityId = $event->getData('data.Content.entity_id');
+            $entityId = $content->entity_id;
         }
-        $data = $this->Page->find('first', [
-            'conditions' => ['Page.id' => $entityId],
-            'recursive' => 0
-        ]);
-        $this->Page->oldPath = $this->oldPath;
-        $this->Page->createPageTemplate($data);
-        $this->Page->saveSearchIndex($this->Page->createSearchIndex($data));
+        $page = $this->Pages->find()
+            ->where(['Pages.id' => $entityId])
+            ->contain('Contents')
+            ->first();
+        $this->Pages->saveSearchIndex($this->Pages->createSearchIndex($page));
     }
 
     /**
      * Contents Before Delete
      *
-     * ゴミ箱に入れた固定ページのテンプレートの削除が目的
+     * ゴミ箱に入れた固定ページの検索インデックスの削除が目的
      *
      * @param Event $event
      */
-    public function contentsBeforeDelete(Event $event)
+    public function baserCoreContentsBeforeDelete(Event $event)
     {
-        $id = $event->getData('data');
-        $data = $this->Page->find('first', ['conditions' => ['Content.id' => $id]]);
-        if ($data) {
-            $this->Page->delFile($data);
-            $this->Page->deleteSearchIndex($data['Page']['id']);
-        }
+        // TODO ucmitz 未対応で一旦コメントアウト
+//        $id = $event->getData('data');
+//        $data = $this->Pages->find('first', ['conditions' => ['Content.id' => $id]]);
+//        if ($data) {
+//            $this->Pages->deleteSearchIndex($data['Page']['id']);
+//        }
     }
 
     /**
      * Contents After Trash Return
      *
-     * ゴミ箱から戻した固定ページのテンプレート生成が目的
+     * ゴミ箱から戻した固定ページの検索インデックス生成が目的
      *
      * @param Event $event
      */
-    public function contentsAfterTrashReturn(Event $event)
+    public function baserCoreContentsAfterTrashReturn(Event $event)
     {
-        $id = $event->getData();
-        $data = $this->Page->find('first', ['conditions' => ['Content.id' => $id]]);
-        if ($data) {
-            $this->Page->createPageTemplate($data);
-            $this->Page->saveSearchIndex($this->Page->createSearchIndex($data));
-        }
+        // TODO ucmitz 未対応で一旦コメントアウト
+//        $id = $event->getData();
+//        $data = $this->Pages->find('first', ['conditions' => ['Content.id' => $id]]);
+//        if ($data) {
+//            $this->Pages->saveSearchIndex($this->Pages->createSearchIndex($data));
+//        }
     }
 
     /**
@@ -162,14 +130,15 @@ class PagesControllerEventListener extends BcControllerEventListener
      *
      * @param Event $event
      */
-    public function contentsAfterChangeStatus(Event $event)
+    public function baserCoreContentsAfterChangeStatus(Event $event)
     {
-        if (empty($event->getData('result'))) {
-            return;
-        }
-        $id = $event->getData('id');
-        $data = $this->Page->find('first', ['conditions' => ['Content.id' => $id]]);
-        $this->Page->saveSearchIndex($this->Page->createSearchIndex($data));
+        // TODO ucmitz 未対応で一旦コメントアウト
+//        if (empty($event->getData('result'))) {
+//            return;
+//        }
+//        $id = $event->getData('id');
+//        $data = $this->Pages->find('first', ['conditions' => ['Content.id' => $id]]);
+//        $this->Pages->saveSearchIndex($this->Pages->createSearchIndex($data));
     }
 
 }

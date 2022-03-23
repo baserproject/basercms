@@ -745,15 +745,9 @@ class ContentsTable extends AppTable
                     if ($content->type == 'ContentFolder') {
                         $url = preg_replace('/\/[^\/]+\/$/', '/', $url);
                     }
-                    if ($this->copyContentFolderPath($url, $site->id) !== $content->id) {
-                        $content->parent_id = $this->copyContentFolderPath($url, $site->id);
-                    }
+                    $content->parent_id = $this->copyContentFolderPath($url, $site->id);
                 } else {
                     $content->name = rawurldecode($data->name);
-                }
-                $this->getEventManager()->off('Model.afterSave');
-                if (!$this->save($content)) {
-                    $result = false;
                 }
             } else {
                 // 存在しない場合はエイリアスを作成
@@ -779,15 +773,14 @@ class ContentsTable extends AppTable
                 } else {
                     $content->alias_id = $data->id;
                 }
-                if ($this->copyContentFolderPath($url, $site->id) !== $content->id) {
-                    $content->parent_id = $this->copyContentFolderPath($url, $site->id);
-                }
+                $content->parent_id = $this->copyContentFolderPath($url, $site->id);
                 $content = $this->newEntity($content->toArray(), ['validate' => false]);
-                $this->getEventManager()->off('Model.afterSave');
-                if (!$this->save($content)) {
-                    $result = false;
-                }
             }
+            $this->offEvent('Model.afterSave');
+            if (!$this->save($content)) {
+                $result = false;
+            }
+            $this->onEvent('Model.afterSave');
         }
         return $result;
     }
@@ -801,7 +794,7 @@ class ContentsTable extends AppTable
      * @return bool|null
      * @checked
      * @unitTest
-     * @note(value="荒川さんに確認")
+     * @noTodo
      */
     public function copyContentFolderPath($currentUrl, $targetSiteId)
     {
@@ -823,8 +816,8 @@ class ContentsTable extends AppTable
         }
         unset($path[0]);
         $parentId = $this->Sites->getRootContentId($targetSiteId);
-        /* @var ContentFolder $ContentFolder */
-        $ContentFolder = TableRegistry::getTableLocator()->get('BaserCore.ContentFolders');
+        /* @var ContentFoldersTable $contentFoldersTable */
+        $contentFoldersTable = TableRegistry::getTableLocator()->get('BaserCore.ContentFolders');
         foreach($path as $currentContentFolder) {
             if ($currentContentFolder->type != 'ContentFolder') {
                 break;
@@ -841,7 +834,7 @@ class ContentsTable extends AppTable
             if ($targetContentFolder) {
                 $parentId = $targetContentFolder->id;
             } else {
-                $data = [
+                $contentFolder = $contentFoldersTable->patchEntity($contentFoldersTable->newEmptyEntity(), [
                     'content' => [
                         'name' => $currentContentFolder->name,
                         'title' => $currentContentFolder->title,
@@ -849,13 +842,13 @@ class ContentsTable extends AppTable
                         'plugin' => 'BaserCore',
                         'type' => 'ContentFolder',
                         'site_id' => $targetSiteId,
-                        'self_status' => true
+                        'self_status' => true,
+                        'created_date' => FrozenTime::now()
                     ]
-                ];
-                $ContentFolder->create($data);
-                // TODO ucmitz: saveがおかしいので修正する
-                if ($ContentFolder->save()) {
-                    $parentId = $ContentFolder->Content->id;
+                ]);
+                $result = $contentFoldersTable->save($contentFolder);
+                if ($result) {
+                    $parentId = $result->content->id;
                 } else {
                     return false;
                 }
@@ -998,7 +991,7 @@ class ContentsTable extends AppTable
      * URL / 公開状態 / メインサイトの関連コンテンツID
      *
      * @param Content $content
-     * @return Content
+     * @return EntityInterface|false
      * @checked
      * @unitTest
      * @noTodo
@@ -1048,10 +1041,13 @@ class ContentsTable extends AppTable
                 $content->main_site_content_id = null;
             }
         }
-        $event = $this->getEventManager()->matchingListeners('afterSave');
-        if ($event) $this->getEventManager()->off('Model.afterSave');
-        $this->getEventManager()->off('Model.beforeSave');
-        return $this->save($content, ['validate' => false]);
+
+        $this->offEvent('Model.beforeSave');
+        $this->offEvent('Model.afterSave');
+        $result = $this->save($content, ['validate' => false]);
+        $this->onEvent('Model.beforeSave');
+        $this->onEvent('Model.afterSave');
+        return $result;
     }
 
     /**
