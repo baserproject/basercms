@@ -1,5 +1,13 @@
 <?php
-
+/**
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
+ *
+ * @copyright     Copyright (c) NPO baser foundation
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
+ */
 namespace BaserCore\Controller\Admin;
 
 use Cake\Core\Configure;
@@ -71,7 +79,7 @@ class PreviewController extends BcAdminAppController
      * @return ServerRequest
      * @checked
      * @unitTest
-     * @noTodo
+     * @note(value="webrootの解析ロジックを反映させる")
      */
     protected function createRequest($url): ServerRequest
     {

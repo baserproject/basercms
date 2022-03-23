@@ -64,6 +64,7 @@ class PreviewControllerTest extends BcTestCase
      */
     public function tearDown(): void
     {
+        unset($this->PreviewController, $this->PreviewService, $this->Pages);
         parent::tearDown();
     }
 
@@ -74,10 +75,10 @@ class PreviewControllerTest extends BcTestCase
      */
     public function testInitialize()
     {
-        $this->assertNotEmpty($this->PreviewController->BcFrontContents, $this->Pages);
+        $this->assertNotEmpty($this->PreviewController->BcFrontContents);
     }
     /**
-     * beforeFilter
+     * testView
      */
     public function testView()
     {
