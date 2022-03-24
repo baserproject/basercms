@@ -64,7 +64,6 @@ class PagesDisplayService implements PagesDisplayServiceInterface
             switch($request->getQuery('preview')) {
                 case 'default':
                 case 'draft':
-                    $a = $request->getQuery('url');
                     $parseUrl = BcUtil::parseEncodedUrl($request->getQuery('url'));
                     $content = $this->Contents->findByUrl($parseUrl['customPath'], true, false, false, !empty($parseUrl['subDomain']));
                     $previewData = $content ? $this->Pages->get($content->entity_id, ['contain' => ['Contents' => ['Sites']]])->ToArray() : [];
