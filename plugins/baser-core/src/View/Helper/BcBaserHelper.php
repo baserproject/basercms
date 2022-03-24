@@ -2795,6 +2795,9 @@ END_FLASH;
      * 現在のコンテンツ情報を取得する
      *
      * @return mixed|null
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getCurrentContent()
     {
@@ -2821,6 +2824,9 @@ END_FLASH;
     /**
      * コンテンツ作成日を取得
      * @return null|string
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getContentCreatedDate($format = 'Y/m/d H:i')
     {
@@ -2837,6 +2843,9 @@ END_FLASH;
      *
      * @param string $format
      * @return null|string
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getContentModifiedDate($format = 'Y/m/d H:i')
     {
@@ -2858,6 +2867,9 @@ END_FLASH;
 
     /**
      * 更新情報を取得する
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getUpdateInfo()
     {

@@ -19,3 +19,5 @@ $this->BcBaser->setDescription($page['content']['description']);
 $this->BcBaser->setPageEditLink($page['id']);
 
 echo $page['contents'];
+
+$this->BcBaser->updateInfo();
