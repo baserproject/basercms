@@ -3,13 +3,15 @@
 namespace BaserCore\Service;
 
 use Cake\ORM\TableRegistry;
+use Cake\Utility\Inflector;
 use Cake\Http\ServerRequest;
-use Cake\Http\Exception\NotFoundException;
-use BaserCore\Model\Validation\BcValidation;
+use BaserCore\Utility\BcUtil;
+use BaserCore\Annotation\Note;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
-use BaserCore\Annotation\Note;
+use Cake\Http\Exception\NotFoundException;
+use BaserCore\Model\Validation\BcValidation;
 
 class PagesDisplayService implements PagesDisplayServiceInterface
 {
@@ -59,8 +61,8 @@ class PagesDisplayService implements PagesDisplayServiceInterface
             switch($request->getQuery('preview')) {
                 case 'default':
                 case 'draft':
-                    // TODO ucmitz: site_idが1以外の場合もテストする
-                    $content = $this->Contents->findByUrl("/" . $request->getParam('pass.0'));
+                    $path = str_replace(BcUtil::getPrefix() . "/" . Inflector::dasherize($request->getParam('plugin')) . "/preview/view", "", $request->getPath());
+                    $content = $this->Contents->findByUrl($path);
                     $previewData = $content ? $this->Pages->get($content->entity_id, ['contain' => ['Contents' => ['Sites']]])->ToArray() : [];
                     break;
             }

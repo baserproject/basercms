@@ -62,13 +62,16 @@ class PagesDisplayServiceTest extends BcTestCase
 
     /**
      * ポストデータが存在する場合のgetPreviewData
-     *
+     * @param  string $url リクエストのURL
+     * @param  string $previewType
+     * @param  string $tmp プレビュー用のデータ
+     * @param  bool $isError エラーが出る前提かどうか
      * @return void
      * @dataProvider getPreviewDataDataProvider
      */
-    public function testGetPreviewData($previewType, $tmp, $isError)
+    public function testGetPreviewData($url, $previewType, $tmp, $isError)
     {
-        $request = $this->getRequest('/baser/admin/baser-core/preview/view/test?preview=' . $previewType);
+        $request = $this->getRequest($url . $previewType);
         $page = $this->PagesDisplayService->Pages->find()->contain('Contents')->first();
         $page->{$previewType === 'default' ? 'contents_tmp' : $previewType } = $tmp;
         $request = $request->withData('Page', $page->toArray());
@@ -82,10 +85,15 @@ class PagesDisplayServiceTest extends BcTestCase
 
     public function getPreviewDataDataProvider()
     {
+        $mainSite = '/baser/admin/baser-core/preview/view/test?preview=';
+        $subSite = '/baser/admin/baser-core/preview/view/en/サイトID3の固定ページ?preview=';
         return [
-            ['default', '<p>test</p>', false],
-            ['draft', '<p>test</p>', false],
-            ['draft', '<script type="text/javascript">', true],
+            [$mainSite, 'default', '<p>test</p>', false],
+            [$mainSite, 'draft', '<p>test</p>', false],
+            [$mainSite, 'draft', '<script type="text/javascript">', true],
+            [$subSite, 'default', '<p>test</p>', false],
+            [$subSite, 'draft', '<p>test</p>', false],
+            [$subSite, 'draft', '<script type="text/javascript">', true],
         ];
     }
 
@@ -96,9 +104,14 @@ class PagesDisplayServiceTest extends BcTestCase
      */
     public function testGetPreviewDataWithoutData()
     {
-        $request = $this->getRequest('/baser/admin/baser-core/preview/view/test?preview=default');
-        $this->expectException("Cake\Http\Exception\NotFoundException");
-        $this->expectExceptionMessage("プレビューが適切ではありません。");
-        $pagesDisplay = $this->PagesDisplayService->getPreviewData($request);
+        foreach([
+            '/baser/admin/baser-core/preview/view/test?preview=default',
+            '/baser/admin/baser-core/preview/view/en/サイトID3の固定ページー?preview=default'
+            ] as $url) {
+            $request = $this->getRequest($url);
+            $this->expectException("Cake\Http\Exception\NotFoundException");
+            $this->expectExceptionMessage("プレビューが適切ではありません。");
+            $pagesDisplay = $this->PagesDisplayService->getPreviewData($request);
+        }
     }
 }

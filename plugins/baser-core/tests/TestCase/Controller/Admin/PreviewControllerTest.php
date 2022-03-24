@@ -11,9 +11,7 @@
 
 namespace BaserCore\Test\TestCase\Controller\Admin;
 
-use Cake\Event\Event;
 use BaserCore\TestSuite\BcTestCase;
-use BaserCore\Service\PreviewService;
 use BaserCore\Service\PagesDisplayService;
 use BaserCore\Controller\Admin\PreviewController;
 
@@ -82,17 +80,24 @@ class PreviewControllerTest extends BcTestCase
      */
     public function testView()
     {
-        // getリクエストの場合既存のデータを返す
         $this->loginAdmin($this->getRequest('/baser/admin'));
-        $this->get('/baser/admin/baser-core/preview/view/index?preview=default');
-        $this->assertResponseOk();
-        // postの際はcontents_tmpが反映されているかを確認
-        $page = $this->Pages->find()->contain('Contents')->first();
-        $page->contents_tmp = "<p>test</p>";
-        $this->enableCsrfToken();
-        $this->post('/baser/admin/baser-core/preview/view/index?preview=default', ['Page' => $page->toArray()]);
-        $this->assertResponseOk();
-        $this->assertEquals($page->contents_tmp, $this->viewVariable('page')['contents']);
+        foreach ([
+            // メインサイトの場合
+            '/baser/admin/baser-core/preview/view/index?preview=default',
+            // サブサイトの場合
+            '/baser/admin/baser-core/preview/view/en/サイトID3の固定ページ?preview=default'
+        ] as $url) {
+            // getリクエストの場合既存のデータを返す
+            $this->get($url);
+            $this->assertResponseOk();
+            // postの際はcontents_tmpが反映されているかを確認
+            $page = $this->Pages->find()->contain('Contents')->first();
+            $page->contents_tmp = "<p>test</p>";
+            $this->enableCsrfToken();
+            $this->post($url, ['Page' => $page->toArray()]);
+            $this->assertResponseOk();
+            $this->assertEquals($page->contents_tmp, $this->viewVariable('page')['contents']);
+        }
     }
 
     /**
@@ -112,10 +117,12 @@ class PreviewControllerTest extends BcTestCase
     public function createRequestDataProvider()
     {
         return [
+            // メインサイトの場合
             [
                 '/about',
                 ['controller' => "Pages", 'action' => 'display', 'id' => 5]
             ],
+            // サブサイトの場合
             [
                 '/en/サイトID3の固定ページ',
                 ['controller' => "Pages", 'action' => 'display', 'id' => 25]

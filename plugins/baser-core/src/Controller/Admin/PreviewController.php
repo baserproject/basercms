@@ -14,12 +14,13 @@ use Cake\Core\Configure;
 use Cake\Routing\Router;
 use Cake\Utility\Inflector;
 use Cake\Http\ServerRequest;
-use Cake\Http\ServerRequestFactory;
-use BaserCore\Utility\BcContainerTrait;
-use Cake\Http\Exception\ForbiddenException;
+use BaserCore\Utility\BcUtil;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use Cake\Http\ServerRequestFactory;
+use BaserCore\Utility\BcContainerTrait;
+use Cake\Http\Exception\ForbiddenException;
 
 class PreviewController extends BcAdminAppController
 {
@@ -54,8 +55,8 @@ class PreviewController extends BcAdminAppController
         if (in_array('..', $path, true) || in_array('.', $path, true)) {
             throw new ForbiddenException();
         }
-
-        $request = $this->createRequest("/" . rawurlencode(rawurldecode($path[0])));
+        $path = str_replace(BcUtil::getPrefix() . "/" . Inflector::dasherize($this->request->getParam('plugin')) . "/preview/view", "", $this->request->getPath());
+        $request = $this->createRequest($path);
         $serviceName = $request->getParam('plugin') . '\\Service\\' . $request->getParam('controller') . Inflector::camelize($request->getParam('action')) . 'ServiceInterface';
         $service = $this->getService($serviceName);
         try {
