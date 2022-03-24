@@ -1226,4 +1226,29 @@ class BcUtil
         return $url;
     }
 
+    /**
+     * エンコードされたURLをデコードせずにパースする
+     * ※DBのレコードがエンコードされたまま保存されてる場合があるためその値を取得する際にデコードが邪魔になる際使用する
+     * @param  string $fullUrl
+     * @return array $parsedUrl
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public static function parseEncodedUrl($fullUrl)
+    {
+        $parsedUrl = parse_url($fullUrl);
+        $directory = explode('/', $parsedUrl['path']);
+        if ($parsedUrl['host'] !== 'localhost') {
+            $parsedUrl['subDomain'] = explode('.', $parsedUrl['host'])[0];
+            array_splice($directory, 1, 0, [$parsedUrl['subDomain']]);
+        }
+        $parsedUrl['customPath'] = "";
+        foreach($directory as $key => $dir) {
+            // デコードされたpathをエンコード
+            if ($key !== 0) $parsedUrl['customPath'] .= "/" . rawurlencode(rawurldecode($dir));
+        }
+        return $parsedUrl;
+    }
+
 }

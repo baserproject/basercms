@@ -55,8 +55,7 @@ class PreviewController extends BcAdminAppController
         if (in_array('..', $path, true) || in_array('.', $path, true)) {
             throw new ForbiddenException();
         }
-        $path = str_replace(BcUtil::getPrefix() . "/" . Inflector::dasherize($this->request->getParam('plugin')) . "/preview/view", "", $this->request->getPath());
-        $request = $this->createRequest($path);
+        $request = $this->createRequest($this->request->getQuery('url'));
         $serviceName = $request->getParam('plugin') . '\\Service\\' . $request->getParam('controller') . Inflector::camelize($request->getParam('action')) . 'ServiceInterface';
         $service = $this->getService($serviceName);
         try {
@@ -86,16 +85,19 @@ class PreviewController extends BcAdminAppController
     {
         $config = [];
         $method = 'GET';
-        if(preg_match('/^http/', $url)) {
-            $parseUrl = parse_url($url);
+        if(preg_match('/^https?/', $url)) {
+            $parseUrl = BcUtil::parseEncodedUrl($url);
             Configure::write('BcEnv.host', $parseUrl['host']);
+            $uri = ServerRequestFactory::createUri([
+                'HTTP_HOST' => $parseUrl['host'],
+                'REQUEST_URI' => $url,
+                'REQUEST_METHOD' => $method,
+                'HTTPS' => (preg_match('/^https/', $url))? 'on' : ''
+            ])->withPath($parseUrl['customPath']);
             $defaultConfig = [
-                'uri' => ServerRequestFactory::createUri([
-                    'HTTP_HOST' => $parseUrl['host'],
-                    'REQUEST_URI' => $url,
-                    'REQUEST_METHOD' => $method,
-                    'HTTPS' => (preg_match('/^https/', $url))? 'on' : ''
-            ])];
+                'webroot' => $this->request->getAttribute('webroot'),
+                'uri' => $uri
+            ];
         } else {
             $defaultConfig = [
                 'url' => $url,

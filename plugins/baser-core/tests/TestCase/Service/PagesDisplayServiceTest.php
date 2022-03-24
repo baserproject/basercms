@@ -85,8 +85,8 @@ class PagesDisplayServiceTest extends BcTestCase
 
     public function getPreviewDataDataProvider()
     {
-        $mainSite = '/baser/admin/baser-core/preview/view/test?preview=';
-        $subSite = '/baser/admin/baser-core/preview/view/en/サイトID3の固定ページ?preview=';
+        $mainSite = '/baser/admin/baser-core/preview/view?url=https://localhost/test&preview=';
+        $subSite = '/baser/admin/baser-core/preview/view?url=https://localhost/en/サイトID3の固定ページ&preview=';
         return [
             [$mainSite, 'default', '<p>test</p>', false],
             [$mainSite, 'draft', '<p>test</p>', false],
@@ -105,8 +105,8 @@ class PagesDisplayServiceTest extends BcTestCase
     public function testGetPreviewDataWithoutData()
     {
         foreach([
-            '/baser/admin/baser-core/preview/view/test?preview=default',
-            '/baser/admin/baser-core/preview/view/en/サイトID3の固定ページー?preview=default'
+            '/baser/admin/baser-core/preview/view?url=https://localhost/test&preview=default',
+            '/baser/admin/baser-core/preview/view?url=https://localhost/en/サイトID3の固定ページ&preview=default'
             ] as $url) {
             $request = $this->getRequest($url);
             $this->expectException("Cake\Http\Exception\NotFoundException");

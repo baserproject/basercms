@@ -81,23 +81,16 @@ class PreviewControllerTest extends BcTestCase
     public function testView()
     {
         $this->loginAdmin($this->getRequest('/baser/admin'));
-        foreach ([
-            // メインサイトの場合
-            '/baser/admin/baser-core/preview/view/index?preview=default',
-            // サブサイトの場合
-            '/baser/admin/baser-core/preview/view/en/サイトID3の固定ページ?preview=default'
-        ] as $url) {
-            // getリクエストの場合既存のデータを返す
-            $this->get($url);
-            $this->assertResponseOk();
-            // postの際はcontents_tmpが反映されているかを確認
-            $page = $this->Pages->find()->contain('Contents')->first();
-            $page->contents_tmp = "<p>test</p>";
-            $this->enableCsrfToken();
-            $this->post($url, ['Page' => $page->toArray()]);
-            $this->assertResponseOk();
-            $this->assertEquals($page->contents_tmp, $this->viewVariable('page')['contents']);
-        }
+        // getリクエストの場合既存のデータを返す
+        $this->get('/baser/admin/baser-core/preview/view?url=https://localhost/about&preview=default');
+        $this->assertResponseOk();
+        // postの際はcontents_tmpが反映されているかを確認
+        $page = $this->Pages->find()->contain('Contents')->first();
+        $page->contents_tmp = "<p>test</p>";
+        $this->enableCsrfToken();
+        $this->post('/baser/admin/baser-core/preview/view?url=https://localhost/about&preview=default', ['Page' => $page->toArray()]);
+        $this->assertResponseOk();
+        $this->assertEquals($page->contents_tmp, $this->viewVariable('page')['contents']);
     }
 
     /**

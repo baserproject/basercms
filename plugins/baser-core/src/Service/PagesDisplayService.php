@@ -53,7 +53,10 @@ class PagesDisplayService implements PagesDisplayServiceInterface
                     }
                     $content = $this->Contents->saveTmpFiles($request->getData('Page.content'), mt_rand(0, 99999999));
                     $request = $request->withData('Page.content', $content);
-                    $request = $request->withData('Page.contents', $request->getData('Page.draft'));
+                    $request = $request->withData('Page.contents', $request->getData('Page.contents_tmp'));
+                    if (!empty($request->getData('Page.draft'))) {
+                        $request = $request->withData('Page.contents', $request->getData('Page.draft'));
+                    }
                     $previewData = $request->getData('Page');
                     break;
             }
@@ -61,8 +64,9 @@ class PagesDisplayService implements PagesDisplayServiceInterface
             switch($request->getQuery('preview')) {
                 case 'default':
                 case 'draft':
-                    $path = str_replace(BcUtil::getPrefix() . "/" . Inflector::dasherize($request->getParam('plugin')) . "/preview/view", "", $request->getPath());
-                    $content = $this->Contents->findByUrl($path);
+                    $a = $request->getQuery('url');
+                    $parseUrl = BcUtil::parseEncodedUrl($request->getQuery('url'));
+                    $content = $this->Contents->findByUrl($parseUrl['customPath'], true, false, false, !empty($parseUrl['subDomain']));
                     $previewData = $content ? $this->Pages->get($content->entity_id, ['contain' => ['Contents' => ['Sites']]])->ToArray() : [];
                     break;
             }
