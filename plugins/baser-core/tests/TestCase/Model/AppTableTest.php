@@ -123,15 +123,15 @@ class AppTableTest extends BcTestCase
         $eventManager = $Permission->getEventManager();
         // 通常のイベント取得
         $listeners = $eventManager->listeners('Model.beforeSave');
-        $this->assertEquals(3, count($listeners));
+        $this->assertEquals(2, count($listeners));
         // BcModelEventListener以外をオフ
         $Permission->offEvent('Model.beforeSave');
         $listeners = $eventManager->listeners('Model.beforeSave');
-        $this->assertEquals(1, count($listeners));
+        $this->assertEquals(0, count($listeners));
         // BcModelEventListener以外をオン
         $Permission->onEvent('Model.beforeSave');
         $listeners = $eventManager->listeners('Model.beforeSave');
-        $this->assertEquals(3, count($listeners));
+        $this->assertEquals(2, count($listeners));
     }
 
 }

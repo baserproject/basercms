@@ -630,33 +630,38 @@ class ContentsTableTest extends BcTestCase
         $this->assertNotEmpty($content->publish_end);
         // 親のstatusがfalseになれば、子にも反映
         $parent = $this->Contents->get(1);
-        $parent->status = false;
+        $parent->self_status = false;
         $this->Contents->save($parent);
         $this->execPrivateMethod($this->Contents, 'updateSystemData', [$content]);
         $content = $this->Contents->get(100);
         $this->assertFalse($content->status);
-        $this->assertNull($content->publish_begin);
+        $this->assertNotNull($content->publish_begin);
         $this->assertNull($content->publish_end);
+
         // siteがある場合
-        // サブコンテンツとして更新
-        $subContent = $this->Contents->get(100);
-        $subContent->title = 'subContent';
-        $subContent->url = 'test';
-        $subContent->site_id = 6;
-        $this->Contents->save($subContent);
-        // 関連するメインコンテンツを生成
+        $parent = $this->Contents->get(23);
+        $parent->name = '/s/';
+        $this->Contents->save($parent);
+        // メインコンテンツ更新
+        $mainContent = $this->Contents->get(100);
+        $mainContent->type = 'ContentFolder';
+        $mainContent->name = 'test_edit';
+        $this->Contents->save($mainContent);
+        // サブコンテンツとして登録
         $new = $this->Contents->newEntity([
             'id' => 101,
+            'name' => 'test_edit',
+            'type' => 'ContentFolder',
             'title' => 'relatedMainContent',
-            'name' => 'relatedMainContent',
-            'url' => '/test/',
-            'site_id' => 1,
-            'created_date' => FrozenTime::now()
+            'url' => '/test_edit/',
+            'site_id' => 2,
+            'created_date' => FrozenTime::now(),
+            'parent_id' => 23
         ]);
-        $mainContent = $this->Contents->save($new);
-        $this->execPrivateMethod($this->Contents, 'updateSystemData', [$subContent]);
+        $subContent = $this->Contents->save($new);
+//        $this->execPrivateMethod($this->Contents, 'updateSystemData', [$subContent]);
         // main_site_content_idが設定されてるか確認
-        $this->assertEquals($mainContent->id, $this->Contents->get(100)->main_site_content_id);
+        $this->assertEquals($mainContent->id, $subContent->main_site_content_id);
     }
 
     /**

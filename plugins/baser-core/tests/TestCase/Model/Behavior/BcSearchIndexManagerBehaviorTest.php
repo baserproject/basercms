@@ -10,17 +10,8 @@
  */
 namespace BaserCore\Test\TestCase\Model\Behavior;
 
-use ArrayObject;
-use Cake\ORM\Entity;
-use ReflectionClass;
-use Cake\Filesystem\File;
 use BaserCore\TestSuite\BcTestCase;
-use Laminas\Diactoros\UploadedFile;
 use BaserCore\Model\Table\PagesTable;
-use BaserCore\Utility\BcContainerTrait;
-use BaserCore\Model\Table\ContentsTable;
-use BaserCore\Model\Behavior\BcSearchIndexManager;
-use BaserCore\Service\ContentServiceInterface;
 use BaserCore\Model\Behavior\BcSearchIndexManagerBehavior;
 
 /**
@@ -117,8 +108,8 @@ class BcSearchIndexManagerBehaviorTest extends BcTestCase
      */
     public function testDeleteSearchIndex()
     {
-        $this->assertTrue($this->table->deleteSearchIndex(2));
-        $this->assertTrue($this->BcSearchIndexManager->SearchIndexes->findByModelId(2)->isEmpty());
+        $this->assertTrue($this->table->deleteSearchIndex(5));
+        $this->assertTrue($this->BcSearchIndexManager->SearchIndexes->findByModelId(5)->isEmpty());
     }
 
     /**

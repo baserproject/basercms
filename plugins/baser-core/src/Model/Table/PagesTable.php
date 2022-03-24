@@ -162,7 +162,7 @@ class PagesTable extends Table implements BcSearchIndexManagerInterface
     {
         // 検索用テーブルに登録
         if ($this->searchIndexSaving) {
-            if (empty($entity->content->exclude_search)) {
+            if (!empty($entity->content) && empty($entity->content->exclude_search)) {
                 $this->saveSearchIndex($this->createSearchIndex($entity));
             } else {
                 $this->deleteSearchIndex($entity->id);
