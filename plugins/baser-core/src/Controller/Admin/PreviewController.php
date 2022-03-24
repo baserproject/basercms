@@ -80,7 +80,7 @@ class PreviewController extends BcAdminAppController
      * @return ServerRequest
      * @checked
      * @unitTest
-     * @note(value="webrootの解析ロジックを反映させる")
+     * @noTodo
      */
     protected function createRequest($url): ServerRequest
     {
@@ -99,14 +99,13 @@ class PreviewController extends BcAdminAppController
         } else {
             $defaultConfig = [
                 'url' => $url,
+                'webroot' => $this->request->getAttribute('webroot'),
                 'environment' => [
                     'REQUEST_METHOD' => $method
             ]];
         }
         $defaultConfig = array_merge($defaultConfig, $config);
         $request = new ServerRequest($defaultConfig);
-        // TODO ucmitz: webrootの解析ロジックを反映させる
-        $request = $request->withAttribute('webroot', '/');
         try {
             Router::setRequest($request);
             $params = Router::parseRequest($request);
