@@ -206,6 +206,10 @@ class SitesController extends BcAdminAppController
         $site = $siteService->get($id);
         try {
             if ($siteService->delete($id)) {
+                if ($id == $this->request->getAttribute('currentSite')->id) {
+                    $session = $this->request->getSession();
+                    $session->delete('BcApp.Admin.currentSite');
+                }
                 $this->BcMessage->setSuccess(__d('baser', 'サイト: {0} を削除しました。', $site->name));
             }
         } catch (Exception $e) {
