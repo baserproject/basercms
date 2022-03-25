@@ -133,7 +133,7 @@ $(function () {
         $("#BtnCopyUrl").on({
             'click': function () {
                 var copyArea = $("<textarea style=\" opacity:0; width:1px; height:1px; margin:0; padding:0; border-style: none;\"/>");
-                copyArea.text(decodeURIComponent(fullUrl));
+                copyArea.text(fullUrl);
                 $(this).after(copyArea);
                 copyArea.select();
                 document.execCommand("copy");
