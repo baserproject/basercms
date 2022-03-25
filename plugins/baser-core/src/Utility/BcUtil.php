@@ -1225,5 +1225,4 @@ class BcUtil
         }
         return $url;
     }
-
 }

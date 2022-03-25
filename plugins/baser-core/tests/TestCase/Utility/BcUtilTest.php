@@ -942,5 +942,4 @@ class BcUtilTest extends BcTestCase
         $result = BcUtil::docRoot();
         $this->assertEquals($expected, $result);
     }
-
 }

@@ -162,33 +162,6 @@ class PageServiceTest extends BcTestCase
         $this->Contents->get($content->id);
     }
 
-
-    /**
-     * 本文にbaserが管理するタグを追加する
-     *
-     * @param string $id ID
-     * @param string $contents 本文
-     * @param string $title タイトル
-     * @param string $description 説明文
-     * @param array $expected 期待値
-     * @param string $message テストが失敗した時に表示されるメッセージ
-     * @dataProvider addBaserPageTagDataProvider
-     */
-    public function testAddBaserPageTag($id, $contents, $title, $description, $expected, $message = null)
-    {
-        $result = $this->PageService->addBaserPageTag($id, $contents, $title, $description);
-        $this->assertRegExp('/' . $expected . '/s', $result, $message);
-    }
-
-    public function addBaserPageTagDataProvider()
-    {
-        return [
-            [1, 'contentdayo', 'titledayo', 'descriptiondayo',
-                "<!-- BaserPageTagBegin -->.*setTitle\('titledayo'\).*setDescription\('descriptiondayo'\).*setPageEditLink\(1\).*contentdayo",
-                '本文にbaserが管理するタグを追加できません'],
-        ];
-    }
-
     /**
      * 固定ページテンプレートリストを取得する
      *
