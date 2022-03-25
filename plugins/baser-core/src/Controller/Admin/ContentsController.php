@@ -341,21 +341,15 @@ class ContentsController extends BcAdminAppController
             $data = $this->request->getData('Content') ?? $this->request->getData('ContentFolder.content');
             $id = $data['id'];
             // EVENT Contents.beforeDelete
-            $beforeEvent = $this->dispatchLayerEvent('beforeDelete', [
+            $this->dispatchLayerEvent('beforeDelete', [
                 'data' => $id
             ]);
-            if ($beforeEvent !== false) {
-                $id = ($beforeEvent->getResult() === null || $beforeEvent->getResult() === true)? $beforeEvent->getData('id') : $beforeEvent->getResult();
-            }
             $content = $contentService->get($id);
             if ($contentService->delete($id)) {
                 // EVENT Contents.afterDelete
-                $afterEvent = $this->dispatchLayerEvent('afterDelete', [
+                $this->dispatchLayerEvent('afterDelete', [
                     'data' => $id
                 ]);
-                if ($afterEvent !== false) {
-                    $content = ($afterEvent->getResult() === null || $afterEvent->getResult() === true)? $afterEvent->getData('content') : $afterEvent->getResult();
-                }
                 $typeName = Configure::read('BcContents.items.' . $content->plugin . '.' . $content->type . '.title');
                 $trashMessage = $typeName . sprintf(__d('baser', '「%s」をゴミ箱に移動しました。'), $content->title);
                 $aliasMessage = sprintf(__d('baser', '%s のエイリアス「%s」を削除しました。'), $typeName, $content->title);

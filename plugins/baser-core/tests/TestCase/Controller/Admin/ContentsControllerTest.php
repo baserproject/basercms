@@ -56,7 +56,7 @@ class ContentsControllerTest extends BcTestCase
         'plugin.BaserCore.UsersUserGroups',
         'plugin.BaserCore.Dblogs',
         'plugin.BaserCore.ContentFolders',
-
+        'plugin.BaserCore.SearchIndexes',
     ];
 
     /**
@@ -400,7 +400,7 @@ class ContentsControllerTest extends BcTestCase
         $this->enableSecurityToken();
         $this->enableCsrfToken();
         // 管理画面からの場合
-        $this->post('/baser/admin/baser-core/contents/delete/', ['Content' => ['id' => 6]]);
+        $this->post('/baser/admin/baser-core/contents/delete', ['Content' => ['id' => 6]]);
         $this->assertResponseSuccess();
         $this->assertRedirect("/baser/admin/baser-core/contents/index");
         $this->assertEquals("フォルダー「サービス」をゴミ箱に移動しました。", $_SESSION['Flash']['flash'][0]['message']);
@@ -421,9 +421,9 @@ class ContentsControllerTest extends BcTestCase
         });
         // afterDeleteイベントテスト(削除されたコンテンツの名前をイベントで更新できるか)
         $this->entryEventToMock(self::EVENT_LAYER_CONTROLLER, 'BaserCore.Contents.afterDelete', function(Event $event) {
-            $content = $event->getData('content');
-            $content = $this->ContentService->update($content, ['name' => 'testAfterDelete']);
-            return $content;
+            $id = $event->getData('data');
+            $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+            $this->ContentService->get($id);
         });
         $request = $this->getRequest('/baser/admin/baser-core/content/')->withEnv('REQUEST_METHOD', 'POST')->withData('Content.id', 1);
         $contentsController = new ContentsController($request);

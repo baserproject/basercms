@@ -93,7 +93,7 @@ class BcSearchIndexManagerBehaviorTest extends BcTestCase
         unset($pageSearchIndex['model_id']); // model_idがない場合は新規追加
         $this->assertTrue($this->table->saveSearchIndex($pageSearchIndex));
         // SearchIndexesが新規で追加されているかを確認
-        $this->assertCount(8, $this->BcSearchIndexManager->SearchIndexes->find()->all());
+        $this->assertCount(11, $this->BcSearchIndexManager->SearchIndexes->find()->all());
         // 更新の場合
         $pageSearchIndex = $this->table->createSearchIndex($page);
         $this->assertTrue($this->table->saveSearchIndex($pageSearchIndex));
