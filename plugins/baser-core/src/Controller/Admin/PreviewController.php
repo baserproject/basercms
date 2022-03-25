@@ -21,10 +21,14 @@ use BaserCore\Annotation\UnitTest;
 use Cake\Http\ServerRequestFactory;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Http\Exception\ForbiddenException;
+use BaserCore\Service\ContentServiceInterface;
 
 class PreviewController extends BcAdminAppController
 {
 
+    /**
+     * Trait
+     */
     use BcContainerTrait;
 
     /**
@@ -39,6 +43,7 @@ class PreviewController extends BcAdminAppController
     {
         parent::initialize();
         $this->loadComponent('BaserCore.BcFrontContents');
+        $this->ContentService = $this->getService(ContentServiceInterface::class);
     }
 
     /**
@@ -86,14 +91,14 @@ class PreviewController extends BcAdminAppController
         $config = [];
         $method = 'GET';
         if(preg_match('/^https?/', $url)) {
-            $parseUrl = BcUtil::parseEncodedUrl($url);
+            $parseUrl = $this->ContentService->encodeParsedUrl($url);
             Configure::write('BcEnv.host', $parseUrl['host']);
             $uri = ServerRequestFactory::createUri([
                 'HTTP_HOST' => $parseUrl['host'],
                 'REQUEST_URI' => $url,
                 'REQUEST_METHOD' => $method,
                 'HTTPS' => (preg_match('/^https/', $url))? 'on' : ''
-            ])->withPath($parseUrl['customPath']);
+            ])->withPath($parseUrl['path']);
             $defaultConfig = [
                 'webroot' => $this->request->getAttribute('webroot'),
                 'uri' => $uri

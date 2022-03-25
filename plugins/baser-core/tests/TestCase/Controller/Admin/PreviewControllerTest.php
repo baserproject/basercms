@@ -74,6 +74,7 @@ class PreviewControllerTest extends BcTestCase
     public function testInitialize()
     {
         $this->assertNotEmpty($this->PreviewController->BcFrontContents);
+        $this->assertNotEmpty($this->PreviewController->ContentService);
     }
     /**
      * testView
