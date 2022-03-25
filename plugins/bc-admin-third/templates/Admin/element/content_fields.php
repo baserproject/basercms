@@ -33,7 +33,7 @@ if ($this->getName() === 'ContentFolders') {
 }
 $parentContents = $this->BcAdminContent->getContentFolderList($content->site_id, $options);
 
-$fullUrl = $this->BcAdminContent->getUrl($content->url, true, $site->use_subdomain);
+$fullUrl = rawurldecode($this->BcAdminContent->getUrl($content->url, true, $site->use_subdomain));
 // $this->request->getData() では Content は取得できないため
 $this->BcBaser->js('admin/contents/edit.bundle', false, ['id' => 'AdminContentsEditScript',
   'data-previewurl' => Router::url(["controller" => "preview", "action" => "view"]),
@@ -68,7 +68,7 @@ if ($site->use_subdomain) {
   if ($this->request->getData('Site.same_main_url') && $content->site_root) {
     $contentsName = '';
   } else {
-    $contentsName = $this->BcAdminForm->getSourceValue($entityName . "name");
+    $contentsName = rawurldecode($this->BcAdminForm->getSourceValue($entityName . "name"));
   }
   if (!$isOmitViewAction && $content->url !== '/' && $contentsName) {
     $contentsName .= '/';
@@ -120,7 +120,7 @@ $editable = $this->BcContents->isEditable($content);
           <?php echo $this->BcAdminForm->control($entityName . "parent_id", ['type' => 'select', 'options' => $parentContents, 'escape' => true]) ?>
         <?php endif ?>
         <?php if (!$content->site_root && !$related): ?>
-          <?php echo $this->BcAdminForm->control($entityName . "name", ['type' => 'text', 'size' => 20, 'autofocus' => true]) ?>
+          <?php echo rawurldecode($this->BcAdminForm->control($entityName . "name", ['type' => 'text', 'size' => 20, 'autofocus' => true])) ?>
           <?php if (!$isOmitViewAction && $content->url !== '/'): ?>/<?php endif ?>
         <?php else: ?>
           <?php if (!$content->site_root): ?>
