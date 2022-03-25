@@ -98,9 +98,16 @@ class ContentFoldersControllerEventListenerTest extends BcTestCase
     /**
      * Contents Before Delete
      */
-    public function testContentsBeforeDelete()
+    public function testBaserCoreContentsBeforeDelete()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $this->loginAdmin($this->getRequest('/'));
+        $this->post('/baser/admin/baser-core/contents/delete', ['Content' => ['id' => 6]]);
+        $searchIndexesTable = $this->getTableLocator()->get('BaserCore.SearchIndexes');
+        $this->assertEquals(0, $searchIndexesTable->find()->where(['url' => '/service/service1'])->count());
+        $this->assertEquals(0, $searchIndexesTable->find()->where(['url' => '/service/service2'])->count());
+        $this->assertEquals(0, $searchIndexesTable->find()->where(['url' => '/service/service3'])->count());
     }
 
     /**

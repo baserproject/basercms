@@ -342,7 +342,7 @@ class ContentsController extends BcAdminAppController
             $id = $data['id'];
             // EVENT Contents.beforeDelete
             $beforeEvent = $this->dispatchLayerEvent('beforeDelete', [
-                'id' => $id
+                'data' => $id
             ]);
             if ($beforeEvent !== false) {
                 $id = ($beforeEvent->getResult() === null || $beforeEvent->getResult() === true)? $beforeEvent->getData('id') : $beforeEvent->getResult();
@@ -351,7 +351,7 @@ class ContentsController extends BcAdminAppController
             if ($contentService->delete($id)) {
                 // EVENT Contents.afterDelete
                 $afterEvent = $this->dispatchLayerEvent('afterDelete', [
-                    'content' => $content
+                    'data' => $id
                 ]);
                 if ($afterEvent !== false) {
                     $content = ($afterEvent->getResult() === null || $afterEvent->getResult() === true)? $afterEvent->getData('content') : $afterEvent->getResult();

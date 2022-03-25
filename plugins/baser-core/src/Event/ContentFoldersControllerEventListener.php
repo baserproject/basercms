@@ -108,25 +108,19 @@ class ContentFoldersControllerEventListener extends BcControllerEventListener
      * @param ArrayObject $options
      * @uses baserCoreContentsBeforeDelete()
      */
-    public function baserCoreContentsBeforeDelete(EventInterface $event, EntityInterface $entity, ArrayObject $options)
+    public function baserCoreContentsBeforeDelete(EventInterface $event)
     {
-//        $id = $event->getData('data');
-//        $data = $this->ContentFolders->find()->where(['Content.id' => $id])->first();
-//        if ($data) {
-//            // TODO: 固定ページのファイル生成は廃止なので、一旦コメントアウト
-//            // $path = $this->Pages->getContentFolderPath($id);
-//            // $Folder = new Folder($path);
-//            // $Folder->delete();
-//            $Controller = $event->getSubject();
-//            $contents = $Controller->Contents->children($id, false, ['type', 'entity_id'], 'Content.lft', null, 1, 1);
-//            foreach($contents as $content) {
-//                if ($content->type !== 'Page') {
-//                    continue;
-//                }
-//                $page = $this->Pages->find()->where(['Page.id' => $content['Content']['entity_id']])->first();
-//                $this->Pages->deleteSearchIndex($page->id);
-//            }
-//        }
+        $id = $event->getData('data');
+        if ($this->ContentFolders->find()->where(['Contents.id' => $id])->contain(['Contents'])->count()) {
+            $contentsTable = TableRegistry::getTableLocator()->get('BaserCore.Contents');
+            $contents = $contentsTable->find('children', ['for' => $id])->select(['type', 'entity_id'])->order('lft')->all();
+            foreach($contents as $content) {
+                if ($content->type !== 'Page') {
+                    continue;
+                }
+                $this->Pages->deleteSearchIndex($content->entity_id);
+            }
+        }
     }
 
     /**
