@@ -222,7 +222,7 @@ class ContentsTable extends AppTable
         ]);
         $validator
         ->datetime('modified_date')
-        ->notEmptyDateTime('modified_date', __d('baser', '更新日が空になってます。'))
+        ->notEmptyDateTime('modified_date', __d('baser', '更新日が空になってます。'), 'update')
         ->add('modified_date', [
             'checkDate' => [
                 'rule' => ['checkDate'],
@@ -472,11 +472,7 @@ class ContentsTable extends AppTable
         if (!empty($entity->id)) {
             $this->beforeSaveParentId = $entity->parent_id;
         }
-        if ($entity->isNew()) {
-            $entity->name = $this->urlEncode(mb_substr($entity->name, 0, 230, 'UTF-8'));
-        } else {
-            $entity->name = $this->urlEncode(mb_substr(rawurldecode($entity->name), 0, 230, 'UTF-8'));
-        }
+        $entity->name = $this->urlEncode(mb_substr(rawurldecode($entity->name), 0, 230, 'UTF-8'));
         return parent::beforeSave($event, $entity, $options);
     }
 
@@ -729,7 +725,7 @@ class ContentsTable extends AppTable
                 // 存在する場合は、自身のエイリアスかどうか確認し、エイリアスの場合は、公開状態とタイトル、説明文、アイキャッチ、更新日を更新
                 // フォルダの場合も更新する
                 if ($content->alias_id == $data->id || ($content->type == 'ContentFolder' && $isContentFolder)) {
-                    $content->name = rawurldecode($data->name);
+                    $content->name = $data->name;
                     $content->title = $data->title;
                     $content->description = $data->description;
                     $content->self_status = $data->self_status;
@@ -747,7 +743,7 @@ class ContentsTable extends AppTable
                     }
                     $content->parent_id = $this->copyContentFolderPath($url, $site->id);
                 } else {
-                    $content->name = rawurldecode($data->name);
+                    $content->name = $data->name;
                 }
             } else {
                 // 存在しない場合はエイリアスを作成
@@ -763,6 +759,7 @@ class ContentsTable extends AppTable
                 unset($content->created);
                 unset($content->modified);
                 unset($content->layout_template);
+                $content->created_date = $content->created = FrozenTime::now();
                 $content->name = $data->name;
                 $content->main_site_content_id = $data->id;
                 $content->site_id = $site->id;

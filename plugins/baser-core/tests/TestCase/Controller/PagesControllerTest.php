@@ -34,6 +34,7 @@ class PagesControllerTest extends BcTestCase
      */
     public $fixtures = [
         'plugin.BaserCore.Sites',
+        'plugin.BaserCore.SiteConfigs',
         'plugin.BaserCore.Contents',
         'plugin.BaserCore.Pages',
         'plugin.BaserCore.ContentFolders',

@@ -811,4 +811,38 @@ class ContentServiceTest extends BcTestCase
         // フィールドが空かテスト
         $this->assertEquals($this->ContentService->getIndex(['site_id' => 1])->last(), $neighbors['prev']);
     }
+
+
+    /**
+     * testEncodeParsedUrl
+     * @dataProvider encodeParsedUrlDataProvider
+     * @return void
+     */
+    public function testEncodeParsedUrl($path, $expected)
+    {
+        $result = $this->ContentService->encodeParsedUrl($path);
+        $this->assertEquals($expected, $result["path"]);
+    }
+
+    public function encodeParsedUrlDataProvider()
+    {
+        // サブサイトはすべて同じpathに変換されているかテスト
+        return [
+            // サブサイト
+            [
+                "http://localhost/en/新しい_固定ページ",
+                "/en/%E6%96%B0%E3%81%97%E3%81%84_%E5%9B%BA%E5%AE%9A%E3%83%9A%E3%83%BC%E3%82%B8"
+            ],
+            // サブドメインを使う場合
+            [
+                "https://en.localhost/新しい_固定ページ",
+                "/en/%E6%96%B0%E3%81%97%E3%81%84_%E5%9B%BA%E5%AE%9A%E3%83%9A%E3%83%BC%E3%82%B8"
+            ],
+            // サブドメインを使う場合 type2
+            [
+                "http://en/新しい_固定ページ",
+                "/en/%E6%96%B0%E3%81%97%E3%81%84_%E5%9B%BA%E5%AE%9A%E3%83%9A%E3%83%BC%E3%82%B8"
+            ],
+        ];
+    }
 }

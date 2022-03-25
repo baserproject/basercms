@@ -9,9 +9,10 @@
  * @license       http://basercms.net/license/index.html MIT License
  */
 
+use Cake\Routing\Router;
+use BaserCore\View\BcAdminAppView;
 use BaserCore\Model\Entity\Content;
 use BaserCore\Model\Entity\ContentFolder;
-use BaserCore\View\BcAdminAppView;
 
 /**
  * [ADMIN] 統合コンテンツフォーム
@@ -32,16 +33,10 @@ if ($this->getName() === 'ContentFolders') {
 }
 $parentContents = $this->BcAdminContent->getContentFolderList($content->site_id, $options);
 
-if ($this->request->getData('Site.use_subdomain')) {
-  $targetSite = $this->BcAdminSite->findByUrl($content->url);
-  $previewUrl = $this->BcBaser->getUrl($targetSite->getPureUrl($content->url) . '?host=' . $targetSite->host);
-} else {
-  $previewUrl = $this->BcBaser->getUrl($this->BcAdminContent->getUrl($content->url, false, false, false));
-}
-$fullUrl = $this->BcAdminContent->getUrl($content->url, true, $site->use_subdomain);
+$fullUrl = rawurldecode($this->BcAdminContent->getUrl($content->url, true, $site->use_subdomain));
 // $this->request->getData() では Content は取得できないため
 $this->BcBaser->js('admin/contents/edit.bundle', false, ['id' => 'AdminContentsEditScript',
-  'data-previewurl' => $previewUrl,
+  'data-previewurl' => Router::url(["controller" => "preview", "action" => "view"]),
   'data-fullurl' => $fullUrl,
   'data-current' => json_encode($this->request->getData()),
   'data-settings' => $this->BcContents->getJsonItems()
@@ -73,7 +68,7 @@ if ($site->use_subdomain) {
   if ($this->request->getData('Site.same_main_url') && $content->site_root) {
     $contentsName = '';
   } else {
-    $contentsName = $this->BcAdminForm->getSourceValue($entityName . "name");
+    $contentsName = rawurldecode($this->BcAdminForm->getSourceValue($entityName . "name"));
   }
   if (!$isOmitViewAction && $content->url !== '/' && $contentsName) {
     $contentsName .= '/';
@@ -125,7 +120,7 @@ $editable = $this->BcContents->isEditable($content);
           <?php echo $this->BcAdminForm->control($entityName . "parent_id", ['type' => 'select', 'options' => $parentContents, 'escape' => true]) ?>
         <?php endif ?>
         <?php if (!$content->site_root && !$related): ?>
-          <?php echo $this->BcAdminForm->control($entityName . "name", ['type' => 'text', 'size' => 20, 'autofocus' => true]) ?>
+          <?php echo rawurldecode($this->BcAdminForm->control($entityName . "name", ['type' => 'text', 'size' => 20, 'autofocus' => true])) ?>
           <?php if (!$isOmitViewAction && $content->url !== '/'): ?>/<?php endif ?>
         <?php else: ?>
           <?php if (!$content->site_root): ?>

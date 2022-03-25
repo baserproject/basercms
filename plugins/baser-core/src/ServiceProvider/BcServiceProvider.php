@@ -11,6 +11,8 @@
 
 namespace BaserCore\ServiceProvider;
 
+use BaserCore\Service\PagesDisplayService;
+use BaserCore\Service\PagesDisplayServiceInterface;
 use Cake\Core\ServiceProvider;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -67,6 +69,7 @@ class BcServiceProvider extends ServiceProvider
         ContentServiceInterface::class,
         ContentFolderServiceInterface::class,
         PageServiceInterface::class,
+        PagesDisplayServiceInterface::class,
         SearchIndexServiceInterface::class,
     ];
 
@@ -102,6 +105,8 @@ class BcServiceProvider extends ServiceProvider
         $container->add(ContentFolderServiceInterface::class, ContentFolderService::class, true);
         // Pagesサービス
         $container->add(PageServiceInterface::class, PageService::class, true);
+        // PagesDisplayサービス
+        $container->add(PagesDisplayServiceInterface::class, PagesDisplayService::class, true);
         // SearchIndexesサービス
         $container->add(SearchIndexServiceInterface::class, SearchIndexService::class, true);
 

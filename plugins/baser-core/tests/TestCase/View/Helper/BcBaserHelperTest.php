@@ -109,6 +109,7 @@ class BcBaserHelperTest extends BcTestCase
         $this->Html = new HtmlHelper($this->BcAdminAppView);
         $this->Flash = new FlashHelper($this->BcAdminAppView);
         $this->Url = new UrlHelper($this->BcAdminAppView);
+        $this->Contents = $this->getTableLocator()->get('BaserCore.Contents');
 
         // TODO: basercms4より移植
         // $this->_View = new BcAppView();
@@ -131,7 +132,7 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function tearDown(): void
     {
-        unset($this->BcAdminAppView, $this->BcBaser, $this->Html, $this->Flash, $this->Url);
+        unset($this->BcAdminAppView, $this->BcBaser, $this->Html, $this->Flash, $this->Url, $this->Contents);
         Router::reload();
         parent::tearDown();
     }
@@ -1646,7 +1647,6 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testGetContentCreatedDate()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->assertEquals('2016/07/29 18:13', $this->BcBaser->getContentCreatedDate());
     }
 
@@ -1656,8 +1656,7 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testGetContentModifiedDate()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->assertEquals('', $this->BcBaser->getContentModifiedDate());
+        $this->assertEquals('2020/09/14 20:13', $this->BcBaser->getContentModifiedDate());
     }
 
     /**
@@ -2456,7 +2455,6 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testGetUpdateInfo()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->assertRegExp('//', $this->BcBaser->getUpdateInfo());
     }
 
@@ -2506,11 +2504,9 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testGetCurrentContent()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $result = $this->BcBaser->getCurrentContent();
-        $this->assertEquals($this->BcBaser->getContentByEntityId($result['entity_id'], 'Page')['Content'], $result);
-        $this->BcBaser->request = $this->BcBaser->request->withParam('Content', '');
-        $this->assertEquals('', $this->BcBaser->getCurrentContent());
+        $content = $this->Contents->get($result->id, ['contain' => 'Sites']);
+        $this->assertEquals($content, $result);
     }
 
     /**

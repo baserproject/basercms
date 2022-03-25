@@ -136,7 +136,7 @@ class AppControllerTest extends BcTestCase
     {
         $this->enableCsrfToken();
         $logPath = ROOT . DS . 'logs' . DS . 'cli-error.log';
-        unlink($logPath);
+        @unlink($logPath);
         $this->post('/', [
             'name' => 'Test_test_Man'
         ]);
@@ -151,7 +151,7 @@ class AppControllerTest extends BcTestCase
     public function testBeforeRender()
     {
         $this->AppController->beforeRender(new Event('beforeRender'));
-        $this->assertEquals('BaserCore.App', $this->AppController->viewBuilder()->getClassName());
+        $this->assertEquals('BaserCore.BcFrontApp', $this->AppController->viewBuilder()->getClassName());
         $this->assertEquals('BcFront', $this->AppController->viewBuilder()->getTheme());
         $request = $this->AppController->getRequest();
         $site = $request->getParam('Site');

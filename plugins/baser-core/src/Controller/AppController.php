@@ -151,8 +151,9 @@ class AppController extends BaseController
      */
     public function beforeRender(EventInterface $event): void
     {
+        parent::beforeRender($event);
         if (!isset($this->RequestHandler) || !$this->RequestHandler->prefers('json')) {
-            $this->viewBuilder()->setClassName('BaserCore.App');
+            $this->viewBuilder()->setClassName('BaserCore.BcFrontApp');
             $theme = Inflector::camelize(Inflector::underscore(Configure::read('BcApp.defaultFrontTheme')));
             $site = $this->getRequest()->getParam('Site');
             if (!$site) {

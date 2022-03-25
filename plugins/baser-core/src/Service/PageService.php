@@ -168,31 +168,6 @@ class PageService implements PageServiceInterface
     }
 
     /**
-	 * 本文にbaserが管理するタグを追加する
-	 *
-	 * @param string $id ID
-	 * @param string $contents 本文
-	 * @param string $title タイトル
-	 * @param string $description 説明文
-	 * @return string 本文の先頭にbaserCMSが管理するタグを付加したデータ
-	 */
-	public function addBaserPageTag($id, $contents, $title, $description)
-	{
-		$tag = [];
-		$tag[] = '<!-- BaserPageTagBegin -->';
-		$title = str_replace("'", "\'", str_replace("\\", "\\\\'", $title));
-		$description = str_replace("'", "\'", str_replace("\\", "\\\\'", $description));
-		$tag[] = '<?php $this->BcBaser->setTitle(\'' . $title . '\') ?>';
-		$tag[] = '<?php $this->BcBaser->setDescription(\'' . $description . '\') ?>';
-
-		if ($id) {
-			$tag[] = '<?php $this->BcBaser->setPageEditLink(' . $id . ') ?>';
-		}
-		$tag[] = '<!-- BaserPageTagEnd -->';
-		return implode("\n", $tag) . "\n\n" . $contents;
-	}
-
-    /**
      * 固定ページテンプレートリストを取得する
      *
      * @param int $contentId

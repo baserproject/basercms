@@ -273,9 +273,12 @@ class BcAdminAppController extends BcAppController
      */
     public function beforeRender(EventInterface $event): void
     {
+        parent::beforeRender($event);
         if (!isset($this->RequestHandler) || !$this->RequestHandler->prefers('json')) {
-            $this->viewBuilder()->setClassName('BaserCore.BcAdminApp');
-            $this->setAdminTheme();
+            if ($this->getName() !== 'Preview') {
+                $this->viewBuilder()->setClassName('BaserCore.BcAdminApp');
+                $this->setAdminTheme();
+            }
         }
     }
 
