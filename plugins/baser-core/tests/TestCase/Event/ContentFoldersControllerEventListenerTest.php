@@ -11,14 +11,15 @@
 
 namespace BaserCore\Test\TestCase\Event;
 
+use BaserCore\Event\ContentFoldersControllerEventListener;
 use BaserCore\Event\PagesControllerEventListener;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\Event\EventManager;
 
 /**
- * Class PagesControllerEventListenerTest
+ * Class ContentFoldersControllerEventListenerTest
  */
-class PagesControllerEventListenerTest extends BcTestCase
+class ContentFoldersControllerEventListenerTest extends BcTestCase
 {
 
     /**
@@ -63,32 +64,35 @@ class PagesControllerEventListenerTest extends BcTestCase
     public function test__construct()
     {
         $event = EventManager::instance();
-        $event->on(new PagesControllerEventListener());
+        $event->on(new ContentFoldersControllerEventListener());
         $listeners = $event->listeners('Controller.BaserCore.Contents.afterMove');
         $listener = $listeners[0]['callable'][0];
         $this->assertEquals('BaserCore\Model\Table\PagesTable', get_class($listener->Pages));
+        $this->assertEquals('BaserCore\Model\Table\ContentFoldersTable', get_class($listener->ContentFolders));
     }
 
     /**
-     * Contents After Move
+     * Contents after move
      */
     public function testBaserCoreContentsAfterMove()
     {
         $token = $this->apiLoginAdmin();
         $data = [
             'origin' => [
-                'id' => 5,
+                'id' => 6,
                 'parentId' => 1
             ],
             'target' => [
-                'id' => 5,
-                'parentId' => 6,
+                'id' => 6,
+                'parentId' => 21,
                 'siteId' => 1,
             ]
         ];
         $this->patch("/baser/api/baser-core/contents/move.json?token=" . $token['access_token'], $data);
         $searchIndexesTable = $this->getTableLocator()->get('BaserCore.SearchIndexes');
-        $this->assertEquals(1, $searchIndexesTable->find()->where(['url' => '/service/about'])->count());
+        $this->assertEquals(1, $searchIndexesTable->find()->where(['url' => '/testEdit/service/service1'])->count());
+        $this->assertEquals(1, $searchIndexesTable->find()->where(['url' => '/testEdit/service/service2'])->count());
+        $this->assertEquals(1, $searchIndexesTable->find()->where(['url' => '/testEdit/service/service3'])->count());
     }
 
     /**

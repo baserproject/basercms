@@ -24,6 +24,7 @@ use BaserCore\Event\BcContainerEventListener;
 use BaserCore\Event\BcControllerEventDispatcher;
 use BaserCore\Event\BcModelEventDispatcher;
 use BaserCore\Event\BcViewEventDispatcher;
+use BaserCore\Event\ContentFoldersControllerEventListener;
 use BaserCore\Event\PagesControllerEventListener;
 use BaserCore\Utility\BcUtil;
 use Cake\Cache\Cache;
@@ -56,11 +57,7 @@ $event->on(new BcModelEventDispatcher());
 $event->on(new BcViewEventDispatcher());
 $event->on(new BcContainerEventListener());
 $event->on(new PagesControllerEventListener());
-
-// TODO 未実装
-// >>>
-//$event->on(new ContentFoldersControllerEventListener());
-// <<<
+$event->on(new ContentFoldersControllerEventListener());
 
 /**
  * パス定義
