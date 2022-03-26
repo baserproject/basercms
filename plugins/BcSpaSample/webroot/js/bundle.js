@@ -2328,7 +2328,21 @@ __webpack_require__.r(__webpack_exports__);
     */
   data: () => {
     return {
-      user: undefined,
+      user: {
+        id: undefined,
+        name: undefined,
+        real_name_1: undefined,
+        real_name_2: undefined,
+        email: undefined,
+        nickname: undefined,
+        created: undefined,
+        modified: undefined,
+        status: undefined,
+        user_groups: undefined,
+        password_1: undefined,
+        password_2: undefined,
+        login_user_id: undefined
+      },
       userGroups: undefined,
       errors: []
     };
@@ -2406,14 +2420,14 @@ __webpack_require__.r(__webpack_exports__);
       this.errors = [];
       let endPoint = '/baser/api/baser-core/users/';
       let user = {
-        name: this.user?.name,
-        real_name_1: this.user?.name,
-        real_name_2: this.user?.real_name_2,
-        nickname: this.user?.nickname,
-        user_groups: this.user?.user_groups,
-        email: this.user?.email,
-        password_1: this.user?.password_1,
-        password_2: this.user?.password_2,
+        name: this.user.name,
+        real_name_1: this.user.name,
+        real_name_2: this.user.real_name_2,
+        nickname: this.user.nickname,
+        user_groups: this.user.user_groups,
+        email: this.user.email,
+        password_1: this.user.password_1,
+        password_2: this.user.password_2,
         login_user_id: this.loginUserId
       };
 
@@ -13551,7 +13565,7 @@ var render = function () {
                   _vm._l(this.userGroups, function (title, id) {
                     return _c(
                       "span",
-                      { key: title - id, staticClass: "bca-checkbox" },
+                      { key: title, staticClass: "bca-checkbox" },
                       [
                         _c("input", {
                           directives: [
@@ -13631,10 +13645,10 @@ var render = function () {
                 ? _c("div", { staticClass: "error-wrap" }, [
                     _c(
                       "ul",
-                      _vm._l(_vm.errors.user_groups, function (message, id) {
+                      _vm._l(_vm.errors.user_groups, function (message) {
                         return _c(
                           "li",
-                          { key: message - id, staticClass: "error-message" },
+                          { key: message, staticClass: "error-message" },
                           [_vm._v(_vm._s(message))]
                         )
                       }),

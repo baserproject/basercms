@@ -90,7 +90,7 @@
                 <td class="col-input bca-form-table__input">
                 <span class="bca-checkbox-group">
                     <input type="hidden" name="user_groups[_ids]" value=""/>
-                    <span v-for="(title, id) in this.userGroups" class="bca-checkbox" :key="title-id">
+                    <span v-for="(title, id) in this.userGroups" class="bca-checkbox" :key="title">
                         <input type="checkbox"
                                name="user_groups[_ids][]"
                                :value="id"
@@ -104,7 +104,7 @@
                 </span>
                     <div class="error-wrap" v-if="errors.user_groups">
                         <ul>
-                            <li class="error-message" v-for="(message, id) in errors.user_groups" :key="message-id">{{ message }}</li>
+                            <li class="error-message" v-for="(message) in errors.user_groups" :key="message">{{ message }}</li>
                         </ul>
                     </div>
                 </td>

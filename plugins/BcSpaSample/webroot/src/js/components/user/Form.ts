@@ -23,7 +23,7 @@ type User =  {
 };
 
 type DataType = {
-    user?: User,
+    user: User,
     userGroups?: UserGroup,
     errors: string[]
 };
@@ -49,7 +49,21 @@ export default Vue.extend({
       */
     data: (): DataType => {
         return {
-            user: undefined,
+            user: {
+                id: undefined,
+                name: undefined,
+                real_name_1: undefined,
+                real_name_2: undefined,
+                email: undefined,
+                nickname: undefined,
+                created: undefined,
+                modified: undefined,
+                status: undefined,
+                user_groups: undefined,
+                password_1: undefined,
+                password_2: undefined,
+                login_user_id: undefined,
+            },
             userGroups: undefined,
             errors: []
         }
@@ -119,14 +133,14 @@ export default Vue.extend({
             this.errors = [];
             let endPoint = '/baser/api/baser-core/users/';
             let user: User = {
-                name:  this.user?.name,
-                real_name_1: this.user?.name,
-                real_name_2: this.user?.real_name_2,
-                nickname: this.user?.nickname,
-                user_groups: this.user?.user_groups,
-                email: this.user?.email,
-                password_1: this.user?.password_1,
-                password_2: this.user?.password_2,
+                name:  this.user.name,
+                real_name_1: this.user.name,
+                real_name_2: this.user.real_name_2,
+                nickname: this.user.nickname,
+                user_groups: this.user.user_groups,
+                email: this.user.email,
+                password_1: this.user.password_1,
+                password_2: this.user.password_2,
                 login_user_id: this.loginUserId
             }
             if (id !== undefined) {
