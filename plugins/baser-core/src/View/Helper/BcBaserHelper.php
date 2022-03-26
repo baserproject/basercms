@@ -210,20 +210,11 @@ class BcBaserHelper extends Helper
      * @return string エレメントのレンダリング結果
      * @checked
      * @unitTest
+     * @noTodo
      */
-    public function getElement($name, $data = [], $options = [])
+    public function getElement(string $name, array $data = [], array $options = [])
     {
-        $options = array_merge([
-            'subDir' => true
-        ], $options);
-
-        if (isset($options['plugin']) && !$options['plugin']) {
-            unset($options['plugin']);
-        }
-
-        /*** beforeElement ***/
-        // TODO ucmitz 未実装
-        /* >>>
+        // EVENT beforeElement
         $event = $this->dispatchLayerEvent('beforeElement', [
             'name' => $name,
             'data' => $data,
@@ -232,11 +223,8 @@ class BcBaserHelper extends Helper
         if ($event !== false) {
             $options = ($event->getResult() === null || $event->getResult() === true)? $event->getData('options') : $event->getResult();
         }
-        <<< */
 
-        /*** Controller.beforeElement ***/
-        // TODO ucmitz 未実装
-        /* >>>
+        // EVENT ControllerName.beforeElement
         $event = $this->dispatchLayerEvent('beforeElement', [
             'name' => $name,
             'data' => $data,
@@ -245,27 +233,10 @@ class BcBaserHelper extends Helper
         if ($event !== false) {
             $options = ($event->getResult() === null || $event->getResult() === true)? $event->getData('options') : $event->getResult();
         }
-        <<< */
-
-        // TODO ucmitz 未実装
-        /* >>>
-        if ($options['subDir'] === false) {
-            if (!$this->_subDir && $this->_View->subDir) {
-                $this->_subDir = $this->_View->subDir;
-            }
-            $this->_View->subDir = null;
-        } else {
-            if ($this->_subDir) {
-                $this->_View->subDir = $this->_subDir;
-            }
-        }
-        <<< */
 
         $out = $this->_View->element($name, $data, $options);
 
-        /*** afterElement ***/
-        // TODO ucmitz 未実装
-        /* >>>
+        // EVENT afterElement
         $event = $this->dispatchLayerEvent('afterElement', [
             'name' => $name,
             'out' => $out
@@ -273,11 +244,8 @@ class BcBaserHelper extends Helper
         if ($event !== false) {
             $out = ($event->getResult() === null || $event->getResult() === true)? $event->getData('out') : $event->getResult();
         }
-        <<< */
 
-        /*** Controller.afterElement ***/
-        // TODO ucmitz 未実装
-        /* >>>
+        // EVENT ControllerName.afterElement
         $event = $this->dispatchLayerEvent('afterElement', [
             'name' => $name,
             'out' => $out
@@ -285,7 +253,6 @@ class BcBaserHelper extends Helper
         if ($event !== false) {
             $out = ($event->getResult() === null || $event->getResult() === true)? $event->getData('out') : $event->getResult();
         }
-        <<< */
 
         return $out;
     }
@@ -361,6 +328,7 @@ class BcBaserHelper extends Helper
      * @return string
      * @checked
      * @unitTest
+     * @note(value="未実装につき継承元のコントロールを返却している")
      */
     public function getLink($title, $url = null, $options = [], $confirmMessage = false)
     {
@@ -678,6 +646,7 @@ class BcBaserHelper extends Helper
      * @return string
      * @checked
      * @unitTest
+     * @note(value="コンテンツ名を取得して返却")
      */
     public function getContentsName($detail = false, $options = [])
     {
@@ -863,6 +832,7 @@ class BcBaserHelper extends Helper
      * @return string URL
      * @checked
      * @unitTest
+     * @note(value="$sessionId について実装検討要")
      */
     public function getUrl($url = null, $full = false, $sessionId = true)
     {
@@ -1190,28 +1160,25 @@ class BcBaserHelper extends Helper
      * MEMO: BcRequest.(agent).aliasは廃止
      *
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function isHome()
     {
-        if (empty($this->_View->getRequest()->getParam('Site'))) {
+        $request = $this->_View->getRequest();
+        if (empty($request->getParam('Site'))) {
             return false;
-        }
-        // TODO ucmitz 未実装のため代替措置
-        // >>>
-        return false;
-        // <<<
-
-        $site = $this->_View->getRequest()->getAttribute('currentSite');
-        if (!$site->alias || $site->same_main_url || $site->use_subdomain) {
-            return (
-                $this->_View->getRequest()->url == false ||
-                $this->_View->getRequest()->url == 'index'
-            );
         } else {
-            return (
-                $this->_View->getRequest()->url == $site->alias . '/' ||
-                $this->_View->getRequest()->url == $site->alias . '/index'
-            );
+            $site = $request->getParam('Site');
+            $path = $request->getUri()->getPath();
+        }
+        if (empty($site->alias) || $site->same_main_url || $site->use_subdomain) {
+            // メインサイトの場合
+            return $path === "/" || $path === "/index";
+        } else {
+            // サブサイトの場合
+            return $path === "/$site->alias/" || $path === "/$site->alias/index";
         }
     }
 
@@ -2136,10 +2103,14 @@ END_FLASH;
      * 現在のページが固定ページかどうかを判定する
      *
      * @return bool 固定ページの場合は true を返す
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function isPage()
     {
-        return ($this->_View->getRequest()->getParam('controller') == 'pages' && $this->_View->getRequest()->getParam('action') == 'display');
+        $request = $this->_View->getRequest();
+        return ($request->getParam('controller') === 'Pages' && $request->getParam('action') == 'display');
     }
 
     /**
@@ -2630,6 +2601,9 @@ END_FLASH;
      * @param array $options オプション（初期値 : array()）
      *    ※ その他のパラメータについては、View::element() を参照
      * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function contentsNavi($data = [], $options = [])
     {
@@ -2821,6 +2795,9 @@ END_FLASH;
      * 現在のコンテンツ情報を取得する
      *
      * @return mixed|null
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getCurrentContent()
     {
@@ -2847,6 +2824,9 @@ END_FLASH;
     /**
      * コンテンツ作成日を取得
      * @return null|string
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getContentCreatedDate($format = 'Y/m/d H:i')
     {
@@ -2863,6 +2843,9 @@ END_FLASH;
      *
      * @param string $format
      * @return null|string
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getContentModifiedDate($format = 'Y/m/d H:i')
     {
@@ -2884,6 +2867,9 @@ END_FLASH;
 
     /**
      * 更新情報を取得する
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getUpdateInfo()
     {

@@ -41,9 +41,9 @@ $(function () {
             previewMode = 'draft';
         }
         if (previewurl.match(/\?/)) {
-            previewurl += '&preview=' + previewMode;
+            previewurl += '&url=' + fullUrl +  '&preview=' + previewMode;
         } else {
-            previewurl += '?preview=' + previewMode;
+            previewurl += '?url=' + fullUrl + '&preview=' + previewMode;
         }
 
         form.attr('target', 'preview');

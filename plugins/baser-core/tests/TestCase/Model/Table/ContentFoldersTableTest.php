@@ -99,7 +99,7 @@ class ContentFoldersTableTest extends BcTestCase
     {
         $data = new Entity(['id' => 1]);
         $this->ContentFolders->dispatchEvent('Model.beforeSave', ['entity' => $data, 'options' => new ArrayObject()]);
-        $this->assertEquals("/", $this->ContentFolders->beforeUrl);
+        $this->assertTrue($this->ContentFolders->beforeStatus);
     }
 
     /**
@@ -109,7 +109,6 @@ class ContentFoldersTableTest extends BcTestCase
      */
     public function testAfterSave(): void
     {
-        $this->ContentFolders->beforeUrl = 'test';
         $contentFolder = $this->ContentFolders->get(1, ['contain' => ['Contents']]);
         $this->ContentFolders->save($contentFolder);
         $this->assertTrue($this->ContentFolders->isMovableTemplate);
@@ -124,7 +123,7 @@ class ContentFoldersTableTest extends BcTestCase
     public function testBeforeMove(): void
     {
         $this->ContentFolders->dispatchEvent('Controller.Contents.beforeMove', [new ContentFolder(), new ArrayObject(), 'data.currentType' => 'ContentFolder', 'data.entityId' => 1]);
-        $this->assertEquals("/", $this->ContentFolders->beforeUrl);
+        $this->assertTrue($this->ContentFolders->beforeStatus);
     }
 
     /**
@@ -145,11 +144,6 @@ class ContentFoldersTableTest extends BcTestCase
     public function testSetBeforeRecord(): void
     {
         $this->execPrivateMethod($this->ContentFolders, "setBeforeRecord", [1]);
-        $reflection = new ReflectionClass($this->ContentFolders);
-        $property = $reflection->getProperty('beforeStatus');
-        $property->setAccessible(true);
-        $beforeStatus =  $property->getValue($this->ContentFolders);
-        $this->assertEquals("/", $this->ContentFolders->beforeUrl);
-        $this->assertTrue($beforeStatus);
+        $this->assertTrue($this->ContentFolders->beforeStatus);
     }
 }

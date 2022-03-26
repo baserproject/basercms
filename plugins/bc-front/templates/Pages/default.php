@@ -11,9 +11,13 @@
 
 /**
  * 固定ページデフォルトテンプレート
- *
- * @var string $pageContent
+ * @var BaserCore\View\BcAdminAppView $this
+ * @var Page $page
  */
+$this->BcAdmin->setTitle($page['content']['title']);
+$this->BcBaser->setDescription($page['content']['description']);
+$this->BcBaser->setPageEditLink($page['id']);
 
+echo $page['contents'];
 
-echo $pageContent;
+$this->BcBaser->updateInfo();

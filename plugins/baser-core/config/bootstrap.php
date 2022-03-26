@@ -18,13 +18,14 @@ use BaserCore\Annotation\Note;
  * bootstrap
  *
  * @checked
- * @note(value="固定ページを実装するまではTODO消化できない")
  */
 
 use BaserCore\Event\BcContainerEventListener;
 use BaserCore\Event\BcControllerEventDispatcher;
 use BaserCore\Event\BcModelEventDispatcher;
 use BaserCore\Event\BcViewEventDispatcher;
+use BaserCore\Event\ContentFoldersControllerEventListener;
+use BaserCore\Event\PagesControllerEventListener;
 use BaserCore\Utility\BcUtil;
 use Cake\Cache\Cache;
 use Cake\Core\Configure;
@@ -55,12 +56,8 @@ $event->on(new BcControllerEventDispatcher());
 $event->on(new BcModelEventDispatcher());
 $event->on(new BcViewEventDispatcher());
 $event->on(new BcContainerEventListener());
-
-// TODO 未実装
-// >>>
-//$event->on(new PagesControllerEventListener());
-//$event->on(new ContentFoldersControllerEventListener());
-// <<<
+$event->on(new PagesControllerEventListener());
+$event->on(new ContentFoldersControllerEventListener());
 
 /**
  * パス定義
@@ -100,3 +97,4 @@ $_ENV['IS_CONSOLE'] = (substr(php_sapi_name(), 0, 3) === 'cli');
 if(BcUtil::isConsole()) {
     Configure::write('App.fullBaseUrl', 'https://localhost');
 }
+

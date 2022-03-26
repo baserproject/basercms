@@ -172,7 +172,10 @@ class ContentFolderServiceTest extends BcTestCase
             // contentの中身が足りない場合
             [
                 ['folder_template' => 'テストcreate', 'content' => []],
-                ['content' => ['title' => ['_required' => "タイトルを入力してください。"]]]
+                ['content' => [
+                    'title' => ['_required' => "タイトルを入力してください。"],
+                    'name' => ['_required' => "nameフィールドが存在しません。"]
+                    ]]
             ],
         ];
     }

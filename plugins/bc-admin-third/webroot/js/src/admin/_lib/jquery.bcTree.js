@@ -732,7 +732,7 @@
                 $(this).find('a.jstree-anchor:first').after('<span class="function"></span>');
                 $(this).find('.content-name').remove();
                 if (node.data.jstree.name) {
-                    $(this).find('a.jstree-anchor:first').after('<span class="content-name">( ' + node.data.jstree.name + ' )</span>')
+                    $(this).find('a.jstree-anchor:first').after('<span class="content-name">( ' + decodeURIComponent(node.data.jstree.name) + ' )</span>')
                 }
             });
             $("span.function").on('click', function (e) {

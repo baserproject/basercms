@@ -351,10 +351,42 @@ class BcUtilTest extends BcTestCase
 
     /**
      * 現在ログインしているユーザーのユーザーグループ情報を取得する
+     * @param string $id ユーザーid
+     * @param bool $expect 期待値
+     * @return void
+     * @dataProvider loginUserGroupDataProvider
      */
-    public function testLoginUserGroup()
+    public function testLoginUserGroup($id, $expect): void
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $sessionKey = Configure::read('BcPrefixAuth.Admin.sessionKey');
+        $session = $this->request->getSession();
+        $user = $this->getUser($id);
+        $session->write($sessionKey, $user);
+        if ($expect) {
+            $this->loginAdmin($this->getRequest(), $id);
+        }
+        $result = BcUtil::loginUserGroup();
+
+        if($result === false){
+            $result = [];
+        }
+
+        $this->assertCount($expect, $result);
+    }
+
+    /**
+     * isAdminUser用データプロバイダ
+     *
+     * @return array
+     */
+    public function loginUserGroupDataProvider()
+    {
+        return [
+            // ログイン
+            [1, 1],
+            // 非ログイン
+            [0, 0],
+        ];
     }
 
     /**
@@ -617,15 +649,23 @@ class BcUtilTest extends BcTestCase
      */
     public function testGetAllThemeList()
     {
-
-        // TODO ucmitz移行時に未実装のため代替措置
-        // >>>
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        // <<<
-
+        $themePath = ROOT . DS . 'plugins' . DS . 'TestTheme';
+        $themeConfigPath = $themePath . DS . 'config.php';
+        $folder = new Folder();
+        $folder->create(ROOT . DS . 'plugins' . DS . 'TestTheme');
+        $file = new File($themeConfigPath);
+        $file->write('
+            <?php
+            return [
+                \'type\' => \'Theme\'
+            ];
+        ');
+        $file->close();
         $themes = BcUtil::getAllThemeList();
-        $this->assertTrue(in_array('nada-icons', $themes));
-        $this->assertTrue(in_array('admin-third', $themes));
+        $this->assertTrue(in_array('BcFront', $themes));
+        $this->assertTrue(in_array('BcAdminThird', $themes));
+        $this->assertTrue(in_array('TestTheme', $themes));
+        $folder->delete($themePath);
     }
 
     /**
@@ -633,15 +673,9 @@ class BcUtilTest extends BcTestCase
      */
     public function testGetThemeList()
     {
-
-        // TODO ucmitz移行時に未実装のため代替措置
-        // >>>
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        // <<<
-
         $themes = BcUtil::getThemeList();
-        $this->assertTrue(in_array('nada-icons', $themes));
-        $this->assertFalse(in_array('admin-third', $themes));
+        $this->assertTrue(in_array('BcFront', $themes));
+        $this->assertFalse(in_array('BcAdminThird', $themes));
     }
 
     /**
@@ -649,15 +683,9 @@ class BcUtilTest extends BcTestCase
      */
     public function testGetAdminThemeList()
     {
-
-        // TODO ucmitz移行時に未実装のため代替措置
-        // >>>
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        // <<<
-
         $themes = BcUtil::getAdminThemeList();
-        $this->assertFalse(in_array('nada-icons', $themes));
-        $this->assertTrue(array_key_exists('admin-third', $themes));
+        $this->assertFalse(in_array('BcFront', $themes));
+        $this->assertTrue(array_key_exists('BcAdminThird', $themes));
     }
 
     /**
@@ -914,5 +942,4 @@ class BcUtilTest extends BcTestCase
         $result = BcUtil::docRoot();
         $this->assertEquals($expected, $result);
     }
-
 }

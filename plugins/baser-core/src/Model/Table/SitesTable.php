@@ -378,7 +378,7 @@ class SitesTable extends AppTable
                 $contentService->deleteRecursive($child->id);
             }
         }
-        if (!$this->Contents->hardDelete($content)) return false;
+        if (!$this->Contents->hardDel($content)) return false;
     }
 
     /**

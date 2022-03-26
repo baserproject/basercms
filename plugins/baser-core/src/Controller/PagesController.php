@@ -111,65 +111,6 @@ class PagesController extends BcFrontAppController
 			$title_for_layout = Inflector::humanize($path[$count - 1]);
 		}
 		$this->set(compact('page', 'subpage', 'title_for_layout'));
-
-		$previewCreated = false;
-		if ($this->request->getData()) {
-			// POSTパラメータのコードに含まれるscriptタグをそのままHTMLに出力するとブラウザによりXSSと判定される
-			// 一度データをセッションに退避する
-			if ($this->BcFrontContents->preview === 'default') {
-				$sessionKey = __CLASS__ . '_preview_default_' . $this->request->getData('Content.entity_id');
-				$this->request = $this->request->withParsedBody($this->Content->saveTmpFiles($this->request->getData(), mt_rand(0, 99999999)));
-				$this->Session->write($sessionKey, $this->request->getData());
-				$query = [];
-				if ($this->request->getQuery()) {
-					foreach($this->request->getQuery() as $key => $value) {
-						$query[] = $key . '=' . $value;
-					}
-				}
-				$redirectUrl = '/';
-				if ($this->request->getPath()) {
-					$redirectUrl .= $this->request->getPath();
-				}
-				if ($query) {
-					$redirectUrl .= '?' . implode('&', $query);
-				}
-				$this->redirect($redirectUrl);
-				return;
-			}
-
-			if ($this->BcFrontContents->preview === 'draft') {
-				$this->request = $this->request->withParsedBody($this->Content->saveTmpFiles($this->request->getData(), mt_rand(0, 99999999)));
-				$this->request->withParam('Content.eyecatch', $this->request->getData('Content.eyecatch'));
-				$uuid = $this->_createPreviewTemplate($pageService, $this->request->getData());
-				$this->set('previewTemplate', TMP . 'pages_preview_' . $uuid . Configure::read('BcApp.templateExt'));
-				$previewCreated = true;
-			}
-
-		} else {
-			// プレビューアクセス
-			if ($this->BcFrontContents->preview === 'default') {
-				$sessionKey = __CLASS__ . '_preview_default_' . $this->request->getParam('Content.entity_id');
-				$previewData = $this->request->getSession()->read($sessionKey);
-				$this->request->withParam('Content.eyecatch', $previewData['Content']['eyecatch']);
-
-				if (!is_null($previewData)) {
-					$this->request->getSession()->delete($sessionKey);
-					$uuid = $this->_createPreviewTemplate($pageService, $previewData);
-					$this->set('previewTemplate', TMP . 'pages_preview_' . $uuid . Configure::read('BcApp.templateExt'));
-					$previewCreated = true;
-				}
-			}
-
-			// 草稿アクセス
-			if ($this->BcFrontContents->preview === 'draft') {
-                $data = $pageService->get($this->request->getParam('Content.entity_id'));
-				$uuid = $this->_createPreviewTemplate($data, true);
-				// TODO ucmitz previewTemplate 不要
-				$this->set('previewTemplate', TMP . 'pages_preview_' . $uuid . Configure::read('BcApp.templateExt'));
-				$previewCreated = true;
-			}
-		}
-
 		$page = $pageService->get($this->request->getParam('Content.entity_id'));
 
 		/* @var Page $page */
@@ -178,13 +119,10 @@ class PagesController extends BcFrontAppController
 			$template = $contentFolderService->getParentTemplate($this->request->getParam('Content.id'), 'page');
 		}
 
-        $this->set('pageContent', $page->contents);
+        $this->set('page', $page);
 
 		try {
 			$this->render('/Pages/' . $template);
-			if ($previewCreated) {
-				@unlink(TMP . 'pages_preview_' . $uuid . Configure::read('BcApp.templateExt'));
-			}
 		} catch (MissingViewException $e) {
 			if (Configure::read('debug')) {
 				throw $e;
@@ -192,44 +130,4 @@ class PagesController extends BcFrontAppController
 			throw new NotFoundException();
 		}
 	}
-
-	/**
-	 * プレビュー用テンプレートを生成する
-	 *
-	 * 一時ファイルとしてビューを保存
-	 * タグ中にPHPタグが入る為、ファイルに保存する必要がある
-	 *@param PageServiceInterface $pageService
-	 * @param $data
-	 * @param bool $isDraft
-	 * @return string uuid
-	 */
-	protected function _createPreviewTemplate($pageService, $data, $isDraft = false)
-	{
-		if (!$isDraft) {
-			// postで送信される前提
-			if (!empty($data['Page']['contents_tmp'])) {
-				$contents = $data['Page']['contents_tmp'];
-			} else {
-				$contents = $data['Page']['contents'];
-			}
-		} else {
-			$contents = $data['Page']['draft'];
-		}
-		$contents = $pageService->addBaserPageTag(
-			null,
-			$contents,
-			$data['Content']['title'],
-			$data['Content']['description'],
-		);
-		$uuid = Text::uuid();
-		$path = TMP . 'pages_preview_' . $uuid . Configure::read('BcApp.templateExt');
-		$file = new File($path);
-		$file->open('w');
-		$file->append($contents);
-		$file->close();
-		unset($file);
-		@chmod($path, 0666);
-		return $uuid;
-	}
-
 }

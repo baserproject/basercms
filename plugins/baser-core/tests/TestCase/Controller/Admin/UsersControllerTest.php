@@ -107,7 +107,7 @@ class UsersControllerTest extends BcTestCase
         $this->assertResponseOk();
 
         // イベントテスト
-        $this->entryControllerEventToMock('Controller.BaserCore.Users.searchIndex', function(Event $event) {
+        $this->entryEventToMock(self::EVENT_LAYER_CONTROLLER, 'BaserCore.Users.searchIndex', function(Event $event) {
             $request = $event->getData('request');
             return $request->withQueryParams(['num' => 1]);
         });
@@ -156,7 +156,7 @@ class UsersControllerTest extends BcTestCase
         $this->assertEquals(1, $query->count());
 
         // イベントテスト
-        $this->entryControllerEventToMock('Controller.BaserCore.Users.afterAdd', function(Event $event) {
+        $this->entryEventToMock(self::EVENT_LAYER_CONTROLLER, 'BaserCore.Users.afterAdd', function(Event $event) {
             $user = $event->getData('user');
             $users = TableRegistry::getTableLocator()->get('Users');
             $user->name = 'etc';
@@ -195,7 +195,7 @@ class UsersControllerTest extends BcTestCase
         $this->assertResponseSuccess();
 
         // イベントテスト
-        $this->entryControllerEventToMock('Controller.BaserCore.Users.afterEdit', function(Event $event) {
+        $this->entryEventToMock(self::EVENT_LAYER_CONTROLLER, 'BaserCore.Users.afterEdit', function(Event $event) {
             $user = $event->getData('user');
             $users = TableRegistry::getTableLocator()->get('Users');
             $user->name = 'etc';

@@ -28,19 +28,13 @@ use Cake\Datasource\EntityInterface;
  */
 class ContentFoldersTable extends AppTable
 {
-    /**
-     * 変更前URL
-     *
-     * @var array
-     */
-    public $beforeUrl = null;
 
     /**
      * 変更前ステータス
      *
      * @var bool|null
      */
-    private $beforeStatus = null;
+    public $beforeStatus = null;
 
     /**
      * テンプレートを移動可能かどうか
@@ -115,19 +109,6 @@ class ContentFoldersTable extends AppTable
     }
 
     /**
-     * After Move
-     * @param EventInterface $event
-     * @param EntityInterface $entity
-     * @param ArrayObject $options
-     * @checked
-     * @noTodo
-     */
-    public function afterMove(EventInterface $event, EntityInterface $entity, ArrayObject $options)
-    {
-        return true;
-    }
-
-    /**
      * Before Save
      * @param EventInterface $event
      * @param EntityInterface $entity
@@ -159,7 +140,7 @@ class ContentFoldersTable extends AppTable
      */
     public function afterSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
-        if (!empty($entity->content->url) && $this->beforeUrl) {
+        if (!empty($entity->content->url)) {
             $this->isMovableTemplate = true;
         }
         if (!empty($options['reconstructSearchIndices']) && $this->beforeStatus !== $entity->content->status) {
@@ -182,7 +163,6 @@ class ContentFoldersTable extends AppTable
     {
         $record = $this->get($id, ['contain' => ['Contents']]);
         if ($record->content->url) {
-            $this->beforeUrl = $record->content->url;
             $this->beforeStatus = $record->content->status;
         }
     }

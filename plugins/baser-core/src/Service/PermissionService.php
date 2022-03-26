@@ -406,6 +406,7 @@ class PermissionService implements PermissionServiceInterface
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function addCheck(string $url, bool $auth)
     {

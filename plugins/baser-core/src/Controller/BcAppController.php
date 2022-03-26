@@ -91,6 +91,7 @@ class BcAppController extends AppController
      *
      * @return void
      * @checked
+     * @note(value="マイルストーン２が終わってから確認する")
      */
     public function beforeFilter(EventInterface $event)
     {
@@ -171,7 +172,8 @@ class BcAppController extends AppController
     public function beforeRender(EventInterface $event): void
     {
         parent::beforeRender($event);
-
+        // TODO ucmitz 未確認
+        return;
         $favoriteBoxOpened = false;
         if (BcUtil::isAdminSystem()) {
             $this->__updateFirstAccess();

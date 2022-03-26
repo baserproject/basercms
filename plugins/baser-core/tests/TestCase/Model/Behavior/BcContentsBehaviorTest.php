@@ -93,6 +93,12 @@ class BcContentsBehaviorTest extends BcTestCase
         $result = $this->table->dispatchEvent('Model.afterMarshal', ['entity' => $contentFolder, 'data' => new ArrayObject($contentFolder->toArray()), 'options' => new ArrayObject()]);
         $contentFolder = $result->getData('entity');
         $this->assertEquals(['content' => ['_required' => "関連するコンテンツがありません"]], $contentFolder->getErrors());
+        // プラグインとタイプが設定されてるかをテストする
+        $contentFolder = $this->table->find()->contain("Contents")->first();
+        $result = $this->table->dispatchEvent('Model.afterMarshal', ['entity' => $contentFolder, 'data' => new ArrayObject($contentFolder->toArray()), 'options' => new ArrayObject()]);
+        $contentFolder = $result->getData('entity');
+        $this->assertEquals('BaserCore', $contentFolder->content->plugin);
+        $this->assertEquals('ContentFolder', $contentFolder->content->type);
     }
 
     /**

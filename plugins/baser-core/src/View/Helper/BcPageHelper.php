@@ -11,10 +11,16 @@
 
 namespace BaserCore\View\Helper;
 
-use BaserCore\Event\BcEventDispatcherTrait;
-use Cake\View\Helper;
 use Cake\View\View;
-use Throwable;
+use Cake\View\Helper;
+use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Event\BcEventDispatcherTrait;
+use BaserCore\Service\PageServiceInterface;
+use BaserCore\Service\ContentServiceInterface;
+use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\Note;
 
 /**
  * BcPageHelper
@@ -26,7 +32,7 @@ class BcPageHelper extends Helper
      * Trait
      */
     use BcEventDispatcherTrait;
-
+    use BcContainerTrait;
     /**
      * ページモデル
      *
@@ -63,6 +69,20 @@ class BcPageHelper extends Helper
             $this->Page = ClassRegistry::init('Page', 'Model');
         }
         <<< */
+    }
+
+    /**
+     * initialize
+     * @param array $config
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function initialize(array $config): void
+    {
+        parent::initialize($config);
+        $this->ContentService = $this->getService(ContentServiceInterface::class);
+        $this->PageService = $this->getService(PageServiceInterface::class);
     }
 
     /**
@@ -133,11 +153,14 @@ class BcPageHelper extends Helper
      *        ※ overCategory が true の場合は、BcPageHelper::contentsNaviAvailable() が false だとしても強制的に出力する
      *    - `escape` : エスケープするかどうか
      * @return mixed コンテンツナビが無効かつオプションoverCategoryがtrueでない場合はfalseを返す
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getNextLink($title = '', $options = [])
     {
-
-        if (empty($this->request->getParam('Content.id')) || empty($this->request->params['Content']['parent_id'])) {
+        $request = $this->getView()->getRequest();
+        if (empty($request->getParam('Content.id')) || empty($request->getParam('Content.parent_id'))) {
             return false;
         }
         $options = array_merge([
@@ -152,16 +175,16 @@ class BcPageHelper extends Helper
         unset($options['arrow']);
         unset($options['overCategory']);
 
-        $content = $this->_getPageByNextOrPrev($this->request->getParam('Content.lft'), $this->request->params['Content']['parent_id'], 'next', $overCategory);
+        $neighbors = $this->getPageNeighbors($request->getParam('Content'), $overCategory);
 
-        if ($content) {
-            if (!$title) {
-                $title = $content['Content']['title'] . $arrow;
-            }
-            $url = $content['Content']['url'];
-            return $this->BcBaser->getLink($title, $url, $options);
-        } else {
+        if (empty($neighbors['next'])) {
             return false;
+        } else {
+            if (!$title) {
+                $title = $neighbors['next']['title'] . $arrow;
+            }
+            $url = $neighbors['next']['url'];
+            return $this->BcBaser->getLink($title, $url, $options);
         }
     }
 
@@ -175,6 +198,9 @@ class BcPageHelper extends Helper
      *    - `overCategory` : 固定ページのカテゴリをまたいで次の記事のリンクを取得するかどうか（初期値 : false）
      *        ※ overCategory が true の場合は、BcPageHelper::contentsNaviAvailable() が false だとしても強制的に出力する
      * @return @return void コンテンツナビが無効かつオプションoverCategoryがtrueでない場合はfalseを出力する
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function nextLink($title = '', $options = [])
     {
@@ -191,10 +217,14 @@ class BcPageHelper extends Helper
      *    - `overCategory` : 固定ページのカテゴリをまたいで次の記事のリンクを取得するかどうか（初期値 : false）
      *    - `escape` : エスケープするかどうか
      * @return string|false
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getPrevLink($title = '', $options = [])
     {
-        if (empty($this->request->getParam('Content.id')) || empty($this->request->params['Content']['parent_id'])) {
+        $request = $this->getView()->getRequest();
+        if (empty($request->getParam('Content.id')) || empty($request->getParam('Content.parent_id'))) {
             return false;
         }
         $options = array_merge([
@@ -208,17 +238,17 @@ class BcPageHelper extends Helper
         $overCategory = $options['overCategory'];
         unset($options['arrow']);
         unset($options['overCategory']);
+        $content = $request->getParam('Content');
+        $neighbors = $this->getPageNeighbors($content, $overCategory);
 
-        $content = $this->_getPageByNextOrPrev($this->request->getParam('Content.lft'), $this->request->params['Content']['parent_id'], 'prev', $overCategory);
-
-        if ($content) {
-            if (!$title) {
-                $title = $arrow . $content['Content']['title'];
-            }
-            $url = $content['Content']['url'];
-            return $this->BcBaser->getLink($title, $url, $options);
-        } else {
+        if (empty($neighbors['prev'])) {
             return false;
+        } else {
+            if (!$title) {
+                $title = $arrow . $neighbors['prev']['title'];
+            }
+            $url = $neighbors['prev']['url'];
+            return $this->BcBaser->getLink($title, $url, $options);
         }
     }
 
@@ -232,6 +262,9 @@ class BcPageHelper extends Helper
      *    - `overCategory` : 固定ページのカテゴリをまたいで次の記事のリンクを取得するかどうか（初期値 : false）
      *        ※ overCategory が true の場合は、BcPageHelper::contentsNaviAvailable() が false だとしても強制的に出力する
      * @return void コンテンツナビが無効かつオプションoverCategoryがtrueでない場合はfalseを返す
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function prevLink($title = '', $options = [])
     {
@@ -241,34 +274,28 @@ class BcPageHelper extends Helper
     /**
      * 指定した固定ページデータの次、または、前のデータを取得する
      *
-     * @param array $page 固定ページデータ
-     * @param string $type next Or prev
+     * @param Content $content
      * @param bool $overCategory カテゴリをまたがるかどうか
      * @return array 次、または、前の固定ページデータ
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    protected function _getPageByNextOrPrev($lft, $parentId, $type, $overCategory = false)
+    protected function getPageNeighbors($content, $overCategory = false)
     {
-        $Content = ClassRegistry::init('Content');
-        $conditions = array_merge($Content->getConditionAllowPublish(), [
-            'Content.type <>' => 'ContentFolder',
-            'Content.site_id' => $this->request->params['Content']['site_id']
+        $conditions = array_merge($this->ContentService->getConditionAllowPublish(), [
+            'Contents.type <>' => 'ContentFolder',
+            'Contents.site_id' => $content->site_id
         ]);
         if ($overCategory !== true) {
-            $conditions['Content.parent_id'] = $parentId;
+            $conditions['Contents.parent_id'] = $content->parent_id;
         }
-        $data = $Content->find('neighbors', [
+        $options = [
             'field' => 'lft',
-            'value' => $lft,
+            'value' => $content->lft,
             'conditions' => $conditions,
-            'order' => ['Content.lft'],
-            'recursive' => 0,
-            'cache' => false
-        ]);
-        if ($data && !empty($data[$type])) {
-            return $data[$type];
-        } else {
-            return false;
-        }
+            'order' => ['Contents.lft'],
+        ];
+        return $this->ContentService->getNeighbors($options);
     }
-
 }

@@ -89,6 +89,7 @@ class AppController extends BaseController
      * Initialize
      * @checked
      * @unitTest
+     * @note(value="BcEmailを実装したあとに確認")
      */
     public function initialize(): void
     {
@@ -104,7 +105,6 @@ class AppController extends BaseController
 
         // TODO ucmitz 未移行のためコメントアウト
         // >>>
-//        $this->loadComponent('BaserCore.Flash');
 //        $this->loadComponent('BaserCore.BcEmail');
         // <<<
     }
@@ -151,8 +151,9 @@ class AppController extends BaseController
      */
     public function beforeRender(EventInterface $event): void
     {
+        parent::beforeRender($event);
         if (!isset($this->RequestHandler) || !$this->RequestHandler->prefers('json')) {
-            $this->viewBuilder()->setClassName('BaserCore.App');
+            $this->viewBuilder()->setClassName('BaserCore.BcFrontApp');
             $theme = Inflector::camelize(Inflector::underscore(Configure::read('BcApp.defaultFrontTheme')));
             $site = $this->getRequest()->getParam('Site');
             if (!$site) {

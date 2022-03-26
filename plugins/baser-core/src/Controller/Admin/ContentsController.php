@@ -15,8 +15,6 @@ use Cake\ORM\Query;
 use Cake\Utility\Hash;
 use Cake\ORM\ResultSet;
 use Cake\Core\Configure;
-use Cake\I18n\FrozenTime;
-use Cake\ORM\TableRegistry;
 use BaserCore\Utility\BcUtil;
 use Cake\Event\EventInterface;
 use BaserCore\Annotation\NoTodo;
@@ -25,11 +23,9 @@ use BaserCore\Annotation\UnitTest;
 use BaserCore\Model\Table\SitesTable;
 use BaserCore\Model\Table\UsersTable;
 use BaserCore\Model\Table\ContentsTable;
-use Cake\Http\Exception\NotFoundException;
 use BaserCore\Model\Table\SiteConfigsTable;
 use BaserCore\Service\SiteServiceInterface;
 use BaserCore\Model\Table\ContentFoldersTable;
-use BaserCore\Service\BcAdminServiceInterface;
 use BaserCore\Service\ContentServiceInterface;
 use BaserCore\Service\SiteConfigServiceInterface;
 use BaserCore\Controller\Component\BcMessageComponent;
@@ -44,7 +40,6 @@ use BaserCore\Controller\Component\BcAdminContentsComponent;
  *
  * @package BaserCore.Controller
  * @property ContentsTable $Contents
- * @property BcAuthComponent $BcAuth
  * @property SiteConfigsTable $SiteConfigs
  * @property SitesTable $Sites
  * @property UsersTable $Users
@@ -346,21 +341,15 @@ class ContentsController extends BcAdminAppController
             $data = $this->request->getData('Content') ?? $this->request->getData('ContentFolder.content');
             $id = $data['id'];
             // EVENT Contents.beforeDelete
-            $beforeEvent = $this->dispatchLayerEvent('beforeDelete', [
-                'id' => $id
+            $this->dispatchLayerEvent('beforeDelete', [
+                'data' => $id
             ]);
-            if ($beforeEvent !== false) {
-                $id = ($beforeEvent->getResult() === null || $beforeEvent->getResult() === true)? $beforeEvent->getData('id') : $beforeEvent->getResult();
-            }
             $content = $contentService->get($id);
             if ($contentService->delete($id)) {
                 // EVENT Contents.afterDelete
-                $afterEvent = $this->dispatchLayerEvent('afterDelete', [
-                    'content' => $content
+                $this->dispatchLayerEvent('afterDelete', [
+                    'data' => $id
                 ]);
-                if ($afterEvent !== false) {
-                    $content = ($afterEvent->getResult() === null || $afterEvent->getResult() === true)? $afterEvent->getData('content') : $afterEvent->getResult();
-                }
                 $typeName = Configure::read('BcContents.items.' . $content->plugin . '.' . $content->type . '.title');
                 $trashMessage = $typeName . sprintf(__d('baser', '「%s」をゴミ箱に移動しました。'), $content->title);
                 $aliasMessage = sprintf(__d('baser', '%s のエイリアス「%s」を削除しました。'), $typeName, $content->title);

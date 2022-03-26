@@ -52,8 +52,6 @@ class ContentsTable extends AppTable
      */
     public function initialize(array $config): void
     {
-        // TODO ucmitz:
-        // FrozenTime::setToStringFormat('yyyy-MM-dd HH:mm:ss');
         FrozenTime::setToStringFormat('yyyy/MM/dd HH:mm:ss');
         parent::initialize($config);
         $this->addBehavior('Tree', ['level' => 'level']);
@@ -130,8 +128,9 @@ class ContentsTable extends AppTable
      * @param Validator $validator
      * @return Validator
      * @checked
+     * @noTodo
      * @unitTest
-     * @note(value="荒川に内容確認")
+     *
      */
     public function validationDefault(Validator $validator): Validator
     {
@@ -143,6 +142,7 @@ class ContentsTable extends AppTable
 
         $validator
         ->scalar('name')
+        ->requirePresence('name', 'create', __d('baser', 'nameフィールドが存在しません。'))
         ->notEmptyString('name', __d('baser', 'URLを入力してください。'))
         ->maxLength('name', 230, __d('baser', '名前は230文字以内で入力してください。'))
         ->add('name', [
@@ -182,6 +182,7 @@ class ContentsTable extends AppTable
             ]
         ]);
         $validator
+        ->dateTime('self_publish_begin')
         ->allowEmptyDateTime('self_publish_begin')
         ->add('self_publish_begin', [
             'checkDate' => [
@@ -192,6 +193,7 @@ class ContentsTable extends AppTable
         ]);
 
         $validator
+        ->dateTime('self_publish_end')
         ->allowEmptyDateTime('self_publish_end')
         ->add('self_publish_end', [
             'checkDate' => [
@@ -202,31 +204,32 @@ class ContentsTable extends AppTable
         ])
         ->add('self_publish_end', [
             'checkDateAfterThan' => [
-                'rule' => ['checkDateAfterThan'],
+                'rule' => ['checkDateAfterThan', 'self_publish_begin'],
                 'provider' => 'bc',
                 'message' => __d('baser', '公開終了日は、公開開始日より新しい日付で入力してください。')
             ]
         ]);
         $validator
-        ->allowEmptyDateTime('created_date');
-        // TODO ucmitz: %Y-%m-%d形式か%Y/%m/%d形式か判断して、書き換える
-        // ->add('created_date', [
-        //     'checkDate' => [
-        //         'rule' => ['checkDate'],
-        //         'provider' => 'bc',
-        //         'message' => __d('baser', '作成日に不正な文字列が入っています。')
-        //     ]
-        // ]);
+        ->dateTime('created_date')
+        ->requirePresence('created_date', 'create', __d('baser', '作成日がありません。'))
+        ->notEmptyDateTime('created_date', __d('baser', '作成日が空になってます。'))
+        ->add('created_date', [
+            'checkDate' => [
+                'rule' => ['checkDate'],
+                'provider' => 'bc',
+                'message' => __d('baser', '作成日が正しくありません。')
+            ]
+        ]);
         $validator
-        ->allowEmptyDateTime('modified_date');
-        // TODO ucmitz: frozenTime形式に書き換える
-        // ->add('modified_date', [
-        //     'checkDate' => [
-        //         'rule' => ['checkDate'],
-        //         'provider' => 'bc',
-        //         'message' => __d('baser', '更新日に不正な文字列が入っています。')
-        //     ]
-        // ]);
+        ->datetime('modified_date')
+        ->notEmptyDateTime('modified_date', __d('baser', '更新日が空になってます。'), 'update')
+        ->add('modified_date', [
+            'checkDate' => [
+                'rule' => ['checkDate'],
+                'provider' => 'bc',
+                'message' => __d('baser', '更新日が正しくありません。')
+            ]
+        ]);
         return $validator;
     }
 
@@ -327,6 +330,9 @@ class ContentsTable extends AppTable
         } else {
             if (empty($content['modified_date'])) {
                 $content['modified_date'] = FrozenTime::now();
+            }
+            if (isset($content['created_date'])) {
+                $content['created_date'] = new FrozenTime($content['created_date']);
             }
             if (isset($content['name'])) {
                 $content['name'] = $content['name'];
@@ -466,11 +472,7 @@ class ContentsTable extends AppTable
         if (!empty($entity->id)) {
             $this->beforeSaveParentId = $entity->parent_id;
         }
-        if ($entity->isNew()) {
-            $entity->name = $this->urlEncode(mb_substr($entity->name, 0, 230, 'UTF-8'));
-        } else {
-            $entity->name = $this->urlEncode(mb_substr(rawurldecode($entity->name), 0, 230, 'UTF-8'));
-        }
+        $entity->name = $this->urlEncode(mb_substr(rawurldecode($entity->name), 0, 230, 'UTF-8'));
         return parent::beforeSave($event, $entity, $options);
     }
 
@@ -723,7 +725,7 @@ class ContentsTable extends AppTable
                 // 存在する場合は、自身のエイリアスかどうか確認し、エイリアスの場合は、公開状態とタイトル、説明文、アイキャッチ、更新日を更新
                 // フォルダの場合も更新する
                 if ($content->alias_id == $data->id || ($content->type == 'ContentFolder' && $isContentFolder)) {
-                    $content->name = rawurldecode($data->name);
+                    $content->name = $data->name;
                     $content->title = $data->title;
                     $content->description = $data->description;
                     $content->self_status = $data->self_status;
@@ -739,15 +741,9 @@ class ContentsTable extends AppTable
                     if ($content->type == 'ContentFolder') {
                         $url = preg_replace('/\/[^\/]+\/$/', '/', $url);
                     }
-                    if ($this->copyContentFolderPath($url, $site->id) !== $content->id) {
-                        $content->parent_id = $this->copyContentFolderPath($url, $site->id);
-                    }
+                    $content->parent_id = $this->copyContentFolderPath($url, $site->id);
                 } else {
-                    $content->name = rawurldecode($data->name);
-                }
-                $this->getEventManager()->off('Model.afterSave');
-                if (!$this->save($content)) {
-                    $result = false;
+                    $content->name = $data->name;
                 }
             } else {
                 // 存在しない場合はエイリアスを作成
@@ -763,6 +759,7 @@ class ContentsTable extends AppTable
                 unset($content->created);
                 unset($content->modified);
                 unset($content->layout_template);
+                $content->created_date = $content->created = FrozenTime::now();
                 $content->name = $data->name;
                 $content->main_site_content_id = $data->id;
                 $content->site_id = $site->id;
@@ -773,15 +770,14 @@ class ContentsTable extends AppTable
                 } else {
                     $content->alias_id = $data->id;
                 }
-                if ($this->copyContentFolderPath($url, $site->id) !== $content->id) {
-                    $content->parent_id = $this->copyContentFolderPath($url, $site->id);
-                }
+                $content->parent_id = $this->copyContentFolderPath($url, $site->id);
                 $content = $this->newEntity($content->toArray(), ['validate' => false]);
-                $this->getEventManager()->off('Model.afterSave');
-                if (!$this->save($content)) {
-                    $result = false;
-                }
             }
+            $this->offEvent('Model.afterSave');
+            if (!$this->save($content)) {
+                $result = false;
+            }
+            $this->onEvent('Model.afterSave');
         }
         return $result;
     }
@@ -795,6 +791,7 @@ class ContentsTable extends AppTable
      * @return bool|null
      * @checked
      * @unitTest
+     * @noTodo
      */
     public function copyContentFolderPath($currentUrl, $targetSiteId)
     {
@@ -816,8 +813,8 @@ class ContentsTable extends AppTable
         }
         unset($path[0]);
         $parentId = $this->Sites->getRootContentId($targetSiteId);
-        /* @var ContentFolder $ContentFolder */
-        $ContentFolder = TableRegistry::getTableLocator()->get('BaserCore.ContentFolders');
+        /* @var ContentFoldersTable $contentFoldersTable */
+        $contentFoldersTable = TableRegistry::getTableLocator()->get('BaserCore.ContentFolders');
         foreach($path as $currentContentFolder) {
             if ($currentContentFolder->type != 'ContentFolder') {
                 break;
@@ -834,7 +831,7 @@ class ContentsTable extends AppTable
             if ($targetContentFolder) {
                 $parentId = $targetContentFolder->id;
             } else {
-                $data = [
+                $contentFolder = $contentFoldersTable->patchEntity($contentFoldersTable->newEmptyEntity(), [
                     'content' => [
                         'name' => $currentContentFolder->name,
                         'title' => $currentContentFolder->title,
@@ -842,13 +839,13 @@ class ContentsTable extends AppTable
                         'plugin' => 'BaserCore',
                         'type' => 'ContentFolder',
                         'site_id' => $targetSiteId,
-                        'self_status' => true
+                        'self_status' => true,
+                        'created_date' => FrozenTime::now()
                     ]
-                ];
-                $ContentFolder->create($data);
-                // TODO ucmitz: saveがおかしいので修正する
-                if ($ContentFolder->save()) {
-                    $parentId = $ContentFolder->Content->id;
+                ]);
+                $result = $contentFoldersTable->save($contentFolder);
+                if ($result) {
+                    $parentId = $result->content->id;
                 } else {
                     return false;
                 }
@@ -991,7 +988,7 @@ class ContentsTable extends AppTable
      * URL / 公開状態 / メインサイトの関連コンテンツID
      *
      * @param Content $content
-     * @return Content
+     * @return EntityInterface|false
      * @checked
      * @unitTest
      * @noTodo
@@ -1012,13 +1009,7 @@ class ContentsTable extends AppTable
         if (isset($content->self_status)) {
             $content->status = $content->self_status;
         }
-        // null の場合、isset で判定できないので array_key_exists を利用
-        if (isset($content->self_publish_begin)) {
-            $content->publish_begin = $content->self_publish_begin;
-        }
-        if (isset($content->self_publish_end)) {
-            $content->publish_end = $content->self_publish_end;
-        }
+        $content = $this->updatePublishDate($content);
         if (!empty($content->parent_id)) {
             $parent = $this->find()->select(['name', 'status', 'publish_begin', 'publish_end'])->where(['id' => $content->parent_id])->first();
             if (!$parent->status || $parent->publish_begin || $parent->publish_begin) {
@@ -1047,10 +1038,38 @@ class ContentsTable extends AppTable
                 $content->main_site_content_id = null;
             }
         }
-        $event = $this->getEventManager()->matchingListeners('afterSave');
-        if ($event) $this->getEventManager()->off('Model.afterSave');
-        $this->getEventManager()->off('Model.beforeSave');
-        return $this->save($content, ['validate' => false]);
+
+        $this->offEvent('Model.beforeSave');
+        $this->offEvent('Model.afterSave');
+        $result = $this->save($content, ['validate' => false]);
+        $this->onEvent('Model.beforeSave');
+        $this->onEvent('Model.afterSave');
+        return $result;
+    }
+
+    /**
+     * 公開・非公開の日時を更新する
+     *
+     * @param  Content $content
+     * @return Content $content
+     * @checked
+     * @unitTest
+     * @noTodo
+     */
+    protected function updatePublishDate($content)
+    {
+        foreach (['publish_begin', 'publish_end'] as $date) {
+            if ($content[$date] !== $content["self_" . $date]) {
+                if ($content[$date] instanceof FrozenTime && $content["self_" . $date] instanceof FrozenTime) {
+                    if ($content[$date]->__toString() !== $content["self_" . $date]->__toString()) {
+                        $content->$date = $content["self_" . $date];
+                    }
+                } else {
+                    $content->$date = $content["self_" . $date];
+                }
+            }
+        }
+        return $content;
     }
 
     /**

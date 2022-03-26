@@ -247,7 +247,21 @@ WEBシステム開発事業（ダミー）</td></tr>
             'draft' => '',
             'modified' => null,
             'created' => '2015-01-27 12:56:52'
-        ]
+        ],
+        [
+            'id' => 20,
+            'contents' => 'siteId3の固定ページ2',
+            'draft' => '',
+            'modified' => null,
+            'created' => '2015-01-27 12:56:52'
+        ],
+        [
+            'id' => 21,
+            'contents' => 'siteId3の固定ページ3',
+            'draft' => '',
+            'modified' => null,
+            'created' => '2015-01-27 12:56:52'
+        ],
 /*
 TODO ucmitz: コンテンツFixtureと整合性がとれないため一旦コメントアウト
         [

@@ -114,5 +114,24 @@ class AppTableTest extends BcTestCase
         $this->assertEquals(22, $max);
     }
 
+    /**
+     * test offEvent And onEvent
+     */
+    public function testOffAndOnEvent()
+    {
+        $Permission = new TablePermissionsTable();
+        $eventManager = $Permission->getEventManager();
+        // 通常のイベント取得
+        $listeners = $eventManager->listeners('Model.beforeSave');
+        $this->assertEquals(2, count($listeners));
+        // BcModelEventListener以外をオフ
+        $Permission->offEvent('Model.beforeSave');
+        $listeners = $eventManager->listeners('Model.beforeSave');
+        $this->assertEquals(0, count($listeners));
+        // BcModelEventListener以外をオン
+        $Permission->onEvent('Model.beforeSave');
+        $listeners = $eventManager->listeners('Model.beforeSave');
+        $this->assertEquals(2, count($listeners));
+    }
 
 }

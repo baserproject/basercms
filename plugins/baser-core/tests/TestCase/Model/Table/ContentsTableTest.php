@@ -36,12 +36,11 @@ class ContentsTableTest extends BcTestCase
         'plugin.BaserCore.UsersUserGroups',
         'plugin.BaserCore.Sites',
         'plugin.BaserCore.Contents',
-        // 'baser.Model.Content.ContentIsMovable',
-        'plugin.BaserCore.Model/Content/ContentStatusCheck',
-        // 'baser.Routing.Route.BcContentsRoute.SiteBcContentsRoute',
-        // 'baser.Routing.Route.BcContentsRoute.ContentBcContentsRoute',
-        // 'baser.Default.SiteConfig',
-        // 'baser.Default.User',
+        'plugin.BaserCore.ContentFolders',
+        'plugin.BaserCore.Pages',
+        'plugin.BaserCore.SearchIndexes',
+        'plugin.BaserCore.SiteConfigs',
+        'plugin.BaserCore.Model/Table/Content/ContentStatusCheck'
     ];
 
     /**
@@ -156,12 +155,21 @@ class ContentsTableTest extends BcTestCase
                 [
                     'name' => '',
                     'title' => '',
+                    'created_date' => '',
                 ],
                 [
                     'name' => ['_empty' => 'スラッグを入力してください。'],
                     'title' => ['_empty' => 'タイトルを入力してください。'],
+                    'created_date' => ['_empty' => '作成日が空になってます。'],
                 ]
-            ]
+            ],
+            [
+                [],
+                [
+                    'name' => ['_required' => 'nameフィールドが存在しません。'],
+                    'title' => ['_required' => 'タイトルを入力してください。'],
+                ]
+            ],
         ];
     }
 
@@ -407,7 +415,7 @@ class ContentsTableTest extends BcTestCase
     public function testDeleteRelateSubSiteContentWithAlias()
     {
         $content = $this->Contents->get(6);
-        $mockContent = $this->Contents->save(new Content(['site_id' => 6, 'main_site_content_id' => 6, 'alias_id' => 26, 'plugin' => 'BaserCore', 'type' => 'test']));
+        $mockContent = $this->Contents->save(new Content(['site_id' => 6, 'main_site_content_id' => 6, 'alias_id' => 28, 'plugin' => 'BaserCore', 'type' => 'test']));
         $this->execPrivateMethod($this->Contents, 'deleteRelateSubSiteContent', [$content]);
         $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
         $this->Contents->get($mockContent->id);
@@ -446,10 +454,44 @@ class ContentsTableTest extends BcTestCase
      */
     public function testCopyContentFolderPath()
     {
+        // 他サイトにフォルダが存在する場合
+        $this->loadFixtures('ContentFolders', 'Pages', 'SearchIndexes', 'SiteConfigs');
         $parent_id = $this->Contents->copyContentFolderPath('/service/service1', 1);
         $this->assertEquals(6, $parent_id);
+        // 他サイトのフォルダが不要な場合
         $parent_id = $this->Contents->copyContentFolderPath('/about', 1);
         $this->assertEquals(1, $parent_id);
+        // 他サイトにフォルダが存在しない場合
+        $contentFoldersTable = $this->getTableLocator()->get('BaserCore.ContentFolders');
+        $contentFolder = $contentFoldersTable->patchEntity($contentFoldersTable->newEmptyEntity(), [
+            'content' => [
+                'name' => 'test',
+                'title' => 'test',
+                'parent_id' => 6,
+                'plugin' => 'BaserCore',
+                'type' => 'ContentFolder',
+                'site_id' => 1,
+                'self_status' => true,
+                'created_date' => FrozenTime::now()
+            ]
+        ]);
+        $result = $contentFoldersTable->save($contentFolder);
+        $pagesTable = $this->getTableLocator()->get('BaserCore.Pages');
+        $page = $pagesTable->patchEntity($pagesTable->newEmptyEntity(), [
+            'content' => [
+                'name' => 'test1',
+                'title' => 'test1',
+                'parent_id' => $result->content->id,
+                'plugin' => 'BaserCore',
+                'type' => 'Page',
+                'site_id' => 1,
+                'self_status' => true,
+                'created_date' => FrozenTime::now()
+            ]
+        ]);
+        $pagesTable->save($page);
+        $parent_id = $this->Contents->copyContentFolderPath('/service/test/test1', 1);
+        $this->assertEquals(28, $parent_id);
     }
 
     /**
@@ -588,32 +630,38 @@ class ContentsTableTest extends BcTestCase
         $this->assertNotEmpty($content->publish_end);
         // 親のstatusがfalseになれば、子にも反映
         $parent = $this->Contents->get(1);
-        $parent->status = false;
+        $parent->self_status = false;
         $this->Contents->save($parent);
         $this->execPrivateMethod($this->Contents, 'updateSystemData', [$content]);
         $content = $this->Contents->get(100);
         $this->assertFalse($content->status);
-        $this->assertNull($content->publish_begin);
+        $this->assertNotNull($content->publish_begin);
         $this->assertNull($content->publish_end);
+
         // siteがある場合
-        // サブコンテンツとして更新
-        $subContent = $this->Contents->get(100);
-        $subContent->title = 'subContent';
-        $subContent->url = 'test';
-        $subContent->site_id = 6;
-        $this->Contents->save($subContent);
-        // 関連するメインコンテンツを生成
+        $parent = $this->Contents->get(23);
+        $parent->name = '/s/';
+        $this->Contents->save($parent);
+        // メインコンテンツ更新
+        $mainContent = $this->Contents->get(100);
+        $mainContent->type = 'ContentFolder';
+        $mainContent->name = 'test_edit';
+        $this->Contents->save($mainContent);
+        // サブコンテンツとして登録
         $new = $this->Contents->newEntity([
             'id' => 101,
+            'name' => 'test_edit',
+            'type' => 'ContentFolder',
             'title' => 'relatedMainContent',
-            'name' => 'relatedMainContent',
-            'url' => '/test/',
-            'site_id' => 1,
+            'url' => '/test_edit/',
+            'site_id' => 2,
+            'created_date' => FrozenTime::now(),
+            'parent_id' => 23
         ]);
-        $mainContent = $this->Contents->save($new);
-        $this->execPrivateMethod($this->Contents, 'updateSystemData', [$subContent]);
+        $subContent = $this->Contents->save($new);
+//        $this->execPrivateMethod($this->Contents, 'updateSystemData', [$subContent]);
         // main_site_content_idが設定されてるか確認
-        $this->assertEquals($mainContent->id, $this->Contents->get(100)->main_site_content_id);
+        $this->assertEquals($mainContent->id, $subContent->main_site_content_id);
     }
 
     /**
@@ -648,7 +696,7 @@ class ContentsTableTest extends BcTestCase
     {
         return [
             ['BcMail.MailContent', null, 9],    // entityId指定なし
-            ['BcBlog.BlogContent', 21, 10],    // entityId指定あり
+            ['BcBlog.BlogContent', 31, 10],    // entityId指定あり
             ['ContentFolder', 1, 1],                // プラグイン指定なし
             ['BcBlog.BlogComment', null, null],    // 存在しないタイプ
             [false, null, null]                // 異常系
@@ -697,6 +745,55 @@ class ContentsTableTest extends BcTestCase
     public function testExistsPublishUrl()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * testUpdatePublishDate
+     *
+     * @return void
+     * @dataProvider updatePublishDateDataProvider
+     */
+    public function testUpdatePublishDate($date, $expected)
+    {
+        $content = $this->Contents->get(1);
+        $content->self_publish_begin = $date['self_publish_begin'];
+        $content->self_publish_end = $date['self_publish_end'];
+        $content = $this->execPrivateMethod($this->Contents, 'updatePublishDate', [$content]);
+        foreach ($expected as $expectedKey => $expectedValue) {
+            if ($expectedValue !== null) {
+                $this->assertEquals($expectedValue, $content->{$expectedKey}->__toString());
+            } else {
+                $this->assertNull($content->{$expectedKey});
+            }
+        }
+    }
+
+    public function updatePublishDateDataProvider()
+    {
+        return [
+            // 日付更新の場合
+            [
+                [
+                    'self_publish_begin' => new FrozenTime('2022/12/01 00:00:00'),
+                    'self_publish_end' => new FrozenTime('2022/12/30 00:00:00'),
+                ],
+                [
+                    'publish_begin' => '2022/12/01 00:00:00',
+                    'publish_end' => '2022/12/30 00:00:00',
+                ]
+            ],
+            // nullになる場合
+            [
+                [
+                    'self_publish_begin' => null,
+                    'self_publish_end' => null,
+                ],
+                [
+                    'publish_begin' => null,
+                    'publish_end' => null,
+                ]
+            ],
+        ];
     }
 
 
@@ -949,7 +1046,7 @@ class ContentsTableTest extends BcTestCase
      */
     public function testFindByUrl($expected, $url, $publish = true, $extend = false, $sameUrl = false, $useSubDomain = false)
     {
-        $this->loadFixtures('Model\Content\ContentStatusCheck', 'Sites');
+        $this->loadFixtures('Model\Table\Content\ContentStatusCheck', 'Sites');
         $result = (bool)$this->Contents->findByUrl($url, $publish, $extend, $sameUrl, $useSubDomain);
         $this->assertEquals($expected, $result);
     }

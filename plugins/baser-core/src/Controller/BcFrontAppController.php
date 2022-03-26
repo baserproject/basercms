@@ -45,12 +45,11 @@ class BcFrontAppController extends AppController
      * Before Render
      * @param EventInterface $event
      * @checked
-     * @unitTest
+     * @note(value="マイルストーン２が終わってから確認する")
      */
     public function beforeRender(EventInterface $event): void
     {
         parent::beforeRender($event);
-        $this->viewBuilder()->setClassName('BaserCore.BcFrontApp');
         // TODO ucmitz サイト名でサブフォルダを設定し、サブフォルダが存在しない場合は、通常のフォルダを参照できるようにする
 //        $subDir = $this->getRequest()->getParam('Site.name');
 //        if ($subDir) {

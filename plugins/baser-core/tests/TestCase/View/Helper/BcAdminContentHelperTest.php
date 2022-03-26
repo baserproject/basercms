@@ -42,6 +42,7 @@ class BcAdminContentHelperTest extends \BaserCore\TestSuite\BcTestCase
         'plugin.BaserCore.Plugins',
         'plugin.BaserCore.Permissions',
         'plugin.BaserCore.Contents',
+        'plugin.BaserCore.Sites',
     ];
 
     /**
@@ -69,6 +70,7 @@ class BcAdminContentHelperTest extends \BaserCore\TestSuite\BcTestCase
     public function testInitialize()
     {
         $this->assertTrue(isset($this->BcAdminContent->ContentService));
+        $this->assertTrue(isset($this->BcAdminContent->PermissionService));
     }
 
     /**
@@ -132,5 +134,21 @@ class BcAdminContentHelperTest extends \BaserCore\TestSuite\BcTestCase
             // 存在しないサイトIDを指定した場合
             [4, false],
         ];
+    }
+
+    /**
+     * test getFolderLinkedUrl
+     */
+    public function testGetFolderLinkedUrl()
+    {
+        /* @var \BaserCore\Model\Table\ContentsTable $contentsTable */
+        $contentsTable = $this->getTableLocator()->get('BaserCore.Contents');
+        $content = $contentsTable->findByUrl('/about');
+        $result = $this->BcAdminContent->getFolderLinkedUrl($content);
+        $this->assertEquals('https://localhost/', $result);
+        $content = $contentsTable->findByUrl('/service/service1');
+        $result = $this->BcAdminContent->getFolderLinkedUrl($content);
+        // TODO ucmitz forceTitle は、BcBaserHelper::getLink() 実装後に消える予定
+        $this->assertEquals('https://localhost/<a href="/baser/baser-core/content_folders/edit/4" forceTitle="1">service</a>/', $result);
     }
 }

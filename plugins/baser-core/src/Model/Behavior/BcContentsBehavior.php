@@ -72,6 +72,10 @@ class BcContentsBehavior extends Behavior
     {
         if (!isset($data['content'])) {
             $entity->setError('content', ['_required' => '関連するコンテンツがありません']);
+        } else {
+            [$plugin, $type] = pluginSplit($this->table->getRegistryAlias());
+            $entity->content->plugin = $entity->content->plugin ?? $plugin;
+            $entity->content->type = $entity->content->type ?? Inflector::classify($type);
         }
     }
 

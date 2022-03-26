@@ -15,18 +15,17 @@ use ArrayObject;
 use Cake\ORM\Query;
 use Cake\ORM\Table;
 use Cake\Event\Event;
-use BaserCore\View\AppView;
 use Cake\ORM\TableRegistry;
 use Cake\Validation\Validator;
-use BaserCore\Annotation\NoTodo;
 use BaserCore\Model\Entity\User;
-use BaserCore\Annotation\Checked;
-use BaserCore\Annotation\UnitTest;
 use BaserCore\View\BcAdminAppView;
 use Cake\ORM\Association\BelongsTo;
 use Cake\Datasource\EntityInterface;
 use Cake\ORM\Behavior\TimestampBehavior;
 use BaserCore\Event\BcEventDispatcherTrait;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
 
 /**
  * Class UsersTable

@@ -157,6 +157,7 @@ class BcContentsHelper extends Helper
      * @param int $entityId コンテンツを特定するID
      * @checked
      * @unitTest
+     * @noTodo
      */
     public function isActionAvailable($type, $action, $entityId) : bool
     {
@@ -167,11 +168,12 @@ class BcContentsHelper extends Helper
         $url = $this->getConfig('items')[$type]['url'][$action] . '/' . $entityId;
         if (isset($user->user_groups)) {
             $userGroups = $user->user_groups;
+            $userGroupIds = [];
             foreach ($userGroups as $group) {
-                // TODO ucmitz: ユーザグループを配列で全て渡すよう変更が必要
-                if ($this->PermissionService->check($url, [$group->id])) {
-                    return true;
-                }
+                $userGroupIds[] = $group->id;
+            }
+            if ($this->PermissionService->check($url, $userGroupIds)) {
+                return true;
             }
         }
         return false;

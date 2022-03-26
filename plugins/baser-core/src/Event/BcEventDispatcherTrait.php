@@ -57,6 +57,7 @@ trait BcEventDispatcherTrait
             $layer = 'Helper';
             $class = str_replace('Helper', '', $class);
             $subject = $this->_View;
+            $plugin = method_exists($this->_View, 'getPlugin')? $this->_View->getPlugin() : '';
         }
         $options = array_merge([
             'modParams' => 0,
