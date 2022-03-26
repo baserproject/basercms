@@ -1,5 +1,10 @@
 import Vue from 'vue';
 import axios from 'axios';
+import { User } from '../../main';
+
+type DataType = {
+    users?: User[],
+};
 
 export default Vue.extend({
     /**
@@ -14,11 +19,11 @@ export default Vue.extend({
     },
     /**
      * Data
-     * @returns {{users: null}}
+     * @returns {{users: undefined}}
      */
-    data: function() {
+    data: function(): DataType {
         return {
-            users: null,
+            users: undefined,
         }
     },
     /**
@@ -40,7 +45,7 @@ export default Vue.extend({
         /**
          * Get Users
          */
-        getUsers: function () {
+        getUsers: function ():void {
             axios.get('/baser/api/baser-core/users/index.json', {
                 headers: {"Authorization": this.accessToken},
                 data: {}

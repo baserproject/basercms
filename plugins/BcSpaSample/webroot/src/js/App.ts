@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import axios from "axios";
+import { User } from './main';
 
 type DataType = {
     accessToken?: string,
@@ -97,10 +98,9 @@ export default Vue.extend({
                 headers: {"Authorization": accessToken},
                 data: {}
             }).then((response) => {
-                if (response.data.user) {
-                    this.loginId = response.data.user.id
-                    this.loginName = response.data.user.name
-                }
+                const user: User = response.data.user;
+                this.loginId = user.id
+                this.loginName = user.name
             });
         },
 

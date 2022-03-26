@@ -1,6 +1,29 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ "./node_modules/@babel/polyfill/lib/index.js":
+/*!***************************************************!*\
+  !*** ./node_modules/@babel/polyfill/lib/index.js ***!
+  \***************************************************/
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+
+__webpack_require__(/*! ./noConflict */ "./node_modules/@babel/polyfill/lib/noConflict.js");
+
+var _global = _interopRequireDefault(__webpack_require__(/*! core-js/library/fn/global */ "./node_modules/core-js/library/fn/global.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+if (_global["default"]._babelPolyfill && typeof console !== "undefined" && console.warn) {
+  console.warn("@babel/polyfill is loaded more than once on this page. This is probably not desirable/intended " + "and may have consequences if different versions of the polyfills are applied sequentially. " + "If you do need to load the polyfill more than once, use @babel/polyfill/noConflict " + "instead to bypass the warning.");
+}
+
+_global["default"]._babelPolyfill = true;
+
+/***/ }),
+
 /***/ "./node_modules/@babel/polyfill/lib/noConflict.js":
 /*!********************************************************!*\
   !*** ./node_modules/@babel/polyfill/lib/noConflict.js ***!
@@ -2103,12 +2126,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.runtime.esm.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.runtime.esm.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _main__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./main */ "./webroot/src/js/main.ts");
 
 
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (vue__WEBPACK_IMPORTED_MODULE_1__["default"].extend({
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (vue__WEBPACK_IMPORTED_MODULE_2__["default"].extend({
   /**
    * Name
    */
@@ -2199,10 +2224,9 @@ __webpack_require__.r(__webpack_exports__);
         },
         data: {}
       }).then(response => {
-        if (response.data.user) {
-          this.loginId = response.data.user.id;
-          this.loginName = response.data.user.name;
-        }
+        const user = response.data.user;
+        this.loginId = user.id;
+        this.loginName = user.name;
       });
     },
 
@@ -2302,12 +2326,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.runtime.esm.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.runtime.esm.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _main__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../main */ "./webroot/src/js/main.ts");
 
 
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (vue__WEBPACK_IMPORTED_MODULE_1__["default"].extend({
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (vue__WEBPACK_IMPORTED_MODULE_2__["default"].extend({
   /**
    * Name
    */
@@ -2343,7 +2369,7 @@ __webpack_require__.r(__webpack_exports__);
         password_2: undefined,
         login_user_id: undefined
       },
-      userGroups: undefined,
+      userGroups: {},
       errors: []
     };
   },
@@ -2358,9 +2384,7 @@ __webpack_require__.r(__webpack_exports__);
           "Authorization": this.accessToken
         }
       }).then(response => {
-        if (response.data.userGroups) {
-          this.userGroups = response.data.userGroups;
-        }
+        this.userGroups = response.data.userGroups;
       });
     }
 
@@ -2382,21 +2406,13 @@ __webpack_require__.r(__webpack_exports__);
             "Authorization": this.accessToken
           }
         }).then(response => {
-          if (response.data.user) {
-            this.user = response.data.user;
-
-            if (this.user?.login_user_id) {
-              this.user.login_user_id = Number(response.data.user.login_user_id);
-            }
-
-            if (this.user !== undefined) {
-              let userGroups = [];
-              this.user.user_groups?.forEach(userGroup => {
-                userGroups.push(userGroup);
-              });
-              this.user.user_groups = userGroups;
-            }
-          }
+          this.user = response.data.user;
+          this.user.login_user_id = Number(response.data.user.login_user_id);
+          let userGroups = [];
+          this.user.user_groups?.forEach(userGroup => {
+            userGroups.push(userGroup);
+          });
+          this.user.user_groups = userGroups;
         });
       } else {
         this.user = {
@@ -2484,6 +2500,37 @@ __webpack_require__.r(__webpack_exports__);
     }
   }
 }));
+
+/***/ }),
+
+/***/ "./webroot/src/js/main.ts":
+/*!********************************!*\
+  !*** ./webroot/src/js/main.ts ***!
+  \********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.runtime.esm.js");
+/* harmony import */ var _App_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./App.vue */ "./webroot/src/js/App.vue");
+/* harmony import */ var _router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./router */ "./webroot/src/js/router/index.ts");
+/**
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
+ *
+ * @copyright     Copyright (c) NPO baser foundation
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
+ */
+
+
+
+vue__WEBPACK_IMPORTED_MODULE_2__["default"].config.productionTip = false;
+new vue__WEBPACK_IMPORTED_MODULE_2__["default"]({
+  router: _router__WEBPACK_IMPORTED_MODULE_1__["default"],
+  render: h => h(_App_vue__WEBPACK_IMPORTED_MODULE_0__["default"])
+}).$mount('#app');
 
 /***/ }),
 
@@ -2648,12 +2695,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.runtime.esm.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.runtime.esm.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _main__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../main */ "./webroot/src/js/main.ts");
 
 
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (vue__WEBPACK_IMPORTED_MODULE_1__["default"].extend({
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (vue__WEBPACK_IMPORTED_MODULE_2__["default"].extend({
   /**
    * Name
    */
@@ -2668,11 +2717,11 @@ __webpack_require__.r(__webpack_exports__);
 
   /**
    * Data
-   * @returns {{users: null}}
+   * @returns {{users: undefined}}
    */
   data: function () {
     return {
-      users: null
+      users: undefined
     };
   },
 
@@ -2776,9 +2825,7 @@ __webpack_require__.r(__webpack_exports__);
       const postData = {
         email: this.name,
         password: this.password
-      }; // TODO: vue側でエラーが出るため一旦コメントアウト
-      // axios.post<loginToken>('/baser/api/baser-core/users/login.json', postData)
-
+      };
       axios__WEBPACK_IMPORTED_MODULE_0___default().post('/baser/api/baser-core/users/login.json', postData).then(response => {
         if (response.data) {
           this.$emit('set-login', response.data.access_token, response.data.refresh_token);
@@ -26251,57 +26298,13 @@ module.exports = JSON.parse('{"_args":[["axios@0.21.4","/home/humuhimi/catchup_p
 /******/ 	})();
 /******/ 	
 /************************************************************************/
-var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be in strict mode.
-(() => {
-"use strict";
-/*!***************************************************!*\
-  !*** ./node_modules/@babel/polyfill/lib/index.js ***!
-  \***************************************************/
-
-
-__webpack_require__(/*! ./noConflict */ "./node_modules/@babel/polyfill/lib/noConflict.js");
-
-var _global = _interopRequireDefault(__webpack_require__(/*! core-js/library/fn/global */ "./node_modules/core-js/library/fn/global.js"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-if (_global["default"]._babelPolyfill && typeof console !== "undefined" && console.warn) {
-  console.warn("@babel/polyfill is loaded more than once on this page. This is probably not desirable/intended " + "and may have consequences if different versions of the polyfills are applied sequentially. " + "If you do need to load the polyfill more than once, use @babel/polyfill/noConflict " + "instead to bypass the warning.");
-}
-
-_global["default"]._babelPolyfill = true;
-})();
-
-// This entry need to be wrapped in an IIFE because it need to be in strict mode.
-(() => {
-"use strict";
-/*!********************************!*\
-  !*** ./webroot/src/js/main.ts ***!
-  \********************************/
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.runtime.esm.js");
-/* harmony import */ var _App_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./App.vue */ "./webroot/src/js/App.vue");
-/* harmony import */ var _router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./router */ "./webroot/src/js/router/index.ts");
-/**
- * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
- *
- * @copyright     Copyright (c) NPO baser foundation
- * @link          https://basercms.net baserCMS Project
- * @since         5.0.0
- * @license       http://basercms.net/license/index.html MIT License
- */
-
-
-
-vue__WEBPACK_IMPORTED_MODULE_2__["default"].config.productionTip = false;
-new vue__WEBPACK_IMPORTED_MODULE_2__["default"]({
-  router: _router__WEBPACK_IMPORTED_MODULE_1__["default"],
-  render: h => h(_App_vue__WEBPACK_IMPORTED_MODULE_0__["default"])
-}).$mount('#app');
-})();
-
+/******/ 	
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	__webpack_require__("./node_modules/@babel/polyfill/lib/index.js");
+/******/ 	// This entry module is referenced by other modules so it can't be inlined
+/******/ 	var __webpack_exports__ = __webpack_require__("./webroot/src/js/main.ts");
+/******/ 	
 /******/ })()
 ;
 //# sourceMappingURL=bundle.js.map

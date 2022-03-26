@@ -8,10 +8,6 @@ type DataType = {
     name? : string,
     password? : string
 };
-interface loginToken {
-    'access_token': string,
-    'refresh_token': string
-}
 
 export default Vue.extend({
     /**
@@ -54,8 +50,6 @@ export default Vue.extend({
                 email: this.name,
                 password: this.password
             };
-            // TODO: vue側でエラーが出るため一旦コメントアウト
-            // axios.post<loginToken>('/baser/api/baser-core/users/login.json', postData)
             axios.post('/baser/api/baser-core/users/login.json', postData)
             .then((response) => {
                 if (response.data) {

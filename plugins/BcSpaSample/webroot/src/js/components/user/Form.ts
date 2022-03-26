@@ -1,30 +1,10 @@
 import Vue from 'vue';
 import axios from 'axios';
-
-type UserGroup = {
-    1?: string;
-    2?: string;
-};
-
-type User =  {
-    id?: number,
-    name?: string,
-    real_name_1?: string,
-    real_name_2?: string,
-    email?: string,
-    nickname?: string,
-    created?: Date,
-    modified?: Date,
-    status?: boolean,
-    user_groups?: number[],
-    password_1?: string,
-    password_2?: string,
-    login_user_id?: number,
-};
+import { User, UserGroup } from '../../main';
 
 type DataType = {
     user: User,
-    userGroups?: UserGroup,
+    userGroups: UserGroup,
     errors: string[]
 };
 
@@ -64,7 +44,7 @@ export default Vue.extend({
                 password_2: undefined,
                 login_user_id: undefined,
             },
-            userGroups: undefined,
+            userGroups: {},
             errors: []
         }
     },
@@ -77,10 +57,8 @@ export default Vue.extend({
             axios.get('/baser/api/baser-core/user_groups/list.json', {
                 headers: {"Authorization": this.accessToken}
             }).then((response) => {
-                if (response.data.userGroups) {
-                    this.userGroups = response.data.userGroups
-                }
-            })
+                this.userGroups = response.data.userGroups
+            });
         }
         this.load(this.userId);
     },
@@ -98,19 +76,13 @@ export default Vue.extend({
                 axios.get('/baser/api/baser-core/users/view/' + id + '.json', {
                     headers: {"Authorization": this.accessToken}
                 }).then((response) => {
-                    if (response.data.user) {
-                        this.user = response.data.user;
-                        if (this.user?.login_user_id) {
-                            this.user.login_user_id = Number(response.data.user.login_user_id);
-                        }
-                        if (this.user !== undefined) {
-                            let userGroups:number[] = [];
-                            this.user.user_groups?.forEach((userGroup) => {
-                                userGroups.push(userGroup);
-                            })
-                            this.user.user_groups = userGroups;
-                        }
-                    }
+                    this.user = response.data.user;
+                    this.user.login_user_id = Number(response.data.user.login_user_id);
+                    let userGroups:number[] = [];
+                    this.user.user_groups?.forEach((userGroup) => {
+                        userGroups.push(userGroup);
+                    })
+                    this.user.user_groups = userGroups;
                 })
             } else {
                 this.user = {
