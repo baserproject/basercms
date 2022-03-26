@@ -696,7 +696,7 @@ class ContentService implements ContentServiceInterface
                         if ($alias) {
                             $alias = '/' . $alias;
                         }
-                        $url = $alias . $this->Sites->getPureUrl($url);
+                        $url = $alias . $site->getPureUrl($url);
                     }
                 }
             }
