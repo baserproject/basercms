@@ -27,7 +27,7 @@
                 </span>
                     <div class="error-wrap" v-if="errors.name">
                         <ul>
-                            <li class="error-message" v-for="(message) in errors.name">{{ message }}</li>
+                            <li class="error-message" v-for="(message) in errors.name" :key="message">{{ message }}</li>
                         </ul>
                     </div>
                 </td>
@@ -61,7 +61,7 @@
                 </span>
                     <div class="error-wrap" v-if="errors.real_name_1">
                         <ul>
-                            <li class="error-message" v-for="(message) in errors.real_name_1">{{ message }}</li>
+                            <li class="error-message" v-for="(message, id) in errors.real_name_1" :key="message-id">{{ message }}</li>
                         </ul>
                     </div>
                 </td>
@@ -90,7 +90,7 @@
                 <td class="col-input bca-form-table__input">
                 <span class="bca-checkbox-group">
                     <input type="hidden" name="user_groups[_ids]" value=""/>
-                    <span v-for="(title, id) in this.userGroups" class="bca-checkbox">
+                    <span v-for="(title, id) in this.userGroups" class="bca-checkbox" :key="title">
                         <input type="checkbox"
                                name="user_groups[_ids][]"
                                :value="id"
@@ -104,7 +104,7 @@
                 </span>
                     <div class="error-wrap" v-if="errors.user_groups">
                         <ul>
-                            <li class="error-message" v-for="(message) in errors.user_groups">{{ message }}</li>
+                            <li class="error-message" v-for="(message) in errors.user_groups" :key="message">{{ message }}</li>
                         </ul>
                     </div>
                 </td>
@@ -128,7 +128,7 @@
                 </span>
                     <div class="error-wrap" v-if="errors.email">
                         <ul>
-                            <li class="error-message" v-for="(message) in errors.email">{{ message }}</li>
+                            <li class="error-message" v-for="(message, id) in errors.email" :key="message-id">{{ message }}</li>
                         </ul>
                     </div>
                 </td>
@@ -163,7 +163,7 @@
                 </span>
                     <div class="error-wrap" v-if="errors.password">
                         <ul>
-                            <li class="error-message" v-for="(message) in errors.password">{{ message }}</li>
+                            <li class="error-message" v-for="(message, id) in errors.password" :key="message-id">{{ message }}</li>
                         </ul>
                     </div>
                 </td>
@@ -200,156 +200,4 @@
 
     </section>
 </template>
-
-<script>
-
-import axios from 'axios'
-
-export default {
-
-    /**
-     * Name
-     */
-    name: 'UserForm',
-
-    /**
-     * Props
-     */
-    props: {
-        userId: String,
-        accessToken: String,
-        loginUserId: Number
-    },
-
-    /**
-     * Data
-     * @returns {{users: null}}
-     */
-    data: function () {
-        return {
-            user: [],
-            userGroups: [],
-            errors: []
-        }
-    },
-
-    /**
-     * Mounted
-     */
-    mounted() {
-        if (this.accessToken) {
-            axios.get('/baser/api/baser-core/user_groups/list.json', {
-                headers: {"Authorization": this.accessToken}
-            }).then(function (response) {
-                if (response.data.userGroups) {
-                    this.userGroups = response.data.userGroups
-                }
-            }.bind(this))
-        }
-        this.load(this.userId)
-    },
-
-    /**
-     * Methods
-     */
-    methods: {
-
-        /**
-         * Load
-         * @param id
-         */
-        load: function (id) {
-            if (id) {
-                axios.get('/baser/api/baser-core/users/view/' + id + '.json', {
-                    headers: {"Authorization": this.accessToken}
-                }).then(function (response) {
-                    if (response.data.user) {
-                        this.user = response.data.user
-                        let userGroups = []
-                        this.user.user_groups.forEach(function (userGroup) {
-                            userGroups.push(userGroup.id)
-                        }.bind(this))
-                        this.user.user_groups = userGroups
-                    }
-                }.bind(this))
-            } else {
-                this.user = {
-                    name: '',
-                    real_name_1: '',
-                    real_name_2: '',
-                    nickname: '',
-                    user_groups: [1],
-                    email: '',
-                    password_1: '',
-                    password_2: '',
-                }
-            }
-        },
-
-        /**
-         * Save
-         * @param id
-         */
-        save: function (id) {
-            this.$emit('clear-message')
-            this.errors = []
-            let endPoint = '/baser/api/baser-core/users/'
-            let user = {
-                name: this.user.name,
-                real_name_1: this.user.name,
-                real_name_2: this.user.real_name_2,
-                nickname: this.user.nickname,
-                user_groups: {_ids: this.user.user_groups},
-                email: this.user.email,
-                password_1: this.user.password_1,
-                password_2: this.user.password_2,
-                login_user_id: this.loginUserId
-            }
-            if (id) {
-                endPoint += 'edit/' + id + '.json'
-                user.id = id
-            } else {
-                endPoint += 'add.json'
-            }
-            axios.post(endPoint, user, {
-                headers: {"Authorization": this.accessToken}
-            }).then(function (response) {
-                this.$emit('set-message', response.data.message, false)
-                if (!id) {
-                    this.$emit('set-message', response.data.message, false, true)
-                    this.$router.push('/user_edit/' + response.data.user.id)
-                } else {
-                    this.$emit('set-message', response.data.message, false)
-                }
-            }.bind(this))
-            .catch(function (error) {
-                this.$emit('set-message', error.response.data.message, true)
-                if (error.response.status === 400) {
-                    this.errors = error.response.data.errors
-                }
-            }.bind(this))
-        },
-
-        /**
-         * Remove
-         * @param id
-         */
-        remove: function (id) {
-            this.$emit('clear-message')
-            if(!confirm('ユーザー情報を削除します。本当によろしいですか？')) {
-                return
-            }
-            axios.post('/baser/api/baser-core/users/delete/' + id + '.json', {}, {
-                headers: {"Authorization": this.accessToken}
-            }).then(function (response) {
-                this.$emit('set-message', response.data.message, false, true)
-                this.$router.push('/user_index')
-            }.bind(this))
-            .catch(function (error) {
-                this.$emit('set-message', error.response.data.message, true)
-            }.bind(this))
-        }
-    }
-
-}
-</script>
+<script lang="ts" src="./Form.ts"></script>

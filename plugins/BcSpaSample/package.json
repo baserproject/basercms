@@ -17,6 +17,7 @@
     "@babel/core": "^7.2.2",
     "@babel/polyfill": "^7.12.1",
     "@babel/preset-env": "^7.2.0",
+    "@babel/preset-flow": "^7.16.7",
     "babel-loader": "^8.0.4",
     "follow-redirects": ">=1.14.8",
     "webpack": "^5.54.0",

@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "target": "es5",
+        "module": "es2015",
+        "lib": ["es5", "dom", "es2015"],
+        "sourceMap": true,
+        "outDir": "./webroot/js",
+        "rootDir": "./webroot/src/js",
+        "strict": true,
+        "moduleResolution": "node",
+        "baseUrl": ".",
+        "esModuleInterop": true,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        "typeRoots" : ["webroot/src/types"]
+    }
+}

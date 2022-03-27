@@ -12,7 +12,24 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 
-Vue.config.productionTip = false
+
+export type User = {
+    id?: number,
+    name?: string,
+    real_name_1?: string,
+    real_name_2?: string,
+    email?: string,
+    nickname?: string,
+    created?: Date,
+    modified?: Date,
+    status?: boolean,
+    user_groups?: number[],
+    password_1?: string,
+    password_2?: string,
+    login_user_id?: number,
+};
+
+Vue.config.productionTip = false;
 
 new Vue({
   router,
