@@ -134,13 +134,13 @@ class ContentFoldersControllerEventListener extends BcControllerEventListener
      */
     public function baserCoreContentsAfterChangeStatus(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
-//        if (empty($event->getData('result'))) {
-//            return;
-//        }
-//        $id = $event->getData('id');
-//        /* @var SearchIndexesTable $searchIndexesTable */
-//        $searchIndexesTable = TableRegistry::getTableLocator()->get('BaserCore.SearchIndex');
-//        $searchIndexesTable->reconstruct($id);
+        if (empty($event->getData('result'))) {
+            return;
+        }
+        $id = $event->getData('id');
+        /* @var SearchIndexesTable $searchIndexesTable */
+        $searchIndexesTable = TableRegistry::getTableLocator()->get('BaserCore.SearchIndex');
+        $searchIndexesTable->reconstruct($id);
     }
 
 }

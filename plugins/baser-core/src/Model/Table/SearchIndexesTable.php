@@ -46,67 +46,6 @@ class SearchIndexesTable extends AppTable
     }
 
     /**
-     * 検索インデックス再構築
-     *
-     * @param int $parentContentId 親となるコンテンツID
-     * @return bool
-     */
-    public function reconstruct($parentContentId = null)
-    {
-        $Contents = TableRegistry::getTableLocator()->get('BaserCore.Contents');;
-        $conditions = [
-            'OR' => [
-                ['Site.status' => null],
-                ['Site.status' => true]
-            ]];
-        if ($parentContentId) {
-            $parentContent = $Contents->find()->select(['lft', 'rght'])->where(['id' => $parentContentId])->first();
-            $conditions = array_merge($conditions, [
-                'lft >' => $parentContent->lft,
-                'rght <' => $parentContent->rght
-            ]);
-        }
-        $contents = $Contents->find()->where($conditions)->orderby('lft')->all();
-        $models = [];
-        $db = $this->getDataSource();
-        $this->begin();
-
-        if (!$parentContentId) {
-            $db->truncate('search_indices');
-        }
-
-        $result = true;
-        if ($contents) {
-            foreach($contents as $content) {
-                if (isset($models[$content['Content']['type']])) {
-                    $modelClass = $models[$content['Content']['type']];
-                } else {
-                    if (ClassRegistry::isKeySet($content['Content']['type'])) {
-                        $models[$content['Content']['type']] = $modelClass = ClassRegistry::getObject($content['Content']['type']);
-                    } else {
-                        if ($content['Content']['plugin'] == 'BaserCore') {
-                            $modelName = $content['Content']['type'];
-                        } else {
-                            $modelName = $content['Content']['plugin'] . '.' . $content['Content']['type'];
-                        }
-                        $models[$content['Content']['type']] = $modelClass = ClassRegistry::init($modelName);
-                    }
-                }
-                $entity = $modelClass->find('first', ['conditions' => [$modelClass->name . '.id' => $content['Content']['entity_id']], 'recursive' => 0]);
-                if (!$modelClass->save($entity, false)) {
-                    $result = false;
-                }
-            }
-        }
-        if ($result) {
-            $this->commit();
-        } else {
-            $this->roleback();
-        }
-        return $result;
-    }
-
-    /**
      * 公開状態確認
      *
      * @param array $data
