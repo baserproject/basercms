@@ -62,6 +62,9 @@ class SearchIndexService implements SearchIndexServiceInterface
      *
      * @param int $parentContentId 親となるコンテンツID
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function reconstruct($parentContentId = null)
     {
@@ -98,8 +101,8 @@ class SearchIndexService implements SearchIndexServiceInterface
                     $models[$content->type] = $table = TableRegistry::getTableLocator()->get($content->plugin . '.' . $tableName);
                 }
                 // データの変更はないがイベントを走らせるために setNew() を実行
-                $entity = $table->find()->contain(['Contents'])->where([$tableName . '.id' => $content->entity_id])->first()->setNew(true);
-                if (!$table->save($entity)) {
+                $entity = $table->find()->contain(['Contents'])->where([$tableName . '.id' => $content->entity_id])->first();
+                if ($entity && $entity->setNew(true) && !$table->save($entity)) {
                     $result = false;
                 }
             }

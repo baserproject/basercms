@@ -12,7 +12,9 @@
 namespace BaserCore\Model\Table;
 
 use ArrayObject;
-use Cake\ORM\TableRegistry;
+use BaserCore\Service\SearchIndexService;
+use BaserCore\Service\SearchIndexServiceInterface;
+use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Model\AppTable;
 use Cake\Event\EventInterface;
 use Cake\Validation\Validator;
@@ -28,6 +30,11 @@ use Cake\Datasource\EntityInterface;
  */
 class ContentFoldersTable extends AppTable
 {
+
+    /**
+     * Trait
+     */
+    use BcContainerTrait;
 
     /**
      * 変更前ステータス
@@ -145,8 +152,9 @@ class ContentFoldersTable extends AppTable
         }
         if (!empty($options['reconstructSearchIndices']) && $this->beforeStatus !== $entity->content->status) {
             // TODO ucmitz: SearchIndexTableを復元できてないため一部テスト未実装
-            $searchIndexModel = TableRegistry::getTableLocator()->get('SearchIndex');
-            $searchIndexModel->reconstruct($entity->content->id);
+            /* @var SearchIndexService $searchIndexService */
+            $searchIndexService = $this->getService(SearchIndexServiceInterface::class);
+            $searchIndexService->reconstruct($entity->content->id);
         }
         return true;
     }

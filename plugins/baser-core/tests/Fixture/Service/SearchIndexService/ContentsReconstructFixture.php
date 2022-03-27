@@ -1,14 +1,14 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Test\Fixture;
+namespace BaserCore\Test\Fixture\Service\SearchIndexService;
 
 use Cake\TestSuite\Fixture\TestFixture;
 
 /**
  * ContentsFixture
  */
-class ContentsFixture extends TestFixture
+class ContentsReconstructFixture extends TestFixture
 {
     /**
      * Import
@@ -175,10 +175,10 @@ class ContentsFixture extends TestFixture
                 'site_id' => 1,
                 'alias_id' => null,
                 'main_site_content_id' => null,
-                'parent_id' => 1,
+                'parent_id' => 4,
                 'lft' => 7,
                 'rght' => 8,
-                'level' => 1,
+                'level' => 2,
                 'title' => 'サービス１',
                 'description' => '',
                 'eyecatch' => '',
@@ -210,10 +210,10 @@ class ContentsFixture extends TestFixture
                 'site_id' => 1,
                 'alias_id' => null,
                 'main_site_content_id' => null,
-                'parent_id' => 1,
+                'parent_id' => 4,
                 'lft' => 9,
                 'rght' => 10,
-                'level' => 1,
+                'level' => 2,
                 'title' => 'サービス２',
                 'description' => '',
                 'eyecatch' => '',

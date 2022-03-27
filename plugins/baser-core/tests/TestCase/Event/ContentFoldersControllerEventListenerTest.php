@@ -111,11 +111,21 @@ class ContentFoldersControllerEventListenerTest extends BcTestCase
     }
 
     /**
-     * Contents After Trash Return
+     * Contents After Change Status
      */
-    public function testContentsAfterTrashReturn()
+    public function testBaserCoreContentsAfterChangeStatus()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $token = $this->apiLoginAdmin();
+        $url = '/about';
+        $contentsTable = $this->getTableLocator()->get('BaserCore.Contents');
+        $content = $contentsTable->find()->where(['url' => $url])->first();
+        $data = [
+            'id' => $content->id,
+            'status' => 'unpublish'
+        ];
+        $this->patch("/baser/api/baser-core/contents/change_status.json?token=" . $token['access_token'], $data);
+        $searchIndexesTable = $this->getTableLocator()->get('BaserCore.SearchIndexes');
+        $this->assertFalse($searchIndexesTable->find()->where(['url' => $url])->first()->status);
     }
 
 
