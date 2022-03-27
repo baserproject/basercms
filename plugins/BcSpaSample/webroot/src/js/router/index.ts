@@ -8,20 +8,20 @@
  * @license       http://basercms.net/license/index.html MIT License
  */
 
-import Vue from 'vue'
-import Router from 'vue-router'
-import Login from '../views/Login.vue'
-import UserIndex from '../views/UserIndex.vue'
-import UserEdit from '../views/UserEdit.vue'
-import UserAdd from '../views/UserAdd.vue'
+import Vue from 'vue';
+import Router from 'vue-router';
+import UserLogin from '../views/user/Login.vue';
+import UserIndex from '../views/user/Index.vue';
+import UserEdit from '../views/user/Edit.vue';
+import UserAdd from '../views/user/Add.vue';
 
-Vue.use(Router)
+Vue.use(Router);
 
 export default new Router({
     routes: [
         {
             path: '/',
-            component: Login
+            component: UserLogin
         },
         {
             path: '/user_index',
