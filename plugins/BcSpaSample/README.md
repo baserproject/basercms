@@ -229,7 +229,7 @@ data: (): DataType => {
         message : undefined,
     }
 },
-// TypeErrorの場合
+// TypeErrorの場合 文字列定義の変数に数値は定義できません
 // Type 'number' is not assignable to type 'string'.ts(2322)
 this.message = 100; // (property) message?: string | undefined
 ```
