@@ -191,9 +191,76 @@ axios.get('/baser/api/baser-core/users/index.json', {
 }.bind(this))
 ```
 
-　
+### BcSpaSampleでtypescriptを利用する
+
+##### 変更点
+
+単一のvueファイルをtemplate(vueファイル)とscript(tsファイル)に分離
+
+例)Login.vue→scriptの箇所をLogin.tsに移行
+```html
+<script lang="ts" src="./Login.ts"></script>
+```
+tsファイル内でVue.extendを使用することで、Vueコンポーネントの記述に近い書き方でTypeScriptを書くことができます
+```vue
+// *.vue
+export default {
+
+    data: function () {...}
+```
+↓
+```vue
+// *.ts
+export default Vue.extend({
+    data: () => {
+```
+##### 型の定義
+
+typeまたはinterfaceを使って、型を定義できます
+代入される変数や返り値が型とそぐわない場合TypeErrorが返る
+
+```ts
+type DataType = {
+    message? : string,
+};
+// dataメソッドが返す値がstringもしくはundefinedという定義が出来る
+data: (): DataType => {
+    return {
+        message : undefined,
+    }
+},
+// TypeErrorの場合
+// Type 'number' is not assignable to type 'string'.ts(2322)
+this.message = 100; // (property) message?: string | undefined
+```
+
+##### 型の再利用
+
+main.tsにてUserタイプを定義してるので、importして再利用できる
+
+```ts
+// main.ts
+export type User = {
+    ...
+};
+// Form.ts
+// form内で使用されるthis.userがUserタイプだと定義
+import { User } from '../../main';
+type DataType = {
+    user: User,
+};
+// user/Index.ts
+// index内で使用されるthis.usersがUserタイプを複数持つ配列だと定義
+import { User } from '../../main';
+type DataType = {
+    users?: User[],
+};
+```
+
+
+
 ### その他のAPI
 
 その他のAPIは `webroot/src/` ディレクトリ内のサンプルコードを参考にしてください。
 
-　
+

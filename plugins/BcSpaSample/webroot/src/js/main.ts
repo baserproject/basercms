@@ -29,11 +29,6 @@ export type User = {
     login_user_id?: number,
 };
 
-export type UserGroup = {
-    1?: string;
-    2?: string;
-};
-
 Vue.config.productionTip = false;
 
 new Vue({

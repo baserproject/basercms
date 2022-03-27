@@ -1,6 +1,11 @@
 import Vue from 'vue';
 import axios from 'axios';
-import { User, UserGroup } from '../../main';
+import { User } from '../../main';
+
+type UserGroup = {
+    1?: string;
+    2?: string;
+};
 
 type DataType = {
     user: User,
