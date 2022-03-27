@@ -17,6 +17,9 @@ use BaserCore\Model\Table\ContentFoldersTable;
 use BaserCore\Model\Table\ContentsTable;
 use BaserCore\Model\Table\PagesTable;
 use BaserCore\Model\Table\SearchIndexesTable;
+use BaserCore\Service\SearchIndexService;
+use BaserCore\Service\SearchIndexServiceInterface;
+use BaserCore\Utility\BcContainerTrait;
 use Cake\ORM\TableRegistry;
 use Cake\Event\EventInterface;
 use Cake\Datasource\EntityInterface;
@@ -29,6 +32,11 @@ use BaserCore\Annotation\UnitTest;
  */
 class ContentFoldersControllerEventListener extends BcControllerEventListener
 {
+
+    /**
+     * Trait
+     */
+    use BcContainerTrait;
 
     /**
      * イベント
@@ -107,6 +115,9 @@ class ContentFoldersControllerEventListener extends BcControllerEventListener
      * @param EntityInterface $entity
      * @param ArrayObject $options
      * @uses baserCoreContentsBeforeDelete()
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function baserCoreContentsBeforeDelete(EventInterface $event)
     {
@@ -131,16 +142,18 @@ class ContentFoldersControllerEventListener extends BcControllerEventListener
      * @param EntityInterface $entity
      * @param ArrayObject $options
      * @uses baserCoreContentsAfterChangeStatus()
+     * @checked
+     * @noTodo
      */
     public function baserCoreContentsAfterChangeStatus(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
-//        if (empty($event->getData('result'))) {
-//            return;
-//        }
-//        $id = $event->getData('id');
-//        /* @var SearchIndexesTable $searchIndexesTable */
-//        $searchIndexesTable = TableRegistry::getTableLocator()->get('BaserCore.SearchIndex');
-//        $searchIndexesTable->reconstruct($id);
+        if (empty($event->getData('result'))) {
+            return;
+        }
+        $id = $event->getData('id');
+        /* @var SearchIndexService $searchIndexService */
+        $searchIndexService = $this->getService(SearchIndexServiceInterface::class);
+        $searchIndexService->reconstruct($id);
     }
 
 }
