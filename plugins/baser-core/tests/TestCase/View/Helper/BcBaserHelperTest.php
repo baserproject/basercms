@@ -1555,10 +1555,9 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testIsSSL()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-
         $_SERVER['HTTPS'] = true;
-        $this->BcBaser->request = $this->_getRequest('https://localhost/');
+
+        $this->BcBaser->getView()->setRequest($this->getRequest('https://localhost/'));
         $this->assertEquals(true, $this->BcBaser->isSSL());
     }
 

@@ -386,7 +386,7 @@ class BcBaserHelper extends Helper
         }
 
         $_url = $this->getUrl($url);
-        $_url = preg_replace('/^' . preg_quote($this->_View->getRequest()->base, '/') . '\//', '/', $_url);
+        $_url = preg_replace('/^' . preg_quote($this->_View->getRequest()->getAttribute('base'), '/') . '\//', '/', $_url);
         $enabled = true;
 
         if ($options == false) {
@@ -454,7 +454,7 @@ class BcBaserHelper extends Helper
         }
 
         if (!is_array($url)) {
-            $url = preg_replace('/^' . preg_quote($this->_View->getRequest()->base, '/') . '\//', '/', $url);
+            $url = preg_replace('/^' . preg_quote($this->_View->getRequest()->getAttribute('base'), '/') . '\//', '/', $url);
         }
         $out = $this->BcHtml->link($title, $url, $options, $confirmMessage);
 
@@ -1537,6 +1537,9 @@ class BcBaserHelper extends Helper
      * SSL通信かどうか判定する
      *
      * @return bool
+     * @checked
+     * @unitTest
+     * @noTodo
      */
     public function isSSL()
     {
