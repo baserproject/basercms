@@ -57,6 +57,7 @@ class ContentsControllerTest extends BcTestCase
         'plugin.BaserCore.Dblogs',
         'plugin.BaserCore.ContentFolders',
         'plugin.BaserCore.SearchIndexes',
+        'plugin.BaserCore.Pages',
     ];
 
     /**
