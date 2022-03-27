@@ -201,7 +201,7 @@ axios.get('/baser/api/baser-core/users/index.json', {
 ```html
 <script lang="ts" src="./Login.ts"></script>
 ```
-tsファイル内でVue.extendを使用することで、Vueコンポーネントの記述に近い書き方でTypeScriptを書くことができます
+tsファイル内でVue.extendを使用することで、Vueコンポーネントの記述に近い書き方でTypeScriptを書くことができます。
 ```vue
 // *.vue
 export default {
@@ -216,8 +216,8 @@ export default Vue.extend({
 ```
 ##### 型の定義
 
-typeまたはinterfaceを使って、型を定義できます
-代入される変数や返り値が型とそぐわない場合TypeErrorが返る
+typeまたはinterfaceを使って、型を定義できます。
+代入される変数や返り値が型とそぐわない場合TypeErrorが返ります。
 
 ```ts
 type DataType = {
@@ -236,21 +236,21 @@ this.message = 100; // (property) message?: string | undefined
 
 ##### 型の再利用
 
-main.tsにてUserタイプを定義してるので、importして再利用できる
+main.tsにてUserタイプを定義してるので、importして再利用できます。
 
 ```ts
 // main.ts
 export type User = {
     ...
 };
-// Form.ts
 // form内で使用されるthis.userがUserタイプだと定義
+// Form.ts
 import { User } from '../../main';
 type DataType = {
     user: User,
 };
-// user/Index.ts
 // index内で使用されるthis.usersがUserタイプを複数持つ配列だと定義
+// user/Index.ts
 import { User } from '../../main';
 type DataType = {
     users?: User[],
