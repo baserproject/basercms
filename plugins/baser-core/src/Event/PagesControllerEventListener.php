@@ -136,16 +136,19 @@ class PagesControllerEventListener extends BcControllerEventListener
      * 一覧から公開設定を変更した場合に固定ページの検索インデックスを更新する事が目的
      *
      * @param Event $event
+     * @uses baserCoreContentsAfterChangeStatus()
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function baserCoreContentsAfterChangeStatus(Event $event)
     {
-        // TODO ucmitz 未対応で一旦コメントアウト
-//        if (empty($event->getData('result'))) {
-//            return;
-//        }
-//        $id = $event->getData('id');
-//        $data = $this->Pages->find('first', ['conditions' => ['Content.id' => $id]]);
-//        $this->Pages->saveSearchIndex($this->Pages->createSearchIndex($data));
+        if (empty($event->getData('result'))) {
+            return;
+        }
+        $id = $event->getData('id');
+        $page = $this->Pages->find()->contain(['Contents'])->where(['Contents.id' => $id])->first();
+        if($page) $this->Pages->saveSearchIndex($this->Pages->createSearchIndex($page));
     }
 
 }

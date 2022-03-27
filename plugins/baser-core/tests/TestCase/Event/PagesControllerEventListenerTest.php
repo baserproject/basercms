@@ -119,4 +119,20 @@ class PagesControllerEventListenerTest extends BcTestCase
         $this->assertEquals(1, $searchIndexesTable->find()->where(['url' => '/sample'])->count());
     }
 
+    /**
+     * test baserCoreContentsAfterChangeStatus
+     */
+    public function testBaserCoreContentsAfterChangeStatus()
+    {
+        $token = $this->apiLoginAdmin();
+        $data = [
+            'id' => 5,
+            'status' => 'unpublish'
+        ];
+        $searchIndexesTable = $this->getTableLocator()->get('BaserCore.SearchIndexes');
+        $this->assertTrue($searchIndexesTable->find()->where(['model' => 'Page', 'model_id' => 16])->first()->status);
+        $this->patch("/baser/api/baser-core/contents/change_status.json?token=" . $token['access_token'], $data);
+        $this->assertFalse($searchIndexesTable->find()->where(['model' => 'Page', 'model_id' => 16])->first()->status);
+    }
+
 }

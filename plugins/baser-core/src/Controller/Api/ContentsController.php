@@ -250,18 +250,29 @@ class ContentsController extends BcApiController
     public function change_status(ContentServiceInterface $contentService)
     {
         $this->request->allowMethod(['post', 'put', 'patch']);
-        if ($this->request->getData('id') && $this->request->getData('status')) {
+        $id = $this->request->getData('id');
+        $status = $this->request->getData('status');
+
+		// EVENT Contents.beforeChangeStatus
+		$this->dispatchLayerEvent('beforeChangeStatus', [
+		    'id' => $id,
+		    'status' => $status
+		]);
+
+        $result = false;
+        if ($id && $status) {
             try {
-                switch($this->request->getData('status')) {
+                switch($status) {
                     case 'publish':
-                        $content = $contentService->publish($this->request->getData('id'));
+                        $content = $contentService->publish($id);
                         $message = __d('baser', 'コンテンツ: {0} を公開しました。', $content->title);
                         break;
                     case 'unpublish':
-                        $content = $contentService->unpublish($this->request->getData('id'));
+                        $content = $contentService->unpublish($id);
                         $message = __d('baser', 'コンテンツ: {0} を非公開にしました。', $content->title);
                         break;
                 }
+                $result = true;
             } catch (\Exception $e) {
                 $this->setResponse($this->response->withStatus(500));
                 $message = __d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
@@ -270,6 +281,13 @@ class ContentsController extends BcApiController
             $this->setResponse($this->response->withStatus(400));
             $message = __d('baser',  '無効な処理です。') . "データが不足しています";
         }
+
+		// EVENT Contents.afterChangeStatus
+		$this->dispatchLayerEvent('afterChangeStatus', [
+		    'id' => $id,
+		    'result' => $result
+		]);
+
         $this->set([
             'message' => $message,
         ]);
