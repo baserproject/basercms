@@ -15,17 +15,18 @@ use Cake\View\View;
 use Cake\View\Helper;
 use Cake\Core\Configure;
 use BaserCore\Utility\BcUtil;
+use BaserCore\Annotation\Note;
 use BaserCore\Utility\BcAgent;
 use Cake\View\Helper\UrlHelper;
+use BaserCore\Annotation\NoTodo;
 use BaserCore\Model\Entity\User;
+use BaserCore\Annotation\Checked;
 use Cake\View\Helper\FlashHelper;
+use BaserCore\Annotation\UnitTest;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Event\BcEventDispatcherTrait;
 use BaserCore\Service\SiteServiceInterface;
-use BaserCore\Annotation\Checked;
-use BaserCore\Annotation\NoTodo;
-use BaserCore\Annotation\UnitTest;
-use BaserCore\Annotation\Note;
+use BaserCore\Service\PermissionServiceInterface;
 
 /**
  * Class BcBaserHelper
@@ -157,6 +158,21 @@ class BcBaserHelper extends Helper
             $this->_initPluginBasers();
         }
         >>> */
+    }
+
+    /**
+     * initialize
+     *
+     * @param  array $config
+     * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function initialize($config): void
+    {
+        parent::initialize($config);
+        $this->PermissionService = $this->getService(PermissionServiceInterface::class);
     }
 
     /**
@@ -332,16 +348,11 @@ class BcBaserHelper extends Helper
      */
     public function getLink($title, $url = null, $options = [], $confirmMessage = false)
     {
-
-        // TODO ucmitz 未実装のため代替措置
-        // >>>
         if ($confirmMessage) {
             $options['confirm'] = $confirmMessage;
         }
-        return $this->BcHtml->link($title, $url, $options);
-        // <<<
 
-        $adminAlias = Configure::read('BcPrefixAuth.Admin.alias');
+        $adminAlias = BcUtil::getAdminPrefix();
 
         if (!is_array($options)) {
             $options = [$options];
@@ -380,10 +391,11 @@ class BcBaserHelper extends Helper
         // 管理システムメニュー対策
         // プレフィックスが変更された場合も正常動作させる為
         // TODO メニューが廃止になったら削除
-        if (!is_array($url)) {
-            $prefixes = Configure::read('Routing.prefixes');
-            $url = preg_replace('/^\/' . $adminAlias . '\//', '/' . $prefixes[0] . '/', $url);
-        }
+        // TODO ucmitz: Routing.prefixesの代替手段が完了後移行する
+        // if (!is_array($url)) {
+        //     $prefixes = Configure::read('Routing.prefixes');
+        //     $url = preg_replace('/^\/' . $adminAlias . '\//', '/' . $prefixes[0] . '/', $url);
+        // }
 
         $_url = $this->getUrl($url);
         $_url = preg_replace('/^' . preg_quote($this->_View->getRequest()->getAttribute('base'), '/') . '\//', '/', $_url);
@@ -394,10 +406,10 @@ class BcBaserHelper extends Helper
         }
 
         // 認証チェック
-        $user = $this->_View->get('user');
-        if (isset($this->_Permission) && !empty($user['user_group_id'])) {
-            $userGroupId = $user['user_group_id'];
-            if (!$this->_Permission->check($_url, $userGroupId)) {
+        $user = Bcutil::loginUser();
+        if ($user) {
+            $userGruops = array_column($user->user_groups, 'id');
+            if (!$this->PermissionService->check($_url, $userGruops)) {
                 $enabled = false;
             }
         }
@@ -429,7 +441,7 @@ class BcBaserHelper extends Helper
             && !preg_match('/^#/', $_url)) {
 
             $_url = preg_replace("/^\//", "", $_url);
-            if (preg_match('/^' . $adminAlias . '\//', $_url)) {
+            if (preg_match('{^' . $adminAlias . '\/}', $_url)) {
                 $admin = true;
             } else {
                 $admin = false;

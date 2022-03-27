@@ -11,17 +11,18 @@
 
 namespace BaserCore\Test\TestCase\View\Helper;
 
-use Cake\Event\Event;
-use Cake\Event\EventManager;
-use Cake\Filesystem\File;
-use Cake\View\Helper\HtmlHelper;
-use BaserCore\TestSuite\BcTestCase;
-use BaserCore\View\BcAdminAppView;
-use BaserCore\View\Helper\BcBaserHelper;
-use Cake\View\Helper\FlashHelper;
-use Cake\View\Helper\UrlHelper;
-use Cake\Routing\Router;
 use ReflectionClass;
+use Cake\Event\Event;
+use Cake\Core\Configure;
+use Cake\Routing\Router;
+use Cake\Filesystem\File;
+use Cake\Event\EventManager;
+use Cake\View\Helper\UrlHelper;
+use Cake\View\Helper\HtmlHelper;
+use Cake\View\Helper\FlashHelper;
+use BaserCore\View\BcAdminAppView;
+use BaserCore\TestSuite\BcTestCase;
+use BaserCore\View\Helper\BcBaserHelper;
 
 
 // use BaserCore\View\BcAdminAppView;
@@ -135,6 +136,14 @@ class BcBaserHelperTest extends BcTestCase
         unset($this->BcAdminAppView, $this->BcBaser, $this->Html, $this->Flash, $this->Url, $this->Contents);
         Router::reload();
         parent::tearDown();
+    }
+
+    /**
+     * Test initialize
+     */
+    public function testInitialize()
+    {
+        $this->assertNotEmpty($this->BcBaser->PermissionService);
     }
 
     /**
@@ -339,10 +348,9 @@ class BcBaserHelperTest extends BcTestCase
     {
         $link = 'sampletest';
         ob_start();
-        $this->BcBaser->link($link);
+        $this->BcBaser->link($link, $link);
         $result = ob_get_clean();
-        $expected = $this->Html->link($link);
-        $this->assertEquals($expected, $result);
+        $this->assertRegExp('/<a href="\/sampletest">sampletest<\/a>/', $result);
     }
 
     /**
@@ -374,7 +382,7 @@ class BcBaserHelperTest extends BcTestCase
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
 
         if (!empty($option['prefix'])) {
-            $this->_getRequest('/admin');
+            $this->BcBaser->getView()->setRequest($this->getRequest('/admin'));
         }
         if (!empty($option['forceTitle'])) {
             $this->_View->viewVars['user']['user_group_id'] = 2;
