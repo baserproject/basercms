@@ -96,17 +96,17 @@ class PagesControllerEventListener extends BcControllerEventListener
      * Contents Before Delete
      *
      * ゴミ箱に入れた固定ページの検索インデックスの削除が目的
+     * afterDelete の方が確実だが、
      *
      * @param Event $event
      */
     public function baserCoreContentsBeforeDelete(Event $event)
     {
-        // TODO ucmitz 未対応で一旦コメントアウト
-//        $id = $event->getData('data');
-//        $data = $this->Pages->find('first', ['conditions' => ['Content.id' => $id]]);
-//        if ($data) {
-//            $this->Pages->deleteSearchIndex($data['Page']['id']);
-//        }
+        $id = $event->getData('data');
+        $page = $this->Pages->find()->contain(['Contents'])->where(['Contents.id' => $id])->first();
+        if ($page) {
+            $this->Pages->deleteSearchIndex($page->id);
+        }
     }
 
     /**

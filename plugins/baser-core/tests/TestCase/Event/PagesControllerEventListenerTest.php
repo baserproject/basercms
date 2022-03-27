@@ -92,11 +92,16 @@ class PagesControllerEventListenerTest extends BcTestCase
     }
 
     /**
-     * Contents Before Delete
+     * Contents After Delete
      */
-    public function testContentsBeforeDelete()
+    public function testBaserCoreContentsAfterDelete()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loginAdmin($this->getRequest());
+        $this->enableCsrfToken();
+        $this->post('/baser/admin/baser-core/contents/delete', ['Content' => ['id' => 13]]);
+        $this->assertResponseSuccess();
+        $searchIndexesTable = $this->getTableLocator()->get('BaserCore.SearchIndexes');
+        $this->assertEquals(0, $searchIndexesTable->find()->where(['url' => '/service/service3'])->count());
     }
 
     /**
