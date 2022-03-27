@@ -152,12 +152,12 @@ $(function () {
         var displayName = $("#site-display-name" + siteId).val();
         var targetUrl = $("#site-target-url" + siteId).val();
         var data = {
-            title: current.title,
-            siteId: siteId,
-            parentId: current.parent_id,
-            contentId: current.id,
-            entityId: current.entity_id,
-            url: current.url
+                title: current.title,
+                siteId: siteId,
+                parentId: current.parent_id,
+                contentId: current.id,
+                entityId: current.entity_id,
+                url: current.url
         };
         if (confirm(bcI18n.contentsEditConfirmMessage4.sprintf(displayName))) {
             $.bcToken.check(function () {
@@ -193,7 +193,7 @@ $(function () {
                                     },
                                     success: function (result) {
                                         $.bcUtil.showNoticeMessage(bcI18n.contentsEditInfoMessage2);
-                                        location.href = bcManageContent[current.type]['url']['edit'] + '/' + result.entity_id;
+                                        location.href = bcManageContent[current.type]['url']['edit'] + '/' + result.content.entity_id;
                                     },
                                     error: function (XMLHttpRequest, textStatus, errorThrown) {
                                         $.bcUtil.hideLoader();
