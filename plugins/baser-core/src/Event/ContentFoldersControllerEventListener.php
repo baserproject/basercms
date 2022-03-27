@@ -144,6 +144,7 @@ class ContentFoldersControllerEventListener extends BcControllerEventListener
      * @uses baserCoreContentsAfterChangeStatus()
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function baserCoreContentsAfterChangeStatus(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
