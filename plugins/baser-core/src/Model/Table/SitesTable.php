@@ -254,17 +254,23 @@ class SitesTable extends AppTable
     {
         $content = $this->Contents->get($contentId, ['contain' => ['Sites']]);
         $isMainSite = $this->isMain($content->site->id);
-        $mainSiteContentId = $isMainSite ? $content->site->id : $content->site->main_site_id;
         $fields = ['id', 'name', 'alias', 'display_name', 'main_site_id'];
         $conditions = ['Sites.status' => true];
         if (is_null($content->site->main_site_id)) {
             $mainSiteContentId = $content->id;
-            $conditions['Sites.main_site_id'] = 1;
+            $conditions['or'] = [
+                ['Sites.id' => $content->site->id],
+                ['Sites.main_site_id' => 1]
+            ];
         } else {
             $conditions['or'] = [
-                    ['Sites.main_site_id' => $mainSiteContentId],
+                    ['Sites.main_site_id' => $content->site->main_site_id],
                     ['Sites.id' => $content->site->main_site_id]
             ];
+            if ($isMainSite) {
+                $conditions['or'][] = ['Site.main_site_id' => $content->site->id];
+            }
+            $mainSiteContentId = $content->main_site_content_id ?? $content->id;
         }
         $sites = $this->find()->select($fields)->where($conditions)->order('main_site_id')->toArray();
         if ($content->site->main_site_id === 1) {
@@ -283,7 +289,6 @@ class SitesTable extends AppTable
                 $list[$key]['Site'] = $site;
                 if ($relatedContent->site_id == $site->id) {
                     $list[$key]['Content'] = $relatedContent;
-                    break;
                 }
             }
         }

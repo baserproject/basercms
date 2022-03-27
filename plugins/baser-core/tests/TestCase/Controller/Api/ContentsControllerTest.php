@@ -333,15 +333,14 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
      *
      * @return void
      */
-    public function testExists_content_by_url()
+    public function testIs_unique_content()
     {
-        $this->post("/baser/api/baser-core/contents/exists_content_by_url.json?token=" . $this->accessToken);
+        $this->post("/baser/api/baser-core/contents/is_unique_content.json?token=" . $this->accessToken);
         $this->assertResponseFailure();
-        $this->assertEquals('無効な処理です。', json_decode($this->_response->getBody())->message);
-        $this->post("/baser/api/baser-core/contents/exists_content_by_url.json?token=" . $this->accessToken, ['url' => 'aaaa']);
-        $this->assertResponseError();
-        $this->assertEquals('データが見つかりません', json_decode($this->_response->getBody())->message);
-        $this->post("/baser/api/baser-core/contents/exists_content_by_url.json?token=" . $this->accessToken, ['url' => '/service/service2']);
+        $this->post("/baser/api/baser-core/contents/is_unique_content.json?token=" . $this->accessToken, ['url' => 'aaaa']);
+        $this->assertTrue(json_decode($this->_response->getBody()));
+        $this->post("/baser/api/baser-core/contents/is_unique_content.json?token=" . $this->accessToken, ['url' => '/service/service2']);
+        $this->assertFalse(json_decode($this->_response->getBody()));
     }
 
     /**
