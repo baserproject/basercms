@@ -98,6 +98,7 @@ class PagesControllerEventListenerTest extends BcTestCase
     {
         $this->loginAdmin($this->getRequest());
         $this->enableCsrfToken();
+        // 検索インデックスも連動して削除
         $this->post('/baser/admin/baser-core/contents/delete', ['Content' => ['id' => 13]]);
         $this->assertResponseSuccess();
         $searchIndexesTable = $this->getTableLocator()->get('BaserCore.SearchIndexes');
@@ -107,10 +108,15 @@ class PagesControllerEventListenerTest extends BcTestCase
     /**
      * Contents After Trash Return
      */
-    public function testContentsAfterTrashReturn()
+    public function testBaserCoreContentsAfterTrashReturn()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loginAdmin($this->getRequest());
+        $this->enableCsrfToken();
+        // 検索インデックスを生成
+        $this->post('/baser/admin/baser-core/contents/trash_return/7');
+        $this->assertResponseSuccess();
+        $searchIndexesTable = $this->getTableLocator()->get('BaserCore.SearchIndexes');
+        $this->assertEquals(1, $searchIndexesTable->find()->where(['url' => '/sample'])->count());
     }
-
 
 }
