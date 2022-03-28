@@ -96,17 +96,20 @@ class PagesControllerEventListener extends BcControllerEventListener
      * Contents Before Delete
      *
      * ゴミ箱に入れた固定ページの検索インデックスの削除が目的
+     * afterDelete の方が確実だが、そのタイミングだと page が取得できないため
      *
      * @param Event $event
+     * @uses baserCoreContentsBeforeDelete()
+     * @checked
+     * @noTodo
+     * @unitTest
+     * @todo beforeDelete で page::id を取得し afterDelete で削除することを検討
      */
     public function baserCoreContentsBeforeDelete(Event $event)
     {
-        // TODO ucmitz 未対応で一旦コメントアウト
-//        $id = $event->getData('data');
-//        $data = $this->Pages->find('first', ['conditions' => ['Content.id' => $id]]);
-//        if ($data) {
-//            $this->Pages->deleteSearchIndex($data['Page']['id']);
-//        }
+        $id = $event->getData('data');
+        $page = $this->Pages->find()->contain(['Contents'])->where(['Contents.id' => $id])->first();
+        if ($page) $this->Pages->deleteSearchIndex($page->id);
     }
 
     /**
@@ -115,15 +118,16 @@ class PagesControllerEventListener extends BcControllerEventListener
      * ゴミ箱から戻した固定ページの検索インデックス生成が目的
      *
      * @param Event $event
+     * @uses baserCoreContentsAfterTrashReturn()
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function baserCoreContentsAfterTrashReturn(Event $event)
     {
-        // TODO ucmitz 未対応で一旦コメントアウト
-//        $id = $event->getData();
-//        $data = $this->Pages->find('first', ['conditions' => ['Content.id' => $id]]);
-//        if ($data) {
-//            $this->Pages->saveSearchIndex($this->Pages->createSearchIndex($data));
-//        }
+        $id = $event->getData('data');
+        $page = $this->Pages->find()->contain(['Contents'])->where(['Contents.id' => $id])->first();
+        if ($page) $this->Pages->saveSearchIndex($this->Pages->createSearchIndex($page));
     }
 
     /**
@@ -132,16 +136,19 @@ class PagesControllerEventListener extends BcControllerEventListener
      * 一覧から公開設定を変更した場合に固定ページの検索インデックスを更新する事が目的
      *
      * @param Event $event
+     * @uses baserCoreContentsAfterChangeStatus()
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function baserCoreContentsAfterChangeStatus(Event $event)
     {
-        // TODO ucmitz 未対応で一旦コメントアウト
-//        if (empty($event->getData('result'))) {
-//            return;
-//        }
-//        $id = $event->getData('id');
-//        $data = $this->Pages->find('first', ['conditions' => ['Content.id' => $id]]);
-//        $this->Pages->saveSearchIndex($this->Pages->createSearchIndex($data));
+        if (empty($event->getData('result'))) {
+            return;
+        }
+        $id = $event->getData('id');
+        $page = $this->Pages->find()->contain(['Contents'])->where(['Contents.id' => $id])->first();
+        if($page) $this->Pages->saveSearchIndex($this->Pages->createSearchIndex($page));
     }
 
 }

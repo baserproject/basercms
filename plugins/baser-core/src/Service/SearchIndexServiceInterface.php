@@ -26,4 +26,13 @@ interface SearchIndexServiceInterface
      * @return EntityInterface
      */
     public function get($id): EntityInterface;
+
+    /**
+     * 検索インデックス再構築
+     *
+     * @param int $parentContentId 親となるコンテンツID
+     * @return bool
+     */
+    public function reconstruct($parentContentId = null);
+
 }

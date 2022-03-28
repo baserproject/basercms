@@ -12,21 +12,18 @@
 namespace BaserCore\Service;
 
 use Cake\ORM\TableRegistry;
-use Cake\Utility\Inflector;
-use BaserCore\Utility\BcUtil;
 use BaserCore\Annotation\NoTodo;
-use BaserCore\Model\Entity\SearchIndex;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
-use Cake\Core\Exception\Exception;
 use Cake\Datasource\EntityInterface;
-use BaserCore\Model\Table\SearchIndexsTable;
+use BaserCore\Model\Table\SearchIndexesTable;
 use BaserCore\Utility\BcContainerTrait;
+use Cake\Utility\Inflector;
 
 /**
  * Class SearchIndexService
  * @package BaserCore\Service
- * @property SearchIndexsTable $SearchIndexs
+ * @property SearchIndexesTable $SearchIndexs
  */
 class SearchIndexService implements SearchIndexServiceInterface
 {
@@ -38,16 +35,16 @@ class SearchIndexService implements SearchIndexServiceInterface
 
     /**
      * SearchIndexs Table
-     * @var SearchIndexsTable
+     * @var SearchIndexesTable
      */
-    public $SearchIndexs;
+    public $SearchIndexes;
 
     /**
-     * SearchIndexservice constructor.
+     * SearchIndexesService constructor.
      */
     public function __construct()
     {
-        $this->SearchIndexs = TableRegistry::getTableLocator()->get('BaserCore.SearchIndexs');
+        $this->SearchIndexes = TableRegistry::getTableLocator()->get('BaserCore.SearchIndexes');
     }
 
     /**
@@ -57,6 +54,64 @@ class SearchIndexService implements SearchIndexServiceInterface
      */
     public function get($id): EntityInterface
     {
-        return $this->SearchIndexs->get($id);
+        return $this->SearchIndexes->get($id);
+    }
+
+    /**
+     * 検索インデックス再構築
+     *
+     * @param int $parentContentId 親となるコンテンツID
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function reconstruct($parentContentId = null)
+    {
+        $Contents = TableRegistry::getTableLocator()->get('BaserCore.Contents');;
+        $conditions = [
+            'OR' => [
+                ['Sites.status IS' => null],
+                ['Sites.status' => true]
+            ]];
+        if ($parentContentId) {
+            $parentContent = $Contents->find()->select(['lft', 'rght'])->where(['id' => $parentContentId])->first();
+            $conditions = array_merge($conditions, [
+                'lft >' => $parentContent->lft,
+                'rght <' => $parentContent->rght
+            ]);
+        }
+        $contents = $Contents->find()->contain(['Sites'])->where($conditions)->order('lft')->all();
+        $models = [];
+        $db = $this->SearchIndexes->getConnection();
+        $db->begin();
+
+        if (!$parentContentId) {
+            $sql = $this->SearchIndexes->getSchema()->truncateSql($this->SearchIndexes->getConnection());
+            $this->SearchIndexes->getConnection()->execute($sql[0])->execute();
+        }
+
+        $result = true;
+        if ($contents) {
+            foreach($contents as $content) {
+                $tableName = Inflector::pluralize($content->type);
+                if (isset($models[$content->type])) {
+                    $table = $models[$content->type];
+                } else {
+                    $models[$content->type] = $table = TableRegistry::getTableLocator()->get($content->plugin . '.' . $tableName);
+                }
+                // データの変更はないがイベントを走らせるために setNew() を実行
+                $entity = $table->find()->contain(['Contents'])->where([$tableName . '.id' => $content->entity_id])->first();
+                if ($entity && $entity->setNew(true) && !$table->save($entity)) {
+                    $result = false;
+                }
+            }
+        }
+        if ($result) {
+            $db->commit();
+        } else {
+            $db->rollback();
+        }
+        return $result;
     }
 }

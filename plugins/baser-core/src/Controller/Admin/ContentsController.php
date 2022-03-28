@@ -11,6 +11,7 @@
 
 namespace BaserCore\Controller\Admin;
 
+use Cake\Http\Response;
 use Cake\ORM\Query;
 use Cake\Utility\Hash;
 use Cake\ORM\ResultSet;
@@ -237,7 +238,6 @@ class ContentsController extends BcAdminAppController
         ]);
         if ($restored = $contentService->restore($id)) {
             $this->BcMessage->setSuccess(sprintf(__d('baser', 'ゴミ箱「%s」を戻しました。'), $restored->title));
-            return $this->redirect(['action' => 'trash_index']);
         } else {
             $this->BcMessage->setError('ゴミ箱から戻す事に失敗しました。');
         }
@@ -245,6 +245,7 @@ class ContentsController extends BcAdminAppController
         $this->dispatchLayerEvent('afterTrashReturn', [
             'data' => $id
         ]);
+        return $this->redirect(['action' => 'trash_index']);
     }
 
     /**

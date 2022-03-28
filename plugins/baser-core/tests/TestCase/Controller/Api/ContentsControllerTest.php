@@ -43,7 +43,13 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
         'plugin.BaserCore.SiteConfigs',
         'plugin.BaserCore.Pages',
         'plugin.BaserCore.SearchIndexes',
+        'plugin.BaserCore.Service/SearchIndexService/ContentsReconstruct',
+        'plugin.BaserCore.Service/SearchIndexService/PagesReconstruct',
+        'plugin.BaserCore.Service/SearchIndexService/ContentFoldersReconstruct',
+        'plugin.BaserCore.Service/SearchIndexService/SearchIndexesReconstruct'
     ];
+
+    public $autoFixtures = false;
 
     /**
      * Access Token
@@ -63,6 +69,17 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadFixtures(
+            'Users',
+            'UserGroups',
+            'UsersUserGroups',
+            'Contents',
+            'ContentFolders',
+            'Sites',
+            'SiteConfigs',
+            'Pages',
+            'SearchIndexes'
+        );
         $token = $this->apiLoginAdmin(1);
         $this->accessToken = $token['access_token'];
         $this->refreshToken = $token['refresh_token'];
@@ -226,6 +243,9 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function testChange_status_toUnpublish()
     {
+        $this->loadFixtures(
+	        'Service\SearchIndexService\ContentsReconstruct'
+        );
         $data = ['id' => 1, 'status' => 'unpublish'];
         $this->patch("/baser/api/baser-core/contents/change_status.json?token=" . $this->accessToken, $data);
         $this->assertResponseOk();
@@ -239,6 +259,9 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function testChange_status_toPublish()
     {
+        $this->loadFixtures(
+	        'Service\SearchIndexService\ContentsReconstruct'
+        );
         $content = $this->ContentService->get(1);
         $this->ContentService->update($content, ['id' => $content->id, 'status' => false, 'name' => 'test']);
         $data = ['id' => 1, 'status' => 'publish'];
