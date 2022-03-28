@@ -23,12 +23,6 @@ use BaserCore\Annotation\Note;
  */
 class SearchIndexesTable extends AppTable
 {
-    // /**
-    //  * クラス名
-    //  *
-    //  * @var string
-    //  */
-    // public $name = 'SearchIndex';
 
     /**
      * Initialize

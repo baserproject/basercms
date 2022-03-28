@@ -179,7 +179,7 @@ class SiteConfigsTableTest extends BcTestCase
         $this->SiteConfigs->updateContentsSortLastModified();
         $this->assertEquals('', $this->SiteConfigs->getValue('contents_sort_last_modified'));
         // ログイン
-        $this->loginAdmin($this->getRequest());
+        Router::setRequest($this->loginAdmin($this->getRequest()));
         $this->SiteConfigs->updateContentsSortLastModified();
         $lastModified = $this->SiteConfigs->getValue('contents_sort_last_modified');
         [$lastModified, $userId] = explode('|', $lastModified);

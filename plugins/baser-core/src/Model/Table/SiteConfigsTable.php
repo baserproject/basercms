@@ -67,6 +67,7 @@ class SiteConfigsTable extends AppTable
         $validator
             ->scalar('name')
             ->maxLength('name', 255, __d('baser', '255文字以内で入力してください。'))
+            ->requirePresence('name', 'create', __d('baser', '設定名を入力してください。'))
             ->notEmptyString('name', __d('baser', '設定名を入力してください。'));
         $validator
             ->scalar('value')
