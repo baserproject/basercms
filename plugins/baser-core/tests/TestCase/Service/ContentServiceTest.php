@@ -584,15 +584,15 @@ class ContentServiceTest extends BcTestCase
     {
         $request = $this->loginAdmin($this->getRequest('/'));
         Router::setRequest($request);
+        $content = $this->ContentService->getIndex()->last();
         $request = $request->withParsedBody([
-            // 'name' => 'aaa',
             'parent_id' => '1',
             'plugin' => 'BaserCore',
             'type' => 'ContentFolder',
             'title' => 'テストエイリアス',
+            'alias_id' => $content->id
         ]);
-        $content = $this->ContentService->getIndex()->last();
-        $result = $this->ContentService->alias($content->id, $request->getData());
+        $result = $this->ContentService->alias($request->getData());
         $expected = $this->ContentService->Contents->find()->last();
         $this->assertEquals($expected->name, $result->name);
         $this->assertEquals($content->id, $result->alias_id);

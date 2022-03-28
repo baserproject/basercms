@@ -260,7 +260,7 @@ class SitesTable extends AppTable
             $mainSiteContentId = $content->id;
             $conditions['or'] = [
                 ['Sites.id' => $content->site->id],
-                ['Sites.main_site_id' => 1]
+                ['Sites.main_site_id' => $this->getRootMain()->id]
             ];
         } else {
             $conditions['or'] = [
@@ -273,9 +273,6 @@ class SitesTable extends AppTable
             $mainSiteContentId = $content->main_site_content_id ?? $content->id;
         }
         $sites = $this->find()->select($fields)->where($conditions)->order('main_site_id')->toArray();
-        if ($content->site->main_site_id === 1) {
-            $sites = array_merge($sites, [$this->getRootMain(['fields' => $fields])]);
-        }
         $conditions = [
             'or' => [
                 ['Contents.id' => $mainSiteContentId],
@@ -284,11 +281,12 @@ class SitesTable extends AppTable
         ];
         $list= [];
         $relatedContents = $this->Contents->find()->where($conditions)->toArray();
-        foreach($relatedContents as $relatedContent) {
-            foreach($sites as $key => $site) {
+        foreach($sites as $key => $site) {
+            foreach($relatedContents as $relatedContent) {
                 $list[$key]['Site'] = $site;
                 if ($relatedContent->site_id == $site->id) {
                     $list[$key]['Content'] = $relatedContent;
+                    break;
                 }
             }
         }

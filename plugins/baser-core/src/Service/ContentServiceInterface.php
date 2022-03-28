@@ -113,12 +113,11 @@ interface ContentServiceInterface
     /**
      * aliasを作成する
      *
-     * @param  int $id
      * @param  array $postData
      * @return \Cake\Datasource\EntityInterface
      * @throws \Cake\ORM\Exception\PersistenceFailedException
      */
-    public function alias(int $id, array $postData);
+    public function alias(array $postData);
 
     /**
      * コンテンツ情報を論理削除する

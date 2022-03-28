@@ -322,15 +322,13 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
     {
         $content = $this->ContentService->get(1);
         $data = [
-            'aliasId' => 1,
-            'aliasName' => 'テストエイリアス',
             'content' => [
                 "parent_id" =>  $content->parent_id,
                 "title" => 'テストエイリアス',
                 "plugin"=> $content->plugin,
                 "type"=> $content->type,
                 "site_id"=> $content->site_id,
-                "alias_id"=> $content->alias_id,
+                "alias_id"=> $content->id,
                 "entity_id"=> $content->entity_id,
             ]];
         $this->post("/baser/api/baser-core/contents/add_alias.json?token=" . $this->accessToken, $data);

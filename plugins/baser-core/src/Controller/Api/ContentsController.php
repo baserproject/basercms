@@ -410,7 +410,7 @@ class ContentsController extends BcApiController
     {
         $this->request->allowMethod(['post']);
         try {
-            $alias = $contentService->alias($this->request->getData('aliasId'), $this->request->getData('content'));
+            $alias = $contentService->alias($this->request->getData('content'));
             $message = __d('baser', '{0} を作成しました。', $alias->title);
         } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
             $alias = $e->getEntity();

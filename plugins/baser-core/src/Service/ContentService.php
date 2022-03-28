@@ -338,7 +338,6 @@ class ContentService implements ContentServiceInterface
     /**
      * aliasを作成する
      *
-     * @param  int $id
      * @param  array $postData
      * @return \Cake\Datasource\EntityInterface
      * @throws \Cake\ORM\Exception\PersistenceFailedException
@@ -346,20 +345,18 @@ class ContentService implements ContentServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function alias(int $id, array $postData)
+    public function alias(array $postData)
     {
-        $content = $this->get($id);
-        $data = array_merge($content->toArray(), $postData);
-        $alias = $this->Contents->newEmptyEntity();
-        if (empty($data['parent_id']) && !empty($data['url'])) {
-            $data['parent_id'] = $this->Contents->copyContentFolderPath($data['url'], $data['site_id']);
+        if (empty($postData['alias_id'])) throw new \Exception('エイリアスIDを指定してください。');
+        if (empty($postData['parent_id']) && !empty($postData['url'])) {
+            $postData['parent_id'] = $this->Contents->copyContentFolderPath($postData['url'], $postData['site_id']);
         }
-        unset($data['lft'], $data['rght'], $data['level'], $data['pubish_begin'], $data['publish_end'], $data['created_date'], $data['created'], $data['modified']);
+        $data = array_merge($this->get($postData['alias_id'])->toArray(), $postData);
+        unset($data['id'], $data['lft'], $data['rght'], $data['level'], $data['pubish_begin'], $data['publish_end'], $data['created_date'], $data['created'], $data['modified']);
+        $alias = $this->Contents->newEntity($data);
         $alias->name = $postData['name'] ?? $postData['title'];
-        $alias->alias_id = $id;
         $alias->created_date = FrozenTime::now();
         $alias->author_id = BcUtil::loginUser()->id ?? null;
-        $alias = $this->Contents->patchEntity($alias, $postData, ['validate' => 'default']);
         return $this->Contents->saveOrFail($alias);
     }
 

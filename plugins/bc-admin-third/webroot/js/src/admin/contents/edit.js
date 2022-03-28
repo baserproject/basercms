@@ -107,7 +107,7 @@ $(function () {
                             $.bcToken.key = null;
                             $.bcToken.check(function () {
                                 return $.ajax({
-                                    url: bcManageContent[current.type]['url']['add'],
+                                    url: bcManageContent['ContentAlias']['url']['add'],
                                     headers: {
                                         "Authorization": $.bcJwt.accessToken,
                                     },
