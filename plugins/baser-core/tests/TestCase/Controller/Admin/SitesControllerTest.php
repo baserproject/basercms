@@ -141,7 +141,7 @@ class SitesControllerTest extends BcTestCase
         $this->enableSecurityToken();
         $this->enableCsrfToken();
         $this->entryEventToMock(self::EVENT_LAYER_CONTROLLER, 'BaserCore.Sites.afterAdd', function(Event $event) {
-            $site = $event->getData('site');
+            $site = $event->getData('data');
             $sites = $this->getTableLocator()->get('Sites');
             $site->name = 'etc';
             $sites->save($site);
@@ -174,7 +174,7 @@ class SitesControllerTest extends BcTestCase
 
         // イベントテスト
         $this->entryEventToMock(self::EVENT_LAYER_CONTROLLER, 'BaserCore.Sites.afterEdit', function(Event $event) {
-            $site = $event->getData('site');
+            $site = $event->getData('data');
             $sites = $this->getTableLocator()->get('BaserCore.Sites');
             $site->display_name = 'etc';
             $sites->save($site);
