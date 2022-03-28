@@ -959,13 +959,6 @@
             if (extra) {
                 postData  += '&' +  encodeURI($.param(extra));
             }
-            if (settingData.alias) {
-                const alias =  {
-                    aliasId: settingData.contentAliasId,
-                    aliasName: settingData.contentTitle,
-                };
-                postData  += '&' +  encodeURI($.param(alias));
-            }
             return postData;
         },
 

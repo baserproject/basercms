@@ -114,7 +114,7 @@ class SitesTableTest extends BcTestCase
     public function testGetRelatedContents()
     {
         $list = $this->Sites->getRelatedContents(24);
-        $this->assertCount(6, $list);
+        $this->assertCount(5, $list);
         $sample = array_shift($list);
         $this->assertNotEmpty($sample['Site']);
         $this->assertNotEmpty($sample['Content']);

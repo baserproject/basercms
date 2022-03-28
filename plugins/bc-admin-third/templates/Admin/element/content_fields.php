@@ -38,7 +38,7 @@ $fullUrl = rawurldecode($this->BcAdminContent->getUrl($content->url, true, $site
 $this->BcBaser->js('admin/contents/edit.bundle', false, ['id' => 'AdminContentsEditScript',
   'data-previewurl' => Router::url(["controller" => "preview", "action" => "view"]),
   'data-fullurl' => $fullUrl,
-  'data-current' => json_encode($this->request->getData()),
+  'data-current' => $content,
   'data-settings' => $this->BcContents->getJsonItems()
 ]);
 $this->BcBaser->i18nScript([

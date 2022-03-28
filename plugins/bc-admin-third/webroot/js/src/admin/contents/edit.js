@@ -74,40 +74,40 @@ $(function () {
 
     $(".create-alias").click(function () {
         var siteId = $(this).attr('data-site-id');
-        var displayName = $("#SiteDisplayName" + siteId).val();
-        var targetUrl = $("#SiteTargetUrl" + siteId).val();
+        var displayName = $("#site-display-name" + siteId).val();
+        var targetUrl = $("#site-target-url" + siteId).val();
         var data = {
-            'Content': {
-                title: current.Content.name,
-                plugin: current.Content.plugin,
-                type: current.Content.type,
+            content: {
+                title: current.name,
+                plugin: current.plugin,
+                type: current.type,
                 site_id: siteId,
-                alias_id: current.Content.id,
-                entity_id: current.Content.entity_id,
-                url: current.Content.url
+                alias_id: current.id,
+                entity_id: current.entity_id,
+                url: current.url
             }
         };
         if (confirm(bcI18n.contentsEditConfirmMessage3.sprintf(displayName))) {
             $.bcToken.check(function () {
                 return $.ajax({
-                    url: $.bcUtil.apiBaseUrl + 'baser-core/contents/exists_content_by_url',
+                    url: $.bcUtil.apiBaseUrl + 'baser-core/contents/is_unique_content',
                     headers: {
                         "Authorization": $.bcJwt.accessToken,
                     },
                     type: 'POST',
                     data: {
-                        data: {url: targetUrl},
+                        url: targetUrl,
                         _csrfToken: $.bcToken.key,
                     },
                     beforeSend: function () {
                         $.bcUtil.showLoader();
                     },
                     success: function (result) {
-                        if (!result) {
+                        if (result) {
                             $.bcToken.key = null;
                             $.bcToken.check(function () {
                                 return $.ajax({
-                                    url: $.bcUtil.apiBaseUrl + 'baser-core/contents/add/1',
+                                    url: bcManageContent['ContentAlias']['url']['add'],
                                     headers: {
                                         "Authorization": $.bcJwt.accessToken,
                                     },
@@ -121,7 +121,8 @@ $(function () {
                                     },
                                     success: function (result) {
                                         $.bcUtil.showNoticeMessage(bcI18n.contentsEditInfoMessage1);
-                                        location.href = $.baseUrl() + '/' + $.bcUtil.adminPrefix + '/contents/edit_alias/' + result.id;
+                                        $.bcUtil.showNoticeMessage(result.message);
+                                        location.href = $.bcUtil.adminBaseUrl + 'baser-core' +  '/contents/edit_alias/' + result.content.id;
                                     },
                                     error: function (XMLHttpRequest, textStatus, errorThrown) {
                                         $.bcUtil.hideLoader();
@@ -148,37 +149,37 @@ $(function () {
 
     $(".create-copy").click(function () {
         var siteId = $(this).attr('data-site-id');
-        var displayName = $("#SiteDisplayName" + siteId).val();
-        var targetUrl = $("#SiteTargetUrl" + siteId).val();
+        var displayName = $("#site-display-name" + siteId).val();
+        var targetUrl = $("#site-target-url" + siteId).val();
         var data = {
-            title: current.Content.title,
-            siteId: siteId,
-            parentId: current.Content.parent_id,
-            contentId: current.Content.id,
-            entityId: current.Content.entity_id,
-            url: current.Content.url
+                title: current.title,
+                siteId: siteId,
+                parentId: current.parent_id,
+                contentId: current.id,
+                entityId: current.entity_id,
+                url: current.url
         };
         if (confirm(bcI18n.contentsEditConfirmMessage4.sprintf(displayName))) {
             $.bcToken.check(function () {
                 return $.ajax({
-                    url: $.bcUtil.apiBaseUrl + 'baser-core/contents/exists_content_by_url',
+                    url: $.bcUtil.apiBaseUrl + 'baser-core/contents/is_unique_content',
                     headers: {
                         "Authorization": $.bcJwt.accessToken,
                     },
                     type: 'POST',
                     data: {
-                        data: {url: targetUrl},
+                        url: targetUrl,
                         _csrfToken: $.bcToken.key,
                     },
                     beforeSend: function () {
                         $.bcUtil.showLoader();
                     },
                     success: function (result) {
-                        if (!result) {
+                        if (result) {
                             $.bcToken.key = null;
                             $.bcToken.check(function () {
                                 return $.ajax({
-                                    url: bcManageContent[current.Content.type]['url']['copy'],
+                                    url: bcManageContent[current.type]['url']['copy'],
                                     headers: {
                                         "Authorization": $.bcJwt.accessToken,
                                     },
@@ -192,7 +193,7 @@ $(function () {
                                     },
                                     success: function (result) {
                                         $.bcUtil.showNoticeMessage(bcI18n.contentsEditInfoMessage2);
-                                        location.href = bcManageContent[current.Content.type]['url']['edit'] + '/' + result.entity_id;
+                                        location.href = bcManageContent[current.type]['url']['edit'] + '/' + result.content.entity_id;
                                     },
                                     error: function (XMLHttpRequest, textStatus, errorThrown) {
                                         $.bcUtil.hideLoader();

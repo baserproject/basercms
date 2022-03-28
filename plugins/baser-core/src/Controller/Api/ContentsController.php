@@ -410,7 +410,7 @@ class ContentsController extends BcApiController
     {
         $this->request->allowMethod(['post']);
         try {
-            $alias = $contentService->alias($this->request->getData('aliasId'), $this->request->getData('content'));
+            $alias = $contentService->alias($this->request->getData('content'));
             $message = __d('baser', '{0} を作成しました。', $alias->title);
         } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
             $alias = $e->getEntity();
@@ -424,26 +424,19 @@ class ContentsController extends BcApiController
     /**
      * 指定したURLのパス上のコンテンツでフォルダ以外が存在するか確認
      * @param  ContentServiceInterface $contentService
+     * @return \Cake\Http\Response
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function exists_content_by_url(ContentServiceInterface $contentService)
+    public function is_unique_content(ContentServiceInterface $contentService)
     {
         $this->request->allowMethod(['post']);
         if (!$this->request->getData('url')) {
             $this->setResponse($this->response->withStatus(500));
-            $message = __d('baser', "無効な処理です。");
         } else {
-            if ($contentService->existsContentByUrl($this->request->getData('url'))) {
-                $this->setResponse($this->response->withStatus(200));
-            } else {
-                $this->setResponse($this->response->withStatus(404));
-                $message = __d('baser', "データが見つかりません");
-            }
+            return $this->response->withType("application/json")->withStringBody(json_encode(!$contentService->existsContentByUrl($this->request->getData('url'))));
         }
-        if(!empty($message)) $this->set(['message' => $message]);
-        $this->viewBuilder()->setOption('serialize', ['message']);
     }
 
     /**

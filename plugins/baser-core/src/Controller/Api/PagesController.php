@@ -162,9 +162,10 @@ class PagesController extends BcApiController
         $this->set([
             'message' => $message,
             'page' => $page,
+            'content' => $page->content,
             'errors' => $page->getErrors(),
         ]);
 
-        $this->viewBuilder()->setOption('serialize', ['page', 'message', 'errors']);
+        $this->viewBuilder()->setOption('serialize', ['page', 'content', 'message', 'errors']);
 	}
 }

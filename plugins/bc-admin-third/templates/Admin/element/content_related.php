@@ -71,7 +71,7 @@ $pureUrl = $this->BcContents->getPureUrl($content->url, $content->site_id);
         $targetUrl = '/' . $prefix . $pureUrl;
         $mainSiteId = $relatedContent['Site']['main_site_id'];
         if ($mainSiteId === '') {
-          $mainSiteId = 0;
+          $mainSiteId = 1;
         }
         ?>
         <tr<?php echo $class ?> id="Row<?php echo $relatedContent['Site']['id'] ?>">

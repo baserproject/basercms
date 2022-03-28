@@ -488,10 +488,9 @@ return [
                     'icon' => 'bca-icon--alias',
                     'routes' => [
                         'add' => [
-                            'prefix' => 'Admin',
+                            'prefix' => 'Api',
                             'controller' => 'Contents',
-                            'action' => 'add',
-                            1
+                            'action' => 'add_alias'
                         ],
                         'edit' => [
                             'prefix' => 'Admin',

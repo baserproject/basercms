@@ -149,6 +149,6 @@ class BcAdminContentHelperTest extends \BaserCore\TestSuite\BcTestCase
         $content = $contentsTable->findByUrl('/service/service1');
         $result = $this->BcAdminContent->getFolderLinkedUrl($content);
         // TODO ucmitz forceTitle は、BcBaserHelper::getLink() 実装後に消える予定
-        $this->assertEquals('https://localhost/<a href="/baser/baser-core/content_folders/edit/4" forceTitle="1">service</a>/', $result);
+        $this->assertEquals('https://localhost/<a href="/baser/baser-core/content_folders/edit/4">service</a>/', $result);
     }
 }
