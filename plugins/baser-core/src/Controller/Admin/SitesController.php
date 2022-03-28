@@ -77,7 +77,7 @@ class SitesController extends BcAdminAppController
                 $site = $siteService->create($this->request->getData());
                 /*** Sites.afterAdd ***/
                 $this->dispatchLayerEvent('afterAdd', [
-                    'site' => $site
+                    'data' => $site
                 ]);
 
                 // TODO ucmitz 未実装のためコメントアウト
@@ -127,7 +127,7 @@ class SitesController extends BcAdminAppController
 
                 /*** Sites.afterEdit ***/
                 $this->dispatchLayerEvent('afterEdit', [
-                    'site' => $site
+                    'data' => $site
                 ]);
 
                 // TODO ucmitz 未実装のためコメントアウト

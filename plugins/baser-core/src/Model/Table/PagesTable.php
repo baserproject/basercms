@@ -253,10 +253,11 @@ class PagesTable extends Table implements BcSearchIndexManagerInterface
         }
         // EVENT Page.beforeCopy
         $event = $this->dispatchLayerEvent('beforeCopy', [
-            'page' => $page,
+            'data' => $page,
+            'id' => $page->id
         ]);
         if ($event !== false) {
-            $page = $event->getResult() === true? $event->getData('page') : $event->getResult();
+            $page = $event->getResult() === true? $event->getData('data') : $event->getResult();
             unset($event);
         }
         if (!is_null($postData['siteId']) && $postData['siteId'] !== $oldSiteId) {
@@ -270,11 +271,13 @@ class PagesTable extends Table implements BcSearchIndexManagerInterface
         }
         // EVENT Page.afterCopy
         $event = $this->dispatchLayerEvent('afterCopy', [
-            'page' => $page,
-            'oldPage' => $oldPage,
+            'data' => $page,
+            'id' => $page->id,
+            'oldData' => $oldPage,
+            'oldId' => $oldPage->id,
         ]);
         if ($event !== false) {
-            $page = $event->getResult() === true? $event->getData('page') : $event->getResult();
+            $page = $event->getResult() === true? $event->getData('data') : $event->getResult();
         }
         return $page;
     }
