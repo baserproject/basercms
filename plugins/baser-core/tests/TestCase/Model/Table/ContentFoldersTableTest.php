@@ -25,16 +25,25 @@ use BaserCore\Model\Table\ContentFoldersTable;
  */
 class ContentFoldersTableTest extends BcTestCase
 {
-
     /**
      * Fixtures
      *
      * @var array
      */
     protected $fixtures = [
-        'plugin.BaserCore.Contents',
+        'plugin.BaserCore.Sites',
+        'plugin.BaserCore.Users',
+        'plugin.BaserCore.UserGroups',
+        'plugin.BaserCore.UsersUserGroups',
         'plugin.BaserCore.ContentFolders',
+        'plugin.BaserCore.Pages',
+        'plugin.BaserCore.SiteConfigs',
+        'plugin.BaserCore.Service/SearchIndexService/ContentsReconstruct',
+        'plugin.BaserCore.Service/SearchIndexService/PagesReconstruct',
+        'plugin.BaserCore.Service/SearchIndexService/ContentFoldersReconstruct',
+        'plugin.BaserCore.Service/SearchIndexService/SearchIndexesReconstruct'
     ];
+    public $autoFixtures = false;
 
     /**
      * Set Up
@@ -46,6 +55,7 @@ class ContentFoldersTableTest extends BcTestCase
         parent::setUp();
         $config = $this->getTableLocator()->exists('ContentFolders')? [] : ['className' => 'BaserCore\Model\Table\ContentFoldersTable'];
         $this->ContentFolders = $this->getTableLocator()->get('ContentFolders', $config);
+        $this->SearchIndexes = $this->getTableLocator()->get('SearchIndexes');
     }
 
     /**
@@ -109,10 +119,27 @@ class ContentFoldersTableTest extends BcTestCase
      */
     public function testAfterSave(): void
     {
+        $this->loadFixtures(
+            'Sites',
+            'Users',
+            'UserGroups',
+            'UsersUserGroups',
+            'ContentFolders',
+            'Pages',
+            'SiteConfigs',
+	        'Service\SearchIndexService\ContentsReconstruct',
+	        'Service\SearchIndexService\PagesReconstruct',
+	        'Service\SearchIndexService\ContentFoldersReconstruct',
+            'Service\SearchIndexService\SearchIndexesReconstruct'
+        );
         $contentFolder = $this->ContentFolders->get(1, ['contain' => ['Contents']]);
-        $this->ContentFolders->save($contentFolder);
+        $this->SearchIndexes->deleteAll([]);
+        // $this->Pages->delete($page);
+        $this->ContentFolders->dispatchEvent('Model.afterSave', ['entity' => $contentFolder, 'options' => new ArrayObject(['reconstructSearchIndices' => true])]);
         $this->assertTrue($this->ContentFolders->isMovableTemplate);
-        // TODO: reconstructSearchIndicesのテスト
+        // reconstructされてるか
+        $this->assertEquals(4, $this->SearchIndexes->find()->count());
+
     }
 
     /**

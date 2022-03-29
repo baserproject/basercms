@@ -143,7 +143,7 @@ class ContentFoldersTable extends AppTable
      * @param bool
      * @checked
      * @unitTest
-     * @note(value="SearchIndexTableを復元できてないため一部テスト未実装")
+     * @noTodo
      */
     public function afterSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
@@ -151,7 +151,6 @@ class ContentFoldersTable extends AppTable
             $this->isMovableTemplate = true;
         }
         if (!empty($options['reconstructSearchIndices']) && $this->beforeStatus !== $entity->content->status) {
-            // TODO ucmitz: SearchIndexTableを復元できてないため一部テスト未実装
             /* @var SearchIndexService $searchIndexService */
             $searchIndexService = $this->getService(SearchIndexServiceInterface::class);
             $searchIndexService->reconstruct($entity->content->id);
