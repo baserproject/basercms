@@ -288,7 +288,7 @@ class BcFormHelperTest extends BcTestCase
         $result = $this->BcForm->end();
         $this->assertStringContainsString('_Token[debug]', $result);
 
-        // beforeEnd
+        // afterEnd
         $this->entryEventToMock(self::EVENT_LAYER_HELPER, 'Form.afterEnd', function(Event $event){
             $data = $event->getData();
             $this->assertTrue(array_key_exists('id', $data));
