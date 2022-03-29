@@ -57,18 +57,13 @@ class BcFormTableHelper extends Helper
      *
      * @return string
      * @checked
-     * @note(value="テーブル生成後イベント未実装")
+     * @noTodo
+     * @unitTest
      */
     public function dispatchAfter()
     {
-
-        // TODO ucmitz 未実装のため代替措置
-        // >>>
-        return '';
-        // <<<
-
         $event = $this->dispatchLayerEvent('after', [
-            'id' => $this->_View->BcForm->getId(),
+            'id' => $this->_View->BcAdminForm->getId(),
             'out' => ''
         ], ['class' => 'BcFormTable', 'plugin' => '']);
         $output = '';

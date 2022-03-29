@@ -62,6 +62,12 @@ class BcFormTableHelperTest extends BcTestCase
      */
     public function testDispatchAfter()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $view = $this->BcFormTable->getView();
+        $view->BcAdminForm->setId('test1');
+        $this->entryEventToMock(self::EVENT_LAYER_HELPER, 'BcFormTable.after', function(Event $event) {
+            $this->assertEquals('test1', $event->getData('id'));
+            $event->setData('out', 'test2');
+        });
+        $this->assertEquals('test2', $this->BcFormTable->dispatchAfter());
     }
 }
