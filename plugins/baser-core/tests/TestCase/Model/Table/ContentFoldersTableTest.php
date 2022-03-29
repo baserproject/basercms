@@ -38,11 +38,13 @@ class ContentFoldersTableTest extends BcTestCase
         'plugin.BaserCore.ContentFolders',
         'plugin.BaserCore.Pages',
         'plugin.BaserCore.SiteConfigs',
+        'plugin.BaserCore.Contents',
         'plugin.BaserCore.Service/SearchIndexService/ContentsReconstruct',
         'plugin.BaserCore.Service/SearchIndexService/PagesReconstruct',
         'plugin.BaserCore.Service/SearchIndexService/ContentFoldersReconstruct',
         'plugin.BaserCore.Service/SearchIndexService/SearchIndexesReconstruct'
     ];
+
     public $autoFixtures = false;
 
     /**
@@ -53,6 +55,16 @@ class ContentFoldersTableTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadFixtures(
+            'Sites',
+            'Users',
+            'UserGroups',
+            'UsersUserGroups',
+            'ContentFolders',
+            'Pages',
+            'SiteConfigs',
+            'Contents',
+        );
         $config = $this->getTableLocator()->exists('ContentFolders')? [] : ['className' => 'BaserCore\Model\Table\ContentFoldersTable'];
         $this->ContentFolders = $this->getTableLocator()->get('ContentFolders', $config);
         $this->SearchIndexes = $this->getTableLocator()->get('SearchIndexes');
@@ -120,13 +132,6 @@ class ContentFoldersTableTest extends BcTestCase
     public function testAfterSave(): void
     {
         $this->loadFixtures(
-            'Sites',
-            'Users',
-            'UserGroups',
-            'UsersUserGroups',
-            'ContentFolders',
-            'Pages',
-            'SiteConfigs',
 	        'Service\SearchIndexService\ContentsReconstruct',
 	        'Service\SearchIndexService\PagesReconstruct',
 	        'Service\SearchIndexService\ContentFoldersReconstruct',

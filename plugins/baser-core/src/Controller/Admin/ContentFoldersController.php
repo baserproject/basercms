@@ -67,7 +67,7 @@ class ContentFoldersController extends BcAdminAppController
      * @return void
      * @checked
      * @unitTest
-     * @note(value="検索インデックス生成処理を実装するまでTODOが解消できない")
+     * @note(value="clearViewCacheが動作しないため一旦コメントアウト")
      */
     public function edit(ContentFolderServiceInterface $contentFolderService, $id = null)
     {
@@ -82,8 +82,7 @@ class ContentFoldersController extends BcAdminAppController
                 $this->redirect(['action' => 'edit', $id]);
             }
             try {
-                $contentFolder = $contentFolderService->update($contentFolder, $this->request->getData('ContentFolder'));
-                // TODO: afterSaveで$optionにreconstructSearchIndicesを渡す if ($ContentFolders->save($this->request->getData(), ['reconstructSearchIndices' => true])) {
+                $contentFolder = $contentFolderService->update($contentFolder, $this->request->getData('ContentFolder'), ['reconstructSearchIndices' => true]);
                 // clearViewCache(); TODO: 動作しないため一旦コメントアウト
                 $this->BcMessage->setSuccess(sprintf(__d('baser', 'フォルダ「%s」を更新しました。'), $contentFolder->content->title));
                 return $this->redirect(['action' => 'edit', $id]);
