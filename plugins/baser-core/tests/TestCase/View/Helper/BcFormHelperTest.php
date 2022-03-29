@@ -266,6 +266,7 @@ class BcFormHelperTest extends BcTestCase
         // 通常
         $result = $this->BcForm->end();
         $this->assertEquals('</form>', $result);
+
         // トークン付き
         $view = $this->BcForm->getView();
         $request = $view->getRequest();
@@ -275,6 +276,7 @@ class BcFormHelperTest extends BcTestCase
         $this->BcForm->create($user);
         $result = $this->BcForm->end();
         $this->assertStringContainsString('</div></form>', $result);
+
         // beforeEnd
         $this->entryEventToMock(self::EVENT_LAYER_HELPER, 'Form.beforeEnd', function(Event $event){
             $data = $event->getData();
@@ -285,7 +287,15 @@ class BcFormHelperTest extends BcTestCase
         $this->BcForm->create($user);
         $result = $this->BcForm->end();
         $this->assertStringContainsString('_Token[debug]', $result);
-        Configure::write('debug', true);
+
+        // beforeEnd
+        $this->entryEventToMock(self::EVENT_LAYER_HELPER, 'Form.afterEnd', function(Event $event){
+            $data = $event->getData();
+            $this->assertTrue(array_key_exists('id', $data));
+            $this->assertTrue(array_key_exists('out', $data));
+            $event->setData('out', 'test');
+        });
+        $this->assertEquals('test', $this->BcForm->end());
     }
 
     /**

@@ -403,7 +403,8 @@ SCRIPT_END;
      * @return string A closing FORM tag.
      * @link https://book.cakephp.org/4/en/views/helpers/form.html#closing-the-form
      * @checked
-     * @note(value="beforeEndイベントにて引き渡すオプション値について要検討")
+     * @noTodo
+     * @unitTest
      */
     public function end(array $secureAttributes = []): string
     {
