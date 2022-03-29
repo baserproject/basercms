@@ -1,17 +1,15 @@
 <?php
-// TODO : コード確認要
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.Event
- * @since           baserCMS v 3.0.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) NPO baser foundation
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
-App::uses('BcEventListener', 'Event');
+
+namespace BaserCore\Event;
 
 /**
  * Class BcHelperEventListener
@@ -30,6 +28,7 @@ App::uses('BcEventListener', 'Event');
  * public $events = array('Form.beforeCreate');
  * public function formBeforeCreate($event) {}
  *
+ * @uses BcHelperEventListener
  */
 class BcHelperEventListener extends BcEventListener
 {

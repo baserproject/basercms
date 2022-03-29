@@ -13,27 +13,53 @@ namespace BaserCore\Test\TestCase\View\Helper;
 
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\View\AppView;
+use BaserCore\View\BcAdminAppView;
 use BaserCore\View\Helper\BcFormTableHelper;
+use BcAppView;
+use Cake\Event\Event;
 
+/**
+ * class BcFormTableHelperTest
+ * @property BcFormTableHelper $BcFormTable
+ */
 class BcFormTableHelperTest extends BcTestCase
 {
+
+    /**
+     * Set Up
+     */
     public function setUp(): void
     {
         parent::setUp();
-        $View = new AppView();
-        $this->BcListTable = new BcFormTableHelper($View);
+        $View = new BcAdminAppView();
+        $this->BcFormTable = new BcFormTableHelper($View);
     }
 
+    /**
+     * Tear Down
+     */
     public function tearDown(): void
     {
         parent::tearDown();
     }
 
+    /**
+     * test dispatchBefore
+     */
     public function testDispatchBefore()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $view = $this->BcFormTable->getView();
+        $view->BcAdminForm->setId('test1');
+        $this->entryEventToMock(self::EVENT_LAYER_HELPER, 'BcFormTable.before', function(Event $event) {
+            $this->assertEquals('test1', $event->getData('id'));
+            $event->setData('out', 'test2');
+        });
+        $this->assertEquals('test2', $this->BcFormTable->dispatchBefore());
     }
 
+    /**
+     * test dispatchAfter
+     */
     public function testDispatchAfter()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');

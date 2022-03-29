@@ -12,7 +12,7 @@
 namespace BaserCore\View\Helper;
 
 use BaserCore\Event\BcEventDispatcherTrait;
-use \Cake\View\Helper;
+use Cake\View\Helper;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -25,6 +25,7 @@ use BaserCore\Annotation\Note;
  */
 class BcFormTableHelper extends Helper
 {
+
     /**
      * Trait
      */
@@ -35,18 +36,13 @@ class BcFormTableHelper extends Helper
      *
      * @return string
      * @checked
-     * @note(value="テーブル生成前イベント未実装")
+     * @noTodo
+     * @unitTest
      */
     public function dispatchBefore()
     {
-
-        // TODO ucmitz 未実装のため代替措置
-        // >>>
-        return '';
-        // <<<
-
         $event = $this->dispatchLayerEvent('before', [
-            'id' => $this->_View->BcForm->getId(),
+            'id' => $this->_View->BcAdminForm->getId(),
             'out' => ''
         ], ['class' => 'BcFormTable', 'plugin' => '']);
         $output = '';
