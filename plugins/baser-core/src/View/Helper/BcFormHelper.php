@@ -407,30 +407,21 @@ SCRIPT_END;
      */
     public function end(array $secureAttributes = []): string
     {
-
-        // CUSTOMIZE ADD 2014/07/03 ryuring
-        // >>>
         $formId = $this->getId();
         $this->setId(null);
 
-        /*** beforeEnd ***/
+        // EVENT Form.beforeEnd
         $event = $this->dispatchLayerEvent('beforeEnd', [
             'id' => $formId,
-            // 'options' => $options // TODO: ucmitz $secureAttributes = []どうするか考える
+            'secureAttributes' => $secureAttributes
         ], ['class' => 'Form', 'plugin' => '']);
         if ($event !== false) {
-            $options = ($event->getResult() === null || $event->getResult() === true)? $event->getData('options') : $event->getResult();
+            $secureAttributes = ($event->getResult() === null || $event->getResult() === true)? $event->getData('secureAttributes') : $event->getResult();
         }
-        // <<<
 
-        // 第１引数の $options が なくなった
-        // >>>
         $out = parent::end($secureAttributes);
-        // <<<
 
-        // CUSTOMIZE ADD 2014/07/03 ryuring
-        // >>>
-        /*** afterEnd ***/
+        // EVENT Form.afterEnd
         $event = $this->dispatchLayerEvent('afterEnd', [
             'id' => $formId,
             'out' => $out
@@ -440,7 +431,6 @@ SCRIPT_END;
         }
 
         return $out;
-        // <<<
     }
 
     /**

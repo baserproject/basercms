@@ -11,6 +11,7 @@
 
 namespace BaserCore\Test\TestCase\View\Helper;
 
+use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\Event\EventList;
 use Cake\Event\EventManager;
@@ -259,32 +260,32 @@ class BcFormHelperTest extends BcTestCase
     /**
      * end
      * フック用にラッピング
-     *
-     * @param array $options
-     * @return    string
-     * @access    public
-     * @dataProvider endProvider
      */
-    public function testEnd($array1, $array2, $expected)
+    public function testEnd()
     {
-
-        // TODO ucmitz移行時に未実装のため代替措置
-        // >>>
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        // <<<
-
-        $result = $this->BcAdminForm->end($array1, $array2);
-        $this->assertEquals($expected, $result);
-    }
-
-    public function endProvider()
-    {
-        return [
-            [null, null, '</form>'],
-            [[1, 2], null, '<div class="submit"><input 1="1" 2="2" type="submit" value="Submit"/></div></form>'],
-            [null, [1, 2], '</form>'],
-            [[1, 2], [1, 2], '<div class="submit"><input 1="1" 2="2" type="submit" value="Submit"/></div></form>']
-        ];
+        // 通常
+        $result = $this->BcForm->end();
+        $this->assertEquals('</form>', $result);
+        // トークン付き
+        $view = $this->BcForm->getView();
+        $request = $view->getRequest();
+        $view->setRequest($request->withAttribute('formTokenData', ['test']));
+        $usersTable = $this->getTableLocator()->get('BaserCore.Users');
+        $user = $usersTable->find()->where(['id' => 1])->first();
+        $this->BcForm->create($user);
+        $result = $this->BcForm->end();
+        $this->assertStringContainsString('</div></form>', $result);
+        // beforeEnd
+        $this->entryEventToMock(self::EVENT_LAYER_HELPER, 'Form.beforeEnd', function(Event $event){
+            $data = $event->getData();
+            $this->assertTrue(array_key_exists('id', $data));
+            $this->assertTrue(array_key_exists('secureAttributes', $data));
+            $event->setData('secureAttributes', ['debugSecurity' => true]);
+        });
+        $this->BcForm->create($user);
+        $result = $this->BcForm->end();
+        $this->assertStringContainsString('_Token[debug]', $result);
+        Configure::write('debug', true);
     }
 
     /**
