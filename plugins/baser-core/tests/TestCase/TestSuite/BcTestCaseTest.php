@@ -12,6 +12,7 @@
 namespace BaserCore\Test\TestCase\TestSuite;
 
 use BaserCore\Utility\BcContainer;
+use Cake\Event\EventManager;
 use Cake\Http\Session;
 use Cake\Core\Configure;
 use Cake\Routing\Router;
@@ -147,6 +148,18 @@ class BcTestCaseTest extends BcTestCase
         $samplePrivateMethod = 'pathToClass';
         $result = $this->execPrivateMethod($sampleClass, $samplePrivateMethod, [ROOT . DS . "plugins"]);
         $this->assertEquals("", $result);
+    }
+
+    /**
+     * test attachEvent
+     */
+    public function testAttachEventAndResetEvent()
+    {
+        $this->attachEvent(['testEvent' => null]);
+        $eventManager = EventManager::instance();
+        $this->assertNotNull($eventManager->listeners('testEvent'));
+        $this->resetEvent();
+        $this->assertEmpty($eventManager->listeners('testEvent'));
     }
 
 }

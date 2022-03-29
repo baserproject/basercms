@@ -103,23 +103,17 @@ class BcFormHelper extends FormHelper
      */
     public function dispatchAfterForm($type = ''): string
     {
-        // TODO ucmitz 未実装のため代替措置
-        // >>>
-        return '';
-        // <<<
-
         if ($type) {
             $type = Inflector::camelize($type);
         }
-
         $event = $this->dispatchLayerEvent('after' . $type . 'Form', ['fields' => [], 'id' => $this->__id], ['class' => 'Form', 'plugin' => '']);
         $out = '';
         if ($event !== false) {
             if (!empty($event->getData('fields'))) {
                 foreach($event->getData('fields') as $field) {
                     $out .= "<tr>";
-                    $out .= "<th class=\"col-head bca-form-table__label\">" . $field['title'] . "</th>\n";
-                    $out .= "<td class=\"col-input bca-form-table__input\">" . $field['input'] . "</td>\n";
+                    $out .= "<th class=\"bca-form-table__label\">" . $field['title'] . "</th>\n";
+                    $out .= "<td class=\"bca-form-table__input\">" . $field['input'] . "</td>\n";
                     $out .= "</tr>";
                 }
             }

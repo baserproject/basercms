@@ -285,4 +285,36 @@ class BcTestCase extends TestCase
         return $value;
     }
 
+
+	/**
+	 * イベントを設定する
+	 *
+	 * @param $events
+     * @checked
+     * @unitTest
+     * @noTodo
+	 */
+	public function attachEvent($events)
+	{
+		$EventManager = EventManager::instance();
+		$event = new BcEventListenerMock($events);
+		$EventManager->on($event);
+		return $event;
+	}
+
+	/**
+	 * イベントをリセットする
+     * @checked
+     * @unitTest
+     * @noTodo
+	 */
+	public function resetEvent()
+	{
+		$EventManager = EventManager::instance();
+		$reflectionClass = new ReflectionClass(get_class($EventManager));
+		$property = $reflectionClass->getProperty('_listeners');
+		$property->setAccessible(true);
+		$property->setValue($EventManager, []);
+	}
+
 }

@@ -11,6 +11,7 @@
 
 namespace BaserCore\Test\TestCase\View\Helper;
 
+use Cake\Event\Event;
 use Cake\Event\EventList;
 use Cake\Event\EventManager;
 use BaserCore\View\BcAdminAppView;
@@ -691,18 +692,11 @@ class BcFormHelperTest extends BcTestCase
      * フォームの最後のフィールドの後に発動する前提としてイベントを発動する
      *
      * @param string $type フォームのタイプ タイプごとにイベントの登録ができる
-     * @return string 行データ
      * @dataProvider dispatchAfterFormDataProvider
      */
     public function testDispatchAfterForm($type, $fields, $res, $expected)
     {
-
-        // TODO ucmitz移行時に未実装のため代替措置
-        // >>>
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        // <<<
-
-        $event = $this->attachEvent(['Helper.Form.after' . $type . 'Form' => ['callable' => function(\Cake\Event\Event $event) use ($fields, $res) {
+        $this->attachEvent(['Helper.Form.after' . $type . 'Form' => ['callable' => function(Event $event) use ($fields, $res) {
             $event->setData('fields', $fields);
             return $res;
         }]]);
@@ -714,8 +708,8 @@ class BcFormHelperTest extends BcTestCase
     public function dispatchAfterFormDataProvider()
     {
         return [
-            ['Hoge', [['title' => '1', 'input' => '2']], true, '<tr><th class="col-head bca-form-table__label">1<\/th>\n<td class="col-input bca-form-table__input">2<\/td>\n<\/tr>'],
-            ['Hoge', [['title' => '1', 'input' => '2']], false, '<tr><th class="col-head bca-form-table__label">1<\/th>\n<td class="col-input bca-form-table__input">2<\/td>\n<\/tr>'],
+            ['Hoge', [['title' => '1', 'input' => '2']], true, '<tr><th class="bca-form-table__label">1<\/th>\n<td class="bca-form-table__input">2<\/td>\n<\/tr>'],
+            ['Hoge', [['title' => '1', 'input' => '2']], false, '<tr><th class="bca-form-table__label">1<\/th>\n<td class="bca-form-table__input">2<\/td>\n<\/tr>'],
             ['Hoge', '', true, ''],
             ['Hoge', '', false, ''],
         ];
