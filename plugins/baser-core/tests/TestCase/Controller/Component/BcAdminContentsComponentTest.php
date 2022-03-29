@@ -11,6 +11,9 @@
 
 namespace BaserCore\Test\TestCase\Controller\Component;
 
+use BaserCore\Model\Entity\Page;
+use Cake\Event\EventManager;
+use Cake\ORM\Entity;
 use Cake\Routing\Router;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Service\ContentService;
@@ -56,6 +59,7 @@ class BcAdminContentsComponentTest extends BcTestCase
         'plugin.BaserCore.ContentFolders',
         'plugin.BaserCore.Sites',
         'plugin.BaserCore.SiteConfigs',
+        'plugin.BaserCore.Pages',
     ];
 
     /**
@@ -106,10 +110,24 @@ class BcAdminContentsComponentTest extends BcTestCase
         $this->assertNotEmpty($this->BcAdminContents->getConfig('items'));
     }
 
-
+    /**
+     * test beforeRender
+     */
     public function testBeforeRender()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $controller = $this->BcAdminContents->getController();
+        $request = $controller->getRequest();
+        $pagesTable = $this->getTableLocator()->get('BaserCore.Pages');
+        $page = $pagesTable->find()->where(['Contents.id' => 4])->contain(['Contents' => ['Sites']])->first();
+        $controller->set('bcAdminContentsTest', $page);
+        $controller->setRequest($request->withParam('action', 'edit'));
+        $this->BcAdminContents->beforeRender();
+        $this->assertIsArray($controller->viewBuilder()->getVar('contentsItems'));
+        // BcAdminContents::settingForm()が呼ばれているか確認
+        $this->assertIsArray($controller->viewBuilder()->getVar('layoutTemplates'));
+        // BcContentsEventListenerが設定されているか確認
+        $listeners = EventManager::instance()->listeners('Helper.Form.beforeCreate');
+        $this->assertEquals('BaserCore\Event\BcContentsEventListener', get_class($listeners[0]['callable'][0]));
     }
 
     /**
