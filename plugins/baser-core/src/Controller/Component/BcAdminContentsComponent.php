@@ -80,7 +80,8 @@ class BcAdminContentsComponent extends Component
     /**
      * Before render
      * @checked
-     * @note(value="TODO内容を江頭さんに確認")
+     * @noTodo
+     * @unitTest
      */
     public function beforeRender(): void
     {
@@ -88,12 +89,7 @@ class BcAdminContentsComponent extends Component
         $request = $controller->getRequest();
         $controller->set('contentsItems', $this->getConfig('items'));
         if (in_array($request->getParam('action'), [$this->editAction, 'edit_alias'])) {
-            // フォームをセット
             $this->settingForm();
-            // TODO ucmitz 改善要
-            // フォームを読み込む為のイベントを設定
-            // 内部で useForm を参照できない為、ここに記述。
-            // フォームの設定しかできないイベントになってしまっている。
             EventManager::instance()->on(new BcContentsEventListener());
         }
     }
