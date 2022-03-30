@@ -14,6 +14,7 @@ namespace BaserCore\View\Helper;
 use Cake\ORM\Query;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
+use Cake\View\Form\EntityContext;
 use Cake\View\Helper\FormHelper;
 use Cake\Datasource\EntityInterface;
 use BaserCore\Event\BcEventDispatcherTrait;
@@ -2261,18 +2262,13 @@ DOC_END;
      */
     public function file($fieldName, $options = []): string
     {
-
         $options = $this->_initInputField($fieldName, $options);
-        // TODO: テーブル名を取得する
-        $table = TableRegistry::getTableLocator()->get('BaserCore.Contents');
-        if (!$table->hasBehavior('BcUpload')) {
+
+        $table = $this->getTable($fieldName);
+        if (!$table || !$table->hasBehavior('BcUpload')) {
             return parent::file($fieldName, $options);
         }
-        // $fieldName = implode('.', $entity);
 
-        // NOTE: idが出力されなくなったため、以前のIDが出力されるよう変更
-        // "Contact.upload" -> "ContactUpload"
-        $id = implode(array_map(function($field) { return Inflector::camelize($field); }, explode('.', $fieldName)));
         $options = array_merge([
             'imgsize' => 'medium', // 画像サイズ
             'rel' => '', // rel属性
@@ -2290,7 +2286,6 @@ DOC_END;
             'figure' => [],
             'img' => ['class' => ''],
             'figcaption' => [],
-            'id' => $id
         ], $options);
 
         $linkOptions = [
@@ -2384,6 +2379,41 @@ DOC_END;
         } else {
             return $out;
         }
+    }
+
+    /**
+     * フィールドに紐づくテーブルを取得する
+     * @param string $fieldName
+     * @return \Cake\ORM\Table|false
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getTable($fieldName)
+    {
+        $context = $this->context();
+        if(!($context instanceof EntityContext)) return false;
+        $entity = $context->entity();
+        if(!$entity) return false;
+
+        $fieldArray = explode('.', $fieldName);
+
+        if(count($fieldArray) === 3) {
+            if ($entity && $entity->get($fieldArray[1])) {
+                $entity = $entity->get($fieldArray[1]);
+            }
+        } elseif(!in_array(count($fieldArray), [1, 2])) {
+            return false;
+        }
+
+        $alias = $entity->getSource();
+        $plugin = '';
+        if (strpos($alias, '.')) {
+            [$plugin, $name] = pluginSplit($alias);
+        }
+        $name = Inflector::camelize(Inflector::tableize($name));
+        if($plugin) $name = $plugin . '.' . $name;
+        return TableRegistry::getTableLocator()->get($name);
     }
 
 // <<<

@@ -39,6 +39,8 @@ class BcFormHelperTest extends BcTestCase
         'plugin.BaserCore.Users',
         'plugin.BaserCore.UsersUserGroups',
         'plugin.BaserCore.UserGroups',
+        'plugin.BaserCore.Contents',
+        'plugin.BaserCore.Pages',
     ];
 
     /**
@@ -665,12 +667,9 @@ class BcFormHelperTest extends BcTestCase
      */
     public function testFile($fieldName, $options, $expected, $message = null)
     {
-
-        // TODO ucmitz移行時に未実装のため代替措置
-        // >>>
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        // <<<
-
+        $pagesTable = $this->getTableLocator()->get('BaserCore.Pages');
+        $page = $pagesTable->find()->where(['Pages.id' => 2])->contain(['Contents'])->first();
+        $this->BcForm->create($page);
         $result = $this->BcForm->file($fieldName, $options);
         $this->assertRegExp('/' . $expected . '/s', $result, $message);
     }
@@ -678,7 +677,7 @@ class BcFormHelperTest extends BcTestCase
     public function fileDataProvider()
     {
         return [
-            ['hoge', [], '<input type="file" name="data\[hoge\]" id="hoge"', 'ファイルインプットボックス出力できません'],
+            ['hoge', [], '<input type="file" name="hoge"', 'ファイルインプットボックス出力できません'],
             ['hoge', ['imgsize' => '50'], 'imgsize="50"', 'ファイルインプットボックス出力できません'],
             ['hoge', ['link' => 'page'], 'link="page"', 'ファイルインプットボックス出力できません'],
             ['hoge', ['delCheck' => 'page'], 'delCheck="page"', 'ファイルインプットボックス出力できません'],
@@ -687,7 +686,7 @@ class BcFormHelperTest extends BcTestCase
             ['hoge', ['title' => 'page'], 'title="page"', 'ファイルインプットボックス出力できません'],
             ['hoge', ['width' => 'page'], 'width="page"', 'ファイルインプットボックス出力できません'],
             ['hoge', ['height' => 'page'], 'height="page"', 'ファイルインプットボックス出力できません'],
-            ['hoge', ['value' => 'page'], '<input type="file" name="data\[hoge\]" id="hoge"', 'ファイルインプットボックス出力できません'],
+            ['hoge', ['value' => 'page'], '<input type="file" name="hoge"', 'ファイルインプットボックス出力できません'],
             ['hoge', ['hoge' => 'page'], 'hoge="page"', 'ファイルインプットボックス出力できません']
         ];
     }
@@ -796,7 +795,7 @@ class BcFormHelperTest extends BcTestCase
         $this->BcForm->setEntity($fieldName);
         // 通常
         $result = $this->BcForm->file($fieldName);
-        $this->assertEquals('<input type="file" name="Content[upload]" id="ContentUpload">', $result);
+        $this->assertEquals('<input type="file" name="Content[upload]">', $result);
     }
 
     /**
@@ -996,6 +995,28 @@ class BcFormHelperTest extends BcTestCase
     {
         $result = $this->BcForm->setId("test");
         $this->assertEquals($this->BcForm->getId(), $result);
+    }
+
+    /**
+     * test getTable
+     */
+    public function testGetTable()
+    {
+        $pagesTable = $this->getTableLocator()->get('BaserCore.Pages');
+        $page = $pagesTable->find()->where(['Pages.id' => 2])->contain(['Contents'])->first();
+        $this->BcForm->create($page);
+
+        // テーブル名なし
+        $table = $this->BcForm->getTable('contents');
+        $this->assertEquals('BaserCore\Model\Table\PagesTable', get_class($table));
+
+        // テーブル名あり
+        $table = $this->BcForm->getTable('Pages.contents');
+        $this->assertEquals('BaserCore\Model\Table\PagesTable', get_class($table));
+
+        // アソシエーションのテーブル名あり
+        $table = $this->BcForm->getTable('Pages.content.eyecatch');
+        $this->assertEquals('BaserCore\Model\Table\ContentsTable', get_class($table));
     }
 
 }
