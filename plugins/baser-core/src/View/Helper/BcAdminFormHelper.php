@@ -146,7 +146,7 @@ class BcAdminFormHelper extends BcFormHelper
         }
 
         if(!isset($options['id']) || $options['id'] !== false) {
-            $options['id'] = implode(array_map(function($field) { return Inflector::camelize($field); }, explode('.', $name)));
+            $options['id'] = true;
         }
 
         return parent::control($name, $options);
