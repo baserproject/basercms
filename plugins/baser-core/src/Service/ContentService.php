@@ -139,19 +139,10 @@ class ContentService implements ContentServiceInterface
      * @return Query
      * @checked
      * @unitTest
-     * @note(value="コンテンツ管理実装後に対応する")
+     * @noTodo
      */
     public function getTreeIndex(array $queryParams): Query
     {
-        // ツリーの全体確認テスト用の条件（実運用では使わない）
-        // TODO ucmitz 裏機能としてクエリーパラメーターで指定できるようにする事を検討
-//        $site = $this->Contents->Sites->getRootMain();
-//        if ($queryParams['site_id'] === 'all') {
-//            $queryParams = ['or' => [
-//                ['Sites.use_subdomain' => false],
-//                ['Contents.site_id' => 1]
-//            ]];
-//        }
         return $this->getIndex($queryParams, 'threaded')->order(['lft']);
     }
 
