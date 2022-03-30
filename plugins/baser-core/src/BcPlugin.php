@@ -211,22 +211,24 @@ class BcPlugin extends BasePlugin
         );
 
         // プラグインの管理画面用ルーティング
-        $routes->prefix(
-            'Admin',
-            ['path' => BcUtil::getPrefix()],
-            function(RouteBuilder $routes) use ($plugin) {
-                $routes->connect('', ['plugin' => 'BaserCore', 'controller' => 'Dashboard', 'action' => 'index']);
-                $routes->plugin(
-                    $plugin,
-                    ['path' => '/' . Inflector::dasherize($plugin)],
-                    function(RouteBuilder $routes) {
-                        // CakePHPのデフォルトで /index が省略する仕様のため、URLを生成する際は、強制的に /index を付ける仕様に変更
-                        $routes->connect('/{controller}/index', [], ['routeClass' => InflectedRoute::class]);
-                        $routes->fallbacks(InflectedRoute::class);
-                    }
-                );
-            }
-        );
+        $prefixSettings = Configure::read('BcPrefixAuth');
+        foreach($prefixSettings as $prefix => $setting) {
+            $routes->prefix(
+                $prefix,
+                ['path' => BcUtil::getBaserCorePrefix() . '/' . $setting['alias']],
+                function(RouteBuilder $routes) use ($plugin) {
+                    $routes->plugin(
+                        $plugin,
+                        ['path' => '/' . Inflector::dasherize($plugin)],
+                        function(RouteBuilder $routes) {
+                            // CakePHPのデフォルトで /index が省略する仕様のため、URLを生成する際は、強制的に /index を付ける仕様に変更
+                            $routes->connect('/{controller}/index', [], ['routeClass' => InflectedRoute::class]);
+                            $routes->fallbacks(InflectedRoute::class);
+                        }
+                    );
+                }
+            );
+        }
 
         // プラグインのフロントエンド用ルーティング
         $routes->plugin(

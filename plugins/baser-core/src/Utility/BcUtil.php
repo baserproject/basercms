@@ -209,7 +209,7 @@ class BcUtil
      */
     public static function getAdminPrefix()
     {
-        return Configure::read('BcPrefixAuth.Admin.alias');
+        return Configure::read('BcApp.adminPrefix');
     }
 
     /**

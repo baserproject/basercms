@@ -20,8 +20,9 @@ use BaserCore\Annotation\Note;
  * @unitTest
  * @note(value="テーマ管理とユーティリティを実装してからメニューを表示する")
  */
-$baserCorePrefix = '/baser';
-$adminPrefix = '/admin';
+$baserCorePrefix = '/' . filter_var(env('BASER_CORE_PREFIX', 'baser'));
+$adminPrefix = '/' . filter_var(env('ADMIN_PREFIX', 'admin'));
+
 return [
     'BcEnv' => [
         /**

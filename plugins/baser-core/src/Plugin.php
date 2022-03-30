@@ -192,7 +192,7 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
     {
         $service = new AuthenticationService();
         $prefix = $request->getParam('prefix');
-        $authSetting = Configure::read('BcPrefixAuth.Admin');
+        $authSetting = Configure::read('BcPrefixAuth.' . $prefix);
         if (!$authSetting || !Configure::read('BcRequest.isInstalled')) {
             $service->loadAuthenticator('Authentication.Form');
             return $service;
@@ -334,8 +334,10 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
 
         $routes->prefix(
             'Admin',
-            ['path' => Configure::read('BcApp.baserCorePrefix') . Configure::read('BcApp.adminPrefix')],
+            ['path' => BcUtil::getPrefix()],
             function(RouteBuilder $routes) {
+                // ダッシュボード
+                $routes->connect('', ['plugin' => 'BaserCore', 'controller' => 'Dashboard', 'action' => 'index']);
                 $routes->connect('/{controller}/index', [], ['routeClass' => InflectedRoute::class]);
                 $routes->fallbacks(InflectedRoute::class);
             }
