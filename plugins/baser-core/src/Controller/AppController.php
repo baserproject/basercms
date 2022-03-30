@@ -69,7 +69,7 @@ class AppController extends BaseController
     {
         parent::__construct($request, $response, $name, $eventManager, $components);
 
-        $isInstall = $request->is('install');
+        $isInstall = $request ? $request->is('install') : false;
 
         // インストールされていない場合、トップページにリダイレクトする
         // コンソールベースのインストールの際のページテンプレート生成において、
