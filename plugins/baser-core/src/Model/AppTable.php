@@ -15,6 +15,7 @@ use ArrayObject;
 use Cake\ORM\Query;
 use Cake\ORM\Table;
 use Cake\Core\Configure;
+use Cake\I18n\FrozenTime;
 use Cake\Filesystem\Folder;
 use Cake\Http\ServerRequest;
 use BaserCore\Utility\BcUtil;
@@ -103,6 +104,21 @@ class AppTable extends Table
                 $AppController->redirect(BC_BASE_URL . 'installations/reset');
             }
         }
+    }
+
+    /**
+     * Initialize
+     *
+     * @param array $config テーブル設定
+     * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function initialize(array $config): void
+    {
+        parent::initialize($config);
+        FrozenTime::setToStringFormat('yyyy/MM/dd HH:mm:ss');
     }
 
     /**

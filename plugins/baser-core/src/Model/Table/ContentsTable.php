@@ -47,12 +47,11 @@ class ContentsTable extends AppTable
      * @param array $config テーブル設定
      * @return void
      * @checked
-     * @note(value="yyyy/MM/dd型に所定の場所で変換する")
+     * @noTodo
      * @unitTest
      */
     public function initialize(array $config): void
     {
-        FrozenTime::setToStringFormat('yyyy/MM/dd HH:mm:ss');
         parent::initialize($config);
         $this->addBehavior('Tree', ['level' => 'level']);
         $this->addBehavior('BaserCore.BcUpload', [

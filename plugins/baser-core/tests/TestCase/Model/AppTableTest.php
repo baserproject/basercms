@@ -11,6 +11,7 @@
 
 namespace BaserCore\Test\TestCase\Model;
 
+use Cake\I18n\Time;
 use BaserCore\Model\AppTable;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Model\PermissionsTable;
@@ -47,6 +48,7 @@ class AppTableTest extends BcTestCase
         parent::setUp();
         $config = $this->getTableLocator()->exists('AppTable')? [] : ['className' => 'BaserCore\Model\AppTable'];
         $this->App = $this->getTableLocator()->get('BaserCore.AppTable', $config);
+
     }
 
     /**
@@ -58,6 +60,22 @@ class AppTableTest extends BcTestCase
     {
         unset($this->App);
         parent::tearDown();
+    }
+
+    /**
+     * Test initialize
+     *
+     * @return void
+     */
+    public function testInitialize()
+    {
+        $Permission = new TablePermissionsTable();
+
+        $this->assertRegExp(
+            // yyyy/MM/dd HH:mm:ssのパターン
+            '{^[0-9]{4}/(0[1-9]|1[0-2])/(0[1-9]|[12][0-9]|3[01])\s([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$}',
+            $Permission->find()->first()->created->__toString()
+        );
     }
 
     /**

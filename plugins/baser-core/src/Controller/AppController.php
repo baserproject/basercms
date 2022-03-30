@@ -57,7 +57,7 @@ class AppController extends BaseController
      * @param EventManagerInterface|null $eventManager
      * @param ComponentRegistry|null $components
      * @checked
-     * @note(value="BcRequestFilterをミドルウェアに移行してから実装する")
+     * @noTodo
      */
     public function __construct(
         ?ServerRequest         $request = null,
@@ -69,12 +69,7 @@ class AppController extends BaseController
     {
         parent::__construct($request, $response, $name, $eventManager, $components);
 
-        // TODO ucmitz BcRequestFilter の実装が必要（ミドルウェアへの移行が必要）
-        // >>>
-        // $isInstall = $request->is('install');
-        // ---
-        $isInstall = false;
-        // <<<
+        $isInstall = $request ? $request->is('install') : false;
 
         // インストールされていない場合、トップページにリダイレクトする
         // コンソールベースのインストールの際のページテンプレート生成において、
