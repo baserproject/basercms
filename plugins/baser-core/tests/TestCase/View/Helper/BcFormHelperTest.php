@@ -214,12 +214,6 @@ class BcFormHelperTest extends BcTestCase
      */
     public function testHidden($fieldName, $options, $expected, $message)
     {
-
-        // TODO ucmitz移行時に未実装のため代替措置
-        // >>>
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        // <<<
-
         $result = $this->BcForm->hidden($fieldName, $options);
         $this->assertRegExp('/' . $expected . '/s', $result, $message);
     }
@@ -227,10 +221,9 @@ class BcFormHelperTest extends BcTestCase
     public function hiddenDataProvider()
     {
         return [
-            ['test', [], '<input type="hidden" name="data\[test\]" id="test"', 'hidden()を出力できません'],
+            ['test', [], '<input type="hidden" name="test"', 'hidden()を出力できません'],
             ['test', ['class' => 'bcclass'], 'class="bcclass"', '属性を付与できません'],
-            ['test', ['multiple' => 'checkbox'], 'name="data\[test\]"\/>$', 'セキュリティコンポーネントに対応していません'],
-            ['test', ['multiple' => 'checkbox', 'value' => ['value1', 'value2']], 'name="data\[test\]\[\]".* value="value1".*value="value2"', '値を複数追加できません'],
+            ['test', ['multiple' => 'checkbox', 'value' => ['value1', 'value2']], 'value="value1".*value="value2"', '値を複数追加できません'],
         ];
     }
 

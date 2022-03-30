@@ -864,12 +864,6 @@ DOC_END;
      */
     public function hidden($fieldName, $options = []): string
     {
-
-        // TODO ucmitz 未実装のため代替措置
-        // >>>
-        return parent::hidden($fieldName, $options);
-        // <<<
-
         $options += ['required' => false, 'secure' => true];
 
         $secure = $options['secure'];
@@ -887,53 +881,61 @@ DOC_END;
         // >>>
         if (!empty($options['multiple'])) {
             $secure = false;
-            $this->_secure(true); //lock
         }
         // <<<
 
         $options = $this->_initInputField($fieldName, array_merge(
-            $options, ['secure' => static::SECURE_SKIP]
+            $options,
+            ['secure' => static::SECURE_SKIP]
         ));
 
-        if ($secure === true) {
-            $this->_secure(true, null, '' . $options['value']);
+        if ($secure === true && $this->formProtector) {
+            $this->formProtector->addField(
+                $options['name'],
+                true,
+                $options['val'] === false ? '0' : (string)$options['val']
+            );
         }
 
-        // CUSTOMIZE 2010/07/24 ryuring
+        $options['type'] = 'hidden';
+
+        // CUSTOMIZE ADD 2010/07/24 ryuring
         // 配列用のhiddenタグを出力できるオプションを追加
         // CUSTOMIZE 2010/08/01 ryuring
         // class属性を指定できるようにした
         // CUSTOMIZE 2011/03/11 ryuring
         // multiple で送信する値が配列の添字となっていたので配列の値に変更した
-        // >>> ADD
+        // >>>
         $multiple = false;
         $value = '';
         if (!empty($options['multiple'])) {
             $multiple = true;
             $options['id'] = null;
-            if (!isset($options['value'])) {
+            if (!isset($options['val'])) {
                 $value = $this->getSourceValue($fieldName);
             } else {
-                $value = $options['value'];
+                $value = $options['val'];
             }
             if (is_array($value) && !$value) {
-                unset($options['value']);
+                unset($options['val']);
             }
             unset($options['multiple']);
         }
         // <<<
-        // >>> MODIFY
-        // $this->Html->useTag('hidden', $options['name'], array_diff_key($options, array('name' => null)));
+
+        // CUSTOMIZE MODIFY 2010/07/24 ryuring
+        // >>>
+        // return $this->widget('hidden', $options);
         // ---
         if ($multiple && is_array($value)) {
             $out = [];
-            foreach($value as $_value) {
-                $options['value'] = $_value;
-                $out[] = $this->Html->useTag('hiddenmultiple', $options['name'], array_diff_key($options, ['name' => '']));
+            foreach($value as $v) {
+                $options['val'] = $v;
+                $out[] = $this->widget('hidden', $options);;
             }
             return implode("\n", $out);
         } else {
-            return $this->Html->useTag('hidden', $options['name'], array_diff_key($options, ['name' => '']));
+            return $this->widget('hidden', $options);
         }
         // <<<
     }
