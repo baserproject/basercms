@@ -178,34 +178,6 @@ class BcFormHelperTest extends BcTestCase
     }
 
     /**
-     * Creates a checkbox input widget.
-     *
-     * @param string $fieldName Name of a field, like this "Modelname.fieldname"
-     * @param array $options Array of HTML attributes.
-     * @param string $expected 期待値
-     * @param string $message テストが失敗した時に表示されるメッセージ
-     * @dataProvider checkboxDataProvider
-     */
-    public function testCheckbox($fieldName, $options, $expected, $message)
-    {
-        // TODO ucmitz移行時に未実装のため代替措置
-        // >>>
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        // <<<
-
-        $result = $this->BcForm->checkbox($fieldName, $options);
-        $this->assertRegExp('/' . $expected . '/s', $result, $message);
-    }
-
-    public function checkboxDataProvider()
-    {
-        return [
-            ['test', [], '<input type="checkbox" name="data\[test\]" value="1" id="test"', 'checkbox()を出力できません'],
-            ['test', ['label' => 'testLabel'], '<input type="checkbox".*label for="test">testLabel', '属性を付与できません'],
-        ];
-    }
-
-    /**
      * Creates a hidden input field.
      *
      * @param string $fieldName Name of a field, in the form of "Modelname.fieldname"
