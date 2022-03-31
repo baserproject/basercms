@@ -157,7 +157,7 @@
                     if ($.bcTree.settings[data.contentType] == undefined || !$.bcTree.settings[data.contentType].editDisabled) {
                         if (!data.alias) {
                             if ($.bcTree.settings[data.contentType] == undefined) {
-                                $.bcTree.openUrl($.bcTree.createLink($.baseUrl() + '/' + $.bcTree.config.baserCorePrefix + $.bcTree.config.adminPrefix + '/contents/edit', data.contentId, data.contentParentId, data.contentEntityId));
+                                $.bcTree.openUrl($.bcTree.createLink($.baseUrl() + '/' + $.bcTree.config.baserCorePrefix + '/' + $.bcTree.config.adminPrefix + '/contents/edit', data.contentId, data.contentParentId, data.contentEntityId));
                             } else {
                                 if ($.bcTree.settings[data.contentType]['url']['dblclick'] !== undefined) {
                                     $.bcTree.openUrl($.bcTree.createLink($.bcTree.settings[data.contentType]['url']['dblclick'], data.contentId, data.contentParentId, data.contentEntityId));

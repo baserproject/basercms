@@ -193,6 +193,9 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
         $service = new AuthenticationService();
         $prefix = $request->getParam('prefix');
         $authSetting = Configure::read('BcPrefixAuth.' . $prefix);
+        if(!$authSetting && $prefix === 'Api') {
+            $authSetting = Configure::read('BcPrefixAuth.Admin');
+        }
         if (!$authSetting || !Configure::read('BcRequest.isInstalled')) {
             $service->loadAuthenticator('Authentication.Form');
             return $service;
@@ -347,7 +350,7 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
         // /baser/api/baser-core/.well-known/jwks.json でアクセス
         $routes->prefix(
             'Api',
-            ['path' => Configure::read('BcApp.baserCorePrefix') . '/api'],
+            ['path' => '/' . Configure::read('BcApp.baserCorePrefix') . '/api'],
             function(RouteBuilder $routes) {
                 $routes->plugin(
                     'BaserCore',

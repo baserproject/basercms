@@ -233,7 +233,7 @@ class BcPlugin extends BasePlugin
         // プラグインのフロントエンド用ルーティング
         $routes->plugin(
             $plugin,
-            ['path' => BcUtil:: getBaserCorePrefix() . '/' . Inflector::dasherize($plugin)],
+            ['path' => '/' . BcUtil:: getBaserCorePrefix() . '/' . Inflector::dasherize($plugin)],
             function(RouteBuilder $routes) {
                 // AnalyseController で利用
                 $routes->setExtensions(['json']);
@@ -245,7 +245,7 @@ class BcPlugin extends BasePlugin
         // API用ルーティング
         $routes->prefix(
             'Api',
-            ['path' => BcUtil::getBaserCorePrefix() . '/api'],
+            ['path' => '/' . BcUtil::getBaserCorePrefix() . '/api'],
             function(RouteBuilder $routes) use ($plugin) {
                 $routes->plugin(
                     $plugin,

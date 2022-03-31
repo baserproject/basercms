@@ -140,7 +140,7 @@ class BcRequestFilterMiddleware implements MiddlewareInterface
      */
     public function isAdmin(ServerRequestInterface $request)
     {
-        $regex = '/^' . preg_quote(Configure::read('BcApp.baserCorePrefix') . Configure::read('BcApp.adminPrefix'), '/') . '($|\/)/';
+        $regex = '/^\/' . preg_quote(Configure::read('BcApp.baserCorePrefix') . '/' . Configure::read('BcApp.adminPrefix'), '/') . '($|\/)/';
         return (bool)preg_match($regex, $request->getPath());
     }
 
