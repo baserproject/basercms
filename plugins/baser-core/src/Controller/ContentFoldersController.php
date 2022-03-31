@@ -62,8 +62,8 @@ class ContentFoldersController extends BcFrontAppController
             $children = $contentService->getChildren($contentFolder->content->id)->order(['lft']);
         }
         $contentService->setTreeConfig('scope', [null]);
-        if ($this->BcFrontContents->preview && !empty($this->request->getData('Content'))) {
-            $contentFolder->content = $this->request->getData('Content');
+        if ($this->BcFrontContents->preview && !empty($this->request->getData('Contents'))) {
+            $contentFolder->content = $this->request->getData('Contents');
         }
         $this->set(compact('contentFolder', 'children'));
         $folderTemplate = !empty($contentFolder->folder_template) ? $contentFolder->folder_template : $contentFolderService->getParentTemplate($this->request->getParam('Content.id'), 'folder');

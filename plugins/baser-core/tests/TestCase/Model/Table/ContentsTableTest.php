@@ -158,7 +158,6 @@ class ContentsTableTest extends BcTestCase
                     'created_date' => '',
                 ],
                 [
-                    'name' => ['_empty' => 'スラッグを入力してください。'],
                     'title' => ['_empty' => 'タイトルを入力してください。'],
                     'created_date' => ['_empty' => '作成日が空になってます。'],
                 ]

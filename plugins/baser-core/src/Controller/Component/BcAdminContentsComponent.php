@@ -104,15 +104,15 @@ class BcAdminContentsComponent extends Component
     public function settingForm()
     {
         $controller = $this->getController();
-        $entityName = Inflector::variable(Inflector::classify($controller->getName()));
+        $entityName = Inflector::classify($controller->getName());
 
-        if ($entityName === "content") {
-            $content = $controller->viewBuilder()->getVar($entityName);
-            $entityName = Inflector::classify($entityName) . ".";
+        if ($entityName === "Content") {
+            $content = $controller->viewBuilder()->getVar(Inflector::variable($entityName));
+            $entityName = Inflector::pluralize($entityName) . ".";
         } else {
-            $associated = $controller->viewBuilder()->getVar($entityName);
+            $associated = $controller->viewBuilder()->getVar(Inflector::variable($entityName));
             $content = $associated->content;
-            $entityName = Inflector::classify($entityName) . ".content.";
+            $entityName = Inflector::pluralize($entityName) . ".content.";
         }
         $site = $content->site;
         $theme = $site->theme;

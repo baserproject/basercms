@@ -103,7 +103,7 @@ class ContentFoldersControllerEventListenerTest extends BcTestCase
         $this->enableSecurityToken();
         $this->enableCsrfToken();
         $this->loginAdmin($this->getRequest('/'));
-        $this->post('/baser/admin/baser-core/contents/delete', ['Content' => ['id' => 6]]);
+        $this->post('/baser/admin/baser-core/contents/delete', ['Contents' => ['id' => 6]]);
         $searchIndexesTable = $this->getTableLocator()->get('BaserCore.SearchIndexes');
         $this->assertEquals(0, $searchIndexesTable->find()->where(['url' => '/service/service1'])->count());
         $this->assertEquals(0, $searchIndexesTable->find()->where(['url' => '/service/service2'])->count());

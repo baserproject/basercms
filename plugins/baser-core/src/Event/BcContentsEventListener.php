@@ -123,7 +123,7 @@ class BcContentsEventListener extends BcEventListener
         if (!preg_match('/(AdminEditForm|AdminEditAliasForm)$/', $event->getData('id'))) {
             return $preOut;
         }
-        $content = $data['Content'] ?? array_column($data, 'content')[0]; // Contentエンティティ or 関連エンティティ
+        $content = $data['Contents'] ?? array_column($data, 'content')[0]; // Contentエンティティ or 関連エンティティ
         $setting = Configure::read('BcContents.items.' . $content['plugin'] . '.' . $content['type']);
         $isAvailablePreview = (!empty($setting['preview']) && $content['type'] != 'ContentFolder');
         $path = BcUtil::getPrefix() . "/" . Inflector::dasherize($event->getSubject()->getPlugin()) . '/contents/delete';

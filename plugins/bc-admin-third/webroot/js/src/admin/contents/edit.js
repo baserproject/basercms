@@ -74,8 +74,8 @@ $(function () {
 
     $(".create-alias").click(function () {
         var siteId = $(this).attr('data-site-id');
-        var displayName = $("#site-display-name" + siteId).val();
-        var targetUrl = $("#site-target-url" + siteId).val();
+        var displayName = $("#sites-display-name" + siteId).val();
+        var targetUrl = $("#sites-target-url" + siteId).val();
         var data = {
             content: {
                 title: current.name,
@@ -149,8 +149,8 @@ $(function () {
 
     $(".create-copy").click(function () {
         var siteId = $(this).attr('data-site-id');
-        var displayName = $("#site-display-name" + siteId).val();
-        var targetUrl = $("#site-target-url" + siteId).val();
+        var displayName = $("#sites-display-name" + siteId).val();
+        var targetUrl = $("#sites-target-url" + siteId).val();
         var data = {
                 title: current.title,
                 siteId: siteId,
