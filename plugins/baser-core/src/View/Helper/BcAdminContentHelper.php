@@ -262,4 +262,27 @@ class BcAdminContentHelper extends Helper
         return $folderLinkedUrl;
     }
 
+    /**
+     * getTargetPrefix
+     * 重複のない適切なprefixを取得する
+     *
+     * @param  array $relatedContent
+     * @return string $prefix
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getTargetPrefix($relatedContent)
+    {
+        $prefix = $relatedContent['Site']['name'];
+        if ($relatedContent['Site']['alias']) {
+            $prefix = $relatedContent['Site']['alias'];
+            if($this->ContentService->existsContentByUrl("/$prefix")) {
+                $prefix = $this->ContentService->getIndex(['site_id' => $relatedContent['Site']['id'], 'title' => $relatedContent['Site']['alias']])->first()->name;
+            }
+        }
+        if ($prefix) $prefix = "/" . $prefix;
+        return $prefix;
+    }
+
 }
