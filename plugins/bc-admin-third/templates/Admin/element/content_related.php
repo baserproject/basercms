@@ -105,8 +105,8 @@ $pureUrl = $this->BcContents->getPureUrl($content->url, $content->site_id);
                 <?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_copy.png', ['alt' => __d('baser', 'コピー作成')]) . '<span class="icon-add-layerd"></span>', 'javascript:void(0)', ['class' => 'create-copy', 'title' => __d('baser', 'コピー作成'), 'target' => '_blank', 'data-site-id' => $relatedContent['Site']['id']]) ?>
               <?php endif ?>
             <?php endif ?>
-            <?php echo $this->BcAdminForm->control($entityName . 'site.display_name' . $relatedContent['Site']['id'], ['type' => 'hidden', 'value' => $relatedContent['Site']['display_name']]) ?>
-            <?php echo $this->BcAdminForm->control($entityName . 'site.target_url' . $relatedContent['Site']['id'], ['type' => 'hidden', 'value' => $targetUrl]) ?>
+            <?php echo $this->BcAdminForm->control('Sites.display_name' . $relatedContent['Site']['id'], ['type' => 'hidden', 'value' => $relatedContent['Site']['display_name']]) ?>
+            <?php echo $this->BcAdminForm->control('Sites.target_url' . $relatedContent['Site']['id'], ['type' => 'hidden', 'value' => $targetUrl]) ?>
           </td>
         </tr>
       <?php endforeach ?>
