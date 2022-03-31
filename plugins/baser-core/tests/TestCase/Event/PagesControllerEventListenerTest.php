@@ -99,7 +99,7 @@ class PagesControllerEventListenerTest extends BcTestCase
         $this->loginAdmin($this->getRequest());
         $this->enableCsrfToken();
         // 検索インデックスも連動して削除
-        $this->post('/baser/admin/baser-core/contents/delete', ['Content' => ['id' => 13]]);
+        $this->post('/baser/admin/baser-core/contents/delete', ['Contents' => ['id' => 13]]);
         $this->assertResponseSuccess();
         $searchIndexesTable = $this->getTableLocator()->get('BaserCore.SearchIndexes');
         $this->assertEquals(0, $searchIndexesTable->find()->where(['url' => '/service/service3'])->count());

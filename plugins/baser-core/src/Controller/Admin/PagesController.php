@@ -103,8 +103,8 @@ class PagesController extends BcAdminAppController
 			}
             try {
                 // contents_tmpをcontentsに反映
-                $this->request = $this->request->withData('Page.contents', $this->request->getData('Page.contents_tmp'));
-                $page = $pageService->update($page, $this->request->getData('Page'));
+                $this->request = $this->request->withData('Pages.contents', $this->request->getData('Pages.contents_tmp'));
+                $page = $pageService->update($page, $this->request->getData('Pages'));
 
 				// 完了メッセージ
 				$site = $siteService->findById($page->content->site_id)->first();
@@ -120,7 +120,7 @@ class PagesController extends BcAdminAppController
                 $this->BcMessage->setError('保存中にエラーが発生しました。入力内容を確認してください。');
             }
 		} else {
-			$this->request = $this->request->withData("Page", $page);
+			$this->request = $this->request->withData("Pages", $page);
 			if (!$this->request->getData()) {
 				$this->BcMessage->setError(__d('baser', '無効な処理です。'));
 				$this->redirect(['controller' => 'contents', 'action' => 'index']);

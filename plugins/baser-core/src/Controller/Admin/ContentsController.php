@@ -267,9 +267,9 @@ class ContentsController extends BcAdminAppController
         $content = $contentService->get($id);
         if ($this->request->is(['patch', 'post', 'put'])) {
             try {
-                $content = $contentService->update($content, $this->request->getData('Content'));
-                $message = Configure::read('BcContents.items.' . $this->request->getData('Content.plugin') . '.' . $this->request->getData('Content.type') . '.title') .
-                sprintf(__d('baser', '「%s」を更新しました。'), $this->request->getData('Content.title'));
+                $content = $contentService->update($content, $this->request->getData('Contents'));
+                $message = Configure::read('BcContents.items.' . $this->request->getData('Contents.plugin') . '.' . $this->request->getData('Contents.type') . '.title') .
+                sprintf(__d('baser', '「%s」を更新しました。'), $this->request->getData('Contents.title'));
                 $this->BcMessage->setSuccess($message);
                 return $this->redirect(['action' => 'edit', $content->id]);
             } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
@@ -277,7 +277,7 @@ class ContentsController extends BcAdminAppController
                 $this->BcMessage->setError('保存中にエラーが発生しました。入力内容を確認してください。');
             }
         }
-        $this->request = $this->request->withData("Content", $content);
+        $this->request = $this->request->withData("Contents", $content);
         $this->set('content', $content);
         $this->set('publishLink', $contentService->getUrl($content->url, true, $content->site->useSubDomain));
     }
@@ -306,7 +306,7 @@ class ContentsController extends BcAdminAppController
                 $this->redirect(['action' => 'edit_alias', $id]);
             }
             try {
-                $alias = $contentService->update($alias, $this->request->getData('Content'));
+                $alias = $contentService->update($alias, $this->request->getData('Contents'));
                 $content = $contentService->get($alias->alias_id);
                 $message = Configure::read('BcContents.items.' . $content->plugin . '.' . $content->type . '.title') .
                 sprintf(__d('baser', '「%s」のエイリアス「%s」を編集しました。'), $content->title, $alias->title);
@@ -317,7 +317,7 @@ class ContentsController extends BcAdminAppController
                 $this->BcMessage->setError("保存中にエラーが発生しました。入力内容を確認してください。\n" . $alias->getErrors());
             }
         } else {
-            $this->request = $this->request->withData('Content', $alias);
+            $this->request = $this->request->withData('Contents', $alias);
             if (!$this->request->getData()) {
                 $this->BcMessage->setError(__d('baser', '無効な処理です。'));
                 $this->redirect(['action' => 'index']);
@@ -339,7 +339,7 @@ class ContentsController extends BcAdminAppController
 		}
         if ($this->request->is(['post', 'put', 'delete'])) {
             // TODO: ページ実装時に汎用化する
-            $data = $this->request->getData('Content') ?? $this->request->getData('ContentFolder.content');
+            $data = $this->request->getData('Contents') ?? $this->request->getData('ContentFolders.content');
             $id = $data['id'];
             // EVENT Contents.beforeDelete
             $this->dispatchLayerEvent('beforeDelete', [

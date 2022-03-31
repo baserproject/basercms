@@ -56,7 +56,6 @@ class ContentFoldersController extends BcAdminAppController
     public function beforeFilter(EventInterface $event)
     {
         parent::beforeFilter($event);
-        // $this->loadModel('BaserCore.Pages');
         $this->loadModel('BaserCore.ContentFolders');
         // $this->BcAuth->allow('view');
     }
@@ -82,7 +81,7 @@ class ContentFoldersController extends BcAdminAppController
                 $this->redirect(['action' => 'edit', $id]);
             }
             try {
-                $contentFolder = $contentFolderService->update($contentFolder, $this->request->getData('ContentFolder'), ['reconstructSearchIndices' => true]);
+                $contentFolder = $contentFolderService->update($contentFolder, $this->request->getData('ContentFolders'), ['reconstructSearchIndices' => true]);
                 // clearViewCache(); TODO: 動作しないため一旦コメントアウト
                 $this->BcMessage->setSuccess(sprintf(__d('baser', 'フォルダ「%s」を更新しました。'), $contentFolder->content->title));
                 return $this->redirect(['action' => 'edit', $id]);
@@ -90,7 +89,7 @@ class ContentFoldersController extends BcAdminAppController
                 $this->BcMessage->setError('保存中にエラーが発生しました。入力内容を確認してください。');
             }
         }
-        $this->request = $this->request->withData("ContentFolder", $contentFolder);
+        $this->request = $this->request->withData("ContentFolders", $contentFolder);
         $this->set('contentFolder', $contentFolder);
     }
 }

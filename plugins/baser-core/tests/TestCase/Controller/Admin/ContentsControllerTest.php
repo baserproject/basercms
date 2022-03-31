@@ -302,7 +302,7 @@ class ContentsControllerTest extends BcTestCase
         $data = $this->ContentService->getIndex(['name' => 'testEdit'])->first();
         $data->name = 'ControllerEdit';
         $data->site->name = 'ucmitz'; // site側でエラーが出るため
-        $this->post('/baser/admin/baser-core/contents/edit/' . $data->id, ["Content" => $data->toArray()]);
+        $this->post('/baser/admin/baser-core/contents/edit/' . $data->id, ["Contents" => $data->toArray()]);
         $this->assertResponseSuccess();
         $this->assertRedirect('/baser/admin/baser-core/contents/edit/' . $data->id);
         $this->assertEquals('ControllerEdit', $this->ContentService->get($data->id)->name);
@@ -386,7 +386,7 @@ class ContentsControllerTest extends BcTestCase
         $data = $this->ContentService->getIndex(['name' => 'testEditのエイリアス'])->first();
         $data->title = 'ControllerEditエイリアス';
         $data->site->name = 'ucmitz'; // site側でエラーが出るため
-        $this->post('/baser/admin/baser-core/contents/edit_alias/' . $data->id, ["Content" => $data->toArray()]);
+        $this->post('/baser/admin/baser-core/contents/edit_alias/' . $data->id, ["Contents" => $data->toArray()]);
         $this->assertResponseSuccess();
         $this->assertRedirect('/baser/admin/baser-core/contents/edit_alias/' . $data->id);
         $this->assertEquals('ControllerEditエイリアス', $this->ContentService->get($data->id)->title);
@@ -401,7 +401,7 @@ class ContentsControllerTest extends BcTestCase
         $this->enableSecurityToken();
         $this->enableCsrfToken();
         // 管理画面からの場合
-        $this->post('/baser/admin/baser-core/contents/delete', ['Content' => ['id' => 6]]);
+        $this->post('/baser/admin/baser-core/contents/delete', ['Contents' => ['id' => 6]]);
         $this->assertResponseSuccess();
         $this->assertRedirect("/baser/admin/baser-core/contents/index");
         $this->assertEquals("フォルダー「サービス」をゴミ箱に移動しました。", $_SESSION['Flash']['flash'][0]['message']);
@@ -426,7 +426,7 @@ class ContentsControllerTest extends BcTestCase
             $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
             $this->ContentService->get($id);
         });
-        $request = $this->getRequest('/baser/admin/baser-core/content/')->withEnv('REQUEST_METHOD', 'POST')->withData('Content.id', 1);
+        $request = $this->getRequest('/baser/admin/baser-core/content/')->withEnv('REQUEST_METHOD', 'POST')->withData('Contents.id', 1);
         $contentsController = new ContentsController($request);
         $contentsController->setName('Contents');
         $contentsController->delete($this->getService(ContentServiceInterface::class));

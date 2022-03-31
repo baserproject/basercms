@@ -142,7 +142,6 @@ class ContentsTable extends AppTable
         $validator
         ->scalar('name')
         ->requirePresence('name', 'create', __d('baser', 'nameフィールドが存在しません。'))
-        ->notEmptyString('name', __d('baser', 'URLを入力してください。'))
         ->maxLength('name', 230, __d('baser', '名前は230文字以内で入力してください。'))
         ->add('name', [
             'bcUtileUrlencodeBlank' => [
@@ -151,7 +150,6 @@ class ContentsTable extends AppTable
                 'message' => __d('baser', 'URLはスペース、全角スペース及び、指定の記号(\\\'|`^"(){}[];/?:@&=+$,%<>#!)だけの名前は付けられません。')
             ]
         ])
-        ->notEmptyString('name', __d('baser', 'スラッグを入力してください。'))
         ->add('name', [
             'duplicateRelatedSiteContent' => [
                 'rule' => [$this, 'duplicateRelatedSiteContent'],
