@@ -217,9 +217,9 @@ $(function () {
         return false;
     });
 
-    if (!$("#ContentModifiedDate").val()) {
-        $("#ContentModifiedDateDate").val(getNowDate());
-        $("#ContentModifiedDateTime").val(getNowTime());
+    if (!$("#pages-content-modified-date").val()) {
+        $("#pages-content-modified-date").val(getNowDate());
+        $("#pages-content-modified-date-time").val(getNowTime());
     }
 
 });
