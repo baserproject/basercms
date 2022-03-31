@@ -29,7 +29,7 @@
 				<div
 					class="eye_catch"><?php echo $this->BcUpload->uploadImage('BlogPost.eye_catch', $data['BlogPost']['eye_catch'], ['imgsize' => 'mobile_thumb']) ?></div>
 			<?php endif; ?>
-			<?php $this->BcBaser->link($data['BlogPost']['name'], ['action' => 'edit', $data['BlogContent']['id'], $data['BlogPost']['id']]) ?>
+			<?php $this->BcBaser->link($data['BlogPost']['name'], ['action' => 'edit', $data['BlogContent']['id'], $data['BlogPost']['id']], ['escape' => true]) ?>
 		</div>
 	</td>
 	<td class="bca-table-listup__tbody-td bca-table-listup__tbody-td--category"><?php // カテゴリ ?>

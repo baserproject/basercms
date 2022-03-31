@@ -54,11 +54,11 @@ $class = ' class="' . implode(' ', $classies) . '"';
 		<?php elseif ($data['Plugin']['update']): ?>
 			<div class="annotation-text"><small><?php echo __d('baser', 'アップデートを完了させてください') ?></small></div>
 		<?php endif ?>
-		<?php echo $data['Plugin']['name'] ?><?php if ($data['Plugin']['title']): ?>（<?php echo $data['Plugin']['title'] ?>）<?php endif ?>
+		<?php echo h($data['Plugin']['name']) ?><?php if ($data['Plugin']['title']): ?>（<?php echo h($data['Plugin']['title']) ?>）<?php endif ?>
 	</td>
-	<td><?php echo $data['Plugin']['version'] ?></td>
-	<td><?php echo $data['Plugin']['description'] ?></td>
-	<td><?php $this->BcBaser->link($data['Plugin']['author'], $data['Plugin']['url'], ['target' => '_blank']) ?></td>
+	<td><?php echo h($data['Plugin']['version']) ?></td>
+	<td><?php echo h($data['Plugin']['description']) ?></td>
+	<td><?php $this->BcBaser->link($data['Plugin']['author'], $data['Plugin']['url'], ['target' => '_blank', 'escape' => true]) ?></td>
 	<td style="width:10%;white-space: nowrap">
 		<?php echo $this->BcTime->format('Y-m-d', $data['Plugin']['created']) ?><br/>
 		<?php echo $this->BcTime->format('Y-m-d', $data['Plugin']['modified']) ?>

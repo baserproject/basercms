@@ -17,10 +17,10 @@
 
 
 <li>
-	<p class="theme-name"><strong><?php echo h($data['title']) ?></strong>&nbsp;(&nbsp;<?php echo $data['name'] ?>&nbsp;)
+	<p class="theme-name"><strong><?php echo h($data['title']) ?></strong>&nbsp;(&nbsp;<?php echo h($data['name']) ?>&nbsp;)
 	</p>
 	<p class="bca-current-theme__screenshot">
-		<a class="theme-popup" href="<?php echo '#Contents' . Inflector::camelize($data['name']) ?>">
+		<a class="theme-popup" href="<?php echo '#Contents' . Inflector::camelize(h($data['name'])) ?>">
 			<?php if ($data['screenshot']): ?>
 				<?php $this->BcBaser->img('/theme/' . $data['name'] . '/screenshot.png', ['alt' => $data['title']]) ?>
 			<?php else: ?>
@@ -38,7 +38,7 @@
 		<?php $this->BcBaser->link('', ['action' => 'ajax_copy', $data['name']], ['title' => __d('baser', 'テーマコピー'), 'class' => 'btn-copy bca-btn-icon', 'data-bca-btn-type' => 'copy', 'data-bca-btn-size' => 'lg']) ?>
 		<?php $this->BcBaser->link('', ['action' => 'ajax_delete', $data['name']], ['title' => __d('baser', 'テーマ削除'), 'class' => 'btn-delete bca-btn-icon', 'data-bca-btn-type' => 'delete', 'data-bca-btn-size' => 'lg']) ?>
 	</p>
-	<p class="theme-version"><?php echo __d('baser', 'バージョン') ?>：<?php echo $data['version'] ?></p>
+	<p class="theme-version"><?php echo __d('baser', 'バージョン') ?>：<?php echo h($data['version']) ?></p>
 	<p class="theme-author"><?php echo __d('baser', '制作者') ?>：
 		<?php if (!empty($data['url']) && !empty($data['author'])): ?>
 			<?php $this->BcBaser->link($data['author'], $data['url'], ['target' => '_blank', 'escape' => true]) ?>
@@ -56,9 +56,9 @@
 				<?php endif ?>
 			</div>
 			<div class="theme-name">
-				<strong><?php echo h($data['title']) ?></strong>&nbsp;(&nbsp;<?php echo $data['name'] ?>&nbsp;)
+				<strong><?php echo h($data['title']) ?></strong>&nbsp;(&nbsp;<?php echo h($data['name']) ?>&nbsp;)
 			</div>
-			<div class="theme-version"><?php echo __d('baser', 'バージョン') ?>：<?php echo $data['version'] ?></div>
+			<div class="theme-version"><?php echo __d('baser', 'バージョン') ?>：<?php echo h($data['version']) ?></div>
 			<div class="theme-author">
 				<?php echo __d('baser', '制作者') ?>：
 				<?php if (!empty($data['url']) && !empty($data['author'])): ?>

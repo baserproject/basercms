@@ -126,7 +126,7 @@ if (!empty($currentAuthPrefix['name']) && $currentPrefix != 'front') {
 										<ul class="clearfix">
 											<?php foreach($package['contents'] as $contents): ?>
 												<?php
-												$options = ['title' => $contents['name']];
+												$options = ['title' => $contents['name'], 'escape' => true];
 												if (!empty($contents['options'])) {
 													$options = array_merge($options, $contents['options']);
 												}

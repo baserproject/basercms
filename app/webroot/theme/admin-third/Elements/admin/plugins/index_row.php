@@ -45,9 +45,9 @@ $class = ' class="' . implode(' ', $classies) . '"';
 		<?php endif ?>
 		<?php echo h($data['Plugin']['name']) ?><?php if ($data['Plugin']['title']): ?>（<?php echo h($data['Plugin']['title']) ?>）<?php endif ?>
 	</td>
-	<td class="bca-table-listup__tbody-td"><?php echo $data['Plugin']['version'] ?></td>
+	<td class="bca-table-listup__tbody-td"><?php echo h($data['Plugin']['version']) ?></td>
 	<td class="bca-table-listup__tbody-td"><?php echo h($data['Plugin']['description']) ?></td>
-	<td class="bca-table-listup__tbody-td"><?php $this->BcBaser->link($data['Plugin']['author'], $data['Plugin']['url'], ['target' => '_blank']) ?></td>
+	<td class="bca-table-listup__tbody-td"><?php $this->BcBaser->link($data['Plugin']['author'], $data['Plugin']['url'], ['target' => '_blank', 'escape' => true]) ?></td>
 	<td class="bca-table-listup__tbody-td" style="width:10%;white-space: nowrap">
 		<?php echo $this->BcTime->format('Y-m-d', $data['Plugin']['created']) ?><br/>
 		<?php echo $this->BcTime->format('Y-m-d', $data['Plugin']['modified']) ?>

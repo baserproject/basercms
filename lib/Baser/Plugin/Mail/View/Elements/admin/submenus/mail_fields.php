@@ -29,6 +29,9 @@
 						'controller' => 'mail_contents',
 						'action' => 'edit',
 						$mailContent['MailContent']['id']
+					],
+					[
+						'escape' => true
 					]
 				) ?>
 			</li>

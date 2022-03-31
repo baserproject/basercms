@@ -45,10 +45,10 @@
 			<div class="bca-current-theme__sub">
 				<div class="theme-info">
 					<h3 class="theme-name">
-						<strong><?php echo h($currentTheme['title']) ?></strong>&nbsp;(&nbsp;<?php echo $currentTheme['name'] ?>
+						<strong><?php echo h($currentTheme['title']) ?></strong>&nbsp;(&nbsp;<?php echo h($currentTheme['name']) ?>
 						&nbsp;)</h3>
 					<p class="theme-version"><?php echo __d('baser', 'バージョン') ?>
-						：<?php echo $currentTheme['version'] ?></p>
+						：<?php echo h($currentTheme['version']) ?></p>
 					<p class="theme-author"><?php echo __d('baser', '制作者') ?>
 						：<?php if (!empty($currentTheme['url']) && !empty($currentTheme['author'])): ?>
 							<?php $this->BcBaser->link($currentTheme['author'], $currentTheme['url'], ['target' => '_blank', 'escape' => true]) ?>
