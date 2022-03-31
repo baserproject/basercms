@@ -39,10 +39,6 @@ use BaserCore\Service\SiteConfigServiceInterface;
  */
 class BcUtil
 {
-    /**
-     * BcContainerTrait
-     */
-    use BcContainerTrait;
 
     /**
      * 認証領域を指定してログインユーザーのデータを取得する
@@ -976,13 +972,52 @@ class BcUtil
      */
     public static function getViewPath()
     {
-        $siteConfig = BcContainerTrait::getService(SiteConfigServiceInterface::class);
-        $theme = $siteConfig->getValue('theme');
-        if ($theme) {
-            return WWW_ROOT . 'theme' . DS . $theme . DS;
+        if(BcUtil::isAdminSystem()) {
+            $theme = BcUtil::getCurrentAdminTheme();
         } else {
-            return APP . 'View' . DS;
+            $theme = BcUtil::getCurrentTheme();
         }
+        $pluginPath = ROOT . DS . 'plugins' . DS;
+        if(is_dir($pluginPath . $theme)) {
+            return $pluginPath . $theme . DS;
+        } elseif(is_dir($pluginPath . Inflector::dasherize($theme))) {
+            return $pluginPath . Inflector::dasherize($theme) . DS;
+        }
+        return false;
+    }
+
+    /**
+     * 現在のテーマ名を取得する
+     * キャメルケースが前提
+     * @return string
+     */
+    public static function getCurrentTheme()
+    {
+        $theme = Inflector::camelize(Inflector::underscore(Configure::read('BcApp.defaultFrontTheme')));
+        $request = Router::getRequest();
+        $site = $request->getParam('Site');
+        if (!$site) {
+            $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
+            $site = $sites->getRootMain();
+        }
+        if ($site->theme) {
+            $theme = $site->theme;
+        }
+        return $theme;
+    }
+
+    /**
+     * 現在の管理画面のテーマ名を取得する
+     * キャメルケースが前提
+     * @return mixed|string
+     */
+    public static function getCurrentAdminTheme()
+    {
+        $adminTheme = Inflector::camelize(Inflector::underscore(Configure::read('BcApp.defaultAdminTheme')));
+        if (!empty(BcSiteConfig::get('admin_theme'))) {
+            $adminTheme = BcSiteConfig::get('admin_theme');
+        }
+        return $adminTheme;
     }
 
     /**

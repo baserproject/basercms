@@ -295,11 +295,7 @@ class BcAdminAppController extends BcAppController
      */
     protected function setAdminTheme()
     {
-        $adminTheme = Inflector::camelize(Inflector::underscore(Configure::read('BcApp.defaultAdminTheme')));
-        if (!empty(BcSiteConfig::get('admin_theme'))) {
-            $adminTheme = BcSiteConfig::get('admin_theme');
-        }
-        $this->viewBuilder()->setTheme($adminTheme);
+        $this->viewBuilder()->setTheme(BcUtil::getCurrentAdminTheme());
     }
 
     /**
