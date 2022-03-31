@@ -73,7 +73,7 @@ class BcAdminFormHelper extends BcFormHelper
                         'class' => 'bca-file__input',
                         'templateVars' => ['tag' => 'span', 'class' => 'bca-file'],
                         'deleteSpan' => ['class' => 'bca-file__delete'],
-                        'deleteCheckbox' => ['class' => 'bca-file__delete-input'],
+                        'deleteCheckbox' => ['class' => 'bca-file__delete-input', 'id' => true],
                         'deleteLabel' => ['class' => 'bca-file__delete-label'],
                         'figure' => ['class' => 'bca-file__figure'],
                         'img' => ['class' => 'bca-file__img'],

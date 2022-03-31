@@ -124,8 +124,8 @@ class BcTestCaseTest extends BcTestCase
         // デフォルト引数が1かテスト
         $this->assertEquals($this->loginAdmin($this->getRequest())->getAttribute('authentication')->getIdentity()->getOriginalData()->id, "1");
         // session書かれているかテスト
-        $this->assertSession($this->loginAdmin($this->getRequest())->getAttribute('authentication')->getIdentity()->getOriginalData(), Configure::read('BcPrefixAuth.Admin.sessionKey'));
-        $this->assertSession($this->loginAdmin($this->getRequest(), 2)->getAttribute('authentication')->getIdentity()->getOriginalData(), Configure::read('BcPrefixAuth.Admin.sessionKey'));
+        $this->assertSession($this->loginAdmin($this->getRequest('/baser/admin'))->getAttribute('authentication')->getIdentity()->getOriginalData(), Configure::read('BcPrefixAuth.Admin.sessionKey'));
+        $this->assertSession($this->loginAdmin($this->getRequest('/baser/admin'), 2)->getAttribute('authentication')->getIdentity()->getOriginalData(), Configure::read('BcPrefixAuth.Admin.sessionKey'));
     }
 
     /**
