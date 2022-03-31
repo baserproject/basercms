@@ -996,7 +996,7 @@ class BcUtil
         $theme = Inflector::camelize(Inflector::underscore(Configure::read('BcApp.defaultFrontTheme')));
         $request = Router::getRequest();
         $site = $request->getParam('Site');
-        if ($site) {
+        if (!$site) {
             $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
             $site = $sites->getRootMain();
         }

@@ -1028,14 +1028,14 @@ class ContentService implements ContentServiceInterface
      * サイトルートコンテンツを取得する
      *
      * @param int $siteId
-     * @return Content|null
+     * @return EntityInterface|null
      * @checked
      * @unitTest
      * @noTodo
      */
     public function getSiteRoot($siteId)
     {
-        return $this->Contents->find()->where(['site_id' => $siteId, 'site_root' => true])->first();
+        return $this->Contents->find()->contain(['Sites'])->where(['site_id' => $siteId, 'site_root' => true])->first();
     }
 
     /**

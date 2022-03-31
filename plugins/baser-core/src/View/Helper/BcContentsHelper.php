@@ -307,41 +307,37 @@ class BcContentsHelper extends Helper
      * @param int $id カテゴリID
      * @param int $level 関連データの階層
      * @param array $options
-     * @return array
      */
     public function getTree($id = 1, $level = null, $options = [])
     {
         $options = array_merge([
             'type' => '',
-            'order' => ['Content.site_id', 'Content.lft']
+            'order' => ['Contents.site_id', 'Contents.lft']
         ], $options);
-        $conditions = array_merge($this->_Contents->getConditionAllowPublish(), ['Content.id' => $id]);
-        $content = $this->_Contents->find('first', ['conditions' => $conditions, 'cache' => false]);
+        $conditions = array_merge($this->_Contents->getConditionAllowPublish(), ['Contents.id' => $id]);
+        $content = $this->_Contents->find()->where($conditions)->first();
         if (!$content) {
             return [];
         }
         $conditions = array_merge($this->_Contents->getConditionAllowPublish(), [
-            'Content.site_root' => false,
-            'rght <' => $content['Content']['rght'],
-            'lft >' => $content['Content']['lft']
+            'Contents.site_root' => false,
+            'rght <' => $content->rght,
+            'lft >' => $content->lft
         ]);
         if ($level) {
-            $level = $level + $content['Content']['level'] + 1;
-            $conditions['Content.level <'] = $level;
+            $level = $level + $content->level + 1;
+            $conditions['Contents.level <'] = $level;
         }
         if (!empty($options['type'])) {
-            $conditions['Content.type'] = ['ContentFolder', $options['type']];
+            $conditions['Contents.type'] = ['ContentFolder', $options['type']];
         }
         if (!empty($options['conditions'])) {
             $conditions = array_merge($conditions, $options['conditions']);
         }
         // CAUTION CakePHP2系では、fields を指定すると正常なデータが取得できない
-        return $this->_Contents->find('threaded', [
-            'order' => $options['order'],
-            'conditions' => $conditions,
-            'recursive' => 0,
-            'cache' => false
-        ]);
+        return $this->_Contents->find('threaded')
+            ->order($options['order'])
+            ->where($conditions)->all();
     }
 
     /**
@@ -564,11 +560,10 @@ class BcContentsHelper extends Helper
      */
     public function isParentId($id, $parentId)
     {
-        $parentIds = $this->_Contents->getPath($id, ['id'], -1);
+        $parentIds = $this->_Contents->find('treeList', ['valuePath' => 'id'])->where(['id' => $id])->all()->toArray();
         if (!$parentIds) {
             return false;
         }
-        $parentIds = Hash::extract($parentIds, '{n}.Content.id');
         if ($parentIds && in_array($parentId, $parentIds)) {
             return true;
         } else {

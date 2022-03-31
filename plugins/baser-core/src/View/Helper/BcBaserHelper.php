@@ -55,7 +55,8 @@ class BcBaserHelper extends Helper
         'BaserCore.BcXml',
         'BaserCore.BcArray',
         'BaserCore.BcPage',
-        'BaserCore.BcContents'
+        'BaserCore.BcContents',
+        'BaserCore.BcAdminContent'
     ];
 
     /**
@@ -1981,19 +1982,12 @@ EOD;
      */
     public function getGlobalMenu($level = 1, $options = [])
     {
-
-        // TODO ucmitz 未実装
-        // >>>
-        return '';
-        // <<<
-
-        $Content = ClassRegistry::init('Content');
         $siteId = 0;
-        if (!empty($this->_View->getRequest()->params['Content']['site_id'])) {
-            $siteId = $this->_View->getRequest()->params['Content']['site_id'];
+        if (!empty($this->_View->getRequest()->getParam('Content.site_id'))) {
+            $siteId = $this->_View->getRequest()->getParam('Content.site_id');
         }
         $siteRoot = $this->BcAdminContent->getSiteRoot($siteId);
-        $id = $siteRoot['Content']['id'];
+        $id = $siteRoot->site->id;
         $currentId = null;
         if (!empty($this->_View->getRequest()->getParam('Content.id'))) {
             $currentId = $this->_View->getRequest()->getParam('Content.id');
@@ -3054,7 +3048,7 @@ END_FLASH;
             }
         }
         if (is_null($useSubDomain)) {
-            $site = $this->_View->getRequest()->getAttribute('currentSite');
+            $site = $this->_View->getRequest()->getParam('Site');
             $useSubDomain = $site->use_subdomain;
         }
         return $this->BcAdminContent->getUrl($url, $full, $useSubDomain, $base);
