@@ -73,7 +73,7 @@ class BcAdminFormHelper extends BcFormHelper
                         'class' => 'bca-file__input',
                         'templateVars' => ['tag' => 'span', 'class' => 'bca-file'],
                         'deleteSpan' => ['class' => 'bca-file__delete'],
-                        'deleteCheckbox' => ['class' => 'bca-file__delete-input', 'id' => true],
+                        'deleteCheckbox' => ['class' => 'bca-file__delete-input'],
                         'deleteLabel' => ['class' => 'bca-file__delete-label'],
                         'figure' => ['class' => 'bca-file__figure'],
                         'img' => ['class' => 'bca-file__img'],
@@ -143,10 +143,6 @@ class BcAdminFormHelper extends BcFormHelper
                 $options['templateVars']['groupClass'] = $groupContainerClass;
             }
 
-        }
-
-        if(!isset($options['id']) || $options['id'] !== false) {
-            $options['id'] = true;
         }
 
         return parent::control($name, $options);

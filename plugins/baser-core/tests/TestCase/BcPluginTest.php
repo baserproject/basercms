@@ -134,7 +134,7 @@ class BcPluginTest extends BcTestCase
         $this->assertEquals($all[6]->defaults, ['plugin' => 'BcBlog', 'action' => 'index', 'prefix' => 'Admin']);
         $this->assertEmpty($all[6]->getExtensions());
         // connectにより1つコネクションあり|拡張子jsonなし
-        $this->assertEquals($all[9]->defaults, ['plugin' => 'BaserCore', 'controller' => 'Dashboard', 'action' => 'index', 'prefix' => 'Admin']);
+        $this->assertEquals($all[9]->defaults, ['plugin' => 'BcBlog', 'action' => 'index']);
         $this->assertEmpty($all[9]->getExtensions());
     }
 }
