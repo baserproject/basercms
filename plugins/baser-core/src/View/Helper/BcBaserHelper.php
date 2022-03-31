@@ -2388,8 +2388,21 @@ END_FLASH;
      */
     public function getThemeImage($name, $options = [])
     {
+        // TODO ucmitz ThemeConfigs は別プラグインに移行する
+        /* >>>
         $themeConfigsTable = TableRegistry::getTableLocator()->get('BaserCore.ThemeConfigs');
         $data = $themeConfigsTable->getKeyValue();
+        */
+        // ---
+        $data = [
+            'logo' => '', 'logo_alt' => '', 'logo_link' => '',
+            'main_image_1' => '', 'main_image_alt_1' => '', 'main_image_link_1' => '',
+            'main_image_2' => '', 'main_image_alt_2' => '', 'main_image_link_2' => '',
+            'main_image_3' => '', 'main_image_alt_3' => '', 'main_image_link_3' => '',
+            'main_image_4' => '', 'main_image_alt_4' => '', 'main_image_link_4' => '',
+            'main_image_5' => '', 'main_image_alt_5' => '', 'main_image_link_5' => '',
+        ];
+        // <<<
 
         $url = $imgPath = $uploadUrl = $uploadThumbUrl = $originUrl = '';
         $thumbSuffix = '_thumb';
