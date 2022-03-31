@@ -253,7 +253,7 @@ class BcFileUploader
      */
     public function isUploadable($fileType, $contentType, $file)
     {
-        if (!empty($file) && is_array($file) && @$file['error'] === 0 && $file['name'] && $file['tmp_name']) {
+        if (!empty($file) && is_array($file) && (int) @$file['error'] === 0 && $file['name'] && $file['tmp_name']) {
             // タイプ別除外
             $targets = [];
             if ($fileType === 'image') {
