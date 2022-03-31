@@ -15,6 +15,7 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Event\BcEventDispatcherTrait;
+use Cake\Utility\Inflector;
 
 /**
  * Class BcAdminFormHelper
@@ -142,6 +143,10 @@ class BcAdminFormHelper extends BcFormHelper
                 $options['templateVars']['groupClass'] = $groupContainerClass;
             }
 
+        }
+
+        if(!isset($options['id']) || $options['id'] !== false) {
+            $options['id'] = true;
         }
 
         return parent::control($name, $options);
