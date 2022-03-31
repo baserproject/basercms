@@ -677,4 +677,27 @@ class BcContentsHelper extends AppHelper
 		return ($this->request->params['Content']['type'] === 'ContentFolder');
 	}
 
+	/**
+	 * getTargetUrl
+	 *
+     * @param  array $relatedContent
+     * @return string $prefix
+	 */
+	public function getTargetPrefix($relatedContent)
+	{
+		$prefix = $relatedContent['Site']['name'];
+		if ($relatedContent['Site']['alias']) {
+			$prefix = $relatedContent['Site']['alias'];
+			if ($this->_Content->existsContentByUrl("/$prefix")) {
+				$prefix = $this->_Content->find('first',
+					['conditions' => [
+							'Content.site_id' => $relatedContent['Site']['id'],
+							'Content.title' => $relatedContent['Site']['alias']
+						]
+				]);
+			}
+		}
+		return $prefix;
+	}
 }
+
