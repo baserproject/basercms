@@ -343,16 +343,12 @@ class BcBaserHelper extends Helper
      *    リンクをクリックした際に確認メッセージが表示され、はいをクリックした場合のみ遷移する
      * @return string
      * @checked
-     * @unitTest
-     * @note(value="未実装につき継承元のコントロールを返却している")
      */
     public function getLink($title, $url = null, $options = [], $confirmMessage = false)
     {
         if ($confirmMessage) {
             $options['confirm'] = $confirmMessage;
         }
-
-        $adminAlias = BcUtil::getAdminPrefix();
 
         if (!is_array($options)) {
             $options = [$options];
@@ -387,15 +383,6 @@ class BcBaserHelper extends Helper
         unset($options['prefix']);
         unset($options['forceTitle']);
         unset($options['ssl']);
-
-        // 管理システムメニュー対策
-        // プレフィックスが変更された場合も正常動作させる為
-        // TODO メニューが廃止になったら削除
-        // TODO ucmitz: Routing.prefixesの代替手段が完了後移行する
-        // if (!is_array($url)) {
-        //     $prefixes = Configure::read('Routing.prefixes');
-        //     $url = preg_replace('/^\/' . $adminAlias . '\//', '/' . $prefixes[0] . '/', $url);
-        // }
 
         $_url = $this->getUrl($url);
         $_url = preg_replace('/^' . preg_quote($this->_View->getRequest()->getAttribute('base'), '/') . '\//', '/', $_url);
@@ -441,7 +428,7 @@ class BcBaserHelper extends Helper
             && !preg_match('/^#/', $_url)) {
 
             $_url = preg_replace("/^\//", "", $_url);
-            if (preg_match('{^' . $adminAlias . '\/}', $_url)) {
+            if (preg_match('{^\/' . BcUtil::getAdminPrefix() . '\/}', $_url)) {
                 $admin = true;
             } else {
                 $admin = false;
