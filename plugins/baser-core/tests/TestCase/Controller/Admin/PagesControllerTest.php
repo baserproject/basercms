@@ -106,8 +106,8 @@ class PagesControllerTest extends BcTestCase
         $data->content->name = "pageTestUpdate";
         $id = $data->id;
         $this->post('/baser/admin/baser-core/pages/edit/' . $id, [
-            'Page' => $data->toArray(),
-            "Content" => ['title' => $data->content->name, 'parent_id' => $data->content->parent_id]
+            'Pages' => $data->toArray(),
+            "Contents" => ['title' => $data->content->name, 'parent_id' => $data->content->parent_id]
         ]);
         $this->assertResponseSuccess();
         $this->assertRedirect('/baser/admin/baser-core/pages/edit/' . $id);

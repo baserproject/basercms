@@ -25,12 +25,12 @@ $this->BcAdmin->setHelp('pages_form');
 </div>
 
 <?php echo $this->BcAdminForm->create($page, ['novalidate' => true]) ?>
-<?php echo $this->BcAdminForm->control('Page.mode', ['type' => 'hidden']) ?>
-<?php echo $this->BcAdminForm->control('Page.id', ['type' => 'hidden']) ?>
+<?php echo $this->BcAdminForm->control('Pages.mode', ['type' => 'hidden']) ?>
+<?php echo $this->BcAdminForm->control('Pages.id', ['type' => 'hidden']) ?>
 
 <?php echo $this->BcFormTable->dispatchBefore() ?>
 <div class="bca-section bca-section-editor-area">
-  <?php echo $this->BcAdminForm->editor('Page.contents', array_merge([
+  <?php echo $this->BcAdminForm->editor('Pages.contents', array_merge([
     'editor' => $editor,
     'editorUseDraft' => true,
     'editorDraftField' => 'draft',
@@ -39,8 +39,8 @@ $this->BcAdmin->setHelp('pages_form');
     'editorEnterBr' => $editor_enter_br
   ], $editorOptions));
   ?>
-  <?php echo $this->BcAdminForm->error('Page.contents') ?>
-  <?php echo $this->BcAdminForm->error('Page.draft') ?>
+  <?php echo $this->BcAdminForm->error('Pages.contents') ?>
+  <?php echo $this->BcAdminForm->error('Pages.draft') ?>
 </div>
 
 <?php if (BcUtil::isAdminUser()): ?>
@@ -55,12 +55,12 @@ $this->BcAdmin->setHelp('pages_form');
       <table class="form-table bca-form-table" data-bca-table-type="type2">
         <tr>
           <th
-            class="bca-form-table__label"><?php echo $this->BcAdminForm->label('Page.page_template', __d('baser', '固定ページテンプレート')) ?></th>
+            class="bca-form-table__label"><?php echo $this->BcAdminForm->label('Pages.page_template', __d('baser', '固定ページテンプレート')) ?></th>
           <td class="col-input bca-form-table__input">
-            <?php echo $this->BcAdminForm->control('Page.page_template', ['type' => 'select', 'options' => $pageTemplateList]) ?>
+            <?php echo $this->BcAdminForm->control('Pages.page_template', ['type' => 'select', 'options' => $pageTemplateList]) ?>
             <div
               class="helptext"><?php echo __d('baser', 'テーマフォルダ内の、templates/Pages テンプレートを配置する事で、ここでテンプレートを選択できます。') ?></div>
-            <?php echo $this->BcAdminForm->error('Page.page_template') ?>
+            <?php echo $this->BcAdminForm->error('Pages.page_template') ?>
           </td>
         </tr>
         <?php echo $this->BcAdminForm->dispatchAfterForm() ?>
