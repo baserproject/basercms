@@ -149,16 +149,7 @@ class AppController extends BaseController
         parent::beforeRender($event);
         if (!isset($this->RequestHandler) || !$this->RequestHandler->prefers('json')) {
             $this->viewBuilder()->setClassName('BaserCore.BcFrontApp');
-            $theme = Inflector::camelize(Inflector::underscore(Configure::read('BcApp.defaultFrontTheme')));
-            $site = $this->getRequest()->getParam('Site');
-            if (!$site) {
-                $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
-                $site = $sites->getRootMain();
-            }
-            if ($site->theme) {
-                $theme = $site->theme;
-            }
-            $this->viewBuilder()->setTheme($theme);
+            $this->viewBuilder()->setTheme(BcUtil::getCurrentTheme());
         }
     }
 

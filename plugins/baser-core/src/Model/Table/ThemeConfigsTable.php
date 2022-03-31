@@ -1,20 +1,21 @@
 <?php
-// TODO : コード確認要
-use BaserCore\Model\AppTable;
-
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.Model
- * @since           baserCMS v 0.1.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) NPO baser foundation
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
 
-App::uses('Imageresizer', 'Vendor');
+namespace BaserCore\Model\Table;
+
+use BaserCore\Model\AppTable;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\Note;
 
 /**
  * Class ThemeConfig
@@ -23,15 +24,8 @@ App::uses('Imageresizer', 'Vendor');
  *
  * @package Baser.Model
  */
-class ThemeConfig extends AppTable
+class ThemeConfigsTable extends AppTable
 {
-
-    /**
-     * ビヘイビア
-     *
-     * @var array
-     */
-    public $actsAs = ['BcCache'];
 
     /**
      * ThemeConfig constructor.
@@ -40,9 +34,11 @@ class ThemeConfig extends AppTable
      * @param null $table
      * @param null $ds
      */
-    public function __construct($id = false, $table = null, $ds = null)
+    public function __construct(array $config = [])
     {
-        parent::__construct($id, $table, $ds);
+        parent::__construct($config);
+        // TODO ucmitz 未移行
+        /*
         $this->validate = [
             'logo' => [['rule' => ['fileExt', 'gif,jpg,jpeg,jpe,jfif,png'], 'message' => __d('baser', '許可されていないファイルです。')]],
             'main_image_1' => [['rule' => ['fileExt', 'gif,jpg,jpeg,jpe,jfif,png'], 'message' => __d('baser', '許可されていないファイルです。')]],
@@ -50,7 +46,7 @@ class ThemeConfig extends AppTable
             'main_image_3' => [['rule' => ['fileExt', 'gif,jpg,jpeg,jpe,jfif,png'], 'message' => __d('baser', '許可されていないファイルです。')]],
             'main_image_4' => [['rule' => ['fileExt', 'gif,jpg,jpeg,jpe,jfif,png'], 'message' => __d('baser', '許可されていないファイルです。')]],
             'main_image_5' => [['rule' => ['fileExt', 'gif,jpg,jpeg,jpe,jfif,png'], 'message' => __d('baser', '許可されていないファイルです。')]]
-        ];
+        ];*/
     }
 
     /**

@@ -10,15 +10,17 @@
  * @license         https://basercms.net/license/index.html
  */
 
+use BaserCore\View\AppView;
+
 /**
  * ヘッダー
  *
  * BcBaserHelper::header() で呼び出す
  * （例）<?php $this->BcBaser->header() ?>
  *
- * @var BcAppView $this
+ * @var AppView $this
  */
-$isSmartphone = $this->request->is('smartphone');
+$isSmartphone = $this->getRequest()->is('smartphone');
 ?>
 
 

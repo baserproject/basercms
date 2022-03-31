@@ -11,6 +11,7 @@
 
 namespace BaserCore\View\Helper;
 
+use Cake\ORM\TableRegistry;
 use Cake\View\View;
 use Cake\View\Helper;
 use Cake\Core\Configure;
@@ -1232,7 +1233,7 @@ class BcBaserHelper extends Helper
 
         $out = $this->getElement('header', $data, $options);
 
-        /*** header ***/
+        // EVENT header
         $event = $this->dispatchLayerEvent('header', [
             'out' => $out
         ], ['layer' => 'View', 'class' => '', 'plugin' => '']);
@@ -1240,7 +1241,7 @@ class BcBaserHelper extends Helper
             $out = ($event->getResult() === null || $event->getResult() === true)? $event->getData('out') : $event->getResult();
         }
 
-        /*** Controller.header ***/
+        // EVENT ControllerName.header
         $event = $this->dispatchLayerEvent('header', [
             'out' => $out
         ], ['layer' => 'View', 'class' => $this->_View->getName()]);
@@ -2393,18 +2394,14 @@ END_FLASH;
      */
     public function getThemeImage($name, $options = [])
     {
-        // TODO ucmitz 未実装
-        // >>>
-        return '';
-        // <<<
-
-        $ThemeConfig = ClassRegistry::init('ThemeConfig');
-        $data = $ThemeConfig->getKeyValue();
+        $themeConfigsTable = TableRegistry::getTableLocator()->get('BaserCore.ThemeConfigs');
+        $data = $themeConfigsTable->getKeyValue();
 
         $url = $imgPath = $uploadUrl = $uploadThumbUrl = $originUrl = '';
         $thumbSuffix = '_thumb';
         $dir = WWW_ROOT . 'files' . DS . 'theme_configs' . DS;
-        $themeDir = $path = getViewPath() . 'img' . DS;
+        $themeDir = BcUtil::getViewPath();
+        $imgDir = $themeDir . DS . 'webroot' . DS . 'img' . DS;
         $num = '';
         if (!empty($options['num'])) {
             $num = '_' . $options['num'];
@@ -2450,9 +2447,9 @@ END_FLASH;
         if (!$url) {
             $exts = ['png', 'jpg', 'gif'];
             foreach($exts as $ext) {
-                if (file_exists($themeDir . $name . '.' . $ext)) {
-                    $url = '/theme/' . $this->siteConfig['theme'] . '/img/' . $name . '.' . $ext;
-                    $imgPath = $themeDir . $name . '.' . $ext;
+                if (file_exists($imgDir . $name . '.' . $ext)) {
+                    $url = BcUtil::getCurrentTheme() . '.' . $name . '.' . $ext;
+                    $imgPath = $imgDir . $name . '.' . $ext;
                     $originUrl = $url;
                 }
             }
@@ -2513,7 +2510,7 @@ END_FLASH;
             } elseif ($options['link']) {
                 $link = $options['link'];
                 if (!empty($this->_View->getRequest()->getParam('Site.alias'))) {
-                    if (empty($this->_View->getRequest()->params['Site']['same_main_url'])) {
+                    if (empty($this->_View->getRequest()->getParam('Site.same_main_url'))) {
                         $link = '/' . $this->_View->getRequest()->getParam('Site.alias') . $link;
                     }
                 }
