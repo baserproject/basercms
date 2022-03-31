@@ -26,6 +26,21 @@ class BcAdminFormHelperTest extends BcTestCase
 {
 
     /**
+     * Fixtures
+     *
+     * @var array
+     */
+    protected $fixtures = [
+        'plugin.BaserCore.Users',
+        'plugin.BaserCore.UserGroups',
+        'plugin.BaserCore.UsersUserGroups',
+        'plugin.BaserCore.Plugins',
+        'plugin.BaserCore.Permissions',
+        'plugin.BaserCore.Contents',
+        'plugin.BaserCore.Sites',
+    ];
+
+    /**
      * setUp method
      *
      * @return void
@@ -56,7 +71,10 @@ class BcAdminFormHelperTest extends BcTestCase
     public function testControl()
     {
         $name = 'Contents.test';
-
+        $contentsTable = $this->getTableLocator()->get('BaserCore.Contents');
+        $content = $contentsTable->find()->where(['id' => '4'])->first();
+        $this->BcForm->create($content);
+        $this->BcAdminForm->create($content);
         $this->assertEquals($this->BcForm->control($name), $this->BcAdminForm->control($name));
 
         $options = [
