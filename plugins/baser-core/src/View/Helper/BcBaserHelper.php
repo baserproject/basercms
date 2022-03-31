@@ -1982,13 +1982,13 @@ EOD;
      */
     public function getGlobalMenu($level = 1, $options = [])
     {
-        $siteId = 0;
+        $siteId = 1;
         if (!empty($this->_View->getRequest()->getParam('Content.site_id'))) {
             $siteId = $this->_View->getRequest()->getParam('Content.site_id');
         }
         $siteRoot = $this->BcAdminContent->getSiteRoot($siteId);
-        $id = $siteRoot->site->id;
-        $currentId = null;
+        $id = $siteRoot->id;
+        $currentId = 1;
         if (!empty($this->_View->getRequest()->getParam('Content.id'))) {
             $currentId = $this->_View->getRequest()->getParam('Content.id');
         }
@@ -3062,7 +3062,7 @@ END_FLASH;
         }
         if (is_null($useSubDomain)) {
             $site = $this->_View->getRequest()->getParam('Site');
-            $useSubDomain = $site->use_subdomain;
+            if($site) $useSubDomain = $site->use_subdomain;
         }
         return $this->BcAdminContent->getUrl($url, $full, $useSubDomain, $base);
     }

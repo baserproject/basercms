@@ -1035,7 +1035,7 @@ class ContentService implements ContentServiceInterface
      */
     public function getSiteRoot($siteId)
     {
-        return $this->Contents->find()->contain(['Sites'])->where(['site_id' => $siteId, 'site_root' => true])->first();
+        return $this->Contents->find()->where(['site_id' => $siteId, 'site_root' => true])->first();
     }
 
     /**

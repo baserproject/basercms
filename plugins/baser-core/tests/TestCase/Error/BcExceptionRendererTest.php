@@ -27,6 +27,8 @@ class BcExceptionRendererTest extends BcTestCase
      */
     public $fixtures = [
         'plugin.BaserCore.Sites',
+        'plugin.BaserCore.SiteConfigs',
+        'plugin.BaserCore.Contents',
     ];
 
     /**

@@ -71,7 +71,12 @@ class BcContentsEventListener extends BcEventListener
         if (!BcUtil::isAdminSystem()) {
             return;
         }
-        $event->setData('options', $event->getData('options') + ['type' => 'file']);
+        $options = $event->getData('options');
+        if(!is_array($options)) {
+            $options = [];
+        }
+        $options += ['type' => 'file'];
+        $event->setData('options', $options);
     }
 
     /**
