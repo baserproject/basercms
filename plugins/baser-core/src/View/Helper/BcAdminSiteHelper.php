@@ -64,13 +64,37 @@ class BcAdminSiteHelper extends Helper
      * @noTodo
      * @unitTest
      */
+    public function getDeviceList(): array
+    {
+        return $this->SiteService->getDeviceList();
+    }
+
+    /**
+     * 言語リストを取得
+     * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getLangList(): array
+    {
+        return $this->SiteService->getLangList();
+    }
+
+    /**
+     * メインサイトごとに選択可能なデバイスリストを取得
+     * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
     public function getSelectableDevices($mainSiteId, $currentSiteId = null): array
     {
         return $this->SiteService->getSelectableDevices($mainSiteId, $currentSiteId);
     }
 
     /**
-     * 言語リストを取得
+     * メインサイトごとに選択可能な言語リストを取得
      * @return array
      * @checked
      * @noTodo
