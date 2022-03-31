@@ -235,7 +235,7 @@ class BcUtil
      */
     public static function getPrefix($regex = false)
     {
-        $prefix = self::getBaserCorePrefix() . self::getAdminPrefix();
+        $prefix = '/' . self::getBaserCorePrefix() . '/' . self::getAdminPrefix();
         return $regex ? str_replace('/', '\/',  substr($prefix, 1)) : $prefix;
     }
 

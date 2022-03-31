@@ -126,7 +126,7 @@ class BcUtilTest extends BcTestCase
     {
 
         if ($id) {
-            $user = $this->loginAdmin($this->getRequest(), $id);
+            $user = $this->loginAdmin($this->getRequest('/baser/admin'), $id);
             $session = $this->request->getSession();
             $session->write('AuthAgent.User', $user);
         }
@@ -730,7 +730,7 @@ class BcUtilTest extends BcTestCase
     public function testGetAdminPrefix()
     {
         $result = BcUtil::getAdminPrefix();
-        $this->assertEquals('/admin', $result);
+        $this->assertEquals('admin', $result);
     }
 
     /**
@@ -740,7 +740,7 @@ class BcUtilTest extends BcTestCase
     public function testGetBaserCorePrefix()
     {
         $result = BcUtil::getBaserCorePrefix();
-        $this->assertEquals('/baser', $result);
+        $this->assertEquals('baser', $result);
     }
 
     /**

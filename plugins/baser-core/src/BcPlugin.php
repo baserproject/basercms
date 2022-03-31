@@ -215,7 +215,7 @@ class BcPlugin extends BasePlugin
         foreach($prefixSettings as $prefix => $setting) {
             $routes->prefix(
                 $prefix,
-                ['path' => BcUtil::getBaserCorePrefix() . '/' . $setting['alias']],
+                ['path' => '/' . BcUtil::getBaserCorePrefix() . '/' . $setting['alias']],
                 function(RouteBuilder $routes) use ($plugin) {
                     $routes->plugin(
                         $plugin,

@@ -20,8 +20,8 @@ use BaserCore\Annotation\Note;
  * @unitTest
  * @note(value="テーマ管理とユーティリティを実装してからメニューを表示する")
  */
-$baserCorePrefix = '/' . filter_var(env('BASER_CORE_PREFIX', 'baser'));
-$adminPrefix = '/' . filter_var(env('ADMIN_PREFIX', 'admin'));
+$baserCorePrefix = filter_var(env('BASER_CORE_PREFIX', 'baser'));
+$adminPrefix = filter_var(env('ADMIN_PREFIX', 'admin'));
 
 return [
     'BcEnv' => [
@@ -137,7 +137,7 @@ return [
                 'Dashboard' => [
                     'title' => __d('baser', 'ダッシュボード'),
                     'type' => 'dashboard',
-                    'url' => $baserCorePrefix . $adminPrefix,
+                    'url' => '/' . $baserCorePrefix . '/' . $adminPrefix,
                 ],
                 'Contents' => [
                     'title' => __d('baser', 'コンテンツ管理'),
@@ -249,7 +249,7 @@ return [
             // 認証タイプ
             'type' => 'Form',
             // URLにおけるエイリアス
-            'alias' => $adminPrefix,
+            'alias' => '/' . $adminPrefix,
             // 認証後リダイレクト先
             'loginRedirect' => ['plugin' => 'BaserCore', 'prefix' => 'Admin', 'controller' => 'Dashboard', 'action' => 'index'],
             // ログインページURL
