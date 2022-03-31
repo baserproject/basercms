@@ -616,11 +616,16 @@ class SitesTable extends AppTable
         $agents = Configure::read('BcAgent');
         $devices = ['' => __d('baser', '指定しない')];
         $this->setDisplayField('device');
+        $conditions = [
+            'id IS NOT' => $currentSiteId
+        ];
+        if($mainSiteId) {
+            $conditions['main_site_id'] = $mainSiteId;
+        } else {
+            $conditions['main_site_id IS'] = null;
+        }
         $selected = $this->find('list')
-            ->where([
-                'main_site_id' => $mainSiteId,
-                'id IS NOT' => $currentSiteId
-            ])->toArray();
+            ->where($conditions)->toArray();
         foreach($agents as $key => $agent) {
             if (in_array($key, $selected)) {
                 continue;
@@ -645,11 +650,16 @@ class SitesTable extends AppTable
         $langs = Configure::read('BcLang');
         $devices = ['' => __d('baser', '指定しない')];
         $this->setDisplayField('lang');
+        $conditions = [
+            'id IS NOT' => $currentSiteId
+        ];
+        if($mainSiteId) {
+            $conditions['main_site_id'] = $mainSiteId;
+        } else {
+            $conditions['main_site_id IS'] = null;
+        }
         $selected = $this->find('list')
-            ->where([
-                'main_site_id' => $mainSiteId,
-                'id IS NOT' => $currentSiteId
-            ])->toArray();
+            ->where($conditions)->toArray();
         foreach($langs as $key => $lang) {
             if (in_array($key, $selected)) {
                 continue;
