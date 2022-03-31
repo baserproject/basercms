@@ -30,7 +30,7 @@ $this->BcBaser->js('admin/sites/form.bundle', false);
 ?>
 
 
-<?php echo $this->BcAdminForm->hidden('id') ?>
+<?php echo $this->BcAdminForm->control('id', ['type' => 'hidden']) ?>
 
 <table class="form-table bca-form-table">
   <?php if ($this->request->getParam('action') === 'admin_edit'): ?>
@@ -125,7 +125,7 @@ $this->BcBaser->js('admin/sites/form.bundle', false);
       <th class="bca-form-table__label"><?php echo $this->BcAdminForm->label('device', __d('baser', 'デバイス・言語')) ?></th>
       <td class=" bca-form-table__input">
         <?php if ($useSiteDeviceSetting): ?>
-          <small><?php echo __d('baser', '[デバイス]') ?></small>&nbsp;<?php echo $this->BcAdminForm->control('device', ['type' => 'select', 'options' => $this->BcAdminSite->getDeviceList()]) ?>
+          <small><?php echo __d('baser', '[デバイス]') ?></small>&nbsp;<?php echo $this->BcAdminForm->control('device', ['type' => 'select', 'options' => $this->BcAdminSite->getSelectableDevices($site->main_site_id, $site->id)]) ?>
           <i class="bca-icon--question-circle btn help bca-help"></i>
           <div
             class="helptext"><?php echo __d('baser', 'サブサイトにデバイス属性を持たせ、サイトアクセス時、ユーザーエージェントを判定し適切なサイトを表示する機能を利用します。') ?></div>
@@ -133,7 +133,7 @@ $this->BcBaser->js('admin/sites/form.bundle', false);
           <?php echo $this->BcAdminForm->control('device', ['type' => 'hidden']) ?>
         <?php endif ?>
         <?php if ($useSiteLangSetting): ?>
-          <small><?php echo __d('baser', '[言語]') ?></small><?php echo $this->BcAdminForm->control('lang', ['type' => 'select', 'options' => $this->BcAdminSite->getLangList()]) ?>
+          <small><?php echo __d('baser', '[言語]') ?></small><?php echo $this->BcAdminForm->control('lang', ['type' => 'select', 'options' => $this->BcAdminSite->getSelectableLangs($site->main_site_id, $site->id)]) ?>
           <i class="bca-icon--question-circle btn help bca-help"></i>
           <div
             class="helptext"><?php echo __d('baser', 'サブサイトに言語属性を持たせ、サイトアクセス時、ブラウザの言語設定を判定し適切なサイトを表示する機能を利用します。') ?></div>

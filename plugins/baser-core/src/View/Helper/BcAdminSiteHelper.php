@@ -64,9 +64,9 @@ class BcAdminSiteHelper extends Helper
      * @noTodo
      * @unitTest
      */
-    public function getDeviceList(): array
+    public function getSelectableDevices($mainSiteId, $currentSiteId = null): array
     {
-        return $this->SiteService->getDeviceList();
+        return $this->SiteService->getSelectableDevices($mainSiteId, $currentSiteId);
     }
 
     /**
@@ -76,9 +76,9 @@ class BcAdminSiteHelper extends Helper
      * @noTodo
      * @unitTest
      */
-    public function getLangList(): array
+    public function getSelectableLangs($mainSiteId, $currentSiteId = null): array
     {
-        return $this->SiteService->getLangList();
+        return $this->SiteService->getSelectableLangs($mainSiteId, $currentSiteId);
     }
 
     /**

@@ -39,14 +39,16 @@ $(function () {
      * デバイスと言語の表示設定
      */
     function loadDeviceAndLang() {
-        var siteId = $("#main-site-id").val();
-        if(siteId === undefined) {
-            siteId = 0;
+        var currentId = $("#id").val();
+        var mainSiteId = $("#main-site-id").val();
+        if(mainSiteId === undefined) {
+            mainSiteId = 1;
         }
-        var url = $.bcUtil.apiBaseUrl + 'baser-core/sites/get_selectable_devices_and_lang/' + siteId + '.json';
-        if($("#id").val() !== undefined) {
-            url += '/' + $("#id").val();
+        var url = $.bcUtil.apiBaseUrl + 'baser-core/sites/get_selectable_devices_and_lang/' + mainSiteId;
+        if(currentId !== undefined) {
+            url += '/' + currentId;
         }
+        url += '.json';
         $.bcUtil.ajax(url, function (result) {
             var selectDevice = $("#device");
             var selectLang = $("#lang");
