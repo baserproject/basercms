@@ -204,9 +204,9 @@ class BcAppHelper extends Helper
 		}
 
 		if (!is_array($url) && preg_match('/^(javascript|https?|ftp|tel):/', $url)) {
-			return $url;
+			return parent::url($url);
 		} elseif (!is_array($url) && preg_match('/\/(img|css|js|files)/', $url)) {
-			return $this->webroot($url);
+			return $this->webroot(parent::url($url));
 		} else {
 			$url = parent::url($url, $full);
 			$params = explode('?', $url);
