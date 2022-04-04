@@ -16,18 +16,15 @@ use BaserCore\Annotation\Note;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
-use Cake\Core\Exception\Exception;
 use BaserCore\Service\PageServiceInterface;
 
 /**
  * Class PagesController
- *
- * https://localhost/baser/api/baser-core/user_groups/action_name.json で呼び出す
- *
- * @package BaserCore\Controller\Api
+ * @uses PagesController
  */
 class PagesController extends BcApiController
 {
+
     /**
      * 固定ページ一覧取得
      * @param PageServiceInterface $Pages
@@ -141,14 +138,14 @@ class PagesController extends BcApiController
     }
 
     /**
-	 * コピー
-	 * @param PageServiceInterface $pages
+     * コピー
+     * @param PageServiceInterface $pages
      * @checked
      * @noTodo
      * @unitTest
-	 */
-	public function copy(PageServiceInterface $pages)
-	{
+     */
+    public function copy(PageServiceInterface $pages)
+    {
         $this->request->allowMethod(['post', 'put', 'patch']);
         try {
             $this->request = $this->request->withData('authorId', BcUtil::loginUser());
@@ -165,7 +162,7 @@ class PagesController extends BcApiController
             'content' => $page->content,
             'errors' => $page->getErrors(),
         ]);
-
         $this->viewBuilder()->setOption('serialize', ['page', 'content', 'message', 'errors']);
-	}
+    }
+
 }
