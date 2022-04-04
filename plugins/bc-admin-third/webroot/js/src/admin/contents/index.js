@@ -64,16 +64,21 @@ $(function () {
     $($.baserAjaxDataList).bind('searchLoaded', function () {
         $.bcUtil.disabledHideMessage = false;
     });
-    $.baserAjaxDataList.config.methods.publish.result = null;
-    $.baserAjaxDataList.config.methods.unpublish.result = null;
-    $.baserAjaxDataList.config.methods.copy.result = function (row, result) {
-        // ローダーが一瞬切れるので強制的に表示
-        $.bcUtil.showLoader();
-        $("#ToTop a").click();
-        loadTable();
-        $.bcUtil.showNoticeMessage(bcI18n.infoMessage1.sprintf($.parseJSON(result).title));
-    };
-    $.baserAjaxDataList.init();
+
+    // TODO ucmitz baserAjaxDataList は廃止のため一旦コメントアウト
+    // >>>
+    // $.baserAjaxDataList.config.methods.publish.result = null;
+    // $.baserAjaxDataList.config.methods.unpublish.result = null;
+    // $.baserAjaxDataList.config.methods.copy.result = function (row, result) {
+    //     // ローダーが一瞬切れるので強制的に表示
+    //     $.bcUtil.showLoader();
+    //     $("#ToTop a").click();
+    //     loadTable();
+    //     $.bcUtil.showNoticeMessage(bcI18n.infoMessage1.sprintf($.parseJSON(result).title));
+    // };
+    // $.baserAjaxDataList.init();
+    // <<<
+
     // 一括処理
     $.bcBatch.init({batchUrl: $.bcUtil.adminBaseUrl + 'baser-core' + '/contents/batch'});
 
@@ -88,7 +93,11 @@ $(function () {
         return false;
     });
     $._data($("#BtnSearchSubmit").get(0)).events.click.shift();
-    $._data($("#ContentIndexForm").get(0)).events.submit.shift();
+
+    // ucmitz TODO エラーとなるため一旦コメントアウト
+    // >>>
+    // $._data($("#ContentIndexForm").get(0)).events.submit.shift();
+    // <<<
 
     $("#BtnOpenTree").click(function () {
         $.bcTree.jsTree.open_all();
