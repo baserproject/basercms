@@ -213,7 +213,7 @@
                     }
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    $.bcUtil.showAjaxError('処理に失敗しました。', XMLHttpRequest, errorThrown);
+                    $.bcUtil.showAjaxError(bcI18n.commonExecFailedMessage, XMLHttpRequest, errorThrown);
                 },
                 success: success
             };
@@ -233,15 +233,15 @@
         showAjaxError: function (message, XMLHttpRequest, errorThrown) {
             var errorMessage = '';
             if (XMLHttpRequest !== undefined && XMLHttpRequest.status) {
-                errorMessage = '<br />(' + XMLHttpRequest.status + ') ';
+                errorMessage = '<br>(' + XMLHttpRequest.status + ') ';
             }
             if(XMLHttpRequest !== undefined && XMLHttpRequest.responseJSON){
                 errorMessage += XMLHttpRequest.responseJSON.message;
             }
             if (XMLHttpRequest !== undefined && XMLHttpRequest.responseText) {
-                errorMessage += XMLHttpRequest.responseText;
+                errorMessage += '<br>' + XMLHttpRequest.responseText;
             } else if (errorThrown !== undefined) {
-                errorMessage += errorThrown;
+                errorMessage += '<br>' + errorThrown;
             }
             $.bcUtil.showAlertMessage(message + errorMessage);
         }

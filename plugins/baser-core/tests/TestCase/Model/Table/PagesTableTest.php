@@ -12,6 +12,7 @@
 namespace BaserCore\Test\TestCase\Model\Table;
 
 use ArrayObject;
+use BaserCore\Model\Entity\Page;
 use Cake\Validation\Validator;
 use BaserCore\TestSuite\BcTestCase;
 
@@ -218,10 +219,10 @@ class PagesTableTest extends BcTestCase
      * @param array $postData 送信するデータ
      * @dataProvider copyDataProvider
      */
-    public function testCopy($postData)
+    public function testCopy($id, $newParentId, $newTitle, $newAuthorId, $newSiteId)
     {
         $this->loginAdmin($this->getRequest());
-        $result = $this->Pages->copy($postData);
+        $result = $this->Pages->copy($id, $newParentId, $newTitle, $newAuthorId, $newSiteId);
         $page = $this->Pages->get($result->id, ['contain' => ['Contents' => ['Sites']]]);
         $this->assertStringContainsString("_2", $page->content->name);
         $this->assertEquals("hoge1", $page->content->title);
@@ -231,25 +232,7 @@ class PagesTableTest extends BcTestCase
     public function copyDataProvider()
     {
         return [
-            [
-                [
-                'contentId' =>4,
-                'entityId' =>2,
-                'parentId' =>1,
-                'title' => 'hoge1',
-                'authorId' => 10,
-                'siteId' =>1
-                ],
-            ],
-            // [
-            //     [
-            //     'contentId' =>3,
-            //     'parentId' =>1,
-            //     'title' => 'hoge',
-            //     'authorId' =>1,
-            //     'siteId' =>0
-            //     ],
-            // ],
+            [2, 1, 'hoge1', 10, 1]
         ];
     }
 }

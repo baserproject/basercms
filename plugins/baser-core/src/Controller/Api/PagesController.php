@@ -17,6 +17,7 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Service\PageServiceInterface;
+use Cake\ORM\Exception\PersistenceFailedException;
 
 /**
  * Class PagesController
@@ -148,13 +149,12 @@ class PagesController extends BcApiController
     {
         $this->request->allowMethod(['post', 'put', 'patch']);
         try {
-            $this->request = $this->request->withData('authorId', BcUtil::loginUser());
             $page = $pages->copy($this->request->getData());
             $message = __d('baser', '固定ページのコピー「%s」を追加しました。', $page->content->title);
-        } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
+        } catch (PersistenceFailedException $e) {
             $this->setResponse($this->response->withStatus(500));
             $page = $e->getEntity();
-            $message = __d('baser', '入力エラーです。内容を修正してください。');
+            $message = __d('baser', 'コピーに失敗しました。データが不整合となっている可能性があります。');
         }
         $this->set([
             'message' => $message,

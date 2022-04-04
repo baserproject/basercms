@@ -12,6 +12,8 @@
 namespace BaserCore\Model\Table;
 
 use ArrayObject;
+use BaserCore\Model\Entity\Content;
+use Cake\ORM\Exception\PersistenceFailedException;
 use Cake\ORM\Table;
 use Cake\Core\Configure;
 use Cake\Filesystem\File;
@@ -237,20 +239,16 @@ class PagesTable extends Table implements BcSearchIndexManagerInterface
      * Content::copy() は利用しない
      *
      * @param array $postData
-     * @return Page $result
+     * @return EntityInterface|false $result
      * @checked
      * @unitTest
      * @noTodo
      */
-    public function copy($postData)
+    public function copy($id, $newParentId, $newTitle, $newAuthorId, $newSiteId = null)
     {
-        $page = $this->get($postData['entityId'], ['contain' => ['Contents' => ['Sites']]]);
-        $oldPage = $page;
-        $oldSiteId = $page->content->site_id;
-        unset($postData['entityId'], $postData['contentId'], $page->id, $page->content->id, $page->created, $page->modified);
-        foreach ($postData as $key => $value) {
-            $page->content->{Inflector::underscore($key)} = $value;
-        }
+        $page = $this->get($id, ['contain' => ['Contents']]);
+        $oldPage = clone $page;
+
         // EVENT Page.beforeCopy
         $event = $this->dispatchLayerEvent('beforeCopy', [
             'data' => $page,
@@ -260,25 +258,31 @@ class PagesTable extends Table implements BcSearchIndexManagerInterface
             $page = $event->getResult() === true? $event->getData('data') : $event->getResult();
             unset($event);
         }
-        if (!is_null($postData['siteId']) && $postData['siteId'] !== $oldSiteId) {
-            $page->content->parent_id = $this->Contents->copyContentFolderPath($page->content->url, $page->content->site_id);
+
+        unset($page->created, $page->modified);
+        $page->content = new Content([
+			'name' => $page->content->name,
+			'parent_id' => $newParentId,
+			'title' => $newTitle,
+			'author_id' => $newAuthorId,
+			'site_id' => $newSiteId,
+			'description' => $page->content->description,
+			'eyecatch' => $page->content->eyecatch
+        ]);
+
+        if (!is_null($newSiteId) && $oldPage->content->site_id !== $newSiteId) {
+            $page->content->parent_id = $this->Contents->copyContentFolderPath($oldPage->content->url, $newSiteId);
         }
         $newPage = $this->patchEntity($this->newEmptyEntity(), $page->toArray());
-        $page = $this->saveOrFail($newPage);
-        if ($page->content->eyecatch) {
-            $content = $this->Contents->renameToBasenameFields($page->content, true);
-            $page->content = $content;
-        }
+        $newPage = $this->saveOrFail($newPage);
+
         // EVENT Page.afterCopy
-        $event = $this->dispatchLayerEvent('afterCopy', [
-            'data' => $page,
-            'id' => $page->id,
+        $this->dispatchLayerEvent('afterCopy', [
+            'data' => $newPage,
+            'id' => $newPage->id,
             'oldData' => $oldPage,
-            'oldId' => $oldPage->id,
+            'oldId' => $id,
         ]);
-        if ($event !== false) {
-            $page = $event->getResult() === true? $event->getData('data') : $event->getResult();
-        }
-        return $page;
+        return $newPage;
     }
 }

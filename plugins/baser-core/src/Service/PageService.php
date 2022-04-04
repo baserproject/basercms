@@ -197,9 +197,6 @@ class PageService implements PageServiceInterface
     /**
      * ページデータをコピーする
      *
-     * 固定ページテンプレートの生成処理を実行する必要がある為、
-     * Content::copy() は利用しない
-     *
      * @param array $postData
      * @return Page $result
      * @checked
@@ -208,7 +205,13 @@ class PageService implements PageServiceInterface
      */
     public function copy($postData)
     {
-        return $this->Pages->copy($postData);
+        return $this->Pages->copy(
+            $postData['entity_id'],
+            $postData['parent_id'],
+            $postData['title'],
+            BcUtil::loginUser(),
+            $postData['site_id']
+        );
     }
 
     /**

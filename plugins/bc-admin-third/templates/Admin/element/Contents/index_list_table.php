@@ -16,10 +16,12 @@ use BaserCore\View\BcAdminAppView;
  * コンテンツ一覧 テーブル
  *
  * @var BcAdminAppView $this
+ * @var array $contents
  */
 $this->BcListTable->setColumnNumber(8);
-$authors = $this->BcAdminContent->getAuthors();
+$this->BcBaser->js('admin/contents/index_table.bundle');
 ?>
+
 
 <div class="bca-data-list__top">
   <?php if ($this->BcBaser->isAdminUser()): ?>
@@ -33,7 +35,12 @@ $authors = $this->BcAdminContent->getAuthors();
         ],
         'empty' => __d('baser', '一括処理')
       ]) ?>
-      <?php echo $this->BcAdminForm->button(__d('baser', '適用'), ['id' => 'BtnApplyBatch', 'disabled' => 'disabled', 'class' => 'bca-btn', 'data-bca-btn-size' => 'lg']) ?>
+      <?php echo $this->BcAdminForm->button(__d('baser', '適用'), [
+        'id' => 'BtnApplyBatch',
+        'disabled' => 'disabled',
+        'class' => 'bca-btn',
+        'data-bca-btn-size' => 'lg'
+      ]) ?>
     </div>
   <?php endif ?>
   <div class="bca-data-list__sub">
@@ -45,7 +52,7 @@ $authors = $this->BcAdminContent->getAuthors();
 <table class="list-table bca-table-listup sort-table" id="ListTable">
   <thead class="bca-table-listup__thead">
   <tr>
-    <th class="list-tool bca-table-listup__thead-th  bca-table-listup__thead-th--select"><?php // 一括選択 ?>
+    <th class="list-tool bca-table-listup__thead-th  bca-table-listup__thead-th--select">
       <?php echo $this->BcAdminForm->control('ListTool.checkall', ['type' => 'checkbox', 'label' => __d('baser', '一括選択')]) ?>
     </th>
     <th class="bca-table-listup__thead-th">
@@ -102,17 +109,23 @@ $authors = $this->BcAdminContent->getAuthors();
     </th>
   </tr>
   </thead>
+
   <tbody>
   <?php if (!empty($contents)): ?>
     <?php $count = 0; ?>
     <?php foreach($contents as $content): ?>
-      <?php $this->BcBaser->element('Contents/index_row_table', ['content' => $content, 'count' => $count, 'authors' => $authors]) ?>
+      <?php $this->BcBaser->element('Contents/index_row_table', [
+        'content' => $content,
+        'count' => $count,
+        'authors' => $this->BcAdminContent->getAuthors()
+      ]) ?>
       <?php $count++; ?>
     <?php endforeach; ?>
   <?php else: ?>
     <tr>
-      <td colspan="<?php echo $this->BcListTable->getColumnNumber() ?>"><p
-          class="no-data"><?php echo __d('baser', 'データが見つかりませんでした。') ?></p></td>
+      <td colspan="<?php echo $this->BcListTable->getColumnNumber() ?>">
+        <p class="no-data"><?php echo __d('baser', 'データが見つかりませんでした。') ?></p>
+      </td>
     </tr>
   <?php endif; ?>
   </tbody>
