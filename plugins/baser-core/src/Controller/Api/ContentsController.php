@@ -102,7 +102,7 @@ class ContentsController extends BcApiController
     public function delete(ContentServiceInterface $contentService)
     {
         $this->request->allowMethod(['post', 'delete']);
-        $id = $this->request->getData('contentId');
+        $id = $this->request->getData('id');
         $content = $contentService->get($id);
         $children = $contentService->getChildren($id);
         try {

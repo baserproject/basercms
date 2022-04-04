@@ -8,5 +8,5 @@
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
  */
-$((function(){$(".btn-copy").click((function(){var e=$(this).attr("href");return $.ajax({url:e,type:"POST",headers:{Authorization:$.bcJwt.accessToken},dataType:"json",data:$(this).parent().find("form").serialize(),beforeSend:function(){$.bcUtil.showLoader()}}).done((function(){location.reload()})).fail((function(e,t,n){$.bcUtil.showAjaxError(bcI18n.commonExecFailedMessage,e,n),$.bcUtil.hideLoader(),location.href="#Header"})),!1}))}))}});
+$((function(){$(".btn-copy, .btn-delete").click((function(){return $(this).attr("data-confirm-message")&&!confirm($(this).attr("data-confirm-message"))||$.ajax({url:$(this).attr("href"),type:"POST",headers:{Authorization:$.bcJwt.accessToken},dataType:"json",data:$(this).parent().find("form").serialize(),beforeSend:function(){$.bcUtil.showLoader()}}).done((function(){location.reload()})).fail((function(e,t,n){$.bcUtil.showAjaxError(bcI18n.commonExecFailedMessage,e,n),$.bcUtil.hideLoader(),location.href="#Header"})),!1}))}))}});
 //# sourceMappingURL=index_table.bundle.js.map

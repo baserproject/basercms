@@ -977,8 +977,8 @@
                     },
                     type: 'POST',
                     data: {
-                        contentId: data.contentId,
-                        entityId: data.contentEntityId,
+                        id: data.contentId,
+                        entity_id: data.contentEntityId,
                         alias: data.alias,
                         _csrfToken: $.bcToken.key,
                     },

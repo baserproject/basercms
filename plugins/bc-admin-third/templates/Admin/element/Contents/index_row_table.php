@@ -205,11 +205,12 @@ if ($content->self_status) {
     <!-- 削除 -->
     <?php if (!$editDisabled && !$isSiteRoot): ?>
       <?php $this->BcBaser->link('',
-        ['action' => 'delete', $content->id], [
+        ['prefix' => 'Api', 'action' => 'delete', $content->id], [
           'title' => __d('baser', '削除'),
           'class' => 'btn-delete bca-btn-icon',
           'data-bca-btn-type' => 'delete',
-          'data-bca-btn-size' => 'lg'
+          'data-bca-btn-size' => 'lg',
+          'data-confirm-message' => __d('baser', '{0} を本当に削除してもいいですか？', $content->title)
         ]) ?>
     <?php endif ?>
 

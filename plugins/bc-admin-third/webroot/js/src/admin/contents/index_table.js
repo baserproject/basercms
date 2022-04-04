@@ -14,11 +14,13 @@
 
 $(function () {
 
-    // コピー
-    $('.btn-copy').click(function () {
-        var url = $(this).attr('href');
+    // コピー・削除
+    $('.btn-copy, .btn-delete').click(function () {
+        if($(this).attr('data-confirm-message') && !confirm($(this).attr('data-confirm-message'))) {
+            return false;
+        }
         $.ajax({
-            url: url,
+            url: $(this).attr('href'),
             type: 'POST',
             headers: {
                 'Authorization': $.bcJwt.accessToken
