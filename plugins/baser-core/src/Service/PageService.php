@@ -209,7 +209,7 @@ class PageService implements PageServiceInterface
             $postData['entity_id'],
             $postData['parent_id'],
             $postData['title'],
-            BcUtil::loginUser(),
+            BcUtil::loginUser()->id,
             $postData['site_id']
         );
     }
