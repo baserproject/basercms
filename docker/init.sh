@@ -4,7 +4,7 @@
 # /var/www/shared と /var/www/html の同期、マイグレーション、書き込み権限の変更などを行う
 # マイグレーションを実行する際、DBの起動より先に実行すると失敗してしまうため sleep で待つようにしている
 #
-rsync -a /var/www/shared/ /var/www/html --exclude='node_modules' --exclude='tmp' --exclude='logs' --exclude='.git' --exclude='.idea' --exclude='.DS_Store' --exclude='docker' --example='config/jwt.key' --example='config/jwt.pem'
+rsync -a /var/www/shared/ /var/www/html --exclude='node_modules' --exclude='tmp' --exclude='logs' --exclude='.git' --exclude='.idea' --exclude='.DS_Store' --exclude='docker' --exclude='config/jwt.key' --exclude='config/jwt.pem'
 
 if [ ! -d '/var/www/html/tmp' ]; then
     mkdir /var/www/html/tmp
