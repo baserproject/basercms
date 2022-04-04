@@ -178,9 +178,12 @@ class LoginStoresTableTest extends BcTestCase
         $enableLoginStore = $this->LoginStores->getEnableLoginStore($loginStore->store_key);
         $this->assertNotNull($enableLoginStore);
 
-        // 古いデータの削除
+        // 古いデータの削除確認
         $disableLoginStore = $this->LoginStores->find('all')
-            ->where(['created <=' => date('Y-m-d h:i:s', strtotime("-365 day"))])
+            ->where([
+                'user_id' => 1,
+                'created <=' => date('Y-m-d h:i:s', strtotime("-365 day"))
+            ])
             ->first();
         $this->assertNull($disableLoginStore);
     }
