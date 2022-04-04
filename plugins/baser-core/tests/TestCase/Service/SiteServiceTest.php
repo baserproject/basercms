@@ -29,6 +29,8 @@ class SiteServiceTest extends \BaserCore\TestSuite\BcTestCase
      */
     protected $fixtures = [
         'plugin.BaserCore.Sites',
+        'plugin.BaserCore.Contents',
+        'plugin.BaserCore.ContentFolders',
     ];
 
     /**

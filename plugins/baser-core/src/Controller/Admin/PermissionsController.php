@@ -166,8 +166,6 @@ class PermissionsController extends BcAdminAppController
 
 	/**
 	 * [ADMIN] 登録処理
-	 *
-	 * @return void
 	 */
 	public function ajax_add(PermissionServiceInterface $permissionService, UserGroupServiceInterface $userGroups)
 	{
@@ -184,10 +182,8 @@ class PermissionsController extends BcAdminAppController
                 true,
                 false
             );
-            echo true;
             return;
         }
-
 		$this->ajaxError(500, __d('baser', '保存に失敗しました。'));
     }
 

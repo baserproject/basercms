@@ -12,7 +12,6 @@
 namespace BaserCore\Test\TestCase\Controller\Api;
 
 use Cake\Core\Configure;
-use BaserCore\Utility\BcUtil;
 use BaserCore\Service\ContentService;
 use Cake\TestSuite\IntegrationTestTrait;
 
@@ -157,7 +156,7 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
     public function testDelete()
     {
         // 子要素を持たない場合
-        $data = ['contentId' => 4];
+        $data = ['id' => 4];
         $this->post('/baser/api/baser-core/contents/delete.json?token=' . $this->accessToken, $data);
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
@@ -165,7 +164,7 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
         $this->get('/baser/api/baser-core/contents/view/4.json?token=' . $this->accessToken);
         $this->assertResponseError();
         // 子要素を持つ場合
-        $data = ['contentId' => 6];
+        $data = ['id' => 6];
         $this->post('/baser/api/baser-core/contents/delete.json?token=' . $this->accessToken, $data);
         $this->assertResponseOk();
         $this->get('/baser/api/baser-core/contents/view/6.json?token=' . $this->accessToken); // 親要素削除チェック

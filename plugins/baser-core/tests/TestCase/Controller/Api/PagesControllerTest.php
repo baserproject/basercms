@@ -151,11 +151,11 @@ class PagesControllerTest extends BcTestCase
     public function testCopy()
     {
         $data = [
-            'contentId' =>4,
-            'entityId' =>2,
-            'parentId' =>1,
+            'id' =>4,
+            'entity_id' =>2,
+            'parent_id' =>1,
             'title' => 'hoge1',
-            'siteId' =>1
+            'site_id' =>1
         ];
         $this->post("/baser/api/baser-core/pages/copy/2.json?token=". $this->accessToken, $data);
         $this->assertResponseSuccess();
