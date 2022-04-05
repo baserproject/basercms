@@ -54,6 +54,7 @@ class PagesController extends BcFrontAppController
     {
         parent::initialize();
         $this->loadComponent('BaserCore.BcFrontContents');
+        $this->loadModel('BaserCore.Contents');
     }
 
 	/**
@@ -73,7 +74,7 @@ class PagesController extends BcFrontAppController
 		$path = func_get_args();
 
 		if ($this->request->getParam('Content')->alias_id) {
-			$urlTmp = $this->Content->field('url', ['Content.id' => $this->request->getParam('Content')->alias_id]);
+			$urlTmp = $this->Contents->find()->where(['Contents.id' => $this->request->getParam('Content')->alias_id])->first()->url;
 		} else {
 			$urlTmp = $this->request->getParam('Content')->url;
 		}
