@@ -832,7 +832,7 @@ class BcUtilTest extends BcTestCase
     public function testGetContentsItem()
     {
         $result = BcUtil::getContentsItem();
-        $list = ['Default', 'ContentFolder', 'ContentAlias', 'ContentLink', 'Page'];
+        $list = ['Default', 'ContentFolder', 'ContentAlias', 'Page'];
         foreach($list as $key) {
             $this->assertArrayHasKey($key, $result);
         }

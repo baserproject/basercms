@@ -85,7 +85,6 @@ class BcAdminContentHelperTest extends \BaserCore\TestSuite\BcTestCase
             'Default' => '無所属コンテンツ',
             'ContentFolder' => 'フォルダー',
             'ContentAlias' => 'エイリアス',
-            'ContentLink' => 'リンク',
             'Page' => '固定ページ',
             'BlogContent' => 'ブログ'
         ];
