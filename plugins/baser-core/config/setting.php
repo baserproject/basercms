@@ -500,6 +500,8 @@ return [
                         ]
                     ],
                 ],
+                // TODO ucmitz リンク未実装のためコメントアウト
+                /* >>>
                 'ContentLink' => [
                     'multiple' => true,
                     'title' => __d('baser', 'リンク'),
@@ -527,6 +529,7 @@ return [
                     ],
                     'icon' => 'bca-icon--link',
                 ]
+                <<< */
             ]
         ]
     ],
