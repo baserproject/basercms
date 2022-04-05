@@ -2395,7 +2395,7 @@ END_FLASH;
         */
         // ---
         $data = [
-            'logo' => '', 'logo_alt' => '', 'logo_link' => '',
+            'logo' => '', 'logo_alt' => '', 'logo_link' => '/',
             'main_image_1' => '', 'main_image_alt_1' => '', 'main_image_link_1' => '',
             'main_image_2' => '', 'main_image_alt_2' => '', 'main_image_link_2' => '',
             'main_image_3' => '', 'main_image_alt_3' => '', 'main_image_link_3' => '',
