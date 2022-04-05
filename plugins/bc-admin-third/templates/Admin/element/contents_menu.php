@@ -37,7 +37,7 @@ use BaserCore\View\BcAdminAppView;
 
       <?php if ($isSuperUser): ?>
         <li class="bca-content-menu__item">
-          <?php $this->BcBaser->element('permission') ?>
+          <?php $this->BcBaser->element('Permissions/dialog') ?>
           <?php // TODO: button要素に変更 ?>
           <?php // TODO アクセス制限を実装 ?>
           <?php $this->BcBaser->link(__d('baser', '制限'), 'javascript:void(0)', ['id' => 'BtnMenuPermission', 'class' => 'bca-content-menu__link bca-icon--permission']) ?></li>

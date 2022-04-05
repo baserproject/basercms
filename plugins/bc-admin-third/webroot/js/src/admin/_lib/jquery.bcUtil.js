@@ -106,7 +106,7 @@
             $("#BcSystemMessage")
                 .removeClass('notice-messge alert-message')
                 .addClass('notice-message')
-                .html(decodeURI(message));
+                .html(message);
             $("#BcMessageBox").fadeIn(500);
         },
 

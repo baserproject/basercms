@@ -164,29 +164,6 @@ class PermissionsController extends BcAdminAppController
         return $this->redirect(['action' => 'index', $userGroupId]);
     }
 
-	/**
-	 * [ADMIN] 登録処理
-	 */
-	public function ajax_add(PermissionServiceInterface $permissionService, UserGroupServiceInterface $userGroups)
-	{
-        $this->disableAutoRender();
-        if (!$this->request->is(['patch', 'post', 'put'])) {
-			$this->ajaxError(500, __d('baser', '無効な処理です。'));
-			return;
-		}
-
-        $permission = $permissionService->create($this->request->getData());
-        if (empty($permission->getErrors()) === true) {
-            $this->BcMessage->setSuccess(
-                sprintf(__d('baser', '新規アクセス制限設定「%s」を追加しました。'), $permission->name),
-                true,
-                false
-            );
-            return;
-        }
-		$this->ajaxError(500, __d('baser', '保存に失敗しました。'));
-    }
-
     /**
      * [ADMIN] 複製処理
      *

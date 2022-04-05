@@ -31,8 +31,16 @@ class PermissionsControllerTest extends BcTestCase
         'plugin.BaserCore.Users',
         'plugin.BaserCore.UsersUserGroups',
         'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.Permissions'
+        'plugin.BaserCore.Permissions',
+        'plugin.BaserCore.Sites',
+        'plugin.BaserCore.SiteConfigs'
     ];
+
+    /**
+     * autoFixtures
+     * @var bool
+     */
+    public $autoFixtures = false;
 
     /**
      * Access Token
@@ -52,6 +60,11 @@ class PermissionsControllerTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadFixtures(
+            'Users',
+            'UsersUserGroups',
+            'UserGroups'
+        );
         $token = $this->apiLoginAdmin(1);
         $this->accessToken = $token['access_token'];
         $this->refreshToken = $token['refresh_token'];
@@ -85,7 +98,30 @@ class PermissionsControllerTest extends BcTestCase
      */
     public function testAdd()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loadFixtures(
+            'Permissions',
+            'Sites',
+            'SiteConfigs'
+        );
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $data = [
+            'no' => 1,
+            'sort' => 2,
+            'name' => 'test',
+            'user_group_id' => 2,
+            'url' => '/baser/admin/baser-core/contents/index',
+            'auth' => true,
+            'method' => 'ALL',
+            'status' => true,
+            'modified' => time(),
+            'created' => time(),
+        ];
+        $this->post('/baser/api/baser-core/permissions/add.json?token=' . $this->accessToken, $data);
+        $this->assertResponseSuccess();
+        $table = $this->getTableLocator()->get('BaserCore.Permissions');
+        $query = $table->find()->where(['name' => $data['name']]);
+        $this->assertEquals(1, $query->count());
     }
 
     /**

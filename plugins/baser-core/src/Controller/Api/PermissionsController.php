@@ -18,11 +18,34 @@ use BaserCore\Annotation\UnitTest;
 
 /**
  * Class PermissionsController
- *
- * https://localhost/baser/api/baser-core/permissions/action_name.json で呼び出す
- *
- * @package BaserCore\Controller\Api
+ * @uses PermissionsController
  */
 class PermissionsController extends BcApiController
 {
+
+	/**
+	 * 登録処理
+     * @checked
+     * @noTodo
+     * @unitTest
+	 */
+	public function add(PermissionServiceInterface $permissionService)
+	{
+        $this->request->allowMethod(['post', 'delete']);
+        try {
+            $permission = $permissionService->create($this->request->getData());
+            $message = __d('baser', '新規アクセス制限設定「{0}」を追加しました。', $permission->name);
+        } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
+            $permission = $e->getEntity();
+            $this->setResponse($this->response->withStatus(400));
+            $message = __d('baser', '入力エラーです。内容を修正してください。');
+        }
+        $this->set([
+            'message' => $message,
+            'permission' => $permission,
+            'errors' => $permission->getErrors(),
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['message', 'permission', 'errors']);
+    }
+
 }

@@ -81,8 +81,7 @@ $base = $attributes['base'];
     'vendor/jquery.form-2.94',
     'vendor/jquery.timepicker',
     'vendor/bootstrap-4.1.3/bootstrap.bundle.min',
-    'admin/functions',
-    'admin/permission',
+    'admin/functions'
   ]) ?>
   <?php $this->BcBaser->js('admin/common.bundle', true, [
     'id' => 'AdminScript',

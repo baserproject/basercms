@@ -10,24 +10,27 @@
  * @license         https://basercms.net/license/index.html
  */
 
+use BaserCore\View\BcAdminAppView;
+use Cake\Routing\Router;
+
 /**
  * [ADMIN] アクセス制限管理（ポップアップ）
+ * @var BcAdminAppView $this
+ * @checked
+ * @noTodo
  */
-use Cake\Routing\Router;
 $methodList = $this->BcAdminPermission->getMethodList();
 $authList = $this->BcAdminPermission->getAuthList();
+$this->BcBaser->js('admin/permissions/dialog.bundle');
 ?>
 
 
-<div id="PermissionDialog" title="アクセス制限登録" style="display:none">
+<div id="PermissionDialog" title="アクセス制限登録" hidden>
 
   <?= $this->BcAdminForm->create(null, [
     'novalidate' => true,
-    'method' => 'POST',
     'id' => 'PermissionAjaxAddForm',
-    'url' => ['plugin' => 'BaserCore', 'controller' => 'permissions', 'action' => 'ajax_add'],
   ]); ?>
-
 
   <dl>
     <dt><?php echo $this->BcForm->label('user_group_id', __d('baser', 'ユーザーグループ')) ?></dt>
