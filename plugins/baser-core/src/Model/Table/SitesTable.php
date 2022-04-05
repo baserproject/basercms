@@ -222,7 +222,7 @@ class SitesTable extends AppTable
                 $conditions[]['id IN'] = $options['includeIds'];
             }
         }
-
+        $this->setDisplayField('display_name');
         return $this->find('list')->where($conditions)->toArray();
     }
 
