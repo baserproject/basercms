@@ -10,6 +10,8 @@
  */
 namespace BaserCore\Controller;
 
+use BaserCore\ServiceProvider\BcServiceProvider;
+use BaserCore\Utility\BcContainer;
 use Cake\Event\EventInterface;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -34,6 +36,9 @@ class BcErrorController extends AppController
     public function initialize(): void
     {
         $this->loadComponent('RequestHandler');
+        // エラー時にはサービスプロバイダーが登録されず、エラー画面表示時にヘルパーでサービスが見つからずにエラーとなってしまう。
+        // 画面表示時にさらにエラーになるとテーマが適用されなくなってしまうためここでサービスプロバイダーを登録する
+        BcContainer::get()->addServiceProvider(new BcServiceProvider());
     }
 
     /**
