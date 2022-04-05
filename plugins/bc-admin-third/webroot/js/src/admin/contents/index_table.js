@@ -14,8 +14,27 @@
 
 $(function () {
 
-    // コピー・削除
-    $('.btn-copy, .btn-delete').click(function () {
+    initList();
+
+    /**
+     * 一覧を初期化
+     */
+    function initList()
+    {
+        $('.btn-copy, .btn-delete, .btn-publish, .btn-unpublish').click(actionClickHandler);
+        // 公開・非公開ボタンの表示設定
+        $("#ListTable tbody tr .btn-publish").hide();
+        $("#ListTable tbody tr.unpublish .btn-publish").show();
+        $("#ListTable tbody tr .btn-unpublish").hide();
+        $("#ListTable tbody tr.publish .btn-unpublish").show();
+    }
+
+    /**
+     * アクションボタンクリック時イベント
+     * @returns {boolean}
+     */
+    function actionClickHandler()
+    {
         if($(this).attr('data-confirm-message') && !confirm($(this).attr('data-confirm-message'))) {
             return false;
         }
@@ -38,6 +57,6 @@ $(function () {
             location.href = '#Header';
         });
         return false;
-    });
+    }
 
 });

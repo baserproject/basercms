@@ -151,14 +151,14 @@ if ($content->self_status) {
     <!-- 公開・非公開 -->
     <?php if (!$isSiteRoot && !$isSiteRelated && !$editDisabled): ?>
       <?php $this->BcBaser->link('',
-        ['action' => 'ajax_change_status'], [
+        ['prefix' => 'Api', 'action' => 'change_status', '_ext' => 'json'], [
           'title' => __d('baser', '非公開'),
           'class' => 'btn-unpublish bca-btn-icon',
           'data-bca-btn-type' => 'unpublish',
           'data-bca-btn-size' => 'lg'
         ]) ?>
       <?php $this->BcBaser->link('',
-        ['action' => 'ajax_change_status'], [
+        ['prefix' => 'Api', 'action' => 'change_status', '_ext' => 'json'], [
           'title' => __d('baser', '公開'),
           'class' => 'btn-publish bca-btn-icon',
           'data-bca-btn-type' => 'publish',
@@ -176,7 +176,7 @@ if ($content->self_status) {
     <!-- コピー -->
     <?php if (!$editDisabled && $type != 'ContentFolder' && !empty($items[$type]['routes']['copy'])): ?>
       <?php $this->BcBaser->link('',
-        array_merge($items[$type]['routes']['copy'], $urlParams), [
+        array_merge($items[$type]['routes']['copy'], $urlParams, ['_ext' => 'json']), [
           'title' => __d('baser', 'コピー'),
           'class' => 'btn-copy bca-btn-icon',
           'data-bca-btn-type' => 'copy',
@@ -205,7 +205,7 @@ if ($content->self_status) {
     <!-- 削除 -->
     <?php if (!$editDisabled && !$isSiteRoot): ?>
       <?php $this->BcBaser->link('',
-        ['prefix' => 'Api', 'action' => 'delete', $content->id], [
+        ['prefix' => 'Api', 'action' => 'delete', $content->id, '_ext' => 'json'], [
           'title' => __d('baser', '削除'),
           'class' => 'btn-delete bca-btn-icon',
           'data-bca-btn-type' => 'delete',

@@ -14,13 +14,14 @@ namespace BaserCore\Test\TestCase\View\Helper;
 use BaserCore\View\AppView;
 use BaserCore\View\Helper\BcListTableHelper;
 use BaserCore\TestSuite\BcTestCase;
+use Cake\Event\Event;
 
 /**
  * Class BcLIstTableHelperTest
  *
  * @property BcListTableHelper $BcListTable
  */
-class BcLIstTableHelperTest extends BcTestCase
+class BcListTableHelperTest extends BcTestCase
 {
     /**
      * Set Up
@@ -34,43 +35,68 @@ class BcLIstTableHelperTest extends BcTestCase
         $this->BcListTable = new BcListTableHelper($View);
     }
 
+    /**
+     * Tear down
+     */
     public function tearDown(): void
     {
         unset($this->BcListTable);
         parent::tearDown();
     }
 
+    /**
+     * test dispatchShowHead
+     */
     public function testDispatchShowHead()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
 
+    /**
+     * test dispatchShowRow
+     */
     public function testDispatchShowRow()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
 
     /**
+     * test rowClass
      * @param $isPublished
      *
      * @dataProvider rowClassDataProvider
      */
     public function testRowClass($isPublished, $expected)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        // $this->BcListTable->rowClass($isPublished);
-        // $this->expectOutputRegex('/' . $expected . '/s');
+         $this->BcListTable->rowClass($isPublished);
+         $this->expectOutputRegex('/' . $expected . '/s');
     }
 
     public function rowClassDataProvider()
     {
         return [
-            [true, 'class="publish bca-table-listup__tbody-tr"'],
-            [false, 'class="unpublish disablerow bca-table-listup__tbody-tr"']
+            [true, 'class="bca-table-listup__tbody-tr publish"'],
+            [false, 'class="bca-table-listup__tbody-tr unpublish disablerow"']
         ];
     }
 
     /**
+     * test Dispatch event rowClass
+     */
+    public function testDispatchEventRowClass()
+    {
+        $this->entryEventToMock(self::EVENT_LAYER_HELPER, 'BcListTable.rowClass', function(Event $event){
+            $data = $event->getData();
+            $this->assertTrue(isset($data['record']));
+            $this->assertTrue(isset($data['class']));
+            $event->setData('class', ['test1', 'test2']);
+        });
+        $this->BcListTable->rowClass(true);
+        $this->expectOutputRegex('/class="test1 test2"/s');
+    }
+
+    /**
+     * test setColumnNumber
      * カラム数をセットする
      */
     public function testSetColumnNumber()
@@ -82,6 +108,7 @@ class BcLIstTableHelperTest extends BcTestCase
     }
 
     /**
+     * test getColumnNumber
      * カラム数を取得する
      */
     public function testGetColumnNumber()

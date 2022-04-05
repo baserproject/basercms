@@ -120,41 +120,35 @@ class BcListTableHelper extends Helper
 
     /**
      * Row Class
+     * テーブルの行用のクラス文字列を生成する
      *
      * @param bool $isPublish 公開しているかどうか
      * @param array $record レコード
      * @param array $options オプション
      *    - `class` : 追加するクラス
+     * @checked
+     * @unitTest
+     * @noTodo
      */
     public function rowClass($isPublish, $record = [], $options = [])
     {
-
-        // TODO 未実装のため代替措置
-        // >>>
-        return '';
-        // <<<
-
         $options = array_merge([
-            'class' => ['bca-table-listup__tbody-tr']
+            'class' => array_merge(
+                ['bca-table-listup__tbody-tr'],
+                ($isPublish)? ['publish'] : ['unpublish', 'disablerow']
+            )
         ], $options);
-        if (!$isPublish) {
-            $classies = ['unpublish', 'disablerow'];
-        } else {
-            $classies = ['publish'];
-        }
-        if (!empty($options['class'])) {
-            $classies = array_merge($classies, $options['class']);
-        }
 
         // EVENT BcListTable.rowClass
         $event = $this->dispatchLayerEvent('rowClass', [
-            'classies' => $classies,
+            'class' => $options['class'],
             'record' => $record
         ], ['class' => 'BcListTable', 'plugin' => '']);
         if ($event !== false) {
-            $classies = ($event->getResult() === null || $event->getResult() === true)? $event->getData('classies') : $event->getResult();
+            $options['class'] = ($event->getResult() === null || $event->getResult() === true)? $event->getData('class') : $event->getResult();
         }
-        echo ' class="' . implode(' ', $classies) . '"';
+
+        echo ' class="' . implode(' ', $options['class']) . '"';
     }
 
 }
