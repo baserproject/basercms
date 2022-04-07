@@ -20,6 +20,8 @@ use Cake\Event\EventManager;
 use Cake\View\Helper\UrlHelper;
 use Cake\View\Helper\HtmlHelper;
 use Cake\View\Helper\FlashHelper;
+use Cake\ORM\TableRegistry;
+use BaserCore\View\BcFrontAppView;
 use BaserCore\View\BcAdminAppView;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\View\Helper\BcBaserHelper;
@@ -49,8 +51,9 @@ class BcBaserHelperTest extends BcTestCase
         'plugin.BaserCore.UserGroups',
         'plugin.BaserCore.UsersUserGroups',
         'plugin.BaserCore.Sites',
+        'plugin.BaserCore.SiteConfigs',
         'plugin.BaserCore.Contents',
-
+        'plugin.BaserCore.ContentFolders',
         // TODO: basercms4系より移植
         // 'baser.Default.Page',    // メソッド内で読み込む
         // 'baser.Default.Content',    // メソッド内で読み込む
@@ -92,6 +95,7 @@ class BcBaserHelperTest extends BcTestCase
     public function __construct($name = null, array $data = [], $dataName = '')
     {
         parent::__construct($name, $data, $dataName);
+            $_SERVER['HTTP_USER_AGENT'] = 'iPhone';
     }
 
     /**
@@ -591,23 +595,44 @@ class BcBaserHelperTest extends BcTestCase
         ob_start();
         $this->BcBaser->contentsName();
         $result = ob_get_clean();
-        $this->assertEquals('Admin', $result);
+        $this->assertEquals('Home', $result);
     }
 
     /**
      * Test BcBaser->getContentsNameが適切なコンテンツ名を取得してるかテスト
      * @return void
-     * @todo basercms4系を統合する
+     * @dataProvider getContentsNameDataProvider
      */
-    public function testGetContentsName()
+    public function testGetContentsName($expects, $url, $detail = false, $options = [])
     {
-        // アクションがログインでない場合
-        $result = $this->BcBaser->getContentsName();
-        $this->assertEquals('Admin', $result);
-        // アクションがログインの場合
-        $this->BcBaser->getView()->setRequest($this->getRequest()->withParam('action', 'login'));
-        $result = $this->BcBaser->getContentsName();
-        $this->assertEquals('AdminUsersLogin', $result);
+
+        if (!empty($options['device'])){
+            $_SERVER['HTTP_USER_AGENT'] = $options['device'];
+            unset($options['device']);
+
+            $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
+            $site = $sites->findById(2)->first();
+            $site = $sites->patchEntity($site, ['status' => true]);
+            $sites->save($site);
+        }
+
+        if (!empty($options['language'])){
+            $_SERVER['HTTP_ACCEPT_LANGUAGE'] = $options['language'];
+            unset($options['device']);
+        }
+
+        $this->BcBaser = new BcBaserHelper(new BcFrontAppView());
+        $this->BcBaser->getView()->setRequest($this->getRequest($url));
+
+        if (!empty($options['error'])) {
+            $reflectionClass = new ReflectionClass(get_class($this->BcBaser->getView()));
+            $property = $reflectionClass->getProperty('name');
+            $property->setAccessible(true);
+            $property->setValue($this->BcBaser->getView(), 'CakeError');
+        }
+
+        $this->assertEquals($expects, $this->BcBaser->getContentsName($detail, $options));
+
     }
 
     /**
@@ -620,20 +645,7 @@ class BcBaserHelperTest extends BcTestCase
      * @param string $expects コンテンツ名
      * @return void*
      * @dataProvider getContentsNameDataProvider
-     *
-     * http://192.168.33.10/test.php?case=View%2FHelper%2FBcBaserHelper&baser=true&filter=testGetContentsName
      */
-    public function testGetContentsName_Version4($expects, $url, $detail = false, $options = [])
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-
-        $this->BcBaser->request = $this->_getRequest($url);
-        if (!empty($options['error'])) {
-            $this->_View->name = 'CakeError';
-        }
-        $this->assertEquals($expects, $this->BcBaser->getContentsName($detail, $options));
-    }
-
     public function getContentsNameDataProvider()
     {
         return [
@@ -654,17 +666,10 @@ class BcBaserHelperTest extends BcTestCase
             ['Hoge', '/about', false, ['default' => 'Hoge']],
             ['service_service1', '/service/service1', true, ['underscore' => true]],
             ['Error!!!', '/', false, ['error' => 'Error!!!']],
-            // モバイル　対応ON 連動OFF
-            ['Home', '/m/'],
-            ['News', '/m/news/'],
-            ['Contact', '/m/contact/'],
-            ['M', '/m/hoge'],    // 存在しないページ
-            // スマートフォン 対応ON　連動OFF
-            ['Home', '/s/'],
-            ['News', '/s/news/'],
-            ['Contact', '/s/contact/'],
-            ['Default', '/s/about'],
-            ['S', '/s/hoge'],    // 存在しないページ
+            // スマートフォン
+            ['Home', '/s/', false, ['device' => 'iPhone']],
+            // 英語サイト
+            ['Home', '/en/', false, ['language' => 'en']],
         ];
     }
 

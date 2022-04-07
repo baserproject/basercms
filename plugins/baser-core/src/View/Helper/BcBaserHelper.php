@@ -17,6 +17,7 @@ use Cake\Utility\Inflector;
 use Cake\View\View;
 use Cake\View\Helper;
 use Cake\Core\Configure;
+use Cake\Utility\Inflector;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Utility\BcAgent;
 use Cake\View\Helper\UrlHelper;
@@ -638,20 +639,9 @@ class BcBaserHelper extends Helper
      * @return string
      * @checked
      * @unitTest
-     * @note(value="コンテンツ名を取得して返却")
      */
     public function getContentsName($detail = false, $options = [])
     {
-
-        // TODO ucmitz 未実装のため代替措置
-        // >>>
-        $request = $this->_View->getRequest();
-        if ($request->getParam('action') === 'login') {
-            return 'AdminUsersLogin';
-        } else {
-            return 'Admin';
-        }
-        // <<<
 
         $options = array_merge([
             'home' => 'Home',
@@ -674,27 +664,32 @@ class BcBaserHelper extends Helper
         $url2 = '';
         $aryUrl = [];
 
-        if (!empty($this->_View->getRequest()->getParam('prefix'))) {
-            $prefix = h($this->_View->getRequest()->getParam('prefix'));
+        if (!empty($this->getView()->getRequest()->getParam('prefix'))) {
+            $prefix = h($this->getView()->getRequest()->getParam('prefix'));
         }
-        if (!empty($this->_View->getRequest()->getParam('plugin'))) {
-            $plugin = h($this->_View->getRequest()->getParam('plugin'));
+        if (!empty($this->getView()->getRequest()->getParam('plugin'))) {
+            $plugin = h($this->getView()->getRequest()->getParam('plugin'));
         }
-        $controller = h($this->_View->getRequest()->getParam('controller'));
+        $controller = h($this->getView()->getRequest()->getParam('controller'));
         if ($prefix) {
-            $action = str_replace($prefix . '_', '', h($this->_View->getRequest()->getParam('action')));
+            $action = str_replace($prefix . '_', '', h($this->getView()->getRequest()->getParam('action')));
         } else {
-            $action = h($this->_View->getRequest()->getParam('action'));
+            $action = h($this->getView()->getRequest()->getParam('action'));
         }
-        if (!empty($this->_View->getRequest()->getParam('pass'))) {
-            foreach($this->_View->getRequest()->getParam('pass') as $key => $value) {
+        if (!empty($this->getView()->getRequest()->getParam('pass'))) {
+            foreach($this->getView()->getRequest()->getParam('pass') as $key => $value) {
                 $pass[$key] = h($value);
             }
         }
 
-        $url = explode('/', h($this->_View->getRequest()->url));
+        $url = explode('/', h($this->getView()->getRequest()->getPath()));
 
-        if (!empty($this->_View->getRequest()->getParam('Site.alias'))) {
+        // url->0がnullの場合はずらす
+        if(empty($url[0])){
+            array_shift($url);
+        }
+
+        if (!empty($this->getView()->getRequest()->getParam('Site.alias'))) {
             array_shift($url);
         }
 
@@ -710,12 +705,13 @@ class BcBaserHelper extends Helper
 
         // 固定ページの場合
         if (!BcUtil::isAdminSystem()) {
-            $pageUrl = h($this->_View->getRequest()->url);
+            $pageUrl = h($this->getView()->getRequest()->getPath());
             if ($pageUrl === false) {
                 $pageUrl = '/';
             } else {
-                $pageUrl = '/' . $pageUrl;
+                //$pageUrl = '/' . $pageUrl;
             }
+
             $sitePrefix = $this->getSitePrefix();
             if ($sitePrefix) {
                 $pageUrl = preg_replace('/^\/' . preg_quote($sitePrefix, '/') . '\//', '/', $pageUrl);
@@ -750,7 +746,7 @@ class BcBaserHelper extends Helper
             }
         }
 
-        if ($this->_View->getName() == 'CakeError') {
+        if ($this->getView()->getName() == 'CakeError') {
             $contentsName = $error;
         } elseif (count($aryUrl) >= 2) {
             if (!$detail) {
@@ -1619,11 +1615,12 @@ class BcBaserHelper extends Helper
             return '';
         }
         $site = null;
-        if (!empty($this->_View->getRequest()->getParam('Site'))) {
-            $site = $this->_View->getRequest()->getParam('Site');
+        if (!empty($this->getView()->getRequest()->getParam('Site'))) {
+            $site = $this->getView()->getRequest()->getParam('Site');
         }
-        $Site = ClassRegistry::init('Site');
-        return $Site->getPrefix($site);
+
+        $sites = \Cake\ORM\TableRegistry::getTableLocator()->get('BaserCore.Sites');
+        return $sites->getPrefix($site->id);
     }
 
     /**
