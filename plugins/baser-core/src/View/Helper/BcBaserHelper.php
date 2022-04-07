@@ -17,7 +17,6 @@ use Cake\Utility\Inflector;
 use Cake\View\View;
 use Cake\View\Helper;
 use Cake\Core\Configure;
-use Cake\Utility\Inflector;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Utility\BcAgent;
 use Cake\View\Helper\UrlHelper;
