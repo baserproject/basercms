@@ -26,10 +26,7 @@ use BaserCore\Controller\Component\BcAdminContentsComponent;
 
 
 /**
- * Class BcMessageTestController
- *
- * @package BaserCore\Test\TestCase\Controller\Component
- * @property BcMessageComponent $BcMessage
+ * Class BcAdminContentsTestController
  */
 class BcAdminContentsTestController extends BcAppController
 {
@@ -70,7 +67,7 @@ class BcAdminContentsComponentTest extends BcTestCase
     {
         parent::setUp();
         $this->getRequest('baser/admin/contents');
-        $this->Controller = new BcAdminContentsTestController();
+        $this->Controller = new BcAdminContentsTestController($this->getRequest());
         $this->ComponentRegistry = new ComponentRegistry($this->Controller);
         $this->BcAdminContents = new BcAdminContentsComponent($this->ComponentRegistry);
         $this->ContentService = new ContentService();
@@ -119,7 +116,7 @@ class BcAdminContentsComponentTest extends BcTestCase
         $request = $controller->getRequest();
         $pagesTable = $this->getTableLocator()->get('BaserCore.Pages');
         $page = $pagesTable->find()->where(['Contents.id' => 4])->contain(['Contents' => ['Sites']])->first();
-        $controller->set('bcAdminContentsTest', $page);
+        $controller->set('page', $page);
         $controller->setRequest($request->withParam('action', 'edit'));
         $this->BcAdminContents->beforeRender();
         $this->assertIsArray($controller->viewBuilder()->getVar('contentsItems'));
@@ -137,7 +134,7 @@ class BcAdminContentsComponentTest extends BcTestCase
      */
     public function testSettingFormWithContent()
     {
-        $Controller = new ContentsController();
+        $Controller = new ContentsController($this->getRequest('/baser/contents/index'));
         $content = $this->ContentService->get(1);
         $Controller->set('content', $content);
         $ComponentRegistry = new ComponentRegistry($Controller);
@@ -162,7 +159,7 @@ class BcAdminContentsComponentTest extends BcTestCase
      */
     public function testSettingFormWithContentFolder()
     {
-        $Controller = new ContentFoldersController();
+        $Controller = new ContentFoldersController($this->getRequest('/baser/content_folders/index'));
         $contentFolder = $this->ContentFolderService->get(1);
         $Controller->set('contentFolder', $contentFolder);
         $Controller->set('content', $contentFolder->content);

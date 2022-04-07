@@ -78,7 +78,6 @@ class AppController extends BaseController
         if (!(BC_INSTALLED || BcUtil::isConsole()) && !$isInstall) {
             $this->redirect('/');
         }
-        $request = Router::getRequest();
         $request->getSession()->start();
     }
 

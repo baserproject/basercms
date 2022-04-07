@@ -41,8 +41,7 @@ class DblogsControllerTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $request = $this->getRequest();
-        $request = $this->loginAdmin($request);
+        $this->loginAdmin($this->getRequest('/baser/admin'));
     }
 
     /**

@@ -22,10 +22,7 @@ use BaserCore\Controller\Component\BcFrontContentsComponent;
 
 
 /**
- * Class BcMessageTestController
- *
- * @package BaserCore\Test\TestCase\Controller\Component
- * @property BcMessageComponent $BcMessage
+ * Class BcFrontContentsTestController
  */
 class BcFrontContentsTestController extends BcAppController
 {
@@ -64,7 +61,7 @@ class BcFrontContentsComponentTest extends BcTestCase
     {
         parent::setUp();
         $this->getRequest('baser/admin');
-        $this->Controller = new BcFrontContentsTestController();
+        $this->Controller = new BcFrontContentsTestController($this->getRequest());
         $this->ComponentRegistry = new ComponentRegistry($this->Controller);
         $this->BcFrontContents = new BcFrontContentsComponent($this->ComponentRegistry);
         $this->PageService = new PageService();

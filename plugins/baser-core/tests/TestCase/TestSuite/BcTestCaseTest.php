@@ -144,7 +144,7 @@ class BcTestCaseTest extends BcTestCase
      */
     public function testExecPrivateMethod(): void
     {
-        $sampleClass = new AnalyseController();
+        $sampleClass = new AnalyseController($this->getRequest());
         $samplePrivateMethod = 'pathToClass';
         $result = $this->execPrivateMethod($sampleClass, $samplePrivateMethod, [ROOT . DS . "plugins"]);
         $this->assertEquals("", $result);

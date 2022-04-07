@@ -55,7 +55,6 @@ use BaserCore\View\Helper\BcAdminContentFolderHelper;
  * @property BcAuthHelper $BcAuth
  * @property BcAdminUserHelper $BcAdminUser
  * @property BcAdminPluginHelper $BcAdminPlugin
- * @property BcAdminSiteHelper $BcAdminSite
  * @property BcAdminDashboardHelper $BcAdminDashboard
  * @property BcAdminPermissionHelper $BcAdminPermission
  * @property BcAdminSiteConfigHelper $BcAdminSiteConfig
@@ -86,7 +85,6 @@ class BcAdminAppView extends AppView
         $this->loadHelper('BaserCore.BcAdminUser');
         $this->loadHelper('BaserCore.BcAdminSiteConfig');
         $this->loadHelper('BaserCore.BcAdminPage');
-        $this->loadHelper('BaserCore.BcAdminSite');
         $this->loadHelper('BaserCore.BcAdminDashboard');
         $this->loadHelper('BaserCore.BcContents');
         $this->loadHelper('BaserCore.BcListTable');

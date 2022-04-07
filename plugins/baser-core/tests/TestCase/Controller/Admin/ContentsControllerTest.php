@@ -13,7 +13,6 @@ namespace BaserCore\Test\TestCase\Controller\Admin;
 
 use Cake\Event\Event;
 use Cake\Http\ServerRequest;
-use BaserCore\Utility\BcUtil;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Service\ContentService;
 use BaserCore\Utility\BcContainerTrait;

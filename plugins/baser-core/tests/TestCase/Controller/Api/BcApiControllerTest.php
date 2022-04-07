@@ -40,6 +40,8 @@ class BcApiControllerTest extends BcTestCase
         'plugin.BaserCore.UsersUserGroups',
         'plugin.BaserCore.UserGroups',
         'plugin.BaserCore.LoginStores',
+        'plugin.BaserCore.Sites',
+        'plugin.BaserCore.SiteConfigs',
     ];
 
     /**
@@ -53,6 +55,7 @@ class BcApiControllerTest extends BcTestCase
      */
     public function setUp(): void
     {
+        $this->loadFixtures('Sites', 'SiteConfigs');
         parent::setUp();
     }
 
@@ -63,7 +66,7 @@ class BcApiControllerTest extends BcTestCase
      */
     public function testInitialize()
     {
-        $controller = new BcApiController();
+        $controller = new BcApiController($this->getRequest());
         $this->assertTrue(isset($controller->Authentication));
         $this->assertFalse($controller->Security->getConfig('validatePost'));
     }
@@ -73,8 +76,9 @@ class BcApiControllerTest extends BcTestCase
      */
     public function testGetAccessToken()
     {
+        $this->loadFixtures('Users', 'UserGroups', 'UsersUserGroups');
         $user = $this->getService(UserServiceInterface::class);
-        $controller = new BcApiController();
+        $controller = new BcApiController($this->getRequest());
         $result = $controller->getAccessToken(new Result($user->get(1), Result::SUCCESS));
         $this->assertArrayHasKey('access_token', $result);
         $result = $controller->getAccessToken(new Result(null, Result::FAILURE_CREDENTIALS_INVALID));

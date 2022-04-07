@@ -218,16 +218,19 @@ class BcAdminSiteHelper extends Helper
 
     /**
      * 現在の管理対象のサイトを取得する
-     * @return Site
+     * @return EntityInterface
      * @checked
      * @noTodo
      * @unitTest
      */
     public function getCurrentSite(): ?Site
     {
-        return $this->SiteService->get(
-            $this->_View->getRequest()->getAttribute('currentSite')->id
-        );
+        $site = $this->_View->getRequest()->getAttribute('currentSite');
+        if($site) {
+            return $this->SiteService->get($site->id);
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -239,9 +242,14 @@ class BcAdminSiteHelper extends Helper
      */
     public function getOtherSiteList(): array
     {
-        return $this->SiteService->getList([
-            'excludeIds' => $this->getCurrentSite()->id
-        ]);
+        $site = $this->getCurrentSite();
+        if($site) {
+            return $this->SiteService->getList([
+                'excludeIds' => $site->id
+            ]);
+        } else {
+            return [];
+        }
     }
 
 }

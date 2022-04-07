@@ -37,7 +37,7 @@ class BcExceptionRenderer extends ExceptionRenderer
         $controller = parent::_getController();
         $request = $controller->getRequest();
         if (!$request->is('json') && !$controller->viewBuilder()->getTheme()) {
-            return new BcErrorController();
+            return new BcErrorController($request);
         }
         return $controller;
     }

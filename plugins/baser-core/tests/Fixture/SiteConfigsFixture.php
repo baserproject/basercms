@@ -136,7 +136,7 @@ class SiteConfigsFixture extends TestFixture
         [
             'id' => '16',
             'name' => 'admin_theme',
-            'value' => '',
+            'value' => 'BcAdminThird',
             'created' => '2021-01-27 12:56:52',
             'modified' => '2021-01-27 12:58:25'
         ],

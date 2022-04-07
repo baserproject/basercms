@@ -56,7 +56,7 @@ class BcMessageComponentTest extends BcTestCase
     {
         parent::setUp();
         $this->getRequest();
-        $this->Controller = new BcMessageTestController();
+        $this->Controller = new BcMessageTestController($this->getRequest());
         $this->ComponentRegistry = new ComponentRegistry($this->Controller);
         $this->BcMessage = new BcMessageComponent($this->ComponentRegistry);
     }

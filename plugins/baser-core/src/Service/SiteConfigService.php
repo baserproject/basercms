@@ -82,7 +82,7 @@ class SiteConfigService implements SiteConfigServiceInterface
                 'site_url' => Configure::read('BcEnv.siteUrl'),
                 'ssl_url' => Configure::read('BcEnv.sslUrl'),
                 'admin_ssl' => (int)Configure::read('BcApp.adminSsl'),
-            ]));
+            ]), ['validate' => 'keyValue']);
         }
         return $this->entity;
     }
