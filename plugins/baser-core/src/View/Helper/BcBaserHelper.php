@@ -677,7 +677,7 @@ class BcBaserHelper extends Helper
         }
         if (!empty($this->getView()->getRequest()->getParam('pass'))) {
             foreach($this->getView()->getRequest()->getParam('pass') as $key => $value) {
-                $pass[$key] = h($value);
+                if($key !== '?') $pass[$key] = h($value);
             }
         }
 
