@@ -232,7 +232,7 @@ class PluginService implements PluginServiceInterface
                 $client = new Client([
                     'host' => ''
                 ]);
-                $response = $client->get(Configure::read('BcApp.marketPluginRss'));
+                $response = $client->get(Configure::read('BcLinks.marketPluginRss'));
                 if ($response->getStatusCode() !== 200) {
                     return [];
                 }

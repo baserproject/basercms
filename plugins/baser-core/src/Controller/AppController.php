@@ -32,6 +32,7 @@ use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
 use Cake\ORM\TableRegistry;
+use Cake\Routing\Router;
 use Cake\Utility\Inflector;
 
 /**
@@ -77,7 +78,8 @@ class AppController extends BaseController
         if (!(BC_INSTALLED || BcUtil::isConsole()) && !$isInstall) {
             $this->redirect('/');
         }
-
+        $request = Router::getRequest();
+        $request->getSession()->start();
     }
 
     /**

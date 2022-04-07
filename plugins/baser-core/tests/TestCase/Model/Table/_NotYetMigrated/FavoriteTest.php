@@ -62,7 +62,7 @@ class FavoriteTest extends BaserTestCase
     public function login($id)
     {
         $this->Favorite->setSession(new SessionComponent(new ComponentCollection()));
-        $prefix = BcUtil::authSessionKey('admin');
+        $prefix = BcUtil::authSessionKey('Admin');
         $this->Favorite->_Session->write('Auth.' . $prefix . '.id', $id);
         $this->Favorite->_Session->write('Auth.' . $prefix . '.user_group_id', $id);
     }

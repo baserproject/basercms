@@ -95,10 +95,6 @@ return [
          */
         'passwordRequestAllowTime' => 1440,
         /**
-         * baserマーケットRSS
-         */
-        'marketPluginRss' => 'https://market.basercms.net/plugins.php',
-        /**
          * 管理画面のSSL
          */
         'adminSsl' => filter_var(env('ADMIN_SSL'), FILTER_VALIDATE_BOOLEAN),
@@ -282,14 +278,14 @@ return [
         // 公開鍵のパス
         'publicKeyPath' => CONFIG . 'jwt.pem'
     ],
-    'links' => [
+    'BcLinks' => [
         'marketThemeRss' => 'https://market.basercms.net/themes.rss',
         'marketPluginRss' => 'https://market.basercms.net/plugins.rss',
         'specialThanks' => 'https://basercms.net/special_thanks/special_thanks/ajax_users',
         // インストールマニュアル
-        'installManual' => 'https://basercms.net/manuals/introductions/4.html',
+        'installManual' => 'http://wiki.basercms.net/%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%E3%82%AC%E3%82%A4%E3%83%89',
         // アップデートマニュアル
-        'updateManual' => 'https://basercms.net/manuals/introductions/8.html'
+        'updateManual' => 'http://wiki.basercms.net/%E3%83%90%E3%83%BC%E3%82%B8%E3%83%A7%E3%83%B3%E3%82%A2%E3%83%83%E3%83%97%E3%82%AC%E3%82%A4%E3%83%89'
     ],
 
     /**

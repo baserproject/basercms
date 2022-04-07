@@ -11,14 +11,15 @@
 
 namespace BaserCore\View\Helper;
 
-use Cake\ORM\TableRegistry;
+use BaserCore\Utility\BcSiteConfig;
+use Cake\Datasource\EntityInterface;
+use Cake\Utility\Inflector;
 use Cake\View\View;
 use Cake\View\Helper;
 use Cake\Core\Configure;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Utility\BcAgent;
 use Cake\View\Helper\UrlHelper;
-use BaserCore\Model\Entity\User;
 use Cake\View\Helper\FlashHelper;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Event\BcEventDispatcherTrait;
@@ -35,6 +36,7 @@ use BaserCore\Annotation\UnitTest;
  * @property BcHtmlHelper $BcHtml
  * @property UrlHelper $Url
  * @property FlashHelper $Flash
+ * @property BcAuthHelper $BcAuth
  */
 class BcBaserHelper extends Helper
 {
@@ -56,7 +58,8 @@ class BcBaserHelper extends Helper
         'BaserCore.BcArray',
         'BaserCore.BcPage',
         'BaserCore.BcContents',
-        'BaserCore.BcAdminContent'
+        'BaserCore.BcAdminContent',
+        'BaserCore.BcAuth'
     ];
 
     /**
@@ -492,13 +495,7 @@ class BcBaserHelper extends Helper
      */
     public function existsEditLink()
     {
-        if (empty($this->_View->get('currentUserAuthPrefixes'))) return false;
-        if (empty($this->_View->get('editLink'))) return false;
-        foreach($this->_View->get('currentUserAuthPrefixes') as $currentPrefix) {
-            if (Configure::read('Routing.prefixes.0') == $currentPrefix) return true;
-            if (Configure::read('Routing.prefixes.0') == Configure::read('BcPrefixAuth.' . $currentPrefix . '.alias')) return true;
-        }
-        return false;
+        return ($this->BcAuth->isCurrentUserAdminAvailable() && !empty($this->_View->get('editLink')));
     }
 
     /**
@@ -508,13 +505,7 @@ class BcBaserHelper extends Helper
      */
     public function existsPublishLink()
     {
-        if (empty($this->_View->get('currentUserAuthPrefixes'))) return false;
-        if (empty($this->_View->get('publishLink'))) return false;
-        foreach($this->_View->get('currentUserAuthPrefixes') as $currentPrefix) {
-            if (Configure::read('Routing.prefixes.0') == $currentPrefix) return true;
-            if (Configure::read('Routing.prefixes.0') == Configure::read('BcPrefixAuth.' . $currentPrefix . '.alias')) return true;
-        }
-        return false;
+        return ($this->BcAuth->isCurrentUserAdminAvailable() && !empty($this->_View->get('publishLink')));
     }
 
     /**
@@ -543,7 +534,7 @@ class BcBaserHelper extends Helper
      * 姓と名を結合して取得
      * ニックネームがある場合にはニックネームを優先する
      *
-     * @param User $user ユーザーデータ
+     * @param EntityInterface $user ユーザーデータ
      * @return string $userName ユーザー名
      * @checked
      * @noTodo
@@ -1351,11 +1342,9 @@ class BcBaserHelper extends Helper
      */
     public function scripts()
     {
-
-        $currentPrefix = $this->_View->get('currentPrefix');
+        $currentPrefix = $this->BcAuth->getCurrentPrefix();
         $authPrefix = Configure::read('BcPrefixAuth.' . $currentPrefix);
         $toolbar = true;
-
         if (isset($authPrefix['toolbar'])) {
             $toolbar = $authPrefix['toolbar'];
         }
@@ -1368,15 +1357,16 @@ class BcBaserHelper extends Helper
         // - 管理画面でない
         // - ログインしている
         if (empty($this->_View->get('preview')) && $toolbar) {
-            if (!isset($this->_View->getRequest()->query['toolbar']) || ($this->_View->getRequest()->query['toolbar'] !== false && $this->_View->getRequest()->query['toolbar'] !== 'false')) {
-                if ($this->_View->getRequest()->getParam('prefix') !== 'Admin' && !empty($this->_View->get('user'))) {
-                    $this->css('admin/toolbar');
+            if ($this->_View->getRequest()->getQuery('toolbar') !== false && $this->_View->getRequest()->getQuery('toolbar') !== 'false') {
+                if ($currentPrefix !== 'Admin' && BcUtil::isAdminUser()) {
+                    $adminTheme = Inflector::camelize(BcSiteConfig::get('admin_theme'));
+                    $this->css($adminTheme . '.toolbar');
                 }
             }
         }
 
         if (empty($this->_View->get('preview')) && Configure::read('BcWidget.editLinkAtFront')) {
-            if ($this->_View->getRequest()->getParam('prefix') !== 'Admin' && !empty($this->_View->get('user'))) {
+            if ($currentPrefix !== 'Admin' && BcUtil::isAdminUser()) {
                 $this->css('admin/widget_link');
             }
         }
@@ -1423,13 +1413,10 @@ class BcBaserHelper extends Helper
      */
     public function func()
     {
-
-        $currentPrefix = $this->_View->get('currentPrefix');
+        $currentPrefix = $this->BcAuth->getCurrentPrefix();
         $authPrefix = Configure::read('BcPrefixAuth.' . $currentPrefix);
         $toolbar = true;
-        if ($authPrefix && isset($authPrefix['toolbar'])) {
-            $toolbar = $authPrefix['toolbar'];
-        }
+        if ($authPrefix && isset($authPrefix['toolbar'])) $toolbar = $authPrefix['toolbar'];
 
         // ### ツールバーエレメント出力
         // 《表示条件》
@@ -1439,9 +1426,10 @@ class BcBaserHelper extends Helper
         // - 管理画面でない
         // - ログインしている
         if (empty($this->_View->get('preview')) && $toolbar) {
-            if (!isset($this->_View->getRequest()->query['toolbar']) || ($this->_View->getRequest()->query['toolbar'] !== false && $this->_View->getRequest()->query['toolbar'] !== 'false')) {
-                if ($this->_View->getRequest()->getParam('prefix') !== 'Admin' && !empty($this->_View->get('user'))) {
-                    $this->element('admin/toolbar', [], ['subDir' => false]);
+            if ($this->_View->getRequest()->getQuery('toolbar') !== false && $this->_View->getRequest()->getQuery('toolbar') !== 'false') {
+                if ($currentPrefix !== 'Admin' && BcUtil::isAdminUser()) {
+                    $adminTheme = Inflector::camelize(BcSiteConfig::get('admin_theme'));
+                    $this->element($adminTheme . '.toolbar');
                 }
             }
         }

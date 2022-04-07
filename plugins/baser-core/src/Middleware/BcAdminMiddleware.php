@@ -41,9 +41,7 @@ class BcAdminMiddleware implements MiddlewareInterface
         RequestHandlerInterface $handler
     ): ResponseInterface
     {
-        if (BcUtil::isAdminSystem()) {
-            $request = $this->setCurrentSite($request);
-        }
+        if(BcUtil::loginUser()) $request = $this->setCurrentSite($request);
         return $handler->handle($request);
     }
 

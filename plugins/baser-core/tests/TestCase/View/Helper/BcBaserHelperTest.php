@@ -818,7 +818,7 @@ class BcBaserHelperTest extends BcTestCase
         unset($user['User']['password']);
         $this->BcBaser->set('user', $user['User']);
         $user['User']['UserGroup'] = $user['UserGroup'];
-        $sessionKey = BcUtil::authSessionKey('admin');
+        $sessionKey = BcUtil::authSessionKey('Admin');
         $_SESSION['Auth'][$sessionKey] = $user['User'];
     }
 
@@ -1895,6 +1895,7 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testIsPage($expected, $requestUrl)
     {
+        $_SERVER['HTTP_USER_AGENT'] = 'iPhone';
         $this->BcBaser->getView()->setRequest($this->getRequest($requestUrl));
         $this->assertEquals($expected, $this->BcBaser->isPage());
     }

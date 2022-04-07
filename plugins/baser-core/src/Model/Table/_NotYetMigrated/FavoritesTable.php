@@ -93,7 +93,7 @@ class Favorite extends AppModel
             return true;
         }
         $url = $check[key($check)];
-        $prefix = BcUtil::authSessionKey('admin');
+        $prefix = BcUtil::authSessionKey('Admin');
         $userGroupId = $this->_Session->read('Auth.' . $prefix . '.user_group_id');
         if ($userGroupId == Configure::read('BcApp.adminGroupId')) {
             return true;

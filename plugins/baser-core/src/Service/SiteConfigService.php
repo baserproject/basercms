@@ -144,7 +144,7 @@ class SiteConfigService implements SiteConfigServiceInterface
         );
 
         if ($this->SiteConfigs->saveKeyValue($siteConfigArray)) {
-            $this->entity = $siteConfig;
+            $this->entity = null;
             return $this->get();
         }
         return false;

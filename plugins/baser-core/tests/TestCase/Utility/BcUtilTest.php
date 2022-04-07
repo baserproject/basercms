@@ -92,6 +92,16 @@ class BcUtilTest extends BcTestCase
     }
 
     /**
+     * test loginUserFromSession
+     */
+    public function testLoginUserFromSession()
+    {
+        $this->assertFalse(BcUtil::loginUserFromSession());
+        $this->loginAdmin($this->getRequest('/baser/admin'));
+        $this->assertEquals('baser admin', BcUtil::loginUserFromSession()->name);
+    }
+
+    /**
      * Test isSuperUser
      * @return void
      * @dataProvider isSuperUserDataProvider
@@ -415,29 +425,8 @@ class BcUtilTest extends BcTestCase
      */
     public function testAuthSessionKey()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->assertEquals('AuthAdmin', BcUtil::authSessionKey());
     }
-
-    /**
-     * ログインしているユーザーのセッションキーを取得
-     */
-    public function testGetLoginUserSessionKey()
-    {
-        // TODO ucmitz移行時に未実装のため代替措置
-        // >>>
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        // <<<
-
-        // セッションキーを未設定の場合
-        $result = BcUtil::getLoginUserSessionKey();
-        $this->assertEquals('User', $result, 'セッションキーを取得を正しく取得できません');
-
-        // セッションキーを設定した場合
-        BcAuthComponent::$sessionKey = 'Auth.Hoge';
-        $result = BcUtil::getLoginUserSessionKey();
-        $this->assertEquals($result, 'Hoge', 'セッションキーを取得を正しく取得できません');
-    }
-
 
     /**
      * テーマ梱包プラグインのリストを取得する
@@ -654,8 +643,7 @@ class BcUtilTest extends BcTestCase
         $folder = new Folder();
         $folder->create(ROOT . DS . 'plugins' . DS . 'TestTheme');
         $file = new File($themeConfigPath);
-        $file->write('
-            <?php
+        $file->write('<?php
             return [
                 \'type\' => \'Theme\'
             ];

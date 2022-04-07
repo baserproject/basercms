@@ -154,9 +154,6 @@ $config['BcApp'] = [
     'allowedPhpOtherThanAdmins' => true,
     // テーマ編集機能の利用を許可するかどうか
     'allowedThemeEdit' => false,
-    'marketThemeRss' => 'https://market.basercms.net/themes.rss',
-    'marketPluginRss' => 'https://market.basercms.net/plugins.rss',
-    'specialThanks' => 'https://basercms.net/special_thanks/special_thanks/ajax_users',
     // 管理システムのデフォルトテーマ
     'defaultAdminTheme' => 'admin-third',
     // コンテンツの作成日を自動で更新する
@@ -172,13 +169,6 @@ $config['BcApp'] = [
     'excludeListAddPrefix' => [],
     // generator のメタタグを出力するかどうか
     'outputMetaGenerator' => true,
-    // 外部リンク
-    'outerLinks' => [
-        // インストールマニュアル
-        'installManual' => 'http://wiki.basercms.net/%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%E3%82%AC%E3%82%A4%E3%83%89',
-        // アップデートマニュアル
-        'updateManual' => 'http://wiki.basercms.net/%E3%83%90%E3%83%BC%E3%82%B8%E3%83%A7%E3%83%B3%E3%82%A2%E3%83%83%E3%83%97%E3%82%AC%E3%82%A4%E3%83%89'
-    ],
     // システムメッセージの言語につてサイト設定を利用する
     // 	- false：ブラウザ
     // 	- true：サイト設定

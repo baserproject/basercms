@@ -11,6 +11,7 @@
 
 namespace BaserCore\View;
 
+use BaserCore\View\Helper\BcToolbarHelper;
 use Cake\View\View;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -24,6 +25,7 @@ use BaserCore\Event\BcEventDispatcherTrait;
  * @package BaserCore\View
  * @property BcPageHelper $BcPage
  * @property BcBaserHelper $BcBaser
+ * @property BcToolbarHelper $BcToolbar
  */
 class AppView extends View
 {
@@ -52,6 +54,7 @@ class AppView extends View
         // <<<
         $this->loadHelper('BaserCore.BcPage');
         $this->loadHelper('BaserCore.BcBaser');
+        $this->loadHelper('BaserCore.BcToolbar');
     }
 
     /**

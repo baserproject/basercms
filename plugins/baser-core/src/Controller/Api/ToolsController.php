@@ -39,7 +39,7 @@ class ToolsController extends BcApiController
             $json = json_decode($specialThanks);
         } else {
             try {
-                $json = file_get_contents(Configure::read('BcApp.specialThanks'), true);
+                $json = file_get_contents(Configure::read('BcLinks.specialThanks'), true);
             } catch (Exception $ex) {
             }
             if ($json) {

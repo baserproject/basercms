@@ -49,23 +49,43 @@ class BcUtil
      * @noTodo
      * @unitTest
      */
-    public static function loginUser()
+    public static function loginUser($prefix = 'Admin')
     {
         $request = Router::getRequest();
-        if(!$request) return false;
+        if (!$request) return false;
 
-        $authenticator =  $request->getAttribute('authentication');
-        if(!$authenticator) return false;
+        $authenticator = $request->getAttribute('authentication');
+        if (!$authenticator) return BcUtil::loginUserFromSession($prefix);
 
         /** @var Result $result */
         $result = $authenticator->getResult();
         if (isset($result) && $result->isValid()) {
+            /* @var User $user */
             $user = $result->getData();
             if (is_null($user->user_groups)) {
                 $userTable = TableRegistry::getTableLocator()->get('BaserCore.Users');
                 $user = $userTable->get($user->id, ['contain' => ['UserGroups']]);
             }
             return $user;
+        } else {
+            return BcUtil::loginUserFromSession($prefix);
+        }
+    }
+
+    /**
+     * セッションからログイン情報を取得する
+     * @param string $prefix
+     * @return array|false|mixed|null
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public static function loginUserFromSession($prefix = 'Admin')
+    {
+        $request = Router::getRequest();
+        $sessionKey = BcUtil::authSessionKey($prefix);
+        if($request->getSession()->check($sessionKey)) {
+            return $request->getSession()->read($sessionKey);
         } else {
             return false;
         }
@@ -396,21 +416,13 @@ class BcUtil
      *
      * @param string $prefix
      * @return mixed
+     * @checked
+     * @notodo
+     * @unitTest
      */
-    public static function authSessionKey($prefix = 'admin')
+    public static function authSessionKey($prefix = 'Admin')
     {
         return Configure::read('BcPrefixAuth.' . $prefix . '.sessionKey');
-    }
-
-    /**
-     * ログインしているユーザーのセッションキーを取得
-     *
-     * @return string
-     */
-    public static function getLoginUserSessionKey()
-    {
-        [, $sessionKey] = explode('.', BcAuthComponent::$sessionKey);
-        return $sessionKey;
     }
 
     /**
@@ -681,7 +693,7 @@ class BcUtil
         $themes = [];
         foreach($paths as $path) {
             $folder = new Folder($path);
-            $files = $folder->read(true, true);
+            $files = $folder->read(true);
             if (!$files[0]) {
                 continue;
             }

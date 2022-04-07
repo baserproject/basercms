@@ -260,7 +260,6 @@ class BcAppController extends AppController
         } else {
             $currentPrefix = 'front';
         }
-        $this->set('currentPrefix', $currentPrefix);
 
         $user = BcUtil::loginUser();
         $sessionKey = Configure::read('BcPrefixAuth.Admin.sessionKey');

@@ -14,7 +14,7 @@ namespace BaserCore\View\Helper;
 use BaserCore\Event\BcEventDispatcherTrait;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
-use Cake\ORM\Entity;
+use Cake\Datasource\EntityInterface;
 use Cake\Routing\Router;
 use Cake\View\Helper;
 use BaserCore\Annotation\UnitTest;
@@ -56,7 +56,7 @@ class BcAuthHelper extends Helper
             if (!empty($request->getParam('prefix'))) {
                 $currentPrefix = $request->getParam('prefix');
             } else {
-                $currentPrefix = 'front';
+                $currentPrefix = 'Front';
             }
         }
         return $currentPrefix;
@@ -69,9 +69,22 @@ class BcAuthHelper extends Helper
      * @noTodo
      * @unitTest
      */
-    public function getCurrentPrefixSetting(): array
+    public function getCurrentPrefixSetting(): ?array
     {
-        return Configure::read('BcPrefixAuth.' . $this->getCurrentPrefix());
+        return $this->getPrefixSetting($this->getCurrentPrefix());
+    }
+
+    /**
+     * 認証プレフィックスの設定を取得
+     * @param $prefix
+     * @return array|false[]|mixed
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getPrefixSetting($prefix)
+    {
+        return Configure::read('BcPrefixAuth.' . $prefix);
     }
 
     /**
@@ -83,29 +96,43 @@ class BcAuthHelper extends Helper
      */
     public function getCurrentLoginUrl(): string
     {
-        return Router::url($this->getCurrentPrefixSetting()['loginAction']);
+        return $this->getLoginUrl($this->getCurrentPrefix());
+    }
+
+    /**
+     * 認証プレフィックスのログインURLを取得
+     * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getLoginUrl($prefix)
+    {
+        $setting = $this->getPrefixSetting($prefix);
+        if(!empty($setting['loginAction'])) {
+            return Router::url($setting['loginAction']);
+        } else {
+            return '';
+        }
     }
 
     /**
      * 現在のユーザーに許可された認証プレフィックスを取得する
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function getCurrentUserPrefixSettings(): array
+    public function getCurrentUserPrefixes(): array
     {
-        // TODO: 現在のログインユーザーのセッションキーを取得
-        // $sessionKey = BcUtil::getLoginUserSessionKey();
-        // >>>
-//        $sessionKey = 'admin';
-        // <<<
-//		$currentUserPrefixes = [];
-        // TODO 取り急ぎ
-        // >>>
-//		if ($this->Session->check('Auth.' . $sessionKey . '.UserGroup.auth_prefix')) {
-//			$currentUserAuthPrefixes = explode(',', $this->Session->read('Auth.' . $sessionKey . '.UserGroup.auth_prefix'));
-//		}
-//        $currentUserPrefixes = ['admin'];
-        // <<<
-        return ['admin'];
+        $user = BcUtil::loginUser();
+        if(!$user) return [];
+		$prefixes = [];
+		foreach($user->user_groups as $userGroup) {
+		    $prefix = explode(',', $userGroup->auth_prefix);
+		    $prefixes = array_merge($prefixes, $prefix);
+		}
+        return $prefixes;
     }
 
     /**
@@ -117,7 +144,7 @@ class BcAuthHelper extends Helper
      */
     public function isCurrentUserAdminAvailable(): bool
     {
-        return in_array('admin', $this->getCurrentUserPrefixSettings());
+        return in_array('Admin', $this->getCurrentUserPrefixes());
     }
 
 
@@ -131,7 +158,7 @@ class BcAuthHelper extends Helper
     public function getCurrentName()
     {
         $currentPrefixSetting = $this->getCurrentPrefixSetting();
-        if (!empty($currentPrefixSetting['name']) && $this->getCurrentPrefix() !== 'front') {
+        if (!empty($currentPrefixSetting['name']) && $this->getCurrentPrefix() !== 'Front') {
             $name = $currentPrefixSetting['name'];
         } elseif (isset($this->BcBaser->siteConfig['formal_name'])) {
             $name = $this->BcBaser->siteConfig['formal_name'];
@@ -162,7 +189,24 @@ class BcAuthHelper extends Helper
      */
     public function getCurrentLogoutUrl()
     {
-        return Router::url($this->getCurrentPrefixSetting()['logoutAction']);
+        return $this->getLogoutUrl($this->getCurrentPrefix());
+    }
+
+    /**
+     * ログアウトURLを取得する
+     * @return mixed
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getLogoutUrl($prefix)
+    {
+        $setting = $this->getPrefixSetting($prefix);
+        if(!empty($setting['logoutAction'])) {
+            return Router::url($setting['logoutAction']);
+        } else {
+            return '';
+        }
     }
 
     /**
@@ -174,12 +218,17 @@ class BcAuthHelper extends Helper
      */
     public function getCurrentLoginRedirectUrl()
     {
-        return Router::url($this->getCurrentPrefixSetting()['loginRedirect']);
+        $setting = $this->getCurrentPrefixSetting();
+        if(!empty($setting['loginRedirect'])) {
+            return Router::url($setting['loginRedirect']);
+        } else {
+            return '';
+        }
     }
 
     /**
      * 現在のログインユーザー
-     * @return Entity
+     * @return EntityInterface
      * @checked
      * @noTodo
      * @unitTest

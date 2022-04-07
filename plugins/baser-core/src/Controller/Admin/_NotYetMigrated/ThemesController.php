@@ -158,7 +158,7 @@ class ThemesController extends AppController
         if (!$baserThemes) {
             $Xml = new Xml();
             try {
-                $baserThemes = $Xml->build(Configure::read('BcApp.marketThemeRss'));
+                $baserThemes = $Xml->build(Configure::read('BcLinks.marketThemeRss'));
             } catch (Exception $ex) {
             }
             if ($baserThemes) {
