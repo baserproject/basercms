@@ -6,7 +6,7 @@
  * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
- * @license       http://basercms.net/license/index.html MIT License
+ * @license       https://basercms.net/license/index.html MIT License
  */
 !function(e){e.baseUrl=function(){return e("#AdminScript").attr("data-baseUrl")}}(jQuery)},function(e,t){
 /**
@@ -16,7 +16,7 @@
  * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
- * @license       http://basercms.net/license/index.html MIT License
+ * @license       https://basercms.net/license/index.html MIT License
  */
 !function(e){e.bcUtil={disabledHideMessage:!1,baseUrl:null,baserCorePrefix:null,adminPrefix:null,adminBaseUrl:null,apiBaseUrl:null,ajaxLoaderPath:null,ajaxLoaderSmallPath:null,init:function(t){var n=e("#AdminScript");e.bcUtil.baseUrl=n.attr("data-baseUrl"),e.bcUtil.baserCorePrefix=n.attr("data-baserCorePrefix"),e.bcUtil.adminPrefix=n.attr("data-adminPrefix"),e.bcUtil.ajaxLoaderPath=n.attr("data-ajaxLoaderPath"),e.bcUtil.ajaxLoaderSmallPath=n.attr("data-ajaxLoaderSmallPath"),e.bcUtil.frontFullUrl=n.attr("data-frontFullUrl"),void 0!==t.baseUrl&&(e.bcUtil.baseUrl=t.baseUrl),void 0!==t.baserCorePrefix&&(e.bcUtil.baserCorePrefix=t.baserCorePrefix),void 0!==t.adminPrefix&&(e.bcUtil.adminPrefix=t.adminPrefix),void 0!==t.ajaxLoaderPath&&(e.bcUtil.ajaxLoaderPath=t.ajaxLoaderPath),void 0!==t.ajaxLoaderSmallPath&&(e.bcUtil.ajaxLoaderSmallPath=t.ajaxLoaderSmallPath),e.bcUtil.adminBaseUrl=e.bcUtil.baseUrl+"/"+e.bcUtil.baserCorePrefix+"/"+e.bcUtil.adminPrefix+"/",e.bcUtil.apiBaseUrl=e.bcUtil.baseUrl+"/"+e.bcUtil.baserCorePrefix+"/api/"},showAlertMessage:function(t){e.bcUtil.hideMessage(),e("#BcSystemMessage").removeClass("notice-messge alert-message").addClass("alert-message").html(t),e("#BcMessageBox").fadeIn(500)},showNoticeMessage:function(t){e.bcUtil.hideMessage(),e("#BcSystemMessage").removeClass("notice-messge alert-message").addClass("notice-message").html(t),e("#BcMessageBox").fadeIn(500)},hideMessage:function(){e.bcUtil.disabledHideMessage||(e("#BcMessageBox").fadeOut(200),e("#AlertMessage").fadeOut(200),e("#MessageBox").fadeOut(200))},showLoader:function(t,n,r){switch((null==t||"none"!=t&&null==n)&&(t="over"),t){case"over":e("#Waiting").show();break;case"inner":var o=e("<div>").css({"text-align":"center"}).attr("id",r),c=e("<img>").attr("src",e.bcUtil.ajaxLoaderPath);o.html(c),e(n).html(o);break;case"after":c=e("<img>").attr("src",e.bcUtil.ajaxLoaderSmallPath).attr("id",r).css("width","16px");e(n).after(c);break;case"target":e(n).show()}},hideLoader:function(t,n,r){switch((null==t||"none"!=t&&null==n)&&(t="over"),t){case"over":e("#Waiting").hide();break;case"inner":case"after":e("#"+r).remove();break;case"target":e(n).show()}},ajax:function(t,n,r){var o,c,a;r||(r={});var i=!0;void 0!==r.loaderType&&(o=r.loaderType,delete r.loaderType),void 0!==r.loaderSelector&&(c=r.loaderSelector,delete r.loaderSelector,a=c.replace(/\./g,"").replace(/#/g,"").replace(/\s/g,"")+"loaderkey"),void 0!==r.hideLoader&&(i=r.hideLoader,delete r.loaderType);var s={url:t,headers:{Authorization:e.bcJwt.accessToken},type:"POST",dataType:"html",beforeSend:function(){e.bcUtil.showLoader(o,c,a)},complete:function(){i&&e.bcUtil.hideLoader(o,c,a)},error:function(t,n,r){e.bcUtil.showAjaxError(bcI18n.commonExecFailedMessage,t,r)},success:n};return r&&e.extend(s,r),e.ajax(s)},showAjaxError:function(t,n,r){var o="";void 0!==n&&n.status&&(o="<br>("+n.status+") "),void 0!==n&&n.responseJSON&&(o+=n.responseJSON.message),void 0!==n&&n.responseText?o+="<br>"+n.responseText:void 0!==r&&(o+="<br>"+r),e.bcUtil.showAlertMessage(t+o)}}}(jQuery)},function(e,t){
 /**
@@ -26,7 +26,7 @@
  * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
- * @license       http://basercms.net/license/index.html MIT License
+ * @license       https://basercms.net/license/index.html MIT License
  */
 !function(e){e.bcToken={key:null,requested:!1,requesting:!1,url:null,defaultUrl:"/baser/baser-core/bc_form/get_token?requestview=false",init:function(){this.setTokenUrl()},check:function(t,n){if(this.requesting)var r=setInterval((function(){e.bcToken.requesting||(clearInterval(r),t&&e.bcToken.execCallback(t,n))}),100);else this.key?t&&this.execCallback(t,n):this.update(n).done((function(){t&&e.bcToken.execCallback(t,n)}))},execCallback:function(t,n){var r={useUpdate:!0};n=void 0!==n?e.extend(r,n):r;var o=t();n.useUpdate&&(n.hideLoader=!0,n.loaderType="none",o?o.always((function(){e.bcToken.update(n)})):this.update(n))},update:function(t){var n={type:"GET"};return t=void 0!==t?e.extend(n,t):n,this.requesting=!0,e.bcUtil.ajax(e.baseUrl()+this.url,(function(t){e.bcToken.key=t,e.bcToken.requesting=!1,e('input[name="_csrfToken"]').val(e.bcToken.key)}),e.extend(!0,{},t))},getForm:function(t,n,r){var o=e("<form/>");o.attr("action",t).attr("method","post"),this.check((function(){o.append(e.bcToken.getHiddenToken()),n(o)}),r)},getHiddenToken:function(){return e('<input name="_csrfToken" type="hidden">').val(this.key)},submitToken:function(t){this.getForm(t,(function(t){e("body").append(t),t.submit()}),{useUpdate:!1,hideLoader:!1})},replaceLinkToSubmitToken:function(t){e(t).each((function(){if(e(this).attr("onclick")){var t=e(this).attr("onclick").match(/if \(confirm\("(.+?)"\)/);t&&(e(this).attr("data-confirm-message",t[1]),e(this).get(0).onclick="",e(this).removeAttr("onclick"))}})),e(t).click((function(){if(e(this).attr("data-confirm-message")){var t=e(this).attr("data-confirm-message");if(t=JSON.parse('"'+t+'"').replace(/\\n/g,"\n"),!confirm(t))return!1}return e.bcToken.submitToken(e(this).attr("href")),!1}))},setTokenUrl:function(e){return this.url=null!=e?e:this.defaultUrl,this}}}(jQuery)},function(e,t){
 /**
@@ -36,7 +36,7 @@
  * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
- * @license       http://basercms.net/license/index.html MIT License
+ * @license       https://basercms.net/license/index.html MIT License
  */
 !function(e){e.bcSortable={updateSortUrl:null,init:function(t){this.updateSortUrl=t.updateSortUrl;var n=e(".sort-handle"),r=e(".sort-table");n.unbind();try{e(r).sortable("destroy")}catch(e){}var o={scroll:!0,items:"tr.sortable",opacity:1,zIndex:55,containment:"body",tolerance:"pointer",distance:5,cursor:"move",handle:".sort-handle",placeholder:"ui-sortable-placeholder",revert:100,start:this.sortStartHandler,update:this.sortUpdateHandler};n.css("cursor","move"),r.sortable(o),n.click((function(e){e.stopPropagation()}))},sortStartHandler:function(t,n){e(".ui-sortable-placeholder").css("height",n.item.height())},sortUpdateHandler:function(t,n){var r=n.item,o=e(".sort-table tr.sortable").index(r)+1-r.attr("id").replace("Row",""),c=e(".sort-table"),a=e("#AlertMessage"),i=e("<form/>").hide(),s=e("<input/>").attr("type","hidden").attr("name","Sort[id]").val(r.find(".id").val()),l=e("<input/>").attr("type","hidden").attr("name","Sort[offset]").val(o);i.append(s).append(l),e.bcToken.check((function(){i.append(e.bcToken.getHiddenToken());var t=i.serialize();return i.find('input[name="_csrfToken"]').remove(),e.ajax({url:e.bcSortable.updateSortUrl,headers:{Authorization:e.bcJwt.accessToken},type:"POST",data:t,dataType:"text",beforeSend:function(){a.fadeOut(200),e("#flashMessage").fadeOut(200),e.bcUtil.showLoader()},success:function(t){"1"===t?c.find("tr.sortable").each((function(t,n){e(this).attr("id","Row"+(t+1))})):(c.sortable("cancel"),a.html(bcI18n.commonSortSaveFailedMessage),a.fadeIn(500))},error:function(e,t,n){var r="";r=404===e.status?"<br>"+bcI18n.commonNotFoundProgramMessage:e.responseText?"<br>"+e.responseText:"<br>"+n,c.sortable("cancel"),a.html(bcI18n.commonSortSaveFailedMessage+"("+e.status+")"+r),a.fadeIn(500)},complete:function(){e.bcUtil.hideLoader()}})}),{hideLoader:!1})}}}(jQuery)},function(e,t){function n(e){void 0!==e.attr("checked")?$(e).parent().parent().addClass("selectedrow"):$(e).parent().parent().removeClass("selectedrow")}
 /**
@@ -76,7 +76,7 @@
  * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
- * @license       http://basercms.net/license/index.html MIT License
+ * @license       https://basercms.net/license/index.html MIT License
  */
 !function(e){e.bcJwt={accessToken:null,init:function(){var e=localStorage.getItem("refreshToken");e&&"null"!==e&&this.getToken(e)},login:function(t,n,r,o,c){e.ajax({url:e.bcUtil.apiBaseUrl+"baser-core/users/login.json",type:"post",data:{email:t,password:n,saved:void 0!==r&&r?1:""},dataType:"json"}).done(function(e){e&&(this.setToken(e.access_token,e.refresh_token),o&&o(e))}.bind(this)).fail((function(){c&&c()}))},getToken:function(t){t&&e.ajax({url:e.bcUtil.apiBaseUrl+"baser-core/users/refresh_token.json",type:"get",async:!1,headers:{Authorization:t,"Content-Type":"application/json"},dataType:"json"}).done(function(e){e?this.setToken(e.access_token,e.refresh_token):alert("APIトークンが取得できませんでした。ブラウザをリロードしてください。")}.bind(this)).fail((function(e){401===e.response.status&&localStorage.setItem("refreshToken","")}))},setToken:function(e,t){this.accessToken=e,localStorage.setItem("refreshToken",t)},logout:function(){this.removeToken()},removeToken:function(){localStorage.setItem("refreshToken",null),this.accessToken=null}}}(jQuery)},function(e,t){
 /**
@@ -86,7 +86,7 @@
  * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
- * @license       http://basercms.net/license/index.html MIT License
+ * @license       https://basercms.net/license/index.html MIT License
  */
 window.addEventListener("DOMContentLoaded",(function(){var e=document.querySelector('[data-js-tmpl="AdminMenu"]'),t=document.getElementById("AdminMenu"),n=null;try{n=JSON.parse(t?t.textContent:"{}")}catch(e){window.console&&console.warn("管理メニューのデータが破損しています（JSONデータが不正です）")}if(e&&n&&n.menuList&&n.menuList.length){var r=[],o=[];n.menuList.forEach((function(e,t){"system"===e.type?o.push(e):r.push(e)})),e.hidden=!1;var c=o.some((function(e){return e.current||e.expanded})),a=new Vue({el:e,data:{systemExpanded:c,baseURL:$.baseUrl(),currentSiteId:n.currentSiteId,contentList:r,isSystemSettingPage:c,systemList:o},methods:{openSystem:function(){a.systemExpanded=!a.systemExpanded}}})}else window.console&&console.warn("データが空のため、管理メニューは表示されませんでした")}))}]);
 //# sourceMappingURL=common.bundle.js.map

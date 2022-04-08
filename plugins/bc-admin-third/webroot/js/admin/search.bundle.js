@@ -6,7 +6,7 @@
  * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
- * @license       http://basercms.net/license/index.html MIT License
+ * @license       https://basercms.net/license/index.html MIT License
  */
 $((function(){var e=$("#AdminSearchScript"),t=e.attr("data-adminSearchOpened"),r=e.attr("data-adminSearchOpenedSaveUrl");function n(e){var t=r;e?($("#Search").slideDown(300),t+="/1"):($("#Search").slideUp(300),t+="/"),$.ajax({type:"GET",url:t,headers:{Authorization:$.bcJwt.accessToken}})}n(t),$("#BtnMenuSearch").click((function(){"none"===$("#Search").css("display")?n(!0):n(!1)})),$("#CloseSearch").click((function(){n(!1)})),$("#BtnSearchClear").click((function(){return $('#Search input[type="text"]').val(""),$('#Search input[type="radio"], #Search input[type="checkbox"]').removeAttr("checked"),$("#Search select").val(""),!1}))}))}});
 //# sourceMappingURL=search.bundle.js.map
