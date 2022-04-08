@@ -19,9 +19,7 @@ use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Utility\BcApiUtil;
-use Cake\Core\Configure;
 use Cake\Event\EventInterface;
-use Firebase\JWT\JWT;
 
 /**
  * Class BcApiController
@@ -48,6 +46,9 @@ class BcApiController extends AppController
      * トークンを取得する
      * @param ResultInterface $result
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getAccessToken(ResultInterface $result): array
     {
@@ -63,6 +64,9 @@ class BcApiController extends AppController
      * @param EventInterface $event
      * @return \Cake\Http\Response|void|null
      * @throws \Exception
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function beforeFilter(EventInterface $event)
     {
@@ -87,6 +91,20 @@ class BcApiController extends AppController
                 $this->setResponse($this->response->withStatus(401));
             }
         }
+    }
+
+    /**
+     * Before render
+     * 日本語を Unicode エスケープしないようにする
+     * @param EventInterface $event
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function beforeRender(EventInterface $event): void
+    {
+        parent::beforeRender($event);
+        $this->viewBuilder()->setOption('jsonOptions', JSON_UNESCAPED_UNICODE);
     }
 
 }

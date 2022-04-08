@@ -16,6 +16,7 @@ use BaserCore\Controller\Api\BcApiController;
 use BaserCore\Service\UserServiceInterface;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
+use Cake\Event\Event;
 use Cake\TestSuite\IntegrationTestTrait;
 
 /**
@@ -106,6 +107,16 @@ class BcApiControllerTest extends BcTestCase
         $users->save($user);
         $this->get('/baser/api/baser-core/users/index.json?token=' . $token['access_token']);
         $this->assertResponseCode(401);
+    }
+
+    /**
+     * test beforeRender
+     */
+    public function testBeforeRender()
+    {
+        $controller = new BcApiController($this->getRequest());
+        $controller->beforeRender(new Event('beforeRender'));
+        $this->assertEquals(JSON_UNESCAPED_UNICODE, $controller->viewBuilder()->getOption('jsonOptions'));
     }
 
 }
