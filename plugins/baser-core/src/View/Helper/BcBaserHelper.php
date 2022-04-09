@@ -797,7 +797,7 @@ class BcBaserHelper extends Helper
             $siteManage = $this->getService(SiteServiceInterface::class);
             $site = $siteManage->findByUrl($this->_View->get('publishLink'));
             $useSubdomain = $fullUrl = false;
-            if ($site && $site->getName()) {
+            if ($site && $site->name) {
                 $useSubdomain = $site->use_subdomain;
                 $fullUrl = true;
             }
