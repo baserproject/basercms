@@ -19,7 +19,7 @@ use Cake\Utility\Inflector;
  * toolbar
  * @var BcAdminAppView $this
  */
-$adminTheme = Inflector::camelize(BcSiteConfig::get('admin_theme'));
+$adminTheme = BcUtil::getCurrentAdminTheme();
 $loginUser = $this->BcAuth->getCurrentLoginUser();
 // JSの出力について、ツールバーはフロントエンドでも利用するため、inlineに出力する
 $this->BcBaser->js([$adminTheme . '.vendor/jquery.fixedMenu', $adminTheme . '.vendor/outerClick', $adminTheme . '.admin/toolbar.bundle']);
