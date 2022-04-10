@@ -1355,7 +1355,7 @@ class BcBaserHelper extends Helper
             if ($this->_View->getRequest()->getQuery('toolbar') !== false && $this->_View->getRequest()->getQuery('toolbar') !== 'false') {
                 if ($currentPrefix !== 'Admin' && BcUtil::isAdminUser()) {
                     $adminTheme = Inflector::camelize(BcSiteConfig::get('admin_theme'));
-                    if($adminTheme) $this->css($adminTheme . '.toolbar');
+                    if($adminTheme) $this->css($adminTheme . '.admin/toolbar');
                 }
             }
         }
