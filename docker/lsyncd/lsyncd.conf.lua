@@ -32,3 +32,10 @@ sync {
         delay = 0,
         delete="running",
 }
+sync {
+        default.rsync,
+        source = "/var/www/html/vendor",
+        target = "/var/www/shared/vendor",
+        delay = 0,
+        delete="running",
+}
