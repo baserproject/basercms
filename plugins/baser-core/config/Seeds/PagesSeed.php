@@ -23,7 +23,7 @@ class PagesSeed extends AbstractSeed
         $data = [
             [
                 'id' => '2',
-                'contents' => '<p>座右の銘「やるときゃやる」</p>',
+                'contents' => '<p>This is ucmitz Project.</p>',
                 'draft' => '',
                 'page_template' => '',
                 'modified' => '2017-05-03 15:12:27',
