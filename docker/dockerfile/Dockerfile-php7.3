@@ -32,6 +32,7 @@ RUN apt-get update \
 		libpq-dev \
 		rsync \
 		lsyncd \
+		mariadb-client \
     && docker-php-ext-install -j$(nproc) iconv pdo_mysql pdo_pgsql mbstring exif xml tokenizer zip intl \
     && docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/ \
     && docker-php-ext-install -j$(nproc) gd \
@@ -47,6 +48,7 @@ COPY apache/ssl/ssl-cert-snakeoil.pem /etc/ssl/certs/
 RUN chmod 400 /etc/ssl/private/ssl-cert-snakeoil.key \
 	&& chmod 400 /etc/ssl/certs/ssl-cert-snakeoil.pem
 RUN groupmod -g 1000 www-data && usermod -u 1000 www-data
+RUN echo 'ServerName localhost:80' >> /etc/apache2/apache2.conf
 
 # lsyncd
 COPY lsyncd/lsyncd.conf.lua /etc/lsyncd/lsyncd.conf.lua
