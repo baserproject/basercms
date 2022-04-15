@@ -29,6 +29,7 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Note;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\Doc;
 
 /**
  * Class BcBaserHelper
@@ -189,6 +190,7 @@ class BcBaserHelper extends Helper
      * @checked
      * @noTodo
      * @unitTest
+     * @doc
      */
     public function js($url, $inline = true, $options = [])
     {
