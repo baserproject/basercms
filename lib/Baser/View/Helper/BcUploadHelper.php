@@ -90,7 +90,7 @@ class BcUploadHelper extends BcAppHelper
 		if (is_array($value)) {
 			$sessionKey = $this->value($fieldName . '_tmp');
 			$oldValue = $this->value($fieldName . '_');
-			if (!$sessionKey && empty($value['name'] && $oldValue)) {
+			if (!$sessionKey && empty($value['name']) && $oldValue) {
 				$value = $oldValue;
 			} else {
 				if ($sessionKey) {
