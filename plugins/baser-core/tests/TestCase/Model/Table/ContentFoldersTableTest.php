@@ -93,6 +93,16 @@ class ContentFoldersTableTest extends BcTestCase
     }
 
     /**
+     * implementedEvents
+     *
+     *  @return void
+     */
+    public function testImplementedEvents()
+    {
+        $this->assertTrue(is_array($this->ContentFolders->implementedEvents()));
+    }
+
+    /**
      * testValidationDefault
      *
      * @return void
