@@ -1082,10 +1082,12 @@ class BcBaserHelper extends AppHelper
 		}
 		$forceTitle = $options['forceTitle'];
 		$ssl = $options['ssl'];
+		$fullUrl = $options['fullUrl'];
 
 		unset($options['prefix']);
 		unset($options['forceTitle']);
 		unset($options['ssl']);
+		unset($options['fullUrl']);
 
 		// 管理システムメニュー対策
 		// プレフィックスが変更された場合も正常動作させる為
@@ -1147,7 +1149,7 @@ class BcBaserHelper extends AppHelper
 				$_url = 'index.php/' . $_url;
 			}
 			if (!$ssl && !$admin) {
-				if ($options['fullUrl']) { // フルパスで取得
+				if ($fullUrl) { // フルパスで取得
 					$url = Configure::read('BcEnv.siteUrl') . $_url;
 				} else { // baserCMSの設置パスも含めたルートパスで取得
 					$passArray = explode($_SERVER["HTTP_HOST"], Configure::read('BcEnv.siteUrl'));
@@ -1156,7 +1158,7 @@ class BcBaserHelper extends AppHelper
 			} else {
 				$sslUrl = Configure::read('BcEnv.sslUrl');
 				if ($sslUrl) {
-					if ($options['fullUrl']) { // フルパスで取得
+					if ($fullUrl) { // フルパスで取得
 						$url = $sslUrl . $_url;
 					} else { // baserCMSの設置パスも含めたルートパスで取得
 						$passArray = explode($_SERVER["HTTP_HOST"], $sslUrl);
