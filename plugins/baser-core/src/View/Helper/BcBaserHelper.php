@@ -1162,6 +1162,7 @@ class BcBaserHelper extends Helper
      * @checked
      * @noTodo
      * @unitTest
+     * @doc
      */
     public function isHome()
     {
@@ -1536,6 +1537,7 @@ class BcBaserHelper extends Helper
      * @checked
      * @unitTest
      * @noTodo
+     * @doc
      */
     public function isSSL()
     {
