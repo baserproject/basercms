@@ -213,6 +213,7 @@ class BcBaserHelper extends Helper
      * @checked
      * @noTodo
      * @unitTest
+     * @doc
      */
     public function element($name, $data = [], $options = [])
     {
@@ -234,6 +235,7 @@ class BcBaserHelper extends Helper
      * @checked
      * @unitTest
      * @noTodo
+     * @doc
      */
     public function getElement(string $name, array $data = [], array $options = [])
     {
@@ -290,6 +292,7 @@ class BcBaserHelper extends Helper
      * @checked
      * @noTodo
      * @unitTest
+     * @doc
      */
     public function img($path, $options = [])
     {
@@ -306,6 +309,7 @@ class BcBaserHelper extends Helper
      * @checked
      * @noTodo
      * @unitTest
+     * @doc
      */
     public function getImg($path, $options = [])
     {
@@ -329,6 +333,7 @@ class BcBaserHelper extends Helper
      * @checked
      * @noTodo
      * @unitTest
+     * @doc
      */
     public function link($title, $url = null, $htmlAttributes = [], $confirmMessage = false)
     {
@@ -350,6 +355,7 @@ class BcBaserHelper extends Helper
      *    リンクをクリックした際に確認メッセージが表示され、はいをクリックした場合のみ遷移する
      * @return string
      * @checked
+     * @doc
      */
     public function getLink($title, $url = null, $options = [], $confirmMessage = false)
     {
@@ -484,6 +490,7 @@ class BcBaserHelper extends Helper
      * @checked
      * @noTodo
      * @unitTest
+     * @doc
      */
     public function isAdminUser($user = null): bool
     {
@@ -524,6 +531,7 @@ class BcBaserHelper extends Helper
      * @checked
      * @unitTest
      * @noTodo
+     * @doc
      */
     public function url($url = null, $full = false, $sessionId = true)
     {
@@ -541,6 +549,7 @@ class BcBaserHelper extends Helper
      * @checked
      * @noTodo
      * @unitTest
+     * @doc
      */
     public function getUserName($user)
     {
@@ -571,6 +580,7 @@ class BcBaserHelper extends Helper
      * @checked
      * @noTodo
      * @unitTest
+     * @doc
      */
     public function flash($key = 'flash'): void
     {
