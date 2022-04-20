@@ -42,8 +42,8 @@ jobs:
           cp docker-compose.yml.default docker-compose.yml
           docker-compose up -d
 
-      - name: Sleep for 10 seconds
-        run: sleep 10
+      - name: Sleep for 20 seconds
+        run: sleep 20
 
       - name: Compose log
         run: |
