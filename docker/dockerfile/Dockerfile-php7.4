@@ -69,6 +69,6 @@ RUN echo 'sendmail_path = "/usr/bin/msmtp -t"' > /usr/local/etc/php/conf.d/mail.
 COPY msmtp/msmtprc /etc/msmtprc
 
 # composer
-# RUN curl -sS https://getcomposer.org/installer | php \
-#    && mv composer.phar /usr/local/bin/composer \
-#    && composer self-update
+RUN curl -sS https://getcomposer.org/installer | php \
+    && mv composer.phar /usr/local/bin/composer \
+    && composer self-update
