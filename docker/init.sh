@@ -12,6 +12,9 @@ fi
 if [ ! -d '/var/www/html/app/webroot/files' ]; then
     mkdir /var/www/html/app/webroot/files
 fi
+if [ ! -d '/var/www/html/docker' ]; then
+    mkdir /var/www/html/docker
+fi
 service lsyncd start
 
 if [ ! -e '/var/www/shared/docker/check' ]; then

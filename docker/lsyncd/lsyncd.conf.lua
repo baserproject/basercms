@@ -13,6 +13,13 @@ sync {
 }
 sync {
         default.rsync,
+        source = "/var/www/shared/docker/bin/",
+        target = "/var/www/html/docker/bin/",
+        delay = 0,
+        delete="running"
+}
+sync {
+        default.rsync,
         source = "/var/www/html/",
         target = "/var/www/shared/",
         delay = 1,
