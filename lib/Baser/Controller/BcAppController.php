@@ -648,7 +648,7 @@ class BcAppController extends Controller
 			'auth' => __d('baser', 'バリデーションエラーまたはコントローラ/アクションの不一致によるエラーです。'),
 		];
 
-		$message = __d('baser', '不正なリクエストと判断されました。');
+		$message = __d('baser', '不正なリクエストです。もしくは、システムが受信できるデータ上限より大きなデータが送信された可能性があります。');
 
 		if (array_key_exists($err, $errorMessages)) {
 			$message .= "(type:{$err})" . $errorMessages[$err];
