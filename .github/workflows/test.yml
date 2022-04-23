@@ -36,8 +36,8 @@ jobs:
           sed -i -e "s/basercms:php8.1/basercms:php${{ matrix.php-version }}/g" docker-compose.yml;
           docker-compose up -d
 
-      - name: Sleep for 30 seconds
-        run: sleep 30
+      - name: Sleep for 40 seconds
+        run: sleep 40
 
       - name: Compose log
         run:  |
