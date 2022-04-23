@@ -467,4 +467,14 @@ class BcUploadBehavior extends ModelBehavior
 		return ($oldEntity)? $oldEntity[$model->alias] : [];
 	}
 
+	/**
+	 * renameToBasenameFields
+	 * @param Model $Model
+	 */
+	public function renameToBasenameFields(Model $model)
+	{
+		$model->data[$model->alias] = $this->BcFileUploader[$model->alias]->renameToBasenameFields($model->data[$model->alias]);
+		return $model->data;
+	}
+
 }
