@@ -70,6 +70,9 @@ class ContentFoldersTable extends AppTable
      * Implemented Events
      *
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function implementedEvents(): array
     {

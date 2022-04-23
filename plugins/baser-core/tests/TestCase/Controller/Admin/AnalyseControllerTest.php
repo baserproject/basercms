@@ -81,6 +81,7 @@ class AnalyseControllerTest extends BcTestCase
             "checked" => true,
             "unitTest" => true,
             "noTodo" => true,
+            "doc" => false,
             "note" => "",
             'type' => 'config'
         ];
