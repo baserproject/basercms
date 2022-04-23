@@ -48,8 +48,9 @@ class MaildataHelper extends BcTextHelper
 	 * @param array|string $options コントロールソース
 	 * @return string メール用データ
 	 */
-	public function toDisplayString($type, $value)
+	public function toDisplayString($type, $value, $prefixSpace = true)
 	{
+		$result = '';
 		switch($type) {
 			case 'text':
 			case 'radio':
@@ -58,7 +59,8 @@ class MaildataHelper extends BcTextHelper
 			case 'tel':
 			case 'number':
 			case 'password':
-				return ' ' . $value;
+				$result = $value;
+				break;
 
 			case 'pref':
 				$prefs = $this->prefList();
@@ -66,75 +68,71 @@ class MaildataHelper extends BcTextHelper
 				foreach($prefs as $pref) {
 					$options[$pref] = $pref;
 				}
-				if (isset($options[$value])) {
-					return ' ' . $options[$value];
-				}
-				return '';
+				if (isset($options[$value])) $result = $options[$value];
+				break;
 
 			case 'multi_check':
-				if ($value === '') {
-					return '';
-				}
-
-				if (!is_array($value)) {
-					$value = explode("|", $value);
-				}
-
-				$out = '';
-				foreach($value as $key => $data) {
-					$out .= " ・" . $data . PHP_EOL;
-				}
-				return $out;
+				if ($value === '') break;
+				if (!is_array($value)) $value = explode("|", $value);
+				$result = $value;
+				break;
 
 			case 'file':
-				if (empty($value)) {
-					return '';
-				}
-
+				$prefixSpace = false;
+				if (empty($value)) break;
 				$mailContent = $this->_View->get('mailContent');
 				$aryFile = explode('/', $value);
 				$file = $aryFile[count($aryFile) - 1];
 				$ext = decodeContent(null, $file);
-				$link = array_merge(
-					[
+				$link = array_merge([
 						'admin' => true,
 						'controller' => 'mail_messages',
 						'action' => 'attachment',
 						$mailContent['MailContent']['id']
-					],
-					$aryFile
-				);
+				], $aryFile);
 				if (in_array($ext, ['gif', 'jpg', 'png'])) {
-					return $this->BcBaser->getLink(
+					$result = $this->BcBaser->getLink(
 						$this->BcBaser->getImg($link, ['width' => 400]), $link, ['target' => '_blank']
 					);
+				} else {
+					$result = $this->BcBaser->getLink($file, $link);
 				}
-
-				return $this->BcBaser->getLink($file, $link);
+				break;
 
 			case 'date_time_calender':
-				if (is_array($value)) {
-					$value = $this->dateTime($value);
-				}
-				if ($value) {
-					return ' ' . date(__d('baser', 'Y年 m月 d日'), strtotime($value));
-				}
-				return '';
+				if (is_array($value)) $value = $this->dateTime($value);
+				if ($value) $result = date(__d('baser', 'Y年 m月 d日'), strtotime($value));
+				break;
 
 			case 'date_time_wareki':
-				if (!is_array($value)) {
-					$value = $this->BcTime->convertToWarekiArray($value);
-				}
-				return ' ' . $this->dateTimeWareki($value);
+				if (!is_array($value)) $value = $this->BcTime->convertToWarekiArray($value);
+				$result = $this->dateTimeWareki($value);
+				break;
 
 			case 'autozip':
 				if (strlen($value) == 7) {
-					return substr($value, 0, 3) . '-' . substr($value, 3, 7);
+					$result = substr($value, 0, 3) . '-' . substr($value, 3, 7);
+				} else {
+					$result = $value;
 				}
-				return ' ' . $value;
+				break;
 
 			default:
-				return $value;
+				$prefixSpace = false;
+				$result = $value;
 		}
+
+		if(is_array($result)) {
+			$out = '';
+			foreach($result as $v) {
+				$v = "・" . $v . PHP_EOL;
+				if($prefixSpace) $v = ' ' . $v;
+				$out .= $v;
+			}
+			$result = $out;
+		} else {
+			if($prefixSpace && $result) $result = ' ' . $result;
+		}
+		return $result;
 	}
 }

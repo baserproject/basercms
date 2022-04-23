@@ -44,13 +44,13 @@ class MaildataHelperTest extends BaserTestCase
 	 * メール表示用のデータを出力する
 	 * @dataProvider toDisplayStringProvider
 	 */
-	public function testToDisplayString($type, $value, $options, $expected)
+	public function testToDisplayString($type, $value, $prefixSpace, $expected)
 	{
 		if ($type == 'file') {
 			$this->View->set('mailContent', ['MailContent' => ['id' => 1]]);
 		}
 
-		$result = $this->Maildata->toDisplayString($type, $value, $options);
+		$result = $this->Maildata->toDisplayString($type, $value, $prefixSpace);
 		$this->assertEquals($result, $expected);
 	}
 
@@ -67,43 +67,37 @@ class MaildataHelperTest extends BaserTestCase
 			'world'
 		];
 		return [
-			['text', 'hoge', '', ' hoge'],
-			['textarea', 'hoge', '', 'hoge'],
-			['email', 'hoge', '', ' hoge'],
-			['hidden', 'hoge', '', 'hoge'],
-			['radio', '', '', ' '],
-			['radio', '', $options, ' '],
-			['radio', 'hoge', $options, ' hoge'],
-			['radio', 'h', $options, ' h'],
-			['select', '', '', ' '],
-			['select', '', $options, ' '],
-			['select', 'hoge', $options, ' hoge'],
-			['select', 'h', $options, ' h'],
-			['pref', '', '', ''],
-			['pref', '東京都', '', ' 東京都'],
-			['pref', '福岡県', '', ' 福岡県'],
-			['check', '', '', ''],
-			['check', '', $options, ''],
-			['check', 'hoge', '', 'hoge'],
-			['check', 'hoge', $options, 'hoge'],
-			['multi_check', '', '', ''],
-			['multi_check', '', $options, ''],
-			['multi_check', $get, $options, " ・hoge\n ・hello\n ・world\n"],
-			['file', 'hoge', $options, '<a href="/admin/mail_messages/attachment/1/hoge">hoge</a>'],
-			['file', 'test/hoge.jpg', $options, '<a href="/admin/mail_messages/attachment/1/test/hoge.jpg" target="_blank"><img src="/admin/mail_messages/attachment/1/test/hoge.jpg" width="400" alt=""/></a>'],
-			//TODO 西暦のオーバーフロー処理ができてない
-			['date_time_calender', 'hoge', $options, ' 1970年 01月 01日'],
-			['date_time_calender', '21000828', $options, ' 2100年 08月 28日'],
-			['date_time_calender', '2100/08/32', $options, ' 1970年 01月 01日'],
-			['date_time_calender', '', $options, ''],
-			['date_time_wareki', 'hoge', $options, ' '],
-			['date_time_wareki', '20200828', $options, ' 令和 2年 08月 28日'],
-			['date_time_wareki', '19950828', $options, ' 平成 7年 08月 28日'],
-			['date_time_wareki', '19500828', $options, ' 昭和 25年 08月 28日'],
-			['date_time_wareki', '1950/08/28', $options, ' 昭和 25年 08月 28日'],
-			['autozip', '888-0000', $options, ' 888-0000'],
-			['autozip', '8880000', $options, '888-0000'],
-			['', 'hoge', $options, 'hoge']
+			['text', 'hoge', true, ' hoge'],
+			['text', 'hoge', false, 'hoge'],
+			['textarea', 'hoge', true, 'hoge'],
+			['textarea', 'hoge', false, 'hoge'],
+			['email', 'hoge', true, ' hoge'],
+			['hidden', 'hoge', true, 'hoge'],
+			['radio', '', true, ''],
+			['radio', 'hoge', true, ' hoge'],
+			['select', '', true, ''],
+			['select', 'hoge', true, ' hoge'],
+			['pref', '', true, ''],
+			['pref', '福岡県', true, ' 福岡県'],
+			['check', '', true, ''],
+			['check', 'hoge', true, 'hoge'],
+			['multi_check', '', true, ''],
+			['multi_check', $options, true, " ・資料請求\n ・お問い合わせ\n ・その他\n"],
+			['multi_check', $options, false, "・資料請求\n・お問い合わせ\n・その他\n"],
+			['file', 'hoge', true, '<a href="/admin/mail_messages/attachment/1/hoge">hoge</a>'],
+			['file', 'test/hoge.jpg', true, '<a href="/admin/mail_messages/attachment/1/test/hoge.jpg" target="_blank"><img src="/admin/mail_messages/attachment/1/test/hoge.jpg" width="400" alt=""/></a>'],
+			['date_time_calender', 'hoge', true, ' 1970年 01月 01日'],
+			['date_time_calender', '21000828', true, ' 2100年 08月 28日'],
+			['date_time_calender', '2100/08/32', true, ' 1970年 01月 01日'],
+			['date_time_calender', '', true, ''],
+			['date_time_wareki', 'hoge', true, ''],
+			['date_time_wareki', '20200828', true, ' 令和 2年 08月 28日'],
+			['date_time_wareki', '19950828', true, ' 平成 7年 08月 28日'],
+			['date_time_wareki', '19500828', true, ' 昭和 25年 08月 28日'],
+			['date_time_wareki', '1950/08/28', true, ' 昭和 25年 08月 28日'],
+			['autozip', '888-0000', true, ' 888-0000'],
+			['autozip', '8880000', true, ' 888-0000'],
+			['', 'hoge', true, 'hoge']
 		];
 	}
 }

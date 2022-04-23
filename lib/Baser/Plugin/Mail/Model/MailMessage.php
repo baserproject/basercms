@@ -965,7 +965,7 @@ class MailMessage extends MailAppModel
 					$inData[$mailField['MailField']['field_name'] . ' (' . $mailField['MailField']['name'] . ')'] = $Maildata->toDisplayString(
 						$mailField['MailField']['type'],
 						$message[$this->alias][$mailField['MailField']['field_name']],
-						$Mailfield->getOptions($mailField['MailField'])
+						false
 					);
 				}
 			}
