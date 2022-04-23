@@ -5,9 +5,8 @@ version: '3'
 
 services:
   bc5-db:
-    # platform: linux/x86_64 # M1の場合はコメントを外す
     container_name: bc5-db
-    image: mysql:5.7
+    image: mysql:8.0.28
     volumes:
       - ./volumes/mysql:/var/lib/mysql
       # - db-volume:/var/lib/mysql # windowsの場合はコメントを外し、上の行をコメントアウトする
@@ -17,10 +16,11 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: "root"
       MYSQL_DATABASE: "basercms"
-    command: mysqld --character-set-server=utf8 --collation-server=utf8_general_ci --innodb-use-native-aio=0
+    command: mysqld --character-set-server=utf8 --collation-server=utf8_general_ci --innodb-use-native-aio=0 --sql-mode=NO_ENGINE_SUBSTITUTION
+
   bc5-php:
     container_name: bc5-php
-    image: baserproject/basercms:5-php7.4
+    image: baserproject/basercms:php8.1
     volumes:
       - ../:/var/www/shared:delegated
     environment:
@@ -32,12 +32,14 @@ services:
     depends_on:
       - bc5-db
     command: bash -c "/var/www/shared/docker/init.sh && apache2-foreground"
+
   bc5-smtp:
     container_name: bc5-smtp
     image: schickling/mailcatcher
     ports:
       - "1080:1080"
       - "1025:1025"
+
   bc5-pma:
     container_name: bc5-pma
     image: phpmyadmin/phpmyadmin
@@ -52,6 +54,7 @@ services:
      - 8080:80
     volumes:
        - ./phpmyadmin/sessions:/sessions
+
   bc5-pg:
     image: postgres:10.5
     container_name: bc5-pg
