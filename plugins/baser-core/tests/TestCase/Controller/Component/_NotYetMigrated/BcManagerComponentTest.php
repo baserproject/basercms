@@ -310,7 +310,7 @@ class BcManagerComponentTest extends BcTestCase
             $File->close();
             rename($configPath . 'database.php.copy', $configPath . 'database.php');
 
-            $this->assertRegExp("/\\\$default.*'datasource' => 'Database\/BcMysql'.*'host' => 'hoge'.*'port' => '0000'/s", $result, 'データベース設定ファイル[database.php]を正しく保存できません');
+            $this->assertMatchesRegularExpression("/\\\$default.*'datasource' => 'Database\/BcMysql'.*'host' => 'hoge'.*'port' => '0000'/s", $result, 'データベース設定ファイル[database.php]を正しく保存できません');
 
         } else {
             $this->markTestIncomplete('database.phpのバックアップに失敗したため、このテストをスキップします。');
@@ -340,7 +340,7 @@ class BcManagerComponentTest extends BcTestCase
             $File->close();
             rename($configPath . 'install.php.copy', $configPath . 'install.php');
 
-            $this->assertRegExp("/'Security.salt', 'hogeSalt'.*'Security.cipherSeed', 'hogeSeed'.*'BcEnv.siteUrl', 'hogeUrl'/s", $result, 'インストール設定ファイルを正しく生成できません');
+            $this->assertMatchesRegularExpression("/'Security.salt', 'hogeSalt'.*'Security.cipherSeed', 'hogeSeed'.*'BcEnv.siteUrl', 'hogeUrl'/s", $result, 'インストール設定ファイルを正しく生成できません');
 
         } else {
             $this->markTestIncomplete('install.phpのバックアップに失敗したため、このテストをスキップします。');
@@ -578,7 +578,7 @@ class BcManagerComponentTest extends BcTestCase
             $this->assertFileExists($targetPath, 'テーマを配置できません');
 
         } else {
-            $this->assertFileNotExists($targetPath, '指定したテーマのみを配置することができません');
+            $this->assertFileDoesNotExist($targetPath, '指定したテーマのみを配置することができません');
             $this->BcManager->deployTheme();
 
         }
@@ -653,8 +653,8 @@ class BcManagerComponentTest extends BcTestCase
 
             $this->BcManager->resetSetting();
 
-            $this->assertFileNotExists($configPath . 'database.php', '設定ファイルをリセットできません');
-            $this->assertFileNotExists($configPath . 'install.php', '設定ファイルをリセットできません');
+            $this->assertFileDoesNotExist($configPath . 'database.php', '設定ファイルをリセットできません');
+            $this->assertFileDoesNotExist($configPath . 'install.php', '設定ファイルをリセットできません');
 
             // ファイルを復元
             rename($configPath . 'database.php.copy', $configPath . 'database.php');
@@ -680,7 +680,7 @@ class BcManagerComponentTest extends BcTestCase
         $path = WWW_ROOT . 'files' . DS;
         $dirs = ['blog', 'editor', 'theme_configs'];
         foreach($dirs as $dir) {
-            $this->assertFileNotExists($path . $dir, 'files フォルダを初期化できません');
+            $this->assertFileDoesNotExist($path . $dir, 'files フォルダを初期化できません');
         }
 
         // 削除されたフォルダを復元
@@ -705,7 +705,7 @@ class BcManagerComponentTest extends BcTestCase
             WWW_ROOT . 'js' . DS . 'admin'
         ];
         foreach($paths as $path) {
-            $this->assertFileNotExists($path, '管理画面用のアセットフォルダを初期化できません');
+            $this->assertFileDoesNotExist($path, '管理画面用のアセットフォルダを初期化できません');
         }
 
         // 復元
@@ -769,7 +769,7 @@ class BcManagerComponentTest extends BcTestCase
             $File->close();
             rename($configPath . 'install.php.copy', $configPath . 'install.php');
 
-            $this->assertRegExp("/Configure::write\('hogeKey', hogeValue\)/s", $result, 'インストール設定ファイルを正しく書き換えることができません');
+            $this->assertMatchesRegularExpression("/Configure::write\('hogeKey', hogeValue\)/s", $result, 'インストール設定ファイルを正しく書き換えることができません');
 
         } else {
             $this->markTestIncomplete('install.phpのバックアップに失敗したため、このテストをスキップします。');

@@ -94,7 +94,7 @@ class PasswordRequestsControllerTest extends BcTestCase
     public function testApply()
     {
         $this->get('/baser/admin/baser-core/password_requests/apply');
-        $this->assertResponseFailure();
+        $this->assertResponseCode(404);
     }
 
     /**

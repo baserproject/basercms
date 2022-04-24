@@ -111,7 +111,18 @@ class BcContentsEventListenerTest extends BcTestCase
             ->withParam('action', 'edit'); // content_infoで必要
         $BcAdminAppView = $this->BcAdminAppView->setRequest($request)->setPlugin("BcAdminThird")
             ->set("entityName", "Contents.")
-            ->set("relatedContents", ['test1', 'test2'])
+            ->set("relatedContents", [
+                ['Site' => [
+                    'id' => '1',
+                    'name' => 'test',
+                    'main_site_id' => ''
+                ]],
+                ['Site' => [
+                    'id' => '2',
+                    'name' => 'test1',
+                    'main_site_id' => '1'
+                ]]
+            ])
             ->set("content", $this->Content); // content_relatedで必要
         $out = "testtest";
         $event = new Event("Helper.Form.afterSubmit", $BcAdminAppView);

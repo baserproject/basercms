@@ -101,7 +101,7 @@ class ContentServiceTest extends BcTestCase
     public function testGetEmptyIndex(): void
     {
         $result = $this->ContentService->getEmptyIndex();
-        $this->assertTrue($result->isEmpty());
+        $this->assertTrue($result->all()->isEmpty());
         $this->assertInstanceOf('Cake\ORM\Query', $result);
     }
     /**
@@ -290,7 +290,7 @@ class ContentServiceTest extends BcTestCase
         $this->ContentService->update($content, ['alias_id' => 5, 'name' => 'test']);
         $this->assertTrue($this->ContentService->delete(5));
         // ゴミ箱行きではなくちゃんと削除されてるか確認
-        $this->assertTrue($this->ContentService->getIndex(['withTrash' => true, 'id' => 5])->isEmpty());
+        $this->assertTrue($this->ContentService->getIndex(['withTrash' => true, 'id' => 5])->all()->isEmpty());
     }
 
     /**
@@ -358,7 +358,7 @@ class ContentServiceTest extends BcTestCase
     public function testRestoreAll()
     {
         $this->assertEquals(2, $this->ContentService->restoreAll(['type' => "ContentFolder"]));
-        $this->assertTrue($this->ContentService->getTrashIndex(['type' => "ContentFolder"])->isEmpty());
+        $this->assertTrue($this->ContentService->getTrashIndex(['type' => "ContentFolder"])->all()->isEmpty());
     }
 
     /**
@@ -584,7 +584,7 @@ class ContentServiceTest extends BcTestCase
     {
         $request = $this->loginAdmin($this->getRequest('/'));
         Router::setRequest($request);
-        $content = $this->ContentService->getIndex()->last();
+        $content = $this->ContentService->getIndex()->all()->last();
         $request = $request->withParsedBody([
             'parent_id' => '1',
             'plugin' => 'BaserCore',
@@ -593,7 +593,7 @@ class ContentServiceTest extends BcTestCase
             'alias_id' => $content->id
         ]);
         $result = $this->ContentService->alias($request->getData());
-        $expected = $this->ContentService->Contents->find()->last();
+        $expected = $this->ContentService->Contents->find()->all()->last();
         $this->assertEquals($expected->name, $result->name);
         $this->assertEquals($content->id, $result->alias_id);
     }
@@ -663,7 +663,7 @@ class ContentServiceTest extends BcTestCase
             'siteId' => "1",
         ];
         $result = $this->ContentService->move($origin, $target1);
-        $lastEntity = $this->ContentService->getIndex(['parent_id' => 1])->order('lft')->last();
+        $lastEntity = $this->ContentService->getIndex(['parent_id' => 1])->order('lft')->all()->last();
         $this->assertEquals($result->title, $originEntity->title);
         $this->assertEquals($result->title, $lastEntity->title);
         // targetIdが指定されてる場合
@@ -809,7 +809,7 @@ class ContentServiceTest extends BcTestCase
         ];
         $neighbors = $this->ContentService->getNeighbors($options);
         // フィールドが空かテスト
-        $this->assertEquals($this->ContentService->getIndex(['site_id' => 1])->last(), $neighbors['prev']);
+        $this->assertEquals($this->ContentService->getIndex(['site_id' => 1])->all()->last(), $neighbors['prev']);
     }
 
 

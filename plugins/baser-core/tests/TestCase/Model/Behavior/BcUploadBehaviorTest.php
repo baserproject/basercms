@@ -157,7 +157,7 @@ class BcUploadBehaviorTest extends BcTestCase
         $this->table->dispatchEvent('Model.beforeMarshal', ['data' => new ArrayObject(['id' => 6, 'eyecatch_delete' => true]), 'options' => new ArrayObject()]);
         $return = $this->table->dispatchEvent('Model.afterSave', ['entity' => $entity, 'options' => new ArrayObject()]);
         $this->assertEquals('', $return->getData('entity')->eyecatch);
-        $this->assertFileNotExists($this->savePath . 'baser.power.gif');
+        $this->assertFileDoesNotExist($this->savePath . 'baser.power.gif');
     }
 
     /**
@@ -190,7 +190,7 @@ class BcUploadBehaviorTest extends BcTestCase
         $trash->eyecatch = 'test.png';
         $this->ContentService->update($trash, ['eyecatch' => 'test.png']);
         $this->table->dispatchEvent('Model.beforeDelete', ['entity' => $trash, 'options' => new ArrayObject()]);
-        $this->assertFileNotExists($filePath);
+        $this->assertFileDoesNotExist($filePath);
         @unlink($filePath);
     }
 

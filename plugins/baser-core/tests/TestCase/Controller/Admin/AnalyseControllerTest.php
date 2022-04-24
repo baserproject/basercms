@@ -76,6 +76,7 @@ class AnalyseControllerTest extends BcTestCase
         $expected = [
             "file" => "paths.php",
             "path" => "/plugins/baser-core/config/paths.php",
+            'type' => 'config',
             "class" => "",
             "method" => "",
             "checked" => true,
@@ -83,7 +84,6 @@ class AnalyseControllerTest extends BcTestCase
             "noTodo" => true,
             "doc" => false,
             "note" => "",
-            'type' => 'config'
         ];
         $this->assertContains($expected, $result);
     }

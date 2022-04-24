@@ -904,7 +904,7 @@ class BcUtil
         return false;
     }
 
-        /**
+    /**
      * サイズの単位を変換する
      *
      * @param string $size 変換前のサイズ
@@ -917,6 +917,7 @@ class BcUtil
      */
     public static function convertSize($size, $outExt = 'B', $inExt = null)
     {
+        if(!$size) return 0;
         preg_match('/\A\d+(\.\d+)?/', $size, $num);
         $sizeNum = (isset($num[0]))? $num[0] : 0;
 
@@ -1012,7 +1013,7 @@ class BcUtil
             $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
             $site = $sites->getRootMain();
         }
-        if ($site->theme) {
+        if ($site && $site->theme) {
             $theme = $site->theme;
         }
         return $theme;
@@ -1043,7 +1044,7 @@ class BcUtil
     {
         $tmp = preg_split('/[\/\\\\]/', $str);
         $res = end($tmp);
-        if (strlen($suffix)) {
+        if ($suffix && strlen($suffix)) {
             $suffix = preg_quote($suffix);
             $res = preg_replace("/({$suffix})$/u", "", $res);
         }

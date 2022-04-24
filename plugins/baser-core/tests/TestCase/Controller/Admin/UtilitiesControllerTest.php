@@ -33,6 +33,8 @@ class UtilitiesControllerTest extends BcTestCase
         'plugin.BaserCore.Users',
         'plugin.BaserCore.UsersUserGroups',
         'plugin.BaserCore.UserGroups',
+        'plugin.BaserCore.Sites',
+        'plugin.BaserCore.Contents'
     ];
 
     /**

@@ -97,7 +97,7 @@ class BcMessageComponentTest extends BcTestCase
         /* @var DblogsTable $dblogs */
         $this->BcMessage->set('test', true, true);
         $dblogs = $this->getTableLocator()->get('BaserCore.Dblogs');
-        $dblog = $dblogs->find()->last();
+        $dblog = $dblogs->find()->all()->last();
         $this->assertEquals('test', $dblog->message);
         unset($_SESSION['Flash']);
 

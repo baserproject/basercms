@@ -100,7 +100,7 @@ class ThemeConfigTest extends BaserTestCase
         if ($expected) {
             $this->assertFileExists($dummyPath, $message);
         } else {
-            $this->assertFileNotExists($dummyPath, $message);
+            $this->assertFileDoesNotExist($dummyPath, $message);
         }
 
         // ダミーの画像を削除
@@ -152,7 +152,7 @@ class ThemeConfigTest extends BaserTestCase
         $File->close();
         unlink($configCssPath);
 
-        $this->assertRegExp('/' . $expected . '/s', $setting, $message);
+        $this->assertMatchesRegularExpression('/' . $expected . '/s', $setting, $message);
         Configure::write('BcSite.theme', $theme);
     }
 

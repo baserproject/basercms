@@ -275,7 +275,7 @@ class ContentsControllerTest extends BcTestCase
     public function testTrash_return()
     {
         $this->get('/baser/admin/baser-core/contents/trash_return/');
-        $this->assertResponseFailure();
+        $this->assertResponseCode(404);
         $id = $this->ContentService->getTrashIndex()->first()->id;
         $this->get("/baser/admin/baser-core/contents/trash_return/{$id}");
         $this->assertRedirect('/baser/admin/baser-core/contents/trash_index');
@@ -484,7 +484,7 @@ class ContentsControllerTest extends BcTestCase
         $this->request = $this->request->withData('test', 'テスト');
         $this->ContentsController->setRequest($this->request);
         $response = $this->ContentsController->trash_empty($this->ContentService);
-        $this->assertTrue($this->ContentService->getTrashIndex(['type' => "ContentFolder"])->isEmpty());
+        $this->assertTrue($this->ContentService->getTrashIndex(['type' => "ContentFolder"])->all()->isEmpty());
         $this->assertEquals(8, $this->ContentFolderService->getIndex()->count());
         $this->assertStringContainsString("/baser/admin/baser-core/contents/trash_index", $response->getHeaderLine('Location'));
     }

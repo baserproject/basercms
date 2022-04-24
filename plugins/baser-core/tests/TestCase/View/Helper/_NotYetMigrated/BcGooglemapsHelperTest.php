@@ -69,13 +69,13 @@ class BcGooglemapsHelperTest extends BcTestCase
 //
 //		if (!empty($address)) {
 //			if ($result) {
-//				$this->assertRegExp('/' . $expected . '/', $output, 'Google マップを正しく出力できません');
+//				$this->assertMatchesRegularExpression('/' . $expected . '/', $output, 'Google マップを正しく出力できません');
 //			} else {
 //				$this->markTestIncomplete('GoogleMapの情報の取得に失敗したため、テストをスキップします');
 //			}
 //
 //		} else {
-//			$this->assertRegExp('/' . $expected . '/', $output, 'Google マップを正しく出力できません');
+//			$this->assertMatchesRegularExpression('/' . $expected . '/', $output, 'Google マップを正しく出力できません');
 //		}
 
     }

@@ -46,7 +46,7 @@ class PermissionsController extends BcAdminAppController
 	{
 		parent::beforeFilter($event);
         $this->loadModel('BaserCore.Permissions');
-        $this->viewBuilder()->setHelpers(
+        $this->viewBuilder()->addHelpers(
             ['BcTime',
             // 'BcFreeze'
         ]);

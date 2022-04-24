@@ -304,7 +304,7 @@ class SitesTable extends AppTable
      */
     public function isMain(int $id)
     {
-        return !$this->find()->where(['main_site_id' => $id])->isEmpty();
+        return !$this->find()->where(['main_site_id' => $id])->all()->isEmpty();
     }
 
     /**
@@ -424,7 +424,7 @@ class SitesTable extends AppTable
         }
         $Contents = TableRegistry::getTableLocator()->get('BaserCore.Contents');
         $contents = $Contents->find()->select(['id'])->where(['Contents.site_root' => true, 'Contents.site_id' => $id]);
-        if (!$contents->isEmpty()) return $contents->first()->id;
+        if (!$contents->all()->isEmpty()) return $contents->first()->id;
     }
 
     /**

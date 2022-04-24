@@ -213,7 +213,7 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
                 }
                 $service->loadAuthenticator('Authentication.Jwt', [
                     'secretKey' => $secretKey,
-                    'algorithms' => ['RS256'],
+                    'algorithm' => 'RS256',
                     'returnPayload' => false,
                     'resolver' => [
                         'className' => 'Authentication.Orm',

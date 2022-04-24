@@ -100,7 +100,7 @@ class MailHelperTest extends BaserTestCase
         ClassRegistry::flush();
         $result = $this->Mail->getForm();
         $expected = '/.*<form.*<\/form>.*/s';
-        $this->assertRegExp($expected, $result, "メールフォームが取得できません。");
+        $this->assertMatchesRegularExpression($expected, $result, "メールフォームが取得できません。");
     }
 
     /**
@@ -143,7 +143,7 @@ class MailHelperTest extends BaserTestCase
     {
         $result = $this->Mail->getToken();
         $expected = '/<script.*<\/script>.*/s';
-        $this->assertRegExp($expected, $result, 'スクリプトが取得できません。');
+        $this->assertMatchesRegularExpression($expected, $result, 'スクリプトが取得できません。');
     }
 
     /**

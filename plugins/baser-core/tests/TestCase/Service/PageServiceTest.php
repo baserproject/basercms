@@ -73,7 +73,7 @@ class PageServiceTest extends BcTestCase
     public function testGet()
     {
         $page = $this->PageService->get(2);
-        $this->assertRegExp('/<section class="mainHeadline">/', $page->contents);
+        $this->assertMatchesRegularExpression('/<section class="mainHeadline">/', $page->contents);
         $this->expectExceptionMessage('Record not found in table "pages"');
         $page = $this->PageService->getTrash(1);
     }
@@ -85,7 +85,7 @@ class PageServiceTest extends BcTestCase
     public function testGetTrash()
     {
         $page = $this->PageService->getTrash(3);
-        $this->assertRegExp('/<div class="articleArea bgGray" id="service">/', $page->contents);
+        $this->assertMatchesRegularExpression('/<div class="articleArea bgGray" id="service">/', $page->contents);
         $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
         $this->expectExceptionMessage('Record not found in table "contents"');
         $this->PageService->getTrash(2);
@@ -124,7 +124,7 @@ class PageServiceTest extends BcTestCase
         // 条件無しで一覧を取得した場合
         $pages = $this->PageService->getIndex();
         $this->assertEquals(9, $pages->all()->count());
-        $this->assertRegExp('/<section class="mainHeadline">/', $pages->first()->contents);
+        $this->assertMatchesRegularExpression('/<section class="mainHeadline">/', $pages->first()->contents);
         // 条件無しで数を制限し、一覧を取得した場合
         $pages2 = $this->PageService->getIndex(['limit' => 3]);
         $this->assertEquals(3, $pages2->all()->count());

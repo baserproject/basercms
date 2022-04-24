@@ -73,7 +73,7 @@ class BcExceptionRendererTest extends BcTestCase
         $this->assertResponseContains('bs-container');
 
         $this->post('/baser/api/baser-core/users/add.json');
-        $this->assertResponseFailure();
+        $this->assertResponseCode(401);
         $this->assertContentType('application/json');
 
         Configure::write('debug', $debug);

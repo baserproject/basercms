@@ -268,7 +268,7 @@ class ToolsController extends BcAdminAppController
      * @param $encoding
      * @return boolean
      */
-    protected function _writeBackup($path, $plugin = '', $encoding)
+    protected function _writeBackup($path, $plugin, $encoding)
     {
         $db = ConnectionManager::getDataSource('default');
         $db->cacheSources = false;

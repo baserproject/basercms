@@ -102,8 +102,8 @@ class UserGroupServiceTest extends BcTestCase
         ];
         $this->UserGroups->create($data);
         $group = $this->UserGroups->getIndex();
-        $this->assertEquals($group->last()->name, $data['name']);
-        $this->assertEquals($group->last()->auth_prefix, $expected);
+        $this->assertEquals($group->all()->last()->name, $data['name']);
+        $this->assertEquals($group->all()->last()->auth_prefix, $expected);
     }
     public function createDataProvider()
     {

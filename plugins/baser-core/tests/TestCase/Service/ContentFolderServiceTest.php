@@ -137,8 +137,8 @@ class ContentFolderServiceTest extends BcTestCase
         ];
         $option = ['validate' => 'default'];
         $result = $this->ContentFolderService->create($data, $option);
-        $folderExpected = $this->ContentFolderService->ContentFolders->find()->last();
-        $contentExpected = $this->Contents->find()->last();
+        $folderExpected = $this->ContentFolderService->ContentFolders->find()->all()->last();
+        $contentExpected = $this->Contents->find()->all()->last();
         $this->assertEquals($folderExpected->name, $result->name);
         $this->assertEquals("新しい フォルダー", $contentExpected->title);
     }

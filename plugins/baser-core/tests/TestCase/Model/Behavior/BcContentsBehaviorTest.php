@@ -200,7 +200,7 @@ class BcContentsBehaviorTest extends BcTestCase
             'entity' => $entity,
             'options' => new ArrayObject(),
         ]);
-        $this->assertTrue($this->table->Contents->find()->where(['entity_id' => 10])->isEmpty());
+        $this->assertTrue($this->table->Contents->find()->where(['entity_id' => 10])->all()->isEmpty());
 
     }
 

@@ -17,7 +17,7 @@ jobs:
 
     strategy:
       matrix:
-        php-version: ['7.3', '7.4', '8.1']
+        php-version: ['8.1']
 
     steps:
 
@@ -36,8 +36,8 @@ jobs:
           sed -i -e "s/basercms:php8.1/basercms:php${{ matrix.php-version }}/g" docker-compose.yml;
           docker-compose up -d
 
-      - name: Sleep for 50 seconds
-        run: sleep 50
+      - name: Sleep for 20 seconds
+        run: sleep 20
 
       - name: Compose log
         run:  |

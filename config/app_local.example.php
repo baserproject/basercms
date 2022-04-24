@@ -91,4 +91,7 @@ return [
             'url' => env('EMAIL_TRANSPORT_DEFAULT_URL', null),
         ],
     ],
+    'Error' => [
+        'errorLevel' => E_ALL & ~E_USER_DEPRECATED
+    ],
 ];

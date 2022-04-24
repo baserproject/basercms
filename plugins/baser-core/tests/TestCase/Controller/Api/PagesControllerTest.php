@@ -73,7 +73,7 @@ class PagesControllerTest extends BcTestCase
         $this->get('/baser/api/baser-core/pages/index.json?token=' . $this->accessToken);
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
-        $this->assertRegExp('/<section class="mainHeadline">/', $result->pages[0]->contents);
+        $this->assertMatchesRegularExpression('/<section class="mainHeadline">/', $result->pages[0]->contents);
     }
 
     /**
@@ -84,7 +84,7 @@ class PagesControllerTest extends BcTestCase
         $this->get('/baser/api/baser-core/pages/view/2.json?token=' . $this->accessToken);
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
-        $this->assertRegExp('/<section class="mainHeadline">/', $result->pages->contents);
+        $this->assertMatchesRegularExpression('/<section class="mainHeadline">/', $result->pages->contents);
     }
 
     /**
@@ -159,6 +159,6 @@ class PagesControllerTest extends BcTestCase
         ];
         $this->post("/baser/api/baser-core/pages/copy/2.json?token=". $this->accessToken, $data);
         $this->assertResponseSuccess();
-        $this->assertFalse($this->PageService->getIndex(['title' => $data['title']])->isEmpty());
+        $this->assertFalse($this->PageService->getIndex(['title' => $data['title']])->all()->isEmpty());
     }
 }

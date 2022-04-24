@@ -77,7 +77,7 @@ class BcControllerEventListener extends BcEventListener
     {
         $builder = $controller->viewBuilder();
         if (is_array($helper)) {
-            $builder->setHelpers($helper);
+            $builder->addHelpers($helper);
         } else {
             $builder->addHelper($helper);
         }

@@ -185,7 +185,7 @@ class BcAdminHelperTest extends BcTestCase
         ob_start();
         $this->BcAdmin->search();
         $actual = ob_get_clean();
-        $this->assertRegExp('/class="bca-search">(.*)<form/s', $actual);
+        $this->assertMatchesRegularExpression('/class="bca-search">(.*)<form/s', $actual);
     }
 
     /**
@@ -245,7 +245,7 @@ class BcAdminHelperTest extends BcTestCase
         }
         // adminNavigationがnullの場合 nullが返る
         Configure::write('BcApp.adminNavigation', null);
-        $this->assertNull(json_decode($this->BcAdmin->getJsonMenu()));
+        $this->assertNull($this->BcAdmin->getJsonMenu());
 
     }
 

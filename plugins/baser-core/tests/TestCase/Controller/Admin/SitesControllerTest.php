@@ -212,13 +212,13 @@ class SitesControllerTest extends BcTestCase
         // getは更新不可
         $this->get('/baser/admin/baser-core/sites/publish/' . $siteId);
         $this->assertRedirect('/baser/admin/baser-core/sites/index');
-        $site = $sites->find()->where(['id' => $siteId])->last();
+        $site = $sites->find()->where(['id' => $siteId])->all()->last();
         $this->assertFalse($site->status);
 
         // postは更新可
         $this->post('/baser/admin/baser-core/sites/publish/' . $siteId);
         $this->assertRedirect('/baser/admin/baser-core/sites/index');
-        $site = $sites->find()->where(['id' => $siteId])->last();
+        $site = $sites->find()->where(['id' => $siteId])->all()->last();
         $this->assertTrue($site->status);
     }
 
@@ -239,13 +239,13 @@ class SitesControllerTest extends BcTestCase
         // getは更新不可
         $this->get('/baser/admin/baser-core/sites/publish/' . $siteId);
         $this->assertRedirect('/baser/admin/baser-core/sites/index');
-        $site = $sites->find()->where(['id' => $siteId])->last();
+        $site = $sites->find()->where(['id' => $siteId])->all()->last();
         $this->assertTrue($site->status);
 
         // postは更新可
         $this->post('/baser/admin/baser-core/sites/unpublish/' . $siteId);
         $this->assertRedirect('/baser/admin/baser-core/sites/index');
-        $site = $sites->find()->where(['id' => $siteId])->last();
+        $site = $sites->find()->where(['id' => $siteId])->all()->last();
         $this->assertFalse($site->status);
     }
 

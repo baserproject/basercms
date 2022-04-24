@@ -457,9 +457,9 @@ class BcBasicsTest extends BcTestCase
      */
     public function testFullUrl()
     {
-        $this->assertRegExp('/\//', fullUrl('/'));
-        $this->assertRegExp('/\/.*blog/', fullUrl('/blog'));
-        $this->assertRegExp('/\//', fullUrl(null));
+        $this->assertMatchesRegularExpression('/\//', fullUrl('/'));
+        $this->assertMatchesRegularExpression('/\/.*blog/', fullUrl('/blog'));
+        $this->assertMatchesRegularExpression('/\//', fullUrl(null));
     }
 
     /**
@@ -593,7 +593,7 @@ class BcBasicsTest extends BcTestCase
         p(['test']);
         $result = ob_get_clean();
         $expect = 'array.*int.*0.*=&gt; &#039;test&#039;';
-        $this->assertRegExp('/' . $expect . '/s', $result);
+        $this->assertMatchesRegularExpression('/' . $expect . '/s', $result);
     }
 
     /**
@@ -654,7 +654,7 @@ class BcBasicsTest extends BcTestCase
         $enc = base64UrlsafeEncode($text);
         $result = urlencode($enc);
         // %が含まれてないかチェック
-        $this->assertRegExp('/^(?!.*%)/', $result, 'パーセントエンコーディングされています');
+        $this->assertMatchesRegularExpression('/^(?!.*%)/', $result, 'パーセントエンコーディングされています');
 
         // decode
         $dec = base64UrlsafeDecode($enc);

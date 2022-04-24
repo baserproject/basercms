@@ -140,9 +140,7 @@ class AppControllerTest extends BcTestCase
         $this->post('/', [
             'name' => 'Test_test_Man'
         ]);
-        $log = file_get_contents($logPath);
-        $this->assertRegExp('/不正なリクエストと判断されました。/', $log);
-        unlink($logPath);
+        $this->assertResponseRegExp('/不正なリクエストと判断されました。/');
     }
 
     /**

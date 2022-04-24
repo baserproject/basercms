@@ -171,9 +171,9 @@ class BcUtilTest extends BcTestCase
     {
         return [
             // インストールモード On
-            [true, true],
+            ["true", true],
             // インストールモード Off
-            [false, false],
+            ["false", false],
         ];
     }
 
@@ -741,7 +741,7 @@ class BcUtilTest extends BcTestCase
         $this->assertEquals('/baser/admin', $result);
         // $regex = trueの場合
         $result = BcUtil::getPrefix(true);
-        $this->assertRegExp('/^(|\/)' . $result . '/', '/baser/admin');
+        $this->assertMatchesRegularExpression('/^(|\/)' . $result . '/', '/baser/admin');
     }
 
 
@@ -856,12 +856,12 @@ class BcUtilTest extends BcTestCase
         if (BcUtil::isConsole()) {
             $this->assertEquals('https://localhost', BcUtil::topLevelUrl());
         } else {
-            $this->assertRegExp('/^http:\/\/.*\/$/', BcUtil::topLevelUrl());
-            $this->assertRegExp('/^http:\/\/.*[^\/]$/', BcUtil::topLevelUrl(false));
+            $this->assertMatchesRegularExpression('/^http:\/\/.*\/$/', BcUtil::topLevelUrl());
+            $this->assertMatchesRegularExpression('/^http:\/\/.*[^\/]$/', BcUtil::topLevelUrl(false));
 
             // httpsの場合
             $_SERVER['HTTPS'] = 'on';
-            $this->assertRegExp('/^https:\/\//', BcUtil::topLevelUrl());
+            $this->assertMatchesRegularExpression('/^https:\/\//', BcUtil::topLevelUrl());
         }
     }
 

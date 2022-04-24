@@ -335,7 +335,7 @@ class BcAdminAppController extends BcAppController
             return false;
         }
         $refererDomain = BcUtil::getDomain($_SERVER['HTTP_REFERER']);
-        if (!preg_match('/^' . preg_quote($siteDomain, '/') . '/', $refererDomain)) {
+        if (!$siteDomain || !preg_match('/^' . preg_quote($siteDomain, '/') . '/', $refererDomain)) {
             throw new NotFoundException();
         }
         return true;

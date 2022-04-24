@@ -1985,7 +1985,7 @@ EOD;
             $siteId = $this->_View->getRequest()->getParam('Content.site_id');
         }
         $siteRoot = $this->BcAdminContent->getSiteRoot($siteId);
-        $id = $siteRoot->id;
+        $id = ($siteRoot) ? $siteRoot->id : 1;
         $currentId = 1;
         if (!empty($this->_View->getRequest()->getParam('Content.id'))) {
             $currentId = $this->_View->getRequest()->getParam('Content.id');

@@ -274,6 +274,7 @@ class BcAdminContentHelper extends Helper
      */
     public function getTargetPrefix($relatedContent)
     {
+        if(!is_array($relatedContent)) return '';
         $prefix = $relatedContent['Site']['name'];
         if ($relatedContent['Site']['alias']) {
             $prefix = $relatedContent['Site']['alias'];

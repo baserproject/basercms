@@ -116,7 +116,7 @@ class ContentService implements ContentServiceInterface
         } catch (\Exception $e) {
             return null;
         }
-        return $query->isEmpty() ? null : $query;
+        return $query->all()->isEmpty() ? null : $query;
     }
 
     /**
@@ -812,9 +812,9 @@ class ContentService implements ContentServiceInterface
     public function exists($id, $withTrash = false): bool
     {
         if ($withTrash) {
-            $exists = !$this->getIndex(['id' => $id, 'withTrash' => true])->isEmpty();
+            $exists = !$this->getIndex(['id' => $id, 'withTrash' => true])->all()->isEmpty();
         } else {
-            $exists = !$this->getIndex(['id' => $id])->isEmpty();
+            $exists = !$this->getIndex(['id' => $id])->all()->isEmpty();
         }
         return $exists;
     }
@@ -886,7 +886,7 @@ class ContentService implements ContentServiceInterface
         }
         // 連携設定となっている小サイトを取得
         $sites = $this->Sites->find()->where(['main_site_id' => $data->site_id, 'relate_main_site' => true]);
-        if ($sites->isEmpty()) {
+        if ($sites->all()->isEmpty()) {
             return true;
         }
         $result = true;
