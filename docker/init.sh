@@ -11,7 +11,6 @@ fi
 if [ ! -d '/var/www/html/logs' ]; then
     mkdir /var/www/html/logs
 fi
-service lsyncd start
 
 if [ ! -e '/var/www/shared/docker/check' ]; then
     rm -rf /var/www/shared/vendor/*
@@ -20,6 +19,8 @@ if [ ! -e '/var/www/shared/docker/check' ]; then
     openssl genrsa -out /var/www/html/config/jwt.key 1024
     openssl rsa -in /var/www/html/config/jwt.key -outform PEM -pubout -out /var/www/html/config/jwt.pem
     chown www-data.www-data /var/www/html/config/jwt.key
+    mkdir /etc/lsyncd
+    cp /var/www/shared/docker/lsyncd/lsyncd.conf.lua /etc/lsyncd/
     TIMES=0
     LIMIT_TIMES=50
     CONNECTED=1
@@ -43,6 +44,7 @@ if [ ! -e '/var/www/shared/docker/check' ]; then
         echo "Migration failed."
 	fi
     touch /var/www/shared/docker/check
-    echo "Container setup is complete."
 fi
 
+service lsyncd start
+echo "Container setup is complete."
