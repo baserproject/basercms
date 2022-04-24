@@ -15,7 +15,6 @@ fi
 if [ ! -d '/var/www/html/docker' ]; then
     mkdir /var/www/html/docker
 fi
-service lsyncd start
 
 if [ ! -e '/var/www/shared/docker/check' ]; then
     chmod -R 777 /var/www/html/app/Config
@@ -26,7 +25,10 @@ if [ ! -e '/var/www/shared/docker/check' ]; then
     chmod -R 777 /var/www/html/app/webroot/js
     chmod -R 777 /var/www/html/app/webroot/css
     chmod -R 777 /var/www/html/app/webroot/theme
+    mkdir /etc/lsyncd
+    cp /var/www/shared/docker/lsyncd/lsyncd.conf.lua /etc/lsyncd/
     touch /var/www/shared/docker/check
-    echo "Container setup is complete."
 fi
 
+service lsyncd start
+echo "Container setup is complete."
