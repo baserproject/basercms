@@ -24,6 +24,8 @@ services:
     volumes:
       - ../:/var/www/shared:delegated
     environment:
+      XDEBUG_MODE: "debug"
+      XDEBUG_SESSION: "1"
       PHP_IDE_CONFIG: "serverName=localhost"
       COMPOSER_ALLOW_SUPERUSER: 1
     ports:
