@@ -11,6 +11,8 @@
 
 namespace BaserCore\Test\TestCase\View\Helper;
 
+use BaserCore\View\Helper\BcAdminPageHelper;
+use BaserCore\View\Helper\BcPageHelper;
 use Cake\Core\Configure;
 use BaserCore\View\BcAdminAppView;
 use BaserCore\TestSuite\BcTestCase;
@@ -35,6 +37,8 @@ class BcAdminHelperTest extends BcTestCase
         'plugin.BaserCore.UsersUserGroups',
         'plugin.BaserCore.Dblogs',
         'plugin.BaserCore.Sites',
+        'plugin.BaserCore.Contents',
+        'plugin.BaserCore.Pages',
         'plugin.BaserCore.Permissions',
     ];
 
@@ -366,6 +370,108 @@ class BcAdminHelperTest extends BcTestCase
             ['1', 1, true, '管理ユーザーのシステム管理者チェックが正しくありません'],
             ['1', 2, false, '運営ユーザーのシステム管理者チェックが正しくありません'],
         ];
+    }
+
+    /**
+     * test setEditLink
+     */
+    public function testSetEditLink()
+    {
+        $this->BcAdmin->setEditLink('aaa');
+        $this->assertEquals('aaa', $this->BcAdmin->getView()->get('editLink'));
+    }
+
+    /**
+     * test setPublishLink
+     */
+    public function testSetPublishLink()
+    {
+        $this->BcAdmin->setPublishLink('aaa');
+        $this->assertEquals('aaa', $this->BcAdmin->getView()->get('publishLink'));
+    }
+
+    /**
+     * 編集画面へのリンクが存在するかチェックする
+     */
+    public function testExistsEditLink()
+    {
+        // 存在しない
+        $request = $this->loginAdmin($this->getRequest('/hoge'));
+        $this->BcAdmin->getView()->setRequest($request);
+        new BcPageHelper($this->BcAdmin->getView());
+        $this->assertEquals(false, $this->BcAdmin->existsEditLink());
+        // 存在する
+        $request = $this->loginAdmin($this->getRequest('/service/service1'));
+        $this->BcAdmin->getView()->setRequest($request);
+        new BcPageHelper($this->BcAdmin->getView());
+        $this->assertEquals(true, $this->BcAdmin->existsEditLink());
+    }
+
+    /**
+     * 公開ページへのリンクが存在するかチェックする
+     * @return void
+     */
+    public function testExistsPublishLink()
+    {
+        // 存在しない
+        $request = $this->loginAdmin($this->getRequest('/hoge'));
+        $this->BcAdmin->getView()->setRequest($request);
+        new BcAdminPageHelper($this->BcAdmin->getView());
+        $this->assertEquals(false, $this->BcAdmin->existsPublishLink());
+        // 存在する
+        $request = $this->loginAdmin($this->getRequest('/baser/admin/baser-core/pages/edit/2'));
+        $this->BcAdmin->getView()->setRequest($request);
+        new BcAdminPageHelper($this->BcAdmin->getView());
+        $this->assertEquals(true, $this->BcAdmin->existsPublishLink());
+    }
+
+    /**
+     * 編集画面へのリンクを出力する
+     *
+     * @return void
+     */
+    public function testEditLink()
+    {
+        // リンクなし
+        $request = $this->loginAdmin($this->getRequest('/hoge'));
+        $this->BcAdmin->getView()->setRequest($request);
+        new BcPageHelper($this->BcAdmin->getView());
+        ob_start();
+        $this->BcAdmin->editLink();
+        $result = ob_get_clean();
+        $this->assertEmpty($result);
+        // リンクあり
+        $request = $this->loginAdmin($this->getRequest('/service/service1'));
+        $this->BcAdmin->getView()->setRequest($request);
+        new BcPageHelper($this->BcAdmin->getView());
+        ob_start();
+        $this->BcAdmin->editLink();
+        $result = ob_get_clean();
+        $this->assertEquals('<a href="/baser/admin/baser-core/pages/edit/5" class="tool-menu">編集する</a>', $result);
+    }
+
+    /**
+     * 公開ページへのリンクを出力する
+     * @return void
+     */
+    public function testPublishLink()
+    {
+        // リンクなし
+        $request = $this->loginAdmin($this->getRequest('/hoge'));
+        $this->BcAdmin->getView()->setRequest($request);
+        new BcAdminPageHelper($this->BcAdmin->getView());
+        ob_start();
+        $this->BcAdmin->publishLink();
+        $result = ob_get_clean();
+        $this->assertEmpty($result);
+        // リンクあり
+        $request = $this->loginAdmin($this->getRequest('/baser/admin/baser-core/pages/edit/2'));
+        $this->BcAdmin->getView()->setRequest($request);
+        new BcAdminPageHelper($this->BcAdmin->getView());
+        ob_start();
+        $this->BcAdmin->publishLink();
+        $result = ob_get_clean();
+        $this->assertEquals('<a href="https://localhost/" class="tool-menu">サイト確認</a>', $result);
     }
 
 }

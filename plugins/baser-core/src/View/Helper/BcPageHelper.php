@@ -11,6 +11,7 @@
 
 namespace BaserCore\View\Helper;
 
+use BaserCore\Service\PageService;
 use Cake\View\View;
 use Cake\View\Helper;
 use BaserCore\Utility\BcContainerTrait;
@@ -24,6 +25,8 @@ use BaserCore\Annotation\Note;
 
 /**
  * BcPageHelper
+ * @property BcAdminHelper $BcAdmin
+ * @property PageService $PageService
  */
 class BcPageHelper extends Helper
 {
@@ -51,7 +54,7 @@ class BcPageHelper extends Helper
      *
      * @var array
      */
-    public $helpers = ['BcBaser', 'BcContents'];
+    public $helpers = ['BcBaser', 'BcContents', 'BcAdmin'];
 
     /**
      * construct
@@ -83,6 +86,7 @@ class BcPageHelper extends Helper
         parent::initialize($config);
         $this->ContentService = $this->getService(ContentServiceInterface::class);
         $this->PageService = $this->getService(PageServiceInterface::class);
+        $this->BcAdmin->setEditLink($this->PageService->getEditLink($this->_View->getRequest()));
     }
 
     /**

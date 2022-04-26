@@ -81,7 +81,6 @@ class BcAdminAppView extends AppView
         $this->loadHelper('BaserCore.BcAuth');
         $this->loadHelper('BaserCore.BcText');
         $this->loadHelper('BaserCore.BcTime');
-        $this->loadHelper('BaserCore.BcAdmin');
         $this->loadHelper('BaserCore.BcAdminUser');
         $this->loadHelper('BaserCore.BcAdminSiteConfig');
         $this->loadHelper('BaserCore.BcAdminPage');

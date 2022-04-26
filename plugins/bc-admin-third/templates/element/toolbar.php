@@ -9,11 +9,8 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
-use BaserCore\Utility\BcSiteConfig;
 use BaserCore\Utility\BcUtil;
 use BaserCore\View\BcAdminAppView;
-use Cake\Core\Configure;
-use Cake\Utility\Inflector;
 
 /**
  * toolbar
@@ -46,12 +43,12 @@ if ($loginUser) {
     <div id="ToolMenu" class="bca-toolbar__tools">
       <?php if ($this->BcToolbar->isAvailableEditLink()): ?>
         <div class="bca-toolbar__tools-button bca-toolbar__tools-button-edit">
-          <?php $this->BcBaser->editLink() ?>
+          <?php $this->BcToolbar->editLink() ?>
         </div>
       <?php endif ?>
       <?php if ($this->BcToolbar->isAvailablePublishLink()): ?>
         <div class="bca-toolbar__tools-button bca-toolbar__tools-button-publish">
-          <?php $this->BcBaser->publishLink() ?>
+          <?php $this->BcToolbar->publishLink() ?>
         </div>
       <?php endif ?>
       <?php if ($this->BcToolbar->isAvailableMode()): ?>

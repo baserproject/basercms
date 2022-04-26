@@ -22,6 +22,7 @@ use BaserCore\Service\PageServiceInterface;
 /**
  * BcAdminPageHelper
  * @property PageService $PageService
+ * @property BcAdminHelper $BcAdmin
  */
 class BcAdminPageHelper extends Helper
 {
@@ -32,16 +33,22 @@ class BcAdminPageHelper extends Helper
     use BcContainerTrait;
 
     /**
+     * Helper
+     * @var string[]
+     */
+    public $helpers = ['BaserCore.BcAdmin'];
+
+    /**
      * initialize
      * @param array $config
      * @checked
      * @noTodo
-     * @unitTest
      */
     public function initialize(array $config): void
     {
         parent::initialize($config);
         $this->PageService = $this->getService(PageServiceInterface::class);
+        $this->BcAdmin->setPublishLink($this->PageService->getPublishLink($this->_View->getRequest()));
     }
 
     /**

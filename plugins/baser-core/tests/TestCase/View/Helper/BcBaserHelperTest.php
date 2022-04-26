@@ -439,40 +439,6 @@ class BcBaserHelperTest extends BcTestCase
         ];
     }
 
-
-    /**
-     * 編集画面へのリンクが存在するかチェックする
-     * @return void
-     */
-    public function testExistsEditLink()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-
-        // 存在しない
-        $this->BcBaser->setPageEditLink(1);
-        $this->assertEquals(false, $this->BcBaser->existsEditLink());
-        // 存在する
-        $this->_View->viewVars['user'] = ['User' => ['id' => 1]];
-        $this->_View->viewVars['currentUserAuthPrefixes'] = [Configure::read('Routing.prefixes.0')];
-        $this->BcBaser->setPageEditLink(1);
-        $this->assertEquals(true, $this->BcBaser->existsEditLink());
-    }
-
-    /**
-     * 公開ページへのリンクが存在するかチェックする
-     * @return void
-     */
-    public function testExistsPublishLink()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        // 存在しない
-        $this->assertEquals(false, $this->BcBaser->existsPublishLink());
-        // 存在する
-        $this->_View->viewVars['currentUserAuthPrefixes'] = [Configure::read('Routing.prefixes.0')];
-        $this->_View->viewVars['publishLink'] = '/';
-        $this->assertEquals(true, $this->BcBaser->existsPublishLink());
-    }
-
     /**
      * Test url
      *
@@ -674,58 +640,6 @@ class BcBaserHelperTest extends BcTestCase
     }
 
     /**
-     * 編集画面へのリンクを出力する
-     * setPageEditLink のテストも兼ねる
-     *
-     * @return void
-     */
-    public function testEditLink()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-
-        // リンクなし
-        $expected = '';
-        $this->BcBaser->setPageEditLink(1);
-        ob_start();
-        $this->BcBaser->editLink();
-        $result = ob_get_clean();
-        $this->assertEquals($expected, $result);
-        // リンクあり
-        $expected = '<a href="/admin/pages/edit/1" class="tool-menu">編集する</a>';
-        $this->_View->viewVars['user'] = ['User' => ['id' => 1]];
-        $this->_View->viewVars['currentUserAuthPrefixes'] = [Configure::read('Routing.prefixes.0')];
-        $this->BcBaser->setPageEditLink(1);
-        ob_start();
-        $this->BcBaser->editLink();
-        $result = ob_get_clean();
-        $this->assertEquals($expected, $result);
-    }
-
-    /**
-     * 公開ページへのリンクを出力する
-     * @return void
-     */
-    public function testPublishLink()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-
-        // リンクなし
-        $expected = '';
-        ob_start();
-        $this->BcBaser->publishLink();
-        $result = ob_get_clean();
-        $this->assertEquals($expected, $result);
-        // リンクあり
-        $expected = '<a href="/" class="tool-menu">サイト確認</a>';
-        $this->_View->viewVars['currentUserAuthPrefixes'] = [Configure::read('Routing.prefixes.0')];
-        $this->_View->viewVars['publishLink'] = '/';
-        ob_start();
-        $this->BcBaser->publishLink();
-        $result = ob_get_clean();
-        $this->assertEquals($expected, $result);
-    }
-
-    /**
      * Test BcBaser->getUrlが適切なURLを取得してるかテスト
      * @return void
      * @todo testGetUrl_basercms4を統合する
@@ -878,22 +792,6 @@ class BcBaserHelperTest extends BcTestCase
 
         $this->BcBaser->setHomeTitle('hoge');
         $this->assertEquals('hoge', $this->_View->viewVars['homeTitle'], 'タイトルをセットできません。');
-    }
-
-    /**
-     * ページにeditLinkを追加する
-     */
-    public function testSetPageEditLink()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-
-        // 存在しない
-        $this->BcBaser->setPageEditLink(1);
-        $this->assertEquals(true, empty($this->_View->viewVars['editLink']));
-        // 存在する
-        $this->_View->viewVars['user'] = ['User' => ['id' => 1]];
-        $this->BcBaser->setPageEditLink(1);
-        $this->assertEquals(['admin' => true, 'controller' => 'pages', 'action' => 'edit', '0' => '1'], $this->_View->viewVars['editLink']);
     }
 
     /**

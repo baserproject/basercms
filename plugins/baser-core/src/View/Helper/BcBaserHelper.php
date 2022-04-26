@@ -498,26 +498,6 @@ class BcBaserHelper extends Helper
     }
 
     /**
-     * 編集画面へのリンクが存在するかチェックする
-     *
-     * @return bool 存在する場合は true を返す
-     */
-    public function existsEditLink()
-    {
-        return ($this->BcAuth->isCurrentUserAdminAvailable() && !empty($this->_View->get('editLink')));
-    }
-
-    /**
-     * 公開ページへのリンクが存在するかチェックする
-     *
-     * @return bool リンクが存在する場合は true を返す
-     */
-    public function existsPublishLink()
-    {
-        return ($this->BcAuth->isCurrentUserAdminAvailable() && !empty($this->_View->get('publishLink')));
-    }
-
-    /**
      * baserCMSの設置フォルダを考慮したURLを出力する
      *
      * 《利用例》
@@ -782,40 +762,6 @@ class BcBaserHelper extends Helper
         }
 
         return $contentsName;
-    }
-
-    /**
-     * 編集画面へのリンクを出力する
-     *
-     * @return void
-     */
-    public function editLink()
-    {
-        if ($this->existsEditLink()) {
-            $this->link(__d('baser', '編集する'), $this->_View->get('editLink'), ['class' => 'tool-menu']);
-        }
-    }
-
-    /**
-     * 公開ページへのリンクを出力する
-     *
-     * 管理システムで利用する
-     *
-     * @return void
-     */
-    public function publishLink()
-    {
-        if ($this->existsPublishLink()) {
-            $siteManage = $this->getService(SiteServiceInterface::class);
-            $site = $siteManage->findByUrl($this->_View->get('publishLink'));
-            $useSubdomain = $fullUrl = false;
-            if ($site && $site->name) {
-                $useSubdomain = $site->use_subdomain;
-                $fullUrl = true;
-            }
-            $url = $this->BcAdminContent->getUrl($this->_View->get('publishLink'), $fullUrl, $useSubdomain, false);
-            $this->link(__d('baser', 'サイト確認'), $url, ['class' => 'tool-menu']);
-        }
     }
 
     /**
@@ -1580,19 +1526,6 @@ class BcBaserHelper extends Helper
             return;
         }
         echo $begin . ' - ' . $year;
-    }
-
-    /**
-     * 編集画面へのリンクを設定する
-     *
-     * @param string $id 固定ページID
-     * @return void
-     */
-    public function setPageEditLink($id)
-    {
-        if ($this->_View->getRequest()->getParam('prefix') !== 'Admin' && !empty($this->_View->get('user'))) {
-            $this->_View->set('editLink', ['admin' => true, 'controller' => 'pages', 'action' => 'edit', $id]);
-        }
     }
 
     /**

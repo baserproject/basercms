@@ -11,24 +11,19 @@
 
 namespace BaserCore\Service;
 
+use Cake\Http\ServerRequest;
 use Cake\ORM\Query;
-use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
-use Cake\Utility\Inflector;
 use BaserCore\Utility\BcUtil;
-use BaserCore\Annotation\NoTodo;
 use BaserCore\Model\Entity\Page;
-use BaserCore\Annotation\Checked;
-use BaserCore\Annotation\UnitTest;
-use BaserCore\Annotation\Note;
-use Cake\Core\Exception\Exception;
 use Cake\Datasource\EntityInterface;
 use BaserCore\Model\Table\PagesTable;
 use BaserCore\Utility\BcContainerTrait;
-use BaserCore\Service\ContentFolderService;
-use Cake\ORM\Exception\PersistenceFailedException;
-use BaserCore\Service\ContentFolderServiceInterface;
 use Cake\Datasource\Exception\RecordNotFoundException;
+use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\Note;
+use BaserCore\Annotation\NoTodo;
 
 /**
  * Class PageService
@@ -231,4 +226,47 @@ class PageService implements PageServiceInterface
         }
         return isset($controlSources[$field]) ? $controlSources[$field] : false;
     }
+
+    /**
+     * 編集リンクを取得する
+     * @param ServerRequest $request
+     * @return array|string
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getEditLink(ServerRequest $request)
+    {
+        if(BcUtil::isAdminSystem()) return '';
+        if($request->getParam('controller') !== 'Pages') return '';
+        if($request->getParam('action') !== 'display') return '';
+        return [
+            'prefix' => 'Admin',
+            'controller' => 'Pages',
+            'action' => 'edit',
+            $request->getParam('Content.entity_id')
+        ];
+    }
+
+    /**
+     * 公開リンクを取得する
+     * @param ServerRequest $request
+     * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getPublishLink(ServerRequest $request)
+    {
+        if(!BcUtil::isAdminSystem()) return '';
+        if($request->getParam('controller') !== 'Pages') return '';
+        if($request->getParam('action') !== 'edit') return '';
+        $page = $this->get($request->getParam('pass')[0]);
+		if (!$page->content->status) return '';
+        $siteService = $this->getService(SiteServiceInterface::class);
+        $contentService = $this->getService(ContentServiceInterface::class);
+        $site = $siteService->findById($page->content->site_id)->first();
+        return $contentService->getUrl($page->content->url, true, $site->useSubDomain);
+    }
+
 }

@@ -23,6 +23,7 @@ use BaserCore\Annotation\UnitTest;
  * BcToolbarHelper
  * @property BcBaserHelper $BcBaser
  * @property BcAuthHelper $BcAuth
+ * @property BcAdminHelper $BcAdmin
  */
 class BcToolbarHelper extends Helper
 {
@@ -31,7 +32,7 @@ class BcToolbarHelper extends Helper
      * Helper
      * @var string[]
      */
-    public $helpers = ['BaserCore.BcBaser', 'BaserCore.BcAuth'];
+    public $helpers = ['BaserCore.BcBaser', 'BaserCore.BcAuth', 'BaserCore.BcAdmin'];
 
     /**
      * 編集画面へのリンクが利用可能かどうか
@@ -43,7 +44,7 @@ class BcToolbarHelper extends Helper
     public function isAvailableEditLink(): bool
     {
         $request = $this->_View->getRequest();
-        return ($this->BcBaser->existsEditLink() && !isset($request->getQuery['preview']));
+        return ($this->BcAdmin->existsEditLink() && !isset($request->getQuery['preview']));
     }
 
     /**
@@ -55,7 +56,7 @@ class BcToolbarHelper extends Helper
      */
     public function isAvailablePublishLink(): bool
     {
-        return $this->BcBaser->existsPublishLink();
+        return $this->BcAdmin->existsPublishLink();
     }
 
     /**
@@ -318,6 +319,28 @@ class BcToolbarHelper extends Helper
             'frontAdminNotAvailable' => ['title' => $this->BcAuth->getCurrentName()],
         ];
         return $options[$this->getLogoType()];
+    }
+
+    /**
+     * 編集画面リンク出力
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function editLink()
+    {
+        $this->BcAdmin->editLink();
+    }
+
+    /**
+     * 公開画面リンク出力
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function publishLink()
+    {
+        $this->BcAdmin->publishLink();
     }
 
 }

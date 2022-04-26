@@ -210,4 +210,32 @@ class PageServiceTest extends BcTestCase
             ['author_id', [1 => 'ニックネーム1', 2 => 'ニックネーム2', 3 => 'ニックネーム3'], 'コントロールソースを取得できません'],
         ];
     }
+
+    /**
+     * test getEditLink
+     */
+    public function testGetEditLink()
+    {
+        $request = $this->getRequest('/about');
+        $this->assertEquals([
+            'prefix' => 'Admin',
+            'controller' => 'Pages',
+            'action' =>
+            'edit', 16
+        ], $this->PageService->getEditLink($request));
+        $request = $this->getRequest('/hoge');
+        $this->assertEmpty($this->PageService->getEditLink($request));
+    }
+
+    /**
+     * test getPublishLink
+     */
+    public function testGetPublishLink()
+    {
+        $request = $this->getRequest('/baser/admin/baser-core/pages/edit/5');
+        $this->assertEquals('https://localhost/service/service1', $this->PageService->getPublishLink($request));
+        $request = $this->getRequest('/hoge');
+        $this->assertEmpty($this->PageService->getPublishLink($request));
+    }
+
 }

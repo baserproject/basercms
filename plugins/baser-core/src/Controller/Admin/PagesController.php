@@ -127,12 +127,6 @@ class PagesController extends BcAdminAppController
 			}
 		}
 
-		// 公開リンク
-		$publishLink = '';
-		if ($page->content->status) {
-			$site = $siteService->findById($page->content->site_id)->first();
-			$publishLink = $contentService->getUrl($page->content->url, true, $site->useSubDomain);
-		}
 		// エディタオプション
 		$editorOptions = ['editorDisableDraft' => false];
         $editorStyles = $siteConfigService->getValue('editor_styles');
@@ -154,7 +148,7 @@ class PagesController extends BcAdminAppController
 		$pageTemplateList = $pageService->getPageTemplateList($page->content->id, $theme);
         $editor = $siteConfigService->getValue('editor');
         $editor_enter_br = $siteConfigService->getValue('editor_enter_br');
-		$this->set(compact('editorOptions', 'pageTemplateList', 'publishLink', 'page', 'editor', 'editor_enter_br'));
+		$this->set(compact('editorOptions', 'pageTemplateList', 'page', 'editor', 'editor_enter_br'));
 		$this->render('form');
 	}
 }

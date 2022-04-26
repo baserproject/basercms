@@ -154,7 +154,7 @@ class BcTestCase extends TestCase
             self::$_detectors = $detectors->getValue();
         }
         $detectors->setValue(self::$_detectors);
-
+        $request->getSession()->start();
         try {
             Router::setRequest($request);
             $params = Router::parseRequest($request);
