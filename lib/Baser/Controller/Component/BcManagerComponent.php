@@ -1368,7 +1368,7 @@ class BcManagerComponent extends Component
 		$status = [
 			'encoding' => mb_internal_encoding(),
 			'phpVersion' => phpversion(),
-			'phpMemory' => intval(ini_get('memory_limit')),
+			'phpMemory' => $this->_getMemoryLimit(),
 			'safeModeOff' => !ini_get('safe_mode'),
 			'configDirWritable' => is_writable(APP . 'Config' . DS),
 			'pluginDirWritable' => is_writable(APP . 'Plugin' . DS),
@@ -1438,6 +1438,20 @@ class BcManagerComponent extends Component
 		}
 
 		return $status + $check;
+	}
+
+	/**
+	 * memory_limit を取得する
+	 * @return int
+	 */
+	protected function _getMemoryLimit ()
+	{
+		$size = ini_get('memory_limit');
+		switch (substr ($size, -1)) {
+			case 'M': case 'm': return (int) $size;
+			case 'G': case 'g': return (int) $size * 1024;
+			default: return (int) $size;
+		}
 	}
 
 	/**
