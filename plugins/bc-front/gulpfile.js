@@ -18,10 +18,10 @@ var sass = require("gulp-sass");
 var plumber = require("gulp-plumber");
 var uglify = require('gulp-uglify');
 var paths = {
-  srcCss :'css/**/*.scss',
-  distCss :'../css/',
-  srcJs : 'js/*.js',
-  destJs : '../js/'
+  srcCss :'./webroot/src/css/**/*.scss',
+  distCss :'./webroot/css/',
+  srcJs : './webroot/src/js/*.js',
+  destJs : './webroot/js/'
 };
 
 // Sass Compile
