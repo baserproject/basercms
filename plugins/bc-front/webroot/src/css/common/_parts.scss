@@ -250,6 +250,29 @@
   }
 }
 
+/* Sql Log
+----------------------------------------------- */
+
+.bc-update-info {
+  margin-top:160px;
+  dl {
+    width:200px;
+    font-size: 12px;
+    margin-right:0;
+    margin-left:auto;
+    dt {
+      display: inline-block;
+      width:40%;
+    }
+    dd {
+      display: inline-block;
+      width:60%;
+      padding:0;
+      margin: 0;
+    }
+  }
+}
+
 /* Toolbar
 ----------------------------------------------- */
 

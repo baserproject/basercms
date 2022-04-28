@@ -13,11 +13,11 @@
  * Gulpfile for BcSample
  * Require Gulp4
  */
-var gulp = require("gulp");
-var sass = require("gulp-sass");
-var plumber = require("gulp-plumber");
-var uglify = require('gulp-uglify');
-var paths = {
+const gulp = require("gulp");
+const sass = require('gulp-sass')(require('sass'));
+const plumber = require("gulp-plumber");
+const uglify = require('gulp-uglify');
+const paths = {
   srcCss :'./webroot/src/css/**/*.scss',
   distCss :'./webroot/css/',
   srcJs : './webroot/src/js/*.js',
