@@ -8,10 +8,11 @@
  * @since         5.0.0
  * @license       https://basercms.net/license/index.html MIT License
  */
+
 namespace BaserCore\View\Helper;
 
+use Cake\Core\Plugin;
 use Cake\View\Helper;
-use Cake\Routing\Asset;
 use Cake\Core\Configure;
 use Cake\Utility\Inflector;
 use BaserCore\Annotation\NoTodo;
@@ -19,7 +20,6 @@ use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\View\Helper\BcHtmlHelper;
 use BaserCore\Event\BcEventDispatcherTrait;
-
 
 
 /**
@@ -319,44 +319,45 @@ class BcCkeditorHelper extends Helper
             }
             $options['toolbar'][count($options['toolbar']) - 1] = $lastBar;
         }
-        // themeの設定
-        $theme = $this->theme;
-        $theme = Configure::read('BcSite.theme');
-        if ($theme) {
-            $this->theme = $theme;
-        }
 
+        $currentTheme = $this->getView()->getTheme();
+        $site = $this->getView()->getRequest()->getAttribute('currentSite');
         $themeEditorCsses = [];
-        if ($theme) {
+        if (!empty($site->theme)) {
+            $currentFrontTheme = $site->theme;
+            // $this->webroot で、フロントテーマのURLを取得できるようにするため、
+            // 一旦テーマをフロントのテーマに切り替える
+            $this->getView()->setTheme($currentFrontTheme);
+            $sitePrefix = '';
+            if (!empty($this->getView()->getRequest()->getData('Site.name'))) {
+                $sitePrefix = $this->getView()->getRequest()->getData('Site.name');
+            }
+            if ($sitePrefix) {
+                $themeEditorCsses = [
+                    'path' => Plugin::path(Inflector::camelize($currentFrontTheme)) . 'webroot' . DS . 'css' . DS . $sitePrefix . DS . 'editor.css',
+                    'url' => $this->Url->webroot('/css/' . $sitePrefix . '/editor.css')
+                ];
+            }
             $themeEditorCsses[] = [
-                'path' => BASER_THEMES . Configure::read('BcSite.theme') . DS . 'css' . DS . 'editor.css',
+                'path' => Plugin::path(Inflector::camelize($currentFrontTheme)) . 'webroot' . DS . 'css' . DS . 'editor.css',
                 'url' => $this->Url->webroot('/css/editor.css')
             ];
         }
         $themeEditorCsses[] = [
-            'path' => BASER_VIEWS . 'webroot' . DS . 'css' . DS . 'admin' . DS . 'ckeditor' . DS . 'contents.css',
+            'path' => Plugin::path(Inflector::camelize($currentTheme)) . 'webroot' . DS . 'css' . DS . 'admin' . DS . 'ckeditor' . DS . 'contents.css',
             'url' => $this->Url->webroot('/css/admin/ckeditor/contents.css')
         ];
         foreach($themeEditorCsses as $key => $themeEditorCss) {
             if (!file_exists($themeEditorCss['path'])) {
                 unset($themeEditorCsses[$key]);
+            } else {
+                $themeEditorCsses[$key] = $themeEditorCss['url'];
             }
         }
-        if ($theme) {
-            $sitePrefix = '';
-            if (!empty($this->request->getData('Site.name'))) {
-                $sitePrefix = $this->request->getData('Site.name');
-            }
-            if ($sitePrefix) {
-                array_unshift($themeEditorCsses, [
-                    'path' => BASER_THEMES . Configure::read('BcSite.theme') . DS . 'css' . DS . $sitePrefix . DS . 'editor.css',
-                    'url' => $this->Url->webroot('/css/' . $sitePrefix . '/editor.css')
-                ]);
-            }
-        }
-        $this->theme = $theme;
+
+        $this->getView()->setTheme($currentTheme);
         $fieldCamelize = Inflector::camelize($field);
-        $draftMode = $editorDisablePublish ? 'draft' :  'publish';
+        $draftMode = $editorDisablePublish? 'draft' : 'publish';
         // applyCkeditor.jsで使う変数のみ定義する
         $jscode;
         $stringVars = [
@@ -372,9 +373,9 @@ class BcCkeditorHelper extends Helper
             'editorDisablePublish' => $editorDisablePublish,
             'fieldCamelize' => $fieldCamelize,
         ];
-        foreach ($stringVars as $varName => $varValue) {
+        foreach($stringVars as $varName => $varValue) {
             if (is_bool($varValue)) {
-                $varValue = $varValue ? 1 : 0;
+                $varValue = $varValue? 1 : 0;
                 $jscode .= "var {$varName}={$varValue};\n";
             } else {
                 $jscode .= "var {$varName}='{$varValue}';\n";
@@ -390,8 +391,8 @@ class BcCkeditorHelper extends Helper
             'themeEditorCsses' => $themeEditorCsses,
             'editorOptions' => $options,
         ];
-        foreach ($arrayVars as $varName => $varValue) {
-            $jscode .= "var {$varName}=" . json_encode($varValue) .  ";\n";
+        foreach($arrayVars as $varName => $varValue) {
+            $jscode .= "var {$varName}=" . json_encode($varValue) . ";\n";
         }
 
         return $this->BcHtml->scriptBlock($jscode, ['type' => 'text/javascript', 'block' => true]) . '<input type="hidden" id="DraftMode' . $fieldCamelize . '" value="' . $draftMode . '">';
@@ -414,7 +415,7 @@ class BcCkeditorHelper extends Helper
             $inputFieldName = $fieldName . '_tmp';
             $hiddenIdElement = pluginSplit($fieldName);
             $hiddenId = $hiddenIdElement[0] . Inflector::camelize($hiddenIdElement[1]);
-            $hidden = $this->BcAdminForm->hidden($fieldName, ['id' => $hiddenId]) . $this->BcAdminForm->hidden($model . '.' . $options['editorDraftField'] , ['id' => $hiddenIdElement[0] . 'Draft']);
+            $hidden = $this->BcAdminForm->hidden($fieldName, ['id' => $hiddenId]) . $this->BcAdminForm->hidden($model . '.' . $options['editorDraftField'], ['id' => $hiddenIdElement[0] . 'Draft']);
         } else {
             $inputFieldName = $fieldName;
             $hidden = '';
