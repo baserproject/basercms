@@ -2067,12 +2067,18 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testGetThemeUrl()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->BcBaser->request = $this->_getRequest('/');
-        $this->BcBaser->request->webroot = '/';
-        $this->siteConfig['theme'] = 'nada-icons';
-        $expects = $this->BcBaser->request->webroot . 'theme' . '/' . $this->siteConfig['theme'] . '/';
-        $this->assertEquals($expects, $this->BcBaser->getThemeUrl());
+        $this->BcBaser->getView()->setTheme('bc-admin-third');
+        $this->assertEquals('/bc_admin_third/', $this->BcBaser->getThemeUrl());
+    }
+
+    /**
+     * test themeUrl
+     */
+    public function testThemeUrl()
+    {
+        $this->BcBaser->getView()->setTheme('bc-admin-third');
+        $this->BcBaser->themeUrl();
+        $this->expectOutputString('/bc_admin_third/');
     }
 
     /**
@@ -2086,9 +2092,8 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testGetBaseUrl($baseUrl, $url, $expects)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        Configure::write('App.baseUrl', $baseUrl);
-        $this->BcBaser->request = $this->_getRequest($url);
+        $request = $this->getRequest($url)->withAttribute('base', $baseUrl);
+        $this->BcBaser->getView()->setRequest($request);
         $this->assertEquals($expects, $this->BcBaser->getBaseUrl());
     }
 
@@ -2100,21 +2105,11 @@ class BcBaserHelperTest extends BcTestCase
             ['', '/index', '/'],
             ['', '/contact/index', '/'],
             ['', '/blog/blog/index', '/'],
-            // スマートURLオフ
-            ['index.php', '/', '/index.php/'],
-            ['index.php', '/index', '/index.php/'],
-            ['index.php', '/contact/index', '/index.php/'],
-            ['index.php', '/blog/blog/index', '/index.php/'],
             // サブフォルダ+スマートURLオン
             ['/basercms', '/', '/basercms/'],
             ['/basercms', '/index', '/basercms/'],
             ['/basercms', '/contact/index', '/basercms/'],
-            ['/basercms', '/blog/blog/index', '/basercms/'],
-            // サブフォルダ+スマートURLオフ
-            ['/basercms/index.php', '/', '/basercms/index.php/'],
-            ['/basercms/index.php', '/index', '/basercms/index.php/'],
-            ['/basercms/index.php', '/contact/index', '/basercms/index.php/'],
-            ['/basercms/index.php', '/blog/blog/index', '/basercms/index.php/']
+            ['/basercms', '/blog/blog/index', '/basercms/']
         ];
     }
 

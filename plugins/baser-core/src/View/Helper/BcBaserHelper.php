@@ -2478,16 +2478,22 @@ END_FLASH;
      * 現在のテーマのURLを取得する
      *
      * @return string テーマのURL
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getThemeUrl()
     {
-        return $this->_View->getRequest()->webroot . 'theme' . '/' . $this->siteConfig['theme'] . '/';
+        return '/' . $this->_View->getRequest()->getAttribute('base') . Inflector::underscore($this->getView()->getTheme()) . '/';
     }
 
     /**
      * 現在のテーマのURLを出力する
      *
      * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function themeUrl()
     {
@@ -2500,10 +2506,13 @@ END_FLASH;
      * サブフォルダやスマートURLについて考慮されている事が前提
      *
      * @return string ベースURL
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getBaseUrl()
     {
-        return $this->_View->getRequest()->base . '/';
+        return $this->_View->getRequest()->getAttribute('base') . '/';
     }
 
     /**
