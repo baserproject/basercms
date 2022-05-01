@@ -45,13 +45,6 @@ class BcAppController extends AppController
     public $subDir = null;
 
     /**
-     * パンくずナビ
-     *
-     * @var array
-     */
-    public $crumbs = [];
-
-    /**
      * コンテンツタイトル
      *
      * @var string
@@ -252,7 +245,6 @@ class BcAppController extends AppController
      */
     private function __loadDataToView()
     {
-        $this->set('crumbs', $this->crumbs);                    // パンくずなび
         $this->set('preview', $this->preview);
 
         if (!empty($this->request->getParam('prefix'))) {

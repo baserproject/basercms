@@ -12,10 +12,9 @@
 namespace BaserCore\Service;
 
 use BaserCore\Model\Entity\Content;
-use Cake\Http\ServerRequest;
 use Cake\Datasource\EntityInterface;
+use Cake\Datasource\QueryInterface;
 use Cake\ORM\Query;
-use Nette\Utils\DateTime;
 
 /**
  * Interface ContentServiceInterface
@@ -153,10 +152,10 @@ interface ContentServiceInterface
     /**
      * 指定日時以前の該当する論理削除されたコンテンツ情報をすべて削除する
      *
-     * @param  Datetime $dateTime
+     * @param  \Datetime $dateTime
      * @return int
      */
-    public function hardDeleteAll(Datetime $dateTime): int;
+    public function hardDeleteAll(\Datetime $dateTime): int;
 
     /**
      * 論理削除されたコンテンツを復元する
@@ -343,4 +342,12 @@ interface ContentServiceInterface
      * @return array $parsedUrl
      */
     public static function encodeParsedUrl($fullUrl);
+
+    /**
+     * ツリー構造のパスを取得する
+     * @param string $id
+     * @return QueryInterface
+     */
+    public function getPath($id): QueryInterface;
+
 }

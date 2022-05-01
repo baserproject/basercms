@@ -74,15 +74,6 @@ class MailFieldsController extends MailAppController
         $mailContentId = $this->request->param('pass.0');
         $this->mailContent = $this->MailContent->read(null, $mailContentId);
         $this->request->param('Content', $this->BcContents->getContent($mailContentId)['Content']);
-        $this->crumbs[] = [
-            'name' => sprintf('%s 設定', $this->request->param('Content.title')),
-            'url' => [
-                'plugin' => 'mail',
-                'controller' => 'mail_fields',
-                'action' => 'index',
-                $mailContentId
-            ]
-        ];
         if ($this->request->param('Content.status')) {
             $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
             $site = $sites->findById($this->request->param('Content.site_id'))->first();

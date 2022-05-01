@@ -11,23 +11,18 @@
 
 namespace BaserCore\Service;
 
+use Cake\Datasource\QueryInterface;
 use Exception;
 use Cake\ORM\Query;
-use Cake\ORM\Entity;
 use Cake\Utility\Hash;
 use Cake\Core\Configure;
 use Cake\Routing\Router;
 use Cake\I18n\FrozenTime;
-use Nette\Utils\DateTime;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
 use Cake\Http\ServerRequest;
 use BaserCore\Utility\BcUtil;
-use BaserCore\Annotation\Note;
-use BaserCore\Annotation\NoTodo;
 use BaserCore\Error\BcException;
-use BaserCore\Annotation\Checked;
-use BaserCore\Annotation\UnitTest;
 use BaserCore\Model\Entity\Content;
 use Cake\ORM\Behavior\TreeBehavior;
 use Cake\Datasource\EntityInterface;
@@ -36,6 +31,10 @@ use Cake\Datasource\ConnectionManager;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Model\Table\ContentsTable;
 use Cake\Datasource\Exception\RecordNotFoundException;
+use BaserCore\Annotation\Note;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
 
 /**
  * Class ContentService
@@ -432,13 +431,13 @@ class ContentService implements ContentServiceInterface
     /**
      * 指定日時以前の該当する論理削除されたコンテンツ情報をすべて物理削除する
      *
-     * @param  Datetime $dateTime
+     * @param  \Datetime $dateTime
      * @return int
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function hardDeleteAll(Datetime $dateTime): int
+    public function hardDeleteAll(\Datetime $dateTime): int
     {
         return $this->Contents->hardDeleteAll($dateTime);
     }
@@ -1176,6 +1175,16 @@ class ContentService implements ContentServiceInterface
             if ($key !== 0) $parsedUrl['path'] .= "/" . rawurlencode(rawurldecode($dir));
         }
         return $parsedUrl;
+    }
+
+    /**
+     * ツリー構造のパスを取得する
+     * @param string $id
+     * @return QueryInterface
+     */
+    public function getPath($id): QueryInterface
+    {
+        return $this->Contents->find('path', ['for' => $id]);
     }
 
 }

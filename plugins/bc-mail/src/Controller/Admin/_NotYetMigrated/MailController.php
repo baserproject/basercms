@@ -92,13 +92,6 @@ class MailController extends MailAppController
     public $dbDatas = null;
 
     /**
-     * ぱんくずナビ
-     *
-     * @var array
-     */
-    public $crumbs = [];
-
-    /**
      * MailController constructor.
      *
      * @param \CakeRequest $request

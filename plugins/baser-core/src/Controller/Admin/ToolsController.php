@@ -54,10 +54,6 @@ class ToolsController extends BcAdminAppController
         $this->set('baserVersion', BcSiteConfig::get('version'));
         $this->set('cakeVersion', Configure::version());
         $this->subMenuElements = ['site_configs', 'tools'];
-        $this->crumbs = [
-            ['name' => __d('baser', 'システム設定'), 'url' => ['controller' => 'site_configs', 'action' => 'index']],
-            ['name' => __d('baser', 'ユーティリティ'), 'url' => ['controller' => 'tools', 'action' => 'index']]
-        ];
     }
 
     /**

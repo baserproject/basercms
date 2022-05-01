@@ -11,9 +11,7 @@
 
 namespace BaserCore\Controller;
 
-use Cake\Utility\Text;
 use Cake\Core\Configure;
-use Cake\Filesystem\File;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
 use BaserCore\Model\Entity\Page;

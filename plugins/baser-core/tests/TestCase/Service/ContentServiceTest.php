@@ -12,6 +12,7 @@
 namespace BaserCore\Test\TestCase\Service;
 
 use Cake\Core\Configure;
+use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\Routing\Router;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Service\ContentService;
@@ -845,4 +846,16 @@ class ContentServiceTest extends BcTestCase
             ],
         ];
     }
+
+    /**
+     * test getPath
+     */
+    public function testGetPath()
+    {
+        $this->assertEquals(1, $this->ContentService->getPath(1)->all()->count());
+        $this->assertEquals(3, $this->ContentService->getPath(11)->all()->count());
+        $this->expectException(RecordNotFoundException::class);
+        $this->ContentService->getPath(100)->all()->count();
+    }
+
 }

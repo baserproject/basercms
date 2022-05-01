@@ -95,17 +95,6 @@ class BlogPostsController extends BlogAppController
                 null,
                 $this->request->params['pass'][0]
             );
-            $this->crumbs[] = [
-                'name' => sprintf(
-                    __d('baser', '%s 設定'),
-                    $this->request->params['Content']['title']
-                ),
-                'url' => [
-                    'controller' => 'blog_contents',
-                    'action' => 'edit',
-                    $this->request->params['pass'][0]
-                ]
-            ];
             $this->BlogPost->setupUpload($this->blogContent['BlogContent']['id']);
             if ($this->request->getParam('prefix') === 'Admin') {
                 $this->subMenuElements = ['blog_posts'];
@@ -464,17 +453,6 @@ class BlogPostsController extends BlogAppController
                 'editorStyles' => $editorStyles
             ]);
         }
-        $this->crumbs[] = [
-            'name' => sprintf(
-                __d('baser', '%s 記事一覧'),
-                $this->request->params['Content']['title']
-            ),
-            'url' => [
-                'controller' => 'blog_posts',
-                'action' => 'index',
-                $blogContentId
-            ]
-        ];
         $this->set(
             'hasNewCategoryAddablePermission',
             $this->BlogPost->BlogCategory->hasNewCategoryAddablePermission(
@@ -651,18 +629,6 @@ class BlogPostsController extends BlogAppController
                 'editorStyles' => $editorStyles
             ]);
         }
-
-        $this->crumbs[] = [
-            'name' => sprintf(
-                __d('baser', '%s 記事一覧'),
-                $this->request->params['Content']['title']
-            ),
-            'url' => [
-                'controller' => 'blog_posts',
-                'action' => 'index',
-                $blogContentId
-            ]
-        ];
         $this->set(
             'hasNewCategoryAddablePermission',
             $this->BlogPost->BlogCategory->hasNewCategoryAddablePermission(

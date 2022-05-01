@@ -10,6 +10,7 @@
  */
 
 namespace BaserCore\Controller\Component;
+
 use BaserCore\Service\ContentServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Http\ServerRequest;
@@ -96,7 +97,7 @@ class BcFrontContentsComponent extends Component
                 $controller->viewBuilder()->setLayout($this->ContentService->getParentLayoutTemplate($request->getParam('Content.id')));
             }
             // パンくず
-            $controller->crumbs = $this->getCrumbs($request->getParam('Content.id'));
+            $controller->set('crumbs', $this->getCrumbs($request->getParam('Content.id')));
             // 説明文
             $controller->set('description', $request->getParam('Content.description'));
             // タイトル
@@ -119,16 +120,13 @@ class BcFrontContentsComponent extends Component
         // そのため、ビヘイビアのメソッドを直接実行して対処した。
         // CakePHPも、PHP自体のエラーも発生せず、ただ止まる。PHP7のバグ？PHP側のメモリーを256Mにしても変わらず。
         // ===========================================================================================
-        // $contents = $this->_Controller->Contents->getBehavior('Tree')->getPath($this->_Controller->Contents, $id, [], -1); TODO: 結果を見るため元のものも残す
-        // $contents = $this->_Controller->Contents->find('path', ['for' => $id]);
-        $contents = []; //TODO: 代替手段
-        unset($contents[count($contents) - 1]);
+        $contents = $this->ContentService->getPath($id)->all();
         $crumbs = [];
         foreach($contents as $content) {
-            if (!$content['Content']['site_root']) {
+            if (!$content->site_root) {
                 $crumb = [
-                    'name' => $content['Content']['title'],
-                    'url' => $content['Content']['url']
+                    'name' => $content->title,
+                    'url' => $content->url
                 ];
                 $crumbs[] = $crumb;
             }

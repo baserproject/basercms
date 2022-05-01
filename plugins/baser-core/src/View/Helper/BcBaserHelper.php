@@ -11,9 +11,9 @@
 
 namespace BaserCore\View\Helper;
 
-use BaserCore\Utility\BcSiteConfig;
 use Cake\Datasource\EntityInterface;
 use Cake\Utility\Inflector;
+use Cake\View\Helper\BreadcrumbsHelper;
 use Cake\View\View;
 use Cake\View\Helper;
 use Cake\Core\Configure;
@@ -23,7 +23,6 @@ use Cake\View\Helper\UrlHelper;
 use Cake\View\Helper\FlashHelper;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Event\BcEventDispatcherTrait;
-use BaserCore\Service\SiteServiceInterface;
 use BaserCore\Service\PermissionServiceInterface;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Note;
@@ -38,6 +37,7 @@ use BaserCore\Annotation\Doc;
  * @property UrlHelper $Url
  * @property FlashHelper $Flash
  * @property BcAuthHelper $BcAuth
+ * @property BreadcrumbsHelper $Breadcrumbs
  */
 class BcBaserHelper extends Helper
 {
@@ -60,7 +60,8 @@ class BcBaserHelper extends Helper
         'BaserCore.BcPage',
         'BaserCore.BcContents',
         'BaserCore.BcAdminContent',
-        'BaserCore.BcAuth'
+        'BaserCore.BcAuth',
+        'Breadcrumbs'
     ];
 
     /**
@@ -998,6 +999,9 @@ class BcBaserHelper extends Helper
      * 同じで、 処理内容がわかりにくいので変数名のリファクタリング要。
      * ただし、BcBaserHelper::getCrumbs() は、テーマで利用されている可能性が高いので、
      * 後方互換を考慮する必要がある。
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getCrumbs($categoryTitleOn = null)
     {
@@ -1578,10 +1582,13 @@ class BcBaserHelper extends Helper
      * @param string $separator パンくずの区切り文字（初期値 : &raquo;）
      * @param string|bool $startText トップページを先頭に追加する場合にはトップページのテキストを指定する（初期値 : false）
      * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function crumbs($separator = '&raquo;', $startText = false, $onSchema = false)
     {
-        $crumbs = $this->BcHtml->getStripCrumbs();
+        $crumbs = $this->Breadcrumbs->getCrumbs();
         if (empty($crumbs)) {
             return;
         }
@@ -1593,18 +1600,18 @@ class BcBaserHelper extends Helper
                 $homeUrl = '/' . $this->_View->getRequest()->getParam('Site.name') . '/';
             }
             array_unshift($crumbs, [
-                0 => $startText,
-                1 => $homeUrl
+                'title' => $startText,
+                'url' => $homeUrl
             ]);
         }
 
         $out = [];
         if (!$onSchema) {
             foreach($crumbs as $crumb) {
-                if (!empty($crumb[1])) {
-                    $out[] = $this->getLink($crumb[0], $crumb[1], @$crumb[2]);
+                if (!empty($crumb['url'])) {
+                    $out[] = $this->getLink($crumb['title'], $crumb['url'], @$crumb['options']);
                 } else {
-                    $out[] = $crumb[0];
+                    $out[] = $crumb['title'];
                 }
             }
             $out = implode($separator, $out);
@@ -1612,13 +1619,13 @@ class BcBaserHelper extends Helper
             $counter = 1;
             foreach($crumbs as $crumb) {
                 $options = ['itemprop' => 'item'];
-                if (!empty($crumb[2])) {
-                    $options = array_merge($options, $crumb[2]);
+                if (!empty($crumb['options'])) {
+                    $options = array_merge($options, $crumb['options']);
                 }
-                if (!empty($crumb[1])) {
-                    $crumb = $this->getLink('<span itemprop="name">' . $crumb[0] . '</span>', $crumb[1], $options) . '<span class="separator">' . $separator . '</span>';
+                if (!empty($crumb['url'])) {
+                    $crumb = $this->getLink('<span itemprop="name">' . $crumb['title'] . '</span>', $crumb['url'], $options) . '<span class="separator">' . $separator . '</span>';
                 } else {
-                    $crumb = '<span itemprop="name">' . $crumb[0] . '</span>';
+                    $crumb = '<span itemprop="name">' . $crumb['title'] . '</span>';
                 }
                 $out[] = <<< EOD
 <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">{$crumb}<meta itemprop="position" content="{$counter}" /></li>
@@ -1641,13 +1648,16 @@ EOD;
      * @param mixed $options リンクタグ用の属性（初期値 : array()）
      * ※ パラメータについては、HtmlHelper::link() を参照。
      * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function addCrumb($name, $link = null, $options = [])
     {
         $options = array_merge([
             'forceTitle' => true
         ], $options);
-        $this->BcHtml->addCrumb($name, $link, $options);
+        $this->Breadcrumbs->add($name, $link, $options);
     }
 
     /**
@@ -2554,6 +2564,9 @@ END_FLASH;
      * @param array $options オプション（初期値 : array()）
      *    ※ その他のパラメータについては、View::element() を参照
      * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function crumbsList($data = [], $options = [])
     {

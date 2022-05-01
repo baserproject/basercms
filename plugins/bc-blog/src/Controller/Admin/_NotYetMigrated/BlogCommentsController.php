@@ -66,8 +66,6 @@ class BlogCommentsController extends BlogAppController
             $this->Security->requireAuth('add');
         }
 
-        $crumbs = [];
-
         if (!empty($this->params['pass'][1])) {
             $dbDatas = $this->BlogPost->find(
                 'first',
@@ -80,28 +78,6 @@ class BlogCommentsController extends BlogAppController
             }
             $this->blogPost = ['BlogPost' => $dbDatas['BlogPost']];
             $this->blogContent = ['BlogContent' => $dbDatas['BlogContent']];
-            if (BcUtil::isAdminSystem()) {
-                $crumbs[] = [
-                    'name' => sprintf(
-                        __d('baser', '%s 設定'),
-                        $this->request->params['Content']['title']
-                    ),
-                    'url' => [
-                        'controller' => 'blog_posts',
-                        'action' => 'index',
-                        $this->blogContent['BlogContent']['id']
-                    ]
-                ];
-                $crumbs[] = [
-                    'name' => $this->blogPost['BlogPost']['name'],
-                    'url' => [
-                        'controller' => 'blog_posts',
-                        'action' => 'edit',
-                        $this->blogContent['BlogContent']['id'],
-                        $this->blogPost['BlogPost']['id']
-                    ]
-                ];
-            }
         } elseif (!empty($this->params['pass'][0])) {
             if (!in_array($this->request->action, ['captcha', 'smartphone_captcha', 'get_token'])) {
                 $dbDatas = $this->BlogPost->BlogContent->find(
@@ -113,22 +89,8 @@ class BlogCommentsController extends BlogAppController
                     ]
                 );
                 $this->blogContent = ['BlogContent' => $dbDatas['BlogContent']];
-                if (BcUtil::isAdminSystem()) {
-                    $crumbs[] = [
-                        'name' => sprintf(
-                            __d('baser', '%s 設定'),
-                            $this->request->params['Content']['title']
-                        ),
-                        'url' => [
-                            'controller' => 'blog_posts',
-                            'action' => 'index',
-                            $this->blogContent['BlogContent']['id']
-                        ]
-                    ];
-                }
             }
         }
-        $this->crumbs = array_merge($this->crumbs, $crumbs);
     }
 
     /**

@@ -1,31 +1,26 @@
 <?php
-// TODO : コード確認要
-use BaserCore\Event\BcEventDispatcherTrait;
-
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.View.Helper
- * @since           baserCMS v 0.1.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) NPO baser foundation
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       https://basercms.net/license/index.html MIT License
  */
 
-/**
- * Include files
- */
-App::uses('Form', 'View/Helper');
+namespace BaserCore\View\Helper;
+
+use BaserCore\Event\BcEventDispatcherTrait;
+use Cake\View\Helper;
 
 /**
- * ArrayHelper
- *
- * @package Baser.View.Helper
+ * BcArrayHelper
+ * @uses BcArrayHelper
  */
 class BcArrayHelper extends Helper
 {
+
     /**
      * Trait
      */
@@ -90,7 +85,6 @@ class BcArrayHelper extends Helper
      * @param string $value
      * @param string $key
      * @param string $add
-     * @return    string
      * @access    private
      */
     private function __addText(&$value, $key, $add)

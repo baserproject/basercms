@@ -32,13 +32,6 @@ class DashboardController extends BcAdminAppController
     public $uses = ['BaserCore.User', 'BaserCore.Page'];
 
     /**
-     * ぱんくずナビ
-     *
-     * @var string
-     */
-    public $crumbs = [];
-
-    /**
      * [ADMIN] 管理者ダッシュボードページを表示する
      *
      * @return void

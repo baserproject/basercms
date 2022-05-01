@@ -980,14 +980,12 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testGetCrumbs()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-
         // パンくずが設定されてない場合
         $result = $this->BcBaser->getCrumbs(true);
         $this->assertEmpty($result);
 
         // パンくずが設定されている場合
-        $this->BcBaser->_View->set('crumbs', [
+        $this->BcBaser->getView()->set('crumbs', [
             ['name' => '会社案内', 'url' => '/company/index'],
             ['name' => '会社データ', 'url' => '/company/data']
         ]);
@@ -1575,7 +1573,6 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testCrumbs()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         // パンくずが設定されてない場合
         $result = $this->BcBaser->crumbs();
         $this->assertEmpty($result);
@@ -1591,38 +1588,12 @@ class BcBaserHelperTest extends BcTestCase
         }
         ob_start();
         $this->BcBaser->crumbs();
-        $result = ob_get_clean();
-        $expected = [
-            ['a' => ['href' => '/company/']],
-            '会社案内',
-            '/a',
-            '&raquo;',
-            ['a' => ['href' => '/company/data']],
-            '会社データ',
-            '/a',
-            '&raquo;会社沿革'
-        ];
-        $this->assertTags($result, $expected);
+        $this->assertEquals('<a href="/company/">会社案内</a>&raquo;<a href="/company/data">会社データ</a>&raquo;会社沿革', ob_get_clean());
 
         // 区切り文字を変更、先頭にホームを追加
         ob_start();
         $this->BcBaser->crumbs(' | ', 'ホーム');
-        $result = ob_get_clean();
-        $expected = [
-            ['a' => ['href' => '/']],
-            'ホーム',
-            '/a',
-            ' | ',
-            ['a' => ['href' => '/company/']],
-            '会社案内',
-            '/a',
-            ' | ',
-            ['a' => ['href' => '/company/data']],
-            '会社データ',
-            '/a',
-            ' | 会社沿革'
-        ];
-        $this->assertTags($result, $expected);
+        $this->assertEquals('<a href="/">ホーム</a> | <a href="/company/">会社案内</a> | <a href="/company/data">会社データ</a> | 会社沿革', ob_get_clean());
     }
 
     /**
@@ -1631,17 +1602,10 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testAddCrumbs()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->BcBaser->addCrumb('会社案内', '/company/');
         ob_start();
         $this->BcBaser->crumbs();
-        $result = ob_get_clean();
-        $expected = [
-            ['a' => ['href' => '/company/']],
-            '会社案内',
-            '/a'
-        ];
-        $this->assertTags($result, $expected);
+        $this->assertEquals('<a href="/company/">会社案内</a>', ob_get_clean());
     }
 
     /**
@@ -2199,7 +2163,6 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testCrumbsList()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->expectOutputRegex('/ホーム/');
         $this->BcBaser->crumbsList();
     }
