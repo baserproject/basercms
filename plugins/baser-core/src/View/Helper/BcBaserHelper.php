@@ -38,6 +38,7 @@ use BaserCore\Annotation\Doc;
  * @property FlashHelper $Flash
  * @property BcAuthHelper $BcAuth
  * @property BreadcrumbsHelper $Breadcrumbs
+ * @property BcContentsHelper $BcContents
  */
 class BcBaserHelper extends Helper
 {
@@ -1842,13 +1843,15 @@ EOD;
      *    - `cache` : キャッシュを有効にする場合に true を指定
      *    ※ その他のパラメータについては、View::element() を参照
      * @return string コンテンツメニュー
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getContentsMenu($id = null, $level = null, $currentId = null, $options = [])
     {
         if (!$id) {
-            // $Content = ClassRegistry::init('Content');
-            $siteRoot = $this->BcAdminContent->getSiteRoot($this->_View->getRequest()->params['Content']['site_id']);
-            $id = $siteRoot['Content']['id'];
+            $siteRoot = $this->BcAdminContent->getSiteRoot($this->_View->getRequest()->getParam('Content.site_id'));
+            $id = $siteRoot->id;
         }
         $options = array_merge([
             'tree' => $this->BcContents->getTree($id, $level),
@@ -1858,7 +1861,7 @@ EOD;
             'element' => 'contents_menu',
         ], $options);
         if ($options['excludeIndex']) {
-            $options['tree'] = $this->_unsetIndexInContentsMenu($options['tree']);
+            $options['tree'] = $this->_unsetIndexInContentsMenu($options['tree']->toArray());
         }
 
         if (BcUtil::loginUser()) {
@@ -1889,7 +1892,7 @@ EOD;
     {
         if ($contents) {
             foreach($contents as $key => $content) {
-                if ($children && $content['Content']['type'] != 'ContentFolder' && $content['Content']['name'] == 'index') {
+                if ($children && $content->type !== 'ContentFolder' && $content->name === 'index') {
                     unset($contents[$key]);
                 }
                 if ($content['children']) {

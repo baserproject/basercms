@@ -1021,8 +1021,6 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testGetContentsMenu()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-
         $this->assertMatchesRegularExpression('/<ul class="menu ul-level-1">/s', $this->BcBaser->getContentsMenu());
         $this->assertMatchesRegularExpression('/<ul class="menu ul-level-1">/s', $this->BcBaser->getContentsMenu(1, 1));
         $this->assertMatchesRegularExpression('/<ul class="menu ul-level-1">/s', $this->BcBaser->getContentsMenu(1, 1, 1));
