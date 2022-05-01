@@ -1156,14 +1156,14 @@ class BcBaserHelper extends Helper
      * 《basercmsというフォルダに設置している場合の取得例》
      * /basercms/
      *
-     * 《basercmsというフォルダに設置し、スマートURLオフの場合の取得例》
-     * /basercms/index.php/
-     *
      * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function getRoot()
+    public function getRoot(): string
     {
-        return $this->_View->getRequest()->base . '/';
+        return $this->_View->getRequest()->getAttribute('base') . '/';
     }
 
     /**

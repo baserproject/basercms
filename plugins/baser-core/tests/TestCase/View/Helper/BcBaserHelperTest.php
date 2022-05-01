@@ -1148,26 +1148,11 @@ class BcBaserHelperTest extends BcTestCase
     /**
      * baserCMSが設置されているパスを取得する
      * @param string $expected 期待値
-     * @param string $baseUrl App.baseUrl
      * @return void
-     * @dataProvider getRootDataProvider
      */
-    public function testGetRoot($expected, $baseUrl)
+    public function testGetRoot()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-
-        Configure::write('App.baseUrl', $baseUrl);
-        $this->BcBaser->request = $this->_getRequest('/');
-        $this->assertEquals($expected, $this->BcBaser->getRoot());
-    }
-
-    public function getRootDataProvider()
-    {
-        return [
-            ['/', ''],
-            ['/index.php/', 'index.php'],
-            ['/basercms/index.php/', 'basercms/index.php']
-        ];
+        $this->assertEquals('/', $this->BcBaser->getRoot());
     }
 
     /**
