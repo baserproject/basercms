@@ -113,6 +113,7 @@ class BcFrontContentsComponent extends Component
      */
     protected function getCrumbs($id)
     {
+        if(!$id) return [];
         // ===========================================================================================
         // 2016/09/22 ryuring
         // PHP 7.0.8 環境にて、コンテンツ一覧追加時、検索インデックス作成のため、BcContentsComponent が
