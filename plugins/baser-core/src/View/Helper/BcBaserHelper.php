@@ -2913,8 +2913,8 @@ END_FLASH;
             $sites = \Cake\ORM\TableRegistry::getTableLocator()->get('BaserCore.Sites');
             $mainSite = $sites->getMainByUrl($this->_View->getRequest()->getPath());
             $url = $mainSite->makeUrl(new CakeRequest($this->BcContents->getPureUrl(
-                $this->_View->getRequest()->url,
-                $this->_View->getRequest()->params['Site']['id']
+                $this->_View->getRequest()->getPath(),
+                $this->_View->getRequest()->getParam('Site.id')
             )));
 
         } else {
@@ -2949,8 +2949,8 @@ END_FLASH;
             return;
         }
         $url = $subSite->makeUrl(new CakeRequest($this->BcContents->getPureUrl(
-            $this->_View->getRequest()->url,
-            $this->_View->getRequest()->params['Site']['id']
+            $this->_View->getRequest()->getPath(),
+            $this->_View->getRequest()->getParam('Site.id')
         )));
         $this->_View->set('meta',
             $this->BcHtml->meta('alternate',
