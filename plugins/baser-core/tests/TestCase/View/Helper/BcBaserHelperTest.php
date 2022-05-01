@@ -2240,21 +2240,9 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testGetParams()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->BcBaser->request = $this->_getRequest('/news/index/example/test?name=value');
+        $this->BcBaser->getView()->setRequest($this->getRequest('/?name=value'));
         $params = $this->BcBaser->getParams();
-
-        $this->assertEquals('blog', $params['plugin']);
-        $this->assertEquals('example', $params['pass'][0]);
-        $this->assertEquals('test', $params['pass'][1]);
-        $this->assertEquals('value', $params['query']['name']);
-        $this->assertEquals('news/index/example/test', $params['url']); // _getRequest では、?name=valueが一部として扱われる
-        $this->assertEquals('/news/index/example/test', $params['here']);
-
-        $this->BcBaser->request = $this->_getRequest('/?name=value');
-        $params = $this->BcBaser->getParams();
-
-        $this->assertEquals(null, $params['plugin']);
+        $this->assertEquals('BaserCore', $params['plugin']);
         $this->assertEquals(['index'], $params['pass']);
         $this->assertEquals('value', $params['query']['name']);
         $this->assertEquals('', $params['url']);

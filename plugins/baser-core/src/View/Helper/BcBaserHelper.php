@@ -2737,13 +2737,17 @@ END_FLASH;
      * 'here' => '/news/index/fuga/hoge'
      *
      * @return array URLのパラメータ情報の配列
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getParams()
     {
-        $params = $this->_View->getRequest()->params;
-        $params['query'] = $this->_View->getRequest()->query;
-        $params['url'] = $this->_View->getRequest()->url;
-        $params['here'] = $this->_View->getRequest()->here;
+        $attributes = $this->_View->getRequest()->getAttributes();
+        $params = $attributes['params'];
+        $params['query'] = $this->_View->getRequest()->getQueryParams();
+        $params['url'] = preg_replace('/^\//', '', $this->_View->getRequest()->getPath());
+        $params['here'] = $this->_View->getRequest()->getPath();
         unset($params['named']);
         unset($params['controller']);
         unset($params['action']);
