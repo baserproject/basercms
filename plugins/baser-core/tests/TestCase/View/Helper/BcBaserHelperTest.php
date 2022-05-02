@@ -810,8 +810,6 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testSetDescription()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-
         $this->BcBaser->setDescription('国産オープンソースのホームページです');
         $this->assertEquals('国産オープンソースのホームページです', $this->BcBaser->getDescription());
     }
