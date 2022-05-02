@@ -811,6 +811,9 @@ class BcBaserHelper extends Helper
      *
      * @param string $keywords キーワード（複数の場合はカンマで区切る）
      * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function setKeywords($keywords)
     {

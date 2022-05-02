@@ -1181,6 +1181,9 @@ class ContentService implements ContentServiceInterface
      * ツリー構造のパスを取得する
      * @param string $id
      * @return QueryInterface
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getPath($id): QueryInterface
     {

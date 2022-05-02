@@ -143,6 +143,9 @@ class PluginService implements PluginServiceInterface
      * プラグイン名からプラグインエンティティを取得
      * @param string $name
      * @return array|EntityInterface|null
+     * @checked
+     * @unitTest
+     * @noTodo
      */
     public function getByName(string $name)
     {

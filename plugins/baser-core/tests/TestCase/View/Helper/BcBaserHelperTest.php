@@ -800,8 +800,6 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testSetKeywords()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-
         $this->BcBaser->setKeywords('baserCMS,国産,オープンソース');
         $this->assertEquals('baserCMS,国産,オープンソース', $this->BcBaser->getKeywords());
     }
