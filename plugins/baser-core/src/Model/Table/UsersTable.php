@@ -343,17 +343,6 @@ class UsersTable extends Table
     }
 
     /**
-     * フォームの初期値を設定する
-     *
-     * @return array 初期値データ
-     */
-    public function getDefaultValue()
-    {
-        $data[$this->getAlias()]['user_group_id'] = Configure::read('BcApp.adminGroupId');
-        return $data;
-    }
-
-    /**
      * ユーザーに関連するよく使う項目を削除する
      *
      * @param int $userId ユーザーID
