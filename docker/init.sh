@@ -15,17 +15,18 @@ if [ ! -e '/var/www/shared/docker/check' ]; then
         rm -rf /var/www/shared/logs
     fi
     mkdir /var/www/shared/logs
+    if [ ! -d '/var/www/shared/webroot/files' ]; then
+        mkdir /var/www/shared/webroot/files
+    fi
 fi
 
 rsync -a /var/www/shared/ /var/www/html --exclude='node_modules' --exclude='tmp' --exclude='logs' --exclude='.git' --exclude='.idea' --exclude='.DS_Store' --exclude='docker' --exclude='config/jwt.key' --exclude='config/jwt.pem'
 
 if [ ! -d '/var/www/html/tmp' ]; then
     mkdir /var/www/html/tmp
-
 fi
 if [ ! -d '/var/www/html/logs' ]; then
     mkdir /var/www/html/logs
-
 fi
 chmod -R 777 /var/www/html/tmp
 chmod -R 777 /var/www/html/logs
