@@ -11,7 +11,9 @@
 
 namespace BaserCore\Test\TestCase\View\Helper;
 
-use BaserCore\View\Helper\BcAdminPageHelper;
+use BaserCore\Service\BcAdminServiceInterface;
+use BaserCore\Utility\BcContainerTrait;
+use BaserCore\View\Helper\PagesAdminHelper;
 use BaserCore\View\Helper\BcPageHelper;
 use Cake\Core\Configure;
 use BaserCore\View\BcAdminAppView;
@@ -25,6 +27,11 @@ use BaserCore\View\Helper\BcAdminHelper;
  */
 class BcAdminHelperTest extends BcTestCase
 {
+
+    /**
+     * Trait
+     */
+    use BcContainerTrait;
 
     /**
      * Fixtures
@@ -236,7 +243,6 @@ class BcAdminHelperTest extends BcTestCase
         $session = $this->BcAdmin->getView()->getRequest()->getSession();
         $session->write('AuthAdmin', true);
 
-        $result = $this->BcAdmin->getJsonMenu();
         $jsonMenu = json_decode($this->BcAdmin->getJsonMenu());
 
         // $currentSiteIdのテスト
@@ -260,6 +266,7 @@ class BcAdminHelperTest extends BcTestCase
      */
     public function testContentsMenu()
     {
+        $this->BcAdmin->getView()->set($this->getService(BcAdminServiceInterface::class)->getViewVarsForAll());
         $this->BcAdmin->getView()->setRequest($this->getRequest('/baser/admin'));
         // ヘルプなし 未ログイン
         $expected = $this->BcAdmin->getView()->element('contents_menu', [
@@ -416,12 +423,12 @@ class BcAdminHelperTest extends BcTestCase
         // 存在しない
         $request = $this->loginAdmin($this->getRequest('/hoge'));
         $this->BcAdmin->getView()->setRequest($request);
-        new BcAdminPageHelper($this->BcAdmin->getView());
+        new PagesAdminHelper($this->BcAdmin->getView());
         $this->assertEquals(false, $this->BcAdmin->existsPublishLink());
         // 存在する
         $request = $this->loginAdmin($this->getRequest('/baser/admin/baser-core/pages/edit/2'));
         $this->BcAdmin->getView()->setRequest($request);
-        new BcAdminPageHelper($this->BcAdmin->getView());
+        new PagesAdminHelper($this->BcAdmin->getView());
         $this->assertEquals(true, $this->BcAdmin->existsPublishLink());
     }
 
@@ -459,7 +466,7 @@ class BcAdminHelperTest extends BcTestCase
         // リンクなし
         $request = $this->loginAdmin($this->getRequest('/hoge'));
         $this->BcAdmin->getView()->setRequest($request);
-        new BcAdminPageHelper($this->BcAdmin->getView());
+        new PagesAdminHelper($this->BcAdmin->getView());
         ob_start();
         $this->BcAdmin->publishLink();
         $result = ob_get_clean();
@@ -467,7 +474,7 @@ class BcAdminHelperTest extends BcTestCase
         // リンクあり
         $request = $this->loginAdmin($this->getRequest('/baser/admin/baser-core/pages/edit/2'));
         $this->BcAdmin->getView()->setRequest($request);
-        new BcAdminPageHelper($this->BcAdmin->getView());
+        new PagesAdminHelper($this->BcAdmin->getView());
         ob_start();
         $this->BcAdmin->publishLink();
         $result = ob_get_clean();
