@@ -825,6 +825,9 @@ class BcBaserHelper extends Helper
      *
      * @param string $description 説明文
      * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function setDescription($description)
     {
