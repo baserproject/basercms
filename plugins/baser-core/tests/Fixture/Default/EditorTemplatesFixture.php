@@ -1,19 +1,17 @@
 <?php
-// TODO : コード確認要
-return;
+declare(strict_types=1);
+
+namespace BaserCore\Test\Fixture;
+
+use Cake\TestSuite\Fixture\TestFixture;
 
 /**
- * EditorTemplateFixture
+ * EditorTemplatesFixture
  */
-class EditorTemplateFixture extends BaserTestFixture
+class EditorTemplatesFixture extends TestFixture
 {
 
-    /**
-     * Name of the object
-     *
-     * @var string
-     */
-    public $name = 'EditorTemplate';
+    public $import = ['table' => 'editor_templates'];
 
     /**
      * Records

@@ -1,12 +1,17 @@
 <?php
-// TODO : コード確認要
-return;
+declare(strict_types=1);
+
+namespace BaserCore\Test\Fixture;
+
+use Cake\TestSuite\Fixture\TestFixture;
 
 /**
- * ThemeConfigFixture
+ * ThemeConfigsFixture
  */
-class ThemeConfigFixture extends BaserTestFixture
+class ThemeConfigsFixture extends TestFixture
 {
+
+    public $import = ['table' => 'theme_configs'];
 
     /**
      * Records

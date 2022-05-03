@@ -1,19 +1,17 @@
 <?php
-// TODO : コード確認要
-return;
+declare(strict_types=1);
+
+namespace BaserCore\Test\Fixture;
+
+use Cake\TestSuite\Fixture\TestFixture;
 
 /**
- * WidgetAreaFixture
+ * WidgetAreasFixture
  */
-class WidgetAreaFixture extends BaserTestFixture
+class WidgetAreasFixture extends TestFixture
 {
 
-    /**
-     * Name of the object
-     *
-     * @var string
-     */
-    public $name = 'WidgetArea';
+    public $import = ['table' => 'widget_areas'];
 
     /**
      * Records

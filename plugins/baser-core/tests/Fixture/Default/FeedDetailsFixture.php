@@ -1,12 +1,18 @@
 <?php
-// TODO : コード確認要
-return;
+declare(strict_types=1);
+
+namespace BaserCore\Test\Fixture;
+
+use Cake\TestSuite\Fixture\TestFixture;
 
 /**
- * FeedDetailFixture
+ * FeedDetailsFixture
  */
-class FeedDetailFixture extends BaserTestFixture
+class FeedDetailsFixture extends TestFixture
 {
+
+    public $import = ['table' => 'feed_details'];
+
     /**
      * Records
      *

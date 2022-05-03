@@ -1,19 +1,17 @@
 <?php
-// TODO : コード確認要
-return;
+declare(strict_types=1);
+
+namespace BaserCore\Test\Fixture;
+
+use Cake\TestSuite\Fixture\TestFixture;
 
 /**
  * BlogContentFixture
  */
-class BlogPostsBlogTagFixture extends BaserTestFixture
+class BlogPostsBlogTagFixture extends TestFixture
 {
 
-    /**
-     * Name of the object
-     *
-     * @var string
-     */
-    public $name = 'BlogPostsBlogTag';
+    public $import = ['table' => 'blog_posts_blog_tags'];
 
     /**
      * Records
