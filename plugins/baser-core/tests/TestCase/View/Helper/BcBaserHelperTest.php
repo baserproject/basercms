@@ -147,7 +147,7 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testInitialize()
     {
-        $this->assertNotEmpty($this->BcBaser->PermissionService);
+        $this->assertNotEmpty($this->BcBaser->PermissionsService);
     }
 
     /**

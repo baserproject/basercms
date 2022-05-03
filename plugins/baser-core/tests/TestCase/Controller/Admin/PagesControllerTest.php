@@ -12,7 +12,7 @@
 namespace BaserCore\Test\TestCase\Controller\Admin;
 
 use Cake\Event\Event;
-use BaserCore\Service\PageService;
+use BaserCore\Service\PagesService;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Controller\Admin\PagesController;
 
@@ -52,7 +52,7 @@ class PagesControllerTest extends BcTestCase
     {
         parent::setUp();
         $this->PagesController = new PagesController($this->getRequest());
-        $this->PageService = new PageService();
+        $this->PagesService = new PagesService();
     }
 
     /**
@@ -101,7 +101,7 @@ class PagesControllerTest extends BcTestCase
         $this->loginAdmin($this->getRequest('/'));
         $this->enableSecurityToken();
         $this->enableCsrfToken();
-        $data = $this->PageService->getIndex()->first();
+        $data = $this->PagesService->getIndex()->first();
         $data->page_template = 'testEdit';
         $data->content->name = "pageTestUpdate";
         $id = $data->id;
@@ -111,8 +111,8 @@ class PagesControllerTest extends BcTestCase
         ]);
         $this->assertResponseSuccess();
         $this->assertRedirect('/baser/admin/baser-core/pages/edit/' . $id);
-        $this->assertEquals('testEdit', $this->PageService->get($id)->page_template);
-        $this->assertEquals('pageTestUpdate', $this->PageService->get($id)->content->name);
+        $this->assertEquals('testEdit', $this->PagesService->get($id)->page_template);
+        $this->assertEquals('pageTestUpdate', $this->PagesService->get($id)->content->name);
     }
 
     /**

@@ -11,7 +11,7 @@
 
 namespace BaserCore\Test\TestCase\View;
 
-use BaserCore\Service\SiteServiceInterface;
+use BaserCore\Service\SitesServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\View\BcFrontAppView;
 use BaserCore\TestSuite\BcTestCase;
@@ -65,8 +65,8 @@ class BcFrontAppViewTest extends BcTestCase
     public function testInitialize()
     {
         $this->assertFalse(isset($this->BcFrontAppView->BcSmartphone));
-        /* @var \BaserCore\Service\SiteServiceInterface $siteService */
-        $siteService = $this->getService(SiteServiceInterface::class);
+        /* @var \BaserCore\Service\SitesServiceInterface $siteService */
+        $siteService = $this->getService(SitesServiceInterface::class);
         $site = $siteService->get(2);
         $siteService->update($site, ['status' => true]);
         $this->BcFrontAppView->setRequest($this->getRequest('/s/'));

@@ -20,10 +20,10 @@ use Cake\Utility\Inflector;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Model\Table\ContentsTable;
-use BaserCore\Service\PermissionService;
+use BaserCore\Service\PermissionsService;
 use BaserCore\Event\BcEventDispatcherTrait;
-use BaserCore\Service\ContentServiceInterface;
-use BaserCore\Service\PermissionServiceInterface;
+use BaserCore\Service\ContentsServiceInterface;
+use BaserCore\Service\PermissionsServiceInterface;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -35,7 +35,7 @@ use BaserCore\Annotation\Note;
  * @package BaserCore\View\Helper
  * @var BcContentsHelper $this
  * @property ContentsTable $_Contents
- * @property PermissionService $PermissionService
+ * @property PermissionsService $PermissionsService
  */
 class BcContentsHelper extends Helper
 {
@@ -67,8 +67,8 @@ class BcContentsHelper extends Helper
     {
         parent::initialize($config);
         $this->_Contents = TableRegistry::getTableLocator()->get('BaserCore.Contents');
-        $this->PermissionService = $this->getService(PermissionServiceInterface::class);
-        $this->ContentService = $this->getService(ContentServiceInterface::class);
+        $this->PermissionsService = $this->getService(PermissionsServiceInterface::class);
+        $this->ContentsService = $this->getService(ContentsServiceInterface::class);
         if (BcUtil::isAdminSystem(Router::url())) {
             $this->setup();
         }
@@ -140,7 +140,7 @@ class BcContentsHelper extends Helper
             // disabled
 			if(!empty($item['url']['add'])) {
                 // TODO ucmitz: ユーザグループを配列で全て渡すよう変更が必要
-				$item['addDisabled'] = !($this->PermissionService->check($item['url']['add'], [$user->user_groups[0]->id]));
+				$item['addDisabled'] = !($this->PermissionsService->check($item['url']['add'], [$user->user_groups[0]->id]));
 			} else {
 				$item['addDisabled'] = true;
 			}
@@ -172,7 +172,7 @@ class BcContentsHelper extends Helper
             foreach ($userGroups as $group) {
                 $userGroupIds[] = $group->id;
             }
-            if ($this->PermissionService->check($url, $userGroupIds)) {
+            if ($this->PermissionsService->check($url, $userGroupIds)) {
                 return true;
             }
         }

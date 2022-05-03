@@ -32,7 +32,7 @@ class BcAdminSiteConfigHelper extends BcSiteConfigHelper
      */
     public function isWritableEnv()
     {
-        return $this->SiteConfigService->isWritableEnv();
+        return $this->SiteConfigsService->isWritableEnv();
     }
 
     /**
@@ -97,7 +97,7 @@ class BcAdminSiteConfigHelper extends BcSiteConfigHelper
      */
     public function getModeList()
     {
-        return $this->SiteConfigService->getModeList();
+        return $this->SiteConfigsService->getModeList();
     }
 
 }

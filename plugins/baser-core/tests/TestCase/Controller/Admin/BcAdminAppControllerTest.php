@@ -11,7 +11,7 @@
 
 namespace BaserCore\Test\TestCase\Controller\Admin;
 
-use BaserCore\Service\SiteConfigServiceInterface;
+use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
 use ReflectionClass;
 use Cake\Event\Event;
@@ -310,8 +310,8 @@ class BcAdminAppControllerTest extends BcTestCase
 //    {
 //        $this->execPrivateMethod($this->BcAdminApp, 'setAdminTheme');
 //        $this->assertEquals('BcAdminThird', $this->BcAdminApp->viewBuilder()->getTheme());
-//        /* @var \BaserCore\Service\SiteConfigServiceInterface $siteConfigService */
-//        $siteConfigService = $this->getService(SiteConfigServiceInterface::class);
+//        /* @var \BaserCore\Service\SiteConfigsServiceInterface $siteConfigService */
+//        $siteConfigService = $this->getService(SiteConfigsServiceInterface::class);
 //        $siteConfigService->setValue('admin_theme', 'test');
 //        $this->execPrivateMethod($this->BcAdminApp, 'setAdminTheme');
 //        $this->assertEquals('test', $this->BcAdminApp->viewBuilder()->getTheme());

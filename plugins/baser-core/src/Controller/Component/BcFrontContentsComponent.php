@@ -11,7 +11,7 @@
 
 namespace BaserCore\Controller\Component;
 
-use BaserCore\Service\ContentServiceInterface;
+use BaserCore\Service\ContentsServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Http\ServerRequest;
 use Cake\Controller\Component;
@@ -33,7 +33,7 @@ use BaserCore\Annotation\Note;
  * @package BaserCore\Controller\Component
  * @property Controller $_Controller
  * @property ServerRequest $Request
- * @property ContentServiceInterface $ContentService
+ * @property ContentsServiceInterface $ContentsService
  */
 class BcFrontContentsComponent extends Component
 {
@@ -62,7 +62,7 @@ class BcFrontContentsComponent extends Component
     public function initialize(array $config): void
     {
         parent::initialize($config);
-        $this->ContentService = $this->getService(ContentServiceInterface::class);
+        $this->ContentsService = $this->getService(ContentsServiceInterface::class);
         $this->setupFront();
     }
 
@@ -94,7 +94,7 @@ class BcFrontContentsComponent extends Component
             $viewBuilder = $controller->viewBuilder();
             $viewBuilder->setLayout($request->getParam('Content.layout_template'));
             if (!$viewBuilder->getLayout()) {
-                $controller->viewBuilder()->setLayout($this->ContentService->getParentLayoutTemplate($request->getParam('Content.id')));
+                $controller->viewBuilder()->setLayout($this->ContentsService->getParentLayoutTemplate($request->getParam('Content.id')));
             }
             // パンくず
             $controller->set('crumbs', $this->getCrumbs($request->getParam('Content.id')));
@@ -121,7 +121,7 @@ class BcFrontContentsComponent extends Component
         // そのため、ビヘイビアのメソッドを直接実行して対処した。
         // CakePHPも、PHP自体のエラーも発生せず、ただ止まる。PHP7のバグ？PHP側のメモリーを256Mにしても変わらず。
         // ===========================================================================================
-        $contents = $this->ContentService->getPath($id)->all();
+        $contents = $this->ContentsService->getPath($id)->all();
         $crumbs = [];
         foreach($contents as $content) {
             if (!$content->site_root) {

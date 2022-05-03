@@ -20,7 +20,7 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\Note;
-use BaserCore\Service\ContentFolderServiceInterface;
+use BaserCore\Service\ContentFoldersServiceInterface;
 
 /**
  * Class ContentFoldersController
@@ -68,7 +68,7 @@ class ContentFoldersController extends BcAdminAppController
      * @unitTest
      * @note(value="clearViewCacheが動作しないため一旦コメントアウト")
      */
-    public function edit(ContentFolderServiceInterface $contentFolderService, $id = null)
+    public function edit(ContentFoldersServiceInterface $contentFolderService, $id = null)
     {
         if (!$id && empty($this->request->getData())) {
             $this->BcMessage->setError(__d('baser', '無効なIDです。'));

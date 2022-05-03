@@ -11,13 +11,13 @@
 
 namespace BaserCore\View\Helper;
 
-use BaserCore\Service\PageService;
+use BaserCore\Service\PagesService;
 use Cake\View\View;
 use Cake\View\Helper;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Event\BcEventDispatcherTrait;
-use BaserCore\Service\PageServiceInterface;
-use BaserCore\Service\ContentServiceInterface;
+use BaserCore\Service\PagesServiceInterface;
+use BaserCore\Service\ContentsServiceInterface;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\UnitTest;
@@ -26,7 +26,7 @@ use BaserCore\Annotation\Note;
 /**
  * BcPageHelper
  * @property BcAdminHelper $BcAdmin
- * @property PageService $PageService
+ * @property PagesService $PagesService
  */
 class BcPageHelper extends Helper
 {
@@ -84,9 +84,9 @@ class BcPageHelper extends Helper
     public function initialize(array $config): void
     {
         parent::initialize($config);
-        $this->ContentService = $this->getService(ContentServiceInterface::class);
-        $this->PageService = $this->getService(PageServiceInterface::class);
-        $this->BcAdmin->setEditLink($this->PageService->getEditLink($this->_View->getRequest()));
+        $this->ContentsService = $this->getService(ContentsServiceInterface::class);
+        $this->PagesService = $this->getService(PagesServiceInterface::class);
+        $this->BcAdmin->setEditLink($this->PagesService->getEditLink($this->_View->getRequest()));
     }
 
     /**
@@ -287,7 +287,7 @@ class BcPageHelper extends Helper
      */
     protected function getPageNeighbors($content, $overCategory = false)
     {
-        $conditions = array_merge($this->ContentService->getConditionAllowPublish(), [
+        $conditions = array_merge($this->ContentsService->getConditionAllowPublish(), [
             'Contents.type <>' => 'ContentFolder',
             'Contents.site_id' => $content->site_id
         ]);
@@ -300,6 +300,6 @@ class BcPageHelper extends Helper
             'conditions' => $conditions,
             'order' => ['Contents.lft'],
         ];
-        return $this->ContentService->getNeighbors($options);
+        return $this->ContentsService->getNeighbors($options);
     }
 }

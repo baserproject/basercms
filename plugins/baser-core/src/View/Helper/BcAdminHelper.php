@@ -12,7 +12,7 @@
 namespace BaserCore\View\Helper;
 
 use BaserCore\Event\BcEventDispatcherTrait;
-use BaserCore\Service\SiteServiceInterface;
+use BaserCore\Service\SitesServiceInterface;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Core\Configure;
@@ -449,7 +449,7 @@ class BcAdminHelper extends Helper
     public function publishLink(): void
     {
         if ($this->existsPublishLink()) {
-            $siteManage = $this->getService(SiteServiceInterface::class);
+            $siteManage = $this->getService(SitesServiceInterface::class);
             $site = $siteManage->findByUrl($this->_View->get('publishLink'));
             $useSubdomain = $fullUrl = false;
             if ($site && $site->name) {

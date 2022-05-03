@@ -13,7 +13,7 @@ return;
  */
 use Cake\Core\Configure;
 use BaserCore\Utility\BcUtil;
-use BaserCore\Service\PermissionServiceInterface;
+use BaserCore\Service\PermissionsServiceInterface;
 /**
  * Class Favorite
  *
@@ -87,7 +87,7 @@ class Favorite extends AppModel
      *
      * @param array $check
      */
-    public function isPermitted($check, PermissionServiceInterface $permissionService)
+    public function isPermitted($check, PermissionsServiceInterface $permissionService)
     {
         if (!$this->_Session) {
             return true;

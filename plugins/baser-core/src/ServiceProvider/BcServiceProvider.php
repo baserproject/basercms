@@ -19,28 +19,28 @@ use Cake\Core\ServiceProvider;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
-use BaserCore\Service\PageService;
-use BaserCore\Service\SiteService;
+use BaserCore\Service\PagesService;
+use BaserCore\Service\SitesService;
 use BaserCore\Service\UsersService;
-use BaserCore\Service\DblogService;
-use BaserCore\Service\PluginService;
-use BaserCore\Service\ContentService;
-use BaserCore\Service\UserGroupService;
-use BaserCore\Service\PermissionService;
-use BaserCore\Service\SiteConfigService;
-use BaserCore\Service\SearchIndexService;
-use BaserCore\Service\ContentFolderService;
-use BaserCore\Service\PageServiceInterface;
-use BaserCore\Service\SiteServiceInterface;
+use BaserCore\Service\DblogsService;
+use BaserCore\Service\PluginsService;
+use BaserCore\Service\ContentsService;
+use BaserCore\Service\UserGroupsService;
+use BaserCore\Service\PermissionsService;
+use BaserCore\Service\SiteConfigsService;
+use BaserCore\Service\SearchIndexesService;
+use BaserCore\Service\ContentFoldersService;
+use BaserCore\Service\PagesServiceInterface;
+use BaserCore\Service\SitesServiceInterface;
 use BaserCore\Service\UsersServiceInterface;
-use BaserCore\Service\DblogServiceInterface;
-use BaserCore\Service\PluginServiceInterface;
-use BaserCore\Service\ContentServiceInterface;
-use BaserCore\Service\UserGroupServiceInterface;
-use BaserCore\Service\PermissionServiceInterface;
-use BaserCore\Service\SiteConfigServiceInterface;
-use BaserCore\Service\SearchIndexServiceInterface;
-use BaserCore\Service\ContentFolderServiceInterface;
+use BaserCore\Service\DblogsServiceInterface;
+use BaserCore\Service\PluginsServiceInterface;
+use BaserCore\Service\ContentsServiceInterface;
+use BaserCore\Service\UserGroupsServiceInterface;
+use BaserCore\Service\PermissionsServiceInterface;
+use BaserCore\Service\SiteConfigsServiceInterface;
+use BaserCore\Service\SearchIndexesServiceInterface;
+use BaserCore\Service\ContentFoldersServiceInterface;
 
 /**
  * Class BcServiceProvider
@@ -56,18 +56,18 @@ class BcServiceProvider extends ServiceProvider
     protected $provides = [
         UsersServiceInterface::class,
         UsersAdminServiceInterface::class,
-        UserGroupServiceInterface::class,
-        PluginServiceInterface::class,
-        PluginServiceInterface::class,
-        SiteServiceInterface::class,
-        SiteConfigServiceInterface::class,
-        PermissionServiceInterface::class,
-        DblogServiceInterface::class,
-        ContentServiceInterface::class,
-        ContentFolderServiceInterface::class,
-        PageServiceInterface::class,
+        UserGroupsServiceInterface::class,
+        PluginsServiceInterface::class,
+        PluginsServiceInterface::class,
+        SitesServiceInterface::class,
+        SiteConfigsServiceInterface::class,
+        PermissionsServiceInterface::class,
+        DblogsServiceInterface::class,
+        ContentsServiceInterface::class,
+        ContentFoldersServiceInterface::class,
+        PagesServiceInterface::class,
         PagesDisplayServiceInterface::class,
-        SearchIndexServiceInterface::class,
+        SearchIndexesServiceInterface::class,
     ];
 
     /**
@@ -84,27 +84,27 @@ class BcServiceProvider extends ServiceProvider
         $container->add(UsersServiceInterface::class, UsersService::class);
         $container->add(UsersAdminServiceInterface::class, UsersAdminService::class);
         // UserGroupsサービス
-        $container->add(UserGroupServiceInterface::class, UserGroupService::class);
+        $container->add(UserGroupsServiceInterface::class, UserGroupsService::class);
         // Pluginsサービス
-        $container->add(PluginServiceInterface::class, PluginService::class);
+        $container->add(PluginsServiceInterface::class, PluginsService::class);
         // Sites サービス
-        $container->add(SiteServiceInterface::class, SiteService::class);
+        $container->add(SitesServiceInterface::class, SitesService::class);
         // SiteConfigsサービス
-        $container->add(SiteConfigServiceInterface::class, SiteConfigService::class);
+        $container->add(SiteConfigsServiceInterface::class, SiteConfigsService::class);
         // Permissionsサービス
-        $container->add(PermissionServiceInterface::class, PermissionService::class);
+        $container->add(PermissionsServiceInterface::class, PermissionsService::class);
         // Dblogsサービス
-        $container->add(DblogServiceInterface::class, DblogService::class);
+        $container->add(DblogsServiceInterface::class, DblogsService::class);
         // Contentsサービス
-        $container->add(ContentServiceInterface::class, ContentService::class);
+        $container->add(ContentsServiceInterface::class, ContentsService::class);
         // ContentFoldersサービス
-        $container->add(ContentFolderServiceInterface::class, ContentFolderService::class);
+        $container->add(ContentFoldersServiceInterface::class, ContentFoldersService::class);
         // Pagesサービス
-        $container->add(PageServiceInterface::class, PageService::class);
+        $container->add(PagesServiceInterface::class, PagesService::class);
         // PagesDisplayサービス
         $container->add(PagesDisplayServiceInterface::class, PagesDisplayService::class);
         // SearchIndexesサービス
-        $container->add(SearchIndexServiceInterface::class, SearchIndexService::class);
+        $container->add(SearchIndexesServiceInterface::class, SearchIndexesService::class);
 
     }
 

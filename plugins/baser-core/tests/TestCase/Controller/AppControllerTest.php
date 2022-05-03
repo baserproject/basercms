@@ -11,7 +11,7 @@
 
 namespace BaserCore\Test\TestCase\Controller;
 
-use BaserCore\Service\SiteConfigServiceInterface;
+use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\Utility\BcContainer;
 use Cake\Core\Configure;
 use Cake\Event\Event;
@@ -183,7 +183,7 @@ class AppControllerTest extends BcTestCase
     {
         $this->_response = $this->AppController->redirectIfIsRequireMaintenance();
         $this->assertNull($this->_response);
-        $siteConfig = BcContainer::get()->get(SiteConfigServiceInterface::class);
+        $siteConfig = BcContainer::get()->get(SiteConfigsServiceInterface::class);
         $siteConfig->setValue('maintenance', true);
         $this->_response = $this->AppController->redirectIfIsRequireMaintenance();
         $this->assertNull($this->_response);

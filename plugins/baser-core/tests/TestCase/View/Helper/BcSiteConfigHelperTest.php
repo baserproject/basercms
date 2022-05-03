@@ -60,7 +60,7 @@ class BcSiteConfigHelperTest extends BcTestCase
      */
     public function testInitialize()
     {
-        $this->assertTrue(isset($this->BcSiteConfig->SiteConfigService));
+        $this->assertTrue(isset($this->BcSiteConfig->SiteConfigsService));
     }
 
     /**

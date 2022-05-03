@@ -12,7 +12,7 @@
 namespace BaserCore\Test\TestCase\Routing\Route;
 
 use BaserCore\Routing\Route\BcContentsRoute;
-use BaserCore\Service\SiteConfigServiceInterface;
+use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Core\Configure;
@@ -112,7 +112,7 @@ class BcContentsRouteTest extends BcTestCase
     public function testParse($useSiteDeviceSetting, $host, $ua, $url, $expects)
     {
         $siteUrl = env('SITE_URL');
-        $siteConfig = $this->getService(SiteConfigServiceInterface::class);
+        $siteConfig = $this->getService(SiteConfigsServiceInterface::class);
         $siteConfig->putEnv('SITE_URL', 'http://main.com');
         Configure::write('BcSite.use_site_device_setting', $useSiteDeviceSetting);
         if ($ua) {

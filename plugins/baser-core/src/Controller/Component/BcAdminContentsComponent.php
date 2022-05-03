@@ -19,8 +19,8 @@ use BaserCore\Utility\BcUtil;
 use Cake\Controller\Component;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Event\BcContentsEventListener;
-use BaserCore\Service\ContentServiceInterface;
-use BaserCore\Service\SiteConfigServiceInterface;
+use BaserCore\Service\ContentsServiceInterface;
+use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
@@ -32,7 +32,7 @@ use BaserCore\Annotation\Note;
  * 階層コンテンツと連携したフォーム画面を作成する為のコンポーネント
  *
  * @package BaserCore\Controller\Component
- * @property ContentServiceInterface $ContentService
+ * @property ContentsServiceInterface $ContentsService
  */
 class BcAdminContentsComponent extends Component
 {
@@ -58,8 +58,8 @@ class BcAdminContentsComponent extends Component
     public function initialize(array $config): void
     {
         parent::initialize($config);
-        $this->ContentService = $this->getService(ContentServiceInterface::class);
-        $this->SiteConfigService = $this->getService(SiteConfigServiceInterface::class);
+        $this->ContentsService = $this->getService(ContentsServiceInterface::class);
+        $this->SiteConfigsService = $this->getService(SiteConfigsServiceInterface::class);
         $this->Sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
         $this->setupAdmin();
     }
@@ -118,7 +118,7 @@ class BcAdminContentsComponent extends Component
         $theme = $site->theme;
         $templates = BcUtil::getTemplateList('Layouts', [$controller->getPlugin(), $theme]);
         if ($content->id != 1) {
-            $parentTemplate = $this->ContentService->getParentLayoutTemplate($content->id);
+            $parentTemplate = $this->ContentsService->getParentLayoutTemplate($content->id);
             if (in_array($parentTemplate, $templates)) {
                 unset($templates[$parentTemplate]);
             }
@@ -132,7 +132,7 @@ class BcAdminContentsComponent extends Component
         }
         $siteList = $this->Sites->find('list', ['fields' => ['id', 'display_name']]);
         $controller->set('sites', $siteList);
-        $controller->set('mainSiteDisplayName', $this->SiteConfigService->getValue('main_site_display_name'));
+        $controller->set('mainSiteDisplayName', $this->SiteConfigsService->getValue('main_site_display_name'));
         $controller->set('mainSiteId', $site->main_site_id);
         $controller->set('relatedContents', $this->Sites->getRelatedContents($content->id));
         $related = false;
@@ -144,7 +144,7 @@ class BcAdminContentsComponent extends Component
         $controller->set('content', $content);
         $controller->set('currentSiteId', $content->site_id);
         $controller->set('related', $related);
-        $controller->set('publishLink', $this->ContentService->getUrl($content->url, true, $site->useSubDomain));
+        $controller->set('publishLink', $this->ContentsService->getUrl($content->url, true, $site->useSubDomain));
         $controller->set('entityName', $entityName);
     }
 }

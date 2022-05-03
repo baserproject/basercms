@@ -8,6 +8,7 @@
  * @since         5.0.0
  * @license       https://basercms.net/license/index.html MIT License
  */
+
 namespace BaserCore\Service;
 
 use BaserCore\Utility\BcUtil;

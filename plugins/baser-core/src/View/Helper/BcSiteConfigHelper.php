@@ -14,14 +14,14 @@ namespace BaserCore\View\Helper;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\UnitTest;
-use BaserCore\Service\SiteConfigService;
-use BaserCore\Service\SiteConfigServiceInterface;
+use BaserCore\Service\SiteConfigsService;
+use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\View\Helper;
 
 /**
  * BcSiteConfigHelper
- * @property SiteConfigService $SiteConfigService
+ * @property SiteConfigsService $SiteConfigsService
  */
 class BcSiteConfigHelper extends Helper
 {
@@ -41,7 +41,7 @@ class BcSiteConfigHelper extends Helper
     public function initialize(array $config): void
     {
         parent::initialize($config);
-        $this->SiteConfigService = $this->getService(SiteConfigServiceInterface::class);
+        $this->SiteConfigsService = $this->getService(SiteConfigsServiceInterface::class);
     }
 
     /**
@@ -53,7 +53,7 @@ class BcSiteConfigHelper extends Helper
      */
     public function getValue($fieldName)
     {
-        return $this->SiteConfigService->getValue($fieldName);
+        return $this->SiteConfigsService->getValue($fieldName);
     }
 
 }

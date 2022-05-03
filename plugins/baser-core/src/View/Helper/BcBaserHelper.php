@@ -23,7 +23,7 @@ use Cake\View\Helper\UrlHelper;
 use Cake\View\Helper\FlashHelper;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Event\BcEventDispatcherTrait;
-use BaserCore\Service\PermissionServiceInterface;
+use BaserCore\Service\PermissionsServiceInterface;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Note;
 use BaserCore\Annotation\Checked;
@@ -180,7 +180,7 @@ class BcBaserHelper extends Helper
     public function initialize($config): void
     {
         parent::initialize($config);
-        $this->PermissionService = $this->getService(PermissionServiceInterface::class);
+        $this->PermissionsService = $this->getService(PermissionsServiceInterface::class);
     }
 
     /**
@@ -411,7 +411,7 @@ class BcBaserHelper extends Helper
         $user = Bcutil::loginUser();
         if ($user) {
             $userGruops = array_column($user->user_groups, 'id');
-            if (!$this->PermissionService->check($_url, $userGruops)) {
+            if (!$this->PermissionsService->check($_url, $userGruops)) {
                 $enabled = false;
             }
         }

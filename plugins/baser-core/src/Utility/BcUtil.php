@@ -30,7 +30,7 @@ use BaserCore\Annotation\UnitTest;
 use Cake\Http\ServerRequestFactory;
 use Cake\Datasource\ConnectionManager;
 use Authentication\Authenticator\Result;
-use BaserCore\Service\SiteConfigServiceInterface;
+use BaserCore\Service\SiteConfigsServiceInterface;
 
 /**
  * Class BcUtil

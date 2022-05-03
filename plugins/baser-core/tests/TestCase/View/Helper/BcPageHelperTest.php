@@ -73,8 +73,8 @@ class BcPageHelperTest extends BcTestCase
      */
     public function testInitialize()
     {
-        $this->assertNotEmpty($this->BcPage->ContentService);
-        $this->assertNotEmpty($this->BcPage->PageService);
+        $this->assertNotEmpty($this->BcPage->ContentsService);
+        $this->assertNotEmpty($this->BcPage->PagesService);
     }
 
     /**
@@ -307,7 +307,7 @@ class BcPageHelperTest extends BcTestCase
      */
     public function testGetPageNeighbors($overCategory, $title)
     {
-        $content = $this->BcPage->ContentService->getIndex(['name' => 'about'])->first();
+        $content = $this->BcPage->ContentsService->getIndex(['name' => 'about'])->first();
         $neighbors = $this->execPrivateMethod($this->BcPage, 'getPageNeighbors', [$content, $overCategory]);
         $this->assertEquals($neighbors['prev']['title'], $title['prev']);
         $this->assertEquals($neighbors['next']['title'], $title['next']);

@@ -11,7 +11,7 @@
 
 namespace BaserCore\Controller\Api;
 
-use BaserCore\Service\PermissionServiceInterface;
+use BaserCore\Service\PermissionsServiceInterface;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
@@ -29,7 +29,7 @@ class PermissionsController extends BcApiController
      * @noTodo
      * @unitTest
 	 */
-	public function add(PermissionServiceInterface $permissionService)
+	public function add(PermissionsServiceInterface $permissionService)
 	{
         $this->request->allowMethod(['post', 'delete']);
         try {

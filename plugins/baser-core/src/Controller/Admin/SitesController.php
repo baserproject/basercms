@@ -16,8 +16,8 @@ use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\Note;
 use Cake\Core\Exception\Exception;
-use BaserCore\Service\SiteServiceInterface;
-use BaserCore\Service\SiteConfigServiceInterface;
+use BaserCore\Service\SitesServiceInterface;
+use BaserCore\Service\SiteConfigsServiceInterface;
 
 /**
  * Class SitesController
@@ -28,13 +28,13 @@ class SitesController extends BcAdminAppController
 
     /**
      * サイト一覧
-     * @param SiteServiceInterface $siteService
-     * @param SiteConfigServiceInterface $siteConfigService
+     * @param SitesServiceInterface $siteService
+     * @param SiteConfigsServiceInterface $siteConfigService
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function index(SiteServiceInterface $siteService, SiteConfigServiceInterface $siteConfigService)
+    public function index(SitesServiceInterface $siteService, SiteConfigsServiceInterface $siteConfigService)
     {
         $this->setViewConditions('Site', ['default' => ['query' => [
             'limit' => $siteConfigService->getValue('admin_list_num'),
@@ -61,7 +61,7 @@ class SitesController extends BcAdminAppController
      * @unitTest
      * @note(value="インストーラーを実装してからテーマの保有するプラグインをインストールする処理を追加する")
      */
-    public function add(SiteServiceInterface $siteService)
+    public function add(SitesServiceInterface $siteService)
     {
         if ($this->request->is('post')) {
 
@@ -105,7 +105,7 @@ class SitesController extends BcAdminAppController
      * @unitTest
      * @note(value="インストーラーを実装してからテーマの保有するプラグインをインストールする処理を追加する")
      */
-    public function edit(SiteServiceInterface $siteService, $id)
+    public function edit(SitesServiceInterface $siteService, $id)
     {
         if (!$id) {
             $this->notFound();
@@ -155,7 +155,7 @@ class SitesController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function publish(SiteServiceInterface $siteService, $siteId)
+    public function publish(SitesServiceInterface $siteService, $siteId)
     {
         $site = $siteService->get($siteId);
 
@@ -177,7 +177,7 @@ class SitesController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function unpublish(SiteServiceInterface $siteService, $siteId)
+    public function unpublish(SitesServiceInterface $siteService, $siteId)
     {
         $site = $siteService->get($siteId);
 
@@ -196,7 +196,7 @@ class SitesController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function delete(SiteServiceInterface $siteService, $id)
+    public function delete(SitesServiceInterface $siteService, $id)
     {
         if (!$id) {
             $this->BcMessage->setError(__d('baser', '無効なIDです。'));

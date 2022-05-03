@@ -15,10 +15,10 @@ use BaserCore\Utility\BcUtil;
 use Cake\Event\EventInterface;
 use BaserCore\Utility\BcSiteConfig;
 use BaserCore\Vendor\CKEditorStyleParser;
-use BaserCore\Service\PageServiceInterface;
-use BaserCore\Service\SiteServiceInterface;
-use BaserCore\Service\ContentServiceInterface;
-use BaserCore\Service\SiteConfigServiceInterface;
+use BaserCore\Service\PagesServiceInterface;
+use BaserCore\Service\SitesServiceInterface;
+use BaserCore\Service\ContentsServiceInterface;
+use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
@@ -73,16 +73,16 @@ class PagesController extends BcAdminAppController
 	/**
 	 * [ADMIN] 固定ページ情報編集
      * @param int $id (page_id)
-	 * @param PageServiceInterface $pageService
-	 * @param ContentServiceInterface $contentService
-	 * @param SiteServiceInterface $siteService
-	 * @param SiteConfigServiceInterface $siteConfigService
+	 * @param PagesServiceInterface $pageService
+	 * @param ContentsServiceInterface $contentService
+	 * @param SitesServiceInterface $siteService
+	 * @param SiteConfigsServiceInterface $siteConfigService
 	 * @return void
      * @checked
      * @unitTest
      * @noTodo
 	 */
-	public function edit($id, PageServiceInterface $pageService, ContentServiceInterface $contentService, SiteServiceInterface $siteService, SiteConfigServiceInterface $siteConfigService)
+	public function edit($id, PagesServiceInterface $pageService, ContentsServiceInterface $contentService, SitesServiceInterface $siteService, SiteConfigsServiceInterface $siteConfigService)
 	{
 		if (!$id && empty($this->request->getData())) {
 			$this->BcMessage->setError(__d('baser', '無効なIDです。'));

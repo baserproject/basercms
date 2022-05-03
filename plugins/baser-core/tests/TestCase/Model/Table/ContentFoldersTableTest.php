@@ -39,10 +39,10 @@ class ContentFoldersTableTest extends BcTestCase
         'plugin.BaserCore.Pages',
         'plugin.BaserCore.SiteConfigs',
         'plugin.BaserCore.Contents',
-        'plugin.BaserCore.Service/SearchIndexService/ContentsReconstruct',
-        'plugin.BaserCore.Service/SearchIndexService/PagesReconstruct',
-        'plugin.BaserCore.Service/SearchIndexService/ContentFoldersReconstruct',
-        'plugin.BaserCore.Service/SearchIndexService/SearchIndexesReconstruct'
+        'plugin.BaserCore.Service/SearchIndexesService/ContentsReconstruct',
+        'plugin.BaserCore.Service/SearchIndexesService/PagesReconstruct',
+        'plugin.BaserCore.Service/SearchIndexesService/ContentFoldersReconstruct',
+        'plugin.BaserCore.Service/SearchIndexesService/SearchIndexesReconstruct'
     ];
 
     public $autoFixtures = false;
@@ -142,10 +142,10 @@ class ContentFoldersTableTest extends BcTestCase
     public function testAfterSave(): void
     {
         $this->loadFixtures(
-	        'Service\SearchIndexService\ContentsReconstruct',
-	        'Service\SearchIndexService\PagesReconstruct',
-	        'Service\SearchIndexService\ContentFoldersReconstruct',
-            'Service\SearchIndexService\SearchIndexesReconstruct'
+	        'Service\SearchIndexesService\ContentsReconstruct',
+	        'Service\SearchIndexesService\PagesReconstruct',
+	        'Service\SearchIndexesService\ContentFoldersReconstruct',
+            'Service\SearchIndexesService\SearchIndexesReconstruct'
         );
         $contentFolder = $this->ContentFolders->get(1, ['contain' => ['Contents']]);
         $this->SearchIndexes->deleteAll([]);

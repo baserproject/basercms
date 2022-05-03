@@ -18,10 +18,10 @@ use BaserCore\Model\Entity\Page;
 use BaserCore\Model\Table\PagesTable;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Http\Exception\NotFoundException;
-use BaserCore\Service\PageServiceInterface;
+use BaserCore\Service\PagesServiceInterface;
 use Cake\Http\Exception\ForbiddenException;
 use Cake\View\Exception\MissingViewException;
-use BaserCore\Service\ContentFolderServiceInterface;
+use BaserCore\Service\ContentFoldersServiceInterface;
 use BaserCore\Controller\Component\BcFrontContentsComponent;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -57,8 +57,8 @@ class PagesController extends BcFrontAppController
 
 	/**
 	 * ビューを表示する
-	 * @param PageServiceInterface $pageService
-	 * @param ContentFolderServiceInterface $contentFolderService
+	 * @param PagesServiceInterface $pageService
+	 * @param ContentFoldersServiceInterface $contentFolderService
 	 * @return \Cake\Http\Response|void
      * @throws ForbiddenException When a directory traversal attempt.
 	 * @throws NotFoundException When the view file could not be found
@@ -67,7 +67,7 @@ class PagesController extends BcFrontAppController
      * @unitTest
      * @noTodo
 	 */
-	public function display(PageServiceInterface $pageService, ContentFolderServiceInterface $contentFolderService)
+	public function display(PagesServiceInterface $pageService, ContentFoldersServiceInterface $contentFolderService)
 	{
 		$path = func_get_args();
 

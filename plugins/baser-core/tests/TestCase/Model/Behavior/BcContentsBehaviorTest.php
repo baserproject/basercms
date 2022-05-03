@@ -14,7 +14,7 @@ use ArrayObject;
 use Cake\ORM\Entity;
 use Cake\ORM\Marshaller;
 use BaserCore\TestSuite\BcTestCase;
-use BaserCore\Service\ContentService;
+use BaserCore\Service\ContentsService;
 use BaserCore\Model\Table\ContentsTable;
 use BaserCore\Model\Table\ContentFoldersTable;
 use BaserCore\Model\Behavior\BcContentsBehavior;
@@ -58,7 +58,7 @@ class BcContentsBehaviorTest extends BcTestCase
         $this->table = $this->getTableLocator()->get('BaserCore.ContentFolders');
         $this->table->setPrimaryKey(['id']);
         $this->table->addBehavior('BaserCore.BcContents');
-        $this->contentService = new ContentService();
+        $this->contentService = new ContentsService();
     }
 
     /**

@@ -11,7 +11,7 @@
 
 namespace BaserCore\Controller\Component;
 
-use BaserCore\Service\DblogServiceInterface;
+use BaserCore\Service\DblogsServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Controller\Component;
 use Cake\Controller\Component\FlashComponent;
@@ -67,7 +67,7 @@ class BcMessageComponent extends Component
 
         if ($saveDblog) {
             try {
-                $dblogs = $this->getService(DblogServiceInterface::class);
+                $dblogs = $this->getService(DblogsServiceInterface::class);
                 $dblogs->create($message);
             } catch (\Exception $e) {
                 $this->Flash->set(__d('baser', 'DBログの保存に失敗しました。'), [

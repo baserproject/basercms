@@ -11,8 +11,8 @@
 
 namespace BaserCore\View\Helper;
 
-use BaserCore\Service\ContentServiceInterface;
-use BaserCore\Service\DblogServiceInterface;
+use BaserCore\Service\ContentsServiceInterface;
+use BaserCore\Service\DblogsServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Datasource\ResultSetInterface;
 use Cake\View\Helper;
@@ -43,7 +43,7 @@ class BcAdminDashboardHelper extends Helper
      */
     public function getDblogs($limit): ResultSetInterface
     {
-        return $this->getService(DblogServiceInterface::class)->getDblogs($limit);
+        return $this->getService(DblogsServiceInterface::class)->getDblogs($limit);
     }
 
     /**
@@ -56,7 +56,7 @@ class BcAdminDashboardHelper extends Helper
      */
     public function getContentsInfo()
     {
-        return $this->getService(ContentServiceInterface::class)->getContentsInfo();
+        return $this->getService(ContentsServiceInterface::class)->getContentsInfo();
     }
 
 }

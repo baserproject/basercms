@@ -65,6 +65,6 @@ class BcAdminContentFolderHelperTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function testInitialize()
     {
-        $this->assertTrue(isset($this->BcAdminContentFolder->ContentFolderService));
+        $this->assertTrue(isset($this->BcAdminContentFolder->ContentFoldersService));
     }
 }

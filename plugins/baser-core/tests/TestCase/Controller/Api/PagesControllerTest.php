@@ -12,7 +12,7 @@
 namespace BaserCore\Test\TestCase\Controller\Api;
 
 use Cake\Routing\Router;
-use BaserCore\Service\PageService;
+use BaserCore\Service\PagesService;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\TestSuite\IntegrationTestTrait;
 
@@ -60,7 +60,7 @@ class PagesControllerTest extends BcTestCase
         $token = $this->apiLoginAdmin(1);
         $this->accessToken = $token['access_token'];
         $this->refreshToken = $token['refresh_token'];
-        $this->PageService = new PageService();
+        $this->PagesService = new PagesService();
     }
 
     /**
@@ -132,13 +132,13 @@ class PagesControllerTest extends BcTestCase
      */
     public function testEdit()
     {
-        $data = $this->PageService->getIndex(['contents' => '<section class="mainHeadline">'])->first();
+        $data = $this->PagesService->getIndex(['contents' => '<section class="mainHeadline">'])->first();
         $data->content->name = "pageTestUpdate";
         $data->contents = "pageTestUpdate";
         $id = $data->id;
         $this->post("/baser/api/baser-core/pages/edit/${id}.json?token=". $this->accessToken, $data->toArray());
         $this->assertResponseSuccess();
-        $query = $this->PageService->getIndex(['contents' => $data->contents]);
+        $query = $this->PagesService->getIndex(['contents' => $data->contents]);
         $this->assertEquals(1, $query->all()->count());
         $this->assertEquals("pageTestUpdate", $query->all()->first()->content->name);
     }
@@ -159,6 +159,6 @@ class PagesControllerTest extends BcTestCase
         ];
         $this->post("/baser/api/baser-core/pages/copy/2.json?token=". $this->accessToken, $data);
         $this->assertResponseSuccess();
-        $this->assertFalse($this->PageService->getIndex(['title' => $data['title']])->all()->isEmpty());
+        $this->assertFalse($this->PagesService->getIndex(['title' => $data['title']])->all()->isEmpty());
     }
 }

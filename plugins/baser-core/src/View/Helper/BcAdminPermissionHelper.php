@@ -12,14 +12,14 @@
 
 namespace BaserCore\View\Helper;
 
-use BaserCore\Service\PermissionServiceInterface;
+use BaserCore\Service\PermissionsServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\View\View;
 
 /**
  * Class BcAdminPermissionHelper
  * @package BaserCore\View\Helper
- * @property PermissionServiceInterface $PermissionService
+ * @property PermissionsServiceInterface $PermissionsService
  */
 class BcAdminPermissionHelper extends \Cake\View\Helper
 {
@@ -37,7 +37,7 @@ class BcAdminPermissionHelper extends \Cake\View\Helper
     public function __construct(View $view, array $config = [])
     {
         parent::__construct($view, $config);
-        $this->PermissionService = $this->getService(PermissionServiceInterface::class);
+        $this->PermissionsService = $this->getService(PermissionsServiceInterface::class);
     }
 
     /**
@@ -46,7 +46,7 @@ class BcAdminPermissionHelper extends \Cake\View\Helper
      */
     public function getMethodList()
     {
-        return $this->PermissionService->getMethodList();
+        return $this->PermissionsService->getMethodList();
     }
 
     /**
@@ -55,6 +55,6 @@ class BcAdminPermissionHelper extends \Cake\View\Helper
      */
     public function getAuthList()
     {
-        return $this->PermissionService->getAuthList();
+        return $this->PermissionsService->getAuthList();
     }
 }

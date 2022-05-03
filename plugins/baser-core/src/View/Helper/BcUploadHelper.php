@@ -20,14 +20,14 @@ use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Event\BcEventDispatcherTrait;
-use BaserCore\Service\SiteConfigServiceInterface;
+use BaserCore\Service\SiteConfigsServiceInterface;
 
 /**
  * アップロードヘルパー
  *
  * @package Baser.View.Helper
  * @property HtmlHelper $Html
- * @property SiteConfigServiceInterface $siteConfigService
+ * @property SiteConfigsServiceInterface $siteConfigService
  */
 class BcUploadHelper  extends Helper
 {
@@ -64,7 +64,7 @@ class BcUploadHelper  extends Helper
     public function initialize(array $config): void
     {
         parent::initialize($config);
-        $this->siteConfigService = $this->getService(SiteConfigServiceInterface::class);
+        $this->siteConfigService = $this->getService(SiteConfigsServiceInterface::class);
     }
 
     /**

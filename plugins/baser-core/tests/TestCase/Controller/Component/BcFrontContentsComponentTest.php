@@ -12,9 +12,9 @@
 namespace BaserCore\Test\TestCase\Controller\Component;
 
 use Cake\Routing\Router;
-use BaserCore\Service\PageService;
+use BaserCore\Service\PagesService;
 use BaserCore\TestSuite\BcTestCase;
-use BaserCore\Service\ContentService;
+use BaserCore\Service\ContentsService;
 use Cake\Controller\ComponentRegistry;
 use BaserCore\Controller\BcAppController;
 use BaserCore\Controller\PagesController;
@@ -64,8 +64,8 @@ class BcFrontContentsComponentTest extends BcTestCase
         $this->Controller = new BcFrontContentsTestController($this->getRequest());
         $this->ComponentRegistry = new ComponentRegistry($this->Controller);
         $this->BcFrontContents = new BcFrontContentsComponent($this->ComponentRegistry);
-        $this->PageService = new PageService();
-        $this->ContentService = new ContentService();
+        $this->PagesService = new PagesService();
+        $this->ContentsService = new ContentsService();
     }
 
     /**
@@ -88,7 +88,7 @@ class BcFrontContentsComponentTest extends BcTestCase
      */
     public function testSetupFront()
     {
-        $page = $this->PageService->get(2);
+        $page = $this->PagesService->get(2);
         $request = $this->getRequest()->withParam('Content', $page->content);
         $Controller = new PagesController($request);
         $ComponentRegistry = new ComponentRegistry($Controller);
@@ -96,7 +96,7 @@ class BcFrontContentsComponentTest extends BcTestCase
         $BcFrontContents->setupFront();
         $layout = $Controller->viewBuilder()->getLayout();
         $vars = $Controller->viewBuilder()->getVars();
-        $this->assertEquals($this->ContentService->getParentLayoutTemplate($page->content->id), $layout);
+        $this->assertEquals($this->ContentsService->getParentLayoutTemplate($page->content->id), $layout);
         $this->assertIsString($vars['description']);
         $this->assertIsString($vars['title']);
 

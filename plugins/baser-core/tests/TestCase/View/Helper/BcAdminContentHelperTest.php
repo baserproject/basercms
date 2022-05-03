@@ -70,8 +70,8 @@ class BcAdminContentHelperTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function testInitialize()
     {
-        $this->assertTrue(isset($this->BcAdminContent->ContentService));
-        $this->assertTrue(isset($this->BcAdminContent->PermissionService));
+        $this->assertTrue(isset($this->BcAdminContent->ContentsService));
+        $this->assertTrue(isset($this->BcAdminContent->PermissionsService));
     }
 
     /**

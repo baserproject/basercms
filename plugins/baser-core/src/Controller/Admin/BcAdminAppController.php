@@ -13,7 +13,7 @@ namespace BaserCore\Controller\Admin;
 
 use Authentication\Controller\Component\AuthenticationComponent;
 use BaserCore\Controller\BcAppController;
-use BaserCore\Service\PermissionServiceInterface;
+use BaserCore\Service\PermissionsServiceInterface;
 use BaserCore\Service\UsersServiceInterface;
 use BaserCore\Service\UsersService;
 use BaserCore\Utility\BcContainerTrait;
@@ -87,8 +87,8 @@ class BcAdminAppController extends BcAppController
     {
         parent::beforeFilter($event);
         $user = BcUtil::loginUser();
-        /* @var PermissionServiceInterface $permission */
-        $permission = $this->getService(PermissionServiceInterface::class);
+        /* @var PermissionsServiceInterface $permission */
+        $permission = $this->getService(PermissionsServiceInterface::class);
         if ($user && !$permission->check($this->getRequest()->getPath(), Hash::extract($user->toArray()['user_groups'], '{n}.id'))) {
             $this->BcMessage->setError(__d('baser', '指定されたページへのアクセスは許可されていません。'));
             $this->redirect($this->Authentication->getLoginRedirect());

@@ -14,7 +14,7 @@ namespace BaserCore\Test\TestCase\Controller\Admin;
 use Cake\Event\Event;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Model\Table\ContentsTable;
-use BaserCore\Service\ContentFolderService;
+use BaserCore\Service\ContentFoldersService;
 use BaserCore\Model\Table\ContentFoldersTable;
 use BaserCore\Controller\Admin\ContentFoldersController;
 
@@ -54,7 +54,7 @@ class ContentFoldersControllerTest extends BcTestCase
         $this->loginAdmin($this->getRequest('/baser/admin/baser-core/content_folders'));
         $this->ContentFoldersController = new ContentFoldersController($this->getRequest());
         $this->ContentFolders = $this->getTableLocator()->get('ContentFolders');
-        $this->ContentFolderService = new ContentFolderService();
+        $this->ContentFoldersService = new ContentFoldersService();
         $this->Contents = $this->getTableLocator()->get('Contents');
     }
 
@@ -98,15 +98,15 @@ class ContentFoldersControllerTest extends BcTestCase
     {
         $this->enableSecurityToken();
         $this->enableCsrfToken();
-        $data = $this->ContentFolderService->getIndex(['folder_template' => "testEdit"])->first();
+        $data = $this->ContentFoldersService->getIndex(['folder_template' => "testEdit"])->first();
         $data->folder_template = 'testEditテンプレート';
         $data->content->name = "contentFolderTestUpdate";
         $id = $data->id;
         $this->post('/baser/admin/baser-core/content_folders/edit/' . $id, ['ContentFolders' => $data->toArray(), "Contents" => ['title' => $data->content->name, 'parent_id' => $data->content->parent_id]]);
         $this->assertResponseSuccess();
         $this->assertRedirect('/baser/admin/baser-core/content_folders/edit/' . $id);
-        $this->assertEquals('testEditテンプレート', $this->ContentFolderService->get($id)->folder_template);
-        $this->assertEquals('contentFolderTestUpdate', $this->ContentFolderService->get($id)->content->name);
+        $this->assertEquals('testEditテンプレート', $this->ContentFoldersService->get($id)->folder_template);
+        $this->assertEquals('contentFolderTestUpdate', $this->ContentFoldersService->get($id)->content->name);
     }
 
     /**

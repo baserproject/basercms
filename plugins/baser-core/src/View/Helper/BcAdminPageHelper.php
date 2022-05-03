@@ -15,13 +15,13 @@ use BaserCore\Utility\BcUtil;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
-use BaserCore\Service\PageService;
+use BaserCore\Service\PagesService;
 use BaserCore\Utility\BcContainerTrait;
-use BaserCore\Service\PageServiceInterface;
+use BaserCore\Service\PagesServiceInterface;
 
 /**
  * BcAdminPageHelper
- * @property PageService $PageService
+ * @property PagesService $PagesService
  * @property BcAdminHelper $BcAdmin
  */
 class BcAdminPageHelper extends Helper
@@ -47,8 +47,8 @@ class BcAdminPageHelper extends Helper
     public function initialize(array $config): void
     {
         parent::initialize($config);
-        $this->PageService = $this->getService(PageServiceInterface::class);
-        $this->BcAdmin->setPublishLink($this->PageService->getPublishLink($this->_View->getRequest()));
+        $this->PagesService = $this->getService(PagesServiceInterface::class);
+        $this->BcAdmin->setPublishLink($this->PagesService->getPublishLink($this->_View->getRequest()));
     }
 
     /**
@@ -60,6 +60,6 @@ class BcAdminPageHelper extends Helper
      */
     public function getPageTemplateList($contentId, $theme)
     {
-        return $this->PageService->getPageTemplateList($contentId, $theme);
+        return $this->PagesService->getPageTemplateList($contentId, $theme);
     }
 }

@@ -24,7 +24,7 @@ use Cake\Core\Exception\Exception;
 use BaserCore\Model\Table\UsersTable;
 use BaserCore\Service\UsersServiceInterface;
 use Cake\Http\Exception\ForbiddenException;
-use BaserCore\Service\SiteConfigServiceInterface;
+use BaserCore\Service\SiteConfigsServiceInterface;
 use Cake\Datasource\Exception\RecordNotFoundException;
 
 /**
@@ -132,7 +132,7 @@ class UsersController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function index(UsersServiceInterface $userService, SiteConfigServiceInterface $siteConfigService): void
+    public function index(UsersServiceInterface $userService, SiteConfigsServiceInterface $siteConfigService): void
     {
         $this->setViewConditions('User', ['default' => ['query' => [
             'limit' => $siteConfigService->getValue('admin_list_num'),

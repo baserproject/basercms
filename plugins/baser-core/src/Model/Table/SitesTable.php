@@ -29,11 +29,11 @@ use Cake\Datasource\EntityInterface;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Datasource\ResultSetInterface;
 use BaserCore\Model\Table\ContentsTable;
-use BaserCore\Service\SiteConfigService;
+use BaserCore\Service\SiteConfigsService;
 use BaserCore\Utility\BcAbstractDetector;
 use BaserCore\Event\BcEventDispatcherTrait;
-use BaserCore\Service\ContentServiceInterface;
-use BaserCore\Service\ContentFolderServiceInterface;
+use BaserCore\Service\ContentsServiceInterface;
+use BaserCore\Service\ContentFoldersServiceInterface;
 
 /**
  * Class Site
@@ -339,7 +339,7 @@ class SitesTable extends AppTable
      */
     public function afterSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
-        $contentFolderService = $this->getService(ContentFolderServiceInterface::class);
+        $contentFolderService = $this->getService(ContentFoldersServiceInterface::class);
         $contentFolderService->saveSiteRoot($entity, $this->changedAlias);
         $this->getEventManager()->off('Model.beforeSave');
         $this->getEventManager()->off('Model.afterSave');
@@ -365,7 +365,7 @@ class SitesTable extends AppTable
      */
     public function afterDelete(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
-        $contentService = $this->getService(ContentServiceInterface::class);
+        $contentService = $this->getService(ContentsServiceInterface::class);
         $content = $this->Contents->find()->where(['Contents.site_id' => $entity->id, 'Contents.site_root' => true])->first();
 
         $children = $contentService->getChildren($content->id);
@@ -523,7 +523,7 @@ class SitesTable extends AppTable
         BcAbstractDetector $lang = null
     )
     {
-        $SiteConfigService = new SiteConfigService();
+        $SiteConfigsService = new SiteConfigsService();
         $currentSite = $this->findByUrl($url);
         $sites = $this->find()->all();
 
@@ -536,7 +536,7 @@ class SitesTable extends AppTable
 
         // 言語の一致するサイト候補に絞り込む
         $langSubSites = [];
-        if ($lang && $SiteConfigService->getValue('use_site_lang_setting')) {
+        if ($lang && $SiteConfigsService->getValue('use_site_lang_setting')) {
             foreach($sites as $site) {
                 if (!$site->status) {
                     continue;
@@ -554,7 +554,7 @@ class SitesTable extends AppTable
         } else {
             $subSites = $sites;
         }
-        if ($agent && $SiteConfigService->getValue('use_site_device_setting')) {
+        if ($agent && $SiteConfigsService->getValue('use_site_device_setting')) {
             foreach($subSites as $subSite) {
                 if (!$subSite->status) {
                     continue;

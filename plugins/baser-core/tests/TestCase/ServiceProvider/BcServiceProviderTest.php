@@ -52,25 +52,25 @@ class BcServiceProviderTest extends BcTestCase
         $container = new Container();
         $this->Provider->services($container);
         $userService = $container->get('BaserCore\Service\UsersServiceInterface');
-        $userGroupService = $container->get('BaserCore\Service\UserGroupServiceInterface');
-        $pluginService = $container->get('BaserCore\Service\PluginServiceInterface');
-        $permissionService = $container->get('BaserCore\Service\PermissionServiceInterface');
-        $DblogService = $container->get('BaserCore\Service\DblogServiceInterface');
-        $siteService = $container->get('BaserCore\Service\SiteServiceInterface');
-        $ContentService = $container->get('BaserCore\Service\ContentServiceInterface');
-        $contentFolderService = $container->get('BaserCore\Service\ContentFolderServiceInterface');
-        $pageService = $container->get('BaserCore\Service\PageServiceInterface');
-        $searchIndexService = $container->get('BaserCore\Service\SearchIndexServiceInterface');
+        $userGroupService = $container->get('BaserCore\Service\UserGroupsServiceInterface');
+        $pluginService = $container->get('BaserCore\Service\PluginsServiceInterface');
+        $permissionService = $container->get('BaserCore\Service\PermissionsServiceInterface');
+        $DblogsService = $container->get('BaserCore\Service\DblogsServiceInterface');
+        $siteService = $container->get('BaserCore\Service\SitesServiceInterface');
+        $ContentsService = $container->get('BaserCore\Service\ContentsServiceInterface');
+        $contentFolderService = $container->get('BaserCore\Service\ContentFoldersServiceInterface');
+        $pageService = $container->get('BaserCore\Service\PagesServiceInterface');
+        $searchIndexService = $container->get('BaserCore\Service\SearchIndexesServiceInterface');
         $this->assertEquals('BaserCore\Service\UsersService', get_class($userService));
-        $this->assertEquals('BaserCore\Service\UserGroupService', get_class($userGroupService));
-        $this->assertEquals('BaserCore\Service\PluginService', get_class($pluginService));
-        $this->assertEquals('BaserCore\Service\PermissionService', get_class($permissionService));
-        $this->assertEquals('BaserCore\Service\DblogService', get_class($DblogService));
-        $this->assertEquals('BaserCore\Service\SiteService', get_class($siteService));
-        $this->assertEquals('BaserCore\Service\ContentService', get_class($ContentService));
-        $this->assertEquals('BaserCore\Service\ContentFolderService', get_class($contentFolderService));
-        $this->assertEquals('BaserCore\Service\PageService', get_class($pageService));
-        $this->assertEquals('BaserCore\Service\SearchIndexService', get_class($searchIndexService));
+        $this->assertEquals('BaserCore\Service\UserGroupsService', get_class($userGroupService));
+        $this->assertEquals('BaserCore\Service\PluginsService', get_class($pluginService));
+        $this->assertEquals('BaserCore\Service\PermissionsService', get_class($permissionService));
+        $this->assertEquals('BaserCore\Service\DblogsService', get_class($DblogsService));
+        $this->assertEquals('BaserCore\Service\SitesService', get_class($siteService));
+        $this->assertEquals('BaserCore\Service\ContentsService', get_class($ContentsService));
+        $this->assertEquals('BaserCore\Service\ContentFoldersService', get_class($contentFolderService));
+        $this->assertEquals('BaserCore\Service\PagesService', get_class($pageService));
+        $this->assertEquals('BaserCore\Service\SearchIndexesService', get_class($searchIndexService));
     }
 
 }

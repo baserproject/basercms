@@ -19,17 +19,17 @@ use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Model\Entity\Content;
 use Cake\Datasource\EntityInterface;
-use BaserCore\Service\ContentService;
+use BaserCore\Service\ContentsService;
 use BaserCore\Utility\BcContainerTrait;
-use BaserCore\Service\PermissionService;
+use BaserCore\Service\PermissionsService;
 use BaserCore\Service\UsersServiceInterface;
-use BaserCore\Service\ContentServiceInterface;
-use BaserCore\Service\PermissionServiceInterface;
+use BaserCore\Service\ContentsServiceInterface;
+use BaserCore\Service\PermissionsServiceInterface;
 
 /**
  * BcAdminContentHelper
- * @property ContentService $ContentService
- * @property PermissionService $PermissionService
+ * @property ContentsService $ContentsService
+ * @property PermissionsService $PermissionsService
  */
 class BcAdminContentHelper extends Helper
 {
@@ -56,8 +56,8 @@ class BcAdminContentHelper extends Helper
     public function initialize(array $config): void
     {
         parent::initialize($config);
-        $this->ContentService = $this->getService(ContentServiceInterface::class);
-        $this->PermissionService = $this->getService(PermissionServiceInterface::class);
+        $this->ContentsService = $this->getService(ContentsServiceInterface::class);
+        $this->PermissionsService = $this->getService(PermissionsServiceInterface::class);
     }
 
     /**
@@ -105,7 +105,7 @@ class BcAdminContentHelper extends Helper
 
             $userGroupIds = Hash::extract($userGroups, '{n}.id');
 
-            if ($this->PermissionService->check(BcUtil::getPrefix() . '/baser-core/contents/delete', $userGroupIds)) {
+            if ($this->PermissionsService->check(BcUtil::getPrefix() . '/baser-core/contents/delete', $userGroupIds)) {
                 return true;
             }
         }
@@ -122,7 +122,7 @@ class BcAdminContentHelper extends Helper
      */
     public function getContentFolderList($siteId = null, $options = [])
     {
-        return $this->ContentService->getContentFolderList($siteId, $options);
+        return $this->ContentsService->getContentFolderList($siteId, $options);
     }
 
     /**
@@ -139,7 +139,7 @@ class BcAdminContentHelper extends Helper
      */
     public function getUrl($url, $full = false, $useSubDomain = false, $base = false)
     {
-        return $this->ContentService->getUrl($url, $full, $useSubDomain, $base);
+        return $this->ContentsService->getUrl($url, $full, $useSubDomain, $base);
     }
 
     /**
@@ -150,7 +150,7 @@ class BcAdminContentHelper extends Helper
      */
     public function getUrlById($id, $full = false)
     {
-        return $this->ContentService->getUrlById($id, $full);
+        return $this->ContentsService->getUrlById($id, $full);
     }
 
     /**
@@ -162,7 +162,7 @@ class BcAdminContentHelper extends Helper
      */
     public function isAllowPublish($data, $self = false)
     {
-        return $this->ContentService->isAllowPublish($data, $self);
+        return $this->ContentsService->isAllowPublish($data, $self);
     }
 
     /**
@@ -173,7 +173,7 @@ class BcAdminContentHelper extends Helper
      */
     public function getSiteRoot($siteId)
     {
-        return $this->ContentService->getSiteRoot($siteId);
+        return $this->ContentsService->getSiteRoot($siteId);
     }
 
     /**
@@ -278,8 +278,8 @@ class BcAdminContentHelper extends Helper
         $prefix = $relatedContent['Site']['name'];
         if ($relatedContent['Site']['alias']) {
             $prefix = $relatedContent['Site']['alias'];
-            if($this->ContentService->existsContentByUrl("/$prefix")) {
-                $prefix = $this->ContentService->getIndex(['site_id' => $relatedContent['Site']['id'], 'title' => $relatedContent['Site']['alias']])->first()->name;
+            if($this->ContentsService->existsContentByUrl("/$prefix")) {
+                $prefix = $this->ContentsService->getIndex(['site_id' => $relatedContent['Site']['id'], 'title' => $relatedContent['Site']['alias']])->first()->name;
             }
         }
         if ($prefix) $prefix = "/" . $prefix;

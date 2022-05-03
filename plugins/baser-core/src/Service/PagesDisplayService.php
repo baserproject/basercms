@@ -3,7 +3,6 @@
 namespace BaserCore\Service;
 
 use Cake\ORM\TableRegistry;
-use Cake\Utility\Inflector;
 use Cake\Http\ServerRequest;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Annotation\Note;
@@ -13,7 +12,6 @@ use BaserCore\Annotation\UnitTest;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Http\Exception\NotFoundException;
 use BaserCore\Model\Validation\BcValidation;
-use BaserCore\Service\ContentServiceInterface;
 
 class PagesDisplayService implements PagesDisplayServiceInterface
 {
@@ -30,7 +28,7 @@ class PagesDisplayService implements PagesDisplayServiceInterface
     {
         $this->Pages = TableRegistry::getTableLocator()->get('BaserCore.Pages');
         $this->Contents = TableRegistry::getTableLocator()->get('BaserCore.Contents');
-        $this->ContentService = $this->getService(ContentServiceInterface::class);
+        $this->ContentsService = $this->getService(ContentsServiceInterface::class);
     }
 
     /**
@@ -72,7 +70,7 @@ class PagesDisplayService implements PagesDisplayServiceInterface
             switch($request->getQuery('preview')) {
                 case 'default':
                 case 'draft':
-                    $parseUrl = $this->ContentService->encodeParsedUrl($request->getQuery('url'));
+                    $parseUrl = $this->ContentsService->encodeParsedUrl($request->getQuery('url'));
                     $content = $this->Contents->findByUrl($parseUrl['path'], true, false, false, !empty($parseUrl['subDomain']));
                     $previewData = $content ? $this->Pages->get($content->entity_id, ['contain' => ['Contents' => ['Sites']]])->ToArray() : [];
                     break;

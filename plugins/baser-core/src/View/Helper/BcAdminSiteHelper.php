@@ -21,9 +21,9 @@ use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use Cake\Datasource\EntityInterface;
 use BaserCore\Utility\BcContainerTrait;
-use BaserCore\Service\SiteServiceInterface;
+use BaserCore\Service\SitesServiceInterface;
 use BaserCore\Service\BcAdminServiceInterface;
-use BaserCore\Service\SiteConfigServiceInterface;
+use BaserCore\Service\SiteConfigsServiceInterface;
 
 /**
  * Class BcAdminSiteHelper
@@ -39,9 +39,9 @@ class BcAdminSiteHelper extends Helper
 
     /**
      * Sites Service
-     * @var SiteServiceInterface
+     * @var SitesServiceInterface
      */
-    public $SiteService;
+    public $SitesService;
 
     /**
      * initialize
@@ -53,8 +53,8 @@ class BcAdminSiteHelper extends Helper
     public function initialize(array $config): void
     {
         parent::initialize($config);
-        $this->SiteService = $this->getService(SiteServiceInterface::class);
-        $this->SiteConfigService = $this->getService(SiteConfigServiceInterface::class);
+        $this->SitesService = $this->getService(SitesServiceInterface::class);
+        $this->SiteConfigsService = $this->getService(SiteConfigsServiceInterface::class);
     }
 
     /**
@@ -66,7 +66,7 @@ class BcAdminSiteHelper extends Helper
      */
     public function getDeviceList(): array
     {
-        return $this->SiteService->getDeviceList();
+        return $this->SitesService->getDeviceList();
     }
 
     /**
@@ -78,7 +78,7 @@ class BcAdminSiteHelper extends Helper
      */
     public function getLangList(): array
     {
-        return $this->SiteService->getLangList();
+        return $this->SitesService->getLangList();
     }
 
     /**
@@ -90,7 +90,7 @@ class BcAdminSiteHelper extends Helper
      */
     public function getSelectableDevices($mainSiteId, $currentSiteId = null): array
     {
-        return $this->SiteService->getSelectableDevices($mainSiteId, $currentSiteId);
+        return $this->SitesService->getSelectableDevices($mainSiteId, $currentSiteId);
     }
 
     /**
@@ -102,7 +102,7 @@ class BcAdminSiteHelper extends Helper
      */
     public function getSelectableLangs($mainSiteId, $currentSiteId = null): array
     {
-        return $this->SiteService->getSelectableLangs($mainSiteId, $currentSiteId);
+        return $this->SitesService->getSelectableLangs($mainSiteId, $currentSiteId);
     }
 
     /**
@@ -116,7 +116,7 @@ class BcAdminSiteHelper extends Helper
      */
     public function getSiteList($options = []): array
     {
-        return $this->SiteService->getList($options);
+        return $this->SitesService->getList($options);
     }
 
     /**
@@ -129,7 +129,7 @@ class BcAdminSiteHelper extends Helper
      */
     public function getThemeList($site): array
     {
-        $themes = $this->SiteService->getThemeList();
+        $themes = $this->SitesService->getThemeList();
         if(!$this->isMainOnCurrentDisplay($site)) {
             $defaultThemeName = __d('baser', 'メインサイトに従う');
             $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
@@ -154,7 +154,7 @@ class BcAdminSiteHelper extends Helper
      */
     public function isUseSiteDeviceSetting(): bool
     {
-        return (bool) $this->SiteConfigService->getValue('use_site_device_setting');
+        return (bool) $this->SiteConfigsService->getValue('use_site_device_setting');
     }
 
     /**
@@ -166,7 +166,7 @@ class BcAdminSiteHelper extends Helper
      */
     public function isUseSiteLangSetting(): bool
     {
-        return (bool) $this->SiteConfigService->getValue('use_site_lang_setting');
+        return (bool) $this->SiteConfigsService->getValue('use_site_lang_setting');
     }
 
     /**
@@ -202,7 +202,7 @@ class BcAdminSiteHelper extends Helper
      */
     public function findByUrl($url): EntityInterface
     {
-        return $this->SiteService->findByUrl($url);
+        return $this->SitesService->findByUrl($url);
     }
 
     /**
@@ -213,7 +213,7 @@ class BcAdminSiteHelper extends Helper
      */
     public function findById($id): Query
     {
-        return $this->SiteService->findById($id);
+        return $this->SitesService->findById($id);
     }
 
     /**
@@ -227,7 +227,7 @@ class BcAdminSiteHelper extends Helper
     {
         $site = $this->_View->getRequest()->getAttribute('currentSite');
         if($site) {
-            return $this->SiteService->get($site->id);
+            return $this->SitesService->get($site->id);
         } else {
             return null;
         }
@@ -244,7 +244,7 @@ class BcAdminSiteHelper extends Helper
     {
         $site = $this->getCurrentSite();
         if($site) {
-            return $this->SiteService->getList([
+            return $this->SitesService->getList([
                 'excludeIds' => $site->id
             ]);
         } else {

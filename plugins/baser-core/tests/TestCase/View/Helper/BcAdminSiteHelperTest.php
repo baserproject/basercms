@@ -12,8 +12,8 @@
 namespace BaserCore\Test\TestCase\View\Helper;
 
 use BaserCore\Model\Entity\Site;
-use BaserCore\Service\SiteConfigServiceInterface;
-use BaserCore\Service\SiteService;
+use BaserCore\Service\SiteConfigsServiceInterface;
+use BaserCore\Service\SitesService;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\View\BcAdminAppView;
 use BaserCore\View\Helper\BcAdminSiteHelper;
@@ -73,7 +73,7 @@ class BcAdminSiteHelperTest extends \BaserCore\TestSuite\BcTestCase
     public function testIsUseSiteDeviceSetting()
     {
         $this->assertTrue($this->BcAdminSite->isUseSiteDeviceSetting());
-        $siteConfigService = $this->getService(SiteConfigServiceInterface::class);
+        $siteConfigService = $this->getService(SiteConfigsServiceInterface::class);
         $siteConfig = $siteConfigService->get();
         $siteConfig->use_site_device_setting = false;
         $siteConfigService->update($siteConfig->toArray());
@@ -86,7 +86,7 @@ class BcAdminSiteHelperTest extends \BaserCore\TestSuite\BcTestCase
     public function testIsUseSiteLangSetting()
     {
         $this->assertFalse($this->BcAdminSite->isUseSiteLangSetting());
-        $siteConfigService = $this->getService(SiteConfigServiceInterface::class);
+        $siteConfigService = $this->getService(SiteConfigsServiceInterface::class);
         $siteConfig = $siteConfigService->get();
         $siteConfig->use_site_lang_setting = true;
         $siteConfigService->update($siteConfig->toArray());
@@ -122,7 +122,7 @@ class BcAdminSiteHelperTest extends \BaserCore\TestSuite\BcTestCase
     public function testGetCurrentSite()
     {
         $request = $this->getRequest('/');
-        $service = new SiteService();
+        $service = new SitesService();
         $site = $service->create([
             'main_site_id' => 2,
             'display_name' => 'beforeChange',

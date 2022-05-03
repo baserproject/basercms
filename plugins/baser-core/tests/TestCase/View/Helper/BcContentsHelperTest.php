@@ -74,8 +74,8 @@ class BcContentsHelperTest extends BcTestCase
     {
         $this->assertNotEmpty($this->BcContents->_Contents);
         $this->assertNotEmpty($this->BcContents->request);
-        $this->assertNotEmpty($this->BcContents->ContentService);
-        $this->assertNotEmpty($this->BcContents->PermissionService);
+        $this->assertNotEmpty($this->BcContents->ContentsService);
+        $this->assertNotEmpty($this->BcContents->PermissionsService);
         $this->assertContains('BcBaser', $this->BcContents->helpers);
 
     }
@@ -636,7 +636,7 @@ class BcContentsHelperTest extends BcTestCase
     public function testIsEditable($id, $adminLogin, $result)
     {
         if ($adminLogin) $this->loginAdmin($this->getRequest());
-        $content = $id ? $this->BcContents->ContentService->get($id) : [];
+        $content = $id ? $this->BcContents->ContentsService->get($id) : [];
         $this->assertEquals($result, $this->BcContents->isEditable($content));
     }
 

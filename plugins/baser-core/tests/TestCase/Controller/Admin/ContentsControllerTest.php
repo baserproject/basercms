@@ -14,13 +14,13 @@ namespace BaserCore\Test\TestCase\Controller\Admin;
 use Cake\Event\Event;
 use Cake\Http\ServerRequest;
 use BaserCore\TestSuite\BcTestCase;
-use BaserCore\Service\ContentService;
+use BaserCore\Service\ContentsService;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\TestSuite\IntegrationTestTrait;
-use BaserCore\Service\ContentFolderService;
-use BaserCore\Service\SiteServiceInterface;
-use BaserCore\Service\ContentServiceInterface;
-use BaserCore\Service\SiteConfigServiceInterface;
+use BaserCore\Service\ContentFoldersService;
+use BaserCore\Service\SitesServiceInterface;
+use BaserCore\Service\ContentsServiceInterface;
+use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\Controller\Admin\ContentsController;
 
 /**
@@ -29,8 +29,8 @@ use BaserCore\Controller\Admin\ContentsController;
  * @package Baser.Test.Case.Controller
  * @property  ContentsController $ContentsController
  * @property ServerRequest $request
- * @property ContentService $ContentService
- * @property ContentFolderService $ContentFolderService
+ * @property ContentsService $ContentsService
+ * @property ContentFoldersService $ContentFoldersService
  */
 class ContentsControllerTest extends BcTestCase
 {
@@ -73,8 +73,8 @@ class ContentsControllerTest extends BcTestCase
         $this->ContentsController->loadModel('BaserCore.Users');
         $this->ContentsController->loadComponent('BaserCore.BcAdminContents');
         $this->ContentsController->BcAdminContents->setConfig('items', ["test" => ['title' => 'test', 'plugin' => 'BaserCore', 'type' => 'ContentFolder']]);
-        $this->ContentService = new ContentService();
-        $this->ContentFolderService = new ContentFolderService();
+        $this->ContentsService = new ContentsService();
+        $this->ContentFoldersService = new ContentFoldersService();
     }
 
     /**
@@ -125,7 +125,7 @@ class ContentsControllerTest extends BcTestCase
         $this->get('/baser/admin/baser-core/contents/index/');
         $this->assertResponseOk();
         // リクエストの変化をテスト
-        $this->ContentsController->index($this->getService(ContentServiceInterface::class), $this->getService(SiteServiceInterface::class), $this->getService(SiteConfigServiceInterface::class));
+        $this->ContentsController->index($this->getService(ContentsServiceInterface::class), $this->getService(SitesServiceInterface::class), $this->getService(SiteConfigsServiceInterface::class));
         $this->assertArrayHasKey('num', $this->ContentsController->getRequest()->getQueryParams());
     }
 
@@ -159,7 +159,7 @@ class ContentsControllerTest extends BcTestCase
 
         $ContentsController = $this->ContentsController->setRequest($this->request);
         $ContentsController->viewBuilder()->setVar('authors', '');
-        $ContentsController->index($this->getService(ContentServiceInterface::class), $this->getService(SiteServiceInterface::class), $this->getService(SiteConfigServiceInterface::class));
+        $ContentsController->index($this->getService(ContentsServiceInterface::class), $this->getService(SitesServiceInterface::class), $this->getService(SiteConfigsServiceInterface::class));
         $this->assertNotEquals('', $ContentsController->viewBuilder()->getVar('template'));
         $this->assertNotEmpty($ContentsController->viewBuilder()->getVar('contents'));
 
@@ -190,7 +190,7 @@ class ContentsControllerTest extends BcTestCase
     {
         $request = $this->request->withParam('action', $action)->withQueryParams(array_merge(['list_type' => $listType], $search));
         $ContentsController = $this->ContentsController->setRequest($request);
-        $contents = $this->execPrivateMethod($ContentsController, 'getContents', [$this->ContentService]);
+        $contents = $this->execPrivateMethod($ContentsController, 'getContents', [$this->ContentsService]);
         $this->assertInstanceOf($expected, $contents);
         $this->assertEquals($count, $contents->count());
     }
@@ -228,7 +228,7 @@ class ContentsControllerTest extends BcTestCase
     {
         $request = $this->request->withParam('action', $action)->withQueryParams(['list_type' => $listType]);
         $ContentsController = $this->ContentsController->setRequest($request);
-        $template = $this->execPrivateMethod($ContentsController, 'getTemplate', [$this->ContentService]);
+        $template = $this->execPrivateMethod($ContentsController, 'getTemplate', [$this->ContentsService]);
         $this->assertEquals($expected, $template);
     }
     public function getTemplateDataProvider()
@@ -252,7 +252,7 @@ class ContentsControllerTest extends BcTestCase
     {
         $request = $this->request->withParam('action', 'trash_index')->withParam('prefix', 'Admin');
         $this->ContentsController->setRequest($request);
-        $this->ContentsController->trash_index($this->getService(ContentServiceInterface::class), $this->getService(SiteServiceInterface::class), $this->getService(SiteConfigServiceInterface::class));
+        $this->ContentsController->trash_index($this->getService(ContentsServiceInterface::class), $this->getService(SitesServiceInterface::class), $this->getService(SiteConfigsServiceInterface::class));
         $this->assertEquals('index', $this->ContentsController->viewBuilder()->getTemplate());
         $this->assertArrayHasKey('num', $this->ContentsController->getRequest()->getQueryParams());
     }
@@ -276,11 +276,11 @@ class ContentsControllerTest extends BcTestCase
     {
         $this->get('/baser/admin/baser-core/contents/trash_return/');
         $this->assertResponseCode(404);
-        $id = $this->ContentService->getTrashIndex()->first()->id;
+        $id = $this->ContentsService->getTrashIndex()->first()->id;
         $this->get("/baser/admin/baser-core/contents/trash_return/{$id}");
         $this->assertRedirect('/baser/admin/baser-core/contents/trash_index');
         $this->assertResponseSuccess();
-        $this->assertNotEmpty($this->ContentService->get($id));
+        $this->assertNotEmpty($this->ContentsService->get($id));
     }
 
     /**
@@ -298,13 +298,13 @@ class ContentsControllerTest extends BcTestCase
     {
         $this->enableSecurityToken();
         $this->enableCsrfToken();
-        $data = $this->ContentService->getIndex(['name' => 'testEdit'])->first();
+        $data = $this->ContentsService->getIndex(['name' => 'testEdit'])->first();
         $data->name = 'ControllerEdit';
         $data->site->name = 'ucmitz'; // site側でエラーが出るため
         $this->post('/baser/admin/baser-core/contents/edit/' . $data->id, ["Contents" => $data->toArray()]);
         $this->assertResponseSuccess();
         $this->assertRedirect('/baser/admin/baser-core/contents/edit/' . $data->id);
-        $this->assertEquals('ControllerEdit', $this->ContentService->get($data->id)->name);
+        $this->assertEquals('ControllerEdit', $this->ContentsService->get($data->id)->name);
     }
 
     /**
@@ -328,7 +328,7 @@ class ContentsControllerTest extends BcTestCase
         $this->post('/baser/admin/baser-core/contents/batch', $data);
         $this->assertResponseNotEmpty();
         $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
-        $this->ContentService->get(1);
+        $this->ContentsService->get(1);
     }
     /**
      * testBatchUnpublish
@@ -348,7 +348,7 @@ class ContentsControllerTest extends BcTestCase
         ];
         $this->post('/baser/admin/baser-core/contents/batch', $data);
         $this->assertResponseNotEmpty();
-        $content = $this->ContentService->get(1);
+        $content = $this->ContentsService->get(1);
         $this->assertFalse($content->status);
     }
 
@@ -360,8 +360,8 @@ class ContentsControllerTest extends BcTestCase
     public function testBatchPublish()
     {
         $this->enableCsrfToken();
-        $content = $this->ContentService->get(1);
-        $this->ContentService->update($content, ['id' => $content->id, 'status' => false, 'name' => 'test']);
+        $content = $this->ContentsService->get(1);
+        $this->ContentsService->update($content, ['id' => $content->id, 'status' => false, 'name' => 'test']);
         // publish
         $data = [
             'ListTool' => [
@@ -371,7 +371,7 @@ class ContentsControllerTest extends BcTestCase
         ];
         $this->post('/baser/admin/baser-core/contents/batch', $data);
         $this->assertResponseNotEmpty();
-        $content = $this->ContentService->get(1);
+        $content = $this->ContentsService->get(1);
         $this->assertTrue($content->status);
     }
 
@@ -382,13 +382,13 @@ class ContentsControllerTest extends BcTestCase
     {
         $this->enableSecurityToken();
         $this->enableCsrfToken();
-        $data = $this->ContentService->getIndex(['name' => 'testEditのエイリアス'])->first();
+        $data = $this->ContentsService->getIndex(['name' => 'testEditのエイリアス'])->first();
         $data->title = 'ControllerEditエイリアス';
         $data->site->name = 'ucmitz'; // site側でエラーが出るため
         $this->post('/baser/admin/baser-core/contents/edit_alias/' . $data->id, ["Contents" => $data->toArray()]);
         $this->assertResponseSuccess();
         $this->assertRedirect('/baser/admin/baser-core/contents/edit_alias/' . $data->id);
-        $this->assertEquals('ControllerEditエイリアス', $this->ContentService->get($data->id)->title);
+        $this->assertEquals('ControllerEditエイリアス', $this->ContentsService->get($data->id)->title);
     }
 
     /**
@@ -423,13 +423,13 @@ class ContentsControllerTest extends BcTestCase
         $this->entryEventToMock(self::EVENT_LAYER_CONTROLLER, 'BaserCore.Contents.afterDelete', function(Event $event) {
             $id = $event->getData('data');
             $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
-            $this->ContentService->get($id);
+            $this->ContentsService->get($id);
         });
         $request = $this->getRequest('/baser/admin/baser-core/content/')->withEnv('REQUEST_METHOD', 'POST')->withData('Contents.id', 1);
         $contentsController = new ContentsController($request);
         $contentsController->setName('Contents');
-        $contentsController->delete($this->getService(ContentServiceInterface::class));
-        $trash = $this->ContentService->getTrash(4);
+        $contentsController->delete($this->getService(ContentsServiceInterface::class));
+        $trash = $this->ContentsService->getTrash(4);
         // beforeDeleteテスト
         $this->assertNotEmpty($trash);
         // afterDeleteテスト
@@ -447,7 +447,7 @@ class ContentsControllerTest extends BcTestCase
         // 管理画面からの場合
         $this->expectException("Cake\Http\Exception\NotFoundException");
         $this->expectExceptionMessage("見つかりませんでした。");
-        $this->ContentsController->delete($this->ContentService);
+        $this->ContentsController->delete($this->ContentsService);
     }
 
     /**
@@ -462,7 +462,7 @@ class ContentsControllerTest extends BcTestCase
         // 管理画面からの場合
         $this->request = $this->request->withData('Content.id', $id);
         $this->ContentsController->setRequest($this->request);
-        $this->ContentsController->delete($this->ContentService);
+        $this->ContentsController->delete($this->ContentsService);
         $this->assertStringContainsString("不正なリクエストです。", $_SESSION['Flash']['flash'][0]['message']);
     }
 
@@ -480,12 +480,12 @@ class ContentsControllerTest extends BcTestCase
     public function testTrash_empty()
     {
         // BcAdminContentsTestはコンポネントのテスト用のため、一旦復活させtrash_emptyを実行
-        $this->ContentService->restoreAll(['type' => 'BcAdminContentsTest']);
+        $this->ContentsService->restoreAll(['type' => 'BcAdminContentsTest']);
         $this->request = $this->request->withData('test', 'テスト');
         $this->ContentsController->setRequest($this->request);
-        $response = $this->ContentsController->trash_empty($this->ContentService);
-        $this->assertTrue($this->ContentService->getTrashIndex(['type' => "ContentFolder"])->all()->isEmpty());
-        $this->assertEquals(8, $this->ContentFolderService->getIndex()->count());
+        $response = $this->ContentsController->trash_empty($this->ContentsService);
+        $this->assertTrue($this->ContentsService->getTrashIndex(['type' => "ContentFolder"])->all()->isEmpty());
+        $this->assertEquals(8, $this->ContentFoldersService->getIndex()->count());
         $this->assertStringContainsString("/baser/admin/baser-core/contents/trash_index", $response->getHeaderLine('Location'));
     }
 

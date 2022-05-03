@@ -15,13 +15,13 @@ use BaserCore\Utility\BcUtil;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
-use BaserCore\Service\ContentFolderService;
+use BaserCore\Service\ContentFoldersService;
 use BaserCore\Utility\BcContainerTrait;
-use BaserCore\Service\ContentFolderServiceInterface;
+use BaserCore\Service\ContentFoldersServiceInterface;
 
 /**
  * BcAdminContentFolderHelper
- * @property ContentFolderService $ContentFolderService
+ * @property ContentFoldersService $ContentFoldersService
  */
 class BcAdminContentFolderHelper extends Helper
 {
@@ -41,7 +41,7 @@ class BcAdminContentFolderHelper extends Helper
     public function initialize(array $config): void
     {
         parent::initialize($config);
-        $this->ContentFolderService = $this->getService(ContentFolderServiceInterface::class);
+        $this->ContentFoldersService = $this->getService(ContentFoldersServiceInterface::class);
     }
 
     /**
@@ -53,6 +53,6 @@ class BcAdminContentFolderHelper extends Helper
      */
     public function getFolderTemplateList($contentId, $theme)
     {
-        return $this->ContentFolderService->getFolderTemplateList($contentId, $theme);
+        return $this->ContentFoldersService->getFolderTemplateList($contentId, $theme);
     }
 }
