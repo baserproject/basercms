@@ -56,7 +56,6 @@ class AppView extends View
         $this->loadHelper('BaserCore.BcPage');
         $this->loadHelper('BaserCore.BcBaser');
         $this->loadHelper('BaserCore.BcToolbar');
-        $this->loadHelper('BaserCore.BcAdminSite');
     }
 
     /**
