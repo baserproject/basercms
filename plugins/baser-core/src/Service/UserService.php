@@ -435,15 +435,4 @@ class UserService implements UserServiceInterface
         }
     }
 
-    /**
-     * ログインユーザー自身のIDか確認
-     * @param int $id
-     * @return mixed
-     */
-    public function isSelf(?int $id)
-    {
-        $loginUser = BcUtil::loginUser();
-        return (!empty($id) && !empty($loginUser->id) && $loginUser->id === $id);
-    }
-
 }

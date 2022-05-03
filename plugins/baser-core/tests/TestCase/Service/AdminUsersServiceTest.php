@@ -9,17 +9,18 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
-namespace BaserCore\Test\TestCase\View\Helper;
+namespace BaserCore\Test\TestCase\Service;
 
-use BaserCore\View\BcAdminAppView;
-use BaserCore\View\Helper\BcAdminUserHelper;
+use BaserCore\Service\AdminUsersService;
+use Cake\Routing\Router;
+use BaserCore\Service\UserService;
+use BaserCore\TestSuite\BcTestCase;
 
 /**
- * Class BcAdminUserHelperTest
- *
- * @package BaserCore\Test\TestCase\View\Helper
+ * Class AdminUsersServiceTest
+ * @property AdminUsersService $Users
  */
-class BcAdminUserHelperTest extends \BaserCore\TestSuite\BcTestCase
+class AdminUsersServiceTest extends BcTestCase
 {
 
     /**
@@ -31,30 +32,33 @@ class BcAdminUserHelperTest extends \BaserCore\TestSuite\BcTestCase
         'plugin.BaserCore.Users',
         'plugin.BaserCore.UsersUserGroups',
         'plugin.BaserCore.UserGroups',
+        'plugin.BaserCore.Sites',
     ];
 
     /**
-     * BcAdminUserHelper
-     * @var BcAdminUserHelper
+     * @var UserService|null
      */
-
-    public $BcAdminUser;
+    public $Users = null;
 
     /**
-     * setUp
+     * Set Up
+     *
+     * @return void
      */
     public function setUp(): void
     {
         parent::setUp();
-        $this->BcAdminUser = new BcAdminUserHelper(new BcAdminAppView($this->getRequest('/')));
+        $this->Users = new AdminUsersService();
     }
 
     /**
-     * tearDown
+     * Tear Down
+     *
+     * @return void
      */
     public function tearDown(): void
     {
-        unset($this->BcAdminUser);
+        unset($this->Users);
         parent::tearDown();
     }
 
@@ -67,11 +71,11 @@ class BcAdminUserHelperTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function testIsEditable($loginId, $postId, $expected)
     {
-        $request = $this->getRequest();
+        $request = $this->getRequest('/baser/admin');
         if ($loginId) {
             $this->loginAdmin($request, $loginId);
         }
-        $result = $this->BcAdminUser->isEditable($postId);
+        $result = $this->Users->isEditable($postId);
         $this->assertEquals($expected, $result);
     }
 
@@ -95,11 +99,11 @@ class BcAdminUserHelperTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function testIsDeletable($loginId, $postId, $expected)
     {
-        $request = $this->getRequest();
+        $request = $this->getRequest('/baser/admin');
         if ($loginId) {
             $this->loginAdmin($request, $loginId);
         }
-        $result = $this->BcAdminUser->isDeletable($postId);
+        $result = $this->Users->isDeletable($postId);
         $this->assertEquals($expected, $result);
     }
 
@@ -115,11 +119,31 @@ class BcAdminUserHelperTest extends \BaserCore\TestSuite\BcTestCase
     }
 
     /**
-     * Test getUserGroupList
+     * Test isSelf
+     * @param int $loginId
+     * @param int $postId
+     * @param bool $expected
+     * @dataProvider isSelfUpdateDataProvider
      */
-    public function testGetUserGroupList()
+    public function testIsSelf($loginId, $postId, $expected)
     {
-        $this->assertIsArray($this->BcAdminUser->getUserGroupList());
+        $request = $this->getRequest();
+        if ($loginId) {
+            $request = $this->loginAdmin($request, $loginId);
+        }
+        Router::setRequest($request);
+        $result = $this->Users->isSelf($postId);
+        $this->assertEquals($expected, $result);
+    }
+
+    public function isSelfUpdateDataProvider()
+    {
+        return [
+            [1, 1, true],        // 自身を更新
+            [1, 2, false],       // 他人を更新
+            [null, null, false], // 新規登録
+            [null, 1, false]     // 更新
+        ];
     }
 
 }

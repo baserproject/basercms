@@ -141,11 +141,4 @@ interface UserServiceInterface
      */
     public function reload(ServerRequest $request);
 
-    /**
-     * ログインユーザー自身のIDか確認
-     * @param int $id
-     * @return mixed
-     */
-    public function isSelf(?int $id);
-
 }

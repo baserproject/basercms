@@ -178,6 +178,7 @@ class UsersController extends BcAdminAppController
             }
         }
         $this->set('user', $user ?? $userService->getNew());
+        $this->set($userService->getAddViewVars());
     }
 
     /**
@@ -191,7 +192,7 @@ class UsersController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function edit(UserServiceInterface $userService, $id = null)
+    public function edit(UsersAdminServiceInterface $userService, $id = null)
     {
         if (!$id && empty($this->request->getData())) {
             $this->BcMessage->setError(__d('baser', '無効なIDです。'));
@@ -214,6 +215,7 @@ class UsersController extends BcAdminAppController
             }
         }
         $this->set('user', $user);
+        $this->set($userService->getEditViewVars($id));
     }
 
     /**

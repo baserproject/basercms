@@ -9,15 +9,14 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
-use BaserCore\View\{AppView as AppViewAlias};
+use BaserCore\View\BcAdminAppView;
 use BaserCore\Model\Entity\User;
 
 /**
  * Users Edit
- * @var AppViewAlias $this
+ * @var BcAdminAppView $this
  * @var User $user
- * @var bool $editable
- * @var bool $deletable
+ * @var bool $isDeletable
  */
 $this->BcAdmin->setTitle(__d('baser', 'ユーザー編集'));
 $this->BcAdmin->setHelp('users_form');
@@ -47,7 +46,7 @@ $this->BcAdmin->setHelp('users_form');
         'id' => 'BtnSave']
     ) ?>
   </div>
-  <?php if ($this->BcAdminUser->isDeletable($user->id)): ?>
+  <?php if ($isDeletable): ?>
     <div class="bca-actions__sub">
       <?= $this->BcAdminForm->postLink(
         __d('baser', '削除'),

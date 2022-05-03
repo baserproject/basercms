@@ -11,6 +11,8 @@
 
 namespace BaserCore\ServiceProvider;
 
+use BaserCore\Service\AdminUsersService;
+use BaserCore\Service\AdminUsersServiceInterface;
 use BaserCore\Service\PagesDisplayService;
 use BaserCore\Service\PagesDisplayServiceInterface;
 use Cake\Core\ServiceProvider;
@@ -53,6 +55,7 @@ class BcServiceProvider extends ServiceProvider
      */
     protected $provides = [
         UserServiceInterface::class,
+        AdminUsersServiceInterface::class,
         UserGroupServiceInterface::class,
         PluginServiceInterface::class,
         PluginServiceInterface::class,
@@ -79,6 +82,7 @@ class BcServiceProvider extends ServiceProvider
         $container->defaultToShared(true);
         // Usersサービス
         $container->add(UserServiceInterface::class, UserService::class);
+        $container->add(AdminUsersServiceInterface::class, AdminUsersService::class);
         // UserGroupsサービス
         $container->add(UserGroupServiceInterface::class, UserGroupService::class);
         // Pluginsサービス
