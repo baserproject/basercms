@@ -81,7 +81,6 @@ class PluginTest extends BcTestCase
         $schema = $connection->getDriver()->newTableSchema('bc_blog_phinxlog');
         $sql = $schema->dropSql($connection);
         $connection->execute($sql[0])->closeCursor();
-        echo '!!!!!!!!!!!!!!!!!!!!!!!!!';
     }
 
     /**
