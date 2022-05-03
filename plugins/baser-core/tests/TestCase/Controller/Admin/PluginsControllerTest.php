@@ -186,6 +186,7 @@ class PluginsControllerTest extends BcTestCase
             'mode' => 0777,
             'schema' => Folder::OVERWRITE
         ]);
+        $this->put('/baser/admin/baser-core/plugins/install/BcBlog', $data);
 
     }
 

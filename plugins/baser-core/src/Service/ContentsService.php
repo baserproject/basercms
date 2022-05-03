@@ -395,16 +395,22 @@ class ContentsService implements ContentsServiceInterface
      */
     public function hardDeleteWithAssoc($id): bool
     {
+        /* @var Content $content */
         $content = $this->getTrash($id);
-        $service = $content->plugin . '\\Service\\' . $content->type . 'ServiceInterface';
+        $service = $content->plugin . '\\Service\\' . Inflector::pluralize($content->type) . 'ServiceInterface';
         if(interface_exists($service)) {
             $target = $this->getService($service);
         } else {
-            $target = TableRegistry::getTableLocator()->get($content->plugin . Inflector::pluralize($content->type));
+            $target = TableRegistry::getTableLocator()->get($content->plugin . '.' . Inflector::pluralize($content->type));
         }
+        $result = false;
         if($target) {
             try {
-                $result = $target->delete($content->entity_id);
+                if(is_a($target, 'Cake\ORM\Table')) {
+                    $result = $target->delete($content);
+                } else {
+                    $result = $target->delete($content->entity_id);
+                }
             } catch (\Exception $e) {
                 $result = false;
             }
