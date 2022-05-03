@@ -20,11 +20,11 @@ use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Service\PagesServiceInterface;
 
 /**
- * BcAdminPageHelper
+ * PagesAdminHelper
  * @property PagesService $PagesService
  * @property BcAdminHelper $BcAdmin
  */
-class BcAdminPageHelper extends Helper
+class PagesAdminHelper extends Helper
 {
 
     /**
