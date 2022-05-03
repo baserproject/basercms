@@ -16,7 +16,7 @@ use Cake\ORM\TableRegistry;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\TestSuite\IntegrationTestTrait;
-use BaserCore\Service\UserServiceInterface;
+use BaserCore\Service\UsersService;
 use BaserCore\Controller\Admin\UsersController;
 use BaserCore\Service\SiteConfigServiceInterface;
 
@@ -113,7 +113,7 @@ class UsersControllerTest extends BcTestCase
         });
         // アクション実行（requestの変化を判定するため $this->get() ではなくクラスを直接利用）
         $this->UsersController->beforeFilter(new Event('beforeFilter'));
-        $this->UsersController->index($this->getService(UserServiceInterface::class), $this->getService(SiteConfigServiceInterface::class));
+        $this->UsersController->index($this->getService(UsersService::class), $this->getService(SiteConfigServiceInterface::class));
         $this->assertEquals(1, $this->UsersController->getRequest()->getQuery('num'));
     }
 
