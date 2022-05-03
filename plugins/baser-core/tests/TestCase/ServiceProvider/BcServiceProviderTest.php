@@ -51,7 +51,7 @@ class BcServiceProviderTest extends BcTestCase
     {
         $container = new Container();
         $this->Provider->services($container);
-        $userService = $container->get('BaserCore\Service\UsersService');
+        $userService = $container->get('BaserCore\Service\UsersServiceInterface');
         $userGroupService = $container->get('BaserCore\Service\UserGroupServiceInterface');
         $pluginService = $container->get('BaserCore\Service\PluginServiceInterface');
         $permissionService = $container->get('BaserCore\Service\PermissionServiceInterface');

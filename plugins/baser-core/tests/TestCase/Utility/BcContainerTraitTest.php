@@ -13,6 +13,7 @@ namespace BaserCore\Test\TestCase\Utility;
 
 use App\Application;
 use BaserCore\Service\UsersService;
+use BaserCore\Service\UsersServiceInterface;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 
@@ -49,7 +50,7 @@ class BcContainerTraitTest extends BcTestCase
         $app = new Application(ROOT . '/config');
         $app->getContainer();
         $bcContainerTrait = new class { use BcContainerTrait; };
-        $this->assertEquals('BaserCore\Service\UsersService', get_class($bcContainerTrait->getService(UsersService::class)));
+        $this->assertEquals('BaserCore\Service\UsersService', get_class($bcContainerTrait->getService(UsersServiceInterface::class)));
     }
 
 }

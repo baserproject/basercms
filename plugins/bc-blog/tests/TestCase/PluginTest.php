@@ -66,6 +66,19 @@ class PluginTest extends BcTestCase
      */
     public function testInstall()
     {
+        // blog_posts / bc_blog_phinxlog テーブルを削除
+        $connection = ConnectionManager::get('test');
+        $schema = $connection->getDriver()->newTableSchema('blog_posts');
+        $sql = $schema->dropSql($connection);
+        $connection->execute($sql[0])->closeCursor();
+        $schema = $connection->getDriver()->newTableSchema('bc_blog_phinxlog');
+        $sql = $schema->dropSql($connection);
+        $connection->execute($sql[0])->closeCursor();
+
+        // plugins テーブルより blog_posts を削除
+        $plugins = $this->getTableLocator()->get('BaserCore.Plugins');
+        $plugins->deleteAll(['name' => 'BcBlog']);
+
         $expected = ['blog_posts'];
         $this->Plugin->install(['connection' => 'test']);
         // インストールされたテーブルをチェック
@@ -75,7 +88,6 @@ class PluginTest extends BcTestCase
             $this->assertContains($value, $tables);
         }
         // インストーラーで追加したテーブルを削除
-        $connection = ConnectionManager::get('test');
         $this->Plugin->migrations->rollback(['plugin' => 'BcBlog', 'connection' => 'test']);
         // bc_blog_phinxlog 削除
         $schema = $connection->getDriver()->newTableSchema('bc_blog_phinxlog');
