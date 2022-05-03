@@ -36,7 +36,6 @@ use BaserCore\View\Helper\BcAdminPluginHelper;
 use BaserCore\View\Helper\BcAdminContentHelper;
 use BaserCore\View\Helper\BcAdminPermissionHelper;
 use BaserCore\View\Helper\BcAdminSiteConfigHelper;
-use BaserCore\View\Helper\BcAdminContentFolderHelper;
 
 /**
  * Class BcAdminAppView
@@ -57,7 +56,6 @@ use BaserCore\View\Helper\BcAdminContentFolderHelper;
  * @property BcAdminSiteConfigHelper $BcAdminSiteConfig
  * @property BcContentsHelper $BcContents
  * @property BcAdminContentHelper $BcAdminContent
- * @property BcAdminContentFolderHelper $BcAdminContentFolder
  * @property BcSiteConfigHelper $BcSiteConfig
  * @property BcAdminPageHelper $BcAdminPage
  */

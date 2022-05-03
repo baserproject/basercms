@@ -51,15 +51,4 @@ class BcAdminPageHelper extends Helper
         $this->BcAdmin->setPublishLink($this->PagesService->getPublishLink($this->_View->getRequest()));
     }
 
-    /**
-     * 固定ページテンプレートリストを取得する
-     *
-     * @param $contentId
-     * @param $theme
-     * @return array
-     */
-    public function getPageTemplateList($contentId, $theme)
-    {
-        return $this->PagesService->getPageTemplateList($contentId, $theme);
-    }
 }

@@ -11,6 +11,7 @@
 
 namespace BaserCore\Controller\Admin;
 
+use BaserCore\Service\ContentFoldersAdminServiceInterface;
 use BaserCore\Utility\BcUtil;
 use Cake\Event\EventInterface;
 use BaserCore\Annotation\NoTodo;
@@ -65,7 +66,7 @@ class ContentFoldersController extends BcAdminAppController
      * @unitTest
      * @note(value="clearViewCacheが動作しないため一旦コメントアウト")
      */
-    public function edit(ContentFoldersServiceInterface $contentFolderService, $id = null)
+    public function edit(ContentFoldersAdminServiceInterface $contentFolderService, $id = null)
     {
         if (!$id && empty($this->request->getData())) {
             $this->BcMessage->setError(__d('baser', '無効なIDです。'));
@@ -87,6 +88,6 @@ class ContentFoldersController extends BcAdminAppController
                 $this->BcMessage->setError('保存中にエラーが発生しました。入力内容を確認してください。');
             }
         }
-        $this->set('contentFolder', $contentFolder);
+        $this->set($contentFolderService->getViewVarsForEdit($contentFolder));
     }
 }

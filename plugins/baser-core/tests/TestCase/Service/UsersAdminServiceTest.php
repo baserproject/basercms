@@ -36,7 +36,7 @@ class UsersAdminServiceTest extends BcTestCase
     ];
 
     /**
-     * @var UsersService|null
+     * @var UsersAdminService|null
      */
     public $Users = null;
 

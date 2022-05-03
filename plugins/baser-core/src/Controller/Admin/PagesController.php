@@ -12,6 +12,7 @@
 namespace BaserCore\Controller\Admin;
 
 use BaserCore\Utility\BcUtil;
+use Cake\Core\Configure;
 use Cake\Event\EventInterface;
 use BaserCore\Utility\BcSiteConfig;
 use BaserCore\Vendor\CKEditorStyleParser;
@@ -23,6 +24,8 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\Note;
+use Cake\Utility\Inflector;
+
 /**
  * PagesController
  */
@@ -140,7 +143,7 @@ class PagesController extends BcAdminAppController
 			]);
 		}
 		// ページテンプレートリスト
-		$theme = [$siteConfigService->getValue('theme')];
+		$theme = [Inflector::camelize(Configure::read('BcApp.defaultFrontTheme'))];
 		$site = $siteService->findById($page->content->site_id)->first();
 		if (!empty($site) && $site->theme && $site->theme != $theme[0]) {
 			$theme[] = $site->theme;
