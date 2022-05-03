@@ -100,6 +100,7 @@ class BcPluginTest extends BcTestCase
             'mode' => 0777,
             'schema' => Folder::OVERWRITE
         ]);
+        $this->BcPlugin->install(['connection' => 'test']);
 
     }
 
@@ -113,6 +114,9 @@ class BcPluginTest extends BcTestCase
         $collection = ConnectionManager::get('default')->getSchemaCollection();
         $tables = $collection->listTables();
         $this->assertNotContains('blog_posts', $tables);
+        $plugins = $this->getTableLocator()->get('BaserCore.Plugins');
+        $plugins->deleteAll(['name' => 'BcBlog']);
+        $this->BcPlugin->install(['connection' => 'test']);
     }
 
     /**

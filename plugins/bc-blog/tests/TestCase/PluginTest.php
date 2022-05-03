@@ -82,7 +82,6 @@ class PluginTest extends BcTestCase
         $expected = ['blog_posts'];
         $this->Plugin->install(['connection' => 'test']);
         // インストールされたテーブルをチェック
-        $connection = ConnectionManager::get('test');
         $tables = $connection->getSchemaCollection()->listTables();
         foreach($expected as $value) {
             $this->assertContains($value, $tables);
