@@ -11,9 +11,6 @@
 
 namespace BaserCore\Controller\Admin;
 
-use Cake\Utility\Hash;
-use Cake\Http\Response;
-use Cake\ORM\TableRegistry;
 use BaserCore\Utility\BcUtil;
 use Cake\Event\EventInterface;
 use BaserCore\Annotation\NoTodo;
@@ -82,14 +79,14 @@ class ContentFoldersController extends BcAdminAppController
             }
             try {
                 $contentFolder = $contentFolderService->update($contentFolder, $this->request->getData('ContentFolders'), ['reconstructSearchIndices' => true]);
-                // clearViewCache(); TODO: 動作しないため一旦コメントアウト
+                // TODO ucmitz 動作しないため一旦コメントアウト
+                // clearViewCache();
                 $this->BcMessage->setSuccess(sprintf(__d('baser', 'フォルダ「%s」を更新しました。'), $contentFolder->content->title));
                 return $this->redirect(['action' => 'edit', $id]);
             } catch (\Exception $e) {
                 $this->BcMessage->setError('保存中にエラーが発生しました。入力内容を確認してください。');
             }
         }
-        $this->request = $this->request->withData("ContentFolders", $contentFolder);
         $this->set('contentFolder', $contentFolder);
     }
 }

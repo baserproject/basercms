@@ -206,6 +206,17 @@ class PluginsControllerTest extends BcTestCase
             'BcBlog'
         ]);
         $this->assertFlashMessage('ブログ プラグインのデータを初期化しました。');
+        $plugins = $this->getTableLocator()->get('BaserCore.Plugins');
+        $plugins->deleteAll(['name' => 'BcBlog']);
+        $data = [
+            'connection' => 'test',
+            'name' => 'BcBlog',
+            'title' => 'ブログ',
+            'status' => "0",
+            'version' => "1.0.0",
+            'permission' => "1"
+        ];
+        $this->put('/baser/admin/baser-core/plugins/install/BcBlog', $data);
     }
 
     /**
