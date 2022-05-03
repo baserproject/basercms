@@ -32,16 +32,16 @@ use DateTime;
 use Psr\Http\Message\ResponseInterface;
 
 /**
- * Class UserService
+ * Class UsersService
  * @package BaserCore\Service
  * @property UsersTable $Users
  * @property LoginStoresTable $LoginStores
  */
-class UserService implements UserServiceInterface
+class UsersService implements UsersServiceInterface
 {
 
     /**
-     * UserService constructor.
+     * UsersService constructor.
      */
     public function __construct()
     {
@@ -89,9 +89,9 @@ class UserService implements UserServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function getIndex(array $queryParams): Query
+    public function getIndex(array $queryParams = []): Query
     {
-        $query = $this->Users->find('all')->contain('UserGroups');
+        $query = $this->Users->find()->contain('UserGroups');
 
         if (!empty($queryParams['limit'])) {
             $query->limit($queryParams['limit']);
@@ -180,7 +180,7 @@ class UserService implements UserServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function getList(): array
+    public function getList(array $queryParams = []): array
     {
         return $this->Users->getUserList();
     }

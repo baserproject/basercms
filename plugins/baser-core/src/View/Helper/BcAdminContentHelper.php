@@ -22,7 +22,7 @@ use Cake\Datasource\EntityInterface;
 use BaserCore\Service\ContentService;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Service\PermissionService;
-use BaserCore\Service\UserServiceInterface;
+use BaserCore\Service\UsersServiceInterface;
 use BaserCore\Service\ContentServiceInterface;
 use BaserCore\Service\PermissionServiceInterface;
 
@@ -86,7 +86,7 @@ class BcAdminContentHelper extends Helper
      */
     public function getAuthors()
     {
-        return $this->getService(UserServiceInterface::class)->getList();
+        return $this->getService(UsersServiceInterface::class)->getList();
     }
 
     /**

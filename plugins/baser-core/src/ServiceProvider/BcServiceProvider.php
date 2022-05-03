@@ -21,7 +21,7 @@ use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Service\PageService;
 use BaserCore\Service\SiteService;
-use BaserCore\Service\UserService;
+use BaserCore\Service\UsersService;
 use BaserCore\Service\DblogService;
 use BaserCore\Service\PluginService;
 use BaserCore\Service\ContentService;
@@ -32,7 +32,7 @@ use BaserCore\Service\SearchIndexService;
 use BaserCore\Service\ContentFolderService;
 use BaserCore\Service\PageServiceInterface;
 use BaserCore\Service\SiteServiceInterface;
-use BaserCore\Service\UserServiceInterface;
+use BaserCore\Service\UsersServiceInterface;
 use BaserCore\Service\DblogServiceInterface;
 use BaserCore\Service\PluginServiceInterface;
 use BaserCore\Service\ContentServiceInterface;
@@ -54,7 +54,7 @@ class BcServiceProvider extends ServiceProvider
      * @var string[]
      */
     protected $provides = [
-        UserServiceInterface::class,
+        UsersServiceInterface::class,
         UsersAdminServiceInterface::class,
         UserGroupServiceInterface::class,
         PluginServiceInterface::class,
@@ -81,7 +81,7 @@ class BcServiceProvider extends ServiceProvider
     {
         $container->defaultToShared(true);
         // Usersサービス
-        $container->add(UserServiceInterface::class, UserService::class);
+        $container->add(UsersServiceInterface::class, UsersService::class);
         $container->add(UsersAdminServiceInterface::class, UsersAdminService::class);
         // UserGroupsサービス
         $container->add(UserGroupServiceInterface::class, UserGroupService::class);

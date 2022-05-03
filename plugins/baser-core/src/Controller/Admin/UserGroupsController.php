@@ -18,7 +18,7 @@ use BaserCore\Annotation\UnitTest;
 use BaserCore\Model\Entity\UserGroup;
 use Cake\Datasource\ResultSetInterface;
 use BaserCore\Model\Table\UserGroupsTable;
-use BaserCore\Service\UserServiceInterface;
+use BaserCore\Service\UsersServiceInterface;
 use BaserCore\Service\UserGroupServiceInterface;
 use BaserCore\Service\SiteConfigServiceInterface;
 use BaserCore\Controller\Component\BcMessageComponent;
@@ -135,7 +135,7 @@ class UserGroupsController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function edit(UserGroupServiceInterface $userGroupService, UserServiceInterface $userService, $id = null)
+    public function edit(UserGroupServiceInterface $userGroupService, UsersServiceInterface $userService, $id = null)
     {
 
         if ($id) {

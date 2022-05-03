@@ -58,9 +58,6 @@ class BcUtilTest extends BcTestCase
      */
     public function tearDown(): void
     {
-        Cache::drop('_bc_env_');
-        Cache::drop('_cake_core_');
-        Cache::drop('_cake_model_');
         parent::tearDown();
     }
 

@@ -14,7 +14,7 @@ namespace BaserCore\Controller\Admin;
 use BaserCore\Service\PluginServiceInterface;
 use BaserCore\Controller\Component\BcMessageComponent;
 use BaserCore\Model\Table\PluginsTable;
-use BaserCore\Service\UserServiceInterface;
+use BaserCore\Service\UsersServiceInterface;
 use Cake\Event\EventInterface;
 use Cake\Http\Response;
 use BaserCore\Annotation\UnitTest;
@@ -262,7 +262,7 @@ class PluginsController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function reset_db(PluginServiceInterface $plugins, UserServiceInterface $userService)
+    public function reset_db(PluginServiceInterface $plugins, UsersServiceInterface $userService)
     {
         if (!$this->request->is('put')) {
             $this->BcMessage->setError(__d('baser', '無効な処理です。'));

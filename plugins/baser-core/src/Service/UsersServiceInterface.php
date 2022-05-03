@@ -19,55 +19,11 @@ use Cake\Datasource\EntityInterface;
 use Psr\Http\Message\ResponseInterface;
 
 /**
- * Interface UserServiceInterface
+ * Interface UsersServiceInterface
  * @package BaserCore\Service
  */
-interface UserServiceInterface
+interface UsersServiceInterface extends CrudBaseServiceInterface
 {
-
-    /**
-     * ユーザーを取得する
-     * @param int $id
-     * @return User
-     */
-    public function get($id): User;
-
-    /**
-     * ユーザー一覧を取得
-     * @param array $queryParams
-     * @return Query
-     */
-    public function getIndex(array $queryParams): Query;
-
-    /**
-     * 新しいデータの初期値を取得する
-     * @return EntityInterface
-     */
-    public function getNew(): EntityInterface;
-
-    /**
-     * 新規登録する
-     * @param array $postData
-     * @return EntityInterface
-     * @throws \Cake\ORM\Exception\PersistenceFailedException
-     */
-    public function create(array $postData);
-
-    /**
-     * 編集する
-     * @param EntityInterface $target
-     * @param array $postData
-     * @return mixed
-     * @throws \Cake\ORM\Exception\PersistenceFailedException
-     */
-    public function update(EntityInterface $target, array $postData);
-
-    /**
-     * 削除する
-     * @param int $id
-     * @return mixed
-     */
-    public function delete(int $id);
 
     /**
      * ログイン

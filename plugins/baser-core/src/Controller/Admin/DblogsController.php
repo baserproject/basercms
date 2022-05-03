@@ -14,7 +14,7 @@ namespace BaserCore\Controller\Admin;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
-use BaserCore\Service\UserServiceInterface;
+use BaserCore\Service\UsersServiceInterface;
 use BaserCore\Service\DblogServiceInterface;
 use BaserCore\Service\SiteConfigServiceInterface;
 

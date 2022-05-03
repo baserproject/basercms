@@ -18,7 +18,7 @@ use BaserCore\Annotation\UnitTest;
 /**
  * UsersAdminService
  */
-class UsersAdminService extends UserService implements UsersAdminServiceInterface
+class UsersAdminService extends UsersService implements UsersAdminServiceInterface
 {
 
     /**
