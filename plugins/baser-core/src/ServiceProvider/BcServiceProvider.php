@@ -11,6 +11,10 @@
 
 namespace BaserCore\ServiceProvider;
 
+use BaserCore\Service\BcAdminService;
+use BaserCore\Service\BcAdminServiceInterface;
+use BaserCore\Service\ContentFoldersAdminService;
+use BaserCore\Service\ContentFoldersAdminServiceInterface;
 use BaserCore\Service\PagesDisplayService;
 use BaserCore\Service\PagesDisplayServiceInterface;
 use BaserCore\Service\UsersAdminService;
@@ -54,6 +58,7 @@ class BcServiceProvider extends ServiceProvider
      * @var string[]
      */
     protected $provides = [
+        BcAdminServiceInterface::class,
         UsersServiceInterface::class,
         UsersAdminServiceInterface::class,
         UserGroupsServiceInterface::class,
@@ -65,6 +70,7 @@ class BcServiceProvider extends ServiceProvider
         DblogsServiceInterface::class,
         ContentsServiceInterface::class,
         ContentFoldersServiceInterface::class,
+        ContentFoldersAdminServiceInterface::class,
         PagesServiceInterface::class,
         PagesDisplayServiceInterface::class,
         SearchIndexesServiceInterface::class,
@@ -80,6 +86,8 @@ class BcServiceProvider extends ServiceProvider
     public function services($container): void
     {
         $container->defaultToShared(true);
+        // BcAdminサービス
+        $container->add(BcAdminServiceInterface::class, BcAdminService::class);
         // Usersサービス
         $container->add(UsersServiceInterface::class, UsersService::class);
         $container->add(UsersAdminServiceInterface::class, UsersAdminService::class);
@@ -99,13 +107,13 @@ class BcServiceProvider extends ServiceProvider
         $container->add(ContentsServiceInterface::class, ContentsService::class);
         // ContentFoldersサービス
         $container->add(ContentFoldersServiceInterface::class, ContentFoldersService::class);
+        $container->add(ContentFoldersAdminServiceInterface::class, ContentFoldersAdminService::class);
         // Pagesサービス
         $container->add(PagesServiceInterface::class, PagesService::class);
         // PagesDisplayサービス
         $container->add(PagesDisplayServiceInterface::class, PagesDisplayService::class);
         // SearchIndexesサービス
         $container->add(SearchIndexesServiceInterface::class, SearchIndexesService::class);
-
     }
 
 }

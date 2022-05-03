@@ -19,11 +19,11 @@ use BaserCore\View\BcAdminAppView;
  * @var BcAdminAppView $this
  * @var array $currentUserGroup
  * @var Permission $permission
+ * @var array $permissionMethodList
+ * @var array $permissionAuthList
  */
 
 $this->BcBaser->js('admin/permissions/form', false);
-$methodList = $this->BcAdminPermission->getMethodList();
-$authList = $this->BcAdminPermission->getAuthList();
 ?>
 
 
@@ -81,14 +81,14 @@ $authList = $this->BcAdminPermission->getAuthList();
     <tr>
       <th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('method', __d('baser', 'メソッド')) ?></th>
       <td class="col-input bca-form-table__input">
-        <?php echo $this->BcAdminForm->control('method', ['type' => 'select', 'options' => $methodList]) ?>
+        <?php echo $this->BcAdminForm->control('method', ['type' => 'select', 'options' => $permissionMethodList]) ?>
         <?php echo $this->BcForm->error('method') ?>
       </td>
     </tr>
     <tr>
       <th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('method', __d('baser', 'アクセス')) ?></th>
       <td class="col-input bca-form-table__input">
-        <?php echo $this->BcAdminForm->control('auth', ['type' => 'radio', 'options' => $authList]) ?>
+        <?php echo $this->BcAdminForm->control('auth', ['type' => 'radio', 'options' => $permissionAuthList]) ?>
         <?php echo $this->BcForm->error('auth') ?>
       </td>
     </tr>

@@ -16,11 +16,11 @@ use Cake\Routing\Router;
 /**
  * [ADMIN] アクセス制限管理（ポップアップ）
  * @var BcAdminAppView $this
+ * @var array $permissionMethodList
+ * @var array $permissionAuthList
  * @checked
  * @noTodo
  */
-$methodList = $this->BcAdminPermission->getMethodList();
-$authList = $this->BcAdminPermission->getAuthList();
 $this->BcBaser->js('admin/permissions/dialog.bundle');
 ?>
 
@@ -48,13 +48,13 @@ $this->BcBaser->js('admin/permissions/dialog.bundle');
 
     <dt><?php echo $this->BcForm->label('method', __d('baser', 'メソッド')) ?></dt>
     <dd>
-      <?php echo $this->BcAdminForm->control('method', ['type' => 'select', 'options' => $methodList]) ?>
+      <?php echo $this->BcAdminForm->control('method', ['type' => 'select', 'options' => $permissionMethodList]) ?>
       <?php echo $this->BcForm->error('method') ?>
     </dd>
 
     <dt><?php echo $this->BcForm->label('auth', __d('baser', 'アクセス')) ?></dt>
     <dd>
-      <?php echo $this->BcAdminForm->control('auth', ['type' => 'radio', 'options' => $authList, 'value' => 0]) ?>
+      <?php echo $this->BcAdminForm->control('auth', ['type' => 'radio', 'options' => $permissionAuthList, 'value' => 0]) ?>
       <?php echo $this->BcForm->error('auth') ?>
     </dd>
   </dl>

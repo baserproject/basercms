@@ -13,6 +13,7 @@ namespace BaserCore\Controller\Admin;
 
 use Authentication\Controller\Component\AuthenticationComponent;
 use BaserCore\Controller\BcAppController;
+use BaserCore\Service\BcAdminServiceInterface;
 use BaserCore\Service\PermissionsServiceInterface;
 use BaserCore\Service\UsersServiceInterface;
 use BaserCore\Service\UsersService;
@@ -277,6 +278,7 @@ class BcAdminAppController extends BcAppController
             if ($this->getName() !== 'Preview') {
                 $this->viewBuilder()->setClassName('BaserCore.BcAdminApp');
                 $this->setAdminTheme();
+                $this->set($this->getService(BcAdminServiceInterface::class)->getViewVarsForAll());
             }
         }
     }
