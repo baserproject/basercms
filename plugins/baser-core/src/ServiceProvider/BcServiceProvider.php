@@ -21,6 +21,8 @@ use BaserCore\Service\DashboardAdminService;
 use BaserCore\Service\DashboardAdminServiceInterface;
 use BaserCore\Service\PagesDisplayService;
 use BaserCore\Service\PagesDisplayServiceInterface;
+use BaserCore\Service\SitesAdminService;
+use BaserCore\Service\SitesAdminServiceInterface;
 use BaserCore\Service\UsersAdminService;
 use BaserCore\Service\UsersAdminServiceInterface;
 use Cake\Core\ServiceProvider;
@@ -70,6 +72,7 @@ class BcServiceProvider extends ServiceProvider
         PluginsServiceInterface::class,
         PluginsServiceInterface::class,
         SitesServiceInterface::class,
+        SitesAdminServiceInterface::class,
         SiteConfigsServiceInterface::class,
         PermissionsServiceInterface::class,
         DblogsServiceInterface::class,
@@ -105,6 +108,7 @@ class BcServiceProvider extends ServiceProvider
         $container->add(PluginsServiceInterface::class, PluginsService::class);
         // Sites サービス
         $container->add(SitesServiceInterface::class, SitesService::class);
+        $container->add(SitesAdminServiceInterface::class, SitesAdminService::class);
         // SiteConfigsサービス
         $container->add(SiteConfigsServiceInterface::class, SiteConfigsService::class);
         // Permissionsサービス
