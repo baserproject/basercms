@@ -13,7 +13,7 @@ namespace BaserCore\Test\TestCase\Service;
 
 use BaserCore\Service\UsersAdminService;
 use Cake\Routing\Router;
-use BaserCore\Service\UserService;
+use BaserCore\Service\UsersService;
 use BaserCore\TestSuite\BcTestCase;
 
 /**
@@ -36,7 +36,7 @@ class UsersAdminServiceTest extends BcTestCase
     ];
 
     /**
-     * @var UserService|null
+     * @var UsersService|null
      */
     public $Users = null;
 

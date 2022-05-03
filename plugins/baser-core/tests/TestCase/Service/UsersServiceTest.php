@@ -13,16 +13,16 @@ namespace BaserCore\Test\TestCase\Service;
 
 use Cake\Http\Response;
 use Cake\Routing\Router;
-use BaserCore\Service\UserService;
+use BaserCore\Service\UsersService;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Model\Table\LoginStoresTable;
 
 /**
- * Class UserServiceTest
+ * Class UsersServiceTest
  * @package BaserCore\Test\TestCase\Service
- * @property UserService $Users
+ * @property UsersService $Users
  */
-class UserServiceTest extends BcTestCase
+class UsersServiceTest extends BcTestCase
 {
 
     /**
@@ -39,7 +39,7 @@ class UserServiceTest extends BcTestCase
     ];
 
     /**
-     * @var UserService|null
+     * @var UsersService|null
      */
     public $Users = null;
 
@@ -51,7 +51,7 @@ class UserServiceTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->Users = new UserService();
+        $this->Users = new UsersService();
     }
 
     /**

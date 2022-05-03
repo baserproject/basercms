@@ -49,7 +49,7 @@ class BcContainerTraitTest extends BcTestCase
         $app = new Application(ROOT . '/config');
         $app->getContainer();
         $bcContainerTrait = new class { use BcContainerTrait; };
-        $this->assertEquals('BaserCore\Service\UserService', get_class($bcContainerTrait->getService(UsersService::class)));
+        $this->assertEquals('BaserCore\Service\UsersService', get_class($bcContainerTrait->getService(UsersService::class)));
     }
 
 }
