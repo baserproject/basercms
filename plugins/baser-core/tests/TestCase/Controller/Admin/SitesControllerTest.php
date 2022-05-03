@@ -11,6 +11,7 @@
 
 namespace BaserCore\Test\TestCase\Controller\Admin;
 
+use BaserCore\Service\SitesAdminServiceInterface;
 use Cake\Event\Event;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
@@ -83,7 +84,7 @@ class SitesControllerTest extends BcTestCase
         });
         // アクション実行（requestの変化を判定するため $this->get() ではなくクラスを直接利用）
         $sitesController = new SitesController($this->getRequest('/baser/admin/baser-core/sites/'));
-        $sitesController->index($this->getService(SitesServiceInterface::class), $this->getService(SiteConfigsServiceInterface::class));
+        $sitesController->index($this->getService(SitesAdminServiceInterface::class), $this->getService(SiteConfigsServiceInterface::class));
         $this->assertEquals(1, $sitesController->getRequest()->getQuery('num'));
     }
 

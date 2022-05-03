@@ -13,7 +13,6 @@ namespace BaserCore\Test\TestCase\View\Helper;
 
 use BaserCore\Service\BcAdminAppServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
-use BaserCore\View\Helper\PagesAdminHelper;
 use BaserCore\View\Helper\BcPageHelper;
 use Cake\Core\Configure;
 use BaserCore\View\BcAdminAppView;
@@ -423,12 +422,12 @@ class BcAdminHelperTest extends BcTestCase
         // 存在しない
         $request = $this->loginAdmin($this->getRequest('/hoge'));
         $this->BcAdmin->getView()->setRequest($request);
-        new PagesAdminHelper($this->BcAdmin->getView());
+        $this->BcAdmin->getView()->set('publishLink', '');
         $this->assertEquals(false, $this->BcAdmin->existsPublishLink());
         // 存在する
         $request = $this->loginAdmin($this->getRequest('/baser/admin/baser-core/pages/edit/2'));
         $this->BcAdmin->getView()->setRequest($request);
-        new PagesAdminHelper($this->BcAdmin->getView());
+        $this->BcAdmin->getView()->set('publishLink', 'test');
         $this->assertEquals(true, $this->BcAdmin->existsPublishLink());
     }
 
@@ -466,7 +465,7 @@ class BcAdminHelperTest extends BcTestCase
         // リンクなし
         $request = $this->loginAdmin($this->getRequest('/hoge'));
         $this->BcAdmin->getView()->setRequest($request);
-        new PagesAdminHelper($this->BcAdmin->getView());
+        $this->BcAdmin->getView()->set('publishLink', '');
         ob_start();
         $this->BcAdmin->publishLink();
         $result = ob_get_clean();
@@ -474,7 +473,7 @@ class BcAdminHelperTest extends BcTestCase
         // リンクあり
         $request = $this->loginAdmin($this->getRequest('/baser/admin/baser-core/pages/edit/2'));
         $this->BcAdmin->getView()->setRequest($request);
-        new PagesAdminHelper($this->BcAdmin->getView());
+        $this->BcAdmin->getView()->set('publishLink', 'https://localhost/');
         ob_start();
         $this->BcAdmin->publishLink();
         $result = ob_get_clean();
