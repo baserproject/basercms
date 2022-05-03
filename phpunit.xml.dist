@@ -16,6 +16,9 @@
         <testsuite name="BaserCore">
             <directory>./plugins/baser-core/tests/TestCase/</directory>
         </testsuite>
+        <testsuite name="BaserCore">
+            <directory>./plugins/bc-blog/tests/TestCase/</directory>
+        </testsuite>
     </testsuites>
 
     <!-- Load extension for fixtures -->

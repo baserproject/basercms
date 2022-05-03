@@ -20,7 +20,7 @@ use Cake\Datasource\ConnectionManager;
  * Class BcPluginTest
  * @package BaserCore\Test\TestCase
  */
-class BcPluginTest extends BcTestCase
+class PluginTest extends BcTestCase
 {
     /**
      * @var \Cake\Core\PluginInterface
@@ -81,6 +81,7 @@ class BcPluginTest extends BcTestCase
         $schema = $connection->getDriver()->newTableSchema('bc_blog_phinxlog');
         $sql = $schema->dropSql($connection);
         $connection->execute($sql[0])->closeCursor();
+        echo '!!!!!!!!!!!!!!!!!!!!!!!!!';
     }
 
     /**

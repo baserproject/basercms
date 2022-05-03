@@ -11,10 +11,14 @@
 
 namespace BaserCore\Service;
 
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
+
 /**
- * Interface AdminUsersServiceInterface
+ * Interface UsersAdminServiceInterface
  */
-interface AdminUsersServiceInterface
+interface UsersAdminServiceInterface
 {
 
     /**
@@ -38,6 +42,9 @@ interface AdminUsersServiceInterface
      * ユーザーグループが更新可能かどうか
      * @param $id
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function isUserGroupEditable(?int $id): bool;
 
@@ -55,13 +62,19 @@ interface AdminUsersServiceInterface
      * 編集画面に必要なデータを取得する
      * @param int $id
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function getEditViewVars(?int $id): array;
+    public function getViewVarsForEdit(?int $id): array;
 
     /**
      * 新規登録画面にに必要なデータを取得する
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function getAddViewVars(): array;
+    public function getViewVarsForAdd(): array;
 
 }

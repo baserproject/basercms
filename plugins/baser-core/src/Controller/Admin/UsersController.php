@@ -11,6 +11,7 @@
 
 namespace BaserCore\Controller\Admin;
 
+use BaserCore\Service\UsersAdminServiceInterface;
 use Cake\Http\Response;
 use Cake\Core\Configure;
 use Cake\Routing\Router;
@@ -25,7 +26,6 @@ use BaserCore\Service\UserServiceInterface;
 use Cake\Http\Exception\ForbiddenException;
 use BaserCore\Service\SiteConfigServiceInterface;
 use Cake\Datasource\Exception\RecordNotFoundException;
-use Authentication\Controller\Component\AuthenticationComponent;
 
 /**
  * Class UsersController
@@ -161,7 +161,7 @@ class UsersController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function add(UserServiceInterface $userService)
+    public function add(UsersAdminServiceInterface $userService)
     {
         if ($this->request->is('post')) {
             try {
@@ -178,7 +178,7 @@ class UsersController extends BcAdminAppController
             }
         }
         $this->set('user', $user ?? $userService->getNew());
-        $this->set($userService->getAddViewVars());
+        $this->set($userService->getViewVarsForAdd());
     }
 
     /**
@@ -215,7 +215,7 @@ class UsersController extends BcAdminAppController
             }
         }
         $this->set('user', $user);
-        $this->set($userService->getEditViewVars($id));
+        $this->set($userService->getViewVarsForEdit($id));
     }
 
     /**

@@ -11,10 +11,10 @@
 
 namespace BaserCore\ServiceProvider;
 
-use BaserCore\Service\AdminUsersService;
-use BaserCore\Service\AdminUsersServiceInterface;
 use BaserCore\Service\PagesDisplayService;
 use BaserCore\Service\PagesDisplayServiceInterface;
+use BaserCore\Service\UsersAdminService;
+use BaserCore\Service\UsersAdminServiceInterface;
 use Cake\Core\ServiceProvider;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -55,7 +55,7 @@ class BcServiceProvider extends ServiceProvider
      */
     protected $provides = [
         UserServiceInterface::class,
-        AdminUsersServiceInterface::class,
+        UsersAdminServiceInterface::class,
         UserGroupServiceInterface::class,
         PluginServiceInterface::class,
         PluginServiceInterface::class,
@@ -82,7 +82,7 @@ class BcServiceProvider extends ServiceProvider
         $container->defaultToShared(true);
         // Usersサービス
         $container->add(UserServiceInterface::class, UserService::class);
-        $container->add(AdminUsersServiceInterface::class, AdminUsersService::class);
+        $container->add(UsersAdminServiceInterface::class, UsersAdminService::class);
         // UserGroupsサービス
         $container->add(UserGroupServiceInterface::class, UserGroupService::class);
         // Pluginsサービス

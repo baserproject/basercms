@@ -11,16 +11,16 @@
 
 namespace BaserCore\Test\TestCase\Service;
 
-use BaserCore\Service\AdminUsersService;
+use BaserCore\Service\UsersAdminService;
 use Cake\Routing\Router;
 use BaserCore\Service\UserService;
 use BaserCore\TestSuite\BcTestCase;
 
 /**
- * Class AdminUsersServiceTest
- * @property AdminUsersService $Users
+ * Class UsersAdminServiceTest
+ * @property UsersAdminService $Users
  */
-class AdminUsersServiceTest extends BcTestCase
+class UsersAdminServiceTest extends BcTestCase
 {
 
     /**
@@ -48,7 +48,7 @@ class AdminUsersServiceTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->Users = new AdminUsersService();
+        $this->Users = new UsersAdminService();
     }
 
     /**
@@ -144,6 +144,39 @@ class AdminUsersServiceTest extends BcTestCase
             [null, null, false], // 新規登録
             [null, 1, false]     // 更新
         ];
+    }
+
+    /**
+     * test isUserGroupEditable
+     */
+    public function testIsUserGroupEditable()
+    {
+        // 新規ユーザー更新
+        $this->assertTrue($this->Users->isUserGroupEditable(null));
+        // システム管理ユーザーでの他ユーザー更新
+        $this->loginAdmin($this->getRequest('/baser/admin'));
+        $this->assertTrue($this->Users->isUserGroupEditable(2));
+        // サイト運営ユーザーで他ユーザー更新
+        $this->loginAdmin($this->getRequest('/baser/admin'), 2);
+        $this->assertFalse($this->Users->isUserGroupEditable(1));
+        // サイト運営ユーザーで自身を更新
+        $this->assertTrue($this->Users->isUserGroupEditable(2));
+    }
+
+    /**
+     * test getViewVarsForEdit
+     */
+    public function test_getViewVarsForEdit()
+    {
+        $this->assertTrue(count($this->Users->getViewVarsForEdit(1)) >= 3);
+    }
+
+    /**
+     * test getViewVarsForAdd
+     */
+    public function test_getViewVarsForAdd()
+    {
+        $this->assertTrue(count($this->Users->getViewVarsForAdd()) >= 2);
     }
 
 }

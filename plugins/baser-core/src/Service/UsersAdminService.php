@@ -11,17 +11,23 @@
 namespace BaserCore\Service;
 
 use BaserCore\Utility\BcUtil;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
 
 /**
- * AdminUsersService
+ * UsersAdminService
  */
-class AdminUsersService extends UserService implements AdminUsersServiceInterface
+class UsersAdminService extends UserService implements UsersAdminServiceInterface
 {
 
     /**
      * ログインユーザー自身のIDか確認
      * @param int $id
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function isSelf(?int $id): bool
     {
@@ -51,6 +57,9 @@ class AdminUsersService extends UserService implements AdminUsersServiceInterfac
      * ユーザーグループが更新可能かどうか
      * @param $id
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function isUserGroupEditable(?int $id): bool
     {
@@ -78,8 +87,11 @@ class AdminUsersService extends UserService implements AdminUsersServiceInterfac
      * 編集画面に必要なデータを取得する
      * @param int $id
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function getEditViewVars(?int $id): array
+    public function getViewVarsForEdit(?int $id): array
     {
         return [
             'userGroupList' => $this->getList(),
@@ -91,8 +103,11 @@ class AdminUsersService extends UserService implements AdminUsersServiceInterfac
     /**
      * 新規登録画面にに必要なデータを取得する
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function getAddViewVars(): array
+    public function getViewVarsForAdd(): array
     {
         return [
             'userGroupList' => $this->getList(),

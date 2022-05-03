@@ -29,8 +29,6 @@ use BaserCore\View\Helper\BcBaserHelper;
 use BaserCore\View\Helper\BcContentsHelper;
 use BaserCore\View\Helper\BcAdminFormHelper;
 use BaserCore\View\Helper\BcAdminPageHelper;
-use BaserCore\View\Helper\BcAdminSiteHelper;
-use BaserCore\View\Helper\BcAdminUserHelper;
 use BaserCore\View\Helper\BcFormTableHelper;
 use BaserCore\View\Helper\BcListTableHelper;
 use BaserCore\View\Helper\BcSiteConfigHelper;
@@ -53,7 +51,6 @@ use BaserCore\View\Helper\BcAdminContentFolderHelper;
  * @property BcHtmlHelper $BcHtml
  * @property BcListTableHelper $BcListTable
  * @property BcAuthHelper $BcAuth
- * @property BcAdminUserHelper $BcAdminUser
  * @property BcAdminPluginHelper $BcAdminPlugin
  * @property BcAdminDashboardHelper $BcAdminDashboard
  * @property BcAdminPermissionHelper $BcAdminPermission
@@ -61,7 +58,6 @@ use BaserCore\View\Helper\BcAdminContentFolderHelper;
  * @property BcContentsHelper $BcContents
  * @property BcAdminContentHelper $BcAdminContent
  * @property BcAdminContentFolderHelper $BcAdminContentFolder
- * @property BcUploadHelper $BcUpload
  * @property BcSiteConfigHelper $BcSiteConfig
  * @property BcAdminPageHelper $BcAdminPage
  */
@@ -81,7 +77,6 @@ class BcAdminAppView extends AppView
         $this->loadHelper('BaserCore.BcAuth');
         $this->loadHelper('BaserCore.BcText');
         $this->loadHelper('BaserCore.BcTime');
-        $this->loadHelper('BaserCore.BcAdminUser');
         $this->loadHelper('BaserCore.BcAdminSiteConfig');
         $this->loadHelper('BaserCore.BcAdminPage');
         $this->loadHelper('BaserCore.BcAdminDashboard');
