@@ -14,6 +14,7 @@
  * サブサイト編集
  * @var \BaserCore\View\BcAdminAppView $this
  * @var \BaserCore\Model\Entity\Site $site
+ * @var bool $isMainOnCurrentDisplay
  */
 $this->BcAdmin->setTitle(__d('baser', 'サイト編集'));
 $this->BcAdmin->setHelp('sites_form');
@@ -22,7 +23,7 @@ $this->BcAdmin->setHelp('sites_form');
 
 <?php echo $this->BcAdminForm->create($site) ?>
 
-<?php $this->BcBaser->element('Sites/form', ['siteListOptions' => ['excludeIds' => $site->id]]) ?>
+<?php $this->BcBaser->element('Sites/form') ?>
 
 <div class="submit bca-actions">
   <div class="bca-actions__main">
@@ -39,7 +40,7 @@ $this->BcAdmin->setHelp('sites_form');
       'id' => 'BtnSave'
     ]) ?>
   </div>
-  <?php if(!$this->BcAdminSite->isMainOnCurrentDisplay($site)): ?>
+  <?php if(!$isMainOnCurrentDisplay): ?>
   <div class="bca-actions__sub">
       <?= $this->BcAdminForm->postLink(
         __d('baser', '削除'),

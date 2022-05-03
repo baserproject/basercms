@@ -15,6 +15,7 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\Note;
+use BaserCore\Service\SitesAdminServiceInterface;
 use Cake\Core\Exception\Exception;
 use BaserCore\Service\SitesServiceInterface;
 use BaserCore\Service\SiteConfigsServiceInterface;
@@ -34,7 +35,7 @@ class SitesController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function index(SitesServiceInterface $siteService, SiteConfigsServiceInterface $siteConfigService)
+    public function index(SitesAdminServiceInterface $siteService, SiteConfigsServiceInterface $siteConfigService)
     {
         $this->setViewConditions('Site', ['default' => ['query' => [
             'limit' => $siteConfigService->getValue('admin_list_num'),
@@ -50,7 +51,7 @@ class SitesController extends BcAdminAppController
             $this->request = ($event->getResult() === null || $event->getResult() === true)? $event->getData('request') : $event->getResult();
         }
 
-        $this->set('sites', $this->paginate($siteService->getIndex($this->request->getQueryParams())));
+        $this->set($siteService->getViewVarsForIndex($this->paginate($siteService->getIndex($this->request->getQueryParams()))));
         $this->request = $this->request->withParsedBody($this->request->getQuery());
     }
 
@@ -61,7 +62,7 @@ class SitesController extends BcAdminAppController
      * @unitTest
      * @note(value="インストーラーを実装してからテーマの保有するプラグインをインストールする処理を追加する")
      */
-    public function add(SitesServiceInterface $siteService)
+    public function add(SitesAdminServiceInterface $siteService)
     {
         if ($this->request->is('post')) {
 
@@ -94,7 +95,8 @@ class SitesController extends BcAdminAppController
                 $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
             }
         }
-        $this->set('site', $site ?? $siteService->getNew());
+
+        $this->set($siteService->getViewVarsForAdd($site ?? $siteService->getNew()));
     }
 
     /**
@@ -105,7 +107,7 @@ class SitesController extends BcAdminAppController
      * @unitTest
      * @note(value="インストーラーを実装してからテーマの保有するプラグインをインストールする処理を追加する")
      */
-    public function edit(SitesServiceInterface $siteService, $id)
+    public function edit(SitesAdminServiceInterface $siteService, $id)
     {
         if (!$id) {
             $this->notFound();
@@ -143,7 +145,7 @@ class SitesController extends BcAdminAppController
                 $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
             }
         }
-        $this->set('site', $site);
+        $this->set($siteService->getViewVarsForEdit($site));
     }
 
     /**

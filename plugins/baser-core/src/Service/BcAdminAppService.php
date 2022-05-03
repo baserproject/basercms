@@ -19,7 +19,7 @@ use BaserCore\Utility\BcContainerTrait;
 /**
  * ContentFoldersAdminService
  */
-class BcAdminService implements BcAdminServiceInterface
+class BcAdminAppService implements BcAdminAppServiceInterface
 {
 
     /**
@@ -29,7 +29,7 @@ class BcAdminService implements BcAdminServiceInterface
 
     /**
      * 管理画面全体で必要な変数を取得
-     * @return string[]
+     * @return array
      */
     public function getViewVarsForAll(): array
     {

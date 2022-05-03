@@ -14,12 +14,11 @@ namespace BaserCore\Service;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
-use Cake\Datasource\EntityInterface;
 
 /**
- * Interface BcAdminServiceInterface
+ * Interface BcAdminAppServiceInterface
  */
-interface BcAdminServiceInterface
+interface BcAdminAppServiceInterface
 {
 
     /**

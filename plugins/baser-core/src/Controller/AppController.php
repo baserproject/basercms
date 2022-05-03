@@ -19,6 +19,7 @@ use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\Note;
+use BaserCore\Service\AppServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcSiteConfig;
 use BaserCore\Utility\BcUtil;
@@ -31,9 +32,6 @@ use Cake\Event\EventManagerInterface;
 use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
-use Cake\ORM\TableRegistry;
-use Cake\Routing\Router;
-use Cake\Utility\Inflector;
 
 /**
  * Class AppController
@@ -151,6 +149,7 @@ class AppController extends BaseController
         if (!isset($this->RequestHandler) || !$this->RequestHandler->prefers('json')) {
             $this->viewBuilder()->setClassName('BaserCore.BcFrontApp');
             $this->viewBuilder()->setTheme(BcUtil::getCurrentTheme());
+            $this->set($this->getService(AppServiceInterface::class)->getViewVarsForAll());
         }
     }
 

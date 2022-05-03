@@ -16,11 +16,15 @@ use BaserCore\View\BcAdminAppView;
  *
  * @var BcAdminAppView $this
  * @var array $themes
- * @var array $siteListOptions
  * @var \BaserCore\Model\Entity\Site $site
+ * @var bool $useSiteDeviceSetting
+ * @var bool $useSiteLangSetting
+ * @var bool $isMainOnCurrentDisplay
+ * @var array $siteList
+ * @var array $selectableLangs
+ * @var array $selectableDevices
+ * @var array $selectableThemes
  */
-$useSiteDeviceSetting = $this->BcAdminSite->isUseSiteDeviceSetting();
-$useSiteLangSetting = $this->BcAdminSite->isUseSiteLangSetting();
 $this->BcBaser->i18nScript([
   'confirmMessage1' => __d('baser', "サブサイトを削除してもよろしいですか？\nサブサイトに関連しているコンテンツは全てゴミ箱に入ります。"),
   'confirmMessage2' => __d('baser', 'エイリアスを本当に変更してもいいですか？<br><br>エイリアスを変更する場合、サイト全体のURLが変更となる為、保存に時間がかかりますのでご注意ください。'),
@@ -41,7 +45,7 @@ $this->BcBaser->js('admin/sites/form.bundle', false);
       </td>
     </tr>
   <?php endif ?>
-  <?php if(!$this->BcAdminSite->isMainOnCurrentDisplay($site)): ?>
+  <?php if(!$isMainOnCurrentDisplay): ?>
   <tr>
     <th class="bca-form-table__label"><?php echo $this->BcAdminForm->label('name', __d('baser', '識別名称')) ?>
       &nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span></th>
@@ -104,12 +108,12 @@ $this->BcBaser->js('admin/sites/form.bundle', false);
       <?php echo $this->BcAdminForm->error('description') ?>
     </td>
   </tr>
-  <?php if(!$this->BcAdminSite->isMainOnCurrentDisplay($site)): ?>
+  <?php if(!$isMainOnCurrentDisplay): ?>
   <tr>
     <th
       class="bca-form-table__label"><?php echo $this->BcAdminForm->label('main_site_id', __d('baser', 'メインサイト')) ?></th>
     <td class=" bca-form-table__input">
-      <?php echo $this->BcAdminForm->control('main_site_id', ['type' => 'select', 'options' => $this->BcAdminSite->getSiteList($siteListOptions)]) ?>
+      <?php echo $this->BcAdminForm->control('main_site_id', ['type' => 'select', 'options' => $siteList]) ?>
       <?php echo $this->BcAdminForm->control('relate_main_site', ['type' => 'checkbox', 'label' => __d('baser', 'エイリアスを利用してメインサイトと自動連携する')]) ?>
       <i class="bca-icon--question-circle btn help bca-help"></i>
       <div class="helptext">
@@ -125,7 +129,7 @@ $this->BcBaser->js('admin/sites/form.bundle', false);
       <th class="bca-form-table__label"><?php echo $this->BcAdminForm->label('device', __d('baser', 'デバイス・言語')) ?></th>
       <td class=" bca-form-table__input">
         <?php if ($useSiteDeviceSetting): ?>
-          <small><?php echo __d('baser', '[デバイス]') ?></small>&nbsp;<?php echo $this->BcAdminForm->control('device', ['type' => 'select', 'options' => $this->BcAdminSite->getSelectableDevices($site->main_site_id, $site->id)]) ?>
+          <small><?php echo __d('baser', '[デバイス]') ?></small>&nbsp;<?php echo $this->BcAdminForm->control('device', ['type' => 'select', 'options' => $selectableDevices]) ?>
           <i class="bca-icon--question-circle btn help bca-help"></i>
           <div
             class="helptext"><?php echo __d('baser', 'サブサイトにデバイス属性を持たせ、サイトアクセス時、ユーザーエージェントを判定し適切なサイトを表示する機能を利用します。') ?></div>
@@ -133,7 +137,7 @@ $this->BcBaser->js('admin/sites/form.bundle', false);
           <?php echo $this->BcAdminForm->control('device', ['type' => 'hidden']) ?>
         <?php endif ?>
         <?php if ($useSiteLangSetting): ?>
-          <small><?php echo __d('baser', '[言語]') ?></small><?php echo $this->BcAdminForm->control('lang', ['type' => 'select', 'options' => $this->BcAdminSite->getSelectableLangs($site->main_site_id, $site->id)]) ?>
+          <small><?php echo __d('baser', '[言語]') ?></small><?php echo $this->BcAdminForm->control('lang', ['type' => 'select', 'options' => $selectableLangs]) ?>
           <i class="bca-icon--question-circle btn help bca-help"></i>
           <div
             class="helptext"><?php echo __d('baser', 'サブサイトに言語属性を持たせ、サイトアクセス時、ブラウザの言語設定を判定し適切なサイトを表示する機能を利用します。') ?></div>
@@ -172,7 +176,7 @@ $this->BcBaser->js('admin/sites/form.bundle', false);
   <tr>
     <th class="bca-form-table__label"><?php echo $this->BcAdminForm->label('theme', __d('baser', 'テーマ')) ?></th>
     <td class=" bca-form-table__input">
-      <?php echo $this->BcAdminForm->control('theme', ['type' => 'select', 'options' => $this->BcAdminSite->getThemeList($site)]) ?>
+      <?php echo $this->BcAdminForm->control('theme', ['type' => 'select', 'options' => $selectableThemes]) ?>
       <i class="bca-icon--question-circle btn help bca-help"></i>
       <div
         class="helptext"><?php echo __d('baser', 'サブサイトのテンプレートは、各テンプレートの配置フォルダ内にサイト名のサブフォルダを作成する事で別途配置する事ができますが、テーマフォルダ自体を別にしたい場合はここでテーマを指定します。') ?></div>

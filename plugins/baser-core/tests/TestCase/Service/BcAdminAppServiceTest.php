@@ -11,18 +11,18 @@
 
 namespace BaserCore\Test\TestCase\Service;
 
-use BaserCore\Service\BcAdminService;
+use BaserCore\Service\BcAdminAppService;
 use BaserCore\TestSuite\BcTestCase;
 
 /**
- * Class BcAdminServiceTest
- * @property BcAdminService $BcAdmin
+ * Class BcAdminAppServiceTest
+ * @property BcAdminAppService $BcAdmin
  */
-class BcAdminServiceTest extends BcTestCase
+class BcAdminAppServiceTest extends BcTestCase
 {
 
     /**
-     * @var BcAdminService|null
+     * @var BcAdminAppService|null
      */
     public $BcAdmin;
 
@@ -34,7 +34,7 @@ class BcAdminServiceTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->BcAdmin = new BcAdminService();
+        $this->BcAdmin = new BcAdminAppService();
     }
 
     /**

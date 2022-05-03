@@ -144,7 +144,7 @@ class BcAdminContentsComponent extends Component
         $controller->set('content', $content);
         $controller->set('currentSiteId', $content->site_id);
         $controller->set('related', $related);
-        $controller->set('publishLink', $this->ContentsService->getUrl($content->url, true, $site->useSubDomain));
+        $controller->set('publishLink', $content->url);
         $controller->set('entityName', $entityName);
     }
 }

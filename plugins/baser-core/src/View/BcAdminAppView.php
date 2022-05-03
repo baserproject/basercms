@@ -11,8 +11,6 @@
 
 namespace BaserCore\View;
 
-use BaserCore\View\Helper\BcAdminDashboardHelper;
-use BaserCore\View\Helper\PagesAdminHelper;
 use Cake\Utility\Hash;
 use Cake\Core\Configure;
 use Cake\Utility\Inflector;
@@ -34,7 +32,6 @@ use BaserCore\View\Helper\BcListTableHelper;
 use BaserCore\View\Helper\BcSiteConfigHelper;
 use BaserCore\View\Helper\BcAdminPluginHelper;
 use BaserCore\View\Helper\BcAdminContentHelper;
-use BaserCore\View\Helper\BcAdminPermissionHelper;
 use BaserCore\View\Helper\BcAdminSiteConfigHelper;
 
 /**
@@ -51,13 +48,10 @@ use BaserCore\View\Helper\BcAdminSiteConfigHelper;
  * @property BcListTableHelper $BcListTable
  * @property BcAuthHelper $BcAuth
  * @property BcAdminPluginHelper $BcAdminPlugin
- * @property BcAdminDashboardHelper $BcAdminDashboard
- * @property BcAdminPermissionHelper $BcAdminPermission
  * @property BcAdminSiteConfigHelper $BcAdminSiteConfig
  * @property BcContentsHelper $BcContents
  * @property BcAdminContentHelper $BcAdminContent
  * @property BcSiteConfigHelper $BcSiteConfig
- * @property PagesAdminHelper $PagesAdmin
  */
 class BcAdminAppView extends AppView
 {
@@ -76,7 +70,6 @@ class BcAdminAppView extends AppView
         $this->loadHelper('BaserCore.BcText');
         $this->loadHelper('BaserCore.BcTime');
         $this->loadHelper('BaserCore.BcAdminSiteConfig');
-        $this->loadHelper('BaserCore.PagesAdmin');
         $this->loadHelper('BaserCore.BcContents');
         $this->loadHelper('BaserCore.BcListTable');
         $this->loadHelper('BaserCore.BcAdminContent');

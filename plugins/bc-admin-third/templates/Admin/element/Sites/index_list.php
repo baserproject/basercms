@@ -16,12 +16,12 @@ use BaserCore\View\BcAdminAppView;
  * サブサイト一覧
  *
  * @var BcAdminAppView $this
+ * @var array $deviceList
+ * @var array $langList
+ * @var array $siteList
  */
 
 $this->BcListTable->setColumnNumber(8);
-$devices = $this->BcAdminSite->getDeviceList();
-$langs = $this->BcAdminSite->getLangList();
-$siteList = $this->BcAdminSite->getSiteList();
 ?>
 
 
@@ -129,8 +129,8 @@ $siteList = $this->BcAdminSite->getSiteList();
       <?php $this->BcBaser->element('Sites/index_row', [
         'site' => $site,
         'count' => ($key + 1),
-        'langs' => $langs,
-        'devices' => $devices,
+        'langs' => $langList,
+        'devices' => $deviceList,
         'siteList' => $siteList
       ]) ?>
     <?php endforeach; ?>

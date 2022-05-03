@@ -11,7 +11,7 @@
 
 namespace BaserCore\Test\TestCase\View\Helper;
 
-use BaserCore\Service\BcAdminServiceInterface;
+use BaserCore\Service\BcAdminAppServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\View\Helper\PagesAdminHelper;
 use BaserCore\View\Helper\BcPageHelper;
@@ -266,7 +266,7 @@ class BcAdminHelperTest extends BcTestCase
      */
     public function testContentsMenu()
     {
-        $this->BcAdmin->getView()->set($this->getService(BcAdminServiceInterface::class)->getViewVarsForAll());
+        $this->BcAdmin->getView()->set($this->getService(BcAdminAppServiceInterface::class)->getViewVarsForAll());
         $this->BcAdmin->getView()->setRequest($this->getRequest('/baser/admin'));
         // ヘルプなし 未ログイン
         $expected = $this->BcAdmin->getView()->element('contents_menu', [

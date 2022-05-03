@@ -11,8 +11,10 @@
 
 namespace BaserCore\ServiceProvider;
 
-use BaserCore\Service\BcAdminService;
-use BaserCore\Service\BcAdminServiceInterface;
+use BaserCore\Service\AppService;
+use BaserCore\Service\AppServiceInterface;
+use BaserCore\Service\BcAdminAppService;
+use BaserCore\Service\BcAdminAppServiceInterface;
 use BaserCore\Service\ContentFoldersAdminService;
 use BaserCore\Service\ContentFoldersAdminServiceInterface;
 use BaserCore\Service\DashboardAdminService;
@@ -60,7 +62,8 @@ class BcServiceProvider extends ServiceProvider
      * @var string[]
      */
     protected $provides = [
-        BcAdminServiceInterface::class,
+        AppServiceInterface::class,
+        BcAdminAppServiceInterface::class,
         UsersServiceInterface::class,
         UsersAdminServiceInterface::class,
         UserGroupsServiceInterface::class,
@@ -89,8 +92,10 @@ class BcServiceProvider extends ServiceProvider
     public function services($container): void
     {
         $container->defaultToShared(true);
+        // Appサービス
+        $container->add(AppServiceInterface::class, AppService::class);
         // BcAdminサービス
-        $container->add(BcAdminServiceInterface::class, BcAdminService::class);
+        $container->add(BcAdminAppServiceInterface::class, BcAdminAppService::class);
         // Usersサービス
         $container->add(UsersServiceInterface::class, UsersService::class);
         $container->add(UsersAdminServiceInterface::class, UsersAdminService::class);

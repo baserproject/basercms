@@ -11,6 +11,7 @@
 
 namespace BaserCore\Controller\Admin;
 
+use BaserCore\Service\ContentsAdminServiceInterface;
 use Cake\Http\Response;
 use Cake\ORM\Query;
 use Cake\Utility\Hash;
