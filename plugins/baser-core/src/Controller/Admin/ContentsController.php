@@ -281,7 +281,6 @@ class ContentsController extends BcAdminAppController
         }
         $this->request = $this->request->withData("Contents", $content);
         $this->set('content', $content);
-        $this->set('publishLink', $contentService->getUrl($content->url, true, $content->site->useSubDomain));
     }
 
     /**

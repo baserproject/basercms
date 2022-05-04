@@ -39,7 +39,17 @@ class ContentsAdminService extends ContentsService implements ContentsAdminServi
     {
         $options = [];
         if ($content->type === 'ContentFolder') $options['excludeId'] = $content->id;
+        $related = false;
+        if (($content->site->relate_main_site && $content->main_site_content_id && $content->alias_id) ||
+            $content->site->relate_main_site && $content->main_site_content_id && $content->type == 'ContentFolder') {
+            $related = true;
+        }
         return [
+            'content' => $content,
+            'related' => $related,
+            'currentSiteId' => $content->site_id,
+            'mainSiteId' => $content->site->main_site_id,
+            'publishLink' => $content->url,
             'parentContents' => $this->getContentFolderList($content->site_id, $options),
             'fullUrl' => $this->getUrl($content->url, true, $content->site->use_subdomain),
             'authorList' => $this->getService(UsersServiceInterface::class)->getList()

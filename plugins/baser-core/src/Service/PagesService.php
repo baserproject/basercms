@@ -269,25 +269,4 @@ class PagesService implements PagesServiceInterface
         ];
     }
 
-    /**
-     * 公開リンクを取得する
-     * @param ServerRequest $request
-     * @return string
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function getPublishLink(ServerRequest $request)
-    {
-        if(!BcUtil::isAdminSystem()) return '';
-        if($request->getParam('controller') !== 'Pages') return '';
-        if($request->getParam('action') !== 'edit') return '';
-        $page = $this->get($request->getParam('pass')[0]);
-		if (!$page->content->status) return '';
-        $siteService = $this->getService(SitesServiceInterface::class);
-        $contentService = $this->getService(ContentsServiceInterface::class);
-        $site = $siteService->findById($page->content->site_id)->first();
-        return $contentService->getUrl($page->content->url, true, $site->useSubDomain);
-    }
-
 }

@@ -133,18 +133,9 @@ class BcAdminContentsComponent extends Component
         $siteList = $this->Sites->find('list', ['fields' => ['id', 'display_name']]);
         $controller->set('sites', $siteList);
         $controller->set('mainSiteDisplayName', $this->SiteConfigsService->getValue('main_site_display_name'));
-        $controller->set('mainSiteId', $site->main_site_id);
         $controller->set('relatedContents', $this->Sites->getRelatedContents($content->id));
-        $related = false;
-        if (($site->relate_main_site && $content->main_site_content_id && $content->alias_id) ||
-            $site->relate_main_site && $content->main_site_content_id && $content->type == 'ContentFolder') {
-            $related = true;
-        }
+
         if (!$entityName === "content") $associated->content = $content;
-        $controller->set('content', $content);
-        $controller->set('currentSiteId', $content->site_id);
-        $controller->set('related', $related);
-        $controller->set('publishLink', $content->url);
         $controller->set('entityName', $entityName);
         $controller->set($this->ContentsService->getViewVarsForEdit($content));
     }

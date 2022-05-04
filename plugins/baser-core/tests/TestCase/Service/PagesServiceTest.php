@@ -228,17 +228,6 @@ class PagesServiceTest extends BcTestCase
     }
 
     /**
-     * test getPublishLink
-     */
-    public function testGetPublishLink()
-    {
-        $request = $this->getRequest('/baser/admin/baser-core/pages/edit/5');
-        $this->assertEquals('https://localhost/service/service1', $this->PagesService->getPublishLink($request));
-        $request = $this->getRequest('/hoge');
-        $this->assertEmpty($this->PagesService->getPublishLink($request));
-    }
-
-    /**
      * test getNew
      */
     public function test_getNew()
