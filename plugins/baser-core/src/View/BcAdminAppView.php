@@ -30,7 +30,6 @@ use BaserCore\View\Helper\BcAdminFormHelper;
 use BaserCore\View\Helper\BcFormTableHelper;
 use BaserCore\View\Helper\BcListTableHelper;
 use BaserCore\View\Helper\BcSiteConfigHelper;
-use BaserCore\View\Helper\BcAdminContentHelper;
 
 /**
  * Class BcAdminAppView
@@ -45,7 +44,6 @@ use BaserCore\View\Helper\BcAdminContentHelper;
  * @property BcListTableHelper $BcListTable
  * @property BcAuthHelper $BcAuth
  * @property BcContentsHelper $BcContents
- * @property BcAdminContentHelper $BcAdminContent
  * @property BcSiteConfigHelper $BcSiteConfig
  */
 class BcAdminAppView extends AppView
@@ -66,7 +64,6 @@ class BcAdminAppView extends AppView
         $this->loadHelper('BaserCore.BcTime');
         $this->loadHelper('BaserCore.BcContents');
         $this->loadHelper('BaserCore.BcListTable');
-        $this->loadHelper('BaserCore.BcAdminContent');
         $this->loadHelper('BaserCore.BcUpload');
         $this->loadHelper('BaserCore.BcHtml');
         $this->loadHelper('BaserCore.BcSiteConfig');

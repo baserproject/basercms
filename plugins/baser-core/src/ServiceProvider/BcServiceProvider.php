@@ -17,6 +17,8 @@ use BaserCore\Service\BcAdminAppService;
 use BaserCore\Service\BcAdminAppServiceInterface;
 use BaserCore\Service\ContentFoldersAdminService;
 use BaserCore\Service\ContentFoldersAdminServiceInterface;
+use BaserCore\Service\ContentsAdminService;
+use BaserCore\Service\ContentsAdminServiceInterface;
 use BaserCore\Service\DashboardAdminService;
 use BaserCore\Service\DashboardAdminServiceInterface;
 use BaserCore\Service\PagesDisplayService;
@@ -82,6 +84,7 @@ class BcServiceProvider extends ServiceProvider
         PermissionsServiceInterface::class,
         DblogsServiceInterface::class,
         ContentsServiceInterface::class,
+        ContentsAdminServiceInterface::class,
         ContentFoldersServiceInterface::class,
         ContentFoldersAdminServiceInterface::class,
         PagesServiceInterface::class,
@@ -124,6 +127,7 @@ class BcServiceProvider extends ServiceProvider
         $container->add(DblogsServiceInterface::class, DblogsService::class);
         // Contentsサービス
         $container->add(ContentsServiceInterface::class, ContentsService::class);
+        $container->add(ContentsAdminServiceInterface::class, ContentsAdminService::class);
         // ContentFoldersサービス
         $container->add(ContentFoldersServiceInterface::class, ContentFoldersService::class);
         $container->add(ContentFoldersAdminServiceInterface::class, ContentFoldersAdminService::class);

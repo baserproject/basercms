@@ -17,13 +17,13 @@ use BaserCore\View\BcAdminAppView;
  * コンテンツ一覧 テーブル行
  *
  * @var BcAdminAppView $this
- * @var array $authors
+ * @var array $authorList
  * @var Content $content
  * @var int $count
  */
 
 $isSiteRelated = $this->BcContents->isSiteRelated($content);
-$isPublish = $this->BcAdminContent->isAllowPublish($content, true);
+$isPublish = $this->BcContents->isAllowPublish($content, true);
 $isSiteRoot = $content->site_root;
 $isAlias = (boolean)$content->alias_id;
 $items = $this->BcContents->getConfig('items');
@@ -56,7 +56,7 @@ $urlParams = ['content_id' => $content->id];
 if ($content->entity_id) {
   $urlParams = array_merge($urlParams, [$content->entity_id]);
 }
-$fullUrl = $this->BcAdminContent->getUrl($content->url, true, @$content['Site']['use_subdomain']);
+$fullUrl = $this->BcContents->getUrl($content->url, true, @$content['Site']['use_subdomain']);
 $toStatus = 'publish';
 if ($content->self_status) {
   $toStatus = 'unpublish';
@@ -100,7 +100,7 @@ if ($content->self_status) {
     <?= $this->BcText->booleanMark($content->status); ?>
   </td>
   <td class="bca-table-listup__tbody-td" style="width:8%;text-align:center">
-    <?= h($this->BcText->arrayValue($content->author_id, $authors)); ?>
+    <?= h($this->BcText->arrayValue($content->author_id, $authorList)); ?>
   </td>
 
   <?= $this->BcListTable->dispatchShowRow($content) ?>

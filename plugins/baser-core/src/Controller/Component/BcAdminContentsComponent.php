@@ -11,6 +11,7 @@
 
 namespace BaserCore\Controller\Component;
 
+use BaserCore\Service\ContentsAdminServiceInterface;
 use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
@@ -31,8 +32,7 @@ use BaserCore\Annotation\Note;
  *
  * 階層コンテンツと連携したフォーム画面を作成する為のコンポーネント
  *
- * @package BaserCore\Controller\Component
- * @property ContentsServiceInterface $ContentsService
+ * @property ContentsAdminServiceInterface $ContentsService
  */
 class BcAdminContentsComponent extends Component
 {
@@ -58,7 +58,7 @@ class BcAdminContentsComponent extends Component
     public function initialize(array $config): void
     {
         parent::initialize($config);
-        $this->ContentsService = $this->getService(ContentsServiceInterface::class);
+        $this->ContentsService = $this->getService(ContentsAdminServiceInterface::class);
         $this->SiteConfigsService = $this->getService(SiteConfigsServiceInterface::class);
         $this->Sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
         $this->setupAdmin();
@@ -146,5 +146,6 @@ class BcAdminContentsComponent extends Component
         $controller->set('related', $related);
         $controller->set('publishLink', $content->url);
         $controller->set('entityName', $entityName);
+        $controller->set($this->ContentsService->getViewVarsForEdit($content));
     }
 }

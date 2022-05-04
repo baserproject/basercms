@@ -25,10 +25,9 @@ use BaserCore\Annotation\Note;
 
 /**
  * Class BcAdminHelper
- * @package BaserCore\View\Helper
  * @uses BcAdminHelper
  * @property BcBaserHelper $BcBaser
- * @property BcAdminContentHelper $BcAdminContent
+ * @property BcContentsHelper $BcContents
  */
 class BcAdminHelper extends Helper
 {
@@ -42,7 +41,7 @@ class BcAdminHelper extends Helper
      * Helper
      * @var string[]
      */
-    public $helpers = ['BaserCore.BcBaser', 'BaserCore.BcAuth', 'BaserCore.BcAdminContent'];
+    public $helpers = ['BaserCore.BcBaser', 'BaserCore.BcAuth', 'BaserCore.BcContents'];
 
     /**
      * ログインユーザーがシステム管理者かチェックする
@@ -456,7 +455,7 @@ class BcAdminHelper extends Helper
                 $useSubdomain = $site->use_subdomain;
                 $fullUrl = true;
             }
-            $url = $this->BcAdminContent->getUrl($this->_View->get('publishLink'), $fullUrl, $useSubdomain, false);
+            $url = $this->BcContents->getUrl($this->_View->get('publishLink'), $fullUrl, $useSubdomain, false);
             $this->BcBaser->link(__d('baser', 'サイト確認'), $url, ['class' => 'tool-menu']);
         }
     }

@@ -16,7 +16,8 @@ use BaserCore\View\BcAdminAppView;
  *
  * @var BcAdminAppView $this
  * @var array $folders
- * @var array $authors
+ * @var array $authorList
+ * @var array $typeList
  */
 ?>
 
@@ -34,7 +35,7 @@ use BaserCore\View\BcAdminAppView;
 	</span>
   <span class="bca-search__input-item">
 		<?= $this->BcAdminForm->label('type', __d('baser', 'タイプ'), ['class' => 'bca-search__input-item-label']) ?>
-    <?= $this->BcAdminForm->control('type', ['type' => 'select', 'options' => $this->BcAdminContent->getTypes(), 'empty' => __d('baser', '指定なし')]) ?>
+    <?= $this->BcAdminForm->control('type', ['type' => 'select', 'options' => $typeList, 'empty' => __d('baser', '指定なし')]) ?>
 	</span>
   <span class="bca-search__input-item">
 		<?= $this->BcAdminForm->label('self_status', __d('baser', '公開状態'), ['class' => 'bca-search__input-item-label']) ?>
@@ -43,7 +44,7 @@ use BaserCore\View\BcAdminAppView;
 	</span>
   <span class="bca-search__input-item">
 		<?= $this->BcAdminForm->label('author_id', __d('baser', '作成者'), ['class' => 'bca-search__input-item-label']) ?>
-    <?= $this->BcAdminForm->control('author_id', ['type' => 'select', 'options' => $this->BcAdminContent->getAuthors(), 'empty' => __d('baser', '指定なし')]) ?>
+    <?= $this->BcAdminForm->control('author_id', ['type' => 'select', 'options' => $authorList, 'empty' => __d('baser', '指定なし')]) ?>
 	</span>
   <? # echo $this->BcSearchBox->dispatchShowField($this->request); ?>
 </p>

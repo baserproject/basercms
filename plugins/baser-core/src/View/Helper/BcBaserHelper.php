@@ -60,7 +60,6 @@ class BcBaserHelper extends Helper
         'BaserCore.BcArray',
         'BaserCore.BcPage',
         'BaserCore.BcContents',
-        'BaserCore.BcAdminContent',
         'BaserCore.BcAuth',
         'Breadcrumbs'
     ];
@@ -1856,7 +1855,7 @@ EOD;
     public function getContentsMenu($id = null, $level = null, $currentId = null, $options = [])
     {
         if (!$id) {
-            $siteRoot = $this->BcAdminContent->getSiteRoot($this->_View->getRequest()->getParam('Content.site_id'));
+            $siteRoot = $this->BcContents->getSiteRoot($this->_View->getRequest()->getParam('Content.site_id'));
             $id = $siteRoot->id;
         }
         $options = array_merge([
@@ -1936,7 +1935,7 @@ EOD;
         if (!empty($this->_View->getRequest()->getParam('Content.site_id'))) {
             $siteId = $this->_View->getRequest()->getParam('Content.site_id');
         }
-        $siteRoot = $this->BcAdminContent->getSiteRoot($siteId);
+        $siteRoot = $this->BcContents->getSiteRoot($siteId);
         $id = ($siteRoot) ? $siteRoot->id : 1;
         $currentId = 1;
         if (!empty($this->_View->getRequest()->getParam('Content.id'))) {
@@ -3030,7 +3029,7 @@ END_FLASH;
             $site = $this->_View->getRequest()->getParam('Site');
             if($site) $useSubDomain = $site->use_subdomain;
         }
-        return $this->BcAdminContent->getUrl($url, $full, $useSubDomain, $base);
+        return $this->BcContents->getUrl($url, $full, $useSubDomain, $base);
     }
 
     /**

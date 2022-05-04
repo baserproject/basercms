@@ -18,26 +18,18 @@ use BaserCore\Model\Entity\ContentFolder;
  * [ADMIN] 統合コンテンツフォーム
  *
  * @var BcAdminAppView $this
- * @var array $parentContents
  * @var bool $related 親サイトに連携する設定で、エイリアス、もしくはフォルダであるかどうか
  *                                        上記に一致する場合、URLに関わるコンテンツ名は編集できない
  * @var bool $editable コンテンツ編集不可かどうか
  * @var Content $content
  * @var ContentFolder $contentFolder
+ * @var array $parentContents
+ * @var array $fullUrl
  */
 
-$site = $content->site;
-$options = [];
-if ($this->getName() === 'ContentFolders') {
-    $options['excludeId'] = $content->id;
-}
-$parentContents = $this->BcAdminContent->getContentFolderList($content->site_id, $options);
-
-$fullUrl = rawurldecode($this->BcAdminContent->getUrl($content->url, true, $site->use_subdomain));
-// $this->request->getData() では Content は取得できないため
 $this->BcBaser->js('admin/contents/edit.bundle', false, ['id' => 'AdminContentsEditScript',
   'data-previewurl' => Router::url(["controller" => "preview", "action" => "view"]),
-  'data-fullurl' => $fullUrl,
+  'data-fullurl' => rawurldecode($fullUrl),
   'data-current' => $content,
   'data-settings' => $this->BcContents->getJsonItems()
 ]);
@@ -56,7 +48,7 @@ $this->BcBaser->i18nScript([
 $isOmitViewAction = $this->BcContents->getConfig('items')[$content->type]['omitViewAction'];
 
 // サブドメイン
-if ($site->use_subdomain) {
+if ($content->site->use_subdomain) {
   $contentsName = '';
   if (!$content->site_root) {
     $contentsName = $this->BcAdminForm->getSourceValue($entityName . "name");
@@ -74,7 +66,7 @@ if ($site->use_subdomain) {
     $contentsName .= '/';
   }
 }
-$linkedFullUrl = $this->BcAdminContent->getCurrentFolderLinkedUrl($content) . $contentsName;
+$linkedFullUrl = $this->BcContents->getFolderLinkedUrl($content) . $contentsName;
 $editable = $this->BcContents->isEditable($content);
 ?>
 
@@ -140,7 +132,7 @@ $editable = $this->BcContents->isEditable($content);
       <th class="col-head bca-form-table__label">
         <?php echo $this->BcAdminForm->label($entityName . "title", __d('baser', 'タイトル')) ?>
         &nbsp;
-        <span class="bca-label"  data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
+        <span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
       </th>
       <td class="col-input bca-form-table__input">
         <?php if ($editable): ?>

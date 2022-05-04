@@ -86,14 +86,14 @@ class ContentsController extends BcAdminAppController
 
     /**
      * コンテンツ一覧
-     * @param  ContentsServiceInterface $contentService
+     * @param  ContentsAdminServiceInterface $contentService
      * @param  SitesServiceInterface $siteService
      * @param  SiteConfigsServiceInterface $siteConfigService
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function index(ContentsServiceInterface $contentService, SitesServiceInterface $siteService, SiteConfigsServiceInterface $siteConfigService)
+    public function index(ContentsAdminServiceInterface $contentService, SitesServiceInterface $siteService, SiteConfigsServiceInterface $siteConfigService)
     {
         $currentSiteId = $this->request->getAttribute('currentSite')->id;
         $sites = $siteService->getList();
@@ -142,6 +142,7 @@ class ContentsController extends BcAdminAppController
         $this->set('template', $this->getTemplate());
         $this->set('folders', $contentService->getContentFolderList($currentSiteId, ['conditions' => ['site_root' => false]]));
         $this->set('sites', $sites);
+        $this->set($contentService->getViewVarsForIndex());
     }
 
     /**

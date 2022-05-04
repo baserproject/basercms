@@ -10,14 +10,19 @@
  * @license         https://basercms.net/license/index.html
  */
 
+use BaserCore\Model\Entity\Content;
+
 /**
- * @var \BaserCore\View\BcAdminAppView $this
  * コンテンツオプション
+ * @var \BaserCore\View\BcAdminAppView $this
  * @var bool $editableContent コンテンツ編集不可かどうか
  * @var array $layoutTemplates レイアウトテンプレートリスト
+ * @var array $authorList
+ * @var Content $content
+ * @var string $entityName
  */
+
 $editable = $this->BcContents->isEditable($content);
-$authors = $this->BcAdminContent->getAuthors();
 $created_date = $this->BcAdminForm->getSourceValue($entityName . "created_date");
 $modified_date = $this->BcAdminForm->getSourceValue($entityName . "modified_date");
 ?>
@@ -65,13 +70,13 @@ $modified_date = $this->BcAdminForm->getSourceValue($entityName . "modified_date
           class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label($entityName . "author_id", __d('baser', '作成者')) ?></th>
         <td class="col-input bca-form-table__input">
           <?php if ($editable): ?>
-            <?php echo $this->BcAdminForm->control($entityName . 'author_id', ['type' => 'select', 'options' => $authors]) ?>
+            <?php echo $this->BcAdminForm->control($entityName . 'author_id', ['type' => 'select', 'options' => $authorList]) ?>
             <small>[<?php echo __d('baser', '作成日') ?>
               ]</small> <?php echo $this->BcAdminForm->control($entityName . 'created_date', ['type' => 'dateTimePicker', 'size' => 12, 'maxlength' => 10, 'value' => $created_date]); ?>
             <small>[<?php echo __d('baser', '更新日') ?>
               ]</small> <?php echo $this->BcAdminForm->control($entityName . 'modified_date', ['type' => 'dateTimePicker', 'size' => 12, 'maxlength' => 10, 'value' => $modified_date]); ?>
           <?php else: ?>
-            <?php echo h($this->BcText->arrayValue($this->BcAdminForm->getSourceValue($entityName . "author_id"), $authors)) ?>
+            <?php echo h($this->BcText->arrayValue($this->BcAdminForm->getSourceValue($entityName . "author_id"), $authorList)) ?>
             <small>[<?php echo __d('baser', '作成日') ?>]</small> <?= $created_date ?>
             <small>[<?php echo __d('baser', '更新日') ?>]</small> <?= $modified_date ?>
             <?php echo $this->BcAdminForm->hidden($entityName . "author_id") ?>

@@ -8,16 +8,19 @@
  * @since         5.0.0
  * @license       https://basercms.net/license/index.html MIT License
  */
+
 use BaserCore\View\BcAdminAppView;
 
 /**
  * [ADMIN] 統合コンテンツ一覧
  *
  * @var BcAdminAppView $this
- * @var Query $contents
+ * @var array $contents
+ * @var bool $isContentDeletable
  */
-$deleteDisabled = !$this->BcAdminContent->isContentDeletable();
 ?>
+
+
 <ul>
   <?php foreach($contents as $content): ?>
     <?php
@@ -25,9 +28,9 @@ $deleteDisabled = !$this->BcAdminContent->isContentDeletable();
     if ($content->type == 'ContentFolder') {
       $treeItemType = 'folder';
     }
-    $fullUrl = $this->BcAdminContent->getUrl($content->url, true, $content->site->use_subdomain);
+    $fullUrl = $this->BcContents->getUrl($content->url, true, $content->site->use_subdomain);
     $parentId = $content->parent_id;
-    $alias = $content->alias_id ? true : false;
+    $alias = $content->alias_id? true : false;
     $open = false;
     $items = $this->BcContents->getConfig('items');
     if (!empty($items[$content->type]['icon'])) {
@@ -39,7 +42,7 @@ $deleteDisabled = !$this->BcAdminContent->isContentDeletable();
     } else {
       $icon = $items['Default']['url']['icon'] ?? '';
     }
-    $status = $this->BcAdminContent->isAllowPublish($content, true);
+    $status = $this->BcContents->isAllowPublish($content, true);
     if ($content->site_root) {
       $open = true;
     }
@@ -70,7 +73,7 @@ $deleteDisabled = !$this->BcAdminContent->isContentDeletable();
 	"contentSiteRoot":"<?php echo (bool)$content->site_root ?>",
 	"editDisabled":"<?php echo $editDisabled ?>",
 	"manageDisabled":"<?php echo $manageDisabled ?>",
-	"deleteDisabled":"<?php echo $deleteDisabled ?>"
+	"deleteDisabled":"<?php echo !$isContentDeletable ?>"
 }'<?php if ($open): ?> class="jstree-open"<?php endif ?>
     ><?php
       echo h($content->title);
