@@ -379,4 +379,12 @@ class PermissionsServiceTest extends BcTestCase
         $this->assertEquals($beforeOrderId, $afterOrderId2);
     }
 
+    /**
+     * test getList
+     */
+    public function test_getLis()
+    {
+        $this->assertEquals([], $this->PermissionsService->getList());
+    }
+
 }

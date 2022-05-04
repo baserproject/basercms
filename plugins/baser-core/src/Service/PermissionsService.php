@@ -71,12 +71,22 @@ class PermissionsService implements PermissionsServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function getNew($userGroupId): EntityInterface
+    public function getNew($userGroupId = null): EntityInterface
     {
         return $this->Permissions->newEntity(
             $this->autoFillRecord(['user_group_id' => $userGroupId]),
             ['validate' => 'plain']
         );
+    }
+
+    /**
+     * リストデータを取得
+     * 対応しない
+     * @return array
+     */
+    public function getList(): array
+    {
+        return [];
     }
 
     /**
@@ -104,7 +114,7 @@ class PermissionsService implements PermissionsServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function getIndex(array $queryParams): Query
+    public function getIndex(array $queryParams = []): Query
     {
         $options = [];
         if (!empty($queryParams['user_group_id'])) {
@@ -219,7 +229,7 @@ class PermissionsService implements PermissionsServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function delete($id)
+    public function delete(int $id): bool
     {
         $Permission = $this->get($id);
         return $this->Permissions->delete($Permission);
@@ -235,7 +245,7 @@ class PermissionsService implements PermissionsServiceInterface
      */
     public function getMethodList() : array
     {
-        return $this->Permissions::METHOD_LIST;
+        return (array) $this->Permissions::METHOD_LIST;
     }
 
     /**
@@ -248,7 +258,7 @@ class PermissionsService implements PermissionsServiceInterface
      */
     public function getAuthList() : array
     {
-        return $this->Permissions::AUTH_LIST;
+        return (array) $this->Permissions::AUTH_LIST;
     }
 
     /**

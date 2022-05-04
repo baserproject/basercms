@@ -17,46 +17,8 @@ use Cake\ORM\Query;
 /**
  * Interface PermissionsServiceInterface
  */
-interface PermissionsServiceInterface
+interface PermissionsServiceInterface extends CrudBaseServiceInterface
 {
-
-    /**
-     * ユーザーを取得する
-     * @param int $id
-     * @return EntityInterface
-     */
-    public function get($id): EntityInterface;
-
-    /**
-     * パーミッション一覧を取得
-     * @param array $queryParams
-     * @return Query
-     */
-    public function getIndex(array $queryParams): Query;
-
-    /**
-     * 新しいデータの初期値を取得する
-     * @param int $userGroupId
-     * @return EntityInterface
-     */
-    public function getNew($userGroupId): EntityInterface;
-
-    /**
-     * 新規登録する
-     * @param EntityInterface $permission
-     * @return EntityInterface
-     * @throws \Cake\ORM\Exception\PersistenceFailedException
-     */
-    public function create(array $postData): EntityInterface;
-
-    /**
-     * 編集する
-     * @param EntityInterface $target
-     * @param array $data
-     * @return EntityInterface
-     * @throws \Cake\ORM\Exception\PersistenceFailedException
-     */
-    public function update(EntityInterface $target, array $data): EntityInterface;
 
     /**
      * 有効状態にする
@@ -81,13 +43,6 @@ interface PermissionsServiceInterface
      * @return EntityInterface|false
      */
     public function copy(int $permissionId);
-
-    /**
-     * 削除する
-     * @param int $id
-     * @return mixed
-     */
-    public function delete(int $id);
 
     /**
      * 許可・拒否を指定するメソッドのリストを取得
