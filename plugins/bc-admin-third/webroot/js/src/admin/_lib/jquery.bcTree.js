@@ -1043,8 +1043,8 @@
                         $.bcToken.key = null;
                         $.bcTree.settings[data.contentType]['exists'] = true;
                         $.bcTree.settings[data.contentType]['existsTitle'] = data.contentTitle;
-                        data.contentId = result.id;
-                        data.contentEntityId = result.entity_id;
+                        data.contentId = result.content.id;
+                        data.contentEntityId = result.content.entity_id;
                         data.contentTitle = data.contentTitle.replace(/&/g, '&amp;')
                             .replace(/"/g, '&quot;')
                             .replace(/'/g, '&#039;')
@@ -1064,12 +1064,11 @@
                             });
                             var newNode = $.bcTree.jsTree.get_node(nodeId);
                             newNode.data.jstree = data;
-                            if (data.contentType == 'ContentFolder') {
+                            if (data.contentType === 'ContentFolder') {
                                 newNode.type = 'folder'
                             }
                             $.bcUtil.hideLoader();
                             $.bcTree.renameContent(newNode, data.contentTitle, true);
-                            location.reload();
                         });
                     },
                     error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -1117,7 +1116,9 @@
                             $.bcUtil.showLoader();
                         },
                         success: function (result) {
-                            $.bcUtil.showNoticeMessage(result.message);
+                            if(!first) {
+                                $.bcUtil.showNoticeMessage(result.message);
+                            }
                             $.bcTree.settings[node.data.jstree.contentType]['existsTitle'] = editNode.text;
                             editNode.data.jstree.contentFullUrl = result.url;
                         },
