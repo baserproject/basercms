@@ -93,7 +93,7 @@ class UserGroupsService implements UserGroupsServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function create(array $postData)
+    public function create(array $postData): ?EntityInterface
     {
         $postData['auth_prefix'] = !empty($postData['auth_prefix']) ? implode(',', $postData['auth_prefix']) : "Admin";
         $userGroup = $this->UserGroups->newEmptyEntity();
@@ -111,7 +111,7 @@ class UserGroupsService implements UserGroupsServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function update(EntityInterface $target, array $postData)
+    public function update(EntityInterface $target, array $postData): ?EntityInterface
     {
         $postData['auth_prefix'] = !empty($postData['auth_prefix']) ? implode(',', $postData['auth_prefix']) : "Admin";
         $userGroup = $this->UserGroups->patchEntity($target, $postData);
@@ -126,7 +126,7 @@ class UserGroupsService implements UserGroupsServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function delete($id)
+    public function delete(int $id): bool
     {
         $userGroup = $this->UserGroups->get($id);
         return $this->UserGroups->delete($userGroup);
