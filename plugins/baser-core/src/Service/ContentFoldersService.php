@@ -62,6 +62,27 @@ class ContentFoldersService implements ContentFoldersServiceInterface
     }
 
     /**
+     * 新しいデータの初期値を取得する
+     * @return EntityInterface
+     */
+    public function getNew(): EntityInterface
+    {
+        return $this->ContentFolders->newEntity([]);
+    }
+
+    /**
+     * リストを取得する
+     * @return array
+     */
+    public function getList(): array
+    {
+        return $this->ContentFolders->find('list', [
+            'keyField' => 'id',
+            'valueField' => 'content.title'
+        ])->contain(['Contents'])->toArray();
+    }
+
+    /**
      * コンテンツフォルダーを取得する
      * @param int $id
      * @return EntityInterface

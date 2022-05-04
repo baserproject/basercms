@@ -329,4 +329,22 @@ class ContentFoldersServiceTest extends BcTestCase
         $contentFolder = $this->ContentFoldersService->saveSiteRoot($site, true);
 
     }
+
+    /**
+     * test getList
+     */
+    public function test_getList()
+    {
+        $result = $this->ContentFoldersService->getList();
+        $this->assertContains('testEdit', $result);
+    }
+
+    /**
+     * test getNew
+     */
+    public function test_getNew()
+    {
+        $this->assertEquals([], $this->ContentFoldersService->getNew()->toArray());
+    }
+
 }

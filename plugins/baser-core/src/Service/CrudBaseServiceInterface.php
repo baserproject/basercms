@@ -45,7 +45,7 @@ interface CrudBaseServiceInterface
      * @param array $queryParams
      * @return array
      */
-    public function getList(array $queryParams = []): array;
+    public function getList(): array;
 
     /**
      * 新規登録する

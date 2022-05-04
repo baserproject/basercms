@@ -13,20 +13,13 @@ namespace BaserCore\Service;
 
 use BaserCore\Model\Entity\Site;
 use Cake\Datasource\Exception\RecordNotFoundException;
-use Cake\ORM\Query;
 use Cake\Datasource\EntityInterface;
 
 /**
  * Interface ContentFoldersServiceInterface
  */
-interface ContentFoldersServiceInterface
+interface ContentFoldersServiceInterface extends CrudBaseServiceInterface
 {
-    /**
-     * コンテンツフォルダーを取得する
-     * @param int $id
-     * @return EntityInterface
-     */
-    public function get($id): EntityInterface;
 
     /**
      * コンテンツフォルダーをゴミ箱から取得する
@@ -34,39 +27,6 @@ interface ContentFoldersServiceInterface
      * @return EntityInterface|array
      */
     public function getTrash($id);
-
-    /**
-     * コンテンツフォルダー一覧用のデータを取得
-     * @param array $queryParams
-     * @return Query
-     */
-    public function getIndex(array $queryParams=[]): Query;
-
-    /**
-     * コンテンツフォルダー登録
-     * @param array $data
-     * @param array $options
-     * @return \Cake\Datasource\EntityInterface
-     * @throws \Cake\ORM\Exception\PersistenceFailedException
-     */
-    public function create(array $postData, $options=[]);
-
-    /**
-     * コンテンツフォルダーを削除する
-     * @param int $id
-     * @return bool
-     */
-    public function delete($id);
-
-    /**
-     * コンテンツフォルダー情報を更新する
-     * @param EntityInterface $target
-     * @param array $contentFolderData
-     * @param array $options
-     * @return EntityInterface
-     * @throws \Cake\ORM\Exception\PersistenceFailedException
-     */
-    public function update(EntityInterface $target, array $contentFolderData, $options = []);
 
     /**
      * フォルダのテンプレートリストを取得する
