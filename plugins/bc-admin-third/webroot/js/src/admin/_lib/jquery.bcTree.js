@@ -110,16 +110,7 @@
             }
             const mode = $("#viewsetting-mode").val();
             let url;
-            if (mode == 'index') {
-                const urlSearchParams = new URLSearchParams(window.location.search);
-                const params = Object.fromEntries(urlSearchParams.entries());
-                if (params.site_id !== 'undefined') $.bcTree.currentSiteId = params.site_id;
-                url = $.bcUtil.adminBaseUrl + 'baser-core' + '/contents/index?site_id=' + $.bcTree.currentSiteId + '&list_type=1';
-            } else if (mode == 'trash') {
-                url = $.bcUtil.adminBaseUrl + 'baser-core' + '/contents/trash_index';
-            }
             $.bcTree.listDisplayed = getNowDateTime();
-            $.bcTree.destroy();
             $.bcTree._init();
             $($.bcTree).trigger('loaded');
             $.bcUtil.hideLoader();
@@ -989,17 +980,15 @@
                     },
                     success: function (result) {
                         $.bcUtil.showNoticeMessage(result.message);
-                        // 削除対象のエイリアスを一度に削除する場合もあり実装が面倒なので
-                        // 一旦、load() で読み直す
-
                         // $.bcTree.jsTree.delete_node(node);
                         // if (!$.bcTree.settings[data.contentType]['multiple'] && !data.alias) {
                         // 	$.bcTree.settings[data.contentType]['exists'] = false;
                         // }
                         $.bcTree.refreshTree();
                         $.bcToken.key = null;
-                        $.bcTree.load();
-                        location.reload();
+                        // TODO 削除対象に関連づくエイリアスも削除が必要
+                        $.bcTree.jsTree.delete_node(node);
+                        $.bcUtil.hideLoader();
                     },
                     error: function (XMLHttpRequest, textStatus, errorThrown) {
                         $.bcToken.key = null;
