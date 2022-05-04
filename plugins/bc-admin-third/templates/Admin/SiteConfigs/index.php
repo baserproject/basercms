@@ -15,7 +15,14 @@
  *
  * @var \BaserCore\View\BcAdminAppView $this
  * @var \BaserCore\Model\Entity\SiteConfig $siteConfig
+ * @var array $mailEncodeList
+ * @var bool $isWritableEnv
+ * @var array $modeList
+ * @var array $widgetAreaList
+ * @var array $adminThemeList
+ * @var array $editorList
  */
+
 $this->BcAdmin->setTitle(__d('baser', 'システム基本設定'));
 $this->BcAdmin->setHelp('site_configs_form');
 $this->BcBaser->i18nScript([
@@ -29,7 +36,6 @@ $this->BcBaser->i18nScript([
 $this->BcBaser->js('admin/site_configs/index.bundle', false, ['id' => 'AdminSiteConfigsFormScript',
   'data-isAdminSsl' => (string)$siteConfig->admin_ssl
 ]);
-$isWritableEnv = $this->BcAdminSiteConfig->isWritableEnv();
 ?>
 
 
@@ -101,7 +107,7 @@ $isWritableEnv = $this->BcAdminSiteConfig->isWritableEnv();
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('mode', [
           'type' => 'select',
-          'options' => $this->BcAdminSiteConfig->getModeList(),
+          'options' => $modeList,
           'disabled' => !$isWritableEnv
         ]) ?>
         <i class="bca-icon--question-circle btn help bca-help"></i>
@@ -121,7 +127,7 @@ $isWritableEnv = $this->BcAdminSiteConfig->isWritableEnv();
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('widget_area', [
           'type' => 'select',
-          'options' => $this->BcAdminSiteConfig->getWidgetAreaList()
+          'options' => $widgetAreaList
         ]) ?>
         <i class="bca-icon--question-circle btn help bca-help"></i>
         <div id="helptextWidgetArea" class="helptext">
@@ -171,7 +177,7 @@ $isWritableEnv = $this->BcAdminSiteConfig->isWritableEnv();
           <?php echo $this->BcAdminForm->label('admin_list_num', __d('baser', '管理画面テーマ')) ?>
         </th>
         <td class="col-input bca-form-table__input">
-          <?php echo $this->BcAdminForm->control('admin_theme', ['type' => 'select', 'options' => $this->BcAdminSiteConfig->getAdminThemeList()]) ?>
+          <?php echo $this->BcAdminForm->control('admin_theme', ['type' => 'select', 'options' => $adminThemeList]) ?>
           <?php echo $this->BcAdminForm->error('admin_theme') ?>
         </td>
       </tr>
@@ -376,7 +382,7 @@ $isWritableEnv = $this->BcAdminSiteConfig->isWritableEnv();
         <td class="col-input bca-form-table__input">
           <?php echo $this->BcAdminForm->control('editor', [
             'type' => 'radio',
-            'options' => $this->BcAdminSiteConfig->getEditorList()
+            'options' => $editorList
           ]) ?>
         </td>
       </tr>
@@ -454,7 +460,7 @@ h2 {}
         <td class="col-input bca-form-table__input">
           <?php echo $this->BcAdminForm->control('mail_encode', [
             'type' => 'select',
-            'options' => $this->BcAdminSiteConfig->getMailEncodeList()
+            'options' => $mailEncodeList
           ]) ?>
           <i class="bca-icon--question-circle btn help bca-help"></i>
           <div id="helptextEncode" class="helptext">
@@ -559,7 +565,7 @@ h2 {}
                 'class' => 'button-small bca-btn',
                 'id' => 'BtnCheckSendmail',
                 'escapeTitle' => false
-            ]) ?>
+              ]) ?>
             　<span id=ResultCheckSendmail></span>
             <?php $this->BcBaser->img('admin/ajax-loader-s.gif', [
               'id' => 'AjaxLoaderCheckSendmail',

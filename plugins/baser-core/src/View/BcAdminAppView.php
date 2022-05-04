@@ -32,11 +32,9 @@ use BaserCore\View\Helper\BcListTableHelper;
 use BaserCore\View\Helper\BcSiteConfigHelper;
 use BaserCore\View\Helper\BcAdminPluginHelper;
 use BaserCore\View\Helper\BcAdminContentHelper;
-use BaserCore\View\Helper\BcAdminSiteConfigHelper;
 
 /**
  * Class BcAdminAppView
- * @package BaserCore\View
  * @property BcBaserHelper $BcBaser
  * @property BcFormHelper $BcForm
  * @property BcAdminFormHelper $BcAdminForm
@@ -48,7 +46,6 @@ use BaserCore\View\Helper\BcAdminSiteConfigHelper;
  * @property BcListTableHelper $BcListTable
  * @property BcAuthHelper $BcAuth
  * @property BcAdminPluginHelper $BcAdminPlugin
- * @property BcAdminSiteConfigHelper $BcAdminSiteConfig
  * @property BcContentsHelper $BcContents
  * @property BcAdminContentHelper $BcAdminContent
  * @property BcSiteConfigHelper $BcSiteConfig
@@ -69,7 +66,6 @@ class BcAdminAppView extends AppView
         $this->loadHelper('BaserCore.BcAuth');
         $this->loadHelper('BaserCore.BcText');
         $this->loadHelper('BaserCore.BcTime');
-        $this->loadHelper('BaserCore.BcAdminSiteConfig');
         $this->loadHelper('BaserCore.BcContents');
         $this->loadHelper('BaserCore.BcListTable');
         $this->loadHelper('BaserCore.BcAdminContent');
@@ -105,7 +101,7 @@ class BcAdminAppView extends AppView
         $paths = parent::_paths($plugin, $cached);
         $customAdminTheme = Configure::read('BcApp.customAdminTheme');
         $plugins = Hash::extract(BcUtil::getEnablePlugins(), '{n}.name');
-        if(!$customAdminTheme || !in_array($customAdminTheme, $plugins)) {
+        if (!$customAdminTheme || !in_array($customAdminTheme, $plugins)) {
             return $paths;
         }
         $themes = [$customAdminTheme, Inflector::dasherize($customAdminTheme)];

@@ -11,15 +11,16 @@
 
 namespace BaserCore\Controller\Admin;
 
-use BaserCore\Service\SiteConfigsServiceInterface;
+use BaserCore\Service\SiteConfigsAdminServiceInterface;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use Cake\Http\Response;
 
 /**
  * Class SiteConfigsController
- * @package BaserCore\Controller\Admin
+ * @uses SiteConfigsController
  */
 class SiteConfigsController extends BcAdminAppController
 {
@@ -36,8 +37,9 @@ class SiteConfigsController extends BcAdminAppController
 
     /**
      * 基本設定
+     * @return void|Response
      */
-    public function index(SiteConfigsServiceInterface $siteConfigs)
+    public function index(SiteConfigsAdminServiceInterface $siteConfigs)
     {
         if ($this->request->is('post')) {
             $siteConfig = $siteConfigs->update($this->getRequest()->getData());
@@ -50,7 +52,7 @@ class SiteConfigsController extends BcAdminAppController
         } else {
             $siteConfig = $siteConfigs->get();
         }
-        $this->set('siteConfig', $siteConfig);
+        $this->set($siteConfigs->getViewVarsForIndex($siteConfig));
     }
 
 }
