@@ -149,7 +149,7 @@ class ContentFoldersService implements ContentFoldersServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function create(array $postData, $options=[])
+    public function create(array $postData, $options=[]): ?EntityInterface
     {
         $contentFolder = $this->ContentFolders->newEmptyEntity();
         $contentFolder = $this->ContentFolders->patchEntity($contentFolder, $postData, $options);
@@ -164,7 +164,7 @@ class ContentFoldersService implements ContentFoldersServiceInterface
      * @unitTest
      * @noTodo
      */
-    public function delete($id)
+    public function delete($id): bool
     {
         $ContentFolder = $this->get($id);
         return $this->ContentFolders->delete($ContentFolder);
@@ -181,7 +181,7 @@ class ContentFoldersService implements ContentFoldersServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function update(EntityInterface $target, array $contentFolderData, $options = [])
+    public function update(EntityInterface $target, array $contentFolderData, $options = []): ?EntityInterface
     {
         $options = array_merge(['associated' => ['Contents' => ['validate' => 'default']]], $options);
         $contentFolder = $this->ContentFolders->patchEntity($target, $contentFolderData, $options);

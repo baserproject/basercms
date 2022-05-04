@@ -858,4 +858,35 @@ class ContentsServiceTest extends BcTestCase
         $this->ContentsService->getPath(100)->all()->count();
     }
 
+    /**
+     * test getList
+     */
+    public function test_getList()
+    {
+        $result = $this->ContentsService->getList();
+        $this->assertContains('testEdit', $result);
+    }
+
+    /**
+     * test getNew
+     */
+    public function test_getNew()
+    {
+        $content = $this->ContentsService->getNew()->toArray();
+        $this->assertArrayHasKey('self_status', $content);
+        $this->assertArrayHasKey('self_publish_begin', $content);
+        $this->assertArrayHasKey('self_publish_end', $content);
+        $this->assertArrayHasKey('created_date', $content);
+        $this->assertArrayHasKey('site_root', $content);
+        $this->assertArrayHasKey('exclude_search', $content);
+    }
+
+    /**
+     * test create
+     */
+    public function test_create()
+    {
+        $this->assertNull($this->ContentsService->create([]));
+    }
+
 }

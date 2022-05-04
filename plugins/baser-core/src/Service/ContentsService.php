@@ -63,12 +63,46 @@ class ContentsService implements ContentsServiceInterface
      */
     public $Sites;
 
+    /**
+     * Construct
+     */
     public function __construct()
     {
         $this->Contents = TableRegistry::getTableLocator()->get("BaserCore.Contents");
         $this->Sites = TableRegistry::getTableLocator()->get("BaserCore.Sites");
     }
 
+    /**
+     * 新しいデータの初期値を取得する
+     * @return EntityInterface
+     */
+    public function getNew(): EntityInterface
+    {
+        return $this->Contents->newEntity([]);
+    }
+
+    /**
+     * リストデータを取得
+     * @param array $queryParams
+     * @return array
+     */
+    public function getList(): array
+    {
+        return $this->Contents->find('list', [
+            'keyField' => 'id',
+            'valueField' => 'title'
+        ])->toArray();
+    }
+
+    /**
+     * 新規登録する
+     * @param array $postData
+     * @return EntityInterface|null
+     */
+    public function create(array $postData): ?EntityInterface
+    {
+        return null;
+    }
 
     /**
      * コンテンツを取得する
@@ -359,7 +393,7 @@ class ContentsService implements ContentsServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function delete($id)
+    public function delete($id): bool
     {
         $content = $this->get($id);
         if ($content->alias_id) {
@@ -722,7 +756,7 @@ class ContentsService implements ContentsServiceInterface
      * @unitTest
      * @noTodo
      */
-    public function update($content, $contentData, $options = [])
+    public function update($content, $contentData, $options = []): ?EntityInterface
     {
         $content = $this->Contents->patchEntity($content, $contentData, $options);
         return $this->Contents->saveOrFail($content, ['atomic' => false]);

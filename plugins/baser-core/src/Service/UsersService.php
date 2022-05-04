@@ -117,7 +117,7 @@ class UsersService implements UsersServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function create(array $postData)
+    public function create(array $postData): ?EntityInterface
     {
         $user = $this->Users->newEmptyEntity();
         $user = $this->Users->patchEntity($user, $postData, ['validate' => 'new']);
@@ -134,7 +134,7 @@ class UsersService implements UsersServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function update(EntityInterface $target, array $postData)
+    public function update(EntityInterface $target, array $postData): ?EntityInterface
     {
         if(empty($postData['login_user_id'])) {
             $loginUser = BcUtil::loginUser();
@@ -155,7 +155,7 @@ class UsersService implements UsersServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function delete($id)
+    public function delete($id): bool
     {
         $user = $this->get($id);
         if ($user->isAdmin()) {

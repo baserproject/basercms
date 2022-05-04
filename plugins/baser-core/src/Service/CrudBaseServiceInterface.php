@@ -31,7 +31,7 @@ interface CrudBaseServiceInterface
      * @param int $id
      * @return EntityInterface
      */
-    public function get($id): EntityInterface;
+    public function get(int $id): EntityInterface;
 
     /**
      * 複数データを取得
@@ -53,7 +53,7 @@ interface CrudBaseServiceInterface
      * @return EntityInterface
      * @throws \Cake\ORM\Exception\PersistenceFailedException
      */
-    public function create(array $postData);
+    public function create(array $postData): ?EntityInterface;
 
     /**
      * 編集する
@@ -62,13 +62,13 @@ interface CrudBaseServiceInterface
      * @return mixed
      * @throws \Cake\ORM\Exception\PersistenceFailedException
      */
-    public function update(EntityInterface $target, array $postData);
+    public function update(EntityInterface $target, array $postData): ?EntityInterface;
 
     /**
      * 削除する
      * @param int $id
      * @return mixed
      */
-    public function delete(int $id);
+    public function delete(int $id): bool;
 
 }

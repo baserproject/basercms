@@ -20,14 +20,8 @@ use Cake\ORM\Query;
  * Interface ContentsServiceInterface
  * @package BaserCore\Service
  */
-interface ContentsServiceInterface
+interface ContentsServiceInterface extends CrudBaseServiceInterface
 {
-    /**
-     * コンテンツを取得する
-     * @param int $id
-     * @return EntityInterface
-     */
-    public function get($id): EntityInterface;
 
     /**
      * ゴミ箱のコンテンツを取得する
@@ -59,14 +53,6 @@ interface ContentsServiceInterface
      * @return Query
      */
     public function getTreeIndex(array $queryParams): Query;
-
-    /**
-     * コンテンツ管理の一覧用のデータを取得
-     * @param array $queryParams
-     * @param string $type
-     * @return Query
-     */
-    public function getIndex(array $queryParams=[], ?string $type="all"): Query;
 
     /**
      * getTableConditions
@@ -117,14 +103,6 @@ interface ContentsServiceInterface
      * @throws \Cake\ORM\Exception\PersistenceFailedException
      */
     public function alias(array $postData);
-
-    /**
-     * コンテンツ情報を論理削除する
-     * @param int $id
-     * @return bool
-     *
-     */
-    public function delete($id);
 
     /**
      * コンテンツ情報を削除する
@@ -218,17 +196,6 @@ interface ContentsServiceInterface
      * @return string URL
      */
     public function getUrl($url, $full = false, $useSubDomain = false, $base = false);
-
-    /**
-     * コンテンツ情報を更新する
-     *
-     * @param  EntityInterface $content
-     * @param  array $contentData
-     * @param  array $options
-     * @return EntityInterface
-     * @throws \Cake\ORM\Exception\PersistenceFailedException
-     */
-    public function update($content, $contentData, $options = []);
 
     /**
      * 公開状態にする
