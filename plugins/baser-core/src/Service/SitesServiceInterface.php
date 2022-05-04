@@ -17,52 +17,8 @@ use Cake\Datasource\EntityInterface;
 /**
  * SitesServiceInterface
  */
-interface SitesServiceInterface
+interface SitesServiceInterface extends CrudBaseServiceInterface
 {
-
-    /**
-     * サイトを取得する
-     * @param int $id
-     * @return EntityInterface
-     */
-    public function get($id): EntityInterface;
-
-    /**
-     * サイト一覧を取得
-     * @param array $queryParams
-     * @return Query
-     */
-    public function getIndex(array $queryParams): Query;
-
-    /**
-     * 新しいデータの初期値を取得する
-     * @return EntityInterface
-     */
-    public function getNew(): EntityInterface;
-
-    /**
-     * 新規登録する
-     * @param array $postData
-     * @return EntityInterface
-     * @throws \Cake\ORM\Exception\PersistenceFailedException
-     */
-    public function create(array $postData);
-
-    /**
-     * 編集する
-     * @param EntityInterface $target
-     * @param array $postData
-     * @return EntityInterface
-     * @throws \Cake\ORM\Exception\PersistenceFailedException
-     */
-    public function update(EntityInterface $target, array $postData);
-
-    /**
-     * 削除する
-     * @param int $id
-     * @return mixed
-     */
-    public function delete(int $id);
 
     /**
      * 選択可能なデバイスの一覧を取得する
@@ -111,13 +67,6 @@ interface SitesServiceInterface
      * @return array
      */
     public function getDeviceList(): array;
-
-    /**
-     * サイトのリストを取得
-     * @param array $options
-     * @return array
-     */
-    public function getList($options = []): array;
 
     /**
      * テーマのリストを取得する

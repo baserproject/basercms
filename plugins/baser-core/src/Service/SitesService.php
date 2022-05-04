@@ -81,7 +81,7 @@ class SitesService implements SitesServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function getIndex(array $queryParams): Query
+    public function getIndex(array $queryParams = []): Query
     {
         $query = $this->Sites->find('all');
         if (!empty($queryParams['limit'])) {
@@ -105,7 +105,7 @@ class SitesService implements SitesServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function create(array $postData)
+    public function create(array $postData): ?EntityInterface
     {
         $site = $this->Sites->newEmptyEntity();
         $site = $this->Sites->patchEntity($site, $postData);
@@ -122,7 +122,7 @@ class SitesService implements SitesServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function update(EntityInterface $target, array $postData)
+    public function update(EntityInterface $target, array $postData): ?EntityInterface
     {
         $site = $this->Sites->patchEntity($target, $postData);
         return $this->Sites->saveOrFail($site);
@@ -168,7 +168,7 @@ class SitesService implements SitesServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function delete(int $id)
+    public function delete(int $id): bool
     {
         $site = $this->get($id);
         if(!$site->main_site_id) {
