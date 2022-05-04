@@ -74,7 +74,6 @@ class BcPageHelperTest extends BcTestCase
     public function testInitialize()
     {
         $this->assertNotEmpty($this->BcPage->ContentsService);
-        $this->assertNotEmpty($this->BcPage->PagesService);
     }
 
     /**

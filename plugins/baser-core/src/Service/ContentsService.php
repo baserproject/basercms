@@ -263,7 +263,7 @@ class ContentsService implements ContentsServiceInterface
         }
 
         foreach($queryParams as $key => $value) {
-            if(!$value) continue;
+            if(is_null($value)) continue;
             if (in_array($key, $columns)) {
                 $query = $query->andWhere(['Contents.' . $key => $value]);
             } elseif ($key[-1] === '!' && in_array($key = mb_substr($key, 0, -1), $columns)) {

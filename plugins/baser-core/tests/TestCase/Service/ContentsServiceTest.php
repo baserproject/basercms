@@ -45,6 +45,7 @@ class ContentsServiceTest extends BcTestCase
         'plugin.BaserCore.Users',
         'plugin.BaserCore.UserGroups',
         'plugin.BaserCore.UsersUserGroups',
+        'plugin.BaserCore.SiteConfigs',
     ];
 
         /**
