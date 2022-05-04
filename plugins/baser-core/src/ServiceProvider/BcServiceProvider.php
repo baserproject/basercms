@@ -23,6 +23,8 @@ use BaserCore\Service\DashboardAdminService;
 use BaserCore\Service\DashboardAdminServiceInterface;
 use BaserCore\Service\PagesDisplayService;
 use BaserCore\Service\PagesDisplayServiceInterface;
+use BaserCore\Service\PagesFrontService;
+use BaserCore\Service\PagesFrontServiceInterface;
 use BaserCore\Service\PluginsAdminService;
 use BaserCore\Service\PluginsAdminServiceInterface;
 use BaserCore\Service\SiteConfigsAdminService;
@@ -88,6 +90,7 @@ class BcServiceProvider extends ServiceProvider
         ContentFoldersServiceInterface::class,
         ContentFoldersAdminServiceInterface::class,
         PagesServiceInterface::class,
+        PagesFrontServiceInterface::class,
         PagesDisplayServiceInterface::class,
         SearchIndexesServiceInterface::class,
         DashboardAdminServiceInterface::class
@@ -133,6 +136,7 @@ class BcServiceProvider extends ServiceProvider
         $container->add(ContentFoldersAdminServiceInterface::class, ContentFoldersAdminService::class);
         // Pagesサービス
         $container->add(PagesServiceInterface::class, PagesService::class);
+        $container->add(PagesFrontServiceInterface::class, PagesFrontService::class);
         // PagesDisplayサービス
         $container->add(PagesDisplayServiceInterface::class, PagesDisplayService::class);
         // SearchIndexesサービス

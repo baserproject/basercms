@@ -11,12 +11,10 @@
 
 namespace BaserCore\View\Helper;
 
-use BaserCore\Service\PagesService;
 use Cake\View\View;
 use Cake\View\Helper;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Event\BcEventDispatcherTrait;
-use BaserCore\Service\PagesServiceInterface;
 use BaserCore\Service\ContentsServiceInterface;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\NoTodo;
@@ -26,7 +24,6 @@ use BaserCore\Annotation\Note;
 /**
  * BcPageHelper
  * @property BcAdminHelper $BcAdmin
- * @property PagesService $PagesService
  */
 class BcPageHelper extends Helper
 {
@@ -85,8 +82,6 @@ class BcPageHelper extends Helper
     {
         parent::initialize($config);
         $this->ContentsService = $this->getService(ContentsServiceInterface::class);
-        $this->PagesService = $this->getService(PagesServiceInterface::class);
-        $this->BcAdmin->setEditLink($this->PagesService->getEditLink($this->_View->getRequest()));
     }
 
     /**
