@@ -30,7 +30,6 @@ use BaserCore\View\Helper\BcAdminFormHelper;
 use BaserCore\View\Helper\BcFormTableHelper;
 use BaserCore\View\Helper\BcListTableHelper;
 use BaserCore\View\Helper\BcSiteConfigHelper;
-use BaserCore\View\Helper\BcAdminPluginHelper;
 use BaserCore\View\Helper\BcAdminContentHelper;
 
 /**
@@ -45,7 +44,6 @@ use BaserCore\View\Helper\BcAdminContentHelper;
  * @property BcHtmlHelper $BcHtml
  * @property BcListTableHelper $BcListTable
  * @property BcAuthHelper $BcAuth
- * @property BcAdminPluginHelper $BcAdminPlugin
  * @property BcContentsHelper $BcContents
  * @property BcAdminContentHelper $BcAdminContent
  * @property BcSiteConfigHelper $BcSiteConfig

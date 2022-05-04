@@ -11,6 +11,7 @@
 
 namespace BaserCore\Controller\Admin;
 
+use BaserCore\Service\PluginsAdminServiceInterface;
 use BaserCore\Service\PluginsServiceInterface;
 use BaserCore\Controller\Component\BcMessageComponent;
 use BaserCore\Model\Table\PluginsTable;
@@ -85,9 +86,9 @@ class PluginsController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function install(PluginsServiceInterface $PluginsService, $name)
+    public function install(PluginsAdminServiceInterface $PluginsService, $name)
     {
-        $this->set('plugin', $this->Plugins->getPluginConfig($name));
+        $this->set($PluginsService->getViewVarsForInstall($this->Plugins->getPluginConfig($name)));
         if ($PluginsService->getInstallStatusMessage($name) || !$this->request->is(['put', 'post'])) {
             return;
         } else {
