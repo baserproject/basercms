@@ -11,11 +11,14 @@
 
 namespace BaserCore\Test\TestCase\Service;
 
+use BaserCore\Test\Factory\UserFactory;
+use BaserCore\Test\Scenario\SuspendedUsersScenario;
 use Cake\Http\Response;
 use Cake\Routing\Router;
 use BaserCore\Service\UsersService;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Model\Table\LoginStoresTable;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class UsersServiceTest
@@ -24,6 +27,11 @@ use BaserCore\Model\Table\LoginStoresTable;
  */
 class UsersServiceTest extends BcTestCase
 {
+
+    /**
+     * Trait
+     */
+    use ScenarioAwareTrait;
 
     /**
      * Fixtures
@@ -263,6 +271,21 @@ class UsersServiceTest extends BcTestCase
         $users->delete($user);
         $this->Users->reload($request);
         $this->assertSessionNotHasKey('AuthAdmin');
+    }
+
+    /**
+     * test fixtureFactorySample
+     * フィクスチャファクトリを利用したサンプル
+     * フィクスチャファクトリが導入でき、`$this->loadFixtures()` を廃止できたら削除する
+     */
+    public function testFixtureFactorySample()
+    {
+        // ファクトリのメソッドを呼び出し無効ユーザーを100人追加
+        UserFactory::make(100)->suspended()->persist();
+        $this->assertEquals(103, UserFactory::find()->count());
+        // シナリオを利用して無効ユーザーを50人追加
+        $this->loadFixtureScenario(SuspendedUsersScenario::class, 50);
+        $this->assertEquals(153, UserFactory::find()->count());
     }
 
 }
