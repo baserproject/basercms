@@ -75,6 +75,9 @@ class ContentsService implements ContentsServiceInterface
     /**
      * 新しいデータの初期値を取得する
      * @return EntityInterface
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getNew(): EntityInterface
     {
@@ -85,6 +88,9 @@ class ContentsService implements ContentsServiceInterface
      * リストデータを取得
      * @param array $queryParams
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getList(): array
     {
@@ -96,8 +102,12 @@ class ContentsService implements ContentsServiceInterface
 
     /**
      * 新規登録する
+     * 対応しない
      * @param array $postData
      * @return EntityInterface|null
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function create(array $postData): ?EntityInterface
     {

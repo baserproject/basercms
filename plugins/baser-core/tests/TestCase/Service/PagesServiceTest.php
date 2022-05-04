@@ -238,4 +238,17 @@ class PagesServiceTest extends BcTestCase
         $this->assertEmpty($this->PagesService->getPublishLink($request));
     }
 
+    /**
+     * test getNew
+     */
+    public function test_getNew()
+    {
+        $this->assertEquals([], $this->PagesService->getNew()->toArray());
+    }
+
+    public function test_getList()
+    {
+        $this->assertContains('会社案内', $this->PagesService->getList());
+    }
+
 }

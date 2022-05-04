@@ -45,6 +45,9 @@ class DblogsService implements DblogsServiceInterface
      * リスト取得
      * 対応しない
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getList(): array
     {
@@ -55,6 +58,9 @@ class DblogsService implements DblogsServiceInterface
      * 削除
      * @param int $id
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function delete(int $id): bool
     {
@@ -66,6 +72,9 @@ class DblogsService implements DblogsServiceInterface
      * 単一データ取得
      * @param int $id
      * @return EntityInterface
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function get(int $id): EntityInterface
     {
@@ -76,6 +85,9 @@ class DblogsService implements DblogsServiceInterface
      * 初期データ取得
      * @param string $message
      * @return EntityInterface
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getNew($message = ''): EntityInterface
     {
@@ -88,6 +100,9 @@ class DblogsService implements DblogsServiceInterface
      * @param EntityInterface $target
      * @param array $postData
      * @return EntityInterface|null
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function update(EntityInterface $target, array $postData): ?EntityInterface
     {

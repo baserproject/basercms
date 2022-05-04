@@ -55,6 +55,27 @@ class PagesService implements PagesServiceInterface
     }
 
     /**
+     * 初期データ取得
+     * @return EntityInterface
+     */
+    public function getNew(): EntityInterface
+    {
+        return $this->Pages->newEntity([]);
+    }
+
+    /**
+     * リストデータ取得
+     * @return array
+     */
+    public function getList(): array
+    {
+        return $this->Pages->find('list', [
+            'keyField' => 'id',
+            'valueField' => 'content.title'
+        ])->contain(['Contents'])->toArray();
+    }
+
+    /**
      * 固定ページを取得する
      * @param int $id
      * @return EntityInterface
@@ -123,7 +144,7 @@ class PagesService implements PagesServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function create(array $postData, $options=[])
+    public function create(array $postData, $options = []): ?EntityInterface
     {
         $page = $this->Pages->newEmptyEntity();
         $page = $this->Pages->patchEntity($page, $postData, $options);
@@ -141,7 +162,7 @@ class PagesService implements PagesServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function update(EntityInterface $target, array $pageData, $options = [])
+    public function update(EntityInterface $target, array $pageData, $options = []): ?EntityInterface
     {
         $options = array_merge(['associated' => ['Contents' => ['validate' => 'default']]], $options);
         $page = $this->Pages->patchEntity($target, $pageData, $options);
@@ -156,7 +177,7 @@ class PagesService implements PagesServiceInterface
      * @unitTest
      * @noTodo
      */
-    public function delete($id)
+    public function delete(int $id): bool
     {
         $Page = $this->get($id);
         return $this->Pages->delete($Page);

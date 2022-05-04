@@ -12,21 +12,13 @@
 namespace BaserCore\Service;
 
 use Cake\Datasource\EntityInterface;
-use Cake\ORM\Query;
 
 /**
  * Interface PagesServiceInterface
  * @package BaserCore\Service
  */
-interface PagesServiceInterface
+interface PagesServiceInterface extends CrudBaseServiceInterface
 {
-
-    /**
-     * 固定ページを取得する
-     * @param int $id
-     * @return EntityInterface
-     */
-    public function get($id): EntityInterface;
 
     /**
      * 固定ページをゴミ箱から取得する
@@ -34,46 +26,6 @@ interface PagesServiceInterface
      * @return EntityInterface|array
      */
     public function getTrash($id);
-
-    /**
-     * ユーザー管理の一覧用のデータを取得
-     * @param array|null $queryParams
-     * @return Query
-     */
-    public function getIndex(array $queryParams=[]): Query;
-
-    /**
-     * 固定ページ登録
-     * @param array $data
-     * @param array $options
-     * @return \Cake\Datasource\EntityInterface
-     * @throws \Cake\ORM\Exception\PersistenceFailedException
-     */
-    public function create(array $postData, $options=[]);
-
-    /**
-     * 固定ページを削除する
-     * @param int $id
-     * @return bool
-     */
-    public function delete($id);
-
-    /**
-     * ページ情報を更新する
-     * @param EntityInterface $target
-     * @param array $$pageData
-     * @param array $options
-     * @return EntityInterface
-     * @throws \Cake\ORM\Exception\PersistenceFailedException
-     */
-    public function update(EntityInterface $target, array $pageData, $options = []);
-
-    // /**
-    //  * DBログ一覧を取得
-    //  * @param array $queryParams
-    //  * @return Query
-    //  */
-    // public function getIndex(array $queryParams): Query;
 
     /**
      * 固定ページテンプレートリストを取得する

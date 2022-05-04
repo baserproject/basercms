@@ -64,6 +64,9 @@ class ContentFoldersService implements ContentFoldersServiceInterface
     /**
      * 新しいデータの初期値を取得する
      * @return EntityInterface
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getNew(): EntityInterface
     {
@@ -73,6 +76,9 @@ class ContentFoldersService implements ContentFoldersServiceInterface
     /**
      * リストを取得する
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getList(): array
     {
