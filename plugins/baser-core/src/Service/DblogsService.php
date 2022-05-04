@@ -42,6 +42,59 @@ class DblogsService implements DblogsServiceInterface
     }
 
     /**
+     * リスト取得
+     * 対応しない
+     * @return array
+     */
+    public function getList(): array
+    {
+        return [];
+    }
+
+    /**
+     * 削除
+     * @param int $id
+     * @return bool
+     */
+    public function delete(int $id): bool
+    {
+        $dblog = $this->Dblogs->get($id);
+        return $this->Dblogs->delete($dblog);
+    }
+
+    /**
+     * 単一データ取得
+     * @param int $id
+     * @return EntityInterface
+     */
+    public function get(int $id): EntityInterface
+    {
+        return $this->Dblogs->get($id);
+    }
+
+    /**
+     * 初期データ取得
+     * @param string $message
+     * @return EntityInterface
+     */
+    public function getNew($message = ''): EntityInterface
+    {
+        return $this->Dblogs->newEntity([]);
+    }
+
+    /**
+     * ログ更新
+     * 対応しない
+     * @param EntityInterface $target
+     * @param array $postData
+     * @return EntityInterface|null
+     */
+    public function update(EntityInterface $target, array $postData): ?EntityInterface
+    {
+        return null;
+    }
+
+    /**
      * DBログ登録
      * @param array $data
      * @return EntityInterface
@@ -50,11 +103,11 @@ class DblogsService implements DblogsServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function create(string $message): EntityInterface
+    public function create(array $postData = []): ?EntityInterface
     {
         $request = Router::getRequest();
         $data = [
-            'message' => $message,
+            'message' => $postData['message'],
             'controller' => $request->getParam('controller'),
             'action' => $request->getParam('action')
         ];
@@ -75,7 +128,7 @@ class DblogsService implements DblogsServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function getIndex(array $queryParams): Query
+    public function getIndex(array $queryParams = []): Query
     {
         $options = [];
         $query = $this->Dblogs

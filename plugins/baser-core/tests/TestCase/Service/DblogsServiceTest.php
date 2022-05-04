@@ -63,7 +63,7 @@ class DblogsServiceTest extends BcTestCase
     public function testCreate()
     {
         $this->getRequest();
-        $dblog = $this->DblogsService->create('Test Message');
+        $dblog = $this->DblogsService->create(['message' => 'Test Message']);
         $savedDblog = $this->Dblogs->get($dblog->id);
         $this->assertEquals('Test Message', $savedDblog->message);
     }
@@ -107,4 +107,40 @@ class DblogsServiceTest extends BcTestCase
         $dblogs = $this->DblogsService->getDblogs(1)->toArray();
         $this->assertEquals(0, count($dblogs));
     }
+
+    /**
+     * test get
+     */
+    public function test_get()
+    {
+        $dblog = $this->DblogsService->get(1);
+        $this->assertEquals('dblogs test message1', $dblog->message);
+    }
+
+    /**
+     * test getList
+     */
+    public function test_getList()
+    {
+        $this->assertEquals([], $this->DblogsService->getList());
+    }
+
+    /**
+     * test getNew
+     */
+    public function test_getNew()
+    {
+        $this->assertEquals([], $this->DblogsService->getNew()->toArray());
+    }
+
+    /**
+     * test delete
+     */
+    public function test_delete()
+    {
+        $count = $this->DblogsService->getIndex()->count();
+        $this->DblogsService->delete(1);
+        $this->assertEquals($count - 1, $this->DblogsService->getIndex()->count());
+    }
+
 }

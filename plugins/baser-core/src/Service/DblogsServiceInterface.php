@@ -11,31 +11,14 @@
 
 namespace BaserCore\Service;
 
-use Cake\Datasource\EntityInterface;
 use Cake\Datasource\ResultSetInterface;
-use Cake\ORM\Query;
 
 /**
  * Interface DblogsServiceInterface
  * @package BaserCore\Service
  */
-interface DblogsServiceInterface
+interface DblogsServiceInterface extends CrudBaseServiceInterface
 {
-
-    /**
-     * 新規登録する
-     * @param array $data
-     * @return EntityInterface
-     * @throws \Cake\ORM\Exception\PersistenceFailedException
-     */
-    public function create(string $message): EntityInterface;
-
-    /**
-     * DBログ一覧を取得
-     * @param array $queryParams
-     * @return Query
-     */
-    public function getIndex(array $queryParams): Query;
 
     /**
      * 最新のDBログ一覧を取得
