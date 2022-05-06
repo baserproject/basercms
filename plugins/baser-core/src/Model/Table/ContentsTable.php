@@ -415,7 +415,7 @@ class ContentsTable extends AppTable
     {
 
         // 先頭が同じ名前のリストを取得し、後方プレフィックス付きのフィールド名を取得する
-        $query = $this->find()->where(['name LIKE' => $name . '%']);
+        $query = $this->find()->where(['name LIKE' => $name . '%', 'site_root' => false]);
         if (isset($parentId)) $query = $query->andWhere(['parent_id' => $parentId]);
         if ($contentId) {
             $query = $query->andWhere(['id <>' => $contentId]);

@@ -672,16 +672,4 @@ class BcContentsHelperTest extends BcTestCase
         ];
     }
 
-    /**
-     * testGetTargetPrefix
-     *
-     * @return void
-     */
-    public function testGetTargetPrefix()
-    {
-        $sites = $this->getTableLocator()->get('BaserCore.Sites');
-        $relatedContent = $sites->getRelatedContents(1)[1];
-        $this->assertEquals("/en", $this->BcContents->getTargetPrefix($relatedContent));
-    }
-
 }

@@ -11,6 +11,7 @@
 
 namespace BaserCore\Model\Validation;
 
+use Cake\ORM\TableRegistry;
 use Cake\Validation\Validation;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -40,4 +41,27 @@ class SiteValidation extends Validation
         }
         return true;
     }
+
+    /**
+     * エイリアスと同名のコンテンツが存在するか確認する
+     * @param string $alias
+     * @return bool
+     * @unitTest
+     * @noTodo
+     * @checked
+     */
+    public static function checkContentExists($alias, $context)
+    {
+        $url = '/' . $alias;
+        $contents = TableRegistry::getTableLocator()->get('BaserCore.Contents');
+        $query = $contents->find()->where(['or' => [
+            ['url' => $url],
+            ['url' => $url . '/']
+        ]]);
+        if(!empty($context['data']['id'])) {
+            $query = $query->where(['site_id IS NOT' => $context['data']['id']]);
+        }
+        return !((bool) $query->count());
+    }
+
 }

@@ -69,7 +69,11 @@ $pureUrl = $this->BcContents->getPureUrl($content->url, $content->site_id);
           $class = ' class="bca-disablerow"';
         }
 
-        $targetUrl = $this->BcContents->getTargetPrefix($relatedContent) . $pureUrl;
+        $prefix = $relatedContent['Site']['name'];
+				if ($relatedContent['Site']['alias']) {
+					$prefix = $relatedContent['Site']['alias'];
+				}
+				$targetUrl = '/' . $prefix . $pureUrl;
         $mainSiteId = $relatedContent['Site']['main_site_id'];
         if ($mainSiteId === '') {
           $mainSiteId = 1;

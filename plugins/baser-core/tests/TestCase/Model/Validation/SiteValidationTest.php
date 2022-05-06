@@ -12,8 +12,8 @@
 namespace BaserCore\Test\TestCase\Model\Validation;
 
 use BaserCore\Model\Validation\SiteValidation;
+use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\TestSuite\BcTestCase;
-use BaserCore\Model\AppTable;
 
 /**
  * Class SiteValidationTest
@@ -77,4 +77,29 @@ class SiteValidationTest extends BcTestCase
             ['ho/ge', true],
         ];
     }
+
+    /**
+     * test checkContentExists
+     * @param $alias
+     * @param $expected
+     */
+    public function test_checkContentExists()
+    {
+        $contents = ContentFactory::make()->getTable();
+        // 重複なし
+        $this->assertTrue($this->SiteValidation->checkContentExists('aaa', []));
+        // 重複コンテンツあり
+        $content = ContentFactory::make(['url' => '/aaa'])->persist();
+        $this->assertFalse($this->SiteValidation->checkContentExists('aaa', []));
+        $contents->delete($content);
+        // 重複フォルダあり
+        $content = ContentFactory::make(['url' => '/aaa/'])->persist();
+        $this->assertFalse($this->SiteValidation->checkContentExists('aaa', []));
+        $contents->delete($content);
+        // 重複フォルダあり（対象サイト）
+        $content = ContentFactory::make(['url' => '/aaa/', 'site_id' => 2])->persist();
+        $this->assertTrue($this->SiteValidation->checkContentExists('aaa', ['data' => ['id' => 2]]));
+        $contents->delete($content);
+    }
+
 }

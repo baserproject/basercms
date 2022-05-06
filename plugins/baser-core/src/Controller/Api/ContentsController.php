@@ -435,7 +435,9 @@ class ContentsController extends BcApiController
         if (!$this->request->getData('url')) {
             $this->setResponse($this->response->withStatus(500));
         } else {
-            return $this->response->withType("application/json")->withStringBody(json_encode(!$contentService->existsContentByUrl($this->request->getData('url'))));
+            return $this->response->withType("application/json")->withStringBody(
+                json_encode(!$contentService->existsContentByUrl($this->request->getData('url')))
+            );
         }
     }
 

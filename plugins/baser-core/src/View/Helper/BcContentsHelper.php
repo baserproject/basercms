@@ -696,30 +696,6 @@ class BcContentsHelper extends Helper
     }
 
     /**
-     * getTargetPrefix
-     * 重複のない適切なprefixを取得する
-     *
-     * @param  array $relatedContent
-     * @return string $prefix
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function getTargetPrefix($relatedContent)
-    {
-        if(!is_array($relatedContent)) return '';
-        $prefix = $relatedContent['Site']['name'];
-        if ($relatedContent['Site']['alias']) {
-            $prefix = $relatedContent['Site']['alias'];
-            if($this->ContentsService->existsContentByUrl("/$prefix")) {
-                $prefix = $this->ContentsService->getIndex(['site_id' => $relatedContent['Site']['id'], 'title' => $relatedContent['Site']['alias']])->first()->name;
-            }
-        }
-        if ($prefix) $prefix = "/" . $prefix;
-        return $prefix;
-    }
-
-    /**
      * データが公開状態にあるか確認する
      *
      * @param array $data コンテンツデータ

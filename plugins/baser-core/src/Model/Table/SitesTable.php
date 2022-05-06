@@ -12,6 +12,7 @@
 namespace BaserCore\Model\Table;
 
 use ArrayObject;
+use BaserCore\Service\ContentFoldersService;
 use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
 use BaserCore\Model\AppTable;
@@ -139,6 +140,12 @@ class SitesTable extends AppTable
                     'rule' => 'aliasSlashChecks',
                     'provider' => 'site',
                     'message' => __d('baser', 'エイリアスには先頭と末尾にスラッシュ（/）は入力できず、また、連続して入力する事もできません。')
+                ]])
+            ->add('alias', [
+                'nameCheckContentExists' => [
+                    'rule' => 'checkContentExists',
+                    'provider' => 'site',
+                    'message' => __d('baser', 'コンテンツ管理上にエイリアスと同名のコンテンツ、またはフォルダが存在するため利用できません。別の名称にするか、コンテンツ、またはフォルダをリネームしてください。')
                 ]]);
         $validator
             ->scalar('title')
@@ -339,6 +346,7 @@ class SitesTable extends AppTable
      */
     public function afterSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
+        /* @var ContentFoldersService $contentFolderService */
         $contentFolderService = $this->getService(ContentFoldersServiceInterface::class);
         $contentFolderService->saveSiteRoot($entity, $this->changedAlias);
         $this->getEventManager()->off('Model.beforeSave');

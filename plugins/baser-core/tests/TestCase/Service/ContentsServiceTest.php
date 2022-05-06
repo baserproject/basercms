@@ -732,10 +732,8 @@ class ContentsServiceTest extends BcTestCase
      */
     public function testExistsContentByUrl()
     {
-        $content = $this->ContentsService->get(6);
-        $this->assertFalse($this->ContentsService->existsContentByUrl($content->url));
-        $content = $this->ContentsService->get(12);
-        $this->assertTrue($this->ContentsService->existsContentByUrl($content->url));
+        $this->assertFalse($this->ContentsService->existsContentByUrl('/aaa'));
+        $this->assertTrue($this->ContentsService->existsContentByUrl('/about'));
     }
 
     /**

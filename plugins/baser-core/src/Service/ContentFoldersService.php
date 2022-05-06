@@ -249,7 +249,7 @@ class ContentFoldersService implements ContentFoldersServiceInterface
     /**
      * サイトルートフォルダを保存
      *
-     * @param Site $site
+     * @param Site|EntityInterface $site
      * @param bool $isUpdateChildrenUrl 子のコンテンツのURLを一括更新するかどうか
      * @return false|EntityInterface
      * @throws RecordNotFoundException

@@ -1099,20 +1099,7 @@ class ContentsService implements ContentsServiceInterface
      */
     public function existsContentByUrl($url)
     {
-        $urlAry = explode('/', preg_replace('/(^\/|\/$)/', '', $url));
-        if (!$url) {
-            return false;
-        }
-        $url = '/';
-        $last = count($urlAry);
-        foreach($urlAry as $key => $name) {
-            $url .= $name;
-            if ($this->Contents->find()->where(['url' => $url, 'type <>' => 'ContentFolder'])->first()) {
-                return true;
-            }
-            $url .= '/';
-        }
-        return false;
+        return (bool) $this->Contents->find()->where(['url' => $url])->count();
     }
 
     /**
