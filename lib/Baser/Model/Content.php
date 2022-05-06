@@ -297,7 +297,8 @@ class Content extends AppModel
 		// 先頭が同じ名前のリストを取得し、後方プレフィックス付きのフィールド名を取得する
 		$conditions = [
 			'Content.name LIKE' => $name . '%',
-			'Content.parent_id' => $parentId
+			'Content.parent_id' => $parentId,
+			'site_root' => false
 		];
 		if ($contentId) {
 			$conditions['Content.id <>'] = $contentId;
@@ -1366,24 +1367,7 @@ class Content extends AppModel
 	 */
 	public function existsContentByUrl($url)
 	{
-		$urlAry = explode('/', preg_replace('/(^\/|\/$)/', '', $url));
-		if (!$url) {
-			return false;
-		}
-		$url = '/';
-		$last = count($urlAry);
-		foreach($urlAry as $key => $name) {
-			$url .= $name;
-			$conditions = ['Content.url' => $url];
-			if (($key + 1) != $last) {
-				$conditions['Content.type <>'] = 'ContentFolder';
-			}
-			if ($this->find('first', ['conditions' => ['Content.url' => $url, 'Content.type <>' => 'ContentFolder'], 'recursive' => -1])) {
-				return true;
-			}
-			$url .= '/';
-		}
-		return false;
+		return (bool) $this->find('count', ['conditions' => ['Content.url' => $url]]);
 	}
 
 	/**
