@@ -5,6 +5,7 @@ version: '3'
 
 services:
   bc5-db:
+	# platform: linux/x86_64 # M1チップの場合はコメントを外す
     container_name: bc5-db
     image: mysql:8.0.28
     volumes:
@@ -24,8 +25,6 @@ services:
     volumes:
       - ../:/var/www/shared:delegated
     environment:
-      XDEBUG_MODE: "debug"
-      XDEBUG_SESSION: "1"
       PHP_IDE_CONFIG: "serverName=localhost"
       COMPOSER_ALLOW_SUPERUSER: 1
     ports:
