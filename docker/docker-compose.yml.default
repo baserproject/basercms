@@ -5,7 +5,7 @@ version: '3'
 
 services:
   bc5-db:
-	# platform: linux/x86_64 # M1チップの場合はコメントを外す
+    # platform: linux/x86_64 # M1チップの場合はコメントを外す
     container_name: bc5-db
     image: mysql:8.0.28
     volumes:
