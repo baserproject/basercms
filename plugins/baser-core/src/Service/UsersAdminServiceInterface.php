@@ -14,6 +14,7 @@ namespace BaserCore\Service;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use Cake\Datasource\EntityInterface;
 
 /**
  * Interface UsersAdminServiceInterface
@@ -66,7 +67,7 @@ interface UsersAdminServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function getViewVarsForEdit(?int $id): array;
+    public function getViewVarsForEdit(EntityInterface $user): array;
 
     /**
      * 新規登録画面にに必要なデータを取得する
@@ -75,6 +76,6 @@ interface UsersAdminServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function getViewVarsForAdd(): array;
+    public function getViewVarsForAdd(EntityInterface $user): array;
 
 }

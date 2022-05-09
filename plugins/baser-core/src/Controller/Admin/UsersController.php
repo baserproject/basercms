@@ -177,8 +177,7 @@ class UsersController extends BcAdminAppController
                 $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
             }
         }
-        $this->set('user', $user ?? $userService->getNew());
-        $this->set($userService->getViewVarsForAdd());
+        $this->set($userService->getViewVarsForAdd($user ?? $userService->getNew()));
     }
 
     /**
@@ -214,8 +213,7 @@ class UsersController extends BcAdminAppController
                 $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
             }
         }
-        $this->set('user', $user);
-        $this->set($userService->getViewVarsForEdit($id));
+        $this->set($userService->getViewVarsForEdit($user));
     }
 
     /**

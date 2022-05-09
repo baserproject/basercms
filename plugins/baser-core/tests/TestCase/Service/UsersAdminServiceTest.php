@@ -168,7 +168,7 @@ class UsersAdminServiceTest extends BcTestCase
      */
     public function test_getViewVarsForEdit()
     {
-        $this->assertTrue(count($this->Users->getViewVarsForEdit(1)) >= 3);
+        $this->assertTrue(count($this->Users->getViewVarsForEdit($this->Users->get(1))) >= 3);
     }
 
     /**
@@ -176,7 +176,7 @@ class UsersAdminServiceTest extends BcTestCase
      */
     public function test_getViewVarsForAdd()
     {
-        $this->assertTrue(count($this->Users->getViewVarsForAdd()) >= 2);
+        $this->assertTrue(count($this->Users->getViewVarsForAdd($this->Users->getNew())) >= 2);
     }
 
 }

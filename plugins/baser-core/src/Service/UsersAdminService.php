@@ -15,6 +15,7 @@ use BaserCore\Utility\BcUtil;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use Cake\Datasource\EntityInterface;
 
 /**
  * UsersAdminService
@@ -92,12 +93,13 @@ class UsersAdminService extends UsersService implements UsersAdminServiceInterfa
      * @noTodo
      * @unitTest
      */
-    public function getViewVarsForEdit(?int $id): array
+    public function getViewVarsForEdit(EntityInterface $user): array
     {
         return [
+            'user' => $user,
             'userGroupList' => $this->getList(),
-            'isUserGroupEditable' => $this->isUserGroupEditable($id),
-            'isDeletable' => $this->isDeletable($id)
+            'isUserGroupEditable' => $this->isUserGroupEditable($user->id),
+            'isDeletable' => $this->isDeletable($user->id)
         ];
     }
 
@@ -108,9 +110,10 @@ class UsersAdminService extends UsersService implements UsersAdminServiceInterfa
      * @noTodo
      * @unitTest
      */
-    public function getViewVarsForAdd(): array
+    public function getViewVarsForAdd(EntityInterface $user): array
     {
         return [
+            'user' => $user,
             'userGroupList' => $this->getList(),
             'isUserGroupEditable' => $this->isUserGroupEditable(null),
         ];
