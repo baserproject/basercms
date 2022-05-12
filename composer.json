@@ -52,10 +52,10 @@
         }
     },
     "replace": {
-        "baserproject/baser-core": "self.version",
-        "baserproject/bc-admin-third": "self.version",
-        "baserproject/bc-blog": "self.version",
-        "baserproject/bc-front": "self.version"
+        "baserproject/baser-core": "2.0.0-rc1",
+        "baserproject/bc-admin-third": "2.0.0-rc1",
+        "baserproject/bc-blog": "2.0.0-rc1",
+        "baserproject/bc-front": "2.0.0-rc1"
     },
     "scripts": {
         "post-install-cmd": "App\\Console\\Installer::postInstall",
