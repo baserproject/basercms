@@ -13,7 +13,6 @@ namespace BaserCore\Test\TestCase\Service;
 
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Service\PermissionsService;
-use phpDocumentor\Reflection\PseudoTypes\True_;
 
 /**
  * BaserCore\Model\Table\PermissionsTable Test Case
@@ -231,9 +230,9 @@ class PermissionsServiceTest extends BcTestCase
     {
         $this->assertEquals(
             $this->PermissionsService->getMethodList(),
-            ['*' => 'ALL',
-            'GET' => 'GET',
-            'POST' => 'POST',]
+            ['*' => '全て',
+            'GET' => '表示のみ',
+            'POST' => '表示と編集',]
         );
     }
 
