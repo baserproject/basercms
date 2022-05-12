@@ -46,7 +46,7 @@ $this->BcBaser->js('admin/permissions/dialog.bundle');
       <?php echo $this->BcAdminForm->control('url', ['type' => 'text', 'size' => 50, 'class' => 'required', 'value' => Router::url()]) ?>
     </dd>
 
-    <dt><?php echo $this->BcForm->label('method', __d('baser', 'メソッド')) ?></dt>
+    <dt><?php echo $this->BcForm->label('method', __d('baser', '権限')) ?></dt>
     <dd>
       <?php echo $this->BcAdminForm->control('method', ['type' => 'select', 'options' => $permissionMethodList]) ?>
       <?php echo $this->BcForm->error('method') ?>
@@ -60,4 +60,3 @@ $this->BcBaser->js('admin/permissions/dialog.bundle');
   </dl>
   <?php echo $this->BcAdminForm->end() ?>
 </div>
-
