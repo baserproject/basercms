@@ -10,21 +10,17 @@
         "cakephp/authentication": "^2.9",
         "cakephp/cakephp": "4.3.*",
         "cakephp/migrations": "^3.2",
-        "cakephp/plugin-installer": "^1.3",
         "doctrine/annotations": "^1.12",
         "firebase/php-jwt": "^6.1",
         "imo-tikuwa/cakephp-soft-delete": "^2.0",
         "josegonzalez/dotenv": "^3.2",
-        "mobiledetect/mobiledetectlib": "^2.8",
-        "symplify/monorepo-builder": "^10.2"
+        "mobiledetect/mobiledetectlib": "^2.8"
     },
     "require-dev": {
         "cakephp/bake": "^2.6",
-        "cakephp/cakephp-codesniffer": "^4.5",
         "cakephp/debug_kit": "^4.5",
-        "josegonzalez/dotenv": "^3.2",
         "phpunit/phpunit": "^9.5",
-        "vierge-noire/cakephp-fixture-factories": "^2.5"
+        "symplify/monorepo-builder": "^10.2"
     },
     "suggest": {
         "markstory/asset_compress": "An asset compression plugin which provides file concatenation and a flexible filter system for preprocessing and minification.",
@@ -51,7 +47,6 @@
             "BcBlog\\Test\\": "plugins/bc-blog/tests/",
             "BcFront\\Test\\": "plugins/bc-front/tests/",
             "BcMail\\Test\\": "plugins/bc-mail/tests/",
-            "BcPage\\Test\\": "plugins/bc-page/tests/",
             "BcSpaSample\\Test\\": "plugins/BcSpaSample/tests/",
             "BcUploader\\Test\\": "plugins/bc-uploader/tests/"
         }
@@ -60,8 +55,7 @@
         "baserproject/baser-core": "self.version",
         "baserproject/bc-admin-third": "self.version",
         "baserproject/bc-blog": "self.version",
-        "baserproject/bc-front": "self.version",
-        "baserproject/bc-page": "self.version"
+        "baserproject/bc-front": "self.version"
     },
     "scripts": {
         "post-install-cmd": "App\\Console\\Installer::postInstall",
@@ -78,12 +72,12 @@
             "vendor/bin/phpunit --colors=always"
         ]
     },
-    "prefer-stable": true,
     "config": {
         "sort-packages": true,
         "allow-plugins": {
             "cakephp/plugin-installer": true,
             "dealerdirect/phpcodesniffer-composer-installer": true
         }
-    }
+    },
+    "prefer-stable": true
 }

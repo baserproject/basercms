@@ -4,6 +4,7 @@
     "homepage": "https://basercms.net",
     "type": "cakephp-plugin",
     "license": "MIT",
+    "vendor-dir": "../../vendor",
     "require": {
         "php": ">=8.1",
         "cakephp/cakephp": "4.3.*",
@@ -16,13 +17,12 @@
         "ext-json": "*",
         "baserproject/bc-admin-third": "0.0.4",
         "baserproject/bc-front": "0.0.1",
-        "imo-tikuwa/cakephp3-soft-delete": "^2.0"
+        "imo-tikuwa/cakephp-soft-delete": "^2.0"
     },
     "require-dev": {
         "cakephp/bake": "^2.6",
         "cakephp/debug_kit": "^4.5",
         "phpunit/phpunit": "^9.5",
-        "psy/psysh": "@stable",
         "symplify/monorepo-builder": "^10.2"
     },
     "autoload": {
