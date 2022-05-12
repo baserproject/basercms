@@ -54,6 +54,14 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
      */
     public function bootstrap(PluginApplicationInterface $application): void
     {
+        // composer インストール対応
+        // composer でインストールした場合、プラグインは vendor 保存されるためパスを追加
+        // bootstrap() で、setting.php の読み込みがあるので、その前に呼び出す必要あり
+        Configure::write('App.paths.plugins', array_merge(
+            Configure::read('App.paths.plugins'),
+            [ROOT . DS . 'vendor' . DS . 'baserproject' . DS]
+        ));
+
         parent::bootstrap($application);
 
         if (!filter_var(env('USE_DEBUG_KIT', true), FILTER_VALIDATE_BOOLEAN)) {
