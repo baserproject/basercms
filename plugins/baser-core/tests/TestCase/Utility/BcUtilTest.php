@@ -182,13 +182,13 @@ class BcUtilTest extends BcTestCase
     {
         // BaserCore
         $file = new File(BASER . DS . 'VERSION.txt');
-        $expected = preg_replace('/(.+?)\n/', "$1", $file->read());
+        $expected = preg_replace('/^(.+?)\n.+$/s', "$1", $file->read());
         $result = BcUtil::getVersion();
         $this->assertEquals($expected, $result);
 
         // プラグイン
         $file = new File(Plugin::path('bc-admin-third') . DS . 'VERSION.txt');
-        $expected = preg_replace('/(.+?)\n/', "$1", $file->read());
+        $expected = preg_replace('/^(.+?)\n.*$/s', "$1", $file->read());
         $result = BcUtil::getVersion('BcAdminThird');
         $this->assertEquals($expected, $result);
 
