@@ -71,9 +71,6 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
 
         $application->addPlugin('Authentication');
         $application->addPlugin('Migrations');
-        if (Configure::read('debug')) {
-            $application->addPlugin('CakephpFixtureFactories');
-        }
         $application->addPlugin(Inflector::camelize(Configure::read('BcApp.defaultAdminTheme'), '-'));
         $application->addPlugin(Inflector::camelize(Configure::read('BcApp.defaultFrontTheme'), '-'));
 
