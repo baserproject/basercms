@@ -1,1 +1,20 @@
-1.0.0
+2.0.0-RC3
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+// +---------------------------------------------------------------------------------------------------+ //
+// baserCMS :  Based Website Development Project <https://basercms.net>
+// Copyright (c) NPO baser foundation <https://baserfoundation.org/>
+//
+// @copyright     Copyright (c) NPO baser foundation
+// @link          https://basercms.net baserCMS Project
+// @since         5.0.0
+// @license       https://basercms.net/license/index.html MIT License
+// +---------------------------------------------------------------------------------------------------+ //
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+CHG: 変更内容 / BUG: バグフィックス / NEW: 機能追加
+
+
+[2022-05-14] ucmitz-2.0.0-RC3
+- NEW: [BC] コンテンツ管理実装
+- NEW: [BC] 固定ページ機能実装
+- CHG: [BC] CakePHP 4.3.8 にアップデート
