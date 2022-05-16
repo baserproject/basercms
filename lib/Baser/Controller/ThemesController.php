@@ -151,7 +151,12 @@ class ThemesController extends AppController
 		if (!$baserThemes) {
 			$Xml = new Xml();
 			try {
-				$baserThemes = $Xml->build(Configure::read('BcApp.marketThemeRss'));
+				$context = stream_context_create(array('ssl'=>array(
+					'allow_self_signed'=> true,
+					'verify_peer' => false,
+				)));
+				libxml_set_streams_context($context);
+				$baserThemes = simplexml_load_file(Configure::read('BcApp.marketThemeRss'));
 			} catch (Exception $ex) {
 			}
 			if ($baserThemes) {
@@ -575,7 +580,7 @@ class ThemesController extends AppController
 		if (!extension_loaded('zip')) {
 			$this->notFound();
 		}
-		
+
 		$this->autoRender = false;
 		set_time_limit(0);
 		ini_set('memory_limit', -1);
@@ -609,18 +614,18 @@ class ThemesController extends AppController
 		}
 		ftruncate($fp, 0);
 		fwrite($fp, implode("\n", $records));
-		
+
 		/* ZIPに固めてダウンロード */
 		$bcZip = new BcZip();
 		$bcZip->create($tmpDir, $distPath);
-		
+
 		header("Cache-Control: no-store");
 		header("Content-Type: application/zip");
 		header("Content-Disposition: attachment; filename=" . basename($distPath) . ";");
 		header("Content-Length: " . filesize($distPath));
 		while (ob_get_level()) { ob_end_clean(); }
 		echo readfile($distPath);
-		
+
 		emptyFolder($tmpDir);
 		unlink($distPath);
 	}
@@ -686,13 +691,13 @@ class ThemesController extends AppController
 		if (!extension_loaded('zip')) {
 			$this->notFound();
 		}
-		
+
 		$this->autoRender = false;
 		$tmpDir = TMP . 'theme' . DS;
 		$orgPath = BASER_THEMES . $this->siteConfigs['theme'] . DS;
 		$sourcePath = $tmpDir . $this->siteConfigs['theme'];
 		$distPath = $sourcePath . '.zip';
-		
+
 		$Folder = new Folder();
 		$Folder->create($tmpDir);
 		$Folder->copy([
@@ -702,14 +707,14 @@ class ThemesController extends AppController
 		]);
 		$bcZip = new BcZip();
 		$bcZip->create($sourcePath, $distPath);
-		
+
 		header("Cache-Control: no-store");
 		header("Content-Type: application/zip");
 		header("Content-Disposition: attachment; filename=" . basename($distPath) . ";");
 		header("Content-Length: " . filesize($distPath));
 		while (ob_get_level()) { ob_end_clean(); }
 		echo readfile($distPath);
-		
+
 		$Folder->delete($tmpDir);
 	}
 }
