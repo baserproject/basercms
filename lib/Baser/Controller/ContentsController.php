@@ -142,6 +142,15 @@ class ContentsController extends AppController
 					$template = 'ajax_index_trash';
 					break;
 			}
+
+			// EVENT Contents.afterData
+			$event = $this->dispatchEvent('afterData', [
+				'datas' => $datas
+			]);
+			if ($event !== false) {
+				$datas = ($event->result === null || $event->result === true) ? $event->data['datas'] : $event->result;
+			}
+
 			$this->set('datas', $datas);
 			Configure::write('debug', 0);
 			$this->render($template);
