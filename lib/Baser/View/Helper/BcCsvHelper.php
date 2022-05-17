@@ -153,6 +153,7 @@ class BcCsvHelper extends AppHelper
 		$body = '';
 		foreach($data as $key => $value) {
 			$value = str_replace(",", "、", $value);
+			$value = str_replace('"', '""', $value);
 			if (is_array($value)) {
 				$value = implode('|', $value);
 			}
