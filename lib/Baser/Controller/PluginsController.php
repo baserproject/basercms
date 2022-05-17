@@ -224,7 +224,12 @@ class PluginsController extends AppController
 
 		$Xml = new Xml();
 		try {
-			$baserPlugins = $Xml->build(Configure::read('BcApp.marketPluginRss'));
+			$context = stream_context_create(array('ssl'=>array(
+				'allow_self_signed'=> true,
+				'verify_peer' => false,
+			)));
+			libxml_set_streams_context($context);
+			$baserPlugins = simplexml_load_file(Configure::read('BcApp.marketPluginRss'));
 		} catch (Exception $ex) {
 
 		}
