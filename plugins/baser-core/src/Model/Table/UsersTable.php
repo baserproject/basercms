@@ -357,6 +357,9 @@ class UsersTable extends Table
      * 利用可能なユーザーを取得する
      * @param Query $query
      * @return Query
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function findAvailable(Query $query)
     {

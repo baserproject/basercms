@@ -36,7 +36,8 @@ class UsersFixture extends TestFixture
             'email' => 'testuser1@example.com',
             'nickname' => 'ニックネーム1',
             'created' => '2017-05-03 10:57:07',
-            'modified' => '2017-05-03 10:57:07'
+            'modified' => '2017-05-03 10:57:07',
+            'status' => true
         ],
         [
             'id' => 2,
@@ -47,7 +48,8 @@ class UsersFixture extends TestFixture
             'email' => 'testuser2@example.com',
             'nickname' => 'ニックネーム2',
             'created' => '2017-05-03 10:57:07',
-            'modified' => '2017-05-03 10:57:07'
+            'modified' => '2017-05-03 10:57:07',
+            'status' => true
         ],
         [
             'id' => 3,
@@ -58,7 +60,8 @@ class UsersFixture extends TestFixture
             'email' => 'testuser3@example.com',
             'nickname' => 'ニックネーム3',
             'created' => '2017-05-03 10:57:07',
-            'modified' => '2017-05-03 10:57:07'
+            'modified' => '2017-05-03 10:57:07',
+            'status' => false
         ],
     ];
 }
