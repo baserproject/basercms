@@ -92,7 +92,22 @@ class BcAppHelperTest extends BaserTestCase
 
 	public function testUrl()
 	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$this->assertEquals('/sample/pages',
+			$this->View->BcApp->url(['plugin' => 'sample', 'controller' => 'pages', 'action' => 'index']));
+		$this->assertEquals('/sample/pages/index/%3Ci%3E',
+			$this->View->BcApp->url(['plugin' => 'sample', 'controller' => 'pages', 'action' => 'index', '<i>']));
+
+		$this->assertEquals('/img/sample.png', $this->View->BcApp->url('/img/sample.png'));
+		$this->assertEquals('/img/sample.png&lt;i&gt;', $this->View->BcApp->url('/img/sample.png<i>'));
+
+		$this->assertEquals('/sample', $this->View->BcApp->url('/sample'));
+		$this->assertEquals('/sample&lt;i&gt;', $this->View->BcApp->url('/sample<i>'));
+		$this->assertEquals('http://localhost/sample', $this->View->BcApp->url('/sample', true));
+
+		$this->assertEquals('http://example.com', $this->View->BcApp->url('http://example.com'));
+		$this->assertEquals('https://example.com', $this->View->BcApp->url('https://example.com'));
+		$this->assertEquals('http://example.com/&lt;i&gt;', $this->View->BcApp->url('http://example.com/<i>'));
+		$this->assertEquals('https://example.com/&lt;i&gt;', $this->View->BcApp->url('https://example.com/<i>'));
 	}
 
 	public function testWebroot()
