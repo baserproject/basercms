@@ -66,7 +66,11 @@ class BlogHelper extends AppHelper
 	public function setContent($blogContentId = null)
 	{
 		$blogContentUpdated = false;
-		if ($blogContentId && ($blogContentId != @$this->blogContent['id'])) {
+		$setedBlogContentId = null;
+		if (isset($this->blogContent['id'])) {
+			$setedBlogContentId = $this->blogContent['id'];
+		}
+		if ($blogContentId && ($blogContentId != $setedBlogContentId)) {
 			$BlogContent = ClassRegistry::init('Blog.BlogContent');
 			$BlogContent->unbindModel(['hasMany' => ['BlogPost', 'BlogCategory']]);
 			$blogContent = $BlogContent->find('first', ['conditions' => ['BlogContent.id' => $blogContentId], 'recursive' => -1]);

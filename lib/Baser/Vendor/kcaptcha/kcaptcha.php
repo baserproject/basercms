@@ -31,20 +31,20 @@ class KCAPTCHA{
 				}
 			}
 		    closedir($handle);
-		}	
-	
+		}
+
 		$alphabet_length=strlen($alphabet);
-		
+
 		do{
 			// generating random keystring
 			while(true){
 				$this->keystring='';
 				for($i=0;$i<$length;$i++){
-					$this->keystring.=$allowed_symbols{mt_rand(0,strlen($allowed_symbols)-1)};
+					$this->keystring .= substr($allowed_symbols, mt_rand(0, strlen($allowed_symbols)-1), 1);
 				}
 				if(!preg_match('/cp|cb|ck|c6|c9|rn|rm|mm|co|do|cl|db|qp|qb|dp|ww/', $this->keystring)) break;
 			}
-		
+
 			$font_file=$fonts[mt_rand(0, count($fonts)-1)];
 			$font=imagecreatefrompng($font_file);
 			imagealphablending($font, true);
@@ -59,13 +59,13 @@ class KCAPTCHA{
 				$transparent = (imagecolorat($font, $i, 0) >> 24) == 127;
 
 				if(!$reading_symbol && !$transparent){
-					$font_metrics[$alphabet{$symbol}]=array('start'=>$i);
+					$font_metrics[substr($alphabet, $symbol, 1)]= array('start'=>$i);
 					$reading_symbol=true;
 					continue;
 				}
 
 				if($reading_symbol && $transparent){
-					$font_metrics[$alphabet{$symbol}]['end']=$i;
+					$font_metrics[substr($alphabet, $symbol, 1)]['end']=$i;
 					$reading_symbol=false;
 					$symbol++;
 					continue;
@@ -82,7 +82,7 @@ class KCAPTCHA{
 			// draw text
 			$x=1;
 			for($i=0;$i<$length;$i++){
-				$m=$font_metrics[$this->keystring{$i}];
+				$m=$font_metrics[substr($this->keystring, $i, 1)];
 
 				$y=mt_rand(-$fluctuation_amplitude, $fluctuation_amplitude)+($height-$fontfile_height)/2+2;
 
@@ -130,7 +130,7 @@ class KCAPTCHA{
 		$img2=imagecreatetruecolor($width, $height+($show_credits?12:0));
 		$foreground=imagecolorallocate($img2, $foreground_color[0], $foreground_color[1], $foreground_color[2]);
 		$background=imagecolorallocate($img2, $background_color[0], $background_color[1], $background_color[2]);
-		imagefilledrectangle($img2, 0, 0, $width-1, $height-1, $background);		
+		imagefilledrectangle($img2, 0, 0, $width-1, $height-1, $background);
 		imagefilledrectangle($img2, 0, $height, $width-1, $height+12, $foreground);
 		$credits=empty($credits)?$_SERVER['HTTP_HOST']:$credits;
 		imagestring($img2, 2, $width/2-imagefontwidth(2)*strlen($credits)/2, $height-2, $credits, $background);
@@ -195,12 +195,12 @@ class KCAPTCHA{
 				imagesetpixel($img2, $x, $y, imagecolorallocate($img2, $newred, $newgreen, $newblue));
 			}
 		}
-		
-		header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); 
-		header('Cache-Control: no-store, no-cache, must-revalidate'); 
-		header('Cache-Control: post-check=0, pre-check=0', FALSE); 
+
+		header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+		header('Cache-Control: no-store, no-cache, must-revalidate');
+		header('Cache-Control: post-check=0, pre-check=0', FALSE);
 		header('Pragma: no-cache');
-		
+
 		if(function_exists("imagejpeg")){
 			header("Content-Type: image/jpeg");
 			imagejpeg($img2, null, $jpeg_quality);

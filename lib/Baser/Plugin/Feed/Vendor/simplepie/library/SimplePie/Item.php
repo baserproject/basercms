@@ -412,13 +412,13 @@ class SimplePie_Item
 			return null;
 		}
 	}
-	
+
 	/**
 	 * Get the media:thumbnail of the item
 	 *
 	 * Uses `<media:thumbnail>`
 	 *
-	 * 
+	 *
 	 * @return array|null
 	 */
 	public function get_thumbnail()
@@ -435,7 +435,7 @@ class SimplePie_Item
 			}
 		}
 		return $this->data['thumbnail'];
-	}	
+	}
 
 	/**
 	 * Get a category for the item
@@ -2902,7 +2902,7 @@ class SimplePie_Item
 					}
 					if (isset($enclosure[0]['attribs']['']['length']))
 					{
-						$length = ceil($enclosure[0]['attribs']['']['length']);
+						$length = ceil((int)$enclosure[0]['attribs']['']['length']);
 					}
 
 					// Since we don't have group or content for these, we'll just pass the '*_parent' variables directly to the constructor
