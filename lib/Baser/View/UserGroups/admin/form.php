@@ -155,7 +155,7 @@ foreach(Configure::read('BcAuthPrefix') as $key => $authPrefix) {
 			<?php if ($favorites): ?>
 				<ul class="clearfix">
 					<?php foreach($favorites as $favorite): ?>
-						<li style="float:left"><?php $this->BcBaser->link($favorite['name'], $favorite['url']) ?></li>
+						<li style="float:left"><?php $this->BcBaser->link($favorite['name'], $favorite['url'], ['escape' => true]) ?></li>
 					<?php endforeach; ?>
 				</ul>
 			<?php endif ?>

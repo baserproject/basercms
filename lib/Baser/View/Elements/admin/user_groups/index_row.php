@@ -28,7 +28,7 @@
 		<?php endif ?>
 	</td>
 	<td><?php echo $data['UserGroup']['id'] ?></td>
-	<td><?php $this->BcBaser->link($data['UserGroup']['name'], ['action' => 'edit', $data['UserGroup']['id']]) ?>
+	<td><?php $this->BcBaser->link($data['UserGroup']['name'], ['action' => 'edit', $data['UserGroup']['id']], ['escape' => true]) ?>
 		<?php if (!empty($data['User'])): ?><br/>
 			<?php foreach($data['User'] as $user): ?>
 				<span
@@ -36,7 +36,7 @@
 			<?php endforeach ?>
 		<?php endif ?>
 	</td>
-	<td><?php echo $data['UserGroup']['title'] ?></td>
+	<td><?php echo h($data['UserGroup']['title']) ?></td>
 	<?php echo $this->BcListTable->dispatchShowRow($data) ?>
 	<td><?php echo $this->BcTime->format('Y-m-d', $data['UserGroup']['created']) ?><br/>
 		<?php echo $this->BcTime->format('Y-m-d', $data['UserGroup']['modified']) ?></td>

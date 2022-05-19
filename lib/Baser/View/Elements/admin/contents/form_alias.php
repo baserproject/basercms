@@ -36,7 +36,7 @@ if ((!empty($this->BcContents->settings[$srcContent['type']]))) {
 			<?php echo $this->BcForm->input('Content.alias_id', ['type' => 'hidden']) ?>
 			<small>[<?php echo $title ?>]</small>&nbsp;
 			&nbsp;
-			<?php $this->BcBaser->link($srcContent['title'], $editLink, ['target' => '_blank']) ?>
+			<?php $this->BcBaser->link($srcContent['title'], $editLink, ['target' => '_blank', 'escape' => true]) ?>
 			<?php if ($related): ?>
 				<p>このコンテンツはメインサイトの連携エイリアスです。<br>フォルダ、レイアウトテンプレート以外を編集する場合は上記リンクをクリックしてメインサイトのコンテンツを編集してください。</p>
 			<?php endif ?>

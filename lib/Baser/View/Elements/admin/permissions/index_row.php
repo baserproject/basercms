@@ -41,7 +41,7 @@
 	</td>
 	<td style="width:10%"><?php echo $data['Permission']['no']; ?></td>
 	<td style="width:55%">
-		<?php $this->BcBaser->link($data['Permission']['name'], ['action' => 'edit', $this->request->params['pass'][0], $data['Permission']['id']]); ?>
+		<?php $this->BcBaser->link($data['Permission']['name'], ['action' => 'edit', $this->request->params['pass'][0], $data['Permission']['id']], ['escape' => true]); ?>
 		<br/>
 		<?php echo $data['Permission']['url']; ?>
 	</td>

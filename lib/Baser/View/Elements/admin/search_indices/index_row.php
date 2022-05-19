@@ -42,7 +42,7 @@ $priorities = ['0.1' => '0.1', '0.2' => '0.2', '0.3' => '0.3', '0.4' => '0.4', '
 	<td><?php echo $data['SearchIndex']['id'] ?></td>
 	<td style="width:15%">
 		<?php echo $data['SearchIndex']['type'] ?><br/>
-		<?php echo $this->BcBaser->link($this->BcText->noValue($data['SearchIndex']['title'], __d('baser', '設定なし')), siteUrl() . preg_replace('/^\//', '', $data['SearchIndex']['url']), ['target' => '_blank']) ?>
+		<?php echo $this->BcBaser->link($this->BcText->noValue($data['SearchIndex']['title'], __d('baser', '設定なし')), siteUrl() . preg_replace('/^\//', '', $data['SearchIndex']['url']), ['target' => '_blank', 'escape' => true]) ?>
 	</td>
 	<td><?php echo $this->Text->truncate($data['SearchIndex']['detail'], 50) ?></td>
 	<td style="width:10%;text-align:center">

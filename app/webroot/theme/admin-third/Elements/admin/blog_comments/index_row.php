@@ -44,7 +44,7 @@ if (!$data['BlogComment']['status']) {
 	</td>
 	<td class="bca-table-listup__tbody-td">
 		<strong>
-			<?php $this->BcBaser->link($data['BlogPost']['name'], ['controller' => 'blog_posts', 'action' => 'edit', $blogContent['BlogContent']['id'], $data['BlogPost']['id']]) ?>
+			<?php $this->BcBaser->link($data['BlogPost']['name'], ['controller' => 'blog_posts', 'action' => 'edit', $blogContent['BlogContent']['id'], $data['BlogPost']['id']], ['escape' => true]) ?>
 		</strong><br/>
 		<?php echo nl2br($this->BcText->autoLinkUrls($data['BlogComment']['message'])) ?>
 	</td>

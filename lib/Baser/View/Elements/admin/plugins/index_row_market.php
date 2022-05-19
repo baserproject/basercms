@@ -23,7 +23,7 @@
 	<td>
 		<?php echo h($data['title']) ?>
 	</td>
-	<td><?php echo $data['version'] ?></td>
+	<td><?php echo h($data['version']) ?></td>
 	<td><?php echo h($data['description']) ?></td>
 	<td><?php $this->BcBaser->link($data['author'], $data['authorLink'], ['target' => '_blank', 'escape' => true]) ?></td>
 	<td style="width:10%;white-space: nowrap">
