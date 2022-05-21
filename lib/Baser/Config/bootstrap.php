@@ -113,7 +113,10 @@ $assetRegex = '/^' . preg_quote(BC_BASE_URL, '/') . '.*?(css|js|img)' . '\/.+\.(
 $assetRegexTheme = '/^' . preg_quote(BC_BASE_URL, '/') . 'theme\/[^\/]+?\/(css|js|img)' . '\/.+\.(js|css|gif|jpg|jpeg|png)$/';
 // テーマ編集は除外
 $nonAssets = '/^' . preg_quote(BC_BASE_URL . Configure::read('Routing.prefixes.0') . '/theme_files/edit/', '/') . '.*?(css|js|img)' . '\/.+\.(js|css|gif|jpg|jpeg|png)$/';
-$uri = @$_SERVER['REQUEST_URI'];
+$uri = null;
+if (isset($_SERVER['REQUEST_URI'])) {
+	$uri = $_SERVER['REQUEST_URI'];
+}
 if (preg_match($nonAssets, $uri) === 0) {
 	if (preg_match($assetRegex, $uri) || preg_match($assetRegexTheme, $uri)) {
 		Configure::write('BcRequest.asset', true);
@@ -168,7 +171,11 @@ App::uses('BcPluginAppModel', 'Model');
  * 言語設定
  * ブラウザよりベースとなる言語を設定
  */
-Configure::write('Config.language', BcLang::parseLang(@$_SERVER['HTTP_ACCEPT_LANGUAGE']));
+$baseLang = 'ja';
+if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
+	$baseLang = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
+}
+Configure::write('Config.language', BcLang::parseLang($baseLang));
 
 /**
  * 設定ファイル読み込み
