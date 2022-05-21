@@ -66,7 +66,7 @@ class MailConfigsControllerTest extends BaserTestCase
         }
 
         $url = $this->Case->headers['Location'];
-        $this->assertRegExp('/' . $expected . '/', $url);
+        $this->assertMatchesRegularExpression('/' . $expected . '/', $url);
     }
 
     public function admin_formDataProvider()

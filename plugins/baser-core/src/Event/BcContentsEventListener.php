@@ -21,7 +21,7 @@ use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\View\BcAdminAppView;
 use BaserCore\Utility\BcContainerTrait;
-use BaserCore\Service\PermissionServiceInterface;
+use BaserCore\Service\PermissionsServiceInterface;
 
 /**
  * Class BcContentsEventListener
@@ -132,7 +132,7 @@ class BcContentsEventListener extends BcEventListener
         $setting = Configure::read('BcContents.items.' . $content['plugin'] . '.' . $content['type']);
         $isAvailablePreview = (!empty($setting['preview']) && $content['type'] != 'ContentFolder');
         $path = BcUtil::getPrefix() . "/" . Inflector::dasherize($event->getSubject()->getPlugin()) . '/contents/delete';
-        $service = $this->getService(PermissionServiceInterface::class);
+        $service = $this->getService(PermissionsServiceInterface::class);
         $checked = false;
         foreach(BcUtil::loginUser()->user_groups as $index => $group) {
             if ($service->check($path, [$index => $group->id])) $checked = true;

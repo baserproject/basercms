@@ -16,8 +16,6 @@ use BaserCore\View\BcAdminAppView;
  * @var BcAdminAppView $this
  */
 $this->BcAdmin->setTitle(__d('baser', 'エイリアス編集'));
-$site = $this->BcAdminSite->findById($this->request->getData($entityName . 'site_id'))->first();
-$this->set('publishLink', $this->BcAdminContent->getUrl($this->request->getData($entityName . 'url'), true, $site->useSubDomain));
 ?>
 
 

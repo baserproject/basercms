@@ -37,13 +37,6 @@ class MaintenanceController extends AppController
     public $uses = null;
 
     /**
-     * ぱんくずナビ
-     *
-     * @var array
-     */
-    public $crumbs = [];
-
-    /**
      * サブメニューエレメント
      *
      * @var array

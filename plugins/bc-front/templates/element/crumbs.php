@@ -1,20 +1,23 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.View
- * @since           baserCMS v 4.4.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) NPO baser foundation
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       https://basercms.net/license/index.html MIT License
  */
 
+use BaserCore\View\AppView;
+
 /**
- * [PUBLISH] ナビゲーション
+ * パンくずナビゲーション
  *
  * ページタイトルが直属のカテゴリ名と同じ場合は、直属のカテゴリ名を省略する
+ * @var AppView $this
  */
+
 if (!isset($separator)) {
 	$separator = '&nbsp;&gt;&nbsp;';
 }
@@ -25,7 +28,7 @@ $crumbs = $this->BcBaser->getCrumbs();
 if (!empty($crumbs)) {
 	foreach($crumbs as $key => $crumb) {
 		if ($this->BcArray->last($crumbs, $key)) {
-			if ($this->viewPath != 'home' && $crumb['name']) {
+			if ($crumb['name']) {
 				$this->BcBaser->addCrumb(h($crumb['name']));
 			}
 		} else {
@@ -49,9 +52,9 @@ if (!empty($crumbs)) {
 		}
 		?>
 	<?php else: ?>
-		<ul itemscope itemtype="http://schema.org/BreadcrumbList">
+		<ul itemscope itemtype="https://schema.org/BreadcrumbList">
 			<?php if ($this->BcBaser->isHome()): ?>
-				<li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><span
+				<li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><span
 						itemprop="name"><?php echo $home ?></span>
 					<meta itemprop="position" content="1"/>
 				</li>

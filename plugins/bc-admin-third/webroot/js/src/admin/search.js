@@ -14,7 +14,7 @@ $(function() {
     var adminSearchOpened = script.attr('data-adminSearchOpened');
     var adminSearchOpenedSaveUrl = script.attr('data-adminSearchOpenedSaveUrl');
 
-    changeSearchBox(adminSearchOpened);
+    changeSearchBox(adminSearchOpened, 0);
 
 	$('#BtnMenuSearch').click(function(){
 		if($('#Search').css('display') === 'none'){
@@ -38,13 +38,14 @@ $(function() {
     /**
      * 検索ボックスの開閉切り替え
      */
-    function changeSearchBox(open) {
+    function changeSearchBox(open, time) {
+        if(time === undefined) time = 300;
         var url = adminSearchOpenedSaveUrl;
         if(open){
-            $('#Search').slideDown(300);
+            $('#Search').slideDown(time);
             url += '/1';
         } else {
-            $('#Search').slideUp(300);
+            $('#Search').slideUp(time);
             url += '/';
         }
         $.ajax({

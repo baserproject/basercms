@@ -11,6 +11,8 @@
 
 namespace BaserCore\Controller\Admin;
 
+use BaserCore\Service\ContentsAdminServiceInterface;
+use Cake\Datasource\ConnectionManager;
 use Cake\Http\Response;
 use Cake\ORM\Query;
 use Cake\Utility\Hash;
@@ -25,10 +27,10 @@ use BaserCore\Model\Table\SitesTable;
 use BaserCore\Model\Table\UsersTable;
 use BaserCore\Model\Table\ContentsTable;
 use BaserCore\Model\Table\SiteConfigsTable;
-use BaserCore\Service\SiteServiceInterface;
+use BaserCore\Service\SitesServiceInterface;
 use BaserCore\Model\Table\ContentFoldersTable;
-use BaserCore\Service\ContentServiceInterface;
-use BaserCore\Service\SiteConfigServiceInterface;
+use BaserCore\Service\ContentsServiceInterface;
+use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\Controller\Component\BcMessageComponent;
 use BaserCore\Controller\Component\BcAdminContentsComponent;
 
@@ -85,14 +87,14 @@ class ContentsController extends BcAdminAppController
 
     /**
      * コンテンツ一覧
-     * @param  ContentServiceInterface $contentService
-     * @param  SiteServiceInterface $siteService
-     * @param  SiteConfigServiceInterface $siteConfigService
+     * @param  ContentsAdminServiceInterface $contentService
+     * @param  SitesServiceInterface $siteService
+     * @param  SiteConfigsServiceInterface $siteConfigService
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function index(ContentServiceInterface $contentService, SiteServiceInterface $siteService, SiteConfigServiceInterface $siteConfigService)
+    public function index(ContentsAdminServiceInterface $contentService, SitesServiceInterface $siteService, SiteConfigsServiceInterface $siteConfigService)
     {
         $currentSiteId = $this->request->getAttribute('currentSite')->id;
         $sites = $siteService->getList();
@@ -141,12 +143,13 @@ class ContentsController extends BcAdminAppController
         $this->set('template', $this->getTemplate());
         $this->set('folders', $contentService->getContentFolderList($currentSiteId, ['conditions' => ['site_root' => false]]));
         $this->set('sites', $sites);
+        $this->set($contentService->getViewVarsForIndex());
     }
 
     /**
      * リクエストに応じたコンテンツを返す
      *
-     * @param  ContentServiceInterface $contentService
+     * @param  ContentsServiceInterface $contentService
      * @return Query|ResultSet
      * @checked
      * @noTodo
@@ -203,14 +206,14 @@ class ContentsController extends BcAdminAppController
     /**
      * ゴミ箱内のコンテンツ一覧を表示する
      *
-     * @param  ContentServiceInterface $contentService
-     * @param  SiteServiceInterface $siteService
-     * @param  SiteConfigServiceInterface $siteConfigService
+     * @param  ContentsServiceInterface $contentService
+     * @param  SitesServiceInterface $siteService
+     * @param  SiteConfigsServiceInterface $siteConfigService
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function trash_index(ContentServiceInterface $contentService, SiteServiceInterface $siteService, SiteConfigServiceInterface $siteConfigService)
+    public function trash_index(ContentsAdminServiceInterface $contentService, SitesServiceInterface $siteService, SiteConfigsServiceInterface $siteConfigService)
     {
         $this->setAction('index', $contentService, $siteService, $siteConfigService);
         $this->render('index');
@@ -219,14 +222,14 @@ class ContentsController extends BcAdminAppController
     /**
      * ゴミ箱のコンテンツを戻す
      *
-     * @param  ContentServiceInterface $contentService
+     * @param  ContentsServiceInterface $contentService
      * @param  int $id
      * @return Response|void
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function trash_return(ContentServiceInterface $contentService, $id)
+    public function trash_return(ContentsServiceInterface $contentService, $id)
     {
         if (empty($id)) {
             $this->ajaxError(500, __d('baser', '無効な処理です。'));
@@ -252,13 +255,13 @@ class ContentsController extends BcAdminAppController
      * コンテンツ編集
      *
      * @param  int $id
-     * @param  ContentServiceInterface $contentService
+     * @param  ContentsServiceInterface $contentService
      * @return void
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function edit(ContentServiceInterface $contentService, $id)
+    public function edit(ContentsServiceInterface $contentService, $id)
     {
         if (!$id && empty($this->request->getData())) {
             $this->BcMessage->setError(__d('baser', '無効な処理です。'));
@@ -279,21 +282,20 @@ class ContentsController extends BcAdminAppController
         }
         $this->request = $this->request->withData("Contents", $content);
         $this->set('content', $content);
-        $this->set('publishLink', $contentService->getUrl($content->url, true, $content->site->useSubDomain));
     }
 
     /**
      * エイリアスを編集する
      *
      * @param $id
-     * @param  ContentServiceInterface $contentService
+     * @param  ContentsServiceInterface $contentService
      * @return Response|null
      * @throws Exception
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function edit_alias(ContentServiceInterface $contentService, $id)
+    public function edit_alias(ContentsServiceInterface $contentService, $id)
     {
         if (!$id && empty($this->request->getData())) {
             $this->BcMessage->setError(__d('baser', '無効な処理です。'));
@@ -328,9 +330,9 @@ class ContentsController extends BcAdminAppController
 
     /**
 	 * コンテンツ削除（論理削除）
-     * @param  ContentServiceInterface $contentService
+     * @param  ContentsServiceInterface $contentService
 	 */
-	public function delete(ContentServiceInterface $contentService)
+	public function delete(ContentsServiceInterface $contentService)
 	{
         $this->disableAutoRender();
         $this->viewBuilder()->disableAutoLayout();
@@ -367,13 +369,13 @@ class ContentsController extends BcAdminAppController
     /**
      * batch
      *
-     * @param  ContentServiceInterface $contentService
+     * @param  ContentsServiceInterface $contentService
      * @return void
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function batch(ContentServiceInterface $contentService)
+    public function batch(ContentsServiceInterface $contentService)
     {
         $this->disableAutoRender();
         $allowMethod = [
@@ -405,13 +407,13 @@ class ContentsController extends BcAdminAppController
     /**
      * ゴミ箱を空にする
      * @see bcTreeの処理はApi/trash_emptyに移行
-     * @param ContentServiceInterface $contentService
+     * @param ContentsServiceInterface $contentService
      * @return Response|null
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function trash_empty(ContentServiceInterface $contentService)
+    public function trash_empty(ContentsServiceInterface $contentService)
     {
         $this->disableAutoRender();
         if (!$this->request->getData()) {

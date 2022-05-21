@@ -11,32 +11,17 @@
 
 namespace BaserCore\Controller\Admin;
 
-use BaserCore\Utility\BcUtil;
-use Cake\Core\Plugin;
+use BaserCore\Service\DashboardAdminServiceInterface;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 
 /**
  * Class DashboardController
- * @package BaserCore\Controller\Admin
+ * @uses DashboardController
  */
 class DashboardController extends BcAdminAppController
 {
-
-    /**
-     * モデル
-     *
-     * @var array
-     */
-    public $uses = ['BaserCore.User', 'BaserCore.Page'];
-
-    /**
-     * ぱんくずナビ
-     *
-     * @var string
-     */
-    public $crumbs = [];
 
     /**
      * [ADMIN] 管理者ダッシュボードページを表示する
@@ -46,18 +31,10 @@ class DashboardController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function index()
+    public function index(DashboardAdminServiceInterface $service)
     {
         $this->setTitle(__d('baser', 'ダッシュボード'));
-        $panels = [];
-        $plugins = Plugin::loaded();
-        if ($plugins) {
-            foreach($plugins as $plugin) {
-                $templates = BcUtil::getTemplateList('Admin/element/Dashboard', $plugin);
-                $panels[$plugin] = $templates;
-            }
-        }
-        $this->set('panels', $panels);
+        $this->set($service->getViewVarsForIndex(5));
     }
 
 }

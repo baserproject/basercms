@@ -17,8 +17,8 @@ use BaserCore\Model\Table\ContentFoldersTable;
 use BaserCore\Model\Table\ContentsTable;
 use BaserCore\Model\Table\PagesTable;
 use BaserCore\Model\Table\SearchIndexesTable;
-use BaserCore\Service\SearchIndexService;
-use BaserCore\Service\SearchIndexServiceInterface;
+use BaserCore\Service\SearchIndexesService;
+use BaserCore\Service\SearchIndexesServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\ORM\TableRegistry;
 use Cake\Event\EventInterface;
@@ -152,8 +152,8 @@ class ContentFoldersControllerEventListener extends BcControllerEventListener
             return;
         }
         $id = $event->getData('id');
-        /* @var SearchIndexService $searchIndexService */
-        $searchIndexService = $this->getService(SearchIndexServiceInterface::class);
+        /* @var SearchIndexesService $searchIndexService */
+        $searchIndexService = $this->getService(SearchIndexesServiceInterface::class);
         $searchIndexService->reconstruct($id);
     }
 

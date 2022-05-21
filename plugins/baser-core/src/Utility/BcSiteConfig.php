@@ -10,7 +10,7 @@
  */
 namespace BaserCore\Utility;
 
-use BaserCore\Service\SiteConfigServiceInterface;
+use BaserCore\Service\SiteConfigsServiceInterface;
 
 /**
  * BcSiteConfig
@@ -26,7 +26,7 @@ class BcSiteConfig
      */
     public static function get($key)
     {
-        $siteConfig = BcContainer::get()->get(SiteConfigServiceInterface::class);
+        $siteConfig = BcContainer::get()->get(SiteConfigsServiceInterface::class);
         return $siteConfig->getValue($key);
     }
 

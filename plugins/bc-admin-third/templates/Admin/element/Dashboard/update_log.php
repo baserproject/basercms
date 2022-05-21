@@ -16,10 +16,10 @@ use BaserCore\Annotation\Checked;
 
 /**
  * @var BcAdminAppView $this
+ * @var array $dblogs
  * @checked
  * @noTodo
  */
-$dblogs = $this->BcAdminDashboard->getDblogs(5);
 ?>
 
 <h2 class="bca-panel-box__title"><?php echo __d('baser', '最近の動き') ?></h2>

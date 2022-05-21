@@ -11,7 +11,7 @@
 
 namespace BaserCore\Controller\Api;
 
-use BaserCore\Service\ContentFolderServiceInterface;
+use BaserCore\Service\ContentFoldersServiceInterface;
 use Cake\Core\Exception\Exception;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -29,12 +29,12 @@ class ContentFoldersController extends BcApiController
 {
     /**
      * コンテンツフォルダ一覧取得
-     * @param ContentFolderServiceInterface $ContentFolders
+     * @param ContentFoldersServiceInterface $ContentFolders
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function index(ContentFolderServiceInterface $ContentFolders)
+    public function index(ContentFoldersServiceInterface $ContentFolders)
     {
         $this->request->allowMethod('get');
         $this->set([
@@ -45,13 +45,13 @@ class ContentFoldersController extends BcApiController
 
     /**
      * コンテンツフォルダ取得
-     * @param ContentFolderServiceInterface $ContentFolders
+     * @param ContentFoldersServiceInterface $ContentFolders
      * @param $id
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function view(ContentFolderServiceInterface $ContentFolders, $id)
+    public function view(ContentFoldersServiceInterface $ContentFolders, $id)
     {
         $this->request->allowMethod('get');
         $this->set([
@@ -62,12 +62,12 @@ class ContentFoldersController extends BcApiController
 
     /**
      * コンテンツフォルダ登録
-     * @param ContentFolderServiceInterface $ContentFolders
+     * @param ContentFoldersServiceInterface $ContentFolders
      * @checked
      * @unitTest
      * @noTodo
      */
-    public function add(ContentFolderServiceInterface $ContentFolders)
+    public function add(ContentFoldersServiceInterface $ContentFolders)
     {
         $this->request->allowMethod(['post', 'put', 'patch']);
         try {
@@ -87,13 +87,13 @@ class ContentFoldersController extends BcApiController
 
     /**
      * コンテンツフォルダ削除
-     * @param ContentFolderServiceInterface $ContentFolders
+     * @param ContentFoldersServiceInterface $ContentFolders
      * @param $id
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function delete(ContentFolderServiceInterface $ContentFolders, $id)
+    public function delete(ContentFoldersServiceInterface $ContentFolders, $id)
     {
         $this->request->allowMethod(['delete']);
         $contentFolders = $ContentFolders->get($id);
@@ -114,13 +114,13 @@ class ContentFoldersController extends BcApiController
 
     /**
      * コンテンツフォルダー情報編集
-     * @param ContentFolderServiceInterface $contentFolders
+     * @param ContentFoldersServiceInterface $contentFolders
      * @param $id
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function edit(ContentFolderServiceInterface $contentFolders, $id)
+    public function edit(ContentFoldersServiceInterface $contentFolders, $id)
     {
         $this->request->allowMethod(['post', 'put', 'patch']);
         try {

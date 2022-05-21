@@ -116,8 +116,7 @@ $this->BcBaser->js('admin/contents/index_table.bundle');
     <?php foreach($contents as $content): ?>
       <?php $this->BcBaser->element('Contents/index_row_table', [
         'content' => $content,
-        'count' => $count,
-        'authors' => $this->BcAdminContent->getAuthors()
+        'count' => $count
       ]) ?>
       <?php $count++; ?>
     <?php endforeach; ?>

@@ -11,7 +11,6 @@
 
 namespace BaserCore\View;
 
-use BaserCore\View\Helper\BcAdminSiteHelper;
 use BaserCore\View\Helper\BcToolbarHelper;
 use Cake\View\View;
 use BaserCore\Annotation\NoTodo;
@@ -27,7 +26,6 @@ use BaserCore\Event\BcEventDispatcherTrait;
  * @property BcPageHelper $BcPage
  * @property BcBaserHelper $BcBaser
  * @property BcToolbarHelper $BcToolbar
- * @property BcAdminSiteHelper $BcAdminSite
  */
 class AppView extends View
 {
@@ -54,10 +52,10 @@ class AppView extends View
 //        $this->loadHelper('BaserCore.BcXml');
 //        $this->loadHelper('BaserCore.BcArray');
         // <<<
+        $this->loadHelper('BaserCore.BcAdmin');
         $this->loadHelper('BaserCore.BcPage');
         $this->loadHelper('BaserCore.BcBaser');
         $this->loadHelper('BaserCore.BcToolbar');
-        $this->loadHelper('BaserCore.BcAdminSite');
     }
 
     /**

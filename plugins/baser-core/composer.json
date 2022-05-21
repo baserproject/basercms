@@ -4,26 +4,27 @@
     "homepage": "https://basercms.net",
     "type": "cakephp-plugin",
     "license": "MIT",
+    "vendor-dir": "../../vendor",
     "require": {
-        "php": ">=7.2",
-        "cakephp/cakephp": "4.2.*",
-        "cakephp/authentication": "^2.3",
-        "cakephp/migrations": "^3.1",
+        "php": ">=8.1",
+        "cakephp/cakephp": "4.3.*",
+        "cakephp/authentication": "^2.9",
+        "cakephp/migrations": "^3.2",
         "doctrine/annotations": "^1.12",
-        "firebase/php-jwt": "^5.3",
+        "firebase/php-jwt": "^6.1",
         "josegonzalez/dotenv": "^3.2",
         "mobiledetect/mobiledetectlib": "^2.8",
         "ext-json": "*",
-        "baserproject/bc-admin-third": "0.0.4",
-        "baserproject/bc-front": "0.0.1",
-        "imo-tikuwa/cakephp3-soft-delete": "^2.0"
+        "baserproject/bc-admin-third": "^2.1",
+        "baserproject/bc-front": "^2.1",
+        "imo-tikuwa/cakephp-soft-delete": "^2.0"
     },
     "require-dev": {
-        "cakephp/bake": "^2.0.3",
-        "cakephp/debug_kit": "^4.1",
-        "phpunit/phpunit": "~8.5.0",
-        "psy/psysh": "@stable",
-        "symplify/monorepo-builder": "^6.1"
+        "cakephp/bake": "^2.6",
+        "cakephp/debug_kit": "^4.5",
+        "phpunit/phpunit": "^9.5",
+        "symplify/monorepo-builder": "^10.2",
+        "vierge-noire/cakephp-fixture-factories": "^2.5"
     },
     "autoload": {
         "psr-4": {

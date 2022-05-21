@@ -16,8 +16,8 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use Cake\Http\Exception\NotFoundException;
-use BaserCore\Service\ContentServiceInterface;
-use BaserCore\Service\ContentFolderServiceInterface;
+use BaserCore\Service\ContentsServiceInterface;
+use BaserCore\Service\ContentFoldersServiceInterface;
 
 /**
  * Class ContentFoldersController
@@ -43,14 +43,14 @@ class ContentFoldersController extends BcFrontAppController
 
     /**
      * コンテンツを表示する
-     * @param  ContentServiceInterface $contentService
-     * @param  ContentFolderServiceInterface $contentFolderService
+     * @param  ContentsServiceInterface $contentService
+     * @param  ContentFoldersServiceInterface $contentFolderService
      * @return void
      * @checked
      * @unitTest
      * @noTodo
      */
-    public function view(ContentFolderServiceInterface $contentFolderService, ContentServiceInterface $contentService)
+    public function view(ContentFoldersServiceInterface $contentFolderService, ContentsServiceInterface $contentService)
     {
         if (empty($this->request->getParam('entityId'))) {
             throw new NotFoundException();

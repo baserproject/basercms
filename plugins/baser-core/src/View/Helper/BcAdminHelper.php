@@ -12,6 +12,7 @@
 namespace BaserCore\View\Helper;
 
 use BaserCore\Event\BcEventDispatcherTrait;
+use BaserCore\Service\SitesServiceInterface;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Core\Configure;
@@ -24,9 +25,9 @@ use BaserCore\Annotation\Note;
 
 /**
  * Class BcAdminHelper
- * @package BaserCore\View\Helper
  * @uses BcAdminHelper
  * @property BcBaserHelper $BcBaser
+ * @property BcContentsHelper $BcContents
  */
 class BcAdminHelper extends Helper
 {
@@ -40,7 +41,7 @@ class BcAdminHelper extends Helper
      * Helper
      * @var string[]
      */
-    public $helpers = ['BcBaser'];
+    public $helpers = ['BaserCore.BcBaser', 'BaserCore.BcAuth', 'BaserCore.BcContents'];
 
     /**
      * ログインユーザーがシステム管理者かチェックする
@@ -368,6 +369,95 @@ class BcAdminHelper extends Helper
             'isLogin' => (bool)(BcUtil::loginUser()),
             'isSuperUser' => BcUtil::isSuperUser()
         ]);
+    }
+
+
+    /**
+     * 編集画面へのリンクが存在するかチェックする
+     *
+     * @return bool 存在する場合は true を返す
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function existsEditLink()
+    {
+        return ($this->BcAuth->isCurrentUserAdminAvailable() && !empty($this->_View->get('editLink')));
+    }
+
+    /**
+     * 公開ページへのリンクが存在するかチェックする
+     *
+     * @return bool リンクが存在する場合は true を返す
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function existsPublishLink()
+    {
+        return ($this->BcAuth->isCurrentUserAdminAvailable() && !empty($this->_View->get('publishLink')));
+    }
+
+    /**
+     * 編集リンクを設定する
+     * @param string|array $link
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function setEditLink($link)
+    {
+        $this->_View->set('editLink', $link);
+    }
+
+    /**
+     * 公開リンクを設定する
+     * @param string $link
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function setPublishLink($link)
+    {
+        $this->_View->set('publishLink', $link);
+    }
+
+    /**
+     * 編集画面へのリンクを出力する
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function editLink(): void
+    {
+        if ($this->existsEditLink()) {
+            $this->BcBaser->link(__d('baser', '編集する'), $this->_View->get('editLink'), ['class' => 'tool-menu']);
+        }
+    }
+
+    /**
+     * 公開ページへのリンクを出力する
+     *
+     * 管理システムで利用する
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function publishLink(): void
+    {
+        if ($this->existsPublishLink()) {
+            $siteManage = $this->getService(SitesServiceInterface::class);
+            $site = $siteManage->findByUrl($this->_View->get('publishLink'));
+            $useSubdomain = $fullUrl = false;
+            if ($site && $site->name) {
+                $useSubdomain = $site->use_subdomain;
+                $fullUrl = true;
+            }
+            $url = $this->BcContents->getUrl($this->_View->get('publishLink'), $fullUrl, $useSubdomain, false);
+            $this->BcBaser->link(__d('baser', 'サイト確認'), $url, ['class' => 'tool-menu']);
+        }
     }
 
 }

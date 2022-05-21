@@ -56,20 +56,6 @@ class ThemesController extends AppController
     public $helpers = ['BcForm'];
 
     /**
-     * ThemesController constructor.
-     *
-     * @param \CakeRequest $request
-     * @param \CakeRequest $response
-     */
-    public function __construct($request = null, $response = null)
-    {
-        parent::__construct($request, $response);
-        $this->crumbs = [
-            ['name' => __d('baser', 'テーマ管理'), 'url' => ['controller' => 'themes', 'action' => 'index']]
-        ];
-    }
-
-    /**
      * テーマをアップロードして適用する
      */
     public function admin_add()

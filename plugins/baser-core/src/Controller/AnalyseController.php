@@ -107,6 +107,7 @@ class AnalyseController extends AppController
                 'checked' => false,
                 'unitTest' => false,
                 'noTodo' => false,
+                'doc' => false,
                 'note' => ''
             ];
             if (preg_match('/^[a-z]/', $fileName) || !preg_match('/\.php$/', $fileName)) {
@@ -120,6 +121,9 @@ class AnalyseController extends AppController
                 }
                 if (preg_match('/@unitTest/', $code)) {
                     $meta['unitTest'] = true;
+                }
+                if (preg_match('/@doc/', $code)) {
+                    $meta['doc'] = true;
                 }
                 if (preg_match('/@note\(value="(.+?)"\)/', $code, $matches)) {
                     $meta['note'] = $matches[1];
@@ -145,6 +149,7 @@ class AnalyseController extends AppController
                     'checked' => false,
                     'unitTest' => false,
                     'noTodo' => false,
+                    'doc' => false,
                     'note' => ''
                 ]);
                 if ('\\' . $method->class === $className && !in_array($method->name, $traitMethodsArray)) {
@@ -174,7 +179,7 @@ class AnalyseController extends AppController
         $methodAnnotations = $reader->getMethodAnnotations(new ReflectionMethod($className, $methodName));
         $annotations = [];
         if ($methodAnnotations) {
-            foreach(['checked', 'unitTest', 'noTodo', 'note'] as $property) {
+            foreach(['checked', 'unitTest', 'noTodo', 'doc', 'note'] as $property) {
                 foreach($methodAnnotations as $annotation) {
                     if ($property === $annotation->name) {
                         if(isset($annotation->value)) {

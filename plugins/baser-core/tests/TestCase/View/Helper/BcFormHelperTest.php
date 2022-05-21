@@ -105,7 +105,7 @@ class BcFormHelperTest extends BcTestCase
     public function testDatePicker($fieldName, $attributes, $expected, $message)
     {
         $result = $this->BcForm->datePicker($fieldName, $attributes);
-        $this->assertRegExp('/' . $expected . '/s', $result, $message);
+        $this->assertMatchesRegularExpression('/' . $expected . '/s', $result, $message);
     }
 
     public function datePickerDataProvider()
@@ -129,7 +129,7 @@ class BcFormHelperTest extends BcTestCase
     public function testDateTimePicker($fieldName, $attributes, $expected, $message)
     {
         $result = $this->BcForm->dateTimePicker($fieldName, $attributes);
-        $this->assertRegExp('/' . $expected . '/s', $result, $message);
+        $this->assertMatchesRegularExpression('/' . $expected . '/s', $result, $message);
     }
 
     public function dateTimePickerDataProvider()
@@ -164,7 +164,7 @@ class BcFormHelperTest extends BcTestCase
         // <<<
 
         $result = $this->BcForm->dateTime($fieldName, $dateFormat, $timeFormat, $attributes);
-        $this->assertRegExp('/' . $expected . '/s', $result, $message);
+        $this->assertMatchesRegularExpression('/' . $expected . '/s', $result, $message);
     }
 
     public function dateTimeDataProvider()
@@ -189,7 +189,7 @@ class BcFormHelperTest extends BcTestCase
     public function testHidden($fieldName, $options, $expected, $message)
     {
         $result = $this->BcForm->hidden($fieldName, $options);
-        $this->assertRegExp('/' . $expected . '/s', $result, $message);
+        $this->assertMatchesRegularExpression('/' . $expected . '/s', $result, $message);
     }
 
     public function hiddenDataProvider()
@@ -214,11 +214,11 @@ class BcFormHelperTest extends BcTestCase
     {
         // 引数がない場合
         $result = $this->BcForm->create();
-        $this->assertRegExp('/<form method="post" accept-charset="utf-8" novalidate="novalidate" action="\/contacts\/add">.*/', $result);
+        $this->assertMatchesRegularExpression('/<form method="post" accept-charset="utf-8" novalidate="novalidate" action="\/contacts\/add">.*/', $result);
         // 引数が既存エンティティの場合の場合
         $user = $this->getTableLocator()->get('Users')->get(1);
         $result = $this->BcForm->create($user);
-        $this->assertRegExp('/<form method="post" accept-charset="utf-8" novalidate="novalidate" action="\/contacts\/add"><div style="display:none;"><input type="hidden" name="_method" value="PUT"\/><\/div>.*/', $result);
+        $this->assertMatchesRegularExpression('/<form method="post" accept-charset="utf-8" novalidate="novalidate" action="\/contacts\/add"><div style="display:none;"><input type="hidden" name="_method" value="PUT"\/><\/div>.*/', $result);
         $this->assertEventFired('Helper.Form.beforeCreate');
         $this->assertEventFired('Helper.Form.afterCreate');
     }
@@ -273,7 +273,7 @@ class BcFormHelperTest extends BcTestCase
     public function testSubmit()
     {
         $result = $this->BcForm->submit('保存');
-        $this->assertRegExp('/<div class="submit"><input type="submit" value="保存"\/><\/div>/', $result);
+        $this->assertMatchesRegularExpression('/<div class="submit"><input type="submit" value="保存"\/><\/div>/', $result);
         $this->assertEventFired('Helper.Form.afterSubmit');
     }
 
@@ -314,7 +314,7 @@ class BcFormHelperTest extends BcTestCase
             ];
         }
         $result = $this->BcAdminForm->control($fieldName, $options);
-        $this->assertRegExp('/' . $expected . '/s', $result);
+        $this->assertMatchesRegularExpression('/' . $expected . '/s', $result);
         $this->resetEvent();
     }
 
@@ -359,7 +359,7 @@ class BcFormHelperTest extends BcTestCase
     {
         $expected = 'class="bca-label"';
         $result = $this->BcForm->label('User.id', 'id', ['class' => 'bca-label']);
-        $this->assertRegExp('/' . $expected . '/s', $result, 'ラベルに正しいクラスが付与できません');
+        $this->assertMatchesRegularExpression('/' . $expected . '/s', $result, 'ラベルに正しいクラスが付与できません');
     }
 
     /**
@@ -382,7 +382,7 @@ class BcFormHelperTest extends BcTestCase
         // <<<
 
         $result = $this->BcForm->ckeditor($fieldName, $options);
-        $this->assertRegExp('/' . $expected . '/s', $result, $message);
+        $this->assertMatchesRegularExpression('/' . $expected . '/s', $result, $message);
     }
 
     public function ckeditorDataProvider()
@@ -411,7 +411,7 @@ class BcFormHelperTest extends BcTestCase
         // <<<
 
         $result = $this->BcForm->editor($fieldName, $options);
-        $this->assertRegExp('/' . $expected . '/s', $result, $message);
+        $this->assertMatchesRegularExpression('/' . $expected . '/s', $result, $message);
     }
 
     public function editorDataProvider()
@@ -442,7 +442,7 @@ class BcFormHelperTest extends BcTestCase
         // <<<
 
         $result = $this->BcForm->prefTag($fieldName, $selected, $attributes);
-        $this->assertRegExp('/' . $expected . '/s', $result, $message);
+        $this->assertMatchesRegularExpression('/' . $expected . '/s', $result, $message);
     }
 
     public function prefTagDataProvider()
@@ -477,7 +477,7 @@ class BcFormHelperTest extends BcTestCase
         // <<<
 
         $result = $this->BcForm->wyear($fieldName, $minYear, $maxYear, $selected, $attributes, $showEmpty);
-        $this->assertRegExp('/' . $expected . '/s', $result, $message);
+        $this->assertMatchesRegularExpression('/' . $expected . '/s', $result, $message);
     }
 
     public function wyearDataProvider()
@@ -514,7 +514,7 @@ class BcFormHelperTest extends BcTestCase
         $now = $w . '-' . $wyear;
 
         $result = $this->BcForm->wyear('test', null, null, 'now');
-        $this->assertRegExp('/' . $now . '" selected/s', $result, '今年を選択状態にできません');
+        $this->assertMatchesRegularExpression('/' . $now . '" selected/s', $result, '今年を選択状態にできません');
     }
 
     /**
@@ -576,7 +576,7 @@ class BcFormHelperTest extends BcTestCase
         $attributes = $attributes + $attributes_default;
 
         $result = $this->BcForm->jsonList($field, $attributes);
-        $this->assertRegExp('/' . $expected . '/s', $result, $message);
+        $this->assertMatchesRegularExpression('/' . $expected . '/s', $result, $message);
     }
 
     public function jsonListDataProvider()
@@ -610,7 +610,7 @@ class BcFormHelperTest extends BcTestCase
         // <<<
 
         $result = $this->BcForm->selectText($fieldName, $options, $selected, $attributes, $showEmpty);
-        $this->assertRegExp('/' . $expected . '/s', $result, $message);
+        $this->assertMatchesRegularExpression('/' . $expected . '/s', $result, $message);
     }
 
     public function selectTextDataProvider()
@@ -643,7 +643,7 @@ class BcFormHelperTest extends BcTestCase
         $page = $pagesTable->find()->where(['Pages.id' => 2])->contain(['Contents'])->first();
         $this->BcForm->create($page);
         $result = $this->BcForm->file($fieldName, $options);
-        $this->assertRegExp('/' . $expected . '/s', $result, $message);
+        $this->assertMatchesRegularExpression('/' . $expected . '/s', $result, $message);
     }
 
     public function fileDataProvider()
@@ -676,7 +676,7 @@ class BcFormHelperTest extends BcTestCase
             return $res;
         }]]);
         $result = $this->BcForm->dispatchAfterForm($type);
-        $this->assertRegExp('/' . $expected . '/s', $result);
+        $this->assertMatchesRegularExpression('/' . $expected . '/s', $result);
         $this->resetEvent();
     }
 
@@ -708,7 +708,7 @@ class BcFormHelperTest extends BcTestCase
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
         // <<<
         $result = $this->BcForm->radio($fieldName, $options, $attributes);
-        $this->assertRegExp('/' . $expected . '/s', $result, $message);
+        $this->assertMatchesRegularExpression('/' . $expected . '/s', $result, $message);
     }
 
     public function radioDataProvider()

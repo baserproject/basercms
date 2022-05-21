@@ -9,25 +9,20 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
-use BaserCore\Utility\BcSiteConfig;
-use BaserCore\Utility\BcUtil;
+use BaserCore\Model\Entity\Site;
+use BaserCore\Model\Entity\User;
 use BaserCore\View\BcAdminAppView;
-use Cake\Core\Configure;
-use Cake\Utility\Inflector;
 
 /**
  * toolbar
  * @var BcAdminAppView $this
+ * @var Site $currentSite
+ * @var array $otherSites
+ * @var User $loginUser
+ * @var string $currentAdminTheme
  */
-$adminTheme = Inflector::camelize(BcSiteConfig::get('admin_theme'));
-$loginUser = $this->BcAuth->getCurrentLoginUser();
 // JSの出力について、ツールバーはフロントエンドでも利用するため、inlineに出力する
-$this->BcBaser->js([$adminTheme . '.vendor/jquery.fixedMenu', $adminTheme . '.vendor/outerClick', $adminTheme . '.admin/toolbar.bundle']);
-$currentSite = $otherSites = null;
-if ($loginUser) {
-  $currentSite = $this->BcAdminSite->getCurrentSite();
-  $otherSites = $this->BcAdminSite->getOtherSiteList();
-}
+$this->BcBaser->js([$currentAdminTheme . '.vendor/jquery.fixedMenu', $currentAdminTheme . '.vendor/outerClick', $currentAdminTheme . '.admin/toolbar.bundle']);
 ?>
 
 
@@ -36,7 +31,7 @@ if ($loginUser) {
 
     <div class="bca-toolbar__logo">
       <?php $this->BcBaser->link(
-        $this->BcBaser->getImg($adminTheme . '.admin/logo_icon.svg', ['alt' => '', 'width' => '24', 'height' => '21', 'class' => 'bca-toolbar__logo-symbol']) .
+        $this->BcBaser->getImg($currentAdminTheme . '.admin/logo_icon.svg', ['alt' => '', 'width' => '24', 'height' => '21', 'class' => 'bca-toolbar__logo-symbol']) .
         '<span class="bca-toolbar__logo-text">' . $this->BcToolbar->getLogoText() . '</span>',
         $this->BcToolbar->getLogoLink(),
         $this->BcToolbar->getLogoLinkOptions()
@@ -46,12 +41,12 @@ if ($loginUser) {
     <div id="ToolMenu" class="bca-toolbar__tools">
       <?php if ($this->BcToolbar->isAvailableEditLink()): ?>
         <div class="bca-toolbar__tools-button bca-toolbar__tools-button-edit">
-          <?php $this->BcBaser->editLink() ?>
+          <?php $this->BcToolbar->editLink() ?>
         </div>
       <?php endif ?>
       <?php if ($this->BcToolbar->isAvailablePublishLink()): ?>
         <div class="bca-toolbar__tools-button bca-toolbar__tools-button-publish">
-          <?php $this->BcBaser->publishLink() ?>
+          <?php $this->BcToolbar->publishLink() ?>
         </div>
       <?php endif ?>
       <?php if ($this->BcToolbar->isAvailableMode()): ?>
@@ -70,7 +65,7 @@ if ($loginUser) {
             <li>
               <?php $this->BcBaser->link(
                 h($currentSite->display_name) . ' ' .
-                $this->BcBaser->getImg($adminTheme . '.admin/btn_dropdown.png', ['width' => 8, 'height' => 11, 'class' => 'bc-btn']),
+                $this->BcBaser->getImg($currentAdminTheme . '.admin/btn_dropdown.png', ['width' => 8, 'height' => 11, 'class' => 'bc-btn']),
                 'javascript:void(0)', [
                 'class' => 'title',
                 'escapeTitle' => false
@@ -92,7 +87,7 @@ if ($loginUser) {
           <li>
             <?php $this->BcBaser->link(
               h($this->BcBaser->getUserName($loginUser)) . ' ' .
-              $this->BcBaser->getImg($adminTheme . '.admin/btn_dropdown.png', ['width' => 8, 'height' => 11, 'class' => 'bc-btn']),
+              $this->BcBaser->getImg($currentAdminTheme . '.admin/btn_dropdown.png', ['width' => 8, 'height' => 11, 'class' => 'bc-btn']),
               'javascript:void(0)', [
               'class' => 'title',
               'escapeTitle' => false
@@ -116,7 +111,7 @@ if ($loginUser) {
             <li>
               <?php $this->BcBaser->link(
                 __d('baser', 'ログインしていません ') .
-                $this->BcBaser->getImg($adminTheme . '.admin/btn_dropdown.png', ['width' => 8, 'height' => 11, 'class' => 'bc-btn']),
+                $this->BcBaser->getImg($currentAdminTheme . '.admin/btn_dropdown.png', ['width' => 8, 'height' => 11, 'class' => 'bc-btn']),
                 'javascript:void(0)',
                 ['class' => 'title', 'escapeTitle' => false]
               ) ?>

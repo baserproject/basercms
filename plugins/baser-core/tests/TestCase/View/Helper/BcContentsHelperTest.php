@@ -74,8 +74,8 @@ class BcContentsHelperTest extends BcTestCase
     {
         $this->assertNotEmpty($this->BcContents->_Contents);
         $this->assertNotEmpty($this->BcContents->request);
-        $this->assertNotEmpty($this->BcContents->ContentService);
-        $this->assertNotEmpty($this->BcContents->PermissionService);
+        $this->assertNotEmpty($this->BcContents->ContentsService);
+        $this->assertNotEmpty($this->BcContents->PermissionsService);
         $this->assertContains('BcBaser', $this->BcContents->helpers);
 
     }
@@ -599,33 +599,6 @@ class BcContentsHelperTest extends BcTestCase
     }
 
     /**
-     * 対象コンテンツが属するフォルダまでのフルパスを取得する
-     * フォルダ名称部分にはフォルダ編集画面へのリンクを付与する
-     * @param int $id コンテンツID
-     * @param string $expected 期待値
-     * @dataProvider getFolderLinkedUrlDataProvider
-     */
-    public function testGetFolderLinkedUrl($url, $expected)
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $content = ClassRegistry::init('Content')->find('first', [
-            'conditions' => ['url' => $url],
-            'recursive' => 0
-        ]);
-        $this->assertEquals($expected, $this->BcContents->getFolderLinkedUrl($content));
-    }
-
-    public function getFolderLinkedUrlDataProvider()
-    {
-        return [
-            ['/', 'https://localhost/'],
-            ['/about', 'https://localhost/'],
-            ['/service/index', 'https://localhost/<a href="/admin/content_folders/edit/4">service</a>/'],
-            ['/s/service/index', 'https://localhost/<a href="/admin/content_folders/edit/3">s</a>/<a href="/admin/content_folders/edit/6">service</a>/'],
-        ];
-    }
-
-    /**
      * testIsEditable
      * @param int|null $id
      * @param bool $adminLogin
@@ -636,7 +609,7 @@ class BcContentsHelperTest extends BcTestCase
     public function testIsEditable($id, $adminLogin, $result)
     {
         if ($adminLogin) $this->loginAdmin($this->getRequest());
-        $content = $id ? $this->BcContents->ContentService->get($id) : [];
+        $content = $id ? $this->BcContents->ContentsService->get($id) : [];
         $this->assertEquals($result, $this->BcContents->isEditable($content));
     }
 
@@ -651,4 +624,52 @@ class BcContentsHelperTest extends BcTestCase
             [4, true, true],
         ];
     }
+
+    /**
+     * サイトIDからコンテンツIDを取得する
+     * getSiteRootId
+     *
+     * @param int $siteId
+     * @param string|bool $expect 期待値
+     * @dataProvider getSiteRootIdDataProvider
+     */
+    public function testGetSiteRootId($siteId, $expect)
+    {
+        $result = $this->BcContents->getSiteRootId($siteId);
+        $this->assertEquals($expect, $result);
+    }
+
+    public function getSiteRootIdDataProvider()
+    {
+        return [
+            // 存在するサイトID（0~2）を指定した場合
+            [1, 1],
+            // 存在しないサイトIDを指定した場合
+            [4, false],
+        ];
+    }
+
+    /**
+     * 対象コンテンツが属するフォルダまでのフルパスを取得する
+     * フォルダ名称部分にはフォルダ編集画面へのリンクを付与する
+     * @param int $id コンテンツID
+     * @param string $expected 期待値
+     * @dataProvider getFolderLinkedUrlDataProvider
+     */
+    public function testGetFolderLinkedUrl($url, $expected)
+    {
+        $content = $this->getTableLocator()->get('BaserCore.Contents')->find()->contain(['Sites'])->where([
+            'url' => $url
+        ])->first();
+        $this->assertEquals($expected, $this->BcContents->getFolderLinkedUrl($content));
+    }
+
+    public function getFolderLinkedUrlDataProvider()
+    {
+        return [
+            ['/', 'https://localhost/'],
+            ['/about', 'https://localhost/'],
+        ];
+    }
+
 }

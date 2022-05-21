@@ -86,17 +86,6 @@ class BlogCategoriesController extends BlogAppController
             null,
             $this->params['pass'][0]
         );
-        $this->crumbs[] = [
-            'name' => sprintf(
-                __d('baser', '%s 管理'),
-                $this->request->params['Content']['title']
-            ),
-            'url' => [
-                'controller' => 'blog_posts',
-                'action' => 'index',
-                $this->params['pass'][0]
-            ]
-        ];
 
         if ($this->params['prefix'] === 'admin') {
             $this->subMenuElements = ['blog_posts'];

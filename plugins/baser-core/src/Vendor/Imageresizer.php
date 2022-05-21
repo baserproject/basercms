@@ -98,7 +98,7 @@ class Imageresizer
         // 新しい画像のベースを作成
         switch($image_type) {
             case IMAGETYPE_GIF:
-                $newImage = imagecreatetruecolor($newWidth, $newHeight);
+                $newImage = imagecreatetruecolor((int) $newWidth, (int) $newHeight);
                 $alpha = imagecolorallocatealpha($newImage, 255, 255, 255, 0);
                 imagefill($newImage, 0, 0, $alpha);
                 imagecolortransparent($newImage, $alpha);
@@ -190,7 +190,7 @@ class Imageresizer
             $x = 0;
             $y = 0;
         }
-        imagecopyresampled($newImage, $srcImage, 0, 0, $x, $y, $newWidth, $newHeight, $srcWidth, $srcHeight);
+        imagecopyresampled($newImage, $srcImage, 0, 0, (int) $x, (int) $y, (int) $newWidth, (int) $newHeight, (int) $srcWidth, (int) $srcHeight);
         return $newImage;
 
     }

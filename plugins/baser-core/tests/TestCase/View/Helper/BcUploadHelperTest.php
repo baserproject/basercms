@@ -79,7 +79,7 @@ class BcUploadHelperTest extends BcTestCase
         ]);
         $BcUpload = new BcUploadHelper(new BcAdminAppView($request));
         $result = $BcUpload->fileLink('Contents.eyecatch');
-        $this->assertRegExp('/<a href=\"\/files\/contents\/template1\.jpg/', $result);
+        $this->assertMatchesRegularExpression('/<a href=\"\/files\/contents\/template1\.jpg/', $result);
     }
 
     /**
@@ -98,7 +98,7 @@ class BcUploadHelperTest extends BcTestCase
         ]);
         $BcUpload = new BcUploadHelper(new BcAdminAppView($request));
         $result = $BcUpload->fileLink('Contents.0.eyecatch');
-        $this->assertRegExp('/<a href=\"\/files\/contents\/template1\.jpg/', $result);
+        $this->assertMatchesRegularExpression('/<a href=\"\/files\/contents\/template1\.jpg/', $result);
     }
 
     /**
@@ -108,7 +108,7 @@ class BcUploadHelperTest extends BcTestCase
     {
         // オプションなし
         $result = $this->BcUpload->uploadImage('Contents.image', 'template1.jpg');
-        $this->assertRegExp('/^<a href=\"\/files\/contents\/template1\.jpg[^>]+?\"[^>]+?><img src=\"\/files\/contents\/template1\.jpg[^>]+?\"[^>]+?><\/a>/', $result);
+        $this->assertMatchesRegularExpression('/^<a href=\"\/files\/contents\/template1\.jpg[^>]+?\"[^>]+?><img src=\"\/files\/contents\/template1\.jpg[^>]+?\"[^>]+?><\/a>/', $result);
 
         // サイズ指定あり
         $options = [
@@ -117,7 +117,7 @@ class BcUploadHelperTest extends BcTestCase
         ];
         $result = $this->BcUpload->uploadImage('Contents.image', 'template1.jpg', $options);
         $expects = '<img src="/uploads/tmp/medium/template1.jpg" alt="" width="100" height="80" />';
-        $this->assertRegExp('/^<a href=\"\/files\/contents\/template1\.jpg[^>]+?\"[^>]+?><img src=\"\/files\/contents\/template1\.jpg[^>]+?\"[^>]+?alt="" width="100" height="80"[^>]+?><\/a>/', $result);
+        $this->assertMatchesRegularExpression('/^<a href=\"\/files\/contents\/template1\.jpg[^>]+?\"[^>]+?><img src=\"\/files\/contents\/template1\.jpg[^>]+?\"[^>]+?alt="" width="100" height="80"[^>]+?><\/a>/', $result);
 
         // 一時ファイルへのリンク（デフォルトがリンク付だが、Aタグが出力されないのが正しい挙動）
         $options = [
@@ -132,14 +132,14 @@ class BcUploadHelperTest extends BcTestCase
             'output' => 'tag'
         ];
         $result = $this->BcUpload->uploadImage('Contents.image', 'template1.jpg', $options);
-        $this->assertRegExp('/^<img src=\"\/files\/contents\/template1\.jpg[^>]+?\"[^>]+?>/', $result);
+        $this->assertMatchesRegularExpression('/^<img src=\"\/files\/contents\/template1\.jpg[^>]+?\"[^>]+?>/', $result);
 
         // output を urlに
         $options = [
             'output' => 'url'
         ];
         $result = $this->BcUpload->uploadImage('Contents.image', 'template1.jpg', $options);
-        $this->assertRegExp('/^\/files\/contents\/template1\.jpg\?[0-9]+/', $result);
+        $this->assertMatchesRegularExpression('/^\/files\/contents\/template1\.jpg\?[0-9]+/', $result);
     }
 
     /**

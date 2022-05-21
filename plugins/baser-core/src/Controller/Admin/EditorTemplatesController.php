@@ -56,10 +56,6 @@ class EditorTemplatesController extends BcAdminAppController
     {
         return // TODO : 一時措置
         parent::beforeFilter();
-        $this->crumbs = [
-            ['name' => __d('baser', 'システム設定'), 'url' => ['controller' => 'site_configs', 'action' => 'form']],
-            ['name' => __d('baser', 'エディタテンプレート管理'), 'url' => ['controller' => 'editor_templates', 'action' => 'index']]
-        ];
         if (BcSiteConfig::get('editor') && BcSiteConfig::get('editor') !== 'none') {
             $this->helpers[] = BcSiteConfig::get('editor');
         }

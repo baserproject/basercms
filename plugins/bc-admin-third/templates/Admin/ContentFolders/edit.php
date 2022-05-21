@@ -13,22 +13,19 @@
  * @var array $folderTemplateList フォルダテンプレートリスト
  * @var array $pageTemplateList ページテンプレートリスト
  */
+
+use BaserCore\Model\Entity\ContentFolder;
 use BaserCore\View\BcAdminAppView;
 
 /**
  * ContentFolders Edit
  * @var BcAdminAppView $this
+ * @var ContentFolder $contentFolder
+ * @var array $folderTemplateList
+ * @var array $pageTemplateList
  */
 $this->BcAdmin->setTitle(__d('baser', 'フォルダ編集'));
 $this->BcBaser->js('admin/content_folders/edit.bundle', false);
-$site = $this->BcAdminSite->findById($contentFolder->content->site_id)->first();
-$publishLink = $this->BcAdminContent->getUrl($contentFolder->content->url, true, $site->useSubDomain);
-if (!empty($site) && $site->theme) {
-    $theme[] = $site->theme;
-}
-$theme = $this->BcAdminSiteConfig->getValue('theme');
-$folderTemplateList = $this->BcAdminContentFolder->getFolderTemplateList($contentFolder->content->id, $theme);
-$pageTemplateList = $this->BcAdminPage->getPageTemplateList($contentFolder->content->id, $theme);
 ?>
 
 

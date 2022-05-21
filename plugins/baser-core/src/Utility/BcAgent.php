@@ -83,6 +83,7 @@ class BcAgent extends BcAbstractDetector
     public function isMatchDecisionKey()
     {
         $key = env('HTTP_USER_AGENT');
+        if(!$key) return false;
         $regex = $this->getDetectorRegex();
         return (bool)preg_match($regex, $key);
     }

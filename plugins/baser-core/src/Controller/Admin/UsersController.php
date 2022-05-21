@@ -11,6 +11,7 @@
 
 namespace BaserCore\Controller\Admin;
 
+use BaserCore\Service\UsersAdminServiceInterface;
 use Cake\Http\Response;
 use Cake\Core\Configure;
 use Cake\Routing\Router;
@@ -21,11 +22,10 @@ use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use Cake\Core\Exception\Exception;
 use BaserCore\Model\Table\UsersTable;
-use BaserCore\Service\UserServiceInterface;
+use BaserCore\Service\UsersServiceInterface;
 use Cake\Http\Exception\ForbiddenException;
-use BaserCore\Service\SiteConfigServiceInterface;
+use BaserCore\Service\SiteConfigsServiceInterface;
 use Cake\Datasource\Exception\RecordNotFoundException;
-use Authentication\Controller\Component\AuthenticationComponent;
 
 /**
  * Class UsersController
@@ -74,7 +74,7 @@ class UsersController extends BcAdminAppController
      * @unitTest
      * @noTodo
      */
-    public function login_agent(UserServiceInterface $userService, $id): ?Response
+    public function login_agent(UsersServiceInterface $userService, $id): ?Response
     {
         // 特権確認
         if (BcUtil::isSuperUser() === false) {
@@ -96,7 +96,7 @@ class UsersController extends BcAdminAppController
      * @noTodo
      * @checked
      */
-    public function back_agent(UserServiceInterface $userService)
+    public function back_agent(UsersServiceInterface $userService)
     {
         try {
             $redirectUrl = $userService->returnLoginUserFromAgent($this->request, $this->response);
@@ -115,7 +115,7 @@ class UsersController extends BcAdminAppController
      * @unitTest
      * @noTodo
      */
-    public function logout(UserServiceInterface $userService)
+    public function logout(UsersServiceInterface $userService)
     {
         /* @var User $user */
         $user = $this->Authentication->getIdentity();
@@ -127,12 +127,12 @@ class UsersController extends BcAdminAppController
     /**
      * ログインユーザーリスト
      * 管理画面にログインすることができるユーザーの一覧を表示する
-     * @param UserServiceInterface $userService
+     * @param UsersServiceInterface $userService
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function index(UserServiceInterface $userService, SiteConfigServiceInterface $siteConfigService): void
+    public function index(UsersServiceInterface $userService, SiteConfigsServiceInterface $siteConfigService): void
     {
         $this->setViewConditions('User', ['default' => ['query' => [
             'limit' => $siteConfigService->getValue('admin_list_num'),
@@ -155,13 +155,13 @@ class UsersController extends BcAdminAppController
     /**
      * ログインユーザー新規追加
      * 管理画面にログインすることができるユーザーの各種情報を新規追加する
-     * @param UserServiceInterface $userService
+     * @param UsersServiceInterface $userService
      * @return Response|null|void Redirects on successful add, renders view otherwise.
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function add(UserServiceInterface $userService)
+    public function add(UsersAdminServiceInterface $userService)
     {
         if ($this->request->is('post')) {
             try {
@@ -177,13 +177,13 @@ class UsersController extends BcAdminAppController
                 $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
             }
         }
-        $this->set('user', $user ?? $userService->getNew());
+        $this->set($userService->getViewVarsForAdd($user ?? $userService->getNew()));
     }
 
     /**
      * ログインユーザー編集
      * 管理画面にログインすることができるユーザーの各種情報を編集する
-     * @param UserServiceInterface $userService
+     * @param UsersServiceInterface $userService
      * @param string|null $id User id.
      * @return Response|null|void Redirects on successful edit, renders view otherwise.
      * @throws RecordNotFoundException When record not found.
@@ -191,7 +191,7 @@ class UsersController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function edit(UserServiceInterface $userService, $id = null)
+    public function edit(UsersAdminServiceInterface $userService, $id = null)
     {
         if (!$id && empty($this->request->getData())) {
             $this->BcMessage->setError(__d('baser', '無効なIDです。'));
@@ -213,13 +213,13 @@ class UsersController extends BcAdminAppController
                 $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
             }
         }
-        $this->set('user', $user);
+        $this->set($userService->getViewVarsForEdit($user));
     }
 
     /**
      * ログインユーザー削除
      * 管理画面にログインすることができるユーザーを削除する
-     * @param UserServiceInterface $userService
+     * @param UsersServiceInterface $userService
      * @param string|null $id User id.
      * @return Response|null|void Redirects to index.
      * @throws RecordNotFoundException When record not found.
@@ -227,7 +227,7 @@ class UsersController extends BcAdminAppController
      * @unitTest
      * @noTodo
      */
-    public function delete(UserServiceInterface $userService, $id = null)
+    public function delete(UsersServiceInterface $userService, $id = null)
     {
         if (!$id) {
             $this->BcMessage->setError(__d('baser', '無効なIDです。'));

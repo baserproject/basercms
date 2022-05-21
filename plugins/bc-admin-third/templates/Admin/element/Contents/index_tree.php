@@ -12,7 +12,7 @@
 /** @var BaserCore\View\BcAdminAppView $this */
 ?>
 
-<?php if (!$contents->isEmpty()): ?>
+<?php if (!$contents->all()->isEmpty()): ?>
   <div id="ContentsTreeList">
     <?php $this->BcBaser->element('Contents/index_list_tree'); ?>
   </div>

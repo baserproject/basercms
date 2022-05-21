@@ -30,8 +30,8 @@ if ($site->status) {
   $classies = ['unpublish', 'disablerow'];
 }
 $class = ' class="' . implode(' ', $classies) . '"';
-$site_alias = $site->alias ? '/' . $site->alias . '/' : '/';
-$url = $this->BcAdminContent->getUrl($site_alias, true, $site->use_subdomain);
+$site_alias = $site->alias? '/' . $site->alias . '/' : '/';
+$url = $this->BcContents->getUrl($site_alias, true, $site->use_subdomain);
 ?>
 
 

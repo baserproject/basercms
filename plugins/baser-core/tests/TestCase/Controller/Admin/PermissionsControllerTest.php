@@ -120,7 +120,7 @@ class PermissionsControllerTest extends BcTestCase
         $this->enableSecurityToken();
         $this->enableCsrfToken();
         $permissions = $this->getTableLocator()->get('Permissions');
-        $permission = $permissions->find()->order(['id' => 'ASC'])->last();
+        $permission = $permissions->find()->order(['id' => 'ASC'])->all()->last();
         $permissionBeforeName = $permission->name;
         $permission->name .= '変更';
         $permissionArray = $permission->toArray();
@@ -128,7 +128,7 @@ class PermissionsControllerTest extends BcTestCase
         $this->post('/baser/admin/baser-core/permissions/edit/2/' . $permission->id, $permissionArray);
         $this->assertResponseSuccess();
 
-        $permission = $permissions->find()->order(['id' => 'ASC'])->last();
+        $permission = $permissions->find()->order(['id' => 'ASC'])->all()->last();
 
         $this->assertNotEquals($permission->name, $permissionBeforeName);
         $this->assertEquals($permission->name, $permissionBeforeName . '変更');
@@ -142,12 +142,12 @@ class PermissionsControllerTest extends BcTestCase
         $this->enableSecurityToken();
         $this->enableCsrfToken();
         $permissions = $this->getTableLocator()->get('Permissions');
-        $permission = $permissions->find()->order(['id' => 'ASC'])->last();
+        $permission = $permissions->find()->order(['id' => 'ASC'])->all()->last();
         $permissionId = $permission->id;
         $this->post('/baser/admin/baser-core/permissions/delete/' . $permission->id);
         $this->assertResponseSuccess();
 
-        $permission = $permissions->find()->where(['id' => $permissionId])->last();
+        $permission = $permissions->find()->where(['id' => $permissionId])->all()->last();
         $this->assertNull($permission);
     }
 
@@ -159,12 +159,12 @@ class PermissionsControllerTest extends BcTestCase
         $this->enableSecurityToken();
         $this->enableCsrfToken();
         $permissions = $this->getTableLocator()->get('Permissions');
-        $permission = $permissions->find()->order(['id' => 'ASC'])->last();
+        $permission = $permissions->find()->order(['id' => 'ASC'])->all()->last();
         $permissionId = $permission->id;
         $this->post('/baser/admin/baser-core/permissions/copy/' . $permission->id);
         $this->assertResponseSuccess();
 
-        $permission = $permissions->find()->order(['id' => 'ASC'])->last();
+        $permission = $permissions->find()->order(['id' => 'ASC'])->all()->last();
         $this->assertGreaterThan($permissionId, $permission->id);
 
     }
@@ -177,7 +177,7 @@ class PermissionsControllerTest extends BcTestCase
         $this->enableSecurityToken();
         $this->enableCsrfToken();
         $permissions = $this->getTableLocator()->get('Permissions');
-        $permission = $permissions->find()->order(['id' => 'ASC'])->last();
+        $permission = $permissions->find()->order(['id' => 'ASC'])->all()->last();
         $permissionId = $permission->id;
         $permissionUgi = $permission->user_group_id;
         $permission->status = true;
@@ -185,7 +185,7 @@ class PermissionsControllerTest extends BcTestCase
         $this->post('/baser/admin/baser-core/permissions/unpublish/' . $permission->id);
         $this->assertRedirect('/baser/admin/baser-core/permissions/index/' . $permissionUgi);
 
-        $permission = $permissions->find()->where(['id' => $permissionId])->last();
+        $permission = $permissions->find()->where(['id' => $permissionId])->all()->last();
         $this->assertFalse($permission->status);
     }
 
@@ -197,7 +197,7 @@ class PermissionsControllerTest extends BcTestCase
         $this->enableSecurityToken();
         $this->enableCsrfToken();
         $permissions = $this->getTableLocator()->get('Permissions');
-        $permission = $permissions->find()->order(['id' => 'ASC'])->last();
+        $permission = $permissions->find()->order(['id' => 'ASC'])->all()->last();
         $permissionId = $permission->id;
         $permissionUgi = $permission->user_group_id;
         $permission->status = false;
@@ -205,7 +205,7 @@ class PermissionsControllerTest extends BcTestCase
         $this->post('/baser/admin/baser-core/permissions/publish/' . $permission->id);
         $this->assertRedirect('/baser/admin/baser-core/permissions/index/' . $permissionUgi);
 
-        $permission = $permissions->find()->where(['id' => $permissionId])->last();
+        $permission = $permissions->find()->where(['id' => $permissionId])->all()->last();
         $this->assertTrue($permission->status);
     }
 
@@ -232,7 +232,7 @@ class PermissionsControllerTest extends BcTestCase
         $this->post('/baser/admin/baser-core/permissions/batch', $data);
         $this->assertResponseNotEmpty();
 
-        $permission = $permissions->find()->where(['id' => 1])->last();
+        $permission = $permissions->find()->where(['id' => 1])->all()->last();
         $this->assertFalse($permission->status);
 
         // publish
@@ -245,7 +245,7 @@ class PermissionsControllerTest extends BcTestCase
         $this->post('/baser/admin/baser-core/permissions/batch', $data);
         $this->assertResponseNotEmpty();
 
-        $permission = $permissions->find()->where(['id' => 1])->last();
+        $permission = $permissions->find()->where(['id' => 1])->all()->last();
         $this->assertTrue($permission->status);
 
         // delete
@@ -258,7 +258,7 @@ class PermissionsControllerTest extends BcTestCase
         $this->post('/baser/admin/baser-core/permissions/batch', $data);
         $this->assertResponseNotEmpty();
 
-        $permission = $permissions->find()->where(['id' => 1])->last();
+        $permission = $permissions->find()->where(['id' => 1])->all()->last();
         $this->assertNull($permission);
     }
 

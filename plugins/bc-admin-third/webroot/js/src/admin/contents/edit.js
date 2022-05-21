@@ -153,10 +153,10 @@ $(function () {
         var targetUrl = $("#sites-target-url" + siteId).val();
         var data = {
                 title: current.title,
-                siteId: siteId,
-                parentId: current.parent_id,
-                contentId: current.id,
-                entityId: current.entity_id,
+                site_id: siteId,
+                parent_id: current.parent_id,
+                content_id: current.id,
+                entity_id: current.entity_id,
                 url: current.url
         };
         if (confirm(bcI18n.contentsEditConfirmMessage4.sprintf(displayName))) {

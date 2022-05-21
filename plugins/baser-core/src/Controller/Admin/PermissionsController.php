@@ -17,8 +17,8 @@ use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Model\Table\UserGroupsTable;
 use BaserCore\Model\Table\PermissionsTable;
-use BaserCore\Service\PermissionServiceInterface;
-use BaserCore\Service\UserGroupServiceInterface;
+use BaserCore\Service\PermissionsServiceInterface;
+use BaserCore\Service\UserGroupsServiceInterface;
 use BaserCore\Controller\Component\BcMessageComponent;
 use Authentication\Controller\Component\AuthenticationComponent;
 
@@ -46,7 +46,7 @@ class PermissionsController extends BcAdminAppController
 	{
 		parent::beforeFilter($event);
         $this->loadModel('BaserCore.Permissions');
-        $this->viewBuilder()->setHelpers(
+        $this->viewBuilder()->addHelpers(
             ['BcTime',
             // 'BcFreeze'
         ]);
@@ -64,7 +64,7 @@ class PermissionsController extends BcAdminAppController
      * @unitTest
      * @noTodo
 	 */
-	public function index(PermissionServiceInterface $permissionService, UserGroupServiceInterface $userGroups, $userGroupId = '')
+	public function index(PermissionsServiceInterface $permissionService, UserGroupsServiceInterface $userGroups, $userGroupId = '')
 	{
 		$currentUserGroup = $userGroups->get($userGroupId);
 
@@ -83,8 +83,8 @@ class PermissionsController extends BcAdminAppController
 	/**
 	 * [ADMIN] 登録処理
      *
-     * @param PermissionServiceInterface $userService
-     * @param UserGroupServiceInterface $userGroups
+     * @param PermissionsServiceInterface $userService
+     * @param UserGroupsServiceInterface $userGroups
      * @param int $userGroupId
      * @return void
      *
@@ -92,7 +92,7 @@ class PermissionsController extends BcAdminAppController
      * @noTodo
      * @unitTest
 	 */
-	public function add(PermissionServiceInterface $permissionService, UserGroupServiceInterface $userGroups, $userGroupId)
+	public function add(PermissionsServiceInterface $permissionService, UserGroupsServiceInterface $userGroups, $userGroupId)
 	{
 		$currentUserGroup = $userGroups->get($userGroupId);
         if ($this->request->is('post')) {
@@ -112,8 +112,8 @@ class PermissionsController extends BcAdminAppController
     /**
      * [ADMIN] 編集処理
      *
-     * @param PermissionServiceInterface $userService
-     * @param UserGroupServiceInterface $userGroups
+     * @param PermissionsServiceInterface $userService
+     * @param UserGroupsServiceInterface $userGroups
      * @param int $userGroupId
      * @param int $permissionId
      * @return void
@@ -123,7 +123,7 @@ class PermissionsController extends BcAdminAppController
      * @unitTest
      */
 
-	public function edit(PermissionServiceInterface $permissionService, UserGroupServiceInterface $userGroups, $userGroupId, $permissionId)
+	public function edit(PermissionsServiceInterface $permissionService, UserGroupsServiceInterface $userGroups, $userGroupId, $permissionId)
     {
 		$currentUserGroup = $userGroups->get($userGroupId);
         $permission = $permissionService->get($permissionId);
@@ -151,7 +151,7 @@ class PermissionsController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-	public function delete(PermissionServiceInterface $permissionService, $permissionId)
+	public function delete(PermissionsServiceInterface $permissionService, $permissionId)
     {
         $permission = $permissionService->get($permissionId);
         $permissionName = $permission->name;
@@ -167,7 +167,7 @@ class PermissionsController extends BcAdminAppController
     /**
      * [ADMIN] 複製処理
      *
-     * @param PermissionServiceInterface $userService
+     * @param PermissionsServiceInterface $userService
      * @param int $userGroupId
      * @param int $permissionId
      * @return void
@@ -176,7 +176,7 @@ class PermissionsController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-	public function copy(PermissionServiceInterface $permissionService, $permissionId)
+	public function copy(PermissionsServiceInterface $permissionService, $permissionId)
     {
         $permission = $permissionService->get($permissionId);
         $userGroupId = $permission->user_group_id;
@@ -201,7 +201,7 @@ class PermissionsController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-	public function unpublish(PermissionServiceInterface $permissionService, $permissionId)
+	public function unpublish(PermissionsServiceInterface $permissionService, $permissionId)
     {
         $permission = $permissionService->get($permissionId);
         $userGroupId = $permission->user_group_id;
@@ -225,7 +225,7 @@ class PermissionsController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-	public function publish(PermissionServiceInterface $permissionService, $permissionId)
+	public function publish(PermissionsServiceInterface $permissionService, $permissionId)
     {
         $permission = $permissionService->get($permissionId);
         $userGroupId = $permission->user_group_id;
@@ -248,7 +248,7 @@ class PermissionsController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function batch(PermissionServiceInterface $permissionService)
+    public function batch(PermissionsServiceInterface $permissionService)
     {
         $this->disableAutoRender();
         $allowMethod = [
@@ -288,7 +288,7 @@ class PermissionsController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function update_sort(PermissionServiceInterface $permissionService, $userGroupId)
+    public function update_sort(PermissionsServiceInterface $permissionService, $userGroupId)
     {
 
         $this->disableAutoRender();

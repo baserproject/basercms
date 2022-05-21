@@ -16,7 +16,6 @@ use BaserCore\View\BcAdminAppView;
 use BaserCore\View\Helper\BcToolbarHelper;
 use Cake\Core\Configure;
 use Cake\View\View;
-use Composer\Config;
 
 /**
  * Class BcToolbarHelperTest
@@ -210,10 +209,10 @@ class BcToolbarHelperTest extends BcTestCase
         $this->assertEquals('debug', $this->BcToolbar->getMode());
         // インストール
         Configure::write('debug', false);
-        $_SERVER['INSTALL_MODE'] = true;
+        $_SERVER['INSTALL_MODE'] = "true";
         $this->assertEquals('install', $this->BcToolbar->getMode());
         // なし
-        $_SERVER['INSTALL_MODE'] = false;
+        $_SERVER['INSTALL_MODE'] = "false";
         $this->assertEquals('', $this->BcToolbar->getMode());
         Configure::write('debug', $debug);
     }
@@ -229,10 +228,10 @@ class BcToolbarHelperTest extends BcTestCase
         $this->assertEquals('デバッグモード', $this->BcToolbar->getModeTitle());
         // インストール
         Configure::write('debug', false);
-        $_SERVER['INSTALL_MODE'] = true;
+        $_SERVER['INSTALL_MODE'] = "true";
         $this->assertEquals('インストールモード', $this->BcToolbar->getModeTitle());
         // なし
-        $_SERVER['INSTALL_MODE'] = false;
+        $_SERVER['INSTALL_MODE'] = "false";
         $this->assertEquals('', $this->BcToolbar->getModeTitle());
         Configure::write('debug', $debug);
     }
@@ -245,13 +244,13 @@ class BcToolbarHelperTest extends BcTestCase
         $debug = Configure::read('debug');
         // デバッグ
         Configure::write('debug', true);
-        $this->assertRegExp('/デバッグモードです。/', $this->BcToolbar->getModeDescription());
+        $this->assertMatchesRegularExpression('/デバッグモードです。/', $this->BcToolbar->getModeDescription());
         // インストール
         Configure::write('debug', false);
-        $_SERVER['INSTALL_MODE'] = true;
-        $this->assertRegExp('/インストールモードです。/', $this->BcToolbar->getModeDescription());
+        $_SERVER['INSTALL_MODE'] = "true";
+        $this->assertMatchesRegularExpression('/インストールモードです。/', $this->BcToolbar->getModeDescription());
         // なし
-        $_SERVER['INSTALL_MODE'] = false;
+        $_SERVER['INSTALL_MODE'] = "false";
         $this->assertEquals('', $this->BcToolbar->getModeDescription());
         Configure::write('debug', $debug);
     }

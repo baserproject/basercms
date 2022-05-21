@@ -15,7 +15,14 @@
  *
  * @var \BaserCore\View\BcAdminAppView $this
  * @var \BaserCore\Model\Entity\SiteConfig $siteConfig
+ * @var array $mailEncodeList
+ * @var bool $isWritableEnv
+ * @var array $modeList
+ * @var array $widgetAreaList
+ * @var array $adminThemeList
+ * @var array $editorList
  */
+
 $this->BcAdmin->setTitle(__d('baser', 'システム基本設定'));
 $this->BcAdmin->setHelp('site_configs_form');
 $this->BcBaser->i18nScript([
@@ -29,7 +36,6 @@ $this->BcBaser->i18nScript([
 $this->BcBaser->js('admin/site_configs/index.bundle', false, ['id' => 'AdminSiteConfigsFormScript',
   'data-isAdminSsl' => (string)$siteConfig->admin_ssl
 ]);
-$isWritableEnv = $this->BcAdminSiteConfig->isWritableEnv();
 ?>
 
 
@@ -75,6 +81,8 @@ $isWritableEnv = $this->BcAdminSiteConfig->isWritableEnv();
         </div>
       </td>
     </tr>
+    <!--
+    <?php // TODO ucmitz 未実装のためコメントアウト ?>
     <tr>
       <th class="col-head bca-form-table__label">
         <?php echo $this->BcAdminForm->label('maintenance', __d('baser', '公開状態')) ?>
@@ -94,6 +102,7 @@ $isWritableEnv = $this->BcAdminSiteConfig->isWritableEnv();
         </div>
       </td>
     </tr>
+    -->
     <tr>
       <th class="col-head bca-form-table__label">
         <?php echo $this->BcAdminForm->label('mode', __d('baser', '制作・開発モード')) ?>
@@ -101,7 +110,7 @@ $isWritableEnv = $this->BcAdminSiteConfig->isWritableEnv();
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('mode', [
           'type' => 'select',
-          'options' => $this->BcAdminSiteConfig->getModeList(),
+          'options' => $modeList,
           'disabled' => !$isWritableEnv
         ]) ?>
         <i class="bca-icon--question-circle btn help bca-help"></i>
@@ -114,6 +123,8 @@ $isWritableEnv = $this->BcAdminSiteConfig->isWritableEnv();
         </div>
       </td>
     </tr>
+    <!--
+    <?php // TODO ucmitz 未実装のためコメントアウト ?>
     <tr>
       <th class="col-head bca-form-table__label">
         <?php echo $this->BcAdminForm->label('widget_area', __d('baser', '標準ウィジェットエリア')) ?>
@@ -121,7 +132,7 @@ $isWritableEnv = $this->BcAdminSiteConfig->isWritableEnv();
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('widget_area', [
           'type' => 'select',
-          'options' => $this->BcAdminSiteConfig->getWidgetAreaList()
+          'options' => $widgetAreaList
         ]) ?>
         <i class="bca-icon--question-circle btn help bca-help"></i>
         <div id="helptextWidgetArea" class="helptext">
@@ -133,6 +144,7 @@ $isWritableEnv = $this->BcAdminSiteConfig->isWritableEnv();
         </div>
       </td>
     </tr>
+    -->
   </table>
 </section>
 
@@ -171,7 +183,7 @@ $isWritableEnv = $this->BcAdminSiteConfig->isWritableEnv();
           <?php echo $this->BcAdminForm->label('admin_list_num', __d('baser', '管理画面テーマ')) ?>
         </th>
         <td class="col-input bca-form-table__input">
-          <?php echo $this->BcAdminForm->control('admin_theme', ['type' => 'select', 'options' => $this->BcAdminSiteConfig->getAdminThemeList()]) ?>
+          <?php echo $this->BcAdminForm->control('admin_theme', ['type' => 'select', 'options' => $adminThemeList]) ?>
           <?php echo $this->BcAdminForm->error('admin_theme') ?>
         </td>
       </tr>
@@ -194,6 +206,8 @@ $isWritableEnv = $this->BcAdminSiteConfig->isWritableEnv();
           </div>
         </td>
       </tr>
+      <!--
+      <?php // TODO ucmitz 未実装のためコメントアウト ?>
       <tr>
         <th class="col-head bca-form-table__label">
           <?php echo $this->BcAdminForm->label('login_credit', __d('baser', 'ログインページのクレジット表示')) ?>
@@ -208,6 +222,7 @@ $isWritableEnv = $this->BcAdminSiteConfig->isWritableEnv();
           <?php echo $this->BcAdminForm->error('login_credit') ?>
         </td>
       </tr>
+      -->
       <tr>
         <th class="col-head bca-form-table__label">
           <?php echo $this->BcAdminForm->label('admin_side_banner', __d('baser', 'サイドバーのバナー表示')) ?>
@@ -226,6 +241,8 @@ $isWritableEnv = $this->BcAdminSiteConfig->isWritableEnv();
     </table>
   </div>
 </section>
+<!--
+<?php // TODO ucmitz 未実装のためコメントアウト ?>
 
 <section class="bca-section" data-bca-section-type='form-group'>
   <div class="bca-collapse__action">
@@ -334,7 +351,7 @@ $isWritableEnv = $this->BcAdminSiteConfig->isWritableEnv();
   </div>
 
 </section>
-
+-->
 <section class="bca-section" data-bca-section-type='form-group'>
   <div class="bca-collapse__action">
     <button type="button"
@@ -349,6 +366,8 @@ $isWritableEnv = $this->BcAdminSiteConfig->isWritableEnv();
   </div>
   <div class="bca-collapse" id="formSubSiteSettingBody" data-bca-state="">
     <table class="form-table bca-form-table section" data-bca-table-type="type2">
+      <!--
+      <?php // TODO ucmitz 未実装のためコメントアウト（不要な可能性が高い、その場合、DBのデータの精査を行う）?>
       <tr>
         <th class="col-head bca-form-table__label">
           <?php echo $this->BcAdminForm->label('main_site_display_name', __d('baser', 'メインサイト表示名称')) ?>
@@ -365,6 +384,7 @@ $isWritableEnv = $this->BcAdminSiteConfig->isWritableEnv();
           <?php echo $this->BcAdminForm->error('main_site_display_name') ?>
         </td>
       </tr>
+      -->
       <tr>
         <th class="col-head bca-form-table__label">
           <?php echo $this->BcAdminForm->label('use_site_device_setting', __d('baser', 'デバイス・言語設定')) ?>
@@ -394,7 +414,8 @@ $isWritableEnv = $this->BcAdminSiteConfig->isWritableEnv();
     </table>
   </div>
 </section>
-
+<!--
+<?php // TODO ucmitz 未実装のためコメントアウト（動作の確認ができていない） ?>
 <section class="bca-section" data-bca-section-type='form-group'>
   <div class="bca-collapse__action">
     <button type="button"
@@ -416,7 +437,7 @@ $isWritableEnv = $this->BcAdminSiteConfig->isWritableEnv();
         <td class="col-input bca-form-table__input">
           <?php echo $this->BcAdminForm->control('editor', [
             'type' => 'radio',
-            'options' => $this->BcAdminSiteConfig->getEditorList()
+            'options' => $editorList
           ]) ?>
         </td>
       </tr>
@@ -472,7 +493,9 @@ h2 {}
     </table>
   </div>
 </section>
-
+-->
+<!--
+<?php // TODO ucmitz 未実装のためコメントアウト（動作確認できていない） ?>
 <section class="bca-section" data-bca-section-type='form-group'>
   <div class="bca-collapse__action">
     <button type="button"
@@ -494,7 +517,7 @@ h2 {}
         <td class="col-input bca-form-table__input">
           <?php echo $this->BcAdminForm->control('mail_encode', [
             'type' => 'select',
-            'options' => $this->BcAdminSiteConfig->getMailEncodeList()
+            'options' => $mailEncodeList
           ]) ?>
           <i class="bca-icon--question-circle btn help bca-help"></i>
           <div id="helptextEncode" class="helptext">
@@ -599,7 +622,7 @@ h2 {}
                 'class' => 'button-small bca-btn',
                 'id' => 'BtnCheckSendmail',
                 'escapeTitle' => false
-            ]) ?>
+              ]) ?>
             　<span id=ResultCheckSendmail></span>
             <?php $this->BcBaser->img('admin/ajax-loader-s.gif', [
               'id' => 'AjaxLoaderCheckSendmail',
@@ -630,7 +653,7 @@ h2 {}
     </table>
   </div>
 </section>
-
+-->
 <?php echo $this->BcFormTable->dispatchAfter() ?>
 
 <div class="bca-actions">

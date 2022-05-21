@@ -63,21 +63,6 @@ class UploaderFilesController extends AppController
      */
     public $subMenuElements = ['uploader'];
 
-    /**
-     * UploaderFilesController constructor.
-     *
-     * @param \CakeRequest $request
-     * @param \CakeRequest $response
-     */
-    public function __construct($request = null, $response = null)
-    {
-        parent::__construct($request, $response);
-        $this->crumbs = [
-            ['name' => __d('baser', 'プラグイン管理'), 'url' => ['plugin' => '', 'controller' => 'plugins', 'action' => 'index']],
-            ['name' => __d('baser', 'アップロードファイル管理'), 'url' => ['controller' => 'uploader_files', 'action' => 'index']]
-        ];
-    }
-
     public function beforeFilter(EventInterface $event)
     {
         $this->BcAuth->allow('view_limited_file');

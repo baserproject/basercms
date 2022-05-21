@@ -110,16 +110,7 @@
             }
             const mode = $("#viewsetting-mode").val();
             let url;
-            if (mode == 'index') {
-                const urlSearchParams = new URLSearchParams(window.location.search);
-                const params = Object.fromEntries(urlSearchParams.entries());
-                if (params.site_id !== 'undefined') $.bcTree.currentSiteId = params.site_id;
-                url = $.bcUtil.adminBaseUrl + 'baser-core' + '/contents/index?site_id=' + $.bcTree.currentSiteId + '&list_type=1';
-            } else if (mode == 'trash') {
-                url = $.bcUtil.adminBaseUrl + 'baser-core' + '/contents/trash_index';
-            }
             $.bcTree.listDisplayed = getNowDateTime();
-            $.bcTree.destroy();
             $.bcTree._init();
             $($.bcTree).trigger('loaded');
             $.bcUtil.hideLoader();
@@ -989,17 +980,15 @@
                     },
                     success: function (result) {
                         $.bcUtil.showNoticeMessage(result.message);
-                        // 削除対象のエイリアスを一度に削除する場合もあり実装が面倒なので
-                        // 一旦、load() で読み直す
-
                         // $.bcTree.jsTree.delete_node(node);
                         // if (!$.bcTree.settings[data.contentType]['multiple'] && !data.alias) {
                         // 	$.bcTree.settings[data.contentType]['exists'] = false;
                         // }
                         $.bcTree.refreshTree();
                         $.bcToken.key = null;
-                        $.bcTree.load();
-                        location.reload();
+                        // TODO 削除対象に関連づくエイリアスも削除が必要
+                        $.bcTree.jsTree.delete_node(node);
+                        $.bcUtil.hideLoader();
                     },
                     error: function (XMLHttpRequest, textStatus, errorThrown) {
                         $.bcToken.key = null;
@@ -1043,8 +1032,8 @@
                         $.bcToken.key = null;
                         $.bcTree.settings[data.contentType]['exists'] = true;
                         $.bcTree.settings[data.contentType]['existsTitle'] = data.contentTitle;
-                        data.contentId = result.id;
-                        data.contentEntityId = result.entity_id;
+                        data.contentId = result.content.id;
+                        data.contentEntityId = result.content.entity_id;
                         data.contentTitle = data.contentTitle.replace(/&/g, '&amp;')
                             .replace(/"/g, '&quot;')
                             .replace(/'/g, '&#039;')
@@ -1064,12 +1053,11 @@
                             });
                             var newNode = $.bcTree.jsTree.get_node(nodeId);
                             newNode.data.jstree = data;
-                            if (data.contentType == 'ContentFolder') {
+                            if (data.contentType === 'ContentFolder') {
                                 newNode.type = 'folder'
                             }
                             $.bcUtil.hideLoader();
                             $.bcTree.renameContent(newNode, data.contentTitle, true);
-                            location.reload();
                         });
                     },
                     error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -1117,7 +1105,9 @@
                             $.bcUtil.showLoader();
                         },
                         success: function (result) {
-                            $.bcUtil.showNoticeMessage(result.message);
+                            if(!first) {
+                                $.bcUtil.showNoticeMessage(result.message);
+                            }
                             $.bcTree.settings[node.data.jstree.contentType]['existsTitle'] = editNode.text;
                             editNode.data.jstree.contentFullUrl = result.url;
                         },

@@ -109,7 +109,7 @@ class BcFreezeHelperTest extends BcTestCase
         }
 
         $result = $this->BcFreeze->select($fieldName, $options, $attributes);
-        $this->assertRegExp('/' . $expected . '/s', $result);
+        $this->assertMatchesRegularExpression('/' . $expected . '/s', $result);
     }
 
     public function selectDataProvider()
@@ -146,7 +146,7 @@ class BcFreezeHelperTest extends BcTestCase
         }
 
         $result = $this->BcFreeze->dateTime($fieldName, $dateFormat, $timeFormat, $attributes);
-        $this->assertRegExp('/' . $expected . '/s', $result);
+        $this->assertMatchesRegularExpression('/' . $expected . '/s', $result);
     }
 
     public function dateTimeDataProvider()
@@ -189,7 +189,7 @@ class BcFreezeHelperTest extends BcTestCase
         }
 
         $result = $this->BcFreeze->wyear($fieldName, $minYear, $maxYear, $selected, $attributes, $showEmpty);
-        $this->assertRegExp('/' . $expected . '/s', $result);
+        $this->assertMatchesRegularExpression('/' . $expected . '/s', $result);
     }
 
     public function wyearDataProvider()
@@ -225,7 +225,7 @@ class BcFreezeHelperTest extends BcTestCase
         }
 
         $result = $this->BcFreeze->checkbox($fieldName, $attributes);
-        $this->assertRegExp('/' . $expected . '/s', $result);
+        $this->assertMatchesRegularExpression('/' . $expected . '/s', $result);
     }
 
     public function checkboxDataProvider()
@@ -258,7 +258,7 @@ class BcFreezeHelperTest extends BcTestCase
         }
 
         $result = $this->BcFreeze->textarea($fieldName, $attributes);
-        $this->assertRegExp('/' . $expected . '/s', $result);
+        $this->assertMatchesRegularExpression('/' . $expected . '/s', $result);
     }
 
     public function textareaDataProvider()
@@ -291,7 +291,7 @@ class BcFreezeHelperTest extends BcTestCase
         }
 
         $result = $this->BcFreeze->radio($fieldName, $options, $attributes);
-        $this->assertRegExp('/' . $expected . '/s', $result);
+        $this->assertMatchesRegularExpression('/' . $expected . '/s', $result);
     }
 
     public function radioDataProvider()
@@ -327,12 +327,12 @@ class BcFreezeHelperTest extends BcTestCase
             $this->EditorTemplate = ClassRegistry::init('EditorTemplate');
             $this->EditorTemplate->BcFreeze = new BcFreezeHelper(new View);
             $result = $this->EditorTemplate->BcFreeze->file($fieldName, $options);
-            $this->assertRegExp('/' . $expected . '/s', $result);
+            $this->assertMatchesRegularExpression('/' . $expected . '/s', $result);
 
 
         } else {
             $result = $this->BcFreeze->file($fieldName, $options);
-            $this->assertRegExp('/' . $expected . '/s', $result);
+            $this->assertMatchesRegularExpression('/' . $expected . '/s', $result);
 
         }
 
@@ -374,7 +374,7 @@ class BcFreezeHelperTest extends BcTestCase
         }
 
         $result = $this->BcFreeze->image($fieldName, $attributes, $imageAttributes);
-        $this->assertRegExp('/' . $expected . '/s', $result);
+        $this->assertMatchesRegularExpression('/' . $expected . '/s', $result);
     }
 
     public function imageDataProvider()
@@ -421,7 +421,7 @@ class BcFreezeHelperTest extends BcTestCase
         $attributes = $attributes + $attributes_default;
 
         $result = $this->BcFreeze->jsonList($fieldName, $attributes);
-        $this->assertRegExp('/' . $expected . '/s', $result);
+        $this->assertMatchesRegularExpression('/' . $expected . '/s', $result);
     }
 
     public function jsonListDataProvider()
@@ -459,7 +459,7 @@ class BcFreezeHelperTest extends BcTestCase
         }
 
         $result = $this->BcFreeze->datepicker($fieldName, $attributes);
-        $this->assertRegExp('/' . $expected . '/s', $result);
+        $this->assertMatchesRegularExpression('/' . $expected . '/s', $result);
     }
 
     public function datepickerDataProvider()
@@ -492,7 +492,7 @@ class BcFreezeHelperTest extends BcTestCase
     public function testFreezeControll($fieldName, $options, $attributes, $expected)
     {
         $result = $this->BcFreeze->freezeControll($fieldName, $options, $attributes);
-        $this->assertRegExp('/' . $expected . '/s', $result);
+        $this->assertMatchesRegularExpression('/' . $expected . '/s', $result);
     }
 
     public function freezeControllDataProvider()

@@ -16,6 +16,8 @@ use BaserCore\View\BcAdminAppView;
  * Users Form
  * @var BcAdminAppView $this
  * @var User $user
+ * @var array $userGroupList
+ * @var bool $isUserGroupEditable
  */
 $this->BcBaser->i18nScript([
   'alertMessage1' => __d('baser', '処理に失敗しました。'),
@@ -25,7 +27,6 @@ $this->BcBaser->i18nScript([
   'infoMessage1' => __d('baser', '登録されている「よく使う項目」を所属するユーザーグループの初期値として設定しました。'),
 ]);
 $this->BcBaser->js('admin/users/form.bundle', false);
-$userGroups = $this->BcAdminUser->getUserGroupList();
 ?>
 
 
@@ -90,8 +91,8 @@ $userGroups = $this->BcAdminUser->getUserGroupList();
         class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('user_group_id', __d('baser', 'グループ')) ?>
         &nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span></th>
       <td class="col-input bca-form-table__input">
-        <?php if ($user->id === null || $this->BcAdminUser->isEditable($user->id)): ?>
-          <?php echo $this->BcAdminForm->control('user_groups._ids', ['type' => 'multiCheckbox', 'options' => $userGroups, 'error' => false]); ?>
+        <?php if ($isUserGroupEditable): ?>
+          <?php echo $this->BcAdminForm->control('user_groups._ids', ['type' => 'multiCheckbox', 'options' => $userGroupList, 'error' => false]); ?>
           <i class="bca-icon--question-circle btn help bca-help"></i>
           <div id="helptextUserGroupId"
                class="helptext"><?php echo sprintf(__d('baser', 'ユーザーグループごとにコンテンツへのアクセス制限をかける場合などには%sより新しいグループを追加しアクセス制限の設定をおこないます。'), $this->BcBaser->getLink(__d('baser', 'ユーザーグループ管理'), ['controller' => 'user_groups', 'action' => 'index'])) ?></div>

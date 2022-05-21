@@ -81,18 +81,6 @@ class MailMessagesController extends MailAppController
         $mailContentId = $this->request->param('pass.0');
         $content = $this->BcContents->getContent($mailContentId);
         $this->request->param('Content', $content['Content']);
-        $this->crumbs[] = [
-            'name' => sprintf(
-                __d('baser', '%s 管理'),
-                $this->request->param('Content.title')
-            ),
-            'url' => [
-                'plugin' => 'mail',
-                'controller' => 'mail_fields',
-                'action' => 'index',
-                $this->request->param('pass.0')
-            ]
-        ];
     }
 
     /**
@@ -156,15 +144,6 @@ class MailMessagesController extends MailAppController
             'order' => 'created DESC'
         ]);
         $mailFields = $this->MailMessage->mailFields;
-
-        $this->crumbs[] = [
-            'name' => __d('baser', '受信メール一覧'),
-            'url' => [
-                'controller' => 'mail_messages',
-                'action' => 'index',
-                $this->params['pass'][0]
-            ]
-        ];
         $this->set(compact('message', 'mailFields'));
         $this->pageTitle = sprintf(
             __d('baser', '%s｜受信メール詳細'),

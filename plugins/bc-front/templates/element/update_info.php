@@ -16,15 +16,13 @@
 ?>
 
 <?php if (!$this->BcBaser->isHome()): ?>
-	<div class="update-info clearfix">
+	<div class="bc-update-info clearfix">
 		<dl>
 			<?php if ($createdDate): ?>
-				<dt><?php echo __d('baser', '作成日') ?></dt>
-				<dd><?php echo $createdDate ?></dd>
+				<dt><?php echo __d('baser', '作成日') ?></dt><dd><?php echo $createdDate ?></dd>
 			<?php endif ?>
 			<?php if ($modifiedDate): ?>
-				<dt><?php echo __d('baser', '最終更新日') ?></dt>
-				<dd><?php echo $modifiedDate ?></dd>
+				<dt><?php echo __d('baser', '最終更新日') ?></dt><dd><?php echo $modifiedDate ?></dd>
 			<?php endif ?>
 		</dl>
 	</div>

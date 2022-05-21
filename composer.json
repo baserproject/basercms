@@ -1,27 +1,33 @@
 {
     "name": "baserproject/basercms",
-    "type": "project",
     "description": "baserCMS plugin for CakePHP",
     "homepage": "https://basercms.net",
+    "type": "project",
     "license": "MIT",
     "require": {
-        "php": ">=7.2",
+        "php": ">=8.1",
         "ext-json": "*",
-        "cakephp/authentication": "2.3.*",
-        "cakephp/cakephp": "4.2.*",
-        "cakephp/migrations": "^3.1",
+        "cakephp/authentication": "^2.9",
+        "cakephp/cakephp": "4.3.*",
+        "cakephp/migrations": "^3.2",
         "doctrine/annotations": "^1.12",
-        "firebase/php-jwt": "5.3.*",
-        "imo-tikuwa/cakephp3-soft-delete": "^2.0",
+        "firebase/php-jwt": "^6.1",
+        "imo-tikuwa/cakephp-soft-delete": "^2.0",
         "josegonzalez/dotenv": "^3.2",
         "mobiledetect/mobiledetectlib": "^2.8"
     },
     "require-dev": {
-        "cakephp/bake": "^2.0.3",
-        "cakephp/debug_kit": "^4.1",
-        "phpunit/phpunit": "~8.5.0",
-        "psy/psysh": "@stable",
-        "symplify/monorepo-builder": "^6.1"
+        "cakephp/bake": "^2.6",
+        "cakephp/debug_kit": "^4.5",
+        "phpunit/phpunit": "^9.5",
+        "symplify/monorepo-builder": "^10.2",
+        "vierge-noire/cakephp-fixture-factories": "^2.5"
+    },
+    "suggest": {
+        "markstory/asset_compress": "An asset compression plugin which provides file concatenation and a flexible filter system for preprocessing and minification.",
+        "dereuromark/cakephp-ide-helper": "After baking your code, this keeps your annotations in sync with the code evolving from there on for maximum IDE and PHPStan/Psalm compatibility.",
+        "phpstan/phpstan": "PHPStan focuses on finding errors in your code without actually running it. It catches whole classes of bugs even before you write tests for the code.",
+        "cakephp/repl": "Console tools for a REPL interface for CakePHP applications."
     },
     "autoload": {
         "psr-4": {
@@ -42,17 +48,15 @@
             "BcBlog\\Test\\": "plugins/bc-blog/tests/",
             "BcFront\\Test\\": "plugins/bc-front/tests/",
             "BcMail\\Test\\": "plugins/bc-mail/tests/",
-            "BcPage\\Test\\": "plugins/bc-page/tests/",
             "BcSpaSample\\Test\\": "plugins/BcSpaSample/tests/",
             "BcUploader\\Test\\": "plugins/bc-uploader/tests/"
         }
     },
     "replace": {
-        "baserproject/baser-core": "self.version",
-        "baserproject/bc-admin-third": "self.version",
-        "baserproject/bc-blog": "self.version",
-        "baserproject/bc-front": "self.version",
-        "baserproject/bc-page": "self.version"
+        "baserproject/baser-core": "2.0.0",
+        "baserproject/bc-admin-third": "2.0.0",
+        "baserproject/bc-blog": "2.0.0",
+        "baserproject/bc-front": "2.0.0"
     },
     "scripts": {
         "post-install-cmd": "App\\Console\\Installer::postInstall",
@@ -63,23 +67,18 @@
         ],
         "cs-check": "phpcs --colors -p  src/ tests/",
         "cs-fix": "phpcbf --colors -p src/ tests/",
-        "stan": "phpstan analyse src/",
+        "stan": "phpstan analyse",
         "test": [
             "Composer\\Config::disableProcessTimeout",
             "vendor/bin/phpunit --colors=always"
         ]
     },
-    "suggest": {
-        "markstory/asset_compress": "An asset compression plugin which provides file concatenation and a flexible filter system for preprocessing and minification.",
-        "dereuromark/cakephp-ide-helper": "After baking your code, this keeps your annotations in sync with the code evolving from there on for maximum IDE and PHPStan/Psalm compatibility.",
-        "phpstan/phpstan": "PHPStan focuses on finding errors in your code without actually running it. It catches whole classes of bugs even before you write tests for the code."
-    },
     "config": {
         "sort-packages": true,
-        "platform": {
-            "php": "7.3"
+        "allow-plugins": {
+            "cakephp/plugin-installer": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true
         }
     },
-    "minimum-stability": "dev",
     "prefer-stable": true
 }

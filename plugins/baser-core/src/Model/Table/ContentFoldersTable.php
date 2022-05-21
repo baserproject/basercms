@@ -12,8 +12,8 @@
 namespace BaserCore\Model\Table;
 
 use ArrayObject;
-use BaserCore\Service\SearchIndexService;
-use BaserCore\Service\SearchIndexServiceInterface;
+use BaserCore\Service\SearchIndexesService;
+use BaserCore\Service\SearchIndexesServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Model\AppTable;
 use Cake\Event\EventInterface;
@@ -70,6 +70,9 @@ class ContentFoldersTable extends AppTable
      * Implemented Events
      *
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function implementedEvents(): array
     {
@@ -151,8 +154,8 @@ class ContentFoldersTable extends AppTable
             $this->isMovableTemplate = true;
         }
         if (!empty($options['reconstructSearchIndices']) && $this->beforeStatus !== $entity->content->status) {
-            /* @var SearchIndexService $searchIndexService */
-            $searchIndexService = $this->getService(SearchIndexServiceInterface::class);
+            /* @var SearchIndexesService $searchIndexService */
+            $searchIndexService = $this->getService(SearchIndexesServiceInterface::class);
             $searchIndexService->reconstruct($entity->content->id);
         }
         return true;

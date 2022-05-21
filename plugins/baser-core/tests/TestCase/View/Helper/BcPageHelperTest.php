@@ -73,8 +73,7 @@ class BcPageHelperTest extends BcTestCase
      */
     public function testInitialize()
     {
-        $this->assertNotEmpty($this->BcPage->ContentService);
-        $this->assertNotEmpty($this->BcPage->PageService);
+        $this->assertNotEmpty($this->BcPage->ContentsService);
     }
 
     /**
@@ -214,7 +213,7 @@ class BcPageHelperTest extends BcTestCase
         ob_start();
         $this->BcPage->nextLink('次のページへ', ['overCategory' => false]);
         $result = ob_get_clean();
-        $this->assertRegExp('/<a href="\/contact\/" class="next-link">/', $result);
+        $this->assertMatchesRegularExpression('/<a href="\/contact\/" class="next-link">/', $result);
     }
 
     /**
@@ -262,7 +261,7 @@ class BcPageHelperTest extends BcTestCase
         ob_start();
         $this->BcPage->prevLink('前のページへ', ['overCategory' => false]);
         $result = ob_get_clean();
-        $this->assertRegExp('/<a href="\/news\/" class="prev-link">/', $result);
+        $this->assertMatchesRegularExpression('/<a href="\/news\/" class="prev-link">/', $result);
     }
 
     /**
@@ -307,7 +306,7 @@ class BcPageHelperTest extends BcTestCase
      */
     public function testGetPageNeighbors($overCategory, $title)
     {
-        $content = $this->BcPage->ContentService->getIndex(['name' => 'about'])->first();
+        $content = $this->BcPage->ContentsService->getIndex(['name' => 'about'])->first();
         $neighbors = $this->execPrivateMethod($this->BcPage, 'getPageNeighbors', [$content, $overCategory]);
         $this->assertEquals($neighbors['prev']['title'], $title['prev']);
         $this->assertEquals($neighbors['next']['title'], $title['next']);

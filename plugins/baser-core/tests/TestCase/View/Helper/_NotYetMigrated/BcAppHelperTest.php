@@ -79,7 +79,7 @@ class BcAppHelperTest extends BcTestCase
             $this->View->set('pagePath', $fileName);
             $output = $this->View->render('templates/default');
             unlink($path);
-            $this->assertRegExp('/' . $expects . '/s', $output);
+            $this->assertMatchesRegularExpression('/' . $expects . '/s', $output);
         } catch (Exception $e) {
             echo 'error: ', $e->getMessage(), "\n";
             //テストを失敗させないとテストが成功して通るため失敗assertion実行

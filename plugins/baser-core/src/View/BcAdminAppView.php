@@ -11,7 +11,6 @@
 
 namespace BaserCore\View;
 
-use BaserCore\View\Helper\BcAdminDashboardHelper;
 use Cake\Utility\Hash;
 use Cake\Core\Configure;
 use Cake\Utility\Inflector;
@@ -28,21 +27,12 @@ use BaserCore\View\Helper\BcAdminHelper;
 use BaserCore\View\Helper\BcBaserHelper;
 use BaserCore\View\Helper\BcContentsHelper;
 use BaserCore\View\Helper\BcAdminFormHelper;
-use BaserCore\View\Helper\BcAdminPageHelper;
-use BaserCore\View\Helper\BcAdminSiteHelper;
-use BaserCore\View\Helper\BcAdminUserHelper;
 use BaserCore\View\Helper\BcFormTableHelper;
 use BaserCore\View\Helper\BcListTableHelper;
 use BaserCore\View\Helper\BcSiteConfigHelper;
-use BaserCore\View\Helper\BcAdminPluginHelper;
-use BaserCore\View\Helper\BcAdminContentHelper;
-use BaserCore\View\Helper\BcAdminPermissionHelper;
-use BaserCore\View\Helper\BcAdminSiteConfigHelper;
-use BaserCore\View\Helper\BcAdminContentFolderHelper;
 
 /**
  * Class BcAdminAppView
- * @package BaserCore\View
  * @property BcBaserHelper $BcBaser
  * @property BcFormHelper $BcForm
  * @property BcAdminFormHelper $BcAdminForm
@@ -53,17 +43,8 @@ use BaserCore\View\Helper\BcAdminContentFolderHelper;
  * @property BcHtmlHelper $BcHtml
  * @property BcListTableHelper $BcListTable
  * @property BcAuthHelper $BcAuth
- * @property BcAdminUserHelper $BcAdminUser
- * @property BcAdminPluginHelper $BcAdminPlugin
- * @property BcAdminDashboardHelper $BcAdminDashboard
- * @property BcAdminPermissionHelper $BcAdminPermission
- * @property BcAdminSiteConfigHelper $BcAdminSiteConfig
  * @property BcContentsHelper $BcContents
- * @property BcAdminContentHelper $BcAdminContent
- * @property BcAdminContentFolderHelper $BcAdminContentFolder
- * @property BcUploadHelper $BcUpload
  * @property BcSiteConfigHelper $BcSiteConfig
- * @property BcAdminPageHelper $BcAdminPage
  */
 class BcAdminAppView extends AppView
 {
@@ -81,14 +62,8 @@ class BcAdminAppView extends AppView
         $this->loadHelper('BaserCore.BcAuth');
         $this->loadHelper('BaserCore.BcText');
         $this->loadHelper('BaserCore.BcTime');
-        $this->loadHelper('BaserCore.BcAdmin');
-        $this->loadHelper('BaserCore.BcAdminUser');
-        $this->loadHelper('BaserCore.BcAdminSiteConfig');
-        $this->loadHelper('BaserCore.BcAdminPage');
-        $this->loadHelper('BaserCore.BcAdminDashboard');
         $this->loadHelper('BaserCore.BcContents');
         $this->loadHelper('BaserCore.BcListTable');
-        $this->loadHelper('BaserCore.BcAdminContent');
         $this->loadHelper('BaserCore.BcUpload');
         $this->loadHelper('BaserCore.BcHtml');
         $this->loadHelper('BaserCore.BcSiteConfig');
@@ -121,7 +96,7 @@ class BcAdminAppView extends AppView
         $paths = parent::_paths($plugin, $cached);
         $customAdminTheme = Configure::read('BcApp.customAdminTheme');
         $plugins = Hash::extract(BcUtil::getEnablePlugins(), '{n}.name');
-        if(!$customAdminTheme || !in_array($customAdminTheme, $plugins)) {
+        if (!$customAdminTheme || !in_array($customAdminTheme, $plugins)) {
             return $paths;
         }
         $themes = [$customAdminTheme, Inflector::dasherize($customAdminTheme)];

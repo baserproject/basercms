@@ -365,7 +365,7 @@ class MailContentTest extends BaserTestCase
         $result = $this->MailContent->copy($id, $newParentId, $newTitle, $newAuthorId, $newSiteId);
 
         if (!is_null($id)) {
-            $this->assertRegExp('/hogeName/', $result['Content']['title'], 'メールコンテンツデータをコピーできません');
+            $this->assertMatchesRegularExpression('/hogeName/', $result['Content']['title'], 'メールコンテンツデータをコピーできません');
             // メールフィールドもコピーされているか
             $this->MailField = ClassRegistry::init('MailField');
             $field = $this->MailField->find(

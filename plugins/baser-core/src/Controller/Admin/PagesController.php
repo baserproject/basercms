@@ -12,17 +12,20 @@
 namespace BaserCore\Controller\Admin;
 
 use BaserCore\Utility\BcUtil;
+use Cake\Core\Configure;
 use Cake\Event\EventInterface;
 use BaserCore\Utility\BcSiteConfig;
 use BaserCore\Vendor\CKEditorStyleParser;
-use BaserCore\Service\PageServiceInterface;
-use BaserCore\Service\SiteServiceInterface;
-use BaserCore\Service\ContentServiceInterface;
-use BaserCore\Service\SiteConfigServiceInterface;
+use BaserCore\Service\PagesServiceInterface;
+use BaserCore\Service\SitesServiceInterface;
+use BaserCore\Service\ContentsServiceInterface;
+use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\Note;
+use Cake\Utility\Inflector;
+
 /**
  * PagesController
  */
@@ -66,23 +69,23 @@ class PagesController extends BcAdminAppController
 	{
 		parent::beforeFilter($event);
         if (BcSiteConfig::get('editor') && BcSiteConfig::get('editor') !== 'none') {
-            $this->viewBuilder()->setHelpers([BcSiteConfig::get('editor'), 'BaserCore.BcGooglemaps', 'BaserCore.BcText', 'BaserCore.BcFreeze']);
+            $this->viewBuilder()->addHelpers([BcSiteConfig::get('editor'), 'BaserCore.BcGooglemaps', 'BaserCore.BcText', 'BaserCore.BcFreeze']);
         }
 	}
 
 	/**
 	 * [ADMIN] 固定ページ情報編集
      * @param int $id (page_id)
-	 * @param PageServiceInterface $pageService
-	 * @param ContentServiceInterface $contentService
-	 * @param SiteServiceInterface $siteService
-	 * @param SiteConfigServiceInterface $siteConfigService
+	 * @param PagesServiceInterface $pageService
+	 * @param ContentsServiceInterface $contentService
+	 * @param SitesServiceInterface $siteService
+	 * @param SiteConfigsServiceInterface $siteConfigService
 	 * @return void
      * @checked
      * @unitTest
      * @noTodo
 	 */
-	public function edit($id, PageServiceInterface $pageService, ContentServiceInterface $contentService, SiteServiceInterface $siteService, SiteConfigServiceInterface $siteConfigService)
+	public function edit($id, PagesServiceInterface $pageService, ContentsServiceInterface $contentService, SitesServiceInterface $siteService, SiteConfigsServiceInterface $siteConfigService)
 	{
 		if (!$id && empty($this->request->getData())) {
 			$this->BcMessage->setError(__d('baser', '無効なIDです。'));
@@ -127,12 +130,6 @@ class PagesController extends BcAdminAppController
 			}
 		}
 
-		// 公開リンク
-		$publishLink = '';
-		if ($page->content->status) {
-			$site = $siteService->findById($page->content->site_id)->first();
-			$publishLink = $contentService->getUrl($page->content->url, true, $site->useSubDomain);
-		}
 		// エディタオプション
 		$editorOptions = ['editorDisableDraft' => false];
         $editorStyles = $siteConfigService->getValue('editor_styles');
@@ -146,7 +143,7 @@ class PagesController extends BcAdminAppController
 			]);
 		}
 		// ページテンプレートリスト
-		$theme = [$siteConfigService->getValue('theme')];
+		$theme = [Inflector::camelize(Configure::read('BcApp.defaultFrontTheme'))];
 		$site = $siteService->findById($page->content->site_id)->first();
 		if (!empty($site) && $site->theme && $site->theme != $theme[0]) {
 			$theme[] = $site->theme;
@@ -154,7 +151,7 @@ class PagesController extends BcAdminAppController
 		$pageTemplateList = $pageService->getPageTemplateList($page->content->id, $theme);
         $editor = $siteConfigService->getValue('editor');
         $editor_enter_br = $siteConfigService->getValue('editor_enter_br');
-		$this->set(compact('editorOptions', 'pageTemplateList', 'publishLink', 'page', 'editor', 'editor_enter_br'));
+		$this->set(compact('editorOptions', 'pageTemplateList', 'page', 'editor', 'editor_enter_br'));
 		$this->render('form');
 	}
 }

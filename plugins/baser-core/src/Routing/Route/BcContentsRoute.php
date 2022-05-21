@@ -12,7 +12,7 @@
 namespace BaserCore\Routing\Route;
 
 use BaserCore\Service\BcFrontService;
-use BaserCore\Service\SiteService;
+use BaserCore\Service\SitesService;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
@@ -72,7 +72,7 @@ class BcContentsRoute extends Route
             @header('Vary: User-Agent');
         } else {
             $site = $sites->findByUrl($url);
-            if (!is_null($site->name)) {
+            if ($site && !is_null($site->name)) {
                 if ($site->use_subdomain) {
                     if (str_starts_with($url, '/' . $site->alias)) {
                         $checkUrl = $url;
@@ -97,11 +97,11 @@ class BcContentsRoute extends Route
                 $checkUrl = (($url)? $url : '/');
             }
         }
-
+        $useSubDomain = ($site)? $site->use_subdomain : false;
         $contents = TableRegistry::getTableLocator()->get('BaserCore.Contents');
-        $content = $contents->findByUrl($checkUrl, $publish, false, $sameUrl, $site->use_subdomain);
+        $content = $contents->findByUrl($checkUrl, $publish, false, $sameUrl, $useSubDomain);
         if (!$content) {
-            $content = $contents->findByUrl($checkUrl, $publish, true, $sameUrl, $site->use_subdomain);
+            $content = $contents->findByUrl($checkUrl, $publish, true, $sameUrl, $useSubDomain);
         }
 
         if (!$content) {
@@ -124,6 +124,7 @@ class BcContentsRoute extends Route
         }
         $url = $site->getPureUrl($url);
         $params = $this->getParams($url, $content->url, $content->plugin, $content->type, $content->entity_id, $site->alias);
+        if(!$params) $params = [];
         $params['Content'] = isset($content)? $content : null;
         $params['Site'] = isset($content->site)? $content->site : null;
         if ($params) {
@@ -189,7 +190,11 @@ class BcContentsRoute extends Route
             }
             $controllerClass = Inflector::camelize($viewParams['controller']) . 'Controller';
             $controllerClass = ($plugin)? $plugin . '\\Controller\\' . $controllerClass : 'App\\Controller\\' . $controllerClass;
-            $methods = get_class_methods($controllerClass);
+            if(class_exists($controllerClass)) {
+                $methods = get_class_methods($controllerClass);
+            } else {
+                return false;
+            }
             if (!$methods || !in_array($action, $methods)) {
                 return false;
             }
@@ -298,7 +303,7 @@ class BcContentsRoute extends Route
         }
 
         // URL生成
-        $sites = new SiteService();
+        $sites = new SitesService();
         $site = $sites->findByUrl($strUrl);
         if ($site && $site->use_subdomain) {
             $strUrl = preg_replace('/^\/' . preg_quote($site->alias, '/') . '\//', '/', $strUrl);

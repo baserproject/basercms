@@ -151,6 +151,17 @@ class PluginsControllerTest extends BcTestCase
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals('ブログ プラグインのデータを初期化しました。', $result->message);
+        $plugins = $this->getTableLocator()->get('BaserCore.Plugins');
+        $plugins->deleteAll(['name' => 'BcBlog']);
+        $data = [
+            'connection' => 'test',
+            'name' => 'BcBlog',
+            'title' => 'ブログ',
+            'status' => "0",
+            'version' => "1.0.0",
+            'permission' => "1"
+        ];
+        $this->post('/baser/api/baser-core/plugins/install/BcBlog.json?token=' . $this->accessToken, $data);
     }
 
     /**

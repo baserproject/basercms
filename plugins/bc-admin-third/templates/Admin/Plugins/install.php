@@ -16,6 +16,7 @@ use BaserCore\View\BcAdminAppView;
  * プラグインインストール
  * @var BcAdminAppView $this
  * @var \BaserCore\Model\Entity\Plugin $plugin
+ * @var string $installStatusMessage
  */
 $this->BcBaser->i18nScript([
   'message1' => __d('baser', 'プラグインのデータを初期化します。よろしいですか？'),
@@ -30,7 +31,6 @@ $this->BcAdmin->addAdminMainBodyHeaderLinks([
 ]);
 $this->BcAdmin->setTitle(__d('baser', '新規プラグイン登録'));
 $this->BcAdmin->setHelp('plugins_install');
-$installStatusMessage = $this->BcAdminPlugin->getInstallStatusMessage($plugin->name);
 ?>
 
 

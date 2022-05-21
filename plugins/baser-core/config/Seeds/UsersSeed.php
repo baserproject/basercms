@@ -23,9 +23,9 @@ class UsersSeed extends AbstractSeed
         $data = [
             [
                 'id' => '1',
-                'name' => 'basercake3',
-                'password' => '$2y$10$x6WQstawmuyS7XrqutyDjOSOLxJp3dv72O73B7lhqzP8XvVlmcx4G',
-                'real_name_1' => 'basercake4',
+                'name' => 'admin',
+                'password' => '$2y$10$YSYT3O.0QCLCCXrllkzmCeC7rB2H1p.VP/gODnwBLzNsfaurK1SKy',
+                'real_name_1' => 'admin',
                 'real_name_2' => '',
                 'email' => 'admin@example.com',
                 'nickname' => '',

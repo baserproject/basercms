@@ -229,7 +229,7 @@ class BlogPostTest extends BaserTestCase
         $authUser['id'] = 1;
         $data = $this->BlogPost->getDefaultValue($authUser);
         $this->assertEquals($data['BlogPost']['user_id'], $authUser['id']);
-        $this->assertRegExp('/' . '([0-9]{4})\/([0-9]{2})\/([0-9]{2}) ([0-9]{2}):([0-9]{2}):([0-9]{2})' . '/', $data['BlogPost']['posts_date']);
+        $this->assertMatchesRegularExpression('/' . '([0-9]{4})\/([0-9]{2})\/([0-9]{2}) ([0-9]{2}):([0-9]{2}):([0-9]{2})' . '/', $data['BlogPost']['posts_date']);
         $this->assertEquals($data['BlogPost']['posts_date'], date('Y/m/d H:i:s'));
         $this->assertEquals($data['BlogPost']['status'], 0);
     }

@@ -91,6 +91,7 @@ class BcTestCase extends TestCase
         $builder = Router::createRouteBuilder('/');
         $this->Application->pluginBootstrap();
         $this->Application->pluginRoutes($builder);
+        $this->Application->addPlugin('CakephpFixtureFactories');
         $this->BaserCore = $this->Application->getPlugins()->get('BaserCore');
         $container = BcContainer::get();
         $container->addServiceProvider(new BcServiceProvider());
@@ -154,7 +155,7 @@ class BcTestCase extends TestCase
             self::$_detectors = $detectors->getValue();
         }
         $detectors->setValue(self::$_detectors);
-
+        $request->getSession()->start();
         try {
             Router::setRequest($request);
             $params = Router::parseRequest($request);

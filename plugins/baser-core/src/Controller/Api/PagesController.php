@@ -16,7 +16,7 @@ use BaserCore\Annotation\Note;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
-use BaserCore\Service\PageServiceInterface;
+use BaserCore\Service\PagesServiceInterface;
 use Cake\ORM\Exception\PersistenceFailedException;
 
 /**
@@ -28,12 +28,12 @@ class PagesController extends BcApiController
 
     /**
      * 固定ページ一覧取得
-     * @param PageServiceInterface $Pages
+     * @param PagesServiceInterface $Pages
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function index(PageServiceInterface $Pages)
+    public function index(PagesServiceInterface $Pages)
     {
         $this->request->allowMethod('get');
         $this->set([
@@ -44,13 +44,13 @@ class PagesController extends BcApiController
 
     /**
      * 固定ページ取得
-     * @param PageServiceInterface $Pages
+     * @param PagesServiceInterface $Pages
      * @param int $id
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function view(PageServiceInterface $Pages, $id)
+    public function view(PagesServiceInterface $Pages, $id)
     {
         $this->request->allowMethod('get');
         $this->set([
@@ -61,12 +61,12 @@ class PagesController extends BcApiController
 
     /**
      * 固定ページ登録
-     * @param PageServiceInterface $Pages
+     * @param PagesServiceInterface $Pages
      * @checked
      * @unitTest
      * @noTodo
      */
-    public function add(PageServiceInterface $Pages)
+    public function add(PagesServiceInterface $Pages)
     {
         $this->request->allowMethod(['post', 'put', 'patch']);
         try {
@@ -86,13 +86,13 @@ class PagesController extends BcApiController
 
     /**
      * 固定ページ削除
-     * @param PageServiceInterface $Pages
+     * @param PagesServiceInterface $Pages
      * @param int $id
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function delete(PageServiceInterface $Pages, $id)
+    public function delete(PagesServiceInterface $Pages, $id)
     {
         $this->request->allowMethod(['delete']);
         $page = $Pages->get($id);
@@ -113,13 +113,13 @@ class PagesController extends BcApiController
 
     /**
      * 固定ページ情報編集
-     * @param PageServiceInterface $pages
+     * @param PagesServiceInterface $pages
      * @param int $id
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function edit(PageServiceInterface $pages, $id)
+    public function edit(PagesServiceInterface $pages, $id)
     {
         $this->request->allowMethod(['post', 'put', 'patch']);
         try {
@@ -140,12 +140,12 @@ class PagesController extends BcApiController
 
     /**
      * コピー
-     * @param PageServiceInterface $pages
+     * @param PagesServiceInterface $pages
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function copy(PageServiceInterface $pages)
+    public function copy(PagesServiceInterface $pages)
     {
         $this->request->allowMethod(['post', 'put', 'patch']);
         try {

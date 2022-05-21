@@ -103,6 +103,7 @@ class BcPlugin extends BasePlugin
                     $this->migrations->seed($options);
                 }
             }
+            BcUtil::clearAllCache();
             return $plugins->install($pluginName);
         } catch (BcException $e) {
             $this->migrations->rollback($options);

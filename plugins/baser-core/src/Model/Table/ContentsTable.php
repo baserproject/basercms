@@ -415,7 +415,7 @@ class ContentsTable extends AppTable
     {
 
         // 先頭が同じ名前のリストを取得し、後方プレフィックス付きのフィールド名を取得する
-        $query = $this->find()->where(['name LIKE' => $name . '%']);
+        $query = $this->find()->where(['name LIKE' => $name . '%', 'site_root' => false]);
         if (isset($parentId)) $query = $query->andWhere(['parent_id' => $parentId]);
         if ($contentId) {
             $query = $query->andWhere(['id <>' => $contentId]);
@@ -469,7 +469,9 @@ class ContentsTable extends AppTable
         if (!empty($entity->id)) {
             $this->beforeSaveParentId = $entity->parent_id;
         }
-        $entity->name = $this->urlEncode(mb_substr(rawurldecode($entity->name), 0, 230, 'UTF-8'));
+        if(!empty($entity->name)) {
+            $entity->name = $this->urlEncode(mb_substr(rawurldecode($entity->name), 0, 230, 'UTF-8'));
+        }
         return parent::beforeSave($event, $entity, $options);
     }
 
@@ -562,7 +564,7 @@ class ContentsTable extends AppTable
     {
         if (empty($content->alias_id)) {
             $contents = $this->find()->select('id')->where(['Contents.alias_id' => $content->id])->applyOptions(['callbacks' => false]);
-            if (!$contents->isEmpty()) {
+            if (!$contents->all()->isEmpty()) {
                 // afterDelete・afterSaveのループを防ぐ
                 foreach (['afterSave', 'afterDelete'] as $eventName) {
                     $event = $this->getEventManager()->matchingListeners($eventName);
@@ -634,13 +636,13 @@ class ContentsTable extends AppTable
             }
             // 連携設定となっている小サイトを取得
             $sites = $this->Sites->find()->where(['main_site_id' => $content->site_id, 'relate_main_site' => true]);
-            if ($sites->isEmpty()) {
+            if ($sites->all()->isEmpty()) {
                 return;
             }
             // 同階層に同名のコンテンツがあるか確認
             foreach($sites as $site) {
                 $contents = $this->find()->where(['site_id' => $site->id, 'main_site_content_id' => $content->id]);
-                if (!$contents->isEmpty()) {
+                if (!$contents->all()->isEmpty()) {
                     $content = $contents->first();
                     // afterDelete・afterSaveのループを防ぐ
                     foreach (['afterSave', 'afterDelete'] as $eventName) {
@@ -682,11 +684,11 @@ class ContentsTable extends AppTable
         }
         // 連携設定となっている小サイトを取得
         $sites = $this->Sites->find()->where(['main_site_id' => $data->site_id, 'relate_main_site' => true]);
-        if ($sites->isEmpty()) {
+        if ($sites->all()->isEmpty()) {
             return true;
         }
         // 連携サイトに紐づくコンテンツがない場合は終了
-        if ($this->find()->where(['site_id' => $sites->first()->id])->isEmpty()) {
+        if ($this->find()->where(['site_id' => $sites->first()->id])->all()->isEmpty()) {
             return true;
         }
         $_data = $this->findById($data->id)->applyOptions(['withDeleted'])->first();
@@ -794,7 +796,7 @@ class ContentsTable extends AppTable
     {
 
         $current = $this->find()->where(['url' => $currentUrl]);
-        if ($current->isEmpty()) {
+        if ($current->all()->isEmpty()) {
             return false;
         } else {
             $currentId = $current->first()->id;
@@ -1079,7 +1081,7 @@ class ContentsTable extends AppTable
      */
     public function isPublishById($id)
     {
-        return !$this->findById($id)->where([$this->getConditionAllowPublish()])->isEmpty();
+        return !$this->findById($id)->where([$this->getConditionAllowPublish()])->all()->isEmpty();
     }
 
     /**
@@ -1095,7 +1097,7 @@ class ContentsTable extends AppTable
     {
         $children = $this->find('children', ['for' => $id])->order('lft');
         $result = true;
-        if (!$children->isEmpty()) {
+        if (!$children->all()->isEmpty()) {
             foreach($children as $child) {
                 if (!$this->updateSystemData($child)) {
                     $result = false;
@@ -1514,7 +1516,7 @@ class ContentsTable extends AppTable
     {
         $contents = $this->find()->select(['id', 'parent_id', 'title'])->where(['parent_id' => $parentId])->order('lft');
         $order = null;
-        if (!$contents->isEmpty()) {
+        if (!$contents->all()->isEmpty()) {
             if ($id) {
                 foreach($contents as $key => $data) {
                     if ($id == $data->id) {

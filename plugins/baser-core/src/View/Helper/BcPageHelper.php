@@ -15,8 +15,7 @@ use Cake\View\View;
 use Cake\View\Helper;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Event\BcEventDispatcherTrait;
-use BaserCore\Service\PageServiceInterface;
-use BaserCore\Service\ContentServiceInterface;
+use BaserCore\Service\ContentsServiceInterface;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\UnitTest;
@@ -24,6 +23,7 @@ use BaserCore\Annotation\Note;
 
 /**
  * BcPageHelper
+ * @property BcAdminHelper $BcAdmin
  */
 class BcPageHelper extends Helper
 {
@@ -51,7 +51,7 @@ class BcPageHelper extends Helper
      *
      * @var array
      */
-    public $helpers = ['BcBaser', 'BcContents'];
+    public $helpers = ['BcBaser', 'BcContents', 'BcAdmin'];
 
     /**
      * construct
@@ -81,8 +81,7 @@ class BcPageHelper extends Helper
     public function initialize(array $config): void
     {
         parent::initialize($config);
-        $this->ContentService = $this->getService(ContentServiceInterface::class);
-        $this->PageService = $this->getService(PageServiceInterface::class);
+        $this->ContentsService = $this->getService(ContentsServiceInterface::class);
     }
 
     /**
@@ -283,7 +282,7 @@ class BcPageHelper extends Helper
      */
     protected function getPageNeighbors($content, $overCategory = false)
     {
-        $conditions = array_merge($this->ContentService->getConditionAllowPublish(), [
+        $conditions = array_merge($this->ContentsService->getConditionAllowPublish(), [
             'Contents.type <>' => 'ContentFolder',
             'Contents.site_id' => $content->site_id
         ]);
@@ -296,6 +295,6 @@ class BcPageHelper extends Helper
             'conditions' => $conditions,
             'order' => ['Contents.lft'],
         ];
-        return $this->ContentService->getNeighbors($options);
+        return $this->ContentsService->getNeighbors($options);
     }
 }

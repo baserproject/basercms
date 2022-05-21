@@ -72,13 +72,6 @@ class BlogController extends BlogAppController
     ];
 
     /**
-     * ぱんくずナビ
-     *
-     * @var array
-     */
-    public $crumbs = [];
-
-    /**
      * サブメニューエレメント
      *
      * @var array
@@ -538,7 +531,7 @@ class BlogController extends BlogAppController
         }
 
         // 表示設定
-        $this->crumbs = array_merge($this->crumbs, $crumbs);
+        $this->set('crumbs', $crumbs);
         $this->set('single', $single);
         $this->set('posts', $posts);
         $this->set('year', $year);

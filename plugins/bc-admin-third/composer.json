@@ -4,8 +4,9 @@
     "homepage": "https://basercms.net",
     "type": "cakephp-plugin",
     "license": "MIT",
+    "vendor-dir": "../../vendor",
     "require": {
-        "php": ">=7.2"
+        "php": ">=8.1"
     },
     "autoload": {
         "psr-4": {

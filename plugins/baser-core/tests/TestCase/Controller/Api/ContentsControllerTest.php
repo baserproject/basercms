@@ -12,12 +12,12 @@
 namespace BaserCore\Test\TestCase\Controller\Api;
 
 use Cake\Core\Configure;
-use BaserCore\Service\ContentService;
+use BaserCore\Service\ContentsService;
 use Cake\TestSuite\IntegrationTestTrait;
 
 /**
  * ContentsControllerTest
- * @property ContentService $ContentService
+ * @property ContentsService $ContentsService
  */
 class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
 {
@@ -42,10 +42,10 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
         'plugin.BaserCore.SiteConfigs',
         'plugin.BaserCore.Pages',
         'plugin.BaserCore.SearchIndexes',
-        'plugin.BaserCore.Service/SearchIndexService/ContentsReconstruct',
-        'plugin.BaserCore.Service/SearchIndexService/PagesReconstruct',
-        'plugin.BaserCore.Service/SearchIndexService/ContentFoldersReconstruct',
-        'plugin.BaserCore.Service/SearchIndexService/SearchIndexesReconstruct'
+        'plugin.BaserCore.Service/SearchIndexesService/ContentsReconstruct',
+        'plugin.BaserCore.Service/SearchIndexesService/PagesReconstruct',
+        'plugin.BaserCore.Service/SearchIndexesService/ContentFoldersReconstruct',
+        'plugin.BaserCore.Service/SearchIndexesService/SearchIndexesReconstruct'
     ];
 
     public $autoFixtures = false;
@@ -82,7 +82,7 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
         $token = $this->apiLoginAdmin(1);
         $this->accessToken = $token['access_token'];
         $this->refreshToken = $token['refresh_token'];
-        $this->ContentService = new ContentService();
+        $this->ContentsService = new ContentsService();
     }
 
     /**
@@ -211,14 +211,14 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function testEdit()
     {
-        $data = $this->ContentService->getIndex(['name' => 'testEdit'])->first();
+        $data = $this->ContentsService->getIndex(['name' => 'testEdit'])->first();
         $id = $data->id;
         $data->name = 'ControllerEdit';
         $data->site->name = 'ucmitz'; // site側でエラーが出るため
         $this->post("/baser/api/baser-core/contents/edit/${id}.json?token=" . $this->accessToken, $data->toArray());
         $this->assertResponseSuccess();
         // updateRelateSubSiteContentにより、連携されてるサイトに同コンテンツが生成されるため2個となる
-        $query = $this->ContentService->getIndex(['name' => 'ControllerEdit']);
+        $query = $this->ContentsService->getIndex(['name' => 'ControllerEdit']);
         $this->assertEquals(2, $query->count());
     }
 
@@ -229,10 +229,10 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function testTrash_return()
     {
-        $id = $this->ContentService->getTrashIndex()->first()->id;
+        $id = $this->ContentsService->getTrashIndex()->first()->id;
         $this->get("/baser/api/baser-core/contents/trash_return/{$id}.json?token=" . $this->accessToken);
         $this->assertResponseOk();
-        $this->assertNotEmpty($this->ContentService->get($id));
+        $this->assertNotEmpty($this->ContentsService->get($id));
     }
 
     /**
@@ -243,12 +243,12 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
     public function testChange_status_toUnpublish()
     {
         $this->loadFixtures(
-	        'Service\SearchIndexService\ContentsReconstruct'
+	        'Service\SearchIndexesService\ContentsReconstruct'
         );
         $data = ['id' => 1, 'status' => 'unpublish'];
         $this->patch("/baser/api/baser-core/contents/change_status.json?token=" . $this->accessToken, $data);
         $this->assertResponseOk();
-        $this->assertFalse($this->ContentService->get($data['id'])->status);
+        $this->assertFalse($this->ContentsService->get($data['id'])->status);
     }
 
     /**
@@ -259,14 +259,14 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
     public function testChange_status_toPublish()
     {
         $this->loadFixtures(
-	        'Service\SearchIndexService\ContentsReconstruct'
+	        'Service\SearchIndexesService\ContentsReconstruct'
         );
-        $content = $this->ContentService->get(1);
-        $this->ContentService->update($content, ['id' => $content->id, 'status' => false, 'name' => 'test']);
+        $content = $this->ContentsService->get(1);
+        $this->ContentsService->update($content, ['id' => $content->id, 'status' => false, 'name' => 'test']);
         $data = ['id' => 1, 'status' => 'publish'];
         $this->patch("/baser/api/baser-core/contents/change_status.json?token=" . $this->accessToken, $data);
         $this->assertResponseOk();
-        $this->assertTrue($this->ContentService->get($data['id'])->status);
+        $this->assertTrue($this->ContentsService->get($data['id'])->status);
     }
 
     /**
@@ -319,7 +319,7 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function testAdd_alias()
     {
-        $content = $this->ContentService->get(1);
+        $content = $this->ContentsService->get(1);
         $data = [
             'content' => [
                 "parent_id" =>  $content->parent_id,
@@ -375,8 +375,8 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
         $this->assertEquals('無効な処理です。', json_decode($this->_response->getBody())->message);
         // サービス1をサービス2の後ろに移動する場合
         $title = 'サービス１';
-        $originEntity = $this->ContentService->getIndex(['title' => $title])->first();
-        $targetEntity = $this->ContentService->getIndex(['title' => 'サービス３'])->first();
+        $originEntity = $this->ContentsService->getIndex(['title' => $title])->first();
+        $targetEntity = $this->ContentsService->getIndex(['title' => 'サービス３'])->first();
         $data = [
             // 移動元
             'origin' => [
@@ -392,7 +392,7 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
         ];
         $this->patch("/baser/api/baser-core/contents/move.json?token=" . $this->accessToken, $data);
         $this->assertEquals("コンテンツ「${title}」の配置を移動しました。\n/service/service1 > /service1", json_decode($this->_response->getBody())->message);
-        $service2Left = $this->ContentService->get(($originEntity->id + $targetEntity->id) / 2)->lft;
+        $service2Left = $this->ContentsService->get(($originEntity->id + $targetEntity->id) / 2)->lft;
         $this->assertGreaterThan($service2Left, json_decode($this->_response->getBody())->content->lft);
     }
 }

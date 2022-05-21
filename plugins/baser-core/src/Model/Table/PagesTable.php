@@ -13,10 +13,7 @@ namespace BaserCore\Model\Table;
 
 use ArrayObject;
 use BaserCore\Model\Entity\Content;
-use Cake\ORM\Exception\PersistenceFailedException;
 use Cake\ORM\Table;
-use Cake\Core\Configure;
-use Cake\Filesystem\File;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
 use BaserCore\Utility\BcUtil;

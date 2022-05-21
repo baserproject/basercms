@@ -9,14 +9,16 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
+use BaserCore\Model\Entity\Page;
+
 /**
  * 固定ページデフォルトテンプレート
  * @var BaserCore\View\BcAdminAppView $this
  * @var Page $page
  */
+
 $this->BcAdmin->setTitle($page['content']['title']);
 $this->BcBaser->setDescription($page['content']['description']);
-$this->BcBaser->setPageEditLink($page['id']);
 
 echo $page['contents'];
 

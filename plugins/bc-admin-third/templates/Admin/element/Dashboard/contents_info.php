@@ -16,17 +16,17 @@ use BaserCore\Annotation\Checked;
 
 /**
  * @var BcAdminAppView $this
+ * @var array $contentsInfo
  * @checked
  * @noTodo
  */
-$sites = $this->BcAdminDashboard->getContentsInfo();
 ?>
 
 <h2 class="bca-panel-box__title"><?php echo __d('baser', 'コンテンツ情報') ?></h2>
 <div id="ContentInfo">
-  <?php if ($sites): ?>
+  <?php if ($contentsInfo): ?>
     <div class="bca-content-info">
-      <?php foreach($sites as $site): ?>
+      <?php foreach($contentsInfo as $site): ?>
         <h3 class="bca-content-info__title"><?php echo h($site['display_name']) ?></h3>
         <ul class="bca-content-info__list">
           <li class="bca-content-info__list-item">

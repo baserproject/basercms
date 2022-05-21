@@ -82,13 +82,6 @@ class SearchIndicesController extends AppController
         // 認証設定
         $this->BcAuth->allow('search', 'smartphone_search');
 
-        if ($this->request->getParam('prefix') === 'Admin') {
-            $this->crumbs = [
-                ['name' => __d('baser', 'システム設定'), 'url' => ['controller' => 'site_configs', 'action' => 'form']],
-                ['name' => __d('baser', '検索インデックス管理'), 'url' => ['controller' => 'search_indices', 'action' => 'index']]
-            ];
-        }
-
         if (BcUtil::isAdminSystem()) {
             return;
         }

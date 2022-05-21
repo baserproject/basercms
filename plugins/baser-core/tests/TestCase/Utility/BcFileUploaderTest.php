@@ -20,14 +20,14 @@ use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Model\Table\ContentsTable;
 use BaserCore\Model\Behavior\BcUploadBehavior;
-use BaserCore\Service\ContentServiceInterface;
+use BaserCore\Service\ContentsServiceInterface;
 
 /**
  * Class BcFileUploaderTest
  *
  * @property BcFileUploader $BcFileUploader
  * @property ContentsTable $ContentsTable
- * @property ContentServiceInterface $ContentService
+ * @property ContentsServiceInterface $ContentsService
  */
 class BcFileUploaderTest extends BcTestCase
 {
@@ -70,7 +70,7 @@ class BcFileUploaderTest extends BcTestCase
         $this->table->setPrimaryKey(['id']);
         $this->table->addBehavior('BaserCore.BcUpload');
         $this->BcFileUploader = $this->table->getBehavior('BcUpload')->BcFileUploader[$this->table->getAlias()];
-        $this->ContentService = $this->getService(ContentServiceInterface::class);
+        $this->ContentsService = $this->getService(ContentsServiceInterface::class);
         $this->uploadedData = [
             'eyecatch' => [
                 "tmp_name" => "/tmp/testBcUpload.png",
@@ -302,8 +302,8 @@ class BcFileUploaderTest extends BcTestCase
         $this->BcFileUploader->setUploadingFiles($file);
         $targetPath = $this->savePath . $fileName;
         touch($targetPath);
-        $this->BcFileUploader->deleteFiles($this->ContentService->get(6), new Content());
-        $this->assertFileNotExists($targetPath);
+        $this->BcFileUploader->deleteFiles($this->ContentsService->get(6), new Content());
+        $this->assertFileDoesNotExist($targetPath);
         touch($targetPath);
         $this->BcFileUploader->deleteFiles(new Content(), new Content());
         $this->assertFileExists($targetPath);
@@ -326,17 +326,17 @@ class BcFileUploaderTest extends BcTestCase
         ];
         $targetPath = $this->savePath . $fileName;
         /* @var Content $entity */
-        $entity = $this->ContentService->get(6);
+        $entity = $this->ContentsService->get(6);
         // ダミーのファイルを生成
         touch($targetPath);
         $this->BcFileUploader->deleteFileWhileChecking(
             $this->eyecatchField,
             $file['eyecatch'],
             $entity,
-            $this->ContentService->get(6)
+            $this->ContentsService->get(6)
         );
         $this->assertEmpty($entity->eyecatch);
-        $this->assertFileNotExists($targetPath);
+        $this->assertFileDoesNotExist($targetPath);
         @unlink($targetPath);
     }
 
@@ -370,7 +370,7 @@ class BcFileUploaderTest extends BcTestCase
             ["eyecatch" => ['name' => '']],
             new Content()
         );
-        $this->assertFileNotExists($filePath);
+        $this->assertFileDoesNotExist($filePath);
         // nameがある場合 新規画像保存の場合
         touch($this->uploadedData['eyecatch']['tmp_name']);
         $this->BcFileUploader->saveFileWhileChecking(
@@ -379,7 +379,7 @@ class BcFileUploaderTest extends BcTestCase
             new Content()
         );
         $this->assertFileExists($filePath);
-        $this->assertFileNotExists($this->uploadedData['eyecatch']['tmp_name']);
+        $this->assertFileDoesNotExist($this->uploadedData['eyecatch']['tmp_name']);
         unlink($filePath);
     }
 
@@ -733,7 +733,7 @@ class BcFileUploaderTest extends BcTestCase
         }
         // 削除を実行
         $this->BcFileUploader->deleteFile($this->eyecatchField, $fileName . '.' . $ext);
-        $this->assertFileNotExists($targetPath, $message);
+        $this->assertFileDoesNotExist($targetPath, $message);
     }
 
     public function deleteFileDataProvider()
@@ -998,8 +998,8 @@ class BcFileUploaderTest extends BcTestCase
         // BcUpload-beforeSaveを回避するため新規データ挿入時にremoveBehavior('BcUpload')を実行
         if ($fileName === 'template1.gif') {
             $table = $this->table->removeBehavior('BcUpload');
-            $content = $table->find()->last();
-            $this->ContentService->update($content, ['eyecatch' => 'template1.gif']);
+            $content = $table->find()->all()->last();
+            $this->ContentsService->update($content, ['eyecatch' => 'template1.gif']);
         }
         $file = ['name' => $fileName, 'ext' => 'gif'];
         $setting = ['name' => $fieldName];
@@ -1073,7 +1073,7 @@ class BcFileUploaderTest extends BcTestCase
         touch($targetPath);
         // アップロードされていなければ、returnで終了
         $this->BcFileUploader->setUploadingFiles([]);
-        $this->BcFileUploader->deleteExistingFiles($this->ContentService->get(6));
+        $this->BcFileUploader->deleteExistingFiles($this->ContentsService->get(6));
         $this->assertFileExists($targetPath);
         // アップロードされていれば削除処理
         $uploaded = [
@@ -1083,8 +1083,8 @@ class BcFileUploaderTest extends BcTestCase
         ];
         $this->BcFileUploader->setUploadingFiles(['eyecatch' => $uploaded]);
         $this->BcFileUploader->settings['fields']['eyecatch'] = $this->eyecatchField;
-        $this->BcFileUploader->deleteExistingFiles($this->ContentService->get(6));
-        $this->assertFileNotExists($targetPath);
+        $this->BcFileUploader->deleteExistingFiles($this->ContentsService->get(6));
+        $this->assertFileDoesNotExist($targetPath);
         @unlink($targetPath);
     }
 
@@ -1100,9 +1100,9 @@ class BcFileUploaderTest extends BcTestCase
             'name' => $fileName . '.' . $this->eyecatchField['ext'],
             'tmp_name' => TMP . $fileName . '.' . $this->eyecatchField['ext'],
         ];
-        $entity = $this->ContentService->get(6);
+        $entity = $this->ContentsService->get(6);
         $this->BcFileUploader->deleteExistingFile('eyecatch', $uploaded, $entity);
-        $this->assertFileNotExists($targetPath);
+        $this->assertFileDoesNotExist($targetPath);
         touch($targetPath);
         $this->BcFileUploader->deleteExistingFile('eyecatch', [], $entity);
         $this->assertFileExists($targetPath);

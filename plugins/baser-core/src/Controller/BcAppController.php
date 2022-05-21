@@ -18,7 +18,7 @@ use Cake\Event\EventInterface;
 use Cake\Http\Exception\NotFoundException;
 use Cake\Http\Response;
 use BaserCore\Utility\BcUtil;
-use BaserCore\Service\DblogServiceInterface;
+use BaserCore\Service\DblogsServiceInterface;
 use Cake\Core\Configure;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -43,13 +43,6 @@ class BcAppController extends AppController
      * @access    public
      */
     public $subDir = null;
-
-    /**
-     * パンくずナビ
-     *
-     * @var array
-     */
-    public $crumbs = [];
 
     /**
      * コンテンツタイトル
@@ -252,7 +245,6 @@ class BcAppController extends AppController
      */
     private function __loadDataToView()
     {
-        $this->set('crumbs', $this->crumbs);                    // パンくずなび
         $this->set('preview', $this->preview);
 
         if (!empty($this->request->getParam('prefix'))) {
@@ -1087,7 +1079,7 @@ class BcAppController extends AppController
      */
     protected function saveDblog($message)
     {
-        $DblogService = $this->getService(DblogServiceInterface::class);
-        return $DblogService->create($message);
+        $DblogsService = $this->getService(DblogsServiceInterface::class);
+        return $DblogsService->create(['message' => $message]);
     }
 }

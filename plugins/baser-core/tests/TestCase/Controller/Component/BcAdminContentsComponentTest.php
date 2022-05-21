@@ -16,10 +16,10 @@ use Cake\Event\EventManager;
 use Cake\ORM\Entity;
 use Cake\Routing\Router;
 use BaserCore\TestSuite\BcTestCase;
-use BaserCore\Service\ContentService;
+use BaserCore\Service\ContentsService;
 use Cake\Controller\ComponentRegistry;
 use BaserCore\Controller\BcAppController;
-use BaserCore\Service\ContentFolderService;
+use BaserCore\Service\ContentFoldersService;
 use BaserCore\Controller\Admin\ContentsController;
 use BaserCore\Controller\Admin\ContentFoldersController;
 use BaserCore\Controller\Component\BcAdminContentsComponent;
@@ -70,8 +70,8 @@ class BcAdminContentsComponentTest extends BcTestCase
         $this->Controller = new BcAdminContentsTestController($this->getRequest());
         $this->ComponentRegistry = new ComponentRegistry($this->Controller);
         $this->BcAdminContents = new BcAdminContentsComponent($this->ComponentRegistry);
-        $this->ContentService = new ContentService();
-        $this->ContentFolderService = new ContentFolderService();
+        $this->ContentsService = new ContentsService();
+        $this->ContentFoldersService = new ContentFoldersService();
     }
 
     /**
@@ -92,7 +92,7 @@ class BcAdminContentsComponentTest extends BcTestCase
      */
     public function testInitialize()
     {
-        $this->assertNotEmpty($this->BcAdminContents->ContentService);
+        $this->assertNotEmpty($this->BcAdminContents->ContentsService);
         // baser/admin/contents 管理システム設定の場合
         $this->assertNotEmpty($this->BcAdminContents->getConfig('items'));
     }
@@ -135,7 +135,7 @@ class BcAdminContentsComponentTest extends BcTestCase
     public function testSettingFormWithContent()
     {
         $Controller = new ContentsController($this->getRequest('/baser/contents/index'));
-        $content = $this->ContentService->get(1);
+        $content = $this->ContentsService->get(1);
         $Controller->set('content', $content);
         $ComponentRegistry = new ComponentRegistry($Controller);
         $BcAdminContents = new BcAdminContentsComponent($ComponentRegistry);
@@ -160,7 +160,7 @@ class BcAdminContentsComponentTest extends BcTestCase
     public function testSettingFormWithContentFolder()
     {
         $Controller = new ContentFoldersController($this->getRequest('/baser/content_folders/index'));
-        $contentFolder = $this->ContentFolderService->get(1);
+        $contentFolder = $this->ContentFoldersService->get(1);
         $Controller->set('contentFolder', $contentFolder);
         $Controller->set('content', $contentFolder->content);
         $ComponentRegistry = new ComponentRegistry($Controller);

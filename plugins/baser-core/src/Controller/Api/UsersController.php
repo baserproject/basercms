@@ -12,7 +12,7 @@
 namespace BaserCore\Controller\Api;
 
 use Authentication\Controller\Component\AuthenticationComponent;
-use BaserCore\Service\UserServiceInterface;
+use BaserCore\Service\UsersServiceInterface;
 use Cake\Core\Configure;
 use Cake\Core\Exception\Exception;
 use BaserCore\Annotation\UnitTest;
@@ -43,7 +43,7 @@ class UsersController extends BcApiController
     /**
      * ログイン
      */
-    public function login(UserServiceInterface $users)
+    public function login(UsersServiceInterface $users)
     {
         $result = $this->Authentication->getResult();
         $json = [];
@@ -79,12 +79,12 @@ class UsersController extends BcApiController
 
     /**
      * ユーザー情報一覧取得
-     * @param UserServiceInterface $users
+     * @param UsersServiceInterface $users
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function index(UserServiceInterface $users)
+    public function index(UsersServiceInterface $users)
     {
         $this->set([
             'users' => $this->paginate($users->getIndex($this->request->getQueryParams()))
@@ -94,13 +94,13 @@ class UsersController extends BcApiController
 
     /**
      * ユーザー情報取得
-     * @param UserServiceInterface $users
+     * @param UsersServiceInterface $users
      * @param $id
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function view(UserServiceInterface $users, $id)
+    public function view(UsersServiceInterface $users, $id)
     {
         $this->set([
             'user' => $users->get($id)
@@ -110,12 +110,12 @@ class UsersController extends BcApiController
 
     /**
      * ユーザー情報登録
-     * @param UserServiceInterface $users
+     * @param UsersServiceInterface $users
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function add(UserServiceInterface $users)
+    public function add(UsersServiceInterface $users)
     {
         $this->request->allowMethod(['post', 'delete']);
         try {
@@ -136,13 +136,13 @@ class UsersController extends BcApiController
 
     /**
      * ユーザー情報編集
-     * @param UserServiceInterface $users
+     * @param UsersServiceInterface $users
      * @param $id
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function edit(UserServiceInterface $users, $id)
+    public function edit(UsersServiceInterface $users, $id)
     {
         $this->request->allowMethod(['post', 'put']);
         $user = $users->get($id);
@@ -163,13 +163,13 @@ class UsersController extends BcApiController
 
     /**
      * ユーザー情報削除
-     * @param UserServiceInterface $users
+     * @param UsersServiceInterface $users
      * @param $id
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function delete(UserServiceInterface $users, $id)
+    public function delete(UsersServiceInterface $users, $id)
     {
         $this->request->allowMethod(['post', 'delete']);
         $user = $users->get($id);

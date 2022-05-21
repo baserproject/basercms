@@ -11,7 +11,7 @@
 
 namespace BaserCore\Controller\Api;
 
-use BaserCore\Service\UserGroupServiceInterface;
+use BaserCore\Service\UserGroupsServiceInterface;
 use Cake\Core\Exception\Exception;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -29,12 +29,12 @@ class UserGroupsController extends BcApiController
 {
     /**
      * ユーザーグループ一覧取得
-     * @param UserGroupServiceInterface $UserGroups
+     * @param UserGroupsServiceInterface $UserGroups
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function index(UserGroupServiceInterface $UserGroups)
+    public function index(UserGroupsServiceInterface $UserGroups)
     {
         $this->set([
             'userGroups' => $this->paginate($UserGroups->getIndex())
@@ -44,13 +44,13 @@ class UserGroupsController extends BcApiController
 
     /**
      * ユーザーグループ取得
-     * @param UserGroupServiceInterface $UserGroups
+     * @param UserGroupsServiceInterface $UserGroups
      * @param $id
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function view(UserGroupServiceInterface $UserGroups, $id)
+    public function view(UserGroupsServiceInterface $UserGroups, $id)
     {
         $this->set([
             'userGroups' => $UserGroups->get($id)
@@ -60,12 +60,12 @@ class UserGroupsController extends BcApiController
 
     /**
      * ユーザーグループ登録
-     * @param UserGroupServiceInterface $UserGroups
+     * @param UserGroupsServiceInterface $UserGroups
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function add(UserGroupServiceInterface $UserGroups)
+    public function add(UserGroupsServiceInterface $UserGroups)
     {
         if ($this->request->is('post')) {
             try {
@@ -87,13 +87,13 @@ class UserGroupsController extends BcApiController
 
     /**
      * ユーザーグループ編集
-     * @param UserGroupServiceInterface $UserGroups
+     * @param UserGroupsServiceInterface $UserGroups
      * @param $id
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function edit(UserGroupServiceInterface $UserGroups, $id)
+    public function edit(UserGroupsServiceInterface $UserGroups, $id)
     {
         $userGroups = $UserGroups->get($id);
         if ($this->request->is(['patch', 'post', 'put'])) {
@@ -115,13 +115,13 @@ class UserGroupsController extends BcApiController
 
     /**
      * ユーザーグループ削除
-     * @param UserGroupServiceInterface $UserGroups
+     * @param UserGroupsServiceInterface $UserGroups
      * @param $id
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function delete(UserGroupServiceInterface $UserGroups, $id)
+    public function delete(UserGroupsServiceInterface $UserGroups, $id)
     {
         $userGroups = $UserGroups->get($id);
         if ($this->request->is(['post', 'delete'])) {
@@ -142,9 +142,9 @@ class UserGroupsController extends BcApiController
 
     /**
      * リスト出力
-     * @param UserGroupServiceInterface $userGroups
+     * @param UserGroupsServiceInterface $userGroups
      */
-    public function list(UserGroupServiceInterface $userGroups)
+    public function list(UserGroupsServiceInterface $userGroups)
     {
         $this->set([
             'userGroups' => $userGroups->getList()

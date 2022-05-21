@@ -11,10 +11,11 @@
 
 namespace BaserCore\Controller\Admin;
 
-use BaserCore\Service\PluginServiceInterface;
+use BaserCore\Service\PluginsAdminServiceInterface;
+use BaserCore\Service\PluginsServiceInterface;
 use BaserCore\Controller\Component\BcMessageComponent;
 use BaserCore\Model\Table\PluginsTable;
-use BaserCore\Service\UserServiceInterface;
+use BaserCore\Service\UsersServiceInterface;
 use Cake\Event\EventInterface;
 use Cake\Http\Response;
 use BaserCore\Annotation\UnitTest;
@@ -65,15 +66,15 @@ class PluginsController extends BcAdminAppController
 
     /**
      * プラグインの一覧を表示する
-     * @param PluginServiceInterface $PluginService
+     * @param PluginsServiceInterface $PluginsService
      * @return void
      * @checked
      * @unitTest
      * @noTodo
      */
-    public function index(PluginServiceInterface $PluginService)
+    public function index(PluginsServiceInterface $PluginsService)
     {
-        $this->set('plugins', $PluginService->getIndex($this->request->getQuery('sortmode') ?? '0'));
+        $this->set('plugins', $PluginsService->getIndex($this->request->getQuery('sortmode') ?? '0'));
     }
 
     /**
@@ -85,15 +86,15 @@ class PluginsController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function install(PluginServiceInterface $PluginService, $name)
+    public function install(PluginsAdminServiceInterface $PluginsService, $name)
     {
-        $this->set('plugin', $this->Plugins->getPluginConfig($name));
-        if ($PluginService->getInstallStatusMessage($name) || !$this->request->is(['put', 'post'])) {
+        $this->set($PluginsService->getViewVarsForInstall($this->Plugins->getPluginConfig($name)));
+        if ($PluginsService->getInstallStatusMessage($name) || !$this->request->is(['put', 'post'])) {
             return;
         } else {
             try {
-                if ($PluginService->install($name, $this->request->getData('connection') ?? 'default')) {
-                    $PluginService->allow($this->request->getData());
+                if ($PluginsService->install($name, $this->request->getData('connection') ?? 'default')) {
+                    $PluginsService->allow($this->request->getData());
                     $this->BcMessage->setSuccess(sprintf(__d('baser', '新規プラグイン「%s」を baserCMS に登録しました。'), $name));
                     return $this->redirect(['action' => 'index']);
                 } else {
@@ -113,7 +114,7 @@ class PluginsController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function detach(PluginServiceInterface $pluginService, $name)
+    public function detach(PluginsServiceInterface $pluginService, $name)
     {
         if (!$this->request->is('post')) {
             $this->BcMessage->setError(__d('baser', '無効な処理です。'));
@@ -139,7 +140,7 @@ class PluginsController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function uninstall(PluginServiceInterface $pluginService, $name)
+    public function uninstall(PluginsServiceInterface $pluginService, $name)
     {
         if (!$this->request->is('post')) {
             $this->BcMessage->setError(__d('baser', '無効な処理です。'));
@@ -214,13 +215,13 @@ class PluginsController extends BcAdminAppController
     /**
      * baserマーケットのプラグインデータを取得する
      * @return void
-     * @param PluginServiceInterface $pluginService
+     * @param PluginsServiceInterface $pluginService
      * @uses get_market_plugins
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function get_market_plugins(PluginServiceInterface $pluginService)
+    public function get_market_plugins(PluginsServiceInterface $pluginService)
     {
         $this->viewBuilder()->disableAutoLayout();
         $baserPlugins = $pluginService->getMarketPlugins();
@@ -236,7 +237,7 @@ class PluginsController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function update_sort(PluginServiceInterface $pluginService)
+    public function update_sort(PluginsServiceInterface $pluginService)
     {
         $this->disableAutoRender();
         if (!$this->request->getData()) {
@@ -262,7 +263,7 @@ class PluginsController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function reset_db(PluginServiceInterface $plugins, UserServiceInterface $userService)
+    public function reset_db(PluginsServiceInterface $plugins, UsersServiceInterface $userService)
     {
         if (!$this->request->is('put')) {
             $this->BcMessage->setError(__d('baser', '無効な処理です。'));

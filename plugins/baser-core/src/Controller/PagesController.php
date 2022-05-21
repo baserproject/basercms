@@ -11,19 +11,17 @@
 
 namespace BaserCore\Controller;
 
-use Cake\Utility\Text;
+use BaserCore\Service\PagesFrontServiceInterface;
 use Cake\Core\Configure;
-use Cake\Filesystem\File;
 use Cake\ORM\TableRegistry;
-use Cake\Utility\Inflector;
 use BaserCore\Model\Entity\Page;
 use BaserCore\Model\Table\PagesTable;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Http\Exception\NotFoundException;
-use BaserCore\Service\PageServiceInterface;
+use BaserCore\Service\PagesServiceInterface;
 use Cake\Http\Exception\ForbiddenException;
 use Cake\View\Exception\MissingViewException;
-use BaserCore\Service\ContentFolderServiceInterface;
+use BaserCore\Service\ContentFoldersServiceInterface;
 use BaserCore\Controller\Component\BcFrontContentsComponent;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -59,8 +57,8 @@ class PagesController extends BcFrontAppController
 
 	/**
 	 * ビューを表示する
-	 * @param PageServiceInterface $pageService
-	 * @param ContentFolderServiceInterface $contentFolderService
+	 * @param PagesServiceInterface $pageService
+	 * @param ContentFoldersServiceInterface $contentFolderService
 	 * @return \Cake\Http\Response|void
      * @throws ForbiddenException When a directory traversal attempt.
 	 * @throws NotFoundException When the view file could not be found
@@ -69,7 +67,7 @@ class PagesController extends BcFrontAppController
      * @unitTest
      * @noTodo
 	 */
-	public function display(PageServiceInterface $pageService, ContentFolderServiceInterface $contentFolderService)
+	public function display(PagesFrontServiceInterface $pageService, ContentFoldersServiceInterface $contentFolderService)
 	{
 		$path = func_get_args();
 
@@ -100,18 +98,7 @@ class PagesController extends BcFrontAppController
 		if (in_array('..', $path, true) || in_array('.', $path, true)) {
 			throw new ForbiddenException();
 		}
-		$page = $subpage = $title_for_layout = null;
 
-		if (!empty($path[0])) {
-			$page = $path[0];
-		}
-		if (!empty($path[1])) {
-			$subpage = $path[1];
-		}
-		if (!empty($path[$count - 1])) {
-			$title_for_layout = Inflector::humanize($path[$count - 1]);
-		}
-		$this->set(compact('page', 'subpage', 'title_for_layout'));
 		$page = $pageService->get($this->request->getParam('Content.entity_id'));
 
 		/* @var Page $page */
@@ -120,7 +107,7 @@ class PagesController extends BcFrontAppController
 			$template = $contentFolderService->getParentTemplate($this->request->getParam('Content.id'), 'page');
 		}
 
-        $this->set('page', $page);
+        $this->set($pageService->getViewVarsForDisplay($page, $this->getRequest()));
 
 		try {
 			$this->render('/Pages/' . $template);

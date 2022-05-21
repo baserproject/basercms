@@ -16,14 +16,14 @@ use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Model\Table\ContentsTable;
 use BaserCore\Model\Behavior\BcUploadBehavior;
-use BaserCore\Service\ContentServiceInterface;
+use BaserCore\Service\ContentsServiceInterface;
 
 /**
  * Class BcUploadBehaviorTest
  *
  * @property BcUploadBehavior $BcUploadBehavior
  * @property ContentsTable $ContentsTable
- * @property ContentServiceInterface $ContentService
+ * @property ContentsServiceInterface $ContentsService
  */
 class BcUploadBehaviorTest extends BcTestCase
 {
@@ -67,7 +67,7 @@ class BcUploadBehaviorTest extends BcTestCase
         $this->table->setPrimaryKey(['id']);
         $this->table->addBehavior('BaserCore.BcUpload');
         $this->BcUploadBehavior = $this->table->getBehavior('BcUpload');
-        $this->ContentService = $this->getService(ContentServiceInterface::class);
+        $this->ContentsService = $this->getService(ContentsServiceInterface::class);
         $this->uploadedData = [
             'eyecatch' => [
                 "tmp_name" => "/tmp/testBcUpload.png",
@@ -157,7 +157,7 @@ class BcUploadBehaviorTest extends BcTestCase
         $this->table->dispatchEvent('Model.beforeMarshal', ['data' => new ArrayObject(['id' => 6, 'eyecatch_delete' => true]), 'options' => new ArrayObject()]);
         $return = $this->table->dispatchEvent('Model.afterSave', ['entity' => $entity, 'options' => new ArrayObject()]);
         $this->assertEquals('', $return->getData('entity')->eyecatch);
-        $this->assertFileNotExists($this->savePath . 'baser.power.gif');
+        $this->assertFileDoesNotExist($this->savePath . 'baser.power.gif');
     }
 
     /**
@@ -186,11 +186,11 @@ class BcUploadBehaviorTest extends BcTestCase
         $this->BcUploadBehavior->BcFileUploader[$this->table->getAlias()]->setupRequestData([]);
         $filePath = $this->savePath . 'test.png';
         touch($filePath);
-        $trash = $this->ContentService->getIndex(['withTrash' => true, 'deleted_date!' => null])->first();
+        $trash = $this->ContentsService->getIndex(['withTrash' => true, 'deleted_date!' => null])->first();
         $trash->eyecatch = 'test.png';
-        $this->ContentService->update($trash, ['eyecatch' => 'test.png']);
+        $this->ContentsService->update($trash, ['eyecatch' => 'test.png']);
         $this->table->dispatchEvent('Model.beforeDelete', ['entity' => $trash, 'options' => new ArrayObject()]);
-        $this->assertFileNotExists($filePath);
+        $this->assertFileDoesNotExist($filePath);
         @unlink($filePath);
     }
 

@@ -35,6 +35,7 @@ class SiteConfigsControllerTest extends BcTestCase
         'plugin.BaserCore.UsersUserGroups',
         'plugin.BaserCore.UserGroups',
         'plugin.BaserCore.SiteConfigs',
+        'plugin.BaserCore.Sites',
     ];
 
     /**

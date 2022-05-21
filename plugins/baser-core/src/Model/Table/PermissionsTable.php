@@ -35,9 +35,9 @@ class PermissionsTable extends AppTable
 {
     // 許可/拒否する対象メソッド
     const METHOD_LIST = [
-        '*' => 'ALL',
-        'GET' => 'GET',
-        'POST' => 'POST',
+        '*' => '全て',
+        'GET' => '表示のみ',
+        'POST' => '表示と編集',
     ];
 
     // 許可/拒否
