@@ -239,8 +239,10 @@ $isWritableEnv = $this->BcAdminSiteConfig->isWritableEnv();
       <i class="bca-icon--chevron-down bca-collapse__btn-icon"></i>
     </button>
   </div>
+
   <div class="bca-collapse" id="formOuterServiceSettingBody" data-bca-state="">
     <table class="form-table bca-form-table" data-bca-table-type="type2">
+      <?php /*
       <tr>
         <th class="col-head bca-form-table__label">
           <?php echo $this->BcAdminForm->label('address', __d('baser', 'GoogleMaps住所')) ?>
@@ -291,8 +293,46 @@ $isWritableEnv = $this->BcAdminSiteConfig->isWritableEnv();
           <?php echo sprintf(__d('baser', 'ユニバーサルアナリティクスを&nbsp;&nbsp;%s'), $this->BcAdminForm->control('use_universal_analytics', ['type' => 'radio', 'options' => ['0' => __d('baser', '利用していない'), '1' => __d('baser', '利用している')]])) ?>
         </td>
       </tr>
+      */ ?>
+
+
+      <tr>
+        <th class="col-head bca-form-table__label">
+          <?php echo $this->BcAdminForm->label('outer_service_output_header', __d('baser', 'ヘッダ埋め込みスクリプト')) ?>
+        </th>
+
+        <td class="col-input bca-form-table__input">
+          <div class="bca-collapse-outer-service">
+            <?php echo $this->BcAdminForm->control('outer_service_output_header', [
+              'type' => 'textarea',
+              'cols' => 36,
+              'rows' => 5,
+              'data-input-text-size' => 'full-counter'
+            ]) ?>
+          </div>
+        </td>
+      </tr>
+
+      <tr>
+        <th class="col-head bca-form-table__label">
+          <?php echo $this->BcAdminForm->label('outer_service_output_footer', __d('baser', 'フッター埋め込みスクリプト')) ?>
+        </th>
+
+        <td class="col-input bca-form-table__input">
+          <div class="bca-collapse-outer-service">
+            <?php echo $this->BcAdminForm->control('outer_service_output_footer', [
+              'type' => 'textarea',
+              'cols' => 36,
+              'rows' => 5,
+              'data-input-text-size' => 'full-counter'
+            ]) ?>
+          </div>
+        </td>
+      </tr>
     </table>
+
   </div>
+
 </section>
 
 <section class="bca-section" data-bca-section-type='form-group'>
