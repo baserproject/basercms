@@ -151,10 +151,13 @@ class BcUploadBehavior extends ModelBehavior
 	 */
 	public function beforeSave(Model $Model, $options = [])
 	{
-		if($Model->alias === 'BlogPost' &&
+		if (isset($Model->data['CuApproverApplication'][['contentsMode']])
+			&& isset($Model->data['CuApproverApplication']['is_published'])) {
+			if($Model->alias === 'BlogPost' &&
 			@$Model->data['CuApproverApplication']['contentsMode'] === 'draft' &&
 			@$Model->data['CuApproverApplication']['is_published']) {
-			return true;
+				return true;
+			}
 		}
 		$files = $this->BcFileUploader[$Model->alias]->getUploadingFiles();
 		foreach($files as $key => $file) {
