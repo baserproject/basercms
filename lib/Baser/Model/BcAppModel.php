@@ -1959,11 +1959,9 @@ class BcAppModel extends Model
 	{
 		$conditions[$this->alias . '.' . $this->publishStatusField] = true;
 		$conditions[] = ['or' => [[$this->alias . '.' . $this->publishBeginField . ' <=' => date('Y-m-d H:i:s')],
-			[$this->alias . '.' . $this->publishBeginField => null],
-			[$this->alias . '.' . $this->publishBeginField => '0000-00-00 00:00:00']]];
+			[$this->alias . '.' . $this->publishBeginField => null]]];
 		$conditions[] = ['or' => [[$this->alias . '.' . $this->publishEndField . ' >=' => date('Y-m-d H:i:s')],
-			[$this->alias . '.' . $this->publishEndField => null],
-			[$this->alias . '.' . $this->publishEndField => '0000-00-00 00:00:00']]];
+			[$this->alias . '.' . $this->publishEndField => null]]];
 		return $conditions;
 	}
 
