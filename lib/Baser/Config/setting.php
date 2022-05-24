@@ -502,6 +502,10 @@ $config['BcRequire'] = [
 /**
  * 環境設定
  */
+$httpHost = null;
+if (isset($_SERVER['HTTP_HOST'])) {
+	$httpHost = $_SERVER['HTTP_HOST'];
+}
 $config['BcEnv'] = [
 	// テストDBプレフィックス
 	'testDbPrefix' => 'test_',
@@ -512,7 +516,7 @@ $config['BcEnv'] = [
 	// 復数のWebサイトを管理する場合のメインとなるドメイン
 	'mainDomain' => '',
 	// 現在のリクエストのホスト
-	'host' => @$_SERVER['HTTP_HOST']
+	'host' => $httpHost
 ];
 
 /**
