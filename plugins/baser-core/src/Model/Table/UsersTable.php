@@ -131,6 +131,9 @@ class UsersTable extends Table
      * afterSave
      *
      * @param boolean $created
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function afterSave(Event $event, EntityInterface $entity, ArrayObject $options)
     {
