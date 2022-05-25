@@ -827,6 +827,7 @@ class BcBaserHelper extends Helper
      * @checked
      * @noTodo
      * @unitTest
+     * @doc
      */
     public function setDescription($description)
     {
@@ -1008,6 +1009,7 @@ class BcBaserHelper extends Helper
      * @checked
      * @noTodo
      * @unitTest
+     * @doc
      */
     public function getCrumbs($categoryTitleOn = null)
     {
@@ -1166,6 +1168,7 @@ class BcBaserHelper extends Helper
      * @checked
      * @noTodo
      * @unitTest
+     * @doc
      */
     public function getRoot(): string
     {
@@ -1591,6 +1594,7 @@ class BcBaserHelper extends Helper
      * @checked
      * @noTodo
      * @unitTest
+     * @doc
      */
     public function crumbs($separator = '&raquo;', $startText = false, $onSchema = false)
     {
@@ -1650,13 +1654,14 @@ EOD;
      * $options の forceTitle キー に false を指定する事で表示しない設定も可能
      *
      * @param string $name パンくず用のテキスト
-     * @param string $link パンくず用のリンク（初期値 : null）※ 指定しない場合はリンクは設定しない
+     * @param mixed $link パンくず用のリンク（初期値 : null）※ 指定しない場合はリンクは設定しない
      * @param mixed $options リンクタグ用の属性（初期値 : array()）
      * ※ パラメータについては、HtmlHelper::link() を参照。
      * @return void
      * @checked
      * @noTodo
      * @unitTest
+     * @doc
      */
     public function addCrumb($name, $link = null, $options = [])
     {
@@ -2052,6 +2057,7 @@ END_FLASH;
      * @checked
      * @noTodo
      * @unitTest
+     * @doc
      */
     public function isPage()
     {
@@ -2486,6 +2492,7 @@ END_FLASH;
      * @checked
      * @noTodo
      * @unitTest
+     * @doc
      */
     public function getThemeUrl()
     {
@@ -2499,6 +2506,7 @@ END_FLASH;
      * @checked
      * @noTodo
      * @unitTest
+     * @doc
      */
     public function themeUrl()
     {
@@ -2584,6 +2592,7 @@ END_FLASH;
      * @checked
      * @noTodo
      * @unitTest
+     * @doc
      */
     public function crumbsList($data = [], $options = [])
     {
