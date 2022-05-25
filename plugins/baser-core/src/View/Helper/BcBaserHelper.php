@@ -604,6 +604,7 @@ class BcBaserHelper extends Helper
      * @checked
      * @noTodo
      * @unitTest
+     * @doc
      */
     public function contentsName($detail = false, $options = [])
     {
@@ -631,6 +632,7 @@ class BcBaserHelper extends Helper
      * @return string
      * @checked
      * @unitTest
+     * @doc
      */
     public function getContentsName($detail = false, $options = [])
     {
@@ -813,6 +815,7 @@ class BcBaserHelper extends Helper
      * @checked
      * @noTodo
      * @unitTest
+     * @doc
      */
     public function setKeywords($keywords)
     {
@@ -1831,6 +1834,7 @@ EOD;
      * @param int $level 階層（初期値：null）※ null の場合は階層指定なし
      * @param string $currentId 現在のページのコンテンツID（初期値：null）
      * @return string コンテンツメニュー
+     * @doc
      */
     public function contentsMenu($id = null, $level = null, $currentId = null)
     {
@@ -1856,6 +1860,7 @@ EOD;
      * @checked
      * @noTodo
      * @unitTest
+     * @doc
      */
     public function getContentsMenu($id = null, $level = null, $currentId = null, $options = [])
     {
@@ -2778,6 +2783,7 @@ END_FLASH;
      * @checked
      * @noTodo
      * @unitTest
+     * @doc
      */
     public function getCurrentContent()
     {
@@ -2807,6 +2813,7 @@ END_FLASH;
      * @checked
      * @noTodo
      * @unitTest
+     * @doc
      */
     public function getContentCreatedDate($format = 'Y/m/d H:i')
     {
@@ -2826,6 +2833,7 @@ END_FLASH;
      * @checked
      * @noTodo
      * @unitTest
+     * @doc
      */
     public function getContentModifiedDate($format = 'Y/m/d H:i')
     {
@@ -2850,6 +2858,7 @@ END_FLASH;
      * @checked
      * @noTodo
      * @unitTest
+     * @doc
      */
     public function getUpdateInfo()
     {
