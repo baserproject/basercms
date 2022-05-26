@@ -106,6 +106,9 @@ class LoginStoresTable extends Table
      * @param string $prefix ログイン対象
      * @param int $user_id ユーザID
      * @return int 削除行数
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function removeKey(string $prefix, int $user_id): int
     {
