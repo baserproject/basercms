@@ -346,17 +346,6 @@ class UsersTable extends Table
     }
 
     /**
-     * ユーザーに関連するよく使う項目を削除する
-     *
-     * @param int $userId ユーザーID
-     * @return boolean
-     */
-    public function deleteFavorites($userId)
-    {
-        return $this->Favorite->deleteAll(['Favorite.user_id' => $userId], false);
-    }
-
-    /**
      * 利用可能なユーザーを取得する
      * @param Query $query
      * @return Query
