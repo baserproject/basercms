@@ -939,6 +939,9 @@ class BcUtil
      * 送信されたPOSTがpost_max_sizeを超えているかチェックする
      *
      * @return boolean
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public static function isOverPostSize()
     {

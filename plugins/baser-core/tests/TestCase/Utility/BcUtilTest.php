@@ -844,6 +844,36 @@ class BcUtilTest extends BcTestCase
     }
 
     /**
+     * Test isOverPostSize
+     *
+     * @return void
+     * @backupGlobals enabled
+     * @dataProvider isOverPostSizeDataProvider
+     */
+    public function testIsOverPostSize($method, $post, $contentLength, $expect)
+    {
+        $_SERVER['REQUEST_METHOD'] = $method;
+        $_POST = $post;
+        $_SERVER['CONTENT_LENGTH'] = $contentLength;
+
+        $this->assertEquals($expect, BcUtil::isOverPostSize());
+    }
+
+    public function isOverPostSizeDataProvider()
+    {
+        $postMaxSizeMega = preg_replace('/M\z/', '', ini_get('post_max_size'));
+        $postMaxSizeByte = $postMaxSizeMega * 1024 * 1024;
+
+        return [
+            ['POST', [], $postMaxSizeByte + 1, true],
+            ['POST', ['key' => 'value'], 9, false],
+            ['POST', [], 0, false],
+            ['GET', [], null, false]
+
+        ];
+    }
+
+    /**
      * サイトのトップレベルのURLを取得する
      *
      * @return void
