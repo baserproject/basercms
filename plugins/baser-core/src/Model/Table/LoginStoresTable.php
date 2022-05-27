@@ -47,6 +47,9 @@ class LoginStoresTable extends Table
     /**
      * initialize
      * @param array $config
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function initialize(array $config): void
     {
