@@ -220,7 +220,8 @@ SCRIPT_END;
             'type' => 'datepicker',
             'div' => $options['dateDiv'],
             'label' => $options['dateLabel'],
-            'autocomplete' => 'off'
+            'autocomplete' => 'off',
+            'id' => $options['id'] . '-date',
         ], $options['dateInput']);
 
         $timeOptions = array_merge($options, [
@@ -231,7 +232,7 @@ SCRIPT_END;
             'size' => 8,
             'maxlength' => 8,
             'escape' => true,
-            'id' => $options['id'] . '-time'
+            'id' => $options['id'] . '-time',
         ], $options['timeInput']);
 
         unset($options['dateDiv'], $options['dateLabel'], $options['timeDiv'], $options['timeLabel'], $options['dateInput'], $options['timeInput']);
@@ -294,7 +295,7 @@ SCRIPT_END;
             }
             $timeTag = $this->BcHtml->tag($tag, $timeTag, $timeDivOptions);
         }
-        $hiddenTag = $this->hidden($fieldName, ['value' => $value]);
+        $hiddenTag = $this->hidden($fieldName, ['value' => $value, 'id' => $options['id']]);
         $script = <<< SCRIPT_END
 <script>
 $(function(){
@@ -302,7 +303,7 @@ $(function(){
     var time = $("#" + id + "-time");
     var date = $("#" + id + "-date");
     time.timepicker({ 'timeFormat': 'H:i' });
-    $([time, date]).change(function(){
+    date.add(time).change(function(){
         if(date.val() && !time.val()) {
             time.val('00:00');
         }

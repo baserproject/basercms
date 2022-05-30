@@ -325,8 +325,16 @@ class ContentsTable extends AppTable
                 if ($user) $content['author_id'] = $user['id'];
             }
         } else {
+            if (isset($content['self_publish_begin'])) {
+                $content['self_publish_begin'] = new FrozenTime($content['self_publish_begin']);
+            }
+            if (isset($content['self_publish_end'])) {
+                $content['self_publish_end'] = new FrozenTime($content['self_publish_end']);
+            }
             if (empty($content['modified_date'])) {
                 $content['modified_date'] = FrozenTime::now();
+            } else {
+                $content['modified_date'] = new FrozenTime($content['modified_date']);
             }
             if (isset($content['created_date'])) {
                 $content['created_date'] = new FrozenTime($content['created_date']);
