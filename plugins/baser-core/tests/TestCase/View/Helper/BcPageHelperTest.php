@@ -265,12 +265,6 @@ class BcPageHelperTest extends BcTestCase
     }
 
     /**
-     * ページカテゴリ間の前の記事へのリンクを出力する
-     *
-     * public function testPrevLink($url, $title, $options, $expected) { }
-     */
-
-    /**
      * ページリストを取得する
      *
      * @dataProvider getPageListDataProvider
@@ -297,26 +291,4 @@ class BcPageHelperTest extends BcTestCase
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
 
-
-    /**
-     * testGetPageByNextOrPrev
-     *
-     * @return void
-     * @dataProvider getPageNeighborsDataProvider
-     */
-    public function testGetPageNeighbors($overCategory, $title)
-    {
-        $content = $this->BcPage->ContentsService->getIndex(['name' => 'about'])->first();
-        $neighbors = $this->execPrivateMethod($this->BcPage, 'getPageNeighbors', [$content, $overCategory]);
-        $this->assertEquals($neighbors['prev']['title'], $title['prev']);
-        $this->assertEquals($neighbors['next']['title'], $title['next']);
-    }
-
-    public function getPageNeighborsDataProvider()
-    {
-        return [
-            [false, ['prev' => "NEWS(※関連Fixture未完了)", 'next' => "お問い合わせ(※関連Fixture未完了)"]],
-            [true, ['prev' => "NEWS(※関連Fixture未完了)", 'next' => "サービス１"]],
-        ];
-    }
 }

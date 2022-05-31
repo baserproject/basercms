@@ -21,7 +21,7 @@ use BaserCore\Utility\BcUtil;
 use BaserCore\View\Helper\BcContentsHelper;
 
 /**
- * BcPage helper library.
+ * BcContents helper library.
  *
  * @package Baser.Test.Case
  * @property BcContentsHelper $BcContents
@@ -673,40 +673,40 @@ class BcContentsHelperTest extends BcTestCase
     }
 
     /**
-     * ページカテゴリ間の次の記事へのリンクを取得する
+     * フォルダ内の次のコンテンツへのリンクを取得する
      * @param string $url
      * @param string $title
      * @param array $options オプション（初期値 : array()）
      *    - `class` : CSSのクラス名（初期値 : 'next-link'）
      *    - `arrow` : 表示文字列（初期値 : ' ≫'）
-     *    - `overCategory` : 固定ページのカテゴリをまたいで次の記事のリンクを取得するかどうか（初期値 : false）
+     *    - `overFolder` : フォルダ外も含めるかどうか（初期値 : false）
      * @param string $expected
      *
      * @dataProvider getNextLinkDataProvider
      */
     public function testGetNextLink($url, $title, $options, $expected)
     {
-        $this->BcPage->getView()->setRequest($this->getRequest($url));
-        $result = $this->BcPage->getNextLink($title, $options);
+        $this->BcContents->getView()->setRequest($this->getRequest($url));
+        $result = $this->BcContents->getNextLink($title, $options);
         $this->assertEquals($expected, $result);
     }
 
     public function getNextLinkDataProvider()
     {
         return [
-            ['/company', '', ['overCategory' => false], false], // PC
-            ['/company', '次のページへ', ['overCategory' => false], false], // PC
-            ['/about', '', ['overCategory' => true], '<a href="/service/service1" class="next-link">サービス１ ≫</a>'], // PC
-            ['/about', '次のページへ', ['overCategory' => true], '<a href="/service/service1" class="next-link">次のページへ</a>'], // PC
-            ['/en/サイトID3の固定ページ2', '', ['overCategory' => false], '<a href="/en/サイトID3の固定ページ3" class="next-link">サイトID3の固定ページ3 ≫</a>'], // smartphone
-            // ['/s/about', '', ['overCategory' => false], '<a href="/s/icons" class="next-link">アイコンの使い方 ≫</a>'], // smartphone
-            // ['/s/about', '次のページへ', ['overCategory' => false], '<a href="/s/icons" class="next-link">次のページへ</a>'], // smartphone
-            // ['/s/sitemap', '', ['overCategory' => true], '<a href="/s/contact/" class="next-link">お問い合わせ ≫</a>'], // smartphone
-            // ['/s/sitemap', '次のページへ', ['overCategory' => true], '<a href="/s/contact/" class="next-link">次のページへ</a>'], // smartphone
+            ['/company', '', ['overFolder' => false], false], // PC
+            ['/company', '次のページへ', ['overFolder' => false], false], // PC
+            ['/about', '', ['overFolder' => true], '<a href="/service/service1" class="next-link">サービス１ ≫</a>'], // PC
+            ['/about', '次のページへ', ['overFolder' => true], '<a href="/service/service1" class="next-link">次のページへ</a>'], // PC
+            ['/en/サイトID3の固定ページ2', '', ['overFolder' => false], '<a href="/en/サイトID3の固定ページ3" class="next-link">サイトID3の固定ページ3 ≫</a>'], // smartphone
+            // ['/s/about', '', ['overFolder' => false], '<a href="/s/icons" class="next-link">アイコンの使い方 ≫</a>'], // smartphone
+            // ['/s/about', '次のページへ', ['overFolder' => false], '<a href="/s/icons" class="next-link">次のページへ</a>'], // smartphone
+            // ['/s/sitemap', '', ['overFolder' => true], '<a href="/s/contact/" class="next-link">お問い合わせ ≫</a>'], // smartphone
+            // ['/s/sitemap', '次のページへ', ['overFolder' => true], '<a href="/s/contact/" class="next-link">次のページへ</a>'], // smartphone
         ];
     }
     /**
-     * ページカテゴリ間の次の記事へのリンクを出力する
+     * フォルダ内の次のコンテンツへのリンクを出力する
      *
      *    public function testNextLink($url, $title, $options, $expected) { }
      */
@@ -717,44 +717,44 @@ class BcContentsHelperTest extends BcTestCase
       */
     public function testNextLink()
     {
-        $this->BcPage->getView()->setRequest($this->getRequest('/about'));
+        $this->BcContents->getView()->setRequest($this->getRequest('/about'));
         ob_start();
-        $this->BcPage->nextLink('次のページへ', ['overCategory' => false]);
+        $this->BcContents->nextLink('次のページへ', ['overFolder' => false]);
         $result = ob_get_clean();
         $this->assertMatchesRegularExpression('/<a href="\/contact\/" class="next-link">/', $result);
     }
 
     /**
-     * ページカテゴリ間の前の記事へのリンクを取得する
+     * フォルダ内の前のコンテンツへのリンクを取得する
      * @param string $url
      * @param string $title
      * @param array $options オプション（初期値 : array()）
      *    - `class` : CSSのクラス名（初期値 : 'next-link'）
      *    - `arrow` : 表示文字列（初期値 : ' ≫'）
-     *    - `overCategory` : 固定ページのカテゴリをまたいで次の記事のリンクを取得するかどうか（初期値 : false）
+     *    - `overFolder` : フォルダ外も含めるかどうか（初期値 : false）
      * @param string $expected
      *
      * @dataProvider getPrevLinkDataProvider
      */
     public function testGetPrevLink($url, $title, $options, $expected)
     {
-        $this->BcPage->getView()->setRequest($this->getRequest($url));
-        $result = $this->BcPage->getPrevLink($title, $options);
+        $this->BcContents->getView()->setRequest($this->getRequest($url));
+        $result = $this->BcContents->getPrevLink($title, $options);
         $this->assertEquals($expected, $result);
     }
 
     public function getPrevLinkDataProvider()
     {
         return [
-            ['/company', '', ['overCategory' => false], false], // PC
-            ['/company', '前のページへ', ['overCategory' => false], false], // PC
-            ['/about', '', ['overCategory' => true], '<a href="/news/" class="prev-link">≪ NEWS(※関連Fixture未完了)</a>'], // PC
-            ['/about', '前のページへ', ['overCategory' => true], '<a href="/news/" class="prev-link">前のページへ</a>'], // PC
-            ['/en/サイトID3の固定ページ2', '', ['overCategory' => false], '<a href="/en/サイトID3の固定ページ" class="prev-link">≪ サイトID3の固定ページ</a>'], // smartphone
-            // ['/s/about', '', ['overCategory' => false], '<a href="/s/" class="prev-link">≪ トップページ</a>'], // smartphone
-            // ['/s/about', '前のページへ', ['overCategory' => false], '<a href="/s/" class="prev-link">前のページへ</a>'], // smartphone
-            // ['/s/sitemap', '', ['overCategory' => true], '<a href="/s/icons" class="prev-link">≪ アイコンの使い方</a>'], // smartphone
-            // ['/s/sitemap', '前のページへ', ['overCategory' => true], '<a href="/s/icons" class="prev-link">前のページへ</a>'], // smartphone
+            ['/company', '', ['overFolder' => false], false], // PC
+            ['/company', '前のページへ', ['overFolder' => false], false], // PC
+            ['/about', '', ['overFolder' => true], '<a href="/news/" class="prev-link">≪ NEWS(※関連Fixture未完了)</a>'], // PC
+            ['/about', '前のページへ', ['overFolder' => true], '<a href="/news/" class="prev-link">前のページへ</a>'], // PC
+            ['/en/サイトID3の固定ページ2', '', ['overFolder' => false], '<a href="/en/サイトID3の固定ページ" class="prev-link">≪ サイトID3の固定ページ</a>'], // smartphone
+            // ['/s/about', '', ['overFolder' => false], '<a href="/s/" class="prev-link">≪ トップページ</a>'], // smartphone
+            // ['/s/about', '前のページへ', ['overFolder' => false], '<a href="/s/" class="prev-link">前のページへ</a>'], // smartphone
+            // ['/s/sitemap', '', ['overFolder' => true], '<a href="/s/icons" class="prev-link">≪ アイコンの使い方</a>'], // smartphone
+            // ['/s/sitemap', '前のページへ', ['overFolder' => true], '<a href="/s/icons" class="prev-link">前のページへ</a>'], // smartphone
         ];
     }
 
@@ -765,9 +765,9 @@ class BcContentsHelperTest extends BcTestCase
      */
     public function testPrevLink()
     {
-        $this->BcPage->getView()->setRequest($this->getRequest('/about'));
+        $this->BcContents->getView()->setRequest($this->getRequest('/about'));
         ob_start();
-        $this->BcPage->prevLink('前のページへ', ['overCategory' => false]);
+        $this->BcContents->prevLink('前のページへ', ['overFolder' => false]);
         $result = ob_get_clean();
         $this->assertMatchesRegularExpression('/<a href="\/news\/" class="prev-link">/', $result);
     }
@@ -778,10 +778,10 @@ class BcContentsHelperTest extends BcTestCase
      * @return void
      * @dataProvider getPageNeighborsDataProvider
      */
-    public function testGetPageNeighbors($overCategory, $title)
+    public function testGetPageNeighbors($overFolder, $title)
     {
-        $content = $this->BcPage->ContentsService->getIndex(['name' => 'about'])->first();
-        $neighbors = $this->execPrivateMethod($this->BcPage, 'getPageNeighbors', [$content, $overCategory]);
+        $content = $this->BcContents->ContentsService->getIndex(['name' => 'about'])->first();
+        $neighbors = $this->execPrivateMethod($this->BcContents, 'getPageNeighbors', [$content, $overFolder]);
         $this->assertEquals($neighbors['prev']['title'], $title['prev']);
         $this->assertEquals($neighbors['next']['title'], $title['next']);
     }

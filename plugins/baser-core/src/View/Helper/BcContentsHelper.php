@@ -708,7 +708,7 @@ class BcContentsHelper extends Helper
     }
 
     /**
-     * ページカテゴリ間の次の記事へのリンクを取得する
+     * フォルダ内の次のコンテンツへのリンクを取得する
      *
      * MEMO: BcRequest.(agent).aliasは廃止
      *
@@ -716,10 +716,10 @@ class BcContentsHelper extends Helper
      * @param array $options オプション（初期値 : array()）
      *    - `class` : CSSのクラス名（初期値 : 'next-link'）
      *    - `arrow` : 表示文字列（初期値 : ' ≫'）
-     *    - `overCategory` : 固定ページのカテゴリをまたいで次の記事のリンクを取得するかどうか（初期値 : false）
-     *        ※ overCategory が true の場合は、BcPageHelper::contentsNaviAvailable() が false だとしても強制的に出力する
+     *    - `overFolder` : フォルダ外も含めるかどうか（初期値 : false）
+     *        ※ overFolder が true の場合は、BcPageHelper::contentsNaviAvailable() が false だとしても強制的に出力する
      *    - `escape` : エスケープするかどうか
-     * @return mixed コンテンツナビが無効かつオプションoverCategoryがtrueでない場合はfalseを返す
+     * @return mixed コンテンツナビが無効かつオプションoverFolderがtrueでない場合はfalseを返す
      * @checked
      * @noTodo
      * @unitTest
@@ -733,16 +733,16 @@ class BcContentsHelper extends Helper
         $options = array_merge([
             'class' => 'next-link',
             'arrow' => ' ≫',
-            'overCategory' => false,
+            'overFolder' => false,
             'escape' => true
         ], $options);
 
         $arrow = $options['arrow'];
-        $overCategory = $options['overCategory'];
+        $overFolder = $options['overFolder'];
         unset($options['arrow']);
-        unset($options['overCategory']);
+        unset($options['overFolder']);
 
-        $neighbors = $this->getPageNeighbors($request->getParam('Content'), $overCategory);
+        $neighbors = $this->getPageNeighbors($request->getParam('Content'), $overFolder);
 
         if (empty($neighbors['next'])) {
             return false;
@@ -756,15 +756,15 @@ class BcContentsHelper extends Helper
     }
 
     /**
-     * ページカテゴリ間の次の記事へのリンクを出力する
+     * フォルダ内の次のコンテンツへのリンクを出力する
      *
      * @param string $title
      * @param array $options オプション（初期値 : array()）
      *    - `class` : CSSのクラス名（初期値 : 'next-link'）
      *    - `arrow` : 表示文字列（初期値 : ' ≫'）
-     *    - `overCategory` : 固定ページのカテゴリをまたいで次の記事のリンクを取得するかどうか（初期値 : false）
-     *        ※ overCategory が true の場合は、BcPageHelper::contentsNaviAvailable() が false だとしても強制的に出力する
-     * @return @return void コンテンツナビが無効かつオプションoverCategoryがtrueでない場合はfalseを出力する
+     *    - `overFolder` : フォルダ外も含めるかどうか（初期値 : false）
+     *        ※ overFolder が true の場合は、BcPageHelper::contentsNaviAvailable() が false だとしても強制的に出力する
+     * @return @return void コンテンツナビが無効かつオプションoverFolderがtrueでない場合はfalseを出力する
      * @checked
      * @noTodo
      * @unitTest
@@ -775,13 +775,13 @@ class BcContentsHelper extends Helper
     }
 
     /**
-     * ページカテゴリ間の前の記事へのリンクを取得する
+     * フォルダ内の前のコンテンツへのリンクを取得する
      *
      * @param string $title
      * @param array $options オプション（初期値 : array()）
      *    - `class` : CSSのクラス名（初期値 : 'prev-link'）
      *    - `arrow` : 表示文字列（初期値 : ' ≫'）
-     *    - `overCategory` : 固定ページのカテゴリをまたいで次の記事のリンクを取得するかどうか（初期値 : false）
+     *    - `overFolder` : フォルダ外も含めるかどうか（初期値 : false）
      *    - `escape` : エスケープするかどうか
      * @return string|false
      * @checked
@@ -797,16 +797,16 @@ class BcContentsHelper extends Helper
         $options = array_merge([
             'class' => 'prev-link',
             'arrow' => '≪ ',
-            'overCategory' => false,
+            'overFolder' => false,
             'escape' => true
         ], $options);
 
         $arrow = $options['arrow'];
-        $overCategory = $options['overCategory'];
+        $overFolder = $options['overFolder'];
         unset($options['arrow']);
-        unset($options['overCategory']);
+        unset($options['overFolder']);
         $content = $request->getParam('Content');
-        $neighbors = $this->getPageNeighbors($content, $overCategory);
+        $neighbors = $this->getPageNeighbors($content, $overFolder);
 
         if (empty($neighbors['prev'])) {
             return false;
@@ -820,15 +820,15 @@ class BcContentsHelper extends Helper
     }
 
     /**
-     * ページカテゴリ間の前の記事へのリンクを出力する
+     * フォルダ内の前のコンテンツへのリンクを出力する
      *
      * @param string $title
      * @param array $options オプション（初期値 : array()）
      *    - `class` : CSSのクラス名（初期値 : 'prev-link'）
      *    - `arrow` : 表示文字列（初期値 : ' ≫'）
-     *    - `overCategory` : 固定ページのカテゴリをまたいで次の記事のリンクを取得するかどうか（初期値 : false）
-     *        ※ overCategory が true の場合は、BcPageHelper::contentsNaviAvailable() が false だとしても強制的に出力する
-     * @return void コンテンツナビが無効かつオプションoverCategoryがtrueでない場合はfalseを返す
+     *    - `overFolder` : フォルダ外も含めるかどうか（初期値 : false）
+     *        ※ overFolder が true の場合は、BcPageHelper::contentsNaviAvailable() が false だとしても強制的に出力する
+     * @return void コンテンツナビが無効かつオプションoverFolderがtrueでない場合はfalseを返す
      * @checked
      * @noTodo
      * @unitTest
@@ -842,19 +842,19 @@ class BcContentsHelper extends Helper
      * 指定した固定ページデータの次、または、前のデータを取得する
      *
      * @param Content $content
-     * @param bool $overCategory カテゴリをまたがるかどうか
+     * @param bool $overFolder フォルダ外も含めるかどうか
      * @return array 次、または、前の固定ページデータ
      * @checked
      * @noTodo
      * @unitTest
      */
-    protected function getPageNeighbors($content, $overCategory = false)
+    protected function getPageNeighbors($content, $overFolder = false)
     {
         $conditions = array_merge($this->ContentsService->getConditionAllowPublish(), [
             'Contents.type <>' => 'ContentFolder',
             'Contents.site_id' => $content->site_id
         ]);
-        if ($overCategory !== true) {
+        if ($overFolder !== true) {
             $conditions['Contents.parent_id'] = $content->parent_id;
         }
         $options = [

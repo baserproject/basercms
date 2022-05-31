@@ -155,36 +155,15 @@ class BcPageHelper extends Helper
      * @checked
      * @noTodo
      * @unitTest
+     * @deprecated BcContentsHelper->getNextLink に移行
      */
     public function getNextLink($title = '', $options = [])
     {
-        $request = $this->getView()->getRequest();
-        if (empty($request->getParam('Content.id')) || empty($request->getParam('Content.parent_id'))) {
-            return false;
+        if (isset($options['overCategory'])) {
+            $options['overFolder'] = $options['overCategory'];
+            unset($options['overCategory']);
         }
-        $options = array_merge([
-            'class' => 'next-link',
-            'arrow' => ' ≫',
-            'overCategory' => false,
-            'escape' => true
-        ], $options);
-
-        $arrow = $options['arrow'];
-        $overCategory = $options['overCategory'];
-        unset($options['arrow']);
-        unset($options['overCategory']);
-
-        $neighbors = $this->getPageNeighbors($request->getParam('Content'), $overCategory);
-
-        if (empty($neighbors['next'])) {
-            return false;
-        } else {
-            if (!$title) {
-                $title = $neighbors['next']['title'] . $arrow;
-            }
-            $url = $neighbors['next']['url'];
-            return $this->BcBaser->getLink($title, $url, $options);
-        }
+        return $this->BcContents->getNextLink($title, $options);
     }
 
     /**
@@ -200,10 +179,15 @@ class BcPageHelper extends Helper
      * @checked
      * @noTodo
      * @unitTest
+     * @deprecated BcContentsHelper->nextLink に移行
      */
     public function nextLink($title = '', $options = [])
     {
-        echo $this->getNextLink($title, $options);
+        if (isset($options['overCategory'])) {
+            $options['overFolder'] = $options['overCategory'];
+            unset($options['overCategory']);
+        }
+        echo $this->BcContents->getNextLink($title, $options);
     }
 
     /**
@@ -219,36 +203,15 @@ class BcPageHelper extends Helper
      * @checked
      * @noTodo
      * @unitTest
+     * @deprecated BcContentsHelper->getPrevLink に移行
      */
     public function getPrevLink($title = '', $options = [])
     {
-        $request = $this->getView()->getRequest();
-        if (empty($request->getParam('Content.id')) || empty($request->getParam('Content.parent_id'))) {
-            return false;
+        if (isset($options['overCategory'])) {
+            $options['overFolder'] = $options['overCategory'];
+            unset($options['overCategory']);
         }
-        $options = array_merge([
-            'class' => 'prev-link',
-            'arrow' => '≪ ',
-            'overCategory' => false,
-            'escape' => true
-        ], $options);
-
-        $arrow = $options['arrow'];
-        $overCategory = $options['overCategory'];
-        unset($options['arrow']);
-        unset($options['overCategory']);
-        $content = $request->getParam('Content');
-        $neighbors = $this->getPageNeighbors($content, $overCategory);
-
-        if (empty($neighbors['prev'])) {
-            return false;
-        } else {
-            if (!$title) {
-                $title = $arrow . $neighbors['prev']['title'];
-            }
-            $url = $neighbors['prev']['url'];
-            return $this->BcBaser->getLink($title, $url, $options);
-        }
+        return $this->BcContents->getPrevLink($title, $options);
     }
 
     /**
@@ -264,37 +227,14 @@ class BcPageHelper extends Helper
      * @checked
      * @noTodo
      * @unitTest
+     * @deprecated BcContentsHelper->prevLink に移行
      */
     public function prevLink($title = '', $options = [])
     {
-        echo $this->getPrevLink($title, $options);
-    }
-
-    /**
-     * 指定した固定ページデータの次、または、前のデータを取得する
-     *
-     * @param Content $content
-     * @param bool $overCategory カテゴリをまたがるかどうか
-     * @return array 次、または、前の固定ページデータ
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    protected function getPageNeighbors($content, $overCategory = false)
-    {
-        $conditions = array_merge($this->ContentsService->getConditionAllowPublish(), [
-            'Contents.type <>' => 'ContentFolder',
-            'Contents.site_id' => $content->site_id
-        ]);
-        if ($overCategory !== true) {
-            $conditions['Contents.parent_id'] = $content->parent_id;
+        if (isset($options['overCategory'])) {
+            $options['overFolder'] = $options['overCategory'];
+            unset($options['overCategory']);
         }
-        $options = [
-            'field' => 'lft',
-            'value' => $content->lft,
-            'conditions' => $conditions,
-            'order' => ['Contents.lft'],
-        ];
-        return $this->ContentsService->getNeighbors($options);
+        echo $this->BcContents->getPrevLink($title, $options);
     }
 }

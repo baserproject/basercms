@@ -16,6 +16,7 @@ use Cake\View\View;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use BaserCore\View\Helper\BcContentHelper;
 use BaserCore\View\Helper\BcPageHelper;
 use BaserCore\View\Helper\BcBaserHelper;
 use BaserCore\Event\BcEventDispatcherTrait;
@@ -53,6 +54,7 @@ class AppView extends View
 //        $this->loadHelper('BaserCore.BcArray');
         // <<<
         $this->loadHelper('BaserCore.BcAdmin');
+        $this->loadHelper('BaserCore.BcContents');
         $this->loadHelper('BaserCore.BcPage');
         $this->loadHelper('BaserCore.BcBaser');
         $this->loadHelper('BaserCore.BcToolbar');
