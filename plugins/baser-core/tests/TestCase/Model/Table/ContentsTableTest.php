@@ -190,7 +190,9 @@ class ContentsTableTest extends BcTestCase
      */
     public function testImplementedEvents()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $result = $this->Contents->implementedEvents();
+        $this->assertTrue(is_array($result));
+        $this->assertGreaterThanOrEqual(5, count($result));
     }
 
     /**
