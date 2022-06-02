@@ -139,14 +139,14 @@ msgid "任意"
 msgstr ""
 
 #: Config/theme/bc_sample/Elements/mail_input.php:98
-#: Plugin/Mail/Model/MailMessage.php:463
+#: Plugin/Mail/Model/MailMessage.php:466
 #: Plugin/Mail/Test/Case/Model/MailMessageTest.php:150
 #: Plugin/Mail/View/Elements/mail_input.php:97
 msgid "入力データが一致していません。"
 msgstr ""
 
 #: Config/theme/bc_sample/Elements/mail_input.php:99
-#: Plugin/Mail/Model/MailMessage.php:421;507
+#: Plugin/Mail/Model/MailMessage.php:424;510
 #: Plugin/Mail/Test/Case/Model/MailMessageTest.php:151
 #: Plugin/Mail/View/Elements/mail_input.php:98
 msgid "入力データが不完全です。"
@@ -467,49 +467,49 @@ msgstr ""
 msgid "エラー : 送信中にエラーが発生しました。しばらくたってから再度送信お願いします。"
 msgstr ""
 
-#: Plugin/Mail/Model/MailMessage.php:195;202;304
+#: Plugin/Mail/Model/MailMessage.php:195;205;307
 #: Plugin/Mail/Test/Case/Model/MailMessageTest.php:145;146;149;155
 msgid "必須項目です。"
 msgstr ""
 
-#: Plugin/Mail/Model/MailMessage.php:216
+#: Plugin/Mail/Model/MailMessage.php:219
 msgid "半角数字で入力してください。"
 msgstr ""
 
-#: Plugin/Mail/Model/MailMessage.php:225
+#: Plugin/Mail/Model/MailMessage.php:228
 msgid "次の文字はメールアドレスでは受け付けられません: "
 msgstr ""
 
-#: Plugin/Mail/Model/MailMessage.php:228
+#: Plugin/Mail/Model/MailMessage.php:231
+#: Plugin/Mail/Test/Case/Model/MailMessageTest.php:147;148
 msgid "@が必要です。"
 msgstr ""
 
-#: Plugin/Mail/Model/MailMessage.php:233
+#: Plugin/Mail/Model/MailMessage.php:236
 msgid "形式が無効です。「XXXXXXXXXX@XXX.XX」で記述してください。"
 msgstr ""
 
-#: Plugin/Mail/Model/MailMessage.php:261
+#: Plugin/Mail/Model/MailMessage.php:264
 msgid "ファイル形式が無効です。"
 msgstr ""
 
-#: Plugin/Mail/Model/MailMessage.php:271
-#: Plugin/Mail/Test/Case/Model/MailMessageTest.php:147;148
+#: Plugin/Mail/Model/MailMessage.php:274
 msgid "形式が無効です。"
 msgstr ""
 
-#: Plugin/Mail/Model/MailMessage.php:316;324;327
+#: Plugin/Mail/Model/MailMessage.php:319;327;330
 msgid "日付の形式が無効です。"
 msgstr ""
 
-#: Plugin/Mail/Model/MailMessage.php:336
+#: Plugin/Mail/Model/MailMessage.php:339
 msgid "次の文字はカタカナではないので受け付けられません: "
 msgstr ""
 
-#: Plugin/Mail/Model/MailMessage.php:344
+#: Plugin/Mail/Model/MailMessage.php:347
 msgid "次の文字はひらがなではないので受け付けられません: "
 msgstr ""
 
-#: Plugin/Mail/Model/MailMessage.php:352
+#: Plugin/Mail/Model/MailMessage.php:355
 msgid "『"
 msgstr ""
 
@@ -517,7 +517,7 @@ msgstr ""
 msgid "クリア"
 msgstr ""
 
-#: Plugin/Mail/View/Helper/MailformHelper.php:283
+#: Plugin/Mail/View/Helper/MailformHelper.php:291
 msgid "認証画像"
 msgstr ""
 
