@@ -61,6 +61,9 @@ class LoginStoresTable extends Table
      * buildRules
      * @param RulesChecker $rules
      * @return RulesChecker
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
