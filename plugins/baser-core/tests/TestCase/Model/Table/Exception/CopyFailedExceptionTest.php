@@ -60,9 +60,9 @@ class CopyFailedExceptionTest extends BcTestCase
     }
 
     /**
-     * Test setErrors
+     * Test setErrors and getErrors
      */
-    public function testSetErrors()
+    public function testSetErrorsAndGetErrors()
     {
         $this->CopyFailedException->setErrors(['testerror1', 'testerror2']);
         $errors = $this->CopyFailedException->getErrors();

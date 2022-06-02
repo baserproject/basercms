@@ -48,6 +48,9 @@ class CopyFailedException extends Exception
      * getErrors
      *
      * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getErrors()
     {
