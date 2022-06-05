@@ -129,6 +129,9 @@ class LoginStoresTable extends Table
      *
      * @param string $key
      * @return Entity
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getEnableLoginStore($key): ?Entity
     {
