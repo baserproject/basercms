@@ -14,6 +14,7 @@ namespace BaserCore\Test\TestCase\Model\Table;
 use BaserCore\Model\Table\LoginStoresTable;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\TestSuite\IntegrationTestTrait;
+use Exception;
 
 /**
  * BaserCore\Model\Table\LoginStoresTable Test Case
@@ -208,6 +209,10 @@ class LoginStoresTableTest extends BcTestCase
                 $loginStore2->store_key
             ]
         ));
+
+        $this->expectException(Exception::class);
+        $this->LoginStores->refresh('Admin', 0);
+
     }
 
 }
