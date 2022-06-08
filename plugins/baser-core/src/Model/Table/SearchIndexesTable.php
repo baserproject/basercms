@@ -43,7 +43,10 @@ class SearchIndexesTable extends AppTable
      * 公開状態確認
      *
      * @param array $data
-     * @return bool
+     * @return bool|int
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function allowPublish($data)
     {

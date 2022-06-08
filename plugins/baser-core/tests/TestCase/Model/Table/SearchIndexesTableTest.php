@@ -76,11 +76,10 @@ class SearchIndexesTableTest extends BcTestCase
 	 */
 	public function testAllowPublish($publish_begin, $publish_end, $status, $expected)
 	{
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
 		$data['publish_begin'] = $publish_begin;
 		$data['publish_end'] = $publish_end;
 		$data['status'] = $status;
-		$this->assertEquals($this->SearchIndex->allowPublish($data), $expected);
+		$this->assertEquals($this->SearchIndexes->allowPublish($data), $expected);
 	}
 
 	public function allowPublishDataProvider()
