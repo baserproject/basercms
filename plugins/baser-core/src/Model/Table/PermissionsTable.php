@@ -226,6 +226,9 @@ class PermissionsTable extends AppTable
      * 検証対象者のPermissionsを設定する
      * @param  array $userGroups
      * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function setTargetPermissions(array $userGroups)
     {
@@ -254,6 +257,9 @@ class PermissionsTable extends AppTable
      *
      * @param array $userGroups
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getTargePermissions(array $userGroups): array
     {

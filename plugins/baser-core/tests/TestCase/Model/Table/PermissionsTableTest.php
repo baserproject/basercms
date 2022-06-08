@@ -298,22 +298,12 @@ class PermissionsTableTest extends BcTestCase
     }
 
     /**
-     * testGetTargePermissions
+     * GetTargetPermissions 
+     * SetTargetPermissions
      *
      * @return void
      */
-    public function testGetTargePermissions(): void
-    {
-        $data = $this->Permissions->getTargePermissions([3]);
-        $this->assertNotEmpty($data[3]);
-    }
-
-    /**
-     * testSetTargetPermissions
-     *
-     * @return void
-     */
-    public function testSetTargetPermissions(): void
+    public function testGetTargetPermissionsAndSetTargetPermissions(): void
     {
         $this->Permissions->setTargetPermissions([2, 3]);
         $data = $this->Permissions->getTargePermissions([2, 3]);
