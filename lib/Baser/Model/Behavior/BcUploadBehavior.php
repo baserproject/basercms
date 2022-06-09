@@ -66,7 +66,7 @@ class BcUploadBehavior extends ModelBehavior
 	 * バリデーション中のロック
 	 * @var bool
 	 */
-	public $validatingLock = false;
+	public $validatingLock = [];
 
 	/**
 	 * セットアップ
@@ -78,7 +78,7 @@ class BcUploadBehavior extends ModelBehavior
 	{
 		$this->BcFileUploader[$Model->alias] = new BcFileUploader();
         $this->BcFileUploader[$Model->alias]->initialize($settings, $Model);
-
+		$this->validatingLock[$Model->alias] = false;
         // @deprecated 後方互換 since v4.5.6, v5.0.0 で削除予定
         // CuApprover-4.3.2以下に対応するための処理
         // >>>
@@ -105,11 +105,11 @@ class BcUploadBehavior extends ModelBehavior
 	 */
 	public function afterValidate(Model $Model, $options = [])
 	{
-		if($this->validatingLock) return true;
+		if($this->validatingLock[$Model->alias]) return true;
         $Model->data[$Model->alias] = $this->BcFileUploader[$Model->alias]->setupRequestData(isset($Model->data[$Model->alias])? $Model->data[$Model->alias] : $Model->data);
         $Model->data[$Model->alias] = $this->BcFileUploader[$Model->alias]->setupTmpData(isset($Model->data[$Model->alias])? $Model->data[$Model->alias] : $Model->data);
         $this->oldEntity = (!empty($Model->data[$Model->alias]['id']))? $this->getOldEntity($Model, $Model->data[$Model->alias]['id']) : [];
-        $this->validatingLock = true;
+        $this->validatingLock[$Model->alias] = true;
 
 		// @deprecated 後方互換 since v4.5.6, v5.0.0 で削除予定
 		// CuApprover-4.3.2以下に対応するための処理
