@@ -57,7 +57,6 @@ class BcAdminAppController extends BcAppController
             'logoutRedirect' => Router::url(Configure::read('BcPrefixAuth.Admin.loginAction'), true),
         ]);
 
-        $this->Security->setConfig('validatePost', false);
         if (Configure::read('BcApp.adminSsl') && !BcUtil::isConsole()) $this->Security->requireSecure();
 
         // TODO ucmitz 未移行のためコメントアウト

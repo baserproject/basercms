@@ -82,7 +82,7 @@ class ContentsController extends BcAdminAppController
         $this->loadModel('BaserCore.ContentFolders');
         $this->loadModel('BaserCore.Users');
         $this->loadModel('BaserCore.Contents');
-        $this->Security->setConfig('unlockedActions', ['delete', 'batch']);
+        $this->Security->setConfig('unlockedActions', ['delete', 'batch', 'trash_return']);
     }
 
     /**
@@ -139,6 +139,7 @@ class ContentsController extends BcAdminAppController
             }
         }
         $this->ContentFolders->getEventManager()->on($this->ContentFolders);
+        $this->request = $this->request->withParsedBody($this->request->getQuery());
         $this->set('contents', $this->getContents($contentService));
         $this->set('template', $this->getTemplate());
         $this->set('folders', $contentService->getContentFolderList($currentSiteId, ['conditions' => ['site_root' => false]]));
