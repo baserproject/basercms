@@ -152,6 +152,13 @@ if (!empty($currentAuthPrefix['name']) && $currentPrefix !== 'front') {
 					<?php $this->BcBaser->publishLink() ?>
 				</div>
 			<?php endif ?>
+			<?php
+			// EVENT leftOfToolbar
+			$event = $this->dispatchEvent('leftOfToolbar', [], ['layer' => 'View', 'class' => '', 'plugin' => '']);
+			if ($event !== false) {
+				echo ($event->result === null || $event->result === true)? '' : $event->result;
+			}
+		 	?>
 			<?php if (!$loginUrl || $this->request->url != $loginUrl): ?>
 				<div class="bca-toolbar__tools-mode">
 					<?php if (Configure::read('debug') == -1 && $this->name !== "Installations"): ?>
@@ -192,6 +199,13 @@ if (!empty($currentAuthPrefix['name']) && $currentPrefix !== 'front') {
 									<li><?php $this->BcBaser->link(__d('baser', 'アカウント設定'), [$currentPrefix => true, 'plugin' => null, 'controller' => 'users', 'action' => 'edit', $user['id']]) ?></li>
 								<?php endif ?>
 							<?php endif ?>
+							<?php
+							// EVENT userMenuOfToolbar
+							$event = $this->dispatchEvent('userMenuOfToolbar', [], ['layer' => 'View', 'class' => '', 'plugin' => '']);
+							if ($event !== false) {
+								echo ($event->result === null || $event->result === true)? '' : $event->result;
+							}
+							?>
 							<li><?php $this->BcBaser->link(__d('baser', 'ログアウト'), $logoutAction) ?></li>
 						</ul>
 					<?php elseif ($this->name !== 'Installations' && $this->request->url != $loginUrl && !Configure::read('BcRequest.isUpdater')): ?>
@@ -221,6 +235,13 @@ if (!empty($currentAuthPrefix['name']) && $currentPrefix !== 'front') {
 						) ?>　
 					</li>
 				<?php endif ?>
+				<?php
+				// EVENT rightOfToolbar
+				$event = $this->dispatchEvent('rightOfToolbar', [], ['layer' => 'View', 'class' => '', 'plugin' => '']);
+				if ($event !== false) {
+					echo ($event->result === null || $event->result === true)? '' : $event->result;
+				}
+				?>
 			</ul>
 		</div>
 	</div>
