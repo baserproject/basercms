@@ -707,4 +707,162 @@ class BcContentsHelper extends Helper
         return $this->ContentsService->isAllowPublish($data, $self);
     }
 
+    /**
+     * フォルダ内の次のコンテンツへのリンクを取得する
+     *
+     * MEMO: BcRequest.(agent).aliasは廃止
+     *
+     * @param string $title
+     * @param array $options オプション（初期値 : array()）
+     *    - `class` : CSSのクラス名（初期値 : 'next-link'）
+     *    - `arrow` : 表示文字列（初期値 : ' ≫'）
+     *    - `overFolder` : フォルダ外も含めるかどうか（初期値 : false）
+     *        ※ overFolder が true の場合は、BcPageHelper::contentsNaviAvailable() が false だとしても強制的に出力する
+     *    - `escape` : エスケープするかどうか
+     * @return mixed コンテンツナビが無効かつオプションoverFolderがtrueでない場合はfalseを返す
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getNextLink($title = '', $options = [])
+    {
+        $request = $this->getView()->getRequest();
+        if (empty($request->getParam('Content.id')) || empty($request->getParam('Content.parent_id'))) {
+            return false;
+        }
+        $options = array_merge([
+            'class' => 'next-link',
+            'arrow' => ' ≫',
+            'overFolder' => false,
+            'escape' => true
+        ], $options);
+
+        $arrow = $options['arrow'];
+        $overFolder = $options['overFolder'];
+        unset($options['arrow']);
+        unset($options['overFolder']);
+
+        $neighbors = $this->getPageNeighbors($request->getParam('Content'), $overFolder);
+
+        if (empty($neighbors['next'])) {
+            return false;
+        } else {
+            if (!$title) {
+                $title = $neighbors['next']['title'] . $arrow;
+            }
+            $url = $neighbors['next']['url'];
+            return $this->BcBaser->getLink($title, $url, $options);
+        }
+    }
+
+    /**
+     * フォルダ内の次のコンテンツへのリンクを出力する
+     *
+     * @param string $title
+     * @param array $options オプション（初期値 : array()）
+     *    - `class` : CSSのクラス名（初期値 : 'next-link'）
+     *    - `arrow` : 表示文字列（初期値 : ' ≫'）
+     *    - `overFolder` : フォルダ外も含めるかどうか（初期値 : false）
+     *        ※ overFolder が true の場合は、BcPageHelper::contentsNaviAvailable() が false だとしても強制的に出力する
+     * @return @return void コンテンツナビが無効かつオプションoverFolderがtrueでない場合はfalseを出力する
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function nextLink($title = '', $options = [])
+    {
+        echo $this->getNextLink($title, $options);
+    }
+
+    /**
+     * フォルダ内の前のコンテンツへのリンクを取得する
+     *
+     * @param string $title
+     * @param array $options オプション（初期値 : array()）
+     *    - `class` : CSSのクラス名（初期値 : 'prev-link'）
+     *    - `arrow` : 表示文字列（初期値 : ' ≫'）
+     *    - `overFolder` : フォルダ外も含めるかどうか（初期値 : false）
+     *    - `escape` : エスケープするかどうか
+     * @return string|false
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getPrevLink($title = '', $options = [])
+    {
+        $request = $this->getView()->getRequest();
+        if (empty($request->getParam('Content.id')) || empty($request->getParam('Content.parent_id'))) {
+            return false;
+        }
+        $options = array_merge([
+            'class' => 'prev-link',
+            'arrow' => '≪ ',
+            'overFolder' => false,
+            'escape' => true
+        ], $options);
+
+        $arrow = $options['arrow'];
+        $overFolder = $options['overFolder'];
+        unset($options['arrow']);
+        unset($options['overFolder']);
+        $content = $request->getParam('Content');
+        $neighbors = $this->getPageNeighbors($content, $overFolder);
+
+        if (empty($neighbors['prev'])) {
+            return false;
+        } else {
+            if (!$title) {
+                $title = $arrow . $neighbors['prev']['title'];
+            }
+            $url = $neighbors['prev']['url'];
+            return $this->BcBaser->getLink($title, $url, $options);
+        }
+    }
+
+    /**
+     * フォルダ内の前のコンテンツへのリンクを出力する
+     *
+     * @param string $title
+     * @param array $options オプション（初期値 : array()）
+     *    - `class` : CSSのクラス名（初期値 : 'prev-link'）
+     *    - `arrow` : 表示文字列（初期値 : ' ≫'）
+     *    - `overFolder` : フォルダ外も含めるかどうか（初期値 : false）
+     *        ※ overFolder が true の場合は、BcPageHelper::contentsNaviAvailable() が false だとしても強制的に出力する
+     * @return void コンテンツナビが無効かつオプションoverFolderがtrueでない場合はfalseを返す
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function prevLink($title = '', $options = [])
+    {
+        echo $this->getPrevLink($title, $options);
+    }
+
+    /**
+     * 指定した固定ページデータの次、または、前のデータを取得する
+     *
+     * @param Content $content
+     * @param bool $overFolder フォルダ外も含めるかどうか
+     * @return array 次、または、前の固定ページデータ
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    protected function getPageNeighbors($content, $overFolder = false)
+    {
+        $conditions = array_merge($this->ContentsService->getConditionAllowPublish(), [
+            'Contents.type <>' => 'ContentFolder',
+            'Contents.site_id' => $content->site_id
+        ]);
+        if ($overFolder !== true) {
+            $conditions['Contents.parent_id'] = $content->parent_id;
+        }
+        $options = [
+            'field' => 'lft',
+            'value' => $content->lft,
+            'conditions' => $conditions,
+            'order' => ['Contents.lft'],
+        ];
+        return $this->ContentsService->getNeighbors($options);
+    }
 }
