@@ -86,3 +86,4 @@ LOCAL_Q&A.md
 # jwt
 /config/jwt.key
 /config/jwt.pem
+/config/setting.php

@@ -64,6 +64,10 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
 
         parent::bootstrap($application);
 
+        if (file_exists(CONFIG . 'setting.php')) {
+            Configure::load('setting', 'baser');
+        }
+
         if (!filter_var(env('USE_DEBUG_KIT', true), FILTER_VALIDATE_BOOLEAN)) {
             // 明示的に指定がない場合、DebugKitは重すぎるのでデバッグモードでも利用しない
             \Cake\Core\Plugin::getCollection()->remove('DebugKit');
