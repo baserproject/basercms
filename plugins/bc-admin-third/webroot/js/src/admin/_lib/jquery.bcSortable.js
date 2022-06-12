@@ -87,7 +87,7 @@
                         $.bcUtil.showLoader();
                     },
                     success: function (result) {
-                        if (result === '1') {
+                        if (result === '1' || result === 'true') {
                             sortTable.find("tr.sortable").each(function (i, v) {
                                 $(this).attr('id', 'Row' + (i + 1));
                             });
