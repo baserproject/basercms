@@ -15,7 +15,6 @@ use ArrayObject;
 use Cake\ORM\Entity;
 use ReflectionClass;
 use Cake\Core\Configure;
-use Cake\ORM\Marshaller;
 use Cake\I18n\FrozenTime;
 use Cake\Validation\Validator;
 use BaserCore\Model\Entity\Content;
@@ -305,29 +304,6 @@ class ContentsTableTest extends BcTestCase
             ['index', 0, 'index'],
             ['index', 1, 'index_2'],
         ];
-    }
-
-    /**
-     * testAfterMarshal
-     *
-     * @return void
-     */
-    public function testAfterMarshal()
-    {
-        $time = new FrozenTime();
-        $data = [
-            "name" => "test",
-            "created" => $time,
-            "parent_id" => 1,
-        ];
-        $marshall = new Marshaller($this->Contents);
-
-        $this->Contents->getEventManager()->on(
-            'Model.afterMarshal',
-            function ($event, $entity, $options) {}
-        );
-        $entity = $marshall->one($data);
-        $this->assertEquals($time->i18nFormat('yyyy/MM/dd HH:mm:ss'), $entity->created);
     }
 
     /**
