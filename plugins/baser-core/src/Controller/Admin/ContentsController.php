@@ -139,6 +139,7 @@ class ContentsController extends BcAdminAppController
             }
         }
         $this->ContentFolders->getEventManager()->on($this->ContentFolders);
+        $this->request = $this->request->withParsedBody($this->request->getQuery());
         $this->set('contents', $this->getContents($contentService));
         $this->set('template', $this->getTemplate());
         $this->set('folders', $contentService->getContentFolderList($currentSiteId, ['conditions' => ['site_root' => false]]));
