@@ -1,59 +1,26 @@
-# admin-third 開発ドキュメント
+# admin-third テーマ
 
-## 概要
-admin-thirdは、新しい管理システムのテーマです。  
-baserCMS 5 でデフォルトの管理システムテーマとなる予定です。
+## 開発に参加する
 
-## 開発への参加
-[開発タスク](https://docs.google.com/spreadsheets/d/1LqDuPntPkR-2XHKR1B42vrXQhJz02UHzaURvaPCbgj8/edit#gid=0) はGoogleスプレッドシートで管理していますので、開発環境を整えてから参加ください。
+### 前提条件
 
-## 環境構築
+- Gulp で監視する前提で、CSSのコンパイルに Sass を利用します。
 
-### レポジトリのクローン
-basercamp レポジトリより、clone します。
-```$xslt
-git clone https://github.com/baserproject/basercamp
+### Gulp を起動する
+
+```shell script
+cd app/webroot/theme/admin-third
+gulp
 ```
 
-### 開発ブランチ
-開発ブランチは、 `dev-4` を利用します。
+### CSS を編集する
 
-### Docker環境の構築
-
-[Dockerを利用した開発方法（Mac）](https://github.com/baserproject/basercamp/blob/dev-4.2-admin-design/docker/README.md) を参考に、Docker 環境を構築します。
-
-### タスクランナーの準備
-npm を利用して、タスクランナーの実行環境を構築します。  
-node は、8系の利用が必須となりますので、nodebrew で、node のバージョンを切り替えれるようにしておきます。
-
-```$xslt
-# nodebrew インストール
-brew install nodebrew
-nodebrew setup
-
-# 利用可能バージョン確認
-nodebrew ls-remote
-
-# 8系の最新版をインストールし、利用設定を行う
-nodebrew install-binary v8.15.1
-nodebrew use v8.15.1
-
-# npm で、必要なパッケージをインストールする
-cd app/webroot/theme/admin-third/__assets/
-npm install
-
-# タスクランナー実行
-npm run dev
+Sass ファイルは、次のフォルダ配下に存在します。
+```shell script
+cd app/webroot/theme/admin-third/__assets/css/
+```
+CSS ファイルの出力先は次のフォルダとなります。
+```shell script
+cd app/webroot/theme/admin-third/css/
 ```
 
-## 参考ドキュメント
-
-- [Dockerを利用した開発方法（Mac）](https://github.com/baserproject/basercamp/blob/dev-4.2-admin-design/docker/README.md)
-- [スタイルガイド](http://localhost/guide.html)
-- [開発タスク](https://docs.google.com/spreadsheets/d/1LqDuPntPkR-2XHKR1B42vrXQhJz02UHzaURvaPCbgj8/edit#gid=0)
-  
-  
-  
-  
-  
-  
