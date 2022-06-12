@@ -1,10 +1,18 @@
 $height: 40px;
+@font-face {
+  font-family: "Font Awesome baserCMS Toolbar";
+  font-style: normal;
+  font-weight: 900;
+  font-display: auto;
+  src: url("../../fonts/admin/fa-solid-900.eot");
+  src: url("../../fonts/admin/fa-solid-900.eot?#iefix") format("embedded-opentype"), url("../../fonts/admin/fa-solid-900.woff2") format("woff2"), url("../../fonts/admin/fa-solid-900.woff") format("woff"), url("../../fonts/admin/fa-solid-900.ttf") format("truetype"), url("../../fonts/admin/fa-solid-900.svg#fontawesome") format("svg");
+}
 body {
   margin-top: 40px !important;
 }
 .bca-toolbar {
   line-height: 1.15!important;
-  font-family: Arial, Geneva, sans-serif, "メイリオ", Verdana, "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", "ＭＳ Ｐゴシック"!important;
+  font-family: 'Font Awesome baserCMS Toolbar', Arial, Geneva, sans-serif, "メイリオ", Verdana, "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", "ＭＳ Ｐゴシック"!important;
   font-size: 12px!important;
   height: $height!important;
   position: fixed!important;
@@ -82,17 +90,23 @@ body {
       }
       &-add {
         a {
-          @include bca-icon(add);
+          &::before {
+            content: "\f055";
+          }
         }
       }
       &-edit {
         a {
-          @include bca-icon(edit);
+          &::before {
+            content: "\f303";
+          }
         }
       }
       &-publish {
         a {
-          @include bca-icon(preview);
+          &::before {
+            content: "\f06e";
+          }
         }
       }
     }
