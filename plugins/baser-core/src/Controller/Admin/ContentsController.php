@@ -82,7 +82,7 @@ class ContentsController extends BcAdminAppController
         $this->loadModel('BaserCore.ContentFolders');
         $this->loadModel('BaserCore.Users');
         $this->loadModel('BaserCore.Contents');
-        $this->Security->setConfig('unlockedActions', ['delete', 'batch']);
+        $this->Security->setConfig('unlockedActions', ['delete', 'batch', 'trash_return']);
     }
 
     /**

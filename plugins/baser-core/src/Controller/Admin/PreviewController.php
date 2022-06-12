@@ -44,6 +44,7 @@ class PreviewController extends BcAdminAppController
         parent::initialize();
         $this->loadComponent('BaserCore.BcFrontContents');
         $this->ContentsService = $this->getService(ContentsServiceInterface::class);
+        $this->Security->setConfig('unlockedActions', ['view']);
     }
 
     /**

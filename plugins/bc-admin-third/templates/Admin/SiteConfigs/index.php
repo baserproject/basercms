@@ -81,8 +81,7 @@ $this->BcBaser->js('admin/site_configs/index.bundle', false, ['id' => 'AdminSite
         </div>
       </td>
     </tr>
-    <!--
-    <?php // TODO ucmitz 未実装のためコメントアウト ?>
+    <?php /* TODO ucmitz 未実装のためコメントアウト ?>
     <tr>
       <th class="col-head bca-form-table__label">
         <?php echo $this->BcAdminForm->label('maintenance', __d('baser', '公開状態')) ?>
@@ -102,7 +101,7 @@ $this->BcBaser->js('admin/site_configs/index.bundle', false, ['id' => 'AdminSite
         </div>
       </td>
     </tr>
-    -->
+    */ ?>
     <tr>
       <th class="col-head bca-form-table__label">
         <?php echo $this->BcAdminForm->label('mode', __d('baser', '制作・開発モード')) ?>
@@ -123,8 +122,7 @@ $this->BcBaser->js('admin/site_configs/index.bundle', false, ['id' => 'AdminSite
         </div>
       </td>
     </tr>
-    <!--
-    <?php // TODO ucmitz 未実装のためコメントアウト ?>
+    <?php /* TODO ucmitz 未実装のためコメントアウト ?>
     <tr>
       <th class="col-head bca-form-table__label">
         <?php echo $this->BcAdminForm->label('widget_area', __d('baser', '標準ウィジェットエリア')) ?>
@@ -144,7 +142,7 @@ $this->BcBaser->js('admin/site_configs/index.bundle', false, ['id' => 'AdminSite
         </div>
       </td>
     </tr>
-    -->
+    */ ?>
   </table>
 </section>
 
@@ -206,8 +204,7 @@ $this->BcBaser->js('admin/site_configs/index.bundle', false, ['id' => 'AdminSite
           </div>
         </td>
       </tr>
-      <!--
-      <?php // TODO ucmitz 未実装のためコメントアウト ?>
+      <?php /* TODO ucmitz 未実装のためコメントアウト ?>
       <tr>
         <th class="col-head bca-form-table__label">
           <?php echo $this->BcAdminForm->label('login_credit', __d('baser', 'ログインページのクレジット表示')) ?>
@@ -222,7 +219,7 @@ $this->BcBaser->js('admin/site_configs/index.bundle', false, ['id' => 'AdminSite
           <?php echo $this->BcAdminForm->error('login_credit') ?>
         </td>
       </tr>
-      -->
+      */ ?>
       <tr>
         <th class="col-head bca-form-table__label">
           <?php echo $this->BcAdminForm->label('admin_side_banner', __d('baser', 'サイドバーのバナー表示')) ?>
@@ -241,8 +238,7 @@ $this->BcBaser->js('admin/site_configs/index.bundle', false, ['id' => 'AdminSite
     </table>
   </div>
 </section>
-<!--
-<?php // TODO ucmitz 未実装のためコメントアウト ?>
+<?php /* TODO ucmitz 未実装のためコメントアウト ?>
 
 <section class="bca-section" data-bca-section-type='form-group'>
   <div class="bca-collapse__action">
@@ -259,7 +255,6 @@ $this->BcBaser->js('admin/site_configs/index.bundle', false, ['id' => 'AdminSite
 
   <div class="bca-collapse" id="formOuterServiceSettingBody" data-bca-state="">
     <table class="form-table bca-form-table" data-bca-table-type="type2">
-      <?php /*
       <tr>
         <th class="col-head bca-form-table__label">
           <?php echo $this->BcAdminForm->label('address', __d('baser', 'GoogleMaps住所')) ?>
@@ -310,7 +305,6 @@ $this->BcBaser->js('admin/site_configs/index.bundle', false, ['id' => 'AdminSite
           <?php echo sprintf(__d('baser', 'ユニバーサルアナリティクスを&nbsp;&nbsp;%s'), $this->BcAdminForm->control('use_universal_analytics', ['type' => 'radio', 'options' => ['0' => __d('baser', '利用していない'), '1' => __d('baser', '利用している')]])) ?>
         </td>
       </tr>
-      */ ?>
 
 
       <tr>
@@ -351,7 +345,7 @@ $this->BcBaser->js('admin/site_configs/index.bundle', false, ['id' => 'AdminSite
   </div>
 
 </section>
--->
+*/ ?>
 <section class="bca-section" data-bca-section-type='form-group'>
   <div class="bca-collapse__action">
     <button type="button"
@@ -366,8 +360,7 @@ $this->BcBaser->js('admin/site_configs/index.bundle', false, ['id' => 'AdminSite
   </div>
   <div class="bca-collapse" id="formSubSiteSettingBody" data-bca-state="">
     <table class="form-table bca-form-table section" data-bca-table-type="type2">
-      <!--
-      <?php // TODO ucmitz 未実装のためコメントアウト（不要な可能性が高い、その場合、DBのデータの精査を行う）?>
+      <?php /* TODO ucmitz 未実装のためコメントアウト（不要な可能性が高い、その場合、DBのデータの精査を行う）?>
       <tr>
         <th class="col-head bca-form-table__label">
           <?php echo $this->BcAdminForm->label('main_site_display_name', __d('baser', 'メインサイト表示名称')) ?>
@@ -384,7 +377,7 @@ $this->BcBaser->js('admin/site_configs/index.bundle', false, ['id' => 'AdminSite
           <?php echo $this->BcAdminForm->error('main_site_display_name') ?>
         </td>
       </tr>
-      -->
+      */ ?>
       <tr>
         <th class="col-head bca-form-table__label">
           <?php echo $this->BcAdminForm->label('use_site_device_setting', __d('baser', 'デバイス・言語設定')) ?>
@@ -414,8 +407,7 @@ $this->BcBaser->js('admin/site_configs/index.bundle', false, ['id' => 'AdminSite
     </table>
   </div>
 </section>
-<!--
-<?php // TODO ucmitz 未実装のためコメントアウト（動作の確認ができていない） ?>
+<?php /* TODO ucmitz 未実装のためコメントアウト（動作の確認ができていない） ?>
 <section class="bca-section" data-bca-section-type='form-group'>
   <div class="bca-collapse__action">
     <button type="button"
@@ -493,9 +485,6 @@ h2 {}
     </table>
   </div>
 </section>
--->
-<!--
-<?php // TODO ucmitz 未実装のためコメントアウト（動作確認できていない） ?>
 <section class="bca-section" data-bca-section-type='form-group'>
   <div class="bca-collapse__action">
     <button type="button"
@@ -653,7 +642,7 @@ h2 {}
     </table>
   </div>
 </section>
--->
+*/ ?>
 <?php echo $this->BcFormTable->dispatchAfter() ?>
 
 <div class="bca-actions">
