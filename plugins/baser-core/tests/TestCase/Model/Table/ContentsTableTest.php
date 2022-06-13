@@ -191,7 +191,7 @@ class ContentsTableTest extends BcTestCase
     {
         $result = $this->Contents->implementedEvents();
         $this->assertTrue(is_array($result));
-        $this->assertGreaterThanOrEqual(5, count($result));
+        $this->assertGreaterThanOrEqual(4, count($result));
     }
 
     /**
