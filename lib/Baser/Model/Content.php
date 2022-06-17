@@ -791,8 +791,12 @@ class Content extends AppModel
 				'conditions' => ['Content.id' => $data['Content']['parent_id']],
 				'recursive' => -1
 			]);
-			if (!$parent['Content']['status'] || $parent['Content']['publish_begin'] || $parent['Content']['publish_begin']) {
+			// 親フォルダが非公開の場合は自身も非公開
+			if (!$parent['Content']['status']) {
 				$data['Content']['status'] = $parent['Content']['status'];
+			}
+			// 親フォルダに公開期間が設定されている場合は自身の公開期間を上書き
+			if ($parent['Content']['publish_begin'] || $parent['Content']['publish_end']) {
 				$data['Content']['publish_begin'] = $parent['Content']['publish_begin'];
 				$data['Content']['publish_end'] = $parent['Content']['publish_end'];
 			}
