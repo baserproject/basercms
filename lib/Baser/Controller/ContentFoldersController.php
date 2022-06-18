@@ -115,7 +115,7 @@ class ContentFoldersController extends AppController
 		$site = BcSite::findById($this->request->data['Content']['site_id']);
 		$this->set('folderTemplateList', $this->ContentFolder->getFolderTemplateList($this->request->data['Content']['id'], $theme));
 		$this->set('pageTemplateList', $this->Page->getPageTemplateList($this->request->data['Content']['id'], $theme));
-		$this->set('publishLink', $this->Content->getUrl($this->request->data['Content']['url'], true, $site->useSubDomain));
+		$this->set('publishLink', $this->Content->getPublishUrl($this->request->data['Content']));
 	}
 
 	/**

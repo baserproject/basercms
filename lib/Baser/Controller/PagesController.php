@@ -265,11 +265,7 @@ class PagesController extends AppController
 		}
 
 		// 公開リンク
-		$publishLink = '';
-		if ($this->request->data['Content']['status']) {
-			$site = BcSite::findById($this->request->data['Content']['site_id']);
-			$publishLink = $this->Content->getUrl($this->request->data['Content']['url'], true, $site->useSubDomain);
-		}
+		$publishLink = $this->Content->getPublishUrl($this->request->data['Content']);
 		// エディタオプション
 		$editorOptions = ['editorDisableDraft' => false];
 		if (!empty($this->siteConfigs['editor_styles'])) {

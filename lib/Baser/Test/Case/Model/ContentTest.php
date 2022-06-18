@@ -24,6 +24,7 @@ class ContentTest extends BaserTestCase
 	public $fixtures = [
 		'baser.Model.Content.ContentIsMovable',
 		'baser.Model.Content.ContentStatusCheck',
+		'baser.Model.Site.SiteSubDomain',
 		'baser.Routing.Route.BcContentsRoute.SiteBcContentsRoute',
 		'baser.Routing.Route.BcContentsRoute.ContentBcContentsRoute',
 		'baser.Default.SiteConfig',
@@ -591,6 +592,28 @@ class ContentTest extends BaserTestCase
 			[true, '', '0000-00-00 00:00:00', true],
 			[true, '', '0000-00-00 00:00:01', false],
 			[true, '', date('Y-m-d H:i:s', strtotime("+1 hour")), true],
+		];
+	}
+
+	/**
+	 * 公開されたURLを取得
+	 *
+	 * @dataProvider getPublishUrlProvider
+	 */
+	public function testGetPublishUrl($content, $expected)
+	{
+		$this->loadFixtures('SiteSubDomain');
+		$result = $this->Content->getPublishUrl($content);
+		$this->assertEquals($expected, $result);
+	}
+
+	public function getPublishUrlProvider()
+	{
+		return [
+			[['status' => true, 'publish_begin' => '', 'publish_end' => '', 'site_id' => 0, 'url' => '/test1'], 'https://localhost/test1'],
+			[['status' => true, 'publish_begin' => '', 'publish_end' => '', 'site_id' => 1, 'url' => '/subdomain/test2'], 'http://subdomain.localhost/test2'],
+			[['status' => true, 'publish_begin' => date('Y-m-d H:i:s', strtotime('+1 hour')), 'publish_end' => ''], false],
+			[['status' => false, 'publish_begin' => '', 'publish_end' => ''], false],
 		];
 	}
 

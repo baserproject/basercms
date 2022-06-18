@@ -219,7 +219,10 @@ class BlogCategoriesController extends BlogAppController
 		} else {
 			$parents = ['' => __d('baser', '指定しない')];
 		}
-		$this->set('publishLink', $this->Content->getUrl($this->request->params['Content']['url'] . 'archives/category/' . $this->request->data['BlogCategory']['name'], true, $this->request->params['Site']['use_subdomain']));
+
+		if ($this->Content->isPublish($this->request->params['Content']['status'], $this->request->params['Content']['publish_begin'], $this->request->params['Content']['publish_end'])) {
+			$this->set('publishLink', $this->Content->getUrl($this->request->params['Content']['url'] . 'archives/category/' . $this->request->data['BlogCategory']['name'], true, $this->request->params['Site']['use_subdomain']));
+		}
 		$this->set('parents', $parents);
 		$this->pageTitle = sprintf(__d('baser', '%s｜カテゴリ編集'), $this->request->params['Content']['title']);
 		$this->help = 'blog_categories_form';
