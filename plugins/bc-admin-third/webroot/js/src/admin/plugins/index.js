@@ -14,10 +14,7 @@ $(function () {
      * マーケットのデータを取得
      */
     $.ajax({
-        url: $.bcUtil.apiBaseUrl + 'baser-core/plugins/get_market_plugins',
-        headers: {
-            "Authorization": $.bcJwt.accessToken,
-        },
+        url: $.bcUtil.adminBaseUrl + 'baser-core/plugins/get_market_plugins',
         type: "GET",
         success: function (result) {
             $("#BaserMarket").html(result);

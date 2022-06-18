@@ -232,12 +232,10 @@ class PluginsService implements PluginsServiceInterface
             $Xml = new Xml();
             try {
                 $client = new Client([
-                    'host' => ''
+                    'host' => '',
+                    'redirect' => true,
                 ]);
                 $response = $client->get(Configure::read('BcLinks.marketPluginRss'));
-                if ($response->getStatusCode() !== 200) {
-                    return [];
-                }
                 $baserPlugins = $Xml->build($response->getBody()->getContents());
                 $baserPlugins = $Xml->toArray($baserPlugins->channel);
                 $baserPlugins = $baserPlugins['channel']['item'];
