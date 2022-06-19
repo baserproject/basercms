@@ -30,7 +30,9 @@
 			'admin/jquery-ui/jquery-ui.min',
 			'../js/admin/vendors/jquery.jstree-3.3.8/themes/proton/style.min',
 			'../js/admin/vendors/jquery-contextMenu-2.2.0/jquery.contextMenu.min',
-			'admin/colorbox/colorbox-1.6.1'])
+			'admin/colorbox/colorbox-1.6.1',
+			'admin/jquery.timepicker'
+			])
 		?>
 		<!--[if IE]><?php $this->BcBaser->js(['admin/vendors/excanvas']) ?><![endif]-->
 		<?php
@@ -89,7 +91,9 @@
 			'admin/sidebar',
 			'admin/startup',
 			'admin/favorite',
-			'admin/permission'])
+			'admin/permission',
+			'admin/vendors/jquery.timepicker'
+			])
 		?>
 	<script>
 		$.bcUtil.init({

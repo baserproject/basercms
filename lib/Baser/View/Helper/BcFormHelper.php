@@ -1968,9 +1968,6 @@ DOC_END;
 	public function dateTimePicker($fieldName, $options = [])
 	{
 
-		$this->Html->script('admin/vendors/jquery.timepicker', ['inline' => false]);
-		$this->Html->css('admin/jquery.timepicker', 'stylesheet', ['inline' => false]);
-
 		$options = array_merge([
 			'div' => ['tag' => 'span'],
 			'dateInput' => [],
