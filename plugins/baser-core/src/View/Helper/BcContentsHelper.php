@@ -30,6 +30,7 @@ use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\Note;
+use BaserCore\Annotation\Doc;
 
 /**
  * コンテンツヘルパ
@@ -723,6 +724,7 @@ class BcContentsHelper extends Helper
      * @checked
      * @noTodo
      * @unitTest
+     * @doc
      */
     public function getNextLink($title = '', $options = [])
     {
@@ -768,6 +770,7 @@ class BcContentsHelper extends Helper
      * @checked
      * @noTodo
      * @unitTest
+     * @doc
      */
     public function nextLink($title = '', $options = [])
     {
@@ -787,6 +790,7 @@ class BcContentsHelper extends Helper
      * @checked
      * @noTodo
      * @unitTest
+     * @doc
      */
     public function getPrevLink($title = '', $options = [])
     {
@@ -832,6 +836,7 @@ class BcContentsHelper extends Helper
      * @checked
      * @noTodo
      * @unitTest
+     * @doc
      */
     public function prevLink($title = '', $options = [])
     {
