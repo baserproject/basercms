@@ -307,10 +307,10 @@ class BcFileUploader
             $file['name'] = $fileName;
 			if (($setting['type'] == 'all' || $setting['type'] == 'image') && !empty($setting['imagecopy']) && in_array($file['ext'], $this->imgExts)) {
 				$this->copyImages($setting, $file);
-				if (!empty($setting['imageresize'])) {
-					$filePath = $this->savePath . $fileName;
-					$this->resizeImage($filePath, $filePath, $setting['imageresize']['width'], $setting['imageresize']['height'], $setting['imageresize']['thumb']);
-				}
+			}
+			if (!empty($setting['imageresize'])) {
+				$filePath = $this->savePath . $fileName;
+				$this->resizeImage($filePath, $filePath, $setting['imageresize']['width'], $setting['imageresize']['height'], $setting['imageresize']['thumb']);
 			}
             if ($options['deleteTmpFiles']) {
                 @unlink($file['tmp_name']);
