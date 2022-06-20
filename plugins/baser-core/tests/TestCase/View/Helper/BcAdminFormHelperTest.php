@@ -48,8 +48,12 @@ class BcAdminFormHelperTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->BcAdminForm = new BcAdminFormHelper(new BcAdminAppView($this->getRequest()));
-        $this->BcForm = new BcFormHelper(new BcAdminAppView($this->getRequest()));
+        $View = new BcAdminAppView($this->getRequest());
+        $View->setRequest($View->getRequest()->withAttribute('formTokenData', [
+            'unlockedFields' => [],
+        ]));
+        $this->BcAdminForm = new BcAdminFormHelper($View);
+        $this->BcForm = new BcFormHelper($View);
     }
 
     /**

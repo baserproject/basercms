@@ -283,8 +283,8 @@ return [
         'publicKeyPath' => CONFIG . 'jwt.pem'
     ],
     'BcLinks' => [
-        'marketThemeRss' => 'https://market.basercms.net/themes.rss',
-        'marketPluginRss' => 'https://market.basercms.net/plugins.rss',
+        'marketThemeRss' => 'https://market.basercms.net/themes.php',
+        'marketPluginRss' => 'https://market.basercms.net/plugins.php',
         'specialThanks' => 'https://basercms.net/special_thanks/special_thanks/ajax_users',
         // インストールマニュアル
         'installManual' => 'http://wiki.basercms.net/%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%E3%82%AC%E3%82%A4%E3%83%89',

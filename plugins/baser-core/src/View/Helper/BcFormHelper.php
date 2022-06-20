@@ -296,6 +296,7 @@ SCRIPT_END;
             $timeTag = $this->BcHtml->tag($tag, $timeTag, $timeDivOptions);
         }
         $hiddenTag = $this->hidden($fieldName, ['value' => $value, 'id' => $options['id']]);
+        $this->unlockField($fieldName);
         $script = <<< SCRIPT_END
 <script>
 $(function(){

@@ -52,6 +52,9 @@ class BcFormHelperTest extends BcTestCase
     {
         parent::setUp();
         $View = new BcAdminAppView($this->getRequest('/contacts/add'));
+        $View->setRequest($View->getRequest()->withAttribute('formTokenData', [
+            'unlockedFields' => [],
+        ]));
         $eventedView = $View->setEventManager(EventManager::instance()->on(new BcContentsEventListener())->setEventList(new EventList()));
         $this->BcForm = new BcFormHelper($eventedView);
     }
@@ -128,6 +131,7 @@ class BcFormHelperTest extends BcTestCase
      */
     public function testDateTimePicker($fieldName, $attributes, $expected, $message)
     {
+        $this->BcForm->create();
         $result = $this->BcForm->dateTimePicker($fieldName, $attributes);
         $this->assertMatchesRegularExpression('/' . $expected . '/s', $result, $message);
     }

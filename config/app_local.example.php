@@ -153,11 +153,20 @@ return [
      */
     'Session' => [
         'defaults' => 'cake',
+        'cookie' => 'BASERCMS',
         /**
          * セッションの有効期限（分）
          * デフォルト：2日間
          */
-        'timeout' => 60 * 24 * 2
+        'timeout' => 60 * 24 * 2,
+        'ini' => [
+            'session.serialize_handler' => 'php',
+            'session.save_path' => TMP . 'sessions',
+            'session.use_cookies' => 1,
+            'session.use_trans_sid' => 0,
+            'session.gc_divisor' => 1,
+            'session.gc_probability' => 1,
+        ]
     ],
 
 ];
