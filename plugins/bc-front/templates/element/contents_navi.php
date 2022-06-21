@@ -24,6 +24,6 @@ use BaserCore\View\AppView;
 
 <?php if(!$this->BcBaser->isHome() && $this->BcBaser->isPage()): ?>
 	<div class="bs-contents-navi">
-		<?php $this->BcPage->prevLink() ?><?php $this->BcPage->nextLink() ?>
+		<?php $this->BcContents->prevLink() ?><?php $this->BcContents->nextLink() ?>
 	</div>
 <?php endif ?>
