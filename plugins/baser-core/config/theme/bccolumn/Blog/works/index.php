@@ -21,7 +21,7 @@ $(function(){
 			</div>
 			<h2><?php $this->Blog->postTitle($post) ?></h2>
 			<?php $this->BcBaser->element('blog_tag', array('post' => $post)) ?>
-			<?php $uri = $this->BcBaser->getRoot().$this->request->getParam('Content.name').'/archives/'.$post['BlogPost']['no']; ?>
+			<?php $uri = $this->BcBaser->getBaseUrl().$this->request->getParam('Content.name').'/archives/'.$post['BlogPost']['no']; ?>
 			<div class="eye-catch">
 				<a href="<?php echo $uri ?>">
 					<?php $this->Blog->eyeCatch($post, array('link'=>false, 'width'=>'150px', 'noimage'=>'/theme/bccolumn/img/blog/works/noimage.png')) ?>

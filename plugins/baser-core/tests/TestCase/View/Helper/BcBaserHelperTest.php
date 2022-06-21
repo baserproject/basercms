@@ -1140,16 +1140,6 @@ class BcBaserHelperTest extends BcTestCase
     }
 
     /**
-     * baserCMSが設置されているパスを取得する
-     * @param string $expected 期待値
-     * @return void
-     */
-    public function testGetRoot()
-    {
-        $this->assertEquals('/', $this->BcBaser->getRoot());
-    }
-
-    /**
      * ヘッダーテンプレートを出力する
      *
      * @return void
