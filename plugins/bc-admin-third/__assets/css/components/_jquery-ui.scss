@@ -317,7 +317,7 @@
 .ui-state-focus,
 .ui-widget-content .ui-state-focus,
 .ui-widget-header .ui-state-focus {
-  border:none!important;
+  border-color: transparent !important;
   background: none!important;
   color:$color_text_primary!important;
 }
@@ -325,11 +325,11 @@
   box-shadow: 0 5px 10px rgba(0,0,0,0.2)!important;
 }
 .ui-datepicker-today .ui-state-default {
-  border: none !important;
+  border-color: transparent !important;
   background: #ddd !important;
 }
 .ui-datepicker .ui-state-active {
-  border: none !important;
+  border-color: transparent !important;
   background: #9ccc65 !important;
   color: #fff !important;
 }
