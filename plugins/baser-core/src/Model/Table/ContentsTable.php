@@ -995,8 +995,12 @@ class ContentsTable extends AppTable
         $content = $this->updatePublishDate($content);
         if (!empty($content->parent_id)) {
             $parent = $this->find()->select(['name', 'status', 'publish_begin', 'publish_end'])->where(['id' => $content->parent_id])->first();
-            if (!$parent->status || $parent->publish_begin || $parent->publish_begin) {
+            // 親フォルダが非公開の場合は自身も非公開
+            if (!$parent->status) {
                 $content->status = $parent->status;
+            }
+            // 親フォルダに公開期間が設定されている場合は自身の公開期間を上書き
+            if ($parent->publish_begin || $parent->publish_end) {
                 $content->publish_begin = $parent->publish_begin;
                 $content->publish_end = $parent->publish_end;
             }
@@ -1069,7 +1073,7 @@ class ContentsTable extends AppTable
     }
 
     /**
-     * 子ノードのURLを全て更新する
+     * 子ノードのシステムデータを全て更新する
      *
      * @param $id
      * @return bool
