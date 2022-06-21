@@ -15,6 +15,7 @@ use BaserCore\Utility\BcUtil;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use BaserCore\Utility\BcContainerTrait;
 use Cake\Datasource\EntityInterface;
 
 /**
@@ -22,6 +23,20 @@ use Cake\Datasource\EntityInterface;
  */
 class UsersAdminService extends UsersService implements UsersAdminServiceInterface
 {
+
+    /**
+     * Trait
+     */
+    use BcContainerTrait;
+
+    /**
+     * Pageservice constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->UserGroupsService = $this->getService(UserGroupsServiceInterface::class);
+    }
 
     /**
      * ログインユーザー自身のIDか確認
@@ -97,7 +112,7 @@ class UsersAdminService extends UsersService implements UsersAdminServiceInterfa
     {
         return [
             'user' => $user,
-            'userGroupList' => $this->getList(),
+            'userGroupList' => $this->UserGroupsService->getList(),
             'isUserGroupEditable' => $this->isUserGroupEditable($user->id),
             'isDeletable' => $this->isDeletable($user->id)
         ];
@@ -114,7 +129,7 @@ class UsersAdminService extends UsersService implements UsersAdminServiceInterfa
     {
         return [
             'user' => $user,
-            'userGroupList' => $this->getList(),
+            'userGroupList' => $this->UserGroupsService->getList(),
             'isUserGroupEditable' => $this->isUserGroupEditable(null),
         ];
     }

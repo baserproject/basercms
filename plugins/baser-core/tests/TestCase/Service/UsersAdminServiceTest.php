@@ -169,6 +169,12 @@ class UsersAdminServiceTest extends BcTestCase
     public function test_getViewVarsForEdit()
     {
         $this->assertTrue(count($this->Users->getViewVarsForEdit($this->Users->get(1))) >= 3);
+
+        $this->assertEquals([
+            1 => 'システム管理',
+            2 => 'サイト運営者',
+            3 => 'その他のグループ',
+        ], $this->Users->getViewVarsForEdit($this->Users->get(1))['userGroupList']);
     }
 
     /**
@@ -177,6 +183,12 @@ class UsersAdminServiceTest extends BcTestCase
     public function test_getViewVarsForAdd()
     {
         $this->assertTrue(count($this->Users->getViewVarsForAdd($this->Users->getNew())) >= 2);
+
+        $this->assertEquals([
+            1 => 'システム管理',
+            2 => 'サイト運営者',
+            3 => 'その他のグループ',
+        ], $this->Users->getViewVarsForEdit($this->Users->get(1))['userGroupList']);
     }
 
 }
