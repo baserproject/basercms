@@ -29,7 +29,7 @@ use BaserCore\View\AppView;
     <?php if (!empty($user->user_groups)): ?>
       <ul class="user_group">
         <?php foreach($user->user_groups as $userGroups): ?>
-          <li><?php echo $userGroups->title; ?></li>
+          <li><?php echo h($userGroups->title); ?></li>
         <?php endforeach; ?>
       </ul>
     <?php endif; ?>
