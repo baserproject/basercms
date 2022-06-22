@@ -73,13 +73,11 @@ nbproject/*
 /Vagrantfile
 # node
 node_modules
-# etc
-LOCAL_TODO.md
-LOCAL_Q&A.md
 # symlink
 /webroot/bc_admin_third
 # uploaded files
-/webroot/files/
+/webroot/files/*
+# plugin symbolic link
 /webroot/bc_spa_sample
 /webroot/bc_front
 /webroot/baser_core
@@ -87,3 +85,6 @@ LOCAL_Q&A.md
 /config/jwt.key
 /config/jwt.pem
 /config/setting.php
+# etc
+LOCAL_TODO.md
+LOCAL_Q&A.md
