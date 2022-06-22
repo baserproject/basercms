@@ -5,40 +5,32 @@
 # マイグレーションを実行する際、DBの起動より先に実行すると失敗してしまうため sleep で待つようにしている
 #
 
-if [ ! -e '/var/www/shared/docker/check' ]; then
-    rm -rf /var/www/shared/vendor/*
-    if [ -d '/var/www/shared/tmp' ]; then
-        rm -rf /var/www/shared/tmp
-    fi
-    mkdir /var/www/shared/tmp
-    if [ -d '/var/www/shared/logs' ]; then
-        rm -rf /var/www/shared/logs
-    fi
-    mkdir /var/www/shared/logs
-    if [ ! -d '/var/www/shared/webroot/files' ]; then
-        mkdir /var/www/shared/webroot/files
-    fi
-fi
+# host tmp and logs
+chmod -R 777 /var/www/shared/tmp
+chmod -R 777 /var/www/shared/logs
 
-rsync -a /var/www/shared/ /var/www/html --exclude='node_modules' --exclude='tmp' --exclude='logs' --exclude='.git' --exclude='.idea' --exclude='.DS_Store' --exclude='docker' --exclude='config/jwt.key' --exclude='config/jwt.pem'
+# rcync
+rsync -a /var/www/shared/ /var/www/html --exclude='node_modules' --exclude='.git' --exclude='.idea' --exclude='.DS_Store' --exclude='docker' --exclude='config/jwt.key' --exclude='config/jwt.pem'
 
-if [ ! -d '/var/www/html/tmp' ]; then
-    mkdir /var/www/html/tmp
-fi
-if [ ! -d '/var/www/html/logs' ]; then
-    mkdir /var/www/html/logs
-fi
-chmod -R 777 /var/www/html/tmp
-chmod -R 777 /var/www/html/logs
+if [ ! -e '/var/www/shared/docker/inited' ]; then
 
-if [ ! -e '/var/www/shared/docker/check' ]; then
+    # composer
     composer install --no-plugins
+
+    # .env
     cp /var/www/html/config/.env.example /var/www/html/config/.env
+
+    # jwt
+    rm /var/www/html/config/jwt.key
     openssl genrsa -out /var/www/html/config/jwt.key 1024
     openssl rsa -in /var/www/html/config/jwt.key -outform PEM -pubout -out /var/www/html/config/jwt.pem
     chown www-data.www-data /var/www/html/config/jwt.key
+
+    # lsyncd
     mkdir /etc/lsyncd
     cp /var/www/shared/docker/lsyncd/lsyncd.conf.lua /etc/lsyncd/
+
+    # migrations
     TIMES=0
     LIMIT_TIMES=50
     CONNECTED=1
@@ -57,12 +49,19 @@ if [ ! -e '/var/www/shared/docker/check' ]; then
         /var/www/html/bin/cake migrations migrate --plugin BaserCore
         /var/www/html/bin/cake migrations seed --plugin BaserCore
         /var/www/html/bin/cake plugin assets symlink
-        rm -rf /var/www/html/tmp/cache
     else
         echo "Migration failed."
 	fi
-    touch /var/www/shared/docker/check
+
+	# touch installed
+    touch /var/www/shared/docker/inited
 fi
 
+# lsyncd
 service lsyncd start
+
+# guest tmp and logs
+chmod -R 777 /var/www/html/tmp
+chmod -R 777 /var/www/html/logs
+
 echo "Container setup is complete."

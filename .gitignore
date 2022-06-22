@@ -51,7 +51,7 @@ nbproject/*
 /docker/phpmyadmin
 /docker/volumes
 /docker/docker-compose.yml
-/docker/check
+/docker/inited
 # plugins
 /plugins/*
 !/plugins/baser-core
@@ -64,10 +64,6 @@ nbproject/*
 !/plugins/BcSpaSample
 /plugins/*/vendor
 /plugins/*/composer.lock
-# docker
-/docker/.docker-sync
-/docs/baserproject.github.io
-/.c9
 # vagrant
 /.vagrant
 /Vagrantfile
