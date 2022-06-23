@@ -43,8 +43,7 @@ class PagesTableTest extends BcTestCase
         'plugin.BaserCore.Contents',
         'plugin.BaserCore.ContentFolders',
         'plugin.BaserCore.Pages',
-        'plugin.BaserCore.SearchIndexes',
-        // 'plugin.BaserCore.Favorites'
+        'plugin.BaserCore.SearchIndexes'
     ];
 
     /**

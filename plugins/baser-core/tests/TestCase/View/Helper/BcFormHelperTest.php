@@ -935,7 +935,6 @@ class BcFormHelperTest extends BcTestCase
         //     ['CakeSchema', 'CakeSchemaAddForm'],
         //     ['Content', 'ContentAddForm'],
         //     ['EditTemplate', 'EditTemplateAddForm'],
-        //     ['Favorite', 'FavoriteAddForm'],
         //     ['Member', 'MemberAddForm'],
         //     ['Page', 'PageAddForm'],
         //     ['Plugin', 'PluginAddForm'],

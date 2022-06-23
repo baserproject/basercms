@@ -64,7 +64,6 @@ class BcBaserHelperTest extends BcTestCase
         // 'baser.Default.SearchIndex',
         // 'baser.Default.User',
         // 'baser.Default.UserGroup',
-        // 'baser.Default.Favorite',
         // 'baser.Default.Permission',
         // 'baser.Default.ThemeConfig',
         // 'baser.Default.WidgetArea',

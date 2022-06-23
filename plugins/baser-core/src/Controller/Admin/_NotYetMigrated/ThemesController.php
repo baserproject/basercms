@@ -570,7 +570,7 @@ class ThemesController extends AppController
         $Folder->create($tmpDir);
         emptyFolder($tmpDir);
         BcUtil::clearAllCache();
-        $excludes = ['plugins', 'dblogs', 'users', 'favorites'];
+        $excludes = ['plugins', 'dblogs', 'users'];
         $this->_writeCsv('core', $tmpDir, $excludes);
         /* プラグインのCSVを生成 */
         $plugins = CakePlugin::loaded();

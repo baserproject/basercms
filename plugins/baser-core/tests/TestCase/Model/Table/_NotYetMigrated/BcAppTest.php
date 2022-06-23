@@ -33,7 +33,6 @@ class BcAppTest extends BaserTestCase
         'baser.Default.SiteConfig',
         'baser.Default.User',
         'baser.Default.UserGroup',
-        'baser.Default.Favorite',
         'baser.Default.Permission',
         'baser.Default.SearchIndex',
         'baser.Default.Content',

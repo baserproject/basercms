@@ -335,7 +335,7 @@ class PermissionsService implements PermissionsServiceInterface
             '/^' . preg_quote($this->adminUrlPrefix . '/baser-core/dashboard/', '/') . '.*?/',
             '/^' . preg_quote($this->adminUrlPrefix . '/baser-core/dblogs/', '/') . '.*?/',
             '/^' . preg_quote($this->adminUrlPrefix . '/baser-core/users/logout', '/') . '$/',
-            '/^' . preg_quote($this->adminUrlPrefix . '/baser-core/user_groups/set_default_favorites', '/') . '$/',
+            '/^' . preg_quote($this->adminUrlPrefix . '/baser-core/user_groups', '/') . '$/',
         ];
         $sessionKey = Configure::read('BcPrefixAuth.Admin.sessionKey');
         if (!empty($_SESSION[$sessionKey]['id'])) {

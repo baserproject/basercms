@@ -28,7 +28,6 @@ class ContentFolderTest extends BaserTestCase
         'baser.Default.Site',
         'baser.Default.User',
         'baser.Default.UserGroup',
-        'baser.Default.Favorite',
         'baser.Default.ContentFolder',
         'baser.Default.Page',
         'baser.Default.SearchIndex',

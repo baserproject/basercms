@@ -1748,12 +1748,8 @@ class BcManagerComponent extends Component
             return false;
         }
         // よく使う項目は、user_groups より生成するのでなくてもよい
-        $excludes = ['favorites.csv'];
         $targetTables = $files[1];
         foreach($coreTables as $coreTable) {
-            if (in_array($coreTable, $excludes)) {
-                continue;
-            }
             if (!in_array($coreTable, $targetTables)) {
                 return false;
             }

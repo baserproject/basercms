@@ -42,7 +42,6 @@ class BcCaptchaComponentTest extends BcTestCase
         'baser.Default.FeedDetail',
         'baser.Default.SiteConfig',
         'baser.Default.UserGroup',
-        'baser.Default.Favorite',
         'baser.Default.Page',
         'baser.Default.Permission',
         'baser.Default.Plugin',
