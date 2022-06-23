@@ -93,8 +93,7 @@ class ContentLinksController extends AppController
 				$this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);
 			}
 		}
-		$site = BcSite::findById($this->request->data['Content']['site_id']);
-		$this->set('publishLink', $this->Content->getUrl($this->request->data['Content']['url'], true, $site->useSubDomain));
+		$this->set('publishLink', $this->Content->getPublishUrl($this->request->data['Content']));
 	}
 
 	/**

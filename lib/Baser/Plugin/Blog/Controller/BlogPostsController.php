@@ -182,9 +182,7 @@ class BlogPostsController extends BlogAppController
 			return;
 		}
 
-		if ($this->request->params['Content']['status']) {
-			$this->set('publishLink', $this->Content->getUrl($this->request->params['Content']['url'], true, $this->request->params['Site']['use_subdomain']));
-		}
+		$this->set('publishLink', $this->Content->getPublishUrl($this->request->param('Content')));
 		$this->pageTitle = sprintf(__d('baser', '%s｜記事一覧'), strip_tags($this->request->params['Content']['title']));
 		$this->search = 'blog_posts_index';
 		$this->help = 'blog_posts_index';
@@ -458,7 +456,7 @@ class BlogPostsController extends BlogAppController
 			'empty' => __d('baser', '指定しない')
 		]);
 
-		if ($this->request->data['BlogPost']['status']) {
+		if ($this->BlogPost->allowPublish($this->request->data['BlogPost']) && $this->Content->isPublish($this->request->params['Content']['status'], $this->request->params['Content']['publish_begin'], $this->request->params['Content']['publish_end'])) {
 			$this->set('publishLink', $this->Content->getUrl($this->request->params['Content']['url'] . 'archives/' . $this->request->data['BlogPost']['no'], true, $this->request->params['Site']['use_subdomain']));
 		}
 

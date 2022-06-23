@@ -219,17 +219,7 @@ class MailContentsController extends MailAppController
 		}
 
 		$this->request->param('Content', $this->BcContents->getContent($id)['Content']);
-		if ($this->request->data['Content']['status']) {
-			$site = BcSite::findById($this->request->data['Content']['site_id']);
-			$this->set(
-				'publishLink',
-				$this->Content->getUrl(
-					$this->request->data['Content']['url'],
-					true,
-					$site->useSubDomain
-				)
-			);
-		}
+		$this->set('publishLink', $this->Content->getPublishUrl($this->request->data['Content']));
 		$this->set('mailContent', $this->request->data);
 		$this->subMenuElements = ['mail_fields'];
 		$this->pageTitle = __d('baser', 'メールフォーム設定編集');

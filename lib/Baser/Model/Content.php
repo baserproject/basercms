@@ -1414,6 +1414,21 @@ class Content extends AppModel
 	}
 
 	/**
+	 * 公開されたURLを取得
+	 *
+	 * @param array $content
+	 * @return string|bool
+	 */
+	public function getPublishUrl($content)
+	{
+		if (!$this->isPublish($content['status'], $content['publish_begin'], $content['publish_end'])) {
+			return false;
+		}
+		$site = BcSite::findById($content['site_id']);
+		return $this->getUrl($content['url'], true, $site->useSubDomain);
+	}
+
+	/**
 	 * 移動元のコンテンツと移動先のディレクトリから移動が可能かチェックする
 	 *
 	 * @param $currentId int 移動元コンテンツID

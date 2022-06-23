@@ -79,12 +79,7 @@ class MailFieldsController extends MailAppController
 				$mailContentId
 			]
 		];
-		if ($this->request->param('Content.status')) {
-			$site = BcSite::findById($this->request->param('Content.site_id'));
-			$this->set('publishLink', $this->Content->getUrl(
-				$this->request->param('Content.url'), true, $site->useSubDomain)
-			);
-		}
+		$this->set('publishLink', $this->Content->getPublishUrl($this->request->param('Content')));
 	}
 
 	/**

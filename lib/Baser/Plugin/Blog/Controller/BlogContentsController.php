@@ -164,10 +164,7 @@ class BlogContentsController extends BlogAppController
 				$this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);
 			}
 		}
-		$site = BcSite::findById($this->request->data['Content']['site_id']);
-		if (!empty($this->request->data['Content']['status'])) {
-			$this->set('publishLink', $this->Content->getUrl($this->request->data['Content']['url'], true, $site->useSubDomain));
-		}
+		$this->set('publishLink', $this->Content->getPublishUrl($this->request->data['Content']));
 		$this->request->params['Content'] = $this->BcContents->getContent($id)['Content'];
 		$this->set('blogContent', $this->request->data);
 		$this->subMenuElements = ['blog_posts'];
