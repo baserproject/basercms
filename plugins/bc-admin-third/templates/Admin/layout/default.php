@@ -63,11 +63,7 @@ $base = $attributes['base'];
     'batchListConfirmUnpublishMessage' => __d('baser', '選択したデータを全て非公開状態に変更します。よろしいですか？'),
     'bcConfirmTitle1' => __d('baser', 'ダイアログ'),
     'bcConfirmAlertMessage1' => __d('baser', 'メッセージを指定してください。'),
-    'bcConfirmAlertMessage2' => __d('baser', 'コールバック処理が登録されていません。'),
-    'favoriteTitle1' => __d('baser', 'よく使う項目登録'),
-    'favoriteTitle2' => __d('baser', 'よく使う項目編集'),
-    'favoriteAlertMessage1' => __d('baser', '並び替えの保存に失敗しました。'),
-    'favoriteAlertMessage2' => __d('baser', 'よく使う項目の追加に失敗しました。'),
+    'bcConfirmAlertMessage2' => __d('baser', 'コールバック処理が登録されていません。')
   ], ['block' => false]) ?>
   <?php $this->BcBaser->js([
     'admin/vendor.bundle',

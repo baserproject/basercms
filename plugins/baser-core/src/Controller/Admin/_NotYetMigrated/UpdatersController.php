@@ -55,13 +55,6 @@ class UpdatersController extends AppController
     public $helpers = ['BcForm'];
 
     /**
-     * モデル
-     *
-     * @var array
-     */
-    public $uses = ['Favorite'];
-
-    /**
      * beforeFilter
      *
      * @return void
@@ -71,9 +64,6 @@ class UpdatersController extends AppController
         $this->Updater = ClassRegistry::init('Updater');
         $this->Plugin = ClassRegistry::init('Plugin');
         $this->SiteConfig = ClassRegistry::init('SiteConfig');
-        if ($this->request->action === 'admin_plugin') {
-            $this->Favorite = ClassRegistry::init('Favorite');
-        }
         $this->BcAuth->allow('index');
 
         parent::beforeFilter();
@@ -81,12 +71,6 @@ class UpdatersController extends AppController
         $this->layoutPath = 'admin';
         $this->layout = 'default';
         $this->subDir = 'admin';
-    }
-
-    public function beforeRender()
-    {
-        parent::beforeRender();
-        $this->set('favoriteBoxOpened', false);
     }
 
     /**

@@ -56,24 +56,3 @@ use BaserCore\Model\Entity\UserGroup;
 <?= $this->BcAdminForm->end() ?>
 
 <?= $this->fetch('postLink') ?>
-
-<?php /* TODO ?>
-<?php if ($this->request->getParam('action') == 'edit'): ?>
-	<div class="section">
-		<div class="panel-box bca-panel-box corner10">
-			<h2><?php echo __d('baser', '「よく使う項目」の初期データ') ?></h2>
-			<p>
-				<small><?php echo __d('baser', 'このグループに新しいユーザーを登録した際、次の「よく使う項目」が登録されます。	') ?></small>
-			</p>
-			<?php $favorites = BcUtil::unserialize($this->request->getData('UserGroup.default_favorites')) ?>
-			<?php if ($favorites): ?>
-			<ul class="bca-list" data-bca-list-layout="horizon">
-				<?php foreach ($favorites as $favorite): ?>
-					<li class="bca-list__item"><?php $this->BcBaser->link($favorite['name'], $favorite['url']) ?></li>
-				<?php endforeach; ?>
-			</ul>
-			<?php endif ?>
-		</div>
-	</div>
-<?php endif; ?>
-<?php */ ?>
