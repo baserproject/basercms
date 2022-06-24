@@ -83,7 +83,7 @@ class BcContentsEventListener extends BcEventListener
      * Form After Create
      *
      * @param Event $event
-     * @return string
+     * @return string|void
      * @checked
      * @noTodo
      * @unitTest
@@ -91,14 +91,14 @@ class BcContentsEventListener extends BcEventListener
     public function formAfterCreate(Event $event)
     {
         if (!BcUtil::isAdminSystem()) {
-            return '';
+            return;
         }
         $View = $event->getSubject();
         if ($event->getData('id') == 'PermissionAdminEditForm') {
-            return '';
+            return;
         }
         if (!preg_match('/(AdminEditForm|AdminEditAliasForm)$/', $event->getData('id'))) {
-            return '';
+            return;
         }
         return $event->getData('out') . "\n" . $View->element('content_fields');
     }
