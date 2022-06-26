@@ -4,8 +4,8 @@ const webpackStream = require('webpack-stream');
 const webpackConfig = require("./webpack.config");
 const plumber = require('gulp-plumber');
 const sass = require('gulp-sass')(require('sass'));
-const JS_DEV_DIR = ['./webroot/js/src/**/*'];
-const JS_DIST_DIR = './webroot/js';
+const JS_DEV_DIR = ['./webroot/js/src/'];
+const JS_DIST_DIR = './webroot/js/';
 const CSS_DEV_DIR = './__assets/css/';
 const CSS_DIST_DIR = './webroot/css/admin/';
 
@@ -32,8 +32,8 @@ gulp.task('bundle', () => {
 });
 
 gulp.task('watch', function(){
-    gulp.watch([CSS_DEV_DIR + "**/*.scss"], gulp.task('css'));
-    gulp.watch(JS_DEV_DIR, gulp.task('bundle'));
+    gulp.watch(CSS_DEV_DIR + "**/*.scss", gulp.task('css'));
+    gulp.watch(JS_DEV_DIR + "**/*.js", gulp.task('bundle'));
 });
 
 gulp.task('default', gulp.task('watch'));

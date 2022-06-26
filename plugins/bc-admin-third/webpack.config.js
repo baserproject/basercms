@@ -9,10 +9,9 @@
  */
 
 
-const path = require("path");
 const glob = require("glob");
-var entries = {};
-const webpack = require('webpack');
+let entries = {};
+webpack = require('webpack');
 
 glob.sync("./webroot/js/src/**/*.js").map(function(file){
     if(!file.replace('./webroot/js/src/admin/', '').match(/^_/)) {
@@ -25,7 +24,6 @@ module.exports = {
 	entry: entries,
     devtool: 'source-map',
     output: {
-    	path: path.resolve(__dirname, './webroot/js'),
 		filename: "[name].bundle.js"
     },
     optimization: {
