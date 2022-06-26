@@ -20,7 +20,7 @@
     "babel-loader": "^8.2.2",
     "css-loader": "^3.6.0",
     "glob-parent": ">=5.1.2",
-    "gulp": "^3.9.1",
+    "gulp": "^4.0.2",
     "gulp-plumber": "^1.2.1",
     "gulp-sass": "^5.0.0",
     "normalize.css": "^8.0.1",
