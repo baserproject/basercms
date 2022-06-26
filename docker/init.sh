@@ -21,6 +21,7 @@ if [ ! -e '/var/www/shared/docker/inited' ]; then
     cp /var/www/html/config/.env.example /var/www/html/config/.env
 
     # jwt
+    rm /var/www/shared/config/jwt.key # host に存在している場合は、host -> guest へ所有権を同期してしまうため一旦削除
     rm /var/www/html/config/jwt.key
     openssl genrsa -out /var/www/html/config/jwt.key 1024
     openssl rsa -in /var/www/html/config/jwt.key -outform PEM -pubout -out /var/www/html/config/jwt.pem
