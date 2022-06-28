@@ -210,7 +210,7 @@ class BcRequestFilterMiddleware implements MiddlewareInterface
     public function isUpdate(ServerRequestInterface $request)
     {
         $slug = '/' . Configure::read('BcApp.updateKey');
-        return in_array($request->getPath(), [$slug, "{$slug}/", "{$slug}/index"]);
+        return ($request->getPath() === $slug);
     }
 
     /**

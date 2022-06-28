@@ -46,8 +46,8 @@ class ContentsFixtureTest extends BcTestCase
      */
     public function setUp(): void
     {
-        $this->loadFixtures('Contents', 'Sites', 'Users', 'UserGroups', 'UsersUserGroups', 'Pages', 'ContentFolders');
         parent::setUp();
+        $this->loadFixtures('Contents', 'Sites', 'Users', 'UserGroups', 'UsersUserGroups', 'Pages', 'ContentFolders');
         $config = $this->getTableLocator()->exists('Contents')? [] : ['className' => 'BaserCore\Model\Table\ContentsTable'];
         $this->Contents = $this->getTableLocator()->get('Contents', $config);
         $this->contents = $this->Contents->find()->applyOptions(['withDeleted'])->all()->toArray();

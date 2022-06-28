@@ -15,6 +15,7 @@ use BaserCore\Utility\BcContainer;
 use Cake\Event\EventManager;
 use Cake\Http\Session;
 use Cake\Core\Configure;
+use Cake\Log\Log;
 use Cake\Routing\Router;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Controller\AnalyseController;
@@ -160,6 +161,22 @@ class BcTestCaseTest extends BcTestCase
         $this->assertNotNull($eventManager->listeners('testEvent'));
         $this->resetEvent();
         $this->assertEmpty($eventManager->listeners('testEvent'));
+    }
+
+    /**
+     * test tearDownAfterClass
+     */
+    public function testTearDownAfterClass()
+    {
+        touch(TMP . 'test');
+        rename(LOGS . 'cli-debug.log', LOGS . 'cli-debug.bak.log');
+        Log::write('debug', 'test');
+        self::tearDownAfterClass();
+        $this->assertEquals('0777', substr(sprintf('%o', fileperms(LOGS . 'cli-debug.log')), -4));
+        $this->assertEquals('0777', substr(sprintf('%o', fileperms(TMP . 'test')), -4));
+        unlink(LOGS . 'cli-debug.log');
+        rename(LOGS . 'cli-debug.bak.log', LOGS . 'cli-debug.log');
+        unlink(TMP . 'test');
     }
 
 }

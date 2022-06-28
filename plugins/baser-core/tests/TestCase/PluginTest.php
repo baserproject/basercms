@@ -161,6 +161,9 @@ class PluginTest extends BcTestCase
         // トップページ
         $result = Router::parseRequest($this->getRequest('/'));
         $this->assertEquals('index', $result['pass'][0]);
+        // アップデーター
+        $result = Router::parseRequest($this->getRequest('/' . Configure::read('BcApp.updateKey')));
+        $this->assertEquals('Plugins', $result['controller']);
         // 管理画面（index付）
         $this->loginAdmin($this->getRequest());
         $result = Router::parseRequest($this->getRequest('/baser/admin/users/index'));

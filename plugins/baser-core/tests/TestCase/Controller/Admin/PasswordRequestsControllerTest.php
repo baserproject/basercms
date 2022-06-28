@@ -39,6 +39,25 @@ class PasswordRequestsControllerTest extends BcTestCase
         'plugin.BaserCore.SiteConfigs'
     ];
 
+
+    /**
+     * set up
+     */
+    public function setUp(): void
+    {
+        parent::setUp();
+    }
+
+    /**
+     * Tear Down
+     *
+     * @return void
+     */
+    public function tearDown(): void
+    {
+        parent::tearDown();
+    }
+
     /**
      * Test initialize
      */

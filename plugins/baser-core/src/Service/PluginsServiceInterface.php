@@ -43,6 +43,19 @@ interface PluginsServiceInterface
     public function install($name, $connection = 'default'): ?bool;
 
     /**
+     * プラグインをアップデートする
+     * @return bool
+     */
+    public function update($name, $connection = 'default'): ?bool;
+
+    /**
+     * バージョンを取得する
+     * @param $name
+     * @return mixed|string
+     */
+	public function getVersion($name);
+
+    /**
      * プラグインを無効にする
      * @param string $name
      */
@@ -93,11 +106,11 @@ interface PluginsServiceInterface
      */
     public function allow($data): void;
 
-
     /**
      * インストール時の状態を返す
      * @param string $pluginName
      * @return string
      */
     public function getInstallStatusMessage($pluginName): string;
+
 }

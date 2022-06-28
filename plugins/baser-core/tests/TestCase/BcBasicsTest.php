@@ -550,33 +550,6 @@ class BcBasicsTest extends BcTestCase
     }
 
     /**
-     * バージョンを取得する
-     */
-    public function testGetVersion()
-    {
-        // BaserCMSコアのバージョン取得
-        $result = getVersion();
-        $version = file(BASER . 'VERSION.txt');
-        $Bcversion = substr($version[0], 0, -1);
-        $this->assertEquals($Bcversion, $result, 'BaserCMSコアのバージョンを正しく取得できません');
-
-        $result = getVersion('BcBlog');
-        $this->assertEquals($Bcversion, $result, 'BaserCMSコアのバージョンを正しく取得できません');
-
-        // プラグインのバージョンを取得
-        // ダミーのプラグインを作成
-        $path = APP . 'Plugin' . DS . 'Hoge' . DS;
-        $Folder = new Folder($path, true);
-        $File = new File($path . 'VERSION.txt', true);
-        $File->write('1.2.3');
-        $result = getVersion('Hoge');
-
-        $File->close();
-        $Folder->delete();
-        $this->assertEquals('1.2.3', $result, 'プラグインのバージョンを取得できません');
-    }
-
-    /**
      * アップデートのURLを記載したメールを送信する
      */
     public function testSendUpdateMail()

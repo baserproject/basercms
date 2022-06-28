@@ -26,4 +26,11 @@ interface PluginsAdminServiceInterface
      */
     public function getViewVarsForInstall(EntityInterface $plugin): array;
 
+    /**
+     * アップデート画面用のデータを取得
+     * @param EntityInterface $plugin
+     * @return array
+     */
+    public function getViewVarsForUpdate(EntityInterface $plugin): array;
+
 }

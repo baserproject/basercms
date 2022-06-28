@@ -86,4 +86,14 @@ interface SiteConfigsServiceInterface
      */
     public function getModeList(): array;
 
+    /**
+     * baserCMSのDBのバージョンを取得する
+     */
+    public function getVersion():string;
+
+    /**
+     * キャッシュ用 Entity を削除
+     */
+    public function clearCache();
+
 }

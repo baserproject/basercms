@@ -11,8 +11,12 @@
 
 namespace BaserCore\Test\TestCase\Controller\Admin;
 
+use BaserCore\Test\Factory\PluginFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcUtil;
+use Cake\Core\Configure;
+use Cake\Core\Plugin;
+use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
 use Cake\TestSuite\IntegrationTestTrait;
 use BaserCore\Controller\Admin\PluginsController;
@@ -82,9 +86,11 @@ class PluginsControllerTest extends BcTestCase
      */
     public function testBeforeFilter()
     {
+        Configure::write('BcRequest.isUpdater', true);
         $event = new Event('Controller.beforeFilter', $this->PluginsController);
         $this->PluginsController->beforeFilter($event);
         $this->assertEquals($this->PluginsController->Security->getConfig('unlockedActions'), ['reset_db', 'update_sort', 'batch']);
+        $this->assertEquals(['update'], $this->PluginsController->Authentication->getUnauthenticatedActions());
     }
 
     /**
@@ -188,6 +194,55 @@ class PluginsControllerTest extends BcTestCase
         ]);
         $this->put('/baser/admin/baser-core/plugins/install/BcBlog', $data);
 
+    }
+
+
+    /**
+     * test update
+     */
+    public function testUpdate(): void
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $path = Plugin::path('BcSpaSample');
+        rename($path . 'VERSION.txt', $path . 'VERSION.bak.txt');
+        $file = new File($path . 'VERSION.txt');
+        $file->write('0.0.2');
+        $file->close();
+        PluginFactory::make(['name' => 'BcSpaSample', 'version' => '0.0.1'])->persist();
+        $this->put('/baser/admin/baser-core/plugins/update/BcSpaSample', [
+            'connection' => 'test',
+            'update' => 1
+        ]);
+        $this->assertRedirect([
+            'plugin' => 'BaserCore',
+            'prefix' => 'Admin',
+            'controller' => 'plugins',
+            'action' => 'update',
+            'BcSpaSample'
+        ]);
+        $this->assertFlashMessage('アップデート処理が完了しました。画面下部のアップデートログを確認してください。');
+        rename($path . 'VERSION.bak.txt', $path . 'VERSION.txt');
+    }
+
+    /**
+     * test update core
+     */
+    public function testUpdateCore(): void
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        rename(BASER . 'VERSION.txt', BASER . 'VERSION.bak.txt');
+        $file = new File(BASER . 'VERSION.txt');
+        $file->write('10.0.0');
+        $file->close();
+        $this->put('/update', [
+            'connection' => 'test',
+            'update' => 1
+        ]);
+        $this->assertRedirect('/');
+        $this->assertFlashMessage(sprintf('全てのアップデート処理が完了しました。 %s にログを出力しています。', LOGS . 'update.log'));
+        rename(BASER . 'VERSION.bak.txt', BASER . 'VERSION.txt');
     }
 
     /**

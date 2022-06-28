@@ -260,8 +260,6 @@ class BcRequestFilterMiddlewareTest extends BcTestCase
         $slug = env('UPDATE_KEY', 'update');
         return [
             [true, "/{$slug}"],
-            [true, "/{$slug}/"],
-            [true, "/{$slug}/index"],
             [false, '/'],
             [false, '/service'],
             [false, '/admin/']

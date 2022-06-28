@@ -33,6 +33,7 @@ class AppServiceTest extends BcTestCase
         'plugin.BaserCore.UsersUserGroups',
         'plugin.BaserCore.UserGroups',
         'plugin.BaserCore.Contents',
+        'plugin.BaserCore.ContentFolders',
         'plugin.BaserCore.SiteConfigs',
     ];
 

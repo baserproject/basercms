@@ -36,6 +36,8 @@ class PluginsControllerTest extends BcTestCase
         'plugin.BaserCore.UserGroups',
         'plugin.BaserCore.Plugins',
         'plugin.BaserCore.Permissions',
+        'plugin.BaserCore.Sites',
+        'plugin.BaserCore.SiteConfigs',
     ];
 
     /**

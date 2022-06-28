@@ -34,7 +34,8 @@ class PagesControllerEventListenerTest extends BcTestCase
         'plugin.BaserCore.Contents',
         'plugin.BaserCore.ContentFolders',
         'plugin.BaserCore.SiteConfigs',
-        'plugin.BaserCore.Pages'
+        'plugin.BaserCore.Pages',
+        'plugin.BaserCore.Dblogs'
     ];
 
     /**

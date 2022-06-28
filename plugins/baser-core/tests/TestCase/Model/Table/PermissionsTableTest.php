@@ -43,14 +43,6 @@ class PermissionsTableTest extends BcTestCase
         'plugin.BaserCore.Users',
         'plugin.BaserCore.UserGroups',
         'plugin.BaserCore.UsersUserGroups',
-        // basercms4系
-        // 'baser.Default.Page',
-        // 'baser.Model.Permission.PermissionPermissionModel',
-        // 'baser.Default.UserGroup',
-        // 'baser.Default.Site',
-        // 'baser.Default.SiteConfig',
-        // 'baser.Default.Content',
-        // 'baser.Default.User'
     ];
 
         /**
@@ -298,7 +290,7 @@ class PermissionsTableTest extends BcTestCase
     }
 
     /**
-     * GetTargetPermissions 
+     * GetTargetPermissions
      * SetTargetPermissions
      *
      * @return void

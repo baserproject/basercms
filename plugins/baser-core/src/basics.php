@@ -39,35 +39,6 @@ function revision($version)
 }
 
 /**
- * バージョンを特定する一意の数値を取得する
- * ２つ目以降のバージョン番号は３桁として結合
- * 1.5.9 => 1005009
- * ※ ２つ目以降のバージョン番号は999までとする
- * β版の場合はfalseを返す
- *
- * @param mixed $version Or false
- */
-function verpoint($version)
-{
-    $version = str_replace('baserCMS ', '', $version);
-    if (preg_match("/([0-9]+)\.([0-9]+)\.([0-9]+)([\sa-z\-]+|\.[0-9]+|)([\sa-z\-]+|\.[0-9]+|)/is", $version, $maches)) {
-        if (isset($maches[4]) && preg_match('/^\.[0-9]+$/', $maches[4])) {
-            if (isset($maches[5]) && preg_match('/^[\sa-z\-]+$/', $maches[5])) {
-                return false;
-            }
-            $maches[4] = str_replace('.', '', $maches[4]);
-        } elseif (isset($maches[4]) && preg_match('/^[\sa-z\-]+$/', $maches[4])) {
-            return false;
-        } else {
-            $maches[4] = 0;
-        }
-        return $maches[1] * 1000000000 + $maches[2] * 1000000 + $maches[3] * 1000 + $maches[4];
-    } else {
-        return 0;
-    }
-}
-
-/**
  * 環境変数よりURLパラメータを取得する
  *
  * ＊ プレフィックスは除外する
@@ -473,43 +444,6 @@ function loadSiteConfig($force = false)
     Configure::write('BcSite', $SiteConfig->getKeyValue());
     ClassRegistry::removeObject('SiteConfig');
     return true;
-}
-
-/**
- * バージョンを取得する
- *
- * @return string Or false
- */
-function getVersion($plugin = '')
-{
-
-    $corePlugins = Configure::read('BcApp.corePlugins');
-    if (!$plugin || in_array($plugin, $corePlugins)) {
-        $path = BASER . 'VERSION.txt';
-    } else {
-        $paths = App::path('Plugin');
-        $exists = false;
-        foreach($paths as $path) {
-            $path .= $plugin . DS . 'VERSION.txt';
-            if (file_exists($path)) {
-                $exists = true;
-                break;
-            }
-        }
-        if (!$exists) {
-            return false;
-        }
-    }
-
-    App::uses('File', 'Utility');
-    $versionFile = new File($path);
-    $versionData = $versionFile->read();
-    $aryVersionData = explode("\n", $versionData);
-    if (!empty($aryVersionData[0])) {
-        return trim($aryVersionData[0]);
-    } else {
-        return false;
-    }
 }
 
 /**

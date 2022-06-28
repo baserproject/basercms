@@ -196,7 +196,7 @@ class BcAppController extends AppController
         $this->__loadDataToView();
         $this->set('isSSL', $this->request->is('ssl'));
         $this->set('safeModeOn', ini_get('safe_mode'));
-        $this->set('baserVersion', $this->getBaserVersion());
+        $this->set('baserVersion', BcUtil::getVersion());
         $this->set('widgetArea', BcSiteConfig::get('widget_area'));
     }
 
@@ -274,17 +274,6 @@ class BcAppController extends AppController
     }
 
     /**
-     * baserCMSのバージョンを取得する
-     *
-     * @param string $plugin プラグイン名
-     * @return string Baserバージョン
-     */
-    protected function getBaserVersion($plugin = '')
-    {
-        return getVersion($plugin);
-    }
-
-    /**
      * テーマのバージョン番号を取得する
      *
      * @param string $theme テーマ名
@@ -304,24 +293,6 @@ class BcAppController extends AppController
         }
 
         return $aryVersionData[0];
-    }
-
-    /**
-     * DBのバージョンを取得する
-     *
-     * @param string $plugin プラグイン名
-     * @return string
-     */
-    protected function getSiteVersion($plugin = '')
-    {
-        if (!$plugin) {
-            if (!BcSiteConfig::get('version')) {
-                return '';
-            }
-            return preg_replace("/baserCMS ([0-9.]+?[\sa-z]*)/is", "$1", BcSiteConfig::get('version'));
-        }
-        $Plugin = ClassRegistry::init('Plugin');
-        return $Plugin->field('version', ['name' => $plugin]);
     }
 
     /**

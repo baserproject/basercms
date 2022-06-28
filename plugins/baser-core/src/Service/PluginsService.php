@@ -11,6 +11,7 @@
 
 namespace BaserCore\Service;
 
+use BaserCore\Model\Entity\Plugin;
 use BaserCore\Model\Table\PluginsTable;
 use Cake\Cache\Cache;
 use Cake\Http\Client;
@@ -45,11 +46,13 @@ class PluginsService implements PluginsServiceInterface
 
     /**
      * PluginsService constructor.
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function __construct()
     {
         $this->Plugins = TableRegistry::getTableLocator()->get('BaserCore.Plugins');
-        $this->UserGroups = TableRegistry::getTableLocator()->get('BaserCore.UserGroups');
     }
 
     /**
@@ -79,12 +82,12 @@ class PluginsService implements PluginsServiceInterface
             ->order(['priority'])
             ->all()
             ->toArray();
-        if($sortMode) {
+        if ($sortMode) {
             return $plugins;
         } else {
             $registeredName = Hash::extract($plugins, '{n}.name');
             // DBに登録されてないもの含めて、プラグインフォルダから取得
-            if(!$plugins) {
+            if (!$plugins) {
                 $plugins = [];
             }
             $paths = App::path('plugins');
@@ -94,7 +97,7 @@ class PluginsService implements PluginsServiceInterface
                 foreach($files[0] as $file) {
                     $name = Inflector::camelize(Inflector::underscore(basename($file)));
                     if (!in_array(basename($file), Configure::read('BcApp.core'))
-                            && !in_array($name, $registeredName)) {
+                        && !in_array($name, $registeredName)) {
                         $plugins[] = $this->Plugins->getPluginConfig($name);
                     }
                 }
@@ -106,8 +109,8 @@ class PluginsService implements PluginsServiceInterface
     /**
      * プラグインをインストールする
      * @param string $name プラグイン名
-     * @return bool|null
      * @param string $connection test connection指定用
+     * @return bool|null
      * @throws Exception
      * @checked
      * @noTodo
@@ -127,13 +130,103 @@ class PluginsService implements PluginsServiceInterface
     }
 
     /**
+     * プラグインをアップデートする
+     * @return bool
+     */
+    public function update($name, $connection = 'default'): ?bool
+    {
+        $options = ['connection' => $connection];
+        BcUtil::includePluginClass($name);
+
+        if (function_exists('ini_set')) {
+            ini_set('max_excution_time', 0);
+            ini_set('max_excution_time', '128M');
+        }
+        if(file_exists(LOGS . 'update.log')) {
+            unlink(LOGS . 'update.log');
+        }
+
+        if ($name === 'BaserCore') {
+            $names = array_merge(['BaserCore'], Configure::read('BcApp.corePlugins'));
+            $ids = $this->detachAll();
+        } else {
+            $names = [$name];
+        }
+
+        $result = true;
+        $pluginCollection = CakePlugin::getCollection();
+        foreach($names as $name) {
+            if($name !== 'BaserCore') {
+                $entity = $this->Plugins->getPluginConfig($name);
+                if(!$entity->registered) continue;
+            }
+            $plugin = $pluginCollection->create($name);
+            if (!method_exists($plugin, 'update')) {
+                throw new Exception(__d('baser', 'プラグインに Plugin クラスが存在しません。src ディレクトリ配下に作成してください。'));
+            } else {
+                if(!$plugin->update($options)) {
+                    $result = false;
+                }
+            }
+        }
+
+        if ($name === 'BaserCore') {
+            $this->attachAllFromIds($ids);
+        }
+
+        return $result;
+    }
+
+    public function detachAll()
+    {
+        $plugins = $this->Plugins->find()->where(['status' => true])->all();
+        $ids = [];
+        if ($plugins) {
+            foreach($plugins as $plugin) {
+                $ids[] = $plugin->id;
+                $plugin->status = false;
+                $this->Plugins->save($plugin);
+            }
+        }
+        return $ids;
+    }
+
+    public function attachAllFromIds($ids)
+    {
+        if (!$ids) {
+            return;
+        }
+        foreach($ids as $id) {
+            $this->Plugins->save(new Plugin(['id' => $id, 'status' => true]));
+        }
+    }
+
+    /**
+     * バージョンを取得する
+     * @param $name
+     * @return mixed|string
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getVersion($name)
+    {
+        $plugin = $this->Plugins->find()->where(['name' => $name])->first();
+        if ($plugin) {
+            return $plugin->version;
+        } else {
+            return '';
+        }
+    }
+
+    /**
      * プラグインを無効にする
      * @param string $name
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function detach(string $name):bool
+    public function detach(string $name): bool
     {
         return $this->Plugins->detach($name);
     }
@@ -269,7 +362,7 @@ class PluginsService implements PluginsServiceInterface
 
         foreach($userGroups as $userGroup) {
 
-            $permissionAuthPrefix = $this->UserGroups->getAuthPrefix($userGroup->id);
+            $permissionAuthPrefix = $permissions->UserGroups->getAuthPrefix($userGroup->id);
             $url = '/baser/' . $permissionAuthPrefix . '/' . Inflector::underscore($data['name']) . '/*';
 
             $prePermissions = $permissions->find()->where(['url' => $url])->first();

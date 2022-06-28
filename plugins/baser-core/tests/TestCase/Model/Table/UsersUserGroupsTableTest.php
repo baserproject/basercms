@@ -11,6 +11,7 @@
 
 namespace BaserCore\Test\TestCase\Model\Table;
 
+use BaserCore\Model\Table\UsersUserGroupsTable;
 use BaserCore\TestSuite\BcTestCase;
 
 /**
@@ -40,8 +41,8 @@ class UsersUserGroupsTableTest extends BcTestCase
      */
     public function setUp(): void
     {
-        $this->loadFixtures('Users', 'UserGroups', 'UsersUserGroups');
         parent::setUp();
+        $this->loadFixtures('Users', 'UserGroups', 'UsersUserGroups');
         $config = $this->getTableLocator()->exists('UsersUserGroups')? [] : ['className' => 'BaserCore\Model\Table\UsersUserGroupsTable'];
         $this->UsersUserGroups = $this->getTableLocator()->get('UsersUserGroups', $config);
     }

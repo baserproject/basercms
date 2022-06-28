@@ -13,7 +13,6 @@ namespace BaserCore\Test\TestCase\Controller\Api;
 
 use Authentication\Authenticator\Result;
 use BaserCore\Controller\Api\BcApiController;
-use BaserCore\Service\UsersService;
 use BaserCore\Service\UsersServiceInterface;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
@@ -57,8 +56,8 @@ class BcApiControllerTest extends BcTestCase
      */
     public function setUp(): void
     {
-        $this->loadFixtures('Sites', 'SiteConfigs');
         parent::setUp();
+        $this->loadFixtures('Sites', 'SiteConfigs');
     }
 
     /**

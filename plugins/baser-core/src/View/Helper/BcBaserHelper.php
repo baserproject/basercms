@@ -1538,14 +1538,14 @@ class BcBaserHelper extends Helper
      */
     public function getSitePrefix()
     {
-        if (!BC_INSTALLED) {
+        if (!BC_INSTALLED || $this->getView()->getRequest()->is('update')) {
             return '';
         }
         $site = null;
         if (!empty($this->getView()->getRequest()->getParam('Site'))) {
             $site = $this->getView()->getRequest()->getParam('Site');
         }
-
+        if(!$site) return '';
         $sites = \Cake\ORM\TableRegistry::getTableLocator()->get('BaserCore.Sites');
         return $sites->getPrefix($site->id);
     }

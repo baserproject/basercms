@@ -47,7 +47,7 @@ $class = ' class="' . implode(' ', $classies) . '"';
       <?php echo $this->BcAdminForm->control('Sort.id' . $plugin->id, ['type' => 'hidden', 'class' => 'id', 'value' => $plugin->id]) ?>
     <?php endif ?>
   </td>
-  <td class="bca-table-listup__tbody-td">
+  <td class="bca-table-listup__tbody-td" style="min-width:150px;">
     <?php if ($plugin->old_version): ?>
       <div class="annotation-text"><small><?php echo __d('baser', '新しいバージョンにアップデートしてください') ?></small></div>
     <?php elseif ($plugin->update): ?>
@@ -56,7 +56,7 @@ $class = ' class="' . implode(' ', $classies) . '"';
     <?php echo h($plugin->name) ?><?php if ($plugin->title): ?>（<?php echo h($plugin->title) ?>）<?php endif ?>
   </td>
   <td class="bca-table-listup__tbody-td"><?php echo $plugin->version ?></td>
-  <td class="bca-table-listup__tbody-td"><?php echo h($plugin->description) ?></td>
+  <td class="bca-table-listup__tbody-td" style="min-width:200px;"><?php echo h($plugin->description) ?></td>
   <td class="bca-table-listup__tbody-td">
     <?php if ($plugin->author): ?>
       <?php if ($plugin->url): ?>
@@ -72,7 +72,7 @@ $class = ' class="' . implode(' ', $classies) . '"';
   </td>
   <td class="bca-table-listup__tbody-td">
     <?php if ($plugin->update): ?>
-      <?php $this->BcBaser->link('', ['controller' => 'updaters', 'action' => 'plugin', $plugin->name], [
+      <?php $this->BcBaser->link('', ['controller' => 'plugins', 'action' => 'update', $plugin->name], [
         'aria-label' => __d('baser', 'このプラグインをアップデートする'),
         'title' => __d('baser', 'アップデート'),
         'class' => 'btn-update bca-btn-icon',

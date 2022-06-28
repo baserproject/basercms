@@ -12,7 +12,9 @@
 namespace BaserCore\Test\TestCase\Model\Table;
 
 use BaserCore\Model\Table\PluginsTable;
+use BaserCore\Test\Factory\PluginFactory;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcUtil;
 use Cake\Validation\Validator;
 
 /**
@@ -35,6 +37,7 @@ class PluginsTableTest extends BcTestCase
      */
     protected $fixtures = [
         'plugin.BaserCore.Plugins',
+        'plugin.BaserCore.SiteConfigs'
     ];
 
     /**
@@ -147,6 +150,18 @@ class PluginsTableTest extends BcTestCase
             // 重複
             [false, ['name' => 'BcBlog', 'title' => 'testtest']],
         ];
+    }
+
+    /**
+     * test update
+     */
+    public function test_update()
+    {
+        $this->Plugins->update('', '6.0.0');
+        $this->assertEquals('6.0.0', BcUtil::getDbVersion());
+        PluginFactory::make(['name' => 'BcSample', 'version' => '1.0.0'])->persist();
+        $this->Plugins->update('BcSample', '6.0.0');
+        $this->assertEquals('6.0.0', BcUtil::getDbVersion('BcSample'));
     }
 
 }

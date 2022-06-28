@@ -12,9 +12,7 @@
 
 namespace BaserCore\Test\TestCase\View\Helper;
 
-use Cake\Core\Configure;
 use Cake\Routing\Router;
-use Cake\Http\ServerRequest;
 use BaserCore\View\BcAdminAppView;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcUtil;

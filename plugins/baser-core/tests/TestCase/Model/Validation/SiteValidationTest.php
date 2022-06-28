@@ -18,10 +18,18 @@ use BaserCore\TestSuite\BcTestCase;
 /**
  * Class SiteValidationTest
  * @package BaserCore\Test\TestCase\Model\Validation
- * @property SiteValidation $SiteValidation
  */
 class SiteValidationTest extends BcTestCase
 {
+
+    /**
+     * Fixtures
+     *
+     * @var array
+     */
+    protected $fixtures = [
+        'plugin.BaserCore.Sites',
+    ];
 
     /**
      * Test subject

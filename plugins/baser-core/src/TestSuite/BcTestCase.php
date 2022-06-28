@@ -18,13 +18,17 @@ use BaserCore\Middleware\BcRequestFilterMiddleware;
 use BaserCore\Plugin;
 use BaserCore\Utility\BcApiUtil;
 use Cake\Core\Configure;
+use Cake\Datasource\ConnectionManager;
 use Cake\Event\EventListenerInterface;
 use Cake\Event\EventManager;
+use Cake\Filesystem\Folder;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
 use Cake\Http\ServerRequestFactory;
 use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
+use Cake\TestSuite\Fixture\FixtureInjector;
+use Cake\TestSuite\Fixture\FixtureManager;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
 use BaserCore\Annotation\UnitTest;
@@ -77,6 +81,55 @@ class BcTestCase extends TestCase
     public static $_detectors;
 
     /**
+     * FixtureManager
+     * 古いフィクスチャーの後方互換用
+     * @var FixtureManager
+     * @deprecated 5.1.0
+     * @see setUpFixtureManager
+     */
+    public $FixtureManager;
+
+    /**
+     * FixtureInjector
+     * 古いフィクスチャーの後方互換用
+     * @var FixtureInjector
+     * @deprecated 5.1.0
+     * @see setUpFixtureManager
+     */
+    public $FixtureInjector;
+
+    /**
+     * setup FixtureManager
+     *
+     * CakePHP4系より、FixtureManagerが非推奨となったが、$this->autoFixtures = false を利用した動的フィクスチャーを
+     * 利用するために FixtureManager が必要となる。phpunit.xml.dist からは、FixtureManager の定義を除外し、
+     * 基本的に利用しない方針だが、動的フィクスチャーが必要なテストの場合にだけ利用する。
+     * 動的フィクスチャーを FixtureFactory に移管後、廃止とする
+     * @deprecated 5.1.0
+     */
+    public function setUpFixtureManager()
+    {
+        $this->FixtureManager = new FixtureManager();
+        $this->FixtureInjector = new FixtureInjector($this->FixtureManager);
+        $this->FixtureInjector->startTest($this);
+    }
+
+    /**
+     * tear down FixtureManager
+     * @deprecated 5.1.0
+     * @see setUpFixtureManager
+     */
+    public function tearDownFixtureManager()
+    {
+        $this->FixtureInjector->endTest($this, 0);
+        $fixtures = $this->FixtureManager->loaded();
+        foreach($fixtures as $fixture) {
+            $fixture->truncate(ConnectionManager::get($fixture->connection()));
+        }
+        self::$fixtureManager = null;
+    }
+
+    /**
      * Set Up
      * @checked
      * @noTodo
@@ -84,6 +137,9 @@ class BcTestCase extends TestCase
      */
     public function setUp(): void
     {
+        if(!$this->autoFixtures) {
+            $this->setUpFixtureManager();
+        }
         parent::setUp();
         $this->Application = new Application(CONFIG);
         $this->Application->bootstrap();
@@ -106,6 +162,9 @@ class BcTestCase extends TestCase
      */
     public function tearDown(): void
     {
+        if(!$this->autoFixtures) {
+            $this->tearDownFixtureManager();
+        }
         BcContainer::clear();
         parent::tearDown();
     }
@@ -317,5 +376,20 @@ class BcTestCase extends TestCase
 		$property->setAccessible(true);
 		$property->setValue($EventManager, []);
 	}
+
+    /**
+     * tear down after class
+     * テスト時に生成されたログや一時ファイルに書き込み権限を与える
+     * ブラウザでアクセスした際にエラーとなるため
+     * @checked
+     * @unitTest
+     * @noTodo
+     */
+	public static function tearDownAfterClass(): void
+    {
+        $folder = new Folder();
+        $folder->chmod(LOGS, 0777);
+        $folder->chmod(TMP, 0777);
+    }
 
 }

@@ -11,13 +11,13 @@
 
 namespace BaserCore\Test\TestCase\Controller\Admin;
 
+use BaserCore\TestSuite\BcTestCase;
 use Cake\TestSuite\IntegrationTestTrait;
-use Cake\TestSuite\TestCase;
 
 /**
  * BaserCore\Controller\DashboardController Test Case
  */
-class DashboardControllerTest extends TestCase
+class DashboardControllerTest extends BcTestCase
 {
     use IntegrationTestTrait;
 
@@ -31,9 +31,8 @@ class DashboardControllerTest extends TestCase
         'plugin.BaserCore.Users',
         'plugin.BaserCore.UsersUserGroups',
         'plugin.BaserCore.UserGroups',
+        'plugin.BaserCore.Sites',
     ];
-
-    public $autoFixtures = false;
 
     /**
      * set up
@@ -41,9 +40,6 @@ class DashboardControllerTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-
-        $this->loadFixtures('Dblogs', 'Users', 'UsersUserGroups', 'UserGroups');
-
         $config = $this->getTableLocator()->exists('Users')? [] : ['className' => 'BaserCore\Model\Table\UsersTable'];
         $Users = $this->getTableLocator()->get('Users', $config);
         $this->session(['AuthAdmin' => $Users->get(1)]);

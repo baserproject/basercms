@@ -175,26 +175,6 @@ if (BC_INSTALLED) {
     checkTmpFolders();
 
     /**
-     * Configures default file logging options
-     */
-    App::uses('CakeLog', 'Log');
-    CakeLog::config('debug', [
-        'engine' => 'FileLog',
-        'types' => ['notice', 'info', 'debug'],
-        'file' => 'debug',
-    ]);
-    CakeLog::config('error', [
-        'engine' => 'FileLog',
-        'types' => ['warning', 'error', 'critical', 'alert', 'emergency'],
-        'file' => 'error',
-    ]);
-    CakeLog::config('update', [
-        'engine' => 'FileLog',
-        'types' => ['update'],
-        'file' => 'update',
-    ]);
-
-    /**
      * キャッシュ設定
      */
     $cacheEngine = Configure::read('BcCache.engine');
@@ -250,31 +230,6 @@ if (BC_INSTALLED) {
     if (empty($_GET['requestview']) || $_GET['requestview'] != 'false') {
         loadSiteConfig();
     }
-
-    /**
-     * メンテナンスチェック
-     */
-    $isMaintenance = ($parameter == 'maintenance/index');
-    Configure::write('BcRequest.isMaintenance', $isMaintenance);
-
-    /**
-     * アップデートチェック
-     */
-    $isUpdater = false;
-    $bcSite = Configure::read('BcSite');
-    $updateKey = preg_quote(Configure::read('BcApp.updateKey'), '/');
-    if (preg_match('/^' . $updateKey . '(|\/index\/)/', $parameter)) {
-        $isUpdater = true;
-    } elseif (BC_INSTALLED && !$isMaintenance && (!empty($bcSite['version']) && (getVersion() > $bcSite['version']))) {
-        if (!isConsole()) {
-            CakeLog::write(LOG_ERR, 'プログラムとデータベースのバージョンが異なります。');
-            header('Location: ' . \BaserCore\Utility\BcUtil::topLevelUrl(false) . BcUtil::baseUrl() . 'maintenance/index');
-            exit();
-        } else {
-            throw new BcException(__d('baser', 'プログラムとデータベースのバージョンが異なるため、強制終了します。データベースのバージョンを調整して、再実行してください。'));
-        }
-    }
-    Configure::write('BcRequest.isUpdater', $isUpdater);
 }
 
 /**

@@ -31,7 +31,9 @@ class UsersControllerTest extends BcTestCase
         'plugin.BaserCore.Users',
         'plugin.BaserCore.UsersUserGroups',
         'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.LoginStores'
+        'plugin.BaserCore.LoginStores',
+        'plugin.BaserCore.Sites',
+        'plugin.BaserCore.SiteConfigs'
     ];
 
     /**

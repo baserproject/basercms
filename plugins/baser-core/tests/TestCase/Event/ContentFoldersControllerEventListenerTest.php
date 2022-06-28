@@ -12,7 +12,6 @@
 namespace BaserCore\Test\TestCase\Event;
 
 use BaserCore\Event\ContentFoldersControllerEventListener;
-use BaserCore\Event\PagesControllerEventListener;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\Event\EventManager;
 
@@ -35,7 +34,8 @@ class ContentFoldersControllerEventListenerTest extends BcTestCase
         'plugin.BaserCore.Contents',
         'plugin.BaserCore.ContentFolders',
         'plugin.BaserCore.SiteConfigs',
-        'plugin.BaserCore.Pages'
+        'plugin.BaserCore.Pages',
+        'plugin.BaserCore.Dblogs'
     ];
 
     /**

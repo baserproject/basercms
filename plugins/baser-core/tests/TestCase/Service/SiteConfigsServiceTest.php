@@ -12,10 +12,19 @@
 namespace BaserCore\Test\TestCase\Service;
 
 use BaserCore\Service\SiteConfigsService;
-use josegonzalez\Dotenv\Loader;
+use BaserCore\Service\SiteConfigsServiceInterface;
+use BaserCore\Utility\BcContainerTrait;
 
+/**
+ * SiteConfigsServiceTest
+ */
 class SiteConfigsServiceTest extends \BaserCore\TestSuite\BcTestCase
 {
+
+    /**
+     * Trait
+     */
+    use BcContainerTrait;
 
     /**
      * Fixtures
@@ -39,7 +48,7 @@ class SiteConfigsServiceTest extends \BaserCore\TestSuite\BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->SiteConfigs = new SiteConfigsService();
+        $this->SiteConfigs = $this->getService(SiteConfigsServiceInterface::class);
     }
 
     /**
@@ -150,6 +159,17 @@ class SiteConfigsServiceTest extends \BaserCore\TestSuite\BcTestCase
     {
         $this->assertNotEmpty($this->SiteConfigs->resetValue('admin_list_num'));
         $this->assertEquals('', $this->SiteConfigs->getValue('admin_list_num'));
+    }
+
+    /**
+     * test getVersion And clearCache
+     */
+    public function test_getVersionAndClearCache()
+    {
+        $this->assertEquals('3.0.6.1', $this->SiteConfigs->getVersion());
+        $this->SiteConfigs->clearCache();
+        $this->SiteConfigs->setValue('version', '5.0.0');
+        $this->assertEquals('5.0.0', $this->SiteConfigs->getVersion());
     }
 
 }

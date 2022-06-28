@@ -15,6 +15,8 @@ use BaserCore\Service\PluginsAdminService;
 use BaserCore\Service\PluginsAdminServiceInterface;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
+use Cake\Log\Log;
+use Psr\Log\LogLevel;
 
 /**
  * PluginsAdminServiceTest
@@ -67,6 +69,39 @@ class PluginsAdminServiceTest extends BcTestCase
         $vars = $this->PluginsAdmin->getViewVarsForInstall($this->PluginsAdmin->get(1));
         $this->assertTrue(isset($vars['plugin']));
         $this->assertTrue(isset($vars['installStatusMessage']));
+    }
+
+    /**
+     * test getViewVarsForUpdate
+     */
+    public function test_getViewVarsForUpdate()
+    {
+        $vars = $this->PluginsAdmin->getViewVarsForUpdate($this->PluginsAdmin->get(1));
+        $this->assertEquals([
+            'plugin',
+            'scriptNum',
+            'scriptMessages',
+            'siteVer',
+            'baserVer',
+            'siteVerPoint',
+            'baserVerPoint',
+            'log'
+        ], array_keys($vars));
+    }
+
+    /**
+     * test getUpdateLog
+     */
+    public function test_getUpdateLog()
+    {
+        if (file_exists(LOGS . 'update.log')) {
+            rename(LOGS . 'update.log', LOGS . 'update.backup.log');
+        }
+        Log::write(LogLevel::INFO, 'test', 'update');
+        $this->assertMatchesRegularExpression('/test\n$/', $this->PluginsAdmin->getUpdateLog());
+        if (file_exists(LOGS . 'update.backup.log')) {
+            rename(LOGS . 'update.log', LOGS . 'update.log');
+        }
     }
 
 }

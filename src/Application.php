@@ -62,6 +62,7 @@ class Application extends BaseApplication
          */
         if (Configure::read('debug')) {
             $this->addPlugin('DebugKit');
+            $this->addPlugin('CakephpFixtureFactories');
         }
 
         // Load more plugins here

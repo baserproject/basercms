@@ -36,6 +36,8 @@ class SitesAdminServiceTest extends \BaserCore\TestSuite\BcTestCase
         'plugin.BaserCore.Sites'
     ];
 
+//    public $autoFixtures = false;
+
     /**
      * SitesAdminService
      * @var SitesAdminService
@@ -49,6 +51,7 @@ class SitesAdminServiceTest extends \BaserCore\TestSuite\BcTestCase
     {
         parent::setUp();
         $this->SitesAdmin = new SitesAdminService();
+//        $this->fixtureStrategy->setupTest($this->getFixtures());
     }
 
     /**

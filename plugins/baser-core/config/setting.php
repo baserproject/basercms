@@ -236,7 +236,26 @@ return [
                 //				]
                 //			]
             ]
-        ]],
+        ]
+     ],
+
+    /**
+     * リクエスト情報
+     */
+    'BcRequest' => [
+        // アセットファイルかどうか
+        'asset' => false,
+        // Router がロード済かどうか
+        // TODO 不要か確認
+        'routerLoaded' => false,
+        // アップデーターかどうか
+        'isUpdater' => false,
+        // メンテナンスかどうか
+        'isMaintenance' => false,
+        // インストール済かどうか
+        // TODO bootstrapの処理を見直してここで明示的に定義できるようにする
+        // 'isInstalled' => false,
+    ],
 
     /**
      * プレフィックス認証

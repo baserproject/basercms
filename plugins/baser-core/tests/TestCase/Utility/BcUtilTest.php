@@ -11,6 +11,7 @@
 
 namespace BaserCore\Test\TestCase\Utility;
 
+use BaserCore\Test\Factory\SiteConfigFactory;
 use Cake\Core\App;
 use Cake\Cache\Cache;
 use Cake\Core\Plugin;
@@ -38,6 +39,7 @@ class BcUtilTest extends BcTestCase
         'plugin.BaserCore.UsersUserGroups',
         'plugin.BaserCore.Plugins',
         'plugin.BaserCore.Sites',
+        'plugin.BaserCore.SiteConfigs',
         'plugin.BaserCore.Contents',
         'plugin.BaserCore.ContentFolders',
     ];
@@ -957,4 +959,15 @@ class BcUtilTest extends BcTestCase
         $result = BcUtil::docRoot();
         $this->assertEquals($expected, $result);
     }
+
+    /**
+     * test getDbVersion
+     */
+    public function test_getDbVersion()
+    {
+        SiteConfigFactory::make(['name' => 'version', 'value' => '2.0.0'])->persist();
+        $this->assertEquals('2.0.0', BcUtil::getDbVersion());
+        $this->assertEquals('1.0.0', BcUtil::getDbVersion('BcBlog'));
+    }
+
 }

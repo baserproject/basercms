@@ -15,6 +15,7 @@ use BaserCore\Event\BcEventDispatcherTrait;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
 use BaserCore\Model\AppTable;
+use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -99,7 +100,7 @@ class PluginsTable extends AppTable
      */
     public function getPluginConfig($name)
     {
-
+        if(!$name) $name = 'BaserCore';
         $pluginName = Inflector::camelize($name, '-');
 
         // プラグインのバージョンを取得
@@ -278,6 +279,30 @@ class PluginsTable extends AppTable
         }
 
         return true;
+    }
+
+    /**
+     * データベースをアップデートする
+     * @param string $name
+     * @param string $version
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function update($name, $version): bool
+    {
+        if(!$name || $name === 'BaserCore') {
+            $siteConfigs = TableRegistry::getTableLocator()->get('BaserCore.SiteConfigs');
+            return (bool) $siteConfigs->saveKeyValue(['version' => $version]);
+        } else {
+            $plugin = $this->find()->select()->where(['name' => $name])->first();
+            if($plugin) {
+                $plugin->version = $version;
+                return (bool) $this->save($plugin);
+            } else {
+                return true;
+            }
+        }
     }
 
 }

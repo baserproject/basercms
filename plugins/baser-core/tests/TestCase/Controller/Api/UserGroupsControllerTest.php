@@ -12,8 +12,6 @@
 namespace BaserCore\Test\TestCase\Controller\Api;
 
 use BaserCore\TestSuite\BcTestCase;
-use Cake\Core\Configure;
-use Cake\Core\Configure\Engine\PhpConfig;
 use Cake\TestSuite\IntegrationTestTrait;
 
 /**
@@ -32,7 +30,9 @@ class UserGroupsControllerTest extends BcTestCase
         'plugin.BaserCore.Users',
         'plugin.BaserCore.UsersUserGroups',
         'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.LoginStores'
+        'plugin.BaserCore.LoginStores',
+        'plugin.BaserCore.Sites',
+        'plugin.BaserCore.SiteConfigs'
     ];
 
     /**

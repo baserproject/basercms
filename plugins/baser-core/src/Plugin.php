@@ -171,6 +171,7 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
             // Authorization (AuthComponent to Authorization)
             ->add(new AuthenticationMiddleware($this))
             ->add(new BcAdminMiddleware())
+//            ->add(new BcUpdateFilterMiddleware())
             ->add(new BcRequestFilterMiddleware());
 
         // APIへのアクセスの場合、CSRFを強制的に利用しない設定に変更
@@ -345,8 +346,25 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
             return;
         }
 
+        /**
+         * アップデーター
+         * /config/setting.php にて URLを変更することができる
+         */
+        $routes->connect('/' . Configure::read('BcApp.updateKey'), [
+            'prefix' => 'Admin',
+            'plugin' => 'BaserCore',
+            'controller' => 'Plugins',
+            'action' => 'update'
+        ]);
+
+        /**
+         * コンテンツルーティング
+         */
         $routes->connect('/*', [], ['routeClass' => 'BaserCore.BcContentsRoute']);
 
+        /**
+         * 管理画面
+         */
         $routes->prefix(
             'Admin',
             ['path' => BcUtil::getPrefix()],
@@ -358,8 +376,10 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
             }
         );
 
-        // JWTトークン検証用ルーティング
-        // /baser/api/baser-core/.well-known/jwks.json でアクセス
+        /**
+         * JWTトークン検証用ルーティング
+         * /baser/api/baser-core/.well-known/jwks.json でアクセス
+         */
         $routes->prefix(
             'Api',
             ['path' => '/' . Configure::read('BcApp.baserCorePrefix') . '/api'],

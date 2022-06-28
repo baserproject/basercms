@@ -240,7 +240,7 @@ class ContentFoldersService implements ContentFoldersServiceInterface
             $contentFolder = $this->ContentFolders->find()->where(function (QueryExpression $exp, Query $query) use($content) {
                 return $query->newExpr()->eq('Contents.id', $content->id);
             })->leftJoinWith('Contents')->first();
-            $template = $contentFolder->{$type . '_template'};
+            if($contentFolder) $template = $contentFolder->{$type . '_template'};
         }
         $parentTemplate = !empty($template) ? $template : 'default';
         return $parentTemplate;

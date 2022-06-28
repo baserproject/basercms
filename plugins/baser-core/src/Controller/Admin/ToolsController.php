@@ -236,7 +236,7 @@ class ToolsController extends BcAdminAppController
     protected function _backupDb($encoding)
     {
         $tmpDir = TMP . 'schemas' . DS;
-        $version = str_replace(' ', '_', $this->getBaserVersion());
+        $version = str_replace(' ', '_', BcUtil::getVersion());
         $this->_resetTmpSchemaFolder();
         BcUtil::clearAllCache();
         $this->_writeBackup($tmpDir . 'core' . DS, '', $encoding);

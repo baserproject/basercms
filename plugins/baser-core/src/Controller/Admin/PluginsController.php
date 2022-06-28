@@ -16,6 +16,8 @@ use BaserCore\Service\PluginsServiceInterface;
 use BaserCore\Controller\Component\BcMessageComponent;
 use BaserCore\Model\Table\PluginsTable;
 use BaserCore\Service\UsersServiceInterface;
+use BaserCore\Utility\BcUtil;
+use Cake\Core\Configure;
 use Cake\Event\EventInterface;
 use Cake\Http\Response;
 use BaserCore\Annotation\UnitTest;
@@ -62,6 +64,7 @@ class PluginsController extends BcAdminAppController
     {
         parent::beforeFilter($event);
         $this->Security->setConfig('unlockedActions', ['reset_db', 'update_sort', 'batch']);
+        if(Configure::read('BcRequest.isUpdater')) $this->Authentication->allowUnauthenticated(['update']);
     }
 
     /**
@@ -105,6 +108,34 @@ class PluginsController extends BcAdminAppController
             }
         }
     }
+
+	/**
+	 * アップデート実行
+     * @param PluginsServiceInterface $pluginsService
+     * @param string $name
+     * @checked
+     * @noTodo
+     * @unitTest
+	 */
+	public function update(PluginsAdminServiceInterface $pluginsService, $name = ''): void
+	{
+        BcUtil::clearAllCache();
+        $plugin = $this->Plugins->getPluginConfig($name);
+        $this->set($pluginsService->getViewVarsForUpdate($plugin));
+        if (!$this->request->is(['put', 'post'])) return;
+        try {
+            $pluginsService->update($plugin->name, $this->request->getData('connection') ?? 'default');
+            if($plugin->name === 'BaserCore') {
+                $this->BcMessage->setInfo(__d('baser', '全てのアップデート処理が完了しました。 {0} にログを出力しています。', LOGS . 'update.log'));
+                $this->redirect('/');
+            } else {
+                $this->BcMessage->setInfo(__d('baser', 'アップデート処理が完了しました。画面下部のアップデートログを確認してください。'));
+                $this->redirect(['action' => 'update', $name]);
+            }
+        } catch (\Exception $e) {
+            $this->BcMessage->setError($e->getMessage());
+        }
+	}
 
     /**
      * 無効化

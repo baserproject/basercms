@@ -322,7 +322,7 @@ class BaserTestShell extends TestShell
         // >>>
         //$this->out(__d('cake_console', '<info>Welcome to CakePHP %s Console</info>', 'v' . Configure::version()));
         // ---
-        $this->out(__d('baser', '<info>baserCMS %s コンソールへようこそ</info>', 'v' . getVersion()));
+        $this->out(__d('baser', '<info>baserCMS %s コンソールへようこそ</info>', 'v' . BcUtil::getVersion()));
         // <<<
 
         $this->hr();

@@ -13,12 +13,8 @@ namespace BaserCore\Test\TestCase\Model\Table;
 
 use ArrayObject;
 use Cake\ORM\Entity;
-use ReflectionClass;
-use Cake\Event\Event;
 use BaserCore\TestSuite\BcTestCase;
-use Cake\Datasource\EntityInterface;
 use BaserCore\Model\Entity\ContentFolder;
-use BaserCore\Model\Table\ContentFoldersTable;
 
 /**
  * Class ContentFoldersTableTest

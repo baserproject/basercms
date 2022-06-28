@@ -12,7 +12,6 @@
 namespace BaserCore\Test\TestCase\Event;
 
 use BaserCore\Controller\Admin\UsersController;
-use BaserCore\Controller\BcAppController;
 use BaserCore\Event\BcControllerEventDispatcher;
 use BaserCore\Event\BcControllerEventListener;
 use BaserCore\TestSuite\BcTestCase;
@@ -37,6 +36,7 @@ class BcControllerEventDispatcherTest extends BcTestCase
         'plugin.BaserCore.Users',
         'plugin.BaserCore.UsersUserGroups',
         'plugin.BaserCore.UserGroups',
+        'plugin.BaserCore.Sites'
     ];
 
     /**

@@ -41,6 +41,7 @@ class PagesControllerTest extends BcTestCase
         'plugin.BaserCore.Users',
         'plugin.BaserCore.UserGroups',
         'plugin.BaserCore.UsersUserGroups',
+        'plugin.BaserCore.Dblogs',
     ];
 
     /**

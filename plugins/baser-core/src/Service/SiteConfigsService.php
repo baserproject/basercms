@@ -39,7 +39,7 @@ class SiteConfigsService implements SiteConfigsServiceInterface
     public $SiteConfigs;
 
     /**
-     * Entity
+     * キャッシュ用 Entity
      * @var SiteConfig
      */
     protected $entity;
@@ -75,7 +75,7 @@ class SiteConfigsService implements SiteConfigsServiceInterface
      */
     public function get(): SiteConfig
     {
-        if(!$this->entity) {
+        if (!$this->entity) {
             $this->entity = $this->SiteConfigs->newEntity(array_merge($this->SiteConfigs->getKeyValue(), [
                 'mode' => Configure::read('debug'),
                 'site_url' => Configure::read('BcEnv.siteUrl'),
@@ -98,7 +98,7 @@ class SiteConfigsService implements SiteConfigsServiceInterface
     {
 
         $siteConfig = $this->SiteConfigs->newEntity($postData, ['validate' => 'keyValue']);
-        if($siteConfig->hasErrors()) {
+        if ($siteConfig->hasErrors()) {
             return $siteConfig;
         }
 
@@ -126,11 +126,11 @@ class SiteConfigsService implements SiteConfigsServiceInterface
             $siteConfig->ssl_url .= '/';
         }
 
-        if($this->isWritableEnv()) {
-            if(isset($siteConfig->mode)) $this->putEnv('DEBUG', ($siteConfig->mode)? 'true' : 'false');
-            if(isset($siteConfig->site_url)) $this->putEnv('SITE_URL', $siteConfig->site_url);
-            if(isset($siteConfig->ssl_url)) $this->putEnv('SSL_URL', $siteConfig->ssl_url);
-            if(isset($siteConfig->admin_ssl)) $this->putEnv('ADMIN_SSL', ($siteConfig->admin_ssl)? 'true' : 'false');
+        if ($this->isWritableEnv()) {
+            if (isset($siteConfig->mode)) $this->putEnv('DEBUG', ($siteConfig->mode)? 'true' : 'false');
+            if (isset($siteConfig->site_url)) $this->putEnv('SITE_URL', $siteConfig->site_url);
+            if (isset($siteConfig->ssl_url)) $this->putEnv('SSL_URL', $siteConfig->ssl_url);
+            if (isset($siteConfig->admin_ssl)) $this->putEnv('ADMIN_SSL', ($siteConfig->admin_ssl)? 'true' : 'false');
         }
 
         $siteConfigArray = $siteConfig->toArray();
@@ -174,13 +174,13 @@ class SiteConfigsService implements SiteConfigsServiceInterface
     {
         $key = str_replace([';', '"'], '', $key);
         $value = str_replace([';', '"'], '', $value);
-        if(!$this->isWritableEnv()) {
+        if (!$this->isWritableEnv()) {
             return false;
         }
         $file = new File(CONFIG . '.env');
         $contents = $file->read();
         $newLine = "export $key=\"$value\"";
-        if(isset($_ENV[$key])) {
+        if (isset($_ENV[$key])) {
             $contents = preg_replace('/export ' . $key . '=\".*?\"/', $newLine, $contents);
         } else {
             $contents .= "\n" . $newLine;
@@ -198,10 +198,10 @@ class SiteConfigsService implements SiteConfigsServiceInterface
     }
 
     /**
-     * サイト全体の設定値を更新する
+     * サイト基本設定の設定値を更新する
      *
-     * @param  string $name
-     * @param  string $value
+     * @param string $name
+     * @param string $value
      * @return SiteConfig
      * @checked
      * @noTodo
@@ -215,7 +215,7 @@ class SiteConfigsService implements SiteConfigsServiceInterface
     /**
      * サイト全体の設定値をリセットする
      *
-     * @param  string $name
+     * @param string $name
      * @return SiteConfig
      * @checked
      * @noTodo
@@ -225,4 +225,27 @@ class SiteConfigsService implements SiteConfigsServiceInterface
     {
         return $this->setValue($name, '');
     }
+
+    /**
+     * baserCMSのDBのバージョンを取得する
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getVersion():string
+    {
+        return (string) $this->getValue('version');
+    }
+
+    /**
+     * キャッシュ用 Entity を削除
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function clearCache()
+    {
+        $this->entity = null;
+    }
+
 }

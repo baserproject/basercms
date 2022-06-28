@@ -32,7 +32,10 @@ class SitesControllerTest extends \BaserCore\TestSuite\BcTestCase
         'plugin.BaserCore.Users',
         'plugin.BaserCore.UsersUserGroups',
         'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.Sites'
+        'plugin.BaserCore.Sites',
+        'plugin.BaserCore.SiteConfigs',
+        'plugin.BaserCore.Contents',
+        'plugin.BaserCore.ContentFolders'
     ];
 
     /**

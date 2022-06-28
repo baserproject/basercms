@@ -11,7 +11,6 @@
 
 namespace BaserCore\Test\TestCase\Model\Table;
 
-use BaserCore\Model\Table\DblogsTable;
 use BaserCore\TestSuite\BcTestCase;
 
 /**

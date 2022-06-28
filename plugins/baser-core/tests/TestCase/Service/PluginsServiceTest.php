@@ -12,7 +12,12 @@
 namespace BaserCore\Test\TestCase\Service;
 
 use BaserCore\Service\PluginsService;
+use BaserCore\Test\Factory\PluginFactory;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcUtil;
+use Cake\Core\Configure;
+use Cake\Core\Plugin;
+use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
 use Cake\Core\App;
 use Cake\ORM\TableRegistry;
@@ -33,7 +38,7 @@ class PluginsServiceTest extends BcTestCase
     public $fixtures = [
         'plugin.BaserCore.Plugins',
         'plugin.BaserCore.Permissions',
-        'plugin.BaserCore.UserGroups'
+        'plugin.BaserCore.UserGroups',
     ];
 
     /**
@@ -61,6 +66,14 @@ class PluginsServiceTest extends BcTestCase
     {
         unset($this->Plugins);
         parent::tearDown();
+    }
+
+    /**
+     * test __construct
+     */
+    public function test__construct()
+    {
+        $this->assertTrue(isset($this->Plugins->Plugins));
     }
 
     /**
@@ -123,7 +136,7 @@ class PluginsServiceTest extends BcTestCase
         $folder = new Folder($pluginPath);
         $folder->create($pluginPath, 0777);
         try {
-            $this->assertNull($this->Plugins->install('BcTest', ['connection' => 'test']));
+            $this->assertNull($this->Plugins->install('BcTest', 'test'));
         } catch (\Exception $e) {
             $this->assertEquals("プラグインに Plugin クラスが存在しません。src ディレクトリ配下に作成してください。", $e->getMessage());
         }
@@ -206,4 +219,43 @@ class PluginsServiceTest extends BcTestCase
         $this->assertEquals('', $this->Plugins->getInstallStatusMessage('BcTest'));
         $folder->delete($pluginPath);
     }
+
+    /**
+     * test getVersion
+     */
+    public function test_getVersion()
+    {
+        $this->assertEquals('', $this->Plugins->getVersion('Hoge'));
+        PluginFactory::make(['name' => 'Hoge', 'version' => '2.0.0'])->persist();
+        $this->assertEquals('2.0.0', $this->Plugins->getVersion('Hoge'));
+    }
+
+    /**
+     * test update
+     * @throws \Exception
+     */
+    public function test_update()
+    {
+        // プラグイン
+        $this->Plugins->install('BcSpaSample', 'test');
+        $pluginPath = Plugin::path('BcSpaSample');
+        rename($pluginPath . 'VERSION.txt', $pluginPath . 'VERSION.bak.txt');
+        $file = new File($pluginPath . 'VERSION.txt');
+        $file->write('10.0.0');
+        $this->Plugins->update('BcSpaSample', 'test');
+        $this->assertEquals('10.0.0', $this->Plugins->getVersion('BcSpaSample'));
+        rename($pluginPath . 'VERSION.bak.txt', $pluginPath . 'VERSION.txt');
+
+        // コア
+        rename(BASER . 'VERSION.txt', BASER . 'VERSION.bak.txt');
+        $file = new File(BASER . 'VERSION.txt');
+        $file->write('10.0.0');
+        $this->Plugins->update('BaserCore', 'test');
+        $plugins = array_merge(['BaserCore'], Configure::read('BcApp.corePlugins'));
+        foreach($plugins as $plugin) {
+            $this->assertEquals('10.0.0', BcUtil::getVersion($plugin));
+        }
+        rename(BASER . 'VERSION.bak.txt', BASER . 'VERSION.txt');
+    }
+
 }

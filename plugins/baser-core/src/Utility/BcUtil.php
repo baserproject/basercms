@@ -11,8 +11,8 @@
 
 namespace BaserCore\Utility;
 
+use BaserCore\Service\PluginsServiceInterface;
 use Cake\Core\App;
-use BcAuthComponent;
 use Cake\Cache\Cache;
 use Cake\Core\Plugin;
 use Cake\Core\Configure;
@@ -155,15 +155,15 @@ class BcUtil
      */
     public static function getVersion($plugin = '')
     {
-        $plugin = Inflector::dasherize($plugin);
+        if(!$plugin) $plugin = 'BaserCore';
         $corePlugins = Configure::read('BcApp.corePlugins');
-        if (!$plugin || in_array($plugin, $corePlugins)) {
+        if (in_array($plugin, $corePlugins)) {
             $path = BASER . 'VERSION.txt';
         } else {
             $paths = App::path('plugins');
             $exists = false;
             foreach($paths as $path) {
-                $path .= $plugin . DS . 'VERSION.txt';
+                $path .= self::getPluginDir($plugin) . DS . 'VERSION.txt';
                 if (file_exists($path)) {
                     $exists = true;
                     break;
@@ -182,6 +182,25 @@ class BcUtil
             return false;
         }
     }
+
+	/**
+	 * DBのバージョンを取得する
+	 *
+	 * @param string $plugin プラグイン名
+	 * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
+	 */
+	public static function getDbVersion($plugin = '')
+	{
+	    if(!$plugin || $plugin === 'BaserCore') {
+	        $service = BcContainer::get()->get(SiteConfigsServiceInterface::class);
+	    } else {
+	        $service = BcContainer::get()->get(PluginsServiceInterface::class);
+	    }
+	    return $service->getVersion($plugin);
+	}
 
     /**
      * バージョンを特定する一意の数値を取得する
@@ -852,6 +871,7 @@ class BcUtil
      */
     public static function getPluginDir($pluginName)
     {
+        if(!$pluginName) $pluginName = 'BaserCore';
         $pluginNames = [$pluginName, Inflector::dasherize($pluginName)];
         foreach(App::path('plugins') as $path) {
             foreach($pluginNames as $name) {

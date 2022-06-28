@@ -39,7 +39,7 @@ class BcAppShell extends Shell
     public function startup()
     {
         $this->clear();
-        $this->out("<info>Welcome to baserCMS v" . getVersion() . " Console</info>");
+        $this->out("<info>Welcome to baserCMS v" . BcUtil::getVersion() . " Console</info>");
         $this->hr();
         $this->out('App : ' . APP_DIR);
         $this->out('Path: ' . APP);

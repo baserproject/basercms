@@ -11,7 +11,6 @@
 
 namespace BaserCore\Test\TestCase\Controller\Api;
 
-use Cake\Routing\Router;
 use BaserCore\Service\PagesService;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\TestSuite\IntegrationTestTrait;
