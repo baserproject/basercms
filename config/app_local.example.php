@@ -61,7 +61,7 @@ return [
              * You can use a DSN string to set the entire configuration
              */
             'url' => env('DATABASE_URL', null),
-            'log' => filter_var(env('SQL_LOG', true), FILTER_VALIDATE_BOOLEAN),
+            'log' => filter_var(env('SQL_LOG', false), FILTER_VALIDATE_BOOLEAN),
         ],
 
         /*
