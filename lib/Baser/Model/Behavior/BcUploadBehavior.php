@@ -108,7 +108,7 @@ class BcUploadBehavior extends ModelBehavior
 		if($this->validatingLock[$Model->alias]) return true;
         $Model->data[$Model->alias] = $this->BcFileUploader[$Model->alias]->setupRequestData(isset($Model->data[$Model->alias])? $Model->data[$Model->alias] : $Model->data);
         $Model->data[$Model->alias] = $this->BcFileUploader[$Model->alias]->setupTmpData(isset($Model->data[$Model->alias])? $Model->data[$Model->alias] : $Model->data);
-        $this->oldEntity = (!empty($Model->data[$Model->alias]['id']))? $this->getOldEntity($Model, $Model->data[$Model->alias]['id']) : [];
+        $this->oldEntity[$Model->alias] = (!empty($Model->data[$Model->alias]['id']))? $this->getOldEntity($Model, $Model->data[$Model->alias]['id']) : [];
         $this->validatingLock[$Model->alias] = true;
 
 		// @deprecated 後方互換 since v4.5.6, v5.0.0 で削除予定
@@ -197,7 +197,7 @@ class BcUploadBehavior extends ModelBehavior
 
 		$data = isset($Model->data[$Model->alias])? $Model->data[$Model->alias] : $Model->data;
         if ($Model->exists()) {
-            $this->BcFileUploader[$Model->alias]->deleteExistingFiles($this->oldEntity);
+            $this->BcFileUploader[$Model->alias]->deleteExistingFiles($this->oldEntity[$Model->alias]);
         }
         $entity = $this->BcFileUploader[$Model->alias]->saveFiles($data);
 
@@ -208,7 +208,7 @@ class BcUploadBehavior extends ModelBehavior
 		// <<<
 
         if ($Model->exists()) {
-            $entity = $this->BcFileUploader[$Model->alias]->deleteFiles($this->oldEntity, $entity);
+            $entity = $this->BcFileUploader[$Model->alias]->deleteFiles($this->oldEntity[$Model->alias], $entity);
         }
         if ($this->BcFileUploader[$Model->alias]->isUploaded()) {
             $entity = $this->BcFileUploader[$Model->alias]->renameToBasenameFields($entity);
