@@ -79,7 +79,7 @@ $this->BcBaser->js('admin/permissions/form', false);
     </tr>
 
     <tr>
-      <th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('method', __d('baser', 'メソッド')) ?></th>
+      <th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('method', __d('baser', '権限')) ?></th>
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('method', ['type' => 'select', 'options' => $permissionMethodList]) ?>
         <?php echo $this->BcForm->error('method') ?>
