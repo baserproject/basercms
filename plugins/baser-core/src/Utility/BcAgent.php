@@ -10,6 +10,8 @@
  */
 
 namespace BaserCore\Utility;
+use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
 
 /**
  * Class BcAgent
@@ -44,6 +46,10 @@ class BcAgent extends BcAbstractDetector
      *
      * @param array $config 設定の配列
      * @return void
+     *
+     * @checked
+     * @unitTest
+
      */
     protected function _setConfig(array $config)
     {
@@ -53,6 +59,9 @@ class BcAgent extends BcAbstractDetector
 
     /**
      * デフォルトの設定値を取得
+     * @checked
+     * @unitTest
+
      *
      * @return array
      */
@@ -67,6 +76,9 @@ class BcAgent extends BcAbstractDetector
     /**
      * ユーザーエージェントの判定用正規表現を取得
      *
+     * @checked
+     * @unitTest
+     *
      * @return string
      */
     public function getDetectorRegex()
@@ -77,6 +89,9 @@ class BcAgent extends BcAbstractDetector
 
     /**
      * ユーザーエージェントがキーワードを含むかどうかを判定
+     *
+     * @checked
+     * @unitTest
      *
      * @return bool
      */

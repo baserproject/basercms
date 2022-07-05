@@ -1,17 +1,25 @@
 <?php
-// TODO : コード確認要
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.Test.Case.Lib
- * @since           baserCMS v 4.0.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) NPO baser foundation
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       https://basercms.net/license/index.html MIT License
  */
-App::uses('BcAgent', 'Lib');
+
+namespace BaserCore\Test\TestCase\Utility;
+
+use Cake\Core\App;
+use Cake\Cache\Cache;
+use Cake\Core\Plugin;
+use Cake\Core\Configure;
+use Cake\Filesystem\File;
+use Cake\Filesystem\Folder;
+use BaserCore\Utility\BcUtil;
+use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcAgent;
 
 /**
  * Class BcAgentTest
@@ -21,15 +29,6 @@ App::uses('BcAgent', 'Lib');
 class BcAgentTest extends BcTestCase
 {
     /**
-     * Fixtures
-     * @var array
-     */
-    public $fixtures = [
-        'baser.Default.Page',
-        'baser.Default.Site',
-    ];
-
-    /**
      * @var BcAgent
      */
     public $agent;
@@ -37,12 +36,13 @@ class BcAgentTest extends BcTestCase
     /**
      * set up
      *
-     * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
-        $this->agent = new BcAgent('smartphone', [
+
+        // config
+        $this->config =  [
             'alias' => 's',
             'prefix' => 'smartphone',
             'autoRedirect' => true,
@@ -62,20 +62,47 @@ class BcAgentTest extends BcTestCase
                 'incognito',        // Other iPhone browser
                 'webmate'            // Other iPhone browser
             ]
-        ]);
-
+        ];
+        $this->agent = new BcAgent('smartphone', $this->config);
         Configure::write("BcApp.smartphone", true);
     }
 
+    /**
+     * test _setConfig
+     */
+    public function test_setConfig(): void
+    {
+        $agent = new BcAgent('smartphone', $this->config);
+        $this->assertEquals($this->config['agents'][0], $agent->decisionKeys[0]);
+    }
 
     /**
-     * 名前をキーとしてインスタンスを探す
+     * test _getDefaultConfig
      *
+     */
+    public function test_getDefaultConfig(): void
+    {
+        $agent = new BcAgent('smartphone', []);
+        $this->assertFalse($agent->sessionId);
+    }
+
+    /**
+     * test getDetectorRegex
+     */
+    public function testGetDetectorRegex(): void
+    {
+        $expectRegex = '/' . implode('|', $this->config['agents']) . '/i';
+        $this->assertEquals($expectRegex, $this->agent->getDetectorRegex());
+        $this->assertNotEquals('', $this->agent->getDetectorRegex());
+    }
+
+    /**
+     * test BcAbstractDetector find
      * @param string $name 名前
-     * @return BcAgent|null
+     *
      * @dataProvider findDataProvider
      */
-    public function testFind($name)
+    public function testFind($name): void
     {
         $result = $this->agent->find($name);
         if (!is_null($result)) {
@@ -85,7 +112,7 @@ class BcAgentTest extends BcTestCase
         }
     }
 
-    public function findDataProvider()
+    public function findDataProvider(): array
     {
         return [
             ['mobile'],
@@ -95,11 +122,9 @@ class BcAgentTest extends BcTestCase
     }
 
     /**
-     * 設定ファイルに存在する全てのインスタンスを返す
-     *
-     * @return BcAgent[]
+     * test BcAbstractDetector findAll
      */
-    public function testFindAll()
+    public function testFindAll(): void
     {
         $result = $this->agent->findAll();
 
@@ -130,14 +155,13 @@ class BcAgentTest extends BcTestCase
     }
 
     /**
-     * 現在の環境のHTTP_USER_AGENTの値に合致するインスタンスを返す
-     *
+     * test BcAbstractDetector findCurrent
      * @param string $agent ユーザーエージェント名
      * @param string $expect 期待値
-     * @return void
+     *
      * @dataProvider findCurrentDataProvider
      */
-    public function testFindCurrent($agent, $expect)
+    public function testFindCurrent($agent, $expect): void
     {
         $_SERVER["HTTP_USER_AGENT"] = $agent;
         $result = $this->agent->findCurrent();
@@ -149,7 +173,7 @@ class BcAgentTest extends BcTestCase
         }
     }
 
-    public function findCurrentDataProvider()
+    public function findCurrentDataProvider(): array
     {
         return [
             ['Googlebot-Mobile', 'mobile'],
@@ -160,28 +184,19 @@ class BcAgentTest extends BcTestCase
     }
 
     /**
-     * ユーザーエージェントの判定用正規表現を取得
-     */
-    public function testGetDetectorRegex()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
-    /**
-     * URLがエージェント用かどうかを判定
-     *
+     * test isMatchDecisionKey
      * @param bool $expect 期待値
      * @param string $userAgent ユーザーエージェントの文字列
-     * @return void
+     *
      * @dataProvider isMatchDecisionKeyDataProvider
      */
-    public function testIsMatchDecisionKey($expect, $userAgent)
+    public function testIsMatchDecisionKey($expect, $userAgent): void
     {
         $_SERVER['HTTP_USER_AGENT'] = $userAgent;
         $this->assertEquals($expect, $this->agent->isMatchDecisionKey());
     }
 
-    public function isMatchDecisionKeyDataProvider()
+    public function isMatchDecisionKeyDataProvider(): array
     {
         return [
             [true, 'Mozilla/5.0 (iPhone; CPU iPhone OS 8_0 like Mac OS X) AppleWebKit/600.1.3 (KHTML, like Gecko) Version/8.0 Mobile/12A4345d Safari/600.1.4'],
@@ -191,5 +206,4 @@ class BcAgentTest extends BcTestCase
             [false, 'DoCoMo']
         ];
     }
-
 }
