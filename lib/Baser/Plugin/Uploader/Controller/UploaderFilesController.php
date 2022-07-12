@@ -127,7 +127,7 @@ class UploaderFilesController extends AppController
 		if ($this->RequestHandler->isAjax()) {
 			$settings = $this->UploaderFile->Behaviors->BcUpload->BcFileUploader['UploaderFile']->settings;
 			$this->set('listId', $id);
-			$this->set('imageSettings', $settings['UploaderFile']['fields']['name']['imagecopy']);
+			$this->set('imageSettings', $settings['fields']['name']['imagecopy']);
 		} else {
 			$this->search = 'uploader_files_index';
 			$this->pageTitle = __d('baser', 'アップロードファイル一覧');
