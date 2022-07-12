@@ -697,7 +697,7 @@ class BlogPost extends BlogAppModel
 				]);
 				$result = $this->renameToBasenameFields(true);
 				$this->set($result);    // 内部でリネームされたデータが再セットされる
-				$result = $this->save();
+				$result = $this->save(null, ['validate' => false, 'callbacks' => false]);
 			}
 			// EVENT BlogPost.afterCopy
 			$this->dispatchEvent('afterCopy', [
