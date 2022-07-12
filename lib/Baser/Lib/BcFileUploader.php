@@ -847,13 +847,14 @@ class BcFileUploader
         $ext = $file['ext'];
         $pathInfo = pathinfo($file['name']);
         $basename = $pathInfo['filename'];
+        $conditions[] = [$this->table->alias . '.' . $setting['name'] . ' LIKE' => $basename . '%' . $ext];
+        if(!empty($entity['id'])) {
+			$conditions[] = [$this->table->alias . '.id <>' => $entity['id']];
+        }
         // 先頭が同じ名前のリストを取得し、後方プレフィックス付きのフィールド名を取得する
         $records = $this->table->find('all', [
         	'fields' => $this->table->alias . '.' . $setting['name'],
-        	'conditions' => [
-        		$this->table->alias . '.id <>' => $entity['id'],
-        		$this->table->alias . '.' . $setting['name'] . ' LIKE' => $basename . '%' . $ext
-        	],
+        	'conditions' => $conditions,
         	'recursive' => -1
         ]);
         $numbers = [];

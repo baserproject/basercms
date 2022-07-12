@@ -122,7 +122,7 @@ class BcUploadBehavior extends ModelBehavior
 				$Model->data[$Model->alias][$key] = $file;
 				// 公開承認のおける草稿の新規投稿対応
 				$setting = $this->settings[$Model->alias]['fields'][$key];
-				$fileName = $this->BcFileUploader[$Model->alias]->saveFile($setting, $file);
+				$Model->data[$Model->alias][$key] = $fileName = $this->BcFileUploader[$Model->alias]->saveFile($setting, $file);
 				if (($setting['type'] == 'all' || $setting['type'] == 'image') && !empty($setting['imagecopy']) && in_array($file['ext'], $this->BcFileUploader[$Model->alias]->imgExts)) {
 					$this->BcFileUploader[$Model->alias]->copyImages($setting, $file);
 					if (!empty($setting['imageresize'])) {
@@ -228,11 +228,13 @@ class BcUploadBehavior extends ModelBehavior
 		// 公開承認のおける草稿の新規投稿対応
 		// afterValidate で無理やり生成したファイルを削除する
 		// >>>
-        foreach($files as $key => $file) {
-        	if(!empty($file['name'])) {
-				$setting = $this->settings[$Model->alias]['fields'][$key];
-				$this->BcFileUploader[$Model->alias]->deleteFile($setting, $file['name']);
-        	}
+		if(!empty($files)) {
+			foreach($files as $key => $file) {
+				if(!empty($file['name'])) {
+					$setting = $this->settings[$Model->alias]['fields'][$key];
+					$this->BcFileUploader[$Model->alias]->deleteFile($setting, $file['name']);
+				}
+			}
 		}
 		// <<<
         return true;
@@ -310,6 +312,32 @@ class BcUploadBehavior extends ModelBehavior
     public function getSaveDir(Model $Model, $isTheme = false, $limited = false)
     {
         return $this->BcFileUploader[$Model->alias]->getSaveDir($isTheme, $limited);
+    }
+
+	/**
+	 * saveFiles
+	 * @param Model $Model
+	 * @param $entity
+	 * @return mixed
+	 * @deprecated 後方互換 since v4.5.6, v5.0.0 で削除予定
+	 */
+    public function saveFiles(Model $Model, $entity)
+	{
+		$entity[$Model->alias] = $this->BcFileUploader[$Model->alias]->saveFiles($entity[$Model->alias]);
+		return $entity;
+	}
+
+	/**
+	 * saveFiles
+	 * @param Model $Model
+	 * @param $entity
+	 * @return mixed
+	 * @deprecated 後方互換 since v4.5.6, v5.0.0 で削除予定
+	 */
+    public function deleteFiles(Model $Model, $newEntity)
+    {
+		$entity[$Model->alias] = $this->BcFileUploader[$Model->alias]->deleteFiles([], $newEntity);
+		return $entity;
     }
 
 	/**
