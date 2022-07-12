@@ -502,9 +502,9 @@ class BcUploadBehavior extends ModelBehavior
 	 * renameToBasenameFields
 	 * @param Model $Model
 	 */
-	public function renameToBasenameFields(Model $model)
+	public function renameToBasenameFields(Model $model, $copy = false)
 	{
-		$model->data[$model->alias] = $this->BcFileUploader[$model->alias]->renameToBasenameFields($model->data[$model->alias]);
+		$model->data[$model->alias] = $this->BcFileUploader[$model->alias]->renameToBasenameFields($model->data[$model->alias], $copy);
 		return $model->data;
 	}
 
