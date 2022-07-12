@@ -31,7 +31,10 @@
         "lib/Cake/Console/cake"
     ],
     "config": {
-        "vendor-dir": "vendors/"
+        "vendor-dir": "vendors/",
+        "allow-plugins": {
+            "composer/installers": true
+        }
     },
     "scripts": {
         "check": [
