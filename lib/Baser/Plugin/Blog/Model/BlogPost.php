@@ -692,6 +692,9 @@ class BlogPost extends BlogAppModel
 			if ($eyeCatch) {
 				$result['BlogPost']['eye_catch'] = $eyeCatch;
 				$this->set($result);
+				$this->Behaviors->BcUpload->BcFileUploader['BlogPost']->setUploadingFiles([
+					'eye_catch' => ['name' => $eyeCatch]
+				]);
 				$result = $this->renameToBasenameFields(true);
 				$this->set($result);    // 内部でリネームされたデータが再セットされる
 				$result = $this->save();
