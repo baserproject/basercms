@@ -841,7 +841,7 @@ class BcFileUploader
     	if(!empty($this->settings['getUniqueFileName']) && method_exists($this->table, $this->settings['getUniqueFileName'])) {
     		return $this->table->{$this->settings['getUniqueFileName']}($setting, $file, $entity);
     	}
-		if(!isset($file['name'])) {
+		if(!isset($file['name']) || !isset($entity['id'])) {
 			return '';
 		}
         $ext = $file['ext'];
