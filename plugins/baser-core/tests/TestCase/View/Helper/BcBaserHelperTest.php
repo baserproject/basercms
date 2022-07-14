@@ -1003,7 +1003,6 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testContentsTitle()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->expectOutputString('会社データ');
         $this->BcBaser->setTitle('会社データ');
         $this->BcBaser->contentsTitle();
