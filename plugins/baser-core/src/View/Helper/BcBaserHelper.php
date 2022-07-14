@@ -845,6 +845,9 @@ class BcBaserHelper extends Helper
      * @param string $key 変数名
      * @param mixed $value 値
      * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function set($key, $value)
     {
