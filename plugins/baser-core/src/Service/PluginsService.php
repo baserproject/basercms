@@ -140,7 +140,7 @@ class PluginsService implements PluginsServiceInterface
 
         if (function_exists('ini_set')) {
             ini_set('max_execution_time', 0);
-            ini_set('memory_limit', '128M');
+            ini_set('memory_limit', '512M');
         }
         if(file_exists(LOGS . 'update.log')) {
             unlink(LOGS . 'update.log');
