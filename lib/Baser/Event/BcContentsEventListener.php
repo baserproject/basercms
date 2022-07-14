@@ -59,14 +59,14 @@ class BcContentsEventListener extends CakeObject implements CakeEventListener
 	public function formAfterCreate(CakeEvent $event)
 	{
 		if (!BcUtil::isAdminSystem()) {
-			return '';
+			return;
 		}
 		$View = $event->subject();
 		if ($event->data['id'] === 'FavoriteAdminEditForm' || $event->data['id'] === 'PermissionAdminEditForm') {
-			return '';
+			return;
 		}
 		if (!preg_match('/(AdminAddForm|AdminEditForm|AdminEditAliasForm)$/', $event->data['id'])) {
-			return '';
+			return;
 		}
 		return $event->data['out'] . "\n" . $View->element('admin/content_fields');
 	}
