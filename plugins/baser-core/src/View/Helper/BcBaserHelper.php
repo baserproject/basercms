@@ -2716,18 +2716,9 @@ END_FLASH;
     }
 
     /**
-     * URLのパラメータ情報を返す
-     * 主なreturnデータは
-     * https://basercms.net/news/index/example/test?name=value の場合
-     * 'plugin' => blog (利用しているプラグイン)
-     * 'pass' => [0] => 'example'
-     *           [1] => 'test'
-     * 'isAjax' => (boolean)false
-     * 'query' => 'name' => 'value'
-     * 'url' => 'news/index/fuga/hoge'
-     * 'here' => '/news/index/fuga/hoge'
+     * パラメータ情報を取得する
      *
-     * @return array URLのパラメータ情報の配列
+     * @return array パラメータ情報の配列
      * @checked
      * @noTodo
      * @unitTest
@@ -2735,17 +2726,28 @@ END_FLASH;
     public function getParams()
     {
         $attributes = $this->_View->getRequest()->getAttributes();
-        $params = $attributes['params'];
-        $params['query'] = $this->_View->getRequest()->getQueryParams();
-        $params['url'] = preg_replace('/^\//', '', $this->_View->getRequest()->getPath());
-        $params['here'] = $this->_View->getRequest()->getPath();
-        unset($params['named']);
-        unset($params['controller']);
-        unset($params['action']);
-        unset($params['models']);
-        unset($params['_Token']);
-        unset($params['paging']);
-        return $params;
+        return $attributes['params'];
+    }
+
+    /**
+     * URL情報を取得する
+     *
+     * @return array URL情報の配列
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getUrlParams()
+    {
+        $attributes = $this->_View->getRequest()->getAttributes();
+        return [
+            'url' => $this->getUrl(null, true),
+            'here' => $attributes['here'],
+            'path' => $this->_View->getRequest()->getPath(),
+            'webroot' => $attributes['webroot'],
+            'base' => $attributes['base'],
+            'query' => $this->_View->getRequest()->getQueryParams(),
+        ];
     }
 
     /**
