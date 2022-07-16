@@ -1448,6 +1448,7 @@ class BcBaserHelper extends Helper
      * @checked
      * @unitTest
      * @noTodo
+     * @doc
      * @see https://book.cakephp.org/4/ja/views/helpers/html.html#css
      * ※ その他のパラメータについては、HtmlHelper::css() を参照。
      *
