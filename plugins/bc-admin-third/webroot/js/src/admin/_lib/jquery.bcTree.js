@@ -980,14 +980,16 @@
                     },
                     success: function (result) {
                         $.bcUtil.showNoticeMessage(result.message);
-                        // $.bcTree.jsTree.delete_node(node);
-                        // if (!$.bcTree.settings[data.contentType]['multiple'] && !data.alias) {
-                        // 	$.bcTree.settings[data.contentType]['exists'] = false;
-                        // }
-                        $.bcTree.refreshTree();
                         $.bcToken.key = null;
-                        // TODO 削除対象に関連づくエイリアスも削除が必要
                         $.bcTree.jsTree.delete_node(node);
+                        // エイリアス削除
+                        var nodes = $.bcTree.jsTree.get_json(null, { flat: true });
+                        for (var i = 0; i < nodes.length; i++) {
+                          if (data.contentId == nodes[i].state.contentAliasId) {
+                            $.bcTree.jsTree.delete_node(nodes[i]);
+                          }
+                        }
+                        $.bcTree.refreshTree();
                         $.bcUtil.hideLoader();
                     },
                     error: function (XMLHttpRequest, textStatus, errorThrown) {
