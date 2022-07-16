@@ -127,7 +127,6 @@
             $.bcTree.treeDom = $('#ContentsTreeList');
             $.bcTree.createTree();
             $.bcTree.jsTree = $.bcTree.treeDom.jstree(true);
-            $.bcTree.jsTree.settings.core.force_text = true;
             $.bcTree.treeDom.bind("move_node.jstree", function (e, data) {
                 $.bcTree.beforeParentId = data.old_parent;
                 $.bcTree.beforePosition = data.old_position;
@@ -231,7 +230,7 @@
                         "variant": "large"
                     },
                     "multiple": false,
-                    "force_text": false,
+                    "force_text": true,
                     "check_callback": function (operation, node, node_parent, node_position, more) {
                         if (operation == 'move_node') {
                             if (!$.bcTree.config.isUseMoveContents) {
