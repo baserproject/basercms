@@ -13,7 +13,7 @@
 /**
  * [管理画面] ブログ記事 一覧
  */
-$this->BcBaser->css('Blog.admin/style', ['inline' => false]);
+$this->BcBaser->css('Blog.admin/style', false);
 $this->BcBaser->js([
   'admin/libs/jquery.baser_ajax_data_list',
   'admin/libs/jquery.baser_ajax_batch',

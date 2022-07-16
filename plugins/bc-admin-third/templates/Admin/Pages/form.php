@@ -14,7 +14,7 @@ use BaserCore\View\BcAdminAppView;
  * [ADMIN] ページ登録・編集フォーム
  * @var BcAdminAppView $this
  */
-$this->BcBaser->css('admin/ckeditor/editor', ['inline' => true]);
+$this->BcBaser->css('admin/ckeditor/editor', true);
 $this->BcAdmin->setTitle(__d('baser', '固定ページ情報編集'));
 $this->BcAdmin->setHelp('pages_form');
 ?>

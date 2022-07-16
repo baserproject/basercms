@@ -185,7 +185,7 @@ class BcBaserHelper extends Helper
     /**
      * Javascript タグを出力する
      *
-     * @param string|array $url Javascriptのパス（js フォルダからの相対パス）拡張子は省略可
+     * @param string|array $path Javascriptのパス（js フォルダからの相対パス）拡張子は省略可
      * @param bool $inline コンテンツ内に Javascript を出力するかどうか（初期値 : true）
      * @return void
      * @checked
@@ -193,13 +193,12 @@ class BcBaserHelper extends Helper
      * @unitTest
      * @doc
      */
-    public function js($url, $inline = true, $options = [])
+    public function js($path, $inline = true, $options = [])
     {
-        $options = array_merge(['block' => !$inline], $options);
-        $result = $this->BcHtml->script($url, $options);
-        if ($inline) {
-            echo $result;
+        if (!isset($options['block'])) {
+            $options['block'] = $inline ? null : true;
         }
+        echo $this->BcHtml->script($path, $options);
     }
 
     /**
@@ -1278,7 +1277,7 @@ class BcBaserHelper extends Helper
      * コンテンツ内で、レイアウトテンプレートへの出力を設定する場合には、inline オプションを false にする
      *
      * 《利用例》
-     * $this->BcBaser->css('admin/layout', array('inline' => false));
+     * $this->BcBaser->css('admin/layout', false);
      * $this->BcBaser->js('admin/startup', false);
      *
      * @return void
@@ -1443,6 +1442,7 @@ class BcBaserHelper extends Helper
      * $this->BcBaser->css('admin/import')
      *
      * @param mixed $path CSSファイルのパス（css フォルダからの相対パス）拡張子は省略可
+     * @param bool $inline コンテンツ内に Javascript を出力するかどうか（初期値 : true）
      * @param mixed $options オプション
      * ※💣inline=false→block=trueに変更になったため注意 @return string|void
      * @checked
@@ -1455,14 +1455,12 @@ class BcBaserHelper extends Helper
      * - 'inline'=trueを指定する (代替:$options['block']にnullが入る)
      * - 'inline'=falseを指定する (代替:$options['block']にtrueが入る)
      */
-    public function css($path, $options = [])
+    public function css($path, $inline = true, $options = [])
     {
-        if (isset($options['inline'])) {
-            $options['block'] = $options['inline']? null : true;
+        if (!isset($options['block'])) {
+            $options['block'] = $inline ? null : true;
         }
-        $result = $this->BcHtml->css($path, $options);
-
-        echo $result;
+        echo $this->BcHtml->css($path, $options);
     }
 
     /**

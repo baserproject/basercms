@@ -16,7 +16,7 @@
 $url = $this->request->params['Content']['url'] . 'archives/' . $this->BcForm->getSourceValue('BlogPost.no');
 $fullUrl = $this->BcBaser->getContentsUrl($url, true, $this->request->params['Site']['use_subdomain']);
 $statuses = [0 => __d('baser', '非公開'), 1 => __d('baser', '公開')];
-$this->BcBaser->css('admin/ckeditor/editor', ['inline' => true]);
+$this->BcBaser->css('admin/ckeditor/editor', true);
 $this->BcBaser->i18nScript([
   'alertMessage1' => __d('baser', 'ブログタグの追加に失敗しました。既に登録されていないか確認してください。'),
   'alertMessage2' => __d('baser', 'ブログタグの追加に失敗しました。'),

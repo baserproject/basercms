@@ -79,7 +79,7 @@ $this->BcBaser->js('admin/contents/index.bundle', false, [
   'data-baserCorePrefix' => Inflector::underscore(BcUtil::getBaserCorePrefix()),
   'data-editInIndexDisabled' => $editInIndexDisabled
 ]);
-$this->BcBaser->css('../js/vendor/jquery.jstree-3.3.8/themes/proton/style.min', ['block' => true]);
+$this->BcBaser->css('../js/vendor/jquery.jstree-3.3.8/themes/proton/style.min', false);
 echo $this->BcAdminForm->control('BcManageContent', ['type' => 'hidden', 'value' => $this->BcContents->getJsonItems()]);
 ?>
 

@@ -2,7 +2,7 @@
 /**
  * ブログ詳細ページ
  */
-$this->BcBaser->css('colorbox/colorbox', array('inline' => false));
+$this->BcBaser->css('colorbox/colorbox', false);
 $this->BcBaser->js('jquery.colorbox-min-1.4.5', false);
 $this->BcBaser->setDescription($this->Blog->getTitle() . '｜' . $this->Blog->getPostContent($post, false, false, 50));
 ?>
@@ -28,7 +28,7 @@ $(function(){
 
 <div class="post">
 <?php $this->Blog->postContent($post) ?>
-	<div class="meta"> 
+	<div class="meta">
 		<span class="date">
 <?php $this->Blog->postDate($post) ?>
 		</span>

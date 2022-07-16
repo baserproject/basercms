@@ -1398,17 +1398,32 @@ class BcBaserHelperTest extends BcTestCase
         $result = ob_get_clean();
         $expected = '<link rel="stylesheet" href="css/admin/import.css"/>';
         $this->assertEquals($expected, $result);
-        // ブロックオン（array）
+        // インライン
         ob_start();
-        $this->BcBaser->css('admin/import2.css', ['block' => null]);
+        $this->BcBaser->css('admin/import2.css', true);
         $result = ob_get_clean();
         $expected = '<link rel="stylesheet" href="css/admin/import2.css"/>';
         $this->assertEquals($expected, $result);
-        // インラインオフ（array）
+        // ブロック
         ob_start();
-        $this->BcBaser->css('admin/import3.css', ['inline' => false]);
+        $this->BcBaser->css('admin/import3.css', false);
         $result = ob_get_clean();
         $this->assertEmpty($result);
+        $this->assertEquals('<link rel="stylesheet" href="css/admin/import3.css"/>',
+            $this->BcAdminAppView->fetch('css'));
+        // ブロック指定
+        ob_start();
+        $this->BcBaser->css('admin/import4.css', false, ['block' => 'testblock']);
+        $result = ob_get_clean();
+        $this->assertEmpty($result);
+        $this->assertEquals('<link rel="stylesheet" href="css/admin/import4.css"/>',
+            $this->BcAdminAppView->fetch('testblock'));
+        ob_start();
+        $this->BcBaser->css('admin/import5.css', true, ['block' => 'testblock2']);
+        $result = ob_get_clean();
+        $this->assertEmpty($result);
+        $this->assertEquals('<link rel="stylesheet" href="css/admin/import5.css"/>',
+            $this->BcAdminAppView->fetch('testblock2'));
     }
 
     /**

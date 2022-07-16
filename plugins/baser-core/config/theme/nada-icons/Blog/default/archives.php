@@ -2,7 +2,7 @@
 /**
  * ブログアーカイブ一覧
  */
-$this->BcBaser->css('colorbox/colorbox', array('inline' => false));
+$this->BcBaser->css('colorbox/colorbox', false);
 $this->BcBaser->js('jquery.colorbox-min-1.4.5', false);
 $this->BcBaser->setDescription($this->Blog->getTitle() . '｜' . $this->BcBaser->getContentsTitle() .  __('のアーカイブ一覧です。'));
 ?>
@@ -27,7 +27,7 @@ $(function(){
 			<?php $this->Blog->postTitle($post) ?>
 			</h4>
 		<?php $this->Blog->postContent($post, true, true) ?>
-			<div class="meta"> 
+			<div class="meta">
 				<span class="date">
 		<?php $this->Blog->postDate($post) ?>
 				</span>
