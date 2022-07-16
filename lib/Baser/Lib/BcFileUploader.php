@@ -648,9 +648,15 @@ class BcFileUploader
      */
     public function renameToBasenameFields($entity, $copy = false)
     {
-        $files = $this->getUploadingFiles();
+		if (!$copy) {
+			$files = $this->getUploadingFiles();
+		}
         foreach($this->settings['fields'] as $setting) {
-            $value = $this->renameToBasenameField($setting, $files[$setting['name']], $entity, $copy);
+			if ($copy) {
+				$value = $this->renameToBasenameField($setting, ['name' => $entity[$setting['name']]], $entity, $copy);
+			} else {
+				$value = $this->renameToBasenameField($setting, $files[$setting['name']], $entity, $copy);
+			}
             if ($value !== false) {
                 $entity[$setting['name']] = $value;
             }
