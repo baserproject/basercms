@@ -404,41 +404,4 @@ class ContentsController extends BcAdminAppController
         }
         return $this->response->withStringBody('true');
     }
-
-    /**
-     * ゴミ箱を空にする
-     * @see bcTreeの処理はApi/trash_emptyに移行
-     * @param ContentsServiceInterface $contentService
-     * @return Response|null
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function trash_empty(ContentsServiceInterface $contentService)
-    {
-        $this->disableAutoRender();
-        if (!$this->request->getData()) {
-            $this->notFound();
-        }
-        $contents = $contentService->getTrashIndex()->order(['plugin', 'type']);
-
-        // EVENT Contents.beforetrash_empty
-        $this->dispatchLayerEvent('beforetrash_empty', [
-            'data' => $contents
-        ]);
-        if ($contents) {
-            $result = true;
-            foreach($contents as $content) {
-                if(!$contentService->hardDeleteWithAssoc($content->id)) {
-                    $result = false;
-                    $this->BcMessage->setError(__d('baser', 'ゴミ箱の削除に失敗しました'));
-                }
-            }
-        }
-        // EVENT Contents.aftertrash_empty
-        $this->dispatchLayerEvent('aftertrash_empty', [
-            'data' => $result
-        ]);
-        return $this->redirect(['action' => "trash_index"]);
-    }
 }

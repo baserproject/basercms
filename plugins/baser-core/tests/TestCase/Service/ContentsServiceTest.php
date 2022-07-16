@@ -323,10 +323,24 @@ class ContentsServiceTest extends BcTestCase
     {
         $content = $this->ContentsService->getTrash(16);
         $this->assertTrue($this->ContentsService->hardDeleteWithAssoc(16));
-        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
-        $this->ContentsService->getTrash(16);
-        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
-        $this->ContentFoldersService->get($content->entity_id);
+        try {
+            $this->ContentsService->getTrash(16);
+            throw new \Exception();
+        } catch (\Exception $e) {
+            $this->assertSame('Cake\Datasource\Exception\RecordNotFoundException', get_class($e));
+        }
+        try {
+            $this->ContentFoldersService->get($content->entity_id);
+            throw new \Exception();
+        } catch (\Exception $e) {
+            $this->assertSame('Cake\Datasource\Exception\RecordNotFoundException', get_class($e));
+        }
+        try {
+            $this->assertTrue($this->ContentsService->hardDeleteWithAssoc(999));
+            throw new \Exception();
+        } catch (\Exception $e) {
+            $this->assertSame('Cake\Datasource\Exception\RecordNotFoundException', get_class($e));
+        }
     }
 
     /**
