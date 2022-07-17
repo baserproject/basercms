@@ -131,7 +131,12 @@ class PluginsService implements PluginsServiceInterface
 
     /**
      * プラグインをアップデートする
+     * @param string $name プラグイン名
+     * @param string $connection コネクション名
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function update($name, $connection = 'default'): ?bool
     {
@@ -177,6 +182,10 @@ class PluginsService implements PluginsServiceInterface
         return $result;
     }
 
+    /**
+     * プラグインを全て無効化する
+     * @return array
+     */
     public function detachAll()
     {
         $plugins = $this->Plugins->find()->where(['status' => true])->all();
@@ -191,6 +200,10 @@ class PluginsService implements PluginsServiceInterface
         return $ids;
     }
 
+    /**
+     * 複数のIDからプラグインを有効化する
+     * @param $ids
+     */
     public function attachAllFromIds($ids)
     {
         if (!$ids) {
