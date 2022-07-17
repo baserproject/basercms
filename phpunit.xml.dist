@@ -8,31 +8,20 @@
         <ini name="memory_limit" value="-1"/>
         <ini name="apc.enable_cli" value="1"/>
     </php>
-
-    <!-- Add any additional test suites you want to run here -->
     <testsuites>
-        <!-- Add plugin test suites here. -->
         <testsuite name="BaserCore">
             <directory>plugins/baser-core/tests/TestCase</directory>
         </testsuite>
-<!--        <testsuite name="BcBlog">-->
-<!--            <directory>./plugins/bc-blog/tests/TestCase/</directory>-->
-<!--        </testsuite>-->
+        <testsuite name="BcBlog">
+            <directory>plugins/bc-blog/tests/TestCase</directory>
+        </testsuite>
     </testsuites>
-
-    <!-- Load extension for fixtures -->
     <extensions>
         <extension class="Cake\TestSuite\Fixture\PHPUnitExtension"/>
     </extensions>
-
     <coverage>
       <include>
-        <directory suffix=".php">src/</directory>
         <directory suffix=".php">plugins/*/src/</directory>
       </include>
-      <exclude>
-        <file>src/Console/Installer.php</file>
-      </exclude>
     </coverage>
-
 </phpunit>
