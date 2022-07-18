@@ -41,14 +41,6 @@ class PluginsController extends BcApiController
     }
 
     /**
-     * Initialize
-     */
-    public function initialize(): void
-    {
-        parent::initialize();
-    }
-
-    /**
      * プラグイン情報一覧取得
      * @param PluginsServiceInterface $Plugins
      * @checked
