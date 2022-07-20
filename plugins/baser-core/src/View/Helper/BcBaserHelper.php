@@ -876,6 +876,7 @@ class BcBaserHelper extends Helper
      * meta タグ用のキーワードを取得する
      *
      * @return string meta タグ用のキーワード
+     * @note(value="サイトキーワードの仕様が大きく変わり対応に時間がかかるためユニットテストをスキップ https://github.com/baserproject/ucmitz/issues/657")
      */
     public function getKeywords()
     {
