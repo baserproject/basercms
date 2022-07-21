@@ -161,6 +161,13 @@ class UsersController extends AppController
 
 		if ($this->request->is('post')) {
 			if($this->_set_auth($user)) {
+
+				// EVENT Users.afterLogin
+				$this->dispatchEvent('afterLogin', [
+					'user' => $this->BcAuth->user(),
+					'loginRedirect' => $this->BcAuth->redirect(),
+				]);
+
 				$this->redirect($this->BcAuth->redirectUrl());
 				return;
 			}
