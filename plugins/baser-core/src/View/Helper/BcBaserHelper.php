@@ -1159,6 +1159,7 @@ class BcBaserHelper extends Helper
      *  `subDir` (boolean) エレメントのパスについてプレフィックスによるサブディレクトリを追加するかどうか
      * ※ その他のパラメータについては、View::element() を参照
      * @return void
+     * @note(value="フロントエンド側が未完成なのでスキップ https://github.com/baserproject/ucmitz/issues/664")
      */
     public function header($data = [], $options = [])
     {
