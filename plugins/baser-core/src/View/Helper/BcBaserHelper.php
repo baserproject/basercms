@@ -938,6 +938,7 @@ class BcBaserHelper extends Helper
      *  `tag` (boolean) false でタグを削除するかどうか (初期値 : true)
      *  `allowableTags` tagが falseの場合、削除しないタグを指定できる。詳しくは、php strip_tags のドキュメントを参考してください。 (初期値 : '')
      * @return string メタタグ用のタイトルを返す
+     * @note(value="BaserTestCase::_getRequestでエラーを吐くためユニットテストをスキップ https://github.com/baserproject/ucmitz/issues/661")
      */
     public function getTitle($separator = '｜', $options = [])
     {
