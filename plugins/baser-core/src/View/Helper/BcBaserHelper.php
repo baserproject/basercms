@@ -1404,6 +1404,7 @@ class BcBaserHelper extends Helper
      *
      * @param array $attrib 属性
      * @return void
+     * @note(value="bcXmlHelperが未実装なのでスキップ https://github.com/baserproject/ucmitz/issues/667")
      */
     public function xmlHeader($attrib = [])
     {
