@@ -1231,6 +1231,7 @@ class BcBaserHelper extends Helper
      *  `subDir` (boolean) エレメントのパスについてプレフィックスによるサブディレクトリを追加するかどうか
      * ※ その他のパラメータについては、View::element() を参照
      * @return void
+     * @note(value="ページネーションの仕様が変わっているのでユニットテストをスキップ https://github.com/baserproject/ucmitz/issues/665")
      */
     public function pagination($name = 'default', $data = [], $options = [])
     {
