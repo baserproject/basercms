@@ -119,10 +119,10 @@ $this->BcBaser->js('admin/users/edit', false);
 		</tr>
 		<tr>
 			<th class="col-head bca-form-table__label">
+				<?php echo $this->BcForm->label('User.password_1', __d('baser', 'パスワード')) ?>
 				<?php if ($this->request->action == 'admin_add'): ?>
 					<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>&nbsp;
 				<?php endif; ?>
-				<?php echo $this->BcForm->label('User.password_1', __d('baser', 'パスワード')) ?>
 			</th>
 			<td class="col-input bca-form-table__input">
 				<?php if ($this->request->action == "admin_edit"): ?><small>
