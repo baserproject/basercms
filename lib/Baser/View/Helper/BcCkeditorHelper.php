@@ -317,8 +317,27 @@ class BcCkeditorHelper extends AppHelper
 		$jscode .= "CKEDITOR.config.extraPlugins = 'draft,showprotected';";
 		$jscode .= "CKEDITOR.config.stylesCombo_stylesSet = '" . $editorStylesSet . "';";
 		$jscode .= "CKEDITOR.config.protectedSource.push( /<\?[\s\S]*?\?>/g );";
-		$jscode .= 'CKEDITOR.dtd.$removeEmpty["i"] = false;'; //　空「i」タグを消さないようにする
-		$jscode .= 'CKEDITOR.dtd.$removeEmpty["span"] = false;'; //　空「span」タグを消さないようにする
+		/* CkEditorの自動整形のコントロール /app/Config/setting.phpで上書き可能 */
+		if (Configure::read('CkeditorConfig.dtd')) {
+			$dtd = Configure::read('CkeditorConfig.dtd');
+		} else {
+			$dtd = [
+				 // aタグ内に入れることを許可するブロック要素のタグ名リスト
+				'a' => ['div', 'h1', 'h2', 'h3', 'h4', 'h5', 'dl', 'p'],
+				// 空を許可する要素名リスト
+				'removeEmpty' => ['i', 'span'],
+			];
+		}
+		if (isset($dtd['a']) && !empty($dtd['a'])) { // aタグ内に入れることを許可するブロック要素を出力
+			foreach ($dtd['a'] as $a) {
+				$jscode .= is_string($a) ? 'CKEDITOR.dtd.a.'. $a.' = 1;' : '';
+			}
+		}
+		if (isset($dtd['removeEmpty']) && !empty($dtd['removeEmpty'])) { // 空を許可する要素を出力
+			foreach ($dtd['removeEmpty'] as $removeEmpty) {
+				$jscode .= is_string($removeEmpty) ? 'CKEDITOR.dtd.$removeEmpty["'.$removeEmpty .'"] = false;' : '';
+			}
+		}
 
 		if ($editorEnterBr) {
 			$jscode .= "CKEDITOR.config.enterMode = CKEDITOR.ENTER_BR;";
