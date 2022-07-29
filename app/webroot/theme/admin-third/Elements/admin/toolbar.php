@@ -127,7 +127,13 @@ if (!empty($currentAuthPrefix['name']) && $currentPrefix !== 'front') {
 					?>
 					<?php // 管理画面にアクセス権限がない場合 ?>
 				<?php else: ?>
-					<?php $this->BcBaser->link(h($authName), Configure::read('BcAuthPrefix.' . $currentPrefix . '.loginRedirect'), ['title' => h($authName)]) ?>
+					<?php
+					$this->BcBaser->link(
+						sprintf('<span class="bca-toolbar__logo-text">%s</span>', h($authName)), 
+						Configure::read('BcAuthPrefix.' . $currentPrefix . '.loginRedirect'), 
+						['class' => 'bca-toolbar__logo-link', 'title' => h($authName)]
+					); 
+					?>
 				<?php endif ?>
 			<?php endif ?>
 		</div>
