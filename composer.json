@@ -70,7 +70,6 @@
         "stan": "phpstan analyse",
         "test": [
             "Composer\\Config::disableProcessTimeout",
-            "XDEBUG_MODE=off",
             "vendor/bin/phpunit --colors=always"
         ]
     },

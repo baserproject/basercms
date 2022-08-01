@@ -47,4 +47,5 @@ jobs:
       - name: Run test suite
         run: |
           cd docker
+          XDEBUG_MODE=off
           docker exec bc5-php composer run-script test
