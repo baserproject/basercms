@@ -178,19 +178,18 @@ class BcValidation extends Validation
      * @param int $size 最大のファイルサイズ
      * @return boolean
      * @link http://php.net/manual/ja/features.file-upload.errors.php
+     * @checked
+     * @noTodo
      */
     public static function fileCheck($value, $size)
     {
         // post_max_size オーバーチェック
         // POSTを前提の検証としているため全ての受信データを検証
         // データの更新時は必ず$_POSTにデータが入っていることを前提とする
-        // TODO isConsole未実装の為コメントアウト
-        /* >>>
-        if (!isConsole() && empty($_POST)) {
+        if (!BcUtil::isConsole() && empty($_POST)) {
             Log::error('アップロードされたファイルは、PHPの設定 post_max_size ディレクティブの値を超えています。');
             return false;
         }
-        <<< */
         $file = $value;
         // input[type=file] 自体が送信されていない場合サイズ検証を終了
         if ($file === null || !is_array($file)) {
@@ -198,7 +197,6 @@ class BcValidation extends Validation
         }
 
         // upload_max_filesizeと$sizeを比較し小さい数値でファイルサイズチェック
-        $AppTable = new AppTable();
         $uploadMaxSize = BcUtil::convertSize(ini_get('upload_max_filesize'));
         $size = min([$size, $uploadMaxSize]);
 
