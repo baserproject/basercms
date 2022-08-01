@@ -171,8 +171,9 @@ class ContentsController extends BcApiController
             'data' => $trash
         ]);
         try {
+            $result = true;
             foreach ($trash as $entity) {
-                $contentService->hardDeleteWithAssoc($entity->id);
+                if(!$contentService->hardDeleteWithAssoc($entity->id)) $result = false;
             }
             $message = __d('baser', 'ゴミ箱を空にしました。');
             // EVENT Contents.aftertrash_empty
