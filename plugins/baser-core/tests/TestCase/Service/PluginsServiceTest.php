@@ -258,4 +258,13 @@ class PluginsServiceTest extends BcTestCase
         rename(BASER . 'VERSION.bak.txt', BASER . 'VERSION.txt');
     }
 
+    /**
+     * test detachAll
+     */
+    public function test_detachAll()
+    {
+        $result = $this->Plugins->detachAll();
+        $this->assertEquals(3, count($result));
+    }
+
 }
