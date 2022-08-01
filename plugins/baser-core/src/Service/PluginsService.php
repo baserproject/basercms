@@ -185,6 +185,9 @@ class PluginsService implements PluginsServiceInterface
     /**
      * プラグインを全て無効化する
      * @return array 無効化したIDのリスト
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function detachAll()
     {
