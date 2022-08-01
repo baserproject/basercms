@@ -21,11 +21,6 @@ jobs:
 
     steps:
 
-      - name: Setup PHP 7.4
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: 7.4
-
       - name: Checkout
         uses: actions/checkout@v2
 
@@ -34,6 +29,7 @@ jobs:
           cd docker
           cp docker-compose.yml.default docker-compose.yml
           sed -i -e "s/basercms:php8.1/basercms:php${{ matrix.php-version }}/g" docker-compose.yml;
+          sed -i -e "s/XDEBUG_MODE: \"debug\"//g" docker-compose.yml;
           docker-compose up -d
 
       - name: Sleep for 20 seconds
@@ -47,5 +43,4 @@ jobs:
       - name: Run test suite
         run: |
           cd docker
-          XDEBUG_MODE=off
           docker exec bc5-php composer run-script test
