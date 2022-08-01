@@ -416,6 +416,9 @@ class BcValidation extends Validation
      *
      * @param string $value 確認する値
      * @return boolean
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public static function checkDate($value)
     {
