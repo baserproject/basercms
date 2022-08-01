@@ -69,7 +69,7 @@ if (empty($_SESSION)) {
 			'session.save_path' => TMP . 'sessions',
 			'session.use_cookies' => $useCookies,
 			'session.use_trans_sid' => $useTransSid,
-			'session.gc_divisor' => 1,
+			'session.gc_divisor' => 100,
 			'session.gc_probability' => 1,
 			'session.cookie_secure' => $cookieSecure
 		]
