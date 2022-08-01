@@ -87,7 +87,8 @@
 			'admin/startup',
 			'admin/favorite',
 			'admin/permission',
-			'admin/vendors/yuga'])
+			'admin/vendors/yuga',
+			'admin/vendors/jquery.timepicker'])
 		?>
 	<script>
 		$.bcUtil.init({
