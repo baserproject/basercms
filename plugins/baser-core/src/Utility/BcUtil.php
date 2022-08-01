@@ -1090,7 +1090,6 @@ class BcUtil
             "image/x-png" => "png",
             "image/jpg" => "jpg",
             "image/png" => "png",
-            "application/x-shockwave-flash" => "swf",
             /* "application/pdf" => "pdf", */ // TODO windows で ai ファイルをアップロードをした場合、headerがpdfとして出力されるのでコメントアウト
             "application/pgp-signature" => "sig",
             "application/futuresplash" => "spl",

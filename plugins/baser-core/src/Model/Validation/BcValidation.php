@@ -260,24 +260,23 @@ class BcValidation extends Validation
      * @param array $value チェック対象データ
      * @param mixed $exts 許可する拡張子
      * @return boolean
+     * @checked
+     * @noTodo
      */
     public static function fileExt($value, $exts)
     {
-        // TODO decodeContent未実装の為コメントアウト
-        /* >>>
         $file = $value;
         if (!empty($file['name'])) {
             if (!is_array($exts)) {
                 $exts = explode(',', $exts);
             }
-            $ext = decodeContent($file['type'], $file['name']);
+            $ext = BcUtil::decodeContent($file['type'], $file['name']);
             if (in_array($ext, $exts)) {
                 return true;
             } else {
                 return false;
             }
         }
-        <<< */
         return true;
     }
 
