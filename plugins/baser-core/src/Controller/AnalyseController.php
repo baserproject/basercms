@@ -138,6 +138,7 @@ class AnalyseController extends AppController
                 }
                 $meta['class'] = $className;
                 $class = new ReflectionClass($className);
+                if($class->isInterface()) continue;
                 $traitMethodsArray = $this->getTraitMethod($class);
             } catch (Exception $e) {
                 $metas[] = $meta;
