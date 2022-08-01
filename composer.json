@@ -69,8 +69,8 @@
         "cs-fix": "phpcbf --colors -p src/ tests/",
         "stan": "phpstan analyse",
         "test": [
-            "XDEBUG_MODE=off",
             "Composer\\Config::disableProcessTimeout",
+            "XDEBUG_MODE=off",
             "vendor/bin/phpunit --colors=always"
         ]
     },
