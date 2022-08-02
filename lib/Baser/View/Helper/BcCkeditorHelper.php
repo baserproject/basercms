@@ -320,13 +320,6 @@ class BcCkeditorHelper extends AppHelper
 		/* CkEditorの自動整形のコントロール /app/Config/setting.phpで上書き可能 */
 		if (Configure::read('CkeditorConfig.dtd')) {
 			$dtd = Configure::read('CkeditorConfig.dtd');
-		} else {
-			$dtd = [
-				 // aタグ内に入れることを許可するブロック要素のタグ名リスト
-				'a' => ['div', 'h1', 'h2', 'h3', 'h4', 'h5', 'dl', 'p'],
-				// 空を許可する要素名リスト
-				'removeEmpty' => ['i', 'span'],
-			];
 		}
 		if (isset($dtd['a']) && !empty($dtd['a'])) { // aタグ内に入れることを許可するブロック要素を出力
 			foreach ($dtd['a'] as $a) {
