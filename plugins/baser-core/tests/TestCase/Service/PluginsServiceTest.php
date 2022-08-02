@@ -267,4 +267,34 @@ class PluginsServiceTest extends BcTestCase
         $this->assertEquals(3, count($result));
     }
 
+    /**
+     * test attachAllFromIds
+     * @return void
+     */
+    public function test_attachAllFromIds(){
+        $plugins = $this->Plugins->getIndex(false);
+        $this->assertTrue($plugins[1]->status);
+
+        $ids = [1,2];
+
+        $this->Plugins->detachAll();
+
+        $this->Plugins->attachAllFromIds($ids);
+        $plugin = $this->Plugins->get(1);
+        $this->assertTrue($plugin->status);
+
+        $plugin = $this->Plugins->get(2);
+        $this->assertTrue($plugin->status);
+    }
+
+    /**
+     * test attachAllFromIds with 配列：null
+     * @return void
+     */
+    public function test_attachAllFromIds_false(){
+        $ids = null;
+        $rs = $this->Plugins->attachAllFromIds($ids);
+
+        $this->assertNull($rs);
+    }
 }
