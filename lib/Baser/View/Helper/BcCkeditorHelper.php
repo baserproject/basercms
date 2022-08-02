@@ -318,9 +318,7 @@ class BcCkeditorHelper extends AppHelper
 		$jscode .= "CKEDITOR.config.stylesCombo_stylesSet = '" . $editorStylesSet . "';";
 		$jscode .= "CKEDITOR.config.protectedSource.push( /<\?[\s\S]*?\?>/g );";
 		/* CkEditorの自動整形のコントロール /app/Config/setting.phpで上書き可能 */
-		if (Configure::read('CkeditorConfig.dtd')) {
-			$dtd = Configure::read('CkeditorConfig.dtd');
-		}
+		$dtd = Configure::read('CkeditorConfig.dtd');
 		if (isset($dtd['a']) && !empty($dtd['a'])) { // aタグ内に入れることを許可するブロック要素を出力
 			foreach ($dtd['a'] as $a) {
 				$jscode .= is_string($a) ? 'CKEDITOR.dtd.a.'. $a.' = 1;' : '';
