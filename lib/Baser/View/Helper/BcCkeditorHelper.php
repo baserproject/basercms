@@ -317,8 +317,17 @@ class BcCkeditorHelper extends AppHelper
 		$jscode .= "CKEDITOR.config.extraPlugins = 'draft,showprotected';";
 		$jscode .= "CKEDITOR.config.stylesCombo_stylesSet = '" . $editorStylesSet . "';";
 		$jscode .= "CKEDITOR.config.protectedSource.push( /<\?[\s\S]*?\?>/g );";
-		$jscode .= 'CKEDITOR.dtd.$removeEmpty["i"] = false;'; //　空「i」タグを消さないようにする
-		$jscode .= 'CKEDITOR.dtd.$removeEmpty["span"] = false;'; //　空「span」タグを消さないようにする
+		$dtd = Configure::read('CkeditorConfig.dtd');
+		if (!empty($dtd['allowIntoA'])) { // aタグ内に入れることを許可するブロック要素を出力
+			foreach ($dtd['allowIntoA'] as $allowIntoA) {
+				$jscode .= is_string($allowIntoA) ? 'CKEDITOR.dtd.a.'. $allowIntoA.' = 1;' : '';
+			}
+		}
+		if (!empty($dtd['allowEmpty'])) { // 空を許可する要素を出力
+			foreach ($dtd['allowEmpty'] as $allowEmpty) {
+				$jscode .= is_string($allowEmpty) ? 'CKEDITOR.dtd.$removeEmpty["'.$allowEmpty .'"] = false;' : '';
+			}
+		}
 
 		if ($editorEnterBr) {
 			$jscode .= "CKEDITOR.config.enterMode = CKEDITOR.ENTER_BR;";

@@ -819,3 +819,15 @@ $config['BcWidget'] = [
 	// フロントにウィジェットエリアの編集リンクを表示するかどうか
 	'editLinkAtFront' => false
 ];
+
+/*
+ * CkEditorの自動整形のコントロール /app/Config/setting.phpで上書き可能
+ */
+$config['CkeditorConfig'] = [
+	'dtd' => [
+		/* aタグ内に入れることを許可するブロック要素のタグ名リスト */
+		'allowIntoA' => ['div', 'h1', 'h2', 'h3', 'h4', 'h5', 'dl', 'p'],
+		/* 空を許可する要素名リスト */
+		'allowEmpty' => ['i', 'span'],
+	]
+];
