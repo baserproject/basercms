@@ -826,8 +826,8 @@ $config['BcWidget'] = [
 $config['CkeditorConfig'] = [
 	'dtd' => [
 		/* aタグ内に入れることを許可するブロック要素のタグ名リスト */
-		'AllowIntoA' => ['div', 'h1', 'h2', 'h3', 'h4', 'h5', 'dl', 'p'],
+		'allowIntoA' => ['div', 'h1', 'h2', 'h3', 'h4', 'h5', 'dl', 'p'],
 		/* 空を許可する要素名リスト */
-		'AllowEmpty' => ['i', 'span'],
+		'allowEmpty' => ['i', 'span'],
 	]
 ];
