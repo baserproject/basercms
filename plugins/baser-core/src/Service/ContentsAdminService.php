@@ -34,6 +34,9 @@ class ContentsAdminService extends ContentsService implements ContentsAdminServi
      * @param $content
      * @param $name
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getViewVarsForEdit($content)
     {
@@ -59,6 +62,9 @@ class ContentsAdminService extends ContentsService implements ContentsAdminServi
     /**
      * 一覧画面用のデータを取得
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getViewVarsForIndex()
     {
