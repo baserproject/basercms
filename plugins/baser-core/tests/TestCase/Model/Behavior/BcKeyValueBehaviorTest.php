@@ -11,6 +11,7 @@
 namespace BaserCore\Test\TestCase\Model\Behavior;
 
 use BaserCore\Model\Table\SiteConfigsTable;
+use BaserCore\Test\Factory\SiteConfigFactory;
 use BaserCore\TestSuite\BcTestCase;
 
 /**
@@ -85,4 +86,66 @@ class BcKeyValueBehaviorTest extends BcTestCase
         $this->SiteConfigs->saveValue('version', $expected);
         $this->assertEquals($expected, $this->SiteConfigs->getValue('version'));
     }
+
+    /**
+     * test getKeyValue
+     * @return void
+     */
+    public function test_getKeyValue(){
+        $newData = SiteConfigFactory::make(["name"=>"type","value"=>"ハガキ"])->persist();
+        $result = $this->SiteConfigs->getKeyValue();
+        $this->assertEquals($newData["value"], $result[$newData["name"]]);
+    }
+
+    /**
+     * test getValue
+     * @return void
+     */
+    public function test_getValue(){
+        $data = ["themes"=>"夏"];
+        $result = $this->SiteConfigs->saveKeyValue($data);
+        $rs = $this->SiteConfigs->getValue('themes');
+        $this->assertEquals('夏',$rs);
+    }
+
+    /**
+     * test getValue false
+     * @return void
+     */
+    public function test_getValue_false(){
+        $result = $this->SiteConfigs->getValue("noValue");
+        $this->assertFalse($result);
+    }
+
+    /**
+     * test saveKeyValue
+     * @return void
+     */
+
+    public function test_saveKeyValue(){
+        $siteConfigs = ['level'=>'admin', 'position'=>'top', 'address'=>'東京'];
+        $result = $this->SiteConfigs->saveKeyValue($siteConfigs);
+
+        foreach ($siteConfigs as $key => $value){
+            $rs = $this->SiteConfigs->getValue($key);
+            $this->assertEquals($value,$rs);
+        }
+
+        $this->assertTrue($result);
+    }
+
+    /**
+     * test saveValue
+     * @return void
+     */
+    public function test_saveValue(){
+        $expected = '町田';
+        $key = 'address';
+        $result = $this->SiteConfigs->saveValue($key, $expected);
+
+        $rs = $this->SiteConfigs->getValue($key);
+        $this->assertEquals($rs, $expected);
+        $this->assertTrue($result);
+    }
+
 }

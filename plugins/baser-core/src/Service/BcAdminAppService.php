@@ -30,6 +30,9 @@ class BcAdminAppService implements BcAdminAppServiceInterface
     /**
      * 管理画面全体で必要な変数を取得
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getViewVarsForAll(): array
     {

@@ -12,6 +12,9 @@ namespace BaserCore\Model\Behavior;
 
 use Cake\Datasource\EntityInterface;
 use Cake\ORM\Behavior;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * Class BcKeyValueBehavior
@@ -23,8 +26,10 @@ class BcKeyValueBehavior extends Behavior
     /**
      * Key Value 形式のテーブルよりデータを取得して
      * １レコードとしてデータを展開する
-     *
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getKeyValue()
     {
@@ -45,6 +50,9 @@ class BcKeyValueBehavior extends Behavior
      *
      * @param array $siteConfigs
      * @return boolean
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function saveKeyValue($siteConfigs)
     {
@@ -74,6 +82,9 @@ class BcKeyValueBehavior extends Behavior
      * 値を取得する
      *
      * @return mixed
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getValue($key)
     {
@@ -94,6 +105,9 @@ class BcKeyValueBehavior extends Behavior
      * @param $key
      * @param $value
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function saveValue($key, $value)
     {

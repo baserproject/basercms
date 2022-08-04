@@ -206,6 +206,9 @@ class PluginsService implements PluginsServiceInterface
     /**
      * 複数のIDからプラグインを有効化する
      * @param $ids
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function attachAllFromIds($ids)
     {
