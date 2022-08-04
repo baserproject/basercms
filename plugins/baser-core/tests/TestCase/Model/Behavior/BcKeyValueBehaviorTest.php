@@ -11,6 +11,7 @@
 namespace BaserCore\Test\TestCase\Model\Behavior;
 
 use BaserCore\Model\Table\SiteConfigsTable;
+use BaserCore\Test\Factory\SiteConfigFactory;
 use BaserCore\TestSuite\BcTestCase;
 
 /**
@@ -85,4 +86,15 @@ class BcKeyValueBehaviorTest extends BcTestCase
         $this->SiteConfigs->saveValue('version', $expected);
         $this->assertEquals($expected, $this->SiteConfigs->getValue('version'));
     }
+
+    /**
+     * test getKeyValue
+     * @return void
+     */
+    public function test_getKeyValue(){
+        $newData = SiteConfigFactory::make(["name"=>"type","value"=>"ハガキ"])->persist();
+        $result = $this->SiteConfigs->getKeyValue();
+        $this->assertEquals($newData["value"], $result[$newData["name"]]);
+    }
+
 }
