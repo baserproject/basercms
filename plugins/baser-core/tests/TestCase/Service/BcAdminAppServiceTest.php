@@ -58,4 +58,27 @@ class BcAdminAppServiceTest extends BcTestCase
         $this->assertTrue(isset($vars['permissionAuthList']));
     }
 
+    /**
+     * test getViewVarsForAll
+     * @return void
+     */
+    public function testGetViewVarsForAll(){
+        $permissionMethodList = [
+            '*' => '全て',
+            'GET' => '表示のみ',
+            'POST' => '表示と編集',
+        ];
+
+        $permissionAuthList = [
+            0 => '拒否',
+            1 => '許可',
+        ];
+
+        $useAdminSideBanner = null;
+
+        $vars = $this->BcAdmin->getViewVarsForAll();
+        $this->assertEquals($permissionMethodList, $vars['permissionMethodList']);
+        $this->assertEquals($permissionAuthList, $vars['permissionAuthList']);
+        $this->assertEquals($useAdminSideBanner, $vars['useAdminSideBanner']);
+    }
 }
