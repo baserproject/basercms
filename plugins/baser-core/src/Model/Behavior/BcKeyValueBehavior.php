@@ -105,6 +105,9 @@ class BcKeyValueBehavior extends Behavior
      * @param $key
      * @param $value
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function saveValue($key, $value)
     {
