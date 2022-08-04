@@ -50,6 +50,9 @@ class SearchIndexesService implements SearchIndexesServiceInterface
      * 索引を取得する
      * @param int $id
      * @return EntityInterface
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function get($id): EntityInterface
     {

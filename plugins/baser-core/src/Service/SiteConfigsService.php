@@ -191,6 +191,9 @@ class SiteConfigsService implements SiteConfigsServiceInterface
     /**
      * アプリケーションモードリストを取得
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getModeList(): array
     {

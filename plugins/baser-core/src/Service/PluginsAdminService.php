@@ -30,6 +30,9 @@ class PluginsAdminService extends PluginsService implements PluginsAdminServiceI
      * インストール画面用のデータを取得
      * @param EntityInterface $plugin
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getViewVarsForInstall(EntityInterface $plugin): array
     {

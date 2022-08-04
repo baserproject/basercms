@@ -57,6 +57,9 @@ class PagesService implements PagesServiceInterface
     /**
      * 初期データ取得
      * @return EntityInterface
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getNew(): EntityInterface
     {
@@ -66,6 +69,9 @@ class PagesService implements PagesServiceInterface
     /**
      * リストデータ取得
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getList(): array
     {

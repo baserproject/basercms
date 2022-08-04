@@ -83,6 +83,9 @@ class PermissionsService implements PermissionsServiceInterface
      * リストデータを取得
      * 対応しない
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getList(): array
     {
