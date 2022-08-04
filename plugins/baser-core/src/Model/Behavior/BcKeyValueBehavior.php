@@ -79,6 +79,9 @@ class BcKeyValueBehavior extends Behavior
      * 値を取得する
      *
      * @return mixed
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getValue($key)
     {

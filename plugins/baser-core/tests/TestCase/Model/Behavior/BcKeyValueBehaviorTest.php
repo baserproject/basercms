@@ -97,4 +97,24 @@ class BcKeyValueBehaviorTest extends BcTestCase
         $this->assertEquals($newData["value"], $result[$newData["name"]]);
     }
 
+    /**
+     * test getValue
+     * @return void
+     */
+    public function test_getValue(){
+        $data = ["themes"=>"夏"];
+        $result = $this->SiteConfigs->saveKeyValue($data);
+        $rs = $this->SiteConfigs->getValue('themes');
+        $this->assertEquals('夏',$rs);
+    }
+
+    /**
+     * test getValue false
+     * @return void
+     */
+    public function test_getValue_false(){
+        $result = $this->SiteConfigs->getValue("noValue");
+        $this->assertFalse($result);
+    }
+
 }
