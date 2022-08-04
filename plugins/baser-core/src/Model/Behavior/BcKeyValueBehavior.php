@@ -50,6 +50,9 @@ class BcKeyValueBehavior extends Behavior
      *
      * @param array $siteConfigs
      * @return boolean
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function saveKeyValue($siteConfigs)
     {
