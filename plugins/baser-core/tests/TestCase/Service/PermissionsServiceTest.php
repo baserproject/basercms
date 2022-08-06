@@ -63,6 +63,12 @@ class PermissionsServiceTest extends BcTestCase
         parent::tearDown();
     }
 
+    public function testConstruct(){
+        $this->execPrivateMethod($this->PermissionsService, 'setDefaultAllow');
+        $this->assertTrue(isset($this->PermissionsService->Permissions));
+        $this->assertTrue(isset($this->PermissionsService->adminUrlPrefix));
+    }
+
     /**
      * Test getNew
      *
