@@ -10,6 +10,7 @@
 
 
 const glob = require("glob");
+const TerserPlugin = require('terser-webpack-plugin');
 let entries = {};
 webpack = require('webpack');
 
@@ -30,7 +31,10 @@ module.exports = {
         splitChunks: {
 			name: 'admin/vendor',
 			chunks: 'initial',
-        }
+        },
+        minimizer: [new TerserPlugin({
+          extractComments: false,
+        })],
     },
     module: {
         rules: [
