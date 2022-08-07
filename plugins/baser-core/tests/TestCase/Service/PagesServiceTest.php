@@ -66,6 +66,17 @@ class PagesServiceTest extends BcTestCase
     }
 
     /**
+     * test construct()
+     * @return void
+     */
+    public function testConstruct(){
+        $a =$this->PagesService;
+        $this->assertTrue(isset($this->PagesService->Pages));
+        $this->assertTrue(isset($this->PagesService->Contents));
+        $this->assertTrue(isset($this->PagesService->Users));
+    }
+
+    /**
      * Test get
      *
      * @return void

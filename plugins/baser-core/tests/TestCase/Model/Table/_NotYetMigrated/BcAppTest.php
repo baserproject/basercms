@@ -475,37 +475,6 @@ class BcAppTest extends BaserTestCase
     }
 
     /**
-     * ファイルの拡張子チェック
-     *
-     * @param string $fileName チェック対象ファイル名
-     * @param string $fileType チェック対象ファイルタイプ
-     * @param boolean $expect
-     * @dataProvider fileExtDataProvider
-     */
-    public function testFileExt($fileName, $fileType, $expect)
-    {
-        $check = [[
-            "name" => $fileName,
-            "type" => $fileType,
-        ]
-        ];
-        $ext = "jpg,png";
-
-        $result = $this->BcApp->fileExt($check, $ext);
-        $this->assertEquals($expect, $result);
-    }
-
-    public function fileExtDataProvider()
-    {
-        return [
-            ["test.jpg", "image/jpeg", true],
-            ["test.png", "image/png", true],
-            ["test.gif", "image/gif", false],
-            ["test", "image/png", true],
-        ];
-    }
-
-    /**
      * 一つ位置を上げる
      */
     public function testSortup()

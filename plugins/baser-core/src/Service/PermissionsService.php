@@ -54,6 +54,10 @@ class PermissionsService implements PermissionsServiceInterface
 
     /**
      * PermissionsService constructor.
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function __construct()
     {
