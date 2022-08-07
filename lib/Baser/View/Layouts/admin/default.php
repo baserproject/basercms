@@ -29,7 +29,8 @@
 			'../js/admin/vendors/jquery-contextMenu-2.2.0/jquery.contextMenu.min',
 			'admin/import',
 			'admin/colorbox/colorbox-1.6.1',
-			'admin/toolbar'])
+			'admin/toolbar',
+			'admin/jquery.timepicker'])
 		?>
 		<?php if($favoriteBoxOpened): ?>
 			<?php $this->BcBaser->css('admin/sidebar_opened') ?>
