@@ -5,7 +5,7 @@
         "lib": ["es5", "dom", "es2015"],
         "sourceMap": true,
         "outDir": "./webroot/js",
-        "rootDir": "./webroot/src/js",
+        "rootDir": "./src/js",
         "strict": true,
         "moduleResolution": "node",
         "baseUrl": ".",
@@ -14,6 +14,6 @@
         "emitDecoratorMetadata": true,
         "skipLibCheck": true,
         "forceConsistentCasingInFileNames": true,
-        "typeRoots" : ["webroot/src/types"]
+        "typeRoots" : ["src/types"]
     }
 }

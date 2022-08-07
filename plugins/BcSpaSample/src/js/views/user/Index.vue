@@ -49,5 +49,5 @@
         </section>
     </div>
 </template>
-<script lang="ts" src="./Index.ts"></script>
+<script lang="ts" src="Index.ts"></script>
 

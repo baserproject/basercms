@@ -22,7 +22,7 @@ composer require baserproject/BcSpaSample
 　
 ## ソースを確認する
 
-ソースファイルは、 `/plugins/BcSpaSample/webroot/src/` に配置しています。
+ソースファイルは、 `/plugins/BcSpaSample/src/` に配置しています。
 
 　
 ## コンパイル
@@ -261,6 +261,6 @@ type DataType = {
 
 ### その他のAPI
 
-その他のAPIは `webroot/src/` ディレクトリ内のサンプルコードを参考にしてください。
+その他のAPIは `/src/` ディレクトリ内のサンプルコードを参考にしてください。
 
 

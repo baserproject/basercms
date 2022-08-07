@@ -200,4 +200,4 @@
 
     </section>
 </template>
-<script lang="ts" src="./Form.ts"></script>
+<script lang="ts" src="Form.ts"></script>
