@@ -4,9 +4,9 @@ const webpackStream = require('webpack-stream');
 const webpackConfig = require("./webpack.config");
 const plumber = require('gulp-plumber');
 const sass = require('gulp-sass')(require('sass'));
-const JS_DEV_DIR = ['./webroot/js/src/'];
+const JS_DEV_DIR = ['./src/js/'];
 const JS_DIST_DIR = './webroot/js/';
-const CSS_DEV_DIR = './__assets/css/';
+const CSS_DEV_DIR = './src/css/';
 const CSS_DIST_DIR = './webroot/css/admin/';
 
 gulp.task('css', () => {

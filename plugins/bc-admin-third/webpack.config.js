@@ -14,9 +14,9 @@ const TerserPlugin = require('terser-webpack-plugin');
 let entries = {};
 webpack = require('webpack');
 
-glob.sync("./webroot/js/src/**/*.js").map(function(file){
-    if(!file.replace('./webroot/js/src/admin/', '').match(/^_/)) {
-        entries[file.replace('./webroot/js/src/', '').split('.').shift()] = file;
+glob.sync("./src/js/**/*.js").map(function(file){
+    if(!file.replace('./src/js/admin/', '').match(/^_/)) {
+        entries[file.replace('./src/js/', '').split('.').shift()] = file;
     }
 });
 
