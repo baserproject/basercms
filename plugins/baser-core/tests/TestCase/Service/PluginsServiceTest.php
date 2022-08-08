@@ -15,6 +15,7 @@ use BaserCore\Service\PluginsService;
 use BaserCore\Test\Factory\PluginFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcUtil;
+use Cake\Cache\Cache;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Filesystem\File;
@@ -296,5 +297,16 @@ class PluginsServiceTest extends BcTestCase
         $rs = $this->Plugins->attachAllFromIds($ids);
 
         $this->assertNull($rs);
+    }
+
+    /**
+     * test getMarketPlugins
+     * @return void
+     */
+    public function testGetMarketPlugins(){
+        $rs = $this->Plugins->getMarketPlugins();
+        $this->assertNotEmpty($rs);
+        $caches = Cache::read('baserMarketPlugins', '_bc_env_');
+        $this->assertIsArray($caches);
     }
 }

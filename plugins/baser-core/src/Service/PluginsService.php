@@ -334,6 +334,9 @@ class PluginsService implements PluginsServiceInterface
     /**
      * baserマーケットのプラグイン一覧を取得する
      * @return array|mixed
+     * @checked
+     * @unitTest
+     * @noTodo
      */
     public function getMarketPlugins(): array
     {
