@@ -42,6 +42,9 @@ class UsersService implements UsersServiceInterface
 
     /**
      * UsersService constructor.
+     * @checked
+     * @unitTest
+     * @noTodo
      */
     public function __construct()
     {

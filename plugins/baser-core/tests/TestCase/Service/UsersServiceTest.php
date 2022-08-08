@@ -75,6 +75,15 @@ class UsersServiceTest extends BcTestCase
     }
 
     /**
+     * test construct
+     * @return void
+     */
+    public function testConstruct(){
+        $this->assertTrue(isset($this->Users->Users));
+        $this->assertTrue(isset($this->Users->LoginStores));
+    }
+
+    /**
      * Test getNew
      */
     public function testGetNew()
