@@ -63,6 +63,14 @@ class UserGroupsServiceTest extends BcTestCase
     }
 
     /**
+     * test construct
+     * @return void
+     */
+    public function testConstruct(){
+        $this->assertTrue(isset($this->UserGroups->UserGroups));
+    }
+
+    /**
      * Test getNew
      */
     public function testGetNew()

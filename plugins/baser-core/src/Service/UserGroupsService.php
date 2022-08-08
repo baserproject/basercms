@@ -34,6 +34,9 @@ class UserGroupsService implements UserGroupsServiceInterface
 
     /**
      * UserGroupsService constructor.
+     * @checked
+     * @unitTest
+     * @noTodo
      */
     public function __construct()
     {
