@@ -31,6 +31,9 @@ class UsersAdminService extends UsersService implements UsersAdminServiceInterfa
 
     /**
      * Pageservice constructor.
+     * @checked
+     * @unitTest
+     * @noTodo
      */
     public function __construct()
     {

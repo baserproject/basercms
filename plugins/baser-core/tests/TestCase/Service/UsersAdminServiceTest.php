@@ -63,6 +63,14 @@ class UsersAdminServiceTest extends BcTestCase
     }
 
     /**
+     * test construct
+     * @return void
+     */
+    public function testConstruct(){
+        $this->assertTrue(isset($this->Users->UserGroupsService));
+    }
+
+    /**
      * Test isEditable
      * @param int $loginId
      * @param int $postId
