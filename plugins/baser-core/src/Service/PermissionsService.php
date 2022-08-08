@@ -333,6 +333,9 @@ class PermissionsService implements PermissionsServiceInterface
      * 標準アクセス許可リクエストを設定
      *
      * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     private function setDefaultAllow(): void
     {
