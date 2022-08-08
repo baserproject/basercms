@@ -46,6 +46,9 @@ class SiteConfigsService implements SiteConfigsServiceInterface
 
     /**
      * SiteConfigsService constructor.
+     * @checked
+     * @unitTest
+     * @noTodo
      */
     public function __construct()
     {

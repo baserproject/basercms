@@ -63,6 +63,14 @@ class SiteConfigsServiceTest extends \BaserCore\TestSuite\BcTestCase
     }
 
     /**
+     * test construct
+     * @return void
+     */
+    public function testConstruct(){
+        $this->assertTrue(isset($this->SiteConfigs->SiteConfigs));
+    }
+
+    /**
      * test get
      */
     public function testGet()
