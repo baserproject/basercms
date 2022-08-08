@@ -118,6 +118,7 @@ class SitesAdminService extends SitesService implements SitesAdminServiceInterfa
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getSelectableThemes($site): array
     {
