@@ -40,6 +40,9 @@ class SearchIndexesService implements SearchIndexesServiceInterface
 
     /**
      * SearchIndexesService constructor.
+     * @checked
+     * @unitTest
+     * @noTodo
      */
     public function __construct()
     {

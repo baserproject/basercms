@@ -75,6 +75,14 @@ class SearchIndexesServiceTest extends BcTestCase
     }
 
     /**
+     * @test construct
+     * @return void
+     */
+    public function testConstruct(){
+        $this->assertTrue(isset($this->SearchIndexesService->SearchIndexes));
+    }
+
+    /**
      * Test get
      *
      * @return void
