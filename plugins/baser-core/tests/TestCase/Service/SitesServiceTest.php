@@ -61,6 +61,15 @@ class SitesServiceTest extends \BaserCore\TestSuite\BcTestCase
     }
 
     /**
+     * dev#716
+     * test construct
+     * @return void
+     */
+    public function testConstruct(){
+        $this->assertTrue(isset($this->Sites->Sites));
+    }
+
+    /**
      * Test getNew
      */
     public function testGetNew()

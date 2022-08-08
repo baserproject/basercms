@@ -38,6 +38,9 @@ class SitesService implements SitesServiceInterface
 
     /**
      * SitesService constructor.
+     * @checked
+     * @unitTest
+     * @noTodo
      */
     public function __construct()
     {
