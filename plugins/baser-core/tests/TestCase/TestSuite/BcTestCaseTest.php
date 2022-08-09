@@ -134,7 +134,10 @@ class BcTestCaseTest extends BcTestCase
      */
     public function testApiLoginAdmin(): void
     {
-        $this->assertNotEmpty($this->apiLoginAdmin(1));
+        $rs = $this->apiLoginAdmin(1);
+        $this->assertNotEmpty($rs);
+        $this->assertTrue(isset($rs["access_token"]));
+        $this->assertTrue(isset($rs["refresh_token"]));
         $this->assertEmpty($this->apiLoginAdmin(100));
     }
 
