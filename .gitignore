@@ -62,6 +62,10 @@ nbproject/*
 !/plugins/bc-mail
 !/plugins/bc-uploader
 !/plugins/BcSpaSample
+!/plugins/bc-editor-template
+!/plugins/bc-theme-config
+!/plugins/bc-theme-file
+!/plugins/bc-widget-area
 /plugins/*/vendor
 /plugins/*/composer.lock
 # vagrant
