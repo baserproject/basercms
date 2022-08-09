@@ -86,6 +86,11 @@ class SitesAdminServiceTest extends \BaserCore\TestSuite\BcTestCase
         $rs = $this->SitesAdmin->getSelectableThemes($site);
         $this->assertEquals("BcSpaSample", $rs["BcSpaSample"]);
         $this->assertEquals("BcFront", $rs["BcFront"]);
+
+        $site = new Site(['id' => 1, 'main_site_id' => 2]);
+        $rs = $this->SitesAdmin->getSelectableThemes($site);
+        $this->assertEquals("BcSpaSample", $rs["BcSpaSample"]);
+        $this->assertEquals("メインサイトに従う（BcFront）", $rs[""]);
     }
 
     /**
