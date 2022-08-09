@@ -66,6 +66,7 @@ nbproject/*
 !/plugins/bc-theme-config
 !/plugins/bc-theme-file
 !/plugins/bc-widget-area
+!/plugins/bc-installer
 /plugins/*/vendor
 /plugins/*/composer.lock
 # vagrant

@@ -9,7 +9,7 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
-namespace BaserCore\Controller\Admin;
+namespace BcEditorTemplate\Controller\Admin;
 
 use Cake\Event\EventInterface;
 use BaserCore\Controller\Admin\BcAdminAppController;
