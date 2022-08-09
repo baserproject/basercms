@@ -82,8 +82,15 @@ class SitesAdminServiceTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function test_getSelectableThemes()
     {
-        // TODO ucmitz BcUtil::getAllThemeList() を実装しないとテストができない
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $site = new Site(['id' => 1, 'main_site_id' => null]);
+        $rs = $this->SitesAdmin->getSelectableThemes($site);
+        $this->assertEquals("BcSpaSample", $rs["BcSpaSample"]);
+        $this->assertEquals("BcFront", $rs["BcFront"]);
+
+        $site = new Site(['id' => 1, 'main_site_id' => 2]);
+        $rs = $this->SitesAdmin->getSelectableThemes($site);
+        $this->assertEquals("BcSpaSample", $rs["BcSpaSample"]);
+        $this->assertEquals("メインサイトに従う（BcFront）", $rs[""]);
     }
 
     /**
