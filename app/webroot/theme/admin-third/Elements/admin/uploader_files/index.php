@@ -50,12 +50,6 @@ if (!isset($listId)) {
 <!-- ファイルリスト -->
 <div id="FileList<?php echo $listId ?>" class="corner5 file-list"></div>
 
-
-<!-- list-num -->
-<?php if (empty($this->params['isAjax'])): ?>
-	<?php $this->BcBaser->element('list_num') ?>
-<?php endif ?>
-
 <!-- 編集ダイアログ -->
 <div id="EditDialog" title="<?php echo __d('baser', 'ファイル情報編集') ?>">
 	<?php $this->BcBaser->element('uploader_files/form', ['listId', $listId, 'popup' => true]) ?>
