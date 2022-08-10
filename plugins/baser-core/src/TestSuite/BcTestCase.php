@@ -118,6 +118,9 @@ class BcTestCase extends TestCase
      * tear down FixtureManager
      * @deprecated 5.1.0
      * @see setUpFixtureManager
+     * @checked
+     * @unitTest
+     * @noTodo
      */
     public function tearDownFixtureManager()
     {
