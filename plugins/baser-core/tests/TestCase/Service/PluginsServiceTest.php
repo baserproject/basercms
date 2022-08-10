@@ -87,7 +87,7 @@ class PluginsServiceTest extends BcTestCase
      * Test getIndex
      * @dataProvider indexDataprovider
      */
-    public function testGetIndex($sortMode, $expectedPlugin, $expectedCount): void
+    public function testGetIndex($sortMode, $expectedPlugin): void
     {
         // テスト用のプラグインフォルダ作成
         $pluginPath = App::path('plugins')[0] . DS . 'BcTest';
@@ -101,8 +101,6 @@ class PluginsServiceTest extends BcTestCase
         }
         //期待されるプラグインを含むか
         $this->assertContains($expectedPlugin, $pluginNames);
-        // プラグイン数
-        $this->assertEquals($expectedCount, count($plugins));
         $folder->delete($pluginPath);
         if ($sortMode) {
             // フォルダ内プラグインが含まれてないか
@@ -113,9 +111,9 @@ class PluginsServiceTest extends BcTestCase
     {
         return [
             // 普通の場合 | DBに登録されてるプラグインとプラグインファイル全て
-            ["0", 'BcTest', "5"],
+            ["0", 'BcTest'],
             // ソートモードの場合 | DBに登録されてるプラグインのみ
-            ["1", 'BcBlog', "3"],
+            ["1", 'BcBlog'],
         ];
     }
 
