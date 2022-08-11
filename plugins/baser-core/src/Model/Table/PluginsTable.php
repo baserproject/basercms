@@ -202,6 +202,7 @@ class PluginsTable extends AppTable
     public function uninstall($name): bool
     {
         $targetPlugin = $this->find()->where(['name' => $name])->first();
+        if(!$targetPlugin) return true;
         return $this->delete($targetPlugin);
     }
 

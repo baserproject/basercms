@@ -178,7 +178,7 @@ class PluginsController extends BcAdminAppController
             return $this->redirect(['action' => 'index']);
         }
         try {
-            $pluginService->uninstall(rawurldecode($name), $this->request->getData('connection'));
+            $pluginService->uninstall(rawurldecode($name), $this->request->getData('connection') ?? 'default');
             $this->BcMessage->setSuccess(sprintf(__d('baser', 'プラグイン「%s」を削除しました。'), $name));
         } catch (\Exception $e) {
             $this->BcMessage->setError(__d('baser', 'プラグインの削除に失敗しました。' . $e->getMessage()));

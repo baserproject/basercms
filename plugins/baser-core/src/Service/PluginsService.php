@@ -309,11 +309,11 @@ class PluginsService implements PluginsServiceInterface
         BcUtil::includePluginClass($name);
         $plugins = CakePlugin::getCollection();
         $plugin = $plugins->create($name);
-        if (!method_exists($plugin, 'uninstall')) {
-            throw new Exception(__d('baser', 'プラグインに Plugin クラスが存在しません。手動で削除してください。'));
-        }
         if (!$plugin->uninstall($options)) {
             throw new Exception(__d('baser', 'プラグインの削除に失敗しました。'));
+        }
+        if (!method_exists($plugin, 'uninstall')) {
+            throw new Exception(__d('baser', 'プラグインに Plugin クラスが存在しません。手動で削除してください。'));
         }
     }
 
