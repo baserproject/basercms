@@ -118,6 +118,9 @@ class BcTestCase extends TestCase
      * tear down FixtureManager
      * @deprecated 5.1.0
      * @see setUpFixtureManager
+     * @checked
+     * @unitTest
+     * @noTodo
      */
     public function tearDownFixtureManager()
     {
@@ -309,6 +312,9 @@ class BcTestCase extends TestCase
      * @param $eventName
      * @param $callback
      * @return EventListenerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @checked
+     * @unitTest
+     * @noTodo
      */
     protected function entryEventToMock($layer, $eventName, $callback)
     {

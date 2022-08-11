@@ -180,6 +180,7 @@ class BcValidation extends Validation
      * @link http://php.net/manual/ja/features.file-upload.errors.php
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function fileCheck($value, $size)
     {
