@@ -1,0 +1,29 @@
+{
+  "name": "bc-theme-file",
+  "version": "1.0.0",
+  "description": "baserCMS Theme File Management Plugin",
+  "author": "NPO baser foundation",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/baserproject/ucmitz.git"
+  },
+  "bugs": {
+    "url": "https://github.com/baserproject/ucmitz/issues"
+  },
+  "homepage": "https://github.com/baserproject/ucmitz#readme",
+  "scripts": {
+    "dev": "gulp"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.13.10",
+    "@babel/preset-env": "^7.13.12",
+    "babel-loader": "^8.2.2",
+    "glob-parent": ">=5.1.2",
+    "gulp": "^4.0.2",
+    "postcss": ">=8.2.13",
+    "webpack": "^5.73.0",
+    "webpack-cli": "^4.10.0",
+    "webpack-stream": "^7.0.0"
+  }
+}

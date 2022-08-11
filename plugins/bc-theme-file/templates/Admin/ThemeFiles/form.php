@@ -10,12 +10,15 @@
  * @license         https://basercms.net/license/index.html
  */
 
+use BaserCore\View\BcAdminAppView;
+
 /**
  * [ADMIN] テーマファイル登録・編集
  *
- * @var BcAppView $this
+ * @var BcAdminAppView $this
  */
-$this->BcBaser->js('admin/themes/form');
+
+$this->BcBaser->js('BcThemeFile.admin/themes/form.bundle', false);
 $params = explode('/', $path);
 $parentPrams = explode('/', $path);
 if ($this->request->action !== 'admin_add') {

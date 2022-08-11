@@ -15,7 +15,7 @@
  *
  * @var BcAppView $this
  */
-$this->BcBaser->js('admin/theme_files/form_folder');
+$this->BcBaser->js('BcThemeFile.admin/theme_files/form_folder.bundle', false);
 $parentPrams = $params = explode('/', $path);
 if ($this->request->action !== 'admin_add_folder') {
   unset($parentPrams[count($parentPrams) - 1]);
