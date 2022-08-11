@@ -82,6 +82,9 @@ node_modules
 /webroot/bc_spa_sample
 /webroot/bc_front
 /webroot/baser_core
+/webroot/bc_theme_config
+/webroot/bc_theme_file
+/webroot/bc_widget_area
 # jwt
 /config/jwt.key
 /config/jwt.pem
