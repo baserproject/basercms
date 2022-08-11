@@ -96,8 +96,10 @@ class PluginsService implements PluginsServiceInterface
                 $files = $Folder->read(true, true, true);
                 foreach($files[0] as $file) {
                     $name = Inflector::camelize(Inflector::underscore(basename($file)));
-                    if (!in_array(basename($file), Configure::read('BcApp.core'))
-                        && !in_array($name, $registeredName)) {
+                    if (in_array(basename($file), Configure::read('BcApp.core'))) continue;
+                    if(in_array($name, $registeredName)) {
+                        $plugins[array_search($name, $registeredName)] = $this->Plugins->getPluginConfig($name);
+                    } else {
                         $plugins[] = $this->Plugins->getPluginConfig($name);
                     }
                 }

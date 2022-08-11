@@ -56,6 +56,7 @@ $class = ' class="' . implode(' ', $classies) . '"';
     <?php echo h($plugin->name) ?><?php if ($plugin->title): ?>（<?php echo h($plugin->title) ?>）<?php endif ?>
   </td>
   <td class="bca-table-listup__tbody-td"><?php echo $plugin->version ?></td>
+  <?php if(!$this->request->getQuery('sortmode')): ?>
   <td class="bca-table-listup__tbody-td" style="min-width:200px;"><?php echo h($plugin->description) ?></td>
   <td class="bca-table-listup__tbody-td">
     <?php if ($plugin->author): ?>
@@ -66,6 +67,7 @@ $class = ' class="' . implode(' ', $classies) . '"';
       <?php endif ?>
     <?php endif ?>
   </td>
+  <?php endif ?>
   <td class="bca-table-listup__tbody-td" style="width:10%;white-space: nowrap">
     <?php echo $this->BcTime->format($plugin->created, 'yyyy-MM-dd') ?><br/>
     <?php echo $this->BcTime->format($plugin->modified, 'yyyy-MM-dd') ?>

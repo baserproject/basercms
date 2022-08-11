@@ -10,12 +10,12 @@
  */
 
 namespace BcWidgetArea;
-use Cake\Core\BasePlugin;
+use BaserCore\BcPlugin;
 
 /**
  * Class Plugin
  * @package BcWidgetArea
  */
-class Plugin extends BasePlugin
+class Plugin extends BcPlugin
 {
 }

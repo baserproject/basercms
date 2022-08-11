@@ -10,12 +10,12 @@
  */
 
 namespace BcEditorTemplate;
-use Cake\Core\BasePlugin;
+use BaserCore\BcPlugin;
 
 /**
  * Class Plugin
  * @package BcEditorTemplate
  */
-class Plugin extends BasePlugin
+class Plugin extends BcPlugin
 {
 }

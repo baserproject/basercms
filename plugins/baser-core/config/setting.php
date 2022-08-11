@@ -76,7 +76,7 @@ return [
          * コアパッケージ名
          * プラグイン一覧に表示しないようにする
          */
-        'core' => ['baser-core', 'bc-admin-third', 'bc-front'],
+        'core' => ['baser-core', 'bc-admin-third', 'bc-front', 'bc-installer'],
         /**
          * デフォルトフロントテーマ
          */
@@ -93,7 +93,7 @@ return [
         /**
          * コアプラグイン
          */
-        'corePlugins' => ['BcBlog', 'BcMail'],
+        'corePlugins' => ['BcBlog', 'BcMail', 'BcEditorTemplate', 'BcThemeConfig', 'BcThemeFile', 'BcUploader', 'BcWidgetArea'],
         /**
          * パスワード再発行URLの有効時間(min) デフォルト24時間
          */

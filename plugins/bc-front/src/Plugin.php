@@ -13,9 +13,6 @@ declare(strict_types=1);
 namespace BcFront;
 
 use BaserCore\BcPlugin;
-use Cake\Core\Configure;
-use Cake\Routing\Route\InflectedRoute;
-use Cake\Routing\RouteBuilder;
 
 /**
  * plugin for BcFront

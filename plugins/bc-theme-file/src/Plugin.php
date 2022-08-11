@@ -10,12 +10,12 @@
  */
 
 namespace BcThemeFile;
-use Cake\Core\BasePlugin;
+use BaserCore\BcPlugin;
 
 /**
  * Class Plugin
  * @package BcThemeFile
  */
-class Plugin extends BasePlugin
+class Plugin extends BcPlugin
 {
 }
