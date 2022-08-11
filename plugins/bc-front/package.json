@@ -1,21 +1,26 @@
 {
   "name": "bc-front",
   "version": "1.0.0",
-  "description": "baserCMS Theme",
-  "main": "gulpfile.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "baserCMS User Community",
+  "description": "baserCMS Front Theme",
+  "author": "NPO baser foundation",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/baserproject/ucmitz.git"
+  },
+  "bugs": {
+    "url": "https://github.com/baserproject/ucmitz/issues"
+  },
+  "homepage": "https://github.com/baserproject/ucmitz#readme",
+  "scripts": {
+    "dev": "gulp"
+  },
   "devDependencies": {
     "glob-parent": ">=5.1.2",
     "gulp": "^4.0.2",
     "gulp-plumber": "^1.2.1",
     "gulp-sass": "^5.0.0",
-    "gulp-uglify": "^3.0.2"
-  },
-  "dependencies": {
+    "gulp-uglify": "^3.0.2",
     "sass": "^1.51.0"
   }
 }
