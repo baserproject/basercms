@@ -218,8 +218,8 @@ $(function () {
     });
 
     if (!$("#pages-content-modified-date").val()) {
-        $("#pages-content-modified-date").val(getNowDate());
-        $("#pages-content-modified-date-time").val(getNowTime());
+        $("#pages-content-modified-date").val($.bcTimeUtil.getNowDate());
+        $("#pages-content-modified-date-time").val($.bcTimeUtil.getNowTime());
     }
 
 });

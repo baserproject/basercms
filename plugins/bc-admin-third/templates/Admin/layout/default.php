@@ -76,8 +76,7 @@ $base = $attributes['base'];
     'vendor/jquery.validate_ja',
     'vendor/jquery.form-2.94',
     'vendor/jquery.timepicker',
-    'vendor/bootstrap-4.1.3/bootstrap.bundle.min',
-    'admin/functions'
+    'vendor/bootstrap-4.1.3/bootstrap.bundle.min'
   ]) ?>
   <?php $this->BcBaser->js('admin/common.bundle', true, [
     'id' => 'AdminScript',

@@ -19,7 +19,7 @@ use Cake\Core\Configure;
  * @var UserGroup $userGroup
  */
 
-$this->BcBaser->js('admin/user_groups/form', false);
+$this->BcBaser->js('admin/user_groups/form.bundle', false);
 $authPrefixes = [];
 foreach(Configure::read('BcPrefixAuth') as $key => $authPrefix) {
   $authPrefixes[$key] = $authPrefix['name'];

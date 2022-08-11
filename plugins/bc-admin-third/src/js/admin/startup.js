@@ -8,6 +8,57 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
+/**
+ * ブラウザ判別用
+ * TOOD ucmits 未検証
+ */
+// var _ua = (function () {
+//     return {
+//         ltIE6: typeof window.addEventListener == "undefined" && typeof document.documentElement.style.maxHeight == "undefined",
+//         ltIE7: typeof window.addEventListener == "undefined" && typeof document.querySelectorAll == "undefined",
+//         ltIE8: typeof window.addEventListener == "undefined" && typeof document.getElementsByClassName == "undefined",
+//         ie: document.uniqueID,
+//         firefox: window.globalStorage,
+//         opera: window.opera,
+//         webkit: !document.uniqueID && !window.opera && !window.globalStorage && window.localStorage,
+//         mobile: /android|iphone|ipad|ipod/i.test(navigator.userAgent.toLowerCase())
+//     }
+// })();
+
+/**
+ * String 拡張
+ * sprintf の文字列置き換えのみ対応
+ *
+ * @returns {string}
+ */
+String.prototype.sprintf = function () {
+    var str = this + '';
+    var args = Array.prototype.slice.call(arguments);
+
+    var ph = true;
+    if (str.indexOf('%s', 0) !== -1) {
+        ph = false;
+    }
+
+    if (args.length === 1) {
+        if (ph) {
+            return str.replace(/%1$s/g, args[0]);
+        } else {
+            return str.replace(/%s/g, args[0]);
+        }
+    } else {
+        for (var i = 0; i < args.length; i++) {
+            var n = i + 1;
+            if (ph) {
+                str = str.replace('%' + n + '$s', args[i]);
+            } else {
+                str = str.replace('%s', args[i]);
+            }
+        }
+    }
+    return str;
+};
+
 $(function () {
 
     /**
@@ -56,6 +107,106 @@ $(function () {
             contentSelector: "$(this).next('.helptext').html()"
         });
     }
+
+
+    /**
+     * ツールチップ表示
+     * bootstrap4 + jquery
+     * TODO umictz 未検証
+     */
+    // $('[data-toggle="tooltip"]').tooltip({html: true});
+
+    /**
+     * ポップアップ
+     * TODO umictz 未検証
+     */
+    // if ($("a[rel='popup']").colorbox) $("a[rel='popup']").colorbox({width: "60%", height: "70%", iframe: true});
+
+    /**
+     * スライド
+     * 項目の表示・非表示を切り替える
+     * TODO umictz 未検証
+     */
+    // $(".slide-trigger").click(function () {
+    //     target = this.id + 'Body';
+    //     if ($("#" + target).css('display') == 'none') {
+    //         $("#" + target).slideDown();
+    //     } else {
+    //         $("#" + target).slideUp();
+    //     }
+    // });
+    //
+    // $(".btn-slide-form a").click(function () {
+    //     target = this.id + 'Body';
+    //     $(this).parent().fadeOut(300, function () {
+    //         $(this).remove();
+    //         if ($("#" + target).css('display') == 'none') {
+    //             $("#" + target).slideDown();
+    //         } else {
+    //             $("#" + target).slideUp();
+    //         }
+    //     });
+    // });
+    //
+    // $(".slide-body").hide();
+
+    /**
+     * 確認リンク
+     * TODO umictz 未検証
+     */
+    // $(".confirm-link").click(function () {
+    //     if (confirm($(this).attr('confirm'))) {
+    //         alert($(this).attr('link'));
+    //         document.location = $(this).attr('link');
+    //     }
+    // });
+
+    /**
+     * 空のサブメニューのLIを削除
+     * TODO umictz 未検証
+     */
+    // $("#SubMenu li").each(function () {
+    //     if (!$(this).html()) {
+    //         $(this).remove();
+    //     }
+    // });
+    // $("input, textarea, select").focus(function () {
+    //     $(this).addClass('active');
+    // });
+    // $("input[type=button]").off('focus'); // input type="button"はフォーカス時に activeクラスを追加するイベントを除去
+    // $("input, textarea, select").focusout(function () {
+    //     $(this).removeClass('active');
+    // });
+
+    /**
+     * サブメニュー調整
+     * 空の項目を削除する
+     * TODO umictz 未検証
+     */
+    // $("#SubMenu td ul").each(function () {
+    //     if (!$(this).html().replace(/^\s+|\s+$/g, "")) {
+    //         $(this).parent().parent().remove();
+    //     }
+    // });
+
+    /**
+     * フォームでエンターキーを押しても送信しないようにする
+     * TODO umictz 未検証
+     */
+    // $(".bca-form-table input[type=text]").each(function () {
+    //     $(this).keypress(function (e) {
+    //         if (e.which && e.which === 13) {
+    //             return false;
+    //         }
+    //         return true;
+    //     });
+    // });
+
+    /**
+     * トークンの送信が必要なリンクでトークンを送信する
+     * TODO umictz 未検証
+     */
+    // $.bcToken.replaceLinkToSubmitToken(".submit-token");
 
     /**
      * カラーボックス
@@ -157,5 +308,58 @@ $(function () {
             }
         });
     }
+
+    /**
+     * よく使う項目
+     * TODO ucmitz 未検証
+     */
+    // $('#BtnSideBarOpener').click(btnSideBarOpenerClickHandler);
+
+    /**
+     * サイドバー開閉ボタンクリック時イベント
+     * TODO ucmitz 未検証
+     */
+    // function btnSideBarOpenerClickHandler(e) {
+    //     e.stopPropagation();
+    //     if ($('#SideBar').css('position') == 'absolute') {
+    //         changeSidebar(true);
+    //         $.ajax({type: "GET", url: $("#SaveFavoriteBoxUrl").html() + '/1'});
+    //     } else {
+    //         changeSidebar(false);
+    //         $.ajax({type: "GET", url: $("#SaveFavoriteBoxUrl").html() + '/'});
+    //     }
+    // }
+
+    /**
+     * サイドバーの開閉切り替え
+     * TODO ucmitz 未検証
+     */
+    // function changeSidebar(open) {
+    //     if (open) {
+    //         $('#SideBar').show()
+    //             .unbind('click', btnSideBarOpenerClickHandler)
+    //             .css({
+    //                 position: 'relative',
+    //                 left: '0',
+    //                 cursor: 'auto'
+    //             });
+    //         $('#Contents').css('margin-left', '220px');
+    //         $("#BtnSideBarOpener").html('＜');
+    //         $('#FavoriteMenu ul').show();
+    //     } else {
+    //         var height = $('#FavoriteMenu').height();
+    //         $('#SideBar').bind("click", btnSideBarOpenerClickHandler)
+    //             .css({
+    //                 cursor: 'pointer',
+    //                 position: 'absolute',
+    //                 left: '-180px'
+    //             });
+    //         $('#Contents').css('margin-left', '0');
+    //         $("#BtnSideBarOpener").html('＞');
+    //         $('#FavoriteMenu ul').hide();
+    //         $('#FavoriteMenu').height(height);
+    //     }
+    // }
+
 });
 

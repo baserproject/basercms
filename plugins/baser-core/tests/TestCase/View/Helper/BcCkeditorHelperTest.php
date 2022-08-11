@@ -114,7 +114,7 @@ class BcCkeditorHelperTest extends BcTestCase
         // ckeditor.jsがタグに含められてるか確認
         $this->assertMatchesRegularExpression('/<script src="bc_admin_third\/js\/vendor\/ckeditor\/ckeditor.js">/', $jsResult);
         // applyCkeditor.bundleがタグに含められてるか確認
-        $this->assertMatchesRegularExpression('/<script src="bc_admin_third\/js\/admin\/pages\/applyCkeditor.bundle.js">/', $jsResult);
+        $this->assertMatchesRegularExpression('/<script src="bc_admin_third\/js\/admin\/pages\/apply_ckeditor.bundle.js">/', $jsResult);
         // javascript側で使用する変数が埋め込まれてるかをテスト
         $varList = [
             "ckeditorField",

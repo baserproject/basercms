@@ -18,7 +18,7 @@ $this->BcBaser->js([
   'admin/libs/jquery.baser_ajax_batch',
   'admin/libs/baser_ajax_data_list_config',
   'admin/libs/baser_ajax_batch_config',
-  'admin/search_indices/index'
+  'admin/search_indexes/index.bundle'
 ]);
 echo $this->BcBaser->i18nScript([
   'reconstructSearchTitle' => __d('baser', '確認'),

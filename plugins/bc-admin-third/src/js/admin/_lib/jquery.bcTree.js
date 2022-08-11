@@ -110,7 +110,7 @@
             }
             const mode = $("#viewsetting-mode").val();
             let url;
-            $.bcTree.listDisplayed = getNowDateTime();
+            $.bcTree.listDisplayed = $.bcTimeUtil.getNowDateTime();
             $.bcTree._init();
             $($.bcTree).trigger('loaded');
             $.bcUtil.hideLoader();

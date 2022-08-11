@@ -23,7 +23,7 @@ $this->BcBaser->i18nScript([
 $this->BcBaser->js([
   'admin/libs/jquery.baser_ajax_data_list',
   'admin/libs/baser_ajax_data_list_config',
-  'admin/themes/index'
+  'admin/themes/index.bundle'
 ]);
 ?>
 

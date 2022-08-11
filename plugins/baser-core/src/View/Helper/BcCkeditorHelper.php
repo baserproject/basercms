@@ -305,7 +305,7 @@ class BcCkeditorHelper extends Helper
         if (!$this->_script) {
             $this->_script = true;
             $this->BcHtml->script(['vendor/ckeditor/ckeditor'], ["block" => true]);
-            $this->BcHtml->script(['admin/pages/applyCkeditor.bundle'], ["block" => true]);
+            $this->BcHtml->script(['admin/pages/apply_ckeditor.bundle'], ["block" => true]);
         }
 
         if ($editorUseDraft) {

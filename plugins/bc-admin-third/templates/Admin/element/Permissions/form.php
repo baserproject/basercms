@@ -23,7 +23,7 @@ use BaserCore\View\BcAdminAppView;
  * @var array $permissionAuthList
  */
 
-$this->BcBaser->js('admin/permissions/form', false);
+$this->BcBaser->js('admin/permissions/form.bundle', false);
 ?>
 
 
