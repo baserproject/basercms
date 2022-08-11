@@ -75,7 +75,7 @@ class BcUploaderViewEventListener extends BcViewEventListener
                     'ckeditorMidium' => __d('baser', '中'),
                     'ckeditorLarge' => __d('baser', '大'),
                 ], ['inline' => true]);
-                $jscode .= $this->BcHtml->script('BcUploader.admin/libs/ckeditor_uploader');
+                $jscode .= $this->BcHtml->script('BcUploader.admin/ckeditor_uploader.bundle');
                 $View->output = str_replace('</head>', $jscode . '</head>', $View->output);
 
                 /* CSSを読み込む */

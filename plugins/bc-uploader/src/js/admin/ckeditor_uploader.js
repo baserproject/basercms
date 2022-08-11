@@ -1,14 +1,17 @@
 /**
- * ファイルアップロードダイアログ用CKEditorスクリプト
- *
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @since            Baser v 0.1.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) NPO baser foundation
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       https://basercms.net/license/index.html MIT License
  */
+
+/**
+ * ファイルアップロードダイアログ用CKEditorスクリプト
+ */
+
 if (!CKEDITOR.dialog.exists('Image')) {
 
     CKEDITOR.dialog.add('baserUploaderDialog', function (editor) {
