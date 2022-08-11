@@ -1,16 +1,15 @@
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package         Baser.View
- * @since           baserCMS v 4.4.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) NPO baser foundation
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       https://basercms.net/license/index.html MIT License
  */
 
 /**
- * Gulpfile for BcSample
+ * Gulpfile for BcFront
  * Require Gulp4
  */
 const gulp = require("gulp");
@@ -18,9 +17,9 @@ const sass = require('gulp-sass')(require('sass'));
 const plumber = require("gulp-plumber");
 const uglify = require('gulp-uglify');
 const paths = {
-  srcCss :'./webroot/src/css/**/*.scss',
+  srcCss :'./src/css/**/*.scss',
   distCss :'./webroot/css/',
-  srcJs : './webroot/src/js/*.js',
+  srcJs : './src/js/*.js',
   destJs : './webroot/js/'
 };
 
