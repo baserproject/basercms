@@ -11,12 +11,12 @@
     },
     "autoload": {
         "psr-4": {
-            "BcBlog\\": "src/"
+            "BcWidgetArea\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "BcBlog\\Test\\": "tests/"
+            "BcWidgetArea\\Test\\": "tests/"
         }
     }
 }

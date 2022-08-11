@@ -11,7 +11,7 @@
         "cakephp/authentication": "^2.9",
         "cakephp/migrations": "^3.2",
         "doctrine/annotations": "^1.12",
-        "firebase/php-jwt": "^6.1",
+        "firebase/php-jwt": "6.1.0",
         "josegonzalez/dotenv": "^3.2",
         "mobiledetect/mobiledetectlib": "^2.8",
         "ext-json": "*",

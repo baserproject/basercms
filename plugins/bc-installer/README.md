@@ -7,5 +7,5 @@ You can install this plugin into your baserCMS application using [composer](http
 The recommended way to install composer packages is:
 
 ```
-composer require baserproject/bc-editor-template
+composer require baserproject/bc-installer
 ```

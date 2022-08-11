@@ -11,12 +11,12 @@
     },
     "autoload": {
         "psr-4": {
-            "BcBlog\\": "src/"
+            "BcEditorTemplate\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "BcBlog\\Test\\": "tests/"
+            "BcEditorTemplate\\Test\\": "tests/"
         }
     }
 }

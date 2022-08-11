@@ -13,10 +13,5 @@
         "psr-4": {
             "BcSpaSample\\": "src/"
         }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "BcSpaSample\\Test\\": "tests/"
-        }
     }
 }

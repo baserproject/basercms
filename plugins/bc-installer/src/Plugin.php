@@ -9,12 +9,12 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
-namespace BcEditorTemplate;
+namespace BcInstaller;
 use BaserCore\BcPlugin;
 
 /**
  * Class Plugin
- * @package BcEditorTemplate
+ * @package BcInstaller
  */
 class Plugin extends BcPlugin
 {
