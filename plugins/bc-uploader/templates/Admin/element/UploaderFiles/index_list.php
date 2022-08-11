@@ -22,7 +22,7 @@ $this->passedArgs['action'] = 'ajax_list';
 //==============================================================================
 $this->BcBaser->js([
   'vendor/jquery.upload-1.0.0.min',
-  'BcUploader.admin/uploader_files/uploader_list_table'
+  'BcUploader.admin/uploader_files/uploader_list_table.bundle'
 ]);
 ?>
 
