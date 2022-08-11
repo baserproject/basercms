@@ -15,7 +15,7 @@
  *
  * @var BcAppView $this
  */
-$this->BcBaser->js('admin/editor_templates/form', false);
+$this->BcBaser->js('BcEditorTemplate.admin/editor_templates/form.bundle', false);
 ?>
 
 
