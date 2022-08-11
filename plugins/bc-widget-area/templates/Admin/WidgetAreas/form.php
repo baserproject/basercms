@@ -23,7 +23,7 @@ $this->BcBaser->i18nScript([
   'infoMessage2' => __d('baser', 'ウィジェットエリア名を保存しました。'),
   'infoMessage3' => __d('baser', 'ウィジェットを保存しました。'),
 ]);
-$this->BcBaser->js('admin/widget_areas/form', false, ['id' => 'AdminWidgetFormScript',
+$this->BcBaser->js('BcWidgetArea.admin/widget_areas/form.bundle', false, ['id' => 'AdminWidgetFormScript',
   'data-delWidgetUrl' => $this->BcBaser->getUrl(['controller' => 'widget_areas', 'action' => 'del_widget', $this->BcForm->getSourceValue('WidgetArea.id')]),
   'data-currentAction' => $this->request->action
 ]);
