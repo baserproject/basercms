@@ -13,7 +13,7 @@
 /**
  * [ADMIN] ブログタグ フォーム
  */
-$this->BcBaser->js('Blog.admin/blog_tags/form', false);
+$this->BcBaser->js('BcBlog.admin/blog_tags/form.bundle', false);
 ?>
 
 

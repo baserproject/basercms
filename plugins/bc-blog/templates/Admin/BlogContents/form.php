@@ -13,7 +13,7 @@
 /**
  * [ADMIN] ブログコンテンツ フォーム
  */
-$this->BcBaser->js('Blog.admin/blog_contents/edit', false);
+$this->BcBaser->js('BcBlog.admin/blog_contents/form.bundle', false);
 $this->BcBaser->i18nScript([
   'confirmMessage1' => __d('baser', 'ブログ設定を保存して、コンテンツテンプレート %s の編集画面に移動します。よろしいですか？')
 ]);

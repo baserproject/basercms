@@ -24,7 +24,7 @@ $this->BcBaser->i18nScript([
   'alertMessage4' => __d('baser', 'ブログカテゴリの追加に失敗しました。'),
   'alertMessage5' => __d('baser', 'ブログカテゴリの追加に失敗しました。')
 ]);
-$this->BcBaser->js('Blog.admin/blog_posts/form', false, [
+$this->BcBaser->js('BcBlog.admin/blog_posts/form.bundle', false, [
   'id' => 'AdminBlogBLogPostsEditScript',
   'data-fullurl' => $fullUrl,
   'data-previewurl' => $this->Blog->getPreviewUrl($url, $this->request->params['Site']['use_subdomain'])
