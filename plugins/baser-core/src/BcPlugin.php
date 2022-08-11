@@ -237,9 +237,8 @@ class BcPlugin extends BasePlugin
             return [];
         }
 
-        // 有効化されていない、かつ、composer に登録されていない可能性があるため include する
-        BcUtil::includePluginClass($name);
-        $path = CakePlugin::path($name) . DS . 'config' . DS . 'update';
+        // 有効化されていない可能性があるため CakePlugin::path() は利用しない
+        $path = BcUtil::getPluginPath($name) . 'config' . DS . 'update';
         $folder = new Folder($path);
         $files = $folder->read(true, true);
         $updaters = [];
@@ -286,8 +285,7 @@ class BcPlugin extends BasePlugin
             return [];
         }
 
-        // 有効化されていない、かつ、composer に登録されていない可能性があるため include する
-        BcUtil::includePluginClass($name);
+        // 有効化されていない可能性があるため CakePlugin::path() は利用しない
         $path = BcUtil::getPluginPath($name) . 'config' . DS . 'update';
         $folder = new Folder($path);
         $files = $folder->read(true, true);
