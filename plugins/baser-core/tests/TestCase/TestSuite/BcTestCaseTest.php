@@ -12,6 +12,8 @@
 namespace BaserCore\Test\TestCase\TestSuite;
 
 use BaserCore\Utility\BcContainer;
+use BaserCore\View\Helper\BcFormHelper;
+use Cake\Event\Event;
 use Cake\Event\EventManager;
 use Cake\Http\Session;
 use Cake\Core\Configure;
@@ -19,6 +21,7 @@ use Cake\Log\Log;
 use Cake\Routing\Router;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Controller\AnalyseController;
+use Cake\View\View;
 
 /**
  * BaserCore\TestSuite\BcTestCase
@@ -182,6 +185,21 @@ class BcTestCaseTest extends BcTestCase
         unlink(TMP . 'test');
     }
 
+    /**
+     * test entryEventToMock
+     * @return void
+     */
+    public function testEntryEventToMock(){
+
+        $form = new BcFormHelper(new View());
+        $rs = self::entryEventToMock(self::EVENT_LAYER_HELPER, 'Form.afterEnd', function(Event $event){
+            $event->setData('out', 'test');
+        });
+
+        $this->assertEquals('test', $form->end());
+        $this->assertTrue(isset($rs->layer));
+        $this->assertTrue(isset($rs->plugin));
+    }
     /**
      * test tearDownFixtureManager and setUpFixtureManager
      * @return void

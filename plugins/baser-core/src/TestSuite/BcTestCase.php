@@ -312,6 +312,9 @@ class BcTestCase extends TestCase
      * @param $eventName
      * @param $callback
      * @return EventListenerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @checked
+     * @unitTest
+     * @noTodo
      */
     protected function entryEventToMock($layer, $eventName, $callback)
     {
