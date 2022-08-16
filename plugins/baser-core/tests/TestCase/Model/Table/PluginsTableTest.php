@@ -83,7 +83,7 @@ class PluginsTableTest extends BcTestCase
         $this->assertEquals(5, $plugin->priority);
         // test Uninstall
         $this->Plugins->uninstall('BcTest');
-        $this->assertEquals(3, $this->Plugins->find()->count());
+        $this->assertEquals(4, $this->Plugins->find()->count());
     }
 
     /**
