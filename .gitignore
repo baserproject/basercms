@@ -85,6 +85,10 @@ node_modules
 /webroot/bc_theme_config
 /webroot/bc_theme_file
 /webroot/bc_widget_area
+/webroot/bc_blog
+/webroot/bc_editor_template
+/webroot/bc_mail
+/webroot/bc_uploader
 # jwt
 /config/jwt.key
 /config/jwt.pem
