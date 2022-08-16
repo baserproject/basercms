@@ -36,7 +36,8 @@ class AppTableTest extends BcTestCase
      * @var array
      */
     protected $fixtures = [
-        'plugin.BaserCore.Permissions'
+        'plugin.BaserCore.Permissions',
+        'plugin.BaserCore.Plugins',
     ];
     /**
      * Set Up
@@ -152,4 +153,15 @@ class AppTableTest extends BcTestCase
         $this->assertEquals(2, count($listeners));
     }
 
+    /**
+     * test changeSort
+     */
+    public function testChangeSort()
+    {
+        $Plugins = $this->getTableLocator()->get('BaserCore.Plugins');
+        $Plugins->changeSort(1, 2, ['sortFieldName' => 'priority']);
+        $this->assertEquals(3, $Plugins->get(1)->priority);
+        $Plugins->changeSort(2, -1, ['sortFieldName' => 'priority']);
+        $this->assertEquals(1, $Plugins->get(2)->priority);
+    }
 }

@@ -1,14 +1,12 @@
 <?php
-$target =
-// 例
-$pages = [
+$target = [
     'id' => ['type' => 'integer', 'null' => false, 'default' => null, 'length' => 8, 'key' => 'primary'],
-    'contents' => ['type' => 'text', 'null' => true, 'default' => null],
-    'draft' => ['type' => 'text', 'null' => true, 'default' => null],
-    'page_template' => ['type' => 'string', 'null' => true, 'default' => null],
-    'code' => ['type' => 'text', 'null' => true, 'default' => null],
-    'modified' => ['type' => 'datetime', 'null' => true, 'default' => null],
+    'user_id' => ['type' => 'integer', 'null' => true, 'default' => null, 'length' => 8],
+    'name' => ['type' => 'string', 'null' => true, 'default' => null],
+    'url' => ['type' => 'string', 'null' => true, 'default' => null],
+    'sort' => ['type' => 'integer', 'null' => true, 'default' => null, 'length' => 8],
     'created' => ['type' => 'datetime', 'null' => true, 'default' => null],
+    'modified' => ['type' => 'datetime', 'null' => true, 'default' => null],
     'indexes' => ['PRIMARY' => ['column' => 'id', 'unique' => 1]],
 ];
 

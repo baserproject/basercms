@@ -237,13 +237,14 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
                     'resolver' => [
                         'className' => 'Authentication.Orm',
                         'userModel' => $authSetting['userModel'],
+                        'finder' => 'available'
                     ],
                 ]);
                 $service->loadAuthenticator('Authentication.' . $authSetting['type'], [
                     'fields' => [
                         'username' => is_array($authSetting['username'])? $authSetting['username'][0] : $authSetting['username'],
                         'password' => $authSetting['password']
-                    ]
+                    ],
                 ]);
                 $service->loadIdentifier('Authentication.Password', [
                     'returnPayload' => false,
@@ -256,7 +257,6 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
                         'userModel' => $authSetting['userModel'],
                         'finder' => 'available'
                     ],
-                    'contain' => 'UserGroups',
                 ]);
                 // ログインの際のみ、管理画面へのログイン状態を維持するためセッションの設定を追加
                 // TODO ログインURLの判定方法を検討必要
@@ -273,7 +273,6 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
                 $service->setConfig([
                     'unauthenticatedRedirect' => Router::url($authSetting['loginAction'], true),
                     'queryParam' => 'redirect',
-                    'contain' => 'UserGroups',
                 ]);
                 $service->loadAuthenticator('Authentication.Session', [
                     'sessionKey' => $authSetting['sessionKey'],
@@ -295,7 +294,6 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
                         'userModel' => $authSetting['userModel'],
                         'finder' => 'available'
                     ],
-                    'contain' => 'UserGroups',
                 ]);
                 break;
 

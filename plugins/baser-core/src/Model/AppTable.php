@@ -735,90 +735,56 @@ class AppTable extends Table
      *
      * @param string $id
      * @param int $offset
-     * @param array $conditions
+     * @param array $options
+     *   - conditions: データ取得条件
+     *   - sortFieldName: ソートフィールドのカラム名 (初期値: sort)
      * @return boolean
      */
-    public function changeSort($id, $offset, $conditions = [])
+    public function changeSort($id, $offset, $options = [])
     {
-        if ($conditions) {
-            $_conditions = $conditions;
-        } else {
-            $_conditions = [];
-        }
-
-        // 一時的にキャッシュをOFFする
-        $this->cacheQueries = false;
-
-        $current = $this->find()
-            ->where([$this->alias . '.id' => $id])
-            ->select([$this->alias . '.id', $this->alias . '.sort'])
-            ->first();
-        if (!$current) {
-            return false;
-        }
-
-        // 変更相手のデータを取得
-        if ($offset > 0) { // DOWN
-            $order = [$this->alias . '.sort'];
-            $limit = $offset;
-            $conditions[$this->alias . '.sort >'] = $current[$this->alias]['sort'];
-        } elseif ($offset < 0) { // UP
-            $order = [$this->alias . '.sort DESC'];
-            $limit = $offset * -1;
-            $conditions[$this->alias . '.sort <'] = $current[$this->alias]['sort'];
-        } else {
+        $options += [
+            'conditions' => [],
+            'sortFieldName' => 'sort',
+        ];
+        $offset = intval($offset);
+        if ($offset === 0) {
             return true;
         }
 
-        $conditions = array_merge($conditions, $_conditions);
-        $target = $this->find('all', [
-            'conditions' => $conditions,
-            'fields' => [$this->alias . '.id', $this->alias . '.sort'],
-            'order' => $order,
-            'limit' => $limit,
-            'recursive' => -1
-        ]);
+        $conditions = $options['conditions'];
 
-        if (!isset($target[count($target) - 1])) {
+        $current = $this->get($id);
+
+        // currentを含め変更するデータを取得
+        if ($offset > 0) { // DOWN
+            $order = [$options['sortFieldName']];
+            $conditions[$options['sortFieldName'] . " >="] = $current->{$options['sortFieldName']};
+        } else { // UP
+            $order = [$options['sortFieldName'] . " DESC"];
+            $conditions[$options['sortFieldName'] . " <="] = $current->{$options['sortFieldName']};
+        }
+
+        $result = $this->find()
+            ->where($conditions)
+            ->select(["id", $options['sortFieldName']])
+            ->order($order)
+            ->limit(abs($offset) + 1)
+            ->all();
+
+        $count = $result->count();
+        if (!$count) {
             return false;
         }
-
-        $currentSort = $current[$this->alias]['sort'];
-        $targetSort = $target[count($target) - 1][$this->alias]['sort'];
-
-        // current から target までのデータをsortで範囲指定して取得
-        $conditions = [];
-        if ($offset > 0) { // DOWN
-            $conditions[$this->alias . '.sort >='] = $currentSort;
-            $conditions[$this->alias . '.sort <='] = $targetSort;
-        } elseif ($offset < 0) { // UP
-            $conditions[$this->alias . '.sort <='] = $currentSort;
-            $conditions[$this->alias . '.sort >='] = $targetSort;
+        $entities = $result->toList();
+        //データをローテーション
+        $currentNewValue = $entities[$count - 1]->{$options['sortFieldName']};
+        for($i = $count - 1; $i > 0; $i--) {
+            $entities[$i]->{$options['sortFieldName']} = $entities[$i - 1]->{$options['sortFieldName']};
         }
+        $entities[0]->{$options['sortFieldName']} = $currentNewValue;
 
-        $conditions = array_merge($conditions, $_conditions);
-        $entities = $this->find('all', [
-            'conditions' => $conditions,
-            'fields' => [$this->alias . '.id', $this->alias . '.sort'],
-            'order' => $order,
-            'recursive' => -1
-        ]);
-
-        // 全てのデータを更新
-        foreach($entities as $entity) {
-            $data = [];
-            if ($entity->sort == $currentSort) {
-                $data['sort'] = $targetSort;
-            } else {
-                if ($offset > 0) {
-                    $data['sort'] = $entity->sort--;
-                } elseif ($offset < 0) {
-                    $data['sort'] = $entity->sort++;
-                }
-            }
-            if (!$this->patchEntity($entity, $data)) {
-                return false;
-            }
+        if (!$this->saveMany($entities)) {
+            return false;
         }
 
         return true;

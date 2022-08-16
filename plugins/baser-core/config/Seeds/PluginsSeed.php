@@ -32,6 +32,17 @@ class PluginsSeed extends AbstractSeed
                 'created' => NULL,
                 'modified' => '2021-12-09 17:16:53',
             ],
+            [
+                'id' => '3',
+                'name' => 'BcFavorite',
+                'title' => 'お気に入り',
+                'version' => '1.0.0',
+                'status' => '1',
+                'db_init' => '1',
+                'priority' => '3',
+                'created' => '2021-09-16 06:46:11',
+                'modified' => '2021-09-16 06:46:11',
+            ],
         ];
 
         $table = $this->table('plugins');

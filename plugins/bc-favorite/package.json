@@ -1,0 +1,23 @@
+{
+  "name": "bc-favorite",
+  "version": "1.0.0",
+  "description": "sample",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "vue": "^2.6.12",
+    "vue-loader": "^15.9.8",
+    "vue-template-compiler": "^2.6.14",
+    "vuelidate": "^0.7.7"
+  },
+  "scripts": {
+    "dev": "./node_modules/.bin/webpack --mode development --watch"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.16.12",
+    "@babel/polyfill": "^7.12.1",
+    "@babel/preset-env": "^7.16.11",
+    "babel-loader": "^8.2.3",
+    "webpack": "^4.27.1",
+    "webpack-cli": "^3.1.2"
+  }
+}

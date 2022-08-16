@@ -11,6 +11,8 @@
 
 namespace BaserCore\ServiceProvider;
 
+use BcFavorite\Service\FavoriteService;
+use BcFavorite\Service\FavoriteServiceInterface;
 use BaserCore\Service\AppService;
 use BaserCore\Service\AppServiceInterface;
 use BaserCore\Service\BcAdminAppService;
@@ -72,6 +74,7 @@ class BcServiceProvider extends ServiceProvider
      * @var string[]
      */
     protected $provides = [
+        FavoriteServiceInterface::class,
         AppServiceInterface::class,
         BcAdminAppServiceInterface::class,
         UsersServiceInterface::class,
@@ -128,6 +131,8 @@ class BcServiceProvider extends ServiceProvider
         $container->add(PermissionsServiceInterface::class, PermissionsService::class);
         // Dblogsサービス
         $container->add(DblogsServiceInterface::class, DblogsService::class);
+        // Favoriteサービス
+        $container->add(FavoriteServiceInterface::class, FavoriteService::class);
         // Contentsサービス
         $container->add(ContentsServiceInterface::class, ContentsService::class);
         $container->add(ContentsAdminServiceInterface::class, ContentsAdminService::class);

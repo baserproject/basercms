@@ -228,61 +228,6 @@ class PluginsTable extends AppTable
     }
 
     /**
-     * 優先順位を変更する
-     *
-     * @param string|int $id 起点となるプラグインのID
-     * @param string|int $offset 変更する範囲の相対位置
-     * @param array $conditions find条件
-     * @return bool
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function changePriority($id, $offset, $conditions = []): bool
-    {
-        $offset = intval($offset);
-        if ($offset === 0) {
-            return true;
-        }
-
-        $current = $this->get($id);
-
-        // currentを含め変更するデータを取得
-        if ($offset > 0) { // DOWN
-            $order = ["priority"];
-            $conditions["priority >="] = $current->priority;
-        } else { // UP
-            $order = ["priority DESC"];
-            $conditions["priority <="] = $current->priority;
-        }
-
-        $result = $this->find()
-            ->where($conditions)
-            ->select(["id", "priority", "name"])
-            ->order($order)
-            ->limit(abs($offset) + 1)
-            ->all();
-
-        $count = $result->count();
-        if (!$count) {
-            return false;
-        }
-        $plugins = $result->toList();
-        //データをローテーション
-        $currentNewValue = $plugins[$count - 1]->priority;
-        for($i = $count - 1; $i > 0; $i--) {
-            $plugins[$i]->priority = $plugins[$i - 1]->priority;
-        }
-        $plugins[0]->priority = $currentNewValue;
-
-        if (!$this->saveMany($plugins)) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
      * データベースをアップデートする
      * @param string $name
      * @param string $version
@@ -305,5 +250,5 @@ class PluginsTable extends AppTable
             }
         }
     }
-
+    
 }

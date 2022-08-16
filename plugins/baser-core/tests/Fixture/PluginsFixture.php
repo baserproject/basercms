@@ -60,5 +60,16 @@ class PluginsFixture extends TestFixture
             'created' => '2021-05-03 10:57:07',
             'modified' => '2021-05-03 10:57:07'
         ],
+        [
+            'id' => 4,
+            'name' => 'BcFavorite',
+            'title' => 'お気に入り',
+            'version' => '1.0.0',
+            'status' => '1',
+            'db_init' => '1',
+            'priority' => '4',
+            'created' => '2021-05-03 10:57:07',
+            'modified' => '2021-05-03 10:57:07'
+        ],
     ];
 }

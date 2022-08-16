@@ -33,6 +33,7 @@ $base = $attributes['base'];
     'vendor/bootstrap-4.1.3/bootstrap',
     'vendor/jquery-ui/jquery-ui.min',
     'vendor/jquery.timepicker',
+    '../js/vendor/jquery-contextMenu-2.2.0/jquery.contextMenu.min.css',
     'vendor/jquery-colorbox/colorbox',
     'admin/style'
   ]) ?>
@@ -70,6 +71,7 @@ $base = $attributes['base'];
     'vendor/vue.min',
     'vendor/jquery-3.5.1.min',
     'vendor/jquery.bt.min',
+    'vendor/jquery-contextMenu-2.2.0/jquery.contextMenu.min',
     'vendor/jquery-ui-1.13.0.min',
     'vendor/i18n/ui.datepicker-ja',
     'vendor/jquery.validate.1.19.3.min',

@@ -20,21 +20,34 @@ use BaserCore\View\BcAdminAppView;
  * @var bool $isHelp
  * @var bool $isLogin
  */
+
+if (!$isLogin) return;
+$contentsMenu =  [];
+$event = $this->dispatchLayerEvent('beforeContentsMenu', ['contentsMenu' => $contentsMenu], ['class' => '', 'plugin' => '']);
+if ($event !== false) {
+  $contentsMenu = ($event->getResult() === null || $event->getResult() === true)? $event->getData('contentsMenu') : $event->getResult();
+}
+$globalEvent = $this->dispatchLayerEvent('beforeContentsMenu', ['contentsMenu' => $contentsMenu]);
+if ($globalEvent !== false) {
+  $contentsMenu = ($globalEvent->getResult() === null || $globalEvent->getResult() === true)? $globalEvent->getData('contentsMenu') : $globalEvent->getResult();
+}
+
 ?>
-
-
-<?php if ($isLogin): ?>
   <div id="ContentsMenu" class="bca-content-menu">
     <ul>
-      <li class="bca-content-menu__item">
-        <?php // TODO: button要素に変更 ?>
-        <?php //$this->BcBaser->link(__d('baser', 'お気に入りに追加'), 'javascript:void(0)', ['id' => 'BtnFavoriteAdd', 'data-bca-fn' => 'BtnFavoriteAdd', 'class' => 'bca-content-menu__link bca-icon--plus-square']) ?></li>
+      <?php if($contentsMenu): ?>
+        <?php foreach ($contentsMenu as $menu):?>
+          <li class="bca-content-menu__item">
+            <?php echo $menu; ?>
+          </li>
+        <?php endforeach; ?>
+      <?php endif; ?>
       <?php if ($isHelp): ?>
         <li class="bca-content-menu__item">
           <?php // TODO: button要素に変更 ?>
-          <?php $this->BcBaser->link(__d('baser', 'ヘルプ'), 'javascript:void(0)', ['id' => 'BtnMenuHelp', 'class' => 'bca-content-menu__link bca-icon--help']) ?></li>
+          <?php $this->BcBaser->link(__d('baser', 'ヘルプ'), 'javascript:void(0)', ['id' => 'BtnMenuHelp', 'class' => 'bca-content-menu__link bca-icon--help']) ?>
+        </li>
       <?php endif ?>
-
       <?php if ($isSuperUser): ?>
         <li class="bca-content-menu__item">
           <?php $this->BcBaser->element('Permissions/dialog') ?>
@@ -44,4 +57,3 @@ use BaserCore\View\BcAdminAppView;
       <?php endif ?>
     </ul>
   </div>
-<?php endif ?>

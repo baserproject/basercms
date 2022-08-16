@@ -21,6 +21,12 @@ use BaserCore\View\BcAdminAppView;
 
 <div id="SideBar" class="bca-nav">
 
+  <?php $this->dispatchLayerEvent('beforeAdminMenu', [], ['class' => '', 'plugin' => '']) ?>
+  <?php $this->dispatchLayerEvent('beforeAdminMenu') ?>
+
+  <?php // TODO : 要実装 ?>
+  <?php // $this->BcBaser->element('permission') ?>
+
   <nav class="bca-nav__main" data-js-tmpl="AdminMenu" hidden>
     <h2 class="bca-nav__main-title"><?php echo __d('baser', '管理メニュー') ?></h2>
     <div v-for="content in contentList" class="bca-nav__sub"

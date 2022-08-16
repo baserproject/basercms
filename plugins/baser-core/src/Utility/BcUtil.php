@@ -343,6 +343,7 @@ class BcUtil
         if ($pluginClassPath && file_exists($pluginClassPath)) {
             $loader = require ROOT . DS . 'vendor/autoload.php';
             $loader->addPsr4($pluginName . '\\', $pluginPath . 'src');
+            $loader->addPsr4($pluginName . '\\Test\\', $pluginPath . 'tests');
             require_once $pluginClassPath;
             return true;
         }

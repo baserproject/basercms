@@ -15,7 +15,6 @@ use ArrayObject;
 use Cake\Event\Event;
 use Cake\Core\Configure;
 use BaserCore\Model\AppTable;
-use BaserCore\Utility\BcUtil;
 use Cake\Event\EventInterface;
 use Cake\Validation\Validator;
 use BaserCore\Annotation\NoTodo;

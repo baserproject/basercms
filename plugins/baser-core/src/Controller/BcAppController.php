@@ -901,19 +901,6 @@ class BcAppController extends AppController
     }
 
     /**
-     * よく使う項目の表示状態を保存する
-     *
-     * @param mixed $open 1 Or ''
-     * @return void
-     */
-    public function admin_ajax_save_favorite_box($open = '')
-    {
-        $this->Session->write('Baser.favorite_box_opened', $open);
-        echo true;
-        exit();
-    }
-
-    /**
      * 検索ボックスの表示状態を保存する
      *
      * @param string $key キー

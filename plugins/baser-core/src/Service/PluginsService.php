@@ -120,7 +120,11 @@ class PluginsService implements PluginsServiceInterface
      */
     public function install($name, $connection = 'default'): ?bool
     {
-        $options = ['connection' => $connection];
+        if($connection) {
+            $options = ['connection' => $connection];
+        } else {
+            $options = [];
+        }
         BcUtil::includePluginClass($name);
         $plugins = CakePlugin::getCollection();
         $plugin = $plugins->create($name);
@@ -332,7 +336,10 @@ class PluginsService implements PluginsServiceInterface
      */
     public function changePriority(int $id, int $offset, array $conditions = []): bool
     {
-        $result = $this->Plugins->changePriority($id, $offset, $conditions);
+        $result = $this->Plugins->changeSort($id, $offset, [
+            'conditions' => $conditions,
+            'sortFieldName' => 'priority',
+        ]);
         return $result;
     }
 
