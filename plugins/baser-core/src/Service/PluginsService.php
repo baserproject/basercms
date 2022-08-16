@@ -271,6 +271,9 @@ class PluginsService implements PluginsServiceInterface
      * @param string $name
      * @param string $connection
      * @throws Exception
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function resetDb(string $name, $connection = 'default'): void
     {

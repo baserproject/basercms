@@ -156,15 +156,16 @@ class PluginsServiceTest extends BcTestCase
      */
     public function testResetDb()
     {
-        $this->markTestIncomplete('テストが未実装です');
-        // TODO インストールが実装できしだい
         $this->Plugins->install('BcBlog', 'test');
-        $blogPosts = $this->getTableLocator()->get('BcBlog.BlogPosts');
-        $blogPosts->save($blogPosts->newEntity([
-            'name' => 'test'
-        ]));
+        $blogPosts = $this->getTableLocator()->get('BcBlog.plugins');
+
+        $rs = $blogPosts->find()->where(['name' => 'BcBlog'])->first();
+        $this->assertTrue($rs->db_init);
+
         $this->Plugins->resetDb('BcBlog', 'test');
-        $this->assertEquals(0, $blogPosts->find()->where(['name' => 'test'])->count());
+
+        $rs = $blogPosts->find()->where(['name' => 'BcBlog'])->first();
+        $this->assertFalse($rs->db_init);
     }
 
     /**
