@@ -143,6 +143,9 @@ class UserGroupsController extends BcApiController
     /**
      * リスト出力
      * @param UserGroupsServiceInterface $userGroups
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function list(UserGroupsServiceInterface $userGroups)
     {
