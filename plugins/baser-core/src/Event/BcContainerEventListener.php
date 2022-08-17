@@ -27,6 +27,9 @@ class BcContainerEventListener implements EventListenerInterface
     /**
      * implementedEvents
      * @return \string[][]
+     * @checked
+     * @unitTest
+     * @noTodo
      */
     public function implementedEvents(): array
     {

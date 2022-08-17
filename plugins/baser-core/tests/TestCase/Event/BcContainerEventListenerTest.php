@@ -65,11 +65,13 @@ class BcContainerEventListenerTest extends BcTestCase
     }
 
     /**
-     * implementedEvents
+     * test implementedEvents
      */
     public function testImplementedEvents()
     {
-        $this->assertTrue(is_array($this->bcContainerEventListener->implementedEvents()));
+        $rs = $this->bcContainerEventListener->implementedEvents();
+        $this->assertTrue(is_array($rs));
+        $this->assertEquals("buildContainer", $rs['Application.buildContainer']['callable']);
     }
 
     /**
