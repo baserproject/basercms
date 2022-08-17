@@ -11,6 +11,7 @@
 
 namespace BaserCore\Test\TestCase\Controller\Api;
 
+use BaserCore\Controller\Api\UsersController;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\Core\Configure;
 use Cake\TestSuite\IntegrationTestTrait;
@@ -68,6 +69,18 @@ class UsersControllerTest extends BcTestCase
     {
         Configure::clear();
         parent::tearDown();
+    }
+
+    /**
+     * test initialize
+     * @return void
+     */
+    public function testInitialize(){
+        $request = $this->getRequest('/baser/api/baser-core/users/');
+        $request = $this->loginAdmin($request);
+        $usersController = new UsersController($request);
+
+        $this->assertEquals($usersController->Authentication->unauthenticatedActions, ['login']);
     }
 
     public function testLoginAndRefreshToken()

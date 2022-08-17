@@ -33,6 +33,9 @@ class UsersController extends BcApiController
 
     /**
      * Initialize
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function initialize(): void
     {
