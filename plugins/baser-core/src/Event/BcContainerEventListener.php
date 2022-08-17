@@ -14,6 +14,9 @@ namespace BaserCore\Event;
 use BaserCore\Utility\BcContainer;
 use Cake\Event\Event;
 use Cake\Event\EventListenerInterface;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * Class BcContainerEventListener
@@ -41,6 +44,9 @@ class BcContainerEventListener implements EventListenerInterface
      * インターフェイスを指定して取得できる
      * 例）$this->getService(UsersServiceInterface::class);
      * @param Event $event
+     * @checked
+     * @unitTest
+     * @noTodo
      */
     public function buildContainer(Event $event)
     {
