@@ -27,6 +27,9 @@ class SiteConfigsController extends BcApiController
     /**
      * システム基本設定を取得
      * @param SiteConfigsServiceInterface $siteConfigs
+     * @checked
+     * @unitTest
+     * @noTodo
      */
     public function view(SiteConfigsServiceInterface $siteConfigs) {
         $this->set([
