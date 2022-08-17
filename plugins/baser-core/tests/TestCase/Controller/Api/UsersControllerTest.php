@@ -187,6 +187,20 @@ class UsersControllerTest extends BcTestCase
     }
 
     /**
+     * test refresh_token function
+     * @return void
+     */
+    public function testRefreshToken(){
+        $this->get('/baser/api/baser-core/users/refresh_token.json');
+        $this->assertResponseCode(401);
+
+        $this->post('/baser/api/baser-core/users/login.json', ['email' => 'testuser1@example.com', 'password' => 'password']);
+
+        $body = json_decode($this->_getBodyAsString());
+        $this->get('/baser/api/baser-core/users/refresh_token.json?token=' . $body->refresh_token);
+        $this->assertResponseContains('access_token');
+    }
+    /**
      * test Login
      * @return void
      */
