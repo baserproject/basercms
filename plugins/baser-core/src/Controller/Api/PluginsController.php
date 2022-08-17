@@ -31,6 +31,9 @@ class PluginsController extends BcApiController
      * プラグイン情報取得
      * @param PluginsServiceInterface $plugins
      * @param $id
+     * @checked
+     * @unitTest
+     * @noTodo
      */
     public function view(PluginsServiceInterface $plugins, $id)
     {
