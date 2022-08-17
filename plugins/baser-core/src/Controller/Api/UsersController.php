@@ -42,6 +42,9 @@ class UsersController extends BcApiController
 
     /**
      * ログイン
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function login(UsersServiceInterface $users)
     {
