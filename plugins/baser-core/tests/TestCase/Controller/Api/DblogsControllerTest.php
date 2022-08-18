@@ -11,7 +11,9 @@
 
 namespace BaserCore\Test\TestCase\Controller\Api;
 
+use BaserCore\Service\DblogsService;
 use BaserCore\TestSuite\BcTestCase;
+use Cake\Http\ServerRequest;
 use Cake\TestSuite\IntegrationTestTrait;
 
 class DblogsControllerTest extends BcTestCase
@@ -65,6 +67,27 @@ class DblogsControllerTest extends BcTestCase
     public function tearDown(): void
     {
         parent::tearDown();
+    }
+
+    /**
+     * test index
+     * @return void
+     */
+    public function testIndex()
+    {
+        $this->get('/baser/api/baser-core/dblogs/index/1.json?token=' . $this->accessToken);
+        $this->assertResponseSuccess();
+        $result = json_decode((string)$this->_response->getBody());
+
+        $dblogService = new DblogsService();
+        $dblogs = $dblogService->getIndex();
+        $this->assertEquals($dblogs->count(), count($result->Dblogs));
+
+        $this->get('/baser/api/baser-core/dblogs/index/1.json?user_id=2&token=' . $this->accessToken);
+        $this->assertResponseSuccess();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals(1, count($result->Dblogs));
+        $this->assertEquals(2, $result->Dblogs[0]->user_id);
     }
 
     /**
