@@ -83,6 +83,11 @@ class PluginsControllerTest extends BcTestCase
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals('BcBlog', $result->plugin->name);
+        $this->assertEquals('ブログ', $result->plugin->title);
+        $this->assertEquals('1.0.0', $result->plugin->version);
+        $this->assertEquals(1, $result->plugin->priority);
+        $this->assertTrue($result->plugin->status);
+        $this->assertTrue($result->plugin->db_init);
     }
 
     /**

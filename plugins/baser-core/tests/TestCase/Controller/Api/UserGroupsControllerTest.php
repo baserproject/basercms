@@ -11,6 +11,7 @@
 
 namespace BaserCore\Test\TestCase\Controller\Api;
 
+use BaserCore\Service\UserGroupsService;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\TestSuite\IntegrationTestTrait;
 
@@ -132,4 +133,20 @@ class UserGroupsControllerTest extends BcTestCase
         $this->assertEquals('admins', $result->userGroups->name);
     }
 
+    /**
+     * Test List
+     */
+    public function testList()
+    {
+        $this->get('/baser/api/baser-core/user_groups/list/1.json?token=' . $this->accessToken);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+
+        $userGroupsService = new UserGroupsService();
+        $userGroups = $userGroupsService->getList();
+
+        foreach ($result->userGroups as $key => $v){
+            $this->assertEquals($userGroups[$key], $v);
+        }
+    }
 }

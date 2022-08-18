@@ -11,6 +11,7 @@
 
 namespace BaserCore\Test\TestCase\Controller\Api;
 
+use BaserCore\Service\SiteConfigsService;
 use Cake\Core\Configure;
 use Cake\TestSuite\IntegrationTestTrait;
 
@@ -77,7 +78,15 @@ class SiteConfigsControllerTest extends \BaserCore\TestSuite\BcTestCase
         $this->get('/baser/api/baser-core/site_configs/view/1.json?token=' . $this->accessToken);
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
-        $this->assertEquals('basertest@example.com', $result->siteConfig->email);
+
+        $site = new SiteConfigsService();
+        $siteConfig = $site->get();
+
+        $this->assertEquals($siteConfig["address"], $result->siteConfig->address);
+        $this->assertEquals($siteConfig["email"], $result->siteConfig->email);
+        $this->assertEquals($siteConfig["theme"], $result->siteConfig->theme);
+        $this->assertEquals($siteConfig["editor_styles"], $result->siteConfig->editor_styles);
+        $this->assertEquals($siteConfig["main_site_display_name"], $result->siteConfig->main_site_display_name);
     }
 
     /**

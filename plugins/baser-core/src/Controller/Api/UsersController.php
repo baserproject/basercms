@@ -33,6 +33,9 @@ class UsersController extends BcApiController
 
     /**
      * Initialize
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function initialize(): void
     {
@@ -42,6 +45,9 @@ class UsersController extends BcApiController
 
     /**
      * ログイン
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function login(UsersServiceInterface $users)
     {
@@ -65,6 +71,9 @@ class UsersController extends BcApiController
 
     /**
      * リフレッシュトークン取得
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function refresh_token()
     {
