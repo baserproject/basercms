@@ -58,7 +58,7 @@
  * @since         5.0.0
  * @license       https://basercms.net/license/index.html MIT License
  */
-!function(e){e.bcTimeUtil={getNowDateTime:function(){return e.bcTImeUtil.getNowDate()+" "+e.bcTImeUtil.getNowTime()},getNowDate:function(){var e=new Date,t=e.getFullYear(),n=e.getMonth()+1,r=e.getDate();return n<10&&(n="0"+n),r<10&&(r="0"+r),t+"/"+n+"/"+r},getNowTime:function(){var e=new Date,t=e.getHours(),n=e.getMinutes();return t<10&&(t="0"+t),n<10&&(n="0"+n),t+":"+n}}}(jQuery)},475:()=>{
+!function(e){e.bcTimeUtil={getNowDateTime:function(){return e.bcTimeUtil.getNowDate()+" "+e.bcTimeUtil.getNowTime()},getNowDate:function(){var e=new Date,t=e.getFullYear(),n=e.getMonth()+1,r=e.getDate();return n<10&&(n="0"+n),r<10&&(r="0"+r),t+"/"+n+"/"+r},getNowTime:function(){var e=new Date,t=e.getHours(),n=e.getMinutes();return t<10&&(t="0"+t),n<10&&(n="0"+n),t+":"+n}}}(jQuery)},475:()=>{
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) NPO baser foundation <https://baserfoundation.org/>

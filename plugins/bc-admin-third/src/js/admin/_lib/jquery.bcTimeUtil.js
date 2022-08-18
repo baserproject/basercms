@@ -17,7 +17,7 @@
          * @returns {string}
          */
         getNowDateTime : function () {
-            return $.bcTImeUtil.getNowDate() + ' ' + $.bcTImeUtil.getNowTime();
+            return $.bcTimeUtil.getNowDate() + ' ' + $.bcTimeUtil.getNowTime();
         },
 
         /**
