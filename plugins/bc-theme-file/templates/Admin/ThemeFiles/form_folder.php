@@ -54,8 +54,8 @@ if ($this->request->action !== 'admin_add_folder') {
       <td class="col-input bca-form-table__input">
         <?php if ($this->request->action != 'admin_view_folder'): ?>
           <?php echo $this->BcAdminForm->control('ThemeFolder.name', ['type' => 'text', 'size' => 40, 'maxlength' => 255, 'autofocus' => true]) ?>
-          <i class="bca-icon--question-circle btn help bca-help"></i>
-          <div id="helptextName" class="helptext">
+          <i class="bca-icon--question-circle bca-help"></i>
+          <div class="bca-helptext">
             <ul>
               <li><?php echo __d('baser', 'フォルダ名は半角で入力してください。') ?></li>
             </ul>

@@ -46,8 +46,8 @@ $this->BcBaser->js('BcBlog.admin/blog_posts/form.bundle', false, [
     <dt><?php echo $this->BcForm->label('BlogCategory.name', __d('baser', 'カテゴリ名')) ?></dt>
     <dd>
       <?php echo $this->BcAdminForm->control('BlogCategory.name', ['type' => 'text', 'size' => 40, 'maxlength' => 255, 'value' => '']) ?>
-      <i class="bca-icon--question-circle btn help bca-help"></i>
-      <div id="helptextName" class="helptext">
+      <i class="bca-icon--question-circle bca-help"></i>
+      <div class="bca-helptext">
         <ul>
           <li><?php echo __d('baser', 'URLに利用されます') ?></li>
           <li><?php echo __d('baser', '半角のみで入力してください') ?></li>

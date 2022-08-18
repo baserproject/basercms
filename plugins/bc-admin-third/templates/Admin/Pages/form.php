@@ -59,7 +59,7 @@ $this->BcAdmin->setHelp('pages_form');
           <td class="col-input bca-form-table__input">
             <?php echo $this->BcAdminForm->control('Pages.page_template', ['type' => 'select', 'options' => $pageTemplateList]) ?>
             <div
-              class="helptext"><?php echo __d('baser', 'テーマフォルダ内の、templates/Pages テンプレートを配置する事で、ここでテンプレートを選択できます。') ?></div>
+              class="bca-helptext"><?php echo __d('baser', 'テーマフォルダ内の、templates/Pages テンプレートを配置する事で、ここでテンプレートを選択できます。') ?></div>
             <?php echo $this->BcAdminForm->error('Pages.page_template') ?>
           </td>
         </tr>

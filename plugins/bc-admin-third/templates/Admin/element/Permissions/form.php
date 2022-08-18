@@ -54,8 +54,8 @@ $this->BcBaser->js('admin/permissions/form.bundle', false);
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('name', ['type' => 'text', 'size' => 40, 'maxlength' => 255, 'autofocus' => true, 'placeholder' => 'ユーザー管理']) ?>
 
-        <i class="bca-icon--question-circle btn help bca-help"></i>
-        <div id="helptextName" class="helptext"><?php echo __d('baser', 'ルール名には日本語が利用できます。特定しやすいわかりやすい名称を入力してください。') ?></div>
+        <i class="bca-icon--question-circle bca-help"></i>
+        <div class="bca-helptext"><?php echo __d('baser', 'ルール名には日本語が利用できます。特定しやすいわかりやすい名称を入力してください。') ?></div>
         <?php echo $this->BcAdminForm->error('name') ?>
       </td>
     </tr>
@@ -67,8 +67,8 @@ $this->BcBaser->js('admin/permissions/form.bundle', false);
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('url', ['type' => 'text', 'size' => 40, 'maxlength' => 255, 'autofocus' => true, 'placeholder' => '/baser/admin/baser-core/users/index']) ?>
 
-        <i class="bca-icon--question-circle btn help bca-help"></i>
-        <div id="helptextUrl" class="helptext">
+        <i class="bca-icon--question-circle bca-help"></i>
+        <div class="bca-helptext">
           <ul>
             <li><?php echo __d('baser', 'スラッシュから始まるURLを入力してください。') ?></li>
             <li><?php echo __d('baser', '特定のフォルダ配下に対しアクセスできないようにする場合などにはワイルドカード（*）を利用します。<br>（例）ユーザー管理内のURL全てアクセスさせない場合： <br />/baser/admin/baser-core/users/* ') ?></li>

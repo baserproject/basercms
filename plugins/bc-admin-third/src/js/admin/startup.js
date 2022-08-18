@@ -68,10 +68,11 @@ $(function () {
      * ヘルプ対象のタグはクラス名を[help]とし、idは[help+識別子]とする。
      * バルーンチップに表示するテキストのタグは、クラス名をhelptextとし、idを[helptext+識別子]とする。
      */
-    if ($('.help').bt) {
-        $('.helptext').css('display', 'none');
+    let $help = $('.bca-help');
+    if ($help.bt) {
+        $('.bca-helptext').css('display', 'none');
         $.bt.options.closeWhenOthersOpen = true;
-        $('.help').bt({
+        $help.bt({
             trigger: 'click',
             positions: 'top',
             shadow: true,
@@ -104,7 +105,7 @@ $(function () {
                     opacity: 0
                 }, 100, callback);
             },
-            contentSelector: "$(this).next('.helptext').html()"
+            contentSelector: "$(this).next('.bca-helptext').html()"
         });
     }
 

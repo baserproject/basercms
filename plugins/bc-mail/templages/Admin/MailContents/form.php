@@ -70,9 +70,9 @@ $this->BcBaser->js('BcMail.admin/mail_contents/form.bundle', false);
       </th>
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('MailContent.sender_name', ['type' => 'text', 'size' => 80, 'maxlength' => 255]) ?>
-        <i class="bca-icon--question-circle btn help bca-help"></i>
+        <i class="bca-icon--question-circle bca-help"></i>
         <?php echo $this->BcForm->error('MailContent.sender_name') ?>
-        <div id="helptextSenderName" class="helptext"><?php echo __d('baser', '自動返信メールの送信者に表示します。') ?></div>
+        <div class="bca-helptext"><?php echo __d('baser', '自動返信メールの送信者に表示します。') ?></div>
       </td>
     </tr>
     <tr>
@@ -82,10 +82,9 @@ $this->BcBaser->js('BcMail.admin/mail_contents/form.bundle', false);
       </th>
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('MailContent.subject_user', ['type' => 'text', 'size' => 80, 'maxlength' => 255]) ?>
-        <i class="bca-icon--question-circle btn help bca-help"></i>
+        <i class="bca-icon--question-circle bca-help"></i>
         <?php echo $this->BcForm->error('MailContent.subject_user') ?>
-        <div id="helptextSubjectUser"
-             class="helptext"><?php echo __d('baser', 'ユーザー宛の自動返信メールの件名に表示します。') ?></div>
+        <div class="bca-helptext"><?php echo __d('baser', 'ユーザー宛の自動返信メールの件名に表示します。') ?></div>
       </td>
     </tr>
     <tr>
@@ -95,10 +94,9 @@ $this->BcBaser->js('BcMail.admin/mail_contents/form.bundle', false);
       </th>
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('MailContent.subject_admin', ['type' => 'text', 'size' => 80, 'maxlength' => 255]) ?>
-        <i class="bca-icon--question-circle btn help bca-help"></i>
+        <i class="bca-icon--question-circle bca-help"></i>
         <?php echo $this->BcForm->error('MailContent.subject_admin') ?>
-        <div id="helptextSubjectAdmin"
-             class="helptext"><?php echo __d('baser', '管理者宛の自動送信メールの件名に表示します。') ?></div>
+        <div class="bca-helptext"><?php echo __d('baser', '管理者宛の自動送信メールの件名に表示します。') ?></div>
       </td>
     </tr>
     <tr>
@@ -106,9 +104,9 @@ $this->BcBaser->js('BcMail.admin/mail_contents/form.bundle', false);
         class="col-head bca-form-table__label"><?php echo $this->BcForm->label('MailContent.redirect_url', __d('baser', 'リダイレクトURL')) ?></th>
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('MailContent.redirect_url', ['type' => 'text', 'size' => 80, 'maxlength' => 255]) ?>
-        <i class="bca-icon--question-circle btn help bca-help"></i>
+        <i class="bca-icon--question-circle bca-help"></i>
         <?php echo $this->BcForm->error('MailContent.redirect_url') ?>
-        <div id="helptextRedirectUrl" class="helptext">
+        <div class="bca-helptext">
           <ul>
             <li><?php echo __d('baser', 'メール送信後、別のURLにリダイレクトする場合、ここにURLを指定します。') ?></li>
             <li><?php echo __d('baser', 'httpからの完全なURLを指定してください。') ?></li>
@@ -149,8 +147,8 @@ $this->BcBaser->js('BcMail.admin/mail_contents/form.bundle', false);
             'dateLabel' => ['text' => __d('baser', '終了日付')],
             'timeLabel' => ['text' => __d('baser', '終了時間')]
           ]) ?>
-          <i class="bca-icon--question-circle btn help bca-help"></i>
-          <div class="helptext">
+          <i class="bca-icon--question-circle bca-help"></i>
+          <div class="bca-helptext">
             <p><?php echo __d('baser', '公開期間とは別にフォームの受付期間を設定する事ができます。受付期間外にはエラーではなく受付期間外のページを表示します。') ?></p>
           </div>
           <?php echo $this->BcForm->error('MailContent.publish_begin') ?>
@@ -162,9 +160,9 @@ $this->BcBaser->js('BcMail.admin/mail_contents/form.bundle', false);
           class="col-head bca-form-table__label"><?php echo $this->BcForm->label('MailContent.save_info', __d('baser', 'データベース保存')) ?></th>
         <td class="col-input bca-form-table__input">
           <?php echo $this->BcAdminForm->control('MailContent.save_info', ['type' => 'radio', 'options' => [1 => __d('baser', '送信情報をデータベースに保存する'), 0 => __d('baser', '送信情報をデータベースに保存しない')]]) ?>
-          <i class="bca-icon--question-circle btn help bca-help"></i>
+          <i class="bca-icon--question-circle bca-help"></i>
           <?php echo $this->BcForm->error('MailContent.save_info') ?>
-          <div id="saveInfo" class="helptext">
+          <div class="bca-helptext">
             <ul>
               <li><?php echo __d('baser', 'メールフォームから送信された情報をデータベースに保存するかどうかを指定できます。') ?></li>
               <li><?php echo __d('baser', 'メールフォームから送信された情報をデータベースに保存したくない場合は、保存しないを指定してください。') ?></li>
@@ -177,9 +175,9 @@ $this->BcBaser->js('BcMail.admin/mail_contents/form.bundle', false);
           class="col-head bca-form-table__label"><?php echo $this->BcForm->label('MailContent.auth_capthca', __d('baser', 'イメージ認証')) ?></th>
         <td class="col-input bca-form-table__input">
           <?php echo $this->BcAdminForm->control('MailContent.auth_captcha', ['type' => 'checkbox', 'label' => __d('baser', '利用する')]) ?>
-          <i class="bca-icon--question-circle btn help bca-help"></i>
+          <i class="bca-icon--question-circle bca-help"></i>
           <?php echo $this->BcForm->error('MailContent.auth_captcha') ?>
-          <div id="helptextAuthCaptcha" class="helptext">
+          <div class="bca-helptext">
             <ul>
               <li><?php echo __d('baser', 'メールフォーム送信の際、表示された画像の文字入力させる事で認証を行ないます。') ?></li>
               <li><?php echo __d('baser', 'スパムなどいたずら送信が多いが多い場合に設定すると便利です。') ?></li>
@@ -192,9 +190,8 @@ $this->BcBaser->js('BcMail.admin/mail_contents/form.bundle', false);
           class="col-head bca-form-table__label"><?php echo $this->BcForm->label('MailContent.ssl_on', __d('baser', 'SSL通信')) ?></th>
         <td class="col-input bca-form-table__input">
           <?php echo $this->BcAdminForm->control('MailContent.ssl_on', ['type' => 'checkbox', 'label' => __d('baser', '利用する')]) ?>
-          <i class="bca-icon--question-circle btn help bca-help"></i>
-          <div id="helptextSslOn"
-               class="helptext"><?php echo __d('baser', '管理者ページでSSLを利用する場合は、事前にSSLの申込、設定が必要です。また、SSL通信で利用するURLをシステム設定で指定している必要があります。') ?></div>
+          <i class="bca-icon--question-circle bca-help"></i>
+          <div class="bca-helptext"><?php echo __d('baser', '管理者ページでSSLを利用する場合は、事前にSSLの申込、設定が必要です。また、SSL通信で利用するURLをシステム設定で指定している必要があります。') ?></div>
           <?php echo $this->BcForm->error('MailContent.ssl_on', sprintf(__d('baser', 'SSL通信を利用するには、%s で、事前にSSL通信用のWebサイトURLを指定してください。'), $this->BcBaser->getLink(__d('baser', 'システム設定'), ['controller' => 'site_configs', 'action' => 'form', 'plugin' => null], ['target' => '_blank'])), ['escape' => false]) ?>
         </td>
       </tr>
@@ -203,9 +200,9 @@ $this->BcBaser->js('BcMail.admin/mail_contents/form.bundle', false);
           class="col-head bca-form-table__label"><?php echo $this->BcForm->label('MailContent.sender_2', __d('baser', 'BCC用送信先メールアドレス')) ?></th>
         <td class="col-input bca-form-table__input">
           <?php echo $this->BcAdminForm->control('MailContent.sender_2', ['type' => 'text', 'size' => 80, 'maxlength' => 255]) ?>
-          <i class="bca-icon--question-circle btn help bca-help"></i>
+          <i class="bca-icon--question-circle bca-help"></i>
           <?php echo $this->BcForm->error('MailContent.sender_2') ?>
-          <div id="helptextSender2" class="helptext">
+          <div class="bca-helptext">
             <ul>
               <li><?php echo __d('baser', 'BCC（ブラインドカーボンコピー）用のメールアドレスを指定します。') ?></li>
               <li><?php echo __d('baser', '複数の送信先を指定するには、カンマで区切って入力します。') ?></li>
@@ -220,9 +217,9 @@ $this->BcBaser->js('BcMail.admin/mail_contents/form.bundle', false);
         </th>
         <td class="col-input bca-form-table__input">
           <?php echo $this->BcAdminForm->control('MailContent.widget_area', ['type' => 'select', 'options' => $this->BcForm->getControlsource('WidgetArea.id'), 'empty' => __d('baser', 'サイト基本設定に従う')]) ?>
-          <i class="bca-icon--question-circle btn help bca-help"></i>
+          <i class="bca-icon--question-circle bca-help"></i>
           <?php echo $this->BcForm->error('MailContent.widget_area') ?>
-          <div id="helptextWidgetArea" class="helptext">
+          <div class="bca-helptext">
             <?php echo sprintf(__d('baser', 'メールコンテンツで利用するウィジェットエリアを指定します。<br>ウィジェットエリアは「%s」より追加できます。'), $this->BcBaser->getLink(__d('baser', 'ウィジェットエリア管理'), ['plugin' => null, 'controller' => 'widget_areas', 'action' => 'index'])) ?>
           </div>
         </td>
@@ -238,9 +235,9 @@ $this->BcBaser->js('BcMail.admin/mail_contents/form.bundle', false);
           <?php if ($this->action == 'admin_edit'): ?>
             <?php $this->BcBaser->link('<i class="bca-icon--edit"></i>' . __d('baser', '編集する'), 'javascript:void(0)', ['id' => 'EditForm']) ?>
           <?php endif ?>
-          <i class="bca-icon--question-circle btn help bca-help"></i>
+          <i class="bca-icon--question-circle bca-help"></i>
           <?php echo $this->BcForm->error('MailContent.form_template') ?>
-          <div id="helptextFormTemplate" class="helptext">
+          <div class="bca-helptext">
             <ul>
               <li><?php echo __d('baser', 'メールフォーム本体のテンプレートを指定します。') ?></li>
               <li><?php echo __d('baser', '「編集する」からテンプレートの内容を編集する事ができます。') ?></li>
@@ -259,9 +256,9 @@ $this->BcBaser->js('BcMail.admin/mail_contents/form.bundle', false);
           <?php if ($this->action == 'admin_edit'): ?>
             <?php $this->BcBaser->link('<i class="bca-icon--edit"></i>' . __d('baser', '編集する'), 'javascript:void(0)', ['id' => 'EditMail']) ?>
           <?php endif ?>
-          <i class="bca-icon--question-circle btn help bca-help"></i>
+          <i class="bca-icon--question-circle bca-help"></i>
           <?php echo $this->BcForm->error('MailContent.mail_template') ?>
-          <div id="helptextMailTemplate" class="helptext">
+          <div class="bca-helptext">
             <ul>
               <li><?php echo __d('baser', '送信するメールのテンプレートを指定します。') ?></li>
               <li><?php echo __d('baser', '「編集する」からテンプレートの内容を編集する事ができます。') ?></li>

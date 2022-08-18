@@ -58,9 +58,9 @@ if ($this->request->action !== 'admin_add') {
           <?php if ($this->BcForm->getSourceValue('ThemeFile.ext')): ?>.<?php endif ?>
           <?php echo h($this->BcForm->getSourceValue('ThemeFile.ext')) ?>
           <?php echo $this->BcAdminForm->control('ThemeFile.ext', ['type' => 'hidden']) ?>
-          <i class="bca-icon--question-circle btn help bca-help"></i>
+          <i class="bca-icon--question-circle bca-help"></i>
           <?php echo $this->BcForm->error('ThemeFile.name') ?>
-          <div id="helptextName" class="helptext">
+          <div class="bca-helptext">
             <ul>
               <li><?php echo __d('baser', 'ファイル名は半角で入力してください。') ?></li>
             </ul>

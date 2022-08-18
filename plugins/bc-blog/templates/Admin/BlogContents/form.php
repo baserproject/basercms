@@ -63,9 +63,9 @@ $this->BcBaser->i18nScript([
         <td class="col-input bca-form-table__input">
           <?php echo $this->BcAdminForm->control('BlogContent.list_count', ['type' => 'text', 'size' => 20, 'maxlength' => 255]) ?>
           &nbsp;件&nbsp;
-          <i class="bca-icon--question-circle btn help bca-help"></i>
+          <i class="bca-icon--question-circle bca-help"></i>
           <?php echo $this->BcForm->error('BlogContent.list_count') ?>
-          <div id="helptextListCount" class="helptext">
+          <div class="bca-helptext">
             <ul>
               <li><?php echo __d('baser', '公開サイトの一覧に表示する件数を指定します。') ?></li>
               <li><?php echo __d('baser', '半角数字で入力してください。') ?></li>
@@ -78,9 +78,9 @@ $this->BcBaser->i18nScript([
           class="col-head bca-form-table__label"><?php echo $this->BcForm->label('BlogContent.list_direction', __d('baser', '一覧に表示する順番')) ?></th>
         <td class="col-input bca-form-table__input">
           <?php echo $this->BcAdminForm->control('BlogContent.list_direction', ['type' => 'select', 'options' => ['DESC' => __d('baser', '新しい記事順'), 'ASC' => __d('baser', '古い記事順')]]) ?>
-          <i class="bca-icon--question-circle btn help bca-help"></i>
+          <i class="bca-icon--question-circle bca-help"></i>
           <?php echo $this->BcForm->error('BlogContent.list_direction') ?>
-          <div id="helptextListDirection" class="helptext">
+          <div class="bca-helptext">
             <ul>
               <li><?php echo __d('baser', '公開サイトの一覧における記事の並び方向を指定します。') ?></li>
               <li><?php echo __d('baser', '新しい・古いの判断は投稿日が基準となります。') ?></li>
@@ -96,9 +96,9 @@ $this->BcBaser->i18nScript([
         <td class="col-input bca-form-table__input">
           <?php echo $this->BcAdminForm->control('BlogContent.feed_count', ['type' => 'text', 'size' => 20, 'maxlength' => 255]) ?>
           &nbsp;件&nbsp;
-          <i class="bca-icon--question-circle btn help bca-help"></i>
+          <i class="bca-icon--question-circle bca-help"></i>
           <?php echo $this->BcForm->error('BlogContent.feed_count') ?>
-          <div id="helptextFeedCount" class="helptext">
+          <div class="bca-helptext">
             <ul>
               <li><?php echo __d('baser', 'RSSフィードに出力する件数を指定します。') ?></li>
               <li><?php echo __d('baser', '半角数字で入力してください。') ?></li>
@@ -124,10 +124,9 @@ $this->BcBaser->i18nScript([
           class="col-head bca-form-table__label"><?php echo $this->BcForm->label('BlogContent.comment_approve', __d('baser', 'コメント承認機能')) ?></th>
         <td class="col-input bca-form-table__input">
           <?php echo $this->BcAdminForm->control('BlogContent.comment_approve', ['type' => 'checkbox', 'label' => __d('baser', '利用する')]) ?>
-          <i class="bca-icon--question-circle btn help bca-help"></i>
+          <i class="bca-icon--question-circle bca-help"></i>
           <?php echo $this->BcForm->error('BlogContent.comment_approve') ?>
-          <div id="helptextCommentApprove"
-               class="helptext"><?php echo __d('baser', '承認機能を利用すると、コメントが投稿されてもすぐに公開されず、管理者側で確認する事ができます。') ?></div>
+          <div class="bca-helptext"><?php echo __d('baser', '承認機能を利用すると、コメントが投稿されてもすぐに公開されず、管理者側で確認する事ができます。') ?></div>
         </td>
       </tr>
       <tr>
@@ -135,9 +134,9 @@ $this->BcBaser->i18nScript([
           class="col-head bca-form-table__label"><?php echo $this->BcForm->label('MailContent.auth_capthca', __d('baser', 'コメントイメージ認証')) ?></th>
         <td class="col-input bca-form-table__input">
           <?php echo $this->BcAdminForm->control('BlogContent.auth_captcha', ['type' => 'checkbox', 'label' => __d('baser', '利用する')]) ?>
-          <i class="bca-icon--question-circle btn help bca-help"></i>
+          <i class="bca-icon--question-circle bca-help"></i>
           <?php echo $this->BcForm->error('BlogContent.auth_captcha') ?>
-          <div id="helptextAuthCaptcha" class="helptext">
+          <div class="bca-helptext">
             <ul>
               <li><?php echo __d('baser', 'ブログコメント送信の際、表示された画像の文字入力させる事で認証を行ないます。') ?></li>
               <li><?php echo __d('baser', 'スパムなどいたずら送信が多いが多い場合に設定すると便利です。') ?></li>
@@ -165,9 +164,9 @@ $this->BcBaser->i18nScript([
             'options' => $this->BcForm->getControlsource('WidgetArea.id'),
             'empty' => __d('baser', 'サイト基本設定に従う')])
           ?>
-          <i class="bca-icon--question-circle btn help bca-help"></i>
+          <i class="bca-icon--question-circle bca-help"></i>
           <?php echo $this->BcForm->error('BlogContent.widget_area') ?>
-          <div id="helptextWidgetArea" class="helptext">
+          <div class="bca-helptext">
             <?php echo __d('baser', 'ブログコンテンツで利用するウィジェットエリアを指定します。') ?><br>
             <?php echo __d('baser', 'ウィジェットエリアはウィジェットエリア管理より追加できます。') ?><br>
             <ul>
@@ -191,9 +190,9 @@ $this->BcBaser->i18nScript([
           <?php if ($this->action == 'admin_edit'): ?>
             <?php $this->BcBaser->link('<i class="bca-icon--edit"></i>' . __d('baser', '編集する'), 'javascript:void(0)', ['id' => 'EditBlogTemplate']) ?>
           <?php endif ?>
-          <i class="bca-icon--question-circle btn help bca-help"></i>
+          <i class="bca-icon--question-circle bca-help"></i>
           <?php echo $this->BcForm->error('BlogContent.template') ?>
-          <div id="helptextTemplate" class="helptext">
+          <div class="bca-helptext">
             <ul>
               <li><?php echo __d('baser', 'ブログの本体のテンプレートを指定します。') ?></li>
               <li><?php echo __d('baser', '「編集する」からテンプレートの内容を編集する事ができます。') ?></li>
@@ -237,7 +236,7 @@ $this->BcBaser->i18nScript([
             </tbody>
           </table>
           <?php echo $this->BcForm->error('BlogContent.eye_catch_size') ?>
-          <div id="helptextTemplate" class="helptext">
+          <div class="bca-helptext">
             <ul>
               <li><?php echo __d('baser', 'アイキャッチ画像のサイズを指定します。') ?></li>
             </ul>

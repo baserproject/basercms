@@ -63,8 +63,8 @@ foreach(Configure::read('BcPrefixAuth') as $key => $authPrefix) {
         <?php else: ?>
           <?php echo $this->BcAdminForm->control('name', ['type' => 'text', 'size' => 20, 'maxlength' => 255, 'autofocus' => true]) ?>
         <?php endif ?>
-        <i class="bca-icon--question-circle btn help bca-help"></i>
-        <div id="helptextName" class="helptext">
+        <i class="bca-icon--question-circle bca-help"></i>
+        <div class="bca-helptext">
           <ul>
             <li><?php echo __d('baser', '重複しない識別名称を半角のみで入力してください。') ?></li>
             <li><?php echo __d('baser', 'admins の場合は変更できません。') ?></li>
@@ -78,8 +78,8 @@ foreach(Configure::read('BcPrefixAuth') as $key => $authPrefix) {
         &nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span></th>
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('title', ['type' => 'text', 'size' => 20, 'maxlength' => 255]) ?>
-        <i class="bca-icon--question-circle btn help bca-help"></i>
-        <div id="helptextTitle" class="helptext"><?php echo __d('baser', '日本語が入力できますのでわかりやすい名称を入力します。') ?></div>
+        <i class="bca-icon--question-circle bca-help"></i>
+        <div class="bca-helptext"><?php echo __d('baser', '日本語が入力できますのでわかりやすい名称を入力します。') ?></div>
         <?php echo $this->BcAdminForm->error('title') ?>
       </td>
     </tr>
@@ -89,8 +89,8 @@ foreach(Configure::read('BcPrefixAuth') as $key => $authPrefix) {
       <td class="col-input bca-form-table__input">
         <span
           style="white-space: nowrap"><?php echo $this->BcAdminForm->control('use_move_contents', ['type' => 'checkbox', 'label' => __d('baser', 'コンテンツのドラッグ＆ドロップ移動機能を利用する')]) ?></span>
-        <i class="bca-icon--question-circle btn help bca-help"></i>
-        <div id="helptextName" class="helptext">
+        <i class="bca-icon--question-circle bca-help"></i>
+        <div class="bca-helptext">
           <span><?php echo __d('baser', 'コンテンツ一覧のツリー構造において、ドラッグ＆ドロップでコンテンツの移動を許可するかどうかを設定します。') ?></span>
         </div>
         <?php echo $this->BcAdminForm->error('use_move_contents') ?>
@@ -103,9 +103,9 @@ foreach(Configure::read('BcPrefixAuth') as $key => $authPrefix) {
           &nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span></th>
         <td class="col-input bca-form-table__input">
           <?php echo $this->BcAdminForm->control('auth_prefix', ['type' => 'multiCheckbox', 'options' => $authPrefixes, 'value' => explode(',', $userGroup->auth_prefix)]) ?>
-          <i class="bca-icon--question-circle btn help bca-help"></i>
+          <i class="bca-icon--question-circle bca-help"></i>
           <?php echo $this->BcAdminForm->error('auth_prefix') ?>
-          <div id="helptextAuthPrefix" class="helptext">
+          <div class="bca-helptext">
             <?php echo __d('baser', '認証プレフィックスの設定を指定します。<br />ユーザーグループ名が admins の場合は編集できません。') ?>
           </div>
         </td>

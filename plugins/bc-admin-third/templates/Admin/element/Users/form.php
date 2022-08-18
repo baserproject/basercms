@@ -55,8 +55,8 @@ $this->BcBaser->js('admin/users/form.bundle', false);
         &nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span></th>
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('name', ['type' => 'text', 'size' => 20, 'maxlength' => 255, 'autofocus' => true]) ?>
-        <i class="bca-icon--question-circle btn help bca-help"></i>
-        <div id="helptextName" class="helptext"><?php echo __d('baser', '半角英数字とハイフン、アンダースコアのみで入力してください。') ?></div>
+        <i class="bca-icon--question-circle bca-help"></i>
+        <div class="bca-helptext"><?php echo __d('baser', '半角英数字とハイフン、アンダースコアのみで入力してください。') ?></div>
         <?php echo $this->BcAdminForm->error('name') ?>
       </td>
     </tr>
@@ -69,8 +69,8 @@ $this->BcBaser->js('admin/users/form.bundle', false);
           ]</small> <?php echo $this->BcAdminForm->control('real_name_1', ['type' => 'text', 'size' => 12, 'maxlength' => 255]) ?>
         <small>[<?php echo __d('baser', '名') ?>
           ]</small> <?php echo $this->BcAdminForm->control('real_name_2', ['type' => 'text', 'size' => 12, 'maxlength' => 255]) ?>
-        <i class="bca-icon--question-circle btn help bca-help"></i>
-        <div id="helptextRealName1" class="helptext"><?php echo __d('baser', '「名」は省略する事ができます。') ?></div>
+        <i class="bca-icon--question-circle bca-help"></i>
+        <div class="bca-helptext"><?php echo __d('baser', '「名」は省略する事ができます。') ?></div>
         <?php echo $this->BcAdminForm->error('real_name_1', __d('baser', '姓を入力してください')) ?>
         <?php echo $this->BcAdminForm->error('real_name_2', __d('baser', '名を入力してください')) ?>
       </td>
@@ -80,9 +80,8 @@ $this->BcBaser->js('admin/users/form.bundle', false);
         class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('nickname', __d('baser', 'ニックネーム')) ?></th>
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('nickname', ['type' => 'text', 'size' => 40, 'maxlength' => 255]) ?>
-        <i class="bca-icon--question-circle btn help bca-help"></i>
-        <div id="helptextNickname"
-             class="helptext"><?php echo __d('baser', 'ニックネームを設定している場合は全ての表示にニックネームが利用されます。') ?></div>
+        <i class="bca-icon--question-circle bca-help"></i>
+        <div class="bca-helptext"><?php echo __d('baser', 'ニックネームを設定している場合は全ての表示にニックネームが利用されます。') ?></div>
         <?php echo $this->BcAdminForm->error('nickname') ?>
       </td>
     </tr>
@@ -93,9 +92,8 @@ $this->BcBaser->js('admin/users/form.bundle', false);
       <td class="col-input bca-form-table__input">
         <?php if ($isUserGroupEditable): ?>
           <?php echo $this->BcAdminForm->control('user_groups._ids', ['type' => 'multiCheckbox', 'options' => $userGroupList, 'error' => false]); ?>
-          <i class="bca-icon--question-circle btn help bca-help"></i>
-          <div id="helptextUserGroupId"
-               class="helptext"><?php echo sprintf(__d('baser', 'ユーザーグループごとにコンテンツへのアクセス制限をかける場合などには%sより新しいグループを追加しアクセス制限の設定をおこないます。'), $this->BcBaser->getLink(__d('baser', 'ユーザーグループ管理'), ['controller' => 'user_groups', 'action' => 'index'])) ?></div>
+          <i class="bca-icon--question-circle bca-help"></i>
+          <div class="bca-helptext"><?php echo sprintf(__d('baser', 'ユーザーグループごとにコンテンツへのアクセス制限をかける場合などには%sより新しいグループを追加しアクセス制限の設定をおこないます。'), $this->BcBaser->getLink(__d('baser', 'ユーザーグループ管理'), ['controller' => 'user_groups', 'action' => 'index'])) ?></div>
           <?php echo $this->BcAdminForm->error('user_groups') ?>
         <?php else: ?>
           <?php foreach($user->user_groups as $group): ?>
@@ -109,8 +107,8 @@ $this->BcBaser->js('admin/users/form.bundle', false);
         &nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span></th>
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('email', ['type' => 'text', 'size' => 40, 'maxlength' => 255]) ?>
-        <i class="bca-icon--question-circle btn help bca-help"></i>
-        <div id="helptextEmail" class="helptext">
+        <i class="bca-icon--question-circle bca-help"></i>
+        <div class="bca-helptext">
           <?php echo __d('baser', '連絡用メールアドレスを入力します。') ?>
           <br><small>※ <?php echo __d('baser', 'パスワードを忘れた場合の新パスワードの通知先等') ?></small>
         </div>
@@ -129,8 +127,8 @@ $this->BcBaser->js('admin/users/form.bundle', false);
           [<?php echo __d('baser', 'パスワードは変更する場合のみ入力してください') ?>]</small><br/><?php endif ?>
         <?php echo $this->BcAdminForm->control('password_1', ['type' => 'password', 'size' => 20, 'maxlength' => 255, 'autocomplete' => 'off']) ?>
         <?php echo $this->BcAdminForm->control('password_2', ['type' => 'password', 'size' => 20, 'maxlength' => 255, 'autocomplete' => 'off']) ?>
-        <i class="bca-icon--question-circle btn help bca-help"></i>
-        <div id="helptextPassword" class="helptext">
+        <i class="bca-icon--question-circle bca-help"></i>
+        <div class="bca-helptext">
           <ul>
             <li>
               <?php if ($this->request->getParam('action') == 'edit'): ?>

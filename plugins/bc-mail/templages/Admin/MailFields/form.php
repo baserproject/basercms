@@ -47,9 +47,9 @@ $this->BcBaser->js('BcMail.admin/mail_fields/form.bundle', false);
       </th>
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('MailField.field_name', ['type' => 'text', 'size' => 40, 'maxlength' => 255, 'autofocus' => true]) ?>
-        <i class="bca-icon--question-circle btn help bca-help"></i>
+        <i class="bca-icon--question-circle bca-help"></i>
         <?php echo $this->BcForm->error('MailField.field_name') ?>
-        <div id="helptextFieldName" class="helptext"><?php echo __d('baser', '重複しない半角英数字で入力してください。') ?></div>
+        <div class="bca-helptext"><?php echo __d('baser', '重複しない半角英数字で入力してください。') ?></div>
       </td>
     </tr>
     <tr id="RowName">
@@ -59,10 +59,9 @@ $this->BcBaser->js('BcMail.admin/mail_fields/form.bundle', false);
       </th>
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('MailField.name', ['type' => 'text', 'size' => 40, 'maxlength' => 255]) ?>
-        <i class="bca-icon--question-circle btn help bca-help"></i>
+        <i class="bca-icon--question-circle bca-help"></i>
         <?php echo $this->BcForm->error('MailField.name') ?>
-        <div id="helptextName"
-             class="helptext"><?php echo __d('baser', '項目を特定しやすいわかりやすい名前を入力してください。日本語可。') ?></div>
+        <div class="bca-helptext"><?php echo __d('baser', '項目を特定しやすいわかりやすい名前を入力してください。日本語可。') ?></div>
       </td>
     </tr>
     <tr id="RowType">
@@ -72,9 +71,9 @@ $this->BcBaser->js('BcMail.admin/mail_fields/form.bundle', false);
       </th>
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('MailField.type', ['type' => 'select', 'options' => $this->BcForm->getControlSource('type')]) ?>
-        <i class="bca-icon--question-circle btn help bca-help"></i>
+        <i class="bca-icon--question-circle bca-help"></i>
         <?php echo $this->BcForm->error('MailField.type') ?>
-        <div id="helptextType" class="helptext">
+        <div class="bca-helptext">
           <ul>
             <li><?php echo __d('baser', 'Eメールを選択すると、メールフォーム送信の際、入力されたEメール宛に自動返信メールを送信します。') ?><br/>
               <small>※ 前バージョンとの互換性のため、フィールド名を「email_1」とした場合、Eメールを選択しなくても自動返信メールを送信します。</small></li>
@@ -88,10 +87,9 @@ $this->BcBaser->js('BcMail.admin/mail_fields/form.bundle', false);
         class="col-head bca-form-table__label"><?php echo $this->BcForm->label('MailField.head', __d('baser', '項目見出し')) ?></th>
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('MailField.head', ['type' => 'text', 'size' => 40, 'maxlength' => 255]) ?>
-        <i class="bca-icon--question-circle btn help bca-help"></i>
+        <i class="bca-icon--question-circle bca-help"></i>
         <?php echo $this->BcForm->error('MailField.head') ?>
-        <div id="helptextHead"
-             class="helptext"><?php echo __d('baser', ' グループとして設定する場合、同グループの２番目以降のフィールドについてこの項目の入力は不要です。 ') ?></div>
+        <div class="bca-helptext"><?php echo __d('baser', ' グループとして設定する場合、同グループの２番目以降のフィールドについてこの項目の入力は不要です。 ') ?></div>
       </td>
     </tr>
     <tr id="RowNotEmpty">
@@ -147,9 +145,9 @@ $this->BcBaser->js('BcMail.admin/mail_fields/form.bundle', false);
         class="col-head bca-form-table__label"><?php echo $this->BcForm->label('MailField.source', __d('baser', '選択リスト')) ?></th>
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('MailField.source', ['type' => 'textarea', 'cols' => 35, 'rows' => 4]) ?>
-        <i class="bca-icon--question-circle btn help bca-help"></i>
+        <i class="bca-icon--question-circle bca-help"></i>
         <?php echo $this->BcForm->error('MailField.source') ?>
-        <div id="helptextSource" class="helptext">
+        <div class="bca-helptext">
           <ul>
             <li><?php echo __d('baser', 'ラジオボタン、セレクトボックス、マルチチェックボックスの場合の選択リスト指定します。') ?></li>
             <li><?php echo __d('baser', '自動補完郵便番号の場合は、都道府県のフィールドと住所のフィールドのリストを指定します。') ?></li>
@@ -171,9 +169,9 @@ $this->BcBaser->js('BcMail.admin/mail_fields/form.bundle', false);
         class="col-head bca-form-table__label"><?php echo $this->BcForm->label('MailField.rows', __d('baser', '行数')) ?></th>
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('MailField.rows', ['type' => 'text', 'size' => 10, 'maxlength' => 255]) ?>
-        <i class="bca-icon--question-circle btn help bca-help"></i>
+        <i class="bca-icon--question-circle bca-help"></i>
         <?php echo $this->BcForm->error('MailField.rows') ?>
-        <div id="helptextRows" class="helptext"><?php echo __d('baser', 'テキストボックスの場合の行数を指定します。') ?></div>
+        <div class="bca-helptext"><?php echo __d('baser', 'テキストボックスの場合の行数を指定します。') ?></div>
       </td>
     </tr>
     <tr id="RowMaxlength">
@@ -202,9 +200,9 @@ $this->BcBaser->js('BcMail.admin/mail_fields/form.bundle', false);
           class="col-head bca-form-table__label"><?php echo $this->BcForm->label('MailField.valid_ex', __d('baser', '拡張入力チェック')) ?></th>
         <td class="col-input bca-form-table__input">
           <?php echo $this->BcAdminForm->control('MailField.valid_ex', ['type' => 'select', 'multiple' => 'checkbox', 'options' => $this->BcForm->getControlSource('valid_ex')]) ?>
-          <i class="bca-icon--question-circle btn help bca-help"></i>
+          <i class="bca-icon--question-circle bca-help"></i>
           <?php echo $this->BcForm->error('MailField.valid_ex') ?>
-          <div id="helptextValidEx" class="helptext">
+          <div class="bca-helptext">
             <ul>
               <li><?php echo __d('baser', 'Eメール比較チェック：利用するには「Eメール」タイプのフィールドを二つ作成し、グループ入力チェックに任意の同じ値を入力します。') ?></li>
               <li><?php echo __d('baser', 'グループチェック：グループで連帯して入力チェックを行うには同じグループ名を入力します。') ?></li>
@@ -221,9 +219,9 @@ $this->BcBaser->js('BcMail.admin/mail_fields/form.bundle', false);
           class="col-head bca-form-table__label"><?php echo $this->BcForm->label('MailField.group_field', __d('baser', 'グループ名')) ?></th>
         <td class="col-input bca-form-table__input">
           <?php echo $this->BcAdminForm->control('MailField.group_field', ['type' => 'text', 'size' => 40, 'maxlength' => 255]) ?>
-          <i class="bca-icon--question-circle btn help bca-help"></i>
+          <i class="bca-icon--question-circle bca-help"></i>
           <?php echo $this->BcForm->error('MailField.group_field') ?>
-          <div id="helptextGroupField" class="helptext">
+          <div class="bca-helptext">
             <ul>
               <li><?php echo __d('baser', '各項目を同じグループとするには同じグループ名を入力します。') ?></li>
               <li><?php echo __d('baser', '半角英数字で入力してください。') ?></li>
@@ -236,9 +234,9 @@ $this->BcBaser->js('BcMail.admin/mail_fields/form.bundle', false);
           class="col-head bca-form-table__label"><?php echo $this->BcForm->label('MailField.group_valid', __d('baser', 'グループ入力チェック')) ?></th>
         <td class="col-input bca-form-table__input">
           <?php echo $this->BcAdminForm->control('MailField.group_valid', ['type' => 'text', 'size' => 40, 'maxlength' => 255]) ?>
-          <i class="bca-icon--question-circle btn help bca-help"></i>
+          <i class="bca-icon--question-circle bca-help"></i>
           <?php echo $this->BcForm->error('MailField.group_valid') ?>
-          <div id="helptextGroupValid" class="helptext">
+          <div class="bca-helptext">
             <ul>
               <li><?php echo __d('baser', 'グループで連帯して入力チェックを行うには同じグループ名を入力します。') ?></li>
               <li><?php echo __d('baser', 'グループ内の項目が一つでもエラーとなるとグループ内の全ての項目にエラーを意味する背景色が付きます。') ?></li>
@@ -268,8 +266,8 @@ $this->BcBaser->js('BcMail.admin/mail_fields/form.bundle', false);
           class="col-head bca-form-table__label"><?php echo $this->BcForm->label('MailField.separator', __d('baser', '区切り文字')) ?></th>
         <td class="col-input bca-form-table__input">
           <?php echo $this->BcAdminForm->control('MailField.separator', ['type' => 'text', 'size' => 40, 'maxlength' => 255]) ?>
-          <i class="bca-icon--question-circle btn help bca-help"></i>
-          <div id="helpSeparator" class="helptext">
+          <i class="bca-icon--question-circle bca-help"></i>
+          <div class="bca-helptext">
             <ul>
               <li><?php echo __d('baser', '空白の場合は自動で「＆nbsp;＆nbsp;」が挿入されます') ?></li>
               <li><?php echo __d('baser', '空にしたいときは半角スペースを入力してください。') ?></li>

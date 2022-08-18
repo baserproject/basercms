@@ -60,9 +60,9 @@ $fullUrl = $this->BcBaser->getContentsUrl($this->request->params['Content']['url
       </th>
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('BlogCategory.name', ['type' => 'text', 'size' => 40, 'maxlength' => 255, 'autofocus' => true]) ?>
-        <i class="bca-icon--question-circle btn help bca-help"></i>
+        <i class="bca-icon--question-circle bca-help"></i>
         <?php echo $this->BcForm->error('BlogCategory.name') ?>
-        <div id="helptextName" class="helptext">
+        <div class="bca-helptext">
           <ul>
             <li><?php echo __d('baser', 'URLに利用されます') ?></li>
             <li><?php echo __d('baser', '半角のみで入力してください') ?></li>
@@ -109,13 +109,13 @@ $fullUrl = $this->BcBaser->getContentsUrl($this->request->params['Content']['url
               'options' => $owners,
               'empty' => __d('baser', '指定しない')])
             ?>
-            <i class="bca-icon--question-circle btn help bca-help"></i>
+            <i class="bca-icon--question-circle bca-help"></i>
             <?php echo $this->BcForm->error('BlogCategory.owner_id') ?>
           <?php else: ?>
             <?php echo $this->BcText->arrayValue($this->request->getData('BlogCategory.owner_id'), $owners) ?>
             <?php echo $this->BcAdminForm->control('BlogCategory.owner_id', ['type' => 'hidden']) ?>
           <?php endif ?>
-          <div id="helptextOwnerId" class="helptext">
+          <div class="bca-helptext">
             <ul>
               <li><?php echo __d('baser', '管理グループを指定した場合、このカテゴリに属した記事は、管理グループのユーザーしか編集する事ができなくなります。') ?></li>
             </ul>
