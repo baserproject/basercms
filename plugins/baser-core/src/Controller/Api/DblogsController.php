@@ -43,6 +43,34 @@ class DblogsController extends BcApiController
     }
 
     /**
+     * [API] ログ新規追加
+     * @param DblogsServiceInterface $DblogsService
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function add(DblogsServiceInterface $DblogsService)
+    {
+        $this->request->allowMethod(['post', 'put']);
+
+        try {
+            $dblogs = $DblogsService->create($this->request->getData());
+            $message = __d('baser', 'ログを追加しました。');
+        } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
+            $dblogs = $e->getEntity();
+            $message = __d('baser', 'ログを追加できませんでした。');
+            $this->setResponse($this->response->withStatus(400));
+        }
+
+        $this->set([
+            'message' => $message,
+            'dblog' => $dblogs,
+            'errors' => $dblogs->getErrors(),
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['message', 'dblog', 'errors']);
+    }
+
+    /**
      * [API] 最近の動きを削除
      * @param DblogsServiceInterface $DblogsService
      * @checked

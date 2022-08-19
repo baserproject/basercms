@@ -91,6 +91,46 @@ class DblogsControllerTest extends BcTestCase
     }
 
     /**
+     * test add
+     * @return void
+     */
+    public function testAdd()
+    {
+        $this->get('/baser/api/baser-core/dblogs/add.json?token=' . $this->accessToken);
+        $this->assertResponseCode(405);
+
+        $data = [
+            'name' => 'ucmitzGroup',
+            'title' => 'ucmitzグループ',
+            'use_move_contents' => '1',
+        ];
+        $this->post('/baser/api/baser-core/dblogs/add.json?token=' . $this->accessToken, $data);
+        $this->assertResponseCode(400);
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('ログを追加できませんでした。', $result->message);
+        $this->assertTrue(isset($result->dblog));
+        $this->assertTrue(isset($result->errors->message));
+
+        $data = [
+            'message' => "message test",
+            'controller' => "controller test",
+            'action' => "add test"
+        ];
+        $this->post('/baser/api/baser-core/dblogs/add.json?token=' . $this->accessToken, $data);
+        $this->assertResponseSuccess();
+
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('ログを追加しました。', $result->message);
+        $this->assertTrue(isset($result->dblog));
+        $this->assertTrue(isset($result->errors));
+        $this->assertEquals(0, count($result->errors));
+
+        $dbLogs = $this->getTableLocator()->get('Dblogs');
+        $query = $dbLogs->find()->where(['message' => $data['message']]);
+        $this->assertEquals(1, $query->count());
+    }
+
+    /**
      * Test delete_all
      */
     public function testDelete_all()
