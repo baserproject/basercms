@@ -11,6 +11,7 @@
 
 namespace BaserCore\Controller\Api;
 
+use BaserCore\Model\Table\UserGroupsTable;
 use BaserCore\Service\UserGroupsServiceInterface;
 use Cake\Core\Exception\Exception;
 use BaserCore\Annotation\UnitTest;
@@ -24,6 +25,7 @@ use BaserCore\Annotation\Checked;
  * https://localhost/baser/api/baser-core/user_groups/action_name.json で呼び出す
  *
  * @package BaserCore\Controller\Api
+ * @property UserGroupsTable $UserGroups
  */
 class UserGroupsController extends BcApiController
 {
@@ -155,4 +157,41 @@ class UserGroupsController extends BcApiController
         $this->viewBuilder()->setOption('serialize', ['userGroups']);
     }
 
+    /**
+     * ユーザーグループコピー
+     * @param UserGroupsServiceInterface $UserGroups
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function copy(UserGroupsServiceInterface $userGroupService, $id)
+    {
+        $this->request->allowMethod(['patch', 'post', 'put']);
+
+        $userGroup = null;
+        $errors = null;
+        try {
+            $userGroup = $userGroupService->get($id);
+            $rs = $this->UserGroups->copy($id);
+            if ($rs) {
+                $message = __d('baser', 'ユーザーグループ「{0}」をコピーしました。', $userGroup->name);
+                $userGroup = $rs;
+            } else {
+                $this->setResponse($this->response->withStatus(400));
+                $message = __d('baser', 'データベース処理中にエラーが発生しました。');
+            }
+        } catch (\Exception $e) {
+            $errors = $e->getMessage();
+            $this->setResponse($this->response->withStatus(400));
+            $message = __d('baser', '入力エラーです。内容を修正してください。');
+        }
+
+        $this->set([
+            'message' => $message,
+            'userGroup' => $userGroup,
+            'errors' => $errors,
+        ]);
+
+        $this->viewBuilder()->setOption('serialize', ['message', 'userGroup', 'errors']);
+    }
 }

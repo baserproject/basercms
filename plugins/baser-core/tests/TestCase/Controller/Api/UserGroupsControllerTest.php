@@ -149,4 +149,28 @@ class UserGroupsControllerTest extends BcTestCase
             $this->assertEquals($userGroups[$key], $v);
         }
     }
+
+    /**
+     * test copy
+     * @return void
+     */
+    public function testCopy()
+    {
+        $this->get('/baser/api/baser-core/user_groups/copy/1.json?token=' . $this->accessToken);
+        $this->assertResponseCode(405);
+
+        $this->post('/baser/api/baser-core/user_groups/copy/1.json?token=' . $this->accessToken);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('ユーザーグループ「admins」をコピーしました。', $result->message);
+        $this->assertEquals('admins_copy', $result->userGroup->name);
+        $this->assertEmpty($result->errors);
+
+        $this->post('/baser/api/baser-core/user_groups/copy/test.json?token=' . $this->accessToken);
+        $this->assertResponseCode(400);
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEmpty($result->userGroup);
+        $this->assertNotEmpty($result->errors);
+        $this->assertEquals('入力エラーです。内容を修正してください。', $result->message);
+    }
 }
