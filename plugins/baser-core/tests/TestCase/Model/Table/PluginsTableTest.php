@@ -105,6 +105,16 @@ class PluginsTableTest extends BcTestCase
         $this->Plugins->detach($plugin);
         $this->assertFalse($this->Plugins->find()->where(['name' => $plugin])->first()->status);
     }
+    /**
+     * test attach
+     */
+    public function testAttach()
+    {
+        $plugin = 'BcBlog';
+        $this->Plugins->detach($plugin);
+        $this->Plugins->attach($plugin);
+        $this->assertTrue($this->Plugins->find()->where(['name' => $plugin])->first()->status);
+    }
 
     /**
      * Test validationDefault

@@ -113,6 +113,31 @@ class PluginsController extends BcApiController
     }
 
     /**
+     * プラグインを有効化する
+     * @param PluginsServiceInterface $plugins
+     * @param $name
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function attach(PluginsServiceInterface $plugins, $name)
+    {
+        $this->request->allowMethod(['post']);
+        $plugin = $plugins->getByName($name);
+        if ($plugins->attach($name)) {
+            $message = sprintf(__d('baser', 'プラグイン「%s」を有効にしました。'), $name);
+        } else {
+            $this->setResponse($this->response->withStatus(400));
+            $message = __d('baser', 'プラグインの有効化に失敗しました。');
+        }
+        $this->set([
+            'message' => $message,
+            'plugin' => $plugin
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['plugin', 'message']);
+    }
+
+    /**
      * プラグインのデータベースを初期化する
      * @param PluginsServiceInterface $plugins
      * @param $name

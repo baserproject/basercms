@@ -62,6 +62,12 @@ interface PluginsServiceInterface
     public function detach(string $name): bool;
 
     /**
+     * プラグインを有効にする
+     * @param string $name
+     */
+    public function attach(string $name): bool;
+
+    /**
      * プラグイン名からプラグインエンティティを取得
      * @param string $name
      * @return array|EntityInterface|null

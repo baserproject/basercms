@@ -226,6 +226,26 @@ class PluginsTable extends AppTable
         BcUtil::clearAllCache();
         return $result !== false;
     }
+    /**
+     * プラグインを有効化する
+     *
+     * @param $name
+     * @return bool
+     * @checked
+     * @unitTest
+     * @noTodo
+     */
+    public function attach($name): bool
+    {
+        $targetPlugin = $this->find()->where(['name' => $name])->first();
+        if ($targetPlugin === null) {
+            return false;
+        }
+        $targetPlugin->status = true;
+        $result = $this->save($targetPlugin);
+        BcUtil::clearAllCache();
+        return $result !== false;
+    }
 
     /**
      * データベースをアップデートする
@@ -250,5 +270,5 @@ class PluginsTable extends AppTable
             }
         }
     }
-    
+
 }

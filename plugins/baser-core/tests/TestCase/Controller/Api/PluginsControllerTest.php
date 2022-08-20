@@ -150,6 +150,23 @@ class PluginsControllerTest extends BcTestCase
     }
 
     /**
+     * test attach
+     */
+    public function testAttach()
+    {
+        $this->post('/baser/api/baser-core/plugins/attach/BcBlog.json?token=' . $this->accessToken);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('プラグイン「BcBlog」を有効にしました。', $result->message);
+        $this->assertTrue($result->plugin->status);
+
+        $this->post('/baser/api/baser-core/plugins/attach/test.json?token=' . $this->accessToken);
+        $this->assertResponseCode(400);
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertNull($result->plugin);
+    }
+
+    /**
      * test reset_db
      */
     public function testRestDb()

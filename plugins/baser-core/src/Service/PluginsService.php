@@ -257,6 +257,18 @@ class PluginsService implements PluginsServiceInterface
     }
 
     /**
+     * プラグインを有効にする
+     * @param string $name
+     * @checked
+     * @noTodo
+     * @unitTest PluginsTable::attach() のテストに委ねる
+     */
+    public function attach(string $name): bool
+    {
+        return $this->Plugins->attach($name);
+    }
+
+    /**
      * プラグイン名からプラグインエンティティを取得
      * @param string $name
      * @return array|EntityInterface|null
