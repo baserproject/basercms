@@ -22,13 +22,13 @@ use BaserCore\View\BcAdminAppView;
 switch($this->request->getParam('action')) {
   case 'index':
       $this->BcAdmin->setTitle(__d('baser', 'コンテンツ一覧'));
+      $this->BcAdmin->setSearch('contents_index');
       break;
   case 'trash_index':
       $this->BcAdmin->setTitle(__d('baser', 'ゴミ箱'));
       break;
 }
 
-$this->BcAdmin->setSearch('contents_index');
 $this->BcAdmin->setHelp('contents_index');
 
 $editInIndexDisabled = false;
