@@ -22,6 +22,23 @@ use BaserCore\Annotation\UnitTest;
  */
 class PermissionsController extends BcApiController
 {
+    /**
+     * [API] 単一アクセス制限設定取得
+     * @param PermissionsServiceInterface $permissionsService
+     * @param $id
+     *
+     * @checked
+     * @unitTest
+     * @noTodo
+     */
+    public function view(PermissionsServiceInterface $permissionsService, $id)
+    {
+        $this->request->allowMethod(['get']);
+        $this->set([
+            'permission' => $permissionsService->get($id)
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['permission']);
+    }
 
     /**
      * [API] アクセス制限設定の一覧

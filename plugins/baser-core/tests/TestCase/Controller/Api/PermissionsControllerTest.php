@@ -108,11 +108,6 @@ class PermissionsControllerTest extends BcTestCase
      */
     public function testAdd()
     {
-        $this->loadFixtures(
-            'Permissions',
-            'Sites',
-            'SiteConfigs'
-        );
         $this->enableSecurityToken();
         $this->enableCsrfToken();
         $data = [
@@ -159,6 +154,11 @@ class PermissionsControllerTest extends BcTestCase
      */
     public function testView()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->get('/baser/api/baser-core/permissions/view/1.json?token=' . $this->accessToken);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('システム管理', $result->permission->name);
+        $this->assertEquals('2', $result->permission->user_group_id);
+        $this->assertEquals('/baser/admin/*', $result->permission->url);
     }
 }
