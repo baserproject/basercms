@@ -83,4 +83,34 @@ class PermissionsController extends BcApiController
         $this->viewBuilder()->setOption('serialize', ['message', 'permission', 'errors']);
     }
 
+    /**
+     * [API] 編集処理
+     *
+     * @param PermissionsServiceInterface $permissionService
+     * @param $permissionId
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+
+    public function edit(PermissionsServiceInterface $permissionService, $permissionId)
+    {
+        $this->request->allowMethod(['post', 'put', 'patch']);
+        try {
+            $permission = $permissionService->update($permissionService->get($permissionId), $this->request->getData());
+            $message = __d('baser', 'アクセス制限設定「{0}」を更新しました。', $permission->name);
+        } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
+            $this->setResponse($this->response->withStatus(400));
+            $permission = $e->getEntity();
+            $message = __d('baser', '入力エラーです。内容を修正してください。');
+        }
+        $this->set([
+            'message' => $message,
+            'permission' => $permission,
+            'errors' => $permission->getErrors(),
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['permission', 'message', 'errors']);
+    }
+
 }
