@@ -23,6 +23,24 @@ use BaserCore\Annotation\UnitTest;
 class PermissionsController extends BcApiController
 {
 
+    /**
+     * [API] アクセス制限設定の一覧
+     * @param PermissionsServiceInterface $permissionService
+     * @param $userGroupId
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function index(PermissionsServiceInterface $permissionService, $userGroupId)
+    {
+        $this->request->allowMethod(['get']);
+
+        $this->request = $this->request->withQueryParams(['user_group_id' => $userGroupId]);
+        $this->set('permissions', $permissionService->getIndex($this->request->getQueryParams()));
+        $this->viewBuilder()->setOption('serialize', ['permissions']);
+    }
+
 	/**
 	 * 登録処理
      * @checked

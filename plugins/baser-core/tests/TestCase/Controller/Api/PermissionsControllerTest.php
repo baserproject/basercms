@@ -11,6 +11,7 @@
 
 namespace BaserCore\Test\TestCase\Controller\Api;
 
+use BaserCore\Service\PermissionsService;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\Core\Configure;
 use Cake\TestSuite\IntegrationTestTrait;
@@ -63,7 +64,10 @@ class PermissionsControllerTest extends BcTestCase
         $this->loadFixtures(
             'Users',
             'UsersUserGroups',
-            'UserGroups'
+            'UserGroups',
+            'Permissions',
+            'Sites',
+            'SiteConfigs'
         );
         $token = $this->apiLoginAdmin(1);
         $this->accessToken = $token['access_token'];
@@ -88,7 +92,13 @@ class PermissionsControllerTest extends BcTestCase
      */
     public function testIndex()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->post('/baser/api/baser-core/permissions/index/1.json?token=' . $this->accessToken);
+        $this->assertResponseCode(405);
+
+        $this->get('/baser/api/baser-core/permissions/index/2.json?token=' . $this->accessToken);
+        $this->assertResponseSuccess();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals(15, count($result->permissions));
     }
 
     /**
