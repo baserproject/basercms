@@ -179,4 +179,28 @@ class PermissionsControllerTest extends BcTestCase
         $this->assertEquals('2', $result->permission->user_group_id);
         $this->assertEquals('/baser/admin/*', $result->permission->url);
     }
+
+    /**
+     * test copy
+     * @return void
+     */
+    public function testCopy()
+    {
+        $this->get('/baser/api/baser-core/permissions/copy/1.json?token=' . $this->accessToken);
+        $this->assertResponseCode(405);
+
+        $this->post('/baser/api/baser-core/permissions/copy/1.json?token=' . $this->accessToken);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('アクセス制限設定「システム管理」をコピーしました。', $result->message);
+        $this->assertEquals('システム管理', $result->permission->name);
+        $this->assertEmpty($result->errors);
+
+        $this->post('/baser/api/baser-core/permissions/copy/test.json?token=' . $this->accessToken);
+        $this->assertResponseCode(400);
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEmpty($result->permission);
+        $this->assertNull($result->errors);
+        $this->assertEquals('処理に失敗しました。', $result->message);
+    }
 }
