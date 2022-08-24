@@ -26,14 +26,22 @@ $this->BcBaser->js('admin/search.bundle', true, [
   'data-adminSearchOpened' => $adminSearchOpened,
   'data-adminSearchOpenedSaveUrl' => $adminSearchOpenedSaveUrl
 ]);
+if (strpos($search, '.') !== false) {
+  [$plugin, $search] = explode('.', $search);
+}
+if (!empty($plugin)) {
+  $search = $plugin . '.search/' . $search;
+} else {
+  $search = 'search/' . $search;
+}
 ?>
 
 
 <div class="bca-search">
   <h2 class="head bca-search__head">
-    <a href="javascript:void(0)" id="BtnMenuSearch"class="bca-icon--search"><?php echo __d('baser', '絞り込み検索') ?></a>
+    <a href="javascript:void(0)" id="BtnMenuSearch" class="bca-icon--search"><?php echo __d('baser', '絞り込み検索') ?></a>
   </h2>
   <div id="Search" class="body bca-search__body">
-    <?php $this->BcBaser->element('search/' . $search) ?>
+    <?php $this->BcBaser->element($search) ?>
   </div>
   <!-- / #Search clearfix --></div>

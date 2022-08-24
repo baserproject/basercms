@@ -30,7 +30,7 @@ class PreviewControllerTest extends BcTestCase
      * @var array
      */
     public $fixtures = [
-        'plugin.BaserCore.SearchIndexes',
+        'plugin.BcSearchIndex.SearchIndexes',
         'plugin.BaserCore.Sites',
         'plugin.BaserCore.SiteConfigs',
         'plugin.BaserCore.Contents',

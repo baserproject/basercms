@@ -49,6 +49,8 @@ if [ ! -e '/var/www/shared/docker/inited' ]; then
     if [ $CONNECTED -eq 1 ]; then
         /var/www/html/bin/cake migrations migrate --plugin BaserCore
         /var/www/html/bin/cake migrations seed --plugin BaserCore
+        /var/www/html/bin/cake migrations migrate --plugin BcSearchIndex
+        /var/www/html/bin/cake migrations seed --plugin BcSearchIndex
         /var/www/html/bin/cake plugin assets symlink
     else
         echo "Migration failed."

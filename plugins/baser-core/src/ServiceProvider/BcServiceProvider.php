@@ -48,7 +48,7 @@ use BaserCore\Service\ContentsService;
 use BaserCore\Service\UserGroupsService;
 use BaserCore\Service\PermissionsService;
 use BaserCore\Service\SiteConfigsService;
-use BaserCore\Service\SearchIndexesService;
+use BcSearchIndex\Service\SearchIndexesService;
 use BaserCore\Service\ContentFoldersService;
 use BaserCore\Service\PagesServiceInterface;
 use BaserCore\Service\SitesServiceInterface;
@@ -59,7 +59,7 @@ use BaserCore\Service\ContentsServiceInterface;
 use BaserCore\Service\UserGroupsServiceInterface;
 use BaserCore\Service\PermissionsServiceInterface;
 use BaserCore\Service\SiteConfigsServiceInterface;
-use BaserCore\Service\SearchIndexesServiceInterface;
+use BcSearchIndex\Service\SearchIndexesServiceInterface;
 use BaserCore\Service\ContentFoldersServiceInterface;
 
 /**

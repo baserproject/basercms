@@ -60,7 +60,6 @@ class BcServiceProviderTest extends BcTestCase
         $ContentsService = $container->get('BaserCore\Service\ContentsServiceInterface');
         $contentFolderService = $container->get('BaserCore\Service\ContentFoldersServiceInterface');
         $pageService = $container->get('BaserCore\Service\PagesServiceInterface');
-        $searchIndexService = $container->get('BaserCore\Service\SearchIndexesServiceInterface');
         $this->assertEquals('BaserCore\Service\UsersService', get_class($userService));
         $this->assertEquals('BaserCore\Service\UserGroupsService', get_class($userGroupService));
         $this->assertEquals('BaserCore\Service\PluginsService', get_class($pluginService));
@@ -70,7 +69,6 @@ class BcServiceProviderTest extends BcTestCase
         $this->assertEquals('BaserCore\Service\ContentsService', get_class($ContentsService));
         $this->assertEquals('BaserCore\Service\ContentFoldersService', get_class($contentFolderService));
         $this->assertEquals('BaserCore\Service\PagesService', get_class($pageService));
-        $this->assertEquals('BaserCore\Service\SearchIndexesService', get_class($searchIndexService));
     }
 
 }

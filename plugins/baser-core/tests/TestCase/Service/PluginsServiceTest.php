@@ -40,6 +40,7 @@ class PluginsServiceTest extends BcTestCase
         'plugin.BaserCore.Plugins',
         'plugin.BaserCore.Permissions',
         'plugin.BaserCore.UserGroups',
+        'plugin.BaserCore.SiteConfigs'
     ];
 
     /**

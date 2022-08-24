@@ -14,6 +14,9 @@ namespace BaserCore\View\Helper;
 use Cake\View\Helper;
 use Cake\Utility\Inflector;
 use BaserCore\Event\BcEventDispatcherTrait;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * 検索ボックスヘルパ
@@ -31,9 +34,12 @@ class BcSearchBoxHelper extends Helper
      * 検索フィールド発火
      *
      * @return string
+     * @checked
+     * @noTodo
      */
-    public function dispatchShowField($request)
+    public function dispatchShowField()
     {
+        $request = $this->_View->getRequest();
         $id = Inflector::camelize($request->getParam('controller')) . '.' . Inflector::camelize($request->getParam('action'));
         $event = $this->dispatchLayerEvent('showField', ['id' => $id, 'fields' => []], ['class' => 'BcSearchBox', 'plugin' => '']);
         $output = '';

@@ -68,5 +68,6 @@ session_id('cli');
 // (new SchemaLoader())->loadSqlFiles('./tests/schema.sql', 'test');
 (new Migrator())->runMany([
     ['plugin' => 'BaserCore'],
-    ['plugin' => 'BcBlog']
+    ['plugin' => 'BcBlog'],
+    ['plugin' => 'BcSearchIndex'],
 ]);

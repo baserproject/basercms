@@ -33,29 +33,29 @@ $this->BcBaser->js('admin/permissions/dialog.bundle');
   ]); ?>
 
   <dl>
-    <dt><?php echo $this->BcForm->label('user_group_id', __d('baser', 'ユーザーグループ')) ?></dt>
+    <dt><?php echo $this->BcAdminForm->label('user_group_id', __d('baser', 'ユーザーグループ')) ?></dt>
     <dd class="col-input">
-      <?php echo $this->BcAdminForm->control('user_group_id', ['type' => 'select', 'options' => $this->BcForm->getControlSource('Permissions.user_group_id')]) ?>
+      <?php echo $this->BcAdminForm->control('user_group_id', ['type' => 'select', 'options' => $this->BcAdminForm->getControlSource('BaserCore.Permissions.user_group_id')]) ?>
     </dd>
 
-    <dt><?php echo $this->BcForm->label('name', __d('baser', 'ルール名')) ?></dt>
+    <dt><?php echo $this->BcAdminForm->label('name', __d('baser', 'ルール名')) ?></dt>
     <dd><?php echo $this->BcAdminForm->control('name', ['type' => 'text', 'size' => 50, 'class' => 'required', 'value' => $this->fetch('title')]) ?></dd>
 
-    <dt><?php echo $this->BcForm->label('url', __d('baser', 'URL設定')) ?></dt>
+    <dt><?php echo $this->BcAdminForm->label('url', __d('baser', 'URL設定')) ?></dt>
     <dd>
       <?php echo $this->BcAdminForm->control('url', ['type' => 'text', 'size' => 50, 'class' => 'required', 'value' => Router::url()]) ?>
     </dd>
 
-    <dt><?php echo $this->BcForm->label('method', __d('baser', '権限')) ?></dt>
+    <dt><?php echo $this->BcAdminForm->label('method', __d('baser', '権限')) ?></dt>
     <dd>
       <?php echo $this->BcAdminForm->control('method', ['type' => 'select', 'options' => $permissionMethodList]) ?>
-      <?php echo $this->BcForm->error('method') ?>
+      <?php echo $this->BcAdminForm->error('method') ?>
     </dd>
 
-    <dt><?php echo $this->BcForm->label('auth', __d('baser', 'アクセス')) ?></dt>
+    <dt><?php echo $this->BcAdminForm->label('auth', __d('baser', 'アクセス')) ?></dt>
     <dd>
       <?php echo $this->BcAdminForm->control('auth', ['type' => 'radio', 'options' => $permissionAuthList, 'value' => 0]) ?>
-      <?php echo $this->BcForm->error('auth') ?>
+      <?php echo $this->BcAdminForm->error('auth') ?>
     </dd>
   </dl>
   <?php echo $this->BcAdminForm->end() ?>

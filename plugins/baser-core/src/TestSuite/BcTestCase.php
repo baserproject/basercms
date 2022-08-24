@@ -17,6 +17,7 @@ use BaserCore\Middleware\BcAdminMiddleware;
 use BaserCore\Middleware\BcRequestFilterMiddleware;
 use BaserCore\Plugin;
 use BaserCore\Utility\BcApiUtil;
+use BcSearchIndex\ServiceProvider\BcSearchIndexServiceProvider;
 use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
 use Cake\Event\EventListenerInterface;
@@ -154,6 +155,7 @@ class BcTestCase extends TestCase
         $this->BaserCore = $this->Application->getPlugins()->get('BaserCore');
         $container = BcContainer::get();
         $container->addServiceProvider(new BcServiceProvider());
+        $container->addServiceProvider(new BcSearchIndexServiceProvider());
         EventManager::instance(new EventManager());
     }
 

@@ -19,6 +19,14 @@ use BaserCore\View\BcAdminAppView;
  * @var BcAdminAppView $this
  * @var string $help
  */
+if (strpos($help, '.') !== false) {
+  [$plugin, $help] = explode('.', $help);
+}
+if (!empty($plugin)) {
+  $help = $plugin . '.help/' . $help;
+} else {
+  $help = 'help/' . $help;
+}
 ?>
 
 
@@ -30,7 +38,7 @@ use BaserCore\View\BcAdminAppView;
   </h2>
 
   <div class="body bca-help__body">
-    <?php $this->BcBaser->element('help/' . $help) ?>
+    <?php $this->BcBaser->element($help) ?>
   </div>
 
   <!-- / #Help --></div>

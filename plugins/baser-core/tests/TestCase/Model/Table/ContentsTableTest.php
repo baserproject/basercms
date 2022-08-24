@@ -37,7 +37,7 @@ class ContentsTableTest extends BcTestCase
         'plugin.BaserCore.Contents',
         'plugin.BaserCore.ContentFolders',
         'plugin.BaserCore.Pages',
-        'plugin.BaserCore.SearchIndexes',
+        'plugin.BcSearchIndex.SearchIndexes',
         'plugin.BaserCore.SiteConfigs',
         'plugin.BaserCore.Model/Table/Content/ContentStatusCheck'
     ];

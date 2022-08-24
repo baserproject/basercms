@@ -207,34 +207,33 @@ return [
                         ],
                     ]
                 ],
-                //			'Tools' => [
-                //				'title' => __d('baser', 'ユーティリティ'),
-                //				'type' => 'system',
-                //				'menus' => [
-                //					'Tools' => ['title' => __d('baser', 'ユーティリティトップ'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'tools', 'action' => 'index']],
-                //					'EditorTemplates' => [
-                //						'title' => __d('baser', 'エディタテンプレート'),
-                //						'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'editor_templates', 'action' => 'index'],
-                //						'currentRegex' => '/\/editor_templates\/[^\/]+?/s'
-                //					],
-                //					'WidgetAreas' => [
-                //						'title' => __d('baser', 'ウィジェットエリア'),
-                //						'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'widget_areas', 'action' => 'index'],
-                //						'currentRegex' => '/\/widget_areas\/[^\/]+?\/[0-9]+/s'
-                //					],
-                //					'SearchIndices' => ['title' => __d('baser', '検索インデックス'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'search_indices', 'action' => 'index']],
-                //					'SiteConfigsInfo' => ['title' => __d('baser', '環境情報'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'tools', 'action' => 'info']],
-                //					'ThemeFiles' => [
-                //						'title' => __d('baser', 'コアテンプレート確認'),
-                //						'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'theme_files', 'action' => 'index', 'core'],
-                //						'currentRegex' => '/\/theme_files\/[^\/]+?/s'
-                //					],
-                //					'ToolsMaintenance' => ['title' => __d('baser', 'データメンテナンス'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'tools', 'action' => 'maintenance']],
-                //					'ToolsLog' => ['title' => __d('baser', 'ログメンテナンス'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'tools', 'action' => 'log']],
-                //					'ToolsWriteSchema' => ['title' => __d('baser', 'スキーマファイル生成'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'tools', 'action' => 'write_schema']],
-                //					'ToolsLoadSchema' => ['title' => __d('baser', 'スキーマファイル読込'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'tools', 'action' => 'load_schema']],
-                //				]
-                //			]
+                'Tools' => [
+                    'title' => __d('baser', 'ユーティリティ'),
+                    'type' => 'system',
+//                    'menus' => [
+//                        'Tools' => ['title' => __d('baser', 'ユーティリティトップ'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'tools', 'action' => 'index']],
+//                        'EditorTemplates' => [
+//                            'title' => __d('baser', 'エディタテンプレート'),
+//                            'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'editor_templates', 'action' => 'index'],
+//                            'currentRegex' => '/\/editor_templates\/[^\/]+?/s'
+//                        ],
+//                        'WidgetAreas' => [
+//                            'title' => __d('baser', 'ウィジェットエリア'),
+//                            'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'widget_areas', 'action' => 'index'],
+//                            'currentRegex' => '/\/widget_areas\/[^\/]+?\/[0-9]+/s'
+//                        ],
+//                        'SiteConfigsInfo' => ['title' => __d('baser', '環境情報'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'tools', 'action' => 'info']],
+//                        'ThemeFiles' => [
+//                            'title' => __d('baser', 'コアテンプレート確認'),
+//                            'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'theme_files', 'action' => 'index', 'core'],
+//                            'currentRegex' => '/\/theme_files\/[^\/]+?/s'
+//                        ],
+//                        'ToolsMaintenance' => ['title' => __d('baser', 'データメンテナンス'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'tools', 'action' => 'maintenance']],
+//                        'ToolsLog' => ['title' => __d('baser', 'ログメンテナンス'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'tools', 'action' => 'log']],
+//                        'ToolsWriteSchema' => ['title' => __d('baser', 'スキーマファイル生成'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'tools', 'action' => 'write_schema']],
+//                        'ToolsLoadSchema' => ['title' => __d('baser', 'スキーマファイル読込'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'tools', 'action' => 'load_schema']],
+//                    ]
+                ]
             ]
         ]
      ],

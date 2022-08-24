@@ -12,6 +12,7 @@
 namespace BaserCore\View\Helper;
 
 use BaserCore\Event\BcEventDispatcherTrait;
+use Cake\Utility\Inflector;
 use Cake\View\Helper;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -98,13 +99,7 @@ class BcListTableHelper extends Helper
      */
     public function dispatchShowRow($data)
     {
-
-        // TODO 未実装のため代替措置
-        // >>>
-        return '';
-        // <<<
-
-        $request = $this->_View->request;
+        $request = $this->_View->getRequest();
         $id = Inflector::camelize($request->getParam('controller')) . '.' . Inflector::camelize($request->getParam('action'));
         $event = $this->dispatchLayerEvent('showRow', ['id' => $id, 'data' => $data, 'fields' => []], ['class' => 'BcListTable', 'plugin' => '']);
         $output = '';

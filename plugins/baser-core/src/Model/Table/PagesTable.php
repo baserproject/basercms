@@ -23,7 +23,6 @@ use BaserCore\Model\Entity\Page;
 use Cake\Datasource\EntityInterface;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Event\BcEventDispatcherTrait;
-use BaserCore\Model\Behavior\BcSearchIndexManagerInterface;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -32,7 +31,7 @@ use BaserCore\Annotation\Note;
 /**
  * Class PagesTable
  */
-class PagesTable extends Table implements BcSearchIndexManagerInterface
+class PagesTable extends Table
 {
     /**
      * Trait
@@ -85,7 +84,7 @@ class PagesTable extends Table implements BcSearchIndexManagerInterface
     {
         parent::initialize($config);
         $this->addBehavior('BaserCore.BcContents');
-        $this->addBehavior('BaserCore.BcSearchIndexManager');
+        $this->addBehavior('BcSearchIndex.BcSearchIndexManager');
         $this->addBehavior('Timestamp');
         $this->Sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
         $this->Contents = TableRegistry::getTableLocator()->get('BaserCore.Contents');

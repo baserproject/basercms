@@ -68,6 +68,7 @@ nbproject/*
 !/plugins/bc-theme-file
 !/plugins/bc-widget-area
 !/plugins/bc-installer
+!/plugins/bc-search-index
 /plugins/*/vendor
 /plugins/*/composer.lock
 # vagrant
@@ -91,6 +92,7 @@ node_modules
 /webroot/bc_editor_template
 /webroot/bc_mail
 /webroot/bc_uploader
+/webroot/bc_search_index
 # jwt
 /config/jwt.key
 /config/jwt.pem

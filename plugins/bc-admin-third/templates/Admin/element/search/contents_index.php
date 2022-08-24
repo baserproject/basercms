@@ -46,7 +46,7 @@ use BaserCore\View\BcAdminAppView;
 		<?= $this->BcAdminForm->label('author_id', __d('baser', '作成者'), ['class' => 'bca-search__input-item-label']) ?>
     <?= $this->BcAdminForm->control('author_id', ['type' => 'select', 'options' => $authorList, 'empty' => __d('baser', '指定なし')]) ?>
 	</span>
-  <?= $this->BcSearchBox->dispatchShowField($this->request); ?>
+  <?= $this->BcSearchBox->dispatchShowField(); ?>
 </p>
 <div class="button bca-search__btns">
   <div  class="bca-search__btns-item"><?= $this->BcAdminForm->button(__d('baser', '検索'), ['id' => 'BtnSearchSubmit', 'class' => 'bca-btn', 'data-bca-btn-type' => 'search']) ?></div>

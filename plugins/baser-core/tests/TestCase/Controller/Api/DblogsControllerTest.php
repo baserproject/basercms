@@ -100,7 +100,7 @@ class DblogsControllerTest extends BcTestCase
         $this->assertResponseCode(405);
 
         $data = [
-            'name' => 'ucmitzGroup',
+            'message' => null,
             'title' => 'ucmitzグループ',
             'use_move_contents' => '1',
         ];
