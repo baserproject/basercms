@@ -263,6 +263,7 @@ class BcValidation extends Validation
      * @return boolean
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function fileExt($value, $exts)
     {
