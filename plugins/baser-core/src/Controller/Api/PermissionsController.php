@@ -60,6 +60,9 @@ class PermissionsController extends BcApiController
 
 	/**
 	 * 登録処理
+     *
+     * @param PermissionsServiceInterface $permissionService
+     *
      * @checked
      * @noTodo
      * @unitTest
@@ -80,6 +83,86 @@ class PermissionsController extends BcApiController
             'permission' => $permission,
             'errors' => $permission->getErrors(),
         ]);
+        $this->viewBuilder()->setOption('serialize', ['message', 'permission', 'errors']);
+    }
+
+    /**
+     * [API] 削除処理
+     *
+     * @param PermissionsServiceInterface $permissionService
+     * @param $permissionId
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function delete(PermissionsServiceInterface $permissionService, $permissionId)
+    {
+        $this->request->allowMethod(['post', 'put', 'patch']);
+
+        $error = null;
+        $permission = null;
+        try {
+            $permission = $permissionService->get($permissionId);
+            $permissionName = $permission->name;
+            $permissionService->delete($permissionId);
+            $message = __d('baser', 'アクセス制限設定「{0}」を削除しました。', $permissionName);
+        } catch (\Exception $e) {
+            $this->setResponse($this->response->withStatus(400));
+            $error = $e->getMessage();
+            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $error);
+        }
+
+        $this->set([
+            'message' => $message,
+            'permission' => $permission,
+            'error' => $error,
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['permission', 'message', 'errors']);
+    }
+
+    /**
+     * [API] アクセス制限設定コピー
+     *
+     * @param PermissionsServiceInterface $permissionService
+     * @param $id
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function copy(PermissionsServiceInterface $permissionService, $id)
+    {
+        $this->request->allowMethod(['patch', 'post', 'put']);
+
+        $permission = null;
+        $errors = null;
+
+        if (!$id || !is_numeric($id)) {
+            $this->setResponse($this->response->withStatus(400));
+            $message = __d('baser', '処理に失敗しました。');
+        }else{
+            try {
+                $permission = $permissionService->copy($id);
+                if ($permission) {
+                    $message = __d('baser', 'アクセス制限設定「{0}」をコピーしました。', $permission->name);
+                } else {
+                    $this->setResponse($this->response->withStatus(400));
+                    $message = __d('baser', 'データベース処理中にエラーが発生しました。');
+                }
+            } catch (\Exception $e) {
+                $errors = $e->getMessage();
+                $this->setResponse($this->response->withStatus(400));
+                $message = __d('baser', 'データベース処理中にエラーが発生しました。'.$errors);
+            }
+        }
+
+        $this->set([
+            'message' => $message,
+            'permission' => $permission,
+            'errors' => $errors,
+        ]);
+
         $this->viewBuilder()->setOption('serialize', ['message', 'permission', 'errors']);
     }
 

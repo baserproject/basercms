@@ -89,7 +89,21 @@ class AppServiceTest extends BcTestCase
      */
     public function test_getOtherSiteList()
     {
-         $this->markTestIncomplete('テストが未実装です');
+        $request = $this->loginAdmin($this->getRequest('/baser/admin'));
+        $service = new SitesService();
+        $request = $request->withAttribute('currentSite', $service->get(3));
+        Router::setRequest($request);
+
+        $rs = $this->AppService->getOtherSiteList();
+        $this->assertEquals('英語サイト', $this->AppService->getCurrentSite()->display_name);
+        $this->assertEquals([1 => "メインサイト", 4 => "別ドメイン", 5 => "サブドメイン", 6 => "関連メインサイト用"], $rs);
+
+        $request = $request->withAttribute('currentSite', $service->get(6));
+        Router::setRequest($request);
+
+        $rs = $this->AppService->getOtherSiteList();
+        $this->assertEquals('関連メインサイト用', $this->AppService->getCurrentSite()->display_name);
+        $this->assertEquals([1 => "メインサイト", 3 => "英語サイト", 4 => "別ドメイン", 5 => "サブドメイン"], $rs);
     }
 
     /**

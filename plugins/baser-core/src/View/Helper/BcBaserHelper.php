@@ -357,6 +357,7 @@ class BcBaserHelper extends Helper
      *    リンクをクリックした際に確認メッセージが表示され、はいをクリックした場合のみ遷移する
      * @return string
      * @checked
+     * @unitTest
      * @doc
      */
     public function getLink($title, $url = null, $options = [], $confirmMessage = false)
