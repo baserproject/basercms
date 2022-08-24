@@ -71,6 +71,7 @@ class AppService
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getOtherSiteList(): array
     {
