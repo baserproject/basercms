@@ -164,7 +164,35 @@ class PermissionsControllerTest extends BcTestCase
      */
     public function testDelete()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $permissionsService = new PermissionsService();
+        $newPermission = [
+            'no' => 10,
+            'sort' => 20,
+            'name' => 'test delete',
+            'user_group_id' => 2,
+            'url' => '/baser/admin/baser-core/contents/index',
+            'auth' => true,
+            'method' => 'ALL',
+            'status' => true,
+            'modified' => time(),
+            'created' => time(),
+        ];
+        $newPermission = $permissionsService->create($newPermission);
+
+        $id = $newPermission->id;
+        $data = $permissionsService->get($id);
+
+
+        $this->post("/baser/api/baser-core/permissions/delete/${id}.json?token=" . $this->accessToken);
+        $this->assertResponseSuccess();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals($result->permission->name, $data->name);
+        $this->assertEquals('アクセス制限設定「test delete」を削除しました。', $result->message);
+
+        $this->post("/baser/api/baser-core/permissions/delete/test.json?token=" . $this->accessToken);
+        $this->assertResponseCode(400);
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('データベース処理中にエラーが発生しました。Cannot convert value of type `string` to integer', $result->message);
     }
 
     /**
