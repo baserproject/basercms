@@ -67,10 +67,6 @@ session_id('cli');
 // load schema from a SQL dump file with
 // use Cake\TestSuite\Fixture\SchemaLoader;
 // (new SchemaLoader())->loadSqlFiles('./tests/schema.sql', 'test');
-BcUtil::includePluginClass([
-    'BcBlog',
-    'BcSearchIndex'
-]);
 (new Migrator())->runMany([
     ['plugin' => 'BaserCore'],
     ['plugin' => 'BcBlog'],
