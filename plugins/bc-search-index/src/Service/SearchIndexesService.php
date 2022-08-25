@@ -95,68 +95,65 @@ class SearchIndexesService implements SearchIndexesServiceInterface
      */
     protected function createAdminIndexConditions($data)
     {
-        if (empty($data['SearchIndex'])) {
+        if (empty($data)) {
             return [];
         }
-        /* 条件を生成 */
+
         $conditions = [];
-
         $type = $status = $keyword = $folderId = $siteId = null;
-        if (isset($data['SearchIndex']['type'])) {
-            $type = $data['SearchIndex']['type'];
+        if (isset($data['type'])) {
+            $type = $data['type'];
         }
-        if (isset($data['SearchIndex']['status'])) {
-            $status = $data['SearchIndex']['status'];
+        if (isset($data['status'])) {
+            $status = $data['status'];
         }
-        if (isset($data['SearchIndex']['keyword'])) {
-            $keyword = $data['SearchIndex']['keyword'];
+        if (isset($data['keyword'])) {
+            $keyword = $data['keyword'];
         }
-        if (isset($data['SearchIndex']['folder_id'])) {
-            $folderId = $data['SearchIndex']['folder_id'];
+        if (isset($data['folder_id'])) {
+            $folderId = $data['folder_id'];
         }
-        if (isset($data['SearchIndex']['site_id'])) {
-            $siteId = $data['SearchIndex']['site_id'];
+        if (isset($data['site_id'])) {
+            $siteId = $data['site_id'];
         }
 
-        unset($data['SearchIndex']['type']);
-        unset($data['SearchIndex']['status']);
-        unset($data['SearchIndex']['keyword']);
-        unset($data['SearchIndex']['folder_id']);
-        unset($data['SearchIndex']['site_id']);
-        unset($data['SearchIndex']['site_id']);
-        unset($data['SearchIndex']['open']);
-        unset($data['ListTool']);
-        if (empty($data['SearchIndex']['priority'])) {
-            unset($data['SearchIndex']['priority']);
+        unset($data['type']);
+        unset($data['status']);
+        unset($data['keyword']);
+        unset($data['folder_id']);
+        unset($data['site_id']);
+        unset($data['site_id']);
+        if (empty($data['priority'])) {
+            unset($data['priority']);
         }
-        foreach($data['SearchIndex'] as $key => $value) {
+        foreach($data as $key => $value) {
             if (preg_match('/priority_[0-9]+$/', $key)) {
-                unset($data['SearchIndex'][$key]);
+                unset($data[$key]);
             }
         }
-        if (isset($data['SearchIndex']['priority'])) {
-            $conditions['SearchIndex.priority'] = $data['SearchIndex']['priority'];
+        if (isset($data['priority'])) {
+            $conditions['SearchIndexes.priority'] = $data['priority'];
         }
         if ($type) {
-            $conditions['SearchIndex.type'] = $type;
+            $conditions['SearchIndexes.type'] = $type;
         }
         if ($siteId) {
-            $conditions['SearchIndex.site_id'] = $siteId;
+            $conditions['SearchIndexes.site_id'] = $siteId;
         } else {
-            $conditions['SearchIndex.site_id'] = 0;
+            $conditions['SearchIndexes.site_id'] = 0;
         }
         if ($folderId) {
             $content = $this->Content->find('first', ['fields' => ['lft', 'rght'], 'conditions' => ['Content.id' => $folderId], 'recursive' => -1]);
-            $conditions['SearchIndex.rght <'] = $content['Content']['rght'];
-            $conditions['SearchIndex.lft >'] = $content['Content']['lft'];
+            $conditions['SearchIndexes.rght <'] = $content['Content']['rght'];
+            $conditions['SearchIndexes.lft >'] = $content['Content']['lft'];
         }
         if ($status != '') {
-            $conditions['SearchIndex.status'] = $status;
+            $conditions['SearchIndexes.status'] = $status;
         }
         if ($keyword) {
             $conditions['and']['or'] = [
-                'SearchIndex.title LIKE' => '%' . $keyword . '%',
-                'SearchIndex.detail LIKE' => '%' . $keyword . '%'
+                'SearchIndexes.title LIKE' => '%' . $keyword . '%',
+                'SearchIndexes.detail LIKE' => '%' . $keyword . '%'
             ];
         }
 
