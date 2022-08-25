@@ -17,7 +17,6 @@ use Cake\Utility\Inflector;
  * @var string $title
  */
 
-$this->assign('title', $title);
 $request = $this->getRequest();
 $attributes = $request->getAttributes();
 $base = $attributes['base'];

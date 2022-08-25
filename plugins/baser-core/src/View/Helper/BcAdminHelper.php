@@ -279,7 +279,7 @@ class BcAdminHelper extends Helper
      */
     public function setTitle($title): void
     {
-        $this->_View->set('title', $title);
+        $this->_View->assign('title', $title);
     }
 
     /**
