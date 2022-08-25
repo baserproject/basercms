@@ -14,7 +14,7 @@ namespace BcSearchIndex\Service;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
-use Cake\Datasource\EntityInterface;
+use Cake\Http\ServerRequest;
 
 /**
  * Interface SearchIndexesAdminServiceInterface
@@ -31,6 +31,6 @@ interface SearchIndexesAdminServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function getViewVarsForIndex(\Cake\ORM\ResultSet $searchIndexes, int $siteId): array;
+    public function getViewVarsForIndex(\Cake\ORM\ResultSet $searchIndexes, ServerRequest $request): array;
 
 }

@@ -64,7 +64,7 @@ class SearchIndexesController extends BcAdminAppController
 
         $this->set($adminService->getViewVarsForIndex(
             $this->paginate($service->getIndex($this->getRequest()->getQueryParams())),
-            (int) $this->getRequest()->getData('id')
+            $this->getRequest()
         ));
     }
 

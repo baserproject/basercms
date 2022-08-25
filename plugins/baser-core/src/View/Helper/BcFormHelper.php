@@ -1626,8 +1626,13 @@ DOC_END;
                     // 複数$contextに設定されてる場合先頭のエンティティを優先
                     $context = array_shift($context);
                 }
-                [, $context] = pluginSplit($context->getSource());
-            } else {
+                if ($context instanceof EntityInterface) {
+                    [, $context] = pluginSplit($context->getSource());
+                } else {
+                    $context = null;
+                }
+            }
+            if(!$context) {
                 $context = empty($request->getParam('controller')) ? false : $request->getParam('controller');
             }
             if ($domId = isset($options['url']['action'])? $options['url']['action'] : $request->getParam('action')) {
