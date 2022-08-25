@@ -362,5 +362,9 @@ $(function () {
     //     }
     // }
 
+    // クリック時にローディング表示
+    $('.bca-loading').click(function(){
+        $.bcUtil.showLoader();
+    });
 });
 
