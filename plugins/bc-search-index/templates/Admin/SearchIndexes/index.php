@@ -18,7 +18,7 @@ $this->BcAdmin->setTitle(__d('baser', '検索インデックス一覧'));
 $this->BcAdmin->setSearch('BcSearchIndex.search_indexes_index');
 $this->BcAdmin->setHelp('BcSearchIndex.search_indexes_index');
 $this->BcBaser->js([
-  'admin/search_indexes/index.bundle'
+  'BcSearchIndex.admin/search_indexes/index.bundle'
 ]);
 echo $this->BcBaser->i18nScript([
   'reconstructSearchTitle' => __d('baser', '確認'),
