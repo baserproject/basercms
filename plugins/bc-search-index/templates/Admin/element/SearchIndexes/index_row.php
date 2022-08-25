@@ -58,9 +58,8 @@ $priorities = [
     <?php echo $this->BcTime->format($searchIndex->modified, 'yyyy-MM-dd') ?>
   </td>
   <?php echo $this->BcListTable->dispatchShowRow($searchIndex) ?>
-  <td class="bca-table-listup__tbody-td">
-    <?php
-    echo $this->BcAdminForm->control('SearchIndex.priority' . '_' . $searchIndex->id, [
+  <td class="bca-table-listup__tbody-td" nowrap>
+    <?php echo $this->BcAdminForm->control('SearchIndex.priority' . '_' . $searchIndex->id, [
       'type' => 'select',
       'options' => $priorities,
       'empty' => false,
@@ -70,6 +69,5 @@ $priorities = [
   </td>
   <td class="bca-table-listup__tbody-td bca-table-listup__tbody-td--actions">
     <?php $this->BcBaser->link('', ['action' => 'ajax_delete', $searchIndex->id], ['title' => __d('baser', '削除'), 'class' => 'btn-delete bca-btn-icon', 'data-bca-btn-type' => 'delete', 'data-bca-btn-size' => 'lg']) ?>
-    <?php $this->BcBaser->img('admin/ajax-loader-s.gif', ['id' => 'PriorityAjaxLoader' . $searchIndex->id, 'style' => "vertical-align:middle;display:none"]) ?>
   </td>
 </tr>

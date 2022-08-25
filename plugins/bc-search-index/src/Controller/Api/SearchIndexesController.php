@@ -12,28 +12,53 @@
 namespace BcSearchIndex\Controller\Api;
 
 use BaserCore\Controller\AppController;
+use BaserCore\Error\BcException;
+use BcSearchIndex\Service\SearchIndexesServiceInterface;
+use Cake\Event\EventInterface;
 
 /**
  * SearchIndicesController
  */
-class SearchIndicesController extends AppController
+class SearchIndexesController extends AppController
 {
 
     /**
-     * [AJAX] 優先順位を変更する
-     *
-     * @return void
-     * @throws Exception
+     * Before filter
+     * @param EventInterface $event
+     * @return \Cake\Http\Response|void
+     * @checked
+     * @noTodo
      */
-    public function admin_ajax_change_priority()
+    public function beforeFilter(EventInterface $event)
     {
-        if ($this->request->getData()) {
-            $this->SearchIndex->set($this->request->getData());
-            if ($this->SearchIndex->save()) {
-                echo true;
-            }
+        parent::beforeFilter($event);
+        $this->Security->setConfig('validatePost', false);
+    }
+
+    /**
+     * [AJAX] 優先順位を変更する
+     * @checked
+     * @noTodo
+     */
+    public function change_priority(SearchIndexesServiceInterface $service, $id)
+    {
+        $this->request->allowMethod(['post', 'put']);
+        $searchIndex = $service->get($id);
+        try {
+            $searchIndex = $service->changePriority(
+                $searchIndex,
+                $this->getRequest()->getData('priority')
+            );
+            $message = __d('baser', '検索インデックス「{0}」の優先度を変更しました。', $searchIndex->title);
+        } catch (BcException $e) {
+            $this->setResponse($this->response->withStatus(400));
+            $message = __d('baser', '検索インデックスの優先度の変更に失敗しました。');
         }
-        exit();
+        $this->set([
+            'message' => $message,
+            'searchIndex' => $searchIndex,
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['user', 'message']);
     }
 
 }

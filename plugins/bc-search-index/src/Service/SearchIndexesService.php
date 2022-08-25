@@ -143,9 +143,10 @@ class SearchIndexesService implements SearchIndexesServiceInterface
             $conditions['SearchIndexes.site_id'] = 0;
         }
         if ($folderId) {
-            $content = $this->Content->find('first', ['fields' => ['lft', 'rght'], 'conditions' => ['Content.id' => $folderId], 'recursive' => -1]);
-            $conditions['SearchIndexes.rght <'] = $content['Content']['rght'];
-            $conditions['SearchIndexes.lft >'] = $content['Content']['lft'];
+            $contentsTable = TableRegistry::getTableLocator()->get('BaserCore.Contents');
+            $content = $contentsTable->find()->select(['lft', 'rght'])->where(['Contents.id' => $folderId])->first();
+            $conditions['SearchIndexes.rght <'] = $content->rght;
+            $conditions['SearchIndexes.lft >'] = $content->lft;
         }
         if ($status != '') {
             $conditions['SearchIndexes.status'] = $status;
@@ -230,6 +231,20 @@ class SearchIndexesService implements SearchIndexesServiceInterface
     public function allowPublish($data)
     {
         return $this->SearchIndexes->allowPublish($data);
+    }
+
+    /**
+     * 優先度を変更する
+     * @param EntityInterface $target
+     * @param $priority
+     * @return EntityInterface|null
+     * @checked
+     * @noTodo
+     */
+    public function changePriority(EntityInterface $target, $priority): ?EntityInterface
+    {
+        $searchIndex = $this->SearchIndexes->patchEntity($target, ['priority' => $priority]);
+        return $this->SearchIndexes->saveOrFail($searchIndex);
     }
 
 }

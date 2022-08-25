@@ -28,6 +28,8 @@ class SearchIndexesController extends BcAdminAppController
     /**
      * before render
      * @param EventInterface $event
+     * @checked
+     * @noTodo
      */
     public function beforeRender(EventInterface $event): void
     {
@@ -39,6 +41,8 @@ class SearchIndexesController extends BcAdminAppController
      * [ADMIN] 検索インデックス
      *
      * @return void
+     * @checked
+     * @noTodo
      */
     public function index(
         SearchIndexesServiceInterface $service,
@@ -69,11 +73,9 @@ class SearchIndexesController extends BcAdminAppController
     }
 
     /**
-     * [ADMIN] 検索インデックス削除　(ajax)
+     * [ADMIN] 検索インデックス削除
      *
      * @param int $id
-     * @return    void
-     * @access    public
      */
     public function delete($id = null)
     {

@@ -54,4 +54,14 @@ interface SearchIndexesServiceInterface
      */
     public function allowPublish($data);
 
+    /**
+     * 優先度を変更する
+     * @param EntityInterface $target
+     * @param $priority
+     * @return EntityInterface|null
+     * @checked
+     * @noTodo
+     */
+    public function changePriority(EntityInterface $target, $priority): ?EntityInterface;
+
 }

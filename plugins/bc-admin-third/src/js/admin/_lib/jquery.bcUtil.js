@@ -139,7 +139,7 @@
                     $(selector).html(div);
                     break;
                 case 'after':
-                    var img = $('<img>').attr('src', $.bcUtil.ajaxLoaderSmallPath).attr('id', key).css('width', '16px');
+                    var img = $('<img>').attr('src', $.bcUtil.ajaxLoaderSmallPath).attr('id', key).css({'width':'16px', 'vertical-align':'middle'});
                     $(selector).after(img);
                     break;
                 case 'target':

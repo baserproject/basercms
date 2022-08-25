@@ -30,21 +30,22 @@ $(function () {
      * 優先度変更
      */
     $(".priority").change(function () {
-        var id = this.id.replace('SearchIndexPriority', '');
+        var id = this.id.replace('searchindex-priority-', '');
         var priority = $(this).val();
         $.bcToken.check(function () {
-            var data = {
-                'data[SearchIndex][id]': id,
-                'data[SearchIndex][priority]': priority,
-                'data[_Token][key]': $.bcToken.key
-            };
             return $.ajax({
                 type: "POST",
-                url: $("#AjaxChangePriorityUrl").html() + '/' + id,
-                data: data,
+                url: $.bcUtil.apiBaseUrl + 'bc-search-index' + '/search_indexes/change_priority/' + id + '.json',
+                headers: {
+                    "Authorization": $.bcJwt.accessToken,
+                },
+                data: {
+                    'priority': priority,
+                    '_Token[key]': $.bcToken.key
+                },
                 beforeSend: function () {
-                    $("#flashMessage").slideUp();
-                    $("#PriorityAjaxLoader" + id).show();
+                    $.bcUtil.hideMessage();
+                    $.bcUtil.showLoader('after', '#searchindex-priority-' + id, 'searchindex-priority-loader');
                 },
                 success: function (result) {
                     if (!result) {
@@ -54,12 +55,15 @@ $(function () {
                 error: function () {
                     $.bcUtil.showAlertMessage('処理中にエラーが発生しました。');                },
                 complete: function () {
-                    $("#PriorityAjaxLoader" + id).hide();
+                    $.bcUtil.hideLoader('after', '#searchindex-priority-' + id, 'searchindex-priority-loader');
                 }
             });
         });
     });
 
+    /**
+     * サイト更新
+     */
     $("#site-id").change(function () {
         $.ajax({
             url: $.bcUtil.apiBaseUrl + 'baser-core' + '/contents/get_content_folder_list/' + $(this).val() + '.json',
