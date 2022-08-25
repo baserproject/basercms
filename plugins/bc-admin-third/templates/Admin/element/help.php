@@ -20,10 +20,10 @@ use BaserCore\View\BcAdminAppView;
  * @var string $help
  */
 if (strpos($help, '.') !== false) {
-  [$plugin, $help] = explode('.', $help);
+  [$pluginName, $help] = explode('.', $help);
 }
-if (!empty($plugin)) {
-  $help = $plugin . '.help/' . $help;
+if (!empty($pluginName)) {
+  $help = $pluginName . '.help/' . $help;
 } else {
   $help = 'help/' . $help;
 }

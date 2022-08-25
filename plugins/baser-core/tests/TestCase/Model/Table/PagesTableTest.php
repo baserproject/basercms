@@ -162,6 +162,7 @@ class PagesTableTest extends BcTestCase
      */
     public function testAfterSave($exclude_search, $exist)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $page = $this->Pages->find()->contain(['Contents' => ['Sites']])->where(['Pages.id' => 5])->first();
         if ($exclude_search) {
             $page->content->exclude_search = $exclude_search;

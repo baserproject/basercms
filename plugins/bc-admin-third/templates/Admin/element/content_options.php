@@ -58,7 +58,7 @@ $modified_date = $this->BcAdminForm->getSourceValue($entityName . "modified_date
           class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label($entityName . "eyecatch", __d('baser', 'アイキャッチ')) ?></th>
         <td class="col-input bca-form-table__input">
           <?php if ($editable): ?>
-            <?php echo $this->BcAdminForm->control($entityName . "eyecatch", ['type' => 'file', 'imgsize' => 'thumb',  'novalidate' => true]) ?>
+            <?php echo $this->BcAdminForm->control($entityName . "eyecatch", ['type' => 'file', 'imgsize' => 'thumb', 'novalidate' => true]) ?>
           <?php else: ?>
             <?php echo $this->BcUpload->uploadImage($entityName . "eyecatch", $this->BcAdminForm->getSourceValue($entityName . "eyecatch"), ['imgsize' => 'thumb']); ?>
           <?php endif ?>
@@ -102,17 +102,33 @@ $modified_date = $this->BcAdminForm->getSourceValue($entityName . "modified_date
           class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label($entityName . "exclude_search", __d('baser', 'その他設定')) ?></th>
         <td class="col-input bca-form-table__input">
           <?php if ($editable): ?>
-            <span
-              style="white-space: nowrap"><?php echo $this->BcAdminForm->control($entityName . "exclude_search", ['type' => 'checkbox', 'label' => __d('baser', 'サイト内検索の検索結果より除外する')]) ?></span>
-            <span
-              style="white-space: nowrap"><?php echo $this->BcAdminForm->control($entityName . "exclude_menu", ['type' => 'checkbox', 'label' => __d('baser', '公開ページのメニューより除外する')]) ?></span>
-            <span
-              style="white-space: nowrap"><?php echo $this->BcAdminForm->control($entityName . "blank_link", ['type' => 'checkbox', 'label' => __d('baser', 'メニューのリンクを別ウィンドウ開く')]) ?></span>
+            <?php if (Cake\Core\Plugin::isloaded('BcSearchIndex')): ?>
+              <span style="white-space: nowrap">
+                <?php echo $this->BcAdminForm->control($entityName . "exclude_search", [
+                  'type' => 'checkbox',
+                  'label' => __d('baser', 'サイト内検索の検索結果より除外する')
+                ]) ?>
+              </span>
+            <?php endif ?>
+            <span style="white-space: nowrap">
+              <?php echo $this->BcAdminForm->control($entityName . "exclude_menu", [
+                'type' => 'checkbox',
+                'label' => __d('baser', '公開ページのメニューより除外する')
+              ]) ?>
+            </span>
+            <span style="white-space: nowrap">
+              <?php echo $this->BcAdminForm->control($entityName . "blank_link", [
+                'type' => 'checkbox',
+                'label' => __d('baser', 'メニューのリンクを別ウィンドウ開く')
+              ]) ?>
+            </span>
           <?php else: ?>
-            <?php if ($this->BcAdminForm->getSourceValue($entityName . "exclude_search")): ?>
-              <span style="white-space: nowrap"><?php echo __d('baser', 'サイト内検索の検索結果より除外する') ?></span>
-            <?php else: ?>
-              <span style="white-space: nowrap"><?php echo __d('baser', 'サイト内検索の検索結果より除外しない') ?></span>
+            <?php if (Cake\Core\Plugin::isloaded('BcSearchIndex')): ?>
+              <?php if ($this->BcAdminForm->getSourceValue($entityName . "exclude_search")): ?>
+                <span style="white-space: nowrap"><?php echo __d('baser', 'サイト内検索の検索結果より除外する') ?></span>
+              <?php else: ?>
+                <span style="white-space: nowrap"><?php echo __d('baser', 'サイト内検索の検索結果より除外しない') ?></span>
+              <?php endif ?>
             <?php endif ?>
             <?php if ($this->BcAdminForm->getSourceValue($entityName . "exclude_menu")): ?>
               <span style="white-space: nowrap"><?php echo __d('baser', '公開ページのメニューより除外する') ?></span>

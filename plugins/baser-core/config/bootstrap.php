@@ -20,16 +20,9 @@ use BaserCore\Annotation\Note;
  * @checked
  */
 
-use BaserCore\Event\BcContainerEventListener;
-use BaserCore\Event\BcControllerEventDispatcher;
-use BaserCore\Event\BcModelEventDispatcher;
-use BaserCore\Event\BcViewEventDispatcher;
-use BaserCore\Event\ContentFoldersControllerEventListener;
-use BaserCore\Event\PagesControllerEventListener;
 use BaserCore\Utility\BcUtil;
 use Cake\Cache\Cache;
 use Cake\Core\Configure;
-use Cake\Event\EventManager;
 use Cake\Validation\Validator;
 
 /**
@@ -47,17 +40,6 @@ if (!Cache::getConfig('_bc_env_')) {
  * デフォルトバリデーションプロバイダー
  */
 Validator::addDefaultProvider('bc', 'BaserCore\Model\Validation\BcValidation');
-
-/**
- * グローバルイベント登録
- */
-$event = EventManager::instance();
-$event->on(new BcControllerEventDispatcher());
-$event->on(new BcModelEventDispatcher());
-$event->on(new BcViewEventDispatcher());
-$event->on(new BcContainerEventListener());
-$event->on(new PagesControllerEventListener());
-$event->on(new ContentFoldersControllerEventListener());
 
 /**
  * パス定義

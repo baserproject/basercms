@@ -327,7 +327,7 @@ class BcUtil
      * プラグインのフォルダ名は camelize と dasherize に対応
      * 例）BcBlog / bc-blog
      *
-     * @param string $pluginName
+     * @param string|array $pluginName
      * @return bool
      * @checked
      * @noTodo
@@ -335,19 +335,24 @@ class BcUtil
      */
     static public function includePluginClass($pluginName)
     {
-        $pluginPath = self::getPluginPath($pluginName);
-        if (!$pluginPath) {
-            return false;
+        if(!is_array($pluginName)) {
+            $pluginName = [$pluginName];
         }
-        $pluginClassPath = $pluginPath . 'src' . DS . 'Plugin.php';
-        if ($pluginClassPath && file_exists($pluginClassPath)) {
-            $loader = require ROOT . DS . 'vendor/autoload.php';
-            $loader->addPsr4($pluginName . '\\', $pluginPath . 'src');
-            $loader->addPsr4($pluginName . '\\Test\\', $pluginPath . 'tests');
-            require_once $pluginClassPath;
-            return true;
+        $result = true;
+        foreach($pluginName as $name) {
+            $pluginPath = self::getPluginPath($name);
+            if (!$pluginPath) {
+                return false;
+            }
+            $pluginClassPath = $pluginPath . 'src' . DS . 'Plugin.php';
+            if (file_exists($pluginClassPath)) {
+                $loader = require ROOT . DS . 'vendor/autoload.php';
+                $loader->addPsr4($name . '\\', $pluginPath . 'src');
+                $loader->addPsr4($name . '\\Test\\', $pluginPath . 'tests');
+                require_once $pluginClassPath;
+            }
         }
-        return false;
+        return true;
     }
 
     /**

@@ -13,13 +13,13 @@ namespace BaserCore\Model\Table;
 
 use ArrayObject;
 use BaserCore\Model\Entity\Content;
+use Cake\Core\Plugin;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
 use BaserCore\Utility\BcUtil;
 use Cake\Event\EventInterface;
 use Cake\Validation\Validator;
-use BaserCore\Model\Entity\Page;
 use Cake\Datasource\EntityInterface;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Event\BcEventDispatcherTrait;
@@ -84,7 +84,9 @@ class PagesTable extends Table
     {
         parent::initialize($config);
         $this->addBehavior('BaserCore.BcContents');
-        $this->addBehavior('BcSearchIndex.BcSearchIndexManager');
+        if(Plugin::isLoaded('BcSearchIndex')) {
+            $this->addBehavior('BcSearchIndex.BcSearchIndexManager');
+        }
         $this->addBehavior('Timestamp');
         $this->Sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
         $this->Contents = TableRegistry::getTableLocator()->get('BaserCore.Contents');
@@ -146,7 +148,7 @@ class PagesTable extends Table
     }
 
     /**
-     * afterSave
+     * Before Save
      *
      * @param  EventInterface $event
      * @param  EntityInterface $entity
@@ -154,24 +156,22 @@ class PagesTable extends Table
      * @return void
      * @checked
      * @noTodo
-     * @unitTest
      */
-    public function afterSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
+    public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
+        if (!Plugin::isLoaded('BcSearchIndex') || !$this->searchIndexSaving ) {
+            return;
+        }
         // 検索用テーブルに登録
-        if ($this->searchIndexSaving) {
-            if (!empty($entity->content) && empty($entity->content->exclude_search)) {
-                $this->saveSearchIndex($this->createSearchIndex($entity));
-            } else {
-                $this->deleteSearchIndex($entity->id);
-            }
+        if (empty($entity->content) || !empty($entity->content->exclude_search)) {
+            $this->setExcluded();
         }
     }
 
     /**
      * 検索用データを生成する
      *
-     * @param Page $page
+     * @param EntityInterface $entity
      * @return array|false
      * @checked
      * @unitTest
