@@ -34,19 +34,48 @@
             "App\\": "src/",
             "BaserCore\\": "plugins/baser-core/src",
             "BcAdminThird\\": "plugins/bc-admin-third/src",
+            "BcBlog\\": "plugins/bc-blog/src/",
+            "BcEditorTemplate\\": "plugins/bc-editor-template/src/",
+            "BcFavorite\\": "plugins/bc-favorite/src/",
             "BcFront\\": "plugins/bc-front/src/",
+            "BcInstaller\\": "plugins/bc-installer/src/",
+            "BcMail\\": "plugins/bc-mail/src/",
+            "BcSearchIndex\\": "plugins/bc-search-index/src/",
+            "BcSpaSample\\": "plugins/BcSpaSample/src/",
+            "BcThemeConfig\\": "plugins/bc-theme-config/src/",
+            "BcThemeFile\\": "plugins/bc-theme-file/src/",
+            "BcUploader\\": "plugins/bc-uploader/src/",
+            "BcWidgetArea\\": "plugins/bc-widget-area/src/",
             "Cake\\Routing\\": "plugins/baser-core/src/Routing"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "BaserCore\\Test\\": "plugins/baser-core/tests/"
+            "BaserCore\\Test\\": "plugins/baser-core/tests/",
+            "BcBlog\\Test\\": "plugins/bc-blog/tests/",
+            "BcEditorTemplate\\Test\\": "plugins/bc-editor-template/tests/",
+            "BcFavorite\\Test\\": "plugins/bc-favorite/tests/",
+            "BcInstaller\\Test\\": "plugins/bc-installer/tests/",
+            "BcMail\\Test\\": "plugins/bc-mail/tests/",
+            "BcSearchIndex\\Test\\": "plugins/bc-search-index/tests/",
+            "BcThemeConfig\\Test\\": "plugins/bc-theme-config/tests/",
+            "BcThemeFile\\Test\\": "plugins/bc-theme-file/tests/",
+            "BcUploader\\Test\\": "plugins/bc-uploader/tests/",
+            "BcWidgetArea\\Test\\": "plugins/bc-widget-area/tests/"
         }
     },
     "replace": {
-        "baserproject/baser-core": "2.0.0",
-        "baserproject/bc-admin-third": "2.0.0",
-        "baserproject/bc-front": "2.0.0",
+        "baserproject/baser-core": "self.version",
+        "baserproject/bc-admin-third": "self.version",
+        "baserproject/bc-blog": "self.version",
+        "baserproject/bc-editor-template": "self.version",
+        "baserproject/bc-favorite": "self.version",
+        "baserproject/bc-front": "self.version",
+        "baserproject/bc-installer": "self.version",
+        "baserproject/bc-search-index": "self.version",
+        "baserproject/bc-theme-config": "self.version",
+        "baserproject/bc-theme-file": "self.version",
+        "baserproject/bc-widget-area": "self.version"
     },
     "scripts": {
         "post-install-cmd": "App\\Console\\Installer::postInstall",
