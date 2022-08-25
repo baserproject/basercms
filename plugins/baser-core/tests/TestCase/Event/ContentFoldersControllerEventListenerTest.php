@@ -89,7 +89,7 @@ class ContentFoldersControllerEventListenerTest extends BcTestCase
             ]
         ];
         $this->patch("/baser/api/baser-core/contents/move.json?token=" . $token['access_token'], $data);
-        $searchIndexesTable = $this->getTableLocator()->get('BaserCore.SearchIndexes');
+        $searchIndexesTable = $this->getTableLocator()->get('BcSearchIndex.SearchIndexes');
         $this->assertEquals(1, $searchIndexesTable->find()->where(['url' => '/testEdit/service/service1'])->count());
         $this->assertEquals(1, $searchIndexesTable->find()->where(['url' => '/testEdit/service/service2'])->count());
         $this->assertEquals(1, $searchIndexesTable->find()->where(['url' => '/testEdit/service/service3'])->count());
@@ -104,7 +104,7 @@ class ContentFoldersControllerEventListenerTest extends BcTestCase
         $this->enableCsrfToken();
         $this->loginAdmin($this->getRequest('/'));
         $this->post('/baser/admin/baser-core/contents/delete', ['Contents' => ['id' => 6]]);
-        $searchIndexesTable = $this->getTableLocator()->get('BaserCore.SearchIndexes');
+        $searchIndexesTable = $this->getTableLocator()->get('BcSearchIndex.SearchIndexes');
         $this->assertEquals(0, $searchIndexesTable->find()->where(['url' => '/service/service1'])->count());
         $this->assertEquals(0, $searchIndexesTable->find()->where(['url' => '/service/service2'])->count());
         $this->assertEquals(0, $searchIndexesTable->find()->where(['url' => '/service/service3'])->count());
@@ -124,7 +124,7 @@ class ContentFoldersControllerEventListenerTest extends BcTestCase
             'status' => 'unpublish'
         ];
         $this->patch("/baser/api/baser-core/contents/change_status.json?token=" . $token['access_token'], $data);
-        $searchIndexesTable = $this->getTableLocator()->get('BaserCore.SearchIndexes');
+        $searchIndexesTable = $this->getTableLocator()->get('BcSearchIndex.SearchIndexes');
         $this->assertFalse($searchIndexesTable->find()->where(['url' => $url])->first()->status);
     }
 

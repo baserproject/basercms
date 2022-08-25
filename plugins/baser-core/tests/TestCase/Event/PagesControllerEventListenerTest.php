@@ -88,7 +88,7 @@ class PagesControllerEventListenerTest extends BcTestCase
             ]
         ];
         $this->patch("/baser/api/baser-core/contents/move.json?token=" . $token['access_token'], $data);
-        $searchIndexesTable = $this->getTableLocator()->get('BaserCore.SearchIndexes');
+        $searchIndexesTable = $this->getTableLocator()->get('BcSearchIndex.SearchIndexes');
         $this->assertEquals(1, $searchIndexesTable->find()->where(['url' => '/service/about'])->count());
     }
 
@@ -102,7 +102,7 @@ class PagesControllerEventListenerTest extends BcTestCase
         // 検索インデックスも連動して削除
         $this->post('/baser/admin/baser-core/contents/delete', ['Contents' => ['id' => 13]]);
         $this->assertResponseSuccess();
-        $searchIndexesTable = $this->getTableLocator()->get('BaserCore.SearchIndexes');
+        $searchIndexesTable = $this->getTableLocator()->get('BcSearchIndex.SearchIndexes');
         $this->assertEquals(0, $searchIndexesTable->find()->where(['url' => '/service/service3'])->count());
     }
 
@@ -116,7 +116,7 @@ class PagesControllerEventListenerTest extends BcTestCase
         // 検索インデックスを生成
         $this->post('/baser/admin/baser-core/contents/trash_return/7');
         $this->assertResponseSuccess();
-        $searchIndexesTable = $this->getTableLocator()->get('BaserCore.SearchIndexes');
+        $searchIndexesTable = $this->getTableLocator()->get('BcSearchIndex.SearchIndexes');
         $this->assertEquals(1, $searchIndexesTable->find()->where(['url' => '/sample'])->count());
     }
 
@@ -130,7 +130,7 @@ class PagesControllerEventListenerTest extends BcTestCase
             'id' => 5,
             'status' => 'unpublish'
         ];
-        $searchIndexesTable = $this->getTableLocator()->get('BaserCore.SearchIndexes');
+        $searchIndexesTable = $this->getTableLocator()->get('BcSearchIndex.SearchIndexes');
         $this->assertTrue($searchIndexesTable->find()->where(['model' => 'Page', 'model_id' => 16])->first()->status);
         $this->patch("/baser/api/baser-core/contents/change_status.json?token=" . $token['access_token'], $data);
         $this->assertFalse($searchIndexesTable->find()->where(['model' => 'Page', 'model_id' => 16])->first()->status);

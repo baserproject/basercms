@@ -46,7 +46,7 @@ class BcSearchIndexManagerBehavior extends Behavior
         /** @var \BaserCore\Model\Table\ContentsTable $Contents  */
         $this->Contents = TableRegistry::getTableLocator()->get('BaserCore.Contents');
         /** @var \BcSearchIndex\Model\Table\SearchIndexesTable $SearchIndexes  */
-        $this->SearchIndexes = TableRegistry::getTableLocator()->get('BaserCore.SearchIndexes');
+        $this->SearchIndexes = TableRegistry::getTableLocator()->get('BcSearchIndex.SearchIndexes');
         /** @var \BaserCore\Model\Table\SiteConfigsTable $SiteConfigs  */
         $this->SiteConfigs = TableRegistry::getTableLocator()->get('BaserCore.SiteConfigs');
     }
