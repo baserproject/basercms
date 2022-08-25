@@ -39,7 +39,6 @@ $types = BcUtil::unserialize($this->BcSiteConfig->getValue('content_types'));
 		<?php echo $this->BcAdminForm->label('site_id', __d('baser', 'サブサイト'), ['class' => 'bca-search__input-item-label']) ?>
         <?php echo $this->BcAdminForm->control('site_id', ['type' => 'select', 'options' => $sites]) ?>
 	</span>
-    <?php $this->BcBaser->img('admin/ajax-loader-s.gif', ['style' => 'vertical-align:middle;display:none', 'id' => 'SearchIndexSiteIdLoader']) ?>
     <span class="bca-search__input-item">
 		<?php echo $this->BcAdminForm->label('folder_id', __d('baser', 'フォルダ'), ['class' => 'bca-search__input-item-label']) ?>
         <?php echo $this->BcAdminForm->control('folder_id', ['type' => 'select', 'options' => $folders, 'empty' => __d('baser', '指定なし')]) ?>

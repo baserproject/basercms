@@ -11,6 +11,9 @@
 
 $(function () {
 
+    /**
+     * 検索インデックス再構築
+     */
     $("#BtnReconstruct").click(function () {
         $.bcConfirm.show({
             title: bcI18n.reconstructSearchTitle,
@@ -23,9 +26,9 @@ $(function () {
         return false;
     });
 
-    // 《一覧のロード時にイベント登録を行う為、外部ファイルに分けない》
-    // 本来であれば、一覧のロード完了イベントを作成し、
-    // そのタイミングでイベント登録をすべきだが、ロード完了イベントがないので応急措置とする
+    /**
+     * 優先度変更
+     */
     $(".priority").change(function () {
         var id = this.id.replace('SearchIndexPriority', '');
         var priority = $(this).val();
@@ -45,14 +48,11 @@ $(function () {
                 },
                 success: function (result) {
                     if (!result) {
-                        $("#flashMessage").html('処理中にエラーが発生しました。');
-                        $("#flashMessage").slideDown();
+                        $.bcUtil.showAlertMessage('処理中にエラーが発生しました。');
                     }
                 },
                 error: function () {
-                    $("#flashMessage").html('処理中にエラーが発生しました。');
-                    $("#flashMessage").slideDown();
-                },
+                    $.bcUtil.showAlertMessage('処理中にエラーが発生しました。');                },
                 complete: function () {
                     $("#PriorityAjaxLoader" + id).hide();
                 }
@@ -60,27 +60,31 @@ $(function () {
         });
     });
 
-    $("#SearchIndexSiteId").change(function () {
+    $("#site-id").change(function () {
         $.ajax({
-            url: $.bcUtil.apiBaseUrl + 'baser-core' + '/contents/get_content_folder_list/' + $(this).val(),
+            url: $.bcUtil.apiBaseUrl + 'baser-core' + '/contents/get_content_folder_list/' + $(this).val() + '.json',
+            headers: {
+                "Authorization": $.bcJwt.accessToken,
+            },
             type: "GET",
             dataType: "json",
             beforeSend: function () {
-                $("#SearchIndexSiteIdLoader").show();
-                $("#SearchIndexFolderId").prop('disabled', true);
+                $.bcUtil.showLoader('after', '#folder-id', 'folder-id-loader');
+                $("#folder-id").prop('disabled', true);
             },
             complete: function () {
-                $("#SearchIndexFolderId").removeAttr("disabled");
-                $("#SearchIndexSiteIdLoader").hide();
+                $("#folder-id").removeAttr("disabled");
+                $.bcUtil.hideLoader('after', '#folder-id', 'folder-id-loader');
             },
             success: function (result) {
-                $("#SearchIndexFolderId").empty();
+                let folderId = $("#folder-id");
+                folderId.empty();
                 var optionItems = [];
                 optionItems.push(new Option("指定なし", ""));
-                for (key in result) {
+                for (key in result.list) {
                     optionItems.push(new Option(result.list[key].replace(/&nbsp;/g, "\u00a0"), key));
                 }
-                $("#SearchIndexFolderId").append(optionItems);
+                folderId.append(optionItems);
             }
         });
     });

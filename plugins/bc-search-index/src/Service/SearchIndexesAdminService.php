@@ -48,7 +48,7 @@ class SearchIndexesAdminService extends SearchIndexesService implements SearchIn
         $searchForm->setData($request->getQuery());
         return [
             'searchIndexes' => $searchIndexes,
-            'folders' => $contentsService->getContentFolderList($request->getData('id'), ['conditions' => ['Contents.site_root' => false]]),
+            'folders' => $contentsService->getContentFolderList($request->getQuery('site_id'), ['conditions' => ['Contents.site_root' => false]]),
             'sites' => $sitesService->getList(),
             'searchIndexesSearch' => $searchForm
         ];

@@ -50,8 +50,8 @@ class SearchIndexesController extends BcAdminAppController
                 'limit' => $siteConfigService->getValue('admin_list_num'),
                 'sort' => 'id',
                 'direction' => 'asc',
-            ],
-            'SearchIndex' => ['site_id' => 0]
+                'site_id' => 1
+            ]
         ]]);
 
         // EVENT SearchIndex.searchIndex
