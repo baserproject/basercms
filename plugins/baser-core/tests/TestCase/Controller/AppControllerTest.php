@@ -73,7 +73,7 @@ class AppControllerTest extends BcTestCase
      */
     public function testConstruct(): void
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->assertNotEmpty($this->getRequest()->getSession());
     }
 
     /**

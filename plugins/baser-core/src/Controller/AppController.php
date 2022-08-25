@@ -57,6 +57,7 @@ class AppController extends BaseController
      * @param ComponentRegistry|null $components
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function __construct(
         ?ServerRequest         $request = null,
