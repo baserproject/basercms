@@ -99,6 +99,7 @@ class BcSearchIndexManagerBehavior extends Behavior
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function afterSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {

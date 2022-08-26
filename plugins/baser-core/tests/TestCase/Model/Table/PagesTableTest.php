@@ -154,37 +154,6 @@ class PagesTableTest extends BcTestCase
     }
 
     /**
-     * afterSave
-     *
-     * @param boolean $created
-     * @param array $options
-     * @dataProvider afterSaveDataProvider
-     */
-    public function testAfterSave($exclude_search, $exist)
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $page = $this->Pages->find()->contain(['Contents' => ['Sites']])->where(['Pages.id' => 5])->first();
-        if ($exclude_search) {
-            $page->content->exclude_search = $exclude_search;
-            $this->assertEquals(false, $this->SearchIndexes->findByModelId($page->id)->isEmpty());
-        } else {
-            $page->id = 100; // 存在しない新規のIDを入れた場合
-        }
-        $this->Pages->dispatchEvent('Model.afterSave', [$page, new ArrayObject()]);
-        $this->assertEquals($exist, $this->SearchIndexes->findByModelId($page->id)->isEmpty());
-    }
-
-    public function afterSaveDataProvider()
-    {
-        return [
-            // exclude_searchがある場合削除されているかを確認
-            [1, true],
-            // exclude_searchがなく、なおかつ新規の場合索引が作成されて存在するかをテスト
-            [0, false]
-        ];
-    }
-
-    /**
      * 検索用データを生成する
      */
     public function testCreateSearchIndex()
