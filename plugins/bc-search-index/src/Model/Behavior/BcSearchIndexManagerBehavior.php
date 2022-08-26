@@ -115,6 +115,10 @@ class BcSearchIndexManagerBehavior extends Behavior
      * @param EventInterface $event
      * @param EntityInterface $entity
      * @param ArrayObject $options
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function afterDelete(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {

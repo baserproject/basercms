@@ -115,6 +115,18 @@ class BcSearchIndexManagerBehaviorTest extends BcTestCase
     }
 
     /**
+     * test afterDelete
+     * @return void
+     */
+    public function testAfterDelete()
+    {
+        $event = new Event("afterSave");
+        $page = $this->table->find()->contain(['Contents' => ['Sites']])->first();
+        $this->BcSearchIndexManager->afterDelete($event, $page, new \ArrayObject());
+        $this->assertEquals(true, $this->SearchIndexes->findByModelId($page->id)->isEmpty());
+    }
+
+    /**
      * コンテンツメタ情報を更新する
      */
     public function testUpdateSearchIndexMeta()
