@@ -13,6 +13,7 @@ namespace BcSearchIndex\Test\TestCase\Model\Behavior;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Model\Table\PagesTable;
 use BcSearchIndex\Model\Behavior\BcSearchIndexManagerBehavior;
+use Cake\Event\Event;
 
 /**
  * Class BcSearchIndexManagerBehavioreTest
@@ -47,6 +48,7 @@ class BcSearchIndexManagerBehaviorTest extends BcTestCase
         $this->table->setPrimaryKey(['id']);
         $this->table->addBehavior('BaserCore.BcSearchIndexManager');
         $this->BcSearchIndexManager = $this->table->getBehavior('BcSearchIndexManager');
+        $this->SearchIndexes = $this->getTableLocator()->get('SearchIndexes');
         parent::setUp();
     }
 
@@ -57,7 +59,7 @@ class BcSearchIndexManagerBehaviorTest extends BcTestCase
      */
     public function tearDown(): void
     {
-        unset($this->table, $this->BcSearchIndexManager);
+        unset($this->table, $this->BcSearchIndexManager, $this->SearchIndexes);
         parent::tearDown();
     }
 
@@ -110,6 +112,18 @@ class BcSearchIndexManagerBehaviorTest extends BcTestCase
     {
         $this->assertTrue($this->table->deleteSearchIndex(5));
         $this->assertTrue($this->BcSearchIndexManager->SearchIndexes->findByModelId(5)->isEmpty());
+    }
+
+    /**
+     * test afterDelete
+     * @return void
+     */
+    public function testAfterDelete()
+    {
+        $event = new Event("afterSave");
+        $page = $this->table->find()->contain(['Contents' => ['Sites']])->first();
+        $this->BcSearchIndexManager->afterDelete($event, $page, new \ArrayObject());
+        $this->assertEquals(true, $this->SearchIndexes->findByModelId($page->id)->isEmpty());
     }
 
     /**

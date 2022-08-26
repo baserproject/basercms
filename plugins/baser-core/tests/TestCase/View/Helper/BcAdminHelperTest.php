@@ -108,7 +108,7 @@ class BcAdminHelperTest extends BcTestCase
     {
         $title = 'test';
         $this->BcAdmin->setTitle($title);
-        $this->assertEquals($title, $this->BcAdmin->getView()->get('title'));
+        $this->assertEquals($title, $this->BcAdmin->getView()->fetch('title'));
     }
 
     /**
