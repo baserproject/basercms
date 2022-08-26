@@ -137,7 +137,7 @@ class BcSearchIndexManagerBehaviorTest extends BcTestCase
     }
 
     /**
-     * afterSave
+     * test afterSave
      *
      * @param boolean $created
      * @param array $options
