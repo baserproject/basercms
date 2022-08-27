@@ -12,12 +12,35 @@
 namespace BcSearchIndex\Test\TestCase\Controller\Admin;
 
 use BaserCore\TestSuite\BcTestCase;
+use BcSearchIndex\Controller\Admin\SearchIndexesController;
+use Cake\Event\Event;
+use Cake\TestSuite\IntegrationTestTrait;
 
 /**
  * Class SearchIndexesControllerTest
+ * @package BcSearchIndex\Test\TestCase\Controller\Admin
+ * @property SearchIndexesController $SearchIndexesController
  */
 class SearchIndexesControllerTest extends BcTestCase
 {
+
+    use IntegrationTestTrait;
+
+    /**
+     * Fixtures
+     *
+     * @var array
+     */
+    public $fixtures = [
+        'plugin.BaserCore.Users',
+        'plugin.BaserCore.UserGroups',
+        'plugin.BaserCore.UsersUserGroups',
+        'plugin.BaserCore.Dblogs',
+        'plugin.BaserCore.Sites',
+        'plugin.BaserCore.Contents',
+        'plugin.BaserCore.Pages',
+        'plugin.BaserCore.Permissions',
+    ];
 
     /**
      * set up
@@ -27,6 +50,9 @@ class SearchIndexesControllerTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $request = $this->getRequest('/baser/admin/bc-search-index/search_indexes/');
+        $request = $this->loginAdmin($request);
+        $this->SearchIndexesController = new SearchIndexesController($request);
     }
 
     /**
@@ -36,6 +62,7 @@ class SearchIndexesControllerTest extends BcTestCase
      */
     public function tearDown(): void
     {
+        unset($this->SearchIndexesController);
         parent::tearDown();
     }
 
@@ -44,7 +71,9 @@ class SearchIndexesControllerTest extends BcTestCase
      */
     public function testBeforeRender()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $event = new Event('Controller.beforeRender', $this->SearchIndexesController);
+        $this->SearchIndexesController->beforeRender($event);
+        $this->assertEquals('BcSearchIndex.BcSearchIndex', $this->SearchIndexesController->viewBuilder()->getHelpers()[0]);
     }
 
 }
