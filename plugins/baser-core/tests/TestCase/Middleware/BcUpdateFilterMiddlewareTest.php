@@ -12,8 +12,12 @@ namespace BaserCore\Test\TestCase\Middleware;
 
 use BaserCore\Error\BcException;
 use BaserCore\Middleware\BcUpdateFilterMiddleware;
+use BaserCore\Test\Factory\SiteConfigFactory;
+use BaserCore\Test\Scenario\Middleware\BcUpdateFilterMiddlewareScenario;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * BcUpdateFilterMiddlewareTest
@@ -22,14 +26,18 @@ class BcUpdateFilterMiddlewareTest extends BcTestCase
 {
 
     /**
+     * Trait
+     */
+    use ScenarioAwareTrait;
+
+    /**
      * fixtures
      * @var string[]
      */
     public $fixtures = [
-        'plugin.BaserCore.Sites',
-        'plugin.BaserCore.Contents',
-        'plugin.BaserCore.Pages',
-        'plugin.BaserCore.SiteConfigs',
+        'plugin.BaserCore.Empty/Sites',
+        'plugin.BaserCore.Empty/Users',
+        'plugin.BaserCore.Empty/SiteConfigs',
     ];
 
     /**
@@ -38,6 +46,7 @@ class BcUpdateFilterMiddlewareTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadFixtureScenario(BcUpdateFilterMiddlewareScenario::class);
         $this->Middleware = new BcUpdateFilterMiddleware();
     }
 
@@ -55,7 +64,6 @@ class BcUpdateFilterMiddlewareTest extends BcTestCase
      */
     public function test_processException()
     {
-        $this->fixtureStrategy->teardownTest();
         // ソースコードとDBのバージョン違い
         $this->expectException(BcException::class);
         $this->Middleware->process($this->getRequest(), $this->Application);
@@ -78,6 +86,7 @@ class BcUpdateFilterMiddlewareTest extends BcTestCase
     public function test_proccessNormal()
     {
         // 正常リクエスト
+        SiteConfigFactory::make(['name' => 'version', 'value' => BcUtil::getVersion()])->persist();
         $this->_response = $this->Middleware->process($this->getRequest('/'), $this->Application);
         $this->assertResponseOk();
     }

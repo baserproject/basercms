@@ -42,4 +42,17 @@ class ContentFactory extends CakephpBaseFactory
             ];
         });
     }
+
+    /**
+     * トップページとして設定する
+     * トップだけでよいのでルーティングが必要とするテスト用
+     * @return ContentFactory
+     */
+    public function top()
+    {
+        return $this->setField('url', '/')
+            ->setField('site_id', 1)
+            ->setField('status', true);
+    }
+
 }
