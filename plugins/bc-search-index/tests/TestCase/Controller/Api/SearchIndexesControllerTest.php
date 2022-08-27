@@ -11,11 +11,13 @@
 
 namespace BcSearchIndex\Test\TestCase\Controller\Api;
 
+use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcSearchIndex\Controller\Api\SearchIndexesController;
 use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\TestSuite\IntegrationTestTrait;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class SearchIndexesControllerTest
@@ -25,6 +27,10 @@ use Cake\TestSuite\IntegrationTestTrait;
 class SearchIndexesControllerTest extends BcTestCase
 {
 
+    /**
+     * Trait
+     */
+    use ScenarioAwareTrait;
     use IntegrationTestTrait;
 
     /**
@@ -33,14 +39,8 @@ class SearchIndexesControllerTest extends BcTestCase
      * @var array
      */
     public $fixtures = [
-        'plugin.BaserCore.Users',
-        'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.UsersUserGroups',
-        'plugin.BaserCore.Dblogs',
-        'plugin.BaserCore.Sites',
-        'plugin.BaserCore.Contents',
-        'plugin.BaserCore.Pages',
-        'plugin.BaserCore.Permissions',
+        'plugin.BaserCore.Empty/Users',
+        'plugin.BaserCore.Empty/Sites',
     ];
 
     /**
@@ -51,7 +51,8 @@ class SearchIndexesControllerTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $token = $this->apiLoginAdmin(1);
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $token = $this->apiLoginAdmin();
         $this->accessToken = $token['access_token'];
         $this->refreshToken = $token['refresh_token'];
     }
