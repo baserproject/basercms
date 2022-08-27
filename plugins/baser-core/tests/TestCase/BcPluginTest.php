@@ -54,6 +54,7 @@ class BcPluginTest extends BcTestCase
      */
     public function setUp(): void
     {
+        $this->setFixtureTruncate();
         parent::setUp();
         $this->BcPlugin = new BcPlugin(['name' => 'BcBlog']);
     }
