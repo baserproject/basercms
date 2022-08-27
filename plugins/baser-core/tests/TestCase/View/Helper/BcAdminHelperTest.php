@@ -481,4 +481,16 @@ class BcAdminHelperTest extends BcTestCase
         $this->assertEquals('<a href="https://localhost/" class="tool-menu">サイト確認</a>', $result);
     }
 
+    /**
+     * test getTitle
+     * @return void
+     */
+    public function testGetTitle()
+    {
+        $title = 'test';
+        $this->BcAdmin->setTitle($title);
+        $rs = $this->BcAdmin->getTitle();
+
+        $this->assertEquals($rs, $title);
+    }
 }
