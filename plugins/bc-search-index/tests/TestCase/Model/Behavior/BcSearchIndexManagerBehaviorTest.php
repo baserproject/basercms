@@ -136,4 +136,16 @@ class BcSearchIndexManagerBehaviorTest extends BcTestCase
         $this->assertNotEmpty($this->BcSearchIndexManager->SiteConfigs->getValue('content_types'));
     }
 
+    /**
+     * test setExcluded()、unsetExcluded()、isExcluded()
+     * @return void
+     */
+    public function test_setExcluded_unsetExcluded_isExcluded()
+    {
+        $this->assertFalse($this->table->isExcluded());
+        $this->table->setExcluded();
+        $this->assertTrue($this->table->isExcluded());
+        $this->table->unsetExcluded();
+        $this->assertFalse($this->table->isExcluded());
+    }
 }

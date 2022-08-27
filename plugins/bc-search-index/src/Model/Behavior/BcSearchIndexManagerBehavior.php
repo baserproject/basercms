@@ -43,6 +43,7 @@ class BcSearchIndexManagerBehavior extends Behavior
      * 除外状態として設定する
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function setExcluded()
     {
@@ -53,6 +54,7 @@ class BcSearchIndexManagerBehavior extends Behavior
      * 除外状態の設定を解除する
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function unsetExcluded()
     {
@@ -62,6 +64,9 @@ class BcSearchIndexManagerBehavior extends Behavior
     /**
      * 除外状態を確認する
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function isExcluded()
     {
