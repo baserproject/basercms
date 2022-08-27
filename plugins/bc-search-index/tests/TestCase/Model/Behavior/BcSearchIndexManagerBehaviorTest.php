@@ -148,4 +148,36 @@ class BcSearchIndexManagerBehaviorTest extends BcTestCase
         $this->table->unsetExcluded();
         $this->assertFalse($this->table->isExcluded());
     }
+
+    /**
+     * test afterSave
+     *
+     * @param boolean $created
+     * @param array $options
+     * @dataProvider afterSaveDataProvider
+     */
+    public function testAfterSave($exclude_search, $exist)
+    {
+        $event = new Event("afterSave");
+        $page = $this->table->find()->contain(['Contents' => ['Sites']])->first();
+        if ($exclude_search) {
+            $this->BcSearchIndexManager->setExcluded();
+            $page->content->exclude_search = $exclude_search;
+        } else {
+            $page->id = 100; // 存在しない新規のIDを入れた場合
+        }
+
+        $this->BcSearchIndexManager->afterSave($event, $page, new \ArrayObject());
+        $this->assertEquals($exist, $this->SearchIndexes->findByModelId($page->id)->isEmpty());
+    }
+
+    public function afterSaveDataProvider()
+    {
+        return [
+            // exclude_searchがある場合削除されているかを確認
+            [1, true],
+            // exclude_searchがなく、なおかつ新規の場合索引が作成されて存在するかをテスト
+            [0, false]
+        ];
+    }
 }
