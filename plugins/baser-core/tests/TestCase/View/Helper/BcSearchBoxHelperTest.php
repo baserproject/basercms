@@ -14,9 +14,32 @@ namespace BaserCore\Test\TestCase\View\Helper;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\View\BcAdminAppView;
 use BaserCore\View\Helper\BcSearchBoxHelper;
+use Cake\Event\Event;
+use Cake\TestSuite\IntegrationTestTrait;
 
+/**
+ * Class BcSearchBoxHelperTest
+ * @property BcSearchBoxHelper $BcSearchBoxHelper
+ */
 class BcSearchBoxHelperTest extends BcTestCase
 {
+    /**
+     * Fixtures
+     *
+     * @var array
+     */
+    protected $fixtures = [
+        'plugin.BaserCore.Pages',
+        'plugin.BaserCore.Contents',
+        'plugin.BaserCore.Sites',
+        'plugin.BaserCore.Users',
+    ];
+
+    /**
+     * Trait
+     */
+    use IntegrationTestTrait;
+
     /**
      * Set Up
      *
@@ -25,6 +48,10 @@ class BcSearchBoxHelperTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+
+        $BcAdminAppView = new BcAdminAppView();
+        $BcAdminAppView->setRequest($this->getRequest()->withParam('action', 'index'));
+        $this->BcSearchBoxHelper = new BcSearchBoxHelper($BcAdminAppView);
     }
 
     /**
@@ -38,13 +65,32 @@ class BcSearchBoxHelperTest extends BcTestCase
     }
 
     /**
-     * testDispatchShowField
+     * test DispatchShowField
      *
      * @return void
      */
     public function testDispatchShowField()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->entryEventToMock(self::EVENT_LAYER_HELPER, 'BcSearchBox.showField', function (Event $event) {
+            $data = $event->getData();
+            $this->assertTrue(isset($data['id']));
+            $this->assertTrue(isset($data['fields']));
+            $inputFields = [
+                [
+                    'title' => 'first name',
+                    'input' => 'text'
+                ],
+                [
+                    'title' => 'last name',
+                    'input' => 'text'
+                ]
+            ];
+            $event->setData('fields', $inputFields);
+        });
+        $expected = '<span class="bca-search__input-item">first name&nbsp;text&nbsp;</span>' . "\n" .
+            '<span class="bca-search__input-item">last name&nbsp;text&nbsp;</span>' . "\n";
+        $rs = $this->BcSearchBoxHelper->dispatchShowField();
+        $this->assertEquals($expected, $rs);
     }
 }
 

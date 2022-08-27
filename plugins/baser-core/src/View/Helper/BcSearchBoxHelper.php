@@ -36,6 +36,7 @@ class BcSearchBoxHelper extends Helper
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function dispatchShowField()
     {
