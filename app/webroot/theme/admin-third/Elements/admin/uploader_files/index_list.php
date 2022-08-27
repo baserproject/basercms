@@ -49,7 +49,7 @@ $this->BcBaser->js([
 		<p style="color:#C00;font-weight:bold"><?php echo $installMessage ?></p>
 	<?php endif ?>
 
-	<div class="bca-list-head">
+	<div class="bca-data-list__top bca-list-head">
 		<?php if (!$listId): ?>
 			<div id="UploaderForm">
 				<?php if (!$installMessage): ?>
@@ -65,8 +65,10 @@ $this->BcBaser->js([
 				<?php endif ?>
 			</div>
 		<?php endif ?>
-
-		<?php $this->BcBaser->element('pagination') ?>
+		<div class="bca-data-list__sub">
+			<!-- pagination -->
+			<?php $this->BcBaser->element('pagination') ?>
+		</div>
 	</div>
 
 	<div class="file-list-body clearfix corner5">
@@ -104,6 +106,15 @@ $this->BcBaser->js([
 			<?php endif ?>
 		</table>
 
+	</div>
+
+	<div class="bca-data-list__bottom">
+		<div class="bca-data-list__sub">
+			<!-- pagination -->
+			<?php $this->BcBaser->element('pagination') ?>
+			<!-- list-num -->
+			<?php $this->BcBaser->element('list_num') ?>
+		</div>
 	</div>
 
 </div>

@@ -55,4 +55,13 @@ $this->BcBaser->js('admin/vendors/jquery.upload-1.0.0.min');
 		<?php endif ?>
 	</div>
 
+	<div class="bca-data-list__bottom">
+		<div class="bca-data-list__sub">
+			<!-- pagination -->
+			<?php $this->BcBaser->element('pagination') ?>
+			<!-- list-num -->
+			<?php $this->BcBaser->element('list_num') ?>
+		</div>
+	</div>
+
 </div>

@@ -477,6 +477,14 @@ class PagesController extends AppController
 
 		$page = $this->Page->find('first', ['conditions' => ['Page.id' => $this->request->params['Content']['entity_id']], 'recursive' => -1]);
 		$template = $page['Page']['page_template'];
+
+		// 固定ページのプレビュー時、保存前の選択している固定ページテンプレートを適用する
+		if ($previewCreated) {
+			if ($previewData['Page']['page_template']) {
+				$template = $previewData['Page']['page_template'];
+			}
+		}
+
 		$pagePath = implode('/', $path);
 		if (!$template) {
 			$ContentFolder = ClassRegistry::init('ContentFolder');
