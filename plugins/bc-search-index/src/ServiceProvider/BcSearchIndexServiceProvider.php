@@ -19,8 +19,7 @@ use BcSearchIndex\Service\SearchIndexesServiceInterface;
 use Cake\Core\ServiceProvider;
 
 /**
- * Class BcServiceProvider
- * @package BaserCore\ServiceProvider
+ * Class BcSearchIndexServiceProvider
  */
 class BcSearchIndexServiceProvider extends ServiceProvider
 {
@@ -39,6 +38,7 @@ class BcSearchIndexServiceProvider extends ServiceProvider
      * @param \Cake\Core\ContainerInterface $container
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function services($container): void
     {
