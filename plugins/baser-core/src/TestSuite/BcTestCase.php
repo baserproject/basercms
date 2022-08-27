@@ -32,6 +32,7 @@ use Cake\TestSuite\Fixture\FixtureInjector;
 use Cake\TestSuite\Fixture\FixtureManager;
 use Cake\TestSuite\Fixture\FixtureStrategyInterface;
 use Cake\TestSuite\Fixture\TransactionStrategy;
+use Cake\TestSuite\Fixture\TruncateStrategy;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
 use BaserCore\Annotation\UnitTest;
@@ -63,6 +64,12 @@ class BcTestCase extends TestCase
      * @var Plugin
      */
     public $BaserCore;
+
+    /**
+     * FixtureStrategy にて、TruncateStrategy を利用するかどうか
+     * @var bool
+     */
+    private $fixtureTruncate = false;
 
     /**
      * イベントレイヤー
@@ -102,6 +109,16 @@ class BcTestCase extends TestCase
     public $FixtureInjector;
 
     /**
+     * FixtureStrategy にて、TruncateStrategy を利用するかどうかを設定
+     * @checked
+     * @noTodo
+     */
+    public function setFixtureTruncate(): void
+    {
+        $this->fixtureTruncate = true;
+    }
+
+    /**
      * getFixtureStrategy
      * フィクスチャの削除処理の高速化を図るため、FixtureStrategy に TransactionStrategy を設定。
      * ベースをこちらにし、 auto increment による問題が発生した場合は、個別のテストケースごとに
@@ -111,7 +128,11 @@ class BcTestCase extends TestCase
      */
     protected function getFixtureStrategy(): FixtureStrategyInterface
     {
-        return new TransactionStrategy();
+        if($this->fixtureTruncate) {
+            return new TruncateStrategy();
+        } else {
+            return new TransactionStrategy();
+        }
     }
 
     /**
