@@ -168,7 +168,6 @@ class SearchIndexesService implements SearchIndexesServiceInterface
      * @return bool
      * @checked
      * @noTodo
-     * @unitTest
      */
     public function reconstruct($parentContentId = null)
     {
