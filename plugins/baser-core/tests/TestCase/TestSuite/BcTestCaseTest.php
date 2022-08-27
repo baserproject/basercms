@@ -48,6 +48,7 @@ class BcTestCaseTest extends BcTestCase
      */
     public function setUp(): void
     {
+        $this->setFixtureTruncate();
         parent::setUp();
     }
 

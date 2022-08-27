@@ -43,6 +43,7 @@ class PluginTest extends BcTestCase
      */
     public function setUp(): void
     {
+        $this->setFixtureTruncate();
         parent::setUp();
         BcUtil::includePluginClass('BcBlog');
         $plugins = Plugin::getCollection();

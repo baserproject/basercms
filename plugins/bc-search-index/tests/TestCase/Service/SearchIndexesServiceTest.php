@@ -12,7 +12,7 @@
 namespace BcSearchIndex\Test\TestCase\Service;
 
 use BaserCore\Model\Table\ContentsTable;
-use BaserCore\Model\Table\SearchIndexesTable;
+use BcSearchIndex\Model\Table\SearchIndexesTable;
 use BcSearchIndex\Service\SearchIndexesService;
 use BaserCore\TestSuite\BcTestCase;
 

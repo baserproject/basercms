@@ -55,6 +55,7 @@ class PluginsServiceTest extends BcTestCase
      */
     public function setUp(): void
     {
+        $this->setFixtureTruncate();
         parent::setUp();
         $this->Plugins = new PluginsService();
     }
