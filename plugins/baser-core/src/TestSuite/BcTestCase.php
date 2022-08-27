@@ -30,6 +30,8 @@ use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
 use Cake\TestSuite\Fixture\FixtureInjector;
 use Cake\TestSuite\Fixture\FixtureManager;
+use Cake\TestSuite\Fixture\FixtureStrategyInterface;
+use Cake\TestSuite\Fixture\TransactionStrategy;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
 use BaserCore\Annotation\UnitTest;
@@ -98,6 +100,19 @@ class BcTestCase extends TestCase
      * @see setUpFixtureManager
      */
     public $FixtureInjector;
+
+    /**
+     * getFixtureStrategy
+     * フィクスチャの削除処理の高速化を図るため、FixtureStrategy に TransactionStrategy を設定。
+     * ベースをこちらにし、 auto increment による問題が発生した場合は、個別のテストケースごとに
+     * TruncateStrategy を利用するようにする。
+     * @checked
+     * @noTodo
+     */
+    protected function getFixtureStrategy(): FixtureStrategyInterface
+    {
+        return new TransactionStrategy();
+    }
 
     /**
      * setup FixtureManager
