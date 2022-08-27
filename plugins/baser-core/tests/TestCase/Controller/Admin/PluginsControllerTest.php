@@ -61,6 +61,7 @@ class PluginsControllerTest extends BcTestCase
      */
     public function setUp(): void
     {
+        $this->setFixtureTruncate();
         parent::setUp();
         $this->PluginsController = new PluginsController($this->loginAdmin($this->getRequest()));
     }
