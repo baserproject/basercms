@@ -42,4 +42,15 @@ class SiteFactory extends CakephpBaseFactory
             ];
         });
     }
+
+    /**
+     * メインサイトに設定する
+     * @return SiteFactory
+     */
+    public function main(): SiteFactory
+    {
+        return $this->setField('id', 1)
+            ->setField('status', true);
+    }
+
 }

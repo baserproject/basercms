@@ -11,10 +11,12 @@
 
 namespace BcSearchIndex\Test\TestCase\Controller\Admin;
 
+use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcSearchIndex\Controller\Admin\SearchIndexesController;
 use Cake\Event\Event;
 use Cake\TestSuite\IntegrationTestTrait;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class SearchIndexesControllerTest
@@ -24,6 +26,10 @@ use Cake\TestSuite\IntegrationTestTrait;
 class SearchIndexesControllerTest extends BcTestCase
 {
 
+    /**
+     * Trait
+     */
+    use ScenarioAwareTrait;
     use IntegrationTestTrait;
 
     /**
@@ -32,14 +38,8 @@ class SearchIndexesControllerTest extends BcTestCase
      * @var array
      */
     public $fixtures = [
-        'plugin.BaserCore.Users',
-        'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.UsersUserGroups',
-        'plugin.BaserCore.Dblogs',
-        'plugin.BaserCore.Sites',
-        'plugin.BaserCore.Contents',
-        'plugin.BaserCore.Pages',
-        'plugin.BaserCore.Permissions',
+        'plugin.BaserCore.Empty/Users',
+        'plugin.BaserCore.Empty/Sites',
     ];
 
     /**
@@ -50,9 +50,6 @@ class SearchIndexesControllerTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $request = $this->getRequest('/baser/admin/bc-search-index/search_indexes/');
-        $request = $this->loginAdmin($request);
-        $this->SearchIndexesController = new SearchIndexesController($request);
     }
 
     /**
@@ -62,7 +59,6 @@ class SearchIndexesControllerTest extends BcTestCase
      */
     public function tearDown(): void
     {
-        unset($this->SearchIndexesController);
         parent::tearDown();
     }
 
@@ -71,9 +67,13 @@ class SearchIndexesControllerTest extends BcTestCase
      */
     public function testBeforeRender()
     {
-        $event = new Event('Controller.beforeRender', $this->SearchIndexesController);
-        $this->SearchIndexesController->beforeRender($event);
-        $this->assertEquals('BcSearchIndex.BcSearchIndex', $this->SearchIndexesController->viewBuilder()->getHelpers()[0]);
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $request = $this->getRequest('/baser/admin/bc-search-index/search_indexes/');
+        $request = $this->loginAdmin($request);
+        $searchIndexesController = new SearchIndexesController($request);
+        $event = new Event('Controller.beforeRender', $searchIndexesController);
+        $searchIndexesController->beforeRender($event);
+        $this->assertEquals('BcSearchIndex.BcSearchIndex', $searchIndexesController->viewBuilder()->getHelpers()[0]);
     }
 
 }
