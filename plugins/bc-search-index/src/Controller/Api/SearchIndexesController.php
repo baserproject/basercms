@@ -28,6 +28,7 @@ class SearchIndexesController extends AppController
      * @return \Cake\Http\Response|void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function beforeFilter(EventInterface $event)
     {
