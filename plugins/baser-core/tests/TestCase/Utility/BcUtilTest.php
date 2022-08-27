@@ -242,6 +242,8 @@ class BcUtilTest extends BcTestCase
     {
         $this->assertEquals(true, BcUtil::includePluginClass('BcBlog'));
         $this->assertEquals(false, BcUtil::includePluginClass('BcTest'));
+        $this->assertEquals(false, BcUtil::includePluginClass(['BcTest', 'BcBlog']));
+        $this->assertEquals(true, BcUtil::includePluginClass(['bc-blog', 'BcBlog']));
     }
 
     /**
