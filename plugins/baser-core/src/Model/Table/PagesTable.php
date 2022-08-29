@@ -156,6 +156,7 @@ class PagesTable extends Table
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {

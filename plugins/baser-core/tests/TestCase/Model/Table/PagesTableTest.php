@@ -13,6 +13,9 @@ namespace BaserCore\Test\TestCase\Model\Table;
 
 use ArrayObject;
 use BaserCore\Model\Entity\Page;
+use BaserCore\Model\Table\PagesTable;
+use Cake\Event\Event;
+use Cake\ORM\Entity;
 use Cake\Validation\Validator;
 use BaserCore\TestSuite\BcTestCase;
 
@@ -196,5 +199,37 @@ class PagesTableTest extends BcTestCase
         return [
             [2, 1, 'hoge1', 10, 1]
         ];
+    }
+
+    /**
+     * test beforeSave
+     * @return void
+     */
+    public function testBeforeSave()
+    {
+        $event = new Event("copy");
+        $object = new ArrayObject();
+
+        $data = new Entity([
+            'test' => 'テストBeforeSave',
+            'content' => [
+                'title' => 'abc'
+            ]
+        ]);
+
+        $this->Pages->beforeSave($event, $data, $object);
+        $this->assertFalse($this->Pages->isExcluded());
+
+        $this->Pages->searchIndexSaving = false;
+        $this->Pages->beforeSave($event, $data, $object);
+        $this->assertFalse($this->Pages->isExcluded());
+
+        $data = new Entity([
+            'test' => 'テストBeforeSave',
+        ]);
+
+        $this->Pages->searchIndexSaving = true;
+        $this->Pages->beforeSave($event, $data, $object);
+        $this->assertTrue($this->Pages->isExcluded());
     }
 }
