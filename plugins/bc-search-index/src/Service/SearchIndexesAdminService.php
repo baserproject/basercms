@@ -39,6 +39,7 @@ class SearchIndexesAdminService extends SearchIndexesService implements SearchIn
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getViewVarsForIndex(\Cake\ORM\ResultSet $searchIndexes, ServerRequest $request): array
     {
