@@ -11,6 +11,8 @@
 
 namespace BcSearchIndex\Service;
 
+use Cake\Core\Configure;
+use Cake\Core\Exception\Exception;
 use Cake\ORM\Query;
 use Cake\ORM\TableRegistry;
 use BaserCore\Annotation\NoTodo;
@@ -159,6 +161,19 @@ class SearchIndexesService implements SearchIndexesServiceInterface
         }
 
         return $conditions;
+    }
+
+    /**
+     * 検索インデックスを削除する
+     * @param int $id
+     * @return bool
+     * @checked
+     * @noTodo
+     */
+    public function delete($id): bool
+    {
+        $entity = $this->get($id);
+        return $this->SearchIndexes->delete($entity);
     }
 
     /**

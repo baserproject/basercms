@@ -15,6 +15,7 @@ use Cake\Datasource\EntityInterface;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use Cake\ORM\Query;
 
 /**
  * Interface SearchIndexesServiceInterface
@@ -31,6 +32,26 @@ interface SearchIndexesServiceInterface
      * @unitTest
      */
     public function get($id): EntityInterface;
+
+    /**
+     * 一覧データを取得
+     * @param array $queryParams
+     * @return Query
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getIndex(array $queryParams = []): Query;
+
+    /**
+     * 検索インデックスを削除する
+     * @param int $id
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function delete($id): bool;
 
     /**
      * 検索インデックス再構築
@@ -61,6 +82,7 @@ interface SearchIndexesServiceInterface
      * @return EntityInterface|null
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function changePriority(EntityInterface $target, $priority): ?EntityInterface;
 

@@ -12,6 +12,7 @@
 namespace BcSearchIndex\Controller\Admin;
 
 use BaserCore\Controller\Admin\BcAdminAppController;
+use BaserCore\Error\BcException;
 use BaserCore\Service\SiteConfigsServiceInterface;
 use BcSearchIndex\Service\SearchIndexesAdminServiceInterface;
 use BcSearchIndex\Service\SearchIndexesServiceInterface;
@@ -77,21 +78,24 @@ class SearchIndexesController extends BcAdminAppController
      * [ADMIN] 検索インデックス削除
      *
      * @param int $id
+     * @noTodo
+     * @checked
      */
-    public function delete($id = null)
+    public function delete(SearchIndexesServiceInterface $service, $id = null)
     {
-        $this->_checkSubmitToken();
+        $this->request->allowMethod(['post', 'delete']);
         if (!$id) {
-            $this->ajaxError(500, __d('baser', '無効な処理です。'));
+            $this->BcMessage->setError(__d('baser', '無効なIDです。'));
+            $this->redirect(['action' => 'index']);
         }
-
-        /* 削除処理 */
-        if ($this->SearchIndex->delete($id)) {
-            $message = sprintf(__d('baser', '検索インデックスより NO.%s を削除しました。'), $id);
-            $this->SearchIndex->saveDbLog($message);
-            exit(true);
+        try {
+            if ($service->delete($id)) {
+                $this->BcMessage->setSuccess(__d('baser', '検索インデックスより No.{0} を削除しました。', $id));
+            }
+        } catch (BcException $e) {
+            $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
         }
-        exit();
+        return $this->redirect(['action' => 'index']);
     }
 
     /**

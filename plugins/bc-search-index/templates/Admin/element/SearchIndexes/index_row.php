@@ -68,6 +68,14 @@ $priorities = [
     ]) ?>
   </td>
   <td class="bca-table-listup__tbody-td bca-table-listup__tbody-td--actions">
-    <?php $this->BcBaser->link('', ['action' => 'ajax_delete', $searchIndex->id], ['title' => __d('baser', '削除'), 'class' => 'btn-delete bca-btn-icon', 'data-bca-btn-type' => 'delete', 'data-bca-btn-size' => 'lg']) ?>
+    <?= $this->BcAdminForm->postLink(
+    '',
+    ['action' => 'delete', $searchIndex->id],
+    ['confirm' => __d('baser', "検索インデックス No.{0} を本当に削除してもいいですか？", $searchIndex->id),
+      'title' => __d('baser', '削除'),
+      'class' => 'btn-delete bca-btn-icon',
+      'data-bca-btn-type' => 'delete',
+      'data-bca-btn-size' => 'lg']
+    ) ?>
   </td>
 </tr>
