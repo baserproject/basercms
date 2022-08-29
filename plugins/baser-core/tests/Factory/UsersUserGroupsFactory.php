@@ -17,14 +17,9 @@ use CakephpFixtureFactories\Factory\BaseFactory as CakephpBaseFactory;
 use Faker\Generator;
 
 /**
- * UserFactory
- *
- * @method \BaserCore\Model\Entity\User getEntity()
- * @method \BaserCore\Model\Entity\User[] getEntities()
- * @method \BaserCore\Model\Entity\User|\BaserCore\Model\Entity\User[] persist()
- * @method static \BaserCore\Model\Entity\User get(mixed $primaryKey, array $options = [])
+ * UsersUserGroupsFactory
  */
-class UserFactory extends CakephpBaseFactory
+class UsersUserGroupsFactory extends CakephpBaseFactory
 {
     /**
      * Defines the Table Registry used to generate entities with
@@ -33,7 +28,7 @@ class UserFactory extends CakephpBaseFactory
      */
     protected function getRootTableRegistryName(): string
     {
-        return 'BaserCore.Users';
+        return 'BaserCore.UsersUserGroups';
     }
 
     /**
@@ -46,32 +41,17 @@ class UserFactory extends CakephpBaseFactory
     {
         $this->setDefaultData(function (Generator $faker) {
             return [
-                'name' => $faker->text
             ];
         });
     }
 
     /**
-     * 無効ユーザーに設定する
-     * @return UserFactory
-     */
-    public function suspended()
-    {
-        return $this->setField('status', false);
-    }
-
-    /**
-     * 管理ユーザーに設定する
+     * 管理者ユーザーを作成する
      * @return UserFactory
      */
     public function admin()
     {
-        UserGroupsFactory::make()->admins()->persist();
-        UsersUserGroupsFactory::make()->admin()->persist();
-
-        return $this->setField('id', 1)
-            ->setField('name', 'name')
-            ->setField('status', 1)
-            ->setField('method', 'ALL');
+        return $this->setField('user_id', 1)
+            ->setField('user_group_id', 1);
     }
 }

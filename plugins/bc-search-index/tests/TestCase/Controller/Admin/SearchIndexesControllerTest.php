@@ -11,9 +11,13 @@
 
 namespace BcSearchIndex\Test\TestCase\Controller\Admin;
 
+use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcContainerTrait;
 use BcSearchIndex\Controller\Admin\SearchIndexesController;
+use BcSearchIndex\Service\SearchIndexesAdminServiceInterface;
+use BcSearchIndex\Service\SearchIndexesServiceInterface;
 use Cake\Event\Event;
 use Cake\TestSuite\IntegrationTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -31,6 +35,7 @@ class SearchIndexesControllerTest extends BcTestCase
      */
     use ScenarioAwareTrait;
     use IntegrationTestTrait;
+    use BcContainerTrait;
 
     /**
      * Fixtures
@@ -40,6 +45,8 @@ class SearchIndexesControllerTest extends BcTestCase
     public $fixtures = [
         'plugin.BaserCore.Empty/Users',
         'plugin.BaserCore.Empty/Sites',
+        'plugin.BaserCore.Empty/UsersUserGroups',
+        'plugin.BaserCore.Empty/UserGroups',
     ];
 
     /**
@@ -50,6 +57,10 @@ class SearchIndexesControllerTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $request = $this->getRequest('/baser/admin/bc-search-index/search_indexes/');
+        $request = $this->loginAdmin($request);
+        $this->SearchIndexesController = new SearchIndexesController($request);
     }
 
     /**
@@ -59,6 +70,7 @@ class SearchIndexesControllerTest extends BcTestCase
      */
     public function tearDown(): void
     {
+        unset($this->SearchIndexesController);
         parent::tearDown();
     }
 
@@ -67,13 +79,33 @@ class SearchIndexesControllerTest extends BcTestCase
      */
     public function testBeforeRender()
     {
-        $this->loadFixtureScenario(InitAppScenario::class);
-        $request = $this->getRequest('/baser/admin/bc-search-index/search_indexes/');
-        $request = $this->loginAdmin($request);
-        $searchIndexesController = new SearchIndexesController($request);
-        $event = new Event('Controller.beforeRender', $searchIndexesController);
-        $searchIndexesController->beforeRender($event);
-        $this->assertEquals('BcSearchIndex.BcSearchIndex', $searchIndexesController->viewBuilder()->getHelpers()[0]);
+        $event = new Event('Controller.beforeRender', $this->SearchIndexesController);
+        $this->SearchIndexesController->beforeRender($event);
+        $this->assertEquals('BcSearchIndex.BcSearchIndex', $this->SearchIndexesController->viewBuilder()->getHelpers()[0]);
+    }
+
+    /**
+     * test index
+     * @return void
+     */
+    public function testIndex()
+    {
+        $this->get('/baser/admin/bc-search-index/search_indexes/index');
+        $this->assertResponseOk();
+
+        // イベントテスト
+        $this->entryEventToMock(self::EVENT_LAYER_CONTROLLER, 'BcSearchIndex.SearchIndexes.searchIndex', function (Event $event) {
+            $request = $event->getData('request');
+            return $request->withQueryParams(['num' => 1]);
+        });
+        // アクション実行（requestの変化を判定するため $this->get() ではなくクラスを直接利用）
+        $this->SearchIndexesController->beforeFilter(new Event('beforeFilter'));
+        $this->SearchIndexesController->index(
+            $this->getService(SearchIndexesServiceInterface::class),
+            $this->getService(SearchIndexesAdminServiceInterface::class),
+            $this->getService(SiteConfigsServiceInterface::class)
+        );
+        $this->assertEquals(1, $this->SearchIndexesController->getRequest()->getQuery('num'));
     }
 
 }
