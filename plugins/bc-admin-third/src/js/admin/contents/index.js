@@ -36,7 +36,7 @@ $(function () {
                 break;
             case "2":
                 // 一括処理
-                $.bcBatch.init({batchUrl: $.bcUtil.adminBaseUrl + 'baser-core' + '/contents/batch'});
+                $.bcBatch.init({batchUrl: $.bcUtil.apiBaseUrl + 'baser-core' + '/contents/batch.json'});
                 grpChangeTreeOpenClose.hide();
                 break;
         }

@@ -83,4 +83,18 @@ interface PermissionsServiceInterface extends CrudBaseServiceInterface
      */
     public function changeSort(int $id, int $offset, array $conditions = []): bool;
 
+    /**
+     * 一括処理
+     * @param array $ids
+     * @return bool
+     */
+    public function batch($method, array $ids): bool;
+
+    /**
+     * IDを指定して名前リストを取得する
+     * @param $ids
+     * @return array
+     */
+    public function getNamesById($ids): array;
+
 }

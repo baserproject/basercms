@@ -11,6 +11,7 @@
 
 namespace BaserCore\Controller\Api;
 
+use BaserCore\Error\BcException;
 use Exception;
 use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
@@ -517,5 +518,46 @@ class ContentsController extends BcApiController
                 $this->setResponse($this->response->withStatus(500));
             }
             return $message;
+    }
+
+    /**
+     * batch
+     *
+     * @param  ContentsServiceInterface $contentService
+     * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function batch(ContentsServiceInterface $service)
+    {
+        $this->request->allowMethod(['post', 'put']);
+        $allowMethod = [
+            'publish' => '公開',
+            'unpublish' => '非公開に',
+            'delete' => '削除',
+        ];
+        $method = $this->getRequest()->getData('batch');
+        if (!isset($allowMethod[$method])) {
+            $this->setResponse($this->response->withStatus(500));
+            $this->viewBuilder()->setOption('serialize', []);
+            return;
+        }
+        $targets = $this->getRequest()->getData('batch_targets');
+        try {
+            $names = $service->getTitlesById($targets);
+            $service->batch($method, $targets);
+            $this->BcMessage->setSuccess(
+                sprintf(__d('baser', 'コンテンツ 「%s」 を %s しました。'), implode('」、「', $names), $allowMethod[$method]),
+                true,
+                false
+            );
+            $message = __d('baser', '一括処理が完了しました。');
+        } catch (BcException $e) {
+            $this->setResponse($this->response->withStatus(400));
+            $message = __d('baser', $e->getMessage());
+        }
+        $this->set(['message' => $message]);
+        $this->viewBuilder()->setOption('serialize', ['message']);
     }
 }

@@ -369,41 +369,4 @@ class ContentsController extends BcAdminAppController
         }
 	}
 
-    /**
-     * batch
-     *
-     * @param  ContentsServiceInterface $contentService
-     * @return void
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function batch(ContentsServiceInterface $contentService)
-    {
-        $this->disableAutoRender();
-        $allowMethod = [
-            'publish' => '公開',
-            'unpublish' => '非公開',
-            'delete' => '削除',
-        ];
-
-        $method = $this->request->getData('ListTool.batch');
-        if (!isset($allowMethod[$method])) {
-            return;
-        }
-
-        $methodText = $allowMethod[$method];
-
-        foreach($this->request->getData('ListTool.batch_targets') as $id) {
-            $content = $contentService->get($id);
-            if ($contentService->$method($id)) {
-                $this->BcMessage->setSuccess(
-                    sprintf(__d('baser', 'コンテンツ「%s」 を %sしました。'), $content->name, $methodText),
-                    true,
-                    false
-                );
-            }
-        }
-        return $this->response->withStringBody('true');
-    }
 }

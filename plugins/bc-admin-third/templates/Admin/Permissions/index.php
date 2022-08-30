@@ -10,39 +10,26 @@
  * @license         https://basercms.net/license/index.html
  */
 
+use BaserCore\Model\Entity\UserGroup;
+use BaserCore\View\BcAdminAppView;
+
 /**
  * [ADMIN] アクセス制限設定一覧
  *
- * @var BcAppView $this
+ * @var BcAdminAppView $this
+ * @var UserGroup $currentUserGroup
  */
-
-
 $this->BcAdmin->setTitle(sprintf(__d('baser', '%s｜アクセス制限設定一覧'), $currentUserGroup->title));
 $this->BcAdmin->setHelp('permissions_index');
-
+$this->BcBaser->js('admin/permissions/index.bundle', false, [
+  'id' => 'AdminPermissionsIndexScript',
+  'data-userGroupId' => $currentUserGroup->id
+]);
 $this->BcAdmin->addAdminMainBodyHeaderLinks([
   'url' => ['action' => 'add', $currentUserGroup->id],
   'title' => __d('baser', '新規追加'),
 ]);
 ?>
-
-<script>
-$(function () {
-  /**
-   * 並び替え機能実装
-   */
-  $.bcSortable.init({
-      updateSortUrl: "<?php echo $this->BcBaser->getUrl(['controller' => 'permissions', 'action' => 'update_sort', $currentUserGroup->id]) ?>"
-  });
-  /**
-   * 一括処理実装
-   */
-  $.bcBatch.init({
-      batchUrl: "<?php echo $this->BcBaser->getUrl(['controller' => 'permissions', 'action' => 'batch']) ?>"
-  });
-});
-
-</script>
 
 
 <section id="DataList">

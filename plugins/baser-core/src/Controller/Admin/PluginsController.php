@@ -262,30 +262,6 @@ class PluginsController extends BcAdminAppController
     }
 
     /**
-     * 優先順位の並び替えを更新する
-     * @return void|Response
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function update_sort(PluginsServiceInterface $pluginService)
-    {
-        $this->disableAutoRender();
-        if (!$this->request->getData()) {
-            $this->ajaxError(500, __d('baser', '無効な処理です。'));
-            return;
-        }
-
-        if (!$pluginService->changePriority($this->request->getData('Sort.id'), $this->request->getData('Sort.offset'))) {
-            $this->ajaxError(500, __d('baser', '一度リロードしてから再実行してみてください。'));
-            return;
-        }
-
-        return $this->response->withStringBody('true');
-    }
-
-
-    /**
      * データベースをリセットする
      *
      * @return void
@@ -311,34 +287,6 @@ class PluginsController extends BcAdminAppController
             $this->BcMessage->setError(__d('baser', 'リセット処理中にエラーが発生しました。') . $e->getMessage());
         }
         $this->redirect(['action' => 'install', $plugin->name]);
-    }
-
-    /**
-     * 一括処理
-     *
-     * @param array $ids プラグインIDの配列
-     * @return void|Response
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function batch()
-    {
-        $this->autoRender = false;
-        if ($this->request->getData('ListTool.batch') !== 'detach') {
-            return;
-        }
-        foreach($this->request->getData('ListTool.batch_targets') as $id) {
-            $plugin = $this->Plugins->get($id);
-            if ($this->Plugins->detach($plugin->name)) {
-                $this->BcMessage->setSuccess(
-                    sprintf(__d('baser', 'プラグイン「%s」 を 無効化しました。'), $plugin->title),
-                    true,
-                    false
-                );
-            }
-        }
-        return $this->response->withStringBody('true');
     }
 
 }

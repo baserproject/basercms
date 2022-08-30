@@ -12,11 +12,7 @@
 $this->BcBaser->i18nScript([
   'message1' => __d('baser', "このデータを本当に無効にしてもいいですか？\nプラグインフォルダ内のファイル、データベースに保存した情報は削除されずそのまま残ります。")
 ]);
-$this->BcBaser->js('admin/plugins/index.bundle', false, [
-  'id' => 'AdminPluginsIndexScript',
-  'data-updateSortUrl' => $this->BcBaser->getUrl(['controller' => 'plugins', 'action' => 'update_sort']),
-  'data-batchUrl' => $this->BcBaser->getUrl(['controller' => 'plugins', 'action' => 'batch'])
-]);
+$this->BcBaser->js('admin/plugins/index.bundle', false);
 $this->BcAdmin->addAdminMainBodyHeaderLinks([
   'url' => ['action' => 'add'],
   'title' => __d('baser', '新規追加'),

@@ -68,7 +68,10 @@ class PermissionsController extends BcAdminAppController
 	{
 		$currentUserGroup = $userGroups->get($userGroupId);
 
-        $this->request = $this->request->withQueryParams(['user_group_id' => $userGroupId]);
+        $this->request = $this->request->withQueryParams(array_merge(
+            $this->getRequest()->getQueryParams(),
+            ['user_group_id' => $userGroupId]
+        ));
         $this->setViewConditions('Permission', ['default' => ['query' => [
             'sort' => 'sort',
             'direction' => 'asc',
@@ -239,73 +242,4 @@ class PermissionsController extends BcAdminAppController
         return $this->redirect(['action' => 'index', $userGroupId]);
     }
 
-    /**
-     * 一括処理
-     *
-     * @return void|Response
-     *
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function batch(PermissionsServiceInterface $permissionService)
-    {
-        $this->disableAutoRender();
-        $allowMethod = [
-            'publish' => '有効化',
-            'unpublish' => '無効化',
-            'delete' => '削除',
-        ];
-
-        $method = $this->request->getData('ListTool.batch');
-        if (!isset($allowMethod[$method])) {
-            return;
-        }
-
-        $methodText = $allowMethod[$method];
-
-        foreach($this->request->getData('ListTool.batch_targets') as $id) {
-            $permission = $permissionService->get($id);
-            if ($permissionService->$method($id)) {
-                $this->BcMessage->setSuccess(
-                    sprintf(__d('baser', 'プラグイン「%s」 を %sしました。'), $permission->name, $methodText),
-                    true,
-                    false
-                );
-            }
-        }
-        return $this->response->withStringBody('true');
-    }
-
-    /**
-     * 並び替えを更新する [AJAX]
-     *
-     * @access    public
-     * @param $userGroupId
-     * @return void
-     *
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function update_sort(PermissionsServiceInterface $permissionService, $userGroupId)
-    {
-
-        $this->disableAutoRender();
-
-        if (!$this->request->getData()) {
-            $this->ajaxError(500, __d('baser', '無効な処理です。'));
-            return;
-        }
-
-        $conditions = [
-            'user_group_id' => $userGroupId,
-        ];
-        if (!$permissionService->changeSort($this->request->getData('Sort.id'), $this->request->getData('Sort.offset'), $conditions)) {
-            $this->ajaxError(500, __d('baser', '一度リロードしてから再実行してみてください。'));
-            return;
-        }
-
-        return $this->response->withStringBody('1');
-    }
 }

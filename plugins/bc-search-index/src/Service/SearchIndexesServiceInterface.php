@@ -86,4 +86,15 @@ interface SearchIndexesServiceInterface
      */
     public function changePriority(EntityInterface $target, $priority): ?EntityInterface;
 
+    /**
+     * 一括処理
+     * @param string $method
+     * @param array $ids
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function batch(string $method, array $ids): bool;
+
 }

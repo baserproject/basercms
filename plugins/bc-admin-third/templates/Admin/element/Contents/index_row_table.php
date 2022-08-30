@@ -68,7 +68,7 @@ if ($content->self_status) {
   <td class="bca-table-listup__tbody-td bca-table-listup__tbody-td--select">
     <?php if ($this->BcBaser->isAdminUser() && empty($content->site_root)): ?>
       <?php echo $this->BcAdminForm->control(
-        'ListTool.batch_targets.' . $content->id, [
+        'batch_targets.' . $content->id, [
         'type' => 'checkbox',
         'label' => '<span class="bca-visually-hidden">' . __d('baser', 'チェックする') . '</span>',
         'class' => 'batch-targets bca-checkbox__input',

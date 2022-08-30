@@ -231,4 +231,90 @@ class PermissionsControllerTest extends BcTestCase
         $this->assertNull($result->errors);
         $this->assertEquals('処理に失敗しました。', $result->message);
     }
+
+
+    /**
+     * 表示順変更
+     */
+    public function testUpdate_sort()
+    {
+        $this->post('/baser/api/baser-core/permissions/update_sort/2.json?token=' . $this->accessToken);
+        $this->assertResponseFailure();
+
+        $data = [
+            'id' => 1,
+            'offset' => 2
+        ];
+        $permissions = $this->getTableLocator()->get('Permissions');
+        $permissionList = $permissions
+            ->find()
+            ->order(['sort' => 'ASC'])
+            ->select('id')
+            ->limit(3)
+            ->all();
+        $beforeOrderId = [];
+        foreach($permissionList as $permission) {
+            $beforeOrderId[] = $permission->id;
+        }
+        $this->post('/baser/api/baser-core/permissions/update_sort/2.json?token=' . $this->accessToken, $data);
+        $permissionList = $permissions
+            ->find()
+            ->order(['sort' => 'ASC'])
+            ->select('id')
+            ->limit(3)
+            ->all();
+
+        $afterOrderId = [];
+        foreach($permissionList as $permission) {
+            $afterOrderId[] = $permission->id;
+        }
+        $this->assertNotEquals($beforeOrderId, $afterOrderId);
+    }
+
+    /**
+     * 一括処理
+     *
+     */
+    public function testBatch()
+    {
+        $permissions = $this->getTableLocator()->get('Permissions');
+
+        // 空データ送信
+        $this->post('/baser/api/baser-core/permissions/batch.json?token=' . $this->accessToken, []);
+        $this->assertResponseFailure();
+
+        // unpublish
+        $data = [
+            'batch' => 'unpublish',
+            'batch_targets' => [1],
+        ];
+        $this->post('/baser/api/baser-core/permissions/batch.json?token=' . $this->accessToken, $data);
+        $this->assertResponseNotEmpty();
+
+        $permission = $permissions->find()->where(['id' => 1])->all()->last();
+        $this->assertFalse($permission->status);
+
+        // publish
+        $data = [
+            'batch' => 'publish',
+            'batch_targets' => [1],
+        ];
+        $this->post('/baser/api/baser-core/permissions/batch.json?token=' . $this->accessToken, $data);
+        $this->assertResponseOk();
+
+        $permission = $permissions->find()->where(['id' => 1])->all()->last();
+        $this->assertTrue($permission->status);
+
+        // delete
+        $data = [
+            'batch' => 'delete',
+            'batch_targets' => [1],
+        ];
+        $this->post('/baser/api/baser-core/permissions/batch.json?token=' . $this->accessToken, $data);
+        $this->assertResponseOk();
+
+        $permission = $permissions->find()->where(['id' => 1])->all()->last();
+        $this->assertNull($permission);
+    }
+
 }

@@ -11,6 +11,7 @@
 
 namespace BaserCore\Service;
 
+use BaserCore\Error\BcException;
 use BaserCore\Model\Entity\Permission;
 use BaserCore\Model\Table\PermissionsTable;
 use Cake\Core\Configure;
@@ -493,6 +494,40 @@ class PermissionsService implements PermissionsServiceInterface
         }
 
         return true;
+    }
+
+    /**
+     * 一括処理
+     * @param array $ids
+     * @return bool
+     * @checked
+     * @noTodo
+     */
+    public function batch($method, array $ids): bool
+    {
+        if (!$ids) return true;
+        $db = $this->Permissions->getConnection();
+        $db->begin();
+        foreach($ids as $id) {
+            if (!$this->{$method}($id)) {
+                $db->rollback();
+                throw new BcException(__d('baser', 'データベース処理中にエラーが発生しました。'));
+            }
+        }
+        $db->commit();
+        return true;
+    }
+
+    /**
+     * IDを指定して名前リストを取得する
+     * @param $ids
+     * @return array
+     * @checked
+     * @noTodo
+     */
+    public function getNamesById($ids): array
+    {
+        return $this->Permissions->find('list')->where(['id IN' => $ids])->toArray();
     }
 
 }

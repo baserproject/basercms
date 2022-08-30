@@ -121,18 +121,6 @@ class PluginsControllerTest extends BcTestCase
     }
 
     /**
-     * 並び替えを更新する
-     */
-    public function testAjax_update_sort()
-    {
-        $this->enableSecurityToken();
-        $this->enableCsrfToken();
-        $this->post('/baser/admin/baser-core/plugins/update_sort', ['connection' => 'test', 'Sort' => ['id' => 1, 'offset' => 1]]);
-        $this->assertResponseOk();
-        $this->assertSame('true', $this->_getBodyAsString());
-    }
-
-    /**
      * ファイル削除
      */
     public function testAjax_delete_file()
@@ -275,24 +263,4 @@ class PluginsControllerTest extends BcTestCase
         $this->put('/baser/admin/baser-core/plugins/install/BcBlog', $data);
     }
 
-    /**
-     * 一括処理できてるかテスト
-     */
-    public function testAjax_batch()
-    {
-        $this->enableSecurityToken();
-        $this->enableCsrfToken();
-        $batchList = [1, 2];
-        $this->post('/baser/admin/baser-core/plugins/batch', ['connection' => 'test', 'ListTool' => ['batch' => 'detach', 'batch_targets' => $batchList]]);
-        $this->assertResponseOk();
-        $plugins = $this->getTableLocator()->get('Plugins');
-        $query = $plugins->find()->select(['id', 'status']);
-        // 複数detachされてるかテスト
-        foreach($query as $plugin) {
-            if (in_array($plugin->id, $batchList)) {
-                $this->assertFalse($plugin->status);
-            }
-        }
-        $this->assertSame('true', $this->_getBodyAsString());
-    }
 }

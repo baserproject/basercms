@@ -11,11 +11,12 @@
 
 namespace BaserCore\Controller\Api;
 
+use BaserCore\Error\BcException;
 use BaserCore\Service\PluginsServiceInterface;
-use Cake\Core\Exception\Exception;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use Cake\Utility\Inflector;
 
 /**
  * Class PluginsController
@@ -196,15 +197,16 @@ class PluginsController extends BcApiController
      * @noTodo
      * @unitTest
      */
-    public function update_sort(PluginsServiceInterface $plugins, $name)
+    public function update_sort(PluginsServiceInterface $plugins)
     {
         $this->request->allowMethod(['post']);
-        $plugin = $plugins->getByName($name);
-        if (!$plugins->changePriority($plugin->id, $this->request->getQuery('offset'))) {
+        $plugin = $plugins->get($this->request->getData('id'));
+
+        if (!$plugins->changePriority($plugin->id, $this->request->getData('offset'))) {
             $this->setResponse($this->response->withStatus(400));
             $message = __d('baser', '一度リロードしてから再実行してみてください。');
         } else {
-            $message = sprintf(__d('baser', 'プラグイン「%s」の並び替えを更新しました。'), $name);
+            $message = sprintf(__d('baser', 'プラグイン「%s」の並び替えを更新しました。'), $plugin->name);
         }
         $this->set([
             'message' => $message,
@@ -227,4 +229,42 @@ class PluginsController extends BcApiController
         ]);
         $this->viewBuilder()->setOption('serialize', ['plugins']);
     }
+
+    /**
+     * バッチ処理
+     *
+     * @param PluginsServiceInterface $service
+     * @checked
+     * @noTodo
+     */
+    public function batch(PluginsServiceInterface $service)
+    {
+        $this->request->allowMethod(['post', 'put']);
+        $allowMethod = [
+            'detach' => '無効化'
+        ];
+        $method = $this->getRequest()->getData('batch');
+        if (!isset($allowMethod[$method])) {
+            $this->setResponse($this->response->withStatus(500));
+            $this->viewBuilder()->setOption('serialize', []);
+            return;
+        }
+        $targets = $this->getRequest()->getData('batch_targets');
+        try {
+            $names = $service->getNamesById($targets);
+            $service->batch($method, $targets);
+            $this->BcMessage->setSuccess(
+                sprintf(__d('baser', 'プラグイン 「%s」 を %s しました。'), implode('」、「', $names), $allowMethod[$method]),
+                true,
+                false
+            );
+            $message = __d('baser', '一括処理が完了しました。');
+        } catch (BcException $e) {
+            $this->setResponse($this->response->withStatus(400));
+            $message = __d('baser', $e->getMessage());
+        }
+        $this->set(['message' => $message]);
+        $this->viewBuilder()->setOption('serialize', ['message']);
+    }
+
 }

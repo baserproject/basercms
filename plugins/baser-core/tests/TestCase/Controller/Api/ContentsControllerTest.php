@@ -395,4 +395,64 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
         $service2Left = $this->ContentsService->get(($originEntity->id + $targetEntity->id) / 2)->lft;
         $this->assertGreaterThan($service2Left, json_decode($this->_response->getBody())->content->lft);
     }
+
+    /**
+     * testBatch
+     *
+     * @return void
+     */
+    public function testBatch()
+    {
+        // 空データ送信
+        $this->post('/baser/api/baser-core/contents/batch.json?token=' . $this->accessToken, []);
+        $this->assertResponseFailure();
+        // delete
+        $data = [
+            'batch' => 'delete',
+            'batch_targets' => [1],
+        ];
+        $this->post('/baser/api/baser-core/contents/batch.json?token=' . $this->accessToken, $data);
+        $this->assertResponseSuccess();
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        $this->ContentsService->get(1);
+    }
+    /**
+     * testBatchUnpublish
+     * NOTE: publishとunPublishのテストを同じ場所に書くとupdateDataが走らないため分離
+     *
+     * @return void
+     */
+    public function testBatchUnpublish()
+    {
+        // unpublish
+        $data = [
+            'batch' => 'unpublish',
+            'batch_targets' => [1],
+        ];
+        $this->post('/baser/api/baser-core/contents/batch.json?token=' . $this->accessToken, $data);
+        $this->assertResponseSuccess();
+        $content = $this->ContentsService->get(1);
+        $this->assertFalse($content->status);
+    }
+
+    /**
+     * testBatchUnpublish
+     *
+     * @return void
+     */
+    public function testBatchPublish()
+    {
+        $content = $this->ContentsService->get(1);
+        $this->ContentsService->update($content, ['id' => $content->id, 'status' => false, 'name' => 'test']);
+        // publish
+        $data = [
+            'batch' => 'publish',
+            'batch_targets' => [1],
+        ];
+        $this->post('/baser/api/baser-core/contents/batch.json?token=' . $this->accessToken, $data);
+        $this->assertResponseSuccess();
+        $content = $this->ContentsService->get(1);
+        $this->assertTrue($content->status);
+    }
+
 }

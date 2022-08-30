@@ -26,7 +26,7 @@ $this->BcBaser->js('admin/contents/index_table.bundle');
 <div class="bca-data-list__top">
   <?php if ($this->BcBaser->isAdminUser()): ?>
     <div class="bca-action-table-listup">
-      <?php echo $this->BcAdminForm->control('ListTool.batch', [
+      <?php echo $this->BcAdminForm->control('batch', [
         'type' => 'select',
         'options' => [
           'publish' => __d('baser', '公開'),
@@ -53,7 +53,7 @@ $this->BcBaser->js('admin/contents/index_table.bundle');
   <thead class="bca-table-listup__thead">
   <tr>
     <th class="list-tool bca-table-listup__thead-th  bca-table-listup__thead-th--select">
-      <?php echo $this->BcAdminForm->control('ListTool.checkall', ['type' => 'checkbox', 'label' => __d('baser', '一括選択')]) ?>
+      <?php echo $this->BcAdminForm->control('checkall', ['type' => 'checkbox', 'label' => __d('baser', '一括選択')]) ?>
     </th>
     <th class="bca-table-listup__thead-th">
       <?php echo $this->Paginator->sort('id',

@@ -10,11 +10,14 @@
  * @license         https://basercms.net/license/index.html
  */
 
+use BaserCore\View\BcAdminAppView;
+
 /**
  * [ADMIN] アクセス制限設定一覧
  *
- * @var BcAppView $this
+ * @var BcAdminAppView $this
  */
+
 $this->BcListTable->setColumnNumber(6);
 ?>
 
@@ -22,13 +25,13 @@ $this->BcListTable->setColumnNumber(6);
 <div class="bca-data-list__top">
   <?php if ($this->BcBaser->isAdminUser()): ?>
     <div>
-      <?php echo $this->BcAdminForm->control('ListTool.batch', [
+      <?php echo $this->BcAdminForm->control('batch', [
         'type' => 'select',
         'options' => [
           'unpublish' => __d('baser', '無効'),
           'publish' => __d('baser', '有効'),
           'delete' => __d('baser', '削除'),
-        ], 
+        ],
         'empty' => __d('baser', '一括処理')
       ]) ?>
       <?php echo $this->BcAdminForm->button(__d('baser', '適用'), ['id' => 'BtnApplyBatch', 'disabled' => 'disabled', 'class' => 'bca-btn', 'data-bca-btn-size' => 'lg']) ?>
@@ -42,7 +45,7 @@ $this->BcListTable->setColumnNumber(6);
   <tr>
     <th class="list-tool bca-table-listup__thead-th  bca-table-listup__thead-th--select"><?php // 一括選択 ?>
       <?php if ($this->BcBaser->isAdminUser()): ?>
-        <?php echo $this->BcAdminForm->control('ListTool.checkall', ['type' => 'checkbox', 'label' => __d('baser', '一括選択')]) ?>
+        <?php echo $this->BcAdminForm->control('checkall', ['type' => 'checkbox', 'label' => __d('baser', '一括選択')]) ?>
       <?php endif; ?>
       <?php if ($this->request->getQuery('sortmode')): ?>
         <?php $this->BcBaser->link('<i class="bca-btn-icon-text" data-bca-btn-type="draggable"></i>' . __d('baser', 'ノーマル'), [$currentUserGroup->id, '?' => ['sortmode' => 0]], ['escape' => false]) ?>

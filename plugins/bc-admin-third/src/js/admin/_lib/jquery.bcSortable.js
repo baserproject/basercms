@@ -63,10 +63,9 @@
             var sourceNum = target.attr('id').replace('Row', '');
             var offset = targetNum - sourceNum;
             var sortTable = $(".sort-table");
-            var alertMessage = $("#AlertMessage");
             var form = $('<form/>').hide();
-            var sortId = $('<input/>').attr('type', 'hidden').attr('name', 'Sort[id]').val(target.find('.id').val());
-            var sortOffset = $('<input/>').attr('type', 'hidden').attr('name', 'Sort[offset]').val(offset);
+            var sortId = $('<input/>').attr('type', 'hidden').attr('name', 'id').val(target.find('.id').val());
+            var sortOffset = $('<input/>').attr('type', 'hidden').attr('name', 'offset').val(offset);
             form.append(sortId).append(sortOffset);
 
             $.bcToken.check(function () {
@@ -82,20 +81,13 @@
                     data: data,
                     dataType: 'text',
                     beforeSend: function () {
-                        alertMessage.fadeOut(200);
-                        $('#flashMessage').fadeOut(200);
+                        $.bcUtil.hideMessage();
                         $.bcUtil.showLoader();
                     },
-                    success: function (result) {
-                        if (result === '1' || result === 'true') {
-                            sortTable.find("tr.sortable").each(function (i, v) {
-                                $(this).attr('id', 'Row' + (i + 1));
-                            });
-                        } else {
-                            sortTable.sortable("cancel");
-                            alertMessage.html(bcI18n.commonSortSaveFailedMessage);
-                            alertMessage.fadeIn(500);
-                        }
+                    success: function () {
+                        sortTable.find("tr.sortable").each(function (i, v) {
+                            $(this).attr('id', 'Row' + (i + 1));
+                        });
                     },
                     error: function (XMLHttpRequest, textStatus, errorThrown) {
                         var errorMessage = '';
@@ -103,14 +95,13 @@
                             errorMessage = '<br>' + bcI18n.commonNotFoundProgramMessage;
                         } else {
                             if (XMLHttpRequest.responseText) {
-                                errorMessage = '<br>' + XMLHttpRequest.responseText;
+                                errorMessage = '<br>' + JSON.parse(XMLHttpRequest.responseText).message;
                             } else {
                                 errorMessage = '<br>' + errorThrown;
                             }
                         }
                         sortTable.sortable("cancel");
-                        alertMessage.html(bcI18n.commonSortSaveFailedMessage + '(' + XMLHttpRequest.status + ')' + errorMessage);
-                        alertMessage.fadeIn(500);
+                        $.bcUtil.showAlertMessage(bcI18n.commonBatchExecFailedMessage + '(' + XMLHttpRequest.status + ')' + errorMessage)
                     },
                     complete: function () {
                         $.bcUtil.hideLoader();

@@ -11,8 +11,10 @@
 
 namespace BcSearchIndex\Service;
 
+use BaserCore\Error\BcException;
 use Cake\Core\Configure;
 use Cake\Core\Exception\Exception;
+use Cake\Datasource\ConnectionManager;
 use Cake\ORM\Query;
 use Cake\ORM\TableRegistry;
 use BaserCore\Annotation\NoTodo;
@@ -264,6 +266,27 @@ class SearchIndexesService implements SearchIndexesServiceInterface
     {
         $searchIndex = $this->SearchIndexes->patchEntity($target, ['priority' => $priority]);
         return $this->SearchIndexes->saveOrFail($searchIndex);
+    }
+
+    /**
+     * 一括処理
+     * @param string $method
+     * @param array $ids
+     * @return bool
+     */
+    public function batch(string $method, array $ids): bool
+    {
+        if (!$ids) return true;
+        $db = $this->SearchIndexes->getConnection();
+        $db->begin();
+        foreach($ids as $id) {
+            if (!$this->$method($id)) {
+                $db->rollback();
+                throw new BcException(__d('baser', 'データベース処理中にエラーが発生しました。'));
+            }
+        }
+        $db->commit();
+        return true;
     }
 
 }

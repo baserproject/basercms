@@ -11,10 +11,13 @@
 
 namespace BaserCore\Controller\Api;
 
+use BaserCore\Error\BcException;
 use BaserCore\Service\PermissionsServiceInterface;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use BaserCore\Service\PluginsServiceInterface;
+use Cake\Utility\Inflector;
 
 /**
  * Class PermissionsController
@@ -58,17 +61,17 @@ class PermissionsController extends BcApiController
         $this->viewBuilder()->setOption('serialize', ['permissions']);
     }
 
-	/**
-	 * 登録処理
+    /**
+     * 登録処理
      *
      * @param PermissionsServiceInterface $permissionService
      *
      * @checked
      * @noTodo
      * @unitTest
-	 */
-	public function add(PermissionsServiceInterface $permissionService)
-	{
+     */
+    public function add(PermissionsServiceInterface $permissionService)
+    {
         $this->request->allowMethod(['post', 'delete']);
         try {
             $permission = $permissionService->create($this->request->getData());
@@ -141,7 +144,7 @@ class PermissionsController extends BcApiController
         if (!$id || !is_numeric($id)) {
             $this->setResponse($this->response->withStatus(400));
             $message = __d('baser', '処理に失敗しました。');
-        }else{
+        } else {
             try {
                 $permission = $permissionService->copy($id);
                 if ($permission) {
@@ -153,7 +156,7 @@ class PermissionsController extends BcApiController
             } catch (\Exception $e) {
                 $errors = $e->getMessage();
                 $this->setResponse($this->response->withStatus(400));
-                $message = __d('baser', 'データベース処理中にエラーが発生しました。'.$errors);
+                $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $errors);
             }
         }
 
@@ -194,6 +197,77 @@ class PermissionsController extends BcApiController
             'errors' => $permission->getErrors(),
         ]);
         $this->viewBuilder()->setOption('serialize', ['permission', 'message', 'errors']);
+    }
+
+    /**
+     * 一括処理
+     *
+     * @param PermissionsServiceInterface $service
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function batch(PermissionsServiceInterface $service)
+    {
+        $this->request->allowMethod(['post', 'put']);
+        $allowMethod = [
+            'publish' => '有効化',
+            'unpublish' => '無効化',
+            'delete' => '削除',
+        ];
+        $method = $this->getRequest()->getData('batch');
+        if (!isset($allowMethod[$method])) {
+            $this->setResponse($this->response->withStatus(500));
+            $this->viewBuilder()->setOption('serialize', []);
+            return;
+        }
+        $targets = $this->getRequest()->getData('batch_targets');
+        try {
+            $names = $service->getNamesById($targets);
+            $service->batch($method, $targets);
+            $this->BcMessage->setSuccess(
+                sprintf(__d('baser', 'アクセス制限設定 「%s」 を %s しました。'), implode('」、「', $names), $allowMethod[$method]),
+                true,
+                false
+            );
+            $message = __d('baser', '一括処理が完了しました。');
+        } catch (BcException $e) {
+            $this->setResponse($this->response->withStatus(400));
+            $message = __d('baser', $e->getMessage());
+        }
+        $this->set(['message' => $message]);
+        $this->viewBuilder()->setOption('serialize', ['message']);
+    }
+
+    /**
+     * 並び替えを更新する [AJAX]
+     *
+     * @access    public
+     * @param $userGroupId
+     * @return void
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function update_sort(PermissionsServiceInterface $service, $userGroupId)
+    {
+        $this->request->allowMethod(['post']);
+        $conditions = [
+            'user_group_id' => $userGroupId,
+        ];
+        $permission = $service->get($this->request->getData('id'));
+        if (!$service->changeSort($this->request->getData('id'), $this->request->getData('offset'), $conditions)) {
+            $this->setResponse($this->response->withStatus(400));
+            $message = __d('baser', '一度リロードしてから再実行してみてください。');
+        } else {
+            $message = sprintf(__d('baser', 'アクセス制限設定「%s」の並び替えを更新しました。'), $permission->name);
+        }
+        $this->set([
+            'message' => $message,
+            'permission' => $permission
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['plugin', 'message']);
     }
 
 }

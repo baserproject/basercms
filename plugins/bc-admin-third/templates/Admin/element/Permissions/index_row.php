@@ -28,12 +28,12 @@ use BaserCore\View\BcAdminAppView;
 <tr id="Row<?php echo $count ?>" <?php echo $class; ?>>
   <td class="row-tools bca-table-listup__tbody-td ">
     <?php if ($this->BcBaser->isAdminUser()): ?>
-      <?php echo $this->BcAdminForm->control('ListTool.batch_targets.' . $data->id, ['type' => 'checkbox', 'label' => '<span class="bca-visually-hidden">' . __d('baser', 'チェックする') . '</span>', 'class' => 'batch-targets bca-checkbox__input', 'value' => $data->id, 'escape' => false]) ?>
+      <?php echo $this->BcAdminForm->control('batch_targets.' . $data->id, ['type' => 'checkbox', 'label' => '<span class="bca-visually-hidden">' . __d('baser', 'チェックする') . '</span>', 'class' => 'batch-targets bca-checkbox__input', 'value' => $data->id, 'escape' => false]) ?>
     <?php endif ?>
     <?php if ($this->request->getQuery('sortmode')): ?>
       <span class="sort-handle"><i class="bca-btn-icon-text"
                                   data-bca-btn-type="draggable"></i><?php echo __d('baser', 'ドラッグ可能') ?></span>
-      <?php echo $this->BcAdminForm->control('Sort.id' . $data->id, ['type' => 'hidden', 'class' => 'id', 'value' => $data->id]) ?>
+      <?php echo $this->BcAdminForm->control('id' . $data->id, ['type' => 'hidden', 'class' => 'id', 'value' => $data->id]) ?>
     <?php endif ?>
   </td>
   <td class="bca-table-listup__tbody-td"><?php echo $data->no; ?></td>

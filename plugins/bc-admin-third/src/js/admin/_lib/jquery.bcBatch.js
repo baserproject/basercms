@@ -21,8 +21,8 @@
             batchUrl: '',
             listTable: '#ListTable',
             executeButton: '#BtnApplyBatch',
-            methodSelect: '#listtool-batch',
-            checkAll: '#listtool-checkall',
+            methodSelect: '#batch',
+            checkAll: '#checkall',
             targetCheckbox: '.batch-targets',
             alertBox: '#AlertMessage',
             loader: '#Waiting',
@@ -58,16 +58,15 @@
                     return false;
                 }
 
-                var method = $(config.methodSelect).val();
                 if (!confirm(bcI18n.batchConfirmMessage)) {
                     return false;
                 }
 
                 var form = $('<form/>').append($(config.methodSelect).clone().val($(config.methodSelect).val()));
                 $(config.targetCheckbox + ":checked").each(function(){
-                    var value = $(this).attr('name').replace(/ListTool\[batch_targets\]\[([0-9]*)\]/, "$1");
+                    var value = $(this).attr('name').replace(/batch_targets\[([0-9]*)\]/, "$1");
                     if(value) {
-                        form.append($('<input name="ListTool[batch_targets][]" type="hidden">').val(value));
+                        form.append($('<input name="batch_targets[]" type="hidden">').val(value));
                     }
                 });
 
@@ -82,20 +81,11 @@
                         data: form.serialize(),
                         dataType: 'text',
                         beforeSend: function () {
-                            $(config.alertBox).fadeOut(200);
-                            $(config.flashBox).parent().fadeOut(200);
+                            $.bcUtil.hideMessage();
                             $.bcUtil.showLoader();
                         },
-                        success: function (result) {
-                            if (result) {
-                                location.reload();
-                            } else {
-                                $.bcToken.key = null;
-                                $.bcUtil.hideLoader();
-                                form.remove();
-                                $(config.alertBox).html(bcI18n.commonBatchExecFailedMessage);
-                                $(config.alertBox).fadeIn(500);
-                            }
+                        success: function () {
+                            location.reload();
                         },
                         error: function (XMLHttpRequest, textStatus, errorThrown) {
                             $.bcToken.key = null;
@@ -104,15 +94,14 @@
                                 errorMessage = '<br>' + bcI18n.commonNotFoundProgramMessage;
                             } else {
                                 if (XMLHttpRequest.responseText) {
-                                    errorMessage = '<br>' + XMLHttpRequest.responseText;
+                                    errorMessage = '<br>' + JSON.parse(XMLHttpRequest.responseText).message;
                                 } else {
                                     errorMessage = '<br>' + errorThrown;
                                 }
                             }
                             $.bcUtil.hideLoader();
                             form.remove();
-                            $(config.alertBox).html(bcI18n.commonBatchExecFailedMessage + '(' + XMLHttpRequest.status + ')' + errorMessage);
-                            $(config.alertBox).fadeIn(500);
+                            $.bcUtil.showAlertMessage(bcI18n.commonBatchExecFailedMessage + '(' + XMLHttpRequest.status + ')' + errorMessage)
                         }
                     });
                 }, {useUpdate: false, hideLoader: false});

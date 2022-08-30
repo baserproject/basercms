@@ -11,6 +11,7 @@
 
 namespace BaserCore\Service;
 
+use BaserCore\Error\BcException;
 use BaserCore\Model\Entity\Plugin;
 use BaserCore\Model\Table\PluginsTable;
 use Cake\Cache\Cache;
@@ -488,4 +489,34 @@ class PluginsService implements PluginsServiceInterface
         return '';
     }
 
+    /**
+     * 一括処理
+     * @param array $ids
+     * @return bool
+     */
+    public function batch(string $method, array $ids): bool
+    {
+        if (!$ids) return true;
+        $db = $this->Plugins->getConnection();
+        $db->begin();
+        foreach($ids as $id) {
+            $plugin = $this->Plugins->get($id);
+            if (!$this->$method($plugin->name)) {
+                $db->rollback();
+                throw new BcException(__d('baser', 'データベース処理中にエラーが発生しました。'));
+            }
+        }
+        $db->commit();
+        return true;
+    }
+
+    /**
+     * IDを指定して名前リストを取得する
+     * @param $ids
+     * @return array
+     */
+    public function getNamesById($ids): array
+    {
+        return $this->Plugins->find('list')->where(['id IN' => $ids])->toArray();
+    }
 }

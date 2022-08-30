@@ -1223,4 +1223,38 @@ class ContentsService implements ContentsServiceInterface
         return $this->Contents->find('path', ['for' => $id]);
     }
 
+    /**
+     * 一括処理
+     * @param array $ids
+     * @return bool
+     * @checked
+     * @noTodo
+     */
+    public function batch($method, array $ids): bool
+    {
+        if (!$ids) return true;
+        $db = $this->Contents->getConnection();
+        $db->begin();
+        foreach($ids as $id) {
+            if (!$this->{$method}($id)) {
+                $db->rollback();
+                throw new BcException(__d('baser', 'データベース処理中にエラーが発生しました。'));
+            }
+        }
+        $db->commit();
+        return true;
+    }
+
+    /**
+     * IDを指定してタイトルリストを取得する
+     * @param $ids
+     * @return array
+     * @checked
+     * @noTodo
+     */
+    public function getTitlesById($ids): array
+    {
+        return $this->Contents->find('list')->select(['id', 'title'])->where(['id IN' => $ids])->toArray();
+    }
+
 }

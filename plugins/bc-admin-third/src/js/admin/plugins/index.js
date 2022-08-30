@@ -30,14 +30,14 @@ $(function () {
      * 並び替え機能実装
      */
     $.bcSortable.init({
-        updateSortUrl:$("#AdminPluginsIndexScript").attr('data-updateSortUrl')
+        updateSortUrl:$.bcUtil.apiBaseUrl + 'baser-core' + '/plugins/update_sort.json'
     });
 
     /**
      * 一括処理実装
      */
     $.bcBatch.init({
-        batchUrl: $("#AdminPluginsIndexScript").attr('data-batchUrl')
+        batchUrl: $.bcUtil.apiBaseUrl + 'baser-core' + '/plugins/batch.json'
     });
 
 });
