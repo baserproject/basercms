@@ -38,7 +38,7 @@ $this->BcBaser->js([
       'baser', '検索インデックス再構築'),
       ['controller' => 'search_indexes', 'action' => 'reconstruct'],
       ['confirm' => __d('baser', '現在の検索インデックスを消去して、再構築します。本当にいいですか？'),
-      'class' => 'bca-btn bca-actions__item',
+      'class' => 'bca-btn bca-actions__item bca-loading',
       'data-bca-btn-size' => 'lg',
       'data-bca-btn-width' => 'lg']
     ) ?>
