@@ -47,8 +47,6 @@ class SearchIndexesServiceTest extends BcTestCase
         'plugin.BaserCore.Factory/SiteConfigs',
     ];
 
-    public $autoFixtures = false;
-
     /**
      * Set Up
      *
