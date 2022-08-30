@@ -17,6 +17,9 @@ use BcSearchIndex\Service\SearchIndexesAdminServiceInterface;
 use BcSearchIndex\Service\SearchIndexesService;
 use BcSearchIndex\Service\SearchIndexesServiceInterface;
 use Cake\Core\ServiceProvider;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * Class BcSearchIndexServiceProvider

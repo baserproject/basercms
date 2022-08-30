@@ -15,6 +15,9 @@ namespace BcFavorite;
 use BaserCore\BcPlugin;
 use Cake\Core\ContainerInterface;
 use BcFavorite\ServiceProvider\BcFavoriteServiceProvider;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * plugin for ContactManager
