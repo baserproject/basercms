@@ -207,8 +207,12 @@ class SearchIndexesService implements SearchIndexesServiceInterface
         $db->begin();
 
         if (!$parentContentId) {
-            $sql = $this->SearchIndexes->getSchema()->truncateSql($this->SearchIndexes->getConnection());
-            $this->SearchIndexes->getConnection()->execute($sql[0])->execute();
+            $this->SearchIndexes->deleteAll('1=1');
+        } else {
+            $this->SearchIndexes->deleteAll([
+                'lft >' => $parentContent->lft,
+                'rght <' => $parentContent->rght
+            ]);
         }
 
         $tables = [];
