@@ -15,6 +15,9 @@ use BaserCore\Model\Entity\Content;
 use Cake\Datasource\EntityInterface;
 use Cake\Datasource\QueryInterface;
 use Cake\ORM\Query;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
 
 /**
  * Interface ContentsServiceInterface
