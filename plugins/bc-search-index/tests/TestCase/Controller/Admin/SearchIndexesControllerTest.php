@@ -46,8 +46,8 @@ class SearchIndexesControllerTest extends BcTestCase
     public $fixtures = [
         'plugin.BaserCore.Factory/Users',
         'plugin.BaserCore.Factory/Sites',
-        'plugin.BaserCore.Factory/UsersUserGroup',
-        'plugin.BaserCore.Factory/UserGroup',
+        'plugin.BaserCore.Factory/UsersUserGroups',
+        'plugin.BaserCore.Factory/UserGroups',
     ];
 
     /**
