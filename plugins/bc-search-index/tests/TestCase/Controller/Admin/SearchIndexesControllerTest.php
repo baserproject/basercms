@@ -12,6 +12,7 @@
 namespace BcSearchIndex\Test\TestCase\Controller\Admin;
 
 use BaserCore\Service\SiteConfigsServiceInterface;
+use BaserCore\Test\Factory\SiteConfigFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
@@ -58,6 +59,7 @@ class SearchIndexesControllerTest extends BcTestCase
     {
         parent::setUp();
         $this->loadFixtureScenario(InitAppScenario::class);
+        SiteConfigFactory::make(['name' => 'content_types', 'value' => serialize(['Page'])])->persist();
         $request = $this->getRequest('/baser/admin/bc-search-index/search_indexes/');
         $request = $this->loginAdmin($request);
         $this->SearchIndexesController = new SearchIndexesController($request);

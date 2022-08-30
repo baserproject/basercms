@@ -56,6 +56,7 @@ class SearchIndexesServiceTest extends BcTestCase
      */
     public function setUp(): void
     {
+        $this->setFixtureTruncate();
         parent::setUp();
         $this->SearchIndexesService = new SearchIndexesService();
     }
