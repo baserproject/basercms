@@ -12,6 +12,13 @@
 $(function () {
 
     /**
+     * 一括処理実装
+     */
+    $.bcBatch.init({
+        batchUrl: $.bcUtil.apiBaseUrl + 'bc-search-index' + '/search_indexes/batch.json',
+    });
+
+    /**
      * 優先度変更
      */
     $(".priority").change(function () {

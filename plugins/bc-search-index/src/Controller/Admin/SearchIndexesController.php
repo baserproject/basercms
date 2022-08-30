@@ -102,28 +102,6 @@ class SearchIndexesController extends BcAdminAppController
     }
 
     /**
-     * [ADMIN] 検索インデックス一括削除
-     *
-     * @param $ids
-     * @return bool
-     * @access    public
-     */
-    protected function _batch_del($ids)
-    {
-        if (!$ids) {
-            return true;
-        }
-        foreach($ids as $id) {
-            /* 削除処理 */
-            if ($this->SearchIndex->delete($id)) {
-                $message = sprintf(__d('baser', '検索インデックスより NO.%s を削除しました。'), $id);
-                $this->SearchIndex->saveDbLog($message);
-            }
-        }
-        return true;
-    }
-
-    /**
      * 検索インデックスを再構築する
      * @noTodo
      * @checked

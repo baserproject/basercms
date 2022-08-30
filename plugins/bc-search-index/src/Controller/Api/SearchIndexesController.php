@@ -65,4 +65,47 @@ class SearchIndexesController extends AppController
         $this->viewBuilder()->setOption('serialize', ['user', 'message']);
     }
 
+    /**
+     * バッチ処理
+     *
+     * @param SearchIndexesServiceInterface $service
+     * @checked
+     * @noTodo
+     */
+    public function batch(SearchIndexesServiceInterface $service)
+    {
+        $this->request->allowMethod(['post', 'put']);
+        if($this->{'_batch_' . $this->getRequest()->getData('ListTool.batch')}(
+            $service,
+            $this->getRequest()->getData('ListTool.batch_targets')
+        )) {
+            $this->response->withStringBody('true');
+        }
+        $this->viewBuilder()->setOption('serialize', []);
+    }
+
+    /**
+     * [ADMIN] 検索インデックス一括削除
+     *
+     * @param $ids
+     * @return bool
+     * @checked
+     * @noTodo
+     */
+    protected function _batch_del($service, $ids)
+    {
+        if (!$ids) {
+            return true;
+        }
+        foreach($ids as $id) {
+            if ($service->delete($id)) {
+                $this->BcMessage->setSuccess(
+                    sprintf(__d('baser', '検索インデックスより NO.%s を削除しました。'), $id),
+                    true,
+                    false
+                );
+            }
+        }
+        return true;
+    }
 }
