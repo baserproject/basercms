@@ -15,6 +15,9 @@ use BaserCore\Model\Table\ContentsTable;
 use BcSearchIndex\Model\Table\SearchIndexesTable;
 use BcSearchIndex\Service\SearchIndexesService;
 use BaserCore\TestSuite\BcTestCase;
+use BcSearchIndex\Test\Factory\SearchIndexFactory;
+use BcSearchIndex\Test\Scenario\Service\SearchIndexesServiceScenario;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class SearchIndexesServiceTest
@@ -26,22 +29,22 @@ class SearchIndexesServiceTest extends BcTestCase
 {
 
     /**
+     * Trait
+     */
+    use ScenarioAwareTrait;
+
+    /**
      * Fixtures
      *
      * @var array
      */
     protected $fixtures = [
-        'plugin.BaserCore.Sites',
-        'plugin.BaserCore.Users',
-        'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.UsersUserGroups',
-        'plugin.BaserCore.ContentFolders',
-        'plugin.BaserCore.Pages',
-        'plugin.BaserCore.SiteConfigs',
-        'plugin.BaserCore.Service/SearchIndexesService/ContentsReconstruct',
-        'plugin.BaserCore.Service/SearchIndexesService/PagesReconstruct',
-        'plugin.BaserCore.Service/SearchIndexesService/ContentFoldersReconstruct',
-        'plugin.BaserCore.Service/SearchIndexesService/SearchIndexesReconstruct'
+        'plugin.BaserCore.Empty/Sites',
+        'plugin.BaserCore.Empty/Users',
+        'plugin.BaserCore.Empty/Contents',
+        'plugin.BaserCore.Empty/ContentFolders',
+        'plugin.BaserCore.Empty/Pages',
+        'plugin.BaserCore.Empty/SiteConfigs',
     ];
 
     public $autoFixtures = false;
@@ -53,14 +56,8 @@ class SearchIndexesServiceTest extends BcTestCase
      */
     public function setUp(): void
     {
-        $this->setFixtureTruncate();
         parent::setUp();
         $this->SearchIndexesService = new SearchIndexesService();
-        $this->SearchIndexes = $this->getTableLocator()->get('SearchIndexes');
-        $this->Contents = $this->getTableLocator()->get('Contents');
-        $this->loadFixtures(
-	        'Service\SearchIndexesService\SearchIndexesReconstruct'
-        );
     }
 
     /**
@@ -71,7 +68,6 @@ class SearchIndexesServiceTest extends BcTestCase
     public function tearDown(): void
     {
         unset($this->SearchIndexesService);
-        unset($this->SearchIndexes);
         parent::tearDown();
     }
 
@@ -90,7 +86,8 @@ class SearchIndexesServiceTest extends BcTestCase
      */
     public function testGet()
     {
-        $searchIndex = $this->SearchIndexesService->get(2);
+        SearchIndexFactory::make(['id' => 1, 'url' => '/about'])->persist();
+        $searchIndex = $this->SearchIndexesService->get(1);
         $this->assertEquals('/about', $searchIndex->url);
     }
 
@@ -99,35 +96,18 @@ class SearchIndexesServiceTest extends BcTestCase
 	 */
 	public function testReconstruct()
 	{
-	    $this->markTestIncomplete('フィクスチャファクトリとフィクスチャマネージャーを混在させるようになってからエラーになるようになったので一旦スキップ。正しくフィクスチャファクトリを導入する。');
-        $this->loadFixtures(
-            'Sites',
-            'Users',
-            'UserGroups',
-            'UsersUserGroups',
-            'ContentFolders',
-            'Pages',
-            'SiteConfigs',
-	        'Service\SearchIndexesService\ContentsReconstruct',
-	        'Service\SearchIndexesService\PagesReconstruct',
-	        'Service\SearchIndexesService\ContentFoldersReconstruct',
-        );
+	    $this->loadFixtureScenario(SearchIndexesServiceScenario::class);
 		$this->loginAdmin($this->getRequest());
-
-		// ===========================================
 		// 全ページ再構築
-		// ===========================================
-		$this->SearchIndexes->deleteAll(['1=1']);
 		$this->SearchIndexesService->reconstruct();
-		$this->assertEquals(4, $this->SearchIndexes->find()->count());
-
-		// ===========================================
+		$searchIndexesTable = $this->getTableLocator()->get('SearchIndexes');
+		$this->assertEquals(3, $searchIndexesTable->find()->count());
 		// 指定ディレクトリ配下再構築
-		// ===========================================
-		$this->SearchIndexes->deleteAll(['url LIKE' => '/service/%']);
-		$content = $this->Contents->find()->where(['url' => '/service/'])->first();
+		$contentsTable = $this->getTableLocator()->get('Contents');
+		$content = $contentsTable->find()->where(['url' => '/service/'])->first();
+		$searchIndexesTable->deleteAll(['url LIKE' => '/service/%']);
 		$this->SearchIndexesService->reconstruct($content->id);
-		$this->assertEquals(2, $this->SearchIndexes->find()->where(['url LIKE' => '/service/%'])->count());
+		$this->assertEquals(2, $searchIndexesTable->find()->where(['url LIKE' => '/service/%'])->count());
 	}
 
 }

@@ -7,15 +7,11 @@ use CakephpFixtureFactories\Factory\BaseFactory as CakephpBaseFactory;
 use Faker\Generator;
 
 /**
- * SiteFactory
- *
- * @method \BaserCore\Model\Entity\Site getEntity()
- * @method \BaserCore\Model\Entity\Site[] getEntities()
- * @method \BaserCore\Model\Entity\Site|\BaserCore\Model\Entity\Site[] persist()
- * @method static \BaserCore\Model\Entity\Site get(mixed $primaryKey, array $options = [])
+ * ContentFolderFactory
  */
-class SiteFactory extends CakephpBaseFactory
+class ContentFolderFactory extends CakephpBaseFactory
 {
+
     /**
      * Defines the Table Registry used to generate entities with
      *
@@ -23,7 +19,7 @@ class SiteFactory extends CakephpBaseFactory
      */
     protected function getRootTableRegistryName(): string
     {
-        return 'BaserCore.Sites';
+        return 'BaserCore.ContentFolders';
     }
 
     /**
@@ -35,20 +31,8 @@ class SiteFactory extends CakephpBaseFactory
     protected function setDefaultTemplate(): void
     {
         $this->setDefaultData(function (Generator $faker) {
-            return [
-                'name' => $faker->text
-            ];
+            return [];
         });
-    }
-
-    /**
-     * メインサイトに設定する
-     * @return SiteFactory
-     */
-    public function main(): SiteFactory
-    {
-        return $this->setField('id', 1)
-            ->setField('status', true);
     }
 
 }

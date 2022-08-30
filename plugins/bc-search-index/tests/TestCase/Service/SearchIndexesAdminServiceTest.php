@@ -12,12 +12,11 @@
 namespace BcSearchIndex\Test\TestCase\Service;
 
 use BaserCore\Model\Table\ContentsTable;
-use BaserCore\Service\SitesService;
-use BaserCore\Test\Factory\SearchIndexesFactory;
 use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BcSearchIndex\Service\SearchIndexesAdminService;
+use BcSearchIndex\Test\Factory\SearchIndexFactory;
 
 /**
  * Class SearchIndexesAdminServiceTest
@@ -67,7 +66,7 @@ class SearchIndexesAdminServiceTest extends BcTestCase
     public function testGetViewVarsForIndex()
     {
         SiteFactory::make(1)->setField('status', 1)->persist();
-        SearchIndexesFactory::make(1)->setField('status', 1)->persist();
+        SearchIndexFactory::make(1)->setField('status', 1)->persist();
         $searchIndexesService = new SearchIndexesAdminService();
         $searchIndexes = $searchIndexesService->getIndex([])->all();
         $request = $this->getRequest('/')->withQueryParams([]);

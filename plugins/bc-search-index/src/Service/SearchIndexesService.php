@@ -183,6 +183,7 @@ class SearchIndexesService implements SearchIndexesServiceInterface
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function reconstruct($parentContentId = null)
     {
@@ -200,7 +201,7 @@ class SearchIndexesService implements SearchIndexesServiceInterface
             ]);
         }
         $contents = $Contents->find()->contain(['Sites'])->where($conditions)->order('lft')->all();
-        $models = [];
+
         $db = $this->SearchIndexes->getConnection();
         $db->begin();
 
@@ -209,18 +210,17 @@ class SearchIndexesService implements SearchIndexesServiceInterface
             $this->SearchIndexes->getConnection()->execute($sql[0])->execute();
         }
 
+        $tables = [];
         $result = true;
         if ($contents) {
             foreach($contents as $content) {
                 $tableName = Inflector::pluralize($content->type);
-                if (isset($models[$content->type])) {
-                    $table = $models[$content->type];
-                } else {
-                    $models[$content->type] = $table = TableRegistry::getTableLocator()->get($content->plugin . '.' . $tableName);
+                if (!isset($tables[$tableName])) {
+                    $tables[$tableName] = TableRegistry::getTableLocator()->get($content->plugin . '.' . $tableName);
                 }
+                $entity = $tables[$tableName]->find()->contain(['Contents'])->where([$tableName . '.id' => $content->entity_id])->first();
                 // データの変更はないがイベントを走らせるために setNew() を実行
-                $entity = $table->find()->contain(['Contents'])->where([$tableName . '.id' => $content->entity_id])->first();
-                if ($entity && $entity->setNew(true) && !$table->save($entity)) {
+                if ($entity && $entity->setNew(true) && !$tables[$tableName]->save($entity)) {
                     $result = false;
                 }
             }
