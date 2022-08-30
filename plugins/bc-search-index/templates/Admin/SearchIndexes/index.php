@@ -38,7 +38,7 @@ echo $this->BcBaser->i18nScript([
 
 <div class="submit bca-actions">
   <div class="bca-actions__main">
-    <?php $this->BcBaser->link(__d('baser', '検索インデックス再構築'), ['controller' => 'search_indices', 'action' => 'reconstruct'], [
+    <?php $this->BcBaser->link(__d('baser', '検索インデックス再構築'), ['controller' => 'search_indexes', 'action' => 'reconstruct'], [
       'id' => 'BtnReconstruct',
       'class' => 'bca-btn bca-actions__item',
       'data-bca-btn-size' => 'lg',
