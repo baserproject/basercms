@@ -17,7 +17,7 @@ use CakephpFixtureFactories\Factory\BaseFactory as CakephpBaseFactory;
 use Faker\Generator;
 
 /**
- * UsersUserGroupsFactory
+ * UsersUserGroupFactory
  */
 class UsersUserGroupFactory extends CakephpBaseFactory
 {
