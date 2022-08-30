@@ -23,6 +23,9 @@ use BaserCore\View\BcAdminAppView;
  * @var ContentFolder $contentFolder
  * @var array $folderTemplateList
  * @var array $pageTemplateList
+ * @checked
+ * @unitTest
+ * @noTodo
  */
 $this->BcAdmin->setTitle(__d('baser', 'フォルダ編集'));
 $this->BcBaser->js('admin/content_folders/edit.bundle', false);
