@@ -45,7 +45,8 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
         'plugin.BaserCore.Service/SearchIndexesService/ContentsReconstruct',
         'plugin.BaserCore.Service/SearchIndexesService/PagesReconstruct',
         'plugin.BaserCore.Service/SearchIndexesService/ContentFoldersReconstruct',
-        'plugin.BaserCore.Service/SearchIndexesService/SearchIndexesReconstruct'
+        'plugin.BaserCore.Service/SearchIndexesService/SearchIndexesReconstruct',
+        'plugin.BaserCore.Dblogs'
     ];
 
     public $autoFixtures = false;

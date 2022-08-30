@@ -42,7 +42,8 @@ class SearchIndexesControllerTest extends BcTestCase
         'plugin.BaserCore.Factory/Users',
         'plugin.BaserCore.Factory/Sites',
         'plugin.BaserCore.Factory/UserGroups',
-        'plugin.BaserCore.Factory/UsersUserGroups'
+        'plugin.BaserCore.Factory/UsersUserGroups',
+        'plugin.BaserCore.Factory/Dblogs'
     ];
 
     /**
