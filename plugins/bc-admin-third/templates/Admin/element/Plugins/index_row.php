@@ -15,6 +15,9 @@
  * @var AppView $this
  * @var array $corePlugins
  * @var \BaserCore\Model\Entity\Plugin $plugin
+ * @checked
+ * @unitTest
+ * @noTodo
  */
 
 /**

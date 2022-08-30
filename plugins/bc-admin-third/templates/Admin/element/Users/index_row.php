@@ -16,6 +16,9 @@ use BaserCore\View\AppView;
  * users index row
  * @var AppView $this
  * @var User $user
+ * @checked
+ * @unitTest
+ * @noTodo
  */
 ?>
 

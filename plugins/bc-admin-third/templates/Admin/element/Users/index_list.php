@@ -15,6 +15,9 @@ use BaserCore\View\AppView;
  * users index list
  * @var AppView $this
  * @var Cake\ORM\ResultSet $users
+ * @checked
+ * @unitTest
+ * @noTodo
  */
 
 $this->BcListTable->setColumnNumber(7);

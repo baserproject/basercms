@@ -15,6 +15,9 @@ use BaserCore\View\BcAdminAppView;
 /**
  * User Index Search
  * @var BcAdminAppView $this
+ * @checked
+ * @unitTest
+ * @noTodo
  */
 $userGroupList = $this->BcAdminForm->getControlSource('Users.user_group_id');
 ?>

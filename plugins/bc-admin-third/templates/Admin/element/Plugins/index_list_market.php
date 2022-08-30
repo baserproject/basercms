@@ -11,6 +11,9 @@
 
 /**
  * [ADMIN] プラグイン一覧　テーブル
+ * @checked
+ * @unitTest
+ * @noTodo
  */
 ?>
 

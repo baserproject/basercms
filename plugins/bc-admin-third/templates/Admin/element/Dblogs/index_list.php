@@ -9,6 +9,13 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
+/**
+ * @var \BaserCore\View\BcAdminAppView $this
+ * @var \Cake\ORM\ResultSet $dblogs
+ * @checked
+ * @unitTest
+ * @noTodo
+ */
 $this->BcListTable->setColumnNumber(4);
 ?>
 

@@ -9,6 +9,12 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
+/**
+ * @var \BaserCore\View\BcAdminAppView
+ * @checked
+ * @unitTest
+ * @noTodo
+ */
 $userList = $this->BcAdminForm->getControlSource('Users.id');
 ?>
 

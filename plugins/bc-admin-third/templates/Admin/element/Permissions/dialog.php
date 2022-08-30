@@ -19,6 +19,7 @@ use Cake\Routing\Router;
  * @var array $permissionMethodList
  * @var array $permissionAuthList
  * @checked
+ * @unitTest
  * @noTodo
  */
 $this->BcBaser->js('admin/permissions/dialog.bundle');

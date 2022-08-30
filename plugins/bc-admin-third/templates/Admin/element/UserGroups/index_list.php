@@ -13,7 +13,10 @@ use BaserCore\View\AppView;
 
 /**
  * user groups index list
- * @var AppView $this
+ * @var \BaserCore\View\BcAdminAppView $this
+ * @checked
+ * @unitTest
+ * @noTodo
  */
 
 $this->BcListTable->setColumnNumber(5);

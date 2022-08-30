@@ -14,8 +14,11 @@ use BaserCore\View\AppView;
 
 /**
  * user groups index row
- * @var AppView $this
+ * @var \BaserCore\View\BcAdminAppView $this
  * @var UserGroup $userGroup
+ * @checked
+ * @unitTest
+ * @noTodo
  */
 ?>
 

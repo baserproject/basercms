@@ -15,6 +15,11 @@ use BaserCore\View\BcAdminAppView;
  * [ADMIN] アクセス制限設定一覧　行
  *
  * @var BcAdminAppView $this
+ * @var \BaserCore\Model\Entity\Permission $data
+ * @var \BaserCore\Model\Entity\UserGroup $currentUserGroup
+ * @checked
+ * @unitTest
+ * @noTodo
  */
 ?>
 

@@ -9,6 +9,13 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
+/**
+ * @var \BaserCore\View\BcAdminAppView $this
+ * @var \BaserCore\Model\Entity\Dblog $dblog
+ * @checked
+ * @unitTest
+ * @noTodo
+ */
 ?>
 
 <tr>

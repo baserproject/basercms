@@ -13,7 +13,10 @@ use BaserCore\View\AppView;
 
 /**
  * プラグイン一覧　行
- * @var AppView $this
+ * @var \BaserCore\View\BcAdminAppView $this
+ * @checked
+ * @unitTest
+ * @noTodo
  */
 ?>
 

@@ -21,6 +21,9 @@ use BaserCore\View\BcAdminAppView;
  * @var array $devices
  * @var array $langs
  * @var array $siteList
+ * @checked
+ * @unitTest
+ * @noTodo
  */
 
 $classies = [];

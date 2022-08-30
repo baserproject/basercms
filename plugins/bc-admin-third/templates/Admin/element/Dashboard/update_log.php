@@ -18,6 +18,7 @@ use BaserCore\Annotation\Checked;
  * @var BcAdminAppView $this
  * @var array $dblogs
  * @checked
+ * @unitTest
  * @noTodo
  */
 ?>

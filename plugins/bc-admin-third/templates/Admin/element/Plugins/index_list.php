@@ -14,6 +14,9 @@
  *
  * @var AppView $this
  * @var array $plugins
+ * @checked
+ * @unitTest
+ * @noTodo
  */
 
 use BaserCore\View\AppView;

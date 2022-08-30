@@ -18,6 +18,9 @@ use BaserCore\View\BcAdminAppView;
  * @var array $folders
  * @var array $authorList
  * @var array $typeList
+ * @checked
+ * @unitTest
+ * @noTodo
  */
 ?>
 

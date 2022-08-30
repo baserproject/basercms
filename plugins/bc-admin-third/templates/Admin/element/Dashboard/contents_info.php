@@ -10,14 +10,12 @@
  */
 
 use BaserCore\View\BcAdminAppView;
-use BaserCore\Annotation\UnitTest;
-use BaserCore\Annotation\NoTodo;
-use BaserCore\Annotation\Checked;
 
 /**
  * @var BcAdminAppView $this
  * @var array $contentsInfo
  * @checked
+ * @unitTest
  * @noTodo
  */
 ?>

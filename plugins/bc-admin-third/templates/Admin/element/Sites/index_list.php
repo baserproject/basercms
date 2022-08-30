@@ -19,6 +19,9 @@ use BaserCore\View\BcAdminAppView;
  * @var array $deviceList
  * @var array $langList
  * @var array $siteList
+ * @checked
+ * @unitTest
+ * @noTodo
  */
 
 $this->BcListTable->setColumnNumber(8);

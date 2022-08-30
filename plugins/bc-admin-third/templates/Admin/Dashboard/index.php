@@ -13,6 +13,9 @@
  * ダッシュボード
  * @var array $panels
  * @var \BaserCore\View\BcAdminAppView $this
+ * @checked
+ * @unitTest
+ * @noTodo
  */
 $this->BcBaser->js(['admin/dashboard/index.bundle'], false);
 $this->BcAdmin->setHelp('dashboard_index');

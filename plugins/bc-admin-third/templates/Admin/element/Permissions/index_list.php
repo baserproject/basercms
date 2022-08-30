@@ -16,6 +16,9 @@ use BaserCore\View\BcAdminAppView;
  * [ADMIN] アクセス制限設定一覧
  *
  * @var BcAdminAppView $this
+ * @checked
+ * @unitTest
+ * @noTodo
  */
 
 $this->BcListTable->setColumnNumber(6);

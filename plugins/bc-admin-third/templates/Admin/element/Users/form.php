@@ -18,6 +18,9 @@ use BaserCore\View\BcAdminAppView;
  * @var User $user
  * @var array $userGroupList
  * @var bool $isUserGroupEditable
+ * @checked
+ * @unitTest
+ * @noTodo
  */
 $this->BcBaser->i18nScript([
   'alertMessage1' => __d('baser', '処理に失敗しました。'),

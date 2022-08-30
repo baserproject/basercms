@@ -24,6 +24,9 @@ use BaserCore\View\BcAdminAppView;
  * @var array $selectableLangs
  * @var array $selectableDevices
  * @var array $selectableThemes
+ * @checked
+ * @unitTest
+ * @noTodo
  */
 $this->BcBaser->i18nScript([
   'confirmMessage1' => __d('baser', "サブサイトを削除してもよろしいですか？\nサブサイトに関連しているコンテンツは全てゴミ箱に入ります。"),

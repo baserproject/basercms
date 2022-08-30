@@ -12,6 +12,9 @@
 /**
  * Dblogs index
  * @var AppView $this
+ * @checked
+ * @unitTest
+ * @noTodo
  */
 
 $this->BcAdmin->setTitle(__d('baser', '最近の動き'));

@@ -14,13 +14,14 @@ use BaserCore\Model\Entity\Permission;
 use BaserCore\View\BcAdminAppView;
 
 /**
- * [ADMIN] ユーザーグループ登録/編集フォーム
- *
  * @var BcAdminAppView $this
  * @var array $currentUserGroup
  * @var Permission $permission
  * @var array $permissionMethodList
  * @var array $permissionAuthList
+ * @checked
+ * @unitTest
+ * @noTodo
  */
 
 $this->BcBaser->js('admin/permissions/form.bundle', false);

@@ -15,8 +15,11 @@ use Cake\Core\Configure;
 
 /**
  * UserGroups Form
- * @var AppView $this
+ * @var \BaserCore\View\BcAdminAppView $this
  * @var UserGroup $userGroup
+ * @checked
+ * @unitTest
+ * @noTodo
  */
 
 $this->BcBaser->js('admin/user_groups/form.bundle', false);
