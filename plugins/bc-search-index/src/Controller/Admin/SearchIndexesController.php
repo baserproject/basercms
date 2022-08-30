@@ -127,7 +127,7 @@ class SearchIndexesController extends BcAdminAppController
      */
     public function reconstruct(SearchIndexesServiceInterface $service)
     {
-        set_time_limit(0);
+        $this->request->allowMethod(['post']);
         if ($service->reconstruct()) {
             $this->BcMessage->setSuccess('検索インデックスの再構築に成功しました。');
         } else {

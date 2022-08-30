@@ -12,21 +12,6 @@
 $(function () {
 
     /**
-     * 検索インデックス再構築
-     */
-    $("#BtnReconstruct").click(function () {
-        $.bcConfirm.show({
-            title: bcI18n.reconstructSearchTitle,
-            message: bcI18n.reconstructSearchMessage,
-            ok: function () {
-                $.bcUtil.showLoader();
-                location.href = $("#BtnReconstruct").attr('href');
-            }
-        });
-        return false;
-    });
-
-    /**
      * 優先度変更
      */
     $(".priority").change(function () {

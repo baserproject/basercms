@@ -187,6 +187,7 @@ class SearchIndexesService implements SearchIndexesServiceInterface
      */
     public function reconstruct($parentContentId = null)
     {
+        set_time_limit(0);
         $Contents = TableRegistry::getTableLocator()->get('BaserCore.Contents');;
         $conditions = [
             'OR' => [

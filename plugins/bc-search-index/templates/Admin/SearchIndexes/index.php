@@ -20,10 +20,6 @@ $this->BcAdmin->setHelp('BcSearchIndex.search_indexes_index');
 $this->BcBaser->js([
   'BcSearchIndex.admin/search_indexes/index.bundle'
 ]);
-echo $this->BcBaser->i18nScript([
-  'reconstructSearchTitle' => __d('baser', '確認'),
-  'reconstructSearchMessage' => __d('baser', '現在の検索インデックスを消去して、再構築します。本当にいいですか？'),
-]);
 ?>
 
 
@@ -38,12 +34,14 @@ echo $this->BcBaser->i18nScript([
 
 <div class="submit bca-actions">
   <div class="bca-actions__main">
-    <?php $this->BcBaser->link(__d('baser', '検索インデックス再構築'), ['controller' => 'search_indexes', 'action' => 'reconstruct'], [
-      'id' => 'BtnReconstruct',
+    <?php echo $this->BcAdminForm->postLink(__d(
+      'baser', '検索インデックス再構築'),
+      ['controller' => 'search_indexes', 'action' => 'reconstruct'],
+      ['confirm' => __d('baser', '現在の検索インデックスを消去して、再構築します。本当にいいですか？'),
       'class' => 'bca-btn bca-actions__item',
       'data-bca-btn-size' => 'lg',
-      'data-bca-btn-width' => 'lg',
-    ]) ?>
+      'data-bca-btn-width' => 'lg']
+    ) ?>
   </div>
 </div>
 
