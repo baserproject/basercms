@@ -241,6 +241,14 @@ class AnalyseController extends AppController
         $file = str_replace('bc-blog', 'BcBlog', $file);
         $file = str_replace('bc-mail', 'BcMail', $file);
         $file = str_replace('bc-uploader', 'BcUploader', $file);
+        $file = str_replace('bc-editor-template', 'BcEditorTemplate', $file);
+        $file = str_replace('bc-favorite', 'BcFavorite', $file);
+        $file = str_replace('bc-front', 'BcFront', $file);
+        $file = str_replace('bc-installer', 'BcInstaller', $file);
+        $file = str_replace('bc-search-index', 'BcSearchIndex', $file);
+        $file = str_replace('bc-theme-config', 'BcThemeConfig', $file);
+        $file = str_replace('bc-theme-file', 'BcThemeFile', $file);
+        $file = str_replace('bc-widget-area', 'BcWidgetArea', $file);
         return str_replace('baser-core', 'BaserCore', $file);
     }
 
