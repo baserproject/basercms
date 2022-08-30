@@ -17,9 +17,9 @@ use CakephpFixtureFactories\Factory\BaseFactory as CakephpBaseFactory;
 use Faker\Generator;
 
 /**
- * UsersUserGroupsFactory
+ * UserGroupsFactory
  */
-class UsersUserGroupsFactory extends CakephpBaseFactory
+class UserGroupFactory extends CakephpBaseFactory
 {
     /**
      * Defines the Table Registry used to generate entities with
@@ -28,7 +28,7 @@ class UsersUserGroupsFactory extends CakephpBaseFactory
      */
     protected function getRootTableRegistryName(): string
     {
-        return 'BaserCore.UsersUserGroups';
+        return 'BaserCore.UserGroups';
     }
 
     /**
@@ -41,17 +41,22 @@ class UsersUserGroupsFactory extends CakephpBaseFactory
     {
         $this->setDefaultData(function (Generator $faker) {
             return [
+                'name' => $faker->text
             ];
         });
     }
 
     /**
-     * 管理者ユーザーを作成する
-     * @return UserFactory
+     * 管理者グループに設定する
+     * @return UserGroupFactory
      */
-    public function admin()
+    public function admins()
     {
-        return $this->setField('user_id', 1)
-            ->setField('user_group_id', 1);
+        return $this->setField('id', 1)
+            ->setField('name', 'admins')
+            ->setField('title', 'システム管理')
+            ->setField('auth_prefix', 'Admin')
+            ->setField('use_move_contents', 1);
     }
+
 }

@@ -95,6 +95,15 @@ class SearchIndexesServiceTest extends BcTestCase
 	 */
 	public function testReconstruct()
 	{
+        // @TODO 全体テストが失敗するので代替案の検討が必要 2022/08/30 by ryuring
+        //
+        // データの初期化に TransactionStrategy を利用している場合、下記エラーが発生する。
+        // Syntax error or access violation: 1305 SAVEPOINT LEVEL2 does not exist
+        // これは、reconstruct() の中で、トランザクションを利用している事や truncate を利用している事が原因の様子。
+        // このクラス単体で実行する場合は、$this->setFixtureTruncate() で、TruncateStrategy に切り替えれば正常に動作できるが
+        // 全体的なテストで、このクラスの前のクラスで、TransactionStrategy を利用していると同様のエラーとなってしまう。
+        $this->markTestIncomplete('特有の問題のためテストをスキップしました。');
+
 	    $this->loadFixtureScenario(SearchIndexesServiceScenario::class);
 		$this->loginAdmin($this->getRequest());
 		// 全ページ再構築
