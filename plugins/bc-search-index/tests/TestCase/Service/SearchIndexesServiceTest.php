@@ -39,12 +39,12 @@ class SearchIndexesServiceTest extends BcTestCase
      * @var array
      */
     protected $fixtures = [
-        'plugin.BaserCore.Empty/Sites',
-        'plugin.BaserCore.Empty/Users',
-        'plugin.BaserCore.Empty/Contents',
-        'plugin.BaserCore.Empty/ContentFolders',
-        'plugin.BaserCore.Empty/Pages',
-        'plugin.BaserCore.Empty/SiteConfigs',
+        'plugin.BaserCore.Factory/Sites',
+        'plugin.BaserCore.Factory/Users',
+        'plugin.BaserCore.Factory/Contents',
+        'plugin.BaserCore.Factory/ContentFolders',
+        'plugin.BaserCore.Factory/Pages',
+        'plugin.BaserCore.Factory/SiteConfigs',
     ];
 
     public $autoFixtures = false;

@@ -31,8 +31,8 @@ class SearchIndexesAdminServiceTest extends BcTestCase
     use BcContainerTrait;
 
     public $fixtures = [
-        'plugin.BaserCore.Empty/Users',
-        'plugin.BaserCore.Empty/Sites',
+        'plugin.BaserCore.Factory/Users',
+        'plugin.BaserCore.Factory/Sites',
     ];
 
     /**

@@ -9,11 +9,11 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
-namespace BaserCore\Test\Fixture\Empty;
+namespace BaserCore\Test\Fixture\Factory;
 
 use Cake\TestSuite\Fixture\TestFixture;
 
 /**
- * Class UsersFixture
+ * Class SiteConfigsFixture
  */
-class UsersFixture extends TestFixture {}
+class SiteConfigsFixture extends TestFixture {}

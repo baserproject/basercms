@@ -35,9 +35,9 @@ class BcUpdateFilterMiddlewareTest extends BcTestCase
      * @var string[]
      */
     public $fixtures = [
-        'plugin.BaserCore.Empty/Sites',
-        'plugin.BaserCore.Empty/Users',
-        'plugin.BaserCore.Empty/SiteConfigs',
+        'plugin.BaserCore.Factory/Sites',
+        'plugin.BaserCore.Factory/Users',
+        'plugin.BaserCore.Factory/SiteConfigs',
     ];
 
     /**
