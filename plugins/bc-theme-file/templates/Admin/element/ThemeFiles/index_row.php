@@ -32,7 +32,7 @@ array_push($params, $data['name']);
 <tr>
   <td class="bca-table-listup__tbody-td bca-table-listup__tbody-td--select">
     <?php if ($this->BcBaser->isAdminUser() && $theme != 'core'): ?>
-      <?php echo $this->BcAdminForm->control('ListTool.batch_targets.' . str_replace('.', '_', h($data['name'])), [
+      <?php echo $this->BcAdminForm->control('batch_targets.' . str_replace('.', '_', h($data['name'])), [
           'type' => 'checkbox',
           'label' => '<span class="bca-visually-hidden">' . __d('baser', 'チェックする') . '</span>',
           'class' => 'batch-targets bca-checkbox__input',

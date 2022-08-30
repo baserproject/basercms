@@ -21,7 +21,7 @@ $this->BcListTable->setColumnNumber(7);
 <div class="bca-data-list__top">
   <?php if ($this->BcBaser->isAdminUser()): ?>
     <div class="bca-action-table-listup">
-      <?php echo $this->BcAdminForm->control('ListTool.batch', ['type' => 'select', 'options' => ['publish' => '公開', 'unpublish' => __d('baser', '非公開'), 'del' => __d('baser', '削除')], 'empty' => __d('baser', '一括処理')]) ?>
+      <?php echo $this->BcAdminForm->control('batch', ['type' => 'select', 'options' => ['publish' => '公開', 'unpublish' => __d('baser', '非公開'), 'del' => __d('baser', '削除')], 'empty' => __d('baser', '一括処理')]) ?>
       <?php echo $this->BcForm->button(__d('baser', '適用'), ['id' => 'BtnApplyBatch', 'disabled' => 'disabled', 'class' => 'bca-btn', 'data-bca-btn-size' => 'sm']) ?>
     </div>
   <?php endif ?>
@@ -35,7 +35,7 @@ $this->BcListTable->setColumnNumber(7);
   <thead class="bca-table-listup__thead ">
   <tr>
     <th class="list-tool bca-table-listup__thead-th bca-table-listup__thead-th--select"><?php // 一括選択 ?>
-      <?php echo $this->BcAdminForm->control('ListTool.checkall', ['type' => 'checkbox', 'label' => __d('baser', '一括選択')]) ?>
+      <?php echo $this->BcAdminForm->control('checkall', ['type' => 'checkbox', 'label' => __d('baser', '一括選択')]) ?>
     </th>
     <th class="bca-table-listup__thead-th">
       <?php

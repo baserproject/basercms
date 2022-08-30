@@ -19,7 +19,7 @@
 <tr<?php $this->BcListTable->rowClass($this->Blog->allowPublish($data), $data) ?>>
   <td class="bca-table-listup__tbody-td bca-table-listup__tbody-td--select"><?php // 選択 ?>
     <?php if ($this->BcBaser->isAdminUser()): ?>
-      <?php echo $this->BcAdminForm->control('ListTool.batch_targets.' . $data['BlogPost']['id'], ['type' => 'checkbox', 'label' => '<span class="bca-visually-hidden">' . __d('baser', 'チェックする') . '</span>', 'class' => 'batch-targets bca-checkbox__input', 'value' => $data['BlogPost']['id']]) ?>
+      <?php echo $this->BcAdminForm->control('batch_targets.' . $data['BlogPost']['id'], ['type' => 'checkbox', 'label' => '<span class="bca-visually-hidden">' . __d('baser', 'チェックする') . '</span>', 'class' => 'batch-targets bca-checkbox__input', 'value' => $data['BlogPost']['id']]) ?>
     <?php endif ?>
   </td>
   <td

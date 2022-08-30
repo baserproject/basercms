@@ -18,7 +18,7 @@
 
 <tr id="Row<?php echo $count + 1 ?>">
   <td class="row-tools bca-table-listup__tbody-td">
-    <?php echo $this->BcAdminForm->control('ListTool.batch_targets.' . $data['MailMessage']['id'], ['type' => 'checkbox', 'label' => '<span class="bca-visually-hidden">チェックする</span>', 'class' => 'batch-targets bca-checkbox__input', 'value' => $data['MailMessage']['id']]) ?>
+    <?php echo $this->BcAdminForm->control('batch_targets.' . $data['MailMessage']['id'], ['type' => 'checkbox', 'label' => '<span class="bca-visually-hidden">チェックする</span>', 'class' => 'batch-targets bca-checkbox__input', 'value' => $data['MailMessage']['id']]) ?>
   </td>
   <td class="row-tools bca-table-listup__tbody-td"><?php echo $data['MailMessage']['id'] ?></td>
   <td

@@ -15,7 +15,7 @@
 <tr>
   <td class="row-tools bca-table-listup__tbody-td">
     <?php if ($this->BcBaser->isAdminUser()): ?>
-      <?php echo $this->BcAdminForm->control('ListTool.batch_targets.' . $data['UploaderCategory']['id'], ['type' => 'checkbox', 'label' => '<span class="bca-visually-hidden">チェックする</span>', 'class' => 'batch-targets bca-checkbox__input', 'value' => $data['UploaderCategory']['id']]) ?>
+      <?php echo $this->BcAdminForm->control('batch_targets.' . $data['UploaderCategory']['id'], ['type' => 'checkbox', 'label' => '<span class="bca-visually-hidden">チェックする</span>', 'class' => 'batch-targets bca-checkbox__input', 'value' => $data['UploaderCategory']['id']]) ?>
     <?php endif ?>
   </td>
   <td class="bca-table-listup__tbody-td"><?php echo $data['UploaderCategory']['id'] ?></td>

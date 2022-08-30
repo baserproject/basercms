@@ -26,7 +26,7 @@ $this->BcListTable->setColumnNumber(3);
   <!-- 一括処理 -->
   <?php if ($this->BcBaser->isAdminUser() && $theme != 'core'): ?>
     <div class="bca-action-table-listup">
-      <?php echo $this->BcAdminForm->control('ListTool.batch', ['type' => 'select',
+      <?php echo $this->BcAdminForm->control('batch', ['type' => 'select',
         'options' => [
           'del' => __d('baser', '削除')
         ],
@@ -48,7 +48,7 @@ $this->BcListTable->setColumnNumber(3);
   <tr>
     <th class="list-tool bca-table-listup__thead-th  bca-table-listup__thead-th--select">
       <?php if ($this->BcBaser->isAdminUser() && $theme != 'core'): ?>
-        <?php echo $this->BcAdminForm->control('ListTool.checkall', ['type' => 'checkbox', 'label' => __d('baser', '一括選択')]) ?>
+        <?php echo $this->BcAdminForm->control('checkall', ['type' => 'checkbox', 'label' => __d('baser', '一括選択')]) ?>
       <?php endif ?>
 
       <?php if ($path): ?>

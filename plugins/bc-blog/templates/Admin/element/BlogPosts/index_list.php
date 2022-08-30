@@ -21,7 +21,7 @@ $this->BcListTable->setColumnNumber(9);
   <?php if ($this->BcBaser->isAdminUser()): ?>
     <div class="bca-action-table-listup">
       <?php echo $this->BcAdminForm->control(
-        'ListTool.batch',
+        'batch',
         [
           'type' => 'select',
           'options' => [
@@ -50,7 +50,7 @@ $this->BcListTable->setColumnNumber(9);
   <tr>
     <th class="list-tool bca-table-listup__thead-th  bca-table-listup__thead-th--select">
       <?php echo $this->BcAdminForm->control(
-        'ListTool.checkall',
+        'checkall',
         ['type' => 'checkbox', 'label' => __d('baser', '一括選択')]
       ) ?>
     </th>
