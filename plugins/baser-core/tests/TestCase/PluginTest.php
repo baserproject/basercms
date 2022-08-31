@@ -15,12 +15,15 @@ use App\Application;
 use BaserCore\Plugin;
 use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
 use Cake\Core\Container;
+use Cake\Event\EventManager;
 use Cake\Http\MiddlewareQueue;
 use Authentication\Middleware\AuthenticationMiddleware;
 use Cake\Http\ServerRequest;
 use Cake\Routing\Router;
+use Cake\Filesystem\File;
 
 /**
  * Class PluginTest
@@ -79,7 +82,78 @@ class PluginTest extends BcTestCase
      */
     public function testBootStrap(): void
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $event = EventManager::instance();
+
+        $this->assertTrue(is_array($event->listeners('Controller.initialize')));
+
+        $this->assertTrue(is_array($event->listeners('Model.beforeFind')));
+
+        $this->assertTrue(is_array($event->listeners('View.beforeRenderFile')));
+
+        $this->assertTrue(is_array($event->listeners('Application.beforeFind')));
+
+        $this->assertTrue(is_array($event->listeners('BaserCore.Contents.afterMove')));
+
+        $this->assertTrue(is_array($event->listeners('BaserCore.Contents.Pages')));
+
+        $this->assertNotNull($this->application->getPlugins()->get('Authentication'));
+        $this->assertNotNull($this->application->getPlugins()->get('Migrations'));
+
+        $pathsPluginsExpected = [
+            '/var/www/html/plugins/',
+            '/var/www/html/vendor/baserproject/',
+        ];
+
+        $this->assertEquals($pathsPluginsExpected, Configure::read('App.paths.plugins'));
+
+        $this->assertNotNull(Configure::read('BcApp.defaultAdminTheme'));
+        $this->assertNotNull(Configure::read('BcApp.defaultFrontTheme'));
+
+        $plugins = BcUtil::getEnablePlugins();
+        foreach ($plugins as $plugin) {
+            $this->assertNotNull($this->application->getPlugins()->get($plugin['name']));
+        }
+
+        $this->assertNotNull(\Cake\Core\Plugin::getCollection()->get('DebugKit'));
+        $this->assertEquals('/var/www/html/plugins/' . Configure::read('BcApp.defaultFrontTheme') . '/templates/', Configure::read('App.paths.templates')[0]);
+
+        copy('config/.env','config/.env.bak');
+
+        $file = new File('config/.env');
+        $file->write('export APP_NAME="ucmitz"
+export DEBUG="true"
+export APP_ENCODING="UTF-8"
+export APP_DEFAULT_LOCALE="en_US"
+export APP_DEFAULT_TIMEZONE="Asia/Tokyo"
+
+export INSTALL_MODE="false"
+export SITE_URL="https://localhost/"
+export SSL_URL="https://localhost/"
+export ADMIN_SSL="true"
+export UPDATE_KEY="update"
+export ADMIN_PREFIX="admin"
+export BASER_CORE_PREFIX="baser"
+export SQL_LOG="false"
+');
+        $file->close();
+
+        $fileSetting = new File('config/setting.php');
+        $fileSetting->write('<?php
+return [];
+');
+
+        $this->loginAdmin($this->getRequest('/baser/admin'));
+        $this->Plugin->bootstrap($this->application);
+        $this->assertEquals('/var/www/html/plugins/' . Configure::read('BcApp.defaultAdminTheme') . '/templates/', Configure::read('App.paths.templates')[0]);
+
+        $this->assertNotNull(\Cake\Core\Plugin::getCollection()->get('DebugKit'));
+
+        $this->assertTrue(Configure::isConfigured('baser'));
+
+        $fileSetting->delete();
+        copy('config/.env.bak','config/.env');
+        $fileEnvBak = new File('config/.env.bak');
+        $fileEnvBak->delete();
     }
 
     /**

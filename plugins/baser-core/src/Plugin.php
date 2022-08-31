@@ -57,6 +57,10 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
      * bootstrap
      *
      * @param PluginApplicationInterface $application
+     *
+     * @checked
+     * @unitTest
+     * @noTodo
      */
     public function bootstrap(PluginApplicationInterface $application): void
     {
