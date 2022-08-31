@@ -83,6 +83,7 @@ class SearchIndexesController extends BcAdminAppController
      * @param int $id
      * @noTodo
      * @checked
+     * @unitTest
      */
     public function delete(SearchIndexesServiceInterface $service, $id = null)
     {

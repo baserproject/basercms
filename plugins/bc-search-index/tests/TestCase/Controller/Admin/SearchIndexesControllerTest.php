@@ -19,6 +19,7 @@ use BaserCore\Utility\BcContainerTrait;
 use BcSearchIndex\Controller\Admin\SearchIndexesController;
 use BcSearchIndex\Service\SearchIndexesAdminServiceInterface;
 use BcSearchIndex\Service\SearchIndexesServiceInterface;
+use BcSearchIndex\Test\Factory\SearchIndexFactory;
 use Cake\Event\Event;
 use Cake\TestSuite\IntegrationTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -108,6 +109,27 @@ class SearchIndexesControllerTest extends BcTestCase
             $this->getService(SiteConfigsServiceInterface::class)
         );
         $this->assertEquals(1, $this->SearchIndexesController->getRequest()->getQuery('num'));
+    }
+
+    /**
+     * test delete
+     * @return void
+     */
+    public function testDelete(){
+        SearchIndexFactory::make(['id' => 1, 'title' => 'test data', 'type' => 'admin', 'site_id' => 1], 1)->persist();
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        $this->delete('/baser/admin/bc-search-index/search_indexes/delete/1');
+        $this->assertFlashMessage('検索インデックスより No.1 を削除しました。');
+        $this->assertResponseSuccess();
+
+        $this->assertRedirect([
+            'plugin' => 'BcSearchIndex',
+            'prefix' => 'Admin',
+            'controller' => 'search_indexes',
+            'action' => 'index'
+        ]);
     }
 
 }
