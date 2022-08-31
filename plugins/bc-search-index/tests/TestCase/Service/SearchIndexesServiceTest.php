@@ -108,4 +108,20 @@ class SearchIndexesServiceTest extends BcTestCase
 		$this->assertEquals(2, $searchIndexesTable->find()->where(['url LIKE' => '/service/%'])->count());
 	}
 
+    /**
+     * test changePriority
+     * @return void
+     */
+    public function testChangePriority()
+    {
+        SearchIndexFactory::make(1)
+            ->setField('priority', 1)
+            ->setField('status', 1)
+            ->persist();
+        $data = $this->SearchIndexesService->getIndex([])->first();
+        $expected = 10;
+        $rs = $this->SearchIndexesService->changePriority($data, $expected);
+        $this->assertEquals($expected, $rs['priority']);
+    }
+
 }

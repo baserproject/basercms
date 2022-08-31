@@ -261,6 +261,7 @@ class SearchIndexesService implements SearchIndexesServiceInterface
      * @return EntityInterface|null
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function changePriority(EntityInterface $target, $priority): ?EntityInterface
     {
