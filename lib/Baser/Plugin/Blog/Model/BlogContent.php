@@ -285,7 +285,7 @@ class BlogContent extends BlogAppModel
 				$result['Content']['id'] = $this->Content->getLastInsertID();
 				$result['Content']['eyecatch'] = $eyeCatch;
 				$this->Content->set(['Content' => $result['Content']]);
-				$result = $this->Contents(true);
+				$result = $this->Content->renameToBasenameFields(true);
 				$this->Content->set($result);
 				$result = $this->Content->save();
 				$data['Content'] = $result['Content'];

@@ -473,7 +473,6 @@ class SearchIndicesController extends AppController
 		} else {
 			$this->BcMessage->setError('検索インデックスの再構築に失敗しました。');
 		}
-
 		$this->redirect(['action' => 'index']);
 	}
 }
