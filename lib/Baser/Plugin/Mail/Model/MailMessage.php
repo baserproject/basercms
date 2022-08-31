@@ -306,7 +306,12 @@ class MailMessage extends MailAppModel
 				if (empty($data['MailMessage'][$field_name])) {
 					$this->invalidate($field_name, __('必須項目です。'));
 				}
-				$dists[$field_name][] = @$data['MailMessage'][$field_name];
+				if (!empty($data['MailMessage'][$field_name])) {
+					$dists[$field_name][] = $data['MailMessage'][$field_name];
+				} else {
+					$dists[$field_name][] = null;
+				}
+
 				// datetimeの空チェック
 				continue;
 			}

@@ -41,7 +41,10 @@ class BcXmlHelper extends AppHelper
 	 */
 	public function header($attrib = [])
 	{
-		$ua = @$_SERVER['HTTP_USER_AGENT'];
+		if (empty($_SERVER['HTTP_USER_AGENT'])) {
+			return;
+		}
+		$ua = $_SERVER['HTTP_USER_AGENT'];
 		if (!(preg_match("/Windows/", $ua) && preg_match("/MSIE/", $ua)) || !(preg_match("/MSIE 6/", $ua))) {
 			if (Configure::read('App.encoding') !== null) {
 				$this->encoding = Configure::read('App.encoding');

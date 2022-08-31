@@ -468,11 +468,18 @@ class SearchIndicesController extends AppController
 	public function admin_reconstruct()
 	{
 		set_time_limit(0);
-		if ($this->SearchIndex->reconstruct()) {
-			$this->BcMessage->setSuccess('検索インデックスの再構築に成功しました。');
-		} else {
-			$this->BcMessage->setError('検索インデックスの再構築に失敗しました。');
+		try {
+
+			if ($this->SearchIndex->reconstruct()) {
+				$this->BcMessage->setSuccess('検索インデックスの再構築に成功しました。');
+			} else {
+				$this->BcMessage->setError('検索インデックスの再構築に失敗しました。');
+			}
+		} catch(Exception $e) {
+			var_dump($e);
+			exit;
 		}
+
 		$this->redirect(['action' => 'index']);
 	}
 }

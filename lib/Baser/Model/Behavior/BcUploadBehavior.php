@@ -151,11 +151,11 @@ class BcUploadBehavior extends ModelBehavior
 	 */
 	public function beforeSave(Model $Model, $options = [])
 	{
-		if (isset($Model->data['CuApproverApplication'][['contentsMode']])
+		if (isset($Model->data['CuApproverApplication']['contentsMode'])
 			&& isset($Model->data['CuApproverApplication']['is_published'])) {
 			if($Model->alias === 'BlogPost' &&
-			@$Model->data['CuApproverApplication']['contentsMode'] === 'draft' &&
-			@$Model->data['CuApproverApplication']['is_published']) {
+				$Model->data['CuApproverApplication']['contentsMode'] === 'draft' &&
+				$Model->data['CuApproverApplication']['is_published']) {
 				return true;
 			}
 		}
@@ -196,7 +196,7 @@ class BcUploadBehavior extends ModelBehavior
 		// <<<
 
 		$data = isset($Model->data[$Model->alias])? $Model->data[$Model->alias] : $Model->data;
-        if ($Model->exists()) {
+        if ($Model->exists() && isset($this->oldEntity[$Model->alias])) {
             $this->BcFileUploader[$Model->alias]->deleteExistingFiles($this->oldEntity[$Model->alias]);
         }
         $entity = $this->BcFileUploader[$Model->alias]->saveFiles($data);
@@ -207,7 +207,7 @@ class BcUploadBehavior extends ModelBehavior
 		$this->uploaded[$Model->alias] = $this->BcFileUploader[$Model->alias]->uploaded;
 		// <<<
 
-        if ($Model->exists()) {
+        if ($Model->exists() && isset($this->oldEntity[$Model->alias])) {
             $entity = $this->BcFileUploader[$Model->alias]->deleteFiles($this->oldEntity[$Model->alias], $entity);
         }
         if ($this->BcFileUploader[$Model->alias]->isUploaded()) {
