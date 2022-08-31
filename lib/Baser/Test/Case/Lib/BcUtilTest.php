@@ -300,6 +300,10 @@ class BcUtilTest extends BaserTestCase
 	 */
 	public function testSerialize()
 	{
+		ini_set('display_errors', "Off");
+		$orig = PHPUnit_Framework_Error_Notice::$enabled;
+		PHPUnit_Framework_Error_Notice::$enabled = false;
+
 		// BcUtil::serialize()でシリアライズした場合
 		$serialized = BcUtil::serialize('hoge');
 		$result = BcUtil::unserialize($serialized);
@@ -310,6 +314,9 @@ class BcUtilTest extends BaserTestCase
 		$result = BcUtil::unserialize($serialized);
 		$this->assertEquals('hoge', $result, 'serializeのみで正しくシリアライズ/アンシリアライズできません');
 
+		PHPUnit_Framework_Error_Notice::$enabled = $orig;
+		ini_set('display_errors', "On");
+
 	}
 
 	/**
@@ -318,7 +325,7 @@ class BcUtilTest extends BaserTestCase
 	 */
 	public function testUnserialize()
 	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$this->markTestIncomplete('testSerializeにて実装');
 	}
 
 	/**
