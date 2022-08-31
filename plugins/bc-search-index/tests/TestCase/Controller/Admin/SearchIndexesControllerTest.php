@@ -132,4 +132,21 @@ class SearchIndexesControllerTest extends BcTestCase
         ]);
     }
 
+    /**
+     * test reconstruct
+     * @return void
+     */
+    public function testReconstruct(){
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        $this->post('/baser/admin/bc-search-index/search_indexes/reconstruct');
+        $this->assertFlashMessage('検索インデックスの再構築に成功しました。');
+        $this->assertRedirect([
+            'plugin' => 'BcSearchIndex',
+            'prefix' => 'Admin',
+            'controller' => 'search_indexes',
+            'action' => 'index'
+        ]);
+    }
 }
