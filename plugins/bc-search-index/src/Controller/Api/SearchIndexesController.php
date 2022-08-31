@@ -103,4 +103,19 @@ class SearchIndexesController extends AppController
         $this->viewBuilder()->setOption('serialize', ['message']);
     }
 
+
+    /**
+     * [API] 検索インデックス情報一覧取得
+     * @param SearchIndexesServiceInterface $searchIndexesService
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function index(SearchIndexesServiceInterface $searchIndexesService)
+    {
+        $this->set([
+            'searchIndexes' => $this->paginate($searchIndexesService->getIndex($this->request->getQueryParams()))
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['searchIndexes']);
+    }
 }
