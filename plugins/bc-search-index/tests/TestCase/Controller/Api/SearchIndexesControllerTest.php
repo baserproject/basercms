@@ -122,7 +122,20 @@ class SearchIndexesControllerTest extends BcTestCase
 
     }
 
+    /**
+     * test reconstruct
+     * @return void
+     */
+    public function testReconstruct()
+    {
+        $this->post('/baser/api/bc-search-index/search_indexes/reconstruct.json?token=' . $this->accessToken);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('検索インデックスの再構築に成功しました。', $result->message);
 
+        $this->get('/baser/api/bc-search-index/search_indexes/reconstruct.json?token=' . $this->accessToken);
+        $this->assertResponseCode(405);
+    }
 
     /**
      * test index
