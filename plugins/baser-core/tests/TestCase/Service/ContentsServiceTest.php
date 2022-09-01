@@ -11,6 +11,7 @@
 
 namespace BaserCore\Test\TestCase\Service;
 
+use BaserCore\Test\Factory\ContentFactory;
 use Cake\Core\Configure;
 use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\Routing\Router;
@@ -900,6 +901,23 @@ class ContentsServiceTest extends BcTestCase
     public function test_create()
     {
         $this->assertNull($this->ContentsService->create([]));
+    }
+
+    /**
+     * test batch
+     * @return void
+     */
+    public function testBatch()
+    {
+        ContentFactory::make(['id' => 100, 'plugin' => 'BaserCore', 'type' => 'ContentFolder', 'site_id' => 100, 'lft' => 1, 'rght' => 48,], 1)->persist();
+        ContentFactory::make(['id' => 101, 'plugin' => 'BaserCore', 'type' => 'ContentFolder', 'site_id' => 100, 'lft' => 1, 'rght' => 48,], 1)->persist();
+        ContentFactory::make(['id' => 102, 'plugin' => 'BaserCore', 'type' => 'ContentFolder', 'site_id' => 100, 'lft' => 1, 'rght' => 48,], 1)->persist();
+
+
+        $this->ContentsService->batch('delete', [100, 101, 102]);
+
+        $contents = $this->ContentsService->getIndex(['site_id' => 100])->all();
+        $this->assertEquals(0, count($contents));
     }
 
 }

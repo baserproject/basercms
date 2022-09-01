@@ -1229,6 +1229,7 @@ class ContentsService implements ContentsServiceInterface
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function batch($method, array $ids): bool
     {
