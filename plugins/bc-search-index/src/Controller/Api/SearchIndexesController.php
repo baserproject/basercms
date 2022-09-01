@@ -74,6 +74,7 @@ class SearchIndexesController extends AppController
      * @param SearchIndexesServiceInterface $service
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function batch(SearchIndexesServiceInterface $service)
     {

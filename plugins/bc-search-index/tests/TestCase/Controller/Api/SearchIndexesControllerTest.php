@@ -14,6 +14,7 @@ namespace BcSearchIndex\Test\TestCase\Controller\Api;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcSearchIndex\Controller\Api\SearchIndexesController;
+use BcSearchIndex\Service\SearchIndexesService;
 use BcSearchIndex\Test\Factory\SearchIndexFactory;
 use Cake\Core\Configure;
 use Cake\Event\Event;
@@ -141,4 +142,33 @@ class SearchIndexesControllerTest extends BcTestCase
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals('test with param', $result->searchIndexes[0]->title);
     }
+
+    /**
+     * test batch
+     * @return void
+     */
+    public function testBatch()
+    {
+        $this->post('/baser/api/bc-search-index/search_indexes/batch.json?token=' . $this->accessToken, []);
+        $this->assertResponseFailure();
+
+        SearchIndexFactory::make(['id' => 1, 'title' => 'test data Batch 1', 'type' => 'admin', 'site_id' => 10], 1)->persist();
+        SearchIndexFactory::make(['id' => 2, 'title' => 'test data Batch 2', 'type' => 'admin', 'site_id' => 10], 1)->persist();
+        SearchIndexFactory::make(['id' => 3, 'title' => 'test data Batch 3', 'type' => 'admin', 'site_id' => 10], 1)->persist();
+
+        $data = [
+            'batch' => 'delete',
+            'batch_targets' => [1, 2, 3],
+        ];
+
+        $this->post('/baser/api/bc-search-index/search_indexes/batch.json?token=' . $this->accessToken, $data);
+        $this->assertResponseSuccess();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('一括処理が完了しました。', $result->message);
+
+        $searchIndexesService = new SearchIndexesService();
+        $searchIndexes = $searchIndexesService->getIndex(['site_id' => 10])->all();
+        $this->assertEquals(0, count($searchIndexes));
+    }
+
 }
