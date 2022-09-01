@@ -124,4 +124,19 @@ class SearchIndexesServiceTest extends BcTestCase
         $this->assertEquals($expected, $rs['priority']);
     }
 
+    /*
+     * test getIndex
+     * @return void
+     */
+    public function testGetIndex()
+    {
+        SearchIndexFactory::make(['title' => 'test data', 'type' => 'admin', 'site_id' => 1], 2)->persist();
+
+        $rs = $this->SearchIndexesService->getIndex(['limit' => 1]);
+        $this->assertEquals(1, $rs->all()->count());
+
+        $rs = $this->SearchIndexesService->getIndex(['type' => 'admin', 'site_id' => 1])->first();
+        $this->assertEquals('test data', $rs['title']);
+    }
+
 }

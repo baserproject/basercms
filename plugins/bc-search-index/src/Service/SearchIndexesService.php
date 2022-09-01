@@ -73,6 +73,7 @@ class SearchIndexesService implements SearchIndexesServiceInterface
      * @return Query
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getIndex(array $queryParams = []): Query
     {
