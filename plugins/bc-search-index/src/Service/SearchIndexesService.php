@@ -276,6 +276,9 @@ class SearchIndexesService implements SearchIndexesServiceInterface
      * @param string $method
      * @param array $ids
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function batch(string $method, array $ids): bool
     {
