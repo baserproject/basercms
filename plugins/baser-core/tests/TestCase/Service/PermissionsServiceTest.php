@@ -394,6 +394,19 @@ class PermissionsServiceTest extends BcTestCase
     }
 
     /**
+     * test getNamesById
+     * @return void
+     */
+    public function testGetNamesById()
+    {
+        $rs = $this->PermissionsService->getNamesById([1, 2, 3]);
+
+        $this->assertEquals('システム管理', $rs[1]);
+        $this->assertEquals('よく使う項目', $rs[2]);
+        $this->assertEquals('ページ管理', $rs[3]);
+    }
+
+    /**
      * test setDefaultAllow
      *
      * @param $url

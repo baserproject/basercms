@@ -525,6 +525,7 @@ class PermissionsService implements PermissionsServiceInterface
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getNamesById($ids): array
     {
