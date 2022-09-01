@@ -144,6 +144,29 @@ class SearchIndexesControllerTest extends BcTestCase
     }
 
     /**
+     * test delete
+     * @return void
+     */
+    public function testDelete()
+    {
+        SearchIndexFactory::make(['id' => 3, 'title' => 'test data delete', 'type' => 'admin', 'site_id' => 0], 1)->persist();
+
+        $this->post('/baser/api/bc-search-index/search_indexes/delete/3.json?token=' . $this->accessToken);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('test data delete', $result->searchIndex->title);
+        $this->assertEquals('検索インデックス: test data delete を削除しました。', $result->message);
+
+        $this->get('/baser/api/bc-search-index/search_indexes/delete/3.json?token=' . $this->accessToken);
+        $this->assertResponseCode(405);
+
+        $this->post('/baser/api/bc-search-index/search_indexes/delete/0.json?token=' . $this->accessToken);
+        $this->assertResponseCode(400);
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('データベース処理中にエラーが発生しました。Record not found in table "search_indexes"', $result->message);
+    }
+
+    /**
      * test batch
      * @return void
      */
