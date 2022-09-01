@@ -172,6 +172,7 @@ class SearchIndexesService implements SearchIndexesServiceInterface
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function delete($id): bool
     {
