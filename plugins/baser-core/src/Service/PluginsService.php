@@ -493,6 +493,9 @@ class PluginsService implements PluginsServiceInterface
      * 一括処理
      * @param array $ids
      * @return bool
+     * @checked
+     * @unitTest
+     * @noTodo
      */
     public function batch(string $method, array $ids): bool
     {

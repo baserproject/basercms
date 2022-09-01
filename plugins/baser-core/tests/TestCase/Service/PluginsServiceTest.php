@@ -310,4 +310,21 @@ class PluginsServiceTest extends BcTestCase
         $caches = Cache::read('baserMarketPlugins', '_bc_env_');
         $this->assertIsArray($caches);
     }
+
+    /**
+     * test batch
+     * @return void
+     */
+    public function testBatch()
+    {
+        PluginFactory::make(['id' => 10, 'name' => 'plugin 1', 'status' => 1])->persist();
+        PluginFactory::make(['id' => 11, 'name' => 'plugin 2', 'status' => 1])->persist();
+        PluginFactory::make(['id' => 12, 'name' => 'plugin 3', 'status' => 1])->persist();
+
+        $this->Plugins->batch('detach', [10, 11, 12]);
+
+        $this->assertFalse($this->Plugins->get(10)->status);
+        $this->assertFalse($this->Plugins->get(11)->status);
+        $this->assertFalse($this->Plugins->get(12)->status);
+    }
 }
