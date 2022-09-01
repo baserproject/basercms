@@ -502,6 +502,7 @@ class PermissionsService implements PermissionsServiceInterface
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function batch($method, array $ids): bool
     {

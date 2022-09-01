@@ -11,6 +11,7 @@
 
 namespace BaserCore\Test\TestCase\Service;
 
+use BaserCore\Test\Factory\PermissionFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Service\PermissionsService;
 
@@ -417,4 +418,19 @@ class PermissionsServiceTest extends BcTestCase
         ];
     }
 
+    /**
+     * test batch
+     * @return void
+     */
+    public function testBatch()
+    {
+        PermissionFactory::make(['id' => 100, 'user_group_id' => 100, 'status' => 1], 1)->persist();
+        PermissionFactory::make(['id' => 101, 'user_group_id' => 100, 'status' => 1], 1)->persist();
+        PermissionFactory::make(['id' => 102, 'user_group_id' => 100, 'status' => 1], 1)->persist();
+
+        $this->PermissionsService->batch('delete', [100, 101, 102]);
+
+        $permissions = $this->PermissionsService->getIndex(['user_group_id' => 100])->all();
+        $this->assertEquals(0, count($permissions));
+    }
 }
