@@ -312,6 +312,19 @@ class PluginsServiceTest extends BcTestCase
     }
 
     /**
+     * test getNamesById
+     * @return void
+     */
+    public function testGetNamesById()
+    {
+        $rs = $this->Plugins->getNamesById([1, 2, 3]);
+
+        $this->assertEquals('ブログ', $rs[1]);
+        $this->assertEquals('メール', $rs[2]);
+        $this->assertEquals('アップローダー', $rs[3]);
+    }
+
+    /**
      * test batch
      * @return void
      */

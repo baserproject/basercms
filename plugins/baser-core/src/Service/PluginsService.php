@@ -517,6 +517,9 @@ class PluginsService implements PluginsServiceInterface
      * IDを指定して名前リストを取得する
      * @param $ids
      * @return array
+     * @checked
+     * @unitTest
+     * @noTodo
      */
     public function getNamesById($ids): array
     {
