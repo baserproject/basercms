@@ -112,6 +112,7 @@ class BcTestCase extends TestCase
      * FixtureStrategy にて、TruncateStrategy を利用するかどうかを設定
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function setFixtureTruncate(): void
     {
@@ -125,6 +126,7 @@ class BcTestCase extends TestCase
      * TruncateStrategy を利用するようにする。
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function getFixtureStrategy(): FixtureStrategyInterface
     {
