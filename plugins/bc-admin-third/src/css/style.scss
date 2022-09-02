@@ -1,6 +1,7 @@
 @charset "utf-8";
 
 @import "normalize.css/normalize.css";
+@import "jquery-colorbox/example3/colorbox.css";
 
 @import "base/mixin";
 @import 'theme/var/colors';
@@ -73,5 +74,6 @@
 @import 'components/uploader';
 @import 'components/submenu';
 @import 'components/install';
+@import 'components/popup';
 @import 'vender/jquery.bt.js';
 
