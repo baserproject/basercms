@@ -17,6 +17,9 @@ use Cake\Utility\Inflector;
  * @var \BaserCore\View\BcAdminAppView $this
  * @var \BaserCore\Model\Entity\Plugin $theme
  * @var string $currentThemeName
+ * @checked
+ * @noTodo
+ * @unitTest
  */
 ?>
 

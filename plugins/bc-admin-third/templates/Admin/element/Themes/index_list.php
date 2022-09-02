@@ -9,23 +9,19 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
+use Cake\Core\Configure;
+
 /**
  * [ADMIN] テーマ一覧　テーブル
  * @var \BaserCore\View\BcAdminAppView $this
  * @var array $currentTheme
  * @var array $defaultDataPatterns
+ * @checked
+ * @noTodo
+ * @unitTest
  */
-
-use Cake\Core\Configure;
-
 ?>
 
-
-<script type="text/javascript">
-  $(function () {
-    $(".theme-popup").colorbox({inline: true, width: "60%"});
-  });
-</script>
 
 <div id="CurrentTheme" class="bca-current-theme">
   <h2 class="bca-current-theme__name"><?php echo __d('baser', '現在のテーマ') ?></h2>

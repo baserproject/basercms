@@ -8,41 +8,17 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
-
 $(function () {
-    $.baserAjaxDataList.config.methods.copy = {
-        button: '.btn-copy',
-        confirm: '',
-        result: function (row, result) {
-            var config = $.baserAjaxDataList.config;
-            if (result) {
-                $.bcUtil.showLoader();
-                document.location.reload();
-                // ↓ 部品のみ取得できる処理をコントローラーに実装したらこちらの処理に変える
-                //$.baserAjaxDataList.load(document.location.href);
-            } else {
-                $(config.alertBox).html(bcI18n.alertMessage1);
-                $(config.alertBox).fadeIn(500);
-            }
-        }
-    }
-    $.baserAjaxDataList.config.methods.del = {
-        button: '.btn-delete',
-        confirm: bcI18n.confirmMessage1,
-        result: function (row, result) {
-            var config = $.baserAjaxDataList.config;
-            if (result) {
-                $.bcUtil.showLoader();
-                document.location.reload();
-                // ↓ 部品のみ取得できる処理をコントローラーに実装したらこちらの処理に変える
-                //$.baserAjaxDataList.load(document.location.href);
-            } else {
-                $(config.alertBox).html(bcI18n.alertMessage2);
-                $(config.alertBox).fadeIn(500);
-            }
-        }
-    };
-    $.baserAjaxDataList.init();
+
+    /**
+     * タブを初期化
+     */
+    $("#tabs").tabs();
+
+    /**
+     * モーダル表示
+     */
+    $(".theme-popup").colorbox({inline: true, width: "60%"});
 
     /**
      * 初期データ読込ボタンを押下した際の動作
@@ -63,13 +39,11 @@ $(function () {
      * マーケットのデータを取得
      */
     $.ajax({
-        url: $.baseUrl() + '/' + $.bcUtil.adminPrefix + '/themes/ajax_get_market_themes',
+        url: $.bcUtil.adminBaseUrl + 'baser-core/themes/get_market_themes',
         type: "GET",
         success: function (result) {
             $("#BaserMarket").html(result);
         }
     });
-
-    $("#tabs").tabs();
 
 });

@@ -21,22 +21,12 @@ $this->BcBaser->i18nScript([
   'confirmTitle1' => __d('baser', '初期データ読込')
 ], ['escape' => false]);
 $this->BcBaser->js([
-  'admin/libs/jquery.baser_ajax_data_list',
-  'admin/libs/baser_ajax_data_list_config',
   'admin/themes/index.bundle'
 ]);
 $this->BcAdmin->setTitle(__d('baser', 'テーマ一覧'));
 $this->BcAdmin->setHelp('themes_index');
 ?>
 
-
-<div id="AjaxBatchUrl" style="display:none">
-  <?php $this->BcBaser->url(['controller' => 'themes', 'action' => 'ajax_batch']) ?>
-</div>
-<div id="AlertMessage" class="message" style="display:none"></div>
-<div id="MessageBox" style="display:none">
-  <div id="flashMessage" class="notice-message"></div>
-</div>
 
 <div id="tabs">
   <ul>
