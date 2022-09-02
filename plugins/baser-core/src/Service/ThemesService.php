@@ -19,8 +19,10 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use Cake\Cache\Cache;
 use Cake\Core\Configure;
+use Cake\Filesystem\Folder;
 use Cake\Http\Client;
 use Cake\ORM\TableRegistry;
+use Cake\Utility\Inflector;
 use Cake\Utility\Xml;
 
 /**
@@ -59,35 +61,19 @@ class ThemesService implements ThemesServiceInterface
      * @param string $theme
      * @param array $options
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function getDefaultDataPatterns($theme = 'core', $options = [])
+    public function getDefaultDataPatterns($theme = '', $options = [])
     {
+        if(!$theme) $theme = Configure::read('BcApp.defaultFrontTheme');
         $options = array_merge(['useTitle' => true], $options);
-        extract($options);
-
-        $themePath = $dataPath = $title = '';
         $dataPath = dirname(BcUtil::getDefaultDataPath('BaserCore', $theme));
 
-        if ($theme != 'core' && $dataPath == dirname(BcUtil::getDefaultDataPath('BaserCore'))) {
+        if ($theme !== Inflector::camelize(Configure::read('BcApp.defaultFrontTheme'), '-') &&
+            $dataPath === dirname(BcUtil::getDefaultDataPath('BaserCore'))) {
             return [];
-        }
-
-        if (is_dir(BASER_THEMES . $theme)) {
-            $themePath = BASER_THEMES . $theme . DS;
-        } elseif (is_dir(BASER_CONFIGS . 'theme' . DS . $theme)) {
-            $themePath = BASER_CONFIGS . 'theme' . DS . $theme . DS;
-        }
-
-        if ($themePath) {
-            if (file_exists($themePath . 'config.php')) {
-                include $themePath . 'config.php';
-            }
-        } else {
-            $title = __d('baser', 'コア');
-        }
-
-        if (!$title) {
-            $title = $theme;
         }
 
         $patterns = [];
@@ -95,7 +81,14 @@ class ThemesService implements ThemesServiceInterface
         $files = $Folder->read(true, true);
         if ($files[0]) {
             foreach($files[0] as $pattern) {
-                if ($useTitle) {
+                if ($options['useTitle']) {
+                    $pluginsTable = TableRegistry::getTableLocator()->get('BaserCore.Plugins');
+                    $themeRecord = $pluginsTable->getPluginConfig($theme);
+                    if ($themeRecord && $themeRecord->title) {
+                        $title = $themeRecord->title;
+                    } else {
+                        $title = $theme;
+                    }
                     $patternName = $title . ' ( ' . $pattern . ' )';
                 } else {
                     $patternName = $pattern;

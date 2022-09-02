@@ -16,6 +16,7 @@ use Cake\Core\App;
 use Cake\Cache\Cache;
 use Cake\Core\Plugin;
 use Cake\Core\Configure;
+use Cake\Core\Plugin as CakePlugin;
 use Cake\Routing\Router;
 use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
@@ -528,78 +529,54 @@ class BcUtil
     /**
      * 初期データのパスを取得する
      *
-     * 初期データのフォルダは アンダースコア区切り推奨
-     *
      * @param string $plugin プラグイン名
      * @param string $theme テーマ名
      * @param string $pattern 初期データの類型
      * @return string Or false
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public static function getDefaultDataPath($plugin = null, $theme = null, $pattern = null)
     {
-
         if (!$plugin) {
             $plugin = 'BaserCore';
         } else {
             $plugin = Inflector::camelize($plugin);
         }
 
-        if (!$theme) {
-            $theme = 'BcSample';
-        }
-
-        if (!$pattern) {
-            $pattern = 'default';
-        }
+        if (!$theme) $theme = Configure::read('BcApp.defaultFrontTheme');
+        if (!$pattern) $pattern = 'default';
 
         if ($plugin == 'BaserCore') {
             $paths = [BASER_CONFIGS . 'data' . DS . $pattern];
-            if ($theme != 'BcSample') {
-                $paths = array_merge([
-                    BASER_THEMES . $theme . DS . 'Config' . DS . 'data' . DS . $pattern,
-                    BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . $pattern,
-                    BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . Inflector::camelize($pattern),
-                    BASER_CONFIGS . 'theme' . DS . $theme . DS . 'Config' . DS . 'data' . DS . $pattern,
-                    BASER_THEMES . $theme . DS . 'Config' . DS . 'data' . DS . 'default',
-                    BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . 'default',
-                ], $paths);
-            }
+            $paths = array_merge([
+                BASER_THEMES . $theme . DS . 'config' . DS . 'data' . DS . $pattern,
+                BASER_CONFIGS . 'theme' . DS . $theme . DS . 'config' . DS . 'data' . DS . $pattern,
+                BASER_THEMES . $theme . DS . 'config' . DS . 'data' . DS . 'default',
+                BASER_THEMES . Inflector::dasherize($theme) . DS . 'config' . DS . 'data' . DS . $pattern,
+                BASER_CONFIGS . 'theme' . DS . Inflector::dasherize($theme) . DS . 'config' . DS . 'data' . DS . $pattern,
+                BASER_THEMES . Inflector::dasherize($theme) . DS . 'config' . DS . 'data' . DS . 'default',
+            ], $paths);
         } else {
-            $pluginPaths = App::path('Plugin');
-            foreach($pluginPaths as $pluginPath) {
-                $pluginPath .= $plugin;
-                if (is_dir($pluginPath)) {
-                    break;
-                }
-                $pluginPath = null;
-            }
-            if (!$pluginPath) {
-                return false;
-            }
+            $pluginPath = CakePlugin::path($plugin);
+            if (!$pluginPath) return false;
             $paths = [
-                $pluginPath . DS . 'Config' . DS . 'data' . DS . $pattern,
-                $pluginPath . DS . 'Config' . DS . 'Data' . DS . $pattern,
-                $pluginPath . DS . 'Config' . DS . 'Data' . DS . Inflector::camelize($pattern),
-                $pluginPath . DS . 'sql',
-                $pluginPath . DS . 'Config' . DS . 'data' . DS . 'default',
-                $pluginPath . DS . 'Config' . DS . 'Data' . DS . 'default',
+                $pluginPath . 'config' . DS . 'data' . DS . $pattern,
+                $pluginPath . 'config' . DS . 'data' . DS . 'default',
             ];
-            if ($theme != 'BcSample') {
-                $paths = array_merge([
-                    BASER_THEMES . $theme . DS . 'Config' . DS . 'data' . DS . $pattern . DS . $plugin,
-                    BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . $pattern . DS . $plugin,
-                    BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . Inflector::camelize($pattern) . DS . $plugin,
-                    BASER_CONFIGS . 'theme' . DS . $theme . DS . 'Config' . DS . 'data' . DS . $pattern . DS . $plugin,
-                    BASER_THEMES . $theme . DS . 'Config' . DS . 'data' . DS . 'default' . DS . $plugin,
-                    BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . 'default' . DS . $plugin,
-                ], $paths);
-            }
+            $paths = array_merge([
+                BASER_THEMES . $theme . DS . 'config' . DS . 'data' . DS . $pattern . DS . $plugin,
+                BASER_CONFIGS . 'theme' . DS . $theme . DS . 'config' . DS . 'data' . DS . $pattern . DS . $plugin,
+                BASER_THEMES . $theme . DS . 'config' . DS . 'data' . DS . 'default' . DS . $plugin,
+                BASER_THEMES . Inflector::dasherize($theme) . DS . 'config' . DS . 'data' . DS . $pattern . DS . $plugin,
+                BASER_CONFIGS . 'theme' . DS . Inflector::dasherize($theme) . DS . 'config' . DS . 'data' . DS . $pattern . DS . $plugin,
+                BASER_THEMES . Inflector::dasherize($theme) . DS . 'config' . DS . 'data' . DS . 'default' . DS . $plugin,
+            ], $paths);
         }
 
         foreach($paths as $path) {
-            if (is_dir($path)) {
-                return $path;
-            }
+            if (is_dir($path)) return $path;
         }
         return false;
 

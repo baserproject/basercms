@@ -1,6 +1,7 @@
 <?php
 // TODO : コード確認要
 use BaserCore\Utility\BcUtil;
+use Cake\Core\Configure;
 
 return;
 /**
@@ -664,7 +665,7 @@ class BcManagerComponent extends Component
             return false;
         }
 
-        $corePath = BcUtil::getDefaultDataPath($plugin, 'core', 'default');
+        $corePath = BcUtil::getDefaultDataPath($plugin, Configure::read('BcApp.defaultFrontTheme'), 'default');
 
         $targetTables = [];
         if ($corePath) {
@@ -1680,11 +1681,11 @@ class BcManagerComponent extends Component
      */
     public function checkDefaultDataPattern($pattern, $theme = 'core')
     {
-        $path = BcUtil::getDefaultDataPath('core', $theme, $pattern);
+        $path = BcUtil::getDefaultDataPath('BaserCore', $theme, $pattern);
         if (!$path) {
             return false;
         }
-        $corePath = BcUtil::getDefaultDataPath('core', 'core', 'default');
+        $corePath = BcUtil::getDefaultDataPath('BaserCore', Configure::read('BcApp.defaultFrontTheme'), 'default');
 
         $Folder = new Folder($corePath);
         $files = $Folder->read(true, true);

@@ -11,11 +11,21 @@
 
 namespace BaserCore\Test\TestCase\Service;
 
+use BaserCore\Service\ThemesService;
+use BaserCore\Service\ThemesServiceInterface;
+use BaserCore\Utility\BcContainerTrait;
+
 /**
  * ThemesServiceTest
+ * @property ThemesService $ThemesService
  */
 class ThemesServiceTest extends \BaserCore\TestSuite\BcTestCase
 {
+
+    /**
+     * Trait
+     */
+    use BcContainerTrait;
 
     /**
      * Set Up
@@ -25,6 +35,7 @@ class ThemesServiceTest extends \BaserCore\TestSuite\BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->ThemesService = $this->getService(ThemesServiceInterface::class);
     }
 
     /**
@@ -39,20 +50,22 @@ class ThemesServiceTest extends \BaserCore\TestSuite\BcTestCase
 
     /**
      * 初期データのセットを取得する
-     *
-     * @param string $theme
-     * @param array $options
-     * @return array
      */
     public function testGetDefaultDataPatterns()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $options = ['useTitle' => false];
-        $result = $this->BcManager->getDefaultDataPatterns('core', $options);
+        $result = $this->ThemesService->getDefaultDataPatterns('BcFront', $options);
         $expected = [
-            'core.default' => 'default'
+            'BcFront.default' => 'default',
+            'BcFront.empty' => 'empty'
         ];
         $this->assertEquals($expected, $result, '初期データのセットのタイトルを外して取得できません');
+        $result = $this->ThemesService->getDefaultDataPatterns('BcFront');
+        $expected = [
+            'BcFront.default' => 'フロントテーマ ( default )',
+            'BcFront.empty' => 'フロントテーマ ( empty )'
+        ];
+        $this->assertEquals($expected, $result);
     }
 
 }

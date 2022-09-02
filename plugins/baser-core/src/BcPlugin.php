@@ -208,7 +208,7 @@ class BcPlugin extends BasePlugin
      */
     public function execScript($__version)
     {
-        $__path = CakePlugin::path($this->getName()) . DS . 'config' . DS . 'update' . DS . $__version . DS . 'updater.php';
+        $__path = CakePlugin::path($this->getName()) . 'config' . DS . 'update' . DS . $__version . DS . 'updater.php';
         if (!file_exists($__path)) return true;
         try {
             include $__path;
