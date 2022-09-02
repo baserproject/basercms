@@ -77,7 +77,6 @@ class ThemesController extends BcAdminAppController
      */
     public function index()
     {
-        $this->setTitle(__d('baser', 'テーマ一覧'));
         $themes = BcUtil::getThemeList();
         $datas = [];
         $currentTheme = null;

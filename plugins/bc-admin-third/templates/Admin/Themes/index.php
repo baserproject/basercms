@@ -25,6 +25,7 @@ $this->BcBaser->js([
   'admin/libs/baser_ajax_data_list_config',
   'admin/themes/index.bundle'
 ]);
+$this->BcAdmin->setTitle(__d('baser', 'テーマ一覧'));
 ?>
 
 
