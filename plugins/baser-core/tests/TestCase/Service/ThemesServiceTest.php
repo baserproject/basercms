@@ -46,6 +46,7 @@ class ThemesServiceTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function testGetDefaultDataPatterns()
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $options = ['useTitle' => false];
         $result = $this->BcManager->getDefaultDataPatterns('core', $options);
         $expected = [
