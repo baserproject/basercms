@@ -26,11 +26,13 @@ $this->BcBaser->js([
   'admin/themes/index.bundle'
 ]);
 $this->BcAdmin->setTitle(__d('baser', 'テーマ一覧'));
+$this->BcAdmin->setHelp('themes_index');
 ?>
 
 
-<div id="AjaxBatchUrl"
-     style="display:none"><?php $this->BcBaser->url(['controller' => 'themes', 'action' => 'ajax_batch']) ?></div>
+<div id="AjaxBatchUrl" style="display:none">
+  <?php $this->BcBaser->url(['controller' => 'themes', 'action' => 'ajax_batch']) ?>
+</div>
 <div id="AlertMessage" class="message" style="display:none"></div>
 <div id="MessageBox" style="display:none">
   <div id="flashMessage" class="notice-message"></div>
@@ -41,7 +43,7 @@ $this->BcAdmin->setTitle(__d('baser', 'テーマ一覧'));
     <li><a href="#DataList"><?php echo __d('baser', '所有テーマ') ?></a></li>
     <li><a href="#BaserMarket"><?php echo __d('baser', 'baserマーケット') ?></a></li>
   </ul>
-  <div id="DataList" class="bca-data-list"><?php $this->BcBaser->element('themes/index_list') ?></div>
+  <div id="DataList" class="bca-data-list"><?php $this->BcBaser->element('Themes/index_list') ?></div>
   <div id="BaserMarket">
     <div
       style="padding:20px;text-align:center;"><?php $this->BcBaser->img('admin/ajax-loader.gif', ['alt' => 'Loading...']) ?></div>

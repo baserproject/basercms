@@ -423,25 +423,6 @@ class BcManagerComponentTest extends BcTestCase
     }
 
     /**
-     * 初期データのセットを取得する
-     *
-     * @param string $theme
-     * @param array $options
-     * @return array
-     */
-    public function testGetDefaultDataPatterns()
-    {
-
-        $options = ['useTitle' => false];
-        $result = $this->BcManager->getDefaultDataPatterns('core', $options);
-        $expected = [
-            'core.default' => 'default'
-        ];
-        $this->assertEquals($expected, $result, '初期データのセットのタイトルを外して取得できません');
-
-    }
-
-    /**
      * 初期データを読み込む
      *
      * @param string $dbConfigKeyName

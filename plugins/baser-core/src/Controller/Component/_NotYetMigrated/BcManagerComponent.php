@@ -645,59 +645,6 @@ class BcManagerComponent extends Component
     }
 
     /**
-     * 初期データのセットを取得する
-     *
-     * @param string $theme
-     * @param array $options
-     * @return array
-     */
-    public function getDefaultDataPatterns($theme = 'core', $options = [])
-    {
-        $options = array_merge(['useTitle' => true], $options);
-        extract($options);
-
-        $themePath = $dataPath = $title = '';
-        $dataPath = dirname(BcUtil::getDefaultDataPath('BaserCore', $theme));
-
-        if ($theme != 'core' && $dataPath == dirname(BcUtil::getDefaultDataPath('BaserCore'))) {
-            return [];
-        }
-
-        if (is_dir(BASER_THEMES . $theme)) {
-            $themePath = BASER_THEMES . $theme . DS;
-        } elseif (is_dir(BASER_CONFIGS . 'theme' . DS . $theme)) {
-            $themePath = BASER_CONFIGS . 'theme' . DS . $theme . DS;
-        }
-
-        if ($themePath) {
-            if (file_exists($themePath . 'config.php')) {
-                include $themePath . 'config.php';
-            }
-        } else {
-            $title = __d('baser', 'コア');
-        }
-
-        if (!$title) {
-            $title = $theme;
-        }
-
-        $patterns = [];
-        $Folder = new Folder($dataPath);
-        $files = $Folder->read(true, true);
-        if ($files[0]) {
-            foreach($files[0] as $pattern) {
-                if ($useTitle) {
-                    $patternName = $title . ' ( ' . $pattern . ' )';
-                } else {
-                    $patternName = $pattern;
-                }
-                $patterns[$theme . '.' . $pattern] = $patternName;
-            }
-        }
-        return $patterns;
-    }
-
-    /**
      * 初期データを読み込む
      *
      * @param string $dbConfigKeyName

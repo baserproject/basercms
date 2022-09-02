@@ -11,10 +11,15 @@
 
 namespace BaserCore\Service;
 
+use BaserCore\Utility\BcSiteConfig;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
+
 /**
  * ThemesAdminService
  */
-class ThemesAdminService implements ThemesAdminServiceInterface
+class ThemesAdminService extends ThemesService implements ThemesAdminServiceInterface
 {
 
     /**
@@ -23,11 +28,22 @@ class ThemesAdminService implements ThemesAdminServiceInterface
      * @return array
      * @checked
      * @noTodo
-     * @unitTest
      */
     public function getViewVarsForIndex($themes): array
     {
-        return [];
+        $currentThemeName = BcSiteConfig::get('theme');
+        $currentTheme = null;
+        foreach($themes as $key => $value) {
+            if ($value['name'] === $currentThemeName) {
+                $currentTheme = $value;
+                unset($themes[$key]);
+            }
+        }
+        return [
+            'themes' => $themes,
+            'currentTheme' => $currentTheme,
+            'defaultDataPatterns' => $this->getDefaultDataPatterns($currentThemeName, ['useTitle' => false])
+        ];
     }
 
 }

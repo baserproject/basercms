@@ -274,28 +274,6 @@ class BcAppController extends AppController
     }
 
     /**
-     * テーマのバージョン番号を取得する
-     *
-     * @param string $theme テーマ名
-     * @return string
-     */
-    protected function getThemeVersion($theme)
-    {
-        $path = WWW_ROOT . 'theme' . DS . $theme . DS . 'VERSION.txt';
-        if (!file_exists($path)) {
-            return false;
-        }
-        $versionFile = new File($path);
-        $versionData = $versionFile->read();
-        $aryVersionData = explode("\n", $versionData);
-        if (empty($aryVersionData[0])) {
-            return false;
-        }
-
-        return $aryVersionData[0];
-    }
-
-    /**
      * CakePHPのバージョンを取得する
      *
      * @return string Baserバージョン

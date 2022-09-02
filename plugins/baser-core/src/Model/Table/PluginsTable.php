@@ -113,6 +113,13 @@ class PluginsTable extends AppTable
             $version = BcUtil::getVersion($pluginName);
         }
 
+        $pluginPath = BcUtil::getPluginPath($name);
+        if (file_exists($pluginPath . 'screenshot.png')) {
+            $hasScreenshot = true;
+        } else {
+            $hasScreenshot = false;
+        }
+
         $result = $this->find()
             ->order(['priority'])
             ->where(['name' => $pluginName])
@@ -124,7 +131,7 @@ class PluginsTable extends AppTable
                 'update' => false,
                 'core' => $core,
                 'permission' => 1,
-                'registered' => true
+                'registered' => true,
             ]);
             if (BcUtil::verpoint($pluginRecord->version) < BcUtil::verpoint($version) &&
                 !in_array($pluginRecord->name, Configure::read('BcApp.corePlugins'))
@@ -142,11 +149,12 @@ class PluginsTable extends AppTable
                 'core' => $core,
                 'permission' => 1,
                 'registered' => false,
+                'creenshot' => $hasScreenshot
             ]);
         }
 
         // 設定ファイル読み込み
-        $appConfigPath = BcUtil::getPluginPath($name) . 'config.php';
+        $appConfigPath = $pluginPath . 'config.php';
         if (file_exists($appConfigPath)) {
             $this->patchEntity($pluginRecord, include $appConfigPath);
         }

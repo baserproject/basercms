@@ -12,6 +12,8 @@
 namespace BaserCore\Controller\Admin;
 
 use BaserCore\Error\BcException;
+use BaserCore\Service\ThemesAdminServiceInterface;
+use BaserCore\Service\ThemesServiceInterface;
 use BaserCore\Utility\BcSiteConfig;
 use BaserCore\Utility\BcUtil;
 use BcZip;
@@ -21,12 +23,27 @@ use Cake\Filesystem\Folder;
 use Cake\Utility\Inflector;
 use MailMessage;
 use Simplezip;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * Class ThemesController
  */
 class ThemesController extends BcAdminAppController
 {
+
+    /**
+     * テーマ一覧
+     *
+     * @return void
+     * @checked
+     * @noTodo
+     */
+    public function index(ThemesServiceInterface $service, ThemesAdminServiceInterface $adminService)
+    {
+        $this->set($adminService->getViewVarsForIndex($service->getIndex()));
+    }
 
     /**
      * テーマをアップロードして適用する
@@ -68,34 +85,6 @@ class ThemesController extends BcAdminAppController
         unlink(TMP . $name);
         $this->BcMessage->setInfo('テーマファイル「' . $name . '」を追加しました。');
         $this->redirect(['action' => 'index']);
-    }
-
-    /**
-     * テーマ一覧
-     *
-     * @return void
-     */
-    public function index()
-    {
-        $themes = BcUtil::getThemeList();
-        $datas = [];
-        $currentTheme = null;
-        $theme = BcSiteConfig::get('theme');
-        foreach($themes as $themename) {
-            if ($themename !== 'core' && $themename !== '_notes') {
-                if ($themename == $theme) {
-                    $currentTheme = $this->_loadThemeInfo($themename);
-                } else {
-                    $datas[] = $this->_loadThemeInfo($themename);
-                }
-            }
-        }
-
-        $this->set('datas', $datas);
-        $this->set('currentTheme', $currentTheme);
-        $this->set('defaultDataPatterns', $this->BcManager->getDefaultDataPatterns($theme, ['useTitle' => false]));
-        $this->subMenuElements = ['themes'];
-        $this->setHelp('themes_index');
     }
 
     /**
@@ -285,34 +274,6 @@ class ThemesController extends BcAdminAppController
 
         return $result;
 
-    }
-
-    /**
-     * テーマ情報を読み込む
-     *
-     * @param string $themename テーマ名
-     * @return array
-     */
-    protected function _loadThemeInfo($themename)
-    {
-        $path = WWW_ROOT . 'theme';
-        $title = $description = $author = $url = $screenshot = '';
-        $theme = [];
-        if (file_exists($path . DS . $themename . DS . 'config.php')) {
-            include $path . DS . $themename . DS . 'config.php';
-        }
-        if (file_exists($path . DS . $themename . DS . 'screenshot.png')) {
-            $theme['screenshot'] = true;
-        } else {
-            $theme['screenshot'] = false;
-        }
-        $theme['name'] = $themename;
-        $theme['title'] = $title;
-        $theme['description'] = $description;
-        $theme['author'] = $author;
-        $theme['url'] = $url;
-        $theme['version'] = $this->getThemeVersion($theme['name']);
-        return $theme;
     }
 
     /**
