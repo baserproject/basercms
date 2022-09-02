@@ -90,32 +90,10 @@ class ThemesController extends BcAdminAppController
     /**
      * baserマーケットのテーマデータを取得する
      */
-    public function ajax_get_market_themes()
+    public function get_market_themes(ThemesServiceInterface $service)
     {
-
-        if (Configure::read('debug')) {
-            Cache::delete('baserMarketThemes');
-        }
-        $baserThemes = Cache::read('baserMarketThemes', '_bc_env_');
-        if (!$baserThemes) {
-            $Xml = new Xml();
-            try {
-                $baserThemes = $Xml->build(Configure::read('BcLinks.marketThemeRss'));
-            } catch (BcException $e) {
-            }
-            if ($baserThemes) {
-                $baserThemes = $Xml->toArray($baserThemes->channel);
-                $baserThemes = $baserThemes['channel']['item'];
-                Cache::write('baserMarketThemes', $baserThemes, '_bc_env_');
-            } else {
-                $baserThemes = [];
-            }
-        } else {
-            $baserThemes = BcUtil::unserialize($baserThemes);
-        }
-
-        $this->set('baserThemes', $baserThemes);
-
+        $this->viewBuilder()->disableAutoLayout();
+        $this->set('baserThemes', $service->getMarketThemes());
     }
 
     /**

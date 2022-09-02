@@ -12,5 +12,8 @@
 /**
  * [ADMIN] baserマーケットテーマ一覧
  * @var \BaserCore\View\BcAdminAppView $this
+ * @checked
+ * @noTodo
+ * @unitTest
  */
-$this->BcBaser->element('themes/index_list_market');
+$this->BcBaser->element('Themes/index_list_market');

@@ -12,12 +12,17 @@
 /**
  * [ADMIN] テーマ一覧　テーブル
  * @var \BaserCore\View\BcAdminAppView $this
+ * @var array $baserThemes
+ * @checked
+ * @noTodo
+ * @unitTest
  */
 ?>
 
 
-<script type="text/javascript">
+<script>
   $(function () {
+    // Ajaxで読み込む前提のため外部ファイルには出さずここに記載
     $(".theme-popup").colorbox({inline: true, width: "60%"});
   });
 </script>
@@ -26,7 +31,7 @@
   <?php if (!empty($baserThemes)): ?>
     <?php $key = 0 ?>
     <?php foreach($baserThemes as $data): ?>
-      <?php $this->BcBaser->element('themes/index_row_market', ['data' => $data, 'key' => $key++]) ?>
+      <?php $this->BcBaser->element('Themes/index_row_market', ['data' => $data, 'key' => $key++]) ?>
     <?php endforeach; ?>
   <?php else: ?>
     <li class="no-data"><?php echo __d('baser', 'baserマーケットのテーマを読み込めませんでした。') ?></li>
