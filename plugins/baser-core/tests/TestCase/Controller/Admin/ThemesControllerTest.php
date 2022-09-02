@@ -1,24 +1,20 @@
 <?php
-// TODO : コード確認要
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.Test.Case.Controller
- * @since           baserCMS v 4.0.9
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) NPO baser foundation
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       https://basercms.net/license/index.html MIT License
  */
 
-App::uses('ThemesController', 'Controller');
+namespace BaserCore\Test\TestCase\Controller\Admin;
+
+use BaserCore\TestSuite\BcTestCase;
 
 /**
  * Class ThemesControllerTest
- *
- * @package Baser.Test.Case.Controller
- * @property  ThemesController $ThemesController
  */
 class ThemesControllerTest extends BcTestCase
 {
@@ -28,7 +24,7 @@ class ThemesControllerTest extends BcTestCase
      *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
     }
@@ -38,7 +34,7 @@ class ThemesControllerTest extends BcTestCase
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
     }
@@ -46,7 +42,7 @@ class ThemesControllerTest extends BcTestCase
     /**
      * テーマをアップロードして適用する
      */
-    public function testAdmin_add()
+    public function test_add()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
@@ -54,15 +50,7 @@ class ThemesControllerTest extends BcTestCase
     /**
      * テーマ一覧
      */
-    public function testAdmin_index()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
-    /**
-     * baserマーケットのテーマデータを取得する
-     */
-    public function testAdmin_ajax_get_market_themes()
+    public function test_index()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
@@ -70,7 +58,7 @@ class ThemesControllerTest extends BcTestCase
     /**
      * 初期データセットを読み込む
      */
-    public function testAdmin_load_default_data_pattern()
+    public function test_load_default_data_pattern()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
@@ -78,15 +66,7 @@ class ThemesControllerTest extends BcTestCase
     /**
      * コアの初期データを読み込む
      */
-    public function testAdmin_reset_data()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
-    /**
-     * テーマ名編集
-     */
-    public function testAdmin_edit()
+    public function test_reset_data()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
@@ -94,15 +74,7 @@ class ThemesControllerTest extends BcTestCase
     /**
      * テーマをコピーする
      */
-    public function testAdmin_ajax_copy()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
-    /**
-     * テーマを削除する　(ajax)
-     */
-    public function testAdmin_ajax_delete()
+    public function test_copy()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
@@ -110,7 +82,7 @@ class ThemesControllerTest extends BcTestCase
     /**
      * テーマを削除する
      */
-    public function testAdmin_del()
+    public function test_delete()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
@@ -118,7 +90,7 @@ class ThemesControllerTest extends BcTestCase
     /**
      * テーマを適用する
      */
-    public function testAdmin_apply()
+    public function test_apply()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
@@ -126,7 +98,7 @@ class ThemesControllerTest extends BcTestCase
     /**
      * 初期データセットをダウンロードする
      */
-    public function testAdmin_download_default_data_pattern()
+    public function test_download_default_data_pattern()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
@@ -134,7 +106,7 @@ class ThemesControllerTest extends BcTestCase
     /**
      * ダウンロード
      */
-    public function testAdmin_download()
+    public function test_download()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }

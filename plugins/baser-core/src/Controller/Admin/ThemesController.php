@@ -1,68 +1,40 @@
 <?php
-// TODO : コード確認要
-use BaserCore\Utility\BcSiteConfig;
-use BaserCore\Utility\BcUtil;
-
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.Controller
- * @since           baserCMS v 0.1.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) NPO baser foundation
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       https://basercms.net/license/index.html MIT License
  */
 
-App::uses('Simplezip', 'Vendor');
+namespace BaserCore\Controller\Admin;
+
+use BaserCore\Error\BcException;
+use BaserCore\Utility\BcSiteConfig;
+use BaserCore\Utility\BcUtil;
+use BcZip;
+use Cake\Cache\Cache;
+use Cake\Core\Configure;
+use Cake\Filesystem\Folder;
+use Cake\Utility\Inflector;
+use MailMessage;
+use Simplezip;
 
 /**
  * Class ThemesController
- *
- * @property Page $Page
- * @property Theme $Theme
- * @property SiteConfig $SiteConfig
- * @property BcManagerComponent $BcManager
  */
-class ThemesController extends AppController
+class ThemesController extends BcAdminAppController
 {
-
-    /**
-     * コントローラー名
-     * @var string
-     * @access    public
-     */
-    public $name = 'Themes';
-
-    /**
-     * モデル
-     * @var array
-     */
-    public $uses = ['Theme', 'Page', 'SiteConfig'];
-
-    /**
-     * コンポーネント
-     *
-     * @var array
-     */
-    public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure', 'BcManager'];
-
-    /**
-     * ヘルパー
-     *
-     * @var array
-     */
-    public $helpers = ['BcForm'];
 
     /**
      * テーマをアップロードして適用する
      */
-    public function admin_add()
+    public function add()
     {
-        $this->setTitle(__d('baser', 'テーマアップロード'));
-        $this->subMenuElements = ['themes'];
-        if (!$this->request->is(['post', 'put'])) {
+
+        if (!$this->getRequest()->is(['post', 'put'])) {
             return;
         }
 
@@ -75,18 +47,17 @@ class ThemesController extends AppController
                 )
             );
         }
-        if (empty($this->request->getData('Theme.file.tmp_name'))) {
+        if (empty($this->getRequest()->getData('Theme.file.tmp_name'))) {
             $message = __d('baser', 'ファイルのアップロードに失敗しました。');
-            if (!empty($this->request->getData('Theme.file.error')) && $this->request->getData('Theme.file.error') == 1) {
+            if (!empty($this->getRequest()->getData('Theme.file.error')) && $this->getRequest()->getData('Theme.file.error') == 1) {
                 $message .= __d('baser', 'サーバに設定されているサイズ制限を超えています。');
             }
             $this->BcMessage->setError($message);
             return;
         }
 
-        $name = $this->request->getData('Theme.file.name');
-        move_uploaded_file($this->request->getData('Theme.file.tmp_name'), TMP . $name);
-        App::uses('BcZip', 'Lib');
+        $name = $this->getRequest()->getData('Theme.file.name');
+        move_uploaded_file($this->getRequest()->getData('Theme.file.tmp_name'), TMP . $name);
         $BcZip = new BcZip();
         if (!$BcZip->extract(TMP . $name, BASER_THEMES)) {
             $msg = __d('baser', 'アップロードしたZIPファイルの展開に失敗しました。');
@@ -104,7 +75,7 @@ class ThemesController extends AppController
      *
      * @return void
      */
-    public function admin_index()
+    public function index()
     {
         $this->setTitle(__d('baser', 'テーマ一覧'));
         $themes = BcUtil::getThemeList();
@@ -131,27 +102,23 @@ class ThemesController extends AppController
     /**
      * baserマーケットのテーマデータを取得する
      */
-    public function admin_ajax_get_market_themes()
+    public function ajax_get_market_themes()
     {
 
-        $baserThemes = [];
-
-        $cachePath = 'views' . DS . 'baser_market_themes.rss';
-        if (Configure::read('debug') > 0) {
-            clearCache('baser_market_themes', 'views', '.rss');
+        if (Configure::read('debug')) {
+            Cache::delete('baserMarketThemes');
         }
-        $baserThemes = cache($cachePath);
+        $baserThemes = Cache::read('baserMarketThemes', '_bc_env_');
         if (!$baserThemes) {
             $Xml = new Xml();
             try {
                 $baserThemes = $Xml->build(Configure::read('BcLinks.marketThemeRss'));
-            } catch (Exception $ex) {
+            } catch (BcException $e) {
             }
             if ($baserThemes) {
                 $baserThemes = $Xml->toArray($baserThemes->channel);
                 $baserThemes = $baserThemes['channel']['item'];
-                cache($cachePath, BcUtil::serialize($baserThemes));
-                chmod(CACHE . $cachePath, 0666);
+                Cache::write('baserMarketThemes', $baserThemes, '_bc_env_');
             } else {
                 $baserThemes = [];
             }
@@ -168,16 +135,16 @@ class ThemesController extends AppController
      *
      * @return void
      */
-    public function admin_load_default_data_pattern()
+    public function load_default_data_pattern()
     {
-        if (empty($this->request->getData('Theme.default_data_pattern'))) {
+        if (empty($this->getRequest()->getData('Theme.default_data_pattern'))) {
             $this->BcMessage->setError(__d('baser', '不正な操作です。'));
             $this->redirect('index');
             return;
         }
-        $result = $this->_load_default_data_pattern($this->request->getData('Theme.default_data_pattern'));
+        $result = $this->_load_default_data_pattern($this->getRequest()->getData('Theme.default_data_pattern'));
         if (!$result) {
-            if (!CakeSession::check('Message.flash.message')) {
+            if (!$this->getRequest()->getSession()->check('Message.flash.message')) {
                 $this->BcMessage->setError(__d('baser', '初期データの読み込みが完了しましたが、いくつかの処理に失敗しています。ログを確認してください。'));
             }
             $this->redirect('index');
@@ -193,7 +160,7 @@ class ThemesController extends AppController
      *
      * @return void
      */
-    public function admin_reset_data()
+    public function reset_data()
     {
         $this->_checkSubmitToken();
         $result = $this->_load_default_data_pattern('core.default', BcSiteConfig::get('theme'));
@@ -261,14 +228,13 @@ class ThemesController extends AppController
         BcUtil::clearAllCache();
 
         // メール受信テーブルの作成
-        App::uses('MailMessage', 'BcMail.Model');
         $MailMessage = new MailMessage();
         if (!$MailMessage->reconstructionAll()) {
             $this->log(__d('baser', 'メールプラグインのメール受信用テーブルの生成に失敗しました。'));
             $result = false;
         }
         BcUtil::clearAllCache();
-        ClassRegistry::flush();
+        $this->getTableLocator()->clear();
 
         if ($currentTheme) {
             $siteConfigs = ['SiteConfig' => ['theme' => $currentTheme]];
@@ -356,7 +322,7 @@ class ThemesController extends AppController
      * @param string $theme
      * @return void
      */
-    public function admin_ajax_copy($theme)
+    public function ajax_copy($theme)
     {
         $this->_checkSubmitToken();
         if (!$theme) {
@@ -408,7 +374,7 @@ class ThemesController extends AppController
      * @param string $theme
      * @return void
      */
-    public function admin_ajax_delete($theme)
+    public function ajax_delete($theme)
     {
         $this->_checkSubmitToken();
         if (!$theme) {
@@ -449,7 +415,7 @@ class ThemesController extends AppController
      * @param string $theme
      * @return void
      */
-    public function admin_del($theme)
+    public function del($theme)
     {
         $this->_checkSubmitToken();
         if (!$theme) {
@@ -474,7 +440,7 @@ class ThemesController extends AppController
      * @param string $theme
      * @return void
      */
-    public function admin_apply($theme)
+    public function apply($theme)
     {
         $this->_checkSubmitToken();
         if (!$theme) {
@@ -559,7 +525,7 @@ class ThemesController extends AppController
     /**
      * 初期データセットをダウンロードする
      */
-    public function admin_download_default_data_pattern()
+    public function download_default_data_pattern()
     {
         set_time_limit(0);
         ini_set('memory_limit', -1);
@@ -657,7 +623,7 @@ class ThemesController extends AppController
     /**
      * ダウンロード
      */
-    public function admin_download()
+    public function download()
     {
         $this->autoRender = false;
         $tmpDir = TMP . 'theme' . DS;
