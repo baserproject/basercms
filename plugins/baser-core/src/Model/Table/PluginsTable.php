@@ -104,7 +104,7 @@ class PluginsTable extends AppTable
         $pluginName = Inflector::camelize($name, '-');
 
         // プラグインのバージョンを取得
-        $corePlugins = Configure::read('BcApp.corePlugins');
+        $corePlugins = array_merge(Configure::read('BcApp.core'), Configure::read('BcApp.corePlugins'));
         if (in_array($pluginName, $corePlugins)) {
             $core = true;
             $version = BcUtil::getVersion();
@@ -132,6 +132,7 @@ class PluginsTable extends AppTable
                 'core' => $core,
                 'permission' => 1,
                 'registered' => true,
+                'screenshot' => $hasScreenshot
             ]);
             if (BcUtil::verpoint($pluginRecord->version) < BcUtil::verpoint($version) &&
                 !in_array($pluginRecord->name, Configure::read('BcApp.corePlugins'))
@@ -149,7 +150,7 @@ class PluginsTable extends AppTable
                 'core' => $core,
                 'permission' => 1,
                 'registered' => false,
-                'creenshot' => $hasScreenshot
+                'screenshot' => $hasScreenshot
             ]);
         }
 

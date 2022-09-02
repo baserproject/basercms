@@ -33,32 +33,32 @@ use Cake\Core\Configure;
     <div class="bca-current-theme__inner">
       <div class="bca-current-theme__main">
         <div class="bca-current-theme__screenshot">
-          <?php if ($currentTheme['screenshot']): ?>
-            <?php $this->BcBaser->img('/theme/' . $currentTheme['name'] . '/screenshot.png', ['alt' => $currentTheme['title']]) ?>
+          <?php if ($currentTheme->screenshot): ?>
+            <?php $this->BcBaser->img(['action' => 'screenshot', $currentTheme->name], ['alt' => $currentTheme->title]) ?>
           <?php else: ?>
-            <?php $this->BcBaser->img('admin/no-screenshot.png', ['alt' => $currentTheme['title']]) ?>
+            <?php $this->BcBaser->img('admin/no-screenshot.png', ['alt' => $currentTheme->title]) ?>
           <?php endif ?>
         </div>
         <div class="row-tools">
           <?php if (Configure::read('BcApp.allowedThemeEdit')): ?>
-            <?php $this->BcBaser->link('', ['controller' => 'theme_files', 'action' => 'index', $currentTheme['name']], ['title' => __d('baser', 'テンプレート編集'), 'class' => 'bca-btn-icon', 'data-bca-btn-type' => 'file-list', 'data-bca-btn-size' => 'lg']) ?>
+            <?php $this->BcBaser->link('', ['controller' => 'theme_files', 'action' => 'index', $currentTheme->name], ['title' => __d('baser', 'テンプレート編集'), 'class' => 'bca-btn-icon', 'data-bca-btn-type' => 'file-list', 'data-bca-btn-size' => 'lg']) ?>
           <?php endif; ?>
-          <?php $this->BcBaser->link('', ['action' => 'ajax_copy', $currentTheme['name']], ['title' => __d('baser', 'テーマコピー'), 'class' => 'btn-copy bca-btn-icon', 'data-bca-btn-type' => 'copy', 'data-bca-btn-size' => 'lg']) ?>
+          <?php $this->BcBaser->link('', ['action' => 'ajax_copy', $currentTheme->name], ['title' => __d('baser', 'テーマコピー'), 'class' => 'btn-copy bca-btn-icon', 'data-bca-btn-type' => 'copy', 'data-bca-btn-size' => 'lg']) ?>
         </div>
       </div>
 
       <div class="bca-current-theme__sub">
         <div class="theme-info">
           <h3 class="theme-name">
-            <strong><?php echo h($currentTheme['title']) ?></strong>&nbsp;(&nbsp;<?php echo $currentTheme['name'] ?>
+            <strong><?php echo h($currentTheme->title) ?></strong>&nbsp;(&nbsp;<?php echo $currentTheme->name ?>
             &nbsp;)</h3>
           <p class="theme-version"><?php echo __d('baser', 'バージョン') ?>
-            ：<?php echo $currentTheme['version'] ?></p>
+            ：<?php echo $currentTheme->version ?></p>
           <p class="theme-author"><?php echo __d('baser', '制作者') ?>
-            ：<?php if (!empty($currentTheme['url']) && !empty($currentTheme['author'])): ?>
-              <?php $this->BcBaser->link($currentTheme['author'], $currentTheme['url'], ['target' => '_blank', 'escape' => true]) ?>
+            ：<?php if (!empty($currentTheme->url) && !empty($currentTheme->author)): ?>
+              <?php $this->BcBaser->link($currentTheme->author, $currentTheme->url, ['target' => '_blank', 'escape' => true]) ?>
             <?php else: ?>
-              <?php echo h($currentTheme['author']) ?>
+              <?php echo h($currentTheme->author) ?>
             <?php endif ?>
           </p>
         </div>
@@ -69,7 +69,7 @@ use Cake\Core\Configure;
           <?php echo $this->BcAdminForm->end() ?>
         <?php endif ?>
         <div
-          class="theme-description"><?php echo nl2br($this->BcText->autoLinkUrls($currentTheme['description'])) ?></div>
+          class="theme-description"><?php echo nl2br($this->BcText->autoLinkUrls($currentTheme->description)) ?></div>
       </div>
     </div>
 
@@ -79,9 +79,9 @@ use Cake\Core\Configure;
 </div>
 
 <ul class="list-panel bca-list-panel">
-  <?php if (!empty($datas)): ?>
-    <?php foreach($datas as $data): ?>
-      <?php $this->BcBaser->element('themes/index_row', ['data' => $data]) ?>
+  <?php if (!empty($themes)): ?>
+    <?php foreach($themes as $theme): ?>
+      <?php $this->BcBaser->element('Themes/index_row', ['theme' => $theme, 'currentThemeName' => $currentTheme->name]) ?>
     <?php endforeach; ?>
   <?php else: ?>
     <li class="no-data"><?php echo __d('baser', '変更できるテーマがありません。') ?>

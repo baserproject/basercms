@@ -285,7 +285,7 @@ class BcBaserHelper extends Helper
     /**
      * 画像タグを出力する
      *
-     * @param string $path 画像のパス（img フォルダからの相対パス）
+     * @param string|array $path 画像のパス（img フォルダからの相対パス）
      * @param array $options オプション（主にHTML属性）
      *    ※ パラメータについては、HtmlHelper::image() を参照。
      * @return void

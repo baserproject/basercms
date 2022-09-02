@@ -40,6 +40,7 @@ class Plugin extends Entity
     protected $_accessible = [
         'name' => true,
         'title' => true,
+        'type' => true,
         'version' => true,
         'status' => true,
         'db_init' => true,
@@ -54,7 +55,8 @@ class Plugin extends Entity
         'url' => true,
         'permission' => true,
         'installMessage' => true,
-        'adminLink' => true
+        'adminLink' => true,
+        'screenshot' => true
     ];
 
 }

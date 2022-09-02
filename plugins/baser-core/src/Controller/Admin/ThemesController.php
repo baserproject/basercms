@@ -601,4 +601,22 @@ class ThemesController extends BcAdminAppController
         $Simplezip->download($theme);
         $Folder->delete($tmpDir);
     }
+
+    /**
+     * スクリーンショットを表示
+     * @param $theme
+     * @return false|string
+     * @checked
+     * @noTodo
+     */
+    public function screenshot($theme)
+    {
+        $this->autoRender = false;
+        $pluginPath = BcUtil::getPluginPath($theme);
+        if(!file_exists($pluginPath . 'screenshot.png')) {
+            $this->notFound();
+        }
+        return $this->getResponse()->withFile($pluginPath . 'screenshot.png');
+    }
+
 }

@@ -76,7 +76,7 @@ return [
          * コアパッケージ名
          * プラグイン一覧に表示しないようにする
          */
-        'core' => ['baser-core', 'bc-admin-third', 'bc-front', 'bc-installer'],
+        'core' => ['BaserCore', 'BcAdminThird', 'BcFront', 'BcInstaller'],
         /**
          * デフォルトフロントテーマ
          */
