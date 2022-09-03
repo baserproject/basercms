@@ -532,14 +532,17 @@ class BcUtilTest extends BcTestCase
         $result = BcUtil::getDefaultDataPath($plugin, $theme, $pattern);
 
         // 初期データ用のダミーディレクトリを削除
-        if ($isset_ptt) {
-            $Folder->delete(BASER_THEMES . $theme . DS . 'config' . DS . 'data' . DS . $pattern);
-        }
         if ($isset_plt && !$isset_plptt) {
             $Folder->delete(BASER_THEMES . $theme . DS . 'config' . DS . 'data' . DS . 'default' . DS . $plugin);
         }
         if ($isset_plptt) {
             $Folder->delete(BASER_THEMES . $theme . DS . 'config' . DS . 'data' . DS . $pattern . DS . $plugin);
+        }
+        if ($isset_ptt) {
+            $Folder->delete(BASER_THEMES . $theme . DS . 'config' . DS . 'data' . DS . $pattern);
+        }
+        if($isset_plt || $isset_plptt || $isset_ptt) {
+            $Folder->delete(BASER_THEMES . $theme);
         }
         $this->assertEquals($expect, $result, '初期データのパスを正しく取得できません');
     }
@@ -553,7 +556,7 @@ class BcUtilTest extends BcTestCase
     {
         return [
             [null, null, null,  ROOT . '/plugins/bc-front/config/data/default'],
-            [null, 'nada-icons', null, ROOT . '/plugins/nada-icons/config/data/default'],
+            [null, 'nada-icons', null, ROOT . '/plugins/baser-core/config/data/default'],
             [null, 'nada-icons', 'not_default', ROOT . '/plugins/nada-icons/config/data/not_default'],
             ['BcBlog', null, null, ROOT . '/plugins/bc-blog/config/data/default'],
             ['BcBlog', 'nada-icons', null, ROOT . '/plugins/nada-icons/config/data/default/BcBlog'],
