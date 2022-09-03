@@ -29,7 +29,7 @@ if (empty($data['authorUrl'])) {
   <p class="theme-screenshot">
     <a class="theme-popup" href="<?php echo '#Contents' . $key ?>">
       <?php if ($data['enclosure']['@url']): ?>
-        <?php $this->BcBaser->img($data['enclosure']['@url'], ['alt' => $data['title'], 'height' => 194]) ?>
+        <?php $this->BcBaser->img($data['enclosure']['@url'], ['alt' => $data['title']]) ?>
       <?php else: ?>
         <?php $this->BcBaser->img('admin/no-screenshot.png', ['alt' => $data['title']]) ?>
       <?php endif ?>
