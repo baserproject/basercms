@@ -28,6 +28,7 @@ class ThemesAdminService extends ThemesService implements ThemesAdminServiceInte
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getViewVarsForIndex($themes): array
     {

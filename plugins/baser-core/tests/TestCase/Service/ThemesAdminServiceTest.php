@@ -11,8 +11,13 @@
 
 namespace BaserCore\Test\TestCase\Service;
 
+use BaserCore\Service\ThemesAdminService;
+use BaserCore\Service\ThemesService;
+use BaserCore\Test\Factory\ThemeFactory;
+
 /**
  * ThemesAdminServiceTest
+ * @property ThemesAdminService $ThemesAdminService;
  */
 class ThemesAdminServiceTest extends \BaserCore\TestSuite\BcTestCase
 {
@@ -25,6 +30,7 @@ class ThemesAdminServiceTest extends \BaserCore\TestSuite\BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->ThemesAdminService = new ThemesAdminService();
     }
 
     /**
@@ -34,7 +40,21 @@ class ThemesAdminServiceTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function tearDown(): void
     {
+        unset($this->ThemesAdminService);
         parent::tearDown();
+    }
+
+    /**
+     * test getViewVarsForIndex
+     * @return void
+     */
+    public function testGetViewVarsForIndex()
+    {
+        $themesService = new ThemesService();
+        $rs = $this->ThemesAdminService->getViewVarsForIndex($themesService->get());
+        $this->assertIsArray($rs['themes']);
+        $this->assertNull($rs['currentTheme']);
+        $this->assertIsArray($rs['defaultDataPatterns']);
     }
 
 }
