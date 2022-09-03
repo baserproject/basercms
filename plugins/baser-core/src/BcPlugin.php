@@ -13,6 +13,7 @@ namespace BaserCore;
 
 use BaserCore\Error\BcException;
 use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Utility\BcSiteConfig;
 use BaserCore\Utility\BcUpdateLog;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\BasePlugin;
@@ -461,6 +462,18 @@ class BcPlugin extends BasePlugin
         );
 
         parent::routes($routes);
+    }
+
+    /**
+     * テーマを適用する
+     * @param string $theme
+     * @checked
+     * @noTodo
+     */
+    public function applyAsTheme(string $theme)
+    {
+        $siteConfigsTable = TableRegistry::getTableLocator()->get('BaserCore.SiteConfigs');
+        $siteConfigsTable->saveValue('theme', $theme);
     }
 
 }

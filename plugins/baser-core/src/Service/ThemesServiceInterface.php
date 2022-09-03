@@ -46,12 +46,13 @@ interface ThemesServiceInterface
     public function add(): bool;
 
     /**
-     * インストール
+     * テーマを適用する
+     * @param string $theme
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function apply(): bool;
+    public function apply(string $theme): array;
 
     /**
      * 初期データを読み込む

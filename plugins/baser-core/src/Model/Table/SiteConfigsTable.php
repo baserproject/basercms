@@ -28,7 +28,7 @@ use BaserCore\Utility\BcUtil;
  *
  * @package BaserCore\Model\Table
  * @method SiteConfig newEntity($data = null, array $options = [])
- * @method BcKeyValueBehavior setValue($key, $value)
+ * @method BcKeyValueBehavior saveValue($key, $value)
  */
 class SiteConfigsTable extends AppTable
 {

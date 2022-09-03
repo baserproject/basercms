@@ -17,7 +17,6 @@ use BaserCore\Service\ThemesServiceInterface;
 use BaserCore\Utility\BcSiteConfig;
 use BaserCore\Utility\BcUtil;
 use BcZip;
-use Cake\Cache\Cache;
 use Cake\Core\Configure;
 use Cake\Filesystem\Folder;
 use Cake\Utility\Inflector;
@@ -377,87 +376,23 @@ class ThemesController extends BcAdminAppController
      *
      * @param string $theme
      * @return void
+     * @checked
+     * @noTodo
      */
-    public function apply($theme)
+    public function apply(ThemesServiceInterface $service, string $theme)
     {
-        $this->_checkSubmitToken();
-        if (!$theme) {
-            $this->notFound();
+        $this->request->allowMethod(['post']);
+        if (!$theme) $this->notFound();
+        try {
+            $info = $service->apply($theme);
+            $message = [__d('baser', 'テーマ「{0}」を適用しました。', $theme)];
+            if ($info) $message = array_merge($message, [''], $info);
+            $message = implode("\n", $message);
+        } catch(BcException $e) {
+            $message = __d('baser', 'テーマの適用に失敗しました。', $e->getMessage());
         }
-
-        $this->_applyTheme($theme);
+        $this->BcMessage->setInfo($message);
         $this->redirect(['action' => 'index']);
-
-    }
-
-    protected function _applyTheme($theme)
-    {
-
-        $plugins = BcUtil::getCurrentThemesPlugins();
-        // テーマ梱包のプラグインをアンインストール
-        foreach($plugins as $plugin) {
-            // TODO PluginsTable::detach() に移行する
-            $this->BcManager->uninstallPlugin($plugin);
-        }
-
-        $siteConfig['SiteConfig']['theme'] = $theme;
-        $this->SiteConfig->saveKeyValue($siteConfig);
-        clearViewCache();
-
-        $info = [];
-        $themePath = BASER_THEMES . $theme . DS;
-
-        $Folder = new Folder($themePath . 'Plugin');
-        $files = $Folder->read(true, true, false);
-        if (!empty($files[0])) {
-            $info = array_merge($info, [
-                __d('baser', 'このテーマは下記のプラグインを同梱しています。')
-            ]);
-            foreach($files[0] as $file) {
-                $info[] = '	・' . $file;
-            }
-        }
-
-        Configure::write('BcSite.theme', $theme);
-        $plugins = BcUtil::getCurrentThemesPlugins();
-
-        App::build(['Plugin' => array_merge([BASER_THEMES . $theme . DS . 'Plugin' . DS], App::path('Plugin'))]);
-        // テーマ梱包のプラグインをインストール
-        foreach($plugins as $plugin) {
-            $this->BcManager->installPlugin($plugin);
-        }
-
-        $path = BcUtil::getDefaultDataPath('BaserCore', $theme);
-        if (strpos($path, '/theme/' . $theme . '/') !== false) {
-            if ($info) {
-                $info = array_merge($info, ['']);
-            }
-            $info = array_merge($info, [
-                __d('baser', 'このテーマは初期データを保有しています。'),
-                __d('baser', 'Webサイトにテーマに合ったデータを適用するには、初期データ読込を実行してください。'),
-            ]);
-        }
-
-        if (!$this->Page->createAllPageTemplate()) {
-            $message = [
-                __d('baser', 'テーマ変更中にページテンプレートの生成に失敗しました。'),
-                __d('baser', '「Pages」フォルダに書き込み権限が付与されていない可能性があります。'),
-                __d('baser', '権限設定後、テーマの適用をやり直すか、表示できないページについて固定ページ管理より更新処理を行ってください。')
-            ];
-            if ($info) {
-                $message = array_merge($message, [''], $info);
-            }
-            $this->BcMessage->setError(implode("\n", $message));
-            return true;
-        }
-
-        $message = ['テーマ「' . $theme . '」を適用しました。'];
-        if ($info) {
-            $message = array_merge($message, [''], $info);
-        }
-        $this->BcMessage->setInfo(implode("\n", $message));
-        return true;
-
     }
 
     /**

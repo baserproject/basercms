@@ -470,10 +470,12 @@ class BcUtil
      * 現在適用しているテーマ梱包プラグインのリストを取得する
      *
      * @return array プラグインリスト
+     * @checked
+     * @noTodo
      */
     public static function getCurrentThemesPlugins()
     {
-        return BcUtil::getThemesPlugins(Configure::read('BcSite.theme'));
+        return BcUtil::getThemesPlugins(BcSiteConfig::get('theme'));
     }
 
     /**
@@ -481,16 +483,17 @@ class BcUtil
      *
      * @param string $theme テーマ名
      * @return array プラグインリスト
+     * @checked
+     * @noTodo
      */
     public static function getThemesPlugins($theme)
     {
-        $path = BASER_THEMES . $theme . DS . 'Plugin';
-        if (is_dir($path)) {
-            $Folder = new Folder($path);
-            $files = $Folder->read(true, true, false);
-            if (!empty($files[0])) {
-                return $files[0];
-            }
+        $path = BcUtil::getPluginPath($theme) . 'Plugin';
+        if(!file_exists($path)) return [];
+        $Folder = new Folder($path);
+        $files = $Folder->read(true, true, false);
+        if (!empty($files[0])) {
+            return $files[0];
         }
         return [];
     }

@@ -12,13 +12,15 @@
 namespace BaserCore\Service;
 
 use BaserCore\Error\BcException;
-use BaserCore\Utility\BcSiteConfig;
+use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use Cake\Cache\Cache;
+use Cake\Core\App;
 use Cake\Core\Configure;
+use Cake\Core\Plugin;
 use Cake\Filesystem\Folder;
 use Cake\Http\Client;
 use Cake\ORM\TableRegistry;
@@ -30,6 +32,11 @@ use Cake\Utility\Xml;
  */
 class ThemesService implements ThemesServiceInterface
 {
+
+    /**
+     * Trait
+     */
+    use BcContainerTrait;
 
     /**
      * 単一データ取得
@@ -67,7 +74,7 @@ class ThemesService implements ThemesServiceInterface
      */
     public function getDefaultDataPatterns($theme = '', $options = [])
     {
-        if(!$theme) $theme = Configure::read('BcApp.defaultFrontTheme');
+        if (!$theme) $theme = Configure::read('BcApp.defaultFrontTheme');
         $options = array_merge(['useTitle' => true], $options);
         $dataPath = dirname(BcUtil::getDefaultDataPath('BaserCore', $theme));
 
@@ -108,11 +115,107 @@ class ThemesService implements ThemesServiceInterface
     }
 
     /**
-     * インストール
+     * テーマを適用する
+     * @param string $theme
+     * @return array 適用完了後に表示するメッセージ
+     * @checked
+     * @noTodo
      */
-    public function apply(): bool
+    public function apply(string $theme): array
     {
-        return true;
+        // テーマ梱包のプラグインを無効化
+        $this->detachCurrentThemesPlugins();
+
+        // テーマを適用
+        BcUtil::includePluginClass($theme);
+        Plugin::getCollection()->get($theme)->applyAsTheme($theme);
+
+        // テーマが梱包するプラグイン情報を取得
+        $info = $this->getThemesPluginsInfo($theme);
+
+        // テーマが梱包するプラグインをインストール
+        $this->installThemesPlugins($theme);
+
+        // テーマが初期データを保有している場合の情報を取得
+        return $this->getThemesDefaultDataInfo($theme, $info);
+    }
+
+    /**
+     * 現在のテーマのプラグインを無効化する
+     * @checked
+     */
+    private function detachCurrentThemesPlugins()
+    {
+        // TODO ucmitz 2022/09/03 ryuring
+        // テーマプラグインの仕組みを実装してからテストを作成する
+        $plugins = BcUtil::getCurrentThemesPlugins();
+        foreach($plugins as $plugin) {
+            /* @var PluginsService $pluginsService */
+            $pluginsService = $this->getService(PluginsServiceInterface::class);
+            $pluginsService->detach($plugin);
+        }
+    }
+
+    /**
+     * 指定したテーマが梱包するプラグイン情報を取得
+     * @param string $theme
+     * @return array|string[]
+     * @checked
+     * @noTodo
+     */
+    private function getThemesPluginsInfo(string $theme)
+    {
+        $info = [];
+        $themePath = BcUtil::getPluginPath($theme);
+        $Folder = new Folder($themePath . 'Plugin');
+        $files = $Folder->read(true, true, false);
+        if (!empty($files[0])) {
+            $info = array_merge($info, [
+                __d('baser', 'このテーマは下記のプラグインを同梱しています。')
+            ]);
+            foreach($files[0] as $file) {
+                $info[] = '	・' . $file;
+            }
+        }
+        return $info;
+    }
+
+    /**
+     * テーマが初期データを保有している場合の情報を取得
+     * @param string $theme
+     * @param array $info
+     * @return array|mixed|string[]
+     */
+    private function getThemesDefaultDataInfo(string $theme, array $info = [])
+    {
+        $path = BcUtil::getDefaultDataPath('BaserCore', $theme);
+        if (preg_match('/\/(' . $theme . '|' . Inflector::dasherize($theme) . ')\//', $path)) {
+            if ($info) $info = array_merge($info, ['']);
+            $info = array_merge($info, [
+                __d('baser', 'このテーマは初期データを保有しています。'),
+                __d('baser', 'Webサイトにテーマに合ったデータを適用するには、初期データ読込を実行してください。'),
+            ]);
+        }
+        return $info;
+    }
+
+    /**
+     * テーマが梱包するプラグインをインストールする
+     * @param string $theme
+     * @throws \Exception
+     * @checked
+     */
+    private function installThemesPlugins(string $theme)
+    {
+        // TODO ucmitz 2022/09/03 ryuring
+        // テーマプラグインの仕組みを実装してからテストを作成する
+        /* @var PluginsService $pluginsService */
+        $pluginsService = $this->getService(PluginsServiceInterface::class);
+        $plugins = BcUtil::getCurrentThemesPlugins();
+        // テーマ梱包のプラグインをインストール
+        foreach($plugins as $plugin) {
+            $pluginsService->install($plugin);
+        }
     }
 
     /**
