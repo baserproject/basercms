@@ -101,7 +101,10 @@ class PluginsService implements PluginsServiceInterface
                     if(in_array($name, $registeredName)) {
                         $plugins[array_search($name, $registeredName)] = $this->Plugins->getPluginConfig($name);
                     } else {
-                        $plugins[] = $this->Plugins->getPluginConfig($name);
+                        $plugin = $this->Plugins->getPluginConfig($name);
+                        if(in_array($plugin->type, ['CorePlugin', 'Plugin'])) {
+                            $plugins[] = $plugin;
+                        }
                     }
                 }
             }
