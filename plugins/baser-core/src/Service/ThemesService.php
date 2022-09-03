@@ -236,7 +236,9 @@ class ThemesService implements ThemesServiceInterface
     public function copy(string $theme): bool
     {
         if(!is_writable(BASER_THEMES)) throw new BcException(BASER_THEMES . ' に書込み権限がありません。');
-        $newTheme = $theme . 'Copy';
+
+        if(in_array($theme, Configure::read('BcApp.core'))) $theme = Inflector::dasherize($theme);
+        $newTheme = Inflector::camelize($theme, '-') . 'Copy';
         while(true) {
             if (!is_dir(BASER_THEMES . $newTheme)) break;
             $newTheme .= 'Copy';

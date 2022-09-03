@@ -47,25 +47,20 @@ use Cake\Utility\Inflector;
         'confirm' => __d('baser', 'テーマ「{0}」を適用します。よろしいですか？', $theme->title),
       ]) ?>
     <?php endif ?>
-    <?php if (Configure::read('BcApp.allowedThemeEdit')): ?>
-      <?php $this->BcBaser->link('', ['controller' => 'theme_files', 'action' => 'index', $theme->name], [
-        'title' => __d('baser', 'テンプレート編集'),
-        'class' => 'bca-btn-icon',
-        'data-bca-btn-type' => 'file-list',
-        'data-bca-btn-size' => 'lg'
-      ]) ?>
-    <?php endif; ?>
-    <?php $this->BcBaser->link('', ['action' => 'ajax_copy', $theme->name], [
+    <?php echo $this->BcAdminForm->postLink('', ['action' => 'copy', $theme->name], [
       'title' => __d('baser', 'テーマコピー'),
       'class' => 'btn-copy bca-btn-icon',
       'data-bca-btn-type' => 'copy',
-      'data-bca-btn-size' => 'lg'
+      'data-bca-btn-size' => 'lg',
+      'block' => true
     ]) ?>
-    <?php $this->BcBaser->link('', ['action' => 'ajax_delete', $theme->name], [
+    <?php echo $this->BcAdminForm->postLink('', ['action' => 'delete', $theme->name], [
       'title' => __d('baser', 'テーマ削除'),
       'class' => 'btn-delete bca-btn-icon',
       'data-bca-btn-type' => 'delete',
-      'data-bca-btn-size' => 'lg'
+      'data-bca-btn-size' => 'lg',
+      'block' => true,
+      'confirm' => __d('baser', "テーマ「{0}」を削除します。よろしいですか？\n※ 削除したファイルは元に戻すことはできません。", $theme->title),
     ]) ?>
   </p>
   <?php echo
