@@ -259,9 +259,18 @@ class ThemesService implements ThemesServiceInterface
 
     /**
      * 削除する
+     * @param string $theme
+     * @checked
+     * @noTodo
      */
-    public function delete(): bool
+    public function delete(string $theme): bool
     {
+        $path = BcUtil::getPluginPath($theme);
+        if(!is_writable($path)) throw new BcException($path . ' に書込み権限がありません。');
+        $folder = new Folder();
+        if (!$folder->delete($path)) {
+            return false;
+        }
         return true;
     }
 

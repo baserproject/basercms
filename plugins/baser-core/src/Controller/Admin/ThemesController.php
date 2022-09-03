@@ -257,7 +257,6 @@ class ThemesController extends BcAdminAppController
      * テーマをコピーする
      *
      * @param string $theme
-     * @return void
      * @checked
      * @noTodo
      */
@@ -275,68 +274,22 @@ class ThemesController extends BcAdminAppController
     }
 
     /**
-     * テーマを削除する　(ajax)
-     *
-     * @param string $theme
-     * @return void
-     */
-    public function ajax_delete($theme)
-    {
-        $this->_checkSubmitToken();
-        if (!$theme) {
-            $this->ajaxError(500, __d('baser', '無効な処理です。'));
-        }
-        if (!$this->_del($theme)) {
-            $this->ajaxError(500, __d('baser', 'テーマフォルダを手動で削除してください。'));
-            exit;
-        }
-        clearViewCache();
-        exit(true);
-    }
-
-    /**
-     * データを削除する
-     *
-     * @param string $theme テーマ名
-     * @return bool
-     */
-    protected function _del($theme)
-    {
-        $path = WWW_ROOT . 'theme' . DS . $theme;
-        $folder = new Folder();
-        if (!$folder->delete($path)) {
-            return false;
-        }
-        $siteConfig = ['SiteConfig' => $this->siteConfigs];
-        if ($theme == $siteConfig['SiteConfig']['theme']) {
-            $siteConfig['SiteConfig']['theme'] = '';
-            $this->SiteConfig->saveKeyValue($siteConfig);
-        }
-        return true;
-    }
-
-    /**
      * テーマを削除する
      *
      * @param string $theme
-     * @return void
+     * @checked
+     * @noTodo
      */
-    public function del($theme)
+    public function delete(ThemesServiceInterface $service, $theme)
     {
-        $this->_checkSubmitToken();
-        if (!$theme) {
-            $this->notFound();
+        $this->request->allowMethod(['post']);
+        if (!$theme) $this->notFound();
+        try {
+            $service->delete($theme);
+            $this->BcMessage->setInfo(__d('baser', 'テーマ「{0}」を削除しました。', $theme));
+        } catch (BcException $e) {
+            $this->BcMessage->setError(__d('baser', 'テーマフォルダのアクセス権限を見直してください。' . $e->getMessage()));
         }
-        $siteConfig = ['SiteConfig' => $this->siteConfigs];
-        $path = WWW_ROOT . 'theme' . DS . $theme;
-        $folder = new Folder();
-        $folder->delete($path);
-        if ($theme == $siteConfig['SiteConfig']['theme']) {
-            $siteConfig['SiteConfig']['theme'] = '';
-            $this->SiteConfig->saveKeyValue($siteConfig);
-        }
-        clearViewCache();
-        $this->BcMessage->setInfo('テーマ「' . $theme . '」を削除しました。');
         $this->redirect(['action' => 'index']);
     }
 

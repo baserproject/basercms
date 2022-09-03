@@ -78,7 +78,7 @@ interface ThemesServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function delete(): bool;
+    public function delete(string $theme): bool;
 
     /**
      * 利用中のテーマをダウンロードする
