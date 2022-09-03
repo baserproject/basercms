@@ -30,7 +30,7 @@ use Cake\Utility\Inflector;
   <p class="bca-current-theme__screenshot">
     <a class="theme-popup" href="<?php echo '#Contents' . Inflector::camelize($theme->name) ?>">
       <?php if ($theme->screenshot): ?>
-        <?php $this->BcBaser->img('/theme/' . $theme->name . '/screenshot.png', ['alt' => $theme->title]) ?>
+        <?php $this->BcBaser->img(['action' => 'screenshot', $theme->name], ['alt' => $theme->title]) ?>
       <?php else: ?>
         <?php $this->BcBaser->img('admin/no-screenshot.png', ['alt' => $theme->title]) ?>
       <?php endif ?>
