@@ -122,3 +122,6 @@
     height: auto;
   }
 }
+.bca-list-panel:has(.no-data) {
+  display: block;
+}
