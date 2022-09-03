@@ -1010,7 +1010,6 @@ class BcUtil
 
     /**
      * 現在のテーマ名を取得する
-     * キャメルケースが前提
      * @return string
      */
     public static function getCurrentTheme()

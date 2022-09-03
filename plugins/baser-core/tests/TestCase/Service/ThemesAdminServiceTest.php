@@ -13,7 +13,8 @@ namespace BaserCore\Test\TestCase\Service;
 
 use BaserCore\Service\ThemesAdminService;
 use BaserCore\Service\ThemesService;
-use BaserCore\Test\Factory\ThemeFactory;
+use BaserCore\Test\Scenario\InitAppScenario;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * ThemesAdminServiceTest
@@ -21,6 +22,11 @@ use BaserCore\Test\Factory\ThemeFactory;
  */
 class ThemesAdminServiceTest extends \BaserCore\TestSuite\BcTestCase
 {
+
+    /**
+     * Trait
+     */
+    use ScenarioAwareTrait;
 
     /**
      * Set Up
@@ -50,6 +56,8 @@ class ThemesAdminServiceTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function testGetViewVarsForIndex()
     {
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loginAdmin($this->getRequest('/baser/admin'));
         $themesService = new ThemesService();
         $rs = $this->ThemesAdminService->getViewVarsForIndex($themesService->get());
         $this->assertIsArray($rs['themes']);
