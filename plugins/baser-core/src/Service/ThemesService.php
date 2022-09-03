@@ -12,6 +12,7 @@
 namespace BaserCore\Service;
 
 use BaserCore\Error\BcException;
+use BaserCore\Model\Entity\Site;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Annotation\UnitTest;
@@ -21,6 +22,7 @@ use Cake\Cache\Cache;
 use Cake\Core\App;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
+use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
 use Cake\Http\Client;
 use Cake\ORM\TableRegistry;
@@ -121,14 +123,14 @@ class ThemesService implements ThemesServiceInterface
      * @checked
      * @noTodo
      */
-    public function apply(string $theme): array
+    public function apply(Site $site, string $theme): array
     {
         // テーマ梱包のプラグインを無効化
         $this->detachCurrentThemesPlugins();
 
         // テーマを適用
         BcUtil::includePluginClass($theme);
-        Plugin::getCollection()->get($theme)->applyAsTheme($theme);
+        Plugin::getCollection()->get($theme)->applyAsTheme($site, $theme);
 
         // テーマが梱包するプラグイン情報を取得
         $info = $this->getThemesPluginsInfo($theme);
@@ -228,9 +230,28 @@ class ThemesService implements ThemesServiceInterface
 
     /**
      * コピーする
+     * @checked
+     * @noTodo
      */
-    public function copy(): bool
+    public function copy(string $theme): bool
     {
+        if(!is_writable(BASER_THEMES)) throw new BcException(BASER_THEMES . ' に書込み権限がありません。');
+        $newTheme = $theme . 'Copy';
+        while(true) {
+            if (!is_dir(BASER_THEMES . $newTheme)) break;
+            $newTheme .= 'Copy';
+        }
+        $folder = new Folder(BASER_THEMES . $theme);
+        if (!$folder->copy(BASER_THEMES . $newTheme, [
+            'mode' => 0777
+        ])) {
+            return false;
+        }
+        $pluginPath = BcUtil::getPluginPath($newTheme);
+        $file = new File($pluginPath . 'src' . DS . 'Plugin.php');
+        $data = $file->read();
+        $file->write(preg_replace('/namespace .+?;/', 'namespace ' . $newTheme . ';', $data));
+        $file->close();
         return true;
     }
 

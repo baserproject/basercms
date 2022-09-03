@@ -258,51 +258,20 @@ class ThemesController extends BcAdminAppController
      *
      * @param string $theme
      * @return void
+     * @checked
+     * @noTodo
      */
-    public function ajax_copy($theme)
+    public function copy(ThemesServiceInterface $service, $theme)
     {
-        $this->_checkSubmitToken();
-        if (!$theme) {
-            $this->ajaxError(500, __d('baser', '無効な処理です。'));
+        $this->request->allowMethod(['post']);
+        if (!$theme) $this->notFound();
+        try {
+            $service->copy($theme);
+            $this->BcMessage->setInfo(__d('baser', 'テーマ「{0}」をコピーしました。', $theme));
+        } catch (BcException $e) {
+            $this->BcMessage->setError(__d('baser', 'テーマフォルダのアクセス権限を見直してください。' . $e->getMessage()));
         }
-        $result = $this->_copy($theme);
-        if (!$result) {
-            $this->ajaxError(500, __d('baser', 'テーマフォルダのアクセス権限を見直してください。'));
-            return;
-        }
-
-        exit(true);
-    }
-
-    /**
-     * テーマをコピーする
-     *
-     * @param string $theme
-     * @return array|bool
-     */
-    protected function _copy($theme)
-    {
-        $basePath = WWW_ROOT . 'theme' . DS;
-        $newTheme = $theme . '_copy';
-        while(true) {
-            if (!is_dir($basePath . $newTheme)) {
-                break;
-            }
-            $newTheme .= '_copy';
-        }
-        $folder = new Folder();
-        $result = $folder->copy([
-            'from' => $basePath . $theme,
-            'to' => $basePath . $newTheme,
-            'mode' => 0777,
-            'skip' => ['_notes']
-        ]);
-        if (!$result) {
-            return false;
-        }
-
-        $this->Theme->saveDblog('テーマ「' . $theme . '」をコピーしました。');
-        return $this->_loadThemeInfo($newTheme);
+        $this->redirect(['action' => 'index']);
     }
 
     /**
@@ -384,14 +353,13 @@ class ThemesController extends BcAdminAppController
         $this->request->allowMethod(['post']);
         if (!$theme) $this->notFound();
         try {
-            $info = $service->apply($theme);
+            $info = $service->apply($this->getRequest()->getAttribute('currentSite'), $theme);
             $message = [__d('baser', 'テーマ「{0}」を適用しました。', $theme)];
             if ($info) $message = array_merge($message, [''], $info);
-            $message = implode("\n", $message);
+            $this->BcMessage->setInfo(implode("\n", $message));
         } catch(BcException $e) {
-            $message = __d('baser', 'テーマの適用に失敗しました。', $e->getMessage());
+            $this->BcMessage->setError(__d('baser', 'テーマの適用に失敗しました。', $e->getMessage()));
         }
-        $this->BcMessage->setInfo($message);
         $this->redirect(['action' => 'index']);
     }
 

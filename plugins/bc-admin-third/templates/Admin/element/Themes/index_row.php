@@ -40,7 +40,7 @@ use Cake\Utility\Inflector;
     <?php if ($theme->name !== $currentThemeName): ?>
       <?php echo $this->BcAdminForm->postLink('', ['action' => 'apply', $theme->name], [
         'title' => __d('baser', '適用'),
-        'class' => 'submit-token bca-btn-icon bca-loading',
+        'class' => 'submit-token bca-btn-icon',
         'data-bca-btn-type' => 'apply',
         'data-bca-btn-size' => 'lg',
         'block' => true,
@@ -68,7 +68,10 @@ use Cake\Utility\Inflector;
       'data-bca-btn-size' => 'lg'
     ]) ?>
   </p>
-  <?= $this->fetch('postLink') ?>
+  <?php echo
+    $this->fetch('postLink');
+    $this->reset('postLink');
+  ?>
   <p class="theme-version"><?php echo __d('baser', 'バージョン') ?>：<?php echo $theme->version ?></p>
   <p class="theme-author"><?php echo __d('baser', '制作者') ?>：
     <?php if (!empty($theme->url) && !empty($theme->author)): ?>

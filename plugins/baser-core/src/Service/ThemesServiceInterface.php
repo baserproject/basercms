@@ -14,6 +14,7 @@ namespace BaserCore\Service;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use BaserCore\Model\Entity\Site;
 
 /**
  * ThemesServiceInterface
@@ -52,7 +53,7 @@ interface ThemesServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function apply(string $theme): array;
+    public function apply(Site $site, string $theme): array;
 
     /**
      * 初期データを読み込む
@@ -64,11 +65,12 @@ interface ThemesServiceInterface
 
     /**
      * コピーする
+     * @param string $theme
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function copy(): bool;
+    public function copy(string $theme): bool;
 
     /**
      * 削除する

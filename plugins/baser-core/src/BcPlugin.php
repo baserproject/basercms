@@ -12,8 +12,8 @@
 namespace BaserCore;
 
 use BaserCore\Error\BcException;
+use BaserCore\Model\Entity\Site;
 use BaserCore\Utility\BcContainerTrait;
-use BaserCore\Utility\BcSiteConfig;
 use BaserCore\Utility\BcUpdateLog;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\BasePlugin;
@@ -470,10 +470,11 @@ class BcPlugin extends BasePlugin
      * @checked
      * @noTodo
      */
-    public function applyAsTheme(string $theme)
+    public function applyAsTheme(Site $site, string $theme)
     {
-        $siteConfigsTable = TableRegistry::getTableLocator()->get('BaserCore.SiteConfigs');
-        $siteConfigsTable->saveValue('theme', $theme);
+        $site->theme = $theme;
+        $siteConfigsTable = TableRegistry::getTableLocator()->get('BaserCore.Sites');
+        $siteConfigsTable->save($site);
     }
 
 }

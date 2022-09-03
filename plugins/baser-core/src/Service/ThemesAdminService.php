@@ -15,6 +15,7 @@ use BaserCore\Utility\BcSiteConfig;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use BaserCore\Utility\BcUtil;
 
 /**
  * ThemesAdminService
@@ -32,7 +33,7 @@ class ThemesAdminService extends ThemesService implements ThemesAdminServiceInte
      */
     public function getViewVarsForIndex($themes): array
     {
-        $currentThemeName = BcSiteConfig::get('theme');
+        $currentThemeName = BcUtil::getCurrentTheme();
         $currentTheme = null;
         foreach($themes as $key => $value) {
             if ($value['name'] === $currentThemeName) {
