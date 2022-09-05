@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 use Migrations\AbstractMigration;
 
-class RemovePagesCode extends AbstractMigration
+class RemoveCodeFromPages extends AbstractMigration
 {
     /**
      * Change Method.

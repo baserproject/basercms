@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 use Migrations\AbstractMigration;
 
-class InitialBcBlog extends AbstractMigration
+class CreateBlogPosts extends AbstractMigration
 {
     /**
      * Up Method.

@@ -43,4 +43,17 @@ class CreateSiteConfigs extends AbstractMigration
         ]);
         $table->create();
     }
+
+    /**
+     * Down Method.
+     *
+     * More information on this method is available here:
+     * https://book.cakephp.org/phinx/0/en/migrations.html#the-down-method
+     * @return void
+     */
+    public function down()
+    {
+        $this->table('site_configs')->drop()->save();
+    }
+
 }

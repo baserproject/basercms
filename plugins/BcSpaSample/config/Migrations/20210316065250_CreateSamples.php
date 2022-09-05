@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 use Migrations\AbstractMigration;
 
-class InitialBcSpaSample extends AbstractMigration
+class CreateSamples extends AbstractMigration
 {
     /**
      * Up Method.

@@ -26,4 +26,17 @@ class CreateFavorites extends AbstractMigration
             ->addColumn('modified', 'datetime', ['null' => true, 'default' => null, 'limit' => null]);
         $table->create();
     }
+
+    /**
+     * Down Method.
+     *
+     * More information on this method is available here:
+     * https://book.cakephp.org/phinx/0/en/migrations.html#the-down-method
+     * @return void
+     */
+    public function down()
+    {
+        $this->table('favorites')->drop()->save();
+    }
+
 }
