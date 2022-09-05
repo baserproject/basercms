@@ -328,4 +328,23 @@ class ThemesService implements ThemesServiceInterface
         return true;
     }
 
+    /**
+     * 指定したテーマをダウンロード用のテーマとして一時フォルダに作成する
+     * @param string $theme
+     * @return string
+     */
+    public function createDownloadToTmp(string $theme): string
+    {
+        $tmpDir = TMP . 'theme' . DS;
+        if(!is_dir($tmpDir)) {
+            $folder = new Folder($tmpDir);
+            $folder->create($tmpDir);
+        }
+        $folder = new Folder(BcUtil::getPluginPath($theme));
+        $folder->copy($tmpDir . $theme, [
+            'chmod' => 0777
+        ]);
+        return $tmpDir;
+    }
+
 }

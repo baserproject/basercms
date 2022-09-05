@@ -324,7 +324,7 @@ class ThemesController extends BcAdminAppController
         set_time_limit(0);
         ini_set('memory_limit', -1);
 
-        /* コアのCSVを生成 */
+        // コアのCSVを生成
         $tmpDir = TMP . 'csv' . DS;
         $Folder = new Folder();
         $Folder->create($tmpDir);
@@ -332,14 +332,14 @@ class ThemesController extends BcAdminAppController
         BcUtil::clearAllCache();
         $excludes = ['plugins', 'dblogs', 'users'];
         $this->_writeCsv('core', $tmpDir, $excludes);
-        /* プラグインのCSVを生成 */
+        // プラグインのCSVを生成
         $plugins = CakePlugin::loaded();
         foreach($plugins as $plugin) {
             $Folder->create($tmpDir . $plugin);
             emptyFolder($tmpDir . $plugin);
             $this->_writeCsv($plugin, $tmpDir . $plugin . DS);
         }
-        /* site_configsの編集 (email / google_analytics_id / version) */
+        // site_configsの編集 (email / google_analytics_id / version)
         $targets = ['email', 'google_analytics_id', 'version'];
         $path = $tmpDir . 'site_configs.csv';
         $fp = fopen($path, 'a+');
@@ -419,22 +419,15 @@ class ThemesController extends BcAdminAppController
      * @checked
      * @noTodo
      */
-    public function download(): void
+    public function download(ThemesServiceInterface $service): void
     {
         $this->autoRender = false;
-        $tmpDir = TMP . 'theme' . DS;
-        if(!is_dir($tmpDir)) {
-            $folder = new Folder($tmpDir);
-            $folder->create($tmpDir);
-        }
         $theme = BcUtil::getCurrentTheme();
-        $folder = new Folder(BcUtil::getPluginPath($theme));
-        $folder->copy($tmpDir . $theme, [
-            'chmod' => 0777
-        ]);
+        $tmpDir = $service->createDownloadToTmp($theme);
         $simplezip = new Simplezip();
         $simplezip->addFolder($tmpDir);
         $simplezip->download($theme);
+        $folder = new Folder();
         $folder->delete($tmpDir);
     }
 

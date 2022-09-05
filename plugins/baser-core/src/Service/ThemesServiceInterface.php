@@ -112,4 +112,11 @@ interface ThemesServiceInterface
      */
     public function resetData(): bool;
 
+    /**
+     * 指定したテーマをダウンロード用のテーマとして一時フォルダに作成する
+     * @param string $theme
+     * @return string
+     */
+    public function createDownloadToTmp(string $theme): string;
+
 }
