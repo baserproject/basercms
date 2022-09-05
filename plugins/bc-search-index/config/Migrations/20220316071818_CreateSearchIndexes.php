@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 use Migrations\AbstractMigration;
 
-class InitialBcSearchIndex extends AbstractMigration
+class CreateSearchIndexes extends AbstractMigration
 {
     /**
      * Up Method.
