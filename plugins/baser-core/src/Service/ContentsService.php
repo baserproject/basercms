@@ -1252,6 +1252,7 @@ class ContentsService implements ContentsServiceInterface
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getTitlesById($ids): array
     {
