@@ -196,7 +196,7 @@ class BcUploadBehavior extends ModelBehavior
 		// <<<
 
 		$data = isset($Model->data[$Model->alias])? $Model->data[$Model->alias] : $Model->data;
-        if ($Model->exists()) {
+        if ($Model->exists() && !empty($this->oldEntity[$Model->alias])) {
             $this->BcFileUploader[$Model->alias]->deleteExistingFiles($this->oldEntity[$Model->alias]);
         }
         $entity = $this->BcFileUploader[$Model->alias]->saveFiles($data);
@@ -207,7 +207,7 @@ class BcUploadBehavior extends ModelBehavior
 		$this->uploaded[$Model->alias] = $this->BcFileUploader[$Model->alias]->uploaded;
 		// <<<
 
-        if ($Model->exists()) {
+        if ($Model->exists() && !empty($this->oldEntity[$Model->alias])) {
             $entity = $this->BcFileUploader[$Model->alias]->deleteFiles($this->oldEntity[$Model->alias], $entity);
         }
         if ($this->BcFileUploader[$Model->alias]->isUploaded()) {
