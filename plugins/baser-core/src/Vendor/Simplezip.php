@@ -1,16 +1,15 @@
 <?php
 /**
- * Simplezip
- *
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.Vendor
- * @since           baserCMS v 3.0.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) NPO baser foundation
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       https://basercms.net/license/index.html MIT License
  */
+
+namespace BaserCore\Vendor;
 
 /**
  * シンプルなZIP利用クラス
@@ -24,50 +23,44 @@ class Simplezip
      * 圧縮データ
      *
      * @var        array
-     * @access    public
      */
-    var $compressedData = [];
+    public $compressedData = [];
 
     /**
      * Central Directory
      *
      * @var        array
-     * @access    public
      */
-    var $centralDirectory = [];
+    public $centralDirectory = [];
 
     /**
      * End Of Central Directory Record
      *
      * @var        string
-     * @access    public
      */
-    var $endOfCentralDirectory = "\x50\x4b\x05\x06\x00\x00\x00\x00";
+    public $endOfCentralDirectory = "\x50\x4b\x05\x06\x00\x00\x00\x00";
 
     /**
      * オフセット
      *
      * @var        int
-     * @access    public
      */
-    var $oldOffset = 0;
+    public $oldOffset = 0;
 
     /**
      * エントリ（解凍用）
      *
      * @var        array
-     * @access    public
      */
-    var $entries = [];
+    public $entries = [];
 
     /**
      * Get Hexd Time
      *
      * @param int $time Unix timestamp
-     * @return    hex    the date formated as a ZIP date
-     * @access    public
+     * @return array|string|string[]
      */
-    function getMTime($time)
+    public function getMTime($time)
     {
         $mtime = ($time !== null? getdate($time) : getdate());
         $mtime = preg_replace(
@@ -89,9 +82,8 @@ class Simplezip
      * @param string $directory
      * @param string $put_int 追加対象位置
      */
-    function addFolder($directory, $put_into = '')
+    public function addFolder($directory, $put_into = '')
     {
-
         $handle = opendir($directory);
         if ($handle) {
             while(false !== ($file = readdir($handle))) {
@@ -105,20 +97,17 @@ class Simplezip
                 }
             }
         }
-
         closedir($handle);
-
     }
 
     /**
      * 圧縮対象データを追加
      *
-     * @param binary $data
+     * @param string $data
      * @param string $directoryName
      * @param int $time
-     * @access    public
      */
-    function addFile($data, $directoryName, $time = 0)
+    public function addFile($data, $directoryName, $time = 0)
     {
 
         $directoryName = str_replace("\\", "/", $directoryName);
@@ -179,7 +168,7 @@ class Simplezip
      * @param string   name of the file in the archive (may contains the path)
      * @param integer  the current timestamp
      */
-    function unix2DosTime($unixtime = 0)
+    public function unix2DosTime($unixtime = 0)
     {
         $timearray = ($unixtime == 0)? getdate() : getdate($unixtime);
 
@@ -197,95 +186,14 @@ class Simplezip
     } // end of the 'unix2DosTime()' method
 
     /**
-     * addFile2
-     *
-     * @param mixed $data
-     * @param string $name
-     * @param int $time
-     */
-    function addFile2($data, $name, $time = 0)
-    {
-        $name = str_replace('\\', '/', $name);
-
-        $dtime = dechex($this->unix2DosTime($time));
-        $hexdtime = '\x' . $dtime[6] . $dtime[7]
-            . '\x' . $dtime[4] . $dtime[5]
-            . '\x' . $dtime[2] . $dtime[3]
-            . '\x' . $dtime[0] . $dtime[1];
-        eval('$hexdtime = "' . $hexdtime . '";');
-
-        $fr = "\x50\x4b\x03\x04";
-        $fr .= "\x14\x00";            // ver needed to extract
-        $fr .= "\x00\x00";            // gen purpose bit flag
-        $fr .= "\x08\x00";            // compression method
-        $fr .= $hexdtime;             // last mod time and date
-
-        // "local file header" segment
-        $unc_len = strlen($data);
-        $crc = crc32($data);
-        $zdata = gzcompress($data);
-        $zdata = substr(substr($zdata, 0, strlen($zdata) - 4), 2); // fix crc bug
-        $c_len = strlen($zdata);
-        $fr .= pack('V', $crc);             // crc32
-        $fr .= pack('V', $c_len);           // compressed filesize
-        $fr .= pack('V', $unc_len);         // uncompressed filesize
-        $fr .= pack('v', strlen($name));    // length of filename
-        $fr .= pack('v', 0);                // extra field length
-        $fr .= $name;
-
-        // "file data" segment
-        $fr .= $zdata;
-
-        // "data descriptor" segment (optional but necessary if archive is not
-        // served as file)
-        // nijel(2004-10-19): this seems not to be needed at all and causes
-        // problems in some cases (bug #1037737)
-        //$fr .= pack('V', $crc);                 // crc32
-        //$fr .= pack('V', $c_len);               // compressed filesize
-        //$fr .= pack('V', $unc_len);             // uncompressed filesize
-
-        // add this entry to array
-        $this->compressedData[] = $fr;
-
-        // now add to central directory record
-        $cdrec = "\x50\x4b\x01\x02";
-        $cdrec .= "\x00\x00";                // version made by
-        $cdrec .= "\x14\x00";                // version needed to extract
-        $cdrec .= "\x00\x00";                // gen purpose bit flag
-        $cdrec .= "\x08\x00";                // compression method
-        $cdrec .= $hexdtime;                 // last mod time & date
-        $cdrec .= pack('V', $crc);           // crc32
-        $cdrec .= pack('V', $c_len);         // compressed filesize
-        $cdrec .= pack('V', $unc_len);       // uncompressed filesize
-        $cdrec .= pack('v', strlen($name)); // length of filename
-        $cdrec .= pack('v', 0);             // extra field length
-        $cdrec .= pack('v', 0);             // file comment length
-        $cdrec .= pack('v', 0);             // disk number start
-        $cdrec .= pack('v', 0);             // internal file attributes
-        $cdrec .= pack('V', 32);            // external file attributes - 'archive' bit set
-
-        $cdrec .= pack('V', $this->oldOffset); // relative offset of local header
-        $this->oldOffset += strlen($fr);
-
-        $cdrec .= $name;
-
-        // optional extra field, file comment goes here
-        // save to central directory
-        $this->centralDirectory[] = $cdrec;
-    } // end of the 'addFile()' method
-
-    /**
      * 圧縮されたデータを取得する
      *
-     * @return    binary    $zipedData
-     * @access    public
+     * @return string $zipedData
      */
-    function getZippedData()
+    public function getZippedData()
     {
-
         $data = implode("", $this->compressedData);
         $controlDirectory = implode("", $this->centralDirectory);
-
         return
             $data .
             $controlDirectory .
@@ -301,11 +209,8 @@ class Simplezip
      *
      * @param string $archiveName
      */
-    function download($archiveName)
+    public function download($archiveName)
     {
-
-        $headerInfo = '';
-
         if (ini_get('zlib.output_compression')) {
             ini_set('zlib.output_compression', 'Off');
         }
@@ -331,16 +236,15 @@ class Simplezip
         header("Content-Transfer-Encoding: binary");
         header("Content-Length: " . $size);
         echo $zippedData;
-
     }
 
     /**
      * 解凍したファイルを出力する
      *
-     * @param <type> $path
-     * @return <type>
+     * @param string $source
+     * @return bool
      */
-    function unzip($source, $tareget)
+    public function unzip($source, $tareget)
     {
         $tareget = preg_replace('/\/$/', '', $tareget);
         $entries = $this->_readFile($source);
@@ -349,7 +253,6 @@ class Simplezip
         }
         $result = true;
         foreach($entries as $entry) {
-            $folder = new Folder($tareget . DS . $entry['Path'], true, 0777);
             $fp = @fopen($tareget . DS . $entry['Path'] . DS . $entry['Name'], 'wb');
             if ($fp) {
                 if (!fwrite($fp, $entry['Data'])) {
@@ -371,7 +274,7 @@ class Simplezip
      * @return    array
      * @access    protected
      */
-    function _readFile($path)
+    public function _readFile($path)
     {
         ini_set('mbstring.func_overload', '0');
         $this->entries = [];
@@ -493,7 +396,6 @@ class Simplezip
         }
 
         return $this->entries;
-
     }
 
 }

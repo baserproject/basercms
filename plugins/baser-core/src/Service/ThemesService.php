@@ -19,7 +19,6 @@ use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use Cake\Cache\Cache;
-use Cake\Core\App;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Filesystem\File;

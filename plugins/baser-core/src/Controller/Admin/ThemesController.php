@@ -16,12 +16,12 @@ use BaserCore\Service\ThemesAdminServiceInterface;
 use BaserCore\Service\ThemesServiceInterface;
 use BaserCore\Utility\BcSiteConfig;
 use BaserCore\Utility\BcUtil;
+use BaserCore\Vendor\Simplezip;
 use BcZip;
 use Cake\Core\Configure;
 use Cake\Filesystem\Folder;
 use Cake\Utility\Inflector;
 use MailMessage;
-use Simplezip;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -416,24 +416,26 @@ class ThemesController extends BcAdminAppController
 
     /**
      * ダウンロード
+     * @checked
+     * @noTodo
      */
-    public function download()
+    public function download(): void
     {
         $this->autoRender = false;
         $tmpDir = TMP . 'theme' . DS;
-        $Folder = new Folder();
-        $Folder->create($tmpDir);
-        $theme = BcSiteConfig::get('theme');
-        $path = BASER_THEMES . $theme . DS;
-        $Folder->copy([
-            'from' => $path,
-            'to' => $tmpDir . $theme,
+        if(!is_dir($tmpDir)) {
+            $folder = new Folder($tmpDir);
+            $folder->create($tmpDir);
+        }
+        $theme = BcUtil::getCurrentTheme();
+        $folder = new Folder(BcUtil::getPluginPath($theme));
+        $folder->copy($tmpDir . $theme, [
             'chmod' => 0777
         ]);
-        $Simplezip = new Simplezip();
-        $Simplezip->addFolder($tmpDir);
-        $Simplezip->download($theme);
-        $Folder->delete($tmpDir);
+        $simplezip = new Simplezip();
+        $simplezip->addFolder($tmpDir);
+        $simplezip->download($theme);
+        $folder->delete($tmpDir);
     }
 
     /**
