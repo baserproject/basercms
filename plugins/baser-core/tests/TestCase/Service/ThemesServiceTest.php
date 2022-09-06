@@ -110,4 +110,19 @@ class ThemesServiceTest extends \BaserCore\TestSuite\BcTestCase
         $folder = new Folder();
         $folder->delete($themePath . 'Plugin');
     }
+
+    /**
+     * 一覧データ取得
+     */
+    public function testGetIndex()
+    {
+        $themes = $this->ThemesService->getIndex();
+        $result = false;
+        foreach ($themes as $theme) {
+            // デフォルトのフロントテーマを持っているかどうか確認する
+            if ($theme->name === 'BcFront') $result = true;
+        }
+
+        $this->assertTrue($result);
+    }
 }
