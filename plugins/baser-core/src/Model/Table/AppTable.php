@@ -1392,7 +1392,6 @@ class AppTable extends Table
      * -`encoding`: 出力エンコーディング
      * -`table`: テーブル名
      * -`init`: id、created、modified を初期化する（初期値：false）
-     * -`plugin`: プラグイン名
      * @return boolean
      * @checked
      * @noTodo
@@ -1403,7 +1402,6 @@ class AppTable extends Table
             'path' => '',
             'encoding' => '',
             'init' => false,
-            'plugin' => null
         ], $options);
 
         if (empty($options['path'])) {
