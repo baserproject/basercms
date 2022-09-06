@@ -423,7 +423,7 @@ class BcValidation extends Validation
      */
     public static function checkDate($value)
     {
-        if (!$value instanceOf FrozenTime) return false;
+        if (!$value instanceof FrozenTime) return false;
         return true;
     }
 

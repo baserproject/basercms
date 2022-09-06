@@ -232,10 +232,10 @@ class UserGroupsTable extends AppTable
      * @noTodo
      * @unitTest
      */
-    public function getAuthPrefix(int $id) : ?string
+    public function getAuthPrefix(int $id): ?string
     {
         $userGroup = $this->find()->where(['id' => $id])->first();
-        if(isset($userGroup->auth_prefix)){
+        if (isset($userGroup->auth_prefix)) {
             return $userGroup->auth_prefix;
         }
         return null;

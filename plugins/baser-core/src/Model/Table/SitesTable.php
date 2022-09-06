@@ -270,8 +270,8 @@ class SitesTable extends AppTable
             ];
         } else {
             $conditions['or'] = [
-                    ['Sites.main_site_id' => $content->site->main_site_id],
-                    ['Sites.id' => $content->site->main_site_id]
+                ['Sites.main_site_id' => $content->site->main_site_id],
+                ['Sites.id' => $content->site->main_site_id]
             ];
             if ($isMainSite) {
                 $conditions['or'][] = ['Site.main_site_id' => $content->site->id];
@@ -285,7 +285,7 @@ class SitesTable extends AppTable
                 ['Contents.main_site_content_id' => $mainSiteContentId]
             ]
         ];
-        $list= [];
+        $list = [];
         $relatedContents = $this->Contents->find()->where($conditions)->toArray();
         foreach($sites as $key => $site) {
             foreach($relatedContents as $relatedContent) {
@@ -626,7 +626,7 @@ class SitesTable extends AppTable
         $conditions = [
             'id IS NOT' => $currentSiteId
         ];
-        if($mainSiteId) {
+        if ($mainSiteId) {
             $conditions['main_site_id'] = $mainSiteId;
         } else {
             $conditions['main_site_id IS'] = null;
@@ -660,7 +660,7 @@ class SitesTable extends AppTable
         $conditions = [
             'id IS NOT' => $currentSiteId
         ];
-        if($mainSiteId) {
+        if ($mainSiteId) {
             $conditions['main_site_id'] = $mainSiteId;
         } else {
             $conditions['main_site_id IS'] = null;

@@ -1357,7 +1357,8 @@ class AppTable extends Table
      * イベントを一時的にオフにする
      * @param string $eventKey
      */
-    public function offEvent($eventKey) {
+    public function offEvent($eventKey)
+    {
         $eventManager = $this->getEventManager();
         $this->tmpEvents[$eventKey] = $eventManager->listeners($eventKey);
         $eventManager->off($eventKey);
@@ -1371,11 +1372,12 @@ class AppTable extends Table
      * @noTodo
      * @unitTest
      */
-    public function onEvent($eventKey) {
-        if(!isset($this->tmpEvents[$eventKey])) return;
+    public function onEvent($eventKey)
+    {
+        if (!isset($this->tmpEvents[$eventKey])) return;
         $eventManager = $this->getEventManager();
         foreach($this->tmpEvents[$eventKey] as $listener) {
-            if(get_class($listener['callable'][0]) !== 'BaserCore\Event\BcModelEventDispatcher' ) {
+            if (get_class($listener['callable'][0]) !== 'BaserCore\Event\BcModelEventDispatcher') {
                 $eventManager->on('Model.beforeSave', [], $listener['callable']);
             }
         }
@@ -1575,16 +1577,16 @@ class AppTable extends Table
         $list = [];
         foreach($plugins as $plugin) {
             $pluginPath = BcUtil::getPluginPath($plugin);
-            if(!$pluginPath) continue;
+            if (!$pluginPath) continue;
             $path = $pluginPath . 'config' . DS . 'Migrations';
             if (!is_dir($path)) continue;
             $folder = new Folder($path);
             $files = $folder->read(true, true);
             if (empty($files[1])) continue;
             foreach($files[1] as $file) {
-                if(!preg_match('/Create([a-zA-Z]+)\./', $file, $matches)) continue;
+                if (!preg_match('/Create([a-zA-Z]+)\./', $file, $matches)) continue;
                 $checkName = Inflector::tableize($matches[1]);
-                if(in_array($checkName, $tables)) {
+                if (in_array($checkName, $tables)) {
                     $list[$plugin][] = $checkName;
                 }
             }

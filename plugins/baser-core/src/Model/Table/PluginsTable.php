@@ -49,7 +49,7 @@ class PluginsTable extends AppTable
         $this->addBehavior('Timestamp');
     }
 
-  /**
+    /**
      * Validation Default
      *
      * @param Validator $validator
@@ -73,13 +73,13 @@ class PluginsTable extends AppTable
                     'rule' => 'validateUnique',
                     'provider' => 'table',
                     'message' => __d('baser', '指定のプラグインは既に使用されています。')
-            ]])
+                ]])
             ->add('name', [
                 'nameAlphaNumericPlus' => [
                     'rule' => ['alphaNumericPlus'],
                     'provider' => 'bc',
                     'message' => __d('baser', 'プラグイン名は半角英数字とハイフン、アンダースコアのみが利用可能です。')
-            ]]);
+                ]]);
 
         $validator
             ->scalar('title')
@@ -99,7 +99,7 @@ class PluginsTable extends AppTable
      */
     public function getPluginConfig($name)
     {
-        if(!$name) $name = 'BaserCore';
+        if (!$name) $name = 'BaserCore';
         $pluginName = Inflector::camelize($name, '-');
 
         // プラグインのバージョンを取得
@@ -210,7 +210,7 @@ class PluginsTable extends AppTable
     public function uninstall($name): bool
     {
         $targetPlugin = $this->find()->where(['name' => $name])->first();
-        if(!$targetPlugin) return true;
+        if (!$targetPlugin) return true;
         return $this->delete($targetPlugin);
     }
 
@@ -234,6 +234,7 @@ class PluginsTable extends AppTable
         BcUtil::clearAllCache();
         return $result !== false;
     }
+
     /**
      * プラグインを有効化する
      *
@@ -265,14 +266,14 @@ class PluginsTable extends AppTable
      */
     public function update($name, $version): bool
     {
-        if(!$name || $name === 'BaserCore') {
+        if (!$name || $name === 'BaserCore') {
             $siteConfigs = TableRegistry::getTableLocator()->get('BaserCore.SiteConfigs');
-            return (bool) $siteConfigs->saveKeyValue(['version' => $version]);
+            return (bool)$siteConfigs->saveKeyValue(['version' => $version]);
         } else {
             $plugin = $this->find()->select()->where(['name' => $name])->first();
-            if($plugin) {
+            if ($plugin) {
                 $plugin->version = $version;
-                return (bool) $this->save($plugin);
+                return (bool)$this->save($plugin);
             } else {
                 return true;
             }

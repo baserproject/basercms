@@ -49,7 +49,7 @@ return [
         /**
          * 現在のリクエストのホスト
          */
-        'host' => (isset($_SERVER['HTTP_HOST'])) ? $_SERVER['HTTP_HOST'] : null
+        'host' => (isset($_SERVER['HTTP_HOST']))? $_SERVER['HTTP_HOST'] : null
     ],
     'BcApp' => [
         /**
@@ -242,7 +242,7 @@ return [
                 ]
             ]
         ]
-     ],
+    ],
 
     /**
      * リクエスト情報

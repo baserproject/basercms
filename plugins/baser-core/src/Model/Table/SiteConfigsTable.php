@@ -125,7 +125,7 @@ class SiteConfigsTable extends AppTable
             'mode' => [
                 0 => __d('baser', 'ノーマルモード'),
                 1 => __d('baser', 'デバッグモード')
-        ]];
+            ]];
         if (isset($controlSources[$field])) {
             return $controlSources[$field];
         } else {
@@ -148,12 +148,12 @@ class SiteConfigsTable extends AppTable
         $changed = false;
         if ($lastModified) {
             $user = BcUtil::loginUser();
-            if(!$user) {
+            if (!$user) {
                 return false;
             }
             [$lastModified, $userId] = explode('|', $lastModified);
             $lastModified = strtotime($lastModified);
-            if ($user->id !== (int) $userId) {
+            if ($user->id !== (int)$userId) {
                 $listDisplayed = strtotime($listDisplayed);
                 if ($lastModified >= ($listDisplayed - 60)) {
                     $changed = true;
@@ -173,7 +173,7 @@ class SiteConfigsTable extends AppTable
     public function updateContentsSortLastModified()
     {
         $user = BcUtil::loginUser();
-        if(!$user) {
+        if (!$user) {
             return false;
         }
         return $this->saveValue(

@@ -310,7 +310,7 @@ class ThemesController extends BcAdminAppController
             $message = [__d('baser', 'テーマ「{0}」を適用しました。', $theme)];
             if ($info) $message = array_merge($message, [''], $info);
             $this->BcMessage->setInfo(implode("\n", $message));
-        } catch(BcException $e) {
+        } catch (BcException $e) {
             $this->BcMessage->setError(__d('baser', 'テーマの適用に失敗しました。', $e->getMessage()));
         }
         $this->redirect(['action' => 'index']);
@@ -359,7 +359,7 @@ class ThemesController extends BcAdminAppController
     {
         $this->autoRender = false;
         $pluginPath = BcUtil::getPluginPath($theme);
-        if(!file_exists($pluginPath . 'screenshot.png')) {
+        if (!file_exists($pluginPath . 'screenshot.png')) {
             $this->notFound();
         }
         return $this->getResponse()->withFile($pluginPath . 'screenshot.png');

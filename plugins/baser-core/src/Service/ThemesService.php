@@ -235,9 +235,9 @@ class ThemesService implements ThemesServiceInterface
      */
     public function copy(string $theme): bool
     {
-        if(!is_writable(BASER_THEMES)) throw new BcException(BASER_THEMES . ' に書込み権限がありません。');
+        if (!is_writable(BASER_THEMES)) throw new BcException(BASER_THEMES . ' に書込み権限がありません。');
 
-        if(in_array($theme, Configure::read('BcApp.core'))) $theme = Inflector::dasherize($theme);
+        if (in_array($theme, Configure::read('BcApp.core'))) $theme = Inflector::dasherize($theme);
         $newTheme = Inflector::camelize($theme, '-') . 'Copy';
         while(true) {
             if (!is_dir(BASER_THEMES . $newTheme)) break;
@@ -266,7 +266,7 @@ class ThemesService implements ThemesServiceInterface
     public function delete(string $theme): bool
     {
         $path = BcUtil::getPluginPath($theme);
-        if(!is_writable($path)) throw new BcException($path . ' に書込み権限がありません。');
+        if (!is_writable($path)) throw new BcException($path . ' に書込み権限がありません。');
         $folder = new Folder();
         if (!$folder->delete($path)) {
             return false;
@@ -337,7 +337,7 @@ class ThemesService implements ThemesServiceInterface
     public function createDownloadToTmp(string $theme): string
     {
         $tmpDir = TMP . 'theme' . DS;
-        if(!is_dir($tmpDir)) {
+        if (!is_dir($tmpDir)) {
             $folder = new Folder($tmpDir);
             $folder->create($tmpDir);
         }
@@ -373,7 +373,7 @@ class ThemesService implements ThemesServiceInterface
             $this->_writeCsv($plugin, $tmpDir . $plugin . DS, $excludes);
             $folder = new Folder($tmpDir . $plugin);
             $files = $folder->read();
-            if(!$files[0] && !$files[1]) $folder->delete($tmpDir . $plugin);
+            if (!$files[0] && !$files[1]) $folder->delete($tmpDir . $plugin);
         }
         // site_configs 調整
         $this->_modifySiteConfigsCsv($tmpDir . 'BaserCore' . DS . 'site_configs.csv');
@@ -420,7 +420,7 @@ class ThemesService implements ThemesServiceInterface
         $db = $appTable->getConnection();
         $tables = $db->getSchemaCollection()->listTables();
         $tableList = $appTable->getAppTableList();
-        if(!isset($tableList[$plugin])) return true;
+        if (!isset($tableList[$plugin])) return true;
         $result = true;
         foreach($tables as $table) {
             if (in_array($table, $tableList[$plugin])) {
