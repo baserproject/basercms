@@ -14,7 +14,6 @@ namespace BaserCore\Model\Table;
 use BaserCore\Event\BcEventDispatcherTrait;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
-use BaserCore\Model\AppTable;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
 use BaserCore\Annotation\UnitTest;

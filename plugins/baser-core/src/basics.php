@@ -270,69 +270,6 @@ function checkTmpFolders()
 }
 
 /**
- * フォルダの中をフォルダを残して空にする(ファイルのみを削除する)
- *
- * @param string $path
- * @return    boolean
- */
-function emptyFolder($path)
-{
-
-    $result = true;
-    $Folder = new Folder($path);
-    $files = $Folder->read(true, true, true);
-    if (is_array($files[1])) {
-        foreach($files[1] as $file) {
-            if ($file != 'empty') {
-                if (!@unlink($file)) {
-                    $result = false;
-                }
-            }
-        }
-    }
-    if (is_array($files[0])) {
-        foreach($files[0] as $file) {
-            if (!emptyFolder($file)) {
-                $result = false;
-            }
-        }
-    }
-    return $result;
-}
-
-/**
- * ファイルポインタから行を取得し、CSVフィールドを処理する
- *
- * @param stream    handle
- * @param int        length
- * @param string    delimiter
- * @param string    enclosure
- * @return    mixed    ファイルの終端に達した場合を含み、エラー時にFALSEを返します。
- */
-function fgetcsvReg(&$handle, $length = null, $d = ',', $e = '"')
-{
-    $d = preg_quote($d);
-    $e = preg_quote($e);
-    $_line = "";
-    $eof = false;
-    while(($eof != true) and (!feof($handle))) {
-        $_line .= (empty($length)? fgets($handle) : fgets($handle, $length));
-        $itemcnt = preg_match_all('/' . $e . '/', $_line, $dummy);
-        if ($itemcnt % 2 == 0)
-            $eof = true;
-    }
-    $_csv_line = preg_replace('/(?:\r\n|[\r\n])?$/', $d, trim($_line));
-    $_csv_pattern = '/(' . $e . '[^' . $e . ']*(?:' . $e . $e . '[^' . $e . ']*)*' . $e . '|[^' . $d . ']*)' . $d . '/';
-    preg_match_all($_csv_pattern, $_csv_line, $_csv_matches);
-    $_csv_data = $_csv_matches[1];
-    for($_csv_i = 0; $_csv_i < count($_csv_data); $_csv_i++) {
-        $_csv_data[$_csv_i] = preg_replace('/^' . $e . '(.*)' . $e . '$/s', '$1', $_csv_data[$_csv_i]);
-        $_csv_data[$_csv_i] = str_replace($e . $e, $e, $_csv_data[$_csv_i]);
-    }
-    return empty($_line)? false : $_csv_data;
-}
-
-/**
  * httpからのフルURLを取得する
  *
  * @param mixed $url
@@ -668,66 +605,6 @@ function checktime($hour, $min, $sec = null)
     return true;
 }
 
-/**
- * 関連するテーブルリストを取得する
- *
- * @return array
- */
-function getTableList()
-{
-    $list = Cache::read('table_list', '_cake_core_');
-    if ($list !== false) {
-        return $list;
-    }
-    $prefix = ConnectionManager::getDataSource('default')->config['prefix'];
-    $tables = ConnectionManager::getDataSource('default')->listSources();
-    $Folder = new Folder(BASER_CONFIGS . 'Schema');
-    $files = $Folder->read(true, true);
-    $list = [];
-    if ($files[1]) {
-        foreach($tables as $key => $table) {
-            foreach($files[1] as $file) {
-                if ($table == $prefix . basename($file, '.php')) {
-                    $list['core'][] = $table;
-                    unset($tables[$key]);
-                }
-            }
-        }
-    }
-    $plugins = CakePlugin::loaded();
-    $pluginFiles = [];
-    foreach($plugins as $plugin) {
-        $path = null;
-        $themePath = BASER_THEMES . Configure::read('BcSite.theme') . DS;
-        if (is_dir($themePath . 'Plugin' . DS . $plugin . DS . 'Config' . DS . 'Schema')) {
-            $path = $themePath . 'Plugin' . DS . $plugin . DS . 'Config' . DS . 'Schema';
-        } elseif (is_dir(APP . 'Plugin' . DS . $plugin . DS . 'Config' . DS . 'Schema')) {
-            $path = APP . 'Plugin' . DS . $plugin . DS . 'Config' . DS . 'Schema';
-        } elseif (is_dir(BASER_PLUGINS . $plugin . DS . 'Config' . DS . 'Schema')) {
-            $path = BASER_PLUGINS . $plugin . DS . 'Config' . DS . 'Schema';
-        }
-        $Folder = new Folder($path);
-        $files = $Folder->read(true, true);
-        if ($files[1]) {
-            $pluginFiles = array_merge($pluginFiles, $files[1]);
-        }
-    }
-    foreach($tables as $table) {
-        foreach($pluginFiles as $file) {
-            if ($prefix . basename($file, '.php') == 'mail_message') {
-                $test = '';
-            }
-            $file = $prefix . basename($file, '.php');
-            $singularize = Inflector::singularize($file);
-            if (preg_match('/^(' . preg_quote($file, '/') . '|' . preg_quote($singularize, '/') . ')/', $table)) {
-                $list['plugin'][] = $table;
-                unset($tables[$key]);
-            }
-        }
-    }
-    Cache::write('table_list', $list, '_cake_core_');
-    return $list;
-}
 
 /**
  * 処理を実行し、例外が発生した場合は指定した回数だけリトライする

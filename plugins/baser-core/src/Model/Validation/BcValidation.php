@@ -15,7 +15,6 @@ use Cake\Log\Log;
 use Cake\Utility\Hash;
 use Cake\Core\Configure;
 use Cake\I18n\FrozenTime;
-use BaserCore\Model\AppTable;
 use BaserCore\Utility\BcUtil;
 use Cake\Validation\Validation;
 use BaserCore\Annotation\NoTodo;

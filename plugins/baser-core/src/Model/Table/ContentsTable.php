@@ -18,7 +18,6 @@ use Cake\Core\Configure;
 use Cake\I18n\FrozenTime;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
-use BaserCore\Model\AppTable;
 use BaserCore\Utility\BcUtil;
 use Cake\Event\EventInterface;
 use Cake\Validation\Validator;

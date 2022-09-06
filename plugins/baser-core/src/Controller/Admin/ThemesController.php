@@ -318,100 +318,17 @@ class ThemesController extends BcAdminAppController
 
     /**
      * 初期データセットをダウンロードする
+     * @checked
+     * @noTodo
      */
-    public function download_default_data_pattern()
+    public function download_default_data_pattern(ThemesServiceInterface $service)
     {
-        set_time_limit(0);
-        ini_set('memory_limit', -1);
-
-        // コアのCSVを生成
-        $tmpDir = TMP . 'csv' . DS;
-        $Folder = new Folder();
-        $Folder->create($tmpDir);
-        emptyFolder($tmpDir);
-        BcUtil::clearAllCache();
-        $excludes = ['plugins', 'dblogs', 'users'];
-        $this->_writeCsv('core', $tmpDir, $excludes);
-        // プラグインのCSVを生成
-        $plugins = CakePlugin::loaded();
-        foreach($plugins as $plugin) {
-            $Folder->create($tmpDir . $plugin);
-            emptyFolder($tmpDir . $plugin);
-            $this->_writeCsv($plugin, $tmpDir . $plugin . DS);
-        }
-        // site_configsの編集 (email / google_analytics_id / version)
-        $targets = ['email', 'google_analytics_id', 'version'];
-        $path = $tmpDir . 'site_configs.csv';
-        $fp = fopen($path, 'a+');
-        $records = [];
-        while(($record = fgetcsvReg($fp, 10240)) !== false) {
-            if (in_array($record[1], $targets)) {
-                $record[2] = '';
-            }
-            $records[] = '"' . implode('","', $record) . '"';
-        }
-        ftruncate($fp, 0);
-        fwrite($fp, implode("\n", $records));
-        /* ZIPに固めてダウンロード */
-        $fileName = 'default';
+        $this->autoRender = false;
+        $tmpDir = $service->createDownloadDefaultDataPatternToTmp();
         $Simplezip = new Simplezip();
         $Simplezip->addFolder($tmpDir);
-        $Simplezip->download($fileName);
-        emptyFolder($tmpDir);
-        exit();
-    }
-
-    /**
-     * CSVファイルを書きだす
-     *
-     * @param string $configKeyName
-     * @param string $path
-     * @return boolean
-     */
-    function _writeCsv($plugin, $path, $exclude = [])
-    {
-
-        $pluginTables = [];
-        if ($plugin !== 'core') {
-            $pluginPath = BcUtil::getSchemaPath($plugin);
-            $Folder = new Folder($pluginPath);
-            $files = $Folder->read(true, true, false);
-            $pluginTables = $files[1];
-            foreach($pluginTables as $key => $pluginTable) {
-                if (preg_match('/^(.+)\.php$/', $pluginTable, $matches)) {
-                    $pluginTables[$key] = $matches[1];
-                } else {
-                    unset($pluginTables[$key]);
-                }
-            }
-        }
-
-        $pluginKey = Inflector::underscore($plugin);
-        $db = ConnectionManager::getDataSource('default');
-        $db->cacheSources = false;
-        $tables = $db->listSources();
-        $tableList = getTableList();
-        $result = true;
-        foreach($tables as $table) {
-            if (($plugin === 'core' && in_array($table, $tableList['core'])) || ($plugin !== 'core' && in_array($table, $tableList['plugin']))) {
-                $table = str_replace($db->config['prefix'], '', $table);
-                if (in_array($table, $exclude)) {
-                    continue;
-                }
-                if ($pluginKey !== 'core' && !in_array($table, $pluginTables)) {
-                    continue;
-                }
-                if (!$db->writeCsv([
-                    'path' => $path . $table . '.csv',
-                    'encoding' => 'UTF-8',
-                    'init' => false,
-                    'plugin' => ($plugin === 'core')? null : $plugin
-                ])) {
-                    $result = false;
-                }
-            }
-        }
-        return $result;
+        $Simplezip->download('default');
+        BcUtil::emptyFolder($tmpDir);
     }
 
     /**

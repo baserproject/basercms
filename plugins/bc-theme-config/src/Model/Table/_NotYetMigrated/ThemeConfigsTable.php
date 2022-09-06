@@ -9,9 +9,8 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
-namespace BaserCore\Model\Table;
+namespace BcThemeConfig\Model\Table;
 
-use BaserCore\Model\AppTable;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;

@@ -15,7 +15,6 @@ use ArrayObject;
 use BcSearchIndex\Service\SearchIndexesService;
 use BcSearchIndex\Service\SearchIndexesServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
-use BaserCore\Model\AppTable;
 use Cake\Event\EventInterface;
 use Cake\Validation\Validator;
 use BaserCore\Annotation\NoTodo;

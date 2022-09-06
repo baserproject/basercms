@@ -9,13 +9,13 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
-namespace BaserCore\Test\TestCase\Model;
+namespace BaserCore\Test\TestCase\Model\Table;
 
-use Cake\I18n\Time;
-use BaserCore\Model\AppTable;
+use BaserCore\Model\Table\AppTable;
+use BaserCore\Test\Factory\UserFactory;
 use BaserCore\TestSuite\BcTestCase;
-use BaserCore\Model\PermissionsTable;
 use BaserCore\Model\Table\PermissionsTable as TablePermissionsTable;
+use Cake\Cache\Cache;
 
 /**
  * Class AppTableTest
@@ -47,7 +47,7 @@ class AppTableTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $config = $this->getTableLocator()->exists('AppTable')? [] : ['className' => 'BaserCore\Model\AppTable'];
+        $config = $this->getTableLocator()->exists('AppTable')? [] : ['className' => 'BaserCore\Model\Table\AppTable'];
         $this->App = $this->getTableLocator()->get('BaserCore.AppTable', $config);
 
     }
@@ -164,4 +164,22 @@ class AppTableTest extends BcTestCase
         $Plugins->changeSort(2, -1, ['sortFieldName' => 'priority']);
         $this->assertEquals(1, $Plugins->get(2)->priority);
     }
+
+    /**
+     * test getAppTableList
+     */
+    public function test_getAppTableList()
+    {
+        Cache::delete('appTableList', '_bc_env_');
+        $result = $this->App->getAppTableList();
+        $this->assertTrue(in_array('plugins', $result['BaserCore']));
+        $this->assertTrue(in_array('plugins', Cache::read('appTableList', '_bc_env_')['BaserCore']));
+    }
+
+    public function test_writeCsv()
+    {
+        UserFactory::make(2)->persist();
+        $result = $this->App->writeCsv('users', ['path' => TMP . 'users.csv']);
+    }
+
 }

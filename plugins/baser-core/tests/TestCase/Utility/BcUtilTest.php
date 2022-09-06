@@ -963,4 +963,82 @@ class BcUtilTest extends BcTestCase
         $this->assertEquals('1.0.0', BcUtil::getDbVersion('BcBlog'));
     }
 
+    /**
+     * フォルダの中をフォルダを残して空にする
+     */
+    public function testEmptyFolder()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $dummyPath = TMP . 'test' . DS;
+        $names = [
+            'folder' => ['folder1', 'folder2'],
+            'file' => ['file1', 'file2'],
+        ];
+
+        // ダミーのフォルダとファイルを作成
+        $Folder = new Folder();
+        $Folder->create($dummyPath, 0755);
+        $Folder->create($dummyPath . $names['folder'][0], 0755);
+        $Folder->create($dummyPath . $names['folder'][1], 0755);
+
+        $File1 = new File($dummyPath . $names['file'][0], true);
+        $File2 = new File($dummyPath . $names['file'][1], true);
+
+        BcUtil::emptyFolder($dummyPath);
+
+        $result = true;
+        // フォルダが存在しているかチェック
+        foreach($names['folder'] as $key => $name) {
+            if (!is_dir($dummyPath . $name)) {
+                $result = false;
+            }
+            @rmdir($dummyPath . $name);
+        }
+        // ファイルが削除されているかチェック
+        foreach($names['file'] as $key => $name) {
+            if (file_exists($dummyPath . $name)) {
+                $result = false;
+            }
+            @unlink($dummyPath . $name);
+        }
+        $Folder->delete($dummyPath);
+
+        $this->assertTrue($result, 'フォルダの中のファイルのみを削除することができません');
+    }
+
+    /**
+     * ファイルポインタから行を取得し、CSVフィールドを処理する
+     *
+     * @param string $content CSVの内容
+     * @param int $length length
+     * @param string $d delimiter
+     * @param string $e enclosure
+     * @param string $expext 期待値
+     * @param string $message テスト失敗時に表示するメッセージ
+     * @dataProvider fgetcsvRegDataProvider
+     */
+    public function testFgetcsvReg($content, $length, $d, $e, $expect, $message)
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $csv = new File(CACHE . 'test.csv');
+        $csv->write($content);
+        $csv->close();
+        $csv->open();
+
+        $result = BcUtil::fgetcsvReg($csv->handle, $length, $d, $e);
+        $this->assertEquals($expect, $result, $message);
+
+        $csv->close();
+    }
+
+    public function fgetcsvRegDataProvider()
+    {
+        return [
+            ['test1,test2,test3', null, ',', '"', ['test1', 'test2', 'test3'], 'ファイルポインタから行を取得し、CSVフィールドを正しく処理できません'],
+            ['test1,test2,test3', 5, ',', '"', ['test'], '読み込む文字列の長さを指定できません'],
+            ['test1?test2?test3', null, '?', '"', ['test1', 'test2', 'test3\\'], 'デリミタを指定できません'],
+            ['test1,<<test2,test3<<', null, ',', '<<', ['test1', 'test2,test3'], 'enclosureを指定できません'],
+        ];
+    }
+
 }

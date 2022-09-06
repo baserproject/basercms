@@ -17,7 +17,6 @@ use Cake\Core\Configure;
 use Cake\ORM\Association\BelongsToMany;
 use Cake\ORM\Behavior\TimestampBehavior as TimestampBehaviorAlias;
 use Cake\Datasource\{EntityInterface, ResultSetInterface as ResultSetInterfaceAlias};
-use BaserCore\Model\AppTable;
 use Cake\Validation\Validator;
 use BaserCore\Model\Table\Exception\CopyFailedException;
 use BaserCore\Annotation\UnitTest;

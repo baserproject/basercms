@@ -15,7 +15,6 @@ use ArrayObject;
 use BaserCore\Service\ContentFoldersService;
 use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
-use BaserCore\Model\AppTable;
 use BaserCore\Utility\BcLang;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Annotation\Note;

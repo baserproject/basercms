@@ -11,7 +11,7 @@
 
 namespace BcSearchIndex\Model\Table;
 
-use BaserCore\Model\AppTable;
+use BaserCore\Model\Table\AppTable;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
