@@ -261,6 +261,7 @@ class ThemesService implements ThemesServiceInterface
      * @param string $theme
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function delete(string $theme): bool
     {
