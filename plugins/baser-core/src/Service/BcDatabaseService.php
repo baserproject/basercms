@@ -22,6 +22,9 @@ use Cake\Log\LogTrait;
 use Cake\ORM\Entity;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  *
@@ -47,6 +50,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      * @param $theme
      * @param $pattern
      * @param $excludes
+     * @checked
      */
     public function loadDefaultDataPattern($theme, $pattern, $excludes)
     {
@@ -63,6 +67,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         foreach($plugins as $plugin) {
             $this->_loadDefaultDataPattern($pattern, $theme, $plugin, $excludes);
         }
+        // TODO ucmitz 下記処理について未検証
         if (!$result) {
             // 指定したデータセットでの読み込みに失敗した場合、コアのデータ読み込みを試みる
             if (!$this->_loadDefaultDataPattern('default', 'BaserCore', 'BaserCore', $excludes)) {
@@ -91,7 +96,9 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      * @param string $theme
      * @param string $plugin
      * @param array $excludes
-     * @return boolean
+     * @return bool
+     * @checked
+     * @noTodo
      */
     public function _loadDefaultDataPattern($pattern, $theme, $plugin = 'BaserCore', $excludes = [])
     {
@@ -305,7 +312,14 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         $siteConfigsService->setValue('first_access', $options['first_access']);
         $siteConfigsService->setValue('admin_theme', $options['adminTheme']);
         $siteConfigsService->setValue('version', $options['version']);
-        $siteConfigsService->setValue('theme', $options['theme']);
+
+        // sites の初期データを設定
+        $sitesTable = TableRegistry::getTableLocator()->get('BaserCore.Sites');
+        $site = $sitesTable->get(1);
+        $site->theme = $options['theme'];
+        if(!$sitesTable->save($site)) {
+            $result = false;
+        }
 
         if (!$result) {
             $this->log(__d('baser', 'システムデータの初期化に失敗しました。'));
