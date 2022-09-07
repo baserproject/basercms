@@ -107,6 +107,7 @@ class ThemesController extends BcAdminAppController
      */
     public function load_default_data_pattern(ThemesServiceInterface $service)
     {
+        $this->request->allowMethod(['post']);
         if (empty($this->getRequest()->getData('default_data_pattern'))) {
             $this->BcMessage->setError(__d('baser', '不正な操作です。'));
             return $this->redirect(['action' => 'index']);
@@ -123,25 +124,6 @@ class ThemesController extends BcAdminAppController
         }
         $this->BcMessage->setInfo(__d('baser', '初期データの読み込みが完了しました。'));
         return $this->redirect(['action' => 'index']);
-    }
-
-    /**
-     * コアの初期データを読み込む
-     *
-     * @return void
-     */
-    public function reset_data()
-    {
-        $this->_checkSubmitToken();
-        $result = $this->_load_default_data_pattern('core.default', BcSiteConfig::get('theme'));
-        if (!$result) {
-            $this->BcMessage->setError(__d('baser', '初期データの読み込みが完了しましたが、いくつかの処理に失敗しています。ログを確認してください。'));
-            $this->redirect('/admin');
-            return;
-        }
-
-        $this->BcMessage->setInfo(__d('baser', '初期データの読み込みが完了しました。'));
-        $this->redirect('/admin');
     }
 
     /**

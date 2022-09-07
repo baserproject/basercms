@@ -355,14 +355,6 @@ class ThemesService implements ThemesServiceInterface
     }
 
     /**
-     * コアの初期データを読み込む
-     */
-    public function resetData(): bool
-    {
-        return true;
-    }
-
-    /**
      * 指定したテーマをダウンロード用のテーマとして一時フォルダに作成する
      * @param string $theme
      * @return string

@@ -847,7 +847,7 @@ class ThemeFilesController extends AppController
             $this->notFound();
         }
 
-        $theme = BcSiteConfig::get('theme');
+        $theme = BcUtil::getCurrentTheme();
         if ($type !== 'etc') {
             if ($plugin && $assets) {
                 $themePath = WWW_ROOT . 'theme' . DS . $theme . DS . $plugin . DS . $type . DS . $path;
@@ -885,7 +885,7 @@ class ThemeFilesController extends AppController
             $this->notFound();
         }
 
-        $theme = BcSiteConfig::get('theme');
+        $theme = BcUtil::getCurrentTheme();
         if ($type !== 'etc') {
             if ($plugin && $assets) {
                 $themePath = WWW_ROOT . 'theme' . DS . $theme . DS . $plugin . DS . $type . DS;

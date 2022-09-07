@@ -110,14 +110,6 @@ class ThemesControllerTest extends BcTestCase
     }
 
     /**
-     * コアの初期データを読み込む
-     */
-    public function test_reset_data()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
-    /**
      * テーマをコピーする
      */
     public function test_copy()

@@ -273,7 +273,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
             'theme' => null,
         ], $options);
 
-        $corePath = BASER_CONFIGS . 'data' . DS . 'default';
+        $corePath = BcUtil::getPluginPath(Inflector::camelize(Configure::read('BcApp.defaultFrontTheme'), '-')) . 'config' . DS . 'data' . DS . 'default' . DS . 'BaserCore';
         $result = true;
 
         // user_groupsの初期データをチェック＆設定
