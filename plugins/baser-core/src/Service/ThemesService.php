@@ -164,6 +164,7 @@ class ThemesService implements ThemesServiceInterface
      * @return array|string[]
      * @checked
      * @noTodo
+     * @unitTest
      */
     private function getThemesPluginsInfo(string $theme)
     {
