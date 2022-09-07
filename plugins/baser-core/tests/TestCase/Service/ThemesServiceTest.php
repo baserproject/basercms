@@ -130,4 +130,17 @@ class ThemesServiceTest extends \BaserCore\TestSuite\BcTestCase
         $folder = new Folder();
         $folder->delete($themePath . 'Plugin');
     }
+
+    /**
+     * test getMarketThemes
+     * @return void
+     */
+    public function testGetMarketThemes()
+    {
+        $themes = $this->ThemesService->getMarketThemes();
+        $this->assertEquals(true, count($themes) > 0);
+        $this->assertEquals('multiverse', $themes[0]['title']);
+        $this->assertEquals('1.0.0', $themes[0]['version']);
+        $this->assertEquals('テーマ', $themes[0]['category']);
+    }
 }

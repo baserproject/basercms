@@ -322,6 +322,9 @@ class ThemesService implements ThemesServiceInterface
 
     /**
      * baserマーケットのテーマ一覧を取得する
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getMarketThemes(): array
     {
