@@ -433,35 +433,21 @@ class BcUtilTest extends BcTestCase
      */
     public function testGetThemesPlugins()
     {
+        $theme = 'BcSpaSample';
+        $plugins = BcUtil::getThemesPlugins($theme);
+        $this->assertCount(0, $plugins);
 
-        // TODO ucmitz移行時に未実装のため代替措置
-        // >>>
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        // <<<
+        $themePath = BcUtil::getPluginPath($theme);
+        $pluginName = 'test';
+        mkdir($themePath . 'Plugin', 777, true);
+        mkdir($themePath . 'Plugin/' . $pluginName, 777, true);
 
-        $theme = Configure::read('BcSite.theme');
-        $path = BASER_THEMES . $theme . DS . 'Plugin';
+        $plugins = BcUtil::getThemesPlugins($theme);
+        $this->assertCount(1, $plugins);
+        $this->assertEquals($pluginName, $plugins[0]);
 
-        // ダミーのプラグインディレクトリを削除
-        $Folder = new Folder();
-        $Folder->delete($path);
-
-        // プラグインが存在しない場合
-        $result = BcUtil::getThemesPlugins($theme);
-        $expect = [];
-        $this->assertEquals($expect, $result, 'テーマ梱包プラグインのリストを正しく取得できません');
-
-        // プラグインが存在する場合
-        // ダミーのプラグインディレクトリを作成
-        $Folder->create($path . DS . 'dummy1');
-        $Folder->create($path . DS . 'dummy2');
-
-        $result = BcUtil::getThemesPlugins($theme);
-        // ダミーのプラグインディレクトリを削除
-        $Folder->delete($path);
-
-        $expect = ['dummy1', 'dummy2'];
-        $this->assertEquals($expect, $result, 'テーマ梱包プラグインのリストを正しく取得できません');
+        $folder = new Folder();
+        $folder->delete($themePath . 'Plugin');
     }
 
     /**

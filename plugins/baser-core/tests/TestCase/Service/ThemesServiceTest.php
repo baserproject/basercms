@@ -15,8 +15,8 @@ use BaserCore\Service\ThemesService;
 use BaserCore\Service\ThemesServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
-use Cake\Filesystem\Folder;
 use Cake\Filesystem\File;
+use Cake\Filesystem\Folder;
 
 /**
  * ThemesServiceTest
@@ -72,6 +72,26 @@ class ThemesServiceTest extends \BaserCore\TestSuite\BcTestCase
     }
 
     /**
+     * test copy
+     * @return void
+     */
+    public function testCopy()
+    {
+        $rs = $this->ThemesService->copy('BcFront');
+        $this->assertTrue($rs);
+        //コピーを確認
+        $this->assertTrue(is_dir(BASER_THEMES . 'BcFrontCopy'));
+
+        $pluginPath = BcUtil::getPluginPath('BcFrontCopy');
+        $file = new File($pluginPath . 'src' . DS . 'Plugin.php');
+        $data = $file->read();
+        //namespaceの書き換えを確認
+        $this->assertTrue(str_contains($data, 'namespace BcFrontCopy;'));
+        $file->close();
+
+        $this->ThemesService->delete('BcFrontCopy');
+    }
+    /**
      * test delete
      * @return void
      */
@@ -109,5 +129,18 @@ class ThemesServiceTest extends \BaserCore\TestSuite\BcTestCase
 
         $folder = new Folder();
         $folder->delete($themePath . 'Plugin');
+    }
+
+    /**
+     * test getMarketThemes
+     * @return void
+     */
+    public function testGetMarketThemes()
+    {
+        $themes = $this->ThemesService->getMarketThemes();
+        $this->assertEquals(true, count($themes) > 0);
+        $this->assertEquals('multiverse', $themes[0]['title']);
+        $this->assertEquals('1.0.0', $themes[0]['version']);
+        $this->assertEquals('テーマ', $themes[0]['category']);
     }
 }

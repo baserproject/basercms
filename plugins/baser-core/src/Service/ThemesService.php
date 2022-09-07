@@ -276,6 +276,7 @@ class ThemesService implements ThemesServiceInterface
      * コピーする
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function copy(string $theme): bool
     {
@@ -321,6 +322,9 @@ class ThemesService implements ThemesServiceInterface
 
     /**
      * baserマーケットのテーマ一覧を取得する
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getMarketThemes(): array
     {

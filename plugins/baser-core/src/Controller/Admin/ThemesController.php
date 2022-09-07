@@ -89,6 +89,9 @@ class ThemesController extends BcAdminAppController
 
     /**
      * baserマーケットのテーマデータを取得する
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function get_market_themes(ThemesServiceInterface $service)
     {
@@ -242,6 +245,7 @@ class ThemesController extends BcAdminAppController
      * @return false|string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function screenshot($theme)
     {
