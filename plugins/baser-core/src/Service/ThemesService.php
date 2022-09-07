@@ -15,6 +15,7 @@ use BaserCore\Error\BcException;
 use BaserCore\Model\Entity\Site;
 use BaserCore\Model\Table\AppTable;
 use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Utility\BcSiteConfig;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -223,10 +224,52 @@ class ThemesService implements ThemesServiceInterface
 
     /**
      * 初期データを読み込む
+     * @param string $theme
+     * @param string $pattern
      */
-    public function loadDefaultDataPattern(): bool
+    public function loadDefaultDataPattern(string $currentTheme, string $dbDataPattern): bool
     {
-        return true;
+        /* @var BcDatabaseService $dbService */
+        $dbService = $this->getService(BcDatabaseServiceInterface::class);
+
+        // データパターンのチェック
+        [$theme, $pattern] = explode('.', $dbDataPattern);
+        if (!$this->checkDefaultDataPattern($theme, $pattern)) {
+            throw new BcException(__d('baser', '初期データのバージョンが違うか、初期データの構造が壊れています。'));
+        }
+
+        // データを削除する
+        $excludes = ['plugins', 'dblogs', 'users'];
+        $dbService->resetAllTables($excludes);
+
+        // 初期データ読み込み
+        $result = true;
+        try {
+            if (!$dbService->loadDefaultDataPattern($theme, $pattern, $excludes)) $result = false;
+        } catch (BcException $e) {
+            throw $e;
+        }
+
+        // メッセージテーブルの初期化
+        if (!$dbService->initMessageTables()) $result = false;
+
+        // システムデータの初期化
+        if (!$dbService->initSystemData([
+            'excludeUsers' => true,
+            'email' => BcSiteConfig::get('email'),
+            'google_analytics_id' => BcSiteConfig::get('google_analytics_id'),
+            'first_access' => null,
+            'version' => BcSiteConfig::get('version'),
+            'theme' => $currentTheme,
+            'adminTheme' => BcSiteConfig::get('admin_theme')
+        ])) {
+            $result = false;
+        }
+
+        // DBシーケンスの更新
+        $dbService->updateSequence();
+
+        return $result;
     }
 
     /**
@@ -273,22 +316,6 @@ class ThemesService implements ThemesServiceInterface
         if (!$folder->delete($path)) {
             return false;
         }
-        return true;
-    }
-
-    /**
-     * 利用中のテーマをダウンロードする
-     */
-    public function download()
-    {
-        return true;
-    }
-
-    /**
-     * 初期データをダウンロードする
-     */
-    public function downloadDefaultDataPattern()
-    {
         return true;
     }
 
@@ -416,18 +443,19 @@ class ThemesService implements ThemesServiceInterface
      */
     protected function _writeCsv($plugin, $path, $exclude = [])
     {
+        $dbService = $this->getService(BcDatabaseServiceInterface::class);
         /* @var AppTable $appTable */
         $appTable = TableRegistry::getTableLocator()->get('BaserCore.App');
         /* @var \Cake\Database\Connection $db */
         $db = $appTable->getConnection();
         $tables = $db->getSchemaCollection()->listTables();
-        $tableList = $appTable->getAppTableList();
+        $tableList = $dbService->getAppTableList();
         if (!isset($tableList[$plugin])) return true;
         $result = true;
         foreach($tables as $table) {
             if (in_array($table, $tableList[$plugin])) {
                 if (in_array($table, $exclude)) continue;
-                if (!$appTable->writeCsv($table, [
+                if (!$dbService->writeCsv($table, [
                     'path' => $path . $table . '.csv',
                     'encoding' => 'UTF-8',
                     'init' => false,
@@ -439,4 +467,35 @@ class ThemesService implements ThemesServiceInterface
         }
         return $result;
     }
+
+    /**
+     * 初期データチェックする
+     *
+     * @param string $theme
+     * @param string $pattern
+     * @return boolean
+     * @checked
+     * @noTodo
+     */
+    public function checkDefaultDataPattern($theme, $pattern = 'default')
+    {
+        $path = BcUtil::getDefaultDataPath('BaserCore', $theme, $pattern);
+        if (!$path) return false;
+        $corePath = BcUtil::getDefaultDataPath('BaserCore', Configure::read('BcApp.defaultFrontTheme'), 'default');
+
+        $Folder = new Folder($corePath . DS . 'BaserCore');
+        $files = $Folder->read(true, true);
+        $coreTables = $files[1];
+        $Folder = new Folder($path . DS . 'BaserCore');
+        $files = $Folder->read(true, true);
+        if (empty($files[1])) return false;
+        $targetTables = $files[1];
+        foreach($coreTables as $coreTable) {
+            if (!in_array($coreTable, $targetTables)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 }

@@ -57,11 +57,13 @@ interface ThemesServiceInterface
 
     /**
      * 初期データを読み込む
+     * @param string $theme
+     * @param string $pattern
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function loadDefaultDataPattern(): bool;
+    public function loadDefaultDataPattern(string $theme, string $pattern): bool;
 
     /**
      * コピーする
@@ -79,22 +81,6 @@ interface ThemesServiceInterface
      * @unitTest
      */
     public function delete(string $theme): bool;
-
-    /**
-     * 利用中のテーマをダウンロードする
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function download();
-
-    /**
-     * 初期データをダウンロードする
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function downloadDefaultDataPattern();
 
     /**
      * baserマーケットのテーマ一覧を取得する

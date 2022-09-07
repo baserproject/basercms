@@ -83,11 +83,6 @@ class BcManagerComponentTest extends BcTestCase
         unset($this->BcManager);
     }
 
-    public function test_getDataSource()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
     public function test_updateContents()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
@@ -496,35 +491,6 @@ class BcManagerComponentTest extends BcTestCase
     public function testResetAllTables($dbConfig = null, $excludes = [])
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
-
-    }
-
-    /**
-     * テーブルをリセットする
-     *
-     * @param type $dbConfigKeyName
-     * @param type $dbConfig
-     * @return boolean
-     */
-    public function testResetTables()
-    {
-
-        $result = $this->BcManager->resetTables('test');
-        $this->assertTrue($result, 'テーブルをリセットできません');
-
-        $this->User = ClassRegistry::init('User');
-        $User = $this->User->find('all', [
-                'recursive' => -1,
-            ]
-        );
-        $this->assertEmpty($User, 'テーブルをリセットできません');
-
-        $this->FeedDetail = ClassRegistry::init('FeedDetail');
-        $FeedDetail = $this->FeedDetail->find('all', [
-                'recursive' => -1,
-            ]
-        );
-        $this->assertEmpty($FeedDetail, 'プラグインのテーブルをリセットできません');
 
     }
 
