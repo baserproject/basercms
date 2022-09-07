@@ -475,7 +475,7 @@ class BcUtil
      */
     public static function getCurrentThemesPlugins()
     {
-        return BcUtil::getThemesPlugins(BcSiteConfig::get('theme'));
+        return BcUtil::getThemesPlugins(BcUtil::getCurrentTheme());
     }
 
     /**
