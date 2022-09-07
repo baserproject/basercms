@@ -46,4 +46,30 @@ $(function () {
         }
     });
 
+    /**
+     * テーマ適用
+     */
+    $(".btn-apply").click(function(){
+        if(!confirm(bcI18n.confirmMessage3)) return false;
+        $.bcUtil.showLoader();
+        return true;
+    });
+
+    /**
+     * テーマ削除
+     */
+    $(".btn-delete").click(function(){
+        if(!confirm(bcI18n.confirmMessage1)) return false;
+        $.bcUtil.showLoader();
+        return true;
+    });
+
+    /**
+     * テーマコピー
+     */
+    $(".btn-copy").click(function(){
+        $.bcUtil.showLoader();
+        return true;
+    });
+
 });
