@@ -89,6 +89,9 @@ class ThemesController extends BcAdminAppController
 
     /**
      * baserマーケットのテーマデータを取得する
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function get_market_themes(ThemesServiceInterface $service)
     {

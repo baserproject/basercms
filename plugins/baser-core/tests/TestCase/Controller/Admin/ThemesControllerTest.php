@@ -11,8 +11,8 @@
 
 namespace BaserCore\Test\TestCase\Controller\Admin;
 
-use BaserCore\Controller\Admin\ThemesController;
 use BaserCore\Test\Scenario\InitAppScenario;
+use BaserCore\Controller\Admin\ThemesController;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -43,6 +43,7 @@ class ThemesControllerTest extends BcTestCase
         'plugin.BaserCore.Factory/UsersUserGroups',
         'plugin.BaserCore.Factory/UserGroups',
     ];
+
     /**
      * set up
      *
@@ -73,6 +74,19 @@ class ThemesControllerTest extends BcTestCase
     public function test_add()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * baserマーケットのテーマデータを取得する
+     */
+    public function test_get_market_themes()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        $this->get('/baser/admin/baser-core/themes/get_market_themes');
+        $this->assertResponseContains('<p class="theme-name">');
+        $this->assertResponseOk();
     }
 
     /**
@@ -160,3 +174,4 @@ class ThemesControllerTest extends BcTestCase
     }
 
 }
+
