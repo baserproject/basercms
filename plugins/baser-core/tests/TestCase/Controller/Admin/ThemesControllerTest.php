@@ -51,6 +51,7 @@ class ThemesControllerTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->ThemesController = new ThemesController($this->getRequest());
         $this->loadFixtureScenario(InitAppScenario::class);
         $request = $this->getRequest('/baser/admin/baser-core/themes/');
         $this->loginAdmin($request);
@@ -140,6 +141,22 @@ class ThemesControllerTest extends BcTestCase
     public function test_download()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * スクリーンショットを表示
+     */
+    public function test_screenshot()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        $this->get('/baser/admin/baser-core/themes/screenshot/BcFront');
+        $this->assertResponseOk();
+        $this->assertFileResponse('/var/www/html/plugins/bc-front/screenshot.png');
+
+        $this->get('/baser/admin/baser-core/themes/screenshot/NotExistsTheme');
+        $this->assertResponseError();
     }
 
 }

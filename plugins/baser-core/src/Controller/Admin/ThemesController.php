@@ -242,6 +242,7 @@ class ThemesController extends BcAdminAppController
      * @return false|string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function screenshot($theme)
     {
