@@ -79,10 +79,10 @@ class ThemesService implements ThemesServiceInterface
     {
         if (!$theme) $theme = Configure::read('BcApp.defaultFrontTheme');
         $options = array_merge(['useTitle' => true], $options);
-        $dataPath = dirname(BcUtil::getDefaultDataPath('BaserCore', $theme));
+        $dataPath = dirname(BcUtil::getDefaultDataPath($theme));
 
         if ($theme !== Inflector::camelize(Configure::read('BcApp.defaultFrontTheme'), '-') &&
-            $dataPath === dirname(BcUtil::getDefaultDataPath('BaserCore'))) {
+            $dataPath === dirname(BcUtil::getDefaultDataPath())) {
             return [];
         }
 
@@ -192,7 +192,7 @@ class ThemesService implements ThemesServiceInterface
      */
     private function getThemesDefaultDataInfo(string $theme, array $info = [])
     {
-        $path = BcUtil::getDefaultDataPath('BaserCore', $theme);
+        $path = BcUtil::getDefaultDataPath($theme);
         if (preg_match('/\/(' . $theme . '|' . Inflector::dasherize($theme) . ')\//', $path)) {
             if ($info) $info = array_merge($info, ['']);
             $info = array_merge($info, [
@@ -238,14 +238,10 @@ class ThemesService implements ThemesServiceInterface
             throw new BcException(__d('baser', '初期データのバージョンが違うか、初期データの構造が壊れています。'));
         }
 
-        // データを削除する
-        $excludes = ['plugins', 'dblogs', 'users'];
-        $dbService->resetAllTables($excludes);
-
         // 初期データ読み込み
         $result = true;
         try {
-            if (!$dbService->loadDefaultDataPattern($theme, $pattern, $excludes)) $result = false;
+            if (!$dbService->loadDefaultDataPattern($theme, $pattern)) $result = false;
         } catch (BcException $e) {
             throw $e;
         }
@@ -475,9 +471,9 @@ class ThemesService implements ThemesServiceInterface
      */
     public function checkDefaultDataPattern($theme, $pattern = 'default')
     {
-        $path = BcUtil::getDefaultDataPath('BaserCore', $theme, $pattern);
+        $path = BcUtil::getDefaultDataPath($theme, $pattern);
         if (!$path) return false;
-        $corePath = BcUtil::getDefaultDataPath('BaserCore', Configure::read('BcApp.defaultFrontTheme'), 'default');
+        $corePath = BcUtil::getDefaultDataPath(Configure::read('BcApp.defaultFrontTheme'), 'default');
 
         $Folder = new Folder($corePath . DS . 'BaserCore');
         $files = $Folder->read(true, true);

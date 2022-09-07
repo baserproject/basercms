@@ -349,60 +349,6 @@ class AppTable extends Table
     }
 
     /**
-     * データベースを初期化
-     *
-     * 既に存在するテーブルは上書きしない
-     *
-     * @param array データベース設定名
-     * @param string プラグイン名
-     * @return boolean
-     */
-    public function initDb($pluginName = '', $options = [])
-    {
-        $options = array_merge([
-            'loadCsv' => true,
-            'filterTable' => '',
-            'filterType' => '',
-            'dbDataPattern' => ''
-        ], $options);
-
-        // 初期データフォルダを走査
-        if (!$pluginName) {
-            $path = BASER_CONFIGS . 'Schema';
-        } else {
-            $path = BcUtil::getSchemaPath($pluginName);
-            if (!$path) {
-                return true;
-            }
-        }
-        $dbDataPattern = null;
-        if (!empty($options['dbDataPattern'])) {
-            $dbDataPattern = $options['dbDataPattern'];
-        } elseif (!empty($_SESSION['dbDataPattern'])) {
-            $dbDataPattern = $_SESSION['dbDataPattern'];
-            unset($_SESSION['dbDataPattern']);
-        }
-        if ($this->loadSchema($this->useDbConfig, $path, $options['filterTable'], $options['filterType'], [], $dropField = false)) {
-            if ($options['loadCsv']) {
-                $theme = $pattern = null;
-                if ($dbDataPattern) {
-                    [$theme, $pattern] = explode('.', $dbDataPattern);
-                }
-                $path = BcUtil::getDefaultDataPath($pluginName, $theme, $pattern);
-                if ($path) {
-                    return $this->loadCsv($this->useDbConfig, $path);
-                } else {
-                    return true;
-                }
-            } else {
-                return true;
-            }
-        } else {
-            return false;
-        }
-    }
-
-    /**
      * スキーマファイルを利用してデータベース構造を変更する
      *
      * @param array    データベース設定名

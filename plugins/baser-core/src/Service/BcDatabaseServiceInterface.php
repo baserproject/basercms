@@ -25,9 +25,8 @@ interface BcDatabaseServiceInterface
      * 初期データを読み込む
      * @param $theme
      * @param $pattern
-     * @param $excludes
      */
-    public function loadDefaultDataPattern($theme, $pattern, $excludes);
+    public function loadDefaultDataPattern($theme, $pattern);
 
     /**
      * CSVファイルをDBに読み込む

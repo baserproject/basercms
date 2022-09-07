@@ -491,45 +491,20 @@ class BcUtilTest extends BcTestCase
     /**
      * 初期データのパスを取得する
      *
-     * @param string $plugin プラグイン名
      * @param string $theme テーマ名
      * @param string $pattern 初期データの類型
      * @param string $expect 期待値
      * @dataProvider getDefaultDataPathDataProvider
      */
-    public function testGetDefaultDataPath($plugin, $theme, $pattern, $expect)
+    public function testGetDefaultDataPath($theme, $pattern, $expect)
     {
-        $isset_ptt = isset($pattern) && isset($theme);
-        $isset_plt = isset($plugin) && isset($theme);
-        $isset_plptt = isset($plugin) && isset($pattern) && isset($theme);
         $Folder = new Folder();
-
         // 初期データ用のダミーディレクトリを作成
-        if ($isset_ptt) {
-            $Folder->create(BASER_THEMES . $theme . DS . 'config' . DS . 'data' . DS . $pattern);
-        }
-        if ($isset_plt && !$isset_plptt) {
-            $Folder->create(BASER_THEMES . $theme . DS . 'config' . DS . 'data' . DS . 'default' . DS . $plugin);
-        }
-        if ($isset_plptt) {
-            $Folder->create(BASER_THEMES . $theme . DS . 'config' . DS . 'data' . DS . $pattern . DS . $plugin);
-        }
-
-        $result = BcUtil::getDefaultDataPath($plugin, $theme, $pattern);
-
+        $path = BASER_THEMES . $theme . DS . 'config' . DS . 'data' . DS . $pattern;
+        $Folder->create($path);
+        $result = BcUtil::getDefaultDataPath($theme, $pattern);
         // 初期データ用のダミーディレクトリを削除
-        if ($isset_plt && !$isset_plptt) {
-            $Folder->delete(BASER_THEMES . $theme . DS . 'config' . DS . 'data' . DS . 'default' . DS . $plugin);
-        }
-        if ($isset_plptt) {
-            $Folder->delete(BASER_THEMES . $theme . DS . 'config' . DS . 'data' . DS . $pattern . DS . $plugin);
-        }
-        if ($isset_ptt) {
-            $Folder->delete(BASER_THEMES . $theme . DS . 'config' . DS . 'data' . DS . $pattern);
-        }
-        if($isset_plt || $isset_plptt || $isset_ptt) {
-            $Folder->delete(BASER_THEMES . $theme);
-        }
+        $Folder->delete($path);
         $this->assertEquals($expect, $result, '初期データのパスを正しく取得できません');
     }
 
@@ -541,12 +516,12 @@ class BcUtilTest extends BcTestCase
     public function getDefaultDataPathDataProvider()
     {
         return [
-            [null, null, null,  ROOT . '/plugins/bc-front/config/data/default'],
-            [null, 'nada-icons', null, ROOT . '/plugins/baser-core/config/data/default'],
-            [null, 'nada-icons', 'not_default', ROOT . '/plugins/nada-icons/config/data/not_default'],
-            ['BcBlog', null, null, ROOT . '/plugins/bc-blog/config/data/default'],
-            ['BcBlog', 'nada-icons', null, ROOT . '/plugins/nada-icons/config/data/default/BcBlog'],
-            ['BcBlog', 'nada-icons', 'not_default', ROOT . '/plugins/nada-icons/config/data/not_default/BcBlog'],
+            [null, null,  ROOT . '/plugins/bc-front/config/data/default'],
+            ['nada-icons', null, ROOT . '/plugins/baser-core/config/data/default'],
+            ['nada-icons', 'not_default', ROOT . '/plugins/nada-icons/config/data/not_default'],
+            [null, null, ROOT . '/plugins/bc-blog/config/data/default'],
+            ['nada-icons', null, ROOT . '/plugins/nada-icons/config/data/default/BcBlog'],
+            ['nada-icons', 'not_default', ROOT . '/plugins/nada-icons/config/data/not_default/BcBlog'],
         ];
     }
 

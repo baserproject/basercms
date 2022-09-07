@@ -52,32 +52,33 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      * @param $excludes
      * @checked
      */
-    public function loadDefaultDataPattern($theme, $pattern, $excludes)
+    public function loadDefaultDataPattern($theme, $pattern)
     {
+        // データを削除する
+        $excludes = ['plugins', 'dblogs', 'users'];
+        $this->resetAllTables($excludes);
+
         $result = true;
         $this->clearAppTableList();
-        // コア
-        if (!$this->_loadDefaultDataPattern($pattern, $theme, 'BaserCore', $excludes)) {
-            $result = false;
-            $this->log(sprintf(__d('baser', '%s の初期データのロードに失敗しました。'), $theme . '.' . $pattern));
-        }
-        // プラグインデータ
-        $corePlugins = Configure::read('BcApp.corePlugins');
-        $plugins = array_merge($corePlugins, BcUtil::getCurrentThemesPlugins());
+
+        $plugins = array_merge(['BaserCore'], Configure::read('BcApp.corePlugins'), BcUtil::getCurrentThemesPlugins());
         foreach($plugins as $plugin) {
-            $this->_loadDefaultDataPattern($pattern, $theme, $plugin, $excludes);
-        }
-        // TODO ucmitz 下記処理について未検証
-        if (!$result) {
-            // 指定したデータセットでの読み込みに失敗した場合、コアのデータ読み込みを試みる
-            if (!$this->_loadDefaultDataPattern('default', 'BaserCore', 'BaserCore', $excludes)) {
-                $this->log(__d('baser', 'コアの初期データのロードに失敗しました。'));
+            if(!$this->_loadDefaultDataPattern($pattern, $theme, $plugin, $excludes)) {
                 $result = false;
+                $this->log(sprintf(__d('baser', '%s %s の初期データのロードに失敗しました。'), $theme . '.' . $pattern, $plugin));
             }
-            foreach($corePlugins as $corePlugin) {
-                if (!$this->_loadDefaultDataPattern('default', 'BaserCore', $corePlugin, $excludes)) {
-                    $this->log(__d('baser', 'コアのプラグインの初期データのロードに失敗しました。'));
-                    $result = false;
+        }
+
+        if (!$result) {
+            $this->resetAllTables($excludes);
+            // 指定したデータセットでの読み込みに失敗した場合、コアのデータ読み込みを試みる
+            if($theme !== Configure::read('BcApp.defaultFrontTheme')) {
+                $theme = Configure::read('BcApp.defaultFrontTheme');
+                foreach($plugins as $plugin) {
+                    if (!$this->_loadDefaultDataPattern($pattern, $theme, $plugin, $excludes)) {
+                        $result = false;
+                        $this->log(sprintf(__d('baser', '%s %s の初期データのロードに失敗しました。'), $theme . '.' . $pattern, $plugin));
+                    }
                 }
             }
             if ($result) {
@@ -102,8 +103,8 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      */
     public function _loadDefaultDataPattern($pattern, $theme, $plugin = 'BaserCore', $excludes = [])
     {
-        $path = BcUtil::getDefaultDataPath($plugin, $theme, $pattern);
-        if (!$path) return false;
+        $path = BcUtil::getDefaultDataPath($theme, $pattern);
+        if (!$path) return true;
 
         $Folder = new Folder($path . DS . $plugin);
         $files = $Folder->read(true, true, true);
