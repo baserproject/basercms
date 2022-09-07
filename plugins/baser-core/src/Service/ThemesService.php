@@ -276,6 +276,7 @@ class ThemesService implements ThemesServiceInterface
      * コピーする
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function copy(string $theme): bool
     {
