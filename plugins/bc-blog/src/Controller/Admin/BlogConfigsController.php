@@ -11,6 +11,8 @@
 
 namespace BcBlog\Controller\Admin;
 
+use Cake\Event\EventInterface;
+
 /**
  * ブログ設定コントローラー
  *
@@ -56,9 +58,9 @@ class BlogConfigsController extends BlogAppController
      *
      * @return void
      */
-    public function beforeFilter()
+    public function beforeFilter(EventInterface$event)
     {
-        parent::beforeFilter();
+        parent::beforeFilter($event);
         if ($this->params['prefix'] == 'admin') {
             $this->subMenuElements = ['blog_common'];
         }
