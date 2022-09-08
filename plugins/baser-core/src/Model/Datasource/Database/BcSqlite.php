@@ -91,7 +91,7 @@ class BcSqlite extends Sqlite
      * @param array $config Configuration array for connecting
      * @return mixed
      */
-    public function connect()
+    public function connect(): bool
     {
         //echo "runs connect\n";
         $this->last_error = null;
@@ -113,13 +113,12 @@ class BcSqlite extends Sqlite
      *
      * @return boolean True if the database could be disconnected, else false
      */
-    public function disconnect()
+    public function disconnect(): void
     {
         //echo "runs disconnect\n";
         //@sqlite3_close($this->_connection);
         $this->_connection = null;
         $this->connected = false;
-        return $this->connected;
     }
 
     /**
@@ -386,10 +385,10 @@ class BcSqlite extends Sqlite
      *
      * @return int
      */
-    public function lastInsertId($source = null)
+    public function lastInsertId(?string $table = null, ?string $column = null)
     {
         //return sqlite3_last_insert_rowid($this->_connection);
-        return $this->_connection->lastInsertId($source);
+        return $this->_connection->lastInsertId($table);
     }
 
     /**
