@@ -15,6 +15,7 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\Note;
+use BaserCore\Model\Table\AppTable;
 
 /**
  * Class ThemeConfig

@@ -9,9 +9,12 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
- namespace BcUploader\Model\Table;
+namespace BcUploader\Model\Table;
 
-use BaserCore\Model\AppTable;
+use ArrayObject;
+use BaserCore\Model\Table\AppTable;
+use Cake\Datasource\EntityInterface;
+use Cake\Event\EventInterface;
 
 /**
  * ファイルアップローダーモデル
@@ -115,7 +118,7 @@ class UploaderFilesTable extends AppTable
      * @param array $options
      * @return bool
      */
-    public function beforeSave($options = [])
+    public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
         parent::beforeSave($options);
 

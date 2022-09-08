@@ -11,7 +11,7 @@
 
 namespace BcThemeFile\Model\Table;
 
-use BaserCore\Model\AppTable;
+use BaserCore\Model\Table\AppTable;
 
 /**
  * Class ThemeFile
@@ -72,7 +72,7 @@ class ThemeFilesTable extends AppTable
      * @param int $id
      * @return bool
      */
-    public function exists($id = null)
+    public function exists($conditions): bool
     {
         $data = $this->data['ThemeFile'];
         if (empty($data['parent']) || empty($data['name']) || empty($data['ext'])) {
