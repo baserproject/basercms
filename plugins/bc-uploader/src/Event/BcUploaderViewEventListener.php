@@ -30,7 +30,7 @@ class BcUploaderViewEventListener extends BcViewEventListener
 
     public function afterLayout(Event $event)
     {
-        // TODO 未確認のため代替処理
+        // TODO ucmitz 未確認のため代替処理
         // >>>
         return ;
         // <<<

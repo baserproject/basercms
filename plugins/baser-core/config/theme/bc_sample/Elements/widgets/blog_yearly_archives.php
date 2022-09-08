@@ -59,7 +59,7 @@ $baseCurrentUrl = $this->BcBaser->getBlogContentsUrl($id) . 'archives/date/';
 			<?php foreach ($postedDates as $postedDate): ?>
 				<?php
 				$class = ['bs-widget-list__item'];
-				if (isset($this->params['named']['year']) && $this->params['named']['year'] == $postedDate['year']) {
+				if ($this->getRequest()->getParam('named.year') === $postedDate['year']) {
 					$class[] = 'selected';
 				} elseif ('/' . $this->request->url == $baseCurrentUrl . $postedDate['year']) {
 					$class[] = 'current';

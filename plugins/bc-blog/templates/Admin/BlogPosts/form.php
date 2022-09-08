@@ -13,8 +13,8 @@
 /**
  * [ADMIN] ブログ記事 フォーム
  */
-$url = $this->request->params['Content']['url'] . 'archives/' . $this->BcForm->getSourceValue('BlogPost.no');
-$fullUrl = $this->BcBaser->getContentsUrl($url, true, $this->request->params['Site']['use_subdomain']);
+$url = $this->request->getParam('Content.url') . 'archives/' . $this->BcForm->getSourceValue('BlogPost.no');
+$fullUrl = $this->BcBaser->getContentsUrl($url, true, $this->request->getParam('Site.use_subdomain'));
 $statuses = [0 => __d('baser', '非公開'), 1 => __d('baser', '公開')];
 $this->BcBaser->css('admin/ckeditor/editor', true);
 $this->BcBaser->i18nScript([
@@ -27,7 +27,7 @@ $this->BcBaser->i18nScript([
 $this->BcBaser->js('BcBlog.admin/blog_posts/form.bundle', false, [
   'id' => 'AdminBlogBLogPostsEditScript',
   'data-fullurl' => $fullUrl,
-  'data-previewurl' => $this->Blog->getPreviewUrl($url, $this->request->params['Site']['use_subdomain'])
+  'data-previewurl' => $this->Blog->getPreviewUrl($url, $this->request->getParam('Site.use_subdomain'))
 ]);
 ?>
 
@@ -85,9 +85,9 @@ $this->BcBaser->js('BcBlog.admin/blog_posts/form.bundle', false, [
     <span class="bca-post__url">
     <?php //echo $this->BcForm->label('BlogPost.url', 'URL') ?>
     <a
-      href="<?php echo $this->BcBaser->getUri(rawurldecode($this->request->params['Content']['url']) . '/archives/' . $this->BcForm->getSourceValue('BlogPost.no')) ?>"
+      href="<?php echo $this->BcBaser->getUri(rawurldecode($this->request->getParam('Content.url')) . '/archives/' . $this->BcForm->getSourceValue('BlogPost.no')) ?>"
       class="bca-text-url" target="_blank" data-toggle="tooltip" data-placement="top" title="公開URLを開きます"><i
-        class="bca-icon--globe"></i><?php echo $this->BcBaser->getUri(rawurldecode($this->request->params['Content']['url']) . '/archives/' . $this->BcForm->getSourceValue('BlogPost.no')) ?></a>
+        class="bca-icon--globe"></i><?php echo $this->BcBaser->getUri(rawurldecode($this->request->getParam('Content.url')) . '/archives/' . $this->BcForm->getSourceValue('BlogPost.no')) ?></a>
     <?php echo $this->BcForm->button('', [
       'id' => 'BtnCopyUrl',
       'class' => 'bca-btn',

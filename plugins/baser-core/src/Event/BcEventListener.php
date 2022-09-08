@@ -125,9 +125,9 @@ class BcEventListener implements EventListenerInterface
     public function getAction($isContainController = true)
     {
         $request = Router::getRequest();
-        $currentAction = Inflector::camelize($request->getParams('action'));
+        $currentAction = Inflector::camelize($request->getParam('action'));
         if ($isContainController) {
-            $currentAction = Inflector::camelize($request->getParams('controller')) . '.' . $currentAction;
+            $currentAction = Inflector::camelize($request->getParam('controller')) . '.' . $currentAction;
         }
         return $currentAction;
     }

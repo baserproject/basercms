@@ -94,7 +94,7 @@ class EditorTemplatesController extends BcAdminAppController
             );
             $this->redirect(['action' => 'add']);
         }
-        $this->EditorTemplate->create($this->request->data);
+        $this->EditorTemplate->create($this->request->getData());
         $result = $this->EditorTemplate->save();
         if (!$result) {
             $this->BcMessage->setError(__d('baser', '保存中にエラーが発生しました。'));
@@ -122,7 +122,7 @@ class EditorTemplatesController extends BcAdminAppController
         $this->setHelp('editor_templates_form');
 
         if (!$this->request->is(['post', 'put'])) {
-            $this->request->data = $this->EditorTemplate->read(null, $id);
+            $this->request = $this->request->withParsedBody($this->EditorTemplate->read(null, $id));
             $this->render('form');
             return;
         }
@@ -131,7 +131,7 @@ class EditorTemplatesController extends BcAdminAppController
             $this->BcMessage->setError(__d('baser', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size')));
             $this->redirect(['action' => 'edit', $id]);
         }
-        $this->EditorTemplate->set($this->request->data);
+        $this->EditorTemplate->set($this->request->getData());
         $result = $this->EditorTemplate->save();
         if (!$result) {
             $this->BcMessage->setError(__d('baser', '保存中にエラーが発生しました。'));
