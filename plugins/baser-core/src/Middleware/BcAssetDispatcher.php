@@ -65,20 +65,21 @@ class BcAssetDispatcher implements MiddlewareInterface
      *
      * @param string $url URL
      * @return string|null Absolute path for asset file
+     * TODO ucmitz 一旦、スキップ
      */
-    protected function _getAssetFile($url)
-    {
-        $path = parent::_getAssetFile($url);
-        if (!empty($path)) {
-            return $path;
-        }
-        $parts = explode('/', $url);
-        $fileFragment = implode(DS, $parts);
-        $path = BASER_WEBROOT;
-        if (file_exists($path . $fileFragment)) {
-            return $path . $fileFragment;
-        }
-        return null;
-    }
+//    protected function _getAssetFile($url)
+//    {
+//        $path = parent::_getAssetFile($url);
+//        if (!empty($path)) {
+//            return $path;
+//        }
+//        $parts = explode('/', $url);
+//        $fileFragment = implode(DS, $parts);
+//        $path = BASER_WEBROOT;
+//        if (file_exists($path . $fileFragment)) {
+//            return $path . $fileFragment;
+//        }
+//        return null;
+//    }
 // <<<
 }
