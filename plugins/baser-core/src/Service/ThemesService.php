@@ -20,6 +20,7 @@ use BaserCore\Utility\BcUtil;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use BaserCore\Utility\BcZip;
 use Cake\Cache\Cache;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
@@ -111,10 +112,45 @@ class ThemesService implements ThemesServiceInterface
 
     /**
      * 新しいテーマをアップロードする
+     * @param array $postData
+     * @checked
+     * @noTodo
      */
-    public function add(): bool
+    public function add(array $postData): string
     {
-        return true;
+        if (BcUtil::isOverPostSize()) {
+            throw new BcException(__d(
+                'baser',
+                '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。',
+                ini_get('post_max_size')
+            ));
+        }
+        if (empty($postData['file']['tmp_name'])) {
+            $message = '';
+            if (!empty($postData['file']['error']) && $postData['file']['error'] == 1) {
+                $message = __d('baser', 'サーバに設定されているサイズ制限を超えています。');
+            }
+            throw new BcException($message);
+        }
+        $name = $postData['file']['name'];
+        move_uploaded_file($postData['file']['tmp_name'], TMP . $name);
+        $srcName = basename($name, '.zip');
+        $zip = new BcZip();
+        if (!$zip->extract(TMP . $name, TMP)) {
+            throw new BcException(__d('baser', 'アップロードしたZIPファイルの展開に失敗しました。'));
+        }
+
+        $num = 2;
+        $dstName = $srcName;
+        while(is_dir(BASER_THEMES . $dstName) || is_dir(BASER_THEMES . Inflector::dasherize($dstName))) {
+            $dstName = $srcName . $num;
+            $num++;
+        }
+        $folder = new Folder(TMP . $srcName);
+        $folder->move(BASER_THEMES . $dstName, ['mode' => 0777]);
+        unlink(TMP . $name);
+        $this->_changePluginNameSpace($dstName);
+        return $dstName;
     }
 
     /**
@@ -290,12 +326,21 @@ class ThemesService implements ThemesServiceInterface
         ])) {
             return false;
         }
+        $this->_changePluginNameSpace($newTheme);
+        return true;
+    }
+
+    /**
+     * プラグインの namespace を書き換える
+     * @param $newTheme
+     */
+    protected function _changePluginNameSpace($newTheme)
+    {
         $pluginPath = BcUtil::getPluginPath($newTheme);
         $file = new File($pluginPath . 'src' . DS . 'Plugin.php');
         $data = $file->read();
         $file->write(preg_replace('/namespace .+?;/', 'namespace ' . $newTheme . ';', $data));
         $file->close();
-        return true;
     }
 
     /**

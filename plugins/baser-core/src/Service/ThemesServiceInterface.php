@@ -40,11 +40,13 @@ interface ThemesServiceInterface
 
     /**
      * 新しいテーマをアップロードする
+     * @param array $postData
+     * @return string
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function add(): bool;
+    public function add(array $postData): string;
 
     /**
      * テーマを適用する

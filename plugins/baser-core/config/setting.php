@@ -191,7 +191,10 @@ return [
                             'currentRegex' => '/\/themes\/[^\/]+?/s'
                         ],
 //                        'ThemeConfigs' => ['title' => __d('baser', '設定'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'theme_configs', 'action' => 'form']],
-//                        'ThemeAdd' => ['title' => __d('baser', '新規追加'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'themes', 'action' => 'add']],
+                        'ThemeAdd' => [
+                            'title' => __d('baser', '新規追加'),
+                            'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'themes', 'action' => 'add']
+                        ],
                         'ThemesDownload' => [
                             'title' => __d('baser', '利用中テーマダウンロード'),
                             'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'themes', 'action' => 'download']

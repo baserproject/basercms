@@ -14,14 +14,10 @@ namespace BaserCore\Controller\Admin;
 use BaserCore\Error\BcException;
 use BaserCore\Service\ThemesAdminServiceInterface;
 use BaserCore\Service\ThemesServiceInterface;
-use BaserCore\Utility\BcSiteConfig;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Vendor\Simplezip;
 use BcZip;
-use Cake\Core\Configure;
 use Cake\Filesystem\Folder;
-use Cake\Utility\Inflector;
-use MailMessage;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -47,44 +43,20 @@ class ThemesController extends BcAdminAppController
 
     /**
      * テーマをアップロードして適用する
+     * @checked
+     * @noTodo
      */
-    public function add()
+    public function add(ThemesServiceInterface $service)
     {
-
-        if (!$this->getRequest()->is(['post', 'put'])) {
-            return;
-        }
-
-        if ($this->Theme->isOverPostSize()) {
-            $this->BcMessage->setError(
-                __d(
-                    'baser',
-                    '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。',
-                    ini_get('post_max_size')
-                )
-            );
-        }
-        if (empty($this->getRequest()->getData('Theme.file.tmp_name'))) {
-            $message = __d('baser', 'ファイルのアップロードに失敗しました。');
-            if (!empty($this->getRequest()->getData('Theme.file.error')) && $this->getRequest()->getData('Theme.file.error') == 1) {
-                $message .= __d('baser', 'サーバに設定されているサイズ制限を超えています。');
+        if ($this->request->is('post')) {
+            try {
+                $name = $service->add($this->getRequest()->getData());
+                $this->BcMessage->setInfo('テーマファイル「' . $name . '」を追加しました。');
+                $this->redirect(['action' => 'index']);
+            } catch (BcException $e) {
+                $this->BcMessage->setError(__d('baser', 'ファイルのアップロードに失敗しました。') . $e->getMessage());
             }
-            $this->BcMessage->setError($message);
-            return;
         }
-
-        $name = $this->getRequest()->getData('Theme.file.name');
-        move_uploaded_file($this->getRequest()->getData('Theme.file.tmp_name'), TMP . $name);
-        $BcZip = new BcZip();
-        if (!$BcZip->extract(TMP . $name, BASER_THEMES)) {
-            $msg = __d('baser', 'アップロードしたZIPファイルの展開に失敗しました。');
-            $msg .= "\n" . $BcZip->error;
-            $this->BcMessage->setError($msg);
-            return;
-        }
-        unlink(TMP . $name);
-        $this->BcMessage->setInfo('テーマファイル「' . $name . '」を追加しました。');
-        $this->redirect(['action' => 'index']);
     }
 
     /**

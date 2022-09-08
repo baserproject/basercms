@@ -702,7 +702,9 @@ class BcUtil
     {
         $themes = self::getAllThemeList();
         foreach($themes as $key => $theme) {
+            if(!file_exists(BcUtil::getPluginPath($theme) . 'config.php')) continue;
             $config = include BcUtil::getPluginPath($theme) . 'config.php';
+            if($config === false) continue;
             if ($config['type'] !== 'Theme') unset($themes[$key]);
         }
         return $themes;
