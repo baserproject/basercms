@@ -68,7 +68,7 @@ use BaserCore\Service\SiteConfigsServiceInterface;
 use BcSearchIndex\Service\SearchIndexesServiceInterface;
 use BaserCore\Service\ContentFoldersServiceInterface;
 use BaserCore\Service\BcDatabaseServiceInterface;
-use BaserCOre\Service\UtilitiesAdminServiceInterface;
+use BaserCore\Service\UtilitiesAdminServiceInterface;
 
 /**
  * Class BcServiceProvider

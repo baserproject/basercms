@@ -11,16 +11,24 @@ class UtilitiesAdminService implements UtilitiesAdminServiceInterface
 
     public function getViewVarsForInfo()
     {
-        $datasources = ['csv' => 'CSV', 'sqlite' => 'SQLite', 'mysql' => 'MySQL', 'postgres' => 'PostgreSQL'];
-        $config = TableRegistry::getTableLocator()->get('BaserCore.App')->getConnection()->config();
-
-        [$type, $name] = explode('/', $db->config['datasource'], 2);
-        $datasource = preg_replace('/^bc/', '', strtolower($name));
         return [
-            'datasource' => @$datasources[$datasource],
+            'datasource' => $this->_getDriver(),
             'baserVersion' => BcSiteConfig::get('version'),
             'cakeVersion' => Configure::version()
         ];
+    }
+
+    private function _getDriver()
+    {
+        $drivers = ['csv' => 'CSV', 'sqlite' => 'SQLite', 'mysql' => 'MySQL', 'postgres' => 'PostgreSQL'];
+        $config = TableRegistry::getTableLocator()->get('BaserCore.App')->getConnection()->config();
+        $names = explode('\\', $config['driver']);
+        $driver = strtolower($names[count($names) - 1]);
+        if(isset($drivers[$driver])) {
+            return $drivers[$driver];
+        } else {
+            return '';
+        }
     }
 
 }

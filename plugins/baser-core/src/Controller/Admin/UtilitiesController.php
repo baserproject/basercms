@@ -55,7 +55,7 @@ class UtilitiesController extends BcAdminAppController
     }
 
     /**
-     * ユーティリティ
+     * ユーティリティトップ
      * @checked
      * @noTodo
      */
@@ -64,7 +64,7 @@ class UtilitiesController extends BcAdminAppController
     }
 
     /**
-     * [ADMIN] PHPINFOを表示する
+     * 環境情報を表示する
      */
     public function info(UtilitiesAdminServiceInterface $service)
     {
@@ -72,10 +72,22 @@ class UtilitiesController extends BcAdminAppController
     }
 
     /**
+     * phpinfo を表示する
+     * @checked
+     * @unitTest
+     */
+    public function phpinfo()
+    {
+        $this->_checkReferer();
+        $this->autoRender = false;
+        phpinfo();
+        exit();
+    }
+
+    /**
      * データメンテナンス
      *
      * @param string $mode
-     * @return void
      */
     public function maintenance($mode = '')
     {
