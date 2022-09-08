@@ -64,7 +64,6 @@ class BcCacheBehavior extends Behavior
      * @param Model $model
      * @param int $expire
      * @param string $method
-     * @args mixed
      * @return mixed
      */
     public function readCache(Model $model, $expire, $type, $query = [])
