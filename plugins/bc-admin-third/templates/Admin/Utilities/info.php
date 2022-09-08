@@ -12,7 +12,9 @@
 
 /**
  * [管理画面] サイト設定 フォーム
+ * @var \BaserCore\View\BcAdminAppView $this
  */
+$this->BcAdmin->setTitle(__d('baser', '環境情報'));
 ?>
 
 
