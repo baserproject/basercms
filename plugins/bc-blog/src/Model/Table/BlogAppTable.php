@@ -11,8 +11,6 @@
 
 namespace BcBlog\Model\Table;
 
-use BaserCore\Model\AppTable;
-
 /**
  * ブログモデル基底クラス
  *
