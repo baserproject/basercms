@@ -11,7 +11,7 @@
 
  namespace BcUploader\Model\Table;
 
-use BaserCore\Model\AppTable;
+use BaserCore\Model\Table\AppTable;
 
 /**
  * ファイルアップローダー設定モデル
