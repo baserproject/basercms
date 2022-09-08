@@ -11,7 +11,7 @@
 
 namespace BcEditorTemplate\Model\Table;
 
-use BaserCore\Model\AppTable;
+use BaserCore\Model\Table\AppTable;
 
 /**
  * Class EditorTemplate

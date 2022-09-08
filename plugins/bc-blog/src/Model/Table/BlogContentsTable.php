@@ -17,7 +17,7 @@ namespace BcBlog\Model\Table;
  * @package Blog.Model
  * @property BlogPost $BlogPost
  */
-class BlogConfigsTable extends BlogAppTable
+class BlogContentsTable extends BlogAppTable
 {
 
     /**

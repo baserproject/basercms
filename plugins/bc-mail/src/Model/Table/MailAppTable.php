@@ -11,7 +11,7 @@
 
 namespace BcMail\Model\Table;
 
-use BaserCore\Model\AppTable;
+use BaserCore\Model\Table\AppTable;
 
 /**
  * メールプラグインモデル根底クラス

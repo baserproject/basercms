@@ -12,6 +12,7 @@
 namespace BcUploader\Controller\Admin;
 
 use BaserCore\Controller\Admin\BcAdminAppController;
+use Cake\Event\EventInterface;
 
 /**
  * ファイルアップローダーコントローラー

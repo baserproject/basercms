@@ -38,8 +38,14 @@ class MailformHelper extends BcFreezeHelper
      * @param array $options コントロールソース
      * @param array $attributes HTML属性
      * @return string フォームコントロールのHTMLタグ
+     *
+     * TODO ucmitz 2022/09/08
+     * FormHelper に control が追加になった事によりシグネチャが変わった
+     * メソッド名を変える必要あり。
+     * 以前のシグネチャは以下のとおり
+     * $type, $fieldName, $options, $attributes = [])
      */
-    public function control($type, $fieldName, $options, $attributes = [])
+    public function control(string $fieldName, array $options = []): string
     {
         $attributes['escape'] = true;
         $out = '';
@@ -247,7 +253,7 @@ class MailformHelper extends BcFreezeHelper
      * @param array $options
      * @return string
      */
-    public function create($model = null, $options = [])
+    public function create($context = null, $options = []): string
     {
         if (!isset($options['type'])) {
             $options['type'] = 'file';
@@ -255,7 +261,7 @@ class MailformHelper extends BcFreezeHelper
         if (!empty($options['url']) && !empty($this->request->getParam('Site.same_main_url'))) {
             $options['url'] = $this->BcContents->getPureUrl($options['url'], $this->request->getParam('Site.id'));
         }
-        return parent::create($model, $options);
+        return parent::create($context, $options);
     }
 
     /**
