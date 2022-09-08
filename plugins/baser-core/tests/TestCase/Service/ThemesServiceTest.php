@@ -150,12 +150,6 @@ class ThemesServiceTest extends \BaserCore\TestSuite\BcTestCase
     public function testGetIndex()
     {
         $themes = $this->ThemesService->getIndex();
-        $result = false;
-        foreach ($themes as $theme) {
-            // デフォルトのフロントテーマを持っているかどうか確認する
-            if ($theme->name === 'BcFront') $result = true;
-        }
-
-        $this->assertTrue($result);
+        $this->assertEquals('BcFront', $themes[1]['name']);
     }
 }
