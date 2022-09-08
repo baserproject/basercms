@@ -12,13 +12,13 @@
 namespace BaserCore\View\Helper;
 
 use BaserCore\Event\BcEventDispatcherTrait;
-use Cake\View\Helper;
+use Cake\View\Helper\TextHelper;
 
 /**
  * Class BcTextHelper
  * @package BaserCore\View\Helper
  */
-class BcTextHelper extends Helper
+class BcTextHelper extends TextHelper
 {
 // CUSTOMIZE ADD 2021/04/24 ryuring
 // >>>

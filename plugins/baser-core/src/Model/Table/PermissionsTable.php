@@ -12,9 +12,7 @@
 namespace BaserCore\Model\Table;
 
 use ArrayObject;
-use Cake\Event\Event;
 use Cake\Core\Configure;
-use BaserCore\Model\AppTable;
 use Cake\Event\EventInterface;
 use Cake\Validation\Validator;
 use BaserCore\Annotation\NoTodo;
@@ -90,7 +88,7 @@ class PermissionsTable extends AppTable
     {
         $validator
             ->scalar('name')
-            ->maxLength('name', 255,  __d('baser', '設定名は255文字以内で入力してください。'))
+            ->maxLength('name', 255, __d('baser', '設定名は255文字以内で入力してください。'))
             ->notEmptyString('name', __d('baser', '設定名を入力してください。'))
             ->requirePresence('name', true);
         $validator
@@ -121,11 +119,11 @@ class PermissionsTable extends AppTable
         $required = ['user_group_id'];
 
         $validator
-        ->integer('user_group_id')
-        ->notEmptyString('user_group_id',  __d('baser', 'ユーザーグループを選択してください。'))
-        ->requirePresence('user_group_id', true);
+            ->integer('user_group_id')
+            ->notEmptyString('user_group_id', __d('baser', 'ユーザーグループを選択してください。'))
+            ->requirePresence('user_group_id', true);
 
-        foreach ($columns as $column) {
+        foreach($columns as $column) {
             if (!in_array($column, $required)) {
                 $validator->allowEmptyFor($column, Validator::EMPTY_STRING, Validator::WHEN_CREATE);
             }
@@ -223,7 +221,7 @@ class PermissionsTable extends AppTable
 
     /**
      * 検証対象者のPermissionsを設定する
-     * @param  array $userGroups
+     * @param array $userGroups
      * @return void
      * @checked
      * @noTodo

@@ -10,7 +10,7 @@
  */
 
 return [
-    'type' => 'Theme',
+    'type' => 'Plugin',
     'title' => __d('baser', 'SPAサンプル'),
     'description' => __d('baser', 'SPAのサンプルプラグインです'),
     'author' => 'baserCMS User Community',

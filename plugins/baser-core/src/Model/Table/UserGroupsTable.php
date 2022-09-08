@@ -17,7 +17,6 @@ use Cake\Core\Configure;
 use Cake\ORM\Association\BelongsToMany;
 use Cake\ORM\Behavior\TimestampBehavior as TimestampBehaviorAlias;
 use Cake\Datasource\{EntityInterface, ResultSetInterface as ResultSetInterfaceAlias};
-use BaserCore\Model\AppTable;
 use Cake\Validation\Validator;
 use BaserCore\Model\Table\Exception\CopyFailedException;
 use BaserCore\Annotation\UnitTest;
@@ -233,10 +232,10 @@ class UserGroupsTable extends AppTable
      * @noTodo
      * @unitTest
      */
-    public function getAuthPrefix(int $id) : ?string
+    public function getAuthPrefix(int $id): ?string
     {
         $userGroup = $this->find()->where(['id' => $id])->first();
-        if(isset($userGroup->auth_prefix)){
+        if (isset($userGroup->auth_prefix)) {
             return $userGroup->auth_prefix;
         }
         return null;

@@ -58,7 +58,7 @@ interface SiteConfigsServiceInterface
      * データをキーバリュー形式で保存する
      * @return EntityInterface
      */
-    public function update(array $postData): SiteConfig;
+    public function update(array $postData);
 
     /**
      * .env が書き込み可能かどうか

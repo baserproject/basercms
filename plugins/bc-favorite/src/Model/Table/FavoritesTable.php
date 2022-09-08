@@ -11,7 +11,7 @@
 
 namespace BcFavorite\Model\Table;
 
-use BaserCore\Model\AppTable;
+use BaserCore\Model\Table\AppTable;
 use BaserCore\Service\PermissionsServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Validation\Validator;

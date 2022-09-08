@@ -18,7 +18,6 @@ use Cake\Core\Configure;
 use Cake\I18n\FrozenTime;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
-use BaserCore\Model\AppTable;
 use BaserCore\Utility\BcUtil;
 use Cake\Event\EventInterface;
 use Cake\Validation\Validator;
@@ -119,6 +118,7 @@ class ContentsTable extends AppTable
             'Model.afterDelete' => 'afterDelete',
         ];
     }
+
     /**
      * Validation Default
      *
@@ -132,99 +132,99 @@ class ContentsTable extends AppTable
     public function validationDefault(Validator $validator): Validator
     {
         $validator
-        ->integer('id')
-        ->allowEmptyString('id', null, 'create')
-        ->numeric('id', __d('baser', 'IDに不正な値が利用されています。'), 'update')
-        ->requirePresence('id', 'update', __d('baser', 'IDに不正な値が利用されています。'));
+            ->integer('id')
+            ->allowEmptyString('id', null, 'create')
+            ->numeric('id', __d('baser', 'IDに不正な値が利用されています。'), 'update')
+            ->requirePresence('id', 'update', __d('baser', 'IDに不正な値が利用されています。'));
 
         $validator
-        ->scalar('name')
-        ->requirePresence('name', 'create', __d('baser', 'nameフィールドが存在しません。'))
-        ->maxLength('name', 230, __d('baser', '名前は230文字以内で入力してください。'))
-        ->add('name', [
-            'bcUtileUrlencodeBlank' => [
-                'rule' => ['bcUtileUrlencodeBlank'],
-                'provider' => 'bc',
-                'message' => __d('baser', 'URLはスペース、全角スペース及び、指定の記号(\\\'|`^"(){}[];/?:@&=+$,%<>#!)だけの名前は付けられません。')
-            ]
-        ])
-        ->add('name', [
-            'duplicateRelatedSiteContent' => [
-                'rule' => [$this, 'duplicateRelatedSiteContent'],
-                'message' => __d('baser', '連携しているサブサイトでスラッグが重複するコンテンツが存在します。重複するコンテンツのスラッグ名を先に変更してください。'),
-            ]
-        ]);
+            ->scalar('name')
+            ->requirePresence('name', 'create', __d('baser', 'nameフィールドが存在しません。'))
+            ->maxLength('name', 230, __d('baser', '名前は230文字以内で入力してください。'))
+            ->add('name', [
+                'bcUtileUrlencodeBlank' => [
+                    'rule' => ['bcUtileUrlencodeBlank'],
+                    'provider' => 'bc',
+                    'message' => __d('baser', 'URLはスペース、全角スペース及び、指定の記号(\\\'|`^"(){}[];/?:@&=+$,%<>#!)だけの名前は付けられません。')
+                ]
+            ])
+            ->add('name', [
+                'duplicateRelatedSiteContent' => [
+                    'rule' => [$this, 'duplicateRelatedSiteContent'],
+                    'message' => __d('baser', '連携しているサブサイトでスラッグが重複するコンテンツが存在します。重複するコンテンツのスラッグ名を先に変更してください。'),
+                ]
+            ]);
         $validator
-        ->scalar('title')
-        ->requirePresence('title', 'create', __d('baser', 'タイトルを入力してください。'))
-        ->notEmptyString('title', __d('baser', 'タイトルを入力してください。'))
-        ->maxLength('title', 230, __d('baser', 'タイトルは230文字以内で入力してください。'))
-        ->regex('title', '/\A(?!.*(\t)).*\z/', __d('baser', 'タイトルはタブを含む名前は付けられません。'))
-        ->add('title', [
-            'bcUtileUrlencodeBlank' => [
-                'rule' => ['bcUtileUrlencodeBlank'],
-                'provider' => 'bc',
-                'message' => __d('baser', 'タイトルはスペース、全角スペース及び、指定の記号(\\\'|`^"(){}[];/?:@&=+$,%<>#!)だけの名前は付けられません。')
-            ]
-        ]);
+            ->scalar('title')
+            ->requirePresence('title', 'create', __d('baser', 'タイトルを入力してください。'))
+            ->notEmptyString('title', __d('baser', 'タイトルを入力してください。'))
+            ->maxLength('title', 230, __d('baser', 'タイトルは230文字以内で入力してください。'))
+            ->regex('title', '/\A(?!.*(\t)).*\z/', __d('baser', 'タイトルはタブを含む名前は付けられません。'))
+            ->add('title', [
+                'bcUtileUrlencodeBlank' => [
+                    'rule' => ['bcUtileUrlencodeBlank'],
+                    'provider' => 'bc',
+                    'message' => __d('baser', 'タイトルはスペース、全角スペース及び、指定の記号(\\\'|`^"(){}[];/?:@&=+$,%<>#!)だけの名前は付けられません。')
+                ]
+            ]);
         $validator
-        ->allowEmptyString('eyecatch')
-        ->add('eyecatch', [
-            'fileCheck' => [
-                'rule' => ['fileCheck', BcUtil::convertSize(ini_get('upload_max_filesize'))],
-                'provider' => 'bc',
-                'message' => __d('baser', 'ファイルのアップロードに失敗しました。')
-            ]
-        ]);
+            ->allowEmptyString('eyecatch')
+            ->add('eyecatch', [
+                'fileCheck' => [
+                    'rule' => ['fileCheck', BcUtil::convertSize(ini_get('upload_max_filesize'))],
+                    'provider' => 'bc',
+                    'message' => __d('baser', 'ファイルのアップロードに失敗しました。')
+                ]
+            ]);
         $validator
-        ->dateTime('self_publish_begin')
-        ->allowEmptyDateTime('self_publish_begin')
-        ->add('self_publish_begin', [
-            'checkDate' => [
-                'rule' => ['checkDate'],
-                'provider' => 'bc',
-                'message' => __d('baser', '公開開始日に不正な文字列が入っています。')
-            ]
-        ]);
+            ->dateTime('self_publish_begin')
+            ->allowEmptyDateTime('self_publish_begin')
+            ->add('self_publish_begin', [
+                'checkDate' => [
+                    'rule' => ['checkDate'],
+                    'provider' => 'bc',
+                    'message' => __d('baser', '公開開始日に不正な文字列が入っています。')
+                ]
+            ]);
 
         $validator
-        ->dateTime('self_publish_end')
-        ->allowEmptyDateTime('self_publish_end')
-        ->add('self_publish_end', [
-            'checkDate' => [
-                'rule' => ['checkDate'],
-                'provider' => 'bc',
-                'message' => __d('baser', '公開終了日に不正な文字列が入っています。')
-            ]
-        ])
-        ->add('self_publish_end', [
-            'checkDateAfterThan' => [
-                'rule' => ['checkDateAfterThan', 'self_publish_begin'],
-                'provider' => 'bc',
-                'message' => __d('baser', '公開終了日は、公開開始日より新しい日付で入力してください。')
-            ]
-        ]);
+            ->dateTime('self_publish_end')
+            ->allowEmptyDateTime('self_publish_end')
+            ->add('self_publish_end', [
+                'checkDate' => [
+                    'rule' => ['checkDate'],
+                    'provider' => 'bc',
+                    'message' => __d('baser', '公開終了日に不正な文字列が入っています。')
+                ]
+            ])
+            ->add('self_publish_end', [
+                'checkDateAfterThan' => [
+                    'rule' => ['checkDateAfterThan', 'self_publish_begin'],
+                    'provider' => 'bc',
+                    'message' => __d('baser', '公開終了日は、公開開始日より新しい日付で入力してください。')
+                ]
+            ]);
         $validator
-        ->dateTime('created_date')
-        ->requirePresence('created_date', 'create', __d('baser', '作成日がありません。'))
-        ->notEmptyDateTime('created_date', __d('baser', '作成日が空になってます。'))
-        ->add('created_date', [
-            'checkDate' => [
-                'rule' => ['checkDate'],
-                'provider' => 'bc',
-                'message' => __d('baser', '作成日が正しくありません。')
-            ]
-        ]);
+            ->dateTime('created_date')
+            ->requirePresence('created_date', 'create', __d('baser', '作成日がありません。'))
+            ->notEmptyDateTime('created_date', __d('baser', '作成日が空になってます。'))
+            ->add('created_date', [
+                'checkDate' => [
+                    'rule' => ['checkDate'],
+                    'provider' => 'bc',
+                    'message' => __d('baser', '作成日が正しくありません。')
+                ]
+            ]);
         $validator
-        ->datetime('modified_date')
-        ->notEmptyDateTime('modified_date', __d('baser', '更新日が空になってます。'), 'update')
-        ->add('modified_date', [
-            'checkDate' => [
-                'rule' => ['checkDate'],
-                'provider' => 'bc',
-                'message' => __d('baser', '更新日が正しくありません。')
-            ]
-        ]);
+            ->datetime('modified_date')
+            ->notEmptyDateTime('modified_date', __d('baser', '更新日が空になってます。'), 'update')
+            ->add('modified_date', [
+                'checkDate' => [
+                    'rule' => ['checkDate'],
+                    'provider' => 'bc',
+                    'message' => __d('baser', '更新日が正しくありません。')
+                ]
+            ]);
         return $validator;
     }
 
@@ -346,7 +346,7 @@ class ContentsTable extends AppTable
             }
             $content['name'] = $this->getUniqueName($content['name'], $content['parent_id'] ?? null, $contentId);
         }
-        return (array) $content;
+        return (array)$content;
     }
 
     /**
@@ -366,7 +366,7 @@ class ContentsTable extends AppTable
     /**
      * コンテンツ情報を物理削除する
      * @param Content $content
-     * @param bool $enableTree(デフォルト:false) TreeBehaviorの有無
+     * @param bool $enableTree (デフォルト:false) TreeBehaviorの有無
      * @return bool
      * @checked
      * @noTodo
@@ -453,7 +453,7 @@ class ContentsTable extends AppTable
         if (!empty($entity->id)) {
             $this->beforeSaveParentId = $entity->parent_id;
         }
-        if(!empty($entity->name)) {
+        if (!empty($entity->name)) {
             $entity->name = $this->urlEncode(mb_substr(rawurldecode($entity->name), 0, 230, 'UTF-8'));
         }
         return parent::beforeSave($event, $entity, $options);
@@ -462,9 +462,9 @@ class ContentsTable extends AppTable
     /**
      * afterSave
      *
-     * @param  EventInterface $event
-     * @param  EntityInterface $entity
-     * @param  ArrayObject $options
+     * @param EventInterface $event
+     * @param EntityInterface $entity
+     * @param ArrayObject $options
      * @return void
      * @checked
      * @noTodo
@@ -516,9 +516,9 @@ class ContentsTable extends AppTable
      * After Delete
      *
      * 関連コンテンツのキャッシュを削除する
-     * @param  EventInterface $event
-     * @param  EntityInterface $entity
-     * @param  ArrayObject $options
+     * @param EventInterface $event
+     * @param EntityInterface $entity
+     * @param ArrayObject $options
      * @return void
      * @checked
      * @noTodo
@@ -550,7 +550,7 @@ class ContentsTable extends AppTable
             $contents = $this->find()->select('id')->where(['Contents.alias_id' => $content->id])->applyOptions(['callbacks' => false]);
             if (!$contents->all()->isEmpty()) {
                 // afterDelete・afterSaveのループを防ぐ
-                foreach (['afterSave', 'afterDelete'] as $eventName) {
+                foreach(['afterSave', 'afterDelete'] as $eventName) {
                     $event = $this->getEventManager()->matchingListeners($eventName);
                     if ($event) $this->getEventManager()->off('Model.' . $eventName);
                 }
@@ -629,7 +629,7 @@ class ContentsTable extends AppTable
                 if (!$contents->all()->isEmpty()) {
                     $content = $contents->first();
                     // afterDelete・afterSaveのループを防ぐ
-                    foreach (['afterSave', 'afterDelete'] as $eventName) {
+                    foreach(['afterSave', 'afterDelete'] as $eventName) {
                         $event = $this->getEventManager()->matchingListeners($eventName);
                         if ($event) $this->getEventManager()->off('Model.' . $eventName);
                     }
@@ -661,7 +661,7 @@ class ContentsTable extends AppTable
             return true;
         }
 
-        $isContentFolder = (bool) (!empty($data->type) && $data->type == 'ContentFolder');
+        $isContentFolder = (bool)(!empty($data->type) && $data->type == 'ContentFolder');
         // メインサイトか確認し、メインサイトでない場合は終了
         if (!$this->Sites->isMain($data->site_id)) {
             return true;
@@ -854,7 +854,7 @@ class ContentsTable extends AppTable
         }
         $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
         $site = $sites->findById($siteId)->first();
-        return $site ? $site->getPureUrl($url) : $url;
+        return $site? $site->getPureUrl($url) : $url;
     }
 
     /**
@@ -902,7 +902,7 @@ class ContentsTable extends AppTable
      */
     public function createUrl($id)
     {
-        switch ((int)$id) {
+        switch((int)$id) {
             case null:
                 return false;
             case 1:
@@ -933,7 +933,7 @@ class ContentsTable extends AppTable
                     ->newQuery()
                     ->select(['name', 'plugin', 'type'])
                     ->from('contents')
-                    ->where(['lft <=' => $content['lft'], 'rght >=' => $content['rght'],'deleted_date IS' => null])
+                    ->where(['lft <=' => $content['lft'], 'rght >=' => $content['rght'], 'deleted_date IS' => null])
                     ->order(['lft' => 'ASC'])
                     ->execute()
                     ->fetchAll('assoc');
@@ -1037,7 +1037,7 @@ class ContentsTable extends AppTable
     /**
      * 公開・非公開の日時を更新する
      *
-     * @param  Content $content
+     * @param Content $content
      * @return Content $content
      * @checked
      * @unitTest
@@ -1045,7 +1045,7 @@ class ContentsTable extends AppTable
      */
     protected function updatePublishDate($content)
     {
-        foreach (['publish_begin', 'publish_end'] as $date) {
+        foreach(['publish_begin', 'publish_end'] as $date) {
             if ($content[$date] !== $content["self_" . $date]) {
                 if ($content[$date] instanceof FrozenTime && $content["self_" . $date] instanceof FrozenTime) {
                     if ($content[$date]->__toString() !== $content["self_" . $date]->__toString()) {
@@ -1468,7 +1468,7 @@ class ContentsTable extends AppTable
                 'Contents.url IN' => $this->getUrlPattern($url)
             ]);
         }
-        $query->innerJoinWith('Sites', function($q) use($sameUrl, $useSubDomain) {
+        $query->innerJoinWith('Sites', function($q) use ($sameUrl, $useSubDomain) {
             return $q->where([
                 ['Sites.status' => true],
                 ['Sites.same_main_url' => $sameUrl],
@@ -1542,7 +1542,7 @@ class ContentsTable extends AppTable
         } else {
             $result = true;
         }
-        return $result ? $content : false;
+        return $result? $content : false;
     }
 
     /**

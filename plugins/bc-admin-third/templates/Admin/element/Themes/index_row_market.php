@@ -1,17 +1,18 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.View
- * @since           baserCMS v 4.0.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) NPO baser foundation
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       https://basercms.net/license/index.html MIT License
  */
 
 /**
  * [ADMIN] テーマ一覧　行
+ * @var \BaserCore\View\BcAdminAppView $this
+ * @var int $key
  */
 // ↓一時対応
 if (empty($data['version'])) {
@@ -28,7 +29,7 @@ if (empty($data['authorUrl'])) {
   <p class="theme-screenshot">
     <a class="theme-popup" href="<?php echo '#Contents' . $key ?>">
       <?php if ($data['enclosure']['@url']): ?>
-        <?php $this->BcBaser->img($data['enclosure']['@url'], ['alt' => $data['title'], 'height' => 194]) ?>
+        <?php $this->BcBaser->img($data['enclosure']['@url'], ['alt' => $data['title']]) ?>
       <?php else: ?>
         <?php $this->BcBaser->img('admin/no-screenshot.png', ['alt' => $data['title']]) ?>
       <?php endif ?>

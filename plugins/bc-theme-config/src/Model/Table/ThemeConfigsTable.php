@@ -11,7 +11,6 @@
 
 namespace BcThemeConfig\Model\Table;
 
-use BaserCore\Model\AppTable;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;

@@ -16,6 +16,7 @@ use Cake\Core\App;
 use Cake\Cache\Cache;
 use Cake\Core\Plugin;
 use Cake\Core\Configure;
+use Cake\Core\Plugin as CakePlugin;
 use Cake\Routing\Router;
 use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
@@ -84,7 +85,7 @@ class BcUtil
     {
         $request = Router::getRequest();
         $sessionKey = BcUtil::authSessionKey($prefix);
-        if($request->getSession()->check($sessionKey)) {
+        if ($request->getSession()->check($sessionKey)) {
             return $request->getSession()->read($sessionKey);
         } else {
             return false;
@@ -155,7 +156,7 @@ class BcUtil
      */
     public static function getVersion($plugin = '')
     {
-        if(!$plugin) $plugin = 'BaserCore';
+        if (!$plugin) $plugin = 'BaserCore';
         $corePlugins = Configure::read('BcApp.corePlugins');
         if (in_array($plugin, $corePlugins)) {
             $path = BASER . 'VERSION.txt';
@@ -183,24 +184,24 @@ class BcUtil
         }
     }
 
-	/**
-	 * DBのバージョンを取得する
-	 *
-	 * @param string $plugin プラグイン名
-	 * @return string
+    /**
+     * DBのバージョンを取得する
+     *
+     * @param string $plugin プラグイン名
+     * @return string
      * @checked
      * @noTodo
      * @unitTest
-	 */
-	public static function getDbVersion($plugin = '')
-	{
-	    if(!$plugin || $plugin === 'BaserCore') {
-	        $service = BcContainer::get()->get(SiteConfigsServiceInterface::class);
-	    } else {
-	        $service = BcContainer::get()->get(PluginsServiceInterface::class);
-	    }
-	    return $service->getVersion($plugin);
-	}
+     */
+    public static function getDbVersion($plugin = '')
+    {
+        if (!$plugin || $plugin === 'BaserCore') {
+            $service = BcContainer::get()->get(SiteConfigsServiceInterface::class);
+        } else {
+            $service = BcContainer::get()->get(PluginsServiceInterface::class);
+        }
+        return $service->getVersion($plugin);
+    }
 
     /**
      * バージョンを特定する一意の数値を取得する
@@ -271,7 +272,7 @@ class BcUtil
     public static function getPrefix($regex = false)
     {
         $prefix = '/' . self::getBaserCorePrefix() . '/' . self::getAdminPrefix();
-        return $regex ? str_replace('/', '\/',  substr($prefix, 1)) : $prefix;
+        return $regex? str_replace('/', '\/', substr($prefix, 1)) : $prefix;
     }
 
     /**
@@ -335,7 +336,7 @@ class BcUtil
      */
     static public function includePluginClass($pluginName)
     {
-        if(!is_array($pluginName)) {
+        if (!is_array($pluginName)) {
             $pluginName = [$pluginName];
         }
         $result = true;
@@ -388,7 +389,7 @@ class BcUtil
     public static function isAdminSystem($url = null)
     {
         if (!$url) {
-            if(!$request = Router::getRequest()) {
+            if (!$request = Router::getRequest()) {
                 $request = ServerRequestFactory::fromGlobals();
             }
             if ($request) {
@@ -469,10 +470,12 @@ class BcUtil
      * 現在適用しているテーマ梱包プラグインのリストを取得する
      *
      * @return array プラグインリスト
+     * @checked
+     * @noTodo
      */
     public static function getCurrentThemesPlugins()
     {
-        return BcUtil::getThemesPlugins(Configure::read('BcSite.theme'));
+        return BcUtil::getThemesPlugins(BcUtil::getCurrentTheme());
     }
 
     /**
@@ -480,16 +483,18 @@ class BcUtil
      *
      * @param string $theme テーマ名
      * @return array プラグインリスト
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public static function getThemesPlugins($theme)
     {
-        $path = BASER_THEMES . $theme . DS . 'Plugin';
-        if (is_dir($path)) {
-            $Folder = new Folder($path);
-            $files = $Folder->read(true, true, false);
-            if (!empty($files[0])) {
-                return $files[0];
-            }
+        $path = BcUtil::getPluginPath($theme) . 'Plugin';
+        if (!file_exists($path)) return [];
+        $Folder = new Folder($path);
+        $files = $Folder->read(true, true, false);
+        if (!empty($files[0])) {
+            return $files[0];
         }
         return [];
     }
@@ -528,78 +533,26 @@ class BcUtil
     /**
      * 初期データのパスを取得する
      *
-     * 初期データのフォルダは アンダースコア区切り推奨
-     *
      * @param string $plugin プラグイン名
      * @param string $theme テーマ名
      * @param string $pattern 初期データの類型
      * @return string Or false
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public static function getDefaultDataPath($plugin = null, $theme = null, $pattern = null)
+    public static function getDefaultDataPath($theme = null, $pattern = null)
     {
-
-        if (!$plugin) {
-            $plugin = 'BaserCore';
-        } else {
-            $plugin = Inflector::camelize($plugin);
-        }
-
-        if (!$theme) {
-            $theme = 'BcSample';
-        }
-
-        if (!$pattern) {
-            $pattern = 'default';
-        }
-
-        if ($plugin == 'BaserCore') {
-            $paths = [BASER_CONFIGS . 'data' . DS . $pattern];
-            if ($theme != 'BcSample') {
-                $paths = array_merge([
-                    BASER_THEMES . $theme . DS . 'Config' . DS . 'data' . DS . $pattern,
-                    BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . $pattern,
-                    BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . Inflector::camelize($pattern),
-                    BASER_CONFIGS . 'theme' . DS . $theme . DS . 'Config' . DS . 'data' . DS . $pattern,
-                    BASER_THEMES . $theme . DS . 'Config' . DS . 'data' . DS . 'default',
-                    BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . 'default',
-                ], $paths);
-            }
-        } else {
-            $pluginPaths = App::path('Plugin');
-            foreach($pluginPaths as $pluginPath) {
-                $pluginPath .= $plugin;
-                if (is_dir($pluginPath)) {
-                    break;
-                }
-                $pluginPath = null;
-            }
-            if (!$pluginPath) {
-                return false;
-            }
-            $paths = [
-                $pluginPath . DS . 'Config' . DS . 'data' . DS . $pattern,
-                $pluginPath . DS . 'Config' . DS . 'Data' . DS . $pattern,
-                $pluginPath . DS . 'Config' . DS . 'Data' . DS . Inflector::camelize($pattern),
-                $pluginPath . DS . 'sql',
-                $pluginPath . DS . 'Config' . DS . 'data' . DS . 'default',
-                $pluginPath . DS . 'Config' . DS . 'Data' . DS . 'default',
-            ];
-            if ($theme != 'BcSample') {
-                $paths = array_merge([
-                    BASER_THEMES . $theme . DS . 'Config' . DS . 'data' . DS . $pattern . DS . $plugin,
-                    BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . $pattern . DS . $plugin,
-                    BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . Inflector::camelize($pattern) . DS . $plugin,
-                    BASER_CONFIGS . 'theme' . DS . $theme . DS . 'Config' . DS . 'data' . DS . $pattern . DS . $plugin,
-                    BASER_THEMES . $theme . DS . 'Config' . DS . 'data' . DS . 'default' . DS . $plugin,
-                    BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . 'default' . DS . $plugin,
-                ], $paths);
-            }
-        }
-
+        if (!$theme) $theme = Configure::read('BcApp.defaultFrontTheme');
+        if (!$pattern) $pattern = 'default';
+        $paths = [
+            BASER_THEMES . $theme . DS . 'config' . DS . 'data' . DS . $pattern,
+            BASER_THEMES . $theme . DS . 'config' . DS . 'data' . DS . 'default',
+            BASER_THEMES . Inflector::dasherize($theme) . DS . 'config' . DS . 'data' . DS . $pattern,
+            BASER_THEMES . Inflector::dasherize($theme) . DS . 'config' . DS . 'data' . DS . 'default',
+        ];
         foreach($paths as $path) {
-            if (is_dir($path)) {
-                return $path;
-            }
+            if (is_dir($path)) return $path;
         }
         return false;
 
@@ -648,7 +601,7 @@ class BcUtil
      */
     public static function isConsole()
     {
-        return (bool) $_ENV['IS_CONSOLE'];
+        return (bool)$_ENV['IS_CONSOLE'];
     }
 
     /**
@@ -728,7 +681,7 @@ class BcUtil
                     continue;
                 }
                 $config = include $appConfigPath;
-                if(!empty($config['type']) && in_array($config['type'], $themeTypes)) {
+                if (!empty($config['type']) && in_array($config['type'], $themeTypes)) {
                     $name = Inflector::camelize(Inflector::underscore($name));
                     $themes[$name] = $name;
                 }
@@ -749,8 +702,10 @@ class BcUtil
     {
         $themes = self::getAllThemeList();
         foreach($themes as $key => $theme) {
+            if(!file_exists(BcUtil::getPluginPath($theme) . 'config.php')) continue;
             $config = include BcUtil::getPluginPath($theme) . 'config.php';
-            if($config['type'] !== 'Theme') unset($themes[$key]);
+            if($config === false) continue;
+            if ($config['type'] !== 'Theme') unset($themes[$key]);
         }
         return $themes;
     }
@@ -768,7 +723,7 @@ class BcUtil
         $themes = self::getAllThemeList();
         foreach($themes as $key => $theme) {
             $config = include BcUtil::getPluginPath($theme) . 'config.php';
-            if($config['type'] !== 'AdminTheme') unset($themes[$key]);
+            if ($config['type'] !== 'AdminTheme') unset($themes[$key]);
         }
         return $themes;
     }
@@ -834,7 +789,7 @@ class BcUtil
     public static function getMainDomain()
     {
         $mainDomain = Configure::read('BcEnv.mainDomain');
-        return !empty($mainDomain) ? $mainDomain : self::getDomain(Configure::read('BcEnv.siteUrl'));
+        return !empty($mainDomain)? $mainDomain : self::getDomain(Configure::read('BcEnv.siteUrl'));
     }
 
     /**
@@ -877,7 +832,7 @@ class BcUtil
      */
     public static function getPluginDir($pluginName)
     {
-        if(!$pluginName) $pluginName = 'BaserCore';
+        if (!$pluginName) $pluginName = 'BaserCore';
         $pluginNames = [$pluginName, Inflector::dasherize($pluginName)];
         foreach(App::path('plugins') as $path) {
             foreach($pluginNames as $name) {
@@ -943,7 +898,7 @@ class BcUtil
      */
     public static function convertSize($size, $outExt = 'B', $inExt = null)
     {
-        if(!$size) return 0;
+        if (!$size) return 0;
         preg_match('/\A\d+(\.\d+)?/', $size, $num);
         $sizeNum = (isset($num[0]))? $num[0] : 0;
 
@@ -1014,15 +969,15 @@ class BcUtil
      */
     public static function getViewPath()
     {
-        if(BcUtil::isAdminSystem()) {
+        if (BcUtil::isAdminSystem()) {
             $theme = BcUtil::getCurrentAdminTheme();
         } else {
             $theme = BcUtil::getCurrentTheme();
         }
         $pluginPath = ROOT . DS . 'plugins' . DS;
-        if(is_dir($pluginPath . $theme)) {
+        if (is_dir($pluginPath . $theme)) {
             return $pluginPath . $theme . DS;
-        } elseif(is_dir($pluginPath . Inflector::dasherize($theme))) {
+        } elseif (is_dir($pluginPath . Inflector::dasherize($theme))) {
             return $pluginPath . Inflector::dasherize($theme) . DS;
         }
         return false;
@@ -1030,14 +985,17 @@ class BcUtil
 
     /**
      * 現在のテーマ名を取得する
-     * キャメルケースが前提
      * @return string
      */
     public static function getCurrentTheme()
     {
         $theme = Inflector::camelize(Inflector::underscore(Configure::read('BcApp.defaultFrontTheme')));
         $request = Router::getRequest();
-        $site = $request->getParam('Site');
+        if (BcUtil::isAdminSystem()) {
+            $site = $request->getAttribute('currentSite');
+        } else {
+            $site = $request->getParam('Site');
+        }
         if (!$site) {
             $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
             $site = $sites->getRootMain();
@@ -1301,4 +1259,71 @@ class BcUtil
         }
         return $url;
     }
+
+    /**
+     * フォルダの中をフォルダを残して空にする(ファイルのみを削除する)
+     *
+     * @param string $path
+     * @return boolean
+     * @checked
+     * @noTodo
+     */
+    public static function emptyFolder($path)
+    {
+        $result = true;
+        $Folder = new Folder($path);
+        $files = $Folder->read(true, true, true);
+        if (is_array($files[1])) {
+            foreach($files[1] as $file) {
+                if ($file != 'empty') {
+                    if (!@unlink($file)) {
+                        $result = false;
+                    }
+                }
+            }
+        }
+        if (is_array($files[0])) {
+            foreach($files[0] as $file) {
+                if (!BcUtil::emptyFolder($file)) {
+                    $result = false;
+                }
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * ファイルポインタから行を取得し、CSVフィールドを処理する
+     *
+     * @param stream    handle
+     * @param int        length
+     * @param string    delimiter
+     * @param string    enclosure
+     * @return    mixed    ファイルの終端に達した場合を含み、エラー時にFALSEを返します。
+     * @checked
+     * @noTodo
+     */
+    public static function fgetcsvReg(&$handle, $length = null, $d = ',', $e = '"')
+    {
+        $d = preg_quote($d);
+        $e = preg_quote($e);
+        $_line = "";
+        $eof = false;
+        while(($eof != true) and (!feof($handle))) {
+            $_line .= (empty($length)? fgets($handle) : fgets($handle, $length));
+            $itemcnt = preg_match_all('/' . $e . '/', $_line, $dummy);
+            if ($itemcnt % 2 == 0)
+                $eof = true;
+        }
+        $_csv_line = preg_replace('/(?:\r\n|[\r\n])?$/', $d, trim($_line));
+        $_csv_pattern = '/(' . $e . '[^' . $e . ']*(?:' . $e . $e . '[^' . $e . ']*)*' . $e . '|[^' . $d . ']*)' . $d . '/';
+        preg_match_all($_csv_pattern, $_csv_line, $_csv_matches);
+        $_csv_data = $_csv_matches[1];
+        for($_csv_i = 0; $_csv_i < count($_csv_data); $_csv_i++) {
+            $_csv_data[$_csv_i] = preg_replace('/^' . $e . '(.*)' . $e . '$/s', '$1', $_csv_data[$_csv_i]);
+            $_csv_data[$_csv_i] = str_replace($e . $e, $e, $_csv_data[$_csv_i]);
+        }
+        return empty($_line)? false : $_csv_data;
+    }
+
 }

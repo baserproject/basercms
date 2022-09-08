@@ -95,6 +95,9 @@ class PluginsServiceTest extends BcTestCase
         $pluginPath = App::path('plugins')[0] . DS . 'BcTest';
         $folder = new Folder($pluginPath);
         $folder->create($pluginPath, 0777);
+        $file = new File($pluginPath . DS . 'config.php');
+        $file->write("<?php return ['type' => 'Plugin'];");
+        $file->close();
 
         $plugins = $this->Plugins->getIndex($sortMode);
         $pluginNames = [];

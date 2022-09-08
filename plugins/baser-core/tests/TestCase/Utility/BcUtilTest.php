@@ -433,35 +433,21 @@ class BcUtilTest extends BcTestCase
      */
     public function testGetThemesPlugins()
     {
+        $theme = 'BcSpaSample';
+        $plugins = BcUtil::getThemesPlugins($theme);
+        $this->assertCount(0, $plugins);
 
-        // TODO ucmitz移行時に未実装のため代替措置
-        // >>>
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        // <<<
+        $themePath = BcUtil::getPluginPath($theme);
+        $pluginName = 'test';
+        mkdir($themePath . 'Plugin', 777, true);
+        mkdir($themePath . 'Plugin/' . $pluginName, 777, true);
 
-        $theme = Configure::read('BcSite.theme');
-        $path = BASER_THEMES . $theme . DS . 'Plugin';
+        $plugins = BcUtil::getThemesPlugins($theme);
+        $this->assertCount(1, $plugins);
+        $this->assertEquals($pluginName, $plugins[0]);
 
-        // ダミーのプラグインディレクトリを削除
-        $Folder = new Folder();
-        $Folder->delete($path);
-
-        // プラグインが存在しない場合
-        $result = BcUtil::getThemesPlugins($theme);
-        $expect = [];
-        $this->assertEquals($expect, $result, 'テーマ梱包プラグインのリストを正しく取得できません');
-
-        // プラグインが存在する場合
-        // ダミーのプラグインディレクトリを作成
-        $Folder->create($path . DS . 'dummy1');
-        $Folder->create($path . DS . 'dummy2');
-
-        $result = BcUtil::getThemesPlugins($theme);
-        // ダミーのプラグインディレクトリを削除
-        $Folder->delete($path);
-
-        $expect = ['dummy1', 'dummy2'];
-        $this->assertEquals($expect, $result, 'テーマ梱包プラグインのリストを正しく取得できません');
+        $folder = new Folder();
+        $folder->delete($themePath . 'Plugin');
     }
 
     /**
@@ -505,48 +491,24 @@ class BcUtilTest extends BcTestCase
     /**
      * 初期データのパスを取得する
      *
-     * 初期データのフォルダは アンダースコア区切り推奨
-     *
-     * @param string $plugin プラグイン名
      * @param string $theme テーマ名
      * @param string $pattern 初期データの類型
      * @param string $expect 期待値
      * @dataProvider getDefaultDataPathDataProvider
      */
-    public function testGetDefaultDataPath($plugin, $theme, $pattern, $expect)
+    public function testGetDefaultDataPath($theme, $pattern, $expect)
     {
-        // TODO ucmitz移行時に未実装のため代替措置
-        // >>>
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        // <<<
-
-        $isset_ptt = isset($pattern) && isset($theme);
-        $isset_plt = isset($plugin) && isset($theme);
-        $isset_plptt = isset($plugin) && isset($pattern) && isset($theme);
         $Folder = new Folder();
-
         // 初期データ用のダミーディレクトリを作成
-        if ($isset_ptt) {
-            $Folder->create(BASER_THEMES . $theme . DS . 'Config' . DS . 'data' . DS . $pattern);
+        if(!$pattern) $pattern = 'default';
+        if($theme) {
+            $path = BASER_THEMES . $theme . DS . 'config' . DS . 'data' . DS . $pattern;
+            $Folder->create($path);
         }
-        if ($isset_plt && !$isset_plptt) {
-            $Folder->create(BASER_THEMES . $theme . DS . 'Config' . DS . 'data' . DS . 'default' . DS . $plugin);
-        }
-        if ($isset_plptt) {
-            $Folder->create(BASER_THEMES . $theme . DS . 'Config' . DS . 'data' . DS . $pattern . DS . $plugin);
-        }
-
-        $result = BcUtil::getDefaultDataPath($plugin, $theme, $pattern);
-
+        $result = BcUtil::getDefaultDataPath($theme, $pattern);
         // 初期データ用のダミーディレクトリを削除
-        if ($isset_ptt) {
-            $Folder->delete(BASER_THEMES . $theme . DS . 'Config' . DS . 'data' . DS . $pattern);
-        }
-        if ($isset_plt && !$isset_plptt) {
-            $Folder->delete(BASER_THEMES . $theme . DS . 'Config' . DS . 'data' . DS . 'default' . DS . $plugin);
-        }
-        if ($isset_plptt) {
-            $Folder->delete(BASER_THEMES . $theme . DS . 'Config' . DS . 'data' . DS . $pattern . DS . $plugin);
+        if($theme) {
+            $Folder->delete($path);
         }
         $this->assertEquals($expect, $result, '初期データのパスを正しく取得できません');
     }
@@ -558,17 +520,10 @@ class BcUtilTest extends BcTestCase
      */
     public function getDefaultDataPathDataProvider()
     {
-        // TODO ucmitz移行時に未実装のため代替措置
-        // >>>
-        return [[null, null, null, '']];
-        // <<<
         return [
-            [null, null, null, BASER_CONFIGS . 'data/default'],
-            [null, 'nada-icons', null, BASER_THEMES . 'nada-icons/Config/data/default'],
-            [null, 'nada-icons', 'not_default', BASER_THEMES . 'nada-icons/Config/data/not_default'],
-            ['BcBlog', null, null, BASER_PLUGINS . 'Blog/Config/data/default'],
-            ['BcBlog', 'nada-icons', null, BASER_THEMES . 'nada-icons/Config/data/default/Blog'],
-            ['BcBlog', 'nada-icons', 'not_default', BASER_THEMES . 'nada-icons/Config/data/not_default/Blog'],
+            [null, null, ROOT . '/plugins/bc-front/config/data/default'],
+            ['nada-icons', null, ROOT . '/plugins/nada-icons/config/data/default'],
+            ['nada-icons', 'not_default', ROOT . '/plugins/nada-icons/config/data/not_default'],
         ];
     }
 
@@ -969,6 +924,84 @@ class BcUtilTest extends BcTestCase
         SiteConfigFactory::make(['name' => 'version', 'value' => '2.0.0'])->persist();
         $this->assertEquals('2.0.0', BcUtil::getDbVersion());
         $this->assertEquals('1.0.0', BcUtil::getDbVersion('BcBlog'));
+    }
+
+    /**
+     * フォルダの中をフォルダを残して空にする
+     */
+    public function testEmptyFolder()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $dummyPath = TMP . 'test' . DS;
+        $names = [
+            'folder' => ['folder1', 'folder2'],
+            'file' => ['file1', 'file2'],
+        ];
+
+        // ダミーのフォルダとファイルを作成
+        $Folder = new Folder();
+        $Folder->create($dummyPath, 0755);
+        $Folder->create($dummyPath . $names['folder'][0], 0755);
+        $Folder->create($dummyPath . $names['folder'][1], 0755);
+
+        $File1 = new File($dummyPath . $names['file'][0], true);
+        $File2 = new File($dummyPath . $names['file'][1], true);
+
+        BcUtil::emptyFolder($dummyPath);
+
+        $result = true;
+        // フォルダが存在しているかチェック
+        foreach($names['folder'] as $key => $name) {
+            if (!is_dir($dummyPath . $name)) {
+                $result = false;
+            }
+            @rmdir($dummyPath . $name);
+        }
+        // ファイルが削除されているかチェック
+        foreach($names['file'] as $key => $name) {
+            if (file_exists($dummyPath . $name)) {
+                $result = false;
+            }
+            @unlink($dummyPath . $name);
+        }
+        $Folder->delete($dummyPath);
+
+        $this->assertTrue($result, 'フォルダの中のファイルのみを削除することができません');
+    }
+
+    /**
+     * ファイルポインタから行を取得し、CSVフィールドを処理する
+     *
+     * @param string $content CSVの内容
+     * @param int $length length
+     * @param string $d delimiter
+     * @param string $e enclosure
+     * @param string $expext 期待値
+     * @param string $message テスト失敗時に表示するメッセージ
+     * @dataProvider fgetcsvRegDataProvider
+     */
+    public function testFgetcsvReg($content, $length, $d, $e, $expect, $message)
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $csv = new File(CACHE . 'test.csv');
+        $csv->write($content);
+        $csv->close();
+        $csv->open();
+
+        $result = BcUtil::fgetcsvReg($csv->handle, $length, $d, $e);
+        $this->assertEquals($expect, $result, $message);
+
+        $csv->close();
+    }
+
+    public function fgetcsvRegDataProvider()
+    {
+        return [
+            ['test1,test2,test3', null, ',', '"', ['test1', 'test2', 'test3'], 'ファイルポインタから行を取得し、CSVフィールドを正しく処理できません'],
+            ['test1,test2,test3', 5, ',', '"', ['test'], '読み込む文字列の長さを指定できません'],
+            ['test1?test2?test3', null, '?', '"', ['test1', 'test2', 'test3\\'], 'デリミタを指定できません'],
+            ['test1,<<test2,test3<<', null, ',', '<<', ['test1', 'test2,test3'], 'enclosureを指定できません'],
+        ];
     }
 
 }

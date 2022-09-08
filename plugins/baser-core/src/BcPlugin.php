@@ -12,6 +12,7 @@
 namespace BaserCore;
 
 use BaserCore\Error\BcException;
+use BaserCore\Model\Entity\Site;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUpdateLog;
 use BaserCore\Utility\BcUtil;
@@ -208,7 +209,7 @@ class BcPlugin extends BasePlugin
      */
     public function execScript($__version)
     {
-        $__path = CakePlugin::path($this->getName()) . DS . 'config' . DS . 'update' . DS . $__version . DS . 'updater.php';
+        $__path = CakePlugin::path($this->getName()) . 'config' . DS . 'update' . DS . $__version . DS . 'updater.php';
         if (!file_exists($__path)) return true;
         try {
             include $__path;
@@ -461,6 +462,19 @@ class BcPlugin extends BasePlugin
         );
 
         parent::routes($routes);
+    }
+
+    /**
+     * テーマを適用する
+     * @param string $theme
+     * @checked
+     * @noTodo
+     */
+    public function applyAsTheme(Site $site, string $theme)
+    {
+        $site->theme = $theme;
+        $siteConfigsTable = TableRegistry::getTableLocator()->get('BaserCore.Sites');
+        $siteConfigsTable->save($site);
     }
 
 }

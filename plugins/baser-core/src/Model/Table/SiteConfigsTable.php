@@ -12,7 +12,6 @@
 namespace BaserCore\Model\Table;
 
 use BaserCore\Event\BcEventDispatcherTrait;
-use BaserCore\Model\AppTable;
 use BaserCore\Model\Behavior\BcKeyValueBehavior;
 use BaserCore\Model\Entity\SiteConfig;
 use Cake\Validation\Validator;
@@ -28,7 +27,7 @@ use BaserCore\Utility\BcUtil;
  *
  * @package BaserCore\Model\Table
  * @method SiteConfig newEntity($data = null, array $options = [])
- * @method BcKeyValueBehavior setValue($key, $value)
+ * @method BcKeyValueBehavior saveValue($key, $value)
  */
 class SiteConfigsTable extends AppTable
 {
@@ -126,7 +125,7 @@ class SiteConfigsTable extends AppTable
             'mode' => [
                 0 => __d('baser', 'ノーマルモード'),
                 1 => __d('baser', 'デバッグモード')
-        ]];
+            ]];
         if (isset($controlSources[$field])) {
             return $controlSources[$field];
         } else {
@@ -149,12 +148,12 @@ class SiteConfigsTable extends AppTable
         $changed = false;
         if ($lastModified) {
             $user = BcUtil::loginUser();
-            if(!$user) {
+            if (!$user) {
                 return false;
             }
             [$lastModified, $userId] = explode('|', $lastModified);
             $lastModified = strtotime($lastModified);
-            if ($user->id !== (int) $userId) {
+            if ($user->id !== (int)$userId) {
                 $listDisplayed = strtotime($listDisplayed);
                 if ($lastModified >= ($listDisplayed - 60)) {
                     $changed = true;
@@ -174,7 +173,7 @@ class SiteConfigsTable extends AppTable
     public function updateContentsSortLastModified()
     {
         $user = BcUtil::loginUser();
-        if(!$user) {
+        if (!$user) {
             return false;
         }
         return $this->saveValue(

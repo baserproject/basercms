@@ -49,7 +49,7 @@ return [
         /**
          * 現在のリクエストのホスト
          */
-        'host' => (isset($_SERVER['HTTP_HOST'])) ? $_SERVER['HTTP_HOST'] : null
+        'host' => (isset($_SERVER['HTTP_HOST']))? $_SERVER['HTTP_HOST'] : null
     ],
     'BcApp' => [
         /**
@@ -76,7 +76,7 @@ return [
          * コアパッケージ名
          * プラグイン一覧に表示しないようにする
          */
-        'core' => ['baser-core', 'bc-admin-third', 'bc-front', 'bc-installer'],
+        'core' => ['BaserCore', 'BcAdminThird', 'BcFront', 'BcInstaller'],
         /**
          * デフォルトフロントテーマ
          */
@@ -181,21 +181,30 @@ return [
                         ],
                     ]
                 ],
-                //			'Theme' => [
-                //				'title' => __d('baser', 'テーマ管理'),
-                //				'type' => 'system',
-                //				'menus' => [
-                //					'Themes' => [
-                //						'title' => __d('baser', 'テーマ'),
-                //						'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'themes', 'action' => 'index'],
-                //						'currentRegex' => '/\/themes\/[^\/]+?/s'
-                //					],
-                //					'ThemeConfigs' => ['title' => __d('baser', '設定'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'theme_configs', 'action' => 'form']],
-                //					'ThemeAdd' => ['title' => __d('baser', '新規追加'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'themes', 'action' => 'add']],
-                //					'ThemesDownload' => ['title' => __d('baser', '利用中テーマダウンロード'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'themes', 'action' => 'download']],
-                //					'ThemesDownloadDefaultDataPattern' => ['title' => __d('baser', 'テーマ用初期データダウンロード'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'themes', 'action' => 'download_default_data_pattern']],
-                //				]
-                //			],
+                'Theme' => [
+                    'title' => __d('baser', 'テーマ管理'),
+                    'type' => 'system',
+                    'menus' => [
+                        'Themes' => [
+                            'title' => __d('baser', 'テーマ'),
+                            'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'themes', 'action' => 'index'],
+                            'currentRegex' => '/\/themes\/[^\/]+?/s'
+                        ],
+//                        'ThemeConfigs' => ['title' => __d('baser', '設定'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'theme_configs', 'action' => 'form']],
+                        'ThemeAdd' => [
+                            'title' => __d('baser', '新規追加'),
+                            'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'themes', 'action' => 'add']
+                        ],
+                        'ThemesDownload' => [
+                            'title' => __d('baser', '利用中テーマダウンロード'),
+                            'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'themes', 'action' => 'download']
+                        ],
+                        'ThemesDownloadDefaultDataPattern' => [
+                            'title' => __d('baser', 'テーマ用初期データダウンロード'),
+                            'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'themes', 'action' => 'download_default_data_pattern']
+                        ],
+                    ]
+                ],
                 'Plugin' => [
                     'title' => __d('baser', 'プラグイン管理'),
                     'type' => 'system',
@@ -236,7 +245,7 @@ return [
                 ]
             ]
         ]
-     ],
+    ],
 
     /**
      * リクエスト情報

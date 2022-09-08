@@ -152,8 +152,6 @@ $config['BcApp'] = [
     'validSyntaxWithPage' => true,
     // 管理者以外のPHPコードを許可するかどうか
     'allowedPhpOtherThanAdmins' => true,
-    // テーマ編集機能の利用を許可するかどうか
-    'allowedThemeEdit' => false,
     // 管理システムのデフォルトテーマ
     'defaultAdminTheme' => 'admin-third',
     // コンテンツの作成日を自動で更新する
