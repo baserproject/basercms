@@ -11,10 +11,12 @@
 
 namespace BaserCore\ServiceProvider;
 
+use BaserCore\Service\BcDatabaseService;
 use BaserCore\Service\ThemesAdminService;
 use BaserCore\Service\ThemesAdminServiceInterface;
 use BaserCore\Service\ThemesService;
 use BaserCore\Service\ThemesServiceInterface;
+use BaserCore\Service\UtilitiesAdminService;
 use BcFavorite\Service\FavoriteService;
 use BcFavorite\Service\FavoriteServiceInterface;
 use BaserCore\Service\AppService;
@@ -65,6 +67,8 @@ use BaserCore\Service\PermissionsServiceInterface;
 use BaserCore\Service\SiteConfigsServiceInterface;
 use BcSearchIndex\Service\SearchIndexesServiceInterface;
 use BaserCore\Service\ContentFoldersServiceInterface;
+use BaserCore\Service\BcDatabaseServiceInterface;
+use BaserCore\Service\UtilitiesAdminServiceInterface;
 
 /**
  * Class BcServiceProvider
@@ -102,7 +106,9 @@ class BcServiceProvider extends ServiceProvider
         SearchIndexesServiceInterface::class,
         DashboardAdminServiceInterface::class,
         ThemesServiceInterface::class,
-        ThemesAdminServiceInterface::class
+        ThemesAdminServiceInterface::class,
+        BcDatabaseServiceInterface::class,
+        UtilitiesAdminServiceInterface::class
     ];
 
     /**
@@ -157,6 +163,11 @@ class BcServiceProvider extends ServiceProvider
         // Themes サービス
         $container->add(ThemesServiceInterface::class, ThemesService::class);
         $container->add(ThemesAdminServiceInterface::class, ThemesAdminService::class);
+        // BcDatabase サービス
+        $container->add(BcDatabaseServiceInterface::class, BcDatabaseService::class);
+        // Utilities サービス
+        $container->add(UtilitiesAdminServiceInterface::class, UtilitiesAdminService::class);
+
     }
 
 }

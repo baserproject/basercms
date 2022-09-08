@@ -11,8 +11,8 @@
 
 namespace BaserCore\Test\TestCase\Controller\Admin;
 
-use BaserCore\Controller\Admin\ThemesController;
 use BaserCore\Test\Scenario\InitAppScenario;
+use BaserCore\Controller\Admin\ThemesController;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -43,6 +43,7 @@ class ThemesControllerTest extends BcTestCase
         'plugin.BaserCore.Factory/UsersUserGroups',
         'plugin.BaserCore.Factory/UserGroups',
     ];
+
     /**
      * set up
      *
@@ -51,6 +52,7 @@ class ThemesControllerTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->ThemesController = new ThemesController($this->getRequest());
         $this->loadFixtureScenario(InitAppScenario::class);
         $request = $this->getRequest('/baser/admin/baser-core/themes/');
         $this->loginAdmin($request);
@@ -75,6 +77,19 @@ class ThemesControllerTest extends BcTestCase
     }
 
     /**
+     * baserマーケットのテーマデータを取得する
+     */
+    public function test_get_market_themes()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        $this->get('/baser/admin/baser-core/themes/get_market_themes');
+        $this->assertResponseContains('<p class="theme-name">');
+        $this->assertResponseOk();
+    }
+
+    /**
      * テーマ一覧
      */
     public function test_index()
@@ -90,14 +105,6 @@ class ThemesControllerTest extends BcTestCase
      * 初期データセットを読み込む
      */
     public function test_load_default_data_pattern()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
-    /**
-     * コアの初期データを読み込む
-     */
-    public function test_reset_data()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
@@ -142,4 +149,21 @@ class ThemesControllerTest extends BcTestCase
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
 
+    /**
+     * スクリーンショットを表示
+     */
+    public function test_screenshot()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        $this->get('/baser/admin/baser-core/themes/screenshot/BcFront');
+        $this->assertResponseOk();
+        $this->assertFileResponse('/var/www/html/plugins/bc-front/screenshot.png');
+
+        $this->get('/baser/admin/baser-core/themes/screenshot/NotExistsTheme');
+        $this->assertResponseError();
+    }
+
 }
+

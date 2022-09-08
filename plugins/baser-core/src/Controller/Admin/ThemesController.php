@@ -14,14 +14,10 @@ namespace BaserCore\Controller\Admin;
 use BaserCore\Error\BcException;
 use BaserCore\Service\ThemesAdminServiceInterface;
 use BaserCore\Service\ThemesServiceInterface;
-use BaserCore\Utility\BcSiteConfig;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Vendor\Simplezip;
 use BcZip;
-use Cake\Core\Configure;
 use Cake\Filesystem\Folder;
-use Cake\Utility\Inflector;
-use MailMessage;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -47,48 +43,27 @@ class ThemesController extends BcAdminAppController
 
     /**
      * テーマをアップロードして適用する
+     * @checked
+     * @noTodo
      */
-    public function add()
+    public function add(ThemesServiceInterface $service)
     {
-
-        if (!$this->getRequest()->is(['post', 'put'])) {
-            return;
-        }
-
-        if ($this->Theme->isOverPostSize()) {
-            $this->BcMessage->setError(
-                __d(
-                    'baser',
-                    '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。',
-                    ini_get('post_max_size')
-                )
-            );
-        }
-        if (empty($this->getRequest()->getData('Theme.file.tmp_name'))) {
-            $message = __d('baser', 'ファイルのアップロードに失敗しました。');
-            if (!empty($this->getRequest()->getData('Theme.file.error')) && $this->getRequest()->getData('Theme.file.error') == 1) {
-                $message .= __d('baser', 'サーバに設定されているサイズ制限を超えています。');
+        if ($this->request->is('post')) {
+            try {
+                $name = $service->add($this->getRequest()->getData());
+                $this->BcMessage->setInfo('テーマファイル「' . $name . '」を追加しました。');
+                $this->redirect(['action' => 'index']);
+            } catch (BcException $e) {
+                $this->BcMessage->setError(__d('baser', 'ファイルのアップロードに失敗しました。') . $e->getMessage());
             }
-            $this->BcMessage->setError($message);
-            return;
         }
-
-        $name = $this->getRequest()->getData('Theme.file.name');
-        move_uploaded_file($this->getRequest()->getData('Theme.file.tmp_name'), TMP . $name);
-        $BcZip = new BcZip();
-        if (!$BcZip->extract(TMP . $name, BASER_THEMES)) {
-            $msg = __d('baser', 'アップロードしたZIPファイルの展開に失敗しました。');
-            $msg .= "\n" . $BcZip->error;
-            $this->BcMessage->setError($msg);
-            return;
-        }
-        unlink(TMP . $name);
-        $this->BcMessage->setInfo('テーマファイル「' . $name . '」を追加しました。');
-        $this->redirect(['action' => 'index']);
     }
 
     /**
      * baserマーケットのテーマデータを取得する
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function get_market_themes(ThemesServiceInterface $service)
     {
@@ -99,159 +74,28 @@ class ThemesController extends BcAdminAppController
     /**
      * 初期データセットを読み込む
      *
-     * @return void
+     * @checked
+     * @noTodo
      */
-    public function load_default_data_pattern()
+    public function load_default_data_pattern(ThemesServiceInterface $service)
     {
-        if (empty($this->getRequest()->getData('Theme.default_data_pattern'))) {
+        $this->request->allowMethod(['post']);
+        if (empty($this->getRequest()->getData('default_data_pattern'))) {
             $this->BcMessage->setError(__d('baser', '不正な操作です。'));
-            $this->redirect('index');
-            return;
+            return $this->redirect(['action' => 'index']);
         }
-        $result = $this->_load_default_data_pattern($this->getRequest()->getData('Theme.default_data_pattern'));
-        if (!$result) {
-            if (!$this->getRequest()->getSession()->check('Message.flash.message')) {
-                $this->BcMessage->setError(__d('baser', '初期データの読み込みが完了しましたが、いくつかの処理に失敗しています。ログを確認してください。'));
-            }
-            $this->redirect('index');
-            return;
+        try {
+            $result = $service->loadDefaultDataPattern(BcUtil::getCurrentTheme(), $this->getRequest()->getData('default_data_pattern'));
+        } catch (BcException $e) {
+            $this->BcMessage->setError(__d('baser', '初期データの読み込みに失敗しました。' . $e->getMessage()));
+            return $this->redirect(['action' => 'index']);
         }
-
-        $this->BcMessage->setInfo(__d('baser', '初期データの読み込みが完了しました。'));
-        $this->redirect('index');
-    }
-
-    /**
-     * コアの初期データを読み込む
-     *
-     * @return void
-     */
-    public function reset_data()
-    {
-        $this->_checkSubmitToken();
-        $result = $this->_load_default_data_pattern('core.default', BcSiteConfig::get('theme'));
         if (!$result) {
             $this->BcMessage->setError(__d('baser', '初期データの読み込みが完了しましたが、いくつかの処理に失敗しています。ログを確認してください。'));
-            $this->redirect('/admin');
-            return;
+            return $this->redirect(['action' => 'index']);
         }
-
         $this->BcMessage->setInfo(__d('baser', '初期データの読み込みが完了しました。'));
-        $this->redirect('/admin');
-    }
-
-    /**
-     * 初期データを読み込む
-     *
-     * @param string $dbDataPattern 初期データのパターン
-     * @param string $currentTheme テーマ名
-     * @return bool
-     */
-    protected function _load_default_data_pattern($dbDataPattern, $currentTheme = '')
-    {
-        [$theme, $pattern] = explode('.', $dbDataPattern);
-        if (!$this->BcManager->checkDefaultDataPattern($pattern, $theme)) {
-            $this->BcMessage->setError(__d('baser', '初期データのバージョンが違うか、初期データの構造が壊れています。'));
-            return false;
-        }
-        $adminTheme = Configure::read('BcSite.admin_theme');
-        $excludes = ['plugins', 'dblogs', 'users'];
-        /* データを削除する */
-        $this->BcManager->resetAllTables(null, $excludes);
-        $result = true;
-        /* コアデータ */
-        if (!$this->BcManager->loadDefaultDataPattern('default', null, $pattern, $theme, 'core', $excludes)) {
-            $result = false;
-            $this->log(sprintf(__d('baser', '%s の初期データのロードに失敗しました。'), $dbDataPattern));
-        }
-
-        /* プラグインデータ */
-        $corePlugins = Configure::read('BcApp.corePlugins');
-        $plugins = array_merge($corePlugins, BcUtil::getCurrentThemesPlugins());
-
-        foreach($plugins as $plugin) {
-            $this->BcManager->loadDefaultDataPattern('default', null, $pattern, $theme, $plugin, $excludes);
-        }
-        if (!$result) {
-            /* 指定したデータセットでの読み込みに失敗した場合、コアのデータ読み込みを試みる */
-            if (!$this->BcManager->loadDefaultDataPattern('default', null, 'default', 'core', 'core', $excludes)) {
-                $this->log(__d('baser', 'コアの初期データのロードに失敗しました。'));
-                $result = false;
-            }
-            foreach($corePlugins as $corePlugin) {
-                if (!$this->BcManager->loadDefaultDataPattern('default', null, 'default', 'core', $corePlugin, $excludes)) {
-                    $this->log(__d('baser', 'コアのプラグインの初期データのロードに失敗しました。'));
-                    $result = false;
-                }
-            }
-            if ($result) {
-                $this->BcMessage->setError(__d('baser', '初期データの読み込みに失敗しましたので baserCMSコアの初期データを読み込みました。'));
-            } else {
-                $this->BcMessage->setError(__d('baser', '初期データの読み込みに失敗しました。データが不完全な状態です。正常に動作しない可能性があります。'));
-            }
-        }
-
-        BcUtil::clearAllCache();
-
-        // メール受信テーブルの作成
-        $MailMessage = new MailMessage();
-        if (!$MailMessage->reconstructionAll()) {
-            $this->log(__d('baser', 'メールプラグインのメール受信用テーブルの生成に失敗しました。'));
-            $result = false;
-        }
-        BcUtil::clearAllCache();
-        $this->getTableLocator()->clear();
-
-        if ($currentTheme) {
-            $siteConfigs = ['SiteConfig' => ['theme' => $currentTheme]];
-            $this->SiteConfig->saveKeyValue($siteConfigs);
-        }
-
-        if (!$this->Page->createAllPageTemplate()) {
-            $result = false;
-            $this->log(
-                __d('baser', '初期データの読み込み中にページテンプレートの生成に失敗しました。') .
-                __d('baser', '「Pages」フォルダに書き込み権限が付与されていない可能性があります。') .
-                __d('baser', '権限設定後、テーマの適用をやり直すか、表示できないページについて固定ページ管理より更新処理を行ってください。')
-            );
-        }
-        // システムデータの初期化
-        // TODO $this->BcManager->initSystemData() は、$this->Page->createAllPageTemplate() の
-        // 後に呼出さないと $this->Page の実体が何故か AppModel にすりかわってしまい、
-        // createAllPageTemplate メソッドが呼び出せないので注意
-        if (!$this->BcManager->initSystemData(null, ['excludeUsers' => true, 'adminTheme' => $adminTheme])) {
-            $result = false;
-            $this->log(__d('baser', 'システムデータの初期化に失敗しました。'));
-        }
-        // ユーザーデータの初期化
-        $User = ClassRegistry::init('User');
-        $UserGroup = ClassRegistry::init('UserGroup');
-        $adminGroupId = $UserGroup->field('id', ['UserGroup.name' => 'admins']);
-        $users = $User->find('all', ['recursive' => -1]);
-        foreach($users as $userData) {
-            $userData['User']['user_group_id'] = $adminGroupId;
-            unset($userData['User']['password']);
-            if (!$User->save($userData)) {
-                $result = false;
-                $this->log(__d('baser', 'ユーザーデータの初期化に失敗しました。手動で各ユーザーのユーザーグループの設定を行なってください。'));
-            }
-        }
-        $Db = ConnectionManager::getDataSource('default');
-        if ($Db->config['datasource'] === 'Database/BcPostgres') {
-            $Db->updateSequence();
-        }
-        // システム基本設定の更新
-        $siteConfigs = ['SiteConfig' => [
-            'email' => BcSiteConfig::get('email'),
-            'google_analytics_id' => BcSiteConfig::get('google_analytics_id'),
-            'first_access' => null,
-            'version' => BcSiteConfig::get('version')
-        ]];
-        $this->SiteConfig->saveKeyValue($siteConfigs);
-
-
-        return $result;
-
+        return $this->redirect(['action' => 'index']);
     }
 
     /**
@@ -355,6 +199,7 @@ class ThemesController extends BcAdminAppController
      * @return false|string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function screenshot($theme)
     {

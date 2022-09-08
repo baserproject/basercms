@@ -433,35 +433,21 @@ class BcUtilTest extends BcTestCase
      */
     public function testGetThemesPlugins()
     {
+        $theme = 'BcSpaSample';
+        $plugins = BcUtil::getThemesPlugins($theme);
+        $this->assertCount(0, $plugins);
 
-        // TODO ucmitz移行時に未実装のため代替措置
-        // >>>
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        // <<<
+        $themePath = BcUtil::getPluginPath($theme);
+        $pluginName = 'test';
+        mkdir($themePath . 'Plugin', 777, true);
+        mkdir($themePath . 'Plugin/' . $pluginName, 777, true);
 
-        $theme = Configure::read('BcSite.theme');
-        $path = BASER_THEMES . $theme . DS . 'Plugin';
+        $plugins = BcUtil::getThemesPlugins($theme);
+        $this->assertCount(1, $plugins);
+        $this->assertEquals($pluginName, $plugins[0]);
 
-        // ダミーのプラグインディレクトリを削除
-        $Folder = new Folder();
-        $Folder->delete($path);
-
-        // プラグインが存在しない場合
-        $result = BcUtil::getThemesPlugins($theme);
-        $expect = [];
-        $this->assertEquals($expect, $result, 'テーマ梱包プラグインのリストを正しく取得できません');
-
-        // プラグインが存在する場合
-        // ダミーのプラグインディレクトリを作成
-        $Folder->create($path . DS . 'dummy1');
-        $Folder->create($path . DS . 'dummy2');
-
-        $result = BcUtil::getThemesPlugins($theme);
-        // ダミーのプラグインディレクトリを削除
-        $Folder->delete($path);
-
-        $expect = ['dummy1', 'dummy2'];
-        $this->assertEquals($expect, $result, 'テーマ梱包プラグインのリストを正しく取得できません');
+        $folder = new Folder();
+        $folder->delete($themePath . 'Plugin');
     }
 
     /**
@@ -505,44 +491,24 @@ class BcUtilTest extends BcTestCase
     /**
      * 初期データのパスを取得する
      *
-     * @param string $plugin プラグイン名
      * @param string $theme テーマ名
      * @param string $pattern 初期データの類型
      * @param string $expect 期待値
      * @dataProvider getDefaultDataPathDataProvider
      */
-    public function testGetDefaultDataPath($plugin, $theme, $pattern, $expect)
+    public function testGetDefaultDataPath($theme, $pattern, $expect)
     {
-        $isset_ptt = isset($pattern) && isset($theme);
-        $isset_plt = isset($plugin) && isset($theme);
-        $isset_plptt = isset($plugin) && isset($pattern) && isset($theme);
         $Folder = new Folder();
-
         // 初期データ用のダミーディレクトリを作成
-        if ($isset_ptt) {
-            $Folder->create(BASER_THEMES . $theme . DS . 'config' . DS . 'data' . DS . $pattern);
+        if(!$pattern) $pattern = 'default';
+        if($theme) {
+            $path = BASER_THEMES . $theme . DS . 'config' . DS . 'data' . DS . $pattern;
+            $Folder->create($path);
         }
-        if ($isset_plt && !$isset_plptt) {
-            $Folder->create(BASER_THEMES . $theme . DS . 'config' . DS . 'data' . DS . 'default' . DS . $plugin);
-        }
-        if ($isset_plptt) {
-            $Folder->create(BASER_THEMES . $theme . DS . 'config' . DS . 'data' . DS . $pattern . DS . $plugin);
-        }
-
-        $result = BcUtil::getDefaultDataPath($plugin, $theme, $pattern);
-
+        $result = BcUtil::getDefaultDataPath($theme, $pattern);
         // 初期データ用のダミーディレクトリを削除
-        if ($isset_plt && !$isset_plptt) {
-            $Folder->delete(BASER_THEMES . $theme . DS . 'config' . DS . 'data' . DS . 'default' . DS . $plugin);
-        }
-        if ($isset_plptt) {
-            $Folder->delete(BASER_THEMES . $theme . DS . 'config' . DS . 'data' . DS . $pattern . DS . $plugin);
-        }
-        if ($isset_ptt) {
-            $Folder->delete(BASER_THEMES . $theme . DS . 'config' . DS . 'data' . DS . $pattern);
-        }
-        if($isset_plt || $isset_plptt || $isset_ptt) {
-            $Folder->delete(BASER_THEMES . $theme);
+        if($theme) {
+            $Folder->delete($path);
         }
         $this->assertEquals($expect, $result, '初期データのパスを正しく取得できません');
     }
@@ -555,12 +521,9 @@ class BcUtilTest extends BcTestCase
     public function getDefaultDataPathDataProvider()
     {
         return [
-            [null, null, null,  ROOT . '/plugins/bc-front/config/data/default'],
-            [null, 'nada-icons', null, ROOT . '/plugins/baser-core/config/data/default'],
-            [null, 'nada-icons', 'not_default', ROOT . '/plugins/nada-icons/config/data/not_default'],
-            ['BcBlog', null, null, ROOT . '/plugins/bc-blog/config/data/default'],
-            ['BcBlog', 'nada-icons', null, ROOT . '/plugins/nada-icons/config/data/default/BcBlog'],
-            ['BcBlog', 'nada-icons', 'not_default', ROOT . '/plugins/nada-icons/config/data/not_default/BcBlog'],
+            [null, null, ROOT . '/plugins/bc-front/config/data/default'],
+            ['nada-icons', null, ROOT . '/plugins/nada-icons/config/data/default'],
+            ['nada-icons', 'not_default', ROOT . '/plugins/nada-icons/config/data/not_default'],
         ];
     }
 

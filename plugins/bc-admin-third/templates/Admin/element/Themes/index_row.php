@@ -40,11 +40,10 @@ use Cake\Utility\Inflector;
     <?php if ($theme->name !== $currentThemeName): ?>
       <?php echo $this->BcAdminForm->postLink('', ['action' => 'apply', $theme->name], [
         'title' => __d('baser', '適用'),
-        'class' => 'submit-token bca-btn-icon',
+        'class' => 'btn-apply bca-btn-icon',
         'data-bca-btn-type' => 'apply',
         'data-bca-btn-size' => 'lg',
         'block' => true,
-        'confirm' => __d('baser', 'テーマ「{0}」を適用します。よろしいですか？', $theme->title),
       ]) ?>
     <?php endif ?>
     <?php echo $this->BcAdminForm->postLink('', ['action' => 'copy', $theme->name], [
@@ -60,7 +59,6 @@ use Cake\Utility\Inflector;
       'data-bca-btn-type' => 'delete',
       'data-bca-btn-size' => 'lg',
       'block' => true,
-      'confirm' => __d('baser', "テーマ「{0}」を削除します。よろしいですか？\n※ 削除したファイルは元に戻すことはできません。", $theme->title),
     ]) ?>
   </p>
   <?php echo

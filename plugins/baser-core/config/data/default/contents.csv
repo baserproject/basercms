@@ -1,3 +1,0 @@
-﻿id,name,site_id,plugin,type,url,parent_id,lft,rght,title,status,created,description,eyecatch,author_id,created_date,modified_date,publish_begin,publish_end,exclude_search,modified,entity_id,alias_id,site_root,deleted_date,deleted,layout_template,main_site_content_id,level,self_status,self_publish_begin,self_publish_end,exclude_menu,blank_link
-1,,0,Core,ContentFolder,/,,1,8,baserCMS inc.,1,,,,1,,,,,,,1,,1,,,default,,0,1,,,,
-2,s,1,Core,ContentFolder,/s/,1,2,3,baserCMS inc.｜スマホ,1,,,,1,,,,,,,2,,1,,,default,1,1,1,,,,

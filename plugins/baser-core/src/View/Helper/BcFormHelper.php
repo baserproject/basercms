@@ -478,7 +478,7 @@ SCRIPT_END;
         /*** beforeInput ***/
         $event = $this->dispatchLayerEvent('beforeInput', [
             'formId' => $this->__id,
-            'data' => $this->request->data,
+            'data' => $this->request->getData(),
             'fieldName' => $fieldName,
             'options' => $options
         ], ['class' => 'Form', 'plugin' => '']);
@@ -737,7 +737,7 @@ DOC_END;
         /*** afterInput ***/
         $event = $this->dispatchLayerEvent('afterInput', [
             'formId' => $this->__id,
-            'data' => $this->request->data,
+            'data' => $this->request->getData(),
             'fieldName' => $fieldName,
             'out' => $output
         ], ['class' => 'Form', 'plugin' => '']);

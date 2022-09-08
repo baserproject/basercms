@@ -15,10 +15,12 @@ use BaserCore\Error\BcException;
 use BaserCore\Model\Entity\Site;
 use BaserCore\Model\Table\AppTable;
 use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Utility\BcSiteConfig;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use BaserCore\Utility\BcZip;
 use Cake\Cache\Cache;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
@@ -79,10 +81,10 @@ class ThemesService implements ThemesServiceInterface
     {
         if (!$theme) $theme = Configure::read('BcApp.defaultFrontTheme');
         $options = array_merge(['useTitle' => true], $options);
-        $dataPath = dirname(BcUtil::getDefaultDataPath('BaserCore', $theme));
+        $dataPath = dirname(BcUtil::getDefaultDataPath($theme));
 
         if ($theme !== Inflector::camelize(Configure::read('BcApp.defaultFrontTheme'), '-') &&
-            $dataPath === dirname(BcUtil::getDefaultDataPath('BaserCore'))) {
+            $dataPath === dirname(BcUtil::getDefaultDataPath())) {
             return [];
         }
 
@@ -111,10 +113,45 @@ class ThemesService implements ThemesServiceInterface
 
     /**
      * 新しいテーマをアップロードする
+     * @param array $postData
+     * @checked
+     * @noTodo
      */
-    public function add(): bool
+    public function add(array $postData): string
     {
-        return true;
+        if (BcUtil::isOverPostSize()) {
+            throw new BcException(__d(
+                'baser',
+                '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。',
+                ini_get('post_max_size')
+            ));
+        }
+        if (empty($postData['file']['tmp_name'])) {
+            $message = '';
+            if (!empty($postData['file']['error']) && $postData['file']['error'] == 1) {
+                $message = __d('baser', 'サーバに設定されているサイズ制限を超えています。');
+            }
+            throw new BcException($message);
+        }
+        $name = $postData['file']['name'];
+        move_uploaded_file($postData['file']['tmp_name'], TMP . $name);
+        $srcName = basename($name, '.zip');
+        $zip = new BcZip();
+        if (!$zip->extract(TMP . $name, TMP)) {
+            throw new BcException(__d('baser', 'アップロードしたZIPファイルの展開に失敗しました。'));
+        }
+
+        $num = 2;
+        $dstName = $srcName;
+        while(is_dir(BASER_THEMES . $dstName) || is_dir(BASER_THEMES . Inflector::dasherize($dstName))) {
+            $dstName = $srcName . $num;
+            $num++;
+        }
+        $folder = new Folder(TMP . $srcName);
+        $folder->move(BASER_THEMES . $dstName, ['mode' => 0777]);
+        unlink(TMP . $name);
+        $this->_changePluginNameSpace($dstName);
+        return $dstName;
     }
 
     /**
@@ -192,7 +229,7 @@ class ThemesService implements ThemesServiceInterface
      */
     private function getThemesDefaultDataInfo(string $theme, array $info = [])
     {
-        $path = BcUtil::getDefaultDataPath('BaserCore', $theme);
+        $path = BcUtil::getDefaultDataPath($theme);
         if (preg_match('/\/(' . $theme . '|' . Inflector::dasherize($theme) . ')\//', $path)) {
             if ($info) $info = array_merge($info, ['']);
             $info = array_merge($info, [
@@ -224,16 +261,55 @@ class ThemesService implements ThemesServiceInterface
 
     /**
      * 初期データを読み込む
+     * @param string $theme
+     * @param string $pattern
      */
-    public function loadDefaultDataPattern(): bool
+    public function loadDefaultDataPattern(string $currentTheme, string $dbDataPattern): bool
     {
-        return true;
+        /* @var BcDatabaseService $dbService */
+        $dbService = $this->getService(BcDatabaseServiceInterface::class);
+
+        // データパターンのチェック
+        [$theme, $pattern] = explode('.', $dbDataPattern);
+        if (!$this->checkDefaultDataPattern($theme, $pattern)) {
+            throw new BcException(__d('baser', '初期データのバージョンが違うか、初期データの構造が壊れています。'));
+        }
+
+        // 初期データ読み込み
+        $result = true;
+        try {
+            if (!$dbService->loadDefaultDataPattern($theme, $pattern)) $result = false;
+        } catch (BcException $e) {
+            throw $e;
+        }
+
+        // メッセージテーブルの初期化
+        if (!$dbService->initMessageTables()) $result = false;
+
+        // システムデータの初期化
+        if (!$dbService->initSystemData([
+            'excludeUsers' => true,
+            'email' => BcSiteConfig::get('email'),
+            'google_analytics_id' => BcSiteConfig::get('google_analytics_id'),
+            'first_access' => null,
+            'version' => BcSiteConfig::get('version'),
+            'theme' => $currentTheme,
+            'adminTheme' => BcSiteConfig::get('admin_theme')
+        ])) {
+            $result = false;
+        }
+
+        // DBシーケンスの更新
+        $dbService->updateSequence();
+
+        return $result;
     }
 
     /**
      * コピーする
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function copy(string $theme): bool
     {
@@ -251,12 +327,21 @@ class ThemesService implements ThemesServiceInterface
         ])) {
             return false;
         }
+        $this->_changePluginNameSpace($newTheme);
+        return true;
+    }
+
+    /**
+     * プラグインの namespace を書き換える
+     * @param $newTheme
+     */
+    protected function _changePluginNameSpace($newTheme)
+    {
         $pluginPath = BcUtil::getPluginPath($newTheme);
         $file = new File($pluginPath . 'src' . DS . 'Plugin.php');
         $data = $file->read();
         $file->write(preg_replace('/namespace .+?;/', 'namespace ' . $newTheme . ';', $data));
         $file->close();
-        return true;
     }
 
     /**
@@ -278,23 +363,10 @@ class ThemesService implements ThemesServiceInterface
     }
 
     /**
-     * 利用中のテーマをダウンロードする
-     */
-    public function download()
-    {
-        return true;
-    }
-
-    /**
-     * 初期データをダウンロードする
-     */
-    public function downloadDefaultDataPattern()
-    {
-        return true;
-    }
-
-    /**
      * baserマーケットのテーマ一覧を取得する
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getMarketThemes(): array
     {
@@ -322,14 +394,6 @@ class ThemesService implements ThemesServiceInterface
             return $baserThemes;
         }
         return [];
-    }
-
-    /**
-     * コアの初期データを読み込む
-     */
-    public function resetData(): bool
-    {
-        return true;
     }
 
     /**
@@ -417,18 +481,19 @@ class ThemesService implements ThemesServiceInterface
      */
     protected function _writeCsv($plugin, $path, $exclude = [])
     {
+        $dbService = $this->getService(BcDatabaseServiceInterface::class);
         /* @var AppTable $appTable */
         $appTable = TableRegistry::getTableLocator()->get('BaserCore.App');
         /* @var \Cake\Database\Connection $db */
         $db = $appTable->getConnection();
         $tables = $db->getSchemaCollection()->listTables();
-        $tableList = $appTable->getAppTableList();
+        $tableList = $dbService->getAppTableList();
         if (!isset($tableList[$plugin])) return true;
         $result = true;
         foreach($tables as $table) {
             if (in_array($table, $tableList[$plugin])) {
                 if (in_array($table, $exclude)) continue;
-                if (!$appTable->writeCsv($table, [
+                if (!$dbService->writeCsv($table, [
                     'path' => $path . $table . '.csv',
                     'encoding' => 'UTF-8',
                     'init' => false,
@@ -440,4 +505,35 @@ class ThemesService implements ThemesServiceInterface
         }
         return $result;
     }
+
+    /**
+     * 初期データチェックする
+     *
+     * @param string $theme
+     * @param string $pattern
+     * @return boolean
+     * @checked
+     * @noTodo
+     */
+    public function checkDefaultDataPattern($theme, $pattern = 'default')
+    {
+        $path = BcUtil::getDefaultDataPath($theme, $pattern);
+        if (!$path) return false;
+        $corePath = BcUtil::getDefaultDataPath(Configure::read('BcApp.defaultFrontTheme'), 'default');
+
+        $Folder = new Folder($corePath . DS . 'BaserCore');
+        $files = $Folder->read(true, true);
+        $coreTables = $files[1];
+        $Folder = new Folder($path . DS . 'BaserCore');
+        $files = $Folder->read(true, true);
+        if (empty($files[1])) return false;
+        $targetTables = $files[1];
+        foreach($coreTables as $coreTable) {
+            if (!in_array($coreTable, $targetTables)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 }

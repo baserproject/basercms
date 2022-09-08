@@ -20,7 +20,6 @@ use BaserCore\Utility\BcUtil;
 use Cake\Controller\Component;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Event\BcContentsEventListener;
-use BaserCore\Service\ContentsServiceInterface;
 use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
