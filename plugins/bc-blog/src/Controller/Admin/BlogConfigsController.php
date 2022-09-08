@@ -70,8 +70,8 @@ class BlogConfigsController extends BlogAppController
      * @return void
      */
     //	public function admin_form() {
-    //		if (empty($this->request->data)) {
-    //			$this->request->data = $this->BlogConfig->read(null, 1);
+    //		if (empty($this->request->getData())) {
+    //			$this->request = $this->request->withParsedBody($this->BlogConfig->read(null, 1));
     //			$blogContentList = $this->BlogContent->find("list");
     //			$this->set('blogContentList', $blogContentList);
     //			$userList = $this->User->find("list");
@@ -79,7 +79,7 @@ class BlogConfigsController extends BlogAppController
     //		} else {
     //
     //			/* 更新処理 */
-    //			if ($this->BlogConfig->save($this->request->data)) {
+    //			if ($this->BlogConfig->save($this->request->getData())) {
     //				$this->BcMessage->setSuccess('ブログ設定を保存しました。');
     //				$this->redirect(array('action' => 'form'));
     //			} else {

@@ -80,7 +80,7 @@ class ThemeFilesController extends BcAdminAppController
                 'admin_edit_folder',
             ];
             // coreのindexはアクセス可能
-            if ($this->request->getParams('pass.0') === 'core') {
+            if ($this->request->getParam('pass.0') === 'core') {
                 unset($denyList[array_search('admin_index', $denyList)]);
             }
             if (in_array($this->request->action, $denyList)) {

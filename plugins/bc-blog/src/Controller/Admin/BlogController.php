@@ -178,8 +178,8 @@ class BlogController extends BlogAppController
         // Viewで $paginator->options = array('url' => $this->passedArgs) を行う事が前提
         if ($this->request->getParam('prefix') !== 'Admin') {
             if (!empty($this->request->getParam('Content'))) {
-                $this->passedArgs['controller'] = $this->request->getParams('Content.name');
-                $this->passedArgs['plugin'] = $this->request->getParams('Content.name');
+                $this->passedArgs['controller'] = $this->request->getParam('Content.name');
+                $this->passedArgs['plugin'] = $this->request->getParam('Content.name');
             }
             $this->passedArgs['action'] = $this->action;
         }
@@ -211,7 +211,7 @@ class BlogController extends BlogAppController
      */
     public function index()
     {
-        if ($this->request->getParams('pass.0') !== 'index') {
+        if ($this->request->getParam('pass.0') !== 'index') {
             $this->notFound();
         }
         if ($this->BcContents->preview === 'default' && $this->request->getData()) {
@@ -228,7 +228,7 @@ class BlogController extends BlogAppController
                     'title' => h(
                         sprintf(
                             "%s｜%s",
-                            $this->request->getParams('Content.title'), $this->siteConfigs['name']
+                            $this->request->getParam('Content.title'), $this->siteConfigs['name']
                         )
                     ),
                     'description' => h(strip_tags($this->blogContent['BlogContent']['description']))
@@ -274,7 +274,7 @@ class BlogController extends BlogAppController
         }
         $this->set('posts', $datas);
         $this->set('single', false);
-        $this->setTitle($this->request->getParams('Content.title'));
+        $this->setTitle($this->request->getParam('Content.title'));
         $this->render($template);
     }
 
@@ -314,8 +314,8 @@ class BlogController extends BlogAppController
         }
 
         $crumbs[] = [
-            'name' => $this->request->getParams('Content.title'),
-            'url' => $this->request->getParams('Content.url')
+            'name' => $this->request->getParam('Content.title'),
+            'url' => $this->request->getParam('Content.url')
         ];
 
         switch ($type) {
@@ -344,7 +344,7 @@ class BlogController extends BlogAppController
                                 'name' => $blogCategory['BlogCategory']['title'],
                                 'url' => sprintf(
                                     "%sarchives/category/%s",
-                                    $this->request->getParams('Content.url'),
+                                    $this->request->getParam('Content.url'),
                                     $blogCategory['BlogCategory']['name']
                                 )
                             ];
@@ -506,7 +506,7 @@ class BlogController extends BlogAppController
                                 'name' => $blogCategory['BlogCategory']['title'],
                                 'url' => sprintf(
                                     "%s/archives/category/%s",
-                                    $this->request->getParams('Content.url'),
+                                    $this->request->getParam('Content.url'),
                                     $blogCategory['BlogCategory']['name']
                                 )
                             ];
@@ -786,8 +786,8 @@ class BlogController extends BlogAppController
      */
     public function posts($blogContentId, $limit = 5)
     {
-        if (!empty($this->request->getParams('named.template'))) {
-            $template = $this->request->getParams('named.template');
+        if (!empty($this->request->getParam('named.template'))) {
+            $template = $this->request->getParam('named.template');
         } else {
             $template = 'posts';
         }
@@ -827,8 +827,8 @@ class BlogController extends BlogAppController
             $this->notFound();
         }
         $num = 10;
-        if (!empty($this->request->getParams('named.num'))) {
-            $num = $this->request->getParams('named.num');
+        if (!empty($this->request->getParam('named.num'))) {
+            $num = $this->request->getParam('named.num');
         }
         $tag = $name;
         $posts = $this->_getBlogPosts([

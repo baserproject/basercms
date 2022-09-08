@@ -265,7 +265,7 @@ class MailHelper extends Helper
             if (!empty($this->request->getParam('requested'))) {
                 Configure::write('Cache.disable', true);
             }
-            $this->_View->BcForm->request->params['_Token']['unlockedFields'] = $this->_View->get('unlockedFields');
+            $this->_View->BcForm->getRequest()->setParam('_Token.unlockedFields', $this->_View->get('unlockedFields'));
         }
     }
 }

@@ -61,7 +61,7 @@ class BlogCommentsController extends BlogAppController
         if (BcUtil::isAdminSystem()) {
             $this->subMenuElements = ['blog_posts'];
             $this->request = $this->request->withParam('Content', $this->BcContents->getContent(
-                $this->request->getParams('pass.0')
+                $this->request->getParam('pass.0')
             )['Content']);
             $this->Security->enabled = true;
             $this->Security->requireAuth('add');
@@ -130,7 +130,7 @@ class BlogCommentsController extends BlogAppController
             $conditions['BlogComment.blog_content_id'] = $blogContentId;
             $this->pageTitle = sprintf(
                 __d('baser', '%s｜コメント一覧'),
-                $this->request->getParams('Content.title')
+                $this->request->getParam('Content.title')
             );
         }
 
@@ -216,7 +216,7 @@ class BlogCommentsController extends BlogAppController
         $this->BlogComment->saveDbLog(
             sprintf(
                 __d('baser', '記事「%s」へのコメントを削除しました。'),
-                $this->blogPost['BlogPost']['name'] ?? $this->request->getParams('Content.title')
+                $this->blogPost['BlogPost']['name'] ?? $this->request->getParam('Content.title')
             )
         );
         return true;
@@ -337,7 +337,7 @@ class BlogCommentsController extends BlogAppController
         $this->BlogComment->saveDbLog(
             sprintf(
                 __d('baser', '記事「%s」へのコメントを %s に設定しました。'),
-                $this->blogPost['BlogPost']['name'] ?? $this->request->getParams('Content.title'),
+                $this->blogPost['BlogPost']['name'] ?? $this->request->getParam('Content.title'),
                 $statusTexts[$status]
             )
         );

@@ -70,7 +70,7 @@ class BlogHelper extends Helper
         $blogContentUpdated = false;
         if (empty($this->blogContent) || ($blogContentId != $this->blogContent['id'])) {
             if ($blogContentId) {
-                if (!empty($this->request->query['preview']) && $this->request->query['preview'] == 'default' && $this->request->data) {
+                if (!empty($this->request->query['preview']) && $this->request->query['preview'] == 'default' && $this->request->getData()) {
                     if (!empty($this->request->getData('BlogContent'))) {
                         $this->blogContent = $this->request->getData('BlogContent');
                         $blogContentUpdated = true;
@@ -84,7 +84,7 @@ class BlogHelper extends Helper
                 }
             } elseif (isset($this->_View->viewVars['blogContent']['BlogContent'])) {
                 $this->blogContent = $this->_View->viewVars['blogContent']['BlogContent'];
-                if ($this->request->params['Content']['type'] === 'BlogContent') {
+                if ($this->request->getParam('Content.type') === 'BlogContent') {
                     $this->content = $this->request->getParam('Content');
                 } else {
                     $content = $this->BcContents->getContentByEntityId($this->blogContent['id'], 'BlogContent');
@@ -102,7 +102,7 @@ class BlogHelper extends Helper
                     'Content.entity_id' => $this->blogContent['id'],
                     'Content.type' => 'BlogContent',
                     'alias_id <>' => null,
-                    'site_id' => $this->request->params['Site']['id']
+                    'site_id' => $this->request->getParam('Site.id')
                 ], 'recursive' => -1]);
                 if (!$content) {
                     $content = $Content->find('first', ['conditions' => [
@@ -156,7 +156,7 @@ class BlogHelper extends Helper
      */
     public function getBlogName()
     {
-        return $this->request->params['Content']['name'];
+        return $this->request->getParam('Content.name');
     }
 
     /**
@@ -176,7 +176,7 @@ class BlogHelper extends Helper
      */
     public function getTitle()
     {
-        return $this->request->params['Content']['title'];
+        return $this->request->getParam('Content.title');
     }
 
     /**
@@ -681,7 +681,7 @@ class BlogHelper extends Helper
                 $class = ['bc-blog-category-list__item'];
                 if ($this->_View->request->url == $url) {
                     $class[] = 'current';
-                } elseif (!empty($this->_View->params['named']['category']) && $this->_View->params['named']['category'] == $category['BlogCategory']['name']) {
+                } elseif (!empty($this->_View->getRequest()->getParam('named.category')) && $this->_View->getRequest()->getParam('named.category') === $category['BlogCategory']['name']) {
                     $class[] = 'selected';
                 }
                 $out .= '<li class="' . implode(' ', $class) . '">' . $this->getCategory($category, $options);
@@ -897,7 +897,7 @@ class BlogHelper extends Helper
             }
             $img = $this->BcBaser->getImg($url, $options);
             if ($link) {
-                return $this->BcBaser->getLink($img, $this->request->params['Content']['url'] . 'archives/' . $post['BlogPost']['no']);
+                return $this->BcBaser->getLink($img, $this->request->getParam('Content.url') . 'archives/' . $post['BlogPost']['no']);
             } else {
                 return $img;
             }
@@ -1663,8 +1663,8 @@ class BlogHelper extends Helper
         $template = 'Blog...' . DS . 'Blog' . DS . $contentsTemplate . DS . $template;
         $params = [];
         // TODO ucmitz 一旦、コメントアウト
-//        if (!empty($this->request->params['Site']['device'])) {
-//            $this->_View->subDir = $this->request->params['Site']['device'];
+//        if (!empty($this->request->getParam('Site.device'))) {
+//            $this->_View->subDir = $this->request->getParam('Site.device');
 //        }
         if (is_array($options['data'])) {
             $data = array_merge(['posts' => $blogPosts], $options['data']);
@@ -1737,11 +1737,11 @@ class BlogHelper extends Helper
             }
         }
         if ($options['autoSetCurrentBlog'] && empty($options['contentUrl']) && empty($options['contentId'])) {
-            if ($this->isBlog() && !empty($this->request->params['Content']['entity_id'])) {
-                $options['contentId'] = $this->request->params['Content']['entity_id'];
+            if ($this->isBlog() && !empty($this->request->getParam('Content.entity_id'))) {
+                $options['contentId'] = $this->request->getParam('Content.entity_id');
             }
-            if ($this->isBlog() && !empty($this->request->params['Content']['url'])) {
-                $options['contentUrl'] = $this->request->params['Content']['url'];
+            if ($this->isBlog() && !empty($this->request->getParam('Content.url'))) {
+                $options['contentUrl'] = $this->request->getParam('Content.url');
             }
         }
         return $options;
@@ -1875,7 +1875,7 @@ class BlogHelper extends Helper
      */
     public function isBlog()
     {
-        return (!empty($this->request->params['Content']['plugin']) && $this->request->params['Content']['plugin'] == 'BcBlog');
+        return (!empty($this->request->getParam('Content.plugin')) && $this->request->getParam('Content.plugin') == 'BcBlog');
     }
 
     /**
@@ -1907,12 +1907,12 @@ class BlogHelper extends Helper
             'Content.type' => 'BlogContent'
         ]);
         $currentSiteId = 0;
-        if (!empty($this->request->params['Content']['alias_id'])) {
+        if (!empty($this->request->getParam('Content.alias_id'))) {
             $currentSiteId = $Content->field('site_id', [
-                'Content.id' => $this->request->params['Content']['alias_id']
+                'Content.id' => $this->request->getParam('Content.alias_id')
             ]);
-        } elseif (isset($this->request->params['Site']['id'])) {
-            $currentSiteId = $this->request->params['Site']['id'];
+        } elseif ($this->request->getParam('Site.id')) {
+            $currentSiteId = $this->request->getParam('Site.id');
         }
         return ($currentSiteId == $siteId);
     }

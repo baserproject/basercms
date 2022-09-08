@@ -191,8 +191,8 @@ class UploaderFilesController extends BcAdminAppController
         // 自動的に $this->passedArgs['num'] 設定されないので明示的に取得
         // TODO setViewConditions の仕様を見直す
         // =====================================================================
-        if ($this->params['named']['num']) {
-            $this->Session->write('UploaderFilesAdminAjaxList.named.num', $this->params['named']['num']);
+        if ($this->getRequest()->getParam('named.num')) {
+            $this->Session->write('UploaderFilesAdminAjaxList.named.num', $this->getRequest()->getParam('named.num'));
         }
         if ($this->Session->read('UploaderFilesAdminAjaxList.named.num')) {
             $num = $this->Session->read('UploaderFilesAdminAjaxList.named.num');

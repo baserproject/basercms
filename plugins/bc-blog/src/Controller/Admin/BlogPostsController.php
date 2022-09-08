@@ -73,9 +73,9 @@ class BlogPostsController extends BlogAppController
     public function beforeFilter(EventInterface $event)
     {
         parent::beforeFilter($event);
-        if ($this->request->getParams('pass.0')) {
+        if ($this->request->getParam('pass.0')) {
             $content = $this->BcContents->getContent(
-                $this->request->getParams('pass.0')
+                $this->request->getParam('pass.0')
             );
             if (!$content) {
                 $this->notFound();
@@ -85,7 +85,7 @@ class BlogPostsController extends BlogAppController
             $this->BlogContent->recursive = -1;
             $this->blogContent = $this->BlogContent->read(
                 null,
-                $this->request->getParams('pass.0')
+                $this->request->getParam('pass.0')
             );
             $this->BlogPost->setupUpload($this->blogContent['BlogContent']['id']);
             if ($this->request->getParam('prefix') === 'Admin') {
@@ -209,20 +209,20 @@ class BlogPostsController extends BlogAppController
             return;
         }
 
-        if ($this->request->getParams('Content.status')) {
+        if ($this->request->getParam('Content.status')) {
             $this->set(
                 'publishLink',
                 $this->Content->getUrl(
-                    $this->request->getParams('Content.url'),
+                    $this->request->getParam('Content.url'),
                     true,
-                    $this->request->getParams('Site.use_subdomain')
+                    $this->request->getParam('Site.use_subdomain')
                 )
             );
         }
         $this->pageTitle = sprintf(
             __d('baser', '%s｜記事一覧'),
             strip_tags(
-                $this->request->getParams('Content.title')
+                $this->request->getParam('Content.title')
             )
         );
         $this->setSearch('blog_posts_index');
@@ -466,7 +466,7 @@ class BlogPostsController extends BlogAppController
         $this->set('users', $this->BlogPost->User->getUserList());
         $this->pageTitle = sprintf(
             __d('baser', '%s｜新規記事登録'),
-            $this->request->getParams('Content.title')
+            $this->request->getParam('Content.title')
         );
         $this->setHelp('blog_posts_form');
         $this->render('form');
@@ -598,11 +598,11 @@ class BlogPostsController extends BlogAppController
                 $this->Content->getUrl(
                     sprintf(
                         "%sarchives/%s",
-                        $this->request->getParams('Content.url'),
+                        $this->request->getParam('Content.url'),
                         $this->request->getData('BlogPost.no')
                     ),
                     true,
-                    $this->request->getParams('Site.use_subdomain')
+                    $this->request->getParam('Site.use_subdomain')
                 )
             );
         }
@@ -641,7 +641,7 @@ class BlogPostsController extends BlogAppController
         $this->set('editorOptions', $editorOptions);
         $this->pageTitle = sprintf(
             __d('baser', '%s｜記事編集'),
-            $this->request->getParams('Content.title')
+            $this->request->getParam('Content.title')
         );
         $this->setHelp('blog_posts_form');
         $this->render('form');

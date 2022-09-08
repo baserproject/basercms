@@ -67,7 +67,7 @@ class BlogCategoriesController extends BlogAppController
 
         $this->BlogContent->recursive = -1;
         $content = $this->BcContents->getContent(
-            $this->request->getParams('pass.0')
+            $this->request->getParam('pass.0')
         );
         if (!$content) {
             $this->notFound();
@@ -136,7 +136,7 @@ class BlogCategoriesController extends BlogAppController
         $this->set('dbDatas', $dbDatas);
         $this->pageTitle = sprintf(
             __d('baser', '%s｜カテゴリ一覧'),
-            $this->request->getParams('Content.title')
+            $this->request->getParam('Content.title')
         );
         $this->setHelp('blog_categories_index');
     }
@@ -204,7 +204,7 @@ class BlogCategoriesController extends BlogAppController
         $this->set('parents', $parents);
         $this->pageTitle = sprintf(
             __d('baser', '%s｜新規カテゴリ登録'),
-            $this->request->getParams('Content.title')
+            $this->request->getParam('Content.title')
         );
         $this->setHelp('blog_categories_form');
         $this->render('form');
@@ -263,17 +263,17 @@ class BlogCategoriesController extends BlogAppController
             $this->Content->getUrl(
                 sprintf(
                     "%s/archives/category/%s",
-                    rtrim($this->request->getParams('Content.url'),'/'),
+                    rtrim($this->request->getParam('Content.url'),'/'),
                     $this->request->getData('BlogCategory.name')
                 ),
                 true,
-                $this->request->getParams('Site.use_subdomain')
+                $this->request->getParam('Site.use_subdomain')
             )
         );
         $this->set('parents', $parents);
         $this->pageTitle = sprintf(
             __d('baser', '%s｜カテゴリ編集'),
-            $this->request->getParams('Content.title')
+            $this->request->getParam('Content.title')
         );
         $this->setHelp('blog_categories_form');
         $this->render('form');

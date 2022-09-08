@@ -86,7 +86,7 @@ class ContentLinksController extends BcAdminAppController
             }
         } else {
             // TODO ucmitz 一旦コメントアウト
-//            $this->request->data = $this->ContentLink->read(null, $entityId);
+//            $this->request = $this->request->withParsedBody($this->ContentLink->read(null, $entityId));
             if (!$this->request->getData()) {
                 $this->BcMessage->setError(__d('baser', '無効な処理です。'));
                 $this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);

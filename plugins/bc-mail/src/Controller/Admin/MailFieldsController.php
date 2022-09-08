@@ -161,10 +161,10 @@ class MailFieldsController extends MailAppController
     protected function _setAdminIndexViewData()
     {
         /* セッション処理 */
-        if (isset($this->params['named']['sortmode'])) {
+        if ($this->getRequest()->getParam('named.sortmode')) {
             $this->Session->write(
                 'SortMode.MailField',
-                $this->params['named']['sortmode']
+                $this->getRequest()->getParam('named.sortmode')
             );
         }
 

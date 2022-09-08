@@ -252,8 +252,8 @@ class MailformHelper extends BcFreezeHelper
         if (!isset($options['type'])) {
             $options['type'] = 'file';
         }
-        if (!empty($options['url']) && !empty($this->request->params['Site']['same_main_url'])) {
-            $options['url'] = $this->BcContents->getPureUrl($options['url'], $this->request->params['Site']['id']);
+        if (!empty($options['url']) && !empty($this->request->getParam('Site.same_main_url'))) {
+            $options['url'] = $this->BcContents->getPureUrl($options['url'], $this->request->getParam('Site.id'));
         }
         return parent::create($model, $options);
     }
@@ -272,9 +272,9 @@ class MailformHelper extends BcFreezeHelper
             'class' => 'auth-captcha-image'
         ], $options);
         $captchaId = mt_rand(0, 99999999);
-        $url = $this->request->params['Content']['url'];
-        if (!empty($this->request->params['Site']['same_main_url'])) {
-            $url = $this->BcContents->getPureUrl($url, $this->request->params['Site']['id']);
+        $url = $this->request->getParam('Content.url');
+        if (!empty($this->request->getParam('Site.same_main_url'))) {
+            $url = $this->BcContents->getPureUrl($url, $this->request->getParam('Site.id'));
         }
         $output = $this->BcBaser->getImg($url . '/captcha/' . $captchaId, ['alt' => __('認証画像'), 'class' => $options['class']]);
         $output .= $options['separate'] . $this->text($fieldName);

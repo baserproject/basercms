@@ -15,7 +15,7 @@
  */
 $this->BcBaser->js('BcBlog.admin/blog_categories/form.bundle', false);
 $owners = $this->BcForm->getControlSource('BlogCategory.owner_id');
-$fullUrl = $this->BcBaser->getContentsUrl($this->request->params['Content']['url'], true, $this->request->params['Site']['use_subdomain']) . 'archives/category/' . $this->BcForm->getSourceValue('BlogCategory.name');
+$fullUrl = $this->BcBaser->getContentsUrl($this->request->getParam('Content.url'), true, $this->request->getParam('Site.use_subdomain')) . 'archives/category/' . $this->BcForm->getSourceValue('BlogCategory.name');
 ?>
 
 <?php if ($this->action == 'admin_edit'): ?>

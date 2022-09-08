@@ -1162,7 +1162,7 @@ class BcBaserHelperTest extends BcTestCase
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
 
         $this->expectOutputRegex('/<div class="pagination">/');
-        $this->BcBaser->request->params['paging']['Model'] = [
+        $this->BcBaser->getRequest()->withParam('paging.Model', [
             'count' => 100,
             'pageCount' => 3,
             'page' => 2,
@@ -1172,7 +1172,7 @@ class BcBaserHelperTest extends BcTestCase
             'nextPage' => 3,
             'options' => [],
             'paramType' => 'named'
-        ];
+        ]);
         $this->BcBaser->pagination();
     }
 

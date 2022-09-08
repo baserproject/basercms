@@ -90,7 +90,7 @@ class BcMobileHelperTest extends BcTestCase
     public function testHeader()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->BcMobile->request->params['Site']['device'] = 'mobile';
+        $this->BcMobile->getRequest->withParam('Site.device', 'mobile');
         $this->BcMobile->header();
 
     }
