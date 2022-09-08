@@ -11,7 +11,6 @@
 
 namespace BaserCore\Model\Table;
 
-use BaserCore\Model\AppTable;
 
 /**
  * Class Tool
