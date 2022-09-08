@@ -1,18 +1,18 @@
 <?php
-// TODO : コード確認要
-use BaserCore\Utility\BcUtil;
-
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.Controller
- * @since           baserCMS v 0.1.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) NPO baser foundation
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       https://basercms.net/license/index.html MIT License
  */
+
+namespace BcInstaller\Controller\Admin;
+
+use BaserCore\Controller\Admin\BcAdminAppController;
+use Cake\Event\EventInterface;
 
 /**
  * Class InstallationsController
@@ -22,7 +22,7 @@ return;
  * @package Baser.Controller
  * @property BcManagerComponent $BcManager
  */
-class InstallationsController extends AppController
+class InstallationsController extends BcAdminAppController
 {
 
     /**
@@ -57,14 +57,6 @@ class InstallationsController extends AppController
     public $subDir = 'admin';
 
     /**
-     * ヘルパー
-     *
-     * @var array
-     * @access    public
-     */
-    public $helpers = ['BcHtml', 'BcForm', 'Js', 'BcTime'];
-
-    /**
      * モデル
      *
      * @var array
@@ -86,9 +78,9 @@ class InstallationsController extends AppController
      *
      * @return void
      */
-    public function beforeFilter()
+    public function beforeFilter(EventInterface $event)
     {
-        parent::beforeFilter();
+        parent::beforeFilter($event);
         set_time_limit(300);
         /* インストール状態判別 */
         if (file_exists(APP . 'Config' . DS . 'database.php')) {
@@ -154,7 +146,7 @@ class InstallationsController extends AppController
      */
     public function step2()
     {
-        if ($this->request->data && $this->request->getData('clicked') === 'next') {
+        if ($this->request->getData() && $this->request->getData('clicked') === 'next') {
             $this->redirect('step3');
             return;
         }
@@ -190,9 +182,9 @@ class InstallationsController extends AppController
     {
         $dbsource = $this->_getDbSource();
 
-        if (!$this->request->data) {
+        if (!$this->request->getData()) {
             BcUtil::clearAllCache();
-            $this->request->data = $this->_getDefaultValuesStep3();
+            $this->request = $this->request->withParsedBody($this->_getDefaultValuesStep3());
             $this->set('dbDataPatterns', $this->BcManager->getAllDefaultDataPatterns());
             $this->setTitle(__d('baser', 'baserCMSのインストール｜ステップ３'));
             $this->set('dbsource', $dbsource);
@@ -251,8 +243,8 @@ class InstallationsController extends AppController
      */
     public function step4()
     {
-        if (!$this->request->data) {
-            $this->request->data = $this->_getDefaultValuesStep4();
+        if (!$this->request->getData()) {
+            $this->request = $this->request->withParsedBody($this->_getDefaultValuesStep4());
             $this->setTitle(__d('baser', 'baserCMSのインストール｜ステップ４'));
             return;
         }
