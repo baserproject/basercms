@@ -9,8 +9,9 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
- namespace BcWidgetArea\Model\Table;
-use BaserCore\Model\AppTable;
+namespace BcWidgetArea\Model\Table;
+
+use BaserCore\Model\Table\AppTable;
 
 /**
  * Class WidgetArea
