@@ -143,4 +143,13 @@ class ThemesServiceTest extends \BaserCore\TestSuite\BcTestCase
         $this->assertEquals('1.0.0', $themes[0]['version']);
         $this->assertEquals('テーマ', $themes[0]['category']);
     }
+
+    /**
+     * 一覧データ取得
+     */
+    public function testGetIndex()
+    {
+        $themes = $this->ThemesService->getIndex();
+        $this->assertEquals('BcFront', $themes[1]['name']);
+    }
 }
