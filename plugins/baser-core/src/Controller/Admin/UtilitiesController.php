@@ -12,12 +12,11 @@
 namespace BaserCore\Controller\Admin;
 
 use BaserCore\Service\UtilitiesAdminServiceInterface;
-use BaserCore\Utility\BcSiteConfig;
+use BaserCore\Service\UtilitiesServiceInterface;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
-use Cake\Core\Configure;
 
 /**
  * Class UtilitiesController
@@ -73,6 +72,7 @@ class UtilitiesController extends BcAdminAppController
 
     /**
      * phpinfo を表示する
+     * 環境情報の表示から iframe で読み込まれる
      * @checked
      * @unitTest
      */
@@ -482,20 +482,20 @@ class UtilitiesController extends BcAdminAppController
      * コンテンツ管理のツリー構造のチェックを行う
      *
      * 問題がある場合にはログを出力する
+     * @param UtilitiesServiceInterface $service
+     * @uses verity_contents_tree
+     * @checked
+     * @noTodo
      */
-    public function verity_contents_tree()
+    public function verity_contents_tree(UtilitiesServiceInterface $service)
     {
         $this->_checkReferer();
-        $Content = ClassRegistry::init('Content');
-        $Content->Behaviors->unload('SoftDelete');
-        $result = $Content->verify();
-        if ($result !== true) {
-            $this->log($result);
+        if (!$service->verityContentsTree()) {
             $this->BcMessage->setError(__d('baser', 'コンテンツのツリー構造に問題があります。ログを確認してください。'));
         } else {
             $this->BcMessage->setSuccess(__d('baser', 'コンテンツのツリー構造に問題はありません。'), false);
         }
-        $this->redirect(['controller' => 'tools', 'action' => 'index']);
+        $this->redirect(['action' => 'index']);
     }
 
 }

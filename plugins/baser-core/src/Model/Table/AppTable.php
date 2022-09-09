@@ -12,15 +12,12 @@
 namespace BaserCore\Model\Table;
 
 use ArrayObject;
-use Cake\Cache\Cache;
-use Cake\Core\Plugin;
 use Cake\ORM\Query;
 use Cake\ORM\Table;
 use Cake\Core\Configure;
 use Cake\I18n\FrozenTime;
 use Cake\Filesystem\Folder;
 use Cake\Http\ServerRequest;
-use BaserCore\Utility\BcUtil;
 use Cake\Event\EventInterface;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -28,7 +25,6 @@ use BaserCore\Annotation\UnitTest;
 use Cake\Datasource\EntityInterface;
 use Cake\Datasource\ConnectionManager;
 use BaserCore\Controller\AppController;
-use Cake\Utility\Inflector;
 
 /**
  * Class AppTable
@@ -36,13 +32,6 @@ use Cake\Utility\Inflector;
  */
 class AppTable extends Table
 {
-
-    /**
-     * DB接続設定名
-     *
-     * @var string
-     */
-    public $useDbConfig = 'default';
 
     /**
      * 一時イベント

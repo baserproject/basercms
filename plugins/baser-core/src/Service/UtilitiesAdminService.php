@@ -18,7 +18,7 @@ use Cake\ORM\TableRegistry;
 /**
  * UtilitiesAdminService
  */
-class UtilitiesAdminService implements UtilitiesAdminServiceInterface
+class UtilitiesAdminService extends UtilitiesService implements UtilitiesAdminServiceInterface
 {
 
     /**
