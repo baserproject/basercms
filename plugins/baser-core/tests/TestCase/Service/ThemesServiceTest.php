@@ -150,6 +150,6 @@ class ThemesServiceTest extends \BaserCore\TestSuite\BcTestCase
     public function testGetIndex()
     {
         $themes = $this->ThemesService->getIndex();
-        $this->assertEquals('BcFront', $themes[1]['name']);
+        $this->assertEquals('BcFront', $themes[1]->name);
     }
 }
