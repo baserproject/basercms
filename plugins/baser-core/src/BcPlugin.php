@@ -466,9 +466,11 @@ class BcPlugin extends BasePlugin
 
     /**
      * テーマを適用する
+     * @param Site $site
      * @param string $theme
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function applyAsTheme(Site $site, string $theme)
     {
