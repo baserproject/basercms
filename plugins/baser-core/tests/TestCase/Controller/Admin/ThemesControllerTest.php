@@ -130,8 +130,21 @@ class ThemesControllerTest extends BcTestCase
      */
     public function test_apply()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        $theme = 'BcFront';
+        $this->post('/baser/admin/baser-core/themes/apply/' . $theme);
+        $this->assertResponseCode(302);
+        $this->assertRedirect([
+            'plugin' => 'BaserCore',
+            'prefix' => 'Admin',
+            'controller' => 'themes',
+            'action' => 'index'
+        ]);
+        $this->assertFlashMessage("テーマ「BcFront」を適用しました。\n\nこのテーマは初期データを保有しています。\nWebサイトにテーマに合ったデータを適用するには、初期データ読込を実行してください。");
     }
+
 
     /**
      * 初期データセットをダウンロードする
