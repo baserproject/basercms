@@ -472,6 +472,7 @@ class BcUtil
      * @return array プラグインリスト
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function getCurrentThemesPlugins()
     {
