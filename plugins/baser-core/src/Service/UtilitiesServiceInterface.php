@@ -14,7 +14,7 @@ namespace BaserCore\Service;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
-use Cake\Http\ServerRequest;
+use BaserCore\Vendor\Simplezip;
 
 /**
  * UtilitiesServiceInterface
@@ -36,7 +36,26 @@ interface UtilitiesServiceInterface
      * @return mixed|null
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getCredit();
+
+    /**
+     * ログのZipファイルを作成する
+     * @return Simplezip|false
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function createLogZip();
+
+    /**
+     * ログを削除する
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function deleteLog();
 
 }

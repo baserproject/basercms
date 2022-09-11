@@ -24,6 +24,8 @@ class UtilitiesAdminService extends UtilitiesService implements UtilitiesAdminSe
     /**
      * info 画面用の view 変数を生成
      * @return array
+     * @checked
+     * @unitTest
      */
     public function getViewVarsForInfo(): array
     {
@@ -37,6 +39,8 @@ class UtilitiesAdminService extends UtilitiesService implements UtilitiesAdminSe
     /**
      * データベースのドライバー情報を取得
      * @return string
+     * @checked
+     * @unitTest
      */
     private function _getDriver(): string
     {
@@ -49,6 +53,23 @@ class UtilitiesAdminService extends UtilitiesService implements UtilitiesAdminSe
         } else {
             return '';
         }
+    }
+
+    /**
+     * ログメンテナンス用の view 変数を生成
+     * @return array
+     * @checked
+     * @unitTest
+     */
+    public function getViewVarsForLogMaintenance(): array
+    {
+        $fileSize = 0;
+        if (file_exists($this->logPath)) {
+            $fileSize = filesize($this->logPath);
+        }
+        return [
+            'fileSize' => $fileSize
+        ];
     }
 
 }

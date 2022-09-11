@@ -220,7 +220,10 @@ return [
                     'title' => __d('baser', 'ユーティリティ'),
                     'type' => 'system',
                     'menus' => [
-                        'Utilities' => ['title' => __d('baser', 'ユーティリティトップ'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'utilities', 'action' => 'index']],
+                        'Utilities' => [
+                            'title' => __d('baser', 'ユーティリティトップ'),
+                            'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'utilities', 'action' => 'index']
+                        ],
 //                        'EditorTemplates' => [
 //                            'title' => __d('baser', 'エディタテンプレート'),
 //                            'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'editor_templates', 'action' => 'index'],
@@ -231,14 +234,20 @@ return [
 //                            'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'widget_areas', 'action' => 'index'],
 //                            'currentRegex' => '/\/widget_areas\/[^\/]+?\/[0-9]+/s'
 //                        ],
-                        'SiteConfigsInfo' => ['title' => __d('baser', '環境情報'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'utilities', 'action' => 'info']],
+                        'SiteConfigsInfo' => [
+                            'title' => __d('baser', '環境情報'),
+                            'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'utilities', 'action' => 'info']
+                        ],
 //                        'ThemeFiles' => [
 //                            'title' => __d('baser', 'コアテンプレート確認'),
 //                            'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'theme_files', 'action' => 'index', 'core'],
 //                            'currentRegex' => '/\/theme_files\/[^\/]+?/s'
 //                        ],
 //                        'UtilitiesMaintenance' => ['title' => __d('baser', 'データメンテナンス'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'utilities', 'action' => 'maintenance']],
-//                        'UtilitiesLog' => ['title' => __d('baser', 'ログメンテナンス'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'utilities', 'action' => 'log_maintenance']],
+                        'UtilitiesLog' => [
+                            'title' => __d('baser', 'ログメンテナンス'),
+                            'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'utilities', 'action' => 'log_maintenance']
+                        ],
 //                        'UtilitiesWriteSchema' => ['title' => __d('baser', 'スキーマファイル生成'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'utilities', 'action' => 'write_schema']],
 //                        'UtilitiesLoadSchema' => ['title' => __d('baser', 'スキーマファイル読込'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'utilities', 'action' => 'load_schema']],
                     ]

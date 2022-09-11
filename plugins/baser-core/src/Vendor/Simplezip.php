@@ -89,8 +89,12 @@ class Simplezip
             while(false !== ($file = readdir($handle))) {
                 if (is_file($directory . $file)) {
                     $fp = fopen($directory . $file, 'rb');
-                    $fileContents = fread($fp, filesize($directory . $file));
-                    fclose($fp);
+                    $size = filesize($directory . $file);
+                    $fileContents = '';
+                    if ($size) {
+                        $fileContents = fread($fp, filesize($directory . $file));
+                        fclose($fp);
+                    }
                     $this->addFile($fileContents, $put_into . $file, filemtime($directory . $file));
                 } elseif ($file != '.' and $file != '..' and is_dir($directory . $file)) {
                     $this->addFolder($directory . $file . DS, $put_into . $file . DS);

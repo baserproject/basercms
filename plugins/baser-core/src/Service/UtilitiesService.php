@@ -12,8 +12,10 @@
 namespace BaserCore\Service;
 
 use BaserCore\Error\BcException;
+use BaserCore\Vendor\Simplezip;
 use Cake\Cache\Cache;
 use Cake\Core\Configure;
+use Cake\Filesystem\Folder;
 use Cake\Log\LogTrait;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
@@ -31,6 +33,12 @@ class UtilitiesService implements UtilitiesServiceInterface
      * Trait
      */
     use LogTrait;
+
+    /**
+     * ログのパス
+     * @var string
+     */
+    public $logPath = LOGS . 'error.log';
 
     /**
      * コンテンツツリーの構造をチェックする
@@ -203,6 +211,67 @@ class UtilitiesService implements UtilitiesServiceInterface
             }
         }
         return $json;
+    }
+
+    /**
+     * ログのZipファイルを作成する
+     * @return Simplezip|false
+     * @checked
+     * @noTodo
+     */
+    public function createLogZip()
+    {
+        set_time_limit(0);
+        $Folder = new Folder(LOGS);
+        $files = $Folder->read(true, true, false);
+        if (count($files[0]) === 0 && count($files[1]) === 0) {
+            return false;
+        }
+        // ZIP圧縮して出力
+        $simplezip = new Simplezip();
+        $simplezip->addFolder(LOGS);
+        return $simplezip;
+    }
+
+    /**
+     * ログを削除する
+     * @return bool
+     * @checked
+     * @noTodo
+     */
+    public function deleteLog()
+    {
+        if (file_exists($this->logPath)) {
+            if (unlink($this->logPath)) {
+                $messages[] = __d('baser', 'エラーログを削除しました。');
+                return true;
+            } else {
+                $messages[] = __d('baser', 'エラーログが削除できませんでした。');
+            }
+        } else {
+            $messages[] = __d('baser', 'エラーログが存在しません。');
+        }
+        throw new BcException(implode("\n", $messages));
+    }
+
+    public function backupDb()
+    {
+
+    }
+
+    public function restoreDb()
+    {
+
+    }
+
+    public function writeScheme()
+    {
+
+    }
+
+    public function loadScheme()
+    {
+
     }
 
 }

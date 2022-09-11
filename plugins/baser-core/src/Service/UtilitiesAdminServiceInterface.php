@@ -11,6 +11,10 @@
 
 namespace BaserCore\Service;
 
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
+
 /**
  * UtilitiesAdminServiceInterface
  */
@@ -20,7 +24,21 @@ interface UtilitiesAdminServiceInterface
     /**
      * info 画面用の view 変数を生成
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getViewVarsForInfo(): array;
+
+    /**
+     * ログメンテナンス用の view 変数を生成
+     * @return array
+     * @checked
+     * @unitTest
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getViewVarsForLogMaintenance(): array;
 
 }

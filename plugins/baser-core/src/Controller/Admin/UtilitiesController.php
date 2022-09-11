@@ -411,71 +411,35 @@ class UtilitiesController extends BcAdminAppController
      *
      * @param string $mode
      * @return void
+     * @uses log_maintenance
      */
-    public function log_maintenance($mode = '')
+    public function log_maintenance(
+        UtilitiesServiceInterface $service,
+        UtilitiesAdminServiceInterface $adminService,
+        $mode = '')
     {
-        $errorLogPath = TMP . 'logs' . DS . 'error.log';
         switch($mode) {
             case 'download':
-                set_time_limit(0);
-                if ($this->_downloadErrorLog()) {
-                    exit();
+                $this->autoRender = false;
+                $result = $service->createLogZip();
+                if ($result) {
+                    $result->download('basercms_logs_' . date('Ymd_His'));
+                    return;
                 }
                 $this->BcMessage->setInfo('エラーログが存在しません。');
-                $this->redirect(['action' => 'log']);
+                $this->redirect(['action' => 'log_maintenance']);
                 break;
             case 'delete':
-                $this->_checkSubmitToken();
-                if (file_exists($errorLogPath)) {
-                    if (unlink($errorLogPath)) {
-                        $messages[] = __d('baser', 'エラーログを削除しました。');
-                        $error = false;
-                    } else {
-                        $messages[] = __d('baser', 'エラーログが削除できませんでした。');
-                        $error = true;
-                    }
-                } else {
-                    $messages[] = __d('baser', 'エラーログが存在しません。');
-                    $error = false;
+                $this->request->allowMethod(['post']);
+                try {
+                    $service->deleteLog();
+                } catch (BcException $e) {
+                    $this->BcMessage->setError($e->getMessage());
                 }
-
-                if ($messages) {
-                    $this->setMessage(implode("\n", $messages), $error);
-                }
-                $this->redirect(['action' => 'log']);
+                $this->redirect(['action' => 'log_maintenance']);
                 break;
-
         }
-
-        $fileSize = 0;
-        if (file_exists($errorLogPath)) {
-            $fileSize = filesize($errorLogPath);
-        }
-
-        $this->setTitle(__d('baser', 'データメンテナンス'));
-        $this->setHelp('tools_log');
-        $this->set('fileSize', $fileSize);
-    }
-
-    /**
-     * ログフォルダを圧縮ダウンロードする
-     *
-     * @return bool
-     */
-    protected function _downloadErrorLog()
-    {
-        $tmpDir = TMP . 'logs' . DS;
-        $Folder = new Folder($tmpDir);
-        $files = $Folder->read(true, true, false);
-        if (count($files[0]) === 0 && count($files[1]) === 0) {
-            return false;
-        }
-        // ZIP圧縮して出力
-        $fileName = 'basercms_logs_' . date('Ymd_His');
-        $Simplezip = new Simplezip();
-        $Simplezip->addFolder($tmpDir);
-        $Simplezip->download($fileName);
-        return true;
+        $this->set($adminService->getViewVarsForLogMaintenance());
     }
 
     /**
@@ -483,6 +447,7 @@ class UtilitiesController extends BcAdminAppController
      * @param UtilitiesServiceInterface $service
      * @checked
      * @noTodo
+     * @uses reset_contents_tree
      */
     public function reset_contents_tree(UtilitiesServiceInterface $service)
     {
