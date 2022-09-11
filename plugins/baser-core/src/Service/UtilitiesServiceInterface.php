@@ -32,13 +32,11 @@ interface UtilitiesServiceInterface
     public function verityContentsTree(): bool;
 
     /**
-     * ログイン画面に必要なデータを取得する
-     * @param ServerRequest $request
-     * @return array
-     * @noTodo
+     * クレジットを取得する
+     * @return mixed|null
      * @checked
-     * @unitTest
+     * @noTodo
      */
-    public function getViewVarsForLogin(ServerRequest $request): array;
+    public function getCredit();
 
 }
