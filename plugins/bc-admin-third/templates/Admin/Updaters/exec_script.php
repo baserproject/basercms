@@ -22,7 +22,7 @@
     &nbsp;<?php echo $this->BcAdminForm->control('Updater.plugin', ['type' => 'select', 'options' => $plugins, 'empty' => __d('baser', 'コア')]) ?></p>
   <p><?php echo $this->BcForm->label('Updater.version', __d('baser', 'バージョン')) ?>
     &nbsp;<?php echo $this->BcAdminForm->control('Updater.version', ['type' => 'text']) ?></p>
-  <?php echo $this->BcAdminForm->end(['label' => __d('baser', '実行'), 'class' => 'button btn-red']) ?>
+  <?php echo $this->BcAdminForm->end(['label' => __d('baser', '実行'), 'class' => 'button']) ?>
 </div>
 
 

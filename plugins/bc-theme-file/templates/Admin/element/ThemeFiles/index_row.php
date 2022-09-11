@@ -82,9 +82,9 @@ array_push($params, $data['name']);
       <?php $this->BcBaser->link('', array_merge(['action' => 'ajax_del', $theme, $type], $params), ['title' => __d('baser', '削除'), 'class' => 'btn-delete bca-btn-icon', 'data-bca-btn-type' => 'delete', 'data-bca-btn-size' => 'lg']) ?>
     <?php else: ?>
       <?php if ($data['type'] == 'folder'): ?>
-        <?php $this->BcBaser->link('', array_merge(['action' => 'view_folder', $theme, $plugin, $type], $params), ['class' => 'btn-gray-s button-s bca-btn-icon', 'data-bca-btn-type' => 'preview', 'data-bca-btn-size' => 'lg']) ?>
+        <?php $this->BcBaser->link('', array_merge(['action' => 'view_folder', $theme, $plugin, $type], $params), ['class' => 'button-s bca-btn-icon', 'data-bca-btn-type' => 'preview', 'data-bca-btn-size' => 'lg']) ?>
       <?php else: ?>
-        <?php $this->BcBaser->link('', array_merge(['action' => 'view', $theme, $plugin, $type], $params), ['class' => 'btn-gray-s button-s bca-btn-icon', 'data-bca-btn-type' => 'preview', 'data-bca-btn-size' => 'lg']) ?>
+        <?php $this->BcBaser->link('', array_merge(['action' => 'view', $theme, $plugin, $type], $params), ['class' => 'button-s bca-btn-icon', 'data-bca-btn-type' => 'preview', 'data-bca-btn-size' => 'lg']) ?>
       <?php endif ?>
     <?php endif ?>
   </td>

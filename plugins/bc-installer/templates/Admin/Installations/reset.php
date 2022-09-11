@@ -52,6 +52,6 @@ $this->BcBaser->i18nScript([
     <p class="bca-main__text"><?php echo __d('baser', '引き続きbaserCMSのインストールを行うには、「インストールページへ」ボタンをクリックしてください。') ?></p>
   </div>
   <div class="submit bca-actions">
-    <?php $this->BcBaser->link(__d('baser', 'インストールページへ'), '/', ['class' => 'button btn-red bca-btn bca-actions__item']) ?>
+    <?php $this->BcBaser->link(__d('baser', 'インストールページへ'), '/', ['class' => 'button bca-btn bca-actions__item']) ?>
   </div>
 <?php endif ?>

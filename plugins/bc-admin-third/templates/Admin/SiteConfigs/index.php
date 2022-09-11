@@ -608,7 +608,7 @@ h2 {}
             <?php echo $this->BcAdminForm->button(
               '<i class="bca-icon--mail"></i>' . __d('baser', 'メール送信テスト'),
               ['type' => 'button',
-                'class' => 'button-small bca-btn',
+                'class' => 'bca-btn',
                 'id' => 'BtnCheckSendmail',
                 'escapeTitle' => false
               ]) ?>

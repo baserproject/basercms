@@ -119,7 +119,7 @@ if ($this->request->action !== 'admin_add') {
       <?php //if($theme == 'core' && !(($type == 'css' || $type == 'js' || $type == 'img') && $plugin)): ?>
       <?php // テーマ編集が許可されていない場合コピー不可 ?>
       <?php if ($theme == 'core' && Configure::read('BcApp.allowedThemeEdit')): ?>
-        <?php $this->BcBaser->link(__d('baser', '現在のテーマにコピー'), array_merge(['action' => 'copy_to_theme', $theme, $plugin, $type], explode('/', $path)), ['class' => 'bca-submit-token btn-red button bca-btn'], sprintf(__d('baser', '本当に現在のテーマ「%s」にコピーしてもいいですか？\n既に存在するファイルは上書きされます。'), Inflector::camelize($siteConfig['theme']))); ?>
+        <?php $this->BcBaser->link(__d('baser', '現在のテーマにコピー'), array_merge(['action' => 'copy_to_theme', $theme, $plugin, $type], explode('/', $path)), ['class' => 'bca-submit-token button bca-btn'], sprintf(__d('baser', '本当に現在のテーマ「%s」にコピーしてもいいですか？\n既に存在するファイルは上書きされます。'), Inflector::camelize($siteConfig['theme']))); ?>
       <?php endif; ?>
     <?php else: ?>
       <?php echo __d('baser', '機能制限のセーフモードで動作していますので、現在のテーマへのコピーはできません。') ?>
@@ -128,9 +128,9 @@ if ($this->request->action !== 'admin_add') {
 </div>
 
 <?php if ($this->request->action == 'admin_add' || $this->request->action == 'admin_edit'): ?>
-  <?php $this->BcBaser->link(__d('baser', '一覧に戻る'), array_merge(['action' => 'index', $theme, $plugin, $type], $parentPrams), ['class' => 'btn-gray button bca-btn', 'data-bca-btn-type' => 'back-to-list']); ?>
+  <?php $this->BcBaser->link(__d('baser', '一覧に戻る'), array_merge(['action' => 'index', $theme, $plugin, $type], $parentPrams), ['class' => 'button bca-btn', 'data-bca-btn-type' => 'back-to-list']); ?>
 <?php else: ?>
-  <?php $this->BcBaser->link(__d('baser', '一覧に戻る'), array_merge(['action' => 'index', $theme, $plugin, $type], explode('/', dirname($path))), ['class' => 'btn-gray button bca-btn', 'data-bca-btn-type' => 'back-to-list']); ?>
+  <?php $this->BcBaser->link(__d('baser', '一覧に戻る'), array_merge(['action' => 'index', $theme, $plugin, $type], explode('/', dirname($path))), ['class' => 'button bca-btn', 'data-bca-btn-type' => 'back-to-list']); ?>
 <?php endif; ?>
 
 

@@ -30,7 +30,7 @@
   </div>
   <div class="submit bca-actions">
     <form action="<?php echo $this->request->base ?>/installations/step2" method="post">
-      <button class='btn-red button bca-btn bca-actions__item' data-bca-btn-type="save" id='startbtn'
+      <button class='button bca-btn bca-actions__item' data-bca-btn-type="save" id='startbtn'
               type='submit'><span><?php echo __d('baser', 'インストール開始') ?></span></button>
     </form>
   </div>

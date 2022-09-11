@@ -49,7 +49,7 @@
 <p><?php echo __d('baser', 'テーブルを選択して「生成」ボタンを押してください。') ?></p>
 <div class="submit bca-actions">
   <div class="bca-actions__main">
-    <?php echo $this->BcForm->submit(__d('baser', '生成'), ['div' => false, 'class' => 'btn-red button bca-btn bca-actions__item', 'data-bca-btn-size' => 'lg']) ?>
+    <?php echo $this->BcForm->submit(__d('baser', '生成'), ['div' => false, 'class' => 'button bca-btn bca-actions__item', 'data-bca-btn-size' => 'lg']) ?>
   </div>
 </div>
 

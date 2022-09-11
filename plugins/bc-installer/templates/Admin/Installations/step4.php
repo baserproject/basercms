@@ -106,8 +106,8 @@ $this->BcBaser->i18nScript([
   </div>
 
   <div class="submit bca-actions">
-    <?php echo $this->BcForm->button(__d('baser', '戻る'), ['type' => 'button', 'class' => 'btn-gray button bca-btn bca-actions__item', 'id' => 'btnback']) ?>
-    <?php echo $this->BcForm->button(__d('baser', '完了'), ['type' => 'button', 'class' => 'btn-red button bca-btn bca-actions__item', 'id' => 'btnfinish', 'name' => 'step5', 'data-bca-btn-type' => 'save']) ?>
+    <?php echo $this->BcForm->button(__d('baser', '戻る'), ['type' => 'button', 'class' => 'button bca-btn bca-actions__item', 'id' => 'btnback']) ?>
+    <?php echo $this->BcForm->button(__d('baser', '完了'), ['type' => 'button', 'class' => 'button bca-btn bca-actions__item', 'id' => 'btnfinish', 'name' => 'step5', 'data-bca-btn-type' => 'save']) ?>
   </div>
 
   <?php echo $this->BcAdminForm->end() ?>

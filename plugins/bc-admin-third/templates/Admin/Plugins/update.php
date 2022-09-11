@@ -134,14 +134,14 @@ $this->BcBaser->js('admin/plugins/update.bundle', false);
         <?php $this->BcBaser->link(
           __d('baser', '管理画面に移動する'),
           ['plugin' => 'BaserCore', 'prefix' => 'Admin', 'controller' => 'Dashboard', 'action' => 'index'],
-          ['class' => 'button-small']
+          ['class' => 'bca-btn']
         ) ?>
       <?php endif ?>
     <?php else: ?>
       <?php $this->BcBaser->link(
         __d('baser', 'プラグイン一覧に移動する'),
         ['controller' => 'plugins', 'action' => 'index'],
-        ['class' => 'button-small']
+        ['class' => 'bca-btn']
       ) ?>
     <?php endif ?>
     </p>

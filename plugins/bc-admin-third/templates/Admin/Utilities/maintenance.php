@@ -34,7 +34,7 @@
     <?php echo $this->BcForm->error('Tool.backup_encoding') ?>
   </p>
   <p
-    class="bca-main__text"><?php echo $this->BcForm->submit(__d('baser', 'ダウンロード'), ['div' => false, 'class' => 'button-small', 'id' => 'BtnDownload']) ?></p>
+    class="bca-main__text"><?php echo $this->BcForm->submit(__d('baser', 'ダウンロード'), ['div' => false, 'class' => 'bca-btn', 'id' => 'BtnDownload']) ?></p>
   <?php echo $this->BcAdminForm->end() ?>
 </div>
 
@@ -49,12 +49,12 @@
   <p class="bca-main__text"><?php echo $this->BcAdminForm->control('Tool.backup', ['type' => 'file']) ?>
     <?php echo $this->BcForm->error('Tool.backup') ?></p>
   <p
-    class="bca-main__text"><?php echo $this->BcForm->submit(__d('baser', 'アップロード'), ['div' => false, 'class' => 'button-small', 'id' => 'BtnUpload']) ?></p>
+    class="bca-main__text"><?php echo $this->BcForm->submit(__d('baser', 'アップロード'), ['div' => false, 'class' => 'bca-btn', 'id' => 'BtnUpload']) ?></p>
   <?php echo $this->BcAdminForm->end() ?>
 </div>
 
 <div class="section bca-main__section">
   <h2 class="bca-main__heading" data-bca-heading-size="lg"><?php echo __d('baser', 'データの初期化') ?></h2>
   <p class="bca-main__text"><?php echo __d('baser', '現在のデータを、baserCMSコアの初期データでリセットします。') ?></p>
-  <p><?php $this->BcBaser->link(__d('baser', 'データリセット'), ['plugin' => null, 'controller' => 'themes', 'action' => 'reset_data'], ['class' => 'button-small bca-submit-token'], __d('baser', "現在のデータを、baserCMSコアの初期データでリセットします。よろしいですか？\n\n※ 初期データを読み込むと現在登録されている記事データや設定は全て上書きされますのでご注意ください。\n※ 管理ログは読み込まれず、ユーザー情報はログインしているユーザーのみに初期化されます。")) ?></p>
+  <p><?php $this->BcBaser->link(__d('baser', 'データリセット'), ['plugin' => null, 'controller' => 'themes', 'action' => 'reset_data'], ['class' => 'bca-submit-token'], __d('baser', "現在のデータを、baserCMSコアの初期データでリセットします。よろしいですか？\n\n※ 初期データを読み込むと現在登録されている記事データや設定は全て上書きされますのでご注意ください。\n※ 管理ログは読み込まれず、ユーザー情報はログインしているユーザーのみに初期化されます。")) ?></p>
 </div>

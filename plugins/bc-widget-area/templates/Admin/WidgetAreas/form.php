@@ -41,7 +41,7 @@ $this->BcBaser->js('BcWidgetArea.admin/widget_areas/form.bundle', false, ['id' =
 <?php echo $this->BcForm->label('WidgetArea.name', __d('baser', 'ウィジェットエリア名')) ?>&nbsp;
 <?php echo $this->BcAdminForm->control('WidgetArea.name', ['type' => 'text', 'size' => 40, 'autofocus' => true]) ?>&nbsp;
 <span
-  class="submit"><?php echo $this->BcAdminForm->end(['label' => __d('baser', 'エリア名を保存する'), 'div' => false, 'class' => 'button btn-red bca-btn', 'id' => 'WidgetAreaUpdateTitleSubmit', 'data-bca-btn-type' => 'save']) ?></span>
+  class="submit"><?php echo $this->BcAdminForm->end(['label' => __d('baser', 'エリア名を保存する'), 'div' => false, 'class' => 'button bca-btn', 'id' => 'WidgetAreaUpdateTitleSubmit', 'data-bca-btn-type' => 'save']) ?></span>
 <?php $this->BcBaser->img('admin/ajax-loader-s.gif', ['style' => 'vertical-align:middle;display:none', 'id' => 'WidgetAreaUpdateTitleLoader']) ?>
 <?php echo $this->BcForm->error('WidgetArea.name') ?>
 

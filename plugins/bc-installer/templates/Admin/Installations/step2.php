@@ -395,9 +395,9 @@
     <div class="submit bca-actions">
       <?php echo $this->BcForm->button(__d('baser', '再チェック'), ['class' => 'btn-orange button bca-btn bca-actions__item', 'id' => 'btncheckagain']) ?>
       <?php if (!$blRequirementsMet): ?>
-        <?php echo $this->BcForm->button(__d('baser', '次のステップへ'), ['class' => 'btn-red button bca-btn bca-actions__item', 'id' => 'btnnext', 'style' => 'display:none', 'data-bca-btn-type' => 'save']) ?>
+        <?php echo $this->BcForm->button(__d('baser', '次のステップへ'), ['class' => 'button bca-btn bca-actions__item', 'id' => 'btnnext', 'style' => 'display:none', 'data-bca-btn-type' => 'save']) ?>
       <?php else: ?>
-        <?php echo $this->BcForm->button(__d('baser', '次のステップへ'), ['class' => 'btn-red button bca-btn bca-actions__item', 'id' => 'btnnext', 'data-bca-btn-type' => 'save']) ?>
+        <?php echo $this->BcForm->button(__d('baser', '次のステップへ'), ['class' => 'button bca-btn bca-actions__item', 'id' => 'btnnext', 'data-bca-btn-type' => 'save']) ?>
       <?php endif ?>
     </div>
   </form>

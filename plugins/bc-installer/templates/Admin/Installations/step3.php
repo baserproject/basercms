@@ -242,12 +242,12 @@ $this->BcBaser->i18nScript([
   </div>
 
   <div class="submit bca-actions">
-    <?php echo $this->BcForm->button(__d('baser', '戻る'), ['type' => 'button', 'class' => 'btn-gray button bca-btn bca-actions__item', 'id' => 'btnback']) ?>
+    <?php echo $this->BcForm->button(__d('baser', '戻る'), ['type' => 'button', 'class' => 'button bca-btn bca-actions__item', 'id' => 'btnback']) ?>
     <?php echo $this->BcForm->button(__d('baser', '接続テスト'), ['type' => 'button', 'class' => 'btn-orange button bca-btn bca-actions__item', 'id' => 'checkdb', 'data-bca-btn-type' => 'save']) ?>
     <?php if (!isset($blDBSettingsOK) || !$blDBSettingsOK): ?>
-      <?php echo $this->BcForm->button(__d('baser', '次のステップへ'), ['type' => 'button', 'class' => 'btn-red button bca-btn bca-actions__item', 'id' => 'btnnext', 'name' => 'btnnext', 'disabled' => 'disabled']) ?>
+      <?php echo $this->BcForm->button(__d('baser', '次のステップへ'), ['type' => 'button', 'class' => 'button bca-btn bca-actions__item', 'id' => 'btnnext', 'name' => 'btnnext', 'disabled' => 'disabled']) ?>
     <?php else: ?>
-      <?php echo $this->BcForm->button(__d('baser', '次のステップへ'), ['type' => 'button', 'class' => 'btn-red button bca-btn bca-actions__item', 'id' => 'btnnext', 'name' => 'btnnext', 'data-bca-btn-type' => 'save']) ?>
+      <?php echo $this->BcForm->button(__d('baser', '次のステップへ'), ['type' => 'button', 'class' => 'button bca-btn bca-actions__item', 'id' => 'btnnext', 'name' => 'btnnext', 'data-bca-btn-type' => 'save']) ?>
     <?php endif ?>
   </div>
 

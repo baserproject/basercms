@@ -46,7 +46,7 @@
 
 <div class="submit bca-actions">
   <div class="bca-actions__main">
-    <?php echo $this->BcForm->submit(__d('baser', '読み込み'), ['div' => false, 'class' => 'btn-red button bca-btn', 'data-bca-btn-size' => 'lg']) ?>
+    <?php echo $this->BcForm->submit(__d('baser', '読み込み'), ['div' => false, 'class' => 'button bca-btn', 'data-bca-btn-size' => 'lg']) ?>
   </div>
 </div>
 
