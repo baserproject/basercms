@@ -189,7 +189,7 @@
             <div class="bca-actions__sub" v-if="userId">
                 <a href="#"
                     @click="remove(userId)"
-                    class="submit-token bca-btn bca-actions__item"
+                    class="bca-submit-token bca-btn bca-actions__item"
                     data-bca-btn-type="delete"
                     data-bca-btn-size="sm"
                     data-bca-btn-color="danger">

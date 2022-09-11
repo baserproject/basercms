@@ -23,7 +23,7 @@ $this->BcListTable->setColumnNumber(4);
   <?php if ($this->BcBaser->isAdminUser() && $dblogs->count()): ?>
     <div class="submit clear bca-update-log__delete">
       <?php echo $this->BcForm->postButton(__d('baser', 'ログを全て削除'), ['action' => 'delete_all'], [
-          'class' => 'btn-gray button submit-token bca-btn',
+          'class' => 'btn-gray button bca-submit-token bca-btn',
           'data-bca-btn-type' => 'delete',
           'confirm' => __d('baser', '最近の動きのログを削除します。いいですか？')
       ]) ?>

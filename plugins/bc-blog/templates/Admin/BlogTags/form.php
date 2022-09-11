@@ -62,7 +62,7 @@ $this->BcBaser->js('BcBlog.admin/blog_tags/form.bundle', false);
   <?php if ($this->action == 'admin_edit'): ?>
     <div class="bca-actions__sub">
       <?php
-      $this->BcBaser->link(__d('baser', '削除'), ['action' => 'delete', $this->BcForm->getSourceValue('BlogTag.id')], ['class' => 'submit-token button bca-btn bca-actions__item', 'data-bca-btn-type' => 'delete', 'data-bca-btn-size' => 'sm'], sprintf(__d('baser', '%s を本当に削除してもいいですか？'), $this->BcForm->getSourceValue('BlogTag.name')), false);
+      $this->BcBaser->link(__d('baser', '削除'), ['action' => 'delete', $this->BcForm->getSourceValue('BlogTag.id')], ['class' => 'bca-submit-token button bca-btn bca-actions__item', 'data-bca-btn-type' => 'delete', 'data-bca-btn-size' => 'sm'], sprintf(__d('baser', '%s を本当に削除してもいいですか？'), $this->BcForm->getSourceValue('BlogTag.name')), false);
       ?>
     </div>
   <?php endif ?>

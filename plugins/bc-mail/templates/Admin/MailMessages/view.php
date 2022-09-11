@@ -83,7 +83,7 @@
       $mailContent['MailContent']['id'],
       $message['MailMessage']['id']],
     [
-      'class' => 'submit-token button bca-btn bca-actions__item',
+      'class' => 'bca-submit-token button bca-btn bca-actions__item',
       'data-bca-btn-type' => 'delete',
       'data-bca-btn-size' => 'sm',
       'data-bca-btn-color' => 'danger',

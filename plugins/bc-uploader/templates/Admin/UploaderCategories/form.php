@@ -52,7 +52,7 @@
     <div class="bca-actions__sub">
       <?php $this->BcBaser->link(__d('baser', '削除'),
         ['action' => 'delete', $this->BcForm->getSourceValue('UploaderCategory.id')],
-        ['class' => 'submit-token button bca-btn bca-actions__item', 'data-bca-btn-type' => 'delete', 'data-bca-btn-size' => 'sm'],
+        ['class' => 'bca-submit-token button bca-btn bca-actions__item', 'data-bca-btn-type' => 'delete', 'data-bca-btn-size' => 'sm'],
         sprintf(__d('baser', '%s を本当に削除してもいいですか？'), $this->BcForm->getSourceValue('UploaderCategory.name')),
         false); ?>
     </div>

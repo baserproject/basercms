@@ -148,7 +148,7 @@ if (empty($popup)) {
     <div class="bca-actions__sub">
       <?php $this->BcBaser->link(__d('baser', '削除'),
         ['action' => 'delete', $this->BcForm->getSourceValue('UploaderFile.id')],
-        ['class' => 'submit-token button bca-btn', 'data-bca-btn-type' => 'delete'],
+        ['class' => 'bca-submit-token button bca-btn', 'data-bca-btn-type' => 'delete'],
         sprintf(__d('baser', '%s を本当に削除してもいいですか？'), $this->BcForm->getSourceValue('UploaderFile.name')),
         false); ?>
     </div>

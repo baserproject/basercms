@@ -206,7 +206,7 @@ $(function () {
     /**
      * トークンの送信が必要なリンクでトークンを送信する
      */
-    $.bcToken.replaceLinkToSubmitToken(".submit-token");
+    $.bcToken.replaceLinkToSubmitToken(".bca-submit-token");
 
     /**
      * カラーボックス

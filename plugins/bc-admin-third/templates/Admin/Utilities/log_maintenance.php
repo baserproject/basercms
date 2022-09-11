@@ -30,5 +30,5 @@
     <?php echo sprintf(__d('baser', 'エラーログのサイズは、%sbytesです。'), number_format($fileSize)) ?>
   </p>
   <p
-    class="bca-main__text"><?php $this->BcBaser->link(__d('baser', '削除'), ['delete'], ['class' => 'submit-token button-small bca-btn', 'data-bca-btn-type' => 'delete', 'confirm' => __d('baser', 'エラーログを削除します。いいですか？')]) ?> </p>
+    class="bca-main__text"><?php $this->BcBaser->link(__d('baser', '削除'), ['delete'], ['class' => 'bca-submit-token button-small bca-btn', 'data-bca-btn-type' => 'delete', 'confirm' => __d('baser', 'エラーログを削除します。いいですか？')]) ?> </p>
 </div>

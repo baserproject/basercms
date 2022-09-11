@@ -41,7 +41,7 @@
       <div class="submit clear bca-update-log__delete">
         <?php $this->BcBaser->link(__d('baser', '削除'),
           ['action' => 'del'],
-          ['class' => 'btn-gray button submit-token bca-btn', 'data-bca-btn-type' => 'delete'],
+          ['class' => 'btn-gray button bca-submit-token bca-btn', 'data-bca-btn-type' => 'delete'],
           __d('baser', '最近の動きのログを削除します。いいですか？')
         ) ?>
       </div>

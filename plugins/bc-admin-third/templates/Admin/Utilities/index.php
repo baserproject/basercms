@@ -26,7 +26,7 @@ $this->BcAdmin->setTitle(__d('baser', 'ユーティリティトップ'));
     <?php echo __d('baser', 'baserCMSは、表示速度向上のため、サーバーサイドのキャッシュ機構を利用しています。<br>これによりテンプレートを直接編集した際など、変更内容が反映されない場合がありますので、その際には、サーバーサイドのキャッシュを削除します。') ?>
   </p>
   <?php $this->BcBaser->link(__d('baser', 'サーバーキャッシュを削除する'), ['controller' => 'utilities', 'action' => 'clear_cache'], [
-    'class' => 'submit-token button-small bca-btn',
+    'class' => 'bca-submit-token button-small bca-btn',
     'data-bca-btn-type' => 'clear',
     'confirm' => __d('baser', 'サーバーキャッシュを削除します。いいですか？')
   ]) ?>
@@ -40,12 +40,12 @@ $this->BcAdmin->setTitle(__d('baser', 'ユーティリティトップ'));
   <?php echo $this->BcAdminForm->postLink(
     __d('baser', 'ツリー構造をチェックする'),
     ['controller' => 'utilities', 'action' => 'verity_contents_tree'],
-    ['class' => 'submit-token button-small bca-btn bca-loading']
+    ['class' => 'bca-submit-token button-small bca-btn bca-loading']
   ) ?>&nbsp;&nbsp;
   <?php echo $this->BcAdminForm->postLink(
     __d('baser', 'ツリー構造リセット'),
     ['controller' => 'utilities', 'action' => 'reset_contents_tree'],
-    ['class' => 'submit-token button-small bca-btn', 'confirm' => __d('baser', 'コンテンツ管理のツリー構造をリセットします。本当によろしいですか？')]
+    ['class' => 'bca-submit-token button-small bca-btn', 'confirm' => __d('baser', 'コンテンツ管理のツリー構造をリセットします。本当によろしいですか？')]
   ) ?>
 </div>
 <?php echo $this->BcAdminForm->secure() ?>

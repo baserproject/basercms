@@ -140,7 +140,7 @@ $fullUrl = $this->BcBaser->getContentsUrl($this->request->getParam('Content.url'
   <?php if ($this->action == 'admin_edit'): ?>
     <div class="bca-actions__sub">
       <?php
-      $this->BcBaser->link(__d('baser', '削除'), ['action' => 'delete', $blogContent['BlogContent']['id'], $this->BcForm->getSourceValue('BlogCategory.id')], ['class' => 'submit-token button bca-btn bca-actions__item', 'data-bca-btn-type' => 'delete', 'data-bca-btn-size' => 'sm'], sprintf('%s を本当に削除してもいいですか？', $this->BcForm->getSourceValue('BlogCategory.name')), false);
+      $this->BcBaser->link(__d('baser', '削除'), ['action' => 'delete', $blogContent['BlogContent']['id'], $this->BcForm->getSourceValue('BlogCategory.id')], ['class' => 'bca-submit-token button bca-btn bca-actions__item', 'data-bca-btn-type' => 'delete', 'data-bca-btn-size' => 'sm'], sprintf('%s を本当に削除してもいいですか？', $this->BcForm->getSourceValue('BlogCategory.name')), false);
       ?>
     </div>
   <?php endif ?>
