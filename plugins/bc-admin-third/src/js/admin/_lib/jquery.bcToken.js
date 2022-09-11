@@ -113,7 +113,6 @@
         /**
          * 新しいトークンをサーバーより取得する
          *
-         * @param callback
          * @param config
          */
         update: function (config) {
@@ -137,14 +136,18 @@
          * トークンを取得した空のフォームを取得する
          * コールバック処理の引数として利用可能
          * @param url
+         * @param options
          * @param callback
          * @param config
          */
-        getForm: function (url, callback, config) {
+        getForm: function (url, options, callback, config) {
             var form = $('<form/>');
             form.attr('action', url).attr('method', 'post');
             this.check(function () {
                 form.append($.bcToken.getHiddenToken());
+                if(options.fields) form.append(options.fields);
+                if(options.unlocked) form.append(options.unlocked);
+                if(options.debug) form.append(options.debug);
                 callback(form);
             }, config);
         },
@@ -161,9 +164,10 @@
         /**
          * 指定したURLに対しトークンを付加した上でPOST送信を行う
          * @param url
+         * @param options
          */
-        submitToken: function (url) {
-            this.getForm(url, function (form) {
+        submitToken: function (url, options) {
+            this.getForm(url, options, function (form) {
                 $('body').append(form);
                 form.submit();
             }, {useUpdate: false, hideLoader: false});
@@ -173,18 +177,21 @@
          * 指定したセレクターのリンクのクリックイベントについて、
          * トークン付加前提のフォーム送信処理に置き換える
          *
+         * CakePHP の postLink に対応
+         * postLink を利用した場合、ローダーを表示するなどの処理を割り込ませる事ができないが、
+         * CakePHP が生成するフォームでなく、こちらで生成するフォームを利用することで、ローダーを表示できるようにした。
          * @param selector
          */
         replaceLinkToSubmitToken: function (selector) {
             $(selector).each(function () {
                 if ($(this).attr('onclick')) {
-                    var regex = /if \(confirm\("(.+?)"\)/;
+                    var regex = /document\.(post_.+?).submit\(\)/;
                     var result = $(this).attr('onclick').match(regex);
                     if (result) {
-                        $(this).attr('data-confirm-message', result[1]);
-                        $(this).get(0).onclick = '';
-                        $(this).removeAttr('onclick');
+                        $(this).attr('data-post-link-form-id', result[1]);
                     }
+                    $(this).get(0).onclick = '';
+                    $(this).removeAttr('onclick');
                 }
             });
             $(selector).click(function () {
@@ -195,7 +202,21 @@
                         return false;
                     }
                 }
-                $.bcToken.submitToken($(this).attr('href'));
+                let url = $(this).attr('href');
+                let options = {};
+                if($(this).attr('data-post-link-form-id')) {
+                    let postLinkForm = $("form[name='" + $(this).attr('data-post-link-form-id') + "']");
+                    let fields = postLinkForm.find("input[name='_Token[fields]']");
+                    let unlocked = postLinkForm.find("input[name='_Token[unlocked]']");
+                    let debug = postLinkForm.find("input[name='_Token[debug]']");
+                    url = postLinkForm.attr('action');
+                    options = {
+                        fields: (fields.length)? fields : null,
+                        unlocked: (unlocked.length)? unlocked : null,
+                        debug: (debug.length)? debug : null
+                    }
+                }
+                $.bcToken.submitToken(url, options);
                 return false;
             });
         },

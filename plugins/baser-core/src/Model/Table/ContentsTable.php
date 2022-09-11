@@ -1363,69 +1363,98 @@ class ContentsTable extends AppTable
 
     /**
      * コンテンツ管理のツリー構造をリセットする
+     * @checked
+     * @noTodo
      */
     public function resetTree()
     {
-        $this->Behaviors->unload('Tree');
+        $this->removeBehavior('Tree');
         $this->updatingRelated = false;
-        $siteRoots = $this->find('all', ['conditions' => ['Content.site_root' => true], 'order' => 'lft', 'recursive' => -1]);
+
+        $beforeSaveListeners = $this->getEventManager()->listeners('Model.beforeSave');
+        $this->getEventManager()->off('Model.beforeSave', $beforeSaveListeners);
+        $afterSaveListeners = $this->getEventManager()->listeners('Model.afterSave');
+        $this->getEventManager()->off('Model.afterSave', $afterSaveListeners);
+
+        $this->getConnection()->begin();
+        $result = true;
+        $siteRoots = $this->find()
+            ->where(['Contents.site_root' => true])
+            ->order('lft')
+            ->all();
         $count = 0;
         $mainSite = [];
         foreach($siteRoots as $siteRoot) {
             $count++;
-            $siteRoot['Content']['lft'] = $count;
-            $siteRoot['Content']['level'] = ($siteRoot['Content']['id'] == 1)? 0 : 1;
-            $siteRoot['Content']['parent_id'] = ($siteRoot['Content']['id'] == 1)? null : 1;
-            $contents = $this->find('all', ['conditions' => ['Content.site_id' => $siteRoot['Content']['site_id'], 'Content.site_root' => false], 'order' => 'lft', 'recursive' => -1]);
+            $siteRoot->lft = $count;
+            $siteRoot->level = ($siteRoot->id == 1)? 0 : 1;
+            $siteRoot->parent_id = ($siteRoot->id == 1)? null : 1;
+            $contents = $this->find()
+                ->where(['Contents.site_id' => $siteRoot->site_id, 'Contents.site_root' => false])
+                ->order('lft')
+                ->all();
             if ($contents) {
                 foreach($contents as $content) {
                     $count++;
-                    $content['Content']['lft'] = $count;
+                    $content->lft = $count;
                     $count++;
-                    $content['Content']['rght'] = $count;
-                    $content['Content']['level'] = $siteRoot['Content']['level'] + 1;
-                    $content['Content']['parent_id'] = $siteRoot['Content']['id'];
-                    $this->save($content, false);
+                    $content->rght = $count;
+                    $content->level = $siteRoot->level + 1;
+                    $content->parent_id = $siteRoot->id;
+                    if(!$this->save($content, false)) $result = false;
                 }
             }
-            if ($siteRoot['Content']['id'] == 1) {
+            if ($siteRoot->id == 1) {
                 $mainSite = $siteRoot;
             } else {
                 $count++;
-                $siteRoot['Content']['rght'] = $count;
-                $this->save($siteRoot, false);
+                $siteRoot->rght = $count;
+                if(!$this->save($siteRoot)) $result = false;
             }
         }
         $count++;
-        $mainSite['Content']['rght'] = $count;
-        $this->save($mainSite, false);
+        $mainSite->rght = $count;
+        if(!$this->save($mainSite)) $result = false;
+
         // ゴミ箱
-        $this->Behaviors->unload('SoftDelete');
-        $contents = $this->find('all', ['conditions' => ['Content.deleted_date IS NOT NULL'], 'order' => 'lft', 'recursive' => -1]);
+        $contents = $this->find()
+            ->applyOptions(['withDeleted'])
+            ->where(['Contents.deleted_date IS NOT NULL'])
+            ->order(['lft'])
+            ->all();
         if ($contents) {
             foreach($contents as $content) {
                 $count++;
-                $content['Content']['lft'] = $count;
+                $content->lft = $count;
                 $count++;
-                $content['Content']['rght'] = $count;
-                $content['Content']['level'] = 0;
-                $content['Content']['parent_id'] = null;
-                $content['Content']['site_id'] = null;
-                $this->save($content, false);
+                $content->rght = $count;
+                $content->level = 0;
+                $content->parent_id = null;
+                $content->site_id = null;
+                if(!$this->save($content)) $result = false;
             }
         }
         // 関連データ更新機能をオンにした状態で再度更新
-        $this->Behaviors->load('Tree');
+        $this->addBehavior('Tree');
         $this->updatingRelated = true;
-        $contents = $this->find('all', ['order' => 'lft', 'recursive' => -1]);
+
+        $this->getEventManager()->on('Model.beforeSave', $beforeSaveListeners);
+        $this->getEventManager()->on('Model.afterSave', $afterSaveListeners);
+
+        $contents = $this->find()->order(['lft'])->all();
         if ($contents) {
             foreach($contents as $content) {
                 // バリデーションをオンにする事で同名コンテンツを強制的にリネームする
                 // beforeValidate でリネーム処理を入れている為
                 // （第二引数を false に設定しない）
-                $this->save($content);
+                if(!$this->save($content)) $result = false;
             }
         }
+        if(!$result) {
+            $this->getConnection()->rollback();
+            return false;
+        }
+        $this->getConnection()->commit();
         return true;
     }
 

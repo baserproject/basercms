@@ -42,13 +42,13 @@ $this->BcAdmin->setTitle(__d('baser', 'ユーティリティトップ'));
     ['controller' => 'utilities', 'action' => 'verity_contents_tree'],
     ['class' => 'submit-token button-small bca-btn bca-loading']
   ) ?>&nbsp;&nbsp;
-  <?php $this->BcBaser->link(
+  <?php echo $this->BcAdminForm->postLink(
     __d('baser', 'ツリー構造リセット'),
     ['controller' => 'utilities', 'action' => 'reset_contents_tree'],
     ['class' => 'submit-token button-small bca-btn', 'confirm' => __d('baser', 'コンテンツ管理のツリー構造をリセットします。本当によろしいですか？')]
   ) ?>
 </div>
-
+<?php echo $this->BcAdminForm->secure() ?>
 <div class="section bca-main__section">
   <h2 class="bca-main__heading" data-bca-heading-size="lg"><?php echo __d('baser', 'スペシャルサンクスクレジット') ?></h2>
   <p class="bca-main__text"><?php echo __d('baser', 'baserCMSの開発や運営、普及にご協力頂いた方々をご紹介します。') ?></p>

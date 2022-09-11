@@ -466,17 +466,19 @@ class UtilitiesController extends BcAdminAppController
 
     /**
      * コンテンツ管理のツリー構造をリセットする
+     * @param UtilitiesServiceInterface $service
+     * @checked
+     * @noTodo
      */
-    public function reset_contents_tree()
+    public function reset_contents_tree(UtilitiesServiceInterface $service)
     {
-        $this->_checkReferer();
-        $Content = ClassRegistry::init('Content');
-        if ($Content->resetTree()) {
+        $this->request->allowMethod(['post']);
+        if ($service->resetContentsTree()) {
             $this->BcMessage->setSuccess(__d('baser', 'コンテンツのツリー構造をリセットしました。'));
         } else {
             $this->BcMessage->setError(__d('baser', 'コンテンツのツリー構造のリセットに失敗しました。'));
         }
-        $this->redirect(['controller' => 'tools', 'action' => 'index']);
+        $this->redirect(['action' => 'index']);
     }
 
     /**

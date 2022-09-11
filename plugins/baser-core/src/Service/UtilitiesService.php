@@ -50,6 +50,15 @@ class UtilitiesService implements UtilitiesServiceInterface
     }
 
     /**
+     * コンテンツツリーをリセットし全て同階層にする
+     */
+    public function resetContentsTree()
+    {
+        $contentsTable = TableRegistry::getTableLocator()->get('BaserCore.Contents');
+        return $contentsTable->resetTree();
+    }
+
+    /**
      * ツリー構造が壊れていないか確認する
      * CakePHP2系の TreeBehavior より移植
      * @param Table $table

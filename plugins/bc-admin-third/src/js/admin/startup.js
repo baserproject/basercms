@@ -205,9 +205,8 @@ $(function () {
 
     /**
      * トークンの送信が必要なリンクでトークンを送信する
-     * TODO umictz 未検証
      */
-    // $.bcToken.replaceLinkToSubmitToken(".submit-token");
+    $.bcToken.replaceLinkToSubmitToken(".submit-token");
 
     /**
      * カラーボックス
