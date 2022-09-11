@@ -523,7 +523,6 @@ class UtilitiesController extends BcAdminAppController
      */
     public function credit(UtilitiesServiceInterface $service)
     {
-        Configure::write('BcLinks.specialThanks', '');
         $this->viewBuilder()->disableAutoLayout();
         try {
             $this->set('credits', $service->getCredit());
