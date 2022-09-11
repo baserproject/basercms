@@ -14,16 +14,11 @@
  * @var \BaserCore\View\BcAdminAppView $this
  */
 $this->BcBaser->i18nScript([
-  'alertMessage1' => __d('baser', 'コピーに失敗しました。'),
-  'alertMessage2' => __d('baser', '削除に失敗しました。'),
-
-  'confirmMessage1' => __d('baser', "このデータを本当に削除してもよろしいですか？\n※ 削除したデータは元に戻すことができません。"),
-  'confirmMessage2' => __d('baser', '
+  'confirmMessage1' => __d('baser', '
     <p><strong>初期データを読み込みます。よろしいですか？</strong></p><br>
     <p>※ 初期データを読み込むと現在登録されている記事データや設定は全て上書きされますのでご注意ください。<br>
     ※ 管理ログは読み込まれず、ユーザー情報はログインしているユーザーのみに初期化されます。</p>
   '),
-  'confirmMessage3' => __d('baser', 'テーマを適用します。よろしいですか？'),
   'confirmTitle1' => __d('baser', '初期データ読込'),
 ], ['escape' => false]);
 $this->BcBaser->js([

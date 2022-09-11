@@ -40,6 +40,7 @@ use Cake\Utility\Inflector;
     <?php if ($theme->name !== $currentThemeName): ?>
       <?php echo $this->BcAdminForm->postLink('', ['action' => 'apply', $theme->name], [
         'title' => __d('baser', '適用'),
+        'confirm' => __d('baser', 'テーマを適用します。よろしいですか？'),
         'class' => 'btn-apply bca-btn-icon',
         'data-bca-btn-type' => 'apply',
         'data-bca-btn-size' => 'lg',
@@ -55,6 +56,7 @@ use Cake\Utility\Inflector;
     ]) ?>
     <?php echo $this->BcAdminForm->postLink('', ['action' => 'delete', $theme->name], [
       'title' => __d('baser', 'テーマ削除'),
+      'confirm' => __d('baser', "このデータを本当に削除してもよろしいですか？\\n※ 削除したデータは元に戻すことができません。"),
       'class' => 'btn-delete bca-btn-icon',
       'data-bca-btn-type' => 'delete',
       'data-bca-btn-size' => 'lg',

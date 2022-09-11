@@ -148,4 +148,26 @@ class BcAdminFormHelper extends BcFormHelper
 
     }
 
+    /**
+     * postLink
+     * CSSクラスに bca-submit-token を追加する
+     * @param string $title
+     * @param string $url
+     * @param array $options
+     */
+    public function postLink(string $title, $url = null, array $options = []): string
+    {
+        $class = 'bca-submit-token';
+        if(!empty($options['class'])) {
+            $classes = explode(' ', $options['class']);
+            if(!in_array($class, $classes)) {
+                $classes[] = $class;
+            }
+            $options['class'] = implode(' ', $classes);
+        } else {
+                $options['class'] = $class;
+        }
+        return parent::postLink($title, $url, $options);
+    }
+
 }

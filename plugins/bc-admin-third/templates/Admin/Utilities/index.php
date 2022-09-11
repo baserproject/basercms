@@ -40,12 +40,12 @@ $this->BcAdmin->setTitle(__d('baser', 'ユーティリティトップ'));
   <?php echo $this->BcAdminForm->postLink(
     __d('baser', 'ツリー構造をチェックする'),
     ['controller' => 'utilities', 'action' => 'verity_contents_tree'],
-    ['class' => 'bca-submit-token bca-btn']
+    ['class' => 'bca-btn']
   ) ?>&nbsp;&nbsp;
   <?php echo $this->BcAdminForm->postLink(
     __d('baser', 'ツリー構造リセット'),
     ['controller' => 'utilities', 'action' => 'reset_contents_tree'],
-    ['class' => 'bca-submit-token bca-btn', 'confirm' => __d('baser', 'コンテンツ管理のツリー構造をリセットします。本当によろしいですか？')]
+    ['class' => 'bca-btn', 'confirm' => __d('baser', 'コンテンツ管理のツリー構造をリセットします。本当によろしいですか？')]
   ) ?>
 </div>
 <?php echo $this->BcAdminForm->secure() ?>

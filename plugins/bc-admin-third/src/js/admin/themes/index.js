@@ -26,7 +26,7 @@ $(function () {
     $("#BtnLoadDefaultDataPattern").click(function () {
         $.bcConfirm.show({
             'title': bcI18n.confirmTitle1,
-            'message': bcI18n.confirmMessage2,
+            'message': bcI18n.confirmMessage1,
             'ok': function () {
                 $.bcUtil.showLoader();
                 $("#ThemeLoadDefaultDataPatternForm").submit();
@@ -44,32 +44,6 @@ $(function () {
         success: function (result) {
             $("#BaserMarket").html(result);
         }
-    });
-
-    /**
-     * テーマ適用
-     */
-    $(".btn-apply").click(function(){
-        if(!confirm(bcI18n.confirmMessage3)) return false;
-        $.bcUtil.showLoader();
-        return true;
-    });
-
-    /**
-     * テーマ削除
-     */
-    $(".btn-delete").click(function(){
-        if(!confirm(bcI18n.confirmMessage1)) return false;
-        $.bcUtil.showLoader();
-        return true;
-    });
-
-    /**
-     * テーマコピー
-     */
-    $(".btn-copy").click(function(){
-        $.bcUtil.showLoader();
-        return true;
     });
 
 });
