@@ -37,10 +37,10 @@ $this->BcAdmin->setTitle(__d('baser', 'ユーティリティトップ'));
   <p class="bca-main__text">
     <?php echo __d('baser', 'コンテンツ管理のツリー構造で並べ替えがうまくいかなくなった場合に、ツリー構造をリセットして正しいデータの状態に戻します。リセットを実行した場合、階層構造はリセットされてしまうのでご注意ください。') ?>
   </p>
-  <?php $this->BcBaser->link(
+  <?php echo $this->BcAdminForm->postLink(
     __d('baser', 'ツリー構造をチェックする'),
     ['controller' => 'utilities', 'action' => 'verity_contents_tree'],
-    ['class' => 'submit-token button-small bca-btn']
+    ['class' => 'submit-token button-small bca-btn bca-loading']
   ) ?>&nbsp;&nbsp;
   <?php $this->BcBaser->link(
     __d('baser', 'ツリー構造リセット'),

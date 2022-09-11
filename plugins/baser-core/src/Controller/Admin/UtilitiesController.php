@@ -75,6 +75,7 @@ class UtilitiesController extends BcAdminAppController
      * 環境情報の表示から iframe で読み込まれる
      * @checked
      * @unitTest
+     * @uses phpinfo
      */
     public function phpinfo()
     {
@@ -489,7 +490,7 @@ class UtilitiesController extends BcAdminAppController
      */
     public function verity_contents_tree(UtilitiesServiceInterface $service)
     {
-        $this->_checkReferer();
+        $this->request->allowMethod(['post']);
         if (!$service->verityContentsTree()) {
             $this->BcMessage->setError(__d('baser', 'コンテンツのツリー構造に問題があります。ログを確認してください。'));
         } else {
