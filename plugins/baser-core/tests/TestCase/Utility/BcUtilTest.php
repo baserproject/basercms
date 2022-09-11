@@ -11,7 +11,10 @@
 
 namespace BaserCore\Test\TestCase\Utility;
 
+use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\Test\Factory\SiteConfigFactory;
+use BaserCore\Utility\BcContainer;
+use BaserCore\Utility\BcSiteConfig;
 use Cake\Core\App;
 use Cake\Cache\Cache;
 use Cake\Core\Plugin;
@@ -455,17 +458,27 @@ class BcUtilTest extends BcTestCase
      */
     public function testGetCurrentThemesPlugins()
     {
+        $currentSite = $this->getRequest()->getParam('Site');
+        // 現在のテーマのプラグインを作成する
+        $targetTheme = BcUtil::getCurrentTheme();
+        $themePath = BcUtil::getPluginPath($targetTheme);
+        $pluginName = 'test';
+        mkdir($themePath . 'Plugin', 777, true);
+        mkdir($themePath . 'Plugin/' . $pluginName, 777, true);
+        // プラグインが存在しているかどうか確認する
+        $plugins = BcUtil::getCurrentThemesPlugins();
+        $this->assertCount(1, $plugins);
+        $this->assertEquals($pluginName, $plugins[0]);
 
-        // TODO ucmitz移行時に未実装のため代替措置
-        // >>>
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        // <<<
+        // 現在のテーマを切り替える
+        $currentSite->theme = 'BcSpaSample';
+        $plugins = BcUtil::getCurrentThemesPlugins();
+        // プラグインが存在しないか確認する
+        $this->assertCount(0, $plugins);
 
-        $theme = Configure::read('BcSite.theme');
-        $path = BASER_THEMES . $theme . DS . 'Plugin';
-        $Folder = new Folder();
-        $Folder->delete($path);
-        $this->assertEquals([], BcUtil::getCurrentThemesPlugins(), '現在適用しているテーマ梱包プラグインのリストを正しく取得できません。');
+        // 作成したプラグインを削除する
+        $folder = new Folder();
+        $folder->delete($themePath . 'Plugin');
     }
 
     /**

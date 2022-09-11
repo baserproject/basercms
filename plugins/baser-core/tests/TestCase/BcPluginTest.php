@@ -12,6 +12,7 @@
 namespace BaserCore\Test\TestCase;
 
 use BaserCore\BcPlugin;
+use BaserCore\Service\SitesService;
 use BaserCore\Test\Factory\PluginFactory;
 use BaserCore\Test\Factory\UserFactory;
 use BaserCore\TestSuite\BcTestCase;
@@ -45,6 +46,7 @@ class BcPluginTest extends BcTestCase
         'plugin.BaserCore.Plugins',
         'plugin.BaserCore.Users',
         'plugin.BaserCore.SiteConfigs',
+        'plugin.BaserCore.Sites',
     ];
 
     /**
@@ -419,6 +421,23 @@ $table->updateAll([\'name\' => \'2022-06-26\'], []);');
         $folder->delete($updaterPath);
         rename(BASER . 'VERSION.bak.txt', BASER . 'VERSION.txt');
         unlink($migrationFile);
+    }
+
+    /**
+     * テーマを適用する
+     */
+    public function test_applyAsTheme()
+    {
+        $targetId = 1;
+        $currentTheme = 'BcFront';
+        $SiteService = new SitesService();
+        $site = $SiteService->get($targetId);
+        $this->assertEquals($currentTheme, $site->theme);
+
+        $updateTheme = 'BcSpaSample';
+        $this->BcPlugin->applyAsTheme($site, $updateTheme);
+        $site = $SiteService->get($targetId);
+        $this->assertEquals($updateTheme, $site->theme);
     }
 
 }
