@@ -597,7 +597,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      */
     public function getAppTableList($plugin = ''): array
     {
-        $list = Cache::read('appTableList', '_bc_env_');;
+        $list = Cache::read('appTableList', '_bc_env_');
         if ($list) {
             if($plugin) {
                 return (isset($list[$plugin]))? $list[$plugin] : [];

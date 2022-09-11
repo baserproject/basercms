@@ -11,6 +11,9 @@
 
 namespace BaserCore\Service;
 
+use BaserCore\Error\BcException;
+use Cake\Cache\Cache;
+use Cake\Core\Configure;
 use Cake\Log\LogTrait;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
@@ -169,6 +172,37 @@ class UtilitiesService implements UtilitiesServiceInterface
         $query = $table->find()->applyOptions(['withDeleted'])->where([$scope]);
         $min = $query->select([$right => $query->func()->min($right)])->first();
         return (empty($min->{$right}))? 0 : (int) $min->{$right};
+    }
+
+    /**
+     * クレジットを取得する
+     * @return mixed|null
+     * @checked
+     * @noTodo
+     */
+    public function getCredit()
+    {
+        $specialThanks = [];
+        if (!Configure::read('debug')) {
+            $specialThanks = Cache::read('specialThanks', '_bc_env_');
+        }
+
+        if ($specialThanks) {
+            $json = json_decode($specialThanks);
+        } else {
+            try {
+                $json = file_get_contents(Configure::read('BcLinks.specialThanks'), true);
+            } catch (BcException $e) {
+                throw new BcException(__d('baser', 'スペシャルサンクスのデータが読み込めませんでした。'));
+            }
+            if ($json) {
+                Cache::write('specialThanks', $json, '_bc_env_');
+                $json = json_decode($json);
+            } else {
+                $json = null;
+            }
+        }
+        return $json;
     }
 
 }

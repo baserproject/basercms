@@ -11,6 +11,7 @@
 
 namespace BaserCore\Controller\Admin;
 
+use BaserCore\Error\BcException;
 use BaserCore\Service\UtilitiesAdminServiceInterface;
 use BaserCore\Service\UtilitiesServiceInterface;
 use BaserCore\Utility\BcUtil;
@@ -24,6 +25,18 @@ use BaserCore\Annotation\Checked;
  */
 class UtilitiesController extends BcAdminAppController
 {
+
+    /**
+     * initialize
+     * @return void
+     * @checked
+     * @noTodo
+     */
+    public function initialize(): void
+    {
+        parent::initialize();
+        $this->Authentication->allowUnauthenticated(['credit']);
+    }
 
     /**
      * サーバーキャッシュを削除する
@@ -499,6 +512,23 @@ class UtilitiesController extends BcAdminAppController
             $this->BcMessage->setSuccess(__d('baser', 'コンテンツのツリー構造に問題はありません。'), false);
         }
         $this->redirect(['action' => 'index']);
+    }
+
+    /**
+     * クレジット表示用データをレンダリング
+     * @param UtilitiesServiceInterface $service
+     * @checked
+     * @noTodo
+     */
+    public function credit(UtilitiesServiceInterface $service)
+    {
+        $this->viewBuilder()->disableAutoLayout();
+        try {
+            $this->set('credits', $service->getCredit());
+        } catch (BcException $e) {
+            $this->setResponse($this->response->withStatus(400));
+            $this->BcMessage->setError($e->getMessage());
+        }
     }
 
 }

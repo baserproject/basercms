@@ -20,6 +20,6 @@ import "./_lib/jquery.bcTree.js";
 import "./_lib/jquery.bcConfirm.js";
 import "./_lib/jquery.bcJwt.js";
 import "./_lib/jquery.bcTimeUtil.js";
+import "./_lib/jquery.bcCredit.js";
 import "./_module/sidebar.js";
-import "./_module/credit.js";
 

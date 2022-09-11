@@ -10,8 +10,28 @@
 
 $(function () {
 
-    let alertMessage = $("#AlertMessage")
+    let alertMessage = $("#AlertMessage");
+    let isEnableLoginCredit = $("#AdminUsersLoginScript").attr('data-isEnableLoginCredit');
 
+    if (isEnableLoginCredit) {
+        $("body").hide();
+    }
+
+    if (isEnableLoginCredit) {
+        let $body = $("body");
+        let $logo = $("#Logo");
+        $body.append($("<div>&nbsp;</div>").attr('id', 'Credit').show());
+        $("#HeaderInner").css('height', '50px');
+        $logo.css('position', 'absolute');
+        $logo.css('z-index', '10000');
+        changeView(isEnableLoginCredit);
+        // 本体がない場合にフッターが上にあがってしまうので一旦消してから表示
+        $body.fadeIn(50);
+    }
+
+    /**
+     * ログイン実行
+     */
     $("#BtnLogin").click(function () {
         $.bcUtil.showLoader()
         alertMessage.fadeOut()
@@ -19,21 +39,21 @@ $(function () {
             $('#email').val(),
             $('#password').val(),
             $('#saved').prop('checked'),
-            function(response){
+            function (response) {
                 let query = decodeURIComponent(location.search).replace('?', '').split('&');
                 let redirect
-                query.forEach(function(v){
+                query.forEach(function (v) {
                     let [key, value] = v.split('=')
-                    if(key === 'redirect') {
+                    if (key === 'redirect') {
                         redirect = value
                     }
                 });
-                if(redirect) {
+                if (redirect) {
                     location.href = redirect
                 } else {
                     location.href = response.redirect
                 }
-            }, function(){
+            }, function () {
                 alertMessage.fadeIn()
                 $.bcUtil.hideLoader()
             }
@@ -41,88 +61,62 @@ $(function () {
         return false;
     });
 
-    // TODO ucmitz 以下、未チェック
-    // if ($("#LoginCredit").html() == 1) {
-    //     $("body").hide();
-    // }
-    // $("body").prepend($("#Login"));
-    // changeNavi("#" + $("#UserModel").html() + "Name");
-    // changeNavi("#" + $("#UserModel").html() + "Password");
-    //
-    // $("#" + $("#UserModel").html() + "Name,#" + $("#UserModel").html() + "Password").bind('keyup', function () {
-    //     if ($(this).val()) {
-    //         $(this).prev().hide();
-    //     } else {
-    //         $(this).prev().show();
-    //     }
-    // });
-    //
-    // $("#Login").click(function () {
-    //     changeView(false);
-    // });
-    //
-    // $("#BtnLogin").click(function () {
-    //     $.bcToken.setTokenUrl('/bc_form/ajax_get_token?requestview=false');
-    //     $("#BtnLogin").attr('disabled', 'disabled');
-    //     $.bcToken.check(function () {
-    //         $("#UserLoginForm").submit();
-    //     }, {loaderType: "none", useUpdate: false});
-    //     return false;
-    // });
-    //
-    // $("#LoginInner").click(function (e) {
-    //     if (e && e.stopPropagation) {
-    //         e.stopPropagation();
-    //     } else {
-    //         window.event.cancelBubble = true;
-    //     }
-    // });
-    //
-    // if ($("#LoginCredit").html() == 1) {
-    //     $("body").append($("<div>&nbsp;</div>").attr('id', 'Credit').show());
-    //     $("#LoginInner").css('color', '#FFF');
-    //     $("#HeaderInner").css('height', '50px');
-    //     $("#Logo").css('position', 'absolute');
-    //     $("#Logo").css('z-index', '10000');
-    //     changeView($("#LoginCredit").html());
-    //     // 本体がない場合にフッターが上にあがってしまうので一旦消してから表示
-    //     $("body").fadeIn(50);
-    // }
-    //
-    // function changeNavi(target) {
-    //     if ($(target).val()) {
-    //         $(target).prev().hide();
-    //     } else {
-    //         $(target).prev().show();
-    //     }
-    // }
-    //
-    // function changeView(creditOn) {
-    //     if (creditOn) {
-    //         credit();
-    //     } else {
-    //         openCredit();
-    //     }
-    // }
-    //
-    // function openCredit(completeHandler) {
-    //     if (!$("#Credit").size()) {
-    //         return;
-    //     }
-    //     $("#LoginInner").css('color', '#333');
-    //     $("#HeaderInner").css('height', 'auto');
-    //     $("#Logo").css('position', 'relative');
-    //     $("#Logo").css('z-index', '0');
-    //     $("#Wrap").css('height', '280px');
-    //     if (completeHandler) {
-    //         if ($("#Credit").length) {
-    //             $("#Credit").fadeOut(1000, completeHandler);
-    //         }
-    //         completeHandler();
-    //     } else {
-    //         if ($("#Credit").length) {
-    //             $("#Credit").fadeOut(1000);
-    //         }
-    //     }
-    // }
+    /**
+     * ログインエリア周辺クリック時
+     * エンドロールを非表示にする
+     */
+    $("#Login").click(function () {
+        changeView(false);
+    });
+
+    /**
+     * ログインエリア内側クリック時
+     * エンドロールの非表示を無効にする
+     */
+    $("#LoginInner").click(function (e) {
+        if (e && e.stopPropagation) {
+            e.stopPropagation();
+        } else {
+            window.event.cancelBubble = true;
+        }
+    });
+
+    /**
+     * エンドロールの表示を切り替える
+     * @param creditOn
+     */
+    function changeView(creditOn) {
+        if (creditOn) {
+            $.bcCredit.show();
+        } else {
+            openCredit();
+        }
+    }
+
+    /**
+     * エンドロールを表示する
+     * @param completeHandler
+     */
+    function openCredit(completeHandler) {
+        let $credit = $("#Credit");
+        let $logo = $("#Logo");
+        if (!$credit.length) {
+            return;
+        }
+        $("#HeaderInner").css('height', 'auto');
+        $logo.css('position', 'relative');
+        $logo.css('z-index', '0');
+        $("#Wrap").css('height', '280px');
+        if (completeHandler) {
+            if ($credit.length) {
+                $credit.fadeOut(1000, completeHandler);
+            }
+            completeHandler();
+        } else {
+            if ($credit.length) {
+                $credit.fadeOut(1000);
+            }
+        }
+    }
+
 });

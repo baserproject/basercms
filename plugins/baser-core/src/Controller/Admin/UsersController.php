@@ -56,9 +56,9 @@ class UsersController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function login()
+    public function login(UsersAdminServiceInterface $service)
     {
-        $this->set('savedEnable', $this->request->is('ssl'));
+        $this->set($service->getViewVarsForLogin($this->getRequest()));
         if ($this->Authentication->getResult()->isValid()) {
             $this->redirect(Router::url(Configure::read('BcPrefixAuth.Admin.loginRedirect')));
         }

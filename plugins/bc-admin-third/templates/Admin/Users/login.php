@@ -14,9 +14,18 @@ use BaserCore\View\AppView;
 /**
  * login
  * @var AppView $this
+ * @var string $isEnableLoginCredit
+ * @var bool $savedEnable
+ * @checked
+ * @noTodo
+ * @unitTest
  */
+
 $this->BcAdmin->setTitle(__d('baser', 'ログイン'));
-$this->BcBaser->js('admin/users/login.bundle', false);
+$this->BcBaser->js('admin/users/login.bundle', false, [
+  'id' => 'AdminUsersLoginScript',
+  'data-isEnableLoginCredit' => $isEnableLoginCredit
+]);
 ?>
 
 

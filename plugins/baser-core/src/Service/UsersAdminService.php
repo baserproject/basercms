@@ -11,12 +11,14 @@
 
 namespace BaserCore\Service;
 
+use BaserCore\Utility\BcSiteConfig;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Datasource\EntityInterface;
+use Cake\Http\ServerRequest;
 
 /**
  * UsersAdminService
@@ -134,6 +136,21 @@ class UsersAdminService extends UsersService implements UsersAdminServiceInterfa
             'user' => $user,
             'userGroupList' => $this->UserGroupsService->getList(),
             'isUserGroupEditable' => $this->isUserGroupEditable(null),
+        ];
+    }
+
+    /**
+     * ログイン画面に必要なデータを取得する
+     * @param ServerRequest $request
+     * @return array
+     * @noTodo
+     * @checked
+     */
+    public function getViewVarsForLogin(ServerRequest $request): array
+    {
+        return [
+            'savedEnable' => $request->is('ssl'),
+            'isEnableLoginCredit' => BcSiteConfig::get('login_credit')
         ];
     }
 

@@ -15,6 +15,7 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use Cake\Datasource\EntityInterface;
+use Cake\Http\ServerRequest;
 
 /**
  * Interface UsersAdminServiceInterface
@@ -77,5 +78,15 @@ interface UsersAdminServiceInterface
      * @unitTest
      */
     public function getViewVarsForAdd(EntityInterface $user): array;
+
+    /**
+     * ログイン画面に必要なデータを取得する
+     * @param ServerRequest $request
+     * @return array
+     * @noTodo
+     * @checked
+     * @unitTest
+     */
+    public function getViewVarsForLogin(ServerRequest $request): array;
 
 }

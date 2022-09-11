@@ -14,6 +14,7 @@ namespace BaserCore\Service;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use Cake\Http\ServerRequest;
 
 /**
  * UtilitiesServiceInterface
@@ -29,5 +30,15 @@ interface UtilitiesServiceInterface
      * @unitTest
      */
     public function verityContentsTree(): bool;
+
+    /**
+     * ログイン画面に必要なデータを取得する
+     * @param ServerRequest $request
+     * @return array
+     * @noTodo
+     * @checked
+     * @unitTest
+     */
+    public function getViewVarsForLogin(ServerRequest $request): array;
 
 }
