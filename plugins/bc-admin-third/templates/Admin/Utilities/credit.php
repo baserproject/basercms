@@ -20,7 +20,7 @@ use Cake\Utility\Inflector;
  * @unitTest
  */
 
-if (!$credits) {
+if (empty($credits)) {
   return;
 }
 $types = ['designers', 'developers', 'supporters', 'publishers'];

@@ -18,6 +18,7 @@ use BaserCore\Utility\BcUtil;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use Cake\Core\Configure;
 
 /**
  * Class UtilitiesController
@@ -522,12 +523,12 @@ class UtilitiesController extends BcAdminAppController
      */
     public function credit(UtilitiesServiceInterface $service)
     {
+        Configure::write('BcLinks.specialThanks', '');
         $this->viewBuilder()->disableAutoLayout();
         try {
             $this->set('credits', $service->getCredit());
         } catch (BcException $e) {
-            $this->setResponse($this->response->withStatus(400));
-            $this->BcMessage->setError($e->getMessage());
+            $this->setResponse($this->response->withStatus(400)->withStringBody($e->getMessage()));
         }
     }
 

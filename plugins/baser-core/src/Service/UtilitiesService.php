@@ -190,9 +190,9 @@ class UtilitiesService implements UtilitiesServiceInterface
         if ($specialThanks) {
             $json = json_decode($specialThanks);
         } else {
-            try {
+            if(Configure::read('BcLinks.specialThanks')) {
                 $json = file_get_contents(Configure::read('BcLinks.specialThanks'), true);
-            } catch (BcException $e) {
+            } else {
                 throw new BcException(__d('baser', 'スペシャルサンクスのデータが読み込めませんでした。'));
             }
             if ($json) {
