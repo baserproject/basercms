@@ -13,7 +13,7 @@ namespace BcSearchIndex\Test\Scenario\Service;
 
 use BaserCore\Test\Factory\SiteConfigFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
-use BaserCore\Test\Scenario\SmallSetContents;
+use BaserCore\Test\Scenario\SmallSetContentsScenario;
 use BcSearchIndex\Test\Factory\SearchIndexFactory;
 use CakephpFixtureFactories\Scenario\FixtureScenarioInterface;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -35,7 +35,7 @@ class SearchIndexesServiceScenario implements FixtureScenarioInterface
     public function load(...$args)
     {
         $this->loadFixtureScenario(InitAppScenario::class);
-        $this->loadFixtureScenario(SmallSetContents::class);
+        $this->loadFixtureScenario(SmallSetContentsScenario::class);
         SearchIndexFactory::make(1)->persist();
         SiteConfigFactory::make(['name' => 'content_types', 'value' => ''])->persist();
     }

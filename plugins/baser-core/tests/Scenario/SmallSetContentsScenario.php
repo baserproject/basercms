@@ -27,7 +27,7 @@ use CakephpFixtureFactories\Scenario\FixtureScenarioInterface;
  * - /service/index
  * - /service/about
  */
-class SmallSetContents implements FixtureScenarioInterface
+class SmallSetContentsScenario implements FixtureScenarioInterface
 {
 
     /**
