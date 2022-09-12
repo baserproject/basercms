@@ -13,10 +13,13 @@ namespace BaserCore\Test\TestCase\Service;
 
 use BaserCore\Service\ThemesService;
 use BaserCore\Service\ThemesServiceInterface;
+use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
 use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
+use Cake\Routing\Router;
+use Cake\TestSuite\IntegrationTestTrait;
 
 /**
  * ThemesServiceTest
@@ -29,6 +32,16 @@ class ThemesServiceTest extends \BaserCore\TestSuite\BcTestCase
      * Trait
      */
     use BcContainerTrait;
+    use IntegrationTestTrait;
+
+    /**
+     * Fixtures
+     *
+     * @var array
+     */
+    public $fixtures = [
+        'plugin.BaserCore.Factory/Sites',
+    ];
 
     /**
      * Set Up
@@ -151,5 +164,23 @@ class ThemesServiceTest extends \BaserCore\TestSuite\BcTestCase
     {
         $themes = $this->ThemesService->getIndex();
         $this->assertEquals('BcFront', $themes[1]->name);
+    }
+
+    /**
+     * テーマを適用する
+     */
+    public function testApply()
+    {
+        $beforeTheme = 'BcSpaSample';
+        $afterTheme = 'BcFront';
+        SiteFactory::make(['id' => 1, 'title' => 'Test Title', 'name' => 'Test Site', 'theme'=> $beforeTheme, 'status' => 1])->persist();
+        $site = SiteFactory::get(1);
+        Router::setRequest($this->getRequest());
+        $result = $this->ThemesService->apply($site, $afterTheme);
+        $site = SiteFactory::get(1);
+        $this->assertNotEquals($beforeTheme, $site->theme);
+        $this->assertCount(2, $result);
+        $this->assertEquals('このテーマは初期データを保有しています。', $result[0]);
+        $this->assertEquals('Webサイトにテーマに合ったデータを適用するには、初期データ読込を実行してください。', $result[1]);
     }
 }

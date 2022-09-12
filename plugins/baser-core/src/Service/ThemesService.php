@@ -160,6 +160,7 @@ class ThemesService implements ThemesServiceInterface
      * @return array 適用完了後に表示するメッセージ
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function apply(Site $site, string $theme): array
     {
