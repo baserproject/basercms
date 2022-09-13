@@ -145,7 +145,26 @@ class ThemesControllerTest extends BcTestCase
      */
     public function test_delete()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        // notFound
+        $this->post('/baser/admin/baser-core/themes/delete/');
+        $this->assertResponseCode(404);
+        // テーマをコピーする
+        $theme = 'BcFront';
+        $this->post('/baser/admin/baser-core/themes/copy/' . $theme);
+        $this->assertResponseCode(302);
+        // テーマを削除する
+        $themeCopy = $theme . 'Copy';
+        $this->post('/baser/admin/baser-core/themes/delete/' . $themeCopy);
+        $this->assertResponseCode(302);
+        $this->assertRedirect([
+            'plugin' => 'BaserCore',
+            'prefix' => 'Admin',
+            'controller' => 'themes',
+            'action' => 'index'
+        ]);
+        $this->assertFlashMessage("テーマ「"  . $themeCopy . "」を削除しました。");
     }
 
     /**
