@@ -71,9 +71,9 @@ class ThemesAdminServiceTest extends \BaserCore\TestSuite\BcTestCase
         $this->loadFixtureScenario(InitAppScenario::class);
         $this->loginAdmin($this->getRequest('/baser/admin'));
         $themesService = new ThemesService();
-        $rs = $this->ThemesAdminService->getViewVarsForIndex($themesService->get());
+        $rs = $this->ThemesAdminService->getViewVarsForIndex($themesService->getIndex());
         $this->assertIsArray($rs['themes']);
-        $this->assertNull($rs['currentTheme']);
+        $this->assertNotNull($rs['currentTheme']);
         $this->assertIsArray($rs['defaultDataPatterns']);
     }
 

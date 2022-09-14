@@ -24,6 +24,7 @@ use BaserCore\Utility\BcZip;
 use Cake\Cache\Cache;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
+use Cake\Datasource\EntityInterface;
 use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
 use Cake\Http\Client;
@@ -46,10 +47,11 @@ class ThemesService implements ThemesServiceInterface
     /**
      * 単一データ取得
      * @param string $theme
+     * @return EntityInterface
      * @checked
      * @noTodo
      */
-    public function get(string $theme): array
+    public function get(string $theme)
     {
         $pluginsTable = TableRegistry::getTableLocator()->get('BaserCore.Plugins');
         return $pluginsTable->getPluginConfig($theme);
