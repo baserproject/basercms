@@ -96,7 +96,7 @@ class ThemesControllerTest extends \BaserCore\TestSuite\BcTestCase
 
         $path = ROOT . DS . 'plugins' . DS . 'BcSpaSample';
         $theme = 'BcSpaSample2';
-        $pathTheme = TMP . DS . 'src' . DS;
+        $pathTheme = TMP . 'src' . DS;
         $zip = new ZipArchiver();
         $zip->archive($path, $pathTheme . $theme . '.zip', true);
         $testFile = $pathTheme . $theme . '.zip';
@@ -132,7 +132,7 @@ class ThemesControllerTest extends \BaserCore\TestSuite\BcTestCase
         $this->assertEquals('テーマファイル「' . $theme . '」を追加しました。', $result->message);
 
         $folder = new Folder();
-        $folder->delete($pathTheme . $theme);
+        $folder->delete(ROOT . DS . 'plugins' . DS . $theme);
 
     }
 }
