@@ -121,7 +121,7 @@ class ThemesServiceTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function testGetThemesDefaultDataInfo()
     {
-        $theme = 'BcSpaSample';
+        $theme = 'BcFront';
         $themePath = BcUtil::getPluginPath($theme);
 
         mkdir($themePath . 'Plugin', 0777, true);
@@ -135,10 +135,20 @@ class ThemesServiceTest extends \BaserCore\TestSuite\BcTestCase
         $file->write('test file 2');
         $file->close();
 
+        $info = [
+            'このテーマは下記のプラグインを同梱しています。',
+            '	・test'
+        ];
+        $expected = [
+            'このテーマは下記のプラグインを同梱しています。',
+            '	・test',
+            '',
+            'このテーマは初期データを保有しています。',
+            'Webサイトにテーマに合ったデータを適用するには、初期データ読込を実行してください。'
+        ];
 
-        $rs = $this->execPrivateMethod($this->ThemesService, 'getThemesPluginsInfo', [$theme]);
-        $this->assertEquals('このテーマは下記のプラグインを同梱しています。', $rs[0]);
-        $this->assertEquals('	・test', $rs[1]);
+        $rs = $this->execPrivateMethod($this->ThemesService, 'getThemesDefaultDataInfo', [$theme, $info]);
+        $this->assertEquals($expected, $rs);
 
         $folder = new Folder();
         $folder->delete($themePath . 'Plugin');
@@ -164,6 +174,25 @@ class ThemesServiceTest extends \BaserCore\TestSuite\BcTestCase
     {
         $themes = $this->ThemesService->getIndex();
         $this->assertEquals('BcFront', $themes[1]->name);
+    }
+
+    /**
+     * 指定したテーマが梱包するプラグイン情報を取得
+     */
+    public function testGetThemesPluginsInfo()
+    {
+        $theme = 'BcFront';
+        $themePath = BcUtil::getPluginPath($theme);
+        $pluginName = 'test';
+        mkdir($themePath . 'Plugin', 777, true);
+        mkdir($themePath . 'Plugin/' . $pluginName, 777, true);
+
+        $pluginsInfo = $this->execPrivateMethod($this->ThemesService, 'getThemesPluginsInfo', [$theme]);
+        $this->assertEquals('このテーマは下記のプラグインを同梱しています。', $pluginsInfo[0]);
+        $this->assertEquals('	・' . $pluginName, $pluginsInfo[1]);
+
+        $folder = new Folder();
+        $folder->delete($themePath . 'Plugin');
     }
 
     /**

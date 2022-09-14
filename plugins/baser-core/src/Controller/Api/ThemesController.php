@@ -28,6 +28,21 @@ class ThemesController extends BcApiController
 {
 
     /**
+     * [API] テーマ一覧を取得する
+     * @param ThemesServiceInterface $themes
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function index(ThemesServiceInterface $themes)
+    {
+        $this->set([
+            'themes' => $themes->getIndex()
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['themes']);
+    }
+
+    /**
      * [API] 新しいテーマをアップロードする
      * @param ThemesServiceInterface $service
      * @noTodo
@@ -54,5 +69,4 @@ class ThemesController extends BcApiController
         ]);
         $this->viewBuilder()->setOption('serialize', ['message', 'theme', 'errors']);
     }
-
 }
