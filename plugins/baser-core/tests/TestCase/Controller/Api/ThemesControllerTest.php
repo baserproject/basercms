@@ -114,7 +114,6 @@ class ThemesControllerTest extends \BaserCore\TestSuite\BcTestCase
                 'name' => $theme . '.zip',
                 'size' => 123,
                 'tmp_name' => $testFile,
-
                 'type' => 'application/zip'
             ]
         ];
