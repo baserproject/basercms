@@ -24,7 +24,7 @@ $BlogContent = ClassRegistry::init('Blog.BlogContent');
 $blogContents = $BlogContent->find('all', [
 	'conditions' => ['Content.deleted' => 0],
 	'recursive' => 0,
-	'order' => $BlogContent->id,
+	'order' =>  'Content.lft',
 ]);
 foreach($blogContents as $blogContent) {
 	$blog = $blogContent['BlogContent'];
