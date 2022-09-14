@@ -168,6 +168,24 @@ class ThemesServiceTest extends \BaserCore\TestSuite\BcTestCase
     }
 
     /**
+     * 指定したテーマをダウンロード用のテーマとして一時フォルダに作成する
+     * @return void
+     */
+    public function testCreateDownloadToTmp()
+    {
+        $tmpDir = TMP . 'theme' . DS;
+        $theme = 'BcFront';
+        $tmpThemeDir = $tmpDir . $theme;
+
+        $result = $this->ThemesService->createDownloadToTmp($theme);
+        $this->assertEquals($tmpDir, $result);
+        $this->assertTrue(is_dir($tmpThemeDir));
+
+        $folder = new Folder();
+        $folder->delete($tmpThemeDir);
+    }
+
+    /**
      * 一覧データ取得
      */
     public function testGetIndex()

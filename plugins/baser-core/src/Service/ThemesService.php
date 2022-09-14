@@ -410,6 +410,9 @@ class ThemesService implements ThemesServiceInterface
      * 指定したテーマをダウンロード用のテーマとして一時フォルダに作成する
      * @param string $theme
      * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function createDownloadToTmp(string $theme): string
     {
