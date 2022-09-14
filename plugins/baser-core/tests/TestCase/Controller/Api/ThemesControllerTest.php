@@ -96,7 +96,7 @@ class ThemesControllerTest extends \BaserCore\TestSuite\BcTestCase
 
         $path = ROOT . DS . 'plugins' . DS . 'BcSpaSample';
         $theme = 'BcSpaSample2';
-        $pathTheme = ROOT . DS . 'plugins' . DS;
+        $pathTheme = TMP . DS . 'src' . DS;
         $zip = new ZipArchiver();
         $zip->archive($path, $pathTheme . $theme . '.zip', true);
         $testFile = $pathTheme . $theme . '.zip';
