@@ -15,6 +15,7 @@ use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\Controller\Admin\ThemesController;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
+use Cake\Filesystem\Folder;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use Cake\TestSuite\IntegrationTestTrait;
 
@@ -114,7 +115,29 @@ class ThemesControllerTest extends BcTestCase
      */
     public function test_copy()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        // notFound
+        $this->post('/baser/admin/baser-core/themes/copy/');
+        $this->assertResponseCode(404);
+
+        // 正常にコピーする
+        $theme = 'BcFront';
+        $this->post('/baser/admin/baser-core/themes/copy/' . $theme);
+        $this->assertResponseCode(302);
+        $this->assertRedirect([
+            'plugin' => 'BaserCore',
+            'prefix' => 'Admin',
+            'controller' => 'themes',
+            'action' => 'index'
+        ]);
+        $this->assertFlashMessage("テーマ「"  . $theme . "」をコピーしました。");
+
+        // コピーしたテーマを削除する
+        $path = BASER_THEMES . $theme . 'Copy';
+        $Folder = new Folder();
+        $Folder->delete($path);
     }
 
     /**
@@ -122,7 +145,26 @@ class ThemesControllerTest extends BcTestCase
      */
     public function test_delete()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        // notFound
+        $this->post('/baser/admin/baser-core/themes/delete/');
+        $this->assertResponseCode(404);
+        // テーマをコピーする
+        $theme = 'BcFront';
+        $this->post('/baser/admin/baser-core/themes/copy/' . $theme);
+        $this->assertResponseCode(302);
+        // テーマを削除する
+        $themeCopy = $theme . 'Copy';
+        $this->post('/baser/admin/baser-core/themes/delete/' . $themeCopy);
+        $this->assertResponseCode(302);
+        $this->assertRedirect([
+            'plugin' => 'BaserCore',
+            'prefix' => 'Admin',
+            'controller' => 'themes',
+            'action' => 'index'
+        ]);
+        $this->assertFlashMessage("テーマ「"  . $themeCopy . "」を削除しました。");
     }
 
     /**

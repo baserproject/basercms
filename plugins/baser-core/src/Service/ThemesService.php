@@ -161,6 +161,7 @@ class ThemesService implements ThemesServiceInterface
      * @return array 適用完了後に表示するメッセージ
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function apply(Site $site, string $theme): array
     {
@@ -227,6 +228,9 @@ class ThemesService implements ThemesServiceInterface
      * @param string $theme
      * @param array $info
      * @return array|mixed|string[]
+     * @noTodo
+     * @checked
+     * @unitTest
      */
     private function getThemesDefaultDataInfo(string $theme, array $info = [])
     {
