@@ -30,6 +30,7 @@ use Cake\Http\Client;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
 use Cake\Utility\Xml;
+use Laminas\Diactoros\UploadedFile;
 
 /**
  * ThemesService
@@ -113,7 +114,7 @@ class ThemesService implements ThemesServiceInterface
 
     /**
      * 新しいテーマをアップロードする
-     * @param array $postData
+     * @param UploadedFile[] $postData
      * @checked
      * @noTodo
      */
@@ -126,15 +127,15 @@ class ThemesService implements ThemesServiceInterface
                 ini_get('post_max_size')
             ));
         }
-        if (empty($postData['file']['tmp_name'])) {
+        if (empty($_FILES['file']['tmp_name'])) {
             $message = '';
-            if (!empty($postData['file']['error']) && $postData['file']['error'] == 1) {
+            if ($postData['file']->getError() === 1) {
                 $message = __d('baser', 'サーバに設定されているサイズ制限を超えています。');
             }
             throw new BcException($message);
         }
-        $name = $postData['file']['name'];
-        move_uploaded_file($postData['file']['tmp_name'], TMP . $name);
+        $name = $postData['file']->getClientFileName();
+        $postData['file']->moveTo(TMP . $name);
         $srcName = basename($name, '.zip');
         $zip = new BcZip();
         if (!$zip->extract(TMP . $name, TMP)) {
