@@ -11,14 +11,49 @@
 namespace BaserCore\Test\TestCase\Service;
 
 use BaserCore\Service\BcDatabaseService;
+use BaserCore\Service\BcDatabaseServiceInterface;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcContainerTrait;
 use Cake\Cache\Cache;
 
 /**
  * BcDatabaseServiceTest
+ * @property BcDatabaseService $BcDatabaseService
  */
 class BcDatabaseServiceTest extends BcTestCase
 {
+
+    /**
+     * Trait
+     */
+    use BcContainerTrait;
+
+    /**
+     * Set Up
+     *
+     * @return void
+     */
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->BcDatabaseService = $this->getService(BcDatabaseServiceInterface::class);
+    }
+
+    /**
+     * Tear Down
+     *
+     * @return void
+     */
+    public function tearDown(): void
+    {
+        parent::tearDown();
+    }
+
+    public function test_getEncoding()
+    {
+        $encoding = $this->BcDatabaseService->getEncoding();
+        $this->assertEquals('utf8', $encoding);
+    }
 
     /**
      * test resetTables

@@ -581,6 +581,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      * @return string The database encoding
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getEncoding()
     {
