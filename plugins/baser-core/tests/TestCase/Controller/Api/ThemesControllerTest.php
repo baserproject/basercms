@@ -96,10 +96,10 @@ class ThemesControllerTest extends \BaserCore\TestSuite\BcTestCase
 
         $path = ROOT . DS . 'plugins' . DS . 'BcSpaSample';
         $theme = 'BcSpaSample2';
-        $pathTheme = ROOT . DS . 'plugins' . DS . $theme . '.zip';
+        $pathTheme = ROOT . DS . 'plugins' . DS;
         $zip = new ZipArchiver();
-        $zip->archive($path, $pathTheme, true);
-        $testFile = ROOT . DS . 'plugins' . DS . 'BcSpaSample2.zip';
+        $zip->archive($path, $pathTheme . $theme . '.zip', true);
+        $testFile = $pathTheme . $theme . '.zip';
         $file = new UploadedFile(
             $testFile,
             10,
@@ -132,7 +132,7 @@ class ThemesControllerTest extends \BaserCore\TestSuite\BcTestCase
         $this->assertEquals('テーマファイル「' . $theme . '」を追加しました。', $result->message);
 
         $folder = new Folder();
-        $folder->delete($pathTheme);
+        $folder->delete($pathTheme . $theme);
 
     }
 }
