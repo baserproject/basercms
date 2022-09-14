@@ -24,11 +24,12 @@ interface ThemesServiceInterface
 
     /**
      * 単一データ取得
+     * @param string $theme
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function get(): array;
+    public function get(string $theme): array;
 
     /**
      * 一覧データ取得

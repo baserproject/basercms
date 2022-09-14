@@ -45,10 +45,14 @@ class ThemesService implements ThemesServiceInterface
 
     /**
      * 単一データ取得
+     * @param string $theme
+     * @checked
+     * @noTodo
      */
-    public function get(): array
+    public function get(string $theme): array
     {
-        return [];
+        $pluginsTable = TableRegistry::getTableLocator()->get('BaserCore.Plugins');
+        return $pluginsTable->getPluginConfig($theme);
     }
 
     /**
@@ -61,9 +65,8 @@ class ThemesService implements ThemesServiceInterface
     {
         $themeNames = BcUtil::getThemeList();
         $themes = [];
-        $pluginsTable = TableRegistry::getTableLocator()->get('BaserCore.Plugins');
         foreach($themeNames as $value) {
-            $themes[] = $pluginsTable->getPluginConfig($value);
+            $themes[] = $this->get($value);
         }
         return $themes;
     }
