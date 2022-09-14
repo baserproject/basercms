@@ -944,7 +944,6 @@ class BcUtilTest extends BcTestCase
      */
     public function testEmptyFolder()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $dummyPath = TMP . 'test' . DS;
         $names = [
             'folder' => ['folder1', 'folder2'],
@@ -957,8 +956,17 @@ class BcUtilTest extends BcTestCase
         $Folder->create($dummyPath . $names['folder'][0], 0755);
         $Folder->create($dummyPath . $names['folder'][1], 0755);
 
-        $File1 = new File($dummyPath . $names['file'][0], true);
-        $File2 = new File($dummyPath . $names['file'][1], true);
+        // フォルダtestにファイルを追加する
+        new File($dummyPath . $names['file'][0], true);
+        new File($dummyPath . $names['file'][1], true);
+
+        // folder1とfolder2にfile1とfile2を追加する
+        foreach ($names['folder'] as $folder) {
+            $folderPath = $dummyPath . $folder . DS;
+            foreach ($names['file'] as $file) {
+                new File($folderPath . $file, true);
+            }
+        }
 
         BcUtil::emptyFolder($dummyPath);
 
@@ -976,6 +984,16 @@ class BcUtilTest extends BcTestCase
                 $result = false;
             }
             @unlink($dummyPath . $name);
+        }
+        // folder1とfolder2にfile1とfile2が削除されているかチェック
+        foreach ($names['folder'] as $folder) {
+            $folderPath = $dummyPath . $folder . DS;
+            foreach ($names['file'] as $file) {
+                if (file_exists($folderPath . $file)) {
+                    $result = false;
+                }
+                @unlink($folderPath . $file);
+            }
         }
         $Folder->delete($dummyPath);
 
