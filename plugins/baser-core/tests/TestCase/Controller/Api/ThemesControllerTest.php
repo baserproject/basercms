@@ -91,6 +91,7 @@ class ThemesControllerTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function testAdd(): void
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->get('/baser/api/baser-core/themes/add.json?token=' . $this->accessToken);
         $this->assertResponseCode(405);
 
