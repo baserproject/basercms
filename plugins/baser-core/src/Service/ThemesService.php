@@ -466,6 +466,7 @@ class ThemesService implements ThemesServiceInterface
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _modifySiteConfigsCsv(string $path)
     {

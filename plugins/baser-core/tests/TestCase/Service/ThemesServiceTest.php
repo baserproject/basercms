@@ -13,6 +13,7 @@ namespace BaserCore\Test\TestCase\Service;
 
 use BaserCore\Service\ThemesService;
 use BaserCore\Service\ThemesServiceInterface;
+use BaserCore\Test\Factory\SiteConfigFactory;
 use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
@@ -41,6 +42,7 @@ class ThemesServiceTest extends \BaserCore\TestSuite\BcTestCase
      */
     public $fixtures = [
         'plugin.BaserCore.Factory/Sites',
+        'plugin.BaserCore.Factory/SiteConfigs',
     ];
 
     /**
@@ -211,6 +213,28 @@ class ThemesServiceTest extends \BaserCore\TestSuite\BcTestCase
 
         $folder = new Folder();
         $folder->delete($themePath . 'Plugin');
+    }
+
+    /**
+     * site_configs テーブルにて、 CSVに出力しないフィールドを空にする
+     */
+    public function test_modifySiteConfigsCsv()
+    {
+        SiteConfigFactory::make(['name' => 'email', 'value' => 'chuongle@mediabridge.asia'])->persist();
+        SiteConfigFactory::make(['name' => 'google_analytics_id', 'value' => 'gg123'])->persist();
+        SiteConfigFactory::make(['name' => 'version', 'value' => '1.1.1'])->persist();
+
+        $this->ThemesService->createDownloadDefaultDataPatternToTmp();
+        $path = TMP . 'csv' . DS . 'BaserCore' . DS . 'site_configs.csv';
+        $this->execPrivateMethod($this->ThemesService, '_modifySiteConfigsCsv', [$path]);
+
+        $targets = ['email', 'google_analytics_id', 'version'];
+        $fp = fopen($path, 'a+');
+        while(($record = BcUtil::fgetcsvReg($fp, 10240)) !== false) {
+            if (in_array($record[1], $targets)) {
+                $this->assertEmpty($record[2]);
+            }
+        }
     }
 
     /**
