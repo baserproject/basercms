@@ -52,7 +52,7 @@ class ThemesController extends BcApiController
     public function add(ThemesServiceInterface $service)
     {
         $this->request->allowMethod(['post']);
-
+        $errors = [];
         try {
             $theme = $service->add($this->getRequest()->getUploadedFiles());
             $message = __d('baser', 'テーマファイル「' . $theme . '」を追加しました。');

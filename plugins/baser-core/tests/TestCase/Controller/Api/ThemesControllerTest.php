@@ -95,19 +95,14 @@ class ThemesControllerTest extends \BaserCore\TestSuite\BcTestCase
         $this->assertResponseCode(405);
 
         $path = ROOT . DS . 'plugins' . DS . 'BcSpaSample';
+        $zipSrcPath = TMP  . 'zip' . DS;
+        $folder = new Folder();
+        $folder->create($zipSrcPath, 0777);
+        $folder->copy($zipSrcPath . 'BcSpaSample2', ['from' => $path, 'mode' => 0777]);
         $theme = 'BcSpaSample2';
-        $pathTheme = ROOT . DS . 'tests'. DS;
         $zip = new ZipArchiver();
-        $zip->archive($path, $pathTheme . $theme . '.zip', true);
-        $testFile = $pathTheme . $theme . '.zip';
-        $file = new UploadedFile(
-            $testFile,
-            10,
-            UPLOAD_ERR_OK,
-            $theme . '.zip',
-            'application/zip',
-
-        );
+        $testFile = $zipSrcPath . $theme . '.zip';
+        $zip->archive($zipSrcPath, $testFile, true);
         $_FILES = [
             'file' => [
                 'error' => UPLOAD_ERR_OK,
@@ -117,15 +112,11 @@ class ThemesControllerTest extends \BaserCore\TestSuite\BcTestCase
                 'type' => 'application/zip'
             ]
         ];
-
         $this->configRequest([
             'Content-Type' => 'multipart/form-data',
-            'files' => [
-                'file' => $file,
-            ]
+            'files' => $_FILES
         ]);
-
-        $this->post('/baser/api/baser-core/themes/add.json?token=' . $this->accessToken, ['file' => $file]);
+        $this->post('/baser/api/baser-core/themes/add.json?token=' . $this->accessToken);
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals($theme, $result->theme);
@@ -133,6 +124,6 @@ class ThemesControllerTest extends \BaserCore\TestSuite\BcTestCase
 
         $folder = new Folder();
         $folder->delete(ROOT . DS . 'plugins' . DS . $theme);
-
+        $folder->delete($zipSrcPath);
     }
 }

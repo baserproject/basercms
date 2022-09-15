@@ -337,7 +337,7 @@ class ThemesService implements ThemesServiceInterface
         ])) {
             return false;
         }
-        $this->_changePluginNameSpace($newTheme);
+        if(!$this->_changePluginNameSpace($newTheme)) return false;
         return true;
     }
 
@@ -348,10 +348,12 @@ class ThemesService implements ThemesServiceInterface
     protected function _changePluginNameSpace($newTheme)
     {
         $pluginPath = BcUtil::getPluginPath($newTheme);
+        if(!$pluginPath) return false;
         $file = new File($pluginPath . 'src' . DS . 'Plugin.php');
         $data = $file->read();
         $file->write(preg_replace('/namespace .+?;/', 'namespace ' . $newTheme . ';', $data));
         $file->close();
+        return true;
     }
 
     /**
