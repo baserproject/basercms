@@ -70,6 +70,39 @@ class ThemesController extends BcApiController
         $this->viewBuilder()->setOption('serialize', ['message', 'theme', 'errors']);
     }
     /**
+     * [API] テーマを削除する
+     *
+     * @param ThemesServiceInterface $service
+     * @param string $theme
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function delete(ThemesServiceInterface $service, string $theme)
+    {
+        $this->request->allowMethod(['post']);
+
+        $error = null;
+        try {
+            $theme = $service->get($theme);
+            $service->delete($theme->name);
+            $message = __d('baser', 'テーマ「{0}」を削除しました。', $theme->name);
+        } catch (BcException $e) {
+            $this->setResponse($this->response->withStatus(400));
+            $error = $e->getMessage();
+            $message = __d('baser', 'テーマフォルダのアクセス権限を見直してください。' . $e->getMessage());
+        }
+
+        $this->set([
+            'theme' => $theme,
+            'message' => $message,
+            'error' => $error
+        ]);
+
+        $this->viewBuilder()->setOption('serialize', ['theme', 'message', 'error']);
+    }
+
+    /**
      * [API] テーマをコピーする
      *
      * @param string $theme
