@@ -1013,7 +1013,6 @@ class BcUtilTest extends BcTestCase
      */
     public function testFgetcsvReg($content, $length, $d, $e, $expect, $message)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $csv = new File(CACHE . 'test.csv');
         $csv->write($content);
         $csv->close();

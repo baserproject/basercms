@@ -1304,6 +1304,7 @@ class BcUtil
      * @return    mixed    ファイルの終端に達した場合を含み、エラー時にFALSEを返します。
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function fgetcsvReg(&$handle, $length = null, $d = ',', $e = '"')
     {
