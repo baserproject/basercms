@@ -76,6 +76,16 @@ class ThemesControllerTest extends BcTestCase
     }
 
     /**
+     * @return void
+     */
+    public function testView()
+    {
+        $this->get('/baser/api/baser-core/themes/view/BcFront.json?token=' . $this->accessToken);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('BcFront', $result->theme->name);
+    }
+    /**
      * test View
      */
     public function testIndex(): void

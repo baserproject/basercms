@@ -17,7 +17,6 @@ use BaserCore\Service\ThemesServiceInterface;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
-use BaserCore\Utility\BcUtil;
 
 /**
  * Class ThemesController
@@ -28,6 +27,22 @@ use BaserCore\Utility\BcUtil;
  */
 class ThemesController extends BcApiController
 {
+    /**
+     * [API] 単一テーマ情報を取得する
+     * @param ThemesServiceInterface $themeSerivce
+     * @param $theme
+     * @checked
+     * @unitTest
+     * @noTodo
+     */
+    public function view(ThemesServiceInterface $themeSerivce, $theme)
+    {
+        $this->set([
+            'theme' => $themeSerivce->get($theme)
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['theme']);
+    }
+
     /**
      * [API] テーマ一覧を取得する
      * @param ThemesServiceInterface $themes
