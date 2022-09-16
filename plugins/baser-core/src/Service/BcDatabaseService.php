@@ -646,6 +646,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      * アプリケーションに関連するテーブルリストのキャッシュをクリアする
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function clearAppTableList()
     {

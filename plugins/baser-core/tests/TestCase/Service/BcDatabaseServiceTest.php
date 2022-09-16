@@ -120,4 +120,16 @@ class BcDatabaseServiceTest extends BcTestCase
         $this->assertTrue(in_array('plugins', Cache::read('appTableList', '_bc_env_')['BaserCore']));
     }
 
+    /**
+     * test clearAppTableList
+     * @return void
+     */
+    public function test_clearAppTableList()
+    {
+        $this->BcDatabaseService->getAppTableList();
+        $this->assertTrue(in_array('plugins', Cache::read('appTableList', '_bc_env_')['BaserCore']));
+        $this->BcDatabaseService->clearAppTableList();
+        $this->assertEquals(0, count(Cache::read('appTableList', '_bc_env_')));
+    }
+
 }
