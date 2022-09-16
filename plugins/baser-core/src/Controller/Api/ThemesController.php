@@ -17,6 +17,7 @@ use BaserCore\Service\ThemesServiceInterface;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use BaserCore\Utility\BcUtil;
 
 /**
  * Class ThemesController
@@ -139,6 +140,45 @@ class ThemesController extends BcApiController
         $this->viewBuilder()->setOption('serialize', ['theme', 'message', 'error']);
     }
 
+    /**
+     * [API] テーマの初期データを読み込むAPIを実装
+     * @param ThemesServiceInterface $themesService
+     * @param SitesServiceInterface $sitesService
+     * @param int $siteId
+     * @noTodo
+     */
+    public function load_default_data(ThemesServiceInterface $themesService, SitesServiceInterface $sitesService, int $siteId)
+    {
+        $this->request->allowMethod(['post']);
+
+        $errors = null;
+
+        if (empty($this->getRequest()->getData('default_data_pattern'))) {
+            $this->setResponse($this->response->withStatus(400));
+            $message = __d('baser', '不正な操作です。');
+        } else {
+            try {
+                $result = $themesService->loadDefaultDataPattern($sitesService->get($siteId), $this->getRequest()->getData('default_data_pattern'));
+                if (!$result) {
+                    $this->setResponse($this->response->withStatus(400));
+                    $message = __d('baser', '初期データの読み込みが完了しましたが、いくつかの処理に失敗しています。ログを確認してください。');
+                } else {
+                    $message = __d('baser', '初期データの読み込みが完了しました。');
+                }
+            } catch (BcException $e) {
+                $errors = $e->getMessage();
+                $message = __d('baser', '初期データの読み込みに失敗しました。');
+                $this->setResponse($this->response->withStatus(400));
+            }
+        }
+
+        $this->set([
+            'message' => $message,
+            'errors' => $errors
+        ]);
+
+        $this->viewBuilder()->setOption('serialize', ['message', 'errors']);
+    }
     /**
      * [API] テーマを適用するAPI
      * @param ThemesServiceInterface $themesService
