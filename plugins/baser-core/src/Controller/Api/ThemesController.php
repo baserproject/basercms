@@ -12,6 +12,7 @@
 namespace BaserCore\Controller\Api;
 
 use BaserCore\Error\BcException;
+use BaserCore\Service\SitesServiceInterface;
 use BaserCore\Service\ThemesServiceInterface;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -26,7 +27,6 @@ use BaserCore\Annotation\Checked;
  */
 class ThemesController extends BcApiController
 {
-
     /**
      * [API] テーマ一覧を取得する
      * @param ThemesServiceInterface $themes
@@ -68,5 +68,41 @@ class ThemesController extends BcApiController
             'errors' => $errors
         ]);
         $this->viewBuilder()->setOption('serialize', ['message', 'theme', 'errors']);
+    }
+    /**
+     * [API] テーマを適用するAPI
+     * @param ThemesServiceInterface $themesService
+     * @param SitesServiceInterface $sitesService
+     * @param int $siteId
+     * @param string $theme
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function apply(ThemesServiceInterface $themesService, SitesServiceInterface $sitesService, int $siteId, string $theme)
+    {
+        $this->request->allowMethod(['post']);
+
+        $errors = null;
+
+        try {
+            $info = $themesService->apply($sitesService->get($siteId), $theme);
+            $theme = $themesService->get($theme);
+            $message = [__d('baser', 'テーマ「{0}」を適用しました。', $theme->name)];
+            if ($info) $message = array_merge($message, [''], $info);
+            $message = implode("\n", $message);
+        } catch (BcException $e) {
+            $errors = $e->getMessage();
+            $message = __d('baser', 'テーマの適用に失敗しました。', $e->getMessage());
+        }
+
+        $this->set([
+            'message' => $message,
+            'theme' => $theme,
+            'siteId' => $siteId,
+            'errors' => $errors
+        ]);
+
+        $this->viewBuilder()->setOption('serialize', ['message', 'theme', 'siteId', 'errors']);
     }
 }
