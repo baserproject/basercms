@@ -66,5 +66,6 @@ service lsyncd start
 # guest tmp and logs
 chmod -R 777 /var/www/html/tmp
 chmod -R 777 /var/www/html/logs
+chmod 777 /var/www/html/plugins
 
 echo "Container setup is complete."
