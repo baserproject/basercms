@@ -15,6 +15,7 @@ use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\Controller\Admin\ThemesController;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Utility\BcUtil;
 use Cake\Filesystem\Folder;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use Cake\TestSuite\IntegrationTestTrait;
@@ -193,7 +194,24 @@ class ThemesControllerTest extends BcTestCase
      */
     public function test_download_default_data_pattern()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        $this->get('/baser/admin/baser-core/themes/download_default_data_pattern');
+        $this->assertResponseOk();
+
+        $tmpDir = TMP . 'csv' . DS;
+        $folder = new Folder($tmpDir);
+        $folderContents = $folder->read(true, true, true);
+        $result = true;
+        if (count($folderContents[1]) > 0) $result = false;
+        foreach ($folderContents[0] as $path) {
+            $childFolder = new Folder($path);
+            $childFiles = $childFolder->find();
+            if (count($childFiles) > 0) $result = false;
+        }
+
+        $this->assertTrue($result);
     }
 
     /**

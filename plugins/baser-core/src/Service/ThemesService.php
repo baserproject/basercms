@@ -435,6 +435,7 @@ class ThemesService implements ThemesServiceInterface
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function createDownloadDefaultDataPatternToTmp(): string
     {
@@ -494,6 +495,7 @@ class ThemesService implements ThemesServiceInterface
      * @return boolean
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _writeCsv($plugin, $path, $exclude = [])
     {

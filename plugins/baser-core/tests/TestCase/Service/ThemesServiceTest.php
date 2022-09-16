@@ -11,6 +11,7 @@
 
 namespace BaserCore\Test\TestCase\Service;
 
+use BaserCore\Service\BcDatabaseServiceInterface;
 use BaserCore\Service\ThemesService;
 use BaserCore\Service\ThemesServiceInterface;
 use BaserCore\Test\Factory\SiteConfigFactory;
@@ -188,6 +189,23 @@ class ThemesServiceTest extends \BaserCore\TestSuite\BcTestCase
     }
 
     /**
+     * 現在のDB内のデータをダウンロード用のCSVとして一時フォルダに作成する
+     * @return void
+     */
+    public function testCreateDownloadDefaultDataPatternToTmp()
+    {
+        $this->ThemesService->createDownloadDefaultDataPatternToTmp();
+        $tmpDir = TMP . 'csv' . DS;
+        // CSVファイルが作成されている事を確認
+        $baserCoreFolder = new Folder($tmpDir . 'BaserCore' . DS);
+        $csvFiles = $baserCoreFolder->find('.*\.csv');
+        $this->assertNotEmpty($csvFiles);
+        // 作成されたディレクトリを削除
+        $folder = new Folder();
+        $folder->delete($tmpDir);
+    }
+
+    /**
      * 一覧データ取得
      */
     public function testGetIndex()
@@ -234,6 +252,25 @@ class ThemesServiceTest extends \BaserCore\TestSuite\BcTestCase
             if (in_array($record[1], $targets)) {
                 $this->assertEmpty($record[2]);
             }
+        }
+    }
+
+    /**
+     * CSVファイルを書きだす
+     * @return void
+     */
+    public function test_writeCsv()
+    {
+        $plugin = 'BaserCore';
+        $dbService = $this->getService(BcDatabaseServiceInterface::class);
+        $tableList = $dbService->getAppTableList($plugin);
+        $path = TMP . 'testWriteCsv' . DS;
+        $csvFolder = new Folder($path, true, 0777);
+        BcUtil::emptyFolder($path);
+        $this->execPrivateMethod($this->ThemesService, '_writeCsv', [$plugin, $path]);
+        $files = $csvFolder->find();
+        foreach ($tableList as $table) {
+            $this->assertTrue(in_array($table . '.csv', $files));
         }
     }
 
