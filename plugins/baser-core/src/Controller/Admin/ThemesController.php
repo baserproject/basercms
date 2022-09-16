@@ -167,6 +167,7 @@ class ThemesController extends BcAdminAppController
      * 初期データセットをダウンロードする
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function download_default_data_pattern(ThemesServiceInterface $service)
     {
