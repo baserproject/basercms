@@ -11,6 +11,7 @@
 
 namespace BaserCore\Test\TestCase\Controller\Api;
 
+use BaserCore\Service\ThemesService;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\Core\Configure;
@@ -128,6 +129,50 @@ class ThemesControllerTest extends BcTestCase
         $folder->delete(ROOT . DS . 'plugins' . DS . $theme);
         $folder->delete($zipSrcPath);
     }
+    /**
+     * test copy
+     * @return void
+     */
+    public function testDelete()
+    {
+        $this->get('/baser/api/baser-core/themes/delete/BcSpaSampleTest.json?token=' . $this->accessToken);
+        $this->assertResponseCode(405);
+
+        $themeService = new ThemesService();
+        $themeService->copy('BcSpaSample');
+        $this->post('/baser/api/baser-core/themes/delete/BcSpaSampleCopy.json?token=' . $this->accessToken);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('テーマ「BcSpaSampleCopy」を削除しました。', $result->message);
+
+        $this->post('/baser/api/baser-core/themes/delete/BcSpaSampleCopy.json?token=' . $this->accessToken);
+        $this->assertResponseCode(400);
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('テーマフォルダのアクセス権限を見直してください。' . $result->error, $result->message);
+    }
+
+    /**
+     * test copy
+     * @return void
+     */
+    public function testCopy()
+    {
+        $this->get('/baser/api/baser-core/themes/copy/BcSpaSample.json?token=' . $this->accessToken);
+        $this->assertResponseCode(405);
+
+        $this->post('/baser/api/baser-core/themes/copy/BcSpaSample2.json?token=' . $this->accessToken);
+        $this->assertResponseCode(400);
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('テーマ「BcSpaSample2」のコピーに失敗しました。', $result->message);
+
+        $this->post('/baser/api/baser-core/themes/copy/BcSpaSample.json?token=' . $this->accessToken);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('テーマ「BcSpaSample」をコピーしました。', $result->message);
+        $themeService = new ThemesService();
+        $themeService->delete('BcSpaSampleCopy');
+    }
+
     /**
      * テーマを適用するAPI
      */

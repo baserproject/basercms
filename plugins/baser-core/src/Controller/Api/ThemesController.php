@@ -17,6 +17,7 @@ use BaserCore\Service\ThemesServiceInterface;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use BaserCore\Utility\BcUtil;
 
 /**
  * Class ThemesController
@@ -68,6 +69,115 @@ class ThemesController extends BcApiController
             'errors' => $errors
         ]);
         $this->viewBuilder()->setOption('serialize', ['message', 'theme', 'errors']);
+    }
+    /**
+     * [API] テーマを削除する
+     *
+     * @param ThemesServiceInterface $service
+     * @param string $theme
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function delete(ThemesServiceInterface $service, string $theme)
+    {
+        $this->request->allowMethod(['post']);
+
+        $error = null;
+        try {
+            $theme = $service->get($theme);
+            $service->delete($theme->name);
+            $message = __d('baser', 'テーマ「{0}」を削除しました。', $theme->name);
+        } catch (BcException $e) {
+            $this->setResponse($this->response->withStatus(400));
+            $error = $e->getMessage();
+            $message = __d('baser', 'テーマフォルダのアクセス権限を見直してください。' . $e->getMessage());
+        }
+
+        $this->set([
+            'theme' => $theme,
+            'message' => $message,
+            'error' => $error
+        ]);
+
+        $this->viewBuilder()->setOption('serialize', ['theme', 'message', 'error']);
+    }
+
+    /**
+     * [API] テーマをコピーする
+     *
+     * @param string $theme
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function copy(ThemesServiceInterface $service, $theme)
+    {
+        $this->request->allowMethod(['post']);
+
+        $error = null;
+        try {
+            $rs = $service->copy($theme);
+            if ($rs) {
+                $message = __d('baser', 'テーマ「{0}」をコピーしました。', $theme);
+            } else {
+                $this->setResponse($this->response->withStatus(400));
+                $message = __d('baser', 'テーマ「{0}」のコピーに失敗しました。', $theme);
+            }
+            $theme = $service->get($theme);
+
+        } catch (BcException $e) {
+            $this->setResponse($this->response->withStatus(400));
+            $error = $e->getMessage();
+            $message = __d('baser', 'テーマフォルダのアクセス権限を見直してください。' . $e->getMessage());
+        }
+        $this->set([
+            'theme' => $theme,
+            'message' => $message,
+            'error' => $error
+        ]);
+
+        $this->viewBuilder()->setOption('serialize', ['theme', 'message', 'error']);
+    }
+
+    /**
+     * [API] テーマの初期データを読み込むAPIを実装
+     * @param ThemesServiceInterface $themesService
+     * @param SitesServiceInterface $sitesService
+     * @param int $siteId
+     * @noTodo
+     */
+    public function load_default_data(ThemesServiceInterface $themesService, SitesServiceInterface $sitesService, int $siteId)
+    {
+        $this->request->allowMethod(['post']);
+
+        $errors = null;
+
+        if (empty($this->getRequest()->getData('default_data_pattern'))) {
+            $this->setResponse($this->response->withStatus(400));
+            $message = __d('baser', '不正な操作です。');
+        } else {
+            try {
+                $result = $themesService->loadDefaultDataPattern($sitesService->get($siteId), $this->getRequest()->getData('default_data_pattern'));
+                if (!$result) {
+                    $this->setResponse($this->response->withStatus(400));
+                    $message = __d('baser', '初期データの読み込みが完了しましたが、いくつかの処理に失敗しています。ログを確認してください。');
+                } else {
+                    $message = __d('baser', '初期データの読み込みが完了しました。');
+                }
+            } catch (BcException $e) {
+                $errors = $e->getMessage();
+                $message = __d('baser', '初期データの読み込みに失敗しました。');
+                $this->setResponse($this->response->withStatus(400));
+            }
+        }
+
+        $this->set([
+            'message' => $message,
+            'errors' => $errors
+        ]);
+
+        $this->viewBuilder()->setOption('serialize', ['message', 'errors']);
     }
     /**
      * [API] テーマを適用するAPI
