@@ -96,13 +96,13 @@ class ThemesServiceTest extends \BaserCore\TestSuite\BcTestCase
         $rs = $this->ThemesService->copy('BcFront');
         $this->assertTrue($rs);
         //コピーを確認
-        $this->assertTrue(is_dir(BASER_THEMES . 'BcFrontCopy'));
+        $this->assertTrue(is_dir(BASER_THEMES . 'BcFrontCopy'), 'テーマのコピーが確認できませんでした。');
 
         $pluginPath = BcUtil::getPluginPath('BcFrontCopy');
         $file = new File($pluginPath . 'src' . DS . 'Plugin.php');
         $data = $file->read();
         //namespaceの書き換えを確認
-        $this->assertTrue(str_contains($data, 'namespace BcFrontCopy;'));
+        $this->assertTrue(str_contains($data, 'namespace BcFrontCopy;'), 'namespace の書き換えが確認できませんでした。');
         $file->close();
 
         $this->ThemesService->delete('BcFrontCopy');

@@ -309,7 +309,7 @@ class PluginsServiceTest extends BcTestCase
      */
     public function testGetMarketPlugins(){
         $rs = $this->Plugins->getMarketPlugins();
-        $this->assertNotEmpty($rs);
+        $this->assertNotEmpty($rs, 'baserマーケットのデータが読み込めませんでした。テストを再実行してください。');
         $caches = Cache::read('baserMarketPlugins', '_bc_env_');
         $this->assertIsArray($caches);
     }
