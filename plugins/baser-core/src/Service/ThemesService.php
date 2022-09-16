@@ -495,6 +495,7 @@ class ThemesService implements ThemesServiceInterface
      * @return boolean
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _writeCsv($plugin, $path, $exclude = [])
     {
