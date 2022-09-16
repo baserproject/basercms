@@ -12,9 +12,11 @@ namespace BaserCore\Test\TestCase\Service;
 
 use BaserCore\Service\BcDatabaseService;
 use BaserCore\Service\BcDatabaseServiceInterface;
+use BaserCore\Test\Factory\SiteConfigFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Cache\Cache;
+use Cake\TestSuite\IntegrationTestTrait;
 
 /**
  * BcDatabaseServiceTest
@@ -27,6 +29,16 @@ class BcDatabaseServiceTest extends BcTestCase
      * Trait
      */
     use BcContainerTrait;
+    use IntegrationTestTrait;
+
+    /**
+     * Fixtures
+     *
+     * @var array
+     */
+    public $fixtures = [
+        'plugin.BaserCore.Factory/SiteConfigs',
+    ];
 
     /**
      * Set Up
@@ -49,10 +61,27 @@ class BcDatabaseServiceTest extends BcTestCase
         parent::tearDown();
     }
 
+    /**
+     * Gets the database encoding
+     * @return void
+     */
     public function test_getEncoding()
     {
         $encoding = $this->BcDatabaseService->getEncoding();
         $this->assertEquals('utf8', $encoding);
+    }
+
+    /**
+     * Gets the database encoding
+     * @return void
+     */
+    public function test_truncate()
+    {
+        SiteConfigFactory::make(['name' => 'company', 'value' => 'Company A'])->persist();
+        SiteConfigFactory::make(['name' => 'address', 'value' => 'Tokyo'])->persist();
+        $this->assertEquals(2, SiteConfigFactory::count());
+        $this->BcDatabaseService->truncate('site_configs');
+        $this->assertEquals(0, SiteConfigFactory::count());
     }
 
     /**

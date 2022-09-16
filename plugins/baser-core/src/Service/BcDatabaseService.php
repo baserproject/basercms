@@ -245,8 +245,10 @@ class BcDatabaseService implements BcDatabaseServiceInterface
     /**
      * テーブルのデータをリセットする
      * @param $table
+     * @return bool
      * @noTodo
      * @checked
+     * @unitTest
      */
     public function truncate($table)
     {
