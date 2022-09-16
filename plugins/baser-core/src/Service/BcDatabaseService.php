@@ -519,7 +519,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      */
     protected function _convertFieldToCsv($value, $dc = true)
     {
-        if ($dc) {
+        if ($value && $dc) {
             $value = str_replace('"', '""', $value);
         }
         $value = trim(trim($value), "\'");
