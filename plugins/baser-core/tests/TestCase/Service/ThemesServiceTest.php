@@ -188,6 +188,23 @@ class ThemesServiceTest extends \BaserCore\TestSuite\BcTestCase
     }
 
     /**
+     * 現在のDB内のデータをダウンロード用のCSVとして一時フォルダに作成する
+     * @return void
+     */
+    public function testCreateDownloadDefaultDataPatternToTmp()
+    {
+        $this->ThemesService->createDownloadDefaultDataPatternToTmp();
+        $tmpDir = TMP . 'csv' . DS;
+        // CSVファイルが作成されている事を確認
+        $baserCoreFolder = new Folder($tmpDir . 'BaserCore' . DS);
+        $csvFiles = $baserCoreFolder->find('.*\.csv');
+        $this->assertNotEmpty($csvFiles);
+        // 作成されたディレクトリを削除
+        $folder = new Folder();
+        $folder->delete($tmpDir);
+    }
+
+    /**
      * 一覧データ取得
      */
     public function testGetIndex()
