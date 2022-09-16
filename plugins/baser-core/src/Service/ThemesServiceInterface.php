@@ -15,6 +15,7 @@ use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Model\Entity\Site;
+use Cake\Datasource\EntityInterface;
 
 /**
  * ThemesServiceInterface
@@ -24,11 +25,13 @@ interface ThemesServiceInterface
 
     /**
      * 単一データ取得
+     * @param string $theme
+     * @return EntityInterface
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function get(): array;
+    public function get(string $theme);
 
     /**
      * 一覧データ取得

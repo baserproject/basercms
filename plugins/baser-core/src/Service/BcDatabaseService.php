@@ -519,7 +519,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      */
     protected function _convertFieldToCsv($value, $dc = true)
     {
-        if ($dc) {
+        if ($value && $dc) {
             $value = str_replace('"', '""', $value);
         }
         $value = trim(trim($value), "\'");
@@ -581,6 +581,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      * @return string The database encoding
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getEncoding()
     {

@@ -24,12 +24,14 @@ use BaserCore\Utility\BcZip;
 use Cake\Cache\Cache;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
+use Cake\Datasource\EntityInterface;
 use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
 use Cake\Http\Client;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
 use Cake\Utility\Xml;
+use Laminas\Diactoros\UploadedFile;
 
 /**
  * ThemesService
@@ -44,10 +46,15 @@ class ThemesService implements ThemesServiceInterface
 
     /**
      * 単一データ取得
+     * @param string $theme
+     * @return EntityInterface
+     * @checked
+     * @noTodo
      */
-    public function get(): array
+    public function get(string $theme)
     {
-        return [];
+        $pluginsTable = TableRegistry::getTableLocator()->get('BaserCore.Plugins');
+        return $pluginsTable->getPluginConfig($theme);
     }
 
     /**
@@ -60,9 +67,8 @@ class ThemesService implements ThemesServiceInterface
     {
         $themeNames = BcUtil::getThemeList();
         $themes = [];
-        $pluginsTable = TableRegistry::getTableLocator()->get('BaserCore.Plugins');
         foreach($themeNames as $value) {
-            $themes[] = $pluginsTable->getPluginConfig($value);
+            $themes[] = $this->get($value);
         }
         return $themes;
     }
@@ -113,7 +119,7 @@ class ThemesService implements ThemesServiceInterface
 
     /**
      * 新しいテーマをアップロードする
-     * @param array $postData
+     * @param UploadedFile[] $postData
      * @checked
      * @noTodo
      */
@@ -126,15 +132,15 @@ class ThemesService implements ThemesServiceInterface
                 ini_get('post_max_size')
             ));
         }
-        if (empty($postData['file']['tmp_name'])) {
+        if (empty($_FILES['file']['tmp_name'])) {
             $message = '';
-            if (!empty($postData['file']['error']) && $postData['file']['error'] == 1) {
+            if ($postData['file']->getError() === 1) {
                 $message = __d('baser', 'サーバに設定されているサイズ制限を超えています。');
             }
             throw new BcException($message);
         }
-        $name = $postData['file']['name'];
-        move_uploaded_file($postData['file']['tmp_name'], TMP . $name);
+        $name = $postData['file']->getClientFileName();
+        $postData['file']->moveTo(TMP . $name);
         $srcName = basename($name, '.zip');
         $zip = new BcZip();
         if (!$zip->extract(TMP . $name, TMP)) {
@@ -160,6 +166,7 @@ class ThemesService implements ThemesServiceInterface
      * @return array 適用完了後に表示するメッセージ
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function apply(Site $site, string $theme): array
     {
@@ -226,6 +233,9 @@ class ThemesService implements ThemesServiceInterface
      * @param string $theme
      * @param array $info
      * @return array|mixed|string[]
+     * @noTodo
+     * @checked
+     * @unitTest
      */
     private function getThemesDefaultDataInfo(string $theme, array $info = [])
     {
@@ -327,7 +337,7 @@ class ThemesService implements ThemesServiceInterface
         ])) {
             return false;
         }
-        $this->_changePluginNameSpace($newTheme);
+        if(!$this->_changePluginNameSpace($newTheme)) return false;
         return true;
     }
 
@@ -338,10 +348,12 @@ class ThemesService implements ThemesServiceInterface
     protected function _changePluginNameSpace($newTheme)
     {
         $pluginPath = BcUtil::getPluginPath($newTheme);
+        if(!$pluginPath) return false;
         $file = new File($pluginPath . 'src' . DS . 'Plugin.php');
         $data = $file->read();
         $file->write(preg_replace('/namespace .+?;/', 'namespace ' . $newTheme . ';', $data));
         $file->close();
+        return true;
     }
 
     /**
@@ -400,6 +412,9 @@ class ThemesService implements ThemesServiceInterface
      * 指定したテーマをダウンロード用のテーマとして一時フォルダに作成する
      * @param string $theme
      * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function createDownloadToTmp(string $theme): string
     {
@@ -420,6 +435,7 @@ class ThemesService implements ThemesServiceInterface
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function createDownloadDefaultDataPatternToTmp(): string
     {
@@ -453,6 +469,7 @@ class ThemesService implements ThemesServiceInterface
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _modifySiteConfigsCsv(string $path)
     {
@@ -478,6 +495,7 @@ class ThemesService implements ThemesServiceInterface
      * @return boolean
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _writeCsv($plugin, $path, $exclude = [])
     {

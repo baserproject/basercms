@@ -121,7 +121,7 @@ class PermissionsController extends BcApiController
             'permission' => $permission,
             'error' => $error,
         ]);
-        $this->viewBuilder()->setOption('serialize', ['permission', 'message', 'errors']);
+        $this->viewBuilder()->setOption('serialize', ['permission', 'message', 'error']);
     }
 
     /**
