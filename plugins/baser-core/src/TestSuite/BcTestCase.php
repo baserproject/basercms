@@ -120,6 +120,18 @@ class BcTestCase extends TestCase
     }
 
     /**
+     * テーブルを空にする
+     * @param string $tableName
+     * @noTodo
+     * @unitTest
+     */
+    public static function truncateTable($tableName): void
+    {
+        $db = TableRegistry::getTableLocator()->get('BaserCore.App')->getConnection();
+        $db->execute('TRUNCATE TABLE ' . $tableName);
+    }
+
+    /**
      * getFixtureStrategy
      * フィクスチャの削除処理の高速化を図るため、FixtureStrategy に TransactionStrategy を設定。
      * ベースをこちらにし、 auto increment による問題が発生した場合は、個別のテストケースごとに

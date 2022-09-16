@@ -39,6 +39,14 @@ class SitesServiceTest extends \BaserCore\TestSuite\BcTestCase
     public $Sites = null;
 
     /**
+     * setUpBeforeClass
+     */
+    public static function setUpBeforeClass(): void
+    {
+        self::truncateTable('sites');
+    }
+
+    /**
      * Set Up
      *
      * @return void
