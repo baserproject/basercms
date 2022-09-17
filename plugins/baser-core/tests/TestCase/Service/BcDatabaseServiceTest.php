@@ -19,6 +19,7 @@ use BaserCore\Test\Factory\UserFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Cache\Cache;
+use Cake\Filesystem\Folder;
 use Cake\TestSuite\IntegrationTestTrait;
 
 /**
@@ -103,6 +104,44 @@ class BcDatabaseServiceTest extends BcTestCase
         $this->assertEquals(1, SiteFactory::count());
         $this->assertEquals(0, PageFactory::count());
         $this->assertEquals(0, UserFactory::count());
+    }
+
+    /**
+     * test loadCsv
+     */
+    public function test_loadCsv()
+    {
+        // csvフォルダーを作成する
+        $csvFolder = TMP . 'csv' . DS;
+        if (!is_dir($csvFolder)) {
+            new Folder($csvFolder, true, 0777);
+        }
+        // csvファイルを作成する
+        $table = 'pages';
+        $csvFilePath = $csvFolder . $table . '.csv';
+        $csvContents = [
+            'head' => ['id', 'contents', 'draft', 'page_template', 'modified', 'created'],
+            'row1' => ['id' => 1, 'contents' => 'content 1', 'draft' => 'draft 1', 'page_template' => 'temp 1', '', 'created' => '2022-09-15 18:00:00'],
+            'row2' => ['id' => 2, 'contents' => 'content 2', 'draft' => 'draft 2', 'page_template' => 'temp 2', '', 'created' => ''],
+        ];
+        $fp = fopen($csvFilePath, 'w');
+        ftruncate($fp, 0);
+        foreach ($csvContents as $row) {
+            $csvRecord = implode(',', $row) . "\n";
+            fwrite($fp, $csvRecord);
+        }
+        fclose($fp);
+        // CSVファイルをDBに読み込む
+        $this->BcDatabaseService->loadCsv(['path' => $csvFilePath, 'encoding' => 'UTF-8']);
+        // 複数のレコードが読み込まれいている事を確認
+        $this->assertEquals(2, PageFactory::count());
+        // 反映したデータが正しい事を確認
+        $row1 = PageFactory::get(1);
+        $this->assertEquals($row1->contents, $csvContents['row1']['contents']);
+        $this->assertEquals($row1->created->format('Y-m-d H:i:s'), $csvContents['row1']['created']);
+        // createdが空の時に本日の日付が入っている事を確認
+        $row2 = PageFactory::get(2);
+        $this->assertEquals($row2->created->format('Y-m-d H:i'), date('Y-m-d H:i'));
     }
 
     /**
