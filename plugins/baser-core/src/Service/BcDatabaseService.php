@@ -226,6 +226,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      * @return boolean
      * @noTodo
      * @checked
+     * @unitTest
      */
     public function resetTables($plugin = 'BaserCore', $excludes = [])
     {

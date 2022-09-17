@@ -12,7 +12,10 @@ namespace BaserCore\Test\TestCase\Service;
 
 use BaserCore\Service\BcDatabaseService;
 use BaserCore\Service\BcDatabaseServiceInterface;
+use BaserCore\Test\Factory\PageFactory;
 use BaserCore\Test\Factory\SiteConfigFactory;
+use BaserCore\Test\Factory\SiteFactory;
+use BaserCore\Test\Factory\UserFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Cache\Cache;
@@ -89,23 +92,17 @@ class BcDatabaseServiceTest extends BcTestCase
      */
     public function test_resetTables()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $result = $this->BcManager->resetTables('test');
-        $this->assertTrue($result, 'テーブルをリセットできません');
-
-        $this->User = ClassRegistry::init('User');
-        $User = $this->User->find('all', [
-                'recursive' => -1,
-            ]
-        );
-        $this->assertEmpty($User, 'テーブルをリセットできません');
-
-        $this->FeedDetail = ClassRegistry::init('FeedDetail');
-        $FeedDetail = $this->FeedDetail->find('all', [
-                'recursive' => -1,
-            ]
-        );
-        $this->assertEmpty($FeedDetail, 'プラグインのテーブルをリセットできません');
+        $plugin = 'BaserCore';
+        $excludes = ['site_configs', 'sites'];
+        SiteConfigFactory::make(['name' => 'test', 'value' => 'test value'])->persist();
+        SiteFactory::make(['name' => 'home page', 'title' => 'welcome'])->persist();
+        PageFactory::make(['contents' => 'this is the contents', 'draft' => 'trash'])->persist();
+        UserFactory::make(['name' => 'Chuong Le', 'email' => 'chuong.le@mediabridge.asia'])->persist();
+        $this->BcDatabaseService->resetTables($plugin, $excludes);
+        $this->assertEquals(1, SiteConfigFactory::count());
+        $this->assertEquals(1, SiteFactory::count());
+        $this->assertEquals(0, PageFactory::count());
+        $this->assertEquals(0, UserFactory::count());
     }
 
     /**
