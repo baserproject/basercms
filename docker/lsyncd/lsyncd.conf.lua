@@ -15,7 +15,7 @@ sync {
         default.rsync,
         source = "/var/www/html",
         target = "/var/www/shared",
-        delay = 1,
+        delay = 0,
         delete="running",
         exclude={"node_modules", ".git", ".idea", ".DS_Store", "docker", "tmp/sessions"}
 }
