@@ -16,7 +16,6 @@ use Cake\Core\App;
 use Cake\Cache\Cache;
 use Cake\Core\Plugin;
 use Cake\Core\Configure;
-use Cake\Core\Plugin as CakePlugin;
 use Cake\Routing\Router;
 use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
@@ -40,6 +39,50 @@ use BaserCore\Service\SiteConfigsServiceInterface;
  */
 class BcUtil
 {
+
+    /**
+     * contentsMaping
+     * @var string[]
+     */
+    public static $contentsMaping = [
+        "image/gif" => "gif",
+        "image/jpeg" => "jpg",
+        "image/pjpeg" => "jpg",
+        "image/x-png" => "png",
+        "image/jpg" => "jpg",
+        "image/png" => "png",
+        /* "application/pdf" => "pdf", */ // TODO windows で ai ファイルをアップロードをした場合、headerがpdfとして出力されるのでコメントアウト
+        "application/pgp-signature" => "sig",
+        "application/futuresplash" => "spl",
+        "application/msword" => "doc",
+        "application/postscript" => "ai",
+        "application/x-bittorrent" => "torrent",
+        "application/x-dvi" => "dvi",
+        "application/x-gzip" => "gz",
+        "application/x-ns-proxy-autoconfig" => "pac",
+        "application/x-shockwave-flash" => "swf",
+        "application/x-tgz" => "tar.gz",
+        "application/x-tar" => "tar",
+        "application/zip" => "zip",
+        "audio/mpeg" => "mp3",
+        "audio/x-mpegurl" => "m3u",
+        "audio/x-ms-wma" => "wma",
+        "audio/x-ms-wax" => "wax",
+        "audio/x-wav" => "wav",
+        "image/x-xbitmap" => "xbm",
+        "image/x-xpixmap" => "xpm",
+        "image/x-xwindowdump" => "xwd",
+        "text/css" => "css",
+        "text/html" => "html",
+        "text/javascript" => "js",
+        "text/plain" => "txt",
+        "text/xml" => "xml",
+        "video/mpeg" => "mpeg",
+        "video/quicktime" => "mov",
+        "video/x-msvideo" => "avi",
+        "video/x-ms-asf" => "asf",
+        "video/x-ms-wmv" => "wmv"
+    ];
 
     /**
      * 認証領域を指定してログインユーザーのデータを取得する
@@ -1040,66 +1083,49 @@ class BcUtil
     }
 
     /**
-     * 拡張子を取得する
-     * @param string    mimeタイプ
-     * @return    string    拡張子
-     * @access    public
+     * コンテンツタイプから拡張子を取得する
+     * @param string mimeタイプ
+     * @return string 拡張子
+     * @checked
+     * @noTodo
      */
     public static function decodeContent($content, $fileName = null)
     {
-
-        $contentsMaping = [
-            "image/gif" => "gif",
-            "image/jpeg" => "jpg",
-            "image/pjpeg" => "jpg",
-            "image/x-png" => "png",
-            "image/jpg" => "jpg",
-            "image/png" => "png",
-            /* "application/pdf" => "pdf", */ // TODO windows で ai ファイルをアップロードをした場合、headerがpdfとして出力されるのでコメントアウト
-            "application/pgp-signature" => "sig",
-            "application/futuresplash" => "spl",
-            "application/msword" => "doc",
-            "application/postscript" => "ai",
-            "application/x-bittorrent" => "torrent",
-            "application/x-dvi" => "dvi",
-            "application/x-gzip" => "gz",
-            "application/x-ns-proxy-autoconfig" => "pac",
-            "application/x-shockwave-flash" => "swf",
-            "application/x-tgz" => "tar.gz",
-            "application/x-tar" => "tar",
-            "application/zip" => "zip",
-            "audio/mpeg" => "mp3",
-            "audio/x-mpegurl" => "m3u",
-            "audio/x-ms-wma" => "wma",
-            "audio/x-ms-wax" => "wax",
-            "audio/x-wav" => "wav",
-            "image/x-xbitmap" => "xbm",
-            "image/x-xpixmap" => "xpm",
-            "image/x-xwindowdump" => "xwd",
-            "text/css" => "css",
-            "text/html" => "html",
-            "text/javascript" => "js",
-            "text/plain" => "txt",
-            "text/xml" => "xml",
-            "video/mpeg" => "mpeg",
-            "video/quicktime" => "mov",
-            "video/x-msvideo" => "avi",
-            "video/x-ms-asf" => "asf",
-            "video/x-ms-wmv" => "wmv"
-        ];
-
-        if (isset($contentsMaping[$content])) {
-            return $contentsMaping[$content];
+        if (isset(self::$contentsMaping[$content])) {
+            return self::$contentsMaping[$content];
         } elseif ($fileName) {
-            $info = pathinfo($fileName);
-            if (!empty($info['extension'])) {
-                return $info['extension'];
-            } else {
-                return false;
-            }
+            return self::getExtension($fileName);
         } else {
             return false;
         }
+    }
+
+    /**
+     * ファイル名よりContent-Type を取得する
+     * @param string $fileName
+     * @return false|string
+     * @checked
+     * @noTodo
+     */
+    public static function getContentType($fileName)
+    {
+        $extension = self::getExtension($fileName);
+        if(!$extension) return false;
+        return array_search($extension, self::$contentsMaping);
+    }
+
+    /**
+     * ファイル名より拡張子を取得する
+     * @param $fileName
+     * @return false|string
+     * @checked
+     * @noTodo
+     */
+    public static function getExtension($fileName)
+    {
+        $info = pathinfo($fileName);
+        if (empty($info['extension'])) return false;
+        return $info['extension'];
     }
 
     /**

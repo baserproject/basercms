@@ -18,7 +18,6 @@ use Cake\Core\Configure;
 use Cake\Filesystem\Folder;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use Composer\Package\Archiver\ZipArchiver;
-use Laminas\Diactoros\UploadedFile;
 use Cake\TestSuite\IntegrationTestTrait;
 
 class ThemesControllerTest extends BcTestCase
@@ -103,7 +102,6 @@ class ThemesControllerTest extends BcTestCase
      */
     public function testAdd(): void
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->get('/baser/api/baser-core/themes/add.json?token=' . $this->accessToken);
         $this->assertResponseCode(405);
 
@@ -116,19 +114,8 @@ class ThemesControllerTest extends BcTestCase
         $zip = new ZipArchiver();
         $testFile = $zipSrcPath . $theme . '.zip';
         $zip->archive($zipSrcPath, $testFile, true);
-        $_FILES = [
-            'file' => [
-                'error' => UPLOAD_ERR_OK,
-                'name' => $theme . '.zip',
-                'size' => 123,
-                'tmp_name' => $testFile,
-                'type' => 'application/zip'
-            ]
-        ];
-        $this->configRequest([
-            'Content-Type' => 'multipart/form-data',
-            'files' => $_FILES
-        ]);
+
+        $this->setUploadFileToRequest('file', $testFile);
         $this->post('/baser/api/baser-core/themes/add.json?token=' . $this->accessToken);
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());

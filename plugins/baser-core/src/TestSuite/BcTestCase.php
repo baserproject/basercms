@@ -17,6 +17,7 @@ use BaserCore\Middleware\BcAdminMiddleware;
 use BaserCore\Middleware\BcRequestFilterMiddleware;
 use BaserCore\Plugin;
 use BaserCore\Utility\BcApiUtil;
+use BaserCore\Utility\BcUtil;
 use BcSearchIndex\ServiceProvider\BcSearchIndexServiceProvider;
 use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
@@ -221,6 +222,7 @@ class BcTestCase extends TestCase
             $this->tearDownFixtureManager();
         }
         BcContainer::clear();
+        $_FILES = [];
         parent::tearDown();
     }
 
@@ -451,6 +453,34 @@ class BcTestCase extends TestCase
         $folder = new Folder();
         $folder->chmod(LOGS, 0777);
         $folder->chmod(TMP, 0777);
+    }
+
+    /**
+     * アップロードするファイルをリクエストに設定する
+     * IntegrationTestTrait を使ったテストで利用する
+     * @param string $name
+     * @param string $path
+     * @param string $fileName
+     * @param int $error
+     * @checked
+     * @noTodo
+     */
+    public function setUploadFileToRequest($name, $path, $fileName = '', $error = UPLOAD_ERR_OK)
+    {
+        if(!$fileName) $fileName = basename($path);
+        $size = filesize($path);
+        $type = BcUtil::getContentType($fileName);
+        $files = [
+            $name => [
+                'error' => $error,
+                'name' => $fileName,
+                'size' => $size,
+                'tmp_name' => $path,
+                'type' => $type
+            ]
+        ];
+        $this->configRequest(['files' => $files]);
+        $_FILES = $files;
     }
 
 }
