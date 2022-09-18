@@ -376,6 +376,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      * @return false|array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function loadCsvToArray($path, $encoding = 'auto')
     {
