@@ -20,6 +20,9 @@ if [ ! -e '/var/www/shared/docker/inited' ]; then
     # .env
     cp /var/www/html/config/.env.example /var/www/html/config/.env
 
+    # bashrc
+    echo "export PATH=$PATH:/var/www/html/bin:/var/www/html/vendor/bin" >> ~/.bashrc
+
     # jwt
     rm /var/www/shared/config/jwt.key # host に存在している場合は、host -> guest へ所有権を同期してしまうため一旦削除
     rm /var/www/html/config/jwt.key
