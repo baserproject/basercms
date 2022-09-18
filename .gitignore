@@ -51,7 +51,7 @@ nbproject/*
 /docker/phpmyadmin
 /docker/volumes
 /docker/docker-compose.yml
-/docker/inited
+/docker_inited
 # plugins
 /plugins/*
 !/plugins/baser-core

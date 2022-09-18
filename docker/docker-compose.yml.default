@@ -23,7 +23,8 @@ services:
     container_name: bc5-php
     image: baserproject/basercms:php8.1
     volumes:
-      - ../:/var/www/shared:delegated
+      - ../:/var/www/html:delegated
+#      - ../:/var/www/shared:delegated
     environment:
       PHP_IDE_CONFIG: "serverName=localhost"
       XDEBUG_MODE: "debug"
@@ -34,7 +35,8 @@ services:
       - "443:443"
     depends_on:
       - bc5-db
-    command: bash -c "/var/www/shared/docker/init.sh && apache2-foreground"
+    command: bash -c "/var/www/html/docker/init.sh && apache2-foreground"
+#    command: bash -c "/var/www/shared/docker/init_lsyncd.sh && /var/www/shared/docker/init.sh && apache2-foreground"
 
   bc5-smtp:
     container_name: bc5-smtp
