@@ -62,6 +62,9 @@ if [ ! -e '/var/www/html/docker_inited' ]; then
         echo "[$(date +"%Y/%m/%d %H:%M:%S")] Migration failed."
 	fi
 
+    # Clear cache
+    /var/www/html/bin/cake cache clear_all
+
 	# Touch installed
     touch /var/www/html/docker_inited
 
