@@ -16,7 +16,10 @@ use Authentication\Authenticator\Result;
 use BaserCore\Middleware\BcAdminMiddleware;
 use BaserCore\Middleware\BcRequestFilterMiddleware;
 use BaserCore\Plugin;
+use BaserCore\Service\BcDatabaseService;
+use BaserCore\Service\BcDatabaseServiceInterface;
 use BaserCore\Utility\BcApiUtil;
+use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
 use BcSearchIndex\ServiceProvider\BcSearchIndexServiceProvider;
 use Cake\Core\Configure;
@@ -55,6 +58,7 @@ class BcTestCase extends TestCase
      * IntegrationTestTrait
      */
     use IntegrationTestTrait;
+    use BcContainerTrait;
 
     /**
      * @var Application
@@ -124,7 +128,7 @@ class BcTestCase extends TestCase
      * テーブルを空にする
      * @param string $tableName
      * @noTodo
-     * @unitTest
+     * @checked
      */
     public static function truncateTable($tableName): void
     {
