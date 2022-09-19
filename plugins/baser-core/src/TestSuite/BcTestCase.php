@@ -129,11 +129,14 @@ class BcTestCase extends TestCase
      * @param string $tableName
      * @noTodo
      * @checked
+     * @unitTest BcDatabaseService::truncate のラッパーメソッドのためスキップ
      */
     public static function truncateTable($tableName): void
     {
-        $db = TableRegistry::getTableLocator()->get('BaserCore.App')->getConnection();
-        $db->execute('TRUNCATE TABLE ' . $tableName);
+        // 静的メソッド setUpBeforeClass でも利用しているため、このメソッドも静的メソッドにしている
+        // BcContainerTrait 経由で取得しようとしたが、タイミングの問題か見つからないとエラーが出るため直接初期化
+        $dbService = new BcDatabaseService();
+        $dbService->truncate($tableName);
     }
 
     /**

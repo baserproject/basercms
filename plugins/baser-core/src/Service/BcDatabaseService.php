@@ -262,10 +262,10 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      */
     public function truncate($table): bool
     {
-        $db = TableRegistry::getTableLocator()
-            ->get('BaserCore.App')
-            ->getConnection();
-        return (bool)$db->execute('TRUNCATE TABLE ' . $table);
+        $table = TableRegistry::getTableLocator()->get(Inflector::camelize($table));
+        $schema = $table->getSchema();
+        $db = $table->getConnection();
+        return (bool)$db->execute($schema->truncateSql($db)[0]);
     }
 
     /**
