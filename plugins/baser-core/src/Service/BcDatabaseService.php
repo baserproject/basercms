@@ -11,17 +11,24 @@
 
 namespace BaserCore\Service;
 
+use BaserCore\Database\Schema\BcSchema;
 use BaserCore\Error\BcException;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
 use Cake\Cache\Cache;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
+use Cake\Database\Schema\TableSchemaInterface;
+use Cake\Datasource\ConnectionManager;
+use Cake\Event\EventManager;
+use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
 use Cake\Log\LogTrait;
 use Cake\ORM\Entity;
+use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
+use Cake\View\View;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -51,8 +58,9 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      * @param $pattern
      * @param $excludes
      * @checked
+     * @noTodo
      */
-    public function loadDefaultDataPattern($theme, $pattern)
+    public function loadDefaultDataPattern($theme, $pattern): bool
     {
         // データを削除する
         $excludes = ['plugins', 'dblogs', 'users'];
@@ -63,7 +71,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
 
         $plugins = array_merge(['BaserCore'], Configure::read('BcApp.corePlugins'), BcUtil::getCurrentThemesPlugins());
         foreach($plugins as $plugin) {
-            if(!$this->_loadDefaultDataPattern($pattern, $theme, $plugin, $excludes)) {
+            if (!$this->_loadDefaultDataPattern($pattern, $theme, $plugin, $excludes)) {
                 $result = false;
                 $this->log(sprintf(__d('baser', '%s %s の初期データのロードに失敗しました。'), $theme . '.' . $pattern, $plugin));
             }
@@ -72,7 +80,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         if (!$result) {
             $this->resetAllTables($excludes);
             // 指定したデータセットでの読み込みに失敗した場合、コアのデータ読み込みを試みる
-            if($theme !== Configure::read('BcApp.defaultFrontTheme')) {
+            if ($theme !== Configure::read('BcApp.defaultFrontTheme')) {
                 $theme = Configure::read('BcApp.defaultFrontTheme');
                 foreach($plugins as $plugin) {
                     if (!$this->_loadDefaultDataPattern($pattern, $theme, $plugin, $excludes)) {
@@ -101,7 +109,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      * @checked
      * @noTodo
      */
-    public function _loadDefaultDataPattern($pattern, $theme, $plugin = 'BaserCore', $excludes = [])
+    protected function _loadDefaultDataPattern($pattern, $theme, $plugin = 'BaserCore', $excludes = [])
     {
         $path = BcUtil::getDefaultDataPath($theme, $pattern);
         if (!$path) return true;
@@ -142,7 +150,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function loadCsv($options)
+    public function loadCsv($options): bool
     {
         $options = array_merge([
             'path' => null,
@@ -168,15 +176,15 @@ class BcDatabaseService implements BcDatabaseServiceInterface
             foreach($records as $record) {
                 foreach($record as $key => $value) {
                     // 主キーでデータが空の場合はスキップ
-                    if($key === $indexField && empty($value)) {
+                    if ($key === $indexField && empty($value)) {
                         unset($record[$indexField]);
                     }
-                    if($key === 'created' && empty($value)) {
+                    if ($key === 'created' && empty($value)) {
                         $record['created'] = date('Y-m-d H:i:s');
-                    } elseif($schema->getColumnType($key) === 'datetime' && empty($value)) {
+                    } elseif ($schema->getColumnType($key) === 'datetime' && empty($value)) {
                         $record[$key] = null;
                     }
-                    if($schema->getColumnType($key) === 'boolean' && empty($value)) {
+                    if ($schema->getColumnType($key) === 'boolean' && empty($value)) {
                         $record[$key] = 0;
                     }
                 }
@@ -206,7 +214,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      * @noTodo
      * @checked
      */
-    public function resetAllTables($excludes = [])
+    public function resetAllTables($excludes = []): bool
     {
         $result = true;
         $this->clearAppTableList();
@@ -229,11 +237,11 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      * @checked
      * @unitTest
      */
-    public function resetTables($plugin = 'BaserCore', $excludes = [])
+    public function resetTables($plugin = 'BaserCore', $excludes = []): bool
     {
         $result = true;
         $tables = $this->getAppTableList($plugin);
-        if(empty($tables)) return true;
+        if (empty($tables)) return true;
         foreach($tables as $table) {
             if (!in_array($table, $excludes)) {
                 if (!$this->truncate($table)) {
@@ -252,12 +260,12 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      * @checked
      * @unitTest
      */
-    public function truncate($table)
+    public function truncate($table): bool
     {
         $db = TableRegistry::getTableLocator()
             ->get('BaserCore.App')
             ->getConnection();
-        return (bool) $db->execute('TRUNCATE TABLE ' . $table);
+        return (bool)$db->execute('TRUNCATE TABLE ' . $table);
     }
 
     /**
@@ -265,8 +273,10 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      *
      * @param string $dbConfigKeyName
      * @param array $dbConfig
+     * @checked
+     * @noTodo
      */
-    public function initSystemData($options = [])
+    public function initSystemData($options = []): bool
     {
         $options = array_merge([
             'excludeUsers' => false,
@@ -322,7 +332,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         $sitesTable = TableRegistry::getTableLocator()->get('BaserCore.Sites');
         $site = $sitesTable->get(1);
         $site->theme = $options['theme'];
-        if(!$sitesTable->save($site)) {
+        if (!$sitesTable->save($site)) {
             $result = false;
         }
 
@@ -337,7 +347,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      * @return bool
      * @checked
      */
-    public function initMessageTables()
+    public function initMessageTables(): bool
     {
         // TODO ucmitz メールプラグイン未実装のため
         return true;
@@ -524,7 +534,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      */
     protected function _convertFieldToCsv($value, $dc = true)
     {
-        if(!$value) return '';
+        if (!$value) return '';
         if ($dc) $value = str_replace('"', '""', $value);
         $value = trim(trim($value), "\'");
         $value = str_replace("\\'", "'", $value);
@@ -587,7 +597,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function getEncoding()
+    public function getEncoding(): string
     {
         return 'utf8';
     }
@@ -604,7 +614,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
     {
         $list = Cache::read('appTableList', '_bc_env_');
         if ($list) {
-            if($plugin) {
+            if ($plugin) {
                 return (isset($list[$plugin]))? $list[$plugin] : [];
             } else {
                 return $list;
@@ -615,14 +625,14 @@ class BcDatabaseService implements BcDatabaseServiceInterface
             ->getConnection()
             ->getSchemaCollection()
             ->listTables();
-        if($plugin) {
+        if ($plugin) {
             $plugins = [$plugin];
         } else {
             $plugins = Plugin::loaded();
         }
         $list = [];
-        foreach($plugins as $plugin) {
-            $pluginPath = BcUtil::getPluginPath($plugin);
+        foreach($plugins as $value) {
+            $pluginPath = BcUtil::getPluginPath($value);
             if (!$pluginPath) continue;
             $path = $pluginPath . 'config' . DS . 'Migrations';
             if (!is_dir($path)) continue;
@@ -633,12 +643,12 @@ class BcDatabaseService implements BcDatabaseServiceInterface
                 if (!preg_match('/Create([a-zA-Z]+)\./', $file, $matches)) continue;
                 $checkName = Inflector::tableize($matches[1]);
                 if (in_array($checkName, $tables)) {
-                    $list[$plugin][] = $checkName;
+                    $list[$value][] = $checkName;
                 }
             }
         }
         Cache::write('appTableList', $list, '_bc_env_');
-        if($plugin) {
+        if ($plugin) {
             return (isset($list[$plugin]))? $list[$plugin] : [];
         } else {
             return $list;
@@ -651,9 +661,176 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function clearAppTableList()
+    public function clearAppTableList(): void
     {
         Cache::write('appTableList', [], '_bc_env_');
+    }
+
+    /**
+     * モデル名を指定してスキーマファイルを生成する
+     *
+     * @param Table テーブルオブジェクト名
+     * @param array $options
+     *  - `path` : スキーマファイルの生成場所
+     * @return string|false スキーマファイルの内容
+     * @unitTest
+     * @noTodo
+     */
+    public function writeSchema($table, $options)
+    {
+        $dir = dirname($options['path']);
+        if (!is_dir($dir)) {
+            $folder = new Folder();
+            $folder->create($dir);
+        }
+        $describe = TableRegistry::getTableLocator()
+            ->get('BaserCore.App')
+            ->getConnection()
+            ->getSchemaCollection()
+            ->describe($table);
+        $schema = $this->_generateSchema($describe);
+        $renderer = new View();
+        $renderer->disableAutoLayout();
+        $renderer->set([
+            'name' => Inflector::camelize($table),
+            'table' => $table,
+            'schema' => $schema
+        ]);
+        $eventManager = EventManager::instance();
+        $beforeRenderListeners = $eventManager->listeners('View.beforeRender');
+        $afterRenderListeners = $eventManager->listeners('View.afterRender');
+        if ($beforeRenderListeners) {
+            foreach($beforeRenderListeners as $beforeRenderListener) {
+                $eventManager->off('View.beforeRender', $beforeRenderListener['callable']);
+            }
+        }
+        if ($afterRenderListeners) {
+            foreach($afterRenderListeners as $afterRenderListener) {
+                $eventManager->off('View.afterRender', $afterRenderListener['callable']);
+            }
+        }
+        $content = "<?php\n\n" . $renderer->render('BaserCore.BcDatabaseService/schema');
+        if ($beforeRenderListeners) {
+            foreach($beforeRenderListeners as $beforeRenderListener) {
+                $eventManager->on('View.beforeRender', $beforeRenderListener['callable']);
+            }
+        }
+        if ($afterRenderListeners) {
+            foreach($afterRenderListeners as $afterRenderListener) {
+                $eventManager->on('View.afterRender', $afterRenderListener['callable']);
+            }
+        }
+        $file = new File($options['path'] . DS . Inflector::camelize($table) . 'Schema.php');
+        $file->write($content);
+        $file->close();
+        return true;
+    }
+
+    /**
+     * テキストのスキーマ情報を生成する
+     * Bake\Command\FixtureCommand::_generateSchema() を移植
+     * @param TableSchemaInterface $table
+     * @return string
+     * @checked
+     * @noTodo
+     * @unitTest 移植のためスキップ
+     */
+    protected function _generateSchema(TableSchemaInterface $table)
+    {
+        $cols = $indexes = $constraints = [];
+        foreach($table->columns() as $field) {
+            $fieldData = $table->getColumn($field);
+            $properties = implode(', ', $this->_values($fieldData));
+            $cols[] = "        '$field' => [$properties],";
+        }
+        foreach($table->indexes() as $index) {
+            $fieldData = $table->getIndex($index);
+            $properties = implode(', ', $this->_values($fieldData));
+            $indexes[] = "            '$index' => [$properties],";
+        }
+        foreach($table->constraints() as $index) {
+            $fieldData = $table->getConstraint($index);
+            $properties = implode(', ', $this->_values($fieldData));
+            $constraints[] = "            '$index' => [$properties],";
+        }
+        $options = $this->_values($table->getOptions());
+
+        $content = implode("\n", $cols) . "\n";
+        if (!empty($indexes)) {
+            $content .= "        '_indexes' => [\n" . implode("\n", $indexes) . "\n        ],\n";
+        }
+        if (!empty($constraints)) {
+            $content .= "        '_constraints' => [\n" . implode("\n", $constraints) . "\n        ],\n";
+        }
+        if (!empty($options)) {
+            foreach($options as &$option) {
+                $option = '            ' . $option;
+            }
+            $content .= "        '_options' => [\n" . implode(",\n", $options) . "\n        ],\n";
+        }
+
+        return "[\n$content    ]";
+    }
+
+    /**
+     * Formats Schema columns from Model Object
+     * Bake\Command\FixtureCommand::_values() を移植
+     * @param array $values options keys(type, null, default, key, length, extra)
+     * @return string[] Formatted values
+     * @checked
+     * @noTodo
+     * @unitTest 移植のためスキップ
+     */
+    protected function _values(array $values): array
+    {
+        $vals = [];
+
+        foreach($values as $key => $val) {
+            if (is_array($val)) {
+                $vals[] = "'{$key}' => [" . implode(', ', $this->_values($val)) . ']';
+            } else {
+                $val = var_export($val, true);
+                if ($val === 'NULL') {
+                    $val = 'null';
+                }
+                if (!is_numeric($key)) {
+                    $vals[] = "'{$key}' => {$val}";
+                } else {
+                    $vals[] = "{$val}";
+                }
+            }
+        }
+
+        return $vals;
+    }
+
+    /**
+     * スキーマを読み込む
+     * @param $options
+     * @return bool
+     * @checked
+     * @noTodo
+     */
+    public function loadSchema($options): bool
+    {
+        $options = array_merge([
+            'type' => 'create',
+            'path' => '',
+            'file' => ''
+        ], $options);
+        $schemaName = basename($options['file'], '.php');
+        require_once $options['path'] . $options['file'];
+        /* @var BcSchema $schema */
+        $schema = new $schemaName();
+        switch($options['type']) {
+            case 'create':
+                $schema->create();
+                break;
+            case 'drop':
+                $schema->drop();
+                break;
+        }
+        return true;
     }
 
 }

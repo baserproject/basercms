@@ -12,9 +12,14 @@
 namespace BaserCore\Service;
 
 use BaserCore\Error\BcException;
+use BaserCore\Model\Table\AppTable;
+use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Utility\BcUtil;
+use BaserCore\Utility\BcZip;
 use BaserCore\Vendor\Simplezip;
 use Cake\Cache\Cache;
 use Cake\Core\Configure;
+use Cake\Core\Plugin;
 use Cake\Filesystem\Folder;
 use Cake\Log\LogTrait;
 use Cake\ORM\Table;
@@ -33,6 +38,7 @@ class UtilitiesService implements UtilitiesServiceInterface
      * Trait
      */
     use LogTrait;
+    use BcContainerTrait;
 
     /**
      * ログのパス
@@ -162,7 +168,7 @@ class UtilitiesService implements UtilitiesServiceInterface
     {
         $query = $table->find()->applyOptions(['withDeleted'])->where([$scope]);
         $max = $query->select([$left => $query->func()->max($left)])->first();
-        return (empty($max->{$left}))? 0 : (int) $max->{$left};
+        return (empty($max->{$left}))? 0 : (int)$max->{$left};
     }
 
     /**
@@ -179,7 +185,7 @@ class UtilitiesService implements UtilitiesServiceInterface
     {
         $query = $table->find()->applyOptions(['withDeleted'])->where([$scope]);
         $min = $query->select([$right => $query->func()->min($right)])->first();
-        return (empty($min->{$right}))? 0 : (int) $min->{$right};
+        return (empty($min->{$right}))? 0 : (int)$min->{$right};
     }
 
     /**
@@ -198,7 +204,7 @@ class UtilitiesService implements UtilitiesServiceInterface
         if ($specialThanks) {
             $json = json_decode($specialThanks);
         } else {
-            if(Configure::read('BcLinks.specialThanks')) {
+            if (Configure::read('BcLinks.specialThanks')) {
                 $json = file_get_contents(Configure::read('BcLinks.specialThanks'), true);
             } else {
                 throw new BcException(__d('baser', 'スペシャルサンクスのデータが読み込めませんでした。'));
@@ -255,17 +261,214 @@ class UtilitiesService implements UtilitiesServiceInterface
         throw new BcException(implode("\n", $messages));
     }
 
-    public function backupDb()
+    /**
+     * DBバックアップを作成する
+     * @param $encoding
+     * @return Simplezip
+     * @checked
+     * @noTodo
+     */
+    public function backupDb($encoding): Simplezip
     {
-
+        set_time_limit(0);
+        $tmpDir = TMP . 'schema' . DS;
+        $this->resetTmpSchemaFolder();
+        BcUtil::clearAllCache();
+        $plugins = Plugin::loaded();
+        if ($plugins) {
+            foreach($plugins as $plugin) {
+                $this->_writeBackup($tmpDir, $plugin, $encoding);
+            }
+        }
+        // ZIP圧縮して出力
+        $Simplezip = new Simplezip();
+        $Simplezip->addFolder($tmpDir);
+        return $Simplezip;
     }
 
-    public function restoreDb()
+    /**
+     * スキーマ用の一時フォルダをリセットする
+     *
+     * @return bool
+     * @checked
+     * @noTodo
+     */
+    public function resetTmpSchemaFolder(): bool
     {
-
+        return BcUtil::emptyFolder(TMP . 'schema' . DS);
     }
 
-    public function writeScheme()
+    /**
+     * バックアップファイルを書きだす
+     *
+     * @param string $path
+     * @param string $plugin
+     * @param $encoding
+     * @return boolean
+     * @checked
+     * @noTodo
+     */
+    protected function _writeBackup($path, $plugin, $encoding)
+    {
+        /* @var BcDatabaseService $dbService */
+        $dbService = $this->getService(BcDatabaseServiceInterface::class);
+
+        /* @var AppTable $appTable */
+        $appTable = TableRegistry::getTableLocator()->get('BaserCore.App');
+
+        /* @var \Cake\Database\Connection $db */
+        $db = $appTable->getConnection();
+
+        $tables = $db->getSchemaCollection()->listTables();
+        $dbService->clearAppTableList();
+        $tableList = $dbService->getAppTableList();
+
+        foreach($tables as $table) {
+            if (!isset($tableList[$plugin]) || !in_array($table, $tableList[$plugin])) continue;
+            if (!$dbService->writeSchema($table, [
+                'path' => $path
+            ])) {
+                return false;
+            }
+            if (!$dbService->writeCsv($table, [
+                'path' => $path . $table . '.csv',
+                'encoding' => $encoding
+            ])) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * バックアップファイルよりレストアを行う
+     * @param array $postData
+     * @return bool
+     * @checked
+     * @noTodo
+     */
+    public function restoreDb(array $postData, array $uploaded): bool
+    {
+        set_time_limit(0);
+
+        if (BcUtil::isOverPostSize()) {
+            throw new BcException(__d(
+                'baser',
+                '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。',
+                ini_get('post_max_size')
+            ));
+        }
+
+        if (empty($_FILES['backup']['tmp_name'])) {
+            if ($uploaded['backup']->getError() === 1) {
+                $message = __d('baser', 'サーバに設定されているサイズ制限を超えています。');
+            } else {
+                $message = __d('baser', 'バックアップファイルが送信されませんでした。');
+            }
+            throw new BcException($message);
+        }
+
+        $tmpPath = TMP . 'schema' . DS;
+        $name = $uploaded['backup']->getClientFileName();
+        $uploaded['backup']->moveTo($tmpPath . $name);
+        $zip = new BcZip();
+        if (!$zip->extract($tmpPath . $name, $tmpPath)) {
+            throw new BcException(__d('baser', 'アップロードしたZIPファイルの展開に失敗しました。'));
+        }
+        unlink($tmpPath . $name);
+
+        $result = true;
+        $db = TableRegistry::getTableLocator()->get('BaserCore.App')->getConnection();
+        $db->begin();
+        try {
+            /* @var \BaserCore\Service\BcDatabaseService $dbService */
+            if ($this->_loadBackup($tmpPath, $postData['encoding'])) {
+                $db->commit();
+            } else {
+                $db->rollback();
+            }
+        } catch (BcException $e) {
+            $db->rollback();
+            throw $e;
+        }
+
+        $this->resetTmpSchemaFolder();
+        BcUtil::clearAllCache();
+        return $result;
+    }
+
+    /**
+     * データベースをレストア
+     *
+     * @param string $path スキーマファイルのパス
+     * @param $encoding
+     * @return boolean
+     * @checked
+     * @noTodo
+     */
+    protected function _loadBackup($path, $encoding)
+    {
+        $folder = new Folder($path);
+        $files = $folder->read(true, true);
+        if (!is_array($files[1])) return false;
+
+        /* @var BcDatabaseService $dbService */
+        $dbService = $this->getService(BcDatabaseServiceInterface::class);
+
+        // テーブルを削除する
+        foreach($files[1] as $file) {
+            if (!preg_match("/\.php$/", $file)) continue;
+            try {
+                $dbService->loadSchema([
+                    'type' => 'drop',
+                    'path' => $path,
+                    'file' => $file
+                ]);
+            } catch (BcException $e) {
+                $this->log($e->getMessage());
+            }
+        }
+
+        // テーブルを読み込む
+        $result = true;
+        foreach($files[1] as $file) {
+            if (!preg_match("/\.php$/", $file)) continue;
+            try {
+                if (!$dbService->loadSchema([
+                    'type' => 'create',
+                    'path' => $path,
+                    'file' => $file
+                ])) {
+                    $result = false;
+                    continue;
+                }
+            } catch (BcException $e) {
+                $result = false;
+                $this->log($e->getMessage());
+            }
+        }
+
+        /* CSVファイルを読み込む */
+        foreach($files[1] as $file) {
+            if (!preg_match("/\.csv$/", $file)) continue;
+            try {
+                if (!$dbService->loadCsv([
+                    'path' => $path . $file,
+                    'encoding' => $encoding
+                ])) {
+                    $result = false;
+                    continue;
+                }
+            } catch (BcException $e) {
+                $result = false;
+                $this->log($e->getMessage());
+            }
+        }
+
+        return $result;
+    }
+
+    public function writeSchema()
     {
 
     }

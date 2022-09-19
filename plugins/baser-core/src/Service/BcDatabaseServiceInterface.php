@@ -11,6 +11,7 @@
 
 namespace BaserCore\Service;
 
+use Cake\ORM\Table;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -25,8 +26,12 @@ interface BcDatabaseServiceInterface
      * 初期データを読み込む
      * @param $theme
      * @param $pattern
+     * @param $excludes
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function loadDefaultDataPattern($theme, $pattern);
+    public function loadDefaultDataPattern($theme, $pattern): bool;
 
     /**
      * CSVファイルをDBに読み込む
@@ -35,11 +40,11 @@ interface BcDatabaseServiceInterface
      *  - `path`: 読み込み元のCSVのパス
      *  - `encoding: CSVファイルのエンコード
      * @return boolean
-     * @noTodo
      * @checked
+     * @noTodo
      * @unitTest
      */
-    public function loadCsv($options);
+    public function loadCsv($options): bool;
 
     /**
      * プラグインも含めて全てのテーブルをリセットする
@@ -53,7 +58,7 @@ interface BcDatabaseServiceInterface
      * @checked
      * @unitTest
      */
-    public function resetAllTables($excludes = []);
+    public function resetAllTables($excludes = []): bool;
 
     /**
      * 複数のテーブルをリセットする
@@ -65,27 +70,27 @@ interface BcDatabaseServiceInterface
      * @checked
      * @unitTest
      */
-    public function resetTables($plugin = 'BaserCore', $excludes = []);
+    public function resetTables($plugin = 'BaserCore', $excludes = []): bool;
 
     /**
      * テーブルのデータをリセットする
      * @param $table
+     * @return bool
      * @noTodo
      * @checked
      * @unitTest
      */
-    public function truncate($table);
+    public function truncate($table): bool;
 
     /**
      * システムデータを初期化する
      *
-     * @param string $dbConfigKeyName
-     * @param array $dbConfig
+     * @param array $options
      * @noTodo
      * @checked
      * @unitTest
      */
-    public function initSystemData($options = []);
+    public function initSystemData($options = []): bool;
 
     /**
      * メールメッセージテーブルを初期化する
@@ -94,7 +99,7 @@ interface BcDatabaseServiceInterface
      * @checked
      * @unitTest
      */
-    public function initMessageTables();
+    public function initMessageTables(): bool;
 
     /**
      * データベースシーケンスをアップデートする
@@ -109,11 +114,11 @@ interface BcDatabaseServiceInterface
      *
      * @param string $path
      * @return false|array
-     * @noTodo
      * @checked
+     * @noTodo
      * @unitTest
      */
-    public function loadCsvToArray($path, $encoding = null);
+    public function loadCsvToArray($path, $encoding = 'auto');
 
     /**
      * DBのデータをCSVファイルとして書きだす
@@ -134,11 +139,11 @@ interface BcDatabaseServiceInterface
      * Gets the database encoding
      *
      * @return string The database encoding
-     * @noTodo
      * @checked
+     * @noTodo
      * @unitTest
      */
-    public function getEncoding();
+    public function getEncoding(): string;
 
     /**
      * アプリケーションに関連するテーブルリストを取得する
@@ -148,6 +153,37 @@ interface BcDatabaseServiceInterface
      * @noTodo
      * @unitTest
      */
-    function getAppTableList($plugin = ''): array;
+    public function getAppTableList($plugin = ''): array;
+
+    /**
+     * アプリケーションに関連するテーブルリストのキャッシュをクリアする
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function clearAppTableList(): void;
+
+    /**
+     * モデル名を指定してスキーマファイルを生成する
+     *
+     * @param Table テーブルオブジェクト名
+     * @param array $options
+     *  - `path` : スキーマファイルの生成場所
+     * @return string|false スキーマファイルの内容
+     * @unitTest
+     * @noTodo
+     * @unitTest
+     */
+    public function writeSchema($table, $options);
+
+    /**
+     * スキーマを読み込む
+     * @param $options
+     * @return bool
+     * @unitTest
+     * @noTodo
+     * @unitTest
+     */
+    public function loadSchema($options): bool;
 
 }

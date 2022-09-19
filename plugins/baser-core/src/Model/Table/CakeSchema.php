@@ -347,64 +347,6 @@ class CakeSchema extends CakeObject
     }
 
     /**
-     * Writes schema file from object or options.
-     *
-     * @param array|object $object Schema object or options array.
-     * @param array $options Schema object properties to override object.
-     * @return mixed False or string written to file.
-     */
-    public function write($object, $options = [])
-    {
-        if (is_object($object)) {
-            $object = get_object_vars($object);
-            $this->build($object);
-        }
-
-        if (is_array($object)) {
-            $options = $object;
-            unset($object);
-        }
-
-        $options = array_merge(
-            get_object_vars($this), $options
-        );
-
-        $out = "class {$options['name']}Schema extends CakeSchema {\n\n";
-
-        if ($options['path'] !== $this->path) {
-            $out .= "\tpublic \$path = '{$options['path']}';\n\n";
-        }
-
-        if ($options['file'] !== $this->file) {
-            $out .= "\tpublic \$file = '{$options['file']}';\n\n";
-        }
-
-        if ($options['connection'] !== 'default') {
-            $out .= "\tpublic \$connection = '{$options['connection']}';\n\n";
-        }
-
-        $out .= "\tpublic function before(\$event = array()) {\n\t\treturn true;\n\t}\n\n\tpublic function after(\$event = array()) {\n\t}\n\n";
-
-        if (empty($options['tables'])) {
-            $this->read();
-        }
-
-        foreach($options['tables'] as $table => $fields) {
-            if (!is_numeric($table) && $table !== 'missing') {
-                $out .= $this->generateTable($table, $fields);
-            }
-        }
-        $out .= "}\n";
-
-        $file = new File($options['path'] . DS . $options['file'], true);
-        $content = "<?php \n{$out}";
-        if ($file->write($content)) {
-            return $content;
-        }
-        return false;
-    }
-
-    /**
      * Generate the schema code for a table.
      *
      * Takes a table name and $fields array and returns a completed,

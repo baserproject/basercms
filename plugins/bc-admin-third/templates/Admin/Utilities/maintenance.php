@@ -1,40 +1,37 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.View
- * @since           baserCMS v 0.1.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) NPO baser foundation
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       https://basercms.net/license/index.html MIT License
  */
 
 /**
  * [ADMIN] データメンテナンス
+ * @var \BaserCore\View\BcAdminAppView $this
+ * @noTodo
+ * @checked
+ * @unitTest
  */
+$this->BcAdmin->setTitle(__d('baser', 'データメンテナンス'));
+$this->BcAdmin->setHelp('tools_maintenance');
 ?>
-
-
-<script>
-  $(function () {
-    $("#BtnUpload").click(function () {
-      $.bcUtil.showLoader();
-    });
-  });
-</script>
 
 
 <div class="section bca-main__section">
   <h2 class="bca-main__heading" data-bca-heading-size="lg"><?php echo __d('baser', 'データのバックアップ') ?></h2>
   <p class="bca-main__text"><?php echo __d('baser', 'データベースのデータをバックアップファイルとしてPCにダウンロードします。') ?></p>
-  <?php echo $this->BcAdminForm->create('Tool', ['type' => 'get', 'url' => ['action' => 'maintenance', 'backup'], 'target' => '_blank']) ?>
+  <?php echo $this->BcAdminForm->create(null, ['type' => 'get', 'url' => ['action' => 'maintenance', 'backup'], 'target' => '_blank']) ?>
   <p class="bca-main__text">
-    <?php echo $this->BcAdminForm->control('Tool.backup_encoding', ['type' => 'radio', 'options' => ['UTF-8' => 'UTF-8', 'SJIS-win' => 'SJIS'], 'value' => 'UTF-8']) ?>
-    <?php echo $this->BcForm->error('Tool.backup_encoding') ?>
+    <?php echo $this->BcAdminForm->control('backup_encoding', ['type' => 'radio', 'options' => ['UTF-8' => 'UTF-8', 'SJIS-win' => 'SJIS'], 'value' => 'UTF-8']) ?>
+    <?php echo $this->BcAdminForm->error('backup_encoding') ?>
   </p>
-  <p
-    class="bca-main__text"><?php echo $this->BcForm->submit(__d('baser', 'ダウンロード'), ['div' => false, 'class' => 'bca-btn', 'id' => 'BtnDownload']) ?></p>
+  <p class="bca-main__text">
+    <?php echo $this->BcAdminForm->submit(__d('baser', 'ダウンロード'), ['div' => false, 'class' => 'bca-btn', 'id' => 'BtnDownload']) ?>
+  </p>
   <?php echo $this->BcAdminForm->end() ?>
 </div>
 
@@ -42,14 +39,16 @@
   <h2 class="bca-main__heading" data-bca-heading-size="lg"><?php echo __d('baser', 'データの復元') ?></h2>
   <p class="bca-main__text"><?php echo __d('baser', 'バックアップファイルをアップロードし、データベースのデータを復元します。') ?><br/>
     <small><?php echo __d('baser', 'ダウンロードしたバックアップファイルをZIPファイルのままアップロードします。') ?></small></p>
-  <?php echo $this->BcAdminForm->create('Tool', ['url' => ['action' => 'maintenance', 'restore'], 'type' => 'file']) ?>
-  <p
-    class="bca-main__text"><?php echo $this->BcAdminForm->control('Tool.encoding', ['type' => 'radio', 'options' => ['auto' => __d('baser', '自動判別'), 'UTF-8' => 'UTF-8', 'SJIS-win' => 'SJIS'], 'value' => 'auto']) ?>
-    <?php echo $this->BcForm->error('Tool.encoding') ?></p>
-  <p class="bca-main__text"><?php echo $this->BcAdminForm->control('Tool.backup', ['type' => 'file']) ?>
-    <?php echo $this->BcForm->error('Tool.backup') ?></p>
-  <p
-    class="bca-main__text"><?php echo $this->BcForm->submit(__d('baser', 'アップロード'), ['div' => false, 'class' => 'bca-btn', 'id' => 'BtnUpload']) ?></p>
+  <?php echo $this->BcAdminForm->create(null, ['url' => ['action' => 'maintenance', 'restore'], 'type' => 'file']) ?>
+  <p class="bca-main__text">
+    <?php echo $this->BcAdminForm->control('encoding', ['type' => 'radio', 'options' => ['auto' => __d('baser', '自動判別'), 'UTF-8' => 'UTF-8', 'SJIS-win' => 'SJIS'], 'value' => 'auto']) ?>
+    <?php echo $this->BcAdminForm->error('encoding') ?>
+  </p>
+  <p class="bca-main__text"><?php echo $this->BcAdminForm->control('backup', ['type' => 'file']) ?>
+    <?php echo $this->BcAdminForm->error('backup') ?></p>
+  <p class="bca-main__text">
+    <?php echo $this->BcAdminForm->submit(__d('baser', 'アップロード'), ['div' => false, 'class' => 'bca-loading bca-btn', 'id' => 'BtnUpload']) ?>
+  </p>
   <?php echo $this->BcAdminForm->end() ?>
 </div>
 

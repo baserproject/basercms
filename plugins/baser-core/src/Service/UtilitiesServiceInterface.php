@@ -32,6 +32,14 @@ interface UtilitiesServiceInterface
     public function verityContentsTree(): bool;
 
     /**
+     * コンテンツツリーをリセットし全て同階層にする
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function resetContentsTree();
+
+    /**
      * クレジットを取得する
      * @return mixed|null
      * @checked
@@ -57,5 +65,39 @@ interface UtilitiesServiceInterface
      * @unitTest
      */
     public function deleteLog();
+
+    /**
+     * DBバックアップを作成する
+     * @param $encoding
+     * @return Simplezip
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function backupDb($encoding): Simplezip;
+
+    /**
+     * スキーマ用の一時フォルダをリセットする
+     *
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function resetTmpSchemaFolder(): bool;
+
+    /**
+     * バックアップファイルよりレストアを行う
+     * @param array $postData
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function restoreDb(array $postData, array $uploaded): bool;
+
+    public function writeSchema();
+
+    public function loadScheme();
 
 }

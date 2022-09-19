@@ -243,7 +243,10 @@ return [
 //                            'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'theme_files', 'action' => 'index', 'core'],
 //                            'currentRegex' => '/\/theme_files\/[^\/]+?/s'
 //                        ],
-//                        'UtilitiesMaintenance' => ['title' => __d('baser', 'データメンテナンス'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'utilities', 'action' => 'maintenance']],
+                        'UtilitiesMaintenance' => [
+                            'title' => __d('baser', 'データメンテナンス'),
+                            'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'utilities', 'action' => 'maintenance']
+                        ],
                         'UtilitiesLog' => [
                             'title' => __d('baser', 'ログメンテナンス'),
                             'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'utilities', 'action' => 'log_maintenance']
