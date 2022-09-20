@@ -16,6 +16,8 @@ use Cake\Core\App;
 use Cake\Cache\Cache;
 use Cake\Core\Plugin;
 use Cake\Core\Configure;
+use Cake\Event\EventListenerInterface;
+use Cake\Event\EventManagerInterface;
 use Cake\Routing\Router;
 use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
@@ -1353,6 +1355,42 @@ class BcUtil
             $_csv_data[$_csv_i] = str_replace($e . $e, $e, $_csv_data[$_csv_i]);
         }
         return empty($_line)? false : $_csv_data;
+    }
+
+    /**
+     * オベントをオフにする
+     * @param EventManagerInterface $eventManager
+     * @param string $eventKey
+     * @return array
+     * @checked
+     * @noTodo
+     */
+    public static function offEvent(EventManagerInterface $eventManager, string $eventKey)
+    {
+        $eventListeners = $eventManager->listeners($eventKey);
+        if ($eventListeners) {
+            foreach($eventListeners as $eventListener) {
+                $eventManager->off($eventKey, $eventListener['callable']);
+            }
+        }
+        return $eventListeners;
+    }
+
+    /**
+     * イベントをオンにする
+     * @param EventManagerInterface $eventManager
+     * @param string $eventKey
+     * @param EventListenerInterface[] $eventListeners
+     * @checked
+     * @noTodo
+     */
+    public static function onEvent(EventManagerInterface $eventManager, string $eventKey, array $eventListeners)
+    {
+        if ($eventListeners) {
+            foreach($eventListeners as $eventListener) {
+                $eventManager->on($eventKey, $eventListener['callable']);
+            }
+        }
     }
 
 }
