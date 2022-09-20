@@ -18,7 +18,6 @@ use ReflectionClass;
 
 /**
  * Class BcContainerTraitTest
- * @package BaserCore\Test\TestCase\Utility
  */
 class BcContainerTest extends BcTestCase
 {

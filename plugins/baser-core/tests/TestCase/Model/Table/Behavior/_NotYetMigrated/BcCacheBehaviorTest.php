@@ -7,7 +7,6 @@ return;
  *
  * @copyright       Copyright (c) baserCMS Users Community
  * @link            https://basercms.net baserCMS Project
- * @package         Baser.Test.Case.Model.Behavior
  * @since           baserCMS v 3.0.6
  * @license         https://basercms.net/license/index.html
  */
@@ -15,7 +14,6 @@ return;
 /**
  * Class BcCacheBehaviorTest
  *
- * @package Baser.Test.Case.Model
  */
 class BcCacheBehaviorTest extends BaserTestCase
 {

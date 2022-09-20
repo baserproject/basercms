@@ -25,7 +25,6 @@ use BaserCore\Service\ContentsServiceInterface;
 
 /**
  * Class ContentsController
- * @package BaserCore\Controller\Api
  */
 class ContentsController extends BcApiController
 {

@@ -19,7 +19,6 @@ use BaserCore\Annotation\Note;
 
 /**
  * Class DblogsController
- * @package BaserCore\Controller\Api
  */
 class DblogsController extends BcApiController
 {

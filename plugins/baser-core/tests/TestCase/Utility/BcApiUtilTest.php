@@ -16,7 +16,6 @@ use BaserCore\Utility\BcApiUtil;
 
 /**
  * Class BcContainerTraitTest
- * @package BaserCore\Test\TestCase\Utility
  */
 class BcApiUtilTest extends BcTestCase
 {

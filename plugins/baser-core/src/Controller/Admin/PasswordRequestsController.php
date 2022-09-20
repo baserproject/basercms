@@ -20,7 +20,6 @@ use BaserCore\Annotation\Checked;
 
 /**
  * Class PasswordRequestsController
- * @package BaserCore\Controller\Admin
  * @property AuthenticationComponent $Authentication
  * @property BcMessageComponent $BcMessage
  */

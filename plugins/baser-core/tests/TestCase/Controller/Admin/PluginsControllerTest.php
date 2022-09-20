@@ -24,7 +24,6 @@ use Cake\Event\Event;
 
 /**
  * Class PluginsControllerTest
- * @package BaserCore\Test\TestCase\Controller
  */
 class PluginsControllerTest extends BcTestCase
 {

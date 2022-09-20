@@ -20,7 +20,6 @@ use BaserCore\Annotation\Note;
 
 /**
  * Class BcFormTableHelper
- * @package BaserCore\View\Helper
  * @uses BcFormTableHelper
  */
 class BcFormTableHelper extends Helper

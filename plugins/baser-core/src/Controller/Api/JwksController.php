@@ -16,7 +16,6 @@ use Firebase\JWT\JWT;
 
 /**
  * Class JwksController
- * @package BaserCore\Controller\Api
  */
 class JwksController extends BcApiController
 {

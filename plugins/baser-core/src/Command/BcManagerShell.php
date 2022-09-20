@@ -18,7 +18,6 @@ use Cake\Console\ConsoleOptionParser;
 /**
  * インストール用シェルスクリプト
  *
- * @package Baser.Console.Command
  * @property BcManagerComponent $BcManager
  */
 class BcManagerShell extends Command

@@ -17,7 +17,6 @@ use Cake\Database\Driver\Postgres;
  *
  * PostgreSQL DBO拡張
  *
- * @package Baser.Model.Datasource.Database
  */
 class BcPostgres extends Postgres
 {

@@ -7,7 +7,6 @@ return;
  *
  * @copyright       Copyright (c) baserCMS Users Community
  * @link            https://basercms.net baserCMS Project
- * @package         Baser.Test.Case.Model
  * @since           baserCMS v 3.0.0-beta
  * @license         https://basercms.net/license/index.html
  */
@@ -22,7 +21,6 @@ App::uses('Theme', 'Model');
  *  public $hasMany = array();
  * }
  *
- * @package Baser.Test.Case.Model
  */
 class ThemeTest extends BaserTestCase
 {

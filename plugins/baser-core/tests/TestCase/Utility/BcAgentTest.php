@@ -24,7 +24,6 @@ use BaserCore\Utility\BcAgent;
 /**
  * Class BcAgentTest
  *
- * @package Baser.Test.Case.Lib
  */
 class BcAgentTest extends BcTestCase
 {

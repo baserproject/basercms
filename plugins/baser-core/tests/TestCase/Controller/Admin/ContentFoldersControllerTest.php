@@ -21,7 +21,6 @@ use BaserCore\Controller\Admin\ContentFoldersController;
 /**
  * Class ContentFoldersControllerTest
  *
- * @package Baser.Test.Case.Controller
  * @property  ContentFoldersController $ContentFoldersController
  * @property ContentFoldersTable $ContentFolders
  * @property ContentsTable $Contents

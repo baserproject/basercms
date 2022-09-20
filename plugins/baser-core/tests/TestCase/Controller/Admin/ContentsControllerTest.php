@@ -27,7 +27,6 @@ use BaserCore\Controller\Admin\ContentsController;
 /**
  * Class ContentsControllerTest
  *
- * @package Baser.Test.Case.Controller
  * @property  ContentsController $ContentsController
  * @property ServerRequest $request
  * @property ContentsService $ContentsService

@@ -19,7 +19,6 @@ use BaserCore\Controller\Admin\PagesController;
 /**
  * Class PagesControllerTest
  *
- * @package Baser.Test.Case.Controller
  * @property  PagesController $PagesController
  */
 class PagesControllerTest extends BcTestCase

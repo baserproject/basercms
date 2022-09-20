@@ -16,7 +16,6 @@ use BaserCore\TestSuite\BcTestCase;
 
 /**
  * Class SiteConfigValidationTest
- * @package BaserCore\Test\TestCase\Model\Validation
  */
 class SiteConfigValidationTest extends BcTestCase
 {

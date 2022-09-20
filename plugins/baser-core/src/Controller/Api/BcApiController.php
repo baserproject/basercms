@@ -23,7 +23,6 @@ use Cake\Event\EventInterface;
 
 /**
  * Class BcApiController
- * @package BaserCore\Controller\Api
  * @property AuthenticationComponent $Authentication
  */
 class BcApiController extends AppController

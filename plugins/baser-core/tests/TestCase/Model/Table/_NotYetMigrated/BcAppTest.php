@@ -7,7 +7,6 @@ return;
  *
  * @copyright       Copyright (c) baserCMS Users Community
  * @link            https://basercms.net baserCMS Project
- * @package         Baser.Test.Case.Model
  * @since           baserCMS v 3.0.0-beta
  * @license         https://basercms.net/license/index.html
  */
@@ -17,7 +16,6 @@ App::uses('Content', 'Model');
 /**
  * Class BcAppTest
  *
- * @package Baser.Test.Case.Model
  * @property BcAppModel $BcApp
  * @property Page $Page
  * @property SiteConfig $SiteConfig

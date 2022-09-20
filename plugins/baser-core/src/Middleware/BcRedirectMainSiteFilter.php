@@ -25,7 +25,6 @@ use Psr\Http\Server\RequestHandlerInterface;
  * （例）
  * /s/service → /service
  *
- * @package Baser.Routing.Filter
  */
 class BcRedirectMainSiteFilter implements MiddlewareInterface
 {

@@ -18,7 +18,6 @@ use BaserCore\TestSuite\BcTestCase;
  * Class ContentsFixtureTest
  * コンテンツ関連のFixtureの整合性テスト
  *
- * @package Baser.Test.Case.Model
  * @property ContentsTable $Contents
  */
 class ContentsFixtureTest extends BcTestCase

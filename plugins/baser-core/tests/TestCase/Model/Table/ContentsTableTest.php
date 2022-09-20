@@ -23,7 +23,6 @@ use BaserCore\Model\Table\ContentsTable;
 /**
  * Class ContentTest
  *
- * @package Baser.Test.Case.Model
  * @property ContentsTable $Contents
  */
 class ContentsTableTest extends BcTestCase

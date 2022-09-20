@@ -21,7 +21,6 @@ use BaserCore\View\Helper\BcAdminHelper;
 
 /**
  * Class BcAdminHelperTest
- * @package BaserCore\Test\TestCase\View\Helper
  * @property BcAdminHelper $BcAdmin
  */
 class BcAdminHelperTest extends BcTestCase

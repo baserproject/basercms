@@ -16,7 +16,6 @@ use BaserCore\TestSuite\BcTestCase;
 
 /**
  * Class PageValidationTest
- * @package BaserCore\Test\TestCase\Model\Validation
  * @property PageValidation $PageValidation
  */
 class PageValidationTest extends BcTestCase

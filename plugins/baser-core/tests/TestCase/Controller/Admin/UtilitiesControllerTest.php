@@ -17,7 +17,6 @@ use BaserCore\Controller\Admin\UtilitiesController;
 
 /**
  * class UtilitiesControllerTest
- * @package Cake\TestSuite\BcTestCase;
  * @package BaserCore\Controller\Admin\UtilitiesController;
  */
 class UtilitiesControllerTest extends BcTestCase

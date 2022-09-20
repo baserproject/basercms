@@ -19,7 +19,6 @@ use BaserCore\Utility\BcContainerTrait;
 
 /**
  * Class BcContainerTraitTest
- * @package BaserCore\Test\TestCase\Utility
  */
 class BcContainerTraitTest extends BcTestCase
 {

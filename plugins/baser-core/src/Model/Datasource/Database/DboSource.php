@@ -16,7 +16,6 @@ return;
  *
  * Creates DBO-descendant objects from a given db connection configuration
  *
- * @package       Cake.Model.Datasource
  */
 class DboSource extends DataSource
 {

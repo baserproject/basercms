@@ -20,7 +20,6 @@ use ReflectionClass;
 
 /**
  * Class SitesTableTest
- * @package BaserCore\Test\TestCase\Model\Table
  * @property SitesTable $Sites
  */
 class SitesTableTest extends BcTestCase

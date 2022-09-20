@@ -23,7 +23,6 @@ use Cake\Utility\Inflector;
  *
  * https://localhost/baser/api/baser-core/plugins/action_name.json で呼び出す
  *
- * @package BaserCore\Controller\Api
  */
 class PluginsController extends BcApiController
 {

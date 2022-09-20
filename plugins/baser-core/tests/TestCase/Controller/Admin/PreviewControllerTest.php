@@ -18,7 +18,6 @@ use BaserCore\Controller\Admin\PreviewController;
 /**
  * Class PreviewControllerTest
  *
- * @package Baser.Test.Case.Controller
  * @property  PreviewController $PreviewController
  */
 class PreviewControllerTest extends BcTestCase

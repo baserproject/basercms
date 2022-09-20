@@ -22,7 +22,6 @@ use BaserCore\Service\SiteConfigsServiceInterface;
 
 /**
  * Class SitesController
- * @package BaserCore\Controller\Admin
  */
 class SitesController extends BcAdminAppController
 {

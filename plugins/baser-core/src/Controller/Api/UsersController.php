@@ -25,7 +25,6 @@ use Cake\Routing\Router;
  *
  * https://localhost/baser/api/baser-core/users/action_name.json で呼び出す
  *
- * @package BaserCore\Controller\Api
  * @property AuthenticationComponent $Authentication
  */
 class UsersController extends BcApiController

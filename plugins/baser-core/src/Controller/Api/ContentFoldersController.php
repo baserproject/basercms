@@ -23,7 +23,6 @@ use BaserCore\Annotation\Note;
  *
  * https://localhost/baser/api/baser-core/user_groups/action_name.json で呼び出す
  *
- * @package BaserCore\Controller\Api
  */
 class ContentFoldersController extends BcApiController
 {

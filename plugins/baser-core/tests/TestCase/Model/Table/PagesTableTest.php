@@ -22,7 +22,6 @@ use BaserCore\TestSuite\BcTestCase;
 /**
  * Class PagesTable Test
  *
- * @package Baser.Test.Case.Model
  * @property Page $Page
  */
 class PagesTableTest extends BcTestCase

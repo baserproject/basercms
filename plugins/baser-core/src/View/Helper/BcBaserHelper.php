@@ -32,7 +32,6 @@ use BaserCore\Annotation\Doc;
 
 /**
  * Class BcBaserHelper
- * @package BaserCore\View\Helper
  * @property BcHtmlHelper $BcHtml
  * @property UrlHelper $Url
  * @property FlashHelper $Flash

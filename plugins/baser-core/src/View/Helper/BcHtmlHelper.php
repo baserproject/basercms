@@ -20,7 +20,6 @@ use BaserCore\Annotation\Checked;
 /**
  * Htmlヘルパーの拡張クラス
  *
- * @package Baser.View.Helper
  */
 class BcHtmlHelper extends HtmlHelper
 {

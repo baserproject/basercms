@@ -24,7 +24,6 @@ use BaserCore\Annotation\Checked;
  *
  * https://localhost/baser/api/baser-core/user_groups/action_name.json で呼び出す
  *
- * @package BaserCore\Controller\Api
  * @property UserGroupsTable $UserGroups
  */
 class UserGroupsController extends BcApiController

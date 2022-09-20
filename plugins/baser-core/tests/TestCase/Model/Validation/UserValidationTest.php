@@ -16,7 +16,6 @@ use BaserCore\TestSuite\BcTestCase;
 
 /**
  * Class UserValidationTest
- * @package BaserCore\Test\TestCase\Model\Validation
  * @property UserValidation $UserValidation
  */
 class UserValidationTest extends BcTestCase

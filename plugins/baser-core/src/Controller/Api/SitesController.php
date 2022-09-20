@@ -19,7 +19,6 @@ use BaserCore\Annotation\Checked;
 
 /**
  * Class SitesController
- * @package BaserCore\Controller\Api
  */
 class SitesController extends BcApiController
 {

@@ -18,7 +18,6 @@ use Cake\Core\Configure;
 
 /**
  * Class BcAuthHelperTest
- * @package BaserCore\Test\TestCase\View\Helper
  * @property BcAuthHelper $BcAuth
  */
 class BcAuthHelperTest extends BcTestCase

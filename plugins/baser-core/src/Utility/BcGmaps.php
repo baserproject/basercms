@@ -14,7 +14,6 @@ namespace BaserCore\Utility;
 /**
  * Class BcGmaps
  *
- * @package Baser.Lib
  */
 class BcGmaps
 {

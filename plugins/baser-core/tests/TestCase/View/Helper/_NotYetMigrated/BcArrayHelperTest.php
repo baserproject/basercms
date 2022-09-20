@@ -7,7 +7,6 @@ return;
  *
  * @copyright       Copyright (c) baserCMS Users Community
  * @link            https://basercms.net baserCMS Project
- * @package         Baser.Test.Case.View.Helper
  * @since           baserCMS v 3.0.0
  * @license         https://basercms.net/license/index.html
  */
@@ -21,7 +20,6 @@ App::uses('AppHelper', 'View/Helper');
  *
  * 管理画面用のヘルパー
  *
- * @package       Baser.Test.Case.View.Helper
  * @property      BcAdminHelper $Helper
  */
 class BcArrayHelperTest extends BcTestCase

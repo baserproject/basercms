@@ -17,7 +17,6 @@ use Cake\Database\Driver\Mysql;
  *
  * MySQL DBO拡張
  *
- * @package Baser.Model.Datasource.Database
  */
 class BcMysql extends Mysql
 {
