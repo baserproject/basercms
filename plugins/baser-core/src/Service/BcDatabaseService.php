@@ -625,11 +625,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
             ->getConnection()
             ->getSchemaCollection()
             ->listTables();
-        if ($plugin) {
-            $plugins = [$plugin];
-        } else {
-            $plugins = Plugin::loaded();
-        }
+        $plugins = Plugin::loaded();
         $list = [];
         foreach($plugins as $value) {
             $pluginPath = BcUtil::getPluginPath($value);
