@@ -251,4 +251,24 @@ class BcDatabaseServiceTest extends BcTestCase
         $this->assertEquals(0, count(Cache::read('appTableList', '_bc_env_')));
     }
 
+    /**
+     * test _dbEncToPhp
+     * @param $value
+     * @param $expected
+     * @dataProvider dbEncToPhpDataProvider
+     */
+    public function test_dbEncToPhp($value, $expected)
+    {
+        $rs = $this->execPrivateMethod($this->BcDatabaseService, '_dbEncToPhp', [$value]);
+        $this->assertEquals($expected, $rs);
+    }
+
+    public function dbEncToPhpDataProvider()
+    {
+        return [
+            ['utf8', 'UTF-8'],
+            ['sjis', 'SJIS'],
+            ['ujis', 'EUC-JP'],
+        ];
+    }
 }
