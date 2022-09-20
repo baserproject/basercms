@@ -12,11 +12,14 @@ namespace BaserCore\Test\TestCase\Service;
 
 use BaserCore\Service\BcDatabaseService;
 use BaserCore\Service\BcDatabaseServiceInterface;
-use BaserCore\Test\Factory\ContentFactory;
+use BaserCore\Test\Factory\ContentFolderFactory;
 use BaserCore\Test\Factory\PageFactory;
+use BaserCore\Test\Factory\ContentFactory;
+use BaserCore\Test\Factory\SearchIndexesFactory;
 use BaserCore\Test\Factory\SiteConfigFactory;
 use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\Test\Factory\UserFactory;
+use BaserCore\Test\Factory\UserGroupFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Cache\Cache;
@@ -49,6 +52,7 @@ class BcDatabaseServiceTest extends BcTestCase
         'plugin.BaserCore.Factory/ContentFolders',
         'plugin.BaserCore.Factory/Pages',
         'plugin.BaserCore.Factory/SiteConfigs',
+        'plugin.BaserCore.Factory/SearchIndexes',
     ];
 
     /**
@@ -197,6 +201,30 @@ class BcDatabaseServiceTest extends BcTestCase
 
         $file = new File($path);
         $file->delete();
+    }
+
+    /**
+     * test resetAllTables
+     */
+    public function test_resetAllTables()
+    {
+        $excludes = ['site_configs', 'sites'];
+        SiteConfigFactory::make(['name' => 'test', 'value' => 'test value'])->persist();
+        SiteFactory::make(['name' => 'home page', 'title' => 'welcome'])->persist();
+        PageFactory::make(['contents' => 'this is the contents', 'draft' => 'trash'])->persist();
+        UserFactory::make(['name' => 'Chuong Le', 'email' => 'chuong.le@mediabridge.asia'])->persist();
+        UserGroupFactory::make(['name' => 'test group', 'title' => 'test title'])->persist();
+        ContentFolderFactory::make(['folder_template' => 'temp1', 'page_template' => 'temp2'])->persist();
+        SearchIndexesFactory::make(['type' => 'test type', 'model' => 'test model'])->persist();
+
+        $this->BcDatabaseService->resetAllTables($excludes);
+        $this->assertEquals(1, SiteConfigFactory::count());
+        $this->assertEquals(1, SiteFactory::count());
+        $this->assertEquals(0, PageFactory::count());
+        $this->assertEquals(0, UserFactory::count());
+        $this->assertEquals(0, UserGroupFactory::count());
+        $this->assertEquals(0, ContentFolderFactory::count());
+        $this->assertEquals(0, SearchIndexesFactory::count());
     }
 
     /**
