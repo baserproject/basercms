@@ -108,6 +108,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _loadDefaultDataPattern($pattern, $theme, $plugin = 'BaserCore', $excludes = [])
     {
