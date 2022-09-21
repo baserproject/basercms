@@ -468,16 +468,6 @@ class UtilitiesService implements UtilitiesServiceInterface
         return $result;
     }
 
-    public function writeSchema()
-    {
-
-    }
-
-    public function loadScheme()
-    {
-
-    }
-
     /**
      * データをリセットする
      * @return bool

@@ -96,8 +96,4 @@ interface UtilitiesServiceInterface
      */
     public function restoreDb(array $postData, array $uploaded): bool;
 
-    public function writeSchema();
-
-    public function loadScheme();
-
 }

@@ -131,84 +131,6 @@ class UtilitiesController extends BcAdminAppController
     }
 
     /**
-     * モデル名からスキーマファイルを生成する
-     *
-     * @return void
-     */
-    public function write_schema()
-    {
-        $path = TMP . 'schemas' . DS;
-
-        /* 表示設定 */
-        $this->setTitle(__d('baser', 'スキーマファイル生成'));
-        $this->setHelp('tools_write_schema');
-
-        if (!$this->request->getData()) {
-            $this->request = $this->request->withData('Tool.connection', 'core');
-            return;
-        }
-
-        if (empty($this->request->getData('Tool'))) {
-            $this->BcMessage->setError(__d('baser', 'テーブルを選択してください。'));
-            return;
-        }
-
-        if (!$this->_resetTmpSchemaFolder()) {
-            $this->BcMessage->setError('フォルダ：' . $path . ' が存在するか確認し、存在する場合は、削除するか書込権限を与えてください。');
-            $this->redirect(['action' => 'write_schema']);
-        }
-        if (!$this->Tool->writeSchema($this->request->getData(), $path)) {
-            $this->BcMessage->setError(__d('baser', 'スキーマファイルの生成に失敗しました。'));
-            return;
-        }
-
-        $Simplezip = new Simplezip();
-        $Simplezip->addFolder($path);
-        $Simplezip->download('schemas');
-        exit();
-    }
-
-    /**
-     * スキーマファイルを読み込みテーブルを生成する
-     *
-     * @return void
-     */
-    public function load_schema()
-    {
-        /* 表示設定 */
-        $this->setTitle(__d('baser', 'スキーマファイル読込'));
-        $this->setHelp('tools_load_schema');
-        if (!$this->request->is(['post', 'put'])) {
-            $this->request = $this->request->withData('Tool.schema_type', 'create');
-            return;
-        }
-
-        if ($this->Tool->isOverPostSize()) {
-            $this->BcMessage->setError(
-                __d('baser', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size'))
-            );
-            $this->redirect(['action' => 'load_schema']);
-        }
-        if (!is_uploaded_file($this->request->getData('Tool.schema_file.tmp_name'))) {
-            $this->BcMessage->setError(__d('baser', 'ファイルアップロードに失敗しました。'));
-            return;
-        }
-
-        $path = TMP . 'schemas' . DS;
-        if (!$this->_resetTmpSchemaFolder()) {
-            $this->BcMessage->setError('フォルダ：' . $path . ' が存在するか確認し、存在する場合は、削除するか書込権限を与えてください。');
-            $this->redirect(['action' => 'load_schema']);
-        }
-        if (!$this->Tool->loadSchemaFile($this->request->getData(), $path)) {
-            $this->BcMessage->setError(__d('baser', 'スキーマファイルの読み込みに失敗しました。'));
-            return;
-        }
-
-        $this->BcMessage->setInfo(__d('baser', 'スキーマファイルの読み込みに成功しました。'));
-        $this->redirect(['action' => 'load_schema']);
-    }
-
-    /**
      * ログメンテナンス
      *
      * @param string $mode
@@ -299,27 +221,27 @@ class UtilitiesController extends BcAdminAppController
         }
     }
 
-	/**
-	 * コアの初期データを読み込む
-	 *
+    /**
+     * コアの初期データを読み込む
+     *
      * @param UtilitiesServiceInterface $service
-	 * @return void
+     * @return void
      * @checked
      * @noTodo
-	 */
-	public function reset_data(UtilitiesServiceInterface $service)
-	{
-		$this->request->allowMethod(['post']);
-		try {
-            if($service->resetData()) {
+     */
+    public function reset_data(UtilitiesServiceInterface $service)
+    {
+        $this->request->allowMethod(['post']);
+        try {
+            if ($service->resetData()) {
                 $this->BcMessage->setInfo(__d('baser', 'データのリセットがが完了しました。'));
             } else {
                 $this->BcMessage->setError(__d('baser', 'データのリセットが完了しましたが、いくつかの処理に失敗しています。ログを確認してください。'));
             }
-		} catch (BcException $e) {
+        } catch (BcException $e) {
             $this->BcMessage->setError(__d('baser', 'データのリセットに失敗しました。' . $e->getMessage()));
-		}
-		$this->redirect(['action' => 'maintenance']);
-	}
+        }
+        $this->redirect(['action' => 'maintenance']);
+    }
 
 }
