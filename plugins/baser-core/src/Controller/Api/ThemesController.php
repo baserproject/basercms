@@ -230,4 +230,22 @@ class ThemesController extends BcApiController
 
         $this->viewBuilder()->setOption('serialize', ['message', 'theme', 'siteId', 'errors']);
     }
+
+    /**
+     * [API] baserマーケットよりテーマの一覧を取得する
+     * @param ThemesServiceInterface $service
+     * @return void
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function get_market_themes(ThemesServiceInterface $service)
+    {
+        $this->set([
+            'baserThemes' => $service->getMarketThemes(),
+        ]);
+
+        $this->viewBuilder()->setOption('serialize', ['baserThemes']);
+    }
 }

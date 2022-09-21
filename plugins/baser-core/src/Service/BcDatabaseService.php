@@ -108,6 +108,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _loadDefaultDataPattern($pattern, $theme, $plugin = 'BaserCore', $excludes = [])
     {
@@ -279,6 +280,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      * @param array $dbConfig
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function initSystemData($options = []): bool
     {
@@ -518,6 +520,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _convertRecordToCsv($record)
     {
@@ -535,6 +538,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _convertFieldToCsv($value, $dc = true)
     {
@@ -554,6 +558,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _dbEncToPhp($enc)
     {
@@ -582,6 +587,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _phpEncToDb($enc)
     {
