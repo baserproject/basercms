@@ -184,4 +184,20 @@ class ThemesControllerTest extends BcTestCase
         $this->assertEquals($theme, $result->theme->name);
         $this->assertEquals('テーマ「' . $theme . '」を適用しました。', $result->message);
     }
+
+    /**
+     * test get_market_themes
+     * @return void
+     */
+    public function test_get_market_themes()
+    {
+        $this->post('/baser/api/baser-core/themes/get_market_themes.json?token=' . $this->accessToken);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+
+        $this->assertEquals(true, count($result->baserThemes) > 0);
+        $this->assertEquals('multiverse', $result->baserThemes[0]->title);
+        $this->assertEquals('1.0.0', $result->baserThemes[0]->version);
+        $this->assertEquals('テーマ', $result->baserThemes[0]->category);
+    }
 }
