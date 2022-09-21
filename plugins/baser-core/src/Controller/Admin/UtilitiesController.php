@@ -299,4 +299,27 @@ class UtilitiesController extends BcAdminAppController
         }
     }
 
+	/**
+	 * コアの初期データを読み込む
+	 *
+     * @param UtilitiesServiceInterface $service
+	 * @return void
+     * @checked
+     * @noTodo
+	 */
+	public function reset_data(UtilitiesServiceInterface $service)
+	{
+		$this->request->allowMethod(['post']);
+		try {
+            if($service->resetData()) {
+                $this->BcMessage->setInfo(__d('baser', 'データのリセットがが完了しました。'));
+            } else {
+                $this->BcMessage->setError(__d('baser', 'データのリセットが完了しましたが、いくつかの処理に失敗しています。ログを確認してください。'));
+            }
+		} catch (BcException $e) {
+            $this->BcMessage->setError(__d('baser', 'データのリセットに失敗しました。' . $e->getMessage()));
+		}
+		$this->redirect(['action' => 'maintenance']);
+	}
+
 }

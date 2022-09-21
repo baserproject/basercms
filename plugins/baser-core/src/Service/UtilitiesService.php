@@ -478,4 +478,24 @@ class UtilitiesService implements UtilitiesServiceInterface
 
     }
 
+    /**
+     * データをリセットする
+     * @return bool
+     * @checked
+     * @noTodo
+     */
+    public function resetData()
+    {
+        /* @var \BaserCore\Service\ThemesService $themesService */
+        $themesService = $this->getService(ThemesServiceInterface::class);
+        try {
+            return $themesService->loadDefaultDataPattern(
+                BcUtil::getRootTheme(),
+                Configure::read('BcApp.defaultFrontTheme') . '.default'
+            );
+        } catch (BcException $e) {
+            throw $e;
+        }
+    }
+
 }

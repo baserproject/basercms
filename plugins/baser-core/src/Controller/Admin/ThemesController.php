@@ -84,7 +84,10 @@ class ThemesController extends BcAdminAppController
             return $this->redirect(['action' => 'index']);
         }
         try {
-            $result = $service->loadDefaultDataPattern(BcUtil::getCurrentTheme(), $this->getRequest()->getData('default_data_pattern'));
+            $result = $service->loadDefaultDataPattern(
+                BcUtil::getRootTheme(),
+                $this->getRequest()->getData('default_data_pattern')
+            );
         } catch (BcException $e) {
             $this->BcMessage->setError(__d('baser', '初期データの読み込みに失敗しました。' . $e->getMessage()));
             return $this->redirect(['action' => 'index']);

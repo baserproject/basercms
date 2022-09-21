@@ -263,7 +263,10 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      */
     public function truncate($table): bool
     {
-        $table = TableRegistry::getTableLocator()->get(Inflector::camelize($table));
+        $table = TableRegistry::getTableLocator()->get(
+            Inflector::camelize($table),
+            ['allowFallbackClass' => true]
+        );
         $schema = $table->getSchema();
         $db = $table->getConnection();
         return (bool)$db->execute($schema->truncateSql($db)[0]);

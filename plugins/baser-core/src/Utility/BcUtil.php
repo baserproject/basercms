@@ -1032,6 +1032,8 @@ class BcUtil
     /**
      * 現在のテーマ名を取得する
      * @return string
+     * @checked
+     * @noTodo
      */
     public static function getCurrentTheme()
     {
@@ -1043,13 +1045,25 @@ class BcUtil
             $site = $request->getParam('Site');
         }
         if (!$site) {
-            $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
-            $site = $sites->getRootMain();
+            return self::getRootTheme();
+        } elseif($site->theme) {
+            return $site->theme;
+        } else {
+            return $theme;
         }
-        if ($site && $site->theme) {
-            $theme = $site->theme;
-        }
-        return $theme;
+    }
+
+    /**
+     * ルートとなるサイトのテーマを取得する
+     * @return mixed
+     * @checked
+     * @noTodo
+     */
+    public static function getRootTheme()
+    {
+        $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
+        $site = $sites->getRootMain();
+        return $site->theme;
     }
 
     /**
