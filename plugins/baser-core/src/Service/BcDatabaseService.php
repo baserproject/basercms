@@ -516,6 +516,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _convertRecordToCsv($record)
     {

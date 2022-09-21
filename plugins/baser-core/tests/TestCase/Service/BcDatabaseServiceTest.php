@@ -283,4 +283,15 @@ class BcDatabaseServiceTest extends BcTestCase
         $this->assertEquals(0, count(Cache::read('appTableList', '_bc_env_')));
     }
 
+    /**
+     * test _convertRecordToCsv
+     * @return void
+     */
+    public function test_convertRecordToCsv()
+    {
+        $record = ['type' => 'test type', 'model' => 'test model'];
+        $rs = $this->execPrivateMethod($this->BcDatabaseService, '_convertRecordToCsv', [$record]);
+        $this->assertEquals('"test type"', $rs['type']);
+        $this->assertEquals('"test model"', $rs['model']);
+    }
 }
