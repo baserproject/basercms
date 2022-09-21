@@ -584,6 +584,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _phpEncToDb($enc)
     {

@@ -386,4 +386,24 @@ class BcDatabaseServiceTest extends BcTestCase
         $this->assertEquals('"test type"', $rs['type']);
         $this->assertEquals('"test model"', $rs['model']);
     }
+    /**
+     * test _phpEncToDb
+     * @param $value
+     * @param $expected
+     * @dataProvider phpEncToDbDataProvider
+     */
+    public function test_phpEncToDb($value, $expected)
+    {
+        $rs = $this->execPrivateMethod($this->BcDatabaseService, '_phpEncToDb', [$value]);
+        $this->assertEquals($expected, $rs);
+    }
+
+    public function phpEncToDbDataProvider()
+    {
+        return [
+            ['UTF-8', 'utf8'],
+            ['SJIS', 'sjis'],
+            ['EUC-JP', 'ujis']
+        ];
+    }
 }
