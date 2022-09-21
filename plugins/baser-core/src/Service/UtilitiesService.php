@@ -167,8 +167,8 @@ class UtilitiesService implements UtilitiesServiceInterface
     protected function _getMin(Table $table, $scope, $left)
     {
         $query = $table->find()->applyOptions(['withDeleted'])->where([$scope]);
-        $max = $query->select([$left => $query->func()->max($left)])->first();
-        return (empty($max->{$left}))? 0 : (int)$max->{$left};
+        $min = $query->select([$left => $query->func()->min($left)])->first();
+        return (empty($min->{$left}))? 0 : (int)$min->{$left};
     }
 
     /**
@@ -184,8 +184,8 @@ class UtilitiesService implements UtilitiesServiceInterface
     protected function _getMax(Table $table, $scope, $right)
     {
         $query = $table->find()->applyOptions(['withDeleted'])->where([$scope]);
-        $min = $query->select([$right => $query->func()->min($right)])->first();
-        return (empty($min->{$right}))? 0 : (int)$min->{$right};
+        $max = $query->select([$right => $query->func()->max($right)])->first();
+        return (empty($max->{$right}))? 0 : (int)$max->{$right};
     }
 
     /**
