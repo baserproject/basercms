@@ -22,8 +22,10 @@ use BaserCore\Test\Factory\UserFactory;
 use BaserCore\Test\Factory\UserGroupFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Utility\BcUtil;
 use Cake\Cache\Cache;
 use Cake\Filesystem\Folder;
+use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\Filesystem\File;
 
@@ -228,6 +230,36 @@ class BcDatabaseServiceTest extends BcTestCase
     }
 
     /**
+     * test _loadDefaultDataPattern
+     */
+    public function test_loadDefaultDataPattern()
+    {
+        $theme = 'BcFront';
+        $plugin = 'BaserCore';
+        $patterns = ['default', 'empty'];
+        $tableList = $this->BcDatabaseService->getAppTableList($plugin);
+        foreach ($patterns as $pattern) {
+            $this->execPrivateMethod($this->BcDatabaseService, '_loadDefaultDataPattern', [$pattern, $theme]);
+            $path = BcUtil::getDefaultDataPath($theme, $pattern);
+            $this->assertNotNull($path);
+            $Folder = new Folder($path . DS . $plugin);
+            $files = $Folder->read(true, true, true);
+            $csvList = $files[1];
+            foreach ($csvList as $path) {
+                $table = basename($path, '.csv');
+                if (!in_array($table, $tableList)) continue;
+                $records = $this->BcDatabaseService->loadCsvToArray($path);
+                $appTable = TableRegistry::getTableLocator()->get('BaserCore.App');
+                $schema = $appTable->getConnection()->getSchemaCollection()->describe($table);
+                $appTable->setTable($table);
+                $appTable->setSchema($schema);
+                $this->assertCount($appTable->find()->count(), $records);
+            }
+            $this->BcDatabaseService->resetTables($plugin);
+        }
+    }
+
+    /**
      * test getAppTableList
      */
     public function test_getAppTableList()
@@ -237,6 +269,27 @@ class BcDatabaseServiceTest extends BcTestCase
         $result = $this->BcDatabase->getAppTableList();
         $this->assertTrue(in_array('plugins', $result['BaserCore']));
         $this->assertTrue(in_array('plugins', Cache::read('appTableList', '_bc_env_')['BaserCore']));
+    }
+
+    /**
+     * test _convertFieldToCsv
+     * @param $value
+     * @param $expected
+     * @dataProvider convertFieldToCsvDataProvider
+     */
+    public function test_convertFieldToCsv($value, $expected)
+    {
+        $rs = $this->execPrivateMethod($this->BcDatabaseService, '_convertFieldToCsv', [$value]);
+        $this->assertEquals($expected, $rs);
+    }
+
+    public function convertFieldToCsvDataProvider()
+    {
+        return [
+            ['test', '"test"'],
+            ['test{CM}testCM', '"test,testCM"'],
+            ['test\\testCM', '"test\testCM"'],
+        ];
     }
 
     /**
@@ -251,6 +304,17 @@ class BcDatabaseServiceTest extends BcTestCase
         $this->assertEquals(0, count(Cache::read('appTableList', '_bc_env_')));
     }
 
+    /**
+     * test _convertRecordToCsv
+     * @return void
+     */
+    public function test_convertRecordToCsv()
+    {
+        $record = ['type' => 'test type', 'model' => 'test model'];
+        $rs = $this->execPrivateMethod($this->BcDatabaseService, '_convertRecordToCsv', [$record]);
+        $this->assertEquals('"test type"', $rs['type']);
+        $this->assertEquals('"test model"', $rs['model']);
+    }
     /**
      * test _phpEncToDb
      * @param $value
