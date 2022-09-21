@@ -272,6 +272,27 @@ class BcDatabaseServiceTest extends BcTestCase
     }
 
     /**
+     * test _convertFieldToCsv
+     * @param $value
+     * @param $expected
+     * @dataProvider convertFieldToCsvDataProvider
+     */
+    public function test_convertFieldToCsv($value, $expected)
+    {
+        $rs = $this->execPrivateMethod($this->BcDatabaseService, '_convertFieldToCsv', [$value]);
+        $this->assertEquals($expected, $rs);
+    }
+
+    public function convertFieldToCsvDataProvider()
+    {
+        return [
+            ['test', '"test"'],
+            ['test{CM}testCM', '"test,testCM"'],
+            ['test\\testCM', '"test\testCM"'],
+        ];
+    }
+
+    /**
      * test clearAppTableList
      * @return void
      */
