@@ -17,7 +17,15 @@ use CakephpFixtureFactories\Scenario\FixtureScenarioInterface;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
- * InitAppScenario
+ * BcUpdateFilterMiddlewareScenario
+ *
+ * 利用する場合は、テーブルの初期化に次のフィクスチャの定義が必要
+ * - plugin.BaserCore.Factory/Sites
+ * - plugin.BaserCore.Factory/SiteConfigs
+ * - plugin.BaserCore.Factory/Users
+ * - plugin.BaserCore.Factory/UsersUserGroups
+ * - plugin.BaserCore.Factory/UserGroups
+ * - plugin.BaserCore.Factory/Contents
  */
 class BcUpdateFilterMiddlewareScenario implements FixtureScenarioInterface
 {

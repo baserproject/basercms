@@ -17,6 +17,9 @@ use CakephpFixtureFactories\Scenario\FixtureScenarioInterface;
 /**
  * SuspendedUsersScenario
  * 無効ユーザーを追加するシナリオ
+ *
+ * 利用する場合は、テーブルの初期化に次のフィクスチャの定義が必要
+ * - plugin.BaserCore.Factory/Users
  */
 class SuspendedUsersScenario implements FixtureScenarioInterface
 {

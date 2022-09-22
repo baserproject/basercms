@@ -26,6 +26,11 @@ use CakephpFixtureFactories\Scenario\FixtureScenarioInterface;
  * - /service/
  * - /service/index
  * - /service/about
+ *
+ * 利用する場合は、テーブルの初期化に次のフィクスチャの定義が必要
+ * - plugin.BaserCore.Factory/Contents
+ * - plugin.BaserCore.Factory/ContentFolders
+ * - plugin.BaserCore.Factory/Pages
  */
 class SmallSetContentsScenario implements FixtureScenarioInterface
 {
