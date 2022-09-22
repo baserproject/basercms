@@ -14,10 +14,32 @@ namespace BaserCore\Controller\Api;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use BaserCore\Utility\BcUtil;
 
 /**
- * UtilitiesController
+ * Class UtilitiesController
+ *
+ * https://localhost/baser/api/baser-core/utilities/action_name.json で呼び出す
+ *
  */
 class UtilitiesController extends BcApiController
 {
+
+    /**
+     * [API] サーバーキャッシュを削除する
+     *
+     * @checked
+     * @unitTest
+     * @noTodo
+     */
+    public function clear_cache()
+    {
+        BcUtil::clearAllCache();
+
+        $this->set([
+            'message' => __d('baser', 'サーバーキャッシュを削除しました。')
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['message']);
+    }
+
 }
