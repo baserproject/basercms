@@ -11,6 +11,8 @@
 
 namespace BaserCore\Test\TestCase\Controller\Api;
 
+use BaserCore\Service\UtilitiesService;
+use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\Core\Configure;
@@ -34,6 +36,7 @@ class UtilitiesControllerTest extends BcTestCase
     public $fixtures = [
         'plugin.BaserCore.Factory/Users',
         'plugin.BaserCore.Factory/Sites',
+        'plugin.BaserCore.Factory/Contents',
     ];
 
     /**
@@ -81,5 +84,21 @@ class UtilitiesControllerTest extends BcTestCase
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals('サーバーキャッシュを削除しました。', $result->message);
+    }
+
+    /**
+     * test reset_contents_tree
+     * @return void
+     */
+    public function test_reset_contents_tree()
+    {
+        ContentFactory::make(['id' => 1, 'name' => 'BaserCore root', 'type' => 'ContentFolder', 'site_root' => 1, 'lft' => 1, 'rght' => 2])->persist();
+        ContentFactory::make(['name' => 'BaserCore 1', 'type' => 'ContentFolder', 'site_root' => 1, 'lft' => 11, 'rght' => 12])->persist();
+        ContentFactory::make(['name' => 'BaserCore 2', 'type' => 'ContentFolder', 'site_root' => 1, 'lft' => 13, 'rght' => 14])->persist();
+
+        $this->post('/baser/api/baser-core/utilities/reset_contents_tree.json?token=' . $this->accessToken);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('コンテンツのツリー構造をリセットしました。', $result->message);
     }
 }
