@@ -1,6 +1,6 @@
 .bca-app {
   display: grid;
-  min-height: 100vh;
+  min-height: calc(100vh - 40px);
   grid-template-rows: auto 1fr auto;
   @include mq(sp) {
   	display: block;
