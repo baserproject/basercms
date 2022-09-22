@@ -19,6 +19,13 @@ use CakephpFixtureFactories\Scenario\FixtureScenarioInterface;
 
 /**
  * InitAppScenario
+ *
+ * 利用する場合は、テーブルの初期化に次のフィクスチャの定義が必要
+ * - plugin.BaserCore.Factory/Sites
+ * - plugin.BaserCore.Factory/SiteConfigs
+ * - plugin.BaserCore.Factory/Users
+ * - plugin.BaserCore.Factory/UsersUserGroups
+ * - plugin.BaserCore.Factory/UserGroups
  */
 class InitAppScenario implements FixtureScenarioInterface
 {
