@@ -163,6 +163,7 @@ class UtilitiesService implements UtilitiesServiceInterface
      * @return int
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _getMin(Table $table, $scope, $left)
     {
