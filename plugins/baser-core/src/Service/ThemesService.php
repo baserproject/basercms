@@ -271,8 +271,12 @@ class ThemesService implements ThemesServiceInterface
 
     /**
      * 初期データを読み込む
-     * @param string $theme
-     * @param string $pattern
+     * @param string $currentTheme
+     * @param string $dbDataPattern
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function loadDefaultDataPattern(string $currentTheme, string $dbDataPattern): bool
     {
@@ -532,6 +536,7 @@ class ThemesService implements ThemesServiceInterface
      * @return boolean
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function checkDefaultDataPattern($theme, $pattern = 'default')
     {

@@ -11,18 +11,25 @@
 
 namespace BaserCore\Test\TestCase\Service;
 
+use BaserCore\Service\BcDatabaseService;
 use BaserCore\Service\BcDatabaseServiceInterface;
+use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\Service\ThemesService;
 use BaserCore\Service\ThemesServiceInterface;
 use BaserCore\Test\Factory\SiteConfigFactory;
 use BaserCore\Test\Factory\SiteFactory;
+use BaserCore\Test\Factory\UsersUserGroupFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Utility\BcSiteConfig;
 use BaserCore\Utility\BcUtil;
+use Cake\Core\Configure;
 use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
+use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
 use Cake\TestSuite\IntegrationTestTrait;
+use Cake\Utility\Inflector;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -50,6 +57,10 @@ class ThemesServiceTest extends \BaserCore\TestSuite\BcTestCase
         'plugin.BaserCore.Factory/Users',
         'plugin.BaserCore.Factory/UsersUserGroups',
         'plugin.BaserCore.Factory/UserGroups',
+        'plugin.BaserCore.Factory/Contents',
+        'plugin.BaserCore.Factory/ContentFolders',
+        'plugin.BaserCore.Factory/Permissions',
+        'plugin.BaserCore.Factory/Pages',
     ];
 
     /**
@@ -196,6 +207,41 @@ class ThemesServiceTest extends \BaserCore\TestSuite\BcTestCase
     }
 
     /**
+     * 初期データチェックする
+     * @return void
+     */
+    public function testCheckDefaultDataPattern()
+    {
+        $theme = Configure::read('BcApp.defaultFrontTheme');
+        $configDataPath = BASER_THEMES . Inflector::dasherize($theme) . DS . 'config' . DS . 'data';
+        $Folder = new Folder($configDataPath . DS . 'default' . DS . 'BaserCore');
+        $files = $Folder->read(true, true);
+        $coreTables = $files[1];
+
+        // 一つ目のダミーフォルダを作る
+        $pattern = 'dummy1';
+        $dummyFolder = new Folder($configDataPath . DS . $pattern, true);
+        // BaserCoreフォルダを作る
+        new Folder($configDataPath . DS . $pattern . DS . 'BaserCore', true);
+        // テーブルファイルを作る
+        foreach ($coreTables as $table) {
+            new File($configDataPath . DS . $pattern . DS . 'BaserCore' . DS . $table, true);
+        }
+        $result = $this->ThemesService->checkDefaultDataPattern($theme, $pattern);
+        $dummyFolder->delete();
+        // 成功を確認
+        $this->assertTrue($result);
+
+        // 二つ目のダミーフォルダを作る
+        $pattern = 'dummy2';
+        $dummyFolder = new Folder($configDataPath . DS . $pattern, true);
+        $result = $this->ThemesService->checkDefaultDataPattern($theme, $pattern);
+        $dummyFolder->delete();
+        // 失敗を確認
+        $this->assertFalse($result);
+    }
+
+    /**
      * 現在のDB内のデータをダウンロード用のCSVとして一時フォルダに作成する
      * @return void
      */
@@ -304,7 +350,48 @@ class ThemesServiceTest extends \BaserCore\TestSuite\BcTestCase
         $this->loadFixtureScenario(InitAppScenario::class);
         Router::setRequest($this->loginAdmin($this->getRequest()));
         $theme = 'BcFront';
-        $result = $this->ThemesService->loadDefaultDataPattern($theme, $theme . '.default');
+        $pattern = 'default';
+        $plugin = 'BaserCore';
+        $result = $this->ThemesService->loadDefaultDataPattern($theme, $theme . '.' . $pattern);
+
+        // --- 初期データ読み込みを確認 start ---
+        $path = BcUtil::getDefaultDataPath($theme, $pattern);
+        $this->assertNotNull($path);
+        $Folder = new Folder($path . DS . $plugin);
+        $files = $Folder->read(true, true, true);
+        $csvList = $files[1];
+        $BcDatabaseService = new BcDatabaseService();
+        $tableList = $BcDatabaseService->getAppTableList($plugin);
+        foreach ($csvList as $path) {
+            $table = basename($path, '.csv');
+            if (!in_array($table, $tableList)) continue;
+            $records = $BcDatabaseService->loadCsvToArray($path);
+            $appTable = TableRegistry::getTableLocator()->get('BaserCore.App');
+            $schema = $appTable->getConnection()->getSchemaCollection()->describe($table);
+            $appTable->setTable($table);
+            $appTable->setSchema($schema);
+            $this->assertCount($appTable->find()->count(), $records);
+        }
+        // --- 初期データ読み込みを確認 end ---
+
+        // --- システムデータの初期化を確認 start ---
+        // user_groups　テーブルにデータが登録されている事を確認
+        $userGroupTable = TableRegistry::getTableLocator()->get('BaserCore.UserGroups');
+        $this->assertTrue($userGroupTable->find()->where(['UserGroups.name' => 'admins'])->count() > 0);
+        // users_user_groups　テーブルにデータが登録されている事を確認
+        $corePath = BcUtil::getPluginPath(Inflector::camelize(Configure::read('BcApp.defaultFrontTheme'), '-')) . 'config' . DS . 'data' . DS . 'default' . DS . 'BaserCore';
+        $usersUserGroups = $BcDatabaseService->loadCsvToArray($corePath . DS . 'users_user_groups.csv');
+        $this->assertCount(UsersUserGroupFactory::count(), $usersUserGroups);
+        // site_configs テーブルの email / google_analytics_id / first_access / admin_theme / version の設定状況を確認
+        $siteConfigsService = $this->getService(SiteConfigsServiceInterface::class);
+        $this->assertEquals($siteConfigsService->getValue('email'), BcSiteConfig::get('email'));
+        $this->assertEquals($siteConfigsService->getValue('google_analytics_id'), BcSiteConfig::get('google_analytics_id'));
+        $this->assertEquals(null, $siteConfigsService->getValue('first_access'));
+        $this->assertEquals($siteConfigsService->getValue('admin_theme'), BcSiteConfig::get('admin_theme'));
+        $this->assertEquals($siteConfigsService->getValue('version'), BcSiteConfig::get('version'));
+        // sites テーブルの theme の設定状況を確認
+        $this->assertEquals($theme, SiteFactory::get(1)->theme);
+        // --- システムデータの初期化を確認 end ---
 
         // 戻り値を確認
         $this->assertTrue($result);
