@@ -31,7 +31,6 @@ use Cake\Routing\Router;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\Utility\Inflector;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
-use Cake\Utility\Inflector;
 
 /**
  * ThemesServiceTest
