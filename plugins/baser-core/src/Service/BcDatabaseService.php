@@ -62,6 +62,12 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      */
     public function loadDefaultDataPattern($theme, $pattern): bool
     {
+        $plugins = array_merge(
+            ['BaserCore'],
+            Configure::read('BcApp.corePlugins'),
+            BcUtil::getCurrentThemesPlugins()
+        );
+
         // データを削除する
         $excludes = ['plugins', 'dblogs', 'users'];
         $this->resetAllTables($excludes);
@@ -69,7 +75,6 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         $result = true;
         $this->clearAppTableList();
 
-        $plugins = array_merge(['BaserCore'], Configure::read('BcApp.corePlugins'), BcUtil::getCurrentThemesPlugins());
         foreach($plugins as $plugin) {
             if (!$this->_loadDefaultDataPattern($pattern, $theme, $plugin, $excludes)) {
                 $result = false;

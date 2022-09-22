@@ -16,12 +16,14 @@ use BaserCore\Service\ThemesService;
 use BaserCore\Service\ThemesServiceInterface;
 use BaserCore\Test\Factory\SiteConfigFactory;
 use BaserCore\Test\Factory\SiteFactory;
+use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
 use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
 use Cake\Routing\Router;
 use Cake\TestSuite\IntegrationTestTrait;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * ThemesServiceTest
@@ -35,6 +37,7 @@ class ThemesServiceTest extends \BaserCore\TestSuite\BcTestCase
      */
     use BcContainerTrait;
     use IntegrationTestTrait;
+    use ScenarioAwareTrait;
 
     /**
      * Fixtures
@@ -44,6 +47,9 @@ class ThemesServiceTest extends \BaserCore\TestSuite\BcTestCase
     public $fixtures = [
         'plugin.BaserCore.Factory/Sites',
         'plugin.BaserCore.Factory/SiteConfigs',
+        'plugin.BaserCore.Factory/Users',
+        'plugin.BaserCore.Factory/UsersUserGroups',
+        'plugin.BaserCore.Factory/UserGroups',
     ];
 
     /**
@@ -53,6 +59,7 @@ class ThemesServiceTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function setUp(): void
     {
+        $this->setFixtureTruncate();
         parent::setUp();
         $this->ThemesService = $this->getService(ThemesServiceInterface::class);
     }
@@ -291,4 +298,16 @@ class ThemesServiceTest extends \BaserCore\TestSuite\BcTestCase
         $this->assertEquals('このテーマは初期データを保有しています。', $result[0]);
         $this->assertEquals('Webサイトにテーマに合ったデータを適用するには、初期データ読込を実行してください。', $result[1]);
     }
+
+    public function testLoadDefaultDataPattern()
+    {
+        $this->loadFixtureScenario(InitAppScenario::class);
+        Router::setRequest($this->loginAdmin($this->getRequest()));
+        $theme = 'BcFront';
+        $result = $this->ThemesService->loadDefaultDataPattern($theme, $theme . '.default');
+
+        // 戻り値を確認
+        $this->assertTrue($result);
+    }
+
 }
