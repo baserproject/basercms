@@ -67,4 +67,28 @@ class UtilitiesController extends BcApiController
         $this->viewBuilder()->setOption('serialize', ['message']);
     }
 
+    /**
+     * [API] ユーティリティ：ツリー構造チェック
+     *
+     * @param UtilitiesServiceInterface $service
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function verity_contents_tree(UtilitiesServiceInterface $service)
+    {
+        $this->request->allowMethod(['post']);
+
+        if ($service->verityContentsTree()) {
+            $message = __d('baser', 'コンテンツのツリー構造に問題はありません。');
+        } else {
+            $this->setResponse($this->response->withStatus(400));
+            $message = __d('baser', 'コンテンツのツリー構造に問題があります。ログを確認してください。');
+        }
+
+        $this->set([
+            'message' => $message
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['message']);
+    }
 }
