@@ -265,22 +265,26 @@ class UtilitiesService implements UtilitiesServiceInterface
     /**
      * DBバックアップを作成する
      * @param $encoding
-     * @return Simplezip
+     * @return Simplezip|false
      * @checked
      * @noTodo
      */
-    public function backupDb($encoding): Simplezip
+    public function backupDb($encoding): ?Simplezip
     {
         set_time_limit(0);
         $tmpDir = TMP . 'schema' . DS;
         $this->resetTmpSchemaFolder();
         BcUtil::clearAllCache();
         $plugins = Plugin::loaded();
+        $result = true;
         if ($plugins) {
             foreach($plugins as $plugin) {
-                $this->_writeBackup($tmpDir, $plugin, $encoding);
+                if(!$this->_writeBackup($tmpDir, $plugin, $encoding)) {
+                    $result = false;
+                }
             }
         }
+        if(!$result) return false;
         // ZIP圧縮して出力
         $Simplezip = new Simplezip();
         $Simplezip->addFolder($tmpDir);

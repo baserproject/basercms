@@ -74,7 +74,7 @@ interface UtilitiesServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function backupDb($encoding): Simplezip;
+    public function backupDb($encoding): ?Simplezip;
 
     /**
      * スキーマ用の一時フォルダをリセットする
