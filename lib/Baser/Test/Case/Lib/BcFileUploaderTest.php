@@ -375,8 +375,8 @@ class BcFileUploaderTest extends BaserTestCase
 		$tmpId = 1;
 		$fieldName = 'image';
 		$tmp_name = 'basercms_tmp';
-		$basename = 'basename.png';
-		$ext = 'png';
+		$basename = 'basename.gif';
+		$ext = 'gif';
 		$namefield = 'hoge';
 
 		//—————————————————————————
@@ -402,7 +402,7 @@ class BcFileUploaderTest extends BaserTestCase
 
 		// ダミーファイルの作成
 		$file = new File($tmpPath);
-		$file->write('dummy');
+		$file->write(file_get_contents(BASER_WEBROOT . 'img/baser.power.gif'));
 		$file->close();
 
 		$this->initTestSaveFiles(1, $this->EditorTemplate->data['EditorTemplate'][$fieldName]);
@@ -433,7 +433,7 @@ class BcFileUploaderTest extends BaserTestCase
 			'error' => 0,
 			'name' => $targetName,
 			'tmp_name' => $targetPath,
-			'size' => 5,
+			'size' => 219,
 			'type' => 'basercms',
 			'uploadable' => true,
 			'ext' => false
