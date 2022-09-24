@@ -72,7 +72,6 @@ services:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: root
       POSTGRES_INITDB_ARGS: "--encoding=UTF-8"
-    restart: always
     user: root
 
   bc5-pga:
@@ -85,4 +84,3 @@ services:
     environment:
       PGADMIN_DEFAULT_EMAIL: root
       PGADMIN_DEFAULT_PASSWORD: root
-    restart: always
