@@ -348,6 +348,10 @@ class ThemesService implements ThemesServiceInterface
     /**
      * プラグインの namespace を書き換える
      * @param $newTheme
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     protected function _changePluginNameSpace($newTheme)
     {
