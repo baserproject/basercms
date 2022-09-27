@@ -718,6 +718,11 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         BcUtil::onEvent($eventManager, 'View.beforeRender', $beforeRenderListeners);
         BcUtil::onEvent($eventManager, 'View.afterRender', $afterRenderListeners);
 
+        if (!is_dir($options['path'])) {
+            $folder = new Folder();
+            $folder->create($options['path']);
+        }
+
         $file = new File($options['path'] . DS . Inflector::camelize($table) . 'Schema.php');
         $file->write($content);
         $file->close();

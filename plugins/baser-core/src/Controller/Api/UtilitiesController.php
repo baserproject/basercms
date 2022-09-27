@@ -14,6 +14,7 @@ namespace BaserCore\Controller\Api;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use BaserCore\Error\BcException;
 use BaserCore\Service\UtilitiesServiceInterface;
 use BaserCore\Utility\BcUtil;
 
@@ -91,4 +92,30 @@ class UtilitiesController extends BcApiController
         ]);
         $this->viewBuilder()->setOption('serialize', ['message']);
     }
+
+    /**
+     * [API] ユーティリティ：バックアップよりレストア
+     *
+     * @param UtilitiesServiceInterface $service
+     * @checked
+     * @noTodo
+     */
+    public function restore_db(UtilitiesServiceInterface $service)
+    {
+        $this->request->allowMethod(['post']);
+
+        try {
+            $service->restoreDb($this->getRequest()->getData(), $this->getRequest()->getUploadedFiles());
+            $message = __d('baser', 'データの復元が完了しました。');
+        } catch (BcException $e) {
+            $this->setResponse($this->response->withStatus(400));
+            $message = __d('baser', 'データの復元に失敗しました。ログの確認を行なって下さい。') . $e->getMessage();
+        }
+
+        $this->set([
+            'message' => $message
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['message']);
+    }
+
 }
