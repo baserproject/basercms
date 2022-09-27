@@ -143,6 +143,11 @@ class UtilitiesControllerTest extends BcTestCase
      */
     public function test_restore_db()
     {
+        $this->post('/baser/api/baser-core/utilities/restore_db.json?token=' . $this->accessToken, ['encoding' => 'utf8']);
+        $this->assertResponseCode(400);
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('データの復元に失敗しました。ログの確認を行なって下さい。バックアップファイルが送信されませんでした。', $result->message);
+
         $zipSrcPath = TMP;
 
         $this->execPrivateMethod(new UtilitiesService(), '_writeBackup', [$zipSrcPath . 'schema', 'BaserCore', 'utf8']);
@@ -151,11 +156,9 @@ class UtilitiesControllerTest extends BcTestCase
         $testFile = $zipSrcPath . 'test.zip';
         $zip->archive($zipSrcPath . 'schema', $testFile, true);
 
-
         $this->setUploadFileToRequest('backup', $testFile);
 
         $this->post('/baser/api/baser-core/utilities/restore_db.json?token=' . $this->accessToken, ['encoding' => 'utf8']);
-
 
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());

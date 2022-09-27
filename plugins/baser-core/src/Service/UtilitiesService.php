@@ -365,7 +365,7 @@ class UtilitiesService implements UtilitiesServiceInterface
         }
 
         if (empty($_FILES['backup']['tmp_name'])) {
-            if ($uploaded['backup']->getError() === 1) {
+            if (!empty($uploaded['backup']) && $uploaded['backup']->getError() === 1) {
                 $message = __d('baser', 'サーバに設定されているサイズ制限を超えています。');
             } else {
                 $message = __d('baser', 'バックアップファイルが送信されませんでした。');
