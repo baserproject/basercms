@@ -84,6 +84,56 @@ class UtilitiesControllerTest extends BcTestCase
     }
 
     /**
+     * test index
+     *
+     * @return void
+     */
+    public function testIndex(): void
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * test reset_contents_tree
+     *
+     * @return void
+     */
+    public function testReset_contents_tree(): void
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * test initialize
+     *
+     * @return void
+     */
+    public function testInitialize(): void
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * test credit
+     *
+     * @return void
+     */
+    public function testCredit(): void
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * test log_maintenance
+     *
+     * @return void
+     */
+    public function testLog_maintenance(): void
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
      * test info
      */
     public function test_info()
