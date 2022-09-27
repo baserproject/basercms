@@ -78,4 +78,16 @@ class UtilitiesControllerTest extends BcTestCase
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
 
+    /**
+     * test info
+     */
+    public function test_info()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        $this->get('/baser/admin/baser-core/utilities/info');
+        $this->assertResponseOk();
+    }
+
 }

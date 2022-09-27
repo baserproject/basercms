@@ -77,6 +77,9 @@ class UtilitiesController extends BcAdminAppController
 
     /**
      * 環境情報を表示する
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function info(UtilitiesAdminServiceInterface $service)
     {
