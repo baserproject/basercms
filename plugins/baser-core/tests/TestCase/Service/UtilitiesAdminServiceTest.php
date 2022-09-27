@@ -47,7 +47,10 @@ class UtilitiesAdminServiceTest extends BcTestCase
      */
     public function test_getViewVarsForInfo()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $info = $this->UtilitiesAdminService->getViewVarsForInfo();
+        $this->assertArrayHasKey('datasource', $info);
+        $this->assertArrayHasKey('cakeVersion', $info);
+        $this->assertArrayHasKey('baserVersion', $info);
     }
 
     /**
