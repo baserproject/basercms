@@ -118,4 +118,100 @@ class UtilitiesServiceTest extends BcTestCase
         $this->assertEquals(1, $rs);
     }
 
+    /**
+     * test _getMax
+     * @return void
+     */
+    public function test_getMax(){
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * test verityContentsTree
+     * @return void
+     */
+    public function test_verityContentsTree(){
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * test _verify
+     * @return void
+     */
+    public function test_verify(){
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * test resetContentsTree
+     * @return void
+     */
+    public function test_resetContentsTree(){
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * test getCredit
+     * @return void
+     */
+    public function test_getCredit(){
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * test createLogZip
+     * @return void
+     */
+    public function test_createLogZip(){
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * test backupDb
+     * @return void
+     */
+    public function test_backupDb(){
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * test resetTmpSchemaFolder
+     * @return void
+     */
+    public function test_resetTmpSchemaFolder(){
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * test _writeBackup
+     * @return void
+     */
+    public function test_writeBackup(){
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * test restoreDb
+     * @return void
+     */
+    public function test_restoreDb(){
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * test _loadBackup
+     * @return void
+     */
+    public function test_loadBackup(){
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * test resetData
+     * @return void
+     */
+    public function test_resetData(){
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
 }
