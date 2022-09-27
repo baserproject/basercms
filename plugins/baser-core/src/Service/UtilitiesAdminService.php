@@ -44,6 +44,7 @@ class UtilitiesAdminService extends UtilitiesService implements UtilitiesAdminSe
      * データベースのドライバー情報を取得
      * @return string
      * @checked
+     * @noTodo
      * @unitTest
      */
     private function _getDriver(): string

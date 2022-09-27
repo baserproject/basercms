@@ -58,7 +58,8 @@ class UtilitiesAdminServiceTest extends BcTestCase
      */
     public function test_getDriver()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $result = $this->execPrivateMethod($this->UtilitiesAdminService, '_getDriver');
+        $this->assertEquals('MySQL', $result);
     }
 
     /**
