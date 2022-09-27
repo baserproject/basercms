@@ -284,7 +284,7 @@ class UtilitiesService implements UtilitiesServiceInterface
                 }
             }
         }
-        if(!$result) return false;
+        if(!$result) return null;
         // ZIP圧縮して出力
         $Simplezip = new Simplezip();
         $Simplezip->addFolder($tmpDir);

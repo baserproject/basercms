@@ -94,6 +94,43 @@ class UtilitiesController extends BcApiController
     }
 
     /**
+     * [API] ユーティリティ：バックアップダウンロード
+     *
+     * @param UtilitiesServiceInterface $service
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function download_backup(UtilitiesServiceInterface $service)
+    {
+        $this->request->allowMethod(['get']);
+
+        try {
+            $result = $service->backupDb($this->request->getQuery('backup_encoding'));
+            if (!$result) {
+                $this->setResponse($this->response->withStatus(400));
+                $message = __d('baser', 'バックアップダウンロードが失敗しました。');
+            } else {
+                $this->autoRender = false;
+                $result->download('baserbackup_' . str_replace(' ', '_', BcUtil::getVersion()) . '_' . date('Ymd_His'));
+                $service->resetTmpSchemaFolder();
+                return;
+            }
+
+        } catch (\Exception $exception) {
+            $message = __d('baser', 'バックアップダウンロードが失敗しました。' . $exception->getMessage());
+            $this->setResponse($this->response->withStatus(400));
+        }
+
+        $this->set([
+            'message' => $message
+        ]);
+
+        $this->viewBuilder()->setOption('serialize', ['message']);
+    }
+
+
+    /**
      * [API] ユーティリティ：バックアップよりレストア
      *
      * @param UtilitiesServiceInterface $service
