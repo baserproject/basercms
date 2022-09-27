@@ -11,9 +11,12 @@
 
 namespace BaserCore\Test\TestCase\Controller\Admin;
 
+use BaserCore\Service\BcDatabaseService;
+use BaserCore\Test\Factory\ContentFactory;
+use BaserCore\Test\Scenario\InitAppScenario;
 use Cake\TestSuite\IntegrationTestTrait;
 use BaserCore\TestSuite\BcTestCase;
-use BaserCore\Controller\Admin\UtilitiesController;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * class UtilitiesControllerTest
@@ -21,6 +24,7 @@ use BaserCore\Controller\Admin\UtilitiesController;
  */
 class UtilitiesControllerTest extends BcTestCase
 {
+    use ScenarioAwareTrait;
     use IntegrationTestTrait;
 
     /**
@@ -29,11 +33,11 @@ class UtilitiesControllerTest extends BcTestCase
      * @var array
      */
     public $fixtures = [
-        'plugin.BaserCore.Users',
-        'plugin.BaserCore.UsersUserGroups',
-        'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.Sites',
-        'plugin.BaserCore.Contents'
+        'plugin.BaserCore.Factory/Users',
+        'plugin.BaserCore.Factory/UsersUserGroups',
+        'plugin.BaserCore.Factory/UserGroups',
+        'plugin.BaserCore.Factory/Sites',
+        'plugin.BaserCore.Factory/Contents'
     ];
 
     /**
@@ -42,7 +46,8 @@ class UtilitiesControllerTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $request = $this->getRequest();
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $request = $this->getRequest('/baser/admin/baser-core/utilities/');
         $this->loginAdmin($request);
     }
 
@@ -88,6 +93,53 @@ class UtilitiesControllerTest extends BcTestCase
 
         $this->get('/baser/admin/baser-core/utilities/info');
         $this->assertResponseOk();
+    }
+
+    /**
+     * test info
+     */
+    public function test_verity_contents_tree()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        // コンテンツのデータ作成
+        ContentFactory::make([
+            'id' => 1,
+            'url' => '/',
+            'name' => '',
+            'plugin' =>
+                'BaserCore',
+            'type' =>
+                'ContentFolder',
+            'site_id' => 1,
+            'parent_id' => null,
+            'entity_id' => 1
+        ])->persist();
+
+        // コンテンツのツリー構造に問題がある場合
+        $this->post('/baser/admin/baser-core/utilities/verity_contents_tree/');
+        $this->assertResponseCode(302);
+        $this->assertRedirect([
+            'plugin' => 'BaserCore',
+            'prefix' => 'Admin',
+            'controller' => 'utilities',
+            'action' => 'index'
+        ]);
+        $this->assertFlashMessage("コンテンツのツリー構造に問題があります。ログを確認してください。");
+
+        // コンテンツのツリー構造に問題がない場合
+        $BcDatabaseService = new BcDatabaseService();
+        $BcDatabaseService->truncate('contents');
+        $this->post('/baser/admin/baser-core/utilities/verity_contents_tree/');
+        $this->assertResponseCode(302);
+        $this->assertRedirect([
+            'plugin' => 'BaserCore',
+            'prefix' => 'Admin',
+            'controller' => 'utilities',
+            'action' => 'index'
+        ]);
+        $this->assertFlashMessage("コンテンツのツリー構造に問題はありません。");
     }
 
 }

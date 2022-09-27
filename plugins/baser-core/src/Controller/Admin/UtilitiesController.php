@@ -196,6 +196,7 @@ class UtilitiesController extends BcAdminAppController
      * @uses verity_contents_tree
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function verity_contents_tree(UtilitiesServiceInterface $service)
     {
