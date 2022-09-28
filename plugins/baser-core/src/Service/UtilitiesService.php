@@ -181,6 +181,7 @@ class UtilitiesService implements UtilitiesServiceInterface
      * @return int
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _getMax(Table $table, $scope, $right)
     {
