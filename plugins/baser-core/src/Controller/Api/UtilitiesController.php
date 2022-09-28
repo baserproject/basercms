@@ -190,4 +190,29 @@ class UtilitiesController extends BcApiController
         $this->viewBuilder()->setOption('serialize', ['message']);
     }
 
+  /**
+     * [API] ユーティリティ：ログファイルを削除
+     *
+     * @param UtilitiesServiceInterface $service
+     * @checked
+     * @noTodo
+     */
+    public function delete_log(UtilitiesServiceInterface $service)
+    {
+        $this->request->allowMethod(['post']);
+
+        try {
+            $service->deleteLog();
+            $message = __d('baser', 'エラーログを削除しました。');
+        } catch (BcException $e) {
+            $this->setResponse($this->response->withStatus(400));
+            $message = __d('baser', 'エラーログをを削除できません。') . $e->getMessage();
+        }
+
+        $this->set([
+            'message' => $message
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['message']);
+    }
+
 }

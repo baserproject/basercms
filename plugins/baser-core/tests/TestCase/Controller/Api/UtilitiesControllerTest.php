@@ -16,6 +16,7 @@ use BaserCore\Service\UtilitiesService;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\Core\Configure;
+use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use Cake\TestSuite\IntegrationTestTrait;
@@ -175,6 +176,27 @@ class UtilitiesControllerTest extends BcTestCase
         $this->get('/baser/api/baser-core/utilities/download_backup.json?backup_encoding=utf8&token=' . $this->accessToken);
         $this->assertResponseOk();
     }
+
+    /**
+     * test download_backup
+     * @return void
+     */
+    public function test_delete_log()
+    {
+        $logPath = LOGS . 'error.log';
+        if (!file_exists($logPath)) {
+            new File($logPath, true);
+        }
+
+        $this->post('/baser/api/baser-core/utilities/delete_log.json?token=' . $this->accessToken);
+        $this->assertResponseOk();
+
+        $this->post('/baser/api/baser-core/utilities/delete_log.json?token=' . $this->accessToken);
+        $this->assertResponseCode(400);
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals($result->message, "エラーログをを削除できません。エラーログが存在しません。");
+    }
+
 
     /**
      * test download_log
