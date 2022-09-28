@@ -175,6 +175,7 @@ class UtilitiesController extends BcAdminAppController
      * @param UtilitiesServiceInterface $service
      * @checked
      * @noTodo
+     * @unitTest
      * @uses reset_contents_tree
      */
     public function reset_contents_tree(UtilitiesServiceInterface $service)
