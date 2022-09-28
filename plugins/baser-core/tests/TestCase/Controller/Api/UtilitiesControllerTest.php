@@ -175,4 +175,14 @@ class UtilitiesControllerTest extends BcTestCase
         $this->get('/baser/api/baser-core/utilities/download_backup.json?backup_encoding=utf8&token=' . $this->accessToken);
         $this->assertResponseOk();
     }
+
+    /**
+     * test download_log
+     * @return void
+     */
+    public function test_download_log()
+    {
+        $this->get('/baser/api/baser-core/utilities/download_log.json?token=' . $this->accessToken);
+        $this->assertResponseOk();
+    }
 }

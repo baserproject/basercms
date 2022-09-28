@@ -155,4 +155,39 @@ class UtilitiesController extends BcApiController
         $this->viewBuilder()->setOption('serialize', ['message']);
     }
 
+    /**
+     * [API] ユーティリティ：ログファイルダウンロード
+     * @param UtilitiesServiceInterface $service
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function download_log(UtilitiesServiceInterface $service)
+    {
+        $this->request->allowMethod(['get']);
+
+        try {
+            $this->autoRender = false;
+            $result = $service->createLogZip();
+
+            if ($result) {
+                $result->download('basercms_logs_' . date('Ymd_His'));
+                return;
+            }
+
+            $this->setResponse($this->response->withStatus(400));
+            $message = __d('baser', 'エラーログが存在しません。');
+        } catch (\Exception $exception) {
+            $message = __d('baser', 'ログファイルダウンロードが失敗しました。' . $exception->getMessage());
+            $this->setResponse($this->response->withStatus(400));
+        }
+
+        $this->set([
+            'message' => $message
+        ]);
+
+        $this->viewBuilder()->setOption('serialize', ['message']);
+    }
+
 }
