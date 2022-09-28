@@ -82,6 +82,7 @@ class UtilitiesService implements UtilitiesServiceInterface
      * @return array|false
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _verify(Table $table)
     {
