@@ -221,8 +221,14 @@ class UtilitiesServiceTest extends BcTestCase
      * test resetContentsTree
      * @return void
      */
-    public function test_resetContentsTree(){
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    public function test_resetContentsTree()
+    {
+        ContentFactory::make(['id' => 1, 'name' => 'BaserCore root', 'type' => 'ContentFolder', 'site_root' => 1, 'lft' => 1, 'rght' => 2])->persist();
+        ContentFactory::make(['name' => 'BaserCore 1', 'type' => 'ContentFolder', 'site_root' => 1, 'lft' => 11, 'rght' => 12])->persist();
+        ContentFactory::make(['name' => 'BaserCore 2', 'type' => 'ContentFolder', 'site_root' => 1, 'lft' => 13, 'rght' => 14])->persist();
+
+        $rs = $this->UtilitiesService->resetContentsTree();
+        $this->assertTrue($rs);
     }
 
     /**

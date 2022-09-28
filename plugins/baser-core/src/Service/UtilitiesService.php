@@ -68,6 +68,9 @@ class UtilitiesService implements UtilitiesServiceInterface
 
     /**
      * コンテンツツリーをリセットし全て同階層にする
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function resetContentsTree()
     {
