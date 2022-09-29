@@ -12,12 +12,12 @@
         <testsuite name="BaserCore">
             <directory>plugins/baser-core/tests/TestCase</directory>
         </testsuite>
-        <testsuite name="BcBlog">
-            <directory>plugins/bc-blog/tests/TestCase</directory>
-        </testsuite>
-        <testsuite name="BcSearchIndex">
-            <directory>plugins/bc-search-index/tests/TestCase</directory>
-        </testsuite>
+<!--        <testsuite name="BcBlog">-->
+<!--            <directory>plugins/bc-blog/tests/TestCase</directory>-->
+<!--        </testsuite>-->
+<!--        <testsuite name="BcSearchIndex">-->
+<!--            <directory>plugins/bc-search-index/tests/TestCase</directory>-->
+<!--        </testsuite>-->
     </testsuites>
     <extensions>
         <extension class="Cake\TestSuite\Fixture\PHPUnitExtension"/>
