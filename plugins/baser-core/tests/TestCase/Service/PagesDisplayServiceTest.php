@@ -34,7 +34,6 @@ class PagesDisplayServiceTest extends BcTestCase
         'plugin.BaserCore.UserGroups',
         'plugin.BaserCore.UsersUserGroups',
         'plugin.BaserCore.ContentFolders',
-        'plugin.BcSearchIndex.SearchIndexes',
         'plugin.BaserCore.SiteConfigs',
     ];
 

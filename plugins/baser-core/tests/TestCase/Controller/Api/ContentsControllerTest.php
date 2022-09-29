@@ -41,11 +41,9 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
         'plugin.BaserCore.Sites',
         'plugin.BaserCore.SiteConfigs',
         'plugin.BaserCore.Pages',
-        'plugin.BcSearchIndex.SearchIndexes',
         'plugin.BaserCore.Service/SearchIndexesService/ContentsReconstruct',
         'plugin.BaserCore.Service/SearchIndexesService/PagesReconstruct',
         'plugin.BaserCore.Service/SearchIndexesService/ContentFoldersReconstruct',
-        'plugin.BaserCore.Service/SearchIndexesService/SearchIndexesReconstruct',
         'plugin.BaserCore.Dblogs'
     ];
 
@@ -78,7 +76,7 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
             'Sites',
             'SiteConfigs',
             'Pages',
-            'SearchIndexes'
+//            'SearchIndexes'
         );
         $token = $this->apiLoginAdmin(1);
         $this->accessToken = $token['access_token'];

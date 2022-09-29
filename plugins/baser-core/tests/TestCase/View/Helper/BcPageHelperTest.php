@@ -34,7 +34,6 @@ class BcPageHelperTest extends BcTestCase
         'plugin.BaserCore.UsersUserGroups',
         'plugin.BaserCore.Permissions',
         'plugin.BaserCore.SiteConfigs',
-        'plugin.BcSearchIndex.SearchIndexes',
         'plugin.BaserCore.Sites',
         'plugin.BaserCore.Contents',
         'plugin.BaserCore.ContentFolders',

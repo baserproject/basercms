@@ -36,7 +36,6 @@ class ContentsTableTest extends BcTestCase
         'plugin.BaserCore.Contents',
         'plugin.BaserCore.ContentFolders',
         'plugin.BaserCore.Pages',
-        'plugin.BcSearchIndex.SearchIndexes',
         'plugin.BaserCore.SiteConfigs',
         'plugin.BaserCore.Model/Table/Content/ContentStatusCheck'
     ];
@@ -431,7 +430,7 @@ class ContentsTableTest extends BcTestCase
     public function testCopyContentFolderPath()
     {
         // 他サイトにフォルダが存在する場合
-        $this->loadFixtures('ContentFolders', 'Pages', 'SearchIndexes', 'SiteConfigs');
+        $this->loadFixtures('ContentFolders', 'Pages', 'SiteConfigs');
         $parent_id = $this->Contents->copyContentFolderPath('/service/service1', 1);
         $this->assertEquals(6, $parent_id);
         // 他サイトのフォルダが不要な場合

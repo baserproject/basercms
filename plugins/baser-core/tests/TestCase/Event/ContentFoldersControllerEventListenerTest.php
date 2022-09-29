@@ -29,7 +29,6 @@ class ContentFoldersControllerEventListenerTest extends BcTestCase
         'plugin.BaserCore.Users',
         'plugin.BaserCore.UserGroups',
         'plugin.BaserCore.UsersUserGroups',
-        'plugin.BcSearchIndex.SearchIndexes',
         'plugin.BaserCore.Sites',
         'plugin.BaserCore.Contents',
         'plugin.BaserCore.ContentFolders',
