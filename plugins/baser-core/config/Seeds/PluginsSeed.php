@@ -25,7 +25,7 @@ class PluginsSeed extends AbstractSeed
                 'id' => '1',
                 'name' => 'BcSpaSample',
                 'title' => 'SPAサンプル',
-                'version' => NULL,
+                'version' => '0.0.1',
                 'status' => '0',
                 'db_init' => '1',
                 'priority' => '1',

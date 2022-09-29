@@ -93,7 +93,16 @@ return [
         /**
          * コアプラグイン
          */
-        'corePlugins' => ['BcBlog', 'BcMail', 'BcEditorTemplate', 'BcThemeConfig', 'BcThemeFile', 'BcUploader', 'BcWidgetArea'],
+        'corePlugins' => [
+            'BcSearchIndex',
+            'BcBlog',
+            'BcMail',
+            'BcEditorTemplate',
+            'BcThemeConfig',
+            'BcThemeFile',
+            'BcUploader',
+            'BcWidgetArea'
+        ],
         /**
          * パスワード再発行URLの有効時間(min) デフォルト24時間
          */
