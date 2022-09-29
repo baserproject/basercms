@@ -24,12 +24,7 @@ class BlogTagsSeed extends AbstractSeed
             [
                 'id' => 1,
                 'name' => '新製品',
-                'created' => 
-                Cake\I18n\FrozenTime::__set_state(array(
-                'date' => '2016-08-12 00:48:33.000000',
-                'timezone_type' => 3,
-                'timezone' => 'Asia/Tokyo',
-                )),
+                'created' => '2022-10-01 09:00:00',
                 'modified' => NULL,
             ],
         ];

@@ -35,18 +35,8 @@ class BlogContentsSeed extends AbstractSeed
                 'widget_area' => 2,
                 'eye_catch_size' => 'YTo0OntzOjExOiJ0aHVtYl93aWR0aCI7czozOiIzMDAiO3M6MTI6InRodW1iX2hlaWdodCI7czozOiIzMDAiO3M6MTg6Im1vYmlsZV90aHVtYl93aWR0aCI7czozOiIxMDAiO3M6MTk6Im1vYmlsZV90aHVtYl9oZWlnaHQiO3M6MzoiMTAwIjt9',
                 'use_content' => true,
-                'created' => 
-                Cake\I18n\FrozenTime::__set_state(array(
-                'date' => '2016-08-07 23:10:38.000000',
-                'timezone_type' => 3,
-                'timezone' => 'Asia/Tokyo',
-                )),
-                'modified' => 
-                Cake\I18n\FrozenTime::__set_state(array(
-                'date' => '2020-09-14 19:27:57.000000',
-                'timezone_type' => 3,
-                'timezone' => 'Asia/Tokyo',
-                )),
+                'created' => '2022-10-01 09:00:00',
+                'modified' => '2022-10-01 09:00:00',
             ],
             [
                 'id' => 2,
@@ -62,18 +52,8 @@ class BlogContentsSeed extends AbstractSeed
                 'widget_area' => NULL,
                 'eye_catch_size' => 'YTo0OntzOjExOiJ0aHVtYl93aWR0aCI7aTo2MDA7czoxMjoidGh1bWJfaGVpZ2h0IjtpOjYwMDtzOjE4OiJtb2JpbGVfdGh1bWJfd2lkdGgiO2k6MTUwO3M6MTk6Im1vYmlsZV90aHVtYl9oZWlnaHQiO2k6MTUwO30=',
                 'use_content' => true,
-                'created' => 
-                Cake\I18n\FrozenTime::__set_state(array(
-                'date' => '2020-12-14 14:26:56.000000',
-                'timezone_type' => 3,
-                'timezone' => 'Asia/Tokyo',
-                )),
-                'modified' => 
-                Cake\I18n\FrozenTime::__set_state(array(
-                'date' => '2020-12-14 14:26:56.000000',
-                'timezone_type' => 3,
-                'timezone' => 'Asia/Tokyo',
-                )),
+                'created' => '2022-10-01 09:00:00',
+                'modified' => '2022-10-01 09:00:00',
             ],
         ];
 

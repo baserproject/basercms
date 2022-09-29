@@ -27,8 +27,8 @@ class UserGroupsSeed extends AbstractSeed
                 'title' => 'システム管理',
                 'auth_prefix' => 'Admin',
                 'use_move_contents' => '1',
-                'modified' => '2016-08-16 19:47:07',
-                'created' => '2015-06-26 20:34:07',
+                'modified' => '2022-10-01 09:00:00',
+                'created' => '2022-10-01 09:00:00',
             ],
             [
                 'id' => '2',
@@ -37,7 +37,7 @@ class UserGroupsSeed extends AbstractSeed
                 'auth_prefix' => 'Admin',
                 'use_move_contents' => '0',
                 'modified' => NULL,
-                'created' => '2015-06-26 20:34:07',
+                'created' => '2022-10-01 09:00:00',
             ],
         ];
 

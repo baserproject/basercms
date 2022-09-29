@@ -48,28 +48,13 @@ class ContentsSeed extends AbstractSeed
                 'self_publish_end' => NULL,
                 'exclude_search' => false,
                 'created_date' => NULL,
-                'modified_date' => 
-                Cake\I18n\FrozenTime::__set_state(array(
-                'date' => '2019-06-11 12:27:00.000000',
-                'timezone_type' => 3,
-                'timezone' => 'Asia/Tokyo',
-                )),
+                'modified_date' => '2022-10-01 09:00:00',
                 'site_root' => true,
                 'deleted_date' => NULL,
                 'exclude_menu' => false,
                 'blank_link' => false,
-                'created' => 
-                Cake\I18n\FrozenTime::__set_state(array(
-                'date' => '2016-07-29 18:02:00.000000',
-                'timezone_type' => 3,
-                'timezone' => 'Asia/Tokyo',
-                )),
-                'modified' => 
-                Cake\I18n\FrozenTime::__set_state(array(
-                'date' => '2020-09-14 21:10:00.000000',
-                'timezone_type' => 3,
-                'timezone' => 'Asia/Tokyo',
-                )),
+                'created' => '2022-10-01 09:00:00',
+                'modified' => '2022-10-01 09:00:00',
             ],
             [
                 'id' => 4,
@@ -97,34 +82,14 @@ class ContentsSeed extends AbstractSeed
                 'self_publish_begin' => NULL,
                 'self_publish_end' => NULL,
                 'exclude_search' => false,
-                'created_date' => 
-                Cake\I18n\FrozenTime::__set_state(array(
-                'date' => '2016-07-29 18:13:00.000000',
-                'timezone_type' => 3,
-                'timezone' => 'Asia/Tokyo',
-                )),
-                'modified_date' => 
-                Cake\I18n\FrozenTime::__set_state(array(
-                'date' => '2020-09-14 20:13:00.000000',
-                'timezone_type' => 3,
-                'timezone' => 'Asia/Tokyo',
-                )),
+                'created_date' => '2022-10-01 09:00:00',
+                'modified_date' => '2022-10-01 09:00:00',
                 'site_root' => false,
                 'deleted_date' => NULL,
                 'exclude_menu' => false,
                 'blank_link' => false,
-                'created' => 
-                Cake\I18n\FrozenTime::__set_state(array(
-                'date' => '2016-07-29 18:13:00.000000',
-                'timezone_type' => 3,
-                'timezone' => 'Asia/Tokyo',
-                )),
-                'modified' => 
-                Cake\I18n\FrozenTime::__set_state(array(
-                'date' => '2020-09-14 20:13:00.000000',
-                'timezone_type' => 3,
-                'timezone' => 'Asia/Tokyo',
-                )),
+                'created' => '2022-10-01 09:00:00',
+                'modified' => '2022-10-01 09:00:00',
             ],
             [
                 'id' => 5,
@@ -152,34 +117,14 @@ class ContentsSeed extends AbstractSeed
                 'self_publish_begin' => NULL,
                 'self_publish_end' => NULL,
                 'exclude_search' => false,
-                'created_date' => 
-                Cake\I18n\FrozenTime::__set_state(array(
-                'date' => '2016-07-29 18:13:00.000000',
-                'timezone_type' => 3,
-                'timezone' => 'Asia/Tokyo',
-                )),
-                'modified_date' => 
-                Cake\I18n\FrozenTime::__set_state(array(
-                'date' => '2020-09-14 19:52:00.000000',
-                'timezone_type' => 3,
-                'timezone' => 'Asia/Tokyo',
-                )),
+                'created_date' => '2022-10-01 09:00:00',
+                'modified_date' => '2022-10-01 09:00:00',
                 'site_root' => false,
                 'deleted_date' => NULL,
                 'exclude_menu' => false,
                 'blank_link' => false,
-                'created' => 
-                Cake\I18n\FrozenTime::__set_state(array(
-                'date' => '2016-07-29 18:13:00.000000',
-                'timezone_type' => 3,
-                'timezone' => 'Asia/Tokyo',
-                )),
-                'modified' => 
-                Cake\I18n\FrozenTime::__set_state(array(
-                'date' => '2020-09-14 19:53:00.000000',
-                'timezone_type' => 3,
-                'timezone' => 'Asia/Tokyo',
-                )),
+                'created' => '2022-10-01 09:00:00',
+                'modified' => '2022-10-01 09:00:00',
             ],
             [
                 'id' => 6,
@@ -207,29 +152,14 @@ class ContentsSeed extends AbstractSeed
                 'self_publish_begin' => NULL,
                 'self_publish_end' => NULL,
                 'exclude_search' => false,
-                'created_date' => 
-                Cake\I18n\FrozenTime::__set_state(array(
-                'date' => '2016-07-29 18:14:00.000000',
-                'timezone_type' => 3,
-                'timezone' => 'Asia/Tokyo',
-                )),
+                'created_date' => '2022-10-01 09:00:00',
                 'modified_date' => NULL,
                 'site_root' => false,
                 'deleted_date' => NULL,
                 'exclude_menu' => false,
                 'blank_link' => false,
-                'created' => 
-                Cake\I18n\FrozenTime::__set_state(array(
-                'date' => '2016-07-29 18:14:00.000000',
-                'timezone_type' => 3,
-                'timezone' => 'Asia/Tokyo',
-                )),
-                'modified' => 
-                Cake\I18n\FrozenTime::__set_state(array(
-                'date' => '2016-07-29 18:14:00.000000',
-                'timezone_type' => 3,
-                'timezone' => 'Asia/Tokyo',
-                )),
+                'created' => '2022-10-01 09:00:00',
+                'modified' => '2022-10-01 09:00:00',
             ],
             [
                 'id' => 7,
@@ -257,34 +187,14 @@ class ContentsSeed extends AbstractSeed
                 'self_publish_begin' => NULL,
                 'self_publish_end' => NULL,
                 'exclude_search' => false,
-                'created_date' => 
-                Cake\I18n\FrozenTime::__set_state(array(
-                'date' => '2016-07-29 18:15:00.000000',
-                'timezone_type' => 3,
-                'timezone' => 'Asia/Tokyo',
-                )),
-                'modified_date' => 
-                Cake\I18n\FrozenTime::__set_state(array(
-                'date' => '2020-09-14 22:27:00.000000',
-                'timezone_type' => 3,
-                'timezone' => 'Asia/Tokyo',
-                )),
+                'created_date' => '2022-10-01 09:00:00',
+                'modified_date' => '2022-10-01 09:00:00',
                 'site_root' => false,
                 'deleted_date' => NULL,
                 'exclude_menu' => false,
                 'blank_link' => false,
-                'created' => 
-                Cake\I18n\FrozenTime::__set_state(array(
-                'date' => '2016-07-29 18:15:00.000000',
-                'timezone_type' => 3,
-                'timezone' => 'Asia/Tokyo',
-                )),
-                'modified' => 
-                Cake\I18n\FrozenTime::__set_state(array(
-                'date' => '2020-09-14 22:30:00.000000',
-                'timezone_type' => 3,
-                'timezone' => 'Asia/Tokyo',
-                )),
+                'created' => '2022-10-01 09:00:00',
+                'modified' => '2022-10-01 09:00:00',
             ],
             [
                 'id' => 9,
@@ -312,34 +222,14 @@ class ContentsSeed extends AbstractSeed
                 'self_publish_begin' => NULL,
                 'self_publish_end' => NULL,
                 'exclude_search' => false,
-                'created_date' => 
-                Cake\I18n\FrozenTime::__set_state(array(
-                'date' => '2016-07-30 21:51:00.000000',
-                'timezone_type' => 3,
-                'timezone' => 'Asia/Tokyo',
-                )),
-                'modified_date' => 
-                Cake\I18n\FrozenTime::__set_state(array(
-                'date' => '2020-09-14 19:36:00.000000',
-                'timezone_type' => 3,
-                'timezone' => 'Asia/Tokyo',
-                )),
+                'created_date' => '2022-10-01 09:00:00',
+                'modified_date' => '2022-10-01 09:00:00',
                 'site_root' => false,
                 'deleted_date' => NULL,
                 'exclude_menu' => false,
                 'blank_link' => false,
-                'created' => 
-                Cake\I18n\FrozenTime::__set_state(array(
-                'date' => '2016-07-30 21:51:00.000000',
-                'timezone_type' => 3,
-                'timezone' => 'Asia/Tokyo',
-                )),
-                'modified' => 
-                Cake\I18n\FrozenTime::__set_state(array(
-                'date' => '2020-09-14 19:37:00.000000',
-                'timezone_type' => 3,
-                'timezone' => 'Asia/Tokyo',
-                )),
+                'created' => '2022-10-01 09:00:00',
+                'modified' => '2022-10-01 09:00:00',
             ],
             [
                 'id' => 10,
@@ -367,34 +257,14 @@ class ContentsSeed extends AbstractSeed
                 'self_publish_begin' => NULL,
                 'self_publish_end' => NULL,
                 'exclude_search' => false,
-                'created_date' => 
-                Cake\I18n\FrozenTime::__set_state(array(
-                'date' => '2016-07-31 15:01:00.000000',
-                'timezone_type' => 3,
-                'timezone' => 'Asia/Tokyo',
-                )),
-                'modified_date' => 
-                Cake\I18n\FrozenTime::__set_state(array(
-                'date' => '2020-09-14 19:27:00.000000',
-                'timezone_type' => 3,
-                'timezone' => 'Asia/Tokyo',
-                )),
+                'created_date' => '2022-10-01 09:00:00',
+                'modified_date' => '2022-10-01 09:00:00',
                 'site_root' => false,
                 'deleted_date' => NULL,
                 'exclude_menu' => false,
                 'blank_link' => false,
-                'created' => 
-                Cake\I18n\FrozenTime::__set_state(array(
-                'date' => '2016-07-31 15:01:00.000000',
-                'timezone_type' => 3,
-                'timezone' => 'Asia/Tokyo',
-                )),
-                'modified' => 
-                Cake\I18n\FrozenTime::__set_state(array(
-                'date' => '2020-09-14 19:27:00.000000',
-                'timezone_type' => 3,
-                'timezone' => 'Asia/Tokyo',
-                )),
+                'created' => '2022-10-01 09:00:00',
+                'modified' => '2022-10-01 09:00:00',
             ],
             [
                 'id' => 11,
@@ -422,29 +292,14 @@ class ContentsSeed extends AbstractSeed
                 'self_publish_begin' => NULL,
                 'self_publish_end' => NULL,
                 'exclude_search' => false,
-                'created_date' => 
-                Cake\I18n\FrozenTime::__set_state(array(
-                'date' => '2016-07-31 16:46:00.000000',
-                'timezone_type' => 3,
-                'timezone' => 'Asia/Tokyo',
-                )),
+                'created_date' => '2022-10-01 09:00:00',
                 'modified_date' => NULL,
                 'site_root' => false,
                 'deleted_date' => NULL,
                 'exclude_menu' => false,
                 'blank_link' => false,
-                'created' => 
-                Cake\I18n\FrozenTime::__set_state(array(
-                'date' => '2016-07-31 16:46:00.000000',
-                'timezone_type' => 3,
-                'timezone' => 'Asia/Tokyo',
-                )),
-                'modified' => 
-                Cake\I18n\FrozenTime::__set_state(array(
-                'date' => '2016-08-12 00:58:00.000000',
-                'timezone_type' => 3,
-                'timezone' => 'Asia/Tokyo',
-                )),
+                'created' => '2022-10-01 09:00:00',
+                'modified' => '2022-10-01 09:00:00',
             ],
             [
                 'id' => 12,
@@ -472,29 +327,14 @@ class ContentsSeed extends AbstractSeed
                 'self_publish_begin' => NULL,
                 'self_publish_end' => NULL,
                 'exclude_search' => false,
-                'created_date' => 
-                Cake\I18n\FrozenTime::__set_state(array(
-                'date' => '2016-07-31 16:46:00.000000',
-                'timezone_type' => 3,
-                'timezone' => 'Asia/Tokyo',
-                )),
+                'created_date' => '2022-10-01 09:00:00',
                 'modified_date' => NULL,
                 'site_root' => false,
                 'deleted_date' => NULL,
                 'exclude_menu' => false,
                 'blank_link' => false,
-                'created' => 
-                Cake\I18n\FrozenTime::__set_state(array(
-                'date' => '2016-07-31 16:46:00.000000',
-                'timezone_type' => 3,
-                'timezone' => 'Asia/Tokyo',
-                )),
-                'modified' => 
-                Cake\I18n\FrozenTime::__set_state(array(
-                'date' => '2016-08-12 00:58:00.000000',
-                'timezone_type' => 3,
-                'timezone' => 'Asia/Tokyo',
-                )),
+                'created' => '2022-10-01 09:00:00',
+                'modified' => '2022-10-01 09:00:00',
             ],
             [
                 'id' => 13,
@@ -522,29 +362,14 @@ class ContentsSeed extends AbstractSeed
                 'self_publish_begin' => NULL,
                 'self_publish_end' => NULL,
                 'exclude_search' => false,
-                'created_date' => 
-                Cake\I18n\FrozenTime::__set_state(array(
-                'date' => '2016-07-31 16:47:00.000000',
-                'timezone_type' => 3,
-                'timezone' => 'Asia/Tokyo',
-                )),
+                'created_date' => '2022-10-01 09:00:00',
                 'modified_date' => NULL,
                 'site_root' => false,
                 'deleted_date' => NULL,
                 'exclude_menu' => false,
                 'blank_link' => false,
-                'created' => 
-                Cake\I18n\FrozenTime::__set_state(array(
-                'date' => '2016-07-31 16:47:00.000000',
-                'timezone_type' => 3,
-                'timezone' => 'Asia/Tokyo',
-                )),
-                'modified' => 
-                Cake\I18n\FrozenTime::__set_state(array(
-                'date' => '2016-08-12 00:59:00.000000',
-                'timezone_type' => 3,
-                'timezone' => 'Asia/Tokyo',
-                )),
+                'created' => '2022-10-01 09:00:00',
+                'modified' => '2022-10-01 09:00:00',
             ],
         ];
 

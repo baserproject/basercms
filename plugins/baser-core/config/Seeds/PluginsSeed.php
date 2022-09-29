@@ -30,7 +30,7 @@ class PluginsSeed extends AbstractSeed
                 'db_init' => '1',
                 'priority' => '1',
                 'created' => NULL,
-                'modified' => '2021-12-09 17:16:53',
+                'modified' => '2022-10-01 09:00:00',
             ],
             [
                 'id' => '2',
@@ -40,8 +40,8 @@ class PluginsSeed extends AbstractSeed
                 'status' => '1',
                 'db_init' => '1',
                 'priority' => '2',
-                'created' => '2021-09-16 06:46:11',
-                'modified' => '2021-09-16 06:46:11',
+                'created' => '2022-10-01 09:00:00',
+                'modified' => '2022-10-01 09:00:00',
             ],
             [
                 'id' => '3',
@@ -51,8 +51,8 @@ class PluginsSeed extends AbstractSeed
                 'status' => '1',
                 'db_init' => '1',
                 'priority' => '3',
-                'created' => '2021-09-16 06:46:11',
-                'modified' => '2021-09-16 06:46:11',
+                'created' => '2022-10-01 09:00:00',
+                'modified' => '2022-10-01 09:00:00',
             ],
         ];
 

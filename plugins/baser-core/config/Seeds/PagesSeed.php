@@ -26,8 +26,8 @@ class PagesSeed extends AbstractSeed
                 'contents' => '<p>This is ucmitz Project.</p>',
                 'draft' => '',
                 'page_template' => '',
-                'modified' => '2017-05-03 15:12:27',
-                'created' => '2015-06-26 20:34:06',
+                'modified' => '2022-10-01 09:00:00',
+                'created' => '2022-10-01 09:00:00',
             ],
         ];
 

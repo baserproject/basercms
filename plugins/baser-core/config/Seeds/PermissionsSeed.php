@@ -30,7 +30,7 @@ class PermissionsSeed extends AbstractSeed
                 'url' => '/baser/admin/*',
                 'auth' => 0,
                 'status' => 1,
-                'created' => '2015-09-30 01:21:40',
+                'created' => '2022-10-01 09:00:00',
                 'method' => 'ALL',
                 'modified' => null,
             ],
@@ -44,7 +44,7 @@ class PermissionsSeed extends AbstractSeed
                 'auth' => 1,
                 'status' => 1,
                 'method' => 'ALL',
-                'created' => '2015-09-30 01:21:40',
+                'created' => '2022-10-01 09:00:00',
                 'modified' => null,
             ],
             [
@@ -57,7 +57,7 @@ class PermissionsSeed extends AbstractSeed
                 'auth' => 0,
                 'status' => 1,
                 'method' => 'ALL',
-                'created' => '2015-09-30 01:21:40',
+                'created' => '2022-10-01 09:00:00',
                 'modified' => null,
             ],
             [
@@ -70,8 +70,8 @@ class PermissionsSeed extends AbstractSeed
                 'auth' => 1,
                 'status' => 1,
                 'method' => 'ALL',
-                'created' => '2015-09-30 01:21:40',
-                'modified' => '2016-08-16 19:29:56',
+                'created' => '2022-10-01 09:00:00',
+                'modified' => '2022-10-01 09:00:00',
             ],
             [
                 'id' => 5,
@@ -83,8 +83,8 @@ class PermissionsSeed extends AbstractSeed
                 'auth' => 1,
                 'status' => 1,
                 'method' => 'ALL',
-                'created' => '2015-09-30 01:21:40',
-                'modified' => '2016-08-16 19:30:12',
+                'created' => '2022-10-01 09:00:00',
+                'modified' => '2022-10-01 09:00:00',
             ],
             [
                 'id' => 6,
@@ -96,8 +96,8 @@ class PermissionsSeed extends AbstractSeed
                 'auth' => 1,
                 'status' => 1,
                 'method' => 'ALL',
-                'created' => '2015-09-30 01:21:40',
-                'modified' => '2016-08-16 19:30:19',
+                'created' => '2022-10-01 09:00:00',
+                'modified' => '2022-10-01 09:00:00',
             ],
             [
                 'id' => 7,
@@ -109,7 +109,7 @@ class PermissionsSeed extends AbstractSeed
                 'auth' => 1,
                 'status' => 1,
                 'method' => 'ALL',
-                'created' => '2015-09-30 01:21:40',
+                'created' => '2022-10-01 09:00:00',
                 'modified' => null,
             ],
             [
@@ -122,8 +122,8 @@ class PermissionsSeed extends AbstractSeed
                 'auth' => 1,
                 'status' => 1,
                 'method' => 'ALL',
-                'created' => '2015-09-30 01:21:40',
-                'modified' => '2016-08-16 19:30:34',
+                'created' => '2022-10-01 09:00:00',
+                'modified' => '2022-10-01 09:00:00',
             ],
             [
                 'id' => 9,
@@ -135,8 +135,8 @@ class PermissionsSeed extends AbstractSeed
                 'auth' => 1,
                 'status' => 1,
                 'method' => 'ALL',
-                'created' => '2015-09-30 01:21:40',
-                'modified' => '2016-08-16 19:29:11',
+                'created' => '2022-10-01 09:00:00',
+                'modified' => '2022-10-01 09:00:00',
             ],
             [
                 'id' => 10,
@@ -148,7 +148,7 @@ class PermissionsSeed extends AbstractSeed
                 'auth' => 1,
                 'status' => 1,
                 'method' => 'ALL',
-                'created' => '2015-09-30 01:21:40',
+                'created' => '2022-10-01 09:00:00',
                 'modified' => null,
             ],
             [
@@ -161,7 +161,7 @@ class PermissionsSeed extends AbstractSeed
                 'auth' => 1,
                 'status' => 1,
                 'method' => 'ALL',
-                'created' => '2015-09-30 01:21:40',
+                'created' => '2022-10-01 09:00:00',
                 'modified' => null,
             ],
             [
@@ -174,8 +174,8 @@ class PermissionsSeed extends AbstractSeed
                 'auth' => 1,
                 'status' => 1,
                 'method' => 'ALL',
-                'created' => '2016-08-16 19:28:39',
-                'modified' => '2016-08-16 19:28:39',
+                'created' => '2022-10-01 09:00:00',
+                'modified' => '2022-10-01 09:00:00',
             ],
             [
                 'id' => 13,
@@ -187,8 +187,8 @@ class PermissionsSeed extends AbstractSeed
                 'auth' => 1,
                 'status' => 1,
                 'method' => 'ALL',
-                'created' => '2016-08-16 19:28:56',
-                'modified' => '2016-08-16 19:28:56',
+                'created' => '2022-10-01 09:00:00',
+                'modified' => '2022-10-01 09:00:00',
             ],
             [
                 'id' => 14,
@@ -200,8 +200,8 @@ class PermissionsSeed extends AbstractSeed
                 'auth' => 1,
                 'status' => 1,
                 'method' => 'ALL',
-                'created' => '2021-05-06 15:25:59',
-                'modified' => '2021-05-06 15:25:59',
+                'created' => '2022-10-01 09:00:00',
+                'modified' => '2022-10-01 09:00:00',
             ],
         ];
 

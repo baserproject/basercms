@@ -25,8 +25,8 @@ class UsersUserGroupsSeed extends AbstractSeed
                 'id' => '1',
                 'user_id' => '1',
                 'user_group_id' => '1',
-                'created' => '2020-04-01 19:28:31',
-                'modified' => '2020-04-01 19:28:31',
+                'created' => '2022-10-01 09:00:00',
+                'modified' => '2022-10-01 09:00:00',
             ],
         ];
 

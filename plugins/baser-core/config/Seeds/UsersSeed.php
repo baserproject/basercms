@@ -29,8 +29,8 @@ class UsersSeed extends AbstractSeed
                 'real_name_2' => '',
                 'email' => 'admin@example.com',
                 'nickname' => '',
-                'created' => '2017-05-03 14:22:08',
-                'modified' => '2020-04-22 10:24:08',
+                'created' => '2022-10-01 09:00:00',
+                'modified' => '2022-10-01 09:00:00',
             ],
         ];
 
