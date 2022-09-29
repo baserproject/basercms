@@ -64,6 +64,7 @@ class UtilitiesAdminService extends UtilitiesService implements UtilitiesAdminSe
      * ログメンテナンス用の view 変数を生成
      * @return array
      * @checked
+     * @noTodo
      * @unitTest
      */
     public function getViewVarsForLogMaintenance(): array

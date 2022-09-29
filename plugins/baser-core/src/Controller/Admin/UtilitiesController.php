@@ -31,6 +31,7 @@ class UtilitiesController extends BcAdminAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function initialize(): void
     {
@@ -136,9 +137,13 @@ class UtilitiesController extends BcAdminAppController
     /**
      * ログメンテナンス
      *
+     * @param UtilitiesServiceInterface $service
+     * @param UtilitiesAdminServiceInterface $adminService
      * @param string $mode
-     * @return void
      * @uses log_maintenance
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function log_maintenance(
         UtilitiesServiceInterface      $service,
@@ -175,6 +180,7 @@ class UtilitiesController extends BcAdminAppController
      * @param UtilitiesServiceInterface $service
      * @checked
      * @noTodo
+     * @unitTest
      * @uses reset_contents_tree
      */
     public function reset_contents_tree(UtilitiesServiceInterface $service)

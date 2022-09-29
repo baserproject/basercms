@@ -67,7 +67,8 @@ class UtilitiesAdminServiceTest extends BcTestCase
      */
     public function test_getViewVarsForLogMaintenance()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $info = $this->UtilitiesAdminService->getViewVarsForLogMaintenance();
+        $this->assertArrayHasKey('fileSize', $info);
     }
 
 }
