@@ -11,7 +11,15 @@
 
 namespace BcBlog\View\Helper;
 
+use BaserCore\View\Helper\BcBaserHelper;
+use BaserCore\View\Helper\BcContentsHelper;
+use BaserCore\View\Helper\BcTimeHelper;
+use BaserCore\View\Helper\BcUploadHelper;
+use BcBlog\Model\Table\BlogPostsTable;
+use Cake\ORM\TableRegistry;
+use Cake\Utility\Hash;
 use Cake\View\Helper;
+use Cake\View\View;
 
 /**
  * ブログヘルパー
@@ -23,12 +31,20 @@ use Cake\View\Helper;
  */
 class BlogHelper extends Helper
 {
+
     /**
      * ヘルパー
      *
      * @var array
      */
-    public $helpers = ['Html', 'BcTime', 'BcBaser', 'BcUpload', 'BcContents'];
+    public $helpers = [
+        'Html',
+        'Url',
+        'BaserCore.BcTime',
+        'BaserCore.BcBaser',
+        'BaserCore.BcUpload',
+        'BaserCore.BcContents'
+    ];
 
     /**
      * ブログカテゴリモデル
@@ -50,10 +66,12 @@ class BlogHelper extends Helper
      * @param View $View Viewオブジェクト
      * @param array $settings 設定
      * @return void
+     * @checked
+     * @noTodo
      */
-    public function __construct(View $View, $settings = [])
+    public function __construct(View $view, array $config = [])
     {
-        parent::__construct($View, $settings);
+        parent::__construct($view, $config);
         $this->setContent();
     }
 
@@ -68,54 +86,53 @@ class BlogHelper extends Helper
     public function setContent($blogContentId = null)
     {
         $blogContentUpdated = false;
-        if (empty($this->blogContent) || ($blogContentId != $this->blogContent['id'])) {
+        if (empty($this->currentBlogContent) || ($blogContentId != $this->currentBlogContent->id)) {
             if ($blogContentId) {
-                if (!empty($this->request->query['preview']) && $this->request->query['preview'] == 'default' && $this->request->getData()) {
-                    if (!empty($this->request->getData('BlogContent'))) {
-                        $this->blogContent = $this->request->getData('BlogContent');
-                        $blogContentUpdated = true;
-                    }
+                if ($this->_View->getRequest()->getQuery('preview') == 'default' && $this->_View->getRequest()->getData()) {
+                    // TODO ucmitz 未確認のためコメントアウト
+//                    if (!empty($this->_View->getRequest()->getData('BlogContent'))) {
+//                        $this->currentBlogContent = $this->_View->getRequest()->getData('BlogContent');
+//                        $blogContentUpdated = true;
+//                    }
                 } else {
-                    $BlogContent = ClassRegistry::init('BcBlog.BlogContent');
-                    $BlogContent->unbindModel(['hasMany' => ['BlogPost', 'BlogCategory']]);
-                    $blogContent = $BlogContent->find('first', ['conditions' => ['BlogContent.id' => $blogContentId], 'recursive' => -1]);
-                    $this->blogContent = Hash::extract($blogContent, 'BlogContent');
+                    $BlogContent = TableRegistry::getTableLocator()->get('BcBlog.BlogContents');
+                    $blogContent = $BlogContent->find()->where(['BlogContents.id' => $blogContentId])->first();
+                    $this->currentBlogContent = $blogContent;
                     $blogContentUpdated = true;
                 }
-            } elseif (isset($this->_View->viewVars['blogContent']['BlogContent'])) {
-                $this->blogContent = $this->_View->viewVars['blogContent']['BlogContent'];
-                if ($this->request->getParam('Content.type') === 'BlogContent') {
-                    $this->content = $this->request->getParam('Content');
+            } elseif ($this->_View->get('blogContent')) {
+                $this->currentBlogContent = $this->_View->get('blogContent');
+                if ($this->_View->getRequest()->getParam('Content.type') === 'BlogContent') {
+                    $this->currentContent = $this->_View->getRequest()->getParam('Content');
                 } else {
-                    $content = $this->BcContents->getContentByEntityId($this->blogContent['id'], 'BlogContent');
-                    if (!empty($content['Content'])) {
-                        $this->content = $content['Content'];
-                    }
+                    $content = $this->BcContents->getContentByEntityId($this->currentBlogContent->id, 'BlogContent');
+                    if ($content) $this->currentContent = $content;
                 }
             }
         }
-        if ($this->blogContent) {
+        if ($this->currentBlogContent) {
             if ($blogContentUpdated) {
-                $Content = ClassRegistry::init('Content');
+                $contentTable = TableRegistry::getTableLocator()->get('BaserCore.Contents');
                 // 現在のサイトにエイリアスが存在するのであればそちらを優先する
-                $content = $Content->find('first', ['conditions' => [
-                    'Content.entity_id' => $this->blogContent['id'],
-                    'Content.type' => 'BlogContent',
-                    'alias_id <>' => null,
-                    'site_id' => $this->request->getParam('Site.id')
-                ], 'recursive' => -1]);
+                $content = $contentTable->find()->where([
+                    'Contents.entity_id' => $this->currentBlogContent->id,
+                    'Contents.type' => 'BlogContent',
+                    'Contents.alias_id <>' => null,
+                    'Contents.site_id' => $this->_View->getRequest()->getParam('Site.id')
+                ])->first();
                 if (!$content) {
-                    $content = $Content->find('first', ['conditions' => [
-                        'Content.entity_id' => $this->blogContent['id'],
-                        'Content.type' => 'BlogContent'
-                    ], 'recursive' => -1]);
+                    $content = $contentTable->find()->where([
+                        'Contents.entity_id' => $this->currentBlogContent->id,
+                        'Contents.type' => 'BlogContent'
+                    ])->first();
                 }
-                $this->content = Hash::extract($content, 'Content');
+                $this->currentContent = $content;
             }
-            $BlogPost = ClassRegistry::init('BcBlog.BlogPost');
-            $BlogPost->setupUpload($this->blogContent['id']);
+            /* @var BlogPostsTable $blogPostTable */
+            $blogPostTable = TableRegistry::getTableLocator()->get('BcBlog.BlogPosts');
+            $blogPostTable->setupUpload($this->currentBlogContent->id);
         } else {
-            $this->content = null;
+            $this->currentContent = null;
         }
     }
 
@@ -136,7 +153,7 @@ class BlogHelper extends Helper
      */
     public function getCurrentBlogId()
     {
-        return $this->blogContent['id'];
+        return $this->currentBlogContent->id;
     }
 
     /**
@@ -156,7 +173,7 @@ class BlogHelper extends Helper
      */
     public function getBlogName()
     {
-        return $this->request->getParam('Content.name');
+        return $this->_View->getRequest()->getParam('Content.name');
     }
 
     /**
@@ -176,7 +193,7 @@ class BlogHelper extends Helper
      */
     public function getTitle()
     {
-        return $this->request->getParam('Content.title');
+        return $this->_View->getRequest()->getParam('Content.title');
     }
 
     /**
@@ -186,7 +203,7 @@ class BlogHelper extends Helper
      */
     public function getDescription()
     {
-        return $this->blogContent['description'];
+        return $this->currentBlogContent->description;
     }
 
     /**
@@ -206,7 +223,7 @@ class BlogHelper extends Helper
      */
     public function descriptionExists()
     {
-        if (!empty($this->blogContent['description'])) {
+        if (!empty($this->currentBlogContent->description)) {
             return true;
         } else {
             return false;
@@ -307,11 +324,11 @@ class BlogHelper extends Helper
     public function getPostLinkUrl($post, $base = true)
     {
         $this->setContent($post['BlogPost']['blog_content_id']);
-        if (empty($this->content['url'])) {
+        if (empty($this->currentContent->url)) {
             return false;
         }
-        $site = BcSite::findByUrl($this->content['url']);
-        $contentUrl = $this->BcBaser->getContentsUrl($this->content['url'], !$this->isSameSiteBlogContent($post['BlogPost']['blog_content_id']), !empty($site->useSubDomain), false);
+        $site = BcSite::findByUrl($this->currentContent->url);
+        $contentUrl = $this->BcBaser->getContentsUrl($this->currentContent->url, !$this->isSameSiteBlogContent($post['BlogPost']['blog_content_id']), !empty($site->useSubDomain), false);
         $url = $contentUrl . 'archives/' . $post['BlogPost']['no'];
         if ($base) {
             return $this->url($url);
@@ -369,7 +386,7 @@ class BlogHelper extends Helper
             $moreLink = __d('baser', '≫ 続きを読む');
         }
         $out = '';
-        if ($this->blogContent['use_content']) {
+        if ($this->currentBlogContent->use_content) {
             $out .= '<div class="post-body">' . $post['BlogPost']['content'] . '</div>';
         }
         if ($moreText && $post['BlogPost']['detail']) {
@@ -526,7 +543,7 @@ class BlogHelper extends Helper
         if ($options['crossing']) {
             $crossingId = null;
         } else {
-            $crossingId = $this->blogContent['id'];
+            $crossingId = $this->currentBlogContent->id;
         }
         if ($options['tag'] === false) {
             $options['link'] = false;
@@ -563,6 +580,8 @@ class BlogHelper extends Helper
      * @param array $options オプション（初期値 : array()）
      *    `named` : URLの名前付きパラメータ
      * @return string カテゴリ一覧へのURL
+     * @checked
+     * @noTodo
      */
     public function getCategoryUrl($blogCategoryId, $options = [])
     {
@@ -570,18 +589,18 @@ class BlogHelper extends Helper
             'named' => [],
             'base' => true
         ], $options);
-        if (!isset($this->BlogCategory)) {
-            $this->BlogCategory = ClassRegistry::init('BcBlog.BlogCategory');
-        }
-        $categoryPath = $this->BlogCategory->getPath($blogCategoryId);
-        $blogContentId = $categoryPath[0]['BlogCategory']['blog_content_id'];
+        $blogCategoriesTable = TableRegistry::getTableLocator()->get('BcBlog.BlogCategories');
+        $blogCategory = $blogCategoriesTable->get($blogCategoryId);
+        $categoryPath = $blogCategoriesTable->find('path', ['for' => $blogCategoryId]);
+        $blogContentId = $blogCategory->blog_content_id;
         $this->setContent($blogContentId);
-        $site = BcSite::findByUrl($this->content['url']);
-        $contentUrl = $this->BcBaser->getContentsUrl($this->content['url'], !$this->isSameSiteBlogContent($blogContentId), !empty($site->useSubDomain), false);
+        $sitesTable = TableRegistry::getTableLocator()->get('BaserCore.Sites');
+        $site = $sitesTable->findByUrl($this->currentContent->url);
+        $contentUrl = $this->BcBaser->getContentsUrl($this->currentContent->url, !$this->isSameSiteBlogContent($blogContentId), !empty($site->useSubDomain), false);
         $path = ['category'];
         if ($categoryPath) {
             foreach ($categoryPath as $category) {
-                $path[] = rawurldecode($category['BlogCategory']['name']);
+                $path[] = rawurldecode($category->name);
             }
         }
         if ($options['named']) {
@@ -589,7 +608,7 @@ class BlogHelper extends Helper
         }
         $url = $contentUrl . 'archives/' . implode('/', $path);
         if ($options['base']) {
-            return $this->url($url);
+            return $this->Url->build($url);
         } else {
             return $url;
         }
@@ -897,7 +916,7 @@ class BlogHelper extends Helper
             }
             $img = $this->BcBaser->getImg($url, $options);
             if ($link) {
-                return $this->BcBaser->getLink($img, $this->request->getParam('Content.url') . 'archives/' . $post['BlogPost']['no']);
+                return $this->BcBaser->getLink($img, $this->_View->getRequest()->getParam('Content.url') . 'archives/' . $post['BlogPost']['no']);
             } else {
                 return $img;
             }
@@ -1078,12 +1097,12 @@ class BlogHelper extends Helper
      */
     public function isSingle()
     {
-        if (empty($this->request->getParam('plugin'))) {
+        if (empty($this->_View->getRequest()->getParam('plugin'))) {
             return false;
         }
-        return ($this->request->getParam('plugin') == 'blog' &&
-            $this->request->getParam('controller') == 'blog' &&
-            $this->request->getParam('action') == 'archives' &&
+        return ($this->_View->getRequest()->getParam('plugin') == 'blog' &&
+            $this->_View->getRequest()->getParam('controller') == 'blog' &&
+            $this->_View->getRequest()->getParam('action') == 'archives' &&
             !$this->getBlogArchiveType());
     }
 
@@ -1094,10 +1113,10 @@ class BlogHelper extends Helper
      */
     public function isHome()
     {
-        if (empty($this->request->getParam('plugin'))) {
+        if (empty($this->_View->getRequest()->getParam('plugin'))) {
             return false;
         }
-        return ($this->request->getParam('plugin') == 'blog' && $this->request->getParam('controller') == 'blog' && $this->request->getParam('action') == 'index');
+        return ($this->_View->getRequest()->getParam('plugin') == 'blog' && $this->_View->getRequest()->getParam('controller') == 'blog' && $this->_View->getRequest()->getParam('action') == 'index');
     }
 
     /**
@@ -1435,9 +1454,9 @@ class BlogHelper extends Helper
         }
         if ($blogContentId) {
             $this->setContent($blogContentId);
-            if (!empty($this->content['url'])) {
-                $site = BcSite::findByUrl($this->content['url']);
-                $url = $this->BcBaser->getContentsUrl($this->content['url'], !$this->isSameSiteBlogContent($blogContentId), !empty($site->useSubDomain), false);
+            if (!empty($this->currentContent->url)) {
+                $site = BcSite::findByUrl($this->currentContent->url);
+                $url = $this->BcBaser->getContentsUrl($this->currentContent->url, !$this->isSameSiteBlogContent($blogContentId), !empty($site->useSubDomain), false);
                 $url = $url . 'archives/tag/' . $tag['name'];
             }
         }
@@ -1663,8 +1682,8 @@ class BlogHelper extends Helper
         $template = 'Blog...' . DS . 'Blog' . DS . $contentsTemplate . DS . $template;
         $params = [];
         // TODO ucmitz 一旦、コメントアウト
-//        if (!empty($this->request->getParam('Site.device'))) {
-//            $this->_View->subDir = $this->request->getParam('Site.device');
+//        if (!empty($this->_View->getRequest()->getParam('Site.device'))) {
+//            $this->_View->subDir = $this->_View->getRequest()->getParam('Site.device');
 //        }
         if (is_array($options['data'])) {
             $data = array_merge(['posts' => $blogPosts], $options['data']);
@@ -1737,11 +1756,11 @@ class BlogHelper extends Helper
             }
         }
         if ($options['autoSetCurrentBlog'] && empty($options['contentUrl']) && empty($options['contentId'])) {
-            if ($this->isBlog() && !empty($this->request->getParam('Content.entity_id'))) {
-                $options['contentId'] = $this->request->getParam('Content.entity_id');
+            if ($this->isBlog() && !empty($this->_View->getRequest()->getParam('Content.entity_id'))) {
+                $options['contentId'] = $this->_View->getRequest()->getParam('Content.entity_id');
             }
-            if ($this->isBlog() && !empty($this->request->getParam('Content.url'))) {
-                $options['contentUrl'] = $this->request->getParam('Content.url');
+            if ($this->isBlog() && !empty($this->_View->getRequest()->getParam('Content.url'))) {
+                $options['contentUrl'] = $this->_View->getRequest()->getParam('Content.url');
             }
         }
         return $options;
@@ -1875,7 +1894,7 @@ class BlogHelper extends Helper
      */
     public function isBlog()
     {
-        return (!empty($this->request->getParam('Content.plugin')) && $this->request->getParam('Content.plugin') == 'BcBlog');
+        return (!empty($this->_View->getRequest()->getParam('Content.plugin')) && $this->_View->getRequest()->getParam('Content.plugin') == 'BcBlog');
     }
 
     /**
@@ -1889,30 +1908,30 @@ class BlogHelper extends Helper
     public function getContentsUrl($blogContentId, $base = true)
     {
         $this->setContent($blogContentId);
-        $site = BcSite::findByUrl($this->content['url']);
-        return $this->BcBaser->getContentsUrl($this->content['url'], !$this->isSameSiteBlogContent($blogContentId), !empty($site->useSubDomain), $base);
+        $site = BcSite::findByUrl($this->currentContent->url);
+        return $this->BcBaser->getContentsUrl($this->currentContent->url, !$this->isSameSiteBlogContent($blogContentId), !empty($site->useSubDomain), $base);
     }
 
     /**
      * 指定したブログコンテンツIDが、現在のサイトと同じかどうか判定する
      *
-     * @param $blogContentId ブログコンテンツID
+     * @param int $blogContentId ブログコンテンツID
      * @return bool
      */
     public function isSameSiteBlogContent($blogContentId)
     {
-        $Content = ClassRegistry::init('Content');
-        $siteId = $Content->field('site_id', [
-            'Content.entity_id' => $blogContentId,
-            'Content.type' => 'BlogContent'
-        ]);
+        $contentsTable = TableRegistry::getTableLocator()->get('BaserCore.Contents');
+        $content = $contentsTable->find()->where([
+            'Contents.entity_id' => $blogContentId,
+            'Contents.type' => 'BlogContent'
+        ])->first();
+        $siteId = $content->site_id;
         $currentSiteId = 0;
-        if (!empty($this->request->getParam('Content.alias_id'))) {
-            $currentSiteId = $Content->field('site_id', [
-                'Content.id' => $this->request->getParam('Content.alias_id')
-            ]);
-        } elseif ($this->request->getParam('Site.id')) {
-            $currentSiteId = $this->request->getParam('Site.id');
+        if (!empty($this->_View->getRequest()->getParam('Content.alias_id'))) {
+            $content = $contentsTable->get($this->_View->getRequest()->getParam('Content.alias_id'));
+            $currentSiteId = $content->site_id;
+        } elseif ($this->_View->getRequest()->getParam('Site.id')) {
+            $currentSiteId = $this->_View->getRequest()->getParam('Site.id');
         }
         return ($currentSiteId == $siteId);
     }
@@ -1947,7 +1966,7 @@ class BlogHelper extends Helper
     public function getCategoryByName($blogContentId, $categoryName = '', $options = [])
     {
         if (!$categoryName && $this->getBlogArchiveType() === 'category') {
-            $pass = $this->request->getParam('pass');
+            $pass = $this->_View->getRequest()->getParam('pass');
             $categoryName = $pass[count($pass) - 1];
         }
         return ClassRegistry::init('Blog.BlogCategory')->getByName($blogContentId, $categoryName, $options);
@@ -1977,7 +1996,7 @@ class BlogHelper extends Helper
     {
         $blogTag = [];
         if ($this->isTag()) {
-            $pass = $this->request->getParam('pass');
+            $pass = $this->_View->getRequest()->getParam('pass');
             $name = isset($pass[1]) ? $pass[1] : '';
             $BlogTagModel = ClassRegistry::init('Blog.BlogTag');
             $blogTag = $BlogTagModel->getByName(rawurldecode($name));

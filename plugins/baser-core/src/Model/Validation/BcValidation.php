@@ -73,7 +73,7 @@ class BcValidation extends Validation
      */
     public static function alphaNumericDashUnderscore($value)
     {
-        return preg_match('|^[0-9a-zA-Z_-]*$|', $value);
+        return (bool) preg_match('|^[0-9a-zA-Z_-]*$|', $value);
     }
 
     /**

@@ -29,7 +29,12 @@ use BaserCore\View\AppView;
         'type' => 'select',
         'options' => ['detach' => __d('baser', '無効')], 'empty' => __d('baser', '一括処理')
       ]) ?>
-      <?php echo $this->BcAdminForm->button(__d('baser', '適用'), ['id' => 'BtnApplyBatch', 'disabled' => 'disabled', 'class' => 'bca-btn', 'data-bca-btn-size' => 'lg']) ?>
+      <?php echo $this->BcAdminForm->button(__d('baser', '適用'), [
+        'id' => 'BtnApplyBatch',
+        'disabled' => 'disabled',
+        'class' => 'bca-btn',
+        'data-bca-btn-size' => 'lg'
+      ]) ?>
     </div>
   <?php endif ?>
 </div>

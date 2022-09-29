@@ -19,7 +19,7 @@ App::uses('BlogCategory', 'BcBlog.Model');
  *
  * @property BlogCategory $BlogCategory
  */
-class BlogCategoryTest extends BaserTestCase
+class BlogCategoriesTableTest extends BaserTestCase
 {
 
     public $fixtures = [
@@ -144,43 +144,6 @@ class BlogCategoryTest extends BaserTestCase
 
         $this->assertArrayHasKey('name', $this->BlogCategory->validationErrors);
         $this->assertEquals('入力されたカテゴリ名は既に登録されています。', current($this->BlogCategory->validationErrors['name']));
-    }
-
-    /**
-     * コントロールソースを取得する
-     *
-     * @param string $field フィールド名
-     * @param array $option オプション
-     * @param array $expected 期待値
-     * @dataProvider getControlSourceDataProvider
-     */
-    public function testGetControlSource($field, $options, $expected)
-    {
-        $result = $this->BlogCategory->getControlSource($field, $options);
-        $this->assertEquals($expected, $result, 'コントロールソースを正しく取得できません');
-    }
-
-    public function getControlSourceDataProvider()
-    {
-        return [
-            ['parent_id', ['blogContentId' => 1], [
-                1 => 'プレスリリース',
-                2 => '　　　└子カテゴリ',
-                3 => '親子関係なしカテゴリ'
-            ]],
-            ['parent_id', ['blogContentId' => 0], []],
-            ['parent_id', ['blogContentId' => 1, 'excludeParentId' => true], [3 => '親子関係なしカテゴリ']],
-            ['parent_id', ['blogContentId' => 1, 'ownerId' => 2], []],
-            ['parent_id', ['blogContentId' => 1, 'ownerId' => 1], [
-                1 => 'プレスリリース',
-                2 => '　　　└子カテゴリ',
-                3 => '親子関係なしカテゴリ'
-            ]],
-            ['owner_id', [], [
-                1 => 'システム管理',
-                2 => 'サイト運営'
-            ]],
-        ];
     }
 
     /**

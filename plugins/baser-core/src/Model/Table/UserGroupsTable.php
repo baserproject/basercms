@@ -52,30 +52,6 @@ class UserGroupsTable extends AppTable
     use BcEventDispatcherTrait;
 
     /**
-     * hasMany
-     *
-     * @var array
-     */
-    public $hasMany = [
-        'Permission' => [
-            'className' => 'Permission',
-            'order' => 'id',
-            'foreignKey' => 'user_group_id',
-            'dependent' => true,
-            'exclusive' => false,
-            'finderQuery' => ''
-        ],
-        'User' => [
-            'className' => 'User',
-            'order' => 'id',
-            'foreignKey' => 'user_group_id',
-            'dependent' => false,
-            'exclusive' => false,
-            'finderQuery' => ''
-        ]
-    ];
-
-    /**
      * Initialize method
      *
      * @param array $config The configuration for the Table.

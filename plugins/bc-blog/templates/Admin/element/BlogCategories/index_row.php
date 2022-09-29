@@ -1,54 +1,81 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package            Blog.View
- * @since           baserCMS v 0.1.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) NPO baser foundation
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       https://basercms.net/license/index.html MIT License
  */
 
 /**
  * [ADMIN] ブログカテゴリ 一覧　行
+ * @var BcBlog\View\BlogAdminAppView $this
+ * @var string $rowGroupClass
+ * @var BcBlog\Model\Entity\BlogContent $blogContent
+ * @var BcBlog\Model\Entity\BlogCategory $blogCategory
+ * @checked
+ * @noTodo
+ * @unitTest
  */
-$allowOwners = [];
-if (isset($user['user_group_id'])) {
-  $allowOwners = ['', $user['user_group_id']];
-}
 ?>
 
 
 <tr<?php echo $rowGroupClass ?>>
-  <td class="row-tools bca-table-listup__tbody-td">
-    <?php if ($this->BcBaser->isAdminUser()): ?>
-      <?php echo $this->BcAdminForm->control('batch_targets.' . $data['BlogCategory']['id'], ['type' => 'checkbox', 'label' => '<span class="bca-visually-hidden">チェックする</span>', 'class' => 'batch-targets bca-checkbox__input', 'value' => $data['BlogCategory']['id']]) ?>
-    <?php endif ?>
-  </td>
-  <td class="bca-table-listup__tbody-td"><?php echo $data['BlogCategory']['no'] ?></td>
-  <td class="bca-table-listup__tbody-td">
-    <?php if (in_array($data['BlogCategory']['owner_id'], $allowOwners) || $this->BcAdmin->isSystemAdmin()): ?>
-      <?php $this->BcBaser->link($data['BlogCategory']['name'], ['action' => 'edit', $blogContent['BlogContent']['id'], $data['BlogCategory']['id']]) ?>
-    <?php else: ?>
-      <?php echo $data['BlogCategory']['name'] ?>
-    <?php endif ?>
-    <?php if ($this->BcBaser->siteConfig['category_permission']): ?>
-      <br/>
-      <?php echo $this->BcText->arrayValue($data['BlogCategory']['owner_id'], $owners) ?>
-    <?php endif ?>
-  </td>
-  <td class="bca-table-listup__tbody-td"><?php echo html_entity_decode(h($data['BlogCategory']['title'])) ?></td>
-  <?php echo $this->BcListTable->dispatchShowRow($data) ?>
-  <td
-    class="bca-table-listup__tbody-td"><?php echo $this->BcTime->format($data['BlogCategory']['created'], 'yyyy-MM-dd'); ?>
-    <br/>
-    <?php echo $this->BcTime->format($data['BlogCategory']['modified'], 'yyyy-MM-dd'); ?></td>
-  <td class="bca-table-listup__tbody-td bca-table-listup__tbody-td--actions">
-    <?php $this->BcBaser->link('', $this->Blog->getCategoryUrl($data['BlogCategory']['id']), ['title' => __d('baser', '確認'), 'target' => '_blank', 'class' => 'bca-btn-icon', 'data-bca-btn-type' => 'preview', 'data-bca-btn-size' => 'lg']) ?>
-    <?php if (in_array($data['BlogCategory']['owner_id'], $allowOwners) || (isset($user['user_group_id']) && $user['user_group_id'] == Configure::read('BcApp.adminGroupId'))): ?>
-      <?php $this->BcBaser->link('', ['action' => 'edit', $blogContent['BlogContent']['id'], $data['BlogCategory']['id']], ['title' => __d('baser', '編集'), 'class' => 'bca-btn-icon', 'data-bca-btn-type' => 'edit', 'data-bca-btn-size' => 'lg']) ?>
-      <?php $this->BcBaser->link('', ['action' => 'ajax_delete', $blogContent['BlogContent']['id'], $data['BlogCategory']['id']], ['title' => __d('baser', '削除'), 'class' => 'btn-delete bca-btn-icon', 'data-bca-btn-type' => 'delete', 'data-bca-btn-size' => 'lg']) ?>
-    <?php endif ?>
-  </td>
+    <td class="row-tools bca-table-listup__tbody-td">
+        <?php if ($this->BcBaser->isAdminUser()): ?>
+            <?php echo $this->BcAdminForm->control('batch_targets.' . $blogCategory->id, [
+                'type' => 'checkbox',
+                'label' => '<span class="bca-visually-hidden">チェックする</span>',
+                'class' => 'batch-targets bca-checkbox__input',
+                'value' => $blogCategory->id,
+                'escape' => false
+            ]) ?>
+        <?php endif ?>
+    </td>
+    <td class="bca-table-listup__tbody-td"><?php echo $blogCategory->no ?></td>
+    <td class="bca-table-listup__tbody-td">
+        <?php $this->BcBaser->link(
+            $blogCategory->name,
+            ['action' => 'edit', $blogContent->id, $blogCategory->id]
+        ) ?>
+    </td>
+    <td class="bca-table-listup__tbody-td"><?php echo html_entity_decode(h($blogCategory->layered_title)) ?></td>
+    <?php echo $this->BcListTable->dispatchShowRow($blogCategory) ?>
+    <td class="bca-table-listup__tbody-td">
+        <?php echo $this->BcTime->format($blogCategory->created, 'yyyy-MM-dd'); ?>
+        <br/>
+        <?php echo $this->BcTime->format($blogCategory->modified, 'yyyy-MM-dd'); ?>
+    </td>
+    <td class="bca-table-listup__tbody-td bca-table-listup__tbody-td--actions">
+        <?php $this->BcBaser->link('', $this->Blog->getCategoryUrl($blogCategory->id), [
+                'title' => __d('baser', '確認'),
+                'target' => '_blank',
+                'class' => 'bca-btn-icon',
+                'data-bca-btn-type' => 'preview',
+                'data-bca-btn-size' => 'lg']
+        ) ?>
+        <?php if (\BaserCore\Utility\BcUtil::isAdminUser()): ?>
+            <?php $this->BcBaser->link('',
+                ['action' => 'edit', $blogContent->id, $blogCategory->id],
+                [
+                    'title' => __d('baser', '編集'),
+                    'class' => 'bca-btn-icon',
+                    'data-bca-btn-type' => 'edit',
+                    'data-bca-btn-size' => 'lg'
+                ]
+            ) ?>
+            <?= $this->BcAdminForm->postLink('',
+                ['action' => 'delete', $blogContent->id, $blogCategory->id],
+                [
+                    'confirm' => __d('baser', "このデータを本当に削除してもいいですか？\n\nこのカテゴリに関連する記事は、どのカテゴリにも関連しない状態として残ります。"),
+                    'title' => __d('baser', '削除'),
+                    'class' => 'btn-delete bca-btn-icon',
+                    'data-bca-btn-type' => 'delete',
+                    'data-bca-btn-size' => 'lg',
+                ]
+            ) ?>
+        <?php endif ?>
+    </td>
 </tr>

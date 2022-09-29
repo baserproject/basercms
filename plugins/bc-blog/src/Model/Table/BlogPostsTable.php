@@ -11,23 +11,19 @@
 
 namespace BcBlog\Model\Table;
 
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
+
 /**
  * 記事モデル
  *
- * @package Blog.Model
- * @property BlogContent $BlogContent
- * @property BlogCategory $BlogCategory
- * @property BlogTag $BlogTag
+ * @property BlogContentsTable $BlogContents
+ * @property BlogCategoriesTable $BlogCategories
+ * @property BlogTagsTable $BlogTags
  */
 class BlogPostsTable extends BlogAppTable
 {
-
-    /**
-     * クラス名
-     *
-     * @var string
-     */
-    public $name = 'BlogPost';
 
     /**
      * 検索テーブルへの保存可否
@@ -44,13 +40,95 @@ class BlogPostsTable extends BlogAppTable
     public $findMethods = ['customParams' => true];
 
     /**
-     * ビヘイビア
+     * BlogPost constructor.
      *
-     * @var array
+     * @param bool $id
+     * @param null $table
+     * @param null $ds
+     * TODO ucmitz 一旦、コメントアウト
      */
-    public $actsAs = [
-        'BcSearchIndexManager',
-        'BcUpload' => [
+//    public function __construct($id = false, $table = null, $ds = null)
+//    {
+//        parent::__construct($id, $table, $ds);
+//        $this->validate = [
+//            'name' => [
+//                ['rule' => ['notBlank'], 'message' => __d('baser', 'タイトルを入力してください。'), 'required' => true],
+//                ['rule' => ['maxLength', 255], 'message' => __d('baser', 'タイトルは255文字以内で入力してください。')]
+//            ],
+//            'content' => [
+//                ['rule' => 'containsScript', 'message' => __d('baser', '概要欄でスクリプトの入力は許可されていません。')]
+//            ],
+//            'detail' => [
+//                ['rule' => ['maxByte', 64000], 'message' => __d('baser', '本稿欄に保存できるデータ量を超えています。')],
+//                ['rule' => 'containsScript', 'message' => __d('baser', '本稿欄でスクリプトの入力は許可されていません。')]
+//            ],
+//            'detail_draft' => [
+//                ['rule' => ['maxByte', 64000], 'message' => __d('baser', '草稿欄に保存できるデータ量を超えています。')],
+//                ['rule' => 'containsScript', 'message' => __d('baser', '草稿欄でスクリプトの入力は許可されていません。')]
+//            ],
+//            'publish_begin' => [
+//                ['rule' => ['checkDate'], 'allowEmpty' => true, 'message' => __d('baser', '公開開始日の形式が不正です。')],
+//                ['rule' => ['checkDateRenge', 'allowEmpty' => true, 'publish_begin', 'publish_end'], 'message' => __d('baser', '公開期間が不正です。')]
+//            ],
+//            'publish_end' => [
+//                ['rule' => ['checkDate'], 'allowEmpty' => true, 'message' => __d('baser', '公開終了日の形式が不正です。')],
+//                ['rule' => ['checkDateRenge', 'allowEmpty' => true, 'publish_begin', 'publish_end'], 'message' => __d('baser', '公開期間が不正です。')]
+//            ],
+//            'posts_date' => [
+//                ['rule' => ['notBlank'], 'message' => __d('baser', '投稿日を入力してください。'), 'required' => true],
+//                ['rule' => ['checkDate'], 'message' => __d('baser', '投稿日の形式が不正です。')]
+//            ],
+//            'user_id' => [
+//                ['rule' => ['notBlank'], 'message' => __d('baser', '投稿者を選択してください。')]
+//            ],
+//            'eye_catch' => [
+//                ['rule' => ['fileCheck', $this->convertSize(ini_get('upload_max_filesize'))], 'message' => __d('baser', 'ファイルのアップロードに失敗しました。')],
+//                ['rule' => ['fileExt', ['gif', 'jpg', 'jpeg', 'jpe', 'jfif', 'png']], 'allowEmpty' => true, 'message' => __d('baser', '許可されていないファイルです。')]
+//            ]
+//        ];
+//    }
+
+    /**
+     * Initialize method
+     *
+     * @param array $config The configuration for the Table.
+     * @return void
+     * @checked
+     * @noTodo
+     */
+    public function initialize(array $config): void
+    {
+        parent::initialize($config);
+
+        $this->setTable('user_groups');
+        $this->setPrimaryKey('id');
+        $this->addBehavior('Timestamp');
+        $this->belongsToMany('BlogTags', [
+            'className' => 'BcBlog.BlogTags',
+            'foreignKey' => 'blog_post_id',
+            'targetForeignKey' => 'blog_tag_id',
+            'joinTable' => 'blog_posts_blog_tags',
+        ]);
+        $this->hasMany('BlogComments', [
+            'className' => 'BcBlog.BlogComments',
+            'order' => 'created',
+            'foreignKey' => 'blog_post_id',
+            'dependent' => true,
+            'exclusive' => false,
+        ]);
+        $this->belongsTo('BlogCategories', [
+            'className' => 'BcBlog.BlogCategories',
+            'foreignKey' => 'blog_category_id',
+        ]);
+        $this->belongsTo('BlogContents', [
+            'className' => 'BcBlog.BlogContents',
+            'foreignKey' => 'blog_content_id',
+        ]);
+        $this->belongsTo('Users', [
+            'className' => 'BaserCore.Users',
+            'foreignKey' => 'user_id',
+        ]);
+        $this->addBehavior('BaserCore.BcUpload', [
             'subdirDateFormat' => 'Y/m/',
             'fields' => [
                 'eye_catch' => [
@@ -59,111 +137,8 @@ class BlogPostsTable extends BlogAppTable
                     'nameformat' => '%08d'
                 ]
             ]
-        ]
-    ];
-
-    /**
-     * belongsTo
-     *
-     * @var array
-     */
-    public $belongsTo = [
-        'BlogCategory' => [
-            'className' => 'BcBlog.BlogCategory',
-            'foreignKey' => 'blog_category_id'
-        ],
-        'User' => [
-            'className' => 'User',
-            'foreignKey' => 'user_id'
-        ],
-        'BlogContent' => [
-            'className' => 'BcBlog.BlogContent',
-            'foreignKey' => 'blog_content_id'
-        ]
-    ];
-
-    /**
-     * hasMany
-     *
-     * @var array
-     */
-    public $hasMany = [
-        'BlogComment' => [
-            'className' => 'BcBlog.BlogComment',
-            'order' => 'created',
-            'foreignKey' => 'blog_post_id',
-            'dependent' => true,
-            'exclusive' => false,
-            'finderQuery' => ''
-        ]
-    ];
-
-    /**
-     * HABTM
-     *
-     * @var array
-     */
-    public $hasAndBelongsToMany = [
-        'BlogTag' => [
-            'className' => 'BcBlog.BlogTag',
-            'joinTable' => 'blog_posts_blog_tags',
-            'foreignKey' => 'blog_post_id',
-            'associationForeignKey' => 'blog_tag_id',
-            'conditions' => '',
-            'order' => '',
-            'limit' => '',
-            'unique' => true,
-            'finderQuery' => '',
-            'deleteQuery' => ''
-        ]
-    ];
-
-    /**
-     * BlogPost constructor.
-     *
-     * @param bool $id
-     * @param null $table
-     * @param null $ds
-     */
-    public function __construct($id = false, $table = null, $ds = null)
-    {
-        parent::__construct($id, $table, $ds);
-        $this->validate = [
-            'name' => [
-                ['rule' => ['notBlank'], 'message' => __d('baser', 'タイトルを入力してください。'), 'required' => true],
-                ['rule' => ['maxLength', 255], 'message' => __d('baser', 'タイトルは255文字以内で入力してください。')]
-            ],
-            'content' => [
-                ['rule' => 'containsScript', 'message' => __d('baser', '概要欄でスクリプトの入力は許可されていません。')]
-            ],
-            'detail' => [
-                ['rule' => ['maxByte', 64000], 'message' => __d('baser', '本稿欄に保存できるデータ量を超えています。')],
-                ['rule' => 'containsScript', 'message' => __d('baser', '本稿欄でスクリプトの入力は許可されていません。')]
-            ],
-            'detail_draft' => [
-                ['rule' => ['maxByte', 64000], 'message' => __d('baser', '草稿欄に保存できるデータ量を超えています。')],
-                ['rule' => 'containsScript', 'message' => __d('baser', '草稿欄でスクリプトの入力は許可されていません。')]
-            ],
-            'publish_begin' => [
-                ['rule' => ['checkDate'], 'allowEmpty' => true, 'message' => __d('baser', '公開開始日の形式が不正です。')],
-                ['rule' => ['checkDateRenge', 'allowEmpty' => true, 'publish_begin', 'publish_end'], 'message' => __d('baser', '公開期間が不正です。')]
-            ],
-            'publish_end' => [
-                ['rule' => ['checkDate'], 'allowEmpty' => true, 'message' => __d('baser', '公開終了日の形式が不正です。')],
-                ['rule' => ['checkDateRenge', 'allowEmpty' => true, 'publish_begin', 'publish_end'], 'message' => __d('baser', '公開期間が不正です。')]
-            ],
-            'posts_date' => [
-                ['rule' => ['notBlank'], 'message' => __d('baser', '投稿日を入力してください。'), 'required' => true],
-                ['rule' => ['checkDate'], 'message' => __d('baser', '投稿日の形式が不正です。')]
-            ],
-            'user_id' => [
-                ['rule' => ['notBlank'], 'message' => __d('baser', '投稿者を選択してください。')]
-            ],
-            'eye_catch' => [
-                ['rule' => ['fileCheck', $this->convertSize(ini_get('upload_max_filesize'))], 'message' => __d('baser', 'ファイルのアップロードに失敗しました。')],
-                ['rule' => ['fileExt', ['gif', 'jpg', 'jpeg', 'jpe', 'jfif', 'png']], 'allowEmpty' => true, 'message' => __d('baser', '許可されていないファイルです。')]
-            ]
-        ];
+        ]);
+        $this->addBehavior('BcSearchIndex.BcSearchIndexManager');
     }
 
     /**
@@ -174,28 +149,27 @@ class BlogPostsTable extends BlogAppTable
     public function setupUpload($id)
     {
         $sizes = ['thumb', 'mobile_thumb'];
-        $data = $this->BlogContent->find('first', ['conditions' => ['BlogContent.id' => $id], 'recursive' => 0]);
-        $data = $this->BlogContent->constructEyeCatchSize($data);
-        $blogContent = $data['BlogContent'];
+        $data = $this->BlogContents->find()->where(['BlogContents.id' => $id])->first();
+        $blogContent = $this->BlogContents->constructEyeCatchSize($data);
 
         $imagecopy = [];
-
         foreach ($sizes as $size) {
-            if (!isset($blogContent['eye_catch_size_' . $size . '_width']) || !isset($blogContent['eye_catch_size_' . $size . '_height'])) {
+            if (!isset($blogContent->{'eye_catch_size_' . $size . '_width'}) || !isset($blogContent->{'eye_catch_size_' . $size . '_height'})) {
                 continue;
             }
             $imagecopy[$size] = ['suffix' => '__' . $size];
-            $imagecopy[$size]['width'] = $blogContent['eye_catch_size_' . $size . '_width'];
-            $imagecopy[$size]['height'] = $blogContent['eye_catch_size_' . $size . '_height'];
+            $imagecopy[$size]['width'] = $blogContent->{'eye_catch_size_' . $size . '_width'};
+            $imagecopy[$size]['height'] = $blogContent->{'eye_catch_size_' . $size . '_height'};
         }
 
-        $settings = $this->Behaviors->BcUpload->BcUpload['BlogPost']->settings;
-        if (empty($settings['saveDir']) || !preg_match('/^' . preg_quote("blog" . DS . $blogContent['id'], '/') . '\//', $settings['saveDir'])) {
-            $settings['saveDir'] = "blog" . DS . $blogContent['id'] . DS . "blog_posts";
+        $bcUpload = $this->getBehavior('BcUpload');
+        $settings = $bcUpload->getSettings();
+        if (empty($settings['saveDir']) || !preg_match('/^' . preg_quote("blog" . DS . $blogContent->id, '/') . '\//', $settings['saveDir'])) {
+            $settings['saveDir'] = "blog" . DS . $blogContent->id . DS . "blog_posts";
         }
 
         $settings['fields']['eye_catch']['imagecopy'] = $imagecopy;
-        $this->Behaviors->attach('BcUpload', $settings);
+        $bcUpload->setSettings($settings);
     }
 
     /**
@@ -583,7 +557,7 @@ class BlogPostsTable extends BlogAppTable
         if (isset($data['BlogPost'])) {
             $data = $data['BlogPost'];
         }
-        $content = $this->BlogContent->Content->findByType('BcBlog.BlogContent', $data['blog_content_id']);
+        $content = $this->BlogContents->Content->findByType('BcBlog.BlogContent', $data['blog_content_id']);
         if (!$content) {
             return false;
         }
@@ -974,7 +948,7 @@ class BlogPostsTable extends BlogAppTable
 
             $this->reduceAssociations($expects, false);
 
-            $this->BlogContent->unbindModel([
+            $this->BlogContents->unbindModel([
                 'hasMany' => ['BlogPost', 'BlogCategory']
             ]);
             $this->BlogCategory->unbindModel([
@@ -1003,7 +977,7 @@ class BlogPostsTable extends BlogAppTable
         if ($contentId) {
             $categoryConditions['BlogCategory.blog_content_id'] = $contentId;
         } elseif ($contentUrl) {
-            $categoryConditions['BlogCategory.blog_content_id'] = $this->BlogContent->Content->field('entity_id', ['Content.url' => $contentUrl]);
+            $categoryConditions['BlogCategory.blog_content_id'] = $this->BlogContents->Content->field('entity_id', ['Content.url' => $contentUrl]);
         } elseif (!$force) {
             trigger_error(__d('baser', 'contentId を指定してください。'), E_USER_WARNING);
         }

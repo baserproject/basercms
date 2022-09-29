@@ -20,13 +20,6 @@ class BlogTagsTable extends BlogAppTable
 {
 
     /**
-     * クラス名
-     *
-     * @var string
-     */
-    public $name = 'BlogTag';
-
-    /**
      * ビヘイビア
      *
      * @var array
@@ -66,17 +59,18 @@ class BlogTagsTable extends BlogAppTable
      * @param bool $id
      * @param null $table
      * @param null $ds
+     * TODO ucmitz 一旦、コメントアウト
      */
-    public function __construct($id = false, $table = null, $ds = null)
-    {
-        parent::__construct($id, $table, $ds);
-        $this->validate = [
-            'name' => [
-                'notBlank' => ['rule' => ['notBlank'], 'message' => __d('baser', 'ブログタグを入力してください。')],
-                'duplicate' => ['rule' => ['duplicate', 'name'], 'message' => __d('baser', '既に登録のあるタグです。')]
-            ]
-        ];
-    }
+//    public function __construct($id = false, $table = null, $ds = null)
+//    {
+//        parent::__construct($id, $table, $ds);
+//        $this->validate = [
+//            'name' => [
+//                'notBlank' => ['rule' => ['notBlank'], 'message' => __d('baser', 'ブログタグを入力してください。')],
+//                'duplicate' => ['rule' => ['duplicate', 'name'], 'message' => __d('baser', '既に登録のあるタグです。')]
+//            ]
+//        ];
+//    }
 
     /**
      * カスタムパラメーター検索

@@ -119,7 +119,7 @@ $class = ' class="' . implode(' ', $classies) . '"';
       <?= $this->BcAdminForm->postLink(
         '',
         ['action' => 'uninstall', $plugin->name],
-        ['block' => true,
+        [
           'confirm' => __d('baser', "本当に削除してもいいですか？\nプラグインフォルダ内のファイル、データベースのデータも全て削除されます。"),
           'title' => __d('baser', '削除'),
           'class' => 'btn-delete bca-btn-icon',

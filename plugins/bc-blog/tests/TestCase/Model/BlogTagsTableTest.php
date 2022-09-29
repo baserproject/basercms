@@ -19,7 +19,7 @@ App::uses('BlogTag', 'BcBlog.Model');
  *
  * @property BlogTag $BlogTag
  */
-class BlogTagTest extends BaserTestCase
+class BlogTagsTableTest extends BaserTestCase
 {
 
     public $fixtures = [

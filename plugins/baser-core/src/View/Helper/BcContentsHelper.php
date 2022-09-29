@@ -518,7 +518,7 @@ class BcContentsHelper extends Helper
      */
     public function getContentByEntityId($id, $contentType, $field = null)
     {
-        $conditions = array_merge($this->_Contents->getConditionAllowPublish(), ['type' => $contentType, 'entity_id' => $id]);
+        $conditions = array_merge($this->_Contents->getConditionAllowPublish(), ['Contents.type' => $contentType, 'Contents.entity_id' => $id]);
         return $this->_getContent($conditions, $field);
     }
 
@@ -532,6 +532,8 @@ class BcContentsHelper extends Helper
      *  'name','url','title'など　初期値：Null
      *  省略した場合配列を取得
      * @return array|string|bool
+     * @checked
+     * @noTodo
      */
     public function getContentByUrl($url, $contentType, $field = null)
     {
@@ -539,12 +541,21 @@ class BcContentsHelper extends Helper
         return $this->_getContent($conditions, $field);
     }
 
-    private function _getContent($conditions, $field)
+    /**
+     * 条件を指定してコンテンツを取得する
+     * フィールドを指定した場合はフィールドの値を取得する
+     * @param array $conditions
+     * @param string|null $field
+     * @return array|EntityInterface|false|mixed
+     * @checked
+     * @noTodo
+     */
+    private function _getContent($conditions, $field = null)
     {
-        $content = $this->_Contents->find('first', ['conditions' => $conditions, 'order' => ['Content.id'], 'cache' => false]);
+        $content = $this->_Contents->find()->where($conditions)->order(['Contents.id'])->first();
         if (!empty($content)) {
             if ($field) {
-                return $content ['Content'][$field];
+                return $content->{$field};
             } else {
                 return $content;
             }
@@ -552,7 +563,6 @@ class BcContentsHelper extends Helper
             return false;
         }
     }
-
 
     /**
      * IDがコンテンツ自身の親のIDかを判定する

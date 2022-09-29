@@ -13,18 +13,27 @@ declare(strict_types=1);
 namespace BcBlog;
 
 use BaserCore\BcPlugin;
+use BcBlog\ServiceProvider\BcBlogServiceProvider;
+use Cake\Core\ContainerInterface;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
 
 /**
  * plugin for ContactManager
  */
 class Plugin extends BcPlugin
 {
+
     /**
      * プラグインをインストールする
      *
      * @param array $options
      *  - `plugin` : プラグイン名
      *  - `connection` : コネクション名
+     * @noTodo
+     * @checked
+     * @unitTest 利用例として継承しているだけのためユニットテストはスキップ
      */
     public function install($options = []) : bool
     {
@@ -39,11 +48,25 @@ class Plugin extends BcPlugin
      *  - `plugin` : プラグイン名
      *  - `connection` : コネクション名
      *  - `target` : ロールバック対象バージョン
+     * @noTodo
+     * @checked
+     * @unitTest 利用例として継承しているだけのためユニットテストはスキップ
      */
     public function uninstall($options = []): bool
     {
         // ここに必要なアンインストール処理を記述
         return parent::uninstall($options);
+    }
+
+    /**
+     * services
+     * @param ContainerInterface $container
+     * @noTodo
+     * @checked
+     */
+    public function services(ContainerInterface $container): void
+    {
+        $container->addServiceProvider(new BcBlogServiceProvider());
     }
 
 }

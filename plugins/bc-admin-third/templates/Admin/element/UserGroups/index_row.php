@@ -54,7 +54,7 @@ use BaserCore\View\AppView;
       <?= $this->BcAdminForm->postLink(
         '',
         ['action' => 'delete', $userGroup->id],
-        ['block' => true,
+        [
           'confirm' => __d('baser', "{0} を本当に削除してもいいですか？\n\n削除する場合、関連するユーザーは削除されませんが、関連するアクセス制限設定は全て削除されます。\n※ 関連するユーザーは管理者グループに所属する事になります。", $userGroup->name),
           'title' => __d('baser', '削除'),
           'class' => 'btn-delete bca-btn-icon',

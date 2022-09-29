@@ -14,7 +14,7 @@ return;
 
 App::uses('BlogComment', 'BcBlog.Model');
 
-class BlogCommentTest extends BaserTestCase
+class BlogCommentsTableTest extends BaserTestCase
 {
     public $fixtures = [
         'baser.Default.BlogComment',

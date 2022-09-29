@@ -11,6 +11,12 @@
 
 namespace BcBlog\Model\Table;
 
+use BaserCore\Utility\BcUtil;
+use Cake\Datasource\EntityInterface;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
+
 /**
  * ブログコンテンツモデル
  *
@@ -69,30 +75,45 @@ class BlogContentsTable extends BlogAppTable
      * @param bool $id
      * @param null $table
      * @param null $ds
+     * TODO ucmitz 一旦、コメントアウト
      */
-    public function __construct($id = false, $table = null, $ds = null)
+//    public function __construct($id = false, $table = null, $ds = null)
+//    {
+//        parent::__construct($id, $table, $ds);
+//        $this->validate = [
+//            'layout' => [
+//                ['rule' => 'halfText', 'message' => __d('baser', 'レイアウトテンプレート名は半角で入力してください。'), 'allowEmpty' => false],
+//                ['rule' => ['maxLength', 20], 'message' => __d('baser', 'レイアウトテンプレート名は20文字以内で入力してください。')]
+//            ],
+//            'template' => [
+//                ['rule' => 'halfText', 'message' => __d('baser', 'コンテンツテンプレート名は半角で入力してください。'), 'allowEmpty' => false],
+//                ['rule' => ['maxLength', 20], 'message' => __d('baser', 'レイアウトテンプレート名は20文字以内で入力してください。')]
+//            ],
+//            'list_count' => [
+//                ['rule' => 'halfText', 'message' => __d('baser', '一覧表示件数は半角で入力してください。'), 'allowEmpty' => false],
+//                ['rule' => ['range', 0, 101], 'message' => __d('baser', '一覧表示件数は100までの数値で入力してください。')]
+//            ],
+//            'list_direction' => [
+//                ['rule' => ['notBlank'], 'message' => __d('baser', '一覧に表示する順番を指定してください。')]
+//            ],
+//            'eye_catch_size' => [
+//                ['rule' => ['checkEyeCatchSize'], 'message' => __d('baser', 'アイキャッチ画像のサイズが不正です。')]
+//            ]
+//        ];
+//    }
+
+    /**
+     * Initialize
+     *
+     * @param array $config テーブル設定
+     * @return void
+     * @checked
+     * @noTodo
+     */
+    public function initialize(array $config): void
     {
-        parent::__construct($id, $table, $ds);
-        $this->validate = [
-            'layout' => [
-                ['rule' => 'halfText', 'message' => __d('baser', 'レイアウトテンプレート名は半角で入力してください。'), 'allowEmpty' => false],
-                ['rule' => ['maxLength', 20], 'message' => __d('baser', 'レイアウトテンプレート名は20文字以内で入力してください。')]
-            ],
-            'template' => [
-                ['rule' => 'halfText', 'message' => __d('baser', 'コンテンツテンプレート名は半角で入力してください。'), 'allowEmpty' => false],
-                ['rule' => ['maxLength', 20], 'message' => __d('baser', 'レイアウトテンプレート名は20文字以内で入力してください。')]
-            ],
-            'list_count' => [
-                ['rule' => 'halfText', 'message' => __d('baser', '一覧表示件数は半角で入力してください。'), 'allowEmpty' => false],
-                ['rule' => ['range', 0, 101], 'message' => __d('baser', '一覧表示件数は100までの数値で入力してください。')]
-            ],
-            'list_direction' => [
-                ['rule' => ['notBlank'], 'message' => __d('baser', '一覧に表示する順番を指定してください。')]
-            ],
-            'eye_catch_size' => [
-                ['rule' => ['checkEyeCatchSize'], 'message' => __d('baser', 'アイキャッチ画像のサイズが不正です。')]
-            ]
-        ];
+        parent::initialize($config);
+        $this->addBehavior('BaserCore.BcContents');
     }
 
     /**
@@ -364,16 +385,16 @@ class BlogContentsTable extends BlogAppTable
     /**
      * アイキャッチサイズフィールドの値をフォーム用に変換する
      *
-     * @param array $data
-     * @return array
+     * @param EntityInterface $data
+     * @return EntityInterface
      */
     public function constructEyeCatchSize($data)
     {
-        $eyeCatchSize = BcUtil::unserialize($data['BlogContent']['eye_catch_size']);
-        $data['BlogContent']['eye_catch_size_thumb_width'] = $eyeCatchSize['thumb_width'];
-        $data['BlogContent']['eye_catch_size_thumb_height'] = $eyeCatchSize['thumb_height'];
-        $data['BlogContent']['eye_catch_size_mobile_thumb_width'] = $eyeCatchSize['mobile_thumb_width'];
-        $data['BlogContent']['eye_catch_size_mobile_thumb_height'] = $eyeCatchSize['mobile_thumb_height'];
+        $eyeCatchSize = BcUtil::unserialize($data->eye_catch_size);
+        $data->eye_catch_size_thumb_width = $eyeCatchSize['thumb_width'];
+        $data->eye_catch_size_thumb_height = $eyeCatchSize['thumb_height'];
+        $data->eye_catch_size_mobile_thumb_width = $eyeCatchSize['mobile_thumb_width'];
+        $data->eye_catch_size_mobile_thumb_height = $eyeCatchSize['mobile_thumb_height'];
         return $data;
     }
 }

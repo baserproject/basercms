@@ -90,7 +90,7 @@ use BaserCore\View\BcAdminAppView;
     <?= $this->BcAdminForm->postLink(
       '',
       ['action' => 'delete', $data->id],
-      ['block' => true,
+      [
         'confirm' => __d('baser', "{0} を本当に削除してもいいですか？", $data->name),
         'title' => __d('baser', '削除'),
         'class' => 'btn-delete bca-btn-icon',

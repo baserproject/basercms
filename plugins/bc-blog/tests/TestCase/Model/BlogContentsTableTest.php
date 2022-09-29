@@ -19,7 +19,7 @@ App::uses('BlogContent', 'BcBlog.Model');
  *
  * @property BlogContent $BlogContent
  */
-class BlogContentTest extends BaserTestCase
+class BlogContentsTableTest extends BaserTestCase
 {
 
     public $fixtures = [

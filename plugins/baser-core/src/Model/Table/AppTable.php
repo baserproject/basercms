@@ -1159,27 +1159,6 @@ class AppTable extends Table
     }
 
     /**
-     * ツリーより再帰的に削除する
-     *
-     * @param int $id
-     * @return boolean
-     */
-    public function removeFromTreeRecursive($id)
-    {
-        // TODO 未実装の為コメントアウト
-        /* >>>
-        if (!$this->Behaviors->enabled('Tree')) {
-            return false;
-        }
-        $children = $this->children($id);
-        foreach($children as $child) {
-            $this->removeFromTree($child[$this->alias]['id'], true);
-        }
-        return $this->removeFromTree($id, true);
-        <<< */
-    }
-
-    /**
      * @inheritDoc
      */
     public function exists($conditions): bool

@@ -11,21 +11,18 @@
 
 namespace BcBlog\Model\Table;
 
+use Cake\Datasource\EntityInterface;
+use Cake\Event\EventInterface;
+use Cake\Validation\Validator;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
+
 /**
- * ブログカテゴリモデル
- *
- * @package Blog.Model
- * @property BlogPost $BlogPost
+ * BlogCategoriesTable
  */
 class BlogCategoriesTable extends BlogAppTable
 {
-
-    /**
-     * クラス名
-     *
-     * @var string
-     */
-    public $name = 'BlogCategory';
 
     /**
      * バリデーション設定
@@ -58,115 +55,58 @@ class BlogCategoriesTable extends BlogAppTable
     ]];
 
     /**
-     * BlogCategory constructor.
+     * Initialize
      *
-     * @param bool $id
-     * @param null $table
-     * @param null $ds
+     * @param array $config テーブル設定
+     * @return void
+     * @checked
+     * @noTodo
      */
-    public function __construct($id = false, $table = null, $ds = null)
+    public function initialize(array $config): void
     {
-        parent::__construct($id, $table, $ds);
-        $this->validate = [
-            'name' => [
-                ['rule' => ['notBlank'], 'message' => __d('baser', 'カテゴリ名を入力してください。'), 'required' => true],
-                ['rule' => 'alphaNumericDashUnderscore', 'message' => __d('baser', 'カテゴリ名は半角のみで入力してください。')],
-                ['rule' => ['duplicateBlogCategory'], 'message' => __d('baser', '入力されたカテゴリ名は既に登録されています。')],
-                ['rule' => ['maxLength', 255], 'message' => __d('baser', 'カテゴリ名は255文字以内で入力してください。')]
-            ],
-            'title' => [
-                ['rule' => ['notBlank'], 'message' => __d('baser', 'カテゴリタイトルを入力してください。'), 'required' => true],
-                ['rule' => ['maxLength', 255], 'message' => __d('baser', 'カテゴリタイトルは255文字以内で入力してください。')]
-            ]
-        ];
+        parent::initialize($config);
+        $this->addBehavior('Tree');
     }
 
     /**
-     * コントロールソースを取得する
+     * Validation Default
      *
-     * @param string $field フィールド名
-     * @param array $option オプション
-     * @return array コントロールソース
+     * @param Validator $validator
+     * @return Validator
+     * @checked
+     * @noTodo
      */
-    public function getControlSource($field, $options = [])
+    public function validationDefault(Validator $validator): Validator
     {
-        switch ($field) {
-            case 'parent_id':
-                if (!isset($options['blogContentId'])) {
-                    return false;
-                }
-                $conditions = [];
-                if (isset($options['conditions'])) {
-                    $conditions = $options['conditions'];
-                }
-                $conditions['BlogCategory.blog_content_id'] = $options['blogContentId'];
-                if (!empty($options['excludeParentId'])) {
-                    $children = $this->children($options['excludeParentId']);
-                    $excludeIds = [$options['excludeParentId']];
-                    foreach ($children as $child) {
-                        $excludeIds[] = $child['BlogCategory']['id'];
-                    }
-                    $conditions['NOT']['BlogCategory.id'] = $excludeIds;
-                }
+        $validator->setProvider('blogCategory', 'BcBlog\Model\Validation\BlogCategoryValidation');
 
-                if (isset($options['ownerId'])) {
-                    $ownerIdConditions = [
-                        ['BlogCategory.owner_id' => null],
-                        ['BlogCategory.owner_id' => $options['ownerId']],
-                    ];
-                    if (isset($conditions['OR'])) {
-                        $conditions['OR'] = am($conditions['OR'], $ownerIdConditions);
-                    } else {
-                        $conditions['OR'] = $ownerIdConditions;
-                    }
-                }
+        $validator
+            ->integer('id')
+            ->allowEmptyString('id', null, 'create');
 
-                $parents = $this->generateTreeList($conditions);
-                $controlSources['parent_id'] = [];
-                foreach ($parents as $key => $parent) {
-                    if (preg_match("/^([_]+)/i", $parent, $matches)) {
-                        $parent = preg_replace("/^[_]+/i", '', $parent);
-                        $prefix = str_replace('_', '　　　', $matches[1]);
-                        $parent = $prefix . '└' . $parent;
-                    }
-                    $controlSources['parent_id'][$key] = $parent;
-                }
-                break;
-            case 'owner_id':
-                $UserGroup = ClassRegistry::init('UserGroup');
-                $controlSources['owner_id'] = $UserGroup->find('list', ['fields' => ['id', 'title'], 'recursive' => -1]);
-                break;
-        }
+        $validator
+            ->scalar('name')
+            ->maxLength('name', 255, __d('baser', 'カテゴリ名は255文字以内で入力してください。'))
+            ->requirePresence('name', 'create', __d('baser', 'カテゴリ名を入力してください。'))
+            ->notEmptyString('name', __d('baser', 'カテゴリ名を入力してください。'))
+            ->add('name', [
+                'alphaNumericDashUnderscore' => [
+                    'rule' => ['alphaNumericDashUnderscore'],
+                    'provider' => 'bc',
+                    'message' => __d('baser', 'カテゴリ名はは半角英数字とハイフン、アンダースコアのみが利用可能です。')]])
+            ->add('name', [
+                'duplicateBlogCategory' => [
+                    'rule' => ['duplicateBlogCategory'],
+                    'provider' => 'blogCategory',
+                    'message' => __d('baser', '入力されたカテゴリ名は既に登録されています。')]]);
 
-        if (isset($controlSources[$field])) {
-            return $controlSources[$field];
-        } else {
-            return false;
-        }
-    }
+        $validator
+            ->scalar('title')
+            ->maxLength('title', 50, __d('baser', 'カテゴリタイトルは255文字以内で入力してください。'))
+            ->requirePresence('title', 'create', __d('baser', 'カテゴリタイトルを入力してください。'))
+            ->notEmptyString('title', __d('baser', 'カテゴリタイトルを入力してください。'));
 
-    /**
-     * 同じニックネームのカテゴリがないかチェックする
-     * 同じブログコンテンツが条件
-     *
-     * @param array $check
-     * @return boolean
-     */
-    public function duplicateBlogCategory($check)
-    {
-        $conditions = [
-            'BlogCategory.' . key($check) => $check[key($check)],
-            'BlogCategory.blog_content_id' => $this->validationParams['blogContentId']
-        ];
-        if ($this->exists()) {
-            $conditions['NOT'] = ['BlogCategory.id' => $this->id];
-        }
-        $ret = $this->find('first', ['conditions' => $conditions]);
-        if ($ret) {
-            return false;
-        } else {
-            return true;
-        }
+        return $validator;
     }
 
     /**
@@ -175,9 +115,10 @@ class BlogCategoriesTable extends BlogAppTable
      * @param boolean $cascade
      * @return boolean
      */
-    public function beforeDelete($cascade = true)
+    public function beforeDelete(EventInterface $event, EntityInterface $entity, \ArrayObject $options)
     {
-        parent::beforeDelete($cascade);
+        // TODO ucmitz 未実装
+        return true;
         $ret = true;
         if (!empty($this->data['BlogCategory']['id'])) {
             $id = $this->data['BlogCategory']['id'];

@@ -197,7 +197,6 @@
             $(selector).click(function () {
                 if ($(this).attr('data-confirm-message')) {
                     var message = $(this).attr('data-confirm-message');
-                    message = JSON.parse('"' + message + '"').replace(/\\n/g, '\n');
                     if (!confirm(message)) {
                         return false;
                     }
