@@ -11,6 +11,7 @@
  */
 
 App::uses('BlogPost', 'Blog.Model');
+App::uses('Folder', 'Utility');
 
 /**
  * Class BlogPostTest
@@ -698,6 +699,86 @@ class BlogPostTest extends BaserTestCase
 	public function testCreateOrder()
 	{
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+	/**
+	 * アイキャッチアップロード
+	 */
+	public function testUpload()
+	{
+		if (is_dir(WWW_ROOT . '/files/blog/999')) {
+			throw new Exception('テスト用のフォルダが既に存在');
+		}
+		copy(__DIR__ . '/../../Fixture/File/test1.png', __DIR__ . '/../../Fixture/File/test1_.png');
+
+		$this->BlogPost->setupUpload(999);
+
+		$data = ['BlogPost' => [
+			'name' => 'test-name',
+			'blog_content_id' => 999,
+			'posts_date' => '2022-07-16 00:00:00',
+			'content' => 'test-content',
+			'detail' => 'test-detail',
+			'status' => 0,
+			'publish_begin' => null,
+			'publish_end' => null,
+			'user_id' => 1,
+			'eye_catch' => [
+				'name' => 'test.png',
+				'type' => 'image/png',
+				'tmp_name' => __DIR__ . '/../../Fixture/File/test1_.png',
+				'error' => 0,
+				'size' => 1,
+			],
+		]];
+
+		// 作成
+		$this->BlogPost->create($data);
+		$blogPost1 = $this->BlogPost->save();
+		$blogPost1no = $blogPost1['BlogPost']['no'];
+		$ym = date('Y/m');
+		$fileDir = WWW_ROOT . '/files/blog/999/blog_posts/' . $ym;
+
+		$this->assertEquals($ym . '/0000000' . $blogPost1no .  '_eye_catch.png', $blogPost1['BlogPost']['eye_catch']);
+		$this->assertTrue(is_file($fileDir . '/0000000' . $blogPost1no .  '_eye_catch.png'));
+		$this->assertTrue(is_file($fileDir . '/0000000' . $blogPost1no .  '_eye_catch__thumb.png'));
+		$this->assertTrue(is_file($fileDir . '/0000000' . $blogPost1no .  '_eye_catch__mobile_thumb.png'));
+
+		$this->BlogPost = ClassRegistry::init('Blog.BlogPost');
+		$this->BlogPost->setupUpload(999);
+
+		// コピー
+		$blogPost2 = $this->BlogPost->copy(null, $blogPost1);
+		$blogPost2no = $blogPost2['BlogPost']['no'];
+
+		// 複製元が影響を受けていないか
+		$this->assertEquals($ym . '/0000000' . $blogPost1no .  '_eye_catch.png', $blogPost1['BlogPost']['eye_catch']);
+		$this->assertTrue(is_file($fileDir . '/0000000' . $blogPost1no .  '_eye_catch.png'));
+		$this->assertTrue(is_file($fileDir . '/0000000' . $blogPost1no .  '_eye_catch__thumb.png'));
+		$this->assertTrue(is_file($fileDir . '/0000000' . $blogPost1no .  '_eye_catch__mobile_thumb.png'));
+
+		// 複製できているか
+		$this->assertEquals($ym . '/0000000' . $blogPost2no .  '_eye_catch.png', $blogPost2['BlogPost']['eye_catch']);
+		$this->assertTrue(is_file($fileDir . '/0000000' . $blogPost2no .  '_eye_catch.png'));
+		$this->assertTrue(is_file($fileDir . '/0000000' . $blogPost2no .  '_eye_catch__thumb.png'));
+		$this->assertTrue(is_file($fileDir . '/0000000' . $blogPost2no .  '_eye_catch__mobile_thumb.png'));
+
+		// 削除
+		$this->BlogPost->delete($blogPost2['BlogPost']['id']);
+		$blogPost2 = $this->BlogPost->find('first', [
+			'conditions' => [
+				'BlogPost.id' => $blogPost2['BlogPost']['id'],
+				// どこかでキャッシュされているのか、条件を変更しないと削除前の情報が取得できてしまう
+				'BlogPost.id !=' => 9999,
+			],
+		]);
+		$this->assertEmpty($blogPost2);
+		$this->assertFalse(is_file($fileDir . '/0000000' . $blogPost2no .  '_eye_catch.png'));
+		$this->assertFalse(is_file($fileDir . '/0000000' . $blogPost2no .  '_eye_catch__thumb.png'));
+		$this->assertFalse(is_file($fileDir . '/0000000' . $blogPost2no .  '_eye_catch__mobile_thumb.png'));
+
+		$dir = new Folder(WWW_ROOT . '/files/blog/999');
+		$dir->delete();
 	}
 
 }
