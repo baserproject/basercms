@@ -389,7 +389,11 @@ class ThemeFilesController extends AppController
 			$result = $folder->delete($fullpath);
 			$target = __d('baser', 'フォルダ');
 		} else {
-			$result = @unlink($fullpath);
+			if (file_exists($fullpath)) {
+				$result = unlink($fullpath);
+			} else {
+				$result = false;
+			}
 			$target = __d('baser', 'ファイル');
 		}
 
@@ -442,7 +446,11 @@ class ThemeFilesController extends AppController
 			$result = $folder->delete($fullpath);
 			$target = __d('baser', 'フォルダ');
 		} else {
-			$result = @unlink($fullpath);
+			if (file_exists($fullpath)) {
+				$result = unlink($fullpath);
+			} else {
+				$result = false;
+			}
 			$target = __d('baser', 'ファイル');
 		}
 		if (!$result) {
@@ -480,7 +488,11 @@ class ThemeFilesController extends AppController
 				$result = $folder->delete($fullpath);
 				$target = __d('baser', 'フォルダ');
 			} else {
-				$result = @unlink($fullpath);
+				if (file_exists($fullpath)) {
+					$result = unlink($fullpath);
+				} else {
+					$result = false;
+				}
 				$target = __d('baser', 'ファイル');
 			}
 			if ($result) {
@@ -573,7 +585,7 @@ class ThemeFilesController extends AppController
 				}
 				$newPath .= '_copy';
 			}
-			$result = @copy(urldecode($fullpath), $newPath);
+			$result = copy(urldecode($fullpath), $newPath);
 			if ($result) {
 				chmod($newPath, 0666);
 			}

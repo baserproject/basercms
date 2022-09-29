@@ -324,12 +324,11 @@ class Page extends AppModel
 		}
 
 		// ファイルに保存
-		$newFile = new File($newPath, true);
+		$newFile = new File($newPath, true, 0666);
 		if ($newFile->open('w')) {
 			$newFile->append($contents);
 			$newFile->close();
 			unset($newFile);
-			@chmod($newPath, 0666);
 			return true;
 		} else {
 			return false;

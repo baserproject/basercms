@@ -512,10 +512,18 @@ class BcFileUploader
      */
     public function rotateImage($file)
     {
+		// 有効な画像タイプはJPEGのみ
+		$enableType = [
+			IMAGETYPE_JPEG,
+		];
         if (!extension_loaded("exif")) {
             return false;
         }
-        $exif = @exif_read_data($file);
+		if (!in_array(exif_imagetype($file), $enableType)) {
+			return false;
+		}
+
+        $exif = exif_read_data($file);
         if (empty($exif) || empty($exif['Orientation'])) {
             return true;
         }
@@ -536,29 +544,29 @@ class BcFileUploader
         $imageType = $imgInfo[2];
         // 元となる画像のオブジェクトを生成
         switch($imageType) {
-            case IMAGETYPE_GIF:
-                $srcImage = imagecreatefromgif($file);
-                break;
+            // case IMAGETYPE_GIF:
+            //     $srcImage = imagecreatefromgif($file);
+            //     break;
             case IMAGETYPE_JPEG:
                 $srcImage = imagecreatefromjpeg($file);
                 break;
-            case IMAGETYPE_PNG:
-                $srcImage = imagecreatefrompng($file);
-                break;
+            // case IMAGETYPE_PNG:
+            //     $srcImage = imagecreatefrompng($file);
+            //     break;
             default:
                 return false;
         }
         $rotate = imagerotate($srcImage, $angle, 0);
         switch($imageType) {
-            case IMAGETYPE_GIF:
-                imagegif($rotate, $file);
-                break;
+            // case IMAGETYPE_GIF:
+            //     imagegif($rotate, $file);
+            //     break;
             case IMAGETYPE_JPEG:
                 imagejpeg($rotate, $file, 100);
                 break;
-            case IMAGETYPE_PNG:
-                imagepng($rotate, $file);
-                break;
+            // case IMAGETYPE_PNG:
+            //     imagepng($rotate, $file);
+            //     break;
             default:
                 return false;
         }
@@ -682,7 +690,10 @@ class BcFileUploader
         if (empty($setting['namefield']) || empty($file) || !empty($file['delete'])) {
             return false;
         }
-        $oldName = @$file['name'];
+		if (!isset($file['name']) || empty($file['name'])) {
+			return false;
+		}
+        $oldName = $file['name'];
         if (!$oldName || is_array($oldName)) {
             return false;
         }

@@ -180,7 +180,11 @@ class BcAppModel extends Model
 		// ログを記録する
 		$Dblog = ClassRegistry::init('Dblog');
 		$logdata['Dblog']['name'] = $message;
-		$logdata['Dblog']['user_id'] = @$_SESSION['Auth'][Configure::read('BcAuthPrefix.admin.sessionKey')]['id'];
+		$userId = null;
+		if (!empty($_SESSION['Auth'][Configure::read('BcAuthPrefix.admin.sessionKey')]['id'])) {
+			$userId = $_SESSION['Auth'][Configure::read('BcAuthPrefix.admin.sessionKey')]['id'];
+		}
+		$logdata['Dblog']['user_id'] = $userId;
 		return $Dblog->save($logdata);
 	}
 

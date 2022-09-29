@@ -23,8 +23,15 @@ $langs = ['' => __d('baser', '指定しない')];
 foreach($languages as $key => $lang) {
 	$langs[$key] = $lang['name'];
 }
-$useSiteDeviceSetting = @$this->get('siteConfig')['use_site_device_setting'];
-$useSiteLangSetting = @$this->get('siteConfig')['use_site_lang_setting'];
+$useSiteDeviceSetting = 0;
+$useSiteLangSetting = 0;
+$thisSiteConfig = $this->get('siteConfig');
+if (isset($thisSiteConfig['use_site_lang_setting'])) {
+	$useSiteDeviceSetting = $thisSiteConfig['use_site_lang_setting'];
+}
+if (isset($thisSiteConfig['use_site_device_setting'])) {
+	$useSiteLangSetting = $thisSiteConfig['use_site_device_setting'];
+}
 ?>
 
 

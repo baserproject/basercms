@@ -148,6 +148,11 @@ class BlogControllerEventListener extends BcControllerEventListener
 			$this->BlogContent->deleteSearchIndex($data['BlogContent']['id']);
 		}
 
+		if (empty($data['BlogContent']['id'])) {
+			$dataSource->commit();
+			return;
+		}
+
 		$posts = $this->BlogPost->find('all', [
 			'conditions' => [
 				'BlogPost.blog_content_id' => $data['BlogContent']['id'],

@@ -67,7 +67,10 @@ class SearchIndex extends AppModel
 		]);
 		$models = [];
 		$db = $this->getDataSource();
-		$this->begin();
+		$transactionBegun = false;
+		if ($db->nestedTransactionSupported()) {
+			$transactionBegun = $db->begin();
+		}
 
 		if (!$parentContentId) {
 			$db->truncate('search_indices');
@@ -96,10 +99,12 @@ class SearchIndex extends AppModel
 				}
 			}
 		}
-		if ($result) {
-			$this->commit();
-		} else {
-			$this->roleback();
+		if ($transactionBegun) {
+			if ($result) {
+				$this->commit();
+			} else {
+				$this->roleback();
+			}
 		}
 		return $result;
 	}

@@ -55,7 +55,7 @@ class Feed extends FeedAppModel
 		$datas['Items'] = $this->_filteringCategory($datas['Items'], $category);
 
 		if (isset($datas['Items']) && $limit && count($datas['Items'] > $limit)) {
-			$datas['Items'] = @array_slice($datas['Items'], 0, $limit);
+			$datas['Items'] = array_slice($datas['Items'], 0, $limit);
 		}
 
 		return $datas;

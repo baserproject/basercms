@@ -108,7 +108,7 @@ class SiteConfigsController extends AppController
 					}
 				}
 
-				$adminSsl = @$this->request->data['SiteConfig']['admin_ssl'];
+				$adminSsl = $this->request->data['SiteConfig']['admin_ssl'];
 				if ($this->request->data['SiteConfig']['use_site_device_setting'] === "0" && $this->SiteConfig->isChange('use_site_device_setting', "0")) {
 					$this->Site->resetDevice();
 				}
