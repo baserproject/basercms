@@ -136,9 +136,13 @@ class UtilitiesController extends BcAdminAppController
     /**
      * ログメンテナンス
      *
+     * @param UtilitiesServiceInterface $service
+     * @param UtilitiesAdminServiceInterface $adminService
      * @param string $mode
-     * @return void
      * @uses log_maintenance
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function log_maintenance(
         UtilitiesServiceInterface      $service,
