@@ -31,6 +31,7 @@ class UtilitiesController extends BcAdminAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function initialize(): void
     {

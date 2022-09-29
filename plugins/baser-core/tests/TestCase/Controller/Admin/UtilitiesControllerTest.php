@@ -11,6 +11,7 @@
 
 namespace BaserCore\Test\TestCase\Controller\Admin;
 
+use BaserCore\Controller\Admin\UtilitiesController;
 use BaserCore\Service\BcDatabaseService;
 use BaserCore\Service\UtilitiesService;
 use BaserCore\Test\Factory\ContentFactory;
@@ -128,7 +129,9 @@ class UtilitiesControllerTest extends BcTestCase
      */
     public function testInitialize(): void
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $utilitiesController = new UtilitiesController($this->getRequest());
+        $this->assertEquals(['credit'], $utilitiesController->Authentication->getUnauthenticatedActions());
+        $this->assertNotEmpty($utilitiesController->Authentication->getConfig('logoutRedirect'));
     }
 
     /**
