@@ -27,25 +27,25 @@ $this->BcBaser->js('BcBlog.admin/blog_tags/form.bundle', false);
     <?php if ($this->action == 'admin_edit'): ?>
       <tr>
         <th
-          class="col-head bca-form-table__label"><?php echo $this->BcForm->label('BlogTag.id', __d('baser', 'No')) ?></th>
+          class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('BlogTag.id', __d('baser', 'No')) ?></th>
         <td class="col-input bca-form-table__input">
-          <?php echo $this->BcForm->getSourceValue('BlogTag.id') ?>
+          <?php echo $this->BcAdminForm->getSourceValue('BlogTag.id') ?>
           <?php echo $this->BcAdminForm->control('BlogTag.id', ['type' => 'hidden']) ?>
         </td>
       </tr>
     <?php endif; ?>
     <tr>
       <th
-        class="col-head bca-form-table__label"><?php echo $this->BcForm->label('BlogTag.name', __d('baser', 'ブログタグ名')) ?>
+        class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('BlogTag.name', __d('baser', 'ブログタグ名')) ?>
         &nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
       </th>
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('BlogTag.name', ['type' => 'text', 'size' => 40, 'maxlength' => 255, 'autofocus' => true]) ?>
-        <?php echo $this->BcForm->error('BlogTag.name') ?>
+        <?php echo $this->BcAdminForm->error('BlogTag.name') ?>
       </td>
     </tr>
 
-    <?php echo $this->BcForm->dispatchAfterForm() ?>
+    <?php echo $this->BcAdminForm->dispatchAfterForm() ?>
   </table>
 </div>
 
@@ -54,7 +54,7 @@ $this->BcBaser->js('BcBlog.admin/blog_tags/form.bundle', false);
 <!-- button -->
 <div class="submit bca-actions">
   <div class="bca-actions__main">
-    <?php echo $this->BcForm->button(__d('baser', '保存'), ['div' => false, 'class' => 'button bca-btn bca-actions__item', 'id' => 'BtnSave',
+    <?php echo $this->BcAdminForm->button(__d('baser', '保存'), ['div' => false, 'class' => 'button bca-btn bca-actions__item', 'id' => 'BtnSave',
       'data-bca-btn-type' => 'save',
       'data-bca-btn-size' => 'lg',
       'data-bca-btn-width' => 'lg',]) ?>
@@ -62,7 +62,7 @@ $this->BcBaser->js('BcBlog.admin/blog_tags/form.bundle', false);
   <?php if ($this->action == 'admin_edit'): ?>
     <div class="bca-actions__sub">
       <?php
-      $this->BcBaser->link(__d('baser', '削除'), ['action' => 'delete', $this->BcForm->getSourceValue('BlogTag.id')], ['class' => 'bca-submit-token button bca-btn bca-actions__item', 'data-bca-btn-type' => 'delete', 'data-bca-btn-size' => 'sm'], sprintf(__d('baser', '%s を本当に削除してもいいですか？'), $this->BcForm->getSourceValue('BlogTag.name')), false);
+      $this->BcBaser->link(__d('baser', '削除'), ['action' => 'delete', $this->BcAdminForm->getSourceValue('BlogTag.id')], ['class' => 'bca-submit-token button bca-btn bca-actions__item', 'data-bca-btn-type' => 'delete', 'data-bca-btn-size' => 'sm'], sprintf(__d('baser', '%s を本当に削除してもいいですか？'), $this->BcAdminForm->getSourceValue('BlogTag.name')), false);
       ?>
     </div>
   <?php endif ?>

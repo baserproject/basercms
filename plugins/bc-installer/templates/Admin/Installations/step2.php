@@ -391,13 +391,13 @@
   </div>
 
   <form action="<?php echo $this->request->base ?>/installations/step2" method="post" id="checkenv">
-    <?php echo $this->BcForm->hidden('clicked') ?>
+    <?php echo $this->BcAdminForm->hidden('clicked') ?>
     <div class="submit bca-actions">
-      <?php echo $this->BcForm->button(__d('baser', '再チェック'), ['class' => 'btn-orange button bca-btn bca-actions__item', 'id' => 'btncheckagain']) ?>
+      <?php echo $this->BcAdminForm->button(__d('baser', '再チェック'), ['class' => 'btn-orange button bca-btn bca-actions__item', 'id' => 'btncheckagain']) ?>
       <?php if (!$blRequirementsMet): ?>
-        <?php echo $this->BcForm->button(__d('baser', '次のステップへ'), ['class' => 'button bca-btn bca-actions__item', 'id' => 'btnnext', 'style' => 'display:none', 'data-bca-btn-type' => 'save']) ?>
+        <?php echo $this->BcAdminForm->button(__d('baser', '次のステップへ'), ['class' => 'button bca-btn bca-actions__item', 'id' => 'btnnext', 'style' => 'display:none', 'data-bca-btn-type' => 'save']) ?>
       <?php else: ?>
-        <?php echo $this->BcForm->button(__d('baser', '次のステップへ'), ['class' => 'button bca-btn bca-actions__item', 'id' => 'btnnext', 'data-bca-btn-type' => 'save']) ?>
+        <?php echo $this->BcAdminForm->button(__d('baser', '次のステップへ'), ['class' => 'button bca-btn bca-actions__item', 'id' => 'btnnext', 'data-bca-btn-type' => 'save']) ?>
       <?php endif ?>
     </div>
   </form>

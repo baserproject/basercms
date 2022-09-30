@@ -13,7 +13,7 @@
 /**
  * [ADMIN] ブログ記事 フォーム
  */
-$url = $this->request->getParam('Content.url') . 'archives/' . $this->BcForm->getSourceValue('BlogPost.no');
+$url = $this->request->getParam('Content.url') . 'archives/' . $this->BcAdminForm->getSourceValue('BlogPost.no');
 $fullUrl = $this->BcBaser->getContentsUrl($url, true, $this->request->getParam('Site.use_subdomain'));
 $statuses = [0 => __d('baser', '非公開'), 1 => __d('baser', '公開')];
 $this->BcBaser->css('admin/ckeditor/editor', true);
@@ -39,11 +39,11 @@ $this->BcBaser->js('BcBlog.admin/blog_posts/form.bundle', false, [
 
 <div id="AddBlogCategoryForm" title="<?php echo __d('baser', 'カテゴリ新規追加') ?>" style="display:none">
   <dl>
-    <dt><?php echo $this->BcForm->label('BlogCategory.title', __d('baser', 'カテゴリタイトル')) ?></dt>
+    <dt><?php echo $this->BcAdminForm->label('BlogCategory.title', __d('baser', 'カテゴリタイトル')) ?></dt>
     <dd>
       <?php echo $this->BcAdminForm->control('BlogCategory.title', ['type' => 'text', 'size' => 40, 'maxlength' => 255, 'value' => '', 'autofocus' => true]) ?>
     </dd>
-    <dt><?php echo $this->BcForm->label('BlogCategory.name', __d('baser', 'カテゴリ名')) ?></dt>
+    <dt><?php echo $this->BcAdminForm->label('BlogCategory.name', __d('baser', 'カテゴリ名')) ?></dt>
     <dd>
       <?php echo $this->BcAdminForm->control('BlogCategory.name', ['type' => 'text', 'size' => 40, 'maxlength' => 255, 'value' => '']) ?>
       <i class="bca-icon--question-circle bca-help"></i>
@@ -62,15 +62,15 @@ $this->BcBaser->js('BcBlog.admin/blog_posts/form.bundle', false, [
 <?php if ($this->action == 'admin_add'): ?>
   <?php echo $this->BcAdminForm->create('BlogPost', ['type' => 'file', 'url' => ['controller' => 'blog_posts', 'action' => 'add', $blogContent['BlogContent']['id']], 'id' => 'BlogPostForm']) ?>
 <?php elseif ($this->action == 'admin_edit'): ?>
-  <?php echo $this->BcAdminForm->create('BlogPost', ['type' => 'file', 'url' => ['controller' => 'blog_posts', 'action' => 'edit', $blogContent['BlogContent']['id'], $this->BcForm->getSourceValue('BlogPost.id'), 'id' => false], 'id' => 'BlogPostForm']) ?>
+  <?php echo $this->BcAdminForm->create('BlogPost', ['type' => 'file', 'url' => ['controller' => 'blog_posts', 'action' => 'edit', $blogContent['BlogContent']['id'], $this->BcAdminForm->getSourceValue('BlogPost.id'), 'id' => false], 'id' => 'BlogPostForm']) ?>
 <?php endif; ?>
 <?php echo $this->BcAdminForm->control('BlogPost.id', ['type' => 'hidden']) ?>
 <?php echo $this->BcAdminForm->control('BlogPost.blog_content_id', ['type' => 'hidden', 'value' => $blogContent['BlogContent']['id']]) ?>
-<?php echo $this->BcForm->hidden('BlogPost.mode') ?>
+<?php echo $this->BcAdminForm->hidden('BlogPost.mode') ?>
 
 
 <?php if (empty($blogContent['BlogContent']['use_content'])): ?>
-  <?php echo $this->BcForm->hidden('BlogPost.content') ?>
+  <?php echo $this->BcAdminForm->hidden('BlogPost.content') ?>
 <?php endif ?>
 
 
@@ -78,17 +78,17 @@ $this->BcBaser->js('BcBlog.admin/blog_posts/form.bundle', false, [
 <?php if ($this->action == 'admin_edit'): ?>
   <div class="bca-section bca-section__post-top">
   <span class="bca-post__no">
-    <?php echo $this->BcForm->label('BlogPost.no', 'No') ?> : <strong><?php echo $this->BcForm->getSourceValue('BlogPost.no') ?></strong>
+    <?php echo $this->BcAdminForm->label('BlogPost.no', 'No') ?> : <strong><?php echo $this->BcAdminForm->getSourceValue('BlogPost.no') ?></strong>
     <?php echo $this->BcAdminForm->control('BlogPost.no', ['type' => 'hidden']) ?>
   </span>
 
     <span class="bca-post__url">
-    <?php //echo $this->BcForm->label('BlogPost.url', 'URL') ?>
+    <?php //echo $this->BcAdminForm->label('BlogPost.url', 'URL') ?>
     <a
-      href="<?php echo $this->BcBaser->getUri(rawurldecode($this->request->getParam('Content.url')) . '/archives/' . $this->BcForm->getSourceValue('BlogPost.no')) ?>"
+      href="<?php echo $this->BcBaser->getUri(rawurldecode($this->request->getParam('Content.url')) . '/archives/' . $this->BcAdminForm->getSourceValue('BlogPost.no')) ?>"
       class="bca-text-url" target="_blank" data-toggle="tooltip" data-placement="top" title="公開URLを開きます"><i
-        class="bca-icon--globe"></i><?php echo $this->BcBaser->getUri(rawurldecode($this->request->getParam('Content.url')) . '/archives/' . $this->BcForm->getSourceValue('BlogPost.no')) ?></a>
-    <?php echo $this->BcForm->button('', [
+        class="bca-icon--globe"></i><?php echo $this->BcBaser->getUri(rawurldecode($this->request->getParam('Content.url')) . '/archives/' . $this->BcAdminForm->getSourceValue('BlogPost.no')) ?></a>
+    <?php echo $this->BcAdminForm->button('', [
       'id' => 'BtnCopyUrl',
       'class' => 'bca-btn',
       'type' => 'button',
@@ -105,7 +105,7 @@ $this->BcBaser->js('BcBlog.admin/blog_posts/form.bundle', false, [
   <table id="FormTable" class="form-table bca-form-table">
     <tr>
       <th
-        class="col-head bca-form-table__label"><?php echo $this->BcForm->label('BlogPost.name', __d('baser', 'タイトル')) ?>
+        class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('BlogPost.name', __d('baser', 'タイトル')) ?>
         &nbsp;<span class="required bca-label"
                     data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span></th>
       <td class="col-input bca-form-table__input">
@@ -117,13 +117,13 @@ $this->BcBaser->js('BcBlog.admin/blog_posts/form.bundle', false, [
           'data-input-text-size' => 'full-counter',
           'counter' => true
         ]) ?>
-        <?php echo $this->BcForm->error('BlogPost.name') ?>
+        <?php echo $this->BcAdminForm->error('BlogPost.name') ?>
       </td>
     </tr>
     <?php if ($categories): ?>
       <tr>
         <th
-          class="col-head bca-form-table__label"><?php echo $this->BcForm->label('BlogPost.blog_category_id', __d('baser', 'カテゴリー')) ?></th>
+          class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('BlogPost.blog_category_id', __d('baser', 'カテゴリー')) ?></th>
         <td class="col-input bca-form-table__input">
           <?php echo $this->BcAdminForm->control('BlogPost.blog_category_id', [
             'type' => 'select',
@@ -131,23 +131,23 @@ $this->BcBaser->js('BcBlog.admin/blog_posts/form.bundle', false, [
             'escape' => true
           ]) ?>&nbsp
           <?php if ($hasNewCategoryAddablePermission): ?>
-            <?php echo $this->BcForm->button(__d('baser', '新しいカテゴリを追加'), ['id' => 'BtnAddBlogCategory', 'class' => 'bca-btn']) ?>
+            <?php echo $this->BcAdminForm->button(__d('baser', '新しいカテゴリを追加'), ['id' => 'BtnAddBlogCategory', 'class' => 'bca-btn']) ?>
           <?php endif ?>
           <?php $this->BcBaser->img('admin/ajax-loader-s.gif', ['style' => 'display:none', 'id' => 'BlogCategoryLoader', 'class' => 'loader']) ?>
-          <?php echo $this->BcForm->error('BlogPost.blog_category_id') ?>
+          <?php echo $this->BcAdminForm->error('BlogPost.blog_category_id') ?>
         </td>
       </tr>
     <?php endif ?>
     <tr>
       <th
-        class="col-head bca-form-table__label"><?php echo $this->BcForm->label('BlogPost.eye_catch', __d('baser', 'アイキャッチ画像')) ?></th>
+        class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('BlogPost.eye_catch', __d('baser', 'アイキャッチ画像')) ?></th>
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('BlogPost.eye_catch', [
           'type' => 'file',
           'imgsize' => 'thumb',
           'width' => '300'
         ]) ?>
-        <?php echo $this->BcForm->error('BlogPost.eye_catch') ?>
+        <?php echo $this->BcAdminForm->error('BlogPost.eye_catch') ?>
       </td>
     </tr>
   </table>
@@ -158,15 +158,15 @@ $this->BcBaser->js('BcBlog.admin/blog_posts/form.bundle', false, [
 <?php if (!empty($blogContent['BlogContent']['use_content'])): ?>
   <section class="bca-section bca-section__post-content">
     <label for="BlogPostContentTmp"
-           class="bca-form-table__label -label"><?php echo $this->BcForm->label('BlogPost.content', __d('baser', '概要')) ?></label>
+           class="bca-form-table__label -label"><?php echo $this->BcAdminForm->label('BlogPost.content', __d('baser', '概要')) ?></label>
     <span class="bca-form-table__input-wrap">
-	  <?php echo $this->BcForm->ckeditor('BlogPost.content', [
+	  <?php echo $this->BcAdminForm->ckeditor('BlogPost.content', [
       'editorWidth' => 'auto',
       'editorHeight' => '120px',
       'editorToolType' => 'simple',
       'editorEnterBr' => @$siteConfig['editor_enter_br']
     ]); ?>
-    <?php echo $this->BcForm->error('BlogPost.content') ?>
+    <?php echo $this->BcAdminForm->error('BlogPost.content') ?>
    </span>
   </section>
 <?php endif ?>
@@ -174,7 +174,7 @@ $this->BcBaser->js('BcBlog.admin/blog_posts/form.bundle', false, [
 <section class="bca-section bca-section__post-detail">
   <label for="BlogPostDetailTmp" class="bca-form-table__label -label">本文</label>
   <span class="bca-form-table__input-wrap">
-  <?php echo $this->BcForm->editor('BlogPost.detail', array_merge([
+  <?php echo $this->BcAdminForm->editor('BlogPost.detail', array_merge([
     'type' => 'editor',
     'editor' => @$siteConfig['editor'],
     'editorUseDraft' => true,
@@ -183,7 +183,7 @@ $this->BcBaser->js('BcBlog.admin/blog_posts/form.bundle', false, [
     'editorHeight' => '480px',
     'editorEnterBr' => @$siteConfig['editor_enter_br']
   ], $editorOptions)) ?>
-  <?php echo $this->BcForm->error('BlogPost.detail') ?>
+  <?php echo $this->BcAdminForm->error('BlogPost.detail') ?>
   </span>
 </section>
 
@@ -192,22 +192,22 @@ $this->BcBaser->js('BcBlog.admin/blog_posts/form.bundle', false, [
     <?php if (!empty($blogContent['BlogContent']['tag_use'])): ?>
       <tr>
         <th
-          class="col-head bca-form-table__label"><?php echo $this->BcForm->label('BlogTag.BlogTag', __d('baser', 'タグ')) ?></th>
+          class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('BlogTag.BlogTag', __d('baser', 'タグ')) ?></th>
         <td class="col-input bca-form-table__input">
           <div id="BlogTags" class="bca-form-table__group bca-blogtags">
             <?php echo $this->BcAdminForm->control('BlogTag.BlogTag', [
               'type' => 'select',
               'multiple' => 'checkbox',
-              'options' => $this->BcForm->getControlSource('BlogPost.blog_tag_id')
+              'options' => $this->BcAdminForm->getControlSource('BlogPost.blog_tag_id')
             ]); ?>
-            <?php echo $this->BcForm->error('BlogTag.BlogTag') ?>
+            <?php echo $this->BcAdminForm->error('BlogTag.BlogTag') ?>
           </div>
           <?php if ($hasNewTagAddablePermission): ?>
             <div class="bca-form-table__group">
               <?php echo $this->BcAdminForm->control('BlogTag.name', [
                 'type' => 'text'
               ]) ?>
-              <?php echo $this->BcForm->button(__d('baser', '新しいタグを追加'), [
+              <?php echo $this->BcAdminForm->button(__d('baser', '新しいタグを追加'), [
                 'id' => 'BtnAddBlogTag',
                 'class' => 'bca-btn'
               ]) ?>
@@ -219,7 +219,7 @@ $this->BcBaser->js('BcBlog.admin/blog_posts/form.bundle', false, [
     <?php endif ?>
     <tr>
       <th
-        class="col-head bca-form-table__label"><?php echo $this->BcForm->label('BlogPost.status', __d('baser', '公開状態')) ?>
+        class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('BlogPost.status', __d('baser', '公開状態')) ?>
         &nbsp;<span class="required bca-label"
                     data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span></th>
       <td class="col-input bca-form-table__input">
@@ -227,12 +227,12 @@ $this->BcBaser->js('BcBlog.admin/blog_posts/form.bundle', false, [
           'type' => 'radio',
           'options' => $statuses
         ]) ?>
-        <?php echo $this->BcForm->error('BlogPost.status') ?>
+        <?php echo $this->BcAdminForm->error('BlogPost.status') ?>
       </td>
     </tr>
     <tr>
       <th
-        class="col-head bca-form-table__label"><?php echo $this->BcForm->label('BlogPost.status', __d('baser', '公開日時')) ?></th>
+        class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('BlogPost.status', __d('baser', '公開日時')) ?></th>
       <td class="col-input bca-form-table__input">
         <span class="bca-datetimepicker__group">
           <span class="bca-datetimepicker__start">
@@ -255,14 +255,14 @@ $this->BcBaser->js('BcBlog.admin/blog_posts/form.bundle', false, [
             ], true) ?>
             </span>
         </span>
-        <?php echo $this->BcForm->error('BlogPost.publish_begin') ?>
-        <?php echo $this->BcForm->error('BlogPost.publish_end') ?>
+        <?php echo $this->BcAdminForm->error('BlogPost.publish_begin') ?>
+        <?php echo $this->BcAdminForm->error('BlogPost.publish_end') ?>
       </td>
     </tr>
 
     <tr>
       <th
-        class="col-head bca-form-table__label"><?php echo $this->BcForm->label('BlogPost.status', __d('baser', 'サイト内検索')) ?>
+        class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('BlogPost.status', __d('baser', 'サイト内検索')) ?>
         &nbsp
       </th>
       <td class="col-input bca-form-table__input">
@@ -275,7 +275,7 @@ $this->BcBaser->js('BcBlog.admin/blog_posts/form.bundle', false, [
 
     <tr>
       <th
-        class="col-head bca-form-table__label"><?php echo $this->BcForm->label('BlogPost.user_id', __d('baser', '作成者')) ?>
+        class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('BlogPost.user_id', __d('baser', '作成者')) ?>
         &nbsp;<span class="required bca-label"
                     data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span></th>
       <td class="col-input bca-form-table__input">
@@ -284,18 +284,18 @@ $this->BcBaser->js('BcBlog.admin/blog_posts/form.bundle', false, [
             'type' => 'select',
             'options' => $users
           ]); ?>
-          <?php echo $this->BcForm->error('BlogPost.user_id') ?>
+          <?php echo $this->BcAdminForm->error('BlogPost.user_id') ?>
         <?php else: ?>
-          <?php if (isset($users[$this->BcForm->getSourceValue('BlogPost.user_id')])): ?>
-            <?php echo h($users[$this->BcForm->getSourceValue('BlogPost.user_id')]) ?>
+          <?php if (isset($users[$this->BcAdminForm->getSourceValue('BlogPost.user_id')])): ?>
+            <?php echo h($users[$this->BcAdminForm->getSourceValue('BlogPost.user_id')]) ?>
           <?php endif ?>
-          <?php echo $this->BcForm->hidden('BlogPost.user_id') ?>
+          <?php echo $this->BcAdminForm->hidden('BlogPost.user_id') ?>
         <?php endif ?>
       </td>
     </tr>
     <tr>
       <th
-        class="col-head bca-form-table__label"><?php echo $this->BcForm->label('BlogPost.posts_date', __d('baser', '投稿日時')) ?>
+        class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('BlogPost.posts_date', __d('baser', '投稿日時')) ?>
         &nbsp;<span class="required bca-label"
                     data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span></th>
       <td class="col-input bca-form-table__input">
@@ -304,10 +304,10 @@ $this->BcBaser->js('BcBlog.admin/blog_posts/form.bundle', false, [
           'size' => 12,
           'maxlength' => 10
         ], true) ?>
-        <?php echo $this->BcForm->error('BlogPost.posts_date') ?>
+        <?php echo $this->BcAdminForm->error('BlogPost.posts_date') ?>
       </td>
     </tr>
-    <?php echo $this->BcForm->dispatchAfterForm() ?>
+    <?php echo $this->BcAdminForm->dispatchAfterForm() ?>
   </table>
 </section>
 
@@ -317,14 +317,14 @@ $this->BcBaser->js('BcBlog.admin/blog_posts/form.bundle', false, [
 <section class="bca-actions">
   <?php if ($this->action == 'admin_edit' || $this->action == 'admin_add'): ?>
     <div class="bca-actions__main">
-      <?php echo $this->BcForm->button(__d('baser', 'プレビュー'),
+      <?php echo $this->BcAdminForm->button(__d('baser', 'プレビュー'),
         [
           'id' => 'BtnPreview',
           'div' => false,
           'class' => 'button bca-btn bca-actions__item',
           'data-bca-btn-type' => 'preview',
         ]) ?>
-      <?php echo $this->BcForm->button(__d('baser', '保存'),
+      <?php echo $this->BcAdminForm->button(__d('baser', '保存'),
         [
           'type' => 'submit',
           'id' => 'BtnSave',
@@ -338,13 +338,13 @@ $this->BcBaser->js('BcBlog.admin/blog_posts/form.bundle', false, [
   <?php endif ?>
   <?php if ($this->action == 'admin_edit'): ?>
     <div class="bca-actions__sub">
-      <?php $this->BcBaser->link(__d('baser', '削除'), ['action' => 'delete', $blogContent['BlogContent']['id'], $this->BcForm->getSourceValue('BlogPost.id')],
+      <?php $this->BcBaser->link(__d('baser', '削除'), ['action' => 'delete', $blogContent['BlogContent']['id'], $this->BcAdminForm->getSourceValue('BlogPost.id')],
         [
           'class' => 'bca-submit-token button bca-btn bca-actions__item',
           'data-bca-btn-type' => 'delete',
           'data-bca-btn-size' => 'sm',
           'data-bca-btn-color' => 'danger'
-        ], sprintf(__d('baser', '%s を本当に削除してもいいですか？\n※ ブログ記事はゴミ箱に入らず完全に消去されます。'), $this->BcForm->getSourceValue('BlogPost.name')), false); ?>
+        ], sprintf(__d('baser', '%s を本当に削除してもいいですか？\n※ ブログ記事はゴミ箱に入らず完全に消去されます。'), $this->BcAdminForm->getSourceValue('BlogPost.name')), false); ?>
     </div>
   <?php endif ?>
 </section>

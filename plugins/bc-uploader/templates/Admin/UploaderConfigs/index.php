@@ -22,7 +22,7 @@
     <tr>
       <th class="bca-form-table__label"><span class="bca-label"
                                               data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>&nbsp;
-        <?php echo $this->BcForm->label('UploaderConfig.large_width', __d('baser', 'PCサイズ（大）')) ?>
+        <?php echo $this->BcAdminForm->label('UploaderConfig.large_width', __d('baser', 'PCサイズ（大）')) ?>
       </th>
       <td class="bca-form-table__input">
         <small>[<?php echo __d('baser', '幅') ?>
@@ -31,14 +31,14 @@
         <small>[<?php echo __d('baser', '高さ') ?>
           ]</small>&nbsp;<?php echo $this->BcAdminForm->control('UploaderConfig.large_height', ['type' => 'text', 'size' => 8, 'maxlength' => 8]) ?>
         &nbsp;px
-        <?php echo $this->BcForm->error('UploaderConfig.large_width') ?>
-        <?php echo $this->BcForm->error('UploaderConfig.large_height') ?>
+        <?php echo $this->BcAdminForm->error('UploaderConfig.large_width') ?>
+        <?php echo $this->BcAdminForm->error('UploaderConfig.large_height') ?>
       </td>
     </tr>
     <tr>
       <th class="bca-form-table__label"><span class="bca-label"
                                               data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>&nbsp;
-        <?php echo $this->BcForm->label('UploaderConfig.midium_width', __d('baser', 'PCサイズ（中）')) ?>
+        <?php echo $this->BcAdminForm->label('UploaderConfig.midium_width', __d('baser', 'PCサイズ（中）')) ?>
       </th>
       <td class="bca-form-table__input">
         <small>[<?php echo __d('baser', '幅') ?>
@@ -47,14 +47,14 @@
         <small>[<?php echo __d('baser', '高さ') ?>
           ]</small>&nbsp;<?php echo $this->BcAdminForm->control('UploaderConfig.midium_height', ['type' => 'text', 'size' => 8, 'maxlength' => 8]) ?>
         &nbsp;px
-        <?php echo $this->BcForm->error('UploaderConfig.midium_width') ?>
-        <?php echo $this->BcForm->error('UploaderConfig.midium_height') ?>
+        <?php echo $this->BcAdminForm->error('UploaderConfig.midium_width') ?>
+        <?php echo $this->BcAdminForm->error('UploaderConfig.midium_height') ?>
       </td>
     </tr>
     <tr>
       <th class="bca-form-table__label"><span class="bca-label"
                                               data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>&nbsp;
-        <?php echo $this->BcForm->label('UploaderConfig.small_width', __d('baser', 'PCサイズ（小）')) ?>
+        <?php echo $this->BcAdminForm->label('UploaderConfig.small_width', __d('baser', 'PCサイズ（小）')) ?>
       </th>
       <td class="bca-form-table__input">
         <small>[<?php echo __d('baser', '幅') ?>
@@ -64,15 +64,15 @@
           ]</small>&nbsp;<?php echo $this->BcAdminForm->control('UploaderConfig.small_height', ['type' => 'text', 'size' => 8, 'maxlength' => 8]) ?>
         &nbsp;px　
         <?php echo $this->BcAdminForm->control('UploaderConfig.small_thumb', ['type' => 'checkbox', 'label' => __d('baser', '正方形に切り抜く'), 'between' => '&nbsp;']) ?>
-        <?php echo $this->BcForm->error('UploaderConfig.small_width') ?>
-        <?php echo $this->BcForm->error('UploaderConfig.small_height') ?>
-        <?php echo $this->BcForm->error('UploaderConfig.small_thumb') ?>
+        <?php echo $this->BcAdminForm->error('UploaderConfig.small_width') ?>
+        <?php echo $this->BcAdminForm->error('UploaderConfig.small_height') ?>
+        <?php echo $this->BcAdminForm->error('UploaderConfig.small_thumb') ?>
       </td>
     </tr>
     <tr>
       <th class="bca-form-table__label"><span class="bca-label"
                                               data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>&nbsp;
-        <?php echo $this->BcForm->label('UploaderConfig.mobile_large_width', __d('baser', '携帯サイズ（大）')) ?>
+        <?php echo $this->BcAdminForm->label('UploaderConfig.mobile_large_width', __d('baser', '携帯サイズ（大）')) ?>
       </th>
       <td class="bca-form-table__input">
         <small>[<?php echo __d('baser', '幅') ?>
@@ -81,14 +81,14 @@
         <small>[<?php echo __d('baser', '高さ') ?>
           ]</small>&nbsp;<?php echo $this->BcAdminForm->control('UploaderConfig.mobile_large_height', ['type' => 'text', 'size' => 8, 'maxlength' => 8]) ?>
         &nbsp;px
-        <?php echo $this->BcForm->error('UploaderConfig.mobile_large_width') ?>
-        <?php echo $this->BcForm->error('UploaderConfig.mobile_large_height') ?>
+        <?php echo $this->BcAdminForm->error('UploaderConfig.mobile_large_width') ?>
+        <?php echo $this->BcAdminForm->error('UploaderConfig.mobile_large_height') ?>
       </td>
     </tr>
     <tr>
       <th class="bca-form-table__label"><span class="bca-label"
                                               data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>&nbsp;
-        <?php echo $this->BcForm->label('UploaderConfig.mobile_small_width', __d('baser', '携帯サイズ（小）')) ?>
+        <?php echo $this->BcAdminForm->label('UploaderConfig.mobile_small_width', __d('baser', '携帯サイズ（小）')) ?>
       </th>
       <td class="bca-form-table__input">
         <small>[<?php echo __d('baser', '幅') ?>
@@ -98,12 +98,12 @@
           ]</small>&nbsp;<?php echo $this->BcAdminForm->control('UploaderConfig.mobile_small_height', ['type' => 'text', 'size' => 8, 'maxlength' => 8]) ?>
         &nbsp;px　
         <?php echo $this->BcAdminForm->control('UploaderConfig.mobile_small_thumb', ['type' => 'checkbox', 'label' => __d('baser', '正方形に切り抜く'), 'between' => '&nbsp;']) ?>
-        <?php echo $this->BcForm->error('UploaderConfig.mobile_small_width') ?>
-        <?php echo $this->BcForm->error('UploaderConfig.mobile_small_height') ?>
-        <?php echo $this->BcForm->error('UploaderConfig.mobile_small_thumb') ?>
+        <?php echo $this->BcAdminForm->error('UploaderConfig.mobile_small_width') ?>
+        <?php echo $this->BcAdminForm->error('UploaderConfig.mobile_small_height') ?>
+        <?php echo $this->BcAdminForm->error('UploaderConfig.mobile_small_thumb') ?>
       </td>
     </tr>
-    <?php echo $this->BcForm->dispatchAfterForm() ?>
+    <?php echo $this->BcAdminForm->dispatchAfterForm() ?>
   </table>
 </div>
 
@@ -114,25 +114,25 @@
     <table class="form-table bca-form-table">
       <tr>
         <th
-          class="col-head bca-form-table__label"><?php echo $this->BcForm->label('UploaderConfig.layout_type', __d('baser', 'レイアウトタイプ')) ?></th>
+          class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('UploaderConfig.layout_type', __d('baser', 'レイアウトタイプ')) ?></th>
         <td class="col-input bca-form-table__input">
           <?php echo $this->BcAdminForm->control('UploaderConfig.layout_type', ['type' => 'radio', 'options' => ['panel' => __d('baser', 'パネル'), 'table' => __d('baser', 'テーブル')]]) ?>
-          <?php echo $this->BcForm->error('UploaderConfig.layout_type') ?>
+          <?php echo $this->BcAdminForm->error('UploaderConfig.layout_type') ?>
         </td>
       </tr>
       <tr>
         <th
-          class="col-head bca-form-table__label"><?php echo $this->BcForm->label('UploaderConfig.use_permission', __d('baser', '制限設定')) ?></th>
+          class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('UploaderConfig.use_permission', __d('baser', '制限設定')) ?></th>
         <td class="col-input bca-form-table__input">
           <?php echo $this->BcAdminForm->control('UploaderConfig.use_permission', ['type' => 'checkbox', 'label' => __d('baser', '編集/削除を制限する'), 'between' => '&nbsp;']) ?>
           <i class="bca-icon--question-circle bca-help"></i>
-          <?php echo $this->BcForm->error('UploaderConfig.use_permission') ?>
+          <?php echo $this->BcAdminForm->error('UploaderConfig.use_permission') ?>
           <div class="bca-helptext">
             <?php echo __d('baser', '管理者以外のユーザーは、自分がアップロードしたファイル以外、編集・削除をできないようにします。') ?>
           </div>
         </td>
       </tr>
-      <?php echo $this->BcForm->dispatchAfterForm('option') ?>
+      <?php echo $this->BcAdminForm->dispatchAfterForm('option') ?>
     </table>
   </div>
 <?php endif ?>
@@ -142,7 +142,7 @@
 <!-- button -->
 <div class="submit bca-actions">
   <div class="bca-actions__main">
-    <?php echo $this->BcForm->submit(__d('baser', '更新'), ['div' => false, 'class' => 'btn-orange button bca-btn bca-actions__item', 'data-bca-btn-type' => 'add', 'data-bca-btn-width' => 'lg', 'data-bca-btn-size' => 'lg', 'id' => 'btnSubmit']) ?>
+    <?php echo $this->BcAdminForm->submit(__d('baser', '更新'), ['div' => false, 'class' => 'btn-orange button bca-btn bca-actions__item', 'data-bca-btn-type' => 'add', 'data-bca-btn-width' => 'lg', 'data-bca-btn-size' => 'lg', 'id' => 'btnSubmit']) ?>
   </div>
 </div>
 

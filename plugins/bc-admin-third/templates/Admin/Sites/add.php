@@ -41,7 +41,7 @@ $this->BcBaser->js('admin/sites/form.bundle', false);
       'data-bca-btn-type' => 'back-to-list'
     ]
   ) ?>
-  <?php echo $this->BcForm->button(__d('baser', '保存'), [
+  <?php echo $this->BcAdminForm->button(__d('baser', '保存'), [
     'div' => false,
     'class' => 'button bca-btn bca-actions__item',
     'data-bca-btn-type' => 'save',

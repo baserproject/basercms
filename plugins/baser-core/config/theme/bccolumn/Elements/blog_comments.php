@@ -29,22 +29,22 @@
 			<table class="row-table-01">
 				<tbody>
 				<tr>
-					<th><?php echo $this->BcForm->label('BlogComment.name', __('お名前') . '・' . __('ニックネーム')) ?><span style="color:red">＊</span></th>
+					<th><?php echo $this->BcAdminForm->label('BlogComment.name', __('お名前') . '・' . __('ニックネーム')) ?><span style="color:red">＊</span></th>
 					<td><?php echo $this->BcAdminForm->control('BlogComment.name', array('type' => 'text', 'class' => 'form-m')) ?></td>
 				</tr>
 				<tr>
-					<th><?php echo $this->BcForm->label('BlogComment.email', __('Eメール')) ?><span style="color:red">＊</span></th>
+					<th><?php echo $this->BcAdminForm->label('BlogComment.email', __('Eメール')) ?><span style="color:red">＊</span></th>
 					<td>
 						<?php echo $this->BcAdminForm->control('BlogComment.email', array('type' => 'text', 'size' => 30, 'class' => 'form-m')) ?><br>
 						<small>※ <?php echo __('Eメールは公開されません') ?></small>
 					</td>
 				</tr>
 				<tr>
-					<th><?php echo $this->BcForm->label('BlogComment.url', 'URL') ?></th>
+					<th><?php echo $this->BcAdminForm->label('BlogComment.url', 'URL') ?></th>
 					<td><?php echo $this->BcAdminForm->control('BlogComment.url', array('type' => 'text', 'size' => 30, 'class' => 'form-l')) ?></td>
 				</tr>
 				<tr>
-					<th><?php echo $this->BcForm->label('BlogComment.message', __('コメント')) ?><span style="color:red">＊</span></th>
+					<th><?php echo $this->BcAdminForm->label('BlogComment.message', __('コメント')) ?><span style="color:red">＊</span></th>
 					<td><?php echo $this->BcAdminForm->control('BlogComment.message', array('type' => 'textarea', 'rows' => 10, 'cols' => 52, 'class' => 'form-l')) ?></td>
 				</tr>
 				</tbody>
@@ -54,7 +54,7 @@
 				<div class="auth-captcha clearfix">
 					<img src="" alt="<?php echo __('認証画象') ?>" class="auth-captcha-image" id="AuthCaptchaImage" style="display:none" />
 					<?php $this->BcBaser->img('admin/captcha_loader.gif', array('alt' => 'Loading...', 'class' => 'auth-captcha-image', 'id' => 'CaptchaLoader')) ?>
-					<?php echo $this->BcForm->text('BlogComment.auth_captcha') ?><br />
+					<?php echo $this->BcAdminForm->text('BlogComment.auth_captcha') ?><br />
 					&nbsp;<?php echo __('画像の文字を入力してください') ?><br />
 				</div>
 			<?php endif ?>

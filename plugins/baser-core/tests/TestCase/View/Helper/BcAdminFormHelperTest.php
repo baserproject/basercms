@@ -77,9 +77,9 @@ class BcAdminFormHelperTest extends BcTestCase
         $name = 'Contents.test';
         $contentsTable = $this->getTableLocator()->get('BaserCore.Contents');
         $content = $contentsTable->find()->where(['id' => '4'])->first();
-        $this->BcForm->create($content);
         $this->BcAdminForm->create($content);
-        $this->assertEquals($this->BcForm->control($name), $this->BcAdminForm->control($name));
+        $this->BcAdminForm->create($content);
+        $this->assertEquals($this->BcAdminForm->control($name), $this->BcAdminForm->control($name));
 
         $options = [
             'label' => false,
@@ -119,7 +119,7 @@ class BcAdminFormHelperTest extends BcTestCase
                 'class' => 'bca-file__figcaption'
             ]
         ]);
-        $controlFile = $this->BcForm->control($name, $optionsFile);
+        $controlFile = $this->BcAdminForm->control($name, $optionsFile);
         $this->assertEquals($controlFile, $this->BcAdminForm->control($name, ['type' => 'file']));
 
         $optionsDateTimePicker = array_replace_recursive($options, [
@@ -151,7 +151,7 @@ class BcAdminFormHelperTest extends BcTestCase
             ],
             'class' => 'bca-hidden__input'
         ]);
-        $controlDateTimePicker = $this->BcForm->control($name, $optionsDateTimePicker);
+        $controlDateTimePicker = $this->BcAdminForm->control($name, $optionsDateTimePicker);
         $this->assertEquals($controlDateTimePicker, $this->BcAdminForm->control($name, ['type' => 'dateTimePicker']));
 
         $optionsText = array_replace_recursive($options, [
@@ -164,7 +164,7 @@ class BcAdminFormHelperTest extends BcTestCase
                 'class' => 'bca-textbox__label'
             ]
         ]);
-        $controlText = $this->BcForm->control($name, $optionsText);
+        $controlText = $this->BcAdminForm->control($name, $optionsText);
         $this->assertEquals($controlText, $this->BcAdminForm->control($name, ['type' => 'text']));
 
         $optionsPassword = array_replace_recursive($options, [
@@ -177,7 +177,7 @@ class BcAdminFormHelperTest extends BcTestCase
                 'class' => 'bca-textbox__label'
             ]
         ]);
-        $controlPassword = $this->BcForm->control($name, $optionsPassword);
+        $controlPassword = $this->BcAdminForm->control($name, $optionsPassword);
         $this->assertEquals($controlPassword, $this->BcAdminForm->control($name, ['type' => 'password']));
 
         $optionsDatePicker = array_replace_recursive($options, [
@@ -190,7 +190,7 @@ class BcAdminFormHelperTest extends BcTestCase
                 'class' => 'bca-textbox__label'
             ]
         ]);
-        $controlDatePicker = $this->BcForm->control($name, $optionsDatePicker);
+        $controlDatePicker = $this->BcAdminForm->control($name, $optionsDatePicker);
         $this->assertEquals($controlDatePicker, $this->BcAdminForm->control($name, ['type' => 'datePicker']));
 
         $optionsTextarea = array_replace_recursive($options, [
@@ -200,7 +200,7 @@ class BcAdminFormHelperTest extends BcTestCase
                 'class' => 'bca-textarea'
             ]
         ]);
-        $controlTextarea = $this->BcForm->control($name, $optionsTextarea);
+        $controlTextarea = $this->BcAdminForm->control($name, $optionsTextarea);
         $this->assertEquals($controlTextarea, $this->BcAdminForm->control($name, ['type' => 'textarea']));
 
         $optionsCheckbox = array_replace_recursive($options, [
@@ -214,7 +214,7 @@ class BcAdminFormHelperTest extends BcTestCase
                 'class' => 'bca-checkbox__label'
             ]
         ]);
-        $controlCheckbox = $this->BcForm->control($name, $optionsCheckbox);
+        $controlCheckbox = $this->BcAdminForm->control($name, $optionsCheckbox);
 
         $optionsMultiCheckbox = array_replace_recursive($options, [
             'type' => 'multiCheckbox',
@@ -227,7 +227,7 @@ class BcAdminFormHelperTest extends BcTestCase
                 'class' => 'bca-checkbox__label'
             ]
         ]);
-        $controlMultiCheckbox = $this->BcForm->control($name, $optionsMultiCheckbox);
+        $controlMultiCheckbox = $this->BcAdminForm->control($name, $optionsMultiCheckbox);
         $this->assertEquals($controlMultiCheckbox, $this->BcAdminForm->control($name, ['type' => 'multiCheckbox']));
 
         $optionsSelect = array_replace_recursive($options, [
@@ -237,7 +237,7 @@ class BcAdminFormHelperTest extends BcTestCase
                 'class' => 'bca-select'
             ]
         ]);
-        $controlSelect = $this->BcForm->control($name, $optionsSelect);
+        $controlSelect = $this->BcAdminForm->control($name, $optionsSelect);
         $this->assertEquals($controlSelect, $this->BcAdminForm->control($name, ['type' => 'select']));
 
         $optionsRadio = array_replace_recursive($options, [
@@ -252,7 +252,7 @@ class BcAdminFormHelperTest extends BcTestCase
             ],
             'separator' => '　'
         ]);
-        $controlRadio = $this->BcForm->control($name, $optionsRadio);
+        $controlRadio = $this->BcAdminForm->control($name, $optionsRadio);
         $this->assertEquals($controlRadio, $this->BcAdminForm->control($name, ['type' => 'radio']));
     }
 

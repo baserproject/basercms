@@ -22,7 +22,7 @@ $userList = $this->BcAdminForm->getControlSource('Users.id');
 <?php echo $this->BcAdminForm->create(null, ['novalidate' => true, 'method' => 'get', 'url' => ['action' => 'index']]) ?>
 <p class="bca-search__input-list">
   <span class="bca-search__input-item">
-    <?php echo $this->BcForm->label('message', __d('baser', 'キーワード'), ['class' => 'bca-search__input-item-label']) ?>
+    <?php echo $this->BcAdminForm->label('message', __d('baser', 'キーワード'), ['class' => 'bca-search__input-item-label']) ?>
     <?php echo $this->BcAdminForm->control('message', ['type' => 'text', 'class' => 'bca-textbox__input', 'size' => '30']) ?>
   </span>
   <span class="bca-search__input-item">

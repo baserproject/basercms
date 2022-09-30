@@ -42,14 +42,14 @@ $this->BcBaser->js('admin/permissions/form.bundle', false);
       </tr>
     <?php endif ?>
     <tr>
-      <th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('user_group_id', __d('baser', 'ユーザーグループ')) ?></th>
+      <th class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('user_group_id', __d('baser', 'ユーザーグループ')) ?></th>
       <td class="col-input bca-form-table__input">
         <?php echo h($currentUserGroup->title) ?>
       </td>
     </tr>
 
     <tr>
-      <th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('name', __d('baser', 'ルール名')) ?>
+      <th class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('name', __d('baser', 'ルール名')) ?>
         &nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
       </th>
       <td class="col-input bca-form-table__input">
@@ -62,7 +62,7 @@ $this->BcBaser->js('admin/permissions/form.bundle', false);
     </tr>
 
     <tr>
-      <th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('name', __d('baser', 'URL設定')) ?>
+      <th class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('name', __d('baser', 'URL設定')) ?>
         &nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
       </th>
       <td class="col-input bca-form-table__input">
@@ -80,24 +80,24 @@ $this->BcBaser->js('admin/permissions/form.bundle', false);
     </tr>
 
     <tr>
-      <th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('method', __d('baser', '権限')) ?></th>
+      <th class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('method', __d('baser', '権限')) ?></th>
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('method', ['type' => 'select', 'options' => $permissionMethodList]) ?>
-        <?php echo $this->BcForm->error('method') ?>
+        <?php echo $this->BcAdminForm->error('method') ?>
       </td>
     </tr>
     <tr>
-      <th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('method', __d('baser', 'アクセス')) ?></th>
+      <th class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('method', __d('baser', 'アクセス')) ?></th>
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('auth', ['type' => 'radio', 'options' => $permissionAuthList]) ?>
-        <?php echo $this->BcForm->error('auth') ?>
+        <?php echo $this->BcAdminForm->error('auth') ?>
       </td>
     </tr>
     <tr>
-      <th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('Permission.status', __d('baser', '利用状態')) ?></th>
+      <th class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('Permission.status', __d('baser', '利用状態')) ?></th>
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('status', ['type' => 'checkbox', 'label' => __d('baser', '有効')]) ?>
-        <?php echo $this->BcForm->error('status') ?>
+        <?php echo $this->BcAdminForm->error('status') ?>
       </td>
     </tr>
   </table>

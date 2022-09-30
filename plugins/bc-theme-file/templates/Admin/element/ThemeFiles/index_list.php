@@ -31,7 +31,7 @@ $this->BcListTable->setColumnNumber(3);
           'del' => __d('baser', '削除')
         ],
         'empty' => __d('baser', '一括処理'), 'data-bca-select-size' => 'lg']) ?>
-      <?php echo $this->BcForm->button(__d('baser', '適用'), ['id' => 'BtnApplyBatch', 'disabled' => 'disabled', 'class' => 'bca-btn', 'data-bca-btn-size' => 'lg']) ?>
+      <?php echo $this->BcAdminForm->button(__d('baser', '適用'), ['id' => 'BtnApplyBatch', 'disabled' => 'disabled', 'class' => 'bca-btn', 'data-bca-btn-size' => 'lg']) ?>
     </div>
   <?php endif ?>
   <div class="bca-data-list__sub">

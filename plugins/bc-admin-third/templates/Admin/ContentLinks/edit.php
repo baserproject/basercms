@@ -14,7 +14,7 @@
 
 <?php echo $this->BcAdminForm->create() ?>
 <?php echo $this->BcFormTable->dispatchBefore() ?>
-<?php echo $this->BcForm->hidden('ContentLink.id') ?>
+<?php echo $this->BcAdminForm->hidden('ContentLink.id') ?>
 
 <table class="form-table bca-form-table">
   <tr>
@@ -22,16 +22,16 @@
     <td class=" bca-form-table__input">
       <?php echo $this->BcAdminForm->control('ContentLink.url', ['type' => 'text', 'size' => 60, 'placeholder' => 'http://']) ?>
       <br>
-      <?php echo $this->BcForm->error('ContentLink.url') ?>
+      <?php echo $this->BcAdminForm->error('ContentLink.url') ?>
     </td>
   </tr>
-  <?php echo $this->BcForm->dispatchAfterForm() ?>
+  <?php echo $this->BcAdminForm->dispatchAfterForm() ?>
 </table>
 
 <?php echo $this->BcFormTable->dispatchAfter() ?>
 
 <div class="submit">
-  <?php echo $this->BcForm->submit(__d('baser', '保存'), ['class' => 'button bca-btn',
+  <?php echo $this->BcAdminForm->submit(__d('baser', '保存'), ['class' => 'button bca-btn',
     'data-bca-btn-type' => 'save',
     'data-bca-btn-size' => 'lg',
     'data-bca-btn-width' => 'lg',

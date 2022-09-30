@@ -49,24 +49,24 @@ if ($this->request->action !== 'admin_add') {
   <table id="FormTable" class="form-table bca-form-table">
     <tr>
       <th
-        class="col-head bca-form-table__label"><?php echo $this->BcForm->label('ThemeFile.name', __d('baser', 'ファイル名')) ?>
+        class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('ThemeFile.name', __d('baser', 'ファイル名')) ?>
         &nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
       </th>
       <td class="col-input bca-form-table__input">
         <?php if ($this->request->action != 'admin_view'): ?>
           <?php echo $this->BcAdminForm->control('ThemeFile.name', ['type' => 'text', 'size' => 30, 'maxlength' => 255, 'autofocus' => true]) ?>
-          <?php if ($this->BcForm->getSourceValue('ThemeFile.ext')): ?>.<?php endif ?>
-          <?php echo h($this->BcForm->getSourceValue('ThemeFile.ext')) ?>
+          <?php if ($this->BcAdminForm->getSourceValue('ThemeFile.ext')): ?>.<?php endif ?>
+          <?php echo h($this->BcAdminForm->getSourceValue('ThemeFile.ext')) ?>
           <?php echo $this->BcAdminForm->control('ThemeFile.ext', ['type' => 'hidden']) ?>
           <i class="bca-icon--question-circle bca-help"></i>
-          <?php echo $this->BcForm->error('ThemeFile.name') ?>
+          <?php echo $this->BcAdminForm->error('ThemeFile.name') ?>
           <div class="bca-helptext">
             <ul>
               <li><?php echo __d('baser', 'ファイル名は半角で入力してください。') ?></li>
             </ul>
           </div>
         <?php else: ?>
-          <?php echo $this->BcAdminForm->control('ThemeFile.name', ['type' => 'text', 'size' => 30, 'readonly' => 'readonly']) ?> .<?php echo $this->BcForm->getSourceValue('ThemeFile.ext') ?>
+          <?php echo $this->BcAdminForm->control('ThemeFile.name', ['type' => 'text', 'size' => 30, 'readonly' => 'readonly']) ?> .<?php echo $this->BcAdminForm->getSourceValue('ThemeFile.ext') ?>
           <?php echo $this->BcAdminForm->control('ThemeFile.ext', ['type' => 'hidden']) ?>
         <?php endif ?>
       </td>
@@ -74,7 +74,7 @@ if ($this->request->action !== 'admin_add') {
     <?php if ($this->request->action == 'admin_add' || (($this->request->action == 'admin_edit' || $this->request->action == 'admin_view') && in_array($this->request->getData('ThemeFile.type'), ['text', 'image']))): ?>
       <tr>
         <th
-          class="col-head bca-form-table__label"><?php echo $this->BcForm->label('ThemeFile.contents', __d('baser', '内容')) ?></th>
+          class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('ThemeFile.contents', __d('baser', '内容')) ?></th>
         <td class="col-input bca-form-table__input">
           <?php if (($this->request->action == 'admin_edit' || $this->request->action == 'admin_view') && $this->request->getData('ThemeFile.type') == 'image'): ?>
             <div style="margin:20px auto">
@@ -85,7 +85,7 @@ if ($this->request->action !== 'admin_add') {
           <?php elseif ($this->request->action == 'admin_add' || $this->request->getData('ThemeFile.type') == 'text'): ?>
             <?php if ($this->request->action != 'admin_view'): ?>
               <?php echo $this->BcAdminForm->control('ThemeFile.contents', ['type' => 'textarea', 'cols' => 80, 'rows' => 30]) ?>
-              <?php echo $this->BcForm->error('ThemeFile.contents') ?>
+              <?php echo $this->BcAdminForm->error('ThemeFile.contents') ?>
             <?php else: ?>
               <?php echo $this->BcAdminForm->control('ThemeFile.contents', ['type' => 'textarea', 'cols' => 80, 'rows' => 30, 'readonly' => 'readonly']) ?>
             <?php endif ?>
@@ -93,7 +93,7 @@ if ($this->request->action !== 'admin_add') {
         </td>
       </tr>
     <?php endif ?>
-    <?php echo $this->BcForm->dispatchAfterForm() ?>
+    <?php echo $this->BcAdminForm->dispatchAfterForm() ?>
   </table>
 </div>
 
@@ -102,12 +102,12 @@ if ($this->request->action !== 'admin_add') {
 <div class="submit bca-actions">
   <?php if ($this->request->action == 'admin_add'): ?>
     <div class="bca-actions__main">
-      <?php echo $this->BcForm->button(__d('baser', '保存'), ['div' => false, 'class' => 'button bca-btn', 'data-bca-btn-type' => 'save', 'data-bca-btn-size' => 'lg', 'data-bca-btn-width' => 'lg', 'id' => 'BtnSave']) ?>
+      <?php echo $this->BcAdminForm->button(__d('baser', '保存'), ['div' => false, 'class' => 'button bca-btn', 'data-bca-btn-type' => 'save', 'data-bca-btn-size' => 'lg', 'data-bca-btn-width' => 'lg', 'id' => 'BtnSave']) ?>
     </div>
   <?php elseif ($this->request->action == 'admin_edit'): ?>
     <?php if ($isWritable): ?>
       <div class="bca-actions__main">
-        <?php echo $this->BcForm->button(__d('baser', '保存'), ['div' => false, 'class' => 'button bca-btn', 'data-bca-btn-type' => 'save', 'data-bca-btn-size' => 'lg', 'data-bca-btn-width' => 'lg', 'id' => 'BtnSave']) ?>
+        <?php echo $this->BcAdminForm->button(__d('baser', '保存'), ['div' => false, 'class' => 'button bca-btn', 'data-bca-btn-type' => 'save', 'data-bca-btn-size' => 'lg', 'data-bca-btn-width' => 'lg', 'id' => 'BtnSave']) ?>
       </div>
       <div class="bca-actions__sub">
         <?php $this->BcBaser->link(__d('baser', '削除'), array_merge(['action' => 'del', $theme, $plugin, $type], $params), ['class' => 'bca-submit-token button bca-btn', 'data-bca-btn-type' => 'delete', 'data-bca-btn-size' => 'sm'], sprintf(__d('baser', '%s を本当に削除してもいいですか？'), basename($path)), false) ?>

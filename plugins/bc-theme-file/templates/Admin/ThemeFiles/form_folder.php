@@ -48,7 +48,7 @@ if ($this->request->action !== 'admin_add_folder') {
   <table id="FormTable" class="form-table bca-form-table">
     <tr>
       <th
-        class="col-head bca-form-table__label"><?php echo $this->BcForm->label('ThemeFolder.name', __d('baser', 'フォルダ名')) ?>
+        class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('ThemeFolder.name', __d('baser', 'フォルダ名')) ?>
         &nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
       </th>
       <td class="col-input bca-form-table__input">
@@ -60,13 +60,13 @@ if ($this->request->action !== 'admin_add_folder') {
               <li><?php echo __d('baser', 'フォルダ名は半角で入力してください。') ?></li>
             </ul>
           </div>
-          <?php echo $this->BcForm->error('ThemeFolder.name') ?>
+          <?php echo $this->BcAdminForm->error('ThemeFolder.name') ?>
         <?php else: ?>
           <?php echo $this->BcAdminForm->control('ThemeFolder.name', ['type' => 'text', 'size' => 40, 'readonly' => 'readonly']) ?>
         <?php endif ?>
       </td>
     </tr>
-    <?php echo $this->BcForm->dispatchAfterForm() ?>
+    <?php echo $this->BcAdminForm->dispatchAfterForm() ?>
   </table>
 </div>
 
@@ -75,15 +75,15 @@ if ($this->request->action !== 'admin_add_folder') {
 <div class="submit bca-actions">
   <?php if ($this->request->action == 'admin_add_folder'): ?>
     <div class="bca-actions__main">
-      <?php echo $this->BcForm->button(__d('baser', '保存'), ['div' => false, 'class' => 'button bca-btn bca-actions__item', 'data-bca-btn-type' => 'save', 'data-bca-btn-size' => 'lg', 'data-bca-btn-width' => 'lg', 'id' => 'BtnSave']) ?>
+      <?php echo $this->BcAdminForm->button(__d('baser', '保存'), ['div' => false, 'class' => 'button bca-btn bca-actions__item', 'data-bca-btn-type' => 'save', 'data-bca-btn-size' => 'lg', 'data-bca-btn-width' => 'lg', 'id' => 'BtnSave']) ?>
     </div>
   <?php elseif ($this->request->action == 'admin_edit_folder'): ?>
     <?php if ($isWritable): ?>
       <div class="bca-actions__main">
-        <?php echo $this->BcForm->button(__d('baser', '保存'), ['div' => false, 'class' => 'button bca-btn bca-actions__item', 'data-bca-btn-type' => 'save', 'data-bca-btn-size' => 'lg', 'data-bca-btn-width' => 'lg', 'id' => 'BtnSave']) ?>
+        <?php echo $this->BcAdminForm->button(__d('baser', '保存'), ['div' => false, 'class' => 'button bca-btn bca-actions__item', 'data-bca-btn-type' => 'save', 'data-bca-btn-size' => 'lg', 'data-bca-btn-width' => 'lg', 'id' => 'BtnSave']) ?>
       </div>
       <div class="bca-actions__sub">
-        <?php $this->BcBaser->link(__d('baser', '削除'), array_merge(['action' => 'del', $theme, $type], $params), ['class' => 'bca-submit-token button bca-btn bca-actions__item', 'data-bca-btn-type' => 'delete', 'data-bca-btn-size' => 'sm'], sprintf(__d('baser', '%s を本当に削除してもいいですか？'), $this->BcForm->getSourceValue('ThemeFolder.name')), false) ?>
+        <?php $this->BcBaser->link(__d('baser', '削除'), array_merge(['action' => 'del', $theme, $type], $params), ['class' => 'bca-submit-token button bca-btn bca-actions__item', 'data-bca-btn-type' => 'delete', 'data-bca-btn-size' => 'sm'], sprintf(__d('baser', '%s を本当に削除してもいいですか？'), $this->BcAdminForm->getSourceValue('ThemeFolder.name')), false) ?>
       </div>
     <?php endif ?>
   <?php else: ?>

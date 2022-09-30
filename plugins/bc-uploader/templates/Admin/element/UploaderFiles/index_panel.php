@@ -11,8 +11,8 @@
  */
 // IE文字化け対策
 header('Content-type: text/html; charset=utf-8');
-$users = $this->BcForm->getControlSource("UploaderFile.user_id");
-$uploaderCategories = $this->BcForm->getControlSource("UploaderFile.uploader_category_id");
+$users = $this->BcAdminForm->getControlSource("UploaderFile.user_id");
+$uploaderCategories = $this->BcAdminForm->getControlSource("UploaderFile.uploader_category_id");
 $this->passedArgs['action'] = 'ajax_list';
 //==============================================================================
 // Ajaxで呼び出される事が前提のためインラインで呼び出し
@@ -28,7 +28,7 @@ $this->BcBaser->js('vendor/jquery.upload-1.0.0.min');
     <?php if (!$installMessage): ?>
       <div id="UploaderForm" class="clearfix">
         <div>
-          <?php echo $this->BcForm->label('UploaderFile.uploader_category_id', __d('baser', 'アップロード')) ?>
+          <?php echo $this->BcAdminForm->label('UploaderFile.uploader_category_id', __d('baser', 'アップロード')) ?>
           &nbsp;
           <?php if ($uploaderCategories): ?>
             <?php echo $this->BcAdminForm->control('UploaderFile.uploader_category_id', ['type' => 'select', 'options' => $uploaderCategories, 'empty' => __d('baser', 'カテゴリ指定なし'), 'id' => 'UploaderFileUploaderCategoryId' . $listId]) ?>&nbsp;

@@ -45,13 +45,13 @@ $folders = $this->BcContents->getContentFolderList($siteId, ['excludeId' => $thi
     <div class="bs-widget-form">
         <?php echo $this->BcAdminForm->create('SearchIndex', ['type' => 'get', 'url' => $url]) ?>
         <?php if ($folders): ?>
-            <?php echo $this->BcForm->label('SearchIndex.f', __('カテゴリ')) ?><br>
+            <?php echo $this->BcAdminForm->label('SearchIndex.f', __('カテゴリ')) ?><br>
             <?php echo $this->BcAdminForm->control('SearchIndex.f', ['type' => 'select', 'options' => $folders, 'empty' => __('指定しない')]) ?>
             <br>
         <?php endif ?>
         <?php echo $this->BcAdminForm->control('SearchIndex.q', ['placeholder' => __('キーワード'), 'escape' => false]) ?>
-        <?php echo $this->BcForm->hidden('SearchIndex.s', ['value' => $siteId]) ?>
-        <?php echo $this->BcForm->submit(__('検索'), ['div' => false, 'class' => 'bs-button-small']) ?>
+        <?php echo $this->BcAdminForm->hidden('SearchIndex.s', ['value' => $siteId]) ?>
+        <?php echo $this->BcAdminForm->submit(__('検索'), ['div' => false, 'class' => 'bs-button-small']) ?>
         <?php echo $this->BcAdminForm->end() ?>
     </div>
 </div>

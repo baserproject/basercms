@@ -21,35 +21,35 @@
 <table class="form-table bca-form-table">
   <tr>
     <th class="col-head bca-form-table__label"><span class="bca-label"
-                                                     data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>&nbsp;<?php echo $this->BcForm->label('Tool.baser', __d('baser', 'コアテーブル名')) ?>
+                                                     data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>&nbsp;<?php echo $this->BcAdminForm->label('Tool.baser', __d('baser', 'コアテーブル名')) ?>
     </th>
     <td class="col-input bca-form-table__input">
       <?php echo $this->BcAdminForm->control('Tool.core', [
         'type' => 'select',
-        'options' => $this->BcForm->getControlSource('Tool.core'),
+        'options' => $this->BcAdminForm->getControlSource('Tool.core'),
         'multiple' => true,
         'style' => 'width:400px;height:250px']); ?>
-      <?php echo $this->BcForm->error('Tool.core') ?>
+      <?php echo $this->BcAdminForm->error('Tool.core') ?>
     </td>
   </tr>
   <tr>
     <th class="col-head bca-form-table__label"><span class="bca-label"
-                                                     data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>&nbsp;<?php echo $this->BcForm->label('Tool.plugin', __d('baser', 'プラグインテーブル名')) ?>
+                                                     data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>&nbsp;<?php echo $this->BcAdminForm->label('Tool.plugin', __d('baser', 'プラグインテーブル名')) ?>
     </th>
     <td class="col-input bca-form-table__input">
       <?php echo $this->BcAdminForm->control('Tool.plugin', [
         'type' => 'select',
-        'options' => $this->BcForm->getControlSource('Tool.plugin'),
+        'options' => $this->BcAdminForm->getControlSource('Tool.plugin'),
         'multiple' => true,
         'style' => 'width:400px;height:250px']); ?>
-      <?php echo $this->BcForm->error('Tool.plugin') ?>
+      <?php echo $this->BcAdminForm->error('Tool.plugin') ?>
     </td>
   </tr>
 </table>
 <p><?php echo __d('baser', 'テーブルを選択して「生成」ボタンを押してください。') ?></p>
 <div class="submit bca-actions">
   <div class="bca-actions__main">
-    <?php echo $this->BcForm->submit(__d('baser', '生成'), ['div' => false, 'class' => 'button bca-btn bca-actions__item', 'data-bca-btn-size' => 'lg']) ?>
+    <?php echo $this->BcAdminForm->submit(__d('baser', '生成'), ['div' => false, 'class' => 'button bca-btn bca-actions__item', 'data-bca-btn-size' => 'lg']) ?>
   </div>
 </div>
 

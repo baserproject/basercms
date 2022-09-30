@@ -15,7 +15,7 @@
  */
 $title = __d('baser', 'ローカルナビゲーション');
 $description = __d('baser', 'ページ機能で作成されたページで同一カテゴリ内のタイトルリストを表示します。');
-echo $this->BcForm->hidden($key . '.cache', ['value' => true]);
+echo $this->BcAdminForm->hidden($key . '.cache', ['value' => true]);
 ?>
 
 

@@ -331,7 +331,7 @@ class BcTextHelper extends TextHelper
      */
     public function listValue($field, $value)
     {
-        $list = $this->BcForm->getControlSource($field);
+        $list = $this->BcAdminForm->getControlSource($field);
         if ($list && isset($list[$value])) {
             return $list[$value];
         } else {

@@ -183,12 +183,12 @@ $this->BcBaser->i18nScript([
     <div class="section">
       <h3 class="bca-panel-box__title"><?php echo __d('baser', '接続情報') ?></h3>
       <ul>
-        <li id="dbType"> <?php echo $this->BcForm->label('Installation.dbType', __d('baser', 'データベースタイプ')); ?>
+        <li id="dbType"> <?php echo $this->BcAdminForm->label('Installation.dbType', __d('baser', 'データベースタイプ')); ?>
           <?php echo $this->BcAdminForm->control('Installation.dbType', ['type' => 'select', 'options' => $dbsource]) ?>
           <br>
           <small>※ <?php echo __d('baser', 'MySQL・PostgreSQL・SQLiteの中で、このサーバーで利用できるものが表示されています。') ?></small>
         </li>
-        <li id="dbHost"> <?php echo $this->BcForm->label('Installation.dbHost', __d('baser', 'データベースホスト名')); ?>
+        <li id="dbHost"> <?php echo $this->BcAdminForm->label('Installation.dbHost', __d('baser', 'データベースホスト名')); ?>
           <?php echo $this->BcAdminForm->control('Installation.dbHost', ['type' => 'text', 'maxlength' => '300', 'size' => 45]); ?> </li>
         <li id="dbUser" class="clearfix">
           <label><?php echo __d('baser', 'ログイン情報') ?></label>
@@ -242,12 +242,12 @@ $this->BcBaser->i18nScript([
   </div>
 
   <div class="submit bca-actions">
-    <?php echo $this->BcForm->button(__d('baser', '戻る'), ['type' => 'button', 'class' => 'button bca-btn bca-actions__item', 'id' => 'btnback']) ?>
-    <?php echo $this->BcForm->button(__d('baser', '接続テスト'), ['type' => 'button', 'class' => 'btn-orange button bca-btn bca-actions__item', 'id' => 'checkdb', 'data-bca-btn-type' => 'save']) ?>
+    <?php echo $this->BcAdminForm->button(__d('baser', '戻る'), ['type' => 'button', 'class' => 'button bca-btn bca-actions__item', 'id' => 'btnback']) ?>
+    <?php echo $this->BcAdminForm->button(__d('baser', '接続テスト'), ['type' => 'button', 'class' => 'btn-orange button bca-btn bca-actions__item', 'id' => 'checkdb', 'data-bca-btn-type' => 'save']) ?>
     <?php if (!isset($blDBSettingsOK) || !$blDBSettingsOK): ?>
-      <?php echo $this->BcForm->button(__d('baser', '次のステップへ'), ['type' => 'button', 'class' => 'button bca-btn bca-actions__item', 'id' => 'btnnext', 'name' => 'btnnext', 'disabled' => 'disabled']) ?>
+      <?php echo $this->BcAdminForm->button(__d('baser', '次のステップへ'), ['type' => 'button', 'class' => 'button bca-btn bca-actions__item', 'id' => 'btnnext', 'name' => 'btnnext', 'disabled' => 'disabled']) ?>
     <?php else: ?>
-      <?php echo $this->BcForm->button(__d('baser', '次のステップへ'), ['type' => 'button', 'class' => 'button bca-btn bca-actions__item', 'id' => 'btnnext', 'name' => 'btnnext', 'data-bca-btn-type' => 'save']) ?>
+      <?php echo $this->BcAdminForm->button(__d('baser', '次のステップへ'), ['type' => 'button', 'class' => 'button bca-btn bca-actions__item', 'id' => 'btnnext', 'name' => 'btnnext', 'data-bca-btn-type' => 'save']) ?>
     <?php endif ?>
   </div>
 
