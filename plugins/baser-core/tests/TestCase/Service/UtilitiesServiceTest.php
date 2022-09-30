@@ -141,18 +141,62 @@ class UtilitiesServiceTest extends BcTestCase
 
     /**
      * test verityContentsTree
-     * @return void
-     * @dataProvider _verifyProvider
+     *
+     * @param $dbSample
+     * @param $expect
+     * @param $logDataExpect
+     *
+     * @dataProvider verityContentsTreeProvider
      */
-    public function test_verityContentsTree(){
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    public function test_verityContentsTree($dbSample, $expect, $logDataExpect)
+    {
+        $logPath = LOGS . 'cli-error.log';
+        if (file_exists($logPath)) {
+            unlink($logPath);
+        }
+
+        foreach ($dbSample as $item) {
+            ContentFactory::make($item)->persist();
+        }
+
+        $rs = $this->UtilitiesService->verityContentsTree();
+        $this->assertEquals($rs, $expect);
+
+        $file = new File($logPath);
+        $logData = $file->read();
+        $this->assertStringContainsString($logDataExpect, $logData);
+    }
+
+    public function verityContentsTreeProvider()
+    {
+        return
+            [
+                //成功
+                [
+                    [
+                        ['id' => 300, 'name' => 'BaserCore 6', 'type' => 'ContentFolder', 'lft' => 1, 'rght' => 2],
+                        ['id' => 301, 'name' => 'BaserCore 7', 'type' => 'ContentFolder', 'lft' => 3, 'rght' => 4],
+                    ],
+                    true,
+                    false
+                ],
+                //失敗
+                [
+                    [
+                        ['id' => 300, 'name' => 'BaserCore 6', 'type' => 'ContentFolder', 'lft' => 1, 'rght' => 2],
+                        ['id' => 301, 'name' => 'BaserCore 7', 'type' => 'ContentFolder', 'lft' => 1, 'rght' => 2],
+                    ],
+                    false,
+                    'error: index, 1, duplicate'
+                ],
+            ];
     }
 
     /**
-     *   * test _verify
+     * test _verify
      * @param $dbSample
      * @param $expect
-     * @return void
+     *
      * @dataProvider _verifyProvider
      */
     public function test_verify($dbSample, $expect)
