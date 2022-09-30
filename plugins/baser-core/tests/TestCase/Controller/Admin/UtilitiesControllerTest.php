@@ -141,7 +141,11 @@ class UtilitiesControllerTest extends BcTestCase
      */
     public function testCredit(): void
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        $this->post('/baser/admin/baser-core/utilities/credit/');
+        $this->assertResponseOk();
     }
 
     /**
