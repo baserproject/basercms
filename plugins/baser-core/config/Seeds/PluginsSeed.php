@@ -31,6 +31,28 @@ class PluginsSeed extends AbstractSeed
                 'priority' => '1',
                 'created' => NULL,
                 'modified' => '2022-10-01 09:00:00',
+            ],
+            [
+                'id' => '2',
+                'name' => 'BcBlog',
+                'title' => 'ブログ',
+                'version' => '2.0.0',
+                'status' => '0',
+                'db_init' => '1',
+                'priority' => '2',
+                'created' => NULL,
+                'modified' => '2022-10-01 09:00:00',
+            ],
+            [
+                'id' => '3',
+                'name' => 'BcSearchIndex',
+                'title' => 'サイト内検索',
+                'version' => '2.0.0',
+                'status' => '0',
+                'db_init' => '1',
+                'priority' => '3',
+                'created' => NULL,
+                'modified' => '2022-10-01 09:00:00',
             ]
         ];
 

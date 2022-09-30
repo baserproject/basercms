@@ -230,7 +230,7 @@ class BcUtilTest extends BcTestCase
      */
     public function testGetEnablePlugins(): void
     {
-        $expects = ['BcBlog', 'BcMail', 'BcUploader', 'BcFavorite'];
+        $expects = ['BcBlog', 'BcMail', 'BcUploader', 'BcFavorite', 'BcSearchIndex'];
         $result = BcUtil::getEnablePlugins();
         foreach($result as $value) {
             $this->assertContains($value->name, $expects, 'プラグインの一覧が取得できません。');

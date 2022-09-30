@@ -55,6 +55,10 @@ if [ ! -e '/var/www/html/docker_inited' ]; then
         mysql -h bc5-db -uroot -proot basercms -N -e 'show tables' | while read table; do mysql -h bc5-db -uroot -proot -e "drop table $table" basercms; done
         /var/www/html/bin/cake migrations migrate --plugin BaserCore
         /var/www/html/bin/cake migrations seed --plugin BaserCore
+        /var/www/html/bin/cake migrations migrate --plugin BcBlog
+        /var/www/html/bin/cake migrations seed --plugin BcBlog
+        /var/www/html/bin/cake migrations migrate --plugin BcSearchIndex
+        /var/www/html/bin/cake migrations seed --plugin BcSearchIndex
         /var/www/html/bin/cake plugin assets symlink
     else
         echo "[$(date +"%Y/%m/%d %H:%M:%S")] Migration failed."

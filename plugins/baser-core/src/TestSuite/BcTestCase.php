@@ -489,4 +489,18 @@ class BcTestCase extends TestCase
         $_FILES = $files;
     }
 
+    /**
+     * テーブルを削除する
+     * @param string $tableName
+     * @checked
+     * @noTodo
+     */
+    public function dropTable($tableName)
+    {
+        $connection = ConnectionManager::get('test');
+        $schema = $connection->getDriver()->newTableSchema($tableName);
+        $sql = $schema->dropSql($connection);
+        $connection->execute($sql[0])->closeCursor();
+    }
+
 }

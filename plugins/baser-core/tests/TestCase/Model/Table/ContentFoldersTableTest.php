@@ -134,23 +134,22 @@ class ContentFoldersTableTest extends BcTestCase
      *
      * @return void
      */
-//    public function testAfterSave(): void
-//    {
-//        $this->loadFixtures(
-//	        'Service\SearchIndexesService\ContentsReconstruct',
-//	        'Service\SearchIndexesService\PagesReconstruct',
-//	        'Service\SearchIndexesService\ContentFoldersReconstruct',
-//            'Service\SearchIndexesService\SearchIndexesReconstruct'
-//        );
-//        $contentFolder = $this->ContentFolders->get(1, ['contain' => ['Contents']]);
-//        $this->SearchIndexes->deleteAll([]);
-//        // $this->Pages->delete($page);
-//        $this->ContentFolders->dispatchEvent('Model.afterSave', ['entity' => $contentFolder, 'options' => new ArrayObject(['reconstructSearchIndices' => true])]);
-//        $this->assertTrue($this->ContentFolders->isMovableTemplate);
-//        // reconstructされてるか
-//        $this->assertEquals(4, $this->SearchIndexes->find()->count());
-//
-//    }
+    public function testAfterSave(): void
+    {
+        $this->loadFixtures(
+	        'Service\SearchIndexesService\ContentsReconstruct',
+	        'Service\SearchIndexesService\PagesReconstruct',
+	        'Service\SearchIndexesService\ContentFoldersReconstruct',
+        );
+        $contentFolder = $this->ContentFolders->get(1, ['contain' => ['Contents']]);
+        $this->SearchIndexes->deleteAll([]);
+        // $this->Pages->delete($page);
+        $this->ContentFolders->dispatchEvent('Model.afterSave', ['entity' => $contentFolder, 'options' => new ArrayObject(['reconstructSearchIndices' => true])]);
+        $this->assertTrue($this->ContentFolders->isMovableTemplate);
+        // reconstructされてるか
+        $this->assertEquals(4, $this->SearchIndexes->find()->count());
+
+    }
 
     /**
      * testBeforeMove

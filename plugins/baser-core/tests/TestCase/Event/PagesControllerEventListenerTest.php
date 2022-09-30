@@ -12,7 +12,10 @@
 namespace BaserCore\Test\TestCase\Event;
 
 use BaserCore\Event\PagesControllerEventListener;
+use BaserCore\Service\PluginsServiceInterface;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcContainer;
+use BcSearchIndex\Test\Factory\SearchIndexFactory;
 use Cake\Event\EventManager;
 
 /**
@@ -122,17 +125,25 @@ class PagesControllerEventListenerTest extends BcTestCase
     /**
      * test baserCoreContentsAfterChangeStatus
      */
-//    public function testBaserCoreContentsAfterChangeStatus()
-//    {
-//        $token = $this->apiLoginAdmin();
-//        $data = [
-//            'id' => 5,
-//            'status' => 'unpublish'
-//        ];
-//        $searchIndexesTable = $this->getTableLocator()->get('BcSearchIndex.SearchIndexes');
-//        $this->assertTrue($searchIndexesTable->find()->where(['model' => 'Page', 'model_id' => 16])->first()->status);
-//        $this->patch("/baser/api/baser-core/contents/change_status.json?token=" . $token['access_token'], $data);
-//        $this->assertFalse($searchIndexesTable->find()->where(['model' => 'Page', 'model_id' => 16])->first()->status);
-//    }
+    public function testBaserCoreContentsAfterChangeStatus()
+    {
+        $token = $this->apiLoginAdmin();
+        $data = [
+            'id' => 5,
+            'status' => 'unpublish'
+        ];
+        /* @var \BaserCore\Service\PluginsService $pluginsService */
+        $pluginsService = BcContainer::get()->get(PluginsServiceInterface::class);
+        $pluginsService->attach('BcSearchIndex');
+        SearchIndexFactory::make([
+            'model' => 'Page',
+            'model_id' => 16,
+            'status' => true,
+        ])->persist();
+        $searchIndexesTable = $this->getTableLocator()->get('BcSearchIndex.SearchIndexes');
+        $this->assertTrue($searchIndexesTable->find()->where(['model' => 'Page', 'model_id' => 16])->first()->status);
+        $this->patch("/baser/api/baser-core/contents/change_status.json?token=" . $token['access_token'], $data);
+        $this->assertFalse($searchIndexesTable->find()->where(['model' => 'Page', 'model_id' => 16])->first()->status);
+    }
 
 }

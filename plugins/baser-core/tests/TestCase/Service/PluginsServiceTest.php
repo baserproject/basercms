@@ -269,7 +269,7 @@ class PluginsServiceTest extends BcTestCase
     public function test_detachAll()
     {
         $result = $this->Plugins->detachAll();
-        $this->assertEquals(4, count($result));
+        $this->assertEquals(5, count($result));
     }
 
     /**
