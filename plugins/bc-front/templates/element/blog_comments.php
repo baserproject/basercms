@@ -43,34 +43,34 @@
 
 	<h4 class="bs-blog-comment__head"><?php echo __('コメントを送る') ?></h4>
 
-	<?php echo $this->BcAdminForm->create('BlogComment', [
+	<?php echo $this->BcForm->create('BlogComment', [
 		'url' => '/blog/blog_comments/add/' . $blogContent['BlogContent']['id'] . '/' . $post['BlogPost']['id'],
 		'id' => 'BlogCommentAddForm'
 	]) ?>
-	<?php echo $this->BcAdminForm->input('BlogComment.captcha_id', [
+	<?php echo $this->BcForm->input('BlogComment.captcha_id', [
 		'type' => 'hidden',
 		'value' => $captchaId
 	]) ?>
 
 	<table class="bs-blog-comment__form">
 		<tr>
-			<th><?php echo $this->BcAdminForm->label('BlogComment.name', __('お名前') . ' / ' . __('ニックネーム')) ?><span class="required">必須</span></th>
-			<td><?php echo $this->BcAdminForm->input('BlogComment.name', ['type' => 'text', 'required' => false]) ?></td>
+			<th><?php echo $this->BcForm->label('BlogComment.name', __('お名前') . ' / ' . __('ニックネーム')) ?><span class="required">必須</span></th>
+			<td><?php echo $this->BcForm->input('BlogComment.name', ['type' => 'text', 'required' => false]) ?></td>
 		</tr>
 		<tr>
-			<th><?php echo $this->BcAdminForm->label('BlogComment.email', __('メールアドレス')) ?><span class="required">必須</span></th>
+			<th><?php echo $this->BcForm->label('BlogComment.email', __('メールアドレス')) ?><span class="required">必須</span></th>
 			<td>
-				<?php echo $this->BcAdminForm->input('BlogComment.email', ['type' => 'text', 'size' => 30, 'required' => false]) ?>&nbsp;
+				<?php echo $this->BcForm->input('BlogComment.email', ['type' => 'text', 'size' => 30, 'required' => false]) ?>&nbsp;
 				<br><small>※ <?php echo __('メールアドレスは公開されません') ?></small>
 			</td>
 		</tr>
 		<tr>
-			<th><?php echo $this->BcAdminForm->label('BlogComment.url', 'URL') ?><span class="normal">任意</span></th>
-			<td><?php echo $this->BcAdminForm->input('BlogComment.url', ['type' => 'text', 'size' => 30, 'required' => false]) ?></td>
+			<th><?php echo $this->BcForm->label('BlogComment.url', 'URL') ?><span class="normal">任意</span></th>
+			<td><?php echo $this->BcForm->input('BlogComment.url', ['type' => 'text', 'size' => 30, 'required' => false]) ?></td>
 		</tr>
 		<tr>
-			<th><?php echo $this->BcAdminForm->label('BlogComment.message', __('コメント')) ?><span class="required">必須</span></th>
-			<td><?php echo $this->BcAdminForm->input('BlogComment.message', ['type' => 'textarea', 'rows' => 10, 'cols' => 52, 'required' => false]) ?></td>
+			<th><?php echo $this->BcForm->label('BlogComment.message', __('コメント')) ?><span class="required">必須</span></th>
+			<td><?php echo $this->BcForm->input('BlogComment.message', ['type' => 'textarea', 'rows' => 10, 'cols' => 52, 'required' => false]) ?></td>
 		</tr>
 	</table>
 
@@ -82,13 +82,13 @@
 			'class' => 'auth-captcha-image',
 			'id' => 'CaptchaLoader'
 		]) ?>
-		<?php echo $this->BcAdminForm->text('BlogComment.auth_captcha') ?>
+		<?php echo $this->BcForm->text('BlogComment.auth_captcha') ?>
 		&nbsp;<?php echo __('画像の文字を入力してください') ?>
 	</div>
 	<?php endif ?>
 
 	<div class="bs-blog-comment__submit">
-		<?php echo $this->BcAdminForm->end(['label' => __('送信する'), 'id' => 'BlogCommentAddButton', 'class' => 'button']) ?>
+		<?php echo $this->BcForm->end(['label' => __('送信する'), 'id' => 'BlogCommentAddButton', 'class' => 'button']) ?>
 	</div>
 
 	<div id="ResultMessage" class="message" style="display:none;text-align:center">&nbsp;</div>

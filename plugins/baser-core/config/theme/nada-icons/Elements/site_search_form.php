@@ -14,9 +14,9 @@ if (!empty($this->passedArgs['num'])) {
 
 
 <div class="section search-box">
-	<?php echo $this->BcAdminForm->create('SearchIndex', ['type' => 'get', 'url' => $url]) ?>
-	<?php echo $this->BcAdminForm->control('SearchIndex.q', ['escape' => false]) ?>
-	<?php echo $this->BcAdminForm->hidden('SearchIndex.s', ['value' => 0]) ?>
-	<?php echo $this->BcAdminForm->submit('検索', array('div' => false, 'class' => 'submit_button')) ?>
-	<?php echo $this->BcAdminForm->end() ?>
+	<?php echo $this->BcForm->create('SearchIndex', ['type' => 'get', 'url' => $url]) ?>
+	<?php echo $this->BcForm->control('SearchIndex.q', ['escape' => false]) ?>
+	<?php echo $this->BcForm->hidden('SearchIndex.s', ['value' => 0]) ?>
+	<?php echo $this->BcForm->submit('検索', array('div' => false, 'class' => 'submit_button')) ?>
+	<?php echo $this->BcForm->end() ?>
 </div>
