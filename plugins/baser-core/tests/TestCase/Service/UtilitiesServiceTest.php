@@ -18,6 +18,8 @@ use BaserCore\Service\UtilitiesServiceInterface;
 use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
+use Cake\Cache\Cache;
+use Cake\Core\Configure;
 use Cake\Filesystem\File;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestTrait;
@@ -279,8 +281,21 @@ class UtilitiesServiceTest extends BcTestCase
      * test getCredit
      * @return void
      */
-    public function test_getCredit(){
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    public function test_getCredit()
+    {
+        Configure::write('debug', false);
+        Cache::write('specialThanks', '', '_bc_env_');
+        $rs = $this->UtilitiesService->getCredit();
+
+        //戻り値を確認
+        $this->assertEquals("中村 美鈴", $rs->designers[0]->name);
+        $this->assertEquals("滝下 真玄", $rs->developers[0]->name);
+        $this->assertEquals("本間 忍", $rs->supporters[0]->name);
+        $this->assertEquals("オガワ", $rs->publishers[0]->name);
+
+        //Configure debug を false に設定してキャッシュの保存を確認
+        $specialThanks = Cache::read('specialThanks', '_bc_env_');
+        $this->assertEquals($specialThanks, json_encode($rs));
     }
 
     /**
