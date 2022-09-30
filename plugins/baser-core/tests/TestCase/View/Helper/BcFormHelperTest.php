@@ -79,7 +79,7 @@ class BcFormHelperTest extends BcTestCase
      */
     public function testGetControlSource($field, $expected)
     {
-        $result = $this->BcAdminForm->getControlSource($field);
+        $result = $this->BcForm->getControlSource($field);
         if ($result) {
             $result = $result->toArray();
         } else {
@@ -107,7 +107,7 @@ class BcFormHelperTest extends BcTestCase
      */
     public function testDatePicker($fieldName, $attributes, $expected, $message)
     {
-        $result = $this->BcAdminForm->datePicker($fieldName, $attributes);
+        $result = $this->BcForm->datePicker($fieldName, $attributes);
         $this->assertMatchesRegularExpression('/' . $expected . '/s', $result, $message);
     }
 
@@ -131,8 +131,8 @@ class BcFormHelperTest extends BcTestCase
      */
     public function testDateTimePicker($fieldName, $attributes, $expected, $message)
     {
-        $this->BcAdminForm->create();
-        $result = $this->BcAdminForm->dateTimePicker($fieldName, $attributes);
+        $this->BcForm->create();
+        $result = $this->BcForm->dateTimePicker($fieldName, $attributes);
         $this->assertMatchesRegularExpression('/' . $expected . '/s', $result, $message);
     }
 
@@ -167,7 +167,7 @@ class BcFormHelperTest extends BcTestCase
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
         // <<<
 
-        $result = $this->BcAdminForm->dateTime($fieldName, $dateFormat, $timeFormat, $attributes);
+        $result = $this->BcForm->dateTime($fieldName, $dateFormat, $timeFormat, $attributes);
         $this->assertMatchesRegularExpression('/' . $expected . '/s', $result, $message);
     }
 
@@ -192,7 +192,7 @@ class BcFormHelperTest extends BcTestCase
      */
     public function testHidden($fieldName, $options, $expected, $message)
     {
-        $result = $this->BcAdminForm->hidden($fieldName, $options);
+        $result = $this->BcForm->hidden($fieldName, $options);
         $this->assertMatchesRegularExpression('/' . $expected . '/s', $result, $message);
     }
 
@@ -217,11 +217,11 @@ class BcFormHelperTest extends BcTestCase
     public function testCreate()
     {
         // 引数がない場合
-        $result = $this->BcAdminForm->create();
+        $result = $this->BcForm->create();
         $this->assertMatchesRegularExpression('/<form method="post" accept-charset="utf-8" novalidate="novalidate" action="\/contacts\/add">.*/', $result);
         // 引数が既存エンティティの場合の場合
         $user = $this->getTableLocator()->get('Users')->get(1);
-        $result = $this->BcAdminForm->create($user);
+        $result = $this->BcForm->create($user);
         $this->assertMatchesRegularExpression('/<form method="post" accept-charset="utf-8" novalidate="novalidate" action="\/contacts\/add"><div style="display:none;"><input type="hidden" name="_method" value="PUT"\/><\/div>.*/', $result);
         $this->assertEventFired('Helper.Form.beforeCreate');
         $this->assertEventFired('Helper.Form.afterCreate');
@@ -235,17 +235,17 @@ class BcFormHelperTest extends BcTestCase
     public function testEnd()
     {
         // 通常
-        $result = $this->BcAdminForm->end();
+        $result = $this->BcForm->end();
         $this->assertEquals('</form>', $result);
 
         // トークン付き
-        $view = $this->BcAdminForm->getView();
+        $view = $this->BcForm->getView();
         $request = $view->getRequest();
         $view->setRequest($request->withAttribute('formTokenData', ['test']));
         $usersTable = $this->getTableLocator()->get('BaserCore.Users');
         $user = $usersTable->find()->where(['id' => 1])->first();
-        $this->BcAdminForm->create($user);
-        $result = $this->BcAdminForm->end();
+        $this->BcForm->create($user);
+        $result = $this->BcForm->end();
         $this->assertStringContainsString('</div></form>', $result);
 
         // beforeEnd
@@ -255,8 +255,8 @@ class BcFormHelperTest extends BcTestCase
             $this->assertTrue(array_key_exists('secureAttributes', $data));
             $event->setData('secureAttributes', ['debugSecurity' => true]);
         });
-        $this->BcAdminForm->create($user);
-        $result = $this->BcAdminForm->end();
+        $this->BcForm->create($user);
+        $result = $this->BcForm->end();
         $this->assertStringContainsString('_Token[debug]', $result);
 
         // afterEnd
@@ -266,7 +266,7 @@ class BcFormHelperTest extends BcTestCase
             $this->assertTrue(array_key_exists('out', $data));
             $event->setData('out', 'test');
         });
-        $this->assertEquals('test', $this->BcAdminForm->end());
+        $this->assertEquals('test', $this->BcForm->end());
     }
 
     /**
@@ -276,7 +276,7 @@ class BcFormHelperTest extends BcTestCase
      */
     public function testSubmit()
     {
-        $result = $this->BcAdminForm->submit('保存');
+        $result = $this->BcForm->submit('保存');
         $this->assertMatchesRegularExpression('/<div class="submit"><input type="submit" value="保存"\/><\/div>/', $result);
         $this->assertEventFired('Helper.Form.afterSubmit');
     }
@@ -309,7 +309,7 @@ class BcFormHelperTest extends BcTestCase
             }
         }]]);
         if (@$options['type'] === 'file') {
-            $this->BcAdminForm->BcUpload->request->data = [
+            $this->BcForm->BcUpload->request->data = [
                 'Contact' => [
                     'id' => '1',
                     'eye_catch' => 'template1.jpg',
@@ -317,7 +317,7 @@ class BcFormHelperTest extends BcTestCase
                 ]
             ];
         }
-        $result = $this->BcAdminForm->control($fieldName, $options);
+        $result = $this->BcForm->control($fieldName, $options);
         $this->assertMatchesRegularExpression('/' . $expected . '/s', $result);
         $this->resetEvent();
     }
@@ -362,7 +362,7 @@ class BcFormHelperTest extends BcTestCase
     public function testLabel()
     {
         $expected = 'class="bca-label"';
-        $result = $this->BcAdminForm->label('User.id', 'id', ['class' => 'bca-label']);
+        $result = $this->BcForm->label('User.id', 'id', ['class' => 'bca-label']);
         $this->assertMatchesRegularExpression('/' . $expected . '/s', $result, 'ラベルに正しいクラスが付与できません');
     }
 
@@ -385,7 +385,7 @@ class BcFormHelperTest extends BcTestCase
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
         // <<<
 
-        $result = $this->BcAdminForm->ckeditor($fieldName, $options);
+        $result = $this->BcForm->ckeditor($fieldName, $options);
         $this->assertMatchesRegularExpression('/' . $expected . '/s', $result, $message);
     }
 
@@ -414,7 +414,7 @@ class BcFormHelperTest extends BcTestCase
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
         // <<<
 
-        $result = $this->BcAdminForm->editor($fieldName, $options);
+        $result = $this->BcForm->editor($fieldName, $options);
         $this->assertMatchesRegularExpression('/' . $expected . '/s', $result, $message);
     }
 
@@ -445,7 +445,7 @@ class BcFormHelperTest extends BcTestCase
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
         // <<<
 
-        $result = $this->BcAdminForm->prefTag($fieldName, $selected, $attributes);
+        $result = $this->BcForm->prefTag($fieldName, $selected, $attributes);
         $this->assertMatchesRegularExpression('/' . $expected . '/s', $result, $message);
     }
 
@@ -480,7 +480,7 @@ class BcFormHelperTest extends BcTestCase
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
         // <<<
 
-        $result = $this->BcAdminForm->wyear($fieldName, $minYear, $maxYear, $selected, $attributes, $showEmpty);
+        $result = $this->BcForm->wyear($fieldName, $minYear, $maxYear, $selected, $attributes, $showEmpty);
         $this->assertMatchesRegularExpression('/' . $expected . '/s', $result, $message);
     }
 
@@ -517,7 +517,7 @@ class BcFormHelperTest extends BcTestCase
         $wyear = $this->BcTime->wyear($wareki);
         $now = $w . '-' . $wyear;
 
-        $result = $this->BcAdminForm->wyear('test', null, null, 'now');
+        $result = $this->BcForm->wyear('test', null, null, 'now');
         $this->assertMatchesRegularExpression('/' . $now . '" selected/s', $result, '今年を選択状態にできません');
     }
 
@@ -539,7 +539,7 @@ class BcFormHelperTest extends BcTestCase
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
         // <<<
 
-        $result = $this->BcAdminForm->generateList($modelName, $conditions, $fields);
+        $result = $this->BcForm->generateList($modelName, $conditions, $fields);
         $this->assertEquals($result, $expected);
     }
 
@@ -579,7 +579,7 @@ class BcFormHelperTest extends BcTestCase
 
         $attributes = $attributes + $attributes_default;
 
-        $result = $this->BcAdminForm->jsonList($field, $attributes);
+        $result = $this->BcForm->jsonList($field, $attributes);
         $this->assertMatchesRegularExpression('/' . $expected . '/s', $result, $message);
     }
 
@@ -613,7 +613,7 @@ class BcFormHelperTest extends BcTestCase
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
         // <<<
 
-        $result = $this->BcAdminForm->selectText($fieldName, $options, $selected, $attributes, $showEmpty);
+        $result = $this->BcForm->selectText($fieldName, $options, $selected, $attributes, $showEmpty);
         $this->assertMatchesRegularExpression('/' . $expected . '/s', $result, $message);
     }
 
@@ -645,8 +645,8 @@ class BcFormHelperTest extends BcTestCase
     {
         $pagesTable = $this->getTableLocator()->get('BaserCore.Pages');
         $page = $pagesTable->find()->where(['Pages.id' => 2])->contain(['Contents'])->first();
-        $this->BcAdminForm->create($page);
-        $result = $this->BcAdminForm->file($fieldName, $options);
+        $this->BcForm->create($page);
+        $result = $this->BcForm->file($fieldName, $options);
         $this->assertMatchesRegularExpression('/' . $expected . '/s', $result, $message);
     }
 
@@ -679,7 +679,7 @@ class BcFormHelperTest extends BcTestCase
             $event->setData('fields', $fields);
             return $res;
         }]]);
-        $result = $this->BcAdminForm->dispatchAfterForm($type);
+        $result = $this->BcForm->dispatchAfterForm($type);
         $this->assertMatchesRegularExpression('/' . $expected . '/s', $result);
         $this->resetEvent();
     }
@@ -711,7 +711,7 @@ class BcFormHelperTest extends BcTestCase
         // >>>
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
         // <<<
-        $result = $this->BcAdminForm->radio($fieldName, $options, $attributes);
+        $result = $this->BcForm->radio($fieldName, $options, $attributes);
         $this->assertMatchesRegularExpression('/' . $expected . '/s', $result, $message);
     }
 
@@ -742,9 +742,9 @@ class BcFormHelperTest extends BcTestCase
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
         // <<<
 
-        $this->BcAdminForm->request['_Token'] = ['key' => 'testKey'];
+        $this->BcForm->request['_Token'] = ['key' => 'testKey'];
         $encoding = strtolower(Configure::read('App.encoding'));
-        $result = $this->BcAdminForm->create('Contact', ['url' => '/contacts/add']);
+        $result = $this->BcForm->create('Contact', ['url' => '/contacts/add']);
         $expected = [
             'form' => ['action' => '/contacts/add', 'novalidate' => 'novalidate', 'id' => 'ContactAddForm', 'method' => 'post', 'accept-charset' => $encoding],
             'div' => ['style' => 'display:none;'],
@@ -755,7 +755,7 @@ class BcFormHelperTest extends BcTestCase
             '/div'
         ];
         $this->assertTags($result, $expected);
-        $result = $this->BcAdminForm->create('Contact', ['url' => '/contacts/add', 'id' => 'MyForm']);
+        $result = $this->BcForm->create('Contact', ['url' => '/contacts/add', 'id' => 'MyForm']);
         $expected['form']['id'] = 'MyForm';
         $this->assertTags($result, $expected);
     }
@@ -768,9 +768,9 @@ class BcFormHelperTest extends BcTestCase
     public function testFileUploadField()
     {
         $fieldName = 'Content.upload';
-        $this->BcAdminForm->setEntity($fieldName);
+        $this->BcForm->setEntity($fieldName);
         // 通常
-        $result = $this->BcAdminForm->file($fieldName);
+        $result = $this->BcForm->file($fieldName);
         $this->assertEquals('<input type="file" name="Content[upload]">', $result);
     }
 
@@ -834,10 +834,10 @@ class BcFormHelperTest extends BcTestCase
         // <<<
 
         $fieldName = 'Contact.0.upload';
-        $this->BcAdminForm->setEntity($fieldName);
+        $this->BcForm->setEntity($fieldName);
 
         // 通常
-        $result = $this->BcAdminForm->file($fieldName);
+        $result = $this->BcForm->file($fieldName);
 
         $expected = [
             ['input' => ['type' => 'file', 'name' => 'data[Contact][0][upload]', 'id' => 'Contact0Upload']],
@@ -861,8 +861,8 @@ class BcFormHelperTest extends BcTestCase
         // <<<
 
         $fieldName = 'Contact.0.eye_catch';
-        $this->BcAdminForm->setEntity($fieldName);
-        $this->BcAdminForm->BcUpload->request->data = [
+        $this->BcForm->setEntity($fieldName);
+        $this->BcForm->BcUpload->request->data = [
             'Contact' => [
                 [
                     'id' => '1',
@@ -872,7 +872,7 @@ class BcFormHelperTest extends BcTestCase
             ]
         ];
 
-        $result = $this->BcAdminForm->file($fieldName);
+        $result = $this->BcForm->file($fieldName);
 
         $expected = [
             ['input' => ['type' => 'file', 'name' => 'data[Contact][0][eye_catch]', 'id' => 'Contact0EyeCatch']],
@@ -968,8 +968,8 @@ class BcFormHelperTest extends BcTestCase
      */
     public function testGetIdandSetId()
     {
-        $result = $this->BcAdminForm->setId("test");
-        $this->assertEquals($this->BcAdminForm->getId(), $result);
+        $result = $this->BcForm->setId("test");
+        $this->assertEquals($this->BcForm->getId(), $result);
     }
 
     /**
@@ -979,18 +979,18 @@ class BcFormHelperTest extends BcTestCase
     {
         $pagesTable = $this->getTableLocator()->get('BaserCore.Pages');
         $page = $pagesTable->find()->where(['Pages.id' => 2])->contain(['Contents'])->first();
-        $this->BcAdminForm->create($page);
+        $this->BcForm->create($page);
 
         // テーブル名なし
-        $table = $this->BcAdminForm->getTable('contents');
+        $table = $this->BcForm->getTable('contents');
         $this->assertEquals('BaserCore\Model\Table\PagesTable', get_class($table));
 
         // テーブル名あり
-        $table = $this->BcAdminForm->getTable('Pages.contents');
+        $table = $this->BcForm->getTable('Pages.contents');
         $this->assertEquals('BaserCore\Model\Table\PagesTable', get_class($table));
 
         // アソシエーションのテーブル名あり
-        $table = $this->BcAdminForm->getTable('Pages.content.eyecatch');
+        $table = $this->BcForm->getTable('Pages.content.eyecatch');
         $this->assertEquals('BaserCore\Model\Table\ContentsTable', get_class($table));
     }
 
