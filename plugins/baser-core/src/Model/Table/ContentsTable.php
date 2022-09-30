@@ -1365,6 +1365,7 @@ class ContentsTable extends AppTable
      * コンテンツ管理のツリー構造をリセットする
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function resetTree()
     {
