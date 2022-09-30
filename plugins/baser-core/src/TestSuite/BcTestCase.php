@@ -17,7 +17,6 @@ use BaserCore\Middleware\BcAdminMiddleware;
 use BaserCore\Middleware\BcRequestFilterMiddleware;
 use BaserCore\Plugin;
 use BaserCore\Service\BcDatabaseService;
-use BaserCore\Service\BcDatabaseServiceInterface;
 use BaserCore\Utility\BcApiUtil;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
@@ -150,7 +149,7 @@ class BcTestCase extends TestCase
      */
     protected function getFixtureStrategy(): FixtureStrategyInterface
     {
-        if($this->fixtureTruncate) {
+        if ($this->fixtureTruncate) {
             return new TruncateStrategy();
         } else {
             return new TransactionStrategy();
@@ -199,7 +198,7 @@ class BcTestCase extends TestCase
      */
     public function setUp(): void
     {
-        if(!$this->autoFixtures) {
+        if (!$this->autoFixtures) {
             $this->setUpFixtureManager();
         }
         parent::setUp();
@@ -225,7 +224,7 @@ class BcTestCase extends TestCase
      */
     public function tearDown(): void
     {
-        if(!$this->autoFixtures) {
+        if (!$this->autoFixtures) {
             $this->tearDownFixtureManager();
         }
         BcContainer::clear();
@@ -249,7 +248,7 @@ class BcTestCase extends TestCase
         ], $config);
         $isAjax = (!empty($config['ajax']))? true : false;
         unset($config['ajax']);
-        if(preg_match('/^http/', $url)) {
+        if (preg_match('/^http/', $url)) {
             $parseUrl = parse_url($url);
             Configure::write('BcEnv.host', $parseUrl['host']);
             $defaultConfig = [
@@ -258,13 +257,13 @@ class BcTestCase extends TestCase
                     'REQUEST_URI' => $url,
                     'REQUEST_METHOD' => $method,
                     'HTTPS' => (preg_match('/^https/', $url))? 'on' : ''
-            ])];
+                ])];
         } else {
             $defaultConfig = [
                 'url' => $url,
                 'environment' => [
                     'REQUEST_METHOD' => $method
-            ]];
+                ]];
         }
         $defaultConfig = array_merge($defaultConfig, $config);
         $request = new ServerRequest($defaultConfig);
@@ -274,7 +273,7 @@ class BcTestCase extends TestCase
         $ref = new ReflectionClass($request);
         $detectors = $ref->getProperty('_detectors');
         $detectors->setAccessible(true);
-        if(!self::$_detectors) {
+        if (!self::$_detectors) {
             self::$_detectors = $detectors->getValue();
         }
         $detectors->setValue(self::$_detectors);
@@ -287,7 +286,7 @@ class BcTestCase extends TestCase
         }
 
         $request = $request->withAttribute('params', $params);
-        if($request->getParam('prefix') === 'Admin') {
+        if ($request->getParam('prefix') === 'Admin') {
             $request = $this->execPrivateMethod(new BcAdminMiddleware(), 'setCurrentSite', [$request]);
         }
         if ($data) {
@@ -296,7 +295,7 @@ class BcTestCase extends TestCase
         $authentication = $this->BaserCore->getAuthenticationService($request);
         $request = $request->withAttribute('authentication', $authentication);
         $request = $request->withEnv('HTTPS', (preg_match('/^https/', $url))? 'on' : '');
-        if($isAjax) {
+        if ($isAjax) {
             $request = $request->withEnv('HTTP_X_REQUESTED_WITH', 'XMLHttpRequest');
         }
         $bcRequestFilter = new BcRequestFilterMiddleware();
@@ -338,7 +337,7 @@ class BcTestCase extends TestCase
         $user = $this->getUser($id);
         $this->session([$sessionKey => $user]);
         $authentication = $request->getAttribute('authentication');
-        if(!$authentication) {
+        if (!$authentication) {
             $authentication = $this->BaserCore->getAuthenticationService($request);
             $request = $request->withAttribute('authentication', $authentication);
         }
@@ -361,7 +360,7 @@ class BcTestCase extends TestCase
     protected function apiLoginAdmin($id = 1)
     {
         $user = $this->getUser($id);
-        if($user) {
+        if ($user) {
             return BcApiUtil::createAccessToken($id);
         } else {
             return [];
@@ -416,36 +415,36 @@ class BcTestCase extends TestCase
     }
 
 
-	/**
-	 * イベントを設定する
-	 *
-	 * @param $events
+    /**
+     * イベントを設定する
+     *
+     * @param $events
      * @checked
      * @unitTest
      * @noTodo
-	 */
-	public function attachEvent($events)
-	{
-		$EventManager = EventManager::instance();
-		$event = new BcEventListenerMock($events);
-		$EventManager->on($event);
-		return $event;
-	}
+     */
+    public function attachEvent($events)
+    {
+        $EventManager = EventManager::instance();
+        $event = new BcEventListenerMock($events);
+        $EventManager->on($event);
+        return $event;
+    }
 
-	/**
-	 * イベントをリセットする
+    /**
+     * イベントをリセットする
      * @checked
      * @unitTest
      * @noTodo
-	 */
-	public function resetEvent()
-	{
-		$EventManager = EventManager::instance();
-		$reflectionClass = new ReflectionClass(get_class($EventManager));
-		$property = $reflectionClass->getProperty('_listeners');
-		$property->setAccessible(true);
-		$property->setValue($EventManager, []);
-	}
+     */
+    public function resetEvent()
+    {
+        $EventManager = EventManager::instance();
+        $reflectionClass = new ReflectionClass(get_class($EventManager));
+        $property = $reflectionClass->getProperty('_listeners');
+        $property->setAccessible(true);
+        $property->setValue($EventManager, []);
+    }
 
     /**
      * tear down after class
@@ -455,7 +454,7 @@ class BcTestCase extends TestCase
      * @unitTest
      * @noTodo
      */
-	public static function tearDownAfterClass(): void
+    public static function tearDownAfterClass(): void
     {
         $folder = new Folder();
         $folder->chmod(LOGS, 0777);
@@ -474,7 +473,7 @@ class BcTestCase extends TestCase
      */
     public function setUploadFileToRequest($name, $path, $fileName = '', $error = UPLOAD_ERR_OK)
     {
-        if(!$fileName) $fileName = basename($path);
+        if (!$fileName) $fileName = basename($path);
         $size = filesize($path);
         $type = BcUtil::getContentType($fileName);
         $files = [

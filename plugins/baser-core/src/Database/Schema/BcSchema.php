@@ -49,6 +49,8 @@ class BcSchema extends TableSchema
      * Construct
      * @param string $table
      * @param array $columns
+     * @checked
+     * @noTodo
      */
     public function __construct(string $table = '', array $columns = [])
     {
@@ -68,6 +70,8 @@ class BcSchema extends TableSchema
 
     /**
      * 初期化処理
+     * @checked
+     * @noTodo
      */
     public function init()
     {
