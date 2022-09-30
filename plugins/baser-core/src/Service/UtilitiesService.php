@@ -232,6 +232,7 @@ class UtilitiesService implements UtilitiesServiceInterface
      * @return Simplezip|false
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function createLogZip()
     {

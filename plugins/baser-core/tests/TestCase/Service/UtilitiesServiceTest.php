@@ -302,8 +302,10 @@ class UtilitiesServiceTest extends BcTestCase
      * test createLogZip
      * @return void
      */
-    public function test_createLogZip(){
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    public function test_createLogZip()
+    {
+        $rs = $this->UtilitiesService->createLogZip();
+        $this->assertTrue(is_array($rs->centralDirectory));
     }
 
     /**
