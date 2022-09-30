@@ -255,4 +255,16 @@ class BcAdminFormHelperTest extends BcTestCase
         $controlRadio = $this->BcForm->control($name, $optionsRadio);
         $this->assertEquals($controlRadio, $this->BcAdminForm->control($name, ['type' => 'radio']));
     }
+
+    /**
+     * Test postLink
+     *
+     * @return void
+     */
+    public function testPostLink(): void
+    {
+        $result = $this->BcAdminForm->postLink('test');
+        $class = 'bca-submit-token';
+        $this->assertTextContains('class="' . $class . '"', $result);
+    }
 }

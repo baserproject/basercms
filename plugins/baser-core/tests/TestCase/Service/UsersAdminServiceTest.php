@@ -199,4 +199,14 @@ class UsersAdminServiceTest extends BcTestCase
         ], $this->Users->getViewVarsForEdit($this->Users->get(1))['userGroupList']);
     }
 
+    /**
+     * test getViewVarsForLogin
+     */
+    public function test_getViewVarsForLogin()
+    {
+        $result = $this->Users->getViewVarsForLogin($this->getRequest());
+        $this->assertArrayHasKey('savedEnable', $result);
+        $this->assertArrayHasKey('isEnableLoginCredit', $result);
+    }
+
 }

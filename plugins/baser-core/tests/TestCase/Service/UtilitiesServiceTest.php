@@ -18,6 +18,8 @@ use BaserCore\Service\UtilitiesServiceInterface;
 use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
+use Cake\Cache\Cache;
+use Cake\Core\Configure;
 use Cake\Filesystem\File;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestTrait;
@@ -141,18 +143,62 @@ class UtilitiesServiceTest extends BcTestCase
 
     /**
      * test verityContentsTree
-     * @return void
-     * @dataProvider _verifyProvider
+     *
+     * @param $dbSample
+     * @param $expect
+     * @param $logDataExpect
+     *
+     * @dataProvider verityContentsTreeProvider
      */
-    public function test_verityContentsTree(){
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    public function test_verityContentsTree($dbSample, $expect, $logDataExpect)
+    {
+        $logPath = LOGS . 'cli-error.log';
+        if (file_exists($logPath)) {
+            unlink($logPath);
+        }
+
+        foreach ($dbSample as $item) {
+            ContentFactory::make($item)->persist();
+        }
+
+        $rs = $this->UtilitiesService->verityContentsTree();
+        $this->assertEquals($rs, $expect);
+
+        $file = new File($logPath);
+        $logData = $file->read();
+        $this->assertStringContainsString($logDataExpect, $logData);
+    }
+
+    public function verityContentsTreeProvider()
+    {
+        return
+            [
+                //成功
+                [
+                    [
+                        ['id' => 300, 'name' => 'BaserCore 6', 'type' => 'ContentFolder', 'lft' => 1, 'rght' => 2],
+                        ['id' => 301, 'name' => 'BaserCore 7', 'type' => 'ContentFolder', 'lft' => 3, 'rght' => 4],
+                    ],
+                    true,
+                    false
+                ],
+                //失敗
+                [
+                    [
+                        ['id' => 300, 'name' => 'BaserCore 6', 'type' => 'ContentFolder', 'lft' => 1, 'rght' => 2],
+                        ['id' => 301, 'name' => 'BaserCore 7', 'type' => 'ContentFolder', 'lft' => 1, 'rght' => 2],
+                    ],
+                    false,
+                    'error: index, 1, duplicate'
+                ],
+            ];
     }
 
     /**
-     *   * test _verify
+     * test _verify
      * @param $dbSample
      * @param $expect
-     * @return void
+     *
      * @dataProvider _verifyProvider
      */
     public function test_verify($dbSample, $expect)
@@ -235,16 +281,31 @@ class UtilitiesServiceTest extends BcTestCase
      * test getCredit
      * @return void
      */
-    public function test_getCredit(){
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    public function test_getCredit()
+    {
+        Configure::write('debug', false);
+        Cache::write('specialThanks', '', '_bc_env_');
+        $rs = $this->UtilitiesService->getCredit();
+
+        //戻り値を確認
+        $this->assertEquals("中村 美鈴", $rs->designers[0]->name);
+        $this->assertEquals("滝下 真玄", $rs->developers[0]->name);
+        $this->assertEquals("本間 忍", $rs->supporters[0]->name);
+        $this->assertEquals("オガワ", $rs->publishers[0]->name);
+
+        //Configure debug を false に設定してキャッシュの保存を確認
+        $specialThanks = Cache::read('specialThanks', '_bc_env_');
+        $this->assertEquals($specialThanks, json_encode($rs));
     }
 
     /**
      * test createLogZip
      * @return void
      */
-    public function test_createLogZip(){
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    public function test_createLogZip()
+    {
+        $rs = $this->UtilitiesService->createLogZip();
+        $this->assertTrue(is_array($rs->centralDirectory));
     }
 
     /**

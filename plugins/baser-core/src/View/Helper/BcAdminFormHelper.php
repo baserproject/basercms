@@ -152,8 +152,12 @@ class BcAdminFormHelper extends BcFormHelper
      * postLink
      * CSSクラスに bca-submit-token を追加する
      * @param string $title
-     * @param string $url
+     * @param null $url
      * @param array $options
+     * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function postLink(string $title, $url = null, array $options = []): string
     {

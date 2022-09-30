@@ -220,6 +220,7 @@ class UtilitiesController extends BcAdminAppController
      * @param UtilitiesServiceInterface $service
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function credit(UtilitiesServiceInterface $service)
     {

@@ -145,6 +145,7 @@ class UsersAdminService extends UsersService implements UsersAdminServiceInterfa
      * @return array
      * @noTodo
      * @checked
+     * @unitTest
      */
     public function getViewVarsForLogin(ServerRequest $request): array
     {

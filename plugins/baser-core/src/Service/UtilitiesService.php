@@ -51,6 +51,7 @@ class UtilitiesService implements UtilitiesServiceInterface
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function verityContentsTree(): bool
     {
@@ -199,6 +200,7 @@ class UtilitiesService implements UtilitiesServiceInterface
      * @return mixed|null
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getCredit()
     {
@@ -230,6 +232,7 @@ class UtilitiesService implements UtilitiesServiceInterface
      * @return Simplezip|false
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function createLogZip()
     {
