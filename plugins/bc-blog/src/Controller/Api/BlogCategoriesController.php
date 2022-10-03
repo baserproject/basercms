@@ -100,4 +100,51 @@ class BlogCategoriesController extends BcApiController
         exit();
     }
 
+    /**
+     * [API] ブログカテゴリー一覧取得
+     */
+    public function index()
+    {
+        //todo ブログカテゴリー一覧取得
+    }
+
+    /**
+     * [API] 単一ブログカテゴリー取得
+     */
+    public function view()
+    {
+        //todo 単一ブログカテゴリー取得
+    }
+
+    /**
+     * [API] 単一ブログカテゴリー取得
+     */
+    public function list()
+    {
+        //todo 単一ブログカテゴリー取得
+    }
+
+    /**
+     * [API] ブログカテゴリー新規追加
+     */
+    public function add()
+    {
+        //todo ブログカテゴリー新規追加
+    }
+
+    /**
+     * [API] ブログカテゴリー編集
+     */
+    public function edit()
+    {
+        //todo ブログカテゴリー編集
+    }
+
+    /**
+     * [API] ブログカテゴリー削除
+     */
+    public function delete()
+    {
+        //todo ブログカテゴリー削除
+    }
 }
