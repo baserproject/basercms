@@ -1073,4 +1073,34 @@ class BcUtilTest extends BcTestCase
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
+
+    /**
+     * Test getExtension
+     *
+     * @return void
+     */
+    public function testGetExtension(): void
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * Test getContentType
+     *
+     * @return void
+     */
+    public function testGetContentType(): void
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * Test decodeContent
+     *
+     * @return void
+     */
+    public function testDecodeContent(): void
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
 }
