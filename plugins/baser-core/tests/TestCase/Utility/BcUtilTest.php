@@ -1122,10 +1122,26 @@ class BcUtilTest extends BcTestCase
     /**
      * Test decodeContent
      *
+     * @param $content
+     * @param $fileName
+     * @param $extension
      * @return void
+     * @dataProvider decodeContentProvider
      */
-    public function testDecodeContent(): void
+    public function testDecodeContent($content, $fileName, $extension): void
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $ext = BcUtil::decodeContent($content, $fileName);
+        $this->assertEquals($extension, $ext);
+    }
+
+    public function decodeContentProvider(): array
+    {
+        return [
+            ['image/gif', null, 'gif'],
+            ['image/jpeg', null, 'jpg'],
+            ['application/zip', null, 'zip'],
+            ['javascript/ts', TMP . 'test.ts', 'ts'],
+            ['javascript/ts', null, false],
+        ];
     }
 }
