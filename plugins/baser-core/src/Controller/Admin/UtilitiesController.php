@@ -71,6 +71,7 @@ class UtilitiesController extends BcAdminAppController
      * ユーティリティトップ
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function index()
     {
