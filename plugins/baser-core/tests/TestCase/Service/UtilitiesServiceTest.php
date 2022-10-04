@@ -330,8 +330,15 @@ class UtilitiesServiceTest extends BcTestCase
      * test _writeBackup
      * @return void
      */
-    public function test_writeBackup(){
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    public function test_writeBackup()
+    {
+        $this->UtilitiesService->resetTmpSchemaFolder();
+
+        $zipSrcPath = TMP . 'schema' . DS;
+        $this->execPrivateMethod(new UtilitiesService(), '_writeBackup', [$zipSrcPath, 'BaserCore', 'utf8']);
+
+        $this->assertTrue(file_exists($zipSrcPath . 'PermissionsSchema.php'));
+        $this->assertTrue(file_exists($zipSrcPath . 'pages.csv'));
     }
 
     /**
