@@ -44,6 +44,7 @@ class ThemesController extends BcAdminAppController
      * テーマをアップロードして適用する
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function add(ThemesServiceInterface $service)
     {

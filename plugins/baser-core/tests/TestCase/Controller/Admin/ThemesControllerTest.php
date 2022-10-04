@@ -18,6 +18,7 @@ use BaserCore\Utility\BcContainerTrait;
 use Cake\Filesystem\Folder;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use Cake\TestSuite\IntegrationTestTrait;
+use Composer\Package\Archiver\ZipArchiver;
 
 /**
  * Class ThemesControllerTest
@@ -75,7 +76,35 @@ class ThemesControllerTest extends BcTestCase
      */
     public function test_add()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        $path = ROOT . DS . 'plugins' . DS . 'BcSpaSample';
+        $zipSrcPath = TMP . 'zip' . DS;
+        $folder = new Folder();
+        $folder->create($zipSrcPath, 0777);
+        $folder->copy($zipSrcPath . 'BcSpaSample2', ['from' => $path, 'mode' => 0777]);
+        $theme = 'BcSpaSample2';
+        $zip = new ZipArchiver();
+        $testFile = $zipSrcPath . $theme . '.zip';
+        $zip->archive($zipSrcPath, $testFile, true);
+
+        $this->setUploadFileToRequest('file', $testFile);
+        $this->setUnlockedFields(['file']);
+        $this->post('/baser/admin/baser-core/themes/add');
+
+        $this->assertResponseCode(302);
+        $this->assertRedirect([
+            'plugin' => 'BaserCore',
+            'prefix' => 'Admin',
+            'controller' => 'themes',
+            'action' => 'index'
+        ]);
+        $this->assertFlashMessage('テーマファイル「' . $theme . '」を追加しました。');
+
+        $folder = new Folder();
+        $folder->delete(ROOT . DS . 'plugins' . DS . $theme);
+        $folder->delete($zipSrcPath);
     }
 
     /**
