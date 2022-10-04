@@ -120,10 +120,20 @@ class BlogCategoriesController extends BcApiController
 
     /**
      * [API] 単一ブログカテゴリー取得
+     *
+     * @param BlogCategoriesServiceInterface $service
+     * @param $blogCategoryId
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function view()
+    public function view(BlogCategoriesServiceInterface $service, $blogCategoryId)
     {
-        //todo 単一ブログカテゴリー取得
+        $this->set([
+            'blogCategory' => $service->get($blogCategoryId)
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['blogCategory']);
     }
 
     /**
