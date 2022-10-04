@@ -122,6 +122,7 @@ class ThemesService implements ThemesServiceInterface
      * @param UploadedFile[] $postData
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function add(array $postData): string
     {

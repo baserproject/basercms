@@ -31,6 +31,8 @@ use Cake\Routing\Router;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\Utility\Inflector;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
+use Composer\Package\Archiver\ZipArchiver;
+use Laminas\Diactoros\UploadedFile;
 
 /**
  * ThemesServiceTest
@@ -83,6 +85,71 @@ class ThemesServiceTest extends \BaserCore\TestSuite\BcTestCase
     public function tearDown(): void
     {
         parent::tearDown();
+    }
+
+    /**
+     * test add
+     * @return void
+     */
+    public function test_add()
+    {
+        $path = ROOT . DS . 'plugins' . DS . 'BcSpaSample';
+        $zipSrcPath = TMP . 'zip' . DS;
+        $folder = new Folder();
+        $folder->create($zipSrcPath, 0777);
+        $folder->copy($zipSrcPath . 'BcSpaSample2', ['from' => $path, 'mode' => 0777]);
+        $theme = 'BcSpaSample2';
+        $zip = new ZipArchiver();
+        $testFile = $zipSrcPath . $theme . '.zip';
+        $zip->archive($zipSrcPath, $testFile, true);
+
+        $size = filesize($path);
+        $type = BcUtil::getContentType($testFile);
+
+        $this->setUploadFileToRequest('file', $testFile);
+
+        $files = new UploadedFile(
+            $testFile,
+            $size,
+            UPLOAD_ERR_OK,
+            $theme . '.zip',
+            $type
+        );
+
+        //成功した場合の戻り値
+        $rs = $this->ThemesService->add(["file" => $files]);
+        $this->assertEquals('BcSpaSample2', $rs);
+
+        // 成功した場合に plugins 配下に新しいディレクトリが存在する
+        $this->assertTrue(is_dir(ROOT . DS . 'plugins' . DS . $theme));
+
+        // 既に存在するテーマと同じテーマをアップロードした場合の戻り値の変化
+        $folder->create($zipSrcPath, 0777);
+        $folder->copy($zipSrcPath . 'BcSpaSample2', ['from' => $path, 'mode' => 0777]);
+        $zip = new ZipArchiver();
+        $zip->archive($zipSrcPath, $testFile, true);
+        $this->setUploadFileToRequest('file', $testFile);
+        $files = new UploadedFile(
+            $testFile,
+            $size,
+            UPLOAD_ERR_OK,
+            $theme . '.zip',
+            $type
+        );
+
+        $rs = $this->ThemesService->add(["file" => $files]);
+        $this->assertEquals('BcSpaSample22', $rs);
+
+        //テスト実行後不要ファイルを削除
+        $folder = new Folder();
+        $folder->delete(ROOT . DS . 'plugins' . DS . $theme);
+        $folder->delete(ROOT . DS . 'plugins' . DS . 'BcSpaSample22');
+        $folder->delete($zipSrcPath);
+
+        // 失敗した場合の Exception メッセージ
+        $this->expectException("Laminas\Diactoros\Exception\UploadedFileAlreadyMovedException");
+        $this->expectExceptionMessage("Cannot move file; already moved!");
+        $this->ThemesService->add(["file" => $files]);
     }
 
     /**
