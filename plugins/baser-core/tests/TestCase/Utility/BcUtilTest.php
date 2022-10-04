@@ -1100,10 +1100,23 @@ class BcUtilTest extends BcTestCase
      * Test getContentType
      *
      * @return void
+     * @dataProvider getContentTypeDataProvider
      */
-    public function testGetContentType(): void
+    public function testGetContentType($fileName, $contentType): void
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $type = BcUtil::getContentType($fileName);
+        $this->assertEquals($contentType, $type);
+    }
+
+    public function getContentTypeDataProvider(): array
+    {
+        return [
+            [TMP, false],
+            [TMP . 'test.jpg', 'image/jpeg'],
+            [TMP . 'test.gif', 'image/gif'],
+            [TMP . 'test.zip', 'application/zip'],
+            [TMP . 'test.bla', false]
+        ];
     }
 
     /**
