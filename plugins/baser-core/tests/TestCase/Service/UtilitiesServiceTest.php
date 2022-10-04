@@ -13,11 +13,14 @@ namespace BaserCore\Test\TestCase\Service;
 
 use BaserCore\Error\BcException;
 use BaserCore\Model\Table\ContentsTable;
+use BaserCore\Service\SitesService;
 use BaserCore\Service\UtilitiesService;
 use BaserCore\Service\UtilitiesServiceInterface;
 use BaserCore\Test\Factory\ContentFactory;
+use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Utility\BcUtil;
 use Cake\Cache\Cache;
 use Cake\Core\Configure;
 use Cake\Filesystem\File;
@@ -372,8 +375,21 @@ class UtilitiesServiceTest extends BcTestCase
      * test resetData
      * @return void
      */
-    public function test_resetData(){
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    public function test_resetData()
+    {
+        SiteFactory::make(['id' => 100, 'title' => 'test title', 'display_name' => 'test display_name', 'theme' => 'BcSpaSample'])->persist();
+        SiteFactory::make(['id' => 101, 'title' => 'test title　101', 'display_name' => 'test display_name　101', 'theme' => 'BcSpaSample101'])->persist();
+        $this->getRequest();
+
+        $rs = $this->UtilitiesService->resetData();
+        $this->assertTrue($rs);
+
+        $siteService = new SitesService();
+        $site = $siteService->getIndex([])->toArray();
+        $this->assertCount(1, $site);
+        $this->assertEquals('BcSpaSample', $site[0]->theme);
+        $this->assertEquals('メインサイト', $site[0]->title);
+        $this->assertEquals('メインサイト', $site[0]->display_name);
     }
 
 }
