@@ -462,4 +462,20 @@ class BcDatabaseServiceTest extends BcTestCase
             ['EUC-JP', 'ujis']
         ];
     }
+
+    /**
+     * Test loadSchema
+     */
+    public function test_loadSchema()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * Test writeSchema
+     */
+    public function test_writeSchema()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
 }
