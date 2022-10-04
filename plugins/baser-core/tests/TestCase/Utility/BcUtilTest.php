@@ -1092,7 +1092,8 @@ class BcUtilTest extends BcTestCase
      */
     public function testGetExtension(): void
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->assertFalse(BcUtil::getExtension('/var/www/html/tmp'));
+        $this->assertEquals('ext', BcUtil::getExtension('/var/www/html/tmp/test.ext'));
     }
 
     /**
