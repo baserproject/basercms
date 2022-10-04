@@ -14,6 +14,7 @@ namespace BcBlog\Test\TestCase\Controller\Api;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcBlog\Controller\Api\BlogCategoriesController;
+use BcBlog\Service\BlogCategoriesService;
 use BcBlog\Test\Factory\BlogCategoryFactory;
 use Cake\Core\Configure;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -138,7 +139,25 @@ class BlogCategoriesControllerTest extends BcTestCase
      */
     public function test_edit()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        BlogCategoryFactory::make(['id' => 10, 'name' => 'Blog-Category-1', 'blog_content_id' => 1, 'title' => 'test title'])->persist();
+
+        $blogCategoriesService = new BlogCategoriesService();
+        $data = $blogCategoriesService->get(10);
+        $data->name = 'blog-category-edit';
+        $this->post('/baser/api/bc-blog/blog_categories/edit/10.json?token=' . $this->accessToken, $data->toArray());
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('blog-category-edit', $result->blogCategory->name);
+        $this->assertEquals('ブログカテゴリー「blog-category-edit」を更新しました。', $result->message);
+
+        $data->name = 'blog Category edit';
+        $this->post('/baser/api/bc-blog/blog_categories/edit/10.json?token=' . $this->accessToken, $data->toArray());
+        $this->assertResponseCode(400);
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('入力エラーです。内容を修正してください。', $result->message);
+        $this->assertEquals(
+            'カテゴリ名はは半角英数字とハイフン、アンダースコアのみが利用可能です。',
+            $result->errors->name->alphaNumericDashUnderscore);
     }
 
     /**
