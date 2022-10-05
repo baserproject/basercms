@@ -85,6 +85,11 @@ class ThemesServiceTest extends \BaserCore\TestSuite\BcTestCase
     public function tearDown(): void
     {
         parent::tearDown();
+        $this->truncateTable('blog_categories');
+        $this->truncateTable('blog_contents');
+        $this->truncateTable('blog_posts');
+        $this->truncateTable('blog_tags');
+        $this->truncateTable('blog_posts_blog_tags');
     }
 
     /**
@@ -212,8 +217,8 @@ class ThemesServiceTest extends \BaserCore\TestSuite\BcTestCase
         $theme = 'BcFront';
         $themePath = BcUtil::getPluginPath($theme);
 
-        mkdir($themePath . 'Plugin', 0777, true);
-        mkdir($themePath . 'Plugin/test', 0777, true);
+        mkdir($themePath . 'Plugin', 0777);
+        mkdir($themePath . 'Plugin/test', 0777);
 
         $file = new File($themePath . 'Plugin/test/test.txt');
         $file->write('test file plugin');
@@ -342,8 +347,8 @@ class ThemesServiceTest extends \BaserCore\TestSuite\BcTestCase
         $theme = 'BcFront';
         $themePath = BcUtil::getPluginPath($theme);
         $pluginName = 'test';
-        mkdir($themePath . 'Plugin', 777, true);
-        mkdir($themePath . 'Plugin/' . $pluginName, 777, true);
+        $folder = new Folder();
+        $folder->create($themePath . 'Plugin/' . $pluginName);
 
         $pluginsInfo = $this->execPrivateMethod($this->ThemesService, 'getThemesPluginsInfo', [$theme]);
         $this->assertEquals('このテーマは下記のプラグインを同梱しています。', $pluginsInfo[0]);
