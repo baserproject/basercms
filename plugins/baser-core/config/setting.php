@@ -433,11 +433,6 @@ return [
                             'controller' => 'Contents',
                             'action' => 'edit'
                         ],
-                        'delete' => [
-                            'prefix' => 'Admin',
-                            'controller' => 'Contents',
-                            'action' => 'empty'
-                        ],
                         'view' => [
                             'controller' => 'Contents',
                             'action' => 'view'
@@ -459,11 +454,6 @@ return [
                             'prefix' => 'Admin',
                             'controller' => 'ContentFolders',
                             'action' => 'edit'
-                        ],
-                        'delete' => [
-                            'prefix' => 'Admin',
-                            'controller' => 'ContentFolders',
-                            'action' => 'delete'
                         ],
                         'view' => [
                             'controller' => 'ContentFolders',
@@ -488,11 +478,6 @@ return [
                             'prefix' => 'Admin',
                             'controller' => 'Pages',
                             'action' => 'edit'
-                        ],
-                        'delete' => [
-                            'prefix' => 'Admin',
-                            'controller' => 'Pages',
-                            'action' => 'delete'
                         ],
                         'view' => [
                             'controller' => 'Pages',
