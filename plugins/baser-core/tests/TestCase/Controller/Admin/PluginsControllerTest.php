@@ -71,6 +71,11 @@ class PluginsControllerTest extends BcTestCase
     public function tearDown(): void
     {
         parent::tearDown();
+        $this->truncateTable('blog_categories');
+        $this->truncateTable('blog_contents');
+        $this->truncateTable('blog_posts');
+        $this->truncateTable('blog_tags');
+        $this->truncateTable('blog_posts_blog_tags');
     }
 
     /**
@@ -181,7 +186,6 @@ class PluginsControllerTest extends BcTestCase
             'schema' => Folder::OVERWRITE
         ]);
         $this->put('/baser/admin/baser-core/plugins/install/BcBlog', $data);
-
     }
 
 

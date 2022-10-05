@@ -70,6 +70,11 @@ class BcPluginTest extends BcTestCase
     {
         unset($this->BcPlugin);
         parent::tearDown();
+        $this->truncateTable('blog_categories');
+        $this->truncateTable('blog_contents');
+        $this->truncateTable('blog_posts');
+        $this->truncateTable('blog_tags');
+        $this->truncateTable('blog_posts_blog_tags');
     }
 
     /**
@@ -110,7 +115,6 @@ class BcPluginTest extends BcTestCase
             'schema' => Folder::OVERWRITE
         ]);
         $this->BcPlugin->install(['connection' => 'test']);
-
     }
 
     /**
