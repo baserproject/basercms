@@ -67,15 +67,6 @@ class BlogContentsTable extends BlogAppTable
         $validator->integer('id')
             ->allowEmptyString('id', null, 'create');
 
-        $validator->scalar('layout')
-            ->maxLength('layout', 20, __d('baser', 'レイアウトテンプレート名は20文字以内で入力してください。'))
-            ->notEmptyString('layout', __d('baser', 'レイアウトテンプレートを入力してください。'))
-            ->add('layout', 'halfText', [
-                'provider' => 'bc',
-                'rule' => 'halfText',
-                'message' => __d('baser', 'レイアウトテンプレート名は半角で入力してください。')
-            ]);
-
         $validator->scalar('list_count')
             ->notEmptyString('list_count', __d('baser', '一覧表示件数を入力してください。'))
             ->range('list_count', [0, 101], __d('baser', '一覧表示件数は100までの数値で入力してください。'))
