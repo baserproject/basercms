@@ -236,9 +236,9 @@ class BcCkeditorHelper extends Helper
             $field = $fieldName;
         }
         if ($options['editorUseDraft']) {
+            $options = $this->setDraft($model, $field, $options);
             $field .= '_tmp';
             $fieldName .= '_tmp';
-            $options = $this->setDraft($model, $field, $options);
         }
 
         $dom = explode('.', $fieldName);

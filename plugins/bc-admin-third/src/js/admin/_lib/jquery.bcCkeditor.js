@@ -94,11 +94,11 @@
                 }
             });
             CKEDITOR[config.ckeditorField].on('instanceReady', function () {
-                if (editorDisableDraft) {
+                if (config.editorDisableDraft) {
                     CKEDITOR[config.ckeditorField].execCommand('changePublish');
                     CKEDITOR[config.ckeditorField].execCommand('disableDraft');
                 }
-                if (editorDisablePublish) {
+                if (config.editorDisablePublish) {
                     CKEDITOR[config.ckeditorField].execCommand('changeDraft');
                     CKEDITOR[config.ckeditorField].execCommand('disablePublish');
                 }
