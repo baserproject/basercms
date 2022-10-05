@@ -468,7 +468,46 @@ class BcDatabaseServiceTest extends BcTestCase
      */
     public function test_loadSchema()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $path = TMP . 'schema' . DS;
+        $fileName = 'UserActionsSchema.php';
+        $schemaFile = new File($path . $fileName, true);
+        $table = 'user_actions';
+        // スキーマファイルを生成
+        $schemaFile->write("<?php
+use BaserCore\Database\Schema\BcSchema;
+class UserActionsSchema extends BcSchema
+{
+    public \$table = '$table';
+    public \$fields = [
+        'id' => ['type' => 'integer', 'autoIncrement' => true],
+        'contents' => ['type' => 'text', 'length' => 100],
+        '_constraints' => [
+            'primary' => ['type' => 'primary', 'columns' => ['id'], 'length' => []],
+        ],
+        '_options' => [
+            'engine' => 'InnoDB',
+            'collation' => 'utf8_general_ci'
+        ]
+    ];
+}");
+        // Create処理実行
+        $this->BcDatabaseService->loadSchema(['type' => 'create', 'path' => $path, 'file' => $fileName]);
+        $tableList = $this->getTableLocator()
+            ->get('BaserCore.App')
+            ->getConnection()
+            ->getSchemaCollection()
+            ->listTables();
+        $this->assertContains($table, $tableList);
+        // Drop処理実行
+        $this->BcDatabaseService->loadSchema(['type' => 'drop', 'path' => $path, 'file' => $fileName]);
+        $tableList = $this->getTableLocator()
+            ->get('BaserCore.App')
+            ->getConnection()
+            ->getSchemaCollection()
+            ->listTables();
+        $this->assertNotContains($table, $tableList);
+        // スキーマファイルを削除
+        $schemaFile->delete();
     }
 
     /**
