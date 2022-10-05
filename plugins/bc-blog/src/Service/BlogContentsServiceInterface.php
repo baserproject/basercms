@@ -25,7 +25,62 @@ interface BlogContentsServiceInterface
      * @return \Cake\Datasource\EntityInterface|array|null
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function get(int $id);
+
+    /**
+     * 初期値を取得する
+     * @return EntityInterface
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getNew();
+
+    /**
+     * 更新
+     * @param EntityInterface $target
+     * @param array $postData
+     * @return EntityInterface
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function update(EntityInterface $target, array $postData);
+
+    /**
+     * ブログ登録
+     * @param array $data
+     * @param array $options
+     * @return \Cake\Datasource\EntityInterface
+     * @throws \Cake\ORM\Exception\PersistenceFailedException
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function create(array $postData, $options = []): ?EntityInterface;
+
+    /**
+     * ブログをコピーする
+     *
+     * @param array $postData
+     * @return EntityInterface $result
+     * @checked
+     * @unitTest
+     * @noTodo
+     * @unitTest
+     */
+    public function copy($postData);
+
+    /**
+     * ブログを削除する
+     * @param int $id
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function delete(int $id): bool;
 
 }

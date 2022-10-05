@@ -16,6 +16,9 @@ end_of_line = crlf
 [*.scss]
 indent_size = 2
 
+[*.css]
+indent_size = 2
+
 [*.yml]
 indent_size = 2
 
@@ -24,3 +27,7 @@ insert_final_newline = false
 
 [*.{md,markdown}]
 trim_trailing_whitespace = false
+
+[plugins/*/templates/**.php]
+indent_size = 2
+

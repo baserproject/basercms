@@ -47,7 +47,7 @@ class BcContentsEventListenerTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->BcContentsEventListener = new BcContentsEventListener();
+        $this->BcContentsEventListener = new BcContentsEventListener('page');
         $BcAdminAppView = new BcAdminAppView($this->getRequest('/baser/admin'));
         $this->BcAdminAppView = $BcAdminAppView->setPlugin("BcAdminThird");
         $this->Content = $this->getTableLocator()->get('Contents')->get(1);
@@ -109,6 +109,7 @@ class BcContentsEventListenerTest extends BcTestCase
         // 正常系
         $request = $this->getRequest('/baser/admin')->withData('ContentFolder.content', $this->Content)
             ->withParam('action', 'edit'); // content_infoで必要
+        $this->loginAdmin($request);
         $BcAdminAppView = $this->BcAdminAppView->setRequest($request)->setPlugin("BcAdminThird")
             ->set("entityName", "Contents.")
             ->set("relatedContents", [
@@ -127,7 +128,8 @@ class BcContentsEventListenerTest extends BcTestCase
         $out = "testtest";
         $event = new Event("Helper.Form.afterSubmit", $BcAdminAppView);
         $event->setData('id', 'TestAdminEditForm')->setData('out', $out);
-        $result = @$this->BcContentsEventListener->formAfterSubmit($event); // NOTE: 必要な要素があるかを判別するため、不要なエラーを制御
+        @$this->BcContentsEventListener->formAfterSubmit($event); // NOTE: 必要な要素があるかを判別するため、不要なエラーを制御
+        $result = $event->getData('out');
         $checkList = [
             $out, // outの文章が含まれているかチェック
             "説明文", // content_optionsの文章が含まれているかチェック
@@ -141,7 +143,8 @@ class BcContentsEventListenerTest extends BcTestCase
         // 異常系 isAdminSystem()がfalseの場合 または、イベント登録されたidがマッチしない場合
         $event = new Event("Helper.Form.afterSubmit", $this->BcAdminAppView->setRequest($this->getRequest()));
         $event->setData('out', $out);
-        $result = $this->BcContentsEventListener->formAfterSubmit($event);
+        $this->BcContentsEventListener->formAfterSubmit($event);
+        $result = $event->getData('out');
         $this->assertEquals($out, $result);
     }
 }

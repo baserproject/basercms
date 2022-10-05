@@ -32,18 +32,6 @@ use Cake\Utility\Inflector;
 class PagesController extends BcAdminAppController
 {
 
-	/**
-	 * コンポーネント
-	 *
-	 * @var array
-	 * @deprecated useViewCache 5.0.0 since 4.0.0
-	 *    CakePHP3では、ビューキャッシュは廃止となるため、別の方法に移行する
-	 */
-	// TODO ucmitz 未移行
-	/* >>>
-	public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure', 'BcEmail', 'BcContents' => ['useForm' => true, 'useViewCache' => true]];
-    <<< */
-
     /**
      * initialize
      * @return void
@@ -54,7 +42,7 @@ class PagesController extends BcAdminAppController
     public function initialize(): void
     {
         parent::initialize();
-        $this->loadComponent('BaserCore.BcAdminContents');
+        $this->loadComponent('BaserCore.BcAdminContents', ['entityVarName' => 'page']);
     }
 
 	/**

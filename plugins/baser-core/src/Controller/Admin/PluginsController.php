@@ -197,7 +197,7 @@ class PluginsController extends BcAdminAppController
 
         //データなし
         if (empty($this->request->getData())) {
-            if ($this->Plugins->isOverPostSize()) {
+            if (BcUtil::isOverPostSize()) {
                 $this->BcMessage->setError(__d('baser', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size')));
             }
             return;

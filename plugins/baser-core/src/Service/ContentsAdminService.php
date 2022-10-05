@@ -10,11 +10,13 @@
  */
 namespace BaserCore\Service;
 
+use BaserCore\Model\Entity\Content;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Utility\BcUtil;
+use Cake\Core\Configure;
 use Cake\Utility\Hash;
 
 /**
@@ -57,6 +59,53 @@ class ContentsAdminService extends ContentsService implements ContentsAdminServi
             'fullUrl' => $this->getUrl($content->url, true, $content->site->use_subdomain),
             'authorList' => $this->getService(UsersServiceInterface::class)->getList()
         ];
+    }
+
+    /**
+     * content_actions エレメント用の変数を取得
+     * @param $content
+     * @param $currentAction
+     * @return array
+     * @checked
+     * @noTodo
+     */
+    public function getViewVarsForContentActions($content, $currentAction)
+    {
+        return [
+            'isAvailablePreview' => $this->_isAvailablePreview($content),
+            'isAvailableDelete' => $this->_isAvailableDelete($content),
+            'currentAction' => $currentAction,
+            'isAlias' => (bool) $content->alias_id
+        ];
+    }
+
+    /**
+     * プレビューが利用可能か確認
+     * @param Content $content
+     * @return bool
+     * @checked
+     * @noTodo
+     */
+    protected function _isAvailablePreview($content)
+    {
+        $setting = Configure::read('BcContents.items.' . $content->plugin . '.' . $content->type);
+        return (!empty($setting['preview']) && $content->type !== 'ContentFolder');
+    }
+
+    /**
+     * コンテンツが削除可能が確認
+     * @param Content $content
+     * @return bool
+     * @checked
+     * @noTodo
+     */
+    protected function _isAvailableDelete($content)
+    {
+        if(!BcUtil::loginUser()->user_groups) return false;
+        $path = BcUtil::getPrefix() . 'baser-core/contents/delete';
+        $userGroupIds = Hash::extract(BcUtil::loginUser()->user_groups, '{n}.id');
+        $service = $this->getService(PermissionsServiceInterface::class);
+        return $service->check($path, $userGroupIds) && !$content->site_root;
     }
 
     /**

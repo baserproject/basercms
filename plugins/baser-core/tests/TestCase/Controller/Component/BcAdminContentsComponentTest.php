@@ -69,7 +69,7 @@ class BcAdminContentsComponentTest extends BcTestCase
         $this->getRequest('baser/admin/contents');
         $this->Controller = new BcAdminContentsTestController($this->getRequest());
         $this->ComponentRegistry = new ComponentRegistry($this->Controller);
-        $this->BcAdminContents = new BcAdminContentsComponent($this->ComponentRegistry);
+        $this->BcAdminContents = new BcAdminContentsComponent($this->ComponentRegistry, ['entityVarName' => 'test']);
         $this->ContentsService = new ContentsService();
         $this->ContentFoldersService = new ContentFoldersService();
     }
@@ -138,7 +138,7 @@ class BcAdminContentsComponentTest extends BcTestCase
         $content = $this->ContentsService->get(1);
         $Controller->set('content', $content);
         $ComponentRegistry = new ComponentRegistry($Controller);
-        $BcAdminContents = new BcAdminContentsComponent($ComponentRegistry);
+        $BcAdminContents = new BcAdminContentsComponent($ComponentRegistry, ['entityVarName' => 'content']);
         $BcAdminContents->settingForm();
         $vars = $Controller->viewBuilder()->getVars();
         $this->assertIsBool($vars['related']);
@@ -164,7 +164,7 @@ class BcAdminContentsComponentTest extends BcTestCase
         $Controller->set('contentFolder', $contentFolder);
         $Controller->set('content', $contentFolder->content);
         $ComponentRegistry = new ComponentRegistry($Controller);
-        $BcAdminContents = new BcAdminContentsComponent($ComponentRegistry);
+        $BcAdminContents = new BcAdminContentsComponent($ComponentRegistry, ['entityVarName' => 'content']);
         $BcAdminContents->settingForm();
         $vars = $Controller->viewBuilder()->getVars();
         $this->assertIsBool($vars["related"]);

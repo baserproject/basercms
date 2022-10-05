@@ -72,15 +72,17 @@ class PagesController extends BcApiController
         try {
             $page = $Pages->create($this->request->getData());
             $message = __d('baser', '固定ページ「{0}」を追加しました。', $page->content->title);
-            $this->set("page", $page);
-            $this->set('content', $page->content);
         } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
             $page = $e->getEntity();
             $message = __d('baser', "入力エラーです。内容を修正してください。\n");
-            $this->set(['errors' => $page->getErrors()]);
             $this->setResponse($this->response->withStatus(400));
         }
-        $this->set(['message' => $message]);
+        $this->set([
+            'page' => $page,
+            'content' => $page->content,
+            'message' => $message,
+            'errors' => $page->getErrors()
+        ]);
         $this->viewBuilder()->setOption('serialize', ['message', 'content', 'errors']);
     }
 
@@ -133,6 +135,7 @@ class PagesController extends BcApiController
         $this->set([
             'message' => $message,
             'page' => $page,
+            'content' => $page->content,
             'errors' => $page->getErrors(),
         ]);
         $this->viewBuilder()->setOption('serialize', ['page', 'message', 'errors']);

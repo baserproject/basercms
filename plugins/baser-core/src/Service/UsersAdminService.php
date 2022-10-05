@@ -151,7 +151,7 @@ class UsersAdminService extends UsersService implements UsersAdminServiceInterfa
     {
         return [
             'savedEnable' => $request->is('ssl'),
-            'isEnableLoginCredit' => BcSiteConfig::get('login_credit')
+            'isEnableLoginCredit' => (bool) BcSiteConfig::get('login_credit')
         ];
     }
 

@@ -11,6 +11,7 @@
 
 namespace BaserCore\View\Helper;
 
+use Cake\Core\Plugin;
 use Cake\Datasource\EntityInterface;
 use Cake\Utility\Inflector;
 use Cake\View\Helper\BreadcrumbsHelper;
@@ -1320,19 +1321,16 @@ class BcBaserHelper extends Helper
         }
 
         if (BcUtil::isAdminSystem()) {
-            // TODO ucmitz 暫定措置としてコメントアウト
-            // >>>
-//            $plugins = CakePlugin::loaded();
-//            if ($plugins) {
-//                foreach($plugins as $plugin) {
-//                    $cssName = 'admin' . DS . Inflector::underscore($plugin) . '_admin';
-//                    $path = CakePlugin::path($plugin) . 'webroot' . DS . 'css' . DS . $cssName . '.css';
-//                    if (file_exists($path)) {
-//                        $this->css($plugin . '.' . $cssName);
-//                    }
-//                }
-//            }
-            // <<<
+            $plugins = Plugin::loaded();
+            if ($plugins) {
+                foreach($plugins as $plugin) {
+                    $cssName = 'admin' . DS . Inflector::underscore($plugin) . '_admin';
+                    $path = Plugin::path($plugin) . 'webroot' . DS . 'css' . DS . $cssName . '.css';
+                    if (file_exists($path)) {
+                        $this->css($plugin . '.' . $cssName);
+                    }
+                }
+            }
         }
 
         // ### テーマ用CSS出力

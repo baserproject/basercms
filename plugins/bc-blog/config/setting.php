@@ -11,81 +11,28 @@
  * @license         https://basercms.net/license/index.html
  */
 
-/**
- * システムナビ
- */
- return [
+
+return [
     'BcApp' => [
-        // TODO ucmitz 未移行
-        // BcBlogのルーティングが実勢できないとルーティングに失敗するため
-        /* >>>
+        /**
+         * システムナビ
+         * ブログコンテンツ系のメニューは BcBlogViewEventListener::beforeRender() にて実装
+         */
         'adminNavigation' => [
             'Plugins' => [
                 'menus' => [
-                    'BlogTags' => ['title' => 'ブログタグ設定', 'url' => ['admin' => true, 'plugin' => 'blog', 'controller' => 'blog_tags', 'action' => 'index']],
+                    'BlogTags' => [
+                        'title' => 'ブログタグ設定',
+                        'url' => [
+                            'Admin' => true,
+                            'plugin' => 'BcBlog',
+                            'controller' => 'blog_tags',
+                            'action' => 'index'
+                    ]],
                 ]
             ]
         ]
-        <<< */
     ],
-
-/* @var BlogContent $BlogContent */
-// TODO ucmitz 未実装のためコメントアウト
-/* >>>
-$BlogContent = ClassRegistry::init('BcBlog.BlogContent');
-$blogContents = $BlogContent->find('all', [
-    'conditions' => [
-        $BlogContent->Content->getConditionAllowPublish()
-    ],
-    'recursive' => 0,
-    'order' => $BlogContent->id,
-]);
-foreach ($blogContents as $blogContent) {
-    $blog = $blogContent['BlogContent'];
-    $content = $blogContent['Content'];
-    $menus = function ($blog) {
-        $menus = [];
-        $route = [
-            'admin' => true, 'plugin' => 'blog', 'action' => 'index', $blog['id']
-        ];
-        $menus['BlogPosts' . $blog['id']] = [
-            'title' => '記事',
-            'url' => array_merge($route, ['controller' => 'blog_posts']),
-            'currentRegex' => '{/blog/blog_posts/[^/]+?/' . $blog['id'] . '($|/)}s'
-        ];
-        $menus['BlogCategories' . $blog['id']] = [
-            'title' => 'カテゴリ',
-            'url' => array_merge($route, ['controller' => 'blog_categories']),
-            'currentRegex' => '{/blog/blog_categories/[^/]+?/' . $blog['id'] . '($|/)}s'
-        ];
-        if ($blog['tag_use']) {
-            $menus['BlogTags' . $blog['id']] = [
-                'title' => 'タグ',
-                'url' => array_merge($route, ['controller' => 'blog_tags']),
-                'currentRegex' => '{/blog/blog_tags/[^/]+?/}s'
-            ];
-        }
-        if ($blog['comment_use']) {
-            $menus['BlogComments' . $blog['id']] = [
-                'title' => 'コメント',
-                'url' => array_merge($route, ['controller' => 'blog_comments'])
-            ];
-        }
-        $menus['BlogContentsEdit' . $blog['id']] = [
-            'title' => '設定',
-            'url' => array_merge($route, ['controller' => 'blog_contents', 'action' => 'edit'])
-        ];
-        return $menus;
-    };
-    $config['BcApp.adminNavigation.Contents.' . 'BlogContent' . $blog['id']] = [
-        'siteId' => $content['site_id'],
-        'title' => $content['title'],
-        'type' => 'blog-content',
-        'icon' => 'bca-icon--blog',
-        'menus' => $menus($blog)
-    ];
-}
-<<< */
     'BcContents' => [
         'items' => [
             'BcBlog' => [
@@ -96,25 +43,25 @@ foreach ($blogContents as $blogContent) {
                     'icon' => 'bca-icon--blog',
                     'routes' => [
                         'manage' => [
-                            'admin' => true,
+                            'prefix' => 'Admin',
                             'plugin' => 'BcBlog',
                             'controller' => 'BlogPosts',
                             'action' => 'index'
                         ],
                         'add' => [
-                            'admin' => true,
+                            'prefix' => 'Api',
                             'plugin' => 'BcBlog',
                             'controller' => 'BlogContents',
-                            'action' => 'ajax_add'
+                            'action' => 'add'
                         ],
                         'edit' => [
-                            'admin' => true,
+                            'prefix' => 'Admin',
                             'plugin' => 'BcBlog',
                             'controller' => 'BlogContents',
                             'action' => 'edit'
                         ],
                         'delete' => [
-                            'admin' => true,
+                            'prefix' => 'Admin',
                             'plugin' => 'BcBlog',
                             'controller' => 'BlogContents',
                             'action' => 'delete'
@@ -125,13 +72,13 @@ foreach ($blogContents as $blogContent) {
                             'action' => 'index'
                         ],
                         'copy' => [
-                            'admin' => true,
+                            'prefix' => 'Api',
                             'plugin' => 'BcBlog',
                             'controller' => 'BlogContents',
-                            'action' => 'ajax_copy'
+                            'action' => 'copy'
                         ],
                         'dblclick' => [
-                            'admin' => true,
+                            'prefix' => 'Admin',
                             'plugin' => 'BcBlog',
                             'controller' => 'BlogPosts',
                             'action' => 'index'

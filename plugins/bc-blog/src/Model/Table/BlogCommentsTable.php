@@ -73,6 +73,29 @@ class BlogCommentsTable extends BlogAppTable
 //        ];
 //    }
 
+
+    /**
+     * Initialize method
+     *
+     * @param array $config The configuration for the Table.
+     * @return void
+     * @checked
+     * @noTodo
+     */
+    public function initialize(array $config): void
+    {
+        parent::initialize($config);
+
+        $this->setTable('blog_comments');
+        $this->setPrimaryKey('id');
+
+        $this->addBehavior('Timestamp');
+
+        $this->belongsTo('BlogCategories', [
+            'className' => 'BcBlog.BlogCategories',
+            'foreignKey' => 'blog_category_id',
+        ]);
+    }
     /**
      * 初期値を取得する
      *

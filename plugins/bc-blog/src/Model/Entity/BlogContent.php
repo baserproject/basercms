@@ -11,6 +11,7 @@
 
 namespace BcBlog\Model\Entity;
 
+use BaserCore\Model\Entity\Content;
 use Cake\I18n\FrozenTime;
 use Cake\ORM\Entity;
 use BaserCore\Annotation\UnitTest;
@@ -34,6 +35,7 @@ use BaserCore\Annotation\Checked;
  * @property bool $use_content
  * @property FrozenTime $created
  * @property FrozenTime $modified
+ * @property Content $content
  */
 class BlogContent extends Entity
 {

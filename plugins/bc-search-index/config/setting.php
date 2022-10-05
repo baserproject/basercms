@@ -28,7 +28,7 @@ return [
          */
         'adminNavigation' => [
             'Systems' => [
-                'Tools' => [
+                'Utilities' => [
                     'menus' => [
                         'SearchIndices' => [
                             'title' => __d('baser', '検索インデックス'),

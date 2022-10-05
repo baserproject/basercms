@@ -30,6 +30,7 @@ class BcCkeditorHelperTest extends BcTestCase
      */
     protected $fixtures = [
         'plugin.BaserCore.Sites',
+        'plugin.BaserCore.Contents',
         'plugin.BaserCore.Users',
         'plugin.BaserCore.UserGroups',
         'plugin.BaserCore.UsersUserGroups',
@@ -40,7 +41,7 @@ class BcCkeditorHelperTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->BcCkeditor = new BcCkeditorHelper(new BcAdminAppView($this->getRequest('/')));
+        $this->BcCkeditor = new BcCkeditorHelper(new BcAdminAppView($this->getRequest('/baser/admin')));
     }
 
     /**
@@ -73,7 +74,7 @@ class BcCkeditorHelperTest extends BcTestCase
         $this->BcCkeditor->getView()->setTheme('BcAdminThird');
         $fieldName = 'Page.test';
         $result = $this->BcCkeditor->editor($fieldName, []);
-        $tagList = ['/<span class="bca-textarea"/', '/<textarea name="Page\[test\]"/', '/<input type="hidden" id="DraftModeTest"/'];
+        $tagList = ['/<span class="bca-textarea"/', '/<textarea name="Page\[test\]"/', '/<input type="hidden" name="draft_mode"/'];
         foreach ($tagList as $requiredTag) {
             $this->assertMatchesRegularExpression($requiredTag, $result);
         }
@@ -110,32 +111,9 @@ class BcCkeditorHelperTest extends BcTestCase
             ];
         $result = $this->execPrivateMethod($this->BcCkeditor, 'buildTmpScript', ["Page.contents_tmp", $options]);
         $jsResult = $this->BcCkeditor->getView()->fetch('script');
-        $this->assertMatchesRegularExpression('/<input type="hidden" id="DraftModeContentsTmpTmp" value="publish">/', $result);
+        $this->assertMatchesRegularExpression('/<input type="hidden" name="draft_mode" id="DraftModeContentsTmpTmp" draft="draft" class="bca-hidden__input"\/>/', $result);
         // ckeditor.jsがタグに含められてるか確認
-        $this->assertMatchesRegularExpression('/<script src="bc_admin_third\/js\/vendor\/ckeditor\/ckeditor.js">/', $jsResult);
-        // applyCkeditor.bundleがタグに含められてるか確認
-        $this->assertMatchesRegularExpression('/<script src="bc_admin_third\/js\/admin\/pages\/apply_ckeditor.bundle.js">/', $jsResult);
-        // javascript側で使用する変数が埋め込まれてるかをテスト
-        $varList = [
-            "ckeditorField",
-            "editorStylesSet",
-            "editorEnterBr",
-            "editorDomId",
-            "editorUseDraft",
-            "draftAreaId",
-            "publishAreaId",
-            "editorReadonlyPublish",
-            "editorDisableDraft",
-            "editorDisablePublish",
-            "fieldCamelize",
-            "initialStyle",
-            "editorStyle",
-            "themeEditorCsses",
-            "editorOptions"
-        ];
-        foreach ($varList as $var) {
-            $this->assertEquals(1, preg_match("/var\s$var/",$jsResult));
-        }
+        $this->assertMatchesRegularExpression('/<script src="bc_admin_third\/js\/vendor\/ckeditor\/ckeditor.js"><\/script>/', $jsResult);
     }
 
 }

@@ -55,7 +55,7 @@ class BcFormHelperTest extends BcTestCase
         $View->setRequest($View->getRequest()->withAttribute('formTokenData', [
             'unlockedFields' => [],
         ]));
-        $eventedView = $View->setEventManager(EventManager::instance()->on(new BcContentsEventListener())->setEventList(new EventList()));
+        $eventedView = $View->setEventManager(EventManager::instance()->on(new BcContentsEventListener('page'))->setEventList(new EventList()));
         $this->BcForm = new BcFormHelper($eventedView);
     }
     /**

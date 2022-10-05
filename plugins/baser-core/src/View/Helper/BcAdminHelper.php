@@ -123,7 +123,7 @@ class BcAdminHelper extends Helper
             if (!isset($adminMenuGroup['siteId'])) {
                 $adminMenuGroup = array_merge(['siteId' => null], $adminMenuGroup);
             } else {
-                $adminMenuGroup['siteId'] = (string)$adminMenuGroup['siteId'];
+                $adminMenuGroup['siteId'] = (int) $adminMenuGroup['siteId'];
             }
             if (!isset($adminMenuGroup['type'])) {
                 $adminMenuGroup = array_merge(['type' => null], $adminMenuGroup);

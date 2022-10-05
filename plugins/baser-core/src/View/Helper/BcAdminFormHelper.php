@@ -28,21 +28,6 @@ class BcAdminFormHelper extends BcFormHelper
     use BcEventDispatcherTrait;
 
     /**
-     * Other helpers used by FormHelper
-     *
-     * @var array
-     */
-    public $helpers = [
-        'Url',
-        'Js',
-        'Html',
-        'BaserCore.BcHtml',
-        'BaserCore.BcTime',
-        'BaserCore.BcText',
-        'BaserCore.BcUpload'
-    ];
-
-    /**
      * control
      * @param string $name
      * @param array $options

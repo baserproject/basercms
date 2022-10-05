@@ -11,6 +11,7 @@
 
 namespace BaserCore\Controller\Admin;
 
+use BaserCore\Utility\BcUtil;
 use Cake\Event\EventInterface;
 
 /**
@@ -68,7 +69,7 @@ class ContentLinksController extends BcAdminAppController
     {
         $this->setTitle(__d('baser', 'リンク編集'));
         if ($this->request->is(['post', 'put'])) {
-            if ($this->ContentLink->isOverPostSize()) {
+            if (BcUtil::isOverPostSize()) {
                 $this->BcMessage->setError(__d('baser', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size')));
                 $this->redirect(['action' => 'edit', $entityId]);
             }

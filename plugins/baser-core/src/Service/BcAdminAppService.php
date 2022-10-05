@@ -17,7 +17,7 @@ use BaserCore\Annotation\UnitTest;
 use BaserCore\Utility\BcContainerTrait;
 
 /**
- * ContentFoldersAdminService
+ * BcAdminAppService
  */
 class BcAdminAppService implements BcAdminAppServiceInterface
 {

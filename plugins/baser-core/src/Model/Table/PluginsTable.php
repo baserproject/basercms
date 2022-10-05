@@ -211,6 +211,7 @@ class PluginsTable extends AppTable
     {
         $targetPlugin = $this->find()->where(['name' => $name])->first();
         if (!$targetPlugin) return true;
+        \Cake\Core\Plugin::getCollection()->remove($name);
         return $this->delete($targetPlugin);
     }
 
@@ -231,6 +232,7 @@ class PluginsTable extends AppTable
         }
         $targetPlugin->status = false;
         $result = $this->save($targetPlugin);
+        \Cake\Core\Plugin::getCollection()->remove($name);
         BcUtil::clearAllCache();
         return $result !== false;
     }

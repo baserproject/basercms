@@ -1702,15 +1702,15 @@ DOC_END;
      */
     public function editor($fieldName, $options = [])
     {
-
         $options = array_merge([
-            'editor' => 'BcCkeditor',
+            'editor' => 'BaserCore.BcCkeditor',
             'style' => 'width:99%;height:540px'
         ], $options);
-        [$plugin, $editor] = pluginSplit($options['editor']);
+        $this->_View->loadHelper($options['editor']);
+        [, $editor] = pluginSplit($options['editor']);
         if (!empty($this->getView()->{$editor})) {
             return $this->getView()->{$editor}->editor($fieldName, $options);
-        } elseif ($editor == 'none') {
+        } elseif ($editor === 'none') {
             $_options = [];
             foreach($options as $key => $value) {
                 if (!preg_match('/^editor/', $key)) {

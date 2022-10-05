@@ -12,7 +12,6 @@
 namespace BaserCore\Controller\Admin;
 
 use BaserCore\Service\ContentsAdminServiceInterface;
-use Cake\Datasource\ConnectionManager;
 use Cake\Http\Response;
 use Cake\ORM\Query;
 use Cake\Utility\Hash;
@@ -63,7 +62,7 @@ class ContentsController extends BcAdminAppController
     public function initialize(): void
     {
         parent::initialize();
-        $this->loadComponent('BaserCore.BcAdminContents');
+        $this->loadComponent('BaserCore.BcAdminContents', ['entityVarName' => 'content']);
     }
 
     /**

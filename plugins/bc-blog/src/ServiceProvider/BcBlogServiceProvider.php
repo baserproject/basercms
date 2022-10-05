@@ -11,6 +11,8 @@
 
 namespace BcBlog\ServiceProvider;
 
+use BcBlog\Service\Admin\BlogContentsAdminService;
+use BcBlog\Service\Admin\BlogContentsAdminServiceInterface;
 use BcBlog\Service\BlogCategoriesAdminService;
 use BcBlog\Service\BlogCategoriesAdminServiceInterface;
 use BcBlog\Service\BlogCategoriesService;
@@ -35,6 +37,8 @@ class BcBlogServiceProvider extends ServiceProvider
     protected $provides = [
         BlogCategoriesServiceInterface::class,
         BlogCategoriesAdminServiceInterface::class,
+        BlogContentsServiceInterface::class,
+        BlogContentsAdminServiceInterface::class
     ];
 
     /**
@@ -51,6 +55,7 @@ class BcBlogServiceProvider extends ServiceProvider
         $container->add(BlogCategoriesAdminServiceInterface::class, BlogCategoriesAdminService::class);
         // BlogContentsサービス
         $container->add(BlogContentsServiceInterface::class, BlogContentsService::class);
+        $container->add(BlogContentsAdminServiceInterface::class, BlogContentsAdminService::class);
     }
 
 }

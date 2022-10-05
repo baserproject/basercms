@@ -11,6 +11,7 @@
 
 namespace BaserCore\Controller\Component;
 
+use BaserCore\Error\BcException;
 use BaserCore\Service\ContentsAdminServiceInterface;
 use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
@@ -35,7 +36,12 @@ use BaserCore\Annotation\Note;
  */
 class BcAdminContentsComponent extends Component
 {
+
+    /**
+     * Trait
+     */
     use BcContainerTrait;
+
     /**
      * コンテンツ編集用のアクション名
      * 判定に利用
@@ -44,6 +50,12 @@ class BcAdminContentsComponent extends Component
      * @var string
      */
     public $editAction = 'edit';
+
+    /**
+     * エンティティの変数名
+     * @var string
+     */
+    protected $entityVarName;
 
     /**
      * Initialize
@@ -57,6 +69,10 @@ class BcAdminContentsComponent extends Component
     public function initialize(array $config): void
     {
         parent::initialize($config);
+        if (!isset($config['entityVarName'])) {
+            throw new BcException(__d('baser', '編集画面で利用するエンティティの変数名を entityVarName として定義してください。'));
+        }
+        $this->entityVarName = $config['entityVarName'];
         $this->ContentsService = $this->getService(ContentsAdminServiceInterface::class);
         $this->SiteConfigsService = $this->getService(SiteConfigsServiceInterface::class);
         $this->Sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
@@ -89,7 +105,7 @@ class BcAdminContentsComponent extends Component
         $controller->set('contentsItems', $this->getConfig('items'));
         if (in_array($request->getParam('action'), [$this->editAction, 'edit_alias'])) {
             $this->settingForm();
-            EventManager::instance()->on(new BcContentsEventListener());
+            EventManager::instance()->on(new BcContentsEventListener($this->entityVarName));
         }
     }
 

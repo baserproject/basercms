@@ -9,11 +9,12 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
-use BaserCore\View\{AppView as AppViewAlias};
-
 /**
  * Users index
- * @var AppViewAlias $this
+ * @var \BaserCore\View\BcAdminAppView $this
+ * @checked
+ * @noTodo
+ * @unitTest
  */
 
 $this->BcAdmin->addAdminMainBodyHeaderLinks([

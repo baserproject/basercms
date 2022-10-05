@@ -11,9 +11,13 @@
 
 namespace BcBlog\Model\Table;
 
+use ArrayObject;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use Cake\Core\Configure;
+use Cake\Event\EventInterface;
+use Cake\ORM\Query;
 
 /**
  * 記事モデル
@@ -94,15 +98,16 @@ class BlogPostsTable extends BlogAppTable
      * @param array $config The configuration for the Table.
      * @return void
      * @checked
-     * @noTodo
      */
     public function initialize(array $config): void
     {
         parent::initialize($config);
 
-        $this->setTable('user_groups');
+        $this->setTable('blog_posts');
         $this->setPrimaryKey('id');
+
         $this->addBehavior('Timestamp');
+
         $this->belongsToMany('BlogTags', [
             'className' => 'BcBlog.BlogTags',
             'foreignKey' => 'blog_post_id',
@@ -138,7 +143,10 @@ class BlogPostsTable extends BlogAppTable
                 ]
             ]
         ]);
-        $this->addBehavior('BcSearchIndex.BcSearchIndexManager');
+        // TODO ucmitz 未実装
+        // >>>
+//        $this->addBehavior('BcSearchIndex.BcSearchIndexManager');
+        // <<<
     }
 
     /**
@@ -529,21 +537,25 @@ class BlogPostsTable extends BlogAppTable
      *
      * @param boolean $created
      * @param array $options
+     * @checked
      */
     public function afterSave($created, $options = [])
     {
         // 検索用テーブルへの登録・削除
-        if ($this->searchIndexSaving && empty($this->data['BlogPost']['exclude_search'])) {
-            $this->saveSearchIndex($this->createSearchIndex($this->data));
-        } else {
-            if (!empty($this->data['BlogPost']['id'])) {
-                $this->deleteSearchIndex($this->data['BlogPost']['id']);
-            } elseif (!empty($this->id)) {
-                $this->deleteSearchIndex($this->id);
-            } else {
-                $this->cakeError('Not found pk-value in BlogPost.');
-            }
-        }
+        // ucmitz 未実装
+        // >>>
+//        if ($this->searchIndexSaving && empty($this->data['BlogPost']['exclude_search'])) {
+//            $this->saveSearchIndex($this->createSearchIndex($this->data));
+//        } else {
+//            if (!empty($this->data['BlogPost']['id'])) {
+//                $this->deleteSearchIndex($this->data['BlogPost']['id']);
+//            } elseif (!empty($this->id)) {
+//                $this->deleteSearchIndex($this->id);
+//            } else {
+//                $this->cakeError('Not found pk-value in BlogPost.');
+//            }
+//        }
+        // <<<
     }
 
     /**
@@ -630,13 +642,14 @@ class BlogPostsTable extends BlogAppTable
      * @param int $id
      * @param array $data
      * @return mixed page Or false
+     * @checked
      */
     public function copy($id = null, $data = [])
     {
         if ($id) {
-            $data = $this->find('first', ['conditions' => ['BlogPost.id' => $id]]);
+            $data = $this->find()->where(['BlogPost.id' => $id]);
         }
-        $oldData = $data;
+        $oldData = clone $data;
 
         // EVENT BlogPost.beforeCopy
         $event = $this->dispatchEvent('beforeCopy', [
@@ -644,54 +657,57 @@ class BlogPostsTable extends BlogAppTable
             'id' => $id,
         ]);
         if ($event !== false) {
-            $data = $event->getResult() === true ? $event->getData('data') : $event->getResult();
+            $data = $event->getResult() === true || is_null($event->getResult()) ? $event->getData('data') : $event->getResult();
         }
 
         $sessionKey = Configure::read('BcPrefixAuth.Admin.sessionKey');
-        if (!empty($_SESSION['Auth'][$sessionKey])) {
-            $data['BlogPost']['user_id'] = $_SESSION['Auth'][$sessionKey]['id'];
+        if (!empty($_SESSION[$sessionKey])) {
+            $data->user_id = $_SESSION[$sessionKey]['id'];
         }
 
-        $data['BlogPost']['name'] .= '_copy';
-        $data['BlogPost']['no'] = $this->getMax('no', ['BlogPost.blog_content_id' => $data['BlogPost']['blog_content_id']]) + 1;
-        $data['BlogPost']['status'] = '0'; // TODO intger のため false では正常に保存できない（postgreSQLで確認）
-        $data['BlogPost']['posts_date'] = date('Y-m-d H:i:s');
+        $data->name .= '_copy';
+        $data->no = $this->getMax('no', ['BlogPosts.blog_content_id' => $data->blog_content_id]) + 1;
+        $data->status = '0'; // TODO intger のため false では正常に保存できない（postgreSQLで確認）
+        $data->posts_date = date('Y-m-d H:i:s');
 
-        unset($data['BlogPost']['id']);
-        unset($data['BlogPost']['created']);
-        unset($data['BlogPost']['modified']);
+        unset($data->id);
+        unset($data->created);
+        unset($data->modified);
 
         // 一旦退避(afterSaveでリネームされてしまうのを避ける為）
-        $eyeCatch = $data['BlogPost']['eye_catch'];
-        unset($data['BlogPost']['eye_catch']);
+        $eyeCatch = $data->eye_catch;
+        unset($data->eye_catch);
 
-        if (!empty($data['BlogTag'])) {
-            foreach ($data['BlogTag'] as $key => $tag) {
-                $data['BlogTag'][$key] = $tag['id'];
-            }
-        }
-
-        $this->create($data);
-        $result = $this->save();
+        // TODO ucmitz 未実装
+        // >>>
+//        if (!empty($data['BlogTag'])) {
+//            foreach ($data['BlogTag'] as $key => $tag) {
+//                $data['BlogTag'][$key] = $tag['id'];
+//            }
+//        }
+        // <<<
+        $newBlogPost = $this->patchEntity($this->newEmptyEntity(), $data->toArray());
+        $result = $this->save($newBlogPost);
 
         if ($result) {
-            if ($eyeCatch) {
-                $result['BlogPost']['eye_catch'] = $eyeCatch;
-                $this->set($result);
-                $result = $this->renameToBasenameFields(true);
-                $this->set($result);    // 内部でリネームされたデータが再セットされる
-                $result = $this->save();
-            }
+            // TODO ucmitz 未実装
+            // >>>
+//            if ($eyeCatch) {
+//                $result->eye_catch = $eyeCatch;
+//                $result = $this->renameToBasenameFields(true);
+//                $newBlogPost = $this->save($result);
+//            }
+            // <<<
             // EVENT BlogPost.afterCopy
             $this->dispatchEvent('afterCopy', [
-                'id' => $result['BlogPost']['id'],
+                'id' => $result->id,
                 'data' => $result,
                 'oldId' => $id,
                 'oldData' => $oldData,
             ]);
             return $result;
         } else {
-            if (isset($this->validationErrors['name'])) {
+            if ($result->getError('name')) {
                 return $this->copy(null, $data);
             } else {
                 return false;
@@ -751,8 +767,9 @@ class BlogPostsTable extends BlogAppTable
      *
      * @param array $options
      * @return array
+     * @checked
      */
-    public function beforeFind($options)
+    public function beforeFind(EventInterface $event, Query $query, ArrayObject $options, $primary)
     {
         // ================================================================
         // 日付等全く同じ値のレコードが複数存在する場合の並び替え処理を安定する為、
@@ -760,6 +777,8 @@ class BlogPostsTable extends BlogAppTable
         // PostgreSQLの場合、max min count sum を利用している際に、order を
         // 指定するとエラーとなってしまうので、追加するのは最小限にする
         // ================================================================
+        // TODO ucmitz 未実装
+        return;
         $idRequire = false;
         if (!empty($options['order']) && isset($options['order'][0]) && $options['order'][0] !== false) {
             $idRequire = true;

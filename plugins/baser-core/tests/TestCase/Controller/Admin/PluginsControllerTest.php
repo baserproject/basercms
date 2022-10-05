@@ -259,6 +259,7 @@ class PluginsControllerTest extends BcTestCase
             'version' => "1.0.0",
             'permission' => "1"
         ];
+        Plugin::getCollection()->remove('BcBlog');
         $this->put('/baser/admin/baser-core/plugins/install/BcBlog', $data);
     }
 

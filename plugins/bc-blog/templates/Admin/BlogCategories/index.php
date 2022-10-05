@@ -21,12 +21,12 @@ $this->BcAdmin->setTitle(sprintf(__d('baser', '%s｜カテゴリ一覧'), $blogC
 $this->BcAdmin->setHelp('blog_categories_index');
 $this->BcBaser->js('BcBlog.admin/blog_categories/index.bundle', false);
 $this->BcAdmin->addAdminMainBodyHeaderLinks([
-    'url' => ['action' => 'add', $blogContent->id],
-    'title' => __d('baser', '新規追加'),
+  'url' => ['action' => 'add', $blogContent->id],
+  'title' => __d('baser', '新規追加'),
 ]);
 ?>
 
 
 <div class="bca-data-list">
-    <?php $this->BcBaser->element('BlogCategories/index_list') ?>
+  <?php $this->BcBaser->element('BlogCategories/index_list') ?>
 </div>

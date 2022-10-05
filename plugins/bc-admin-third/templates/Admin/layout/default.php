@@ -12,9 +12,13 @@
 use BaserCore\Utility\BcUtil;
 use BaserCore\View\BcAdminAppView;
 use Cake\Utility\Inflector;
+
 /**
  * @var BcAdminAppView $this
  * @var string $title
+ * @checked
+ * @noTodo
+ * @unitTest
  */
 
 $request = $this->getRequest();
@@ -91,7 +95,7 @@ $base = $attributes['base'];
     'admin/startup.bundle'
   ]) ?>
   <?= $this->fetch('script') ?>
-
+  <?php $this->BcBaser->scripts() ?>
 </head>
 
 <body id="<?php $this->BcBaser->contentsName(true) ?>" class="normal">

@@ -21,6 +21,8 @@
  * @var array $widgetAreaList
  * @var array $adminThemeList
  * @var array $editorList
+ * @checked
+ * @unitTest
  */
 
 $this->BcAdmin->setTitle(__d('baser', 'システム基本設定'));
@@ -204,7 +206,6 @@ $this->BcBaser->js('admin/site_configs/index.bundle', false, ['id' => 'AdminSite
           </div>
         </td>
       </tr>
-      <?php /* TODO ucmitz 未実装のためコメントアウト ?>
       <tr>
         <th class="col-head bca-form-table__label">
           <?php echo $this->BcAdminForm->label('login_credit', __d('baser', 'ログインページのクレジット表示')) ?>
@@ -219,7 +220,6 @@ $this->BcBaser->js('admin/site_configs/index.bundle', false, ['id' => 'AdminSite
           <?php echo $this->BcAdminForm->error('login_credit') ?>
         </td>
       </tr>
-      */ ?>
       <tr>
         <th class="col-head bca-form-table__label">
           <?php echo $this->BcAdminForm->label('admin_side_banner', __d('baser', 'サイドバーのバナー表示')) ?>
@@ -407,7 +407,7 @@ $this->BcBaser->js('admin/site_configs/index.bundle', false, ['id' => 'AdminSite
     </table>
   </div>
 </section>
-<?php /* TODO ucmitz 未実装のためコメントアウト（動作の確認ができていない） ?>
+
 <section class="bca-section" data-bca-section-type='form-group'>
   <div class="bca-collapse__action">
     <button type="button"
@@ -485,6 +485,8 @@ h2 {}
     </table>
   </div>
 </section>
+
+<?php /* TODO ucmitz 未実装のためコメントアウト?>
 <section class="bca-section" data-bca-section-type='form-group'>
   <div class="bca-collapse__action">
     <button type="button"

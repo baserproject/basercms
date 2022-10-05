@@ -27,26 +27,6 @@ class BlogTagsTable extends BlogAppTable
     public $actsAs = ['BcCache'];
 
     /**
-     * HABTM
-     *
-     * @var array
-     */
-    public $hasAndBelongsToMany = [
-        'BlogPost' => [
-            'className' => 'BcBlog.BlogPost',
-            'joinTable' => 'blog_posts_blog_tags',
-            'foreignKey' => 'blog_tag_id',
-            'associationForeignKey' => 'blog_post_id',
-            'conditions' => '',
-            'order' => '',
-            'limit' => '',
-            'unique' => true,
-            'finderQuery' => '',
-            'deleteQuery' => ''
-        ]
-    ];
-
-    /**
      * ファインダーメソッド
      *
      * @var array
@@ -71,6 +51,31 @@ class BlogTagsTable extends BlogAppTable
 //            ]
 //        ];
 //    }
+
+    /**
+     * Initialize method
+     *
+     * @param array $config The configuration for the Table.
+     * @return void
+     * @checked
+     * @noTodo
+     */
+    public function initialize(array $config): void
+    {
+        parent::initialize($config);
+
+        $this->setTable('blog_tags');
+        $this->setPrimaryKey('id');
+
+        $this->addBehavior('Timestamp');
+
+        $this->belongsToMany('BlogPosts', [
+            'className' => 'BcBlog.BlogPosts',
+            'foreignKey' => 'blog_tag_id',
+            'targetForeignKey' => 'blog_post_id',
+            'joinTable' => 'blog_posts_blog_tags',
+        ]);
+    }
 
     /**
      * カスタムパラメーター検索

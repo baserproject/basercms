@@ -13,17 +13,26 @@ declare(strict_types=1);
 namespace BcBlog;
 
 use BaserCore\BcPlugin;
+use BaserCore\Model\Table\SitesTable;
+use BaserCore\Utility\BcContainerTrait;
 use BcBlog\ServiceProvider\BcBlogServiceProvider;
 use Cake\Core\ContainerInterface;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use Cake\Http\ServerRequestFactory;
+use Cake\ORM\TableRegistry;
 
 /**
  * plugin for ContactManager
  */
 class Plugin extends BcPlugin
 {
+
+    /**
+     * Trait
+     */
+    use BcContainerTrait;
 
     /**
      * プラグインをインストールする
@@ -67,6 +76,49 @@ class Plugin extends BcPlugin
     public function services(ContainerInterface $container): void
     {
         $container->addServiceProvider(new BcBlogServiceProvider());
+    }
+
+    /**
+     * routes
+     * @param \Cake\Routing\RouteBuilder $routes
+     * @checked
+     * @noTodo
+     */
+    public function routes($routes): void
+    {
+        /**
+         * RSS
+         */
+        $routes->connect('/rss/index', [
+            'plugin' => 'BcBlog',
+            'controller' => 'blog',
+            'action' => 'index'
+        ]);
+
+        /**
+         * Tag
+         */
+        $routes->connect('/tags/*', [
+            'plugin' => 'BcBlog',
+            'controller' =>
+            'blog',
+            'action' => 'tags'
+        ]);
+
+        $request = ServerRequestFactory::fromGlobals();
+        /* @var SitesTable $sitesTable */
+        $sitesTable = TableRegistry::getTableLocator()->get('BaserCore.Sites');
+        $site = $sitesTable->findByUrl($request->getPath());
+        if ($site) {
+            $routes->connect("/{$site->alias}/tags/*", [
+                'prefix' => $site->name,
+                'plugin' => 'BcBlog',
+                'controller' => 'blog',
+                'action' => 'tags'
+            ]);
+        }
+
+        parent::routes($routes);
     }
 
 }

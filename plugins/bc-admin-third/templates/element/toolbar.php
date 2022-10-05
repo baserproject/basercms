@@ -20,6 +20,9 @@ use BaserCore\View\BcAdminAppView;
  * @var array $otherSites
  * @var User $loginUser
  * @var string $currentAdminTheme
+ * @checked
+ * @noTodo
+ * @unitTest
  */
 // JSの出力について、ツールバーはフロントエンドでも利用するため、inlineに出力する
 $this->BcBaser->js([$currentAdminTheme . '.vendor/jquery.fixedMenu', $currentAdminTheme . '.vendor/outerClick', $currentAdminTheme . '.admin/toolbar.bundle']);
@@ -31,7 +34,12 @@ $this->BcBaser->js([$currentAdminTheme . '.vendor/jquery.fixedMenu', $currentAdm
 
     <div class="bca-toolbar__logo">
       <?php $this->BcBaser->link(
-        $this->BcBaser->getImg($currentAdminTheme . '.admin/logo_icon.svg', ['alt' => '', 'width' => '24', 'height' => '21', 'class' => 'bca-toolbar__logo-symbol']) .
+        $this->BcBaser->getImg($currentAdminTheme . '.admin/logo_icon.svg', [
+          'alt' => '',
+          'width' => '24',
+          'height' => '21',
+          'class' => 'bca-toolbar__logo-symbol',
+        ]) .
         '<span class="bca-toolbar__logo-text">' . $this->BcToolbar->getLogoText() . '</span>',
         $this->BcToolbar->getLogoLink(),
         $this->BcToolbar->getLogoLinkOptions()

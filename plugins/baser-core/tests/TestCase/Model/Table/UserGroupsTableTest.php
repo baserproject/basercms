@@ -114,7 +114,7 @@ class UserGroupsTableTest extends BcTestCase
     public function testGetAuthPrefix()
     {
         $result = $this->UserGroups->getAuthPrefix(1);
-        $this->assertEquals('admin', $result);
+        $this->assertEquals('Admin', $result);
 
         $result = $this->UserGroups->getAuthPrefix(999);
         $this->assertEquals(null, $result);

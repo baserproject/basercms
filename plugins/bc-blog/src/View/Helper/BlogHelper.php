@@ -11,11 +11,15 @@
 
 namespace BcBlog\View\Helper;
 
+use BaserCore\Utility\BcUtil;
 use BaserCore\View\Helper\BcBaserHelper;
 use BaserCore\View\Helper\BcContentsHelper;
 use BaserCore\View\Helper\BcTimeHelper;
 use BaserCore\View\Helper\BcUploadHelper;
 use BcBlog\Model\Table\BlogPostsTable;
+use Cake\Core\App;
+use Cake\Core\Configure;
+use Cake\Filesystem\Folder;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Hash;
 use Cake\View\Helper;
@@ -806,13 +810,13 @@ class BlogHelper extends Helper
     {
         $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
         $site = $sites->findById($siteId)->first();
-        $theme = $this->BcBaser->siteConfig['theme'];
+        $theme = BcUtil::getCurrentTheme();
         if ($site->theme) {
             $theme = $site->theme;
         }
-        $templatesPathes = array_merge(App::path('View', 'Blog'), App::path('View'));
+        $templatesPathes = array_merge(App::path('templates', 'BcBlog'), App::path('templates'));
         if ($theme) {
-            array_unshift($templatesPathes, WWW_ROOT . 'theme' . DS . $theme . DS);
+            array_unshift($templatesPathes, App::path('templates', $theme)[0]);
         }
 
         $_templates = [];
@@ -820,10 +824,9 @@ class BlogHelper extends Helper
             $templatePath .= 'Blog' . DS;
             $folder = new Folder($templatePath);
             $files = $folder->read(true, true);
-            $foler = null;
             if ($files[0]) {
                 if ($_templates) {
-                    $_templates = am($_templates, $files[0]);
+                    $_templates = array_merge($_templates, $files[0]);
                 } else {
                     $_templates = $files[0];
                 }

@@ -39,22 +39,6 @@ class BlogCategoriesTable extends BlogAppTable
     public $actsAs = ['Tree', 'BcCache'];
 
     /**
-     * hasMany
-     *
-     * @var array
-     */
-    public $hasMany = ['BlogPost' =>
-    [
-        'className' => 'BcBlog.BlogPost',
-        'order' => 'id DESC',
-        'limit' => 10,
-        'foreignKey' => 'blog_category_id',
-        'dependent' => false,
-        'exclusive' => false,
-        'finderQuery' => ''
-    ]];
-
-    /**
      * Initialize
      *
      * @param array $config テーブル設定
@@ -65,7 +49,21 @@ class BlogCategoriesTable extends BlogAppTable
     public function initialize(array $config): void
     {
         parent::initialize($config);
+
+        $this->setTable('blog_categories');
+        $this->setPrimaryKey('id');
+
+        $this->addBehavior('Timestamp');
+
         $this->addBehavior('Tree');
+        $this->hasMany('BlogPosts', [
+            'className' => 'BcBlog.BlogPosts',
+            'order' => 'posted DESC',
+            'limit' => 10,
+            'foreignKey' => 'blog_category_id',
+            'dependent' => false,
+            'exclusive' => false,
+        ]);
     }
 
     /**
