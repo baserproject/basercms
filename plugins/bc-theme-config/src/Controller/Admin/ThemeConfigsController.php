@@ -12,6 +12,7 @@
 namespace BcThemeConfig\Controller\Admin;
 
 use BaserCore\Controller\Admin\BcAdminAppController;
+use BaserCore\Utility\BcUtil;
 
 /**
  * Class ThemeConfigsController
@@ -65,7 +66,7 @@ class ThemeConfigsController extends BcAdminAppController
             return;
         }
 
-        if ($this->ThemeConfig->isOverPostSize()) {
+        if (BcUtil::isOverPostSize()) {
             $this->BcMessage->setError(
                 __d(
                     'baser',

@@ -11,6 +11,7 @@
 
 namespace BcBlog\Controller\Admin;
 
+use BaserCore\Utility\BcUtil;
 use Cake\Event\EventInterface;
 
 /**
@@ -339,7 +340,7 @@ class BlogPostsController extends BlogAppController
         }
 
         if ($this->request->is(['post', 'put'])) {
-            if ($this->BlogPost->isOverPostSize()) {
+            if (BcUtil::isOverPostSize()) {
                 $this->BcMessage->setError(
                     __d(
                         'baser',
@@ -495,7 +496,7 @@ class BlogPostsController extends BlogAppController
 
         $this->BlogPost->recursive = 2;
         if ($this->request->is(['post', 'put'])) {
-            if ($this->BlogPost->isOverPostSize()) {
+            if (BcUtil::isOverPostSize()) {
                 $this->BcMessage->setError(
                     __d(
                         'baser',

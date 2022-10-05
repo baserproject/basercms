@@ -11,6 +11,8 @@
 
 namespace BcMail\Controller\Admin;
 
+use BaserCore\Utility\BcUtil;
+
 /**
  * メールコンテンツコントローラー
  *
@@ -197,7 +199,7 @@ class MailContentsController extends MailAppController
             }
         } else {
             $this->request = $this->request->withParsedBody($this->MailContent->read(null, $id));
-            if ($this->MailContent->isOverPostSize()) {
+            if (BcUtil::isOverPostSize()) {
                 $this->BcMessage->setError(
                     __d(
                         'baser',

@@ -11,6 +11,7 @@
 
 namespace BcEditorTemplate\Controller\Admin;
 
+use BaserCore\Utility\BcUtil;
 use Cake\Event\EventInterface;
 use BaserCore\Controller\Admin\BcAdminAppController;
 
@@ -84,7 +85,7 @@ class EditorTemplatesController extends BcAdminAppController
             return;
         }
 
-        if ($this->EditorTemplate->isOverPostSize()) {
+        if (BcUtil::isOverPostSize()) {
             $this->BcMessage->setError(
                 __d(
                     'baser',
@@ -127,7 +128,7 @@ class EditorTemplatesController extends BcAdminAppController
             return;
         }
 
-        if ($this->EditorTemplate->isOverPostSize()) {
+        if (BcUtil::isOverPostSize()) {
             $this->BcMessage->setError(__d('baser', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size')));
             $this->redirect(['action' => 'edit', $id]);
         }

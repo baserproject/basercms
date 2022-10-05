@@ -12,6 +12,7 @@
 namespace BcThemeFile\Controller\Admin;
 
 use BaserCore\Controller\Admin\BcAdminAppController;
+use BaserCore\Utility\BcUtil;
 
 /**
  * Class ThemeFilesController
@@ -594,7 +595,7 @@ class ThemeFilesController extends BcAdminAppController
     {
         $messages = [];
         if (!$this->request->getData()) {
-            if ($this->ThemeFile->isOverPostSize()) {
+            if (BcUtil::isOverPostSize()) {
                 $messages[] = __d('baser', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size'));
             } else {
                 $this->notFound();

@@ -12,6 +12,7 @@
 namespace BcUploader\Controller\Admin;
 
 use BaserCore\Controller\Admin\BcAdminAppController;
+use BaserCore\Utility\BcUtil;
 use Cake\Event\EventInterface;
 
 /**
@@ -292,7 +293,7 @@ class UploaderFilesController extends BcAdminAppController
         Configure::write('debug', 0);
 
         if (!$this->request->getData()) {
-            if ($this->UploaderFile->isOverPostSize()) {
+            if (BcUtil::isOverPostSize()) {
                 echo null;
                 die;
             }
