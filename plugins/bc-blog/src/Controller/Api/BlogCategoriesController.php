@@ -185,9 +185,35 @@ class BlogCategoriesController extends BcApiController
 
     /**
      * [API] ブログカテゴリー削除
+     * @param BlogCategoriesServiceInterface $service
+     * @param $blogCategoryId
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function delete()
+    public function delete(BlogCategoriesServiceInterface $service, $blogCategoryId)
     {
-        //todo ブログカテゴリー削除
+        if ($this->request->is(['post', 'delete'])) {
+            try {
+                $blogCategory = $service->get($blogCategoryId);
+                if ($service->delete($blogCategoryId)) {
+                    $message = __d('baser', 'ブログカテゴリー「{0}」を削除しました。', $blogCategory->name);
+                } else {
+                    $this->setResponse($this->response->withStatus(400));
+                    $message = __d('baser', '入力エラーです。内容を修正してください。');
+                }
+            } catch (PersistenceFailedException $e) {
+                $this->setResponse($this->response->withStatus(400));
+                $blogCategory = $e->getEntity();
+                $message = __d('baser', 'データベース処理中にエラーが発生しました。');
+            }
+            $this->set([
+                'message' => $message,
+                'blogCategory' => $blogCategory,
+                'errors' => $blogCategory->getErrors()
+            ]);
+            $this->viewBuilder()->setOption('serialize', ['blogCategory', 'message', 'errors']);
+        }
     }
 }
