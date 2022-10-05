@@ -22,11 +22,32 @@ class ContentFoldersSeed extends AbstractSeed
     {
         $data = [
             [
-                'id' => '1',
+                'id' => 1,
                 'folder_template' => '',
                 'page_template' => '',
                 'created' => '2022-10-01 09:00:00',
                 'modified' => '2022-10-01 09:00:00',
+            ],
+            [
+                'id' => 2,
+                'folder_template' => '',
+                'page_template' => '',
+                'created' => '2022-10-01 09:00:00',
+                'modified' => '2022-10-01 09:00:00',
+            ],
+            [
+                'id' => 3,
+                'folder_template' => '',
+                'page_template' => '',
+                'created' => '2022-10-01 09:00:00',
+                'modified' => '2022-10-01 09:00:00',
+            ],
+            [
+                'id' => 4,
+                'folder_template' => '',
+                'page_template' => '',
+                'created' => '2022-10-01 09:00:00',
+                'modified' => NULL,
             ],
         ];
 
