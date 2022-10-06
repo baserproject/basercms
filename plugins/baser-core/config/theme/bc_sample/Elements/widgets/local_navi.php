@@ -20,14 +20,14 @@
  * @var int $id ウィジェットID
  * @var book $use_title タイトルの利用可否
  */
-if(empty($this->request->getParam('Content')) || ($this->request->getParam('controller') === 'search_indices' && $this->request->getParam('action') === 'search')) {
+if(empty($this->request->getAttribute('currentContent')) || ($this->request->getParam('controller') === 'search_indices' && $this->request->getParam('action') === 'search')) {
 	return;
 }
-if($this->request->getParam('Content.type') == 'ContentFolder') {
-	$parentId = $this->request->getParam('Content.id');
-	$title = $this->request->getParam('Content.title');
+if($this->request->getAttribute('currentContent')->type == 'ContentFolder') {
+	$parentId = $this->request->getAttribute('currentContent')->id;
+	$title = $this->request->getAttribute('currentContent')->title;
 } else {
-	$parent = $this->BcContents->getParent($this->request->getParam('Content.id'));
+	$parent = $this->BcContents->getParent($this->request->getAttribute('currentContent')->id);
 	$parentId = $parent['Content']['id'];
 	$title = $parent['Content']['title'];
 	if($parent['Content']['site_root']) {
@@ -42,5 +42,5 @@ if($this->request->getParam('Content.type') == 'ContentFolder') {
 		<h2 class="bs-widget-head"><?php echo h($title) ?></h2>
 	<?php endif ?>
 	<!-- /Elements/page_list.php -->
-	<?php $this->BcBaser->contentsMenu($parentId, 1, $this->request->getParam('Content.id')) ?>
+	<?php $this->BcBaser->contentsMenu($parentId, 1, $this->request->getAttribute('currentContent')->id) ?>
 </div>

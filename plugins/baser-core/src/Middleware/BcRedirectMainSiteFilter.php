@@ -57,7 +57,7 @@ class BcRedirectMainSiteFilter implements MiddlewareInterface
     {
         $request = $event->getData('request');
         $response = $event->getData('response');
-        if (!empty($request->getParam('Content'))) {
+        if (!empty($request->getAttribute('currentContent'))) {
             return $handler->handle($request);
         } else {
             if ($this->_existController($request)) {

@@ -210,20 +210,20 @@ class BlogPostsController extends BlogAppController
             return;
         }
 
-        if ($this->request->getParam('Content.status')) {
+        if ($this->request->getAttribute('currentContent')->status) {
             $this->set(
                 'publishLink',
                 $this->Content->getUrl(
-                    $this->request->getParam('Content.url'),
+                    $this->request->getAttribute('currentContent')->url,
                     true,
-                    $this->request->getParam('Site.use_subdomain')
+                    $this->request->getAttribute('currentSite')->use_subdomain
                 )
             );
         }
         $this->pageTitle = sprintf(
             __d('baser', '%s｜記事一覧'),
             strip_tags(
-                $this->request->getParam('Content.title')
+                $this->request->getAttribute('currentContent')->title
             )
         );
         $this->setSearch('blog_posts_index');
@@ -467,7 +467,7 @@ class BlogPostsController extends BlogAppController
         $this->set('users', $this->BlogPost->User->getUserList());
         $this->pageTitle = sprintf(
             __d('baser', '%s｜新規記事登録'),
-            $this->request->getParam('Content.title')
+            $this->request->getAttribute('currentContent')->title
         );
         $this->setHelp('blog_posts_form');
         $this->render('form');
@@ -599,11 +599,11 @@ class BlogPostsController extends BlogAppController
                 $this->Content->getUrl(
                     sprintf(
                         "%sarchives/%s",
-                        $this->request->getParam('Content.url'),
+                        $this->request->getAttribute('currentContent')->url,
                         $this->request->getData('BlogPost.no')
                     ),
                     true,
-                    $this->request->getParam('Site.use_subdomain')
+                    $this->request->getAttribute('currentSite')->use_subdomain
                 )
             );
         }
@@ -642,7 +642,7 @@ class BlogPostsController extends BlogAppController
         $this->set('editorOptions', $editorOptions);
         $this->pageTitle = sprintf(
             __d('baser', '%s｜記事編集'),
-            $this->request->getParam('Content.title')
+            $this->request->getAttribute('currentContent')->title
         );
         $this->setHelp('blog_posts_form');
         $this->render('form');

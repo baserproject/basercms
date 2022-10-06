@@ -22,6 +22,7 @@ use BaserCore\Event\BcViewEventDispatcher;
 use BaserCore\Event\ContentFoldersControllerEventListener;
 use BaserCore\Event\PagesControllerEventListener;
 use BaserCore\Middleware\BcAdminMiddleware;
+use BaserCore\Middleware\BcFrontMiddleware;
 use BaserCore\Middleware\BcRequestFilterMiddleware;
 use BaserCore\ServiceProvider\BcServiceProvider;
 use BaserCore\Utility\BcUtil;
@@ -192,6 +193,7 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
             // Authorization (AuthComponent to Authorization)
             ->add(new AuthenticationMiddleware($this))
             ->add(new BcAdminMiddleware())
+            ->add(new BcFrontMiddleware())
 //            ->add(new BcUpdateFilterMiddleware())
             ->add(new BcRequestFilterMiddleware());
 

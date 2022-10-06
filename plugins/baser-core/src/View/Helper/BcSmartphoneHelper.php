@@ -55,14 +55,14 @@ class BcSmartphoneHelper extends Helper
         $sites = \Cake\ORM\TableRegistry::getTableLocator()->get('BaserCore.Sites');
         $site = $sites->findByUrl($this->_View->getRequest()->getPath());
         if (!$rss && $site->device == 'smartphone' && $this->_View->layoutPath != 'Emails' . DS . 'text') {
-            if (empty($this->request->getParam('Site'))) {
+            if (empty($this->request->getAttribute('currentSite'))) {
                 return;
             }
             // 内部リンクの自動変換
             if ($site->auto_link) {
                 $siteUrl = Configure::read('BcEnv.siteUrl');
                 $sslUrl = Configure::read('BcEnv.sslUrl');
-                $currentAlias = $this->request->getParam('Site.alias');
+                $currentAlias = $this->request->getAttribute('currentSite')->alias;
                 $regBaseUrls = [
                     preg_quote(BC_BASE_URL, '/'),
                     preg_quote(preg_replace('/\/$/', '', $siteUrl) . BC_BASE_URL, '/'),
@@ -112,7 +112,7 @@ class BcSmartphoneHelper extends Helper
      */
     protected function _addPrefix($matches)
     {
-        $currentAlias = $this->request->getParam('Site.alias');
+        $currentAlias = $this->request->getAttribute('currentSite')->alias;
         $baseUrl = $matches[2];
         $etc = $matches[1];
         $url = $matches[3];

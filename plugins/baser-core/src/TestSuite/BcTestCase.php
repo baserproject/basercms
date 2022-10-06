@@ -14,6 +14,7 @@ namespace BaserCore\TestSuite;
 use App\Application;
 use Authentication\Authenticator\Result;
 use BaserCore\Middleware\BcAdminMiddleware;
+use BaserCore\Middleware\BcFrontMiddleware;
 use BaserCore\Middleware\BcRequestFilterMiddleware;
 use BaserCore\Plugin;
 use BaserCore\Service\BcDatabaseService;
@@ -288,6 +289,8 @@ class BcTestCase extends TestCase
         $request = $request->withAttribute('params', $params);
         if ($request->getParam('prefix') === 'Admin') {
             $request = $this->execPrivateMethod(new BcAdminMiddleware(), 'setCurrentSite', [$request]);
+        } else {
+            $request = $this->execPrivateMethod(new BcFrontMiddleware(), 'setCurrent', [$request]);
         }
         if ($data) {
             $request = $request->withParsedBody($data);

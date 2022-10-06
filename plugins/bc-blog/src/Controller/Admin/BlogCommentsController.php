@@ -130,7 +130,7 @@ class BlogCommentsController extends BlogAppController
             $conditions['BlogComment.blog_content_id'] = $blogContentId;
             $this->pageTitle = sprintf(
                 __d('baser', '%s｜コメント一覧'),
-                $this->request->getParam('Content.title')
+                $this->request->getAttribute('currentContent')->title
             );
         }
 
@@ -216,7 +216,7 @@ class BlogCommentsController extends BlogAppController
         $this->BlogComment->saveDbLog(
             sprintf(
                 __d('baser', '記事「%s」へのコメントを削除しました。'),
-                $this->blogPost['BlogPost']['name'] ?? $this->request->getParam('Content.title')
+                $this->blogPost['BlogPost']['name'] ?? $this->request->getAttribute('currentContent')->title
             )
         );
         return true;
@@ -337,7 +337,7 @@ class BlogCommentsController extends BlogAppController
         $this->BlogComment->saveDbLog(
             sprintf(
                 __d('baser', '記事「%s」へのコメントを %s に設定しました。'),
-                $this->blogPost['BlogPost']['name'] ?? $this->request->getParam('Content.title'),
+                $this->blogPost['BlogPost']['name'] ?? $this->request->getAttribute('currentContent')->title,
                 $statusTexts[$status]
             )
         );

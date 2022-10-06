@@ -158,7 +158,7 @@ class BlogController extends BlogAppController
             }
         }
 
-        if (empty($this->request->getParam('Content'))) {
+        if (empty($this->request->getAttribute('currentContent'))) {
             // ウィジェット系の際にコンテンツ管理上のURLでないので自動取得できない
             $content = $this->BcContents->getContent($blogContentId);
             if ($content) {
@@ -177,9 +177,9 @@ class BlogController extends BlogAppController
         // コンテンツ名を変更している際、以下の設定を行わないとプラグイン名がURLに付加されてしまう
         // Viewで $paginator->options = array('url' => $this->passedArgs) を行う事が前提
         if ($this->request->getParam('prefix') !== 'Admin') {
-            if (!empty($this->request->getParam('Content'))) {
-                $this->passedArgs['controller'] = $this->request->getParam('Content.name');
-                $this->passedArgs['plugin'] = $this->request->getParam('Content.name');
+            if (!empty($this->request->getAttribute('currentContent'))) {
+                $this->passedArgs['controller'] = $this->request->getAttribute('currentContent')->name;
+                $this->passedArgs['plugin'] = $this->request->getAttribute('currentContent')->name;
             }
             $this->passedArgs['action'] = $this->action;
         }
@@ -228,7 +228,7 @@ class BlogController extends BlogAppController
                     'title' => h(
                         sprintf(
                             "%s｜%s",
-                            $this->request->getParam('Content.title'), $this->siteConfigs['name']
+                            $this->request->getAttribute('currentContent')->title, $this->siteConfigs['name']
                         )
                     ),
                     'description' => h(strip_tags($this->blogContent['BlogContent']['description']))
@@ -274,7 +274,7 @@ class BlogController extends BlogAppController
         }
         $this->set('posts', $datas);
         $this->set('single', false);
-        $this->setTitle($this->request->getParam('Content.title'));
+        $this->setTitle($this->request->getAttribute('currentContent')->title);
         $this->render($template);
     }
 
@@ -314,8 +314,8 @@ class BlogController extends BlogAppController
         }
 
         $crumbs[] = [
-            'name' => $this->request->getParam('Content.title'),
-            'url' => $this->request->getParam('Content.url')
+            'name' => $this->request->getAttribute('currentContent')->title,
+            'url' => $this->request->getAttribute('currentContent')->url
         ];
 
         switch ($type) {
@@ -344,7 +344,7 @@ class BlogController extends BlogAppController
                                 'name' => $blogCategory['BlogCategory']['title'],
                                 'url' => sprintf(
                                     "%sarchives/category/%s",
-                                    $this->request->getParam('Content.url'),
+                                    $this->request->getAttribute('currentContent')->url,
                                     $blogCategory['BlogCategory']['name']
                                 )
                             ];
@@ -506,7 +506,7 @@ class BlogController extends BlogAppController
                                 'name' => $blogCategory['BlogCategory']['title'],
                                 'url' => sprintf(
                                     "%s/archives/category/%s",
-                                    $this->request->getParam('Content.url'),
+                                    $this->request->getAttribute('currentContent')->url,
                                     $blogCategory['BlogCategory']['name']
                                 )
                             ];

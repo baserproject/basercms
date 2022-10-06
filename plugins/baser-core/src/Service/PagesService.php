@@ -274,7 +274,7 @@ class PagesService implements PagesServiceInterface
             'prefix' => 'Admin',
             'controller' => 'Pages',
             'action' => 'edit',
-            $request->getParam('Content.entity_id')
+            $request->getAttribute('currentContent')->entity_id
         ];
     }
 

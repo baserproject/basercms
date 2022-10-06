@@ -685,7 +685,7 @@ class BcBaserHelper extends Helper
             array_shift($url);
         }
 
-        if (!empty($this->getView()->getRequest()->getParam('Site.alias'))) {
+        if (!empty($this->getView()->getRequest()->getAttribute('currentSite')->alias)) {
             array_shift($url);
         }
 
@@ -887,8 +887,8 @@ class BcBaserHelper extends Helper
             return $keywords;
         }
 
-        if (!empty($this->_View->getRequest()->getParam('Site.keyword'))) {
-            return $this->_View->getRequest()->getParam('Site.keyword');
+        if (!empty($this->_View->getRequest()->getAttribute('currentSite')->keyword)) {
+            return $this->_View->getRequest()->getAttribute('currentSite')->keyword;
         }
 
         if (!empty($this->siteConfig['keyword'])) {
@@ -913,8 +913,8 @@ class BcBaserHelper extends Helper
 
         if ($this->isHome()) {
 
-            if (!empty($this->_View->getRequest()->getParam('Site.description'))) {
-                return $this->_View->getRequest()->getParam('Site.description');
+            if (!empty($this->_View->getRequest()->getAttribute('currentSite')->description)) {
+                return $this->_View->getRequest()->getAttribute('currentSite')->description;
             }
 
             if (!empty($this->siteConfig['description'])) {
@@ -987,8 +987,8 @@ class BcBaserHelper extends Helper
 
         // サイトタイトルを追加
         $siteName = '';
-        if (!empty($this->_View->getRequest()->getParam('Site.title'))) {
-            $siteName = $this->_View->getRequest()->getParam('Site.title');
+        if (!empty($this->_View->getRequest()->getAttribute('currentSite')->title)) {
+            $siteName = $this->_View->getRequest()->getAttribute('currentSite')->title;
         } elseif (!empty($this->siteConfig['name'])) {
             $siteName = $this->siteConfig['name'];
         }
@@ -1047,9 +1047,9 @@ class BcBaserHelper extends Helper
         $contentsTitle = $this->getContentsTitle();
         $useCurrentTitle = true;
         // インデックスページで親カテゴリとタイトルが被る場合は重複しないようにする
-        if (!empty($this->_View->getRequest()->getParam('Content')) &&
-            $this->_View->getRequest()->getParam('Content.type') !== 'ContentFolder' &&
-            $this->_View->getRequest()->getParam('Content.name') === 'index' &&
+        if (!empty($this->_View->getRequest()->getAttribute('currentContent')) &&
+            $this->_View->getRequest()->getAttribute('currentContent')->type !== 'ContentFolder' &&
+            $this->_View->getRequest()->getAttribute('currentContent')->name === 'index' &&
             $this->_categoryTitleOn) {
             $parentTitle = '';
             if ($this->_categoryTitle === true && $crumbs) {
@@ -1139,10 +1139,10 @@ class BcBaserHelper extends Helper
     public function isHome()
     {
         $request = $this->_View->getRequest();
-        if (empty($request->getParam('Site'))) {
+        if (empty($request->getAttribute('currentSite'))) {
             return false;
         } else {
-            $site = $request->getParam('Site');
+            $site = $request->getAttribute('currentSite');
             $path = $request->getUri()->getPath();
         }
         if (empty($site->alias) || $site->same_main_url || $site->use_subdomain) {
@@ -1410,7 +1410,7 @@ class BcBaserHelper extends Helper
      */
     public function xmlHeader($attrib = [])
     {
-        if (empty($attrib['encoding']) && !empty($this->_View->getRequest()->getParam('Site.device')) && $this->_View->getRequest()->getParam('Site.device') == 'mobile') {
+        if (empty($attrib['encoding']) && !empty($this->_View->getRequest()->getAttribute('currentSite')->device) && $this->_View->getRequest()->getAttribute('currentSite')->device == 'mobile') {
             $attrib['encoding'] = 'Shift-JIS';
         }
         echo $this->BcXml->header($attrib) . "\n";
@@ -1495,7 +1495,7 @@ class BcBaserHelper extends Helper
      */
     public function charset($charset = null)
     {
-        if (!$charset && !empty($this->_View->getRequest()->getParam('Site.device')) && $this->_View->getRequest()->getParam('Site.device') === 'mobile') {
+        if (!$charset && !empty($this->_View->getRequest()->getAttribute('currentSite')->device) && $this->_View->getRequest()->getAttribute('currentSite')->device === 'mobile') {
             $charset = 'Shift-JIS';
         }
         echo $this->BcHtml->charset($charset);
@@ -1556,8 +1556,8 @@ class BcBaserHelper extends Helper
             return '';
         }
         $site = null;
-        if (!empty($this->getView()->getRequest()->getParam('Site'))) {
-            $site = $this->getView()->getRequest()->getParam('Site');
+        if (!empty($this->getView()->getRequest()->getAttribute('currentSite'))) {
+            $site = $this->getView()->getRequest()->getAttribute('currentSite');
         }
         if(!$site) return '';
         $sites = \Cake\ORM\TableRegistry::getTableLocator()->get('BaserCore.Sites');
@@ -1586,10 +1586,10 @@ class BcBaserHelper extends Helper
         }
         if ($startText) {
             $homeUrl = '/';
-            if (!empty($this->_View->getRequest()->getParam('Site.alias'))) {
-                $homeUrl = '/' . $this->_View->getRequest()->getParam('Site.alias') . '/';
-            } elseif (!empty($this->_View->getRequest()->getParam('Site.name'))) {
-                $homeUrl = '/' . $this->_View->getRequest()->getParam('Site.name') . '/';
+            if (!empty($this->_View->getRequest()->getAttribute('currentSite')->alias)) {
+                $homeUrl = '/' . $this->_View->getRequest()->getAttribute('currentSite')->alias . '/';
+            } elseif (!empty($this->_View->getRequest()->getAttribute('currentSite')->name)) {
+                $homeUrl = '/' . $this->_View->getRequest()->getAttribute('currentSite')->name . '/';
             }
             array_unshift($crumbs, [
                 'title' => $startText,
@@ -1844,7 +1844,7 @@ EOD;
     public function getContentsMenu($id = null, $level = null, $currentId = null, $options = [])
     {
         if (!$id) {
-            $siteRoot = $this->BcContents->getSiteRoot($this->_View->getRequest()->getParam('Content.site_id'));
+            $siteRoot = $this->BcContents->getSiteRoot($this->_View->getRequest()->getAttribute('currentContent')->site_id);
             $id = $siteRoot->id;
         }
         $options = array_merge([
@@ -1921,14 +1921,14 @@ EOD;
     public function getGlobalMenu($level = 1, $options = [])
     {
         $siteId = 1;
-        if (!empty($this->_View->getRequest()->getParam('Content.site_id'))) {
-            $siteId = $this->_View->getRequest()->getParam('Content.site_id');
+        if (!empty($this->_View->getRequest()->getAttribute('currentContent')->site_id)) {
+            $siteId = $this->_View->getRequest()->getAttribute('currentContent')->site_id;
         }
         $siteRoot = $this->BcContents->getSiteRoot($siteId);
         $id = ($siteRoot) ? $siteRoot->id : 1;
         $currentId = 1;
-        if (!empty($this->_View->getRequest()->getParam('Content.id'))) {
-            $currentId = $this->_View->getRequest()->getParam('Content.id');
+        if (!empty($this->_View->getRequest()->getAttribute('currentContent')->id)) {
+            $currentId = $this->_View->getRequest()->getAttribute('currentContent')->id;
         }
         $options = array_merge([
             'tree' => $this->BcContents->getTree($id, $level),
@@ -2455,9 +2455,9 @@ END_FLASH;
                 $link = $originUrl;
             } elseif ($options['link']) {
                 $link = $options['link'];
-                if (!empty($this->_View->getRequest()->getParam('Site.alias'))) {
-                    if (empty($this->_View->getRequest()->getParam('Site.same_main_url'))) {
-                        $link = '/' . $this->_View->getRequest()->getParam('Site.alias') . $link;
+                if (!empty($this->_View->getRequest()->getAttribute('currentSite')->alias)) {
+                    if (empty($this->_View->getRequest()->getAttribute('currentSite')->same_main_url)) {
+                        $link = '/' . $this->_View->getRequest()->getAttribute('currentSite')->alias . $link;
                     }
                 }
             }
@@ -2769,8 +2769,8 @@ END_FLASH;
      */
     public function getCurrentContent()
     {
-        if (!empty($this->_View->getRequest()->getParam('Content'))) {
-            return $this->_View->getRequest()->getParam('Content');
+        if (!empty($this->_View->getRequest()->getAttribute('currentContent'))) {
+            return $this->_View->getRequest()->getAttribute('currentContent');
         }
         return null;
     }
@@ -2782,11 +2782,11 @@ END_FLASH;
      */
     public function getCurrentPrefix()
     {
-        if (empty($this->_View->getRequest()->getParam('Site'))) {
+        if (empty($this->_View->getRequest()->getAttribute('currentSite'))) {
             return '';
         }
         $Site = ClassRegistry::init('Site');
-        return $Site->getPrefix($this->_View->getRequest()->getParam('Site'));
+        return $Site->getPrefix($this->_View->getRequest()->getAttribute('currentSite'));
     }
 
     /**
@@ -2892,7 +2892,7 @@ END_FLASH;
         if (BcUtil::isAdminSystem()) {
             return;
         }
-        if (empty($this->_View->getRequest()->getParam('Site'))) {
+        if (empty($this->_View->getRequest()->getAttribute('currentSite'))) {
             return;
         }
         $this->setCanonicalUrl();
@@ -2919,7 +2919,7 @@ END_FLASH;
             $mainSite = $sites->getMainByUrl($this->_View->getRequest()->getPath());
             $url = $mainSite->makeUrl(new CakeRequest($this->BcContents->getPureUrl(
                 $this->_View->getRequest()->getPath(),
-                $this->_View->getRequest()->getParam('Site.id')
+                $this->_View->getRequest()->getAttribute('currentSite')->id
             )));
 
         } else {
@@ -2955,7 +2955,7 @@ END_FLASH;
         }
         $url = $subSite->makeUrl(new CakeRequest($this->BcContents->getPureUrl(
             $this->_View->getRequest()->getPath(),
-            $this->_View->getRequest()->getParam('Site.id')
+            $this->_View->getRequest()->getAttribute('currentSite')->id
         )));
         $this->_View->set('meta',
             $this->BcHtml->meta('alternate',
@@ -3019,14 +3019,14 @@ END_FLASH;
     public function getContentsUrl($url = null, $full = false, $useSubDomain = null, $base = true)
     {
         if (!$url) {
-            if (!empty($this->_View->getRequest()->getParam('Content.url'))) {
-                $url = $this->_View->getRequest()->getParam('Content.url');
+            if (!empty($this->_View->getRequest()->getAttribute('currentContent')->url)) {
+                $url = $this->_View->getRequest()->getAttribute('currentContent')->url;
             } else {
                 $url = '/';
             }
         }
         if (is_null($useSubDomain)) {
-            $site = $this->_View->getRequest()->getParam('Site');
+            $site = $this->_View->getRequest()->getAttribute('currentSite');
             if($site) $useSubDomain = $site->use_subdomain;
         }
         return $this->BcContents->getUrl($url, $full, $useSubDomain, $base);

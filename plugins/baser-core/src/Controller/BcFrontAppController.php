@@ -51,7 +51,7 @@ class BcFrontAppController extends AppController
     {
         parent::beforeRender($event);
         // TODO ucmitz サイト名でサブフォルダを設定し、サブフォルダが存在しない場合は、通常のフォルダを参照できるようにする
-//        $subDir = $this->getRequest()->getParam('Site.name');
+//        $subDir = $this->getRequest()->getAttribute('currentSite')->name;
 //        if ($subDir) {
 //            $this->viewBuilder()->setLayoutPath($subDir);
 //            $this->viewBuilder()->setTemplatePath($this->getName() . DS . $subDir);

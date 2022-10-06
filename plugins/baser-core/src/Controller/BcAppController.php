@@ -536,8 +536,8 @@ class BcAppController extends AppController
 
             $subDir = $plugin = '';
             // インストール時にSiteは参照できない
-            if ($options['agentTemplate'] && !empty($this->request->getParam('Site.name'))) {
-                $subDir = $this->request->getParam('Site.name');
+            if ($options['agentTemplate'] && !empty($this->request->getAttribute('currentSite')->name)) {
+                $subDir = $this->request->getAttribute('currentSite')->name;
             }
 
             [$plugin, $template] = pluginSplit($options['template']);

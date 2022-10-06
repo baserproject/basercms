@@ -33,8 +33,8 @@ class BcFrontAppView extends AppView
     public function initialize(): void
     {
         parent::initialize();
-        if (!empty($this->getRequest()->getParam('Site.device'))) {
-            $agentHelper = Configure::read('BcAgent.' . $this->getRequest()->getParam('Site.device') . '.helper');
+        if (!empty($this->getRequest()->getAttribute('currentSite')->device)) {
+            $agentHelper = Configure::read('BcAgent.' . $this->getRequest()->getAttribute('currentSite')->device . '.helper');
             if ($agentHelper) $this->loadHelper($agentHelper);
         }
     }

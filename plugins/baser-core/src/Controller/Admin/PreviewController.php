@@ -121,7 +121,11 @@ class PreviewController extends BcAdminAppController
             return $request;
         }
         $request = $request->withAttribute('params', $params);
-        return $request;
+        return $request
+            ->withAttribute('currentContent', $request->getParam('Content'))
+            ->withAttribute('currentSite', $request->getParam('Site'))
+            ->withParam('Content', '')
+            ->withParam('Site', '');
     }
 
 }

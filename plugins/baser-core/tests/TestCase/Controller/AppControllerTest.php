@@ -152,7 +152,7 @@ class AppControllerTest extends BcTestCase
         $this->assertEquals('BaserCore.BcFrontApp', $this->AppController->viewBuilder()->getClassName());
         $this->assertEquals('BcFront', $this->AppController->viewBuilder()->getTheme());
         $request = $this->AppController->getRequest();
-        $site = $request->getParam('Site');
+        $site = $request->getAttribute('currentSite');
         $site['theme'] = 'test';
         $request = $request->withParam('Site', $site);
         $this->AppController->setRequest($request);

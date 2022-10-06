@@ -288,10 +288,10 @@ class BcContentsHelper extends Helper
      */
     public function getCurrentRelatedSiteUrl($siteName)
     {
-        if (empty($this->request->getParam('Site'))) {
+        if (empty($this->request->getAttribute('currentSite'))) {
             return '';
         }
-        $url = $this->getPureUrl('/' . $this->request->url, $this->request->getParam('Site.id'));
+        $url = $this->getPureUrl('/' . $this->request->url, $this->request->getAttribute('currentSite')->id);
         $Site = ClassRegistry::init('Site');
         $site = $Site->find('first', ['conditions' => ['Site.name' => $siteName], 'recursive' => -1]);
         if (!$site) {
@@ -355,8 +355,8 @@ class BcContentsHelper extends Helper
      */
     public function getParent($id = null, $direct = true)
     {
-        if (!$id && !empty($this->request->getParam('Content.id'))) {
-            $id = $this->request->getParam('Content.id');
+        if (!$id && !empty($this->request->getAttribute('currentContent')->id)) {
+            $id = $this->request->getAttribute('currentContent')->id;
         }
         if (!$id) {
             return false;
@@ -419,8 +419,8 @@ class BcContentsHelper extends Helper
         ], $options);
         $this->_Contents->unbindModel(['belongsTo' => ['User']]);
         if (!$id) {
-            if (!empty($this->request->getParam('Content'))) {
-                $content = $this->request->getParam('Content');
+            if (!empty($this->request->getAttribute('currentContent'))) {
+                $content = $this->request->getAttribute('currentContent');
                 if ($content['main_site_content_id']) {
                     $id = $content['main_site_content_id'];
                 } else {
@@ -590,10 +590,10 @@ class BcContentsHelper extends Helper
      */
     public function isFolder()
     {
-        if (BcUtil::isAdminSystem() || !$this->request->getParam('Content.type')) {
+        if (BcUtil::isAdminSystem() || !$this->request->getAttribute('currentContent')->type) {
             return false;
         }
-        return ($this->request->getParam('Content.type') === 'ContentFolder');
+        return ($this->request->getAttribute('currentContent')->type === 'ContentFolder');
     }
 
     /**
@@ -739,7 +739,7 @@ class BcContentsHelper extends Helper
     public function getNextLink($title = '', $options = [])
     {
         $request = $this->getView()->getRequest();
-        if (empty($request->getParam('Content.id')) || empty($request->getParam('Content.parent_id'))) {
+        if (empty($request->getAttribute('currentContent')->id) || empty($request->getAttribute('currentContent')->parent_id)) {
             return false;
         }
         $options = array_merge([
@@ -754,7 +754,7 @@ class BcContentsHelper extends Helper
         unset($options['arrow']);
         unset($options['overFolder']);
 
-        $neighbors = $this->getPageNeighbors($request->getParam('Content'), $overFolder);
+        $neighbors = $this->getPageNeighbors($request->getAttribute('currentContent'), $overFolder);
 
         if (empty($neighbors['next'])) {
             return false;
@@ -805,7 +805,7 @@ class BcContentsHelper extends Helper
     public function getPrevLink($title = '', $options = [])
     {
         $request = $this->getView()->getRequest();
-        if (empty($request->getParam('Content.id')) || empty($request->getParam('Content.parent_id'))) {
+        if (empty($request->getAttribute('currentContent')->id) || empty($request->getAttribute('currentContent')->parent_id)) {
             return false;
         }
         $options = array_merge([
@@ -819,7 +819,7 @@ class BcContentsHelper extends Helper
         $overFolder = $options['overFolder'];
         unset($options['arrow']);
         unset($options['overFolder']);
-        $content = $request->getParam('Content');
+        $content = $request->getAttribute('currentContent');
         $neighbors = $this->getPageNeighbors($content, $overFolder);
 
         if (empty($neighbors['prev'])) {

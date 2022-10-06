@@ -20,7 +20,7 @@
 ?>
 
 
-<h2 class="bs-contents-title"><?php echo $this->request->getParam('Content.title') ?></h2>
+<h2 class="bs-contents-title"><?php echo $this->request->getAttribute('currentContent')->title ?></h2>
 
 <?php if($children): ?>
 <ul class="bs-contents-list">

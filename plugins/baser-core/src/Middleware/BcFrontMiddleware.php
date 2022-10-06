@@ -12,19 +12,20 @@
 namespace BaserCore\Middleware;
 
 use BaserCore\Utility\BcUtil;
-use Cake\ORM\TableRegistry;
+use Cake\Http\ServerRequest;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Http\Server\MiddlewareInterface;
-use BaserCore\Annotation\UnitTest;
+use Psr\Http\Server\RequestHandlerInterface;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\Note;
 
 /**
- * BcAdminMiddleware
+ * BcFrontMiddleware
  */
-class BcAdminMiddleware implements MiddlewareInterface
+class BcFrontMiddleware implements MiddlewareInterface
 {
 
     /**
@@ -34,36 +35,29 @@ class BcAdminMiddleware implements MiddlewareInterface
      * @return ResponseInterface
      * @checked
      * @noTodo
-     * @unitTest
      */
     public function process(
         ServerRequestInterface  $request,
         RequestHandlerInterface $handler
     ): ResponseInterface
     {
-        if(BcUtil::isAdminSystem()) $request = $this->setCurrentSite($request);
+        if(!BcUtil::isAdminSystem()) $request = $this->setCurrent($request);
         return $handler->handle($request);
     }
 
     /**
-     * 現在の管理対象のサイトを設定する
      * @param ServerRequestInterface $request
+     * @return ServerRequestInterface
      * @checked
      * @noTodo
-     * @unitTest
      */
-    private function setCurrentSite($request): ServerRequestInterface
+    protected function setCurrent(ServerRequest $request): ServerRequestInterface
     {
-        $session = $request->getSession();
-        $currentSiteId = 1;
-        $queryCurrentSiteId = $request->getQuery('site_id');
-        if (!$session->check('BcApp.Admin.currentSite') || $queryCurrentSiteId) {
-            if ($queryCurrentSiteId) {
-                $currentSiteId = $queryCurrentSiteId;
-            }
-            $currentSite = TableRegistry::getTableLocator()->get('BaserCore.Sites')->get($currentSiteId);
-            $session->write('BcApp.Admin.currentSite', $currentSite);
-        }
-        return $request->withAttribute('currentSite', $session->read('BcApp.Admin.currentSite'));
+        return $request
+            ->withAttribute('currentContent', $request->getParam('Content'))
+            ->withAttribute('currentSite', $request->getParam('Site'))
+            ->withParam('Content', '')
+            ->withParam('Site', '');
     }
+
 }

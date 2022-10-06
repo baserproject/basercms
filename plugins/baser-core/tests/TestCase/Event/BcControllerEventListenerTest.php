@@ -73,7 +73,7 @@ class BcControllerEventListenerTest extends BcTestCase
         $controller = new Controller($this->getRequest('baser/admin'));
         $site_id = 1;
         $this->assertTrue($this->BcControllerEventListener->setAdminCurrentSite($controller, $site_id));
-        $this->assertEquals($site_id, $controller->getRequest()->getParam('site_id'));
+        $this->assertEquals($site_id, $controller->getRequest()->getAttribute('currentSite')->id);
     }
 
     /**

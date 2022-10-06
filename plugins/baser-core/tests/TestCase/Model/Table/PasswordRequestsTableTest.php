@@ -46,6 +46,7 @@ class PasswordRequestsTableTest extends BcTestCase
         'plugin.BaserCore.Users',
         'plugin.BaserCore.UsersUserGroups',
         'plugin.BaserCore.UserGroups',
+        'plugin.BaserCore.Sites',
     ];
 
     /**

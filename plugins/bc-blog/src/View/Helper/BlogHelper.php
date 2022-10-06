@@ -106,8 +106,8 @@ class BlogHelper extends Helper
                 }
             } elseif ($this->_View->get('blogContent')) {
                 $this->currentBlogContent = $this->_View->get('blogContent');
-                if ($this->_View->getRequest()->getParam('Content.type') === 'BlogContent') {
-                    $this->currentContent = $this->_View->getRequest()->getParam('Content');
+                if ($this->_View->getRequest()->getAttribute('currentContent')->type === 'BlogContent') {
+                    $this->currentContent = $this->_View->getRequest()->getAttribute('currentContent');
                 } else {
                     $content = $this->BcContents->getContentByEntityId($this->currentBlogContent->id, 'BlogContent');
                     if ($content) $this->currentContent = $content;
@@ -122,7 +122,7 @@ class BlogHelper extends Helper
                     'Contents.entity_id' => $this->currentBlogContent->id,
                     'Contents.type' => 'BlogContent',
                     'Contents.alias_id <>' => null,
-                    'Contents.site_id' => $this->_View->getRequest()->getParam('Site.id')
+                    'Contents.site_id' => $this->_View->getRequest()->getAttribute('currentSite')->id
                 ])->first();
                 if (!$content) {
                     $content = $contentTable->find()->where([
@@ -177,7 +177,7 @@ class BlogHelper extends Helper
      */
     public function getBlogName()
     {
-        return $this->_View->getRequest()->getParam('Content.name');
+        return $this->_View->getRequest()->getAttribute('currentContent')->name;
     }
 
     /**
@@ -197,7 +197,7 @@ class BlogHelper extends Helper
      */
     public function getTitle()
     {
-        return $this->_View->getRequest()->getParam('Content.title');
+        return $this->_View->getRequest()->getAttribute('currentContent')->title;
     }
 
     /**
@@ -919,7 +919,7 @@ class BlogHelper extends Helper
             }
             $img = $this->BcBaser->getImg($url, $options);
             if ($link) {
-                return $this->BcBaser->getLink($img, $this->_View->getRequest()->getParam('Content.url') . 'archives/' . $post['BlogPost']['no']);
+                return $this->BcBaser->getLink($img, $this->_View->getRequest()->getAttribute('currentContent')->url . 'archives/' . $post['BlogPost']['no']);
             } else {
                 return $img;
             }
@@ -1685,8 +1685,8 @@ class BlogHelper extends Helper
         $template = 'Blog...' . DS . 'Blog' . DS . $contentsTemplate . DS . $template;
         $params = [];
         // TODO ucmitz 一旦、コメントアウト
-//        if (!empty($this->_View->getRequest()->getParam('Site.device'))) {
-//            $this->_View->subDir = $this->_View->getRequest()->getParam('Site.device');
+//        if (!empty($this->_View->getRequest()->getAttribute('currentSite')->device)) {
+//            $this->_View->subDir = $this->_View->getRequest()->getAttribute('currentSite')->device;
 //        }
         if (is_array($options['data'])) {
             $data = array_merge(['posts' => $blogPosts], $options['data']);
@@ -1759,11 +1759,11 @@ class BlogHelper extends Helper
             }
         }
         if ($options['autoSetCurrentBlog'] && empty($options['contentUrl']) && empty($options['contentId'])) {
-            if ($this->isBlog() && !empty($this->_View->getRequest()->getParam('Content.entity_id'))) {
-                $options['contentId'] = $this->_View->getRequest()->getParam('Content.entity_id');
+            if ($this->isBlog() && !empty($this->_View->getRequest()->getAttribute('currentContent')->entity_id)) {
+                $options['contentId'] = $this->_View->getRequest()->getAttribute('currentContent')->entity_id;
             }
-            if ($this->isBlog() && !empty($this->_View->getRequest()->getParam('Content.url'))) {
-                $options['contentUrl'] = $this->_View->getRequest()->getParam('Content.url');
+            if ($this->isBlog() && !empty($this->_View->getRequest()->getAttribute('currentContent')->url)) {
+                $options['contentUrl'] = $this->_View->getRequest()->getAttribute('currentContent')->url;
             }
         }
         return $options;
@@ -1897,7 +1897,7 @@ class BlogHelper extends Helper
      */
     public function isBlog()
     {
-        return (!empty($this->_View->getRequest()->getParam('Content.plugin')) && $this->_View->getRequest()->getParam('Content.plugin') == 'BcBlog');
+        return (!empty($this->_View->getRequest()->getAttribute('currentContent')->plugin) && $this->_View->getRequest()->getAttribute('currentContent')->plugin == 'BcBlog');
     }
 
     /**
@@ -1930,11 +1930,11 @@ class BlogHelper extends Helper
         ])->first();
         $siteId = $content->site_id;
         $currentSiteId = 0;
-        if (!empty($this->_View->getRequest()->getParam('Content.alias_id'))) {
-            $content = $contentsTable->get($this->_View->getRequest()->getParam('Content.alias_id'));
+        if (!empty($this->_View->getRequest()->getAttribute('currentContent')->alias_id)) {
+            $content = $contentsTable->get($this->_View->getRequest()->getAttribute('currentContent')->alias_id);
             $currentSiteId = $content->site_id;
-        } elseif ($this->_View->getRequest()->getParam('Site.id')) {
-            $currentSiteId = $this->_View->getRequest()->getParam('Site.id');
+        } elseif ($this->_View->getRequest()->getAttribute('currentSite')->id) {
+            $currentSiteId = $this->_View->getRequest()->getAttribute('currentSite')->id;
         }
         return ($currentSiteId == $siteId);
     }

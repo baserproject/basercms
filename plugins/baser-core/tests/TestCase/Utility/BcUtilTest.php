@@ -460,7 +460,7 @@ class BcUtilTest extends BcTestCase
      */
     public function testGetCurrentThemesPlugins()
     {
-        $currentSite = $this->getRequest()->getParam('Site');
+        $currentSite = $this->getRequest()->getAttribute('currentSite');
         // 現在のテーマのプラグインを作成する
         $targetTheme = BcUtil::getCurrentTheme();
         $themePath = BcUtil::getPluginPath($targetTheme);
@@ -1069,7 +1069,7 @@ class BcUtilTest extends BcTestCase
      */
     public function testGetCurrentTheme(): void
     {
-        $currentSite = $this->getRequest()->getParam('Site');
+        $currentSite = $this->getRequest()->getAttribute('currentSite');
         $theme = BcUtil::getCurrentTheme();
         $this->assertEquals($theme, $currentSite->theme);
     }

@@ -269,8 +269,8 @@ class BcContentsRoute extends Route
             if (!empty($request->getParam('entityId'))) {
                 $entityId = $request->getParam('entityId');
             }
-            if (!empty($request->getParam('Content.alias_id'))) {
-                $contentId = $request->getParam('Content.id');
+            if (!empty($request->getAttribute('currentContent')->alias_id)) {
+                $contentId = $request->getAttribute('currentContent')->id;
             }
         }
 

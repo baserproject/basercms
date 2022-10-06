@@ -288,8 +288,8 @@ class AppController extends BaseController
         }
 
         $redirectUrl = '/maintenance';
-        if ($this->getRequest()->getParam('Site.alias')) {
-            $redirectUrl = '/' . $this->getRequest()->getParam('Site.alias') . $redirectUrl;
+        if ($this->getRequest()->getAttribute('currentSite')->alias) {
+            $redirectUrl = '/' . $this->getRequest()->getAttribute('currentSite')->alias . $redirectUrl;
         }
         return $this->redirect($redirectUrl);
     }

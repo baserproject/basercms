@@ -1043,7 +1043,7 @@ class BcUtil
         if (BcUtil::isAdminSystem()) {
             $site = $request->getAttribute('currentSite');
         } else {
-            $site = $request->getParam('Site');
+            $site = $request->getAttribute('currentSite');
         }
         if (!$site) {
             return self::getRootTheme();

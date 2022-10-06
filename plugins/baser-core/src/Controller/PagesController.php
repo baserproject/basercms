@@ -71,17 +71,17 @@ class PagesController extends BcFrontAppController
 	{
 		$path = func_get_args();
 
-		if ($this->request->getParam('Content')->alias_id) {
-			$urlTmp = $this->Contents->find()->where(['Contents.id' => $this->request->getParam('Content')->alias_id])->first()->url;
+		if ($this->request->getAttribute('currentContent')->alias_id) {
+			$urlTmp = $this->Contents->find()->where(['Contents.id' => $this->request->getAttribute('currentContent')->alias_id])->first()->url;
 		} else {
-			$urlTmp = $this->request->getParam('Content')->url;
+			$urlTmp = $this->request->getAttribute('currentContent')->url;
 		}
 
-		if ($this->request->getParam('Content')->alias) {
+		if ($this->request->getAttribute('currentContent')->alias) {
             $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
 			$site = $sites->findByUrl($urlTmp);
-			if ($site && ($site->alias == $this->request->getParam('Site')->alias)) {
-				$urlTmp = preg_replace('/^\/' . preg_quote($site->alias, '/') . '\//', '/' . $this->request->getParam('Site')->name . '/', $urlTmp);
+			if ($site && ($site->alias == $this->request->getAttribute('currentSite')->alias)) {
+				$urlTmp = preg_replace('/^\/' . preg_quote($site->alias, '/') . '\//', '/' . $this->request->getAttribute('currentSite')->name . '/', $urlTmp);
 			}
 		}
 
@@ -99,12 +99,12 @@ class PagesController extends BcFrontAppController
 			throw new ForbiddenException();
 		}
 
-		$page = $pageService->get($this->request->getParam('Content.entity_id'));
+		$page = $pageService->get($this->request->getAttribute('currentContent')->entity_id);
 
 		/* @var Page $page */
 		$template = $page->page_template;
 		if (!$template) {
-			$template = $contentFolderService->getParentTemplate($this->request->getParam('Content.id'), 'page');
+			$template = $contentFolderService->getParentTemplate($this->request->getAttribute('currentContent')->id, 'page');
 		}
 
         $this->set($pageService->getViewVarsForDisplay($page, $this->getRequest()));

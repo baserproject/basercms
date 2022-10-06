@@ -92,16 +92,16 @@ class BcFrontContentsComponent extends Component
         if (!empty($request->getAttributes())) {
             // レイアウトテンプレート設定
             $viewBuilder = $controller->viewBuilder();
-            $viewBuilder->setLayout($request->getParam('Content.layout_template'));
+            $viewBuilder->setLayout($request->getAttribute('currentContent')->layout_template);
             if (!$viewBuilder->getLayout()) {
-                $controller->viewBuilder()->setLayout($this->ContentsService->getParentLayoutTemplate($request->getParam('Content.id')));
+                $controller->viewBuilder()->setLayout($this->ContentsService->getParentLayoutTemplate($request->getAttribute('currentContent')->id));
             }
             // パンくず
-            $controller->set('crumbs', $this->getCrumbs($request->getParam('Content.id')));
+            $controller->set('crumbs', $this->getCrumbs($request->getAttribute('currentContent')->id));
             // 説明文
-            $controller->set('description', $request->getParam('Content.description'));
+            $controller->set('description', $request->getAttribute('currentContent')->description);
             // タイトル
-            $controller->setTitle($request->getParam('Content.title'));
+            $controller->setTitle($request->getAttribute('currentContent')->title);
         }
     }
 
