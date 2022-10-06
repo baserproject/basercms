@@ -1,4 +1,4 @@
-﻿"id","blog_content_id","no","name","content","detail","blog_category_id","user_id","status","posts_date","content_draft","detail_draft","publish_begin","publish_end","exclude_search","eye_catch","created","modified"
+﻿"id","blog_content_id","no","name","content","detail","blog_category_id","user_id","status","posted","content_draft","detail_draft","publish_begin","publish_end","exclude_search","eye_catch","created","modified"
 "1","1","1","メールフォーム機能について説明します","","<p>baserCMSのメールフォームでは、管理画面上にて入力項目を自由に変更することができ、受信したメールを管理画面で閲覧することができます。</p>
 
 <h3>入力項目の変更</h3>
