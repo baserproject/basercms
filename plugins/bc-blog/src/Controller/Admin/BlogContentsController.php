@@ -44,7 +44,6 @@ class BlogContentsController extends BlogAppController
      * @param int $id
      * @return void
      * @checked
-     * @noTodo
      */
     public function edit(BlogContentsAdminServiceInterface $service, int $id)
     {
