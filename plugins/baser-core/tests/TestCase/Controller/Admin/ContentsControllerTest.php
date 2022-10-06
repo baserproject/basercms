@@ -11,18 +11,18 @@
 
 namespace BaserCore\Test\TestCase\Controller\Admin;
 
-use BaserCore\Service\ContentsAdminServiceInterface;
-use Cake\Event\Event;
-use Cake\Http\ServerRequest;
-use BaserCore\TestSuite\BcTestCase;
-use BaserCore\Service\ContentsService;
-use BaserCore\Utility\BcContainerTrait;
-use Cake\TestSuite\IntegrationTestTrait;
+use BaserCore\Controller\Admin\ContentsController;
+use BaserCore\Service\Admin\ContentsAdminServiceInterface;
 use BaserCore\Service\ContentFoldersService;
-use BaserCore\Service\SitesServiceInterface;
+use BaserCore\Service\ContentsService;
 use BaserCore\Service\ContentsServiceInterface;
 use BaserCore\Service\SiteConfigsServiceInterface;
-use BaserCore\Controller\Admin\ContentsController;
+use BaserCore\Service\SitesServiceInterface;
+use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcContainerTrait;
+use Cake\Event\Event;
+use Cake\Http\ServerRequest;
+use Cake\TestSuite\IntegrationTestTrait;
 
 /**
  * Class ContentsControllerTest

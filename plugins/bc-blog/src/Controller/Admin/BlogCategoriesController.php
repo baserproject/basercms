@@ -12,7 +12,7 @@
 namespace BcBlog\Controller\Admin;
 
 use BcBlog\Model\Entity\BlogCategory;
-use BcBlog\Service\BlogCategoriesAdminServiceInterface;
+use BcBlog\Service\Admin\BlogCategoriesAdminServiceInterface;
 use BcBlog\Service\BlogCategoriesServiceInterface;
 use Cake\Event\EventInterface;
 use Cake\Http\Response;

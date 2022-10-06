@@ -11,66 +11,66 @@
 
 namespace BaserCore\ServiceProvider;
 
-use BaserCore\Service\BcDatabaseService;
-use BaserCore\Service\ThemesAdminService;
-use BaserCore\Service\ThemesAdminServiceInterface;
-use BaserCore\Service\ThemesService;
-use BaserCore\Service\ThemesServiceInterface;
-use BaserCore\Service\UtilitiesAdminService;
-use BaserCore\Service\UtilitiesService;
-use BcFavorite\Service\FavoriteService;
-use BcFavorite\Service\FavoriteServiceInterface;
+use BaserCore\Service\Admin\BcAdminAppService;
+use BaserCore\Service\Admin\BcAdminAppServiceInterface;
+use BaserCore\Service\Admin\ContentFoldersAdminService;
+use BaserCore\Service\Admin\ContentFoldersAdminServiceInterface;
+use BaserCore\Service\Admin\ContentsAdminService;
+use BaserCore\Service\Admin\ContentsAdminServiceInterface;
+use BaserCore\Service\Admin\DashboardAdminService;
+use BaserCore\Service\Admin\DashboardAdminServiceInterface;
+use BaserCore\Service\Admin\PluginsAdminService;
+use BaserCore\Service\Admin\PluginsAdminServiceInterface;
+use BaserCore\Service\Admin\SiteConfigsAdminService;
+use BaserCore\Service\Admin\SiteConfigsAdminServiceInterface;
+use BaserCore\Service\Admin\SitesAdminService;
+use BaserCore\Service\Admin\SitesAdminServiceInterface;
+use BaserCore\Service\Admin\ThemesAdminService;
+use BaserCore\Service\Admin\ThemesAdminServiceInterface;
+use BaserCore\Service\Admin\UsersAdminService;
+use BaserCore\Service\Admin\UsersAdminServiceInterface;
+use BaserCore\Service\Admin\UtilitiesAdminService;
+use BaserCore\Service\Admin\UtilitiesAdminServiceInterface;
 use BaserCore\Service\AppService;
 use BaserCore\Service\AppServiceInterface;
-use BaserCore\Service\BcAdminAppService;
-use BaserCore\Service\BcAdminAppServiceInterface;
-use BaserCore\Service\ContentFoldersAdminService;
-use BaserCore\Service\ContentFoldersAdminServiceInterface;
-use BaserCore\Service\ContentsAdminService;
-use BaserCore\Service\ContentsAdminServiceInterface;
-use BaserCore\Service\DashboardAdminService;
-use BaserCore\Service\DashboardAdminServiceInterface;
+use BaserCore\Service\BcDatabaseService;
+use BaserCore\Service\BcDatabaseServiceInterface;
+use BaserCore\Service\ContentFoldersService;
+use BaserCore\Service\ContentFoldersServiceInterface;
+use BaserCore\Service\ContentsService;
+use BaserCore\Service\ContentsServiceInterface;
+use BaserCore\Service\DblogsService;
+use BaserCore\Service\DblogsServiceInterface;
 use BaserCore\Service\PagesDisplayService;
 use BaserCore\Service\PagesDisplayServiceInterface;
 use BaserCore\Service\PagesFrontService;
 use BaserCore\Service\PagesFrontServiceInterface;
-use BaserCore\Service\PluginsAdminService;
-use BaserCore\Service\PluginsAdminServiceInterface;
-use BaserCore\Service\SiteConfigsAdminService;
-use BaserCore\Service\SiteConfigsAdminServiceInterface;
-use BaserCore\Service\SitesAdminService;
-use BaserCore\Service\SitesAdminServiceInterface;
-use BaserCore\Service\UsersAdminService;
-use BaserCore\Service\UsersAdminServiceInterface;
+use BaserCore\Service\PagesService;
+use BaserCore\Service\PagesServiceInterface;
+use BaserCore\Service\PermissionsService;
+use BaserCore\Service\PermissionsServiceInterface;
+use BaserCore\Service\PluginsService;
+use BaserCore\Service\PluginsServiceInterface;
+use BaserCore\Service\SiteConfigsService;
+use BaserCore\Service\SiteConfigsServiceInterface;
+use BaserCore\Service\SitesService;
+use BaserCore\Service\SitesServiceInterface;
+use BaserCore\Service\ThemesService;
+use BaserCore\Service\ThemesServiceInterface;
+use BaserCore\Service\UserGroupsService;
+use BaserCore\Service\UserGroupsServiceInterface;
+use BaserCore\Service\UsersService;
+use BaserCore\Service\UsersServiceInterface;
+use BaserCore\Service\UtilitiesService;
+use BaserCore\Service\UtilitiesServiceInterface;
+use BcFavorite\Service\FavoritesService;
+use BcFavorite\Service\FavoritesServiceInterface;
+use BcSearchIndex\Service\SearchIndexesService;
+use BcSearchIndex\Service\SearchIndexesServiceInterface;
 use Cake\Core\ServiceProvider;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
-use BaserCore\Service\PagesService;
-use BaserCore\Service\SitesService;
-use BaserCore\Service\UsersService;
-use BaserCore\Service\DblogsService;
-use BaserCore\Service\PluginsService;
-use BaserCore\Service\ContentsService;
-use BaserCore\Service\UserGroupsService;
-use BaserCore\Service\PermissionsService;
-use BaserCore\Service\SiteConfigsService;
-use BcSearchIndex\Service\SearchIndexesService;
-use BaserCore\Service\ContentFoldersService;
-use BaserCore\Service\PagesServiceInterface;
-use BaserCore\Service\SitesServiceInterface;
-use BaserCore\Service\UsersServiceInterface;
-use BaserCore\Service\DblogsServiceInterface;
-use BaserCore\Service\PluginsServiceInterface;
-use BaserCore\Service\ContentsServiceInterface;
-use BaserCore\Service\UserGroupsServiceInterface;
-use BaserCore\Service\PermissionsServiceInterface;
-use BaserCore\Service\SiteConfigsServiceInterface;
-use BcSearchIndex\Service\SearchIndexesServiceInterface;
-use BaserCore\Service\ContentFoldersServiceInterface;
-use BaserCore\Service\BcDatabaseServiceInterface;
-use BaserCore\Service\UtilitiesAdminServiceInterface;
-use BaserCore\Service\UtilitiesServiceInterface;
 
 /**
  * Class BcServiceProvider
@@ -84,7 +84,7 @@ class BcServiceProvider extends ServiceProvider
      * @var string[]
      */
     protected $provides = [
-        FavoriteServiceInterface::class,
+        FavoritesServiceInterface::class,
         AppServiceInterface::class,
         BcAdminAppServiceInterface::class,
         UsersServiceInterface::class,
@@ -147,7 +147,7 @@ class BcServiceProvider extends ServiceProvider
         // Dblogsサービス
         $container->add(DblogsServiceInterface::class, DblogsService::class);
         // Favoriteサービス
-        $container->add(FavoriteServiceInterface::class, FavoriteService::class);
+        $container->add(FavoritesServiceInterface::class, FavoritesService::class);
         // Contentsサービス
         $container->add(ContentsServiceInterface::class, ContentsService::class);
         $container->add(ContentsAdminServiceInterface::class, ContentsAdminService::class);

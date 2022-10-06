@@ -9,32 +9,26 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
-namespace BaserCore\Controller\Admin;
+namespace BaserCore\Service\Admin;
 
-use BaserCore\Service\Admin\DashboardAdminServiceInterface;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 
 /**
- * Class DashboardController
- * @uses DashboardController
+ * ThemesAdminServiceInterface
  */
-class DashboardController extends BcAdminAppController
+interface ThemesAdminServiceInterface
 {
 
     /**
-     * [ADMIN] 管理者ダッシュボードページを表示する
-     *
-     * @return void
+     * 一覧画面用のデータを取得する
+     * @param array $themes
+     * @return array
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function index(DashboardAdminServiceInterface $service)
-    {
-        $this->setTitle(__d('baser', 'ダッシュボード'));
-        $this->set($service->getViewVarsForIndex(5));
-    }
+    public function getViewVarsForIndex($themes): array;
 
 }

@@ -14,7 +14,7 @@ namespace BcSearchIndex\Controller\Admin;
 use BaserCore\Controller\Admin\BcAdminAppController;
 use BaserCore\Error\BcException;
 use BaserCore\Service\SiteConfigsServiceInterface;
-use BcSearchIndex\Service\SearchIndexesAdminServiceInterface;
+use BcSearchIndex\Service\Admin\SearchIndexesAdminServiceInterface;
 use BcSearchIndex\Service\SearchIndexesServiceInterface;
 use Cake\Event\EventInterface;
 use BaserCore\Annotation\UnitTest;
