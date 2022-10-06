@@ -349,8 +349,8 @@ class BcCkeditorHelper extends Helper
             $currentTheme = $this->getView()->getTheme();
             $this->getView()->setTheme($currentFrontTheme);
             $sitePrefix = '';
-            if (!empty($this->getView()->getRequest()->getData('Site.name'))) {
-                $sitePrefix = $this->getView()->getRequest()->getData('Site.name');
+            if (!empty($this->getView()->getRequest()->getData('Site.alias'))) {
+                $sitePrefix = $this->getView()->getRequest()->getData('Site.alias');
             }
             if ($sitePrefix) {
                 $themeEditorCsses = [
