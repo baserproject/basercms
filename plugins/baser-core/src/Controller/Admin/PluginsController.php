@@ -11,10 +11,10 @@
 
 namespace BaserCore\Controller\Admin;
 
-use BaserCore\Service\PluginsAdminServiceInterface;
-use BaserCore\Service\PluginsServiceInterface;
 use BaserCore\Controller\Component\BcMessageComponent;
 use BaserCore\Model\Table\PluginsTable;
+use BaserCore\Service\Admin\PluginsAdminServiceInterface;
+use BaserCore\Service\PluginsServiceInterface;
 use BaserCore\Service\UsersServiceInterface;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;

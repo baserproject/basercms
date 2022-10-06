@@ -11,11 +11,11 @@
 
 namespace BaserCore\Event;
 
-use BaserCore\Service\ContentsAdminServiceInterface;
-use Cake\Event\Event;
+use BaserCore\Service\Admin\ContentsAdminServiceInterface;
+use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
 use BaserCore\View\BcAdminAppView;
-use BaserCore\Utility\BcContainerTrait;
+use Cake\Event\Event;
 use BaserCore\Annotation\Note;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;

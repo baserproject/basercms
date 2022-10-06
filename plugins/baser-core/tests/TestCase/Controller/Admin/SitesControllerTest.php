@@ -11,14 +11,13 @@
 
 namespace BaserCore\Test\TestCase\Controller\Admin;
 
-use BaserCore\Service\SitesAdminServiceInterface;
-use Cake\Event\Event;
+use BaserCore\Controller\Admin\SitesController;
+use BaserCore\Service\Admin\SitesAdminServiceInterface;
+use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
+use Cake\Event\Event;
 use Cake\TestSuite\IntegrationTestTrait;
-use BaserCore\Service\SitesServiceInterface;
-use BaserCore\Controller\Admin\SitesController;
-use BaserCore\Service\SiteConfigsServiceInterface;
 
 /**
  * Class SitesControllerTest

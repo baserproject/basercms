@@ -11,14 +11,13 @@
 
 namespace BaserCore\Controller\Admin;
 
-use BaserCore\Service\ContentFoldersAdminServiceInterface;
+use BaserCore\Service\Admin\ContentFoldersAdminServiceInterface;
 use BaserCore\Utility\BcUtil;
 use Cake\Event\EventInterface;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\Note;
-use BaserCore\Service\ContentFoldersServiceInterface;
 
 /**
  * Class ContentFoldersController

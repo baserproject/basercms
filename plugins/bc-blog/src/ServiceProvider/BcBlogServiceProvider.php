@@ -11,10 +11,10 @@
 
 namespace BcBlog\ServiceProvider;
 
+use BcBlog\Service\Admin\BlogCategoriesAdminService;
+use BcBlog\Service\Admin\BlogCategoriesAdminServiceInterface;
 use BcBlog\Service\Admin\BlogContentsAdminService;
 use BcBlog\Service\Admin\BlogContentsAdminServiceInterface;
-use BcBlog\Service\BlogCategoriesAdminService;
-use BcBlog\Service\BlogCategoriesAdminServiceInterface;
 use BcBlog\Service\BlogCategoriesService;
 use BcBlog\Service\BlogCategoriesServiceInterface;
 use BcBlog\Service\BlogContentsService;

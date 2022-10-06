@@ -17,7 +17,7 @@ use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BcSearchIndex\Controller\Admin\SearchIndexesController;
-use BcSearchIndex\Service\SearchIndexesAdminServiceInterface;
+use BcSearchIndex\Service\Admin\SearchIndexesAdminServiceInterface;
 use BcSearchIndex\Service\SearchIndexesServiceInterface;
 use BcSearchIndex\Test\Factory\SearchIndexFactory;
 use Cake\Event\Event;

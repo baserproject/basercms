@@ -12,20 +12,19 @@
 namespace BaserCore\Controller\Component;
 
 use BaserCore\Error\BcException;
-use BaserCore\Service\ContentsAdminServiceInterface;
-use Cake\Core\Configure;
-use Cake\ORM\TableRegistry;
-use Cake\Utility\Inflector;
-use Cake\Event\EventManager;
+use BaserCore\Event\BcContentsEventListener;
+use BaserCore\Service\Admin\ContentsAdminServiceInterface;
+use BaserCore\Service\SiteConfigsServiceInterface;
+use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
 use Cake\Controller\Component;
-use BaserCore\Utility\BcContainerTrait;
-use BaserCore\Event\BcContentsEventListener;
-use BaserCore\Service\SiteConfigsServiceInterface;
+use Cake\Core\Configure;
+use Cake\Event\EventManager;
+use Cake\ORM\TableRegistry;
+use Cake\Utility\Inflector;
+use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
-use BaserCore\Annotation\UnitTest;
-use BaserCore\Annotation\Note;
 
 /**
  * Class BcContentsComponent

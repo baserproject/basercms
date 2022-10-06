@@ -12,7 +12,7 @@
 namespace BcSearchIndex\Test\TestCase\ServiceProvider;
 
 use BaserCore\TestSuite\BcTestCase;
-use BcSearchIndex\Service\SearchIndexesAdminServiceInterface;
+use BcSearchIndex\Service\Admin\SearchIndexesAdminServiceInterface;
 use BcSearchIndex\Service\SearchIndexesServiceInterface;
 use BcSearchIndex\ServiceProvider\BcSearchIndexServiceProvider;
 use Cake\Core\Container;

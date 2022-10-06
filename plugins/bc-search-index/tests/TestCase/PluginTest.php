@@ -12,10 +12,10 @@
 namespace BcSearchIndex\Test\TestCase;
 
 use BcSearchIndex\Plugin;
-use BaserCore\TestSuite\BcTestCase;
-use BcSearchIndex\Service\SearchIndexesAdminServiceInterface;
+use BcSearchIndex\Service\Admin\SearchIndexesAdminServiceInterface;
 use BcSearchIndex\Service\SearchIndexesServiceInterface;
 use Cake\Core\Container;
+use BaserCore\TestSuite\BcTestCase;
 
 /**
  * Class PluginTest

@@ -12,8 +12,8 @@
 namespace BcSearchIndex\ServiceProvider;
 
 
-use BcSearchIndex\Service\SearchIndexesAdminService;
-use BcSearchIndex\Service\SearchIndexesAdminServiceInterface;
+use BcSearchIndex\Service\Admin\SearchIndexesAdminService;
+use BcSearchIndex\Service\Admin\SearchIndexesAdminServiceInterface;
 use BcSearchIndex\Service\SearchIndexesService;
 use BcSearchIndex\Service\SearchIndexesServiceInterface;
 use Cake\Core\ServiceProvider;

@@ -9,32 +9,28 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
-namespace BaserCore\Controller\Admin;
+namespace BcSearchIndex\Service\Admin;
 
-use BaserCore\Service\Admin\DashboardAdminServiceInterface;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use Cake\Http\ServerRequest;
 
 /**
- * Class DashboardController
- * @uses DashboardController
+ * Interface SearchIndexesAdminServiceInterface
  */
-class DashboardController extends BcAdminAppController
+interface SearchIndexesAdminServiceInterface
 {
 
     /**
-     * [ADMIN] 管理者ダッシュボードページを表示する
-     *
-     * @return void
+     * 一覧画面に必要なデータを取得する
+     * @param \Cake\ORM\ResultSet $searchIndexes
+     * @param int $siteId
+     * @return array
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function index(DashboardAdminServiceInterface $service)
-    {
-        $this->setTitle(__d('baser', 'ダッシュボード'));
-        $this->set($service->getViewVarsForIndex(5));
-    }
+    public function getViewVarsForIndex(\Cake\ORM\ResultSet $searchIndexes, ServerRequest $request): array;
 
 }
