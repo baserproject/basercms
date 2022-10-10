@@ -34,10 +34,19 @@ class BlogContentsController extends BcApiController
 
     /**
      * [API] 単一ブログコンテンツー取得
+     *
+     * @param BlogContentsServiceInterface $service
+     * @param $blogContentId
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function view()
+    public function view(BlogContentsServiceInterface $service, $blogContentId)
     {
-        //todo 単一ブログコンテンツー取得
+        $this->set([
+            'blogContent' => $service->get($blogContentId)
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['blogContent']);
     }
 
     /**

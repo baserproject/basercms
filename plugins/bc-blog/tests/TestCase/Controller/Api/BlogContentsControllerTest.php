@@ -14,6 +14,7 @@ namespace BcBlog\Test\TestCase\Controller\Api;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcBlog\Controller\Api\BlogContentsController;
+use BcBlog\Test\Factory\BlogContentsFactory;
 use Cake\Core\Configure;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use Cake\TestSuite\IntegrationTestTrait;
@@ -92,11 +93,15 @@ class BlogContentsControllerTest extends BcTestCase
 
     /**
      * test view
-     * @return void
      */
     public function test_view()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        BlogContentsFactory::make(['id' => 12, 'description' => 'baserCMS inc. [デモ] の最新の情報をお届けします。'])->persist();
+
+        $this->get('/baser/api/bc-blog/blog_contents/view/12.json?token=' . $this->accessToken);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('baserCMS inc. [デモ] の最新の情報をお届けします。', $result->blogContent->description);
     }
 
     /**
