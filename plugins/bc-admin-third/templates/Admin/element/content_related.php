@@ -20,6 +20,9 @@ use BaserCore\Utility\BcUtil;
  * @var Query $sites サイトリスト
  * @var int $currentSiteId 現在のサイトID
  * @var Content $content
+ * @checked
+ * @noTodo
+ * @unitTest
  */
 $sites = isset($sites)? $sites->toArray() : [];
 $pureUrl = $this->BcContents->getPureUrl($content->url, $content->site_id);
@@ -113,7 +116,7 @@ $pureUrl = $this->BcContents->getPureUrl($content->url, $content->site_id);
                   $editUrl,
                   ['title' => __d('baser', '編集'), 'escape' => false]
                 ) ?>
-              <?php elseif ($currentSiteId == $mainSiteId && $this->BcAdminForm->getSourceValue($entityName . "type") !== 'ContentFolder'): ?>
+              <?php elseif ($currentSiteId == $mainSiteId && $this->BcAdminForm->getSourceValue("content.type") !== 'ContentFolder'): ?>
                 <?php $this->BcBaser->link(
                   $this->BcBaser->getImg('admin/icon_alias.png', ['alt' => __d('baser', 'エイリアス作成')]) . '<span class="icon-add-layerd"></span>',
                   'javascript:void(0)',

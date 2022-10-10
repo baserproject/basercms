@@ -11,16 +11,10 @@
 
 namespace BaserCore\Controller;
 
-use BaserCore\Service\PagesFrontServiceInterface;
-use Cake\Core\Configure;
-use Cake\ORM\TableRegistry;
-use BaserCore\Model\Entity\Page;
+use BaserCore\Service\Front\PagesFrontServiceInterface;
 use BaserCore\Model\Table\PagesTable;
 use BaserCore\Utility\BcContainerTrait;
-use Cake\Http\Exception\NotFoundException;
 use BaserCore\Service\PagesServiceInterface;
-use Cake\Http\Exception\ForbiddenException;
-use Cake\View\Exception\MissingViewException;
 use BaserCore\Service\ContentFoldersServiceInterface;
 use BaserCore\Controller\Component\BcFrontContentsComponent;
 use BaserCore\Annotation\NoTodo;
@@ -52,7 +46,6 @@ class PagesController extends BcFrontAppController
     {
         parent::initialize();
         $this->loadComponent('BaserCore.BcFrontContents');
-        $this->loadModel('BaserCore.Contents');
     }
 
 	/**
@@ -60,62 +53,18 @@ class PagesController extends BcFrontAppController
 	 * @param PagesServiceInterface $pageService
 	 * @param ContentFoldersServiceInterface $contentFolderService
 	 * @return \Cake\Http\Response|void
-     * @throws ForbiddenException When a directory traversal attempt.
-	 * @throws NotFoundException When the view file could not be found
-	 *   or MissingViewException in debug mode.
      * @checked
      * @unitTest
      * @noTodo
 	 */
-	public function display(PagesFrontServiceInterface $pageService, ContentFoldersServiceInterface $contentFolderService)
+	public function view(PagesFrontServiceInterface $pageService)
 	{
-		$path = func_get_args();
-
-		if ($this->request->getAttribute('currentContent')->alias_id) {
-			$urlTmp = $this->Contents->find()->where(['Contents.id' => $this->request->getAttribute('currentContent')->alias_id])->first()->url;
-		} else {
-			$urlTmp = $this->request->getAttribute('currentContent')->url;
-		}
-
-		if ($this->request->getAttribute('currentContent')->alias) {
-            $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
-			$site = $sites->findByUrl($urlTmp);
-			if ($site && ($site->alias == $this->request->getAttribute('currentSite')->alias)) {
-				$urlTmp = preg_replace('/^\/' . preg_quote($site->alias, '/') . '\//', '/' . $this->request->getAttribute('currentSite')->name . '/', $urlTmp);
-			}
-		}
-
-		if (isset($urlTmp)) {
-			$urlTmp = preg_replace('/^\//', '', $urlTmp);
-			$path = explode('/', $urlTmp);
-		}
-		// <<<
-
-		$count = count($path);
-		if (!$count) {
-			return $this->redirect('/');
-		}
-		if (in_array('..', $path, true) || in_array('.', $path, true)) {
-			throw new ForbiddenException();
-		}
-
-		$page = $pageService->get($this->request->getAttribute('currentContent')->entity_id);
-
-		/* @var Page $page */
-		$template = $page->page_template;
-		if (!$template) {
-			$template = $contentFolderService->getParentTemplate($this->request->getAttribute('currentContent')->id, 'page');
-		}
-
-        $this->set($pageService->getViewVarsForDisplay($page, $this->getRequest()));
-
-		try {
-			$this->render('/Pages/' . $template);
-		} catch (MissingViewException $e) {
-			if (Configure::read('debug')) {
-				throw $e;
-			}
-			throw new NotFoundException();
-		}
+        $page = $pageService->get(
+            $this->request->getAttribute('currentContent')->entity_id,
+            ['status' => 'publish']
+        );
+        $this->set($pageService->getViewVarsForView($page, $this->getRequest()));
+        $this->render($pageService->getPageTemplate($page));
 	}
+
 }

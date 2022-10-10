@@ -96,9 +96,19 @@ class ContentFoldersService implements ContentFoldersServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function get($id): EntityInterface
+    public function get($id, array $queryParams = []): EntityInterface
     {
-        return $this->ContentFolders->get($id, ['contain' => ['Contents' => ['Sites']]]);
+        $queryParams = array_merge([
+            'status' => ''
+        ], $queryParams);
+        $conditions = [];
+        if($queryParams['status'] === 'published') {
+            $conditions = $this->ContentFolders->Contents->getConditionAllowPublish();
+        }
+        return $this->ContentFolders->get($id, [
+            'contain' => ['Contents' => ['Sites']],
+            'conditions' => $conditions
+        ]);
     }
 
     /**

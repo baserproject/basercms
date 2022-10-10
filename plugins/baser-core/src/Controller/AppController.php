@@ -148,10 +148,20 @@ class AppController extends BaseController
     {
         parent::beforeRender($event);
         if (!isset($this->RequestHandler) || !$this->RequestHandler->prefers('json')) {
-            $this->viewBuilder()->setClassName('BaserCore.BcFrontApp');
-            $this->viewBuilder()->setTheme(BcUtil::getCurrentTheme());
-            $this->set($this->getService(AppServiceInterface::class)->getViewVarsForAll());
+            $this->setupFrontView();
         }
+    }
+
+    /**
+     * フロント用のViewクラスをセットアップする
+     * @checked
+     * @noTodo
+     */
+    public function setupFrontView(): void
+    {
+        $this->viewBuilder()->setClassName('BaserCore.BcFrontApp');
+        $this->viewBuilder()->setTheme(BcUtil::getCurrentTheme());
+        $this->set($this->getService(AppServiceInterface::class)->getViewVarsForAll());
     }
 
     /**

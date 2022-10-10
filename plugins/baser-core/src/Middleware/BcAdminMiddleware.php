@@ -52,7 +52,7 @@ class BcAdminMiddleware implements MiddlewareInterface
      * @noTodo
      * @unitTest
      */
-    private function setCurrentSite($request): ServerRequestInterface
+    public function setCurrentSite($request): ServerRequestInterface
     {
         $session = $request->getSession();
         $currentSiteId = 1;

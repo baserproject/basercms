@@ -25,7 +25,7 @@ $(function(){
         editorUrl: script.attr('data-editorUrl'),
         draftAreaId: script.attr('data-draftAreaId'),
         publishAreaId: script.attr('data-publishAreaId'),
-        fieldCamelize: script.attr('data-fieldCamelize'),
+        previewModeId: script.attr('data-previewModeId'),
         initialStyle: JSON.parse(script.attr('data-initialStyle')),
         editorStyle: JSON.parse(script.attr('data-editorStyle')),
         themeEditorCsses: JSON.parse(script.attr('data-themeEditorCsses')),

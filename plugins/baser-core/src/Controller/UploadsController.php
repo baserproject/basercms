@@ -115,7 +115,7 @@ class UploadsController extends BcAppController
 
             $path = TMP . 'uploads' . DS . $name;
             $file = new File($path, true);
-            $file->write($session->read('Upload.' . $sessioName . '.data'), 'wb');
+            $file->write(base64_decode($session->read('Upload.' . $sessioName . '.data'), 'wb'));
             $file->close();
 
             $thumb = false;

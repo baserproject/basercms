@@ -226,7 +226,7 @@ class BcRequestFilterMiddleware implements MiddlewareInterface
     public function isPage(ServerRequestInterface $request)
     {
         return $request->getParam('controller') === 'Pages'
-            && $request->getParam('action') === 'display';
+            && $request->getParam('action') === 'view';
     }
 
     /**

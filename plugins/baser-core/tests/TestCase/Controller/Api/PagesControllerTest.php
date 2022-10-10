@@ -82,7 +82,7 @@ class PagesControllerTest extends BcTestCase
         $this->get('/baser/api/baser-core/pages/view/2.json?token=' . $this->accessToken);
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
-        $this->assertMatchesRegularExpression('/<section class="mainHeadline">/', $result->pages->contents);
+        $this->assertMatchesRegularExpression('/<section class="mainHeadline">/', $result->page->contents);
     }
 
     /**

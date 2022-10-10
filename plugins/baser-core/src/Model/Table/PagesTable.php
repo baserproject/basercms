@@ -14,7 +14,6 @@ namespace BaserCore\Model\Table;
 use ArrayObject;
 use BaserCore\Model\Entity\Content;
 use Cake\Core\Plugin;
-use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
 use BaserCore\Utility\BcUtil;
@@ -31,7 +30,7 @@ use BaserCore\Annotation\Note;
 /**
  * Class PagesTable
  */
-class PagesTable extends Table
+class PagesTable extends AppTable
 {
     /**
      * Trait

@@ -11,20 +11,16 @@
 
 namespace BaserCore\Controller\Admin;
 
-use BaserCore\Utility\BcUtil;
-use Cake\Core\Configure;
+use BaserCore\Service\Admin\PagesAdminServiceInterface;
 use Cake\Event\EventInterface;
 use BaserCore\Utility\BcSiteConfig;
-use BaserCore\Vendor\CKEditorStyleParser;
 use BaserCore\Service\PagesServiceInterface;
-use BaserCore\Service\SitesServiceInterface;
 use BaserCore\Service\ContentsServiceInterface;
-use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\Note;
-use Cake\Utility\Inflector;
+use Cake\ORM\Exception\PersistenceFailedException;
 
 /**
  * PagesController
@@ -45,7 +41,59 @@ class PagesController extends BcAdminAppController
         $this->loadComponent('BaserCore.BcAdminContents', ['entityVarName' => 'page']);
     }
 
-	/**
+    /**
+     * [ADMIN] 固定ページ情報編集
+     *
+     * @param PagesServiceInterface $pagesService
+     * @param ContentsServiceInterface $contentsService
+     * @param int $id (page_id)
+     * @return void
+     * @checked
+     * @unitTest
+     * @noTodo
+     */
+    public function edit(
+        PagesAdminServiceInterface $pagesService,
+        ContentsServiceInterface $contentsService,
+        int $id
+    ) {
+        $page = $pagesService->get($id);
+        if ($this->request->is(['patch', 'post', 'put'])) {
+
+            // EVENT Pages.beforeEdit
+            $event = $this->dispatchEvent('beforeEdit', [
+                'request' => $this->request,
+            ]);
+            if ($event !== false) {
+                $this->request = ($event->getResult() === null || $event->getResult() === true)? $event->getData('request') : $event->getResult();
+            }
+
+            try {
+                $page = $pagesService->update($page, $this->request->getData());
+
+                // EVENT Pages.afterEdit
+                $this->dispatchEvent('afterEdit', [
+                    'request' => $this->request,
+                ]);
+
+                $url = $contentsService->getUrl($page->content->url, true, $page->content->site->useSubDomain);
+                $this->BcMessage->setSuccess(sprintf(__d('baser', "固定ページ「%s」を更新しました。\n%s"), $page->content->title, rawurldecode($url)));
+                return $this->redirect(['action' => 'edit', $id]);
+            } catch (PersistenceFailedException $e) {
+                $page = $e->getEntity();
+                $this->BcMessage->setError(
+                    __d('baser', '入力エラーです。内容を修正してください。')
+                );
+            }  catch (\Exception $e) {
+                $this->BcMessage->setError(
+                    __d('baser', '入力エラーです。内容を修正してください。' . $e->getMessage())
+                );
+            }
+        }
+        $this->set($pagesService->getViewVarsForEdit($page));
+    }
+
+    /**
 	 * beforeFilter
 	 *
 	 * @return void
@@ -57,89 +105,8 @@ class PagesController extends BcAdminAppController
 	{
 		parent::beforeFilter($event);
         if (BcSiteConfig::get('editor') && BcSiteConfig::get('editor') !== 'none') {
-            $this->viewBuilder()->addHelpers([BcSiteConfig::get('editor'), 'BaserCore.BcGooglemaps', 'BaserCore.BcText', 'BaserCore.BcFreeze']);
+            $this->viewBuilder()->addHelpers([BcSiteConfig::get('editor')]);
         }
 	}
 
-	/**
-	 * [ADMIN] 固定ページ情報編集
-     * @param int $id (page_id)
-	 * @param PagesServiceInterface $pageService
-	 * @param ContentsServiceInterface $contentService
-	 * @param SitesServiceInterface $siteService
-	 * @param SiteConfigsServiceInterface $siteConfigService
-	 * @return void
-     * @checked
-     * @unitTest
-     * @noTodo
-	 */
-	public function edit($id, PagesServiceInterface $pageService, ContentsServiceInterface $contentService, SitesServiceInterface $siteService, SiteConfigsServiceInterface $siteConfigService)
-	{
-		if (!$id && empty($this->request->getData())) {
-			$this->BcMessage->setError(__d('baser', '無効なIDです。'));
-			$this->redirect(['controller' => 'contents', 'action' => 'index']);
-		}
-        $page = $pageService->get($id);
-		if ($this->request->is(['patch', 'post', 'put'])) {
-			if (BcUtil::isOverPostSize()) {
-				$this->BcMessage->setError(__d('baser', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size')));
-				$this->redirect(['action' => 'edit', $id]);
-			}
-			// EVENT Pages.beforeEdit
-			$event = $this->dispatchEvent('beforeEdit', [
-				'request' => $this->request,
-			]);
-			if ($event !== false) {
-				$this->request = ($event->getResult() === null || $event->getResult() === true)? $event->getData('request') : $event->getResult();
-			}
-            try {
-                // contents_tmpをcontentsに反映
-                $this->request = $this->request->withData('Pages.contents', $this->request->getData('Pages.contents_tmp'));
-                $page = $pageService->update($page, $this->request->getData('Pages'));
-
-				// 完了メッセージ
-				$site = $siteService->findById($page->content->site_id)->first();
-				$url = $contentService->getUrl($page->content->url, true, $site->useSubDomain);
-				// EVENT Pages.afterEdit
-				$this->dispatchEvent('afterEdit', [
-					'request' => $this->request,
-				]);
-                $this->BcMessage->setSuccess(sprintf(__d('baser', "固定ページ「%s」を更新しました。\n%s"), $page->content->title, rawurldecode($url)));
-				// 同固定ページへリダイレクト
-				return $this->redirect(['action' => 'edit', $id]);
-            }  catch (\Exception $e) {
-                $this->BcMessage->setError('保存中にエラーが発生しました。入力内容を確認してください。');
-            }
-		} else {
-			$this->request = $this->request->withData("Pages", $page);
-			if (!$this->request->getData()) {
-				$this->BcMessage->setError(__d('baser', '無効な処理です。'));
-				$this->redirect(['controller' => 'contents', 'action' => 'index']);
-			}
-		}
-
-		// エディタオプション
-		$editorOptions = ['editorDisableDraft' => false];
-        $editorStyles = $siteConfigService->getValue('editor_styles');
-		if ($editorStyles) {
-			$CKEditorStyleParser = new CKEditorStyleParser();
-			$editorOptions = array_merge($editorOptions, [
-				'editorStylesSet' => 'default',
-				'editorStyles' => [
-					'default' => $CKEditorStyleParser->parse($editorStyles)
-				]
-			]);
-		}
-		// ページテンプレートリスト
-		$theme = [Inflector::camelize(Configure::read('BcApp.defaultFrontTheme'))];
-		$site = $siteService->findById($page->content->site_id)->first();
-		if (!empty($site) && $site->theme && $site->theme != $theme[0]) {
-			$theme[] = $site->theme;
-		}
-		$pageTemplateList = $pageService->getPageTemplateList($page->content->id, $theme);
-        $editor = $siteConfigService->getValue('editor');
-        $editor_enter_br = $siteConfigService->getValue('editor_enter_br');
-		$this->set(compact('editorOptions', 'pageTemplateList', 'page', 'editor', 'editor_enter_br'));
-		$this->render('form');
-	}
 }

@@ -1380,39 +1380,39 @@ class BcBaserHelperTest extends BcTestCase
         ob_start();
         $this->BcBaser->css('admin/import');
         $result = ob_get_clean();
-        $expected = '<link rel="stylesheet" href="css/admin/import.css"/>';
+        $expected = '<link rel="stylesheet" href="/css/admin/import.css"/>';
         $this->assertEquals($expected, $result);
         // // 拡張子あり
         ob_start();
         $this->BcBaser->css('admin/import.css');
         $result = ob_get_clean();
-        $expected = '<link rel="stylesheet" href="css/admin/import.css"/>';
+        $expected = '<link rel="stylesheet" href="/css/admin/import.css"/>';
         $this->assertEquals($expected, $result);
         // インライン
         ob_start();
         $this->BcBaser->css('admin/import2.css', true);
         $result = ob_get_clean();
-        $expected = '<link rel="stylesheet" href="css/admin/import2.css"/>';
+        $expected = '<link rel="stylesheet" href="/css/admin/import2.css"/>';
         $this->assertEquals($expected, $result);
         // ブロック
         ob_start();
         $this->BcBaser->css('admin/import3.css', false);
         $result = ob_get_clean();
         $this->assertEmpty($result);
-        $this->assertEquals('<link rel="stylesheet" href="css/admin/import3.css"/>',
+        $this->assertEquals('<link rel="stylesheet" href="/css/admin/import3.css"/>',
             $this->BcAdminAppView->fetch('css'));
         // ブロック指定
         ob_start();
         $this->BcBaser->css('admin/import4.css', false, ['block' => 'testblock']);
         $result = ob_get_clean();
         $this->assertEmpty($result);
-        $this->assertEquals('<link rel="stylesheet" href="css/admin/import4.css"/>',
+        $this->assertEquals('<link rel="stylesheet" href="/css/admin/import4.css"/>',
             $this->BcAdminAppView->fetch('testblock'));
         ob_start();
         $this->BcBaser->css('admin/import5.css', true, ['block' => 'testblock2']);
         $result = ob_get_clean();
         $this->assertEmpty($result);
-        $this->assertEquals('<link rel="stylesheet" href="css/admin/import5.css"/>',
+        $this->assertEquals('<link rel="stylesheet" href="/css/admin/import5.css"/>',
             $this->BcAdminAppView->fetch('testblock2'));
     }
 
@@ -2234,7 +2234,7 @@ class BcBaserHelperTest extends BcTestCase
         $params = $this->BcBaser->getParams();
         $this->assertEquals('BaserCore', $params['plugin']);
         $this->assertEquals('Pages', $params['controller']);
-        $this->assertEquals('display', $params['action']);
+        $this->assertEquals('view', $params['action']);
         $this->assertEquals(['index'], $params['pass']);
     }
 
@@ -2250,7 +2250,7 @@ class BcBaserHelperTest extends BcTestCase
             'url' => 'https://localhost/?a=b',
             'here' => '/',
             'path' => '/',
-            'webroot' => '',
+            'webroot' => '/',
             'base' => '',
             'query' => [
                 'a' => 'b',

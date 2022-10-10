@@ -87,15 +87,6 @@ class BcTestCase extends TestCase
     const EVENT_LAYER_HELPER = 'Helper';
 
     /**
-     * detectors
-     *
-     * ServerRequest::_detectors を初期化する際、
-     * 一番初期の状況を保管しておくために利用
-     * @var array
-     */
-    public static $_detectors;
-
-    /**
      * FixtureManager
      * 古いフィクスチャーの後方互換用
      * @var FixtureManager
@@ -244,65 +235,10 @@ class BcTestCase extends TestCase
      */
     public function getRequest($url = '/', $data = [], $method = 'GET', $config = [])
     {
-        $config = array_merge([
-            'ajax' => false
-        ], $config);
-        $isAjax = (!empty($config['ajax']))? true : false;
-        unset($config['ajax']);
-        if (preg_match('/^http/', $url)) {
-            $parseUrl = parse_url($url);
-            Configure::write('BcEnv.host', $parseUrl['host']);
-            $defaultConfig = [
-                'uri' => ServerRequestFactory::createUri([
-                    'HTTP_HOST' => $parseUrl['host'],
-                    'REQUEST_URI' => $url,
-                    'REQUEST_METHOD' => $method,
-                    'HTTPS' => (preg_match('/^https/', $url))? 'on' : ''
-                ])];
-        } else {
-            $defaultConfig = [
-                'url' => $url,
-                'environment' => [
-                    'REQUEST_METHOD' => $method
-                ]];
-        }
-        $defaultConfig = array_merge($defaultConfig, $config);
-        $request = new ServerRequest($defaultConfig);
-
-        // ServerRequest::_detectors を初期化
-        // static プロパティで値が残ってしまうため
-        $ref = new ReflectionClass($request);
-        $detectors = $ref->getProperty('_detectors');
-        $detectors->setAccessible(true);
-        if (!self::$_detectors) {
-            self::$_detectors = $detectors->getValue();
-        }
-        $detectors->setValue(self::$_detectors);
+        $request = BcUtil::createRequest($url, $data, $method, $config);
         $request->getSession()->start();
-        try {
-            Router::setRequest($request);
-            $params = Router::parseRequest($request);
-        } catch (\Exception $e) {
-            return $request;
-        }
-
-        $request = $request->withAttribute('params', $params);
-        if ($request->getParam('prefix') === 'Admin') {
-            $request = $this->execPrivateMethod(new BcAdminMiddleware(), 'setCurrentSite', [$request]);
-        } else {
-            $request = $this->execPrivateMethod(new BcFrontMiddleware(), 'setCurrent', [$request]);
-        }
-        if ($data) {
-            $request = $request->withParsedBody($data);
-        }
         $authentication = $this->BaserCore->getAuthenticationService($request);
         $request = $request->withAttribute('authentication', $authentication);
-        $request = $request->withEnv('HTTPS', (preg_match('/^https/', $url))? 'on' : '');
-        if ($isAjax) {
-            $request = $request->withEnv('HTTP_X_REQUESTED_WITH', 'XMLHttpRequest');
-        }
-        $bcRequestFilter = new BcRequestFilterMiddleware();
-        $request = $bcRequestFilter->addDetectors($request);
         Router::setRequest($request);
         return $request;
     }

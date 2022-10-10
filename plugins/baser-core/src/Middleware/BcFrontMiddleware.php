@@ -51,7 +51,7 @@ class BcFrontMiddleware implements MiddlewareInterface
      * @checked
      * @noTodo
      */
-    protected function setCurrent(ServerRequest $request): ServerRequestInterface
+    public function setCurrent(ServerRequest $request): ServerRequestInterface
     {
         return $request
             ->withAttribute('currentContent', $request->getParam('Content'))

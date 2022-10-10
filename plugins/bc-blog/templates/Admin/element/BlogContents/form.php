@@ -26,24 +26,24 @@ use Cake\Routing\Router;
 
 <?php echo $this->BcFormTable->dispatchBefore() ?>
 
-<?php echo $this->BcAdminForm->control('BlogContents.id', ['type' => 'hidden']) ?>
+<?php echo $this->BcAdminForm->control('id', ['type' => 'hidden']) ?>
 
 <section class="bca-section" data-bca-section-type="form-group">
   <table class="form-table bca-form-table" data-bca-table-type="type2">
     <tr>
       <th class="col-head bca-form-table__label">
-        <?php echo $this->BcAdminForm->label('BlogContents.description', __d('baser', 'ブログ説明文')) ?>
+        <?php echo $this->BcAdminForm->label('description', __d('baser', 'ブログ説明文')) ?>
       </th>
       <td class="col-input bca-form-table__input">
         <?php
-        echo $this->BcAdminForm->editor('BlogContents.description', [
+        echo $this->BcAdminForm->editor('description', [
           'editorWidth' => 'auto',
           'editorHeight' => '120px',
           'editorToolType' => 'simple',
           'editorEnterBr' => $editorEnterBr
         ])
         ?>
-        <?php echo $this->BcAdminForm->error('BlogContents.description') ?>
+        <?php echo $this->BcAdminForm->error('description') ?>
       </td>
     </tr>
     <?php echo $this->BcAdminForm->dispatchAfterForm() ?>
@@ -67,14 +67,14 @@ use Cake\Routing\Router;
     <table class="form-table bca-form-table" data-bca-table-type="type2">
       <tr>
         <th class="col-head bca-form-table__label">
-          <?php echo $this->BcAdminForm->label('BlogContents.list_count', __d('baser', '一覧表示件数')) ?>&nbsp;
+          <?php echo $this->BcAdminForm->label('list_count', __d('baser', '一覧表示件数')) ?>&nbsp;
           <span class="required bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
         </th>
         <td class="col-input bca-form-table__input">
-          <?php echo $this->BcAdminForm->control('BlogContents.list_count', ['type' => 'text', 'size' => 20, 'maxlength' => 255]) ?>
+          <?php echo $this->BcAdminForm->control('list_count', ['type' => 'text', 'size' => 20, 'maxlength' => 255]) ?>
           &nbsp;件&nbsp;
           <i class="bca-icon--question-circle bca-help"></i>
-          <?php echo $this->BcAdminForm->error('BlogContents.list_count') ?>
+          <?php echo $this->BcAdminForm->error('list_count') ?>
           <div class="bca-helptext">
             <ul>
               <li><?php echo __d('baser', '公開サイトの一覧に表示する件数を指定します。') ?></li>
@@ -85,12 +85,12 @@ use Cake\Routing\Router;
       </tr>
       <tr>
         <th class="col-head bca-form-table__label">
-          <?php echo $this->BcAdminForm->label('BlogContents.list_direction', __d('baser', '一覧に表示する順番')) ?>
+          <?php echo $this->BcAdminForm->label('list_direction', __d('baser', '一覧に表示する順番')) ?>
         </th>
         <td class="col-input bca-form-table__input">
-          <?php echo $this->BcAdminForm->control('BlogContents.list_direction', ['type' => 'select', 'options' => ['DESC' => __d('baser', '新しい記事順'), 'ASC' => __d('baser', '古い記事順')]]) ?>
+          <?php echo $this->BcAdminForm->control('list_direction', ['type' => 'select', 'options' => ['DESC' => __d('baser', '新しい記事順'), 'ASC' => __d('baser', '古い記事順')]]) ?>
           <i class="bca-icon--question-circle bca-help"></i>
-          <?php echo $this->BcAdminForm->error('BlogContents.list_direction') ?>
+          <?php echo $this->BcAdminForm->error('list_direction') ?>
           <div class="bca-helptext">
             <ul>
               <li><?php echo __d('baser', '公開サイトの一覧における記事の並び方向を指定します。') ?></li>
@@ -101,14 +101,14 @@ use Cake\Routing\Router;
       </tr>
       <tr>
         <th class="col-head bca-form-table__label">
-          <?php echo $this->BcAdminForm->label('BlogContents.list_count', __d('baser', 'RSSフィード出力件数')) ?>&nbsp;
+          <?php echo $this->BcAdminForm->label('list_count', __d('baser', 'RSSフィード出力件数')) ?>&nbsp;
           <span class="required bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
         </th>
         <td class="col-input bca-form-table__input">
-          <?php echo $this->BcAdminForm->control('BlogContents.feed_count', ['type' => 'text', 'size' => 20, 'maxlength' => 255]) ?>
+          <?php echo $this->BcAdminForm->control('feed_count', ['type' => 'text', 'size' => 20, 'maxlength' => 255]) ?>
           &nbsp;件&nbsp;
           <i class="bca-icon--question-circle bca-help"></i>
-          <?php echo $this->BcAdminForm->error('BlogContents.feed_count') ?>
+          <?php echo $this->BcAdminForm->error('feed_count') ?>
           <div class="bca-helptext">
             <ul>
               <li><?php echo __d('baser', 'RSSフィードに出力する件数を指定します。') ?></li>
@@ -124,21 +124,21 @@ use Cake\Routing\Router;
       </tr>
       <tr>
         <th class="col-head bca-form-table__label">
-          <?php echo $this->BcAdminForm->label('BlogContents.comment_use', __d('baser', 'コメント受付機能')) ?>
+          <?php echo $this->BcAdminForm->label('comment_use', __d('baser', 'コメント受付機能')) ?>
         </th>
         <td class="col-input bca-form-table__input">
-          <?php echo $this->BcAdminForm->control('BlogContents.comment_use', ['type' => 'checkbox', 'label' => __d('baser', '利用する')]) ?>
-          <?php echo $this->BcAdminForm->error('BlogContents.comment_use') ?>
+          <?php echo $this->BcAdminForm->control('comment_use', ['type' => 'checkbox', 'label' => __d('baser', '利用する')]) ?>
+          <?php echo $this->BcAdminForm->error('comment_use') ?>
         </td>
       </tr>
       <tr>
         <th class="col-head bca-form-table__label">
-          <?php echo $this->BcAdminForm->label('BlogContents.comment_approve', __d('baser', 'コメント承認機能')) ?>
+          <?php echo $this->BcAdminForm->label('comment_approve', __d('baser', 'コメント承認機能')) ?>
         </th>
         <td class="col-input bca-form-table__input">
-          <?php echo $this->BcAdminForm->control('BlogContents.comment_approve', ['type' => 'checkbox', 'label' => __d('baser', '利用する')]) ?>
+          <?php echo $this->BcAdminForm->control('comment_approve', ['type' => 'checkbox', 'label' => __d('baser', '利用する')]) ?>
           <i class="bca-icon--question-circle bca-help"></i>
-          <?php echo $this->BcAdminForm->error('BlogContents.comment_approve') ?>
+          <?php echo $this->BcAdminForm->error('comment_approve') ?>
           <div class="bca-helptext"><?php echo __d('baser', '承認機能を利用すると、コメントが投稿されてもすぐに公開されず、管理者側で確認する事ができます。') ?></div>
         </td>
       </tr>
@@ -147,9 +147,9 @@ use Cake\Routing\Router;
           <?php echo $this->BcAdminForm->label('MailContent.auth_capthca', __d('baser', 'コメントイメージ認証')) ?>
         </th>
         <td class="col-input bca-form-table__input">
-          <?php echo $this->BcAdminForm->control('BlogContents.auth_captcha', ['type' => 'checkbox', 'label' => __d('baser', '利用する')]) ?>
+          <?php echo $this->BcAdminForm->control('auth_captcha', ['type' => 'checkbox', 'label' => __d('baser', '利用する')]) ?>
           <i class="bca-icon--question-circle bca-help"></i>
-          <?php echo $this->BcAdminForm->error('BlogContents.auth_captcha') ?>
+          <?php echo $this->BcAdminForm->error('auth_captcha') ?>
           <div class="bca-helptext">
             <ul>
               <li><?php echo __d('baser', 'ブログコメント送信の際、表示された画像の文字入力させる事で認証を行ないます。') ?></li>
@@ -160,29 +160,29 @@ use Cake\Routing\Router;
       </tr>
       <tr>
         <th class="col-head bca-form-table__label">
-          <?php echo $this->BcAdminForm->label('BlogContents.tag_use', __d('baser', 'タグ機能')) ?>
+          <?php echo $this->BcAdminForm->label('tag_use', __d('baser', 'タグ機能')) ?>
         </th>
         <td class="col-input bca-form-table__input">
-          <?php echo $this->BcAdminForm->control('BlogContents.tag_use', ['type' => 'checkbox', 'label' => __d('baser', '利用する')]) ?>
-          <?php echo $this->BcAdminForm->error('BlogContents.tag_use') ?>
+          <?php echo $this->BcAdminForm->control('tag_use', ['type' => 'checkbox', 'label' => __d('baser', '利用する')]) ?>
+          <?php echo $this->BcAdminForm->error('tag_use') ?>
         </td>
       </tr>
       <tr>
         <th class="col-head bca-form-table__label">
-          <?php echo $this->BcAdminForm->label('BlogContents.widget_area', __d('baser', 'ウィジェットエリア')) ?>&nbsp;
+          <?php echo $this->BcAdminForm->label('widget_area', __d('baser', 'ウィジェットエリア')) ?>&nbsp;
           <span class="required bca-label" data-bca-label-type="required">
             <?php echo __d('baser', '必須') ?>
           </span>
         </th>
         <td class="col-input bca-form-table__input">
           <?php // TODO ucmitz ウィジェットエリア未実装 ?>
-          <?php /* echo $this->BcAdminForm->control('BlogContents.widget_area', [
+          <?php /* echo $this->BcAdminForm->control('widget_area', [
             'type' => 'select',
             'options' => $this->BcAdminForm->getControlsource('WidgetArea.id'),
             'empty' => __d('baser', 'サイト基本設定に従う')
           ]) */ ?>
           <i class="bca-icon--question-circle bca-help"></i>
-          <?php echo $this->BcAdminForm->error('BlogContents.widget_area') ?>
+          <?php echo $this->BcAdminForm->error('widget_area') ?>
           <div class="bca-helptext">
             <?php echo __d('baser', 'ブログコンテンツで利用するウィジェットエリアを指定します。') ?><br>
             <?php echo __d('baser', 'ウィジェットエリアはウィジェットエリア管理より追加できます。') ?><br>
@@ -194,16 +194,16 @@ use Cake\Routing\Router;
       </tr>
       <tr>
         <th class="col-head bca-form-table__label">
-          <?php echo $this->BcAdminForm->label('BlogContents.template', __d('baser', 'コンテンツテンプレート名')) ?>&nbsp;
+          <?php echo $this->BcAdminForm->label('template', __d('baser', 'コンテンツテンプレート名')) ?>&nbsp;
           <span class="required bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
         </th>
         <td class="col-input bca-form-table__input">
           <?php
-          echo $this->BcAdminForm->control('BlogContents.template', [
+          echo $this->BcAdminForm->control('template', [
             'type' => 'select',
             'options' => $this->Blog->getBlogTemplates($blogContent->content->site_id)])
           ?>
-          <?php echo $this->BcAdminForm->control('BlogContents.edit_blog_template', ['type' => 'hidden']) ?>
+          <?php echo $this->BcAdminForm->control('edit_blog_template', ['type' => 'hidden']) ?>
           <?php if ($this->getRequest()->getParam('action') === 'edit'): ?>
             <?php $this->BcBaser->link('<i class="bca-icon--edit"></i>' . __d('baser', '編集する'), 'javascript:void(0)', [
               'id' => 'EditBlogTemplate',
@@ -211,7 +211,7 @@ use Cake\Routing\Router;
             ]) ?>
           <?php endif ?>
           <i class="bca-icon--question-circle bca-help"></i>
-          <?php echo $this->BcAdminForm->error('BlogContents.template') ?>
+          <?php echo $this->BcAdminForm->error('template') ?>
           <div class="bca-helptext">
             <ul>
               <li><?php echo __d('baser', 'ブログの本体のテンプレートを指定します。') ?></li>
@@ -222,7 +222,7 @@ use Cake\Routing\Router;
       </tr>
       <tr>
         <th class="col-head bca-form-table__label">
-          <?php echo $this->BcAdminForm->label('BlogContents.eye_catch_size_thumb_width', __d('baser', 'アイキャッチ画像サイズ')) ?>&nbsp;
+          <?php echo $this->BcAdminForm->label('eye_catch_size_thumb_width', __d('baser', 'アイキャッチ画像サイズ')) ?>&nbsp;
           <span class="required bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
         </th>
         <td class="col-input bca-form-table__input">
@@ -237,25 +237,25 @@ use Cake\Routing\Router;
             <tbody>
             <tr>
               <th><?php echo __d('baser', 'PCサイズ') ?></th>
-              <td><?php echo $this->BcAdminForm->control('BlogContents.eye_catch_size_thumb_width', ['type' => 'text', 'size' => '8']) ?>
+              <td><?php echo $this->BcAdminForm->control('eye_catch_size_thumb_width', ['type' => 'text', 'size' => '8']) ?>
                 &nbsp;px
               </td>
-              <td><?php echo $this->BcAdminForm->control('BlogContents.eye_catch_size_thumb_height', ['type' => 'text', 'size' => '8']) ?>
+              <td><?php echo $this->BcAdminForm->control('eye_catch_size_thumb_height', ['type' => 'text', 'size' => '8']) ?>
                 px
               </td>
             </tr>
             <tr>
               <th><?php echo __d('baser', '携帯サイズ') ?></th>
-              <td><?php echo $this->BcAdminForm->control('BlogContents.eye_catch_size_mobile_thumb_width', ['type' => 'text', 'size' => '8']) ?>
+              <td><?php echo $this->BcAdminForm->control('eye_catch_size_mobile_thumb_width', ['type' => 'text', 'size' => '8']) ?>
                 &nbsp;px
               </td>
-              <td><?php echo $this->BcAdminForm->control('BlogContents.eye_catch_size_mobile_thumb_height', ['type' => 'text', 'size' => '8']) ?>
+              <td><?php echo $this->BcAdminForm->control('eye_catch_size_mobile_thumb_height', ['type' => 'text', 'size' => '8']) ?>
                 px
               </td>
             </tr>
             </tbody>
           </table>
-          <?php echo $this->BcAdminForm->error('BlogContents.eye_catch_size_thumb_width') ?>
+          <?php echo $this->BcAdminForm->error('eye_catch_size_thumb_width') ?>
           <div class="bca-helptext">
             <ul>
               <li><?php echo __d('baser', 'アイキャッチ画像のサイズを指定します。') ?></li>
@@ -265,11 +265,11 @@ use Cake\Routing\Router;
       </tr>
       <tr>
         <th class="col-head bca-form-table__label">
-          <?php echo $this->BcAdminForm->label('BlogContents.use_content', __d('baser', '記事概要')) ?>
+          <?php echo $this->BcAdminForm->label('use_content', __d('baser', '記事概要')) ?>
         </th>
         <td class="col-input bca-form-table__input">
-          <?php echo $this->BcAdminForm->control('BlogContents.use_content', ['type' => 'checkbox', 'label' => __d('baser', '利用する')]) ?>
-          <?php echo $this->BcAdminForm->error('BlogContents.use_content') ?>
+          <?php echo $this->BcAdminForm->control('use_content', ['type' => 'checkbox', 'label' => __d('baser', '利用する')]) ?>
+          <?php echo $this->BcAdminForm->error('use_content') ?>
         </td>
       </tr>
       <?php echo $this->BcAdminForm->dispatchAfterForm('option') ?>

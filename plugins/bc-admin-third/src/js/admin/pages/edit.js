@@ -18,11 +18,15 @@ $(function () {
             return true;
         });
     });
-    $("#BtnSave").click(function () {
-        if (typeof editor_contents_tmp != "undefined") {
-            editor_contents_tmp.execCommand('synchronize');
+    $("#BtnPreview").click(function (){
+        if (typeof $.bcCkeditor.editor.editor_contents_tmp !== "undefined") {
+            $.bcCkeditor.editor.editor_contents_tmp.execCommand('synchronize');
         }
-        $("#PageMode").val('save');
+    });
+    $("#BtnSave").click(function () {
+        if (typeof $.bcCkeditor.editor.editor_contents_tmp !== "undefined") {
+            $.bcCkeditor.editor.editor_contents_tmp.execCommand('synchronize');
+        }
         $.bcToken.check(function () {
             $("#PageAdminEditForm").submit();
         }, {useUpdate: false, hideLoader: false});

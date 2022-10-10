@@ -118,7 +118,7 @@ $base = $attributes['base'];
       <?php $this->BcBaser->element('sidebar') ?>
     <?php endif ?>
 
-    <main id="Contents" class="bca-main">
+    <main class="bca-main">
 
       <article id="ContentsBody" class="contents-body bca-main__body">
 

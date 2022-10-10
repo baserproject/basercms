@@ -11,12 +11,12 @@
 
 namespace BaserCore\Controller\Api;
 
-use BaserCore\Utility\BcUtil;
 use BaserCore\Annotation\Note;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Service\PagesServiceInterface;
+use Cake\Http\Exception\ForbiddenException;
 use Cake\ORM\Exception\PersistenceFailedException;
 
 /**
@@ -25,6 +25,18 @@ use Cake\ORM\Exception\PersistenceFailedException;
  */
 class PagesController extends BcApiController
 {
+
+    /**
+     * initialize
+     * @return void
+     * @checked
+     * @unitTest
+     */
+    public function initialize(): void
+    {
+        parent::initialize();
+        $this->Authentication->allowUnauthenticated(['view']);
+    }
 
     /**
      * 固定ページ一覧取得
@@ -44,6 +56,12 @@ class PagesController extends BcApiController
 
     /**
      * 固定ページ取得
+     *
+     * クエリーパラーメーター
+     * - status: string 公開ステータス（初期値：publish）
+     *  - `publish` 公開されたページ
+     *  - `` 全て
+     *
      * @param PagesServiceInterface $Pages
      * @param int $id
      * @checked
@@ -53,10 +71,28 @@ class PagesController extends BcApiController
     public function view(PagesServiceInterface $Pages, $id)
     {
         $this->request->allowMethod('get');
+        $queryParams = $this->getRequest()->getQueryParams();
+        if(isset($queryParams['status'])) {
+            if(!$this->Authentication->getIdentity()) throw new ForbiddenException();
+        }
+
+        $queryParams = array_merge([
+            'status' => 'publish'
+        ], $queryParams);
+
+        $page = $message = null;
+        try {
+            $page = $Pages->get($id, $queryParams);
+        } catch(\Exception $e) {
+            $this->setResponse($this->response->withStatus(401));
+            $message = $e->getMessage();
+        }
+
         $this->set([
-            'pages' => $Pages->get($id)
+            'page' => $page,
+            'message' => $message
         ]);
-        $this->viewBuilder()->setOption('serialize', ['pages']);
+        $this->viewBuilder()->setOption('serialize', ['page', 'message']);
     }
 
     /**

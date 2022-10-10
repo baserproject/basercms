@@ -9,40 +9,37 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
-namespace BaserCore\Utility;
+namespace BcBlog\Service\Front;
 
+use Cake\Controller\Controller;
+use Cake\Http\ServerRequest;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 
 /**
- * Trait BcContainerTrait
- * @package BaserCore\Utility
+ * BlogFrontServiceInterface
  */
-trait BcContainerTrait
+interface BlogFrontServiceInterface
 {
-    /**
-     * Get Service
-     * @param $service
-     * @return array|mixed|object
-     * @checked
-     * @noTodo
-     */
-    public function getService($service)
-    {
-        return BcContainer::get()->get($service);
-    }
 
     /**
-     * Has Service
-     * @param $service
-     * @return bool
+     * プレビュー用の view 変数を取得する
+     * @param ServerRequest $request
+     * @return array[]
      * @checked
      * @noTodo
+     * @unitTest
      */
-    public function hasService($service)
-    {
-        return BcContainer::get()->has($service);
-    }
+    public function getViewVarsForIndex(ServerRequest $request): array;
+
+    /**
+     * プレビュー用のセットアップをする
+     * @param Controller $controller
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function setupPreviewForIndex(Controller $controller): void;
 
 }

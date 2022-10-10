@@ -1250,13 +1250,13 @@ class AppTable extends Table
      */
     public function getConditionAllowPublish()
     {
-        $conditions[$this->alias . '.' . $this->publishStatusField] = true;
-        $conditions[] = ['or' => [[$this->alias . '.' . $this->publishBeginField . ' <=' => date('Y-m-d H:i:s')],
-            [$this->alias . '.' . $this->publishBeginField => null],
-            [$this->alias . '.' . $this->publishBeginField => '0000-00-00 00:00:00']]];
-        $conditions[] = ['or' => [[$this->alias . '.' . $this->publishEndField . ' >=' => date('Y-m-d H:i:s')],
-            [$this->alias . '.' . $this->publishEndField => null],
-            [$this->alias . '.' . $this->publishEndField => '0000-00-00 00:00:00']]];
+        $conditions[$this->getAlias() . '.' . $this->publishStatusField] = true;
+        $conditions[] = ['or' => [[$this->getAlias() . '.' . $this->publishBeginField . ' <=' => date('Y-m-d H:i:s')],
+            [$this->getAlias() . '.' . $this->publishBeginField => null],
+            [$this->getAlias() . '.' . $this->publishBeginField => '0000-00-00 00:00:00']]];
+        $conditions[] = ['or' => [[$this->getAlias() . '.' . $this->publishEndField . ' >=' => date('Y-m-d H:i:s')],
+            [$this->getAlias() . '.' . $this->publishEndField => null],
+            [$this->getAlias() . '.' . $this->publishEndField => '0000-00-00 00:00:00']]];
         return $conditions;
     }
 
@@ -1285,7 +1285,7 @@ class AppTable extends Table
         $eventManager = $this->getEventManager();
         foreach($this->tmpEvents[$eventKey] as $listener) {
             if (get_class($listener['callable'][0]) !== 'BaserCore\Event\BcModelEventDispatcher') {
-                $eventManager->on('Model.beforeSave', [], $listener['callable']);
+                $eventManager->on($eventKey, [], $listener['callable']);
             }
         }
         unset($this->tmpEvents[$eventKey]);

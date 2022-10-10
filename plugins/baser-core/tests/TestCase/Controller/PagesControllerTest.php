@@ -81,7 +81,7 @@ class PagesControllerTest extends BcTestCase
      *
      * @return void
      */
-    public function testDisplay(): void
+    public function testView(): void
     {
         $this->get('/');
         $this->assertResponseOk();

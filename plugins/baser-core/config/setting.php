@@ -481,7 +481,7 @@ return [
                         ],
                         'view' => [
                             'controller' => 'Pages',
-                            'action' => 'display'
+                            'action' => 'view'
                         ],
                         'copy' => [
                             'prefix' => 'Api',

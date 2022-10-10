@@ -11,8 +11,8 @@
 
 namespace BaserCore\Test\TestCase\Service;
 
-use BaserCore\Service\PagesFrontService;
-use BaserCore\Service\PagesFrontServiceInterface;
+use BaserCore\Service\Front\PagesFrontService;
+use BaserCore\Service\Front\PagesFrontServiceInterface;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 
@@ -58,9 +58,9 @@ class PagesFrontServiceTest extends BcTestCase
     /**
      * test getViewVarsForDisplay
      */
-    public function test_getViewVarsForDisplay()
+    public function test_getViewVarsForView()
     {
-        $vars = $this->PagesFront->getViewVarsForDisplay(
+        $vars = $this->PagesFront->getViewVarsForView(
             $this->PagesFront->get(2),
             $this->getRequest('/')
         );

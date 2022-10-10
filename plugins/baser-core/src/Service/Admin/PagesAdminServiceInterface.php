@@ -9,28 +9,21 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
-namespace BaserCore\Service;
+namespace BaserCore\Service\Admin;
 
 use Cake\Datasource\EntityInterface;
-use Cake\Http\ServerRequest;
 
 /**
- * PagesFrontService
+ * PagesAdminServiceInterface
  */
-class PagesFrontService extends PagesService implements PagesFrontServiceInterface
-{
+interface PagesAdminServiceInterface{
 
     /**
-     * 固定ページ用のデータを取得する
+     * 編集画面用の view 変数を取得する
+     *
      * @param EntityInterface $page
-     * @param ServerRequest $request
      * @return array
      */
-    public function getViewVarsForDisplay(EntityInterface $page, ServerRequest $request): array
-    {
-        return [
-            'page' => $page,
-            'editLink' => $this->getEditLink($request)
-        ];
-    }
+    public function getViewVarsForEdit(EntityInterface $page): array;
+
 }

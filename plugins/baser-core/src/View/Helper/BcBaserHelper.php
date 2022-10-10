@@ -1600,8 +1600,12 @@ class BcBaserHelper extends Helper
         $out = [];
         if (!$onSchema) {
             foreach($crumbs as $crumb) {
+                $options = ['escape' => false];
+                if (!empty($crumb['options'])) {
+                    $options = array_merge($options, $crumb['options']);
+                }
                 if (!empty($crumb['url'])) {
-                    $out[] = $this->getLink($crumb['title'], $crumb['url'], @$crumb['options']);
+                    $out[] = $this->getLink($crumb['title'], $crumb['url'], $options);
                 } else {
                     $out[] = $crumb['title'];
                 }
@@ -1610,7 +1614,7 @@ class BcBaserHelper extends Helper
         } else {
             $counter = 1;
             foreach($crumbs as $crumb) {
-                $options = ['itemprop' => 'item'];
+                $options = ['itemprop' => 'item', 'escape' => false];
                 if (!empty($crumb['options'])) {
                     $options = array_merge($options, $crumb['options']);
                 }
@@ -2046,7 +2050,7 @@ END_FLASH;
     public function isPage()
     {
         $request = $this->_View->getRequest();
-        return ($request->getParam('controller') === 'Pages' && $request->getParam('action') == 'display');
+        return ($request->getParam('controller') === 'Pages' && $request->getParam('action') == 'view');
     }
 
     /**

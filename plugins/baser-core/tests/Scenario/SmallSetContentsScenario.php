@@ -53,7 +53,8 @@ class SmallSetContentsScenario implements FixtureScenarioInterface
             'lft' => 1,
             'rght' => 10,
             'entity_id' => 1,
-            'site_root' => true
+            'site_root' => true,
+            'status' => true
         ])->persist();
         ContentFactory::make([
             'id' => 2,
@@ -70,7 +71,8 @@ class SmallSetContentsScenario implements FixtureScenarioInterface
             'lft' => 2,
             'rght' => 3,
             'entity_id' => 1,
-            'site_root' => false
+            'site_root' => false,
+            'status' => true
         ])->persist();
         ContentFactory::make([
             'id' => 3,
@@ -83,7 +85,8 @@ class SmallSetContentsScenario implements FixtureScenarioInterface
             'lft' => 4,
             'rght' => 9,
             'entity_id' => 2,
-            'site_root' => false
+            'site_root' => false,
+            'status' => true
         ])->persist();
         ContentFactory::make([
             'id' => 4,
@@ -96,7 +99,8 @@ class SmallSetContentsScenario implements FixtureScenarioInterface
             'lft' => 5,
             'rght' => 6,
             'entity_id' => 2,
-            'site_root' => false
+            'site_root' => false,
+            'status' => true
         ])->persist();
         ContentFactory::make([
             'id' => 5,
@@ -109,7 +113,8 @@ class SmallSetContentsScenario implements FixtureScenarioInterface
             'lft' => 7,
             'rght' => 8,
             'entity_id' => 3,
-            'site_root' => false
+            'site_root' => false,
+            'status' => true
         ])->persist();
         ContentFolderFactory::make(['id' => 1])->persist();
         ContentFolderFactory::make(['id' => 2])->persist();

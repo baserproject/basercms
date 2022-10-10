@@ -15,9 +15,7 @@ use BaserCore\Annotation\Note;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
-use Cake\Http\Exception\NotFoundException;
-use BaserCore\Service\ContentsServiceInterface;
-use BaserCore\Service\ContentFoldersServiceInterface;
+use BaserCore\Service\Front\ContentFoldersFrontServiceInterface;
 
 /**
  * Class ContentFoldersController
@@ -28,6 +26,7 @@ use BaserCore\Service\ContentFoldersServiceInterface;
  */
 class ContentFoldersController extends BcFrontAppController
 {
+
     /**
      * initialize
      * @return void
@@ -43,31 +42,20 @@ class ContentFoldersController extends BcFrontAppController
 
     /**
      * コンテンツを表示する
-     * @param  ContentsServiceInterface $contentService
-     * @param  ContentFoldersServiceInterface $contentFolderService
+     * @param  ContentFoldersFrontServiceInterface $service
      * @return void
      * @checked
      * @unitTest
      * @noTodo
      */
-    public function view(ContentFoldersServiceInterface $contentFolderService, ContentsServiceInterface $contentService)
+    public function view(ContentFoldersFrontServiceInterface $service)
     {
-        if (empty($this->request->getParam('entityId'))) {
-            throw new NotFoundException();
-        }
-        $contentFolder = $contentFolderService->get($this->request->getParam('entityId'));
-        $contentService->setTreeConfig('scope', ['site_root' => false] + $contentService->getConditionAllowPublish());
-        $children = [];
-        if ($contentService->getChildren($contentFolder->content->id)) {
-            $children = $contentService->getChildren($contentFolder->content->id)->order(['lft']);
-        }
-        $contentService->setTreeConfig('scope', [null]);
-        if ($this->BcFrontContents->preview && !empty($this->request->getData('Contents'))) {
-            $contentFolder->content = $this->request->getData('Contents');
-        }
-        $this->set(compact('contentFolder', 'children'));
-        $folderTemplate = !empty($contentFolder->folder_template) ? $contentFolder->folder_template : $contentFolderService->getParentTemplate($this->request->getAttribute('currentContent')->id, 'folder');
-        $this->set('editLink', ['admin' => true, 'plugin' => 'BaserCore', 'controller' => 'content_folders', 'action' => 'edit', $contentFolder->id, 'content_id' => $contentFolder->content->id]);
-        $this->render($folderTemplate);
+        $contentFolder = $service->get(
+            $this->getRequest()->getAttribute('currentContent')->entity_id,
+            ['status' => 'publish']
+        );
+        $this->set($service->getViewVarsForView($contentFolder, $this->getRequest()));
+        $this->render($service->getTemplateForView($contentFolder));
     }
+
 }

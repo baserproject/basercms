@@ -9,10 +9,14 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
-namespace BaserCore\Service;
+namespace BaserCore\Service\Front;
 
+use Cake\Controller\Controller;
 use Cake\Datasource\EntityInterface;
 use Cake\Http\ServerRequest;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * PagesFrontServiceInterface
@@ -26,6 +30,12 @@ interface PagesFrontServiceInterface
      * @param ServerRequest $request
      * @return array
      */
-    public function getViewVarsForDisplay(EntityInterface $page, ServerRequest $request): array;
+    public function getViewVarsForView(EntityInterface $page, ServerRequest $request): array;
+
+    /**
+     * プレビューのためのセットアップを行う
+     * @param Controller $controller
+     */
+    public function setupPreviewForView(Controller $controller): void;
 
 }

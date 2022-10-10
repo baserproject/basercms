@@ -19,6 +19,8 @@ use BaserCore\Service\Admin\ContentsAdminService;
 use BaserCore\Service\Admin\ContentsAdminServiceInterface;
 use BaserCore\Service\Admin\DashboardAdminService;
 use BaserCore\Service\Admin\DashboardAdminServiceInterface;
+use BaserCore\Service\Admin\PagesAdminService;
+use BaserCore\Service\Admin\PagesAdminServiceInterface;
 use BaserCore\Service\Admin\PluginsAdminService;
 use BaserCore\Service\Admin\PluginsAdminServiceInterface;
 use BaserCore\Service\Admin\SiteConfigsAdminService;
@@ -41,10 +43,12 @@ use BaserCore\Service\ContentsService;
 use BaserCore\Service\ContentsServiceInterface;
 use BaserCore\Service\DblogsService;
 use BaserCore\Service\DblogsServiceInterface;
-use BaserCore\Service\PagesDisplayService;
-use BaserCore\Service\PagesDisplayServiceInterface;
-use BaserCore\Service\PagesFrontService;
-use BaserCore\Service\PagesFrontServiceInterface;
+use BaserCore\Service\Front\BcFrontContentsService;
+use BaserCore\Service\Front\BcFrontContentsServiceInterface;
+use BaserCore\Service\Front\ContentFoldersFrontService;
+use BaserCore\Service\Front\ContentFoldersFrontServiceInterface;
+use BaserCore\Service\Front\PagesFrontService;
+use BaserCore\Service\Front\PagesFrontServiceInterface;
 use BaserCore\Service\PagesService;
 use BaserCore\Service\PagesServiceInterface;
 use BaserCore\Service\PermissionsService;
@@ -102,16 +106,18 @@ class BcServiceProvider extends ServiceProvider
         ContentsAdminServiceInterface::class,
         ContentFoldersServiceInterface::class,
         ContentFoldersAdminServiceInterface::class,
+        ContentFoldersFrontServiceInterface::class,
         PagesServiceInterface::class,
+        PagesAdminServiceInterface::class,
         PagesFrontServiceInterface::class,
-        PagesDisplayServiceInterface::class,
         SearchIndexesServiceInterface::class,
         DashboardAdminServiceInterface::class,
         ThemesServiceInterface::class,
         ThemesAdminServiceInterface::class,
         BcDatabaseServiceInterface::class,
         UtilitiesAdminServiceInterface::class,
-        UtilitiesServiceInterface::class
+        UtilitiesServiceInterface::class,
+        BcFrontContentsServiceInterface::class
     ];
 
     /**
@@ -154,11 +160,11 @@ class BcServiceProvider extends ServiceProvider
         // ContentFoldersサービス
         $container->add(ContentFoldersServiceInterface::class, ContentFoldersService::class);
         $container->add(ContentFoldersAdminServiceInterface::class, ContentFoldersAdminService::class);
+        $container->add(ContentFoldersFrontServiceInterface::class, ContentFoldersFrontService::class);
         // Pagesサービス
         $container->add(PagesServiceInterface::class, PagesService::class);
+        $container->add(PagesAdminServiceInterface::class, PagesAdminService::class);
         $container->add(PagesFrontServiceInterface::class, PagesFrontService::class);
-        // PagesDisplayサービス
-        $container->add(PagesDisplayServiceInterface::class, PagesDisplayService::class);
         // SearchIndexesサービス
         $container->add(SearchIndexesServiceInterface::class, SearchIndexesService::class);
         // Dashboardサービス
@@ -171,7 +177,8 @@ class BcServiceProvider extends ServiceProvider
         // Utilities サービス
         $container->add(UtilitiesServiceInterface::class, UtilitiesService::class);
         $container->add(UtilitiesAdminServiceInterface::class, UtilitiesAdminService::class);
-
+        // BcFrontContents サービス
+        $container->add(BcFrontContentsServiceInterface::class, BcFrontContentsService::class);
     }
 
 }

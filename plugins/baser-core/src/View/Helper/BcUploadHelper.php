@@ -10,6 +10,7 @@
  */
 namespace BaserCore\View\Helper;
 
+use Cake\Utility\Hash;
 use Cake\View\Helper;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
@@ -42,7 +43,7 @@ class BcUploadHelper  extends Helper
      *
      * @var array
      */
-    public $helpers = ['Html', 'BcAdminForm'];
+    public $helpers = ['Html', 'BaserCore.BcAdminForm'];
 
     /**
      * BcUploadHelperで使用するテーブル
@@ -278,10 +279,15 @@ class BcUploadHelper  extends Helper
             unset($linkOptions['class']);
         }
 
-        $sessionKey = $this->BcAdminForm->getSourceValue($fieldName . '_tmp');
-        if ($sessionKey) {
-            $fileName = $sessionKey;
-            $options['tmp'] = true;
+        $fieldNameArray = explode('.', $fieldName);
+        $entity = $this->_View->get($fieldNameArray[0]);
+        if($entity) {
+            unset($fieldNameArray[0]);
+            $sessionKey = Hash::get($entity, implode('.', $fieldNameArray) . '_tmp');;
+            if ($sessionKey) {
+                $fileName = $sessionKey;
+                $options['tmp'] = true;
+            }
         }
 
         if ($options['noimage']) {
@@ -313,7 +319,7 @@ class BcUploadHelper  extends Helper
         }
         if ($options['tmp']) {
             $options['link'] = false;
-            $fileUrl = '/uploads/tmp/';
+            $fileUrl = '/' . BcUtil::getBaserCorePrefix() . '/baser-core/uploads/tmp/';
             if ($options['imgsize']) {
                 $fileUrl .= $options['imgsize'] . '/';
             }

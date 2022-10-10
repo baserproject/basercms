@@ -74,7 +74,7 @@ class BcCkeditorHelperTest extends BcTestCase
         $this->BcCkeditor->getView()->setTheme('BcAdminThird');
         $fieldName = 'Page.test';
         $result = $this->BcCkeditor->editor($fieldName, []);
-        $tagList = ['/<span class="bca-textarea"/', '/<textarea name="Page\[test\]"/', '/<input type="hidden" name="draft_mode"/'];
+        $tagList = ['/<span class="bca-textarea"/', '/<textarea name="Page\[test\]"/'];
         foreach ($tagList as $requiredTag) {
             $this->assertMatchesRegularExpression($requiredTag, $result);
         }
@@ -109,11 +109,14 @@ class BcCkeditorHelperTest extends BcTestCase
                 ],
             'type' => 'textarea',
             ];
+        $request = $this->BcCkeditor->getView()->getRequest()->withAttribute('formTokenData', ['dummy']);
+        $this->BcCkeditor->getView()->setRequest($request);
+        $this->BcCkeditor->BcAdminForm->create();
         $result = $this->execPrivateMethod($this->BcCkeditor, 'buildTmpScript', ["Page.contents_tmp", $options]);
+        $this->assertMatchesRegularExpression('/<script src="\/bc_admin_third\/js\/ckeditor\.bundle.js"/', $result);
         $jsResult = $this->BcCkeditor->getView()->fetch('script');
-        $this->assertMatchesRegularExpression('/<input type="hidden" name="draft_mode" id="DraftModeContentsTmpTmp" draft="draft" class="bca-hidden__input"\/>/', $result);
-        // ckeditor.jsがタグに含められてるか確認
-        $this->assertMatchesRegularExpression('/<script src="bc_admin_third\/js\/vendor\/ckeditor\/ckeditor.js"><\/script>/', $jsResult);
+        // ckeditor.bundle.jsがタグに含められてるか確認
+        $this->assertMatchesRegularExpression('/<script src="\/bc_admin_third\/js\/vendor\/ckeditor\/ckeditor\.js"/', $jsResult);
     }
 
 }

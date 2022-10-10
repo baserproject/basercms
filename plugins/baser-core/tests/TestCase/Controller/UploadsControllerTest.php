@@ -11,7 +11,6 @@
 
 namespace BaserCore\Test\TestCase\Controller;
 use Cake\Http\Session;
-use Cake\ORM\TableRegistry;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Controller\UploadsController;
 
@@ -64,7 +63,7 @@ class UploadsControllerTest extends BcTestCase
         $this->enableSecurityToken();
         $this->enableCsrfToken();
         $session = new Session();
-        $session->write('Upload.test_gif.data', file_get_contents(TMP . 'uploads/test.gif'));
+        $session->write('Upload.test_gif.data', base64_encode(file_get_contents(TMP . 'uploads/test.gif')));
         $session->write('Upload.test_gif.type', 'image/gif');
         $session->write('Upload.test_gif.imagecopy.medium', ['width' => 100, 'height' => 100]);
         $UploadsController = new UploadsController($this->getRequest('/baser/baser-core/uploads/', [], 'GET', ['session' => $session]));

@@ -15,6 +15,11 @@
     $.bcCkeditor = {
 
         /**
+         * editor
+         */
+        editor: {},
+
+        /**
          * 初期化チェックフラグ
          */
         initStatus: false,
@@ -43,8 +48,8 @@
                     CKEDITOR.config.contentsCss.push(css);
                 }
             });
-            CKEDITOR[config.ckeditorField] = CKEDITOR.replace(config.editorDomId, config.editorOptions);
-            this.setUpDraft(config)
+            this.editor[config.ckeditorField] = CKEDITOR.replace(config.editorDomId, config.editorOptions);
+            this.setUpDraft(config);
             this.setUpToolBar(config);
         },
 
@@ -80,33 +85,33 @@
         setUpDraft: function(config)
         {
             if (!config.editorUseDraft) return;
-            CKEDITOR[config.ckeditorField].on('pluginsLoaded', function () {
+            this.editor[config.ckeditorField].on('pluginsLoaded', function () {
                 if (config.editorUseDraft) {
                     if (config.draftAreaId) {
-                        CKEDITOR[config.ckeditorField].draftDraftAreaId = config.draftAreaId;
+                        this.draftDraftAreaId = config.draftAreaId;
                     }
                     if (config.publishAreaId) {
-                        CKEDITOR[config.ckeditorField].draftPublishAreaId = config.publishAreaId;
+                        this.draftPublishAreaId = config.publishAreaId;
                     }
                     if (config.editorReadonlyPublish) {
-                        CKEDITOR[config.ckeditorField].draftReadOnlyPublish = true;
+                        this.draftReadOnlyPublish = true;
                     }
                 }
             });
-            CKEDITOR[config.ckeditorField].on('instanceReady', function () {
+            this.editor[config.ckeditorField].on('instanceReady', function () {
                 if (config.editorDisableDraft) {
-                    CKEDITOR[config.ckeditorField].execCommand('changePublish');
-                    CKEDITOR[config.ckeditorField].execCommand('disableDraft');
+                    this.execCommand('changePublish');
+                    this.execCommand('disableDraft');
                 }
                 if (config.editorDisablePublish) {
-                    CKEDITOR[config.ckeditorField].execCommand('changeDraft');
-                    CKEDITOR[config.ckeditorField].execCommand('disablePublish');
+                    this.execCommand('changeDraft');
+                    this.execCommand('disablePublish');
                 }
-                CKEDITOR[config.ckeditorField].on('beforeCommandExec', function (e) {
+                this.on('beforeCommandExec', function (e) {
                     if (e.data.name === 'changePublish' || e.data.name === 'copyPublish') {
-                        $(`#DraftMode${config.fieldCamelize}`).val('publish');
+                        $(`#${config.previewModeId}`).val('default');
                     } else if (e.data.name === 'changeDraft' || e.data.name === 'copyDraft') {
-                        $(`#DraftMode${config.fieldCamelize}`).val('draft');
+                        $(`#${config.previewModeId}`).val('draft');
                     }
                 });
             });
@@ -118,10 +123,10 @@
          */
         setUpToolBar: function(config)
         {
-            CKEDITOR[config.ckeditorField].on('instanceReady', function () {
-                if (CKEDITOR[config.ckeditorField].getCommand('maximize').uiItems.length > 0) {
+            this.editor[config.ckeditorField].on('instanceReady', function () {
+                if (this.getCommand('maximize').uiItems.length > 0) {
                     // ツールバーの表示を切り替え
-                    CKEDITOR[config.ckeditorField].getCommand('maximize').on('state', () => {
+                    this.getCommand('maximize').on('state', () => {
                         if (this.state === 1) {
                             $("#ToolBar").hide();
                         } else {

@@ -44,7 +44,7 @@ class BcToolbarHelper extends Helper
     public function isAvailableEditLink(): bool
     {
         $request = $this->_View->getRequest();
-        return ($this->BcAdmin->existsEditLink() && !isset($request->getQuery['preview']));
+        return ($this->BcAdmin->existsEditLink() && !$request->getQuery('preview'));
     }
 
     /**

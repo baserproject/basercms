@@ -9,7 +9,7 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
-namespace BcBlog\Controller\Admin;
+namespace BcBlog\Controller;
 
 use Cake\Event\EventInterface;
 

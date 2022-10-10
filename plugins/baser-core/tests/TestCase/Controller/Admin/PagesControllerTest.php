@@ -81,7 +81,7 @@ class PagesControllerTest extends BcTestCase
         $event = new Event('Controller.beforeFilter', $this->PagesController);
         $this->PagesController->beforeFilter($event);
         $helpers = $this->PagesController->viewBuilder()->getHelpers();
-        $this->assertCount(4, $helpers);
+        $this->assertCount(1, $helpers);
     }
 
     /**

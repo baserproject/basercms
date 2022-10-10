@@ -198,7 +198,7 @@ class BcFileUploader
                 if ($file['uploadable']) {
                     // arrayをstringとして変換
                     $data[$name] = $file['name'];
-                } elseif (isset($file['error']) && $file['error'] === UPLOAD_ERR_NO_FILE) {
+                } elseif (isset($file['error']) && (int) $file['error'] === UPLOAD_ERR_NO_FILE) {
                     if (isset($data[$name . '_'])) {
                         // 新しいデータが送信されず、既存データを引き継ぐ場合は、元のフィールド名に戻す
                         $data[$name] = $data[$name . '_'];
@@ -1115,7 +1115,9 @@ class BcFileUploader
     public function getSaveTmpFileName($setting, $file, $entity)
     {
         if (!empty($setting['namefield'])) {
-            $entity[$setting['namefield']] = $this->tmpId;
+            if(empty($entity[$setting['namefield']])) {
+                $entity[$setting['namefield']] = $this->tmpId;
+            }
             $fileName = $this->getFieldBasename($setting, $file, $entity);
         } else {
             $fileName = $this->tmpId . '_' . $setting['name'] . '.' . $file['ext'];

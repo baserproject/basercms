@@ -11,6 +11,7 @@
 
 namespace BaserCore\Test\TestCase\View\Helper;
 
+use BaserCore\Model\Entity\Content;
 use BaserCore\View\BcAdminAppView;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\View\Helper\BcUploadHelper;
@@ -116,15 +117,15 @@ class BcUploadHelperTest extends BcTestCase
             'height' => '80',
         ];
         $result = $this->BcUpload->uploadImage('Contents.image', 'template1.jpg', $options);
-        $expects = '<img src="/uploads/tmp/medium/template1.jpg" alt="" width="100" height="80" />';
         $this->assertMatchesRegularExpression('/^<a href=\"\/files\/contents\/template1\.jpg[^>]+?\"[^>]+?><img src=\"\/files\/contents\/template1\.jpg[^>]+?\"[^>]+?alt="" width="100" height="80"[^>]+?><\/a>/', $result);
 
         // 一時ファイルへのリンク（デフォルトがリンク付だが、Aタグが出力されないのが正しい挙動）
         $options = [
             'tmp' => true
         ];
-        $result = $this->BcUpload->uploadImage('Contents.image', 'template1.jpg', $options);
-        $expects = '<img src="/uploads/tmp/medium/template1_jpg" alt=""/>';
+        $this->BcUpload->getView()->set('Content', new Content(['eyecatch_tmp' => 'test']));
+        $result = $this->BcUpload->uploadImage('Content.eyecatch', 'template1.jpg', $options);
+        $expects = '<img src="/baser/baser-core/uploads/tmp/medium/test" alt=""/>';
         $this->assertEquals($expects, $result);
 
         $options = [

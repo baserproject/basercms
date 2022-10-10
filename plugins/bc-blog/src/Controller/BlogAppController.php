@@ -9,9 +9,9 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
-namespace BcBlog\Controller\Admin;
+namespace BcBlog\Controller;
 
-use BaserCore\Controller\Admin\BcAdminAppController;
+use BaserCore\Controller\AppController;
 
 /**
  * ブログコントローラー基底クラス
@@ -20,7 +20,7 @@ use BaserCore\Controller\Admin\BcAdminAppController;
  * @property BlogPost $BlogPost
  * @property BlogCategory $BlogCategory
  */
-class BlogAppController extends BcAdminAppController
+class BlogAppController extends AppController
 {
     /**
      * コメントを管理者メールへメール送信する

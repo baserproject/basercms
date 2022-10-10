@@ -193,7 +193,7 @@ class AppControllerTest extends BcTestCase
         $this->AppController->setRequest($this->getRequest('/', [], 'GET', ['ajax' => true]));
         $this->_response = $this->AppController->redirectIfIsRequireMaintenance();
         $this->assertNull($this->_response);
-        $this->AppController->setRequest($this->getRequest('http://localhost/baser/admin'));
+        $this->AppController->setRequest($this->getRequest('https://localhost/baser/admin'));
         $this->_response = $this->AppController->redirectIfIsRequireMaintenance();
         $this->assertNull($this->_response);
         $this->loginAdmin($this->getRequest());

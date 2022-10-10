@@ -441,16 +441,16 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function testBatchPublish()
     {
-        $content = $this->ContentsService->get(1);
+        $content = $this->ContentsService->get(4);
         $this->ContentsService->update($content, ['id' => $content->id, 'status' => false, 'name' => 'test']);
         // publish
         $data = [
             'batch' => 'publish',
-            'batch_targets' => [1],
+            'batch_targets' => [4],
         ];
         $this->post('/baser/api/baser-core/contents/batch.json?token=' . $this->accessToken, $data);
         $this->assertResponseSuccess();
-        $content = $this->ContentsService->get(1);
+        $content = $this->ContentsService->get(4);
         $this->assertTrue($content->status);
     }
 

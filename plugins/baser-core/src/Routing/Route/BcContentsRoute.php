@@ -11,7 +11,6 @@
 
 namespace BaserCore\Routing\Route;
 
-use BaserCore\Service\BcFrontService;
 use BaserCore\Service\SitesService;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
@@ -53,10 +52,10 @@ class BcContentsRoute extends Route
 
         //管理システムにログインしているかつプレビューの場合は公開状態のステータスは無視する
         $publish = true;
-        if ((!empty($request->getQuery['preview']) || !empty($request->getQuery['force'])) && BcUtil::loginUser()) {
+        if ((!empty($request->getQuery('preview')) || !empty($request->getQuery('force'))) && BcUtil::loginUser()) {
             $publish = false;
-            if (!empty($request->getQuery['host'])) {
-                Configure::write('BcEnv.host', $request->getQuery['host']);
+            if (!empty($request->getQuery('host'))) {
+                Configure::write('BcEnv.host', $request->getQuery('host'));
             } else {
                 Configure::write('BcEnv.host', '');
             }
@@ -83,7 +82,7 @@ class BcContentsRoute extends Route
                     $checkUrl = ($url)? $url : '/';
                 }
             } else {
-                if (!empty($request->getQuery['force']) && BcUtil::isAdminUser()) {
+                if (!empty($request->getQuery('force')) && BcUtil::isAdminUser()) {
                     // =================================================================================================
                     // 2016/11/10 ryuring
                     // 別ドメインの際に、固定ページのプレビューで、正しくサイト情報を取得できない。

@@ -92,7 +92,7 @@ class ContentsAdminService extends ContentsService implements ContentsAdminServi
     protected function _isAvailablePreview($content)
     {
         $setting = Configure::read('BcContents.items.' . $content->plugin . '.' . $content->type);
-        return (!empty($setting['preview']) && $content->type !== 'ContentFolder');
+        return (!empty($setting['preview']));
     }
 
     /**

@@ -25,10 +25,13 @@ use BaserCore\Model\Entity\ContentFolder;
  * @var ContentFolder $contentFolder
  * @var array $parentContents
  * @var array $fullUrl
+ * @checked
+ * @noTodo
+ * @unitTest
  */
 
 $this->BcBaser->js('admin/contents/edit.bundle', false, ['id' => 'AdminContentsEditScript',
-  'data-previewurl' => Router::url(["controller" => "preview", "action" => "view"]),
+  'data-previewurl' => Router::url(["plugin" => "BaserCore", "controller" => "preview", "action" => "view"]),
   'data-fullurl' => rawurldecode($fullUrl),
   'data-current' => $content,
   'data-settings' => $this->BcContents->getJsonItems()
@@ -51,7 +54,7 @@ $isOmitViewAction = $this->BcContents->getConfig('items')[$content->type]['omitV
 if ($content->site->use_subdomain) {
   $contentsName = '';
   if (!$content->site_root) {
-    $contentsName = $this->BcAdminForm->getSourceValue($entityName . "name");
+    $contentsName = $this->BcAdminForm->getSourceValue("content.name");
     if (!$isOmitViewAction && $content->url !== '/') {
       $contentsName .= '/';
     }
@@ -60,7 +63,7 @@ if ($content->site->use_subdomain) {
   if ($this->request->getData('Site.same_main_url') && $content->site_root) {
     $contentsName = '';
   } else {
-    $contentsName = rawurldecode($this->BcAdminForm->getSourceValue($entityName . "name"));
+    $contentsName = rawurldecode($this->BcAdminForm->getSourceValue("content.name"));
   }
   if (!$isOmitViewAction && $content->url !== '/' && $contentsName) {
     $contentsName .= '/';
@@ -71,19 +74,20 @@ $editable = $this->BcContents->isEditable($content);
 ?>
 
 
-<?php echo $this->BcAdminForm->hidden($entityName . "id") ?>
-<?php echo $this->BcAdminForm->hidden($entityName . "plugin") ?>
-<?php echo $this->BcAdminForm->hidden($entityName . "type") ?>
-<?php echo $this->BcAdminForm->hidden($entityName . "entity_id") ?>
-<?php echo $this->BcAdminForm->hidden($entityName . "url") ?>
-<?php echo $this->BcAdminForm->hidden($entityName . "alias_id") ?>
-<?php echo $this->BcAdminForm->hidden($entityName . "site_root") ?>
-<?php echo $this->BcAdminForm->hidden($entityName . "site_id") ?>
-<?php echo $this->BcAdminForm->hidden($entityName . "lft") ?>
-<?php echo $this->BcAdminForm->hidden($entityName . "rght") ?>
-<?php echo $this->BcAdminForm->hidden($entityName . "status") ?>
-<?php echo $this->BcAdminForm->hidden($entityName . "main_site_content_id") ?>
-<?php echo $this->BcAdminForm->hidden($entityName . "publish_begin") ?>
+<?php echo $this->BcAdminForm->hidden("content.id") ?>
+<?php echo $this->BcAdminForm->hidden("content.plugin") ?>
+<?php echo $this->BcAdminForm->hidden("content.type") ?>
+<?php echo $this->BcAdminForm->hidden("content.entity_id") ?>
+<?php echo $this->BcAdminForm->hidden("content.url") ?>
+<?php echo $this->BcAdminForm->hidden("content.alias_id") ?>
+<?php echo $this->BcAdminForm->hidden("content.site_root") ?>
+<?php echo $this->BcAdminForm->hidden("content.site_id") ?>
+<?php echo $this->BcAdminForm->hidden("content.lft") ?>
+<?php echo $this->BcAdminForm->hidden("content.rght") ?>
+<?php echo $this->BcAdminForm->hidden("content.status") ?>
+<?php echo $this->BcAdminForm->hidden("content.main_site_content_id") ?>
+<?php echo $this->BcAdminForm->hidden("content.publish_begin") ?>
+<?php echo $this->BcAdminForm->hidden("content.preview_mode", ['value' => 'default', 'id' => 'ContentPreviewMode']) ?>
 
 
 <div class="bca-section bca-section__post-top">
@@ -104,25 +108,25 @@ $editable = $this->BcContents->isEditable($content);
 <section id="BasicSetting" class="bca-section">
   <table class="form-table bca-form-table" data-bca-table-type="type2">
     <tr>
-      <th class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label($entityName . "name", 'URL') ?>
+      <th class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label("content.name", 'URL') ?>
         &nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
       </th>
       <td class="col-input bca-form-table__input">
         <?php if (!$content->site_root): ?>
-          <?php echo $this->BcAdminForm->control($entityName . "parent_id", ['type' => 'select', 'options' => $parentContents, 'escape' => true]) ?>
+          <?php echo $this->BcAdminForm->control("content.parent_id", ['type' => 'select', 'options' => $parentContents, 'escape' => true]) ?>
         <?php endif ?>
         <?php if (!$content->site_root && !$related): ?>
-          <?php echo rawurldecode($this->BcAdminForm->control($entityName . "name", ['type' => 'text', 'size' => 20, 'autofocus' => true])) ?>
+          <?php echo rawurldecode($this->BcAdminForm->control("content.name", ['type' => 'text', 'size' => 20, 'autofocus' => true])) ?>
           <?php if (!$isOmitViewAction && $content->url !== '/'): ?>/<?php endif ?>
         <?php else: ?>
           <?php if (!$content->site_root): ?>
             <?php // サイトルートの場合はコンテンツ名を表示しない ?>
             <?php echo h($contentsName) ?>
           <?php endif ?>
-          <?php echo $this->BcAdminForm->hidden($entityName . "name") ?>
+          <?php echo $this->BcAdminForm->hidden("content.name") ?>
         <?php endif ?>
-        <?php echo $this->BcAdminForm->error($entityName . "name") ?>
-        <?php echo $this->BcAdminForm->error($entityName . "parent_id") ?>
+        <?php echo $this->BcAdminForm->error("content.name") ?>
+        <?php echo $this->BcAdminForm->error("content.parent_id") ?>
         <span class="bca-post__url">
           <?php echo strip_tags($linkedFullUrl, '<a>') ?>
         </span>
@@ -130,45 +134,45 @@ $editable = $this->BcContents->isEditable($content);
     </tr>
     <tr>
       <th class="col-head bca-form-table__label">
-        <?php echo $this->BcAdminForm->label($entityName . "title", __d('baser', 'タイトル')) ?>
+        <?php echo $this->BcAdminForm->label("content.title", __d('baser', 'タイトル')) ?>
         &nbsp;
         <span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
       </th>
       <td class="col-input bca-form-table__input">
         <?php if ($editable): ?>
-          <?php echo $this->BcAdminForm->control($entityName . "title", ['type' => 'text', 'size' => 50]) ?>
-          <?php echo $this->BcAdminForm->error($entityName . "title") ?>
+          <?php echo $this->BcAdminForm->control("content.title", ['type' => 'text', 'size' => 50]) ?>
+          <?php echo $this->BcAdminForm->error("content.title") ?>
         <?php else: ?>
-          <?php echo h($this->BcAdminForm->getSourceValue($entityName . "title")) ?>
-          <?php echo $this->BcAdminForm->hidden($entityName . "title") ?>
+          <?php echo h($this->BcAdminForm->getSourceValue("content.title")) ?>
+          <?php echo $this->BcAdminForm->hidden("content.title") ?>
         <?php endif ?>
       </td>
     </tr>
     <tr>
       <th
-        class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label($entityName . "self_status", __d('baser', '公開状態')) ?>
+        class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label("content.self_status", __d('baser', '公開状態')) ?>
         &nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
       </th>
       <td class="col-input bca-form-table__input">
         <?php if ($editable): ?>
-          <?php echo $this->BcAdminForm->control($entityName . "self_status", ['type' => 'radio', 'options' => $this->BcText->booleanDoList('公開')]) ?>
+          <?php echo $this->BcAdminForm->control("content.self_status", ['type' => 'radio', 'options' => $this->BcText->booleanDoList('公開')]) ?>
         <?php else: ?>
-          <?php echo $this->BcText->arrayValue($this->BcAdminForm->getSourceValue($entityName . "self_status"), $this->BcText->booleanDoList('公開')) ?>
-          <?php echo $this->BcAdminForm->hidden($entityName . "self_status") ?>
+          <?php echo $this->BcText->arrayValue($this->BcAdminForm->getSourceValue("content.self_status"), $this->BcText->booleanDoList('公開')) ?>
+          <?php echo $this->BcAdminForm->hidden("content.self_status") ?>
         <?php endif ?>
         <br>
-        <?php echo $this->BcAdminForm->error($entityName . "self_status") ?>
-        <?php if ((bool)$this->BcAdminForm->getSourceValue($entityName . "status") != (bool)$this->BcAdminForm->getSourceValue($entityName . "self_status")): ?>
+        <?php echo $this->BcAdminForm->error("content.self_status") ?>
+        <?php if ((bool)$this->BcAdminForm->getSourceValue("content.status") != (bool)$this->BcAdminForm->getSourceValue("content.self_status")): ?>
           <p>※ <?php echo __d('baser', '親フォルダの設定を継承し非公開状態となっています') ?></p>
         <?php endif ?>
       </td>
     </tr>
     <tr>
       <th
-        class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label($entityName . "self_status", __d('baser', '公開日時')) ?></th>
+        class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label("content.self_status", __d('baser', '公開日時')) ?></th>
       <td class="col-input bca-form-table__input">
         <?php if ($editable): ?>
-          <?php echo $this->BcAdminForm->control($entityName . "self_publish_begin", [
+          <?php echo $this->BcAdminForm->control("content.self_publish_begin", [
             'type' => 'dateTimePicker',
             'size' => 12,
             'maxlength' => 10,
@@ -176,24 +180,24 @@ $editable = $this->BcContents->isEditable($content);
             'timeLabel' => ['text' => '開始時間']
           ]) ?>
           &nbsp;〜&nbsp;
-          <?php echo $this->BcAdminForm->control($entityName . "self_publish_end", [
+          <?php echo $this->BcAdminForm->control("content.self_publish_end", [
             'type' => 'dateTimePicker',
             'size' => 12, 'maxlength' => 10,
             'dateLabel' => ['text' => '終了日付'],
             'timeLabel' => ['text' => '終了時間']
           ]) ?>
         <?php else: ?>
-          <?php if ($this->BcAdminForm->getSourceValue($entityName . "self_publish_begin") || $this->BcAdminForm->getSourceValue($entityName . "self_publish_end")): ?>
-            <?php echo $this->BcAdminForm->getSourceValue($entityName . "self_publish_begin") ?>&nbsp;〜&nbsp;<?php echo $this->BcAdminForm->getSourceValue($entityName . "self_publish_end") ?>
+          <?php if ($this->BcAdminForm->getSourceValue("content.self_publish_begin") || $this->BcAdminForm->getSourceValue("content.self_publish_end")): ?>
+            <?php echo $this->BcAdminForm->getSourceValue("content.self_publish_begin") ?>&nbsp;〜&nbsp;<?php echo $this->BcAdminForm->getSourceValue("content.self_publish_end") ?>
           <?php endif ?>
-          <?php echo $this->BcAdminForm->hidden($entityName . "self_publish_begin") ?>
-          <?php echo $this->BcAdminForm->hidden($entityName . "self_publish_end") ?>
+          <?php echo $this->BcAdminForm->hidden("content.self_publish_begin") ?>
+          <?php echo $this->BcAdminForm->hidden("content.self_publish_end") ?>
         <?php endif ?>
         <br>
-        <?php echo $this->BcAdminForm->error($entityName . "self_publish_begin") ?>
-        <?php echo $this->BcAdminForm->error($entityName . "self_publish_end") ?>
-        <?php if (($this->BcAdminForm->getSourceValue($entityName . "publish_begin") != $this->BcAdminForm->getSourceValue($entityName . "self_publish_begin")) ||
-          ($this->BcAdminForm->getSourceValue($entityName . "publish_end") != $this->BcAdminForm->getSourceValue($entityName . "self_publish_end"))): ?>
+        <?php echo $this->BcAdminForm->error("content.self_publish_begin") ?>
+        <?php echo $this->BcAdminForm->error("content.self_publish_end") ?>
+        <?php if (($this->BcAdminForm->getSourceValue("content.publish_begin") != $this->BcAdminForm->getSourceValue("content.self_publish_begin")) ||
+          ($this->BcAdminForm->getSourceValue("content.publish_end") != $this->BcAdminForm->getSourceValue("content.self_publish_end"))): ?>
           <p>※ <?php echo __d('baser', '親フォルダの設定を継承し公開期間が設定されている状態となっています') ?><br>
             （<?php echo $this->BcTime->format($content->publish_begin, 'yyyy/MM/dd HH:mm') ?>
             〜

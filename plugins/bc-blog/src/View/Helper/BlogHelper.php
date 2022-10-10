@@ -106,11 +106,13 @@ class BlogHelper extends Helper
                 }
             } elseif ($this->_View->get('blogContent')) {
                 $this->currentBlogContent = $this->_View->get('blogContent');
-                if ($this->_View->getRequest()->getAttribute('currentContent')->type === 'BlogContent') {
-                    $this->currentContent = $this->_View->getRequest()->getAttribute('currentContent');
-                } else {
-                    $content = $this->BcContents->getContentByEntityId($this->currentBlogContent->id, 'BlogContent');
-                    if ($content) $this->currentContent = $content;
+                if(!BcUtil::isAdminSystem()) {
+                    if ($this->_View->getRequest()->getAttribute('currentContent')->type === 'BlogContent') {
+                        $this->currentContent = $this->_View->getRequest()->getAttribute('currentContent');
+                    } else {
+                        $content = $this->BcContents->getContentByEntityId($this->currentBlogContent->id, 'BlogContent');
+                        if ($content) $this->currentContent = $content;
+                    }
                 }
             }
         }

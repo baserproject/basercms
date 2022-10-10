@@ -31,14 +31,11 @@ $(function () {
         window.open('', 'preview');
         var form = $(this).parents('form');
         var action = form.attr('action');
-        var previewMode = 'default';
+        var previewMode = $("#ContentPreviewMode").val();
         var previewurl = previewurlBase;
 
         if ($("#ContentAliasId").val()) {
             previewMode = 'alias';
-        }
-        if ($("#DraftModeContentsTmp").val() == 'draft') {
-            previewMode = 'draft';
         }
         if (previewurl.match(/\?/)) {
             previewurl += '&url=' + fullUrl +  '&preview=' + previewMode;

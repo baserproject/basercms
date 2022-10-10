@@ -12,7 +12,9 @@
 namespace BaserCore\Controller\Component;
 
 use BaserCore\Service\ContentsServiceInterface;
+use BaserCore\Service\Front\BcFrontContentsServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
+use Cake\Event\EventInterface;
 use Cake\Http\ServerRequest;
 use Cake\Controller\Component;
 use Cake\Controller\Controller;
@@ -45,30 +47,25 @@ class BcFrontContentsComponent extends Component
 
     /**
      * プレビューモード
-     *
      * @var string default Or alias
      */
     protected $preview = null;
 
     /**
-     * Initialize
-     *
+     * beforeRender
      * @param array $config
      * @return void
      * @checked
      * @unitTest
      * @noTodo
      */
-    public function initialize(array $config): void
+    public function beforeRender(EventInterface $event): void
     {
-        parent::initialize($config);
-        $this->ContentsService = $this->getService(ContentsServiceInterface::class);
         $this->setupFront();
     }
 
     /**
      * フロントエンドのセットアップ
-     *
      * @checked
      * @unitTest
      * @noTodo
@@ -77,62 +74,33 @@ class BcFrontContentsComponent extends Component
     {
         $controller = $this->getController();
         $request = $controller->getRequest();
-        // プレビュー時のデータセット
-        if (!empty($request->getQuery('preview'))) {
-            $this->preview = $request->getQuery('preview');
-            if (!empty($request->getData())) {
-                // 何か他の方法を考える、本当にその処理が必要かも確認
-                $controller->setRequest($request->withParam('Content', $request->getData()));
-                $controller->Security->validatePost = false;
-                $controller->Security->csrfCheck = false;
-            }
-        }
+        if(!$request->getAttribute('currentContent')) return;
+
+        $currentContent = $request->getAttribute('currentContent');
 
         // 表示設定
-        if (!empty($request->getAttributes())) {
-            // レイアウトテンプレート設定
-            $viewBuilder = $controller->viewBuilder();
-            $viewBuilder->setLayout($request->getAttribute('currentContent')->layout_template);
-            if (!$viewBuilder->getLayout()) {
-                $controller->viewBuilder()->setLayout($this->ContentsService->getParentLayoutTemplate($request->getAttribute('currentContent')->id));
-            }
-            // パンくず
-            $controller->set('crumbs', $this->getCrumbs($request->getAttribute('currentContent')->id));
-            // 説明文
-            $controller->set('description', $request->getAttribute('currentContent')->description);
-            // タイトル
-            $controller->setTitle($request->getAttribute('currentContent')->title);
+        if ($currentContent) {
+            $this->setLayout($currentContent);
+            $bcFrontContentsService = $this->getService(BcFrontContentsServiceInterface::class);
+            $controller->set($bcFrontContentsService->getViewVarsForFront($currentContent));
         }
     }
 
     /**
-     * パンくず用のデータを取得する
-     *
-     * @param $id
-     * @return array
+     * レイアウトをセットする
+     * @param $currentContent
+     * @checked
+     * @noTodo
      */
-    protected function getCrumbs($id)
+    public function setLayout($currentContent)
     {
-        if(!$id) return [];
-        // ===========================================================================================
-        // 2016/09/22 ryuring
-        // PHP 7.0.8 環境にて、コンテンツ一覧追加時、検索インデックス作成のため、BcContentsComponent が
-        // 呼び出されるが、その際、モデルのマジックメソッドの戻り値を返すタイミングで処理がストップしてしまう。
-        // そのため、ビヘイビアのメソッドを直接実行して対処した。
-        // CakePHPも、PHP自体のエラーも発生せず、ただ止まる。PHP7のバグ？PHP側のメモリーを256Mにしても変わらず。
-        // ===========================================================================================
-        $contents = $this->ContentsService->getPath($id)->all();
-        $crumbs = [];
-        foreach($contents as $content) {
-            if (!$content->site_root) {
-                $crumb = [
-                    'name' => $content->title,
-                    'url' => $content->url
-                ];
-                $crumbs[] = $crumb;
-            }
+        if ($currentContent->layout_template) {
+            $layout = $currentContent->layout_template;
+        } else {
+            $contentsService = $this->getService(ContentsServiceInterface::class);
+            $layout = $contentsService->getParentLayoutTemplate($currentContent->id);
         }
-        return $crumbs;
+        $this->getController()->viewBuilder()->setLayout($layout);
     }
 
 }

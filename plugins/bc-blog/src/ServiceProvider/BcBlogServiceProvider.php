@@ -19,6 +19,10 @@ use BcBlog\Service\BlogCategoriesService;
 use BcBlog\Service\BlogCategoriesServiceInterface;
 use BcBlog\Service\BlogContentsService;
 use BcBlog\Service\BlogContentsServiceInterface;
+use BcBlog\Service\Front\BlogContentsFrontService;
+use BcBlog\Service\Front\BlogContentsFrontServiceInterface;
+use BcBlog\Service\Front\BlogFrontService;
+use BcBlog\Service\Front\BlogFrontServiceInterface;
 use Cake\Core\ServiceProvider;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -38,7 +42,8 @@ class BcBlogServiceProvider extends ServiceProvider
         BlogCategoriesServiceInterface::class,
         BlogCategoriesAdminServiceInterface::class,
         BlogContentsServiceInterface::class,
-        BlogContentsAdminServiceInterface::class
+        BlogContentsAdminServiceInterface::class,
+        BlogFrontServiceInterface::class
     ];
 
     /**
@@ -56,6 +61,8 @@ class BcBlogServiceProvider extends ServiceProvider
         // BlogContentsサービス
         $container->add(BlogContentsServiceInterface::class, BlogContentsService::class);
         $container->add(BlogContentsAdminServiceInterface::class, BlogContentsAdminService::class);
+        // Blogサービス
+        $container->add(BlogFrontServiceInterface::class, BlogFrontService::class);
     }
 
 }

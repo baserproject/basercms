@@ -2092,7 +2092,7 @@ DOC_END;
     {
         $context = $this->context();
         if(!($context instanceof EntityContext)) return false;
-        $entity = $context->entity();
+        $entity = $context->entity(explode('.', $fieldName));
         if(!$entity) return false;
 
         $fieldArray = explode('.', $fieldName);
