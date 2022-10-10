@@ -30,6 +30,7 @@ class BlogCategoriesController extends BcApiController
      * @param BlogCategoriesServiceInterface $service
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function batch(BlogCategoriesServiceInterface $service)
     {
