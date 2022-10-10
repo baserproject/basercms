@@ -112,11 +112,37 @@ class BlogContentsController extends BcApiController
     }
 
     /**
-     * [API] ブログコンテンツー削除
+     * [API] ブログコンテンツ削除
+     * @param BlogContentsServiceInterface $service
+     * @param $blogContentId
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function delete()
+    public function delete(BlogContentsServiceInterface $service, $blogContentId)
     {
-        //todo ブログコンテンツー削除
+        if ($this->request->is(['post', 'delete'])) {
+            try {
+                $blogContent = $service->get($blogContentId);
+                if ($service->delete($blogContentId)) {
+                    $message = __d('baser', 'ブログコンテンツ「{0}」を削除しました。', $blogContent->description);
+                } else {
+                    $this->setResponse($this->response->withStatus(400));
+                    $message = __d('baser', '入力エラーです。内容を修正してください。');
+                }
+            } catch (PersistenceFailedException $e) {
+                $this->setResponse($this->response->withStatus(400));
+                $blogContent = $e->getEntity();
+                $message = __d('baser', 'データベース処理中にエラーが発生しました。');
+            }
+            $this->set([
+                'message' => $message,
+                'blogContent' => $blogContent,
+                'errors' => $blogContent->getErrors()
+            ]);
+            $this->viewBuilder()->setOption('serialize', ['blogContent', 'message', 'errors']);
+        }
     }
 
     /**
