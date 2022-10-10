@@ -235,4 +235,17 @@ class BcTestCaseTest extends BcTestCase
         $this->assertNotNull($rs);
         $this->assertEquals('Cake\TestSuite\Fixture\TruncateStrategy', get_class($rs));
     }
+
+    /**
+     * test setUploadFileToRequest
+     */
+    public function testSetUploadFileToRequest()
+    {
+        $bcTestCase = new BcTestCase();
+        $filename = 'testUpload.txt';
+        $filePath = TMP . $filename;
+        $bcTestCase->setUploadFileToRequest($name = 'file', $filePath);
+        $this->assertEquals($filename, $_FILES[$name]['name']);
+        $this->assertEquals($filename, $bcTestCase->_request['files'][$name]['name']);
+    }
 }

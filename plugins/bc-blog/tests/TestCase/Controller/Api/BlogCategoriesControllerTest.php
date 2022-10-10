@@ -130,7 +130,19 @@ class BlogCategoriesControllerTest extends BcTestCase
      */
     public function test_add()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $data = ['name' => 'blog-category-add', 'title' => 'test title'];
+        $this->post('/baser/api/bc-blog/blog_categories/add/1.json?token=' . $this->accessToken, $data);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('blog-category-add', $result->blogCategory->name);
+        $this->assertEquals('test title', $result->blogCategory->title);
+        $this->assertEquals('ブログカテゴリー「blog-category-add」を追加しました。', $result->message);
+
+        $this->post('/baser/api/bc-blog/blog_categories/add/1.json?token=' . $this->accessToken, $data);
+        $this->assertResponseCode(400);
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('入力エラーです。内容を修正してください。', $result->message);
+        $this->assertEquals('入力されたカテゴリ名は既に登録されています。', $result->errors->name->duplicateBlogCategory);
     }
 
     /**
@@ -166,7 +178,33 @@ class BlogCategoriesControllerTest extends BcTestCase
      */
     public function test_batch()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //成功場合、
+        BlogCategoryFactory::make(
+            ['id' => 21, 'name' => 'blog-category-delete', 'blog_content_id' => 21, 'title' => 'test title delete', 'lft' => 1, 'rght' => 2]
+        )->persist();
+        BlogCategoryFactory::make(
+            ['id' => 22, 'name' => 'blog-category-delete', 'blog_content_id' => 21, 'title' => 'test title delete', 'lft' => 1, 'rght' => 2]
+        )->persist();
+
+        $this->post('/baser/api/bc-blog/blog_categories/batch.json?token=' . $this->accessToken, [
+            'batch' => 'delete',
+            'batch_targets' => [21, 22]
+        ]);
+        $this->assertResponseOk();
+
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('一括処理が完了しました。', $result->message);
+
+        $blogCategoriesService = new BlogCategoriesService();
+        $data = $blogCategoriesService->getIndex(21, [])->count();
+        $this->assertEquals(0, $data);
+
+        //失敗場合、
+        $this->post('/baser/api/bc-blog/blog_categories/batch.json?token=' . $this->accessToken, [
+            'batch' => 'new',
+            'batch_targets' => [1, 2]
+        ]);
+        $this->assertResponseCode(500);
     }
 
     /**

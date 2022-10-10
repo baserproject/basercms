@@ -409,6 +409,7 @@ class BcTestCase extends TestCase
      * @param int $error
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function setUploadFileToRequest($name, $path, $fileName = '', $error = UPLOAD_ERR_OK)
     {

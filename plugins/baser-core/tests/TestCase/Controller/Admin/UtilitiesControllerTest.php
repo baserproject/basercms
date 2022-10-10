@@ -13,6 +13,7 @@ namespace BaserCore\Test\TestCase\Controller\Admin;
 
 use BaserCore\Controller\Admin\UtilitiesController;
 use BaserCore\Service\BcDatabaseService;
+use BaserCore\Service\UtilitiesService;
 use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use Cake\Datasource\ConnectionManager;
@@ -21,6 +22,7 @@ use Cake\Filesystem\Folder;
 use Cake\TestSuite\IntegrationTestTrait;
 use BaserCore\TestSuite\BcTestCase;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
+use Composer\Package\Archiver\ZipArchiver;
 
 /**
  * class UtilitiesControllerTest
@@ -295,4 +297,46 @@ class UtilitiesControllerTest extends BcTestCase
         $this->assertFlashMessage("コンテンツのツリー構造に問題はありません。");
     }
 
+    /**
+     * Test maintenance
+     */
+    public function testMaintenance()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        // backup のステータスを確認
+        $this->post('/baser/admin/baser-core/utilities/maintenance/backup');
+        $this->assertResponseOk();
+        // restore の失敗ステータスを確認
+        $this->post('/baser/admin/baser-core/utilities/maintenance/restore');
+        $this->assertResponseCode(302);
+        // restore の失敗リダイレクトを確認
+        $this->assertRedirect([
+            'plugin' => 'BaserCore',
+            'prefix' => 'Admin',
+            'controller' => 'utilities',
+            'action' => 'maintenance'
+        ]);
+        // restore の失敗メッセージを確認
+        $this->assertFlashMessage('データの復元に失敗しました。ログの確認を行なって下さい。バックアップファイルが送信されませんでした。');
+        // restore の成功ステータスを確認
+        $zipSrcPath = TMP;
+        $this->execPrivateMethod(new UtilitiesService(), '_writeBackup', [$zipSrcPath . 'schema', 'BaserCore', 'utf8']);
+        $zip = new ZipArchiver();
+        $testFile = $zipSrcPath . 'test.zip';
+        $zip->archive($zipSrcPath . 'schema', $testFile, true);
+        $this->setUploadFileToRequest('backup', $testFile);
+        $this->setUnlockedFields(['backup']);
+        $this->post('/baser/admin/baser-core/utilities/maintenance/restore');
+        $this->assertResponseCode(302);
+        // restore の成功リダイレクトを確認
+        $this->assertRedirect([
+            'plugin' => 'BaserCore',
+            'prefix' => 'Admin',
+            'controller' => 'utilities',
+            'action' => 'maintenance'
+        ]);
+        // restore の成功メッセージを確認
+        $this->assertFlashMessage('データの復元が完了しました。');
+    }
 }
