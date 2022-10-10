@@ -11,7 +11,9 @@
 
 namespace BaserCore\Test\TestCase\Database\Schema;
 
+use BaserCore\Database\Schema\BcSchema;
 use BaserCore\TestSuite\BcTestCase;
+use Cake\Filesystem\File;
 
 /**
  * Class BcSchemaTest
@@ -22,6 +24,20 @@ class BcSchemaTest extends BcTestCase
 {
 
     /**
+     * スキーム
+     *
+     * @var BcSchema
+    */
+    private $schema;
+
+    /**
+     * スキームファイル
+     *
+     * @var File
+     */
+    private $schemaFile;
+
+    /**
      * set up
      *
      * @return void
@@ -29,6 +45,31 @@ class BcSchemaTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $path = TMP . 'schema' . DS;
+        $schemaName = 'UserActionsSchema';
+        $schemaFilePath = $path . $schemaName . '.php';
+        $this->schemaFile = new File($schemaFilePath, true);
+        $table = 'user_actions';
+        // スキーマファイルを生成
+        $this->schemaFile->write("<?php
+use BaserCore\Database\Schema\BcSchema;
+class UserActionsSchema extends BcSchema
+{
+    public \$table = '$table';
+    public \$fields = [
+        'id' => ['type' => 'integer', 'autoIncrement' => true],
+        'contents' => ['type' => 'text', 'length' => 100],
+        '_constraints' => [
+            'primary' => ['type' => 'primary', 'columns' => ['id'], 'length' => []],
+        ],
+        '_options' => [
+            'engine' => 'InnoDB',
+            'collation' => 'utf8_general_ci'
+        ]
+    ];
+}");
+        require_once $schemaFilePath;
+        $this->schema = new $schemaName();
     }
 
     /**
@@ -39,6 +80,7 @@ class BcSchemaTest extends BcTestCase
     public function tearDown(): void
     {
         parent::tearDown();
+        $this->schemaFile->delete();
     }
 
     /**
@@ -46,7 +88,9 @@ class BcSchemaTest extends BcTestCase
      */
     public function test_construct()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // fields プロパティに値が設定される事を確認
+        $this->assertEquals('integer', $this->schema->fields['id']['type']);
+        $this->assertEquals('text', $this->schema->fields['contents']['type']);
     }
 
     /**

@@ -51,6 +51,7 @@ class BcSchema extends TableSchema
      * @param array $columns
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function __construct(string $table = '', array $columns = [])
     {
