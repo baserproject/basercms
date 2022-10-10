@@ -84,10 +84,31 @@ class BlogContentsController extends BcApiController
 
     /**
      * [API] ブログコンテンツー編集
+     * @param BlogContentsServiceInterface $service
+     * @param $blogContentId
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function edit()
+    public function edit(BlogContentsServiceInterface $service, $blogContentId)
     {
-        //todo ブログコンテンツー編集
+        $this->request->allowMethod(['post', 'put', 'patch']);
+
+        try {
+            $blogContent = $service->update($service->get($blogContentId), $this->request->getData());
+            $message = __d('baser', 'ブログ「{0}」を更新しました。', $blogContent->content->title);
+        } catch (PersistenceFailedException $e) {
+            $blogContent = $e->getEntity();
+            $this->setResponse($this->response->withStatus(400));
+            $message = __d('baser', '入力エラーです。内容を修正してください。');
+        }
+        $this->set([
+            'message' => $message,
+            'blogContent' => $blogContent,
+            'errors' => $blogContent->getErrors()
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['blogContent', 'message', 'errors']);
     }
 
     /**
