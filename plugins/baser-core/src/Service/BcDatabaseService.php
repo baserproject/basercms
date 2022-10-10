@@ -687,6 +687,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      * @return string|false スキーマファイルの内容
      * @unitTest
      * @noTodo
+     * @unitTest
      */
     public function writeSchema($table, $options)
     {
