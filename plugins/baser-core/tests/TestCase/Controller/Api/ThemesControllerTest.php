@@ -196,7 +196,7 @@ class ThemesControllerTest extends BcTestCase
         $result = json_decode((string)$this->_response->getBody());
 
         $this->assertEquals(true, count($result->baserThemes) > 0);
-        $this->assertEquals('multiverse', $result->baserThemes[0]->title);
+        $this->assertEquals('News CMS', $result->baserThemes[0]->title);
         $this->assertEquals('1.0.0', $result->baserThemes[0]->version);
         $this->assertEquals('テーマ', $result->baserThemes[0]->category);
     }

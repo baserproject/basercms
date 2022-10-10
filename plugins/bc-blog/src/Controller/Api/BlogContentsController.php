@@ -61,6 +61,7 @@ class BlogContentsController extends BcApiController
      * [API] ブログコンテンツー新規追加
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function add(BlogContentsServiceInterface $service)
     {
@@ -70,7 +71,7 @@ class BlogContentsController extends BcApiController
             $message = __d('baser', 'ブログ「{0}」を追加しました。', $blogContent->content->title);
         } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
             $blogContent = $e->getEntity();
-            $message = __d('baser', "入力エラーです。内容を修正してください。\n");
+            $message = __d('baser', "入力エラーです。内容を修正してください。");
             $this->setResponse($this->response->withStatus(400));
         }
         $this->set([
@@ -78,7 +79,7 @@ class BlogContentsController extends BcApiController
             'message' => $message,
             'errors' => $blogContent->getErrors()
         ]);
-        $this->viewBuilder()->setOption('serialize', ['message', 'content', 'errors']);
+        $this->viewBuilder()->setOption('serialize', ['message', 'blogContent', 'errors']);
     }
 
     /**

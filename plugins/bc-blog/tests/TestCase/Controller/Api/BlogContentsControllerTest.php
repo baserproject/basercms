@@ -115,11 +115,29 @@ class BlogContentsControllerTest extends BcTestCase
 
     /**
      * test add
-     * @return void
      */
     public function test_add()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $data = [
+            'description' => 'baserCMS inc. [デモ] の最新の情報をお届けします。',
+            'content' => [
+                "title" => "新しい ブログ"
+            ]
+        ];
+        $this->post('/baser/api/bc-blog/blog_contents/add.json?token=' . $this->accessToken, $data);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('ブログ「新しい ブログ」を追加しました。', $result->message);
+        $this->assertEquals('baserCMS inc. [デモ] の最新の情報をお届けします。', $result->blogContent->description);
+
+        $data = [
+            'description' => 'baserCMS inc. [デモ] の最新の情報をお届けします。',
+        ];
+        $this->post('/baser/api/bc-blog/blog_contents/add.json?token=' . $this->accessToken, $data);
+        $this->assertResponseCode(400);
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('入力エラーです。内容を修正してください。', $result->message);
+        $this->assertEquals('関連するコンテンツがありません', $result->errors->content->_required);
     }
 
     /**
