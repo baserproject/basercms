@@ -147,10 +147,32 @@ class BlogCategoriesController extends BcApiController
 
     /**
      * [API] ブログカテゴリー新規追加
+     * @param BlogCategoriesServiceInterface $service
+     * @param $blogContentId
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function add()
+    public function add(BlogCategoriesServiceInterface $service, $blogContentId)
     {
-        //todo ブログカテゴリー新規追加
+        if ($this->request->is('post')) {
+            try {
+                $blogCategory = $service->create($blogContentId, $this->request->getData());
+                $message = __d('baser', 'ブログカテゴリー「{0}」を追加しました。', $blogCategory->name);
+            } catch (PersistenceFailedException $e) {
+                $blogCategory = $e->getEntity();
+                $this->setResponse($this->response->withStatus(400));
+                $message = __d('baser', '入力エラーです。内容を修正してください。');
+            }
+
+            $this->set([
+                'message' => $message,
+                'blogCategory' => $blogCategory,
+                'errors' => $blogCategory->getErrors(),
+            ]);
+            $this->viewBuilder()->setOption('serialize', ['message', 'blogCategory', 'errors']);
+        }
     }
 
     /**

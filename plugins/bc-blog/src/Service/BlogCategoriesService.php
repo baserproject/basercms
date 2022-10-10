@@ -177,8 +177,9 @@ class BlogCategoriesService implements BlogCategoriesServiceInterface
     public function create(int $blogContentId, array $postData): ?EntityInterface
     {
         $postData['no'] = $this->BlogCategories->getMax('no', [
-            'BlogCategories.blog_content_id' => $blogContentId
-        ]) + 1;
+                'BlogCategories.blog_content_id' => $blogContentId
+            ]) + 1;
+        $postData['blog_content_id'] = $blogContentId;
         $blogCategory = $this->BlogCategories->newEmptyEntity();
         $blogCategory = $this->BlogCategories->patchEntity($blogCategory, $postData);
         return $this->BlogCategories->saveOrFail($blogCategory);

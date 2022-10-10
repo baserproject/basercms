@@ -130,7 +130,19 @@ class BlogCategoriesControllerTest extends BcTestCase
      */
     public function test_add()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $data = ['name' => 'blog-category-add', 'title' => 'test title'];
+        $this->post('/baser/api/bc-blog/blog_categories/add/1.json?token=' . $this->accessToken, $data);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('blog-category-add', $result->blogCategory->name);
+        $this->assertEquals('test title', $result->blogCategory->title);
+        $this->assertEquals('ブログカテゴリー「blog-category-add」を追加しました。', $result->message);
+
+        $this->post('/baser/api/bc-blog/blog_categories/add/1.json?token=' . $this->accessToken, $data);
+        $this->assertResponseCode(400);
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('入力エラーです。内容を修正してください。', $result->message);
+        $this->assertEquals('入力されたカテゴリ名は既に登録されています。', $result->errors->name->duplicateBlogCategory);
     }
 
     /**
