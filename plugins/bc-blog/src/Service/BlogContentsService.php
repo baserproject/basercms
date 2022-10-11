@@ -19,6 +19,7 @@ use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
 use Cake\Datasource\EntityInterface;
+use Cake\ORM\Query;
 use Cake\ORM\TableRegistry;
 
 /**
@@ -40,6 +41,31 @@ class BlogContentsService implements BlogContentsServiceInterface
     public function __construct()
     {
         $this->BlogContents = TableRegistry::getTableLocator()->get("BcBlog.BlogContents");
+    }
+
+    /**
+     * 一覧データを取得
+     * @param array $queryParams
+     * @return Query
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getIndex(array $queryParams = []): Query
+    {
+        $query = $this->BlogContents->find()->order([
+            'BlogContents.id'
+        ]);
+
+        if (!empty($queryParams['limit'])) {
+            $query->limit($queryParams['limit']);
+        }
+
+        if (!empty($queryParams['description'])) {
+            $query->where(['description LIKE' => '%' . $queryParams['description'] . '%']);
+        }
+
+        return $query;
     }
 
     /**
