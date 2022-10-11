@@ -107,7 +107,11 @@ class UserActionsSchema extends BcSchema
      */
     public function test_init()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->schema->init();
+        $this->assertEquals('integer', $this->schema->fields['id']['type']);
+        $this->assertEquals('text', $this->schema->fields['contents']['type']);
+        $this->assertEquals('primary', $this->schema->fields['_constraints']['primary']['type']);
+        $this->assertEquals('InnoDB', $this->schema->fields['_options']['engine']);
     }
 
     /**

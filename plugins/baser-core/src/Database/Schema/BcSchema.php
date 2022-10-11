@@ -76,6 +76,7 @@ class BcSchema extends TableSchema
      * 初期化処理
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function init()
     {
