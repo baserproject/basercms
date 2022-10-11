@@ -50,11 +50,23 @@ class BcUtil
     /**
      * detectors
      *
-     * ServerRequest::_detectors を初期化する際、
-     * 一番初期の状況を保管しておくために利用
+     * BcUtil::createRequest() にて
+     * ServerRequest::_detectors を初期化する際に利用
      * @var array
      */
-    public static $_detectors;
+    protected static $_detectors = [
+        'get' => ['env' => 'REQUEST_METHOD', 'value' => 'GET'],
+        'post' => ['env' => 'REQUEST_METHOD', 'value' => 'POST'],
+        'put' => ['env' => 'REQUEST_METHOD', 'value' => 'PUT'],
+        'patch' => ['env' => 'REQUEST_METHOD', 'value' => 'PATCH'],
+        'delete' => ['env' => 'REQUEST_METHOD', 'value' => 'DELETE'],
+        'head' => ['env' => 'REQUEST_METHOD', 'value' => 'HEAD'],
+        'options' => ['env' => 'REQUEST_METHOD', 'value' => 'OPTIONS'],
+        'ssl' => ['env' => 'HTTPS', 'options' => [1, 'on']],
+        'ajax' => ['env' => 'HTTP_X_REQUESTED_WITH', 'value' => 'XMLHttpRequest'],
+        'json' => ['accept' => ['application/json'], 'param' => '_ext', 'value' => 'json'],
+        'xml' => ['accept' => ['application/xml', 'text/xml'], 'param' => '_ext', 'value' => 'xml'],
+    ];
 
     /**
      * contentsMaping
@@ -1500,9 +1512,6 @@ class BcUtil
         $ref = new ReflectionClass($request);
         $detectors = $ref->getProperty('_detectors');
         $detectors->setAccessible(true);
-        if (!self::$_detectors) {
-            self::$_detectors = $detectors->getValue();
-        }
         $detectors->setValue(self::$_detectors);
         $bcRequestFilter = new BcRequestFilterMiddleware();
         $request = $bcRequestFilter->addDetectors($request);

@@ -413,6 +413,7 @@ class BcTestCase extends TestCase
      */
     public function setUploadFileToRequest($name, $path, $fileName = '', $error = UPLOAD_ERR_OK)
     {
+        if(!file_exists($path)) return false;
         if (!$fileName) $fileName = basename($path);
         $size = filesize($path);
         $type = BcUtil::getContentType($fileName);
@@ -427,6 +428,7 @@ class BcTestCase extends TestCase
         ];
         $this->configRequest(['files' => $files]);
         $_FILES = $files;
+        return true;
     }
 
     /**
