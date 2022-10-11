@@ -223,12 +223,22 @@ class BcUploadBehavior extends ModelBehavior
         }
         $Model->data = $Model->save($entity, ['validate' => false, 'callbacks' => false]);
 
+		// 20221011 kato
+		// ブログコンテンツのアイキャッチ画像がアップロードできない問題を解決
+		// >>>
+		if(isset($Model->data['Content'])) {
+			$type = $Model->data['Content']['type'];
+		} else {
+			$type = '';
+		}
+		// <<<
+
 		// @deprecated 後方互換 since v4.5.6, v5.0.0 で削除
 		// CuApprover-4.3.2以下に対応するための処理
 		// 公開承認のおける草稿の新規投稿対応
 		// afterValidate で無理やり生成したファイルを削除する
 		// >>>
-		if(!empty($files)) {
+		if(!empty($files) && $type !== 'BlogContent') {
 			foreach($files as $key => $file) {
 				if(!empty($file['name'])) {
 					$setting = $this->settings[$Model->alias]['fields'][$key];
