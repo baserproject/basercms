@@ -18,6 +18,7 @@ use BaserCore\Service\UtilitiesService;
 use BaserCore\Service\UtilitiesServiceInterface;
 use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Factory\SiteFactory;
+use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
@@ -27,6 +28,9 @@ use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestTrait;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
+use Composer\Package\Archiver\ZipArchiver;
+use Laminas\Diactoros\UploadedFile;
 
 /**
  * Class UtilitiesServiceTest
@@ -40,6 +44,7 @@ class UtilitiesServiceTest extends BcTestCase
      */
     use BcContainerTrait;
     use IntegrationTestTrait;
+    use ScenarioAwareTrait;
 
     /**
      * Fixtures
@@ -368,7 +373,27 @@ class UtilitiesServiceTest extends BcTestCase
      * @return void
      */
     public function test_restoreDb(){
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loadFixtureScenario(InitAppScenario::class);
+        // バックアップファイルを作成してアップロード
+        $zipSrcPath = TMP;
+        $this->execPrivateMethod(new UtilitiesService(), '_writeBackup', [$zipSrcPath . 'schema/', 'BcSearchIndex', 'utf8']);
+        $zip = new ZipArchiver();
+        $testFile = $zipSrcPath . 'test.zip';
+        $zip->archive($zipSrcPath . 'schema', $testFile, true);
+        $this->setUploadFileToRequest('backup', $testFile);
+        $file = new UploadedFile(
+            $testFile,
+            filesize($testFile),
+            UPLOAD_ERR_OK,
+            'test.zip',
+            BcUtil::getContentType($testFile)
+        );
+        $this->UtilitiesService->restoreDb(['encoding' => 'utf8'], ['backup' => $file]);
+
+        // テーブルが作成されデータが作成されている事を確認
+        $list = $this->getTableLocator()->get('BaserCore.App')->getConnection()->getSchemaCollection()->listTables();
+        $this->assertContains('sites', $list);
+        $this->assertEquals(1, SiteFactory::count());
     }
 
     /**
