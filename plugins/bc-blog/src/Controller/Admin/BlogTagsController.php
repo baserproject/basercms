@@ -11,6 +11,10 @@
 
 namespace BcBlog\Controller\Admin;
 
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
+
 /**
  * ブログタグコントローラー
  *
@@ -21,7 +25,7 @@ namespace BcBlog\Controller\Admin;
  * @property BcContentsComponent $BcContents
  * @property BlogTag $BlogTag
  */
-class BlogTagsController extends BlogAppController
+class BlogTagsController extends BlogAdminAppController
 {
     /**
      * クラス名

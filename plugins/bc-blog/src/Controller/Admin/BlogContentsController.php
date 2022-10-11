@@ -15,6 +15,9 @@ use BaserCore\Controller\Component\BcAdminContentsComponent;
 use BaserCore\Error\BcException;
 use BcBlog\Service\Admin\BlogContentsAdminServiceInterface;
 use Cake\ORM\Exception\PersistenceFailedException;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
 
 /**
  * ブログコンテンツコントローラー
@@ -22,7 +25,7 @@ use Cake\ORM\Exception\PersistenceFailedException;
  * @property BcAdminContentsComponent $BcContents
  * @uses BlogContentsController
  */
-class BlogContentsController extends BlogAppController
+class BlogContentsController extends BlogAdminAppController
 {
 
     /**

@@ -12,6 +12,9 @@
 namespace BcBlog\Controller\Admin;
 
 use Cake\Event\EventInterface;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
 
 /**
  * ブログコメントコントローラー
@@ -22,7 +25,7 @@ use Cake\Event\EventInterface;
  * @property BcAuthConfigureComponent $BcAuthConfigure
  * @property BcContentsComponent $BcContents
  */
-class BlogCommentsController extends BlogAppController
+class BlogCommentsController extends BlogAdminAppController
 {
     /**
      * モデル

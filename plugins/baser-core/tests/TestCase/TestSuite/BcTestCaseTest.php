@@ -22,6 +22,9 @@ use Cake\Routing\Router;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Controller\AnalyseController;
 use Cake\View\View;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
 
 /**
  * BaserCore\TestSuite\BcTestCase
@@ -244,8 +247,10 @@ class BcTestCaseTest extends BcTestCase
         $bcTestCase = new BcTestCase();
         $filename = 'testUpload.txt';
         $filePath = TMP . $filename;
+        touch($filePath);
         $bcTestCase->setUploadFileToRequest($name = 'file', $filePath);
         $this->assertEquals($filename, $_FILES[$name]['name']);
         $this->assertEquals($filename, $bcTestCase->_request['files'][$name]['name']);
+        unlink($filePath);
     }
 }
