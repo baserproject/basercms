@@ -139,11 +139,21 @@ class BlogCategoriesController extends BcApiController
     }
 
     /**
-     * [API] 単一ブログカテゴリー取得
+     * [API] ブログカテゴリーリスト取得
+     *
+     * @param BlogCategoriesServiceInterface $service
+     * @param $blogContentId
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function list()
+    public function list(BlogCategoriesServiceInterface $service, $blogContentId)
     {
-        //todo 単一ブログカテゴリー取得
+        $this->set([
+            'blogCategories' => $service->getList($blogContentId)
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['blogCategories']);
     }
 
     /**

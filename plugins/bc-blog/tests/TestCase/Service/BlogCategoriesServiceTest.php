@@ -11,11 +11,59 @@
 
 namespace BcBlog\Test\TestCase\Service;
 
+use BcBlog\Service\BlogCategoriesService;
+use BcBlog\Test\Factory\BlogCategoryFactory;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
+use Cake\TestSuite\IntegrationTestTrait;
+
 /**
  * BlogCategoriesServiceTest
+ * @property BlogCategoriesService $BlogCategories
  */
 class BlogCategoriesServiceTest extends \BaserCore\TestSuite\BcTestCase
 {
+    /**
+     * ScenarioAwareTrait
+     */
+    use ScenarioAwareTrait;
+    use IntegrationTestTrait;
+
+    /**
+     * Fixtures
+     *
+     * @var array
+     */
+    protected $fixtures = [
+
+    ];
+
+    /**
+     * @var BlogCategoriesService|null
+     */
+    public $BlogCategories = null;
+
+    /**
+     * Set Up
+     *
+     * @return void
+     */
+    public function setUp(): void
+    {
+        $this->setFixtureTruncate();
+        parent::setUp();
+        $this->BlogCategories = new BlogCategoriesService();
+    }
+
+    /**
+     * Tear Down
+     *
+     * @return void
+     */
+    public function tearDown(): void
+    {
+        unset($this->BlogCategories);
+        parent::tearDown();
+    }
 
     /**
      * コントロールソースを取得する
@@ -55,4 +103,20 @@ class BlogCategoriesServiceTest extends \BaserCore\TestSuite\BcTestCase
         ];
     }
 
+    /**
+     * test getList
+     * @return void
+     */
+    public function test_getList()
+    {
+        BlogCategoryFactory::make(['id' => 100, 'title' => 'title 100', 'name' => 'name-100', 'blog_content_id' => 1])->persist();
+        BlogCategoryFactory::make(['id' => 101, 'title' => 'title 101', 'name' => 'name-101', 'blog_content_id' => 1])->persist();
+        BlogCategoryFactory::make(['id' => 102, 'title' => 'title 102', 'name' => 'name-102', 'blog_content_id' => 1])->persist();
+        BlogCategoryFactory::make(['id' => 103, 'title' => 'title 103', 'name' => 'name-103', 'blog_content_id' => 2])->persist();
+
+        $rs = $this->BlogCategories->getList(1);
+        $this->assertEquals($rs[100], 'title 100');
+        $this->assertEquals($rs[101], 'title 101');
+        $this->assertEquals($rs[102], 'title 102');
+    }
 }
