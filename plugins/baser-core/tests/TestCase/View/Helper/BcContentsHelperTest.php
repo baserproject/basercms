@@ -791,4 +791,16 @@ class BcContentsHelperTest extends BcTestCase
             [true, ['prev' => "NEWS(※関連Fixture未完了)", 'next' => "サービス１"]],
         ];
     }
+
+    /**
+     * Test _getContent
+     */
+    public function test_getContent()
+    {
+        $content = $this->execPrivateMethod($this->BcContents, '_getContent', [['Contents.id' => 1]]);
+        $this->assertEquals(1, $content->id);
+
+        $plugin = $this->execPrivateMethod($this->BcContents, '_getContent', [['Contents.id' => 1], 'plugin']);
+        $this->assertEquals('BaserCore', $plugin);
+    }
 }

@@ -549,6 +549,7 @@ class BcContentsHelper extends Helper
      * @return array|EntityInterface|false|mixed
      * @checked
      * @noTodo
+     * @unitTest
      */
     private function _getContent($conditions, $field = null)
     {
