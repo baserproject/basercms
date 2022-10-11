@@ -84,11 +84,16 @@ class BlogContentsControllerTest extends BcTestCase
 
     /**
      * test index
-     * @return void
      */
     public function test_index()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        BlogContentsFactory::make(['id' => 10, 'description' => 'baserCMS inc. [デモ] の最新の情報をお届けします。'])->persist();
+        BlogContentsFactory::make(['id' => 11, 'description' => 'ディスクリプション'])->persist();
+
+        $this->get('/baser/api/bc-blog/blog_contents/index.json?token=' . $this->accessToken);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertCount(2, $result->blogContents);
     }
 
     /**

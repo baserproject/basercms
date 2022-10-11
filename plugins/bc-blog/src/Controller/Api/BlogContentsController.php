@@ -26,10 +26,18 @@ class BlogContentsController extends BcApiController
 
     /**
      * [API] ブログコンテンツー一覧取得
+     *
+     * @param BlogContentsServiceInterface $blogContentsService
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function index()
+    public function index(BlogContentsServiceInterface $blogContentsService)
     {
-        //todo ブログコンテンツー一覧取得
+        $this->set([
+            'blogContents' => $this->paginate($blogContentsService->getIndex($this->request->getQueryParams()))
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['blogContents']);
     }
 
     /**

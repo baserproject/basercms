@@ -17,7 +17,7 @@ use CakephpFixtureFactories\Factory\BaseFactory as CakephpBaseFactory;
 use Faker\Generator;
 
 /**
- * SearchIndexFactory
+ * BlogCategoryFactory
  */
 class BlogCategoryFactory extends CakephpBaseFactory
 {

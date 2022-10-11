@@ -63,6 +63,9 @@ class BcSchema extends TableSchema
     /**
      * コネクション名を取得
      * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function connection(): string
     {
@@ -73,6 +76,7 @@ class BcSchema extends TableSchema
      * 初期化処理
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function init()
     {
@@ -121,6 +125,9 @@ class BcSchema extends TableSchema
     /**
      * テーブルを作成する
      * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function create()
     {
@@ -136,6 +143,9 @@ class BcSchema extends TableSchema
     /**
      * テーブルを削除する
      * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function drop()
     {

@@ -12,12 +12,22 @@
 namespace BcBlog\Service;
 
 use Cake\Datasource\EntityInterface;
+use Cake\ORM\Query;
 
 /**
  * BlogContentsServiceInterface
  */
 interface BlogContentsServiceInterface
 {
+    /**
+     * 一覧データを取得
+     * @param array $queryParams
+     * @return Query
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getIndex(array $queryParams = []): Query;
 
     /**
      * 単一データ取得

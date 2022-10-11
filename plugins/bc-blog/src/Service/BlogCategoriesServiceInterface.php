@@ -133,4 +133,12 @@ interface BlogCategoriesServiceInterface
      */
     public function getNamesById($ids): array;
 
+    /**
+     *ブログカテゴリーリスト取得
+     * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getList($blogContentId): array;
 }

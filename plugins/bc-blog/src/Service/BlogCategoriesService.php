@@ -253,4 +253,17 @@ class BlogCategoriesService implements BlogCategoriesServiceInterface
         return $this->BlogCategories->find('list')->where(['id IN' => $ids])->toArray();
     }
 
+    /**
+     *ブログカテゴリーリスト取得
+     * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getList($blogContentId): array
+    {
+        $conditions = [];
+        if ($blogContentId) $conditions = ['BlogCategories.blog_content_id' => $blogContentId];
+        return $this->BlogCategories->find('list', ['keyField' => 'id', 'valueField' => 'title'])->where($conditions)->toArray();
+    }
 }

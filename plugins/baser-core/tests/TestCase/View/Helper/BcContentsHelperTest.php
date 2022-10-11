@@ -12,6 +12,7 @@
 
 namespace BaserCore\Test\TestCase\View\Helper;
 
+use BaserCore\Test\Factory\ContentFactory;
 use Cake\Routing\Router;
 use BaserCore\View\BcAdminAppView;
 use BaserCore\TestSuite\BcTestCase;
@@ -502,39 +503,16 @@ class BcContentsHelperTest extends BcTestCase
 
     /**
      * urlからコンテンツの情報を取得
-     * getContentByUrl
-     *
-     * @param string $contentType コンテンツタイプ
-     * ('Page','MailContent','BlogContent','ContentFolder')
-     * @param string $url
-     * @param string $field 取得したい値
-     *  'name','url','title'など　初期値：Null
-     *  省略した場合配列を取得
-     * @param string|bool $expect 期待値
-     * @dataProvider getContentByUrlDataProvider
+     * Test getContentByUrl
      */
-    public function testgetContentByUrl($expect, $url, $contentType, $field)
+    public function testGetContentByUrl()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $result = $this->BcContents->getContentByUrl($url, $contentType, $field);
-        $this->assertEquals($expect, $result);
-    }
-
-    public function getContentByUrlDataProvider()
-    {
-        return [
-            // 存在するURL（0~2）を指定した場合
-            ['1', '/news/', 'BlogContent', 'entity_id'],
-            ['/contact/', '/contact/', 'MailContent', 'url'],
-            ['1', '/index', 'Page', 'entity_id'],
-            ['4', '/service/', 'ContentFolder', 'entity_id'],
-            ['14', '/service/sub_service/sub_service_1', 'Page', 'entity_id'],
-            ['サービス２', '/service/service2', 'Page', 'title'],
-            // 存在しないURLを指定した場合
-            [false, '/blog/', 'BlogContent', 'name'],
-            //指定がおかしい場合
-            [false, '/blog/', 'Blog', 'url'],
-        ];
+        ContentFactory::make(['url' => '/test_no_1' ,'type' => 'ContentFolder', 'status' => true])->persist();
+        ContentFactory::make(['url' => '/test_no_2' ,'type' => 'ContentFolder', 'status' => false])->persist();
+        $result = $this->BcContents->getContentByUrl('/test_no_1', 'ContentFolder');
+        $this->assertNotEmpty($result);
+        $result = $this->BcContents->getContentByUrl('/test_no_2', 'ContentFolder');
+        $this->assertFalse($result);
     }
 
     /**
@@ -790,5 +768,17 @@ class BcContentsHelperTest extends BcTestCase
             [false, ['prev' => "NEWS(※関連Fixture未完了)", 'next' => "お問い合わせ(※関連Fixture未完了)"]],
             [true, ['prev' => "NEWS(※関連Fixture未完了)", 'next' => "サービス１"]],
         ];
+    }
+
+    /**
+     * Test _getContent
+     */
+    public function test_getContent()
+    {
+        $content = $this->execPrivateMethod($this->BcContents, '_getContent', [['Contents.id' => 1]]);
+        $this->assertEquals(1, $content->id);
+
+        $plugin = $this->execPrivateMethod($this->BcContents, '_getContent', [['Contents.id' => 1], 'plugin']);
+        $this->assertEquals('BaserCore', $plugin);
     }
 }
