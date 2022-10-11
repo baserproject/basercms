@@ -94,7 +94,6 @@ $base = $attributes['base'];
   <?php $this->BcBaser->js([
     'admin/startup.bundle'
   ]) ?>
-  <?= $this->fetch('script') ?>
   <?php $this->BcBaser->scripts() ?>
 </head>
 
