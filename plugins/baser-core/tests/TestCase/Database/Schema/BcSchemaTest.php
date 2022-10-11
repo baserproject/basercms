@@ -98,7 +98,8 @@ class UserActionsSchema extends BcSchema
      */
     public function test_connection()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $conn = $this->schema->connection();
+        $this->assertEquals('test', $conn);
     }
 
     /**

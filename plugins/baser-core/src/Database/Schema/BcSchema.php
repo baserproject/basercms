@@ -63,6 +63,9 @@ class BcSchema extends TableSchema
     /**
      * コネクション名を取得
      * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function connection(): string
     {
