@@ -117,8 +117,25 @@ class UserActionsSchema extends BcSchema
     /**
      * Test create
      */
-    public function test_create()
+    public function test_create_and_drop()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // createを実行
+        $this->schema->create();
+        // DBに存在する事を確認
+        $tableList = $this->getTableLocator()
+            ->get('BaserCore.App')
+            ->getConnection()
+            ->getSchemaCollection()
+            ->listTables();
+        $this->assertContains('user_actions', $tableList);
+        // dropを実行
+        $this->schema->drop();
+        // DBに存在しない事を確認
+        $tableList = $this->getTableLocator()
+            ->get('BaserCore.App')
+            ->getConnection()
+            ->getSchemaCollection()
+            ->listTables();
+        $this->assertNotContains('user_actions', $tableList);
     }
 }
