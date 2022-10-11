@@ -242,6 +242,7 @@ class UtilitiesController extends BcAdminAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function reset_data(UtilitiesServiceInterface $service)
     {
