@@ -1,6 +1,4 @@
 <?php
-// TODO : コード確認要
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
@@ -12,25 +10,50 @@ return;
  * @license         https://basercms.net/license/index.html
  */
 
-App::uses('BlogCategoriesController', 'BcBlog.Controller');
+namespace BcBlog\Test\TestCase\Controller\Admin;
+
+use BaserCore\TestSuite\BcTestCase;
+use BcBlog\Controller\Admin\BlogCategoriesController;
+use Cake\TestSuite\IntegrationTestTrait;
 
 /**
  * Class BlogCategoriesControllerTest
  *
  * @package Blog.Test.Case.Controller
- * @property  BlogCategoriesController $BlogCategoriesController
+ * @property  BlogCategoriesController $Controller
  */
-class BlogCategoriesControllerTest extends BaserTestCase
+class BlogCategoriesControllerTest extends BcTestCase
 {
+
+    /**
+     * IntegrationTestTrait
+     */
+    use IntegrationTestTrait;
+
+    /**
+     * Fixtures
+     *
+     * @var array
+     */
+    public $fixtures = [
+        'plugin.BaserCore.Users',
+        'plugin.BaserCore.UsersUserGroups',
+        'plugin.BaserCore.UserGroups',
+        'plugin.BaserCore.Plugins',
+        'plugin.BaserCore.Permissions',
+        'plugin.BaserCore.Sites',
+    ];
 
     /**
      * set up
      *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
+        $this->setFixtureTruncate();
         parent::setUp();
+        $this->Controller = new BlogCategoriesController($this->loginAdmin($this->getRequest()));
     }
 
     /**
@@ -38,7 +61,7 @@ class BlogCategoriesControllerTest extends BaserTestCase
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
     }
@@ -47,14 +70,6 @@ class BlogCategoriesControllerTest extends BaserTestCase
      * beforeFilter
      */
     public function testBeforeFilter()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
-    /**
-     * beforeRender
-     */
-    public function testBeforeRender()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
@@ -84,14 +99,6 @@ class BlogCategoriesControllerTest extends BaserTestCase
     }
 
     /**
-     * [ADMIN] 削除処理　(ajax)
-     */
-    public function testAdmin_ajax_delete()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
-    /**
      * [ADMIN] 削除処理
      */
     public function testAdmin_delete()
@@ -99,11 +106,4 @@ class BlogCategoriesControllerTest extends BaserTestCase
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
 
-    /**
-     * [ADMIN] 追加処理（AJAX）
-     */
-    public function testAdmin_ajax_add()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
 }
