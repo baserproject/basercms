@@ -66,6 +66,38 @@ class BlogCategoriesServiceTest extends \BaserCore\TestSuite\BcTestCase
     }
 
     /**
+     * Test __construct
+     */
+    public function test__construct()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * Test get
+     */
+    public function testGet()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * Test getIndex
+     */
+    public function testGetIndex()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * Test getTreeIndex
+     */
+    public function testGetTreeIndex()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
      * コントロールソースを取得する
      *
      * @param string $field フィールド名
@@ -101,6 +133,54 @@ class BlogCategoriesServiceTest extends \BaserCore\TestSuite\BcTestCase
                 2 => 'サイト運営'
             ]],
         ];
+    }
+
+    /**
+     * Test getNew
+     */
+    public function testGetNew()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * Test create
+     */
+    public function testCreate()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * Test update
+     */
+    public function testUpdate()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * Test delete
+     */
+    public function testDelete()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * Test batch
+     */
+    public function testBatch()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * Test getNamesById
+     */
+    public function testGetNamesById()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
 
     /**
