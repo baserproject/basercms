@@ -28,6 +28,7 @@ class BlogAdminAppView extends BcAdminAppView
      * initialize
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function initialize(): void
     {
