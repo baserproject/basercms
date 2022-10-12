@@ -25,9 +25,10 @@ class BlogAdminAppController extends BcAdminAppController
     /**
      * Before Render
      * @param EventInterface $event
-     * @return \Cake\Http\Response|void|null
+     * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function beforeRender(EventInterface $event): void
     {
