@@ -67,6 +67,8 @@ use BaserCore\Service\UsersService;
 use BaserCore\Service\UsersServiceInterface;
 use BaserCore\Service\UtilitiesService;
 use BaserCore\Service\UtilitiesServiceInterface;
+use BcBlog\Service\BlogContentsService;
+use BcBlog\Service\BlogContentsServiceInterface;
 use BcFavorite\Service\FavoritesService;
 use BcFavorite\Service\FavoritesServiceInterface;
 use BcSearchIndex\Service\SearchIndexesService;
@@ -117,7 +119,8 @@ class BcServiceProvider extends ServiceProvider
         BcDatabaseServiceInterface::class,
         UtilitiesAdminServiceInterface::class,
         UtilitiesServiceInterface::class,
-        BcFrontContentsServiceInterface::class
+        BcFrontContentsServiceInterface::class,
+        BlogContentsServiceInterface::class
     ];
 
     /**
@@ -179,6 +182,8 @@ class BcServiceProvider extends ServiceProvider
         $container->add(UtilitiesAdminServiceInterface::class, UtilitiesAdminService::class);
         // BcFrontContents サービス
         $container->add(BcFrontContentsServiceInterface::class, BcFrontContentsService::class);
+        //BlogContents サービス
+        $container->add(BlogContentsServiceInterface::class, BlogContentsService::class);
     }
 
 }
