@@ -70,7 +70,8 @@ class BlogCategoriesServiceTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function test__construct()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // テーブルがセットされている事を確認
+        $this->assertEquals('BlogCategories', $this->BlogCategories->BlogCategories->getAlias());
     }
 
     /**
