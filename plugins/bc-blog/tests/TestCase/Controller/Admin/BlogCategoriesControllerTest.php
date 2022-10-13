@@ -79,7 +79,10 @@ class BlogCategoriesControllerTest extends BcTestCase
      */
     public function testAdmin_index()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->get('/baser/admin/bc-blog/blog_categories/index');
+        $this->assertResponseError();
+        $this->get('/baser/admin/bc-blog/blog_categories/index/1');
+        $this->assertResponseOk();
     }
 
     /**
