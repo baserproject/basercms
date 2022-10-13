@@ -93,4 +93,13 @@ interface BlogContentsServiceInterface
      */
     public function delete(int $id): bool;
 
+    /**
+     * リストを取得する
+     * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getList(): array;
+
 }
