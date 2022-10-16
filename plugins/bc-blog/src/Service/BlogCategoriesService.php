@@ -67,6 +67,7 @@ class BlogCategoriesService implements BlogCategoriesServiceInterface
      * @return Query
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getIndex(int $blogContentId, array $queryParams, $type = 'all'): Query
     {
