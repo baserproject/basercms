@@ -230,7 +230,28 @@ class BlogCategoriesServiceTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function testBatch()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        BlogCategoryFactory::make([
+            'id' => 59,
+            'name' => 'testName1',
+            'blog_content_id' => 19,
+            'title' => 'testTitle1',
+            'lft' => 1,
+            'rght' => 2
+        ])->persist();
+        BlogCategoryFactory::make([
+            'id' => 60,
+            'name' => 'testName2',
+            'blog_content_id' => 19,
+            'title' => 'testTitle2',
+            'lft' => 3,
+            'rght' => 4
+        ])->persist();
+        $result = $this->BlogCategories->batch('delete', [59, 60]);
+        // 戻り値を確認
+        $this->assertTrue($result);
+        // データの削除を確認（複数）
+        $blogCategories = $this->BlogCategories->BlogCategories->find()->where(['blog_content_id' => 19])->toArray();
+        $this->assertCount(0, $blogCategories);
     }
 
     /**
