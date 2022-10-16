@@ -142,7 +142,26 @@ class BlogContentsServiceTest extends BcTestCase
      */
     public function test_update()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        BlogContentsFactory::make(['id' => 100, 'description' => '新しい'])->persist();
+        $data = [
+            'id' => 100,
+            'description' => '更新した!',
+            'content' => [
+                'title' => '更新 ブログ',
+            ]
+        ];
+
+        $record = $this->BlogContentsService->getIndex([])->first();
+        $blogContent = $this->BlogContentsService->update($record, $data);
+        $this->assertEquals('更新した!', $blogContent['description']);
+
+        $data = [
+            'id' => 100,
+            'description' => '更新した!'
+        ];
+        $this->expectException("Cake\ORM\Exception\PersistenceFailedException");
+        $this->expectExceptionMessage("関連するコンテンツがありません");
+        $this->BlogContentsService->update($record, $data);
     }
 
     /**
