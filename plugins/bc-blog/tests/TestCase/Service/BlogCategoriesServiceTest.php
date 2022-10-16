@@ -79,7 +79,24 @@ class BlogCategoriesServiceTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function testGet()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $data = [
+            'id' => '59',
+            'blog_content_id' => '1',
+            'no' => '1',
+            'name' => 'release',
+            'title' => 'プレスリリース',
+            'status' => '1',
+            'parent_id' => null,
+            'lft' => '1',
+            'rght' => '4',
+            'owner_id' => '1',
+            'created' => '2015-01-27 12:56:53',
+            'modified' => null
+        ];
+        BlogCategoryFactory::make($data)->persist();
+        $blogCategory = $this->BlogCategories->get($data['id']);
+        $this->assertEquals($data['id'], $blogCategory['id']);
+        $this->assertEquals($data['name'], $blogCategory['name']);
     }
 
     /**

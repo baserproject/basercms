@@ -52,6 +52,7 @@ class BlogCategoriesService implements BlogCategoriesServiceInterface
      * @return EntityInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function get(int $id): EntityInterface
     {
