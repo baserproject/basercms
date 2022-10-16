@@ -177,7 +177,13 @@ class BlogCategoriesServiceTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function testCreate()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        BlogCategoryFactory::make(['blog_content_id' => 19, 'no' => 9])->persist();
+        $result = $this->BlogCategories->create(19, ['id' => 59, 'name' => 'testName', 'title' => 'testTitle']);
+        $this->assertEquals(10, $result['no']);
+        $this->assertEquals('testName', $result['name']);
+        $createdBlogCategories = $this->BlogCategories->BlogCategories->find()->where(['blog_content_id' => 19, 'no'=> 10])->toArray();
+        $this->assertCount(1, $createdBlogCategories);
+        $this->assertEquals('testName', $createdBlogCategories[0]['name']);
     }
 
     /**
