@@ -130,7 +130,11 @@ class BlogContentsServiceTest extends BcTestCase
      */
     public function test_getNew()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $rs = $this->BlogContentsService->getNew();
+        $this->assertTrue($rs['comment_use']);
+        $this->assertFalse($rs['comment_approve']);
+        $this->assertEquals('default', $rs['layout']);
+        $this->assertEquals(600, $rs['eye_catch_size_thumb_width']);
     }
 
     /**
