@@ -34,7 +34,7 @@ class BlogCategoriesServiceTest extends \BaserCore\TestSuite\BcTestCase
      * @var array
      */
     protected $fixtures = [
-
+        'plugin.BcBlog.Factory/BlogCategories',
     ];
 
     /**
