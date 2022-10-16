@@ -35,6 +35,7 @@ class PagesFrontService extends PagesService implements PagesFrontServiceInterfa
      * @return array
      * @noTodo
      * @checked
+     * @unitTest
      */
     public function getViewVarsForView(EntityInterface $page, ServerRequest $request): array
     {
