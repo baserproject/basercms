@@ -199,6 +199,7 @@ class BlogCategoriesService implements BlogCategoriesServiceInterface
      * @throws PersistenceFailedException
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function update(EntityInterface $target, array $postData): ?EntityInterface
     {

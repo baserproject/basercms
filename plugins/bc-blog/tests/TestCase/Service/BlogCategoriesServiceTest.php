@@ -191,7 +191,17 @@ class BlogCategoriesServiceTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function testUpdate()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        BlogCategoryFactory::make(['id' => 59, 'name' => 'testName'])->persist();
+        $updateData = ['name' => 'testNameUpdated', 'blog_content_id' => 1];
+        $blogCategory = BlogCategoryFactory::get(59);
+        $result = $this->BlogCategories->update($blogCategory, $updateData);
+        // 戻り値を確認
+        $this->assertEquals($updateData['name'], $result['name']);
+        $this->assertEquals($updateData['blog_content_id'], $result['blog_content_id']);
+        // データの変更を確認
+        $blogCategory = BlogCategoryFactory::get(59);
+        $this->assertEquals($updateData['name'], $blogCategory['name']);
+        $this->assertEquals($updateData['blog_content_id'], $blogCategory['blog_content_id']);
     }
 
     /**
