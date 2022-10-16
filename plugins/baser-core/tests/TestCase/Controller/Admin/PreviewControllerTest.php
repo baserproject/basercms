@@ -58,6 +58,7 @@ class PreviewControllerTest extends BcTestCase
     {
         $this->setFixtureTruncate();
         parent::setUp();
+        $this->PreviewController = new PreviewController($this->getRequest());
     }
 
     /**
@@ -77,8 +78,7 @@ class PreviewControllerTest extends BcTestCase
      */
     public function testInitialize()
     {
-        $previewController = new PreviewController($this->getRequest());
-        $this->assertNotEmpty($previewController->BcFrontContents);
+        $this->assertNotEmpty($this->PreviewController->BcFrontContents);
     }
 
     /**
@@ -107,4 +107,22 @@ class PreviewControllerTest extends BcTestCase
         $this->assertEquals($page->draft, $this->viewVariable('page')['contents']);
     }
 
+    /**
+     * test _createPreviewRequest
+     * @return void
+     */
+    public function test_createPreviewRequest()
+    {
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(SmallSetContentsScenario::class);
+        $this->loginAdmin($this->getRequest('/'));
+        $result = $this->execPrivateMethod(
+            $this->PreviewController,
+            '_createPreviewRequest',
+            [$this->getRequest()->withQueryParams(['url' => 'https://localhost/', 'preview' => 'default'])]
+        );
+        $this->assertEquals('view', $result->getParam('action'));
+        $this->assertEquals(1, $result->getParam('entityId'));
+        $this->assertEquals('Pages', $result->getParam('controller'));
+    }
 }

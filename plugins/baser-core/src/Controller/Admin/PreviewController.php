@@ -82,6 +82,9 @@ class PreviewController extends BcAdminAppController
      *
      * @param ServerRequest $request
      * @return ServerRequest
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     private function _createPreviewRequest($request)
     {
