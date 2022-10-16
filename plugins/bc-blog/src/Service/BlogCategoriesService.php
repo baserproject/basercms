@@ -160,6 +160,7 @@ class BlogCategoriesService implements BlogCategoriesServiceInterface
      * @return EntityInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getNew(int $blogContentId): EntityInterface
     {

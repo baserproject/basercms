@@ -168,7 +168,8 @@ class BlogCategoriesServiceTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function testGetNew()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $entity = $this->BlogCategories->getNew(1);
+        $this->assertEquals(1, $entity['blog_content_id']);
     }
 
     /**
