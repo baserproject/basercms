@@ -84,6 +84,7 @@ class BlogCategoriesService implements BlogCategoriesServiceInterface
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getTreeIndex(int $blogContentId, array $queryParams): array
     {

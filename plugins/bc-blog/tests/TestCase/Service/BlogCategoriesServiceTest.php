@@ -116,7 +116,13 @@ class BlogCategoriesServiceTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function testGetTreeIndex()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        BlogCategoryFactory::make(['id' => 59, 'blog_content_id' => 19, 'title' => 'test'])->persist();
+        $categories = $this->BlogCategories->getTreeIndex(19, []);
+        $this->assertEquals('test', $categories[0]->layered_title);
+
+        BlogCategoryFactory::make(['id' => 60, 'blog_content_id' => 29, 'title' => '_test'])->persist();
+        $categories = $this->BlogCategories->getTreeIndex(29, []);
+        $this->assertEquals('&nbsp;&nbsp;&nbsp;&nbsp;└_test', $categories[0]->layered_title);
     }
 
     /**
