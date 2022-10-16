@@ -1,37 +1,60 @@
 <?php
-// TODO : コード確認要
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Blog.Test.Case.Model
- * @since           baserCMS v 3.0.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) NPO baser foundation
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       https://basercms.net/license/index.html MIT License
  */
 
-App::uses('BlogComment', 'BcBlog.Model');
+namespace BcBlog\Test\TestCase\Model;
 
-class BlogCommentsTableTest extends BaserTestCase
+use BaserCore\TestSuite\BcTestCase;
+use BcBlog\Model\Table\BlogCommentsTable;
+
+/**
+ * Class BlogCommentsTableTest
+ *
+ * @property BlogCommentsTable $BlogCommentsTable
+ */
+class BlogCommentsTableTest extends BcTestCase
 {
     public $fixtures = [
-        'baser.Default.BlogComment',
-        'baser.Default.Content',
-        'baser.Default.Site',
+        'plugin.BcBlog.Factory/BlogComments',
     ];
 
-    public function setUp()
+    /**
+     * Set Up
+     *
+     * @return void
+     */
+    public function setUp(): void
     {
-        $this->BlogComment = ClassRegistry::init('BcBlog.BlogComment');
         parent::setUp();
+        $this->BlogCommentsTable = $this->getTableLocator()->get('BcBlog.BlogComments');
     }
 
-    public function tearDown()
+    /**
+     * Tear Down
+     *
+     * @return void
+     */
+    public function tearDown(): void
     {
-        unset($this->BlogComment);
+        unset($this->BlogCommentsTable);
         parent::tearDown();
+    }
+
+    /**
+     * test initialize
+     */
+    public function test_initialize()
+    {
+        $this->assertEquals('blog_comments', $this->BlogCommentsTable->getTable());
+        $this->assertTrue($this->BlogCommentsTable->hasBehavior('Timestamp'));
+        $this->assertTrue($this->BlogCommentsTable->hasAssociation('BlogCategories'));
     }
 
     /*
@@ -39,6 +62,7 @@ class BlogCommentsTableTest extends BaserTestCase
 	 */
     public function test空チェック()
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $this->BlogComment->create([
             'BlogComment' => [
                 'name' => '',
@@ -57,6 +81,7 @@ class BlogCommentsTableTest extends BaserTestCase
 
     public function test桁数チェック異常系()
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $this->BlogComment->create([
             'BlogComment' => [
                 'name' => '123456789012345678901234567890123456789012345678901',
@@ -79,6 +104,7 @@ class BlogCommentsTableTest extends BaserTestCase
 
     public function test桁数チェック正常系()
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $this->BlogComment->create([
             'BlogComment' => [
                 'name' => '12345678901234567890123456789012345678901234567890',
@@ -91,6 +117,7 @@ class BlogCommentsTableTest extends BaserTestCase
 
     public function testその他異常系()
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         // 形式チェック
         $this->BlogComment->create([
             'BlogComment' => [
@@ -113,6 +140,7 @@ class BlogCommentsTableTest extends BaserTestCase
      */
     public function testGetDefaultValue()
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $this->assertEquals($this->BlogComment->getDefaultValue()['BlogComment']['name'], 'NO NAME');
     }
 
@@ -121,6 +149,7 @@ class BlogCommentsTableTest extends BaserTestCase
      */
     public function testAdd()
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $data = ['BlogComment' => [
             'name' => 'test_name<',
             'email' => '-@example.com',
