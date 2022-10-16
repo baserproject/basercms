@@ -37,6 +37,7 @@ class BlogContentsService implements BlogContentsServiceInterface
      * Construct
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function __construct()
     {
