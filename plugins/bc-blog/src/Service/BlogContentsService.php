@@ -75,6 +75,7 @@ class BlogContentsService implements BlogContentsServiceInterface
      * @return \Cake\Datasource\EntityInterface|array|null
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function get(int $id)
     {

@@ -12,6 +12,7 @@
 namespace BcBlog\Test\TestCase\Service;
 
 use BaserCore\Test\Factory\ContentFactory;
+use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BcBlog\Service\BlogContentsService;
@@ -82,7 +83,14 @@ class BlogContentsServiceTest extends BcTestCase
      */
     public function test_get()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        BlogContentsFactory::make(['id' => 60, 'description' => 'test get'])->persist();
+        ContentFactory::make(['id' => 60, 'type' => 'BlogContent', 'entity_id' => 60, 'title' => 'title test get', 'site_id' => 60])->persist();
+        SiteFactory::make(['id' => 60, 'theme' => 'BcBlog'])->persist();
+        $rs = $this->BlogContentsService->get(60);
+
+        $this->assertEquals('test get', $rs['description']);
+        $this->assertEquals('title test get', $rs['content']['title']);
+        $this->assertEquals('BcBlog', $rs['content']['site']['theme']);
     }
 
     /**
