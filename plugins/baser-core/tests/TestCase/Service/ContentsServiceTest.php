@@ -97,17 +97,6 @@ class ContentsServiceTest extends BcTestCase
     }
 
     /**
-     * testGetEmptyIndex
-     *
-     * @return void
-     */
-    public function testGetEmptyIndex(): void
-    {
-        $result = $this->ContentsService->getEmptyIndex();
-        $this->assertTrue($result->all()->isEmpty());
-        $this->assertInstanceOf('Cake\ORM\Query', $result);
-    }
-    /**
      * testGetTreeIndex
      *
      * @return void

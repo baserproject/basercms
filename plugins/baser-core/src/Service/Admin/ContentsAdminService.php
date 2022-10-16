@@ -10,6 +10,7 @@
  */
 namespace BaserCore\Service\Admin;
 
+use BaserCore\Form\ContentsSearchForm;
 use BaserCore\Model\Entity\Content;
 use BaserCore\Service\ContentsService;
 use BaserCore\Service\PermissionsServiceInterface;
@@ -20,6 +21,7 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
+use Cake\Http\ServerRequest;
 use Cake\Utility\Hash;
 
 /**
@@ -118,12 +120,36 @@ class ContentsAdminService extends ContentsService implements ContentsAdminServi
      * @noTodo
      * @unitTest
      */
-    public function getViewVarsForIndex()
+    public function getViewVarsForIndex(ServerRequest $request, $contents)
     {
+        $templates = [1 => 'index_tree', 2 => 'index_table'];
+        $currentUser = BcUtil::loginUser();
+        $isUseMoveContents = false;
+        foreach ($currentUser->user_groups as $group) {
+          if ($isUseMoveContents = $group->use_move_contents) break;
+        }
+        $contentsSearch = new ContentsSearchForm();
+        $contentsSearch->setData($request->getQuery());
         return [
             'typeList' => $this->getTypes(),
             'authorList' => $this->getService(UsersServiceInterface::class)->getList(),
-            'isContentDeletable' => $this->isContentDeletable()
+            'isContentDeletable' => $this->isContentDeletable(),
+            'folders' => $this->getContentFolderList($request->getQuery('site_id'), ['conditions' => ['site_root' => false]]),
+            'template' => $templates[$request->getQuery('list_type')],
+            'editInIndexDisabled' => false,  // 2022/10/16 ryuring 今の所未実装のため false 固定,
+            'isUseMoveContents' => $isUseMoveContents,
+            'contents' => $contents,
+            'contentsSearch' => $contentsSearch
+        ];
+    }
+
+    public function getViewVarsForTrashIndex($contents)
+    {
+        return [
+            'contents' => $contents,
+            'isContentDeletable' => $this->isContentDeletable(),
+            'isUseMoveContents' => false,
+            'editInIndexDisabled' => false
         ];
     }
 

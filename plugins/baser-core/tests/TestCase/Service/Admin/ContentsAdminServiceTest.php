@@ -124,7 +124,9 @@ class ContentsAdminServiceTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function test_getViewVarsForIndex()
     {
-        $vars = $this->ContentsAdmin->getViewVarsForIndex();
+        $request = $this->getRequest('/baser/admin/baser-core/contents/index?list_type=1');
+        $this->loginAdmin($request);
+        $vars = $this->ContentsAdmin->getViewVarsForIndex($request, $this->ContentsAdmin->get(5));
         $this->assertTrue(isset($vars['typeList']));
         $this->assertTrue(isset($vars['authorList']));
         $this->assertTrue(isset($vars['isContentDeletable']));

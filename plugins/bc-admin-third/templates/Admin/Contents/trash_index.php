@@ -10,28 +10,23 @@
  */
 
 /**
- * [ADMIN] 統合コンテンツ一覧
  * @var \BaserCore\View\BcAdminAppView $this
- * @var string $template
  * @checked
  * @unitTest
  * @noTodo
  */
-
-$this->BcAdmin->setTitle(__d('baser', 'コンテンツ一覧'));
-$this->BcAdmin->setSearch('contents_index');
-$this->BcAdmin->setHelp('contents_index');
+$this->BcAdmin->setTitle(__d('baser', 'ゴミ箱'));
 $this->BcBaser->element('Contents/index_setup_tree');
 ?>
 
+
+<?php echo $this->BcAdminForm->control('ViewSetting.mode', ['type' => 'hidden', 'value' => 'trash']) ?>
 
 <div id="AlertMessage" class="message" style="display:none"></div>
 <div id="MessageBox" style="display:none">
   <div id="flashMessage" class="notice-message"></div>
 </div>
 
-<?php $this->BcBaser->element('Contents/index_view_setting') ?>
-
 <div id="DataList" class="bca-data-list">
-  <?php $this->BcBaser->element("Contents/${template}"); ?>
+  <?php $this->BcBaser->element("Contents/index_trash"); ?>
 </div>

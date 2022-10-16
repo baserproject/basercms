@@ -73,28 +73,6 @@ class PagesControllerEventListenerTest extends BcTestCase
     }
 
     /**
-     * Contents After Move
-     */
-    public function testBaserCoreContentsAfterMove()
-    {
-        $token = $this->apiLoginAdmin();
-        $data = [
-            'origin' => [
-                'id' => 5,
-                'parentId' => 1
-            ],
-            'target' => [
-                'id' => 5,
-                'parentId' => 6,
-                'siteId' => 1,
-            ]
-        ];
-        $this->patch("/baser/api/baser-core/contents/move.json?token=" . $token['access_token'], $data);
-        $searchIndexesTable = $this->getTableLocator()->get('BcSearchIndex.SearchIndexes');
-        $this->assertEquals(1, $searchIndexesTable->find()->where(['url' => '/service/about'])->count());
-    }
-
-    /**
      * Contents After Delete
      */
     public function testBaserCoreContentsAfterDelete()

@@ -71,30 +71,6 @@ class ContentFoldersControllerEventListenerTest extends BcTestCase
     }
 
     /**
-     * Contents after move
-     */
-    public function testBaserCoreContentsAfterMove()
-    {
-        $token = $this->apiLoginAdmin();
-        $data = [
-            'origin' => [
-                'id' => 6,
-                'parentId' => 1
-            ],
-            'target' => [
-                'id' => 6,
-                'parentId' => 21,
-                'siteId' => 1,
-            ]
-        ];
-        $this->patch("/baser/api/baser-core/contents/move.json?token=" . $token['access_token'], $data);
-        $searchIndexesTable = $this->getTableLocator()->get('BcSearchIndex.SearchIndexes');
-        $this->assertEquals(1, $searchIndexesTable->find()->where(['url' => '/testEdit/service/service1'])->count());
-        $this->assertEquals(1, $searchIndexesTable->find()->where(['url' => '/testEdit/service/service2'])->count());
-        $this->assertEquals(1, $searchIndexesTable->find()->where(['url' => '/testEdit/service/service3'])->count());
-    }
-
-    /**
      * Contents Before Delete
      */
     public function testBaserCoreContentsBeforeDelete()

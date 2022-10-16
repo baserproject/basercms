@@ -88,16 +88,6 @@ class ContentFoldersTableTest extends BcTestCase
     }
 
     /**
-     * implementedEvents
-     *
-     *  @return void
-     */
-    public function testImplementedEvents()
-    {
-        $this->assertTrue(is_array($this->ContentFolders->implementedEvents()));
-    }
-
-    /**
      * testValidationDefault
      *
      * @return void
@@ -149,17 +139,6 @@ class ContentFoldersTableTest extends BcTestCase
         // reconstructされてるか
         $this->assertEquals(4, $this->SearchIndexes->find()->count());
 
-    }
-
-    /**
-     * testBeforeMove
-     *
-     * @return void
-     */
-    public function testBeforeMove(): void
-    {
-        $this->ContentFolders->dispatchEvent('Controller.Contents.beforeMove', [new ContentFolder(), new ArrayObject(), 'data.currentType' => 'ContentFolder', 'data.entityId' => 1]);
-        $this->assertTrue($this->ContentFolders->beforeStatus);
     }
 
     /**

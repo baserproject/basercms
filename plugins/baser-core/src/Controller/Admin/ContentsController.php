@@ -76,149 +76,74 @@ class ContentsController extends BcAdminAppController
     public function beforeFilter(EventInterface $event)
     {
         parent::beforeFilter($event);
-        $this->loadModel('BaserCore.Sites');
-        $this->loadModel('BaserCore.SiteConfigs');
-        $this->loadModel('BaserCore.ContentFolders');
-        $this->loadModel('BaserCore.Users');
-        $this->loadModel('BaserCore.Contents');
         $this->Security->setConfig('unlockedActions', ['delete', 'batch', 'trash_return']);
     }
 
     /**
      * コンテンツ一覧
-     * @param  ContentsAdminServiceInterface $contentService
-     * @param  SitesServiceInterface $siteService
+     * @param  ContentsAdminServiceInterface $service
      * @param  SiteConfigsServiceInterface $siteConfigService
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function index(ContentsAdminServiceInterface $contentService, SitesServiceInterface $siteService, SiteConfigsServiceInterface $siteConfigService)
+    public function index(ContentsAdminServiceInterface $service, SiteConfigsServiceInterface $siteConfigService)
     {
-        $currentSiteId = $this->request->getAttribute('currentSite')? $this->request->getAttribute('currentSite')->id : null;
-        $sites = $siteService->getList();
-        if ($sites) {
-            if (in_array($currentSiteId, array_keys($sites))) {
-                $this->request = $this->request->withQueryParams(Hash::merge($this->request->getQueryParams(), ['site_id' => $currentSiteId]));
-            } elseif (!$this->request->getQuery('site_id') || !in_array($this->request->getQuery('site_id'), array_keys($sites))) {
-                reset($sites);
-                $this->request = $this->request->withQueryParams(Hash::merge($this->request->getQueryParams(), ['site_id' =>key($sites)]));
-            }
-        } else {
-            $this->request = $this->request->withQueryParams(Hash::merge($this->request->getQueryParams(),  ['site_id' => null]));
-        }
-        $currentListType = $this->request->getQuery('list_type') ?? 1;
         $this->setViewConditions('Contents', ['default' => [
             'query' => [
-                'num' => $siteConfigService->getValue('admin_list_num'),
-                'site_id' => $currentSiteId,
-                'list_type' => $currentListType,
-                'sort' => 'id',
-                'direction' => 'asc',
+                'site_id' => $this->request->getAttribute('currentSite')? $this->request->getAttribute('currentSite')->id : 1,
+                'list_type' => $this->request->getQuery('list_type') ?? 1,
             ]
         ]]);
-        if($this->request->getParam('action') == "index") {
-            switch($this->request->getQuery('list_type')) {
-                case 1:
-                    // 並び替え最終更新時刻をリセット
-                    $siteConfigService->resetValue('contents_sort_last_modified');
-                    break;
-                case 2:
-                    $this->request = $this->request->withQueryParams(
-                        Hash::merge(
-                            $this->request->getQueryParams(),
-                            $contentService->getTableConditions($this->request->getQueryParams())
-                        ));
-                    // EVENT Contents.searchIndex
-                    $event = $this->dispatchLayerEvent('searchIndex', [
-                        'request' => $this->request
-                    ]);
-                    if ($event !== false) {
-                        $this->request = ($event->getResult() === null || $event->getResult() === true)? $event->getData('request') : $event->getResult();
-                    }
-                    break;
-            }
-        }
-        $this->ContentFolders->getEventManager()->on($this->ContentFolders);
-        $this->request = $this->request->withParsedBody($this->request->getQuery());
-        $this->set('contents', $this->getContents($contentService));
-        $this->set('template', $this->getTemplate());
-        $this->set('folders', $contentService->getContentFolderList($currentSiteId, ['conditions' => ['site_root' => false]]));
-        $this->set('sites', $sites);
-        $this->set($contentService->getViewVarsForIndex());
-    }
 
-    /**
-     * リクエストに応じたコンテンツを返す
-     *
-     * @param  ContentsServiceInterface $contentService
-     * @return Query|ResultSet
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    protected function getContents($contentService)
-    {
-        switch($this->request->getParam('action')) {
-            case 'index':
-                switch($this->request->getQuery('list_type')) {
-                    case 1:
-                        return $contentService->getTreeIndex($this->request->getQueryParams());
-                    case 2:
-                        return $this->paginate($contentService->getTableIndex($this->request->getQueryParams()));
-                    default:
-                        return $contentService->getEmptyIndex();
-                }
-            case 'trash_index':
-                return $contentService->getTrashIndex($this->request->getQueryParams(), 'threaded')->order(['site_id', 'lft']);
-            default:
-                return $contentService->getEmptyIndex();
-        }
-    }
+        switch($this->getRequest()->getQuery('list_type')) {
+            case 1:
+                // 並び替え最終更新時刻をリセット
+                $siteConfigService->resetValue('contents_sort_last_modified');
+                $contents = $service->getTreeIndex($this->request->getQueryParams());
+                break;
+            case 2:
+                $this->setViewConditions('Contents', ['default' => [
+                    'query' => [
+                        'num' => $siteConfigService->getValue('admin_list_num'),
+                        'sort' => 'id',
+                        'direction' => 'asc',
+                    ]
+                ]]);
 
-    /**
-     * リクエストに応じたテンプレートを取得する
-     *
-     * @return string
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    protected function getTemplate(): string
-    {
-        switch($this->request->getParam('action')) {
-            case 'index':
-                switch($this->request->getQuery('list_type')) {
-                    case 1:
-                        return 'index_tree';
-                    case 2:
-                        return 'index_table';
-                    default:
-                        $this->BcMessage->setError(__d('baser', '指定されたテンプレートは存在しません'));
-                        return 'index_tree';
+                // EVENT Contents.searchIndex
+                $event = $this->dispatchLayerEvent('searchIndex', [
+                    'request' => $this->request
+                ]);
+                if ($event !== false) {
+                    $this->request = ($event->getResult() === null || $event->getResult() === true)? $event->getData('request') : $event->getResult();
                 }
-            case 'trash_index':
-                return 'index_trash';
-            default:
-                $this->BcMessage->setError(__d('baser', '指定されたテンプレートは存在しません'));
-                return 'index_tree';
+
+                $contents = $this->paginate($service->getTableIndex($this->request->getQueryParams()));
+                break;
         }
+
+        $this->setRequest($this->getRequest()->withData('ViewSetting.list_type', $this->getRequest()->getQuery('list_type')));
+        $this->set($service->getViewVarsForIndex($this->getRequest(), $contents));
     }
 
     /**
      * ゴミ箱内のコンテンツ一覧を表示する
      *
      * @param  ContentsServiceInterface $contentService
-     * @param  SitesServiceInterface $siteService
-     * @param  SiteConfigsServiceInterface $siteConfigService
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function trash_index(ContentsAdminServiceInterface $contentService, SitesServiceInterface $siteService, SiteConfigsServiceInterface $siteConfigService)
+    public function trash_index(ContentsAdminServiceInterface $service)
     {
-        $this->setAction('index', $contentService, $siteService, $siteConfigService);
-        $this->render('index');
+        $this->setViewConditions('Contents', ['default' => [
+            'query' => [
+                'site_id' => $this->request->getAttribute('currentSite')? $this->request->getAttribute('currentSite')->id : 1,
+            ]
+        ]]);
+        $contents = $service->getTrashIndex($this->request->getQueryParams(), 'threaded')->order(['site_id', 'lft']);
+        $this->set($service->getViewVarsForTrashIndex($contents));
     }
 
     /**

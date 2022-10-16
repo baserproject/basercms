@@ -489,13 +489,6 @@ class ContentsController extends BcApiController
      */
     protected function execMove($contentService, $siteConfig)
     {
-            // EVENT Contents.beforeMove
-            $beforeEvent = $this->dispatchLayerEvent('beforeMove', [
-                'data' => $this->getRequest()->getData()
-            ]);
-            if ($beforeEvent !== false) {
-                $this->getRequest()->withParsedBody(($beforeEvent->getResult() === null || $beforeEvent->getResult() === true)? $beforeEvent->getData('data') : $beforeEvent->getResult());
-            }
             $content = $contentService->get($this->request->getData('origin.id'));
             $beforeUrl = $content->url;
             try {
@@ -504,10 +497,6 @@ class ContentsController extends BcApiController
                     // 親が違う場合は、Contentモデルで更新してくれるが同じ場合更新しない仕様のためここで更新する
                     $siteConfig->updateContentsSortLastModified();
                 }
-                // EVENT Contents.afterMove
-                $this->dispatchLayerEvent('afterMove', [
-                    'data' => $result
-                ]);
                 $message = sprintf(__d('baser', "コンテンツ「%s」の配置を移動しました。\n%s > %s"), $result->title, rawurldecode($beforeUrl), rawurldecode($result->url));
                 $url = $contentService->getUrlById($result->id, true);
                 $this->set(['url' => $url]);

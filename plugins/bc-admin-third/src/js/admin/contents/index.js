@@ -107,18 +107,15 @@ $(function () {
      * 表形式のリストをロードする
      */
     function loadTable() {
-        let siteId = getCurrentSiteId();
-        let url = $.bcUtil.adminBaseUrl + 'baser-core' + '/contents/index?site_id=' + siteId;
-        let queryParams = decodeURI($("#ContentIndexForm").serialize());
-        location.href = url + '&' + queryParams;
+        let url = $.bcUtil.adminBaseUrl + 'baser-core' + '/contents/index?list_type=2';
+        location.href = url + '&' + decodeURI($("#ContentIndexForm").serialize());
     }
 
     /**
      * ツリーを読み込む
      */
     function loadTree() {
-        // listTypeを変更し、空のクエリ文字列を消す処理
-        location.href = location.href.replace("list_type=2", "list_type=1").replace(/[^?=&]+=(&|$)/g, "").replace(/&$/, "");
+        location.href = $.bcUtil.adminBaseUrl + 'baser-core' + '/contents/index?list_type=1';
     }
 
     /**

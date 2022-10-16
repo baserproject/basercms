@@ -9,15 +9,14 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
-use BaserCore\View\BcAdminAppView;
-
 /**
  * コンテンツ一覧
  *
- * @var BcAdminAppView $this
+ * @var BaserCore\View\BcAdminAppView $this
  * @var array $folders
  * @var array $authorList
  * @var array $typeList
+ * @var \BaserCore\Form\ContentsSearchForm $contentsSearch
  * @checked
  * @unitTest
  * @noTodo
@@ -25,9 +24,8 @@ use BaserCore\View\BcAdminAppView;
 ?>
 
 
-<?= $this->BcAdminForm->create(null, ['type' => 'get', 'id' => 'ContentIndexForm'], ) ?>
+<?= $this->BcAdminForm->create($contentsSearch, ['type' => 'get', 'id' => 'ContentIndexForm'], ) ?>
 <?= $this->BcAdminForm->control('open', ['type' => 'hidden', 'value' => true]) ?>
-<?= $this->BcAdminForm->control('list_type', ['type' => 'hidden', 'value' => 2]) ?>
 <p class="bca-search__input-list">
 	<span class="bca-search__input-item">
 		<?= $this->BcAdminForm->label('folder_id', __d('baser', 'フォルダ'), ['class' => 'bca-search__input-item-label']) ?>

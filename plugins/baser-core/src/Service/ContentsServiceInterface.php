@@ -49,16 +49,6 @@ interface ContentsServiceInterface extends CrudBaseServiceInterface
     public function getChildren($id);
 
     /**
-     * 空のQueryを返す
-     *
-     * @return Query
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function getEmptyIndex(): Query;
-
-    /**
      * getTreeIndex
      *
      * @param  array $queryParams

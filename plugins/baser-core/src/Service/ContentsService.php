@@ -163,19 +163,6 @@ class ContentsService implements ContentsServiceInterface
     }
 
     /**
-     * 空のQueryを返す
-
-     * @return Query
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function getEmptyIndex(): Query
-    {
-        return $this->getIndex(['site_id' => 0]);
-    }
-
-    /**
      * getTreeIndex
      *
      * @param  array $queryParams
@@ -186,6 +173,15 @@ class ContentsService implements ContentsServiceInterface
      */
     public function getTreeIndex(array $queryParams): Query
     {
+        unset(
+            $queryParams['folder_id'],
+            $queryParams['name'],
+            $queryParams['type'],
+            $queryParams['self_status'],
+            $queryParams['author_id'],
+            $queryParams['limit'],
+            $queryParams['withTrash']
+        );
         return $this->getIndex($queryParams, 'threaded')->order(['lft']);
     }
 
@@ -201,7 +197,6 @@ class ContentsService implements ContentsServiceInterface
     public function getTableConditions(array $queryParams): array
     {
         $customFields = ['name', 'folder_id', 'self_status'];
-        $options = [];
         foreach ($queryParams as $key => $value) {
             if (!empty($queryParams[$key])) {
                 if (!in_array($key, $customFields)) {
@@ -251,10 +246,6 @@ class ContentsService implements ContentsServiceInterface
                 'Contents.title LIKE' => '%' . $queryParams['name'] . '%'
             ]]);
             unset($queryParams['name']);
-        }
-
-        if (!empty($queryParams['title'])) {
-            $query = $query->andWhere(['Contents.title LIKE' => '%' . $queryParams['title'] . '%']);
         }
 
         if (!empty($queryParams['folder_id'])) {
