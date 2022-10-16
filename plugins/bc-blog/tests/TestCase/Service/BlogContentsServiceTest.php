@@ -169,7 +169,21 @@ class BlogContentsServiceTest extends BcTestCase
      */
     public function test_create()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $data = [
+            'description' => '新しい ブログコンテンツ',
+            'content' => [
+                'title' => '新しい ブログ'
+            ]
+        ];
+        $blogContent = $this->BlogContentsService->create($data);
+        $this->assertEquals('新しい ブログコンテンツ', $blogContent['description']);
+
+        $data = [
+            'description' => '新しい ブログコンテンツ'
+        ];
+        $this->expectException("Cake\ORM\Exception\PersistenceFailedException");
+        $this->expectExceptionMessage("関連するコンテンツがありません");
+        $this->BlogContentsService->create($data);
     }
 
     /**
