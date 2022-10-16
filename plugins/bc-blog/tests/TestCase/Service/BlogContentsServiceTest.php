@@ -199,7 +199,13 @@ class BlogContentsServiceTest extends BcTestCase
      */
     public function test_delete()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        BlogContentsFactory::make(['id' => 70, 'description' => 'test delete'])->persist();
+        $rs = $this->BlogContentsService->delete(70);
+        //戻り値を確認
+        $this->assertTrue($rs);
+        //データの削除を確認
+        $blogContent = $this->BlogContentsService->get(70);
+        $this->assertNull($blogContent);
     }
 
 }
