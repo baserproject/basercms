@@ -256,6 +256,7 @@ class BlogCategoriesService implements BlogCategoriesServiceInterface
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getNamesById($ids): array
     {

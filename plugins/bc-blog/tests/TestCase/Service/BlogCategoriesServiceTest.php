@@ -259,7 +259,24 @@ class BlogCategoriesServiceTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function testGetNamesById()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        BlogCategoryFactory::make([
+            'id' => 59,
+            'name' => 'testName1',
+            'blog_content_id' => 19,
+            'title' => 'testTitle1',
+            'lft' => 1,
+            'rght' => 2
+        ])->persist();
+        BlogCategoryFactory::make([
+            'id' => 60,
+            'name' => 'testName2',
+            'blog_content_id' => 19,
+            'title' => 'testTitle2',
+            'lft' => 3,
+            'rght' => 4
+        ])->persist();
+        $result = $this->BlogCategories->getNamesById([59, 60]);
+        $this->assertEquals([59 => 'testTitle1', 60 => 'testTitle2'], $result);
     }
 
     /**
