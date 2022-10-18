@@ -13,14 +13,10 @@ namespace BaserCore\Controller\Api;
 
 use BaserCore\Error\BcException;
 use Exception;
-use Cake\Core\Configure;
-use Cake\ORM\TableRegistry;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\Note;
-use BaserCore\Service\ContentsService;
-use BaserCore\Model\Table\SiteConfigsTable;
 use BaserCore\Service\ContentsServiceInterface;
 
 /**
@@ -107,7 +103,19 @@ class ContentsController extends BcApiController
         $content = $contentService->get($id);
         $children = $contentService->getChildren($id);
         try {
+
+            // EVENT Contents.beforeDelete
+            $this->dispatchLayerEvent('beforeDelete', [
+                'data' => $id
+            ]);
+
             if ($contentService->deleteRecursive($id)) {
+
+                // EVENT Contents.afterDelete
+                $this->dispatchLayerEvent('afterDelete', [
+                    'data' => $id
+                ]);
+
                 $text = "コンテンツ: " . $content->title . "を削除しました。";
                 if ($children) {
                     $content = array_merge([$content], $children->toArray());
@@ -454,7 +462,7 @@ class ContentsController extends BcApiController
         if (!$contentService->isTreeModifiedByAnotherUser($this->getRequest()->getData('listDisplayed'))) {
             try {
                 // EVENT Contents.beforeMove
-                $event = $this->dispatchEvent('beforeMove', [
+                $event = $this->dispatchLayerEvent('beforeMove', [
                     'data' => $this->getRequest()->getData()
                 ]);
                 if ($event !== false) {
@@ -473,7 +481,7 @@ class ContentsController extends BcApiController
                 $url = $contentService->getUrlById($content->id, true);
 
                 // EVENT Contents.afterMove
-                $this->dispatchEvent('afterMove', [
+                $this->dispatchLayerEvent('afterMove', [
                     'data' => $content
                 ]);
 

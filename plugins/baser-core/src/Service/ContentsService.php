@@ -821,8 +821,7 @@ class ContentsService implements ContentsServiceInterface
     public function publish($id): EntityInterface
     {
         $content = $this->get($id);
-        // 日付をどこで入れるかを確認する
-        $content->self_publish_begin = FrozenTime::now();
+        $content->self_publish_begin = null;
         $content->self_publish_end = null;
         $content->self_status = true;
         return $this->Contents->save($content);
@@ -840,8 +839,8 @@ class ContentsService implements ContentsServiceInterface
     public function unpublish($id): EntityInterface
     {
         $content = $this->get($id);
-        // 日付をどこで入れるかを確認する
-        $content->self_publish_end = FrozenTime::now();
+        $content->self_publish_begin = null;
+        $content->self_publish_end = null;
         $content->self_status = false;
         return $this->Contents->save($content);
     }

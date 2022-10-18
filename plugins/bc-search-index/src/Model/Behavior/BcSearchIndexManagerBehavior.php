@@ -178,7 +178,6 @@ class BcSearchIndexManagerBehavior extends Behavior
         $before = false;
         if (!empty($searchIndex['model_id'])) {
             $before = $this->SearchIndexes->find()
-                ->select(['id', 'content_id'])
                 ->where([
                     'model' => $searchIndex['model'],
                     'model_id' => $searchIndex['model_id']

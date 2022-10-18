@@ -184,10 +184,10 @@ class PagesTable extends AppTable
         }
         $content = $page->content;
         if (!isset($content->publish_begin)) {
-            $content->publish_begin = '';
+            $content->publish_begin = null;
         }
         if (!isset($content->publish_end)) {
-            $content->publish_end = '';
+            $content->publish_end = null;
         }
 
         if (!$content->title) {
