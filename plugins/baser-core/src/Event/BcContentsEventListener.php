@@ -66,6 +66,7 @@ class BcContentsEventListener extends BcEventListener
      * Constructor
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function __construct($entityVarName)
     {

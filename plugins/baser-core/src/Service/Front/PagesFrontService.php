@@ -64,6 +64,7 @@ class PagesFrontService extends PagesService implements PagesFrontServiceInterfa
      * @param Controller $controller
      * @noTodo
      * @checked
+     * @unitTest
      */
     public function setupPreviewForView(Controller $controller): void
     {

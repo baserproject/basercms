@@ -117,6 +117,7 @@ class BlogCategoriesService implements BlogCategoriesServiceInterface
      * @return mixed
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getControlSource(string $field, array $options): mixed
     {

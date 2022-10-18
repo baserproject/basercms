@@ -93,7 +93,19 @@ class BlogCategoriesAdminServiceTest extends BcTestCase
      */
     public function test_getViewVarsForAdd()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        BlogContentsFactory::make(['id' => 51, 'description' => 'test add'])->persist();
+        BlogCategoryFactory::make(['id' => 51, 'title' => 'title add', 'name' => 'name-add', 'rght' => 5, 'lft' => 6])->persist();
+
+        $blogCategoriesService = new BlogCategoriesService();
+        $blogCategory = $blogCategoriesService->get(51);
+
+        $rs = $this->BlogCategoriesAdminService->getViewVarsForAdd(51, $blogCategory);
+
+        $this->assertTrue(isset($rs['blogContent']));
+        $this->assertTrue(isset($rs['blogCategory']));
+        $this->assertTrue(isset($rs['parents']));
+        $this->assertEquals($blogCategory, $rs['blogCategory']);
+        $this->assertEquals('test add', $rs['blogContent']['description']);
     }
 
     /**

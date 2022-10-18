@@ -1,6 +1,4 @@
 <?php
-// TODO : コード確認要
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
@@ -12,42 +10,67 @@ return;
  * @license         https://basercms.net/license/index.html
  */
 
-App::uses('BlogCategory', 'BcBlog.Model');
+namespace BcBlog\Test\TestCase\Model;
+
+use BaserCore\TestSuite\BcTestCase;
+use BcBlog\Model\Table\BlogCategoriesTable;
 
 /**
  * Class BlogCategoryTest
- *
- * @property BlogCategory $BlogCategory
+ * @property BlogCategoriesTable $BlogCategoriesTable
  */
-class BlogCategoriesTableTest extends BaserTestCase
+class BlogCategoriesTableTest extends BcTestCase
 {
 
     public $fixtures = [
-        'baser.Default.SearchIndex',
-        'baser.Default.Permission',
-        'baser.Default.User',
-        'baser.Default.UserGroup',
-        'baser.Default.SiteConfig',
-        'baser.Default.BlogPost',
-        'baser.Default.BlogPostsBlogTag',
-        'baser.Default.BlogContent',
-        'baser.Default.BlogComment',
-        'baser.Default.BlogTag',
-        'baser.Default.Content',
-        'baser.Default.Site',
-        'plugin.blog.Model/BlogPost/BlogCategoryModel',
+        'plugin.BcBlog.Factory/BlogCategories',
     ];
 
-    public function setUp()
+    /**
+     * Setup
+     *
+     * @return void
+     */
+    public function setUp(): void
     {
-        $this->BlogCategory = ClassRegistry::init('BcBlog.BlogCategory');
+        $this->setFixtureTruncate();
         parent::setUp();
+        $this->BlogCategoriesTable = new BlogCategoriesTable();
     }
 
-    public function tearDown()
+    /**
+     * Tear down
+     *
+     * @return void
+     */
+    public function tearDown(): void
     {
-        unset($this->BlogCategory);
         parent::tearDown();
+    }
+
+    /**
+     * Test initialize
+     *
+     * @return void
+     */
+    public function testInitialize(): void
+    {
+        $this->BlogCategoriesTable->initialize([]);
+        $this->assertEquals('blog_categories', $this->BlogCategoriesTable->getTable());
+        $this->assertEquals('id', $this->BlogCategoriesTable->getPrimaryKey());
+        $this->assertTrue($this->BlogCategoriesTable->hasBehavior('Timestamp'));
+        $this->assertTrue($this->BlogCategoriesTable->hasBehavior('Tree'));
+        $this->assertEquals('BlogPosts', $this->BlogCategoriesTable->getAssociation('BlogPosts')->getName());
+    }
+
+    /**
+     * Test validationDefault
+     *
+     * @return void
+     */
+    public function testValidationDefault(): void
+    {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
     }
 
     /*
@@ -55,6 +78,7 @@ class BlogCategoriesTableTest extends BaserTestCase
 	 */
     public function test必須チェック()
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         // blog_content_idを設定
         $this->BlogCategory->validationParams = [
             'blogContentId' => 1
@@ -77,6 +101,7 @@ class BlogCategoriesTableTest extends BaserTestCase
 
     public function test桁数チェック異常系()
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         // blog_content_idを設定
         $this->BlogCategory->validationParams = [
             'blogContentId' => 1
@@ -99,6 +124,7 @@ class BlogCategoriesTableTest extends BaserTestCase
 
     public function test桁数チェック正常系()
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         // blog_content_idを設定
         $this->BlogCategory->validationParams = [
             'blogContentId' => 1
@@ -116,6 +142,7 @@ class BlogCategoriesTableTest extends BaserTestCase
 
     public function testその他異常系()
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         // blog_content_idを設定
         $this->BlogCategory->validationParams = [
             'blogContentId' => 1
@@ -154,6 +181,7 @@ class BlogCategoriesTableTest extends BaserTestCase
      */
     public function testDuplicateBlogCategory($check, $expected)
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $this->BlogCategory->validationParams['blogContentId'] = 1;
         $result = $this->BlogCategory->duplicateBlogCategory($check);
         $this->assertEquals($result, $expected);
@@ -161,6 +189,7 @@ class BlogCategoriesTableTest extends BaserTestCase
 
     public function duplicateBlogCategoryDataProvider()
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         return [
             [['id' => 0], true],
             [['id' => 1], false],
@@ -176,6 +205,7 @@ class BlogCategoriesTableTest extends BaserTestCase
      */
     public function testBeforeDelete()
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $this->BlogCategory->data = ['BlogCategory' => [
             'id' => '1'
         ]];
@@ -193,6 +223,7 @@ class BlogCategoriesTableTest extends BaserTestCase
      */
     public function testGetCategoryList()
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $message = '正しくカテゴリリストを取得できません';
         // 正常
         $result = $this->BlogCategory->getCategoryList(1, []);
@@ -226,6 +257,7 @@ class BlogCategoriesTableTest extends BaserTestCase
      */
     public function testHasNewCategoryAddablePermission()
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
         //		$result = $this->BlogCategory->hasNewCategoryAddablePermission(2, 99);
     }
@@ -235,6 +267,7 @@ class BlogCategoriesTableTest extends BaserTestCase
      */
     public function testHasChild()
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $this->assertFalse($this->BlogCategory->hasChild(2));
         $this->assertTrue($this->BlogCategory->hasChild(1));
     }
@@ -248,6 +281,7 @@ class BlogCategoriesTableTest extends BaserTestCase
      */
     public function testGetByName($blogCategoryId, $name, $expects)
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $result = $this->BlogCategory->getByName($blogCategoryId, $name);
         $this->assertEquals($expects, (bool)$result);
     }
