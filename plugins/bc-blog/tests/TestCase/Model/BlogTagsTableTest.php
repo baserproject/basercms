@@ -1,49 +1,61 @@
 <?php
-// TODO : コード確認要
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Blog.Test.Case.Model
- * @since           baserCMS v 3.0.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) NPO baser foundation
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       https://basercms.net/license/index.html MIT License
  */
 
-App::uses('BlogTag', 'BcBlog.Model');
+namespace BcBlog\Test\TestCase\Model;
+
+use BaserCore\TestSuite\BcTestCase;
+use BcBlog\Model\Table\BlogTagsTable;
 
 /**
- * Class BlogTagTest
+ * Class BlogTagsTableTest
  *
- * @property BlogTag $BlogTag
+ * @property BlogTagsTable $BlogTagsTable
  */
-class BlogTagsTableTest extends BaserTestCase
+class BlogTagsTableTest extends BcTestCase
 {
 
     public $fixtures = [
-        'plugin.blog.Model/BlogTag/BlogPostBlogTagFindCustomPrams',
-        'plugin.blog.Model/BlogTag/BlogPostsBlogTagBlogTagFindCustomPrams',
-        'plugin.blog.Model/BlogTag/BlogTagBlogTagFindCustomPrams',
-        'plugin.blog.Model/BlogTag/BlogContentBlogTagFindCustomPrams',
-        'plugin.blog.Model/BlogTag/ContentBlogTagFindCustomPrams',
-        'plugin.blog.Model/BlogTag/SiteBlogTagFindCustomPrams',
-        'baser.Default.BlogCategory',
-        'baser.Default.BlogComment',
-        'baser.Default.User',
+        'plugin.BcBlog.Factory/BlogTags',
     ];
 
-    public function setUp()
+    /**
+     * Set Up
+     *
+     * @return void
+     */
+    public function setUp(): void
     {
-        $this->BlogTag = ClassRegistry::init('BcBlog.BlogTag');
         parent::setUp();
+        $this->BlogTagsTable = $this->getTableLocator()->get('BcBlog.BlogTags');
     }
 
-    public function tearDown()
+    /**
+     * Tear Down
+     *
+     * @return void
+     */
+    public function tearDown(): void
     {
-        unset($this->BlogTag);
+        unset($this->BlogTagsTable);
         parent::tearDown();
+    }
+
+    /**
+     * test initialize
+     */
+    public function test_initialize()
+    {
+        $this->assertEquals('blog_tags', $this->BlogTagsTable->getTable());
+        $this->assertTrue($this->BlogTagsTable->hasBehavior('Timestamp'));
+        $this->assertTrue($this->BlogTagsTable->hasAssociation('BlogPosts'));
     }
 
     /*
@@ -51,7 +63,7 @@ class BlogTagsTableTest extends BaserTestCase
 	 */
     public function test空チェック()
     {
-
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $this->BlogTag->create([
             'BlogTag' => [
                 'name' => ''
@@ -66,6 +78,7 @@ class BlogTagsTableTest extends BaserTestCase
 
     public function test重複チェック()
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $this->BlogTag->create([
             'BlogTag' => [
                 'name' => 'タグ１'
@@ -80,6 +93,7 @@ class BlogTagsTableTest extends BaserTestCase
 
     public function test正常チェック()
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $this->BlogTag->create([
             'BlogTag' => [
                 'name' => 'test'
@@ -99,6 +113,7 @@ class BlogTagsTableTest extends BaserTestCase
      */
     public function testFindCustomParams($type, $expected, $options = [])
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $result = $this->BlogTag->find('customParams', $options);
         if ($type == 'count') {
             if ($result) {
@@ -134,6 +149,7 @@ class BlogTagsTableTest extends BaserTestCase
      */
     public function testGetByName($name, $expects)
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $result = $this->BlogTag->getByName($name);
         $this->assertEquals($expects, (bool)$result);
     }
