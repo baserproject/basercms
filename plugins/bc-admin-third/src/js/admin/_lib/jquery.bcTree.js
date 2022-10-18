@@ -360,7 +360,7 @@
                                         "action": function (obj) {
                                             $.bcToken.check(function () {
                                                 return $.ajax({
-                                                    url: $.bcUtil.apiBaseUrl + 'baser-core' +  '/contents/change_status',
+                                                    url: $.bcUtil.apiBaseUrl + 'baser-core' + '/contents/change_status',
                                                     headers: {
                                                         "Authorization": $.bcJwt.accessToken,
                                                     },
@@ -868,57 +868,60 @@
             var node = $.bcTree.jsTree.get_node(nodeId);
             $.bcTree.jsTree.edit(node, data.contentTitle, function (editNode) {
                 $.bcToken.check(function () {
-                    const content = {
-                        parent_id: data.contentParentId,
-                        title: editNode.text,
-                        plugin: data.contentPlugin,
-                        type: data.contentType,
-                        site_id: data.contentSiteId,
-                        alias_id: data.contentAliasId,
-                        entity_id: data.contentEntityId
-                    };
-                    return $.ajax({
-                        url: url,
-                        headers: {
-                            "Authorization": $.bcJwt.accessToken,
-                        },
-                        type: 'POST',
-                        data: {
-                            _csrfToken: $.bcToken.key,
-                            content: content,
-                        },
-                        dataType: 'json',
-                        beforeSend: function () {
-                            this.data = $.bcTree.fillExtraData(this.data, data);
-                            $.bcUtil.hideMessage();
-                            $.bcUtil.showLoader();
-                        },
-                        success: function (result) {
-                            $.bcUtil.showNoticeMessage(result.message);
-                            $.bcTree.settings[data.contentType]['exists'] = true;
-                            $.bcTree.settings[data.contentType]['existsTitle'] = editNode.text;
-                            data.contentId = result.content.id;
-                            data.contentEntityId = result.content.entity_id;
-                            data.name = decodeURIComponent(result.content.name);
-                            node.data.jstree = data;
-                            $.bcTree.refreshTree();
-                        },
-                        error: function (XMLHttpRequest, textStatus, errorThrown) {
-                            $.bcUtil.showAjaxError(bcI18n.bcTreeAlertMessage6, XMLHttpRequest, errorThrown);
-                            $.bcTree.jsTree.delete_node(node);
-                            $.bcUtil.hideLoader();
-                        }
-                    }).then(function () {
-                        return $.bcUtil.ajax($.bcUtil.apiBaseUrl + 'baser-core' + '/contents/get_full_url/' + data.contentId, {}, {type: 'GET', dataType: 'json'}).done(function (result) {
-                            data.contentFullUrl = decodeURI(result.fullUrl);
-                            node.data.jstree = data;
-                            if (data.contentType == 'ContentFolder') {
-                                node.type = 'folder'
+                        const content = {
+                            parent_id: data.contentParentId,
+                            title: editNode.text,
+                            plugin: data.contentPlugin,
+                            type: data.contentType,
+                            site_id: data.contentSiteId,
+                            alias_id: data.contentAliasId,
+                            entity_id: data.contentEntityId
+                        };
+                        return $.ajax({
+                            url: url,
+                            headers: {
+                                "Authorization": $.bcJwt.accessToken,
+                            },
+                            type: 'POST',
+                            data: {
+                                _csrfToken: $.bcToken.key,
+                                content: content,
+                            },
+                            dataType: 'json',
+                            beforeSend: function () {
+                                this.data = $.bcTree.fillExtraData(this.data, data);
+                                $.bcUtil.hideMessage();
+                                $.bcUtil.showLoader();
+                            },
+                            success: function (result) {
+                                $.bcUtil.showNoticeMessage(result.message);
+                                $.bcTree.settings[data.contentType]['exists'] = true;
+                                $.bcTree.settings[data.contentType]['existsTitle'] = editNode.text;
+                                data.contentId = result.content.id;
+                                data.contentEntityId = result.content.entity_id;
+                                data.name = decodeURIComponent(result.content.name);
+                                node.data.jstree = data;
+                                $.bcTree.refreshTree();
+                            },
+                            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                $.bcUtil.showAjaxError(bcI18n.bcTreeAlertMessage6, XMLHttpRequest, errorThrown);
+                                $.bcTree.jsTree.delete_node(node);
+                                $.bcUtil.hideLoader();
                             }
+                        }).then(function () {
+                            return $.bcUtil.ajax($.bcUtil.apiBaseUrl + 'baser-core' + '/contents/get_full_url/' + data.contentId, {}, {
+                                type: 'GET',
+                                dataType: 'json'
+                            }).done(function (result) {
+                                data.contentFullUrl = decodeURI(result.fullUrl);
+                                node.data.jstree = data;
+                                if (data.contentType == 'ContentFolder') {
+                                    node.type = 'folder'
+                                }
+                            });
                         });
-                    });
-                }
-                , {hideLoader: false});
+                    }
+                    , {hideLoader: false});
             });
         },
         /**
@@ -933,7 +936,7 @@
                     case "ContentFolder":
                         return {
                             folder_template: "",
-                            page_template : ""
+                            page_template: ""
                         };
                     case "Page":
                         return {
@@ -947,7 +950,7 @@
                 }
             })();
             if (extra) {
-                postData  += '&' +  encodeURI($.param(extra));
+                postData += '&' + encodeURI($.param(extra));
             }
             return postData;
         },
@@ -982,11 +985,11 @@
                         $.bcToken.key = null;
                         $.bcTree.jsTree.delete_node(node);
                         // エイリアス削除
-                        var nodes = $.bcTree.jsTree.get_json(null, { flat: true });
+                        var nodes = $.bcTree.jsTree.get_json(null, {flat: true});
                         for (var i = 0; i < nodes.length; i++) {
-                          if (data.contentId == nodes[i].state.contentAliasId) {
-                            $.bcTree.jsTree.delete_node(nodes[i]);
-                          }
+                            if (data.contentId == nodes[i].state.contentAliasId) {
+                                $.bcTree.jsTree.delete_node(nodes[i]);
+                            }
                         }
                         $.bcTree.refreshTree();
                         $.bcUtil.hideLoader();
@@ -1003,6 +1006,7 @@
         /**
          * Copy Content
          *
+         * @param parent
          * @param node
          */
         copyContent: function (parent, node) {
@@ -1106,7 +1110,7 @@
                             $.bcUtil.showLoader();
                         },
                         success: function (result) {
-                            if(!first) {
+                            if (!first) {
                                 $.bcUtil.showNoticeMessage(result.message);
                             }
                             $.bcTree.settings[node.data.jstree.contentType]['existsTitle'] = editNode.text;
