@@ -323,7 +323,6 @@ class ContentsServiceTest extends BcTestCase
         }
         try {
             $this->ContentFoldersService->get($content->entity_id);
-            throw new \Exception();
         } catch (\Exception $e) {
             $this->assertSame('Cake\Datasource\Exception\RecordNotFoundException', get_class($e));
         }
