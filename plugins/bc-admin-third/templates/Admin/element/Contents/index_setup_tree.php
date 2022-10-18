@@ -32,6 +32,7 @@ $this->BcBaser->i18nScript([
   'bcTreeCopy' => __d('baser', 'コピー'),
   'bcTreeDelete' => __d('baser', '削除'),
   'bcTreeToTrash' => __d('baser', 'ゴミ箱に入れる'),
+  'bcTreeUndo' => __d('baser', '元に戻す'),
   'bcTreeEmptyTrash' => __d('baser', 'ゴミ箱を空にする'),
   'bcTreeConfirmMessage1' => __d('baser', "ゴミ箱にある項目を完全に消去してもよろしいですか？\nこの操作は取り消せません。"),
   'bcTreeConfirmToTrash' => __d('baser', 'コンテンツをゴミ箱に移動してもよろしいですか？'),

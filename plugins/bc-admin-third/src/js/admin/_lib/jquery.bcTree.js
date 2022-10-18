@@ -496,7 +496,7 @@
                             $.extend(true, menu, {
                                 "return": {
                                     _disabled: editDisabled,
-                                    label: "戻す",
+                                    label: bcI18n.bcTreeUndo,
                                     "icon": "bca-icon--undo",
                                     "action": function (obj) {
                                         if (data.alias) {

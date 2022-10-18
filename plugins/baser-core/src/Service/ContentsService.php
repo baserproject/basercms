@@ -489,7 +489,20 @@ class ContentsService implements ContentsServiceInterface
     public function restore($id)
     {
         $trash = $this->getTrash($id);
-        return $this->Contents->restore($trash) ? $trash : null;
+        $content = $this->Contents->restore($trash) ? $trash : null;
+        if($content) {
+            $siteRoot = $this->getSiteRoot($content->site_id);
+            $content->parent_id = $siteRoot->id;
+            $content->lft = null;
+            $content->rght = null;
+            return $this->update($content, [
+                'parent_id' => $siteRoot->id,
+                'lft' => null,
+                'rght' => null
+            ]);
+        } else {
+            return null;
+        }
     }
 
     /**

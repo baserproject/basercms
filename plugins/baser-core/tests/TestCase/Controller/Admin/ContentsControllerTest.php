@@ -210,7 +210,7 @@ class ContentsControllerTest extends BcTestCase
         $this->assertResponseCode(404);
         $id = $this->ContentsService->getTrashIndex()->first()->id;
         $this->get("/baser/admin/baser-core/contents/trash_return/{$id}");
-        $this->assertRedirect('/baser/admin/baser-core/contents/trash_index');
+        $this->assertRedirect('/baser/admin/baser-core/contents/index');
         $this->assertResponseSuccess();
         $this->assertNotEmpty($this->ContentsService->get($id));
     }

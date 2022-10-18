@@ -162,20 +162,23 @@ class ContentsController extends BcAdminAppController
             $this->ajaxError(500, __d('baser', '無効な処理です。'));
         }
         $this->disableAutoRender();
+
         // EVENT Contents.beforeTrashReturn
         $this->dispatchLayerEvent('beforeTrashReturn', [
             'data' => $id
         ]);
+
         if ($restored = $contentService->restore($id)) {
+            // EVENT Contents.afterTrashReturn
+            $this->dispatchLayerEvent('afterTrashReturn', [
+                'data' => $id
+            ]);
             $this->BcMessage->setSuccess(sprintf(__d('baser', 'ゴミ箱「%s」を戻しました。'), $restored->title));
+            return $this->redirect(['action' => 'index']);
         } else {
             $this->BcMessage->setError('ゴミ箱から戻す事に失敗しました。');
+            return $this->redirect(['action' => 'trash_index']);
         }
-        // EVENT Contents.afterTrashReturn
-        $this->dispatchLayerEvent('afterTrashReturn', [
-            'data' => $id
-        ]);
-        return $this->redirect(['action' => 'trash_index']);
     }
 
     /**
