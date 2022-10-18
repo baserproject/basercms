@@ -451,7 +451,7 @@ class ContentsController extends BcApiController
     {
         $this->request->allowMethod(['post', 'put', 'patch']);
         $url = $content = null;
-        if(!$contentService->isTreeModifiedByAnotherUser($this->getRequest()->getData('listDisplayed'))) {
+        if (!$contentService->isTreeModifiedByAnotherUser($this->getRequest()->getData('listDisplayed'))) {
             try {
                 // EVENT Contents.beforeMove
                 $event = $this->dispatchEvent('beforeMove', [

@@ -49,7 +49,7 @@ class ContentsServiceTest extends BcTestCase
         'plugin.BaserCore.SiteConfigs',
     ];
 
-        /**
+    /**
      * Set Up
      *
      * @return void
@@ -126,15 +126,15 @@ class ContentsServiceTest extends BcTestCase
         $result = $this->ContentsService->getTableConditions($request->getQueryParams());
         $this->assertEquals([
             'OR' => [
-            'name LIKE' => '%テスト%',
-            'title LIKE' => '%テスト%',
+                'name LIKE' => '%テスト%',
+                'title LIKE' => '%テスト%',
             ],
             'name' => 'テスト',
             'self_status' => '1',
             'type' => 'ContentFolder',
             'site_id' => 1,
             'open' => '1'
-            ], $result);
+        ], $result);
     }
 
     /**
@@ -148,6 +148,7 @@ class ContentsServiceTest extends BcTestCase
         $result = $this->ContentsService->getTableIndex($conditions);
         $this->assertEquals($expected, $result->count());
     }
+
     public function getTableIndexDataProvider()
     {
         return [
@@ -213,6 +214,7 @@ class ContentsServiceTest extends BcTestCase
         $contents = $this->ContentsService->getIndex($request->getQueryParams());
         $this->assertEquals(3, $contents->all()->count());
     }
+
     /**
      * testGetTrashIndex
      *
@@ -246,7 +248,7 @@ class ContentsServiceTest extends BcTestCase
                 20 => '　　　　　　　　　└ツリー階層削除用フォルダー(孫)',
                 21 => '　　　└testEdit',
             ],
-        $result);
+            $result);
         $result = $this->ContentsService->getContentFolderList($siteId, ['conditions' => ['site_root' => false]]);
         $this->assertEquals([
             6 => 'サービス',
@@ -402,13 +404,13 @@ class ContentsServiceTest extends BcTestCase
         // 子要素がある場合
         $children = $this->ContentsService->getChildren(6);
         $this->assertTrue($this->ContentsService->deleteRecursive(6));
-        foreach ($children as $child) {
+        foreach($children as $child) {
             $this->assertNotEmpty($this->ContentsService->getTrash($child->id));
         }
         // 子要素の階層が深い場合
         $children = $this->ContentsService->getChildren(18);
         $this->assertTrue($this->ContentsService->deleteRecursive(18));
-        foreach ($children as $child) {
+        foreach($children as $child) {
             $this->assertNotEmpty($this->ContentsService->getTrash($child->id));
         }
         // エイリアスを子に持つ場合
@@ -428,7 +430,7 @@ class ContentsServiceTest extends BcTestCase
         $this->assertEquals('default', $result);
     }
 
-        /**
+    /**
      * コンテンツIDよりURLを取得する
      *
      * @param int $id コンテンツID
@@ -573,6 +575,7 @@ class ContentsServiceTest extends BcTestCase
         $this->assertEquals($result['title'], $titleExpected);
         $this->assertEquals($result['author_id'], $newAuthorId);
     }
+
     public function copyDataProvider()
     {
         return [
@@ -688,8 +691,8 @@ class ContentsServiceTest extends BcTestCase
     /**
      * メインサイトの場合、連携設定がされている子サイトも移動する
      *
-     *  @return void
-     *  @todo 子サイトが複数ある状況のテストを追加する
+     * @return void
+     * @todo 子サイトが複数ある状況のテストを追加する
      */
     public function testMoveRelateSubSiteContent()
     {
@@ -786,7 +789,7 @@ class ContentsServiceTest extends BcTestCase
     /**
      * testGetNeighbors
      *
-     * @param  mixed $options
+     * @param mixed $options
      * @return void
      */
     public function testGetNeighbors()

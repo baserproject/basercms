@@ -120,6 +120,7 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals('削除済みフォルダー(親)', $result->trash->title);
     }
+
     /**
      * Test index method
      *
@@ -242,7 +243,7 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
     public function testChange_status_toUnpublish()
     {
         $this->loadFixtures(
-	        'Service\SearchIndexesService\ContentsReconstruct'
+            'Service\SearchIndexesService\ContentsReconstruct'
         );
         $data = ['id' => 1, 'status' => 'unpublish'];
         $this->patch("/baser/api/baser-core/contents/change_status.json?token=" . $this->accessToken, $data);
@@ -258,7 +259,7 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
     public function testChange_status_toPublish()
     {
         $this->loadFixtures(
-	        'Service\SearchIndexesService\ContentsReconstruct'
+            'Service\SearchIndexesService\ContentsReconstruct'
         );
         $content = $this->ContentsService->get(1);
         $this->ContentsService->update($content, ['id' => $content->id, 'status' => false, 'name' => 'test']);
@@ -321,13 +322,13 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
         $content = $this->ContentsService->get(1);
         $data = [
             'content' => [
-                "parent_id" =>  $content->parent_id,
+                "parent_id" => $content->parent_id,
                 "title" => 'テストエイリアス',
-                "plugin"=> $content->plugin,
-                "type"=> $content->type,
-                "site_id"=> $content->site_id,
-                "alias_id"=> $content->id,
-                "entity_id"=> $content->entity_id,
+                "plugin" => $content->plugin,
+                "type" => $content->type,
+                "site_id" => $content->site_id,
+                "alias_id" => $content->id,
+                "entity_id" => $content->entity_id,
             ]];
         $this->post("/baser/api/baser-core/contents/add_alias.json?token=" . $this->accessToken, $data);
         $this->assertResponseOk();
@@ -415,6 +416,7 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
         $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
         $this->ContentsService->get(1);
     }
+
     /**
      * testBatchUnpublish
      * NOTE: publishとunPublishのテストを同じ場所に書くとupdateDataが走らないため分離
