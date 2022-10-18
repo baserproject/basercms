@@ -57,7 +57,7 @@ class BcFrontContentsServiceTest extends BcTestCase
      */
     public function test_getViewVarsForFront()
     {
-
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
 
     /**
@@ -65,6 +65,6 @@ class BcFrontContentsServiceTest extends BcTestCase
      */
     public function test_getCrumbs()
     {
-
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
 }
