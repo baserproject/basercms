@@ -135,31 +135,29 @@ class BlogCategoriesServiceTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function testGetControlSource($field, $options, $expected)
     {
-        $this->markTestIncomplete('このテストは、動作の確認が必要です。');
-        $result = $this->BlogCategory->getControlSource($field, $options);
+        $rows = [
+            ['id' => 58, 'blog_content_id' => 39, 'lft' => 1, 'rght' => 2, 'status' => 1, 'title' => 'test'],
+            ['id' => 59, 'blog_content_id' => 19, 'status' => 1, 'title' => 'test', 'lft' => 3, 'rght' => 4],
+            ['id' => 60, 'blog_content_id' => 19, 'status' => 1, 'parent_id' => 58, 'title' => '_test']
+        ];
+        foreach ($rows as $row) {
+            BlogCategoryFactory::make($row)->persist();
+        }
+        $result = $this->BlogCategories->getControlSource($field, $options);
         $this->assertEquals($expected, $result, 'コントロールソースを正しく取得できません');
     }
 
-    public function getControlSourceDataProvider()
+    public function getControlSourceDataProvider(): array
     {
         return [
-            ['parent_id', ['blogContentId' => 1], [
-                1 => 'プレスリリース',
-                2 => '　　　└子カテゴリ',
-                3 => '親子関係なしカテゴリ'
-            ]],
-            ['parent_id', ['blogContentId' => 0], []],
-            ['parent_id', ['blogContentId' => 1, 'excludeParentId' => true], [3 => '親子関係なしカテゴリ']],
-            ['parent_id', ['blogContentId' => 1, 'ownerId' => 2], []],
-            ['parent_id', ['blogContentId' => 1, 'ownerId' => 1], [
-                1 => 'プレスリリース',
-                2 => '　　　└子カテゴリ',
-                3 => '親子関係なしカテゴリ'
-            ]],
-            ['owner_id', [], [
-                1 => 'システム管理',
-                2 => 'サイト運営'
-            ]],
+            ['parent_id', [], false],
+            [
+                'parent_id',
+                ['conditions' => ['BlogCategories.status' => 1], 'blogContentId' => 19],
+                [59 => 'test', 60 => '　　　└test']
+            ],
+            ['parent_id',['blogContentId' => 19], [59 => 'test', 60 => '　　　└test']],
+            ['parent_id', ['blogContentId' => 19, 'excludeParentId' => 59], [60 => '　　　└test']],
         ];
     }
 
