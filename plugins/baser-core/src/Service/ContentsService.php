@@ -1250,4 +1250,31 @@ class ContentsService implements ContentsServiceInterface
         return $this->Contents->find('list')->select(['id', 'title'])->where(['id IN' => $ids])->toArray();
     }
 
+    /**
+     * リネーム処理
+     * @param Content $content
+     * @param array $postData
+     * @return EntityInterface|null
+     * @checked
+     * @noTodo
+     */
+    public function rename($content, $postData)
+    {
+        if(empty($postData['id'])) {
+            throw new BcException(__d('baser', '送信データが不正です。'));
+        }
+        $newContent = array_merge($content->toArray(), ['title' => $postData['title']]);
+        unset($newContent['site']);
+        $options = ['validate' => false];
+        if(!empty($postData['first'])) {
+            unset($newContent['name']);
+            $options['firstCreate'] = true;
+        }
+        try {
+            return $this->update($content, $newContent, $options);
+        } catch (BcException $e) {
+            throw $e;
+        }
+    }
+
 }

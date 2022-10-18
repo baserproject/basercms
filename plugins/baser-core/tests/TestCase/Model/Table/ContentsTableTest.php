@@ -311,6 +311,8 @@ class ContentsTableTest extends BcTestCase
             ['hoge', 1, 'hoge'],
             ['index', 0, 'index'],
             ['index', 1, 'index_2'],
+            ['service1', 0, 'service1'],
+            ['service1', 6, 'service1_2'],
         ];
     }
 

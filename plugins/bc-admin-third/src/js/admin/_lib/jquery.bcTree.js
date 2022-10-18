@@ -1103,6 +1103,7 @@
                         data: {
                             id: node.data.jstree.contentId,
                             title: newTitle,
+                            first: +first, // 0 Or 1 に変換
                             _csrfToken: $.bcToken.key,
                         },
                         beforeSend: function () {
@@ -1110,11 +1111,13 @@
                             $.bcUtil.showLoader();
                         },
                         success: function (result) {
-                            if (!first) {
+                            if (!result) {
                                 $.bcUtil.showNoticeMessage(result.message);
                             }
                             $.bcTree.settings[node.data.jstree.contentType]['existsTitle'] = editNode.text;
                             editNode.data.jstree.contentFullUrl = result.url;
+                            editNode.data.jstree.name = result.name;
+                            $.bcTree.refreshTree();
                         },
                         error: function (XMLHttpRequest, textStatus, errorThrown) {
                             $.bcTree.jsTree.rename_node(editNode, defaultTitle);

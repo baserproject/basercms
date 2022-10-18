@@ -368,40 +368,26 @@ class ContentsController extends BcApiController
     public function rename(ContentsServiceInterface $contentService)
     {
         $this->request->allowMethod(['post', 'put', 'patch']);
-        if (empty($this->request->getData('id')) || empty($this->request->getData('title'))) {
-            $this->setResponse($this->response->withStatus(500));
-            $message = __d('baser', '無効な処理です。');
-        }else {
+        try {
             $oldContent = $contentService->get($this->request->getData('id'));
-            $oldTitle = $oldContent->title;
-            try {
-                $newContent = $contentService->update($oldContent, ['title' => $this->request->getData('title')], ['validate' => false]);
-                $this->setResponse($this->response->withStatus(200));
-                $url = $contentService->getUrlById($this->request->getData('title'));
-                $this->set(['url' => $url]);
-                $message = sprintf(
-                    '%s%s',
-                    Configure::read(
-                        sprintf(
-                            'BcContents.items.%s.%s.title',
-                            $newContent->plugin,
-                            $newContent->type
-                        )
-                    ),
-                    sprintf(
-                        __d('baser', '「%s」を「%s」に名称変更しました。'),
-                        $oldTitle,
-                        $newContent->title
-                    )
-                );
-            } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
-                $content = $e->getEntity();
-                $this->setResponse($this->response->withStatus(500));
-                $message = $content->getErrors();
-            }
+            $newContent = $contentService->rename($oldContent, $this->getRequest()->getData());
+            $this->setResponse($this->response->withStatus(200));
+            $message = sprintf(
+                __d('baser', '「%s」を「%s」に名称変更しました。'),
+                $oldContent->title,
+                $newContent->title
+            );
+        } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
+            $content = $e->getEntity();
+            $this->setResponse($this->response->withStatus(400));
+            $message = $content->getErrors();
         }
-        $this->set(['message' => $message]);
-        $this->viewBuilder()->setOption('serialize', ['message', 'url']);
+        $this->set([
+            'message' => $message,
+            'name' => $newContent->name,
+            'url' => $contentService->getUrlById($newContent->id)
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['message', 'name', 'url']);
     }
 
     /**
