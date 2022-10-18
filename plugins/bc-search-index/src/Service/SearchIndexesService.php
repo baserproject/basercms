@@ -14,6 +14,7 @@ namespace BcSearchIndex\Service;
 use BaserCore\Error\BcException;
 use Cake\Core\Configure;
 use Cake\Core\Exception\Exception;
+use Cake\Core\Plugin;
 use Cake\Datasource\ConnectionManager;
 use Cake\ORM\Query;
 use Cake\ORM\TableRegistry;
@@ -192,20 +193,20 @@ class SearchIndexesService implements SearchIndexesServiceInterface
     public function reconstruct($parentContentId = null)
     {
         set_time_limit(0);
-        $Contents = TableRegistry::getTableLocator()->get('BaserCore.Contents');;
+        $contentsTable = TableRegistry::getTableLocator()->get('BaserCore.Contents');
         $conditions = [
             'OR' => [
                 ['Sites.status IS' => null],
                 ['Sites.status' => true]
             ]];
         if ($parentContentId) {
-            $parentContent = $Contents->find()->select(['lft', 'rght'])->where(['id' => $parentContentId])->first();
+            $parentContent = $contentsTable->find()->select(['lft', 'rght'])->where(['id' => $parentContentId])->first();
             $conditions = array_merge($conditions, [
                 'lft >' => $parentContent->lft,
                 'rght <' => $parentContent->rght
             ]);
         }
-        $contents = $Contents->find()->contain(['Sites'])->where($conditions)->order('lft')->all();
+        $contents = $contentsTable->find()->contain(['Sites'])->where($conditions)->order('lft')->all();
 
         $db = $this->SearchIndexes->getConnection();
         $db->begin();
@@ -219,10 +220,13 @@ class SearchIndexesService implements SearchIndexesServiceInterface
             ]);
         }
 
+        $contentsTable->disableUpdatingSystemData();
+        $contentsTable->updatingRelated = false;
         $tables = [];
         $result = true;
         if ($contents) {
             foreach($contents as $content) {
+                if(!Plugin::isLoaded($content->plugin)) continue;
                 $tableName = Inflector::pluralize($content->type);
                 if (!isset($tables[$tableName])) {
                     $tables[$tableName] = TableRegistry::getTableLocator()->get($content->plugin . '.' . $tableName);
