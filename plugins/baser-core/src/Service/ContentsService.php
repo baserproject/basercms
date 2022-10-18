@@ -11,6 +11,7 @@
 
 namespace BaserCore\Service;
 
+use Cake\Core\Plugin;
 use Cake\Datasource\QueryInterface;
 use Exception;
 use Cake\ORM\Query;
@@ -434,21 +435,18 @@ class ContentsService implements ContentsServiceInterface
         /* @var Content $content */
         $content = $this->getTrash($id);
         $service = $content->plugin . '\\Service\\' . Inflector::pluralize($content->type) . 'ServiceInterface';
-        if (interface_exists($service)) {
+        $table = $content->plugin . '\\Model\\Table\\' . Inflector::pluralize($content->type) . 'Table';
+        $isPluginEnabled = Plugin::isLoaded($content->type);
+        if ($isPluginEnabled && interface_exists($service)) {
             $target = $this->getService($service);
-        } else {
+            return $target->delete($content->entity_id);
+        } elseif($isPluginEnabled && class_exists($table)) {
             $target = TableRegistry::getTableLocator()->get($content->plugin . '.' . Inflector::pluralize($content->type));
-        }
-        if (!$target) {
-            throw new \Cake\Datasource\Exception\RecordNotFoundException();
-        }
-        if (is_a($target, 'Cake\ORM\Table')) {
             return $target->delete($content);
         } else {
-            return $target->delete($content->entity_id);
+            return $this->hardDelete($id);
         }
     }
-
 
     /**
      * 該当するコンテンツ情報をすべて論理削除する

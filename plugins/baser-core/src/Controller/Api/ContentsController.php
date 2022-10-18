@@ -165,21 +165,24 @@ class ContentsController extends BcApiController
     {
         $this->request->allowMethod(['post', 'delete']);
         $trash = $contentService->getTrashIndex($this->request->getQueryParams())->order(['plugin', 'type']);
-        $text = "ゴミ箱: ";
-        // EVENT Contents.beforetrash_empty
-        $this->dispatchLayerEvent('beforetrash_empty', [
+
+        // EVENT Contents.beforeTrashEmpty
+        $this->dispatchLayerEvent('beforeTrashEmpty', [
             'data' => $trash
         ]);
+
         try {
             $result = true;
             foreach ($trash as $entity) {
                 if(!$contentService->hardDeleteWithAssoc($entity->id)) $result = false;
             }
             $message = __d('baser', 'ゴミ箱を空にしました。');
-            // EVENT Contents.aftertrash_empty
-            $this->dispatchLayerEvent('aftertrash_empty', [
+
+            // EVENT Contents.afterTrashEmpty
+            $this->dispatchLayerEvent('afterTrashEmpty', [
                 'data' => $result
             ]);
+
         } catch (Exception $e) {
             $this->setResponse($this->response->withStatus(500));
             $message = __d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
