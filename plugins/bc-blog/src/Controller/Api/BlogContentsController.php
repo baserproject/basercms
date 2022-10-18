@@ -92,6 +92,7 @@ class BlogContentsController extends BcApiController
         }
         $this->set([
             'blogContent' => $blogContent,
+            'content' => $blogContent->content,
             'message' => $message,
             'errors' => $blogContent->getErrors()
         ]);
