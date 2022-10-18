@@ -65,6 +65,12 @@ class BcContentsEventListenerTest extends BcTestCase
     }
 
     /**
+     * test __construct
+     */
+    public function test__construct(){
+        $this->assertNotEmpty($this->BcContentsEventListener);
+    }
+    /**
      * Implemented Events
      */
     public function testImplementedEvents()
