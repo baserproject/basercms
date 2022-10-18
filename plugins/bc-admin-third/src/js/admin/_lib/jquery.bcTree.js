@@ -274,7 +274,7 @@
                         var data = node.data.jstree;
                         var mode = $("#viewsetting-mode").val();
                         var parent;
-                        if (data.type == 'folder' && !node.data.jstree.alias) {
+                        if (data.type === 'folder' && !node.data.jstree.alias) {
                             parent = node;
                         } else {
                             parent = $.bcTree.jsTree.get_node($.bcTree.jsTree.get_parent(node));
@@ -282,13 +282,18 @@
 
                         var editDisabled = false;
                         var manageDisabled = false;
-                        if ($.bcTree.settings[data.contentType] == undefined) {
-                            $.bcTree.settings[data.contentType] = {
-                                'url': $.bcTree.settings['Default']['url']
-                            };
-                        } else {
+                        var editUrl = null;
+                        var manageUrl = null;
+                        var copyUrl = null;
+                        var isEnabled = false;
+
+                        if ($.bcTree.settings[data.contentType] !== undefined) {
                             editDisabled = data.editDisabled;
                             manageDisabled = data.manageDisabled;
+                            manageUrl = $.bcTree.settings[data.contentType]['url']['manage'];
+                            editUrl = $.bcTree.settings[data.contentType]['url']['edit'];
+                            copyUrl = $.bcTree.settings[data.contentType]['url']['copy'];
+                            isEnabled = true;
                         }
 
                         var menu = {};
@@ -296,7 +301,7 @@
                         // 確認
                         // - 公開されている
                         // - URLがある
-                        if (data.status == true && data.contentFullUrl && !$.bcTree.contextmenuAddOnly && mode == 'index') {
+                        if (isEnabled && data.status && data.contentFullUrl && !$.bcTree.contextmenuAddOnly && mode === 'index') {
                             $.extend(true, menu, {
                                 "view": {
                                     label: bcI18n.bcTreeCheck,
@@ -311,8 +316,8 @@
                         // 公開・非公開
                         // - サイトルートではない
                         // - 関連データではない
-                        if (!$.bcTree.config.editInIndexDisabled && !editDisabled && !data.contentSiteRoot && mode == 'index' && !$.bcTree.contextmenuAddOnly && !data.related) {
-                            if (data.status == false) {
+                        if (isEnabled && !$.bcTree.config.editInIndexDisabled && !editDisabled && !data.contentSiteRoot && mode === 'index' && !$.bcTree.contextmenuAddOnly && !data.related) {
+                            if (!data.status) {
                                 $.extend(true, menu, {
                                     "publish": {
                                         label: bcI18n.bcTreePublish,
@@ -352,7 +357,7 @@
                                         }
                                     }
                                 });
-                            } else if (data.status == true) {
+                            } else if (data.status) {
                                 $.extend(true, menu, {
                                     "unpublish": {
                                         label: bcI18n.bcTreeUnpublish,
@@ -399,13 +404,13 @@
                         // - 管理権限あり
                         // - 管理機能サポート
                         // - エイリアスではない
-                        if (!manageDisabled && !$.bcTree.contextmenuAddOnly && $.bcTree.settings[data.contentType]['url']['manage'] !== undefined && mode == 'index' && !data.alias) {
+                        if (!manageDisabled && !$.bcTree.contextmenuAddOnly && manageUrl && mode === 'index' && !data.alias) {
                             $.extend(true, menu, {
                                 "manage": {
                                     label: bcI18n.bcTreeManage,
                                     "icon": "bca-icon--th-list",
                                     "action": function (obj) {
-                                        $.bcTree.openUrl($.bcTree.createLink($.bcTree.settings[data.contentType]['url']['manage'], data.contentId, data.contentParentId, data.contentEntityId));
+                                        $.bcTree.openUrl($.bcTree.createLink(manageUrl, data.contentId, data.contentParentId, data.contentEntityId));
                                     }
                                 }
                             });
@@ -415,7 +420,7 @@
                         // - 編集権限あり
                         // - サイトルートでない
                         // − サイト関連データでない
-                        if (!$.bcTree.config.editInIndexDisabled && !editDisabled && !$.bcTree.contextmenuAddOnly && !data.contentSiteRoot && mode == 'index' && !data.related) {
+                        if (isEnabled && !$.bcTree.config.editInIndexDisabled && !editDisabled && !$.bcTree.contextmenuAddOnly && !data.contentSiteRoot && mode === 'index' && !data.related) {
                             $.extend(true, menu, {
                                 "rename": {
                                     label: bcI18n.bcTreeRename,
@@ -429,14 +434,14 @@
 
                         // 編集
                         // - 編集権限あり
-                        if (!editDisabled && !$.bcTree.contextmenuAddOnly && mode == 'index') {
+                        if (isEnabled && !editDisabled && !$.bcTree.contextmenuAddOnly && mode === 'index') {
                             $.extend(true, menu, {
                                 "edit": {
                                     label: bcI18n.bcTreeEdit,
                                     "icon": "bca-icon--edit",
                                     "action": function (obj) {
                                         if (!node.data.jstree.alias) {
-                                            $.bcTree.openUrl($.bcTree.createLink($.bcTree.settings[data.contentType]['url']['edit'], data.contentId, data.contentParentId, data.contentEntityId));
+                                            $.bcTree.openUrl($.bcTree.createLink(editUrl, data.contentId, data.contentParentId, data.contentEntityId));
                                         } else {
                                             $.bcTree.openUrl($.bcUtil.adminBaseUrl + 'baser-core' + '/contents/edit_alias/' + data.contentId);
                                         }
@@ -449,7 +454,7 @@
                         // - 編集権限あり
                         // - フォルダーでない
                         // - コピー機能サポート
-                        if (!editDisabled && !$.bcTree.contextmenuAddOnly && data.contentType != 'ContentFolder' && !data.alias && $.bcTree.settings[data.contentType]['url']['copy'] != undefined && mode == 'index') {
+                        if (!editDisabled && !$.bcTree.contextmenuAddOnly && data.contentType !== 'ContentFolder' && !data.alias && copyUrl && mode === 'index') {
                             $.extend(true, menu, {
                                 "copy": {
                                     label: bcI18n.bcTreeCopy,
@@ -470,7 +475,7 @@
                         // 削除
                         // - 編集権限あり
                         // - サイトルートでない
-                        if (!$.bcTree.config.editInIndexDisabled && !editDisabled && !data.deleteDisabled && !$.bcTree.contextmenuAddOnly && !data.contentSiteRoot && mode == 'index') {
+                        if (!$.bcTree.config.editInIndexDisabled && !editDisabled && !data.deleteDisabled && !$.bcTree.contextmenuAddOnly && !data.contentSiteRoot && mode === 'index') {
                             $.extend(true, menu, {
                                 "delete": {
                                     label: deleteLabel,
@@ -487,7 +492,7 @@
                                 }
                             });
                         }
-                        if (mode == 'trash') {
+                        if (mode === 'trash') {
                             $.extend(true, menu, {
                                 "return": {
                                     _disabled: editDisabled,
@@ -569,16 +574,18 @@
                         }
 
                         var settings = $.extend(true, {}, $.bcTree.settings);
+
                         delete settings.Default;
                         if (node.data.jstree.alias) {
                             delete settings.ContentAlias;
                         }
 
-                        if (mode == 'index') {
+                        if (mode === 'index') {
                             var addMenu = {};
                             var counter = 1;
+
                             $.each(settings, function (i, val) {
-                                if (counter == maxContents + 1) {
+                                if (counter === maxContents + 1) {
                                     addMenu['Etc'] = {
                                         "separator_before": false,
                                         "separator_after": false,

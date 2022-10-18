@@ -1252,7 +1252,7 @@ class ContentsService implements ContentsServiceInterface
 
     /**
      * リネーム処理
-     * @param Content $content
+     * @param EntityInterface $content
      * @param array $postData
      * @return EntityInterface|null
      * @checked
