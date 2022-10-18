@@ -866,6 +866,12 @@ class ContentsService implements ContentsServiceInterface
         return $exists;
     }
 
+    public function isTreeModifiedByAnotherUser($listDisplayed)
+    {
+        $siteConfig = TableRegistry::getTableLocator()->get('BaserCore.SiteConfigs');
+        return $siteConfig->isChangedContentsSortLastModified($listDisplayed);
+    }
+
     /**
      * コンテンツを移動する
      *
@@ -881,11 +887,18 @@ class ContentsService implements ContentsServiceInterface
      */
     public function move($origin, $target)
     {
+        if(!$this->exists($origin['id'])) {
+            throw new BcException(__d('baser', 'データが存在しません。'));
+        } elseif (!$this->isMovable($origin['id'], $target['parentId'])) {
+            throw new BcException(__d('baser', '同一URLのコンテンツが存在するため処理に失敗しました。（現在のサイトに存在しない場合は、関連サイトに存在します）'));
+        }
+
         $this->moveRelateSubSiteContent($origin['id'], $target['parentId'], $target['id']);
         $targetSort = $this->Contents->getOrderSameParent($target['id'], $target['parentId']);
         if ($origin['parentId'] != $target['parentId']) {
             $content = $this->get($origin['id']);
             // 親を変更
+            /* @var Content $content */
             $content = $this->update($content, [
                 'id' => $origin['id'],
                 'name' => $content->name,
@@ -909,7 +922,13 @@ class ContentsService implements ContentsServiceInterface
             $offset--;
         }
         // オフセットを元に移動
-        return $this->Contents->moveOffset($origin['id'], $offset);
+        $result = $this->Contents->moveOffset($origin['id'], $offset);
+        if ($result && $origin['parentId'] === $target['parentId']) {
+            // 親が違う場合は、Contentモデルで更新してくれるが同じ場合更新しない仕様のためここで更新する
+            $siteConfig = TableRegistry::getTableLocator()->get('BaserCore.SiteConfigs');
+            $siteConfig->updateContentsSortLastModified();
+        }
+        return $result;
     }
 
     /**

@@ -317,14 +317,6 @@ class ContentsControllerTest extends BcTestCase
     }
 
     /**
-     * 並び順を移動する
-     */
-    public function testAdmin_ajax_move()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
-    /**
      * 指定したURLのパス上のコンテンツでフォルダ以外が存在するか確認
      */
     public function testAdmin_exists_content_by_url()

@@ -44,6 +44,7 @@ class ContentsController extends BcApiController
         ]);
         $this->viewBuilder()->setOption('serialize', ['content']);
     }
+
     /**
      * ゴミ箱情報取得
      * @param ContentsServiceInterface $Contents
@@ -63,15 +64,15 @@ class ContentsController extends BcApiController
     /**
      * コンテンツ情報一覧取得
      *
-     * @param  ContentsServiceInterface $contentService
+     * @param ContentsServiceInterface $contentService
      * @return void
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function index(ContentsServiceInterface $contentService, $type="index")
+    public function index(ContentsServiceInterface $contentService, $type = "index")
     {
-        switch ($type) {
+        switch($type) {
             case "index":
                 $data = $this->paginate($contentService->getIndex($this->request->getQueryParams()));
                 break;
@@ -106,11 +107,11 @@ class ContentsController extends BcApiController
         $content = $contentService->get($id);
         $children = $contentService->getChildren($id);
         try {
-            if($contentService->deleteRecursive($id)) {
+            if ($contentService->deleteRecursive($id)) {
                 $text = "コンテンツ: " . $content->title . "を削除しました。";
                 if ($children) {
                     $content = array_merge([$content], $children->toArray());
-                    foreach ($children as $child) {
+                    foreach($children as $child) {
                         $text .= "\nコンテンツ: " . $child->title . "を削除しました。";
                     }
                 }
@@ -173,8 +174,8 @@ class ContentsController extends BcApiController
 
         try {
             $result = true;
-            foreach ($trash as $entity) {
-                if(!$contentService->hardDeleteWithAssoc($entity->id)) $result = false;
+            foreach($trash as $entity) {
+                if (!$contentService->hardDeleteWithAssoc($entity->id)) $result = false;
             }
             $message = __d('baser', 'ゴミ箱を空にしました。');
 
@@ -193,6 +194,7 @@ class ContentsController extends BcApiController
         ]);
         $this->viewBuilder()->setOption('serialize', ['trash', 'message']);
     }
+
     /**
      * コンテンツ情報編集
      * @param ContentsServiceInterface $contents
@@ -263,11 +265,11 @@ class ContentsController extends BcApiController
         $id = $this->request->getData('id');
         $status = $this->request->getData('status');
 
-		// EVENT Contents.beforeChangeStatus
-		$this->dispatchLayerEvent('beforeChangeStatus', [
-		    'id' => $id,
-		    'status' => $status
-		]);
+        // EVENT Contents.beforeChangeStatus
+        $this->dispatchLayerEvent('beforeChangeStatus', [
+            'id' => $id,
+            'status' => $status
+        ]);
 
         $result = false;
         if ($id && $status) {
@@ -289,14 +291,14 @@ class ContentsController extends BcApiController
             }
         } else {
             $this->setResponse($this->response->withStatus(400));
-            $message = __d('baser',  '無効な処理です。') . "データが不足しています";
+            $message = __d('baser', '無効な処理です。') . "データが不足しています";
         }
 
-		// EVENT Contents.afterChangeStatus
-		$this->dispatchLayerEvent('afterChangeStatus', [
-		    'id' => $id,
-		    'result' => $result
-		]);
+        // EVENT Contents.afterChangeStatus
+        $this->dispatchLayerEvent('afterChangeStatus', [
+            'id' => $id,
+            'result' => $result
+        ]);
 
         $this->set([
             'message' => $message,
@@ -307,8 +309,8 @@ class ContentsController extends BcApiController
     /**
      * get_full_url
      *
-     * @param  ContentsServiceInterface $contentService
-     * @param  int $id
+     * @param ContentsServiceInterface $contentService
+     * @param int $id
      * @checked
      * @unitTest
      * @noTodo
@@ -320,7 +322,7 @@ class ContentsController extends BcApiController
             $this->set(['fullUrl' => $contentService->getUrlById($id, true)]);
         } else {
             $this->setResponse($this->response->withStatus(400));
-            $this->set(['message' => __d('baser',  '無効な処理です。')]);
+            $this->set(['message' => __d('baser', '無効な処理です。')]);
         }
         $this->viewBuilder()->setOption('serialize', ['message', 'fullUrl']);
     }
@@ -329,7 +331,7 @@ class ContentsController extends BcApiController
      * 指定したIDのコンテンツが存在するか確認する
      * ゴミ箱のものは無視
      *
-     * @param  ContentsServiceInterface $contentService
+     * @param ContentsServiceInterface $contentService
      * @param $id
      * @return Response
      * @checked
@@ -354,7 +356,7 @@ class ContentsController extends BcApiController
     public function get_content_folder_list(ContentsServiceInterface $contentService, $siteId)
     {
         $this->request->allowMethod(['get']);
-        $this->set(['list' => $contentService->getContentFolderList($siteId,['conditions' => ['site_root' => false]])]);
+        $this->set(['list' => $contentService->getContentFolderList($siteId, ['conditions' => ['site_root' => false]])]);
         $this->viewBuilder()->setOption('serialize', ['list']);
     }
 
@@ -362,7 +364,7 @@ class ContentsController extends BcApiController
      * リネーム
      *
      * 新規登録時の初回リネーム時は、name にも保存する
-     * @param  ContentsServiceInterface $contentService
+     * @param ContentsServiceInterface $contentService
      * @return void
      * @checked
      * @noTodo
@@ -396,7 +398,7 @@ class ContentsController extends BcApiController
     /**
      * add_alias
      *
-     * @param  ContentsServiceInterface $contentService
+     * @param ContentsServiceInterface $contentService
      * @return void
      * @checked
      * @noTodo
@@ -419,7 +421,7 @@ class ContentsController extends BcApiController
 
     /**
      * 指定したURLのパス上のコンテンツでフォルダ以外が存在するか確認
-     * @param  ContentsServiceInterface $contentService
+     * @param ContentsServiceInterface $contentService
      * @return \Cake\Http\Response
      * @checked
      * @noTodo
@@ -439,7 +441,7 @@ class ContentsController extends BcApiController
 
     /**
      * 並び順を移動する
-     * @param  ContentsServiceInterface $contentService
+     * @param ContentsServiceInterface $contentService
      * @return void
      * @checked
      * @noTodo
@@ -448,59 +450,53 @@ class ContentsController extends BcApiController
     public function move(ContentsServiceInterface $contentService)
     {
         $this->request->allowMethod(['post', 'put', 'patch']);
-        $siteConfig = TableRegistry::getTableLocator()->get('BaserCore.SiteConfigs');
-        if (empty($this->request->getData())) {
-            $message = __d('baser', '無効な処理です。');
-            $this->setResponse($this->response->withStatus(400));
-        } elseif(!$contentService->exists($this->request->getData('origin.id'))) {
-            $message = __d('baser', 'データが存在しません。');
-            $this->setResponse($this->response->withStatus(500));
-        } elseif($siteConfig->isChangedContentsSortLastModified($this->request->getData('listDisplayed'))) {
-            $message = __d('baser', 'コンテンツ一覧を表示後、他のログインユーザーがコンテンツの並び順を更新しました。<br>一度リロードしてから並び替えてください。');
-            $this->setResponse($this->response->withStatus(500));
-        } elseif (!$contentService->isMovable($this->request->getData('origin.id'), $this->request->getData('target.parentId'))) {
-            $message = __d('baser', '同一URLのコンテンツが存在するため処理に失敗しました。（現在のサイトに存在しない場合は、関連サイトに存在します）');
-            $this->setResponse($this->response->withStatus(500));;
-        } else {
-            // 正常系
-            $message = $this->execMove($contentService, $siteConfig);
-        }
-        $this->set(['message' => $message]);
-        $this->viewBuilder()->setOption('serialize', ['message', 'url', 'content']);
-    }
-
-    /**
-     * execMove
-     *
-     * @param  ContentsService $contentService
-     * @param  SiteConfigsTable $siteConfig
-     * @return string
-     */
-    protected function execMove($contentService, $siteConfig)
-    {
-            $content = $contentService->get($this->request->getData('origin.id'));
-            $beforeUrl = $content->url;
+        $url = $content = null;
+        if(!$contentService->isTreeModifiedByAnotherUser($this->getRequest()->getData('listDisplayed'))) {
             try {
-                $result = $contentService->move($this->request->getData('origin'), $this->request->getData('target'));
-                if ($this->request->getData('origin.parentId') == $this->request->getData('target.parentId')) {
-                    // 親が違う場合は、Contentモデルで更新してくれるが同じ場合更新しない仕様のためここで更新する
-                    $siteConfig->updateContentsSortLastModified();
+                // EVENT Contents.beforeMove
+                $event = $this->dispatchEvent('beforeMove', [
+                    'data' => $this->getRequest()->getData()
+                ]);
+                if ($event !== false) {
+                    $this->getRequest()->withParsedBody($event->getResult() === true? $event->getData('data') : $event->getResult());
                 }
-                $message = sprintf(__d('baser', "コンテンツ「%s」の配置を移動しました。\n%s > %s"), $result->title, rawurldecode($beforeUrl), rawurldecode($result->url));
-                $url = $contentService->getUrlById($result->id, true);
-                $this->set(['url' => $url]);
-                $this->set(['content' => $result]);
-            } catch(Exception $e) {
+
+                $beforeContent = $contentService->get($this->request->getData('origin.id'));
+                $beforeUrl = $beforeContent->url;
+                $content = $contentService->move($this->request->getData('origin'), $this->request->getData('target'));
+                $message = sprintf(
+                    __d('baser', "コンテンツ「%s」の配置を移動しました。\n%s > %s"),
+                    $content->title,
+                    rawurldecode($beforeUrl),
+                    rawurldecode($content->url)
+                );
+                $url = $contentService->getUrlById($content->id, true);
+
+                // EVENT Contents.afterMove
+                $this->dispatchEvent('afterMove', [
+                    'data' => $content
+                ]);
+
+            } catch (Exception $e) {
                 $message = __d('baser', 'データ保存中にエラーが発生しました。' . $e->getMessage());
                 $this->setResponse($this->response->withStatus(500));
             }
-            return $message;
+        } else {
+            $message = __d('baser', 'コンテンツ一覧を表示後、他のログインユーザーがコンテンツの並び順を更新しました。<br>一度リロードしてから並び替えてください。');
+        }
+
+        $this->set([
+            'message' => $message,
+            'url' => $url,
+            'content' => $content
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['message', 'url', 'content']);
     }
 
     /**
      * batch
      *
-     * @param  ContentsServiceInterface $contentService
+     * @param ContentsServiceInterface $contentService
      * @return void
      * @checked
      * @noTodo
