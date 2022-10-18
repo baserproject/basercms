@@ -1,55 +1,68 @@
 <?php
-// TODO : コード確認要
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Blog.Test.Case.Model
- * @since           baserCMS v 3.0.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) NPO baser foundation
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       https://basercms.net/license/index.html MIT License
  */
 
-App::uses('BlogPost', 'BcBlog.Model');
+namespace BcBlog\Test\TestCase\Model;
+
+use BaserCore\TestSuite\BcTestCase;
+use BcBlog\Model\Table\BlogPostsTable;
 
 /**
- * Class BlogPostTest
+ * Class BlogPostsTableTest
  *
- * @property BlogPost $BlogPost
+ * @property BlogPostsTable $BlogPostsTable
  */
-class BlogPostsTableTest extends BaserTestCase
+class BlogPostsTableTest extends BcTestCase
 {
 
     public $fixtures = [
-        'baser.Default.User',
-        'baser.Default.SearchIndex',
-        'baser.Default.SiteConfig',
-        'baser.Default.BlogTag',
-        'baser.Default.BlogPostsBlogTag',
-        'baser.Default.BlogContent',
-        'baser.Default.BlogComment',
-        'baser.Default.Site',
-        'plugin.blog.Model/BlogPost/ContentBlogPost',
-        'baser.Default.User',
-        'baser.Default.UserGroup',
-        'baser.Default.Favorite',
-        'plugin.blog.Model/BlogPost/BlogPostModel',
-        'plugin.blog.Model/BlogPost/BlogCategoryModel',
-        'plugin.blog.Model/BlogPost/BlogPostsBlogTagModel',
+        'plugin.BcBlog.Factory/BlogPosts',
     ];
 
-    public function setUp()
+
+    /**
+     * Set Up
+     *
+     * @return void
+     */
+    public function setUp(): void
     {
-        $this->BlogPost = ClassRegistry::init('BcBlog.BlogPost');
         parent::setUp();
+        $this->BlogPostsTable = $this->getTableLocator()->get('BcBlog.BlogPosts');
     }
 
-    public function tearDown()
+    /**
+     * Tear Down
+     *
+     * @return void
+     */
+    public function tearDown(): void
     {
-        unset($this->BlogPost);
+        unset($this->BlogPostsTable);
         parent::tearDown();
+    }
+
+    /**
+     * test initialize
+     */
+    public function test_initialize()
+    {
+        $this->assertEquals('blog_posts', $this->BlogPostsTable->getTable());
+        $this->assertTrue($this->BlogPostsTable->hasBehavior('Timestamp'));
+        $this->assertTrue($this->BlogPostsTable->hasBehavior('BcUpload'));
+        $this->assertTrue($this->BlogPostsTable->hasAssociation('BlogTags'));
+        $this->assertTrue($this->BlogPostsTable->hasAssociation('BlogComments'));
+        $this->assertTrue($this->BlogPostsTable->hasAssociation('BlogCategories'));
+        $this->assertTrue($this->BlogPostsTable->hasAssociation('BlogContents'));
+        $this->assertTrue($this->BlogPostsTable->hasAssociation('Users'));
+        $this->assertTrue($this->BlogPostsTable->hasAssociation('Users'));
     }
 
     /*
@@ -57,7 +70,7 @@ class BlogPostsTableTest extends BaserTestCase
 	 */
     public function test必須チェック()
     {
-
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $this->BlogPost->create([
             'BlogPost' => ['blog_content_id' => 1]
         ]);
@@ -73,6 +86,7 @@ class BlogPostsTableTest extends BaserTestCase
 
     public function test空チェック()
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $this->BlogPost->create([
             'BlogPost' => [
                 'user_id' => '',
@@ -88,6 +102,7 @@ class BlogPostsTableTest extends BaserTestCase
 
     public function test桁数チェック異常系()
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $this->BlogPost->create([
             'BlogPost' => [
                 'name' => '1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456',
@@ -103,6 +118,7 @@ class BlogPostsTableTest extends BaserTestCase
 
     public function test桁数チェック正常系()
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $this->BlogPost->create([
             'BlogPost' => [
                 'name' => '123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345',
@@ -115,6 +131,7 @@ class BlogPostsTableTest extends BaserTestCase
 
     public function testその他異常系()
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         // 形式チェック
         $this->BlogPost->create([
             'BlogPost' => [
@@ -163,6 +180,7 @@ class BlogPostsTableTest extends BaserTestCase
 
     public function testその他正常系()
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         // 形式チェック
         $this->BlogPost->create([
             'BlogPost' => [
@@ -197,6 +215,7 @@ class BlogPostsTableTest extends BaserTestCase
      */
     public function testSetupUpload()
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $this->BlogPost->setupUpload(1);
 
         // protectedな値にアクセスするため配列にキャストする
@@ -226,6 +245,7 @@ class BlogPostsTableTest extends BaserTestCase
      */
     public function testGetDefaultValue()
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $authUser['id'] = 1;
         $data = $this->BlogPost->getDefaultValue($authUser);
         $this->assertEquals($data['BlogPost']['user_id'], $authUser['id']);
@@ -244,6 +264,7 @@ class BlogPostsTableTest extends BaserTestCase
      */
     public function testGetPostedDates($blogContentId, $options, $expected)
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $result = $this->BlogPost->getPostedDates($blogContentId, $options);
         $this->assertEquals($expected, $result, '正しくブログの月別一覧を取得できません');
     }
@@ -277,7 +298,7 @@ class BlogPostsTableTest extends BaserTestCase
      */
     public function testGetEntryDates($blogContentId, $year, $month, $expected)
     {
-
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $datasource = $datasource = $this->BlogPost->getDataSource()->config['datasource'];
         if ($datasource === 'Database/BcSqlite') {
             $this->markTestIncomplete('このテストは、まだ実装されていません。');
@@ -301,6 +322,7 @@ class BlogPostsTableTest extends BaserTestCase
      */
     public function testGetAuthors()
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $message = '投稿者一覧を正しく取得できません';
         $result = $this->BlogPost->getAuthors(1, []);
         $this->assertEquals($result[0]['User']['name'], 'basertest', $message);
@@ -318,6 +340,7 @@ class BlogPostsTableTest extends BaserTestCase
      */
     public function testExistsEntry()
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $datasource = $datasource = $this->BlogPost->getDataSource()->config['datasource'];
         if ($datasource === 'Database/BcSqlite') {
             $this->markTestIncomplete('このテストは、まだ実装されていません。');
@@ -344,6 +367,7 @@ class BlogPostsTableTest extends BaserTestCase
      */
     public function testGetControlSource($options, $expected)
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $result = $this->BlogPost->getControlSource('blog_category_id', $options);
         $this->assertEquals($expected, $result, '正しくコントロールソースを取得できません');
     }
@@ -363,6 +387,7 @@ class BlogPostsTableTest extends BaserTestCase
      */
     public function testAllowPublish($publish_begin, $publish_end, $status, $expected)
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $data['publish_begin'] = $publish_begin;
         $data['publish_end'] = $publish_end;
         $data['status'] = $status;
@@ -387,6 +412,7 @@ class BlogPostsTableTest extends BaserTestCase
      */
     public function testGetPublishes()
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $message = '正しく公開状態の記事を取得できません';
 
         $result = count($this->BlogPost->getPublishes([]));
@@ -404,6 +430,7 @@ class BlogPostsTableTest extends BaserTestCase
      */
     public function testAfterSave()
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $data = ['BlogPost' => [
             'id' => 99,
             'no' => 99,
@@ -450,6 +477,7 @@ class BlogPostsTableTest extends BaserTestCase
      */
     public function testCreateSearchIndex()
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         // 戻り値の型チェック
         $data = [
             'BlogPost' => [
@@ -488,6 +516,7 @@ class BlogPostsTableTest extends BaserTestCase
      */
     public function testCreateSearchIndexStatus($blogPostStatus, $contentStatus, $expected)
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $blogContentId = 1;
         $blogPost = [
             'BlogPost' => [
@@ -524,6 +553,7 @@ class BlogPostsTableTest extends BaserTestCase
      */
     public function testCreateSearchIndexPublish($blogPostPublish, $contentPublish, $expected)
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $blogContentId = 1;
         $blogPost = [
             'BlogPost' => [
@@ -587,6 +617,7 @@ class BlogPostsTableTest extends BaserTestCase
      */
     public function testCopy()
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $this->BlogPost->copy(1);
         $result = $this->BlogPost->find('first', [
             'conditions' => ['BlogPost.id' => $this->BlogPost->getLastInsertID()]
@@ -612,6 +643,7 @@ class BlogPostsTableTest extends BaserTestCase
      */
     public function testFindCustomParams($type, $options, $expected)
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         set_error_handler(function ($no, $str, $file, $line, $context) {
         });
         $result = $this->BlogPost->find('customParams', $options);

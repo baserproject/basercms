@@ -98,6 +98,7 @@ class BlogPostsTable extends BlogAppTable
      * @param array $config The configuration for the Table.
      * @return void
      * @checked
+     * @unitTest
      */
     public function initialize(array $config): void
     {
