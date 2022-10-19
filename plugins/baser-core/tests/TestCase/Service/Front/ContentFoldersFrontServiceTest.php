@@ -12,7 +12,11 @@
 namespace BaserCore\Test\TestCase\Service\Front;
 
 use BaserCore\Service\Front\ContentFoldersFrontService;
+use BaserCore\Test\Scenario\InitAppScenario;
+use BaserCore\Test\Scenario\SmallSetContentsScenario;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcContainerTrait;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * ContentFoldersFrontServiceTest
@@ -21,6 +25,11 @@ use BaserCore\TestSuite\BcTestCase;
  */
 class ContentFoldersFrontServiceTest extends BcTestCase
 {
+    /**
+     * Trait
+     */
+    use BcContainerTrait;
+    use ScenarioAwareTrait;
 
     /**
      * Fixtures
@@ -28,6 +37,15 @@ class ContentFoldersFrontServiceTest extends BcTestCase
      * @var array
      */
     protected $fixtures = [
+        'plugin.BaserCore.Factory/Sites',
+        'plugin.BaserCore.Factory/SiteConfigs',
+        'plugin.BaserCore.Factory/Users',
+        'plugin.BaserCore.Factory/UsersUserGroups',
+        'plugin.BaserCore.Factory/UserGroups',
+        'plugin.BaserCore.Factory/Contents',
+        'plugin.BaserCore.Factory/ContentFolders',
+        'plugin.BaserCore.Factory/Permissions',
+        'plugin.BaserCore.Factory/Pages',
     ];
 
     /**
@@ -57,7 +75,12 @@ class ContentFoldersFrontServiceTest extends BcTestCase
      */
     public function test_getViewVarsForView()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(SmallSetContentsScenario::class);
+        $rs = $this->ContentFoldersFrontService->getViewVarsForView($this->ContentFoldersFrontService->get(2), $this->getRequest('/'));
+        $this->assertArrayHasKey('contentFolder', $rs);
+        $this->assertArrayHasKey('children', $rs);
+        $this->assertArrayHasKey('editLink', $rs);
     }
 
     /**

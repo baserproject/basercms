@@ -40,6 +40,7 @@ class ContentFoldersFrontService extends ContentFoldersService implements Conten
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getViewVarsForView(EntityInterface $contentFolder, ServerRequest $request): array
     {
