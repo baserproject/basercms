@@ -74,6 +74,7 @@ class BlogCategoriesTable extends BlogAppTable
      * @return Validator
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function validationDefault(Validator $validator): Validator
     {

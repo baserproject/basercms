@@ -14,6 +14,7 @@ namespace BcBlog\Test\TestCase\Model;
 
 use BaserCore\TestSuite\BcTestCase;
 use BcBlog\Model\Table\BlogCategoriesTable;
+use BcBlog\Test\Factory\BlogCategoryFactory;
 
 /**
  * Class BlogCategoryTest
@@ -70,7 +71,91 @@ class BlogCategoriesTableTest extends BcTestCase
      */
     public function testValidationDefault(): void
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
+        // id integer　テスト
+        $blogCategory = $this->BlogCategoriesTable->newEntity(['id' => 'test']);
+        $this->assertNotNull($blogCategory->getErrors()['id']);
+        // id allowEmptyString　テスト
+        $blogCategory = $this->BlogCategoriesTable->newEntity(['id' => '']);
+        $this->assertNull($blogCategory->getErrors()['id']);
+        // name maxLength　テスト
+        $blogCategory = $this->BlogCategoriesTable->newEntity([
+            'name' => '_test_blog_category_test_blog_category_test_blog_category_test_blog_category_test_blog_category'
+                .'_test_blog_category_test_blog_category_test_blog_category_test_blog_category_test_blog_category'
+                .'_test_blog_category_test_blog_category_test_blog_category_test_blog_category',
+            'blog_content_id' => 1,
+            'title' => 'test'
+        ]);
+        $this->assertSame([
+            'name' => ['maxLength' => 'カテゴリ名は255文字以内で入力してください。'],
+        ], $blogCategory->getErrors());
+        // name requirePresence　テスト
+        $blogCategory = $this->BlogCategoriesTable->newEntity([
+            'blog_content_id' => 1,
+            'title' => 'test'
+        ]);
+        $this->assertSame([
+            'name' => ['_required' => 'カテゴリ名を入力してください。'],
+        ], $blogCategory->getErrors());
+        // name notEmptyString　テスト
+        $blogCategory = $this->BlogCategoriesTable->newEntity([
+            'name' => '',
+            'blog_content_id' => 1,
+            'title' => 'test'
+        ]);
+        $this->assertSame([
+            'name' => ['_empty' => 'カテゴリ名を入力してください。'],
+        ], $blogCategory->getErrors());
+        // name alphaNumericDashUnderscore　テスト
+        $blogCategory = $this->BlogCategoriesTable->newEntity([
+            'name' => 'test 123',
+            'blog_content_id' => 1,
+            'title' => 'test'
+        ]);
+        $this->assertSame([
+            'name' => ['alphaNumericDashUnderscore' => 'カテゴリ名はは半角英数字とハイフン、アンダースコアのみが利用可能です。'],
+        ], $blogCategory->getErrors());
+        // name duplicateBlogCategory　テスト
+        BlogCategoryFactory::make([
+            'name' => 'test',
+            'blog_content_id' => 1,
+            'title' => 'test'
+        ])->persist();
+        $blogCategory = $this->BlogCategoriesTable->newEntity([
+            'name' => 'test',
+            'blog_content_id' => 1,
+            'title' => 'test'
+        ]);
+        $this->assertSame([
+            'name' => ['duplicateBlogCategory' => '入力されたカテゴリ名は既に登録されています。'],
+        ], $blogCategory->getErrors());
+        // title maxLength　テスト
+        $blogCategory = $this->BlogCategoriesTable->newEntity([
+            'title' => '_test_blog_category_test_blog_category_test_blog_category_test_blog_category_test_blog_category'
+                .'_test_blog_category_test_blog_category_test_blog_category_test_blog_category_test_blog_category'
+                .'_test_blog_category_test_blog_category_test_blog_category_test_blog_category',
+            'blog_content_id' => 1,
+            'name' => 'test2'
+        ]);
+        $this->assertSame([
+            'title' => ['maxLength' => 'カテゴリタイトルは255文字以内で入力してください。'],
+        ], $blogCategory->getErrors());
+        // title requirePresence　テスト
+        $blogCategory = $this->BlogCategoriesTable->newEntity([
+            'blog_content_id' => 1,
+            'name' => 'test2'
+        ]);
+        $this->assertSame([
+            'title' => ['_required' => 'カテゴリタイトルを入力してください。'],
+        ], $blogCategory->getErrors());
+        // title notEmptyString　テスト
+        $blogCategory = $this->BlogCategoriesTable->newEntity([
+            'name' => 'test2',
+            'blog_content_id' => 1,
+            'title' => ''
+        ]);
+        $this->assertSame([
+            'title' => ['_empty' => 'カテゴリタイトルを入力してください。'],
+        ], $blogCategory->getErrors());
     }
 
     /*
