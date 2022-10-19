@@ -58,6 +58,7 @@ class BcFrontContentsService
      * @return array
      * @noTodo
      * @checked
+     * @unitTest
      */
     protected function getCrumbs($id)
     {
