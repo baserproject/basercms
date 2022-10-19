@@ -241,7 +241,7 @@ class ContentsController extends BcAdminAppController
 
             /* @var \BaserCore\Model\Entity\Content $content */
             $content = $contentService->get($id);
-            if ($contentService->delete($id)) {
+            if ($contentService->deleteRecursive($id)) {
 
                 // EVENT Contents.afterDelete
                 $this->dispatchLayerEvent('afterDelete', [

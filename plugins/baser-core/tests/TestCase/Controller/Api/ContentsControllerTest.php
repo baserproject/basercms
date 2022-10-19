@@ -11,6 +11,8 @@
 
 namespace BaserCore\Test\TestCase\Controller\Api;
 
+use BaserCore\Test\Factory\PageFactory;
+use BcBlog\Test\Factory\BlogContentsFactory;
 use Cake\Core\Configure;
 use BaserCore\Service\ContentsService;
 use Cake\TestSuite\IntegrationTestTrait;
@@ -44,7 +46,8 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
         'plugin.BaserCore.Service/SearchIndexesService/ContentsReconstruct',
         'plugin.BaserCore.Service/SearchIndexesService/PagesReconstruct',
         'plugin.BaserCore.Service/SearchIndexesService/ContentFoldersReconstruct',
-        'plugin.BaserCore.Dblogs'
+        'plugin.BaserCore.Dblogs',
+        'plugin.BcBlog.Factory/BlogContents'
     ];
 
     public $autoFixtures = false;
@@ -245,6 +248,8 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
         $this->loadFixtures(
             'Service\SearchIndexesService\ContentsReconstruct'
         );
+        // 従来のフィクスチャで足りないデータを追加
+        PageFactory::make([['id' => 1], ['id' => 4]])->persist();
         $data = ['id' => 1, 'status' => 'unpublish'];
         $this->patch("/baser/api/baser-core/contents/change_status.json?token=" . $this->accessToken, $data);
         $this->assertResponseOk();
@@ -261,6 +266,8 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
         $this->loadFixtures(
             'Service\SearchIndexesService\ContentsReconstruct'
         );
+        // 従来のフィクスチャで足りないデータを追加
+        PageFactory::make([['id' => 1], ['id' => 4]])->persist();
         $content = $this->ContentsService->get(1);
         $this->ContentsService->update($content, ['id' => $content->id, 'status' => false, 'name' => 'test']);
         $data = ['id' => 1, 'status' => 'publish'];
@@ -303,6 +310,7 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function testRename()
     {
+        BlogContentsFactory::make(['id' => 31, 'description' => ''])->persist();
         $this->patch("/baser/api/baser-core/contents/rename.json?token=" . $this->accessToken);
         $this->assertResponseFailure();
         $data = ['id' => 1, 'title' => 'testRename'];
@@ -425,6 +433,7 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function testBatchUnpublish()
     {
+        BlogContentsFactory::make(['id' => 31, 'description' => ''])->persist();
         // unpublish
         $data = [
             'batch' => 'unpublish',

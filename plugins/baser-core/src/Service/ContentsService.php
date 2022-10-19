@@ -493,16 +493,29 @@ class ContentsService implements ContentsServiceInterface
     public function restore($id)
     {
         $trash = $this->getTrash($id);
+
+        // ゴミ箱に入っているデータは、lft / rght が null のため、
+        // TreeBehavior が有効だと エラーとので一旦無効化したうえでレストア
+        $this->Contents->Behaviors()->unload('Tree');
+        $this->Contents->disableUpdatingSystemData();
+        $this->Contents->updatingRelated = false;
         $content = $this->Contents->restore($trash)? $trash : null;
+        $this->Contents->updatingRelated = true;
+        $this->Contents->enableUpdatingSystemData();
+        $this->Contents->Behaviors()->load('Tree', ['level' => 'level']);
+
         if ($content) {
+            // lft / rght が null の場合、新規登録の場合でないと正常な値が割り振られないため、
+            // 重複しない値を割り振ってから、parent_id を元に、level / left / rght をTreeBehavior に更新してもらう。
+            $max = $this->Contents->getMax('rght');
             $siteRoot = $this->getSiteRoot($content->site_id);
-            $content->parent_id = $siteRoot->id;
-            $content->lft = null;
-            $content->rght = null;
             $result = $this->update($content, [
+                'id' => $content->id,
+                'name' => $content->name,
+                'level' => null,
                 'parent_id' => $siteRoot->id,
-                'lft' => null,
-                'rght' => null
+                'lft' => $max + 1,
+                'rght' => $max + 2
             ]);
             $this->saveSearchIndex($id);
             return $result;
@@ -600,20 +613,36 @@ class ContentsService implements ContentsServiceInterface
         } else {
             $target = [$parent];
         }
+
         foreach($target as $node) {
-            // 一旦階層構造から除外しリセットしてゴミ箱に移動（論理削除）
-            // エイリアスの場合直接削除
             $node->parent_id = null;
             $node->url = '';
             $node->status = false;
             $node->self_status = false;
+            // lft / rght をリセットしておかないと 複数データの save() 実行時、
+            // 2つ目以降の lft / rght がおかしくなる
             unset($node->lft);
             unset($node->rght);
+
             $this->Contents->disableUpdatingSystemData();
-            // ここでは callbacks を false にすると lft rght が更新されないので callbacks は true に設定する（default: true）
-            $this->Contents->save($node, ['validate' => false]); // 論理削除用のvalidationを用意するべき
+            $this->Contents->updatingRelated = false;
+            $node = $this->Contents->save($node, ['validate' => false]);
+
+            if(!$node->alias_id) {
+                // TreeBehavior　をオフにした上で、一旦階層構造から除外しリセットしてゴミ箱に移動（論理削除）
+                $this->Contents->Behaviors()->unload('Tree');
+                $node->lft = null;
+                $node->rght = null;
+                $node->level = null;
+                $this->Contents->save($node, ['validate' => false]);
+                $result = $this->delete($node->id);
+                $this->Contents->Behaviors()->load('Tree');
+            } else {
+                // エイリアスの場合直接削除
+                $result = $this->delete($node->id);
+            }
             $this->Contents->enableUpdatingSystemData();
-            $result = $this->delete($node->id);
+            $this->Contents->updatingRelated = true;
             // =====================================================================
             // 通常の削除の際、afterDelete で、関連コンテンツのキャッシュを削除しているが、
             // 論理削除の場合、afterDelete が呼ばれない為、ここで削除する
@@ -1001,7 +1030,7 @@ class ContentsService implements ContentsServiceInterface
         /* @var Content $currentContent */
         $currentContent = $this->Contents->get($id);
         $contents = [$currentContent];
-        if ($currentContent->type === 'ContentFolder') {
+        if ($currentContent->type === 'ContentFolder' && $this->Contents->hasBehavior('Tree')) {
             $contents = array_merge(
                 $contents,
                 $this->Contents->find('children', ['for' => $currentContent->id])

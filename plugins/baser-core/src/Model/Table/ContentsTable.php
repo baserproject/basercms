@@ -1420,24 +1420,6 @@ class ContentsTable extends AppTable
         $mainSite->rght = $count;
         if (!$this->save($mainSite)) $result = false;
 
-        // ゴミ箱
-        $contents = $this->find()
-            ->applyOptions(['withDeleted'])
-            ->where(['Contents.deleted_date IS NOT NULL'])
-            ->order(['lft'])
-            ->all();
-        if ($contents) {
-            foreach($contents as $content) {
-                $count++;
-                $content->lft = $count;
-                $count++;
-                $content->rght = $count;
-                $content->level = 0;
-                $content->parent_id = null;
-                $content->site_id = null;
-                if (!$this->save($content)) $result = false;
-            }
-        }
         // 関連データ更新機能をオンにした状態で再度更新
         $this->addBehavior('Tree');
         $this->updatingRelated = true;

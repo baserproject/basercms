@@ -1208,7 +1208,7 @@ class AppTable extends Table
     public function delete(EntityInterface $entity, $options = []): bool
     {
         $result = parent::delete($entity, $options);
-        // TODO 未実装の為コメントアウト
+        // TODO ucmitz 未実装の為コメントアウト
         // if ($result === false && $this->Behaviors->enabled('SoftDelete')) {
         //     $this->getEventManager()->dispatch(new CakeEvent('Model.afterDelete', $this));
         //     return (bool)$this->field('deleted', ['deleted' => 1]);
