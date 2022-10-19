@@ -154,6 +154,10 @@ class BlogPostsTable extends BlogAppTable
      * アップロードビヘイビアの設定
      *
      * @param int $id ブログコンテンツID
+     *
+     * @checked
+     * @unitTest
+     * @noTodo
      */
     public function setupUpload($id)
     {
