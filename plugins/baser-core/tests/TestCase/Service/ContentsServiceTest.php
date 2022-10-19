@@ -12,6 +12,8 @@
 namespace BaserCore\Test\TestCase\Service;
 
 use BaserCore\Test\Factory\ContentFactory;
+use BaserCore\Test\Factory\PageFactory;
+use BcBlog\Test\Factory\BlogContentsFactory;
 use Cake\Core\Configure;
 use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\Routing\Router;
@@ -47,6 +49,8 @@ class ContentsServiceTest extends BcTestCase
         'plugin.BaserCore.UserGroups',
         'plugin.BaserCore.UsersUserGroups',
         'plugin.BaserCore.SiteConfigs',
+        'plugin.BaserCore.Factory/Pages',
+        'plugin.BcBlog.Factory/BlogContents',
     ];
 
     /**
@@ -613,6 +617,18 @@ class ContentsServiceTest extends BcTestCase
      */
     public function testPublish()
     {
+        PageFactory::make([
+            ['id' => 2],
+            ['id' => 16],
+            ['id' => 3],
+            ['id' => 5],
+            ['id' => 6],
+            ['id' => 7],
+            ['id' => 19],
+            ['id' => 20],
+            ['id' => 21]
+        ])->persist();
+        BlogContentsFactory::make(['id' => 31, 'description' => ''])->persist();
         $contents = $this->getTableLocator()->get('Contents');
 
         $content = $contents->find()->order(['id' => 'ASC'])->first();
@@ -630,6 +646,18 @@ class ContentsServiceTest extends BcTestCase
      */
     public function testUnpublish()
     {
+        PageFactory::make([
+            ['id' => 2],
+            ['id' => 16],
+            ['id' => 3],
+            ['id' => 5],
+            ['id' => 6],
+            ['id' => 7],
+            ['id' => 19],
+            ['id' => 20],
+            ['id' => 21]
+        ])->persist();
+        BlogContentsFactory::make(['id' => 31, 'description' => ''])->persist();
         $contents = $this->getTableLocator()->get('Contents');
 
         $content = $contents->find()->order(['id' => 'ASC'])->first();
@@ -658,6 +686,17 @@ class ContentsServiceTest extends BcTestCase
      */
     public function testMove()
     {
+        PageFactory::make([
+            ['id' => 2],
+            ['id' => 16],
+            ['id' => 3],
+            ['id' => 5],
+            ['id' => 6],
+            ['id' => 7],
+            ['id' => 19],
+            ['id' => 20],
+            ['id' => 21]
+        ])->persist();
         // 移動元のエンティティ
         $originEntity = $this->ContentsService->getIndex(['parent_id' => 1])->order('lft')->first();
         $origin = [

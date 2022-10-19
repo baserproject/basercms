@@ -20,7 +20,6 @@ use BaserCore\Event\BcControllerEventDispatcher;
 use BaserCore\Event\BcModelEventDispatcher;
 use BaserCore\Event\BcViewEventDispatcher;
 use BaserCore\Event\ContentFoldersControllerEventListener;
-use BaserCore\Event\PagesControllerEventListener;
 use BaserCore\Middleware\BcAdminMiddleware;
 use BaserCore\Middleware\BcFrontMiddleware;
 use BaserCore\Middleware\BcRequestFilterMiddleware;
@@ -107,7 +106,6 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
         $event->on(new BcModelEventDispatcher());
         $event->on(new BcViewEventDispatcher());
         $event->on(new BcContainerEventListener());
-        $event->on(new PagesControllerEventListener());
         $event->on(new ContentFoldersControllerEventListener());
     }
 

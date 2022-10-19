@@ -389,7 +389,9 @@ class ContentsService implements ContentsServiceInterface
 
     /**
      * コンテンツ情報を論理削除する
+     *
      * ※ エイリアスの場合は直接削除
+     * 削除前に検索インデックスを削除するが、削除前でないと、ContentFolder の子の取得ができないため。
      * @param int $id
      * @return bool
      * @checked
@@ -398,10 +400,12 @@ class ContentsService implements ContentsServiceInterface
      */
     public function delete($id): bool
     {
+        /* @var Content $content */
         $content = $this->get($id);
         if ($content->alias_id) {
             $result = $this->Contents->hardDelete($content);
         } else {
+            $this->deleteSearchIndex($id);
             $result = $this->Contents->delete($content);
         }
         return $result;
@@ -495,11 +499,13 @@ class ContentsService implements ContentsServiceInterface
             $content->parent_id = $siteRoot->id;
             $content->lft = null;
             $content->rght = null;
-            return $this->update($content, [
+            $result = $this->update($content, [
                 'parent_id' => $siteRoot->id,
                 'lft' => null,
                 'rght' => null
             ]);
+            $this->saveSearchIndex($id);
+            return $result;
         } else {
             return null;
         }
@@ -824,7 +830,9 @@ class ContentsService implements ContentsServiceInterface
         $content->self_publish_begin = null;
         $content->self_publish_end = null;
         $content->self_status = true;
-        return $this->Contents->save($content);
+        $result = $this->Contents->save($content);
+        if ($result) $this->saveSearchIndex($id);
+        return $result;
     }
 
     /**
@@ -842,7 +850,9 @@ class ContentsService implements ContentsServiceInterface
         $content->self_publish_begin = null;
         $content->self_publish_end = null;
         $content->self_status = false;
-        return $this->Contents->save($content);
+        $result = $this->Contents->save($content);
+        if ($result) $this->saveSearchIndex($id);
+        return $result;
     }
 
     /**
@@ -927,7 +937,95 @@ class ContentsService implements ContentsServiceInterface
             $siteConfig = TableRegistry::getTableLocator()->get('BaserCore.SiteConfigs');
             $siteConfig->updateContentsSortLastModified();
         }
+        if ($result) $this->saveSearchIndex($origin['id']);
         return $result;
+    }
+
+    /**
+     * 検索インデックスを生成する
+     *
+     * 対象が ContentFolder の場合は、子の検索インデックスも更新する
+     * 子の検索インデックス更新時には、親の status を引き継ぐ
+     * @param $id
+     * @checked
+     * @noTodo
+     */
+    public function saveSearchIndex($id)
+    {
+        if (!Plugin::isLoaded('BcSearchIndex')) return;
+        /* @var Content $currentContent */
+        $currentContent = $this->get($id);
+        $contents = [$currentContent];
+        if ($currentContent->type === 'ContentFolder') {
+            $contents = array_merge(
+                $contents,
+                $this->Contents->find('children', ['for' => $currentContent->id])
+                    ->select(['plugin', 'type', 'entity_id'])
+                    ->order('lft')
+                    ->all()
+                    ->toArray()
+            );
+        }
+        $tables = [];
+        $this->Contents->getConnection()->begin();
+        foreach($contents as $content) {
+            if (!isset($tables[$content->type])) {
+                $tables[$content->type] = TableRegistry::getTableLocator()->get(
+                    $content->plugin . '.' . Inflector::pluralize($content->type)
+                );
+            }
+            if ($content->type === 'ContentFolder' || !$tables[$content->type]->hasBehavior('BcSearchIndexManager')) continue;
+            $entity = $tables[$content->type]->get($content->entity_id, ['contain' => 'Contents']);
+            $entity->setDirty('id', true);
+            if ($currentContent->type === 'ContentFolder') {
+                $entity->content->status = $currentContent->status;
+            }
+            if(!$tables[$content->type]->save($entity)) {
+                $this->Contents->getConnection()->rollback();
+            }
+        }
+        $this->Contents->getConnection()->commit();
+    }
+
+    /**
+     * 検索インデックスを削除する
+     *
+     * 対象が ContentFolder の場合は、子の検索インデックスも削除する
+     * @param int $id
+     * @checked
+     * @noTodo
+     */
+    public function deleteSearchIndex($id)
+    {
+        if (!Plugin::isLoaded('BcSearchIndex')) return;
+        /* @var Content $currentContent */
+        $currentContent = $this->Contents->get($id);
+        $contents = [$currentContent];
+        if ($currentContent->type === 'ContentFolder') {
+            $contents = array_merge(
+                $contents,
+                $this->Contents->find('children', ['for' => $currentContent->id])
+                    ->select(['plugin', 'type', 'entity_id'])
+                    ->order('lft')
+                    ->all()
+                    ->toArray()
+            );
+        }
+        $tables = [];
+        $this->Contents->getConnection()->begin();
+        foreach($contents as $content) {
+            if (!isset($tables[$content->type])) {
+                $tables[$content->type] = TableRegistry::getTableLocator()->get(
+                    $content->plugin . '.' . Inflector::pluralize($content->type)
+                );
+            }
+            if ($content->type === 'ContentFolder' || !$tables[$content->type]->hasBehavior('BcSearchIndexManager')) continue;
+            if(!$tables[$content->type]->deleteSearchIndex($content->entity_id)) {
+                $this->Contents->getConnection()->rollback();
+                return;
+            }
+        }
+        $this->Contents->getConnection()->commit();
     }
 
     /**
@@ -1300,7 +1398,9 @@ class ContentsService implements ContentsServiceInterface
             $options['firstCreate'] = true;
         }
         try {
-            return $this->update($content, $newContent, $options);
+            $result = $this->update($content, $newContent, $options);
+            if ($result) $this->saveSearchIndex($content->id);
+            return $result;
         } catch (BcException $e) {
             throw $e;
         }
