@@ -13,6 +13,7 @@ namespace BcBlog\Test\TestCase\Model;
 
 use BaserCore\TestSuite\BcTestCase;
 use BcBlog\Model\Table\BlogPostsTable;
+use BcBlog\Test\Factory\BlogContentsFactory;
 
 /**
  * Class BlogPostsTableTest
@@ -24,6 +25,7 @@ class BlogPostsTableTest extends BcTestCase
 
     public $fixtures = [
         'plugin.BcBlog.Factory/BlogPosts',
+        'plugin.BcBlog.Factory/BlogContents',
     ];
 
 
@@ -215,29 +217,30 @@ class BlogPostsTableTest extends BcTestCase
      */
     public function testSetupUpload()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $this->BlogPost->setupUpload(1);
-
-        // protectedな値にアクセスするため配列にキャストする
-        $behaviors = (array)$this->BlogPost->Behaviors;
-        $result = $behaviors["\0*\0_loaded"]['BcUpload']->settings['BlogPost'];
-
-        $imagecopy = $result['fields']['eye_catch']['imagecopy'];
-        $expected = [
-            'thumb' => [
-                'suffix' => '__thumb',
-                'width' => '300',
-                'height' => '300'
-            ],
-            'mobile_thumb' => [
-                'suffix' => '__mobile_thumb',
-                'width' => '100',
-                'height' => '100'
-            ]
-        ];
-
-        $this->assertEquals($result['saveDir'], 'blog/1/blog_posts');
-        $this->assertEquals($imagecopy, $expected);
+        BlogContentsFactory::make([
+            'id' => '1',
+            'blog_content_id' => '1',
+            'no' => '1',
+            'name' => 'name1',
+            'content' => 'content1',
+            'blog_category_id' => '1',
+            'user_id' => '1',
+            'status' => '1',
+            'posts_date' => '2017-02-01 12:57:59',
+            'content_draft' => '',
+            'detail_draft' => '',
+            'publish_begin' => null,
+            'publish_end' => null,
+            'exclude_search' => 0,
+            'eye_catch' => '',
+            'created' => '2017-02-01 12:57:59',
+            'modified' => '2016-01-02 12:57:59'
+        ])->persist();
+        $this->BlogPostsTable->setupUpload(1);
+        $result = $this->BlogPostsTable->getBehavior('BcUpload')->BcFileUploader["BlogPosts"];
+        $this->assertEquals($result->settings["saveDir"], 'blog/1/blog_posts');
+        $this->assertEquals($result->settings["fields"]["eye_catch"]["type"], 'image');
+        $this->assertEquals($result->settings["fields"]["eye_catch"]["name"], 'eye_catch');
     }
 
     /**

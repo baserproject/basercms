@@ -31,6 +31,7 @@ class BlogCategoryValidation extends Validation
      * @return boolean
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function duplicateBlogCategory($value, $context)
     {

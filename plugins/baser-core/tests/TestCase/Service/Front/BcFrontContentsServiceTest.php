@@ -11,7 +11,9 @@
 
 namespace BaserCore\Test\TestCase\Service\Front;
 
+use BaserCore\Service\ContentsService;
 use BaserCore\Service\Front\BcFrontContentsService;
+use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\TestSuite\BcTestCase;
 
 /**
@@ -28,6 +30,7 @@ class BcFrontContentsServiceTest extends BcTestCase
      * @var array
      */
     protected $fixtures = [
+        'plugin.BaserCore.Contents'
     ];
 
     /**
@@ -57,7 +60,13 @@ class BcFrontContentsServiceTest extends BcTestCase
      */
     public function test_getViewVarsForFront()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        ContentFactory::make(['id' => 100, 'title' => 'test title', 'description' => 'description test', 'lft'=>1, 'rght'=>2])->persist();
+        $contentService = new ContentsService();
+        $content = $contentService->get(100);
+        $rs = $this->BcFrontContentsService->getViewVarsForFront($content);
+        $this->assertEquals('description test',$rs['description']);
+        $this->assertEquals('test title',$rs['title']);
+        $this->assertEquals('test title',$rs['crumbs'][0]['name']);
     }
 
     /**

@@ -11,6 +11,7 @@
 
 namespace BaserCore\Test\TestCase\Controller\Api;
 
+use BaserCore\Controller\Api\PagesController;
 use BaserCore\Service\PagesService;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\TestSuite\IntegrationTestTrait;
@@ -59,6 +60,15 @@ class PagesControllerTest extends BcTestCase
         $this->accessToken = $token['access_token'];
         $this->refreshToken = $token['refresh_token'];
         $this->PagesService = new PagesService();
+    }
+
+    /**
+     * test initialize
+     */
+    public function test_initialize()
+    {
+        $controller = new PagesController($this->getRequest());
+        $this->assertEquals($controller->Authentication->unauthenticatedActions, ['view']);
     }
 
     /**

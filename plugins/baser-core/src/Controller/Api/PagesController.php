@@ -31,6 +31,7 @@ class PagesController extends BcApiController
      * @return void
      * @checked
      * @unitTest
+     * @unitTest
      */
     public function initialize(): void
     {
