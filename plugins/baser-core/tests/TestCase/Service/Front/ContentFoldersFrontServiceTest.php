@@ -11,6 +11,7 @@
 
 namespace BaserCore\Test\TestCase\Service\Front;
 
+use BaserCore\Controller\ContentFoldersController;
 use BaserCore\Service\Front\ContentFoldersFrontService;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\Test\Scenario\SmallSetContentsScenario;
@@ -88,6 +89,19 @@ class ContentFoldersFrontServiceTest extends BcTestCase
      */
     public function test_setupPreviewForView()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(SmallSetContentsScenario::class);
+        $request = $this->getRequest();
+        $controller = new ContentFoldersController($request);
+        $this->ContentFoldersFrontService->setupPreviewForView($controller);
+
+        $this->assertEquals('default', $controller->viewBuilder()->getTemplate());
+
+        $vars = $controller->viewBuilder()->getVars();
+        $this->assertArrayHasKey('contentFolder', $vars);
+        $this->assertArrayHasKey('children', $vars);
+        $this->assertArrayHasKey('editLink', $vars);
+        $this->assertEquals('edit', $vars['editLink']['action']);
+        $this->assertTrue($vars['editLink']['admin']);
     }
 }
