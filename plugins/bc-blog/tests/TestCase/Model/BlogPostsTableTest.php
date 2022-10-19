@@ -36,6 +36,7 @@ class BlogPostsTableTest extends BcTestCase
      */
     public function setUp(): void
     {
+        $this->setFixtureTruncate();
         parent::setUp();
         $this->BlogPostsTable = $this->getTableLocator()->get('BcBlog.BlogPosts');
     }

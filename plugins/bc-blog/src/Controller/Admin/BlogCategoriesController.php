@@ -75,6 +75,7 @@ class BlogCategoriesController extends BlogAdminAppController
      * @return Response|null|void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function add(BlogCategoriesAdminServiceInterface $service, string $blogContentId)
     {

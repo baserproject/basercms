@@ -12,10 +12,14 @@
 
 namespace BcBlog\Test\TestCase\Controller\Admin;
 
+use BaserCore\Test\Factory\ContentFactory;
+use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcBlog\Controller\Admin\BlogCategoriesController;
 use BcBlog\Test\Factory\BlogCategoryFactory;
+use BcBlog\Test\Factory\BlogContentsFactory;
 use Cake\TestSuite\IntegrationTestTrait;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class BlogCategoriesControllerTest
@@ -30,6 +34,7 @@ class BlogCategoriesControllerTest extends BcTestCase
      * IntegrationTestTrait
      */
     use IntegrationTestTrait;
+    use ScenarioAwareTrait;
 
     /**
      * Fixtures
@@ -37,12 +42,12 @@ class BlogCategoriesControllerTest extends BcTestCase
      * @var array
      */
     public $fixtures = [
-        'plugin.BaserCore.Users',
-        'plugin.BaserCore.UsersUserGroups',
-        'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.Plugins',
-        'plugin.BaserCore.Permissions',
-        'plugin.BaserCore.Sites',
+        'plugin.BaserCore.Factory/Sites',
+        'plugin.BaserCore.Factory/Users',
+        'plugin.BaserCore.Factory/UserGroups',
+        'plugin.BaserCore.Factory/UsersUserGroups',
+        'plugin.BaserCore.Factory/Contents',
+        'plugin.BcBlog.Factory/BlogCategories',
     ];
 
     /**
@@ -54,6 +59,7 @@ class BlogCategoriesControllerTest extends BcTestCase
     {
         $this->setFixtureTruncate();
         parent::setUp();
+        $this->loadFixtureScenario(InitAppScenario::class);
         $this->Controller = new BlogCategoriesController($this->loginAdmin($this->getRequest()));
     }
 
@@ -91,7 +97,51 @@ class BlogCategoriesControllerTest extends BcTestCase
      */
     public function testAdmin_add()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        ContentFactory::make([
+            'id' => '1',
+            'url' => '/blog/',
+            'name' => 'blog',
+            'plugin' => 'BcBlog',
+            'type' => 'BlogContent',
+            'site_id' => 1,
+            'parent_id' => 3,
+            'lft' => 7,
+            'rght' => 8,
+            'entity_id' => 1,
+            'site_root' => false,
+            'status' => true
+        ])->persist();
+        BlogContentsFactory::make([
+            'id' => '1',
+            'description' => 'baserCMS inc. [デモ] の最新の情報をお届けします。',
+            'template' => 'default',
+            'list_count' => '10',
+            'list_direction' => 'DESC',
+            'feed_count' => '10',
+            'tag_use' => '1',
+            'comment_use' => '1',
+            'comment_approve' => '0',
+            'auth_captcha' => '1',
+            'widget_area' => '2',
+            'eye_catch_size' => 'YTo0OntzOjExOiJ0aHVtYl93aWR0aCI7czozOiIzMDAiO3M6MTI6InRodW1iX2hlaWdodCI7czozOiIzMDAiO3M6MTg6Im1vYmlsZV90aHVtYl93aWR0aCI7czozOiIxMDAiO3M6MTk6Im1vYmlsZV90aHVtYl9oZWlnaHQiO3M6MzoiMTAwIjt9',
+            'use_content' => '1',
+            'created' => '2015-08-10 18:57:47',
+            'modified' => NULL,
+        ])->persist();
+        $blogContentId = 1;
+        $data = ['name' => 'testName', 'title' => 'testTitle'];
+        $this->post("/baser/admin/bc-blog/blog_categories/add/$blogContentId", $data);
+        // ステータスを確認
+        $this->assertResponseCode(302);
+        // データの登録を確認
+        $blogCategory = BlogCategoryFactory::get(1);
+        $this->assertEquals($data['name'], $blogCategory['name']);
+        // 失敗のメッセージを確認
+        $data['name'] = 'test name';
+        $this->post("/baser/admin/bc-blog/blog_categories/add/$blogContentId", $data);
+        $this->assertResponseContains('入力エラーです。内容を修正してください。');
     }
 
     /**
