@@ -37,6 +37,7 @@ class BcFrontContentsService
      * @return array
      * @noTodo
      * @checked
+     * @unitTest
      */
     public function getViewVarsForFront($content)
     {
