@@ -417,6 +417,8 @@ class ContentsService implements ContentsServiceInterface
         $content = $this->Contents->save($content, ['validate' => false]);
 
         if(!$content->alias_id) {
+            $this->Contents->deleteRelateSubSiteContent($content);
+            $this->Contents->deleteAlias($content);
             // TreeBehavior　をオフにした上で、一旦階層構造から除外しリセットしてゴミ箱に移動（論理削除）
             $this->Contents->Behaviors()->unload('Tree');
             $content->lft = null;

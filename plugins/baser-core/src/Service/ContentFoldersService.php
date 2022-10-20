@@ -271,6 +271,7 @@ class ContentFoldersService implements ContentFoldersServiceInterface
     public function saveSiteRoot($site, $isUpdateChildrenUrl = false)
     {
         if ($site->id === 1) return false;
+        $rootContentId = 1;
         if($site->main_site_id) {
             /* @var SitesTable $sitesTable */
             $sitesTable = TableRegistry::getTableLocator()->get('BaserCore.Sites');

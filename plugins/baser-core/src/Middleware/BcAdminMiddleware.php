@@ -66,9 +66,9 @@ class BcAdminMiddleware implements MiddlewareInterface
                     $request = $request->withQueryParams(['site_id' => 1]);
                 }
             }
-            $currentSite = TableRegistry::getTableLocator()->get('BaserCore.Sites')->find()->where(['id' => $currentSiteId])->first();
-            $session->write('BcApp.Admin.currentSite', $currentSite);
         }
+        $currentSite = TableRegistry::getTableLocator()->get('BaserCore.Sites')->find()->where(['id' => $currentSiteId])->first();
+        $session->write('BcApp.Admin.currentSite', $currentSite);
         return $request->withAttribute('currentSite', $session->read('BcApp.Admin.currentSite'));
     }
 }

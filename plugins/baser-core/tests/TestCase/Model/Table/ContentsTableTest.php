@@ -178,7 +178,7 @@ class ContentsTableTest extends BcTestCase
     {
         $result = $this->Contents->implementedEvents();
         $this->assertTrue(is_array($result));
-        $this->assertGreaterThanOrEqual(4, count($result));
+        $this->assertGreaterThanOrEqual(3, count($result));
     }
 
     /**
@@ -342,21 +342,6 @@ class ContentsTableTest extends BcTestCase
     public function testBeforeDelete()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
-    /**
-     * After Delete
-     *
-     * 関連コンテンツのキャッシュを削除する
-     */
-    public function testAfterDelete()
-    {
-        $alias = $this->Contents->find()->where(['alias_id IS NOT' => null])->first();
-        $aliased = $this->Contents->get($alias->alias_id);
-        $this->Contents->dispatchEvent('Model.afterDelete', [$aliased, new ArrayObject()]);
-        // エイリアスが削除されてるか確認
-        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
-        $this->Contents->get($alias->id);
     }
 
     /**
