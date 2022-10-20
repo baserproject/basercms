@@ -28,7 +28,6 @@ use BaserCore\Annotation\UnitTest;
 use Cake\Datasource\EntityInterface;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Datasource\ResultSetInterface;
-use BaserCore\Model\Table\ContentsTable;
 use BaserCore\Service\SiteConfigsService;
 use BaserCore\Utility\BcAbstractDetector;
 use BaserCore\Event\BcEventDispatcherTrait;
@@ -426,12 +425,13 @@ class SitesTable extends AppTable
      */
     public function getRootContentId($id)
     {
-        if ($id == 0) {
+        if ($id == 1) {
             return 1;
         }
         $Contents = TableRegistry::getTableLocator()->get('BaserCore.Contents');
         $contents = $Contents->find()->select(['id'])->where(['Contents.site_root' => true, 'Contents.site_id' => $id]);
         if (!$contents->all()->isEmpty()) return $contents->first()->id;
+        return 1;
     }
 
     /**

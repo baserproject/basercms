@@ -47,6 +47,31 @@ $this->BcBaser->js([$currentAdminTheme . '.vendor/jquery.fixedMenu', $currentAdm
     </div>
 
     <div id="ToolMenu" class="bca-toolbar__tools">
+      <?php if ($otherSites): ?>
+        <ul class="clearfix">
+          <li>
+            <?php $this->BcBaser->link(
+              h($currentSite->display_name) . ' ' .
+              $this->BcBaser->getImg($currentAdminTheme . '.admin/btn_dropdown.png', ['width' => 8, 'height' => 11, 'class' => 'bc-btn']),
+              'javascript:void(0)', [
+              'class' => 'title',
+              'escapeTitle' => false
+            ]) ?>
+            <ul>
+              <?php foreach($otherSites as $key => $value): ?>
+                <li>
+                  <?php $this->BcBaser->link($value, [
+                    'prefix' => 'Admin',
+                    'controller' => 'Contents',
+                    'action' => 'index',
+                    '?' => ['site_id' => $key]
+                  ]) ?>
+                </li>
+              <?php endforeach ?>
+            </ul>
+          </li>
+        </ul>
+      <?php endif ?>
       <?php if ($this->BcToolbar->isAvailableEditLink()): ?>
         <div class="bca-toolbar__tools-button bca-toolbar__tools-button-edit">
           <?php $this->BcToolbar->editLink() ?>
@@ -69,29 +94,6 @@ $this->BcBaser->js([$currentAdminTheme . '.vendor/jquery.fixedMenu', $currentAdm
     <?php if ($this->BcAuth->isAdminLogin()): ?>
       <div id="UserMenu" class="bca-toolbar__users">
         <ul class="clearfix">
-          <?php if ($otherSites): ?>
-            <li>
-              <?php $this->BcBaser->link(
-                h($currentSite->display_name) . ' ' .
-                $this->BcBaser->getImg($currentAdminTheme . '.admin/btn_dropdown.png', ['width' => 8, 'height' => 11, 'class' => 'bc-btn']),
-                'javascript:void(0)', [
-                'class' => 'title',
-                'escapeTitle' => false
-              ]) ?>
-              <ul>
-                <?php foreach($otherSites as $key => $value): ?>
-                  <li>
-                    <?php $this->BcBaser->link($value, [
-                      'prefix' => 'Admin',
-                      'controller' => 'Contents',
-                      'action' => 'index',
-                      '?' => ['site_id' => $key]
-                    ]) ?>
-                  </li>
-                <?php endforeach ?>
-              </ul>
-            </li>
-          <?php endif ?>
           <li>
             <?php $this->BcBaser->link(
               h($this->BcBaser->getUserName($loginUser)) . ' ' .

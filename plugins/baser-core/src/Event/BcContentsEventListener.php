@@ -129,10 +129,15 @@ class BcContentsEventListener extends BcEventListener
         /**  @var BcAdminAppView $view*/
         $view = $event->getSubject();
         $entity = $view->get($this->entityVarName);
+        if($entity->alias_id) {
+            $content = $entity;
+        } else {
+            $content = $entity->content;
+        }
         $adminService = $this->getService(ContentsAdminServiceInterface::class);
         $event->setData('out', implode("\n", [
             $view->element('content_options'),
-            $view->element('content_actions', $adminService->getViewVarsForContentActions($entity->content, $event->getData('out'))),
+            $view->element('content_actions', $adminService->getViewVarsForContentActions($content, $event->getData('out'))),
             $view->element('content_related'),
             $view->element('content_info')
         ]));

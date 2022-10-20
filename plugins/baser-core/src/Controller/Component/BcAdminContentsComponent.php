@@ -21,6 +21,7 @@ use Cake\Controller\Component;
 use Cake\Core\Configure;
 use Cake\Event\EventManager;
 use Cake\ORM\TableRegistry;
+use Cake\Routing\Router;
 use Cake\Utility\Inflector;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -122,12 +123,15 @@ class BcAdminContentsComponent extends Component
 
         if ($entityName === "Content") {
             $content = $controller->viewBuilder()->getVar(Inflector::variable($entityName));
-            $entityName = Inflector::pluralize($entityName) . ".";
         } else {
             $associated = $controller->viewBuilder()->getVar(Inflector::variable($entityName));
             $content = $associated->content;
-            $entityName = Inflector::pluralize($entityName) . ".content.";
         }
+
+        $controller->getRequest()->getSession()->write('BcApp.Admin.currentSite', $content->site);
+        $controller->setRequest($controller->getRequest()->withAttribute('currentSite', $content->site));
+        Router::setRequest($controller->getRequest());
+
         $site = $content->site;
         $theme = $site->theme;
         $templates = BcUtil::getTemplateList('Layouts', [$controller->getPlugin(), $theme]);
@@ -147,9 +151,6 @@ class BcAdminContentsComponent extends Component
         $controller->set('sites', $siteList);
         $controller->set('mainSiteDisplayName', $this->SiteConfigsService->getValue('main_site_display_name'));
         $controller->set('relatedContents', $this->Sites->getRelatedContents($content->id));
-
-        if (!$entityName === "content") $associated->content = $content;
-        $controller->set('entityName', $entityName);
         $controller->set($this->ContentsService->getViewVarsForEdit($content));
     }
 }

@@ -13,6 +13,7 @@
  * @var bool $isAvailablePreview プレビュー機能が利用可能かどうか
  * @var bool $isAvailableDelete 削除機能が利用可能かどうか
  * @var string $currentAction 現在の画面のアクションボタン
+ * @var bool $isAlias
  */
 $deleteButtonText = __d('baser', 'ゴミ箱');
 if ($isAlias) {

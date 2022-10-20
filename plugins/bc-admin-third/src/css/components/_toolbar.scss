@@ -28,7 +28,7 @@ body {
   & &__logo {
     flex: 0 1 auto!important;
     display: flex!important;
-    padding: 0 0 0 12px!important;
+    padding: 0 12px 0 12px!important;
 
     &-link {
       display: flex!important;
@@ -116,7 +116,7 @@ body {
     }
   }
 
-  &__users {
+  &__users, &__tools {
     .bc-btn {
       margin-left:5px;
     }

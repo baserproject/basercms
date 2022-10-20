@@ -245,7 +245,7 @@ class PagesTable extends AppTable
         $page = $this->get($id, ['contain' => ['Contents']]);
         $oldPage = clone $page;
 
-        // EVENT Page.beforeCopy
+        // EVENT Pages.beforeCopy
         $event = $this->dispatchLayerEvent('beforeCopy', [
             'data' => $page,
             'id' => $page->id
@@ -272,7 +272,7 @@ class PagesTable extends AppTable
         $newPage = $this->patchEntity($this->newEmptyEntity(), $page->toArray());
         $newPage = $this->saveOrFail($newPage);
 
-        // EVENT Page.afterCopy
+        // EVENT Pages.afterCopy
         $this->dispatchLayerEvent('afterCopy', [
             'data' => $newPage,
             'id' => $newPage->id,

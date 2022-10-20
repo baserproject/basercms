@@ -233,7 +233,7 @@ class ContentsControllerTest extends BcTestCase
         $data = $this->ContentsService->getIndex(['name' => 'testEditのエイリアス'])->first();
         $data->title = 'ControllerEditエイリアス';
         $data->site->name = 'ucmitz'; // site側でエラーが出るため
-        $this->post('/baser/admin/baser-core/contents/edit_alias/' . $data->id, ["Contents" => $data->toArray()]);
+        $this->post('/baser/admin/baser-core/contents/edit_alias/' . $data->id, ["content" => $data->toArray()]);
         $this->assertResponseSuccess();
         $this->assertRedirect('/baser/admin/baser-core/contents/edit_alias/' . $data->id);
         $this->assertEquals('ControllerEditエイリアス', $this->ContentsService->get($data->id)->title);
