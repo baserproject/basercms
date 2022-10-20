@@ -38,6 +38,12 @@ class BcBlogViewEventListenerTest extends BcTestCase
      * @var array
      */
     public $fixtures = [
+        'plugin.BaserCore.Factory/Users',
+        'plugin.BaserCore.Factory/Sites',
+        'plugin.BaserCore.Factory/UsersUserGroups',
+        'plugin.BaserCore.Factory/UserGroups',
+        'plugin.BaserCore.Factory/Contents',
+        'plugin.BcBlog.Factory/BlogContents'
     ];
 
     /**
@@ -47,8 +53,10 @@ class BcBlogViewEventListenerTest extends BcTestCase
      */
     public function setUp(): void
     {
+        $this->setFixtureTruncate();
         parent::setUp();
         $this->Listener = new BcBlogViewEventListener();
+        $this->loadFixtureScenario(InitAppScenario::class);
     }
 
     /**
@@ -68,7 +76,6 @@ class BcBlogViewEventListenerTest extends BcTestCase
      */
     public function testBeforeRender(): void
     {
-        $this->loadFixtureScenario(InitAppScenario::class);
         BlogContentsFactory::make([
             'id' => '1',
             'description' => 'baserCMS inc. [デモ] の最新の情報をお届けします。',
