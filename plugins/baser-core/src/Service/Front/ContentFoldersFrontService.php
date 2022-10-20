@@ -92,6 +92,7 @@ class ContentFoldersFrontService extends ContentFoldersService implements Conten
      * @param Controller $controller
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function setupPreviewForView(Controller $controller): void
     {
