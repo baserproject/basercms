@@ -411,6 +411,7 @@ class UtilitiesServiceTest extends BcTestCase
         $this->truncateTable('sites');
         // 実行
         $this->execPrivateMethod($this->UtilitiesService, '_loadBackup', [TMP . 'schema' . DS, 'utf8']);
+        $this->UtilitiesService->resetTmpSchemaFolder();
         // データが復元されているか確認
         $this->assertEquals(1, UserFactory::count());
         $this->assertEquals(1, SiteFactory::count());
