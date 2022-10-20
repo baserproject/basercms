@@ -190,7 +190,7 @@ $(function () {
                                     },
                                     success: function (result) {
                                         $.bcUtil.showNoticeMessage(bcI18n.contentsEditInfoMessage2);
-                                        location.href = bcManageContent[current.type]['url']['edit'] + '/' + result.content.entity_id;
+                                        location.href = bcManageContent[current.type]['url']['edit'] + '/' + result.content.entity_id + '?site_id=' + siteId;
                                     },
                                     error: function (XMLHttpRequest, textStatus, errorThrown) {
                                         $.bcUtil.hideLoader();
