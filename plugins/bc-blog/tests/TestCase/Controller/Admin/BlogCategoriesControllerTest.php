@@ -48,6 +48,7 @@ class BlogCategoriesControllerTest extends BcTestCase
         'plugin.BaserCore.Factory/UsersUserGroups',
         'plugin.BaserCore.Factory/Contents',
         'plugin.BcBlog.Factory/BlogCategories',
+        'plugin.BcBlog.Factory/BlogContents',
     ];
 
     /**
@@ -149,7 +150,62 @@ class BlogCategoriesControllerTest extends BcTestCase
      */
     public function testAdmin_edit()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        ContentFactory::make([
+            'id' => '1',
+            'url' => '/blog/',
+            'name' => 'blog',
+            'plugin' => 'BcBlog',
+            'type' => 'BlogContent',
+            'site_id' => 1,
+            'parent_id' => 3,
+            'lft' => 7,
+            'rght' => 8,
+            'entity_id' => 1,
+            'site_root' => false,
+            'status' => true
+        ])->persist();
+        BlogContentsFactory::make([
+            'id' => '1',
+            'description' => 'baserCMS inc. [デモ] の最新の情報をお届けします。',
+            'template' => 'default',
+            'list_count' => '10',
+            'list_direction' => 'DESC',
+            'feed_count' => '10',
+            'tag_use' => '1',
+            'comment_use' => '1',
+            'comment_approve' => '0',
+            'auth_captcha' => '1',
+            'widget_area' => '2',
+            'eye_catch_size' => 'YTo0OntzOjExOiJ0aHVtYl93aWR0aCI7czozOiIzMDAiO3M6MTI6InRodW1iX2hlaWdodCI7czozOiIzMDAiO3M6MTg6Im1vYmlsZV90aHVtYl93aWR0aCI7czozOiIxMDAiO3M6MTk6Im1vYmlsZV90aHVtYl9oZWlnaHQiO3M6MzoiMTAwIjt9',
+            'use_content' => '1',
+            'created' => '2015-08-10 18:57:47',
+            'modified' => NULL,
+        ])->persist();
+        BlogCategoryFactory::make([
+            'id' => 1,
+            'blog_content_id' => 1,
+            'no' => 1,
+            'name' => 'release',
+            'title' => 'プレスリリース',
+            'status' => 1,
+            'lft' => 1,
+            'rght' => 2,
+        ])->persist();
+        $data = ['name' => 'editedName', 'blog_content_id' => '1'];
+        $this->put("/baser/admin/bc-blog/blog_categories/edit/1/1", $data);
+        // ステータスを確認
+        $this->assertResponseCode(302);
+        // メッセージを確認
+        $this->assertFlashMessage('カテゴリー「editedName」を更新しました。');
+        // データの変更を確認
+        $blogCategory = BlogCategoryFactory::get(1);
+        $this->assertEquals('editedName', $blogCategory['name']);
+        // 失敗のメッセージを確認
+        $data['name'] = 'edited name';
+        $this->put("/baser/admin/bc-blog/blog_categories/edit/1/1", $data);
+        $this->assertResponseContains('入力エラーです。内容を修正してください。');
     }
 
     /**
