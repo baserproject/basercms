@@ -50,6 +50,7 @@ class PreviewController extends BcAdminAppController
      * @return Response|void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function view()
     {
