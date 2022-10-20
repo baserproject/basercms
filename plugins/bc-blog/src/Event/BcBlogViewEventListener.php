@@ -36,6 +36,7 @@ class BcBlogViewEventListener extends \BaserCore\Event\BcViewEventListener
      * Before render
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function beforeRender()
     {
