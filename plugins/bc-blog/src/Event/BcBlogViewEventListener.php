@@ -47,6 +47,7 @@ class BcBlogViewEventListener extends \BaserCore\Event\BcViewEventListener
      * 管理画面メニュー用のデータをセットする
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function setAdminMenu()
     {
