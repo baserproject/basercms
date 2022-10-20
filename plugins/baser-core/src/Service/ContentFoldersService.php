@@ -12,6 +12,7 @@
 
 namespace BaserCore\Service;
 
+use BaserCore\Model\Table\SitesTable;
 use Cake\ORM\Query;
 use Cake\ORM\TableRegistry;
 use BaserCore\Utility\BcUtil;
@@ -271,16 +272,23 @@ class ContentFoldersService implements ContentFoldersServiceInterface
     {
         if ($site->id === 1) return false;
         if ($site->isNew()) {
+            if($site->main_site_id) {
+                /* @var SitesTable $sitesTable */
+                $sitesTable = TableRegistry::getTableLocator()->get('BaserCore.Sites');
+                $parentSite = $sitesTable->get($site->main_site_id);
+                $rootContentId = $sitesTable->getRootContentId($parentSite->id);
+            }
             $data = [
                 'folder_template' => 'default',
                 'content' => [
-                    'layout_template' => 'default',
                     'site_id' => $site->id,
-                    'name' => ($site->alias) ? $site->alias : $site->name,
-                    'parent_id' => 1,
+                    'name' => ($site->alias) ? : $site->name,
+                    'parent_id' => $rootContentId,
                     'title' => $site->title,
                     'self_status' => $site->status,
+                    'author_id' => BcUtil::loginUser()['id'],
                     'site_root' => true,
+                    'layout_template' => 'default',
                 ]
             ];
             $contentFolder = $this->create($data);
@@ -289,11 +297,9 @@ class ContentFoldersService implements ContentFoldersServiceInterface
             if (is_null($contentFolder)) throw new RecordNotFoundException('Record not found in table "content_folders"');
             $data = [
                 'content' => [
-                    'id' => $contentFolder->content->id,
-                    'name' => ($site->alias) ? $site->alias : $site->name,
+                    'name' => ($site->alias) ? : $site->name,
                     'title' => $site->title,
                     'self_status' => $site->status,
-                    'parent_id' => $contentFolder->content->parent_id
                 ]
             ];
             $contentFolder = $this->update($contentFolder, $data);

@@ -205,7 +205,7 @@ class ContentsController extends BcAdminAppController
                 $this->redirect(['action' => 'edit_alias', $id]);
             }
             try {
-                $alias = $contentService->update($alias, $this->request->getData('Contents'));
+                $alias = $contentService->update($alias, $this->request->getData('content'));
                 $content = $contentService->get($alias->alias_id);
                 $message = Configure::read('BcContents.items.' . $content->plugin . '.' . $content->type . '.title') .
                 sprintf(__d('baser', '「%s」のエイリアス「%s」を編集しました。'), $content->title, $alias->title);
@@ -222,6 +222,7 @@ class ContentsController extends BcAdminAppController
                 $this->redirect(['action' => 'index']);
             }
         }
+        $alias->content = clone $alias;
         $this->set('content', $alias);
     }
 

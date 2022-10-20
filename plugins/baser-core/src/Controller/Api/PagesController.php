@@ -15,6 +15,7 @@ use BaserCore\Annotation\Note;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use BaserCore\Service\PagesService;
 use BaserCore\Service\PagesServiceInterface;
 use Cake\Http\Exception\ForbiddenException;
 use Cake\ORM\Exception\PersistenceFailedException;
@@ -189,6 +190,7 @@ class PagesController extends BcApiController
     {
         $this->request->allowMethod(['post', 'put', 'patch']);
         try {
+            /* @var PagesService $pages */
             $page = $pages->copy($this->request->getData());
             $message = __d('baser', '固定ページのコピー「%s」を追加しました。', $page->content->title);
         } catch (PersistenceFailedException $e) {

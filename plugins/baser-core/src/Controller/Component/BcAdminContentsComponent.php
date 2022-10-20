@@ -122,11 +122,9 @@ class BcAdminContentsComponent extends Component
 
         if ($entityName === "Content") {
             $content = $controller->viewBuilder()->getVar(Inflector::variable($entityName));
-            $entityName = Inflector::pluralize($entityName) . ".";
         } else {
             $associated = $controller->viewBuilder()->getVar(Inflector::variable($entityName));
             $content = $associated->content;
-            $entityName = Inflector::pluralize($entityName) . ".content.";
         }
         $site = $content->site;
         $theme = $site->theme;
@@ -147,9 +145,6 @@ class BcAdminContentsComponent extends Component
         $controller->set('sites', $siteList);
         $controller->set('mainSiteDisplayName', $this->SiteConfigsService->getValue('main_site_display_name'));
         $controller->set('relatedContents', $this->Sites->getRelatedContents($content->id));
-
-        if (!$entityName === "content") $associated->content = $content;
-        $controller->set('entityName', $entityName);
         $controller->set($this->ContentsService->getViewVarsForEdit($content));
     }
 }
