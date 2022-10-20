@@ -75,6 +75,7 @@ class BlogHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function __construct(View $view, array $config = [])
     {

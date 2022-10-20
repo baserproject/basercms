@@ -45,6 +45,7 @@ class BlogContentsControllerTest extends BcTestCase
         'plugin.BaserCore.Factory/Users',
         'plugin.BaserCore.Factory/UsersUserGroups',
         'plugin.BaserCore.Factory/UserGroups',
+        'plugin.BcBlog.Factory/BlogContents',
     ];
 
     /**
@@ -88,6 +89,7 @@ class BlogContentsControllerTest extends BcTestCase
      */
     public function test_index()
     {
+        $this->truncateTable('blog_contents');
         BlogContentsFactory::make(['id' => 10, 'description' => 'baserCMS inc. [デモ] の最新の情報をお届けします。'])->persist();
         BlogContentsFactory::make(['id' => 11, 'description' => 'ディスクリプション'])->persist();
 

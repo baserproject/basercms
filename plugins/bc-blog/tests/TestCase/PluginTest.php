@@ -13,6 +13,12 @@ namespace BcBlog\Test\TestCase;
 
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcUtil;
+use BcBlog\Service\Admin\BlogCategoriesAdminServiceInterface;
+use BcBlog\Service\Admin\BlogContentsAdminServiceInterface;
+use BcBlog\Service\BlogCategoriesServiceInterface;
+use BcBlog\Service\BlogContentsServiceInterface;
+use BcBlog\Service\Front\BlogFrontServiceInterface;
+use Cake\Core\Container;
 use Cake\Core\Plugin;
 use Cake\Datasource\ConnectionManager;
 
@@ -87,5 +93,19 @@ class PluginTest extends BcTestCase
     public function testUninstall()
     {
         $this->markTestIncomplete('Not implemented yet.');
+    }
+
+    /**
+     * test service
+     */
+    public function testService()
+    {
+        $container = new Container();
+        $this->Plugin->services($container);
+        $this->assertTrue($container->has(BlogCategoriesServiceInterface::class));
+        $this->assertTrue($container->has(BlogCategoriesAdminServiceInterface::class));
+        $this->assertTrue($container->has(BlogContentsServiceInterface::class));
+        $this->assertTrue($container->has(BlogContentsAdminServiceInterface::class));
+        $this->assertTrue($container->has(BlogFrontServiceInterface::class));
     }
 }

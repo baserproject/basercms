@@ -40,6 +40,7 @@ class ContentFoldersFrontService extends ContentFoldersService implements Conten
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getViewVarsForView(EntityInterface $contentFolder, ServerRequest $request): array
     {
@@ -91,6 +92,7 @@ class ContentFoldersFrontService extends ContentFoldersService implements Conten
      * @param Controller $controller
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function setupPreviewForView(Controller $controller): void
     {
