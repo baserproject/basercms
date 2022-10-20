@@ -367,29 +367,6 @@ class ContentsTable extends AppTable
     }
 
     /**
-     * コンテンツ情報を物理削除する
-     * @param Content $content
-     * @param bool $enableTree (デフォルト:false) TreeBehaviorの有無
-     * @return bool
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function hardDel($content, $enableTree = false): bool
-    {
-        if (!empty($content->deleted_date)) {
-            if ($enableTree && !$this->hasBehavior('Tree')) {
-                $this->addBehavior('Tree');
-            }
-            if (!$enableTree && $this->hasBehavior('Tree')) {
-                $this->removeBehavior('Tree');
-            }
-            return $this->hardDelete($content);
-        }
-        return false;
-    }
-
-    /**
      * 一意の name 値を取得する
      *
      * @param string $name name フィールドの値

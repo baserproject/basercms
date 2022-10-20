@@ -13,18 +13,15 @@ namespace BaserCore\Model\Table;
 
 use ArrayObject;
 use BaserCore\Service\ContentFoldersService;
+use BaserCore\Service\ContentsService;
 use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
 use BaserCore\Utility\BcLang;
 use BaserCore\Utility\BcUtil;
-use BaserCore\Annotation\Note;
 use BaserCore\Utility\BcAgent;
 use Cake\Event\EventInterface;
 use Cake\Validation\Validator;
-use BaserCore\Annotation\NoTodo;
 use BaserCore\Model\Entity\Site;
-use BaserCore\Annotation\Checked;
-use BaserCore\Annotation\UnitTest;
 use Cake\Datasource\EntityInterface;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Datasource\ResultSetInterface;
@@ -33,6 +30,10 @@ use BaserCore\Utility\BcAbstractDetector;
 use BaserCore\Event\BcEventDispatcherTrait;
 use BaserCore\Service\ContentsServiceInterface;
 use BaserCore\Service\ContentFoldersServiceInterface;
+use BaserCore\Annotation\Note;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
 
 /**
  * Class Site
@@ -371,23 +372,45 @@ class SitesTable extends AppTable
      */
     public function afterDelete(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
-        $contentService = $this->getService(ContentsServiceInterface::class);
         $content = $this->Contents->find()->where(['Contents.site_id' => $entity->id, 'Contents.site_root' => true])->first();
+        /* @var ContentsService $contentService */
+        $contentService = $this->getService(ContentsServiceInterface::class);
 
-        $children = $contentService->getChildren($content->id);
+        $children = $this->children($entity->id);
+        if($children) {
+            $eventManager = $this->getEventManager();
+            $beforeSaveEventListener = BcUtil::offEvent($eventManager, 'Model.beforeSave');
+            $afterSaveEventListener = BcUtil::offEvent($eventManager, 'Model.afterSave');
+            foreach($children as $child) {
+                $childRootContent = $contentService->get($this->getRootContentId($child->id));
+                $contentService->update($childRootContent, ['id' => $childRootContent->id, 'parent_id' => 1]);
+                $child->main_site_id = 1;
+                $this->save($child);
+            }
+            BcUtil::onEvent($eventManager, 'Model.beforeSave', $beforeSaveEventListener);
+            BcUtil::onEvent($eventManager, 'Model.afterSave', $afterSaveEventListener);
+        }
+
+        $children = $contentService->getChildren($content->id, ['site_id' => $entity->id]);
         if (isset($children)) {
+
+            $eventManager = $this->Contents->getEventManager();
+            $afterSaveEventListener = BcUtil::offEvent($eventManager, 'Model.afterSave');
             foreach($children as $child) {
                 $child->site_id = 1;
-                // バリデートすると name が変換されてしまう
-                $this->Contents->getEventManager()->off('Model.afterSave');
-                $this->Contents->save($child, false);
+                $this->Contents->save($child);
             }
+            BcUtil::onEvent($eventManager, 'Model.afterSave', $afterSaveEventListener);
+
             $children = $contentService->getChildren($content->id);
             foreach($children as $child) {
-                $contentService->deleteRecursive($child->id);
+                $contentService->delete($child->id);
             }
         }
-        if (!$this->Contents->hardDel($content)) return false;
+        /* @var ContentsService $contentsService */
+        $contentsService = $this->getService(ContentsServiceInterface::class);
+        if (!$contentsService->hardDelete($content->id)) return false;
+        return true;
     }
 
     /**

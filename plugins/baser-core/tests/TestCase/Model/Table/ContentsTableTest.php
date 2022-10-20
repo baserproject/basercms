@@ -105,27 +105,6 @@ class ContentsTableTest extends BcTestCase
     }
 
     /**
-     * testDelete
-     *
-     * @return void
-     */
-    public function testHardDel(): void
-    {
-        // treeBehavior falseの場合
-        $content1 = $this->Contents->getTrash(15);
-        $this->assertTrue($this->Contents->hardDel($content1));
-        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
-        $this->Contents->getTrash(15);
-        // treeBehavior trueの場合
-        $content2 = $this->Contents->getTrash(16);
-        $this->assertTrue($this->Contents->hardDel($content2, true));
-        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
-        $this->Contents->getTrash(16); // 親要素
-        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
-        $this->Contents->getTrash(17); // 子要素
-    }
-
-    /**
      * Test validationDefault
      *
      * @return void
