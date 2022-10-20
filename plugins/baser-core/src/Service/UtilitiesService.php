@@ -422,6 +422,7 @@ class UtilitiesService implements UtilitiesServiceInterface
      * @return boolean
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _loadBackup($path, $encoding)
     {
