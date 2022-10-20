@@ -59,7 +59,7 @@ class BlogCategoryValidationTest extends BcTestCase
      * @param $insertData
      * @param $expected
      * @return void
-     * @dataProvider testDuplicateBlogCategoryDataProvider
+     * @dataProvider duplicateBlogCategoryDataProvider
      */
     public function testDuplicateBlogCategory($value, $context, $insertData, $expected): void
     {
@@ -69,7 +69,7 @@ class BlogCategoryValidationTest extends BcTestCase
         $this->assertEquals($expected, $this->BlogCategoryValidation::duplicateBlogCategory($value, $context));
     }
 
-    public function testDuplicateBlogCategoryDataProvider(): array
+    public function duplicateBlogCategoryDataProvider(): array
     {
         return [
             [

@@ -21,6 +21,7 @@ use Cake\Controller\Component;
 use Cake\Core\Configure;
 use Cake\Event\EventManager;
 use Cake\ORM\TableRegistry;
+use Cake\Routing\Router;
 use Cake\Utility\Inflector;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -126,6 +127,11 @@ class BcAdminContentsComponent extends Component
             $associated = $controller->viewBuilder()->getVar(Inflector::variable($entityName));
             $content = $associated->content;
         }
+
+        $controller->getRequest()->getSession()->write('BcApp.Admin.currentSite', $content->site);
+        $controller->setRequest($controller->getRequest()->withAttribute('currentSite', $content->site));
+        Router::setRequest($controller->getRequest());
+
         $site = $content->site;
         $theme = $site->theme;
         $templates = BcUtil::getTemplateList('Layouts', [$controller->getPlugin(), $theme]);

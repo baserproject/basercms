@@ -10,7 +10,7 @@
 
 
 $(function(){
-	$('#UserMenu').fixedMenu();
+	$('#UserMenu, #ToolMenu').fixedMenu();
 	$("#UserMenu ul li div ul li").each(function(){
 		if(!$(this).html().replace(/(^\s+)|(\s+$)/g, "")) {
 			$(this).remove();

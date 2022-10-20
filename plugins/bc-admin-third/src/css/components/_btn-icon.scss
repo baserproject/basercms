@@ -4,7 +4,7 @@
 .bca-btn-icon {
 
   // デフォルトボタン
-  display: inline-block;
+  display: table-cell;
   width: 1em;
   font-size: 1.8rem;
   line-height: 1;
@@ -41,6 +41,10 @@
   // 複製
   &[data-bca-btn-type=copy] {
     @include bca-icon(copy);
+  }
+  // 複製
+  &[data-bca-btn-type=alias] {
+    @include bca-icon(alias);
   }
   // 削除
   &[data-bca-btn-type=delete] {

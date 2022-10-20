@@ -54,6 +54,9 @@ class SearchIndexesController extends BcAdminAppController
         SearchIndexesAdminServiceInterface $adminService,
         SiteConfigsServiceInterface $siteConfigService)
     {
+        $currentSite = $this->getRequest()->getAttribute('currentSite');
+        $this->setRequest($this->getRequest()->withQueryParams(['site_id' => $currentSite->id]));
+
         $this->setViewConditions('User', ['default' => [
             'query' => [
                 'limit' => $siteConfigService->getValue('admin_list_num'),
