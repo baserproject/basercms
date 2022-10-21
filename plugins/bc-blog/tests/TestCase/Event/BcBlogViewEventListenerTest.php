@@ -12,9 +12,13 @@
 
 namespace BcBlog\Test\TestCase\Event;
 
+use BaserCore\Test\Factory\ContentFactory;
+use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
-use BaserCore\Utility\BcContainerTrait;
 use BcBlog\Event\BcBlogViewEventListener;
+use BcBlog\Test\Factory\BlogContentsFactory;
+use Cake\Core\Configure;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class BlogCategoryTest
@@ -26,7 +30,7 @@ class BcBlogViewEventListenerTest extends BcTestCase
     /**
      * Trait
      */
-    use BcContainerTrait;
+    use ScenarioAwareTrait;
 
     /**
      * Fixtures
@@ -34,6 +38,12 @@ class BcBlogViewEventListenerTest extends BcTestCase
      * @var array
      */
     public $fixtures = [
+        'plugin.BaserCore.Factory/Users',
+        'plugin.BaserCore.Factory/Sites',
+        'plugin.BaserCore.Factory/UsersUserGroups',
+        'plugin.BaserCore.Factory/UserGroups',
+        'plugin.BaserCore.Factory/Contents',
+        'plugin.BcBlog.Factory/BlogContents'
     ];
 
     /**
@@ -43,8 +53,10 @@ class BcBlogViewEventListenerTest extends BcTestCase
      */
     public function setUp(): void
     {
+        $this->setFixtureTruncate();
         parent::setUp();
         $this->Listener = new BcBlogViewEventListener();
+        $this->loadFixtureScenario(InitAppScenario::class);
     }
 
     /**
@@ -74,7 +86,42 @@ class BcBlogViewEventListenerTest extends BcTestCase
      */
     public function testSetAdminMenu(): void
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        BlogContentsFactory::make([
+            'id' => '1',
+            'description' => 'baserCMS inc. [デモ] の最新の情報をお届けします。',
+            'template' => 'default',
+            'list_count' => '10',
+            'list_direction' => 'DESC',
+            'feed_count' => '10',
+            'tag_use' => '1',
+            'comment_use' => '1',
+            'comment_approve' => '0',
+            'auth_captcha' => '1',
+            'widget_area' => '2',
+            'eye_catch_size' => '',
+            'use_content' => '1'
+        ])->persist();
+        ContentFactory::make([
+            'id' => 1,
+            'url' => '/',
+            'name' => '',
+            'title' => 'test',
+            'plugin' => 'BcBlog',
+            'type' => 'BlogContent',
+            'site_id' => 1,
+            'parent_id' => null,
+            'lft' => 1,
+            'rght' => 10,
+            'entity_id' => 1,
+            'site_root' => true,
+            'status' => true
+        ])->persist();
+        $this->Listener->setAdminMenu();
+        $config = Configure::read('BcApp.adminNavigation.Contents');
+        $this->assertArrayHasKey('BlogContent1', $config);
+        $this->assertEquals(1, $config['BlogContent1']['siteId']);
+        $this->assertEquals('test', $config['BlogContent1']['title']);
+        $this->assertEquals('blog-content', $config['BlogContent1']['type']);
     }
 
 }

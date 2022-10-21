@@ -119,4 +119,47 @@ class BcCkeditorHelperTest extends BcTestCase
         $this->assertMatchesRegularExpression('/<script src="\/bc_admin_third\/js\/vendor\/ckeditor\/ckeditor\.js"/', $jsResult);
     }
 
+    /**
+     * Test setEditorToolbar
+     */
+    public function testSetEditorToolbar()
+    {
+        $options = $this->BcCkeditor->setEditorToolbar(['editorToolbar' => [['Bold']]]);
+        $this->assertEquals(['editorToolbar' => [['Bold']]], $options);
+        $options = $this->BcCkeditor->setEditorToolbar([
+            'editorToolbar' => [['Bold']],
+            'editorUseTemplates' => false,
+            'editorToolType' => 'simple'
+        ]);
+        $this->assertIsArray($options['editorToolbar']);
+        $options = $this->BcCkeditor->setEditorToolbar([
+            'editorToolbar' => [],
+            'editorUseTemplates' => true,
+            'editorToolType' => 'simple'
+        ]);
+        $this->assertContains('Templates', $options['editorToolbar'][0]);
+        $options = $this->BcCkeditor->setEditorToolbar([
+            'editorToolbar' => [],
+            'editorUseTemplates' => true,
+            'editorToolType' => 'normal'
+        ]);
+        $this->assertContains('Templates', $options['editorToolbar'][1]);
+    }
+
+    /**
+     * Test setDraft
+     */
+    public function testSetDraft()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * Test getThemeEditorCsses
+     */
+    public function testGetThemeEditorCsses()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
 }
