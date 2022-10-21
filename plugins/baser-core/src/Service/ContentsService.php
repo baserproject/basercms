@@ -148,15 +148,16 @@ class ContentsService implements ContentsServiceInterface
      * コンテンツの子要素を取得する
      *
      * @param int $id
+     * @param array $conditions
      * @return Query|null
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function getChildren($id)
+    public function getChildren($id, $conditions = [])
     {
         try {
-            $query = $this->Contents->find('children', ['for' => $id]);
+            $query = $this->Contents->find('children', ['for' => $id])->where($conditions);
         } catch (\Exception $e) {
             return null;
         }
@@ -402,12 +403,42 @@ class ContentsService implements ContentsServiceInterface
     {
         /* @var Content $content */
         $content = $this->get($id);
-        if ($content->alias_id) {
-            $result = $this->Contents->hardDelete($content);
-        } else {
+        $content->parent_id = null;
+        $content->url = '';
+        $content->status = false;
+        $content->self_status = false;
+        // lft / rght をリセットしておかないと 複数データの save() 実行時、
+        // 2つ目以降の lft / rght がおかしくなる
+        unset($content->lft);
+        unset($content->rght);
+
+        $this->Contents->disableUpdatingSystemData();
+        $this->Contents->updatingRelated = false;
+        $content = $this->Contents->save($content, ['validate' => false]);
+
+        if(!$content->alias_id) {
+            $this->Contents->deleteRelateSubSiteContent($content);
+            $this->Contents->deleteAlias($content);
+            // TreeBehavior　をオフにした上で、一旦階層構造から除外しリセットしてゴミ箱に移動（論理削除）
+            $this->Contents->Behaviors()->unload('Tree');
+            $content->lft = null;
+            $content->rght = null;
+            $content->level = null;
+            $this->Contents->save($content, ['validate' => false]);
             $this->deleteSearchIndex($id);
             $result = $this->Contents->delete($content);
+            $this->Contents->Behaviors()->load('Tree');
+        } else {
+            // エイリアスの場合直接削除
+            $result = $this->Contents->hardDelete($content);
         }
+        $this->Contents->enableUpdatingSystemData();
+        $this->Contents->updatingRelated = true;
+        // =====================================================================
+        // 通常の削除の際、afterDelete で、関連コンテンツのキャッシュを削除しているが、
+        // 論理削除の場合、afterDelete が呼ばれない為、ここで削除する
+        // =====================================================================
+        $this->Contents->deleteAssocCache($content);
         return $result;
     }
 
@@ -422,8 +453,21 @@ class ContentsService implements ContentsServiceInterface
      */
     public function hardDelete($id, $enableTree = false): bool
     {
-        $content = $this->getTrash($id);
-        return $this->Contents->hardDel($content, $enableTree);
+        $content = $this->Contents->find()->where(['id' => $id])->first();
+        if ($content && empty($content->deleted_date)) {
+            $this->delete($content->id);
+        } else {
+            $content = $this->getTrash($id);
+        }
+        // 2022/10/20 ryuring
+        // 原因不明の下記のエラーが出てしまったが、sleep() を実行する事で回避できた。根本的な解決に至らず
+        // デバッガで１行ずつステップ実行すると成功したため sleep() で回避できることに気づいた
+        // Cannot commit transaction - rollback() has been already called in the nested transaction
+        sleep(1);
+        $this->Contents->Behaviors()->unload('Tree');
+        $result = $this->Contents->hardDelete($content);
+        $this->Contents->Behaviors()->load('Tree');
+        return $result;
     }
 
     /**
@@ -440,7 +484,7 @@ class ContentsService implements ContentsServiceInterface
         $content = $this->getTrash($id);
         $service = $content->plugin . '\\Service\\' . Inflector::pluralize($content->type) . 'ServiceInterface';
         $table = $content->plugin . '\\Model\\Table\\' . Inflector::pluralize($content->type) . 'Table';
-        $isPluginEnabled = Plugin::isLoaded($content->type);
+        $isPluginEnabled = Plugin::isLoaded($content->plugin);
         if ($isPluginEnabled && interface_exists($service)) {
             $target = $this->getService($service);
             return $target->delete($content->entity_id);
@@ -615,40 +659,7 @@ class ContentsService implements ContentsServiceInterface
         }
 
         foreach($target as $node) {
-            $node->parent_id = null;
-            $node->url = '';
-            $node->status = false;
-            $node->self_status = false;
-            // lft / rght をリセットしておかないと 複数データの save() 実行時、
-            // 2つ目以降の lft / rght がおかしくなる
-            unset($node->lft);
-            unset($node->rght);
-
-            $this->Contents->disableUpdatingSystemData();
-            $this->Contents->updatingRelated = false;
-            $node = $this->Contents->save($node, ['validate' => false]);
-
-            if(!$node->alias_id) {
-                // TreeBehavior　をオフにした上で、一旦階層構造から除外しリセットしてゴミ箱に移動（論理削除）
-                $this->Contents->Behaviors()->unload('Tree');
-                $node->lft = null;
-                $node->rght = null;
-                $node->level = null;
-                $this->Contents->save($node, ['validate' => false]);
-                $result = $this->delete($node->id);
-                $this->Contents->Behaviors()->load('Tree');
-            } else {
-                // エイリアスの場合直接削除
-                $result = $this->delete($node->id);
-            }
-            $this->Contents->enableUpdatingSystemData();
-            $this->Contents->updatingRelated = true;
-            // =====================================================================
-            // 通常の削除の際、afterDelete で、関連コンテンツのキャッシュを削除しているが、
-            // 論理削除の場合、afterDelete が呼ばれない為、ここで削除する
-            // =====================================================================
-            $this->Contents->deleteAssocCache($node);
-            if (!$result) return false;
+            $result = $this->delete($node->id);
         }
         return $result;
     }

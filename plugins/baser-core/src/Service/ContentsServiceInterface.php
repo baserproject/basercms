@@ -41,12 +41,13 @@ interface ContentsServiceInterface extends CrudBaseServiceInterface
      * コンテンツの子要素を取得する
      *
      * @param  int $id
+     * @param array $conditions
      * @return Query|null
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function getChildren($id);
+    public function getChildren($id, $conditions = []);
 
     /**
      * getTreeIndex
