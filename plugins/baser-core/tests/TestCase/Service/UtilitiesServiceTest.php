@@ -18,6 +18,7 @@ use BaserCore\Service\UtilitiesService;
 use BaserCore\Service\UtilitiesServiceInterface;
 use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Factory\SiteFactory;
+use BaserCore\Test\Factory\UserFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
@@ -401,7 +402,19 @@ class UtilitiesServiceTest extends BcTestCase
      * @return void
      */
     public function test_loadBackup(){
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // データを作成
+        $this->loadFixtureScenario(InitAppScenario::class);
+        // バックアップを作成し、展開
+        $this->UtilitiesService->backupDb('utf8');
+        // データを削除
+        $this->truncateTable('users');
+        $this->truncateTable('sites');
+        // 実行
+        $this->execPrivateMethod($this->UtilitiesService, '_loadBackup', [TMP . 'schema' . DS, 'utf8']);
+        $this->UtilitiesService->resetTmpSchemaFolder();
+        // データが復元されているか確認
+        $this->assertEquals(1, UserFactory::count());
+        $this->assertEquals(1, SiteFactory::count());
     }
 
     /**
