@@ -124,7 +124,26 @@ class BcCkeditorHelperTest extends BcTestCase
      */
     public function testSetEditorToolbar()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $options = $this->BcCkeditor->setEditorToolbar(['editorToolbar' => [['Bold']]]);
+        $this->assertEquals(['editorToolbar' => [['Bold']]], $options);
+        $options = $this->BcCkeditor->setEditorToolbar([
+            'editorToolbar' => [['Bold']],
+            'editorUseTemplates' => false,
+            'editorToolType' => 'simple'
+        ]);
+        $this->assertIsArray($options['editorToolbar']);
+        $options = $this->BcCkeditor->setEditorToolbar([
+            'editorToolbar' => [],
+            'editorUseTemplates' => true,
+            'editorToolType' => 'simple'
+        ]);
+        $this->assertContains('Templates', $options['editorToolbar'][0]);
+        $options = $this->BcCkeditor->setEditorToolbar([
+            'editorToolbar' => [],
+            'editorUseTemplates' => true,
+            'editorToolType' => 'normal'
+        ]);
+        $this->assertContains('Templates', $options['editorToolbar'][1]);
     }
 
     /**
