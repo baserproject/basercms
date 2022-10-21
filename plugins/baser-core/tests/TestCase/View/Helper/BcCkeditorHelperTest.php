@@ -119,4 +119,28 @@ class BcCkeditorHelperTest extends BcTestCase
         $this->assertMatchesRegularExpression('/<script src="\/bc_admin_third\/js\/vendor\/ckeditor\/ckeditor\.js"/', $jsResult);
     }
 
+    /**
+     * Test setEditorToolbar
+     */
+    public function testSetEditorToolbar()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * Test setDraft
+     */
+    public function testSetDraft()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * Test getThemeEditorCsses
+     */
+    public function testGetThemeEditorCsses()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
 }

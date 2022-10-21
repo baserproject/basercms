@@ -13,6 +13,7 @@
 namespace BcBlog\Test\TestCase\View\Helper;
 
 use App\View\AppView;
+use BaserCore\Model\Entity\Content;
 use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BcBlog\Model\Entity\BlogContent;
@@ -79,7 +80,9 @@ class BlogHelperTest extends BcTestCase
             'modified' => NULL,
         ])->persist();
         $view = new AppView();
-        $view->set('blogContent', new BlogContent(['id' => 1]));
+        $blogContent = BlogContentsFactory::get(1);
+        $blogContent->content = ContentFactory::get(6);
+        $view->set('blogContent', $blogContent);
         $this->Blog = new BlogHelper($view);
     }
 

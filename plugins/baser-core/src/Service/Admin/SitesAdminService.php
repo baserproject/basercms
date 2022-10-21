@@ -45,7 +45,7 @@ class SitesAdminService extends SitesService implements SitesAdminServiceInterfa
             'sites' => $sites,
             'deviceList' => $this->getDeviceList(),
             'langList' => $this->getLangList(),
-            'siteList' => $this->getList()
+            'siteList' => $this->getList(['status' => null])
         ];
     }
 
@@ -66,7 +66,7 @@ class SitesAdminService extends SitesService implements SitesAdminServiceInterfa
             'selectableLangs' => $this->getSelectableLangs($site->main_site_id, $site->id),
             'selectableDevices' => $this->getSelectableDevices($site->main_site_id, $site->id),
             'selectableThemes' => $this->getSelectableThemes($site),
-            'siteList' => $this->getList(['excludeIds' => $site->id])
+            'siteList' => $this->getList(['excludeIds' => $site->id, 'status' => null])
         ];
     }
 
@@ -87,7 +87,7 @@ class SitesAdminService extends SitesService implements SitesAdminServiceInterfa
             'selectableLangs' => $this->getSelectableLangs($site->main_site_id, $site->id),
             'selectableDevices' => $this->getSelectableDevices($site->main_site_id, $site->id),
             'selectableThemes' => $this->getSelectableThemes($site),
-            'siteList' => $this->getList()
+            'siteList' => $this->getList(['status' => null])
         ];
     }
 

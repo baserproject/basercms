@@ -32,7 +32,7 @@ class SitesService implements SitesServiceInterface
 {
     /**
      * Sites Table
-     * @var \Cake\ORM\Table
+     * @var SitesTable
      */
     public $Sites;
 
@@ -299,6 +299,17 @@ class SitesService implements SitesServiceInterface
     public function getThemeList(): array
     {
         return BcUtil::getThemeList();
+    }
+
+    /**
+     * サイトのルートコンテンツを取得する
+     * @param int $id
+     * @return EntityInterface
+     */
+    public function getRootContent($id)
+    {
+        $contentsTable = TableRegistry::getTableLocator()->get('BaserCore.Contents');
+        return $contentsTable->find()->select()->where(['Contents.site_root' => true, 'Contents.site_id' => $id])->first();
     }
 
 }

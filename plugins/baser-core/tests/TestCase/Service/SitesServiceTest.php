@@ -31,6 +31,8 @@ class SitesServiceTest extends \BaserCore\TestSuite\BcTestCase
         'plugin.BaserCore.Sites',
         'plugin.BaserCore.Contents',
         'plugin.BaserCore.ContentFolders',
+        'plugin.BaserCore.Users',
+        'plugin.BaserCore.SiteConfigs'
     ];
 
     /**
@@ -122,7 +124,8 @@ class SitesServiceTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function testCreate()
     {
-        $request = $this->getRequest('/');
+        $request = $this->getRequest('/baser/admin');
+        $this->loginAdmin($request);
         $request = $request->withParsedBody([
             'name' => 'chinese',
             'display_name' => '中国サイト',
@@ -226,6 +229,7 @@ class SitesServiceTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function testGetSiteList()
     {
+        $this->loginAdmin($this->getRequest('/baser/admin'));
         $this->assertEquals(5, count($this->Sites->getList()));
         $this->Sites->create([
             'name' => 'test',
