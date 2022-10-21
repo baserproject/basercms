@@ -31,6 +31,8 @@ class SitesServiceTest extends \BaserCore\TestSuite\BcTestCase
         'plugin.BaserCore.Sites',
         'plugin.BaserCore.Contents',
         'plugin.BaserCore.ContentFolders',
+        'plugin.BaserCore.Users',
+        'plugin.BaserCore.SiteConfigs'
     ];
 
     /**
