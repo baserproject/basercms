@@ -143,6 +143,13 @@ class ContentsAdminService extends ContentsService implements ContentsAdminServi
         ];
     }
 
+    /**
+     * ゴミ箱用の view 変数を生成する
+     * @param $contents
+     * @return array
+     * @noTodo
+     * @checked
+     */
     public function getViewVarsForTrashIndex($contents)
     {
         return [
