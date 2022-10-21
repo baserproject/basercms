@@ -90,4 +90,11 @@ interface SitesServiceInterface extends CrudBaseServiceInterface
      */
     public function unpublish($id): bool;
 
+    /**
+     * サイトのルートコンテンツを取得する
+     * @param int $id
+     * @return EntityInterface
+     */
+    public function getRootContent($id);
+
 }

@@ -24,9 +24,9 @@ $this->BcAdmin->setTitle(sprintf(
 $this->BcAdmin->setHelp('blog_categories_form');
 $this->BcBaser->js('BcBlog.admin/blog_categories/form.bundle', false);
 $fullUrl = $this->BcBaser->getContentsUrl(
-    $this->request->getAttribute('currentContent')->url,
+    $blogContent->content->url,
     true,
-    $this->request->getAttribute('currentSite')->use_subdomain
+    $blogContent->content->site->use_subdomain
   ) . 'archives/category/' . $blogCategory->name;
 ?>
 

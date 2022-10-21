@@ -35,12 +35,13 @@ class BcToolbarHelperTest extends BcTestCase
      */
     protected $fixtures = [
         'plugin.BaserCore.Sites',
+        'plugin.BaserCore.Contents',
         'plugin.BaserCore.Users',
         'plugin.BaserCore.UserGroups',
         'plugin.BaserCore.UsersUserGroups',
     ];
 
-    public $autoFixtures = false;
+//    public $autoFixtures = false;
 
     /**
      * setUp
@@ -65,7 +66,6 @@ class BcToolbarHelperTest extends BcTestCase
      */
     public function testIsAvailableEditLink()
     {
-        $this->loadFixtures('Sites', 'Users', 'UserGroups', 'UsersUserGroups');
         // editLink 設定なし
         $this->assertFalse($this->BcToolbar->isAvailableEditLink());
         $this->BcToolbar->getView()->set('editLink', 'test');
@@ -84,7 +84,6 @@ class BcToolbarHelperTest extends BcTestCase
      */
     public function testIsAvailablePublishLink()
     {
-        $this->loadFixtures('Sites', 'Users', 'UserGroups', 'UsersUserGroups');
         // publishLink 設定なし
         $this->assertFalse($this->BcToolbar->isAvailablePublishLink());
         $this->BcToolbar->getView()->set('publishLink', 'test');
@@ -113,7 +112,6 @@ class BcToolbarHelperTest extends BcTestCase
      */
     public function testIsAvailableClearCache()
     {
-        $this->loadFixtures('Sites', 'Users', 'UserGroups', 'UsersUserGroups');
         $this->assertFalse($this->BcToolbar->isAvailableClearCache());
         $this->loginAdmin($this->getRequest('/baser/admin'));
         $this->assertTrue($this->BcToolbar->isAvailableClearCache());
@@ -135,7 +133,6 @@ class BcToolbarHelperTest extends BcTestCase
      */
     public function testIsAvailableLogin()
     {
-        $this->loadFixtures('Sites', 'Users', 'UserGroups', 'UsersUserGroups');
         $this->assertTrue($this->BcToolbar->isAvailableLogin());
         // インストーラーの場合
         $toolbar = new BcToolbarHelper(new View(null, null, null, ['name' => 'Installations']));
@@ -157,7 +154,6 @@ class BcToolbarHelperTest extends BcTestCase
      */
     public function testIsAvailableAccountSetting()
     {
-        $this->loadFixtures('Sites', 'Users', 'UserGroups', 'UsersUserGroups');
         $this->assertFalse($this->BcToolbar->isAvailableAccountSetting());
         $this->loginAdmin($this->getRequest('/baser/admin'));
         $this->assertTrue($this->BcToolbar->isAvailableAccountSetting());
@@ -169,7 +165,6 @@ class BcToolbarHelperTest extends BcTestCase
      */
     public function testGetAccountSettingUrl()
     {
-        $this->loadFixtures('Sites', 'Users', 'UserGroups', 'UsersUserGroups');
         $this->assertEquals('', $this->BcToolbar->getAccountSettingUrl());
         $this->loginAdmin($this->getRequest('/baser/admin'));
         $this->assertEquals(['prefix' => 'Admin', 'controller' => 'Users', 'action' => 'edit', 1], $this->BcToolbar->getAccountSettingUrl());
@@ -181,7 +176,6 @@ class BcToolbarHelperTest extends BcTestCase
      */
     public function testGetLoginUrl()
     {
-        $this->loadFixtures('Sites', 'Users', 'UserGroups', 'UsersUserGroups');
         $this->assertEquals('', $this->BcToolbar->getLoginUrl());
         $this->loginAdmin($this->getRequest('/baser/admin'));
         $this->assertEquals('/baser/admin/baser-core/users/login', $this->BcToolbar->getLoginUrl());
@@ -192,7 +186,6 @@ class BcToolbarHelperTest extends BcTestCase
      */
     public function testGetLogoutUrl()
     {
-        $this->loadFixtures('Sites', 'Users', 'UserGroups', 'UsersUserGroups');
         $this->assertEquals('', $this->BcToolbar->getLogoutUrl());
         $this->loginAdmin($this->getRequest('/baser/admin'));
         $this->assertEquals('/baser/admin/baser-core/users/logout', $this->BcToolbar->getLogoutUrl());
@@ -260,7 +253,6 @@ class BcToolbarHelperTest extends BcTestCase
      */
     public function testIsLoginUrl()
     {
-        $this->loadFixtures('Sites');
         $this->assertFalse($this->BcToolbar->isLoginUrl());
         $bcToolbar = new BcToolbarHelper(new View($this->getRequest('/baser/admin/baser-core/users/login')));
         $this->assertTrue($bcToolbar->isLoginUrl());
@@ -274,7 +266,6 @@ class BcToolbarHelperTest extends BcTestCase
         // フロントで管理画面利用不可
         $this->assertEquals('frontAdminNotAvailable', $this->BcToolbar->getLogoType());
         // フロントで管理画面利用可能
-        $this->loadFixtures('Sites', 'Users', 'UserGroups', 'UsersUserGroups');
         $this->loginAdmin($this->getRequest('/baser/admin'));
         $this->assertEquals('frontAdminAvailable', $this->BcToolbar->getLogoType());
         // ノーマル
@@ -297,12 +288,11 @@ class BcToolbarHelperTest extends BcTestCase
         // フロントで管理画面利用不可
         $this->assertEquals('', $this->BcToolbar->getLogoLink());
         // フロントで管理画面利用可能
-        $this->loadFixtures('Sites', 'Users', 'UserGroups', 'UsersUserGroups');
         $this->loginAdmin($this->getRequest('/baser/admin'));
         $this->assertEquals(['prefix' => 'Admin', 'controller' => 'dashboard', 'action' => 'index'], $this->BcToolbar->getLogoLink());
         // ノーマル
         $bcToolbar = new BcToolbarHelper(new View($this->getRequest('/baser/admin/baser-core/users/login')));
-        $this->assertEquals('/', $bcToolbar->getLogoLink());
+        $this->assertEquals('https://localhost/', $bcToolbar->getLogoLink());
         // アップデーター
         Configure::write('BcRequest.isUpdater', true);
         $this->assertEquals('http://wiki.basercms.net/%E3%83%90%E3%83%BC%E3%82%B8%E3%83%A7%E3%83%B3%E3%82%A2%E3%83%83%E3%83%97%E3%82%AC%E3%82%A4%E3%83%89', $bcToolbar->getLogoLink());
@@ -320,7 +310,6 @@ class BcToolbarHelperTest extends BcTestCase
         // フロントで管理画面利用不可
         $this->assertEquals('baserCMS', $this->BcToolbar->getLogoText());
         // フロントで管理画面利用可能
-        $this->loadFixtures('Sites', 'Users', 'UserGroups', 'UsersUserGroups');
         $this->loginAdmin($this->getRequest('/baser/admin'));
         $this->assertEquals('ダッシュボード', $this->BcToolbar->getLogoText());
         // ノーマル
@@ -343,7 +332,6 @@ class BcToolbarHelperTest extends BcTestCase
         // フロントで管理画面利用不可
         $this->assertEquals(['title' => 'baserCMS'], $this->BcToolbar->getLogoLinkOptions());
         // フロントで管理画面利用可能
-        $this->loadFixtures('Sites', 'Users', 'UserGroups', 'UsersUserGroups');
         $this->loginAdmin($this->getRequest('/baser/admin'));
         $options = $this->BcToolbar->getLogoLinkOptions();
         $this->assertTrue(in_array('bca-toolbar__logo-link', $options));

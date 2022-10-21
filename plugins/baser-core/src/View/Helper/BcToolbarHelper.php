@@ -11,6 +11,9 @@
 
 namespace BaserCore\View\Helper;
 
+use BaserCore\Service\SitesService;
+use BaserCore\Service\SitesServiceInterface;
+use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
 use Cake\View\Helper;
@@ -27,6 +30,11 @@ use BaserCore\Annotation\UnitTest;
  */
 class BcToolbarHelper extends Helper
 {
+
+    /**
+     * Trait
+     */
+    use BcContainerTrait;
 
     /**
      * Helper
@@ -273,10 +281,16 @@ class BcToolbarHelper extends Helper
      */
     public function getLogoLink()
     {
+        $currentSite = $this->_View->getRequest()->getAttribute('currentSite');
+        /* @var SitesService $siteService */
+        $siteService = $this->getService(SitesServiceInterface::class);
+        $content = $siteService->getRootContent($currentSite->id);
+        $normalUrl = '/';
+        if($content) $normalUrl = $this->BcBaser->getContentsUrl($content->url, true, $currentSite->use_subdomain);
         $links = [
             'install' => Configure::read('BcLinks.installManual'),
             'update' => Configure::read('BcLinks.updateManual'),
-            'normal' => '/',
+            'normal' => $normalUrl,
             'frontAdminAvailable' => ['prefix' => 'Admin', 'controller' => 'dashboard', 'action' => 'index'],
             'frontAdminNotAvailable' => $this->BcAuth->getCurrentLoginRedirectUrl(),
         ];
