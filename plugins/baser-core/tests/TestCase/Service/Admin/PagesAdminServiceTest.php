@@ -29,14 +29,7 @@ class PagesAdminServiceTest extends \BaserCore\TestSuite\BcTestCase
      * @var array
      */
     public $fixtures = [
-        'plugin.BaserCore.Factory/Sites',
-        'plugin.BaserCore.Factory/SiteConfigs',
-        'plugin.BaserCore.Factory/Users',
-        'plugin.BaserCore.Factory/UsersUserGroups',
-        'plugin.BaserCore.Factory/UserGroups',
         'plugin.BaserCore.Factory/Contents',
-        'plugin.BaserCore.Factory/ContentFolders',
-        'plugin.BaserCore.Factory/Permissions',
         'plugin.BaserCore.Factory/Pages',
     ];
 
