@@ -76,7 +76,8 @@ class BlogCategoriesTableTest extends BcTestCase
         $this->assertNotNull($blogCategory->getErrors()['id']);
         // id allowEmptyString　テスト
         $blogCategory = $this->BlogCategoriesTable->newEntity(['id' => '']);
-        $this->assertNull($blogCategory->getErrors()['id']);
+        $errors  =$blogCategory->getErrors();
+        $this->assertFalse(isset($errors['id']));
         // name maxLength　テスト
         $blogCategory = $this->BlogCategoriesTable->newEntity([
             'name' => '_test_blog_category_test_blog_category_test_blog_category_test_blog_category_test_blog_category'

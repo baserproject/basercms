@@ -444,8 +444,8 @@ class BcUtilTest extends BcTestCase
 
         $themePath = BcUtil::getPluginPath($theme);
         $pluginName = 'test';
-        mkdir($themePath . 'Plugin', 777, true);
-        mkdir($themePath . 'Plugin/' . $pluginName, 777, true);
+        mkdir($themePath . 'Plugin', 0777, true);
+        mkdir($themePath . 'Plugin/' . $pluginName, 0777, true);
 
         $plugins = BcUtil::getThemesPlugins($theme);
         $this->assertCount(1, $plugins);
