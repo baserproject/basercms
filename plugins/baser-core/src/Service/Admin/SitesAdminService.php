@@ -45,7 +45,7 @@ class SitesAdminService extends SitesService implements SitesAdminServiceInterfa
             'sites' => $sites,
             'deviceList' => $this->getDeviceList(),
             'langList' => $this->getLangList(),
-            'siteList' => $this->getList()
+            'siteList' => $this->getList(['status' => null])
         ];
     }
 

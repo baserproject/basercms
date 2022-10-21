@@ -11,6 +11,9 @@
 namespace BaserCore\Model\Behavior;
 
 use ArrayObject;
+use BaserCore\Service\ContentsService;
+use BaserCore\Service\ContentsServiceInterface;
+use BaserCore\Utility\BcContainerTrait;
 use Cake\ORM\Behavior;
 use Cake\Utility\Inflector;
 use Cake\Event\EventInterface;
@@ -26,6 +29,12 @@ use BaserCore\Annotation\UnitTest;
  */
 class BcContentsBehavior extends Behavior
 {
+
+    /**
+     * Trait
+     */
+    use BcContainerTrait;
+
     /**
      * Contents
      *
@@ -113,7 +122,9 @@ class BcContentsBehavior extends Behavior
     public function afterDelete(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
         if ($entity->content) {
-            $this->Contents->hardDel($entity->content);
+            /* @var ContentsService $contentsService */
+            $contentsService = $this->getService(ContentsServiceInterface::class);
+            $contentsService->hardDelete($entity->content->id);
         }
     }
 

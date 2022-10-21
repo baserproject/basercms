@@ -939,9 +939,9 @@ class ContentsServiceTest extends BcTestCase
      */
     public function testBatch()
     {
-        ContentFactory::make(['id' => 100, 'plugin' => 'BaserCore', 'type' => 'ContentFolder', 'site_id' => 100, 'lft' => 1, 'rght' => 48,], 1)->persist();
-        ContentFactory::make(['id' => 101, 'plugin' => 'BaserCore', 'type' => 'ContentFolder', 'site_id' => 100, 'lft' => 1, 'rght' => 48,], 1)->persist();
-        ContentFactory::make(['id' => 102, 'plugin' => 'BaserCore', 'type' => 'ContentFolder', 'site_id' => 100, 'lft' => 1, 'rght' => 48,], 1)->persist();
+        ContentFactory::make(['id' => 100, 'plugin' => 'BaserCore', 'type' => 'ContentFolder', 'site_id' => 100, 'lft' => 1, 'rght' => 2,], 1)->persist();
+        ContentFactory::make(['id' => 101, 'plugin' => 'BaserCore', 'type' => 'ContentFolder', 'site_id' => 100, 'lft' => 3, 'rght' => 4,], 1)->persist();
+        ContentFactory::make(['id' => 102, 'plugin' => 'BaserCore', 'type' => 'ContentFolder', 'site_id' => 100, 'lft' => 5, 'rght' => 6,], 1)->persist();
 
 
         $this->ContentsService->batch('delete', [100, 101, 102]);

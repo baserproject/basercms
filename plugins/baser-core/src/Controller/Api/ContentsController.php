@@ -135,34 +135,6 @@ class ContentsController extends BcApiController
     }
 
     /**
-     * ゴミ箱内コンテンツ情報を削除する(物理削除)
-     * @param ContentsServiceInterface $contentService
-     * @param $id
-     * @return void
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function delete_trash(ContentsServiceInterface $contentService, $id)
-    {
-        $this->request->allowMethod(['post', 'delete']);
-        $trash = $contentService->getTrash($id);
-        try {
-            if ($contentService->hardDeleteWithAssoc($id)) {
-                $message = __d('baser', 'ゴミ箱: {0} を削除しました。', $trash->title);
-            }
-        } catch (Exception $e) {
-            $this->setResponse($this->response->withStatus(500));
-            $message = __d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
-        }
-        $this->set([
-            'message' => $message,
-            'trash' => $trash
-        ]);
-        $this->viewBuilder()->setOption('serialize', ['trash', 'message']);
-    }
-
-    /**
      * ゴミ箱を空にする(物理削除)
      * @param ContentsServiceInterface $contentService
      * @return void

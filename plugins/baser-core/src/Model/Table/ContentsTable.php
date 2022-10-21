@@ -114,8 +114,7 @@ class ContentsTable extends AppTable
         return [
             'Model.beforeMarshal' => 'beforeMarshal',
             'Model.beforeSave' => ['callable' => 'beforeSave', 'passParams' => true],
-            'Model.afterSave' => ['callable' => 'afterSave', 'passParams' => true],
-            'Model.afterDelete' => 'afterDelete',
+            'Model.afterSave' => ['callable' => 'afterSave', 'passParams' => true]
         ];
     }
 
@@ -367,29 +366,6 @@ class ContentsTable extends AppTable
     }
 
     /**
-     * コンテンツ情報を物理削除する
-     * @param Content $content
-     * @param bool $enableTree (デフォルト:false) TreeBehaviorの有無
-     * @return bool
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function hardDel($content, $enableTree = false): bool
-    {
-        if (!empty($content->deleted_date)) {
-            if ($enableTree && !$this->hasBehavior('Tree')) {
-                $this->addBehavior('Tree');
-            }
-            if (!$enableTree && $this->hasBehavior('Tree')) {
-                $this->removeBehavior('Tree');
-            }
-            return $this->hardDelete($content);
-        }
-        return false;
-    }
-
-    /**
      * 一意の name 値を取得する
      *
      * @param string $name name フィールドの値
@@ -516,44 +492,23 @@ class ContentsTable extends AppTable
     }
 
     /**
-     * After Delete
-     *
-     * 関連コンテンツのキャッシュを削除する
-     * @param EventInterface $event
-     * @param EntityInterface $entity
-     * @param ArrayObject $options
-     * @return void
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function afterDelete(EventInterface $event, EntityInterface $entity, ArrayObject $options)
-    {
-        if ($entity) {
-            $this->deleteRelateSubSiteContent($entity);
-            $this->deleteAlias($entity);
-        }
-        $this->deleteAssocCache($entity);
-    }
-
-    /**
      * 自データのエイリアスを削除する
      *
      * 全サイトにおけるエイリアスを全て削除
      *
-     * @param Content $content
+     * @param EntityInterface $content
      * @return void
      * @checked
      * @noTodo
      * @unitTest
      */
-    protected function deleteAlias($content): void
+    public function deleteAlias($content): void
     {
         if (empty($content->alias_id)) {
             $contents = $this->find()->select('id')->where(['Contents.alias_id' => $content->id])->applyOptions(['callbacks' => false]);
             if (!$contents->all()->isEmpty()) {
                 // afterDelete・afterSaveのループを防ぐ
-                foreach(['afterSave', 'afterDelete'] as $eventName) {
+                foreach(['afterSave'] as $eventName) {
                     $event = $this->getEventManager()->matchingListeners($eventName);
                     if ($event) $this->getEventManager()->off('Model.' . $eventName);
                 }
@@ -607,13 +562,13 @@ class ContentsTable extends AppTable
     /**
      * メインサイトの場合、連携設定がされている子サイトのエイリアス削除する
      *
-     * @param Content $content
+     * @param EntityInterface $content
      * @return void
      * @checked
      * @noTodo
      * @unitTest
      */
-    protected function deleteRelateSubSiteContent($content)
+    public function deleteRelateSubSiteContent($content)
     {
         // 自身がエイリアスか確認し、エイリアスの場合は終了
         if (!$content->alias_id) {

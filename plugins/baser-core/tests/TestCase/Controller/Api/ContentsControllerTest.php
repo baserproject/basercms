@@ -177,21 +177,6 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
     }
 
     /**
-     * Test delete method
-     *
-     * @return void
-     */
-    public function testDelete_trash()
-    {
-        $this->post('/baser/api/baser-core/contents/delete_trash/16.json?token=' . $this->accessToken);
-        $this->assertResponseOk();
-        $result = json_decode((string)$this->_response->getBody());
-        $this->assertEquals("ゴミ箱: 削除済みフォルダー(親) を削除しました。", $result->message);
-        $this->get('/baser/api/baser-core/contents/view_trash/16.json?token=' . $this->accessToken);
-        $this->assertResponseError();
-    }
-
-    /**
      * testtrash_empty
      *
      * @return void
