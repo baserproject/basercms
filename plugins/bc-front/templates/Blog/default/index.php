@@ -14,8 +14,11 @@
  * ブログトップ
  * 呼出箇所：ブログトップ
  *
- * @var BcAppView $this
+ * @var \BcBlog\View\BlogFrontAppView $this
  * @var array $posts ブログ記事リスト
+ * @checked
+ * @noTodo
+ * @unitTest
  */
 $this->BcBaser->setDescription($this->Blog->getDescription());
 ?>

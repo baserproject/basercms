@@ -129,6 +129,24 @@ class AppControllerTest extends BcTestCase
 //        $this->assertEquals('BcAdminThird', $this->AppController->viewBuilder()->getTheme());
     }
 
+
+    /**
+     * Test setupFrontView
+     */
+    public function test_setupFrontView()
+    {
+        $this->AppController->setupFrontView();
+        $this->assertEquals('BaserCore.BcFrontApp', $this->AppController->viewBuilder()->getClassName());
+        $this->assertEquals('BcFront', $this->AppController->viewBuilder()->getTheme());
+        $request = $this->AppController->getRequest();
+        $site = $request->getAttribute('currentSite');
+        $site['theme'] = 'test';
+        $request = $request->withParam('Site', $site);
+        $this->AppController->setRequest($request);
+        $this->AppController->setupFrontView();
+        $this->assertEquals('test', $this->AppController->viewBuilder()->getTheme());
+    }
+
     /**
      * test blackHoleCallback
      */
@@ -141,23 +159,6 @@ class AppControllerTest extends BcTestCase
             'name' => 'Test_test_Man'
         ]);
         $this->assertResponseRegExp('/不正なリクエストと判断されました。/');
-    }
-
-    /**
-     * Test beforeRender
-     */
-    public function testBeforeRender()
-    {
-        $this->AppController->beforeRender(new Event('beforeRender'));
-        $this->assertEquals('BaserCore.BcFrontApp', $this->AppController->viewBuilder()->getClassName());
-        $this->assertEquals('BcFront', $this->AppController->viewBuilder()->getTheme());
-        $request = $this->AppController->getRequest();
-        $site = $request->getAttribute('currentSite');
-        $site['theme'] = 'test';
-        $request = $request->withParam('Site', $site);
-        $this->AppController->setRequest($request);
-        $this->AppController->beforeRender(new Event('beforeRender'));
-        $this->assertEquals('test', $this->AppController->viewBuilder()->getTheme());
     }
 
     /**

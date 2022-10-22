@@ -273,7 +273,7 @@ class BcAdminAppController extends BcAppController
     {
         parent::beforeRender($event);
         if (isset($this->RequestHandler) && $this->RequestHandler->prefers('json')) return;
-        if ($this->getName() === 'Preview') return;
+        if ($this->getRequest()->getQuery('preview')) return;
         $this->viewBuilder()->setClassName('BaserCore.BcAdminApp');
         $this->setAdminTheme();
         $this->set($this->getService(BcAdminAppServiceInterface::class)->getViewVarsForAll());

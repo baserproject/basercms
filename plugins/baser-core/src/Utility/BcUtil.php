@@ -1468,6 +1468,7 @@ class BcUtil
      * @param string $url
      * @return ServerRequest
      * @checked
+     * @noTodo
      */
     public static function createRequest($url = '/', $data = [], $method = 'GET', $config = [])
     {
@@ -1482,13 +1483,17 @@ class BcUtil
         if (preg_match('/^http/', $url)) {
             $parseUrl = parse_url($url);
             Configure::write('BcEnv.host', $parseUrl['host']);
+            $query = strpos($url, '?') !== false? explode('?', $url)[1] : '';
+            $queryParameters = '';
+            if($query) parse_str($query, $queryParameters);
             $defaultConfig = [
                 'uri' => ServerRequestFactory::createUri([
                     'HTTP_HOST' => $parseUrl['host'],
                     'REQUEST_URI' => $url,
                     'HTTPS' => (preg_match('/^https/', $url))? 'on' : '',
-                    'QUERY_STRING' => strpos($url, '?') !== false? explode('?', $url)[1] : ''
+                    'QUERY_STRING' => $query
                 ]),
+                'query' => $queryParameters,
                 'environment' => [
                     'REQUEST_METHOD' => $method
                 ]];

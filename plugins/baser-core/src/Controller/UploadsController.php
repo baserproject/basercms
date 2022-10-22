@@ -10,6 +10,7 @@
  */
 
 namespace BaserCore\Controller;
+
 use Cake\Core\Configure;
 use Cake\Filesystem\File;
 use BaserCore\Utility\BcUtil;
@@ -19,27 +20,10 @@ use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 
 /**
- * Class UploadsController
- *
  * アップロードコントローラー
- *
- * @package Baser.Controller
  */
-class UploadsController extends BcAppController
+class UploadsController extends AppController
 {
-
-    /**
-     * クラス名
-     *
-     * @var string
-     */
-    public $name = 'Uploads';
-
-    /**
-     * モデル
-     * @var array
-     */
-    public $uses = [];
 
     /**
      * セッションに保存した一時ファイルを出力する

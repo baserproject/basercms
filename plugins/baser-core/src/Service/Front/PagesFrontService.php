@@ -39,23 +39,9 @@ class PagesFrontService extends PagesService implements PagesFrontServiceInterfa
      */
     public function getViewVarsForView(EntityInterface $page, ServerRequest $request): array
     {
-        if ($request->is(['patch', 'post', 'put'])) {
-            $pageArray = $request->getData();
-            if($request->getQuery('preview') === 'draft') {
-                $pageArray['contents'] = $pageArray['draft'];
-            }
-            if (!BcValidation::containsScript($pageArray['contents'])) {
-                throw new NotFoundException(__d('baser', '本文欄でスクリプトの入力は許可されていません。'));
-            }
-            $page = $this->Pages->patchEntity($page, $pageArray);
-            $page->content = $this->Contents->saveTmpFiles($request->getData('content'), mt_rand(0, 99999999));
-            $editLink = null;
-        } else {
-            $editLink = $this->getEditLink($request);
-        }
         return [
             'page' => $page,
-            'editLink' => $editLink
+            'editLink' => $this->getEditLink($request)
         ];
     }
 
@@ -69,14 +55,23 @@ class PagesFrontService extends PagesService implements PagesFrontServiceInterfa
     public function setupPreviewForView(Controller $controller): void
     {
         /* @var Page $page */
-        $page = $this->get(
-            $controller->getRequest()->getAttribute('currentContent')->entity_id,
-            ['status' => 'publish']
-        );
-        $controller->viewBuilder()->setTemplate(
-            $this->getPageTemplate($page)
-        );
-        $controller->set($this->getViewVarsForView($page, $controller->getRequest()));
+        $page = $this->get($controller->getRequest()->getParam('entityId'));
+        $vars = $this->getViewVarsForView($page, $controller->getRequest());
+        $request = $controller->getRequest();
+        $pageArray = $request->getData();
+        if($pageArray) {
+            if ($request->getQuery('preview') === 'draft') {
+                $pageArray['contents'] = $pageArray['draft'];
+            }
+            if (!empty($pageArray['contents']) && !BcValidation::containsScript($pageArray['contents'])) {
+                throw new NotFoundException(__d('baser', '本文欄でスクリプトの入力は許可されていません。'));
+            }
+            $page = $this->Pages->patchEntity($page, $pageArray);
+            $page->content = $this->Contents->saveTmpFiles($request->getData('content'), mt_rand(0, 99999999));
+        }
+        unset($vars['editLink']);
+        $controller->set($vars);
+        $controller->viewBuilder()->setTemplate($this->getPageTemplate($page));
     }
 
 }

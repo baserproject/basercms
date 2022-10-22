@@ -50,21 +50,22 @@ class PagesController extends BcFrontAppController
 
 	/**
 	 * ビューを表示する
-	 * @param PagesServiceInterface $pageService
+	 * @param PagesServiceInterface $service
 	 * @param ContentFoldersServiceInterface $contentFolderService
 	 * @return \Cake\Http\Response|void
      * @checked
      * @unitTest
      * @noTodo
 	 */
-	public function view(PagesFrontServiceInterface $pageService)
+	public function view(PagesFrontServiceInterface $service)
 	{
-        $page = $pageService->get(
-            $this->request->getAttribute('currentContent')->entity_id,
+	    /* @var \BaserCore\Service\PagesService $service */
+        $page = $service->get(
+            $this->request->getParam('entityId'),
             ['status' => 'publish']
         );
-        $this->set($pageService->getViewVarsForView($page, $this->getRequest()));
-        $this->render($pageService->getPageTemplate($page));
+        $this->set($service->getViewVarsForView($page, $this->getRequest()));
+        $this->render($service->getPageTemplate($page));
 	}
 
 }

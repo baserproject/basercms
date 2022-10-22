@@ -12,35 +12,10 @@
 namespace BaserCore\Controller;
 
 /**
- * Class MaintenanceController
- *
  * メンテナンスコントローラー
- *
- * @package Baser.Controller
  */
-class MaintenanceController extends AppController
+class MaintenanceController extends BcFrontAppController
 {
-
-    /**
-     * クラス名
-     *
-     * @var string
-     */
-    public $name = 'Maintenance';
-
-    /**
-     * モデル
-     *
-     * @var array
-     */
-    public $uses = null;
-
-    /**
-     * サブメニューエレメント
-     *
-     * @var array
-     */
-    public $subMenuElements = [];
 
     /**
      * メンテナンス中ページを表示する
