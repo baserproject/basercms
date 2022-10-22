@@ -1484,7 +1484,7 @@ class BcUtil
             $parseUrl = parse_url($url);
             Configure::write('BcEnv.host', $parseUrl['host']);
             $query = strpos($url, '?') !== false? explode('?', $url)[1] : '';
-            $queryParameters = '';
+            $queryParameters = [];
             if($query) parse_str($query, $queryParameters);
             $defaultConfig = [
                 'uri' => ServerRequestFactory::createUri([

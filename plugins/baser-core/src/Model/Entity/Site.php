@@ -71,7 +71,10 @@ class Site extends EntityAlias
                 return 1;
             }
         }
-        return $this->_fields['domain_type'];
+        if (isset($this->_fields['domain_type'])) {
+            return $this->_fields['domain_type'];
+        }
+        return null;
     }
 
     /**
