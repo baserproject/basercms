@@ -28,13 +28,13 @@ use Cake\Core\Configure;
   <?php if ($currentTheme): ?>
     <div class="bca-current-theme__inner">
       <div class="bca-current-theme__main">
-        <div class="bca-current-theme__screenshot">
+        <p class="bca-current-theme__screenshot">
           <?php if ($currentTheme->screenshot): ?>
             <?php $this->BcBaser->img(['action' => 'screenshot', $currentTheme->name], ['alt' => $currentTheme->title]) ?>
           <?php else: ?>
             <?php $this->BcBaser->img('admin/no-screenshot.png', ['alt' => $currentTheme->title]) ?>
           <?php endif ?>
-        </div>
+        </p>
         <div class="row-tools">
           <?php if (Configure::read('BcApp.allowedThemeEdit')): ?>
             <?php $this->BcBaser->link('', ['controller' => 'theme_files', 'action' => 'index', $currentTheme->name], [

@@ -23,6 +23,9 @@
     margin-bottom: 5px;
     border: 1px solid $color_border;
     padding: 3px;
+    .bca-btn-icon {
+      display: inline-block;
+    }
   }
   .theme {
     &-name {
