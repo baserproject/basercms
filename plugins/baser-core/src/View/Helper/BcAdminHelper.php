@@ -134,10 +134,13 @@ class BcAdminHelper extends Helper
             $adminMenuGroup = array_merge(['name' => $group], $adminMenuGroup);
 
             if (!empty($adminMenuGroup['url'])) {
-
                 $adminMenuGroup['url'] = preg_replace('/^' . preg_quote($base, '/') . '\//', '/', $this->BcBaser->getUrl($adminMenuGroup['url']));
-                if (preg_match('/^' . preg_quote($adminMenuGroup['url'], '/') . '$/', $currentUrl)) {
-                    $adminMenuGroup['current'] = true;
+                if ($permissionsService->check($adminMenuGroup['url'], Hash::extract(BcUtil::loginUserGroup(), '{n}.id'))) {
+                    if (preg_match('/^' . preg_quote($adminMenuGroup['url'], '/') . '$/', $currentUrl)) {
+                        $adminMenuGroup['current'] = true;
+                    }
+                } else {
+                    unset($adminMenuGroup['url']);
                 }
             }
 
@@ -153,20 +156,19 @@ class BcAdminHelper extends Helper
                     $adminMenu['name'] = $menu;
                     $url = $this->BcBaser->getUrl($adminMenu['url']);
                     $url = preg_replace('/^' . preg_quote($base, '/') . '\//', '/', $url);
-					if ($permissionsService->check($url, Hash::extract(BcUtil::loginUserGroup(), '{n}.id'))) {
-                        if (empty($adminMenuGroup['url'])) {
-                            $adminMenuGroup['url'] = $url;
-                        }
-                        $adminMenu['urlArray'] = $adminMenu['url'];
-                        $adminMenu['url'] = $url;
-                        if (preg_match('/^' . preg_quote($url, '/') . '$/', $currentUrl)) {
-                            $adminMenu['current'] = true;
-                            $adminMenuGroup['current'] = false;
-                            $adminMenuGroup['expanded'] = true;
-                            $currentOn = true;
-                        }
-                        $covertedAdminMenus[] = $adminMenu;
-					}
+					if (!$permissionsService->check($url, Hash::extract(BcUtil::loginUserGroup(), '{n}.id'))) continue;
+                    if (empty($adminMenuGroup['url'])) {
+                        $adminMenuGroup['url'] = $url;
+                    }
+                    $adminMenu['urlArray'] = $adminMenu['url'];
+                    $adminMenu['url'] = $url;
+                    if (preg_match('/^' . preg_quote($url, '/') . '$/', $currentUrl)) {
+                        $adminMenu['current'] = true;
+                        $adminMenuGroup['current'] = false;
+                        $adminMenuGroup['expanded'] = true;
+                        $currentOn = true;
+                    }
+                    $covertedAdminMenus[] = $adminMenu;
                 }
             }
             if ($covertedAdminMenus) {

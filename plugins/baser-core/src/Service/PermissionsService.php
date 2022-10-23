@@ -346,6 +346,7 @@ class PermissionsService implements PermissionsServiceInterface
             '/^' . preg_quote($this->adminUrlPrefix . '/baser-core/dashboard/', '/') . '.*?/',
             '/^' . preg_quote($this->adminUrlPrefix . '/baser-core/dblogs/', '/') . '.*?/',
             '/^' . preg_quote($this->adminUrlPrefix . '/baser-core/users/logout', '/') . '$/',
+            '/^' . preg_quote($this->adminUrlPrefix . '/baser-core/users/back_agent', '/') . '$/',
             '/^' . preg_quote($this->adminUrlPrefix . '/baser-core/user_groups', '/') . '$/',
         ];
         $sessionKey = Configure::read('BcPrefixAuth.Admin.sessionKey');
@@ -405,7 +406,7 @@ class PermissionsService implements PermissionsServiceInterface
      */
     private function checkGroup(string $url, array $groupPermission): bool
     {
-        $ret = false;
+        $ret = true;
         foreach($groupPermission as $permission) {
             $pattern = $permission->url;
             $pattern = preg_quote($pattern, '/');
