@@ -10,31 +10,31 @@
  * @license         https://basercms.net/license/index.html
  */
 
+/**
+ * @var \BaserCore\View\BcAdminAppView $this
+ * @checked
+ * @noTodo
+ * @unitTest
+ */
+$this->BcAdmin->setTitle(__d('baser', 'プラグインアップロード'));
 $this->BcBaser->i18nScript([
-  'message1' => __d('baser', 'プラグインをアップロードし、そのままインストールします。よろしいですか？'),
+  'message1' => __d('baser', 'プラグインをアップロードします。よろしいですか？'),
 ]);
+$this->BcBaser->js('admin/plugins/add.bundle', false);
 ?>
 
 
-<script>
-  $(function () {
-    $("#BtnSave").click(function () {
-      if (confirm(bcI18n.message1)) {
-        $.bcUtil.showLoader();
-        return true;
-      }
-      return false;
-    });
-  });
-</script>
-
-
-<p><?php echo __d('baser', 'ZIP 形式のプラグインファイルをお持ちの場合、こちらからアップロードしてインストールできます。') ?></p>
-<?php echo $this->BcAdminForm->create('Plugin', ['type' => 'file']) ?>
+<p><?php echo __d('baser', 'ZIP 形式のプラグインファイルをお持ちの場合、こちらからアップロードできます。') ?></p>
+<?php echo $this->BcAdminForm->create(null, ['type' => 'file']) ?>
 
 <div class="submit">
-  <?php echo $this->BcAdminForm->control('Plugin.file', ['type' => 'file']) ?>
-  <?php echo $this->BcAdminForm->submit(__d('baser', 'インストール'), ['class' => 'button bca-btn', 'div' => false, 'data-bca-btn-status' => 'primary']) ?>
+  <?php echo $this->BcAdminForm->control('file', ['type' => 'file']) ?>
+  <?php echo $this->BcAdminForm->submit(__d('baser', 'アップロード'), [
+    'id' => 'BtnSave',
+    'class' => 'button bca-btn',
+    'div' => false,
+    'data-bca-btn-status' => 'primary'
+  ]) ?>
 </div>
 
 <?php echo $this->BcAdminForm->end() ?>

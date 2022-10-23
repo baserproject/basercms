@@ -1561,4 +1561,23 @@ class BcUtil
         $folder->create(CACHE . 'environment', 0777);
     }
 
+    /**
+     * プラグインの namespace を書き換える
+     * @param $newPlugin
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public static function changePluginNameSpace($newPlugin)
+    {
+        $pluginPath = BcUtil::getPluginPath($newPlugin);
+        if(!$pluginPath) return false;
+        $file = new File($pluginPath . 'src' . DS . 'Plugin.php');
+        $data = $file->read();
+        $file->write(preg_replace('/namespace .+?;/', 'namespace ' . $newPlugin . ';', $data));
+        $file->close();
+        return true;
+    }
+
 }

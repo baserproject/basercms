@@ -1170,4 +1170,34 @@ class BcUtilTest extends BcTestCase
         $this->assertTrue($result, '一時フォルダが正しく生成されていません');
     }
 
+    /**
+     * プラグインの namespace を書き換える
+     */
+    public function test_changePluginNameSpace()
+    {
+        $result = BcUtil::changePluginNameSpace('noExistsPlugin');
+        // 処理実行が失敗を確認
+        $this->assertFalse($result);
+        // 対象ファイルをopen
+        $theme = 'BcFront';
+        $pluginPath = BcUtil::getPluginPath($theme);
+        $file = new File($pluginPath . 'src' . DS . 'Plugin.php');
+        // テーマ名とネームスペースが違う状態を作る
+        $data = $file->read();
+        $file->write(preg_replace('/namespace .+?;/', 'namespace WrongNamespace;', $data));
+        // テーマ名とネームスペースが違う状態を確認
+        $data = $file->read();
+        preg_match('/namespace .+?;/', $data, $match);
+        $this->assertNotEquals('namespace ' . $theme . ';', $match[0]);
+        // 処理実行が成功を確認
+        $result = BcUtil::changePluginNameSpace('BcFront');
+        $this->assertTrue($result);
+        // 処理実行後、テーマ名とネームスペースが同じになっている事を確認
+        $data = $file->read();
+        preg_match('/namespace .+?;/', $data, $match);
+        $this->assertEquals('namespace ' . $theme . ';', $match[0]);
+        // ファイルをclose
+        $file->close();
+    }
+
 }

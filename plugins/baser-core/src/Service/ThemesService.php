@@ -149,15 +149,15 @@ class ThemesService implements ThemesServiceInterface
         }
 
         $num = 2;
-        $dstName = $srcName;
+        $dstName = Inflector::camelize($srcName);
         while(is_dir(BASER_THEMES . $dstName) || is_dir(BASER_THEMES . Inflector::dasherize($dstName))) {
-            $dstName = $srcName . $num;
+            $dstName = Inflector::camelize($srcName) . $num;
             $num++;
         }
         $folder = new Folder(TMP . $srcName);
         $folder->move(BASER_THEMES . $dstName, ['mode' => 0777]);
         unlink(TMP . $name);
-        $this->_changePluginNameSpace($dstName);
+        BcUtil::changePluginNameSpace($dstName);
         return $dstName;
     }
 
@@ -342,26 +342,7 @@ class ThemesService implements ThemesServiceInterface
         ])) {
             return false;
         }
-        if(!$this->_changePluginNameSpace($newTheme)) return false;
-        return true;
-    }
-
-    /**
-     * プラグインの namespace を書き換える
-     * @param $newTheme
-     * @return bool
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    protected function _changePluginNameSpace($newTheme)
-    {
-        $pluginPath = BcUtil::getPluginPath($newTheme);
-        if(!$pluginPath) return false;
-        $file = new File($pluginPath . 'src' . DS . 'Plugin.php');
-        $data = $file->read();
-        $file->write(preg_replace('/namespace .+?;/', 'namespace ' . $newTheme . ';', $data));
-        $file->close();
+        if(!BcUtil::changePluginNameSpace($newTheme)) return false;
         return true;
     }
 
