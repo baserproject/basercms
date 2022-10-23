@@ -297,8 +297,8 @@ class PermissionsServiceTest extends BcTestCase
      */
     public function testCheck($url, $userGroup, $expected)
     {
-        $result = $this->PermissionsService->addCheck("/fuga", false);
-        $result = $this->PermissionsService->addCheck("/piyo", true);
+        $this->PermissionsService->addCheck("/fuga", false);
+        $this->PermissionsService->addCheck("/piyo", true);
         $result = $this->PermissionsService->check($url, $userGroup);
         $this->assertEquals($expected, $result);
     }
@@ -307,7 +307,7 @@ class PermissionsServiceTest extends BcTestCase
     {
         return [
             ['hoge', [1], true],
-            ['hoge', [2], false],
+            ['hoge', [2], true],
             ['/fuga', [1], true],
             ['/fuga', [2], false],
             ['/piyo', [2], true],
