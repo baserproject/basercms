@@ -12,11 +12,14 @@
 namespace BaserCore\View\Helper;
 
 use BaserCore\Event\BcEventDispatcherTrait;
+use BaserCore\Service\PermissionsService;
+use BaserCore\Service\PermissionsServiceInterface;
 use BaserCore\Service\SitesServiceInterface;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Core\Configure;
 use Cake\Routing\Router;
+use Cake\Utility\Hash;
 use Cake\View\Helper;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -108,10 +111,10 @@ class BcAdminHelper extends Helper
         if ($params) {
             $currentUrl .= '?' . $params;
         }
-        // TODO 要実装
-        // $Permission = ClassRegistry::init('Permission');
         $covertedAdminMenuGroups = [];
         $currentOn = false;
+        /* @var PermissionsService $permissionsService */
+        $permissionsService = $this->getService(PermissionsServiceInterface::class);
         foreach($adminMenuGroups as $group => $adminMenuGroup) {
             if (!empty($adminMenuGroup['disable']) && $adminMenuGroup['disable'] === true) {
                 continue;
@@ -150,21 +153,20 @@ class BcAdminHelper extends Helper
                     $adminMenu['name'] = $menu;
                     $url = $this->BcBaser->getUrl($adminMenu['url']);
                     $url = preg_replace('/^' . preg_quote($base, '/') . '\//', '/', $url);
-                    // TODO : 要実装
-//					if ($Permission->check($url, $this->_View->viewVars['user']['user_group_id'])) {
-                    if (empty($adminMenuGroup['url'])) {
-                        $adminMenuGroup['url'] = $url;
-                    }
-                    $adminMenu['urlArray'] = $adminMenu['url'];
-                    $adminMenu['url'] = $url;
-                    if (preg_match('/^' . preg_quote($url, '/') . '$/', $currentUrl)) {
-                        $adminMenu['current'] = true;
-                        $adminMenuGroup['current'] = false;
-                        $adminMenuGroup['expanded'] = true;
-                        $currentOn = true;
-                    }
-                    $covertedAdminMenus[] = $adminMenu;
-//					}
+					if ($permissionsService->check($url, Hash::extract(BcUtil::loginUserGroup(), '{n}.id'))) {
+                        if (empty($adminMenuGroup['url'])) {
+                            $adminMenuGroup['url'] = $url;
+                        }
+                        $adminMenu['urlArray'] = $adminMenu['url'];
+                        $adminMenu['url'] = $url;
+                        if (preg_match('/^' . preg_quote($url, '/') . '$/', $currentUrl)) {
+                            $adminMenu['current'] = true;
+                            $adminMenuGroup['current'] = false;
+                            $adminMenuGroup['expanded'] = true;
+                            $currentOn = true;
+                        }
+                        $covertedAdminMenus[] = $adminMenu;
+					}
                 }
             }
             if ($covertedAdminMenus) {
@@ -215,7 +217,7 @@ class BcAdminHelper extends Helper
     public function getJsonMenu()
     {
         $adminMenuGroups = $this->getAdminMenuGroups();
-        if($adminMenuGroups === false || !BcUtil::isAdminUser()) return null;
+        if($adminMenuGroups === false) return null;
         $loginUserGroup = BcUtil::loginUserGroup();
         if($loginUserGroup === false) return null;
         $currentSiteId = 1;
