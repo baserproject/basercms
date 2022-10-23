@@ -17,6 +17,7 @@ use BaserCore\Annotation\UnitTest;
 use BaserCore\Error\BcException;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
+use BcBlog\Model\Table\BlogContentsTable;
 use Cake\Core\Configure;
 use Cake\Datasource\EntityInterface;
 use Cake\ORM\Query;
@@ -24,6 +25,7 @@ use Cake\ORM\TableRegistry;
 
 /**
  * BlogContentsService
+ * @property BlogContentsTable $BlogContents
  */
 class BlogContentsService implements BlogContentsServiceInterface
 {
