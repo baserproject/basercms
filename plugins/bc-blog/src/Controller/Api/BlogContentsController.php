@@ -96,7 +96,7 @@ class BlogContentsController extends BcApiController
             'message' => $message,
             'errors' => $blogContent->getErrors()
         ]);
-        $this->viewBuilder()->setOption('serialize', ['message', 'blogContent', 'errors']);
+        $this->viewBuilder()->setOption('serialize', ['message', 'blogContent', 'content', 'errors']);
     }
 
     /**
