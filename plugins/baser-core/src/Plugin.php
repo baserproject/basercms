@@ -21,6 +21,7 @@ use BaserCore\Event\BcModelEventDispatcher;
 use BaserCore\Event\BcViewEventDispatcher;
 use BaserCore\Middleware\BcAdminMiddleware;
 use BaserCore\Middleware\BcFrontMiddleware;
+use BaserCore\Middleware\BcRedirectSubSiteFilter;
 use BaserCore\Middleware\BcRequestFilterMiddleware;
 use BaserCore\ServiceProvider\BcServiceProvider;
 use BaserCore\Utility\BcUtil;
@@ -195,7 +196,8 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
             ->add(new BcAdminMiddleware())
             ->add(new BcFrontMiddleware())
 //            ->add(new BcUpdateFilterMiddleware())
-            ->add(new BcRequestFilterMiddleware());
+            ->add(new BcRequestFilterMiddleware())
+            ->add(new BcRedirectSubSiteFilter());
 
         // APIへのアクセスの場合、CSRFを強制的に利用しない設定に変更
         $ref = new ReflectionClass($middlewareQueue);

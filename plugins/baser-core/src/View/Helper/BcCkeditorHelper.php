@@ -360,7 +360,7 @@ class BcCkeditorHelper extends Helper
             $currentTheme = $this->getView()->getTheme();
             $this->getView()->setTheme($currentFrontTheme);
             if ($site->alias) {
-                $themeEditorCsses = [
+                $themeEditorCsses[] = [
                     'path' => Plugin::path(Inflector::camelize($currentFrontTheme)) . 'webroot' . DS . 'css' . DS . $site->alias . DS . 'editor.css',
                     'url' => $this->Url->webroot('/css/' . $site->alias . '/editor.css')
                 ];
