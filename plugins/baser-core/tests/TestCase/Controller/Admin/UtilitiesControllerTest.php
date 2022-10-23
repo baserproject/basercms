@@ -166,16 +166,6 @@ class UtilitiesControllerTest extends BcTestCase
     }
 
     /**
-     * test ajax_save_search_box
-     *
-     * @return void
-     */
-    public function testAjax_save_search_box(): void
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
-    /**
      * test index
      *
      * @return void

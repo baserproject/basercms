@@ -54,20 +54,6 @@ class UtilitiesController extends BcAdminAppController
     }
 
     /**
-     * 検索ボックスの表示状態を保存する
-     *
-     * @param string $key キー
-     * @param mixed $open 1 Or ''
-     * @return void
-     */
-    public function ajax_save_search_box($key, $open = '')
-    {
-        $this->autoRender = false;
-        $this->request->getSession()->write('BcApp.adminSearchOpened.' . $key, $open);
-        echo true;
-    }
-
-    /**
      * ユーティリティトップ
      * @checked
      * @noTodo

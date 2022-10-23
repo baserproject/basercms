@@ -19,12 +19,12 @@ use BaserCore\View\BcAdminAppView;
  * @var BcAdminAppView $this
  * @var string $search 検索条件テンプレート
  * @var bool $adminSearchOpened 検索エリアが開いているかどうか
- * @var string $adminSearchOpenedSaveUrl 検索エリアの開閉状態を保存するためのURL
+ * @var string $adminSearchOpenedTarget 検索エリアの開閉状態を保存するためのURL
  */
 $this->BcBaser->js('admin/search.bundle', true, [
   'id' => 'AdminSearchScript',
   'data-adminSearchOpened' => $adminSearchOpened,
-  'data-adminSearchOpenedSaveUrl' => $adminSearchOpenedSaveUrl
+  'data-adminSearchOpenedTarget' => $adminSearchOpenedTarget
 ]);
 if (strpos($search, '.') !== false) {
   [$plugin, $search] = explode('.', $search);
