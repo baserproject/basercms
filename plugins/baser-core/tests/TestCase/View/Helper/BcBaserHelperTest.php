@@ -585,7 +585,6 @@ class BcBaserHelperTest extends BcTestCase
      * ・トップページは、Home
      * @param string $url URL
      * @param string $expects コンテンツ名
-     * @return void*
      * @dataProvider getContentsNameDataProvider
      */
     public function getContentsNameDataProvider()
