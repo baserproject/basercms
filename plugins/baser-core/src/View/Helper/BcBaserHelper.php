@@ -358,6 +358,7 @@ class BcBaserHelper extends Helper
      * @return string
      * @checked
      * @unitTest
+     * @noTodo
      * @doc
      */
     public function getLink($title, $url = null, $options = [], $confirmMessage = false)
@@ -416,17 +417,6 @@ class BcBaserHelper extends Helper
                 $enabled = false;
             }
         }
-
-        // コンテンツ公開チェック
-        // TODO 統合コンテンツ管理のチェックに変更する
-//		if (isset($this->_Page) && $this->_View->getRequest()->getParam['prefix'] !== 'Admin') {
-//			$adminPrefix = Configure::read('Routing.prefixes.0');
-//			if (isset($this->_Page) && !preg_match('/^\/' . $adminPrefix . '/', $_url)) {
-//				if ($this->_Page->isPageUrl($_url) && !$this->_Page->checkPublish($_url)) {
-//					$enabled = false;
-//				}
-//			}
-//		}
 
         if (!$enabled) {
             if ($forceTitle) {

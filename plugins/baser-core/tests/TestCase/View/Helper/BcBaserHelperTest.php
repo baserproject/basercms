@@ -54,6 +54,7 @@ class BcBaserHelperTest extends BcTestCase
         'plugin.BaserCore.SiteConfigs',
         'plugin.BaserCore.Contents',
         'plugin.BaserCore.ContentFolders',
+        'plugin.BaserCore.Permissions',
         // TODO: basercms4系より移植
         // 'baser.Default.Page',    // メソッド内で読み込む
         // 'baser.Default.Content',    // メソッド内で読み込む
@@ -64,7 +65,6 @@ class BcBaserHelperTest extends BcTestCase
         // 'baser.Default.SearchIndex',
         // 'baser.Default.User',
         // 'baser.Default.UserGroup',
-        // 'baser.Default.Permission',
         // 'baser.Default.ThemeConfig',
         // 'baser.Default.WidgetArea',
         // 'baser.Default.Plugin',
@@ -104,6 +104,7 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function setUp(): void
     {
+        $this->setFixtureTruncate();
         parent::setUp();
         $this->BcAdminAppView = new BcAdminAppView($this->getRequest(), null, null, [
             'name' => 'Pages',
@@ -347,21 +348,6 @@ class BcBaserHelperTest extends BcTestCase
     }
 
     /**
-     * Test BcBaser->getLinkが適切なリンクを取得できているかテスト
-     * @return void
-     * @todo basercms4統合必要
-     */
-    public function testGeLink()
-    {
-        $options = ['confirm' => true];
-        $title = 'sampletest';
-        $link = 'sampletest/';
-        $result = $this->BcBaser->getLink($title, $link, $options, $options['confirm']);
-        $expected = $this->Html->link($title, $link, $options);
-        $this->assertEquals($expected, $result);
-    }
-
-    /**
      * アンカータグを取得する
      * @param string $title タイトル
      * @param string $url URL
@@ -372,13 +358,11 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testGetLink($title, $url, $option, $expected)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-
         if (!empty($option['prefix'])) {
             $this->BcBaser->getView()->setRequest($this->getRequest('/admin'));
         }
         if (!empty($option['forceTitle'])) {
-            $this->_View->viewVars['user']['user_group_id'] = 2;
+            $this->loginAdmin($this->getRequest('/baser/admin'), 2);
         }
         if (!empty($option['ssl'])) {
             Configure::write('BcEnv.sslUrl', 'https://localhost/');
@@ -397,10 +381,10 @@ class BcBaserHelperTest extends BcTestCase
             ['<b>title</b>', 'https://example.com/<b>link</b>', [], '<a href="https://example.com/&lt;b&gt;link&lt;/b&gt;">&lt;b&gt;title&lt;/b&gt;</a>'], // エスケープ
             ['<b>title</b>', 'https://example.com/<b>link</b>', ['escape' => false], '<a href="https://example.com/<b>link</b>"><b>title</b></a>'], // エスケープ
             ['<b>title</b>', 'https://example.com/<b>link</b>', ['escapeTitle' => false], '<a href="https://example.com/&lt;b&gt;link&lt;/b&gt;"><b>title</b></a>'], // エスケープ
-            ['固定ページ管理', ['controller' => 'pages', 'action' => 'index'], ['prefix' => true], '<a href="/admin/pages/">固定ページ管理</a>'],    // プレフィックス
-            ['システム設定', ['admin' => true, 'controller' => 'site_configs', 'action' => 'form'], ['forceTitle' => true], '<span>システム設定</span>'],    // 強制タイトル
+            ['固定ページ管理', ['prefix' => 'Admin', 'controller' => 'pages', 'action' => 'index'], [], '<a href="/baser/admin/baser-core/pages/index">固定ページ管理</a>'],    // プレフィックス
+            ['システム設定', ['Admin' => true, 'controller' => 'site_configs', 'action' => 'index'], ['forceTitle' => true], '<span>システム設定</span>'],    // 強制タイトル
             ['会社案内', '/about', ['ssl' => true], '<a href="https://localhost/about">会社案内</a>'], // SSL
-            ['テーマファイル管理', ['controller' => 'themes', 'action' => 'manage', 'jsa'], ['ssl' => true], '<a href="https://localhost/themes/manage/jsa">テーマファイル管理</a>'], // SSL
+            ['テーマファイル管理', ['controller' => 'themes', 'action' => 'manage', 'jsa'], ['ssl' => true], '<a href="https://localhost/baser/baser-core/themes/manage/jsa">テーマファイル管理</a>'], // SSL
             ['画像', '/img/test.jpg', ['ssl' => true], '<a href="https://localhost/img/test.jpg">画像</a>'], // SSL
         ];
     }
