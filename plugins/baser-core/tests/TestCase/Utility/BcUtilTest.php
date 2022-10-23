@@ -1144,4 +1144,30 @@ class BcUtilTest extends BcTestCase
             ['javascript/ts', null, false],
         ];
     }
+
+
+    /**
+     * 必要な一時フォルダが存在するかチェックし、なければ生成する
+     */
+    public function testCheckTmpFolders()
+    {
+        BcUtil::checkTmpFolders();
+        $paths = [
+            TMP . 'sessions',
+            CACHE,
+            CACHE . 'models',
+            CACHE . 'persistent',
+            CACHE . 'environment',
+        ];
+        // フォルダが生成されているかチェック
+        $result = true;
+        foreach($paths as $key => $value) {
+            if (!is_dir($value)) {
+                $result = false;
+                echo $value;
+            }
+        }
+        $this->assertTrue($result, '一時フォルダが正しく生成されていません');
+    }
+
 }

@@ -73,6 +73,10 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
 
         parent::bootstrap($application);
 
+        if(BcUtil::isInstalled()) {
+            BcUtil::checkTmpFolders();
+        }
+
         if (file_exists(CONFIG . 'setting.php')) {
             Configure::load('setting', 'baser');
         }

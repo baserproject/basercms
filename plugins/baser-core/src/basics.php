@@ -246,30 +246,6 @@ function getDbConfig($name = 'default')
 }
 
 /**
- * 必要な一時フォルダが存在するかチェックし、
- * なければ生成する
- */
-function checkTmpFolders()
-{
-
-    if (!is_writable(TMP)) {
-        return;
-    }
-    $folder = new Folder();
-    $folder->create(TMP . 'logs', 0777);
-    $folder->create(TMP . 'sessions', 0777);
-    $folder->create(TMP . 'schemas', 0777);
-    $folder->create(TMP . 'schemas' . DS . 'core', 0777);
-    $folder->create(TMP . 'schemas' . DS . 'plugin', 0777);
-    $folder->create(CACHE, 0777);
-    $folder->create(CACHE . 'models', 0777);
-    $folder->create(CACHE . 'persistent', 0777);
-    $folder->create(CACHE . 'views', 0777);
-    $folder->create(CACHE . 'datas', 0777);
-    $folder->create(CACHE . 'environment', 0777);
-}
-
-/**
  * httpからのフルURLを取得する
  *
  * @param mixed $url

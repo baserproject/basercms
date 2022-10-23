@@ -325,38 +325,6 @@ class BcBasicsTest extends BcTestCase
     }
 
     /**
-     * 必要な一時フォルダが存在するかチェックし、なければ生成する
-     */
-    public function testCheckTmpFolders()
-    {
-        checkTmpFolders();
-
-        $paths = [
-            TMP . 'logs',
-            TMP . 'sessions',
-            TMP . 'schemas',
-            TMP . 'schemas' . DS . 'core',
-            TMP . 'schemas' . DS . 'plugin',
-            CACHE,
-            CACHE . 'models',
-            CACHE . 'persistent',
-            CACHE . 'views',
-            CACHE . 'datas',
-            CACHE . 'environment',
-        ];
-
-        // フォルダが生成されているかチェック
-        $result = true;
-        foreach($paths as $key => $value) {
-            if (!is_dir($value)) {
-                $result = false;
-            }
-        }
-        $this->assertTrue($result, '一時フォルダが正しく生成されていません');
-
-    }
-
-    /**
      * 現在のビューディレクトリのパスを取得する
      */
     public function testGetViewPath()
