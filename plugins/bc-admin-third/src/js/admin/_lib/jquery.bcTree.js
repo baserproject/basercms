@@ -346,8 +346,9 @@
                                                         node.data.jstree.status = true;
                                                         $.bcTree.refreshTree();
                                                     },
-                                                    error: function (XMLHttpRequest, textStatus, errorThrown) {
-                                                        $.bcUtil.showAjaxError(bcI18n.commonChangePublishFailedMessage, XMLHttpRequest, errorThrown);
+                                                    error: function (XMLHttpRequest) {
+                                                        XMLHttpRequest.responseText = null;
+                                                        $.bcUtil.showAjaxError(bcI18n.commonChangePublishFailedMessage, XMLHttpRequest);
                                                     },
                                                     complete: function () {
                                                         $.bcUtil.hideLoader();
@@ -386,8 +387,9 @@
                                                         node.data.jstree.status = false;
                                                         $.bcTree.refreshTree();
                                                     },
-                                                    error: function (XMLHttpRequest, textStatus, errorThrown) {
-                                                        $.bcUtil.showAjaxError(bcI18n.commonChangePublishFailedMessage, XMLHttpRequest, errorThrown);
+                                                    error: function (XMLHttpRequest) {
+                                                        XMLHttpRequest.responseText = null;
+                                                        $.bcUtil.showAjaxError(bcI18n.commonChangePublishFailedMessage, XMLHttpRequest);
                                                     },
                                                     complete: function () {
                                                         $.bcUtil.hideLoader();
@@ -559,8 +561,9 @@
                                                             $("#DataList").html('<div class="tree-empty">' + bcI18n.bcTreeInfoMessage1 + '</div>');
                                                         }
                                                     },
-                                                    error: function (XMLHttpRequest, textStatus, errorThrown) {
-                                                        $.bcUtil.showAjaxError(bcI18n.bcTreeAlertMessage2, XMLHttpRequest, errorThrown);
+                                                    error: function (XMLHttpRequest) {
+                                                        XMLHttpRequest.responseText = null;
+                                                        $.bcUtil.showAjaxError(bcI18n.bcTreeAlertMessage2, XMLHttpRequest);
                                                     },
                                                     complete: function () {
                                                         $.bcUtil.hideLoader();
@@ -910,8 +913,9 @@
                                 node.data.jstree = data;
                                 $.bcTree.refreshTree();
                             },
-                            error: function (XMLHttpRequest, textStatus, errorThrown) {
-                                $.bcUtil.showAjaxError(bcI18n.bcTreeAlertMessage6, XMLHttpRequest, errorThrown);
+                            error: function (XMLHttpRequest) {
+                                XMLHttpRequest.responseText = null;
+                                $.bcUtil.showAjaxError(bcI18n.bcTreeAlertMessage6, XMLHttpRequest);
                                 $.bcTree.jsTree.delete_node(node);
                                 $.bcUtil.hideLoader();
                             }
@@ -1001,9 +1005,9 @@
                         $.bcTree.refreshTree();
                         $.bcUtil.hideLoader();
                     },
-                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    error: function (XMLHttpRequest) {
                         $.bcToken.key = null;
-                        $.bcUtil.showAjaxError(bcI18n.bcTreeAlertMessage4, XMLHttpRequest, errorThrown);
+                        $.bcUtil.showAjaxError(bcI18n.bcTreeAlertMessage4, XMLHttpRequest);
                         $.bcUtil.hideLoader();
                     }
                 });
@@ -1072,9 +1076,9 @@
                             $.bcTree.renameContent(newNode, data.contentTitle, true);
                         });
                     },
-                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    error: function (XMLHttpRequest) {
                         $.bcToken.key = null;
-                        $.bcUtil.showAjaxError(bcI18n.commonCopyFailedMessage, XMLHttpRequest, errorThrown);
+                        $.bcUtil.showAjaxError(bcI18n.commonCopyFailedMessage, XMLHttpRequest);
                         $.bcUtil.hideLoader();
                     }
                 });
@@ -1126,9 +1130,10 @@
                             editNode.data.jstree.name = result.name;
                             $.bcTree.refreshTree();
                         },
-                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        error: function (XMLHttpRequest) {
                             $.bcTree.jsTree.rename_node(editNode, defaultTitle);
-                            $.bcUtil.showAjaxError(bcI18n.bcTreeAlertMessage5, XMLHttpRequest, errorThrown);
+                            XMLHttpRequest.responseText = null;
+                            $.bcUtil.showAjaxError(bcI18n.bcTreeAlertMessage5, XMLHttpRequest);
                         },
                         complete: function () {
                             $.bcUtil.hideLoader();
@@ -1244,8 +1249,9 @@
                         $.bcUtil.showNoticeMessage(result.message);
                         $.bcUtil.hideLoader();
                     },
-                    error: function (XMLHttpRequest, textStatus, errorThrown) {
-                        $.bcUtil.showAjaxError(bcI18n.commonSortSaveFailedMessage, XMLHttpRequest, errorThrown);
+                    error: function (XMLHttpRequest) {
+                        XMLHttpRequest.responseText = null;
+                        $.bcUtil.showAjaxError(bcI18n.commonSortSaveFailedMessage, XMLHttpRequest);
                         $.bcTree.load();
                     },
                     complete: function () {
