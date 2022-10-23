@@ -509,16 +509,15 @@ class BcBaserHelper extends Helper
      * @param mixed $url baserCMS設置フォルダからの絶対URL、もしくは配列形式のURL情報
      *        省略した場合には、PC用のトップページのURLを出力する
      * @param bool $full httpから始まるURLを取得するかどうか
-     * @param bool $sessionId セションIDを付加するかどうか
      * @return void
      * @checked
      * @unitTest
      * @noTodo
      * @doc
      */
-    public function url($url = null, $full = false, $sessionId = true)
+    public function url($url = null, $full = false)
     {
-        echo $this->getUrl($url, $full, $sessionId);
+        echo $this->getUrl($url, $full);
     }
 
     /**
@@ -778,20 +777,14 @@ class BcBaserHelper extends Helper
      * @param mixed $url baserCMS設置フォルダからの絶対URL、もしくは配列形式のURL情報
      *        省略した場合には、PC用のトップページのURLを取得する
      * @param bool $full httpから始まるURLを取得するかどうか
-     * @param bool $sessionId セションIDを付加するかどうか
      * @return string URL
      * @checked
      * @unitTest
      * @note(value="$sessionId について実装検討要")
      */
-    public function getUrl($url = null, $full = false, $sessionId = true)
+    public function getUrl($url = null, $full = false)
     {
-        // TODO ucmitz 未実装のため代替処理
-        // $sessionId について実装検討要
-        // >>>
         return $this->Url->build($url, ['fullBase' => $full]);
-        // <<<
-        return parent::url($url, $full, $sessionId);
     }
 
     /**

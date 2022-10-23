@@ -12,10 +12,8 @@
 namespace BaserCore\Test\TestCase\Model\Table;
 
 use BaserCore\Model\Table\AppTable;
-use BaserCore\Test\Factory\UserFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Model\Table\PermissionsTable as TablePermissionsTable;
-use Cake\Cache\Cache;
 
 /**
  * Class AppTableTest
@@ -130,7 +128,7 @@ class AppTableTest extends BcTestCase
     {
         $Permission = new TablePermissionsTable();
         $max = $Permission->getMax('no', []);
-        $this->assertEquals(22, $max);
+        $this->assertEquals(23, $max);
     }
 
     /**

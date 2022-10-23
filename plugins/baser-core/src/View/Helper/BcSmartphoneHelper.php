@@ -14,6 +14,10 @@ namespace BaserCore\View\Helper;
 use BaserCore\Event\BcEventDispatcherTrait;
 use Cake\Core\Configure;
 use Cake\View\Helper;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Note;
+use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
 
 /**
  * スマホヘルパー

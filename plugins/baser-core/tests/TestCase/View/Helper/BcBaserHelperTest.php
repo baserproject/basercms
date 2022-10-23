@@ -633,86 +633,37 @@ class BcBaserHelperTest extends BcTestCase
 
     /**
      * Test BcBaser->getUrlが適切なURLを取得してるかテスト
-     * @return void
-     * @todo testGetUrl_basercms4を統合する
+     * @dataProvider getUrlDataProvider
      */
-    public function testGetUrl()
+    public function testGetUrl($url, $full, $base, $expected)
     {
-        $url = '/sampletest';
-        $result = $this->BcBaser->getUrl($url, false);
-        $this->assertEquals('/sampletest', $result);
-        // フルパスかどうか
-        $result = $this->BcBaser->getUrl($url, true);
-        $this->assertEquals("https://localhost/sampletest", $result);
+        if($base) {
+            $this->BcBaser->getView()->setRequest($this->getRequest('/', [], 'GET', ['base' => $base]));
+        }
+        $this->assertEquals($expected, $this->BcBaser->getUrl($url, $full));
     }
 
-    /**
-     * Test BcBaser->getUrlが適切なURLを取得してるかテスト
-     * @return void
-     * @todo testGetUrlに統合する
-     */
-    public function testGetUrl_Version4()
+    public function getUrlDataProvider()
     {
-        // TODO; basercms4系より移植
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-
-        // ノーマル
-        $result = $this->BcBaser->getUrl('/about');
-        $this->assertEquals('/about', $result);
-
-        // 省略した場合
-        $result = $this->BcBaser->getUrl();
-        $this->assertEquals('/', $result);
-
-        // フルURL
-        $result = $this->BcBaser->getUrl('/about', true);
-        $this->assertEquals(Configure::read('App.fullBaseUrl') . '/about', $result);
-
-        // 配列URL
-        $result = $this->BcBaser->getUrl([
-            'admin' => true,
-            'plugin' => 'blog',
-            'controller' => 'blog_posts',
-            'action' => 'edit',
-            1
-        ]);
-        $this->assertEquals('/admin/blog/blog_posts/edit/1', $result);
-
-        // セッションIDを付加する場合
-        // TODO セッションIDを付加する場合、session.use_trans_sid の値が0である必要が
-        // があるが、上記の値はセッションがスタートした後では書込不可のため見送り
-        /*Configure::write('BcRequest.agent', 'mobile');
-        Configure::write('BcAgent.mobile.sessionId', true);
-        ini_set('session.use_trans_sid', 0);*/
-
-        // --- サブフォルダ+スマートURLオフ ---
-        Configure::write('App.baseUrl', '/basercms/index.php');
-        $this->BcBaser->request = $this->_getRequest('/');
-
-        // ノーマル
-        $result = $this->BcBaser->getUrl('/about');
-        $this->assertEquals('/basercms/index.php/about', $result);
-
-        // 省略した場合
-        $result = $this->BcBaser->getUrl();
-
-        $this->assertEquals('/basercms/index.php/', $result);
-
-        // フルURL
-        $result = $this->BcBaser->getUrl('/about', true);
-        $this->assertEquals(Configure::read('App.fullBaseUrl') . '/basercms/index.php/about', $result);
-
-        // 配列URL
-        $result = $this->BcBaser->getUrl([
-            'admin' => true,
-            'plugin' => 'blog',
-            'controller' => 'blog_posts',
-            'action' => 'edit',
-            1
-        ]);
-        $this->assertEquals('/basercms/index.php/admin/blog/blog_posts/edit/1', $result);
+        return [
+            // ノーマル
+            ['/sampletest', false, false, '/sampletest'],
+            // フルパス
+            ['/sampletest', true, false, 'https://localhost/sampletest'],
+            // 省略
+            [null, false, false, '/'],
+            // 配列
+            [[
+                'prefix' => 'Admin',
+                'plugin' => 'BcBlog',
+                'controller' => 'BlogPosts',
+                'action' =>
+                'edit', 1
+            ], false, false, '/baser/admin/bc-blog/blog_posts/edit/1'],
+            // サブフォルダ
+            ['/sampletest', false, '/sub', '/sub/sampletest'],
+        ];
     }
-
 
     /**************** TODO:下記basercms4系より移行 メソッドが準備され次第　調整して上記のテストコードに追加してください　********************/
 
