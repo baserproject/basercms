@@ -88,8 +88,8 @@ class ContentsAdminServiceTest extends \BaserCore\TestSuite\BcTestCase
     /**
      * testIsContentDeletable
      *
-     * @param int $id
-     * @param bool $expected
+     * @param  int $id
+     * @param  bool $expected
      * @return void
      * @dataProvider isContentDeletableDataProvider
      */
@@ -137,7 +137,13 @@ class ContentsAdminServiceTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function test_getViewVarsForContentActions()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $request = $this->getRequest('/baser/admin/baser-core/contents/index?list_type=1');
+        $this->loginAdmin($request);
+        $result = $this->ContentsAdmin->getViewVarsForContentActions($this->ContentsAdmin->get(5), null);
+        $this->assertArrayHasKey('isAvailablePreview', $result);
+        $this->assertArrayHasKey('isAvailableDelete', $result);
+        $this->assertArrayHasKey('currentAction', $result);
+        $this->assertArrayHasKey('isAlias', $result);
     }
 
     /**
