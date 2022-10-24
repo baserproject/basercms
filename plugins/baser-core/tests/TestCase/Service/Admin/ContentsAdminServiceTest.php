@@ -88,8 +88,8 @@ class ContentsAdminServiceTest extends \BaserCore\TestSuite\BcTestCase
     /**
      * testIsContentDeletable
      *
-     * @param  int $id
-     * @param  bool $expected
+     * @param int $id
+     * @param bool $expected
      * @return void
      * @dataProvider isContentDeletableDataProvider
      */
@@ -132,4 +132,35 @@ class ContentsAdminServiceTest extends \BaserCore\TestSuite\BcTestCase
         $this->assertTrue(isset($vars['isContentDeletable']));
     }
 
+    /**
+     * test getViewVarsForContentActions
+     */
+    public function test_getViewVarsForContentActions()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * test _isAvailablePreview
+     */
+    public function test_isAvailablePreview()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * test _isAvailableDelete
+     */
+    public function test_isAvailableDelete()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * test getViewVarsForTrashIndex
+     */
+    public function test_getViewVarsForTrashIndex()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
 }
