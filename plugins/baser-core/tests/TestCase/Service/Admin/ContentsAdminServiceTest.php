@@ -153,7 +153,16 @@ class ContentsAdminServiceTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function test_isAvailableDelete()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $request = $this->getRequest('/baser/admin/baser-core/contents/index?list_type=1');
+        $this->loginAdmin($request);
+
+        $content = $this->ContentsAdmin->get(1);
+        $result = $this->execPrivateMethod($this->ContentsAdmin, '_isAvailableDelete', [$content]);
+        $this->assertFalse($result);
+
+        $content = $this->ContentsAdmin->get(4);
+        $result = $this->execPrivateMethod($this->ContentsAdmin, '_isAvailableDelete', [$content]);
+        $this->assertTrue($result);
     }
 
     /**
