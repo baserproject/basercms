@@ -154,6 +154,7 @@ class BcCkeditorHelperTest extends BcTestCase
         $request = $this->BcCkeditor->getView()->getRequest()->withAttribute('formTokenData', ['dummy']);
         $this->BcCkeditor->getView()->setRequest($request);
         $this->BcCkeditor->BcAdminForm->create();
+
         $options = [
             'editorToolbar' => [['Bold']],
             'editorDisableCopyDraft' => ['test draft'],
@@ -162,6 +163,7 @@ class BcCkeditorHelperTest extends BcTestCase
         ];
         $result = $this->BcCkeditor->setDraft('contents', $options);
         $this->assertCount(5, $result['editorToolbar'][0]);
+
         $options = [
             'editorToolbar' => [['Bold']],
             'editorDisableCopyDraft' => [],
@@ -173,6 +175,7 @@ class BcCkeditorHelperTest extends BcTestCase
         $this->assertContains('CopyPublish', $result['editorToolbar'][0]);
         $this->assertEquals('Contents', $result['publishAreaId']);
         $this->assertEquals('Test', $result['draftAreaId']);
+
         $result = $this->BcCkeditor->setDraft('page.contents', $options);
         $this->assertEquals('PageContents', $result['publishAreaId']);
         $this->assertEquals('PageTest', $result['draftAreaId']);
