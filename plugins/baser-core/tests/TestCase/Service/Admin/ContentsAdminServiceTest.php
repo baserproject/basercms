@@ -88,8 +88,8 @@ class ContentsAdminServiceTest extends \BaserCore\TestSuite\BcTestCase
     /**
      * testIsContentDeletable
      *
-     * @param  int $id
-     * @param  bool $expected
+     * @param int $id
+     * @param bool $expected
      * @return void
      * @dataProvider isContentDeletableDataProvider
      */
