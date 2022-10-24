@@ -21,6 +21,7 @@ use BaserCore\View\AppView;
  */
 class AppViewTest extends BcTestCase
 {
+
     /**
      * setUp method
      *
@@ -52,16 +53,6 @@ class AppViewTest extends BcTestCase
     {
         $this->assertNotEmpty($this->AppView->BcPage);
         $this->assertNotEmpty($this->AppView->BcBaser);
-    }
-
-    /**
-     * メソッドが未実装でwarningが出るためサンプルメソッド配置
-     * @test
-     * @return void
-     */
-    public function sampleTest(): void
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
 
 }

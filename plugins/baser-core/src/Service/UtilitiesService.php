@@ -368,6 +368,10 @@ class UtilitiesService implements UtilitiesServiceInterface
     {
         set_time_limit(0);
 
+        $postData = array_merge([
+            'encoding' => 'UTF-8'
+        ], $postData);
+
         if (BcUtil::isOverPostSize()) {
             throw new BcException(__d(
                 'baser',
@@ -422,6 +426,7 @@ class UtilitiesService implements UtilitiesServiceInterface
      * @return boolean
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _loadBackup($path, $encoding)
     {

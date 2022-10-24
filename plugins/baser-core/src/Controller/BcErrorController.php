@@ -20,10 +20,10 @@ use BaserCore\Annotation\Checked;
 /**
  * BcErrorController
  *
- * 継承先を \BaserCore\Controller\AppController に切り替えることにより、
- * エラー画面にフロントテーマを適用する（AppController::beforeRender() でテーマを適用しているため）
+ * 継承先を BcFrontAppController に切り替えることにより、
+ * エラー画面にフロントテーマを適用する（BcFrontAppController::beforeRender() でテーマを適用しているため）
  */
-class BcErrorController extends AppController
+class BcErrorController extends BcFrontAppController
 {
     /**
      * Initialization hook method.

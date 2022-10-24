@@ -137,31 +137,28 @@ class AppController extends BaseController
     }
 
     /**
-     * Before Render
+     * Before render
      * @param EventInterface $event
-     * @return \Cake\Http\Response|void|null
+     * @return Response|void|null
      * @checked
      * @noTodo
-     * @unitTest
      */
-    public function beforeRender(EventInterface $event): void
+    public function beforeRender(EventInterface $event)
     {
         parent::beforeRender($event);
-        if (!isset($this->RequestHandler) || !$this->RequestHandler->prefers('json')) {
-            $this->setupFrontView();
-        }
+        $this->set($this->getService(AppServiceInterface::class)->getViewVarsForAll());
     }
 
     /**
      * フロント用のViewクラスをセットアップする
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function setupFrontView(): void
     {
         $this->viewBuilder()->setClassName('BaserCore.BcFrontApp');
         $this->viewBuilder()->setTheme(BcUtil::getCurrentTheme());
-        $this->set($this->getService(AppServiceInterface::class)->getViewVarsForAll());
     }
 
     /**

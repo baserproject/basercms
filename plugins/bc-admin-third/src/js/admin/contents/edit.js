@@ -117,8 +117,9 @@ $(function () {
                                         $("#Waiting").show();
                                     },
                                     success: function (result) {
+                                        $.bcUtil.hideLoader();
+                                        location.hash = '#Page';
                                         $.bcUtil.showNoticeMessage(bcI18n.contentsEditInfoMessage1);
-                                        $.bcUtil.showNoticeMessage(result.message);
                                         location.href = $.bcUtil.adminBaseUrl + 'baser-core' +  '/contents/edit_alias/' + result.content.id;
                                     },
                                     error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -189,6 +190,8 @@ $(function () {
                                         $("#Waiting").show();
                                     },
                                     success: function (result) {
+                                        $.bcUtil.hideLoader();
+                                        location.hash = '#Page';
                                         $.bcUtil.showNoticeMessage(bcI18n.contentsEditInfoMessage2);
                                         location.href = bcManageContent[current.type]['url']['edit'] + '/' + result.content.entity_id;
                                     },

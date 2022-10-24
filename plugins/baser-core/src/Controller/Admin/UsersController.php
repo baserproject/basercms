@@ -15,6 +15,7 @@ use BaserCore\Model\Entity\User;
 use BaserCore\Model\Table\UsersTable;
 use BaserCore\Service\Admin\UsersAdminServiceInterface;
 use BaserCore\Service\SiteConfigsServiceInterface;
+use BaserCore\Service\UsersService;
 use BaserCore\Service\UsersServiceInterface;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
@@ -85,6 +86,7 @@ class UsersController extends BcAdminAppController
             $this->BcMessage->setError(__d('baser', '既に代理ログイン中のため失敗しました。'));
             return $this->redirect(['action' => 'index']);
         }
+        /* @var UsersService * $userService */
         $userService->loginToAgent($this->request, $this->response, $id, $this->referer());
         return $this->redirect($this->Authentication->getLoginRedirect() ?? Router::url(Configure::read('BcPrefixAuth.Admin.loginRedirect')));
     }

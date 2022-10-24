@@ -32,6 +32,17 @@ class UsersSeed extends AbstractSeed
                 'created' => '2022-10-01 09:00:00',
                 'modified' => '2022-10-01 09:00:00',
             ],
+            [
+                'id' => '2',
+                'name' => 'operator',
+                'password' => '$2y$10$YSYT3O.0QCLCCXrllkzmCeC7rB2H1p.VP/gODnwBLzNsfaurK1SKy',
+                'real_name_1' => 'operator',
+                'real_name_2' => '',
+                'email' => 'operator@example.com',
+                'nickname' => '',
+                'created' => '2022-10-01 09:00:00',
+                'modified' => '2022-10-01 09:00:00',
+            ],
         ];
 
         $table = $this->table('users');

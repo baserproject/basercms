@@ -90,7 +90,7 @@ class BcAdminAppController extends BcAppController
         $permission = $this->getService(PermissionsServiceInterface::class);
         if ($user && !$permission->check($this->getRequest()->getPath(), Hash::extract($user->toArray()['user_groups'], '{n}.id'))) {
             $this->BcMessage->setError(__d('baser', '指定されたページへのアクセスは許可されていません。'));
-            $this->redirect($this->Authentication->getLoginRedirect());
+            $this->redirect(Router::url(Configure::read('BcPrefixAuth.Admin.loginRedirect')));
         }
     }
 
@@ -273,7 +273,7 @@ class BcAdminAppController extends BcAppController
     {
         parent::beforeRender($event);
         if (isset($this->RequestHandler) && $this->RequestHandler->prefers('json')) return;
-        if ($this->getName() === 'Preview') return;
+        if ($this->getRequest()->getQuery('preview')) return;
         $this->viewBuilder()->setClassName('BaserCore.BcAdminApp');
         $this->setAdminTheme();
         $this->set($this->getService(BcAdminAppServiceInterface::class)->getViewVarsForAll());

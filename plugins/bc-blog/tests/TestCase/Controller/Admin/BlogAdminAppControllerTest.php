@@ -65,8 +65,9 @@ class BlogAdminAppControllerTest extends BcTestCase
         // BlogAdminAppがセットされている事を確認
         $this->Controller->beforeRender(new Event('beforeRender'));
         $this->assertEquals('BcBlog.BlogAdminApp', $this->Controller->viewBuilder()->getClassName());
-        // PreviewControllerを利用してBlogAdminAppがセットされない事を確認
-        $this->Controller->setName('Preview');
+        // PreviewControllerを利用してBlogAdminAppがセットされない事を確認\
+        $this->Controller->setRequest($this->Controller->getRequest()->withQueryParams(['preview' => 'default']));
+        $this->Controller->viewBuilder()->setClassName('');
         $this->Controller->beforeRender(new Event('beforeRender'));
         $this->assertNotEquals('BcBlog.BlogAdminApp', $this->Controller->viewBuilder()->getClassName());
     }

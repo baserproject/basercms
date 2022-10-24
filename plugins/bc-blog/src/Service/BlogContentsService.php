@@ -17,6 +17,7 @@ use BaserCore\Annotation\UnitTest;
 use BaserCore\Error\BcException;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
+use BcBlog\Model\Table\BlogContentsTable;
 use Cake\Core\Configure;
 use Cake\Datasource\EntityInterface;
 use Cake\ORM\Query;
@@ -24,6 +25,7 @@ use Cake\ORM\TableRegistry;
 
 /**
  * BlogContentsService
+ * @property BlogContentsTable $BlogContents
  */
 class BlogContentsService implements BlogContentsServiceInterface
 {
@@ -72,19 +74,27 @@ class BlogContentsService implements BlogContentsServiceInterface
     /**
      * 単一データ取得
      * @param int $id
+     * @param array $options
+     *  - `status`: ステータス。 publish を指定すると公開状態のもののみ取得（初期値：全て）
      * @return \Cake\Datasource\EntityInterface|array|null
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function get(int $id)
+    public function get(int $id, $options = [])
     {
-        return $this->BlogContents->find()
-            ->contain(['Contents' => ['Sites']])
-            ->where(['BlogContents.id' => $id])
-            ->first();
+        $options = array_merge([
+            'status' => ''
+        ], $options);
+        $conditions = ['BlogContents.id' => $id];
+        if($options['status'] === 'publish') {
+            $conditions = array_merge($conditions, $this->BlogContents->Contents->getConditionAllowPublish());
+        }
+        return $this->BlogContents->get($id, [
+            'conditions' => $conditions,
+            'contain' => ['Contents' => ['Sites']]
+        ]);
     }
-
 
     /**
      * 初期値を取得する

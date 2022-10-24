@@ -59,7 +59,7 @@ class ContentsAdminService extends ContentsService implements ContentsAdminServi
             'related' => $related,
             'currentSiteId' => $content->site_id,
             'mainSiteId' => $content->site->main_site_id,
-            'publishLink' => $content->url,
+            'publishLink' => $this->isAllowPublish($content)? $content->url : null,
             'parentContents' => $this->getContentFolderList($content->site_id, $options),
             'fullUrl' => $this->getUrl($content->url, true, $content->site->use_subdomain),
             'authorList' => $this->getService(UsersServiceInterface::class)->getList()
@@ -143,6 +143,13 @@ class ContentsAdminService extends ContentsService implements ContentsAdminServi
         ];
     }
 
+    /**
+     * ゴミ箱用の view 変数を生成する
+     * @param $contents
+     * @return array
+     * @noTodo
+     * @checked
+     */
     public function getViewVarsForTrashIndex($contents)
     {
         return [

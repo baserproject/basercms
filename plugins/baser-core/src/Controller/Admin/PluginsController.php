@@ -12,6 +12,7 @@
 namespace BaserCore\Controller\Admin;
 
 use BaserCore\Controller\Component\BcMessageComponent;
+use BaserCore\Error\BcException;
 use BaserCore\Model\Table\PluginsTable;
 use BaserCore\Service\Admin\PluginsAdminServiceInterface;
 use BaserCore\Service\PluginsServiceInterface;
@@ -187,60 +188,21 @@ class PluginsController extends BcAdminAppController
     }
 
     /**
-     * プラグインをアップロードしてインストールする
-     *
-     * @return void
+     * プラグインをアップロードする
+     * @checked
+     * @noTodo
      */
-    public function add()
+    public function add(PluginsServiceInterface $service)
     {
-        $this->setTitle(__d('baser', 'プラグインアップロード'));
-
-        //データなし
-        if (empty($this->request->getData())) {
-            if (BcUtil::isOverPostSize()) {
-                $this->BcMessage->setError(__d('baser', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size')));
+        if ($this->request->is('post')) {
+            try {
+                $name = $service->add($this->getRequest()->getUploadedFiles());
+                $this->BcMessage->setInfo(sprintf(__d('baser', '新規プラグイン「%s」を追加しました。'), $name));
+                $this->redirect(['action' => 'index']);
+            } catch (BcException $e) {
+                $this->BcMessage->setError(__d('baser', 'ファイルのアップロードに失敗しました。') . $e->getMessage());
             }
-            return;
         }
-
-        //アップロード失敗
-        if (empty($this->request->getData('Plugin.file.tmp_name'))) {
-            $this->BcMessage->setError(__d('baser', 'ファイルのアップロードに失敗しました。'));
-            return;
-        }
-
-        $zippedName = $this->request->getData('Plugin.file.name');
-        move_uploaded_file($this->request->getData('Plugin.file.tmp_name'), TMP . $zippedName);
-        App::uses('BcZip', 'Lib');
-        $BcZip = new BcZip();
-        if (!$BcZip->extract(TMP . $zippedName, APP . 'Plugin' . DS)) {
-            $msg = __d('baser', 'アップロードしたZIPファイルの展開に失敗しました。');
-            $msg .= "\n" . $BcZip->error;
-            $this->BcMessage->setError($msg);
-            $this->redirect(['action' => 'add']);
-            return;
-        }
-
-        $plugin = $BcZip->topArchiveName;
-
-        // 解凍したプラグインフォルダがキャメルケースでない場合にキャメルケースに変換
-        $plugin = preg_replace('/^\s*?(creating|inflating):\s*' . preg_quote(APP . 'Plugin' . DS, '/') . '/', '', $plugin);
-        $plugin = explode(DS, $plugin);
-        $plugin = $plugin[0];
-        $srcPluginPath = APP . 'Plugin' . DS . $plugin;
-        $Folder = new Folder();
-        $Folder->chmod($srcPluginPath, 0777);
-        $tgtPluginPath = APP . 'Plugin' . DS . Inflector::camelize($plugin);
-        if ($srcPluginPath != $tgtPluginPath) {
-            $Folder->move([
-                'to' => $tgtPluginPath,
-                'from' => $srcPluginPath,
-                'mode' => 0777
-            ]);
-        }
-        unlink(TMP . $zippedName);
-        $this->BcMessage->setSuccess(sprintf(__d('baser', '新規プラグイン「%s」を追加しました。'), $plugin));
-        $this->redirect(['action' => 'index']);
     }
 
     /**

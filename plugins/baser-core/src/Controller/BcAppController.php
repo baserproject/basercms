@@ -879,20 +879,6 @@ class BcAppController extends AppController
     }
 
     /**
-     * 検索ボックスの表示状態を保存する
-     *
-     * @param string $key キー
-     * @param mixed $open 1 Or ''
-     * @return void
-     */
-    public function admin_ajax_save_search_box($key, $open = '')
-    {
-        $this->Session->write('Baser.searchBoxOpened.' . $key, $open);
-        echo true;
-        exit();
-    }
-
-    /**
      * Internally redirects one action to another. Examples:
      *
      * setAction('another_action');

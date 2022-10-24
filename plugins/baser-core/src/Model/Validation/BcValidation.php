@@ -483,6 +483,7 @@ class BcValidation extends Validation
      */
     public static function containsScript($value)
     {
+        if(!$value) return true;
         $events = ['onclick', 'ondblclick', 'onmousedown', 'onmouseup', 'onmouseover', 'onmousemove',
             'onmouseout', 'onkeypress', 'onkeydown', 'onkeyup', 'onload', 'onunload',
             'onfocus', 'onblur', 'onsubmit', 'onreset', 'onselect', 'onchange'];

@@ -11,71 +11,27 @@
 
 namespace BcBlog\Controller;
 
+use BcBlog\Service\Front\BlogFrontService;
+use BcBlog\Service\Front\BlogFrontServiceInterface;
 use Cake\Event\EventInterface;
 
 /**
  * ブログ記事コントローラー
- *
- * @package Blog.Controller
- * @property BlogContent $BlogContent
- * @property BlogCategory $BlogCategory
- * @property BlogPost $BlogPost
- * @property BcAuthComponent $BcAuth
- * @property CookieComponent $Cookie
- * @property BcAuthConfigureComponent $BcAuthConfigure
- * @property BcContentsComponent $BcContents
- * @property Content $Content
  */
-class BlogController extends BlogAppController
+class BlogController extends BlogFrontAppController
 {
-    /**
-     * クラス名
-     *
-     * @var string
-     */
-    public $name = 'Blog';
 
     /**
-     * モデル
-     *
-     * @var array
+     * initialize
+     * @return void
+     * @checked
+     * @unitTest
      */
-    public $uses = [
-        'BcBlog.BlogCategory',
-        'BcBlog.BlogPost',
-        'BcBlog.BlogContent',
-        'Content',
-        'BcBlog.BlogTag'
-    ];
-
-    /**
-     * コンポーネント
-     *
-     * @var array
-     */
-    public $components = [
-        'BcAuth',
-        'Cookie',
-        'BcAuthConfigure',
-        'RequestHandler',
-        'BcEmail',
-        'Security',
-        'BcContents' => ['type' => 'BcBlog.BlogContent', 'useViewCache' => false]
-    ];
-
-    /**
-     * サブメニューエレメント
-     *
-     * @var array
-     */
-    public $subMenuElements = [];
-
-    /**
-     * ブログデータ
-     *
-     * @var array
-     */
-    public $blogContent = [];
+    public function initialize(): void
+    {
+        parent::initialize();
+        $this->loadComponent('BaserCore.BcFrontContents');
+    }
 
     /**
      * beforeFilter
@@ -85,26 +41,6 @@ class BlogController extends BlogAppController
     public function beforeFilter(EventInterface $event)
     {
         parent::beforeFilter($event);
-
-        /* 認証設定 */
-        $this->BcAuth->allow(
-            'index',
-            'mobile_index',
-            'smartphone_index',
-            'archives',
-            'mobile_archives',
-            'smartphone_archives',
-            'posts',
-            'mobile_posts',
-            'smartphone_posts',
-            'get_calendar',
-            'get_categories',
-            'get_posted_months',
-            'get_posted_years',
-            'get_recent_entries',
-            'get_authors',
-            'tags'
-        );
         $blogContentId = null;
 
         if (preg_match('/tags$/', $this->request->getParam('action'))) {
@@ -142,20 +78,6 @@ class BlogController extends BlogAppController
             if (!$blogContentId) {
                 $this->notFound();
             }
-
-            $this->BlogContent->recursive = -1;
-            if ($this->contentId) {
-                $this->blogContent = $this->BlogContent->read(
-                    null,
-                    $this->contentId
-                );
-            } else {
-                $this->blogContent = $this->BlogContent->read(
-                    null,
-                    $blogContentId
-                );
-                $this->contentId = $blogContentId;
-            }
         }
 
         if (empty($this->request->getAttribute('currentContent'))) {
@@ -167,22 +89,21 @@ class BlogController extends BlogAppController
             }
         }
 
+        // TODO ucmitz 未検証
+        /* >>>
         if (!empty($this->blogContent['BlogContent']['id'])) {
             $this->BlogPost->setupUpload($this->blogContent['BlogContent']['id']);
         }
 
-        $this->subMenuElements = ['default'];
-
         // ページネーションのリンク対策
         // コンテンツ名を変更している際、以下の設定を行わないとプラグイン名がURLに付加されてしまう
         // Viewで $paginator->options = array('url' => $this->passedArgs) を行う事が前提
-        if ($this->request->getParam('prefix') !== 'Admin') {
-            if (!empty($this->request->getAttribute('currentContent'))) {
-                $this->passedArgs['controller'] = $this->request->getAttribute('currentContent')->name;
-                $this->passedArgs['plugin'] = $this->request->getAttribute('currentContent')->name;
-            }
-            $this->passedArgs['action'] = $this->action;
+        if (!empty($this->request->getAttribute('currentContent'))) {
+            $this->passedArgs['controller'] = $this->request->getAttribute('currentContent')->name;
+            $this->passedArgs['plugin'] = $this->request->getAttribute('currentContent')->name;
         }
+        $this->passedArgs['action'] = $this->action;
+        <<< */
 
         // コメント送信用のトークンを出力する為にセキュリティコンポーネントを利用しているが、
         // 表示用のコントローラーなのでポストデータのチェックは必要ない
@@ -198,10 +119,13 @@ class BlogController extends BlogAppController
     public function beforeRender(EventInterface $event): void
     {
         parent::beforeRender($event);
-        $this->set('blogContent', $this->blogContent);
-        if (!empty($this->blogContent['BlogContent']['widget_area'])) {
-            $this->set('widgetArea', $this->blogContent['BlogContent']['widget_area']);
-        }
+        // TODO ucmitz 未確認
+        // >>>
+//        $this->set('blogContent', $this->blogContent);
+//        if (!empty($this->blogContent['BlogContent']['widget_area'])) {
+//            $this->set('widgetArea', $this->blogContent['BlogContent']['widget_area']);
+//        }
+        // <<<
     }
 
     /**
@@ -209,11 +133,10 @@ class BlogController extends BlogAppController
      *
      * @return void
      */
-    public function index()
+    public function index(BlogFrontServiceInterface $service)
     {
-        if ($this->request->getParam('pass.0') !== 'index') {
-            $this->notFound();
-        }
+        // TODO ucmitz 未検証
+        /* >>>
         if ($this->BcContents->preview === 'default' && $this->request->getData()) {
             $this->blogContent['BlogContent'] = $this->request->getData('BlogContent');
             $this->request = $this->request->withParsedBody($this->Content->saveTmpFiles(
@@ -221,6 +144,7 @@ class BlogController extends BlogAppController
             ));
             $this->request->withParam('Content.eyecatch', $this->request->getData('Content.eyecatch'));
         }
+
         if ($this->RequestHandler->isRss()) {
             Configure::write('debug', 0);
             if ($this->blogContent) {
@@ -255,27 +179,18 @@ class BlogController extends BlogAppController
             if ($this->request->url === 'rss/index') {
                 $this->notFound();
             }
-            $template = $this->blogContent['BlogContent']['template'] . DS . 'index';
             $listCount = $this->blogContent['BlogContent']['list_count'];
         }
 
         $datas = $this->_getBlogPosts(['num' => $listCount]);
-        if (BcUtil::loginUser()) {
-            $this->set(
-                'editLink',
-                [
-                    'admin' => true,
-                    'plugin' => 'blog',
-                    'controller' => 'blog_posts',
-                    'action' => 'index',
-                    $this->blogContent['BlogContent']['id']
-                ]
-            );
-        }
-        $this->set('posts', $datas);
-        $this->set('single', false);
-        $this->setTitle($this->request->getAttribute('currentContent')->title);
-        $this->render($template);
+        <<< */
+
+        /* @var BlogFrontService $service */
+        $vars = $service->getViewVarsForIndex($this->getRequest(), [
+            'status' => 'publish'
+        ]);
+        $this->set($vars);
+        $this->render($service->getIndexTemplate($vars['blogContent']));
     }
 
     /**

@@ -168,10 +168,6 @@ if (BC_INSTALLED) {
 $parameter = getUrlParamFromEnv();
 
 if (BC_INSTALLED) {
-    /**
-     * tmpフォルダ確認
-     */
-    checkTmpFolders();
 
     /**
      * キャッシュ設定

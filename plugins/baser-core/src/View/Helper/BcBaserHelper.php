@@ -358,6 +358,7 @@ class BcBaserHelper extends Helper
      * @return string
      * @checked
      * @unitTest
+     * @noTodo
      * @doc
      */
     public function getLink($title, $url = null, $options = [], $confirmMessage = false)
@@ -416,17 +417,6 @@ class BcBaserHelper extends Helper
                 $enabled = false;
             }
         }
-
-        // コンテンツ公開チェック
-        // TODO 統合コンテンツ管理のチェックに変更する
-//		if (isset($this->_Page) && $this->_View->getRequest()->getParam['prefix'] !== 'Admin') {
-//			$adminPrefix = Configure::read('Routing.prefixes.0');
-//			if (isset($this->_Page) && !preg_match('/^\/' . $adminPrefix . '/', $_url)) {
-//				if ($this->_Page->isPageUrl($_url) && !$this->_Page->checkPublish($_url)) {
-//					$enabled = false;
-//				}
-//			}
-//		}
 
         if (!$enabled) {
             if ($forceTitle) {
@@ -509,16 +499,15 @@ class BcBaserHelper extends Helper
      * @param mixed $url baserCMS設置フォルダからの絶対URL、もしくは配列形式のURL情報
      *        省略した場合には、PC用のトップページのURLを出力する
      * @param bool $full httpから始まるURLを取得するかどうか
-     * @param bool $sessionId セションIDを付加するかどうか
      * @return void
      * @checked
      * @unitTest
      * @noTodo
      * @doc
      */
-    public function url($url = null, $full = false, $sessionId = true)
+    public function url($url = null, $full = false)
     {
-        echo $this->getUrl($url, $full, $sessionId);
+        echo $this->getUrl($url, $full);
     }
 
     /**
@@ -638,108 +627,69 @@ class BcBaserHelper extends Helper
      */
     public function getContentsName($detail = false, $options = [])
     {
-
         $options = array_merge([
             'home' => 'Home',
             'default' => 'Default',
             'error' => 'Error',
-            'underscore' => false], $options);
+            'underscore' => false
+        ], $options);
 
         $home = $options['home'];
         $default = $options['default'];
         $error = $options['error'];
         $underscore = $options['underscore'];
+        $prefix = $plugin = $url0 = $url1 = $url2 = '';
+        $pass = $aryUrl = [];
 
-        $prefix = '';
-        $plugin = '';
-        $controller = '';
-        $action = '';
-        $pass = [];
-        $url0 = '';
-        $url1 = '';
-        $url2 = '';
-        $aryUrl = [];
-
-        if (!empty($this->getView()->getRequest()->getParam('prefix'))) {
-            $prefix = h($this->getView()->getRequest()->getParam('prefix'));
-        }
-        if (!empty($this->getView()->getRequest()->getParam('plugin'))) {
-            $plugin = h($this->getView()->getRequest()->getParam('plugin'));
-        }
-        $controller = h($this->getView()->getRequest()->getParam('controller'));
+        $request = $this->getView()->getRequest();
+        if (!empty($request->getParam('prefix'))) $prefix = h($request->getParam('prefix'));
+        if (!empty($request->getParam('plugin'))) $plugin = h($request->getParam('plugin'));
+        $controller = h($request->getParam('controller'));
         if ($prefix) {
-            $action = str_replace($prefix . '_', '', h($this->getView()->getRequest()->getParam('action')));
+            $action = str_replace($prefix . '_', '', h($request->getParam('action')));
         } else {
-            $action = h($this->getView()->getRequest()->getParam('action'));
+            $action = h($request->getParam('action'));
         }
-        if (!empty($this->getView()->getRequest()->getParam('pass'))) {
-            foreach($this->getView()->getRequest()->getParam('pass') as $key => $value) {
+        if (!empty($request->getParam('pass'))) {
+            foreach($request->getParam('pass') as $key => $value) {
                 if($key !== '?') $pass[$key] = h($value);
             }
         }
 
-        $url = explode('/', h($this->getView()->getRequest()->getPath()));
+        $url = explode('/', h($request->getPath()));
 
-        // url->0がnullの場合はずらす
-        if(empty($url[0])){
-            array_shift($url);
-        }
+        // $url[0]がnullの場合はずらす
+        if(empty($url[0])) array_shift($url);
 
-        if (!empty($this->getView()->getRequest()->getAttribute('currentSite')->alias)) {
-            array_shift($url);
-        }
-
-        if (isset($url[0])) {
-            $url0 = $url[0];
-        }
-        if (isset($url[1])) {
-            $url1 = $url[1];
-        }
-        if (isset($url[2])) {
-            $url2 = $url[2];
-        }
+        if (!empty($request->getAttribute('currentSite')->alias)) array_shift($url);
+        if (isset($url[0])) $url0 = $url[0];
+        if (isset($url[1])) $url1 = $url[1];
+        if (isset($url[2])) $url2 = $url[2];
 
         // 固定ページの場合
         if (!BcUtil::isAdminSystem()) {
-            $pageUrl = h($this->getView()->getRequest()->getPath());
-            if ($pageUrl === false) {
-                $pageUrl = '/';
-            } else {
-                //$pageUrl = '/' . $pageUrl;
-            }
+            $pageUrl = h($request->getPath());
+            if ($pageUrl === false) $pageUrl = '/';
 
             $sitePrefix = $this->getSitePrefix();
             if ($sitePrefix) {
                 $pageUrl = preg_replace('/^\/' . preg_quote($sitePrefix, '/') . '\//', '/', $pageUrl);
             }
-            if (preg_match('/\/$/', $pageUrl)) {
-                $pageUrl .= 'index';
-            }
+            if (preg_match('/\/$/', $pageUrl)) $pageUrl .= 'index';
             $pageUrl = preg_replace('/\.html$/', '', $pageUrl);
             $pageUrl = preg_replace('/^\//', '', $pageUrl);
             $aryUrl = explode('/', $pageUrl);
         } else {
             // プラグインルーティングの場合
             if ((($url1 == '' && in_array($action, ['index', 'mobile_index', 'smartphone_index'])) || ($url1 == $action)) && $url2 != $action && $plugin) {
-                $prefix = '';
-                $plugin = '';
+                $prefix = $plugin = '';
                 $controller = $url0;
             }
-            if ($plugin) {
-                $controller = $plugin . '_' . $controller;
-            }
-            if ($prefix) {
-                $controller = $prefix . '_' . $controller;
-            }
-            if ($controller) {
-                $aryUrl[] = $controller;
-            }
-            if ($action) {
-                $aryUrl[] = $action;
-            }
-            if ($pass) {
-                $aryUrl = array_merge($aryUrl, $pass);
-            }
+            if ($plugin) $controller = $plugin . '_' . $controller;
+            if ($prefix) $controller = $prefix . '_' . $controller;
+            if ($controller) $aryUrl[] = $controller;
+            if ($action) $aryUrl[] = $action;
+            if ($pass) $aryUrl = array_merge($aryUrl, $pass);
         }
 
         if ($this->getView()->getName() == 'CakeError') {
@@ -778,20 +728,14 @@ class BcBaserHelper extends Helper
      * @param mixed $url baserCMS設置フォルダからの絶対URL、もしくは配列形式のURL情報
      *        省略した場合には、PC用のトップページのURLを取得する
      * @param bool $full httpから始まるURLを取得するかどうか
-     * @param bool $sessionId セションIDを付加するかどうか
      * @return string URL
      * @checked
      * @unitTest
      * @note(value="$sessionId について実装検討要")
      */
-    public function getUrl($url = null, $full = false, $sessionId = true)
+    public function getUrl($url = null, $full = false)
     {
-        // TODO ucmitz 未実装のため代替処理
-        // $sessionId について実装検討要
-        // >>>
         return $this->Url->build($url, ['fullBase' => $full]);
-        // <<<
-        return parent::url($url, $full, $sessionId);
     }
 
     /**

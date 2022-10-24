@@ -1468,6 +1468,7 @@ class BcUtil
      * @param string $url
      * @return ServerRequest
      * @checked
+     * @noTodo
      */
     public static function createRequest($url = '/', $data = [], $method = 'GET', $config = [])
     {
@@ -1482,13 +1483,17 @@ class BcUtil
         if (preg_match('/^http/', $url)) {
             $parseUrl = parse_url($url);
             Configure::write('BcEnv.host', $parseUrl['host']);
+            $query = strpos($url, '?') !== false? explode('?', $url)[1] : '';
+            $queryParameters = [];
+            if($query) parse_str($query, $queryParameters);
             $defaultConfig = [
                 'uri' => ServerRequestFactory::createUri([
                     'HTTP_HOST' => $parseUrl['host'],
                     'REQUEST_URI' => $url,
                     'HTTPS' => (preg_match('/^https/', $url))? 'on' : '',
-                    'QUERY_STRING' => strpos($url, '?') !== false? explode('?', $url)[1] : ''
+                    'QUERY_STRING' => $query
                 ]),
+                'query' => $queryParameters,
                 'environment' => [
                     'REQUEST_METHOD' => $method
                 ]];
@@ -1537,6 +1542,42 @@ class BcUtil
         $bcRequestFilter = new BcRequestFilterMiddleware();
         $request = $bcRequestFilter->addDetectors($request);
         return $request;
+    }
+
+    /**
+     * 必要な一時フォルダが存在するかチェックし、
+     * なければ生成する
+     */
+    public static function checkTmpFolders()
+    {
+        if (!is_writable(TMP)) {
+            return;
+        }
+        $folder = new Folder();
+        $folder->create(TMP . 'sessions', 0777);
+        $folder->create(CACHE, 0777);
+        $folder->create(CACHE . 'models', 0777);
+        $folder->create(CACHE . 'persistent', 0777);
+        $folder->create(CACHE . 'environment', 0777);
+    }
+
+    /**
+     * プラグインの namespace を書き換える
+     * @param $newPlugin
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public static function changePluginNameSpace($newPlugin)
+    {
+        $pluginPath = BcUtil::getPluginPath($newPlugin);
+        if(!$pluginPath) return false;
+        $file = new File($pluginPath . 'src' . DS . 'Plugin.php');
+        $data = $file->read();
+        $file->write(preg_replace('/namespace .+?;/', 'namespace ' . $newPlugin . ';', $data));
+        $file->close();
+        return true;
     }
 
 }

@@ -11,17 +11,29 @@
 
 namespace BcBlog\Controller;
 
-use BaserCore\Controller\AppController;
+use BaserCore\Controller\BcFrontAppController;
+use Cake\Event\EventInterface;
 
 /**
  * ブログコントローラー基底クラス
- *
- * @package            Blog.Controller
- * @property BlogPost $BlogPost
- * @property BlogCategory $BlogCategory
  */
-class BlogAppController extends AppController
+class BlogFrontAppController extends BcFrontAppController
 {
+
+    /**
+     * Before Render
+     * @param EventInterface $event
+     * @return void
+     * @checked
+     * @noTodo
+     */
+    public function beforeRender(EventInterface $event): void
+    {
+        parent::beforeRender($event);
+        if (isset($this->RequestHandler) && $this->RequestHandler->prefers('json')) return;
+        $this->viewBuilder()->setClassName('BcBlog.BlogFrontApp');
+    }
+
     /**
      * コメントを管理者メールへメール送信する
      *
@@ -93,7 +105,7 @@ class BlogAppController extends AppController
 
         $data['SiteConfig'] = $this->siteConfigs;
         $sended = [];
-        foreach ($blogComments as $blogComment) {
+        foreach($blogComments as $blogComment) {
             if (!$blogComment['email'] || !$blogComment['status']) {
                 $sended[] = $blogComment['email'];
                 continue;
@@ -120,4 +132,5 @@ class BlogAppController extends AppController
 
         return $result ?? true;
     }
+
 }

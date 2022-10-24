@@ -55,4 +55,23 @@ class ContentFactory extends CakephpBaseFactory
             ->setField('status', true);
     }
 
+    /**
+     * ツリーのノードとしてのデータを生成する
+     *
+     * lft / rght はセットしない
+     * TreeBehavior::recover() でセットすること
+     * @return ContentFactory
+     */
+    public function treeNode($id, $siteId, $parentId, $name, $url, $entityId, $siteRoot = false)
+    {
+        return $this->setField('id', $id)
+            ->setField('site_id', $siteId)
+            ->setField('parent_id', $parentId)
+            ->setField('name', $name)
+            ->setField('url', $url)
+            ->setField('entity_id', $entityId)
+            ->setField('status', true)
+            ->setField('site_root', $siteRoot);
+    }
+
 }
