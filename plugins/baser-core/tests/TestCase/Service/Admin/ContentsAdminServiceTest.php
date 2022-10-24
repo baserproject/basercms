@@ -145,7 +145,13 @@ class ContentsAdminServiceTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function test_isAvailablePreview()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $content = $this->ContentsAdmin->get(1);
+        $result = $this->execPrivateMethod($this->ContentsAdmin, '_isAvailablePreview', [$content]);
+        $this->assertTrue($result);
+
+        $content = $this->ContentsAdmin->get(14);
+        $result = $this->execPrivateMethod($this->ContentsAdmin, '_isAvailablePreview', [$content]);
+        $this->assertFalse($result);
     }
 
     /**
