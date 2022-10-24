@@ -17,7 +17,7 @@ use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcBlog\Controller\Admin\BlogCategoriesController;
 use BcBlog\Test\Factory\BlogCategoryFactory;
-use BcBlog\Test\Factory\BlogContentsFactory;
+use BcBlog\Test\Factory\BlogContentFactory;
 use Cake\TestSuite\IntegrationTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
@@ -87,7 +87,7 @@ class BlogCategoriesControllerTest extends BcTestCase
      */
     public function testAdmin_index()
     {
-        BlogContentsFactory::make(['id' => 1, 'eye_catch_size' => 'YTo0OntzOjExOiJ0aHVtYl93aWR0aCI7czozOiIzMDAiO3M6MTI6InRodW1iX2hlaWdodCI7czozOiIzMDAiO3M6MTg6Im1vYmlsZV90aHVtYl93aWR0aCI7czozOiIxMDAiO3M6MTk6Im1vYmlsZV90aHVtYl9oZWlnaHQiO3M6MzoiMTAwIjt9'])->persist();
+        BlogContentFactory::make(['id' => 1, 'eye_catch_size' => 'YTo0OntzOjExOiJ0aHVtYl93aWR0aCI7czozOiIzMDAiO3M6MTI6InRodW1iX2hlaWdodCI7czozOiIzMDAiO3M6MTg6Im1vYmlsZV90aHVtYl93aWR0aCI7czozOiIxMDAiO3M6MTk6Im1vYmlsZV90aHVtYl9oZWlnaHQiO3M6MzoiMTAwIjt9'])->persist();
         ContentFactory::make(['id' => 1, 'entity_id' => 1, 'type' => 'BlogContent', 'plugin' => 'BcBlog'])->persist();
         $this->get('/baser/admin/bc-blog/blog_categories/index');
         $this->assertResponseError();
@@ -116,7 +116,7 @@ class BlogCategoriesControllerTest extends BcTestCase
             'site_root' => false,
             'status' => true
         ])->persist();
-        BlogContentsFactory::make([
+        BlogContentFactory::make([
             'id' => '1',
             'description' => 'baserCMS inc. [デモ] の最新の情報をお届けします。',
             'template' => 'default',
@@ -168,7 +168,7 @@ class BlogCategoriesControllerTest extends BcTestCase
             'site_root' => false,
             'status' => true
         ])->persist();
-        BlogContentsFactory::make([
+        BlogContentFactory::make([
             'id' => '1',
             'description' => 'baserCMS inc. [デモ] の最新の情報をお届けします。',
             'template' => 'default',

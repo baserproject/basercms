@@ -16,7 +16,7 @@ use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcBlog\Event\BcBlogViewEventListener;
-use BcBlog\Test\Factory\BlogContentsFactory;
+use BcBlog\Test\Factory\BlogContentFactory;
 use Cake\Core\Configure;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
@@ -86,7 +86,7 @@ class BcBlogViewEventListenerTest extends BcTestCase
      */
     public function testSetAdminMenu(): void
     {
-        BlogContentsFactory::make([
+        BlogContentFactory::make([
             'id' => '1',
             'description' => 'baserCMS inc. [デモ] の最新の情報をお届けします。',
             'template' => 'default',

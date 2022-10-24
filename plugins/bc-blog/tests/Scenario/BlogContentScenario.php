@@ -12,7 +12,7 @@
 namespace BcBlog\Test\Scenario;
 
 use BaserCore\Test\Factory\ContentFactory;
-use BcBlog\Test\Factory\BlogContentsFactory;
+use BcBlog\Test\Factory\BlogContentFactory;
 use CakephpFixtureFactories\Scenario\FixtureScenarioInterface;
 
 /**
@@ -40,7 +40,7 @@ class BlogContentScenario implements FixtureScenarioInterface
         $url = $args[4];
         ContentFactory::make(['plugin' => 'BcBlog', 'type' => 'BlogContent'])
             ->treeNode($id, $siteId, $parentId, $name, $url, $id, true)->persist();
-        BlogContentsFactory::make(['id' => $id])->persist();
+        BlogContentFactory::make(['id' => $id])->persist();
     }
 
 }

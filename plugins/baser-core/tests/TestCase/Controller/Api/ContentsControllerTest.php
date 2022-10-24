@@ -12,7 +12,7 @@
 namespace BaserCore\Test\TestCase\Controller\Api;
 
 use BaserCore\Test\Factory\PageFactory;
-use BcBlog\Test\Factory\BlogContentsFactory;
+use BcBlog\Test\Factory\BlogContentFactory;
 use Cake\Core\Configure;
 use BaserCore\Service\ContentsService;
 use Cake\TestSuite\IntegrationTestTrait;
@@ -295,7 +295,7 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function testRename()
     {
-        BlogContentsFactory::make(['id' => 31, 'description' => ''])->persist();
+        BlogContentFactory::make(['id' => 31, 'description' => ''])->persist();
         $this->patch("/baser/api/baser-core/contents/rename.json?token=" . $this->accessToken);
         $this->assertResponseFailure();
         $data = ['id' => 1, 'title' => 'testRename'];
@@ -418,7 +418,7 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function testBatchUnpublish()
     {
-        BlogContentsFactory::make(['id' => 31, 'description' => ''])->persist();
+        BlogContentFactory::make(['id' => 31, 'description' => ''])->persist();
         // unpublish
         $data = [
             'batch' => 'unpublish',
