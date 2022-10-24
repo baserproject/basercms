@@ -1048,6 +1048,7 @@ class BcFileUploader
      */
     public function saveTmpFiles($data, $tmpId)
     {
+        if(!$data) return false;
         $this->Session->delete('Upload');
         $this->tmpId = $tmpId;
         $data = $this->setupRequestData($data);

@@ -81,7 +81,12 @@ class ContentFoldersController extends BcApiController
             $this->setResponse($this->response->withStatus(400));
         }
         $this->set(['message' => $message]);
-        $this->viewBuilder()->setOption('serialize', ['message', 'content', 'errors']);
+        $this->viewBuilder()->setOption('serialize', [
+            'contentFolder',
+            'content',
+            'message',
+            'errors'
+        ]);
     }
 
     /**

@@ -12,20 +12,20 @@
 $(function() {
     var script = $("#AdminSearchScript");
     var adminSearchOpened = script.attr('data-adminSearchOpened');
-    var adminSearchOpenedSaveUrl = script.attr('data-adminSearchOpenedSaveUrl');
+    var adminSearchOpenedTarget = script.attr('data-adminSearchOpenedTarget');
 
-    changeSearchBox(adminSearchOpened, 0);
+    changeSearchBox(adminSearchOpenedTarget, adminSearchOpened, 0);
 
 	$('#BtnMenuSearch').click(function(){
 		if($('#Search').css('display') === 'none'){
-			changeSearchBox(true);
+			changeSearchBox(adminSearchOpenedTarget, true);
 		} else {
-			changeSearchBox(false);
+			changeSearchBox(adminSearchOpenedTarget, false);
 		}
 	});
 
 	$('#CloseSearch').click(function(){
-		changeSearchBox(false);
+		changeSearchBox(adminSearchOpenedTarget, false);
 	});
 
     $('#BtnSearchClear').click(function () {
@@ -38,18 +38,18 @@ $(function() {
     /**
      * 検索ボックスの開閉切り替え
      */
-    function changeSearchBox(open, time) {
+    function changeSearchBox(target, open, time) {
         if(time === undefined) time = 300;
-        var url = adminSearchOpenedSaveUrl;
+        var url = $.bcUtil.apiBaseUrl + 'baser-core/utilities/save_search_opened/' + target;
         if(open){
             $('#Search').slideDown(time);
-            url += '/1';
+            url += '/1.json';
         } else {
             $('#Search').slideUp(time);
-            url += '/';
+            url += '.json';
         }
         $.ajax({
-            type: "GET",
+            type: "POST",
             url: url,
             headers: {
                 "Authorization": $.bcJwt.accessToken,

@@ -56,8 +56,6 @@ class BcContentsRoute extends Route
             $publish = false;
             if (!empty($request->getQuery('host'))) {
                 Configure::write('BcEnv.host', $request->getQuery('host'));
-            } else {
-                Configure::write('BcEnv.host', '');
             }
         }
 

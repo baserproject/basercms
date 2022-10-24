@@ -59,9 +59,11 @@ class PreviewController extends BcAdminAppController
             Router::setRequest($request);
             $this->setRequest($request);
             $action = $request->getParam('action');
+            $controller = $request->getParam('controller');
+            $this->setName($controller);
             $this->viewBuilder()->setLayout('default');
             $this->viewBuilder()->setTemplate($action);
-            $this->viewBuilder()->setTemplatePath($request->getParam('controller'));
+            $this->viewBuilder()->setTemplatePath($controller);
             $this->setupFrontView();
 
             $serviceName = $request->getParam('plugin') . '\\Service\\Front\\' . $request->getParam('controller') . 'FrontServiceInterface';

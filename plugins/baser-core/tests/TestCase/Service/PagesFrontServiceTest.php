@@ -93,6 +93,6 @@ class PagesFrontServiceTest extends BcTestCase
 
         $this->PagesFront->setupPreviewForView($controller);
         $this->assertArrayHasKey('page', $controller->viewBuilder()->getVars());
-        $this->assertArrayHasKey('editLink', $controller->viewBuilder()->getVars());
+        $this->assertArrayNotHasKey('editLink', $controller->viewBuilder()->getVars());
     }
 }

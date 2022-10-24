@@ -125,7 +125,7 @@ class BlogHelper extends Helper
                 $content = $contentTable->find()->where([
                     'Contents.entity_id' => $this->currentBlogContent->id,
                     'Contents.type' => 'BlogContent',
-                    'Contents.alias_id <>' => null,
+                    'Contents.alias_id IS NOT' => null,
                     'Contents.site_id' => $this->_View->getRequest()->getAttribute('currentSite')->id
                 ])->first();
                 if (!$content) {
@@ -604,7 +604,7 @@ class BlogHelper extends Helper
         $this->setContent($blogContentId);
         $sitesTable = TableRegistry::getTableLocator()->get('BaserCore.Sites');
         $site = $sitesTable->findByUrl($this->currentContent->url);
-        $contentUrl = $this->BcBaser->getContentsUrl($this->currentContent->url, !$this->isSameSiteBlogContent($blogContentId), !empty($site->useSubDomain), false);
+        $contentUrl = $this->BcBaser->getContentsUrl($this->currentContent->url, !$this->isSameSiteBlogContent($blogContentId), !empty($site->use_subdomain), false);
         $path = ['category'];
         if ($categoryPath) {
             foreach ($categoryPath as $category) {

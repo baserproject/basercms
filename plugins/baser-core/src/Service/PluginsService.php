@@ -14,6 +14,7 @@ namespace BaserCore\Service;
 use BaserCore\Error\BcException;
 use BaserCore\Model\Entity\Plugin;
 use BaserCore\Model\Table\PluginsTable;
+use BaserCore\Utility\BcZip;
 use Cake\Cache\Cache;
 use Cake\Http\Client;
 use Cake\ORM\TableRegistry;
@@ -527,5 +528,49 @@ class PluginsService implements PluginsServiceInterface
     public function getNamesById($ids): array
     {
         return $this->Plugins->find('list')->where(['id IN' => $ids])->toArray();
+    }
+
+    /**
+     * プラグインをアップロードする
+     * @param array $postData
+     * @return string
+     * @checked
+     * @noTodo
+     */
+    public function add(array $postData)
+    {
+        if (BcUtil::isOverPostSize()) {
+            throw new BcException(__d(
+                'baser',
+                '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。',
+                ini_get('post_max_size')
+            ));
+        }
+        if (empty($_FILES['file']['tmp_name'])) {
+            $message = '';
+            if ($postData['file']->getError() === 1) {
+                $message = __d('baser', 'サーバに設定されているサイズ制限を超えています。');
+            }
+            throw new BcException($message);
+        }
+        $name = $postData['file']->getClientFileName();
+        $postData['file']->moveTo(TMP . $name);
+        $srcName = basename($name, '.zip');
+        $zip = new BcZip();
+        if (!$zip->extract(TMP . $name, TMP)) {
+            throw new BcException(__d('baser', 'アップロードしたZIPファイルの展開に失敗しました。'));
+        }
+
+        $num = 2;
+        $dstName = Inflector::camelize($srcName);
+        while(is_dir(BASER_PLUGINS . $dstName) || is_dir(BASER_THEMES . Inflector::dasherize($dstName))) {
+            $dstName = Inflector::camelize($srcName) . $num;
+            $num++;
+        }
+        $folder = new Folder(TMP . $srcName);
+        $folder->move(BASER_PLUGINS . $dstName, ['mode' => 0777]);
+        unlink(TMP . $name);
+        BcUtil::changePluginNameSpace($dstName);
+        return $dstName;
     }
 }

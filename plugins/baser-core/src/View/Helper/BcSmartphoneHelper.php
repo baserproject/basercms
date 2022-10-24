@@ -12,8 +12,12 @@
 namespace BaserCore\View\Helper;
 
 use BaserCore\Event\BcEventDispatcherTrait;
-use BaserCore\Utility\BcContainerTrait;
+use Cake\Core\Configure;
 use Cake\View\Helper;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Note;
+use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
 
 /**
  * スマホヘルパー
@@ -27,7 +31,6 @@ class BcSmartphoneHelper extends Helper
      * Trait
      */
     use BcEventDispatcherTrait;
-    use BcContainerTrait;
 
     /**
      * ヘルパ
@@ -40,45 +43,49 @@ class BcSmartphoneHelper extends Helper
      * afterLayout
      *
      * @return void
+     * @checked
      */
     public function afterLayout($layoutFile)
     {
-
-        // TODO ucmitz 代替措置
-        return;
-
-        if ($this->request->getParam('ext') === 'rss') {
-            $rss = true;
-        } else {
-            $rss = false;
-        }
+        // TODO ucmitz 未検証
+        // ブログのRSSを実装してから確認する
+        // >>>
+//        if ($this->request->getParam('ext') === 'rss') {
+//            $rss = true;
+//        } else {
+//            $rss = false;
+//        }
+        // ---
+        $rss = false;
+        // <<<
         $sites = \Cake\ORM\TableRegistry::getTableLocator()->get('BaserCore.Sites');
         $site = $sites->findByUrl($this->_View->getRequest()->getPath());
-        if (!$rss && $site->device == 'smartphone' && $this->_View->layoutPath != 'Emails' . DS . 'text') {
-            if (empty($this->request->getAttribute('currentSite'))) {
+        if (!$rss && $site->device == 'smartphone' && $this->_View->getLayoutPath() != 'Emails' . DS . 'text') {
+            if (empty($this->_View->getRequest()->getAttribute('currentSite'))) {
                 return;
             }
             // 内部リンクの自動変換
             if ($site->auto_link) {
                 $siteUrl = Configure::read('BcEnv.siteUrl');
                 $sslUrl = Configure::read('BcEnv.sslUrl');
-                $currentAlias = $this->request->getAttribute('currentSite')->alias;
+                $currentAlias = $this->_View->getRequest()->getAttribute('currentSite')->alias;
+                $base = '/' . $this->_View->getRequest()->getAttribute('base');
                 $regBaseUrls = [
-                    preg_quote(BC_BASE_URL, '/'),
-                    preg_quote(preg_replace('/\/$/', '', $siteUrl) . BC_BASE_URL, '/'),
+                    preg_quote($base, '/'),
+                    preg_quote(preg_replace('/\/$/', '', $siteUrl) . $base, '/'),
                 ];
                 if ($sslUrl) {
-                    $regBaseUrls[] = preg_quote(preg_replace('/\/$/', '', $sslUrl) . BC_BASE_URL, '/');
+                    $regBaseUrls[] = preg_quote(preg_replace('/\/$/', '', $sslUrl) . $base, '/');
                 }
                 $regBaseUrl = implode('|', $regBaseUrls);
 
                 // 一旦プレフィックスを除外
                 $reg = '/<a([^<]*?)href="((' . $regBaseUrl . ')(' . $currentAlias . '\/([^\"]*?)))\"/';
-                $this->_View->output = preg_replace_callback($reg, [$this, '_removePrefix'], $this->_View->output);
+                $this->_View->assign('content', preg_replace_callback($reg, [$this, '_removePrefix'], $this->_View->fetch('content')));
 
                 // プレフィックス追加
                 $reg = '/<a([^<]*?)href=\"(' . $regBaseUrl . ')([^\"]*?)\"/';
-                $this->_View->output = preg_replace_callback($reg, [$this, '_addPrefix'], $this->_View->output);
+                $this->_View->assign('content', preg_replace_callback($reg, [$this, '_addPrefix'], $this->_View->fetch('content')));
             }
         }
     }
@@ -89,7 +96,8 @@ class BcSmartphoneHelper extends Helper
      *
      * @param array $matches
      * @return string
-     * @access protected
+     * @checked
+     * @noTodo
      */
     protected function _removePrefix($matches)
     {
@@ -109,10 +117,12 @@ class BcSmartphoneHelper extends Helper
      *
      * @param array $matches
      * @return string
+     * @checked
+     * @noTodo
      */
     protected function _addPrefix($matches)
     {
-        $currentAlias = $this->request->getAttribute('currentSite')->alias;
+        $currentAlias = $this->_View->getRequest()->getAttribute('currentSite')->alias;
         $baseUrl = $matches[2];
         $etc = $matches[1];
         $url = $matches[3];

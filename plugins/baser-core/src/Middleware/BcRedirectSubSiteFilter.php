@@ -11,6 +11,8 @@
 
 namespace BaserCore\Middleware;
 
+use Cake\Core\Configure;
+use Cake\Http\Response;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -25,11 +27,6 @@ use Psr\Http\Server\RequestHandlerInterface;
  */
 class BcRedirectSubSiteFilter implements MiddlewareInterface
 {
-
-    /**
-     * Trait
-     */
-    use \BaserCore\Utility\BcContainerTrait;
 
     /**
      * 優先順位
@@ -52,21 +49,19 @@ class BcRedirectSubSiteFilter implements MiddlewareInterface
         RequestHandlerInterface $handler
     ): ResponseInterface
     {
-        $request = $event->getData('request');
         if (Configure::read('BcRequest.isUpdater')) {
             return $handler->handle($request);
         }
-        $response = $event->getData('response');
         if ($request->is('admin')) {
             return $handler->handle($request);
         }
-
         $sites = \Cake\ORM\TableRegistry::getTableLocator()->get('BaserCore.Sites');
         $subSite = $sites->getSubByUrl($request->getPath());
         if (!is_null($subSite) && $subSite->shouldRedirects($request)) {
-            $response->header('Location', $request->base . $subSite->makeUrl($request));
-            $response->statusCode(302);
-            return $response;
+            $response = new Response([
+                'status' => 302
+            ]);
+            return $response->withLocation($request->getAttribute('base') . $subSite->makeUrl($request));
         }
         return $handler->handle($request);
     }

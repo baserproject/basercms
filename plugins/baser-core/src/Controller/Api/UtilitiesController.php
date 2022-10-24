@@ -215,4 +215,23 @@ class UtilitiesController extends BcApiController
         $this->viewBuilder()->setOption('serialize', ['message']);
     }
 
+    /**
+     * 検索ボックスの表示状態を保存する
+     *
+     * @param string $key キー
+     * @param mixed $open 1 Or ''
+     * @return void
+     * @checked
+     * @noTodo
+     */
+    public function save_search_opened($key, $open = '')
+    {
+        $this->request->allowMethod(['post']);
+        $this->request->getSession()->write('BcApp.adminSearchOpened.' . $key, $open);
+        $this->set([
+            'result' => true
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['result']);
+    }
+
 }

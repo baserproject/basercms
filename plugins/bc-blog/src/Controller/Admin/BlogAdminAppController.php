@@ -34,7 +34,7 @@ class BlogAdminAppController extends BcAdminAppController
     {
         parent::beforeRender($event);
         if (isset($this->RequestHandler) && $this->RequestHandler->prefers('json')) return;
-        if ($this->getName() === 'Preview') return;
+        if ($this->getRequest()->getQuery('preview')) return;
         $this->viewBuilder()->setClassName('BcBlog.BlogAdminApp');
     }
 

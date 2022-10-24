@@ -88,18 +88,20 @@ class PagesService implements PagesServiceInterface
     /**
      * 固定ページを取得する
      * @param int $id
+     * @param array $options
+     *  - `status`: ステータス。 publish を指定すると公開状態のもののみ取得（初期値：全て）
      * @return EntityInterface
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function get($id, array $queryParams = []): EntityInterface
+    public function get($id, array $options = []): EntityInterface
     {
-        $queryParams = array_merge([
+        $options = array_merge([
             'status' => ''
-        ], $queryParams);
+        ], $options);
         $conditions = [];
-        if($queryParams['status'] === 'published') {
+        if($options['status'] === 'publish') {
             $conditions = $this->Pages->Contents->getConditionAllowPublish();
         }
         return $this->Pages->get($id, [

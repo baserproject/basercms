@@ -24,7 +24,9 @@ use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\Service\SitesServiceInterface;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
+use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\Event\EventInterface;
+use Cake\Http\Exception\NotFoundException;
 use Cake\Http\Response;
 use Cake\ORM\Query;
 use Cake\ORM\ResultSet;
@@ -118,8 +120,18 @@ class ContentsController extends BcAdminAppController
                 if ($event !== false) {
                     $this->request = ($event->getResult() === null || $event->getResult() === true)? $event->getData('request') : $event->getResult();
                 }
+                try {
+                    $contents = $this->paginate($service->getTableIndex($this->request->getQueryParams()));
+                } catch(NotFoundException $e) {
+                    // 1ページ目以外で最後のレコードを削除した際に発生するので1ページに戻す
+                    $paging = $this->request->getAttribute('paging');
+                    if($paging['Contents']['requestedPage'] !== 1) {
+                        return $this->redirect(['?' => array_merge($this->getRequest()->getQueryParams(), [
+                            'page' => 1,
+                        ])]);
+                    }
+                }
 
-                $contents = $this->paginate($service->getTableIndex($this->request->getQueryParams()));
                 break;
         }
 

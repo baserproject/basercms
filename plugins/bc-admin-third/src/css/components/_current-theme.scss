@@ -22,7 +22,8 @@
 
   &__screenshot {
     padding: 0;
-    border: 1px solid #ccc;
+    margin-top:0;
+    border: 1px solid $color_border;
     img {
       display: block;
       max-width: 100%;
@@ -72,8 +73,11 @@
     text-align: center;
     margin-top: 5px;
     margin-bottom: 5px;
-    border: 3px solid #ccc;
+    border: 1px solid $color_border;
     padding: 3px;
+    .bca-btn-icon {
+      display: inline-block;
+    }
   }
 
   .error-message {

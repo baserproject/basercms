@@ -12,11 +12,14 @@
 namespace BaserCore\View\Helper;
 
 use BaserCore\Event\BcEventDispatcherTrait;
+use BaserCore\Service\PermissionsService;
+use BaserCore\Service\PermissionsServiceInterface;
 use BaserCore\Service\SitesServiceInterface;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Core\Configure;
 use Cake\Routing\Router;
+use Cake\Utility\Hash;
 use Cake\View\Helper;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -108,10 +111,10 @@ class BcAdminHelper extends Helper
         if ($params) {
             $currentUrl .= '?' . $params;
         }
-        // TODO 要実装
-        // $Permission = ClassRegistry::init('Permission');
         $covertedAdminMenuGroups = [];
         $currentOn = false;
+        /* @var PermissionsService $permissionsService */
+        $permissionsService = $this->getService(PermissionsServiceInterface::class);
         foreach($adminMenuGroups as $group => $adminMenuGroup) {
             if (!empty($adminMenuGroup['disable']) && $adminMenuGroup['disable'] === true) {
                 continue;
@@ -131,10 +134,13 @@ class BcAdminHelper extends Helper
             $adminMenuGroup = array_merge(['name' => $group], $adminMenuGroup);
 
             if (!empty($adminMenuGroup['url'])) {
-
                 $adminMenuGroup['url'] = preg_replace('/^' . preg_quote($base, '/') . '\//', '/', $this->BcBaser->getUrl($adminMenuGroup['url']));
-                if (preg_match('/^' . preg_quote($adminMenuGroup['url'], '/') . '$/', $currentUrl)) {
-                    $adminMenuGroup['current'] = true;
+                if ($permissionsService->check($adminMenuGroup['url'], Hash::extract(BcUtil::loginUserGroup(), '{n}.id'))) {
+                    if (preg_match('/^' . preg_quote($adminMenuGroup['url'], '/') . '$/', $currentUrl)) {
+                        $adminMenuGroup['current'] = true;
+                    }
+                } else {
+                    unset($adminMenuGroup['url']);
                 }
             }
 
@@ -150,8 +156,7 @@ class BcAdminHelper extends Helper
                     $adminMenu['name'] = $menu;
                     $url = $this->BcBaser->getUrl($adminMenu['url']);
                     $url = preg_replace('/^' . preg_quote($base, '/') . '\//', '/', $url);
-                    // TODO : 要実装
-//					if ($Permission->check($url, $this->_View->viewVars['user']['user_group_id'])) {
+					if (!$permissionsService->check($url, Hash::extract(BcUtil::loginUserGroup(), '{n}.id'))) continue;
                     if (empty($adminMenuGroup['url'])) {
                         $adminMenuGroup['url'] = $url;
                     }
@@ -164,7 +169,6 @@ class BcAdminHelper extends Helper
                         $currentOn = true;
                     }
                     $covertedAdminMenus[] = $adminMenu;
-//					}
                 }
             }
             if ($covertedAdminMenus) {
@@ -215,7 +219,7 @@ class BcAdminHelper extends Helper
     public function getJsonMenu()
     {
         $adminMenuGroups = $this->getAdminMenuGroups();
-        if($adminMenuGroups === false || !BcUtil::isAdminUser()) return null;
+        if($adminMenuGroups === false) return null;
         $loginUserGroup = BcUtil::loginUserGroup();
         if($loginUserGroup === false) return null;
         $currentSiteId = 1;
@@ -353,17 +357,11 @@ class BcAdminHelper extends Helper
         $template = $this->_View->get('search');
         $contentsName = $this->BcBaser->getContentsName(true);
         $adminSearchOpened = $this->_View->getRequest()->getSession()->read('BcApp.adminSearchOpened.' . $contentsName);
-        $adminSearchOpenedSaveUrl = $this->BcBaser->getUrl([
-            'plugin' => 'BaserCore',
-            'controller' => 'Utilities',
-            'action' => 'ajax_save_search_box',
-            $contentsName
-        ]);
         if ($template) {
             echo $this->_View->element('search', [
                 'search' => $template,
                 'adminSearchOpened' => $adminSearchOpened,
-                'adminSearchOpenedSaveUrl' => $adminSearchOpenedSaveUrl
+                'adminSearchOpenedTarget' => $contentsName
             ]);
         }
     }

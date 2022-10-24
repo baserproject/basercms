@@ -13,13 +13,15 @@
 namespace BcBlog\Test\TestCase\View\Helper;
 
 use App\View\AppView;
-use BaserCore\Model\Entity\Content;
 use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\TestSuite\BcTestCase;
-use BcBlog\Model\Entity\BlogContent;
 use BcBlog\Test\Factory\BlogContentsFactory;
+use BcBlog\Test\Scenario\BlogContentScenario;
+use BcBlog\Test\Scenario\MultiSiteBlogScenario;
 use BcBlog\View\Helper\BlogHelper;
+use Cake\Core\Configure;
 use Cake\View\View;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Blog helper library.
@@ -31,12 +33,20 @@ class BlogHelperTest extends BcTestCase
 {
 
     /**
+     * Trait
+     */
+    use ScenarioAwareTrait;
+
+    /**
      * Fixtures
      * @var array
      */
     public $fixtures = [
+        'plugin.BaserCore.Factory/Sites',
         'plugin.BaserCore.Factory/Contents',
+        'plugin.BaserCore.Factory/ContentFolders',
         'plugin.BcBlog.Factory/BlogContents',
+        'plugin.BcBlog.Factory/BlogCategories',
     ];
 
     /**
@@ -48,40 +58,16 @@ class BlogHelperTest extends BcTestCase
     {
         $this->setFixtureTruncate();
         parent::setUp();
-        ContentFactory::make([
-            'id' => 6,
-            'url' => '/blog/',
-            'name' => 'blog',
-            'plugin' => 'BcBlog',
-            'type' => 'BlogContent',
-            'site_id' => 1,
-            'parent_id' => 3,
-            'lft' => 7,
-            'rght' => 8,
-            'entity_id' => 1,
-            'site_root' => false,
-            'status' => true
-        ])->persist();
-        BlogContentsFactory::make([
-            'id' => '1',
-            'description' => 'baserCMS inc. [デモ] の最新の情報をお届けします。',
-            'template' => 'default',
-            'list_count' => '10',
-            'list_direction' => 'DESC',
-            'feed_count' => '10',
-            'tag_use' => '1',
-            'comment_use' => '1',
-            'comment_approve' => '0',
-            'auth_captcha' => '1',
-            'widget_area' => '2',
-            'eye_catch_size' => 'YTo0OntzOjExOiJ0aHVtYl93aWR0aCI7czozOiIzMDAiO3M6MTI6InRodW1iX2hlaWdodCI7czozOiIzMDAiO3M6MTg6Im1vYmlsZV90aHVtYl93aWR0aCI7czozOiIxMDAiO3M6MTk6Im1vYmlsZV90aHVtYl9oZWlnaHQiO3M6MzoiMTAwIjt9',
-            'use_content' => '1',
-            'created' => '2015-08-10 18:57:47',
-            'modified' => NULL,
-        ])->persist();
+        $this->loadFixtureScenario(BlogContentScenario::class,
+            1,  // id
+            1, // siteId
+            1, // parentId
+            'news', // name
+            '/news/' // url
+        );
         $view = new AppView();
         $blogContent = BlogContentsFactory::get(1);
-        $blogContent->content = ContentFactory::get(6);
+        $blogContent->content = ContentFactory::get(1);
         $view->set('blogContent', $blogContent);
         $this->Blog = new BlogHelper($view);
     }
@@ -101,7 +87,7 @@ class BlogHelperTest extends BcTestCase
      */
     public function test__construct()
     {
-        $this->assertEquals(6, $this->Blog->currentContent->id);
+        $this->assertEquals(1, $this->Blog->currentContent->id);
     }
 
     /**
@@ -394,39 +380,46 @@ class BlogHelperTest extends BcTestCase
      * カテゴリ一覧へのURLを取得する
      *
      * @param int $blogCategoryId ブログカテゴリーID
-     * @param int $named $options['named']の値
+     * @param int $base URLベース
+     * @param bool $useBase URLベースを利用するかどうか
      * @param string $expected 期待値
      * @dataProvider getCategoryUrlDataProvider
      */
-    public function testGetCategoryUrl($blogCategoryId, $named, $base, $useBase, $expected)
+    public function testGetCategoryUrl($blogCategoryId, $base, $useBase, $expected)
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
+        $this->truncateTable('contents');
+        $this->truncateTable('blog_contents');
+        $this->loadFixtureScenario(MultiSiteBlogScenario::class);
+
+        $blogContent = BlogContentsFactory::get(6);
+        $blogContent->content = ContentFactory::get(6);
+        $this->Blog->getView()->set('blogContent', $blogContent);
+
         $siteUrl = Configure::read('BcEnv.siteUrl');
-        Configure::write('BcEnv.siteUrl', 'http://main.com');
-        $this->loadFixtures('ContentBcContentsRoute', 'SiteBcContentsRoute', 'BlogContentMultiSite', 'BlogCategoryMultiSite');
-        $this->Blog->request = $this->_getRequest('/');
-        $this->Blog->request->base = $base;
+        Configure::write('BcEnv.siteUrl', 'https://main.com');
+        $this->Blog->getView()->setRequest($this->getRequest('/', [], 'GET', $base? ['base' => $base] : []));
         $options = [
-            'named' => $named,
             'base' => $useBase
         ];
+
         $result = $this->Blog->getCategoryUrl($blogCategoryId, $options);
-        Configure::write('BcEnv.siteUrl', $siteUrl);
         $this->assertEquals($result, $expected, 'カテゴリ一覧へのURLを正しく取得できません');
+
+        Configure::write('BcEnv.siteUrl', $siteUrl);
     }
 
     public function getCategoryUrlDataProvider()
     {
         return [
-            [1, [], '', false, '/news/archives/category/release'],
-            [1, [], '/sub', false, '/news/archives/category/release'],
-            [1, [], '/sub', true, '/sub/news/archives/category/release'],
-            [2, [], '', false, '/news/archives/category/release/child'],
-            [3, [], '', false, '/news/archives/category/child-no-parent'],
-            [4, [], '', false, 'http://main.com/m/news/archives/category/release'],
-            [5, [], '', false, 'http://sub.main.com/news/archives/category/release'],
-            [6, [], '', false, 'http://another.com/news/archives/category/release'],
-            [1, ['test1', 'test2'], '', false, '/news/archives/category/release/test1/test2'],
+            [1, '', false, '/news/archives/category/release'],
+            [1, '/sub', false, '/news/archives/category/release'],
+            [1, '/sub', true, '/sub/news/archives/category/release'],
+            [2, '', false, '/news/archives/category/release/child'],
+            [3, '', false, '/news/archives/category/child-no-parent'],
+            [4, '', false, 'https://main.com/s/news2/archives/category/smartphone_release'],
+            [5, '', false, 'https://main.com/en/news3/archives/category/english_release'],
+            [6, '', false, 'https://example.com/news4/archives/category/another_domain_release'],
+            [7, '', false, 'https://sub.main.com/news5/archives/category/sub_domain_release'],
         ];
     }
 

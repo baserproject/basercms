@@ -12,11 +12,12 @@
 namespace BaserCore\View;
 
 use BaserCore\View\Helper\BcToolbarHelper;
+use BaserCore\View\Helper\BcUploadHelper;
 use Cake\View\View;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
-use BaserCore\View\Helper\BcContentHelper;
+use BaserCore\View\Helper\BcContentsHelper;
 use BaserCore\View\Helper\BcPageHelper;
 use BaserCore\View\Helper\BcBaserHelper;
 use BaserCore\Event\BcEventDispatcherTrait;
@@ -26,6 +27,7 @@ use BaserCore\Event\BcEventDispatcherTrait;
  * @package BaserCore\View
  * @property BcPageHelper $BcPage
  * @property BcBaserHelper $BcBaser
+ * @property BcUploadHelper $Upload
  * @property BcToolbarHelper $BcToolbar
  */
 class AppView extends View
@@ -57,6 +59,7 @@ class AppView extends View
         $this->loadHelper('BaserCore.BcContents');
         $this->loadHelper('BaserCore.BcPage');
         $this->loadHelper('BaserCore.BcBaser');
+        $this->loadHelper('BaserCore.BcUpload');
         $this->loadHelper('BaserCore.BcToolbar');
         $this->assign('title', $this->get('title'));
     }
