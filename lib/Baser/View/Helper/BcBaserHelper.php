@@ -2835,6 +2835,7 @@ END_FLASH;
 			$url = '/' . $this->request->url;
 		}
 		$url = preg_replace('/\.html$/', '', $url);
+		$url = preg_replace('/\/page:1$/', '', $url);
 		$url = preg_replace('/\\/index$/', '/', $url);
 		$this->_View->set('meta',
 			$this->BcHtml->meta('canonical',
