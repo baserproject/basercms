@@ -1,6 +1,4 @@
 <?php
-// TODO : コード確認要
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
@@ -11,41 +9,42 @@ return;
  * @since           baserCMS v 3.0.0
  * @license         https://basercms.net/license/index.html
  */
-
-App::uses('BlogContent', 'BcBlog.Model');
+namespace BcBlog\Test\TestCase\Model;
+use BaserCore\TestSuite\BcTestCase;
+use BcBlog\Model\Table\BlogContentsTable;
+use BcBlog\Test\Factory\BlogContentsFactory;
 
 /**
- * Class BlogContentTest
+ * Class BlogContentsTableTest
  *
- * @property BlogContent $BlogContent
+ * @property BlogContentsTable $BlogContentsTable
  */
-class BlogContentsTableTest extends BaserTestCase
+class BlogContentsTableTest extends BcTestCase
 {
 
     public $fixtures = [
-        'baser.Default.SearchIndex',
-        'baser.Default.SiteConfig',
-        'baser.Default.BlogPost',
-        'baser.Default.BlogPostsBlogTag',
-        'baser.Default.BlogCategory',
-        'baser.Default.BlogContent',
-        'baser.Default.BlogComment',
-        'baser.Default.Content',
-        'baser.Default.Site',
-        'baser.Default.User',
-        'baser.Default.UserGroup',
-        'baser.Default.Favorite'
+        'plugin.BcBlog.Factory/BlogContents',
     ];
 
-    public function setUp()
+    /**
+     * Setup
+     *
+     * @return void
+     */
+    public function setUp(): void
     {
-        $this->BlogContent = ClassRegistry::init('BcBlog.BlogContent');
         parent::setUp();
+        $this->BlogContentsTable = new BlogContentsTable();
     }
 
-    public function tearDown()
+    /**
+     * Tear down
+     *
+     * @return void
+     */
+    public function tearDown(): void
     {
-        unset($this->BlogContent);
+        unset($this->BlogContentsTable);
         parent::tearDown();
     }
 
@@ -54,6 +53,7 @@ class BlogContentsTableTest extends BaserTestCase
 	 */
     public function test空チェック()
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $this->BlogContent->create([
             'BlogContent' => [
                 'list_direction' => ''
@@ -66,6 +66,7 @@ class BlogContentsTableTest extends BaserTestCase
 
     public function test桁数チェック異常系()
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $this->BlogContent->create([
             'BlogContent' => [
                 'layout' => '123456789012345678901',
@@ -83,6 +84,7 @@ class BlogContentsTableTest extends BaserTestCase
 
     public function test桁数チェック正常系()
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $this->BlogContent->create([
             'BlogContent' => [
                 'layout' => '12345678901234567890',
@@ -95,6 +97,7 @@ class BlogContentsTableTest extends BaserTestCase
 
     public function testその他異常系()
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         // 半角チェック
         $this->BlogContent->create([
             'BlogContent' => [
@@ -136,6 +139,7 @@ class BlogContentsTableTest extends BaserTestCase
 
     public function testその他正常系()
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         // eye_catch_sizeチェック
         $data = [
             'thumb_width' => 1,
@@ -161,6 +165,7 @@ class BlogContentsTableTest extends BaserTestCase
      */
     public function testAlphaNumeric($key, $expected)
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $this->assertEquals($this->BlogContent->alphaNumeric($key), $expected);
     }
 
@@ -186,6 +191,7 @@ class BlogContentsTableTest extends BaserTestCase
      */
     public function testGetControlSource($field, $expected)
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $result = $this->BlogContent->getControlSource($field);
         $this->assertEquals($result, $expected);
     }
@@ -209,6 +215,7 @@ class BlogContentsTableTest extends BaserTestCase
      */
     public function testAfterSave($id, $exclude_search)
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $this->_loginAdmin();
         $this->BlogContent->create([
             'BlogContent' => [
@@ -295,6 +302,7 @@ class BlogContentsTableTest extends BaserTestCase
      */
     public function testCopy()
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $this->_loginAdmin();
         $this->BlogContent->copy(1, 1, 'hoge1', 1, 0);
         $result = $this->BlogContent->find('first', [
@@ -313,6 +321,7 @@ class BlogContentsTableTest extends BaserTestCase
      */
     public function testGetDefaultValue()
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $data = $this->BlogContent->getDefaultValue();
         $this->assertEquals($data['BlogContent']['comment_use'], true);
         $this->assertEquals($data['BlogContent']['comment_approve'], false);
@@ -334,12 +343,16 @@ class BlogContentsTableTest extends BaserTestCase
     /**
      * アイキャッチサイズフィールドの値をDB用に変換する
      */
-    public function testDeconstructEyeCatchSize()
+    public function test_deconstructEyeCatchSize()
     {
-        $data = $this->BlogContent->deconstructEyeCatchSize($this->BlogContent->getDefaultValue());
+        BlogContentsFactory::make([
+            'id' => 1,
+            'description' => 'baserCMS inc. [デモ] の最新の情報をお届けします。',
+        ])->persist();
+        $data = $this->BlogContentsTable->deconstructEyeCatchSize($this->BlogContentsTable->get(1));
         $this->assertEquals(
-            $data['BlogContent']['eye_catch_size'],
-            'YTo0OntzOjExOiJ0aHVtYl93aWR0aCI7aTo2MDA7czoxMjoidGh1bWJfaGVpZ2h0IjtpOjYwMDtzOjE4OiJtb2JpbGVfdGh1bWJfd2lkdGgiO2k6MTUwO3M6MTk6Im1vYmlsZV90aHVtYl9oZWlnaHQiO2k6MTUwO30='
+            $data['eye_catch_size'],
+            'YTo0OntzOjExOiJ0aHVtYl93aWR0aCI7TjtzOjEyOiJ0aHVtYl9oZWlnaHQiO047czoxODoibW9iaWxlX3RodW1iX3dpZHRoIjtOO3M6MTk6Im1vYmlsZV90aHVtYl9oZWlnaHQiO047fQ=='
         );
     }
 
@@ -348,6 +361,7 @@ class BlogContentsTableTest extends BaserTestCase
      */
     public function testConstructEyeCatchSize()
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $data = $this->BlogContent->constructEyeCatchSize($this->BlogContent->deconstructEyeCatchSize($this->BlogContent->getDefaultValue()));
         $this->assertEquals($data['BlogContent']['eye_catch_size_thumb_width'], 600);
         $this->assertEquals($data['BlogContent']['eye_catch_size_thumb_height'], 600);
