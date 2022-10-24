@@ -31,6 +31,7 @@ class BlogContentsAdminService extends BlogContentsService implements BlogConten
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getViewVarsForEdit(EntityInterface $blogContent)
     {
