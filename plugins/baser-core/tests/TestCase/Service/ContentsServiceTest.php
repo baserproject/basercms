@@ -13,7 +13,7 @@ namespace BaserCore\Test\TestCase\Service;
 
 use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Factory\PageFactory;
-use BcBlog\Test\Factory\BlogContentsFactory;
+use BcBlog\Test\Factory\BlogContentFactory;
 use Cake\Core\Configure;
 use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\Routing\Router;
@@ -628,7 +628,7 @@ class ContentsServiceTest extends BcTestCase
             ['id' => 20],
             ['id' => 21]
         ])->persist();
-        BlogContentsFactory::make(['id' => 31, 'description' => ''])->persist();
+        BlogContentFactory::make(['id' => 31, 'description' => ''])->persist();
         $contents = $this->getTableLocator()->get('Contents');
 
         $content = $contents->find()->order(['id' => 'ASC'])->first();
@@ -657,7 +657,7 @@ class ContentsServiceTest extends BcTestCase
             ['id' => 20],
             ['id' => 21]
         ])->persist();
-        BlogContentsFactory::make(['id' => 31, 'description' => ''])->persist();
+        BlogContentFactory::make(['id' => 31, 'description' => ''])->persist();
         $contents = $this->getTableLocator()->get('Contents');
 
         $content = $contents->find()->order(['id' => 'ASC'])->first();
