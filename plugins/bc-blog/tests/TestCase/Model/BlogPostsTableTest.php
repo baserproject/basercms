@@ -13,8 +13,8 @@ namespace BcBlog\Test\TestCase\Model;
 
 use BaserCore\TestSuite\BcTestCase;
 use BcBlog\Model\Table\BlogPostsTable;
-use BcBlog\Test\Factory\BlogContentsFactory;
-use BcBlog\Test\Factory\BlogPostsFactory;
+use BcBlog\Test\Factory\BlogContentFactory;
+use BcBlog\Test\Factory\BlogPostFactory;
 
 /**
  * Class BlogPostsTableTest
@@ -219,7 +219,7 @@ class BlogPostsTableTest extends BcTestCase
      */
     public function testSetupUpload()
     {
-        BlogContentsFactory::make([
+        BlogContentFactory::make([
             'id' => '1',
             'description' => 'baserCMS inc. [デモ] の最新の情報をお届けします。',
             'template' => 'default',
@@ -236,7 +236,7 @@ class BlogPostsTableTest extends BcTestCase
             'created' => '2015-08-10 18:57:47',
             'modified' => NULL,
         ])->persist();
-        BlogPostsFactory::make([
+        BlogPostFactory::make([
             'id' => '1',
             'blog_content_id' => '1',
             'no' => '1',

@@ -73,6 +73,7 @@ class ContentsAdminService extends ContentsService implements ContentsAdminServi
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getViewVarsForContentActions($content, $currentAction)
     {
@@ -90,6 +91,7 @@ class ContentsAdminService extends ContentsService implements ContentsAdminServi
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _isAvailablePreview($content)
     {
@@ -149,6 +151,7 @@ class ContentsAdminService extends ContentsService implements ContentsAdminServi
      * @return array
      * @noTodo
      * @checked
+     * @unitTest
      */
     public function getViewVarsForTrashIndex($contents)
     {

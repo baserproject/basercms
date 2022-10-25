@@ -15,7 +15,7 @@ use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcBlog\Controller\Api\BlogContentsController;
-use BcBlog\Test\Factory\BlogContentsFactory;
+use BcBlog\Test\Factory\BlogContentFactory;
 use Cake\Core\Configure;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use Cake\TestSuite\IntegrationTestTrait;
@@ -90,8 +90,8 @@ class BlogContentsControllerTest extends BcTestCase
     public function test_index()
     {
         $this->truncateTable('blog_contents');
-        BlogContentsFactory::make(['id' => 10, 'description' => 'baserCMS inc. [デモ] の最新の情報をお届けします。'])->persist();
-        BlogContentsFactory::make(['id' => 11, 'description' => 'ディスクリプション'])->persist();
+        BlogContentFactory::make(['id' => 10, 'description' => 'baserCMS inc. [デモ] の最新の情報をお届けします。'])->persist();
+        BlogContentFactory::make(['id' => 11, 'description' => 'ディスクリプション'])->persist();
 
         $this->get('/baser/api/bc-blog/blog_contents/index.json?token=' . $this->accessToken);
         $this->assertResponseOk();
@@ -104,7 +104,7 @@ class BlogContentsControllerTest extends BcTestCase
      */
     public function test_view()
     {
-        BlogContentsFactory::make(['id' => 12, 'description' => 'baserCMS inc. [デモ] の最新の情報をお届けします。'])->persist();
+        BlogContentFactory::make(['id' => 12, 'description' => 'baserCMS inc. [デモ] の最新の情報をお届けします。'])->persist();
 
         $this->get('/baser/api/bc-blog/blog_contents/view/12.json?token=' . $this->accessToken);
         $this->assertResponseOk();
@@ -117,8 +117,8 @@ class BlogContentsControllerTest extends BcTestCase
      */
     public function test_list()
     {
-        BlogContentsFactory::make(['id' => 13, 'description' => 'baserCMS inc. [デモ] の最新の情報をお届けします。'])->persist();
-        BlogContentsFactory::make(['id' => 14, 'description' => 'ディスクリプション'])->persist();
+        BlogContentFactory::make(['id' => 13, 'description' => 'baserCMS inc. [デモ] の最新の情報をお届けします。'])->persist();
+        BlogContentFactory::make(['id' => 14, 'description' => 'ディスクリプション'])->persist();
 
         ContentFactory::make(['id' => 13, 'type' => 'BlogContent', 'entity_id' => 13, 'alias_id' => NULL, 'title' => 'baserCMS inc',])->persist();
         ContentFactory::make(['id' => 14, 'type' => 'BlogContent', 'entity_id' => 14, 'alias_id' => NULL, 'title' => 'ディスクリプション タイトル',])->persist();
@@ -162,7 +162,7 @@ class BlogContentsControllerTest extends BcTestCase
      */
     public function test_edit()
     {
-        BlogContentsFactory::make(['id' => 100, 'description' => '新しい'])->persist();
+        BlogContentFactory::make(['id' => 100, 'description' => '新しい'])->persist();
         //実行成功
         $data = [
             'id' => 100,
@@ -190,7 +190,7 @@ class BlogContentsControllerTest extends BcTestCase
      */
     public function test_delete()
     {
-        BlogContentsFactory::make(['id' => 101, 'description' => 'abc'])->persist();
+        BlogContentFactory::make(['id' => 101, 'description' => 'abc'])->persist();
 
         $this->post('/baser/api/bc-blog/blog_contents/delete/101.json?token=' . $this->accessToken);
         $this->assertResponseOk();

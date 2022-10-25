@@ -1,10 +1,9 @@
 <?php
-// TODO ucmitz 未実装
-return;
 
-//namespace BcBlog\Test\TestCase\Model\Validation;
+namespace BcBlog\Test\TestCase\Model\Validation;
 
 use BaserCore\TestSuite\BcTestCase;
+use BcBlog\Model\Validation\BlogContentValidation;
 
 class BlogContentValidationTest extends BcTestCase
 {
@@ -15,15 +14,12 @@ class BlogContentValidationTest extends BcTestCase
      */
     public function testCheckEyeCatchSize($thumb_width, $thumb_height, $mobile_thumb_width, $mobile_thumb_height, $expected)
     {
-        // TODO ucmitz 未調整
-        $this->markTestIncomplete('未実装のためスキップ');
-        $this->BlogContent->data['BlogContent']['eye_catch_size'] = BcUtil::serialize([
-            'thumb_width' => $thumb_width,
-            'thumb_height' => $thumb_height,
-            'mobile_thumb_width' => $mobile_thumb_width,
-            'mobile_thumb_height' => $mobile_thumb_height
-        ]);
-        $this->assertEquals($this->BlogContent->checkEyeCatchSize(), $expected);
+        $context['data']['eye_catch_size_thumb_width'] = $thumb_width;
+        $context['data']['eye_catch_size_thumb_height'] = $thumb_height;
+        $context['data']['eye_catch_size_mobile_thumb_width'] = $mobile_thumb_width;
+        $context['data']['eye_catch_size_mobile_thumb_height'] = $mobile_thumb_height;
+        $rs = BlogContentValidation::checkEyeCatchSize("test", $context);
+        $this->assertEquals($rs, $expected);
     }
 
     public function checkEyeCatchSizeDataProvider()

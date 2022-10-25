@@ -16,7 +16,7 @@ use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BcBlog\Service\BlogContentsService;
-use BcBlog\Test\Factory\BlogContentsFactory;
+use BcBlog\Test\Factory\BlogContentFactory;
 use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\TestSuite\IntegrationTestTrait;
 
@@ -84,7 +84,7 @@ class BlogContentsServiceTest extends BcTestCase
      */
     public function test_get()
     {
-        BlogContentsFactory::make(['id' => 60, 'description' => 'test get'])->persist();
+        BlogContentFactory::make(['id' => 60, 'description' => 'test get'])->persist();
         ContentFactory::make(['id' => 60, 'type' => 'BlogContent', 'entity_id' => 60, 'title' => 'title test get', 'site_id' => 60])->persist();
         SiteFactory::make(['id' => 60, 'theme' => 'BcBlog'])->persist();
         $rs = $this->BlogContentsService->get(60);
@@ -99,8 +99,8 @@ class BlogContentsServiceTest extends BcTestCase
      */
     public function test_getIndex()
     {
-        BlogContentsFactory::make(['id' => 100, 'description' => 'baserCMS inc. [デモ] の最新の情報をお届けします。'])->persist();
-        BlogContentsFactory::make(['id' => 101, 'description' => 'ディスクリプション'])->persist();
+        BlogContentFactory::make(['id' => 100, 'description' => 'baserCMS inc. [デモ] の最新の情報をお届けします。'])->persist();
+        BlogContentFactory::make(['id' => 101, 'description' => 'ディスクリプション'])->persist();
 
         $result = $this->BlogContentsService->getIndex([])->toArray();
         $this->assertEquals('baserCMS inc. [デモ] の最新の情報をお届けします。', $result[0]['description']);
@@ -115,8 +115,8 @@ class BlogContentsServiceTest extends BcTestCase
      */
     public function test_getList()
     {
-        BlogContentsFactory::make(['id' => 111, 'description' => 'test 1'])->persist();
-        BlogContentsFactory::make(['id' => 112, 'description' => 'test 2'])->persist();
+        BlogContentFactory::make(['id' => 111, 'description' => 'test 1'])->persist();
+        BlogContentFactory::make(['id' => 112, 'description' => 'test 2'])->persist();
 
         ContentFactory::make(['id' => 111, 'type' => 'BlogContent', 'entity_id' => 111, 'alias_id' => NULL, 'title' => 'baserCMSサンプル',])->persist();
         ContentFactory::make(['id' => 112, 'type' => 'BlogContent', 'entity_id' => 112, 'alias_id' => NULL, 'title' => 'baserCMSテスト',])->persist();
@@ -143,7 +143,7 @@ class BlogContentsServiceTest extends BcTestCase
      */
     public function test_update()
     {
-        BlogContentsFactory::make(['id' => 100, 'description' => '新しい'])->persist();
+        BlogContentFactory::make(['id' => 100, 'description' => '新しい'])->persist();
         $data = [
             'id' => 100,
             'description' => '更新した!',
@@ -200,7 +200,7 @@ class BlogContentsServiceTest extends BcTestCase
      */
     public function test_delete()
     {
-        BlogContentsFactory::make(['id' => 70, 'description' => 'test delete'])->persist();
+        BlogContentFactory::make(['id' => 70, 'description' => 'test delete'])->persist();
         $rs = $this->BlogContentsService->delete(70);
         //戻り値を確認
         $this->assertTrue($rs);

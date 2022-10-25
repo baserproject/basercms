@@ -88,8 +88,8 @@ class ContentsAdminServiceTest extends \BaserCore\TestSuite\BcTestCase
     /**
      * testIsContentDeletable
      *
-     * @param  int $id
-     * @param  bool $expected
+     * @param int $id
+     * @param bool $expected
      * @return void
      * @dataProvider isContentDeletableDataProvider
      */
@@ -132,4 +132,51 @@ class ContentsAdminServiceTest extends \BaserCore\TestSuite\BcTestCase
         $this->assertTrue(isset($vars['isContentDeletable']));
     }
 
+    /**
+     * test getViewVarsForContentActions
+     */
+    public function test_getViewVarsForContentActions()
+    {
+        $request = $this->getRequest('/baser/admin/baser-core/contents/index?list_type=1');
+        $this->loginAdmin($request);
+        $result = $this->ContentsAdmin->getViewVarsForContentActions($this->ContentsAdmin->get(5), null);
+        $this->assertArrayHasKey('isAvailablePreview', $result);
+        $this->assertArrayHasKey('isAvailableDelete', $result);
+        $this->assertArrayHasKey('currentAction', $result);
+        $this->assertArrayHasKey('isAlias', $result);
+    }
+
+    /**
+     * test _isAvailablePreview
+     */
+    public function test_isAvailablePreview()
+    {
+        $content = $this->ContentsAdmin->get(1);
+        $result = $this->execPrivateMethod($this->ContentsAdmin, '_isAvailablePreview', [$content]);
+        $this->assertTrue($result);
+
+        $content = $this->ContentsAdmin->get(14);
+        $result = $this->execPrivateMethod($this->ContentsAdmin, '_isAvailablePreview', [$content]);
+        $this->assertFalse($result);
+    }
+
+    /**
+     * test _isAvailableDelete
+     */
+    public function test_isAvailableDelete()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * test getViewVarsForTrashIndex
+     */
+    public function test_getViewVarsForTrashIndex()
+    {
+        $result = $this->ContentsAdmin->getViewVarsForTrashIndex($this->ContentsAdmin->get(5));
+        $this->assertArrayHasKey('contents', $result);
+        $this->assertArrayHasKey('isContentDeletable', $result);
+        $this->assertArrayHasKey('isUseMoveContents', $result);
+        $this->assertArrayHasKey('editInIndexDisabled', $result);
+    }
 }

@@ -25,6 +25,8 @@ use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
 use BaserCore\Utility\BcUtil;
 use BaserCore\TestSuite\BcTestCase;
+use Cake\Http\Session;
+use Cake\Routing\Router;
 
 /**
  * TODO: $this->getRequest();などをsetupに統一する
@@ -568,6 +570,29 @@ class BcUtilTest extends BcTestCase
     }
 
     /**
+     * Test urlencode
+     *
+     * @param $input
+     * @param $expected
+     * @dataProvider testUrlencodeProvider
+     */
+    public function testUrlencode($input, $expected)
+    {
+        $this->assertEquals($expected, BcUtil::urlencode($input));
+    }
+
+    public function testUrlencodeProvider(): array
+    {
+        return [
+            ['a=b+c', 'a_b_c'],
+            ['_a=b+c', 'a_b_c'],
+            ['_a=b+c_', 'a_b_c'],
+            ['__a=b+c_', 'a_b_c'],
+            ['!"#$%&a=b+c_', 'a_b_c'],
+        ];
+    }
+
+    /**
      * コンソールから実行されてるかどうかチェックする
      */
     public function testIsConsole()
@@ -1060,6 +1085,36 @@ class BcUtilTest extends BcTestCase
         // listeners() イベントの解除を確認
         $listeners = $eventManager->listeners($eventKey);
         $this->assertEmpty($listeners);
+    }
+
+    /**
+     * Test createRequest
+     *
+     * @return void
+     */
+    public function testCreateRequest(): void
+    {
+        // デフォルトURL $url = '/'
+        $urlList = ['' => '/*', '/about' => '/*', '/baser/admin/users/login' => '/baser/admin/{controller}/{action}/*'];
+        foreach($urlList as $url => $route) {
+            $request = BcUtil::createRequest($url);
+            $this->assertEquals($route, $request->getParam('_matchedRoute'));
+        }
+        // テストAttributeとsetRequest
+        $request = BcUtil::createRequest();
+        $this->assertObjectHasAttribute('params', $request);
+        // dataを設定する場合
+        $request = BcUtil::createRequest('/', ['testKey' => 'testValue']);
+        $data = $request->getParsedBody();
+        $this->assertEquals('testValue', $data['testKey']);
+        // methodを設定する場合
+        $request = BcUtil::createRequest('/', [], 'POST');
+        $this->assertEquals('POST', $request->getMethod());
+        // configを設定する場合
+        $session = new Session();
+        $session->write('test', 'testGetRequest');
+        $request = BcUtil::createRequest('/', [], 'GET', ['session' => $session]);
+        $this->assertEquals('testGetRequest', $request->getSession()->read('test'));
     }
 
     /**

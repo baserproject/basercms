@@ -79,6 +79,7 @@ class ContentFoldersFrontService extends ContentFoldersService implements Conten
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getTemplateForView($contentFolder): string
     {
