@@ -138,6 +138,6 @@ class PluginTest extends BcTestCase
         Router::setRequest(new ServerRequest(['url' => '/as/']));
         $this->Plugin->routes($routes);
         $result = Router::parseRequest($this->getRequest('/as/tags/bla'));
-        $this->assertEquals('LoremIpsum', $result['prefix']);
+        $this->assertEquals('LoremIpsum', $result['sitePrefix']);
     }
 }
