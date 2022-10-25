@@ -568,6 +568,29 @@ class BcUtilTest extends BcTestCase
     }
 
     /**
+     * Test urlencode
+     *
+     * @param $input
+     * @param $expected
+     * @dataProvider testUrlencodeProvider
+     */
+    public function testUrlencode($input, $expected)
+    {
+        $this->assertEquals($expected, BcUtil::urlencode($input));
+    }
+
+    public function testUrlencodeProvider(): array
+    {
+        return [
+            ['a=b+c', 'a_b_c'],
+            ['_a=b+c', 'a_b_c'],
+            ['_a=b+c_', 'a_b_c'],
+            ['__a=b+c_', 'a_b_c'],
+            ['!"#$%&a=b+c_', 'a_b_c'],
+        ];
+    }
+
+    /**
      * コンソールから実行されてるかどうかチェックする
      */
     public function testIsConsole()
