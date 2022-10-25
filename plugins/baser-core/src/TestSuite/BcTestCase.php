@@ -438,6 +438,7 @@ class BcTestCase extends TestCase
      * @param string $tableName
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function dropTable($tableName)
     {

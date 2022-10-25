@@ -11,6 +11,7 @@
 
 namespace BaserCore\Test\TestCase\TestSuite;
 
+use BaserCore\Database\Schema\BcSchema;
 use BaserCore\Utility\BcContainer;
 use BaserCore\View\Helper\BcFormHelper;
 use Cake\Event\Event;
@@ -18,6 +19,7 @@ use Cake\Event\EventManager;
 use Cake\Http\Session;
 use Cake\Core\Configure;
 use Cake\Log\Log;
+use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Controller\AnalyseController;
@@ -252,5 +254,26 @@ class BcTestCaseTest extends BcTestCase
         $this->assertEquals($filename, $_FILES[$name]['name']);
         $this->assertEquals($filename, $bcTestCase->_request['files'][$name]['name']);
         unlink($filePath);
+    }
+
+    /**
+     * test dropTable
+     */
+    public function testDropTable()
+    {
+        $table = 'table_for_test_drop_table';
+        $columns = [
+            'id' => ['type' => 'integer'],
+            'contents' => ['type' => 'text'],
+        ];
+        $schema = new BcSchema($table, $columns);
+        $schema->create();
+        $this->dropTable($table);
+        $tableList = TableRegistry::getTableLocator()
+            ->get('BaserCore.App')
+            ->getConnection()
+            ->getSchemaCollection()
+            ->listTables();
+        $this->assertNotContains($table, $tableList);
     }
 }
