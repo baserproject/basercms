@@ -15,7 +15,7 @@ namespace BcBlog\Test\TestCase\View\Helper;
 use App\View\AppView;
 use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\TestSuite\BcTestCase;
-use BcBlog\Test\Factory\BlogContentsFactory;
+use BcBlog\Test\Factory\BlogContentFactory;
 use BcBlog\Test\Scenario\BlogContentScenario;
 use BcBlog\Test\Scenario\MultiSiteBlogScenario;
 use BcBlog\View\Helper\BlogHelper;
@@ -66,7 +66,7 @@ class BlogHelperTest extends BcTestCase
             '/news/' // url
         );
         $view = new AppView();
-        $blogContent = BlogContentsFactory::get(1);
+        $blogContent = BlogContentFactory::get(1);
         $blogContent->content = ContentFactory::get(1);
         $view->set('blogContent', $blogContent);
         $this->Blog = new BlogHelper($view);
@@ -391,7 +391,7 @@ class BlogHelperTest extends BcTestCase
         $this->truncateTable('blog_contents');
         $this->loadFixtureScenario(MultiSiteBlogScenario::class);
 
-        $blogContent = BlogContentsFactory::get(6);
+        $blogContent = BlogContentFactory::get(6);
         $blogContent->content = ContentFactory::get(6);
         $this->Blog->getView()->set('blogContent', $blogContent);
 

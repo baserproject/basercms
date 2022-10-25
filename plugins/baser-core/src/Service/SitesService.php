@@ -305,6 +305,9 @@ class SitesService implements SitesServiceInterface
      * サイトのルートコンテンツを取得する
      * @param int $id
      * @return EntityInterface
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getRootContent($id)
     {
