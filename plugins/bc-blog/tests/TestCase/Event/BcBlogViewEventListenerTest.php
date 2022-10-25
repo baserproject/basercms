@@ -76,7 +76,15 @@ class BcBlogViewEventListenerTest extends BcTestCase
      */
     public function testBeforeRender(): void
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        BlogContentsFactory::make(['id' => '1'])->persist();
+        ContentFactory::make(['id' => 1, 'type' => 'BlogContent', 'entity_id' => 1, 'status' => true ])->persist();
+
+        $this->Listener->beforeRender();
+        $this->assertArrayNotHasKey('BlogContent1', Configure::read('BcApp.adminNavigation.Contents'));
+
+        $this->loginAdmin($this->getRequest('/baser/admin'));
+        $this->Listener->beforeRender();
+        $this->assertArrayHasKey('BlogContent1', Configure::read('BcApp.adminNavigation.Contents'));
     }
 
     /**
