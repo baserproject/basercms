@@ -73,6 +73,7 @@ class ContentsAdminService extends ContentsService implements ContentsAdminServi
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getViewVarsForContentActions($content, $currentAction)
     {
