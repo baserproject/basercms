@@ -14,6 +14,7 @@ namespace BaserCore\Test\TestCase\Service\Front;
 use BaserCore\Controller\ContentFoldersController;
 use BaserCore\Service\Front\ContentFoldersFrontService;
 use BaserCore\Test\Scenario\InitAppScenario;
+use BaserCore\Test\Scenario\SmallSetContentFoldersScenario;
 use BaserCore\Test\Scenario\SmallSetContentsScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
@@ -38,15 +39,8 @@ class ContentFoldersFrontServiceTest extends BcTestCase
      * @var array
      */
     protected $fixtures = [
-        'plugin.BaserCore.Factory/Sites',
-        'plugin.BaserCore.Factory/SiteConfigs',
-        'plugin.BaserCore.Factory/Users',
-        'plugin.BaserCore.Factory/UsersUserGroups',
-        'plugin.BaserCore.Factory/UserGroups',
         'plugin.BaserCore.Factory/Contents',
         'plugin.BaserCore.Factory/ContentFolders',
-        'plugin.BaserCore.Factory/Permissions',
-        'plugin.BaserCore.Factory/Pages',
     ];
 
     /**
@@ -103,5 +97,24 @@ class ContentFoldersFrontServiceTest extends BcTestCase
         $this->assertArrayHasKey('editLink', $vars);
         $this->assertEquals('edit', $vars['editLink']['action']);
         $this->assertTrue($vars['editLink']['admin']);
+    }
+
+    /**
+     * test getTemplateForView
+     */
+    public function test_getTemplateForView()
+    {
+        $this->loadFixtureScenario(SmallSetContentFoldersScenario::class);
+        //初期の状態
+        $rs = $this->ContentFoldersFrontService->getTemplateForView($this->ContentFoldersFrontService->get(1));
+        $this->assertEquals('default', $rs);
+
+        // 対象に値が入っている場合
+        $rs = $this->ContentFoldersFrontService->getTemplateForView($this->ContentFoldersFrontService->get(2));
+        $this->assertEquals('test 1', $rs);
+
+        //対象に値が入っておらず親を参照する場合
+        $rs = $this->ContentFoldersFrontService->getTemplateForView($this->ContentFoldersFrontService->get(3));
+        $this->assertEquals('test 1', $rs);
     }
 }
