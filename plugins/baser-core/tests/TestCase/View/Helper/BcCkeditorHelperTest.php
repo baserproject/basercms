@@ -151,7 +151,34 @@ class BcCkeditorHelperTest extends BcTestCase
      */
     public function testSetDraft()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $request = $this->BcCkeditor->getView()->getRequest()->withAttribute('formTokenData', ['dummy']);
+        $this->BcCkeditor->getView()->setRequest($request);
+        $this->BcCkeditor->BcAdminForm->create();
+
+        $options = [
+            'editorToolbar' => [['Bold']],
+            'editorDisableCopyDraft' => ['test draft'],
+            'editorDisableCopyPublish' => ['test publish'],
+            'editorDraftField' => 'test',
+        ];
+        $result = $this->BcCkeditor->setDraft('contents', $options);
+        $this->assertCount(5, $result['editorToolbar'][0]);
+
+        $options = [
+            'editorToolbar' => [['Bold']],
+            'editorDisableCopyDraft' => [],
+            'editorDisableCopyPublish' => [],
+            'editorDraftField' => 'test',
+        ];
+        $result = $this->BcCkeditor->setDraft('contents', $options);
+        $this->assertContains('CopyDraft', $result['editorToolbar'][0]);
+        $this->assertContains('CopyPublish', $result['editorToolbar'][0]);
+        $this->assertEquals('Contents', $result['publishAreaId']);
+        $this->assertEquals('Test', $result['draftAreaId']);
+
+        $result = $this->BcCkeditor->setDraft('page.contents', $options);
+        $this->assertEquals('PageContents', $result['publishAreaId']);
+        $this->assertEquals('PageTest', $result['draftAreaId']);
     }
 
     /**
