@@ -30,6 +30,7 @@ class BlogContentValidation extends Validation
      * @uses checkEyeCatchSize
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function checkEyeCatchSize($value, $context)
     {
