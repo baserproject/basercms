@@ -13,6 +13,7 @@ namespace BaserCore\Test\TestCase\Service\Admin;
 
 use BaserCore\Service\Admin\ContentsAdminService;
 use BaserCore\Service\Admin\ContentsAdminServiceInterface;
+use BaserCore\Test\Factory\UserFactory;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Routing\Router;
 
@@ -175,6 +176,12 @@ class ContentsAdminServiceTest extends \BaserCore\TestSuite\BcTestCase
         $content = $this->ContentsAdmin->get(4);
         $result = $this->execPrivateMethod($this->ContentsAdmin, '_isAvailableDelete', [$content]);
         $this->assertTrue($result);
+
+        UserFactory::make(['id' => 10])->persist();
+        $this->loginAdmin($request, 10);
+        $content = $this->ContentsAdmin->get(10);
+        $result = $this->execPrivateMethod($this->ContentsAdmin, '_isAvailableDelete', [$content]);
+        $this->assertFalse($result);
     }
 
     /**
