@@ -76,7 +76,7 @@ class BcBlogViewEventListenerTest extends BcTestCase
      */
     public function testBeforeRender(): void
     {
-        BlogContentsFactory::make(['id' => '1'])->persist();
+        BlogContentFactory::make(['id' => '1'])->persist();
         ContentFactory::make(['id' => 1, 'type' => 'BlogContent', 'entity_id' => 1, 'status' => true ])->persist();
 
         $this->Listener->beforeRender();

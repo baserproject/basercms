@@ -17,7 +17,7 @@ use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BcBlog\Service\Admin\BlogContentsAdminService;
 use BcBlog\Service\BlogContentsService;
-use BcBlog\Test\Factory\BlogContentsFactory;
+use BcBlog\Test\Factory\BlogContentFactory;
 use Cake\TestSuite\IntegrationTestTrait;
 
 /**
@@ -71,7 +71,7 @@ class BlogContentsAdminServiceTest extends BcTestCase
      */
     public function test_getViewVarsForEdit()
     {
-        BlogContentsFactory::make([
+        BlogContentFactory::make([
             'id' => '1',
             'description' => 'baserCMS inc. [デモ] の最新の情報をお届けします。',
             'use_content' => '1',

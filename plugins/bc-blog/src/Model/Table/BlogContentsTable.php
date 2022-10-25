@@ -101,6 +101,7 @@ class BlogContentsTable extends BlogAppTable
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function initialize(array $config): void
     {
