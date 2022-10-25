@@ -137,7 +137,13 @@ class ContentsAdminServiceTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function test_getViewVarsForContentActions()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $request = $this->getRequest('/baser/admin/baser-core/contents/index?list_type=1');
+        $this->loginAdmin($request);
+        $result = $this->ContentsAdmin->getViewVarsForContentActions($this->ContentsAdmin->get(5), null);
+        $this->assertArrayHasKey('isAvailablePreview', $result);
+        $this->assertArrayHasKey('isAvailableDelete', $result);
+        $this->assertArrayHasKey('currentAction', $result);
+        $this->assertArrayHasKey('isAlias', $result);
     }
 
     /**
@@ -145,7 +151,13 @@ class ContentsAdminServiceTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function test_isAvailablePreview()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $content = $this->ContentsAdmin->get(1);
+        $result = $this->execPrivateMethod($this->ContentsAdmin, '_isAvailablePreview', [$content]);
+        $this->assertTrue($result);
+
+        $content = $this->ContentsAdmin->get(14);
+        $result = $this->execPrivateMethod($this->ContentsAdmin, '_isAvailablePreview', [$content]);
+        $this->assertFalse($result);
     }
 
     /**
@@ -161,6 +173,10 @@ class ContentsAdminServiceTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function test_getViewVarsForTrashIndex()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $result = $this->ContentsAdmin->getViewVarsForTrashIndex($this->ContentsAdmin->get(5));
+        $this->assertArrayHasKey('contents', $result);
+        $this->assertArrayHasKey('isContentDeletable', $result);
+        $this->assertArrayHasKey('isUseMoveContents', $result);
+        $this->assertArrayHasKey('editInIndexDisabled', $result);
     }
 }

@@ -101,6 +101,7 @@ class BlogContentsTable extends BlogAppTable
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function initialize(array $config): void
     {
@@ -349,6 +350,7 @@ class BlogContentsTable extends BlogAppTable
      * @return EntityInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function deconstructEyeCatchSize($data)
     {

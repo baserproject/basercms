@@ -18,7 +18,7 @@ use BaserCore\Utility\BcContainerTrait;
 use BcBlog\Service\Admin\BlogCategoriesAdminService;
 use BcBlog\Service\BlogCategoriesService;
 use BcBlog\Test\Factory\BlogCategoryFactory;
-use BcBlog\Test\Factory\BlogContentsFactory;
+use BcBlog\Test\Factory\BlogContentFactory;
 use Cake\TestSuite\IntegrationTestTrait;
 
 /**
@@ -78,7 +78,7 @@ class BlogCategoriesAdminServiceTest extends BcTestCase
      */
     public function test_getViewVarsForIndex()
     {
-        BlogContentsFactory::make(['id' => 52, 'description' => 'test index'])->persist();
+        BlogContentFactory::make(['id' => 52, 'description' => 'test index'])->persist();
         BlogCategoryFactory::make(['id' => 52, 'title' => 'title index 1', 'blog_content_id' => 52, 'rght' => 7, 'lft' => 8])->persist();
         BlogCategoryFactory::make(['id' => 53, 'title' => 'title index 2', 'blog_content_id' => 52, 'rght' => 9, 'lft' => 10])->persist();
         BlogCategoryFactory::make(['id' => 54, 'title' => 'title index 2', 'blog_content_id' => 51, 'rght' => 10, 'lft' => 11])->persist();
@@ -93,7 +93,7 @@ class BlogCategoriesAdminServiceTest extends BcTestCase
      */
     public function test_getViewVarsForAdd()
     {
-        BlogContentsFactory::make(['id' => 51, 'description' => 'test add'])->persist();
+        BlogContentFactory::make(['id' => 51, 'description' => 'test add'])->persist();
         BlogCategoryFactory::make(['id' => 51, 'title' => 'title add', 'name' => 'name-add', 'rght' => 5, 'lft' => 6])->persist();
 
         $blogCategoriesService = new BlogCategoriesService();
@@ -113,7 +113,7 @@ class BlogCategoriesAdminServiceTest extends BcTestCase
      */
     public function test_getViewVarsForEdit()
     {
-        BlogContentsFactory::make(['id' => 50, 'description' => 'test 1'])->persist();
+        BlogContentFactory::make(['id' => 50, 'description' => 'test 1'])->persist();
         ContentFactory::make(
             [
                 'id' => 50,

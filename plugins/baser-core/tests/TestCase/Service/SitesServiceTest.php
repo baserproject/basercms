@@ -75,7 +75,8 @@ class SitesServiceTest extends \BaserCore\TestSuite\BcTestCase
      * test construct
      * @return void
      */
-    public function testConstruct(){
+    public function testConstruct()
+    {
         $this->assertTrue(isset($this->Sites->Sites));
     }
 
@@ -251,4 +252,19 @@ class SitesServiceTest extends \BaserCore\TestSuite\BcTestCase
         $this->assertFalse(in_array('BcAdminThird', $themes));
     }
 
+    /**
+     * test getRootContent
+     * @return void
+     */
+    public function test_getRootContent()
+    {
+        $rs = $this->Sites->getRootContent(1);
+        $this->assertEquals(1, $rs['id']);
+        $this->assertEquals('BaserCore', $rs['plugin']);
+        $this->assertEquals('ContentFolder', $rs['type']);
+        $this->assertEquals('baserCMSサンプル', $rs['title']);
+
+        $rs = $this->Sites->getRootContent(100);
+        $this->assertNull($rs);
+    }
 }

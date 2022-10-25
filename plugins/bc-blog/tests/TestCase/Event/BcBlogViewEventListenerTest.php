@@ -16,7 +16,7 @@ use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcBlog\Event\BcBlogViewEventListener;
-use BcBlog\Test\Factory\BlogContentsFactory;
+use BcBlog\Test\Factory\BlogContentFactory;
 use Cake\Core\Configure;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
@@ -76,7 +76,15 @@ class BcBlogViewEventListenerTest extends BcTestCase
      */
     public function testBeforeRender(): void
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        BlogContentFactory::make(['id' => '1'])->persist();
+        ContentFactory::make(['id' => 1, 'type' => 'BlogContent', 'entity_id' => 1, 'status' => true ])->persist();
+
+        $this->Listener->beforeRender();
+        $this->assertArrayNotHasKey('BlogContent1', Configure::read('BcApp.adminNavigation.Contents'));
+
+        $this->loginAdmin($this->getRequest('/baser/admin'));
+        $this->Listener->beforeRender();
+        $this->assertArrayHasKey('BlogContent1', Configure::read('BcApp.adminNavigation.Contents'));
     }
 
     /**
@@ -86,7 +94,7 @@ class BcBlogViewEventListenerTest extends BcTestCase
      */
     public function testSetAdminMenu(): void
     {
-        BlogContentsFactory::make([
+        BlogContentFactory::make([
             'id' => '1',
             'description' => 'baserCMS inc. [デモ] の最新の情報をお届けします。',
             'template' => 'default',
