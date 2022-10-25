@@ -151,6 +151,7 @@ class ContentsAdminService extends ContentsService implements ContentsAdminServi
      * @return array
      * @noTodo
      * @checked
+     * @unitTest
      */
     public function getViewVarsForTrashIndex($contents)
     {

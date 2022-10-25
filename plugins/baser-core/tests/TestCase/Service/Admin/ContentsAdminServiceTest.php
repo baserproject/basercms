@@ -173,6 +173,10 @@ class ContentsAdminServiceTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function test_getViewVarsForTrashIndex()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $result = $this->ContentsAdmin->getViewVarsForTrashIndex($this->ContentsAdmin->get(5));
+        $this->assertArrayHasKey('contents', $result);
+        $this->assertArrayHasKey('isContentDeletable', $result);
+        $this->assertArrayHasKey('isUseMoveContents', $result);
+        $this->assertArrayHasKey('editInIndexDisabled', $result);
     }
 }
