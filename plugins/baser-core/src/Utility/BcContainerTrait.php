@@ -27,6 +27,7 @@ trait BcContainerTrait
      * @return array|mixed|object
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getService($service)
     {
@@ -39,6 +40,7 @@ trait BcContainerTrait
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function hasService($service)
     {

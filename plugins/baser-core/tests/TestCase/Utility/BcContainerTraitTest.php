@@ -23,7 +23,7 @@ use BaserCore\Utility\BcContainerTrait;
 class BcContainerTraitTest extends BcTestCase
 {
 
-   /**
+    /**
      * set up
      */
     public function setUp(): void
@@ -50,6 +50,19 @@ class BcContainerTraitTest extends BcTestCase
         $app->getContainer();
         $bcContainerTrait = new class { use BcContainerTrait; };
         $this->assertEquals('BaserCore\Service\UsersService', get_class($bcContainerTrait->getService(UsersServiceInterface::class)));
+    }
+
+    /**
+     * test hasService
+     */
+    public function testHasService()
+    {
+        $app = new Application(ROOT . '/config');
+        $app->getContainer();
+        $bcContainerTrait = new class {
+            use BcContainerTrait;
+        };
+        $this->assertTrue($bcContainerTrait->hasService(UsersServiceInterface::class));
     }
 
 }
