@@ -91,6 +91,7 @@ class ContentsAdminService extends ContentsService implements ContentsAdminServi
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _isAvailablePreview($content)
     {
