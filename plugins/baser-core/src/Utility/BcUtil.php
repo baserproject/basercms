@@ -1469,6 +1469,7 @@ class BcUtil
      * @return ServerRequest
      * @checked
      * @noTodo
+     * @unitTest
      */
     public static function createRequest($url = '/', $data = [], $method = 'GET', $config = [])
     {
