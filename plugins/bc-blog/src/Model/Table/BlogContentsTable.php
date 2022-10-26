@@ -370,6 +370,7 @@ class BlogContentsTable extends BlogAppTable
      * @return EntityInterface
      * @checked
      * @noTodo
+     * @unitTest 
      */
     public function constructEyeCatchSize($data)
     {
