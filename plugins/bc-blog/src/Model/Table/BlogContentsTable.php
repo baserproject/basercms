@@ -217,6 +217,7 @@ class BlogContentsTable extends BlogAppTable
      * @return array|false
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function createSearchIndex($blogContent)
     {
