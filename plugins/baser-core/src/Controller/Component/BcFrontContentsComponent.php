@@ -91,6 +91,7 @@ class BcFrontContentsComponent extends Component
      * @param $currentContent
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function setLayout($currentContent)
     {
