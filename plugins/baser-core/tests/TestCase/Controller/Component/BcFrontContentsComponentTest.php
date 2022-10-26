@@ -11,7 +11,6 @@
 
 namespace BaserCore\Test\TestCase\Controller\Component;
 
-use BaserCore\Model\Entity\Content;
 use BaserCore\Test\Factory\ContentFactory;
 use Cake\Routing\Router;
 use BaserCore\Service\PagesService;
