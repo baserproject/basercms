@@ -11,6 +11,7 @@
 
 namespace BcBlog\Test\TestCase;
 
+use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcUtil;
 use BcBlog\Service\Admin\BlogCategoriesAdminServiceInterface;
@@ -21,6 +22,8 @@ use BcBlog\Service\Front\BlogFrontServiceInterface;
 use Cake\Core\Container;
 use Cake\Core\Plugin;
 use Cake\Datasource\ConnectionManager;
+use Cake\Http\ServerRequest;
+use Cake\Routing\Router;
 
 /**
  * Class BcPluginTest
@@ -32,6 +35,15 @@ class PluginTest extends BcTestCase
      * @var \Cake\Core\PluginInterface
      */
     public $Plugin;
+
+    /**
+     * Fixtures
+     *
+     * @var array
+     */
+    public $fixtures = [
+        'plugin.BaserCore.Factory/Sites',
+    ];
 
     /**
      * Set Up
@@ -107,5 +119,25 @@ class PluginTest extends BcTestCase
         $this->assertTrue($container->has(BlogContentsServiceInterface::class));
         $this->assertTrue($container->has(BlogContentsAdminServiceInterface::class));
         $this->assertTrue($container->has(BlogFrontServiceInterface::class));
+    }
+
+    /**
+     * test routes
+     */
+    public function testRoutes() {
+        $routes = Router::createRouteBuilder('/');
+        $this->Plugin->routes($routes);
+
+        $result = Router::parseRequest($this->getRequest('/rss/index'));
+        $this->assertEquals('blog', $result['controller']);
+
+        $result = Router::parseRequest($this->getRequest('/tags/test'));
+        $this->assertEquals('tags', $result['action']);
+
+        SiteFactory::make(['alias' => 'as', 'name' => 'LoremIpsum'])->persist();
+        Router::setRequest(new ServerRequest(['url' => '/as/']));
+        $this->Plugin->routes($routes);
+        $result = Router::parseRequest($this->getRequest('/as/tags/bla'));
+        $this->assertEquals('LoremIpsum', $result['sitePrefix']);
     }
 }
