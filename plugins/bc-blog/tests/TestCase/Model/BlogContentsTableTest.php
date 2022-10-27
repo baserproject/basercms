@@ -10,9 +10,15 @@
  * @license         https://basercms.net/license/index.html
  */
 namespace BcBlog\Test\TestCase\Model;
+use BaserCore\Service\PluginsService;
+use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcContainerTrait;
 use BcBlog\Model\Table\BlogContentsTable;
+use BcBlog\Service\BlogContentsService;
 use BcBlog\Test\Factory\BlogContentFactory;
+use ArrayObject;
+use Cake\Event\Event;
 
 /**
  * Class BlogContentsTableTest
@@ -21,6 +27,11 @@ use BcBlog\Test\Factory\BlogContentFactory;
  */
 class BlogContentsTableTest extends BcTestCase
 {
+
+    /**
+     * Trait
+     */
+    use BcContainerTrait;
 
     public $fixtures = [
         'plugin.BcBlog.Factory/BlogContents',
@@ -280,6 +291,47 @@ class BlogContentsTableTest extends BcTestCase
     public function testBeforeDelete()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * test beforeSave
+     * @dataProvider afterSaveDataProvider
+     */
+    public function test_beforeSave($setExcluded)
+    {
+        $PluginsService = new PluginsService();
+        $BlogContentsService = new BlogContentsService();
+        $PluginsService->attach('BcSearchIndex');
+
+        BlogContentFactory::make([
+            'id' => 2,
+            'description' => 'test',
+            'template' => 'default',
+        ])->persist();
+        ContentFactory::make([
+            'id' => 2,
+            'title' => 'news',
+            'plugin' => 'BcBlog',
+            'type' => 'BlogContent',
+            'entity_id' => 2,
+            'url' => '/test',
+            'exclude_search' => 1,
+            'status' => true,
+        ])->persist();
+
+        $blogContent = $BlogContentsService->get(2);
+
+        if ($setExcluded) {
+            $this->BlogContentsTable->setExcluded();
+        }
+
+        $this->BlogContentsTable->beforeSave(new Event("beforeSave"), $blogContent, new ArrayObject());
+        $this->assertTrue($this->BlogContentsTable->isExcluded());
+    }
+
+    public function beforeSaveProvider()
+    {
+        return [1, 0];
     }
 
     /**
