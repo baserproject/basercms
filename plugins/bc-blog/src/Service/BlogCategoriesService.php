@@ -221,7 +221,7 @@ class BlogCategoriesService implements BlogCategoriesServiceInterface
         try {
             $blogCategory = $this->BlogCategories->get($id);
             $result = $this->BlogCategories->deleteOrFail($blogCategory);
-        } catch(RecordNotFoundException) {
+        } catch(RecordNotFoundException $e) {
             $result = true;
         }
         return $result;
