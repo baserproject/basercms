@@ -54,4 +54,4 @@ $this->BcBaser->setDescription($this->Blog->getDescription());
 
 
 <!-- /Elements/paginations/simple.php -->
-<?php $this->BcBaser->pagination('simple'); ?>
+<?php //$this->BcBaser->pagination('simple'); ?>

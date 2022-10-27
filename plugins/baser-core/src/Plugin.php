@@ -364,6 +364,9 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
          * インストーラー
          */
         if (!BcUtil::isInstalled()) {
+            $routes->connect('/', ['plugin' => 'BaserCore', 'controller' => 'Installations', 'action' => 'index']);
+            $routes->connect('/install', ['plugin' => 'BaserCore', 'controller' => 'Installations', 'action' => 'index']);
+            $routes->fallbacks(InflectedRoute::class);
             parent::routes($routes);
             return;
         }

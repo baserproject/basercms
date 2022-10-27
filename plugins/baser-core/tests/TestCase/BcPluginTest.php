@@ -21,11 +21,9 @@ use Cake\Core\Plugin;
 use Cake\Datasource\ConnectionManager;
 use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
-use Cake\Http\ServerRequest;
 use Cake\ORM\TableRegistry;
 use Cake\Routing\RouteBuilder;
 use Cake\Routing\RouteCollection;
-use Cake\Routing\Router;
 
 /**
  * Class BcPluginTest
