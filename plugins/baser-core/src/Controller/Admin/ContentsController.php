@@ -95,8 +95,8 @@ class ContentsController extends BcAdminAppController
             'query' => [
                 'site_id' => $this->request->getAttribute('currentSite')? $this->request->getAttribute('currentSite')->id : 1,
                 'list_type' => $this->request->getQuery('list_type') ?? 1,
-            ]
-        ]]);
+            ],
+        ], 'get' => true]);
 
         switch($this->getRequest()->getQuery('list_type')) {
             case 1:
@@ -153,7 +153,7 @@ class ContentsController extends BcAdminAppController
             'query' => [
                 'site_id' => $this->request->getAttribute('currentSite')? $this->request->getAttribute('currentSite')->id : 1,
             ]
-        ]]);
+        ], 'get' => true]);
         $contents = $service->getTrashIndex($this->request->getQueryParams(), 'threaded')->order(['site_id', 'lft']);
         $this->set($service->getViewVarsForTrashIndex($contents));
     }

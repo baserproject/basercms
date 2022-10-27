@@ -83,7 +83,7 @@ class DblogsControllerTest extends BcTestCase
         $this->assertResponseError();
 
         $this->post('/baser/admin/baser-core/dblogs/delete_all');
-        $this->assertResponseError();
+        $this->assertResponseCode(500);
 
         $this->enableSecurityToken();
         $this->enableCsrfToken();
