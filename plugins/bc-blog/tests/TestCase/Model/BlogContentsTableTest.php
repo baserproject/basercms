@@ -382,4 +382,102 @@ class BlogContentsTableTest extends BcTestCase
         $this->assertEquals($data['BlogContent']['eye_catch_size_mobile_thumb_width'], 150);
         $this->assertEquals($data['BlogContent']['eye_catch_size_mobile_thumb_height'], 150);
     }
+
+    /**
+     * test validationDefault
+     */
+    public function test_validationDefault()
+    {
+        $createNewContentRequest = $this->BlogContentsTable->newEntity([
+            'id' => 'test',
+        ]);
+        $this->assertSame([
+            'id' => [
+                'integer' => 'The provided value is invalid'
+            ],
+            'content' => [
+                '_required' => '関連するコンテンツがありません'
+            ],
+        ], $createNewContentRequest->getErrors());
+
+        $listCountRequest = $this->BlogContentsTable->newEntity([
+            'description' => 'baserCMS inc. [デモ] の最新の情報をお届けします。',
+            'template' => 'default',
+            'list_count' => 'あ',
+            'content' => [
+                'id' => 1
+            ]
+        ]);
+        $this->assertSame([
+            'range' => '一覧表示件数は100までの数値で入力してください。',
+            'halfText' => '一覧表示件数は半角で入力してください。'
+        ], $listCountRequest->getErrors()['list_count']);
+
+        $listCountNoInputRequest = $this->BlogContentsTable->newEntity([
+            'description' => 'baserCMS inc. [デモ] の最新の情報をお届けします。',
+            'template' => 'default',
+            'list_count' => '',
+            'content' => [
+                'id' => 1
+            ]
+        ]);
+        $this->assertSame([
+            '_empty' => '一覧表示件数を入力してください。',
+        ], $listCountNoInputRequest->getErrors()['list_count']);
+        $templateHalfTextRequest = $this->BlogContentsTable->newEntity([
+            'template' => '覧',
+            'list_count' => '',
+            'content' => [
+                'id' => 1
+            ]
+        ]);
+        $this->assertSame([
+            'halfText' => 'コンテンツテンプレート名は半角で入力してください。',
+        ], $templateHalfTextRequest->getErrors()['template']);
+
+        $noTemplateRequest = $this->BlogContentsTable->newEntity([
+            'list_count' => '2',
+            'template' => '',
+            'content' => [
+                'id' => 1
+            ]
+        ]);
+
+        $this->assertSame([
+            '_empty' => 'コンテンツテンプレート名を入力してください。',
+        ], $noTemplateRequest->getErrors()['template']);
+        $templateTextLengthOverRequest = $this->BlogContentsTable->newEntity([
+            'list_count' => '2',
+            'template' => 'testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest',
+            'content' => [
+                'id' => 1
+            ]
+        ]);
+
+        $this->assertSame([
+            'maxLength' => 'コンテンツテンプレート名は半角で入力してください。',
+        ], $templateTextLengthOverRequest->getErrors()['template']);
+
+        $listDirectionRequest = $this->BlogContentsTable->newEntity([
+            'list_count' => '2',
+            'list_direction'=>'',
+            'content' => [
+                'id' => 1
+            ]
+        ]);
+        $this->assertSame([
+            '_empty' => '一覧に表示する順番を指定してください。',
+        ], $listDirectionRequest->getErrors()['list_direction']);
+
+        $checkEyeCatchSizeRequest = $this->BlogContentsTable->newEntity([
+            'list_count' => '2',
+            'eye_catch_size_thumb_width'=>'testtest',
+            'content' => [
+                'id' => 1
+            ]
+        ]);
+        $this->assertSame([
+            'checkEyeCatchSize' => 'アイキャッチ画像のサイズが不正です。',
+        ], $checkEyeCatchSizeRequest->getErrors()['eye_catch_size_thumb_width']);
+    }
 }
