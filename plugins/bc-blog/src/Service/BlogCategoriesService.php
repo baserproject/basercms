@@ -33,7 +33,7 @@ class BlogCategoriesService implements BlogCategoriesServiceInterface
     /**
      * @var BlogCategoriesTable|Table
      */
-    public Table|BlogCategoriesTable $BlogCategories;
+    public Table $BlogCategories;
 
     /**
      * Construct
