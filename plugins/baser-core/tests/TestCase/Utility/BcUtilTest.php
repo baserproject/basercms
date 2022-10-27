@@ -12,10 +12,7 @@
 namespace BaserCore\Test\TestCase\Utility;
 
 use BaserCore\Event\BcEventListener;
-use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\Test\Factory\SiteConfigFactory;
-use BaserCore\Utility\BcContainer;
-use BaserCore\Utility\BcSiteConfig;
 use Cake\Core\App;
 use Cake\Cache\Cache;
 use Cake\Core\Plugin;
@@ -574,14 +571,14 @@ class BcUtilTest extends BcTestCase
      *
      * @param $input
      * @param $expected
-     * @dataProvider testUrlencodeProvider
+     * @dataProvider urlencodeProvider
      */
     public function testUrlencode($input, $expected)
     {
         $this->assertEquals($expected, BcUtil::urlencode($input));
     }
 
-    public function testUrlencodeProvider(): array
+    public function urlencodeProvider(): array
     {
         return [
             ['a=b+c', 'a_b_c'],
@@ -1253,6 +1250,16 @@ class BcUtilTest extends BcTestCase
         $this->assertEquals('namespace ' . $theme . ';', $match[0]);
         // ファイルをclose
         $file->close();
+    }
+
+    /**
+     * httpからのフルURLを取得する
+     */
+    public function testFullUrl()
+    {
+        $this->assertMatchesRegularExpression('/\//', BcUtil::fullUrl('/'));
+        $this->assertMatchesRegularExpression('/\/.*blog/', BcUtil::fullUrl('/blog'));
+        $this->assertMatchesRegularExpression('/\//', BcUtil::fullUrl(null));
     }
 
 }

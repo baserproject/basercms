@@ -23,6 +23,8 @@ use BaserCore\Middleware\BcAdminMiddleware;
 use BaserCore\Middleware\BcFrontMiddleware;
 use BaserCore\Middleware\BcRedirectSubSiteFilter;
 use BaserCore\Middleware\BcRequestFilterMiddleware;
+use BaserCore\Model\Entity\Site;
+use BaserCore\Model\Table\SitesTable;
 use BaserCore\ServiceProvider\BcServiceProvider;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
@@ -31,6 +33,7 @@ use Cake\Core\PluginApplicationInterface;
 use Cake\Event\EventManager;
 use Cake\Http\Middleware\CsrfProtectionMiddleware;
 use Cake\Http\MiddlewareQueue;
+use Cake\Http\ServerRequest;
 use Cake\Http\ServerRequestFactory;
 use Cake\ORM\TableRegistry;
 use Cake\Routing\Route\InflectedRoute;
@@ -419,34 +422,6 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
         );
 
         if (!BcUtil::isAdminSystem()) {
-
-            /**
-             * サブサイト標準ルーティング
-             */
-            try {
-                $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
-                $site = $sites->findByUrl($request->getPath());
-                $siteAlias = $sitePrefix = '';
-                if ($site) {
-                    $siteAlias = $site->alias;
-                    $sitePrefix = $site->name;
-                }
-                if ($siteAlias) {
-                    // プラグイン
-                    $routes->connect("/{$siteAlias}/:plugin/:controller", ['prefix' => $sitePrefix, 'action' => 'index']);
-                    $routes->connect("/{$siteAlias}/:plugin/:controller/:action/*", ['prefix' => $sitePrefix]);
-                    // TODO baserCMS4のコード
-                    // 使うタイミングまでコメントアウト、テストもなし
-                    /* >>>
-                    $routes->connect("/{$siteAlias}/:plugin/:action/*", ['prefix' => $sitePrefix]);
-                    // モバイルノーマル
-                    $routes->connect("/{$siteAlias}/:controller/:action/*", ['prefix' => $sitePrefix]);
-                    $routes->connect("/{$siteAlias}/:controller", ['prefix' => $sitePrefix, 'action' => 'index']);
-                    <<< */
-                }
-            } catch (Exception $e) {
-            }
-
             /**
              * フィード出力
              * 拡張子rssの場合は、rssディレクトリ内のビューを利用する

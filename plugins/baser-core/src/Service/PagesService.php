@@ -302,6 +302,9 @@ class PagesService implements PagesServiceInterface
      * ページテンプレートを取得する
      * @param EntityInterface $page
      * @return mixed
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getPageTemplate(EntityInterface $page)
     {

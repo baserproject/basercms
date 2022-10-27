@@ -245,16 +245,6 @@ return [];
         // API（.well-known）
         $result = Router::parseRequest($this->getRequest('/baser/api/baser-core/.well-known/jwks.json'));
         $this->assertEquals('json', $result['_ext']);
-        // サイト
-        Router::reload();
-        $builder = Router::createRouteBuilder('/');
-        // ルーティング設定をするために一旦　Router::setRequest() を実施
-        Router::setRequest(new ServerRequest(['url' => '/en/']));
-        $this->Plugin->routes($builder);
-        $result = Router::parseRequest(new ServerRequest(['url' => '/en/baser-core/users/']));
-        $this->assertEquals('index', $result['action']);
-        $result = Router::parseRequest(new ServerRequest(['url' => '/en/baser-core/users/view']));
-        $this->assertEquals('view', $result['action']);
     }
 
     /**

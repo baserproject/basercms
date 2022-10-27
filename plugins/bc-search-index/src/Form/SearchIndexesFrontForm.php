@@ -9,35 +9,27 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
-namespace BaserCore\Form;
+namespace BcSearchIndex\Form;
 
 use Cake\Form\Form;
 use Cake\Form\Schema;
-use BaserCore\Annotation\NoTodo;
-use BaserCore\Annotation\Checked;
-use BaserCore\Annotation\UnitTest;
 
 /**
- * ContentsSearchForm
+ * SearchIndexesFrontForm
  */
-class ContentsSearchForm extends Form
+class SearchIndexesFrontForm extends Form
 {
 
     /**
      * build Schema
      * @param Schema $schema
      * @return Schema
-     * @checked
-     * @noTodo
-     * @unitTest
      */
     protected function _buildSchema(Schema $schema): Schema
     {
-        return $schema->addField('folder_id', 'string')
-            ->addField('name', 'string')
-            ->addField('type', 'string')
-            ->addField('self_status', 'string')
-            ->addField('author_id', 'string');
+        return $schema->addField('f', 'string')
+            ->addField('q', 'string')
+            ->addField('s', 'string');
     }
 
 }

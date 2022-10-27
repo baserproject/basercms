@@ -12,10 +12,7 @@
 namespace BcSearchIndex\Service;
 
 use BaserCore\Error\BcException;
-use Cake\Core\Configure;
-use Cake\Core\Exception\Exception;
 use Cake\Core\Plugin;
-use Cake\Datasource\ConnectionManager;
 use Cake\ORM\Query;
 use Cake\ORM\TableRegistry;
 use BaserCore\Annotation\NoTodo;
@@ -88,7 +85,7 @@ class SearchIndexesService implements SearchIndexesServiceInterface
             unset($queryParams['limit']);
         }
         if (!empty($queryParams)) {
-            $query->where($this->createAdminIndexConditions($queryParams));
+            $query->where($this->createIndexConditions($queryParams));
         }
         return $query;
     }
@@ -98,73 +95,88 @@ class SearchIndexesService implements SearchIndexesServiceInterface
      *
      * @param array $data
      * @return array
+     * @checked
+     * @noTodo
      */
-    protected function createAdminIndexConditions($data)
+    protected function createIndexConditions($options)
     {
-        if (empty($data)) {
-            return [];
-        }
-
-        $conditions = [];
-        $type = $status = $keyword = $folderId = $siteId = null;
-        if (isset($data['type'])) {
-            $type = $data['type'];
-        }
-        if (isset($data['status'])) {
-            $status = $data['status'];
-        }
-        if (isset($data['keyword'])) {
-            $keyword = $data['keyword'];
-        }
-        if (isset($data['folder_id'])) {
-            $folderId = $data['folder_id'];
-        }
-        if (isset($data['site_id'])) {
-            $siteId = $data['site_id'];
-        }
-
-        unset($data['type']);
-        unset($data['status']);
-        unset($data['keyword']);
-        unset($data['folder_id']);
-        unset($data['site_id']);
-        unset($data['site_id']);
-        if (empty($data['priority'])) {
-            unset($data['priority']);
-        }
-        foreach($data as $key => $value) {
-            if (preg_match('/priority_[0-9]+$/', $key)) {
-                unset($data[$key]);
+        foreach($options as $key => $value) {
+            if (preg_match('/priority_[0-9]+$/', $key) || $value === '') {
+                unset($options[$key]);
             }
         }
-        if (isset($data['priority'])) {
-            $conditions['SearchIndexes.priority'] = $data['priority'];
-        }
-        if ($type) {
-            $conditions['SearchIndexes.type'] = $type;
-        }
-        if ($siteId) {
-            $conditions['SearchIndexes.site_id'] = $siteId;
+        if (empty($options)) return [];
+
+        $options = array_merge([
+            'keyword' => null,
+            'site_id' => 1,
+            'content_id' => null,
+            'content_filter_id' => null,
+            'type' => null,
+            'model' => null,
+            'priority' => null,
+            'status' => null,
+            'folder_id' => null,
+            'cf' => null,
+            'm' => null,
+            's' => null,
+            'c' => null,
+            'f' => null,
+            'q' => null
+        ], $options);
+
+        if (!is_null($options['s'])) $options['site_id'] = $options['s'];
+        if (!is_null($options['c'])) $options['content_id'] = $options['c'];
+        if (!is_null($options['cf'])) $options['content_filter_id'] = $options['cf'];
+        if (!is_null($options['m'])) $options['model'] = $options['m'];
+        if (!is_null($options['f'])) $options['folder_id'] = $options['f'];
+        if (!is_null($options['q'])) $options['keyword'] = $options['q'];
+
+        if($options['status'] === 'publish' || $options['status'] === '1') {
+            $conditions = $this->SearchIndexes->getConditionAllowPublish();
         } else {
-            $conditions['SearchIndexes.site_id'] = 0;
+            $conditions = [];
         }
-        if ($folderId) {
+        if (!is_null($options['site_id'])) $conditions['SearchIndexes.site_id'] = $options['site_id'];
+        if (!is_null($options['content_id'])) $conditions['SearchIndexes.content_id'] = $options['content_id'];
+        if (!is_null($options['content_filter_id'])) $conditions['SearchIndexes.content_filter_id'] = $options['content_filter_id'];
+        if (!is_null($options['type'])) $conditions['SearchIndexes.type'] = $options['type'];
+        if (!is_null($options['model'])) $conditions['SearchIndexes.model'] = $options['model'];
+        if (!is_null($options['priority'])) $conditions['SearchIndexes.priority'] = $options['priority'];
+        if (!is_null($options['folder_id'])) {
             $contentsTable = TableRegistry::getTableLocator()->get('BaserCore.Contents');
-            $content = $contentsTable->find()->select(['lft', 'rght'])->where(['Contents.id' => $folderId])->first();
+            $content = $contentsTable->find()->select(['lft', 'rght'])->where(['Contents.id' => $options['folder_id']])->first();
             $conditions['SearchIndexes.rght <'] = $content->rght;
             $conditions['SearchIndexes.lft >'] = $content->lft;
         }
-        if ($status != '') {
-            $conditions['SearchIndexes.status'] = $status;
-        }
-        if ($keyword) {
-            $conditions['and']['or'] = [
-                'SearchIndexes.title LIKE' => '%' . $keyword . '%',
-                'SearchIndexes.detail LIKE' => '%' . $keyword . '%'
-            ];
+        if (!is_null($options['keyword'])) {
+            $query = $this->parseQuery($options['keyword']);
+            foreach($query as $key => $value) {
+                $conditions['and'][$key]['or'][] = ['SearchIndexes.title LIKE' => "%{$value}%"];
+                $conditions['and'][$key]['or'][] = ['SearchIndexes.detail LIKE' => "%{$value}%"];
+            }
         }
 
         return $conditions;
+    }
+
+    /**
+     * 検索キーワードを分解し配列に変換する
+     *
+     * @param string $query
+     * @return array
+     * @checked
+     * @noTodo
+     */
+    protected function parseQuery($query)
+    {
+        $query = str_replace('　', ' ', $query);
+        if (strpos($query, ' ') !== false) {
+            $query = explode(' ', $query);
+        } else {
+            $query = [$query];
+        }
+        return h($query);
     }
 
     /**

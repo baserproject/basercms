@@ -125,7 +125,7 @@ class ContentsControllerTest extends BcTestCase
         $this->assertResponseOk();
         // リクエストの変化をテスト
         $this->ContentsController->index($this->getService(ContentsAdminServiceInterface::class), $this->getService(SiteConfigsServiceInterface::class));
-        $this->assertArrayHasKey('num', $this->ContentsController->getRequest()->getQueryParams());
+        $this->assertArrayHasKey('list_type', $this->ContentsController->getRequest()->getQueryParams());
     }
 
     /**
