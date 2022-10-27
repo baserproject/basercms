@@ -392,7 +392,7 @@ class BcPlugin extends BasePlugin
         /**
          * インストーラー
          */
-        if (!Configure::read('BcRequest.isInstalled')) {
+        if (!Configure::read('BcRequest.isInstalled') || !file_exists(ROOT. DS . 'docker_inited')) {
             $routes->connect('/', ['plugin' => 'BaserCore', 'controller' => 'Installations', 'action' => 'index']);
             $routes->connect('/install', ['plugin' => 'BaserCore', 'controller' => 'Installations', 'action' => 'index']);
             $routes->fallbacks(InflectedRoute::class);
