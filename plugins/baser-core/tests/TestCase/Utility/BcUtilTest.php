@@ -571,14 +571,14 @@ class BcUtilTest extends BcTestCase
      *
      * @param $input
      * @param $expected
-     * @dataProvider testUrlencodeProvider
+     * @dataProvider urlencodeProvider
      */
     public function testUrlencode($input, $expected)
     {
         $this->assertEquals($expected, BcUtil::urlencode($input));
     }
 
-    public function testUrlencodeProvider(): array
+    public function urlencodeProvider(): array
     {
         return [
             ['a=b+c', 'a_b_c'],
