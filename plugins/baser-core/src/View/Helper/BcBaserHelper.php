@@ -573,13 +573,12 @@ class BcBaserHelper extends Helper
      * コンテンツタイトルを取得する
      *
      * @return string コンテンツタイトル
+     * @checked
+     * @noTodo
      */
     public function getContentsTitle()
     {
-        if (empty($this->_View->pageTitle)) {
-            return '';
-        }
-        return $this->_View->pageTitle;
+        return $this->_View->fetch('title');
     }
 
     /**
@@ -750,7 +749,7 @@ class BcBaserHelper extends Helper
         if (!is_null($categoryTitleOn)) {
             $this->_categoryTitleOn = $categoryTitleOn;
         }
-        $this->_View->pageTitle = $title;
+        $this->_View->assign('title', $title);
     }
 
     /**
@@ -1185,14 +1184,8 @@ class BcBaserHelper extends Helper
         $options = array_merge([
             'subDir' => true
         ], $options);
-
-        if (!$name) {
-            $name = 'default';
-        }
-
-        $file = 'paginations' . DS . $name;
-
-        echo $this->getElement($file, $data, $options);
+        if (!$name) $name = 'default';
+        echo $this->getElement('paginations' . DS . $name, $data, $options);
     }
 
     /**

@@ -12,13 +12,15 @@
 namespace BcBlog\Test\TestCase\Service;
 
 use BaserCore\Test\Factory\ContentFactory;
+use BaserCore\Test\Factory\SiteConfigFactory;
 use BaserCore\Test\Factory\SiteFactory;
+use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
-use BaserCore\Utility\BcContainerTrait;
 use BcBlog\Service\BlogContentsService;
 use BcBlog\Test\Factory\BlogContentFactory;
 use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\TestSuite\IntegrationTestTrait;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * BlogContentsServiceTest
@@ -30,7 +32,7 @@ class BlogContentsServiceTest extends BcTestCase
     /**
      * Trait
      */
-    use BcContainerTrait;
+    use ScenarioAwareTrait;
     use IntegrationTestTrait;
 
     /**
@@ -41,6 +43,8 @@ class BlogContentsServiceTest extends BcTestCase
     public $fixtures = [
         'plugin.BaserCore.Factory/Sites',
         'plugin.BaserCore.Factory/Users',
+        'plugin.BaserCore.Factory/UserGroups',
+        'plugin.BaserCore.Factory/UsersUserGroups',
         'plugin.BaserCore.Factory/Contents',
         'plugin.BaserCore.Factory/ContentFolders',
         'plugin.BaserCore.Factory/Pages',
@@ -192,7 +196,56 @@ class BlogContentsServiceTest extends BcTestCase
      */
     public function test_copy()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loadFixtureScenario(InitAppScenario::class);
+        BlogContentFactory::make([
+            'id' => 2,
+            'description' => 'baserCMS inc. [デモ] の最新の情報をお届けします。',
+            'template' => 'default',
+            'list_count' => '10',
+            'list_direction' => 'DESC',
+            'feed_count' => '10',
+            'tag_use' => '1',
+            'comment_use' => '1',
+            'comment_approve' => '0',
+            'auth_captcha' => '1',
+            'widget_area' => '2',
+            'eye_catch_size' => '',
+            'use_content' => '1'
+        ])->persist();
+        ContentFactory::make([
+            'id' => 2,
+            'title' => 'news',
+            'plugin' => 'BcBlog',
+            'type' => 'BlogContent',
+            'entity_id' => 2,
+            'url' => '/test',
+            'site_id' => 1,
+            'alias_id' => null,
+            'main_site_content_id' => null,
+            'parent_id' => null,
+            'lft' => 1,
+            'rght' => 2,
+            'level' => 1,
+
+        ])->persist();
+        SiteConfigFactory::make([
+            'name' => 'contents_sort_last_modified',
+            'value' => ''
+        ])->persist();
+        $data = [
+            'entity_id' => 2,
+            'parent_id' => 2,
+            'site_id' => 1,
+            'title' => 'news',
+        ];
+        $request = $this->getRequest('/baser/admin/baser-core/blog_contents/');
+        $this->loginAdmin($request);
+        $rs = $this->BlogContentsService->copy($data);
+        $this->assertEquals($rs['description'], 'baserCMS inc. [デモ] の最新の情報をお届けします。');
+        $this->assertEquals($rs['list_count'], 10);
+        $this->assertEquals($rs['content']['title'], 'news');
+        $this->assertEquals($rs['content']['type'], 'BlogContent');
+        $this->assertNotEquals($rs['id'], 2);
     }
 
     /**

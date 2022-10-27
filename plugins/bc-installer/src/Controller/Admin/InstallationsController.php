@@ -330,7 +330,7 @@ class InstallationsController extends BcAdminAppController
         if (!BC_INSTALLED) {
             $installationData = $this->Session->read('Installation');
             $installationData['lastStep'] = true;
-            checkTmpFolders();
+            BcUtil::checkTmpFolders();
             Configure::write('Cache.disable', false);
             // インストールファイルでセッションの保存方法を切り替える為、インストール情報をキャッシュに保存
             Cache::write('Installation', $installationData, 'default');

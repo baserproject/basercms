@@ -13,6 +13,7 @@ namespace BaserCore;
 
 use BaserCore\Error\BcException;
 use BaserCore\Model\Entity\Site;
+use BaserCore\Model\Table\SitesTable;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUpdateLog;
 use BaserCore\Utility\BcUtil;
@@ -22,6 +23,7 @@ use Cake\Core\Configure\Engine\PhpConfig;
 use Cake\Core\PluginApplicationInterface;
 use Cake\Datasource\ConnectionManager;
 use Cake\Filesystem\Folder;
+use Cake\Http\ServerRequest;
 use Cake\Log\LogTrait;
 use Cake\ORM\TableRegistry;
 use Cake\Routing\Route\InflectedRoute;
@@ -390,7 +392,7 @@ class BcPlugin extends BasePlugin
         /**
          * インストーラー
          */
-        if (!Configure::read('BcRequest.isInstalled')) {
+        if (!Configure::read('BcRequest.isInstalled') || !file_exists(ROOT. DS . 'docker_inited')) {
             $routes->connect('/', ['plugin' => 'BaserCore', 'controller' => 'Installations', 'action' => 'index']);
             $routes->connect('/install', ['plugin' => 'BaserCore', 'controller' => 'Installations', 'action' => 'index']);
             $routes->fallbacks(InflectedRoute::class);
@@ -412,7 +414,10 @@ class BcPlugin extends BasePlugin
             }
         );
 
-        // プラグインの管理画面用ルーティング
+        /**
+         * プラグインの管理画面用ルーティング
+         * プラグイン名がダッシュ区切りの場合
+         */
         $prefixSettings = Configure::read('BcPrefixAuth');
         foreach($prefixSettings as $prefix => $setting) {
             $routes->prefix(
@@ -432,19 +437,44 @@ class BcPlugin extends BasePlugin
             );
         }
 
-        // プラグインのフロントエンド用ルーティング
+        /**
+         * プラグインのフロントエンド用ルーティング
+         */
         $routes->plugin(
             $plugin,
-            ['path' => '/' . BcUtil:: getBaserCorePrefix() . '/' . Inflector::dasherize($plugin)],
+            ['path' => '/' . Inflector::dasherize($plugin)],
             function(RouteBuilder $routes) {
                 // AnalyseController で利用
                 $routes->setExtensions(['json']);
-                $routes->connect('/{controller}/index', [], ['routeClass' => InflectedRoute::class]);
+                $routes->connect('/{controller}/index', ['sitePrefix' => ''], ['routeClass' => InflectedRoute::class]);
+                $routes->connect('/{controller}/{action}/*', ['sitePrefix' => ''], ['routeClass' => InflectedRoute::class]);
                 $routes->fallbacks(InflectedRoute::class);
             }
         );
 
-        // API用ルーティング
+        /**
+         * サブサイト標準ルーティング
+         */
+        $request = new ServerRequest();
+        /* @var SitesTable $sitesTable */
+        $sitesTable = TableRegistry::getTableLocator()->get('BaserCore.Sites');
+        /* @var Site $site */
+        $site = $sitesTable->findByUrl($request->getPath());
+        if($site && $site->alias) {
+            $routes->plugin(
+                $plugin,
+                ['path' => '/' . $site->alias . '/' . Inflector::dasherize($plugin)],
+                function(RouteBuilder $routes) use ($site){
+                    // BcFrontMiddleware にて、sitePrefix によって currentSite を設定
+                    $routes->connect('/{controller}/index', ['sitePrefix' => $site->alias], ['routeClass' => InflectedRoute::class]);
+                    $routes->connect('/{controller}/{action}/*', ['sitePrefix' => $site->alias], ['routeClass' => InflectedRoute::class]);
+                }
+            );
+        }
+
+        /**
+         * API用ルーティング
+         */
         $routes->prefix(
             'Api',
             ['path' => '/' . BcUtil::getBaserCorePrefix() . '/api'],

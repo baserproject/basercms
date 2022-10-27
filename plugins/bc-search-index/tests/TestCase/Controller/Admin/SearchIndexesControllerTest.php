@@ -104,7 +104,6 @@ class SearchIndexesControllerTest extends BcTestCase
         // アクション実行（requestの変化を判定するため $this->get() ではなくクラスを直接利用）
         $this->SearchIndexesController->beforeFilter(new Event('beforeFilter'));
         $this->SearchIndexesController->index(
-            $this->getService(SearchIndexesServiceInterface::class),
             $this->getService(SearchIndexesAdminServiceInterface::class),
             $this->getService(SiteConfigsServiceInterface::class)
         );

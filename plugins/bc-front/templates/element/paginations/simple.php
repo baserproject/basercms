@@ -1,13 +1,12 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package         Baser.View
- * @since           baserCMS v 4.4.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) NPO baser foundation
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       https://basercms.net/license/index.html MIT License
  */
 
 /**
@@ -17,7 +16,10 @@
  * BcBaserHelper::pagination() で呼び出す
  * （例）<?php $this->BcBaser->pagination() ?>
  *
- * @var BcAppView $this
+ * @var \BaserCore\View\BcFrontAppView $this
+ * @checked
+ * @noTodo
+ * @unitTest
  */
 if (empty($this->Paginator)) {
 	return;
@@ -25,13 +27,22 @@ if (empty($this->Paginator)) {
 if (!isset($modules)) {
 	$modules = 4;
 }
+$pageCount = $this->Paginator->counter('{{pages}}');
+$this->Paginator->setTemplates([
+  'prevActive' => '<span class="bs-pagination__prev"><a href="{{url}}" rel="prev">{{text}}</a></span>',
+  'prevDisabled' => '<span class="bs-pagination__prev disabled">{{text}}</span>',
+  'nextActive' => '<span class="bs-pagination__next"><a href="{{url}}" rel="next">{{text}}</a></span>',
+  'nextDisabled' => '<span class="bs-pagination__next disabled">{{text}}</span>',
+  'current' => '<span class="current bs-pagination__number">{{text}}</span>',
+  'number' => '<span class="bs-pagination__number"><a href="{{url}}">{{text}}</a></span>'
+]);
 ?>
 
 
-<?php if ((int) $this->Paginator->counter(['format' => '%pages%']) > 1): ?>
 <div class="bs-pagination">
-	<?php echo $this->Paginator->prev('< '. __('前へ'), ['class' => 'bs-pagination__prev'], null, ['class' => 'bs-pagination__prev disabled']) ?>
-	<?php echo $this->Html->tag('span', $this->Paginator->numbers(['separator' => '', 'class' => 'bs-pagination__number', 'modulus' => $modules])) ?>
-	<?php echo $this->Paginator->next(__('次へ'). ' >', ['class' => 'bs-pagination__next'], null, ['class' => 'bs-pagination__next disabled']) ?>
+  <?php if ($pageCount > 1): ?>
+      <?php echo $this->Paginator->prev('< '. __('前へ')) ?>
+      <?php echo $this->Html->tag('span', $this->Paginator->numbers(['separator' => '', 'modulus' => $modules])) ?>
+      <?php echo $this->Paginator->next(__('次へ'). ' >') ?>
+  <?php endif ?>
 </div>
-<?php endif; ?>
