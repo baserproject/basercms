@@ -14,6 +14,9 @@ namespace BcSearchIndex\Controller;
 use BaserCore\Controller\BcFrontAppController;
 use BcSearchIndex\Service\Front\SearchIndexesFrontService;
 use BcSearchIndex\Service\Front\SearchIndexesFrontServiceInterface;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * SearchIndexesController
