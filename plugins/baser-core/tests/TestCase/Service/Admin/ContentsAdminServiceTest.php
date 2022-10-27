@@ -13,6 +13,7 @@ namespace BaserCore\Test\TestCase\Service\Admin;
 
 use BaserCore\Service\Admin\ContentsAdminService;
 use BaserCore\Service\Admin\ContentsAdminServiceInterface;
+use BaserCore\Test\Factory\UserFactory;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Routing\Router;
 
@@ -165,7 +166,22 @@ class ContentsAdminServiceTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function test_isAvailableDelete()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $request = $this->getRequest('/baser/admin/baser-core/contents/index?list_type=1');
+        $this->loginAdmin($request);
+
+        $content = $this->ContentsAdmin->get(1);
+        $result = $this->execPrivateMethod($this->ContentsAdmin, '_isAvailableDelete', [$content]);
+        $this->assertFalse($result);
+
+        $content = $this->ContentsAdmin->get(4);
+        $result = $this->execPrivateMethod($this->ContentsAdmin, '_isAvailableDelete', [$content]);
+        $this->assertTrue($result);
+
+        UserFactory::make(['id' => 10])->persist();
+        $this->loginAdmin($request, 10);
+        $content = $this->ContentsAdmin->get(10);
+        $result = $this->execPrivateMethod($this->ContentsAdmin, '_isAvailableDelete', [$content]);
+        $this->assertFalse($result);
     }
 
     /**

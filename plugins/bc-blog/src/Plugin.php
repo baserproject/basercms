@@ -84,6 +84,7 @@ class Plugin extends BcPlugin
      * @param \Cake\Routing\RouteBuilder $routes
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function routes($routes): void
     {
@@ -112,7 +113,7 @@ class Plugin extends BcPlugin
         $site = $sitesTable->findByUrl($request->getPath());
         if ($site) {
             $routes->connect("/{$site->alias}/tags/*", [
-                'prefix' => $site->name,
+                'sitePrefix' => $site->name,
                 'plugin' => 'BcBlog',
                 'controller' => 'blog',
                 'action' => 'tags'
