@@ -1113,7 +1113,7 @@ class BcUtil
     {
         $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
         $site = $sites->getRootMain();
-        return $site->theme;
+        return (isset($site->theme))? $site->theme : null;
     }
 
     /**
@@ -1580,6 +1580,19 @@ class BcUtil
         $file->write(preg_replace('/namespace .+?;/', 'namespace ' . $newPlugin . ';', $data));
         $file->close();
         return true;
+    }
+
+
+    /**
+     * httpからのフルURLを取得する
+     *
+     * @param mixed $url
+     * @return    string
+     */
+    public static function fullUrl($url)
+    {
+        $url = Router::url($url);
+        return self::topLevelUrl(false) . $url;
     }
 
 }

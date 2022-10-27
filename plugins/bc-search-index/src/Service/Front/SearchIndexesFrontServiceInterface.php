@@ -9,35 +9,28 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
-namespace BaserCore\Form;
+namespace BcSearchIndex\Service\Front;
 
-use Cake\Form\Form;
-use Cake\Form\Schema;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use Cake\Datasource\ResultSetInterface;
+use Cake\Http\ServerRequest;
 
 /**
- * ContentsSearchForm
+ * Interface SearchIndexesFrontServiceInterface
  */
-class ContentsSearchForm extends Form
+interface SearchIndexesFrontServiceInterface
 {
 
     /**
-     * build Schema
-     * @param Schema $schema
-     * @return Schema
+     * サイト内検索用の view 変数を取得する
+     * @param \Cake\ORM\ResultSet|\Cake\Datasource\ResultSetInterface $searchIndexes
+     * @param ServerRequest $request
+     * @return array
      * @checked
      * @noTodo
-     * @unitTest
      */
-    protected function _buildSchema(Schema $schema): Schema
-    {
-        return $schema->addField('folder_id', 'string')
-            ->addField('name', 'string')
-            ->addField('type', 'string')
-            ->addField('self_status', 'string')
-            ->addField('author_id', 'string');
-    }
+    public function getViewVarsForSearch(ResultSetInterface $searchIndexes, ServerRequest $request): array;
 
 }

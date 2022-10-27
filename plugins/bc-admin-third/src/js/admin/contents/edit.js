@@ -1,11 +1,11 @@
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @since           baserCMS v 4.0.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) NPO baser foundation
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       https://basercms.net/license/index.html MIT License
  */
 
 /**
@@ -48,7 +48,7 @@ $(function () {
         form.submit();
         form.attr('target', '_self');
         form.attr('action', action);
-        $.get('/baser/baser-core/bc_form/get_token?requestview=false', function (result) {
+        $.get($.bcUtil.baseUrl + '/baser-core/bc_form/get_token?requestview=false', function (result) {
             $('input[name="_csrfToken"]').val(result);
         });
         return false;

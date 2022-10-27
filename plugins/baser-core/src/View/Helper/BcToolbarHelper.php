@@ -11,6 +11,7 @@
 
 namespace BaserCore\View\Helper;
 
+use BaserCore\Error\BcException;
 use BaserCore\Service\SitesService;
 use BaserCore\Service\SitesServiceInterface;
 use BaserCore\Utility\BcContainerTrait;

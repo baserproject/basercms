@@ -13,6 +13,7 @@ namespace BaserCore\Middleware;
 
 use BaserCore\Utility\BcUtil;
 use Cake\Http\ServerRequest;
+use Cake\ORM\TableRegistry;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -53,11 +54,22 @@ class BcFrontMiddleware implements MiddlewareInterface
      */
     public function setCurrent(ServerRequest $request): ServerRequestInterface
     {
+        $site = $request->getParam('Site');
+        $content = $request->getParam('Content');
+        if(!$site) {
+            $sitesTable = TableRegistry::getTableLocator()->get('BaserCore.Sites');
+            $contentsTable = TableRegistry::getTableLocator()->get('BaserCore.Contents');
+            $sitePrefix = (string) $request->getParam('sitePrefix');
+            $site = $sitesTable->findByName($sitePrefix)->first();
+            $url = '/';
+            if($sitePrefix) $url .= $sitePrefix . '/';
+            $content = $contentsTable->findByUrl($url);
+        }
         return $request
-            ->withAttribute('currentContent', $request->getParam('Content'))
-            ->withAttribute('currentSite', $request->getParam('Site'))
-            ->withParam('Content', '')
-            ->withParam('Site', '');
+            ->withAttribute('currentContent', $content)
+            ->withAttribute('currentSite', $site)
+            ->withParam('Content', null)
+            ->withParam('Site', null);
     }
 
 }

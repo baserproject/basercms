@@ -61,7 +61,7 @@ class BcManagerComponent extends Component
         BcUtil::clearAllCache();
 
         // 一時フォルダ作成
-        checkTmpFolders();
+        BcUtil::checkTmpFolders();
 
         if ($dbConfig['datasource'] == 'sqlite' || $dbConfig['datasource'] == 'csv') {
             switch($dbConfig['datasource']) {

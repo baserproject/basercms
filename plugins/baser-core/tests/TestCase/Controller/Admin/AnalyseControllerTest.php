@@ -59,7 +59,7 @@ class AnalyseControllerTest extends BcTestCase
      */
     public function testIndex()
     {
-        $this->get('/baser/baser-core/analyse/index/bc-admin-third.json');
+        $this->get('/baser-core/analyse/index/bc-admin-third.json');
         $this->assertResponseOk();
         $this->assertHeader('Content-Type', 'application/json');
     }

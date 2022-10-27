@@ -51,7 +51,8 @@ class BcFormControllerTest extends BcTestCase
     {
         $this->enableSecurityToken();
         $this->enableCsrfToken();
-        $this->get('/baser/baser-core/bc_form/get_token?requestview=false');
+        $this->get('/baser-core/bc_form/get_token?requestview=false');
+        $this->assertResponseSuccess();
         $this->assertNotEmpty($this->_getBodyAsString());
     }
 
