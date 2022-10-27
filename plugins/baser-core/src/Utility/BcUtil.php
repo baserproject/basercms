@@ -1113,7 +1113,7 @@ class BcUtil
     {
         $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
         $site = $sites->getRootMain();
-        return (isset($site->theme))?: null;
+        return (isset($site->theme))? $site->theme : null;
     }
 
     /**

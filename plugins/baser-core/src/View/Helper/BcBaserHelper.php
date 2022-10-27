@@ -749,7 +749,7 @@ class BcBaserHelper extends Helper
         if (!is_null($categoryTitleOn)) {
             $this->_categoryTitleOn = $categoryTitleOn;
         }
-        $this->_View->pageTitle = $title;
+        $this->_View->assign('title', $title);
     }
 
     /**
