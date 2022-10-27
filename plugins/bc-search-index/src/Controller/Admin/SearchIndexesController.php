@@ -14,6 +14,7 @@ namespace BcSearchIndex\Controller\Admin;
 use BaserCore\Controller\Admin\BcAdminAppController;
 use BaserCore\Error\BcException;
 use BaserCore\Service\SiteConfigsServiceInterface;
+use BcSearchIndex\Service\Admin\SearchIndexesAdminService;
 use BcSearchIndex\Service\Admin\SearchIndexesAdminServiceInterface;
 use BcSearchIndex\Service\SearchIndexesServiceInterface;
 use Cake\Event\EventInterface;
@@ -48,14 +49,17 @@ class SearchIndexesController extends BcAdminAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function index(
-        SearchIndexesServiceInterface $service,
-        SearchIndexesAdminServiceInterface $adminService,
+        SearchIndexesAdminServiceInterface $service,
         SiteConfigsServiceInterface $siteConfigService)
     {
         $currentSite = $this->getRequest()->getAttribute('currentSite');
-        $this->setRequest($this->getRequest()->withQueryParams(['site_id' => $currentSite->id]));
+        $this->setRequest($this->getRequest()->withQueryParams(array_merge(
+            $this->getRequest()->getQueryParams(),
+            ['site_id' => $currentSite->id]
+        )));
 
         $this->setViewConditions('User', ['default' => [
             'query' => [
@@ -74,7 +78,8 @@ class SearchIndexesController extends BcAdminAppController
             $this->setRequest(($event->getResult() === null || $event->getResult() === true)? $event->getData('request') : $event->getResult());
         }
 
-        $this->set($adminService->getViewVarsForIndex(
+        /* @var SearchIndexesAdminService $service */
+        $this->set($service->getViewVarsForIndex(
             $this->paginate($service->getIndex($this->getRequest()->getQueryParams())),
             $this->getRequest()
         ));

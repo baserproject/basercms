@@ -41,7 +41,7 @@
         /**
          * デフォルトトークンURL
          */
-        defaultUrl: '/baser/baser-core/bc_form/get_token?requestview=false',
+        defaultUrl: '/baser-core/bc_form/get_token?requestview=false',
 
         /**
          * 初期化
@@ -225,7 +225,7 @@
          * @param url トークン発行URL。nullの場合はデフォルトURL
          */
         setTokenUrl: function (url) {
-            this.url = url != null ? url : this.defaultUrl;
+            this.url = url != null ? url : $.bcUtil.baseUrl + this.defaultUrl;
             return this;
         }
 

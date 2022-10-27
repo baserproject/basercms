@@ -11,6 +11,7 @@
 
 namespace BaserCore\View\Helper;
 
+use BaserCore\Error\BcException;
 use BaserCore\Service\SitesService;
 use BaserCore\Service\SitesServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
@@ -41,6 +42,18 @@ class BcToolbarHelper extends Helper
      * @var string[]
      */
     public $helpers = ['BaserCore.BcBaser', 'BaserCore.BcAuth', 'BaserCore.BcAdmin'];
+
+    /**
+     * Initialize
+     * @param array $config
+     */
+    public function initialize(array $config): void
+    {
+        parent::initialize($config);
+        if(!$this->_View->getRequest()->getAttribute('currentSite')) {
+            throw new BcException(__d('baser', 'カレントサイトが取得できなかったため、BcToolbarHelper を利用できません。'));
+        }
+    }
 
     /**
      * 編集画面へのリンクが利用可能かどうか

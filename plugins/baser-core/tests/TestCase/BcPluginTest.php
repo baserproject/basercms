@@ -21,9 +21,11 @@ use Cake\Core\Plugin;
 use Cake\Datasource\ConnectionManager;
 use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
+use Cake\Http\ServerRequest;
 use Cake\ORM\TableRegistry;
 use Cake\Routing\RouteBuilder;
 use Cake\Routing\RouteCollection;
+use Cake\Routing\Router;
 
 /**
  * Class BcPluginTest
@@ -141,18 +143,29 @@ class BcPluginTest extends BcTestCase
         $routes = new RouteBuilder($collection, '/');
         $this->BcPlugin->routes($routes);
         $all = $collection->routes();
-        // connect・fallbacksにより3つコネクションあり|拡張子jsonあり
-        $this->assertEquals($all[0]->defaults, ['plugin' => 'BcBlog', 'action' => 'index']);
+        // connect・fallbacksにより4つコネクションあり|拡張子jsonあり
+        $this->assertEquals($all[0]->defaults, ['sitePrefix' => '', 'plugin' => 'BcBlog', 'action' => 'index']);
         $this->assertEquals($all[0]->getExtensions()[0], "json");
         // connect・fallbacksにより3つコネクションあり|拡張子jsonあり
-        $this->assertEquals($all[3]->defaults, ['plugin' => 'BcBlog', 'action' => 'index', 'prefix' => 'Api']);
-        $this->assertEquals($all[3]->getExtensions()[0], "json");
+        $this->assertEquals($all[4]->defaults, ['plugin' => 'BcBlog', 'action' => 'index', 'prefix' => 'Api']);
+        $this->assertEquals($all[4]->getExtensions()[0], "json");
         // connect・fallbacksにより3つコネクションあり|拡張子jsonなし
-        $this->assertEquals($all[6]->defaults, ['plugin' => 'BcBlog', 'action' => 'index', 'prefix' => 'Admin']);
-        $this->assertEmpty($all[6]->getExtensions());
+        $this->assertEquals($all[7]->defaults, ['plugin' => 'BcBlog', 'action' => 'index', 'prefix' => 'Admin']);
+        $this->assertEmpty($all[7]->getExtensions());
         // connectにより1つコネクションあり|拡張子jsonなし
-        $this->assertEquals($all[9]->defaults, ['plugin' => 'BcBlog', 'action' => 'index']);
-        $this->assertEmpty($all[9]->getExtensions());
+        $this->assertEquals($all[10]->defaults, ['plugin' => 'BcBlog', 'action' => 'index']);
+        $this->assertEmpty($all[10]->getExtensions());
+
+        // サイト
+//        Router::reload();
+//        $builder = Router::createRouteBuilder('/');
+//        // ルーティング設定をするために一旦　Router::setRequest() を実施
+//        Router::setRequest(new ServerRequest(['url' => '/en/']));
+//        $this->Plugin->routes($builder);
+//        $result = Router::parseRequest(new ServerRequest(['url' => '/en/baser-core/users/']));
+//        $this->assertEquals('index', $result['action']);
+//        $result = Router::parseRequest(new ServerRequest(['url' => '/en/baser-core/users/view']));
+//        $this->assertEquals('view', $result['action']);
     }
 
     /**

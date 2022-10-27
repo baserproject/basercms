@@ -246,18 +246,6 @@ function getDbConfig($name = 'default')
 }
 
 /**
- * httpからのフルURLを取得する
- *
- * @param mixed $url
- * @return    string
- */
-function fullUrl($url)
-{
-    $url = Router::url($url);
-    return \BaserCore\Utility\BcUtil::topLevelUrl(false) . $url;
-}
-
-/**
  * 配列を再帰的に上書きする
  * 二つまで
  * @param array $a

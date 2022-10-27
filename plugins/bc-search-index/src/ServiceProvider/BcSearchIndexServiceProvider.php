@@ -14,6 +14,8 @@ namespace BcSearchIndex\ServiceProvider;
 
 use BcSearchIndex\Service\Admin\SearchIndexesAdminService;
 use BcSearchIndex\Service\Admin\SearchIndexesAdminServiceInterface;
+use BcSearchIndex\Service\Front\SearchIndexesFrontService;
+use BcSearchIndex\Service\Front\SearchIndexesFrontServiceInterface;
 use BcSearchIndex\Service\SearchIndexesService;
 use BcSearchIndex\Service\SearchIndexesServiceInterface;
 use Cake\Core\ServiceProvider;
@@ -34,6 +36,7 @@ class BcSearchIndexServiceProvider extends ServiceProvider
     protected $provides = [
         SearchIndexesServiceInterface::class,
         SearchIndexesAdminServiceInterface::class,
+        SearchIndexesFrontServiceInterface::class
     ];
 
     /**
@@ -49,6 +52,7 @@ class BcSearchIndexServiceProvider extends ServiceProvider
         // SearchIndexesサービス
         $container->add(SearchIndexesServiceInterface::class, SearchIndexesService::class);
         $container->add(SearchIndexesAdminServiceInterface::class, SearchIndexesAdminService::class);
+        $container->add(SearchIndexesFrontServiceInterface::class, SearchIndexesFrontService::class);
     }
 
 }

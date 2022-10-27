@@ -11,21 +11,33 @@
 
 namespace BcSearchIndex\Controller\Api;
 
-use BaserCore\Controller\AppController;
+use BaserCore\Controller\Api\BcApiController;
 use BaserCore\Error\BcException;
 use BcSearchIndex\Service\SearchIndexesServiceInterface;
-use Cake\Datasource\ConnectionManager;
 use Cake\Event\EventInterface;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
-use Cake\Utility\Inflector;
+use Cake\Http\Exception\ForbiddenException;
 
 /**
  * SearchIndicesController
  */
-class SearchIndexesController extends AppController
+class SearchIndexesController extends BcApiController
 {
+
+    /**
+     * initialize
+     * @return void
+     * @checked
+     * @unitTest
+     * @noTodo
+     */
+    public function initialize(): void
+    {
+        parent::initialize();
+        $this->Authentication->allowUnauthenticated(['index']);
+    }
 
     /**
      * Before filter
@@ -137,8 +149,16 @@ class SearchIndexesController extends AppController
      */
     public function index(SearchIndexesServiceInterface $searchIndexesService)
     {
+        $this->request->allowMethod('get');
+        $queryParams = $this->getRequest()->getQueryParams();
+        if(isset($queryParams['status'])) {
+            if(!$this->Authentication->getIdentity()) throw new ForbiddenException();
+        }
+        $queryParams = array_merge($queryParams, [
+            'status' => 'publish'
+        ]);
         $this->set([
-            'searchIndexes' => $this->paginate($searchIndexesService->getIndex($this->request->getQueryParams()))
+            'searchIndexes' => $this->paginate($searchIndexesService->getIndex($queryParams))
         ]);
         $this->viewBuilder()->setOption('serialize', ['searchIndexes']);
     }

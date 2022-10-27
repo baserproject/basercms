@@ -309,7 +309,6 @@ class AppController extends BaseController
      * @param array $options オプション
      * @checked
      * @noTodo
-     * @unitTest
      */
     protected function setViewConditions($targetModel = [], $options = []): void
     {
@@ -322,72 +321,46 @@ class AppController extends BaseController
      *
      * @param array $targetModel
      * @param array $options オプション
+     *  - `group`: 保存するグループ名（初期値：''）
+     *  - `post`: POSTデータを保存するかどうか（初期値：true）
+     *  - `get`: GETデータを保存するかどうか（初期値：false）
      * @return void
      * @checked
      * @noTodo
-     * @unitTest
      */
     protected function saveViewConditions($targetModel = [], $options = []): void
     {
         $options = array_merge([
-            'action' => '',
             'group' => '',
             'post' => true,
-            'get' => true,
-            'named' => true,
-            'query' => true,
+            'get' => false,
         ], $options);
 
-        if (!$options['action']) {
-            $options['action'] = $this->request->getParam('action');
-        }
-        $contentsName = $this->name . Inflector::classify($options['action']);
-        if ($options['group']) {
-            $contentsName .= "." . $options['group'];
-        }
+        $contentsName = $this->getRequest()->getParam('controller') . Inflector::classify($this->getRequest()->getParam('action'));
+        if ($options['group']) $contentsName .= "." . $options['group'];
+        if (!is_array($targetModel)) $targetModel = [$targetModel];
+        $session = $this->getRequest()->getSession();
 
-        if (!is_array($targetModel)) {
-            $targetModel = [$targetModel];
-        }
-
-        $session = $this->request->getSession();
-
-        if ($options['post']) {
-            if ($targetModel) {
-                foreach($targetModel as $model) {
-                    if ($this->request->getData($model)) {
-                        $session->write("BcApp.viewConditions.{$contentsName}.data.{$model}", $this->request->getData($model));
-                    }
-                }
-            } else {
-                if ($this->request->getData()) {
-                    $session->write("BcApp.viewConditions.{$contentsName}.data", $this->request->getData());
+        if ($options['post'] && $targetModel) {
+            foreach($targetModel as $model) {
+                if ($this->getRequest()->getData($model)) {
+                    $session->write("BcApp.viewConditions.{$contentsName}.data.{$model}", $this->getRequest()->getData($model));
                 }
             }
         }
 
-        if ($options['get'] && $this->request->getQuery()) {
-            $session->write("BcApp.viewConditions.{$contentsName}.query", $this->request->getQuery());
-        }
-        if (($options['named']) && $this->request->getParam('named')) {
-            if ($session->check("BcApp.viewConditions.{$contentsName}.named")) {
-                $named = array_merge($session->read("BcApp.viewConditions.{$contentsName}.named"), $this->request->getParam('named'));
-            } else {
-                $named = $this->request->getParam('named');
-            }
-            $session->write("BcApp.viewConditions.{$contentsName}.named", $named);
-        }
-        if ($options['query'] && $this->request->getQuery()) {
-            if (isset($options['default']['query'])) {
-                if ($session->check("BcApp.viewConditions.{$contentsName}.query")) {
-                    $query = array_merge($options['default']['query'], $this->request->getQueryParams());
-                } else {
-                    $query = $options['default']['query'];
+        if ($options['get'] && $this->getRequest()->getQueryParams()) {
+            if ($session->check("BcApp.viewConditions.{$contentsName}.query")) {
+                if(!isset($query['page']) && $session->read("BcApp.viewConditions.{$contentsName}.query.page")) {
+                    $session->delete("BcApp.viewConditions.{$contentsName}.query.page");
                 }
+                $query = array_merge(
+                    $session->read("BcApp.viewConditions.{$contentsName}.query"),
+                    $this->getRequest()->getQueryParams()
+                );
             } else {
-                $query = $this->request->getQueryParams();
+                $query = $this->getRequest()->getQueryParams();
             }
-
             $session->write("BcApp.viewConditions.{$contentsName}.query", $query);
         }
     }
@@ -395,78 +368,60 @@ class AppController extends BaseController
     /**
      * 画面の情報をセッションから読み込む
      *
+     * 初期値が設定されている場合は初期値を設定する
+     *
      * @param array $targetModel
      * @param array|string $options オプション
+     *  - `default`: 読み出す初期値（初期値：[]）
+     *  - `group`: 保存するグループ名（初期値：''）
+     *  - `post`: POSTデータを保存するかどうか（初期値：true）
+     *  - `get`: GETデータを保存するかどうか（初期値：false）
      * @checked
      * @noTodo
-     * @unitTest
      */
     protected function loadViewConditions($targetModel = [], $options = []): void
     {
         $options = array_merge([
             'default' => [],
-            'action' => '',
             'group' => '',
             'post' => true,
-            'get' => true,
-            'named' => true
+            'get' => false,
         ], $options);
 
-        if (!$options['action']) {
-            $options['action'] = $this->request->getParam('action');
-        }
-        $contentsName = $this->name . Inflector::classify($options['action']);
-        if ($options['group']) {
-            $contentsName .= "." . $options['group'];
-        }
+        $contentsName = $this->getRequest()->getParam('controller') . Inflector::classify($this->getRequest()->getParam('action'));
+        if ($options['group']) $contentsName .= "." . $options['group'];
+        if (!is_array($targetModel)) $targetModel = [$targetModel];
+        $session = $this->getRequest()->getSession();
 
-        if (!is_array($targetModel)) {
-            $targetModel = [$targetModel];
-        }
-
-        $session = $this->request->getSession();
-
-        if ($targetModel) {
+        if ($options['post'] && $targetModel) {
             foreach($targetModel as $model) {
+                $data = [];
+                if (!empty($options['default'][$model])) $data = $options['default'][$model];
                 if ($session->check("BcApp.viewConditions.{$contentsName}.data.{$model}")) {
-                    $data = $session->read("BcApp.viewConditions.{$contentsName}.data.{$model}");
-                } elseif (!empty($options['default'][$model])) {
-                    $data = $options['default'][$model];
-                } else {
-                    $data = [];
+                    $data = array_merge($data, $session->read("BcApp.viewConditions.{$contentsName}.data.{$model}"));
                 }
                 if ($data) {
-                    $this->request = $this->request->withData($model, $data);
+                    if(count($targetModel) > 1) {
+                        $this->setRequest($this->getRequest()->withData($model, $data));
+                    } else {
+                        $this->setRequest($this->getRequest()->withParsedBody($data));
+                    }
                 }
             }
         }
 
-        $query = [];
-        if ($session->check("BcApp.viewConditions.{$contentsName}.query")) {
-            $query = $session->read("BcApp.viewConditions.{$contentsName}.query");
+        if ($options['get']) {
+            $query = [];
+            if (!empty($options['default']['query'])) $query = $options['default']['query'];
+            if ($session->check("BcApp.viewConditions.{$contentsName}.query")) {
+                $query = array_merge($query, $session->read("BcApp.viewConditions.{$contentsName}.query"));
+            }
             unset($query['url']);
             unset($query['ext']);
             unset($query['x']);
             unset($query['y']);
+            if ($query) $this->setRequest($this->getRequest()->withQueryParams($query));
         }
-        if (empty($query) && !empty($options['default']['query'])) {
-            $query = $options['default']['query'];
-        }
-        if ($query) {
-            $this->request = $this->request->withQueryParams($query);
-        }
-
-        $named = [];
-        if (!empty($options['default']['named'])) {
-            $named = $options['default']['named'];
-        }
-        if ($session->check("BcApp.viewConditions.{$contentsName}.named")) {
-            $named = array_merge($named, $session->read("BcApp.viewConditions.{$contentsName}.named"));
-        }
-
-        $named['?'] = $query;
-
-        $this->request = $this->request->withParam('pass', $named);
     }
 
 }

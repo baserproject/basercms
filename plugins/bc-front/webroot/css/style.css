@@ -1875,6 +1875,10 @@ table.cake-sql-log td {
   font-weight: bold;
 }
 
+.bs-search-form {
+  margin-bottom: 20px;
+}
+
 .bs-search-result__item {
   margin-bottom: 20px;
 }
