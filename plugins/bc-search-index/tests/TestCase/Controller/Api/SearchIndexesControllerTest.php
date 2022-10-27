@@ -56,6 +56,7 @@ class SearchIndexesControllerTest extends BcTestCase
      */
     public function setUp(): void
     {
+        $this->setFixtureTruncate();
         parent::setUp();
         $this->loadFixtureScenario(InitAppScenario::class);
         $token = $this->apiLoginAdmin();
@@ -142,14 +143,14 @@ class SearchIndexesControllerTest extends BcTestCase
      * @return void
      */
     public function testIndex(){
-        SearchIndexFactory::make(['id' => 2, 'title' => 'test data index', 'type' => 'admin', 'site_id' => 0], 1)->persist();
+        SearchIndexFactory::make(['id' => 2, 'title' => 'test data index', 'type' => 'admin', 'site_id' => 2, 'status' => true], 1)->persist();
 
-        $this->get('/baser/api/bc-search-index/search_indexes/index.json?token=' . $this->accessToken);
+        $this->get('/baser/api/bc-search-index/search_indexes/index.json?site_id=2&token=' . $this->accessToken);
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals('test data index', $result->searchIndexes[0]->title);
 
-        SearchIndexFactory::make(['id' => 3, 'title' => 'test with param', 'type' => 'admin', 'site_id' => 1], 1)->persist();
+        SearchIndexFactory::make(['id' => 3, 'title' => 'test with param', 'type' => 'admin', 'site_id' => 1, 'status' => true], 1)->persist();
         $this->get('/baser/api/bc-search-index/search_indexes/index.json?site_id=1&token=' . $this->accessToken);
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
