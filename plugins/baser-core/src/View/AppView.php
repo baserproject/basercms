@@ -11,6 +11,7 @@
 
 namespace BaserCore\View;
 
+use BaserCore\View\Helper\BcFormHelper;
 use BaserCore\View\Helper\BcToolbarHelper;
 use BaserCore\View\Helper\BcUploadHelper;
 use Cake\View\View;
@@ -29,6 +30,7 @@ use BaserCore\Event\BcEventDispatcherTrait;
  * @property BcBaserHelper $BcBaser
  * @property BcUploadHelper $Upload
  * @property BcToolbarHelper $BcToolbar
+ * @property BcFormHelper $BcForm
  */
 class AppView extends View
 {
@@ -50,17 +52,18 @@ class AppView extends View
         // TODO ucmitz 未移行のため暫定措置
         // >>>
 //        $this->loadHelper('BaserCore.BcHtml');
-//        $this->loadHelper('BaserCore.BcForm');
 //        $this->loadHelper('BaserCore.BcWidgetArea');
 //        $this->loadHelper('BaserCore.BcXml');
 //        $this->loadHelper('BaserCore.BcArray');
         // <<<
+        $this->loadHelper('BaserCore.BcForm', ['templates' => 'BaserCore.bc_form']);
         $this->loadHelper('BaserCore.BcAdmin');
         $this->loadHelper('BaserCore.BcContents');
         $this->loadHelper('BaserCore.BcPage');
         $this->loadHelper('BaserCore.BcBaser');
         $this->loadHelper('BaserCore.BcUpload');
         $this->loadHelper('BaserCore.BcToolbar');
+        $this->loadHelper('Paginator');
         $this->assign('title', $this->get('title'));
     }
 

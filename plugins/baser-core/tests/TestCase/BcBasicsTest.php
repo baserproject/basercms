@@ -343,16 +343,6 @@ class BcBasicsTest extends BcTestCase
     }
 
     /**
-     * httpからのフルURLを取得する
-     */
-    public function testFullUrl()
-    {
-        $this->assertMatchesRegularExpression('/\//', fullUrl('/'));
-        $this->assertMatchesRegularExpression('/\/.*blog/', fullUrl('/blog'));
-        $this->assertMatchesRegularExpression('/\//', fullUrl(null));
-    }
-
-    /**
      * 配列を再帰的に上書きする
      */
     public function testAmr()

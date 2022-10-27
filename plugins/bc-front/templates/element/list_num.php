@@ -17,22 +17,20 @@
  * BcBaserHelper::listNum() で呼び出す
  * （例）<?php $this->BcBaser->listNum() ?>
  *
- * @var BcAppView $this
+ * @var \BaserCore\View\BcFrontAppView $this
+ * @checked
+ * @noTodo
+ * @unitTest
  */
 $currentNum = '';
-if (empty($nums)) {
-	$nums = ['10', '20', '50', '100'];
-}
-if (!is_array($nums)) {
-	$nums = [$nums];
-}
-if (!empty($this->passedArgs['num'])) {
-	$currentNum = $this->passedArgs['num'];
-}
+if (empty($nums)) $nums = ['10', '20', '50', '100'];
+if (!is_array($nums)) $nums = [$nums];
+if (!empty($this->getRequest()->getQuery('limit'))) $currentNum = $this->getRequest()->getQuery('limit');
+
 $links = [];
 foreach ($nums as $num) {
 	if ($currentNum != $num) {
-		$links[] = '<span>' . $this->BcBaser->getLink($num, am($this->passedArgs, ['num' => $num, 'page' => null])) . '</span>';
+		$links[] = '<span>' . $this->BcBaser->getLink($num, array_merge($this->getRequest()->getQuery(), ['limit' => $num, 'page' => null])) . '</span>';
 	} else {
 		$links[] = '<span class="current">' . $num . '</span>';
 	}

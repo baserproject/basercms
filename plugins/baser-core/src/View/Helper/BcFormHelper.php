@@ -2115,6 +2115,22 @@ DOC_END;
         return TableRegistry::getTableLocator()->get($name);
     }
 
+    /**
+     * Control
+     * @param string $fieldName
+     * @param array $options
+     * @return string
+     */
+    public function control(string $fieldName, array $options = []): string
+    {
+        $options = array_replace_recursive([
+            'label' => false,
+            'legend' => false,
+            'error' => false,
+            'templateVars' => ['tag' => 'span', 'groupTag' => 'span']
+        ], $options);
+        return parent::control($fieldName, $options);
+    }
 // <<<
 
 }

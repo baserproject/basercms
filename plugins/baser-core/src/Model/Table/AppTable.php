@@ -1247,15 +1247,17 @@ class AppTable extends Table
      * 公開済データを取得するための conditions を生成取得
      *
      * @return array
+     * @checked
+     * @noTodo
      */
     public function getConditionAllowPublish()
     {
         $conditions[$this->getAlias() . '.' . $this->publishStatusField] = true;
         $conditions[] = ['or' => [[$this->getAlias() . '.' . $this->publishBeginField . ' <=' => date('Y-m-d H:i:s')],
-            [$this->getAlias() . '.' . $this->publishBeginField => null],
+            [$this->getAlias() . '.' . $this->publishBeginField . ' IS' => null],
             [$this->getAlias() . '.' . $this->publishBeginField => '0000-00-00 00:00:00']]];
         $conditions[] = ['or' => [[$this->getAlias() . '.' . $this->publishEndField . ' >=' => date('Y-m-d H:i:s')],
-            [$this->getAlias() . '.' . $this->publishEndField => null],
+            [$this->getAlias() . '.' . $this->publishEndField . ' IS' => null],
             [$this->getAlias() . '.' . $this->publishEndField => '0000-00-00 00:00:00']]];
         return $conditions;
     }
