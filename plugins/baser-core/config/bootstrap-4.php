@@ -10,6 +10,7 @@
  */
 
 use BaserCore\Service\BcFrontService;
+use BaserCore\Utility\BcUtil;
 
 require CORE_PATH . 'Baser' . DS . 'Config' . DS . 'paths.php';
 require BASER . 'basics.php';
@@ -145,7 +146,7 @@ if (Configure::load('setting', 'baser') === false) {
     include BASER_CONFIGS . 'setting.php';
     Configure::write($config);
 }
-if (BC_INSTALLED && $baserSettings) {
+if (BcUtil::isInstalled() && $baserSettings) {
     foreach($baserSettings as $key1 => $settings) {
         if ($settings) {
             foreach($settings as $key2 => $setting) {
@@ -158,7 +159,7 @@ if (BC_INSTALLED && $baserSettings) {
 /**
  * セッション設定
  */
-if (BC_INSTALLED) {
+if (BcUtil::isInstalled()) {
     require APP . 'Config' . DS . 'session.php';
 }
 
@@ -167,7 +168,7 @@ if (BC_INSTALLED) {
  */
 $parameter = getUrlParamFromEnv();
 
-if (BC_INSTALLED) {
+if (BcUtil::isInstalled()) {
 
     /**
      * キャッシュ設定
@@ -230,7 +231,7 @@ if (BC_INSTALLED) {
 /**
  * テーマヘルパーのパスを追加する
  */
-if (BC_INSTALLED || isConsole()) {
+if (BcUtil::isInstalled() || isConsole()) {
     App::build([
         'View/Helper' => [BASER_THEMES . Configure::read('BcSite.theme') . DS . 'Helper' . DS]
     ], App::PREPEND);
@@ -243,7 +244,7 @@ if (BC_INSTALLED || isConsole()) {
  * サブサイトに適用されているプラグインも読み込む
  */
 
-if (BC_INSTALLED && !$isUpdater && !$isMaintenance) {
+if (BcUtil::isInstalled() && !$isUpdater && !$isMaintenance) {
     $sitesTable = \Cake\ORM\TableRegistry::getTableLocator()->get('BaserCore.Sites');
     $sites = $sitesTable->find()->all();
     $pluginPaths = [ROOT . DS . 'Plugin' . DS];

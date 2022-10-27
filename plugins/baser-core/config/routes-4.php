@@ -9,12 +9,12 @@
  * @license         https://basercms.net/license/index.html
  */
 
+use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
 // CakeRequest 判定できる関数があるが、CakeRequest での判定は、
 // routes.php の処理が完了している事が前提である為利用できない
 $isMaintenance = Configure::read('BcRequest.isMaintenance');
 $isUpdater = Configure::read('BcRequest.isUpdater');
-$isInstalled = Configure::read('BcRequest.isInstalled');
 
 // ==================================================================
 // Object::cakeError() のため、router.php が読み込まれた事をマークしておく
@@ -32,7 +32,7 @@ if (Configure::read('BcRequest.asset') || $isMaintenance) {
 /**
  * インストーラー
  */
-if (!$isInstalled) {
+if (!BcUtil::isInstalled()) {
     Router::connect('/', ['controller' => 'installations', 'action' => 'index']);
     Router::connect('/install', ['controller' => 'installations', 'action' => 'index']);
     return;

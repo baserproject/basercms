@@ -13,6 +13,9 @@
 /**
  * baserCMS初期化ページ
  */
+
+use BaserCore\Utility\BcUtil;
+
 $adminPrefix = Configure::read('Routing.prefixes.0');
 $this->BcBaser->i18nScript([
   'message' => __d('baser', '本当にbaserCMSを初期化してもよろしいですか？')
@@ -35,7 +38,7 @@ $this->BcBaser->i18nScript([
 <?php if (!$complete): ?>
 
   <p class="bca-main__text"><?php echo __d('baser', 'baserCMSを初期化します。データベースのデータも全て削除されます。') ?></p>
-  <?php if (BC_INSTALLED): ?>
+  <?php if (BcUtil::isInstalled()): ?>
     <p class="bca-main__text"><?php echo __d('baser', 'データベースのバックアップをとられていない場合は必ずバックアップを保存してから実行してください。') ?></p>
     <ul>
       <li><?php $this->BcBaser->link(__d('baser', 'バックアップはこちらから'), ['admin' => true, 'controller' => 'tools', 'action' => 'maintenance', 'backup', '?' => ['backup_encoding' => 'UTF-8']]) ?></li>

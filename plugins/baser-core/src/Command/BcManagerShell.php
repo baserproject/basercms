@@ -76,7 +76,7 @@ class BcManagerShell extends Command
      */
     public function install()
     {
-        if (BC_INSTALLED) {
+        if (BcUtil::isInstalled()) {
             $this->err(__d('baser', '既にインストール済です。 cake bc_manager reset を実行してください。'));
             return;
         }

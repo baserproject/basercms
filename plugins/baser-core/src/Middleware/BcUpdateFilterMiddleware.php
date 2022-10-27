@@ -58,7 +58,7 @@ class BcUpdateFilterMiddleware implements MiddlewareInterface
     ): ResponseInterface
     {
         $allowedUpdate = false;
-        if (BC_INSTALLED) {
+        if (BcUtil::isInstalled()) {
             $siteConfigs = TableRegistry::getTableLocator()->get('BaserCore.SiteConfigs');
             /* @var SiteConfig $siteConfig */
             $siteConfig = $siteConfigs->find()->where(['name' => 'version'])->first();

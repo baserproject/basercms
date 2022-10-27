@@ -281,9 +281,6 @@ return [
         'isUpdater' => false,
         // メンテナンスかどうか
         'isMaintenance' => false,
-        // インストール済かどうか
-        // TODO bootstrapの処理を見直してここで明示的に定義できるようにする
-        // 'isInstalled' => false,
     ],
 
     /**

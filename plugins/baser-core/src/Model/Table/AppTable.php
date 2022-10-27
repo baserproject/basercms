@@ -12,6 +12,7 @@
 namespace BaserCore\Model\Table;
 
 use ArrayObject;
+use BaserCore\Utility\BcUtil;
 use Cake\ORM\Query;
 use Cake\ORM\Table;
 use Cake\Core\Configure;
@@ -1108,7 +1109,7 @@ class AppTable extends Table
             $cache = $query['cache'];
             unset($query['cache']);
         }
-        if (BC_INSTALLED && isset($this->Behaviors) && $this->Behaviors->attached('BcCache') &&
+        if (BcUtil::isInstalled() && isset($this->Behaviors) && $this->Behaviors->attached('BcCache') &&
             $this->Behaviors->enabled('BcCache') && Configure::read('debug') == 0) {
             // ===========================================================================================
             // 2016/09/22 ryuring
