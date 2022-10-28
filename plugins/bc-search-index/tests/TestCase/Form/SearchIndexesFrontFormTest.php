@@ -16,8 +16,8 @@ use BaserCore\TestSuite\BcTestCase;
 use Cake\Form\Schema;
 
 /**
- * Class SearchIndexesTableTest
- * @package BaserCore\Test\TestCase\Model\Table
+ * Class SearchIndexesFrontFormTest
+ * @package BcSearchIndex\Test\TestCase\Form
  */
 class SearchIndexesFrontFormTest extends BcTestCase
 {
