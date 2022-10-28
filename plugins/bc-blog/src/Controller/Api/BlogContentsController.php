@@ -167,23 +167,30 @@ class BlogContentsController extends BcApiController
      *
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function copy(BlogContentsServiceInterface $service)
     {
         $this->request->allowMethod(['post', 'put', 'patch']);
+        $errors = null;
         try {
             $blogContent = $service->copy($this->request->getData());
-            $message = __d('baser', 'ブログのコピー「%s」を追加しました。', $blogContent->content->title);
+            if (!$blogContent) {
+                $this->setResponse($this->response->withStatus(400));
+                $message = __d('baser', 'コピーに失敗しました。データが不整合となっている可能性があります。');
+            } else {
+                $message = __d('baser', 'ブログのコピー「{0}」を追加しました。', $blogContent->content->title);
+            }
+
         } catch (PersistenceFailedException $e) {
             $this->setResponse($this->response->withStatus(500));
-            $blogContent = $e->getEntity();
+            $errors = $e->getEntity();
             $message = __d('baser', 'コピーに失敗しました。データが不整合となっている可能性があります。');
         }
         $this->set([
             'message' => $message,
             'blogContent' => $blogContent,
-            'content' => $blogContent->content,
-            'errors' => $blogContent->getErrors(),
+            'errors' => $errors,
         ]);
         $this->viewBuilder()->setOption('serialize', ['blogContent', 'content', 'message', 'errors']);
     }

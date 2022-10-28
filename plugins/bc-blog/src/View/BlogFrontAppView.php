@@ -28,6 +28,7 @@ class BlogFrontAppView extends BcFrontAppView
      * initialize
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function initialize(): void
     {

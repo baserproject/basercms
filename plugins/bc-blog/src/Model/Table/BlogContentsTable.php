@@ -58,6 +58,7 @@ class BlogContentsTable extends BlogAppTable
      * @return Validator
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function validationDefault(Validator $validator): Validator
     {
@@ -217,6 +218,7 @@ class BlogContentsTable extends BlogAppTable
      * @return array|false
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function createSearchIndex($blogContent)
     {
@@ -370,6 +372,7 @@ class BlogContentsTable extends BlogAppTable
      * @return EntityInterface
      * @checked
      * @noTodo
+     * @unitTest 
      */
     public function constructEyeCatchSize($data)
     {

@@ -131,6 +131,12 @@ class ContentsAdminServiceTest extends \BaserCore\TestSuite\BcTestCase
         $this->assertTrue(isset($vars['typeList']));
         $this->assertTrue(isset($vars['authorList']));
         $this->assertTrue(isset($vars['isContentDeletable']));
+        $this->assertTrue(isset($vars['folders']));
+        $this->assertTrue(isset($vars['template']));
+        $this->assertTrue(isset($vars['editInIndexDisabled']));
+        $this->assertTrue(isset($vars['isUseMoveContents']));
+        $this->assertTrue(isset($vars['contents']));
+        $this->assertTrue(isset($vars['contentsSearch']));
     }
 
     /**
