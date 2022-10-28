@@ -41,6 +41,7 @@ class SearchIndexesFrontServiceTest extends BcTestCase
         'plugin.BaserCore.Factory/Users',
         'plugin.BaserCore.Factory/Sites',
         'plugin.BaserCore.Factory/Contents',
+        'plugin.BaserCore.Factory/SearchIndexes',
     ];
 
     /**
