@@ -25,7 +25,25 @@ class SearchIndexesController extends BcFrontAppController
 {
 
     /**
-     * コンテンツ検索
+     * サイト内検索
+     *
+     * 検索インデックスに保存された公開状態のデータをページネーションによって
+     * デフォルトで10件表示する。
+     *
+     * ### 並び順
+     * - priority: 降順
+     * - modified: 降順
+     * - id: 昇順
+     *
+     * ### クエリパラメーター（カッコ内は省略形）
+     * - keyword(q): 検索キーワード
+     * - site_id(s): サイトID
+     * - content_id(c): コンテンツID
+     * - content_filter_id(cf): コンテンツフィルダーID
+     * - type: コンテンツタイプ
+     * - model(m): モデル名（エンティティ名）
+     * - priority: 優先度
+     * - folder_id(f): フォルダーID
      *
      * @checked
      * @noTodo

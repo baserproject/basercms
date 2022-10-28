@@ -47,6 +47,16 @@ class BcFrontMiddleware implements MiddlewareInterface
     }
 
     /**
+     * 現在のページのサイトとコンテンツを ServerRequest に設定する
+     *
+     * ### コンテンツ管理により管理されているページの場合
+     * BcContentsRoute によって、$request の param に設定されているので、
+     * そのデータを Attribute にセットしなおす。
+     *
+     * ###そうでないページの場合
+     * URL より、サイトを判定し、そのサイトのトップページを
+     * 現在のコンテンツとしてみなし、ServerRequest に設定する。
+     *
      * @param ServerRequestInterface $request
      * @return ServerRequestInterface
      * @checked

@@ -305,8 +305,26 @@ class AppController extends BaseController
     /**
      * 画面の情報をセットする
      *
+     * POSTデータとクエリパラメーターをセッションに保存した上で、
+     * 指定されたデフォルト値も含めて ServerRequest に設定する。
+     *
+     * ```
+     * $this->setViewConditions(['Content'], [
+     *     'group' => 'index',
+     *     'default' => [
+     *          'query' => ['limit' => 10],
+     *          'data' => ['title' => 'default']
+     *      ],
+     *     'get' => true
+     * ]);
+     * ```
+     *
      * @param array $targetModel ターゲットとなるモデル
      * @param array $options オプション
+     *  - `default`: 読み出す初期値（初期値：[]）
+     *  - `group`: 保存するグループ名（初期値：''）
+     *  - `post`: POSTデータを保存するかどうか（初期値：true）
+     *  - `get`: GETデータを保存するかどうか（初期値：false）
      * @checked
      * @noTodo
      */
@@ -319,12 +337,22 @@ class AppController extends BaseController
     /**
      * 画面の情報をセッションに保存する
      *
+     * 次のセッション名に保存。
+     * - POSTデータ: BcApp.viewConditions.{$contentsName}.data.{$model}
+     * - クエリパラメーター: BcApp.viewConditions.{$contentsName}.query
+     *
+     * $contentsNameは次の形式となる。
+     * {$controllerName}{$actionName}.{$group}
+     *
+     * ただし、ページネーションにおいて、1ページ目はクエリパラメーター`page` を付けない仕様となっているため
+     * `page` は保存しない。
+     *
      * @param array $targetModel
      * @param array $options オプション
      *  - `group`: 保存するグループ名（初期値：''）
      *  - `post`: POSTデータを保存するかどうか（初期値：true）
      *  - `get`: GETデータを保存するかどうか（初期値：false）
-     * @return void
+     * @see setViewConditions
      * @checked
      * @noTodo
      */
@@ -343,9 +371,12 @@ class AppController extends BaseController
 
         if ($options['post'] && $targetModel) {
             foreach($targetModel as $model) {
-                if ($this->getRequest()->getData($model)) {
-                    $session->write("BcApp.viewConditions.{$contentsName}.data.{$model}", $this->getRequest()->getData($model));
+                if(count($targetModel) > 1) {
+                    $data = $this->getRequest()->getData($model);
+                } else {
+                    $data = $this->getRequest()->getData();
                 }
+                if ($data) $session->write("BcApp.viewConditions.{$contentsName}.data.{$model}", $data);
             }
         }
 
@@ -368,7 +399,8 @@ class AppController extends BaseController
     /**
      * 画面の情報をセッションから読み込む
      *
-     * 初期値が設定されている場合は初期値を設定する
+     * 初期値が設定されている場合は初期値を設定した上で、セッションで上書きし、
+     * ServerRequestに設定する。
      *
      * @param array $targetModel
      * @param array|string $options オプション
@@ -376,6 +408,7 @@ class AppController extends BaseController
      *  - `group`: 保存するグループ名（初期値：''）
      *  - `post`: POSTデータを保存するかどうか（初期値：true）
      *  - `get`: GETデータを保存するかどうか（初期値：false）
+     * @see setViewConditions, saveViewConditions
      * @checked
      * @noTodo
      */
