@@ -171,7 +171,7 @@ class BcAppController extends AppController
             $this->__updateFirstAccess();
         } else {
             // テーマのヘルパーをセット
-            if (BC_INSTALLED) {
+            if (BcUtil::isInstalled()) {
                 $this->setThemeHelpers();
                 // ショートコード
                 App::uses('BcShortCodeEventListener', 'Event');
@@ -255,7 +255,7 @@ class BcAppController extends AppController
         }
 
         /* ログインユーザー */
-        if (BC_INSTALLED && $user && $this->name !== 'Installations' && !Configure::read('BcRequest.isUpdater') && !Configure::read('BcRequest.isMaintenance') && $this->name !== 'CakeError') {
+        if (BcUtil::isInstalled() && $user && $this->name !== 'Installations' && !Configure::read('BcRequest.isUpdater') && !Configure::read('BcRequest.isMaintenance') && $this->name !== 'CakeError') {
             $this->set('user', $user);
         }
 

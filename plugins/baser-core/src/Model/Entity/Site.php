@@ -19,6 +19,7 @@ use Cake\ORM\TableRegistry;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * Class Site
@@ -146,13 +147,13 @@ class Site extends EntityAlias
      * エイリアスを反映したURLを生成
      * 同一URL設定のみ利用可
      *
-     * @param ServerRequest $request リクエスト
+     * @param ServerRequestInterface $request リクエスト
      * @return string
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function makeUrl(ServerRequest $request)
+    public function makeUrl(ServerRequestInterface $request)
     {
         $here = $request->getPath();
         if (!$this->alias) {
@@ -170,13 +171,13 @@ class Site extends EntityAlias
     /**
      * URLが存在するか確認
      *
-     * @param ServerRequest $request
+     * @param ServerRequestInterface $request
      * @return bool
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function existsUrl(ServerRequest $request)
+    public function existsUrl(ServerRequestInterface $request)
     {
         $url = $this->makeUrl($request);
         if (strpos($url, '?') !== false) {
@@ -194,13 +195,13 @@ class Site extends EntityAlias
     /**
      * 与えられたリクエストに対して自動リダイレクトすべきかどうかを返す
      *
-     * @param ServerRequest $request リクエスト
+     * @param ServerRequestInterface $request リクエスト
      * @return bool
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function shouldRedirects(ServerRequest $request)
+    public function shouldRedirects(ServerRequestInterface $request)
     {
         if (!$this->status || !$this->existsUrl($request)) {
             return false;

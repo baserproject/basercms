@@ -33,7 +33,7 @@ class BlogCategoriesService implements BlogCategoriesServiceInterface
     /**
      * @var BlogCategoriesTable|Table
      */
-    public Table|BlogCategoriesTable $BlogCategories;
+    public Table $BlogCategories;
 
     /**
      * Construct
@@ -221,7 +221,7 @@ class BlogCategoriesService implements BlogCategoriesServiceInterface
         try {
             $blogCategory = $this->BlogCategories->get($id);
             $result = $this->BlogCategories->deleteOrFail($blogCategory);
-        } catch(RecordNotFoundException) {
+        } catch(RecordNotFoundException $e) {
             $result = true;
         }
         return $result;

@@ -768,7 +768,7 @@ class ContentsService implements ContentsServiceInterface
                 $url = $originUrl;
             }
         } else {
-            if (BC_INSTALLED) {
+            if (BcUtil::isInstalled()) {
                 if (!is_array($url)) {
                     $site = $this->Sites->findByUrl($url);
                     if ($site && $site->same_main_url) {

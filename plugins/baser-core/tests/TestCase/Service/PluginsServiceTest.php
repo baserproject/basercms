@@ -308,6 +308,7 @@ class PluginsServiceTest extends BcTestCase
      * @return void
      */
     public function testGetMarketPlugins(){
+        $this->markTestIncomplete('TODO 直接外部ではなく Mockのテストに切り替える');
         $rs = $this->Plugins->getMarketPlugins();
         $this->assertNotEmpty($rs, 'baserマーケットのデータが読み込めませんでした。テストを再実行してください。');
         $caches = Cache::read('baserMarketPlugins', '_bc_env_');

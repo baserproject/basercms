@@ -11,6 +11,7 @@
 
 namespace BaserCore\Controller\Component;
 
+use BaserCore\Utility\BcUtil;
 use Cake\Controller\Component;
 
 /**
@@ -953,7 +954,7 @@ class BcManagerComponent extends Component
     {
         $result = true;
 
-        if (BC_INSTALLED) {
+        if (BcUtil::isInstalled()) {
             // 設定ファイルを初期化
             if (!$this->resetSetting()) {
                 $result = false;

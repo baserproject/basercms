@@ -23,8 +23,6 @@ use BaserCore\Middleware\BcAdminMiddleware;
 use BaserCore\Middleware\BcFrontMiddleware;
 use BaserCore\Middleware\BcRedirectSubSiteFilter;
 use BaserCore\Middleware\BcRequestFilterMiddleware;
-use BaserCore\Model\Entity\Site;
-use BaserCore\Model\Table\SitesTable;
 use BaserCore\ServiceProvider\BcServiceProvider;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
@@ -33,9 +31,7 @@ use Cake\Core\PluginApplicationInterface;
 use Cake\Event\EventManager;
 use Cake\Http\Middleware\CsrfProtectionMiddleware;
 use Cake\Http\MiddlewareQueue;
-use Cake\Http\ServerRequest;
 use Cake\Http\ServerRequestFactory;
-use Cake\ORM\TableRegistry;
 use Cake\Routing\Route\InflectedRoute;
 use Cake\Routing\RouteBuilder;
 use Cake\Routing\Router;
@@ -237,7 +233,7 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
         if(!$authSetting && $prefix === 'Api') {
             $authSetting = Configure::read('BcPrefixAuth.Admin');
         }
-        if (!$authSetting || !Configure::read('BcRequest.isInstalled')) {
+        if (!$authSetting || !BcUtil::isInstalled()) {
             $service->loadAuthenticator('Authentication.Form');
             return $service;
         }
@@ -367,7 +363,10 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
         /**
          * インストーラー
          */
-        if (!Configure::read('BcRequest.isInstalled')) {
+        if (!BcUtil::isInstalled()) {
+            $routes->connect('/', ['plugin' => 'BaserCore', 'controller' => 'Installations', 'action' => 'index']);
+            $routes->connect('/install', ['plugin' => 'BaserCore', 'controller' => 'Installations', 'action' => 'index']);
+            $routes->fallbacks(InflectedRoute::class);
             parent::routes($routes);
             return;
         }

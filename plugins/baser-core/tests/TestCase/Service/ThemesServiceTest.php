@@ -253,6 +253,7 @@ class ThemesServiceTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function testGetMarketThemes()
     {
+        $this->markTestIncomplete('TODO 外部サイトに直接ではなくモックのテストに切り替える');
         $themes = $this->ThemesService->getMarketThemes();
         $this->assertEquals(true, count($themes) > 0);
     }

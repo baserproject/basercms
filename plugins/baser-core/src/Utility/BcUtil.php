@@ -965,18 +965,10 @@ class BcUtil
      * baserCMSのインストールが完了しているかチェックする
      * @return    boolean
      * @checked
-     * @note(value="インストーラーを実装完了後に対応")
      */
     public static function isInstalled()
     {
-        // TODO 未移行のため暫定措置
-        // >>>
-        return true;
-        // <<<
-        if (getDbConfig() && file_exists(APP . 'Config' . DS . 'install.php')) {
-            return true;
-        }
-        return false;
+        return (bool) Configure::read('BcRequest.isInstalled');
     }
 
     /**

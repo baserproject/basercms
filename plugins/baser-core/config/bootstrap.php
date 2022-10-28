@@ -51,11 +51,10 @@ require __DIR__ . DS . 'paths.php';
 // require BASER . DS . 'src' . DS . 'basics.php';
 // <<<
 
-if(!defined('BC_INSTALLED')) {
-    define('BC_INSTALLED', BcUtil::isInstalled());
-}
+// TODO ucmitz dockerに依存しているため、インストーラー実装後に見直し
+// ユニットテストの setUp() で状態を書き換える事ができるようにするため、config/setting.php にはキーは記述しないようにする。
 if(is_null(Configure::read('BcRequest.isInstalled'))) {
-    Configure::write('BcRequest.isInstalled', BC_INSTALLED); // UnitTest用
+    Configure::write('BcRequest.isInstalled', file_exists(ROOT . DS . 'docker_inited'));
 }
 
 /**

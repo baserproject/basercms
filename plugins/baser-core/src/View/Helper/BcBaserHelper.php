@@ -139,7 +139,7 @@ class BcBaserHelper extends Helper
         // 一度初期化した後に再利用し、処理速度を向上する為にコンストラクタでセットしておく
         // TODO 未実装のためコメントアウト
         /* >>>
-        if ($this->_View && BC_INSTALLED && !Configure::read('BcRequest.isUpdater') && !Configure::read('BcRequest.isMaintenance')) {
+        if ($this->_View && BcUtil::isInstalled() && !Configure::read('BcRequest.isUpdater') && !Configure::read('BcRequest.isMaintenance')) {
             // DBに接続できない場合、CakePHPのエラーメッセージが表示されてしまう為、 try を利用
             try {
                 $this->_Permission = ClassRegistry::init('Permission');
@@ -153,7 +153,7 @@ class BcBaserHelper extends Helper
         // サイト基本設定データをセット
         // TODO 未実装
         /* >>>
-        if (BC_INSTALLED || isConsole()) {
+        if (BcUtil::isInstalled() || isConsole()) {
             $this->siteConfig = $this->_View->get('siteConfig', []);
         }
         <<< */
@@ -161,7 +161,7 @@ class BcBaserHelper extends Helper
         // プラグインのBaserヘルパを初期化
         // TODO 未実装
         /* >>>
-        if (BC_INSTALLED && !Configure::read('BcRequest.isUpdater') && !Configure::read('BcRequest.isMaintenance')) {
+        if (BcUtil::isInstalled() && !Configure::read('BcRequest.isUpdater') && !Configure::read('BcRequest.isMaintenance')) {
             $this->_initPluginBasers();
         }
         >>> */
@@ -1489,7 +1489,7 @@ class BcBaserHelper extends Helper
      */
     public function getSitePrefix()
     {
-        if (!BC_INSTALLED || $this->getView()->getRequest()->is('update')) {
+        if (!BcUtil::isInstalled() || $this->getView()->getRequest()->is('update')) {
             return '';
         }
         $site = null;

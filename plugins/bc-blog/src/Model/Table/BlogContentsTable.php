@@ -58,6 +58,7 @@ class BlogContentsTable extends BlogAppTable
      * @return Validator
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function validationDefault(Validator $validator): Validator
     {
@@ -218,6 +219,7 @@ class BlogContentsTable extends BlogAppTable
      * @return array|false
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function createSearchIndex($blogContent)
     {
@@ -243,7 +245,7 @@ class BlogContentsTable extends BlogAppTable
      * @param string $newTitle 新しいタイトル
      * @param int $newAuthorId 新しいユーザーID
      * @param int $newSiteId 新しいサイトID
-     * @return mixed blogContent|false
+     * @return mixed EntityInterface|false
      * @checked
      */
     public function copy(
@@ -252,7 +254,7 @@ class BlogContentsTable extends BlogAppTable
         string $newTitle,
         int $newAuthorId,
         int $newSiteId = null
-    ) : false|EntityInterface {
+    ) {
         $data = $this->find()->where(['BlogContents.id' => $id])->contain('Contents')->first();
         $oldData = clone $data;
 
@@ -371,6 +373,7 @@ class BlogContentsTable extends BlogAppTable
      * @return EntityInterface
      * @checked
      * @noTodo
+     * @unitTest 
      */
     public function constructEyeCatchSize($data)
     {

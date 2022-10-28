@@ -387,18 +387,15 @@ class BcPlugin extends BasePlugin
      */
     public function routes($routes): void
     {
-        $plugin = $this->getName();
-
         /**
          * インストーラー
          */
-        if (!Configure::read('BcRequest.isInstalled') || !file_exists(ROOT. DS . 'docker_inited')) {
-            $routes->connect('/', ['plugin' => 'BaserCore', 'controller' => 'Installations', 'action' => 'index']);
-            $routes->connect('/install', ['plugin' => 'BaserCore', 'controller' => 'Installations', 'action' => 'index']);
-            $routes->fallbacks(InflectedRoute::class);
+        if (!BcUtil::isInstalled()) {
             parent::routes($routes);
             return;
         }
+
+        $plugin = $this->getName();
 
         /**
          * コンテンツ管理ルーティング
@@ -439,6 +436,7 @@ class BcPlugin extends BasePlugin
 
         /**
          * プラグインのフロントエンド用ルーティング
+         * プラグイン名がダッシュ区切りの場合
          */
         $routes->plugin(
             $plugin,
@@ -454,6 +452,7 @@ class BcPlugin extends BasePlugin
 
         /**
          * サブサイト標準ルーティング
+         * プラグイン名がダッシュ区切りの場合
          */
         $request = new ServerRequest();
         /* @var SitesTable $sitesTable */
@@ -474,6 +473,7 @@ class BcPlugin extends BasePlugin
 
         /**
          * API用ルーティング
+         * プラグイン名がダッシュ区切りの場合
          */
         $routes->prefix(
             'Api',

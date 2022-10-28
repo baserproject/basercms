@@ -87,7 +87,7 @@ abstract class BcAbstractDetector
      */
     public static function findAll()
     {
-        if (!BC_INSTALLED) {
+        if (!BcUtil::isInstalled()) {
             return [];
         }
         if (!empty(static::$_detectors[static::$_configName])) {

@@ -29,17 +29,18 @@ class BcRedirectSubSiteFilter implements MiddlewareInterface
 {
 
     /**
-     * 優先順位
-     *
-     * 先にキャッシュを読まれると意味がない為
-     * BcCacheDispatcherより先に呼び出される必要がある
-     *
-     * @var int
-     */
-    public $priority = 4;
-
-    /**
      * Process
+     *
+     * ブラウザのユーザーエージェント、もしくは言語設定により、適切なサブサイトを決定し、そのサイトにリダレクトする。
+     *
+     * - リダイレクト先のサイトが非公開の場合はリダイレクトしない。
+     * - リダイレクト先のサイトのオートリダイレクト設定が必要。
+     * - クエリーパラメーターに、{$site->name}_auto_redirect=off と設定されている場合はリダイレクトしない。
+     * - アップデーターや管理画面へのアクセスの場合には無視する。
+     *
+     * 例えば、サブサイトに英語言語設定とオートリダイレクト設定がされており、エイリアスが en と設定されている場合
+     * /about → /en/about にリダイレクトします。
+     *
      * @param ServerRequestInterface $request
      * @param RequestHandlerInterface $handler
      * @return ResponseInterface
@@ -56,6 +57,7 @@ class BcRedirectSubSiteFilter implements MiddlewareInterface
             return $handler->handle($request);
         }
         $sites = \Cake\ORM\TableRegistry::getTableLocator()->get('BaserCore.Sites');
+        /* @var \BaserCore\Model\Entity\Site $subSite */
         $subSite = $sites->getSubByUrl($request->getPath());
         if (!is_null($subSite) && $subSite->shouldRedirects($request)) {
             $response = new Response([

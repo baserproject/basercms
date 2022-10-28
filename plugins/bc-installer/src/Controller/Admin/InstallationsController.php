@@ -12,6 +12,7 @@
 namespace BcInstaller\Controller\Admin;
 
 use BaserCore\Controller\Admin\BcAdminAppController;
+use BaserCore\Utility\BcUtil;
 use Cake\Event\EventInterface;
 
 /**
@@ -327,7 +328,7 @@ class InstallationsController extends BcAdminAppController
         $this->setTitle(__d('baser', 'baserCMSのインストール完了！'));
         Cache::config('default', ['engine' => 'File']);
 
-        if (!BC_INSTALLED) {
+        if (!BcUtil::isInstalled()) {
             $installationData = $this->Session->read('Installation');
             $installationData['lastStep'] = true;
             BcUtil::checkTmpFolders();
@@ -739,7 +740,7 @@ class InstallationsController extends BcAdminAppController
         $this->subDir = 'admin';
 
         if (empty($this->request->getData('Installation.reset'))) {
-            $this->set('complete', !BC_INSTALLED? true : false);
+            $this->set('complete', !BcUtil::isInstalled()? true : false);
             return;
         }
 
