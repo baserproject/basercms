@@ -12,6 +12,7 @@
 namespace BcBlog\Test\TestCase\Controller\Api;
 
 use BaserCore\Test\Factory\ContentFactory;
+use BaserCore\Test\Factory\SiteConfigFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcBlog\Controller\Api\BlogContentsController;
@@ -204,7 +205,83 @@ class BlogContentsControllerTest extends BcTestCase
      */
     public function test_copy()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        BlogContentFactory::make([
+            'id' => 2,
+            'description' => 'baserCMS inc. [デモ] の最新の情報をお届けします。',
+            'template' => 'default',
+            'list_count' => '10',
+            'list_direction' => 'DESC',
+            'feed_count' => '10',
+            'tag_use' => '1',
+            'comment_use' => '1',
+            'comment_approve' => '0',
+            'auth_captcha' => '1',
+            'widget_area' => '2',
+            'eye_catch_size' => '',
+            'use_content' => '1'
+        ])->persist();
+        ContentFactory::make([
+            'id' => 2,
+            'title' => 'news',
+            'plugin' => 'BcBlog',
+            'type' => 'BlogContent',
+            'entity_id' => 2,
+            'url' => '/test',
+            'site_id' => 1,
+            'alias_id' => null,
+            'main_site_content_id' => null,
+            'parent_id' => null,
+            'lft' => 1,
+            'rght' => 2,
+            'level' => 1,
+
+        ])->persist();
+        SiteConfigFactory::make([
+            'name' => 'contents_sort_last_modified',
+            'value' => ''
+        ])->persist();
+        $data = [
+            'entity_id' => 2,
+            'parent_id' => 2,
+            'site_id' => 1,
+            'title' => 'news',
+        ];
+        $this->post('/baser/api/bc-blog/blog_contents/copy.json?token=' . $this->accessToken, $data);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('ブログのコピー「news」を追加しました。', $result->message);
+        $this->assertEquals('baserCMS inc. [デモ] の最新の情報をお届けします。', $result->blogContent->description);
+
+        BlogContentFactory::make([
+            'id' => 10,
+        ])->persist();
+        ContentFactory::make([
+            'id' => 10,
+            'title' => 'news',
+            'plugin' => 'BcBlog',
+            'type' => 'BlogContent',
+            'entity_id' => 10,
+            'url' => '/test',
+            'site_id' => 1,
+            'alias_id' => null,
+            'main_site_content_id' => null,
+            'parent_id' => null,
+            'lft' => 3,
+            'rght' => 4,
+            'level' => 1,
+
+        ])->persist();
+
+        $data = [
+            'entity_id' => 10,
+            'parent_id' => 1,
+            'site_id' => 1,
+            'title' => 'news',
+        ];
+        $this->post('/baser/api/bc-blog/blog_contents/copy.json?token=' . $this->accessToken, $data);
+        $this->assertResponseCode(400);
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('コピーに失敗しました。データが不整合となっている可能性があります。', $result->message);
     }
 
 }
