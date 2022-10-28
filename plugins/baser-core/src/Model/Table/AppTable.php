@@ -12,7 +12,6 @@
 namespace BaserCore\Model\Table;
 
 use ArrayObject;
-use BaserCore\Utility\BcUtil;
 use Cake\ORM\Query;
 use Cake\ORM\Table;
 use Cake\Core\Configure;
@@ -1245,7 +1244,12 @@ class AppTable extends Table
     }
 
     /**
-     * 公開済データを取得するための conditions を生成取得
+     * 公開状態となっているデータを取得するための conditions 値を取得
+     *
+     * 公開状態（初期値：status）、公開開始日（初期値：publish_begin）、公開終了日（初期値：publish_end）
+     * の組み合わせてによって配列を生成する。
+     *
+     * 公開状態が true であったとしても、公開期間が設定されている場合はそちらを優先する。
      *
      * @return array
      * @checked

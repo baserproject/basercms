@@ -2116,7 +2116,13 @@ DOC_END;
     }
 
     /**
-     * Control
+     * フォームコントロールを取得
+     *
+     * CakePHPの標準仕様をカスタマイズ
+     * - labelタグを自動で付けない
+     * - legendタグを自動で付けない
+     * - errorタグを自動で付けない
+     *
      * @param string $fieldName
      * @param array $options
      * @return string
