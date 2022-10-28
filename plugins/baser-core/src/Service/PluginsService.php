@@ -532,10 +532,24 @@ class PluginsService implements PluginsServiceInterface
 
     /**
      * プラグインをアップロードする
+     *
+     * POSTデータにて キー`file` で Zipファイルをアップロードとすると、
+     * /plugins/ 内に、Zipファイルを展開して配置する。
+     *
+     * ### エラー
+     * post_max_size　を超えた場合、サーバーに設定されているサイズ制限を超えた場合、
+     * Zipファイルの展開に失敗した場合は、Exception を発生。
+     *
+     * ### リネーム処理
+     * 展開後のフォルダー名はアッパーキャメルケースにリネームする。
+     * 既に /plugins/ 内に同名のプラグインが存在する場合には、数字付きのディレクトリ名（PluginName2）にリネームする。
+     * 数字付きのディレクトリ名にリネームする際、プラグイン内の Plugin クラスの namespace もリネームする。
+     *
      * @param array $postData
-     * @return string
+     * @return string Zip を展開したフォルダ名
      * @checked
      * @noTodo
+     * @throws BcException
      */
     public function add(array $postData)
     {
@@ -573,4 +587,5 @@ class PluginsService implements PluginsServiceInterface
         BcUtil::changePluginNameSpace($dstName);
         return $dstName;
     }
+
 }

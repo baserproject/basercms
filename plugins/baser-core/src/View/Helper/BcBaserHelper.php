@@ -570,7 +570,9 @@ class BcBaserHelper extends Helper
     }
 
     /**
-     * コンテンツタイトルを取得する
+     * 表示しているページのコンテンツタイトルを取得する
+     *
+     * コンテンツタイトルは、BcBaserHelper->setTitle() でセットする
      *
      * @return string コンテンツタイトル
      * @checked

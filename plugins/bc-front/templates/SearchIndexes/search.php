@@ -20,7 +20,7 @@
  * @noTodo
  * @unitTest
  */
-$this->BcAdmin->setTitle(__d('baser', '検索結果一覧'));
+$this->BcBaser->setTitle(__d('baser', '検索結果一覧'));
 ?>
 
 
