@@ -23,11 +23,12 @@ use Cake\Core\Configure\Engine\PhpConfig;
 use Cake\Core\PluginApplicationInterface;
 use Cake\Datasource\ConnectionManager;
 use Cake\Filesystem\Folder;
-use Cake\Http\ServerRequest;
+use Cake\Http\ServerRequestFactory;
 use Cake\Log\LogTrait;
 use Cake\ORM\TableRegistry;
 use Cake\Routing\Route\InflectedRoute;
 use Cake\Routing\RouteBuilder;
+use Cake\Routing\Router;
 use Cake\Utility\Inflector;
 use Migrations\Migrations;
 use Cake\Core\Plugin as CakePlugin;
@@ -380,6 +381,30 @@ class BcPlugin extends BasePlugin
     }
 
     /**
+     * ルーティング設定
+     *
+     * 次のルートを設定するが、未インストールの場合はスキップする。
+     *
+     * ### コンテンツ管理のプラグイン用のリバースルーティング
+     * ['plugin' => 'BcBlog', 'controller' => 'Blog', 'action' => 'index'] → /news/
+     * ['plugin' => 'BcBlog', 'controller' => 'Blog', 'action' => 'archives', 1] → /news/archives/1
+     *
+     * ### 管理画面のプラグイン用ルーティング
+     * /baser/admin/plugin-name/controller_name/index
+     * /baser/admin/plugin-name/controller_name/action_name/*
+     *
+     * ### フロントエンドのプラグイン用ルーティング
+     * /plugin-name/controller_name/index
+     * /plugin-name/controller_name/action_name/*
+     *
+     * ### サブサイトのプラグイン用ルーティング
+     * /site_alias/plugin-name/controller_name/index
+     * /site_alias/plugin-name/controller_name/action_name/*
+     *
+     * ### APIのプラグイン用ルーティング
+     * /baser/api/plugin-name/controller_name/index.json
+     * /baser/api/plugin-name/controller_name/action_name/*.json
+     *
      * @param \Cake\Routing\RouteBuilder $routes
      * @checked
      * @unitTest
@@ -387,9 +412,6 @@ class BcPlugin extends BasePlugin
      */
     public function routes($routes): void
     {
-        /**
-         * インストーラー
-         */
         if (!BcUtil::isInstalled()) {
             parent::routes($routes);
             return;
@@ -399,6 +421,7 @@ class BcPlugin extends BasePlugin
 
         /**
          * コンテンツ管理ルーティング
+         * リバースルーティングのために必要
          */
         $routes->plugin(
             $plugin,
@@ -442,8 +465,7 @@ class BcPlugin extends BasePlugin
             $plugin,
             ['path' => '/' . Inflector::dasherize($plugin)],
             function(RouteBuilder $routes) {
-                // AnalyseController で利用
-                $routes->setExtensions(['json']);
+                $routes->setExtensions(['json']);   // AnalyseController で利用
                 $routes->connect('/{controller}/index', ['sitePrefix' => ''], ['routeClass' => InflectedRoute::class]);
                 $routes->connect('/{controller}/{action}/*', ['sitePrefix' => ''], ['routeClass' => InflectedRoute::class]);
                 $routes->fallbacks(InflectedRoute::class);
@@ -451,10 +473,13 @@ class BcPlugin extends BasePlugin
         );
 
         /**
-         * サブサイト標準ルーティング
+         * サブサイトのプラグイン用ルーティング
          * プラグイン名がダッシュ区切りの場合
          */
-        $request = new ServerRequest();
+        $request = Router::getRequest();
+        if(!$request) {
+            $request = ServerRequestFactory::fromGlobals();
+        }
         /* @var SitesTable $sitesTable */
         $sitesTable = TableRegistry::getTableLocator()->get('BaserCore.Sites');
         /* @var Site $site */
@@ -472,7 +497,7 @@ class BcPlugin extends BasePlugin
         }
 
         /**
-         * API用ルーティング
+         * APIのプラグイン用ルーティング
          * プラグイン名がダッシュ区切りの場合
          */
         $routes->prefix(
