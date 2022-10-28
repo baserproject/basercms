@@ -18,8 +18,6 @@ use BaserCore\TestSuite\BcTestCase;
 use BcSearchIndex\Controller\SearchIndexesController;
 use BcSearchIndex\Service\Front\SearchIndexesFrontService;
 use BcSearchIndex\Service\SearchIndexesService;
-use Cake\Datasource\ResultSetInterface;
-use Cake\ORM\ResultSet;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
