@@ -15,6 +15,7 @@ use BaserCore\Controller\Component\BcMessageComponent;
 use BaserCore\Error\BcException;
 use BaserCore\Model\Table\PluginsTable;
 use BaserCore\Service\Admin\PluginsAdminServiceInterface;
+use BaserCore\Service\PluginsService;
 use BaserCore\Service\PluginsServiceInterface;
 use BaserCore\Service\UsersServiceInterface;
 use BaserCore\Utility\BcUtil;
@@ -189,6 +190,11 @@ class PluginsController extends BcAdminAppController
 
     /**
      * プラグインをアップロードする
+     *
+     * POSTデータで、キー`file` を使って zipファイルを送信する。
+     * 送信が完了したら一覧画面にリダイレクトする。
+     *
+     * @param PluginsServiceInterface $service
      * @checked
      * @noTodo
      */
@@ -196,6 +202,7 @@ class PluginsController extends BcAdminAppController
     {
         if ($this->request->is('post')) {
             try {
+                /* @var PluginsService $service */
                 $name = $service->add($this->getRequest()->getUploadedFiles());
                 $this->BcMessage->setInfo(sprintf(__d('baser', '新規プラグイン「%s」を追加しました。'), $name));
                 $this->redirect(['action' => 'index']);

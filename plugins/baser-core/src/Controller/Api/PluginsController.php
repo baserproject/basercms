@@ -16,7 +16,6 @@ use BaserCore\Service\PluginsServiceInterface;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
-use Cake\Utility\Inflector;
 
 /**
  * Class PluginsController
