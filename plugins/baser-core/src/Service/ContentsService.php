@@ -1424,6 +1424,7 @@ class ContentsService implements ContentsServiceInterface
      * @return EntityInterface|null
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function rename($content, $postData)
     {
