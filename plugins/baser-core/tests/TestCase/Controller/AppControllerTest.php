@@ -129,6 +129,14 @@ class AppControllerTest extends BcTestCase
 //        $this->assertEquals('BcAdminThird', $this->AppController->viewBuilder()->getTheme());
     }
 
+    /**
+     * test beforeRender
+     */
+    public function test_beforeRender()
+    {
+        $this->AppController->beforeRender(new Event('beforeRender'));
+        $this->assertEquals('BcAdminThird', $this->AppController->viewBuilder()->getVars()['currentAdminTheme']);
+    }
 
     /**
      * Test setupFrontView

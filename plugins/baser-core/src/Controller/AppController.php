@@ -143,6 +143,7 @@ class AppController extends BaseController
      * @return Response|void|null
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function beforeRender(EventInterface $event)
     {
