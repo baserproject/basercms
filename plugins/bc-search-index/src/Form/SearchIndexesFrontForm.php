@@ -21,7 +21,15 @@ class SearchIndexesFrontForm extends Form
 {
 
     /**
-     * build Schema
+     * サイト内検索フォームのスキーマを生成
+     *
+     * サイト内検索のフォームにコンテキストとしてセットするために利用する。
+     *
+     * ### フィールド
+     * - f: フォルダID
+     * - q: 検索キーワード
+     * - s: サイトID
+     *
      * @param Schema $schema
      * @return Schema
      */

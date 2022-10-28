@@ -67,7 +67,15 @@ class SearchIndexesService implements SearchIndexesServiceInterface
 
     /**
      * 一覧データを取得
+     *
+     * ### 並び順
+     * - priority: 降順
+     * - modified: 降順
+     * - id: 昇順
+     *
      * @param array $queryParams
+     *  - `limit`: 取得件数
+     *  - その他、createIndexConditions を参照
      * @return Query
      * @checked
      * @noTodo
@@ -93,7 +101,18 @@ class SearchIndexesService implements SearchIndexesServiceInterface
     /**
      * 管理画面ページ一覧の検索条件を取得する
      *
-     * @param array $data
+     * パラメーターのカッコ内は省略形。省略形を優先する。
+     * `keyword` は、LIKE検索とし、`title` と `detail` を対象とする。
+     *
+     * @param array $options
+     * - keyword(q): 検索キーワード
+     * - site_id(s): サイトID
+     * - content_id(c): コンテンツID
+     * - content_filter_id(cf): コンテンツフィルダーID
+     * - type: コンテンツタイプ
+     * - model(m): モデル名（エンティティ名）
+     * - priority: 優先度
+     * - folder_id(f): フォルダーID
      * @return array
      * @checked
      * @noTodo
@@ -132,7 +151,7 @@ class SearchIndexesService implements SearchIndexesServiceInterface
         if (!is_null($options['f'])) $options['folder_id'] = $options['f'];
         if (!is_null($options['q'])) $options['keyword'] = $options['q'];
 
-        if($options['status'] === 'publish' || $options['status'] === '1') {
+        if($options['status'] === 'publish' || (string) $options['status'] === '1') {
             $conditions = $this->SearchIndexes->getConditionAllowPublish();
         } else {
             $conditions = [];
@@ -162,6 +181,9 @@ class SearchIndexesService implements SearchIndexesServiceInterface
 
     /**
      * 検索キーワードを分解し配列に変換する
+     *
+     * 半角スペース、全角スペースで分解する。
+     * エスケープ処理を行う。
      *
      * @param string $query
      * @return array
