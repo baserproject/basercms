@@ -10,9 +10,11 @@
  * @license         https://basercms.net/license/index.html
  */
 namespace BcBlog\Test\TestCase\Model;
+use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcUtil;
 use BcBlog\Model\Table\BlogContentsTable;
+use BcBlog\Service\BlogContentsService;
 use BcBlog\Test\Factory\BlogContentFactory;
 
 /**
@@ -25,6 +27,7 @@ class BlogContentsTableTest extends BcTestCase
 
     public $fixtures = [
         'plugin.BcBlog.Factory/BlogContents',
+        'plugin.BaserCore.Factory/Contents',
     ];
 
     /**
@@ -392,5 +395,59 @@ class BlogContentsTableTest extends BcTestCase
         $this->assertEquals($rs['eye_catch_size_thumb_height'], 600);
         $this->assertEquals($rs['eye_catch_size_mobile_thumb_width'], 150);
         $this->assertEquals($rs['eye_catch_size_mobile_thumb_height'], 150);
+    }
+
+    /**
+     * test createSearchIndex
+     */
+    public function test_createSearchIndex()
+    {
+        BlogContentFactory::make([
+            'id' => 2,
+            'description' => 'test detail',
+            'title' => 'test title',
+            'template' => 'default',
+            'list_count' => '10',
+            'list_direction' => 'DESC',
+            'feed_count' => '10',
+            'tag_use' => '1',
+            'comment_use' => '1',
+            'comment_approve' => '0',
+            'auth_captcha' => '1',
+            'widget_area' => '2',
+            'eye_catch_size' => '',
+            'use_content' => '1'
+        ])->persist();
+        ContentFactory::make([
+            'id' => 2,
+            'title' => 'news',
+            'plugin' => 'BcBlog',
+            'type' => 'BlogContent',
+            'entity_id' => 2,
+            'url' => '/test',
+            'site_id' => 1,
+            'alias_id' => null,
+            'main_site_content_id' => null,
+            'parent_id' => null,
+            'lft' => 1,
+            'rght' => 2,
+            'level' => 1,
+            'status' => 1,
+            'publish_begin' => '2020-01-27 12:57:59',
+            'publish_end' => '2020-01-29 12:57:59',
+
+        ])->persist();
+        $BlogContentsService = new BlogContentsService();
+        $rs = $this->BlogContentsTable->createSearchIndex($BlogContentsService->get(2));
+        $this->assertEquals($rs['type'], 'ブログ');
+        $this->assertEquals($rs['model_id'], 2);
+        $this->assertEquals($rs['content_id'], 2);
+        $this->assertEquals($rs['site_id'], 1);
+        $this->assertEquals($rs['title'], 'news');
+        $this->assertEquals($rs['detail'], 'test detail');
+        $this->assertEquals($rs['url'], '/test');
+        $this->assertEquals($rs['status'], 1);
+        $this->assertNotNull($rs['publish_begin']);
+        $this->assertNotNull($rs['publish_end']);
     }
 }
