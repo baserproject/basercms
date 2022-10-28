@@ -229,10 +229,12 @@ class BcAppView extends View
         // CUSTOMIZE ADD 2013/08/25 ryuring
         // イベントを追加
         // >>>
+        // EVENT beforeGetViewFileName
         $event = $this->dispatchLayerEvent('beforeGetViewFileName', ['name' => $name], ['class' => '', 'plugin' => '']);
         if ($event !== false) {
             $name = ($event->getResult() === null || $event->getResult() === true)? $event->getData('name') : $event->getResult();
         }
+        // EVENT PluginName.ControllerName.beforeGetViewFileName
         $event = $this->dispatchLayerEvent('beforeGetViewFileName', ['name' => $name]);
         if ($event !== false) {
             $name = ($event->getResult() === null || $event->getResult() === true)? $event->getData('name') : $event->getResult();
@@ -336,10 +338,12 @@ class BcAppView extends View
         // CUSTOMIZE ADD 2013/08/27 ryuring
         // イベントを追加
         // >>>
+        // EVENT beforeGetElementFileName
         $event = $this->dispatchLayerEvent('beforeGetElementFileName', ['name' => $name], ['class' => '', 'plugin' => '']);
         if ($event !== false) {
             $name = ($event->getResult() === null || $event->getResult() === true)? $event->getData('name') : $event->getResult();
         }
+        // EVENT PluginName.ControllerName.beforeGetElementFileName
         $event = $this->dispatchLayerEvent('beforeGetElementFileName', ['name' => $name]);
         if ($event !== false) {
             $name = ($event->getResult() === null || $event->getResult() === true)? $event->getData('name') : $event->getResult();
@@ -412,10 +416,12 @@ class BcAppView extends View
 
         // CUSTOMIZE ADD 2013/08/25 ryuring
         // >>>
+        // EVENT beforeGetLayoutFileName
         $event = $this->dispatchLayerEvent('beforeGetLayoutFileName', ['name' => $name], ['class' => '', 'plugin' => '']);
         if ($event !== false) {
             $name = ($event->getResult() === null || $event->getResult() === true)? $event->getData('name') : $event->getResult();
         }
+        // EVENT PluginName.ControllerName.beforeGetLayoutFileName
         $event = $this->dispatchLayerEvent('beforeGetLayoutFileName', ['name' => $name]);
         if ($event !== false) {
             $name = ($event->getResult() === null || $event->getResult() === true)? $event->getData('name') : $event->getResult();

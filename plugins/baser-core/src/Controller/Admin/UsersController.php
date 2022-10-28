@@ -203,6 +203,7 @@ class UsersController extends BcAdminAppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             try {
                 $user = $userService->update($user, $this->request->getData());
+                // EVENT Users.afterEdit
                 $this->dispatchLayerEvent('afterEdit', [
                     'user' => $user
                 ]);

@@ -271,8 +271,8 @@ class MailContentsTable extends MailAppTable
         $data = $this->find('first', ['conditions' => ['MailContent.id' => $id], 'recursive' => 0]);
         $oldData = $data;
 
-        // EVENT MailContent.beforeCopy
-        $event = $this->dispatchEvent('beforeCopy', [
+        // EVENT MailContents.beforeCopy
+        $event = $this->dispatchLayerEvent('beforeCopy', [
             'data' => $data,
             'id' => $id,
         ]);
@@ -330,8 +330,8 @@ class MailContentsTable extends MailAppTable
                 $data['Content'] = $result['Content'];
             }
 
-            // EVENT MailContent.afterCopy
-            $event = $this->dispatchEvent('afterCopy', [
+            // EVENT MailContents.afterCopy
+            $event = $this->dispatchLayerEvent('afterCopy', [
                 'id' => $data['MailContent']['id'],
                 'data' => $data,
                 'oldId' => $id,

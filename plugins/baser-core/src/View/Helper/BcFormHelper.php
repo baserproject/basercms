@@ -364,7 +364,7 @@ SCRIPT_END;
 
         $formId = $this->setId($this->createId($context, $options));
 
-        /*** beforeCreate ***/
+        // EVENT Form.beforeCreate
         $event = $this->dispatchLayerEvent('beforeCreate', [
             'id' => $formId,
             'options' => $options
@@ -381,7 +381,7 @@ SCRIPT_END;
 
         // CUSTOMIZE ADD 2014/07/03 ryuring
         // >>>
-        /*** afterCreate ***/
+        // EVENT Form.afterCreate
         $event = $this->dispatchLayerEvent('afterCreate', [
             'id' => $formId,
             'out' => $out
@@ -475,7 +475,7 @@ SCRIPT_END;
 
         // CUSTOMIZE ADD 2014/07/03 ryuring
         // >>>
-        /*** beforeInput ***/
+        // EVENT Form.beforeInput
         $event = $this->dispatchLayerEvent('beforeInput', [
             'formId' => $this->__id,
             'data' => $this->request->getData(),
@@ -734,7 +734,7 @@ DOC_END;
             $output = $output . $counter . $this->Html->scriptblock($script);
         }
 
-        /*** afterInput ***/
+        // EVENT Form.afterInput
         $event = $this->dispatchLayerEvent('afterInput', [
             'formId' => $this->__id,
             'data' => $this->request->getData(),
@@ -874,7 +874,7 @@ DOC_END;
     {
         // CUSTOMIZE ADD 2016/06/08 ryuring
         // >>>
-        /*** beforeInput ***/
+        // EVENT Form.beforeSubmit
         $event = $this->dispatchLayerEvent('beforeSubmit', [
             'id' => $this->getId(),
             'caption' => $caption,
@@ -886,7 +886,7 @@ DOC_END;
 
         $output = parent::submit($caption, $options);
 
-        /*** afterInput ***/
+        // EVENT Form.afterSubmit
         $event = $this->dispatchLayerEvent('afterSubmit', [
             'id' => $this->getId(),
             'caption' => $caption,

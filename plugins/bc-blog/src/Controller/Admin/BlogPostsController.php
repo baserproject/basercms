@@ -182,7 +182,7 @@ class BlogPostsController extends BlogAdminAppController
         ];
 
         // EVENT BlogPosts.searchIndex
-        $event = $this->dispatchEvent('searchIndex', [
+        $event = $this->dispatchLayerEvent('searchIndex', [
             'options' => $options
         ]);
         if ($event !== false) {
@@ -367,7 +367,7 @@ class BlogPostsController extends BlogAdminAppController
             }
 
             // EVENT BlogPosts.beforeAdd
-            $event = $this->dispatchEvent('beforeAdd', [
+            $event = $this->dispatchLayerEvent('beforeAdd', [
                 'data' => $this->request->getData()
             ]);
             if ($event !== false) {
@@ -395,7 +395,7 @@ class BlogPostsController extends BlogAdminAppController
                     $this->BlogPost->recursive = 1;
 
                     // EVENT BlogPosts.afterAdd
-                    $this->dispatchEvent('afterAdd', [
+                    $this->dispatchLayerEvent('afterAdd', [
                         'data' => $this->BlogPost->read(null, $id)
                     ]);
 
@@ -528,7 +528,7 @@ class BlogPostsController extends BlogAdminAppController
             }
 
             // EVENT BlogPosts.beforeEdit
-            $event = $this->dispatchEvent('beforeEdit', [
+            $event = $this->dispatchLayerEvent('beforeEdit', [
                 'data' => $this->request->getData()
             ]);
             if ($event !== false) {
@@ -550,7 +550,7 @@ class BlogPostsController extends BlogAdminAppController
                 );
 
                 // EVENT BlogPosts.afterEdit
-                $this->dispatchEvent('afterEdit', [
+                $this->dispatchLayerEvent('afterEdit', [
                     'data' => $this->BlogPost->read(null, $id)
                 ]);
 

@@ -23,10 +23,12 @@ use BaserCore\View\BcAdminAppView;
 
 if (!$isLogin) return;
 $contentsMenu =  [];
+// EVENT beforeContentsMenu
 $event = $this->dispatchLayerEvent('beforeContentsMenu', ['contentsMenu' => $contentsMenu], ['class' => '', 'plugin' => '']);
 if ($event !== false) {
   $contentsMenu = ($event->getResult() === null || $event->getResult() === true)? $event->getData('contentsMenu') : $event->getResult();
 }
+// EVENT PluginName.ControllerName.beforeContentsMenu
 $globalEvent = $this->dispatchLayerEvent('beforeContentsMenu', ['contentsMenu' => $contentsMenu]);
 if ($globalEvent !== false) {
   $contentsMenu = ($globalEvent->getResult() === null || $globalEvent->getResult() === true)? $globalEvent->getData('contentsMenu') : $globalEvent->getResult();

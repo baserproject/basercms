@@ -385,8 +385,8 @@ class MailController extends MailAppController
 
                     $this->request = $this->request->withParsedBody($result);
 
-                    /*** Mail.beforeSendEmail ***/
-                    $event = $this->dispatchEvent('beforeSendEmail', [
+                    // EVENT Mail.beforeSendEmail
+                    $event = $this->dispatchLayerEvent('beforeSendEmail', [
                         'data' => $this->request->getData()
                     ]);
                     $sendEmailOptions = [];
@@ -423,8 +423,8 @@ class MailController extends MailAppController
 
                         $this->Session->delete('BcMail.valid');
 
-                        /*** Mail.afterSendEmail ***/
-                        $this->dispatchEvent('afterSendEmail', [
+                        // EVENT Mail.afterSendEmail
+                        $this->dispatchLayerEvent('afterSendEmail', [
                             'data' => $this->request->getData()
                         ]);
                     } else {

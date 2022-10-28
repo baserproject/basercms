@@ -293,8 +293,8 @@ class BlogHelper extends Helper
 
         $url = $this->getPostLinkUrl($post, false);
 
-        // EVENT beforeGetPostLink
-        $event = $this->dispatchEvent('beforeGetPostLink', [
+        // EVENT BcBlog.Blog.beforeGetPostLink
+        $event = $this->dispatchLayerEvent('beforeGetPostLink', [
             'post' => $post,
             'title' => $title,
             'options' => $options,
@@ -309,8 +309,8 @@ class BlogHelper extends Helper
 
         $out = $this->BcBaser->getLink($title, $url, $options);
 
-        // EVENT afterGetPostLink
-        $event = $this->dispatchEvent('afterGetPostLink', [
+        // EVENT BcBlog.Blog.afterGetPostLink
+        $event = $this->dispatchLayerEvent('afterGetPostLink', [
             'post' => $post,
             'title' => $title,
             'out' => $out,

@@ -317,7 +317,7 @@ class BcAppController extends AppController
             'template' => 'default'
         ], $options);
 
-        /*** Controller.beforeSendEmail ***/
+        // EVENT PluginName.ControllerName.beforeSendEmail
         $event = $this->dispatchLayerEvent('beforeSendMail', [
             'options' => $options
         ]);

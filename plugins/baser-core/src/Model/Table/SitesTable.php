@@ -186,7 +186,7 @@ class SitesTable extends AppTable
             'status' => true
         ], $options);
 
-        // EVENT Site.beforeGetSiteList
+        // EVENT Sites.beforeGetSiteList
         $event = $this->dispatchLayerEvent('beforeGetSiteList', [
             'options' => $options
         ]);

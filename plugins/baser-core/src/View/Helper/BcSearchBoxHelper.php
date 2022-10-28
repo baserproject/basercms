@@ -42,6 +42,7 @@ class BcSearchBoxHelper extends Helper
     {
         $request = $this->_View->getRequest();
         $id = Inflector::camelize($request->getParam('controller')) . '.' . Inflector::camelize($request->getParam('action'));
+        // EVENT BcSearchBox.showField
         $event = $this->dispatchLayerEvent('showField', ['id' => $id, 'fields' => []], ['class' => 'BcSearchBox', 'plugin' => '']);
         $output = '';
         if ($event !== false) {

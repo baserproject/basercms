@@ -61,7 +61,7 @@ class PagesController extends BcAdminAppController
         if ($this->request->is(['patch', 'post', 'put'])) {
 
             // EVENT Pages.beforeEdit
-            $event = $this->dispatchEvent('beforeEdit', [
+            $event = $this->dispatchLayerEvent('beforeEdit', [
                 'request' => $this->request,
             ]);
             if ($event !== false) {
@@ -72,7 +72,7 @@ class PagesController extends BcAdminAppController
                 $page = $pagesService->update($page, $this->request->getData());
 
                 // EVENT Pages.afterEdit
-                $this->dispatchEvent('afterEdit', [
+                $this->dispatchLayerEvent('afterEdit', [
                     'request' => $this->request,
                 ]);
 

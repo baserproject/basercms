@@ -65,7 +65,7 @@ class SitesController extends BcAdminAppController
     {
         if ($this->request->is('post')) {
 
-            /*** Sites.beforeAdd ** */
+            // EVENT Sites.beforeAdd
             $event = $this->dispatchLayerEvent('beforeAdd', [
                 'data' => $this->request->getData()
             ]);
@@ -75,7 +75,7 @@ class SitesController extends BcAdminAppController
 
             try {
                 $site = $siteService->create($this->request->getData());
-                /*** Sites.afterAdd ***/
+                // EVENT Sites.afterAdd
                 $this->dispatchLayerEvent('afterAdd', [
                     'data' => $site
                 ]);
@@ -114,7 +114,7 @@ class SitesController extends BcAdminAppController
         $site = $siteService->get($id);
         if ($this->request->is(['patch', 'post', 'put'])) {
 
-            /*** Sites.beforeEdit ** */
+            // EVENT Sites.beforeEdit
             $event = $this->dispatchLayerEvent('beforeEdit', [
                 'data' => $this->request->getData()
             ]);
@@ -126,7 +126,7 @@ class SitesController extends BcAdminAppController
             try {
                 $site = $siteService->update($site, $this->request->getData());
 
-                /*** Sites.afterEdit ***/
+                // EVENT Sites.afterEdit
                 $this->dispatchLayerEvent('afterEdit', [
                     'data' => $site
                 ]);
