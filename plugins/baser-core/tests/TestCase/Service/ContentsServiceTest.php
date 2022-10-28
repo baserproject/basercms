@@ -13,6 +13,7 @@ namespace BaserCore\Test\TestCase\Service;
 
 use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Factory\PageFactory;
+use BaserCore\Test\Factory\SearchIndexesFactory;
 use BcBlog\Test\Factory\BlogContentFactory;
 use Cake\Core\Configure;
 use Cake\Datasource\Exception\RecordNotFoundException;
@@ -961,5 +962,33 @@ class ContentsServiceTest extends BcTestCase
         $this->assertCount(2, $titles);
         $this->assertEquals('ID110', $titles[110]);
         $this->assertEquals('ID111', $titles[111]);
+    }
+
+    /**
+     * test rename
+     */
+    public function testRename()
+    {
+        PageFactory::make(['id' => 16, 'content' => 'test'])->persist();
+        $content = ContentFactory::get(5);
+        $originalName = $content['name'];
+        $postData = ['id' => 5, 'title' => 'タイトル編集済', 'first' => true];
+        $this->ContentsService->rename($content, $postData);
+        // first オプションを有効にした場合、content.name の変更を確認
+        $this->assertNotEquals($originalName, $content['name']);
+
+        PageFactory::make(['id' => 2, 'content' => 'test'])->persist();
+        $countBefore = SearchIndexesFactory::count();
+        $content = ContentFactory::get(4);
+        $originalName = $content['name'];
+        $postData = ['id' => 4, 'title' => 'タイトル編集済'];
+        $this->ContentsService->rename($content, $postData);
+        $content = ContentFactory::get(4);
+        // DBの content.titleの変更を確認
+        $this->assertEquals($postData['title'], $content['title']);
+        // first オプションを無効にした場合、content.name の値を確認
+        $this->assertEquals($originalName, $content['name']);
+        // DBの search_indexes の変更を確認（BcSearchIndexプラグインの有効化が必要）
+        $this->assertEquals($countBefore + 1, SearchIndexesFactory::count());
     }
 }
