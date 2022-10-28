@@ -514,11 +514,9 @@ class BcBaserHelperTest extends BcTestCase
     /**
      * コンテンツタイトルを取得する
      * @return void
-     * @todo メソッド未実装
      */
-    public function testGetContentsTitle()
+    public function testGetContentsTitle(): void
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         // 設定なし
         $this->assertEmpty($this->BcBaser->getContentsTitle());
 

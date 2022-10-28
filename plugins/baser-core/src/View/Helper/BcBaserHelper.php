@@ -577,6 +577,7 @@ class BcBaserHelper extends Helper
      * @return string コンテンツタイトル
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getContentsTitle()
     {
