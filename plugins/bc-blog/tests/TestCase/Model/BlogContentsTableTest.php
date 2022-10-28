@@ -11,6 +11,7 @@
  */
 namespace BcBlog\Test\TestCase\Model;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcUtil;
 use BcBlog\Model\Table\BlogContentsTable;
 use BcBlog\Test\Factory\BlogContentFactory;
 
@@ -371,15 +372,25 @@ class BlogContentsTableTest extends BcTestCase
     }
 
     /**
-     * アイキャッチサイズフィールドの値をフォーム用に変換する
+     * test constructEyeCatchSize
      */
     public function testConstructEyeCatchSize()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $data = $this->BlogContent->constructEyeCatchSize($this->BlogContent->deconstructEyeCatchSize($this->BlogContent->getDefaultValue()));
-        $this->assertEquals($data['BlogContent']['eye_catch_size_thumb_width'], 600);
-        $this->assertEquals($data['BlogContent']['eye_catch_size_thumb_height'], 600);
-        $this->assertEquals($data['BlogContent']['eye_catch_size_mobile_thumb_width'], 150);
-        $this->assertEquals($data['BlogContent']['eye_catch_size_mobile_thumb_height'], 150);
+
+        $eye_catch_size = BcUtil::serialize([
+            'thumb_width' => 600,
+            'thumb_height' => 600,
+            'mobile_thumb_width' => 150,
+            'mobile_thumb_height' => 150,
+        ]);
+        BlogContentFactory::make([
+            'id' => 1,
+            'eye_catch_size' => $eye_catch_size
+        ])->persist();
+        $rs = $this->BlogContentsTable->constructEyeCatchSize($this->BlogContentsTable->get(1));
+        $this->assertEquals($rs['eye_catch_size_thumb_width'], 600);
+        $this->assertEquals($rs['eye_catch_size_thumb_height'], 600);
+        $this->assertEquals($rs['eye_catch_size_mobile_thumb_width'], 150);
+        $this->assertEquals($rs['eye_catch_size_mobile_thumb_height'], 150);
     }
 }
