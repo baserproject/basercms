@@ -11,6 +11,7 @@
 
 namespace BaserCore\Test\TestCase\Controller\Component;
 
+use BaserCore\Test\Factory\ContentFactory;
 use Cake\Routing\Router;
 use BaserCore\Service\PagesService;
 use BaserCore\TestSuite\BcTestCase;
@@ -105,5 +106,20 @@ class BcFrontContentsComponentTest extends BcTestCase
     public function testGetCrumbs()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * test setLayout
+     */
+    public function testSetLayout()
+    {
+        // currentContent の layout_template に値がある場合
+        $this->BcFrontContents->setLayout(ContentFactory::get(6));
+        $currentLayout = $this->BcFrontContents->getController()->viewBuilder()->getLayout();
+        $this->assertEquals('serviceTemplate', $currentLayout);
+        // currentContent の layout_template に値がなく、親にはある場合
+        $this->BcFrontContents->setLayout(ContentFactory::get(4));
+        $currentLayout = $this->BcFrontContents->getController()->viewBuilder()->getLayout();
+        $this->assertEquals('default', $currentLayout);
     }
 }
