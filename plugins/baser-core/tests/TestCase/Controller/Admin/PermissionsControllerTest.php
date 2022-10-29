@@ -68,7 +68,6 @@ class PermissionsControllerTest extends BcTestCase
         $event = new Event('Controller.beforeFilter', $this->PermissionsController);
 
         $this->PermissionsController->beforeFilter($event);
-        $this->assertNotEmpty($this->PermissionsController->Permissions);
         $this->assertNotEmpty($this->PermissionsController->viewBuilder()->getHelpers('BcTime'));
 
         $unLockActions = $this->PermissionsController->Security->getConfig("unlockedActions");

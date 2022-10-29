@@ -17,6 +17,9 @@ use BaserCore\Model\Table\PasswordRequestsTable;
 use Cake\Datasource\EntityInterface;
 use Cake\ORM\TableRegistry;
 use DateTime;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * PasswordRequestsService
