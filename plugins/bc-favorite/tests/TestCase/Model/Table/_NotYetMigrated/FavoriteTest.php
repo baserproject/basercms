@@ -18,14 +18,6 @@ App::uses('CookieComponent', 'Controller/Component');
 
 /**
  * Class FavoriteTest
- *
- * class NonAssosiationFavorite extends Favorite {
- *  public $name = 'Favorite';
- *  public $belongsTo = array();
- *  public $hasMany = array();
- * }
- *
- * @package Baser.Test.Case.Model
  */
 class FavoriteTest extends BaserTestCase
 {

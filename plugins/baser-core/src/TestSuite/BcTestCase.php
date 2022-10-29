@@ -191,6 +191,9 @@ class BcTestCase extends TestCase
      */
     public function setUp(): void
     {
+        if(!empty($_SERVER['REQUEST_URI']) && $_SERVER['REQUEST_URI'] === '/s/') {
+            $a = 1;
+        }
         if (!$this->autoFixtures) {
             $this->setUpFixtureManager();
         }
@@ -208,6 +211,10 @@ class BcTestCase extends TestCase
         $container->addServiceProvider(new BcSearchIndexServiceProvider());
         $container->addServiceProvider(new BcBlogServiceProvider());
         EventManager::instance(new EventManager());
+        if(!empty($_SERVER['REQUEST_URI']) && $_SERVER['REQUEST_URI'] === '/s/') {
+            $a = 1;
+        }
+
     }
 
     /**

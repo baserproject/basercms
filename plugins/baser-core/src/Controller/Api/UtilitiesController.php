@@ -20,9 +20,6 @@ use BaserCore\Utility\BcUtil;
 
 /**
  * Class UtilitiesController
- *
- * https://localhost/baser/api/baser-core/utilities/action_name.json で呼び出す
- *
  */
 class UtilitiesController extends BcApiController
 {
@@ -190,7 +187,7 @@ class UtilitiesController extends BcApiController
         $this->viewBuilder()->setOption('serialize', ['message']);
     }
 
-  /**
+    /**
      * [API] ユーティリティ：ログファイルを削除
      *
      * @param UtilitiesServiceInterface $service

@@ -94,4 +94,11 @@ interface UsersServiceInterface extends CrudBaseServiceInterface
      */
     public function reload(ServerRequest $request);
 
+    /**
+     * ユーザーが有効化チェックする
+     * @param int $id
+     * @return bool
+     */
+    public function isAvailable(int $id): bool;
+
 }

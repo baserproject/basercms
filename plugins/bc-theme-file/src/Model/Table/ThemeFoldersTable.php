@@ -24,13 +24,6 @@ class ThemeFoldersTable extends AppTable
 {
 
     /**
-     * クラス名
-     *
-     * @var string
-     */
-    public $name = 'ThemeFolder';
-
-    /**
      * use table
      *
      * @var boolean

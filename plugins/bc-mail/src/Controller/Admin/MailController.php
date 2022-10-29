@@ -33,20 +33,6 @@ class MailController extends MailAppController
 {
 
     /**
-     * クラス名
-     *
-     * @var string
-     */
-    public $name = 'Mail';
-
-    /**
-     * モデル
-     *
-     * @var array
-     */
-    public $uses = ['BcMail.MailMessage', 'BcMail.MailContent', 'BcMail.MailField', 'BcMail.MailConfig', 'Content'];
-
-    /**
      * Array of components a controller will use
      *
      * @var array
@@ -66,13 +52,6 @@ class MailController extends MailAppController
      * @var array
      */
     public $css = ['mail/form'];
-
-    /**
-     * サブメニューエレメント
-     *
-     * @var array
-     */
-    public $subMenuElements = [];
 
     /**
      * データベースデータ

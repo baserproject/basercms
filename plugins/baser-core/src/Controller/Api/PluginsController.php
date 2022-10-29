@@ -28,16 +28,16 @@ class PluginsController extends BcApiController
 
     /**
      * プラグイン情報取得
-     * @param PluginsServiceInterface $plugins
-     * @param $id
+     * @param PluginsServiceInterface $service
+     * @param int $id
      * @checked
      * @unitTest
      * @noTodo
      */
-    public function view(PluginsServiceInterface $plugins, $id)
+    public function view(PluginsServiceInterface $service, $id)
     {
         $this->set([
-            'plugin' => $plugins->get($id)
+            'plugin' => $service->get($id)
         ]);
         $this->viewBuilder()->setOption('serialize', ['plugin']);
     }
@@ -49,10 +49,10 @@ class PluginsController extends BcApiController
      * @unitTest
      * @noTodo
      */
-    public function index(PluginsServiceInterface $plugins)
+    public function index(PluginsServiceInterface $service)
     {
         $this->set([
-            'plugins' => $plugins->getIndex($this->request->getQuery('sortmode') ?? '0')
+            'plugins' => $service->getIndex($this->request->getQuery('sortmode') ?? '0')
         ]);
         $this->viewBuilder()->setOption('serialize', ['plugins']);
     }
@@ -60,17 +60,18 @@ class PluginsController extends BcApiController
     /**
      * プラグインをインストールする
      * @param PluginsServiceInterface $Plugins
+     * @param string $name
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function install(PluginsServiceInterface $plugins, $name)
+    public function install(PluginsServiceInterface $service, $name)
     {
         $this->request->allowMethod(['post', 'put']);
-        $plugin = $plugins->getByName($name);
+        $plugin = $service->getByName($name);
         try {
-            if($plugins->install($name, $this->request->getData('connection'))) {
-                $plugins->allow($this->request->getData());
+            if($service->install($name, $this->request->getData('connection'))) {
+                $service->allow($this->request->getData());
                 $message = sprintf(__d('baser', 'プラグイン「%s」をインストールしました。'), $name);
             } else {
                 $this->setResponse($this->response->withStatus(400));
@@ -88,17 +89,17 @@ class PluginsController extends BcApiController
 
     /**
      * プラグインを無効化する
-     * @param PluginsServiceInterface $plugins
-     * @param $name
+     * @param PluginsServiceInterface $service
+     * @param string $name
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function detach(PluginsServiceInterface $plugins, $name)
+    public function detach(PluginsServiceInterface $service, $name)
     {
         $this->request->allowMethod(['post']);
-        $plugin = $plugins->getByName($name);
-        if ($plugins->detach($name)) {
+        $plugin = $service->getByName($name);
+        if ($service->detach($name)) {
             $message = sprintf(__d('baser', 'プラグイン「%s」を無効にしました。'), $name);
         } else {
             $this->setResponse($this->response->withStatus(400));
@@ -113,17 +114,17 @@ class PluginsController extends BcApiController
 
     /**
      * プラグインを有効化する
-     * @param PluginsServiceInterface $plugins
-     * @param $name
+     * @param PluginsServiceInterface $service
+     * @param string $name
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function attach(PluginsServiceInterface $plugins, $name)
+    public function attach(PluginsServiceInterface $service, $name)
     {
         $this->request->allowMethod(['post']);
-        $plugin = $plugins->getByName($name);
-        if ($plugins->attach($name)) {
+        $plugin = $service->getByName($name);
+        if ($service->attach($name)) {
             $message = sprintf(__d('baser', 'プラグイン「%s」を有効にしました。'), $name);
         } else {
             $this->setResponse($this->response->withStatus(400));
@@ -138,18 +139,18 @@ class PluginsController extends BcApiController
 
     /**
      * プラグインのデータベースを初期化する
-     * @param PluginsServiceInterface $plugins
-     * @param $name
+     * @param PluginsServiceInterface $service
+     * @param string $name
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function reset_db(PluginsServiceInterface $plugins, $name)
+    public function reset_db(PluginsServiceInterface $service, $name)
     {
         $this->request->allowMethod(['put']);
-        $plugin = $plugins->getByName($name);
+        $plugin = $service->getByName($name);
         try {
-            $plugins->resetDb($name, $this->request->getData('connection'));
+            $service->resetDb($name, $this->request->getData('connection'));
             $message = sprintf(__d('baser', '%s プラグインのデータを初期化しました。'), $plugin->title);
         } catch(\Exception $e) {
             $this->setResponse($this->response->withStatus(400));
@@ -164,19 +165,19 @@ class PluginsController extends BcApiController
 
     /**
      * アンインストール
-     * @param PluginsServiceInterface $plugins
-     * @param $name
+     * @param PluginsServiceInterface $service
+     * @param string $name
      * @return \Cake\Http\Response|void|null
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function uninstall(PluginsServiceInterface $plugins, $name)
+    public function uninstall(PluginsServiceInterface $service, $name)
     {
         $this->request->allowMethod(['post']);
-        $plugin = $plugins->getByName($name);
+        $plugin = $service->getByName($name);
         try {
-            $plugins->uninstall($name, $this->request->getData('connection'));
+            $service->uninstall($name, $this->request->getData('connection'));
             $message = sprintf(__d('baser', 'プラグイン「%s」を削除しました。'), $name);
         } catch (\Exception $e) {
             $this->setResponse($this->response->withStatus(400));
@@ -191,16 +192,18 @@ class PluginsController extends BcApiController
 
     /**
      * 並び替えを更新する
+     *
+     * @param PluginsServiceInterface $service
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function update_sort(PluginsServiceInterface $plugins)
+    public function update_sort(PluginsServiceInterface $service)
     {
         $this->request->allowMethod(['post']);
-        $plugin = $plugins->get($this->request->getData('id'));
+        $plugin = $service->get($this->request->getData('id'));
 
-        if (!$plugins->changePriority($plugin->id, $this->request->getData('offset'))) {
+        if (!$service->changePriority($plugin->id, $this->request->getData('offset'))) {
             $this->setResponse($this->response->withStatus(400));
             $message = __d('baser', '一度リロードしてから再実行してみてください。');
         } else {
@@ -220,10 +223,10 @@ class PluginsController extends BcApiController
      * @noTodo
      * @unitTest
      */
-    public function get_market_plugins(PluginsServiceInterface $plugins)
+    public function get_market_plugins(PluginsServiceInterface $service)
     {
         $this->set([
-            'plugins' => $plugins->getMarketPlugins()
+            'plugins' => $service->getMarketPlugins()
         ]);
         $this->viewBuilder()->setOption('serialize', ['plugins']);
     }

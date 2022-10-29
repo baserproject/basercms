@@ -92,7 +92,6 @@ class BcAdminContentsComponentTest extends BcTestCase
      */
     public function testInitialize()
     {
-        $this->assertNotEmpty($this->BcAdminContents->ContentsService);
         // baser/admin/contents 管理システム設定の場合
         $this->assertNotEmpty($this->BcAdminContents->getConfig('items'));
     }
@@ -147,7 +146,7 @@ class BcAdminContentsComponentTest extends BcTestCase
         $this->assertIsArray($vars["relatedContents"]);
         $this->assertEquals($content->site_id == 1 ? null : 1, $vars["mainSiteId"]);
         $this->assertEquals("パソコン", $vars["mainSiteDisplayName"]);
-        $this->assertInstanceOf("Cake\ORM\Query", $vars["sites"]);
+        $this->assertIsArray($vars["sites"]);
         $this->assertNotNull($vars["layoutTemplates"]);
         $this->assertIsString($vars["publishLink"]);
     }
@@ -173,7 +172,7 @@ class BcAdminContentsComponentTest extends BcTestCase
         $this->assertIsArray($vars["relatedContents"]);
         $this->assertEquals($contentFolder->content->site_id == 1 ? null : 1, $vars["mainSiteId"]);
         $this->assertEquals("パソコン", $vars["mainSiteDisplayName"]);
-        $this->assertInstanceOf("Cake\ORM\Query", $vars["sites"]);
+        $this->assertIsArray($vars["sites"]);
         $this->assertNotNull($vars["layoutTemplates"]);
         $this->assertIsString($vars["publishLink"]);
     }

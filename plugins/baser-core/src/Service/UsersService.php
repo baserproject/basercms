@@ -438,4 +438,14 @@ class UsersService implements UsersServiceInterface
         }
     }
 
+    /**
+     * ユーザーが有効化チェックする
+     * @param int $id
+     * @return bool
+     */
+    public function isAvailable(int $id): bool
+    {
+        return (bool) $this->Users->find('available')->where(['id' => $id])->count();
+    }
+
 }

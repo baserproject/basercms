@@ -14,12 +14,6 @@ return;
 
 class MailMessageFixture extends BaserTestFixture
 {
-    /**
-     * Name of the object
-     *
-     * @var string
-     */
-    public $name = 'MailMessage';
 
     /**
      * Fields

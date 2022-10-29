@@ -21,8 +21,6 @@ use BaserCore\Service\Front\ContentFoldersFrontServiceInterface;
  * Class ContentFoldersController
  *
  * フロント用のフォルダ コントローラー
- *
- * @package BaserCore.Controller
  */
 class ContentFoldersController extends BcFrontAppController
 {

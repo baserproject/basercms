@@ -20,13 +20,6 @@ class MailConfigsTable extends MailAppTable
 {
 
     /**
-     * クラス名
-     *
-     * @var string
-     */
-    public $name = 'MailConfig';
-
-    /**
      * ビヘイビア
      *
      * @var array

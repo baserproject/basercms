@@ -21,13 +21,6 @@ class MailContentsTable extends MailAppTable
 {
 
     /**
-     * クラス名
-     *
-     * @var string
-     */
-    public $name = 'MailContent';
-
-    /**
      * behaviors
      *
      * @var array

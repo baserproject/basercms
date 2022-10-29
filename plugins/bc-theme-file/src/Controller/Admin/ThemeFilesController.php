@@ -25,19 +25,6 @@ class ThemeFilesController extends BcAdminAppController
 {
 
     /**
-     * クラス名
-     * @var string
-     */
-    public $name = 'ThemeFiles';
-
-    /**
-     * モデル
-     *
-     * @var array
-     */
-    public $uses = ['ThemeFile', 'ThemeFolder'];
-
-    /**
      * テーマファイルタイプ
      *
      * @var array

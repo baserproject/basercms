@@ -12,7 +12,6 @@
 namespace BaserCore\Controller\Api;
 
 use BaserCore\Service\ContentFoldersServiceInterface;
-use Cake\Core\Exception\Exception;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -20,57 +19,55 @@ use BaserCore\Annotation\Note;
 
 /**
  * Class ContentFoldersController
- *
- * https://localhost/baser/api/baser-core/user_groups/action_name.json で呼び出す
- *
  */
 class ContentFoldersController extends BcApiController
 {
+
     /**
      * コンテンツフォルダ一覧取得
-     * @param ContentFoldersServiceInterface $ContentFolders
+     * @param ContentFoldersServiceInterface $service
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function index(ContentFoldersServiceInterface $ContentFolders)
+    public function index(ContentFoldersServiceInterface $service)
     {
         $this->request->allowMethod('get');
         $this->set([
-            'contentFolders' => $this->paginate($ContentFolders->getIndex())
+            'contentFolders' => $this->paginate($service->getIndex())
         ]);
         $this->viewBuilder()->setOption('serialize', ['contentFolders']);
     }
 
     /**
      * コンテンツフォルダ取得
-     * @param ContentFoldersServiceInterface $ContentFolders
-     * @param $id
+     * @param ContentFoldersServiceInterface $service
+     * @param int $id
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function view(ContentFoldersServiceInterface $ContentFolders, $id)
+    public function view(ContentFoldersServiceInterface $service, $id)
     {
         $this->request->allowMethod('get');
         $this->set([
-            'contentFolders' => $ContentFolders->get($id)
+            'contentFolders' => $service->get($id)
         ]);
         $this->viewBuilder()->setOption('serialize', ['contentFolders']);
     }
 
     /**
      * コンテンツフォルダ登録
-     * @param ContentFoldersServiceInterface $ContentFolders
+     * @param ContentFoldersServiceInterface $service
      * @checked
      * @unitTest
      * @noTodo
      */
-    public function add(ContentFoldersServiceInterface $ContentFolders)
+    public function add(ContentFoldersServiceInterface $service)
     {
         $this->request->allowMethod(['post', 'put', 'patch']);
         try {
-            $contentFolders = $ContentFolders->create($this->request->getData());
+            $contentFolders = $service->create($this->request->getData());
             $message = __d('baser', 'コンテンツフォルダ「{0}」を追加しました。', $contentFolders->content->title);
             $this->set("contentFolder", $contentFolders);
             $this->set('content', $contentFolders->content);
@@ -91,18 +88,18 @@ class ContentFoldersController extends BcApiController
 
     /**
      * コンテンツフォルダ削除
-     * @param ContentFoldersServiceInterface $ContentFolders
-     * @param $id
+     * @param ContentFoldersServiceInterface $service
+     * @param int $id
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function delete(ContentFoldersServiceInterface $ContentFolders, $id)
+    public function delete(ContentFoldersServiceInterface $service, $id)
     {
         $this->request->allowMethod(['delete']);
-        $contentFolders = $ContentFolders->get($id);
+        $contentFolders = $service->get($id);
         try {
-            if ($ContentFolders->delete($id)) {
+            if ($service->delete($id)) {
                 $message = __d('baser', 'コンテンツフォルダ: {0} を削除しました。', $contentFolders->content->title);
             }
         } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
@@ -118,20 +115,20 @@ class ContentFoldersController extends BcApiController
 
     /**
      * コンテンツフォルダー情報編集
-     * @param ContentFoldersServiceInterface $contentFolders
-     * @param $id
+     * @param ContentFoldersServiceInterface $service
+     * @param int $id
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function edit(ContentFoldersServiceInterface $contentFolders, $id)
+    public function edit(ContentFoldersServiceInterface $service, $id)
     {
         $this->request->allowMethod(['post', 'put', 'patch']);
         try {
-            $contentFolder = $contentFolders->update($contentFolders->get($id), $this->request->getData());
+            $contentFolder = $service->update($service->get($id), $this->request->getData());
             $message = __d('baser', 'フォルダー「{0}」を更新しました。', $contentFolder->content->title);
         } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
-            $contentFolders = $e->getEntity();
+            $contentFolder = $e->getEntity();
             $this->setResponse($this->response->withStatus(400));
             $message = __d('baser', '入力エラーです。内容を修正してください。');
         }

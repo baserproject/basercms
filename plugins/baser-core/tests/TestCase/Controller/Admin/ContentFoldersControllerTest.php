@@ -79,18 +79,6 @@ class ContentFoldersControllerTest extends BcTestCase
     }
 
     /**
-     * Before Filter
-     */
-    public function testBeforeFilter()
-    {
-        $event = new Event('Controller.beforeFilter', $this->ContentFoldersController);
-        $this->ContentFoldersController->beforeFilter($event);
-        $this->assertNotEmpty($this->ContentFoldersController);
-        $this->assertNotEmpty($this->ContentFoldersController->ContentFolders);
-
-    }
-
-    /**
      * コンテンツ編集
      */
     public function testEdit()

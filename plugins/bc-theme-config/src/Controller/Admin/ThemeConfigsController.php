@@ -26,32 +26,11 @@ class ThemeConfigsController extends BcAdminAppController
 {
 
     /**
-     * クラス名
-     *
-     * @var string
-     */
-    public $name = 'ThemeConfigs';
-
-    /**
-     * モデル
-     *
-     * @var array
-     */
-    public $uses = ['ThemeConfig'];
-
-    /**
      * コンポーネント
      *
      * @var array
      */
     public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure'];
-
-    /**
-     * サブメニューエレメント
-     *
-     * @var array
-     */
-    public $subMenuElements = ['themes'];
 
     /**
      * [ADMIN] 設定編集

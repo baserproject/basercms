@@ -20,11 +20,9 @@ use ReflectionMethod;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
-use BaserCore\Controller\AppController;
 
 /**
  * Class AnalyseController
- * @package BaserCore\Controller
  */
 class AnalyseController extends AppController
 {

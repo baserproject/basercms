@@ -16,8 +16,6 @@ use BaserCore\Service\PermissionsServiceInterface;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
-use BaserCore\Service\PluginsServiceInterface;
-use Cake\Utility\Inflector;
 
 /**
  * Class PermissionsController
@@ -27,54 +25,51 @@ class PermissionsController extends BcApiController
 {
     /**
      * [API] 単一アクセス制限設定取得
-     * @param PermissionsServiceInterface $permissionsService
-     * @param $id
-     *
+     * @param PermissionsServiceInterface $service
+     * @param int $id
      * @checked
      * @unitTest
      * @noTodo
      */
-    public function view(PermissionsServiceInterface $permissionsService, $id)
+    public function view(PermissionsServiceInterface $service, $id)
     {
         $this->request->allowMethod(['get']);
         $this->set([
-            'permission' => $permissionsService->get($id)
+            'permission' => $service->get($id)
         ]);
         $this->viewBuilder()->setOption('serialize', ['permission']);
     }
 
     /**
      * [API] アクセス制限設定の一覧
-     * @param PermissionsServiceInterface $permissionService
-     * @param $userGroupId
-     *
+     * @param PermissionsServiceInterface $service
+     * @param int $userGroupId
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function index(PermissionsServiceInterface $permissionService, $userGroupId)
+    public function index(PermissionsServiceInterface $service, $userGroupId)
     {
         $this->request->allowMethod(['get']);
 
         $this->request = $this->request->withQueryParams(['user_group_id' => $userGroupId]);
-        $this->set('permissions', $permissionService->getIndex($this->request->getQueryParams()));
+        $this->set('permissions', $service->getIndex($this->request->getQueryParams()));
         $this->viewBuilder()->setOption('serialize', ['permissions']);
     }
 
     /**
      * 登録処理
      *
-     * @param PermissionsServiceInterface $permissionService
-     *
+     * @param PermissionsServiceInterface $service
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function add(PermissionsServiceInterface $permissionService)
+    public function add(PermissionsServiceInterface $service)
     {
         $this->request->allowMethod(['post', 'delete']);
         try {
-            $permission = $permissionService->create($this->request->getData());
+            $permission = $service->create($this->request->getData());
             $message = __d('baser', '新規アクセス制限設定「{0}」を追加しました。', $permission->name);
         } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
             $permission = $e->getEntity();
@@ -92,23 +87,22 @@ class PermissionsController extends BcApiController
     /**
      * [API] 削除処理
      *
-     * @param PermissionsServiceInterface $permissionService
-     * @param $permissionId
-     *
+     * @param PermissionsServiceInterface $service
+     * @param int $permissionId
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function delete(PermissionsServiceInterface $permissionService, $permissionId)
+    public function delete(PermissionsServiceInterface $service, $permissionId)
     {
         $this->request->allowMethod(['post', 'put', 'patch']);
 
         $error = null;
         $permission = null;
         try {
-            $permission = $permissionService->get($permissionId);
+            $permission = $service->get($permissionId);
             $permissionName = $permission->name;
-            $permissionService->delete($permissionId);
+            $service->delete($permissionId);
             $message = __d('baser', 'アクセス制限設定「{0}」を削除しました。', $permissionName);
         } catch (\Exception $e) {
             $this->setResponse($this->response->withStatus(400));
@@ -127,14 +121,13 @@ class PermissionsController extends BcApiController
     /**
      * [API] アクセス制限設定コピー
      *
-     * @param PermissionsServiceInterface $permissionService
-     * @param $id
-     *
+     * @param PermissionsServiceInterface $service
+     * @param int $id
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function copy(PermissionsServiceInterface $permissionService, $id)
+    public function copy(PermissionsServiceInterface $service, $id)
     {
         $this->request->allowMethod(['patch', 'post', 'put']);
 
@@ -146,7 +139,7 @@ class PermissionsController extends BcApiController
             $message = __d('baser', '処理に失敗しました。');
         } else {
             try {
-                $permission = $permissionService->copy($id);
+                $permission = $service->copy($id);
                 if ($permission) {
                     $message = __d('baser', 'アクセス制限設定「{0}」をコピーしました。', $permission->name);
                 } else {
@@ -172,19 +165,17 @@ class PermissionsController extends BcApiController
     /**
      * [API] 編集処理
      *
-     * @param PermissionsServiceInterface $permissionService
-     * @param $permissionId
-     *
+     * @param PermissionsServiceInterface $service
+     * @param int $permissionId
      * @checked
      * @noTodo
      * @unitTest
      */
-
-    public function edit(PermissionsServiceInterface $permissionService, $permissionId)
+    public function edit(PermissionsServiceInterface $service, $permissionId)
     {
         $this->request->allowMethod(['post', 'put', 'patch']);
         try {
-            $permission = $permissionService->update($permissionService->get($permissionId), $this->request->getData());
+            $permission = $service->update($service->get($permissionId), $this->request->getData());
             $message = __d('baser', 'アクセス制限設定「{0}」を更新しました。', $permission->name);
         } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
             $this->setResponse($this->response->withStatus(400));
@@ -240,12 +231,11 @@ class PermissionsController extends BcApiController
     }
 
     /**
-     * 並び替えを更新する [AJAX]
+     * 並び替えを更新する
      *
-     * @access    public
-     * @param $userGroupId
+     * @param PermissionsServiceInterface $service
+     * @param int $userGroupId
      * @return void
-     *
      * @checked
      * @noTodo
      * @unitTest

@@ -20,20 +20,7 @@ use BaserCore\Controller\Admin\BcAdminAppController;
  */
 class UploaderConfigsController extends BcAdminAppController
 {
-    /**
-     * クラス名
-     *
-     * @var        string
-     * @access    public
-     */
-    public $name = 'UploaderConfigs';
-    /**
-     * モデル
-     *
-     * @var        array
-     * @access    public
-     */
-    public $uses = ['Plugin', 'BcUploader.UploaderConfig'];
+
     /**
      * コンポーネント
      *
@@ -41,13 +28,6 @@ class UploaderConfigsController extends BcAdminAppController
      * @access    public
      */
     public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure'];
-    /**
-     * サブメニューエレメント
-     *
-     * @var    array
-     * @access    public
-     */
-    public $subMenuElements = ['uploader'];
 
     /**
      * [ADMIN] アップローダー設定

@@ -21,7 +21,6 @@ use BaserCore\Annotation\Checked;
 
 /**
  * Class UtilitiesController
- * @package BaserCore\Controller\Admin
  */
 class UtilitiesController extends BcAdminAppController
 {
@@ -65,6 +64,8 @@ class UtilitiesController extends BcAdminAppController
 
     /**
      * 環境情報を表示する
+     *
+     * @param UtilitiesAdminServiceInterface $service
      * @checked
      * @noTodo
      * @unitTest
@@ -98,10 +99,7 @@ class UtilitiesController extends BcAdminAppController
      * @checked
      * @unitTest
      */
-    public function maintenance(
-        UtilitiesServiceInterface $service,
-        string                    $mode = ''
-    )
+    public function maintenance(UtilitiesServiceInterface $service, string $mode = '')
     {
         $this->_checkReferer();
         switch($mode) {
@@ -126,18 +124,14 @@ class UtilitiesController extends BcAdminAppController
     /**
      * ログメンテナンス
      *
-     * @param UtilitiesServiceInterface $service
-     * @param UtilitiesAdminServiceInterface $adminService
+     * @param UtilitiesAdminServiceInterface $service
      * @param string $mode
      * @uses log_maintenance
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function log_maintenance(
-        UtilitiesServiceInterface      $service,
-        UtilitiesAdminServiceInterface $adminService,
-        string                         $mode = '')
+    public function log_maintenance(UtilitiesAdminServiceInterface $service, string $mode = '')
     {
         switch($mode) {
             case 'download':
@@ -161,7 +155,7 @@ class UtilitiesController extends BcAdminAppController
                 $this->redirect(['action' => 'log_maintenance']);
                 break;
         }
-        $this->set($adminService->getViewVarsForLogMaintenance());
+        $this->set($service->getViewVarsForLogMaintenance());
     }
 
     /**

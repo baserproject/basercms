@@ -18,14 +18,13 @@ use BaserCore\Utility\BcUtil;
  * @var \BaserCore\View\BcAdminAppView $this
  * @var string $mainSiteDisplayName メインサイト表示名称
  * @var array $relatedContents 関連コンテンツ
- * @var Query $sites サイトリスト
+ * @var array $sites サイトリスト
  * @var int $currentSiteId 現在のサイトID
  * @var Content $content
  * @checked
  * @noTodo
  * @unitTest
  */
-$sites = isset($sites)? $sites->toArray() : [];
 $pureUrl = $this->BcContents->getPureUrl($content->url, $content->site_id);
 ?>
 

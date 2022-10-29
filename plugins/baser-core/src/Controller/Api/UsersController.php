@@ -23,8 +23,6 @@ use Cake\Routing\Router;
 /**
  * Class UsersController
  *
- * https://localhost/baser/api/baser-core/users/action_name.json で呼び出す
- *
  * @property AuthenticationComponent $Authentication
  */
 class UsersController extends BcApiController
@@ -44,11 +42,12 @@ class UsersController extends BcApiController
 
     /**
      * ログイン
+     * @param UsersServiceInterface $service
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function login(UsersServiceInterface $users)
+    public function login(UsersServiceInterface $service)
     {
         $result = $this->Authentication->getResult();
         $json = [];
@@ -57,9 +56,9 @@ class UsersController extends BcApiController
         } else {
             $redirect = $this->Authentication->getLoginRedirect() ?? Router::url(Configure::read('BcPrefixAuth.Admin.loginRedirect'));
             $user = $result->getData();
-            $users->removeLoginKey($user->id);
+            $service->removeLoginKey($user->id);
             if ($this->request->is('ssl') && $this->request->getData('saved')) {
-                $this->response = $users->setCookieAutoLoginKey($this->response, $user->id);
+                $this->response = $service->setCookieAutoLoginKey($this->response, $user->id);
             }
             $this->BcMessage->setInfo(__d('baser', 'ようこそ、' . $user->getDisplayName() . 'さん。'));
             $json['redirect'] = $redirect;
@@ -87,47 +86,47 @@ class UsersController extends BcApiController
 
     /**
      * ユーザー情報一覧取得
-     * @param UsersServiceInterface $users
+     * @param UsersServiceInterface $service
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function index(UsersServiceInterface $users)
+    public function index(UsersServiceInterface $service)
     {
         $this->set([
-            'users' => $this->paginate($users->getIndex($this->request->getQueryParams()))
+            'users' => $this->paginate($service->getIndex($this->request->getQueryParams()))
         ]);
         $this->viewBuilder()->setOption('serialize', ['users']);
     }
 
     /**
      * ユーザー情報取得
-     * @param UsersServiceInterface $users
-     * @param $id
+     * @param UsersServiceInterface $service
+     * @param int $id
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function view(UsersServiceInterface $users, $id)
+    public function view(UsersServiceInterface $service, $id)
     {
         $this->set([
-            'user' => $users->get($id)
+            'user' => $service->get($id)
         ]);
         $this->viewBuilder()->setOption('serialize', ['user']);
     }
 
     /**
      * ユーザー情報登録
-     * @param UsersServiceInterface $users
+     * @param UsersServiceInterface $service
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function add(UsersServiceInterface $users)
+    public function add(UsersServiceInterface $service)
     {
         $this->request->allowMethod(['post', 'delete']);
         try {
-            $user = $users->create($this->request->getData());
+            $user = $service->create($this->request->getData());
             $message = __d('baser', 'ユーザー「{0}」を追加しました。', $user->name);
         } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
             $user = $e->getEntity();
@@ -144,18 +143,18 @@ class UsersController extends BcApiController
 
     /**
      * ユーザー情報編集
-     * @param UsersServiceInterface $users
-     * @param $id
+     * @param UsersServiceInterface $service
+     * @param int $id
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function edit(UsersServiceInterface $users, $id)
+    public function edit(UsersServiceInterface $service, $id)
     {
         $this->request->allowMethod(['post', 'put']);
-        $user = $users->get($id);
+        $user = $service->get($id);
         try {
-            $user = $users->update($user, $this->request->getData());
+            $user = $service->update($user, $this->request->getData());
             $message = __d('baser', 'ユーザー「{0}」を更新しました。', $user->name);
         } catch (\Exception $e) {
             $this->setResponse($this->response->withStatus(400));
@@ -171,18 +170,18 @@ class UsersController extends BcApiController
 
     /**
      * ユーザー情報削除
-     * @param UsersServiceInterface $users
-     * @param $id
+     * @param UsersServiceInterface $service
+     * @param int $id
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function delete(UsersServiceInterface $users, $id)
+    public function delete(UsersServiceInterface $service, $id)
     {
         $this->request->allowMethod(['post', 'delete']);
-        $user = $users->get($id);
+        $user = $service->get($id);
         try {
-            if ($users->delete($id)) {
+            if ($service->delete($id)) {
                 $message = __d('baser', 'ユーザー: {0} を削除しました。', $user->name);
             }
         } catch (Exception $e) {

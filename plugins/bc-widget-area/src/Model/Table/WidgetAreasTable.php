@@ -24,12 +24,6 @@ class WidgetAreasTable extends AppTable
 {
 
     /**
-     * クラス名
-     * @var string
-     */
-    public $name = 'WidgetArea';
-
-    /**
      * ビヘイビア
      *
      * @var array

@@ -26,32 +26,11 @@ class MailFieldsController extends MailAppController
 {
 
     /**
-     * クラス名
-     *
-     * @var string
-     */
-    public $name = 'MailFields';
-
-    /**
-     * モデル
-     *
-     * @var array
-     */
-    public $uses = ['BcMail.MailField', 'BcMail.MailContent', 'BcMail.MailMessage'];
-
-    /**
      * コンポーネント
      *
      * @var array
      */
     public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure', 'BcContents' => ['type' => 'BcMail.MailContent']];
-
-    /**
-     * サブメニューエレメント
-     *
-     * @var string
-     */
-    public $subMenuElements = [];
 
     /**
      * beforeFilter

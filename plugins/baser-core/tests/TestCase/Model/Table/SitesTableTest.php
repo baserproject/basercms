@@ -108,18 +108,6 @@ class SitesTableTest extends BcTestCase
     }
 
     /**
-     * コンテンツに関連したコンテンツをサイト情報と一緒に全て取得する
-     */
-    public function testGetRelatedContents()
-    {
-        $list = $this->Sites->getRelatedContents(24);
-        $this->assertCount(5, $list);
-        $sample = array_shift($list);
-        $this->assertNotEmpty($sample['Site']);
-        $this->assertNotEmpty($sample['Content']);
-    }
-
-    /**
      * メインサイトかどうか判定する
      */
     public function testIsMain()

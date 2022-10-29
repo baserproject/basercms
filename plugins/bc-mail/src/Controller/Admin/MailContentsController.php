@@ -29,32 +29,11 @@ class MailContentsController extends MailAppController
 {
 
     /**
-     * クラス名
-     *
-     * @var string
-     */
-    public $name = 'MailContents';
-
-    /**
-     * モデル
-     *
-     * @var array
-     */
-    public $uses = ['BcMail.MailContent', 'BcMail.MailMessage'];
-
-    /**
      * コンポーネント
      *
      * @var array
      */
     public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure', 'BcContents' => ['useForm' => true]];
-
-    /**
-     * サブメニューエレメント
-     *
-     * @var string
-     */
-    public $subMenuElements = [];
 
     /**
      * [ADMIN] メールフォーム一覧

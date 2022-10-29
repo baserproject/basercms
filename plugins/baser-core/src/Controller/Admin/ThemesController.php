@@ -30,18 +30,20 @@ class ThemesController extends BcAdminAppController
     /**
      * テーマ一覧
      *
+     * @param ThemesAdminServiceInterface $service
      * @return void
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function index(ThemesServiceInterface $service, ThemesAdminServiceInterface $adminService)
+    public function index(ThemesAdminServiceInterface $service)
     {
-        $this->set($adminService->getViewVarsForIndex($service->getIndex()));
+        $this->set($service->getViewVarsForIndex($service->getIndex()));
     }
 
     /**
      * テーマをアップロードして適用する
+     * @param ThemesServiceInterface $service
      * @checked
      * @noTodo
      * @unitTest
@@ -61,6 +63,7 @@ class ThemesController extends BcAdminAppController
 
     /**
      * baserマーケットのテーマデータを取得する
+     * @param ThemesServiceInterface $service
      * @checked
      * @noTodo
      * @unitTest
@@ -74,6 +77,7 @@ class ThemesController extends BcAdminAppController
     /**
      * 初期データセットを読み込む
      *
+     * @param ThemesServiceInterface $service
      * @checked
      * @noTodo
      */
@@ -104,6 +108,7 @@ class ThemesController extends BcAdminAppController
     /**
      * テーマをコピーする
      *
+     * @param ThemesServiceInterface $service
      * @param string $theme
      * @checked
      * @noTodo
@@ -125,6 +130,7 @@ class ThemesController extends BcAdminAppController
     /**
      * テーマを削除する
      *
+     * @param ThemesServiceInterface $service
      * @param string $theme
      * @checked
      * @noTodo
@@ -146,6 +152,7 @@ class ThemesController extends BcAdminAppController
     /**
      * テーマを適用する
      *
+     * @param ThemesServiceInterface $service
      * @param string $theme
      * @return void
      * @checked
@@ -169,6 +176,8 @@ class ThemesController extends BcAdminAppController
 
     /**
      * 初期データセットをダウンロードする
+     *
+     * @param ThemesServiceInterface $service
      * @checked
      * @noTodo
      * @unitTest
@@ -185,6 +194,8 @@ class ThemesController extends BcAdminAppController
 
     /**
      * ダウンロード
+     *
+     * @param ThemesServiceInterface $service
      * @checked
      * @noTodo
      */
@@ -202,7 +213,7 @@ class ThemesController extends BcAdminAppController
 
     /**
      * スクリーンショットを表示
-     * @param $theme
+     * @param string $theme
      * @return false|string
      * @checked
      * @noTodo

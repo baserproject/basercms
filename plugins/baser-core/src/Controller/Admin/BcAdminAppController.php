@@ -25,7 +25,6 @@ use Cake\Http\Exception\NotFoundException;
 use Cake\Http\Response;
 use Cake\Routing\Router;
 use Cake\Utility\Hash;
-use Cake\Utility\Inflector;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;

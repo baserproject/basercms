@@ -27,16 +27,16 @@ class ContentsController extends BcApiController
 
     /**
      * コンテンツ情報取得
-     * @param ContentsServiceInterface $Contents
-     * @param $id
+     * @param ContentsServiceInterface $service
+     * @param int $id
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function view(ContentsServiceInterface $contentService, $id)
+    public function view(ContentsServiceInterface $service, $id)
     {
         $this->set([
-            'content' => $contentService->get($id)
+            'content' => $service->get($id)
         ]);
         $this->viewBuilder()->setOption('serialize', ['content']);
     }
@@ -44,15 +44,15 @@ class ContentsController extends BcApiController
     /**
      * ゴミ箱情報取得
      * @param ContentsServiceInterface $Contents
-     * @param $id
+     * @param int $id
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function view_trash(ContentsServiceInterface $contentService, $id)
+    public function view_trash(ContentsServiceInterface $service, $id)
     {
         $this->set([
-            'trash' => $contentService->getTrash($id)
+            'trash' => $service->getTrash($id)
         ]);
         $this->viewBuilder()->setOption('serialize', ['trash']);
     }
@@ -60,26 +60,27 @@ class ContentsController extends BcApiController
     /**
      * コンテンツ情報一覧取得
      *
-     * @param ContentsServiceInterface $contentService
+     * @param ContentsServiceInterface $service
+     * @param string $type
      * @return void
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function index(ContentsServiceInterface $contentService, $type = "index")
+    public function index(ContentsServiceInterface $service, $type = "index")
     {
         switch($type) {
             case "index":
-                $data = $this->paginate($contentService->getIndex($this->request->getQueryParams()));
+                $data = $this->paginate($service->getIndex($this->request->getQueryParams()));
                 break;
             case "trash":
-                $data = $this->paginate($contentService->getTrashIndex($this->request->getQueryParams(), 'threaded')->order(['site_id', 'lft']));
+                $data = $this->paginate($service->getTrashIndex($this->request->getQueryParams(), 'threaded')->order(['site_id', 'lft']));
                 break;
             case "tree":
-                $data = $this->paginate($contentService->getTreeIndex($this->request->getQueryParams()));
+                $data = $this->paginate($service->getTreeIndex($this->request->getQueryParams()));
                 break;
             case "table":
-                $data = $this->paginate($contentService->getTableIndex($this->request->getQueryParams()));
+                $data = $this->paginate($service->getTableIndex($this->request->getQueryParams()));
                 break;
         }
         $this->set([
@@ -91,17 +92,17 @@ class ContentsController extends BcApiController
     /**
      * コンテンツ情報削除(論理削除)
      * ※ 子要素があれば、子要素も削除する
-     * @param ContentsServiceInterface $contentService
+     * @param ContentsServiceInterface $service
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function delete(ContentsServiceInterface $contentService)
+    public function delete(ContentsServiceInterface $service)
     {
         $this->request->allowMethod(['post', 'delete']);
         $id = $this->request->getData('id');
-        $content = $contentService->get($id);
-        $children = $contentService->getChildren($id);
+        $content = $service->get($id);
+        $children = $service->getChildren($id);
         try {
 
             // EVENT Contents.beforeDelete
@@ -109,7 +110,7 @@ class ContentsController extends BcApiController
                 'data' => $id
             ]);
 
-            if ($contentService->deleteRecursive($id)) {
+            if ($service->deleteRecursive($id)) {
 
                 // EVENT Contents.afterDelete
                 $this->dispatchLayerEvent('afterDelete', [
@@ -136,16 +137,16 @@ class ContentsController extends BcApiController
 
     /**
      * ゴミ箱を空にする(物理削除)
-     * @param ContentsServiceInterface $contentService
+     * @param ContentsServiceInterface $service
      * @return void
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function trash_empty(ContentsServiceInterface $contentService)
+    public function trash_empty(ContentsServiceInterface $service)
     {
         $this->request->allowMethod(['post', 'delete']);
-        $trash = $contentService->getTrashIndex($this->request->getQueryParams())->order(['plugin', 'type']);
+        $trash = $service->getTrashIndex($this->request->getQueryParams())->order(['plugin', 'type']);
 
         // EVENT Contents.beforeTrashEmpty
         $this->dispatchLayerEvent('beforeTrashEmpty', [
@@ -155,7 +156,7 @@ class ContentsController extends BcApiController
         try {
             $result = true;
             foreach($trash as $entity) {
-                if (!$contentService->hardDeleteWithAssoc($entity->id)) $result = false;
+                if (!$service->hardDeleteWithAssoc($entity->id)) $result = false;
             }
             $message = __d('baser', 'ゴミ箱を空にしました。');
 
@@ -177,17 +178,17 @@ class ContentsController extends BcApiController
 
     /**
      * コンテンツ情報編集
-     * @param ContentsServiceInterface $contents
-     * @param $id
+     * @param ContentsServiceInterface $service
+     * @param int $id
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function edit(ContentsServiceInterface $contents, $id)
+    public function edit(ContentsServiceInterface $service, $id)
     {
         $this->request->allowMethod(['post', 'put']);
         try {
-            $content = $contents->update($contents->get($id), $this->request->getData());
+            $content = $service->update($service->get($id), $this->request->getData());
             $message = __d('baser', 'コンテンツ「{0}」を更新しました。', $content->title);
         } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
             $this->setResponse($this->response->withStatus(400));
@@ -205,17 +206,17 @@ class ContentsController extends BcApiController
      * trash_return
      *
      * コンテンツ情報を元に戻す
-     * @param ContentsServiceInterface $contents
-     * @param $id
+     * @param ContentsServiceInterface $service
+     * @param int $id
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function trash_return(ContentsServiceInterface $contents, $id)
+    public function trash_return(ContentsServiceInterface $service, $id)
     {
         $this->request->allowMethod(['get', 'head']);
         try {
-            if ($restored = $contents->restore($id)) {
+            if ($restored = $service->restore($id)) {
                 $message = __d('baser', 'ゴミ箱: {0} を元に戻しました。', $restored->title);
             } else {
                 $message = __d('baser', 'ゴミ箱の復元に失敗しました');
@@ -233,13 +234,12 @@ class ContentsController extends BcApiController
 
     /**
      * 公開状態を変更する
-     * @param ContentsServiceInterface $contentService
-     * @return bool
+     * @param ContentsServiceInterface $service
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function change_status(ContentsServiceInterface $contentService)
+    public function change_status(ContentsServiceInterface $service)
     {
         $this->request->allowMethod(['post', 'put', 'patch']);
         $id = $this->request->getData('id');
@@ -256,11 +256,11 @@ class ContentsController extends BcApiController
             try {
                 switch($status) {
                     case 'publish':
-                        $content = $contentService->publish($id);
+                        $content = $service->publish($id);
                         $message = __d('baser', 'コンテンツ: {0} を公開しました。', $content->title);
                         break;
                     case 'unpublish':
-                        $content = $contentService->unpublish($id);
+                        $content = $service->unpublish($id);
                         $message = __d('baser', 'コンテンツ: {0} を非公開にしました。', $content->title);
                         break;
                 }
@@ -289,17 +289,17 @@ class ContentsController extends BcApiController
     /**
      * get_full_url
      *
-     * @param ContentsServiceInterface $contentService
+     * @param ContentsServiceInterface $service
      * @param int $id
      * @checked
      * @unitTest
      * @noTodo
      */
-    public function get_full_url(ContentsServiceInterface $contentService, $id)
+    public function get_full_url(ContentsServiceInterface $service, $id)
     {
         $this->request->allowMethod(['get']);
         if ($id) {
-            $this->set(['fullUrl' => $contentService->getUrlById($id, true)]);
+            $this->set(['fullUrl' => $service->getUrlById($id, true)]);
         } else {
             $this->setResponse($this->response->withStatus(400));
             $this->set(['message' => __d('baser', '無効な処理です。')]);
@@ -311,32 +311,31 @@ class ContentsController extends BcApiController
      * 指定したIDのコンテンツが存在するか確認する
      * ゴミ箱のものは無視
      *
-     * @param ContentsServiceInterface $contentService
-     * @param $id
-     * @return Response
+     * @param ContentsServiceInterface $service
+     * @param int $id
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function exists(ContentsServiceInterface $contentService, $id)
+    public function exists(ContentsServiceInterface $service, $id)
     {
         $this->request->allowMethod(['get']);
-        $this->set(['exists' => $contentService->exists($id)]);
+        $this->set(['exists' => $service->exists($id)]);
         $this->viewBuilder()->setOption('serialize', ['exists']);
     }
 
     /**
      * サイトに紐付いたフォルダリストを取得
-     * @param ContentsServiceInterface $contentService
+     * @param ContentsServiceInterface $service
      * @param int $siteId
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function get_content_folder_list(ContentsServiceInterface $contentService, $siteId)
+    public function get_content_folder_list(ContentsServiceInterface $service, $siteId)
     {
         $this->request->allowMethod(['get']);
-        $this->set(['list' => $contentService->getContentFolderList($siteId, ['conditions' => ['site_root' => false]])]);
+        $this->set(['list' => $service->getContentFolderList($siteId, ['conditions' => ['site_root' => false]])]);
         $this->viewBuilder()->setOption('serialize', ['list']);
     }
 
@@ -344,18 +343,18 @@ class ContentsController extends BcApiController
      * リネーム
      *
      * 新規登録時の初回リネーム時は、name にも保存する
-     * @param ContentsServiceInterface $contentService
+     * @param ContentsServiceInterface $service
      * @return void
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function rename(ContentsServiceInterface $contentService)
+    public function rename(ContentsServiceInterface $service)
     {
         $this->request->allowMethod(['post', 'put', 'patch']);
         try {
-            $oldContent = $contentService->get($this->request->getData('id'));
-            $newContent = $contentService->rename($oldContent, $this->getRequest()->getData());
+            $oldContent = $service->get($this->request->getData('id'));
+            $newContent = $service->rename($oldContent, $this->getRequest()->getData());
             $this->setResponse($this->response->withStatus(200));
             $message = sprintf(
                 __d('baser', '「%s」を「%s」に名称変更しました。'),
@@ -370,7 +369,7 @@ class ContentsController extends BcApiController
         $this->set([
             'message' => $message,
             'name' => $newContent->name,
-            'url' => $contentService->getUrlById($newContent->id)
+            'url' => $service->getUrlById($newContent->id)
         ]);
         $this->viewBuilder()->setOption('serialize', ['message', 'name', 'url']);
     }
@@ -378,17 +377,17 @@ class ContentsController extends BcApiController
     /**
      * add_alias
      *
-     * @param ContentsServiceInterface $contentService
+     * @param ContentsServiceInterface $service
      * @return void
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function add_alias(ContentsServiceInterface $contentService)
+    public function add_alias(ContentsServiceInterface $service)
     {
         $this->request->allowMethod(['post']);
         try {
-            $alias = $contentService->alias($this->request->getData('content'));
+            $alias = $service->alias($this->request->getData('content'));
             $message = __d('baser', '{0} を作成しました。', $alias->title);
         } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
             $alias = $e->getEntity();
@@ -401,37 +400,37 @@ class ContentsController extends BcApiController
 
     /**
      * 指定したURLのパス上のコンテンツでフォルダ以外が存在するか確認
-     * @param ContentsServiceInterface $contentService
+     * @param ContentsServiceInterface $service
      * @return \Cake\Http\Response
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function is_unique_content(ContentsServiceInterface $contentService)
+    public function is_unique_content(ContentsServiceInterface $service)
     {
         $this->request->allowMethod(['post']);
         if (!$this->request->getData('url')) {
             $this->setResponse($this->response->withStatus(500));
         } else {
             return $this->response->withType("application/json")->withStringBody(
-                json_encode(!$contentService->existsContentByUrl($this->request->getData('url')))
+                json_encode(!$service->existsContentByUrl($this->request->getData('url')))
             );
         }
     }
 
     /**
      * 並び順を移動する
-     * @param ContentsServiceInterface $contentService
+     * @param ContentsServiceInterface $service
      * @return void
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function move(ContentsServiceInterface $contentService)
+    public function move(ContentsServiceInterface $service)
     {
         $this->request->allowMethod(['post', 'put', 'patch']);
         $url = $content = null;
-        if (!$contentService->isTreeModifiedByAnotherUser($this->getRequest()->getData('listDisplayed'))) {
+        if (!$service->isTreeModifiedByAnotherUser($this->getRequest()->getData('listDisplayed'))) {
             try {
                 // EVENT Contents.beforeMove
                 $event = $this->dispatchLayerEvent('beforeMove', [
@@ -441,16 +440,16 @@ class ContentsController extends BcApiController
                     $this->getRequest()->withParsedBody($event->getResult() === true? $event->getData('data') : $event->getResult());
                 }
 
-                $beforeContent = $contentService->get($this->request->getData('origin.id'));
+                $beforeContent = $service->get($this->request->getData('origin.id'));
                 $beforeUrl = $beforeContent->url;
-                $content = $contentService->move($this->request->getData('origin'), $this->request->getData('target'));
+                $content = $service->move($this->request->getData('origin'), $this->request->getData('target'));
                 $message = sprintf(
                     __d('baser', "コンテンツ「%s」の配置を移動しました。\n%s > %s"),
                     $content->title,
                     rawurldecode($beforeUrl),
                     rawurldecode($content->url)
                 );
-                $url = $contentService->getUrlById($content->id, true);
+                $url = $service->getUrlById($content->id, true);
 
                 // EVENT Contents.afterMove
                 $this->dispatchLayerEvent('afterMove', [
@@ -476,7 +475,7 @@ class ContentsController extends BcApiController
     /**
      * batch
      *
-     * @param ContentsServiceInterface $contentService
+     * @param ContentsServiceInterface $service
      * @return void
      * @checked
      * @noTodo

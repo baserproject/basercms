@@ -28,19 +28,6 @@ use BaserCore\Annotation\UnitTest;
  */
 class BlogPostsController extends BlogAdminAppController
 {
-    /**
-     * クラス名
-     *
-     * @var string
-     */
-    public $name = 'BlogPosts';
-
-    /**
-     * モデル
-     *
-     * @var array
-     */
-    public $uses = ['BcBlog.BlogPost', 'BcBlog.BlogCategory', 'BcBlog.BlogContent'];
 
     /**
      * コンポーネント
@@ -54,13 +41,6 @@ class BlogPostsController extends BlogAdminAppController
         'BcEmail',
         'BcContents' => ['type' => 'BcBlog.BlogContent']
     ];
-
-    /**
-     * サブメニューエレメント
-     *
-     * @var array
-     */
-    public $subMenuElements = [];
 
     /**
      * ブログコンテンツデータ

@@ -13,6 +13,8 @@ namespace BaserCore\ServiceProvider;
 
 use BaserCore\Service\Admin\BcAdminAppService;
 use BaserCore\Service\Admin\BcAdminAppServiceInterface;
+use BaserCore\Service\Admin\BcAdminContentsService;
+use BaserCore\Service\Admin\BcAdminContentsServiceInterface;
 use BaserCore\Service\Admin\ContentFoldersAdminService;
 use BaserCore\Service\Admin\ContentFoldersAdminServiceInterface;
 use BaserCore\Service\Admin\ContentsAdminService;
@@ -117,7 +119,8 @@ class BcServiceProvider extends ServiceProvider
         BcDatabaseServiceInterface::class,
         UtilitiesAdminServiceInterface::class,
         UtilitiesServiceInterface::class,
-        BcFrontContentsServiceInterface::class
+        BcFrontContentsServiceInterface::class,
+        BcAdminContentsServiceInterface::class
     ];
 
     /**
@@ -179,6 +182,8 @@ class BcServiceProvider extends ServiceProvider
         $container->add(UtilitiesAdminServiceInterface::class, UtilitiesAdminService::class);
         // BcFrontContents サービス
         $container->add(BcFrontContentsServiceInterface::class, BcFrontContentsService::class);
+        // BcAdminContents サービス
+        $container->add(BcAdminContentsServiceInterface::class, BcAdminContentsService::class);
     }
 
 }
