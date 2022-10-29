@@ -12,7 +12,8 @@
 namespace BaserCore\Mailer;
 
 use BaserCore\Model\Entity\PasswordRequest;
-use Cake\ORM\Entity;
+use BaserCore\Model\Entity\User;
+use Cake\Datasource\EntityInterface;
 use Cake\Core\Configure;
 use Cake\Routing\Router;
 
@@ -22,6 +23,7 @@ use Cake\Routing\Router;
  */
 class PasswordRequestMailer
 {
+
     /**
      * Mailer Config
      *
@@ -37,17 +39,11 @@ class PasswordRequestMailer
     private $theme = 'BcAdminThird';
 
     /**
-     * PasswordRequestMailer constructor.
-     */
-    public function __construct()
-    {
-
-    }
-
-    /**
      * パスワード再発行URLメール送信
+     * @param User|EntityInterface $user
+     * @param PasswordRequest|EntityInterface
      */
-    public function deliver(Entity $user, PasswordRequest $passwordRequest): array
+    public function deliver(EntityInterface $user, EntityInterface $passwordRequest): array
     {
         $subject = __d('baser', 'パスワード再発行');
         $passwordRequestData = $passwordRequest->toArray();
@@ -65,7 +61,7 @@ class PasswordRequestMailer
         );
 
         $mailer = new BcMailer($this->mailerConfig);
-        // TODO from情報の設定
+        // TODO ucmitz from情報の設定
         $mailer->setFrom(['basercms@example.com' => 'basercms'])
             ->setTo($user->email)
             ->setSubject($subject)
@@ -79,4 +75,5 @@ class PasswordRequestMailer
             );
         return $mailer->deliver();
     }
+
 }

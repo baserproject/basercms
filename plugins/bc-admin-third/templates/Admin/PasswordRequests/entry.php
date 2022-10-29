@@ -9,11 +9,14 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
-use BaserCore\View\AppView;
-
 /**
- * @var AppView $this
+ * @var \BaserCore\View\BcAdminAppView $this
+ * @var \BaserCore\Model\Entity\PasswordRequest $passwordRequest
+ * @checked
+ * @noTodo
+ * @unitTest
  */
+$this->BcAdmin->setTitle(__d('baser', 'パスワードのリセット'));
 ?>
 
 <div class="section">

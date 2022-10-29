@@ -9,15 +9,11 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
-/**
- * @var \BaserCore\View\BcAdminAppView $this
- * @checked
- * @noTodo
- * @unitTest
- */
-$this->BcAdmin->setTitle(__d('baser', 'Not Found'));
-?>
+namespace BaserCore\Test\Fixture\Factory;
 
-<div class="section">
-  <p><?php echo __d('baser', 'ページの有効期限が切れているか、もしくは誤ったURLにアクセスしています。') ?></p>
-</div>
+use Cake\TestSuite\Fixture\TestFixture;
+
+/**
+ * Class PasswordRequestsFixture
+ */
+class PasswordRequestsFixture extends TestFixture {}

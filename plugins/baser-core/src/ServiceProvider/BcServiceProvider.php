@@ -53,6 +53,8 @@ use BaserCore\Service\Front\PagesFrontService;
 use BaserCore\Service\Front\PagesFrontServiceInterface;
 use BaserCore\Service\PagesService;
 use BaserCore\Service\PagesServiceInterface;
+use BaserCore\Service\PasswordRequestsService;
+use BaserCore\Service\PasswordRequestsServiceInterface;
 use BaserCore\Service\PermissionsService;
 use BaserCore\Service\PermissionsServiceInterface;
 use BaserCore\Service\PluginsService;
@@ -120,7 +122,8 @@ class BcServiceProvider extends ServiceProvider
         UtilitiesAdminServiceInterface::class,
         UtilitiesServiceInterface::class,
         BcFrontContentsServiceInterface::class,
-        BcAdminContentsServiceInterface::class
+        BcAdminContentsServiceInterface::class,
+        PasswordRequestsServiceInterface::class
     ];
 
     /**
@@ -184,6 +187,8 @@ class BcServiceProvider extends ServiceProvider
         $container->add(BcFrontContentsServiceInterface::class, BcFrontContentsService::class);
         // BcAdminContents サービス
         $container->add(BcAdminContentsServiceInterface::class, BcAdminContentsService::class);
+        // PasswordRequests サービス
+        $container->add(PasswordRequestsServiceInterface::class, PasswordRequestsService::class);
     }
 
 }
