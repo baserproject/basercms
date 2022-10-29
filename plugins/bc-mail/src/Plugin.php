@@ -15,7 +15,7 @@ namespace BcMail;
 use BaserCore\BcPlugin;
 
 /**
- * plugin for ContactManager
+ * plugin for BcMail
  */
 class Plugin extends BcPlugin
 {

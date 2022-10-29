@@ -83,7 +83,7 @@ class PluginsController extends BcAdminAppController
     {
         $this->set($service->getViewVarsForInstall($this->Plugins->getPluginConfig($name)));
         if ($service->getInstallStatusMessage($name) || !$this->request->is(['put', 'post'])) {
-            return $this->getResponse();
+            return;
         } else {
             try {
                 if ($service->install($name, $this->request->getData('connection') ?? 'default')) {
@@ -112,7 +112,7 @@ class PluginsController extends BcAdminAppController
         BcUtil::clearAllCache();
         $plugin = $this->Plugins->getPluginConfig($name);
         $this->set($service->getViewVarsForUpdate($plugin));
-        if (!$this->request->is(['put', 'post'])) return $this->getResponse();
+        if (!$this->request->is(['put', 'post'])) return;
         try {
             $service->update($plugin->name, $this->request->getData('connection') ?? 'default');
             if($plugin->name === 'BaserCore') {
