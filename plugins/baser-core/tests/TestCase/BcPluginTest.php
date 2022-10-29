@@ -22,8 +22,6 @@ use Cake\Datasource\ConnectionManager;
 use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
 use Cake\ORM\TableRegistry;
-use Cake\Routing\RouteBuilder;
-use Cake\Routing\RouteCollection;
 use Cake\Routing\Router;
 
 /**
@@ -189,6 +187,7 @@ class BcPluginTest extends BcTestCase
         $result = Router::parseRequest($this->getRequest('/baser/api/bc-blog/blog_contents/edit/1.json'));
         $this->assertEquals('BlogContents', $result['controller']);
         $this->assertEquals('json', $result['_ext']);
+        unset($_SERVER['REQUEST_URI']);
     }
 
     /**
