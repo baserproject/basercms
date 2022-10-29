@@ -93,7 +93,7 @@ class BcTestCaseTest extends BcTestCase
     public function testGetRequest(): void
     {
         // デフォルトURL $url = '/'
-        $urlList = ['' => '/*', '/about' => '/*', '/baser/admin/users/login' => '/baser/admin/{controller}/{action}/*'];
+        $urlList = ['' => '/*', '/about' => '/*', '/baser/admin/baser-core/users/login' => '/baser/admin/baser-core/{controller}/{action}/*'];
         foreach($urlList as $url => $route) {
             $request = $this->getRequest($url);
             $this->assertEquals($route, $request->getParam('_matchedRoute'));

@@ -11,6 +11,7 @@
 
 namespace BcBlog\Model\Table;
 
+use BaserCore\Event\BcEventDispatcherTrait;
 use BaserCore\Model\Entity\Content;
 use BaserCore\Model\Table\ContentsTable;
 use BaserCore\Utility\BcUtil;
@@ -35,21 +36,9 @@ class BlogContentsTable extends BlogAppTable
 {
 
     /**
-     * クラス名
-     *
-     * @var string
+     * Trait
      */
-    public $name = 'BlogContent';
-
-    /**
-     * behaviors
-     *
-     * @var array
-     */
-    public $actsAs = [
-        'BcSearchIndexManager',
-        'BcContents'
-    ];
+    use BcEventDispatcherTrait;
 
     /**
      * Validation Default

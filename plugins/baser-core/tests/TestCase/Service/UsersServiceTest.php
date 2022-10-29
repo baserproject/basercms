@@ -189,7 +189,7 @@ class UsersServiceTest extends BcTestCase
      */
     public function testLoginAndLogout()
     {
-        $request = $this->getRequest('/baser/admin/users/index');
+        $request = $this->getRequest('/baser/admin/baser-core/users/index');
         $authentication = $this->BaserCore->getAuthenticationService($request);
         $request = $request->withAttribute('authentication', $authentication);
         $response = new Response();
@@ -259,7 +259,7 @@ class UsersServiceTest extends BcTestCase
     public function testReload()
     {
         // 未ログイン
-        $request = $this->loginAdmin($this->getRequest('/baser/admin/users/index'));
+        $request = $this->loginAdmin($this->getRequest('/baser/admin/baser-core/users/index'));
         $noLoginUser = $this->Users->reload($request);
         $this->assertTrue($noLoginUser);
 
