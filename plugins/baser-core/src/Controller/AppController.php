@@ -30,6 +30,7 @@ use Cake\Core\Configure;
 use Cake\Event\EventInterface;
 use Cake\Event\EventManagerInterface;
 use Cake\Http\Exception\BadRequestException;
+use Cake\Http\Exception\NotFoundException;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
 use Cake\Utility\Inflector;
@@ -456,6 +457,19 @@ class AppController extends BaseController
             unset($query['y']);
             if ($query) $this->setRequest($this->getRequest()->withQueryParams($query));
         }
+    }
+
+    /**
+     * NOT FOUNDページを出力する
+     *
+     * @return    void
+     * @throws    NotFoundException
+     * @checked
+     * @noTodo
+     */
+    public function notFound()
+    {
+        throw new NotFoundException(__d('baser', '見つかりませんでした。'));
     }
 
 }

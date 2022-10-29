@@ -68,6 +68,7 @@ nbproject/*
 !/plugins/bc-widget-area
 !/plugins/bc-installer
 !/plugins/bc-search-index
+!/plugins/bc-content-link
 !/plugins/BcSpaSample
 !/plugins/BcThemeSample
 /plugins/*/vendor

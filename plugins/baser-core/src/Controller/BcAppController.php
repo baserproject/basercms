@@ -216,17 +216,6 @@ class BcAppController extends AppController
     }
 
     /**
-     * NOT FOUNDページを出力する
-     *
-     * @return    void
-     * @throws    NotFoundException
-     */
-    public function notFound()
-    {
-        throw new NotFoundException(__d('baser', '見つかりませんでした。'));
-    }
-
-    /**
      * View用のデータを読み込む。
      * beforeRenderで呼び出される
      *
