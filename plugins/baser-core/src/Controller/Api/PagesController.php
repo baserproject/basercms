@@ -143,7 +143,7 @@ class PagesController extends BcApiController
         $page = $service->get($id);
         try {
             if ($service->delete($id)) {
-                $message = __d('baser', '固定ページ: {0} を削除しました。', $page->content->title);
+                $message = __d('baser', '固定ページ: {0} をゴミ箱に移動しました。', $page->content->title);
             }
         } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
             $page = $e->getEntity();

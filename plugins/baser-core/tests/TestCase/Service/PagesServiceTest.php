@@ -11,6 +11,7 @@
 
 namespace BaserCore\Test\TestCase\Service;
 
+use BaserCore\Model\Entity\Content;
 use BaserCore\Model\Table\PagesTable;
 use BaserCore\Service\PagesService;
 use BaserCore\Test\Factory\ContentFactory;
@@ -49,6 +50,7 @@ class PagesServiceTest extends BcTestCase
      */
     public function setUp(): void
     {
+        $this->setFixtureTruncate();
         parent::setUp();
         $this->PagesService = new PagesService();
         $this->Pages = $this->getTableLocator()->get('Pages');
@@ -88,7 +90,7 @@ class PagesServiceTest extends BcTestCase
         $page = $this->PagesService->get(2);
         $this->assertMatchesRegularExpression('/<section class="mainHeadline">/', $page->contents);
         $this->expectExceptionMessage('Record not found in table "pages"');
-        $page = $this->PagesService->getTrash(1);
+        $this->PagesService->getTrash(1);
     }
 
     /**
@@ -166,14 +168,17 @@ class PagesServiceTest extends BcTestCase
      *
      * @return void
      */
-    public function testDelete()
+    public function testHardDelete()
     {
+        /* @var Content $content */
         $content = $this->Contents->find()->where(['type' => 'Page'])->first();
-        $this->assertTrue($this->PagesService->delete($content->entity_id));
-        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
-        $this->PagesService->get($content->entity_id);
-        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
-        $this->Contents->get($content->id);
+        $this->assertTrue($this->PagesService->hardDelete($content->entity_id));
+        $this->assertEquals(0, $this->Pages->find()->where(['Pages.id' => $content->entity_id])->count());
+        $this->assertEquals(0, $this->Contents->find()
+            ->where(['Contents.id' => $content->id])
+            ->applyOptions(['withDeleted'])
+            ->count()
+        );
     }
 
     /**

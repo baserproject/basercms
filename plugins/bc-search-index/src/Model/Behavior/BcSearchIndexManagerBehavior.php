@@ -216,6 +216,7 @@ class BcSearchIndexManagerBehavior extends Behavior
         if ($this->SearchIndexes->deleteAll(['model' => Inflector::classify($this->table->getAlias()), 'model_id' => $id])) {
             return $this->updateSearchIndexMeta();
         }
+        return true;
     }
 
     /**

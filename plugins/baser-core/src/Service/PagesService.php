@@ -199,7 +199,7 @@ class PagesService implements PagesServiceInterface
     }
 
     /**
-     * 固定ページを削除する
+     * 論理削除
      * @param int $id
      * @return bool
      * @checked
@@ -208,8 +208,23 @@ class PagesService implements PagesServiceInterface
      */
     public function delete(int $id): bool
     {
-        $Page = $this->get($id);
-        return $this->Pages->delete($Page);
+        $page = $this->get($id);
+        $contentsService = $this->getService(ContentsServiceInterface::class);
+        return $contentsService->delete($page->content->id);
+    }
+
+    /**
+     * 物理削除
+     * @param int $id
+     * @return bool
+     * @checked
+     * @unitTest
+     * @noTodo
+     */
+    public function hardDelete(int $id): bool
+    {
+        $page = $this->get($id);
+        return $this->Pages->delete($page);
     }
 
     /**
