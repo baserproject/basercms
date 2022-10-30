@@ -50,7 +50,6 @@ class PagesServiceTest extends BcTestCase
      */
     public function setUp(): void
     {
-        $this->setFixtureTruncate();
         parent::setUp();
         $this->PagesService = new PagesService();
         $this->Pages = $this->getTableLocator()->get('Pages');
@@ -168,11 +167,11 @@ class PagesServiceTest extends BcTestCase
      *
      * @return void
      */
-    public function testHardDelete()
+    public function testDelete()
     {
         /* @var Content $content */
         $content = $this->Contents->find()->where(['type' => 'Page'])->first();
-        $this->assertTrue($this->PagesService->hardDelete($content->entity_id));
+        $this->assertTrue($this->PagesService->delete($content->entity_id));
         $this->assertEquals(0, $this->Pages->find()->where(['Pages.id' => $content->entity_id])->count());
         $this->assertEquals(0, $this->Contents->find()
             ->where(['Contents.id' => $content->id])

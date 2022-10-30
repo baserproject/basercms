@@ -174,17 +174,17 @@ class ContentFoldersService implements ContentFoldersServiceInterface
     }
 
     /**
-     * コンテンツフォルダーを削除する
+     * 物理削除
      * @param int $id
      * @return bool
      * @checked
-     * @unitTest
      * @noTodo
+     * @unitTest
      */
-    public function delete($id): bool
+    public function delete(int $id): bool
     {
-        $ContentFolder = $this->get($id);
-        return $this->ContentFolders->delete($ContentFolder);
+        $contentFolder = $this->get($id);
+        return $this->ContentFolders->delete($contentFolder);
     }
 
     /**

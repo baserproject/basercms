@@ -199,29 +199,15 @@ class PagesService implements PagesServiceInterface
     }
 
     /**
-     * 論理削除
-     * @param int $id
-     * @return bool
-     * @checked
-     * @unitTest
-     * @noTodo
-     */
-    public function delete(int $id): bool
-    {
-        $page = $this->get($id);
-        $contentsService = $this->getService(ContentsServiceInterface::class);
-        return $contentsService->delete($page->content->id);
-    }
-
-    /**
      * 物理削除
      * @param int $id
      * @return bool
      * @checked
      * @unitTest
      * @noTodo
+     * @unitTest
      */
-    public function hardDelete(int $id): bool
+    public function delete(int $id): bool
     {
         $page = $this->get($id);
         return $this->Pages->delete($page);

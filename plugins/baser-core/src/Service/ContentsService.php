@@ -463,6 +463,7 @@ class ContentsService implements ContentsServiceInterface
         if ($content && empty($content->deleted_date)) {
             $this->delete($content->id);
         }
+        $content = $this->getTrash($id);
         // 2022/10/20 ryuring
         // 原因不明の下記のエラーが出てしまったが、sleep() を実行する事で回避できた。根本的な解決に至らず
         // デバッガで１行ずつステップ実行すると成功したため sleep() で回避できることに気づいた

@@ -57,16 +57,6 @@ interface PagesServiceInterface extends CrudBaseServiceInterface
     public function copy($postData);
 
     /**
-     * 論理削除
-     * @param int $id
-     * @return bool
-     * @checked
-     * @unitTest
-     * @noTodo
-     */
-    public function delete(int $id): bool;
-
-    /**
      * 物理削除
      * @param int $id
      * @return bool
@@ -74,6 +64,6 @@ interface PagesServiceInterface extends CrudBaseServiceInterface
      * @unitTest
      * @noTodo
      */
-    public function hardDelete(int $id): bool;
+    public function delete(int $id): bool;
 
 }

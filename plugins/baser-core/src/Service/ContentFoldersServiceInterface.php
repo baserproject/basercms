@@ -55,6 +55,16 @@ interface ContentFoldersServiceInterface extends CrudBaseServiceInterface
      */
     public function saveSiteRoot($site, $isUpdateChildrenUrl = false);
 
+    /**
+     * 物理削除
+     * @param int $id
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function delete(int $id): bool;
+
 }
 
 
