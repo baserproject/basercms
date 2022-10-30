@@ -27,6 +27,9 @@ class ContentLinksTable extends AppTable
 
     /**
      * initialize
+     *
+     * コンテンツテーブルと連携するための、BcContentsBehavior を追加する
+     *
      * @param array $config
      * @checked
      * @noTodo
@@ -39,6 +42,11 @@ class ContentLinksTable extends AppTable
 
     /**
      * Validation Default
+     *
+     * バリデーションの設定を行う。
+     *
+     * - url
+     *  - 入力必須
      *
      * @param Validator $validator
      * @return Validator

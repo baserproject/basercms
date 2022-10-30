@@ -27,7 +27,23 @@ class ContentLinksController extends BcApiController
 {
 
     /**
-     * コンテンツリンクを登録する
+     * コンテンツリンクを登録する（認証要）
+     *
+     * /baser/api/bc-content-link/content_links/add.json
+     *
+     * ### POSTデータ
+     * - content
+     *  - parent_id: 親のコンテンツID
+     *  - title: タイトル
+     *  - plugin: プラグイン名
+     *  - type: コンテンツタイプ名
+     *  - site_id: サイトID
+     *
+     * ### レスポンス
+     * - contentLink: コンテンツリンクエンティティ
+     * - content: コンテンツエンティティ
+     * - message: メッセージ
+     * - errors: エラーが発生した場合の詳細内容
      *
      * @param ContentLinksService $service
      * @return void

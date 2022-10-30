@@ -42,7 +42,7 @@ class PasswordRequestsService implements PasswordRequestsServiceInterface
     }
 
     /**
-     * 新規データを取得する
+     * 空の新規エンティティを取得する
      * @return EntityInterface
      */
     public function getNew(): EntityInterface
@@ -51,7 +51,7 @@ class PasswordRequestsService implements PasswordRequestsServiceInterface
     }
 
     /**
-     * 単一データを取得する
+     * 単一のエンティティを取得する
      * @param int $id
      * @return EntityInterface
      */
@@ -61,7 +61,11 @@ class PasswordRequestsService implements PasswordRequestsServiceInterface
     }
 
     /**
-     * 更新する
+     * パスワードリクエストを発行する
+     *
+     * ユーザーIDとリクエストキーを設定してパスワードリクエストを発行しDBに保存する。
+     * 発行時には、パスワード再発行用のURLを記載したメールを送信する。
+     *
      * @param EntityInterface|PasswordRequest $entity
      * @param array $postData
      * @return EntityInterface|false

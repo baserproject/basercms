@@ -34,6 +34,9 @@ class BcContentLinkServiceProvider extends ServiceProvider
 
     /**
      * Services
+     *
+     * サービスのインターフェイスとの紐付けをコンテナに追加する
+     *
      * @param \Cake\Core\ContainerInterface $container
      * @checked
      * @noTodo

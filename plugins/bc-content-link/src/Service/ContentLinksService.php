@@ -27,6 +27,9 @@ class ContentLinksService implements ContentLinksServiceInterface
 
     /**
      * Constructor
+     *
+     * ContentLinksTable を初期化し、メンバーにセットする
+     *
      * @checked
      * @noTodo
      */
@@ -36,8 +39,12 @@ class ContentLinksService implements ContentLinksServiceInterface
     }
 
     /**
-     * 単一データ取得
+     * 単一のエンティティを取得する
+     *
+     * Site を内包した、Content を内包する
+     *
      * @param int $id
+     *  - status: ステータス。publish を指定すると公開状態のもののみ取得（初期値：全て）
      * @return EntityInterface
      * @checked
      * @noTodo
@@ -58,7 +65,8 @@ class ContentLinksService implements ContentLinksServiceInterface
     }
 
     /**
-     * 新規登録
+     * コンテンツリンクを新しく登録する
+     *
      * @param array $postData
      * @return \Cake\Datasource\EntityInterface
      * @checked
@@ -72,7 +80,8 @@ class ContentLinksService implements ContentLinksServiceInterface
     }
 
     /**
-     * リンクを更新する
+     * コンテンツリンクを更新する
+     *
      * @param EntityInterface $target
      * @param array $postData
      * @return EntityInterface

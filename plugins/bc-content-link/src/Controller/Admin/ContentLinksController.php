@@ -29,6 +29,9 @@ class ContentLinksController extends BcAdminAppController
 
     /**
      * initialize
+     *
+     * 編集画面に必要な BcAdminContentsComponent をロードする。
+     *
      * @throws \Exception
      * @checked
      * @noTodo
@@ -40,7 +43,10 @@ class ContentLinksController extends BcAdminAppController
     }
 
     /**
-     * コンテンツを更新する
+     * コンテンツリンクを更新する
+     *
+     * 更新に成功した場合は、同一ページにリダイレクトする。
+     * 失敗した場合は、エラー内容を表示する。
      *
      * @param ContentLinksService $service
      * @param int $id

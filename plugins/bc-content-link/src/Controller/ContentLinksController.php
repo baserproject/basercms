@@ -28,6 +28,9 @@ class ContentLinksController extends BcFrontAppController
 
     /**
      * initialize
+     *
+     * フロントエンド表示に必要な BcFrontContentsComponent をロードする。
+     *
      * @throws \Exception
      * @checked
      * @noTodo
@@ -39,7 +42,9 @@ class ContentLinksController extends BcFrontAppController
     }
 
     /**
-     * コンテンツを表示する
+     * コンテンツリンクを表示する
+     *
+     * ビューの処理にて、設定リンク先のURLにリダイレクトする。
      *
      * @param ContentLinksService $service
      * @return void

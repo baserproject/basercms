@@ -462,8 +462,8 @@ class AppController extends BaseController
     /**
      * NOT FOUNDページを出力する
      *
-     * @return    void
-     * @throws    NotFoundException
+     * @return void
+     * @throws NotFoundException
      * @checked
      * @noTodo
      */

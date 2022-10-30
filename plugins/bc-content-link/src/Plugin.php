@@ -27,6 +27,9 @@ class Plugin extends BcPlugin
 
     /**
      * services
+     *
+     * コンテンツリンクプラグインのサービスプロバイダを追加する
+     *
      * @param ContainerInterface $container
      * @noTodo
      * @checked
