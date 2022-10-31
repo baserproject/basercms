@@ -414,6 +414,9 @@ class ContentsService implements ContentsServiceInterface
 
         $this->Contents->disableUpdatingSystemData();
         $this->Contents->updatingRelated = false;
+        $afterEventListener = BcUtil::offEvent($this->Contents->getEventManager(), 'Model.afterSave');
+        $beforeEventListener = BcUtil::offEvent($this->Contents->getEventManager(), 'Model.beforeSave');
+
         $content = $this->Contents->save($content, ['validate' => false]);
 
         if(!$content->alias_id) {
@@ -432,6 +435,9 @@ class ContentsService implements ContentsServiceInterface
             // エイリアスの場合直接削除
             $result = $this->Contents->hardDelete($content);
         }
+
+        BcUtil::onEvent($this->Contents->getEventManager(), 'Model.afterSave', $afterEventListener);
+        BcUtil::onEvent($this->Contents->getEventManager(), 'Model.beforeSave', $beforeEventListener);
         $this->Contents->enableUpdatingSystemData();
         $this->Contents->updatingRelated = true;
         // =====================================================================
@@ -456,9 +462,8 @@ class ContentsService implements ContentsServiceInterface
         $content = $this->Contents->find()->where(['id' => $id])->first();
         if ($content && empty($content->deleted_date)) {
             $this->delete($content->id);
-        } else {
-            $content = $this->getTrash($id);
         }
+        $content = $this->getTrash($id);
         // 2022/10/20 ryuring
         // 原因不明の下記のエラーが出てしまったが、sleep() を実行する事で回避できた。根本的な解決に至らず
         // デバッガで１行ずつステップ実行すると成功したため sleep() で回避できることに気づいた
@@ -1424,6 +1429,7 @@ class ContentsService implements ContentsServiceInterface
      * @return EntityInterface|null
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function rename($content, $postData)
     {

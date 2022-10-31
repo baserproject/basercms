@@ -15,14 +15,6 @@ App::uses('ThemeConfig', 'Model');
 
 /**
  * Class ThemeConfigTest
- *
- * class NonAssosiationThemeConfig extends ThemeConfig {
- *  public $name = 'ThemeConfig';
- *  public $belongsTo = array();
- *  public $hasMany = array();
- * }
- *
- * @package Baser.Test.Case.Model
  */
 class ThemeConfigTest extends BaserTestCase
 {

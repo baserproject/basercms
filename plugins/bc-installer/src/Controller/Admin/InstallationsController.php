@@ -27,14 +27,6 @@ class InstallationsController extends BcAdminAppController
 {
 
     /**
-     * クラス名
-     *
-     * @var string
-     * @access    public
-     */
-    public $name = 'Installations';
-
-    /**
      * コンポーネント
      *
      * @var array
@@ -56,14 +48,6 @@ class InstallationsController extends BcAdminAppController
      * @access    public
      */
     public $subDir = 'admin';
-
-    /**
-     * モデル
-     *
-     * @var array
-     * @access    public
-     */
-    public $uses = null;
 
     /**
      * テーマ

@@ -9,11 +9,14 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
-use BaserCore\View\AppView;
-
 /**
- * @var AppView $this
+ * @var \BaserCore\View\BcAdminAppView $this
+ * @var \BaserCore\Model\Entity\User $user
+ * @checked
+ * @noTodo
+ * @unitTest
  */
+$this->BcAdmin->setTitle(__d('baser', 'パスワードのリセット'));
 ?>
 
 <div class="section">
@@ -23,10 +26,8 @@ use BaserCore\View\AppView;
   <div class="submit">
     <p>
       <?php echo $this->BcAdminForm->control('password_1', ['type' => 'password', 'size' => '50', 'maxlength' => 255, 'placeholder' => 'パスワード']) ?>
-      <?php echo $this->BcAdminForm->error('password') ?>
-    </p>
-    <p>
       <?php echo $this->BcAdminForm->control('password_2', ['type' => 'password', 'size' => '50', 'maxlength' => 255, 'placeholder' => '再入力']) ?>
+      <?php echo $this->BcAdminForm->error('password') ?>
     </p>
 
     <?= $this->BcAdminForm->button(

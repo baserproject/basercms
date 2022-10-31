@@ -70,6 +70,7 @@ class UserFactory extends CakephpBaseFactory
         UsersUserGroupFactory::make()->admin()->persist();
 
         return $this->setField('id', 1)
+            ->setField('email', 'admin@example.com')
             ->setField('name', 'name')
             ->setField('status', 1)
             ->setField('method', 'ALL');

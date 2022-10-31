@@ -15,7 +15,7 @@ namespace BcUploader;
 use BaserCore\BcPlugin;
 
 /**
- * plugin for ContactManager
+ * plugin for BcUploader
  */
 class Plugin extends BcPlugin
 {

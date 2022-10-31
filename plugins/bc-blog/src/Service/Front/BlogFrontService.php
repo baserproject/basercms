@@ -98,6 +98,9 @@ class BlogFrontService implements BlogFrontServiceInterface
      * 一覧用のテンプレート名を取得する
      * @param BlogContent|EntityInterface $blogContent
      * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getIndexTemplate($blogContent)
     {

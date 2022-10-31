@@ -29,31 +29,31 @@ class ThemesController extends BcApiController
 {
     /**
      * [API] 単一テーマ情報を取得する
-     * @param ThemesServiceInterface $themeSerivce
-     * @param $theme
+     * @param ThemesServiceInterface $service
+     * @param string $theme
      * @checked
      * @unitTest
      * @noTodo
      */
-    public function view(ThemesServiceInterface $themeSerivce, $theme)
+    public function view(ThemesServiceInterface $service, $theme)
     {
         $this->set([
-            'theme' => $themeSerivce->get($theme)
+            'theme' => $service->get($theme)
         ]);
         $this->viewBuilder()->setOption('serialize', ['theme']);
     }
 
     /**
      * [API] テーマ一覧を取得する
-     * @param ThemesServiceInterface $themes
+     * @param ThemesServiceInterface $service
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function index(ThemesServiceInterface $themes)
+    public function index(ThemesServiceInterface $service)
     {
         $this->set([
-            'themes' => $themes->getIndex()
+            'themes' => $service->getIndex()
         ]);
         $this->viewBuilder()->setOption('serialize', ['themes']);
     }
@@ -121,6 +121,7 @@ class ThemesController extends BcApiController
     /**
      * [API] テーマをコピーする
      *
+     * @param ThemesServiceInterface $service
      * @param string $theme
      * @checked
      * @noTodo
@@ -157,13 +158,16 @@ class ThemesController extends BcApiController
 
     /**
      * [API] テーマの初期データを読み込むAPIを実装
-     * @param ThemesServiceInterface $themesService
+     * @param ThemesServiceInterface $service
      * @param SitesServiceInterface $sitesService
      * @param int $siteId
      * @noTodo
      */
-    public function load_default_data(ThemesServiceInterface $themesService, SitesServiceInterface $sitesService, int $siteId)
-    {
+    public function load_default_data(
+        ThemesServiceInterface $service,
+        SitesServiceInterface $sitesService,
+        int $siteId
+    ) {
         $this->request->allowMethod(['post']);
 
         $errors = null;
@@ -173,7 +177,7 @@ class ThemesController extends BcApiController
             $message = __d('baser', '不正な操作です。');
         } else {
             try {
-                $result = $themesService->loadDefaultDataPattern($sitesService->get($siteId), $this->getRequest()->getData('default_data_pattern'));
+                $result = $service->loadDefaultDataPattern($sitesService->get($siteId), $this->getRequest()->getData('default_data_pattern'));
                 if (!$result) {
                     $this->setResponse($this->response->withStatus(400));
                     $message = __d('baser', '初期データの読み込みが完了しましたが、いくつかの処理に失敗しています。ログを確認してください。');
@@ -196,7 +200,7 @@ class ThemesController extends BcApiController
     }
     /**
      * [API] テーマを適用するAPI
-     * @param ThemesServiceInterface $themesService
+     * @param ThemesServiceInterface $service
      * @param SitesServiceInterface $sitesService
      * @param int $siteId
      * @param string $theme
@@ -204,15 +208,19 @@ class ThemesController extends BcApiController
      * @noTodo
      * @unitTest
      */
-    public function apply(ThemesServiceInterface $themesService, SitesServiceInterface $sitesService, int $siteId, string $theme)
-    {
+    public function apply(
+        ThemesServiceInterface $service,
+        SitesServiceInterface $sitesService,
+        int $siteId,
+        string $theme
+    ) {
         $this->request->allowMethod(['post']);
 
         $errors = null;
 
         try {
-            $info = $themesService->apply($sitesService->get($siteId), $theme);
-            $theme = $themesService->get($theme);
+            $info = $service->apply($sitesService->get($siteId), $theme);
+            $theme = $service->get($theme);
             $message = [__d('baser', 'テーマ「{0}」を適用しました。', $theme->name)];
             if ($info) $message = array_merge($message, [''], $info);
             $message = implode("\n", $message);

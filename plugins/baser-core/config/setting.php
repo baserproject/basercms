@@ -101,7 +101,8 @@ return [
             'BcThemeConfig',
             'BcThemeFile',
             'BcUploader',
-            'BcWidgetArea'
+            'BcWidgetArea',
+            'BcContentLink'
         ],
         /**
          * パスワード再発行URLの有効時間(min) デフォルト24時間
@@ -502,39 +503,9 @@ return [
                             'controller' => 'Contents',
                             'action' => 'edit_alias'
                         ]
-                    ],
-                ],
-                // TODO ucmitz リンク未実装のためコメントアウト
-                /* >>>
-                'ContentLink' => [
-                    'multiple' => true,
-                    'title' => __d('baser', 'リンク'),
-                    'omitViewAction' => true,
-                    'routes' => [
-                        'add' => [
-                            'prefix' => 'Admin',
-                            'controller' => 'ContentLinks',
-                            'action' => 'add'
-                        ],
-                        'edit' => [
-                            'prefix' => 'Admin',
-                            'controller' => 'ContentLinks',
-                            'action' => 'edit'
-                        ],
-                        'delete' => [
-                            'prefix' => 'Admin',
-                            'controller' => 'ContentLinks',
-                            'action' => 'delete'
-                        ],
-                        'view' => [
-                            'controller' => 'ContentLinks',
-                            'action' => 'view'
-                        ]
-                    ],
-                    'icon' => 'bca-icon--link',
+                    ]
                 ]
-                <<< */
             ]
         ]
-    ],
+    ]
 ];

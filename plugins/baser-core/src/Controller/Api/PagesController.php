@@ -42,16 +42,16 @@ class PagesController extends BcApiController
 
     /**
      * 固定ページ一覧取得
-     * @param PagesServiceInterface $Pages
+     * @param PagesServiceInterface $service
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function index(PagesServiceInterface $Pages)
+    public function index(PagesServiceInterface $service)
     {
         $this->request->allowMethod('get');
         $this->set([
-            'pages' => $this->paginate($Pages->getIndex())
+            'pages' => $this->paginate($service->getIndex())
         ]);
         $this->viewBuilder()->setOption('serialize', ['pages']);
     }
@@ -64,13 +64,13 @@ class PagesController extends BcApiController
      *  - `publish` 公開されたページ
      *  - `` 全て
      *
-     * @param PagesServiceInterface $Pages
+     * @param PagesServiceInterface $service
      * @param int $id
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function view(PagesServiceInterface $Pages, $id)
+    public function view(PagesServiceInterface $service, $id)
     {
         $this->request->allowMethod('get');
         $queryParams = $this->getRequest()->getQueryParams();
@@ -84,7 +84,7 @@ class PagesController extends BcApiController
 
         $page = $message = null;
         try {
-            $page = $Pages->get($id, $queryParams);
+            $page = $service->get($id, $queryParams);
         } catch(\Exception $e) {
             $this->setResponse($this->response->withStatus(401));
             $message = $e->getMessage();
@@ -99,16 +99,16 @@ class PagesController extends BcApiController
 
     /**
      * 固定ページ登録
-     * @param PagesServiceInterface $Pages
+     * @param PagesServiceInterface $service
      * @checked
      * @unitTest
      * @noTodo
      */
-    public function add(PagesServiceInterface $Pages)
+    public function add(PagesServiceInterface $service)
     {
         $this->request->allowMethod(['post', 'put', 'patch']);
         try {
-            $page = $Pages->create($this->request->getData());
+            $page = $service->create($this->request->getData());
             $message = __d('baser', '固定ページ「{0}」を追加しました。', $page->content->title);
         } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
             $page = $e->getEntity();
@@ -131,19 +131,19 @@ class PagesController extends BcApiController
 
     /**
      * 固定ページ削除
-     * @param PagesServiceInterface $Pages
+     * @param PagesServiceInterface $service
      * @param int $id
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function delete(PagesServiceInterface $Pages, $id)
+    public function delete(PagesServiceInterface $service, $id)
     {
         $this->request->allowMethod(['delete']);
-        $page = $Pages->get($id);
+        $page = $service->get($id);
         try {
-            if ($Pages->delete($id)) {
-                $message = __d('baser', '固定ページ: {0} を削除しました。', $page->content->title);
+            if ($service->delete($id)) {
+                $message = __d('baser', '固定ページ: {0} をゴミ箱に移動しました。', $page->content->title);
             }
         } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
             $page = $e->getEntity();
@@ -158,17 +158,17 @@ class PagesController extends BcApiController
 
     /**
      * 固定ページ情報編集
-     * @param PagesServiceInterface $pages
+     * @param PagesServiceInterface $service
      * @param int $id
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function edit(PagesServiceInterface $pages, $id)
+    public function edit(PagesServiceInterface $service, $id)
     {
         $this->request->allowMethod(['post', 'put', 'patch']);
         try {
-            $page = $pages->update($pages->get($id), $this->request->getData());
+            $page = $service->update($service->get($id), $this->request->getData());
             $message = __d('baser', '固定ページ 「{0}」を更新しました。', $page->content->title);
         } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
             $this->setResponse($this->response->withStatus(400));
@@ -186,17 +186,17 @@ class PagesController extends BcApiController
 
     /**
      * コピー
-     * @param PagesServiceInterface $pages
+     * @param PagesServiceInterface $service
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function copy(PagesServiceInterface $pages)
+    public function copy(PagesServiceInterface $service)
     {
         $this->request->allowMethod(['post', 'put', 'patch']);
         try {
-            /* @var PagesService $pages */
-            $page = $pages->copy($this->request->getData());
+            /* @var PagesService $service */
+            $page = $service->copy($this->request->getData());
             $message = __d('baser', '固定ページのコピー「%s」を追加しました。', $page->content->title);
         } catch (PersistenceFailedException $e) {
             $this->setResponse($this->response->withStatus(500));

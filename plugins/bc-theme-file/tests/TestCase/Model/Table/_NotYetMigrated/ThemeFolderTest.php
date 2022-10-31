@@ -15,14 +15,6 @@ App::uses('ThemeFolder', 'Model');
 
 /**
  * Class ThemeFolderTest
- *
- * class NonAssosiationThemeFolder extends ThemeFolder {
- *  public $name = 'ThemeFolder';
- *  public $belongsTo = [];
- *  public $hasMany = [];
- * }
- *
- * @package Baser.Test.Case.Model
  */
 class ThemeFolderTest extends BaserTestCase
 {

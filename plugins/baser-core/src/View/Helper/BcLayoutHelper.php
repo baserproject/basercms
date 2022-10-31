@@ -35,6 +35,7 @@ class BcLayoutHelper extends Helper
     {
         $request = $this->_View->request;
         $id = Inflector::camelize($request->getParam('controller')) . '.' . Inflector::camelize($request->getParam('action'));
+        // EVENT BcLayout.contentsHeader
         $event = $this->dispatchLayerEvent('contentsHeader', [
             'id' => $id,
             'out' => ''
@@ -55,6 +56,7 @@ class BcLayoutHelper extends Helper
     {
         $request = $this->_View->request;
         $id = Inflector::camelize($request->getParam('controller')) . '.' . Inflector::camelize($request->getParam('action'));
+        // EVENT BcLayout.contentsFooter
         $event = $this->dispatchLayerEvent('contentsFooter', [
             'id' => $id,
             'out' => ''

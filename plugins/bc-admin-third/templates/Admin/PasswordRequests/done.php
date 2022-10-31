@@ -9,14 +9,21 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
-use BaserCore\View\AppView;
-
 /**
- * @var AppView $this
+ * @var \BaserCore\View\BcAdminAppView $this
+ * @checked
+ * @noTodo
+ * @unitTest
  */
+$this->BcAdmin->setTitle(__d('baser', 'パスワードのリセット完了'));
 ?>
 
 <div class="section">
   <p><?php echo __d('baser', 'パスワードを変更しました。') ?></p>
-  <p><?php echo $this->BcBaser->link(__d('baser', 'ログイン'), ['controller' => 'users', 'action' => 'login']); ?> </p>
+  <p>
+    <?php $this->BcBaser->link(
+      __d('baser', 'ログイン'), ['controller' => 'users', 'action' => 'login'],
+      ['class' => 'bca-btn', 'data-bca-btn-size' => 'lg', 'data-bca-btn-width' => 'lg']
+    ) ?>
+  </p>
 </div>

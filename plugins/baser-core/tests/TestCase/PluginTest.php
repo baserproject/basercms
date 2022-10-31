@@ -240,8 +240,8 @@ return [];
         $this->assertEquals('Plugins', $result['controller']);
         // 管理画面（index付）
         $this->loginAdmin($this->getRequest());
-        $result = Router::parseRequest($this->getRequest('/baser/admin/users/index'));
-        $this->assertEquals('Users', $result['controller']);
+        $result = Router::parseRequest($this->getRequest('/baser/admin'));
+        $this->assertEquals('Dashboard', $result['controller']);
         // API（.well-known）
         $result = Router::parseRequest($this->getRequest('/baser/api/baser-core/.well-known/jwks.json'));
         $this->assertEquals('json', $result['_ext']);

@@ -13,6 +13,8 @@ namespace BaserCore\ServiceProvider;
 
 use BaserCore\Service\Admin\BcAdminAppService;
 use BaserCore\Service\Admin\BcAdminAppServiceInterface;
+use BaserCore\Service\Admin\BcAdminContentsService;
+use BaserCore\Service\Admin\BcAdminContentsServiceInterface;
 use BaserCore\Service\Admin\ContentFoldersAdminService;
 use BaserCore\Service\Admin\ContentFoldersAdminServiceInterface;
 use BaserCore\Service\Admin\ContentsAdminService;
@@ -51,6 +53,8 @@ use BaserCore\Service\Front\PagesFrontService;
 use BaserCore\Service\Front\PagesFrontServiceInterface;
 use BaserCore\Service\PagesService;
 use BaserCore\Service\PagesServiceInterface;
+use BaserCore\Service\PasswordRequestsService;
+use BaserCore\Service\PasswordRequestsServiceInterface;
 use BaserCore\Service\PermissionsService;
 use BaserCore\Service\PermissionsServiceInterface;
 use BaserCore\Service\PluginsService;
@@ -117,7 +121,9 @@ class BcServiceProvider extends ServiceProvider
         BcDatabaseServiceInterface::class,
         UtilitiesAdminServiceInterface::class,
         UtilitiesServiceInterface::class,
-        BcFrontContentsServiceInterface::class
+        BcFrontContentsServiceInterface::class,
+        BcAdminContentsServiceInterface::class,
+        PasswordRequestsServiceInterface::class
     ];
 
     /**
@@ -179,6 +185,10 @@ class BcServiceProvider extends ServiceProvider
         $container->add(UtilitiesAdminServiceInterface::class, UtilitiesAdminService::class);
         // BcFrontContents サービス
         $container->add(BcFrontContentsServiceInterface::class, BcFrontContentsService::class);
+        // BcAdminContents サービス
+        $container->add(BcAdminContentsServiceInterface::class, BcAdminContentsService::class);
+        // PasswordRequests サービス
+        $container->add(PasswordRequestsServiceInterface::class, PasswordRequestsService::class);
     }
 
 }

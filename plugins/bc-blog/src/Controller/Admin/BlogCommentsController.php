@@ -27,12 +27,6 @@ use BaserCore\Annotation\UnitTest;
  */
 class BlogCommentsController extends BlogAdminAppController
 {
-    /**
-     * モデル
-     *
-     * @var array
-     */
-    public $uses = ['BcBlog.BlogCategory', 'BcBlog.BlogComment', 'BcBlog.BlogPost'];
 
     /**
      * コンポーネント

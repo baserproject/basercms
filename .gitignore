@@ -68,6 +68,7 @@ nbproject/*
 !/plugins/bc-widget-area
 !/plugins/bc-installer
 !/plugins/bc-search-index
+!/plugins/bc-content-link
 !/plugins/BcSpaSample
 !/plugins/BcThemeSample
 /plugins/*/vendor
@@ -95,6 +96,7 @@ node_modules
 /webroot/bc_search_index
 /webroot/bc_spa_sample
 /webroot/bc_theme_sample
+/webroot/debug_kit
 # jwt
 /config/jwt.key
 /config/jwt.pem

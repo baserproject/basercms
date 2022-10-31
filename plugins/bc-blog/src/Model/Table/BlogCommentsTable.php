@@ -23,13 +23,6 @@ class BlogCommentsTable extends BlogAppTable
 {
 
     /**
-     * クラス名
-     *
-     * @var string
-     */
-    public $name = 'BlogComment';
-
-    /**
      * ビヘイビア
      *
      * @var array

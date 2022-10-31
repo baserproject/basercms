@@ -11,6 +11,7 @@
 
 namespace BaserCore\Test\TestCase\Service;
 
+use BaserCore\Model\Entity\Content;
 use Cake\Routing\Router;
 use Cake\ORM\TableRegistry;
 use BaserCore\TestSuite\BcTestCase;
@@ -187,12 +188,15 @@ class ContentFoldersServiceTest extends BcTestCase
      */
     public function testDelete()
     {
+        /* @var Content $content */
         $content = $this->Contents->find()->where(['type' => 'ContentFolder', 'entity_id' => 10])->first();
         $this->assertTrue($this->ContentFoldersService->delete($content->entity_id));
-        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
-        $this->ContentFoldersService->get($content->entity_id);
-        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
-        $this->Contents->get($content->id);
+        $this->assertEquals(0, $this->ContentFolders->find()->where(['ContentFolders.id' => $content->entity_id])->count());
+        $this->assertEquals(0, $this->Contents->find()
+            ->where(['Contents.id' => $content->id])
+            ->applyOptions(['withDeleted'])
+            ->count()
+        );
     }
 
     /**

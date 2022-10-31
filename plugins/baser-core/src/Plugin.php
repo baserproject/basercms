@@ -328,7 +328,26 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
 
     /**
      * Routes
-     * App として管理画面を作成するためのルーティングを設定
+     *
+     * 次のルートを設定するが、未インストール時はインストーラーのみ設定し他はスキップする。
+     *
+     * ### インストーラー
+     * /
+     * /install
+     *
+     * ### アップデーター
+     * /{update-key}
+     *
+     * ### コンテンツルーティング
+     * /*
+     *
+     * ### 管理画面ダッシュボード
+     * /baser/admin
+     *
+     * ### JWTトークン検証用
+     * /baser/api/baser-core/.well-known/jwks.json
+     *
+     *
      * @param RouteBuilder $routes
      * @checked
      * @noTodo
@@ -396,8 +415,6 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
             function(RouteBuilder $routes) {
                 // ダッシュボード
                 $routes->connect('', ['plugin' => 'BaserCore', 'controller' => 'Dashboard', 'action' => 'index']);
-                $routes->connect('/{controller}/index', [], ['routeClass' => InflectedRoute::class]);
-                $routes->fallbacks(InflectedRoute::class);
             }
         );
 
@@ -420,13 +437,12 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
             }
         );
 
+        /**
+         * フィード出力
+         * 拡張子rssの場合は、rssディレクトリ内のビューを利用する
+         */
         if (!BcUtil::isAdminSystem()) {
-            /**
-             * フィード出力
-             * 拡張子rssの場合は、rssディレクトリ内のビューを利用する
-             */
             $routes->setExtensions('rss');
-
         }
         parent::routes($routes);
     }

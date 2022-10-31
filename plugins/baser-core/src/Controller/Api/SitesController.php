@@ -25,47 +25,47 @@ class SitesController extends BcApiController
 
     /**
      * サイト情報取得
-     * @param SitesServiceInterface $sites
-     * @param $id
+     * @param SitesServiceInterface $service
+     * @param int $id
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function view(SitesServiceInterface $sites, $id)
+    public function view(SitesServiceInterface $service, $id)
     {
         $this->set([
-            'site' => $sites->get($id)
+            'site' => $service->get($id)
         ]);
         $this->viewBuilder()->setOption('serialize', ['site']);
     }
 
     /**
      * サイト情報一覧取得
-     * @param SitesServiceInterface $sites
+     * @param SitesServiceInterface $service
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function index(SitesServiceInterface $sites)
+    public function index(SitesServiceInterface $service)
     {
         $this->set([
-            'sites' => $this->paginate($sites->getIndex($this->request->getQueryParams()))
+            'sites' => $this->paginate($service->getIndex($this->request->getQueryParams()))
         ]);
         $this->viewBuilder()->setOption('serialize', ['sites']);
     }
 
     /**
      * サイト情報登録
-     * @param SitesServiceInterface $sites
+     * @param SitesServiceInterface $service
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function add(SitesServiceInterface $sites)
+    public function add(SitesServiceInterface $service)
     {
         $this->request->allowMethod(['post', 'delete']);
         try {
-            $site = $sites->create($this->request->getData());
+            $site = $service->create($this->request->getData());
             $message = __d('baser', 'サイト「{0}」を追加しました。', $site->name);
         } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
             $site = $e->getEntity();
@@ -82,18 +82,18 @@ class SitesController extends BcApiController
 
     /**
      * サイト情報編集
-     * @param SitesServiceInterface $sites
-     * @param $id
+     * @param SitesServiceInterface $service
+     * @param int $id
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function edit(SitesServiceInterface $sites, $id)
+    public function edit(SitesServiceInterface $service, $id)
     {
         $this->request->allowMethod(['post', 'put']);
-        $site = $sites->get($id);
+        $site = $service->get($id);
         try {
-            $site = $sites->update($site, $this->request->getData());
+            $site = $service->update($site, $this->request->getData());
             $message = __d('baser', 'サイト「{0}」を更新しました。', $site->name);
         } catch (\Exception $e) {
             $this->setResponse($this->response->withStatus(400));
@@ -109,18 +109,18 @@ class SitesController extends BcApiController
 
     /**
      * サイト情報削除
-     * @param SitesServiceInterface $sites
-     * @param $id
+     * @param SitesServiceInterface $service
+     * @param int $id
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function delete(SitesServiceInterface $sites, $id)
+    public function delete(SitesServiceInterface $service, $id)
     {
         $this->request->allowMethod(['post', 'delete']);
-        $site = $sites->get($id);
+        $site = $service->get($id);
         try {
-            if ($sites->delete($id)) {
+            if ($service->delete($id)) {
                 $message = __d('baser', 'サイト: {0} を削除しました。', $site->name);
             }
         } catch (Exception $e) {
@@ -137,17 +137,18 @@ class SitesController extends BcApiController
     /**
      * 選択可能なデバイスと言語の一覧を取得する
      *
+     * @param SitesServiceInterface $service
      * @param int $mainSiteId メインサイトID
      * @param int $currentSiteId 現在のサイトID
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function get_selectable_devices_and_lang(SitesServiceInterface $sites, $mainSiteId, $currentSiteId = null)
+    public function get_selectable_devices_and_lang(SitesServiceInterface $service, $mainSiteId, $currentSiteId = null)
     {
         $this->set([
-            'devices' => $sites->getSelectableDevices($mainSiteId, $currentSiteId),
-            'langs' => $sites->getSelectableLangs($mainSiteId, $currentSiteId),
+            'devices' => $service->getSelectableDevices($mainSiteId, $currentSiteId),
+            'langs' => $service->getSelectableLangs($mainSiteId, $currentSiteId),
         ]);
         $this->viewBuilder()->setOption('serialize', ['devices', 'langs']);
     }

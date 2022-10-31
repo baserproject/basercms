@@ -18,7 +18,9 @@ use BaserCore\Controller\AppController;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use BaserCore\Service\UsersServiceInterface;
 use BaserCore\Utility\BcApiUtil;
+use BaserCore\Utility\BcContainerTrait;
 use Cake\Event\EventInterface;
 
 /**
@@ -27,6 +29,11 @@ use Cake\Event\EventInterface;
  */
 class BcApiController extends AppController
 {
+
+    /**
+     * Trait
+     */
+    use BcContainerTrait;
 
     /**
      * Initialize
@@ -77,7 +84,8 @@ class BcApiController extends AppController
 
         // ユーザーの有効チェック
         $user = $this->Authentication->getResult()->getData();
-        if($user && !$this->loadModel('BaserCore.Users')->find()->where(['id' => $user->id, 'status' => true])->count()){
+        $usersService = $this->getService(UsersServiceInterface::class);
+        if($user && !$usersService->isAvailable($user->id)){
             $this->setResponse($this->response->withStatus(401));
             return;
         }

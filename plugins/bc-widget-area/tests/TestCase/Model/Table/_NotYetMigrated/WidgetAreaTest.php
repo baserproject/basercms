@@ -15,14 +15,6 @@ App::uses('WidgetArea', 'Model');
 
 /**
  * Class WidgetAreaTest
- *
- * class NonAssosiationWidgetArea extends WidgetArea {
- *  public $name = 'WidgetArea';
- *  public $belongsTo = [];
- *  public $hasMany = [];
- * }
- *
- * @package Baser.Test.Case.Model
  */
 class WidgetAreaTest extends BaserTestCase
 {

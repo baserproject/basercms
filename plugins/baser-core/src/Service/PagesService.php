@@ -199,17 +199,18 @@ class PagesService implements PagesServiceInterface
     }
 
     /**
-     * 固定ページを削除する
+     * 物理削除
      * @param int $id
      * @return bool
      * @checked
      * @unitTest
      * @noTodo
+     * @unitTest
      */
     public function delete(int $id): bool
     {
-        $Page = $this->get($id);
-        return $this->Pages->delete($Page);
+        $page = $this->get($id);
+        return $this->Pages->delete($page);
     }
 
     /**

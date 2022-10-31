@@ -25,17 +25,17 @@ class DblogsController extends BcApiController
 
     /**
      * [API] DBログ一覧
-     * @param DblogsServiceInterface $DblogsService
+     * @param DblogsServiceInterface $service
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function index(DblogsServiceInterface $DblogsService)
+    public function index(DblogsServiceInterface $service)
     {
         $this->request->allowMethod(['get']);
 
         $this->set([
-            'Dblogs' => $this->paginate($DblogsService->getIndex($this->request->getQueryParams()))
+            'Dblogs' => $this->paginate($service->getIndex($this->request->getQueryParams()))
         ]);
 
         $this->viewBuilder()->setOption('serialize', ['Dblogs']);
@@ -43,17 +43,17 @@ class DblogsController extends BcApiController
 
     /**
      * [API] ログ新規追加
-     * @param DblogsServiceInterface $DblogsService
+     * @param DblogsServiceInterface $service
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function add(DblogsServiceInterface $DblogsService)
+    public function add(DblogsServiceInterface $service)
     {
         $this->request->allowMethod(['post', 'put']);
 
         try {
-            $dblogs = $DblogsService->create($this->request->getData());
+            $dblogs = $service->create($this->request->getData());
             $message = __d('baser', 'ログを追加しました。');
         } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
             $dblogs = $e->getEntity();
@@ -71,16 +71,16 @@ class DblogsController extends BcApiController
 
     /**
      * [API] 最近の動きを削除
-     * @param DblogsServiceInterface $DblogsService
+     * @param DblogsServiceInterface $service
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function delete_all(DblogsServiceInterface $DblogsService)
+    public function delete_all(DblogsServiceInterface $service)
     {
         $this->request->allowMethod(['post', 'put']);
 
-        if ($DblogsService->deleteAll()) {
+        if ($service->deleteAll()) {
             $message = __d('baser', '最近の動きのログを削除しました。');
         } else {
             $this->setResponse($this->response->withStatus(400));

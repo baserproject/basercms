@@ -27,19 +27,6 @@ use BaserCore\Annotation\UnitTest;
  */
 class BlogTagsController extends BlogAdminAppController
 {
-    /**
-     * クラス名
-     *
-     * @var array
-     */
-    public $name = 'BlogTags';
-
-    /**
-     * モデル
-     *
-     * @var array
-     */
-    public $uses = ['BcBlog.BlogCategory', 'BcBlog.BlogTag'];
 
     /**
      * コンポーネント

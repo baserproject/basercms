@@ -110,17 +110,6 @@ class ContentsAdminServiceTest extends \BaserCore\TestSuite\BcTestCase
     }
 
     /**
-     * test getViewVarsForEdit
-     */
-    public function test_getViewVarsForEdit()
-    {
-        $vars = $this->ContentsAdmin->getViewVarsForEdit($this->ContentsAdmin->get(5));
-        $this->assertTrue(isset($vars['parentContents']));
-        $this->assertTrue(isset($vars['fullUrl']));
-        $this->assertTrue(isset($vars['authorList']));
-    }
-
-    /**
      * test getViewVarsForIndex
      */
     public function test_getViewVarsForIndex()

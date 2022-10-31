@@ -216,17 +216,6 @@ class BcAppController extends AppController
     }
 
     /**
-     * NOT FOUNDページを出力する
-     *
-     * @return    void
-     * @throws    NotFoundException
-     */
-    public function notFound()
-    {
-        throw new NotFoundException(__d('baser', '見つかりませんでした。'));
-    }
-
-    /**
      * View用のデータを読み込む。
      * beforeRenderで呼び出される
      *
@@ -317,7 +306,7 @@ class BcAppController extends AppController
             'template' => 'default'
         ], $options);
 
-        /*** Controller.beforeSendEmail ***/
+        // EVENT PluginName.ControllerName.beforeSendEmail
         $event = $this->dispatchLayerEvent('beforeSendMail', [
             'options' => $options
         ]);

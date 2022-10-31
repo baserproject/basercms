@@ -12,14 +12,11 @@
 namespace BaserCore\Model\Table;
 
 use BaserCore\Event\BcEventDispatcherTrait;
-use DateTime;
-use BaserCore\Model\Entity\PasswordRequest;
 use BaserCore\Model\Entity\User;
 use Cake\Datasource\EntityInterface;
 use Cake\ORM\Association\BelongsTo;
 use Cake\ORM\Behavior\TimestampBehavior;
 use Cake\ORM\Table;
-use Cake\ORM\TableRegistry;
 use Cake\Validation\Validator;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -40,6 +37,7 @@ use BaserCore\Annotation\Checked;
  */
 class PasswordRequestsTable extends Table
 {
+
     /**
      * Trait
      */
@@ -79,60 +77,5 @@ class PasswordRequestsTable extends Table
             ->notEmptyString('email', __d('baser', 'Eメールを入力してください。'));
         return $validator;
     }
-
-    /**
-     * 有効なパスワード変更情報を取得する
-     *
-     * @param [type] $requestKey
-     * @return EntityInterface
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function getEnableRequestData($requestKey)
-    {
-        return $this->find('all')
-            ->where([
-                'PasswordRequests.request_key' => $requestKey,
-                'PasswordRequests.created >' => new DateTime('-1 days'),
-                'PasswordRequests.used' => 0,
-            ])
-            ->first();
-    }
-
-    /**
-     * パスワードを変更する
-     *
-     * @param PasswordRequest $passwordRequest
-     * @param string $password
-     * @return \Cake\Datasource\EntityInterface|false
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function updatePassword(PasswordRequest $passwordRequest, string $password)
-    {
-
-        $passwordRequest = $this->find('all')
-            ->where([
-                'id' => $passwordRequest->id,
-                'used' => 0,
-            ])
-            ->first();
-
-        if ($passwordRequest === null) {
-            return false;
-        }
-        $passwordRequest->used = 1;
-        $this->save($passwordRequest);
-
-        $users = TableRegistry::get('BaserCore.Users');
-        $user = $users->find('all')
-            ->where(['Users.id' => $passwordRequest->user_id])
-            ->first();
-        $user->password = $password;
-        return $users->save($user);
-    }
-
 
 }

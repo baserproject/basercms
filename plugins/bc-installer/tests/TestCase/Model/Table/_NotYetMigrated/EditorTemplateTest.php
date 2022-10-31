@@ -15,14 +15,6 @@ App::uses('EditorTemplate', 'Model');
 
 /**
  * Class EditorTemplateTest
- *
- * class NonAssosiationEditorTemplate extends EditorTemplate {
- *  public $name = 'EditorTemplate';
- *  public $belongsTo = [];
- *  public $hasMany = [];
- * }
- *
- * @package Baser.Test.Case.Model
  */
 class EditorTemplateTest extends BaserTestCase
 {

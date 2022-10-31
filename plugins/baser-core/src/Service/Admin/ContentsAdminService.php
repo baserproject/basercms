@@ -36,37 +36,6 @@ class ContentsAdminService extends ContentsService implements ContentsAdminServi
     use BcContainerTrait;
 
     /**
-     * 編集画面用のデータを取得
-     * BcAdminContentsComponent より呼び出される
-     * @param $content
-     * @param $name
-     * @return array
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function getViewVarsForEdit($content)
-    {
-        $options = [];
-        if ($content->type === 'ContentFolder') $options['excludeId'] = $content->id;
-        $related = false;
-        if (($content->site->relate_main_site && $content->main_site_content_id && $content->alias_id) ||
-            $content->site->relate_main_site && $content->main_site_content_id && $content->type == 'ContentFolder') {
-            $related = true;
-        }
-        return [
-            'content' => $content,
-            'related' => $related,
-            'currentSiteId' => $content->site_id,
-            'mainSiteId' => $content->site->main_site_id,
-            'publishLink' => $this->isAllowPublish($content)? $content->url : null,
-            'parentContents' => $this->getContentFolderList($content->site_id, $options),
-            'fullUrl' => $this->getUrl($content->url, true, $content->site->use_subdomain),
-            'authorList' => $this->getService(UsersServiceInterface::class)->getList()
-        ];
-    }
-
-    /**
      * content_actions エレメント用の変数を取得
      * @param $content
      * @param $currentAction
@@ -202,4 +171,5 @@ class ContentsAdminService extends ContentsService implements ContentsAdminServi
         }
         return false;
     }
+
 }

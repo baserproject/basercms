@@ -21,16 +21,11 @@ use BaserCore\Model\Table\UsersTable;
 use BaserCore\Service\Admin\ContentsAdminServiceInterface;
 use BaserCore\Service\ContentsServiceInterface;
 use BaserCore\Service\SiteConfigsServiceInterface;
-use BaserCore\Service\SitesServiceInterface;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
-use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\Event\EventInterface;
 use Cake\Http\Exception\NotFoundException;
 use Cake\Http\Response;
-use Cake\ORM\Query;
-use Cake\ORM\ResultSet;
-use Cake\Utility\Hash;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
@@ -42,12 +37,6 @@ use BaserCore\Annotation\UnitTest;
  *
  * baserCMS内のコンテンツを統合的に管理する
  *
- * @package BaserCore.Controller
- * @property ContentsTable $Contents
- * @property SiteConfigsTable $SiteConfigs
- * @property SitesTable $Sites
- * @property UsersTable $Users
- * @property ContentFoldersTable $ContentFolders
  * @property BcAdminContentsComponent $BcAdminContents
  * @property BcMessageComponent $BcMessage
  */
@@ -56,7 +45,6 @@ class ContentsController extends BcAdminAppController
 {
     /**
      * initialize
-     * @return void
      * @checked
      * @noTodo
      * @unitTest
@@ -70,7 +58,7 @@ class ContentsController extends BcAdminAppController
     /**
      * beforeFilter
      *
-     * @return void
+     * @param EventInterface $event
      * @checked
      * @noTodo
      * @unitTest
@@ -142,7 +130,7 @@ class ContentsController extends BcAdminAppController
     /**
      * ゴミ箱内のコンテンツ一覧を表示する
      *
-     * @param  ContentsServiceInterface $contentService
+     * @param  ContentsServiceInterface $service
      * @checked
      * @noTodo
      * @unitTest
@@ -159,68 +147,30 @@ class ContentsController extends BcAdminAppController
     }
 
     /**
-     * ゴミ箱のコンテンツを戻す
-     *
-     * @param  ContentsServiceInterface $contentService
-     * @param  int $id
-     * @return Response|void
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function trash_return(ContentsServiceInterface $contentService, $id)
-    {
-        if (empty($id)) {
-            $this->ajaxError(500, __d('baser', '無効な処理です。'));
-        }
-        $this->disableAutoRender();
-
-        // EVENT Contents.beforeTrashReturn
-        $this->dispatchLayerEvent('beforeTrashReturn', [
-            'data' => $id
-        ]);
-
-        if ($restored = $contentService->restore($id)) {
-            // EVENT Contents.afterTrashReturn
-            $this->dispatchLayerEvent('afterTrashReturn', [
-                'data' => $id
-            ]);
-            $this->BcMessage->setSuccess(sprintf(__d('baser', 'ゴミ箱「%s」を戻しました。'), $restored->title));
-            return $this->redirect(['action' => 'index']);
-        } else {
-            $this->BcMessage->setError('ゴミ箱から戻す事に失敗しました。');
-            return $this->redirect(['action' => 'trash_index']);
-        }
-    }
-
-    /**
      * エイリアスを編集する
-     *
-     * @param $id
-     * @param  ContentsServiceInterface $contentService
-     * @return Response|null
-     * @throws Exception
+     * @param ContentsServiceInterface $service
+     * @param int $id
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function edit_alias(ContentsServiceInterface $contentService, $id)
+    public function edit_alias(ContentsServiceInterface $service, $id)
     {
         if (!$id && empty($this->request->getData())) {
             $this->BcMessage->setError(__d('baser', '無効な処理です。'));
             return $this->redirect(['action' => 'index']);
         }
-        $alias = $contentService->get($id);
+        $alias = $service->get($id);
         if ($this->request->is(['post', 'put'])) {
             if (BcUtil::isOverPostSize()) {
                 $this->BcMessage->setError(__d('baser', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size')));
                 $this->redirect(['action' => 'edit_alias', $id]);
             }
             try {
-                $alias = $contentService->update($alias, $this->request->getData('content'));
-                $content = $contentService->get($alias->alias_id);
+                $alias = $service->update($alias, $this->request->getData('content'));
+                $content = $service->get($alias->alias_id);
                 $message = Configure::read('BcContents.items.' . $content->plugin . '.' . $content->type . '.title') .
-                sprintf(__d('baser', '「%s」のエイリアス「%s」を編集しました。'), $content->title, $alias->title);
+                    sprintf(__d('baser', '「%s」のエイリアス「%s」を編集しました。'), $content->title, $alias->title);
                 $this->BcMessage->setSuccess($message);
                 $this->redirect(['action' => 'edit_alias', $id]);
             } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
@@ -239,10 +189,44 @@ class ContentsController extends BcAdminAppController
     }
 
     /**
+     * ゴミ箱のコンテンツを戻す
+     *
+     * @param  ContentsServiceInterface $service
+     * @param  int $id
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function trash_return(ContentsServiceInterface $service, $id)
+    {
+        if (empty($id)) {
+            $this->ajaxError(500, __d('baser', '無効な処理です。'));
+        }
+        $this->disableAutoRender();
+
+        // EVENT Contents.beforeTrashReturn
+        $this->dispatchLayerEvent('beforeTrashReturn', [
+            'data' => $id
+        ]);
+
+        if ($restored = $service->restore($id)) {
+            // EVENT Contents.afterTrashReturn
+            $this->dispatchLayerEvent('afterTrashReturn', [
+                'data' => $id
+            ]);
+            $this->BcMessage->setSuccess(sprintf(__d('baser', 'ゴミ箱「%s」を戻しました。'), $restored->title));
+            return $this->redirect(['action' => 'index']);
+        } else {
+            $this->BcMessage->setError('ゴミ箱から戻す事に失敗しました。');
+            return $this->redirect(['action' => 'trash_index']);
+        }
+    }
+
+    /**
 	 * コンテンツ削除（論理削除）
-     * @param  ContentsServiceInterface $contentService
+     * @param  ContentsServiceInterface $service
 	 */
-	public function delete(ContentsServiceInterface $contentService)
+	public function delete(ContentsServiceInterface $service)
 	{
         if ($this->request->is(['post', 'put', 'delete'])) {
             $id = $this->request->getData('content.id');
@@ -253,8 +237,8 @@ class ContentsController extends BcAdminAppController
             ]);
 
             /* @var \BaserCore\Model\Entity\Content $content */
-            $content = $contentService->get($id);
-            if ($contentService->deleteRecursive($id)) {
+            $content = $service->get($id);
+            if ($service->deleteRecursive($id)) {
 
                 // EVENT Contents.afterDelete
                 $this->dispatchLayerEvent('afterDelete', [

@@ -23,7 +23,6 @@ use BaserCore\Annotation\UnitTest;
 
 /**
  * PagesController
- * @property PagesTable $Pages
  * @property BcFrontContentsComponent $BcFrontContents
  */
 class PagesController extends BcFrontAppController

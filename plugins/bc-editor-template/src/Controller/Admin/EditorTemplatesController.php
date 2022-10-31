@@ -28,20 +28,6 @@ class EditorTemplatesController extends BcAdminAppController
 {
 
     /**
-     * コントローラー名
-     *
-     * @var string
-     */
-    public $name = 'EditorTemplates';
-
-    /**
-     * サブメニュー
-     *
-     * @var array
-     */
-    public $subMenuElements = ['site_configs', 'editor_templates'];
-
-    /**
      * コンポーネント
      *
      * @var array

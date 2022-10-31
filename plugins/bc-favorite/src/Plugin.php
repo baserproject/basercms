@@ -20,7 +20,7 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 
 /**
- * plugin for ContactManager
+ * plugin for BcFavorite
  */
 class Plugin extends BcPlugin
 {

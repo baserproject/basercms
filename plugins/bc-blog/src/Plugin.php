@@ -24,7 +24,7 @@ use Cake\Http\ServerRequestFactory;
 use Cake\ORM\TableRegistry;
 
 /**
- * plugin for ContactManager
+ * plugin for BcBlog
  */
 class Plugin extends BcPlugin
 {

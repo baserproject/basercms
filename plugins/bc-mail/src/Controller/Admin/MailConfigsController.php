@@ -20,20 +20,6 @@ class MailConfigsController extends MailAppController
 {
 
     /**
-     * クラス名
-     *
-     * @var string
-     */
-    public $name = 'MailConfigs';
-
-    /**
-     * モデル
-     *
-     * @var array
-     */
-    public $uses = ['BcMail.MailConfig'];
-
-    /**
      * コンポーネント
      *
      * @var array

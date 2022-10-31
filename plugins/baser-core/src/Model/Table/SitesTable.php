@@ -186,7 +186,7 @@ class SitesTable extends AppTable
             'status' => true
         ], $options);
 
-        // EVENT Site.beforeGetSiteList
+        // EVENT Sites.beforeGetSiteList
         $event = $this->dispatchLayerEvent('beforeGetSiteList', [
             'options' => $options
         ]);
@@ -245,58 +245,6 @@ class SitesTable extends AppTable
     public function getRootMain($options = [])
     {
         return $this->find()->where(['main_site_id IS' => null])->first();
-    }
-
-    /**
-     * コンテンツに関連したコンテンツをサイト情報と一緒に全て取得する
-     *
-     * @param $contentId
-     * @return array|null $list
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function getRelatedContents($contentId)
-    {
-        $content = $this->Contents->get($contentId, ['contain' => ['Sites']]);
-        $isMainSite = $this->isMain($content->site->id);
-        $fields = ['id', 'name', 'alias', 'display_name', 'main_site_id'];
-        $conditions = ['Sites.status' => true];
-        if (is_null($content->site->main_site_id)) {
-            $mainSiteContentId = $content->id;
-            $conditions['or'] = [
-                ['Sites.id' => $content->site->id],
-                ['Sites.main_site_id' => $this->getRootMain()->id]
-            ];
-        } else {
-            $conditions['or'] = [
-                ['Sites.main_site_id' => $content->site->main_site_id],
-                ['Sites.id' => $content->site->main_site_id]
-            ];
-            if ($isMainSite) {
-                $conditions['or'][] = ['Site.main_site_id' => $content->site->id];
-            }
-            $mainSiteContentId = $content->main_site_content_id ?? $content->id;
-        }
-        $sites = $this->find()->select($fields)->where($conditions)->order('main_site_id')->toArray();
-        $conditions = [
-            'or' => [
-                ['Contents.id' => $mainSiteContentId],
-                ['Contents.main_site_content_id' => $mainSiteContentId]
-            ]
-        ];
-        $list = [];
-        $relatedContents = $this->Contents->find()->where($conditions)->toArray();
-        foreach($sites as $key => $site) {
-            foreach($relatedContents as $relatedContent) {
-                $list[$key]['Site'] = $site;
-                if ($relatedContent->site_id == $site->id) {
-                    $list[$key]['Content'] = $relatedContent;
-                    break;
-                }
-            }
-        }
-        return $list;
     }
 
     /**

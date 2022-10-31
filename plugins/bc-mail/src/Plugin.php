@@ -13,9 +13,11 @@ declare(strict_types=1);
 namespace BcMail;
 
 use BaserCore\BcPlugin;
+use BcMail\ServiceProvider\BcMailServiceProvider;
+use Cake\Core\ContainerInterface;
 
 /**
- * plugin for ContactManager
+ * plugin for BcMail
  */
 class Plugin extends BcPlugin
 {
@@ -42,6 +44,17 @@ class Plugin extends BcPlugin
     {
         // ここに必要なアンインストール処理を記述
         return parent::uninstall();
+    }
+
+    /**
+     * services
+     * @param ContainerInterface $container
+     * @noTodo
+     * @checked
+     */
+    public function services(ContainerInterface $container): void
+    {
+        $container->addServiceProvider(new BcMailServiceProvider());
     }
 
 }

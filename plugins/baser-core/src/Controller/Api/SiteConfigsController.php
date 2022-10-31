@@ -26,26 +26,26 @@ class SiteConfigsController extends BcApiController
 
     /**
      * システム基本設定を取得
-     * @param SiteConfigsServiceInterface $siteConfigs
+     * @param SiteConfigsServiceInterface $service
      * @checked
      * @unitTest
      * @noTodo
      */
-    public function view(SiteConfigsServiceInterface $siteConfigs) {
+    public function view(SiteConfigsServiceInterface $service) {
         $this->set([
-            'siteConfig' => $siteConfigs->get()
+            'siteConfig' => $service->get()
         ]);
         $this->viewBuilder()->setOption('serialize', ['siteConfig']);
     }
 
     /**
      * システム基本設定を編集する
-     * @param SiteConfigsServiceInterface $siteConfigs
+     * @param SiteConfigsServiceInterface $service
      */
-    public function edit(SiteConfigsServiceInterface $siteConfigs)
+    public function edit(SiteConfigsServiceInterface $service)
     {
         $this->request->allowMethod(['post', 'put']);
-        $siteConfig = $siteConfigs->update($this->request->getData());
+        $siteConfig = $service->update($this->request->getData());
         if (!$siteConfig->getErrors()) {
             $message = __d('baser', 'システム基本設定を更新しました。');
         } else {

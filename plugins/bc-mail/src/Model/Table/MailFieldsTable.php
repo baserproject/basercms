@@ -297,9 +297,9 @@ class MailFieldsTable extends MailAppTable
             return $this->copy(null, $data, $options); // 再帰処理
         }
 
-        // EVENT MailField.beforeCopy
         if (!$sortUpdateOff) {
-            $event = $this->dispatchEvent('beforeCopy', [
+            // EVENT MailFields.beforeCopy
+            $event = $this->dispatchLayerEvent('beforeCopy', [
                 'data' => $data,
                 'id' => $id,
             ]);
@@ -332,9 +332,9 @@ class MailFieldsTable extends MailAppTable
         $result['MailField']['id'] = $this->getInsertID();
         $data = $result;
 
-        // EVENT MailField.afterCopy
+        // EVENT MailFields.afterCopy
         if (!$sortUpdateOff) {
-            $event = $this->dispatchEvent('afterCopy', [
+            $event = $this->dispatchLayerEvent('afterCopy', [
                 'id' => $data['MailField']['id'],
                 'data' => $data,
                 'oldId' => $id,

@@ -78,6 +78,7 @@ class BcListTableHelper extends Helper
 
         $request = $this->_View->request;
         $id = Inflector::camelize($request->getParam('controller')) . '.' . Inflector::camelize($request->getParam('action'));
+        // EVENT BcListTable.showHead
         $event = $this->dispatchLayerEvent('showHead', ['id' => $id, 'fields' => []], ['class' => 'BcListTable', 'plugin' => '']);
         $output = '';
         if ($event !== false) {
@@ -101,6 +102,7 @@ class BcListTableHelper extends Helper
     {
         $request = $this->_View->getRequest();
         $id = Inflector::camelize($request->getParam('controller')) . '.' . Inflector::camelize($request->getParam('action'));
+        // EVENT BcListTable.showRow
         $event = $this->dispatchLayerEvent('showRow', ['id' => $id, 'data' => $data, 'fields' => []], ['class' => 'BcListTable', 'plugin' => '']);
         $output = '';
         if ($event !== false) {

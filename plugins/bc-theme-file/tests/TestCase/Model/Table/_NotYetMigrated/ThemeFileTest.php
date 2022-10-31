@@ -16,14 +16,6 @@ App::uses('File', 'Utility');
 
 /**
  * Class ThemeFileTest
- *
- * class NonAssosiationThemeFile extends ThemeFile {
- *  public $name = 'ThemeFile';
- *  public $belongsTo = array();
- *  public $hasMany = array();
- * }
- *
- * @package Baser.Test.Case.Model
  */
 class ThemeFileTest extends BaserTestCase
 {

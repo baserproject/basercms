@@ -22,20 +22,6 @@ class MailMessagesController extends MailAppController
 {
 
     /**
-     * クラス名
-     *
-     * @var string
-     */
-    public $name = 'MailMessages';
-
-    /**
-     * モデル
-     *
-     * @var array
-     */
-    public $uses = ['BcMail.MailContent', 'BcMail.MailField', 'BcMail.MailMessage'];
-
-    /**
      * コンポーネント
      *
      * @var array
@@ -48,13 +34,6 @@ class MailMessagesController extends MailAppController
      * @var array
      */
     public $mailContent;
-
-    /**
-     * サブメニュー
-     *
-     * @var array
-     */
-    public $subMenuElements = ['mail_fields'];
 
     /**
      * beforeFilter

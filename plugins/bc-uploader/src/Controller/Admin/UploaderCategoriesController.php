@@ -22,33 +22,12 @@ class UploaderCategoriesController extends BcAdminAppController
 {
 
     /**
-     * クラス名
-     *
-     * @var        string
-     * @access    public
-     */
-    public $name = 'UploaderCategories';
-    /**
-     * モデル
-     *
-     * @var        array
-     * @access    public
-     */
-    public $uses = ['Plugin', 'BcUploader.UploaderCategory'];
-    /**
      * コンポーネント
      *
      * @var        array
      * @access    public
      */
     public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure'];
-    /**
-     * サブメニュー
-     *
-     * @var        array
-     * @access    public
-     */
-    public $subMenuElements = ['uploader'];
 
     /**
      * ファイルカテゴリ一覧

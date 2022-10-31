@@ -21,17 +21,12 @@ use BaserCore\Annotation\Note;
 
 /**
  * Class ContentFoldersController
- *
- * フォルダ コントローラー
- *
- * @package BaserCore.Controller
  */
 class ContentFoldersController extends BcAdminAppController
 {
 
     /**
      * initialize
-     * @return void
      * @checked
      * @noTodo
      * @unitTest
@@ -43,50 +38,34 @@ class ContentFoldersController extends BcAdminAppController
     }
 
     /**
-     * beforeFilter
-     *
-     * @return void
-     * @checked
-     * @unitTest
-     * @note(value="テーマを実装するまでTODO解消できない")
-     */
-    public function beforeFilter(EventInterface $event)
-    {
-        parent::beforeFilter($event);
-        $this->loadModel('BaserCore.ContentFolders');
-        // $this->BcAuth->allow('view');
-    }
-
-    /**
      * コンテンツを更新する
      *
-     * @return void
+     * @param ContentFoldersAdminServiceInterface $service
+     * @param int $id
      * @checked
      * @unitTest
-     * @note(value="clearViewCacheが動作しないため一旦コメントアウト")
+     * @noTodo
      */
-    public function edit(ContentFoldersAdminServiceInterface $contentFolderService, $id = null)
+    public function edit(ContentFoldersAdminServiceInterface $service, $id = null)
     {
         if (!$id && empty($this->request->getData())) {
             $this->BcMessage->setError(__d('baser', '無効なIDです。'));
             return $this->redirect(['controller' => 'contents', 'action' => 'index']);
         }
-        $contentFolder = $contentFolderService->get($id);
+        $contentFolder = $service->get($id);
         if ($this->request->is(['patch', 'post', 'put'])) {
             if (BcUtil::isOverPostSize()) {
                 $this->BcMessage->setError(__d('baser', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size')));
                 $this->redirect(['action' => 'edit', $id]);
             }
             try {
-                $contentFolder = $contentFolderService->update($contentFolder, $this->request->getData('ContentFolders'), ['reconstructSearchIndices' => true]);
-                // TODO ucmitz 動作しないため一旦コメントアウト
-                // clearViewCache();
+                $contentFolder = $service->update($contentFolder, $this->request->getData('ContentFolders'), ['reconstructSearchIndices' => true]);
                 $this->BcMessage->setSuccess(sprintf(__d('baser', 'フォルダ「%s」を更新しました。'), $contentFolder->content->title));
                 return $this->redirect(['action' => 'edit', $id]);
             } catch (\Exception $e) {
                 $this->BcMessage->setError('保存中にエラーが発生しました。入力内容を確認してください。');
             }
         }
-        $this->set($contentFolderService->getViewVarsForEdit($contentFolder));
+        $this->set($service->getViewVarsForEdit($contentFolder));
     }
 }

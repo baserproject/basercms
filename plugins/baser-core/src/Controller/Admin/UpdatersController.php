@@ -20,8 +20,6 @@ use Cake\Filesystem\File;
  * アップデーターコントローラー
  *
  * baserCMSのコアや、プラグインのアップデートを行います
- *
- * @package    Baser.Controller
  */
 class UpdatersController extends BcAdminAppController
 {

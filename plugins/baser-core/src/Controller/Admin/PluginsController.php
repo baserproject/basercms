@@ -13,7 +13,6 @@ namespace BaserCore\Controller\Admin;
 
 use BaserCore\Controller\Component\BcMessageComponent;
 use BaserCore\Error\BcException;
-use BaserCore\Model\Table\PluginsTable;
 use BaserCore\Service\Admin\PluginsAdminServiceInterface;
 use BaserCore\Service\PluginsService;
 use BaserCore\Service\PluginsServiceInterface;
@@ -28,19 +27,10 @@ use BaserCore\Annotation\Checked;
 
 /**
  * Class PluginsController
- * @package BaserCore\Controller\Admin
- * @property PluginsTable $Plugins
  * @property BcMessageComponent $BcMessage
  */
 class PluginsController extends BcAdminAppController
 {
-
-    /**
-     * モデル
-     *
-     * @var array
-     */
-    public $uses = ['BaserCore.Plugin'];
 
     /**
      * initialize
@@ -71,35 +61,33 @@ class PluginsController extends BcAdminAppController
 
     /**
      * プラグインの一覧を表示する
-     * @param PluginsServiceInterface $PluginsService
-     * @return void
+     * @param PluginsServiceInterface $service
      * @checked
      * @unitTest
      * @noTodo
      */
-    public function index(PluginsServiceInterface $PluginsService)
+    public function index(PluginsServiceInterface $service)
     {
-        $this->set('plugins', $PluginsService->getIndex($this->request->getQuery('sortmode') ?? '0'));
+        $this->set('plugins', $service->getIndex($this->request->getQuery('sortmode') ?? '0'));
     }
 
     /**
      * インストール
      *
      * @param string $name プラグイン名
-     * @return Response|void
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function install(PluginsAdminServiceInterface $PluginsService, $name)
+    public function install(PluginsAdminServiceInterface $service, $name)
     {
-        $this->set($PluginsService->getViewVarsForInstall($this->Plugins->getPluginConfig($name)));
-        if ($PluginsService->getInstallStatusMessage($name) || !$this->request->is(['put', 'post'])) {
+        $this->set($service->getViewVarsForInstall($this->Plugins->getPluginConfig($name)));
+        if ($service->getInstallStatusMessage($name) || !$this->request->is(['put', 'post'])) {
             return;
         } else {
             try {
-                if ($PluginsService->install($name, $this->request->getData('connection') ?? 'default')) {
-                    $PluginsService->allow($this->request->getData());
+                if ($service->install($name, $this->request->getData('connection') ?? 'default')) {
+                    $service->allow($this->request->getData());
                     $this->BcMessage->setSuccess(sprintf(__d('baser', '新規プラグイン「%s」を baserCMS に登録しました。'), $name));
                     return $this->redirect(['action' => 'index']);
                 } else {
@@ -113,26 +101,26 @@ class PluginsController extends BcAdminAppController
 
 	/**
 	 * アップデート実行
-     * @param PluginsServiceInterface $pluginsService
+     * @param PluginsServiceInterface $service
      * @param string $name
      * @checked
      * @noTodo
      * @unitTest
 	 */
-	public function update(PluginsAdminServiceInterface $pluginsService, $name = ''): void
+	public function update(PluginsAdminServiceInterface $service, $name = '')
 	{
         BcUtil::clearAllCache();
         $plugin = $this->Plugins->getPluginConfig($name);
-        $this->set($pluginsService->getViewVarsForUpdate($plugin));
+        $this->set($service->getViewVarsForUpdate($plugin));
         if (!$this->request->is(['put', 'post'])) return;
         try {
-            $pluginsService->update($plugin->name, $this->request->getData('connection') ?? 'default');
+            $service->update($plugin->name, $this->request->getData('connection') ?? 'default');
             if($plugin->name === 'BaserCore') {
                 $this->BcMessage->setInfo(__d('baser', '全てのアップデート処理が完了しました。 {0} にログを出力しています。', LOGS . 'update.log'));
-                $this->redirect('/');
+                return $this->redirect('/');
             } else {
                 $this->BcMessage->setInfo(__d('baser', 'アップデート処理が完了しました。画面下部のアップデートログを確認してください。'));
-                $this->redirect(['action' => 'update', $name]);
+                return $this->redirect(['action' => 'update', $name]);
             }
         } catch (\Exception $e) {
             $this->BcMessage->setError($e->getMessage());
@@ -142,18 +130,19 @@ class PluginsController extends BcAdminAppController
     /**
      * 無効化
      *
+     * @param PluginsServiceInterface $service
      * @param string $name プラグイン名
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function detach(PluginsServiceInterface $pluginService, $name)
+    public function detach(PluginsServiceInterface $service, $name)
     {
         if (!$this->request->is('post')) {
             $this->BcMessage->setError(__d('baser', '無効な処理です。'));
             return $this->redirect(['action' => 'index']);
         }
-        if ($pluginService->detach(rawurldecode($name))) {
+        if ($service->detach(rawurldecode($name))) {
             $this->BcMessage->setSuccess(sprintf(__d('baser', 'プラグイン「%s」を無効にしました。'), rawurldecode($name)));
         } else {
             $this->BcMessage->setError(__d('baser', 'プラグインの無効化に失敗しました。'));
@@ -167,20 +156,21 @@ class PluginsController extends BcAdminAppController
      * - プラグインのテーブルを削除
      * - プラグインのディレクトリを削除
      *
+     * @param PluginsServiceInterface $service
      * @param string $name プラグイン名
      * @return Response|void
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function uninstall(PluginsServiceInterface $pluginService, $name)
+    public function uninstall(PluginsServiceInterface $service, $name)
     {
         if (!$this->request->is('post')) {
             $this->BcMessage->setError(__d('baser', '無効な処理です。'));
             return $this->redirect(['action' => 'index']);
         }
         try {
-            $pluginService->uninstall(rawurldecode($name), $this->request->getData('connection') ?? 'default');
+            $service->uninstall(rawurldecode($name), $this->request->getData('connection') ?? 'default');
             $this->BcMessage->setSuccess(sprintf(__d('baser', 'プラグイン「%s」を削除しました。'), $name));
         } catch (\Exception $e) {
             $this->BcMessage->setError(__d('baser', 'プラグインの削除に失敗しました。' . $e->getMessage()));
@@ -215,16 +205,16 @@ class PluginsController extends BcAdminAppController
     /**
      * baserマーケットのプラグインデータを取得する
      * @return void
-     * @param PluginsServiceInterface $pluginService
+     * @param PluginsServiceInterface $service
      * @uses get_market_plugins
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function get_market_plugins(PluginsServiceInterface $pluginService)
+    public function get_market_plugins(PluginsServiceInterface $service)
     {
         $this->viewBuilder()->disableAutoLayout();
-        $baserPlugins = $pluginService->getMarketPlugins();
+        $baserPlugins = $service->getMarketPlugins();
         if ($baserPlugins) {
             $this->set('baserPlugins', $baserPlugins);
         }
@@ -233,22 +223,24 @@ class PluginsController extends BcAdminAppController
     /**
      * データベースをリセットする
      *
+     * @param PluginsServiceInterface $service
+     * @param UsersServiceInterface $usersService
      * @return void
      * @uses reset_db
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function reset_db(PluginsServiceInterface $plugins, UsersServiceInterface $userService)
+    public function reset_db(PluginsServiceInterface $service, UsersServiceInterface $usersService)
     {
         if (!$this->request->is('put')) {
             $this->BcMessage->setError(__d('baser', '無効な処理です。'));
             return;
         }
-        $plugin = $plugins->getByName($this->request->getData('name'));
+        $plugin = $service->getByName($this->request->getData('name'));
         try {
-            $plugins->resetDb($this->request->getData('name'), $this->request->getData('connection'));
-            $userService->reLogin($this->request, $this->response);
+            $service->resetDb($this->request->getData('name'), $this->request->getData('connection'));
+            $usersService->reLogin($this->request, $this->response);
             $this->BcMessage->setSuccess(
                 sprintf(__d('baser', '%s プラグインのデータを初期化しました。'), $plugin->title)
             );

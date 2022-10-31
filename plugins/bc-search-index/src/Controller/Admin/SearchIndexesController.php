@@ -70,7 +70,7 @@ class SearchIndexesController extends BcAdminAppController
             ]
         ]]);
 
-        // EVENT SearchIndex.searchIndex
+        // EVENT SearchIndexes.searchIndex
         $event = $this->dispatchLayerEvent('searchIndex', [
             'request' => $this->getRequest()
         ]);

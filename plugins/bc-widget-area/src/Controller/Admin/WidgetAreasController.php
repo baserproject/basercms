@@ -25,29 +25,10 @@ class WidgetAreasController extends BcAdminAppController
 {
 
     /**
-     * クラス名
-     * @var string
-     */
-    public $name = 'WidgetAreas';
-
-    /**
      * コンポーネント
      * @var array
      */
     public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure', 'RequestHandler'];
-
-    /**
-     * モデル
-     * @var array
-     */
-    public $uses = ['WidgetArea', 'Plugin'];
-
-    /**
-     * サブメニューエレメント
-     *
-     * @var array
-     */
-    public $subMenuElements = ['widget_areas'];
 
     /**
      * beforeFilter

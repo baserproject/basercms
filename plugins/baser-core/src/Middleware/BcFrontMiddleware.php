@@ -61,6 +61,7 @@ class BcFrontMiddleware implements MiddlewareInterface
      * @return ServerRequestInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function setCurrent(ServerRequest $request): ServerRequestInterface
     {

@@ -23,13 +23,6 @@ class ToolsTable extends AppTable
 {
 
     /**
-     * クラス名
-     *
-     * @var string
-     */
-    public $name = 'Tool';
-
-    /**
      * テーブル
      *
      * @var string

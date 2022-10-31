@@ -50,8 +50,8 @@ class UploaderCategoriesTable extends AppTable
         }
         $oldData = $data;
 
-        // EVENT UploaderCategory.beforeCopy
-        $event = $this->dispatchEvent('beforeCopy', [
+        // EVENT UploaderCategories.beforeCopy
+        $event = $this->dispatchLayerEvent('beforeCopy', [
             'data' => $data,
             'id' => $id,
         ]);
@@ -72,8 +72,8 @@ class UploaderCategoriesTable extends AppTable
             $result['UploaderCategory']['id'] = $this->getLastInsertID();
             $data = $result;
 
-            // EVENT UploaderCategory.afterCopy
-            $event = $this->dispatchEvent('afterCopy', [
+            // EVENT UploaderCategories.afterCopy
+            $event = $this->dispatchLayerEvent('afterCopy', [
                 'id' => $data['UploaderCategory']['id'],
                 'data' => $data,
                 'oldId' => $id,

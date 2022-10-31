@@ -30,7 +30,6 @@ class PagesController extends BcAdminAppController
 
     /**
      * initialize
-     * @return void
      * @checked
      * @noTodo
      * @unitTest
@@ -44,24 +43,23 @@ class PagesController extends BcAdminAppController
     /**
      * [ADMIN] 固定ページ情報編集
      *
-     * @param PagesServiceInterface $pagesService
+     * @param PagesServiceInterface $service
      * @param ContentsServiceInterface $contentsService
-     * @param int $id (page_id)
-     * @return void
+     * @param int $id ページID
      * @checked
      * @unitTest
      * @noTodo
      */
     public function edit(
-        PagesAdminServiceInterface $pagesService,
+        PagesAdminServiceInterface $service,
         ContentsServiceInterface $contentsService,
         int $id
     ) {
-        $page = $pagesService->get($id);
+        $page = $service->get($id);
         if ($this->request->is(['patch', 'post', 'put'])) {
 
             // EVENT Pages.beforeEdit
-            $event = $this->dispatchEvent('beforeEdit', [
+            $event = $this->dispatchLayerEvent('beforeEdit', [
                 'request' => $this->request,
             ]);
             if ($event !== false) {
@@ -69,10 +67,10 @@ class PagesController extends BcAdminAppController
             }
 
             try {
-                $page = $pagesService->update($page, $this->request->getData());
+                $page = $service->update($page, $this->request->getData());
 
                 // EVENT Pages.afterEdit
-                $this->dispatchEvent('afterEdit', [
+                $this->dispatchLayerEvent('afterEdit', [
                     'request' => $this->request,
                 ]);
 
@@ -90,13 +88,13 @@ class PagesController extends BcAdminAppController
                 );
             }
         }
-        $this->set($pagesService->getViewVarsForEdit($page));
+        $this->set($service->getViewVarsForEdit($page));
     }
 
     /**
 	 * beforeFilter
 	 *
-	 * @return void
+     * @param EventInterface $event
      * @checked
      * @noTodo
      * @unitTest

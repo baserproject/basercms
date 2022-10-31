@@ -24,13 +24,6 @@ class EditorTemplatesTable extends AppTable
 {
 
     /**
-     * モデル名
-     *
-     * @var string
-     */
-    public $name = 'EditorTemplate';
-
-    /**
      * behaviors
      *
      * @var    array

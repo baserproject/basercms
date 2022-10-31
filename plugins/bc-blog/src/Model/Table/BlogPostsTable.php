@@ -656,8 +656,8 @@ class BlogPostsTable extends BlogAppTable
         }
         $oldData = clone $data;
 
-        // EVENT BlogPost.beforeCopy
-        $event = $this->dispatchEvent('beforeCopy', [
+        // EVENT BlogPosts.beforeCopy
+        $event = $this->dispatchLayerEvent('beforeCopy', [
             'data' => $data,
             'id' => $id,
         ]);
@@ -703,8 +703,8 @@ class BlogPostsTable extends BlogAppTable
 //                $newBlogPost = $this->save($result);
 //            }
             // <<<
-            // EVENT BlogPost.afterCopy
-            $this->dispatchEvent('afterCopy', [
+            // EVENT BlogPosts.afterCopy
+            $this->dispatchLayerEvent('afterCopy', [
                 'id' => $result->id,
                 'data' => $result,
                 'oldId' => $id,

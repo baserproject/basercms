@@ -249,7 +249,7 @@ class BcBaserHelper extends Helper
             $options = ($event->getResult() === null || $event->getResult() === true)? $event->getData('options') : $event->getResult();
         }
 
-        // EVENT ControllerName.beforeElement
+        // EVENT PluginName.ControllerName.beforeElement
         $event = $this->dispatchLayerEvent('beforeElement', [
             'name' => $name,
             'data' => $data,
@@ -270,7 +270,7 @@ class BcBaserHelper extends Helper
             $out = ($event->getResult() === null || $event->getResult() === true)? $event->getData('out') : $event->getResult();
         }
 
-        // EVENT ControllerName.afterElement
+        // EVENT PluginName.ControllerName.afterElement
         $event = $this->dispatchLayerEvent('afterElement', [
             'name' => $name,
             'out' => $out
@@ -378,7 +378,7 @@ class BcBaserHelper extends Helper
             'ssl' => $this->isSSL()
         ], $options);
 
-        /*** beforeGetLink ***/
+        // EVENT Html.beforeGetLink
         $event = $this->dispatchLayerEvent('beforeGetLink', [
             'title' => $title,
             'url' => $url,
@@ -463,7 +463,7 @@ class BcBaserHelper extends Helper
         }
         $out = $this->BcHtml->link($title, $url, $options, $confirmMessage);
 
-        /*** afterGetLink ***/
+        // EVENT Html.afterGetLink
         $event = $this->dispatchLayerEvent('afterGetLink', [
             'url' => $url,
             'out' => $out
@@ -577,6 +577,7 @@ class BcBaserHelper extends Helper
      * @return string コンテンツタイトル
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getContentsTitle()
     {

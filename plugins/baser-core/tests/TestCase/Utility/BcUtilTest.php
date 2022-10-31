@@ -23,7 +23,6 @@ use Cake\Filesystem\Folder;
 use BaserCore\Utility\BcUtil;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\Http\Session;
-use Cake\Routing\Router;
 
 /**
  * TODO: $this->getRequest();などをsetupに統一する
@@ -464,8 +463,8 @@ class BcUtilTest extends BcTestCase
         $targetTheme = BcUtil::getCurrentTheme();
         $themePath = BcUtil::getPluginPath($targetTheme);
         $pluginName = 'test';
-        mkdir($themePath . 'Plugin', 777, true);
-        mkdir($themePath . 'Plugin/' . $pluginName, 777, true);
+        $folder = new Folder();
+        $folder->create($themePath . 'Plugin/' . $pluginName, 0777);
         // プラグインが存在しているかどうか確認する
         $plugins = BcUtil::getCurrentThemesPlugins();
         $this->assertCount(1, $plugins);
@@ -1092,7 +1091,7 @@ class BcUtilTest extends BcTestCase
     public function testCreateRequest(): void
     {
         // デフォルトURL $url = '/'
-        $urlList = ['' => '/*', '/about' => '/*', '/baser/admin/users/login' => '/baser/admin/{controller}/{action}/*'];
+        $urlList = ['' => '/*', '/about' => '/*', '/baser/admin/baser-core/users/login' => '/baser/admin/baser-core/{controller}/{action}/*'];
         foreach($urlList as $url => $route) {
             $request = BcUtil::createRequest($url);
             $this->assertEquals($route, $request->getParam('_matchedRoute'));

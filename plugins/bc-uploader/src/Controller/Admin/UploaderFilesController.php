@@ -22,13 +22,7 @@ use Cake\Event\EventInterface;
  */
 class UploaderFilesController extends BcAdminAppController
 {
-    /**
-     * クラス名
-     *
-     * @var        string
-     * @access    public
-     */
-    public $name = 'UploaderFiles';
+
     /**
      * コンポーネント
      *
@@ -36,35 +30,6 @@ class UploaderFilesController extends BcAdminAppController
      * @access    public
      */
     public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure', 'RequestHandler'];
-    /**
-     * ヘルパー
-     *
-     * @var        array
-     * @access    public
-     */
-    public $helpers = ['BcText', 'BcTime', 'BcForm', 'BcUploader.Uploader', 'BcUpload'];
-    /**
-     * ページタイトル
-     *
-     * @var        string
-     * @access    public
-     */
-    public $pageTitle = 'アップローダープラグイン';
-    /**
-     * モデル
-     *
-     * @var        array
-     * @access    public
-     */
-    public $uses = ['Plugin', 'BcUploader.UploaderFile', 'BcUploader.UploaderConfig'];
-
-    /**
-     * サブメニューエレメント
-     *
-     * @var    array
-     * @access    public
-     */
-    public $subMenuElements = ['uploader'];
 
     public function beforeFilter(EventInterface $event)
     {

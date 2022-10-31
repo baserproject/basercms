@@ -29,6 +29,7 @@ class BlogFrontAppController extends BcFrontAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function beforeRender(EventInterface $event): void
     {

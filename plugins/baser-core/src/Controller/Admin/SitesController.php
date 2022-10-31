@@ -28,16 +28,16 @@ class SitesController extends BcAdminAppController
 
     /**
      * サイト一覧
-     * @param SitesServiceInterface $siteService
-     * @param SiteConfigsServiceInterface $siteConfigService
+     * @param SitesServiceInterface $service
+     * @param SiteConfigsServiceInterface $siteConfigsService
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function index(SitesAdminServiceInterface $siteService, SiteConfigsServiceInterface $siteConfigService)
+    public function index(SitesAdminServiceInterface $service, SiteConfigsServiceInterface $siteConfigsService)
     {
         $this->setViewConditions('Site', ['default' => ['query' => [
-            'limit' => $siteConfigService->getValue('admin_list_num'),
+            'limit' => $siteConfigsService->getValue('admin_list_num'),
             'sort' => 'id',
             'direction' => 'asc',
         ]]]);
@@ -50,22 +50,23 @@ class SitesController extends BcAdminAppController
             $this->request = ($event->getResult() === null || $event->getResult() === true)? $event->getData('request') : $event->getResult();
         }
 
-        $this->set($siteService->getViewVarsForIndex($this->paginate($siteService->getIndex($this->request->getQueryParams()))));
+        $this->set($service->getViewVarsForIndex($this->paginate($service->getIndex($this->request->getQueryParams()))));
         $this->request = $this->request->withParsedBody($this->request->getQuery());
     }
 
     /**
      * サイト追加
      *
+     * @param SiteConfigsServiceInterface $service
      * @checked
      * @unitTest
      * @note(value="インストーラーを実装してからテーマの保有するプラグインをインストールする処理を追加する")
      */
-    public function add(SitesAdminServiceInterface $siteService)
+    public function add(SitesAdminServiceInterface $service)
     {
         if ($this->request->is('post')) {
 
-            /*** Sites.beforeAdd ** */
+            // EVENT Sites.beforeAdd
             $event = $this->dispatchLayerEvent('beforeAdd', [
                 'data' => $this->request->getData()
             ]);
@@ -74,8 +75,8 @@ class SitesController extends BcAdminAppController
             }
 
             try {
-                $site = $siteService->create($this->request->getData());
-                /*** Sites.afterAdd ***/
+                $site = $service->create($this->request->getData());
+                // EVENT Sites.afterAdd
                 $this->dispatchLayerEvent('afterAdd', [
                     'data' => $site
                 ]);
@@ -95,26 +96,27 @@ class SitesController extends BcAdminAppController
             }
         }
 
-        $this->set($siteService->getViewVarsForAdd($site ?? $siteService->getNew()));
+        $this->set($service->getViewVarsForAdd($site ?? $service->getNew()));
     }
 
     /**
      * サイト情報編集
      *
-     * @param $id
+     * @param SitesAdminServiceInterface $service
+     * @param int $id
      * @checked
      * @unitTest
      * @note(value="インストーラーを実装してからテーマの保有するプラグインをインストールする処理を追加する")
      */
-    public function edit(SitesAdminServiceInterface $siteService, $id)
+    public function edit(SitesAdminServiceInterface $service, $id)
     {
         if (!$id) {
             $this->notFound();
         }
-        $site = $siteService->get($id);
+        $site = $service->get($id);
         if ($this->request->is(['patch', 'post', 'put'])) {
 
-            /*** Sites.beforeEdit ** */
+            // EVENT Sites.beforeEdit
             $event = $this->dispatchLayerEvent('beforeEdit', [
                 'data' => $this->request->getData()
             ]);
@@ -124,9 +126,9 @@ class SitesController extends BcAdminAppController
 
             $beforeSite = clone $site;
             try {
-                $site = $siteService->update($site, $this->request->getData());
+                $site = $service->update($site, $this->request->getData());
 
-                /*** Sites.afterEdit ***/
+                // EVENT Sites.afterEdit
                 $this->dispatchLayerEvent('afterEdit', [
                     'data' => $site
                 ]);
@@ -144,24 +146,25 @@ class SitesController extends BcAdminAppController
                 $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
             }
         }
-        $this->set($siteService->getViewVarsForEdit($site));
+        $this->set($service->getViewVarsForEdit($site));
     }
 
     /**
      * 有効状態にする
      *
-     * @param $siteId
+     * @param SitesAdminServiceInterface $service
+     * @param int $siteId
      * @return void
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function publish(SitesServiceInterface $siteService, $siteId)
+    public function publish(SitesServiceInterface $service, $siteId)
     {
-        $site = $siteService->get($siteId);
+        $site = $service->get($siteId);
 
         if ($this->request->is(['patch', 'post', 'put'])) {
-            if ($siteService->publish($siteId)) {
+            if ($service->publish($siteId)) {
                 $this->BcMessage->setSuccess(sprintf(__d('baser', 'サイト「%s」を公開しました。'),
                     $site->name));
             }
@@ -172,18 +175,19 @@ class SitesController extends BcAdminAppController
     /**
      * 無効状態にする
      *
-     * @param $siteId
+     * @param SitesAdminServiceInterface $service
+     * @param int $siteId
      * @return void
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function unpublish(SitesServiceInterface $siteService, $siteId)
+    public function unpublish(SitesServiceInterface $service, $siteId)
     {
-        $site = $siteService->get($siteId);
+        $site = $service->get($siteId);
 
         if ($this->request->is(['patch', 'post', 'put'])) {
-            if ($siteService->unpublish($siteId)) {
+            if ($service->unpublish($siteId)) {
                 $this->BcMessage->setSuccess(sprintf(__d('baser', 'サイト「%s」を非公開にしました。'),
                     $site->name));
             }
@@ -193,20 +197,23 @@ class SitesController extends BcAdminAppController
 
     /**
      * 削除する
+     *
+     * @param SitesServiceInterface $service
+     * @param int $id
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function delete(SitesServiceInterface $siteService, $id)
+    public function delete(SitesServiceInterface $service, $id)
     {
         if (!$id) {
             $this->BcMessage->setError(__d('baser', '無効なIDです。'));
             $this->redirect(['action' => 'index']);
         }
         $this->request->allowMethod(['post', 'delete']);
-        $site = $siteService->get($id);
+        $site = $service->get($id);
         try {
-            if ($siteService->delete($id)) {
+            if ($service->delete($id)) {
                 if ($id == $this->request->getAttribute('currentSite')->id) {
                     $session = $this->request->getSession();
                     $session->delete('BcApp.Admin.currentSite');

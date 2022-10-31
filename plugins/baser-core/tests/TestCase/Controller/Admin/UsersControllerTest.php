@@ -71,7 +71,6 @@ class UsersControllerTest extends BcTestCase
         $request = $this->getRequest('/baser/admin/baser-core/users/');
         $request = $this->loginAdmin($request);
         $this->UsersController = new UsersController($request);
-        $this->UsersController->loadModel('BaserCore.Users');
     }
 
     /**

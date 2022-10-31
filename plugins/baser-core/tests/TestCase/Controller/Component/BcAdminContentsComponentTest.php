@@ -12,6 +12,7 @@
 namespace BaserCore\Test\TestCase\Controller\Component;
 
 use BaserCore\Model\Entity\Page;
+use Cake\Controller\Controller;
 use Cake\Event\EventManager;
 use Cake\ORM\Entity;
 use Cake\Routing\Router;
@@ -23,20 +24,6 @@ use BaserCore\Service\ContentFoldersService;
 use BaserCore\Controller\Admin\ContentsController;
 use BaserCore\Controller\Admin\ContentFoldersController;
 use BaserCore\Controller\Component\BcAdminContentsComponent;
-
-
-/**
- * Class BcAdminContentsTestController
- */
-class BcAdminContentsTestController extends BcAppController
-{
-    public function initialize(): void
-    {
-        parent::initialize();
-        $this->loadModel('BaserCore.Contents');
-        $this->Contents->addBehavior('Tree', ['level' => 'level']);
-    }
-}
 
 /**
  * Class BcAdminContentsComponentTest
@@ -66,9 +53,7 @@ class BcAdminContentsComponentTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->getRequest('baser/admin/contents');
-        $this->Controller = new BcAdminContentsTestController($this->getRequest());
-        $this->ComponentRegistry = new ComponentRegistry($this->Controller);
+        $this->ComponentRegistry = new ComponentRegistry(new Controller($this->getRequest()));
         $this->BcAdminContents = new BcAdminContentsComponent($this->ComponentRegistry, ['entityVarName' => 'test']);
         $this->ContentsService = new ContentsService();
         $this->ContentFoldersService = new ContentFoldersService();
@@ -92,7 +77,6 @@ class BcAdminContentsComponentTest extends BcTestCase
      */
     public function testInitialize()
     {
-        $this->assertNotEmpty($this->BcAdminContents->ContentsService);
         // baser/admin/contents 管理システム設定の場合
         $this->assertNotEmpty($this->BcAdminContents->getConfig('items'));
     }
@@ -147,7 +131,7 @@ class BcAdminContentsComponentTest extends BcTestCase
         $this->assertIsArray($vars["relatedContents"]);
         $this->assertEquals($content->site_id == 1 ? null : 1, $vars["mainSiteId"]);
         $this->assertEquals("パソコン", $vars["mainSiteDisplayName"]);
-        $this->assertInstanceOf("Cake\ORM\Query", $vars["sites"]);
+        $this->assertIsArray($vars["sites"]);
         $this->assertNotNull($vars["layoutTemplates"]);
         $this->assertIsString($vars["publishLink"]);
     }
@@ -173,7 +157,7 @@ class BcAdminContentsComponentTest extends BcTestCase
         $this->assertIsArray($vars["relatedContents"]);
         $this->assertEquals($contentFolder->content->site_id == 1 ? null : 1, $vars["mainSiteId"]);
         $this->assertEquals("パソコン", $vars["mainSiteDisplayName"]);
-        $this->assertInstanceOf("Cake\ORM\Query", $vars["sites"]);
+        $this->assertIsArray($vars["sites"]);
         $this->assertNotNull($vars["layoutTemplates"]);
         $this->assertIsString($vars["publishLink"]);
     }

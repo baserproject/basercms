@@ -33,20 +33,6 @@ class MailController extends MailAppController
 {
 
     /**
-     * クラス名
-     *
-     * @var string
-     */
-    public $name = 'Mail';
-
-    /**
-     * モデル
-     *
-     * @var array
-     */
-    public $uses = ['BcMail.MailMessage', 'BcMail.MailContent', 'BcMail.MailField', 'BcMail.MailConfig', 'Content'];
-
-    /**
      * Array of components a controller will use
      *
      * @var array
@@ -66,13 +52,6 @@ class MailController extends MailAppController
      * @var array
      */
     public $css = ['mail/form'];
-
-    /**
-     * サブメニューエレメント
-     *
-     * @var array
-     */
-    public $subMenuElements = [];
 
     /**
      * データベースデータ
@@ -385,8 +364,8 @@ class MailController extends MailAppController
 
                     $this->request = $this->request->withParsedBody($result);
 
-                    /*** Mail.beforeSendEmail ***/
-                    $event = $this->dispatchEvent('beforeSendEmail', [
+                    // EVENT Mail.beforeSendEmail
+                    $event = $this->dispatchLayerEvent('beforeSendEmail', [
                         'data' => $this->request->getData()
                     ]);
                     $sendEmailOptions = [];
@@ -423,8 +402,8 @@ class MailController extends MailAppController
 
                         $this->Session->delete('BcMail.valid');
 
-                        /*** Mail.afterSendEmail ***/
-                        $this->dispatchEvent('afterSendEmail', [
+                        // EVENT Mail.afterSendEmail
+                        $this->dispatchLayerEvent('afterSendEmail', [
                             'data' => $this->request->getData()
                         ]);
                     } else {

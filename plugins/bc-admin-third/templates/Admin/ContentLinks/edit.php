@@ -9,20 +9,28 @@
  * @since           baserCMS v 4.0.0
  * @license         https://basercms.net/license/index.html
  */
+/**
+ * @var \BaserCore\View\BcAdminAppView $this
+ * @var \BaserCore\Model\Entity\ContentLink $contentLink
+ * @checked
+ * @noTodo
+ * @unitTest
+ */
+$this->BcAdmin->setTitle(__d('baser', 'リンク編集'));
 ?>
 
 
-<?php echo $this->BcAdminForm->create() ?>
+<?php echo $this->BcAdminForm->create($contentLink) ?>
 <?php echo $this->BcFormTable->dispatchBefore() ?>
-<?php echo $this->BcAdminForm->hidden('ContentLink.id') ?>
+<?php echo $this->BcAdminForm->hidden('id') ?>
 
 <table class="form-table bca-form-table">
   <tr>
     <th class="bca-form-table__label"><?php echo __d('baser', 'リンク先URL') ?></th>
     <td class=" bca-form-table__input">
-      <?php echo $this->BcAdminForm->control('ContentLink.url', ['type' => 'text', 'size' => 60, 'placeholder' => 'http://']) ?>
+      <?php echo $this->BcAdminForm->control('url', ['type' => 'text', 'size' => 60, 'placeholder' => 'httpssrc/Controller/ContentLinksController://']) ?>
       <br>
-      <?php echo $this->BcAdminForm->error('ContentLink.url') ?>
+      <?php echo $this->BcAdminForm->error('url') ?>
     </td>
   </tr>
   <?php echo $this->BcAdminForm->dispatchAfterForm() ?>

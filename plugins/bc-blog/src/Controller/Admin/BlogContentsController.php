@@ -18,6 +18,7 @@ use Cake\ORM\Exception\PersistenceFailedException;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use Exception;
 
 /**
  * ブログコンテンツコントローラー
@@ -31,6 +32,7 @@ class BlogContentsController extends BlogAdminAppController
     /**
      * initialize
      * @return void
+     * @throws Exception
      * @checked
      * @noTodo
      * @unitTest
