@@ -10,15 +10,16 @@
  * @license         https://basercms.net/license/index.html
  */
 namespace BcBlog\Test\TestCase\Model;
-use BaserCore\Service\PluginsService;
+use BaserCore\Service\PluginsServiceInterface;
 use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
 use BcBlog\Model\Table\BlogContentsTable;
 use BcBlog\Service\BlogContentsService;
-use BcBlog\Test\Factory\BlogContentFactory;
 use ArrayObject;
+use BcBlog\Service\BlogContentsServiceInterface;
+use BcBlog\Test\Factory\BlogContentFactory;
 use Cake\Event\Event;
 
 /**
@@ -297,13 +298,28 @@ class BlogContentsTableTest extends BcTestCase
 
     /**
      * test beforeSave
-     * @dataProvider afterSaveDataProvider
      */
-    public function test_beforeSave($setExcluded)
+    public function test_beforeSave()
     {
-        $PluginsService = new PluginsService();
-        $BlogContentsService = new BlogContentsService();
+        $PluginsService = $this->getService(PluginsServiceInterface::class);
+        $BlogContentsService = $this->getService(BlogContentsServiceInterface::class);
         $PluginsService->attach('BcSearchIndex');
+
+        BlogContentFactory::make([
+            'id' => 1,
+            'description' => 'test',
+            'template' => 'default',
+        ])->persist();
+        ContentFactory::make([
+            'id' => 1,
+            'title' => 'news',
+            'plugin' => 'BcBlog',
+            'type' => 'BlogContent',
+            'entity_id' => 1,
+            'url' => '/test',
+            'exclude_search' => null,
+            'status' => true,
+        ])->persist();
 
         BlogContentFactory::make([
             'id' => 2,
@@ -321,19 +337,13 @@ class BlogContentsTableTest extends BcTestCase
             'status' => true,
         ])->persist();
 
+        $blogContent = $BlogContentsService->get(1);
+        $this->BlogContentsTable->beforeSave(new Event("beforeSave"), $blogContent, new ArrayObject());
+        $this->assertFalse($this->BlogContentsTable->isExcluded());
+
         $blogContent = $BlogContentsService->get(2);
-
-        if ($setExcluded) {
-            $this->BlogContentsTable->setExcluded();
-        }
-
         $this->BlogContentsTable->beforeSave(new Event("beforeSave"), $blogContent, new ArrayObject());
         $this->assertTrue($this->BlogContentsTable->isExcluded());
-    }
-
-    public function beforeSaveProvider()
-    {
-        return [1, 0];
     }
 
     /**
