@@ -17,8 +17,14 @@ use BcBlog\Service\Admin\BlogContentsAdminService;
 use BcBlog\Service\Admin\BlogContentsAdminServiceInterface;
 use BcBlog\Service\BlogCategoriesService;
 use BcBlog\Service\BlogCategoriesServiceInterface;
+use BcBlog\Service\BlogCommentsService;
+use BcBlog\Service\BlogCommentsServiceInterface;
 use BcBlog\Service\BlogContentsService;
 use BcBlog\Service\BlogContentsServiceInterface;
+use BcBlog\Service\BlogPostsService;
+use BcBlog\Service\BlogPostsServiceInterface;
+use BcBlog\Service\BlogTagsService;
+use BcBlog\Service\BlogTagsServiceInterface;
 use BcBlog\Service\Front\BlogContentsFrontService;
 use BcBlog\Service\Front\BlogContentsFrontServiceInterface;
 use BcBlog\Service\Front\BlogFrontService;
@@ -43,7 +49,10 @@ class BcBlogServiceProvider extends ServiceProvider
         BlogCategoriesAdminServiceInterface::class,
         BlogContentsServiceInterface::class,
         BlogContentsAdminServiceInterface::class,
-        BlogFrontServiceInterface::class
+        BlogFrontServiceInterface::class,
+        BlogPostsServiceInterface::class,
+        BlogCommentsServiceInterface::class,
+        BlogTagsServiceInterface::class
     ];
 
     /**
@@ -62,6 +71,12 @@ class BcBlogServiceProvider extends ServiceProvider
         // BlogContentsサービス
         $container->add(BlogContentsServiceInterface::class, BlogContentsService::class);
         $container->add(BlogContentsAdminServiceInterface::class, BlogContentsAdminService::class);
+        // BlogPostsサービス
+        $container->add(BlogPostsServiceInterface::class, BlogPostsService::class);
+        // BlogCommentsサービス
+        $container->add(BlogCommentsServiceInterface::class, BlogCommentsService::class);
+        // BlogTagsサービス
+        $container->add(BlogTagsServiceInterface::class, BlogTagsService::class);
         // Blogサービス
         $container->add(BlogFrontServiceInterface::class, BlogFrontService::class);
     }
