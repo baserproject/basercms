@@ -10,7 +10,10 @@
  */
 
 namespace BcThemeConfig;
+
 use BaserCore\BcPlugin;
+use BcThemeConfig\ServiceProvider\BcThemeConfigServiceProvider;
+use Cake\Core\ContainerInterface;
 
 /**
  * Class Plugin
@@ -18,4 +21,16 @@ use BaserCore\BcPlugin;
  */
 class Plugin extends BcPlugin
 {
+
+    /**
+     * services
+     * @param ContainerInterface $container
+     * @noTodo
+     * @checked
+     */
+    public function services(ContainerInterface $container): void
+    {
+        $container->addServiceProvider(new BcThemeConfigServiceProvider());
+    }
+
 }
