@@ -10,12 +10,17 @@
  * @license         https://basercms.net/license/index.html
  */
 namespace BcBlog\Test\TestCase\Model;
+use BaserCore\Service\PluginsServiceInterface;
 use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
 use BcBlog\Model\Table\BlogContentsTable;
 use BcBlog\Service\BlogContentsService;
+use ArrayObject;
+use BcBlog\Service\BlogContentsServiceInterface;
 use BcBlog\Test\Factory\BlogContentFactory;
+use Cake\Event\Event;
 
 /**
  * Class BlogContentsTableTest
@@ -24,6 +29,11 @@ use BcBlog\Test\Factory\BlogContentFactory;
  */
 class BlogContentsTableTest extends BcTestCase
 {
+
+    /**
+     * Trait
+     */
+    use BcContainerTrait;
 
     public $fixtures = [
         'plugin.BcBlog.Factory/BlogContents',
@@ -284,6 +294,56 @@ class BlogContentsTableTest extends BcTestCase
     public function testBeforeDelete()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * test beforeSave
+     */
+    public function test_beforeSave()
+    {
+        $PluginsService = $this->getService(PluginsServiceInterface::class);
+        $BlogContentsService = $this->getService(BlogContentsServiceInterface::class);
+        $PluginsService->attach('BcSearchIndex');
+
+        BlogContentFactory::make([
+            'id' => 1,
+            'description' => 'test',
+            'template' => 'default',
+        ])->persist();
+        ContentFactory::make([
+            'id' => 1,
+            'title' => 'news',
+            'plugin' => 'BcBlog',
+            'type' => 'BlogContent',
+            'entity_id' => 1,
+            'url' => '/test',
+            'exclude_search' => null,
+            'status' => true,
+        ])->persist();
+
+        BlogContentFactory::make([
+            'id' => 2,
+            'description' => 'test',
+            'template' => 'default',
+        ])->persist();
+        ContentFactory::make([
+            'id' => 2,
+            'title' => 'news',
+            'plugin' => 'BcBlog',
+            'type' => 'BlogContent',
+            'entity_id' => 2,
+            'url' => '/test',
+            'exclude_search' => 1,
+            'status' => true,
+        ])->persist();
+
+        $blogContent = $BlogContentsService->get(1);
+        $this->BlogContentsTable->beforeSave(new Event("beforeSave"), $blogContent, new ArrayObject());
+        $this->assertFalse($this->BlogContentsTable->isExcluded());
+
+        $blogContent = $BlogContentsService->get(2);
+        $this->BlogContentsTable->beforeSave(new Event("beforeSave"), $blogContent, new ArrayObject());
+        $this->assertTrue($this->BlogContentsTable->isExcluded());
     }
 
     /**

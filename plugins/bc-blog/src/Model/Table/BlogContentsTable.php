@@ -166,6 +166,7 @@ class BlogContentsTable extends BlogAppTable
      * @return boolean
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function beforeSave(EventInterface $event, EntityInterface $entity, \ArrayObject $options)
     {
