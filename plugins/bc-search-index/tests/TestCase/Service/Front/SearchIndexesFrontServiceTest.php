@@ -15,9 +15,10 @@ use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcContainerTrait;
 use BcSearchIndex\Controller\SearchIndexesController;
-use BcSearchIndex\Service\Front\SearchIndexesFrontService;
-use BcSearchIndex\Service\SearchIndexesService;
+use BcSearchIndex\Service\Front\SearchIndexesFrontServiceInterface;
+use BcSearchIndex\Service\SearchIndexesServiceInterface;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -31,6 +32,7 @@ class SearchIndexesFrontServiceTest extends BcTestCase
      * Trait
      */
     use ScenarioAwareTrait;
+    use BcContainerTrait;
 
     /**
      * Fixtures
@@ -77,8 +79,8 @@ class SearchIndexesFrontServiceTest extends BcTestCase
         $this->loadFixtureScenario(InitAppScenario::class);
         ContentFactory::make(['site_id' => 1, 'site_root' => true])->persist();
         $controller = new SearchIndexesController($this->getRequest());
-        $service = new SearchIndexesService();
-        $frontService = new SearchIndexesFrontService();
+        $service = $this->getService(SearchIndexesServiceInterface::class);
+        $frontService = $this->getService(SearchIndexesFrontServiceInterface::class);
         $searchIndexes = $controller->paginate($service->getIndex());
         $request = $this->getRequest()
             ->withAttribute('currentSite', SiteFactory::get(1))
