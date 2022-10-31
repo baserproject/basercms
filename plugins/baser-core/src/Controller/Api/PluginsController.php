@@ -189,6 +189,29 @@ class PluginsController extends BcApiController
         ]);
         $this->viewBuilder()->setOption('serialize', ['plugin', 'message']);
     }
+    /**
+     * [API]　プラグインを追加
+     * @param PluginsServiceInterface $service
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function add(PluginsServiceInterface $service)
+    {
+        if ($this->request->is('post')) {
+            try {
+                $name = $service->add($this->getRequest()->getUploadedFiles());
+                $message = sprintf(__d('baser', '新規プラグイン「%s」を追加しました。'), $name);
+            } catch (BcException $e) {
+                $this->setResponse($this->response->withStatus(400));
+                $message = __d('baser', 'ファイルのアップロードに失敗しました。' . $e->getMessage());
+            }
+            $this->set([
+                'message' => $message
+            ]);
+            $this->viewBuilder()->setOption('serialize', ['plugin', 'message']);
+        }
+    }
 
     /**
      * 並び替えを更新する
