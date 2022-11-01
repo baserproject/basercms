@@ -297,4 +297,13 @@ class UsersServiceTest extends BcTestCase
         $this->assertEquals(153, UserFactory::find()->count());
     }
 
+    /**
+     * test isAvailable
+     */
+    public function testIsAvailable()
+    {
+        $this->assertTrue($this->Users->isAvailable(1));
+        $this->assertFalse($this->Users->isAvailable(3));
+    }
+
 }
