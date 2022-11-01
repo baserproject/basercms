@@ -44,6 +44,9 @@ class PasswordRequestsService implements PasswordRequestsServiceInterface
     /**
      * 空の新規エンティティを取得する
      * @return EntityInterface
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getNew(): EntityInterface
     {

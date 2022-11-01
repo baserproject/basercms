@@ -118,7 +118,7 @@ class PasswordRequestsServiceTest extends BcTestCase
      */
     public function testGetNew()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->assertEmpty($this->service->getNew()->toArray());
     }
 
     /**
