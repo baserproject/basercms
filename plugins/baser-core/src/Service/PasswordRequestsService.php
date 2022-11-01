@@ -54,6 +54,9 @@ class PasswordRequestsService implements PasswordRequestsServiceInterface
      * 単一のエンティティを取得する
      * @param int $id
      * @return EntityInterface
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function get($id): EntityInterface
     {

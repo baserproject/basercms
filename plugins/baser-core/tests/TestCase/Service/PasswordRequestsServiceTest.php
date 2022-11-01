@@ -44,6 +44,7 @@ class PasswordRequestsServiceTest extends BcTestCase
      */
     public function setUp(): void
     {
+        $this->setFixtureTruncate();
         parent::setUp();
         $this->service = $this->getService(PasswordRequestsServiceInterface::class);
     }
@@ -134,6 +135,7 @@ class PasswordRequestsServiceTest extends BcTestCase
      */
     public function testGet()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        PasswordRequestFactory::make(['id' => 1])->persist();
+        $this->assertEquals(1, $this->service->get(1)->id);
     }
 }
