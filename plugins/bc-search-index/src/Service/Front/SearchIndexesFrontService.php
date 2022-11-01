@@ -40,6 +40,7 @@ class SearchIndexesFrontService extends SearchIndexesService implements SearchIn
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getViewVarsForSearch(ResultSetInterface $searchIndexes, ServerRequest $request): array
     {

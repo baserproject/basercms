@@ -72,6 +72,7 @@ class BlogFrontService implements BlogFrontServiceInterface
      * @param Controller $controller
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function setupPreviewForIndex(Controller $controller): void
     {

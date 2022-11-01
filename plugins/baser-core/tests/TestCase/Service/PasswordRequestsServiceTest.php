@@ -113,4 +113,27 @@ class PasswordRequestsServiceTest extends BcTestCase
         $this->assertSession(1, 'AuthAdmin.id');
     }
 
+    /**
+     * test getNew
+     */
+    public function testGetNew()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * test update
+     */
+    public function testUpdate()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * test get
+     */
+    public function testGet()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
 }

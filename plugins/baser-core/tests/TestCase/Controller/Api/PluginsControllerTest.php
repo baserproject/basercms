@@ -17,6 +17,7 @@ use Cake\Filesystem\Folder;
 use Cake\Core\App;
 use Cake\Core\Configure\Engine\PhpConfig;
 use Cake\TestSuite\IntegrationTestTrait;
+use Composer\Package\Archiver\ZipArchiver;
 
 /**
  * BaserCore\Controller\Api\PluginsController Test Case
@@ -198,6 +199,36 @@ class PluginsControllerTest extends BcTestCase
         // TODO インストールの処理とまとめる予定
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
+
+    /**
+     * test add
+     */
+    public function test_add()
+    {
+        $this->get('/baser/api/baser-core/themes/add.json?token=' . $this->accessToken);
+        $this->assertResponseCode(405);
+
+        $path = BASER_PLUGINS . 'BcSpaSample';
+        $zipSrcPath = TMP . 'zip' . DS;
+        $folder = new Folder();
+        $folder->create($zipSrcPath, 0777);
+        $folder->copy($zipSrcPath . 'BcSpaSample2', ['from' => $path, 'mode' => 0777]);
+        $plugin = 'BcSpaSample2';
+        $zip = new ZipArchiver();
+        $testFile = $zipSrcPath . $plugin . '.zip';
+        $zip->archive($zipSrcPath, $testFile, true);
+
+        $this->setUploadFileToRequest('file', $testFile);
+        $this->post('/baser/api/baser-core/plugins/add.json?token=' . $this->accessToken);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('新規プラグイン「' . $plugin . '」を追加しました。', $result->message);
+
+        $folder = new Folder();
+        $folder->delete(BASER_PLUGINS . $plugin);
+        $folder->delete($zipSrcPath);
+    }
+
     /**
      * test update_sort
      */
