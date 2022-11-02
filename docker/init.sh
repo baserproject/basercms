@@ -59,6 +59,8 @@ if [ ! -e '/var/www/html/docker_inited' ]; then
         /var/www/html/bin/cake migrations seed --plugin BcBlog
         /var/www/html/bin/cake migrations migrate --plugin BcSearchIndex
         /var/www/html/bin/cake migrations seed --plugin BcSearchIndex
+        /var/www/html/bin/cake migrations migrate --plugin BcContentLink
+        /var/www/html/bin/cake migrations seed --plugin BcContentLink
         /var/www/html/bin/cake plugin assets symlink
     else
         echo "[$(date +"%Y/%m/%d %H:%M:%S")] Migration failed."
