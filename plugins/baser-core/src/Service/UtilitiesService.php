@@ -48,6 +48,7 @@ class UtilitiesService implements UtilitiesServiceInterface
 
     /**
      * コンテンツツリーの構造をチェックする
+     * 
      * @return bool
      * @checked
      * @noTodo
@@ -69,6 +70,7 @@ class UtilitiesService implements UtilitiesServiceInterface
 
     /**
      * コンテンツツリーをリセットし全て同階層にする
+     * 
      * @checked
      * @noTodo
      * @unitTest
@@ -82,6 +84,7 @@ class UtilitiesService implements UtilitiesServiceInterface
     /**
      * ツリー構造が壊れていないか確認する
      * CakePHP2系の TreeBehavior より移植
+     * 
      * @param Table $table
      * @return array|false
      * @checked
@@ -197,6 +200,7 @@ class UtilitiesService implements UtilitiesServiceInterface
 
     /**
      * クレジットを取得する
+     * 
      * @return mixed|null
      * @checked
      * @noTodo
@@ -229,6 +233,7 @@ class UtilitiesService implements UtilitiesServiceInterface
 
     /**
      * ログのZipファイルを作成する
+     * 
      * @return Simplezip|false
      * @checked
      * @noTodo
@@ -250,6 +255,7 @@ class UtilitiesService implements UtilitiesServiceInterface
 
     /**
      * ログを削除する
+     * 
      * @return bool
      * @checked
      * @noTodo
@@ -272,6 +278,7 @@ class UtilitiesService implements UtilitiesServiceInterface
 
     /**
      * DBバックアップを作成する
+     * 
      * @param $encoding
      * @return Simplezip|false
      * @checked
@@ -358,6 +365,7 @@ class UtilitiesService implements UtilitiesServiceInterface
 
     /**
      * バックアップファイルよりレストアを行う
+     * 
      * @param array $postData
      * @return bool
      * @checked
@@ -492,6 +500,7 @@ class UtilitiesService implements UtilitiesServiceInterface
 
     /**
      * データをリセットする
+     * 
      * @return bool
      * @checked
      * @noTodo

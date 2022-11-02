@@ -21,6 +21,7 @@ interface BlogContentsServiceInterface
 {
     /**
      * 一覧データを取得
+     * 
      * @param array $queryParams
      * @return Query
      * @checked
@@ -31,6 +32,7 @@ interface BlogContentsServiceInterface
 
     /**
      * 単一データ取得
+     * 
      * @param int $id
      * @return \Cake\Datasource\EntityInterface|array|null
      * @checked
@@ -41,6 +43,7 @@ interface BlogContentsServiceInterface
 
     /**
      * 初期値を取得する
+     * 
      * @return EntityInterface
      * @checked
      * @noTodo
@@ -50,6 +53,7 @@ interface BlogContentsServiceInterface
 
     /**
      * 更新
+     * 
      * @param EntityInterface $target
      * @param array $postData
      * @return EntityInterface
@@ -61,6 +65,7 @@ interface BlogContentsServiceInterface
 
     /**
      * ブログ登録
+     * 
      * @param array $data
      * @param array $options
      * @return \Cake\Datasource\EntityInterface
@@ -85,6 +90,7 @@ interface BlogContentsServiceInterface
 
     /**
      * ブログを削除する
+     * 
      * @param int $id
      * @return bool
      * @checked
@@ -95,6 +101,7 @@ interface BlogContentsServiceInterface
 
     /**
      * リストを取得する
+     * 
      * @return array
      * @checked
      * @noTodo

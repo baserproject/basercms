@@ -22,6 +22,7 @@ interface PagesServiceInterface extends CrudBaseServiceInterface
 
     /**
      * 固定ページをゴミ箱から取得する
+     * 
      * @param int $id
      * @return EntityInterface|array
      * @checked
@@ -58,6 +59,7 @@ interface PagesServiceInterface extends CrudBaseServiceInterface
 
     /**
      * 物理削除
+     * 
      * @param int $id
      * @return bool
      * @checked

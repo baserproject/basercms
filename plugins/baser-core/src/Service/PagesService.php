@@ -47,6 +47,7 @@ class PagesService implements PagesServiceInterface
 
     /**
      * Pageservice constructor.
+     * 
      * @checked
      * @unitTest
      * @noTodo
@@ -60,6 +61,7 @@ class PagesService implements PagesServiceInterface
 
     /**
      * 初期データ取得
+     * 
      * @return EntityInterface
      * @checked
      * @noTodo
@@ -72,6 +74,7 @@ class PagesService implements PagesServiceInterface
 
     /**
      * リストデータ取得
+     * 
      * @return array
      * @checked
      * @noTodo
@@ -87,6 +90,7 @@ class PagesService implements PagesServiceInterface
 
     /**
      * 固定ページを取得する
+     * 
      * @param int $id
      * @param array $options
      *  - `status`: ステータス。 publish を指定すると公開状態のもののみ取得（初期値：全て）
@@ -112,6 +116,7 @@ class PagesService implements PagesServiceInterface
 
     /**
      * 固定ページをゴミ箱から取得する
+     * 
      * @param int $id
      * @return EntityInterface|array
      * @throws RecordNotFoundException
@@ -133,6 +138,7 @@ class PagesService implements PagesServiceInterface
 
     /**
      * ユーザー管理の一覧用のデータを取得
+     * 
      * @param array|null $queryParams
      * @return Query
      * @checked
@@ -158,6 +164,7 @@ class PagesService implements PagesServiceInterface
 
     /**
      * 固定ページ登録
+     * 
      * @param array $data
      * @param array $options
      * @return \Cake\Datasource\EntityInterface
@@ -175,6 +182,7 @@ class PagesService implements PagesServiceInterface
 
     /**
      * ページ情報を更新する
+     * 
      * @param EntityInterface $target
      * @param array $pageData
      * @param array $options
@@ -200,6 +208,7 @@ class PagesService implements PagesServiceInterface
 
     /**
      * 物理削除
+     * 
      * @param int $id
      * @return bool
      * @checked
@@ -280,6 +289,7 @@ class PagesService implements PagesServiceInterface
 
     /**
      * 編集リンクを取得する
+     * 
      * @param ServerRequest $request
      * @return array|string
      * @checked
@@ -301,6 +311,7 @@ class PagesService implements PagesServiceInterface
 
     /**
      * ページテンプレートを取得する
+     * 
      * @param EntityInterface $page
      * @return mixed
      * @checked

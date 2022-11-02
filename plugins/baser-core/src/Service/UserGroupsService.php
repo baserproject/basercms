@@ -34,6 +34,7 @@ class UserGroupsService implements UserGroupsServiceInterface
 
     /**
      * UserGroupsService constructor.
+     * 
      * @checked
      * @unitTest
      * @noTodo
@@ -45,6 +46,7 @@ class UserGroupsService implements UserGroupsServiceInterface
 
     /**
      * ユーザーグループを取得する
+     * 
      * @param int $id
      * @return EntityInterface
      * @checked
@@ -60,6 +62,7 @@ class UserGroupsService implements UserGroupsServiceInterface
 
     /**
      * ユーザーグループの新規データ用の初期値を含んだエンティティを取得する
+     * 
      * @return UserGroup
      * @checked
      * @noTodo
@@ -76,6 +79,7 @@ class UserGroupsService implements UserGroupsServiceInterface
 
     /**
      * ユーザーグループ全件取得する
+     * 
      * @param array $options
      * @return Query
      * @checked
@@ -89,6 +93,7 @@ class UserGroupsService implements UserGroupsServiceInterface
 
     /**
      * ユーザーグループ登録
+     * 
      * @param array $postData
      * @return \Cake\Datasource\EntityInterface
      * @throws \Cake\ORM\Exception\PersistenceFailedException
@@ -106,6 +111,7 @@ class UserGroupsService implements UserGroupsServiceInterface
 
     /**
      * ユーザーグループ情報を更新する
+     * 
      * @param EntityInterface $target
      * @param array $postData
      * @return EntityInterface
@@ -123,6 +129,7 @@ class UserGroupsService implements UserGroupsServiceInterface
 
     /**
      * ユーザーグループ情報を削除する
+     * 
      * @param int $id
      * @return bool
      * @checked
@@ -137,6 +144,7 @@ class UserGroupsService implements UserGroupsServiceInterface
 
     /**
      * リストを取得する
+     * 
      * @return array
      * @checked
      * @noTodo

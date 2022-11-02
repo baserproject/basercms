@@ -26,6 +26,7 @@ interface BlogCategoriesServiceInterface
 
     /**
      * 単一レコードを取得する
+     * 
      * @param int $id
      * @return EntityInterface
      * @checked
@@ -36,6 +37,7 @@ interface BlogCategoriesServiceInterface
 
     /**
      * 一覧を取得する
+     * 
      * @param int $blogContentId
      * @param array $queryParams
      * @param string $type
@@ -60,6 +62,7 @@ interface BlogCategoriesServiceInterface
 
     /**
      * コントロールソース取得
+     * 
      * @param string $field
      * @param array $options
      * @return mixed
@@ -71,6 +74,7 @@ interface BlogCategoriesServiceInterface
 
     /**
      * 新規エンティティ取得
+     * 
      * @param int $blogContentId
      * @return EntityInterface
      * @checked
@@ -81,6 +85,7 @@ interface BlogCategoriesServiceInterface
 
     /**
      * 新規作成
+     * 
      * @param int $blogContentId
      * @param array $postData
      * @return EntityInterface|null
@@ -92,6 +97,7 @@ interface BlogCategoriesServiceInterface
 
     /**
      * 更新する
+     * 
      * @param EntityInterface $target
      * @param array $postData
      * @return EntityInterface|null
@@ -104,6 +110,7 @@ interface BlogCategoriesServiceInterface
 
     /**
      * 削除する
+     * 
      * @param int $id
      * @return bool
      * @checked
@@ -114,6 +121,7 @@ interface BlogCategoriesServiceInterface
 
     /**
      * 一括処理
+     * 
      * @param string $method
      * @param array $ids
      * @return bool
@@ -125,6 +133,7 @@ interface BlogCategoriesServiceInterface
 
     /**
      * IDを指定して名前リストを取得する
+     * 
      * @param $ids
      * @return array
      * @checked
@@ -135,6 +144,7 @@ interface BlogCategoriesServiceInterface
 
     /**
      *ブログカテゴリーリスト取得
+     
      * @return array
      * @checked
      * @noTodo

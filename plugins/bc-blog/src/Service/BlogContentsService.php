@@ -37,6 +37,7 @@ class BlogContentsService implements BlogContentsServiceInterface
 
     /**
      * Construct
+     * 
      * @checked
      * @noTodo
      * @unitTest
@@ -48,6 +49,7 @@ class BlogContentsService implements BlogContentsServiceInterface
 
     /**
      * 一覧データを取得
+     * 
      * @param array $queryParams
      * @return Query
      * @checked
@@ -73,6 +75,7 @@ class BlogContentsService implements BlogContentsServiceInterface
 
     /**
      * 単一データ取得
+     * 
      * @param int $id
      * @param array $options
      *  - `status`: ステータス。 publish を指定すると公開状態のもののみ取得（初期値：全て）
@@ -98,6 +101,7 @@ class BlogContentsService implements BlogContentsServiceInterface
 
     /**
      * 初期値を取得する
+     * 
      * @return EntityInterface
      * @checked
      * @noTodo
@@ -128,6 +132,7 @@ class BlogContentsService implements BlogContentsServiceInterface
 
     /**
      * 更新
+     * 
      * @param EntityInterface $target
      * @param array $postData
      * @return EntityInterface
@@ -152,6 +157,7 @@ class BlogContentsService implements BlogContentsServiceInterface
 
     /**
      * ブログ登録
+     * 
      * @param array $data
      * @param array $options
      * @return \Cake\Datasource\EntityInterface
@@ -191,6 +197,7 @@ class BlogContentsService implements BlogContentsServiceInterface
 
     /**
      * ブログを削除する
+     * 
      * @param int $id
      * @return bool
      * @checked
@@ -205,6 +212,7 @@ class BlogContentsService implements BlogContentsServiceInterface
 
     /**
      * リストを取得する
+     * 
      * @return array
      * @checked
      * @noTodo

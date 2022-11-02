@@ -35,6 +35,10 @@ class DblogsService implements DblogsServiceInterface
 
     /**
      * DblogsService constructor.
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function __construct()
     {
@@ -44,6 +48,7 @@ class DblogsService implements DblogsServiceInterface
     /**
      * リスト取得
      * 対応しない
+     * 
      * @return array
      * @checked
      * @noTodo
@@ -56,6 +61,7 @@ class DblogsService implements DblogsServiceInterface
 
     /**
      * 削除
+     * 
      * @param int $id
      * @return bool
      * @checked
@@ -70,6 +76,7 @@ class DblogsService implements DblogsServiceInterface
 
     /**
      * 単一データ取得
+     * 
      * @param int $id
      * @return EntityInterface
      * @checked
@@ -83,6 +90,7 @@ class DblogsService implements DblogsServiceInterface
 
     /**
      * 初期データ取得
+     * 
      * @param string $message
      * @return EntityInterface
      * @checked
@@ -97,6 +105,7 @@ class DblogsService implements DblogsServiceInterface
     /**
      * ログ更新
      * 対応しない
+     * 
      * @param EntityInterface $target
      * @param array $postData
      * @return EntityInterface|null
@@ -111,6 +120,7 @@ class DblogsService implements DblogsServiceInterface
 
     /**
      * DBログ登録
+     * 
      * @param array $data
      * @return EntityInterface
      * @throws \Cake\ORM\Exception\PersistenceFailedException
@@ -137,6 +147,7 @@ class DblogsService implements DblogsServiceInterface
 
     /**
      * DBログ一覧を取得
+     * 
      * @param array $queryParams
      * @return Query
      * @checked
@@ -162,6 +173,7 @@ class DblogsService implements DblogsServiceInterface
 
     /**
      * 最新のDBログ一覧を取得
+     * 
      * @param int $limit
      * @checked
      * @noTodo
@@ -179,6 +191,7 @@ class DblogsService implements DblogsServiceInterface
 
     /**
      * DBログをすべて削除
+     * 
      * @return int
      * @checked
      * @noTodo

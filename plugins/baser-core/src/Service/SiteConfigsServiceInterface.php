@@ -25,8 +25,12 @@ interface SiteConfigsServiceInterface
 
     /**
      * フィールドの値を取得する
+     * 
      * @param $fieldName
      * @return string|null
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getValue($fieldName): ?string;
 
@@ -36,6 +40,9 @@ interface SiteConfigsServiceInterface
      * @param  string $name
      * @param  string $value
      * @return SiteConfig
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function setValue($name, $value);
 
@@ -44,24 +51,36 @@ interface SiteConfigsServiceInterface
      *
      * @param  string $name
      * @return SiteConfig
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function resetValue($name);
 
 
     /**
      * データをキーバリュー形式で取得する
+     * 
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function get(): SiteConfig;
 
     /**
      * データをキーバリュー形式で保存する
+     * 
      * @return EntityInterface
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function update(array $postData);
 
     /**
      * .env が書き込み可能かどうか
+     * 
      * @return bool
      * @checked
      * @noTodo
@@ -71,6 +90,7 @@ interface SiteConfigsServiceInterface
 
     /**
      * .env に設定値を書き込む
+     * 
      * @param $key
      * @param $value
      * @return bool
@@ -82,17 +102,29 @@ interface SiteConfigsServiceInterface
 
     /**
      * アプリケーションモードリストを取得
+     * 
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getModeList(): array;
 
     /**
      * baserCMSのDBのバージョンを取得する
+     * 
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getVersion():string;
 
     /**
      * キャッシュ用 Entity を削除
+     * 
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function clearCache();
 

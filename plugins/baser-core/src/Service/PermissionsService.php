@@ -69,9 +69,9 @@ class PermissionsService implements PermissionsServiceInterface
 
     /**
      * パーミッションの新規データ用の初期値を含んだエンティティを取得する
+     * 
      * @param int $userGroupId
      * @return Permission
-     *
      * @checked
      * @noTodo
      * @unitTest
@@ -87,6 +87,7 @@ class PermissionsService implements PermissionsServiceInterface
     /**
      * リストデータを取得
      * 対応しない
+     * 
      * @return array
      * @checked
      * @noTodo
@@ -99,9 +100,9 @@ class PermissionsService implements PermissionsServiceInterface
 
     /**
      * パーミッションを取得する
+     * 
      * @param int $id
      * @return EntityInterface
-     *
      * @checked
      * @noTodo
      * @unitTest
@@ -115,9 +116,9 @@ class PermissionsService implements PermissionsServiceInterface
 
     /**
      * パーミッション管理の一覧用のデータを取得
+     * 
      * @param array $queryParams
      * @return Query
-     *
      * @checked
      * @noTodo
      * @unitTest
@@ -134,10 +135,10 @@ class PermissionsService implements PermissionsServiceInterface
 
     /**
      * パーミッション登録
+     * 
      * @param ServerRequest $request
      * @return EntityInterface
      * @throws \Cake\ORM\Exception\PersistenceFailedException
-     *
      * @checked
      * @noTodo
      * @unitTest
@@ -152,11 +153,11 @@ class PermissionsService implements PermissionsServiceInterface
 
     /**
      * パーミッション情報を更新する
+     * 
      * @param EntityInterface $target
      * @param array $data
      * @return EntityInterface
      * @throws \Cake\ORM\Exception\PersistenceFailedException
-     *
      * @checked
      * @noTodo
      * @unitTest
@@ -172,7 +173,6 @@ class PermissionsService implements PermissionsServiceInterface
      *
      * @param int $id
      * @return bool
-     *
      * @checked
      * @noTodo
      * @unitTest
@@ -189,7 +189,6 @@ class PermissionsService implements PermissionsServiceInterface
      *
      * @param int $id
      * @return bool
-     *
      * @checked
      * @noTodo
      * @unitTest
@@ -206,7 +205,6 @@ class PermissionsService implements PermissionsServiceInterface
      *
      * @param int $permissionId
      * @return EntityInterface|false
-     *
      * @checked
      * @noTodo
      * @unitTest
@@ -230,9 +228,9 @@ class PermissionsService implements PermissionsServiceInterface
 
     /**
      * パーミッション情報を削除する
+     * 
      * @param int $id
      * @return bool
-     *
      * @checked
      * @noTodo
      * @unitTest
@@ -270,10 +268,10 @@ class PermissionsService implements PermissionsServiceInterface
     }
 
     /**
-     *  レコード作成に必要なデータを代入する
+     * レコード作成に必要なデータを代入する
+     * 
      * @param array $data
      * @return array $data
-     *
      * @noTodo
      * @unitTest
      * @checked
@@ -499,6 +497,7 @@ class PermissionsService implements PermissionsServiceInterface
 
     /**
      * 一括処理
+     * 
      * @param array $ids
      * @return bool
      * @checked
@@ -522,6 +521,7 @@ class PermissionsService implements PermissionsServiceInterface
 
     /**
      * IDを指定して名前リストを取得する
+     * 
      * @param $ids
      * @return array
      * @checked

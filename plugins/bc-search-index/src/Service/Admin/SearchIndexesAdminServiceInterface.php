@@ -24,6 +24,7 @@ interface SearchIndexesAdminServiceInterface
 
     /**
      * 一覧画面に必要なデータを取得する
+     * 
      * @param \Cake\ORM\ResultSet $searchIndexes
      * @param int $siteId
      * @return array

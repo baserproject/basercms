@@ -24,6 +24,7 @@ interface UtilitiesServiceInterface
 
     /**
      * コンテンツツリーの構造をチェックする
+     * 
      * @return bool
      * @checked
      * @noTodo
@@ -33,6 +34,7 @@ interface UtilitiesServiceInterface
 
     /**
      * コンテンツツリーをリセットし全て同階層にする
+     * 
      * @checked
      * @noTodo
      * @unitTest
@@ -41,6 +43,7 @@ interface UtilitiesServiceInterface
 
     /**
      * クレジットを取得する
+     * 
      * @return mixed|null
      * @checked
      * @noTodo
@@ -50,6 +53,7 @@ interface UtilitiesServiceInterface
 
     /**
      * ログのZipファイルを作成する
+     * 
      * @return Simplezip|false
      * @checked
      * @noTodo
@@ -59,6 +63,7 @@ interface UtilitiesServiceInterface
 
     /**
      * ログを削除する
+     * 
      * @return bool
      * @checked
      * @noTodo
@@ -68,6 +73,7 @@ interface UtilitiesServiceInterface
 
     /**
      * DBバックアップを作成する
+     * 
      * @param $encoding
      * @return Simplezip
      * @checked
@@ -88,6 +94,7 @@ interface UtilitiesServiceInterface
 
     /**
      * バックアップファイルよりレストアを行う
+     * 
      * @param array $postData
      * @return bool
      * @checked

@@ -24,6 +24,7 @@ interface PermissionsServiceInterface extends CrudBaseServiceInterface
 
     /**
      * 有効状態にする
+     * 
      * @param int $id
      * @return bool
      * @checked
@@ -34,6 +35,7 @@ interface PermissionsServiceInterface extends CrudBaseServiceInterface
 
     /**
      * 無効状態にする
+     * 
      * @param int $id
      * @return bool
      * @checked
@@ -44,6 +46,7 @@ interface PermissionsServiceInterface extends CrudBaseServiceInterface
 
     /**
      * 複製する
+     * 
      * @param int $permissionId
      * @return EntityInterface|false
      * @checked
@@ -54,6 +57,7 @@ interface PermissionsServiceInterface extends CrudBaseServiceInterface
 
     /**
      * 許可・拒否を指定するメソッドのリストを取得
+     * 
      * @return array
      * @checked
      * @noTodo
@@ -63,6 +67,7 @@ interface PermissionsServiceInterface extends CrudBaseServiceInterface
 
     /**
      * 権限リストを取得
+     * 
      * @return array
      * @checked
      * @noTodo
@@ -108,6 +113,7 @@ interface PermissionsServiceInterface extends CrudBaseServiceInterface
 
     /**
      * 一括処理
+     * 
      * @param array $ids
      * @return bool
      * @checked
@@ -118,6 +124,7 @@ interface PermissionsServiceInterface extends CrudBaseServiceInterface
 
     /**
      * IDを指定して名前リストを取得する
+     * 
      * @param $ids
      * @return array
      * @checked

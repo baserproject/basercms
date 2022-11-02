@@ -25,10 +25,12 @@ interface SearchIndexesFrontServiceInterface
 
     /**
      * サイト内検索用の view 変数を取得する
+     * 
      * @param \Cake\ORM\ResultSet|\Cake\Datasource\ResultSetInterface $searchIndexes
      * @param ServerRequest $request
      * @return array
      * @checked
+     * @unitTest
      * @noTodo
      */
     public function getViewVarsForSearch(ResultSetInterface $searchIndexes, ServerRequest $request): array;

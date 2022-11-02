@@ -54,11 +54,13 @@ class BcDatabaseService implements BcDatabaseServiceInterface
 
     /**
      * 初期データを読み込む
+     * 
      * @param $theme
      * @param $pattern
      * @param $excludes
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function loadDefaultDataPattern($theme, $pattern): bool
     {
@@ -261,6 +263,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
 
     /**
      * テーブルのデータをリセットする
+     * 
      * @param $table
      * @return bool
      * @noTodo
@@ -355,8 +358,11 @@ class BcDatabaseService implements BcDatabaseServiceInterface
 
     /**
      * メールメッセージテーブルを初期化する
+     * 
      * @return bool
      * @checked
+     * @noTodo
+     * @unitTest
      */
     public function initMessageTables(): bool
     {
@@ -377,7 +383,10 @@ class BcDatabaseService implements BcDatabaseServiceInterface
 
     /**
      * データベースシーケンスをアップデートする
+     * 
      * @checked
+     * @noTodo
+     * @unitTest
      */
     public function updateSequence()
     {
@@ -669,6 +678,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
 
     /**
      * アプリケーションに関連するテーブルリストのキャッシュをクリアする
+     * 
      * @checked
      * @noTodo
      * @unitTest
@@ -733,6 +743,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
     /**
      * テキストのスキーマ情報を生成する
      * Bake\Command\FixtureCommand::_generateSchema() を移植
+     * 
      * @param TableSchemaInterface $table
      * @return string
      * @checked
@@ -779,6 +790,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
     /**
      * Formats Schema columns from Model Object
      * Bake\Command\FixtureCommand::_values() を移植
+     * 
      * @param array $values options keys(type, null, default, key, length, extra)
      * @return string[] Formatted values
      * @checked
@@ -810,6 +822,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
 
     /**
      * スキーマを読み込む
+     * 
      * @param $options
      * @return bool
      * @checked

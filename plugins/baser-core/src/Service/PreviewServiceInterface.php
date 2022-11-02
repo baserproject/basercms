@@ -20,8 +20,12 @@ interface PreviewServiceInterface {
 
     /**
      * プレビューで利用するデータを取得する
+     * 
      * @param ServerRequest $request
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getPreviewData(ServerRequest $request): array;
 

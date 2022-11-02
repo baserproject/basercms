@@ -34,6 +34,7 @@ class AppService
 
     /**
      * アプリケーション全体で必要な変数を取得
+     * 
      * @return array
      * @checked
      * @noTodo
@@ -51,6 +52,7 @@ class AppService
 
     /**
      * 現在の管理対象のサイトを取得する
+     * 
      * @return EntityInterface
      * @checked
      * @noTodo
@@ -70,6 +72,7 @@ class AppService
 
     /**
      * 現在の管理対象のサイト以外のリストを取得する
+     * 
      * @return array
      * @checked
      * @noTodo

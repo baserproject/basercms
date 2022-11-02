@@ -42,6 +42,7 @@ class UsersService implements UsersServiceInterface
 
     /**
      * UsersService constructor.
+     * 
      * @checked
      * @unitTest
      * @noTodo
@@ -54,6 +55,7 @@ class UsersService implements UsersServiceInterface
 
     /**
      * ユーザーの新規データ用の初期値を含んだエンティティを取得する
+     * 
      * @return User
      * @checked
      * @noTodo
@@ -71,6 +73,7 @@ class UsersService implements UsersServiceInterface
 
     /**
      * ユーザーを取得する
+     * 
      * @param int $id
      * @return User
      * @checked
@@ -86,6 +89,7 @@ class UsersService implements UsersServiceInterface
 
     /**
      * ユーザー管理の一覧用のデータを取得
+     * 
      * @param array $queryParams
      * @return Query
      * @checked
@@ -113,6 +117,7 @@ class UsersService implements UsersServiceInterface
 
     /**
      * ユーザー登録
+     * 
      * @param array $data
      * @return \Cake\Datasource\EntityInterface
      * @throws \Cake\ORM\Exception\PersistenceFailedException
@@ -129,6 +134,7 @@ class UsersService implements UsersServiceInterface
 
     /**
      * ユーザー情報を更新する
+     * 
      * @param EntityInterface $target
      * @param array $postData
      * @return EntityInterface
@@ -152,6 +158,7 @@ class UsersService implements UsersServiceInterface
     /**
      * ユーザー情報を削除する
      * 最後のシステム管理者でなければ削除
+     * 
      * @param int $id
      * @return bool
      * @checked
@@ -178,6 +185,7 @@ class UsersService implements UsersServiceInterface
 
     /**
      * ユーザーリストを取得する
+     * 
      * @return mixed
      * @checked
      * @noTodo
@@ -190,6 +198,7 @@ class UsersService implements UsersServiceInterface
 
     /**
      * ログイン
+     * 
      * @param ServerRequest $request
      * @param ResponseInterface $response
      * @param $id
@@ -214,6 +223,7 @@ class UsersService implements UsersServiceInterface
 
     /**
      * ログアウト
+     * 
      * @param ServerRequest $request
      * @param ResponseInterface $response
      * @return array|false
@@ -242,6 +252,7 @@ class UsersService implements UsersServiceInterface
 
     /**
      * 認証用のセッションキーを取得
+     * 
      * @param string $prefix
      * @return false|string
      * @checked
@@ -259,6 +270,7 @@ class UsersService implements UsersServiceInterface
 
     /**
      * 再ログイン
+     * 
      * @param ServerRequest $request
      * @param ResponseInterface $response
      * @return array|false
@@ -281,6 +293,7 @@ class UsersService implements UsersServiceInterface
 
     /**
      * ログイン状態の保存のキー送信
+     * 
      * @param ResponseInterface
      * @param int $id
      * @return ResponseInterface
@@ -305,6 +318,7 @@ class UsersService implements UsersServiceInterface
 
     /**
      * ログインキーを削除する
+     * 
      * @param int $id
      * @return int 削除行数
      * @checked
@@ -318,6 +332,7 @@ class UsersService implements UsersServiceInterface
 
     /**
      * ログイン状態の保存確認
+     * 
      * @return ResponseInterface
      * @checked
      * @noTodo
@@ -359,6 +374,7 @@ class UsersService implements UsersServiceInterface
 
     /**
      * 代理ログインを行う
+     * 
      * @param ServerRequest $request
      * @param int $id
      * @param string $referer
@@ -382,6 +398,7 @@ class UsersService implements UsersServiceInterface
 
     /**
      * 代理ログインから元のユーザーに戻る
+     * 
      * @param ServerRequest $request
      * @param ResponseInterface $response
      * @return array|mixed|string
