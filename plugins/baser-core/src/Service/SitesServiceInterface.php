@@ -28,6 +28,9 @@ interface SitesServiceInterface extends CrudBaseServiceInterface
      * @param int $mainSiteId メインサイトID
      * @param int $currentSiteId 現在のサイトID
      * @return array
+     * @checked
+     * @unitTest
+     * @noTodo
      */
     public function getSelectableDevices($mainSiteId, $currentSiteId = null): array;
 
@@ -37,6 +40,9 @@ interface SitesServiceInterface extends CrudBaseServiceInterface
      * @param int $mainSiteId メインサイトID
      * @param int $currentSiteId 現在のサイトID
      * @return array
+     * @checked
+     * @unitTest
+     * @noTodo
      */
     public function getSelectableLangs($mainSiteId, $currentSiteId = null): array;
 
@@ -45,6 +51,9 @@ interface SitesServiceInterface extends CrudBaseServiceInterface
      *
      * @param string $url
      * @return EntityInterface
+     * @checked
+     * @unitTest
+     * @noTodo
      */
     public function findByUrl($url): EntityInterface;
 
@@ -53,24 +62,39 @@ interface SitesServiceInterface extends CrudBaseServiceInterface
      *
      * @param string $id
      * @return Query
+     * @checked
+     * @unitTest
+     * @noTodo
      */
     public function findById($id): Query;
 
     /**
      * 言語リストを取得
+     * 
      * @return array
+     * @checked
+     * @unitTest
+     * @noTodo
      */
     public function getLangList(): array;
 
     /**
      * デバイスリストを取得
+     * 
      * @return array
+     * @checked
+     * @unitTest
+     * @noTodo
      */
     public function getDeviceList(): array;
 
     /**
      * テーマのリストを取得する
+     * 
      * @return array
+     * @checked
+     * @unitTest
+     * @noTodo
      */
     public function getThemeList(): array;
 
@@ -79,6 +103,9 @@ interface SitesServiceInterface extends CrudBaseServiceInterface
      *
      * @param int $id
      * @return bool
+     * @checked
+     * @unitTest
+     * @noTodo
      */
     public function publish($id): bool;
 
@@ -87,13 +114,20 @@ interface SitesServiceInterface extends CrudBaseServiceInterface
      *
      * @param int $id
      * @return bool
+     * @checked
+     * @unitTest
+     * @noTodo
      */
     public function unpublish($id): bool;
 
     /**
      * サイトのルートコンテンツを取得する
+     * 
      * @param int $id
      * @return EntityInterface
+     * @checked
+     * @unitTest
+     * @noTodo
      */
     public function getRootContent($id);
 

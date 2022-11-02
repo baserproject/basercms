@@ -22,22 +22,34 @@ interface PasswordRequestsServiceInterface
 
     /**
      * 新規データを取得する
+     * 
      * @return EntityInterface
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getNew(): EntityInterface;
 
     /**
      * 単一データを取得する
+     * 
      * @param int $id
      * @return EntityInterface
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function get($id): EntityInterface;
 
     /**
      * 更新する
+     * 
      * @param EntityInterface|PasswordRequest $entity
      * @param array $postData
      * @return EntityInterface|false
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function update($entity, $postData): ?EntityInterface;
 
@@ -54,6 +66,7 @@ interface PasswordRequestsServiceInterface
 
     /**
      * パスワードを変更する
+     * 
      * @param EntityInterface|PasswordRequest $passwordRequest
      * @param array $postData
      * @return EntityInterface|false

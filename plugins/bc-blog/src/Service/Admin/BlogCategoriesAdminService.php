@@ -33,6 +33,7 @@ class BlogCategoriesAdminService extends BlogCategoriesService implements BlogCa
 
     /**
      * ブログカテゴリ一覧用の view 変数取得
+     * 
      * @param int $blogContentId
      * @return array
      * @noTodo
@@ -50,6 +51,7 @@ class BlogCategoriesAdminService extends BlogCategoriesService implements BlogCa
 
     /**
      * ブログカテゴリー登録用の view 変数取得
+     * 
      * @return array
      * @noTodo
      * @checked
@@ -69,6 +71,7 @@ class BlogCategoriesAdminService extends BlogCategoriesService implements BlogCa
 
     /**
      * ブログカテゴリー編集用の view 変数取得
+     * 
      * @return array
      * @noTodo
      * @checked

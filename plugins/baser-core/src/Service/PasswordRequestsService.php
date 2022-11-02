@@ -35,6 +35,10 @@ class PasswordRequestsService implements PasswordRequestsServiceInterface
 
     /**
      * コンストラクタ
+     * 
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function __construct()
     {
@@ -43,7 +47,11 @@ class PasswordRequestsService implements PasswordRequestsServiceInterface
 
     /**
      * 空の新規エンティティを取得する
+     * 
      * @return EntityInterface
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getNew(): EntityInterface
     {
@@ -52,8 +60,12 @@ class PasswordRequestsService implements PasswordRequestsServiceInterface
 
     /**
      * 単一のエンティティを取得する
+     * 
      * @param int $id
      * @return EntityInterface
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function get($id): EntityInterface
     {
@@ -69,6 +81,9 @@ class PasswordRequestsService implements PasswordRequestsServiceInterface
      * @param EntityInterface|PasswordRequest $entity
      * @param array $postData
      * @return EntityInterface|false
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function update($entity, $postData): ?EntityInterface
     {
@@ -108,6 +123,7 @@ class PasswordRequestsService implements PasswordRequestsServiceInterface
 
     /**
      * パスワードを変更する
+     * 
      * @param EntityInterface|PasswordRequest $passwordRequest
      * @param array $postData
      * @return EntityInterface|false

@@ -37,10 +37,12 @@ class BlogFrontService implements BlogFrontServiceInterface
 
     /**
      * プレビュー用の view 変数を取得する
+     * 
      * @param ServerRequest $request
      * @param array $options
      * @return array[]
      * @checked
+     * @unitTest
      * @noTodo
      */
     public function getViewVarsForIndex(ServerRequest $request, array $options = []): array
@@ -69,6 +71,7 @@ class BlogFrontService implements BlogFrontServiceInterface
 
     /**
      * プレビュー用のセットアップをする
+     * 
      * @param Controller $controller
      * @checked
      * @noTodo

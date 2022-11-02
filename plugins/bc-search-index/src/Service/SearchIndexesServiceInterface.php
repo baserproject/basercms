@@ -25,6 +25,7 @@ interface SearchIndexesServiceInterface
 
     /**
      * プラグインを取得する
+     * 
      * @param int $id
      * @return EntityInterface
      * @checked
@@ -35,6 +36,7 @@ interface SearchIndexesServiceInterface
 
     /**
      * 一覧データを取得
+     * 
      * @param array $queryParams
      * @return Query
      * @checked
@@ -45,6 +47,7 @@ interface SearchIndexesServiceInterface
 
     /**
      * 検索インデックスを削除する
+     * 
      * @param int $id
      * @return bool
      * @checked
@@ -77,6 +80,7 @@ interface SearchIndexesServiceInterface
 
     /**
      * 優先度を変更する
+     * 
      * @param EntityInterface $target
      * @param $priority
      * @return EntityInterface|null
@@ -88,6 +92,7 @@ interface SearchIndexesServiceInterface
 
     /**
      * 一括処理
+     * 
      * @param string $method
      * @param array $ids
      * @return bool

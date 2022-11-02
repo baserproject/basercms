@@ -14,6 +14,9 @@ namespace BaserCore\Service;
 use BaserCore\Model\Entity\Site;
 use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\Datasource\EntityInterface;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
 
 /**
  * Interface ContentFoldersServiceInterface
@@ -23,8 +26,12 @@ interface ContentFoldersServiceInterface extends CrudBaseServiceInterface
 
     /**
      * コンテンツフォルダーをゴミ箱から取得する
+     * 
      * @param int $id
      * @return EntityInterface|array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getTrash($id);
 
@@ -34,6 +41,9 @@ interface ContentFoldersServiceInterface extends CrudBaseServiceInterface
      * @param $contentId
      * @param $theme
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getFolderTemplateList($contentId, $theme);
 
@@ -42,6 +52,9 @@ interface ContentFoldersServiceInterface extends CrudBaseServiceInterface
      *
      * @param int $id
      * @param string $type folder|page
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getParentTemplate($id, $type);
 
@@ -52,11 +65,15 @@ interface ContentFoldersServiceInterface extends CrudBaseServiceInterface
      * @param bool $isUpdateChildrenUrl 子のコンテンツのURLを一括更新するかどうか
      * @return false|EntityInterface
      * @throws RecordNotFoundException
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function saveSiteRoot($site, $isUpdateChildrenUrl = false);
 
     /**
      * 物理削除
+     * 
      * @param int $id
      * @return bool
      * @checked

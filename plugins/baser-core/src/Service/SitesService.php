@@ -39,6 +39,7 @@ class SitesService implements SitesServiceInterface
 
     /**
      * SitesService constructor.
+     * 
      * @checked
      * @unitTest
      * @noTodo
@@ -50,6 +51,7 @@ class SitesService implements SitesServiceInterface
 
     /**
      * サイトの新規データ用の初期値を含んだエンティティを取得する
+     * 
      * @return Site
      * @checked
      * @noTodo
@@ -66,6 +68,7 @@ class SitesService implements SitesServiceInterface
 
     /**
      * サイトを取得する
+     * 
      * @param int $id
      * @return EntityInterface
      * @checked
@@ -79,6 +82,7 @@ class SitesService implements SitesServiceInterface
 
     /**
      * サイト管理の一覧用のデータを取得
+     * 
      * @param array $queryParams
      * @return Query
      * @checked
@@ -102,6 +106,7 @@ class SitesService implements SitesServiceInterface
 
     /**
      * サイト登録
+     * 
      * @param array $data
      * @return \Cake\Datasource\EntityInterface
      * @throws \Cake\ORM\Exception\PersistenceFailedException
@@ -118,6 +123,7 @@ class SitesService implements SitesServiceInterface
 
     /**
      * サイト情報を更新する
+     * 
      * @param EntityInterface $target
      * @param array $postData
      * @return EntityInterface
@@ -166,6 +172,7 @@ class SitesService implements SitesServiceInterface
 
     /**
      * サイト情報を削除する
+     * 
      * @param int $id
      * @return bool
      * @checked
@@ -244,6 +251,7 @@ class SitesService implements SitesServiceInterface
 
     /**
      * 言語リストを取得
+     * 
      * @return array
      * @checked
      * @noTodo
@@ -261,6 +269,7 @@ class SitesService implements SitesServiceInterface
 
     /**
      * デバイスリストを取得
+     * 
      * @return array
      * @checked
      * @noTodo
@@ -278,6 +287,7 @@ class SitesService implements SitesServiceInterface
 
     /**
      * サイトのリストを取得
+     * 
      * @param array $options
      * @return array
      * @checked
@@ -291,6 +301,7 @@ class SitesService implements SitesServiceInterface
 
     /**
      * テーマのリストを取得する
+     * 
      * @param Site $site
      * @return array
      * @checked
@@ -304,6 +315,7 @@ class SitesService implements SitesServiceInterface
 
     /**
      * サイトのルートコンテンツを取得する
+     * 
      * @param int $id
      * @return EntityInterface
      * @checked

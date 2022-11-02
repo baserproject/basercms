@@ -22,13 +22,21 @@ interface DblogsServiceInterface extends CrudBaseServiceInterface
 
     /**
      * 最新のDBログ一覧を取得
+     * 
      * @param int $limit
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getDblogs(int $limit): ResultSetInterface;
 
     /**
      * DBログをすべて削除
+     * 
      * @return int
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function deleteAll(): int;
 

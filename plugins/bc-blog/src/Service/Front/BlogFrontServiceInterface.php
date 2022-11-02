@@ -25,6 +25,7 @@ interface BlogFrontServiceInterface
 
     /**
      * プレビュー用の view 変数を取得する
+     * 
      * @param ServerRequest $request
      * @return array[]
      * @checked
@@ -35,6 +36,7 @@ interface BlogFrontServiceInterface
 
     /**
      * プレビュー用のセットアップをする
+     * 
      * @param Controller $controller
      * @checked
      * @noTodo

@@ -24,6 +24,7 @@ interface BlogCategoriesAdminServiceInterface
 
     /**
      * ブログカテゴリ一覧用の view 変数取得
+     * 
      * @param int $blogContentId
      * @return array
      * @noTodo
@@ -34,6 +35,7 @@ interface BlogCategoriesAdminServiceInterface
 
     /**
      * ブログカテゴリー登録用の view 変数取得
+     * 
      * @return array
      * @noTodo
      * @checked
@@ -43,6 +45,7 @@ interface BlogCategoriesAdminServiceInterface
 
     /**
      * ブログカテゴリー編集用の view 変数取得
+     * 
      * @return array
      * @noTodo
      * @checked

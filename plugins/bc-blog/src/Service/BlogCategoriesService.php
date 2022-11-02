@@ -37,6 +37,7 @@ class BlogCategoriesService implements BlogCategoriesServiceInterface
 
     /**
      * Construct
+     * 
      * @checked
      * @noTodo
      * @unitTest
@@ -48,6 +49,7 @@ class BlogCategoriesService implements BlogCategoriesServiceInterface
 
     /**
      * 単一レコードを取得する
+     * 
      * @param int $id
      * @return EntityInterface
      * @checked
@@ -61,6 +63,7 @@ class BlogCategoriesService implements BlogCategoriesServiceInterface
 
     /**
      * 一覧を取得する
+     * 
      * @param int $blogContentId
      * @param array $queryParams
      * @param string $type
@@ -112,6 +115,7 @@ class BlogCategoriesService implements BlogCategoriesServiceInterface
 
     /**
      * コントロールソース取得
+     * 
      * @param string $field
      * @param array $options
      * @return mixed
@@ -157,6 +161,7 @@ class BlogCategoriesService implements BlogCategoriesServiceInterface
 
     /**
      * 新規エンティティ取得
+     * 
      * @param int $blogContentId
      * @return EntityInterface
      * @checked
@@ -174,6 +179,7 @@ class BlogCategoriesService implements BlogCategoriesServiceInterface
 
     /**
      * 新規作成
+     * 
      * @param int $blogContentId
      * @param array $postData
      * @return EntityInterface|null
@@ -194,6 +200,7 @@ class BlogCategoriesService implements BlogCategoriesServiceInterface
 
     /**
      * 更新する
+     * 
      * @param EntityInterface $target
      * @param array $postData
      * @return EntityInterface|null
@@ -210,6 +217,7 @@ class BlogCategoriesService implements BlogCategoriesServiceInterface
 
     /**
      * 削除する
+     * 
      * @param int $id
      * @return bool
      * @checked
@@ -229,6 +237,7 @@ class BlogCategoriesService implements BlogCategoriesServiceInterface
 
     /**
      * 一括処理
+     * 
      * @param string $method
      * @param array $ids
      * @return bool
@@ -253,6 +262,7 @@ class BlogCategoriesService implements BlogCategoriesServiceInterface
 
     /**
      * IDを指定して名前リストを取得する
+     * 
      * @param $ids
      * @return array
      * @checked
@@ -266,6 +276,7 @@ class BlogCategoriesService implements BlogCategoriesServiceInterface
 
     /**
      *ブログカテゴリーリスト取得
+     
      * @return array
      * @checked
      * @noTodo

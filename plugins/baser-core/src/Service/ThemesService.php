@@ -46,9 +46,11 @@ class ThemesService implements ThemesServiceInterface
 
     /**
      * 単一データ取得
+     * 
      * @param string $theme
      * @return EntityInterface
      * @checked
+     * @unitTest
      * @noTodo
      */
     public function get(string $theme)
@@ -59,6 +61,7 @@ class ThemesService implements ThemesServiceInterface
 
     /**
      * 一覧データ取得
+     * 
      * @checked
      * @noTodo
      * @unitTest
@@ -119,6 +122,7 @@ class ThemesService implements ThemesServiceInterface
 
     /**
      * 新しいテーマをアップロードする
+     * 
      * @param UploadedFile[] $postData
      * @checked
      * @noTodo
@@ -163,6 +167,7 @@ class ThemesService implements ThemesServiceInterface
 
     /**
      * テーマを適用する
+     * 
      * @param string $theme
      * @return array 適用完了後に表示するメッセージ
      * @checked
@@ -190,7 +195,10 @@ class ThemesService implements ThemesServiceInterface
 
     /**
      * 現在のテーマのプラグインを無効化する
+     * 
      * @checked
+     * @unitTest
+     * @noTodo
      */
     private function detachCurrentThemesPlugins()
     {
@@ -206,6 +214,7 @@ class ThemesService implements ThemesServiceInterface
 
     /**
      * 指定したテーマが梱包するプラグイン情報を取得
+     * 
      * @param string $theme
      * @return array|string[]
      * @checked
@@ -231,6 +240,7 @@ class ThemesService implements ThemesServiceInterface
 
     /**
      * テーマが初期データを保有している場合の情報を取得
+     * 
      * @param string $theme
      * @param array $info
      * @return array|mixed|string[]
@@ -253,9 +263,12 @@ class ThemesService implements ThemesServiceInterface
 
     /**
      * テーマが梱包するプラグインをインストールする
+     * 
      * @param string $theme
      * @throws \Exception
      * @checked
+     * @unitTest
+     * @noTodo
      */
     private function installThemesPlugins(string $theme)
     {
@@ -272,6 +285,7 @@ class ThemesService implements ThemesServiceInterface
 
     /**
      * 初期データを読み込む
+     * 
      * @param string $currentTheme
      * @param string $dbDataPattern
      * @return bool
@@ -322,6 +336,7 @@ class ThemesService implements ThemesServiceInterface
 
     /**
      * コピーする
+     * 
      * @checked
      * @noTodo
      * @unitTest
@@ -348,6 +363,7 @@ class ThemesService implements ThemesServiceInterface
 
     /**
      * 削除する
+     * 
      * @param string $theme
      * @checked
      * @noTodo
@@ -366,6 +382,7 @@ class ThemesService implements ThemesServiceInterface
 
     /**
      * baserマーケットのテーマ一覧を取得する
+     * 
      * @checked
      * @noTodo
      * @unitTest
@@ -400,6 +417,7 @@ class ThemesService implements ThemesServiceInterface
 
     /**
      * 指定したテーマをダウンロード用のテーマとして一時フォルダに作成する
+     * 
      * @param string $theme
      * @return string
      * @checked
@@ -422,6 +440,7 @@ class ThemesService implements ThemesServiceInterface
 
     /**
      * 現在のDB内のデータをダウンロード用のCSVとして一時フォルダに作成する
+     * 
      * @return string
      * @checked
      * @noTodo
@@ -455,6 +474,7 @@ class ThemesService implements ThemesServiceInterface
 
     /**
      * site_configs テーブルにて、 CSVに出力しないフィールドを空にする
+     * 
      * @param string $path
      * @return bool
      * @checked

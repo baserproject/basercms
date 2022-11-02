@@ -41,6 +41,9 @@ use BaserCore\Annotation\UnitTest;
  * Class ContentsService
  * @package BaserCore\Service
  * @property ContentsTable $Contents
+ * @checked
+ * @noTodo
+ * @unitTest
  */
 class ContentsService implements ContentsServiceInterface
 {
@@ -66,6 +69,10 @@ class ContentsService implements ContentsServiceInterface
 
     /**
      * Construct
+     * 
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function __construct()
     {
@@ -75,6 +82,7 @@ class ContentsService implements ContentsServiceInterface
 
     /**
      * 新しいデータの初期値を取得する
+     * 
      * @return EntityInterface
      * @checked
      * @noTodo
@@ -87,6 +95,7 @@ class ContentsService implements ContentsServiceInterface
 
     /**
      * リストデータを取得
+     * 
      * @param array $queryParams
      * @return array
      * @checked
@@ -104,6 +113,7 @@ class ContentsService implements ContentsServiceInterface
     /**
      * 新規登録する
      * 対応しない
+     * 
      * @param array $postData
      * @return EntityInterface|null
      * @checked
@@ -117,6 +127,7 @@ class ContentsService implements ContentsServiceInterface
 
     /**
      * コンテンツを取得する
+     * 
      * @param int $id
      * @return EntityInterface
      * @checked
@@ -132,6 +143,7 @@ class ContentsService implements ContentsServiceInterface
 
     /**
      * ゴミ箱のコンテンツを取得する
+     * 
      * @param int $id
      * @return EntityInterface|array
      * @throws \Cake\Datasource\Exception\RecordNotFoundException
@@ -225,6 +237,7 @@ class ContentsService implements ContentsServiceInterface
 
     /**
      * コンテンツ管理の一覧用のデータを取得
+     * 
      * @param array $queryParams
      * @param string $type
      * @return Query
@@ -288,6 +301,7 @@ class ContentsService implements ContentsServiceInterface
 
     /**
      * getTrashIndex
+     * 
      * @param array $queryParams
      * @param string $type
      * @return Query
@@ -341,6 +355,7 @@ class ContentsService implements ContentsServiceInterface
 
     /**
      * ツリー構造のデータを コンボボックスのデータ用に変換する
+     * 
      * @param array $nodes
      * @return array
      * @checked
@@ -450,6 +465,7 @@ class ContentsService implements ContentsServiceInterface
 
     /**
      * コンテンツ情報を削除する
+     * 
      * @param int $id
      * @param bool $enableTree (デフォルト:false) TreeBehaviorの有無
      * @return bool
@@ -477,6 +493,7 @@ class ContentsService implements ContentsServiceInterface
 
     /**
      * コンテンツ情報と紐付いてるモデルを物理削除する
+     * 
      * @param int $id
      * @return bool
      * @checked
@@ -596,6 +613,7 @@ class ContentsService implements ContentsServiceInterface
 
     /**
      * コンテンツ情報を取得する
+     * 
      * @return array
      * @checked
      * @noTodo
@@ -621,8 +639,12 @@ class ContentsService implements ContentsServiceInterface
     /**
      * ツリー構造より論理削除する
      * TODO: キャッシュビヘイビアー実装後復活させる
+     * 
      * @param $id
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function softDeleteFromTree($id)
     {
@@ -674,6 +696,9 @@ class ContentsService implements ContentsServiceInterface
      *
      * @param $id
      * @return string $parentTemplate|false
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getParentLayoutTemplate($id)
     {
@@ -829,6 +854,9 @@ class ContentsService implements ContentsServiceInterface
      * @param $newAuthorId
      * @param $entityId
      * @return mixed
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function copy($id, $entityId, $newTitle, $newAuthorId, $newSiteId = null)
     {
@@ -864,7 +892,6 @@ class ContentsService implements ContentsServiceInterface
      *
      * @param int $id
      * @return EntityInterface
-     *
      * @checked
      * @noTodo
      * @unitTest
@@ -920,6 +947,13 @@ class ContentsService implements ContentsServiceInterface
         return $exists;
     }
 
+    /**
+     * 
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
     public function isTreeModifiedByAnotherUser($listDisplayed)
     {
         $siteConfig = TableRegistry::getTableLocator()->get('BaserCore.SiteConfigs');
@@ -994,6 +1028,7 @@ class ContentsService implements ContentsServiceInterface
      * @param $id
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function saveSearchIndex($id)
     {
@@ -1039,6 +1074,7 @@ class ContentsService implements ContentsServiceInterface
      * @param int $id
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function deleteSearchIndex($id)
     {
@@ -1146,6 +1182,9 @@ class ContentsService implements ContentsServiceInterface
      * @param int $currentId int 移動元コンテンツID
      * @param int $targetParentId int 移動先コンテンツID (ContentFolder)
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function isMovable($currentId, $targetParentId)
     {
@@ -1351,6 +1390,7 @@ class ContentsService implements ContentsServiceInterface
     /**
      * エンコードされたURLをデコードせずにパースする
      * ※DBのレコードがエンコードされたまま保存されてる場合があるためその値を取得する際にデコードが邪魔になる際使用する
+     * 
      * @param string $fullUrl
      * @return array $parsedUrl
      * @checked
@@ -1375,6 +1415,7 @@ class ContentsService implements ContentsServiceInterface
 
     /**
      * ツリー構造のパスを取得する
+     * 
      * @param string $id
      * @return QueryInterface
      * @checked
@@ -1388,6 +1429,7 @@ class ContentsService implements ContentsServiceInterface
 
     /**
      * 一括処理
+     * 
      * @param array $ids
      * @return bool
      * @checked
@@ -1411,6 +1453,7 @@ class ContentsService implements ContentsServiceInterface
 
     /**
      * IDを指定してタイトルリストを取得する
+     * 
      * @param $ids
      * @return array
      * @checked
@@ -1424,6 +1467,7 @@ class ContentsService implements ContentsServiceInterface
 
     /**
      * リネーム処理
+     * 
      * @param EntityInterface $content
      * @param array $postData
      * @return EntityInterface|null

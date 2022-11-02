@@ -23,6 +23,7 @@ interface BlogContentsAdminServiceInterface
 
     /**
      * 編集画面用の view 変数を取得
+     * 
      * @param EntityInterface $blogContent
      * @return array
      * @checked

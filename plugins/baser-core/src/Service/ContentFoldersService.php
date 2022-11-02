@@ -55,6 +55,10 @@ class ContentFoldersService implements ContentFoldersServiceInterface
 
     /**
      * ContentFoldersService constructor.
+     * 
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function __construct()
     {
@@ -64,6 +68,7 @@ class ContentFoldersService implements ContentFoldersServiceInterface
 
     /**
      * 新しいデータの初期値を取得する
+     * 
      * @return EntityInterface
      * @checked
      * @noTodo
@@ -76,6 +81,7 @@ class ContentFoldersService implements ContentFoldersServiceInterface
 
     /**
      * リストを取得する
+     * 
      * @return array
      * @checked
      * @noTodo
@@ -91,6 +97,7 @@ class ContentFoldersService implements ContentFoldersServiceInterface
 
     /**
      * コンテンツフォルダーを取得する
+     * 
      * @param int $id
      * @return EntityInterface
      * @checked
@@ -114,6 +121,7 @@ class ContentFoldersService implements ContentFoldersServiceInterface
 
     /**
      * コンテンツフォルダーをゴミ箱から取得する
+     * 
      * @param int $id
      * @return EntityInterface
      * @throws RecordNotFoundException
@@ -135,6 +143,7 @@ class ContentFoldersService implements ContentFoldersServiceInterface
 
     /**
      * コンテンツフォルダー一覧用のデータを取得
+     * 
      * @param array $queryParams
      * @return Query
      * @checked
@@ -158,6 +167,7 @@ class ContentFoldersService implements ContentFoldersServiceInterface
 
     /**
      * コンテンツフォルダー登録
+     * 
      * @param array $data
      * @param array $options
      * @return \Cake\Datasource\EntityInterface
@@ -175,6 +185,7 @@ class ContentFoldersService implements ContentFoldersServiceInterface
 
     /**
      * 物理削除
+     * 
      * @param int $id
      * @return bool
      * @checked
@@ -189,6 +200,7 @@ class ContentFoldersService implements ContentFoldersServiceInterface
 
     /**
      * コンテンツフォルダー情報を更新する
+     * 
      * @param EntityInterface $target
      * @param array $contentFolderData
      * @param array $options

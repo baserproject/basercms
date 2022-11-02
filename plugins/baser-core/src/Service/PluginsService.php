@@ -48,6 +48,7 @@ class PluginsService implements PluginsServiceInterface
 
     /**
      * PluginsService constructor.
+     * 
      * @checked
      * @noTodo
      * @unitTest
@@ -59,6 +60,7 @@ class PluginsService implements PluginsServiceInterface
 
     /**
      * プラグインを取得する
+     * 
      * @param int $id
      * @return EntityInterface
      * @checked
@@ -72,6 +74,7 @@ class PluginsService implements PluginsServiceInterface
 
     /**
      * プラグイン一覧を取得
+     * 
      * @param string $sortMode
      * @return array $plugins
      * @checked
@@ -115,6 +118,7 @@ class PluginsService implements PluginsServiceInterface
 
     /**
      * プラグインをインストールする
+     * 
      * @param string $name プラグイン名
      * @param string $connection test connection指定用
      * @return bool|null
@@ -142,6 +146,7 @@ class PluginsService implements PluginsServiceInterface
 
     /**
      * プラグインをアップデートする
+     * 
      * @param string $name プラグイン名
      * @param string $connection コネクション名
      * @return bool
@@ -195,6 +200,7 @@ class PluginsService implements PluginsServiceInterface
 
     /**
      * プラグインを全て無効化する
+     * 
      * @return array 無効化したIDのリスト
      * @checked
      * @noTodo
@@ -216,6 +222,7 @@ class PluginsService implements PluginsServiceInterface
 
     /**
      * 複数のIDからプラグインを有効化する
+     * 
      * @param $ids
      * @checked
      * @noTodo
@@ -233,6 +240,7 @@ class PluginsService implements PluginsServiceInterface
 
     /**
      * バージョンを取得する
+     * 
      * @param $name
      * @return mixed|string
      * @checked
@@ -251,6 +259,7 @@ class PluginsService implements PluginsServiceInterface
 
     /**
      * プラグインを無効にする
+     * 
      * @param string $name
      * @checked
      * @noTodo
@@ -263,6 +272,7 @@ class PluginsService implements PluginsServiceInterface
 
     /**
      * プラグインを有効にする
+     * 
      * @param string $name
      * @checked
      * @noTodo
@@ -275,6 +285,7 @@ class PluginsService implements PluginsServiceInterface
 
     /**
      * プラグイン名からプラグインエンティティを取得
+     * 
      * @param string $name
      * @return array|EntityInterface|null
      * @checked
@@ -320,6 +331,7 @@ class PluginsService implements PluginsServiceInterface
 
     /**
      * プラグインを削除する
+     * 
      * @param string $name
      * @param array $connection
      * @checked
@@ -343,6 +355,7 @@ class PluginsService implements PluginsServiceInterface
 
     /**
      * 優先度を変更する
+     * 
      * @param int $id
      * @param int $offset
      * @param array $conditions
@@ -362,6 +375,7 @@ class PluginsService implements PluginsServiceInterface
 
     /**
      * baserマーケットのプラグイン一覧を取得する
+     * 
      * @return array|mixed
      * @checked
      * @unitTest
@@ -495,6 +509,7 @@ class PluginsService implements PluginsServiceInterface
 
     /**
      * 一括処理
+     * 
      * @param array $ids
      * @return bool
      * @checked
@@ -519,6 +534,7 @@ class PluginsService implements PluginsServiceInterface
 
     /**
      * IDを指定して名前リストを取得する
+     * 
      * @param $ids
      * @return array
      * @checked
@@ -549,6 +565,7 @@ class PluginsService implements PluginsServiceInterface
      * @return string Zip を展開したフォルダ名
      * @checked
      * @noTodo
+     * @unitTest
      * @throws BcException
      */
     public function add(array $postData)

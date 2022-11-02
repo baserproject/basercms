@@ -39,6 +39,7 @@ class SearchIndexesFrontService extends SearchIndexesService implements SearchIn
      * @param ServerRequest $request
      * @return array
      * @checked
+     * @unitTest
      * @noTodo
      * @unitTest
      */
