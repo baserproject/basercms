@@ -22,6 +22,8 @@ use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
 use Cake\Core\App;
 use Cake\ORM\TableRegistry;
+use Composer\Package\Archiver\ZipArchiver;
+use Laminas\Diactoros\UploadedFile;
 
 /**
  * Class PluginsServiceTest
@@ -343,5 +345,80 @@ class PluginsServiceTest extends BcTestCase
         $this->assertFalse($this->Plugins->get(10)->status);
         $this->assertFalse($this->Plugins->get(11)->status);
         $this->assertFalse($this->Plugins->get(12)->status);
+    }
+
+    /**
+     * test add
+     */
+    public function test_add()
+    {
+        $path = BASER_PLUGINS . 'BcThemeSample';
+        $zipSrcPath = TMP . 'zip' . DS;
+        $folder = new Folder();
+        $folder->create($zipSrcPath, 0777);
+        $folder->copy($zipSrcPath . 'BcThemeSample2', ['from' => $path, 'mode' => 0777]);
+        $plugin = 'BcThemeSample2';
+        $zip = new ZipArchiver();
+        $testFile = $zipSrcPath . $plugin . '.zip';
+        $zip->archive($zipSrcPath, $testFile, true);
+        $size = filesize($path);
+        $type = BcUtil::getContentType($testFile);
+
+        $this->setUploadFileToRequest('file', $testFile);
+
+        $files = new UploadedFile(
+            $testFile,
+            $size,
+            UPLOAD_ERR_OK,
+            $plugin . '.zip',
+            $type
+        );
+
+        //成功
+        $rs = $this->Plugins->add(["file" => $files]);
+        $this->assertEquals('BcThemeSample2', $rs);
+        //plugins/ 内に、Zipファイルを展開して配置する。
+        $this->assertTrue(is_dir(ROOT . DS . 'plugins' . DS . $plugin));
+
+        //  既に /plugins/ 内に同名のプラグインが存在する場合には、数字付きのディレクトリ名（PluginName2）にリネームする。
+        $folder->create($zipSrcPath, 0777);
+        $folder->copy($zipSrcPath . 'BcThemeSample2', ['from' => $path, 'mode' => 0777]);
+        $zip = new ZipArchiver();
+        $zip->archive($zipSrcPath, $testFile, true);
+        $this->setUploadFileToRequest('file', $testFile);
+        $files = new UploadedFile(
+            $testFile,
+            $size,
+            UPLOAD_ERR_OK,
+            $plugin . '.zip',
+            $type
+        );
+
+        $rs = $this->Plugins->add(["file" => $files]);
+        $this->assertEquals('BcThemeSample3', $rs);
+
+        //テスト実行後不要ファイルを削除
+        $folder = new Folder();
+        $folder->delete(ROOT . DS . 'plugins' . DS . $plugin);
+        $folder->delete(ROOT . DS . 'plugins' . DS . 'BcThemeSample22');
+        $folder->delete($zipSrcPath);
+
+        // TODO ローカルでは成功するが、GitHubActions上でうまくいかないためコメントアウト（原因不明）
+        // post_max_size　を超えた場合、サーバーに設定されているサイズ制限を超えた場合、
+//        $this->setUploadFileToRequest('file', 'test.zip');
+//        $postMaxSizeMega = preg_replace('/M\z/', '', ini_get('post_max_size'));
+//        $postMaxSizeByte = $postMaxSizeMega * 1024 * 1024;
+//        $_SERVER['CONTENT_LENGTH'] = $postMaxSizeByte + 1;
+//        $_SERVER['REQUEST_METHOD'] = 'POST';
+//        $files = new UploadedFile(
+//            'test.zip',
+//            1,
+//            UPLOAD_ERR_OK,
+//            'test.zip',
+//            'zip'
+//        );
+//        $this->expectException("BaserCore\Error\BcException");
+//        $this->expectExceptionMessage("送信できるデータ量を超えています。合計で " . ini_get('post_max_size') . " 以内のデータを送信してください。");
+//        $this->Plugins->add(["file" => $files]);
     }
 }

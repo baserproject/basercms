@@ -592,11 +592,20 @@ class PluginsService implements PluginsServiceInterface
             throw new BcException(__d('baser', 'アップロードしたZIPファイルの展開に失敗しました。'));
         }
 
-        $num = 2;
         $dstName = Inflector::camelize($srcName);
+        if(preg_match('/^(.+?)([0-9]+)$/', $dstName, $matches)) {
+            $baseName = $matches[1];
+            $num = $matches[2];
+        } else {
+            $baseName = $dstName;
+            $num = null;
+        }
         while(is_dir(BASER_PLUGINS . $dstName) || is_dir(BASER_THEMES . Inflector::dasherize($dstName))) {
-            $dstName = Inflector::camelize($srcName) . $num;
+            if(is_null($num)) {
+                $num = 1;
+            }
             $num++;
+            $dstName = Inflector::camelize($baseName) . $num;
         }
         $folder = new Folder(TMP . $srcName);
         $folder->move(BASER_PLUGINS . $dstName, ['mode' => 0777]);
