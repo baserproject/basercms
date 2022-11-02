@@ -10,7 +10,11 @@
  */
 
 namespace BcThemeFile;
+
 use BaserCore\BcPlugin;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * Class Plugin

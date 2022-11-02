@@ -14,6 +14,9 @@ namespace BcThemeConfig;
 use BaserCore\BcPlugin;
 use BcThemeConfig\ServiceProvider\BcThemeConfigServiceProvider;
 use Cake\Core\ContainerInterface;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * Class Plugin

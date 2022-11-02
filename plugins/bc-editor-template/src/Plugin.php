@@ -14,6 +14,9 @@ namespace BcEditorTemplate;
 use BaserCore\BcPlugin;
 use BcEditorTemplate\ServiceProvider\BcEditorTemplateServiceProvider;
 use Cake\Core\ContainerInterface;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * Class Plugin

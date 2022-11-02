@@ -31,11 +31,11 @@ class PasswordRequestsService implements PasswordRequestsServiceInterface
      * PasswordRequestsTable
      * @var PasswordRequestsTable|\Cake\ORM\Table
      */
-    public PasswordRequestsTable|\Cake\ORM\Table $PasswordRequests;
+    public \Cake\ORM\Table $PasswordRequests;
 
     /**
      * コンストラクタ
-     * 
+     *
      * @checked
      * @noTodo
      * @unitTest
@@ -47,7 +47,7 @@ class PasswordRequestsService implements PasswordRequestsServiceInterface
 
     /**
      * 空の新規エンティティを取得する
-     * 
+     *
      * @return EntityInterface
      * @checked
      * @noTodo
@@ -60,7 +60,7 @@ class PasswordRequestsService implements PasswordRequestsServiceInterface
 
     /**
      * 単一のエンティティを取得する
-     * 
+     *
      * @param int $id
      * @return EntityInterface
      * @checked
@@ -123,7 +123,7 @@ class PasswordRequestsService implements PasswordRequestsServiceInterface
 
     /**
      * パスワードを変更する
-     * 
+     *
      * @param EntityInterface|PasswordRequest $passwordRequest
      * @param array $postData
      * @return EntityInterface|false
