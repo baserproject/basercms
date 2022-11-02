@@ -395,7 +395,7 @@ class PluginsServiceTest extends BcTestCase
         );
 
         $rs = $this->Plugins->add(["file" => $files]);
-        $this->assertEquals('BcThemeSample22', $rs);
+        $this->assertEquals('BcThemeSample3', $rs);
 
         //テスト実行後不要ファイルを削除
         $folder = new Folder();
