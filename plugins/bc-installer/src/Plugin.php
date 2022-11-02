@@ -14,6 +14,9 @@ namespace BcInstaller;
 use BaserCore\BcPlugin;
 use BcInstaller\ServiceProvider\BcInstallerServiceProvider;
 use Cake\Core\ContainerInterface;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * Class Plugin
