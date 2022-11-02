@@ -15,6 +15,9 @@ namespace BcMail;
 use BaserCore\BcPlugin;
 use BcMail\ServiceProvider\BcMailServiceProvider;
 use Cake\Core\ContainerInterface;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * plugin for BcMail

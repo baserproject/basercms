@@ -16,6 +16,9 @@ use BaserCore\BcPlugin;
 use Cake\Core\Configure;
 use Cake\Routing\Route\InflectedRoute;
 use Cake\Routing\RouteBuilder;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * plugin for BcSpaSample
