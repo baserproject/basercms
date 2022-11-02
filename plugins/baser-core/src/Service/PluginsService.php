@@ -549,6 +549,7 @@ class PluginsService implements PluginsServiceInterface
      * @return string Zip を展開したフォルダ名
      * @checked
      * @noTodo
+     * @unitTest
      * @throws BcException
      */
     public function add(array $postData)
