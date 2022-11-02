@@ -30,6 +30,8 @@ class PasswordRequestsServiceTest extends BcTestCase
     public $fixtures = [
         'plugin.BaserCore.Factory/Sites',
         'plugin.BaserCore.Factory/Users',
+        'plugin.BaserCore.Factory/UsersUserGroups',
+        'plugin.BaserCore.Factory/UserGroups',
         'plugin.BaserCore.Factory/PasswordRequests'
     ];
 
