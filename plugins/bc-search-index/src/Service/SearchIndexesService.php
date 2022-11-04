@@ -43,7 +43,7 @@ class SearchIndexesService implements SearchIndexesServiceInterface
 
     /**
      * SearchIndexesService constructor.
-     * 
+     *
      * @checked
      * @unitTest
      * @noTodo
@@ -55,7 +55,7 @@ class SearchIndexesService implements SearchIndexesServiceInterface
 
     /**
      * 索引を取得する
-     * 
+     *
      * @param int $id
      * @return EntityInterface
      * @checked
@@ -119,6 +119,7 @@ class SearchIndexesService implements SearchIndexesServiceInterface
      * @checked
      * @unitTest
      * @noTodo
+     * @unitTest
      */
     protected function createIndexConditions($options)
     {
@@ -207,7 +208,7 @@ class SearchIndexesService implements SearchIndexesServiceInterface
 
     /**
      * 検索インデックスを削除する
-     * 
+     *
      * @param int $id
      * @return bool
      * @checked
@@ -301,7 +302,7 @@ class SearchIndexesService implements SearchIndexesServiceInterface
 
     /**
      * 優先度を変更する
-     * 
+     *
      * @param EntityInterface $target
      * @param $priority
      * @return EntityInterface|null
@@ -317,7 +318,7 @@ class SearchIndexesService implements SearchIndexesServiceInterface
 
     /**
      * 一括処理
-     * 
+     *
      * @param string $method
      * @param array $ids
      * @return bool
