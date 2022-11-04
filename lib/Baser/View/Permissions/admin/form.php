@@ -30,7 +30,7 @@ $this->BcBaser->js('admin/permissions/form', false);
 			<th class="col-head"><?php echo $this->BcForm->label('Permission.user_group_id', __d('baser', 'ユーザーグループ')) ?></th>
 			<td class="col-input">
 				<?php $userGroups = $this->BcForm->getControlSource('user_group_id') ?>
-				<?php echo $userGroups[$this->BcForm->value('Permission.user_group_id')] ?>
+				<?php echo h($userGroups[$this->BcForm->value('Permission.user_group_id')]) ?>
 				<?php echo $this->BcForm->input('Permission.user_group_id', ['type' => 'hidden']) ?>
 			</td>
 		</tr>

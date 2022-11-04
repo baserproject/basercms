@@ -22,7 +22,7 @@
 		<?= Hash::get($row, 'Dblog.id') ?>
 	</td>
 	<td class="bca-table-listup__tbody-td">
-		<?= Hash::get($row, 'Dblog.name') ?>
+		<?= h(Hash::get($row, 'Dblog.name')) ?>
 	</td>
 	<td class="bca-table-listup__tbody-td">
 		<?php if ($row['Dblog']['user_id']): ?>

@@ -21,7 +21,7 @@ $favorite['Favorite']['url'] = preg_replace('/^\/admin\//', '/' . BcUtil::getAdm
 	<?php $this->BcBaser->link(
 		'<span class="bca-nav-favorite-list-item-label">' . h($favorite['Favorite']['name']) . '</span>',
 		$favorite['Favorite']['url'],
-		['title' => Router::url($favorite['Favorite']['url'], true)]
+		['title' => h(Router::url($favorite['Favorite']['url']), true)]
 	) ?>
 	<?php echo $this->BcForm->input('Favorite.id.' . $favorite['Favorite']['id'], ['type' => 'hidden', 'value' => $favorite['Favorite']['id'], 'class' => 'favorite-id']) ?>
 	<?php echo $this->BcForm->input('Favorite.name.' . $favorite['Favorite']['id'], ['type' => 'hidden', 'value' => $favorite['Favorite']['name'], 'class' => 'favorite-name']) ?>
