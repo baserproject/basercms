@@ -32,6 +32,7 @@ class ContentLinksService implements ContentLinksServiceInterface
      *
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function __construct()
     {
