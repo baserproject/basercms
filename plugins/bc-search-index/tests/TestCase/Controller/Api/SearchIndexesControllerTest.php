@@ -12,6 +12,7 @@
 namespace BcSearchIndex\Test\TestCase\Controller\Api;
 
 use BaserCore\Test\Scenario\InitAppScenario;
+use BaserCore\Test\Scenario\SearchIndexesSearchScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcSearchIndex\Controller\Api\SearchIndexesController;
 use BcSearchIndex\Service\SearchIndexesService;
@@ -46,7 +47,8 @@ class SearchIndexesControllerTest extends BcTestCase
         'plugin.BaserCore.Factory/UserGroups',
         'plugin.BaserCore.Factory/UsersUserGroups',
         'plugin.BaserCore.Factory/SearchIndexes',
-        'plugin.BaserCore.Factory/Dblogs'
+        'plugin.BaserCore.Factory/Dblogs',
+        'plugin.BaserCore.Factory/Contents',
     ];
 
     /**
@@ -143,18 +145,101 @@ class SearchIndexesControllerTest extends BcTestCase
      * @return void
      */
     public function testIndex(){
-        SearchIndexFactory::make(['id' => 2, 'title' => 'test data index', 'type' => 'admin', 'site_id' => 2, 'status' => true], 1)->persist();
 
-        $this->get('/baser/api/bc-search-index/search_indexes/index.json?site_id=2&token=' . $this->accessToken);
+        $this->loadFixtureScenario(SearchIndexesSearchScenario::class);
+
+        // `limit`: 取得件数
+        $query = http_build_query(['limit' => 2, 'site_id' => 1, 'token' => $this->accessToken]);
+        $this->get('/baser/api/bc-search-index/search_indexes/index.json?' . $query);
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
-        $this->assertEquals('test data index', $result->searchIndexes[0]->title);
+        $this->assertCount(2, $result->searchIndexes);
 
-        SearchIndexFactory::make(['id' => 3, 'title' => 'test with param', 'type' => 'admin', 'site_id' => 1, 'status' => true], 1)->persist();
-        $this->get('/baser/api/bc-search-index/search_indexes/index.json?site_id=1&token=' . $this->accessToken);
+        // keyword(q): 検索キーワード
+        $query = http_build_query(['keyword' => 'inc', 'site_id' => 4, 'token' => $this->accessToken]);
+        $this->get('/baser/api/bc-search-index/search_indexes/index.json?' . $query);
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
-        $this->assertEquals('test with param', $result->searchIndexes[0]->title);
+        $this->assertEquals('会社案内', $result->searchIndexes[0]->title);
+        $query = http_build_query(['q' => 'inc', 's' => 4, 'token' => $this->accessToken]);
+        $this->get('/baser/api/bc-search-index/search_indexes/index.json?' . $query);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('会社案内', $result->searchIndexes[0]->title);
+
+        // site_id(s): サイトID
+        $query = http_build_query(['site_id' => 4, 'token' => $this->accessToken]);
+        $this->get('/baser/api/bc-search-index/search_indexes/index.json?' . $query);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('会社案内', $result->searchIndexes[0]->title);
+        $query = http_build_query(['s' => 4, 'token' => $this->accessToken]);
+        $this->get('/baser/api/bc-search-index/search_indexes/index.json?' . $query);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('会社案内', $result->searchIndexes[0]->title);
+
+        // content_id(c): コンテンツID
+        $query = http_build_query(['content_id' => 2, 'site_id' => 4, 'token' => $this->accessToken]);
+        $this->get('/baser/api/bc-search-index/search_indexes/index.json?' . $query);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('会社案内', $result->searchIndexes[0]->title);
+        $query = http_build_query(['c' => 2, 's' => 4, 'token' => $this->accessToken]);
+        $this->get('/baser/api/bc-search-index/search_indexes/index.json?' . $query);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('会社案内', $result->searchIndexes[0]->title);
+
+        // content_filter_id(cf): コンテンツフィルダーID
+        $query = http_build_query(['content_filter_id' => 3, 'site_id' => 4, 'token' => $this->accessToken]);
+        $this->get('/baser/api/bc-search-index/search_indexes/index.json?' . $query);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('会社案内', $result->searchIndexes[0]->title);
+        $query = http_build_query(['cf' => 3, 's' => 4, 'token' => $this->accessToken]);
+        $this->get('/baser/api/bc-search-index/search_indexes/index.json?' . $query);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('会社案内', $result->searchIndexes[0]->title);
+
+        // type: コンテンツタイプ
+        $query = http_build_query(['type' => 'ページ', 'site_id' => 4, 'token' => $this->accessToken]);
+        $this->get('/baser/api/bc-search-index/search_indexes/index.json?' . $query);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('会社案内', $result->searchIndexes[0]->title);
+
+        // model(m): モデル名（エンティティ名）
+        $query = http_build_query(['model' => 'Page', 'site_id' => 4, 'token' => $this->accessToken]);
+        $this->get('/baser/api/bc-search-index/search_indexes/index.json?' . $query);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('会社案内', $result->searchIndexes[0]->title);
+        $query = http_build_query(['m' => 'Page', 's' => 4, 'token' => $this->accessToken]);
+        $this->get('/baser/api/bc-search-index/search_indexes/index.json?' . $query);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('会社案内', $result->searchIndexes[0]->title);
+
+        // priority: 優先度
+        $query = http_build_query(['priority' => 0.5, 'site_id' => 4, 'token' => $this->accessToken]);
+        $this->get('/baser/api/bc-search-index/search_indexes/index.json?' . $query);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('会社案内', $result->searchIndexes[0]->title);
+
+        // folder_id(f): フォルダーID
+        $query = http_build_query(['folder_id' => 1, 'site_id' => 4, 'token' => $this->accessToken]);
+        $this->get('/baser/api/bc-search-index/search_indexes/index.json?' . $query);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('会社案内', $result->searchIndexes[0]->title);
+        $query = http_build_query(['f' => 1, 'site_id' => 4, 'token' => $this->accessToken]);
+        $this->get('/baser/api/bc-search-index/search_indexes/index.json?' . $query);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('会社案内', $result->searchIndexes[0]->title);
     }
 
     /**
