@@ -1254,6 +1254,7 @@ class AppTable extends Table
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getConditionAllowPublish()
     {
