@@ -33,6 +33,7 @@ class Plugin extends BcPlugin
      * @param ContainerInterface $container
      * @noTodo
      * @checked
+     * @unitTest
      */
     public function services(ContainerInterface $container): void
     {
