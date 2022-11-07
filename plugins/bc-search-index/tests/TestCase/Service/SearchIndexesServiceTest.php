@@ -217,4 +217,57 @@ class SearchIndexesServiceTest extends BcTestCase
         $searchIndexes = $this->SearchIndexesService->getIndex(['site_id' => 5])->all();
         $this->assertEquals(0, count($searchIndexes));
     }
+
+    /**
+     * Test createIndexConditions
+     * @dataProvider createIndexConditionsDataProvider
+     */
+    public function testCreateIndexConditions($isLoadScenario, $options, $expected)
+    {
+        if ($isLoadScenario) {
+            $this->loadFixtureScenario(SearchIndexesServiceScenario::class);
+        }
+        $result = $this->execPrivateMethod($this->SearchIndexesService, "createIndexConditions", [$options]);
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * createIndexConditionsテストのデータプロバイダ
+     * @return array
+     */
+    public function createIndexConditionsDataProvider(): array
+    {
+        return [
+            // 空配列の結果テスト
+            [false, [], []],
+            [false, ['priority_123' => 1], []],
+            // keyword(q): 検索キーワード
+            [false, ['keyword' => 'test'], [
+                'SearchIndexes.site_id' => 1,
+                'and' => [0 => ['or' => [0 => ['SearchIndexes.title LIKE' => '%test%'], 1 => ['SearchIndexes.detail LIKE' => '%test%']]]]
+            ]],
+            [false, ['q' => 'test'], [
+                'SearchIndexes.site_id' => 1,
+                'and' => [0 => ['or' => [0 => ['SearchIndexes.title LIKE' => '%test%'], 1 => ['SearchIndexes.detail LIKE' => '%test%']]]]
+            ]],
+            // site_id(s): サイトID
+            [false, ['site_id' => 2], ['SearchIndexes.site_id' => 2]],
+            [false, ['s' => 2], ['SearchIndexes.site_id' => 2]],
+            // content_id(c): コンテンツID
+            [false, ['content_id' => 2], ['SearchIndexes.site_id' => 1, 'SearchIndexes.content_id' => 2]],
+            [false, ['c' => 2], ['SearchIndexes.site_id' => 1, 'SearchIndexes.content_id' => 2]],
+            // content_filter_id(cf): コンテンツフィルダーID
+            [false, ['content_filter_id' => 2], ['SearchIndexes.site_id' => 1, 'SearchIndexes.content_filter_id' => 2]],
+            [false, ['cf' => 2], ['SearchIndexes.site_id' => 1, 'SearchIndexes.content_filter_id' => 2]],
+            // type: コンテンツタイプ
+            [false, ['type' => 'ページ'], ['SearchIndexes.site_id' => 1, 'SearchIndexes.type' => 'ページ']],
+            // model(m): モデル名（エンティティ名）
+            [false, ['model' => 'Page'], ['SearchIndexes.site_id' => 1, 'SearchIndexes.model' => 'Page']],
+            [false, ['m' => 'Page'], ['SearchIndexes.site_id' => 1, 'SearchIndexes.model' => 'Page']],
+            // priority: 優先度
+            [false, ['priority' => 2], ['SearchIndexes.site_id' => 1, 'SearchIndexes.priority' => 2]],
+            // folder_id(f): フォルダーID
+            [true, ['folder_id' => 2], ['SearchIndexes.site_id' => 1, 'SearchIndexes.rght <' => 3, 'SearchIndexes.lft >' => 2]],
+        ];
+    }
 }
