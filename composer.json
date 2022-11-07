@@ -41,6 +41,7 @@
             "BcInstaller\\": "plugins/bc-installer/src/",
             "BcMail\\": "plugins/bc-mail/src/",
             "BcSearchIndex\\": "plugins/bc-search-index/src/",
+            "BcContentLink\\": "plugins/bc-content-link/src/",
             "BcSpaSample\\": "plugins/BcSpaSample/src/",
             "BcThemeConfig\\": "plugins/bc-theme-config/src/",
             "BcThemeFile\\": "plugins/bc-theme-file/src/",
@@ -58,6 +59,7 @@
             "BcInstaller\\Test\\": "plugins/bc-installer/tests/",
             "BcMail\\Test\\": "plugins/bc-mail/tests/",
             "BcSearchIndex\\Test\\": "plugins/bc-search-index/tests/",
+            "BcContentLink\\Test\\": "plugins/bc-content-link/tests/",
             "BcThemeConfig\\Test\\": "plugins/bc-theme-config/tests/",
             "BcThemeFile\\Test\\": "plugins/bc-theme-file/tests/",
             "BcUploader\\Test\\": "plugins/bc-uploader/tests/",
@@ -73,6 +75,7 @@
         "baserproject/bc-front": "self.version",
         "baserproject/bc-installer": "self.version",
         "baserproject/bc-search-index": "self.version",
+        "baserproject/bc-content-link": "self.version",
         "baserproject/bc-theme-config": "self.version",
         "baserproject/bc-theme-file": "self.version",
         "baserproject/bc-widget-area": "self.version"

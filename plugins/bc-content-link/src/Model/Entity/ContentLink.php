@@ -9,7 +9,7 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
-namespace BaserCore\Model\Entity;
+namespace BcContentLink\Model\Entity;
 
 use Cake\I18n\Time as TimeAlias;
 use Cake\ORM\Entity as EntityAlias;

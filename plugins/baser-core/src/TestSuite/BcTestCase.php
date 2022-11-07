@@ -22,6 +22,7 @@ use BaserCore\Utility\BcApiUtil;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
 use BcBlog\ServiceProvider\BcBlogServiceProvider;
+use BcContentLink\ServiceProvider\BcContentLinkServiceProvider;
 use BcSearchIndex\ServiceProvider\BcSearchIndexServiceProvider;
 use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
@@ -209,6 +210,7 @@ class BcTestCase extends TestCase
         $container = BcContainer::get();
         $container->addServiceProvider(new BcServiceProvider());
         $container->addServiceProvider(new BcSearchIndexServiceProvider());
+        $container->addServiceProvider(new BcContentLinkServiceProvider());
         $container->addServiceProvider(new BcBlogServiceProvider());
         EventManager::instance(new EventManager());
         if(!empty($_SERVER['REQUEST_URI']) && $_SERVER['REQUEST_URI'] === '/s/') {

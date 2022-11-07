@@ -11,8 +11,10 @@
 
 namespace BcContentLink\Test\TestCase\Service;
 
+use BcContentLink\Test\Scenario\ContentLinksServiceScenario;
 use BcContentLink\Service\ContentLinksService;
 use BaserCore\TestSuite\BcTestCase;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class ContentLinksServiceTest
@@ -22,12 +24,29 @@ class ContentLinksServiceTest extends BcTestCase
 {
 
     /**
+     * Trait
+     */
+    use ScenarioAwareTrait;
+
+    /**
+     * Fixtures
+     *
+     * @var array
+     */
+    public $fixtures = [
+        'plugin.BaserCore.Factory/Sites',
+        'plugin.BaserCore.Factory/Contents',
+        'plugin.BcContentLink.Factory/ContentLinks',
+    ];
+
+    /**
      * Set Up
      *
      * @return void
      */
     public function setUp(): void
     {
+        $this->setFixtureTruncate();
         parent::setUp();
         $this->ContentLinksService = new ContentLinksService();
     }
@@ -52,4 +71,34 @@ class ContentLinksServiceTest extends BcTestCase
         $this->assertTrue(isset($this->ContentLinksService->ContentLinks));
     }
 
+    /**
+     * @test get
+     * @return void
+     */
+    public function test_get(): void
+    {
+        $this->loadFixtureScenario(ContentLinksServiceScenario::class);
+        $data = $this->ContentLinksService->get(1);
+        $this->assertNotEmpty($data);
+        $data = $this->ContentLinksService->get(1, ['status' => 'publish']);
+        $this->assertNotEmpty($data);
+    }
+
+    /**
+     * @test create
+     * @return void
+     */
+    public function test_create(): void
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * @test update
+     * @return void
+     */
+    public function test_update(): void
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
 }

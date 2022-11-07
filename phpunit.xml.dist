@@ -18,6 +18,9 @@
         <testsuite name="BcSearchIndex">
             <directory>plugins/bc-search-index/tests/TestCase</directory>
         </testsuite>
+        <testsuite name="BcContentLink">
+            <directory>plugins/bc-content-link/tests/TestCase</directory>
+        </testsuite>
     </testsuites>
     <extensions>
         <extension class="Cake\TestSuite\Fixture\PHPUnitExtension"/>
