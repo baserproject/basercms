@@ -52,4 +52,30 @@ class ContentLinksServiceTest extends BcTestCase
         $this->assertTrue(isset($this->ContentLinksService->ContentLinks));
     }
 
+    /**
+     * @test get
+     * @return void
+     */
+    public function test_get(): void
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * @test create
+     * @return void
+     */
+    public function test_create(): void
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * @test update
+     * @return void
+     */
+    public function test_update(): void
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
 }
