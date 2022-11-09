@@ -68,7 +68,9 @@ class BlogCommentsController extends BlogAdminAppController
     }
 
     /**
-     * [ADMIN] 削除処理
+     * ブログコメントを削除する
+     *
+     * ブログ記事IDでフィルタリングがかかっている場合は、削除後にフィルタリングされた画面にリダイレクトする
      *
      * @param BlogCommentsServiceInterface $service
      * @param int $blogContentId

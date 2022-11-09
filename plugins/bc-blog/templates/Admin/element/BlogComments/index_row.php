@@ -49,7 +49,9 @@ if (!$blogComment->status) {
       <?php $this->BcBaser->link($blogComment->email, 'mailto:' . $blogComment->email, ['escape' => true]) ?>
     <?php endif; ?>
     <br>
+    <?php if($blogComment->url): ?>
     <?php echo $this->BcText->autoLinkUrls($blogComment->url, ['target' => '_blank']) ?>
+    <?php endif ?>
   </td>
   <td class="bca-table-listup__tbody-td">
     <strong>

@@ -31,13 +31,13 @@ class BlogCommentsAdminService extends BlogCommentsService implements BlogCommen
      * ブログコメント一覧用の view 変数を取得
      *
      * @param int $blogContentId
-     * @param int $blogPostId
+     * @param int|null $blogPostId
      * @param ResultSet $blogComments
      * @return array
      * @checked
      * @noTodo
      */
-    public function getViewVarsForIndex(int $blogContentId, int $blogPostId, ResultSet $blogComments): array
+    public function getViewVarsForIndex(int $blogContentId, $blogPostId, ResultSet $blogComments): array
     {
         $blogContentsService = $this->getService(BlogContentsServiceInterface::class);
         $blogPostsService = $this->getService(BlogPostsServiceInterface::class);
