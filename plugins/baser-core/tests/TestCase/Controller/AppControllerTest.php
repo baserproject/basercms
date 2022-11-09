@@ -251,4 +251,13 @@ class AppControllerTest extends BcTestCase
         $this->assertEquals(['a' => '1', 'b' => '2'], $result);
     }
 
+    /**
+     * test notFound
+     */
+    public function test_notFound()
+    {
+        $this->expectException("Cake\Http\Exception\NotFoundException");
+        $this->expectExceptionMessage("見つかりませんでした。");
+        $this->AppController->notFound();
+    }
 }
