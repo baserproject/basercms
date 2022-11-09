@@ -187,6 +187,7 @@ class PluginsController extends BcAdminAppController
      * @param PluginsServiceInterface $service
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function add(PluginsServiceInterface $service)
     {
@@ -196,8 +197,9 @@ class PluginsController extends BcAdminAppController
                 $name = $service->add($this->getRequest()->getUploadedFiles());
                 $this->BcMessage->setInfo(sprintf(__d('baser', '新規プラグイン「%s」を追加しました。'), $name));
                 $this->redirect(['action' => 'index']);
-            } catch (BcException $e) {
+            } catch (\Exception $e) {
                 $this->BcMessage->setError(__d('baser', 'ファイルのアップロードに失敗しました。') . $e->getMessage());
+                $this->redirect(['action' => 'index']);
             }
         }
     }
