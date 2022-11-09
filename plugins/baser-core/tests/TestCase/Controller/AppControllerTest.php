@@ -251,4 +251,38 @@ class AppControllerTest extends BcTestCase
         $this->assertEquals(['a' => '1', 'b' => '2'], $result);
     }
 
+    /**
+     * test saveViewConditions
+     */
+    public function test_saveViewConditions()
+    {
+        $request = $this->getRequest()
+            ->withQueryParams(['q' => '1'])
+            ->withData('a', 'android')
+            ->withParam('controller', 'Test')
+            ->withParam('action', 'view');
+        $this->AppController->setRequest($request);
+        $targetModel = 'model';
+
+        $options = ['group' => 'abc', 'post' => false, 'get' => false];
+        $this->execPrivateMethod($this->AppController, 'saveViewConditions', [$targetModel, $options]);
+        $session = $this->AppController->getRequest()->getSession();
+        // クエリパラメーターが保存されないテスト
+        $query = $session->read('BcApp.viewConditions.TestView.abc.query');
+        $this->assertNull($query);
+        // POSTデータが保存されないテスト
+        $data = $session->read('BcApp.viewConditions.TestView.abc.data.model');
+        $this->assertNull($data);
+
+        $options = ['group' => 'abc', 'post' => true, 'get' => true];
+        $this->execPrivateMethod($this->AppController, 'saveViewConditions', [$targetModel, $options]);
+        $session = $this->AppController->getRequest()->getSession();
+        // クエリパラメーターが保存されるテスト
+        $query = $session->read('BcApp.viewConditions.TestView.abc.query');
+        $this->assertEquals(['q' => '1'], $query);
+        // POSTデータが保存されるテスト
+        $data = $session->read('BcApp.viewConditions.TestView.abc.data.model');
+        $this->assertEquals(['a' => 'android'], $data);
+    }
+
 }

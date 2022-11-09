@@ -357,6 +357,7 @@ class AppController extends BaseController
      * @see setViewConditions
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function saveViewConditions($targetModel = [], $options = []): void
     {
