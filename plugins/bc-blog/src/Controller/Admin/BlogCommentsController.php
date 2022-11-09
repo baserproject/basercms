@@ -125,7 +125,10 @@ class BlogCommentsController extends BlogAdminAppController
     }
 
     /**
-     * [ADMIN] 有効状態にする
+     * [ADMIN] ブログコメントを公開状態にする
+     * 
+     * 指定したブログコメントの公開状態に設定する。
+     * 設定後、一覧にリダイレクトするが、ブログ記事でフィルタリングしている場合は、フィルタリングした状態でリダイレクトする。
      *
      * @param BlogCommentsService $service
      * @param int $blogContentId
