@@ -12,8 +12,13 @@
 
 /**
  * [ADMIN] ブログ記事コメント 一覧　テーブル
+ * @var \BaserCore\View\BcAdminAppView $this
+ * @checked
+ * @noTodo
+ * @unitTest
  */
 $this->BcListTable->setColumnNumber(7);
+$this->BcBaser->js('BcBlog.admin/blog_comments/index.bundle', false);
 ?>
 
 
@@ -21,8 +26,13 @@ $this->BcListTable->setColumnNumber(7);
 <div class="bca-data-list__top">
   <?php if ($this->BcBaser->isAdminUser()): ?>
     <div class="bca-action-table-listup">
-      <?php echo $this->BcAdminForm->control('batch', ['type' => 'select', 'options' => ['publish' => '公開', 'unpublish' => __d('baser', '非公開'), 'del' => __d('baser', '削除')], 'empty' => __d('baser', '一括処理')]) ?>
-      <?php echo $this->BcAdminForm->button(__d('baser', '適用'), ['id' => 'BtnApplyBatch', 'disabled' => 'disabled', 'class' => 'bca-btn', 'data-bca-btn-size' => 'sm']) ?>
+      <?php echo $this->BcAdminForm->control('batch', [
+        'type' => 'select',
+        'options' => ['publish' => '公開', 'unpublish' => __d('baser', '非公開'), 'delete' => __d('baser', '削除')],
+        'empty' => __d('baser', '一括処理'),
+        'data-bca-select-size' => 'lg'
+      ]) ?>
+      <?php echo $this->BcAdminForm->button(__d('baser', '適用'), ['id' => 'BtnApplyBatch', 'disabled' => 'disabled', 'class' => 'bca-btn', 'data-bca-btn-size' => 'lg']) ?>
     </div>
   <?php endif ?>
   <div class="bca-data-list__sub">
@@ -97,9 +107,9 @@ $this->BcListTable->setColumnNumber(7);
   </tr>
   </thead>
   <tbody class="bca-table-listup__tbody">
-  <?php if (!empty($dbDatas)): ?>
-    <?php foreach($dbDatas as $data): ?>
-      <?php $this->BcBaser->element('blog_comments/index_row', ['data' => $data]) ?>
+  <?php if (!empty($blogComments)): ?>
+    <?php foreach($blogComments as $blogComment): ?>
+      <?php $this->BcBaser->element('BlogComments/index_row', ['blogComment' => $blogComment]) ?>
     <?php endforeach; ?>
   <?php else: ?>
     <tr>

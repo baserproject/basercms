@@ -23,23 +23,6 @@ class BlogCommentsTable extends BlogAppTable
 {
 
     /**
-     * ビヘイビア
-     *
-     * @var array
-     */
-    public $actsAs = ['BcCache'];
-
-    /**
-     * belongsTo
-     *
-     * @var array
-     */
-    public $belongsTo = ['BlogPost' => [
-        'className' => 'BcBlog.BlogPost',
-        'foreignKey' => 'blog_post_id'
-    ]];
-
-    /**
      * BlogComment constructor.
      *
      * @param bool $id
@@ -88,9 +71,9 @@ class BlogCommentsTable extends BlogAppTable
 
         $this->addBehavior('Timestamp');
 
-        $this->belongsTo('BlogCategories', [
-            'className' => 'BcBlog.BlogCategories',
-            'foreignKey' => 'blog_category_id',
+        $this->belongsTo('BlogPosts', [
+            'className' => 'BcBlog.BlogPosts',
+            'foreignKey' => 'blog_post_id',
         ]);
     }
     /**

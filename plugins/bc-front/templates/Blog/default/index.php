@@ -21,6 +21,7 @@
  * @unitTest
  */
 $this->BcBaser->setDescription($this->Blog->getDescription());
+$this->BcUpload->setTable('BcBlog.BlogPosts');
 ?>
 
 
@@ -34,7 +35,7 @@ $this->BcBaser->setDescription($this->Blog->getDescription());
 <?php if (!empty($posts)): ?>
 	<?php foreach ($posts as $post): ?>
 	<article class="bs-blog-post__item clearfix">
-		<?php if(!empty($post['BlogPost']['eye_catch'])): ?>
+		<?php if(!empty($post->eye_catch)): ?>
 		<a href="<?php echo $this->Blog->getPostLinkUrl($post) ?>" class="bs-blog-post__item-eye-catch">
 			<?php $this->Blog->eyeCatch($post, ['width' => 150, 'link' => false]) ?>
 		</a>
@@ -42,7 +43,7 @@ $this->BcBaser->setDescription($this->Blog->getDescription());
 		<span class="bs-blog-post__item-date"><?php $this->Blog->postDate($post, 'Y.m.d') ?></span>
 		<?php $this->Blog->category($post, ['class' => 'bs-blog-post__item-category']) ?>
 		<span class="bs-blog-post__item-title"><?php $this->Blog->postTitle($post) ?></span>
-		<?php if(strip_tags($post['BlogPost']['content'] . $post['BlogPost']['detail'])): ?>
+		<?php if(strip_tags($post->content . $post->detail)): ?>
 		<div class="bs-top-post__item-detail"><?php $this->Blog->postContent($post, true, false, 46) ?>...</div>
 		<?php endif ?>
 	</article>
@@ -54,4 +55,4 @@ $this->BcBaser->setDescription($this->Blog->getDescription());
 
 
 <!-- /Elements/paginations/simple.php -->
-<?php //$this->BcBaser->pagination('simple'); ?>
+<?php $this->BcBaser->pagination('simple'); ?>

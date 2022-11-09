@@ -16,11 +16,13 @@ use BaserCore\Service\Admin\UsersAdminServiceInterface;
 use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\Service\UsersService;
 use BaserCore\Service\UsersServiceInterface;
+use BaserCore\Utility\BcSiteConfig;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
 use Cake\Core\Exception\Exception;
 use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\Http\Exception\ForbiddenException;
+use Cake\Http\Exception\NotFoundException;
 use Cake\Http\Response;
 use Cake\Routing\Router;
 use BaserCore\Annotation\NoTodo;
@@ -139,15 +141,14 @@ class UsersController extends BcAdminAppController
      * 管理画面にログインすることができるユーザーの一覧を表示する
      *
      * @param UsersServiceInterface $service
-     * @param SiteConfigsServiceInterface $siteConfigsService
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function index(UsersServiceInterface $service, SiteConfigsServiceInterface $siteConfigsService): void
+    public function index(UsersServiceInterface $service)
     {
         $this->setViewConditions('User', ['default' => ['query' => [
-            'limit' => $siteConfigsService->getValue('admin_list_num'),
+            'limit' => BcSiteConfig::get('admin_list_num'),
             'sort' => 'id',
             'direction' => 'asc',
         ]]]);
@@ -159,8 +160,12 @@ class UsersController extends BcAdminAppController
         if ($event !== false) {
             $this->request = ($event->getResult() === null || $event->getResult() === true)? $event->getData('request') : $event->getResult();
         }
-
-        $this->set('users', $this->paginate($service->getIndex($this->request->getQueryParams())));
+        try {
+            $entities = $this->paginate($service->getIndex($this->getRequest()->getQueryParams()));
+        } catch (NotFoundException $e) {
+            return $this->redirect(['action' => 'index']);
+        }
+        $this->set('users', $entities);
         $this->request = $this->request->withParsedBody($this->request->getQuery());
     }
 

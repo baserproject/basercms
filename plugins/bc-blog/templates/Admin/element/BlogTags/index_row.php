@@ -12,6 +12,11 @@
 
 /**
  * [ADMIN] ブログタグ一覧　行
+ * @var \BaserCore\View\BcAdminAppView $this
+ * @var \BcBlog\Model\Entity\BlogTag $blogTag
+ * @checked
+ * @noTodo
+ * @unitTest
  */
 ?>
 
@@ -19,21 +24,36 @@
 <tr>
   <td class="row-tools bca-table-listup__tbody-td">
     <?php if ($this->BcBaser->isAdminUser()): ?>
-      <?php echo $this->BcAdminForm->control('batch_targets.' . $data['BlogTag']['id'], ['type' => 'checkbox', 'label' => '<span class="bca-visually-hidden">' . __d('baser', 'チェックする') . '</span>', 'class' => 'batch-targets bca-checkbox__input', 'value' => $data['BlogTag']['id']]) ?>
+      <?php echo $this->BcAdminForm->control('batch_targets.' . $blogTag->id, [
+        'type' => 'checkbox',
+        'label' => '<span class="bca-visually-hidden">' . __d('baser', 'チェックする') . '</span>',
+        'class' => 'batch-targets bca-checkbox__input',
+        'value' => $blogTag->id,
+        'escape' => false
+      ]) ?>
     <?php endif ?>
   </td>
-  <td class="bca-table-listup__tbody-td"><?php echo $data['BlogTag']['id'] ?></td>
+  <td class="bca-table-listup__tbody-td"><?php echo $blogTag->id ?></td>
 
   <td
-    class="bca-table-listup__tbody-td"><?php $this->BcBaser->link($data['BlogTag']['name'], ['action' => 'edit', $data['BlogTag']['id']], ['escape' => true]) ?></td>
+    class="bca-table-listup__tbody-td"><?php $this->BcBaser->link($blogTag->name, ['action' => 'edit', $blogTag->id], ['escape' => true]) ?></td>
 
-  <?php echo $this->BcListTable->dispatchShowRow($data) ?>
+  <?php echo $this->BcListTable->dispatchShowRow($blogTag) ?>
 
-  <td class="bca-table-listup__tbody-td"><?php echo $this->BcTime->format($data['BlogTag']['created'], 'yyyy-MM-dd'); ?>
+  <td class="bca-table-listup__tbody-td"><?php echo $this->BcTime->format($blogTag->created, 'yyyy-MM-dd'); ?>
     <br/>
-    <?php echo $this->BcTime->format($data['BlogTag']['modified'], 'yyyy-MM-dd'); ?></td>
+    <?php echo $this->BcTime->format($blogTag->modified, 'yyyy-MM-dd'); ?></td>
   <td class="row-tools bca-table-listup__tbody-td bca-table-listup__tbody-td--actions">
-    <?php $this->BcBaser->link('', ['action' => 'edit', $data['BlogTag']['id']], ['title' => __d('baser', '編集'), 'class' => 'bca-btn-icon', 'data-bca-btn-type' => 'edit', 'data-bca-btn-size' => 'lg']) ?>
-    <?php $this->BcBaser->link('', ['action' => 'ajax_delete', $data['BlogTag']['id']], ['title' => __d('baser', '削除'), 'class' => 'btn-delete bca-btn-icon', 'data-bca-btn-type' => 'delete', 'data-bca-btn-size' => 'lg']) ?>
+    <?php $this->BcBaser->link('',
+      ['action' => 'edit', $blogTag->id],
+      ['title' => __d('baser', '編集'), 'class' => 'bca-btn-icon', 'data-bca-btn-type' => 'edit', 'data-bca-btn-size' => 'lg']
+    ) ?>
+    <?= $this->BcAdminForm->postLink('', ['action' => 'delete', $blogTag->id], [
+      'confirm' => __d('baser', "このデータを本当に削除してもいいですか？\nこのタグに関連する記事は削除されません。"),
+      'title' => __d('baser', '削除'),
+      'class' => 'btn-delete bca-btn-icon',
+      'data-bca-btn-type' => 'delete',
+      'data-bca-btn-size' => 'lg',
+    ]) ?>
   </td>
 </tr>

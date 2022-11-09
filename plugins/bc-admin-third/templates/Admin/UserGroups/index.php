@@ -11,35 +11,18 @@
 
 /**
  * UserGroups index
- * @var AppView $this
+ * @var \BaserCore\View\BcAdminAppView $this
+ * @checked
+ * @noTodo
+ * @unitTest
  */
-
-// TODO 一覧をどうやって読み込ませるか検討が必要
-// $this->BcBaser->i18nScript([
-// 	'message1' => __d('baser', "このデータを本当に削除してもいいですか？\n削除する場合、関連するユーザーは削除されませんが、関連するアクセス制限設定は全て削除されます。\n※ 関連するユーザーは管理者グループに所属する事になります。")
-// ]);
-// $this->BcBaser->js([
-// 	'admin/lib/jquery.baser_ajax_data_list',
-// 	'admin/lib/jquery.baser_ajax_batch',
-// 	'admin/lib/baser_ajax_data_list_config',
-// 	'admin/lib/baser_ajax_batch_config'
-// ]);
-use BaserCore\View\AppView;
-
 $this->BcAdmin->addAdminMainBodyHeaderLinks([
   'url' => ['action' => 'add'],
   'title' => __d('baser', '新規追加'),
 ]);
+$this->BcAdmin->setHelp('user_groups_index');
+$this->BcAdmin->setTitle(__d('baser', 'ユーザーグループ一覧'));
 ?>
-
-<!-- TODO 一覧をどうやって 読み込ませるか検討が必要 -->
-<script type="text/javascript">
-  // 	$(function(){
-  // 		$.baserAjaxDataList.config.methods.del.confirm = bcI18n.message1;
-  // 		$.baserAjaxDataList.init();
-  // 		$.baserAjaxBatch.init({ url: $("#AjaxBatchUrl").html()});
-  // 	});
-</script>
 
 
 <div id="AjaxBatchUrl"

@@ -187,7 +187,7 @@ use Cake\Routing\Router;
             <?php echo __d('baser', 'ブログコンテンツで利用するウィジェットエリアを指定します。') ?><br>
             <?php echo __d('baser', 'ウィジェットエリアはウィジェットエリア管理より追加できます。') ?><br>
             <ul>
-              <li><?php $this->BcBaser->link(__d('baser', 'ウィジェットエリア管理'), ['plugin' => null, 'controller' => 'widget_areas', 'action' => 'index']) ?></li>
+              <li><?php //$this->BcBaser->link(__d('baser', 'ウィジェットエリア管理'), ['plugin' => null, 'controller' => 'widget_areas', 'action' => 'index']) ?></li>
             </ul>
           </div>
         </td>

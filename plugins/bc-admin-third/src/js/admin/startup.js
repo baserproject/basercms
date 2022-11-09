@@ -365,5 +365,8 @@ $(function () {
     $('.bca-loading').click(function(){
         $.bcUtil.showLoader();
     });
+
+    $.bcUtil.showFlashMessage();
+
 });
 

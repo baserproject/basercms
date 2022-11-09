@@ -90,7 +90,7 @@ class UploadsController extends AppController
         }
 
         if (!$size) {
-            $data = $session->read('Upload.' . $sessioName . '.data');
+            $data = base64_decode($session->read('Upload.' . $sessioName . '.data'));
         } else {
             if (is_dir(TMP . 'uploads')) {
                 mkdir(TMP . 'uploads');

@@ -11,6 +11,7 @@
 
 namespace BaserCore\Test\TestCase\Event;
 
+use BaserCore\Model\Entity\Page;
 use Cake\Event\Event;
 use BaserCore\View\BcAdminAppView;
 use BaserCore\TestSuite\BcTestCase;
@@ -132,6 +133,8 @@ class BcContentsEventListenerTest extends BcTestCase
             ])
             ->set("content", $this->Content); // content_relatedで必要
         $out = "testtest";
+        $entity = new Page(['content' => []]);
+        $BcAdminAppView->BcAdminForm->create($entity);
         $event = new Event("Helper.Form.afterSubmit", $BcAdminAppView);
         $event->setData('id', 'TestAdminEditForm')->setData('out', $out);
         @$this->BcContentsEventListener->formAfterSubmit($event); // NOTE: 必要な要素があるかを判別するため、不要なエラーを制御

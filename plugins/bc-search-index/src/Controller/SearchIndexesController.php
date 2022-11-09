@@ -17,6 +17,7 @@ use BcSearchIndex\Service\Front\SearchIndexesFrontServiceInterface;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use Cake\Http\Exception\NotFoundException;
 
 /**
  * SearchIndexesController
@@ -54,9 +55,16 @@ class SearchIndexesController extends BcFrontAppController
             'default' => ['query' => ['limit' => 10]]
         ]);
         $params = array_merge($this->request->getQueryParams(), ['status' => 'publish']);
+
+        try {
+            $entities = $this->paginate($service->getIndex($params));
+        } catch (NotFoundException $e) {
+            return $this->redirect(['action' => 'search']);
+        }
+
         /* @var SearchIndexesFrontService $service */
         $this->set($service->getViewVarsForSearch(
-            $this->paginate($service->getIndex($params)),
+            $entities,
             $this->getRequest()
         ));
     }

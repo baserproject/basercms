@@ -12,6 +12,7 @@ $(function () {
 
     var fullUrl = $("#AdminBlogBLogPostsEditScript").attr('data-fullurl');
     var previewurlBase = $("#AdminBlogBLogPostsEditScript").attr('data-previewurl');
+    let blogContentId = $("#AdminBlogBLogPostsEditScript").attr('data-blogContentId');
 
     $("input[type=text]").each(function () {
         $(this).keypress(function (e) {
@@ -42,13 +43,16 @@ $(function () {
         var previewMode = 'default';
         var previewurl = previewurlBase;
 
-        if ($("#DraftModeDetailTmp").val() == 'draft') {
+        if ($("#ContentPreviewMode").val() == 'draft') {
             previewMode = 'draft';
         }
         if (previewurl.match(/\?/)) {
-            previewurl += '&preview=' + previewMode;
+            previewurl += '&url=' + fullUrl +  '&preview=' + previewMode;
         } else {
-            previewurl += '?preview=' + previewMode;
+            previewurl += '?url=' + fullUrl +  '&preview=' + previewMode;
+        }
+        if (typeof $.bcCkeditor.editor['editor_detail_tmp'] !== undefined) {
+            $.bcCkeditor.editor['editor_detail_tmp'].execCommand('synchronize');
         }
         form.attr('target', 'preview');
         form.attr('action', previewurl);
@@ -66,8 +70,8 @@ $(function () {
      */
     $("#BtnSave").click(function () {
         $.bcUtil.showLoader();
-        if (typeof editor_detail_tmp != "undefined") {
-            editor_detail_tmp.execCommand('synchronize');
+        if (typeof $.bcCkeditor.editor['editor_detail_tmp'] !== undefined) {
+            $.bcCkeditor.editor['editor_detail_tmp'].execCommand('synchronize');
         }
         $("#BlogPostMode").val('save');
         $.bcToken.check(function () {
@@ -89,27 +93,39 @@ $(function () {
     });
 
     $("#BtnAddBlogTag").click(function () {
-        if (!$("#BlogTagName").val()) {
+        if (!$("#blog-tag-name").val()) {
             return false;
         }
         $.bcToken.check(function () {
             return $.ajax({
                 type: "POST",
-                url: $("#AddTagUrl").html(),
+                url: $.bcUtil.apiBaseUrl + 'bc-blog/blog_tags/add.json',
+                headers: {
+                    "Authorization": $.bcJwt.accessToken,
+                },
                 data: {
-                    'data[BlogTag][name]': $("#BlogTagName").val(),
+                    'name': $("#blog-tag-name").val(),
                     '_csrfToken': $.bcToken.key
                 },
-                dataType: 'html',
+                dataType: 'json',
                 beforeSend: function () {
                     $("#BtnAddBlogTag").prop('disabled', true);
-                    $("#TagLoader").show();
+                    if(!$("#BtnAddBlogTagloaderkey").length) {
+                        $.bcUtil.showLoader('after', '#BtnAddBlogTag', 'BtnAddBlogTagloaderkey');
+                    }
                 },
                 success: function (result) {
                     if (result) {
-                        $("#BlogTags").append(result);
-                        $('input[name="data[BlogTag][BlogTag][]"]').last().prop('checked', true);
-                        $("#BlogTagName").val('');
+                        let checkbox = $('<span class="bca-checkbox"/>')
+                            .append($('<input type="checkbox" name="blog_tags[_ids][]" class="bca-checkbox__input" />')
+                                .val(result.blogTag.id)
+                                .attr('id', 'blog-tags-ids-' + result.blogTag.id))
+                            .append($('<label class="bca-checkbox__label">')
+                                .attr('for', 'blog-tags-ids-' + result.blogTag.id)
+                                .html(result.blogTag.name));
+                        $("#BlogTags").append(checkbox);
+                        $('input[name="blog_tags[_ids][]"]').last().prop('checked', true);
+                        $("#blog-tag-name").val('');
                     } else {
                         alert(bcI18n.alertMessage1);
                     }
@@ -119,16 +135,16 @@ $(function () {
                 },
                 complete: function (xhr, textStatus) {
                     $("#BtnAddBlogTag").removeAttr('disabled');
-                    $("#TagLoader").hide();
+                    $.bcUtil.hideLoader('after', '#BtnAddBlogTag', 'BtnAddBlogTagloaderkey');
                     $("#BlogTags").effect("highlight", {}, 1500);
                 }
             });
-        }, {loaderType: 'target', loaderSelector: '#TagLoader', hideLoader: false});
+        }, {loaderType: 'after', loaderSelector: '#BtnAddBlogTag', hideLoader: false});
         return false;
     });
 
     /**
-     * ブログカテゴリ追加
+     * ブログカテゴリダイアログ
      */
     $("#BtnAddBlogCategory").click(function () {
         $("#AddBlogCategoryForm").dialog({
@@ -140,8 +156,8 @@ $(function () {
                 $(this.parentNode).css('overflow', 'visible');
             },
             close: function () {
-                $("#BlogCategoryTitle").val('');
-                $("#BlogCategoryName").val('');
+                $("#blogcategory-title").val('');
+                $("#blogcategory-name").val('');
             },
             buttons: {
                 cancel: {
@@ -153,50 +169,11 @@ $(function () {
                 save: {
                     text: bcI18n.commonSave,
                     click: function () {
-                        var name = $('#AddBlogCategoryForm [name="data[BlogCategory][name]"]').val();
-                        var title = $('#AddBlogCategoryForm [name="data[BlogCategory][title]"]').val();
-
-                        if (!name) {
-                            name = title;
-                        }
-
-                        $.bcToken.check(function () {
-                            return $.ajax({
-                                type: "POST",
-                                url: $("#AddBlogCategoryUrl").html(),
-                                data: {
-                                    'data[BlogCategory][name]': name,
-                                    'data[BlogCategory][title]': title,
-                                    '_csrfToken': $.bcToken.key
-                                },
-                                dataType: 'script',
-                                beforeSend: function () {
-                                    $("#BtnAddBlogCategory").prop('disabled', true);
-                                    $.bcUtil.showLoader();
-                                },
-                                success: function (result) {
-                                    if (result) {
-                                        $("#BlogPostBlogCategoryId").append($('<option />').val(result).html(title));
-                                        $("#BlogPostBlogCategoryId").val(result);
-                                    } else {
-                                        alert(bcI18n.alertMessage3);
-                                    }
-                                    $("#AddBlogCategoryForm").dialog('close');
-                                },
-                                error: function (XMLHttpRequest, textStatus) {
-                                    if (XMLHttpRequest.responseText) {
-                                        alert(bcI18n.alertMessage4 + '\n\n' + XMLHttpRequest.responseText);
-                                    } else {
-                                        alert(bcI18n.alertMessage5 + '\n\n' + XMLHttpRequest.statusText);
-                                    }
-                                },
-                                complete: function (xhr, textStatus) {
-                                    $("#BtnAddBlogCategory").removeAttr('disabled');
-                                    $.bcUtil.hideLoader();
-                                    $("#BlogPostBlogCategoryId").effect("highlight", {}, 1500);
-                                }
-                            });
-                        }, {hideLoader: false});
+                        addCategory(
+                            blogContentId,
+                            $('#blogcategory-title').val(),
+                            $('#blogcategory-name').val()
+                        );
                         return false;
                     }
                 }
@@ -204,4 +181,64 @@ $(function () {
         });
         return false;
     });
+
+    /**
+     * カテゴリを追加する
+     * @param blogContentId
+     * @param name
+     * @param title
+     */
+    function addCategory(blogContentId, name, title)
+    {
+        if (!name) name = title;
+        $.bcToken.check(function () {
+            return $.ajax({
+                type: "post",
+                url: $.bcUtil.apiBaseUrl + 'bc-blog/blog_categories/add/' + blogContentId + '.json',
+                headers: {
+                    "Authorization": $.bcJwt.accessToken,
+                },
+                data: {
+                    'name': name,
+                    'title': title,
+                    '_csrfToken': $.bcToken.key
+                },
+                beforeSend: function () {
+                    $("#BtnAddBlogCategory").prop('disabled', true);
+                    $.bcUtil.showLoader();
+                },
+                success: function (result) {
+                    if (result) {
+                        $("#blog-category-id").append($('<option />')
+                            .val(result.blogCategory.id)
+                            .text(result.blogCategory.title)
+                            .prop('selected', true)
+                        );
+                    } else {
+                        alert(bcI18n.alertMessage3);
+                    }
+                    $("#AddBlogCategoryForm").dialog('close');
+                },
+                error: function (XMLHttpRequest) {
+                    if(XMLHttpRequest.responseJSON.errors) {
+                        let messages = [];
+                        let errors = XMLHttpRequest.responseJSON.errors;
+                        Object.keys(errors).forEach(function (field) {
+                            Object.keys(errors[field]).forEach(function (type) {
+                              messages.push(errors[field][type]);
+                            });
+                        });
+                        alert(bcI18n.alertMessage4 + '\n\n' + messages.join('\n'));
+                    } else {
+                        alert(bcI18n.alertMessage4);
+                    }
+                },
+                complete: function (xhr, textStatus) {
+                    $("#BtnAddBlogCategory").removeAttr('disabled');
+                    $.bcUtil.hideLoader();
+                    $("#BlogPostBlogCategoryId").effect("highlight", {}, 1500);
+                }
+            });
+        }, {hideLoader: false});
+    }
 });

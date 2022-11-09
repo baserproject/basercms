@@ -14,11 +14,13 @@ namespace BaserCore\Controller\Admin;
 use BaserCore\Service\Admin\SitesAdminServiceInterface;
 use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\Service\SitesServiceInterface;
+use BaserCore\Utility\BcSiteConfig;
 use Cake\Core\Exception\Exception;
 use BaserCore\Annotation\Note;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use Cake\Http\Exception\NotFoundException;
 
 /**
  * Class SitesController
@@ -29,15 +31,14 @@ class SitesController extends BcAdminAppController
     /**
      * サイト一覧
      * @param SitesServiceInterface $service
-     * @param SiteConfigsServiceInterface $siteConfigsService
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function index(SitesAdminServiceInterface $service, SiteConfigsServiceInterface $siteConfigsService)
+    public function index(SitesAdminServiceInterface $service)
     {
         $this->setViewConditions('Site', ['default' => ['query' => [
-            'limit' => $siteConfigsService->getValue('admin_list_num'),
+            'limit' => BcSiteConfig::get('admin_list_num'),
             'sort' => 'id',
             'direction' => 'asc',
         ]]]);
@@ -50,7 +51,13 @@ class SitesController extends BcAdminAppController
             $this->request = ($event->getResult() === null || $event->getResult() === true)? $event->getData('request') : $event->getResult();
         }
 
-        $this->set($service->getViewVarsForIndex($this->paginate($service->getIndex($this->request->getQueryParams()))));
+        try {
+            $entities = $this->paginate($service->getIndex($this->getRequest()->getQueryParams()));
+        } catch (NotFoundException $e) {
+            return $this->redirect(['action' => 'index']);
+        }
+        $this->set('users', $entities);
+        $this->set($service->getViewVarsForIndex($entities));
         $this->request = $this->request->withParsedBody($this->request->getQuery());
     }
 

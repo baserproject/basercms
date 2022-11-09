@@ -1496,4 +1496,21 @@ class ContentsService implements ContentsServiceInterface
         }
     }
 
+    /**
+     * ServerRequest インスタンスに指定したコンテンツデータを現在のコンテンツとしてセットする
+     *
+     * @param string $type
+     * @param int $entityId
+     * @param ServerRequest $request
+     * @return false|ServerRequest
+     * @checked
+     * @noTodo
+     */
+    public function setCurrentToRequest(string $type, int $entityId, ServerRequest $request)
+    {
+        $content = $this->Contents->findByType($type, $entityId);
+        if (!$content) return false;
+        return $request->withAttribute('currentContent', $content);
+    }
+
 }

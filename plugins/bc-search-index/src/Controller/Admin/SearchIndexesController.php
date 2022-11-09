@@ -14,6 +14,7 @@ namespace BcSearchIndex\Controller\Admin;
 use BaserCore\Controller\Admin\BcAdminAppController;
 use BaserCore\Error\BcException;
 use BaserCore\Service\SiteConfigsServiceInterface;
+use BaserCore\Utility\BcSiteConfig;
 use BcSearchIndex\Service\Admin\SearchIndexesAdminService;
 use BcSearchIndex\Service\Admin\SearchIndexesAdminServiceInterface;
 use BcSearchIndex\Service\SearchIndexesServiceInterface;
@@ -21,6 +22,7 @@ use Cake\Event\EventInterface;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use Cake\Http\Exception\NotFoundException;
 
 /**
  * Class SearchIndexesController
@@ -51,9 +53,7 @@ class SearchIndexesController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function index(
-        SearchIndexesAdminServiceInterface $service,
-        SiteConfigsServiceInterface $siteConfigService)
+    public function index(SearchIndexesAdminServiceInterface $service)
     {
         $currentSite = $this->getRequest()->getAttribute('currentSite');
         $this->setRequest($this->getRequest()->withQueryParams(array_merge(
@@ -63,7 +63,7 @@ class SearchIndexesController extends BcAdminAppController
 
         $this->setViewConditions('User', ['default' => [
             'query' => [
-                'limit' => $siteConfigService->getValue('admin_list_num'),
+                'limit' => BcSiteConfig::get('admin_list_num'),
                 'sort' => 'id',
                 'direction' => 'asc',
                 'site_id' => 1
@@ -78,11 +78,13 @@ class SearchIndexesController extends BcAdminAppController
             $this->setRequest(($event->getResult() === null || $event->getResult() === true)? $event->getData('request') : $event->getResult());
         }
 
+        try {
+            $entities = $this->paginate($service->getIndex($this->getRequest()->getQueryParams()));
+        } catch (NotFoundException $e) {
+            return $this->redirect(['action' => 'index']);
+        }
         /* @var SearchIndexesAdminService $service */
-        $this->set($service->getViewVarsForIndex(
-            $this->paginate($service->getIndex($this->getRequest()->getQueryParams())),
-            $this->getRequest()
-        ));
+        $this->set($service->getViewVarsForIndex($entities, $this->getRequest()));
     }
 
     /**

@@ -10,10 +10,12 @@
  */
 namespace BaserCore\View\Helper;
 
+use Cake\Datasource\EntityInterface;
+use Cake\Event\Event;
+use Cake\ORM\Table;
 use Cake\Utility\Hash;
 use Cake\View\Helper;
 use Cake\ORM\TableRegistry;
-use Cake\Utility\Inflector;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Error\BcException;
@@ -22,6 +24,8 @@ use BaserCore\Annotation\UnitTest;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Event\BcEventDispatcherTrait;
 use BaserCore\Service\SiteConfigsServiceInterface;
+use Cake\View\Helper\HtmlHelper;
+use Throwable;
 
 /**
  * アップロードヘルパー
@@ -47,11 +51,11 @@ class BcUploadHelper  extends Helper
 
     /**
      * BcUploadHelperで使用するテーブル
-     * initFieldにて$fieldNameに基づき設定
+     * initFieldにて設定
      *
      * @var Table
      */
-    public $table;
+    private $table;
 
     /**
      * initialize
@@ -69,6 +73,20 @@ class BcUploadHelper  extends Helper
     }
 
     /**
+     * Before Render
+     * @param Event $event
+     * @param string $viewFile
+     * @checked
+     * @noTodo
+     */
+    public function beforeRender(Event $event, $viewFile)
+    {
+        try {
+            $this->table = TableRegistry::getTableLocator()->get($this->_View->getPlugin() . '.' . $this->_View->getName());
+        } catch (Throwable $e) {}
+    }
+
+    /**
      * ファイルへのリンクを取得する
      *
      * @param string $fieldName
@@ -78,8 +96,9 @@ class BcUploadHelper  extends Helper
      * @noTodo
      * @unitTest
      */
-    public function fileLink($fieldName, $options = [])
+    public function fileLink($fieldName, $entity, $options = [])
     {
+        if(!($entity instanceof EntityInterface)) throw new BcException(__d('baser', '第２引数に EntityInterface を指定してください。'));
         $options = array_merge([
             'imgsize' => 'medium', // 画像サイズ
             'rel' => '', // rel属性
@@ -90,13 +109,11 @@ class BcUploadHelper  extends Helper
             'height' => '', // 高さ
             'figure' => null,
             'img' => ['class' => ''],
-            'figcaption' => null
+            'figcaption' => null,
+            'table' => null
         ], $options);
 
-        if (strpos($fieldName, '.') === false) {
-            throw new BcException(__d('baser', 'BcUploadHelper を利用するには、$fieldName に、モデル名とフィールド名をドットで区切って指定する必要があります。'));
-        }
-        $field = $this->initField($fieldName);
+        $this->initField($options);
 
         $tmp = false;
 
@@ -123,12 +140,12 @@ class BcUploadHelper  extends Helper
         $basePath = '/files/' . str_replace(DS, '/', $settings['saveDir']) . '/';
 
         if (empty($options['value'])) {
-            $value = $this->BcAdminForm->getSourceValue($fieldName);
+            $value = Hash::get($entity, $fieldName);
         } else {
             $value = $options['value'];
         }
 
-        $sessionKey = $this->BcAdminForm->getSourceValue($fieldName . '_tmp');
+        $sessionKey = Hash::get($entity, $fieldName . '_tmp');
         if ($sessionKey) {
             $tmp = true;
             $value = str_replace('/', '_', $sessionKey);
@@ -139,7 +156,12 @@ class BcUploadHelper  extends Helper
         /* 画像の場合はサイズを指定する */
         if (isset($settings['saveDir'])) {
             if ($value && !is_array($value)) {
-                $uploadSettings = $settings['fields'][$field];
+                $settingField = $fieldName;
+                if(strpos($fieldName, '.') !== false) {
+                    $fieldArray = explode('.', $fieldName);
+                    $settingField = $fieldArray[count($fieldArray) - 1];
+                }
+                $uploadSettings = $settings['fields'][$settingField];
                 $ext = BcUtil::decodeContent('', $value);
                 $figureOptions = $figcaptionOptions = [];
                 if (!empty($options['figcaption'])) {
@@ -166,7 +188,7 @@ class BcUploadHelper  extends Helper
                     if ($tmp) {
                         $imgOptions['tmp'] = true;
                     }
-                    $out = $this->Html->tag('figure', $this->uploadImage($fieldName, $value, $imgOptions) . '<br>' . $this->Html->tag('figcaption', BcUtil::mb_basename($value), $figcaptionOptions), $figureOptions);
+                    $out = $this->Html->tag('figure', $this->uploadImage($fieldName, $entity, $imgOptions) . '<br>' . $this->Html->tag('figcaption', BcUtil::mb_basename($value), $figcaptionOptions), $figureOptions);
                 } else {
                     $filePath = $basePath . $value;
                     $linkOptions = ['target' => '_blank'];
@@ -210,8 +232,9 @@ class BcUploadHelper  extends Helper
      * @unitTest
      * @noTodo
      */
-    public function uploadImage($fieldName, $fileName, $options = [])
+    public function uploadImage($fieldName, $entity, $options = [])
     {
+        if(!($entity instanceof EntityInterface)) throw new BcException(__d('baser', '第２引数に EntityInterface を指定してください。'));
         $options = array_merge([
             'imgsize' => 'medium', // 画像サイズ
             'escape' => false, // エスケープ
@@ -229,15 +252,15 @@ class BcUploadHelper  extends Helper
             'class' => ''
         ], $options);
 
-        if (strpos($fieldName, '.') === false) {
-			throw new BcException(__d('baser', 'BcUploadHelper を利用するには、$fieldName に、モデル名とフィールド名をドットで区切って指定する必要があります。'));
-		}
-        $field = $this->initField($fieldName);
+        $this->initField($options);
+
         try {
             $settings = $this->getBcUploadSetting();
         } catch (BcException $e) {
             throw $e;
         }
+
+        $fileName = Hash::get($entity, $fieldName);
 
         // EVENT BcUpload.beforeUploadImage
         $event = $this->dispatchLayerEvent('beforeUploadImage', [
@@ -279,11 +302,8 @@ class BcUploadHelper  extends Helper
             unset($linkOptions['class']);
         }
 
-        $fieldNameArray = explode('.', $fieldName);
-        $entity = $this->_View->get($fieldNameArray[0]);
         if($entity) {
-            unset($fieldNameArray[0]);
-            $sessionKey = Hash::get($entity, implode('.', $fieldNameArray) . '_tmp');;
+            $sessionKey = Hash::get($entity, $fieldName . '_tmp');
             if ($sessionKey) {
                 $fileName = $sessionKey;
                 $options['tmp'] = true;
@@ -300,16 +320,16 @@ class BcUploadHelper  extends Helper
             }
         }
 
-        if (strpos($fieldName, '.') === false) {
-            trigger_error(__d('baser', 'フィールド名は、 ModelName.field_name で指定してください。'), E_USER_WARNING);
-            return false;
-        }
-
         $fileUrl = '/files/' . str_replace(DS, '/', $settings['saveDir']) . '/';
         $saveDir = $this->table->getSaveDir(false, $options['limited']);
 
-        if (isset($settings['fields'][$field]['imagecopy'])) {
-            $copySettings = $settings['fields'][$field]['imagecopy'];
+        $settingField = $fieldName;
+        if(strpos($fieldName, '.') !== false) {
+            $fieldArray = explode('.', $fieldName);
+            $settingField = $fieldArray[count($fieldArray) - 1];
+        }
+        if (isset($settings['fields'][$settingField]['imagecopy'])) {
+            $copySettings = $settings['fields'][$settingField]['imagecopy'];
         } else {
             $copySettings = "";
         }
@@ -319,7 +339,7 @@ class BcUploadHelper  extends Helper
         }
         if ($options['tmp']) {
             $options['link'] = false;
-            $fileUrl = '/' . BcUtil::getBaserCorePrefix() . '/baser-core/uploads/tmp/';
+            $fileUrl = '/baser-core/uploads/tmp/';
             if ($options['imgsize']) {
                 $fileUrl .= $options['imgsize'] . '/';
             }
@@ -468,25 +488,35 @@ class BcUploadHelper  extends Helper
      * initField
      *
      * @param  string $fieldName
-     * @return string $field
      * @checked
      * @noTodo
      * @unitTest
      */
-    protected function initField($fieldName)
+    protected function initField($options = [])
     {
-        $targetField = explode('.', $fieldName);
-        $field = array_pop($targetField);
-        while (true) {
-            $table = array_pop($targetField);
-            if (!is_numeric($table)) break;
+        if(!empty($options['table'])) {
+            $this->table = TableRegistry::getTableLocator()->get($options['table']);
         }
         if (is_null($this->table)) {
-            $this->table = TableRegistry::getTableLocator()->get('BaserCore.' . Inflector::pluralize($table));
+            throw new BcException(__d('baser', 'BcUploadHelper を利用するには、$this->BcUpload->setTable() か、 $this->BcUpload->fileLink() または、$this->BcUpload->uploadImage() の第３引数の `table` キーでテーブル名を指定してください。'));
         }
         if (!$this->table->hasBehavior('BcUpload')) {
-            throw new BcException(__d('baser', 'BcUploadHelper を利用するには、モデルで BcUploadBehavior の利用設定が必要です。'));
+            throw new BcException(__d('baser', 'BcUploadHelper を利用するには、テーブル {0} で BcUploadBehavior の利用設定が必要です。
+            テーブルを変更するには、$options[\'table\'] でテーブル名を指定してください。', get_class($this->table)));
         }
-        return $field;
     }
+
+    /**
+     * テーブルをセットする
+     *
+     * @param string $tableName
+     * @return void
+     * @checked
+     * @noTodo
+     */
+    public function setTable($tableName)
+    {
+        $this->table = TableRegistry::getTableLocator()->get($tableName);
+    }
+
 }

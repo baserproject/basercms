@@ -88,7 +88,7 @@ class UserGroupsService implements UserGroupsServiceInterface
      */
     public function getIndex($options = []): Query
     {
-        return $this->UserGroups->find('all', $options);
+        return $this->UserGroups->find();
     }
 
     /**

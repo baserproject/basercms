@@ -274,6 +274,10 @@ class BcTimeHelper extends TimeHelper
     {
         if ($format === 'Y-m-d') {
             $format = 'yyyy-MM-dd';
+        } elseif ($format === 'Y/m/d') {
+            $format = 'yyyy/MM/dd';
+        } elseif ($format === 'Y.m.d') {
+            $format = 'yyyy.MM.dd';
         }
         if ($date !== "00:00:00" && (!$date || $date == '0000-00-00 00:00:00')) {
             return "";

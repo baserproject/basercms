@@ -9,25 +9,32 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
-namespace BcBlog\Controller\Admin;
+namespace BcBlog\Model\Entity;
 
-use BaserCore\Controller\Admin\BcAdminAppController;
+use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
-use BaserCore\Annotation\UnitTest;
+use Cake\I18n\FrozenTime;
+use Cake\ORM\Entity;
 
 /**
- * Class PostsController
- * @package BcBlog\Controller\Admin
+ * Class BlogTag
+ * @property int $id
+ * @property string $name
+ * @property FrozenTime $created
+ * @property FrozenTime $modified
  */
-class PostsController extends BcAdminAppController
+class BlogTag extends Entity
 {
 
     /**
-     * 記事一覧
+     * Accessible
+     *
+     * @var array
      */
-    public function index(): void
-    {
-        $this->setTitle('ブログサンプル');
-    }
+    protected $_accessible = [
+        '*' => true,
+        'id' => false
+    ];
+
 }

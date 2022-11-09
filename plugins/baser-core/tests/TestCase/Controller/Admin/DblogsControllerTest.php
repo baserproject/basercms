@@ -71,7 +71,7 @@ class DblogsControllerTest extends BcTestCase
         $this->get('/baser/admin/baser-core/dblogs/?limit=1&page=2');
         $this->assertResponseOk();
         $this->get('/baser/admin/baser-core/dblogs/?limit=1&page=100');
-        $this->assertResponseError();
+        $this->assertRedirect(['action' => 'index']);
     }
 
     /**

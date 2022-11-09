@@ -54,7 +54,7 @@ class ContentLinksController extends BcFrontAppController
     public function view(ContentLinksServiceInterface $service)
     {
         $contentLink = $service->get(
-            $this->request->getParam('entityId'),
+            $this->getRequest()->getAttribute('currentContent')->entity_id,
             ['status' => 'publish']
         );
         $this->set(compact('contentLink'));

@@ -1615,6 +1615,12 @@ table.cake-sql-log td {
   text-align: right;
 }
 
+/* Related Posts
+----------------------------------------------- */
+.bs-blog-related-posts {
+  margin-top: 160px;
+}
+
 /* Blog Comment
 ----------------------------------------------- */
 .bs-blog-comment {

@@ -28,7 +28,7 @@ use BaserCore\Event\BcEventDispatcherTrait;
  * @package BaserCore\View
  * @property BcPageHelper $BcPage
  * @property BcBaserHelper $BcBaser
- * @property BcUploadHelper $Upload
+ * @property BcUploadHelper $BcUpload
  * @property BcToolbarHelper $BcToolbar
  * @property BcFormHelper $BcForm
  */

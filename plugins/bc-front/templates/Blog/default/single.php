@@ -14,10 +14,15 @@
  * ブログ記事詳細ページ
  * 呼出箇所：ブログ記事詳細ページ
  *
- * @var BcAppView $this
- * @var array $post ブログ記事データ
+ * @var \BaserCore\View\BcFrontAppView $this
+ * @var \BcBlog\Model\Entity\BlogPost $post ブログ記事データ
+ * @checked
+ * @noTodo
+ * @unitTest
  */
 $this->BcBaser->setDescription($this->Blog->getTitle() . '｜' . $this->Blog->getPostContent($post, false, false, 50));
+$this->BcUpload->setTable('BcBlog.BlogPosts');
+$this->BcBaser->setTitle($post->name);
 ?>
 
 

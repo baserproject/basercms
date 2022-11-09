@@ -12,7 +12,6 @@
 namespace BaserCore\Controller;
 
 use BaserCore\Service\Front\PagesFrontServiceInterface;
-use BaserCore\Model\Table\PagesTable;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Service\PagesServiceInterface;
 use BaserCore\Service\ContentFoldersServiceInterface;
@@ -60,7 +59,7 @@ class PagesController extends BcFrontAppController
 	{
 	    /* @var \BaserCore\Service\PagesService $service */
         $page = $service->get(
-            $this->request->getParam('entityId'),
+            $this->request->getAttribute('currentContent')->entity_id,
             ['status' => 'publish']
         );
         $this->set($service->getViewVarsForView($page, $this->getRequest()));

@@ -28,6 +28,7 @@ use BaserCore\Model\Entity\Content;
 $editable = $this->BcContents->isEditable($content);
 $created_date = $this->BcAdminForm->getSourceValue("content.created_date");
 $modified_date = $this->BcAdminForm->getSourceValue("content.modified_date");
+$this->BcUpload->setTable('BaserCore.Contents');
 ?>
 
 
@@ -61,9 +62,14 @@ $modified_date = $this->BcAdminForm->getSourceValue("content.modified_date");
           class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label("content.eyecatch", __d('baser', 'アイキャッチ')) ?></th>
         <td class="col-input bca-form-table__input">
           <?php if ($editable): ?>
-            <?php echo $this->BcAdminForm->control("content.eyecatch", ['type' => 'file', 'imgsize' => 'thumb', 'novalidate' => true]) ?>
+            <?php echo $this->BcAdminForm->control("content.eyecatch", [
+              'type' => 'file',
+              'imgsize' => 'thumb',
+              'novalidate' => true,
+              'table' => 'BaserCore.Contents'
+            ]) ?>
           <?php else: ?>
-            <?php echo $this->BcUpload->uploadImage("content.eyecatch", $this->BcAdminForm->getSourceValue("content.eyecatch"), ['imgsize' => 'thumb']); ?>
+            <?php echo $this->BcUpload->uploadImage("content.eyecatch", $this->BcAdminForm->context()->entity(), ['imgsize' => 'thumb']); ?>
           <?php endif ?>
           <?php echo $this->BcAdminForm->error("content.eyecatch") ?>
         </td>

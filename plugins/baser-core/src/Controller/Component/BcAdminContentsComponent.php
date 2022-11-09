@@ -92,7 +92,7 @@ class BcAdminContentsComponent extends Component
         $controller = $this->getController();
         $request = $controller->getRequest();
         $controller->set('contentsItems', $this->getConfig('items'));
-        if (in_array($request->getParam('action'), [$this->editAction, 'edit_alias'])) {
+        if ($this->getConfig('useForm') && in_array($request->getParam('action'), [$this->editAction, 'edit_alias'])) {
             $this->settingForm();
         }
     }
@@ -123,6 +123,7 @@ class BcAdminContentsComponent extends Component
         if (Configure::read('BcApp.autoUpdateContentCreatedDate')) {
             $content->modified_date = date('Y-m-d H:i:s');
         }
+        /* @var \BaserCore\Service\Admin\BcAdminContentsService $bcAdminContentsService */
         $bcAdminContentsService = $this->getService(BcAdminContentsServiceInterface::class);
         $controller->set($bcAdminContentsService->getViewVarsForEdit($content));
     }

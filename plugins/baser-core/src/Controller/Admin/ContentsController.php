@@ -13,19 +13,14 @@ namespace BaserCore\Controller\Admin;
 
 use BaserCore\Controller\Component\BcAdminContentsComponent;
 use BaserCore\Controller\Component\BcMessageComponent;
-use BaserCore\Model\Table\ContentFoldersTable;
-use BaserCore\Model\Table\ContentsTable;
-use BaserCore\Model\Table\SiteConfigsTable;
-use BaserCore\Model\Table\SitesTable;
-use BaserCore\Model\Table\UsersTable;
 use BaserCore\Service\Admin\ContentsAdminServiceInterface;
 use BaserCore\Service\ContentsServiceInterface;
 use BaserCore\Service\SiteConfigsServiceInterface;
+use BaserCore\Utility\BcSiteConfig;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
 use Cake\Event\EventInterface;
 use Cake\Http\Exception\NotFoundException;
-use Cake\Http\Response;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
@@ -79,12 +74,11 @@ class ContentsController extends BcAdminAppController
      */
     public function index(ContentsAdminServiceInterface $service, SiteConfigsServiceInterface $siteConfigService)
     {
-        $this->setViewConditions('Contents', ['default' => [
-            'query' => [
-                'site_id' => $this->request->getAttribute('currentSite')? $this->request->getAttribute('currentSite')->id : 1,
-                'list_type' => $this->request->getQuery('list_type') ?? 1,
-            ],
-        ], 'get' => true]);
+        $this->setViewConditions('Contents', ['default' => ['query' => [
+            'limit' => BcSiteConfig::get('admin_list_num'),
+            'site_id' => $this->request->getAttribute('currentSite')? $this->request->getAttribute('currentSite')->id : 1,
+            'list_type' => $this->request->getQuery('list_type') ?? 1,
+        ]]]);
 
         switch($this->getRequest()->getQuery('list_type')) {
             case 1:

@@ -203,7 +203,11 @@ class BcUploadBehaviorTest extends BcTestCase
         $this->assertIsArray($settings);
         $this->BcUploadBehavior->setSettings([]);
         $settings = $this->BcUploadBehavior->getSettings();
-        $this->assertEmpty($settings);
+        $this->assertEquals([
+            'saveDir' => '',
+            'existsCheckDirs' => [],
+            'fields' => []
+        ], $settings);
     }
 
     /**

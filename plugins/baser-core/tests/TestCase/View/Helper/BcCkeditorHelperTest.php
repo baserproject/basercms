@@ -85,7 +85,7 @@ class BcCkeditorHelperTest extends BcTestCase
      *
      * @return void
      */
-    public function testBuildTmpScript()
+    public function testBuild()
     {
         $this->BcCkeditor->getView()->setTheme('BcAdminThird');
         $options = [
@@ -112,11 +112,10 @@ class BcCkeditorHelperTest extends BcTestCase
         $request = $this->BcCkeditor->getView()->getRequest()->withAttribute('formTokenData', ['dummy']);
         $this->BcCkeditor->getView()->setRequest($request);
         $this->BcCkeditor->BcAdminForm->create();
-        $result = $this->execPrivateMethod($this->BcCkeditor, 'buildTmpScript', ["Page.contents_tmp", $options]);
-        $this->assertMatchesRegularExpression('/<script src="\/bc_admin_third\/js\/ckeditor\.bundle.js"/', $result);
+        $result = $this->execPrivateMethod($this->BcCkeditor, 'build', ["Page.contents", $options]);
+        $this->assertMatchesRegularExpression('/<input type="hidden" name="ckeditor\[setting\]\[Page\]\[contents_tmp\]"/', $result);
         $jsResult = $this->BcCkeditor->getView()->fetch('script');
-        // ckeditor.bundle.jsがタグに含められてるか確認
-        $this->assertMatchesRegularExpression('/<script src="\/bc_admin_third\/js\/vendor\/ckeditor\/ckeditor\.js"/', $jsResult);
+        $this->assertMatchesRegularExpression('/let config = JSON\.parse\(\$\(\'#CkeditorSettingContentsTmp\'\)\.val\(\)\)/', $jsResult);
     }
 
     /**

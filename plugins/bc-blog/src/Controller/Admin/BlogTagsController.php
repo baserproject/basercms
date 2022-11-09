@@ -14,215 +14,131 @@ namespace BcBlog\Controller\Admin;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use BaserCore\Error\BcException;
+use BaserCore\Utility\BcSiteConfig;
+use BcBlog\Model\Entity\BlogTag;
+use BcBlog\Service\BlogTagsService;
+use BcBlog\Service\BlogTagsServiceInterface;
+use Cake\Http\Exception\NotFoundException;
+use Cake\ORM\Exception\PersistenceFailedException;
 
 /**
  * ブログタグコントローラー
- *
- * @package Blog.Controller
- * @property BcAuthComponent $BcAuth
- * @property CookieComponent $Cookie
- * @property BcAuthConfigureComponent $BcAuthConfigure
- * @property BcContentsComponent $BcContents
- * @property BlogTag $BlogTag
  */
 class BlogTagsController extends BlogAdminAppController
 {
 
     /**
-     * コンポーネント
-     *
-     * @var array
+     * initialize
+     * @return void
+     * @checked
+     * @noTodo
      */
-    public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure', 'BcContents'];
+    public function initialize(): void
+    {
+        parent::initialize();
+        $this->loadComponent('BaserCore.BcAdminContents', ['entityVarName' => 'blogContent']);
+    }
 
     /**
      * [ADMIN] タグ一覧
      *
+     * @param BlogTagsService $service
      * @return void
+     * @checked
+     * @noTodo
      */
-    public function admin_index()
+    public function index(BlogTagsServiceInterface $service, $blogContentId = [])
     {
-        $default = [
-            'named' => [
-                'num' => $this->siteConfigs['admin_list_num'],
-                'sort' => 'id',
+        $this->setViewConditions('BlogTag', ['default' => [
+            'query' => [
+                'limit' => BcSiteConfig::get('admin_list_num'),
+                'sort' => 'BlogTags.id',
                 'direction' => 'asc'
-            ]
-        ];
-        $this->setViewConditions(
-            'BlogTag',
-            ['default' => $default]
-        );
-
-        $this->paginate = [
-            'order' => 'BlogTag.id',
-            'limit' => $this->passedArgs['num'],
-            'recursive' => 0
-        ];
-        $this->set('datas', $this->paginate('BlogTag'));
-
-        $this->setTitle(__d('baser', 'タグ一覧'));
+            ],
+        ]]);
+        try {
+            $blogTags = $this->paginate($service->getIndex($this->getRequest()->getQueryParams()));
+        } catch (NotFoundException $e) {
+            return $this->redirect(['action' => 'index', $blogContentId]);
+        }
+        $this->set(['blogTags' => $blogTags]);
     }
 
     /**
      * [ADMIN] タグ登録
      *
+     * @param BlogTagsService $service
      * @return void
      */
-    public function admin_add()
+    public function add(BlogTagsServiceInterface $service)
     {
         if (!empty($this->request->getData())) {
-            $this->BlogTag->create($this->request->getData());
-            if ($this->BlogTag->save()) {
-                $this->BcMessage->setSuccess(
-                    sprintf(
-                        __d('baser', 'タグ「%s」を追加しました。'),
-                        $this->request->getData('BlogTag.name')
-                    )
-                );
+            try {
+                $blogTag = $service->create($this->request->getData());
+                $this->BcMessage->setSuccess(sprintf(
+                    __d('baser', 'タグ「%s」を追加しました。'),
+                    $blogTag->name
+                ));
                 $this->redirect(['action' => 'index']);
-            } else {
+            } catch (PersistenceFailedException $e) {
+                $blogTag = $e->getEntity();
                 $this->BcMessage->setError(
                     __d('baser', 'エラーが発生しました。内容を確認してください。')
                 );
             }
         }
-        $this->setTitle(__d('baser', '新規タグ登録'));
-        $this->render('form');
+        $this->set(['blogTag' => $blogTag ?? $service->getNew()]);
     }
 
     /**
      * [ADMIN] タグ編集
      *
+     * @param BlogTagsService $service
      * @param int $id タグID
      * @return void
      */
-    public function admin_edit($id)
+    public function edit(BlogTagsServiceInterface $service, $id)
     {
-        if (!$id) {
-            $this->BcMessage->setError(__d('baser', '無効な処理です。'));
-            $this->redirect(['action' => 'index']);
-        }
-        if (empty($this->request->getData())) {
-            $this->request = $this->request->withParsedBody($this->BlogTag->read(null, $id));
-        } else {
-            $this->BlogTag->set($this->request->getData());
-            if ($this->BlogTag->save()) {
-                $this->BcMessage->setSuccess(
-                    sprintf(
-                        __d('baser', 'タグ「%s」を更新しました。'),
-                        $this->request->getData('BlogTag.name')
-                    )
-                );
+        $blogTag = $service->get($id);
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            try {
+                /* @var BlogTag $blogTag */
+                $blogTag = $service->update($blogTag, $this->getRequest()->getData());
+                $this->BcMessage->setSuccess(sprintf(
+                    __d('baser', 'タグ「%s」を更新しました。'),
+                    $blogTag->name
+                ));
                 $this->redirect(['action' => 'index']);
-            } else {
+            } catch (PersistenceFailedException $e) {
+                $blogTag = $e->getEntity();
                 $this->BcMessage->setError(
                     __d('baser', 'エラーが発生しました。内容を確認してください。')
                 );
             }
         }
-        $this->setTitle(__d('baser', 'タグ編集'));
-        $this->render('form');
+        $this->set(['blogTag' => $blogTag]);
     }
 
     /**
      * [ADMIN] 削除処理
      *
+     * @param BlogTagsService $service
      * @param int $id
      * @return void
      */
-    public function admin_delete($id = null)
+    public function delete(BlogTagsServiceInterface $service, $id)
     {
-        $this->_checkSubmitToken();
-        if (!$id) {
-            $this->BcMessage->setError(__d('baser', '無効な処理です。'));
-            $this->redirect(['action' => 'index']);
-        }
-
-        $data = $this->BlogTag->read(null, $id);
-
-        if ($this->BlogTag->delete($id)) {
-            $this->BcMessage->setSuccess(
-                sprintf(
-                    __d('baser', 'タグ「%s」を削除しました。'),
-                    $this->BlogTag->data['BlogTag']['name']
-                )
-            );
-        } else {
-            $this->BcMessage->setError(
-                __d('baser', 'データベース処理中にエラーが発生しました。')
-            );
-        }
-        $this->redirect(['action' => 'index']);
-    }
-
-    /**
-     * [ADMIN] 削除処理　(ajax)
-     *
-     * @param int $id
-     * @return void
-     */
-    public function admin_ajax_delete($id = null)
-    {
-        $this->_checkSubmitToken();
-        if (!$id) {
-            $this->ajaxError(500, __d('baser', '無効な処理です。'));
-        }
-
-        $data = $this->BlogTag->read(null, $id);
-        if ($this->BlogTag->delete($id)) {
-            $message = sprintf(
-                __d('baser', 'タグ「%s」を削除しました。'),
-                $this->BlogTag->data['BlogTag']['name']
-            );
-            $this->BlogTag->saveDbLog($message);
-            exit(true);
-        }
-        exit();
-    }
-
-    /**
-     * [ADMIN] 一括削除
-     *
-     * @param int $id
-     * @return bool
-     */
-    protected function _batch_del($ids)
-    {
-        if ($ids) {
-            foreach ($ids as $id) {
-                $data = $this->BlogTag->read(null, $id);
-                if ($this->BlogTag->delete($id)) {
-                    $message = sprintf(
-                        __d('baser', 'タグ「%s」を削除しました。'),
-                        $this->BlogTag->data['BlogTag']['name']
-                    );
-                    $this->BlogTag->saveDbLog($message);
-                }
+        $this->request->allowMethod(['post', 'delete']);
+        $blogTag = $service->get($id);
+        try {
+            if ($service->delete($id)) {
+                $this->BcMessage->setSuccess(__d('baser', 'ブログタグ「{0}」を削除しました。', $blogTag->name));
             }
+        } catch (BcException $e) {
+            $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
         }
-        return true;
+        return $this->redirect(['action' => 'index']);
     }
 
-    /**
-     * [ADMIN] AJAXタグ登録
-     *
-     * @return void
-     */
-    public function admin_ajax_add()
-    {
-        if (empty($this->request->getData())) {
-            $this->ajaxError(500, __d('baser', '無効な処理です。'));
-            return;
-        }
-
-        $this->BlogTag->create($this->request->getData());
-        if (!($data = $this->BlogTag->save())) {
-            $this->ajaxError(500, $this->BlogTag->validationErrors);
-            return;
-        }
-
-        $result = [$this->BlogTag->id => $data['BlogTag']['name']];
-        $this->set('result', $result);
-    }
 }
