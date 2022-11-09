@@ -14,9 +14,29 @@
  * ブログアーカイブ一覧
  * 呼出箇所：カテゴリ別ブログ記事一覧、タグ別ブログ記事一覧、年別ブログ記事一覧、月別ブログ記事一覧、日別ブログ記事一覧
  *
- * @var BcAppView $this
+ * @var \BaserCore\View\BcFrontAppView $this
+ * @var \BcBlog\Model\Entity\BlogCategory $blogCategory
+ * @var \BcBlog\Model\Entity\BlogTag $blogTag
+ * @var \BaserCore\Model\Entity\User $author
+ * @var \Cake\ORM\ResultSet $posts
+ * @var string $blogArchiveType
+ * @var string $year
+ * @var string $month
+ * @var string $day
+ * @checked
+ * @noTodo
+ * @unitTest
  */
+$title = '';
+if($blogArchiveType === 'category') $title = $blogCategory->title;
+if($blogArchiveType === 'author') $title = $author->getDisplayName();
+if($blogArchiveType === 'tag') $title = rawurldecode($blogTag->name);
+if($blogArchiveType === 'daily') $title = sprintf(__('%s年%s月%s日'), $year, $month, $day);
+if($blogArchiveType === 'monthly') $title = sprintf(__('%s年%s月'), $year, $month);
+if($blogArchiveType === 'yearly') $title = sprintf(__('%s年'), $year);
+$this->BcBaser->setTitle($title);
 $this->BcBaser->setDescription($this->Blog->getTitle() . '｜' . $this->BcBaser->getContentsTitle() . __('のアーカイブ一覧です。'));
+$this->BcUpload->setTable('BcBlog.BlogPosts');
 ?>
 
 
@@ -28,7 +48,7 @@ $this->BcBaser->setDescription($this->Blog->getTitle() . '｜' . $this->BcBaser-
 <?php if (!empty($posts)): ?>
 	<?php foreach ($posts as $post): ?>
 	<article class="bs-blog-post__item clearfix">
-		<?php if(!empty($post['BlogPost']['eye_catch'])): ?>
+		<?php if(!empty($post->eye_catch)): ?>
 		<a href="<?php echo $this->Blog->getPostLinkUrl($post) ?>" class="bs-blog-post__item-eye-catch">
 			<?php $this->Blog->eyeCatch($post, ['width' => 150, 'link' => false]) ?>
 		</a>
@@ -36,7 +56,7 @@ $this->BcBaser->setDescription($this->Blog->getTitle() . '｜' . $this->BcBaser-
 		<span class="bs-blog-post__item-date"><?php $this->Blog->postDate($post, 'Y.m.d') ?></span>
 		<?php $this->Blog->category($post, ['class' => 'bs-blog-post__item-category']) ?>
 		<span class="bs-blog-post__item-title"><?php $this->Blog->postTitle($post) ?></span>
-		<?php if(strip_tags($post['BlogPost']['content'] . $post['BlogPost']['detail'])): ?>
+		<?php if(strip_tags($post->content . $post->detail)): ?>
 		<div class="bs-top-post__item-detail"><?php $this->Blog->postContent($post, true, false, 46) ?>...</div>
 		<?php endif ?>
 	</article>

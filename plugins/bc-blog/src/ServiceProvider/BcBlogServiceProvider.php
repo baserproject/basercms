@@ -13,8 +13,12 @@ namespace BcBlog\ServiceProvider;
 
 use BcBlog\Service\Admin\BlogCategoriesAdminService;
 use BcBlog\Service\Admin\BlogCategoriesAdminServiceInterface;
+use BcBlog\Service\Admin\BlogCommentsAdminService;
+use BcBlog\Service\Admin\BlogCommentsAdminServiceInterface;
 use BcBlog\Service\Admin\BlogContentsAdminService;
 use BcBlog\Service\Admin\BlogContentsAdminServiceInterface;
+use BcBlog\Service\Admin\BlogPostsAdminService;
+use BcBlog\Service\Admin\BlogPostsAdminServiceInterface;
 use BcBlog\Service\BlogCategoriesService;
 use BcBlog\Service\BlogCategoriesServiceInterface;
 use BcBlog\Service\BlogCommentsService;
@@ -25,8 +29,6 @@ use BcBlog\Service\BlogPostsService;
 use BcBlog\Service\BlogPostsServiceInterface;
 use BcBlog\Service\BlogTagsService;
 use BcBlog\Service\BlogTagsServiceInterface;
-use BcBlog\Service\Front\BlogContentsFrontService;
-use BcBlog\Service\Front\BlogContentsFrontServiceInterface;
 use BcBlog\Service\Front\BlogFrontService;
 use BcBlog\Service\Front\BlogFrontServiceInterface;
 use Cake\Core\ServiceProvider;
@@ -52,7 +54,8 @@ class BcBlogServiceProvider extends ServiceProvider
         BlogFrontServiceInterface::class,
         BlogPostsServiceInterface::class,
         BlogCommentsServiceInterface::class,
-        BlogTagsServiceInterface::class
+        BlogTagsServiceInterface::class,
+        BlogCommentsAdminServiceInterface::class
     ];
 
     /**
@@ -73,8 +76,10 @@ class BcBlogServiceProvider extends ServiceProvider
         $container->add(BlogContentsAdminServiceInterface::class, BlogContentsAdminService::class);
         // BlogPostsサービス
         $container->add(BlogPostsServiceInterface::class, BlogPostsService::class);
+        $container->add(BlogPostsAdminServiceInterface::class, BlogPostsAdminService::class);
         // BlogCommentsサービス
         $container->add(BlogCommentsServiceInterface::class, BlogCommentsService::class);
+        $container->add(BlogCommentsAdminServiceInterface::class, BlogCommentsAdminService::class);
         // BlogTagsサービス
         $container->add(BlogTagsServiceInterface::class, BlogTagsService::class);
         // Blogサービス

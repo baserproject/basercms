@@ -1077,7 +1077,7 @@ class ContentsTable extends AppTable
         if ($entityId) {
             $conditions['Contents.entity_id'] = $entityId;
         }
-        return $this->find('all')->where([$conditions])->order(['Contents.id'])->first();
+        return $this->find()->where([$conditions])->order(['Contents.id'])->first();
     }
 
     /**

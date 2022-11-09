@@ -221,7 +221,7 @@ class BcUploadBehavior extends Behavior
      */
     public function setSettings($settings)
     {
-        $this->BcFileUploader[$this->table()->getAlias()]->settings = $settings;
+        $this->BcFileUploader[$this->table()->getAlias()]->initialize($settings, $this->table());
     }
 
     /**
@@ -270,6 +270,16 @@ class BcUploadBehavior extends Behavior
             $oldEntity = $query->first();
         }
 		return ($oldEntity)?: null;
+	}
+
+	/**
+	 * renameToBasenameFields
+	 * @param EntityInterface $entity
+     * @param bool $copy
+	 */
+	public function renameToBasenameFields($entity, $copy = false)
+	{
+		$this->BcFileUploader[$this->table()->getAlias()]->renameToBasenameFields($entity, $copy);
 	}
 
 }

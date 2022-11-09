@@ -11,6 +11,7 @@
 
 namespace BaserCore\Service\Front;
 
+use BaserCore\Model\Entity\Content;
 use BaserCore\Service\ContentsServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Annotation\UnitTest;
@@ -33,17 +34,18 @@ class BcFrontContentsService
 
     /**
      * フロント用の view 変数を取得する
-     * @param $content
+     * @param Content $content
+     * @param bool $isContentsPage 対象コンテンツのページかどうか
      * @return array
      * @noTodo
      * @checked
      * @unitTest
      */
-    public function getViewVarsForFront($content)
+    public function getViewVarsForFront($content, $isContentsPage = true)
     {
         return [
             // パンくず
-            'crumbs' => $this->getCrumbs($content->id),
+            'crumbs' => $this->getCrumbs($content->id, $isContentsPage),
             // 説明文
             'description' => $content->description,
             // タイトル
@@ -55,22 +57,31 @@ class BcFrontContentsService
      * パンくず用のデータを取得する
      *
      * @param $id
+     * @param bool $isContentsPage 対象コンテンツのページかどうか
+     * true の場合、パンくずの親要素に対象コンテンツを表示しない（カレントページとしてパンくずの最後に表示する）
+     * false の場合、パンくずの親要素に対象コンテンツを表示する
+     *
+     * 例えばブログコンテンツのタイトルをパンくずの親要素に表示して、
+     * ブログ記事のタイトルをパンくずの最後に表示する場合に false を設定する
      * @return array
      * @noTodo
      * @checked
      * @unitTest
      */
-    protected function getCrumbs($id)
+    protected function getCrumbs($id, $isContentsPage = true)
     {
         if(!$id) return [];
         $contentsService = $this->getService(ContentsServiceInterface::class);
-        $contents = $contentsService->getPath($id)->all();
+        $contents = $contentsService->getPath($id)->all()->toArray();
         $crumbs = [];
+        if($isContentsPage) {
+            unset($contents[count($contents) - 1]);
+        }
         foreach($contents as $content) {
             if (!$content->site_root) {
                 $crumb = [
-                    'name' => $content->title,
-                    'url' => $content->url
+                    'name' => $content['title'],
+                    'url' => $content['url']
                 ];
                 $crumbs[] = $crumb;
             }

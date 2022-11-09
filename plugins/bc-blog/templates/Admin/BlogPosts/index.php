@@ -12,32 +12,31 @@
 
 /**
  * [管理画面] ブログ記事 一覧
+ * @var \BaserCore\View\BcAdminAppView $this
+ * @var \BcBlog\Model\Entity\BlogContent $blogContent
+ * @checked
+ * @noTodo
+ * @unitTest
  */
-$this->BcBaser->css('Blog.admin/style', false);
-$this->BcBaser->js([
-  'admin/libs/jquery.baser_ajax_data_list',
-  'admin/libs/jquery.baser_ajax_batch',
-  'admin/libs/baser_ajax_data_list_config',
-  'admin/libs/baser_ajax_batch_config'
-]);
+$this->BcAdmin->setSearch('blog_posts_index');
+$this->BcAdmin->setHelp('blog_posts_index');
+$this->BcAdmin->setTitle(sprintf(
+  __d('baser', '%s｜記事一覧'),
+  strip_tags(
+    $this->request->getAttribute('currentContent')->title
+  )
+));
 $this->BcAdmin->addAdminMainBodyHeaderLinks([
-  'url' => ['action' => 'add', $this->request->params['pass'][0]],
+  'url' => ['action' => 'add', $blogContent->id],
   'title' => __d('baser', '新規記事追加'),
 ]);
 ?>
 
 
-<script type="text/javascript">
-  $(function () {
-    $.baserAjaxDataList.init();
-    $.baserAjaxBatch.init({url: $("#AjaxBatchUrl").html()});
-  });
-</script>
-
-
-<div　id="AjaxBatchUrl" hidden><?php $this->BcBaser->url(['controller' => 'blog_posts', 'action' => 'ajax_batch']) ?></div>
 <div id="AlertMessage" class="message" hidden></div>
 <div id="MessageBox" hidden>
   <div id="flashMessage" class="notice-message"></div>
 </div>
-<div id="DataList" class="bca-data-list"><?php $this->BcBaser->element('blog_posts/index_list') ?></div>
+<div id="DataList" class="bca-data-list">
+  <?php $this->BcBaser->element('BlogPosts/index_list') ?>
+</div>

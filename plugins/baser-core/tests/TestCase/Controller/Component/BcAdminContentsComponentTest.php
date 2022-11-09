@@ -11,15 +11,12 @@
 
 namespace BaserCore\Test\TestCase\Controller\Component;
 
-use BaserCore\Model\Entity\Page;
 use Cake\Controller\Controller;
 use Cake\Event\EventManager;
-use Cake\ORM\Entity;
 use Cake\Routing\Router;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Service\ContentsService;
 use Cake\Controller\ComponentRegistry;
-use BaserCore\Controller\BcAppController;
 use BaserCore\Service\ContentFoldersService;
 use BaserCore\Controller\Admin\ContentsController;
 use BaserCore\Controller\Admin\ContentFoldersController;
@@ -102,6 +99,7 @@ class BcAdminContentsComponentTest extends BcTestCase
         $page = $pagesTable->find()->where(['Contents.id' => 4])->contain(['Contents' => ['Sites']])->first();
         $controller->set('page', $page);
         $controller->setRequest($request->withParam('action', 'edit'));
+        $this->BcAdminContents->setConfig('useForm', true);
         $this->BcAdminContents->beforeRender();
         $this->assertIsArray($controller->viewBuilder()->getVar('contentsItems'));
         // BcAdminContents::settingForm()が呼ばれているか確認

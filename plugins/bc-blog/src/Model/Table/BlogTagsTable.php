@@ -13,6 +13,11 @@ namespace BcBlog\Model\Table;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use BaserCore\Service\PermissionsService;
+use BaserCore\Service\PermissionsServiceInterface;
+use BaserCore\Utility\BcContainerTrait;
+use Cake\Routing\Router;
+use Cake\Validation\Validator;
 
 /**
  * ブログタグモデル
@@ -21,6 +26,11 @@ use BaserCore\Annotation\Checked;
  */
 class BlogTagsTable extends BlogAppTable
 {
+
+    /**
+     * Trait
+     */
+    use BcContainerTrait;
 
     /**
      * ビヘイビア
@@ -79,6 +89,35 @@ class BlogTagsTable extends BlogAppTable
             'targetForeignKey' => 'blog_post_id',
             'joinTable' => 'blog_posts_blog_tags',
         ]);
+    }
+
+
+    /**
+     * Validation Default
+     *
+     * @param Validator $validator
+     * @return Validator
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function validationDefault(Validator $validator): Validator
+    {
+        $validator
+            ->integer('id')
+            ->allowEmptyString('id', null, 'create');
+
+        $validator
+            ->scalar('name')
+            ->requirePresence('name', 'create', __d('baser', 'ブログタグを入力してください。'))
+            ->notEmptyString('name', __d('baser', 'ブログタグを入力してください。'))
+            ->add('name', [
+                'duplicate' => [
+                    'rule' => 'validateUnique',
+                    'provider' => 'table',
+                    'message' => __d('baser', '既に登録のあるタグです。')
+        ]]);
+        return $validator;
     }
 
     /**
@@ -174,20 +213,23 @@ class BlogTagsTable extends BlogAppTable
     /**
      * アクセス制限としてブログタグの新規追加ができるか確認する
      *
-     * Ajaxを利用する箇所にて BcBaserHelper::link() が利用できない場合に利用
-     *
-     * @param int $userGroupId ユーザーグループID
+     * @param array $userGroupId ユーザーグループID
      * @param int $blogContentId ブログコンテンツID
+     * @checked
+     * @noTodo
      */
     public function hasNewTagAddablePermission($userGroupId, $blogContentId)
     {
-        if (ClassRegistry::isKeySet('Permission')) {
-            $Permission = ClassRegistry::getObject('Permission');
-        } else {
-            $Permission = ClassRegistry::init('Permission');
-        }
-        $ajaxAddUrl = preg_replace('|^/index.php|', '', Router::url(['plugin' => 'blog', 'controller' => 'blog_tags', 'action' => 'ajax_add', $blogContentId]));
-        return $Permission->check($ajaxAddUrl, $userGroupId);
+        /* @var PermissionsService $permissionsService */
+        $permissionsService = $this->getService(PermissionsServiceInterface::class);
+        $addUrl = preg_replace('|^/index.php|', '', Router::url([
+            'plugin' => 'BcBlog',
+            'prefix' => 'Api',
+            'controller' => 'BlogTags',
+            'action' => 'add',
+            $blogContentId
+        ]));
+        return $permissionsService->check($addUrl, $userGroupId);
     }
 
     /**

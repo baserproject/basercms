@@ -122,6 +122,7 @@ class BlogFrontServiceTest extends BcTestCase
             'lft' => 1,
             'rght' => 2,
             'level' => 1,
+            'status' => true
 
         ])->persist();
         $blogContent = [
@@ -133,7 +134,7 @@ class BlogFrontServiceTest extends BcTestCase
             ]
         ];
         $controller = new ContentFoldersController(
-            $this->getRequest()
+            $this->getRequest('/test')
                 ->withParam('entityId', 1)
                 ->withParsedBody($blogContent)
         );
@@ -145,7 +146,6 @@ class BlogFrontServiceTest extends BcTestCase
         $this->assertArrayHasKey('blogContent', $vars);
         $this->assertArrayHasKey('posts', $vars);
         $this->assertArrayHasKey('single', $vars);
-        $this->assertArrayNotHasKey('editLink', $vars);
         $this->assertEquals('test', $vars['blogContent']->description);
         $this->assertEquals('default-2', $vars['blogContent']->template);
         $this->assertEquals('/preview', $vars['blogContent']->content->url);

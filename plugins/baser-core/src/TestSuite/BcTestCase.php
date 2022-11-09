@@ -364,6 +364,22 @@ class BcTestCase extends TestCase
         return $value;
     }
 
+    /**
+     * private・protectedプロパティの値を取得する
+     * @param object $class
+     * @param string $property
+     * @return mixed
+     * @throws \ReflectionException
+     * @checked
+     * @noTodo
+     */
+    protected function getPrivateProperty(object $class, string $property)
+    {
+        $ref = new ReflectionClass($class);
+        $property = $ref->getProperty($property);
+        $property->setAccessible(true);
+        return $property->getValue($class);
+    }
 
     /**
      * イベントを設定する

@@ -91,11 +91,12 @@ class Plugin extends BcPlugin
         /**
          * RSS
          */
-        $routes->connect('/rss/index', [
-            'plugin' => 'BcBlog',
-            'controller' => 'blog',
-            'action' => 'index'
-        ]);
+         // TODO ucmitz 未実装
+//        $routes->connect('/rss/index', [
+//            'plugin' => 'BcBlog',
+//            'controller' => 'blog',
+//            'action' => 'index'
+//        ]);
 
         /**
          * Tag

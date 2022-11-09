@@ -16,6 +16,8 @@ use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Service\DblogsServiceInterface;
 use BaserCore\Service\SiteConfigsServiceInterface;
+use BaserCore\Utility\BcSiteConfig;
+use Cake\Http\Exception\NotFoundException;
 
 /**
  * Class DblogsController
@@ -27,22 +29,24 @@ class DblogsController extends BcAdminAppController
      * [ADMIN] DBログ一覧
      *
      * @param DblogsServiceInterface $service
-     * @param SiteConfigsServiceInterface $siteConfigService
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function index(DblogsServiceInterface $service, SiteConfigsServiceInterface $siteConfigService)
+    public function index(DblogsServiceInterface $service)
     {
         $this->setViewConditions('Dblog', ['default' => ['query' => [
-            'limit' => $siteConfigService->getValue('admin_list_num'),
+            'limit' => BcSiteConfig::get('admin_list_num'),
             'sort' => 'id',
             'direction' => 'desc',
         ]]]);
 
-        $queryParams = $this->request->getQueryParams();
-
-        $this->set('dblogs', $this->paginate($service->getIndex($queryParams)));
+        try {
+            $entities = $this->paginate($service->getIndex($this->getRequest()->getQueryParams()));
+        } catch (NotFoundException $e) {
+            return $this->redirect(['action' => 'index']);
+        }
+        $this->set('dblogs', $entities);
         $this->request = $this->request->withParsedBody($this->request->getQuery());
     }
 

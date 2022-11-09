@@ -12,8 +12,15 @@
 
 /**
  * [ADMIN] ブログ記事コメント 一覧　行
+ * @var \BaserCore\View\BcAdminAppView $this
+ * @var \BcBlog\Model\Entity\BlogContent $blogContent
+ * @var \BcBlog\Model\Entity\BlogComment $blogComment
+ * @var \BcBlog\Model\Entity\BlogPost $blogPost
+ * @checked
+ * @noTodo
+ * @unitTest
  */
-if (!$data['BlogComment']['status']) {
+if (!$blogComment->status) {
   $class = ' class="disablerow unpublish"';
 } else {
   $class = ' class="publish"';
@@ -24,44 +31,89 @@ if (!$data['BlogComment']['status']) {
 <tr<?php echo $class; ?>>
   <td class="row-tools bca-table-listup__tbody-td">
     <?php if ($this->BcBaser->isAdminUser()): ?>
-      <?php echo $this->BcAdminForm->control('batch_targets.' . $data['BlogComment']['id'], ['type' => 'checkbox', 'label' => '<span class="bca-visually-hidden">チェックする</span>', 'class' => 'batch-targets bca-checkbox__input', 'value' => $data['BlogComment']['id']]) ?>
+      <?php echo $this->BcAdminForm->control('batch_targets.' . $blogComment->id, [
+        'type' => 'checkbox',
+        'label' => '<span class="bca-visually-hidden">チェックする</span>',
+        'class' => 'batch-targets bca-checkbox__input',
+        'value' => $blogComment->id,
+        'escape' => false
+      ]) ?>
     <?php endif ?>
   </td>
-  <td class="bca-table-listup__tbody-td"><?php echo $data['BlogComment']['no'] ?></td>
+  <td class="bca-table-listup__tbody-td"><?php echo $blogComment->no ?></td>
   <td class="bca-table-listup__tbody-td">
-    <?php if (!empty($data['BlogComment']['url'])): ?>
-      <?php $this->BcBaser->link($data['BlogComment']['name'], $data['BlogComment']['url'], ['target' => '_blank', 'escape' => true]) ?>
-    <?php else: ?>
-      <?php echo h($data['BlogComment']['name']) ?>
-    <?php endif ?>
+      <?php echo h($blogComment->name) ?>
   </td>
   <td class="bca-table-listup__tbody-td">
-    <?php if (!empty($data['BlogComment']['email'])): ?>
-      <?php $this->BcBaser->link($data['BlogComment']['email'], 'mailto:' . $data['BlogComment']['email'], ['escape' => true]) ?>
+    <?php if (!empty($blogComment->email)): ?>
+      <?php $this->BcBaser->link($blogComment->email, 'mailto:' . $blogComment->email, ['escape' => true]) ?>
     <?php endif; ?>
-    <br/>
-    <?php echo $this->BcText->autoLinkUrls($data['BlogComment']['url']) ?>
+    <br>
+    <?php if($blogComment->url): ?>
+    <?php echo $this->BcText->autoLinkUrls($blogComment->url, ['target' => '_blank']) ?>
+    <?php endif ?>
   </td>
   <td class="bca-table-listup__tbody-td">
     <strong>
-      <?php $this->BcBaser->link($data['BlogPost']['name'], ['controller' => 'blog_posts', 'action' => 'edit', $blogContent['BlogContent']['id'], $data['BlogPost']['id']]) ?>
-    </strong><br/>
-    <?php echo nl2br($this->BcText->autoLinkUrls($data['BlogComment']['message'])) ?>
+      <?php $this->BcBaser->link($blogComment->blog_post->name, ['controller' => 'blog_posts', 'action' => 'edit', $blogContent->id, $blogComment->blog_post->id]) ?>
+    </strong>
+    <br>
+    <?php echo nl2br($this->BcText->autoLinkUrls($blogComment->message)) ?>
   </td>
-  <?php echo $this->BcListTable->dispatchShowRow($data) ?>
+
+  <?php echo $this->BcListTable->dispatchShowRow($blogComment) ?>
+
   <td class="bca-table-listup__tbody-td" style="white-space: nowrap">
-    <?php echo $this->BcTime->format($data['BlogComment']['created'], 'yyyy-MM-dd'); ?><br/>
-    <?php echo $this->BcTime->format($data['BlogComment']['modified'], 'yyyy-MM-dd'); ?>
+    <?php echo $this->BcTime->format($blogComment->created); ?><br/>
+    <?php echo $this->BcTime->format($blogComment->modified); ?>
   </td>
   <td class="bca-table-listup__tbody-td bca-table-listup__tbody-td--actions">
-    <?php if (!empty($this->params['pass'][1])): ?>
-      <?php $this->BcBaser->link('', ['action' => 'ajax_unpublish', $blogContent['BlogContent']['id'], $data['BlogComment']['blog_post_id'], $data['BlogComment']['id']], ['title' => __d('baser', '非公開'), 'class' => 'btn-unpublish bca-btn-icon', 'data-bca-btn-type' => 'unpublish', 'data-bca-btn-size' => 'lg']) ?>
-      <?php $this->BcBaser->link('', ['action' => 'ajax_publish', $blogContent['BlogContent']['id'], $data['BlogComment']['blog_post_id'], $data['BlogComment']['id']], ['title' => __d('baser', '公開'), 'class' => 'btn-publish bca-btn-icon', 'data-bca-btn-type' => 'publish', 'data-bca-btn-size' => 'lg']) ?>
-      <?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_delete.png', ['alt' => __d('baser', '削除'), 'class' => 'btn']), ['action' => 'ajax_delete', $blogContent['BlogContent']['id'], $data['BlogComment']['blog_post_id'], $data['BlogComment']['id']], ['title' => __d('baser', '削除'), 'class' => 'btn-delete bca-btn-icon', 'data-bca-btn-type' => 'delete', 'data-bca-btn-size' => 'lg']) ?>
+    <?php if ($blogPost): ?>
+      <?php if($blogComment->status): ?>
+        <?= $this->BcAdminForm->postLink('', ['action' => 'unpublish', $blogContent->id, $blogComment->id, '?' => ['blog_post_id' => $blogComment->blog_post_id]], [
+          'title' => __d('baser', '非公開'),
+          'class' => 'btn-unpublish bca-btn-icon',
+          'data-bca-btn-type' => 'unpublish',
+          'data-bca-btn-size' => 'lg'
+        ]) ?>
+        <?php else: ?>
+        <?= $this->BcAdminForm->postLink('', ['action' => 'publish', $blogContent->id, $blogComment->id, '?' => ['blog_post_id' => $blogComment->blog_post_id]], [
+          'title' => __d('baser', '公開'),
+          'class' => 'btn-publish bca-btn-icon',
+          'data-bca-btn-type' => 'publish',
+          'data-bca-btn-size' => 'lg'
+        ]) ?>
+        <?php endif ?>
+        <?= $this->BcAdminForm->postLink('', ['action' => 'delete', $blogContent->id, $blogComment->id, '?' => ['blog_post_id' => $blogComment->blog_post_id]], [
+          'confirm' => __d('baser', "{0} を本当に削除してもいいですか？", $blogComment->name),
+          'title' => __d('baser', '非公開'),
+          'class' => 'btn-delete bca-btn-icon',
+          'data-bca-btn-type' => 'delete',
+          'data-bca-btn-size' => 'lg'
+        ]) ?>
     <?php else: ?>
-      <?php $this->BcBaser->link('', ['action' => 'ajax_unpublish', $blogContent['BlogContent']['id'], 0, $data['BlogComment']['id']], ['title' => __d('baser', '非公開'), 'class' => 'btn-unpublish bca-btn-icon', 'data-bca-btn-type' => 'unpublish', 'data-bca-btn-size' => 'lg']) ?>
-      <?php $this->BcBaser->link('', ['action' => 'ajax_publish', $blogContent['BlogContent']['id'], 0, $data['BlogComment']['id']], ['title' => __d('baser', '公開'), 'class' => 'btn-publish bca-btn-icon', 'data-bca-btn-type' => 'publish', 'data-bca-btn-size' => 'lg']) ?>
-      <?php $this->BcBaser->link('', ['action' => 'ajax_delete', $blogContent['BlogContent']['id'], 0, $data['BlogComment']['id']], ['title' => __d('baser', '削除'), 'class' => 'btn-delete bca-btn-icon', 'data-bca-btn-type' => 'delete', 'data-bca-btn-size' => 'lg']) ?>
+      <?php if($blogComment->status): ?>
+        <?= $this->BcAdminForm->postLink('', ['action' => 'unpublish', $blogContent->id, $blogComment->id], [
+          'title' => __d('baser', '非公開'),
+          'class' => 'btn-unpublish bca-btn-icon',
+          'data-bca-btn-type' => 'unpublish',
+          'data-bca-btn-size' => 'lg'
+        ]) ?>
+        <?php else: ?>
+        <?= $this->BcAdminForm->postLink('', ['action' => 'publish', $blogContent->id, $blogComment->id], [
+          'title' => __d('baser', '公開'),
+          'class' => 'btn-publish bca-btn-icon',
+          'data-bca-btn-type' => 'publish',
+          'data-bca-btn-size' => 'lg'
+        ]) ?>
+        <?php endif ?>
+        <?= $this->BcAdminForm->postLink('', ['action' => 'delete', $blogContent->id, $blogComment->id], [
+          'confirm' => __d('baser', "{0} を本当に削除してもいいですか？", $blogComment->name),
+          'title' => __d('baser', '非公開'),
+          'class' => 'btn-delete bca-btn-icon',
+          'data-bca-btn-type' => 'delete',
+          'data-bca-btn-size' => 'lg'
+        ]) ?>
     <?php endif ?>
   </td>
 </tr>

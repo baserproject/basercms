@@ -7,6 +7,7 @@
  * @since         5.0.0
  * @license       https://basercms.net/license/index.html MIT License
  */
+import Cookies from 'js-cookie'
 
 (function ($) {
     $.bcUtil = {
@@ -139,7 +140,11 @@
                     $(selector).html(div);
                     break;
                 case 'after':
-                    var img = $('<img>').attr('src', $.bcUtil.ajaxLoaderSmallPath).attr('id', key).css({'width':'16px', 'vertical-align':'middle'});
+                    var img = $('<img>').attr('src', $.bcUtil.ajaxLoaderSmallPath).attr('id', key).css({
+                        'width':'16px',
+                        'vertical-align': 'middle',
+                        'margin':'5px'
+                    });
                     $(selector).after(img);
                     break;
                 case 'target':
@@ -244,6 +249,30 @@
                 errorMessage += '<br>' + errorThrown;
             }
             $.bcUtil.showAlertMessage(message + errorMessage);
+        },
+
+        /**
+         * フラッシュメッセージをセットする
+         *
+         * 一度しか表示できないメッセージ
+         * @param message
+         */
+        setFlashMessage: function(message) {
+            Cookies.set('bcFlashMessage', message);
+        },
+
+        /**
+         * フラッシュメッセージを表示する
+         *
+         * 一度表示したら削除する
+         */
+        showFlashMessage: function () {
+            let message = Cookies.get('bcFlashMessage');
+            if(message !== undefined) {
+                this.showNoticeMessage(message);
+                Cookies.remove('bcFlashMessage')
+            }
         }
+
     };
 })(jQuery);

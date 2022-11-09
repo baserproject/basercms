@@ -11,6 +11,7 @@
 
 namespace BaserCore\View\Helper;
 
+use BaserCore\Utility\BcContainerTrait;
 use Cake\ORM\Query;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
@@ -36,6 +37,7 @@ class BcFormHelper extends FormHelper
      * Trait
      */
     use BcEventDispatcherTrait;
+    use BcContainerTrait;
 
     /**
      * Other helpers used by FormHelper
@@ -136,19 +138,20 @@ class BcFormHelper extends FormHelper
     public function getControlSource($field, $options = [])
     {
         $count = preg_match_all('/\./is', $field, $matches);
+        $plugin = $modelName = null;
         if ($count === 1) {
             [$modelName, $field] = explode('.', $field);
             $plugin = $this->_View->getPlugin();
-            if ($plugin) {
-                $modelName = $plugin . '.' . $modelName;
-            }
         } elseif ($count === 2) {
             [$plugin, $modelName, $field] = explode('.', $field);
-            $modelName = $plugin . '.' . $modelName;
         }
-        if (empty($modelName)) {
-            return false;
+        if(!$modelName) return false;
+        $serviceName = ($plugin)?: 'App' . '\\Service\\' . $modelName . 'ServiceInterface';
+        $modelName = (($plugin)? $plugin . '.' : '') . $modelName;
+        if(method_exists($serviceName, 'getControlSource')) {
+            return $this->getService($serviceName)->getControlSource($field, $options);
         }
+        if (empty($modelName)) return false;
         $model = TableRegistry::getTableLocator()->get($modelName);
         if ($model && method_exists($model, 'getControlSource')) {
             return $model->getControlSource($field, $options);
@@ -1985,6 +1988,7 @@ DOC_END;
             'figure' => [],
             'img' => ['class' => ''],
             'figcaption' => [],
+            'table' => null
         ], $options);
 
         $linkOptions = [
@@ -1998,7 +2002,8 @@ DOC_END;
             'height' => $options['height'],
             'figure' => $options['figure'],
             'img' => $options['img'],
-            'figcaption' => $options['figcaption']
+            'figcaption' => $options['figcaption'],
+            'table' => $options['table']
         ];
 
         $deleteSpanOptions = $deleteCheckboxOptions = $deleteLabelOptions = [];
@@ -2020,9 +2025,9 @@ DOC_END;
         unset($options['imgsize'], $options['rel'], $options['title'], $options['link']);
         unset($options['delCheck'], $options['force'], $options['width'], $options['height']);
         unset($options['deleteSpan'], $options['deleteCheckbox'], $options['deleteLabel']);
-        unset($options['figure'], $options['img'], $options['figcaption'], $options['div']);
+        unset($options['figure'], $options['img'], $options['figcaption'], $options['div'], $options['table']);
 
-        $fileLinkTag = $this->BcUpload->fileLink($fieldName, $linkOptions);
+        $fileLinkTag = $this->BcUpload->fileLink($fieldName, $this->_getContext()->entity(), $linkOptions);
         $fileTag = parent::file($fieldName, $options);
 
         if (empty($options['value'])) {

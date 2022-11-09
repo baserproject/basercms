@@ -79,12 +79,13 @@
                         },
                         type: 'POST',
                         data: form.serialize(),
-                        dataType: 'text',
+                        dataType: 'json',
                         beforeSend: function () {
                             $.bcUtil.hideMessage();
                             $.bcUtil.showLoader();
                         },
-                        success: function () {
+                        success: function (result) {
+                            $.bcUtil.setFlashMessage(result.message);
                             location.reload();
                         },
                         error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -99,9 +100,9 @@
                                     errorMessage = '<br>' + errorThrown;
                                 }
                             }
-                            $.bcUtil.hideLoader();
                             form.remove();
-                            $.bcUtil.showAlertMessage(bcI18n.commonBatchExecFailedMessage + '(' + XMLHttpRequest.status + ')' + errorMessage)
+                            $.bcUtil.showAlertMessage(bcI18n.commonBatchExecFailedMessage + '(' + XMLHttpRequest.status + ')' + errorMessage);
+                            $.bcUtil.hideLoader();
                         }
                     });
                 }, {useUpdate: false, hideLoader: false});

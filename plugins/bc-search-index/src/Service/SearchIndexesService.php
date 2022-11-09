@@ -114,6 +114,7 @@ class SearchIndexesService implements SearchIndexesServiceInterface
      * - type: コンテンツタイプ
      * - model(m): モデル名（エンティティ名）
      * - priority: 優先度
+     * - status: 公開状態。publish もしくは 1 の場合、公開期間も加味する。
      * - folder_id(f): フォルダーID
      * @return array
      * @checked
@@ -192,8 +193,8 @@ class SearchIndexesService implements SearchIndexesServiceInterface
      * @param string $query
      * @return array
      * @checked
-     * @unitTest
      * @noTodo
+     * @unitTest
      */
     protected function parseQuery($query)
     {

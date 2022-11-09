@@ -446,7 +446,7 @@ class BcValidationTest extends BcTestCase
     }
 
     /**
-     * Test checkDateRenge
+     * Test checkDateRange
      *
      * @return void
      */
@@ -460,15 +460,15 @@ class BcValidationTest extends BcTestCase
             ]
         ];
 
-        $this->assertEquals(true, $this->BcValidation->checkDateRenge($value, 'begin', 'end', $context));
-        $this->assertEquals(true, $this->BcValidation->checkDateRenge($value, 'test', 'end', $context));
-        $this->assertEquals(true, $this->BcValidation->checkDateRenge($value, 'begin', 'test', $context));
+        $this->assertEquals(true, $this->BcValidation->checkDateRange($value, ['begin', 'end'], $context));
+        $this->assertEquals(true, $this->BcValidation->checkDateRange($value, ['test', 'end'], $context));
+        $this->assertEquals(true, $this->BcValidation->checkDateRange($value, ['begin', 'test'], $context));
 
         $context['data']['end'] = '2020-01-01 00:00:00';
-        $this->assertEquals(false, $this->BcValidation->checkDateRenge($value, 'begin', 'end', $context));
+        $this->assertEquals(false, $this->BcValidation->checkDateRange($value, ['begin', 'end'], $context));
 
         $context['data']['end'] = '2019-01-01 00:00:00';
-        $this->assertEquals(false, $this->BcValidation->checkDateRenge($value, 'begin', 'end', $context));
+        $this->assertEquals(false, $this->BcValidation->checkDateRange($value, ['begin', 'end'], $context));
     }
 
     /**

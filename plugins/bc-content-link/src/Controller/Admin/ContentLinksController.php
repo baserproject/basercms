@@ -35,11 +35,15 @@ class ContentLinksController extends BcAdminAppController
      * @throws \Exception
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function initialize(): void
     {
         parent::initialize();
-        $this->loadComponent('BaserCore.BcAdminContents', ['entityVarName' => 'contentLink']);
+        $this->loadComponent('BaserCore.BcAdminContents', [
+            'entityVarName' => 'contentLink',
+            'useForm' => true
+        ]);
     }
 
     /**

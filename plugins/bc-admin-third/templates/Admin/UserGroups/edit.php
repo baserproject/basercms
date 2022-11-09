@@ -9,16 +9,18 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
-use BaserCore\View\{AppView as AppViewAlias};
-use BaserCore\Model\Entity\UserGroup;
-
 /**
  * UserGroups Add
- * @var AppViewAlias $this
- * @var UserGroup $userGroup
+ * @var \BaserCore\View\BcAdminAppView $this
+ * @var \BaserCore\Model\Entity\UserGroup $userGroup
  * @var bool $editable
  * @var bool $deletable
+ * @checked
+ * @noTodo
+ * @unitTest
  */
+$this->BcAdmin->setTitle(__d('baser', 'ユーザーグループ編集'));
+$this->BcAdmin->setHelp('user_groups_form');
 ?>
 
 

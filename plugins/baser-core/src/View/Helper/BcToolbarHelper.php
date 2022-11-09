@@ -292,7 +292,7 @@ class BcToolbarHelper extends Helper
             'install' => Configure::read('BcLinks.installManual'),
             'update' => Configure::read('BcLinks.updateManual'),
             'normal' => $normalUrl,
-            'frontAdminAvailable' => ['prefix' => 'Admin', 'controller' => 'dashboard', 'action' => 'index'],
+            'frontAdminAvailable' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'dashboard', 'action' => 'index'],
             'frontAdminNotAvailable' => $this->BcAuth->getCurrentLoginRedirectUrl(),
         ];
         return $links[$this->getLogoType()];

@@ -46,20 +46,29 @@ class BcFrontContentsComponent extends Component
     use BcContainerTrait;
 
     /**
-     * プレビューモード
-     * @var string default Or alias
+     * Initialize
+     *
+     * @param array $config
+     * @return void
+     * @checked
      */
-    protected $preview = null;
+    public function initialize(array $config): void
+    {
+        $config = array_merge([
+            'isContentsPage' => true
+        ], $config);
+        $this->setConfig($config);
+    }
 
     /**
-     * beforeRender
+     * beforeFilter
      * @param array $config
      * @return void
      * @checked
      * @unitTest
      * @noTodo
      */
-    public function beforeRender(EventInterface $event): void
+    public function beforeFilter(EventInterface $event): void
     {
         $this->setupFront();
     }
@@ -82,7 +91,7 @@ class BcFrontContentsComponent extends Component
         if ($currentContent) {
             $this->setLayout($currentContent);
             $bcFrontContentsService = $this->getService(BcFrontContentsServiceInterface::class);
-            $controller->set($bcFrontContentsService->getViewVarsForFront($currentContent));
+            $controller->set($bcFrontContentsService->getViewVarsForFront($currentContent, $this->getConfig('isContentsPage')));
         }
     }
 

@@ -289,7 +289,7 @@ class BcToolbarHelperTest extends BcTestCase
         $this->assertEquals('', $this->BcToolbar->getLogoLink());
         // フロントで管理画面利用可能
         $this->loginAdmin($this->getRequest('/baser/admin'));
-        $this->assertEquals(['prefix' => 'Admin', 'controller' => 'dashboard', 'action' => 'index'], $this->BcToolbar->getLogoLink());
+        $this->assertEquals(['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'dashboard', 'action' => 'index'], $this->BcToolbar->getLogoLink());
         // ノーマル
         $bcToolbar = new BcToolbarHelper(new View($this->getRequest('/baser/admin/baser-core/users/login')));
         $this->assertEquals('https://localhost/', $bcToolbar->getLogoLink());

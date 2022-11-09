@@ -63,7 +63,7 @@ class BcFrontContentsServiceTest extends BcTestCase
         ContentFactory::make(['id' => 100, 'title' => 'test title', 'description' => 'description test', 'lft'=>1, 'rght'=>2])->persist();
         $contentService = new ContentsService();
         $content = $contentService->get(100);
-        $rs = $this->BcFrontContentsService->getViewVarsForFront($content);
+        $rs = $this->BcFrontContentsService->getViewVarsForFront($content, false);
         $this->assertEquals('description test',$rs['description']);
         $this->assertEquals('test title',$rs['title']);
         $this->assertEquals('test title',$rs['crumbs'][0]['name']);
@@ -92,12 +92,12 @@ class BcFrontContentsServiceTest extends BcTestCase
                 'rght' => 3,
                 'url' => '/test2'
             ])->persist();
-        $result = $this->execPrivateMethod($this->BcFrontContentsService, 'getCrumbs', [101]);
+        $result = $this->execPrivateMethod($this->BcFrontContentsService, 'getCrumbs', [101, false]);
         $this->assertCount(1, $result);
         $this->assertEquals('test title 1', $result[0]['name']);
         $this->assertEquals('/test1', $result[0]['url']);
 
-        $result = $this->execPrivateMethod($this->BcFrontContentsService, 'getCrumbs', [102]);
+        $result = $this->execPrivateMethod($this->BcFrontContentsService, 'getCrumbs', [102, false]);
         $this->assertCount(3, $result);
         $this->assertEquals('test title 1', $result[0]['name']);
         $this->assertEquals('/test1', $result[0]['url']);

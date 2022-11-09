@@ -67,12 +67,12 @@ class BcBlogViewEventListener extends \BaserCore\Event\BcViewEventListener
                     'BlogPosts' . $blogContent->id => [
                         'title' => '記事',
                         'url' => array_merge($route, ['controller' => 'blog_posts']),
-                        'currentRegex' => '{/blog/blog_posts/[^/]+?/' . $blogContent->id . '($|/)}s'
+                        'currentRegex' => '/\/bc-blog\/blog_posts\/[^\/]+?\/' . $blogContent->id . '($|\/)/s'
                     ],
                     'BlogCategories' . $blogContent->id => [
                         'title' => 'カテゴリ',
                         'url' => array_merge($route, ['controller' => 'blog_categories']),
-                        'currentRegex' => '{/blog/blog_categories/[^/]+?/' . $blogContent->id . '($|/)}s'
+                        'currentRegex' => '/\/bc-blog\/blog_categories\/[^\/]+?\/' . $blogContent->id . '($|\/)/s'
                     ]
                 ];
                 if ($blogContent->tag_use) {
@@ -80,7 +80,7 @@ class BcBlogViewEventListener extends \BaserCore\Event\BcViewEventListener
                         'BlogTags' . $blogContent->id => [
                             'title' => 'タグ',
                             'url' => array_merge($route, ['controller' => 'blog_tags']),
-                            'currentRegex' => '{/blog/blog_tags/[^/]+?/}s'
+                            'currentRegex' => '/\/bc-blog\/blog_tags\/[^\/]+?/s'
                         ]
                     ]);
                 }

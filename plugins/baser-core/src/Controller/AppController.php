@@ -363,37 +363,36 @@ class AppController extends BaseController
         $options = array_merge([
             'group' => '',
             'post' => true,
-            'get' => false,
+            'get' => true,
         ], $options);
 
-        $contentsName = $this->getRequest()->getParam('controller') . Inflector::classify($this->getRequest()->getParam('action'));
+        $request = $this->getRequest();
+        $contentsName = $request->getParam('controller') . Inflector::classify($request->getParam('action'));
         if ($options['group']) $contentsName .= "." . $options['group'];
         if (!is_array($targetModel)) $targetModel = [$targetModel];
-        $session = $this->getRequest()->getSession();
+        $session = $request->getSession();
 
         if ($options['post'] && $targetModel) {
             foreach($targetModel as $model) {
                 if(count($targetModel) > 1) {
-                    $data = $this->getRequest()->getData($model);
+                    $data = $request->getData($model);
                 } else {
-                    $data = $this->getRequest()->getData();
+                    $data = $request->getData();
                 }
                 if ($data) $session->write("BcApp.viewConditions.{$contentsName}.data.{$model}", $data);
             }
         }
 
-        if ($options['get'] && $this->getRequest()->getQueryParams()) {
+        if ($options['get'] && $request->getQueryParams()) {
             if ($session->check("BcApp.viewConditions.{$contentsName}.query")) {
-                if(!isset($query['page']) && $session->read("BcApp.viewConditions.{$contentsName}.query.page")) {
-                    $session->delete("BcApp.viewConditions.{$contentsName}.query.page");
-                }
                 $query = array_merge(
                     $session->read("BcApp.viewConditions.{$contentsName}.query"),
-                    $this->getRequest()->getQueryParams()
+                    $request->getQueryParams()
                 );
             } else {
-                $query = $this->getRequest()->getQueryParams();
+                $query = $request->getQueryParams();
             }
+            unset($query['page']);
             $session->write("BcApp.viewConditions.{$contentsName}.query", $query);
         }
     }
@@ -420,43 +419,42 @@ class AppController extends BaseController
             'default' => [],
             'group' => '',
             'post' => true,
-            'get' => false,
+            'get' => true,
         ], $options);
 
-        $contentsName = $this->getRequest()->getParam('controller') . Inflector::classify($this->getRequest()->getParam('action'));
+        $request = $this->getRequest();
+        $contentsName = $request->getParam('controller') . Inflector::classify($request->getParam('action'));
         if ($options['group']) $contentsName .= "." . $options['group'];
         if (!is_array($targetModel)) $targetModel = [$targetModel];
-        $session = $this->getRequest()->getSession();
+        $session = $request->getSession();
 
-        if ($options['post'] && $targetModel) {
+        if ($targetModel) {
             foreach($targetModel as $model) {
                 $data = [];
                 if (!empty($options['default'][$model])) $data = $options['default'][$model];
-                if ($session->check("BcApp.viewConditions.{$contentsName}.data.{$model}")) {
+                if ($options['post'] && $session->check("BcApp.viewConditions.{$contentsName}.data.{$model}")) {
                     $data = array_merge($data, $session->read("BcApp.viewConditions.{$contentsName}.data.{$model}"));
                 }
                 if ($data) {
                     if(count($targetModel) > 1) {
-                        $this->setRequest($this->getRequest()->withData($model, $data));
+                        $this->setRequest($request->withData($model, array_merge($data, $request->getData($model))));
                     } else {
-                        $this->setRequest($this->getRequest()->withParsedBody($data));
+                        $this->setRequest($request->withParsedBody(array_merge($data, $request->getData())));
                     }
                 }
             }
         }
 
-        if ($options['get']) {
-            $query = [];
-            if (!empty($options['default']['query'])) $query = $options['default']['query'];
-            if ($session->check("BcApp.viewConditions.{$contentsName}.query")) {
-                $query = array_merge($query, $session->read("BcApp.viewConditions.{$contentsName}.query"));
-            }
+        $query = [];
+        if (!empty($options['default']['query'])) $query = $options['default']['query'];
+        if ($options['get'] && $session->check("BcApp.viewConditions.{$contentsName}.query")) {
+            $query = array_merge($query, $session->read("BcApp.viewConditions.{$contentsName}.query"));
             unset($query['url']);
             unset($query['ext']);
             unset($query['x']);
             unset($query['y']);
-            if ($query) $this->setRequest($this->getRequest()->withQueryParams($query));
         }
+        if ($query) $this->setRequest($request->withQueryParams(array_merge($query, $request->getQueryParams())));
     }
 
     /**
@@ -466,6 +464,7 @@ class AppController extends BaseController
      * @throws NotFoundException
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function notFound()
     {

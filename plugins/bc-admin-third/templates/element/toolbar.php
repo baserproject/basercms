@@ -62,6 +62,7 @@ $this->BcBaser->js([$currentAdminTheme . '.vendor/jquery.fixedMenu', $currentAdm
                 <li>
                   <?php $this->BcBaser->link($value, [
                     'prefix' => 'Admin',
+                    'plugin' => 'BaserCore',
                     'controller' => 'Contents',
                     'action' => 'index',
                     '?' => ['site_id' => $key]
@@ -107,7 +108,7 @@ $this->BcBaser->js([$currentAdminTheme . '.vendor/jquery.fixedMenu', $currentAdm
                 <li>
                   <?php $this->BcBaser->link(
                     __d('baser', '元のユーザーに戻る'),
-                    ['prefix' => 'Admin', 'controller' => 'users', 'action' => 'back_agent']
+                    ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'users', 'action' => 'back_agent']
                   ) ?>
                 </li>
               <?php endif ?>
@@ -135,7 +136,7 @@ $this->BcBaser->js([$currentAdminTheme . '.vendor/jquery.fixedMenu', $currentAdm
             <li>
               <?php $this->BcBaser->link(
                 __d('baser', 'キャッシュクリア'),
-                ['prefix' => 'Admin', 'controller' => 'Utilities', 'action' => 'clear_cache'],
+                ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'Utilities', 'action' => 'clear_cache'],
                 ['confirm' => __d('baser', 'キャッシュクリアします。いいですか？')]
               ) ?>
             </li>

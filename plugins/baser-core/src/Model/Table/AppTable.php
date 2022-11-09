@@ -482,7 +482,7 @@ class AppTable extends Table
      * @unitTest
      * @noTodo
      */
-    public function getMax($field, $conditions = [])
+    public function getMax(string $field, array $conditions = []): int
     {
         $max = $this->find()->where($conditions)->all()->max($field);
         return $max->{$field} ?? 0;

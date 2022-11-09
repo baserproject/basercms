@@ -12,7 +12,13 @@
 
 /**
  * [ADMIN] ブログタグ一覧　テーブル
+ * @var \BaserCore\View\BcAdminAppView $this
+ * @var \Cake\ORM\ResultSet $blogTags
+ * @checked
+ * @noTodo
+ * @unitTest
  */
+$this->BcBaser->js('BcBlog.admin/blog_tags/index.bundle', false);
 $this->BcListTable->setColumnNumber(5);
 ?>
 
@@ -21,7 +27,7 @@ $this->BcListTable->setColumnNumber(5);
   <!-- 一括処理 -->
   <?php if ($this->BcBaser->isAdminUser()): ?>
     <div class="bca-action-table-listup">
-      <?php echo $this->BcAdminForm->control('batch', ['type' => 'select', 'options' => ['del' => __d('baser', '削除')], 'empty' => __d('baser', '一括処理'), 'data-bca-select-size' => 'lg']) ?>
+      <?php echo $this->BcAdminForm->control('batch', ['type' => 'select', 'options' => ['delete' => __d('baser', '削除')], 'empty' => __d('baser', '一括処理'), 'data-bca-select-size' => 'lg']) ?>
       <?php echo $this->BcAdminForm->button(__d('baser', '適用'), ['id' => 'BtnApplyBatch', 'disabled' => 'disabled', 'class' => 'bca-btn', 'data-bca-btn-size' => 'lg']) ?>
     </div>
   <?php endif ?>
@@ -79,9 +85,9 @@ $this->BcListTable->setColumnNumber(5);
   </tr>
   </thead>
   <tbody class="bca-table-listup__tbody">
-  <?php if (!empty($datas)): ?>
-    <?php foreach($datas as $data): ?>
-      <?php $this->BcBaser->element('blog_tags/index_row', ['data' => $data]) ?>
+  <?php if (!empty($blogTags)): ?>
+    <?php foreach($blogTags as $blogTag): ?>
+      <?php $this->BcBaser->element('BlogTags/index_row', ['blogTag' => $blogTag]) ?>
     <?php endforeach; ?>
   <?php else: ?>
     <tr>

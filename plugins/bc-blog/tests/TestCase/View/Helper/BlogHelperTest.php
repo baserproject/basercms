@@ -652,42 +652,6 @@ class BlogHelperTest extends BcTestCase
         $this->assertEquals('release', $result['BlogCategory']['name'], $message);
     }
 
-
-    /**
-     * 同じタグの関連投稿を取得する
-     */
-    public function testGetRelatedPosts()
-    {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $post = [
-            'BlogPost' => [
-                'id' => 1,
-                'blog_content_id' => 1,
-            ],
-            'BlogTag' => [
-                ['name' => '新製品']
-            ]
-        ];
-        $result = $this->Blog->getRelatedPosts($post);
-        $this->assertEquals($result[0]['BlogPost']['id'], 3, '同じタグの関連投稿を正しく取得できません');
-        $this->assertEquals($result[1]['BlogPost']['id'], 2, '同じタグの関連投稿を正しく取得できません');
-
-        $post['BlogPost']['id'] = 2;
-        $post['BlogPost']['blog_content_id'] = 1;
-        $result = $this->Blog->getRelatedPosts($post);
-        $this->assertEquals($result[0]['BlogPost']['id'], 3, '同じタグの関連投稿を正しく取得できません');
-
-        $post['BlogPost']['id'] = 7;
-        $post['BlogPost']['blog_content_id'] = 2;
-        $result = $this->Blog->getRelatedPosts($post);
-        $this->assertEmpty($result, '関連していない投稿を取得しています');
-
-        $post['BlogPost']['id'] = 2;
-        $post['BlogPost']['blog_content_id'] = 3;
-        $result = $this->Blog->getRelatedPosts($post);
-        $this->assertEmpty($result, '関連していない投稿を取得しています');
-    }
-
     /**
      * アイキャッチ画像を取得する
      */
@@ -1087,39 +1051,6 @@ class BlogHelperTest extends BcTestCase
     public function testIsSameSiteBlogContent()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
-    /**
-     * testGetPreviewUrl
-     *
-     * @param string $url
-     * @param bool $useSubdomain
-     * @param string $expects
-     * @dataProvider getPreviewUrlDataProvider
-     */
-    public function testGetPreviewUrl($url, $useSubdomain, $base, $expects)
-    {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        BcSite::flash();
-        $siteUrl = Configure::read('BcEnv.siteUrl');
-        Configure::write('BcEnv.siteUrl', 'http://main.com');
-        $this->loadFixtures('ContentBcContentsRoute', 'SiteBcContentsRoute', 'BlogContentMultiSite');
-        $this->Blog->request = $this->_getRequest('/');
-        $this->Blog->request->base = $base;
-        $result = $this->Blog->getPreviewUrl($url, $useSubdomain);
-        Configure::write('BcEnv.siteUrl', $siteUrl);
-        $this->assertEquals($expects, $result);
-    }
-
-    public function getPreviewUrlDataProvider()
-    {
-        return [
-            ['/news/', false, '', '/news/'],
-            ['/news/', false, '/sub', '/sub/news/'],
-            ['/sub/news/', true, '', '/news/?host=sub.main.com'],
-            ['/sub/news/', true, '/sub', '/sub/news/?host=sub.main.com'],
-            ['/another.com/news/', true, '', '/news/?host=another.com']
-        ];
     }
 
     /**

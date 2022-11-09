@@ -40,7 +40,6 @@ class PreviewController extends BcAdminAppController
     public function initialize(): void
     {
         parent::initialize();
-        $this->loadComponent('BaserCore.BcFrontContents');
         $this->Security->setConfig('unlockedActions', ['view']);
     }
 
@@ -64,6 +63,8 @@ class PreviewController extends BcAdminAppController
             $this->viewBuilder()->setLayout('default');
             $this->viewBuilder()->setTemplate($action);
             $this->viewBuilder()->setTemplatePath($controller);
+            $this->loadComponent('BaserCore.BcFrontContents');
+            $this->BcFrontContents->setupFront();
             $this->setupFrontView();
 
             $serviceName = $request->getParam('plugin') . '\\Service\\Front\\' . $request->getParam('controller') . 'FrontServiceInterface';

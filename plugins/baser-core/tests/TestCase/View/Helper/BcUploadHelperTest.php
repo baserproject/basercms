@@ -12,6 +12,7 @@
 namespace BaserCore\Test\TestCase\View\Helper;
 
 use BaserCore\Model\Entity\Content;
+use BaserCore\Model\Entity\Page;
 use BaserCore\View\BcAdminAppView;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\View\Helper\BcUploadHelper;
@@ -43,6 +44,7 @@ class BcUploadHelperTest extends BcTestCase
     {
         parent::setUp();
         $this->BcUpload = new BcUploadHelper(new BcAdminAppView($this->getRequest()));
+        $this->BcUpload->setTable('BaserCore.Contents');
     }
 
     /**
@@ -71,15 +73,17 @@ class BcUploadHelperTest extends BcTestCase
      */
     public function testFileLink()
     {
-        $request = $this->getRequest()->withData('Contents', [
+        $data = [
             'id' => '1',
             'name' => '画像（左）とテキスト',
             'eyecatch' => 'template1.jpg',
             'description' => '説明文',
             'modified' => '2013-07-21 01:41:12', 'created' => '2013-07-21 00:53:42',
-        ]);
+        ];
+        $request = $this->getRequest()->withData('Contents', $data);
         $BcUpload = new BcUploadHelper(new BcAdminAppView($request));
-        $result = $BcUpload->fileLink('Contents.eyecatch');
+        $BcUpload->setTable('BaserCore.Contents');
+        $result = $BcUpload->fileLink('eyecatch', new Content($data));
         $this->assertMatchesRegularExpression('/<a href=\"\/files\/contents\/template1\.jpg/', $result);
     }
 
@@ -88,17 +92,19 @@ class BcUploadHelperTest extends BcTestCase
      */
     public function testFileLinkHasManyField()
     {
-        $request = $this->getRequest()->withData('Contents', [
-            [
+        $data = [
+            'content' => [
                 'id' => '1',
                 'name' => '画像（左）とテキスト',
                 'eyecatch' => 'template1.jpg',
                 'description' => '説明文',
                 'modified' => '2013-07-21 01:41:12', 'created' => '2013-07-21 00:53:42',
             ]
-        ]);
+        ];
+        $request = $this->getRequest()->withData('Contents', $data);
         $BcUpload = new BcUploadHelper(new BcAdminAppView($request));
-        $result = $BcUpload->fileLink('Contents.0.eyecatch');
+        $BcUpload->setTable('BaserCore.Contents');
+        $result = $BcUpload->fileLink('content.eyecatch', new Page($data));
         $this->assertMatchesRegularExpression('/<a href=\"\/files\/contents\/template1\.jpg/', $result);
     }
 
@@ -108,7 +114,7 @@ class BcUploadHelperTest extends BcTestCase
     public function testUploadImage()
     {
         // オプションなし
-        $result = $this->BcUpload->uploadImage('Contents.image', 'template1.jpg');
+        $result = $this->BcUpload->uploadImage('image', new Content(['image' => 'template1.jpg']));
         $this->assertMatchesRegularExpression('/^<a href=\"\/files\/contents\/template1\.jpg[^>]+?\"[^>]+?><img src=\"\/files\/contents\/template1\.jpg[^>]+?\"[^>]+?><\/a>/', $result);
 
         // サイズ指定あり
@@ -116,30 +122,32 @@ class BcUploadHelperTest extends BcTestCase
             'width' => '100',
             'height' => '80',
         ];
-        $result = $this->BcUpload->uploadImage('Contents.image', 'template1.jpg', $options);
+        $result = $this->BcUpload->uploadImage('image', new Content(['image' => 'template1.jpg']), $options);
         $this->assertMatchesRegularExpression('/^<a href=\"\/files\/contents\/template1\.jpg[^>]+?\"[^>]+?><img src=\"\/files\/contents\/template1\.jpg[^>]+?\"[^>]+?alt="" width="100" height="80"[^>]+?><\/a>/', $result);
 
         // 一時ファイルへのリンク（デフォルトがリンク付だが、Aタグが出力されないのが正しい挙動）
         $options = [
             'tmp' => true
         ];
-        $this->BcUpload->getView()->set('Content', new Content(['eyecatch_tmp' => 'test']));
-        $result = $this->BcUpload->uploadImage('Content.eyecatch', 'template1.jpg', $options);
-        $expects = '<img src="/baser/baser-core/uploads/tmp/medium/test" alt=""/>';
+        $result = $this->BcUpload->uploadImage('eyecatch', new Content([
+            'eyecatch' => 'template1.jpg',
+            'eyecatch_tmp' => 'test'
+        ]), $options);
+        $expects = '<img src="/baser-core/uploads/tmp/medium/test" alt=""/>';
         $this->assertEquals($expects, $result);
 
         $options = [
             'link' => false,
             'output' => 'tag'
         ];
-        $result = $this->BcUpload->uploadImage('Contents.image', 'template1.jpg', $options);
+        $result = $this->BcUpload->uploadImage('image', new Content(['image' => 'template1.jpg']), $options);
         $this->assertMatchesRegularExpression('/^<img src=\"\/files\/contents\/template1\.jpg[^>]+?\"[^>]+?>/', $result);
 
         // output を urlに
         $options = [
             'output' => 'url'
         ];
-        $result = $this->BcUpload->uploadImage('Contents.image', 'template1.jpg', $options);
+        $result = $this->BcUpload->uploadImage('image', new Content(['image' => 'template1.jpg']), $options);
         $this->assertMatchesRegularExpression('/^\/files\/contents\/template1\.jpg\?[0-9]+/', $result);
     }
 
@@ -164,8 +172,13 @@ class BcUploadHelperTest extends BcTestCase
     {
         // $this->tableの設定
         $this->execPrivateMethod($this->BcUpload, 'initField', ['Contents.test']);
-        $this->execPrivateMethod($this->BcUpload, 'setBcUploadSetting', ['test']);
-        $this->assertEquals('test', $this->execPrivateMethod($this->BcUpload, 'getBcUploadSetting', []));
+        $this->execPrivateMethod($this->BcUpload, 'setBcUploadSetting', [['test']]);
+        $this->assertEquals([
+            0 => 'test',
+            'saveDir' => '',
+            'existsCheckDirs' => [],
+            'fields' => []
+        ], $this->execPrivateMethod($this->BcUpload, 'getBcUploadSetting', []));
     }
 
     /**
@@ -175,13 +188,8 @@ class BcUploadHelperTest extends BcTestCase
      */
     public function testInitField()
     {
-        $this->assertEquals('eyecatch', $this->execPrivateMethod($this->BcUpload, 'initField', ['Contents.eyecatch']));
-        // タグにより別々の入力がある場合 (belongsToMany)
-        $this->assertEquals('eyecatch', $this->execPrivateMethod($this->BcUpload, 'initField', ['Contents.0.eyecatch']));
-        $this->assertEquals('eyecatch', $this->execPrivateMethod($this->BcUpload, 'initField', ['Contents.1.0.eyecatch']));
-        $this->assertEquals('eyecatch', $this->execPrivateMethod($this->BcUpload, 'initField', ['ContentFolder.content.eyecatch']));
-        $this->assertEquals('eyecatch', $this->execPrivateMethod($this->BcUpload, 'initField', ['ContentFolder.content.0.eyecatch']));
-        $this->assertNotEmpty($this->BcUpload->table);
+        $this->execPrivateMethod($this->BcUpload, 'initField', [['table' => 'BaserCore.Contents']]);
+        $this->assertNotEmpty($this->getPrivateProperty($this->BcUpload, 'table'));
     }
 
 }

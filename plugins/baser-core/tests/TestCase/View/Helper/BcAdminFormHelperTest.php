@@ -119,6 +119,7 @@ class BcAdminFormHelperTest extends BcTestCase
                 'class' => 'bca-file__figcaption'
             ]
         ]);
+        $this->BcAdminForm->BcUpload->setTable('BaserCore.Contents');
         $controlFile = $this->BcAdminForm->control($name, $optionsFile);
         $this->assertEquals($controlFile, $this->BcAdminForm->control($name, ['type' => 'file']));
 

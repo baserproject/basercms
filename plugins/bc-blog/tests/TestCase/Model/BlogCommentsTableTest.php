@@ -54,7 +54,7 @@ class BlogCommentsTableTest extends BcTestCase
     {
         $this->assertEquals('blog_comments', $this->BlogCommentsTable->getTable());
         $this->assertTrue($this->BlogCommentsTable->hasBehavior('Timestamp'));
-        $this->assertTrue($this->BlogCommentsTable->hasAssociation('BlogCategories'));
+        $this->assertTrue($this->BlogCommentsTable->hasAssociation('BlogPosts'));
     }
 
     /*

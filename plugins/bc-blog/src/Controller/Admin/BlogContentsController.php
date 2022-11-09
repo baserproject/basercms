@@ -40,7 +40,10 @@ class BlogContentsController extends BlogAdminAppController
     public function initialize(): void
     {
         parent::initialize();
-        $this->loadComponent('BaserCore.BcAdminContents', ['entityVarName' => 'blogContent']);
+        $this->loadComponent('BaserCore.BcAdminContents', [
+            'entityVarName' => 'blogContent',
+            'useForm' => true
+        ]);
     }
 
     /**

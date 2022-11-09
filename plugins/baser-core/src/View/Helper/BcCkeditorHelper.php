@@ -198,7 +198,7 @@ class BcCkeditorHelper extends Helper
      * @noTodo
      * @unitTest
      */
-    protected function buildTmpScript($fieldName, $options = [])
+    protected function build($fieldName, $options = [])
     {
         $options = array_merge([
             'editorLanguage' => 'ja', // 言語
@@ -235,10 +235,20 @@ class BcCkeditorHelper extends Helper
         } else {
             $field = $fieldName;
         }
+        $previewModeHidden = '';
         if ($options['editorUseDraft']) {
             $options = $this->setDraft($fieldName, $options);
             $field .= '_tmp';
             $fieldName .= '_tmp';
+            $draftMode = 'publish';
+            if($options['editorDisablePublish']) {
+                $draftMode = 'draft';
+            }
+            $previewModeHidden = $this->BcAdminForm->hidden($options['editorPreviewModeId'], [
+                'value' => $draftMode,
+                'id' => $options['editorPreviewModeId']
+            ]);
+            $this->BcAdminForm->unlockField($options['editorPreviewModeId']);
         }
         if(strpos($fieldName, '.') !== false) {
             $dom = explode('.', $fieldName);
@@ -248,42 +258,45 @@ class BcCkeditorHelper extends Helper
         }
 
         $fieldCamelize = Inflector::camelize($field);
-
-        // 2022/10/10 ryuring
-        // block を true にしないと、JSファイルが２回呼び出されてしまう。
-        // 原因不明
-        $script = $this->BcHtml->script('ckeditor.bundle', [
-            "block" => false,
-            'id' => 'CkeditorScript',
-            'data-ckeditorField' => "editor_{$field}",
-            'data-editorStylesSet' => $options['editorStylesSet'],
-            'data-editorEnterBr' => $options['editorEnterBr'],
-            'data-editorDomId' => $domId,
-            'data-editorUseDraft' => $options['editorUseDraft'],
-            'data-publishAreaId' => $options['publishAreaId'] ?? null,
-            'data-draftAreaId' => $options['draftAreaId'] ?? null,
-            'data-editorReadonlyPublish' => $options['editorReadOnlyPublish'],
-            'data-editorDisableDraft' => $options['editorDisableDraft'],
-            'data-editorDisablePublish' => $options['editorDisablePublish'],
-            'data-previewModeId' => $options['editorPreviewModeId'],
-            'data-editorUrl' => ($options['editorUseTemplates'])?
-                $this->Url->build(['plugin' => 'BaserCore', 'prefix' => 'Admin', 'controller' => 'editor_templates', 'action' => 'js']) : '',
-            'data-initialStyle' => json_encode($this->style),
-            'data-editorStyle' => json_encode($options['editorStyles']),
-            'data-themeEditorCsses' => json_encode($this->getThemeEditorCsses()),
-            'data-editorOptions' => json_encode([
-                'language' => $options['editorLanguage'],
-                'skin' => $options['editorSkin'],
-                'toolbar' => $options['editorToolbar'],
-                'width' => $options['editorWidth'],
-                'height' => $options['editorHeight'],
-                'collapser' => $options['editorCollapser'],
-                'baseFloatZIndex' => $options['editorBaseFloatZIndex'],
-                'styles' => $options['editorStyles'],
-            ])
-        ]);
-
-        return $script;
+        $hidden = $this->BcAdminForm->hidden('ckeditor.setting.' . $fieldName, [
+            'id' => 'CkeditorSetting' . $fieldCamelize,
+            'value' => json_encode([
+                'ckeditorField' => "editor_{$field}",
+                'editorStylesSet' => $options['editorStylesSet'],
+                'editorEnterBr' => $options['editorEnterBr'],
+                'editorDomId' => $domId,
+                'editorUseDraft' => $options['editorUseDraft'],
+                'publishAreaId' => $options['publishAreaId'] ?? null,
+                'draftAreaId' => $options['draftAreaId'] ?? null,
+                'editorReadonlyPublish' => $options['editorReadOnlyPublish'],
+                'editorDisableDraft' => $options['editorDisableDraft'],
+                'editorDisablePublish' => $options['editorDisablePublish'],
+                'previewModeId' => $options['editorPreviewModeId'],
+                'editorUrl' => ($options['editorUseTemplates'])?
+                    $this->Url->build(['plugin' => 'BaserCore', 'prefix' => 'Admin', 'controller' => 'editor_templates', 'action' => 'js']) : '',
+                'initialStyle' => $this->style,
+                'editorStyle' => $options['editorStyles'],
+                'themeEditorCsses' => $this->getThemeEditorCsses(),
+                'editorOptions' => [
+                    'language' => $options['editorLanguage'],
+                    'skin' => $options['editorSkin'],
+                    'toolbar' => $options['editorToolbar'],
+                    'width' => $options['editorWidth'],
+                    'height' => $options['editorHeight'],
+                    'collapser' => $options['editorCollapser'],
+                    'baseFloatZIndex' => $options['editorBaseFloatZIndex'],
+                    'styles' => $options['editorStyles'],
+                ]
+        ])]);
+        $this->BcHtml->scriptStart(['block' => true]);
+        echo <<< SCRIPT_END
+        $(function(){
+            let config = JSON.parse($('#CkeditorSetting{$fieldCamelize}').val());
+            $.bcCkeditor.show(config);
+        });
+        SCRIPT_END;
+        $this->BcHtml->scriptEnd();
+        return $hidden . $previewModeHidden;
     }
 
     /**
@@ -422,6 +435,6 @@ class BcCkeditorHelper extends Helper
         }
         $textIdElement = pluginSplit($inputFieldName);
         $_options['id'] = $textIdElement[0] . Inflector::camelize($textIdElement[1]);
-        return $this->BcAdminForm->control($inputFieldName, $_options) . $hidden . $this->buildTmpScript($fieldName, $options);
+        return $this->BcAdminForm->control($inputFieldName, $_options) . $hidden . $this->build($fieldName, $options);
     }
 }

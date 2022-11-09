@@ -440,12 +440,12 @@ class BcValidation extends Validation
      * @noTodo
      * @unitTest
      */
-    public static function checkDateRenge($value, $begin, $end, $context)
+    public static function checkDateRange($value, $fields, $context)
     {
-        if (!empty($context['data'][$begin]) &&
-            !empty($context['data'][$end])) {
-            if (strtotime($context['data'][$begin]) >=
-                strtotime($context['data'][$end])) {
+        if (!empty($context['data'][$fields[0]]) &&
+            !empty($context['data'][$fields[1]])) {
+            if (strtotime($context['data'][$fields[0]]) >=
+                strtotime($context['data'][$fields[1]])) {
                 return false;
             }
         }

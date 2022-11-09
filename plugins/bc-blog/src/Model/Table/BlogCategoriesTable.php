@@ -11,8 +11,12 @@
 
 namespace BcBlog\Model\Table;
 
+use BaserCore\Service\PermissionsService;
+use BaserCore\Service\PermissionsServiceInterface;
+use BaserCore\Utility\BcContainerTrait;
 use Cake\Datasource\EntityInterface;
 use Cake\Event\EventInterface;
+use Cake\Routing\Router;
 use Cake\Validation\Validator;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -23,6 +27,11 @@ use BaserCore\Annotation\UnitTest;
  */
 class BlogCategoriesTable extends BlogAppTable
 {
+
+    /**
+     * Trait
+     */
+    use BcContainerTrait;
 
     /**
      * バリデーション設定
@@ -295,20 +304,23 @@ class BlogCategoriesTable extends BlogAppTable
     /**
      * アクセス制限としてカテゴリの新規追加ができるか確認する
      *
-     * Ajaxを利用する箇所にて BcBaserHelper::link() が利用できない場合に利用
-     *
-     * @param int $userGroupId ユーザーグループID
+     * @param array $userGroupId ユーザーグループID
      * @param int $blogContentId ブログコンテンツID
+     * @checked
+     * @noTodo
      */
     public function hasNewCategoryAddablePermission($userGroupId, $blogContentId)
     {
-        if (ClassRegistry::isKeySet('Permission')) {
-            $Permission = ClassRegistry::getObject('Permission');
-        } else {
-            $Permission = ClassRegistry::init('Permission');
-        }
-        $ajaxAddUrl = preg_replace('|^/index.php|', '', Router::url(['plugin' => 'blog', 'controller' => 'blog_categories', 'action' => 'ajax_add', $blogContentId]));
-        return $Permission->check($ajaxAddUrl, $userGroupId);
+        /* @var PermissionsService $permissionsService */
+        $permissionsService = $this->getService(PermissionsServiceInterface::class);
+        $addUrl = preg_replace('|^/index.php|', '', Router::url([
+            'plugin' => 'BcBlog',
+            'prefix' => 'Api',
+            'controller' => 'BlogCategories',
+            'action' => 'add',
+            $blogContentId
+        ]));
+        return $permissionsService->check($addUrl, $userGroupId);
     }
 
     /**
