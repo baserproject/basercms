@@ -274,7 +274,25 @@ class AppControllerTest extends BcTestCase
      */
     public function test_loadViewConditions()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $targetModel = ['model'];
+        $options = ['group' => 'abc', 'post' => true, 'get' => true];
+
+        $this->execPrivateMethod($this->AppController, 'loadViewConditions', [$targetModel, $options]);
+        $request = $this->AppController->getRequest();
+        $this->assertEmpty($request->getData());
+        $this->assertEmpty($request->getQueryParams());
+
+        $request = $this->getRequest()
+            ->withParam('controller', 'Test')
+            ->withParam('action', 'view');
+        $session = $request->getSession();
+        $session->write('BcApp.viewConditions.TestView.abc.query', ['q' => '1']);
+        $session->write('BcApp.viewConditions.TestView.abc.data.model', ['a' => 'android']);
+        $this->AppController->setRequest($request);
+        $this->execPrivateMethod($this->AppController, 'loadViewConditions', [$targetModel, $options]);
+        $request = $this->AppController->getRequest();
+        $this->assertEquals(['q' => '1'], $request->getQueryParams());
+        $this->assertEquals(['a' => 'android'], $request->getParsedBody());
     }
 
     /**
