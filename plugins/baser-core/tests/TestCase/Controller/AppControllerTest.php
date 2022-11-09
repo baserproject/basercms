@@ -260,6 +260,30 @@ class AppControllerTest extends BcTestCase
         $this->expectExceptionMessage("見つかりませんでした。");
         $this->AppController->notFound();
     }
+
+    /**
+     * test saveViewConditions
+     */
+    public function test_saveViewConditions()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * test loadViewConditions
+     */
+    public function test_loadViewConditions()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * test setViewConditions
+     */
+    public function test_setViewConditions()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
     /**
      * test saveViewConditions
      */
