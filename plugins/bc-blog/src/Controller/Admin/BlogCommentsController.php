@@ -28,7 +28,9 @@ class BlogCommentsController extends BlogAdminAppController
 {
 
     /**
-     * [ADMIN] ブログを一覧表示する
+     * [ADMIN] ブログコメントを一覧表示する
+     * 
+     * 記事IDでフィルタリングできる
      *
      * @param BlogCommentsAdminService $service
      * @param int $blogContentId
