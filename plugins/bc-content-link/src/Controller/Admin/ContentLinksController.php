@@ -35,6 +35,7 @@ class ContentLinksController extends BcAdminAppController
      * @throws \Exception
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function initialize(): void
     {

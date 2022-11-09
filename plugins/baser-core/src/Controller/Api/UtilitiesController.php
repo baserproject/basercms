@@ -220,6 +220,7 @@ class UtilitiesController extends BcApiController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function save_search_opened($key, $open = '')
     {

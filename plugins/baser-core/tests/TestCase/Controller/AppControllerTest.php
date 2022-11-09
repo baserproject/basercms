@@ -252,6 +252,15 @@ class AppControllerTest extends BcTestCase
     }
 
     /**
+     * test notFound
+     */
+    public function test_notFound()
+    {
+        $this->expectException("Cake\Http\Exception\NotFoundException");
+        $this->expectExceptionMessage("見つかりませんでした。");
+        $this->AppController->notFound();
+    }
+    /**
      * test saveViewConditions
      */
     public function test_saveViewConditions()

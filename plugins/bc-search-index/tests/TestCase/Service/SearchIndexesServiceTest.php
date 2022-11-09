@@ -270,4 +270,28 @@ class SearchIndexesServiceTest extends BcTestCase
             [true, ['folder_id' => 2], ['SearchIndexes.site_id' => 1, 'SearchIndexes.rght <' => 3, 'SearchIndexes.lft >' => 2]],
         ];
     }
+
+    /**
+     * test parseQuery
+     * @dataProvider parseQueryDataProvider
+     */
+    public function testParseQuery($query, $expected)
+    {
+        $result = $this->execPrivateMethod($this->SearchIndexesService, 'parseQuery', [$query]);
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * Data Provider for parseQuery
+     * @return array
+     */
+    public function parseQueryDataProvider(): array
+    {
+        return [
+            ['', ['']],
+            ['a b', ['a', 'b']], // 半角スペースで分解する
+            ['a　b', ['a', 'b']], // 全角スペースで分解する
+            ['<a', ['&lt;a']], // htmlspecialchars()
+        ];
+    }
 }

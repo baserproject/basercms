@@ -34,6 +34,7 @@ class ContentLinksController extends BcFrontAppController
      * @throws \Exception
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function initialize(): void
     {

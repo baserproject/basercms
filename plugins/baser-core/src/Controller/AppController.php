@@ -465,6 +465,7 @@ class AppController extends BaseController
      * @throws NotFoundException
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function notFound()
     {

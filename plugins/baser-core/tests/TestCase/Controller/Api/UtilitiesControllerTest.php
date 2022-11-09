@@ -223,4 +223,16 @@ class UtilitiesControllerTest extends BcTestCase
 //        $this->assertResponseOk();
         // <<<
     }
+
+    /**
+     * test save_search_opened
+     */
+    public function test_save_search_opened()
+    {
+        $this->post('/baser/api/baser-core/utilities/save_search_opened/key1/open1.json?token=' . $this->accessToken);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertTrue($result->result);
+        $this->assertEquals($_SESSION["BcApp"]["adminSearchOpened"]["key1"], 'open1');
+    }
 }

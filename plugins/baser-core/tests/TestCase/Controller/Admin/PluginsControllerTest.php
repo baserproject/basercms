@@ -21,6 +21,7 @@ use Cake\Filesystem\Folder;
 use Cake\TestSuite\IntegrationTestTrait;
 use BaserCore\Controller\Admin\PluginsController;
 use Cake\Event\Event;
+use Composer\Package\Archiver\ZipArchiver;
 
 /**
  * Class PluginsControllerTest
@@ -267,4 +268,45 @@ class PluginsControllerTest extends BcTestCase
         $this->put('/baser/admin/baser-core/plugins/install/BcBlog', $data);
     }
 
+    /**
+     * test add
+     */
+    public function test_add()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        $path = BASER_PLUGINS . 'BcSpaSample';
+        $zipSrcPath = TMP . 'zip' . DS;
+        $folder = new Folder();
+        $folder->create($zipSrcPath, 0777);
+        $folder->copy($zipSrcPath . 'BcSpaSample2', ['from' => $path, 'mode' => 0777]);
+        $plugin = 'BcSpaSample2';
+        $zip = new ZipArchiver();
+        $testFile = $zipSrcPath . $plugin . '.zip';
+        $zip->archive($zipSrcPath, $testFile, true);
+
+        $this->setUploadFileToRequest('file', $testFile, '', 1);
+        $this->setUnlockedFields(['file']);
+        $this->post('/baser/admin/baser-core/plugins/add');
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('ファイルのアップロードに失敗しました。Cannot retrieve stream due to upload error: The uploaded file exceeds the upload_max_filesize directive in php.ini');
+
+        $this->setUploadFileToRequest('file', $testFile);
+        $this->setUnlockedFields(['file']);
+        $this->post('/baser/admin/baser-core/plugins/add');
+
+        $this->assertResponseCode(302);
+        $this->assertRedirect([
+            'plugin' => 'BaserCore',
+            'prefix' => 'Admin',
+            'controller' => 'plugins',
+            'action' => 'index'
+        ]);
+        $this->assertFlashMessage('新規プラグイン「' . $plugin . '」を追加しました。');
+
+        $folder = new Folder();
+        $folder->delete(BASER_PLUGINS . $plugin);
+        $folder->delete($zipSrcPath);
+    }
 }

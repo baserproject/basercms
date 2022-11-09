@@ -193,8 +193,8 @@ class SearchIndexesService implements SearchIndexesServiceInterface
      * @param string $query
      * @return array
      * @checked
-     * @unitTest
      * @noTodo
+     * @unitTest
      */
     protected function parseQuery($query)
     {
