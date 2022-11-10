@@ -70,6 +70,9 @@ class BlogCommentsController extends BcApiController
     /**
      * [AJAX] ブログコメントを登録する
      * 
+     * 画像認証を行い認証されればブログのコメントを登録する
+     * コメント承認を利用していないブログの場合、公開されているコメント投稿者にアラートを送信する
+     *
      * @param string $blogContentId
      * @param string $blogPostId
      * @return void | bool
