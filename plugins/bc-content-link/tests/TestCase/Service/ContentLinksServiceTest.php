@@ -13,6 +13,9 @@ namespace BcContentLink\Test\TestCase\Service;
 
 use BcContentLink\Service\ContentLinksService;
 use BaserCore\TestSuite\BcTestCase;
+use BcContentLink\Service\ContentLinksServiceInterface;
+use BcContentLink\Test\Factory\ContentLinkFactory;
+use BaserCore\Utility\BcContainerTrait;
 
 /**
  * Class ContentLinksServiceTest
@@ -21,6 +24,16 @@ use BaserCore\TestSuite\BcTestCase;
 class ContentLinksServiceTest extends BcTestCase
 {
 
+    use BcContainerTrait;
+    /**
+     * Fixtures
+     *
+     * @var array
+     */
+    protected $fixtures = [
+        'plugin.BcContentLink.Factory/ContentLinks',
+    ];
+
     /**
      * Set Up
      *
@@ -28,8 +41,9 @@ class ContentLinksServiceTest extends BcTestCase
      */
     public function setUp(): void
     {
+        $this->setFixtureTruncate();
         parent::setUp();
-        $this->ContentLinksService = new ContentLinksService();
+        $this->ContentLinksService = $this->getService(ContentLinksServiceInterface::class);
     }
 
     /**
@@ -52,6 +66,14 @@ class ContentLinksServiceTest extends BcTestCase
         $this->assertTrue(isset($this->ContentLinksService->ContentLinks));
     }
 
+    /**
+     * test delete
+     */
+    public function test_delete()
+    {
+        ContentLinkFactory::make(['id' => 1, 'url' => '/test-delete'])->persist();
+        $this->assertTrue($this->ContentLinksService->delete(1));
+    }
     /**
      * @test get
      * @return void
