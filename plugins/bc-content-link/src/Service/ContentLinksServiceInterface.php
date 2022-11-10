@@ -54,4 +54,14 @@ interface ContentLinksServiceInterface
      */
     public function update(EntityInterface $target, array $postData): ?EntityInterface;
 
+    /**
+     * リンクをを削除する
+     *
+     * @param int $id
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function delete($id): bool;
 }

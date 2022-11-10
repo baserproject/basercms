@@ -35,6 +35,7 @@
             "BaserCore\\": "plugins/baser-core/src",
             "BcAdminThird\\": "plugins/bc-admin-third/src",
             "BcBlog\\": "plugins/bc-blog/src/",
+            "BcContentLink\\": "plugins/bc-content-link/src/",
             "BcEditorTemplate\\": "plugins/bc-editor-template/src/",
             "BcFavorite\\": "plugins/bc-favorite/src/",
             "BcFront\\": "plugins/bc-front/src/",
@@ -53,6 +54,7 @@
         "psr-4": {
             "BaserCore\\Test\\": "plugins/baser-core/tests/",
             "BcBlog\\Test\\": "plugins/bc-blog/tests/",
+            "BcContentLink\\Test\\": "plugins/bc-content-link/tests/",
             "BcEditorTemplate\\Test\\": "plugins/bc-editor-template/tests/",
             "BcFavorite\\Test\\": "plugins/bc-favorite/tests/",
             "BcInstaller\\Test\\": "plugins/bc-installer/tests/",
@@ -68,6 +70,7 @@
         "baserproject/baser-core": "self.version",
         "baserproject/bc-admin-third": "self.version",
         "baserproject/bc-blog": "self.version",
+        "baserproject/bc-content-link": "self.version",
         "baserproject/bc-editor-template": "self.version",
         "baserproject/bc-favorite": "self.version",
         "baserproject/bc-front": "self.version",

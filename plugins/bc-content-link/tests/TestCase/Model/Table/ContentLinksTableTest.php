@@ -57,7 +57,16 @@ class ContentLinksTableTest extends BcTestCase
      */
     public function testValidationDefault()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $contentLink = $this->ContentLinks->newEntity(['id' => 'test']);
+        $this->assertSame([
+            'id' => [
+                'integer' => 'The provided value is invalid',
+            ],
+            // BcContentsBehaviorのafterMarshalにて、contentを他のフィールド同様必要前提としている
+            'content' => [
+                '_required' => '関連するコンテンツがありません'
+            ]
+        ], $contentLink->getErrors());
     }
 
 }

@@ -96,4 +96,18 @@ class ContentLinksService implements ContentLinksServiceInterface
         return $this->ContentLinks->saveOrFail($entity);
     }
 
+    /**
+     * リンクをを削除する
+     *
+     * @param int $id
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function delete($id): bool
+    {
+        $entity = $this->get($id);
+        return $this->ContentLinks->delete($entity);
+    }
 }
