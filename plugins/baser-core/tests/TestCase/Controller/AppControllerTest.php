@@ -287,14 +287,22 @@ class AppControllerTest extends BcTestCase
             'group' => 'index',
             'default' => [
                 'query' => ['limit' => 10],
-                'data' => ['title' => 'default']
+                'Content' => ['title' => 'default']
             ],
-            'get' => true
+            'get' => true,
+            'post' => true,
         ];
+        $request = $this->getRequest()->withQueryParams(['limit' => 10])->withData('title', 'default');
+        $this->AppController->setRequest($request);
         $this->execPrivateMethod($this->AppController, 'setViewConditions', [$targetModel, $options]);
 
-        $req = $this->AppController->getRequest();
         $this->assertEquals(['limit' => 10], $this->AppController->getRequest()->getQueryParams());
         $this->assertEquals(['title' => 'default'], $this->AppController->getRequest()->getParsedBody());
+
+        $session = $this->AppController->getRequest()->getSession();
+        $query = $session->read('BcApp.viewConditions.PagesView.index.query');
+        $this->assertEquals(['limit' => 10], $query);
+        $data = $session->read('BcApp.viewConditions.PagesView.index.data.Content');
+        $this->assertEquals(['title' => 'default'], $data);
     }
 }

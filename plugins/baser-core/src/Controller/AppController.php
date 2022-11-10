@@ -329,6 +329,7 @@ class AppController extends BaseController
      *  - `get`: GETデータを保存するかどうか（初期値：false）
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function setViewConditions($targetModel = [], $options = []): void
     {
