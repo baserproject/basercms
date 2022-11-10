@@ -14,6 +14,9 @@ namespace BcContentLink\Test\TestCase\Service;
 use BcContentLink\Test\Scenario\ContentLinksServiceScenario;
 use BcContentLink\Service\ContentLinksService;
 use BaserCore\TestSuite\BcTestCase;
+use BcContentLink\Service\ContentLinksServiceInterface;
+use BcContentLink\Test\Factory\ContentLinkFactory;
+use BaserCore\Utility\BcContainerTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -39,6 +42,16 @@ class ContentLinksServiceTest extends BcTestCase
         'plugin.BcContentLink.Factory/ContentLinks',
     ];
 
+    use BcContainerTrait;
+    /**
+     * Fixtures
+     *
+     * @var array
+     */
+    protected $fixtures = [
+        'plugin.BcContentLink.Factory/ContentLinks',
+    ];
+
     /**
      * Set Up
      *
@@ -48,7 +61,7 @@ class ContentLinksServiceTest extends BcTestCase
     {
         $this->setFixtureTruncate();
         parent::setUp();
-        $this->ContentLinksService = new ContentLinksService();
+        $this->ContentLinksService = $this->getService(ContentLinksServiceInterface::class);
     }
 
     /**
@@ -71,6 +84,14 @@ class ContentLinksServiceTest extends BcTestCase
         $this->assertTrue(isset($this->ContentLinksService->ContentLinks));
     }
 
+    /**
+     * test delete
+     */
+    public function test_delete()
+    {
+        ContentLinkFactory::make(['id' => 1, 'url' => '/test-delete'])->persist();
+        $this->assertTrue($this->ContentLinksService->delete(1));
+    }
     /**
      * @test get
      * @return void

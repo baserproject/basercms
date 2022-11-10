@@ -17,6 +17,7 @@ use BcContentLink\Service\ContentLinksServiceInterface;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use Cake\ORM\Exception\PersistenceFailedException;
 
 /**
  * Class ContentLinksController
@@ -73,6 +74,50 @@ class ContentLinksController extends BcApiController
             'message',
             'errors'
         ]);
+    }
+
+    /**
+     * コンテンツリンクを削除（認証要）
+     *
+     * /baser/api/bc-content-link/content_links/delete/{id}.json
+     *
+     * ### POSTデータ
+     *  - id: コンテンツリンクID
+     *
+     * ### レスポンス
+     * - contentLink: コンテンツリンクエンティティ
+     * - message: メッセージ
+     * - errors: エラーが発生した場合の詳細内容
+     *
+     * @param ContentLinksServiceInterface $service
+     * @param $id
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function delete(ContentLinksServiceInterface $service, $id)
+    {
+        $this->request->allowMethod(['post', 'delete']);
+        try {
+            $contentLink = $service->get($id);
+            if ($service->delete($id)) {
+                $message = __d('baser', 'コンテンツリンク: {0} を削除しました。', $contentLink->content->title);
+            } else {
+                $this->setResponse($this->response->withStatus(400));
+                $message = __d('baser', 'データベース処理中にエラーが発生しました。');
+            }
+        } catch (PersistenceFailedException $e) {
+            $this->setResponse($this->response->withStatus(400));
+            $contentLink = $e->getEntity();
+            $message = __d('baser', 'データベース処理中にエラーが発生しました。');
+        }
+
+        $this->set([
+            'message' => $message,
+            'contentLink' => $contentLink,
+            'errors' => $contentLink->getErrors()
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['message', 'contentLink', 'errors']);
     }
 
 }
