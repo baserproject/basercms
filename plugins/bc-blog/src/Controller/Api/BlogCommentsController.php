@@ -64,7 +64,7 @@ class BlogCommentsController extends BcApiController
 
     /**
      * [AJAX] ブログコメントを登録する
-     *
+     * 
      * @param string $blogContentId
      * @param string $blogPostId
      * @return void | bool
