@@ -30,6 +30,7 @@ class ContentLinksServiceTest extends BcTestCase
      * Trait
      */
     use ScenarioAwareTrait;
+    use BcContainerTrait;
 
     /**
      * Fixtures
@@ -39,16 +40,6 @@ class ContentLinksServiceTest extends BcTestCase
     public $fixtures = [
         'plugin.BaserCore.Factory/Sites',
         'plugin.BaserCore.Factory/Contents',
-        'plugin.BcContentLink.Factory/ContentLinks',
-    ];
-
-    use BcContainerTrait;
-    /**
-     * Fixtures
-     *
-     * @var array
-     */
-    protected $fixtures = [
         'plugin.BcContentLink.Factory/ContentLinks',
     ];
 

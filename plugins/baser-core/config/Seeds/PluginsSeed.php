@@ -42,17 +42,6 @@ class PluginsSeed extends AbstractSeed
                 'priority' => '2',
                 'created' => NULL,
                 'modified' => '2022-10-01 09:00:00',
-            ],
-            [
-                'id' => '3',
-                'name' => 'BcContentLink',
-                'title' => 'コンテンツリンク',
-                'version' => '2.0.0',
-                'status' => '1',
-                'db_init' => '1',
-                'priority' => '3',
-                'created' => NULL,
-                'modified' => '2022-10-01 09:00:00',
             ]
         ];
 
