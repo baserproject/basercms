@@ -274,25 +274,23 @@ class AppControllerTest extends BcTestCase
      */
     public function test_loadViewConditions()
     {
-        $targetModel = ['model'];
-        $options = ['group' => 'abc', 'post' => true, 'get' => true];
-
-        $this->execPrivateMethod($this->AppController, 'loadViewConditions', [$targetModel, $options]);
-        $request = $this->AppController->getRequest();
-        $this->assertEmpty($request->getData());
-        $this->assertEmpty($request->getQueryParams());
-
-        $request = $this->getRequest()
-            ->withParam('controller', 'Test')
-            ->withParam('action', 'view');
-        $session = $request->getSession();
-        $session->write('BcApp.viewConditions.TestView.abc.query', ['q' => '1']);
-        $session->write('BcApp.viewConditions.TestView.abc.data.model', ['a' => 'android']);
+        // セッションデータからクエリパラメーターを設定する
+        $options = ['group' => 'index', 'default' => ['Content' => ['q' => 'keyword']], 'post' => false, 'get' => true];
+        $request = $this->getRequest();
+        $request->getSession()->write('BcApp.viewConditions.PagesView.index.query', ['limit' => 10]);
         $this->AppController->setRequest($request);
-        $this->execPrivateMethod($this->AppController, 'loadViewConditions', [$targetModel, $options]);
-        $request = $this->AppController->getRequest();
-        $this->assertEquals(['q' => '1'], $request->getQueryParams());
-        $this->assertEquals(['a' => 'android'], $request->getParsedBody());
+        $this->execPrivateMethod($this->AppController, 'loadViewConditions', [['Content'], $options]);
+        $this->assertEquals(['limit' => 10], $this->AppController->getRequest()->getQueryParams());
+        $this->assertEquals(['q' => 'keyword'], $this->AppController->getRequest()->getParsedBody());
+
+        // セッションデータからPOSTデータを設定する
+        $options = ['group' => 'index', 'default' => ['Content' => ['q' => 'keyword']], 'post' => true, 'get' => false];
+        $request = $this->getRequest();
+        $request->getSession()->write('BcApp.viewConditions.PagesView.index.data.Content', ['title' => 'default']);
+        $this->AppController->setRequest($request);
+        $this->execPrivateMethod($this->AppController, 'loadViewConditions', [['Content'], $options]);
+        $this->assertEmpty($this->AppController->getRequest()->getQueryParams());
+        $this->assertEquals(['q' => 'keyword', 'title' => 'default'], $this->AppController->getRequest()->getParsedBody());
     }
 
     /**
