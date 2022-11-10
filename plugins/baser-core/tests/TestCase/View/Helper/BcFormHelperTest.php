@@ -994,4 +994,18 @@ class BcFormHelperTest extends BcTestCase
         $this->assertEquals('BaserCore\Model\Table\ContentsTable', get_class($table));
     }
 
+    /**
+     * test control
+     */
+    public function test_control()
+    {
+        $option = ['type' => 'radio', 'options' => [1, 2]];
+        $result = $this->BcForm->control('country', $option);
+        $this->assertStringContainsString('name="country"', $result);
+        $this->assertStringContainsString('type="radio"', $result);
+        $this->assertStringNotContainsString('legend', $result);
+        $this->assertStringNotContainsString('error', $result);
+        $this->assertStringNotContainsString('<label>', $result);
+    }
+
 }

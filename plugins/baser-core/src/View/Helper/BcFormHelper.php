@@ -2131,6 +2131,9 @@ DOC_END;
      * @param string $fieldName
      * @param array $options
      * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function control(string $fieldName, array $options = []): string
     {
