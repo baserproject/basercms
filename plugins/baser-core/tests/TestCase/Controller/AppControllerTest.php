@@ -266,33 +266,21 @@ class AppControllerTest extends BcTestCase
      */
     public function test_saveViewConditions()
     {
-        $request = $this->getRequest()
-            ->withQueryParams(['q' => '1'])
-            ->withData('a', 'android')
-            ->withParam('controller', 'Test')
-            ->withParam('action', 'view');
-        $this->AppController->setRequest($request);
-        $targetModel = 'model';
-
-        $options = ['group' => 'abc', 'post' => false, 'get' => false];
-        $this->execPrivateMethod($this->AppController, 'saveViewConditions', [$targetModel, $options]);
-        $session = $this->AppController->getRequest()->getSession();
-        // クエリパラメーターが保存されないテスト
-        $query = $session->read('BcApp.viewConditions.TestView.abc.query');
-        $this->assertNull($query);
-        // POSTデータが保存されないテスト
-        $data = $session->read('BcApp.viewConditions.TestView.abc.data.model');
-        $this->assertNull($data);
-
-        $options = ['group' => 'abc', 'post' => true, 'get' => true];
-        $this->execPrivateMethod($this->AppController, 'saveViewConditions', [$targetModel, $options]);
-        $session = $this->AppController->getRequest()->getSession();
         // クエリパラメーターが保存されるテスト
-        $query = $session->read('BcApp.viewConditions.TestView.abc.query');
-        $this->assertEquals(['q' => '1'], $query);
+        $this->AppController->setRequest($this->getRequest()->withQueryParams(['limit' => 10]));
+        $options = ['group' => 'index', 'post' => false, 'get' => true];
+        $this->execPrivateMethod($this->AppController, 'saveViewConditions', [['Content'], $options]);
+        $session = $this->AppController->getRequest()->getSession();
+        $query = $session->read('BcApp.viewConditions.PagesView.index.query');
+        $this->assertEquals(['limit' => 10], $query);
+
         // POSTデータが保存されるテスト
-        $data = $session->read('BcApp.viewConditions.TestView.abc.data.model');
-        $this->assertEquals(['a' => 'android'], $data);
+        $this->AppController->setRequest($this->getRequest()->withData('title', 'default'));
+        $options = ['group' => 'index', 'post' => true, 'get' => false];
+        $this->execPrivateMethod($this->AppController, 'saveViewConditions', [['Content'], $options]);
+        $session = $this->AppController->getRequest()->getSession();
+        $query = $session->read('BcApp.viewConditions.PagesView.index.data.Content');
+        $this->assertEquals(['title' => 'default'], $query);
     }
 
     /**
