@@ -106,4 +106,44 @@ class ContentLinksControllerTest extends BcTestCase
         $this->assertEquals('Record not found in table "content_links"', $result->message);
     }
 
+    /**
+     * test view
+     */
+    public function test_view()
+    {
+        ContentLinkFactory::make(['id' => 1, 'url' => '/test-delete'])->persist();
+        ContentFactory::make([
+            'id' => 1,
+            'plugin' => 'BcContentLink',
+            'type' => 'ContentLink',
+            'site_id' => 1,
+            'title' => 'test link',
+            'lft' => 1,
+            'rght' => 2,
+            'entity_id' => 1,
+            'status' => true
+        ])->persist();
+        ContentLinkFactory::make(['id' => 2, 'url' => '/test-delete'])->persist();
+        ContentFactory::make([
+            'id' => 2,
+            'plugin' => 'BcContentLink',
+            'type' => 'ContentLink',
+            'site_id' => 1,
+            'title' => 'test link',
+            'lft' => 3,
+            'rght' => 4,
+            'entity_id' => 2,
+            'status' => false
+        ])->persist();
+
+        $this->get('/baser/api/bc-content-link/content_links/view/1.json?token=' . $this->accessToken);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('test link', $result->contentLink->content->title);
+
+        $this->get('/baser/api/bc-content-link/content_links/view/2.json?token=' . $this->accessToken);
+        $this->assertResponseCode(401);
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('Record not found in table "content_links"', $result->message);
+    }
 }

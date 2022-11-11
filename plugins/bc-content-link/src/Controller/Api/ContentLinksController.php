@@ -17,6 +17,7 @@ use BcContentLink\Service\ContentLinksServiceInterface;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use Cake\Http\Exception\ForbiddenException;
 use Cake\ORM\Exception\PersistenceFailedException;
 
 /**
