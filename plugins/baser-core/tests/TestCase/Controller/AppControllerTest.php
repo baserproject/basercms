@@ -266,7 +266,21 @@ class AppControllerTest extends BcTestCase
      */
     public function test_saveViewConditions()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // クエリパラメーターが保存されるテスト
+        $this->AppController->setRequest($this->getRequest()->withQueryParams(['limit' => 10]));
+        $options = ['group' => 'index', 'post' => false, 'get' => true];
+        $this->execPrivateMethod($this->AppController, 'saveViewConditions', [['Content'], $options]);
+        $session = $this->AppController->getRequest()->getSession();
+        $query = $session->read('BcApp.viewConditions.PagesView.index.query');
+        $this->assertEquals(['limit' => 10], $query);
+
+        // POSTデータが保存されるテスト
+        $this->AppController->setRequest($this->getRequest()->withData('title', 'default'));
+        $options = ['group' => 'index', 'post' => true, 'get' => false];
+        $this->execPrivateMethod($this->AppController, 'saveViewConditions', [['Content'], $options]);
+        $session = $this->AppController->getRequest()->getSession();
+        $query = $session->read('BcApp.viewConditions.PagesView.index.data.Content');
+        $this->assertEquals(['title' => 'default'], $query);
     }
 
     /**
