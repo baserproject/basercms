@@ -74,6 +74,57 @@ class ContentLinksControllerTest extends BcTestCase
     }
 
     /**
+     * test edit
+     */
+    public function test_edit()
+    {
+        ContentLinkFactory::make(['id' => 1, 'url' => '/test'])->persist();
+        ContentFactory::make([
+            'id' => 2,
+            'plugin' => 'BcContentLink',
+            'type' => 'ContentLink',
+            'site_id' => 1,
+            'title' => 'test delete link',
+            'lft' => 1,
+            'rght' => 2,
+            'entity_id' => 1,
+        ])->persist();
+
+        $data = [
+            'id' => 1,
+            'url' => '/test-edit',
+            'content' => [
+                "title" => "更新 BcContentLink",
+            ]
+        ];
+        $this->post('/baser/api/bc-content-link/content_links/edit/1.json?token=' . $this->accessToken, $data);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('コンテンツリンク: 「更新 BcContentLink」を更新しました。', $result->message);
+        $this->assertEquals('/test-edit', $result->contentLink->url);
+
+        $this->post('/baser/api/bc-content-link/content_links/edit/10.json?token=' . $this->accessToken, $data);
+        $this->assertResponseCode(400);
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('入力エラーです。内容を修正してください。', $result->message);
+        $this->assertEquals('Record not found in table "content_links"', $result->errors);
+
+        $data = [
+            'id' => 1,
+            'url' => '/test-edit',
+            'content' => [
+                "title" => "更新 BcContentLink",
+                "parent_id" => "level"
+            ]
+        ];
+        $this->post('/baser/api/bc-content-link/content_links/edit/1.json?token=' . $this->accessToken, $data);
+        $this->assertResponseCode(400);
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('入力エラーです。内容を修正してください。', $result->message);
+        $this->assertEquals('Cannot convert value of type `string` to integer', $result->errors);
+    }
+
+    /**
      * test delete
      */
     public function test_delete()
