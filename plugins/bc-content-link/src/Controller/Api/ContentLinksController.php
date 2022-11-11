@@ -17,6 +17,7 @@ use BcContentLink\Service\ContentLinksServiceInterface;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use Cake\Http\Exception\ForbiddenException;
 use Cake\ORM\Exception\PersistenceFailedException;
 
 /**
@@ -74,6 +75,49 @@ class ContentLinksController extends BcApiController
             'message',
             'errors'
         ]);
+    }
+
+    /**
+     * コンテンツリンクを編集（認証要）
+     *
+     * /baser/api/bc-content-link/content_links/edit/{id}.json
+     *
+     * ### POSTデータ
+     *  - id: コンテンツリンクID
+     * - コンテンツリンクデータ
+     *
+     * ### レスポンス
+     * - contentLink: コンテンツリンクエンティティ
+     * - message: メッセージ
+     * - errors: エラーが発生した場合の詳細内容
+     *
+     * @param ContentLinksServiceInterface $service
+     * @param $id
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function edit(ContentLinksServiceInterface $service, $id)
+    {
+        $this->request->allowMethod(['post', 'put']);
+        $contentLink = null;
+        $error = null;
+
+        try {
+            $contentLink = $service->update($service->get($id), $this->request->getData());
+            $message = __d('baser', 'コンテンツリンク: 「{0}」を更新しました。', $contentLink->content->title);
+        } catch (\Exception $e) {
+            $this->setResponse($this->response->withStatus(400));
+            $error = $e->getMessage();
+            $message = __d('baser', '入力エラーです。内容を修正してください。');
+        }
+
+        $this->set([
+            'message' => $message,
+            'contentLink' => $contentLink,
+            'errors' => $error,
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['message', 'contentLink', 'errors']);
     }
 
     /**

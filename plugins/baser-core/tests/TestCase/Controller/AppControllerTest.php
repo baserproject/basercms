@@ -266,7 +266,21 @@ class AppControllerTest extends BcTestCase
      */
     public function test_saveViewConditions()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // クエリパラメーターが保存されるテスト
+        $this->AppController->setRequest($this->getRequest()->withQueryParams(['limit' => 10]));
+        $options = ['group' => 'index', 'post' => false, 'get' => true];
+        $this->execPrivateMethod($this->AppController, 'saveViewConditions', [['Content'], $options]);
+        $session = $this->AppController->getRequest()->getSession();
+        $query = $session->read('BcApp.viewConditions.PagesView.index.query');
+        $this->assertEquals(['limit' => 10], $query);
+
+        // POSTデータが保存されるテスト
+        $this->AppController->setRequest($this->getRequest()->withData('title', 'default'));
+        $options = ['group' => 'index', 'post' => true, 'get' => false];
+        $this->execPrivateMethod($this->AppController, 'saveViewConditions', [['Content'], $options]);
+        $session = $this->AppController->getRequest()->getSession();
+        $query = $session->read('BcApp.viewConditions.PagesView.index.data.Content');
+        $this->assertEquals(['title' => 'default'], $query);
     }
 
     /**
@@ -274,7 +288,28 @@ class AppControllerTest extends BcTestCase
      */
     public function test_loadViewConditions()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // セッションデータからクエリパラメーターを設定する
+        $options = [
+            'group' => 'index',
+            'default' => ['Content' => ['q' => 'keyword'], 'query' => ['limit' => 10]],
+            'post' => false,
+            'get' => true
+        ];
+        $request = $this->getRequest();
+        $request->getSession()->write('BcApp.viewConditions.PagesView.index.query', ['id' => 1]);
+        $this->AppController->setRequest($request);
+        $this->execPrivateMethod($this->AppController, 'loadViewConditions', [['Content'], $options]);
+        $this->assertEquals(['limit' => 10, 'id' => 1], $this->AppController->getRequest()->getQueryParams());
+        $this->assertEquals(['q' => 'keyword'], $this->AppController->getRequest()->getParsedBody());
+
+        // セッションデータからPOSTデータを設定する
+        $options = ['group' => 'index', 'default' => ['Content' => ['q' => 'keyword']], 'post' => true, 'get' => false];
+        $request = $this->getRequest();
+        $request->getSession()->write('BcApp.viewConditions.PagesView.index.data.Content', ['title' => 'default']);
+        $this->AppController->setRequest($request);
+        $this->execPrivateMethod($this->AppController, 'loadViewConditions', [['Content'], $options]);
+        $this->assertEmpty($this->AppController->getRequest()->getQueryParams());
+        $this->assertEquals(['q' => 'keyword', 'title' => 'default'], $this->AppController->getRequest()->getParsedBody());
     }
 
     /**
@@ -282,6 +317,27 @@ class AppControllerTest extends BcTestCase
      */
     public function test_setViewConditions()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $targetModel = ['Content'];
+        $options = [
+            'group' => 'index',
+            'default' => [
+                'query' => ['limit' => 10],
+                'Content' => ['title' => 'default']
+            ],
+            'get' => true,
+            'post' => true,
+        ];
+        $request = $this->getRequest()->withQueryParams(['limit' => 10])->withData('title', 'default');
+        $this->AppController->setRequest($request);
+        $this->execPrivateMethod($this->AppController, 'setViewConditions', [$targetModel, $options]);
+
+        $this->assertEquals(['limit' => 10], $this->AppController->getRequest()->getQueryParams());
+        $this->assertEquals(['title' => 'default'], $this->AppController->getRequest()->getParsedBody());
+
+        $session = $this->AppController->getRequest()->getSession();
+        $query = $session->read('BcApp.viewConditions.PagesView.index.query');
+        $this->assertEquals(['limit' => 10], $query);
+        $data = $session->read('BcApp.viewConditions.PagesView.index.data.Content');
+        $this->assertEquals(['title' => 'default'], $data);
     }
 }
