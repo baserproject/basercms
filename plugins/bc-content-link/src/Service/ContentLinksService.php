@@ -89,6 +89,7 @@ class ContentLinksService implements ContentLinksServiceInterface
      * @throws \Cake\ORM\Exception\PersistenceFailedException
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function update(EntityInterface $target, array $postData): ?EntityInterface
     {
