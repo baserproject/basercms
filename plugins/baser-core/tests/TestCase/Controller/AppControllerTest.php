@@ -317,6 +317,27 @@ class AppControllerTest extends BcTestCase
      */
     public function test_setViewConditions()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $targetModel = ['Content'];
+        $options = [
+            'group' => 'index',
+            'default' => [
+                'query' => ['limit' => 10],
+                'Content' => ['title' => 'default']
+            ],
+            'get' => true,
+            'post' => true,
+        ];
+        $request = $this->getRequest()->withQueryParams(['limit' => 10])->withData('title', 'default');
+        $this->AppController->setRequest($request);
+        $this->execPrivateMethod($this->AppController, 'setViewConditions', [$targetModel, $options]);
+
+        $this->assertEquals(['limit' => 10], $this->AppController->getRequest()->getQueryParams());
+        $this->assertEquals(['title' => 'default'], $this->AppController->getRequest()->getParsedBody());
+
+        $session = $this->AppController->getRequest()->getSession();
+        $query = $session->read('BcApp.viewConditions.PagesView.index.query');
+        $this->assertEquals(['limit' => 10], $query);
+        $data = $session->read('BcApp.viewConditions.PagesView.index.data.Content');
+        $this->assertEquals(['title' => 'default'], $data);
     }
 }
