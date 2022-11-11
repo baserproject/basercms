@@ -413,6 +413,7 @@ class AppController extends BaseController
      * @see setViewConditions, saveViewConditions
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function loadViewConditions($targetModel = [], $options = []): void
     {
@@ -455,7 +456,10 @@ class AppController extends BaseController
             unset($query['x']);
             unset($query['y']);
         }
-        if ($query) $this->setRequest($request->withQueryParams(array_merge($query, $request->getQueryParams())));
+        if ($query) {
+            $request = $this->getRequest();
+            $this->setRequest($request->withQueryParams(array_merge($query, $request->getQueryParams())));
+        }
     }
 
     /**

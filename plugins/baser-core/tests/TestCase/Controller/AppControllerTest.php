@@ -288,7 +288,28 @@ class AppControllerTest extends BcTestCase
      */
     public function test_loadViewConditions()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // セッションデータからクエリパラメーターを設定する
+        $options = [
+            'group' => 'index',
+            'default' => ['Content' => ['q' => 'keyword'], 'query' => ['limit' => 10]],
+            'post' => false,
+            'get' => true
+        ];
+        $request = $this->getRequest();
+        $request->getSession()->write('BcApp.viewConditions.PagesView.index.query', ['id' => 1]);
+        $this->AppController->setRequest($request);
+        $this->execPrivateMethod($this->AppController, 'loadViewConditions', [['Content'], $options]);
+        $this->assertEquals(['limit' => 10, 'id' => 1], $this->AppController->getRequest()->getQueryParams());
+        $this->assertEquals(['q' => 'keyword'], $this->AppController->getRequest()->getParsedBody());
+
+        // セッションデータからPOSTデータを設定する
+        $options = ['group' => 'index', 'default' => ['Content' => ['q' => 'keyword']], 'post' => true, 'get' => false];
+        $request = $this->getRequest();
+        $request->getSession()->write('BcApp.viewConditions.PagesView.index.data.Content', ['title' => 'default']);
+        $this->AppController->setRequest($request);
+        $this->execPrivateMethod($this->AppController, 'loadViewConditions', [['Content'], $options]);
+        $this->assertEmpty($this->AppController->getRequest()->getQueryParams());
+        $this->assertEquals(['q' => 'keyword', 'title' => 'default'], $this->AppController->getRequest()->getParsedBody());
     }
 
     /**
