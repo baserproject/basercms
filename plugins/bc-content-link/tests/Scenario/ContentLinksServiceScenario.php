@@ -46,7 +46,7 @@ class ContentLinksServiceScenario implements FixtureScenarioInterface
             'rght' => 10,
             'entity_id' => 1,
             'site_root' => true,
-            'status' => true
+            'status' => false
         ])->persist();
         ContentLinkFactory::make([
             'id' => 1,

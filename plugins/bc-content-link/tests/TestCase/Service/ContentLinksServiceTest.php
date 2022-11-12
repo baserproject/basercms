@@ -18,6 +18,7 @@ use BaserCore\TestSuite\BcTestCase;
 use BcContentLink\Service\ContentLinksServiceInterface;
 use BcContentLink\Test\Factory\ContentLinkFactory;
 use BaserCore\Utility\BcContainerTrait;
+use Cake\Datasource\Exception\RecordNotFoundException;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -42,7 +43,6 @@ class ContentLinksServiceTest extends BcTestCase
         'plugin.BaserCore.Factory/Sites',
         'plugin.BaserCore.Factory/Contents',
         'plugin.BcContentLink.Factory/ContentLinks',
-        'plugin.BaserCore.Factory/Contents',
     ];
 
     /**
@@ -94,8 +94,8 @@ class ContentLinksServiceTest extends BcTestCase
         $this->loadFixtureScenario(ContentLinksServiceScenario::class);
         $data = $this->ContentLinksService->get(1);
         $this->assertNotEmpty($data);
-        $data = $this->ContentLinksService->get(1, ['status' => 'publish']);
-        $this->assertNotEmpty($data);
+        $this->expectException(RecordNotFoundException::class);
+        $this->ContentLinksService->get(1, ['status' => 'publish']);
     }
 
     /**
