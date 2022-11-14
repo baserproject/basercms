@@ -24,7 +24,12 @@ class BlogPostsController extends BcApiController
 {
 
     /**
-     * バッチ処理
+     * ブログ記事のバッチ処理
+     * 
+     * 指定したブログ記事に対して削除、公開、非公開の処理を一括で行う
+     * 
+     * ### エラー
+     * 受け取ったPOSTデータのキー名'batch'が'delete','publish','unpublish'以外の値であれば500エラーを発生させる
      *
      * @param BlogPostsServiceInterface $service
      * @checked
