@@ -164,4 +164,46 @@ class ContentLinksController extends BcApiController
         $this->viewBuilder()->setOption('serialize', ['message', 'contentLink', 'errors']);
     }
 
+    /**
+     * コンテンツリンク取得
+     *
+     * /baser/api/bc-content-link/content_links/view/{id}.json
+     *
+     * クエリーパラーメーター
+     * - status: string 公開ステータス（初期値：publish）
+     *  - `publish` 公開されたページ
+     *  - `` 全て
+     *
+     * @param ContentLinksServiceInterface $service
+     * @param $id
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function view(ContentLinksServiceInterface $service, $id)
+    {
+        $this->request->allowMethod('get');
+        $queryParams = $this->getRequest()->getQueryParams();
+        if(isset($queryParams['status'])) {
+            if(!$this->Authentication->getIdentity()) throw new ForbiddenException();
+        }
+
+        $queryParams = array_merge($queryParams, [
+            'status' => 'publish'
+        ]);
+
+        $contentLink = $message = null;
+        try {
+            $contentLink = $service->get($id, $queryParams);
+        } catch(\Exception $e) {
+            $this->setResponse($this->response->withStatus(401));
+            $message = $e->getMessage();
+        }
+
+        $this->set([
+            'contentLink' => $contentLink,
+            'message' => $message
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['contentLink', 'message']);
+    }
 }
