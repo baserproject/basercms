@@ -1,6 +1,5 @@
 <?php
-// TODO : コード確認要
-return;
+
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
@@ -12,25 +11,52 @@ return;
  * @license         https://basercms.net/license/index.html
  */
 
-App::uses('BlogTagsController', 'BcBlog.Controller');
+namespace BcBlog\Test\TestCase\Controller\Admin;
+
+use BaserCore\Test\Scenario\InitAppScenario;
+use BaserCore\TestSuite\BcTestCase;
+use BcBlog\Controller\Admin\BlogTagsController;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class BlogTagsControllerTest
  *
- * @package Blog.Test.Case.Controller
- * @property  BlogTagsController $BlogTagsController
+ * @property BlogTagsController $BlogTagsController
  */
-class BlogTagsControllerTest extends BaserTestCase
+class BlogTagsControllerTest extends BcTestCase
 {
+
+    /**
+     * Trait
+     */
+    use ScenarioAwareTrait;
+
+    /**
+     * Fixtures
+     *
+     * @var array
+     */
+    public $fixtures = [
+        'plugin.BaserCore.Factory/Sites',
+        'plugin.BaserCore.Factory/SiteConfigs',
+        'plugin.BaserCore.Factory/Users',
+        'plugin.BaserCore.Factory/UsersUserGroups',
+        'plugin.BaserCore.Factory/UserGroups',
+        'plugin.BcBlog.Factory/BlogPosts',
+        'plugin.BcBlog.Factory/BlogTags',
+    ];
 
     /**
      * set up
      *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
+        $this->setFixtureTruncate();
         parent::setUp();
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->BlogTagsController = new BlogTagsController($this->loginAdmin($this->getRequest()));
     }
 
     /**
@@ -38,55 +64,47 @@ class BlogTagsControllerTest extends BaserTestCase
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
     }
 
     /**
-     * [ADMIN] タグ一覧
+     * test index
      */
-    public function testAdmin_index()
+    public function test_initialize()
+    {
+        $this->assertNotEmpty($this->BlogTagsController->BcAdminContents);
+    }
+
+    /**
+     * test add
+     */
+    public function test_add(): void
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
 
     /**
-     * [ADMIN] タグ登録
+     * test delete
      */
-    public function testAdmin_add()
+    public function test_delete()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
 
     /**
-     * [ADMIN] タグ編集
+     * test edit
      */
-    public function testAdmin_edit()
+    public function test_edit()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
 
     /**
-     * [ADMIN] 削除処理
+     * test index
      */
-    public function testAdmin_delete()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
-    /**
-     * [ADMIN] 削除処理 (ajax)
-     */
-    public function testAdmin_ajax_delete()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
-    /**
-     * [ADMIN] AJAXタグ登録
-     */
-    public function testAdmin_ajax_add()
+    public function test_index()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }

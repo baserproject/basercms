@@ -73,7 +73,7 @@ class BlogPostsControllerTest extends BcTestCase
      */
     public function testInitialize(): void
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->assertNotEmpty($this->BlogPostsController->BcAdminContents);
     }
 
     /**

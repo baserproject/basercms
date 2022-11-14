@@ -40,12 +40,13 @@ class BlogPostsController extends BlogAdminAppController
 
     /**
      * initialize
-     * 
+     *
      * ブログ記事に関する処理の初期化を行う
-     * 
+     *
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function initialize(): void
     {
@@ -94,7 +95,7 @@ class BlogPostsController extends BlogAdminAppController
 
     /**
      * [ADMIN] ブログ記事一覧表示
-     * 
+     *
      * ブログ記事の一覧を表示する。
      * ページネーションで次の記事が見つからなかった場合は、１ページ目にリダイレクトする。
      *
@@ -144,9 +145,9 @@ $this->paginate = [
 
     /**
      * [ADMIN] ブログ記事追加処理
-     * 
+     *
      * 指定したブログに記事を追加して、ブログ記事編集画面へリダイレクトする。
-     * 
+     *
      * ###エラー
      * ブログ記事の追加に失敗した場合、PersistenceFailedExceptionかBcExceptionが発生する。
      *
@@ -198,7 +199,7 @@ $this->paginate = [
 
     /**
      * [ADMIN] ブログ記事編集処理
-     * 
+     *
      * 指定したブログ記事を編集する。
      * 記事の保存に失敗した場合、PersistenceFailedExceptionかBcExceptionのエラーが発生する。
      *
@@ -248,7 +249,7 @@ $this->paginate = [
 
     /**
      * [ADMIN] ブログ記事削除処理
-     * 
+     *
      * 指定したブログ記事を削除し、ブログ記事一覧へリダイレクトする。
      *
      * @param BlogPostsServiceInterface $service
@@ -273,7 +274,7 @@ $this->paginate = [
 
     /**
      * [ADMIN] ブログ記事を非公開状態にする
-     * 
+     *
      * 指定したブログ記事を非公開にしてブログ記事一覧へリダイレクトする。
      *
      * @param string $blogContentId
@@ -297,7 +298,7 @@ $this->paginate = [
 
     /**
      * [ADMIN] ブログ記事を公開状態にする
-     * 
+     *
      * 指定したブログ記事を公開状態にしてブログ記事一覧にリダイレクトする。
      *
      * @param string $blogContentId
@@ -321,7 +322,7 @@ $this->paginate = [
 
     /**
      * [ADMIN] コピー
-     * 
+     *
      * 指定したブログ記事をコピーする。
      * HTTPメソッドがGETの場合はコピー処理は行わず、ブログ記事一覧へリダイレクトする。
      *
