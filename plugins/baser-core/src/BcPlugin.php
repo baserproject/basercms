@@ -412,7 +412,7 @@ class BcPlugin extends BasePlugin
      */
     public function routes($routes): void
     {
-        if (!BcUtil::isInstalled()) {
+        if (!BcUtil::isInstalled() || BcUtil::isMigrations()) {
             parent::routes($routes);
             return;
         }

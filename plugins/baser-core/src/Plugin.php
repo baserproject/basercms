@@ -357,7 +357,7 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
     {
 
         // migrations コマンドの場合は実行しない
-        if(isset($_SERVER['argv'][1]) && $_SERVER['argv'][1] === 'migrations') {
+        if(BcUtil::isMigrations()) {
             parent::routes($routes);
             return;
         }

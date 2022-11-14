@@ -1587,4 +1587,19 @@ class BcUtil
         return self::topLevelUrl(false) . $url;
     }
 
+    /**
+     * 現在の処理がCakePHPのマイグレーションコマンドかどうか
+     *
+     * @return bool
+     * @checked
+     * @noTodo
+     */
+    public static function isMigrations()
+    {
+        if(self::isConsole() && isset($_SERVER['argv'][1]) && $_SERVER['argv'][1] === 'migrations') {
+            return true;
+        }
+        return false;
+    }
+
 }
