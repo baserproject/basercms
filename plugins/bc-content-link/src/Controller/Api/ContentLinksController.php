@@ -60,7 +60,7 @@ class ContentLinksController extends BcApiController
             $message = __d('baser', 'リンク「{0}」を追加しました。', $entity->content->title);
         } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
             $entity = $e->getEntity();
-            $message = __d('baser', "入力エラーです。内容を修正してください。\n");
+            $message = __d('baser', "入力エラーです。内容を修正してください。");
             $this->setResponse($this->response->withStatus(400));
         }
         $this->set([

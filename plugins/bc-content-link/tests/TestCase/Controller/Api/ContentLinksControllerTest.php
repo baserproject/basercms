@@ -74,6 +74,39 @@ class ContentLinksControllerTest extends BcTestCase
     }
 
     /**
+     * test add
+     */
+    public function test_add()
+    {
+        $data = [
+            'url' => '/test-add',
+            'content' => [
+                'plugin' => 'BcContentLink',
+                'type' => 'ContentLink',
+                'site_id' => 1,
+                'title' => 'test add link',
+                'lft' => 1,
+                'rght' => 2,
+                'entity_id' => 1,
+            ]
+        ];
+        $this->post('/baser/api/bc-content-link/content_links/add.json?token=' . $this->accessToken, $data);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('リンク「test add link」を追加しました。', $result->message);
+        $this->assertEquals('BcContentLink', $result->content->plugin);
+        $this->assertEquals('/test-add', $result->contentLink->url);
+
+        $data = [
+            'url' => '/test-add',
+        ];
+        $this->post('/baser/api/bc-content-link/content_links/add.json?token=' . $this->accessToken, $data);
+        $this->assertResponseCode(400);
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('入力エラーです。内容を修正してください。', $result->message);
+        $this->assertEquals('関連するコンテンツがありません', $result->errors->content->_required);
+    }
+    /**
      * test edit
      */
     public function test_edit()
