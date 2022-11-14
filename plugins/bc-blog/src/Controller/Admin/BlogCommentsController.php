@@ -20,6 +20,7 @@ use BaserCore\Annotation\UnitTest;
 use BcBlog\Service\BlogCommentsService;
 use BcBlog\Service\BlogCommentsServiceInterface;
 use Cake\Http\Exception\NotFoundException;
+use Cake\Http\Response;
 
 /**
  * ブログコメントコントローラー
@@ -29,7 +30,7 @@ class BlogCommentsController extends BlogAdminAppController
 
     /**
      * [ADMIN] ブログコメントを一覧表示する
-     * 
+     *
      * 記事IDでフィルタリングできる
      *
      * @param BlogCommentsAdminService $service
@@ -77,11 +78,12 @@ class BlogCommentsController extends BlogAdminAppController
      * @param BlogCommentsServiceInterface $service
      * @param int $blogContentId
      * @param int $id
-     * @return void
+     * @return Response|null
      * @checked
      * @noTodo
+     * @unitTest
      */
-    public function delete(BlogCommentsServiceInterface $service, int $blogContentId, int $id)
+    public function delete(BlogCommentsServiceInterface $service, int $blogContentId, int $id): ?Response
     {
         $this->request->allowMethod(['post', 'delete']);
         $entity = $service->get($id);
@@ -129,7 +131,7 @@ class BlogCommentsController extends BlogAdminAppController
 
     /**
      * [ADMIN] ブログコメントを公開状態にする
-     * 
+     *
      * 指定したブログコメントの公開状態に設定する。
      * 設定後、一覧にリダイレクトするが、ブログ記事でフィルタリングしている場合は、フィルタリングした状態でリダイレクトする。
      *
