@@ -74,7 +74,7 @@ class BlogTagsControllerTest extends BcTestCase
      */
     public function test_initialize()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->assertNotEmpty($this->BlogTagsController->BcAdminContents);
     }
 
     /**
