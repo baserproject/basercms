@@ -33,10 +33,13 @@ class BlogCommentsAdminService extends BlogCommentsService implements BlogCommen
     /**
      * ブログコメント一覧用の view 変数を取得
      *
-     * @param int $blogContentId
-     * @param int|null $blogPostId
-     * @param ResultSet $blogComments
+     * @param int $blogContentId ブログコンテンツID
+     * @param int|null $blogPostId ブログ記事ID
+     * @param ResultSet $blogComments ブログコメント
      * @return array
+     *  - blogComments: ブログコメント
+     *  - blogContent: ブログコンテンツ
+     *  - blogPost: ブログ記事
      * @checked
      * @noTodo
      */

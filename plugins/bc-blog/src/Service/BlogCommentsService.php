@@ -20,13 +20,14 @@ use Cake\ORM\TableRegistry;
 
 /**
  * BlogCommentsService
+ * 
  * @property BlogCommentsTable $BlogComments
  */
 class BlogCommentsService implements BlogCommentsServiceInterface
 {
 
     /**
-     * Constructor
+     * ブログコメントを初期化する
      */
     public function __construct()
     {
