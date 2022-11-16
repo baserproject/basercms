@@ -282,6 +282,7 @@ $this->paginate = [
      * @param int $id
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function unpublish(BlogPostsServiceInterface $service, $blogContentId, $id)
     {
