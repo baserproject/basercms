@@ -11,9 +11,7 @@
 
 namespace BcBlog\Test\Scenario;
 
-use BaserCore\Test\Factory\ContentFactory;
 use BcBlog\Test\Factory\BlogCommentFactory;
-use BcBlog\Test\Factory\BlogContentFactory;
 use CakephpFixtureFactories\Scenario\FixtureScenarioInterface;
 
 /**
@@ -64,7 +62,7 @@ class BlogCommentsScenario implements FixtureScenarioInterface
             'blog_content_id' => 1,
             'blog_post_id' => 1,
             'no' => 3,
-            'status' => 1,
+            'status' => false,
             'name' => 'baserCMS',
             'email' => '',
             'url' => 'https://basercms.net',
