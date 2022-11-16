@@ -100,6 +100,7 @@ class BcUploadBehavior extends Behavior
 
     /**
      * Initialize
+     * 
      * @param array $config
      * @return void
      * @checked
@@ -113,8 +114,8 @@ class BcUploadBehavior extends Behavior
     }
 
     /**
-     * Before Marshal
      * アップロード用のリクエストデータを変換する
+     * 
      * @param EventInterface $event
      * @param ArrayObject $data
      * @checked
@@ -130,6 +131,7 @@ class BcUploadBehavior extends Behavior
 
     /**
      * After Save
+     * 
      * @param EventInterface $event
      * @param EntityInterface $entity
      * @checked
@@ -169,9 +171,9 @@ class BcUploadBehavior extends Behavior
     }
 
     /**
-     * Before delete
      * テーブル削除時に対象の画像ファイルの削除を行う
      * 削除に失敗してもデータの削除は行う
+     * 
      * @param EventInterface $event
      * @param EntityInterface $entity
      * @checked
@@ -186,6 +188,7 @@ class BcUploadBehavior extends Behavior
 
     /**
      * 一時ファイルとして保存する
+     * 
      * @param array $data
      * @param string $tmpId
      * @return mixed false|array
@@ -200,6 +203,7 @@ class BcUploadBehavior extends Behavior
 
     /**
      * 設定情報を取得
+     * 
      * @param $alias
      * @return mixed
      * @checked
@@ -213,6 +217,7 @@ class BcUploadBehavior extends Behavior
 
     /**
      * 設定情報を設定
+     * 
      * @param $alias
      * @param $settings
      * @checked
@@ -226,6 +231,7 @@ class BcUploadBehavior extends Behavior
 
     /**
      * 保存先のパスを取得
+     * 
      * @param $alias
      * @param false $isTheme
      * @param false $limited
@@ -241,6 +247,7 @@ class BcUploadBehavior extends Behavior
 
 	/**
      * getFileUploader
+     * 
 	 * @param $modelName
 	 * @return BcFileUploader|false
      * @checked
@@ -254,6 +261,7 @@ class BcUploadBehavior extends Behavior
 
 	/**
 	 * getOldEntity
+     * 
 	 * @param int $id
 	 * @return EntityInterface|null
      * @checked
@@ -273,7 +281,8 @@ class BcUploadBehavior extends Behavior
 	}
 
 	/**
-	 * renameToBasenameFields
+     * 全フィールドのファイル名をフィールド値ベースのファイル名に変更する
+     * 
 	 * @param EntityInterface $entity
      * @param bool $copy
 	 */
