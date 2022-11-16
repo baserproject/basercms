@@ -13,8 +13,6 @@
  * アプリケーション基本設定
  */
 $config['BcApp'] = [
-    // デフォルトタイトル設定（インストールの際のエラー時等DB接続まえのエラーで利用）
-    'title' => __d('baser', 'baserCMS'),
     // 初期テーマ
     'defaultTheme' => 'bc_sample',
     // 管理システムテーマ（キャメルケース）
@@ -170,17 +168,6 @@ $config['BcApp'] = [
     // 	- false：ブラウザ
     // 	- true：サイト設定
     'systemMessageLangFromSiteSetting' => false
-];
-
-/**
- * システム要件
- */
-$config['BcRequire'] = [
-    'phpVersion' => "5.4.0",
-    'phpMemory' => "128",
-    'MySQLVersion' => "5.0.0",
-    'winSQLiteVersion' => "3.7.16",
-    'PostgreSQLVersion' => "8.4.0"
 ];
 
 /**

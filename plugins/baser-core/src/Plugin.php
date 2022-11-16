@@ -28,11 +28,11 @@ use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
 use Cake\Core\ContainerInterface;
 use Cake\Core\PluginApplicationInterface;
+use Cake\Datasource\ConnectionManager;
 use Cake\Event\EventManager;
 use Cake\Http\Middleware\CsrfProtectionMiddleware;
 use Cake\Http\MiddlewareQueue;
 use Cake\Http\ServerRequestFactory;
-use Cake\Routing\Route\InflectedRoute;
 use Cake\Routing\RouteBuilder;
 use Cake\Routing\Router;
 use Cake\Utility\Inflector;
@@ -63,34 +63,64 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
      */
     public function bootstrap(PluginApplicationInterface $application): void
     {
-        // composer インストール対応
-        // composer でインストールした場合、プラグインは vendor 保存されるためパスを追加
-        // bootstrap() で、setting.php の読み込みがあるので、その前に呼び出す必要あり
+        /**
+         * composer インストール対応
+         * composer でインストールした場合、プラグインは vendor 保存されるためパスを追加
+         * bootstrap() で、setting.php の読み込みがあるので、その前に呼び出す必要あり
+         */
         Configure::write('App.paths.plugins', array_merge(
             Configure::read('App.paths.plugins'),
             [ROOT . DS . 'vendor' . DS . 'baserproject' . DS]
         ));
 
-        parent::bootstrap($application);
+        /**
+         * インストール状態の設定
+         * インストールされてない場合のテストをできるようにするため、Configure の設定を優先する
+         */
+        $hasInstall = file_exists(CONFIG . 'install.php');
+        if(is_null(Configure::read('BcRequest.isInstalled'))) {
+            Configure::write('BcRequest.isInstalled', $hasInstall);
+        }
 
+        /**
+         * コンソール判定
+         * BcUtil::isConsole で利用
+         */
+        $_ENV['IS_CONSOLE'] = (substr(php_sapi_name(), 0, 3) === 'cli');
+
+        /**
+         * インストール状態による初期化設定
+         * インストールされている場合は、TMP フォルダの設定を行い、
+         * されていない場合は、インストールプラグインをロードする。
+         */
         if(BcUtil::isInstalled()) {
             BcUtil::checkTmpFolders();
+        } else {
+            $application->addPlugin('BcInstaller');
         }
 
-        if (file_exists(CONFIG . 'setting.php')) {
-            Configure::load('setting', 'baser');
-        }
+        /**
+         * プラグインごとの設定ファイル読み込み
+         */
+        parent::bootstrap($application);
 
-        if (!filter_var(env('USE_DEBUG_KIT', true), FILTER_VALIDATE_BOOLEAN)) {
-            // 明示的に指定がない場合、DebugKitは重すぎるのでデバッグモードでも利用しない
-            \Cake\Core\Plugin::getCollection()->remove('DebugKit');
-        }
+        /**
+         * 設定ファイル読み込み
+         * baserCMSの各種設定は、ここで上書きできる事を想定
+         */
+        if (file_exists(CONFIG . 'setting.php')) Configure::load('setting', 'baser');
 
+        /**
+         * プラグインロード
+         */
         $application->addPlugin('Authentication');
         $application->addPlugin('Migrations');
         $application->addPlugin(Inflector::camelize(Configure::read('BcApp.defaultAdminTheme'), '-'));
         $application->addPlugin(Inflector::camelize(Configure::read('BcApp.defaultFrontTheme'), '-'));
-
+        if (!filter_var(env('USE_DEBUG_KIT', true), FILTER_VALIDATE_BOOLEAN)) {
+            // 明示的に指定がない場合、DebugKitは重すぎるのでデバッグモードでも利用しない
+            \Cake\Core\Plugin::getCollection()->remove('DebugKit');
+        }
         $plugins = BcUtil::getEnablePlugins();
         if ($plugins) {
             foreach($plugins as $plugin) {
@@ -99,6 +129,10 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
                 }
             }
         }
+
+        /**
+         * デフォルトテンプレートを設定する
+         */
         $this->setupDefaultTemplatesPath();
 
         /**
@@ -235,6 +269,11 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
         }
         if (!$authSetting || !BcUtil::isInstalled()) {
             $service->loadAuthenticator('Authentication.Form');
+            if(!empty($authSetting['sessionKey'])) {
+                $service->loadAuthenticator('Authentication.Session', [
+                    'sessionKey' => $authSetting['sessionKey'],
+                ]);
+            }
             return $service;
         }
 
@@ -362,6 +401,12 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
             return;
         }
 
+        // インストールされていない場合は実行しない
+        if (!BcUtil::isInstalled()) {
+            parent::routes($routes);
+            return;
+        }
+
         $request = Router::getRequest();
         if(!$request) {
             $request = ServerRequestFactory::fromGlobals();
@@ -377,17 +422,6 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
             $property = new ReflectionProperty(get_class($collection), '_paths');
             $property->setAccessible(true);
             $property->setValue($collection, []);
-        }
-
-        /**
-         * インストーラー
-         */
-        if (!BcUtil::isInstalled()) {
-            $routes->connect('/', ['plugin' => 'BaserCore', 'controller' => 'Installations', 'action' => 'index']);
-            $routes->connect('/install', ['plugin' => 'BaserCore', 'controller' => 'Installations', 'action' => 'index']);
-            $routes->fallbacks(InflectedRoute::class);
-            parent::routes($routes);
-            return;
         }
 
         /**

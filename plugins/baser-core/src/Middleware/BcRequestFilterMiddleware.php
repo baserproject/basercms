@@ -52,7 +52,7 @@ class BcRequestFilterMiddleware implements MiddlewareInterface
             return new Response();
         }
 
-        $this->redirectIfIsDeviceFile($request, $handler);
+        if(BcUtil::isInstalled()) $this->redirectIfIsDeviceFile($request, $handler);
 
         return $handler->handle($request);
     }

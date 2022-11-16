@@ -11,6 +11,7 @@
 
 namespace BaserCore\Middleware;
 
+use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
 use Cake\Http\Response;
 use Psr\Http\Message\ResponseInterface;
@@ -53,7 +54,7 @@ class BcRedirectSubSiteFilter implements MiddlewareInterface
         if (Configure::read('BcRequest.isUpdater')) {
             return $handler->handle($request);
         }
-        if ($request->is('admin')) {
+        if ($request->is('admin') || !BcUtil::isInstalled()) {
             return $handler->handle($request);
         }
         $sites = \Cake\ORM\TableRegistry::getTableLocator()->get('BaserCore.Sites');

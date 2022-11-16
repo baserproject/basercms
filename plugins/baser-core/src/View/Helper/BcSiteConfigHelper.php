@@ -17,6 +17,7 @@ use BaserCore\Annotation\UnitTest;
 use BaserCore\Service\SiteConfigsService;
 use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Utility\BcUtil;
 use Cake\View\Helper;
 
 /**
@@ -41,6 +42,7 @@ class BcSiteConfigHelper extends Helper
     public function initialize(array $config): void
     {
         parent::initialize($config);
+        if(!BcUtil::isInstalled()) return;
         $this->SiteConfigsService = $this->getService(SiteConfigsServiceInterface::class);
     }
 

@@ -42,7 +42,7 @@ class BcFrontMiddleware implements MiddlewareInterface
         RequestHandlerInterface $handler
     ): ResponseInterface
     {
-        if(!BcUtil::isAdminSystem()) $request = $this->setCurrent($request);
+        if(!BcUtil::isAdminSystem() && BcUtil::isInstalled()) $request = $this->setCurrent($request);
         return $handler->handle($request);
     }
 

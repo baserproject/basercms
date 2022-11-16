@@ -295,11 +295,13 @@ class BcToolbarHelperTest extends BcTestCase
         $this->assertEquals('https://localhost/', $bcToolbar->getLogoLink());
         // アップデーター
         Configure::write('BcRequest.isUpdater', true);
-        $this->assertEquals('http://wiki.basercms.net/%E3%83%90%E3%83%BC%E3%82%B8%E3%83%A7%E3%83%B3%E3%82%A2%E3%83%83%E3%83%97%E3%82%AC%E3%82%A4%E3%83%89', $bcToolbar->getLogoLink());
+        $this->assertEquals('https://wiki.basercms.net/%E3%83%90%E3%83%BC%E3%82%B8%E3%83%A7%E3%83%B3%E3%82%A2%E3%83%83%E3%83%97%E3%82%AC%E3%82%A4%E3%83%89', $bcToolbar->getLogoLink());
         Configure::write('BcRequest.isUpdater', false);
         // インストーラー
+        Configure::write('BcRequest.isInstalled', false);
         $bcToolbar = new BcToolbarHelper(new View(null, null, null, ['name' => 'Installations']));
-        $this->assertEquals('http://wiki.basercms.net/%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%E3%82%AC%E3%82%A4%E3%83%89', $bcToolbar->getLogoLink());
+        $this->assertEquals('https://wiki.basercms.net/%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%E3%82%AC%E3%82%A4%E3%83%89', $bcToolbar->getLogoLink());
+        Configure::write('BcRequest.isInstalled', true);
     }
 
     /**

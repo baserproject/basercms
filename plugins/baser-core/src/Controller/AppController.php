@@ -71,15 +71,29 @@ class AppController extends BaseController
     {
         parent::__construct($request, $response, $name, $eventManager, $components);
 
-        $isInstall = $request ? $request->is('install') : false;
+        $request->getSession()->start();
 
         // インストールされていない場合、トップページにリダイレクトする
-        // コンソールベースのインストールの際のページテンプレート生成において、
-        // BC_INSTALLED、$isInstall ともに true でない為、コンソールの場合は無視する
-        if (!(BcUtil::isInstalled() || BcUtil::isConsole()) && !$isInstall) {
-            $this->redirect('/');
+        // コンソールの場合は無視する
+        if (!(BcUtil::isInstalled() || BcUtil::isConsole())) {
+            if (!($request? $request->is('install') : false)) {
+                return $this->redirect('/');
+            } else {
+                // インストーラーの最初のステップでログイン状態を解除
+                if ($request->getParam('action') === 'index') {
+                    $sessionKey = Configure::read('BcPrefixAuth.Admin.sessionKey');
+                    if ($request->getSession()->check($sessionKey)) {
+                        $request->getSession()->delete($sessionKey);
+                        // 2022/11/16 by ryuring
+                        // $this->redirect() を利用した場合、なぜか、リダイレクト後にセッションが復活してしまう。
+                        // header() に切り替えるとうまくいった。
+                        header('Location: ' . $request->getAttribute('base') . '/');
+                        exit();
+                    }
+                }
+            }
         }
-        $request->getSession()->start();
+
     }
 
     /**
@@ -218,7 +232,7 @@ class AppController extends BaseController
                 $data[$key] = $this->_autoConvertEncodingByArray($value, $outenc);
                 continue;
             }
-            $inenc = mb_detect_encoding((string) $value);
+            $inenc = mb_detect_encoding((string)$value);
             if ($value && $inenc !== $outenc) {
                 // 半角カナは一旦全角に変換する
                 $value = mb_convert_kana($value, 'KV', $inenc);
@@ -271,24 +285,13 @@ class AppController extends BaseController
      */
     public function redirectIfIsRequireMaintenance()
     {
-        if ($this->request->is('ajax')) {
-            return;
-        }
-        if (empty(BcSiteConfig::get('maintenance'))) {
-            return;
-        }
-        if (Configure::read('debug')) {
-            return;
-        }
-        if ($this->getRequest()->is('maintenance')) {
-            return;
-        }
-        if ($this->getRequest()->is('admin')) {
-            return;
-        }
-        if (BcUtil::isAdminUser()) {
-            return;
-        }
+        if (!BcUtil::isInstalled()) return;
+        if ($this->request->is('ajax')) return;
+        if (empty(BcSiteConfig::get('maintenance'))) return;
+        if (Configure::read('debug')) return;
+        if ($this->getRequest()->is('maintenance')) return;
+        if ($this->getRequest()->is('admin')) return;
+        if (BcUtil::isAdminUser()) return;
 
         // TODO ucmitz 削除検討要
         // CakePHP4 から requestAction がなくなっているので不要の可能性が高い
@@ -376,7 +379,7 @@ class AppController extends BaseController
 
         if ($options['post'] && $targetModel) {
             foreach($targetModel as $model) {
-                if(count($targetModel) > 1) {
+                if (count($targetModel) > 1) {
                     $data = $request->getData($model);
                 } else {
                     $data = $request->getData();
@@ -439,7 +442,7 @@ class AppController extends BaseController
                     $data = array_merge($data, $session->read("BcApp.viewConditions.{$contentsName}.data.{$model}"));
                 }
                 if ($data) {
-                    if(count($targetModel) > 1) {
+                    if (count($targetModel) > 1) {
                         $this->setRequest($request->withData($model, array_merge($data, $request->getData($model))));
                     } else {
                         $this->setRequest($request->withParsedBody(array_merge($data, $request->getData())));

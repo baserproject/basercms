@@ -23,6 +23,7 @@ use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
 use BcBlog\ServiceProvider\BcBlogServiceProvider;
 use BcContentLink\ServiceProvider\BcContentLinkServiceProvider;
+use BcInstaller\ServiceProvider\BcInstallerServiceProvider;
 use BcSearchIndex\ServiceProvider\BcSearchIndexServiceProvider;
 use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
@@ -192,9 +193,6 @@ class BcTestCase extends TestCase
      */
     public function setUp(): void
     {
-        if(!empty($_SERVER['REQUEST_URI']) && $_SERVER['REQUEST_URI'] === '/s/') {
-            $a = 1;
-        }
         if (!$this->autoFixtures) {
             $this->setUpFixtureManager();
         }
@@ -212,6 +210,7 @@ class BcTestCase extends TestCase
         $container->addServiceProvider(new BcSearchIndexServiceProvider());
         $container->addServiceProvider(new BcContentLinkServiceProvider());
         $container->addServiceProvider(new BcBlogServiceProvider());
+        $container->addServiceProvider(new BcInstallerServiceProvider());
         EventManager::instance(new EventManager());
         if(!empty($_SERVER['REQUEST_URI']) && $_SERVER['REQUEST_URI'] === '/s/') {
             $a = 1;

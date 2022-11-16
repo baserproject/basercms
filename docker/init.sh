@@ -35,6 +35,9 @@ if [ ! -e '/var/www/html/docker_inited' ]; then
     chmod -R 777 /var/www/html/logs
     chmod 777 /var/www/html/plugins
 
+    # Setup install setting
+    cp /var/www/html/config/test_install.php /var/www/html/config/install.php
+
     # Migrations
     echo "[$(date +"%Y/%m/%d %H:%M:%S")] Migration start."
     TIMES=0

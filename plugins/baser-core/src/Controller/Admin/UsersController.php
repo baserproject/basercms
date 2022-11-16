@@ -13,7 +13,6 @@ namespace BaserCore\Controller\Admin;
 
 use BaserCore\Model\Entity\User;
 use BaserCore\Service\Admin\UsersAdminServiceInterface;
-use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\Service\UsersService;
 use BaserCore\Service\UsersServiceInterface;
 use BaserCore\Utility\BcSiteConfig;

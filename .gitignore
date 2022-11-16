@@ -96,11 +96,18 @@ node_modules
 /webroot/bc_search_index
 /webroot/bc_spa_sample
 /webroot/bc_theme_sample
+/webroot/bc_installer
 /webroot/debug_kit
 # jwt
 /config/jwt.key
 /config/jwt.pem
 /config/setting.php
+/config/install.php
+# composer
+/composer/*
+!/composer/.gitkeep
+# vendor
+!/vendor/.gitkeep
 # etc
 LOCAL_TODO.md
 LOCAL_Q&A.md

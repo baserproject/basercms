@@ -11,6 +11,7 @@
 
 namespace BaserCore\View\Helper;
 
+use BaserCore\Utility\BcUtil;
 use Cake\View\View;
 use Cake\View\Helper;
 use BaserCore\Utility\BcContainerTrait;
@@ -81,6 +82,7 @@ class BcPageHelper extends Helper
     public function initialize(array $config): void
     {
         parent::initialize($config);
+        if(!BcUtil::isInstalled()) return;
         $this->ContentsService = $this->getService(ContentsServiceInterface::class);
     }
 

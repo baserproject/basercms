@@ -17,6 +17,7 @@ use BaserCore\Annotation\UnitTest;
 use BaserCore\Service\PermissionsServiceInterface;
 use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Utility\BcUtil;
 
 /**
  * BcAdminAppService
@@ -38,6 +39,7 @@ class BcAdminAppService implements BcAdminAppServiceInterface
      */
     public function getViewVarsForAll(): array
     {
+        if(!BcUtil::isInstalled()) return [];
         return [
             'permissionMethodList' => $this->getService(PermissionsServiceInterface::class)->getMethodList(),
             'permissionAuthList' => $this->getService(PermissionsServiceInterface::class)->getAuthList(),

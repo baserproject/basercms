@@ -18,8 +18,13 @@ use BaserCore\Utility\BcUtil;
 use Cake\Cache\Cache;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
+use Cake\Database\Connection;
+use Cake\Database\Driver\Mysql;
+use Cake\Database\Driver\Postgres;
+use Cake\Database\Driver\Sqlite;
 use Cake\Database\Schema\TableSchemaInterface;
 use Cake\Datasource\ConnectionManager;
+use Cake\Datasource\Exception\MissingDatasourceConfigException;
 use Cake\Event\EventManager;
 use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
@@ -27,11 +32,15 @@ use Cake\Log\LogTrait;
 use Cake\ORM\Entity;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
+use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
 use Cake\View\View;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use Migrations\Migrations;
+use PDO;
+use PDOException;
 
 /**
  *
@@ -54,7 +63,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
 
     /**
      * 初期データを読み込む
-     * 
+     *
      * @param $theme
      * @param $pattern
      * @param $excludes
@@ -263,7 +272,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
 
     /**
      * テーブルのデータをリセットする
-     * 
+     *
      * @param $table
      * @return bool
      * @noTodo
@@ -358,7 +367,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
 
     /**
      * メールメッセージテーブルを初期化する
-     * 
+     *
      * @return bool
      * @checked
      * @noTodo
@@ -383,20 +392,39 @@ class BcDatabaseService implements BcDatabaseServiceInterface
 
     /**
      * データベースシーケンスをアップデートする
-     * 
-     * @checked
-     * @noTodo
-     * @unitTest
      */
     public function updateSequence()
     {
-        // TODO ucmitz 未実装のため一旦スキップ
-        return;
-        $Db = ConnectionManager::getDataSource('default');
-        if ($Db->config['datasource'] === 'Database/BcPostgres') {
-            $Db->updateSequence();
+        // TODO ucmitz 未実装
+        return true;
+
+        $db = ConnectionManager::get('default');
+        $tables = $db->getSchemaCollection()->listTables();
+        $result = true;
+        foreach($tables as $table) {
+            $sql = 'select setval(\'' . $this->getSequence($table) . '\', (select max(id) from ' . $table . '));';
+            if (!$db->execute($sql)) $result = false;
         }
-        return;
+        return $result;
+    }
+
+    /**
+     * シーケンスを取得する
+     */
+    public function getSequence($table, $field = 'id')
+    {
+        // TODO ucmitz 未実装
+        // CakePHP4系で存在しないので、CakePHP2系のPostgresクラスより持ってきた
+        if (is_object($table)) {
+            $table = $this->fullTableName($table, false, false);
+        }
+        if (!isset($this->_sequenceMap[$table])) {
+            $this->describe($table);
+        }
+        if (isset($this->_sequenceMap[$table][$field])) {
+            return $this->_sequenceMap[$table][$field];
+        }
+        return "{$table}_{$field}_seq";
     }
 
     /**
@@ -678,7 +706,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
 
     /**
      * アプリケーションに関連するテーブルリストのキャッシュをクリアする
-     * 
+     *
      * @checked
      * @noTodo
      * @unitTest
@@ -743,7 +771,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
     /**
      * テキストのスキーマ情報を生成する
      * Bake\Command\FixtureCommand::_generateSchema() を移植
-     * 
+     *
      * @param TableSchemaInterface $table
      * @return string
      * @checked
@@ -790,7 +818,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
     /**
      * Formats Schema columns from Model Object
      * Bake\Command\FixtureCommand::_values() を移植
-     * 
+     *
      * @param array $values options keys(type, null, default, key, length, extra)
      * @return string[] Formatted values
      * @checked
@@ -822,7 +850,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
 
     /**
      * スキーマを読み込む
-     * 
+     *
      * @param $options
      * @return bool
      * @checked
@@ -849,6 +877,325 @@ class BcDatabaseService implements BcDatabaseServiceInterface
                 break;
         }
         return true;
+    }
+
+    /**
+     * datasource名を取得
+     *
+     * @param string datasource name.postgre.mysql.etc.
+     * @return string
+     */
+    public function getDatasourceName($datasource = null)
+    {
+        $name = $datasource;
+        switch($datasource) {
+            case 'postgres' :
+                $name = Postgres::class;
+                break;
+            case 'mysql' :
+                $name = Mysql::class;
+                break;
+            case 'sqlite' :
+                $name = Sqlite::class;
+                break;
+            default :
+        }
+        return $name;
+    }
+
+    /**
+     * データベースに接続する
+     *
+     * @param array $config
+     */
+    public function connectDb(array $config, $name = 'default')
+    {
+        if (empty($config['driver']) && !empty($config['datasource'])) {
+            $config['driver'] = $this->getDatasourceName($config['datasource']);
+        }
+        if (empty($config['driver'])) return ConnectionManager::get($name);
+        ConnectionManager::setConfig($name, [
+            'className' => Connection::class,
+            'driver' => $config['driver'],
+            'persistent' => false,
+            'host' => $config['host'],
+            'port' => $config['port'],
+            'username' => $config['username'],
+            'password' => $config['password'],
+            'database' => $config['database'],
+            'schema' => $config['schema'],
+            'prefix' => $config['prefix'],
+            'encoding' => $config['encoding']
+        ]);
+        $db = ConnectionManager::get($name);
+        $db->connect();
+        return $db;
+    }
+
+    /**
+     * データソースを取得する
+     *
+     * @param string $configKeyName
+     * @param array $dbConfig
+     * @return Connection
+     */
+    public function getDataSource($dbConfigKeyName = 'default', $dbConfig = null)
+    {
+        try {
+            $db = ConnectionManager::get($dbConfigKeyName);
+        } catch (MissingDatasourceConfigException $e) {
+            if ($dbConfig) {
+                if (empty($dbConfig['driver']) && !empty($dbConfig['datasource'])) {
+                    $dbConfig['driver'] = $this->getDatasourceName($dbConfig['datasource']);
+                }
+                ConnectionManager::setConfig($dbConfigKeyName, $dbConfig);
+                $db = ConnectionManager::get($dbConfigKeyName);
+            } else {
+                throw $e;
+            }
+        }
+        return $db;
+    }
+
+    /**
+     * テーブルを削除する
+     *
+     * @param string $dbConfigKeyName
+     * @param array $dbConfig
+     * @return boolean
+     */
+    public function deleteTables($dbConfigKeyName = 'default', $dbConfig = null)
+    {
+        $db = $this->getDataSource($dbConfigKeyName, $dbConfig);
+        if (!$dbConfig) $dbConfig = ConnectionManager::getConfig($dbConfigKeyName);
+        $prefix = Configure::read('Datasources.default.prefix');
+        $datasource = strtolower(str_replace('Cake\\Database\\Driver\\', '', $dbConfig['driver']));
+        switch($datasource) {
+            case 'mysql':
+                $sources = $db->getSchemaCollection()->listTables();
+                foreach($sources as $source) {
+                    if (!preg_match("/^" . $prefix . "([^_].+)$/", $source)) continue;
+                    try {
+                        $db->execute('DROP TABLE ' . $source);
+                    } catch (BcException $e) {
+                    }
+                }
+                break;
+
+            case 'postgres':
+                $sources = $db->getSchemaCollection()->listTables();
+                foreach($sources as $source) {
+                    if (!preg_match("/^" . $prefix . "([^_].+)$/", $source)) continue;
+                    try {
+                        $db->execute('DROP TABLE ' . $source);
+                    } catch (BcException $e) {
+                    }
+                }
+                // シーケンスも削除
+                $sql = "SELECT sequence_name FROM INFORMATION_SCHEMA.sequences WHERE sequence_schema = '{$dbConfig['schema']}';";
+                $sequences = [];
+                try {
+                    $sequences = $db->query($sql);
+                } catch (BcException $e) {
+                }
+                if ($sequences) {
+                    $sequences = Hash::extract($sequences, '0.sequence_name');
+                    foreach($sequences as $sequence) {
+                        if (!preg_match("/^" . $prefix . "([^_].+)$/", $sequence)) continue;
+                        $sql = 'DROP SEQUENCE ' . $sequence;
+                        try {
+                            $db->execute($sql);
+                        } catch (BcException $e) {
+                        }
+                    }
+                }
+                break;
+
+            case 'sqlite':
+                @unlink($dbConfig['database']);
+                break;
+        }
+        return true;
+    }
+
+    /**
+     * DB接続チェック
+     *
+     * @param string[] $config
+     *  - `datasource`: 'MySQL' or 'Postgres' or 'SQLite' or 'CSV'
+     *  - `database`: データベース名 SQLiteの場合はファイルパス CSVの場合はディレクトリへのパス
+     *  - `host`: テキストDB or localhostの場合は不要
+     *  - `port`: 接続ポート テキストDBの場合は不要
+     *  - `login`: 接続ユーザ名 テキストDBの場合は不要
+     *  - `password`: 接続パスワード テキストDBの場合は不要
+     * @throws PDOException
+     * @throws BcException
+     */
+    public function checkDbConnection($config)
+    {
+        $datasource = Hash::get($config, 'datasource');
+        $database = Hash::get($config, 'database');
+        $host = Hash::get($config, 'host');
+        $port = Hash::get($config, 'port');
+        $login = Hash::get($config, 'username');
+        $password = Hash::get($config, 'password');
+        $datasource = strtolower($datasource);
+
+        try {
+            switch($datasource) {
+                case 'mysql':
+                    $dsn = "mysql:dbname={$database}";
+                    if ($host) $dsn .= ";host={$host}";
+                    if ($port) $dsn .= ";port={$port}";
+                    $pdo = new PDO($dsn, $login, $password);
+                    break;
+                case 'postgres':
+                    $dsn = "pgsql:dbname={$database}";
+                    if ($host) $dsn .= ";host={$host}";
+                    if ($port) $dsn .= ";port={$port}";
+                    $pdo = new PDO($dsn, $login, $password);
+                    break;
+                case 'sqlite':
+                    if (file_exists($database)) {
+                        if (!is_writable($database)) {
+                            throw new BcException(__d('baser', "データベースファイルに書き込み権限がありません。"));
+                        }
+                    } else {
+                        if (!is_writable(dirname($database))) {
+                            throw new BcException(__d('baser', 'データベースの保存フォルダに書き込み権限がありません。'));
+                        }
+                    }
+                    $dsn = "sqlite:" . $database;
+                    $pdo = new PDO($dsn);
+                    break;
+                default:
+                    throw new BcException(__d('baser', 'ドライバが見つかりません Driver is not defined.(MySQL|Postgres|SQLite)'));
+            }
+            unset($pdo);
+        } catch (PDOException $e) {
+            throw $e;
+        }
+    }
+
+    /**
+     * データベース接続テスト
+     *
+     * @param array $config
+     */
+    public function testConnectDb($config)
+    {
+        /* データベース接続確認 */
+        try {
+            $this->checkDbConnection($config);
+        } catch (PDOException $e) {
+            if ($e->getCode() === 2002) {
+                throw new PDOException(__d('baser', "データベースへの接続でエラーが発生しました。データベース設定を見直してください。\nサーバー上に指定されたデータベースが存在しない可能性が高いです。\n" . $e->getMessage()));
+            }
+            throw $e;
+        } catch (BcException $e) {
+            $message = __d('baser', "データベースへの接続でエラーが発生しました。データベース設定を見直してください。\nサーバー上に指定されたデータベースが存在しない可能性が高いです。");
+            if (preg_match('/with message \'(.+?)\' in/s', $e->getMessage(), $matches)) {
+                $message .= "\n" . $matches[1];
+            }
+            throw new BcException($message);
+        }
+
+        /* データベース接続生成 */
+        /* @var Connection $db */
+        $db = $this->connectDb($config);
+
+        if (!$db->isConnected()) {
+            throw new BcException(__d('baser', "データベースへの接続でエラーが発生しました。データベース設定を見直してください。"));
+        }
+
+        //version check
+        $driver = $db->getDriver();
+        switch(get_class($driver)) {
+            case 'Cake\Database\Driver\Mysql' :
+                $result = $db->execute("SELECT version() as version")->fetch();
+                if (version_compare($result[0], Configure::read('BcRequire.MySQLVersion')) == -1) {
+                    throw new BcException(sprintf(__d('baser', 'データベースのバージョンが %s 以上か確認してください。'), Configure::read('BcRequire.MySQLVersion')));
+                }
+                break;
+            case 'Cake\Database\Driver\Postgres' :
+                // TODO ucmitz 未検証
+                $result = $db->query("SELECT version() as version")->fetch();
+                [, $version] = explode(" ", $result[0]);
+                if (version_compare(trim($version), Configure::read('BcRequire.PostgreSQLVersion')) == -1) {
+                    throw new BcException(sprintf(__d('baser', 'データベースのバージョンが %s 以上か確認してください。'), Configure::read('BcRequire.PostgreSQLVersion')));
+                }
+                break;
+        }
+
+        try {
+            /* 一時的にテーブルを作成できるかテスト */
+            $randomtablename = 'deleteme' . rand(100, 100000);
+            $db->execute("CREATE TABLE $randomtablename (a varchar(10))");
+            $db->execute('drop TABLE ' . $randomtablename);
+        } catch (PDOException $e) {
+            throw new PDOException(__d('baser', "データベースへの接続でエラーが発生しました。\n") . $e->getMessage());
+        }
+
+        // データベースのテーブルをチェック
+        $tableNames = $db->getSchemaCollection()->listTables();
+        $prefix = Hash::get($config, 'prefix');
+        $duplicateTableNames = array_filter($tableNames, function($tableName) use ($prefix) {
+            return strpos($tableName, $prefix) === 0;
+        });
+        if (count($duplicateTableNames) > 0) {
+            throw new BcException(__d('baser', 'データベースへの接続に成功しましたが、プレフィックスが重複するテーブルが存在します。') . implode(', ', $duplicateTableNames));
+        }
+    }
+
+    /**
+     * テーブルを構築する
+     *
+     * @param string $plugin
+     * @param string $dbConfigKeyName
+     * @param array $dbConfig
+     * @return boolean
+     */
+    public function constructionTable(string $plugin, string $dbConfigKeyName = 'default', array $dbConfig = [])
+    {
+        $db = $this->getDataSource($dbConfigKeyName, $dbConfig);
+        if (!$dbConfig) $dbConfig = ConnectionManager::getConfig($dbConfigKeyName);
+        $datasource = strtolower(str_replace('Cake\\Database\\Driver\\', '', $dbConfig['driver']));
+        if (!$db->isConnected()) {
+            return false;
+        } elseif ($datasource == 'sqlite') {
+            $db->connect();
+            chmod($dbConfig['database'], 0666);
+        }
+        return $this->migrate($plugin, $dbConfigKeyName);
+    }
+
+    /**
+     * データベースのマイグレーションを実行する
+     *
+     * @param string $plugin
+     * @param string $connection
+     * @return bool
+     */
+    public function migrate(string $plugin, string $connection = 'default')
+    {
+        $pluginPath = BcUtil::getPluginPath($plugin);
+        if (!is_dir($pluginPath . 'config' . DS . 'Migrations')) return false;
+        $options = [
+            'plugin' => $plugin,
+            'connection' => $connection
+        ];
+        try {
+            $migrations = new Migrations();
+            $migrations->migrate([
+                'plugin' => $plugin,
+                'connection' => $connection
+            ]);
+            return true;
+        } catch (BcException $e) {
+            $this->log($e->getMessage());
+            $migrations->rollback($options);
+            return false;
+        }
     }
 
 }

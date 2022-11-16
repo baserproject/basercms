@@ -179,6 +179,7 @@ class BcBaserHelper extends Helper
     public function initialize($config): void
     {
         parent::initialize($config);
+        if(!BcUtil::isInstalled()) return;
         $this->PermissionsService = $this->getService(PermissionsServiceInterface::class);
     }
 
@@ -411,7 +412,7 @@ class BcBaserHelper extends Helper
 
         // 認証チェック
         $user = Bcutil::loginUser();
-        if ($user) {
+        if ($user && BcUtil::isInstalled()) {
             $userGruops = array_column($user->user_groups, 'id');
             if (!$this->PermissionsService->check($_url, $userGruops)) {
                 $enabled = false;

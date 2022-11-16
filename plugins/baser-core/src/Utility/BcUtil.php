@@ -359,6 +359,7 @@ class BcUtil
      */
     public static function getEnablePlugins()
     {
+        if(!BcUtil::isInstalled()) return [];
         $enablePlugins = [];
         if (!Configure::read('debug')) {
             $enablePlugins = Cache::read('enable_plugins', '_bc_env_');
@@ -569,37 +570,6 @@ class BcUtil
             return $files[0];
         }
         return [];
-    }
-
-    /**
-     * スキーマ情報のパスを取得する
-     *
-     * @param string $plugin プラグイン名
-     * @return string Or false
-     */
-    public static function getSchemaPath($plugin = null)
-    {
-
-        if (!$plugin) {
-            $plugin = 'BaserCore';
-        } else {
-            $plugin = Inflector::camelize($plugin);
-        }
-
-        if ($plugin == 'BaserCore') {
-            return BASER_CONFIGS . 'Schema';
-        }
-
-        $paths = App::path('Plugin');
-        foreach($paths as $path) {
-            $_path = $path . $plugin . DS . 'Config' . DS . 'Schema';
-            if (is_dir($_path)) {
-                return $_path;
-            }
-        }
-
-        return false;
-
     }
 
     /**
@@ -1079,6 +1049,7 @@ class BcUtil
     public static function getCurrentTheme()
     {
         $theme = Inflector::camelize(Inflector::underscore(Configure::read('BcApp.defaultFrontTheme')));
+        if(!BcUtil::isInstalled()) return $theme;
         $request = Router::getRequest();
         if (BcUtil::isAdminSystem()) {
             $site = $request->getAttribute('currentSite');
@@ -1116,7 +1087,7 @@ class BcUtil
     public static function getCurrentAdminTheme()
     {
         $adminTheme = Inflector::camelize(Inflector::underscore(Configure::read('BcApp.defaultAdminTheme')));
-        if (!empty(BcSiteConfig::get('admin_theme'))) {
+        if (BcUtil::isInstalled() && !empty(BcSiteConfig::get('admin_theme'))) {
             $adminTheme = BcSiteConfig::get('admin_theme');
         }
         return $adminTheme;

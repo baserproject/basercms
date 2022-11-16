@@ -263,6 +263,7 @@ class BcAdminHelper extends Helper
      */
     public function isAvailableSideBar()
     {
+        if(!BcUtil::isInstalled()) return false;
         $prefix = $this->_View->getRequest()->getParam('prefix');
         $loginAction = Router::url(Configure::read('BcPrefixAuth.' . $prefix . '.loginAction'));
         $name = $this->_View->getName();

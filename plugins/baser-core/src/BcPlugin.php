@@ -420,21 +420,6 @@ class BcPlugin extends BasePlugin
         $plugin = $this->getName();
 
         /**
-         * コンテンツ管理ルーティング
-         * リバースルーティングのために必要
-         */
-        $routes->plugin(
-            $plugin,
-            ['path' => '/'],
-            function(RouteBuilder $routes) {
-                $routes->setRouteClass('BaserCore.BcContentsRoute');
-                $routes->connect('/', []);
-                $routes->connect('/{controller}/index', []);
-                $routes->connect('/:controller/:action/*', []);
-            }
-        );
-
-        /**
          * プラグインの管理画面用ルーティング
          * プラグイン名がダッシュ区切りの場合
          */
@@ -456,6 +441,46 @@ class BcPlugin extends BasePlugin
                 }
             );
         }
+
+       /**
+         * APIのプラグイン用ルーティング
+         * プラグイン名がダッシュ区切りの場合
+         */
+        $routes->prefix(
+            'Api',
+            ['path' => '/' . BcUtil::getBaserCorePrefix() . '/api'],
+            function(RouteBuilder $routes) use ($plugin) {
+                $routes->plugin(
+                    $plugin,
+                    ['path' => '/' . Inflector::dasherize($plugin)],
+                    function(RouteBuilder $routes) {
+                        $routes->setExtensions(['json']);
+                        $routes->connect('/{controller}/index', [], ['routeClass' => InflectedRoute::class]);
+                        $routes->fallbacks(InflectedRoute::class);
+                    }
+                );
+            }
+        );
+
+        if (!BcUtil::isInstalled()) {
+            parent::routes($routes);
+            return;
+        }
+
+        /**
+         * コンテンツ管理ルーティング
+         * リバースルーティングのために必要
+         */
+        $routes->plugin(
+            $plugin,
+            ['path' => '/'],
+            function(RouteBuilder $routes) {
+                $routes->setRouteClass('BaserCore.BcContentsRoute');
+                $routes->connect('/', []);
+                $routes->connect('/{controller}/index', []);
+                $routes->connect('/:controller/:action/*', []);
+            }
+        );
 
         /**
          * プラグインのフロントエンド用ルーティング
@@ -495,26 +520,6 @@ class BcPlugin extends BasePlugin
                 }
             );
         }
-
-        /**
-         * APIのプラグイン用ルーティング
-         * プラグイン名がダッシュ区切りの場合
-         */
-        $routes->prefix(
-            'Api',
-            ['path' => '/' . BcUtil::getBaserCorePrefix() . '/api'],
-            function(RouteBuilder $routes) use ($plugin) {
-                $routes->plugin(
-                    $plugin,
-                    ['path' => '/' . Inflector::dasherize($plugin)],
-                    function(RouteBuilder $routes) {
-                        $routes->setExtensions(['json']);
-                        $routes->connect('/{controller}/index', [], ['routeClass' => InflectedRoute::class]);
-                        $routes->fallbacks(InflectedRoute::class);
-                    }
-                );
-            }
-        );
 
         parent::routes($routes);
     }

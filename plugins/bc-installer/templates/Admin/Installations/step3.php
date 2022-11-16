@@ -12,6 +12,10 @@
 
 /**
  * [PUBLISH] インストーラー Step3
+ * @var \BaserCore\View\BcAdminAppView $this
+ * @var bool $blDBSettingsOK
+ * @var array $dbDataPatterns
+ * @var array $dbsource
  */
 $this->BcBaser->i18nScript([
   'message1' => __d('baser', 'データベースのホスト名を入力してください。'),
@@ -23,217 +27,92 @@ $this->BcBaser->i18nScript([
   'message7' => __d('baser', 'ドット（.）を含むデータベース名にはインストールできません。'),
   'message8' => __d('baser', 'データベースのポートナンバーを入力してください。')
 ]);
+$this->BcBaser->js('BcInstaller.admin/step3.bundle', false, [
+  'id' => 'AdminInstallersScript',
+  'data-dbSettingOk' => $blDBSettingsOK
+]);
+$this->BcAdmin->setTitle(__d('baser', 'baserCMSのインストール｜ステップ３'));
 ?>
 
 
-<script type="text/javascript">
-  $(function () {
-    if ($('#btnnext').prop('disabled')) {
-      $('#btnnext').hide();
-    }
-    initForm();
-    <?php if (!empty($blDBSettingsOK)): ?>$('#btnnext').show();<?php endif; ?>
-
-    /* イベント登録 */
-    $('#checkdb,#btnnext,#btnback').click(function array() {
-      $.bcUtil.showLoader();
-      if (this.id == 'btnnext') {
-        $("#buttonclicked").val('createdb');
-      } else if (this.id == 'btnback') {
-        $("#buttonclicked").val('back');
-      } else if (this.id == 'checkdb') {
-        $("#buttonclicked").val('checkdb');
-      }
-
-      var result = true;
-      if (this.id != 'btnback' &&
-        $('#InstallationDbType').val() != 'csv' &&
-        $('#InstallationDbType').val() != 'sqlite') {
-
-        if ($("#InstallationDbHost").val() == "") {
-          alert(bcI18n.message1);
-          result = false;
-        } else if ($("#InstallationDbUsername").val() == "") {
-          alert(bcI18n.message2);
-          result = false;
-        } else if ($("#InstallationDbName").val() == "") {
-          alert(bcI18n.message3);
-          result = false;
-        } else if ($("#InstallationDbPrefix").val() == "") {
-          alert(bcI18n.message4);
-          result = false;
-        } else if (!$("#InstallationDbPrefix").val().match(/[_]$/)) {
-          alert(bcI18n.message5);
-          result = false;
-        } else if (!$("#InstallationDbPrefix").val().match(/^[a-zA-z0-9_]+_$/)) {
-          alert(bcI18n.message6);
-          result = false;
-        } else if ($("#InstallationDbName").val().match(/^.*\..*$/)) {
-          alert(bcI18n.message7);
-          result = false;
-        } else if ($("#InstallationDbPort").val() == "") {
-          alert(bcI18n.message8);
-          result = false;
-        }
-
-      }
-
-      if (result) {
-        $('#dbsettings').submit();
-      } else {
-        $.bcUtil.hideLoader();
-        return false;
-      }
-
-    });
-
-    $('#InstallationDbType').change(function () {
-      $('#InstallationDbHost').val('');
-      $('#InstallationDbUsername').val('');
-      $('#InstallationDbPassword').val('');
-      $('#InstallationDbDBName').val('');
-      $('#InstallationDbPort').val('');
-      initForm();
-    });
-
-  });
-
-  /**
-   * フォームを初期化する
-   * @return void
-   */
-  function initForm() {
-
-    var dbType = $('#InstallationDbType');
-    var port, host, dbName, prefix;
-
-    if (dbType.val() == 'mysql') {
-      $('#dbHost').show(500);
-      $('#dbUser').show(500);
-      $('#dbInfo').show(500);
-      $('#checkdb').show();
-      $('#btnnext').hide();
-      host = 'localhost';
-      dbName = 'baser';
-      port = '3306';
-      prefix = 'mysite_';
-    } else if (dbType.val() == 'postgres') {
-      $('#dbHost').show(500);
-      $('#dbUser').show(500);
-      $('#dbInfo').show(500);
-      $('#checkdb').show();
-      $('#btnnext').hide();
-      host = 'localhost';
-      dbName = 'baser';
-      port = '5432';
-      prefix = 'mysite_';
-    } else if (dbType.val() == 'sqlite') {
-      $('#dbHost').hide(500);
-      $('#dbUser').hide(500);
-      $('#dbInfo').hide(500);
-      $('#checkdb').hide();
-
-      $('#btnnext').removeAttr("disabled");
-      $('#btnnext').show();
-      dbName = 'baser';
-      port = '';
-      $('#InstallationDbPrefix').val('');
-    } else if (dbType.val() == 'csv') {
-      $('#dbHost').hide(500);
-      $('#dbUser').hide(500);
-      $('#dbInfo').hide(500);
-      $('#checkdb').hide();
-      $('#btnnext').removeAttr("disabled");
-      $('#btnnext').show();
-      dbName = 'baser';
-      port = '';
-      $('#InstallationDbPrefix').val('');
-    } else {
-      $('#dbHost').show(500);
-      $('#dbUser').show(500);
-      $('#dbInfo').show(500);
-      $('#checkdb').show();
-      $('#btnnext').hide();
-    }
-    if (!$('#InstallationDbHost').val()) {
-      $('#InstallationDbHost').val(host);
-    }
-    if (!$('#InstallationDbDBName').val()) {
-      $('#InstallationDbDBName').val(dbName);
-    }
-    if (!$('#InstallationDbPort').val()) {
-      $('#InstallationDbPort').val(port);
-    }
-    if (!$('#InstallationDbPrefix').val()) {
-      $('#InstallationDbPrefix').val(prefix);
-    }
-
-  }
-</script>
-
-<?php echo $this->BcAdminForm->create(null, ['url' => ['controller' => 'installations', 'action' => 'step3'], 'id' => 'dbsettings', 'name' => 'dbsettings']) ?>
+<?php echo $this->BcAdminForm->create(null, ['url' => ['controller' => 'installations', 'action' => 'step3'], 'id' => 'DbSettingForm']) ?>
+<?php echo $this->BcAdminForm->control('mode', ['style' => 'display:none', 'type' => 'hidden', 'id' => 'mode']); ?>
+<?php $this->BcAdminForm->unlockField('mode') ?>
 
 <div class="step-3">
 
   <div class="em-box bca-em-box">
-    <?php echo __d('baser', 'データベースサーバーの場合は、データベースの接続情報を入力し接続テストを実行してください。<br>MySQL / PostgreSQLの場合は、データベースが存在し初期化されている必要があります。<br><strong>既に用意したデータベースにデータが存在する場合は、初期データで上書きされてしまうので注意してください。<br>プレフィックスを活用しましょう。</strong>') ?>
+    <?php echo __d('baser', 'データベースサーバーの場合は、データベースの接続情報を入力し接続テストを実行してください。<br>MySQL / PostgreSQLの場合は、データベースが存在し初期化されている必要があります。<br><strong>既に用意したデータベースにデータが存在する場合は、初期データで上書きされてしまうので注意してください。</strong>') ?>
   </div>
+
   <h2 class="bca-main__heading"><?php echo __d('baser', 'データベース設定') ?></h2>
+
   <div class="panel-box bca-panel-box corner10">
     <div class="section">
+
       <h3 class="bca-panel-box__title"><?php echo __d('baser', '接続情報') ?></h3>
+
       <ul>
-        <li id="dbType"> <?php echo $this->BcAdminForm->label('Installation.dbType', __d('baser', 'データベースタイプ')); ?>
-          <?php echo $this->BcAdminForm->control('Installation.dbType', ['type' => 'select', 'options' => $dbsource]) ?>
+        <li id="liDbType">
+          <?php echo $this->BcAdminForm->label('dbType', __d('baser', 'データベースタイプ')); ?>
+          <?php echo $this->BcAdminForm->control('dbType', ['type' => 'select', 'options' => $dbsource, 'id' => 'dbType']) ?>
           <br>
           <small>※ <?php echo __d('baser', 'MySQL・PostgreSQL・SQLiteの中で、このサーバーで利用できるものが表示されています。') ?></small>
         </li>
-        <li id="dbHost"> <?php echo $this->BcAdminForm->label('Installation.dbHost', __d('baser', 'データベースホスト名')); ?>
-          <?php echo $this->BcAdminForm->control('Installation.dbHost', ['type' => 'text', 'maxlength' => '300', 'size' => 45]); ?> </li>
-        <li id="dbUser" class="clearfix">
+        <li id="liDbHost">
+          <?php echo $this->BcAdminForm->label('dbHost', __d('baser', 'データベースホスト名')); ?>
+          <?php echo $this->BcAdminForm->control('dbHost', ['type' => 'text', 'maxlength' => '300', 'size' => 45, 'id' => 'dbHost']); ?>
+        </li>
+        <li id="liDbUser" class="clearfix">
           <label><?php echo __d('baser', 'ログイン情報') ?></label>
-          <div
-            class="float-left"> <?php echo $this->BcAdminForm->control('Installation.dbUsername', ['type' => 'text', 'maxlength' => '100']); ?>
-            <br/>
+          <div class="float-left">
+            <?php echo $this->BcAdminForm->control('dbUsername', ['type' => 'text', 'maxlength' => '100', 'id' => 'dbUserName']); ?>
+            <br>
             <small><?php echo __d('baser', 'ユーザー名') ?></small></div>
-          <div
-            class="float-left"> <?php echo $this->BcAdminForm->control('Installation.dbPassword', ['type' => 'text', 'maxlength' => '100', 'type' => 'password']); ?>
-            <br/>
+          <div class="float-left">
+            <?php echo $this->BcAdminForm->control('dbPassword', ['type' => 'password', 'maxlength' => '100', 'id' => 'dbPassword']); ?>
+            <br>
             <small><?php echo __d('baser', 'パスワード') ?></small></div>
         </li>
-        <li id="dbInfo" class="clearfix">
+        <li id="liDbInfo" class="clearfix">
           <label><?php echo __d('baser', 'データベース情報') ?></label>
-          <div
-            class="float-left"> <?php echo $this->BcAdminForm->control('Installation.dbName', ['type' => 'text', 'maxlength' => '100']); ?>
-            <br/>
-            <small><?php echo __d('baser', 'データベース名') ?></small></div>
-          <div
-            class="float-left"> <?php echo $this->BcAdminForm->control('Installation.dbPrefix', ['type' => 'text', 'size' => '10']); ?>
-            <br/>
-            <small><?php echo __d('baser', 'プレフィックス') ?></small></div>
-          <div
-            class="float-left"> <?php echo $this->BcAdminForm->control('Installation.dbPort', ['type' => 'text', 'maxlength' => '5', 'size' => 5]); ?>
-            <br/>
-            <small><?php echo __d('baser', 'ポート') ?></small></div>
-          <?php echo $this->BcAdminForm->control('buttonclicked', ['style' => 'display:none', 'type' => 'hidden']); ?>
-          <br style="clear:both"/><br/>
+          <div class="float-left">
+            <?php echo $this->BcAdminForm->control('dbName', ['type' => 'text', 'maxlength' => '100', 'id' => 'dbName']); ?>
+            <br>
+            <small><?php echo __d('baser', 'データベース名') ?></small>
+          </div>
+          <div class="float-left">
+            <?php echo $this->BcAdminForm->control('dbPrefix', ['type' => 'text', 'size' => '10', 'id' => 'dbPrefix']); ?>
+            <br>
+            <small><?php echo __d('baser', 'プレフィックス') ?></small>
+          </div>
+          <div class="float-left">
+            <?php echo $this->BcAdminForm->control('dbPort', ['type' => 'text', 'maxlength' => '5', 'size' => 5, 'id' => 'dbPort']); ?>
+            <br>
+            <small><?php echo __d('baser', 'ポート') ?></small>
+          </div>
+          <br style="clear:both"/><br>
           <small>※ <?php echo __d('baser', 'プレフィックスは英数字とアンダースコアの組み合わせとし末尾はアンダースコアにしてください。<br />※ ホスト名、データベース名、ポートは実際の環境に合わせて書き換えてください。') ?></small>
         </li>
       </ul>
     </div>
+
+  </div>
+  <div class="panel-box bca-panel-box corner10">
 
     <div class="section">
       <h3 class="bca-panel-box__title"><?php echo __d('baser', 'オプション') ?></h3>
 
       <ul>
         <li><label><?php echo __d('baser', 'フロントテーマと初期データ') ?></label>
-          <p
-            class="bca-main__text"><?php echo __d('baser', '利用するフロント側のデザインテーマと、コアパッケージやデザインテーマが保有するデモンストレーション用データを選択します。') ?></p>
-          <?php echo $this->BcAdminForm->control('Installation.dbDataPattern', ['type' => 'select', 'options' => $dbDataPatterns]) ?>
+          <p class="bca-main__text">
+            <?php echo __d('baser', '利用するフロント側のデザインテーマと、コアパッケージやデザインテーマが保有するデモンストレーション用データを選択します。') ?>
+          </p>
+          <?php echo $this->BcAdminForm->control('dbDataPattern', ['type' => 'select', 'options' => $dbDataPatterns, 'id' => 'dbDataPattern']) ?>
           <br>
           <small>
-            <?php if (isset($dbDataPatterns[$this->request->getData('Installation.dbDataPattern')])): ?>
-            ※ <?php echo sprintf(__d('baser', '初めてインストールされる方は、%s を選択してください。'), $dbDataPatterns[$this->request->getData('Installation.dbDataPattern')]) ?></small>
+            <?php if (isset($dbDataPatterns[$this->request->getData('dbDataPattern')])): ?>
+            ※ <?php echo sprintf(__d('baser', '初めてインストールされる方は、%s を選択してください。'), $dbDataPatterns[$this->request->getData('dbDataPattern')]) ?></small>
         <?php endif; ?>
         </li>
       </ul>
@@ -242,12 +121,29 @@ $this->BcBaser->i18nScript([
   </div>
 
   <div class="submit bca-actions">
-    <?php echo $this->BcAdminForm->button(__d('baser', '戻る'), ['type' => 'button', 'class' => 'button bca-btn bca-actions__item', 'id' => 'btnback']) ?>
-    <?php echo $this->BcAdminForm->button(__d('baser', '接続テスト'), ['type' => 'button', 'class' => 'btn-orange button bca-btn bca-actions__item', 'id' => 'checkdb', 'data-bca-btn-type' => 'save']) ?>
-    <?php if (!isset($blDBSettingsOK) || !$blDBSettingsOK): ?>
-      <?php echo $this->BcAdminForm->button(__d('baser', '次のステップへ'), ['type' => 'button', 'class' => 'button bca-btn bca-actions__item', 'id' => 'btnnext', 'name' => 'btnnext', 'disabled' => 'disabled']) ?>
+    <?php echo $this->BcAdminForm->button(__d('baser', '戻る'), ['type' => 'button', 'class' => 'button bca-btn bca-actions__item', 'id' => 'BtnBack']) ?>
+    <?php if (!$blDBSettingsOK): ?>
+    <?php echo $this->BcAdminForm->button(__d('baser', '接続テスト'), [
+      'type' => 'button',
+      'class' => 'btn-orange button bca-btn bca-actions__item',
+      'id' => 'BtnCheckDb',
+      'data-bca-btn-size' => 'lg',
+      'data-bca-btn-width' => 'lg',
+      'data-bca-btn-type' => 'save']) ?>
+      <?php echo $this->BcAdminForm->button(__d('baser', '次のステップへ'), [
+        'type' => 'button',
+        'class' => 'button bca-btn bca-actions__item',
+        'id' => 'BtnNext',
+        'disabled' => 'disabled'
+      ]) ?>
     <?php else: ?>
-      <?php echo $this->BcAdminForm->button(__d('baser', '次のステップへ'), ['type' => 'button', 'class' => 'button bca-btn bca-actions__item', 'id' => 'btnnext', 'name' => 'btnnext', 'data-bca-btn-type' => 'save']) ?>
+      <?php echo $this->BcAdminForm->button(__d('baser', '次のステップへ'), [
+        'type' => 'button',
+        'class' => 'button bca-btn bca-actions__item',
+        'id' => 'BtnNext',
+        'data-bca-btn-size' => 'lg',
+        'data-bca-btn-width' => 'lg',
+        'data-bca-btn-type' => 'save']) ?>
     <?php endif ?>
   </div>
 

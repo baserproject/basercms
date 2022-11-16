@@ -25,7 +25,6 @@ use Cake\Cache\Cache;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Datasource\EntityInterface;
-use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
 use Cake\Http\Client;
 use Cake\ORM\TableRegistry;
@@ -46,7 +45,7 @@ class ThemesService implements ThemesServiceInterface
 
     /**
      * 単一データ取得
-     * 
+     *
      * @param string $theme
      * @return EntityInterface
      * @checked
@@ -61,7 +60,7 @@ class ThemesService implements ThemesServiceInterface
 
     /**
      * 一覧データ取得
-     * 
+     *
      * @checked
      * @noTodo
      * @unitTest
@@ -88,10 +87,10 @@ class ThemesService implements ThemesServiceInterface
      */
     public function getDefaultDataPatterns($theme = '', $options = [])
     {
-        if (!$theme) $theme = Configure::read('BcApp.defaultFrontTheme');
+        if (!$theme) $theme = Inflector::camelize(Configure::read('BcApp.defaultFrontTheme'), '-');
         $options = array_merge(['useTitle' => true], $options);
         $dataPath = dirname(BcUtil::getDefaultDataPath($theme));
-
+        if(!$dataPath) return [];
         if ($theme !== Inflector::camelize(Configure::read('BcApp.defaultFrontTheme'), '-') &&
             $dataPath === dirname(BcUtil::getDefaultDataPath())) {
             return [];
@@ -103,10 +102,14 @@ class ThemesService implements ThemesServiceInterface
         if ($files[0]) {
             foreach($files[0] as $pattern) {
                 if ($options['useTitle']) {
-                    $pluginsTable = TableRegistry::getTableLocator()->get('BaserCore.Plugins');
-                    $themeRecord = $pluginsTable->getPluginConfig($theme);
-                    if ($themeRecord && $themeRecord->title) {
-                        $title = $themeRecord->title;
+                    if(BcUtil::isInstalled()) {
+                        $pluginsTable = TableRegistry::getTableLocator()->get('BaserCore.Plugins');
+                        $themeRecord = $pluginsTable->getPluginConfig($theme);
+                        if ($themeRecord && $themeRecord->title) {
+                            $title = $themeRecord->title;
+                        } else {
+                            $title = $theme;
+                        }
                     } else {
                         $title = $theme;
                     }
@@ -122,7 +125,7 @@ class ThemesService implements ThemesServiceInterface
 
     /**
      * 新しいテーマをアップロードする
-     * 
+     *
      * @param UploadedFile[] $postData
      * @checked
      * @noTodo
@@ -167,7 +170,7 @@ class ThemesService implements ThemesServiceInterface
 
     /**
      * テーマを適用する
-     * 
+     *
      * @param string $theme
      * @return array 適用完了後に表示するメッセージ
      * @checked
@@ -195,7 +198,7 @@ class ThemesService implements ThemesServiceInterface
 
     /**
      * 現在のテーマのプラグインを無効化する
-     * 
+     *
      * @checked
      * @unitTest
      * @noTodo
@@ -214,7 +217,7 @@ class ThemesService implements ThemesServiceInterface
 
     /**
      * 指定したテーマが梱包するプラグイン情報を取得
-     * 
+     *
      * @param string $theme
      * @return array|string[]
      * @checked
@@ -240,7 +243,7 @@ class ThemesService implements ThemesServiceInterface
 
     /**
      * テーマが初期データを保有している場合の情報を取得
-     * 
+     *
      * @param string $theme
      * @param array $info
      * @return array|mixed|string[]
@@ -263,7 +266,7 @@ class ThemesService implements ThemesServiceInterface
 
     /**
      * テーマが梱包するプラグインをインストールする
-     * 
+     *
      * @param string $theme
      * @throws \Exception
      * @checked
@@ -285,7 +288,7 @@ class ThemesService implements ThemesServiceInterface
 
     /**
      * 初期データを読み込む
-     * 
+     *
      * @param string $currentTheme
      * @param string $dbDataPattern
      * @return bool
@@ -336,7 +339,7 @@ class ThemesService implements ThemesServiceInterface
 
     /**
      * コピーする
-     * 
+     *
      * @checked
      * @noTodo
      * @unitTest
@@ -363,7 +366,7 @@ class ThemesService implements ThemesServiceInterface
 
     /**
      * 削除する
-     * 
+     *
      * @param string $theme
      * @checked
      * @noTodo
@@ -382,7 +385,7 @@ class ThemesService implements ThemesServiceInterface
 
     /**
      * baserマーケットのテーマ一覧を取得する
-     * 
+     *
      * @checked
      * @noTodo
      * @unitTest
@@ -417,7 +420,7 @@ class ThemesService implements ThemesServiceInterface
 
     /**
      * 指定したテーマをダウンロード用のテーマとして一時フォルダに作成する
-     * 
+     *
      * @param string $theme
      * @return string
      * @checked
@@ -440,7 +443,7 @@ class ThemesService implements ThemesServiceInterface
 
     /**
      * 現在のDB内のデータをダウンロード用のCSVとして一時フォルダに作成する
-     * 
+     *
      * @return string
      * @checked
      * @noTodo
@@ -474,7 +477,7 @@ class ThemesService implements ThemesServiceInterface
 
     /**
      * site_configs テーブルにて、 CSVに出力しないフィールドを空にする
-     * 
+     *
      * @param string $path
      * @return bool
      * @checked

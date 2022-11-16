@@ -157,7 +157,6 @@ if ($fullBaseUrl) {
 unset($fullBaseUrl);
 
 Cache::setConfig(Configure::consume('Cache'));
-ConnectionManager::setConfig(Configure::consume('Datasources'));
 TransportFactory::setConfig(Configure::consume('EmailTransport'));
 Mailer::setConfig(Configure::consume('Email'));
 Log::setConfig(Configure::consume('Log'));
@@ -213,3 +212,8 @@ ServerRequest::addDetector('tablet', function ($request) {
 //Inflector::rules('irregular', ['red' => 'redlings']);
 //Inflector::rules('uninflected', ['dontinflectme']);
 //Inflector::rules('transliteration', ['/å/' => 'aa']);
+
+if(file_exists(CONFIG . 'install.php')) {
+    Configure::load('install');
+    ConnectionManager::setConfig(Configure::consume('Datasources'));
+}

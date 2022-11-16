@@ -69,6 +69,7 @@ class BcContentsHelper extends Helper
     public function initialize(array $config): void
     {
         parent::initialize($config);
+        if(!BcUtil::isInstalled()) return;
         $this->_Contents = TableRegistry::getTableLocator()->get('BaserCore.Contents');
         $this->PermissionsService = $this->getService(PermissionsServiceInterface::class);
         $this->ContentsService = $this->getService(ContentsServiceInterface::class);

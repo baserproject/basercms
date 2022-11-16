@@ -40,7 +40,7 @@ return [
      */
     'Datasources' => [
         'default' => [
-            'host' => 'bc5-db',
+            'host' => '',
             /*
              * CakePHP will use the default DB port based on the driver selected
              * MySQL on MAMP uses port 8889, MAMP users will want to uncomment
@@ -48,9 +48,9 @@ return [
              */
             //'port' => 'non_standard_port_number',
 
-            'username' => 'root',
-            'password' => 'root',
-            'database' => 'basercms',
+            'username' => '',
+            'password' => '',
+            'database' => '',
             /*
              * If not using the default 'public' schema with the PostgreSQL driver
              * set it here.
@@ -68,11 +68,11 @@ return [
          * The test connection is used during the test suite.
          */
         'test' => [
-            'host' => 'bc5-db',
+            'host' => '',
             //'port' => 'non_standard_port_number',
-            'username' => 'root',
-            'password' => 'root',
-            'database' => 'test_basercms',
+            'username' => '',
+            'password' => '',
+            'database' => '',
             //'schema' => 'myapp',
             'url' => env('DATABASE_TEST_URL', null),
         ],

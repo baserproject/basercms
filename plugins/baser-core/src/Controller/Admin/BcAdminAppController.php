@@ -51,6 +51,8 @@ class BcAdminAppController extends BcAppController
     {
         parent::initialize();
 
+        if(!BcUtil::isInstalled()) return;
+
         $this->loadComponent('Authentication.Authentication', [
             'logoutRedirect' => Router::url(Configure::read('BcPrefixAuth.Admin.loginAction'), true),
         ]);
@@ -83,6 +85,9 @@ class BcAdminAppController extends BcAppController
     public function beforeFilter(EventInterface $event)
     {
         parent::beforeFilter($event);
+
+        if(!BcUtil::isInstalled()) return;
+
         $user = BcUtil::loginUser();
         /* @var PermissionsServiceInterface $permission */
         $permission = $this->getService(PermissionsServiceInterface::class);

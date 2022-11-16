@@ -77,7 +77,7 @@
                     alert('APIトークンが取得できませんでした。ブラウザをリロードしてください。')
                 }
             }.bind(this)).fail(function(error){
-                if (error.response.status === 401) {
+                if (error.status === 401) {
                     localStorage.setItem('refreshToken', '')
                 }
             })

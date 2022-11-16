@@ -69,6 +69,7 @@ class BcUploadHelper  extends Helper
     public function initialize(array $config): void
     {
         parent::initialize($config);
+        if(!BcUtil::isInstalled()) return;
         $this->siteConfigService = $this->getService(SiteConfigsServiceInterface::class);
     }
 

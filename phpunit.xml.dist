@@ -21,6 +21,9 @@
         <testsuite name="BcContentLink">
             <directory>plugins/bc-content-link/tests/TestCase</directory>
         </testsuite>
+        <testsuite name="BcInstaller">
+            <directory>plugins/bc-installer/tests/TestCase</directory>
+        </testsuite>
     </testsuites>
     <extensions>
         <extension class="Cake\TestSuite\Fixture\PHPUnitExtension"/>

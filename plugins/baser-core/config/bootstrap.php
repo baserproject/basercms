@@ -51,24 +51,12 @@ require __DIR__ . DS . 'paths.php';
 // require BASER . DS . 'src' . DS . 'basics.php';
 // <<<
 
-// TODO ucmitz dockerに依存しているため、インストーラー実装後に見直し
-// ユニットテストの setUp() で状態を書き換える事ができるようにするため、config/setting.php にはキーは記述しないようにする。
-if(is_null(Configure::read('BcRequest.isInstalled'))) {
-    Configure::write('BcRequest.isInstalled', file_exists(ROOT . DS . 'docker_inited'));
-}
-
 /**
  * 文字コードの検出順を指定
  */
 if (function_exists('mb_detect_order')) {
     mb_detect_order(Configure::read('BcEncode.detectOrder'));
 }
-
-/**
- * コンソール判定
- * BcUtil::isConsole で利用
- */
-$_ENV['IS_CONSOLE'] = (substr(php_sapi_name(), 0, 3) === 'cli');
 
 /**
  * fullBaseUrl

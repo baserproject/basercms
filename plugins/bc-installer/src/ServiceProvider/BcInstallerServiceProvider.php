@@ -14,6 +14,8 @@ namespace BcInstaller\ServiceProvider;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use BcInstaller\Service\Admin\InstallationsAdminService;
+use BcInstaller\Service\Admin\InstallationsAdminServiceInterface;
 use BcInstaller\Service\InstallationsService;
 use BcInstaller\Service\InstallationsServiceInterface;
 use Cake\Core\ServiceProvider;
@@ -29,7 +31,8 @@ class BcInstallerServiceProvider extends ServiceProvider
      * @var string[]
      */
     protected $provides = [
-        InstallationsServiceInterface::class
+        InstallationsServiceInterface::class,
+        InstallationsAdminServiceInterface::class
     ];
 
     /**
@@ -43,6 +46,7 @@ class BcInstallerServiceProvider extends ServiceProvider
         $container->defaultToShared(true);
         // Installations サービス
         $container->add(InstallationsServiceInterface::class, InstallationsService::class);
+        $container->add(InstallationsAdminServiceInterface::class, InstallationsAdminService::class);
     }
 
 }
