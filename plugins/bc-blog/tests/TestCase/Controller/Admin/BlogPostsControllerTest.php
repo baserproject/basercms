@@ -16,6 +16,7 @@ namespace BcBlog\Test\TestCase\Controller\Admin;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcBlog\Controller\Admin\BlogPostsController;
+use BcBlog\Test\Scenario\BlogContentScenario;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -43,6 +44,7 @@ class BlogPostsControllerTest extends BcTestCase
         'plugin.BaserCore.Factory/UsersUserGroups',
         'plugin.BaserCore.Factory/UserGroups',
         'plugin.BcBlog.Factory/BlogPosts',
+        'plugin.BaserCore.Factory/Contents',
     ];
 
     /**
@@ -99,7 +101,16 @@ class BlogPostsControllerTest extends BcTestCase
      */
     public function testAdd()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $this->loadFixtureScenario(BlogContentScenario::class, 1, 1, null, 'test', '/');
+        $this->post('/baser/admin/bc-blog/blog_posts/add/1', ['blog_content_id' => 2, 'title' => 'test']);
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('記事「test」を追加しました。');
+        $this->assertRedirect(['action' => 'edit/1/1']);
+
+        $this->post('/baser/admin/bc-blog/blog_posts/add/1', ['blog_content_id' => 2, 'title' => '']);
+        $this->assertFlashMessage('入力エラーです。内容を修正してください。');
     }
 
     /**
