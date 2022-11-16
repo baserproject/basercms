@@ -12,7 +12,7 @@
  * ユニットテスト用のインストール設定ファイル
  */
 return [
-    'Security.salt' => '0AjCJRJdl3i3caMm5WKDWSLUDXJZQhDSMEmQQF78',
+    'Security.salt' => 'af0aa6bb8bad3bf5f9a39e928c645745cc008d67d82ac4edd16ec17e99539725',
     'Datasources.default' => [
         'className' => 'Cake\\Database\\Connection',
         'driver' => 'Cake\\Database\\Driver\\Mysql',
