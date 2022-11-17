@@ -11,7 +11,7 @@ return;
  * @license       https://basercms.net/license/index.html MIT License
  */
 
-namespace BcInstaller\Test\TestCase\Service\Admin;
+//namespace BcInstaller\Test\TestCase\Service\Admin;
 
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
