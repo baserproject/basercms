@@ -38,6 +38,15 @@ class InstallationsServiceTest extends BcTestCase
     }
 
     /**
+     * tear down
+     */
+    public function tearDown(): void
+    {
+        parent::tearDown();
+        unset($this->Installations);
+    }
+
+    /**
      * 環境チェック
      *
      * @return array
