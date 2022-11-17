@@ -15,19 +15,6 @@ use Cake\Event\EventInterface;
 
 /**
  * お問い合わせメールフォーム用コントローラー
- *
- * @package Mail.Controller
- * @property MailMessage $MailMessage
- * @property MailContent $MailContent
- * @property MailField $MailField
- * @property MailConfig $MailConfig
- * @property BcAuthComponent $BcAuth
- * @property CookieComponent $Cookie
- * @property BcAuthConfigureComponent $BcAuthConfigure
- * @property BcEmailComponent $BcEmail
- * @property BcCaptchaComponent $BcCaptcha
- * @property SecurityComponent $Security
- * @property BcContentsComponent $BcContents
  */
 class MailController extends MailAppController
 {
