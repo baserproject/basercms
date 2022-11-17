@@ -11,6 +11,9 @@
 
 namespace BcMail\Model\Table;
 
+use Cake\Core\Plugin;
+use Cake\Validation\Validator;
+
 /**
  * メールコンテンツモデル
  *
@@ -43,15 +46,39 @@ class MailContentsTable extends MailAppTable
     ]];
 
     /**
-     * MailContent constructor.
+     * Initialize
      *
-     * @param bool $id
-     * @param null $table
-     * @param null $ds
+     * @param array $config テーブル設定
+     * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function __construct($id = false, $table = null, $ds = null)
+    public function initialize(array $config): void
     {
-        parent::__construct($id, $table, $ds);
+        parent::initialize($config);
+
+        $this->setTable('mail_contents');
+        $this->setPrimaryKey('id');
+
+        $this->addBehavior('Timestamp');
+        $this->addBehavior('BaserCore.BcContents');
+        if (Plugin::isLoaded('BcSearchIndex')) {
+            $this->addBehavior('BcSearchIndex.BcSearchIndexManager');
+        }
+    }
+
+    /**
+     * Validation Default
+     *
+     * @param Validator $validator
+     * @return Validator
+     */
+    public function validationDefault(Validator $validator): Validator
+    {
+        // TODO ucmitz 未実装
+        return $validator;
+
         $this->validate = [
             'id' => [
                 [
@@ -171,35 +198,15 @@ class MailContentsTable extends MailAppTable
     }
 
     /**
-     * フォームの初期値を取得する
-     *
-     * @return array
-     */
-    public function getDefaultValue()
-    {
-        return [
-            'MailContent' => [
-                'sender_name' => __d('baser', '送信先名を入力してください'),
-                'subject_user' => __d('baser', 'お問い合わせ頂きありがとうございます'),
-                'subject_admin' => __d('baser', 'お問い合わせを頂きました'),
-                'layout_template' => 'default',
-                'form_template' => 'default',
-                'mail_template' => 'mail_default',
-                'use_description' => true,
-                'auth_captcha' => false,
-                'ssl_on' => false,
-                'save_info' => true
-            ]
-        ];
-    }
-
-    /**
      * afterSave
      *
      * @return void
      */
     public function afterSave($created, $options = [])
     {
+        // TODO ucmitz 未実装
+        return;
+
         // 検索用テーブルへの登録・削除
         if (!$this->data['Content']['exclude_search'] && $this->data['Content']['status']) {
             $this->saveSearchIndex($this->createSearchIndex($this->data));

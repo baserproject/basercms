@@ -11,124 +11,31 @@
 
 namespace BcMail\Controller\Admin;
 
+use BaserCore\Controller\Admin\BcAdminAppController;
 use BaserCore\Utility\BcUtil;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
 
 /**
  * メールコンテンツコントローラー
- *
- * @package Mail.Controller
- * @property MailMessage $MailMessage
- * @property MailContent $MailContent
- * @property BcAuthComponent $BcAuth
- * @property CookieComponent $Cookie
- * @property BcAuthConfigureComponent $BcAuthConfigure
- * @property BcContentsComponent $BcContents
- * @property Content $Content
  */
-class MailContentsController extends MailAppController
+class MailContentsController extends BcAdminAppController
 {
 
     /**
-     * コンポーネント
-     *
-     * @var array
-     */
-    public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure', 'BcContents' => ['useForm' => true]];
-
-    /**
-     * [ADMIN] メールフォーム一覧
-     *
+     * initialize
      * @return void
+     * @checked
+     * @noTodo
      */
-    public function admin_index()
+    public function initialize(): void
     {
-        $listDatas = $this->MailContent->find('all');
-        $this->set('listDatas', $listDatas);
-        $this->subMenuElements = ['mail_common'];
-        $this->setTitle(__d('baser', 'メールフォーム一覧'));
-        $this->setHelp('mail_contents_index');
-    }
-
-    /**
-     * メールフォーム登録
-     *
-     * @return mixed json|false
-     */
-    public function admin_ajax_add()
-    {
-        $this->autoRender = false;
-        if (!$this->request->getData()) {
-            $this->ajaxError(500, __d('baser', '無効な処理です。'));
-        }
-        $this->request = $this->request->withData('MailContent',  $this->MailContent->getDefaultValue()['MailContent']);
-        $data = $this->MailContent->save($this->request->getData());
-        if (!$data) {
-            $this->ajaxError(500, $this->MailContent->validationErrors);
-            return false;
-        }
-        $this->MailMessage->createTable($data['MailContent']['id']);
-        $this->BcMessage->setSuccess(
-            sprintf(
-                __d('baser', 'メールフォーム「%s」を追加しました。'),
-                $this->request->getData('Content.title')
-            ),
-            true,
-            false
-        );
-        return json_encode($data['Content']);
-    }
-
-    /**
-     * [ADMIN] メールフォーム追加
-     *
-     * @return void
-     */
-    public function admin_add()
-    {
-        $this->setTitle(__d('baser', '新規メールフォーム登録'));
-        $this->subMenuElements = ['mail_common'];
-        $this->setHelp('mail_contents_form');
-
-        if (!$this->request->getData()) {
-            $this->request = $this->request->withParsedBody($this->MailContent->getDefaultValue());
-            $this->render('form');
-            return;
-        }
-
-        /* 登録処理 */
-        if (!$this->request->getData('MailContent.sender_1_')) {
-            $this->request = $this->request->withData('MailContent.sender_1',  '');
-        }
-        $this->MailContent->create($this->request->getData());
-        if (!$this->MailContent->validates()) {
-            $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
-            $this->render('form');
-            return;
-        }
-
-        if (!$this->MailMessage->createTable($this->request->getData('MailContent.id'))) {
-            $this->BcMessage->setError(
-                __d('baser', 'データベースに問題があります。メール受信データ保存用テーブルの作成に失敗しました。')
-            );
-            $this->render('form');
-            return;
-        }
-
-        /* データを保存 */
-        if (!$this->MailContent->save(null, false)) {
-            $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。'));
-            $this->render('form');
-            return;
-        }
-
-        $this->BcMessage->setSuccess(
-            sprintf(
-                __d('baser', '新規メールフォーム「%s」を追加しました。'),
-                $this->request->getData('MailContent.title')
-            )
-        );
-        $this->redirect(['action' => 'edit', $this->MailContent->id]);
-        $this->render('form');
+        parent::initialize();
+        $this->loadComponent('BaserCore.BcAdminContents', [
+            'entityVarName' => 'blogContent',
+            'useForm' => true
+        ]);
     }
 
     /**
@@ -137,9 +44,8 @@ class MailContentsController extends MailAppController
      * @param int ID
      * @return void
      */
-    public function admin_edit($id)
+    public function edit($id)
     {
-
         if (!$id && empty($this->request->getData())) {
             $this->BcMessage->setError(__d('baser', '無効なIDです。'));
             $this->redirect(
@@ -222,7 +128,7 @@ class MailContentsController extends MailAppController
      *
      * @return bool
      */
-    public function admin_delete()
+    public function delete()
     {
         if (empty($this->request->getData('entityId'))) {
             return false;
@@ -330,34 +236,4 @@ class MailContentsController extends MailAppController
         }
     }
 
-    /**
-     * コピー
-     *
-     * @return bool
-     */
-    public function admin_ajax_copy()
-    {
-        $this->autoRender = false;
-        if (!$this->request->getData()) {
-            $this->ajaxError(500, __d('baser', '無効な処理です。'));
-        }
-        $user = $this->BcAuth->user();
-        $data = $this->MailContent->copy(
-            $this->request->getData('entityId'),
-            $this->request->getData('parentId'),
-            $this->request->getData('title'),
-            $user['id'],
-            $this->request->getData('siteId')
-        );
-        if (!$data) {
-            $this->ajaxError(500, $this->MailContent->validationErrors);
-            return false;
-        }
-        $message = sprintf(
-            __d('baser', 'メールフォームのコピー「%s」を追加しました。'),
-            $this->request->getData('title')
-        );
-        $this->BcMessage->setSuccess($message, true, false);
-        return json_encode($data['Content']);
-    }
 }

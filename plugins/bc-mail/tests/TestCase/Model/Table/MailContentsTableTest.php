@@ -206,14 +206,6 @@ class MailContentTest extends BaserTestCase
     }
 
     /**
-     * フォームの初期値を取得する
-     */
-    public function testGetDefaultValue()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
-    /**
      * afterSave
      *
      * @param boolean $exclude_search

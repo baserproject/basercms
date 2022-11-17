@@ -73,4 +73,5 @@ session_id('cli');
     ['plugin' => 'BcSearchIndex'],
     ['plugin' => 'BcContentLink'],
     ['plugin' => 'BcInstaller'],
+    ['plugin' => 'BcMail'],
 ]);

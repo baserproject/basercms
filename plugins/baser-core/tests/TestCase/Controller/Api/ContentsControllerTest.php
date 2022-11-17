@@ -298,7 +298,7 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
         BlogContentFactory::make(['id' => 31, 'description' => ''])->persist();
         $this->patch("/baser/api/baser-core/contents/rename.json?token=" . $this->accessToken);
         $this->assertResponseFailure();
-        $data = ['id' => 1, 'title' => 'testRename'];
+        $data = ['id' => 6, 'title' => 'testRename'];
         $this->patch("/baser/api/baser-core/contents/rename.json?token=" . $this->accessToken, $data);
         $this->assertResponseOk();
         $this->assertStringContainsString('testRename', json_decode($this->_response->getBody())->message);
@@ -422,11 +422,11 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
         // unpublish
         $data = [
             'batch' => 'unpublish',
-            'batch_targets' => [1],
+            'batch_targets' => [6],
         ];
         $this->post('/baser/api/baser-core/contents/batch.json?token=' . $this->accessToken, $data);
         $this->assertResponseSuccess();
-        $content = $this->ContentsService->get(1);
+        $content = $this->ContentsService->get(6);
         $this->assertFalse($content->status);
     }
 
@@ -442,11 +442,11 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
         // publish
         $data = [
             'batch' => 'publish',
-            'batch_targets' => [4],
+            'batch_targets' => [6],
         ];
         $this->post('/baser/api/baser-core/contents/batch.json?token=' . $this->accessToken, $data);
         $this->assertResponseSuccess();
-        $content = $this->ContentsService->get(4);
+        $content = $this->ContentsService->get(6);
         $this->assertTrue($content->status);
     }
 

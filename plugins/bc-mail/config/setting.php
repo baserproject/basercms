@@ -43,28 +43,22 @@ return [
                     'icon' => 'bca-icon--mail',
                     'routes' => [
                         'manage' => [
-                            'admin' => true,
-                            'plugin' => 'mail',
-                            'controller' => 'mail_fields',
+                            'prefix' => 'Admin',
+                            'plugin' => 'BcMail',
+                            'controller' => 'MailFields',
                             'action' => 'index'
                         ],
                         'add' => [
-                            'admin' => true,
-                            'plugin' => 'mail',
-                            'controller' => 'mail_contents',
-                            'action' => 'ajax_add'
+                            'prefix' => 'Api',
+                            'plugin' => 'BcMail',
+                            'controller' => 'MailContents',
+                            'action' => 'add'
                         ],
                         'edit' => [
-                            'admin' => true,
-                            'plugin' => 'mail',
-                            'controller' => 'mail_contents',
+                            'prefix' => 'Admin',
+                            'plugin' => 'BcMail',
+                            'controller' => 'MailContents',
                             'action' => 'edit'
-                        ],
-                        'delete' => [
-                            'admin' => true,
-                            'plugin' => 'mail',
-                            'controller' => 'mail_contents',
-                            'action' => 'delete'
                         ],
                         'view' => [
                             'plugin' => 'mail',
@@ -72,10 +66,10 @@ return [
                             'action' => 'index'
                         ],
                         'copy' => [
-                            'admin' => true,
-                            'plugin' => 'mail',
-                            'controller' => 'mail_contents',
-                            'action' => 'ajax_copy'
+                            'prefix' => 'Api',
+                            'plugin' => 'BcMail',
+                            'controller' => 'MailContents',
+                            'action' => 'copy'
                         ]
                     ]
                 ]

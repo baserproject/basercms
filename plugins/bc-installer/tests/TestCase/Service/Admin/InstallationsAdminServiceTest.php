@@ -1,4 +1,6 @@
 <?php
+return;
+
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
