@@ -1637,6 +1637,10 @@ class BcAppController extends Controller
 	 */
 	public function dispatchEvent($name, $params = [], $options = [])
 	{
+		$dbg = debug_backtrace();
+		if(!empty($dbg[1]['function']) && $dbg[1]['function'] == 'invokeArgs') {
+			$this->notFound();
+		}
 		$options = array_merge([
 			'modParams' => 0,
 			'plugin' => $this->plugin,
