@@ -50,6 +50,7 @@ class ContentsServiceTest extends BcTestCase
         'plugin.BaserCore.UserGroups',
         'plugin.BaserCore.UsersUserGroups',
         'plugin.BaserCore.SiteConfigs',
+        'plugin.BaserCore.MailContents',
         'plugin.BaserCore.Factory/Pages',
         'plugin.BcBlog.Factory/BlogContents',
     ];

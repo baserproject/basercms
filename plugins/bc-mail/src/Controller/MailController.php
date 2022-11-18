@@ -9,14 +9,15 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
-namespace BcMail\Controller\Admin;
+namespace BcMail\Controller;
 
+use BaserCore\Controller\BcFrontAppController;
 use Cake\Event\EventInterface;
 
 /**
  * お問い合わせメールフォーム用コントローラー
  */
-class MailController extends MailAppController
+class MailController extends BcFrontAppController
 {
 
     /**

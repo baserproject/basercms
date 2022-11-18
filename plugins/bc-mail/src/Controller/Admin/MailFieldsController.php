@@ -11,6 +11,7 @@
 
 namespace BcMail\Controller\Admin;
 
+use BaserCore\Controller\Admin\BcAdminAppController;
 use Cake\Event\EventInterface;
 
 /**
@@ -22,7 +23,7 @@ use Cake\Event\EventInterface;
  * @property MailContent $MailContent
  * @property MailMessage $MailMessage
  */
-class MailFieldsController extends MailAppController
+class MailFieldsController extends BcAdminAppController
 {
 
     /**

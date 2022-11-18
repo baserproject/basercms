@@ -11,6 +11,7 @@
 
 namespace BcMail\Controller\Admin;
 
+use BaserCore\Controller\Admin\BcAdminAppController;
 use Cake\Event\EventInterface;
 
 /**
@@ -18,7 +19,7 @@ use Cake\Event\EventInterface;
  *
  * @package Mail.Controller
  */
-class MailMessagesController extends MailAppController
+class MailMessagesController extends BcAdminAppController
 {
 
     /**
