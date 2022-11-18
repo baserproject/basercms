@@ -54,9 +54,6 @@ class BcContentsRoute extends Route
         $publish = true;
         if ((!empty($request->getQuery('preview')) || !empty($request->getQuery('force'))) && BcUtil::loginUser()) {
             $publish = false;
-            if (!empty($request->getQuery('host'))) {
-                Configure::write('BcEnv.host', $request->getQuery('host'));
-            }
         }
 
         $sameUrl = false;
