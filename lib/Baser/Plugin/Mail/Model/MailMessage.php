@@ -218,6 +218,18 @@ class MailMessage extends MailAppModel
 						'rule' => '/^([0-9]+)$/',
 						'message' => __('半角数字で入力してください。')
 					];
+					// 半角数字とハイフン
+				} elseif ($mailField['valid'] === '/^(|[0-9\-]+)$/') {
+					$this->validate[$mailField['field_name']] = [
+						'rule' => '/^(|[0-9\-]+)$/',
+						'message' => '半角数字とハイフンのみで入力してください。'
+					];
+					// 半角数字とハイフン（入力必須）
+				} elseif ($mailField['valid'] === '/^([0-9\-]+)$/') {
+					$this->validate[$mailField['field_name']] = [
+						'rule' => '/^([0-9\-]+)$/',
+						'message' => __('半角数字とハイフンのみで入力してください。')
+					];
 				} else {
 					$this->validate[$mailField['field_name']] = $mailField['valid'];
 				}
