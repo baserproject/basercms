@@ -365,6 +365,7 @@ class BcTestCase extends TestCase
 
     /**
      * private・protectedプロパティの値を取得する
+     *
      * @param object $class
      * @param string $property
      * @return mixed

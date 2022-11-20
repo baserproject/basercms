@@ -32,6 +32,9 @@ class BlogController extends BlogFrontAppController
 
     /**
      * initialize
+     *
+     * コンポーネントをロードする
+     *
      * @return void
      * @checked
      * @unitTest

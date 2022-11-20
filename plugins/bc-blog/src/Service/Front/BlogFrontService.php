@@ -45,6 +45,9 @@ class BlogFrontService implements BlogFrontServiceInterface
 
     /**
      * Constructor
+     *
+     * サービスクラスを初期化する
+     *
      * @checked
      * @noTodo
      */
@@ -357,6 +360,8 @@ class BlogFrontService implements BlogFrontServiceInterface
     /**
      * アーカイブページ用のテンプレート名を取得する
      *
+     * ブログコンテンツの設定に依存する
+     *
      * @param BlogContent $blogContent
      * @return string
      * @checked
@@ -368,7 +373,9 @@ class BlogFrontService implements BlogFrontServiceInterface
     }
 
     /**
-     * 詳細ページ用のテンプレート名を取得する
+     * ブログ詳細ページ用のテンプレート名を取得する
+     *
+     * ブログコンテンツの設定に依存する
      *
      * @param BlogContent $blogContent
      * @return string

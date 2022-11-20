@@ -48,6 +48,9 @@ class BcFrontContentsComponent extends Component
     /**
      * Initialize
      *
+     * 設定の初期化を行う
+     * - `isContentsPage`: 対象コンテンツのページかどうか
+     *
      * @param array $config
      * @return void
      * @checked

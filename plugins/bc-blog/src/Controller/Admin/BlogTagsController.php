@@ -73,7 +73,7 @@ class BlogTagsController extends BlogAdminAppController
     }
 
     /**
-     * [ADMIN] ブログタグ登録
+     * [ADMIN] ブログタグを登録する
      *
      * ブロブのタグを登録する。
      * 登録に成功した場合、タグの一覧へリダイレクトする。
