@@ -41,7 +41,7 @@ class BlogPostsController extends BlogAdminAppController
     /**
      * initialize
      *
-     * ブログ記事に関する処理の初期化を行う
+     * コンテンツ管理用のコンポーネントをロードする。
      *
      * @return void
      * @checked
