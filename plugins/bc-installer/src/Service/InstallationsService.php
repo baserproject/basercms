@@ -16,6 +16,7 @@ use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\BcPlugin;
 use BaserCore\Error\BcException;
+use BaserCore\Model\Entity\SiteConfig;
 use BaserCore\Service\BcDatabaseService;
 use BaserCore\Service\BcDatabaseServiceInterface;
 use BaserCore\Service\SiteConfigsServiceInterface;
@@ -225,12 +226,12 @@ class InstallationsService implements InstallationsServiceInterface
      * サイト基本設定に管理用メールアドレスを登録する
      *
      * @param string $email
-     * @return bool
+     * @return SiteConfig|false
      * @checked
      * @noTodo
      * @unitTest ラッパーメソッドのためユニットテスト不要
      */
-    public function setAdminEmail(string $email): bool
+    public function setAdminEmail(string $email)
     {
         /* @var \BaserCore\Service\SiteConfigsService $siteConfigsService */
         $siteConfigsService = $this->getService(SiteConfigsServiceInterface::class);
