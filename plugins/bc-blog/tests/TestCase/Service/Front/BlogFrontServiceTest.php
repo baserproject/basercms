@@ -75,6 +75,14 @@ class BlogFrontServiceTest extends BcTestCase
 
 
     /**
+     * test __construct
+     */
+    public function test__construct()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
      * test getViewVarsForIndex
      */
     public function test_getViewVarsForIndex()
@@ -164,5 +172,21 @@ class BlogFrontServiceTest extends BcTestCase
         $BlogContentsService = new BlogContentsService();
         $rs = $this->BlogFrontService->getIndexTemplate($BlogContentsService->get(1));
         $this->assertEquals($rs, 'Blog/template-1/index');
+    }
+
+    /**
+     * test getSingleTemplate
+     */
+    public function test_getSingleTemplate()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * test getArchivesTemplate
+     */
+    public function test_getArchivesTemplate()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
 }
