@@ -189,4 +189,44 @@ class BlogFrontServiceTest extends BcTestCase
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
+
+    /**
+     * test getViewVarsForSingle
+     */
+    public function test_getViewVarsForSingle()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * test getViewVarsForArchivesByTag
+     */
+    public function test_getViewVarsForArchivesByTag()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * test getViewVarsForArchivesByDate
+     */
+    public function test_getViewVarsForArchivesByDate()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * test getViewVarsForArchivesByCategory
+     */
+    public function test_getViewVarsForArchivesByCategory()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * test getViewVarsForArchivesByAuthor
+     */
+    public function test_getViewVarsForArchivesByAuthor()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
 }
