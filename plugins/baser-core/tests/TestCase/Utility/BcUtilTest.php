@@ -1261,4 +1261,21 @@ class BcUtilTest extends BcTestCase
         $this->assertMatchesRegularExpression('/\//', BcUtil::fullUrl(null));
     }
 
+    /**
+     * test isMigrations
+     */
+    public function testIsMigrations()
+    {
+        //正常場合のテスト
+        $_ENV['IS_CONSOLE'] = true;
+        $_SERVER['argv'][1] = 'migrations';
+        $result = BcUtil::isMigrations();
+        $this->assertTrue($result);
+
+        //異常場合のテスト
+        $_ENV['IS_CONSOLE'] = false;
+        $_SERVER['argv'][1] = null;
+        $result = BcUtil::isMigrations();
+        $this->assertFalse($result);
+    }
 }
