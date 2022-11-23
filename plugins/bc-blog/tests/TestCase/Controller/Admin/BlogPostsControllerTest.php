@@ -17,7 +17,10 @@ use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Factory\SiteConfigFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcContainerTrait;
 use BcBlog\Controller\Admin\BlogPostsController;
+use BcBlog\Service\BlogPostsServiceInterface;
+use BcBlog\Test\Factory\BlogContentFactory;
 use BcBlog\Test\Factory\BlogPostFactory;
 use BcBlog\Test\Scenario\BlogContentScenario;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -35,6 +38,7 @@ class BlogPostsControllerTest extends BcTestCase
      * Trait
      */
     use ScenarioAwareTrait;
+    use BcContainerTrait;
     use IntegrationTestTrait;
 
     /**
@@ -198,7 +202,54 @@ class BlogPostsControllerTest extends BcTestCase
      */
     public function testCopy()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        //データを作成
+        SiteConfigFactory::make(['name' => 'content_types', 'value' => ''])->persist();
+        ContentFactory::make(['plugin' => 'BcBlog', 'type' => 'BlogContent', 'entity_id' => 1])->persist();
+        BlogPostFactory::make(
+            [
+                'id' => '1',
+                'blog_content_id' => '1',
+                'no' => '1',
+                'name' => 'ホームページをオープンしました',
+                'title' => 'test',
+                'content' => 'content test',
+                'detail' => 'detail test',
+                'blog_category_id' => '1',
+                'user_id' => '1',
+                'status' => '1',
+                'posts_date' => '2015-01-27 12:57:59',
+                'content_draft' => '',
+                'detail_draft' => '',
+                'publish_begin' => null,
+                'publish_end' => null,
+                'exclude_search' => 0,
+                'eye_catch' => 'template1.jpg',
+                'created' => '2015-01-27 12:56:53',
+                'modified' => '2015-01-27 12:57:59'
+            ]
+        )->persist();
+        BlogPostFactory::make(['id' => 2])->persist();
+
+        //実行成功のテスト
+        $this->post('/baser/admin/bc-blog/blog_posts/copy/1/1');
+        // ステータスを確認
+        $this->assertResponseCode(302);
+        // メッセージを確認
+        $this->assertFlashMessage('ブログ記事「test」をコピーしました。');
+        // リダイレクトを確認
+        $this->assertRedirect(['action' => 'index', 1]);
+        // データのコピーを確認
+        $BlogPostsService = $this->getService(BlogPostsServiceInterface::class);
+        $copyBlogPost = $BlogPostsService->getIndex(['title' => 'test_copy'])->first();
+        $this->assertEquals($copyBlogPost->content, 'content test');
+
+        //実行失敗のテスト　存在しないBlogPostIDを利用
+        $this->post('/baser/admin/bc-blog/blog_posts/copy/1/2');
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('入力エラーです。内容を修正してください。');
+        $this->assertRedirect(['action' => 'index', 1]);
     }
 
 }
