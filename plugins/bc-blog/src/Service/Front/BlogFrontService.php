@@ -50,6 +50,7 @@ class BlogFrontService implements BlogFrontServiceInterface
      *
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function __construct()
     {
