@@ -28,6 +28,10 @@ class BlogCommentsService implements BlogCommentsServiceInterface
 
     /**
      * ブログコメントを初期化する
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function __construct()
     {
