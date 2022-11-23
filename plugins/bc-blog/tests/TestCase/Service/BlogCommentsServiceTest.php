@@ -73,7 +73,16 @@ class BlogCommentsServiceTest extends BcTestCase
      */
     public function testGetIndex()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loadFixtureScenario(BlogCommentsServiceScenario::class);
+
+        // ブログコメント一覧データを取得できるテスト
+        $query = $this->BlogCommentsService->getIndex(['blog_post_id' => 1, 'num' => 2]);
+        $this->assertCount(2, $query->toArray());
+        $this->assertEquals(1, $query->toArray()[0]['blog_post']['id']);
+
+        // ブログコメント一覧データを取得できないテスト
+        $query = $this->BlogCommentsService->getIndex(['blog_post_id' => 9, 'num' => 2]);
+        $this->assertEmpty($query->toArray());
     }
 
     /**
