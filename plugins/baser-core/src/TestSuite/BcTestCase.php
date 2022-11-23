@@ -372,6 +372,7 @@ class BcTestCase extends TestCase
      * @throws \ReflectionException
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function getPrivateProperty(object $class, string $property)
     {

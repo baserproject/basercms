@@ -27,6 +27,7 @@ use Cake\View\View;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use Cake\Filesystem\File;
 
 /**
  * BaserCore\TestSuite\BcTestCase
@@ -275,5 +276,39 @@ class BcTestCaseTest extends BcTestCase
             ->getSchemaCollection()
             ->listTables();
         $this->assertNotContains($table, $tableList);
+    }
+
+    /**
+     * test getPrivateProperty
+     */
+    public function testGetPrivateProperty()
+    {
+        $className = 'DummyClass';
+        $filePath = TMP . $className . '.php';
+        $file = new File($filePath, true);
+        // DummyClassファイルを作成する
+        $file->write("<?php
+class $className
+{
+    private \$privateVar;
+    protected \$protectedVar;
+    public function __construct(string \$privateVar = '', string \$protectedVar = '')
+    {
+        \$this->privateVar = \$privateVar;
+        \$this->protectedVar = \$protectedVar;
+    }
+}");
+        require_once $filePath;
+        // private・protectedプロパティの初期値を設定する
+        $dummyClass = new $className('private variable', 'protected variable');
+
+        // privateプロパティ値をget
+        $this->assertEquals('private variable', $this->getPrivateProperty($dummyClass, 'privateVar'));
+
+        // protectedプロパティ値をget
+        $this->assertEquals('protected variable', $this->getPrivateProperty($dummyClass, 'protectedVar'));
+
+        // 作成したファイルを削除する
+        $file->delete();
     }
 }
