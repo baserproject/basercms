@@ -51,6 +51,7 @@ class ContentLinksController extends BcFrontAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function view(ContentLinksServiceInterface $service)
     {
