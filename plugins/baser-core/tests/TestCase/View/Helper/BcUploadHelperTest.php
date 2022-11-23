@@ -192,4 +192,14 @@ class BcUploadHelperTest extends BcTestCase
         $this->assertNotEmpty($this->getPrivateProperty($this->BcUpload, 'table'));
     }
 
+    /**
+     * test setTable
+     */
+    public function testSetTable()
+    {
+        $this->BcUpload->setTable('contents');
+        // テーブルがセットされたかどうか確認する
+        $this->assertEquals('contents', $this->getPrivateProperty($this->BcUpload, 'table')->getTable());
+    }
+
 }

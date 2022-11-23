@@ -514,6 +514,7 @@ class BcUploadHelper  extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function setTable($tableName)
     {
