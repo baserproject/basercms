@@ -13,6 +13,7 @@ namespace BcBlog\Test\TestCase\Service;
 
 use BaserCore\TestSuite\BcTestCase;
 use BcBlog\Service\BlogCommentsService;
+use BcBlog\Test\Scenario\BlogCommentsServiceScenario;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -107,7 +108,15 @@ class BlogCommentsServiceTest extends BcTestCase
      */
     public function testDelete()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loadFixtureScenario(BlogCommentsServiceScenario::class);
+        $count = $this->BlogCommentsService->getIndex(['blog_post_id' => 1])->count();
+
+        // ブログコメントを削除するテスト
+        $comment = $this->BlogCommentsService->delete(1);
+        $this->assertTrue($comment);
+
+        // 削除が成功ならコメント数が１単位減る
+        $this->assertEquals($count - 1, $this->BlogCommentsService->getIndex(['blog_post_id' => 1])->count());
     }
 
     /**

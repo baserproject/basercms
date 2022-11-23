@@ -107,6 +107,7 @@ class BlogCommentsService implements BlogCommentsServiceInterface
      * @return bool
      * @noTodo
      * @checked
+     * @unitTest
      */
     public function delete(int $id)
     {
