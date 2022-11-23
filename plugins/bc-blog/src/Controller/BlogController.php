@@ -37,6 +37,7 @@ class BlogController extends BlogFrontAppController
      *
      * @return void
      * @checked
+     * @noTodo
      * @unitTest
      */
     public function initialize(): void

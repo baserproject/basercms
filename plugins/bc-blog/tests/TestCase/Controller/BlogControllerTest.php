@@ -1,6 +1,4 @@
 <?php
-// TODO : コード確認要
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
@@ -12,15 +10,17 @@ return;
  * @license         https://basercms.net/license/index.html
  */
 
-App::uses('BlogController', 'BcBlog.Controller');
+namespace BcBlog\Test\TestCase\Controller;
+
+use BaserCore\TestSuite\BcTestCase;
+use BcBlog\Controller\BlogController;
 
 /**
  * Class BlogControllerTest
  *
- * @package Blog.Test.Case.Controller
  * @property  BlogController $BlogController
  */
-class BlogControllerTest extends BaserTestCase
+class BlogControllerTest extends BcTestCase
 {
 
     /**
@@ -28,7 +28,7 @@ class BlogControllerTest extends BaserTestCase
      *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
     }
@@ -38,9 +38,21 @@ class BlogControllerTest extends BaserTestCase
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
+    }
+
+    /**
+     * test initialize
+     */
+    public function testInitialize()
+    {
+        $this->BlogController = new BlogController($this->getRequest());
+        // コンポーネント設定を確認するテスト
+        $this->assertNotEmpty($this->BlogController->BcFrontContents);
+        // configを確認するテスト
+        $this->assertFalse($this->BlogController->BcFrontContents->getConfig('isContentsPage'));
     }
 
     /**
@@ -147,4 +159,5 @@ class BlogControllerTest extends BaserTestCase
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
+
 }
