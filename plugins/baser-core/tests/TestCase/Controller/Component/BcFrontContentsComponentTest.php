@@ -68,6 +68,24 @@ class BcFrontContentsComponentTest extends BcTestCase
     }
 
     /**
+     * test initialize
+     */
+    public function testInitialize()
+    {
+        // isContentsPageが設定されないとtrueになる
+        $this->BcFrontContents->initialize([]);
+        $this->assertTrue($this->BcFrontContents->getConfig('isContentsPage'));
+
+        // isContentsPageが設定されると設定値の通りになる
+        $this->BcFrontContents->initialize(['isContentsPage' => false]);
+        $this->assertFalse($this->BcFrontContents->getConfig('isContentsPage'));
+
+        // isContentsPageの以外の設定をテスト
+        $this->BcFrontContents->initialize(['configKey' => 'configValue']);
+        $this->assertEquals('configValue', $this->BcFrontContents->getConfig('configKey'));
+    }
+
+    /**
      * testSetupFront
      * コントローラーがPagesControllerの場合
      * ※ NOTE ucmitz: プレビュー時のテスト未完了

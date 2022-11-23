@@ -54,6 +54,8 @@ class BcFrontContentsComponent extends Component
      * @param array $config
      * @return void
      * @checked
+     * @noTodo
+     * @unitTest
      */
     public function initialize(array $config): void
     {
