@@ -57,6 +57,7 @@ class ContentLinksController extends BcAdminAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function edit(ContentLinksServiceInterface $service, $id)
     {
