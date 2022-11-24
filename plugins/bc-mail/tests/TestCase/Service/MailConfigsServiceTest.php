@@ -10,7 +10,7 @@ return;
  * @license       https://basercms.net/license/index.html MIT License
  */
 
-namespace BcMail\Test\TestCase\Service;
+//namespace BcMail\Test\TestCase\Service;
 
 use BaserCore\TestSuite\BcTestCase;
 

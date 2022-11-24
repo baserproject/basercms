@@ -13,6 +13,9 @@ namespace BcMail\Model\Table;
 
 use Cake\Core\Plugin;
 use Cake\Validation\Validator;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * メールコンテンツモデル
