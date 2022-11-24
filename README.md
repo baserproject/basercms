@@ -50,3 +50,6 @@ License
 -------
 
 Licensed under the MIT license since version 2.0
+
+
+[オープンソース勉強会：初心者向けGitハンズオン](https://e-ve.event-form.jp/event/38631/basercms001)
