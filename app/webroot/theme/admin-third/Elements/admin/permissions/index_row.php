@@ -39,7 +39,7 @@
 	<td class="bca-table-listup__tbody-td">
 		<?php $this->BcBaser->link($data['Permission']['name'], ['action' => 'edit', $this->request->params['pass'][0], $data['Permission']['id']], ['escape' => true]) ?>
 		<br>
-		<?php echo $data['Permission']['url']; ?>
+		<?php echo h($data['Permission']['url']); ?>
 	</td>
 	<td class="bca-table-listup__tbody-td"><?php echo $this->BcText->arrayValue($data['Permission']['auth'], [0 => '×', 1 => '〇']) ?></td>
 	<?php echo $this->BcListTable->dispatchShowRow($data) ?>

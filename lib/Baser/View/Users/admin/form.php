@@ -99,7 +99,7 @@ $this->BcBaser->js('admin/users/edit', false);
 					<div id="helptextUserGroupId"
 						 class="helptext"> <?php echo sprintf(__d('baser', 'ユーザーグループごとにコンテンツへのアクセス制限をかける場合などには%sより新しいグループを追加しアクセス制限の設定をおこないます。'), $this->BcBaser->getLink(__d('baser', 'ユーザーグループ管理'), ['controller' => 'user_groups', 'action' => 'index'])) ?></div>
 				<?php else: ?>
-					<?php echo $this->BcText->arrayValue($this->request->data['User']['user_group_id'], $userGroups) ?>
+					<?php echo h($this->BcText->arrayValue($this->request->data['User']['user_group_id'], $userGroups)) ?>
 					<?php echo $this->BcForm->input('User.user_group_id', ['type' => 'hidden']) ?>
 				<?php endif ?>
 			</td>
