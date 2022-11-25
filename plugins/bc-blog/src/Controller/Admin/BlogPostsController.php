@@ -104,6 +104,7 @@ class BlogPostsController extends BlogAdminAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function index(BlogPostsAdminServiceInterface $service, int $blogContentId)
     {
