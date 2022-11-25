@@ -69,6 +69,7 @@ class BlogCommentsService implements BlogCommentsServiceInterface
      * @return \Cake\Datasource\EntityInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function get(int $id) {
         return $this->BlogComments->get($id, ['contain' => ['BlogPosts']]);
