@@ -46,6 +46,7 @@ class BlogPostsAdminService extends BlogPostsService implements BlogPostsAdminSe
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getViewVarsForIndex($posts, $request)
     {

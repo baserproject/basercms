@@ -55,7 +55,8 @@ class BcBlogServiceProvider extends ServiceProvider
         BlogPostsServiceInterface::class,
         BlogCommentsServiceInterface::class,
         BlogTagsServiceInterface::class,
-        BlogCommentsAdminServiceInterface::class
+        BlogCommentsAdminServiceInterface::class,
+        BlogPostsAdminServiceInterface::class
     ];
 
     /**

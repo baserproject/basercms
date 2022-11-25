@@ -41,6 +41,7 @@ class BlogContentsAdminServiceTest extends BcTestCase
     public $fixtures = [
         'plugin.BaserCore.Factory/Contents',
         'plugin.BcBlog.Factory/BlogContents',
+        'plugin.BaserCore.Factory/Sites',
     ];
 
     /**
