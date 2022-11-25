@@ -113,6 +113,9 @@ class BlogTagsController extends BlogAdminAppController
      * @param BlogTagsService $service
      * @param int $id タグID
      * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function edit(BlogTagsServiceInterface $service, $id)
     {

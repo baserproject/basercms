@@ -149,7 +149,36 @@ class BlogTagsControllerTest extends BcTestCase
      */
     public function test_edit()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        BlogTagFactory::make(['id' => 1, 'name' => 'test'])->persist();
+
+        //Getで使ったらリダイレクトしない
+        $this->get('/baser/admin/bc-blog/blog_tags/edit/1', ['name' => null]);
+        $this->assertResponseCode(200);
+        $vars = $this->_controller->viewBuilder()->getVars();
+        $this->assertEquals('test', $vars['blogTag']['name']);
+
+        //実行成功場合
+        $this->post('/baser/admin/bc-blog/blog_tags/edit/1', ['name' => 'updated']);
+        //リダイレクトを確認
+        $this->assertResponseCode(302);
+        $this->assertRedirect(['action' => 'index']);
+        //メッセージを確認
+        $this->assertFlashMessage('タグ「updated」を更新しました。');
+
+        //実行失敗場合
+        $this->post('/baser/admin/bc-blog/blog_tags/edit/1', ['name' => null]);
+        $vars = $this->_controller->viewBuilder()->getVars();
+        //メッセージを確認
+        $this->assertEquals(['name' => ['_empty' => "ブログタグを入力してください。"]], $vars['blogTag']->getErrors());
+        //リダイレクトしないを確認
+        $this->assertResponseCode(200);
+
+        //実行失敗場合　存在しないIDを利用
+        $this->post('/baser/admin/bc-blog/blog_tags/edit/11', ['name' => null]);
+        $this->assertResponseCode(404);
     }
 
     /**
