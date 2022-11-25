@@ -69,6 +69,7 @@ class BlogCommentsService implements BlogCommentsServiceInterface
      * @return \Cake\Datasource\EntityInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function get(int $id) {
         return $this->BlogComments->get($id, ['contain' => ['BlogPosts']]);
@@ -97,6 +98,7 @@ class BlogCommentsService implements BlogCommentsServiceInterface
      * @return \Cake\Datasource\EntityInterface|false
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function unpublish(int $id)
     {
@@ -136,6 +138,7 @@ class BlogCommentsService implements BlogCommentsServiceInterface
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function batch(string $method, array $ids): bool
     {

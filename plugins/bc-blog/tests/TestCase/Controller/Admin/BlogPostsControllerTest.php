@@ -101,7 +101,35 @@ class BlogPostsControllerTest extends BcTestCase
      */
     public function testIndex()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        //データを作成
+        $this->loadFixtureScenario(BlogContentScenario::class, 2, 1, null, 'test', '/test');
+        BlogPostFactory::make(['id' => '1', 'blog_content_id' => '2', 'title' => 'blog post'])->persist();
+        BlogPostFactory::make(['id' => '2', 'blog_content_id' => '2', 'title' => 'blog post'])->persist();
+
+        //正常の場合を確認
+        $this->post('/baser/admin/bc-blog/blog_posts/index/2?num=1&page=2');
+        // ステータスを確認
+        $this->assertResponseCode(200);
+
+        //戻り値を確認
+        $vars = $this->_controller->viewBuilder()->getVars();
+        //blogContentが存在するのを確認
+        $this->assertArrayHasKey('blogContent', $vars);
+        //publishLinkを確認
+        $this->assertEquals('https://localhost/test', $vars['publishLink']);
+        //postsが存在するのを確認
+        $this->assertEquals(1, count($vars['posts']));
+        //パラメータクエリを確認
+        $this->assertEquals(1, $this->_controller->getRequest()->getQuery('num'));
+
+        //異常の場合を確認
+        $this->post('/baser/admin/bc-blog/blog_posts/index/2?num=1&page=3');
+        // ステータスを確認
+        $this->assertResponseCode(302);
+        // リダイレクトを確認
+        $this->assertRedirect(['action' => 'index', 2]);
     }
 
     /**

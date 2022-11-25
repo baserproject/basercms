@@ -26,15 +26,16 @@ class BlogCommentsController extends BcApiController
 
     /**
      * ブログコメントのバッチ処理
-     * 
+     *
      * 指定したブログのコメントに対して削除、公開、非公開の処理を一括で行う
-     * 
+     *
      * ### エラー
      * 受け取ったPOSTデータのキー名'batch'が'delete','publish','unpublish'以外の値であれば500エラーを発生させる
      *
      * @param BlogCommentsService $service
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function batch(BlogCommentsServiceInterface $service)
     {
@@ -69,7 +70,7 @@ class BlogCommentsController extends BcApiController
 
     /**
      * [AJAX] ブログコメントを登録する
-     * 
+     *
      * 画像認証を行い認証されればブログのコメントを登録する
      * コメント承認を利用していないブログの場合、公開されているコメント投稿者にアラートを送信する
      *

@@ -308,6 +308,7 @@ class BlogCategoriesTable extends BlogAppTable
      * @param int $blogContentId ブログコンテンツID
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function hasNewCategoryAddablePermission($userGroupId, $blogContentId)
     {

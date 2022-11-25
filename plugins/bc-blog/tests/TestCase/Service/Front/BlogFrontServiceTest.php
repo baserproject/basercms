@@ -21,6 +21,8 @@ use BcBlog\Service\BlogContentsServiceInterface;
 use BcBlog\Service\Front\BlogFrontService;
 use BcBlog\Service\Front\BlogFrontServiceInterface;
 use BcBlog\Test\Factory\BlogContentFactory;
+use BcBlog\Test\Factory\BlogPostFactory;
+use BcBlog\Test\Scenario\BlogContentScenario;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -204,7 +206,49 @@ class BlogFrontServiceTest extends BcTestCase
      */
     public function test_getViewVarsForSingle()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // サービスクラス
+        $BlogContentsService = $this->getService(BlogContentsServiceInterface::class);
+        // データ生成
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(BlogContentScenario::class, 1, 1, null, 'test', '/');
+        BlogPostFactory::make([
+            'id' => 1,
+            'blog_content_id' => 1,
+            'no' => 1,
+            'title' => 'blog post title',
+            'status' => true
+        ])->persist();
+        //リクエストバリューを設定
+        $request = $this->loginAdmin($this->getRequest(), 1);
+        // メソードをコール
+        $rs = $this->BlogFrontService->getViewVarsForSingle(
+            $request->withParam('pass', [1]),
+            $BlogContentsService->get(1),
+            ['blog', 'test']
+        );
+        //戻り値を確認
+        $this->assertEquals($rs['post']['title'], 'blog post title');
+        $this->assertEquals($rs['blogContent']->content->name, 'test');
+        $editLinkExpected = [
+            'prefix' => 'Admin',
+            'plugin' => 'BcBlog',
+            'controller' => 'BlogPosts',
+            'action' => 'edit',
+            1,
+            1
+        ];
+        $this->assertEquals($rs['editLink'], $editLinkExpected);
+        $this->assertTrue($rs['commentUse']);
+        $this->assertTrue($rs['single']);
+        $this->assertEquals($rs['crumbs'], ['blog', 'test']);
+
+        //$noが存在しない場合、
+        $this->expectException('Cake\Http\Exception\NotFoundException');
+        $this->BlogFrontService->getViewVarsForSingle(
+            $this->getRequest(),
+            $BlogContentsService->get(1),
+            ['blog', 'test']
+        );
     }
 
     /**

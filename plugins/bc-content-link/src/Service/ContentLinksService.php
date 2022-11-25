@@ -72,6 +72,7 @@ class ContentLinksService implements ContentLinksServiceInterface
      * @return \Cake\Datasource\EntityInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function create(array $postData)
     {

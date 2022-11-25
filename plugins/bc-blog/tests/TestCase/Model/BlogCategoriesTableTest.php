@@ -12,6 +12,10 @@
 
 namespace BcBlog\Test\TestCase\Model;
 
+use BaserCore\Test\Factory\PermissionFactory;
+use BaserCore\Test\Factory\UserFactory;
+use BaserCore\Test\Factory\UserGroupFactory;
+use BaserCore\Test\Factory\UsersUserGroupFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BcBlog\Model\Table\BlogCategoriesTable;
 use BcBlog\Test\Factory\BlogCategoryFactory;
@@ -25,6 +29,10 @@ class BlogCategoriesTableTest extends BcTestCase
 
     public $fixtures = [
         'plugin.BcBlog.Factory/BlogCategories',
+        'plugin.BaserCore.Factory/Users',
+        'plugin.BaserCore.Factory/UsersUserGroups',
+        'plugin.BaserCore.Factory/UserGroups',
+        'plugin.BaserCore.Factory/Permissions',
     ];
 
     /**
@@ -343,9 +351,43 @@ class BlogCategoriesTableTest extends BcTestCase
      */
     public function testHasNewCategoryAddablePermission()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        //		$result = $this->BlogCategory->hasNewCategoryAddablePermission(2, 99);
+        //データを生成
+
+        //アクセス制限を持っているデータを生成
+        UserFactory::make(['id' => 3])->persist();
+        UserGroupFactory::make(['id' => 3])->persist();
+        UsersUserGroupFactory::make(['id' => 3, 'user_id' => 3, 'user_group_id' => 3])->persist();
+        PermissionFactory::make([
+            'id' => 3,
+            'name' => '新着情報記事管理',
+            'user_group_id' => 3,
+            'url' => '/baser/api/bc-blog/*',
+            'auth' => true,
+            'status' => true
+        ])->persist();
+
+        //アクセス制限を持っていないデータを生成
+        UserFactory::make(['id' => 2])->persist();
+        UserGroupFactory::make(['id' => 2])->persist();
+        UsersUserGroupFactory::make(['id' => 2, 'user_id' => 2, 'user_group_id' => 2])->persist();
+        PermissionFactory::make([
+            'id' => 2,
+            'name' => '新着情報記事管理ブロック',
+            'user_group_id' => 2,
+            'url' => '/baser/api/bc-blog/*',
+            'auth' => false,
+            'status' => true
+        ])->persist();
+
+        BlogCategoryFactory::make(['id' => 1])->persist();
+
+        //アクセス制限を持っている検証
+        $result = $this->BlogCategoriesTable->hasNewCategoryAddablePermission([3], 1);
+        $this->assertTrue($result);
+
+        //アクセス制限を持っていない検証
+        $result = $this->BlogCategoriesTable->hasNewCategoryAddablePermission([2], 1);
+        $this->assertFalse($result);
     }
 
     /**

@@ -271,6 +271,7 @@ class BlogFrontService implements BlogFrontServiceInterface
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getViewVarsForSingle(ServerRequest $request, EntityInterface $blogContent, array $crumbs): array
     {

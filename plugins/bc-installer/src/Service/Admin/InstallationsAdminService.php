@@ -44,6 +44,7 @@ class InstallationsAdminService extends InstallationsService implements Installa
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getViewVarsForStep2(): array
     {
@@ -57,6 +58,7 @@ class InstallationsAdminService extends InstallationsService implements Installa
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getViewVarsForStep3(bool $blDBSettingsOK): array
     {

@@ -113,6 +113,9 @@ class BlogTagsController extends BlogAdminAppController
      * @param BlogTagsService $service
      * @param int $id タグID
      * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function edit(BlogTagsServiceInterface $service, $id)
     {
@@ -144,12 +147,15 @@ class BlogTagsController extends BlogAdminAppController
      * @param BlogTagsService $service
      * @param int $id
      * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function delete(BlogTagsServiceInterface $service, $id)
     {
         $this->request->allowMethod(['post', 'delete']);
-        $blogTag = $service->get($id);
         try {
+            $blogTag = $service->get($id);
             if ($service->delete($id)) {
                 $this->BcMessage->setSuccess(__d('baser', 'ブログタグ「{0}」を削除しました。', $blogTag->name));
             }
