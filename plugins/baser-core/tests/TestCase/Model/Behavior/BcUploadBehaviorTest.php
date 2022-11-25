@@ -11,6 +11,7 @@
 namespace BaserCore\Test\TestCase\Model\Behavior;
 
 use ArrayObject;
+use BaserCore\Utility\BcFileUploader;
 use Cake\ORM\Entity;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
@@ -235,6 +236,47 @@ class BcUploadBehaviorTest extends BcTestCase
     {
         $result = $this->BcUploadBehavior->getOldEntity(1);
         $this->assertEmpty($result->name);
+    }
+
+    /**
+     * test renameToBasenameFields
+     *
+     * @param $filename
+     * @param $copy
+     * @param $fileList
+     * @dataProvider renameToBasenameFieldsDataProvider
+     */
+    public function testRenameToBasenameFields($filename, $copy, $fileList)
+    {
+        $this->getRequest('/baser/admin/');
+        // 初期化
+        $entity = $this->table->get(1);
+        $entity->eyecatch = $filename;
+        $uploader = $this->BcUploadBehavior->getFileUploader();
+        $uploader->setUploadingFiles(['eyecatch' => ['name' => $filename, 'ext' => 'txt']]);
+
+        // ダミーファイルの生成
+        touch($this->savePath . $filename);
+
+        // テスト実行
+        $this->BcUploadBehavior->renameToBasenameFields($entity, $copy);
+        foreach ($fileList as $file) {
+            $this->assertFileExists($path = $this->savePath . $file);
+            @unlink($path);
+        }
+    }
+
+    /**
+     * @return array[]
+     */
+    public function renameToBasenameFieldsDataProvider(): array
+    {
+        return [
+            // copyがfalseの場合、ファイルネームを変更する
+            ['test.txt', false, ['00000001_eyecatch.txt']],
+            // copyがtrueの場合、ファイルをコピーした後ファイルネームを変更する。コピー元ファイルはそのまま残す。
+            ['test.txt', true, ['test.txt', '00000001_eyecatch.txt']],
+        ];
     }
 
 }
