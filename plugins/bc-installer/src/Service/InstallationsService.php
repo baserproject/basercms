@@ -53,6 +53,7 @@ class InstallationsService implements InstallationsServiceInterface
      *
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function __construct()
     {
