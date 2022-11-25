@@ -36,6 +36,7 @@ class MailContentsService implements MailContentsServiceInterface
      *
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function __construct()
     {
