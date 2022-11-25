@@ -114,7 +114,34 @@ class BlogTagsControllerTest extends BcTestCase
      */
     public function test_delete()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        // データ生成
+        BlogTagFactory::make([
+            'id' => '1',
+            'name' => 'test_tag',
+            'created' => '2022-01-27 12:56:53',
+            'modified' => null
+        ])->persist();
+        $this->delete('/baser/admin/bc-blog/blog_tags/delete/1');
+        // ステータスを確認
+        $this->assertResponseCode(302);
+        // メッセージを確認
+        $this->assertFlashMessage('ブログタグ「test_tag」を削除しました。');
+        // リダイレクトを確認
+        $this->assertRedirect([
+            'plugin' => 'BcBlog',
+            'prefix' => 'Admin',
+            'controller' => 'blog_tags',
+            'action' => 'index'
+        ]);
+        // データの削除を確認
+        $this->assertEquals(0, BlogTagFactory::count());
+
+        //失敗テスト
+        $this->delete('/baser/admin/bc-blog/blog_tags/delete/1');
+        $this->assertResponseCode(404);
     }
 
     /**
