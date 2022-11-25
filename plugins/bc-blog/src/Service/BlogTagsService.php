@@ -16,10 +16,13 @@ use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Error\BcException;
 use BcBlog\Model\Entity\BlogTag;
+use BcBlog\Model\Table\BlogTagsTable;
 use Cake\ORM\TableRegistry;
 
 /**
  * BlogTagsService
+ *
+ * @property BlogTagsTable $BlogTags
  */
 class BlogTagsService implements BlogTagsServiceInterface
 {

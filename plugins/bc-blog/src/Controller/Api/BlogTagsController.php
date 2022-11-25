@@ -27,10 +27,13 @@ class BlogTagsController extends BcApiController
 
     /**
      * [ADMIN] ブログタグ登録
-     * 
+     *
      * ブログのタグを登録する
      * ブログタグの登録に失敗した場合、HTTPレスポンスのステータスに400を返します。
-     * 
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function add(BlogTagsServiceInterface $service)
     {
@@ -55,9 +58,9 @@ class BlogTagsController extends BcApiController
 
     /**
      * ブログタグのバッチ処理
-     * 
+     *
      * 指定したブログのコメントに対して削除処理を一括で行う
-     * 
+     *
      * ### エラー
      * delete以外のHTTPメソッドには500エラーを返す
      * 一括処理に失敗すると400エラーを返す
