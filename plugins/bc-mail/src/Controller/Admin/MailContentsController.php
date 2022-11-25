@@ -33,7 +33,7 @@ class MailContentsController extends BcAdminAppController
     {
         parent::initialize();
         $this->loadComponent('BaserCore.BcAdminContents', [
-            'entityVarName' => 'blogContent',
+            'entityVarName' => 'mailContent',
             'useForm' => true
         ]);
     }
