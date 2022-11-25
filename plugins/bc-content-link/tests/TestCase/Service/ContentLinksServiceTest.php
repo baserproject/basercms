@@ -104,7 +104,28 @@ class ContentLinksServiceTest extends BcTestCase
      */
     public function test_create(): void
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $data = [
+            'url' => '/test-create',
+            'content' => [
+                'plugin' => 'BcContentLink',
+                'type' => 'ContentLink',
+                'site_id' => 1,
+                'title' => 'test create link',
+                'lft' => 1,
+                'rght' => 2,
+                'name' => 'test create',
+            ]
+        ];
+        $rs = $this->ContentLinksService->create($data);
+        $this->assertEquals($rs['url'], '/test-create');
+        $this->assertEquals($rs['content']['title'], 'test create link');
+
+        $data = [
+            'url' => '/test-create'
+        ];
+        $this->expectException("Cake\ORM\Exception\PersistenceFailedException");
+        $this->expectExceptionMessage("関連するコンテンツがありません");
+        $this->ContentLinksService->create($data);
     }
 
     /**
