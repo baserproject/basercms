@@ -12,12 +12,70 @@
 namespace BcBlog\Test\TestCase\Service;
 
 use BaserCore\TestSuite\BcTestCase;
+use BcBlog\Service\BlogPostsService;
+use BcBlog\Service\BlogPostsServiceInterface;
 
 /**
  * BlogPostsServiceTest
+ *
+ * @property BlogPostsService $BlogPostsService
  */
 class BlogPostsServiceTest extends BcTestCase
 {
+
+    /**
+     * set up
+     *
+     * @return void
+     */
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->BlogPostsService = $this->getService(BlogPostsServiceInterface::class);
+    }
+
+    /**
+     * tearDown
+     *
+     * @return void
+     */
+    public function tearDown(): void
+    {
+        parent::tearDown();
+    }
+
+    /**
+     * test constructor
+     */
+    public function test__construct()
+    {
+        // テーブルを初期化のテスト
+        $this->assertEquals('blog_posts', $this->BlogPostsService->BlogPosts->getTable());
+    }
+
+    /**
+     * BlogPostsTable のファイルアップロードの設定を実施
+     */
+    public function testSetupUpload()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * 単一データを取得する
+     */
+    public function testGet()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * ブログ記事一覧を取得する
+     */
+    public function testGetIndex()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
 
     /**
      * コントロールソースを取得する
@@ -138,6 +196,14 @@ class BlogPostsServiceTest extends BcTestCase
     }
 
     /**
+     * ページ一覧用の検索条件を生成する
+     */
+    public function testCreateIndexConditions()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
      * 同じタグの関連投稿を取得する
      */
     public function testGetRelatedPosts()
@@ -171,6 +237,142 @@ class BlogPostsServiceTest extends BcTestCase
         $post['BlogPost']['blog_content_id'] = 3;
         $result = $this->Blog->getRelatedPosts($post);
         $this->assertEmpty($result, '関連していない投稿を取得しています');
+    }
+
+    /**
+     * 初期データ用のエンティティを取得
+     */
+    public function testGetNew()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * 新規登録
+     */
+    public function testCreate()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * ブログ記事を更新する
+     */
+    public function testUpdate()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * 公開状態を取得する
+     */
+    public function testAllowPublish()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * コントロールソースを取得する
+     */
+    public function testGetControlSource()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * 記事を公開状態に設定する
+     */
+    public function testPublish()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * 記事を非公開状態に設定する
+     */
+    public function testUnpublish()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * ブログ記事を削除する
+     */
+    public function testDelete()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * ブログ記事をコピーする
+     */
+    public function testCopy()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * IDからタイトルリストを取得する
+     */
+    public function testGetTitlesById()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * 一括処理
+     */
+    public function testBatch()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * カテゴリ別記事一覧を取得
+     */
+    public function testGetIndexByCategory()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * 著者別記事一覧を取得
+     */
+    public function testGetIndexByAuthor()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * タグ別記事一覧を取得
+     */
+    public function testGetIndexByTag()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * 日付別記事一覧を取得
+     */
+    public function testGetIndexByDate()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * 前の記事を取得する
+     */
+    public function testGetPrevPost()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * 次の記事を取得する
+     */
+    public function testGetNextPost()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
 
 }

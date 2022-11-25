@@ -45,6 +45,7 @@ class BlogPostsService implements BlogPostsServiceInterface
      * BlogPosts テーブルを初期化してセットする
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function __construct()
     {
