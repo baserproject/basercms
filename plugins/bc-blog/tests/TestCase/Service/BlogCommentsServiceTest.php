@@ -142,7 +142,30 @@ class BlogCommentsServiceTest extends BcTestCase
      */
     public function testBatch()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loadFixtureScenario(BlogCommentsServiceScenario::class);
+        $ids = [1, 2, 3];
+
+        // 一括でブログコメントを非公開するテスト
+        $result = $this->BlogCommentsService->batch('unpublish', $ids);
+        $this->assertTrue($result);
+        foreach ($ids as $id) {
+            $comment = $this->BlogCommentsService->get($id);
+            $this->assertFalse($comment->status);
+        }
+
+        // 一括でブログコメントを公開するテスト
+        $result = $this->BlogCommentsService->batch('publish', $ids);
+        $this->assertTrue($result);
+        foreach ($ids as $id) {
+            $comment = $this->BlogCommentsService->get($id);
+            $this->assertTrue($comment->status);
+        }
+
+        // 一括でブログコメントを削除するテスト
+        $count = $this->BlogCommentsService->getIndex(['blog_post_id' => 1])->count();
+        $result = $this->BlogCommentsService->batch('delete', $ids);
+        $this->assertTrue($result);
+        $this->assertEquals($count - 3, $this->BlogCommentsService->getIndex(['blog_post_id' => 1])->count());
     }
 
 }
