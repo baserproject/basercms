@@ -98,6 +98,7 @@ class BlogCommentsService implements BlogCommentsServiceInterface
      * @return \Cake\Datasource\EntityInterface|false
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function unpublish(int $id)
     {

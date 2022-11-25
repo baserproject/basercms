@@ -107,7 +107,7 @@ class BlogCommentsServiceTest extends BcTestCase
         $this->loadFixtureScenario(BlogCommentsServiceScenario::class);
 
         $comment = $this->BlogCommentsService->publish(3);
-        $this->assertTrue($comment['status']);
+        $this->assertTrue($comment->status);
     }
 
     /**
@@ -115,7 +115,10 @@ class BlogCommentsServiceTest extends BcTestCase
      */
     public function testUnpublish()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loadFixtureScenario(BlogCommentsServiceScenario::class);
+
+        $comment = $this->BlogCommentsService->unpublish(1);
+        $this->assertFalse($comment->status);
     }
 
     /**
