@@ -87,7 +87,6 @@ $editable = $this->BcContents->isEditable($content);
 <?php echo $this->BcAdminForm->hidden("content.status") ?>
 <?php echo $this->BcAdminForm->hidden("content.main_site_content_id") ?>
 <?php echo $this->BcAdminForm->hidden("content.publish_begin") ?>
-<?php echo $this->BcAdminForm->hidden("content.preview_mode", ['value' => 'default', 'id' => 'ContentPreviewMode']) ?>
 
 
 <div class="bca-section bca-section__post-top">
