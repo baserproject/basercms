@@ -131,7 +131,32 @@ class BlogPostsAdminServiceTest extends BcTestCase
      */
     public function test_getViewVarsForEdit()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // データを作成する
+        BlogPostFactory::make(['id' => 1])->persist();
+        BlogContentFactory::make(['id' => 1])->persist();
+        $this->loadFixtureScenario(InitAppScenario::class);
+
+        // 対象メーソドを実行する
+        /** @var BlogPostsAdminService $service */
+        $service = $this->getService(BlogPostsAdminServiceInterface::class);
+        $request = $this->getRequest('/baser/admin')->withParam('pass.0', 1);
+        $post = BlogPostFactory::get(1);
+        /** @var UsersService $userService */
+        $userService = $this->getService(UsersServiceInterface::class);
+        $user = $userService->get(1);
+        $result = $service->getViewVarsForEdit($request, $post, $user);
+
+        // 戻り値の中身を確認する
+        $this->assertEquals($post, $result['post']);
+        $this->assertEquals(1, $result['blogContent']->id);
+        $this->assertArrayHasKey('editor', $result);
+        $this->assertArrayHasKey('editorOptions', $result);
+        $this->assertArrayHasKey('editorEnterBr', $result);
+        $this->assertArrayHasKey('users', $result);
+        $this->assertArrayHasKey('categories', $result);
+        $this->assertArrayHasKey('hasNewCategoryAddablePermission', $result);
+        $this->assertArrayHasKey('hasNewTagAddablePermission', $result);
+        $this->assertArrayHasKey('publishLink', $result);
     }
 
     /**
