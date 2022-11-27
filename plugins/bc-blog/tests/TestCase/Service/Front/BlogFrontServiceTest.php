@@ -18,10 +18,12 @@ use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
 use BcBlog\Service\BlogContentsServiceInterface;
+use BcBlog\Service\BlogPostsServiceInterface;
 use BcBlog\Service\Front\BlogFrontService;
 use BcBlog\Service\Front\BlogFrontServiceInterface;
 use BcBlog\Test\Factory\BlogContentFactory;
 use BcBlog\Test\Factory\BlogPostFactory;
+use BcBlog\Test\Factory\BlogTagFactory;
 use BcBlog\Test\Scenario\BlogContentScenario;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
@@ -51,6 +53,7 @@ class BlogFrontServiceTest extends BcTestCase
         'plugin.BaserCore.Factory/UserGroups',
         'plugin.BaserCore.Factory/Contents',
         'plugin.BcBlog.Factory/BlogContents',
+        'plugin.BcBlog.Factory/BlogTags',
     ];
 
     /**
@@ -256,7 +259,38 @@ class BlogFrontServiceTest extends BcTestCase
      */
     public function test_getViewVarsForArchivesByTag()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //サービスをコル
+        $blogPostsService = $this->getService(BlogPostsServiceInterface::class);
+        // データ生成
+        $this->loadFixtureScenario(BlogContentScenario::class, 1, 1, null, 'test', '/');
+        BlogContentFactory::make([
+            'id' => 2,
+            'template' => 'template-2',
+            'list_direction' => 'DESC',
+            'tag_use' => true,
+        ])->persist();
+        BlogTagFactory::make([
+            'id' => 1,
+            'name' => 'Archives By Tag',
+        ])->persist();
+
+        // tag string
+        $tag = 'Archives By Tag';
+
+        // BlogContent
+        $blogContent = BlogContentFactory::get(2);
+
+        //サービスメソッドコール
+        $result = $this->BlogFrontService->getViewVarsForArchivesByTag($blogPostsService->getIndex([])->all(), $tag, $blogContent);
+        //戻る値を確認
+        $this->assertEquals(true, isset($result['posts']));
+        $this->assertEquals('tag', $result['blogArchiveType']);
+        $this->assertEquals(true, isset($result['blogTag']));
+
+        //error　存在しないタグを設定する場合、
+        $tag = 'error Archives By Tag'; // tag string
+        $this->expectException('Cake\Http\Exception\NotFoundException');
+        $this->BlogFrontService->getViewVarsForArchivesByTag($blogPostsService->getIndex([])->all(), $tag, $blogContent);
     }
 
     /**

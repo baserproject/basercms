@@ -1,5 +1,4 @@
 <?php
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
@@ -10,12 +9,16 @@ return;
  * @license       https://basercms.net/license/index.html MIT License
  */
 
-//namespace BcMail\Test\TestCase\Service;
+namespace BcMail\Test\TestCase\Service;
 
 use BaserCore\TestSuite\BcTestCase;
+use BcMail\Service\MailContentsService;
+use BcMail\Service\MailContentsServiceInterface;
 
 /**
  * MailContentsServiceTest
+ *
+ * @property MailContentsService $MailContentsService
  */
 class MailContentsServiceTest extends BcTestCase
 {
@@ -26,6 +29,7 @@ class MailContentsServiceTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->MailContentsService = $this->getService(MailContentsServiceInterface::class);
     }
 
     /**
@@ -34,6 +38,31 @@ class MailContentsServiceTest extends BcTestCase
     public function tearDown(): void
     {
         parent::tearDown();
+        unset($this->MailContentsService);
+    }
+
+    /**
+     * test constructor
+     */
+    public function test__construct()
+    {
+        $this->assertEquals('mail_contents', $this->MailContentsService->MailContents->getTable());
+    }
+
+    /**
+     * test getNew
+     */
+    public function test_getNew()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * test create
+     */
+    public function test_create()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
 
 }

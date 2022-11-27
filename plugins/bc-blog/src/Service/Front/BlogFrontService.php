@@ -220,6 +220,7 @@ class BlogFrontService implements BlogFrontServiceInterface
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getViewVarsForArchivesByTag(ResultSet $posts, string $tag, BlogContent $blogContent): array
     {

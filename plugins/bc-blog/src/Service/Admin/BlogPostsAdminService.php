@@ -83,6 +83,7 @@ class BlogPostsAdminService extends BlogPostsService implements BlogPostsAdminSe
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getViewVarsForAdd(ServerRequest $request, EntityInterface $post, EntityInterface $user): array
     {
@@ -121,6 +122,7 @@ class BlogPostsAdminService extends BlogPostsService implements BlogPostsAdminSe
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getViewVarsForEdit(ServerRequest $request, EntityInterface $post, EntityInterface $user): array
     {
