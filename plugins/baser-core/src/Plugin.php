@@ -97,6 +97,7 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
             BcUtil::checkTmpFolders();
         } else {
             $application->addPlugin('BcInstaller');
+            Configure::load('BcInstaller.setting');
         }
 
         /**

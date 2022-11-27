@@ -162,13 +162,13 @@ $this->BcAdmin->setTitle(__d('baser', 'baserCMSのインストール｜ステッ
       <ul class="section">
         <li class='<?php if ($dbDirWritable) echo 'check';
         else echo 'failed'; ?>'>
-          <?php echo __d('baser', '/app/db/ の書き込み権限（707 OR 777 等、サーバー推奨がある場合はそちらに従ってください）') ?><br>
+          <?php echo __d('baser', '{0} の書き込み権限（707 OR 777 等、サーバー推奨がある場合はそちらに従ってください）', $dbDir) ?><br>
           <div class="check-result">
             <?php if ($dbDirWritable): ?>
               <?php echo __d('baser', '書き込み可') ?>
             <?php else: ?>
               <?php echo __d('baser', '書き込み不可') ?><br>
-              <small><?php echo __d('baser', 'SQLite を利用するには、/app/db/ フォルダに書き込み権限が必要です') ?></small>
+              <small><?php echo __d('baser', 'SQLite を利用するには、{0} フォルダに書き込み権限が必要です', $dbDir) ?></small>
             <?php endif ?>
           </div>
         </li>
