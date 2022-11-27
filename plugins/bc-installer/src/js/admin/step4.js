@@ -24,12 +24,6 @@ $(function () {
             } else if ($("#admin-email").val() === "") {
                 alert(bcI18n.message1);
                 result = false;
-            } else if ($("#admin-username").val() === "") {
-                alert(bcI18n.message2);
-                result = false;
-            } else if (!$("#admin-username").val().match(/^[a-zA-Z0-9\-_]+$/)) {
-                alert(bcI18n.message3);
-                result = false;
             } else if ($("#admin-password").val().length < 6) {
                 alert(bcI18n.message4);
                 result = false;

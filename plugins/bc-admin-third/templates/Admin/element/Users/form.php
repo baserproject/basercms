@@ -54,16 +54,6 @@ $this->BcBaser->js('admin/users/form.bundle', false);
       </tr>
     <?php endif ?>
     <tr>
-      <th class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('name', __d('baser', 'アカウント名')) ?>
-        &nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span></th>
-      <td class="col-input bca-form-table__input">
-        <?php echo $this->BcAdminForm->control('name', ['type' => 'text', 'size' => 20, 'maxlength' => 255, 'autofocus' => true]) ?>
-        <i class="bca-icon--question-circle bca-help"></i>
-        <div class="bca-helptext"><?php echo __d('baser', '半角英数字とハイフン、アンダースコアのみで入力してください。') ?></div>
-        <?php echo $this->BcAdminForm->error('name') ?>
-      </td>
-    </tr>
-    <tr>
       <th
         class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('real_name_1', __d('baser', '名前')) ?>
         &nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span></th>
@@ -116,6 +106,20 @@ $this->BcBaser->js('admin/users/form.bundle', false);
           <br><small>※ <?php echo __d('baser', 'パスワードを忘れた場合の新パスワードの通知先等') ?></small>
         </div>
         <?php echo $this->BcAdminForm->error('email') ?>
+      </td>
+    </tr>
+    <tr>
+      <th class="col-head bca-form-table__label">
+        <?php echo $this->BcAdminForm->label('name', __d('baser', 'アカウント名')) ?>
+      </th>
+      <td class="col-input bca-form-table__input">
+        <?php echo $this->BcAdminForm->control('name', ['type' => 'text', 'size' => 20, 'maxlength' => 255, 'autofocus' => true]) ?>
+        <i class="bca-icon--question-circle bca-help"></i>
+        <div class="bca-helptext">
+          <?php echo __d('baser', 'アカウント名を設定するとアカウント名とパスワードでログインできるようになります。') ?>
+          <?php echo __d('baser', '半角英数字とハイフン、アンダースコアのみで入力してください。') ?>
+        </div>
+        <?php echo $this->BcAdminForm->error('name') ?>
       </td>
     </tr>
     <tr>

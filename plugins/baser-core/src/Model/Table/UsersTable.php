@@ -163,8 +163,6 @@ class UsersTable extends Table
         $validator
             ->scalar('name')
             ->maxLength('name', 255, __d('baser', 'アカウント名は255文字以内で入力してください。'))
-            ->requirePresence('name', 'create', __d('baser', 'アカウント名を入力してください。'))
-            ->notEmptyString('name', __d('baser', 'アカウント名を入力してください。'))
             ->add('name', [
                 'nameUnique' => [
                     'rule' => 'validateUnique',

@@ -16,8 +16,6 @@
 $this->BcBaser->i18nScript([
   'message0' => __d('baser', 'サイト名を入力してください。'),
   'message1' => __d('baser', '管理用メールアドレスを入力してください。'),
-  'message2' => __d('baser', 'ユーザー名を入力してください。'),
-  'message3' => __d('baser', 'ユーザー名には半角英数字とハイフン、アンダースコアのみ利用可能です。'),
   'message4' => __d('baser', 'あなたのパスワードを６文字以上で入力してください。'),
   'message5' => __d('baser', 'パスワードが確認欄のパスワードと同じではありません。'),
   'message6' => __d('baser', 'パスワードは半角英数字(英字は大文字小文字を区別)とスペース、記号(._-:/()#,@[]+=&;{}!$*)のみで入力してください。')
@@ -51,10 +49,6 @@ $this->BcBaser->js('BcInstaller.admin/step4.bundle', false);
         </li>
         <li><label><?php echo __d('baser', 'Eメールアドレス') ?></label>
           <?php echo $this->BcAdminForm->control('admin_email', ['type' => 'text', 'size' => 44]); ?>
-        </li>
-        <li>
-          <label><?php echo __d('baser', '管理者アカウント名') ?></label>&nbsp;<small><?php echo __d('baser', '半角英数字（ハイフン、アンダースコア含む）') ?></small><br>
-          <?php echo $this->BcAdminForm->control('admin_username', ['type' => 'text']); ?>
         </li>
         <li class="clearfix">
           <label><?php echo __d('baser', 'パスワード') ?></label>&nbsp;<small><?php echo __d('baser', '半角英数字（英字は大文字小文字を区別）とスペース、記号（._-:/()#,@[]+=&amp;;{}!$*）') ?></small><br>

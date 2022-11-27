@@ -170,6 +170,7 @@ class InstallationsController extends BcAdminAppController
     /**
      * Step 4: データベース生成／管理者ユーザー作成
      *
+     * @param InstallationsAdminService $service
      * @return void
      * @checked
      */
@@ -193,7 +194,6 @@ class InstallationsController extends BcAdminAppController
                     // TODO ucmitz メール送信未実装
 //                    $this->_sendCompleteMail(
 //                        $this->getRequest()->getData('admin_email'),
-//                        $this->getRequest()->getData('admin_username'),
 //                        $this->getRequest()->getData('admin_password')
 //                    );
                     $this->redirect(['action' => 'step5']);
