@@ -332,13 +332,14 @@ class BlogFrontService implements BlogFrontServiceInterface
         // ブログ記事をPOSTデータにより書き換え
         if($controller->getRequest()->getData()) {
             $events = BcUtil::offEvent($this->BlogPostsService->BlogPosts->getEventManager(), 'Model.beforeMarshal');
-            $controller->setRequest($controller->getRequest()->withData('detail', $controller->getRequest()->getData('detail_tmp')));
+            $request = $controller->getRequest();
+            $postArray = $request->getData();
+            if ($request->getQuery('preview') === 'draft') {
+                $postArray['detail'] = $postArray['detail_draft'];
+            }
             $this->BlogPostsService->BlogPosts->patchEntity(
                 $vars['post'],
-                $this->BlogPostsService->BlogPosts->saveTmpFiles(
-                    $controller->getRequest()->getData(),
-                    mt_rand(0, 99999999)
-                )->toArray()
+                $this->BlogPostsService->BlogPosts->saveTmpFiles($postArray, mt_rand(0, 99999999))->toArray()
             );
             BcUtil::onEvent($this->BlogPostsService->BlogPosts->getEventManager(), 'Model.beforeMarshal', $events);
         }
