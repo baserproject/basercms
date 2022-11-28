@@ -407,20 +407,23 @@ class BcCkeditorHelper extends Helper
     public function editor($fieldName, $options = [])
     {
         if (!empty($options['editorUseDraft']) && !empty($options['editorDraftField'])) {
-            $model = null;
-            if(strpos($fieldName, '.') !== false) {
-                [$model] = explode('.', $fieldName);
-            }
             // フィールド名を変更するためセキュリティコンポーネントの対象外とする 2022/10/10 ryuring
             // TODO: 対象外とせずとも送信できるよう検討する
             $this->BcAdminForm->unlockField($fieldName);
             $inputFieldName = $fieldName . '_tmp';
-            $hiddenIdElement = pluginSplit($fieldName);
-            $hiddenId = $hiddenIdElement[0] . Inflector::camelize($hiddenIdElement[1]);
-            $hidden = $this->BcAdminForm->hidden($fieldName, ['id' => $hiddenId]) .
+
+            $model = null;
+            if(strpos($fieldName, '.') !== false) {
+                [$model, $field] = explode('.', $fieldName);
+            } else {
+                $field = $fieldName;
+            }
+            $publishAreaId = Inflector::camelize($model? $model . '_' . $field : $field);
+            $draftAreaId = Inflector::camelize($model? $model . '_' . $options['editorDraftField'] : $options['editorDraftField']);
+            $hidden = $this->BcAdminForm->hidden($fieldName, ['id' => $publishAreaId]) .
                 $this->BcAdminForm->hidden(
                     ($model)? $model . '.' . $options['editorDraftField'] : $options['editorDraftField'],
-                    ['id' => $hiddenIdElement[0] . 'Draft']
+                    ['id' => $draftAreaId]
                 );
         } else {
             $inputFieldName = $fieldName;
