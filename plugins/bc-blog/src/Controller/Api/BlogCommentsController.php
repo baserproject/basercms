@@ -25,6 +25,22 @@ class BlogCommentsController extends BcApiController
 {
 
     /**
+     * [API] ブログコメント一覧取得
+     *
+     * @param BlogCommentsServiceInterface $blogCommentsService
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function index(BlogCommentsServiceInterface $blogCommentsService)
+    {
+        $this->set([
+            'blogComments' => $this->paginate($blogCommentsService->getIndex($this->request->getQueryParams()))
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['blogComments']);
+    }
+
+    /**
      * ブログコメントのバッチ処理
      *
      * 指定したブログのコメントに対して削除、公開、非公開の処理を一括で行う
