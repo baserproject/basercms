@@ -1,6 +1,5 @@
 <?php
-// TODO : コード確認要
-return;
+
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
@@ -12,9 +11,13 @@ return;
  * @license         https://basercms.net/license/index.html
  */
 
-App::uses('MailContentsController', 'BcMail.Controller');
+namespace BcMail\Test\TestCase\Controller\Admin;
 
-class MailContentsControllerTest extends BaserTestCase
+use BaserCore\TestSuite\BcTestCase;
+use BcMail\Controller\Admin\MailContentsController;
+
+class
+MailContentsControllerTest extends BcTestCase
 {
 
     /**
@@ -22,7 +25,7 @@ class MailContentsControllerTest extends BaserTestCase
      *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
     }
@@ -32,37 +35,42 @@ class MailContentsControllerTest extends BaserTestCase
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
     }
 
     /**
-     * [ADMIN] メールフォーム一覧
+     * test initialize
      */
-    public function testAdmin_index()
+    public function test_initialize()
+    {
+        $controller = new MailContentsController($this->getRequest());
+        // コンポーネントが設定されたかどうかを確認する
+        $this->assertNotEmpty($controller->BcAdminContents);
+        // 設定されたconfigを確認する
+        $this->assertEquals('mailContent', $controller->BcAdminContents->getConfig('entityVarName'));
+        $this->assertTrue($controller->BcAdminContents->getConfig('useForm'));
+    }
+
+    /**
+     * test edit
+     */
+    public function test_edit()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
 
     /**
-     * メールフォーム登録
+     * test delete
      */
-    public function testAdmin_ajax_add()
+    public function test_delete()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
 
     /**
-     * [ADMIN] メールフォーム追加
-     */
-    public function testAdmin_add()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
-    /**
-     * [ADMIN] 編集処理
+     * test edit
      */
     public function testAdmin_edit()
     {
@@ -70,36 +78,19 @@ class MailContentsControllerTest extends BaserTestCase
     }
 
     /**
-     * 削除
-     *
-     * Controller::requestAction() で呼び出される
+     * test redirectEditMail
      */
-    public function testAdmin_delete()
+    public function test_redirectEditMail()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
 
     /**
-     * メール編集画面にリダイレクトする
+     * test redirectEditForm
      */
-    public function testRedirectEditMail()
+    public function test_redirectEditForm()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
 
-    /**
-     * メールフォーム編集画面にリダイレクトする
-     */
-    public function testRedirectEditForm()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
-    /**
-     * コピー
-     */
-    public function testAdmin_ajax_copy()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
 }
