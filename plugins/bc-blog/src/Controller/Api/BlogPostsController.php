@@ -24,10 +24,66 @@ class BlogPostsController extends BcApiController
 {
 
     /**
+     * [API] ブログ記事一覧データ取得のAPI実装
+     */
+    public function index()
+    {
+        //todo ブログ記事一覧データ取得のAPI実装
+    }
+
+    /**
+     * [API] ブログ記事単一データ取得のAPI実装
+     */
+    public function view()
+    {
+        //todo ブログ記事単一データ取得のAPI実装
+    }
+
+    /**
+     * [API] ブログ記事新規追加のAPI実装
+     */
+    public function add()
+    {
+        //todo ブログ記事新規追加のAPI実装
+    }
+
+    /**
+     * [API] ブログ記事編集のAPI実装
+     */
+    public function edit()
+    {
+        //todo ブログ記事編集のAPI実装
+    }
+
+    /**
+     * [API] ブログ記事複製のAPI実装
+     */
+    public function copy()
+    {
+        //todo ブログ記事複製のAPI実装
+    }
+
+    /**
+     * [API] ブログ記事を公開状態に設定のAPI実装
+     */
+    public function publish()
+    {
+        //todo ブログ記事を公開状態に設定のAPI実装
+    }
+
+    /**
+     * [API] ブログ記事を非公開状態に設定のAPI実装
+     */
+    public function unpublish()
+    {
+        //todo ブログ記事を非公開状態に設定のAPI実装
+    }
+
+    /**
      * ブログ記事のバッチ処理
-     * 
+     *
      * 指定したブログ記事に対して削除、公開、非公開の処理を一括で行う
-     * 
+     *
      * ### エラー
      * 受け取ったPOSTデータのキー名'batch'が'delete','publish','unpublish'以外の値であれば500エラーを発生させる
      *
