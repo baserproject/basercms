@@ -348,7 +348,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         $siteConfigsService->setValue('email', $options['email']);
         $siteConfigsService->setValue('google_analytics_id', $options['google_analytics_id']);
         $siteConfigsService->setValue('first_access', $options['first_access']);
-        $siteConfigsService->setValue('admin_theme', Inflector::camelize(Inflector::underscore($options['adminTheme'])));
+        $siteConfigsService->setValue('admin_theme', !empty($options['adminTheme'])? Inflector::camelize(Inflector::underscore($options['adminTheme'])) : null);
         $siteConfigsService->setValue('version', $options['version']);
 
         // sites の初期データを設定
