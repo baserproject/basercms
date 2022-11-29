@@ -93,6 +93,28 @@ class BlogCommentsControllerTest extends BcTestCase
     }
 
     /**
+     * test index
+     */
+    public function test_index()
+    {
+        // ５件コメントを作成する
+        BlogCommentFactory::make([], 5)->persist();
+
+        // クエリはトークンの以外で何も設定しない場合、全てのコメントを取得する
+        $this->get('/baser/api/bc-blog/blog_comments/index.json?token=' . $this->accessToken);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        // コメント一覧は全て５件が返す
+        $this->assertCount(5, $result->blogComments);
+
+        // クエリを設定し(limit = 4)、該当の結果が返す
+        $this->get('/baser/api/bc-blog/blog_comments/index.json?limit=4&token=' . $this->accessToken);
+        $result = json_decode((string)$this->_response->getBody());
+        // コメント一覧は４件が返す
+        $this->assertCount(4, $result->blogComments);
+    }
+
+    /**
      * test batch
      */
     public function test_batch()
