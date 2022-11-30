@@ -11,9 +11,11 @@
 
 namespace BcBlog\Test\TestCase\Controller\Api;
 
+use BaserCore\Service\DblogsServiceInterface;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
-use BcBlog\Controller\Admin\BlogTagsController;
+use BcBlog\Controller\Api\BlogTagsController;
+use BcBlog\Test\Factory\BlogTagFactory;
 use Cake\Core\Configure;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use Cake\TestSuite\IntegrationTestTrait;
@@ -106,6 +108,38 @@ class BlogTagsControllerTest extends BcTestCase
         $this->assertResponseCode(400);
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals('入力エラーです。内容を修正してください。', $result->message);
+    }
+
+    /**
+     * test batch
+     */
+    public function testBatch()
+    {
+        // delete以外のHTTPメソッドには500エラーを返す
+        $this->post('/baser/api/bc-blog/blog_tags/batch.json?token=' . $this->accessToken, ['batch' => 'test']);
+        $this->assertResponseCode(500);
+
+        // データを作成する
+        BlogTagFactory::make(['id' => 1, 'name' => 'tag1'])->persist();
+        BlogTagFactory::make(['id' => 2, 'name' => 'tag2'])->persist();
+
+        $data = [
+            'batch' => 'delete',
+            'batch_targets' => [1, 2],
+        ];
+        $this->post('/baser/api/bc-blog/blog_tags/batch.json?token=' . $this->accessToken, $data);
+        // バッチの実行が成功
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        // レスポンスのメッセージを確認する
+        $this->assertEquals('一括処理が完了しました。', $result->message);
+        // DBログに保存するかどうか確認する
+        $dbLogService = $this->getService(DblogsServiceInterface::class);
+        $dbLog = $dbLogService->getDblogs(1)->toArray()[0];
+        $this->assertEquals('ブログタグ「tag1」、「tag2」を 削除 しました。', $dbLog->message);
+        $this->assertEquals(1, $dbLog->id);
+        $this->assertEquals('BlogTags', $dbLog->controller);
+        $this->assertEquals('batch', $dbLog->action);
     }
 
 }
