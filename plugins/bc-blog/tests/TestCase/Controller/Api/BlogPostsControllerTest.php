@@ -14,6 +14,7 @@ namespace BcBlog\Test\TestCase\Controller\Api;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcBlog\Controller\Api\BlogPostsController;
+use BcBlog\Test\Factory\BlogPostFactory;
 use Cake\Core\Configure;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use Cake\TestSuite\IntegrationTestTrait;
@@ -42,6 +43,7 @@ class BlogPostsControllerTest extends BcTestCase
         'plugin.BaserCore.Factory/Users',
         'plugin.BaserCore.Factory/UsersUserGroups',
         'plugin.BaserCore.Factory/UserGroups',
+        'plugin.BcBlog.Factory/BlogPosts',
     ];
 
     /**
@@ -85,7 +87,17 @@ class BlogPostsControllerTest extends BcTestCase
      */
     public function test_index()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを生成
+        BlogPostFactory::make(['blog_content_id' => 1])->persist();
+        BlogPostFactory::make(['blog_content_id' => 2])->persist();
+
+        //APIを呼ぶ
+        $this->get('/baser/api/bc-blog/blog_posts/index/1.json?token=' . $this->accessToken);
+        //responseを確認
+        $this->assertResponseOk();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertCount(2, $result->blogPosts);
     }
 
     /**
