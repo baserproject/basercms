@@ -221,7 +221,42 @@ class BlogPostsControllerTest extends BcTestCase
      */
     public function testPublish()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        // データ生成
+        SiteConfigFactory::make([
+            'name' => 'content_types',
+            'value' => ''
+        ])->persist();
+        $this->loadFixtureScenario(BlogContentScenario::class, 3, 1, null, 'news', '/news');
+        //非公開を設定
+        BlogPostFactory::make([])->unpubish(1,3)->persist();
+
+        // 公開設定コール
+        $this->patch('/baser/admin/bc-blog/blog_posts/publish/3/1');
+        // ステータスを確認
+        $this->assertResponseCode(302);
+        // メッセージを確認
+        $this->assertMatchesRegularExpression('/ブログ記事「.+」を公開状態にしました。/', $_SESSION["Flash"]["flash"][0]["message"]);
+        // リダイレクトを確認
+        $this->assertRedirect([
+            'plugin' => 'BcBlog',
+            'prefix' => 'Admin',
+            'controller' => 'blog_posts',
+            'action' => 'index/3'
+        ]);
+        // データの変更を確認
+        $blogPost = BlogPostFactory::get(1);
+        $this->assertEquals(true, $blogPost['status']);
+        $this->assertEquals(null, $blogPost['publish_begin']);
+        $this->assertEquals(null, $blogPost['publish_end']);
+
+        // テスト失敗確認
+        // 公開設定コール
+        $this->patch('/baser/admin/bc-blog/blog_posts/publish/3/99');
+        // ステータスを確認
+        $this->assertResponseCode(404);
     }
 
     /**
@@ -258,7 +293,7 @@ class BlogPostsControllerTest extends BcTestCase
                 'modified' => '2015-01-27 12:57:59'
             ]
         )->persist();
-        BlogPostFactory::make(['id' => 2])->persist();
+        BlogPostFactory::make(['id' => 2, 'blog_content_id' => null])->persist();
 
         //実行成功のテスト
         $this->post('/baser/admin/bc-blog/blog_posts/copy/1/1');
@@ -273,7 +308,7 @@ class BlogPostsControllerTest extends BcTestCase
         $copyBlogPost = $BlogPostsService->getIndex(['title' => 'test_copy'])->first();
         $this->assertEquals($copyBlogPost->content, 'content test');
 
-        //実行失敗のテスト　存在しないBlogPostIDを利用
+        //実行失敗のテスト　BlogPostコンテンツ準備足りないのを利用
         $this->post('/baser/admin/bc-blog/blog_posts/copy/1/2');
         $this->assertResponseCode(302);
         $this->assertFlashMessage('入力エラーです。内容を修正してください。');

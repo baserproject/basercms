@@ -308,16 +308,17 @@ class BlogPostsController extends BlogAdminAppController
      * @param int $id
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function publish(BlogPostsServiceInterface $service, $blogContentId, $id)
     {
         if ($this->request->is(['patch', 'post', 'put'])) {
-            /* @var BlogPostsService $service */
-            $result = $service->publish($id);
-            if ($result) {
+            try {
+                /* @var BlogPostsService $service */
+                $result = $service->publish($id);
                 $this->BcMessage->setSuccess(sprintf(__d('baser', 'ブログ記事「%s」を公開状態にしました。'), $result->title));
-            } else {
-                $this->BcMessage->setSuccess(__d('baser', 'データベース処理中にエラーが発生しました。'));
+            } catch (BcException $e) {
+                $this->BcMessage->setSuccess(__d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
             }
         }
         return $this->redirect(['action' => 'index', $blogContentId]);
