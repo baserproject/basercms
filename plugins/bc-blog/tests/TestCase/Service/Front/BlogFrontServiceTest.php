@@ -325,7 +325,42 @@ class BlogFrontServiceTest extends BcTestCase
      */
     public function test_getViewVarsForArchivesByDate()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // サービスクラス
+        $blogPostsService = $this->getService(BlogPostsServiceInterface::class);
+
+        // データ生成
+        $this->loadFixtureScenario(BlogContentScenario::class, 1, 1, null, 'test', '/');
+
+        // BlogPost取得
+        $posts = $blogPostsService->getIndex([])->all();
+
+        // 日別
+        $result = $this->BlogFrontService->getViewVarsForArchivesByDate($posts, '2022', '1', '1');
+        $this->assertEquals(true, isset($result['posts']));
+        $this->assertEquals('daily', $result['blogArchiveType']);
+        $this->assertEquals(true, isset($result['year']));
+        $this->assertEquals(true, isset($result['month']));
+        $this->assertEquals(1, $result['day']);
+
+        // 月別
+        $result = $this->BlogFrontService->getViewVarsForArchivesByDate($posts, '2022', '1', '');
+        $this->assertEquals(true, isset($result['posts']));
+        $this->assertEquals('monthly', $result['blogArchiveType']);
+        $this->assertEquals(true, isset($result['year']));
+        $this->assertEquals(1, $result['month']);
+        $this->assertEquals(true, isset($result['day']));
+
+        // 年別
+        $result = $this->BlogFrontService->getViewVarsForArchivesByDate($posts, '2022', '', '');
+        $this->assertEquals(true, isset($result['posts']));
+        $this->assertEquals('yearly', $result['blogArchiveType']);
+        $this->assertEquals(2022, $result['year']);
+        $this->assertEquals(true, isset($result['month']));
+        $this->assertEquals(true, isset($result['day']));
+
+        //日付が存在しない場合、
+        $this->expectException('Cake\Http\Exception\NotFoundException');
+        $this->BlogFrontService->getViewVarsForArchivesByDate($posts, '', '', '1');
     }
 
     /**
