@@ -73,6 +73,35 @@ class BlogTagsController extends BcApiController
     }
 
     /**
+     * [API] ブログタグ編集
+     * @param BlogTagsServiceInterface $service
+     * @param $blogTagId
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function edit(BlogTagsServiceInterface $service, $blogTagId)
+    {
+        $this->request->allowMethod(['post', 'put', 'patch']);
+
+        try {
+            $blogTag = $service->update($service->get($blogTagId), $this->request->getData());
+            $message = __d('baser', 'ブログタグ「{0}」を更新しました。', $blogTag->name);
+        } catch (PersistenceFailedException $e) {
+            $blogTag = $e->getEntity();
+            $this->setResponse($this->response->withStatus(400));
+            $message = __d('baser', '入力エラーです。内容を修正してください。');
+        }
+        $this->set([
+            'message' => $message,
+            'blogTag' => $blogTag,
+            'errors' => $blogTag->getErrors()
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['blogTag', 'message', 'errors']);
+    }
+
+    /**
      * ブログタグのバッチ処理
      *
      * 指定したブログのコメントに対して削除処理を一括で行う
