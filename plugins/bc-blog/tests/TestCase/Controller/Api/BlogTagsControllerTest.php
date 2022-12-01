@@ -162,6 +162,25 @@ class BlogTagsControllerTest extends BcTestCase
     }
 
     /**
+     * test delete
+     */
+    public function testDelete()
+    {
+        // タグのデータを作成する
+        BlogTagFactory::make(['id' => 1, 'name' => 'tag1'])->persist();
+
+        // タグ削除APIを叩く
+        $this->post('/baser/api/bc-blog/blog_tags/delete/1.json?token=' . $this->accessToken);
+        // レスポンスのステータスを確認する
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        // レスポンスのメッセージを確認する
+        $this->assertEquals('ブログタグ「tag1」を削除しました。', $result->message);
+        // 削除されたタグのidを確認する
+        $this->assertEquals(1, $result->blogTag->id);
+    }
+
+    /**
      * test batch
      */
     public function testBatch()
