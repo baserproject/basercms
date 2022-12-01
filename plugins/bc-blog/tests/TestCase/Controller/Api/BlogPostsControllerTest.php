@@ -153,7 +153,23 @@ class BlogPostsControllerTest extends BcTestCase
      */
     public function test_copy()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを生成
+        BlogPostFactory::make(['id' => 1, 'title' => 'test'])->persist();
+
+        //正常の時を確認
+        //APIをコル
+        $this->post('/baser/api/bc-blog/blog_posts/copy/1.json?token=' . $this->accessToken);
+        //ステータスを確認
+        $this->assertResponseOk();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('ブログ記事「test」をコピーしました。', $result->message);
+        $this->assertEquals('test_copy', $result->blogPost->title);
+
+        //存在しないBlogPostIDをコビー場合、
+        $this->post('/baser/api/bc-blog/blog_posts/copy/100000.json?token=' . $this->accessToken);
+        //ステータスを確認
+        $this->assertResponseCode(404);
     }
 
     /**

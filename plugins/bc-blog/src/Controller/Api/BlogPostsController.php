@@ -101,10 +101,35 @@ class BlogPostsController extends BcApiController
 
     /**
      * [API] ブログ記事複製のAPI実装
+     *
+     * @param BlogPostsServiceInterface $service
+     * @param $id
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function copy()
+    public function copy(BlogPostsServiceInterface $service, $id)
     {
-        //todo ブログ記事複製のAPI実装
+        $this->request->allowMethod(['patch', 'post', 'put']);
+
+        try {
+            $blogPost = $service->get($id);
+            $blogPostCopied = $service->copy($id);
+            $message = __d('baser', 'ブログ記事「{0}」をコピーしました。', $blogPost->title);
+        } catch (BcException $e) {
+            $this->setResponse($this->response->withStatus(400));
+            $blogPostCopied = $e->getEntity();
+            $message = __d('baser', '入力エラーです。内容を修正してください。');
+        }
+
+        $this->set([
+            'blogPost' => $blogPostCopied,
+            'message' => $message,
+            'errors' => $blogPostCopied->getErrors(),
+        ]);
+
+        $this->viewBuilder()->setOption('serialize', ['blogPost', 'message', 'errors']);
     }
 
     /**
