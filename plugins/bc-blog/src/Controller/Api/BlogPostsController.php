@@ -16,6 +16,7 @@ use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Error\BcException;
 use BcBlog\Service\BlogPostsServiceInterface;
+use Cake\ORM\Exception\PersistenceFailedException;
 
 /**
  * BlogPostsController
@@ -57,10 +58,45 @@ class BlogPostsController extends BcApiController
 
     /**
      * [API] ブログ記事編集のAPI実装
+     *
+     * 指定したブログ記事を編集する。
+     * 記事の保存に失敗した場合、PersistenceFailedExceptionかBcExceptionのエラーが発生する。
+     *
+     * @param BlogPostsServiceInterface $service
+     * @param $id
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function edit()
+    public function edit(BlogPostsServiceInterface $service, $id)
     {
-        //todo ブログ記事編集のAPI実装
+        $this->request->allowMethod(['post', 'put', 'patch']);
+
+        try {
+            $blogPost = $service->update($service->get($id), $this->request->getData());
+            $message = __d('baser', '記事「{0}」を更新しました。', $blogPost->title);
+        } catch (PersistenceFailedException $e) {
+            $this->setResponse($this->response->withStatus(400));
+            $blogPost = $e->getEntity();
+            $message = __d('baser', '入力エラーです。内容を修正してください。');
+        } catch (BcException $e) {
+            $blogPost = $e->getEntity();
+            $this->setResponse($this->response->withStatus(400));
+            if ($e->getCode() === "23000") {
+                $message = __d('baser', '同時更新エラーです。しばらく経ってから保存してください。');
+            } else {
+                $message = __d('baser', 'データベース処理中にエラーが発生しました。');
+            }
+        }
+
+        $this->set([
+            'message' => $message,
+            'blogPost' => $blogPost,
+            'errors' => $blogPost->getErrors(),
+        ]);
+
+        $this->viewBuilder()->setOption('serialize', ['blogPost', 'message', 'errors']);
     }
 
     /**
