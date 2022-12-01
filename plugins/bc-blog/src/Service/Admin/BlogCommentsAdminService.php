@@ -42,6 +42,7 @@ class BlogCommentsAdminService extends BlogCommentsService implements BlogCommen
      *  - blogPost: ブログ記事
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getViewVarsForIndex(int $blogContentId, $blogPostId, ResultSet $blogComments): array
     {

@@ -48,6 +48,7 @@ class BlogCategoriesAdminServiceTest extends BcTestCase
         'plugin.BaserCore.Factory/SiteConfigs',
         'plugin.BaserCore.Factory/SearchIndexes',
         'plugin.BcBlog.Factory/BlogContents',
+        'plugin.BcBlog.Factory/BlogPosts',
     ];
 
     /**
