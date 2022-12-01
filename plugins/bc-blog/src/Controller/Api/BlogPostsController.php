@@ -124,6 +124,40 @@ class BlogPostsController extends BcApiController
     }
 
     /**
+     * [API] ブログ記事削除処理
+     *
+     * 指定したブログ記事を削除する
+     *
+     * @param BlogPostsServiceInterface $service
+     * @param $id
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function delete(BlogPostsServiceInterface $service, $id)
+    {
+        $this->request->allowMethod(['post', 'put']);
+        try {
+            $blogPost = $service->get($id);
+            $service->delete($id);
+            $message = __d('baser', 'ブログ記事「{0}」を削除しました。', $blogPost->title);
+        } catch (PersistenceFailedException $e) {
+            $this->setResponse($this->response->withStatus(400));
+            $blogPost = $e->getEntity();
+            $message = __d('baser', 'データベース処理中にエラーが発生しました。');
+        }
+
+        $this->set([
+            'blogPost' => $blogPost,
+            'message' => $message,
+            'errors' => $blogPost->getErrors(),
+        ]);
+
+        $this->viewBuilder()->setOption('serialize', ['blogPost', 'message', 'errors']);
+    }
+
+    /**
      * ブログ記事のバッチ処理
      *
      * 指定したブログ記事に対して削除、公開、非公開の処理を一括で行う

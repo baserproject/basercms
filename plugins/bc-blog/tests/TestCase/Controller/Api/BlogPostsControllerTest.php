@@ -11,6 +11,7 @@
 
 namespace BcBlog\Test\TestCase\Controller\Api;
 
+use BaserCore\Test\Factory\SiteConfigFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
@@ -179,4 +180,28 @@ class BlogPostsControllerTest extends BcTestCase
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
 
+    /**
+     * test delete
+     */
+    public function test_delete()
+    {
+        //データを生成
+        SiteConfigFactory::make(['name' => 'content_types', 'value' => ''])->persist();
+        BlogPostFactory::make(['id' => 1])->persist();
+
+        //正常の時を確認
+        //APIをコル
+        $this->post('/baser/api/bc-blog/blog_posts/delete/1.json?token=' . $this->accessToken);
+        //ステータスを確認
+        $this->assertResponseOk();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertMatchesRegularExpression('/ブログ記事「.+」を削除しました。/', $result->message);
+        $this->assertNotNull($result->blogPost->title);
+
+        //存在しないBlogPostIDを削除場合、
+        $this->post('/baser/api/bc-blog/blog_posts/delete/1.json?token=' . $this->accessToken);
+        //ステータスを確認
+        $this->assertResponseCode(404);
+    }
 }
