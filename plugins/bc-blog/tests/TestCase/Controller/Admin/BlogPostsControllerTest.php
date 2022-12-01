@@ -53,6 +53,7 @@ class BlogPostsControllerTest extends BcTestCase
         'plugin.BaserCore.Factory/UsersUserGroups',
         'plugin.BaserCore.Factory/UserGroups',
         'plugin.BcBlog.Factory/BlogPosts',
+        'plugin.BcBlog.Factory/BlogContents',
         'plugin.BaserCore.Factory/Contents',
     ];
 
@@ -156,7 +157,48 @@ class BlogPostsControllerTest extends BcTestCase
      */
     public function testEdit()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        //データを作成
+        SiteConfigFactory::make([
+            'name' => 'content_types',
+            'value' => ''
+        ])->persist();
+        SiteConfigFactory::make([
+            'name' => 'editor',
+            'value' => 'BaserCore.BcCkeditor'
+        ])->persist();
+        $this->loadFixtureScenario(BlogContentScenario::class, 1, 1, null, 'test', '/test');
+        BlogPostFactory::make([
+            'id' => '1',
+            'blog_content_id' => '1'
+        ])->persist();
+
+        $data = ['title' => 'blog post edit', 'name' => 'ホームページをオープンしました'];
+        //正常の場合を確認
+        $this->post('/baser/admin/bc-blog/blog_posts/edit/1/1', $data);
+        // ステータスを確認
+        $this->assertResponseCode(302);
+        // メッセージを確認
+        $this->assertFlashMessage('記事「blog post edit」を更新しました。');
+        // リダイレクトを確認
+        $this->assertRedirect([
+            'plugin' => 'BcBlog',
+            'prefix' => 'Admin',
+            'controller' => 'blog_posts',
+            'action' => 'edit/1/1'
+        ]);
+        // データの変更を確認
+        $blogPost = BlogPostFactory::get(1);
+        $this->assertEquals('blog post edit', $blogPost['title']);
+        $this->assertEquals('ホームページをオープンしました', $blogPost['name']);
+
+        //dataは空にする場合を確認
+        $this->post('/baser/admin/bc-blog/blog_posts/edit/1/1', []);
+        // ステータスを確認
+        $this->assertResponseCode(200);
+        // メッセージを確認
+        $this->assertResponseContains('入力エラーです。内容を修正してください。');
     }
 
     /**
@@ -178,7 +220,7 @@ class BlogPostsControllerTest extends BcTestCase
         $this->enableCsrfToken();
         // データ生成
         SiteConfigFactory::make(['name' => 'content_types', 'value' => ''])->persist();
-        ContentFactory::make(['plugin' => 'BcBlog', 'type' => 'BlogContent', 'entity_id' => 1])->persist();
+        $this->loadFixtureScenario(BlogContentScenario::class, 1, 1, null, 'test', '/test');
         BlogPostFactory::make([
             'id' => '1',
             'blog_content_id' => '1',
@@ -269,28 +311,13 @@ class BlogPostsControllerTest extends BcTestCase
         $this->enableCsrfToken();
         //データを作成
         SiteConfigFactory::make(['name' => 'content_types', 'value' => ''])->persist();
-        ContentFactory::make(['plugin' => 'BcBlog', 'type' => 'BlogContent', 'entity_id' => 1])->persist();
+        $this->loadFixtureScenario(BlogContentScenario::class, 1, 1, null, 'test', '/test');
         BlogPostFactory::make(
             [
                 'id' => '1',
                 'blog_content_id' => '1',
-                'no' => '1',
-                'name' => 'ホームページをオープンしました',
                 'title' => 'test',
-                'content' => 'content test',
-                'detail' => 'detail test',
-                'blog_category_id' => '1',
-                'user_id' => '1',
-                'status' => '1',
-                'posts_date' => '2015-01-27 12:57:59',
-                'content_draft' => '',
-                'detail_draft' => '',
-                'publish_begin' => null,
-                'publish_end' => null,
-                'exclude_search' => 0,
-                'eye_catch' => 'template1.jpg',
-                'created' => '2015-01-27 12:56:53',
-                'modified' => '2015-01-27 12:57:59'
+                'content' => 'content test'
             ]
         )->persist();
         BlogPostFactory::make(['id' => 2, 'blog_content_id' => null])->persist();
@@ -300,7 +327,8 @@ class BlogPostsControllerTest extends BcTestCase
         // ステータスを確認
         $this->assertResponseCode(302);
         // メッセージを確認
-        $this->assertFlashMessage('ブログ記事「test」をコピーしました。');
+        $this->assertMatchesRegularExpression('/ブログ記事「.+」をコピーしました。/', $_SESSION["Flash"]["flash"][0]["message"]);
+
         // リダイレクトを確認
         $this->assertRedirect(['action' => 'index', 1]);
         // データのコピーを確認
