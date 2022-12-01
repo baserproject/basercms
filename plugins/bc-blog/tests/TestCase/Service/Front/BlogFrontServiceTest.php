@@ -12,6 +12,7 @@
 namespace BcBlog\Test\TestCase\Service\Front;
 
 use BaserCore\Controller\ContentFoldersController;
+use BaserCore\Service\ContentsServiceInterface;
 use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
@@ -26,6 +27,7 @@ use BcBlog\Test\Factory\BlogContentFactory;
 use BcBlog\Test\Factory\BlogPostFactory;
 use BcBlog\Test\Factory\BlogTagFactory;
 use BcBlog\Test\Scenario\BlogContentScenario;
+use BcBlog\Test\Scenario\MultiSiteBlogScenario;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -369,7 +371,48 @@ class BlogFrontServiceTest extends BcTestCase
      */
     public function test_getViewVarsForArchivesByCategory()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // サービスクラス
+        $blogPostsService = $this->getService(BlogPostsServiceInterface::class);
+        $BlogContentsService = $this->getService(BlogContentsServiceInterface::class);
+        $ContentsService = $this->getService(ContentsServiceInterface::class);
+
+        // データ生成
+        $this->loadFixtureScenario(MultiSiteBlogScenario::class);
+        BlogPostFactory::make([
+            'id' => '1',
+            'blog_content_id' => '1'
+        ])->persist();
+
+        //正常の場合を確認
+        $rs = $this->BlogFrontService->getViewVarsForArchivesByCategory(
+            $blogPostsService->getIndex([])->all(),
+            'release',
+            $this->getRequest()->withParam('currentContent', $ContentsService->get(4)),
+            $BlogContentsService->get(6),
+            ['blog', 'test']
+        );
+
+        //戻り値を確認
+
+        //postsが取得できるかどうかのを確認
+        $this->assertEquals($rs['posts']->count(), 1);
+        //blogArchiveTypeの戻り値を確認
+        $this->assertEquals($rs['blogArchiveType'], 'category');
+        //blogCategoryの戻り値を確認
+        $this->assertEquals($rs['blogCategory']->name, 'release');
+        $this->assertEquals($rs['blogCategory']->title, 'プレスリリース');
+        //crumbsの戻り値を確認
+        $this->assertEquals($rs['crumbs'], ['blog', 'test']);
+
+        //異常の場合を確認
+        $this->expectException("Cake\Http\Exception\NotFoundException");
+        $this->BlogFrontService->getViewVarsForArchivesByCategory(
+            $blogPostsService->getIndex([])->all(),
+            'release-test',
+            $this->getRequest()->withParam('currentContent', $ContentsService->get(4)),
+            $BlogContentsService->get(6),
+            ['blog', 'test']
+        );
     }
 
     /**
