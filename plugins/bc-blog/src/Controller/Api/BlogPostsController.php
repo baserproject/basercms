@@ -49,11 +49,31 @@ class BlogPostsController extends BcApiController
     }
 
     /**
-     * [API] ブログ記事新規追加のAPI実装
+     * [API] ブログ記事新規追加
+     *
+     * @param BlogPostsServiceInterface $service
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function add()
+    public function add(BlogPostsServiceInterface $service)
     {
-        //todo ブログ記事新規追加のAPI実装
+        $this->request->allowMethod(['post', 'put', 'patch']);
+        try {
+            $blogPost = $service->create($this->request->getData());
+            $message = __d('baser', '記事「{0}」を追加しました。', $blogPost->title);
+        } catch (PersistenceFailedException $e) {
+            $blogPost = $e->getEntity();
+            $message = __d('baser', "入力エラーです。内容を修正してください。");
+            $this->setResponse($this->response->withStatus(400));
+        }
+        $this->set([
+            'blogPost' => $blogPost,
+            'message' => $message,
+            'errors' => $blogPost->getErrors()
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['message', 'blogPost', 'errors']);
     }
 
     /**

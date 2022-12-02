@@ -114,7 +114,44 @@ class BlogPostsControllerTest extends BcTestCase
      */
     public function test_add()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // postデータを生成
+        $postData = [
+            'blog_content_id' => 1,
+            'title' => 'baserCMS inc. [デモ] の新しい記事',
+            'content' => '記事の概要',
+            'detail' => '記事の詳細',
+        ];
+        // APIを呼ぶ
+        $this->post('/baser/api/bc-blog/blog_posts/add.json?token=' . $this->accessToken, $postData);
+        // レスポンスの確認
+        $this->assertResponseOk();
+        // 戻り値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        //メッセージを確認
+        $this->assertEquals('記事「baserCMS inc. [デモ] の新しい記事」を追加しました。', $result->message);
+        //作成したBlogPostを確認
+        $this->assertEquals('baserCMS inc. [デモ] の新しい記事', $result->blogPost->title);
+        $this->assertEquals('記事の概要', $result->blogPost->content);
+        $this->assertEquals('記事の詳細', $result->blogPost->detail);
+
+        // 入力エラー
+        // titleが空のpostデータを生成
+        $postData = [
+            'blog_content_id' => 1,
+            'title' => '',
+            'content' => '',
+            'detail' => '',
+        ];
+        // APIを呼ぶ
+        $this->post('/baser/api/bc-blog/blog_posts/add.json?token=' . $this->accessToken, $postData);
+        // レスポンスの確認
+        $this->assertResponseCode(400);
+        // 戻り値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        //メッセージを確認
+        $this->assertEquals('入力エラーです。内容を修正してください。', $result->message);
+        //エラーメッセージを確認
+        $this->assertEquals('タイトルを入力してください。', $result->errors->title->_empty);
     }
 
     /**
