@@ -261,17 +261,21 @@ class BlogPostsController extends BlogAdminAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function delete(BlogPostsServiceInterface $service, int $blogContentId, int $id)
     {
         $this->request->allowMethod(['post', 'delete']);
-        $blogPost = $service->get($id);
 
-        if ($service->delete($id)) {
-            $this->BcMessage->setSuccess(__d('baser', 'ブログ記事「{0}」を削除しました。', $blogPost->title));
-        } else {
-            $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。'));
+        try {
+            $blogPost = $service->get($id);
+            if ($service->delete($id)) {
+                $this->BcMessage->setSuccess(__d('baser', 'ブログ記事「{0}」を削除しました。', $blogPost->title));
+            }
+        } catch (BcException $e) {
+            $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
         }
+
         return $this->redirect(['action' => 'index', $blogContentId]);
     }
 

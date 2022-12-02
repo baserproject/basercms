@@ -207,7 +207,29 @@ class BlogPostsControllerTest extends BcTestCase
      */
     public function testDelete()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        // データ生成
+        SiteConfigFactory::make(['name' => 'content_types', 'value' => ''])->persist();
+        $this->loadFixtureScenario(BlogContentScenario::class, 2, 2, null, 'news', '/news');
+        BlogPostFactory::make(['id' => 1])->persist();
+        // 記事削除コール
+        $this->delete('/baser/admin/bc-blog/blog_posts/delete/2/1');
+        // ステータスを確認
+        $this->assertResponseCode(302);
+        // メッセージを確認
+        $this->assertMatchesRegularExpression('/ブログ記事「.+」を削除しました。/', $_SESSION["Flash"]["flash"][0]["message"]);
+        // リダイレクトを確認
+        $this->assertRedirect(['action' => 'index', 2]);
+        // データ削除確認
+        $result = BlogPostFactory::find()->where(['id' => 1])->count();
+        $this->assertEquals(0, $result);
+
+        // error
+        $this->delete('/baser/admin/bc-blog/blog_posts/delete/2/1');
+        // ステータスを確認
+        $this->assertResponseCode(404);
     }
 
     /**
