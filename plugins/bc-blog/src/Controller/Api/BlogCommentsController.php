@@ -43,6 +43,23 @@ class BlogCommentsController extends BcApiController
     }
 
     /**
+     * [API] 単一ブログコメントー取得
+     *
+     * @param BlogCommentsServiceInterface $service
+     * @param $blogCommentId
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function view(BlogCommentsServiceInterface $service, $blogCommentId)
+    {
+        $this->set([
+            'blogComment' => $service->get($blogCommentId)
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['blogComment']);
+    }
+
+    /**
      * [API] ブログコメント削除
      * @param BlogCommentsServiceInterface $service
      * @param $blogCommentId
