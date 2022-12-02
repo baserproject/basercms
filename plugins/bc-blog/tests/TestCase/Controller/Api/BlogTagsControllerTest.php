@@ -14,7 +14,7 @@ namespace BcBlog\Test\TestCase\Controller\Api;
 use BaserCore\Service\DblogsServiceInterface;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
-use BcBlog\Controller\Admin\BlogTagsController;
+use BcBlog\Controller\Api\BlogTagsController;
 use BcBlog\Test\Factory\BlogTagFactory;
 use Cake\Core\Configure;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -103,6 +103,23 @@ class BlogTagsControllerTest extends BcTestCase
         $result = json_decode((string)$this->_response->getBody());
         // タグ一覧は４件が返す
         $this->assertCount(4, $result->blogTags);
+    }
+
+    /**
+     * test view
+     */
+    public function testView()
+    {
+        // ブログタグのデータを作成する
+        BlogTagFactory::make(['id' => 1, 'name' => 'tag1'])->persist();
+        // 単一ブログタグー取得APIを叩く
+        $this->post('/baser/api/bc-blog/blog_tags/view/1.json?token=' . $this->accessToken);
+        // OKレスポンスを確認する
+        $this->assertResponseOk();
+        // レスポンスのデータを確認する
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals(1, $result->blogTag->id);
+        $this->assertEquals('tag1', $result->blogTag->name);
     }
 
     /**

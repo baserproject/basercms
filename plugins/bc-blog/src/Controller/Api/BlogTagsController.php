@@ -43,6 +43,23 @@ class BlogTagsController extends BcApiController
     }
 
     /**
+     * [API] 単一ブログタグー取得
+     *
+     * @param BlogTagsServiceInterface $service
+     * @param $blogTagId
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function view(BlogTagsServiceInterface $service, $blogTagId)
+    {
+        $this->set([
+            'blogTag' => $service->get($blogTagId)
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['blogTag']);
+    }
+
+    /**
      * [ADMIN] ブログタグ登録
      *
      * ブログのタグを登録する
