@@ -438,12 +438,22 @@ class BcUtil
     public static function clearAllCache(): void
     {
         Cache::clear('_cake_core_');
-        Cache::clear('_cake_model_');
+        self::clearModelCache();
         Cache::clear('_bc_env_');
         //TODO ucmitz : viewキャッシュ削除
         // clearCache();
         //TODO ucmitz : dataキャッシュ削除
         // clearDataCache();
+    }
+
+    /**
+     * モデルキャッシュを削除する
+     * @checked
+     * @noTodo
+     */
+    public static function clearModelCache(): void
+    {
+        Cache::clear('_cake_model_');
     }
 
     /**

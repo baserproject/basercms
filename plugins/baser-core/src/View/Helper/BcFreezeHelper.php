@@ -56,7 +56,11 @@ class BcFreezeHelper extends BcFormHelper
     {
 
         if ($this->freezed) {
-            [$model, $field] = explode('.', $fieldName);
+            if(strpos($fieldName, '.') !== false) {
+                [, $field] = explode('.', $fieldName);
+            } else {
+                $field = $fieldName;
+            }
             if (isset($attributes)) {
                 $attributes = $attributes + ['type' => 'hidden'];
             } else {
@@ -65,7 +69,7 @@ class BcFreezeHelper extends BcFormHelper
             if (isset($attributes["value"])) {
                 $value = $attributes["value"];
             } else {
-                $value = $this->request->data[$model][$field];
+                $value = $this->getSourceValue($field);
             }
             return parent::text($fieldName, $attributes) . h($value);
         } else {
@@ -87,7 +91,9 @@ class BcFreezeHelper extends BcFormHelper
     public function select($fieldName, $options = [], $attributes = []): string
     {
         if ($this->freezed) {
-            return $this->freezeControll($fieldName, $options, $attributes);
+            // TODO ucmitz 未実装
+//            return $this->freezeControll($fieldName, $options, $attributes);
+            return '';
         } else {
             // 横幅を設定する
             // 指定した文字数より足りない文字数分スペースを埋める処理としている為、
@@ -332,12 +338,16 @@ class BcFreezeHelper extends BcFormHelper
     {
 
         if ($this->freezed) {
-            [$model, $field] = explode('.', $fieldName);
+            if(strpos($fieldName, '.') !== false) {
+                [, $field] = explode('.', $fieldName);
+            } else {
+                $field = $fieldName;
+            }
             $attributes = $attributes + ['type' => 'hidden'];
             if (isset($attributes["value"])) {
                 $value = $attributes["value"];
             } else {
-                $value = $this->request->data[$model][$field];
+                $value = $this->getSourceValue($field);
             }
             if ($value) {
                 return parent::text($fieldName, $attributes) . nl2br(h($value));
@@ -584,7 +594,11 @@ class BcFreezeHelper extends BcFormHelper
         if (preg_match_all("/\./", $fieldName, $regs) == 2) {
             [$model, $field, $detail] = explode('.', $fieldName);
         } else {
-            [$model, $field] = explode('.', $fieldName);
+            if(strpos($fieldName, '.') !== false) {
+                [$model, $field] = explode('.', $fieldName);
+            } else {
+                $field = $fieldName;
+            }
         }
 
         // 値を取得
@@ -593,13 +607,10 @@ class BcFreezeHelper extends BcFormHelper
         } else {
             // HABTAM
             if (!empty($attributes["multiple"]) && $attributes["multiple"] !== 'checkbox') {
+                // TODO ucmitz 未検証
                 $value = $this->request->data[$model];
             } else {
-                if (!empty($this->request->data[$model][$field])) {
-                    $value = $this->request->data[$model][$field];
-                } else {
-                    $value = null;
-                }
+                $value = $this->getSourceValue($field);
             }
         }
 
@@ -627,9 +638,9 @@ class BcFreezeHelper extends BcFormHelper
                         $_value .= sprintf($this->Html->_tags['li'], null, $options[$data]);
                     }
                 }
-
-                $out = sprintf($this->Html->_tags['ul'], " " . $this->_parseAttributes($attributes, null, '', ' '), $_value);
-                $out .= $this->hidden($fieldName, ['value' => $value, 'multiple' => true]);
+                // TODO ucmitz 未実装
+//                $out = sprintf($this->Html->_tags['ul'], " " . $this->_parseAttributes($attributes, null, '', ' '), $_value);
+//                $out .= $this->hidden($fieldName, ['value' => $value, 'multiple' => true]);
 
                 // 一般
             } elseif (empty($detail)) {
@@ -662,9 +673,7 @@ class BcFreezeHelper extends BcFormHelper
                     $value = "";
                 }
             } elseif (empty($detail)) {
-                if (!empty($value)) {
-                    $value = $value;
-                } else {
+                if (empty($value)) {
                     $value = null;
                 }
             } elseif (is_array($value) && isset($value[$detail])) {

@@ -182,8 +182,10 @@ class BcContentsRoute extends Route
                     }
                 }
             }
-            $controllerClass = Inflector::camelize($viewParams['controller']) . 'Controller';
-            $controllerClass = ($plugin)? $plugin . '\\Controller\\' . $controllerClass : 'App\\Controller\\' . $controllerClass;
+            $prefix = $viewParams['prefix']?? null;
+            $namespace = ($plugin)? $plugin . '\\Controller\\' : 'App\\Controller\\';
+            $namespace = $prefix? $namespace . $prefix . '\\' : $namespace;
+            $controllerClass = $namespace . Inflector::camelize($viewParams['controller']) . 'Controller';
             if(class_exists($controllerClass)) {
                 $methods = get_class_methods($controllerClass);
             } else {
@@ -200,6 +202,7 @@ class BcContentsRoute extends Route
                 'named' => $named,
                 'entityId' => $entityId
             ];
+            if($prefix) $params['prefix'] = $prefix;
         }
         $params['_matchedRoute'] = $this->template;
         return $params;

@@ -11,7 +11,9 @@
 
 namespace BaserCore\Mailer;
 
+use BaserCore\Utility\BcSiteConfig;
 use Cake\Mailer\Mailer;
+use Cake\Routing\Router;
 
 /**
  * Class BcMailer
@@ -20,4 +22,21 @@ use Cake\Mailer\Mailer;
 class BcMailer extends Mailer
 {
 
+    /**
+     * Constructor
+     *
+     * @param null $config
+     */
+    public function __construct($config = null)
+    {
+        parent::__construct($config);
+        $request = Router::getRequest();
+        $site = $request->getAttribute('currentSite');
+        if($site) $this->viewBuilder()
+            ->setTheme($site->theme)
+            ->setClassName('BaserCore.BcFrontEmail');
+        $this->setFrom([
+            BcSiteConfig::get('email') => BcSiteConfig::get('formal_name')
+        ]);
+    }
 }

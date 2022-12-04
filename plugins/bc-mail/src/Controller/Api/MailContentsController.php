@@ -15,7 +15,9 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Controller\Api\BcApiController;
+use BcMail\Service\MailContentsService;
 use BcMail\Service\MailContentsServiceInterface;
+use Cake\ORM\Exception\PersistenceFailedException;
 
 /**
  * メールコンテンツコントローラー
@@ -52,32 +54,35 @@ class MailContentsController extends BcApiController
     /**
      * コピー
      *
-     * @return bool
+     * @param MailContentsService $service
+     * @checked
+     * @noTodo
      */
-    public function copy()
+    public function copy(MailContentsServiceInterface $service)
     {
-        $this->autoRender = false;
-        if (!$this->request->getData()) {
-            $this->ajaxError(500, __d('baser', '無効な処理です。'));
+        $this->request->allowMethod(['post', 'put', 'patch']);
+        $errors = null;
+        try {
+            $entity = $service->copy($this->request->getData());
+            if (!$entity) {
+                $this->setResponse($this->response->withStatus(400));
+                $message = __d('baser', 'コピーに失敗しました。データが不整合となっている可能性があります。');
+            } else {
+                $message = __d('baser', 'メールフォームのコピー「{0}」を追加しました。', $entity->content->title);
+            }
+
+        } catch (PersistenceFailedException $e) {
+            $this->setResponse($this->response->withStatus(500));
+            $errors = $e->getEntity();
+            $message = __d('baser', 'コピーに失敗しました。データが不整合となっている可能性があります。');
         }
-        $user = $this->BcAuth->user();
-        $data = $this->MailContent->copy(
-            $this->request->getData('entityId'),
-            $this->request->getData('parentId'),
-            $this->request->getData('title'),
-            $user['id'],
-            $this->request->getData('siteId')
-        );
-        if (!$data) {
-            $this->ajaxError(500, $this->MailContent->validationErrors);
-            return false;
-        }
-        $message = sprintf(
-            __d('baser', 'メールフォームのコピー「%s」を追加しました。'),
-            $this->request->getData('title')
-        );
-        $this->BcMessage->setSuccess($message, true, false);
-        return json_encode($data['Content']);
+        $this->set([
+            'message' => $message,
+            'mailContent' => $entity,
+            'content' => $entity->content,
+            'errors' => $errors,
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['mailContent', 'content', 'message', 'errors']);
     }
 
 }

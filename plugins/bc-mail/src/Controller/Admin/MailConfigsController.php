@@ -11,14 +11,12 @@
 
 namespace BcMail\Controller\Admin;
 
-use BaserCore\Controller\Admin\BcAdminAppController;
-
 /**
  * メールフォーム設定コントローラー
  *
  * @package Mail.Controller
  */
-class MailConfigsController extends BcAdminAppController
+class MailConfigsController extends MailAdminAppController
 {
 
     /**

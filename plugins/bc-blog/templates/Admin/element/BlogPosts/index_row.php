@@ -97,7 +97,7 @@ use Cake\Utility\Hash;
     <?= $this->BcAdminForm->postLink(
       '',
       ['action' => 'unpublish', $post->blog_content->id, $post->id],
-      ['block' => true,
+      [
         'title' => __d('baser', '非公開'),
         'class' => 'btn-unpublish bca-btn-icon',
         'data-bca-btn-type' => 'unpublish',
@@ -107,7 +107,7 @@ use Cake\Utility\Hash;
     <?= $this->BcAdminForm->postLink(
       '',
       ['action' => 'publish', $post->blog_content->id, $post->id],
-      ['block' => true,
+      [
         'title' => __d('baser', '公開'),
         'class' => 'btn-unpublish bca-btn-icon',
         'data-bca-btn-type' => 'unpublish',
@@ -125,8 +125,7 @@ use Cake\Utility\Hash;
     <?= $this->BcAdminForm->postLink(
       '',
       ['action' => 'copy', $post->blog_content->id, $post->id],
-      ['block' => true,
-        'confirm' => __d('baser', "{0} をコピーしてもいいですか？", $post->title),
+      [
         'title' => __d('baser', 'コピー'),
         'class' => 'btn-copy bca-btn-icon',
         'data-bca-btn-type' => 'copy',

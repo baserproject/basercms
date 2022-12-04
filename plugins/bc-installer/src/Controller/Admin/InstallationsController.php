@@ -191,11 +191,7 @@ class InstallationsController extends BcAdminAppController
                 try {
                     $service->connectDb($this->getRequest());
                     $service->initAdmin($this->getRequest());
-                    // TODO ucmitz メール送信未実装
-//                    $this->_sendCompleteMail(
-//                        $this->getRequest()->getData('admin_email'),
-//                        $this->getRequest()->getData('admin_password')
-//                    );
+                    $service->sendCompleteMail($this->getRequest()->getData());
                     $this->redirect(['action' => 'step5']);
                 } catch (PersistenceFailedException $e) {
                     $errMsg = implode("\n・", Hash::extract($e->getEntity()->getErrors(), '{s}.{s}'));
@@ -224,22 +220,6 @@ class InstallationsController extends BcAdminAppController
 
             BcUtil::clearAllCache();
             if (function_exists('opcache_reset')) opcache_reset();
-        }
-    }
-
-    /**
-     * インストール完了メールを送信する
-     *
-     * @param string $email
-     * @param string $name
-     * @param string $password
-     * @return void
-     */
-    protected function _sendCompleteMail($email, $name, $password)
-    {
-        if (DS !== '\\') {
-            $body = ['name' => $name, 'password' => $password, 'siteUrl' => BcUtil::siteUrl()];
-            $this->sendMail($email, __d('baser', 'baserCMSインストール完了'), $body, ['template' => 'installed', 'from' => $email]);
         }
     }
 

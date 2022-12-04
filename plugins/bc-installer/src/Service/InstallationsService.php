@@ -31,6 +31,7 @@ use Cake\Database\Connection;
 use Cake\Filesystem\Folder;
 use Cake\I18n\FrozenTime;
 use Cake\Log\LogTrait;
+use Cake\Mailer\MailerAwareTrait;
 use Cake\ORM\Exception\PersistenceFailedException;
 use Cake\ORM\TableRegistry;
 use PDOException;
@@ -47,6 +48,7 @@ class InstallationsService implements InstallationsServiceInterface
      */
     use BcContainerTrait;
     use LogTrait;
+    use MailerAwareTrait;
 
     /**
      * Constructor
@@ -171,7 +173,7 @@ class InstallationsService implements InstallationsServiceInterface
         } catch (BcException $e) {
             throw new BcException(__d('baser', 'コアの初期データのロードに失敗しました。' . $e->getMessage()));
         }
-        if (!$this->BcDatabase->initSystemData(['adminTheme' => $adminTheme])) {
+        if (!$this->BcDatabase->initSystemData(['theme' => $theme, 'adminTheme' => $adminTheme])) {
             throw new BcException(__d('baser', 'システムデータの初期化に失敗しました。'));
         }
         $datasource = strtolower(str_replace('Cake\\Database\\Driver\\', '', $dbConfig['driver']));
@@ -682,6 +684,18 @@ class InstallationsService implements InstallationsServiceInterface
             $patterns = array_merge($patterns, $themesService->getDefaultDataPatterns($theme));
         }
         return $patterns;
+    }
+
+    /**
+     * インストール完了メールを送信
+     *
+     * @param array $email
+     * @checked
+     * @noTodo
+     */
+    public function sendCompleteMail(array $postData)
+    {
+        $this->getMailer('BcInstaller.Admin/Installer')->send('installed', [$postData['admin_email']]);
     }
 
 }

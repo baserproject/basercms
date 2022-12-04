@@ -611,7 +611,7 @@ CREATE TABLE `mail_fields` (
 -- テーブルのデータのダンプ `mail_fields`
 --
 
-INSERT INTO `mail_fields` (`id`, `mail_content_id`, `no`, `name`, `field_name`, `type`, `head`, `attention`, `before_attachment`, `after_attachment`, `source`, `size`, `rows`, `maxlength`, `options`, `class`, `separator`, `default_value`, `description`, `group_field`, `group_valid`, `valid`, `valid_ex`, `auto_convert`, `not_empty`, `use_field`, `no_send`, `sort`, `created`, `modified`) VALUES
+INSERT INTO `mail_fields` (`id`, `mail_content_id`, `no`, `name`, `field_name`, `type`, `head`, `attention`, `before_attachment`, `after_attachment`, `source`, `size`, `rows`, `maxlength`, `options`, `class`, delimiter, `default_value`, `description`, `group_field`, `group_valid`, `valid`, `valid_ex`, `auto_convert`, `not_empty`, `use_field`, `no_send`, `sort`, `created`, `modified`) VALUES
 (1, 1, 1, '姓', 'name_1', 'text', 'お名前', '', '', '', '', NULL, NULL, 255, 'placeholder|姓', '', '', '', '', 'name', 'name', 'VALID_NOT_EMPTY', '', '', 1, 1, 0, 1, '2016-08-12 00:48:34', '2020-09-14 19:41:09'),
 (2, 1, 2, '名', 'name_2', 'text', 'お名前', '', '', '', '', NULL, NULL, 255, 'placeholder|名', '', '', '', '', 'name', 'name', 'VALID_NOT_EMPTY', '', '', 1, 1, 0, 2, '2016-08-12 00:48:34', '2020-09-14 19:41:24'),
 (5, 1, 5, '性別', 'sex', 'radio', '性別', '', '', '', '男性|女性', 0, 0, 0, '', '', '', '', '', '', '', '', '', '', 0, 1, 0, 5, '2016-08-12 00:48:34', NULL),

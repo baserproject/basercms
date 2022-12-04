@@ -11,7 +11,10 @@
 
 namespace BcMail\Model\Table;
 
+use BaserCore\Event\BcEventDispatcherTrait;
+use BaserCore\Model\Entity\Content;
 use Cake\Core\Plugin;
+use Cake\ORM\Exception\PersistenceFailedException;
 use Cake\Validation\Validator;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -25,6 +28,11 @@ use BaserCore\Annotation\Checked;
  */
 class MailContentsTable extends MailAppTable
 {
+
+    /**
+     * Trait
+     */
+    use BcEventDispatcherTrait;
 
     /**
      * behaviors
@@ -219,17 +227,6 @@ class MailContentsTable extends MailAppTable
     }
 
     /**
-     * beforeDelete
-     *
-     * @return    boolean
-     * @access    public
-     */
-    public function beforeDelete($cascade = true)
-    {
-        return $this->deleteSearchIndex($this->id);
-    }
-
-    /**
      * 検索用データを生成する
      *
      * @param array $data
@@ -269,10 +266,15 @@ class MailContentsTable extends MailAppTable
      * @param int $newSiteId 新しいサイトID
      * @return mixed mailContent|false
      */
-    public function copy($id, $newParentId, $newTitle, $newAuthorId, $newSiteId = null)
-    {
-        $data = $this->find('first', ['conditions' => ['MailContent.id' => $id], 'recursive' => 0]);
-        $oldData = $data;
+    public function copy(
+        int $id,
+        int $newParentId,
+        string $newTitle,
+        int $newAuthorId,
+        int $newSiteId = null
+    ) {
+        $data = $this->find()->where(['MailContents.id' => $id])->contain('Contents')->first();
+        $oldData = clone $data;
 
         // EVENT MailContents.beforeCopy
         $event = $this->dispatchLayerEvent('beforeCopy', [
@@ -280,94 +282,94 @@ class MailContentsTable extends MailAppTable
             'id' => $id,
         ]);
         if ($event !== false) {
-            $data = $event->getResult() === true ? $event->getData('data') : $event->getResult();
+            $data = $event->getResult() === true || is_null($event->getResult()) ? $event->getData('data') : $event->getResult();
         }
 
-        $url = $data['Content']['url'];
-        $siteId = $data['Content']['site_id'];
-        $name = $data['Content']['name'];
-        $eyeCatch = $data['Content']['eyecatch'];
-        unset($data['MailContent']['id']);
-        unset($data['MailContent']['created']);
-        unset($data['MailContent']['modified']);
-        unset($data['Content']);
-        $data['Content'] = [
+        $url = $data->content->url;
+        $siteId = $data->content->site_id;
+        $name = $data->content->name;
+        $eyeCatch = $data->content->eyecatch;
+        unset($data->id);
+        unset($data->created);
+        unset($data->modified);
+        $data->content = new Content([
             'name' => $name,
             'parent_id' => $newParentId,
             'title' => $newTitle,
             'author_id' => $newAuthorId,
-            'site_id' => $newSiteId
-        ];
-        if (!is_null($newSiteId) && $siteId != $newSiteId) {
-            $data['Content']['site_id'] = $newSiteId;
-            $data['Content']['parent_id'] = $this->Content->copyContentFolderPath($url, $newSiteId);
-        }
-        $this->getDataSource()->begin();
-        if ($result = $this->save($data)) {
-            $result['MailContent']['id'] = $this->id;
-            $data = $result;
-            $mailFields = $this->MailField->find(
-                'all',
-                [
-                    'conditions' => ['MailField.mail_content_id' => $id],
-                    'order' => 'MailField.sort',
-                    'recursive' => -1
-                ]
-            );
-            foreach ($mailFields as $mailField) {
-                $mailField['MailField']['mail_content_id'] = $result['MailContent']['id'];
-                $this->MailField->copy(null, $mailField, ['sortUpdateOff' => true]);
-            }
-            App::uses('MailMessage', 'BcMail.Model');
-            $MailMessage = ClassRegistry::init('BcMail.MailMessage');
-            $MailMessage->setup($result['MailContent']['id']);
-            $MailMessage->_sourceConfigured = true; // 設定しておかないと、下記の処理にて内部的にgetDataSouceが走る際にエラーとなってしまう。
-            $MailMessage->construction($result['MailContent']['id']);
-            if ($eyeCatch) {
-                $result['Content']['id'] = $this->Content->getLastInsertID();
-                $result['Content']['eyecatch'] = $eyeCatch;
-                $this->Content->set(['Content' => $result['Content']]);
-                $result = $this->Content->renameToBasenameFields(true);
-                $this->Content->set($result);
-                $result = $this->Content->save();
-                $data['Content'] = $result['Content'];
-            }
+            'site_id' => $newSiteId,
+            'exclude_search' => false,
+			'description' => $data->content->description,
+			'eyecatch' => $data->content->eyecatch
+        ]);
 
-            // EVENT MailContents.afterCopy
-            $event = $this->dispatchLayerEvent('afterCopy', [
-                'id' => $data['MailContent']['id'],
-                'data' => $data,
+        $newEntity = $this->patchEntity($this->newEmptyEntity(), $data->toArray());
+        if (!is_null($newSiteId) && $siteId != $newSiteId) {
+            $data->content = new Content([
+                'site_id' => $newSiteId,
+                'parent_id' => $this->Contents->copyContentFolderPath($url, $newSiteId)
+            ]);
+        }
+        $this->getConnection()->begin();
+
+        try {
+            $result = $this->save($newEntity);
+            if(!$result) {
+                $this->getConnection()->rollback();
+                return false;
+            }
+            $newEntity = clone $result;
+
+            // TODO ucmitz 未実装
+//            $mailFields = $this->MailFields->find()
+//                ->where(['MailFields.mail_content_id' => $id])
+//                ->order(['MailFields.sort'])
+//                ->all();
+//            if($mailFields) {
+//                foreach($mailFields as $field) {
+//                    $field->mail_content_id = $newEntity->id;
+//                    if (!$this->MailFields->copy(null, $field, ['sortUpdateOff' => true])) {
+//                        $this->getConnection()->rollback();
+//                        return false;
+//                    }
+//                }
+//            }
+
+            // TODO ucmitz 未実装
+//            $mailMessages = TableRegistry::getTableLocator()->get('BcMail.MailMessages');
+//            $mailMessages->setup($newEntity->id);
+//            $mailMessages->_sourceConfigured = true; // 設定しておかないと、下記の処理にて内部的にgetDataSouceが走る際にエラーとなってしまう。
+//            $mailMessages->construction($newEntity->id);
+
+            // TODO ucmitz 未実装
+            // >>>
+//            if ($eyeCatch) {
+//                $content = clone $data->content;
+//                $content->eyecatch = $eyeCatch;
+//                $content = $this->Contents->renameToBasenameFields(true);
+//                $result = $this->Content->save($content);
+//                if(!$result) {
+//                    $this->getConnection()->rollback();
+//                    return false;
+//                }
+//                $newEntity->content = $result;
+//            }
+            // <<<
+
+            // EVENT BlogContents.afterCopy
+            $this->dispatchLayerEvent('afterCopy', [
+                'id' => $newEntity->id,
+                'data' => $newEntity,
                 'oldId' => $id,
                 'oldData' => $oldData,
             ]);
 
-            $this->getDataSource()->commit();
-            return $result;
+            $this->getConnection()->commit();
+            return $newEntity;
+        } catch (PersistenceFailedException $e) {
+            $this->getConnection()->rollback();
+            return false;
         }
-        $this->getDataSource()->rollback();
-        return false;
-    }
-
-    /**
-     * フォームが公開中かどうかチェックする
-     *
-     * @param string $publishBegin 公開開始日時
-     * @param string $publishEnd 公開終了日時
-     * @return    bool
-     */
-    public function isAccepting($publishBegin, $publishEnd)
-    {
-        if ($publishBegin && $publishBegin !== '0000-00-00 00:00:00') {
-            if ($publishBegin > date('Y-m-d H:i:s')) {
-                return false;
-            }
-        }
-        if ($publishEnd && $publishEnd !== '0000-00-00 00:00:00') {
-            if ($publishEnd < date('Y-m-d H:i:s')) {
-                return false;
-            }
-        }
-        return true;
     }
 
     /**

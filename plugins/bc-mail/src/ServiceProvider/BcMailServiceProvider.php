@@ -14,6 +14,12 @@ namespace BcMail\ServiceProvider;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use BcMail\Service\Admin\MailContentsAdminService;
+use BcMail\Service\Admin\MailContentsAdminServiceInterface;
+use BcMail\Service\Admin\MailFieldsAdminService;
+use BcMail\Service\Admin\MailFieldsAdminServiceInterface;
+use BcMail\Service\Front\MailFrontService;
+use BcMail\Service\Front\MailFrontServiceInterface;
 use BcMail\Service\MailConfigsService;
 use BcMail\Service\MailConfigsServiceInterface;
 use BcMail\Service\MailContentsService;
@@ -37,8 +43,11 @@ class BcMailServiceProvider extends ServiceProvider
     protected $provides = [
         MailConfigsServiceInterface::class,
         MailContentsServiceInterface::class,
+        MailContentsAdminServiceInterface::class,
         MailFieldsServiceInterface::class,
-        MailMessagesServiceInterface::class
+        MailFieldsAdminServiceInterface::class,
+        MailMessagesServiceInterface::class,
+        MailFrontServiceInterface::class
     ];
 
     /**
@@ -54,10 +63,14 @@ class BcMailServiceProvider extends ServiceProvider
         $container->add(MailConfigsServiceInterface::class, MailConfigsService::class);
         // MailContents サービス
         $container->add(MailContentsServiceInterface::class, MailContentsService::class);
+        $container->add(MailContentsAdminServiceInterface::class, MailContentsAdminService::class);
         // MailFields サービス
         $container->add(MailFieldsServiceInterface::class, MailFieldsService::class);
+        $container->add(MailFieldsAdminServiceInterface::class, MailFieldsAdminService::class);
         // MailMessages サービス
         $container->add(MailMessagesServiceInterface::class, MailMessagesService::class);
+        // MailFront サービス
+        $container->add(MailFrontServiceInterface::class, MailFrontService::class);
     }
 
 }

@@ -142,7 +142,8 @@ class InstallationsAdminService extends InstallationsService implements Installa
         if (!empty($data['dbType']) && $data['dbType'] === 'postgres') {
             $data['dbSchema'] = 'public'; // TODO とりあえずpublic固定
         }
-        $request->getSession()->write($request->getSession()->read() + ['Installation' => [
+        $sessionData = $request->getSession()->read();
+        $installation = ['Installation' => array_merge($sessionData['Installation'], [
             'dbType' => $data['dbType'],
             'dbHost' => $data['dbHost'],
             'dbPort' => $data['dbPort'],
@@ -153,7 +154,8 @@ class InstallationsAdminService extends InstallationsService implements Installa
             'dbSchema' => $data['dbSchema'],
             'dbEncoding' => $data['dbEncoding'],
             'dbDataPattern' => $data['dbDataPattern']
-        ]]);
+        ])];
+        $request->getSession()->write($installation);
     }
 
     /**

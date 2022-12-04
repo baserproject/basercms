@@ -54,6 +54,8 @@ return [
     'BcApp' => [
         // デフォルトタイトル設定（インストールの際のエラー時等DB接続まえのエラーで利用）
         'title' => __d('baser', 'baserCMS'),
+        // テンプレートの基本となる拡張子（.php 推奨）
+        'templateExt' => '.php',
         /**
          * baserコアのプレフィックス
          * URLの先頭に付与

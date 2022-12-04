@@ -31,11 +31,11 @@ use BaserCore\Annotation\Checked;
  * @property string $after_attachment
  * @property string $source
  * @property int $size
- * @property int $rows
+ * @property int $text_rows
  * @property int $maxlength
  * @property string $options
  * @property string $class
- * @property string $separator
+ * @property string $delimiter
  * @property string $default_value
  * @property string $description
  * @property string $group_field

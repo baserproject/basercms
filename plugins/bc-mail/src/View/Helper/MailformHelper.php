@@ -12,13 +12,10 @@
 namespace BcMail\View\Helper;
 
 use BaserCore\View\Helper\BcFreezeHelper;
+use Cake\ORM\ResultSet;
 
 /**
  * メールフォームヘルパー
- *
- * @package Mail.View.Helper
- * @property BcBaserHelper $BcBaser
- * @property BcContentsHelper $BcContents
  */
 class MailformHelper extends BcFreezeHelper
 {
@@ -28,7 +25,7 @@ class MailformHelper extends BcFreezeHelper
      *
      * @var array
      */
-    public $helpers = ['Html', 'BcTime', 'BcText', 'Js', 'BcUpload', 'BcCkeditor', 'BcBaser', 'BcContents', 'BcArray'];
+    public $helpers = ['Html', 'BcTime', 'BcText', 'Js', 'BcUpload', 'BcCkeditor', 'BcBaser', 'BcContents', 'BcArray', 'Url'];
 
     /**
      * メールフィールドのデータよりコントロールを生成する
@@ -45,16 +42,25 @@ class MailformHelper extends BcFreezeHelper
      * 以前のシグネチャは以下のとおり
      * $type, $fieldName, $options, $attributes = [])
      */
-    public function control(string $fieldName, array $options = []): string
+    public function control(string $fieldName, array $attributes = []): string
     {
-        $attributes['escape'] = true;
-        $out = '';
+        $attributes = array_merge([
+            'type' => 'text',
+            'escape' => true,
+            'options' => []
+        ], $attributes);
+
+        $type = $attributes['type'];
+        $options = $attributes['options'];
+        if(!empty($attributes['delimiter'])) $attributes['separator'] = $attributes['delimiter'];
+        if(!empty($attributes['text_rows'])) $attributes['rows'] = $attributes['text_rows'];
+        unset($attributes['options'], $attributes['regex'], $attributes['separator'], $attributes['text_rows']);
+
         if ($this->freezed) {
             unset($attributes['type']);
         }
 
-        unset($attributes['regex']);
-
+        $out = '';
         switch ($type) {
 
             case 'text':
@@ -71,9 +77,7 @@ class MailformHelper extends BcFreezeHelper
                 unset($attributes['maxlength']);
                 unset($attributes['empty']);
                 $attributes['legend'] = false;
-                if (!empty($attributes['separator'])) {
-                    $attributes['separator'] = $attributes['separator'];
-                } else {
+                if (empty($attributes['separator'])) {
                     $attributes['separator'] = "&nbsp;&nbsp;";
                 }
                 // CakePHPでは、初期値を指定していない場合に、hiddenタグを出力する仕様
@@ -121,19 +125,22 @@ class MailformHelper extends BcFreezeHelper
                 unset($attributes['rows']);
                 unset($attributes['empty']);
                 $count = 0;
-                foreach ($options as $option) {
-                    switch ($count) {
-                        case 0:
-                            $address1 = $this->_name([], $option);
-                            break;
-                        case 1:
-                            $address2 = $this->_name([], $option);
-                            break;
-                        default:
-                            break;
-                    }
-                    $count++;
-                }
+                // TODO ucmitz 以下、未検証
+                // >>>
+//                foreach ($options as $option) {
+//                    switch ($count) {
+//                        case 0:
+//                            $address1 = $this->_name([], $option);
+//                            break;
+//                        case 1:
+//                            $address2 = $this->_name([], $option);
+//                            break;
+//                        default:
+//                            break;
+//                    }
+//                    $count++;
+//                }
+                // <<<
                 if (!isset($address1['name'])) {
                     $address1['name'] = '';
                     $address2['name'] = '';
@@ -258,8 +265,8 @@ class MailformHelper extends BcFreezeHelper
         if (!isset($options['type'])) {
             $options['type'] = 'file';
         }
-        if (!empty($options['url']) && !empty($this->request->getAttribute('currentSite')->same_main_url)) {
-            $options['url'] = $this->BcContents->getPureUrl($options['url'], $this->request->getAttribute('currentSite')->id);
+        if (!empty($options['url']) && !empty($this->_View->getRequest()->getAttribute('currentSite')->same_main_url)) {
+            $options['url'] = $this->BcContents->getPureUrl($options['url'], $this->_View->getRequest()->getAttribute('currentSite')->id);
         }
         return parent::create($context, $options);
     }
@@ -324,29 +331,26 @@ class MailformHelper extends BcFreezeHelper
 
     /**
      * メールフィールドのグループの最後か判定する
-     * @param array $mailFields
+     * @param ResultSet $mailFields
      * @param array $currentMailField
      * @return bool
      */
     public function isGroupLastField($mailFields, $currentMailField)
     {
-        if (empty($currentMailField['group_field'])) {
+        if (empty($currentMailField->group_field)) {
             return false;
         }
-        if (isset($currentMailField['MailField'])) {
-            $currentMailField = $currentMailField['MailField'];
-        }
         foreach ($mailFields as $key => $mailField) {
-            if ($currentMailField === $mailField['MailField']) {
+            if ($currentMailField === $mailField) {
                 break;
             }
         }
-        if (
-            empty($mailFields[$key + 1]['MailField']['group_field']) ||
-            $currentMailField['group_field'] !== $mailFields[$key + 1]['MailField']['group_field']
-        ) {
-            return true;
-        }
+        // TODO ucmitz 未実装
+        // 次のレコードの取得方法がわからない
+//        if($nextField && (!$nextField->group_field || $currentMailField->group_field !== $nextField->_group_field)) {
+//            return true;
+//        }
         return false;
     }
+
 }

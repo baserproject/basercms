@@ -25,7 +25,8 @@ return [
                             'plugin' => 'BcMail',
                             'controller' => 'MailConfigs',
                             'action' => 'index'
-                        ]],
+                        ]
+                    ]
                 ]
             ]
         ]
@@ -61,8 +62,8 @@ return [
                             'action' => 'edit'
                         ],
                         'view' => [
-                            'plugin' => 'mail',
-                            'controller' => 'mail',
+                            'plugin' => 'BcMail',
+                            'controller' => 'Mail',
                             'action' => 'index'
                         ],
                         'copy' => [

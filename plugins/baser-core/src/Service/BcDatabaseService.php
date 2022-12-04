@@ -38,9 +38,12 @@ use Cake\View\View;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use Migrations\CakeAdapter;
+use Migrations\ConfigurationTrait;
 use Migrations\Migrations;
 use PDO;
 use PDOException;
+use Phinx\Db\Adapter\AdapterFactory;
 
 /**
  *
@@ -53,6 +56,182 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      */
     use LogTrait;
     use BcContainerTrait;
+    use ConfigurationTrait;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->initAdapter();
+    }
+
+    /**
+     * アダプターを初期化する
+     *
+     * アダプターはテーブルのマイグレーションに利用する
+     *
+     * @checked
+     * @noTodo
+     */
+    protected function initAdapter()
+    {
+        if(!BcUtil::isInstalled()) return;
+        $db = TableRegistry::getTableLocator()
+            ->get('BaserCore.App')
+            ->getConnection();
+        $config = $db->config();
+        $options = [
+            'adapter' => $this->getAdapterName($config['driver']),
+            'host' => $config['host'] ?? null,
+            'user' => $config['username'] ?? null,
+            'pass' => $config['password'] ?? null,
+            'port' => $config['port'] ?? null,
+            'name' => $config['database'],
+            'charset' => $config['encoding'] ?? null,
+            'unix_socket' => $config['unix_socket'] ?? null,
+        ];
+        $factory = AdapterFactory::instance();
+        $adapter = $factory->getAdapter($options['adapter'], $options);
+        /* @var PDO $pdo */
+        $pdo = $db->getDriver()->getConnection();
+        $adapter->setConnection($pdo);
+        $adapter = new CakeAdapter($adapter, $db);
+        $this->_adapter = $adapter;
+    }
+
+    /**
+     * マイグレーション用のテーブルオブジェクトを取得する。
+     *
+     * @param string $tableName
+     * @return \Migrations\Table
+     * @checked
+     * @noTodo
+     */
+    public function getMigrationsTable(string $tableName)
+    {
+        return new \Migrations\Table($tableName, [], $this->_adapter);
+    }
+
+    /**
+     * テーブルにカラムを追加する
+     *
+     * @param string $tableName
+     * @param string $columnName
+     * @param string $type
+     * @param array $options
+     * @return bool
+     */
+    public function addColumn(
+        string $tableName,
+        string $columnName,
+        string $type,
+        array $options = []
+    )
+    {
+        $options = array_merge([
+            'default' => null,
+            'null' => true,
+        ], $options);
+        $table = $this->getMigrationsTable($tableName);
+        $table->addColumn($columnName, $type, $options);
+        $table->update();
+        BcUtil::clearModelCache();
+        return true;
+    }
+
+    /**
+     * テーブルよりカラムを削除する
+     *
+     * @param string $tableName
+     * @param string $columnName
+     * @return bool
+     */
+    public function removeColumn(string $tableName, string $columnName)
+    {
+        $table = $this->getMigrationsTable($tableName);
+        $table->removeColumn($columnName);
+        $table->update();
+        BcUtil::clearModelCache();
+        return true;
+    }
+
+    /**
+     * テーブルのカラム名を変更する
+     *
+     * @param string $tableName
+     * @param string $columnName
+     * @param string $newColumnName
+     * @return bool
+     */
+    public function renameColumn(
+        string $tableName,
+        string $columnName,
+        string $newColumnName
+    )
+    {
+        $table = $this->getMigrationsTable($tableName);
+        $table->renameColumn($columnName, $newColumnName);
+        $table->update();
+        BcUtil::clearModelCache();
+        return true;
+    }
+
+    /**
+     * テーブルを作成する
+     *
+     * @param string $tableName
+     * @param array $columns
+     * @return bool
+     */
+    public function createTable(string $tableName, array $columns = [])
+    {
+        $table = $this->getMigrationsTable($tableName);
+        $table->create();
+        if($columns) {
+            foreach($columns as $key => $column) {
+                $type = $column['type'];
+                unset($column['type']);
+                $table->addColumn($key, $type, $column);
+            }
+        }
+        $table->update();
+        BcUtil::clearModelCache();
+        $this->clearAppTableList();
+        return true;
+    }
+
+    /**
+     * テーブルの存在チェックを行う
+     *
+     * @param string $tableName
+     * @return bool
+     */
+    public function tableExists(string $tableName): bool
+    {
+        $tables = TableRegistry::getTableLocator()
+            ->get('BaserCore.App')
+            ->getConnection()
+            ->getSchemaCollection()
+            ->listTables();
+        return in_array($tableName, $tables);
+    }
+
+    /**
+     * テーブルを削除する
+     *
+     * @param string $tableName
+     * @return bool
+     */
+    public function dropTable(string $tableName)
+    {
+        $table = $this->getMigrationsTable($tableName);
+        $table->drop();
+        $table->update();
+        BcUtil::clearModelCache();
+        $this->clearAppTableList();
+        return true;
+    }
 
     /**
      * PHP←→DBエンコーディングマップ
@@ -510,7 +689,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         );
 
         $appEncoding = $this->_dbEncToPhp($this->getEncoding());
-        $sql = 'SELECT ' . implode(',', $schema->columns()) . ' FROM ' . $table;
+        $sql = 'SELECT `' . implode('`,`', $schema->columns()) . '` FROM ' . $table;
         $query = $db->query($sql);
         $records = $query->fetchAll('assoc');
 

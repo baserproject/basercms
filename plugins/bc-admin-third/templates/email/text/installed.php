@@ -1,19 +1,23 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.View
- * @since           baserCMS v 0.1.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) NPO baser foundation
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       https://basercms.net/license/index.html MIT License
  */
 
 /**
  * [EMAIL] インストール完了メール
+ * @var string $siteUrl
+ * @var string $adminUrl
+ * @var string $email
+ * @checked
+ * @noTodo
+ * @unitTest
  */
-$adminPrefix = BcUtil::getAdminPrefix();
 ?>
 
 <?php echo date('Y-m-d H:i:s') ?>　
@@ -29,10 +33,8 @@ $adminPrefix = BcUtil::getAdminPrefix();
 ━━━━◇◆━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 　◆ <?php echo __d('baser', 'ログイン情報') ?>　
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━◆◇━━━━
-<?php echo __d('baser', '管理ページ') ?>： <?php echo $siteUrl . $adminPrefix . '/users/login' ?>　
-<?php echo __d('baser', 'アカウント') ?>： <?php echo $name ?>　
-<?php echo __d('baser', 'パスワード') ?>： <?php echo $password ?>　
-※ <?php echo __d('baser', 'パスワードはユーザー管理より変更する事ができます。') ?>　
+<?php echo __d('baser', '管理ページ') ?>： <?php echo $adminUrl ?>　
+<?php echo __d('baser', 'メールアドレス') ?>： <?php echo $email ?>　
 
 
 ━━━━◇◆━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -86,9 +88,9 @@ https://www.facebook.com/basercms
 https://twitter.com/basercms
 <?php echo __d('baser', 'TIPSや最新情報をつぶやいてます。Follow Me！') ?>　
 
-■ <?php echo __d('baser', 'baserCMSの雑談広場（Facebook）') ?>　
-https://www.facebook.com/groups/308200669249993/
-<?php echo __d('baser', 'ちょっとした雑談やつぶやきにどうぞ。初心者歓迎！') ?>　
+■ <?php echo __d('baser', 'baserCMS公式Instagram') ?>　
+https://www.instagram.com/basercms/
+<?php echo __d('baser', '色んなべっしーを見てみよう') ?>　
 
 ■ <?php echo __d('baser', 'baserCMSユーザーズフォーラム') ?>　
 https://forum.basercms.net/

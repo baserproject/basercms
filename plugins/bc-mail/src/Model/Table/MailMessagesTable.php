@@ -11,10 +11,11 @@
 
 namespace BcMail\Model\Table;
 
-use ArrayObject;
-use Cake\Datasource\EntityInterface;
-use Cake\Event\EventInterface;
+use BaserCore\Error\BcException;
+use BcMail\Model\Entity\MailMessage;
+use Cake\Datasource\ConnectionManager;
 use Cake\ORM\Query;
+use Cake\ORM\TableRegistry;
 
 /**
  * メッセージモデル
@@ -57,6 +58,28 @@ class MailMessagesTable extends MailAppTable
         ]
     ];
 
+
+    /**
+     * Initialize method
+     *
+     * @param array $config The configuration for the Table.
+     * @return void
+     * @checked
+     * @noTodo
+     */
+    public function initialize(array $config): void
+    {
+        parent::initialize($config);
+
+        $this->setTable('mail_messages');
+        $this->setPrimaryKey('id');
+
+        $this->addBehavior('Timestamp');
+        $this->addBehavior('BaserCore.BcUpload', [
+            'subdirDateFormat' => 'Y/m/'
+        ]);
+    }
+
     /**
      * モデルのセットアップを行う
      *
@@ -67,27 +90,8 @@ class MailMessagesTable extends MailAppTable
      */
     public function setup($mailContentId)
     {
-        $this->mailFields = [];
         // テーブル名の設定
         $this->setUseTable($mailContentId);
-        // 利用するメールフィールド取得
-        App::uses('MailField', 'BcMail.Model');
-        $MailContent = ClassRegistry::init('BcMail.MailContent');
-        $mailContent = $MailContent->find('first', [
-            'conditions' => ['MailContent.id' => $mailContentId],
-            'recursive' => 0
-        ]);
-        if (!$mailContent) {
-            return false;
-        }
-        $this->mailContent = ['MailContent' => $mailContent['MailContent']];
-
-        $this->mailFields = $MailContent->MailField->find('all', [
-            'conditions' => ['MailField.mail_content_id' => $mailContentId, 'MailField.use_field' => true],
-            'recursive' => -1,
-            'order' => 'MailField.sort ASC',
-        ]);
-
         // アップロード設定
         $this->setupUpload($mailContentId);
         return true;
@@ -97,45 +101,58 @@ class MailMessagesTable extends MailAppTable
      * テーブル名を設定する
      *
      * @param $mailContentId
+     * @checked
+     * @noTodo
      */
     public function setUseTable($mailContentId)
     {
-        $this->table = $this->useTable = $this->createTableName($mailContentId);
+        $this->setTable($this->createTableName($mailContentId));
+    }
+
+    /**
+     * テーブル名を生成する
+     * int型でなかったら強制終了
+     * @param $mailContentId
+     * @return string
+     * @checked
+     * @noTodo
+     */
+    public function createTableName($mailContentId)
+    {
+        $mailContentId = (int)$mailContentId;
+        if (!is_int($mailContentId)) {
+            throw new BcException(__d('baser', 'MailMessageService::createTableName() の引数 $mailContentId は int 型しか受けつけていません。'));
+        }
+        return 'mail_message_' . $mailContentId;
     }
 
     /**
      * アップロード設定を行う
+     * @checked
+     * @noTodo
      */
-    public function setupUpload($name)
+    public function setupUpload(int $mailContentId)
     {
-
-        $settings = $this->Behaviors->BcUpload->BcUpload['MailMessage']->settings;
+        $mailFieldsTable = TableRegistry::getTableLocator()->get('BcMail.MailFields');
+        $mailFields = $mailFieldsTable->find()->where([
+            'MailFields.mail_content_id' => $mailContentId,
+            'MailFields.use_field' => true
+        ])->all();
+        $settings = $this->getFileUploader()->getSettings();
         $settings['fields'] = [];
-        foreach ($this->mailFields as $mailField) {
-            $mailField = $mailField['MailField'];
-            if ($mailField['type'] === 'file') {
-                $settings['fields'][$mailField['field_name']] = [
+        foreach($mailFields as $mailField) {
+            if ($mailField->type === 'file') {
+                $settings['fields'][$mailField->field_name] = [
                     'type' => 'all',
                     'namefield' => 'id',
                     'nameformat' => '%08d'
                 ];
             }
         }
-        if (empty($settings['saveDir']) || !preg_match('/^' . preg_quote("mail" . DS . $name, '/') . '\//', $settings['saveDir'])) {
-            $settings['saveDir'] = "mail" . DS . "limited" . DS . $name . DS . "messages";
+        if (empty($settings['saveDir']) || !preg_match('/^' . preg_quote("mail" . DS . $mailContentId, '/') . '\//', $settings['saveDir'])) {
+            $settings['saveDir'] = "mail" . DS . "limited" . DS . $mailContentId . DS . "messages";
         }
-        $this->Behaviors->load('BcUpload', $settings);
-    }
-
-    /**
-     * beforeSave
-     *
-     * @return boolean
-     */
-    public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options): bool
-    {
-        $this->data = $this->convertToDb($this->data);
-        return true;
+        $this->getBehavior('BcUpload')->setSettings($settings);
     }
 
     /**
@@ -183,7 +200,7 @@ class MailMessagesTable extends MailAppTable
      */
     protected function _setValidate()
     {
-        foreach ($this->mailFields as $mailField) {
+        foreach($this->mailFields as $mailField) {
             $mailField = $mailField['MailField'];
             if ($mailField['valid'] && !empty($mailField['use_field'])) {
                 // 必須項目
@@ -234,10 +251,10 @@ class MailMessagesTable extends MailAppTable
             // ### 拡張バリデーション
             if ($mailField['valid_ex'] && !empty($mailField['use_field'])) {
                 $valids = explode(',', $mailField['valid_ex']);
-                foreach ($valids as $valid) {
+                foreach($valids as $valid) {
                     $options = preg_split('/(?<!\\\)\|/', $mailField['options']);
                     $options = call_user_func_array('aa', $options);
-                    switch ($valid) {
+                    switch($valid) {
                         case 'VALID_MAX_FILE_SIZE':
                             if (
                                 !empty($options['maxFileSize']) &&
@@ -288,7 +305,7 @@ class MailMessagesTable extends MailAppTable
         $dists = [];
 
         // 対象フィールドを取得
-        foreach ($this->mailFields as $row) {
+        foreach($this->mailFields as $row) {
             $mailField = $row['MailField'];
             if (empty($mailField['use_field'])) {
                 continue;
@@ -355,7 +372,7 @@ class MailMessagesTable extends MailAppTable
         $dists = [];
 
         // 対象フィールドを取得
-        foreach ($this->mailFields as $mailField) {
+        foreach($this->mailFields as $mailField) {
             $mailField = $mailField['MailField'];
             // 対象フィールドがあれば、バリデートグループごとに配列にフィールド名を格納する
             if (!empty($mailField['use_field']) && $mailField['group_valid']) {
@@ -364,8 +381,8 @@ class MailMessagesTable extends MailAppTable
         }
 
         // エラーが発生しているかチェック
-        foreach ($dists as $key => $dist) {
-            foreach ($dist as $data) {
+        foreach($dists as $key => $dist) {
+            foreach($dist as $data) {
                 if (isset($this->validationErrors[$data]) && isset($this->validate[$data])) {
                     $this->invalidate($key);
                 }
@@ -384,7 +401,7 @@ class MailMessagesTable extends MailAppTable
         $dists = [];
 
         // 対象フィールドを取得
-        foreach ($this->mailFields as $mailField) {
+        foreach($this->mailFields as $mailField) {
             $mailField = $mailField['MailField'];
             // 対象フィールドがあれば、バリデートグループごとに配列に格納する
             $valids = explode(',', $mailField['valid_ex']);
@@ -398,9 +415,9 @@ class MailMessagesTable extends MailAppTable
         // チェック
         // バリデートグループにおけるデータの埋まり具合をチェックし、全て埋まっていない場合、全て埋まっている場合以外は
         // 不完全データとみなしエラーとする
-        foreach ($dists as $key => $dist) {
+        foreach($dists as $key => $dist) {
             $i = 0;
-            foreach ($dist as $data) {
+            foreach($dist as $data) {
                 if (!empty($data['value'])) {
                     $i++;
                 }
@@ -408,7 +425,7 @@ class MailMessagesTable extends MailAppTable
             $count = count($dist);
             if ($i > 0 && $i < $count) {
                 $this->invalidate($key . '_not_complate', __('入力データが不完全です。'));
-                foreach ($dist as $jValue) {
+                foreach($dist as $jValue) {
                     $this->invalidate($jValue['name']);
                 }
             }
@@ -426,7 +443,7 @@ class MailMessagesTable extends MailAppTable
         $dists = [];
 
         // 対象フィールドを取得
-        foreach ($this->mailFields as $mailField) {
+        foreach($this->mailFields as $mailField) {
             $mailField = $mailField['MailField'];
             if (empty($mailField['use_field'])) {
                 continue;
@@ -443,7 +460,7 @@ class MailMessagesTable extends MailAppTable
         }
         // チェック
         // バリデートグループにおけるデータ２つを比較し、違えばエラーとする
-        foreach ($dists as $key => $dist) {
+        foreach($dists as $key => $dist) {
             if (count($dist) < 2) {
                 continue;
             }
@@ -472,7 +489,7 @@ class MailMessagesTable extends MailAppTable
         $dists = [];
 
         // 対象フィールドを取得
-        foreach ($this->mailFields as $mailField) {
+        foreach($this->mailFields as $mailField) {
             $mailField = $mailField['MailField'];
             if ($mailField['type'] !== 'date_time_wareki') {
                 continue;
@@ -483,10 +500,10 @@ class MailMessagesTable extends MailAppTable
             ];
         }
 
-        foreach ($dists as $dist) {
+        foreach($dists as $dist) {
             $timeNames = ['year', 'month', 'day'];
             $inputCount = 0;
-            foreach ($timeNames as $timeName) {
+            foreach($timeNames as $timeName) {
                 if (!empty($data['MailMessage'][$dist['name']][$timeName])) {
                     $inputCount++;
                 }
@@ -498,132 +515,37 @@ class MailMessagesTable extends MailAppTable
     }
 
     /**
-     * 自動変換
-     * 確認画面で利用される事も踏まえてバリデートを通す為の
-     * 可能な変換処理を行う。
-     *
-     * @param array $data
-     * @return array $data
-     */
-    public function autoConvert($data)
-    {
-        foreach ($this->mailFields as $mailField) {
-            $mailField = $mailField['MailField'];
-            if (!$mailField['use_field']) {
-                continue;
-            }
-
-            $value = null;
-            if (
-                isset($data['MailMessage'][$mailField['field_name']]) &&
-                $data['MailMessage'][$mailField['field_name']] !== ""
-            ) {
-                $value = $data['MailMessage'][$mailField['field_name']];
-            }
-
-            if ($value !== null) {
-
-                // 半角処理
-                if ($mailField['auto_convert'] === 'CONVERT_HANKAKU') {
-                    $value = mb_convert_kana($value, 'a');
-                }
-                // 全角処理
-                if ($mailField['auto_convert'] === 'CONVERT_ZENKAKU') {
-                    $value = mb_convert_kana($value, 'AK');
-                }
-                // サニタイズ
-                if (!is_array($value)) {
-                    $value = str_replace('<!--', '&lt;!--', $value);
-                }
-                // TRIM
-                if (!is_array($value)) {
-                    $value = trim($value);
-                }
-            }
-
-            $data['MailMessage'][$mailField['field_name']] = $value;
-        }
-
-        return $data;
-    }
-
-    /**
-     * 初期値の設定をする
-     *
-     * @return array $data
-     */
-    public function getDefaultValue($data)
-    {
-        $_data = [];
-
-        // 対象フィールドを取得
-        if ($this->mailFields) {
-            foreach ($this->mailFields as $mailField) {
-                $mailField = $mailField['MailField'];
-                // 対象フィールドがあれば、バリデートグループごとに配列に格納する
-                if (!is_null($mailField['default_value']) && $mailField['default_value'] !== "") {
-
-                    if ($mailField['type'] === 'multi_check') {
-                        $_data['MailMessage'][$mailField['field_name']][0] = $mailField['default_value'];
-                    } else {
-                        $_data['MailMessage'][$mailField['field_name']] = $mailField['default_value'];
-                    }
-                }
-            }
-        }
-
-        if ($data) {
-            if (!isset($data['MailMessage'])) {
-                $data = ['MailMessage' => $data];
-            }
-            foreach ($data['MailMessage'] as $key => $value) {
-                if (isset($data['MailMessage'][$key])) {
-                    $_data['MailMessage'][$key] = h($value);
-                }
-            }
-        }
-        return $_data;
-    }
-
-    /**
      * データベース用のデータに変換する
      *
-     * @param array $dbDatas
-     * @return array $dbDatas
+     * @param $mailFields
+     * @param $mailMessage
+     * @return MailMessage
      */
-    public function convertToDb($dbData)
+    public function convertToDb($mailFields, $mailMessage)
     {
-        foreach ($this->mailFields as $mailField) {
-            $mailField = $mailField['MailField'];
+        foreach($mailFields as $mailField) {
+            if (empty($mailMessage->{$mailField->field_name})) continue;
+            $value = $mailMessage->{$mailField->field_name};
             // マルチチェックのデータを｜区切りに変換
-            if ($mailField['type'] === 'multi_check' && $mailField['use_field']) {
-                if (!empty($dbData['MailMessage'][$mailField['field_name']])) {
-                    if (is_array($dbData['MailMessage'][$mailField['field_name']])) {
-                        $dbData['MailMessage'][$mailField['field_name']] = implode("|", $dbData['MailMessage'][$mailField['field_name']]);
-                    } else {
-                        $dbData['MailMessage'][$mailField['field_name']] = $dbData['MailMessage'][$mailField['field_name']];
-                    }
-                }
+            if ($mailField->type === 'multi_check' && $mailField->use_field && $value && is_array($value)) {
+                $mailMessage->{$mailField->field_name} = implode("|", $value);
             }
             // パスワードのデータをハッシュ化
-            if ($mailField['type'] === 'password') {
-                if (!empty($dbData['MailMessage'][$mailField['field_name']])) {
-                    App::uses('AuthComponent', 'Controller/Component');
-                    $dbData['MailMessage'][$mailField['field_name']] = AuthComponent::password($dbData['MailMessage'][$mailField['field_name']]);
-                }
-            }
+            // TODO ucmitz 未実装
+//            if ($mailField->type === 'password' && !empty($mailMessage->{$mailField->field_name})) {
+//                App::uses('AuthComponent', 'Controller/Component');
+//                $mailMessage->{$mailField->field_name} = AuthComponent::password($mailMessage->{$mailField->field_name});
+//            }
             // 和暦未入力時に配列をnullに変換
             // - 和暦完全入力時は、lib/Baser/Model/BcAppModel->deconstruct にて日時に変換される
             // - 一部のフィールドしか入力されていない場合は $this->_validWarekiComplate にてエラーになる
-            if ($mailField['type'] === 'date_time_wareki' && is_array($dbData['MailMessage'][$mailField['field_name']])) {
-                $dbData['MailMessage'][$mailField['field_name']] = null;
+            if ($mailField->type === 'date_time_wareki' && is_array($value)) {
+                $mailMessage->{$mailField->field_name} = null;
             }
+            // 機種依存文字を変換
+            $mailMessage->{$mailField->field_name} = $this->replaceText($value);
         }
-
-        // 機種依存文字を変換
-        $dbData['MailMessage'] = $this->replaceText($dbData['MailMessage']);
-
-        return $dbData;
+        return $mailMessage;
     }
 
     /**
@@ -637,7 +559,6 @@ class MailMessagesTable extends MailAppTable
      */
     public function replaceText($str)
     {
-        $ret = $str;
         $arr = [
             "\xE2\x85\xA0" => "I",
             "\xE2\x85\xA1" => "II",
@@ -719,44 +640,38 @@ class MailMessagesTable extends MailAppTable
      * @return array $dbDatas
      * TODO ヘルパー化すべきかも
      */
-    public function convertDatasToMail($dbData)
+    public function convertDatasToMail($data, $options)
     {
-        foreach ($dbData['mailFields'] as $key => $value) {
-            $dbData['mailFields'][$key]['MailField']['before_attachment'] = strip_tags($value['MailField']['before_attachment']);
-            $dbData['mailFields'][$key]['MailField']['after_attachment'] = strip_tags($value['MailField']['after_attachment'], "<br>");
-            $dbData['mailFields'][$key]['MailField']['head'] = strip_tags($value['MailField']['head'], "<br>");
-            $dbData['mailFields'][$key]['MailField']['after_attachment'] = str_replace(["<br />", "<br>"], "\n", $dbData['mailFields'][$key]['MailField']['after_attachment']);
-            $dbData['mailFields'][$key]['MailField']['head'] = str_replace(["<br />", "<br>"], "", $dbData['mailFields'][$key]['MailField']['head']);
-        }
-        foreach ($this->mailFields as $mailField) {
-            $mailField = $mailField['MailField'];
-            if ($mailField['no_send']) {
-                unset($dbData['message'][$mailField['field_name']]);
+        $mailFields = $data['mailFields'];
+        $message = $data['message'];
+        $mailContent = $data['mailContent'];
+
+        foreach($mailFields as $key => $value) {
+            $fieldName = $value->field_name;
+            $value->before_attachment = strip_tags($value->before_attachment);
+            $value->after_attachment = str_replace(["<br />", "<br>"], "\n", strip_tags($value->after_attachment, "<br>"));
+            $value->head = str_replace(["<br />", "<br>"], "", strip_tags($value->head, "<br>"));
+            if ($value->no_send) {
+                unset($message->{$fieldName});
             }
-            if ($mailField['type'] === 'multi_check') {
-                if (!empty($dbData['message'][$mailField['field_name']]) && !is_array($dbData['message'][$mailField['field_name']])) {
-                    $dbData['message'][$mailField['field_name']] = explode("|", $dbData['message'][$mailField['field_name']]);
+            if ($value->type === 'multi_check') {
+                if (!empty($message->{$fieldName}) && !is_array($message->{$fieldName})) {
+                    $message->{$fieldName} = explode("|", $message->{$fieldName});
                 }
             }
+            if (!is_array($message->{$fieldName})) {
+                $mailContent->subject_user = str_replace('{$' . $fieldName . '}', $message->{$fieldName}, $mailContent->subject_user);
+                $mailContent->subject_admin = str_replace('{$' . $fieldName . '}', $message->{$fieldName}, $mailContent->subject_admin);
+            }
+            // パスワードは入力値をマスクした値を表示
+            if ($value->type === 'password' && $message->{$fieldName} && !empty($options['maskedPasswords'][$fieldName])) {
+                $message->{$fieldName} = $options['maskedPasswords'][$fieldName];
+            }
         }
-
-        return $dbData;
-    }
-
-    /**
-     * テーブル名を生成する
-     * int型でなかったら強制終了
-     * @param $mailContentId
-     * @return string
-     */
-    public function createTableName($mailContentId)
-    {
-        $mailContentId = (int)$mailContentId;
-        if (!is_int($mailContentId)) {
-            throw new BcException(__d('baser', 'createTableNameの引数$mailContentIdはint型しか受けつけていません。'));
-        }
-
-        return 'mail_message_' . $mailContentId;
+        $data['message'] = $message;
+        $data['mailContent'] = $mailContent;
+        $data['mailFields'] = $mailFields;
+        return $data;
     }
 
     /**
@@ -768,128 +683,6 @@ class MailMessagesTable extends MailAppTable
     public function createFullTableName($mailContentId)
     {
         return $this->tablePrefix . $this->createTableName($mailContentId);
-    }
-
-    /**
-     * メッセージテーブルを作成する
-     *
-     * @param string $contentName コンテンツ名
-     * @return boolean
-     */
-    public function createTable($mailContentId)
-    {
-        $db = $this->getDataSource();
-        $schema = [
-            'id' => ['type' => 'integer', 'null' => false, 'default' => null, 'length' => 8, 'key' => 'primary'],
-            'modified' => ['type' => 'datetime', 'null' => true, 'default' => null],
-            'created' => ['type' => 'datetime', 'null' => true, 'default' => null],
-            'indexes' => ['PRIMARY' => ['column' => 'id', 'unique' => 1]]
-        ];
-        $table = $this->createTableName($mailContentId);
-        $ret = true;
-        if ($this->tableExists($db->config['prefix'] . $table)) {
-            $ret = $db->dropTable(['table' => $table]);
-        }
-        if (!$ret) {
-            return false;
-        }
-        $ret = $db->createTable(['schema' => $schema, 'table' => $table]);
-        $this->deleteModelCache();
-        return $ret;
-    }
-
-    /**
-     * メッセージテーブルを削除する
-     *
-     * @param string $contentName コンテンツ名
-     * @return boolean
-     */
-    public function dropTable($mailContentId)
-    {
-        $db = $this->getDataSource();
-        $table = $this->createTableName($mailContentId);
-        if (!$this->tableExists($db->config['prefix'] . $table)) {
-            return true;
-        }
-        $ret = $db->dropTable(['table' => $table]);
-        $this->deleteModelCache();
-        return $ret;
-    }
-
-    /**
-     * メッセージファイルにフィールドを追加する
-     *
-     * @param string $contentName
-     * @param string $field
-     * @return array|bool
-     */
-    public function addMessageField($mailContentId, $field)
-    {
-        $table = $this->createTableName($mailContentId);
-        $options = ['field' => $field, 'column' => ['type' => 'text'], 'table' => $table];
-        return parent::addField($options);
-    }
-
-    /**
-     * メッセージファイルのフィールドを削除する
-     *
-     * @param string $contentName
-     * @param string $field
-     * @return array|bool
-     */
-    public function delMessageField($mailContentId, $field)
-    {
-        $table = $this->createTableName($mailContentId);
-        return parent::delField(['field' => $field, 'table' => $table]);
-    }
-
-    /**
-     * メッセージファイルのフィールドを編集する
-     *
-     * @param string $fieldName
-     * @param string $oldFieldName
-     * @param string $newfieldName
-     * @return array|bool
-     */
-    public function renameMessageField($mailContentId, $oldFieldName, $newfieldName)
-    {
-        $table = $this->createTableName($mailContentId);
-        return parent::renameField(['old' => $oldFieldName, 'new' => $newfieldName, 'table' => $table]);
-    }
-
-    /**
-     * メッセージ保存用テーブルのフィールドを最適化する
-     * 初回の場合、id/created/modifiedを追加する
-     * 2回目以降の場合は、最後のカラムに追加する
-     *
-     * @param array $dbConfig
-     * @param int $mailContentId
-     * @return boolean
-     */
-    public function construction($mailContentId)
-    {
-        $mailFieldClass = ClassRegistry::init('BcMail.MailField');
-        // フィールドリストを取得
-        $mailFields = $mailFieldClass->find('all', ['conditions' => ['MailField.mail_content_id' => $mailContentId]]);
-        if (!$this->tableExists($this->createFullTableName($mailContentId))) {
-            /* 初回の場合 */
-            $this->createTable($mailContentId);
-            $this->construction($mailContentId);
-        } else {
-            /* 2回目以降の場合 */
-            $this->setUseTable($mailContentId);
-            $this->_schema = null;
-            $this->cacheSources = false;
-            ClassRegistry::flush();
-            $schema = $this->schema();
-            $messageFields = array_keys($schema);
-            foreach ($mailFields as $mailField) {
-                if (!in_array($mailField['MailField']['field_name'], $messageFields)) {
-                    $this->addMessageField($mailContentId, $mailField['MailField']['field_name']);
-                }
-            }
-        }
-        return true;
     }
 
     /**
@@ -913,10 +706,10 @@ class MailMessagesTable extends MailAppTable
         $Maildata = new MaildataHelper(new View());
         $Mailfield = new MailfieldHelper(new View());
 
-        foreach ($messages as $key => $message) {
+        foreach($messages as $key => $message) {
             $inData = [];
             $inData['NO'] = $message[$this->alias]['id'];
-            foreach ($mailFields as $mailField) {
+            foreach($mailFields as $mailField) {
                 if ($mailField['MailField']['type'] === 'file') {
                     $inData[$mailField['MailField']['field_name'] . ' (' . $mailField['MailField']['name'] . ')'] = $message[$this->alias][$mailField['MailField']['field_name']];
                 } else {
@@ -948,7 +741,7 @@ class MailMessagesTable extends MailAppTable
         $contents = $MailContent->find('all', ['recursive' => -1]);
 
         $result = true;
-        foreach ($contents as $content) {
+        foreach($contents as $content) {
             if ($this->createTable($content['MailContent']['id'])) {
                 if (!$this->construction($content['MailContent']['id'])) {
                     $result = false;
@@ -969,9 +762,11 @@ class MailMessagesTable extends MailAppTable
      */
     public function find(string $type = 'all', array $options = []): Query
     {
+        return parent::find($type, $options);
+        // TODO ucmitz 以下、未検証
         // テーブルを共用しているため、環境によってはデータ取得に失敗する。
         // その原因のキャッシュメソッドをfalseに設定。
-        $db = ConnectionManager::getDataSource('default');
+        $db = ConnectionManager::get('default');
         $db->cacheMethods = false;
         $result = parent::find($type, $options);
         $db->cacheMethods = true;

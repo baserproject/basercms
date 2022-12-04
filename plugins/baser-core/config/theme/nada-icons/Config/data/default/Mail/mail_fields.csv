@@ -1,4 +1,4 @@
-﻿"id","mail_content_id","no","name","field_name","type","head","attention","before_attachment","after_attachment","source","size","rows","maxlength","options","class","separator","default_value","description","group_field","group_valid","valid","valid_ex","auto_convert","not_empty","use_field","no_send","sort","created","modified"
+﻿"id","mail_content_id","no","name","field_name","type","head","attention","before_attachment","after_attachment","source","size","rows","maxlength","options","class","delimiter","default_value","description","group_field","group_valid","valid","valid_ex","auto_convert","not_empty","use_field","no_send","sort","created","modified"
 "","1","1","姓漢字","name_1","text","お名前","","<small>[姓]</small>","","","8","","255","","","","","","name","name","VALID_NOT_EMPTY","","","1","1","0","1","",""
 "","1","2","名漢字","name_2","text","お名前","","<small>[名]</small>","","","8","","255","","","","","","name","name","VALID_NOT_EMPTY","","","1","1","0","2","",""
 "","1","3","姓カナ","name_kana_1","text","フリガナ","","<small>[姓]</small>","","","8","","255","","","","","","name_kana","name_kana","","","","","1","0","3","",""

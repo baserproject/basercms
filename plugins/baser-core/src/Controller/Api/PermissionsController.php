@@ -12,6 +12,7 @@
 namespace BaserCore\Controller\Api;
 
 use BaserCore\Error\BcException;
+use BaserCore\Service\PermissionsService;
 use BaserCore\Service\PermissionsServiceInterface;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -233,7 +234,7 @@ class PermissionsController extends BcApiController
     /**
      * 並び替えを更新する
      *
-     * @param PermissionsServiceInterface $service
+     * @param PermissionsService $service
      * @param int $userGroupId
      * @return void
      * @checked

@@ -78,24 +78,6 @@ class AppTableTest extends BcTestCase
     }
 
     /**
-     * Test deleteModelCache
-     *
-     * @return void
-     */
-    public function testDeleteModelCache()
-    {
-        $path = CACHE . 'models' . DS . 'dummy';
-
-        if (touch($path)) {
-            $this->App->deleteModelCache();
-            $result = !file_exists($path);
-            $this->assertTrue($result, 'Modelキャッシュを削除できません');
-        } else {
-            $this->markTestIncomplete('ダミーのキャッシュファイルの作成に失敗しました。');
-        }
-    }
-
-    /**
      * Test getUrlPattern
      *
      * @param string $url

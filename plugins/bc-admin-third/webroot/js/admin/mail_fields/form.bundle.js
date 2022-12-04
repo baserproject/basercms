@@ -1,0 +1,11 @@
+/**
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
+ *
+ * @copyright     Copyright (c) NPO baser foundation
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       https://basercms.net/license/index.html MIT License
+ */
+$((function(){function e(e){switch(e){case"text":case"email":$("#RowSize").show(),$("#RowRows").hide(),$("#text-rows").val(""),$("#RowMaxlength").show(),$("#RowSource").hide(),$("#source").val(""),$("#RowAutoConvert").show(),$("#RowSeparator").hide(),$("#delimiter").val("");break;case"textarea":$("#RowSize").show(),$("#RowRows").show(),$("#RowMaxlength").hide(),$("#max-length").val(""),$("#RowSource").hide(),$("#source").val(""),$("#RowAutoConvert").show(),$("#RowSeparator").hide(),$("#delimiter").val("");break;case"radio":case"multi_check":$("#RowSize").hide(),$("#size").val(""),$("#RowRows").hide(),$("#text-rows").val(""),$("#RowMaxlength").hide(),$("#max-length").val(""),$("#RowSource").show(),$("#RowAutoConvert").hide(),$("#auto-convert").val(""),$("#RowSeparator").show();break;case"select":$("#RowSize").hide(),$("#size").val(""),$("#RowRows").hide(),$("#text-rows").val(""),$("#RowMaxlength").hide(),$("#max-length").val(""),$("#RowSource").show(),$("#RowAutoConvert").hide(),$("#auto-convert").val(""),$("#RowSeparator").hide(),$("#delimiter").val("");break;case"pref":case"date_time_wareki":case"date_time_calender":case"file":$("#RowSize").hide(),$("#size").val(""),$("#RowRows").hide(),$("#text-rows").val(""),$("#RowMaxlength").hide(),$("#max-length").val(""),$("#RowSource").hide(),$("#source").val(""),$("#RowAutoConvert").hide(),$("#auto-convert").val(""),$("#RowSeparator").hide(),$("#delimiter").val("");break;case"autozip":$("#RowSize").show(),$("#RowRows").hide(),$("#text-rows").val(""),$("#RowMaxlength").show(),$("#RowSource").show(),$("#RowAutoConvert").show(),$("#auto-convert").val("CONVERT_HANKAKU"),$("#RowSeparator").hide(),$("#delimiter").val("")}}$("#type").change((function(){e($("#type").val())})),$("#name").change((function(){$("#head").val()||$("#head").val($("#name").val())})),$("#BtnSave").click((function(){$.bcUtil.showLoader()})),e($("#type").val())}));
+//# sourceMappingURL=form.bundle.js.map

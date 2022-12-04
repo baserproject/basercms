@@ -11,7 +11,15 @@
 
 namespace BcMail\View\Helper;
 
+use BaserCore\Service\SitesService;
+use BaserCore\Service\SitesServiceInterface;
+use BaserCore\Utility\BcContainerTrait;
+use Cake\Core\App;
+use Cake\Core\Configure;
+use Cake\Event\Event;
+use Cake\Filesystem\Folder;
 use Cake\View\Helper;
+use Cake\View\View;
 
 /**
  * メールヘルパー
@@ -21,6 +29,11 @@ use Cake\View\Helper;
  */
 class MailHelper extends Helper
 {
+
+    /**
+     * Trait
+     */
+    use BcContainerTrait;
 
     /**
      * ヘルパー
@@ -34,9 +47,9 @@ class MailHelper extends Helper
      * @param View $View Viewオブジェクト
      * @return void
      */
-    public function __construct(View $View)
+    public function __construct(View $view, array $config = [])
     {
-        parent::__construct($View);
+        parent::__construct($view, $config);
         $this->setMailContent();
     }
 
@@ -55,8 +68,8 @@ class MailHelper extends Helper
             $MailContent = ClassRegistry::init('BcMail.MailContent');
             $MailContent->reduceAssociations([]);
             $this->mailContent = Hash::extract($MailContent->read(null, $mailContentId), 'MailContent');
-        } elseif (isset($this->_View->viewVars['mailContent'])) {
-            $this->mailContent = $this->_View->viewVars['mailContent']['MailContent'];
+        } elseif ($this->_View->get('mailContent')) {
+            $this->mailContent = $this->_View->get('mailContent');
         }
     }
 
@@ -67,44 +80,35 @@ class MailHelper extends Helper
      *
      * @return array フォームテンプレート一覧データ
      * @todo 他のヘルパーに移動する
+     * @checked
+     * @noTodo
      */
-    public function getFormTemplates($siteId = 0)
+    public function getFormTemplates($siteId = 1)
     {
-        $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
-        $site = $sites->findById($siteId)->first();
-        $theme = $this->BcBaser->siteConfig['theme'];
-        if ($site->theme) {
-            $theme = $site->theme;
-        }
-        $templatesPathes = array_merge(App::path('View', 'Mail'), App::path('View'));
+        /* @var SitesService $sitesService */
+        $sitesService = $this->getService(SitesServiceInterface::class);
+        $site = $sitesService->get($siteId);
+        $theme = $site->theme;
+        $templatesPaths = App::path('templates');
         if ($theme) {
-            array_unshift($templatesPathes, WWW_ROOT . 'theme' . DS . $theme . DS);
+            $templatesPaths = array_merge(App::path('templates', $theme), $templatesPaths);
         }
 
-        $_templates = [];
-        foreach ($templatesPathes as $templatePath) {
+        $templates = [];
+        foreach ($templatesPaths as $templatePath) {
             $templatePath .= 'Mail' . DS;
             $folder = new Folder($templatePath);
             $files = $folder->read(true, true);
-            $foler = null;
             if ($files[0]) {
-                if ($_templates) {
-                    $_templates = am($_templates, $files[0]);
+                if ($templates) {
+                    $templates = array_merge($templates, $files[0]);
                 } else {
-                    $_templates = $files[0];
+                    $templates = $files[0];
                 }
             }
         }
-
-        $excludes = Configure::read('BcAgent');
-        $excludes = Hash::extract($excludes, '{s}.prefix');
-        $templates = [];
-        foreach ($_templates as $template) {
-            if (!in_array($template, $excludes)) {
-                $templates[$template] = $template;
-            }
-        }
-        return $templates;
+        $templates = array_unique($templates);
+        return array_combine($templates, $templates);
     }
 
     /**
@@ -114,45 +118,42 @@ class MailHelper extends Helper
      *
      * @return array メールテンプレート一覧データ
      * @todo 他のヘルパに移動する
+     * @checked
+     * @noTodo
      */
-    public function getMailTemplates($siteId = 0)
+    public function getMailTemplates($siteId = 1)
     {
-        $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
-        $site = $sites->findById($siteId)->first();
-        $theme = $this->BcBaser->siteConfig['theme'];
-        if ($site->theme) {
-            $theme = $site->theme;
-        }
-        $templatesPathes = array_merge(App::path('View', 'Mail'), App::path('View'));
+        $sitesService = $this->getService(SitesServiceInterface::class);
+        $site = $sitesService->get($siteId);
+        $theme = $site->theme;
+        $templatesPaths = App::path('templates');
         if ($theme) {
-            array_unshift($templatesPathes, WWW_ROOT . 'theme' . DS . $theme . DS);
-        }
-
-        $_templates = [];
-        foreach ($templatesPathes as $templatesPath) {
-            $templatesPath .= 'Emails' . DS . 'text' . DS;
-            $Folder = new Folder($templatesPath);
-            $files = $Folder->read(true, true);
-            $Folder = null;
-            if ($files[1]) {
-                if ($_templates) {
-                    $_templates = am($_templates, $files[1]);
-                } else {
-                    $_templates = $files[1];
-                }
-            }
+            $templatesPaths = array_merge(App::path('templates', $theme), $templatesPaths);
         }
 
         $templates = [];
         $ext = Configure::read('BcApp.templateExt');
-        $excludes = ['empty', 'installed' . $ext, 'mail_data' . $ext];
-        foreach ($_templates as $template) {
-            if (!in_array($template, $excludes)) {
-                $template = basename($template, $ext);
-                $templates[$template] = $template;
+        foreach ($templatesPaths as $templatePath) {
+            $templatePath .= 'email' . DS . 'text' . DS;
+            $folder = new Folder($templatePath);
+            $files = $folder->read(true, true);
+            if ($files[1]) {
+                foreach($files[1] as $key => $file) {
+                    if($file === 'mail_data.php' || !preg_match('/^mail_/', $file)) {
+                        unset($files[1][$key]);
+                    } else {
+                        $files[1][$key] = basename($file, $ext);
+                    }
+                }
+                if ($templates) {
+                    $templates = array_merge($templates, $files[1]);
+                } else {
+                    $templates = $files[1];
+                }
             }
         }
-        return $templates;
+        $templates = array_unique($templates);
+        return array_combine($templates, $templates);
     }
 
     /**
@@ -255,17 +256,21 @@ class MailHelper extends Helper
     /**
      * beforeRender
      *
+     * @param Event $event
      * @param string $viewFile
      */
-    public function beforeRender($viewFile)
+    public function beforeRender(Event $event, string $viewFile)
     {
-        if ($this->request->getParam('controller') === 'mail' && in_array($this->request->getParam('action'), ['index', 'confirm', 'submit'])) {
+        $request = $this->getView()->getRequest();
+        if ($request->getParam('controller') === 'Mail' && in_array($request->getParam('action'), ['index', 'confirm', 'submit'])) {
             // メールフォームをショートコードを利用する際、ショートコードの利用先でキャッシュを利用している場合、
             // セキュリティコンポーネントで発行するトークンが更新されない為、強制的にキャッシュをオフにする
-            if (!empty($this->request->getParam('requested'))) {
+            // TODO ucmitz 未実装
+            /*if (!empty($request->getParam('requested'))) {
                 Configure::write('Cache.disable', true);
-            }
-            $this->_View->BcForm->getRequest()->setParam('_Token.unlockedFields', $this->_View->get('unlockedFields'));
+            }*/
+            // TODO ucmitz 未検証
+            $this->getView()->setRequest($request->withParam('_Token.unlockedFields', $this->getView()->get('unlockedFields')));
         }
     }
 }

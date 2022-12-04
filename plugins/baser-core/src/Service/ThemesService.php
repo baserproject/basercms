@@ -512,6 +512,7 @@ class ThemesService implements ThemesServiceInterface
      */
     protected function _writeCsv($plugin, $path, $exclude = [])
     {
+        /** @var BcDatabaseService $dbService */
         $dbService = $this->getService(BcDatabaseServiceInterface::class);
         /* @var AppTable $appTable */
         $appTable = TableRegistry::getTableLocator()->get('BaserCore.App');

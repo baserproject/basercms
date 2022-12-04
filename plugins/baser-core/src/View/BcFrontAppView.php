@@ -11,6 +11,7 @@
 
 namespace BaserCore\View;
 
+use BaserCore\View\Helper\BcTextHelper;
 use Cake\Core\Configure;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -20,6 +21,7 @@ use BaserCore\Annotation\Note;
 /**
  * BcFrontAppView
  * @uses BcFrontAppView
+ * @property BcTextHelper $BcText
  */
 class BcFrontAppView extends AppView
 {
@@ -37,6 +39,7 @@ class BcFrontAppView extends AppView
             $agentHelper = Configure::read('BcAgent.' . $this->getRequest()->getAttribute('currentSite')->device . '.helper');
             if ($agentHelper) $this->loadHelper($agentHelper);
         }
+        $this->loadHelper('BaserCore.BcText');
     }
 
 }

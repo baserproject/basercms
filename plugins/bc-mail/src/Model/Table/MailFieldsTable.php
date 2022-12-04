@@ -11,6 +11,10 @@
 
 namespace BcMail\Model\Table;
 
+use BaserCore\Event\BcEventDispatcherTrait;
+use Cake\Datasource\EntityInterface;
+use Cake\Validation\Validator;
+
 /**
  * メールフィールドモデル
  *
@@ -21,11 +25,30 @@ class MailFieldsTable extends MailAppTable
 {
 
     /**
-     * ビヘイビア
-     *
-     * @var array
+     * Trait
      */
-    public $actsAs = ['BcCache'];
+    use BcEventDispatcherTrait;
+
+    /**
+     * Initialize method
+     *
+     * @param array $config The configuration for the Table.
+     * @return void
+     * @checked
+     * @unitTest
+     */
+    public function initialize(array $config): void
+    {
+        parent::initialize($config);
+
+        $this->setTable('mail_fields');
+        $this->setPrimaryKey('id');
+        $this->addBehavior('Timestamp');
+        $this->belongsTo('MailContents', [
+            'className' => 'BcMail.MailContents',
+            'foreignKey' => 'mail_content_id',
+        ]);
+    }
 
     /**
      * MailField constructor.
@@ -34,121 +57,78 @@ class MailFieldsTable extends MailAppTable
      * @param null $table
      * @param null $ds
      */
-    public function __construct($id = false, $table = null, $ds = null)
+    public function validationDefault(Validator $validator): Validator
     {
-        parent::__construct($id, $table, $ds);
-        $this->validate = [
-            'id' => [
-                [
-                    'rule' => 'numeric',
-                    'on' => 'update',
-                    'message' => __d('baser', 'IDに不正な値が利用されています。')
-                ]
-            ],
-            'name' => [
-                [
-                    'rule' => ['notBlank'],
-                    'message' => __d('baser', '項目名を入力してください。')
-                ],
-                [
-                    'rule' => ['maxLength', 255],
-                    'message' => __d('baser', '項目名は255文字以内で入力してください。')
-                ]
-            ],
-            'field_name' => [
-                [
-                    'rule' => ['halfTextMailField'],
-                    'message' => __d('baser', 'フィールド名は半角英数字のみで入力してください。'),
-                    'allowEmpty' => false
-                ],
-                [
-                    'rule' => 'duplicateMailField',
-                    'message' => __d('baser', '入力されたフィールド名は既に登録されています。')
-                ],
-                [
-                    'rule' => ['maxLength', 255],
-                    'message' => __d('baser', 'フィールド名は255文字以内で入力してください。')
-                ]
-            ],
-            'type' => [
-                [
-                    'rule' => ['notBlank'],
-                    'message' => __d('baser', 'タイプを入力してください。')
-                ]
-            ],
-            'head' => [
-                [
-                    'rule' => ['maxLength', 255],
-                    'message' => __d('baser', '項目見出しは255文字以内で入力してください。')
-                ]
-            ],
-            'attention' => [
-                [
-                    'rule' => ['maxLength', 255],
-                    'message' => __d('baser', '注意書きは255文字以内で入力してください。')
-                ]
-            ],
-            'before_attachment' => [
-                [
-                    'rule' => ['maxLength', 255],
-                    'message' => __d('baser', '前見出しは255文字以内で入力してください。')
-                ]
-            ],
-            'after_attachment' => [
-                [
-                    'rule' => ['maxLength', 255],
-                    'message' => __d('baser', '後見出しは255文字以内で入力してください。')
-                ]
-            ],
-            'source' => [
-                [
-                    'rule' => ['sourceMailField'],
-                    'message' => __d('baser', '選択リストを入力してください。')
-                ]
-            ],
-            'options' => [
-                [
-                    'rule' => ['maxLength', 255],
-                    'message' => __d('baser', 'オプションは255文字以内で入力してください。')
-                ]
-            ],
-            'class' => [
-                [
-                    'rule' => ['maxLength', 255],
-                    'message' => __d('baser', 'クラス名は255文字以内で入力してください。')
-                ]
-            ],
-            'separator' => [
-                [
-                    'rule' => ['maxLength', 255],
-                    'message' => __d('baser', '区切り文字は255文字以内で入力してください。')
-                ]
-            ],
-            'default_value' => [
-                [
-                    'rule' => ['maxLength', 255],
-                    'message' => __d('baser', '初期値は255文字以内で入力してください。')
-                ]
-            ],
-            'description' => [
-                [
-                    'rule' => ['maxLength', 255],
-                    'message' => __d('baser', '説明文は255文字以内で入力してください。')
-                ]
-            ],
-            'group_field' => [
-                [
-                    'rule' => ['maxLength', 255],
-                    'message' => __d('baser', 'グループフィールドは255文字以内で入力してください。')
-                ]
-            ],
-            'group_valid' => [
-                [
-                    'rule' => ['maxLength', 255],
-                    'message' => __d('baser', 'グループ入力チェックは255文字以内で入力してください。')
-                ]
-            ]
-        ];
+        $validator
+            ->integer('id')
+            ->allowEmptyString('id', null, 'create');
+        $validator
+            ->scalar('name')
+            ->notEmptyString('name', __d('baser', '項目名を入力してください。'))
+            ->maxLength('name', 255, __d('baser', '項目名は255文字以内で入力してください。'));
+        $validator
+            ->scalar('field_name')
+            ->notEmptyString('field_name', __d('baser', 'フィールド名を入力してください。'))
+            ->maxLength('field_name', 255, __d('baser', 'フィールド名は255文字以内で入力してください。'));
+        // TODO ucmitz 未実装
+//            ->add('field_name', [
+//                'halfTextMailField' => [
+//                    'rule' => 'halfTextMailField',
+//                    'provider' => 'table',
+//                    'message' => __d('baser', 'フィールド名は半角英数字のみで入力してください。')
+//                ]])
+//            ->add('field_name', [
+//                'duplicateMailField' => [
+//                    'rule' => 'duplicateMailField',
+//                    'provider' => 'table',
+//                    'message' => __d('baser', '既に登録のあるフィールド名です。')
+//                ]]);
+        $validator
+            ->scalar('type')
+            ->notEmptyString('type', __d('baser', 'タイプを入力してください。'));
+        $validator
+            ->scalar('head')
+            ->maxLength('head', 255, __d('baser', '項目見出しは255文字以内で入力してください。'));
+        $validator
+            ->scalar('attention')
+            ->maxLength('attention', 255, __d('baser', '注意書きは255文字以内で入力してください。'));
+        $validator
+            ->scalar('before_attachment')
+            ->maxLength('before_attachment', 255, __d('baser', '前見出しは255文字以内で入力してください。'));
+        $validator
+            ->scalar('after_attachment')
+            ->maxLength('after_attachment', 255, __d('baser', '後見出しは255文字以内で入力してください。'));
+        // TODO ucmitz 未実装
+//        $validator
+//            ->scalar('source')
+//            ->add('source', [
+//                'sourceMailField' => [
+//                    'rule' => 'sourceMailField',
+//                    'provider' => 'table',
+//                    'message' => __d('baser', '選択リストを入力してください。')
+//                ]]);
+        $validator
+            ->scalar('options')
+            ->maxLength('options', 255, __d('baser', 'オプションは255文字以内で入力してください。'));
+        $validator
+            ->scalar('class')
+            ->maxLength('class', 255, __d('baser', 'クラス名255文字以内で入力してください。'));
+        $validator
+            ->scalar('delimiter')
+            ->maxLength('delimiter', 255, __d('baser', '区切り文字は255文字以内で入力してください。'));
+        $validator
+            ->scalar('default_value')
+            ->maxLength('default_value', 255, __d('baser', '初期値は255文字以内で入力してください。'));
+        $validator
+            ->scalar('description')
+            ->maxLength('options', 255, __d('baser', '説明文は255文字以内で入力してください。'));
+        $validator
+            ->scalar('group_field')
+            ->maxLength('group_field', 255, __d('baser', 'グループフィールドは255文字以内で入力してください。'));
+        $validator
+            ->scalar('group_valid')
+            ->maxLength('group_valid', 255, __d('baser', 'グループ入力チェックは255文字以内で入力してください。'));
+        return $validator;
     }
 
     /**
@@ -245,7 +225,7 @@ class MailFieldsTable extends MailAppTable
      */
     public function sourceMailField($check)
     {
-        switch ($this->data['MailField']['type']) {
+        switch($this->data['MailField']['type']) {
             case 'radio':        // ラジオボタン
             case 'select':        // セレクトボックス
             case 'multi_check':    // マルチチェックボックス
@@ -262,86 +242,59 @@ class MailFieldsTable extends MailAppTable
      *
      * @param int $id
      * @param array $data
-     * @return mixed UserGroup Or false
+     * @param array $options
+     * @return EntityInterface|false
+     * @checked
+     * @noTodo
      */
-    public function copy($id, $data = [], $options = [])
+    public function copy($id, $data = null, $options = [])
     {
-        $options = array_merge(
-            [
-                'sortUpdateOff' => false,
-            ],
-            $options
-        );
+        $options = array_merge([
+            'sortUpdateOff' => false,
+        ], $options);
 
-        extract($options);
+        if ($id) $data = $this->get($id);
+        $oldData = clone $data;
 
-        if ($id) {
-            $data = $this->find(
-                'first',
-                [
-                    'conditions' => [
-                        'MailField.id' => $id
-                    ],
-                    'recursive' => -1
-                ]
-            );
-        }
-        $oldData = $data;
-
-        if ($this->find('count', ['conditions' => ['MailField.mail_content_id' => $data['MailField']['mail_content_id'], 'MailField.field_name' => $data['MailField']['field_name']]])) {
-            $data['MailField']['name'] .= '_copy';
-            if (strlen($data['MailField']['name']) >= 64) {
-                return false;
-            }
-            $data['MailField']['field_name'] .= '_copy';
+        if($this->find()->where(['MailFields.mail_content_id' => $data->mail_content_id, 'MailFields.field_name' => $data->field_name])->count()) {
+            $data->name .= '_copy';
+            if (strlen($data->name) >= 64) return false;
+            $data->field_name .= '_copy';
             return $this->copy(null, $data, $options); // 再帰処理
         }
 
-        if (!$sortUpdateOff) {
+        if (!$options['sortUpdateOff']) {
             // EVENT MailFields.beforeCopy
             $event = $this->dispatchLayerEvent('beforeCopy', [
                 'data' => $data,
                 'id' => $id,
             ]);
             if ($event !== false) {
-                $data = $event->getResult() === true ? $event->getData('data') : $event->getResult();
+                $data = $event->getResult() === true? $event->getData('data') : $event->getResult();
             }
         }
 
-        $data['MailField']['no'] = $this->getMax(
-            'no',
-            [
-                'MailField.mail_content_id' => $data['MailField']['mail_content_id']
-            ]
-        ) + 1;
-        if (!$sortUpdateOff) {
-            $data['MailField']['sort'] = $this->getMax('sort') + 1;
+        $data->no = $this->getMax('no', ['MailFields.mail_content_id' => $data->mail_content_id]) + 1;
+        if (!$options['sortUpdateOff']) {
+            $data->sort = $this->getMax('sort') + 1;
         }
-        $data['MailField']['use_field'] = false;
+        $data->use_field = false;
+        $data->id = null;
+        $data->modified = null;
+        $data->created = null;
 
-        unset($data['MailField']['id']);
-        unset($data['MailField']['modified']);
-        unset($data['MailField']['created']);
-
-        $this->create($data);
-        $result = $this->save();
-        if (!$result) {
-            return false;
-        }
-
-        $result['MailField']['id'] = $this->getInsertID();
-        $data = $result;
+        $result = $this->save($this->patchEntity($this->newEmptyEntity(), $data->toArray()));
+        if (!$result) return false;
 
         // EVENT MailFields.afterCopy
-        if (!$sortUpdateOff) {
-            $event = $this->dispatchLayerEvent('afterCopy', [
-                'id' => $data['MailField']['id'],
-                'data' => $data,
+        if (!$options['sortUpdateOff']) {
+            $this->dispatchLayerEvent('afterCopy', [
+                'id' => $data->id,
+                'data' => $result,
                 'oldId' => $id,
                 'oldData' => $oldData,
             ]);
         }
-
         return $result;
     }
 
@@ -357,7 +310,7 @@ class MailFieldsTable extends MailAppTable
         $source = str_replace('|', "\n", $source);
         $values = explode("\n", $source);
         $sourceList = [];
-        foreach ($values as $value) {
+        foreach($values as $value) {
             $sourceList[] = preg_replace("/(^\s+|\r|\n\s+$)/u", '', $value);
         }
         return implode("\n", $sourceList);
@@ -368,10 +321,11 @@ class MailFieldsTable extends MailAppTable
      */
     public function afterDelete()
     {
-        parent::afterDelete();
-        // フロントエンドでは、MailContentのキャッシュを利用する為削除しておく
-        $MailContent = ClassRegistry::init('BcMail.MailContent');
-        $MailContent->delCache();
+        // TODO ucmitz 未実装
+//        parent::afterDelete();
+//        // フロントエンドでは、MailContentのキャッシュを利用する為削除しておく
+//        $MailContent = ClassRegistry::init('BcMail.MailContent');
+//        $MailContent->delCache();
     }
 
     /**
@@ -382,9 +336,10 @@ class MailFieldsTable extends MailAppTable
      */
     public function afterSave($created, $options = [])
     {
-        parent::afterSave($created, $options);
-        // フロントエンドでは、MailContentのキャッシュを利用する為削除しておく
-        $MailContent = ClassRegistry::init('BcMail.MailContent');
-        $MailContent->delCache();
+        // TODO ucmitz 未実装
+//        parent::afterSave($created, $options);
+//        // フロントエンドでは、MailContentのキャッシュを利用する為削除しておく
+//        $MailContent = ClassRegistry::init('BcMail.MailContent');
+//        $MailContent->delCache();
     }
 }

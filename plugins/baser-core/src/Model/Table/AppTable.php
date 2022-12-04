@@ -496,6 +496,7 @@ class AppTable extends Table
      */
     public function addField($options)
     {
+        return true;
         // TODO 未実装の為コメントアウト
         /* >>>
         extract($options);
@@ -556,6 +557,7 @@ class AppTable extends Table
      */
     public function delField($options)
     {
+        return true;
         // TODO 未実装の為コメントアウト
         /* >>>
         extract($options);
@@ -724,26 +726,6 @@ class AppTable extends Table
         }
 
         return true;
-    }
-
-    /**
-     * Modelキャッシュを削除する
-     *
-     * @return void
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function deleteModelCache()
-    {
-        $this->_schema = null;
-        $folder = new Folder(CACHE . 'models' . DS);
-        $caches = $folder->read(true, true);
-        foreach($caches[1] as $cache) {
-            if (basename($cache) != 'empty') {
-                @unlink(CACHE . 'models' . DS . $cache);
-            }
-        }
     }
 
     /**

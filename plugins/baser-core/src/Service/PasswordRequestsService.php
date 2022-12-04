@@ -11,10 +11,10 @@
 
 namespace BaserCore\Service;
 
-use BaserCore\Mailer\PasswordRequestMailer;
 use BaserCore\Model\Entity\PasswordRequest;
 use BaserCore\Model\Table\PasswordRequestsTable;
 use Cake\Datasource\EntityInterface;
+use Cake\Mailer\MailerAwareTrait;
 use Cake\ORM\TableRegistry;
 use DateTime;
 use BaserCore\Annotation\UnitTest;
@@ -26,6 +26,11 @@ use BaserCore\Annotation\Checked;
  */
 class PasswordRequestsService implements PasswordRequestsServiceInterface
 {
+
+    /**
+     * Trait
+     */
+    use MailerAwareTrait;
 
     /**
      * PasswordRequestsTable
@@ -97,7 +102,7 @@ class PasswordRequestsService implements PasswordRequestsServiceInterface
         $passwordRequest->used = 0;
         $passwordRequest->setRequestKey();
         $result = $this->PasswordRequests->saveOrFail($passwordRequest);
-        (new PasswordRequestMailer())->deliver($user, $passwordRequest);
+        $this->getMailer('BaserCore.Admin/PasswordRequest')->send('resetPassword', [$user, $passwordRequest]);
         return $result;
     }
 
