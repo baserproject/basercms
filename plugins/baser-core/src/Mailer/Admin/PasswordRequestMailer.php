@@ -16,6 +16,9 @@ use BaserCore\Model\Entity\User;
 use Cake\Datasource\EntityInterface;
 use Cake\Core\Configure;
 use Cake\Routing\Router;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * Class PasswordRequestMailer
@@ -28,6 +31,8 @@ class PasswordRequestMailer extends BcAdminMailer
      * パスワード再発行URLメール送信
      * @param User|EntityInterface $user
      * @param PasswordRequest|EntityInterface
+     * @checked
+     * @noTodo
      */
     public function resetPassword(EntityInterface $user, EntityInterface $passwordRequest)
     {
