@@ -16,6 +16,7 @@ use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Error\BcException;
 use BcBlog\Service\BlogPostsServiceInterface;
+use Cake\ORM\Exception\PersistenceFailedException;
 
 /**
  * BlogPostsController
@@ -24,10 +25,188 @@ class BlogPostsController extends BcApiController
 {
 
     /**
+     * [API] ブログ記事一覧データ取得
+     *
+     * @param BlogPostsServiceInterface $service
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function index(BlogPostsServiceInterface $service)
+    {
+        $this->set([
+            'blogPosts' => $this->paginate($service->getIndex($this->request->getQueryParams()))
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['blogPosts']);
+    }
+
+    /**
+     * [API] ブログ記事単一データ取得のAPI実装
+     */
+    public function view()
+    {
+        //todo ブログ記事単一データ取得のAPI実装
+    }
+
+    /**
+     * [API] ブログ記事新規追加
+     *
+     * @param BlogPostsServiceInterface $service
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function add(BlogPostsServiceInterface $service)
+    {
+        $this->request->allowMethod(['post', 'put', 'patch']);
+        try {
+            $blogPost = $service->create($this->request->getData());
+            $message = __d('baser', '記事「{0}」を追加しました。', $blogPost->title);
+        } catch (PersistenceFailedException $e) {
+            $blogPost = $e->getEntity();
+            $message = __d('baser', "入力エラーです。内容を修正してください。");
+            $this->setResponse($this->response->withStatus(400));
+        }
+        $this->set([
+            'blogPost' => $blogPost,
+            'message' => $message,
+            'errors' => $blogPost->getErrors()
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['message', 'blogPost', 'errors']);
+    }
+
+    /**
+     * [API] ブログ記事編集のAPI実装
+     *
+     * 指定したブログ記事を編集する。
+     * 記事の保存に失敗した場合、PersistenceFailedExceptionかBcExceptionのエラーが発生する。
+     *
+     * @param BlogPostsServiceInterface $service
+     * @param $id
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function edit(BlogPostsServiceInterface $service, $id)
+    {
+        $this->request->allowMethod(['post', 'put', 'patch']);
+
+        try {
+            $blogPost = $service->update($service->get($id), $this->request->getData());
+            $message = __d('baser', '記事「{0}」を更新しました。', $blogPost->title);
+        } catch (PersistenceFailedException $e) {
+            $this->setResponse($this->response->withStatus(400));
+            $blogPost = $e->getEntity();
+            $message = __d('baser', '入力エラーです。内容を修正してください。');
+        } catch (BcException $e) {
+            $blogPost = $e->getEntity();
+            $this->setResponse($this->response->withStatus(400));
+            if ($e->getCode() === "23000") {
+                $message = __d('baser', '同時更新エラーです。しばらく経ってから保存してください。');
+            } else {
+                $message = __d('baser', 'データベース処理中にエラーが発生しました。');
+            }
+        }
+
+        $this->set([
+            'message' => $message,
+            'blogPost' => $blogPost,
+            'errors' => $blogPost->getErrors(),
+        ]);
+
+        $this->viewBuilder()->setOption('serialize', ['blogPost', 'message', 'errors']);
+    }
+
+    /**
+     * [API] ブログ記事複製のAPI実装
+     *
+     * @param BlogPostsServiceInterface $service
+     * @param $id
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function copy(BlogPostsServiceInterface $service, $id)
+    {
+        $this->request->allowMethod(['patch', 'post', 'put']);
+
+        try {
+            $blogPost = $service->get($id);
+            $blogPostCopied = $service->copy($id);
+            $message = __d('baser', 'ブログ記事「{0}」をコピーしました。', $blogPost->title);
+        } catch (BcException $e) {
+            $this->setResponse($this->response->withStatus(400));
+            $blogPostCopied = $e->getEntity();
+            $message = __d('baser', '入力エラーです。内容を修正してください。');
+        }
+
+        $this->set([
+            'blogPost' => $blogPostCopied,
+            'message' => $message,
+            'errors' => $blogPostCopied->getErrors(),
+        ]);
+
+        $this->viewBuilder()->setOption('serialize', ['blogPost', 'message', 'errors']);
+    }
+
+    /**
+     * [API] ブログ記事を公開状態に設定のAPI実装
+     */
+    public function publish()
+    {
+        //todo ブログ記事を公開状態に設定のAPI実装
+    }
+
+    /**
+     * [API] ブログ記事を非公開状態に設定のAPI実装
+     */
+    public function unpublish()
+    {
+        //todo ブログ記事を非公開状態に設定のAPI実装
+    }
+
+    /**
+     * [API] ブログ記事削除処理
+     *
+     * 指定したブログ記事を削除する
+     *
+     * @param BlogPostsServiceInterface $service
+     * @param $id
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function delete(BlogPostsServiceInterface $service, $id)
+    {
+        $this->request->allowMethod(['post', 'put']);
+        try {
+            $blogPost = $service->get($id);
+            $service->delete($id);
+            $message = __d('baser', 'ブログ記事「{0}」を削除しました。', $blogPost->title);
+        } catch (PersistenceFailedException $e) {
+            $this->setResponse($this->response->withStatus(400));
+            $blogPost = $e->getEntity();
+            $message = __d('baser', 'データベース処理中にエラーが発生しました。');
+        }
+
+        $this->set([
+            'blogPost' => $blogPost,
+            'message' => $message,
+            'errors' => $blogPost->getErrors(),
+        ]);
+
+        $this->viewBuilder()->setOption('serialize', ['blogPost', 'message', 'errors']);
+    }
+
+    /**
      * ブログ記事のバッチ処理
-     * 
+     *
      * 指定したブログ記事に対して削除、公開、非公開の処理を一括で行う
-     * 
+     *
      * ### エラー
      * 受け取ったPOSTデータのキー名'batch'が'delete','publish','unpublish'以外の値であれば500エラーを発生させる
      *

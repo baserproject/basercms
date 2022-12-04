@@ -211,6 +211,7 @@ class BlogPostsController extends BlogAdminAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function edit(BlogPostsAdminServiceInterface $service, int $blogContentId, int $id)
     {
@@ -260,17 +261,21 @@ class BlogPostsController extends BlogAdminAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function delete(BlogPostsServiceInterface $service, int $blogContentId, int $id)
     {
         $this->request->allowMethod(['post', 'delete']);
-        $blogPost = $service->get($id);
 
-        if ($service->delete($id)) {
-            $this->BcMessage->setSuccess(__d('baser', 'ブログ記事「{0}」を削除しました。', $blogPost->title));
-        } else {
-            $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。'));
+        try {
+            $blogPost = $service->get($id);
+            if ($service->delete($id)) {
+                $this->BcMessage->setSuccess(__d('baser', 'ブログ記事「{0}」を削除しました。', $blogPost->title));
+            }
+        } catch (BcException $e) {
+            $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
         }
+
         return $this->redirect(['action' => 'index', $blogContentId]);
     }
 
@@ -308,16 +313,17 @@ class BlogPostsController extends BlogAdminAppController
      * @param int $id
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function publish(BlogPostsServiceInterface $service, $blogContentId, $id)
     {
         if ($this->request->is(['patch', 'post', 'put'])) {
-            /* @var BlogPostsService $service */
-            $result = $service->publish($id);
-            if ($result) {
+            try {
+                /* @var BlogPostsService $service */
+                $result = $service->publish($id);
                 $this->BcMessage->setSuccess(sprintf(__d('baser', 'ブログ記事「%s」を公開状態にしました。'), $result->title));
-            } else {
-                $this->BcMessage->setSuccess(__d('baser', 'データベース処理中にエラーが発生しました。'));
+            } catch (BcException $e) {
+                $this->BcMessage->setSuccess(__d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
             }
         }
         return $this->redirect(['action' => 'index', $blogContentId]);

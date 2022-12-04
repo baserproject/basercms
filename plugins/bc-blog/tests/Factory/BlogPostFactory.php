@@ -41,8 +41,31 @@ class BlogPostFactory extends CakephpBaseFactory
     protected function setDefaultTemplate(): void
     {
         $this->setDefaultData(function (Generator $faker) {
-            return [];
+            return [
+                'blog_content_id' => $faker->randomNumber(),
+                'no' => $faker->randomNumber(),
+                'title' => $faker->title(),
+                'content' => $faker->randomHtml(),
+                'detail' => $faker->randomHtml(),
+                'blog_category_id' => $faker->randomNumber(),
+                'user_id' => $faker->randomNumber(),
+                'posted' => $faker->date(),
+                'content_draft' => $faker->randomHtml(),
+                'detail_draft' => $faker->randomHtml(),
+                'publish_begin' => null,
+                'publish_end' => null,
+                'exclude_search' => $faker->randomElement([true, false]),
+                'eye_catch_size' => 'YTo0OntzOjExOiJ0aHVtYl93aWR0aCI7czozOiIzMDAiO3M6MTI6InRodW1iX2hlaWdodCI7czozOiIzMDAiO3M6MTg6Im1vYmlsZV90aHVtYl93aWR0aCI7czozOiIxMDAiO3M6MTk6Im1vYmlsZV90aHVtYl9oZWlnaHQiO3M6MzoiMTAwIjt9',
+                'created' => $faker->date(),
+                'modified' => $faker->date()
+            ];
         });
     }
 
+    public function unpubish($id, $blogContentId)
+    {
+        return $this->setField('id', $id)
+            ->setField('blog_content_id', $blogContentId)
+            ->setField('status', false);
+    }
 }

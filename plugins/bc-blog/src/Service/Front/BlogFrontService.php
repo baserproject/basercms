@@ -131,6 +131,7 @@ class BlogFrontService implements BlogFrontServiceInterface
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getViewVarsForArchivesByCategory(
         ResultSet       $posts,
@@ -244,16 +245,20 @@ class BlogFrontService implements BlogFrontServiceInterface
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getViewVarsForArchivesByDate(ResultSet $posts, string $year, string $month, string $day): array
     {
-        if ($day) {
+        if ($day && $month && $year) {
             $type = 'daily';
-        } elseif ($month) {
+        } elseif ($month && $year) {
             $type = 'monthly';
-        } else {
+        } elseif ($year) {
             $type = 'yearly';
+        } else {
+            throw new NotFoundException();
         }
+
         return [
             'posts' => $posts,
             'blogArchiveType' => $type,
