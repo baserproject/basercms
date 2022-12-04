@@ -78,8 +78,7 @@ class BlogPostsTable extends BlogAppTable
             'className' => 'BcBlog.BlogComments',
             'order' => 'created',
             'foreignKey' => 'blog_post_id',
-            'dependent' => true,
-            'exclusive' => false,
+            'dependent' => true
         ]);
         $this->belongsTo('BlogCategories', [
             'className' => 'BcBlog.BlogCategories',

@@ -18,6 +18,8 @@ use BcMail\Service\Admin\MailContentsAdminService;
 use BcMail\Service\Admin\MailContentsAdminServiceInterface;
 use BcMail\Service\Admin\MailFieldsAdminService;
 use BcMail\Service\Admin\MailFieldsAdminServiceInterface;
+use BcMail\Service\Admin\MailMessagesAdminService;
+use BcMail\Service\Admin\MailMessagesAdminServiceInterface;
 use BcMail\Service\Front\MailFrontService;
 use BcMail\Service\Front\MailFrontServiceInterface;
 use BcMail\Service\MailConfigsService;
@@ -47,6 +49,7 @@ class BcMailServiceProvider extends ServiceProvider
         MailFieldsServiceInterface::class,
         MailFieldsAdminServiceInterface::class,
         MailMessagesServiceInterface::class,
+        MailMessagesAdminServiceInterface::class,
         MailFrontServiceInterface::class
     ];
 
@@ -69,6 +72,7 @@ class BcMailServiceProvider extends ServiceProvider
         $container->add(MailFieldsAdminServiceInterface::class, MailFieldsAdminService::class);
         // MailMessages サービス
         $container->add(MailMessagesServiceInterface::class, MailMessagesService::class);
+        $container->add(MailMessagesAdminServiceInterface::class, MailMessagesAdminService::class);
         // MailFront サービス
         $container->add(MailFrontServiceInterface::class, MailFrontService::class);
     }

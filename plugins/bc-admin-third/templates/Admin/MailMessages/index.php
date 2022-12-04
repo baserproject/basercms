@@ -1,46 +1,46 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package            Mail.View
- * @since           baserCMS v 0.1.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) NPO baser foundation
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       https://basercms.net/license/index.html MIT License
  */
 
 /**
  * [ADMIN] 受信メール一覧
+ * @var \BcMail\View\MailAdminAppView $this
+ * @var \BcMail\Model\Entity\MailContent $mailContent
  */
-$this->BcBaser->js([
-  'admin/libs/jquery.baser_ajax_data_list',
-  'admin/libs/jquery.baser_ajax_batch',
-  'admin/libs/baser_ajax_data_list_config',
-  'admin/libs/baser_ajax_batch_config'
-]);
+$this->BcAdmin->setTitle(__d(
+  'baser',
+  '{0}｜受信メール一覧',
+  $this->getRequest()->getAttribute('currentContent')->title
+));
+$this->BcAdmin->setHelp('mail_messages_index');
 ?>
 
-
-<script type="text/javascript">
-  $(function () {
-    $.baserAjaxDataList.init();
-    $.baserAjaxBatch.init({url: $("#AjaxBatchUrl").html()});
-  });
-</script>
-
 <div class="panel-box bca-panel-box" id="FunctionBox">
-  <?php echo $this->BcAdminForm->create('Function', ['type' => 'get', 'url' => ['controller' => 'mail_fields', 'action' => 'download_csv', $this->params['pass'][0]]]) ?>
-  <?php echo $this->BcAdminForm->control('Function.encoding', ['type' => 'radio', 'options' => ['UTF-8' => 'UTF-8', 'SJIS-win' => 'SJIS'], 'value' => 'UTF-8']) ?>
+  <?php echo $this->BcAdminForm->create(null, [
+    'type' => 'get',
+    'url' => ['controller' => 'MailFields', 'action' => 'download_csv', $mailContent->id]
+  ]) ?>
+  <?php echo $this->BcAdminForm->control('encoding', [
+    'type' => 'radio',
+    'options' => ['UTF-8' => 'UTF-8', 'SJIS-win' => 'SJIS'],
+    'value' => 'UTF-8'
+  ]) ?>
   &nbsp;&nbsp;
   <?php echo $this->BcAdminForm->submit(__d('baser', 'CSVダウンロード'), ['div' => false, 'class' => 'bca-btn']) ?>
   <?php echo $this->BcAdminForm->end() ?>
 </div>
 
-<div id="AjaxBatchUrl"
-     style="display:none"><?php $this->BcBaser->url(['controller' => 'mail_messages', 'action' => 'ajax_batch', $this->params['pass'][0]]) ?></div>
 <div id="AlertMessage" class="message" style="display:none"></div>
 <div id="MessageBox" style="display:none">
   <div id="flashMessage" class="notice-message"></div>
 </div>
-<div id="DataList" class="bca-data-list"><?php $this->BcBaser->element('mail_messages/index_list') ?></div>
+<div id="DataList" class="bca-data-list">
+  <?php $this->BcBaser->element('MailMessages/index_list') ?>
+</div>

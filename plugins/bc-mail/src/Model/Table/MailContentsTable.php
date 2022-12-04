@@ -71,7 +71,12 @@ class MailContentsTable extends MailAppTable
 
         $this->setTable('mail_contents');
         $this->setPrimaryKey('id');
-
+        $this->hasMany('MailFields', [
+            'className' => 'BcMail.MailFields',
+            'order' => 'sort',
+            'foreignKey' => 'mail_content_id',
+            'dependent' => true
+        ]);
         $this->addBehavior('Timestamp');
         $this->addBehavior('BaserCore.BcContents');
         if (Plugin::isLoaded('BcSearchIndex')) {

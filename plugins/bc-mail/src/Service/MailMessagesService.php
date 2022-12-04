@@ -49,6 +49,60 @@ class MailMessagesService implements MailMessagesServiceInterface
     }
 
     /**
+     * メールメッセージの初期セットアップを実行する
+     *
+     * 利用する前に必ず実行しなければならない
+     *
+     * @param int $mailContentId
+     * @checked
+     * @noTodo
+     */
+    public function setup(int $mailContentId)
+    {
+        $this->MailMessages->setup($mailContentId);
+    }
+
+    /**
+     * メールメッセージを取得する
+     *
+     * @param int $id
+     * @return EntityInterface
+     * @checked
+     * @noTodo
+     */
+    public function get(int $id)
+    {
+        return $this->MailMessages->get($id);
+    }
+
+    /**
+     * メールメッセージの一覧を取得する
+     *
+     * @param array $queryParams
+     * @return \Cake\ORM\Query
+     * @checked
+     * @noTodo
+     */
+    public function getIndex(array $queryParams = [])
+    {
+        $options = array_merge([
+            'limit' => null,
+            'direction' => 'DESC',    // 並び方向
+            'order' => 'created',    // 並び順対象のフィールド
+        ], $queryParams);
+        $query = $this->MailMessages->find();
+        if ($options['order']) {
+            $query->order("{$options['order']} {$options['direction']}");
+            unset($options['order'], $options['direction']);
+        }
+        if (!empty($options['limit'])) {
+            $query->limit($options['limit']);
+            unset($options['limit']);
+        }
+        return $query;
+    }
+
+    /**
      * 新規データ作成
      *
      * @param EntityInterface|MailContent $mailContent
@@ -188,7 +242,7 @@ class MailMessagesService implements MailMessagesServiceInterface
      * @checked
      * @noTodo
      */
-    public function construction(int $mailContentId)
+    public function construction(int $mailContentId): bool
     {
         $mailFieldClass = TableRegistry::getTableLocator()->get('BcMail.MailFields');
         // フィールドリストを取得
@@ -222,7 +276,7 @@ class MailMessagesService implements MailMessagesServiceInterface
      * @checked
      * @noTodo
      */
-    public function getNew(int $mailContentId, array $params)
+    public function getNew(int $mailContentId, array $params): EntityInterface
     {
         /** @var MailFieldsService $mailFieldsService */
         $mailFieldsService = $this->getService(MailFieldsServiceInterface::class);
@@ -259,7 +313,7 @@ class MailMessagesService implements MailMessagesServiceInterface
      * @checked
      * @noTodo
      */
-    public function autoConvert(int $mailContentId, array $data)
+    public function autoConvert(int $mailContentId, array $data): array
     {
         /** @var MailFieldsService $mailFieldsService */
         $mailFieldsService = $this->getService(MailFieldsServiceInterface::class);

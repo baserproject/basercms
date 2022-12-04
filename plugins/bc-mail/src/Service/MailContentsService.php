@@ -158,7 +158,8 @@ class MailContentsService implements MailContentsServiceInterface
     public function get(int $id)
     {
         return $this->MailContents->get($id, ['contain' => [
-            'Contents' => ['Sites']
+            'Contents' => ['Sites'],
+            'MailFields'
         ]]);
     }
 

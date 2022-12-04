@@ -132,7 +132,7 @@ class BcFileUploader
      * @noTodo
      * @unitTest
      */
-    public function getSettings(array $config): array
+    public function getSettings(array $config = []): array
     {
         $setting = Hash::merge([
             'saveDir' => '',
