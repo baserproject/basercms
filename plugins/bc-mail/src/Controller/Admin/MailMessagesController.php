@@ -96,61 +96,21 @@ class MailMessagesController extends MailAdminAppController
     /**
      * [ADMIN] 受信メール詳細
      *
+     * @param MailMessagesAdminService $service
      * @param int $mailContentId
      * @param int $messageId
      * @return void
+     * @checked
+     * @noTodo
      */
-    public function view($mailContentId, $messageId)
+    public function view(
+        MailMessagesAdminServiceInterface $service,
+        int $mailContentId,
+        int $messageId
+    )
     {
-        if (!$mailContentId || !$messageId) {
-            $this->BcMessage->setError(__d('baser', '無効な処理です。'));
-            $this->notFound();
-        }
-        $message = $this->MailMessage->find('first', [
-            'conditions' => ['MailMessage.id' => $messageId],
-            'order' => 'created DESC'
-        ]);
-        $mailFields = $this->MailMessage->mailFields;
-        $this->set(compact('message', 'mailFields'));
-        $this->pageTitle = sprintf(
-            __d('baser', '%s｜受信メール詳細'),
-            $this->request->param('Content.title')
-        );
-    }
-
-    /**
-     * [ADMIN] 受信メール一括削除
-     *
-     * @param int $mailContentId
-     * @param int $messageId
-     * @return bool
-     */
-    protected function _batch_del($ids)
-    {
-        if ($ids) {
-            foreach ($ids as $id) {
-                $this->_del($id);
-            }
-        }
-        return true;
-    }
-
-    /**
-     * 受信メール削除　
-     *
-     * @param int $mailContentId
-     * @param int $messageId
-     * @return bool
-     */
-    protected function _del($id = null)
-    {
-        if (!$this->MailMessage->delete($id)) {
-            return false;
-        }
-
-        $message = sprintf(__d('baser', '受信データ NO「%s」 を削除しました。'), $id);
-        $this->MailMessage->saveDbLog($message);
-        return true;
+        $service->setup($mailContentId);
+        $this->set($service->getViewVarsForView($mailContentId, $messageId));
     }
 
     /**

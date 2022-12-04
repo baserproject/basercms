@@ -47,4 +47,27 @@ class MailMessagesAdminService extends MailMessagesService implements MailMessag
             'mailMessages' => $mailMessages
         ];
     }
+
+    /**
+     * メールメッセージ詳細画面用 View 変数を取得する
+     *
+     * @param int $mailContentId
+     * @param int $mailMessageId
+     * @return array
+     * @checked
+     * @noTodo
+     */
+    public function getViewVarsForView(int $mailContentId, int $mailMessageId)
+    {
+        /** @var MailContentsService $mailContentsService */
+        $mailContentsService = $this->getService(MailContentsServiceInterface::class);
+        /** @var MailContent $mailContent */
+        $mailContent = $mailContentsService->get($mailContentId);
+        return [
+            'mailContent' => $mailContent,
+            'mailMessage' => $this->get($mailMessageId),
+            'mailFields' => $mailContent->mail_fields
+        ];
+    }
+
 }

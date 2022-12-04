@@ -11,6 +11,7 @@
 
 namespace BcMail\View\Helper;
 
+use BcMail\Model\Entity\MailField;
 use Cake\View\Helper;
 
 /**
@@ -81,17 +82,14 @@ class MailfieldHelper extends Helper
     /**
      * コントロールのソースを取得する
      *
-     * @param array $data メールフィールドデータ
+     * @param MailField $data メールフィールドデータ
      * @return array コントロールソース
      */
     public function getOptions($data)
     {
-        if (isset($data['MailField'])) {
-            $data = $data['MailField'];
-        }
-        if (!empty($data['source'])) {
-            if ($data['type'] !== "check") {
-                $values = explode("\n", str_replace('|', "\n", $data['source']));
+        if (!empty($data->source)) {
+            if ($data->type !== "check") {
+                $values = explode("\n", str_replace('|', "\n", $data->source));
                 $source = [];
                 foreach($values as $value) {
                     $source[$value] = $value;

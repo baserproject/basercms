@@ -12,63 +12,75 @@
 
 /**
  * [ADMIN] 受信メール詳細
+ * @var \BcMail\View\MailAdminAppView $this
+ * @var \BcMail\Model\Entity\MailMessage $mailMessage
+ * @var \Cake\ORM\ResultSet $mailFields
+ * @var \BcMail\Model\Entity\MailContent $mailContent
+ * @checked
+ * @noTodo
+ * @unitTest
  */
+$this->BcAdmin->setTitle(__d(
+  'baser',
+  '{0}｜受信メール詳細',
+  $this->getRequest()->getAttribute('currentContent')->title
+));
 ?>
 
 
-<!-- view -->
 <table class="list-table bca-form-table" id="ListTable">
-
   <tr>
     <th class="col-head bca-form-table__label">No</th>
-    <td class="col-input bca-form-table__input"><?php echo $message['MailMessage']['id'] ?></td>
+    <td class="col-input bca-form-table__input"><?php echo $mailMessage->id ?></td>
   </tr>
   <tr>
     <th class="col-head bca-form-table__label"><?php echo __d('baser', '受信日時') ?></th>
-    <td
-      class="col-input bca-form-table__input"><?php echo $this->BcTime->format($message['MailMessage']['created'], 'Y/m/d H:i:s') ?></td>
+    <td class="col-input bca-form-table__input"><?php echo $this->BcTime->format($mailMessage->created) ?></td>
   </tr>
   <?php
   $groupField = null;
-  foreach($mailFields as $key => $mailField) {
-    $field = $mailField['MailField'];
-    if ($field['use_field']) {
+  foreach($mailFields as $key => $field) {
+    if ($field->use_field) {
       $nextKey = $key + 1;
       /* 項目名 */
-      if ($groupField != $field['group_field'] || (!$groupField && !$field['group_field'])) {
+      if ($groupField != $field->group_field || (!$groupField && !$field->group_field)) {
         echo '<tr>';
-        echo '<th class="col-head bca-form-table__label">' . $field['head'] . '</th>';
+        echo '<th class="col-head bca-form-table__label">' . $field->head . '</th>';
         echo '<td class="col-input bca-form-table__input">';
       }
-      if (!empty($message['MailMessage'][$mailField['MailField']['field_name']])) {
-        echo $field['before_attachment'];
+      if (!empty($mailMessage->{$field->field_name})) {
+        echo $field->before_attachment;
       }
-      if (!$field['no_send']) {
-        if ($field['type'] == 'file') {
+      if (!$field->no_send) {
+        if ($field->type == 'file') {
           echo $this->Maildata->control(
-            $mailField['MailField']['type'],
-            $message['MailMessage'][$mailField['MailField']['field_name']],
-            $this->Mailfield->getOptions($mailField['MailField'])
+            $field->type,
+            $mailMessage->{$field->field_name},
+            $this->Mailfield->getOptions($field)
           );
         } else {
-          echo nl2br($this->BcText->autoLink($this->Maildata->control(
-            $mailField['MailField']['type'],
-            $message['MailMessage'][$mailField['MailField']['field_name']],
-            $this->Mailfield->getOptions($mailField['MailField'])
-          )));
+          $body = $this->Maildata->control(
+            $field->type,
+            $mailMessage->{$field->field_name},
+            $this->Mailfield->getOptions($field)
+          );
+          if($body) {
+            $body = $this->BcText->autoLink($body, ['target' => '_blank']);
+          }
+          echo nl2br($body);
         }
       }
-      if (!empty($message['MailMessage'][$mailField['MailField']['field_name']])) {
-        echo $field['after_attachment'];
+      if (!empty($mailMessage->{$field->field_name})) {
+        echo $field->after_attachment;
       }
       echo '&nbsp;';
       if (($this->BcArray->last($mailFields, $key)) ||
-        ($field['group_field'] != $mailFields[$nextKey]['MailField']['group_field']) ||
-        (!$field['group_field'] && !$mailFields[$nextKey]['MailField']['group_field']) ||
-        ($field['group_field'] != $mailFields[$nextKey]['MailField']['group_field'] && $this->BcArray->first($mailFields, $key))) {
+        ($field->group_field != $mailFields[$nextKey]->group_field) ||
+        (!$field->group_field && !$mailFields[$nextKey]->group_field) ||
+        ($field->group_field != $mailFields[$nextKey]->group_field && $this->BcArray->first($mailFields, $key))) {
         echo '</td></tr>';
       }
-      $groupField = $field['group_field'];
+      $groupField = $field->group_field;
     }
   }
   ?>
@@ -76,21 +88,12 @@
 
 <!-- button -->
 <div class="bca-actions">
-  <?php
-  $this->BcBaser->link(__d('baser', '削除'),
-    [
-      'action' => 'delete',
-      $mailContent['MailContent']['id'],
-      $message['MailMessage']['id']],
-    [
+  <?php echo $this->BcAdminForm->postLink(__d('baser', '削除'),
+    ['action' => 'delete', $mailContent->id, $mailMessage->id], [
+      'confirm' => __d('baser', '受信メール No「{0}」を削除してもいいですか？', $mailMessage->id),
       'class' => 'bca-submit-token button bca-btn bca-actions__item',
       'data-bca-btn-type' => 'delete',
       'data-bca-btn-size' => 'sm',
-      'data-bca-btn-color' => 'danger',
-      'data-bca-btn-type' => 'delete'
-    ],
-    sprintf(__d('baser', '受信メール No「%s」を削除してもいいですか？'), $message['MailMessage']['id']),
-    false
-  );
-  ?>
+      'data-bca-btn-color' => 'danger'
+  ]) ?>
 </div>
