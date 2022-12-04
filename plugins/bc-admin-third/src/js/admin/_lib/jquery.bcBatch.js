@@ -94,7 +94,7 @@
                             if (XMLHttpRequest.status === 404) {
                                 errorMessage = '<br>' + bcI18n.commonNotFoundProgramMessage;
                             } else {
-                                if (XMLHttpRequest.responseText) {
+                                if (XMLHttpRequest.responseText && XMLHttpRequest.responseText !== 'null') {
                                     errorMessage = '<br>' + JSON.parse(XMLHttpRequest.responseText).message;
                                 } else {
                                     errorMessage = '<br>' + errorThrown;

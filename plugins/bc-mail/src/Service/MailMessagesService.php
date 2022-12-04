@@ -145,6 +145,29 @@ class MailMessagesService implements MailMessagesServiceInterface
     }
 
     /**
+     * 一括処理
+     * @param string $method
+     * @param array $ids
+     * @return bool
+     * @checked
+     * @noTodo
+     */
+    public function batch(string $method, array $ids): bool
+    {
+        if (!$ids) return true;
+        $db = $this->MailMessages->getConnection();
+        $db->begin();
+        foreach($ids as $id) {
+            if (!$this->$method($id)) {
+                $db->rollback();
+                throw new BcException(__d('baser', 'データベース処理中にエラーが発生しました。'));
+            }
+        }
+        $db->commit();
+        return true;
+    }
+
+    /**
      * メッセージフィールドを追加する
      *
      * @param int $mailContentId

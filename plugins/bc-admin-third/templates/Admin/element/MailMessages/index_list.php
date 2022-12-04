@@ -14,8 +14,13 @@
  * [ADMIN] 受信メール一覧　テーブル
  * @var \BcMail\View\MailAdminAppView $this
  * @var \Cake\ORM\ResultSet $mailMessages
+ * @var \BcMail\Model\Entity\MailContent $mailContent
  */
 $this->BcListTable->setColumnNumber(6);
+$this->BcBaser->js('admin/mail_messages/index.bundle', false, [
+  'id' => 'AdminMailMessagesScript',
+  'data-mailContentId' => $mailContent->id
+]);
 ?>
 
 
@@ -24,7 +29,7 @@ $this->BcListTable->setColumnNumber(6);
   <div class="bca-action-table-listup">
     <?php echo $this->BcAdminForm->control('batch', [
       'type' => 'select',
-      'options' => ['del' => __d('baser', '削除')],
+      'options' => ['delete' => __d('baser', '削除')],
       'empty' => __d('baser', '一括処理'),
       'data-bca-select-size' => 'lg'
     ]) ?>
