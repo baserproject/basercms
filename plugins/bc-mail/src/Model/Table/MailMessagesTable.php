@@ -93,6 +93,8 @@ class MailMessagesTable extends MailAppTable
         $this->setUseTable($mailContentId);
         // アップロード設定
         $this->setupUpload($mailContentId);
+        // スキーマの初期化
+        $this->_schema = null;
         return true;
     }
 

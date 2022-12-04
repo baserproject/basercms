@@ -256,6 +256,7 @@ class MailController extends MailFrontAppController
 
         // メッセージ保存
         try {
+            $mailMessagesService->setup($mailContent->id);
             $entity = $mailMessagesService->create($mailContent, $entity);
         } catch (PersistenceFailedException $e) {
             $entity = $e->getEntity();

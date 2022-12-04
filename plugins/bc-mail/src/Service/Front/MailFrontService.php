@@ -15,7 +15,6 @@ use BaserCore\Error\BcException;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcSiteConfig;
 use BaserCore\Utility\BcUtil;
-use BcBlog\Model\Entity\BlogContent;
 use BcMail\Model\Entity\MailContent;
 use BcMail\Model\Entity\MailMessage;
 use BcMail\Service\MailContentsService;
@@ -152,7 +151,7 @@ class MailFrontService implements MailFrontServiceInterface
      * @param array $postData
      * @return EntityInterface
      */
-    public function confirm(EntityInterface $mailContent, array $postData): array
+    public function confirm(EntityInterface $mailContent, array $postData): EntityInterface
     {
         if (BcUtil::isOverPostSize()) {
             throw new BcException(__(
@@ -277,7 +276,7 @@ class MailFrontService implements MailFrontServiceInterface
      */
     public function getUserMail(ResultSetInterface $mailFields, EntityInterface $mailMessage): string
     {
-        $userMail = null;
+        $userMail = '';
         foreach($mailFields as $mailField) {
             if (empty($mailMessage->{$mailField->field_name})) continue;
             $value = $mailMessage->{$mailField->field_name};

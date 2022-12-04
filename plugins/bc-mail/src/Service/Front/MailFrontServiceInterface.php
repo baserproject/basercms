@@ -64,7 +64,7 @@ interface MailFrontServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function confirm(EntityInterface $mailContent, array $postData): array;
+    public function confirm(EntityInterface $mailContent, array $postData): EntityInterface;
 
     /**
      * メールを送信する

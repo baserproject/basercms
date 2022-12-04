@@ -53,8 +53,6 @@ class MailMessageMailer extends BcMailer
         $data['other']['mode'] = 'admin';
         $this->setTo($adminMail)
             ->setFrom($fromAdmin, $mailContent->sender_name)
-            // カンマ区切りで複数設定されていた場合先頭のアドレスをreplayToに利用
-            ->setReplyTo(strpos($userMail, ',') === false? $userMail : strstr($userMail, ',', true))
             ->setSubject($mailContent->subject_admin)
             ->setAttachments($attachments)
             ->viewBuilder()
@@ -63,6 +61,10 @@ class MailMessageMailer extends BcMailer
             ->setVars($data);
         if($mailContent->sender_2) {
             $this->setBcc($mailContent->sender_2);
+        }
+        if($userMail) {
+            // カンマ区切りで複数設定されていた場合先頭のアドレスをreplayToに利用
+            $this->setReplyTo(strpos($userMail, ',') === false? $userMail : strstr($userMail, ',', true));
         }
         if (empty($options['toAdmin'])) return;
         foreach($options['toAdmin'] as $key => $value) {
