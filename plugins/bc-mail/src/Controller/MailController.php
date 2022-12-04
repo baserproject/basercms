@@ -21,6 +21,9 @@ use BcMail\Service\MailMessagesServiceInterface;
 use Cake\Event\EventInterface;
 use Cake\Http\Response;
 use Cake\ORM\Exception\PersistenceFailedException;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * お問い合わせメールフォーム用コントローラー
