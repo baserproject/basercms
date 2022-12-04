@@ -1,20 +1,19 @@
 <?php
-// TODO : コード確認要
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Mail.Test.Case.Controller
- * @since           baserCMS v 4.0.9
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) NPO baser foundation
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       https://basercms.net/license/index.html MIT License
  */
 
-App::uses('MailMessagesController', 'BcMail.Controller');
+namespace BcMail\Test\TestCase\Controller\Admin;
 
-class MailMessagesControllerTest extends BaserTestCase
+use BaserCore\TestSuite\BcTestCase;
+
+class MailMessagesControllerTest extends BcTestCase
 {
 
     /**
@@ -22,7 +21,7 @@ class MailMessagesControllerTest extends BaserTestCase
      *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
     }
@@ -32,7 +31,7 @@ class MailMessagesControllerTest extends BaserTestCase
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
     }
@@ -56,7 +55,7 @@ class MailMessagesControllerTest extends BaserTestCase
     /**
      * [ADMIN] 受信メール一覧
      */
-    public function testAdmin_index()
+    public function testIndex()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
@@ -64,15 +63,7 @@ class MailMessagesControllerTest extends BaserTestCase
     /**
      * [ADMIN] 受信メール詳細
      */
-    public function testAdmin_view()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
-    /**
-     * [ADMIN] 受信メール削除　(ajax)
-     */
-    public function testAdmin_ajax_delete()
+    public function testView()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
@@ -80,7 +71,7 @@ class MailMessagesControllerTest extends BaserTestCase
     /**
      * [ADMIN] 受信メール削除
      */
-    public function testAdmin_delete()
+    public function testDelete()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
@@ -88,7 +79,7 @@ class MailMessagesControllerTest extends BaserTestCase
     /**
      * メールフォームに添付したファイルを開く
      */
-    public function testAdmin_attachment()
+    public function testAttachment()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }

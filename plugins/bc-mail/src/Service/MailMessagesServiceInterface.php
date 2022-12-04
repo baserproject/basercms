@@ -178,4 +178,15 @@ interface MailMessagesServiceInterface
      */
     public function autoConvert(int $mailContentId, array $data): array;
 
+    /**
+     * メールメッセージを削除する
+     *
+     * @param int $id
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function delete(int $id): bool;
+
 }

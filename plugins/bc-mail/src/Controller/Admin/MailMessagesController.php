@@ -17,6 +17,8 @@ use BaserCore\Service\ContentsServiceInterface;
 use BaserCore\Utility\BcSiteConfig;
 use BcMail\Service\Admin\MailMessagesAdminService;
 use BcMail\Service\Admin\MailMessagesAdminServiceInterface;
+use BcMail\Service\MailContentsServiceInterface;
+use BcMail\Service\MailMessagesServiceInterface;
 use Cake\Event\EventInterface;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -134,26 +136,6 @@ class MailMessagesController extends MailAdminAppController
     }
 
     /**
-     * [ADMIN] 受信メール削除　(ajax)
-     *
-     * @param int $mailContentId
-     * @param int $messageId
-     * @return void
-     */
-    public function ajax_delete($mailContentId, $messageId)
-    {
-        $this->_checkSubmitToken();
-        if (!$messageId) {
-            $this->ajaxError(500, __d('baser', '無効な処理です。'));
-        }
-        if (!$this->_del($messageId)) {
-            exit;
-        }
-
-        exit(true);
-    }
-
-    /**
      * 受信メール削除　
      *
      * @param int $mailContentId
@@ -174,31 +156,37 @@ class MailMessagesController extends MailAdminAppController
     /**
      * [ADMIN] 受信メール削除
      *
+     * @param MailMessagesServiceInterface $service
+     * @param MailContentsServiceInterface $mailContentsService
      * @param int $mailContentId
-     * @param int $messageId
+     * @param int $id
      * @return void
+     * @checked
+     * @noTodo
      */
-    public function delete($mailContentId, $messageId)
+    public function delete(
+        MailMessagesServiceInterface $service,
+        MailContentsServiceInterface $mailContentsService,
+        int $mailContentId,
+        int $id
+    )
     {
-        $this->_checkSubmitToken();
-        if (!$mailContentId || !$messageId) {
-            $this->BcMessage->setError(__d('baser', '無効な処理です。'));
-            $this->notFound();
+        $this->request->allowMethod(['post', 'delete']);
+        $mailContent = $mailContentsService->get($mailContentId);
+        try {
+            $service->setup($mailContentId);
+            if ($service->delete($id)) {
+                $this->BcMessage->setSuccess(__d(
+                    'baser',
+                    '{0} への受信データ NO「{1}」 を削除しました。',
+                    $mailContent->content->title,
+                    $id
+                ));
+            }
+        } catch (\Throwable $e) {
+            $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
         }
-        if (!$this->MailMessage->delete($messageId)) {
-            $this->BcMessage->setError(
-                __d('baser', 'データベース処理中にエラーが発生しました。')
-            );
-        } else {
-            $this->BcMessage->setSuccess(
-                sprintf(
-                    __d('baser', '%s への受信データ NO「%s」 を削除しました。'),
-                    $this->mailContent['Content']['title'],
-                    $messageId
-                )
-            );
-        }
-        $this->redirect(['action' => 'index', $mailContentId]);
+        return $this->redirect(['action' => 'index', $mailContentId]);
     }
 
     /**

@@ -131,6 +131,20 @@ class MailMessagesService implements MailMessagesServiceInterface
     }
 
     /**
+     * メールメッセージを削除する
+     *
+     * @param int $id
+     * @return bool
+     * @checked
+     * @noTodo
+     */
+    public function delete(int $id): bool
+    {
+        $blogPost = $this->MailMessages->get($id);
+        return $this->MailMessages->delete($blogPost);
+    }
+
+    /**
      * メッセージフィールドを追加する
      *
      * @param int $mailContentId

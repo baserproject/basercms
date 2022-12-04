@@ -58,7 +58,6 @@ class MailMessagesTable extends MailAppTable
         ]
     ];
 
-
     /**
      * Initialize method
      *
