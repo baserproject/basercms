@@ -12,55 +12,36 @@
  namespace BcWidgetArea\Controller\Admin;
 
 use BaserCore\Controller\Admin\BcAdminAppController;
-use Cake\Event\EventInterface;
+use BaserCore\Utility\BcSiteConfig;
+use BcWidgetArea\Service\WidgetAreasServiceInterface;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * Class WidgetAreasController
  *
  * ウィジェットエリアコントローラー
- *
- * @package Baser.Controller
  */
 class WidgetAreasController extends BcAdminAppController
 {
 
     /**
-     * コンポーネント
-     * @var array
-     */
-    public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure', 'RequestHandler'];
-
-    /**
-     * beforeFilter
-     *
-     * @return void
-     */
-    public function beforeFilter(EventInterface $event)
-    {
-        $this->BcAuth->allow('get_widgets');
-        parent::beforeFilter($event);
-    }
-
-    /**
      * 一覧
      * @return void
+     * @checked
+     * @noTodo
      */
-    public function admin_index()
+    public function index(WidgetAreasServiceInterface $service)
     {
-        $this->setTitle(__d('baser', 'ウィジェットエリア一覧'));
-        $widgetAreas = $this->WidgetArea->find('all');
-        if ($widgetAreas) {
-            foreach($widgetAreas as $key => $widgetArea) {
-                $widgets = BcUtil::unserialize($widgetArea['WidgetArea']['widgets']);
-                if (!$widgets) {
-                    $widgetAreas[$key]['WidgetArea']['count'] = 0;
-                } else {
-                    $widgetAreas[$key]['WidgetArea']['count'] = count($widgets);
-                }
-            }
-        }
-        $this->set('widgetAreas', $widgetAreas);
-        $this->setHelp('widget_areas_index');
+        $this->setViewConditions('MailMessage', [
+            'default' => [
+                'query' => [
+                    'limit' => BcSiteConfig::get('admin_list_num'),
+        ]]]);
+        $this->set([
+            'widgetAreas' => $this->paginate($service->getIndex($this->getRequest()->getQueryParams()))
+        ]);
     }
 
     /**
@@ -68,7 +49,7 @@ class WidgetAreasController extends BcAdminAppController
      *
      * @return void
      */
-    public function admin_add()
+    public function add()
     {
         $this->setTitle(__d('baser', '新規ウィジェットエリア登録'));
 
@@ -90,7 +71,7 @@ class WidgetAreasController extends BcAdminAppController
      *
      * @return void
      */
-    public function admin_edit($id)
+    public function edit($id)
     {
         $this->setTitle(__d('baser', 'ウィジェットエリア編集'));
 
@@ -149,7 +130,7 @@ class WidgetAreasController extends BcAdminAppController
      * @param int ID
      * @return void
      */
-    public function admin_ajax_delete($id = null)
+    public function ajax_delete($id = null)
     {
         $this->_checkSubmitToken();
         /* 除外処理 */
@@ -194,7 +175,7 @@ class WidgetAreasController extends BcAdminAppController
      *
      * @return void
      */
-    public function admin_update_title()
+    public function update_title()
     {
         if (!$this->request->getData()) {
             $this->notFound();
@@ -213,7 +194,7 @@ class WidgetAreasController extends BcAdminAppController
      * @param int $widgetAreaId
      * @return void
      */
-    public function admin_update_widget($widgetAreaId)
+    public function update_widget($widgetAreaId)
     {
         if (!$widgetAreaId || !$this->request->getData()) {
             exit();
@@ -260,7 +241,7 @@ class WidgetAreasController extends BcAdminAppController
      * @param int $widgetAreaId
      * @return void
      */
-    public function admin_update_sort($widgetAreaId)
+    public function update_sort($widgetAreaId)
     {
         if (!$widgetAreaId || !$this->request->getData()) {
             exit();
@@ -294,7 +275,7 @@ class WidgetAreasController extends BcAdminAppController
      * @param int $id
      * @return void
      */
-    public function admin_del_widget($widgetAreaId, $id)
+    public function del_widget($widgetAreaId, $id)
     {
         $this->_checkSubmitToken();
         $widgetArea = $this->WidgetArea->read(null, $widgetAreaId);

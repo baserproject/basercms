@@ -12,6 +12,10 @@
 
 /**
  * [ADMIN] ウィジェットエリア一覧 テーブル
+ * \BaserCore\View\BcAdminAppView $this
+ * @checked
+ * @noTodo
+ * @unitTest
  */
 $this->BcListTable->setColumnNumber(6);
 ?>
@@ -21,8 +25,17 @@ $this->BcListTable->setColumnNumber(6);
   <!-- 一括処理 -->
   <?php if ($this->BcBaser->isAdminUser()): ?>
     <div class="bca-action-table-listup">
-      <?php echo $this->BcAdminForm->control('batch', ['type' => 'select', 'options' => ['del' => __d('baser', '削除')], 'empty' => __d('baser', '一括処理'), 'data-bca-select-size' => 'lg']) ?>
-      <?php echo $this->BcAdminForm->button(__d('baser', '適用'), ['id' => 'BtnApplyBatch', 'disabled' => 'disabled', 'class' => 'bca-btn', 'data-bca-btn-size' => 'lg']) ?>
+      <?php echo $this->BcAdminForm->control('batch', [
+        'type' => 'select',
+        'options' => ['delete' => __d('baser', '削除')],
+        'empty' => __d('baser', '一括処理'),
+        'data-bca-select-size' => 'lg'
+      ]) ?>
+      <?php echo $this->BcAdminForm->button(__d('baser', '適用'), [
+        'id' => 'BtnApplyBatch',
+        'disabled' => 'disabled',
+        'class' => 'bca-btn', 'data-bca-btn-size' => 'lg'
+      ]) ?>
     </div>
   <?php endif ?>
   <div class="bca-data-list__sub">
@@ -44,23 +57,26 @@ $this->BcListTable->setColumnNumber(6);
     <th class="bca-table-listup__thead-th"><?php echo __d('baser', 'ウィジェットエリア名') ?></th>
     <th class="bca-table-listup__thead-th"><?php echo __d('baser', '登録ウィジェット数') ?></th>
     <?php echo $this->BcListTable->dispatchShowHead() ?>
-    <th class="bca-table-listup__thead-th"><?php echo __d('baser', '登録日') ?><br><?php echo __d('baser', '更新日') ?>
+    <th class="bca-table-listup__thead-th">
+      <?php echo __d('baser', '登録日') ?><br><?php echo __d('baser', '更新日') ?>
     </th>
     <th class="bca-table-listup__thead-th">
       <?php echo __d('baser', 'アクション') ?>
     </th>
-
   </tr>
   </thead>
   <tbody class="bca-table-listup__tbody">
   <?php if (!empty($widgetAreas)): ?>
-    <?php foreach($widgetAreas as $data): ?>
-      <?php $this->BcBaser->element('widget_areas/index_row', ['data' => $data]) ?>
+    <?php foreach($widgetAreas as $widgetArea): ?>
+      <?php $this->BcBaser->element('WidgetAreas/index_row', ['widgetArea' => $widgetArea]) ?>
     <?php endforeach; ?>
   <?php else: ?>
     <tr>
       <td colspan="<?php echo $this->BcListTable->getColumnNumber() ?>">
-        <p class="no-data"><?php echo __d('baser', 'データが見つかりませんでした。') ?></p></td>
+        <p class="no-data">
+          <?php echo __d('baser', 'データが見つかりませんでした。') ?>
+        </p>
+      </td>
     </tr>
   <?php endif; ?>
   </tbody>

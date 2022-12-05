@@ -14,11 +14,12 @@ namespace BcWidgetArea\Service\Admin;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use BcWidgetArea\Service\WidgetAreasService;
 
 /**
  * WidgetAreasAdminService
  */
-class WidgetAreasAdminService implements WidgetAreasAdminServiceInterface
+class WidgetAreasAdminService extends WidgetAreasService implements WidgetAreasAdminServiceInterface
 {
 
 }

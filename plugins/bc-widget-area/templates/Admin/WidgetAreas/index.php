@@ -12,13 +12,13 @@
 
 /**
  * [ADMIN] ウィジェットエリア一覧
+ * @var \BaserCore\View\BcAdminAppView $this
+ * @checked
+ * @noTodo
+ * @unitTest
  */
-$this->BcBaser->js([
-  'admin/libs/jquery.baser_ajax_data_list',
-  'admin/libs/jquery.baser_ajax_batch',
-  'admin/libs/baser_ajax_data_list_config',
-  'admin/libs/baser_ajax_batch_config'
-]);
+$this->BcAdmin->setTitle(__d('baser', 'ウィジェットエリア一覧'));
+$this->BcAdmin->setHelp('widget_areas_index');
 $this->BcAdmin->addAdminMainBodyHeaderLinks([
   'url' => ['action' => 'add'],
   'title' => __d('baser', '新規追加'),
@@ -26,18 +26,6 @@ $this->BcAdmin->addAdminMainBodyHeaderLinks([
 ?>
 
 
-<script type="text/javascript">
-  $(function () {
-    $.baserAjaxDataList.init();
-    $.baserAjaxBatch.init({url: $("#AjaxBatchUrl").html()});
-  });
-</script>
-
-
-<div id="AjaxBatchUrl"
-     style="display:none"><?php $this->BcBaser->url(['controller' => 'widget_areas', 'action' => 'ajax_batch']) ?></div>
-<div id="AlertMessage" class="message" style="display:none"></div>
-<div id="MessageBox" style="display:none">
-  <div id="flashMessage" class="notice-message"></div>
+<div id="DataList" class="bca-data-list">
+  <?php $this->BcBaser->element('WidgetAreas/index_list') ?>
 </div>
-<div id="DataList" class="bca-data-list"><?php $this->BcBaser->element('widget_areas/index_list') ?></div>

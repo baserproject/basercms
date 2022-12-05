@@ -9,30 +9,19 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
-namespace BcWidgetArea;
+ namespace BcWidgetArea\Controller\Api;
 
-use BaserCore\BcPlugin;
+use BaserCore\Controller\Api\BcApiController;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
-use BcWidgetArea\ServiceProvider\BcWidgetAreaServiceProvider;
-use Cake\Core\ContainerInterface;
 
 /**
- * Class Plugin
- * @package BcWidgetArea
+ * Class WidgetAreasController
+ *
+ * ウィジェットエリアコントローラー
  */
-class Plugin extends BcPlugin
+class WidgetAreasController extends BcApiController
 {
 
-    /**
-     * services
-     * @param ContainerInterface $container
-     * @noTodo
-     * @checked
-     */
-    public function services(ContainerInterface $container): void
-    {
-        $container->addServiceProvider(new BcWidgetAreaServiceProvider());
-    }
 }
