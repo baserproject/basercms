@@ -17,6 +17,7 @@ use BcWidgetArea\Service\WidgetAreasServiceInterface;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use Cake\ORM\Exception\PersistenceFailedException;
 
 /**
  * Class WidgetAreasController
@@ -49,21 +50,21 @@ class WidgetAreasController extends BcAdminAppController
      *
      * @return void
      */
-    public function add()
+    public function add(WidgetAreasServiceInterface $service)
     {
-        $this->setTitle(__d('baser', '新規ウィジェットエリア登録'));
-
-        if ($this->request->getData()) {
-            $this->WidgetArea->set($this->request->getData());
-            if (!$this->WidgetArea->save()) {
-                $this->BcMessage->setError(__d('baser', '新しいウィジェットエリアの保存に失敗しました。'));
-            } else {
+        if ($this->getRequest()->is(['post', 'put'])) {
+            try {
+                $entity = $service->create($this->getRequest()->getData());
                 $this->BcMessage->setInfo(__d('baser', '新しいウィジェットエリアを保存しました。'));
-                $this->redirect(['action' => 'edit', $this->WidgetArea->getInsertID()]);
+                $this->redirect(['action' => 'edit', $entity->id]);
+            } catch (PersistenceFailedException $e) {
+                $entity = $e->getEntity();
+                $this->BcMessage->setError(__d('baser', '新しいウィジェットエリアの保存に失敗しました。'));
+            } catch (\Throwable $e) {
+                $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
             }
         }
-        $this->setHelp('widget_areas_form');
-        $this->render('form');
+        $this->set(['widgetArea' => $entity?? $service->getNew()]);
     }
 
     /**

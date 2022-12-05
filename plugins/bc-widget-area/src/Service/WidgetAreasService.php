@@ -59,17 +59,25 @@ class WidgetAreasService implements WidgetAreasServiceInterface
 
     /**
      * 初期データ取得
+     * @checked
+     * @noTodo
      */
     public function getNew()
     {
-
+        return $this->WidgetAreas->newEmptyEntity();
     }
 
     /**
      * 作成
+     * @param array $postData
+     * @return \Cake\Datasource\EntityInterface
+     * @checked
+     * @noTodo
      */
-    public function create()
+    public function create(array $postData)
     {
+        $entity = $this->WidgetAreas->patchEntity($this->getNew(), $postData);
+        return $this->WidgetAreas->saveOrFail($entity);
     }
 
     /**
