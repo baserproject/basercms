@@ -15,6 +15,8 @@ use BaserCore\Controller\Api\BcApiController;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use BcWidgetArea\Service\WidgetAreasService;
+use BcWidgetArea\Service\WidgetAreasServiceInterface;
 
 /**
  * Class WidgetAreasController
@@ -23,6 +25,49 @@ use BaserCore\Annotation\Checked;
  */
 class WidgetAreasController extends BcApiController
 {
+
+
+    /**
+     * メールフィールドのバッチ処理
+     *
+     * 指定したメールフィールドに対して削除、公開、非公開の処理を一括で行う
+     *
+     * ### エラー
+     * 受け取ったPOSTデータのキー名'batch'が'delete'以外の値であれば500エラーを発生させる
+     *
+     * @param WidgetAreasService $service
+     * @checked
+     * @noTodo
+     */
+    public function batch(WidgetAreasServiceInterface $service)
+    {
+        $this->request->allowMethod(['post', 'put']);
+        $allowMethod = [
+            'delete' => '削除',
+        ];
+        $method = $this->getRequest()->getData('batch');
+        if (!isset($allowMethod[$method])) {
+            $this->setResponse($this->response->withStatus(500));
+            $this->viewBuilder()->setOption('serialize', []);
+            return;
+        }
+        $targets = $this->getRequest()->getData('batch_targets');
+        try {
+            $names = $service->getTitlesById($targets);
+            $service->batch($method, $targets);
+            $this->BcMessage->setSuccess(
+                sprintf(__d('baser', 'ウィジェットエリア「%s」を %s しました。'), implode('」、「', $names), $allowMethod[$method]),
+                true,
+                false
+            );
+            $message = __d('baser', '一括処理が完了しました。');
+        } catch (\Throwable $e) {
+            $this->setResponse($this->response->withStatus(400));
+            $message = __d('baser', $e->getMessage());
+        }
+        $this->set(['message' => $message]);
+        $this->viewBuilder()->setOption('serialize', ['message']);
+    }
 
     /**
      * [AJAX] タイトル更新

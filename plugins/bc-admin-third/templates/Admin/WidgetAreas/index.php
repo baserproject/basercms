@@ -17,6 +17,7 @@
  * @noTodo
  * @unitTest
  */
+$this->BcBaser->js('admin/widget_areas/index.bundle', false);
 $this->BcAdmin->setTitle(__d('baser', 'ウィジェットエリア一覧'));
 $this->BcAdmin->setHelp('widget_areas_index');
 $this->BcAdmin->addAdminMainBodyHeaderLinks([

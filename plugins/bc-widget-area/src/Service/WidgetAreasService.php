@@ -14,6 +14,7 @@ namespace BcWidgetArea\Service;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use BaserCore\Error\BcException;
 use BcWidgetArea\Model\Table\WidgetAreasTable;
 use Cake\ORM\TableRegistry;
 use Throwable;
@@ -96,6 +97,41 @@ class WidgetAreasService implements WidgetAreasServiceInterface
             throw $e;
         }
         return $result;
+    }
+
+    /**
+     * IDからタイトルリストを取得する
+     *
+     * @param array $ids
+     * @param array $ids
+     * @return array
+     * @checked
+     */
+    public function getTitlesById(array $ids): array
+    {
+        return $this->WidgetAreas->find('list')->select(['id', 'name'])->where(['id IN' => $ids])->toArray();
+    }
+
+    /**
+     * 一括処理
+     * @param string $method
+     * @param array $ids
+     * @return bool
+     * @checked
+     */
+    public function batch(string $method, array $ids): bool
+    {
+        if (!$ids) return true;
+        $db = $this->WidgetAreas->getConnection();
+        $db->begin();
+        foreach($ids as $id) {
+            if (!$this->$method($id)) {
+                $db->rollback();
+                throw new BcException(__d('baser', 'データベース処理中にエラーが発生しました。'));
+            }
+        }
+        $db->commit();
+        return true;
     }
 
 }

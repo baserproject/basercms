@@ -12,7 +12,8 @@
 
 /**
  * [ADMIN] ウィジェットエリア一覧 テーブル
- * \BaserCore\View\BcAdminAppView $this
+ * @var \BaserCore\View\BcAdminAppView $this
+ * @var \Cake\ORM\ResultSet $widgetAreas
  * @checked
  * @noTodo
  * @unitTest
@@ -66,7 +67,7 @@ $this->BcListTable->setColumnNumber(6);
   </tr>
   </thead>
   <tbody class="bca-table-listup__tbody">
-  <?php if (!empty($widgetAreas)): ?>
+  <?php if ($widgetAreas->count()): ?>
     <?php foreach($widgetAreas as $widgetArea): ?>
       <?php $this->BcBaser->element('WidgetAreas/index_row', ['widgetArea' => $widgetArea]) ?>
     <?php endforeach; ?>
