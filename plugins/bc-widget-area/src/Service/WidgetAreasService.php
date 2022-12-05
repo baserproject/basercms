@@ -16,6 +16,7 @@ use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BcWidgetArea\Model\Table\WidgetAreasTable;
 use Cake\ORM\TableRegistry;
+use Throwable;
 
 /**
  * WidgetAreasService
@@ -33,8 +34,9 @@ class WidgetAreasService implements WidgetAreasServiceInterface
     /**
      * 単一データ取得
      */
-    public function get()
+    public function get($id)
     {
+        return $this->WidgetAreas->get($id);
     }
 
     /**
@@ -50,7 +52,7 @@ class WidgetAreasService implements WidgetAreasServiceInterface
             'limit' => null
         ], $queryParams);
         $query = $this->WidgetAreas->find();
-        if(!is_null($options['limit'])) $query->limit($options['limit']);
+        if (!is_null($options['limit'])) $query->limit($options['limit']);
         return $query;
     }
 
@@ -79,8 +81,21 @@ class WidgetAreasService implements WidgetAreasServiceInterface
 
     /**
      * 削除
+     * @param int $id
+     * @return bool
+     * @throws Throwable
+     * @checked
+     * @noTodo
      */
-    public function delete()
+    public function delete(int $id)
     {
+        $entity = $this->WidgetAreas->get($id);
+        try {
+            $result = $this->WidgetAreas->delete($entity);
+        } catch (Throwable $e) {
+            throw $e;
+        }
+        return $result;
     }
+
 }

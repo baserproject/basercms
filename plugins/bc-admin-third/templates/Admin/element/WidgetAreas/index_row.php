@@ -53,7 +53,7 @@
       'data-bca-btn-type' => 'edit',
       'data-bca-btn-size' => 'lg'
     ]); ?>
-    <?php echo $this->BcAdminForm->postLink('', ['action' => 'ajax_delete', $widgetArea->id], [
+    <?php echo $this->BcAdminForm->postLink('', ['action' => 'delete', $widgetArea->id], [
       'confirm' => __d('baser', '{0} を本当に削除してもいいですか？', $widgetArea->name),
       'title' => __d('baser', '削除'),
       'class' => 'btn-delete bca-btn-icon',
