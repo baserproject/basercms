@@ -25,6 +25,51 @@ class MailMessagesController extends BcApiController
 {
 
     /**
+     * [API] 受信メール一覧
+     *
+     */
+    public function index()
+    {
+        // TODO 受信メール管理：一覧取得APIを実装
+    }
+
+    /**
+     * [API] 受信メール詳細
+     *
+     */
+    public function view()
+    {
+        // TODO 受信メール管理：単一データ取得APIを実装
+    }
+
+    /**
+     * [API] 受信メール追加
+     *
+     */
+    public function add()
+    {
+        // TODO 受信メール管理：新規追加APIを実装
+    }
+
+    /**
+     * [API] 受信メール編集
+     *
+     */
+    public function edit()
+    {
+        // TODO 受信メール管理：編集APIを実装
+    }
+
+    /**
+     * [API] 受信メール削除
+     *
+     */
+    public function delete()
+    {
+        // TODO 受信メール管理：削除APIを実装
+    }
+
+    /**
      * メールメッセージのバッチ処理
      *
      * 指定したメールフィールドに対して削除、公開、非公開の処理を一括で行う
@@ -64,6 +109,15 @@ class MailMessagesController extends BcApiController
         }
         $this->set(['message' => $message]);
         $this->viewBuilder()->setOption('serialize', ['message']);
+    }
+
+    /**
+     * [API] CSVダウンロード
+     *
+     */
+    public function download()
+    {
+        // TODO 受信メール管理：受信メールCSVダウンロードAPIを実装
     }
 
 }
