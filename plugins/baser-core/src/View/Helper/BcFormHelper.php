@@ -146,7 +146,7 @@ class BcFormHelper extends FormHelper
             [$plugin, $modelName, $field] = explode('.', $field);
         }
         if(!$modelName) return false;
-        $serviceName = ($plugin)?: 'App' . '\\Service\\' . $modelName . 'ServiceInterface';
+        $serviceName = (($plugin)?: 'App') . '\\Service\\' . $modelName . 'ServiceInterface';
         $modelName = (($plugin)? $plugin . '.' : '') . $modelName;
         if(method_exists($serviceName, 'getControlSource')) {
             return $this->getService($serviceName)->getControlSource($field, $options);

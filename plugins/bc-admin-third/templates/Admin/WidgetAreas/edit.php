@@ -12,6 +12,12 @@
 
 /**
  * [ADMIN] ウィジェットエリア編集
+ * @var \BaserCore\View\BcAdminAppView $this
+ * @var \BcWidgetArea\Model\Entity\WidgetArea $widgetArea
+ * @var array $widgetInfos
+ * @checked
+ * @noTodo
+ * @unitTest
  */
 $this->BcBaser->i18nScript([
   'alertMessage1' => __d('baser', 'ウィジェットの削除に失敗しました。'),
@@ -23,33 +29,33 @@ $this->BcBaser->i18nScript([
   'infoMessage2' => __d('baser', 'ウィジェットエリア名を保存しました。'),
   'infoMessage3' => __d('baser', 'ウィジェットを保存しました。'),
 ]);
-$this->BcBaser->js('BcWidgetArea.admin/widget_areas/form.bundle', false, ['id' => 'AdminWidgetFormScript',
-  'data-delWidgetUrl' => $this->BcBaser->getUrl(['controller' => 'widget_areas', 'action' => 'del_widget', $this->BcAdminForm->getSourceValue('WidgetArea.id')]),
-  'data-currentAction' => $this->request->action
+$this->BcBaser->js('admin/widget_areas/form.bundle', false, [
+  'id' => 'AdminWidgetAreasScript',
+  'data-widgetAreaId' => $widgetArea->id
 ]);
+$this->BcAdmin->setTitle(__d('baser', 'ウィジェットエリア編集'));
+$this->BcAdmin->setHelp('widget_areas_form');
 ?>
 
 
-<?php if ($this->request->action == 'admin_add'): ?>
-  <?php echo $this->BcAdminForm->create('WidgetArea', ['url' => ['action' => 'add']]) ?>
-<?php elseif ($this->request->action == 'admin_edit'): ?>
-  <?php echo $this->BcAdminForm->create('WidgetArea', ['url' => ['action' => 'update_title', 'id' => false]]) ?>
-<?php endif ?>
-
-<?php echo $this->BcAdminForm->hidden('WidgetArea.id') ?>
-
-<?php echo $this->BcAdminForm->label('WidgetArea.name', __d('baser', 'ウィジェットエリア名')) ?>&nbsp;
-<?php echo $this->BcAdminForm->control('WidgetArea.name', ['type' => 'text', 'size' => 40, 'autofocus' => true]) ?>&nbsp;
-<span
-  class="submit"><?php echo $this->BcAdminForm->end(['label' => __d('baser', 'エリア名を保存する'), 'div' => false, 'class' => 'button bca-btn', 'id' => 'WidgetAreaUpdateTitleSubmit', 'data-bca-btn-type' => 'save']) ?></span>
-<?php $this->BcBaser->img('admin/ajax-loader-s.gif', ['style' => 'vertical-align:middle;display:none', 'id' => 'WidgetAreaUpdateTitleLoader']) ?>
-<?php echo $this->BcAdminForm->error('WidgetArea.name') ?>
+<?php echo $this->BcAdminForm->create($widgetArea, ['id' => 'WidgetAreaUpdateTitleForm']) ?>
+<?php echo $this->BcAdminForm->hidden('id') ?>
+<?php echo $this->BcAdminForm->label('name', __d('baser', 'ウィジェットエリア名')) ?>&nbsp;
+<?php echo $this->BcAdminForm->control('name', ['type' => 'text', 'size' => 40, 'autofocus' => true]) ?>&nbsp;
+<?php echo $this->BcAdminForm->submit(__d('baser', 'エリア名を保存する'), [
+    'div' => false,
+    'class' => 'bca-btn',
+    'id' => 'WidgetAreaUpdateTitleSubmit',
+    'data-bca-btn-type' => 'save'
+]) ?>&nbsp;
+<?php $this->BcBaser->img('admin/ajax-loader-s.gif', [
+  'style' => 'vertical-align:middle;display:none;width:16px',
+  'id' => 'WidgetAreaUpdateTitleLoader'
+]) ?>
+<?php echo $this->BcAdminForm->error('name') ?>
+<?php echo $this->BcAdminForm->end() ?>
 
 <?php if (!empty($widgetInfos)): ?>
-
-  <?php echo $this->BcAdminForm->create('WidgetArea', ['url' => ['action' => 'update_sort', $this->BcAdminForm->getSourceValue('WidgetArea.id'), 'id' => false]]) ?>
-  <?php echo $this->BcAdminForm->control('WidgetArea.sorted_ids', ['type' => 'hidden']) ?>
-  <?php echo $this->BcAdminForm->end() ?>
 
   <div id="WidgetSetting" class="clearfix">
 
@@ -63,7 +69,7 @@ $this->BcBaser->js('BcWidgetArea.admin/widget_areas/form.bundle', false, ['id' =
           <?php
           $widgets = [];
           foreach($widgetInfo['paths'] as $path) {
-            $Folder = new Folder($path);
+            $Folder = new \Cake\Filesystem\Folder($path);
             $files = $Folder->read(true, true, true);
             $widgets = [];
             foreach($files[1] as $file) {
@@ -74,8 +80,10 @@ $this->BcBaser->js('BcWidgetArea.admin/widget_areas/form.bundle', false, ['id' =
               // コントローラーでインクルードした場合、コントローラー内でヘルパ等が読み込まれていないのが原因で
               // エラーとなるのでここで読み込む
               include $file;
-              $widget['name'] = basename($file, $this->ext);
+              $widget['name'] = basename($file, \Cake\Core\Configure::read('BcApp.templateExt'));
+              /** @var string $title */
               $widget['title'] = $title;
+              /** @var string $description */
               $widget['description'] = $description;
               $widget['setting'] = ob_get_contents();
               $widgets[] = $widget;
@@ -86,14 +94,14 @@ $this->BcBaser->js('BcWidgetArea.admin/widget_areas/form.bundle', false, ['id' =
           <?php foreach($widgets as $widget): ?>
 
             <div class="ui-widget-content draggable widget"
-                 id="Widget<?php echo Inflector::camelize($widget['name']) ?>">
+                 id="Widget<?php echo \Cake\Utility\Inflector::camelize($widget['name']) ?>">
               <div class="head"><?php echo h($widget['title']) ?></div>
             </div>
 
             <div class="description"><?php echo h($widget['description']) ?></div>
 
             <div class="ui-widget-content sortable widget template <?php echo h($widget['name']) ?>"
-                 id="<?php echo Inflector::camelize($widget['name']) ?>">
+                 id="<?php echo \Cake\Utility\Inflector::camelize($widget['name']) ?>">
               <div class="clearfix">
                 <div class="widget-name display-none"><?php echo h($widget['name']) ?></div>
                 <div class="del"><?php echo __d('baser', '削除') ?></div>
@@ -102,19 +110,29 @@ $this->BcBaser->js('BcWidgetArea.admin/widget_areas/form.bundle', false, ['id' =
               </div>
               <div class="content" style="text-align:right">
                 <p class="widget-name"><small><?php echo h($widget['title']) ?></small></p>
-                <?php echo $this->BcAdminForm->create('Widget', ['url' => ['controller' => 'widget_areas', 'action' => 'update_widget', $this->BcAdminForm->getSourceValue('WidgetArea.id')], 'class' => 'form']) ?>
+                <?php echo $this->BcAdminForm->create(null, ['class' => 'form']) ?>
                 <?php echo $this->BcAdminForm->control('Widget.id', ['type' => 'hidden', 'class' => 'id']) ?>
                 <?php echo $this->BcAdminForm->control('Widget.type', ['type' => 'hidden', 'value' => $widget['title']]) ?>
                 <?php echo $this->BcAdminForm->control('Widget.element', ['type' => 'hidden', 'value' => $widget['name']]) ?>
                 <?php echo $this->BcAdminForm->control('Widget.plugin', ['type' => 'hidden', 'value' => $widgetInfo['plugin']]) ?>
                 <?php echo $this->BcAdminForm->control('Widget.sort', ['type' => 'hidden']) ?>
-                <p><?php echo $this->BcAdminForm->label('Widget.name', __d('baser', 'タイトル')) ?>&nbsp;
-                  <?php echo $this->BcAdminForm->control('Widget.name', ['type' => 'text', 'class' => 'bca-textbox__input name']) ?></p>
+                <p>
+                  <?php echo $this->BcAdminForm->label('Widget.name', __d('baser', 'タイトル')) ?>&nbsp;
+                  <?php echo $this->BcAdminForm->control('Widget.name', ['type' => 'text', 'class' => 'bca-textbox__input name']) ?>
+                </p>
                 <?php echo $widget['setting'] ?>
-                <p><?php $this->BcBaser->img('admin/ajax-loader-s.gif', ['style' => 'vertical-align:middle;display:none', 'id' => 'WidgetUpdateWidgetLoader', 'class' => 'loader']) ?>
+                <p>
+                  <?php $this->BcBaser->img('admin/ajax-loader-s.gif', ['style' => 'vertical-align:middle;display:none', 'id' => 'WidgetUpdateWidgetLoader', 'class' => 'loader']) ?>
                   <?php echo $this->BcAdminForm->control('Widget.use_title', ['type' => 'checkbox', 'label' => __d('baser', 'タイトルを表示'), 'class' => 'bca-checkbox__input use_title', 'checked' => 'checked']) ?>
                   <?php echo $this->BcAdminForm->control('Widget.status', ['type' => 'checkbox', 'label' => __d('baser', '利用する'), 'class' => 'bca-checkbox__input status']) ?>
-                  <?php echo $this->BcAdminForm->end(['label' => __d('baser', '保存'), 'div' => false, 'id' => 'WidgetUpdateWidgetSubmit', 'class' => 'bca-btn button', 'data-bca-btn-type' => 'save']) ?></p>
+                  <?php echo $this->BcAdminForm->submit(__d('baser', '保存'), [
+                      'div' => false,
+                      'class' => 'bca-btn',
+                      'id' => 'WidgetUpdateWidgetSubmit',
+                      'data-bca-btn-type' => 'save'
+                  ]) ?>
+                  <?php echo $this->BcAdminForm->end() ?>
+                </p>
               </div>
             </div>
           <?php endforeach ?>
@@ -126,19 +144,29 @@ $this->BcBaser->js('BcWidgetArea.admin/widget_areas/form.bundle', false, ['id' =
     <div id="TargetOuter">
       <div id="Target">
 
-        <h2><?php echo __d('baser', '利用中のウィジェット ') ?><?php $this->BcBaser->img('admin/ajax-loader-s.gif', [
-            'style' => 'vertical-align:middle;display:none',
+        <h2>
+          <?php echo __d('baser', '利用中のウィジェット ') ?>
+          <?php $this->BcBaser->img('admin/ajax-loader-s.gif', [
+            'style' => 'vertical-align:middle;display:none;width:16px',
             'id' => 'WidgetAreaUpdateSortLoader',
-            'class' => 'loader']); ?></h2>
+            'class' => 'loader'
+          ]) ?>
+        </h2>
 
-        <?php if ($this->BcAdminForm->getSourceValue('WidgetArea.widgets')): ?>
-          <?php foreach($this->BcAdminForm->getSourceValue('WidgetArea.widgets') as $widget): ?>
+        <?php if ($widgetArea->widgets_array): ?>
+          <?php foreach($widgetArea->widgets_array as $widget): ?>
 
-            <?php $key = key($widget) ?>
-            <?php $enabled = '' ?>
-            <?php if ($widget[$key]['status']): ?>
-              <?php $enabled = ' enabled' ?>
-            <?php endif ?>
+            <?php
+              $key = key($widget);
+              $enabled = '';
+              if ($widget[$key]['status']){
+                $enabled = ' enabled';
+              }
+              $this->setRequest($this->getRequest()->withParsedBody(array_merge(
+                $this->getRequest()->getData(),
+                [$key => $widget[$key]]
+              )));
+            ?>
 
             <div
               class="ui-widget-content sortable widget setting <?php echo h($widget[$key]['element']) ?><?php echo $enabled ?>"
@@ -151,19 +179,43 @@ $this->BcBaser->js('BcWidgetArea.admin/widget_areas/form.bundle', false, ['id' =
               </div>
               <div class="content" style="text-align:right">
                 <p><small><?php echo $widget[$key]['type'] ?></small></p>
-                <?php echo $this->BcAdminForm->create('Widget', ['url' => ['controller' => 'widget_areas', 'action' => 'update_widget', $this->BcAdminForm->getSourceValue('WidgetArea.id'), 'id' => false], 'class' => 'form', 'id' => 'WidgetUpdateWidgetForm' . $widget[$key]['id']]) ?>
+                <?php echo $this->BcAdminForm->create(null, [
+                  'class' => 'form',
+                  'id' => 'WidgetUpdateWidgetForm' . $widget[$key]['id']
+                ]) ?>
                 <?php echo $this->BcAdminForm->control($key . '.id', ['type' => 'hidden', 'class' => 'id']) ?>
                 <?php echo $this->BcAdminForm->control($key . '.type', ['type' => 'hidden']) ?>
                 <?php echo $this->BcAdminForm->control($key . '.element', ['type' => 'hidden']) ?>
                 <?php echo $this->BcAdminForm->control($key . '.plugin', ['type' => 'hidden']) ?>
                 <?php echo $this->BcAdminForm->control($key . '.sort', ['type' => 'hidden']) ?>
-                <p><?php echo $this->BcAdminForm->label($key . 'name', __d('baser', 'タイトル')) ?>&nbsp;
-                  <?php echo $this->BcAdminForm->control($key . '.name', ['type' => 'text', 'class' => 'name bca-textbox__input']) ?></p>
-                <?php $this->BcBaser->element('widgets/' . $widget[$key]['element'], ['key' => $key, 'plugin' => $widget[$key]['plugin'], 'mode' => 'edit'], ['plugin' => $widget[$key]['plugin']]) ?>
-                <p><?php $this->BcBaser->img('admin/ajax-loader-s.gif', ['style' => 'vertical-align:middle;display:none', 'id' => 'WidgetUpdateWidgetLoader' . $widget[$key]['id'], 'class' => 'loader']) ?>
-                  <?php echo $this->BcAdminForm->control($key . '.use_title', ['type' => 'checkbox', 'label' => __d('baser', 'タイトルを表示')]) ?>
-                  <?php echo $this->BcAdminForm->control($key . '.status', ['type' => 'checkbox', 'label' => __d('baser', '利用する')]) ?>
-                  <?php echo $this->BcAdminForm->end(['label' => __d('baser', '保存'), 'div' => false, 'id' => 'WidgetUpdateWidgetSubmit' . $widget[$key]['id'], 'class' => 'button bca-btn', 'data-bca-btn-type' => 'save']) ?></p>
+                <p>
+                  <?php echo $this->BcAdminForm->label($key . 'name', __d('baser', 'タイトル')) ?>&nbsp;
+                  <?php echo $this->BcAdminForm->control($key . '.name', ['type' => 'text', 'class' => 'name bca-textbox__input']) ?>
+                </p>
+                <?php if(!empty($widget[$key]['element'])): ?>
+                <?php $this->BcBaser->element('widgets/' . $widget[$key]['element'], [
+                  'key' => $key,
+                  'plugin' => $widget[$key]['plugin'],
+                  'mode' =>
+                  'edit'
+                ], ['plugin' => $widget[$key]['plugin']]) ?>
+                <?php endif ?>
+                <p>
+                  <?php $this->BcBaser->img('admin/ajax-loader-s.gif', [
+                    'style' => 'vertical-align:middle;display:none;width:16px',
+                    'id' => 'WidgetUpdateWidgetLoader' . $widget[$key]['id'],
+                    'class' => 'loader'
+                  ]) ?>
+                  <?php echo $this->BcAdminForm->control($key . '.use_title', ['type' => 'checkbox', 'label' => __d('baser', 'タイトルを表示'), 'class' => 'bca-checkbox__input use_title']) ?>
+                  <?php echo $this->BcAdminForm->control($key . '.status', ['type' => 'checkbox', 'label' => __d('baser', '利用する'), 'class' => 'bca-checkbox__input status']) ?>
+                  <?php echo $this->BcAdminForm->submit(__d('baser', '保存'), [
+                      'div' => false,
+                      'class' => 'bca-btn',
+                      'id' => 'WidgetUpdateWidgetSubmit' . $widget[$key]['id'],
+                      'data-bca-btn-type' => 'save'
+                  ]) ?>
+                  <?php echo $this->BcAdminForm->end() ?>
+                </p>
               </div>
             </div>
           <?php endforeach; ?>

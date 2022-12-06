@@ -14,6 +14,8 @@ namespace BcWidgetArea\ServiceProvider;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use BcWidgetArea\Service\Admin\WidgetAreasAdminService;
+use BcWidgetArea\Service\Admin\WidgetAreasAdminServiceInterface;
 use BcWidgetArea\Service\WidgetAreasService;
 use BcWidgetArea\Service\WidgetAreasServiceInterface;
 use Cake\Core\ServiceProvider;
@@ -29,7 +31,8 @@ class BcWidgetAreaServiceProvider extends ServiceProvider
      * @var string[]
      */
     protected $provides = [
-        WidgetAreasServiceInterface::class
+        WidgetAreasServiceInterface::class,
+        WidgetAreasAdminServiceInterface::class
     ];
 
     /**
@@ -43,6 +46,7 @@ class BcWidgetAreaServiceProvider extends ServiceProvider
         $container->defaultToShared(true);
         // Installations サービス
         $container->add(WidgetAreasServiceInterface::class, WidgetAreasService::class);
+        $container->add(WidgetAreasAdminServiceInterface::class, WidgetAreasAdminService::class);
     }
 
 }

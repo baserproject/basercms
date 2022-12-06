@@ -262,4 +262,26 @@ class BlogContentsServiceTest extends BcTestCase
         $this->BlogContentsService->get(70);
     }
 
+    /**
+     * コントロールソースを取得する
+     *
+     * @dataProvider getControlSourceDataProvider
+     */
+    public function testGetControlSource($field, $expected)
+    {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です。BlogContentsTableより移植');
+        $result = $this->BlogContent->getControlSource($field);
+        $this->assertEquals($result, $expected);
+    }
+
+    public function getControlSourceDataProvider()
+    {
+        return [
+            [null, false],
+            ['', false],
+            ['hoge', false],
+            ['id', ['1' => '新着情報']],
+        ];
+    }
+
 }

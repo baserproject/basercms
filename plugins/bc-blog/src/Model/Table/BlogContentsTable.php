@@ -124,41 +124,6 @@ class BlogContentsTable extends BlogAppTable
     }
 
     /**
-     * コントロールソースを取得する
-     *
-     * @param string フィールド名
-     * @return array コントロールソース
-     */
-    public function getControlSource($field = null, $options = [])
-    {
-
-        switch($field) {
-            case 'id':
-                $ContentModel = ClassRegistry::init('Content');
-                $controlSources['id'] = $ContentModel->find('list', [
-                    'fields' => [
-                        'entity_id',
-                        'title',
-                    ],
-                    'conditions' => [
-                        'plugin' => 'BcBlog',
-                        'type' => 'BlogContent',
-                    ],
-                    'recursive' => -1,
-                ]);
-                break;
-            default:
-                break;
-        }
-
-        if (isset($controlSources[$field])) {
-            return $controlSources[$field];
-        } else {
-            return false;
-        }
-    }
-
-    /**
      * beforeSave
      * @param EventInterface $event
      * @param EntityInterface $entity

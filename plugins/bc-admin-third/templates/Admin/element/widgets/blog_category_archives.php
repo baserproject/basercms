@@ -1,21 +1,25 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package            Blog.View
- * @since           baserCMS v 0.1.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) NPO baser foundation
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       https://basercms.net/license/index.html MIT License
  */
-
 /**
  * [ADMIN] ブログカテゴリー一覧ウィジェット設定
+ * @var \BaserCore\View\BcAdminAppView $this
+ * @var string $key
+ * @checked
+ * @noTodo
+ * @unitTest
  */
 $title = __d('baser', 'カテゴリ一覧');
 $description = __d('baser', 'カテゴリ一覧を表示します。');
 ?>
+
 
 <script type="text/javascript">
   $(function () {
@@ -35,17 +39,35 @@ $description = __d('baser', 'カテゴリ一覧を表示します。');
   });
 </script>
 
+
 <?php echo $this->BcAdminForm->label($key . '.limit', __d('baser', '表示数')) ?>&nbsp;
-<?php echo $this->BcAdminForm->control($key . '.limit', ['type' => 'text', 'size' => 6]) ?>&nbsp;件<br/>
+<?php echo $this->BcAdminForm->control($key . '.limit', [
+  'type' => 'text',
+  'size' => 6
+]) ?>&nbsp;件
+<br>
 <?php echo $this->BcAdminForm->label($key . '.view_count', __d('baser', '記事数表示')) ?>&nbsp;
-<?php echo $this->BcAdminForm->control($key . '.view_count', ['type' => 'radio', 'options' => $this->BcText->booleanDoList(''), 'legend' => false, 'default' => 0]) ?>
-<br/>
-<?php echo $this->BcAdminForm->control($key . '.by_year', ['type' => 'checkbox', 'label' => __d('baser', '年別に表示する')]) ?>
-<br/>
+<?php echo $this->BcAdminForm->control($key . '.view_count', [
+  'type' => 'radio',
+  'options' => $this->BcText->booleanDoList(''),
+  'legend' => false,
+  'default' => 0
+]) ?>
+<br>
+<?php echo $this->BcAdminForm->control($key . '.by_year', [
+  'type' => 'checkbox',
+  'label' => __d('baser', '年別に表示する')
+]) ?>
+<br>
 <p id="Span<?php echo $key ?>Depth"><?php echo $this->BcAdminForm->label($key . '.depth', __d('baser', '深さ')) ?>&nbsp;
   <?php echo $this->BcAdminForm->control($key . '.depth', ['type' => 'text', 'size' => 6, 'default' => 1]) ?>
   &nbsp;<?php echo __d('baser', '階層') ?></p>
 <?php echo $this->BcAdminForm->label($key . '.blog_content_id', __d('baser', 'ブログ')) ?>&nbsp;
-<?php echo $this->BcAdminForm->control($key . '.blog_content_id', ['type' => 'select', 'options' => $this->BcAdminForm->getControlSource('Blog.BlogContent.id')]) ?>
-<br/>
-<small><?php echo __d('baser', 'ブログページを表示している場合は、上記の設定に関係なく、<br>対象ブログのカテゴリ一覧を表示します。') ?></small>
+<?php echo $this->BcAdminForm->control($key . '.blog_content_id', [
+  'type' => 'select',
+  'options' => $this->BcAdminForm->getControlSource('BcBlog.BlogContents.id')
+]) ?>
+<br>
+<small>
+  <?php echo __d('baser', 'ブログページを表示している場合は、上記の設定に関係なく、<br>対象ブログのカテゴリ一覧を表示します。') ?>
+</small>

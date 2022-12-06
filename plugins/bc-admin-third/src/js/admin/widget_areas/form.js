@@ -11,8 +11,6 @@
 
 $(function () {
 
-    var delWidgetUrl = $("#AdminWidgetFormScript").attr('data-delWidgetUrl');
-    var currentAction = $("#AdminWidgetFormScript").attr('data-currentAction');
     var sortableOptions = {
         scroll: true,
         items: 'div.sortable',
@@ -29,20 +27,20 @@ $(function () {
             // 一旦リセットするようにした。
             $("#Target").sortable("destroy");
             $("#Target").sortable(sortableOptions
-            ).droppable(
-                {
-                    hoverClass: 'topDrop',
-                    accept: 'div.sortable',
-                    tolderance: 'intersect'
-                });
+            ).droppable({
+                hoverClass: 'topDrop',
+                accept: 'div.sortable',
+                tolderance: 'intersect'
+            });
         },
         update: function (event, ui) {
             // jQueryUI 1.8.14 より、 ui.item.attr("id")で id が取得できない
-            if ($(ui.item.context).attr("id").match(/^Setting/i)) {
+            if ($(ui.item.prevObject.prevObject).attr("id").match(/^Setting/i)) {
                 widgetAreaUpdateSortedIds();
                 return;
             }
 
+            // ベースIDの更新
             var baseId = 0;
             $("#Target .setting").each(function () {
                 var _baseId = parseInt($(this).attr('id').replace('Setting', ''));
@@ -50,30 +48,28 @@ $(function () {
                     baseId = _baseId;
                 }
             });
-
             baseId++;
-            var id = $(ui.item.context).attr("id").replace('Widget', '');
+
+            // ターゲットにテンプレートを追加
+            var id = $(ui.item.prevObject.prevObject).attr("id").replace('Widget', '');
             var sourceId = id.replace('Widget', '');
             var settingId = 'Setting' + (baseId);
             var tmpId = 'Tmp' + (baseId);
-
-            /* ターゲットにテンプレートを追加 */
             ui.item.attr('id', tmpId);
-            $("#" + tmpId).after($("#" + sourceId).clone().attr('id', settingId));
-            $("#" + tmpId).remove();
-            $("#" + settingId).addClass('setting');
-            $("#" + settingId).removeClass('template');
+            $("#" + tmpId).after($("#" + sourceId).clone().attr('id', settingId)).remove();
+            $("#" + settingId).addClass('setting').removeClass('template');
 
-            /* フィールドIDのリネーム */
+            // フィールドIDのリネーム
             renameWidget(baseId);
 
-            /* 値の設定 */
-            var widgetname = $("#" + settingId + ' .widget-name').html();
-            $("#" + settingId + ' .head').html($("#" + settingId + ' .head').html() + $("#Target ." + widgetname).length);
-            $("#WidgetId" + baseId).val(baseId);
-            $("#WidgetName" + baseId).val($("#" + settingId + ' .head').html());
+            // 値の設定
+            const widgetName = $("#" + settingId + ' .widget-name').html();
+            let $head = $("#" + settingId + ' .head');
+            $head.html($head.html() + $("#Target ." + widgetName).length);
+            $("#widget-id" + baseId).val(baseId);
+            $("#widget-name" + baseId).val($head.html());
 
-            /* イベント登録 */
+            // イベント登録
             registWidgetEvent(baseId);
 
             /* sortable をリフレッシュ */
@@ -83,62 +79,54 @@ $(function () {
 
             /* ウィジェットを保存 */
             updateWidget(baseId);
-
         },
         activate: function (event, ui) {
             // ドラッグ時の幅を元の幅に合わせる
             $("#Source div:last").width(ui.item.width() - 20);
         }
     };
-    $("#Target").sortable(sortableOptions).droppable(
-        {
-            hoverClass: 'topDrop',
-            accept: 'div.draggable',
-            tolderance: 'intersect'
-        });
-    $("div.draggable").draggable(
-        {
-            scroll: true,
-            helper: 'clone',
-            opacity: 0.80,
-            revert: 'invalid',
-            cursor: 'move',
-            connectToSortable: '#Target',
-            containment: 'body'
-        });
+
+    $("#Target").sortable(sortableOptions).droppable({
+        hoverClass: 'topDrop',
+        accept: 'div.draggable',
+        tolderance: 'intersect'
+    });
+
+    $("div.draggable").draggable({
+        scroll: true,
+        helper: 'clone',
+        opacity: 0.80,
+        revert: 'invalid',
+        cursor: 'move',
+        connectToSortable: '#Target',
+        containment: 'body'
+    });
 
     $("#Target .sortable").each(function (k, v) {
         registWidgetEvent($(this).attr('id').replace('Setting', ''));
     });
 
-    if (currentAction == 'admin_edit') {
-        $("#WidgetAreaUpdateTitleSubmit").click(function () {
-            widgetAreaUpdateTitle();
-            return false;
-        });
-    }
+    $("#WidgetAreaUpdateTitleSubmit").click(function () {
+        widgetAreaUpdateTitle();
+        return false;
+    });
 
     /**
      * ウィジェットごとにid/nameをリネームする
      */
     function renameWidget(baseId) {
-
-        var settingId = 'Setting' + baseId;
-        $("#" + settingId + ' .form').attr('id', 'WidgetUpdateWidgetForm' + baseId);
-        $("#WidgetUpdateWidgetForm" + baseId).find('input, select, textarea').each(function () {
-            if ($(this).attr('id')) {
-                $(this).attr('id', $(this).attr('id') + baseId);
-            }
-            if ($(this).attr('name') != undefined) {
-                if ($(this).attr('name').match(/data\[Widget\]/i)) {
-                    $(this).attr('name', $(this).attr('name').replace('data[Widget]', 'data[Widget' + baseId + ']'));
-                }
+        let settingId = 'Setting' + baseId;
+        let newFormId = 'WidgetUpdateWidgetForm' + baseId;
+        $("#" + settingId + ' .form').attr('id', newFormId);
+        let $newForm = $("#" + newFormId);
+        $newForm.find('input, select, textarea').each(function () {
+            if ($(this).attr('id')) $(this).attr('id', $(this).attr('id') + baseId);
+            if ($(this).attr('name') !== undefined && $(this).attr('name').match(/^Widget\[/i)) {
+                $(this).attr('name', $(this).attr('name').replace('Widget', 'Widget' + baseId + ''));
             }
         });
-        $("#WidgetUpdateWidgetForm" + baseId).find('label').each(function () {
-            if ($(this).attr('for')) {
-                $(this).attr('for', $(this).attr('for') + baseId);
-            }
+        $newForm.find('label').each(function () {
+            if ($(this).attr('for')) $(this).attr('for', $(this).attr('for') + baseId);
         });
     }
 
@@ -146,17 +134,17 @@ $(function () {
      * ウィジェットイベントを登録
      */
     function registWidgetEvent(baseId) {
-
-        var settingId = 'Setting' + baseId;
+        const settingId = 'Setting' + baseId;
         $("#WidgetUpdateWidgetSubmit" + baseId).click(function () {
             updateWidget(baseId);
             return false;
         });
         $("#" + settingId + " .action").click(function () {
-            if ($("#" + settingId + " .content").is(":hidden")) {
-                $("#" + settingId + " .content").slideDown('fast');
+            let $content = $("#" + settingId + " .content");
+            if ($content.is(":hidden")) {
+                $content.slideDown('fast');
             } else {
-                $("#" + settingId + " .content").slideUp('fast');
+                $content.slideUp('fast');
             }
         });
         $("#" + settingId + " .status").click(function () {
@@ -170,45 +158,43 @@ $(function () {
             if (!confirm(bcI18n.confirmMessage1)) {
                 return;
             }
-            delWidget(baseId);
+            deleteWidget(baseId);
         });
-
     }
 
     /**
      * ウィジェットを削除
      */
-    function delWidget(id) {
+    function deleteWidget(id) {
         $.bcToken.check(function () {
-            $("#WidgetAreaUpdateSortForm input[name='_csrfToken']").val($.bcToken.key);
+            const widgetAreaId = $("#AdminWidgetAreasScript").attr('data-widgetAreaId');
             return $.ajax({
-                url: delWidgetUrl + '/' + id,
+                headers: {
+                    "Authorization": $.bcJwt.accessToken,
+                },
+                url: `${$.bcUtil.apiBaseUrl}bc-widget-area/widget_areas/delete_widget/${widgetAreaId}/${id}.json`,
                 type: 'POST',
                 data: {
-                    _Token: {
-                        key: $.bcToken.key
-                    }
+                    _csrfToken: $.bcToken.key
                 },
-                dataType: 'text',
+                dataType: 'json',
                 beforeSend: function () {
                     $("#WidgetAreaUpdateSortLoader").show();
-                    $("#BcMessageBox").slideUp();
+                    $.bcUtil.hideMessage();
                 },
                 success: function (result) {
-                    if (result != '1') {
-                        $("#BcSystemMessage").html(bcI18n.alertMessage1);
+                    if (!result.widgetArea) {
+                        $.bcUtil.showAlertMessage(bcI18n.alertMessage1);
                     } else {
                         $("#Setting" + id + "").slideUp(200, function () {
                             $("#Setting" + id).remove();
                             widgetAreaUpdateSortedIds();
                         });
-                        $("#BcSystemMessage").html(bcI18n.infoMessage1);
+                        $.bcUtil.showNoticeMessage(bcI18n.infoMessage1);
                     }
-                    $("#BcMessageBox").slideDown();
                 },
                 error: function () {
-                    $("#BcSystemMessage").html(bcI18n.alertMessage1);
-                    $("#BcMessageBox").slideDown();
+                    $.bcUtil.showAlertMessage(bcI18n.alertMessage1);
                 },
                 complete: function (xhr, textStatus) {
                     $("#WidgetAreaUpdateSortLoader").hide();
@@ -221,69 +207,72 @@ $(function () {
      * 並び順を更新する
      */
     function widgetAreaUpdateSortedIds() {
-
         var ids = [];
+        const widgetAreaId = $("#AdminWidgetAreasScript").attr('data-widgetAreaId');
         $("#Target .sortable").each(function (k, v) {
             ids.push($(this).attr('id').replace('Setting', ''));
         });
-        $("#WidgetAreaSortedIds").val(ids.join(','));
         $.bcToken.check(function () {
-            $("#WidgetAreaUpdateSortForm input[name='_csrfToken']").val($.bcToken.key);
             return $.ajax({
-                url: $("#WidgetAreaUpdateSortForm").attr('action'),
+                headers: {
+                    "Authorization": $.bcJwt.accessToken,
+                },
+                url: `${$.bcUtil.apiBaseUrl}bc-widget-area/widget_areas/update_sort/${widgetAreaId}.json`,
                 type: 'POST',
-                data: $("#WidgetAreaUpdateSortForm").serialize(),
-                dataType: 'text',
+                data: {
+                    _csrfToken: $.bcToken.key,
+                    sorted_ids: ids.join(',')
+                },
+                dataType: 'json',
                 beforeSend: function () {
                     $("#WidgetAreaUpdateSortLoader").show();
                 },
                 success: function (result) {
-                    if (result != '1') {
+                    if (!result.widgetArea) {
                         $("#BcMessageBox").slideUp();
-                        $("#BcSystemMessage").html(bcI18n.alertMessage2);
-                        $("#BcMessageBox").slideDown();
+                        $.bcUtil.showAlertMessage(bcI18n.alertMessage2);
                     }
                 },
                 error: function () {
                     $("#BcMessageBox").slideUp();
-                    $("#BcSystemMessage").html(bcI18n.alertMessage2);
-                    $("#BcMessageBox").slideDown();
+                    $.bcUtil.showAlertMessage(bcI18n.alertMessage2);
                 },
                 complete: function (xhr, textStatus) {
                     $("#WidgetAreaUpdateSortLoader").hide();
                 }
             });
         }, {loaderType: "target", loaderSelector: "#WidgetAreaUpdateSortLoader", hideLoader: false});
-
     }
 
     /**
      * タイトルを更新する
      */
     function widgetAreaUpdateTitle() {
+        const widgetAreaId = $("#AdminWidgetAreasScript").attr('data-widgetAreaId');
         $.bcToken.check(function () {
             $('#WidgetAreaUpdateTitleForm input[name="_csrfToken"]').val($.bcToken.key);
             return $.ajax({
-                url: $("#WidgetAreaUpdateTitleForm").attr('action'),
+                headers: {
+                    "Authorization": $.bcJwt.accessToken,
+                },
+                url: `${$.bcUtil.apiBaseUrl}bc-widget-area/widget_areas/update_title/${widgetAreaId}.json`,
                 type: 'POST',
                 data: $("#WidgetAreaUpdateTitleForm").serialize(),
-                dataType: 'text',
+                dataType: 'json',
                 beforeSend: function () {
                     $("#WidgetAreaUpdateTitleSubmit").prop('disabled', true);
-                    $("#BcMessageBox").slideUp();
+                    $.bcUtil.hideMessage();
                     $("#WidgetAreaUpdateTitleLoader").show();
                 },
                 success: function (result) {
-                    if (result) {
-                        $("#BcSystemMessage").html(bcI18n.infoMessage2);
+                    if (result.widgetArea) {
+                        $.bcUtil.showNoticeMessage(bcI18n.infoMessage2);
                     } else {
-                        $("#BcSystemMessage").html(bcI18n.alertMessage3);
+                        $.bcUtil.showAlertMessage(bcI18n.alertMessage3);
                     }
-                    $("#BcMessageBox").slideDown();
                 },
                 error: function () {
-                    $("#BcSystemMessage").html(bcI18n.alertMessage3);
-                    $("#BcMessageBox").slideDown();
+                    $.bcUtil.showAlertMessage(bcI18n.alertMessage3);
                 },
                 complete: function (xhr, textStatus) {
                     $("#WidgetAreaUpdateTitleSubmit").removeAttr('disabled');
@@ -297,31 +286,35 @@ $(function () {
      * ウィジェットを更新する
      */
     function updateWidget(id) {
-
+        const formId = "WidgetUpdateWidgetForm" + id;
+        const widgetAreaId = $("#AdminWidgetAreasScript").attr('data-widgetAreaId');
+        let $form = $("#" + formId);
         $.bcToken.check(function () {
-            $("#WidgetUpdateWidgetForm" + id + ' input[name="_csrfToken"]').val($.bcToken.key);
+            $("#" + formId + ' input[name="_csrfToken"]').val($.bcToken.key);
             return $.ajax({
-                url: $("#WidgetUpdateWidgetForm" + id).attr('action'),
+                headers: {
+                    "Authorization": $.bcJwt.accessToken,
+                },
+                url: $.bcUtil.apiBaseUrl + 'bc-widget-area/widget_areas/update_widget/' + widgetAreaId + '.json',
                 type: 'POST',
-                data: $("#WidgetUpdateWidgetForm" + id).serialize(),
-                dataType: 'text',
+                data: $form.serialize(),
+                dataType: 'json',
                 beforeSend: function () {
                     $("#WidgetUpdateWidgetSubmit" + id).prop('disabled', true);
                     $("#WidgetUpdateWidgetLoader" + id).show();
                     $("#BcMessageBox").slideUp();
+                    $.bcUtil.hideMessage();
                 },
                 success: function (result) {
-                    if (result != '1') {
-                        $("#BcSystemMessage").html(bcI18n.alertMessage4);
+                    if (!result.widgetArea) {
+                        $.bcUtil.showAlertMessage(bcI18n.alertMessage4);
                     } else {
                         $("#Setting" + id + ' .head').html($("#Setting" + id + ' .name').val());
-                        $("#BcSystemMessage").html(bcI18n.infoMessage3);
+                        $.bcUtil.showNoticeMessage(bcI18n.infoMessage3);
                     }
-                    $("#BcMessageBox").slideDown();
                 },
                 error: function () {
-                    $("#BcSystemMessage").html(bcI18n.alertMessage4);
-                    $("#BcMessageBox").slideDown();
+                    $.bcUtil.showAlertMessage(bcI18n.alertMessage4);
                 },
                 complete: function (xhr, textStatus) {
                     $("#WidgetUpdateWidgetSubmit" + id).removeAttr('disabled');

@@ -37,7 +37,7 @@ class BlogContentsService implements BlogContentsServiceInterface
 
     /**
      * Construct
-     * 
+     *
      * @checked
      * @noTodo
      * @unitTest
@@ -49,7 +49,7 @@ class BlogContentsService implements BlogContentsServiceInterface
 
     /**
      * 一覧データを取得
-     * 
+     *
      * @param array $queryParams
      * @return Query
      * @checked
@@ -75,7 +75,7 @@ class BlogContentsService implements BlogContentsServiceInterface
 
     /**
      * 単一データ取得
-     * 
+     *
      * @param int $id
      * @param array $options
      *  - `status`: ステータス。 publish を指定すると公開状態のもののみ取得（初期値：全て）
@@ -90,7 +90,7 @@ class BlogContentsService implements BlogContentsServiceInterface
             'status' => ''
         ], $options);
         $conditions = ['BlogContents.id' => $id];
-        if($options['status'] === 'publish') {
+        if ($options['status'] === 'publish') {
             $conditions = array_merge($conditions, $this->BlogContents->Contents->getConditionAllowPublish());
         }
         return $this->BlogContents->get($id, [
@@ -101,7 +101,7 @@ class BlogContentsService implements BlogContentsServiceInterface
 
     /**
      * 初期値を取得する
-     * 
+     *
      * @return EntityInterface
      * @checked
      * @noTodo
@@ -132,7 +132,7 @@ class BlogContentsService implements BlogContentsServiceInterface
 
     /**
      * 更新
-     * 
+     *
      * @param EntityInterface $target
      * @param array $postData
      * @return EntityInterface
@@ -157,7 +157,7 @@ class BlogContentsService implements BlogContentsServiceInterface
 
     /**
      * ブログ登録
-     * 
+     *
      * @param array $data
      * @param array $options
      * @return \Cake\Datasource\EntityInterface
@@ -197,7 +197,7 @@ class BlogContentsService implements BlogContentsServiceInterface
 
     /**
      * ブログを削除する
-     * 
+     *
      * @param int $id
      * @return bool
      * @checked
@@ -212,7 +212,7 @@ class BlogContentsService implements BlogContentsServiceInterface
 
     /**
      * リストを取得する
-     * 
+     *
      * @return array
      * @checked
      * @noTodo
@@ -223,6 +223,40 @@ class BlogContentsService implements BlogContentsServiceInterface
         return $this->BlogContents
             ->find('list', ['keyField' => 'id', 'valueField' => 'content.title'])
             ->contain('Contents')->toArray();
+    }
+
+    /**
+     * コントロールソースを取得する
+     *
+     * @param null $field
+     * @param array $options
+     * @return array|false コントロールソース
+     * @checked
+     * @noTodo
+     */
+    public function getControlSource($field = null, $options = [])
+    {
+        switch($field) {
+            case 'id':
+                $contentsTable = TableRegistry::getTableLocator()->get('BaserCore.Contents');
+                $controlSources['id'] = $contentsTable->find('list')
+                    ->select([
+                        'entity_id',
+                        'title',
+                    ])
+                    ->where([
+                        'plugin' => 'BcBlog',
+                        'type' => 'BlogContent',
+                    ]);
+                break;
+            default:
+                break;
+        }
+        if (isset($controlSources[$field])) {
+            return $controlSources[$field];
+        } else {
+            return false;
+        }
     }
 
 }

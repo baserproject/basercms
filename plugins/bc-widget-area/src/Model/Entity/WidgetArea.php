@@ -22,11 +22,13 @@ use Cake\I18n\FrozenTime;
  *
  * @property int $id
  * @property string $name
- * @property array $widgets
+ * @property string $widgets
+ * @property array $widgets_array
  * @property FrozenTime $created
  * @property FrozenTime $modified
  */
-class WidgetArea extends \Cake\ORM\Entity {
+class WidgetArea extends \Cake\ORM\Entity
+{
 
     /**
      * Accessible
@@ -39,25 +41,74 @@ class WidgetArea extends \Cake\ORM\Entity {
     ];
 
     /**
-     * ウィジェットを取り出す
-     * @return array|mixed
+     * バーチャルフィールド
+     *
+     * @var string[]
      */
-    protected function _getWidgets()
+    protected $_virtual = ['widgets_array'];
+
+    /**
+     * ウィジェットを取り出す
+     *
+     * 取り出す際に widgets フィールドの値をアンシリアライズする。
+     *
+     * @return array|mixed
+     * @checked
+     * @noTodo
+     */
+    protected function _getWidgetsArray()
     {
-        if(!empty($this->_fields['widgets'])) {
-            return BcUtil::unserialize($this->_fields['widgets']);
+        if (!empty($this->_fields['widgets'])) {
+            $value = BcUtil::unserialize($this->_fields['widgets']);
+            usort($value, function($a, $b) {
+                $aKey = key($a);
+                $bKey = key($b);
+                if ($a[$aKey]['sort'] == $b[$bKey]['sort']) {
+                    return 0;
+                }
+                if ($a[$aKey]['sort'] < $b[$bKey]['sort']) {
+                    return -1;
+                }
+                return 1;
+            });
+            return $value;
         } else {
             return [];
         }
     }
 
     /**
+     * ウィジェットをセットする
+     *
+     * 保存する際に、配列をシリアライズする。
+     *
+     * @param $value
+     * @return string|null
+     * @checked
+     * @noTodo
+     */
+    protected function _setWidgets($value)
+    {
+        if ($value) {
+            return BcUtil::serialize($value);
+        } else {
+            return $value;
+        }
+    }
+
+    /**
      * ウィジェット数を取得する
      * @return int
+     * @checked
+     * @noTodo
      */
     protected function _getCount()
     {
-        return count($this->widgets);
+        if ($this->_fields['widgets']) {
+            return count($this->widgets_array);
+        } else {
+            return 0;
+        }
     }
 
 }

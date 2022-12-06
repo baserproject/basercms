@@ -15,7 +15,9 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Error\BcException;
+use BcWidgetArea\Model\Entity\WidgetArea;
 use BcWidgetArea\Model\Table\WidgetAreasTable;
+use Cake\Datasource\EntityInterface;
 use Cake\ORM\TableRegistry;
 use Throwable;
 
@@ -82,10 +84,16 @@ class WidgetAreasService implements WidgetAreasServiceInterface
 
     /**
      * 編集
+     * @param EntityInterface $entity
+     * @param array $postData
+     * @return EntityInterface
+     * @checked
+     * @noTodo
      */
-    public function update()
+    public function update(EntityInterface $entity, array $postData)
     {
-
+        $entity = $this->WidgetAreas->patchEntity($entity, $postData);
+        return $this->WidgetAreas->saveOrFail($entity);
     }
 
     /**
@@ -140,6 +148,89 @@ class WidgetAreasService implements WidgetAreasServiceInterface
         }
         $db->commit();
         return true;
+    }
+
+    /**
+     * ウィジェットをアップデートする
+     *
+     * @param int $widgetAreaId
+     * @param array $postData
+     * @return EntityInterface
+     * @checked
+     * @noTodo
+     */
+    public function updateWidget(int $widgetAreaId, array $postData)
+    {
+        $dataKey = key($postData);
+        /** @var WidgetArea $widgetArea */
+        $widgetArea = $this->WidgetAreas->get($widgetAreaId);
+        $widgets = $widgetArea->widgets_array;
+        $update = false;
+        if ($widgets) {
+            foreach($widgets as $key => $widget) {
+                if (isset($postData[$dataKey]['id']) && isset($widget[$dataKey]['id']) && $widget[$dataKey]['id'] === $postData[$dataKey]['id']) {
+                    $widgets[$key] = $postData;
+                    $update = true;
+                    break;
+                }
+            }
+        } else {
+            $widgets = [];
+        }
+        if (!$update) $widgets[] = $postData;
+        $widgetArea->widgets = $widgets;
+        return $this->WidgetAreas->saveOrFail($widgetArea);
+    }
+
+    /**
+     * ウィジェットの並べ替えを更新する
+     *
+     * @param int $widgetAreaId
+     * @param array $postData
+     * @return WidgetArea|EntityInterface
+     * @checked
+     * @noTodo
+     */
+    public function updateSort(int $widgetAreaId, array $postData)
+    {
+        $ids = explode(',', $postData['sorted_ids']);
+        /** @var WidgetArea $widgetArea */
+        $widgetArea = $this->WidgetAreas->get($widgetAreaId);
+        $widgets = $widgetArea->widgets_array;
+        if ($widgets) {
+            foreach($widgets as $key => $widget) {
+                $widgetKey = key($widget);
+                $widgets[$key][$widgetKey]['sort'] = array_search($widget[$widgetKey]['id'], $ids) + 1;
+            }
+            $widgetArea->widgets = $widgets;
+            return $this->WidgetAreas->saveOrFail($widgetArea);
+        }
+        return $widgetArea;
+    }
+
+    /**
+     * ウィジェットを削除する
+     *
+     * @param int $widgetAreaId
+     * @param int $widgetId
+     * @return EntityInterface
+     * @checked
+     * @noTodo
+     */
+    public function deleteWidget(int $widgetAreaId, int $widgetId)
+    {
+        $widgetArea = $this->WidgetAreas->get($widgetAreaId);
+        $widgets = $widgetArea->widgets_array;
+        if (!$widgets) return $widgetArea;
+        foreach($widgets as $key => $widget) {
+            $type = key($widget);
+            if ($widgetId == $widget[$type]['id']) {
+                unset($widgets[$key]);
+                break;
+            }
+        }
+        $widgetArea->widgets = $widgets;
+        return $this->WidgetAreas->saveOrFail($widgetArea);
     }
 
 }
