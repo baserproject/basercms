@@ -134,11 +134,11 @@ class BlogFrontService implements BlogFrontServiceInterface
      * @unitTest
      */
     public function getViewVarsForArchivesByCategory(
-        ResultSet       $posts,
-        string          $category,
-        ServerRequest   $request,
+        ResultSet $posts,
+        string $category,
+        ServerRequest $request,
         EntityInterface $blogContent,
-        array           $crumbs
+        array $crumbs
     ): array
     {
         $blogCategoriesTable = TableRegistry::getTableLocator()->get('BcBlog.BlogCategories');
@@ -154,9 +154,9 @@ class BlogFrontService implements BlogFrontServiceInterface
             'blogCategory' => $blogCategory,
             'blogArchiveType' => 'category',
             'crumbs' => array_merge($crumbs, $this->getCategoryCrumbs(
-                    $request->getAttribute('currentContent')->url,
-                    $blogCategory->id
-                ))
+                $request->getAttribute('currentContent')->url,
+                $blogCategory->id
+            ))
         ];
     }
 
@@ -295,7 +295,7 @@ class BlogFrontService implements BlogFrontServiceInterface
             ));
         }
 
-        $isPreview = (bool) $request->getQuery('preview');
+        $isPreview = (bool)$request->getQuery('preview');
 
         return [
             'post' => $post,
@@ -335,7 +335,7 @@ class BlogFrontService implements BlogFrontServiceInterface
             $controller->viewBuilder()->getVar('crumbs')
         );
         // ブログ記事をPOSTデータにより書き換え
-        if($controller->getRequest()->getData()) {
+        if ($controller->getRequest()->getData()) {
             $events = BcUtil::offEvent($this->BlogPostsService->BlogPosts->getEventManager(), 'Model.beforeMarshal');
             $request = $controller->getRequest();
             $postArray = $request->getData();
@@ -414,5 +414,39 @@ class BlogFrontService implements BlogFrontServiceInterface
         } catch (\Throwable $e) {
             return false;
         }
+    }
+
+    /**
+     * ブログカレンダーウィジェット用の View 変数を取得する
+     *
+     * @param int $blogContentId
+     * @param string $year
+     * @param string $month
+     * @return array
+     * @checked
+     * @noTodo
+     */
+    public function getViewVarsForBlogCalendarWidget(int $blogContentId, string $year = '', string $month = '')
+    {
+        $year = h($year);
+        $month = h($month);
+        if (!$year) $year = date('Y');
+        if (!$month) $month = date('m');
+        if ($month == 12) {
+            $next = $this->BlogPostsService->BlogPosts->existsEntry($blogContentId, $year + 1, 1);
+        } else {
+            $next = $this->BlogPostsService->BlogPosts->existsEntry($blogContentId, $year, $month + 1);
+        }
+        if ($month == 1) {
+            $prev = $this->BlogPostsService->BlogPosts->existsEntry($blogContentId, $year - 1, 12);
+        } else {
+            $prev = $this->BlogPostsService->BlogPosts->existsEntry($blogContentId, $year, $month - 1);
+        }
+        return [
+            'blogContent' => $this->BlogContentsService->get($blogContentId),
+            'entryDates' => $this->BlogPostsService->BlogPosts->getEntryDates($blogContentId, $year, $month),
+            'next' => $next,
+            'prev' => $prev
+        ];
     }
 }

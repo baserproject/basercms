@@ -1957,4 +1957,21 @@ class BlogHelper extends Helper
         return $blogFrontService->getViewVarsForBlogAuthorArchivesWidget($blogContentId, $viewCount);
     }
 
+    /**
+     * ブログカレンダーウィジェット用の View 変数を取得する
+     *
+     * @param int $blogContentId
+     * @param string $year
+     * @param string $month
+     * @return array
+     * @checked
+     * @noTodo
+     * @unitTest ラッパーメソッドのためユニットテストは実装しない
+     */
+    public function getViewVarsForBlogCalendarWidget(int $blogContentId, string $year = '', string $month = '') {
+        /** @var BlogFrontService $blogFrontService */
+        $blogFrontService = $this->getService(BlogFrontServiceInterface::class);
+        return $blogFrontService->getViewVarsForBlogCalendarWidget($blogContentId, $year, $month);
+    }
+
 }

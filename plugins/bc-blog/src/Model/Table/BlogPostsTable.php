@@ -21,10 +21,14 @@ use BaserCore\Model\Entity\Content;
 use BaserCore\Model\Table\UsersTable;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Plugin;
+use Cake\Database\Driver\Mysql;
+use Cake\Database\Driver\Postgres;
+use Cake\Database\Driver\Sqlite;
 use Cake\Event\EventInterface;
 use Cake\I18n\FrozenTime;
 use Cake\ORM\Exception\PersistenceFailedException;
 use Cake\ORM\Query;
+use Cake\Utility\Hash;
 use Cake\Validation\Validator;
 
 /**
@@ -360,15 +364,16 @@ class BlogPostsTable extends BlogAppTable
      * @param int $year 年
      * @param int $month 月
      * @return array
+     * @checked
+     * @noTodo
      */
     public function getEntryDates($blogContentId, $year, $month)
     {
-        $entryDates = $this->find('all', [
-            'fields' => ['BlogPost.posted'],
-            'conditions' => $this->_getEntryDatesConditions($blogContentId, $year, $month),
-            'recursive' => -1,
-        ]);
-        $entryDates = Hash::extract($entryDates, '{n}.BlogPost.posted');
+        $entryDates = $this->find()
+            ->select(['BlogPosts.posted'])
+            ->where($this->_getEntryDatesConditions($blogContentId, $year, $month))
+            ->all();
+        $entryDates = Hash::extract($entryDates->toArray(), '{n}.posted');
         foreach($entryDates as $key => $entryDate) {
             $entryDates[$key] = date('Y-m-d', strtotime($entryDate));
         }
@@ -419,14 +424,16 @@ class BlogPostsTable extends BlogAppTable
      * @param int $year
      * @param int $month
      * @return    boolean
+     * @checked
+     * @noTodo
      */
-    public function existsEntry($blogContentId, $year, $month)
+    public function existsEntry(int $blogContentId, int $year, int $month): bool
     {
-        if ($this->find('first', [
-            'fields' => ['BlogPost.id'],
-            'conditions' => $this->_getEntryDatesConditions($blogContentId, $year, $month),
-            'recursive' => -1,
-        ])) {
+        if ($this->find()
+            ->select(['BlogPosts.id'])
+            ->where($this->_getEntryDatesConditions($blogContentId, $year, $month))
+            ->count()
+        ) {
             return true;
         } else {
             return false;
@@ -444,48 +451,47 @@ class BlogPostsTable extends BlogAppTable
      */
     protected function _getEntryDatesConditions($blogContentId, $year, $month)
     {
-        $datasource = $this->getDataSource()->config['datasource'];
+        $driver = $this->getConnection()->config()['driver'];
         $conditions = [];
-        switch($datasource) {
-            case 'Database/BcMysql':
-            case 'Database/BcCsv':
+        switch($driver) {
+            case Mysql::class:
                 if (!empty($year)) {
-                    $conditions["YEAR(`BlogPost`.`posted`)"] = $year;
+                    $conditions["YEAR(`BlogPosts`.`posted`)"] = $year;
                 } else {
-                    $conditions["YEAR(`BlogPost`.`posted`)"] = date('Y');
+                    $conditions["YEAR(`BlogPosts`.`posted`)"] = date('Y');
                 }
                 if (!empty($month)) {
-                    $conditions["MONTH(`BlogPost`.`posted`)"] = $month;
+                    $conditions["MONTH(`BlogPosts`.`posted`)"] = $month;
                 } else {
-                    $conditions["MONTH(`BlogPost`.`posted`)"] = date('m');
+                    $conditions["MONTH(`BlogPosts`.`posted`)"] = date('m');
                 }
                 break;
-            case 'Database/BcPostgres':
+            case Postgres::class:
                 if (!empty($year)) {
-                    $conditions["date_part('year', \"BlogPost\".\"posted\") ="] = $year;
+                    $conditions["date_part('year', \"BlogPosts\".\"posted\") ="] = $year;
                 } else {
-                    $conditions["date_part('year', \"BlogPost\".\"posted\") ="] = date('Y');
+                    $conditions["date_part('year', \"BlogPosts\".\"posted\") ="] = date('Y');
                 }
                 if (!empty($month)) {
-                    $conditions["date_part('month', \"BlogPost\".\"posted\") ="] = $month;
+                    $conditions["date_part('month', \"BlogPosts\".\"posted\") ="] = $month;
                 } else {
-                    $conditions["date_part('month', \"BlogPost\".\"posted\") ="] = date('m');
+                    $conditions["date_part('month', \"BlogPosts\".\"posted\") ="] = date('m');
                 }
                 break;
-            case 'Database/BcSqlite':
+            case Sqlite::class:
                 if (!empty($year)) {
-                    $conditions["strftime('%Y',BlogPost.posted)"] = $year;
+                    $conditions["strftime('%Y',BlogPosts.posted)"] = $year;
                 } else {
-                    $conditions["strftime('%Y',BlogPost.posted)"] = date('Y');
+                    $conditions["strftime('%Y',BlogPosts.posted)"] = date('Y');
                 }
                 if (!empty($month)) {
-                    $conditions["strftime('%m',BlogPost.posted)"] = sprintf('%02d', $month);
+                    $conditions["strftime('%m',BlogPosts.posted)"] = sprintf('%02d', $month);
                 } else {
-                    $conditions["strftime('%m',BlogPost.posted)"] = date('m');
+                    $conditions["strftime('%m',BlogPosts.posted)"] = date('m');
                 }
                 break;
         }
-        return am($conditions, ['BlogPost.blog_content_id' => $blogContentId], $this->getConditionAllowPublish());
+        return array_merge_recursive($conditions, ['BlogPosts.blog_content_id' => $blogContentId], $this->getConditionAllowPublish());
     }
 
     /**
@@ -677,7 +683,7 @@ class BlogPostsTable extends BlogAppTable
         $arrayData = $data->toArray();
         if (!empty($arrayData)) {
             $blogTagIds = [];
-            foreach ($arrayData['blog_tags'] as $tag) {
+            foreach($arrayData['blog_tags'] as $tag) {
                 $blogTagIds[] = $tag['id'];
             }
             unset($arrayData['blog_tags']);

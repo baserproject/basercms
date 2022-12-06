@@ -1675,7 +1675,8 @@ EOD;
      */
     protected function _initPluginBasers()
     {
-        $plugins = Hash::extract(BcUtil::getEnablePlugins(), '{n}.name');
+        $plugins = BcUtil::getEnablePlugins();
+        if($plugins) $plugins = Hash::extract(BcUtil::getEnablePlugins(), '{n}.name');
         if (!$plugins) return;
         foreach($plugins as $plugin) {
             $pluginName = Inflector::camelize($plugin);
