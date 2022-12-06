@@ -78,9 +78,9 @@ class PagesController extends BcApiController
             if(!$this->Authentication->getIdentity()) throw new ForbiddenException();
         }
 
-        $queryParams = array_merge($queryParams, [
+        $queryParams = array_merge([
             'status' => 'publish'
-        ]);
+        ], $queryParams);
 
         $page = $message = null;
         try {
