@@ -351,8 +351,9 @@ class BcContentsHelper extends Helper
      * - $id を指定して取得する事ができる
      * - $direct を false に設定する事で、最上位までの親情報を取得
      *
+     * @param null $id
      * @param bool $direct 直接の親かどうか
-     * @return mixed false|array
+     * @return EntityInterface|array|false
      */
     public function getParent($id = null, $direct = true)
     {
@@ -362,20 +363,22 @@ class BcContentsHelper extends Helper
         if (!$id) {
             return false;
         }
-        $siteId = $this->_Contents->field('site_id', ['Content.id' => $id]);
+        $siteId = $this->_Contents->find()->where(['Contents.id' => $id])->first()->site_id;
         if ($direct) {
-            $parent = $this->_Contents->getParentNode($id);
-            if ($parent && $parent['Content']['site_id'] == $siteId) {
+            $parents = $this->_Contents->find('path', ['for' => $id])->all()->toArray();
+            if(!isset($parents[count($parents) - 2])) return false;
+                $parent = $parents[count($parents) - 2];
+            if ($parent->site_id === $siteId) {
                 return $parent;
             } else {
                 return false;
             }
         } else {
-            $parents = $this->_Contents->getPath($id);
+            $parents = $this->_Contents->find('path', ['for' => $id])->all()->toArray();
             if ($parents) {
                 $result = [];
                 foreach($parents as $parent) {
-                    if ($parent['Content']['id'] != $id && $parent['Content']['site_id'] == $siteId) {
+                    if ($parent->id !== $id && $parent->site_id === $siteId) {
                         $result[] = $parent;
                     }
                 }
