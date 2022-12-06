@@ -381,25 +381,31 @@ class BlogPostsTable extends BlogAppTable
      * @param int $blogContentId ブログコンテンツID
      * @param array $options オプション
      * @return array
+     * @checked
+     * @noTodo
      */
-    public function getAuthors($blogContentId, $options)
+    public function getAuthors(int $blogContentId, array $options)
     {
         $options = array_merge([
             'viewCount' => false
         ], $options);
-        $users = $this->User->find('all', ['recursive' => -1, ['order' => 'User.id'], 'fields' => [
-            'User.id', 'User.name', 'User.real_name_1', 'User.real_name_2', 'User.nickname'
-        ]]);
+        $users = $this->Users->find()
+            ->order(['Users.id'])
+            ->select([
+                'Users.id',
+                'Users.name',
+                'Users.real_name_1',
+                'Users.real_name_2',
+                'Users.nickname'
+            ]);
         $availableUsers = [];
-        foreach($users as $key => $user) {
-            $count = $this->find('count', ['conditions' => array_merge([
-                'BlogPost.user_id' => $user['User']['id'],
-                'BlogPost.blog_content_id' => $blogContentId
-            ], $this->getConditionAllowPublish())]);
+        foreach($users as $user) {
+            $count = $this->find()->where(array_merge([
+                'BlogPosts.user_id' => $user->id,
+                'BlogPosts.blog_content_id' => $blogContentId
+            ], $this->getConditionAllowPublish()))->count();
             if ($count) {
-                if ($options['viewCount']) {
-                    $user['count'] = $count;
-                }
+                if ($options['viewCount']) $user->count = $count;
                 $availableUsers[] = $user;
             }
         }

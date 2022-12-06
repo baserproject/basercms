@@ -197,7 +197,6 @@ class BcAppController extends AppController
         $this->set('isSSL', $this->request->is('ssl'));
         $this->set('safeModeOn', ini_get('safe_mode'));
         $this->set('baserVersion', BcUtil::getVersion());
-        $this->set('widgetArea', BcSiteConfig::get('widget_area'));
     }
 
     /**

@@ -14,21 +14,25 @@
  * ブログ投稿者一覧
  * 呼出箇所：ウィジェット
  *
- * @var BcAppView $this
+ * @var \BcBlog\View\BlogFrontAppView $this
  * @var int $blog_content_id ブログコンテンツID
  * @var string $name タイトル
  * @var bool $use_title タイトルを利用するかどうか
+ * @checked
+ * @noTodo
+ * @unitTest
  */
 
 if (empty($view_count)) {
 	$view_count = '0';
 }
 if (isset($blogContent)) {
-	$id = $blogContent['BlogContent']['id'];
+	$id = $blogContent->id;
 } else {
 	$id = $blog_content_id;
 }
-$data = $this->requestAction('/blog/blog/get_authors/' . $id . '/' . $view_count, ['entityId' => $id]);
+$data = $this->Blog->getViewVarsForBlogAuthorArchivesWidget($id, $view_count);
+if(!$data) return;
 $authors = $data['authors'];
 $blogContent = $data['blogContent'];
 $baseCurrentUrl = $this->BcBaser->getBlogContentsUrl($id) . 'archives/author/';
@@ -44,20 +48,24 @@ $baseCurrentUrl = $this->BcBaser->getBlogContentsUrl($id) . 'archives/author/';
 			<?php foreach ($authors as $author): ?>
 				<?php
 				$class = ['bs-widget-list__item'];
-				if ('/' . $this->request->url == $baseCurrentUrl . $author['User']['name']) {
+				if ('/' . $this->getRequest()->getPath() === $baseCurrentUrl . $author->name) {
 					$class[] = 'current';
 				}
 				if ($view_count) {
-					$title = h($this->BcBaser->getUserName($author['User'])) . ' (' . $author['count'] . ')';
+					$title = h($this->BcBaser->getUserName($author)) . ' (' . $author['count'] . ')';
 				} else {
-					$title = h($this->BcBaser->getUserName($author['User']));
+					$title = h($this->BcBaser->getUserName($author));
 				}
 				?>
 				<li class="<?php echo implode(' ', $class) ?>">
-					<?php $this->BcBaser->link($title, $baseCurrentUrl . $author['User']['name'], [
-						'escape' => true,
-						'class' => 'bs-widget-list__item-title'
-					]) ?>
+				  <?php if($author->name): ?>
+            <?php $this->BcBaser->link($title, $baseCurrentUrl . $author->name, [
+              'escape' => true,
+              'class' => 'bs-widget-list__item-title'
+            ]) ?>
+          <?php else: ?>
+            <?php echo $title ?>
+          <?php endif ?>
 				</li>
 			<?php endforeach; ?>
 		</ul>

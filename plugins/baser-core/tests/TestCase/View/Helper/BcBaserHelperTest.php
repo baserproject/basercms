@@ -1775,32 +1775,6 @@ class BcBaserHelperTest extends BcTestCase
         ];
     }
 
-    /**
-     * ウィジェットエリアを出力する
-     * TODO: $noが指定されてない(null)場合のテストを記述する
-     * $noを指定していない場合、ウィジェットが出力されません。
-     *
-     * @param string $url 現在のURL
-     * @param int $no
-     * @param string $expected 期待値
-     * @dataProvider getWidgetAreaDataProvider
-     */
-    public function testGetWidgetArea($url, $no, $expected)
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        App::uses('BlogHelper', 'BcBlog.View/Helper');
-        $this->BcBaser->request = $this->_getRequest($url);
-        $this->assertMatchesRegularExpression('/' . $expected . '/', $this->BcBaser->getWidgetArea($no));
-    }
-
-    public function getWidgetAreaDataProvider()
-    {
-        return [
-            ['/company', 1, '<div class="widget-area widget-area-1">'],
-            ['/company', 2, '<div class="widget-area widget-area-2">'],
-            ['/company', null, '<div class="widget-area widget-area-1">'],
-        ];
-    }
 
     /**
      * 指定したURLが現在のURLかどうか判定する

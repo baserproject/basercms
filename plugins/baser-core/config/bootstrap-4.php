@@ -258,8 +258,6 @@ if (BcUtil::isInstalled() && !$isUpdater && !$isMaintenance) {
     foreach($plugins as $plugin) {
         loadPlugin($plugin['Plugin']['name'], $plugin['Plugin']['priority']);
     }
-    $plugins = Hash::extract($plugins, '{n}.Plugin.name');
-    Configure::write('BcStatus.enablePlugins', $plugins);
 
     /**
      * アセットの場合負荷を軽減するため以降の処理を終了

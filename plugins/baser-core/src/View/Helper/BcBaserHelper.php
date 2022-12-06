@@ -13,6 +13,7 @@ namespace BaserCore\View\Helper;
 
 use Cake\Core\Plugin;
 use Cake\Datasource\EntityInterface;
+use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
 use Cake\View\Helper\BreadcrumbsHelper;
 use Cake\View\View;
@@ -157,14 +158,11 @@ class BcBaserHelper extends Helper
             $this->siteConfig = $this->_View->get('siteConfig', []);
         }
         <<< */
-
+        $request = $this->_View->getRequest();
         // プラグインのBaserヘルパを初期化
-        // TODO 未実装
-        /* >>>
-        if (BcUtil::isInstalled() && !Configure::read('BcRequest.isUpdater') && !Configure::read('BcRequest.isMaintenance')) {
+        if (BcUtil::isInstalled() && !$request->is('update') && !$request->is('maintenance')) {
             $this->_initPluginBasers();
         }
-        >>> */
     }
 
     /**
@@ -1677,15 +1675,13 @@ EOD;
      */
     protected function _initPluginBasers()
     {
-        $plugins = Configure::read('BcStatus.enablePlugins');
-        if (!$plugins) {
-            return;
-        }
+        $plugins = Hash::extract(BcUtil::getEnablePlugins(), '{n}.name');
+        if (!$plugins) return;
         foreach($plugins as $plugin) {
             $pluginName = Inflector::camelize($plugin);
-            if (App::import('Helper', $pluginName . '.' . $pluginName . 'Baser')) {
-                $pluginBaser = $pluginName . 'BaserHelper';
-                $this->_pluginBasers[$pluginName] = new $pluginBaser($this->_View);
+            $className = $pluginName . '\\View\\Helper\\' . $pluginName . 'BaserHelper';
+            if (class_exists($className)) {
+                $this->_pluginBasers[$pluginName] = new $className($this->getView());
             }
         }
     }
@@ -2093,49 +2089,6 @@ END_FLASH;
         if ($editLink) {
             $this->_View->set('editLink', $editLink);
         }
-    }
-
-    /**
-     * ウィジェットエリアを出力する
-     *
-     * @param int $no ウィジェットエリアNO（初期値 : null）※ 省略した場合は、コンテンツごとに管理システムにて設定されているウィジェットエリアを出力する
-     * @param array $options オプション（初期値 : array()）
-     *    - `loadHelpers` : ヘルパーを読み込むかどうか（初期値 : false）
-     * todo loadHelpersが利用されていないのをなんとかする
-     *    - `subDir` : テンプレートの配置場所についてプレフィックスに応じたサブフォルダを利用するかどうか（初期値 : true）
-     * @return void
-     */
-    public function widgetArea($no = null, $options = [])
-    {
-        echo $this->getWidgetArea($no, $options);
-    }
-
-    /**
-     * ウィジェットエリアを取得する
-     *
-     * @param int $no ウィジェットエリアNO（初期値 : null）※ 省略した場合は、コンテンツごとに管理システムにて設定されているウィジェットエリアを出力する
-     * @param array $options オプション（初期値 : array()）
-     *    - `loadHelpers` : ヘルパーを読み込むかどうか（初期値 : false）
-     * todo loadHelpersが利用されていないのをなんとかする
-     *    - `subDir` : テンプレートの配置場所についてプレフィックスに応じたサブフォルダを利用するかどうか（初期値 : true）
-     * @return string
-     */
-    public function getWidgetArea($no = null, $options = [])
-    {
-        $options = array_merge([
-            'loadHelpers' => false,
-            'subDir' => true,
-        ], $options);
-
-        $subDir = $options['subDir'];
-
-        if (!$no && !empty($this->_View->get('widgetArea'))) {
-            $no = $this->_View->get('widgetArea');
-        }
-        if ($no) {
-            return $this->getElement('widget_area', ['no' => $no, 'subDir' => $subDir], ['subDir' => $subDir]);
-        }
-        return '';
     }
 
     /**

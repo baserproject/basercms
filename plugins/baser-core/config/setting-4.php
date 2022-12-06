@@ -390,11 +390,3 @@ $config['BcShortCode']['BaserCore'] = [
     'BcBaser.getSiteSearchForm',
     'BcBaser.getUpdateInfo'
 ];
-
-/**
- * ウィジェット
- */
-$config['BcWidget'] = [
-    // フロントにウィジェットエリアの編集リンクを表示するかどうか
-    'editLinkAtFront' => false
-];

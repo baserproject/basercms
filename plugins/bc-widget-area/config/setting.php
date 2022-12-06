@@ -22,4 +22,12 @@ return[
                             'title' => __d('baser', 'ウィジェットエリア'),
                             'url' => ['prefix' => 'Admin', 'plugin' => 'BcWidgetArea', 'controller' => 'WidgetAreas', 'action' => 'index'],
                             'currentRegex' => '/\/widget_areas\/[^\/]+?\/[0-9]+/s'
-]]]]]]];
+    ]]]]]],
+    /**
+     * ウィジェット
+     */
+    'BcWidget' => [
+        // フロントにウィジェットエリアの編集リンクを表示するかどうか
+        'editLinkAtFront' => false
+    ]
+];

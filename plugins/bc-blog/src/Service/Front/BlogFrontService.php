@@ -397,4 +397,22 @@ class BlogFrontService implements BlogFrontServiceInterface
         return 'Blog/' . $blogContent->template . DS . 'single';
     }
 
+    /**
+     * ブログ投稿者一覧ウィジェット用の View 変数を取得する
+     *
+     * @param int $blogContentId
+     * @param bool $viewCount
+     * @return array|false
+     */
+    public function getViewVarsForBlogAuthorArchivesWidget(int $blogContentId, bool $viewCount)
+    {
+        try {
+            return [
+                'blogContent' => $this->BlogContentsService->get($blogContentId),
+                'authors' => $this->BlogPostsService->BlogPosts->getAuthors($blogContentId, ['viewCount' => $viewCount])
+            ];
+        } catch (\Throwable $e) {
+            return false;
+        }
+    }
 }

@@ -23,6 +23,8 @@ use BcBlog\Model\Entity\BlogPost;
 use BcBlog\Model\Table\BlogPostsTable;
 use BcBlog\Service\BlogPostsService;
 use BcBlog\Service\BlogPostsServiceInterface;
+use BcBlog\Service\Front\BlogFrontService;
+use BcBlog\Service\Front\BlogFrontServiceInterface;
 use Cake\Core\App;
 use Cake\Core\Configure;
 use Cake\Datasource\EntityInterface;
@@ -1937,4 +1939,22 @@ class BlogHelper extends Helper
         }
         return $blogTag;
     }
+
+    /**
+     * ブログ投稿者一覧ウィジェット用の View 変数を取得する
+     *
+     * @param int $blogContentId
+     * @param bool $viewCount
+     * @return array|false
+     * @checked
+     * @noTodo
+     * @unitTest ラッパーメソッドのためユニットテストは実装しない
+     */
+    public function getViewVarsForBlogAuthorArchivesWidget(int $blogContentId, bool $viewCount)
+    {
+        /** @var BlogFrontService $blogFrontService */
+        $blogFrontService = $this->getService(BlogFrontServiceInterface::class);
+        return $blogFrontService->getViewVarsForBlogAuthorArchivesWidget($blogContentId, $viewCount);
+    }
+
 }

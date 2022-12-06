@@ -238,16 +238,15 @@ class BlogContentsService implements BlogContentsServiceInterface
     {
         switch($field) {
             case 'id':
-                $contentsTable = TableRegistry::getTableLocator()->get('BaserCore.Contents');
-                $controlSources['id'] = $contentsTable->find('list')
-                    ->select([
-                        'entity_id',
-                        'title',
+                $controlSources['id'] = $this->BlogContents->find('list', [
+                        'keyField' => 'id',
+                        'valueField' => 'content.title'
                     ])
+                    ->contain(['Contents'])
                     ->where([
                         'plugin' => 'BcBlog',
                         'type' => 'BlogContent',
-                    ]);
+                    ])->toArray();
                 break;
             default:
                 break;

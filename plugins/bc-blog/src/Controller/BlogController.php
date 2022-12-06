@@ -125,23 +125,6 @@ class BlogController extends BlogFrontAppController
     }
 
     /**
-     * beforeRender
-     *
-     * @return void
-     */
-    public function beforeRender(EventInterface $event): void
-    {
-        parent::beforeRender($event);
-        // TODO ucmitz 未確認
-        // >>>
-//        $this->set('blogContent', $this->blogContent);
-//        if (!empty($this->blogContent['BlogContent']['widget_area'])) {
-//            $this->set('widgetArea', $this->blogContent['BlogContent']['widget_area']);
-//        }
-        // <<<
-    }
-
-    /**
      * [PUBLIC] ブログを一覧表示する
      *
      * @param BlogFrontService $service
