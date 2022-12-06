@@ -15,11 +15,6 @@ class CreateWidgetAreas extends AbstractMigration
     public function up()
     {
         $this->table('widget_areas')
-            ->addColumn('site_id', 'integer', [
-                'default' => null,
-                'limit' => null,
-                'null' => true,
-            ])
             ->addColumn('name', 'string', [
                 'default' => null,
                 'limit' => 255,

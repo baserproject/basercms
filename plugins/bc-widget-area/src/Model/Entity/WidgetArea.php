@@ -89,8 +89,12 @@ class WidgetArea extends \Cake\ORM\Entity
      */
     protected function _setWidgets($value)
     {
-        if ($value) {
-            return BcUtil::serialize($value);
+        if (is_array($value)) {
+            if($value) {
+                return BcUtil::serialize($value);
+            } else {
+                return null;
+            }
         } else {
             return $value;
         }
