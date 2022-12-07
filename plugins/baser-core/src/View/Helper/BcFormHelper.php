@@ -109,7 +109,7 @@ class BcFormHelper extends FormHelper
         if ($type) {
             $type = Inflector::camelize($type);
         }
-        $event = $this->dispatchLayerEvent('after' . $type . 'Form', ['fields' => [], 'id' => $this->__id], ['class' => 'Form', 'plugin' => '']);
+        $event = $this->dispatchLayerEvent('after' . $type . 'Form', ['fields' => [], 'id' => $this->formId], ['class' => 'Form', 'plugin' => '']);
         $out = '';
         if ($event !== false) {
             if (!empty($event->getData('fields'))) {
