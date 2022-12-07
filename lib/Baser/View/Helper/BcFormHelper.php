@@ -1975,7 +1975,8 @@ DOC_END;
 			'dateLabel' => ['text' => '日付'],
 			'timeInput' => [],
 			'timeDiv' => ['tag' => 'span'],
-			'timeLabel' => ['text' => '時間']
+			'timeLabel' => ['text' => '時間'],
+			'timeStep' => 30
 		], $options);
 
 		$dateOptions = array_merge($options, [
@@ -1989,13 +1990,14 @@ DOC_END;
 			'type' => 'text',
 			'div' => $options['timeDiv'],
 			'label' => $options['timeLabel'],
+			'step' => $options['timeStep'],
 			'autocomplete' => 'off',
 			'size' => 8,
 			'maxlength' => 8,
 			'escape' => true
 		], $options['timeInput']);
 
-		unset($options['dateDiv'], $options['dateLabel'], $options['timeDiv'], $options['timeLabel'], $options['dateInput'], $options['timeInput']);
+		unset($options['dateDiv'], $options['dateLabel'], $options['timeDiv'], $options['timeLabel'], $options['dateInput'], $options['timeInput'], $options['timeStep']);
 		unset($dateOptions['dateDiv'], $dateOptions['dateLabel'], $dateOptions['timeDiv'], $dateOptions['timeLabel'], $dateOptions['dateInput'], $dateOptions['timeInput']);
 		unset($timeOptions['dateDiv'], $timeOptions['dateLabel'], $timeOptions['timeDiv'], $timeOptions['timeLabel'], $timeOptions['dateInput'], $timeOptions['timeInput']);
 
@@ -2011,6 +2013,9 @@ DOC_END;
 			$dateOptions['value'] = $dateValue;
 			$timeOptions['value'] = $timeValue;
 		}
+
+		$step = $timeOptions['step'];
+		unset($timeOptions['step']);
 
 		$dateDivOptions = $timeDivOptions = $dateLabelOptions = $timeLabelOptions = null;
 		if (!empty($dateOptions['div'])) {
@@ -2059,7 +2064,7 @@ DOC_END;
 		$_script = <<< DOC_END
 <script type="text/javascript">
 $(function(){
-   $("#{$domId}Time").timepicker({ 'timeFormat': 'H:i' });
+   $("#{$domId}Time").timepicker({ 'timeFormat': 'H:i', 'step': {$step} });
    $("#{$domId}Date").change({$domId}ChangeResultHandler);
    $("#{$domId}Time").change({$domId}ChangeResultHandler);
    function {$domId}ChangeResultHandler(){
