@@ -18,7 +18,6 @@
  * @var array $mailEncodeList
  * @var bool $isWritableEnv
  * @var array $modeList
- * @var array $widgetAreaList
  * @var array $adminThemeList
  * @var array $editorList
  * @checked
@@ -124,7 +123,6 @@ $this->BcBaser->js('admin/site_configs/index.bundle', false, ['id' => 'AdminSite
         </div>
       </td>
     </tr>
-    <?php /* TODO ucmitz 未実装のためコメントアウト ?>
     <tr>
       <th class="col-head bca-form-table__label">
         <?php echo $this->BcAdminForm->label('widget_area', __d('baser', '標準ウィジェットエリア')) ?>
@@ -132,7 +130,7 @@ $this->BcBaser->js('admin/site_configs/index.bundle', false, ['id' => 'AdminSite
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('widget_area', [
           'type' => 'select',
-          'options' => $widgetAreaList
+          'options' => $this->BcAdminForm->getControlSource('BcWidgetArea.WidgetAreas.id'), 'empty' => __d('baser', 'なし')
         ]) ?>
         <i class="bca-icon--question-circle bca-help"></i>
         <div class="bca-helptext">
@@ -144,7 +142,6 @@ $this->BcBaser->js('admin/site_configs/index.bundle', false, ['id' => 'AdminSite
         </div>
       </td>
     </tr>
-    */ ?>
   </table>
 </section>
 
