@@ -190,7 +190,12 @@ class BlogFrontServiceTest extends BcTestCase
      */
     public function test_getSingleTemplate()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // データ生成
+        BlogContentFactory::make(['id' => 1, 'template' => 'template-1'])->persist();
+        // ブログコンテンツの設定に依存するメソードをコール
+        $rs = $this->BlogFrontService->getSingleTemplate(BlogContentFactory::get(1));
+        //戻り値を確認
+        $this->assertEquals($rs, 'Blog/template-1/single');
     }
 
     /**

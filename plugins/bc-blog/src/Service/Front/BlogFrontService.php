@@ -391,6 +391,7 @@ class BlogFrontService implements BlogFrontServiceInterface
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getSingleTemplate(BlogContent $blogContent): string
     {
