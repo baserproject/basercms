@@ -50,7 +50,7 @@ class BcBlogViewEventListener extends \BaserCore\Event\BcViewEventListener
             // ウィジェットでブログ以外でも利用する可能性があるので読み込む
             /** @var View $view */
             $view = $event->getSubject();
-            if(Plugin::isLoaded('BcWidgetArea') && !$view->helpers()->has('Blog')) {
+            if(!$view->helpers()->has('Blog')) {
                 $view->loadHelper('BcBlog.Blog');
             }
         }

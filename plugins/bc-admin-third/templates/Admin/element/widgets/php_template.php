@@ -30,8 +30,8 @@ $description = __d('baser', 'PHPコードが書かれたテンプレートの読
 <p style="text-align:left">
   <small>
     <?php
-    $webroot = preg_replace('/' . preg_quote(\BaserCore\Utility\BcUtil::docRoot(), '/') . '/', '', WWW_ROOT, 1);
-    echo sprintf(__d('baser', 'テンプレートを利用中のテーマ内の次のパスに保存してください。<br />%stheme/{テーマ名}/Elements/widgets/'), $webroot);
+    $themeDir = preg_replace('/' . preg_quote(\BaserCore\Utility\BcUtil::docRoot(), '/') . '/', '', BASER_THEMES, 1);
+    echo sprintf(__d('baser', 'テンプレートを利用中のテーマ内の次のパスに保存してください。<br>%s{テーマ名}/templates/element/widgets/'), $themeDir);
     ?>
   </small>
 </p>

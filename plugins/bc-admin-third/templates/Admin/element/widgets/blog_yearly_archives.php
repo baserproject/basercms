@@ -39,7 +39,7 @@ $description = __d('baser', 'ブログの年別アーカイブー一覧を表示
 <br>
 <?php echo $this->BcAdminForm->label($key . '.start_month', __d('baser', '年度別の場合の開始月')) ?>&nbsp;
 <?php echo $this->BcAdminForm->control($key . '.start_month', [
-  'type' => 'int',
+  'type' => 'text',
   'size' => 2,
   'default' => 1
 ]) ?>&nbsp;月

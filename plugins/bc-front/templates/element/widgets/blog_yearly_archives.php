@@ -14,36 +14,20 @@
  * ブログ年別アーカイブ
  * 呼出箇所：ウィジェット
  *
- * @var BcAppView $this
+ * @var \BcBlog\View\BlogFrontAppView $this
  * @var int $blog_content_id ブログコンテンツID
  * @var string $name タイトル
  * @var bool $use_title タイトルを利用するかどうか
  */
 
-if (!isset($view_count)) {
-	$view_count = false;
-}
-if (!isset($limit)) {
-	$limit = false;
-}
+if (!isset($view_count)) $view_count = false;
+if (!isset($limit)) $limit = false;
 if (isset($blogContent)) {
-	$id = $blogContent['BlogContent']['id'];
+	$id = $blogContent->id;
 } else {
 	$id = $blog_content_id;
 }
-$actionUrl = '/blog/blog/get_posted_years/' . $id;
-if ($limit) {
-	$actionUrl .= '/' . $limit;
-} else {
-	$actionUrl .= '/0';
-}
-if ($view_count) {
-	$actionUrl .= '/1';
-} else {
-	$actionUrl .= '/0';
-}
-
-$data = $this->requestAction($actionUrl, ['entityId' => $id]);
+$data = $this->Blog->getViewVarsForBlogYearlyArchivesWidget($id, $limit, $view_count);
 $postedDates = $data['postedDates'];
 $blogcontent = $data['blogContent'];
 $baseCurrentUrl = $this->BcBaser->getBlogContentsUrl($id) . 'archives/date/';
@@ -59,9 +43,9 @@ $baseCurrentUrl = $this->BcBaser->getBlogContentsUrl($id) . 'archives/date/';
 			<?php foreach ($postedDates as $postedDate): ?>
 				<?php
 				$class = ['bs-widget-list__item'];
-				if ($this->getRequest()->getParam('named.year') === $postedDate['year']) {
+				if ($this->getRequest()->getQuery('year') === $postedDate['year']) {
 					$class[] = 'selected';
-				} elseif ('/' . $this->request->url == $baseCurrentUrl . $postedDate['year']) {
+				} elseif ($this->getRequest()->getPath() === $baseCurrentUrl . $postedDate['year']) {
 					$class[] = 'current';
 				}
 				if ($view_count) {

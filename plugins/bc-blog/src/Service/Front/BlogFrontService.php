@@ -15,6 +15,8 @@ use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
 use BcBlog\Model\Entity\BlogContent;
 use BcBlog\Model\Entity\BlogPost;
+use BcBlog\Service\BlogCategoriesService;
+use BcBlog\Service\BlogCategoriesServiceInterface;
 use BcBlog\Service\BlogContentsService;
 use BcBlog\Service\BlogContentsServiceInterface;
 use BcBlog\Service\BlogPostsService;
@@ -34,6 +36,7 @@ use Cake\ORM\TableRegistry;
  *
  * @property BlogPostsService $BlogPostsService
  * @property BlogContentsService $BlogContentsService
+ * @property BlogCategoriesService $BlogCategoriesService
  */
 class BlogFrontService implements BlogFrontServiceInterface
 {
@@ -56,6 +59,7 @@ class BlogFrontService implements BlogFrontServiceInterface
     {
         $this->BlogContentsService = $this->getService(BlogContentsServiceInterface::class);
         $this->BlogPostsService = $this->getService(BlogPostsServiceInterface::class);
+        $this->BlogCategoriesService = $this->getService(BlogCategoriesServiceInterface::class);
     }
 
     /**
@@ -449,4 +453,108 @@ class BlogFrontService implements BlogFrontServiceInterface
             'prev' => $prev
         ];
     }
+
+    /**
+     * ブログカテゴリウィジェット用の View 変数を取得する
+     *
+     * @param int $blogContentId
+     * @param bool $limit
+     * @param bool $viewCount
+     * @param int $depth
+     * @param string|null $contentType
+     * @return array
+     * @checked
+     * @noTodo
+     */
+    public function getViewVarsForBlogCategoryArchivesWidget(
+        int $blogContentId,
+        bool $limit = false,
+        bool $viewCount = false,
+        int $depth = 1,
+        string $contentType = null
+    )
+    {
+        if ($limit === '0') $limit = false;
+        return [
+            'blogContent' => $this->BlogContentsService->get($blogContentId),
+            'categories' => $this->BlogCategoriesService->BlogCategories->getCategoryList($blogContentId, [
+                'type' => $contentType,
+                'limit' => $limit,
+                'depth' => $depth,
+                'viewCount' => $viewCount
+            ])
+        ];
+    }
+
+    /**
+     * ブログ年別アーカイブウィジェット用の View 変数を取得する
+     *
+     * @param int $blogContentId
+     * @param bool $limit
+     * @param bool $viewCount
+     * @return array
+     */
+    public function getViewVarsForBlogYearlyArchivesWidget(
+        int $blogContentId,
+        bool $limit = false,
+        bool $viewCount = false
+    )
+    {
+        return [
+            'blogContent' => $this->BlogContentsService->get($blogContentId),
+            'postedDates' => $this->BlogPostsService->BlogPosts->getPostedDates($blogContentId, [
+                'type' => 'year',
+                'limit' => $limit !== '0'? $limit : false,
+                'viewCount' => $viewCount
+            ])
+        ];
+    }
+
+    /**
+     * ブログ月別アーカイブウィジェット用の View 変数を取得する
+     *
+     * @param int $blogContentId
+     * @param int $limit
+     * @param bool $viewCount
+     * @return array
+     */
+    public function getViewVarsBlogMonthlyArchivesWidget(
+        int $blogContentId,
+        int $limit = 12,
+        bool $viewCount = false
+    )
+    {
+        return [
+            'blogContent' => $this->BlogContentsService->get($blogContentId),
+            'postedDates' => $this->BlogPostsService->BlogPosts->getPostedDates($blogContentId, [
+                'type' => 'month',
+                'limit' => $limit !== 0? $limit : false,
+                'viewCount' => $viewCount
+            ])
+        ];
+    }
+
+    /**
+     * 最近の投稿ウィジェット用 View 変数を取得する
+     * @param int $blogContentId
+     * @param int $limit
+     * @return array
+     */
+    public function getViewVarsRecentEntriesWidget(int $blogContentId, int $limit = 5)
+    {
+        $query = $this->BlogPostsService->BlogPosts->find()
+                ->where(array_merge(
+                    ['BlogPosts.blog_content_id' => $blogContentId],
+                    $this->BlogPostsService->BlogPosts->getConditionAllowPublish()
+                ))
+                ->order(['BlogPosts.posted DESC']);
+        if($limit) {
+            $query->limit($limit);
+        }
+        return [
+            'blogContent' => $this->BlogContentsService->get($blogContentId),
+            'recentEntries' => $query->all()
+        ];
+    }
+
 }

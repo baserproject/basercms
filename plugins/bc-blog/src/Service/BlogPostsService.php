@@ -340,9 +340,7 @@ class BlogPostsService implements BlogPostsServiceInterface
                 }
             }
         }
-        if ($categoryIds === false) {
-            $conditions['BlogPosts.id'] = null;
-        } else {
+        if ($categoryIds !== false) {
             $conditions['BlogPosts.blog_category_id IN'] = $categoryIds;
         }
         return $conditions;

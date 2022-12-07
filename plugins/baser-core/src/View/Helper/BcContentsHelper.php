@@ -471,7 +471,8 @@ class BcContentsHelper extends Helper
      */
     public function getContentFolderList($siteId = null, $options = [])
     {
-        return $this->_Contents->getContentFolderList($siteId, $options);
+        $contentsService = $this->getService(ContentsServiceInterface::class);
+        return $contentsService->getContentFolderList($siteId, $options);
     }
 
 

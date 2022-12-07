@@ -10,42 +10,30 @@
  * @license         https://basercms.net/license/index.html
  */
 
-App::uses('BlogHelper', 'Blog.View/Helper');
-
 /**
  * ブログカテゴリ一覧
  * 呼出箇所：ウィジェット
  *
- * @var BcAppView $this
+ * @var \BcBlog\View\BlogFrontAppView $this
  * @var int $blog_content_id ブログコンテンツID
  * @var string $name タイトル
  * @var bool $use_title タイトルを利用するかどうか
+ * @noTodo
+ * @checked
+ * @unitTest
  */
-if (empty($view_count)) {
-	$view_count = '0';
-}
-if (empty($limit)) {
-	$limit = '0';
-}
-if (!isset($by_year)) {
-	$by_year = null;
-}
+if (empty($view_count)) $view_count = '0';
+if (empty($limit)) $limit = '0';
+if (!isset($by_year)) $by_year = null;
+if (empty($depth)) $depth = 1;
 if (isset($blogContent)) {
-	$id = $blogContent['BlogContent']['id'];
+	$id = $blogContent->id;
 } else {
 	$id = $blog_content_id;
 }
-if (empty($depth)) {
-	$depth = 1;
-}
-$actionUrl = '/blog/blog/get_categories/' . $id . '/' . $limit . '/' . $view_count . '/' . $depth;
-if ($by_year) {
-	$actionUrl .= '/year';
-}
-$data = $this->requestAction($actionUrl, ['entityId' => $id]);
+$data = $this->Blog->getViewVarsForBlogCategoryArchivesWdget($id, $limit, $view_count, $depth, $by_year? 'year' : null);
 $categories = $data['categories'];
 $this->viewVars['blogContent'] = $data['blogContent'];
-$this->Blog = new BlogHelper($this);
 ?>
 
 
@@ -58,14 +46,13 @@ $this->Blog = new BlogHelper($this);
 			<?php foreach ($categories as $key => $category): ?>
 				<li class="bs-widget-list-by-year__item">
 					<span>
-						<?php $this->BcBaser->link($key . '年', [
-							'plugin' => null,
-							'controller' => $this->request->getAttribute('currentContent')->url,
-							'action' => 'archives',
-							'date', $key
-						], ['class' => 'bs-widget-list-by-year__item-title']) ?>
+						<?php $this->BcBaser->link(
+						  $key . '年',
+						  $this->request->getAttribute('currentContent')->url . 'archives/date/' . $key,
+						  ['class' => 'bs-widget-list-by-year__item-title']
+						) ?>
 					</span>
-					<?php echo $this->Blog->getCategoryList($category, $depth, $view_count, ['named' => ['year' => $key]]) ?>
+					<?php echo $this->Blog->getCategoryList($category, $depth, $view_count, ['query' => ['year' => $key]]) ?>
 				</li>
 			<?php endforeach ?>
 		</ul>

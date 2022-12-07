@@ -12,6 +12,10 @@
 namespace BcBlog\View\Helper;
 
 use BaserCore\Event\BcEventDispatcherTrait;
+use BaserCore\Model\Entity\Content;
+use BaserCore\Service\ContentsService;
+use BaserCore\Service\ContentsServiceInterface;
+use BaserCore\Service\SitesService;
 use BaserCore\Service\SitesServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
@@ -20,14 +24,20 @@ use BaserCore\View\Helper\BcContentsHelper;
 use BaserCore\View\Helper\BcTimeHelper;
 use BaserCore\View\Helper\BcUploadHelper;
 use BcBlog\Model\Entity\BlogPost;
+use BcBlog\Model\Entity\BlogTag;
 use BcBlog\Model\Table\BlogPostsTable;
+use BcBlog\Service\BlogContentsService;
+use BcBlog\Service\BlogContentsServiceInterface;
 use BcBlog\Service\BlogPostsService;
 use BcBlog\Service\BlogPostsServiceInterface;
+use BcBlog\Service\BlogTagsService;
+use BcBlog\Service\BlogTagsServiceInterface;
 use BcBlog\Service\Front\BlogFrontService;
 use BcBlog\Service\Front\BlogFrontServiceInterface;
 use Cake\Core\App;
 use Cake\Core\Configure;
 use Cake\Datasource\EntityInterface;
+use Cake\Datasource\ResultSetInterface;
 use Cake\Filesystem\Folder;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Hash;
@@ -322,7 +332,7 @@ class BlogHelper extends Helper
             'url' => $url,
         ], ['class' => 'Blog', 'plugin' => 'BcBlog']);
         if ($event !== false) {
-            $options = ($event->getResult() === null || $event->getResult() === true) ? $event->getData('options') : $event->getResult();
+            $options = ($event->getResult() === null || $event->getResult() === true)? $event->getData('options') : $event->getResult();
             $post = $event->getData('post');
             $title = $event->getData('title');
             $url = $event->getData('url');
@@ -338,7 +348,7 @@ class BlogHelper extends Helper
             'url' => $url,
         ], ['class' => 'Blog', 'plugin' => 'BcBlog']);
         if ($event !== false) {
-            $out = ($event->getResult() === null || $event->getResult() === true) ? $event->getData('out') : $event->getResult();
+            $out = ($event->getResult() === null || $event->getResult() === true)? $event->getData('out') : $event->getResult();
         }
         return $out;
     }
@@ -416,6 +426,7 @@ class BlogHelper extends Helper
      * @param mixed $lastText 本文後に文字列を挿入するかを真偽値で指定。挿入する場合、テキストを入力（初期値 : false）
      * @return string 記事本文
      * @checked
+     * @noTodo
      */
     public function getPostContent($post, $moreText = true, $moreLink = false, $cut = false, $lastText = false)
     {
@@ -439,11 +450,10 @@ class BlogHelper extends Helper
             }
         }
         if ($moreLink && trim($post->detail) && trim($post->detail) != "<br>") {
-            if (!isset($this->Html)) {
-                App::uses('HtmlHelper', 'View/Helper');
-                $this->Html = new HtmlHelper($this->_View);
-            }
-            $out .= '<p class="more">' . $this->Html->link($moreLink, $this->getContentsUrl($post->blog_content_id, false) . 'archives/' . $post->no . '#post-detail', null, null) . '</p>';
+            $out .= '<p class="more">' . $this->Html->link(
+                $moreLink,
+                $this->getContentsUrl($post->blog_content_id, false) . 'archives/' . $post->no . '#post-detail'
+            ) . '</p>';
         }
         return $out;
     }
@@ -586,7 +596,7 @@ class BlogHelper extends Helper
             $options['link'] = false;
         }
         if (!empty($post['BlogTag'])) {
-            foreach ($post['BlogTag'] as $tag) {
+            foreach($post['BlogTag'] as $tag) {
                 if ($options['link']) {
                     $tags[] = $this->BcBaser->getLink($tag['name'], $this->getTagLinkUrl($crossingId, $tag, false), ['escape' => true]);
                 } else {
@@ -623,7 +633,7 @@ class BlogHelper extends Helper
     public function getCategoryUrl($blogCategoryId, $options = [])
     {
         $options = array_merge([
-            'named' => [],
+            'query' => [],
             'base' => true
         ], $options);
         $blogCategoriesTable = TableRegistry::getTableLocator()->get('BcBlog.BlogCategories');
@@ -636,14 +646,18 @@ class BlogHelper extends Helper
         $contentUrl = $this->BcBaser->getContentsUrl($this->currentContent->url, !$this->isSameSiteBlogContent($blogContentId), !empty($site->use_subdomain), false);
         $path = ['category'];
         if ($categoryPath) {
-            foreach ($categoryPath as $category) {
+            foreach($categoryPath as $category) {
                 $path[] = rawurldecode($category->name);
             }
         }
-        if ($options['named']) {
-            $path = array_merge($path, $options['named']);
-        }
         $url = $contentUrl . 'archives/' . implode('/', $path);
+        if ($options['query']) {
+            $queryArray = [];
+            foreach($options['query'] as $key => $value) {
+                $queryArray[] = $key . '=' . $value;
+            }
+            $url .= '?' . implode('&', $queryArray);
+        }
         if ($options['base']) {
             return $this->Url->build($url);
         } else {
@@ -681,12 +695,12 @@ class BlogHelper extends Helper
     /**
      * 記事の投稿者を出力する
      *
-     * @param array $post ブログ記事
+     * @param BlogPost $post ブログ記事
      * @return void
      */
     public function author($post)
     {
-        echo h($this->BcBaser->getUserName($post['User']));
+        echo h($this->BcBaser->getUserName($post->user));
     }
 
     /**
@@ -721,28 +735,24 @@ class BlogHelper extends Helper
      */
     protected function _getCategoryList($categories, $depth = 3, $current = 1, $count = false, $options = [])
     {
-        if ($depth < $current) {
-            return '';
-        }
+        if ($depth < $current) return '';
 
         if ($categories) {
             $out = '<ul class="bc-blog-category-list depth-' . $current . '">';
             $current++;
-            foreach ($categories as $category) {
-                if ($count && isset($category['BlogCategory']['count'])) {
-                    $category['BlogCategory']['title'] .= '(' . $category['BlogCategory']['count'] . ')';
-                }
-                $url = $this->getCategoryUrl($category['BlogCategory']['id'], ['base' => false]);
+            foreach($categories as $category) {
+                if ($count && isset($category->count)) $category->title .= '(' . $category->count . ')';
+                $url = $this->getCategoryUrl($category->id, ['base' => false]);
                 $url = preg_replace('/^\//', '', $url);
                 $class = ['bc-blog-category-list__item'];
-                if ($this->_View->request->url == $url) {
+                if ($this->_View->getRequest()->getPath() == $url) {
                     $class[] = 'current';
-                } elseif (!empty($this->_View->getRequest()->getParam('named.category')) && $this->_View->getRequest()->getParam('named.category') === $category['BlogCategory']['name']) {
+                } elseif (!empty($this->_View->getRequest()->getQuery('category')) && $this->_View->getRequest()->getQuery('category') === $category->name) {
                     $class[] = 'selected';
                 }
-                $out .= '<li class="' . implode(' ', $class) . '">' . $this->getCategory($category, $options);
-                if (!empty($category['BlogCategory']['children'])) {
-                    $out .= $this->_getCategoryList($category['BlogCategory']['children'], $depth, $current, $count, $options);
+                $out .= '<li class="' . implode(' ', $class) . '">' . $this->getCategory(new BlogPost(['blog_category' => $category]), $options);
+                if (!empty($category->children)) {
+                    $out .= $this->_getCategoryList($category->children, $depth, $current, $count, $options);
                 }
                 $out .= '</li>';
             }
@@ -855,7 +865,7 @@ class BlogHelper extends Helper
         }
 
         $_templates = [];
-        foreach ($templatesPathes as $templatePath) {
+        foreach($templatesPathes as $templatePath) {
             $templatePath .= 'Blog' . DS;
             $folder = new Folder($templatePath);
             $files = $folder->read(true, true);
@@ -873,7 +883,7 @@ class BlogHelper extends Helper
 
         $excludes[] = 'rss';
         $templates = [];
-        foreach ($_templates as $template) {
+        foreach($_templates as $template) {
             if (!in_array($template, $excludes)) {
                 $templates[$template] = $template;
             }
@@ -1324,6 +1334,8 @@ class BlogHelper extends Helper
      *  - `siteId` : サイトIDでフィルタリングする場合に指定する
      *  - `postCount` : 記事件数を表示するかどうか
      * @return array|null
+     * @checked
+     * @noTodo
      */
     public function getTagList($name, $options = [])
     {
@@ -1339,7 +1351,7 @@ class BlogHelper extends Helper
         }
         $options['contentId'] = $options['contentUrl'] = [];
         if ($name) {
-            foreach ($name as $value) {
+            foreach($name as $value) {
                 if (is_int($value)) {
                     $options['contentId'][] = $value;
                 } else {
@@ -1347,9 +1359,9 @@ class BlogHelper extends Helper
                 }
             }
         }
-        /** @var \BlogTag $BlogTag */
-        $BlogTag = ClassRegistry::init('BcBlog.BlogTag');
-        $tags = $BlogTag->find('customParams', $options);
+        /** @var BlogTagsService $blogTagsService */
+        $blogTagsService = $this->getService(BlogTagsServiceInterface::class);
+        $tags = $blogTagsService->getIndex($options)->all();
         // 公開記事数のカウントを追加
         if ($options['postCount']) {
             $tags = $this->_mergePostCountToTagsData($tags, $options);
@@ -1363,6 +1375,8 @@ class BlogHelper extends Helper
      * @param mixed $name
      * @param array $options
      *    ※ オプションのパラーメーターは、BlogHelper::getTagList() に準ずる
+     * @checked
+     * @noTodo
      */
     public function tagList($name, $options = [])
     {
@@ -1378,10 +1392,15 @@ class BlogHelper extends Helper
             if (is_int($name[0])) {
                 $blogContentId = $name[0];
             } else {
-                /** @var \Content $Content */
-                $Content = ClassRegistry::init('Content');
+                /** @var ContentsService $contentsService */
+                $contentsService = $this->getService(ContentsServiceInterface::class);
                 $url = '/' . preg_replace("/^\/?(.*?)\/?$/", "$1", $name[0]) . '/';
-                $blogContentId = $Content->field('entity_id', ['Content.url' => $url]);
+                /** @var Content $content */
+                $content = $contentsService->Contents->find()
+                    ->select(['entity_id'])
+                    ->where(['Contents.url' => $url])
+                    ->first();
+                $blogContentId = $content->entity_id;
             }
         }
         $this->BcBaser->element('BcBlog.blog_tag_list', [
@@ -1395,26 +1414,25 @@ class BlogHelper extends Helper
      * タグ一覧へのURLを取得する
      *
      * @param int $blogContentId
-     * @param array $tag
+     * @param BlogTag $tag
      * @param bool $base
      * @return string
      */
     public function getTagLinkUrl($blogContentId, $tag, $base = true)
     {
         $url = null;
-        if (isset($tag['BlogTag'])) {
-            $tag = $tag['BlogTag'];
-        }
         if ($blogContentId) {
             $this->setContent($blogContentId);
             if (!empty($this->currentContent->url)) {
-                $site = BcSite::findByUrl($this->currentContent->url);
+                /** @var SitesService $sitesService */
+                $sitesService = $this->getService(SitesServiceInterface::class);
+                $site = $sitesService->findByUrl($this->currentContent->url);
                 $url = $this->BcBaser->getContentsUrl($this->currentContent->url, !$this->isSameSiteBlogContent($blogContentId), !empty($site->useSubDomain), false);
-                $url = $url . 'archives/tag/' . $tag['name'];
+                $url = $url . 'archives/tag/' . $tag->name;
             }
         }
         if (!$url) {
-            $url = '/tags/' . $tag['name'];
+            $url = '/tags/' . $tag->name;
             $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
             $site = $sites->findByUrl($this->_View->getRequest()->getPath());
             if ($site && $site->alias && !$site->useSubDomain) {
@@ -1432,21 +1450,21 @@ class BlogHelper extends Helper
      * タグ一覧へのリンクタグを取得する
      *
      * @param int $blogContentId
-     * @param array $tag
+     * @param BlogTag $tag
      * @param array $options
      * @return string
      */
     public function getTagLink($blogContentId, $tag, $options = [])
     {
         $url = $this->getTagLinkUrl($blogContentId, $tag, false);
-        return $this->BcBaser->getLink($tag['BlogTag']['name'], $url, $options);
+        return $this->BcBaser->getLink($tag->name, $url, $options);
     }
 
     /**
      * タグ一覧へのリンクタグを出力する
      *
      * @param int $blogContentId
-     * @param array $tag
+     * @param BlogTag $tag
      * @param array $options
      */
     public function tagLink($blogContentId, $tag, $options = [])
@@ -1460,77 +1478,64 @@ class BlogHelper extends Helper
      * @param array $tags BlogTagの基本情報の配列
      * @return array
      */
-    private function _mergePostCountToTagsData(array $tags, $options)
+    private function _mergePostCountToTagsData(ResultSetInterface $tags, $options)
     {
+        if(!$tags->count()) return $tags;
+        $blogTagIds = Hash::extract($tags->toArray(), "{n}.id");
 
-        /** @var BlogPost $BlogPost */
-        $BlogPost = ClassRegistry::init('Blog.BlogPost');
-        $blogTagIds = Hash::extract($tags, "{n}.BlogTag.id");
+        /** @var BlogPostsService $blogPostsService */
+        $blogPostsService = $this->getService(BlogPostsServiceInterface::class);
         $conditions = array_merge(
-            ['BlogTag.id' => $blogTagIds],
-            $BlogPost->getConditionAllowPublish()
+            ['BlogTags.id IN' => $blogTagIds],
+            $blogPostsService->BlogPosts->getConditionAllowPublish()
         );
-        if (!empty($options['contentId'])) {
-            $blogContentIds = $options['contentId'];
-        }
+        if (!empty($options['contentId'])) $blogContentIds = $options['contentId'];
         if (!empty($options['contentUrl'])) {
-            /** @var BlogContent $BlogContent */
-            $BlogContent = ClassRegistry::init('Blog.BlogContent');
-            $blogContent = $BlogContent->find('all', [
-                'fields' => ['BlogContent.id'],
-                'conditions' => array_merge(
-                    $BlogContent->Content->getConditionAllowPublish(),
-                    ['Content.url' => $options['contentUrl']]
-                ),
-                'recursive' => 0,
-            ]);
-            $blogContentIds = Hash::extract($blogContent, "{n}.BlogContent.id");
+            /** @var BlogContentsService $blogContentsService */
+            $blogContentsService = $this->getService(BlogContentsServiceInterface::class);
+            $blogContents = $blogContentsService->BlogContents->find()
+                ->select(['BlogContent.id'])
+                ->where(array_merge(
+                    $blogContentsService->BlogContents->Content->getConditionAllowPublish(),
+                    ['Contents.url' => $options['contentUrl']]
+                ))->all();
+            $blogContentIds = Hash::extract($blogContents->toArray(), "{n}.id");
         }
-        if (!empty($blogContentIds)) {
-            $conditions[] = ['BlogPost.blog_content_id' => $blogContentIds];
+        if (!empty($blogContentIds)) $conditions[] = ['BlogPosts.blog_content_id' => $blogContentIds];
+
+        $tagIds = [];
+        if(!empty($conditions['BlogTags.id IN'])) {
+            $tagIds = $conditions['BlogTags.id IN'];
+            unset($conditions['BlogTags.id IN']);
         }
 
-        $postCountsData = $BlogPost->find('all', [
-            'fields' => [
-                'BlogTag.id',
-                'COUNT(BlogPost.id) as post_count',
-            ],
-            'conditions' => $conditions,
-            'group' => ['BlogTag.id'],
-            'recursive' => -1,
-            'joins' => [
-                [
-                    'type' => 'INNER',
-                    'table' => 'blog_posts_blog_tags',
-                    'alias' => 'BlogPostsBlogTag',
-                    'conditions' => "BlogPostsBlogTag.blog_post_id=BlogPost.id"
-                ],
-                [
-                    'type' => 'INNER',
-                    'table' => 'blog_tags',
-                    'alias' => 'BlogTag',
-                    'conditions' => "BlogPostsBlogTag.blog_tag_id=BlogTag.id"
-                ],
-            ]
+        $query = $blogPostsService->BlogPosts->find()
+            ->where($conditions)
+            ->leftJoinWith('BlogTags')
+            ->group(['BlogTags.id'])
+            ->select(['BlogTags.id']);
+        $query = $query->select([
+            'post_count' => $query->func()->count('BlogPosts.id')
         ]);
+        if($tagIds) {
+            $query = $query->matching('BlogTags', function ($q) use ($tagIds) {
+                return $q->where(['BlogTags.id IN' => $tagIds]);
+            });
+        }
 
-        if (empty($postCountsData)) {
-            foreach ($tags as $tag) {
-                $tag['BlogTag']['post_count'] = 0;
+        if (!$query->count()) {
+            foreach($tags as $tag) {
+                $tag->post_count = 0;
             }
             return $tags;
         }
 
-        foreach ($tags as $index => $tag) {
-            $blogTagId = $tag['BlogTag']['id'];
-            $countData = array_values(array_filter($postCountsData, function (array $data) use ($blogTagId) {
-                return $data['BlogTag']['id'] == $blogTagId;
-            }));
-            if (empty($countData)) {
-                $tags[$index]['BlogTag']['post_count'] = 0;
-                continue;
+        foreach($tags as $tag) {
+            foreach($query->all() as $postCount) {
+                if($tag->id === $postCount->get('_matchingData')['BlogTags']->id) {
+                    $tag->post_count = $postCount->post_count;
+                }
             }
-            $tags[$index]['BlogTag']['post_count'] = intval($countData[0][0]['post_count']);
         }
         return $tags;
     }
@@ -1579,6 +1584,8 @@ class BlogHelper extends Helper
      */
     public function posts($contentsName = [], $num = 5, $options = [])
     {
+        // TODO ucmitz 以下、未実装
+        return [];
         /** @var BlogContent $BlogContent */
         $this->_View->loadHelper('Blog.Blog');
         $options = array_merge([
@@ -1700,7 +1707,7 @@ class BlogHelper extends Helper
         // 対象ブログを指定する条件を設定
         $options['contentUrl'] = $options['contentId'] = [];
         if ($contentsName) {
-            foreach ($contentsName as $value) {
+            foreach($contentsName as $value) {
                 if (is_int($value)) {
                     $options['contentId'][] = $value;
                 } else {
@@ -1775,7 +1782,7 @@ class BlogHelper extends Helper
             unset($datas['BlogContent']['eye_catch_size']);
             $contents[] = $datas;
         } else {
-            foreach ($datas as $val) {
+            foreach($datas as $val) {
                 $val = $BlogContent->constructEyeCatchSize($val);
                 unset($val['BlogContent']['eye_catch_size']);
                 $contents[] = $val;
@@ -1816,16 +1823,16 @@ class BlogHelper extends Helper
         ]);
 
         if (empty($postCountsData)) {
-            foreach ($blogsData as $blogData) {
+            foreach($blogsData as $blogData) {
                 $blogData['BlogContent']['post_count'] = 0;
             }
             return $blogsData;
         }
 
-        foreach ($blogsData as $index => $blogData) {
+        foreach($blogsData as $index => $blogData) {
 
             $blogContentId = $blogData['BlogContent']['id'];
-            $countData = array_values(array_filter($postCountsData, function (array $data) use ($blogContentId) {
+            $countData = array_values(array_filter($postCountsData, function(array $data) use ($blogContentId) {
                 return $data['BlogPost']['blog_content_id'] == $blogContentId;
             }));
 
@@ -1855,13 +1862,14 @@ class BlogHelper extends Helper
      *
      * 別ドメインの場合はフルパスで取得する
      *
-     * @param $blogContentId ブログコンテンツID
+     * @param int $blogContentId ブログコンテンツID
      * @return string
      */
-    public function getContentsUrl($blogContentId, $base = true)
+    public function getContentsUrl(int $blogContentId, $base = true)
     {
         $this->setContent($blogContentId);
-        $site = BcSite::findByUrl($this->currentContent->url);
+        $sitesService = $this->getService(SitesServiceInterface::class);
+        $site = $sitesService->findByUrl($this->currentContent->url);
         return $this->BcBaser->getContentsUrl($this->currentContent->url, !$this->isSameSiteBlogContent($blogContentId), !empty($site->useSubDomain), $base);
     }
 
@@ -1933,7 +1941,7 @@ class BlogHelper extends Helper
         $blogTag = [];
         if ($this->isTag()) {
             $pass = $this->_View->getRequest()->getParam('pass');
-            $name = isset($pass[1]) ? $pass[1] : '';
+            $name = isset($pass[1])? $pass[1] : '';
             $BlogTagModel = ClassRegistry::init('Blog.BlogTag');
             $blogTag = $BlogTagModel->getByName(rawurldecode($name));
         }
@@ -1968,10 +1976,85 @@ class BlogHelper extends Helper
      * @noTodo
      * @unitTest ラッパーメソッドのためユニットテストは実装しない
      */
-    public function getViewVarsForBlogCalendarWidget(int $blogContentId, string $year = '', string $month = '') {
+    public function getViewVarsForBlogCalendarWidget(int $blogContentId, string $year = '', string $month = '')
+    {
         /** @var BlogFrontService $blogFrontService */
         $blogFrontService = $this->getService(BlogFrontServiceInterface::class);
         return $blogFrontService->getViewVarsForBlogCalendarWidget($blogContentId, $year, $month);
+    }
+
+    /**
+     * ブログカテゴリウィジェット用の View 変数を取得する
+     *
+     * @param int $blogContentId
+     * @param bool $limit
+     * @param bool $viewCount
+     * @param int $depth
+     * @param string|null $contentType
+     * @return array
+     * @checked
+     * @noTodo
+     * @unitTest ラッパーメソッドのためユニットテストは実装しない
+     */
+    public function getViewVarsForBlogCategoryArchivesWdget(
+        int $blogContentId,
+        bool $limit = false,
+        bool $viewCount = false,
+        int $depth = 1,
+        string $contentType = null
+    )
+    {
+        /** @var BlogFrontService $blogFrontService */
+        $blogFrontService = $this->getService(BlogFrontServiceInterface::class);
+        return $blogFrontService->getViewVarsForBlogCategoryArchivesWidget($blogContentId, $limit, $viewCount, $depth, $contentType);
+    }
+
+    /**
+     * ブログ年別アーカイブウィジェット用の View 変数を取得する
+     *
+     * @param int $blogContentId
+     * @param bool $limit
+     * @param bool $viewCount
+     * @return array
+     */
+    public function getViewVarsForBlogYearlyArchivesWidget(int $blogContentId, bool $limit = false, bool $viewCount = false)
+    {
+        /** @var BlogFrontService $blogFrontService */
+        $blogFrontService = $this->getService(BlogFrontServiceInterface::class);
+        return $blogFrontService->getViewVarsForBlogYearlyArchivesWidget($blogContentId, $limit, $viewCount);
+    }
+
+
+    /**
+     * ブログ月別アーカイブウィジェット用の View 変数を取得する
+     *
+     * @param int $blogContentId
+     * @param int $limit
+     * @param bool $viewCount
+     * @return array
+     */
+    public function getViewVarsBlogMonthlyArchivesWidget(
+        int $blogContentId,
+        int $limit = 12,
+        bool $viewCount = false
+    )
+    {
+        /** @var BlogFrontService $blogFrontService */
+        $blogFrontService = $this->getService(BlogFrontServiceInterface::class);
+        return $blogFrontService->getViewVarsBlogMonthlyArchivesWidget($blogContentId, $limit, $viewCount);
+    }
+
+    /**
+     * 最近の投稿ウィジェット用 View 変数を取得する
+     * @param int $blogContentId
+     * @param int $limit
+     * @return array
+     */
+    public function getViewVarsRecentEntriesWidget(int $blogContentId, int $limit = 5)
+    {
+        /** @var BlogFrontService $blogFrontService */
+        $blogFrontService = $this->getService(BlogFrontServiceInterface::class);
+        return $blogFrontService->getViewVarsRecentEntriesWidget($blogContentId, $limit);
     }
 
 }

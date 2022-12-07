@@ -11,6 +11,12 @@
 
 $(function () {
 
+    $('#WidgetsType').accordion({
+        collapsible: true,
+        heightStyle: "content"
+    });
+    $('#Target').css('min-height', $('#Source').css('height'));
+
     var sortableOptions = {
         scroll: true,
         items: 'div.sortable',

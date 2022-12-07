@@ -481,7 +481,7 @@ SCRIPT_END;
         // EVENT Form.beforeInput
         $event = $this->dispatchLayerEvent('beforeInput', [
             'formId' => $this->__id,
-            'data' => $this->request->getData(),
+            'data' => $this->getView()->getRequest()->getData(),
             'fieldName' => $fieldName,
             'options' => $options
         ], ['class' => 'Form', 'plugin' => '']);

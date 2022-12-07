@@ -14,27 +14,19 @@
  * ブログ月別アーカイブ
  * 呼出箇所：ウィジェット
  *
- * @var BcAppView $this
+ * @var \BcBlog\View\BlogFrontAppView $this
  * @var int $blog_content_id ブログコンテンツID
  * @var string $name タイトル
  * @var bool $use_title タイトルを利用するかどうか
  */
-if (!isset($view_count)) {
-	$view_count = false;
-}
-if (!isset($limit)) {
-	$limit = 12;
-}
+if (!isset($view_count)) $view_count = false;
+if (!isset($limit)) $limit = 12;
 if (isset($blogContent)) {
-	$id = $blogContent['BlogContent']['id'];
+	$id = $blogContent->id;
 } else {
 	$id = $blog_content_id;
 }
-$actionUrl = '/blog/blog/get_posted_months/' . $id . '/' . $limit;
-if ($view_count) {
-	$actionUrl .= '/1';
-}
-$data = $this->requestAction($actionUrl, ['entityId' => $id]);
+$data = $this->Blog->getViewVarsBlogMonthlyArchivesWidget($id, $limit, $view_count);
 $postedDates = $data['postedDates'];
 $blogContent = $data['blogContent'];
 $baseCurrentUrl = $this->BcBaser->getBlogContentsUrl($id) . 'archives/date/';
@@ -50,9 +42,9 @@ $baseCurrentUrl = $this->BcBaser->getBlogContentsUrl($id) . 'archives/date/';
 			<?php foreach ($postedDates as $postedDate): ?>
 				<?php
 				$class = ['bs-widget-list__item'];
-				if ($this->request->getParam('named.year') == $postedDate['year'] && $this->request->getParam('named.month') == $postedDate['month']) {
+				if ($this->getRequest()->getQuery('year') === $postedDate['year'] && $this->getRequest()->getQuery('month') === $postedDate['month']) {
 					$class[] = 'selected';
-				} elseif ('/' . $this->request->url == $baseCurrentUrl . $postedDate['year'] . '/' . $postedDate['month']) {
+				} elseif ($this->getRequest()->getPath() === $baseCurrentUrl . $postedDate['year'] . '/' . $postedDate['month']) {
 					$class[] = 'current';
 				}
 				if ($view_count) {
@@ -60,7 +52,7 @@ $baseCurrentUrl = $this->BcBaser->getBlogContentsUrl($id) . 'archives/date/';
 				} else {
 					$title = $postedDate['year'] . '/' . $postedDate['month'];
 				}
-				$url = $this->BcBaser->getBlogContentsUrl($blogContent['BlogContent']['id']) . 'archives/date/' . $postedDate['year'] . '/' . $postedDate['month'];
+				$url = $this->BcBaser->getBlogContentsUrl($blogContent->id) . 'archives/date/' . $postedDate['year'] . '/' . $postedDate['month'];
 				?>
 				<li class="<?php echo implode(' ', $class) ?>">
 					<?php $this->BcBaser->link($title, $url, ['class' => 'bs-widget-list__item-title']) ?>

@@ -14,7 +14,7 @@
  * テキスト
  * 呼出箇所：ウィジェット
  *
- * @var BcAppView $this
+ * @var \BaserCore\View\BcFrontAppView $this
  * @var int $id ウィジェットID
  * @var string $name タイトル
  * @var bool $use_title タイトルを利用するかどうか

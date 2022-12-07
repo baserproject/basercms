@@ -15,7 +15,9 @@ use BaserCore\Service\PermissionsService;
 use BaserCore\Service\PermissionsServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Datasource\EntityInterface;
+use Cake\Datasource\ResultSetInterface;
 use Cake\Event\EventInterface;
+use Cake\ORM\ResultSet;
 use Cake\Routing\Router;
 use Cake\Validation\Validator;
 use BaserCore\Annotation\NoTodo;
@@ -24,6 +26,7 @@ use BaserCore\Annotation\UnitTest;
 
 /**
  * BlogCategoriesTable
+ * @property BlogPostsTable $BlogPosts
  */
 class BlogCategoriesTable extends BlogAppTable
 {
@@ -152,6 +155,7 @@ class BlogCategoriesTable extends BlogAppTable
      * @param int $blogContentId
      * @param array $options
      * @return array
+     *
      */
     public function getCategoryList($blogContentId = null, $options = [])
     {
@@ -162,31 +166,32 @@ class BlogCategoriesTable extends BlogAppTable
             'limit' => false,
             'viewCount' => false,
             'parentId' => null,
-            'fields' => ['BlogCategory.id', 'BlogCategory.name', 'BlogCategory.title', 'BlogCategory.lft', 'BlogCategory.rght'],
+            'fields' => [
+                'BlogCategories.id',
+                'BlogCategories.name',
+                'BlogCategories.title',
+                'BlogCategories.lft',
+                'BlogCategories.rght'
+            ],
         ], $options);
         $fields = $options['fields'];
         $depth = $options['depth'];
         $parentId = $options['parentId'];
-        unset($options['fields']);
-        unset($options['depth']);
-        unset($options['parentId']);
+        unset($options['fields'], $options['depth'], $options['parentId']);
         $datas = [];
         if (!$options['type']) {
             $datas = $this->_getCategoryList($blogContentId, $parentId, $options['viewCount'], $depth, 1, $fields, $options);
         } elseif ($options['type'] == 'year') {
-            $options = [
+            $postedDates = $this->BlogPosts->getPostedDates($blogContentId, [
                 'category' => true,
                 'limit' => $options['limit'],
                 'viewCount' => $options['viewCount'],
                 'type' => 'year'
-            ];
-            $_datas = $this->BlogPost->getPostedDates($blogContentId, $options);
-            $datas = [];
-            foreach ($_datas as $data) {
-                if ($options['viewCount']) {
-                    $data['BlogCategory']['count'] = $data['count'];
-                }
-                $datas[$data['year']][] = ['BlogCategory' => $data['BlogCategory']];
+            ]);
+            foreach ($postedDates as $postedDate) {
+                if(empty($postedDate['category'])) continue;
+                if ($options['viewCount']) $postedDate['category']->count = $postedDate['count'];
+                $datas[$postedDate['year']][] = $postedDate['category'];
             }
         }
         return $datas;
@@ -197,108 +202,112 @@ class BlogCategoriesTable extends BlogAppTable
      *
      * @param int $blogContentId
      * @param int $parentId
-     * @param int $viewCount
+     * @param bool $viewCount
      * @param int $depth
      * @param int $current
      * @param array $fields
      * @param array $options
-     * @return array
+     * @return ResultSetInterface
      */
-    protected function _getCategoryList($blogContentId = null, $parentId = null, $viewCount = false, $depth = 1, $current = 1, $fields = [], $options = [])
+    protected function _getCategoryList(
+        int $blogContentId = null,
+        int $parentId = null,
+        bool $viewCount = false,
+        int $depth = 1,
+        int $current = 1,
+        array $fields = [],
+        array $options = [])
     {
         $options = array_merge([
             'id' => null,
             'siteId' => null,
-            'order' => 'BlogCategory.lft asc',
+            'order' => 'BlogCategories.lft asc',
             'conditions' => [],
             'threaded' => false
         ], $options);
+
+        // 検索条件
         $conditions = $options['conditions'];
         if (!empty($options['id'])) {
             $parentId = false;
+            $conditions['BlogCategories.id'] = $options['id'];
         }
-        // 親を指定する場合
-        if ($parentId !== false) {
-            $conditions['BlogCategory.parent_id'] = $parentId;
-        }
-        if (!empty($options['id'])) {
-            $conditions['BlogCategory.id'] = $options['id'];
+        if (is_null($parentId)) {
+            $conditions['BlogCategories.parent_id IS'] = null;
+        } elseif ($parentId !== false) {    // 親を指定する場合
+            $conditions['BlogCategories.parent_id'] = $parentId;
         }
         if ($options['siteId'] !== false && !is_null($options['siteId'])) {
-            $conditions['Content.site_id'] = $options['siteId'];
+            $conditions['Contents.site_id'] = $options['siteId'];
         }
         if (!is_null($blogContentId)) {
-            $conditions['BlogCategory.blog_content_id'] = $blogContentId;
+            $conditions['BlogCategories.blog_content_id'] = $blogContentId;
         }
+
+        // 検索設定
         $findType = 'all';
         if ($options['threaded']) {
             $findType = 'threaded';
-            $options['order'] = 'BlogCategory.lft';
-            unset($conditions['BlogCategory.parent_id']);
+            $options['order'] = 'BlogCategories.lft';
+            unset($conditions['BlogCategories.parent_id']);
             $fields = [];
         } else {
             if ($fields) {
                 if (is_array($fields)) {
-                    $fields[0] = 'DISTINCT ' . $fields[0];
+                    $distinct = $fields[0];
                 } else {
-                    $fields = 'DISTINCT ' . $fields;
+                    $distinct = $fields;
                 }
             }
         }
-        $findOptions = [
-            'conditions' => $conditions,
-            'fields' => $fields,
-            'order' => $options['order'],
-            'recursive' => 0,
-            'joins' => [
-                [
-                    'type' => 'LEFT',
-                    'table' => 'blog_contents',
-                    'alias' => 'BlogContent',
-                    'conditions' => "BlogCategory.blog_content_id=BlogContent.id",
-                ],
-                [
-                    'type' => 'LEFT',
-                    'table' => 'contents',
-                    'alias' => 'Content',
-                    'conditions' => "Content.entity_id=BlogContent.id AND Content.type='BlogContent'",
-                ]
-            ]
-        ];
-        $datas = $this->find($findType, $findOptions);
-        if ($datas && $findType == 'all') {
-            foreach ($datas as $key => $data) {
+
+        // 検索実行
+        $query = $this->find($findType)
+            ->contain(['BlogPosts' => ['BlogContents' => ['Contents']]])
+            ->where($conditions)
+            ->select($fields)
+            ->order($options['order']);
+        if($distinct) {
+            $query->distinct($distinct);
+        }
+        $entities = $query->all();
+
+        // all の場合に、付属情報を追加
+        if ($findType == 'all' && $entities) {
+            foreach ($entities as $entity) {
+                // 表示件数
                 if ($viewCount) {
-                    $childrenIds = $this->find('list', [
-                        'fields' => ['id'],
-                        'conditions' => [
-                            ['BlogCategory.lft > ' => $data['BlogCategory']['lft']],
-                            ['BlogCategory.rght < ' => $data['BlogCategory']['rght']],
-                        ],
-                        'recursive' => -1
-                    ]);
-                    $categoryId = [$data['BlogCategory']['id']];
+                    $childrenIds = $this->find('list', ['keyField' => 'id', 'valueField' => 'id'])
+                        ->where([
+                            ['BlogCategories.lft > ' => $entity->lft],
+                            ['BlogCategories.rght < ' => $entity->rght]
+                        ])->toArray();
+                    $categoryId = [$entity->id];
                     if ($childrenIds) {
                         $categoryId = array_merge($categoryId, $childrenIds);
                     }
-                    $datas[$key]['BlogCategory']['count'] = $this->BlogPost->find('count', [
-                        'conditions' =>
-                        array_merge(
-                            ['BlogPost.blog_category_id' => $categoryId],
-                            $this->BlogPost->getConditionAllowPublish()
-                        ),
-                        'cache' => false
-                    ]);
+                    $entity->count = $this->BlogPosts->find()
+                        ->where(array_merge(
+                            ['BlogPosts.blog_category_id IN' => $categoryId],
+                            $this->BlogPosts->getConditionAllowPublish()
+                        ))->count();
                 }
+                // 子カテゴリ
                 if ($current < $depth) {
-                    $children = $this->_getCategoryList($blogContentId, $data['BlogCategory']['id'], $viewCount, $depth, $current + 1, $fields, $options);
-                    if ($children) {
-                        $datas[$key]['BlogCategory']['children'] = $children;
-                    }
+                    $children = $this->_getCategoryList(
+                        $blogContentId,
+                        $entity->id,
+                        $viewCount,
+                        $depth,
+                        $current + 1,
+                        $fields,
+                        $options
+                    );
+                    if ($children) $entity->children = $children;
                 }
             }
         }
-        return $datas;
+        return $entities;
     }
 
     /**

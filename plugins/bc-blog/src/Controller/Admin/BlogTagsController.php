@@ -61,7 +61,7 @@ class BlogTagsController extends BlogAdminAppController
         $this->setViewConditions('BlogTag', ['default' => [
             'query' => [
                 'limit' => BcSiteConfig::get('admin_list_num'),
-                'sort' => 'BlogTags.id',
+                'sort' => 'id',
                 'direction' => 'asc'
             ],
         ]]);

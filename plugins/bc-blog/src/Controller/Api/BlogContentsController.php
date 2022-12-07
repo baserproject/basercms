@@ -190,7 +190,7 @@ class BlogContentsController extends BcApiController
         $this->set([
             'message' => $message,
             'blogContent' => $blogContent,
-            'content' => $blogContent->content,
+            'content' => $blogContent? $blogContent->content : null,
             'errors' => $errors,
         ]);
         $this->viewBuilder()->setOption('serialize', ['blogContent', 'content', 'message', 'errors']);

@@ -56,38 +56,13 @@ class BlogController extends BlogFrontAppController
         parent::beforeFilter($event);
         $blogContentId = null;
 
-        if (preg_match('/tags$/', $this->request->getParam('action'))) {
-            $sites = $this->getTableLocator()->get('BaserCore.Sites');
-            $currentSite = $sites->findByUrl($this->getRequest()->getPath());
-            $url = '/';
-            if ($this->request->getParam('action') !== 'tags') {
-                $prefix = str_replace('_tags', '', $this->request->getParam('action'));
-                if ($prefix === $currentSite->name) {
-                    $url = '/' . $currentSite->alias . '/';
-                    $this->request = $this->request->withParam('action', 'tags');
-                    $this->action = 'tags';
-                }
-            }
-            $obj = ClassRegistry::init('Content');
-            $content = $obj->find(
-                'first',
-                [
-                    'conditions' => [
-                        'Content.url' => $url
-                    ],
-                    'recursive' => 0
-                ]
-            );
-            $this->request = $this->request->withParam('Content', $content['Content']);
-            $this->request = $this->request->withParam('Site', $content['Site']);
-        } else {
+        if ($this->request->getParam('action') !== 'tags') {
             if (!empty($this->request->getParam('entityId'))) {
                 $blogContentId = $this->request->getParam('entityId');
             } elseif (!empty($this->request->getParam('pass'))) {
                 // 後方互換のため pass もチェック
                 $blogContentId = $this->request->getParam('pass');
             }
-
             if (!$blogContentId) {
                 $this->notFound();
             }
@@ -206,15 +181,17 @@ class BlogController extends BlogFrontAppController
      *
      * @param BlogFrontService $service
      * @param BlogContentsService $blogContentsService
+     * @param BlogPostsService $blogPostsService
+     * @param string $type
      * @return void
      * @checked
      * @noTodo
      */
     public function archives(
-        BlogFrontServiceInterface    $service,
+        BlogFrontServiceInterface $service,
         BlogContentsServiceInterface $blogContentsService,
-        BlogPostsServiceInterface    $blogPostsService,
-                                     $type
+        BlogPostsServiceInterface $blogPostsService,
+        string $type
     )
     {
         /* @var BlogContent $blogContent */
@@ -228,11 +205,11 @@ class BlogController extends BlogFrontAppController
             case 'category':
                 $category = $pass[count($pass) - 1];
                 $this->set($service->getViewVarsForArchivesByCategory(
-                    $this->paginate($blogPostsService->getIndexByCategory($category, [
+                    $this->paginate($blogPostsService->getIndexByCategory($category, array_merge([
                         'status' => 'publish',
                         'blog_content_id' => $blogContent->id,
                         'direction' => $blogContent->list_direction
-                    ])),
+                    ], $this->getRequest()->getQueryParams()))),
                     $category,
                     $this->getRequest(),
                     $blogContent,
@@ -266,7 +243,7 @@ class BlogController extends BlogFrontAppController
                 break;
 
             case 'date':
-                $year = $month = $day = null;
+                $year = $month = $day = '';
                 if (isset($pass[1]) && preg_match('/^\d{4}$/', $pass[1])) {
                     $year = $pass[1];
                     if ($year && isset($pass[2]) && preg_match('/^((0?[1-9])|(1[0-2]))$/', $pass[2])) {
@@ -305,150 +282,6 @@ class BlogController extends BlogFrontAppController
     }
 
     /**
-     * カテゴリー一覧用のデータを取得する
-     *
-     * @param int $id
-     * @param mixed $limit Number Or false Or '0'（制限なし）
-     * @param mixed $viewCount
-     * @param mixed $contentType year Or null
-     * @return array
-     */
-    public function get_categories($id, $limit = false, $viewCount = false, $depth = 1, $contentType = null)
-    {
-        if ($limit === '0') {
-            $limit = false;
-        }
-        $data = [];
-        $this->BlogContent->recursive = -1;
-        $data['blogContent'] = $this->BlogContent->read(null, $id);
-        $data['categories'] = $this->BlogCategory->getCategoryList(
-            $id,
-            [
-                'type' => $contentType,
-                'limit' => $limit,
-                'depth' => $depth,
-                'viewCount' => $viewCount
-            ]
-        );
-        return $data;
-    }
-
-    /**
-     * 投稿者一覧ウィジェット用のデータを取得する
-     *
-     * @param int $blogContentId
-     * @param boolean $limit
-     * @param int $viewCount
-     */
-    public function get_authors($blogContentId, $viewCount = false)
-    {
-        $data = [];
-        $this->BlogContent->recursive = -1;
-        $data['blogContent'] = $this->BlogContent->read(null, $blogContentId);
-        $data['authors'] = $this->BlogPost->getAuthors(
-            $blogContentId,
-            [
-                'viewCount' => $viewCount
-            ]
-        );
-        return $data;
-    }
-
-    /**
-     * 月別アーカイブ一覧用のデータを取得する
-     *
-     * @param int $id
-     * @return mixed $limit Number Or false Or '0'（制限なし）
-     */
-    public function get_posted_months($id, $limit = 12, $viewCount = false)
-    {
-        $this->BlogContent->recursive = -1;
-        $data['blogContent'] = $this->BlogContent->read(null, $id);
-        $this->BlogPost->recursive = -1;
-        $data['postedDates'] = $this->BlogPost->getPostedDates(
-            $id,
-            [
-                'type' => 'month',
-                'limit' => $limit !== '0'? $limit : false,
-                'viewCount' => $viewCount
-            ]
-        );
-        return $data;
-    }
-
-    /**
-     * 年別アーカイブ一覧用のデータを取得する
-     *
-     * @param int $id
-     * @param boolean $viewCount
-     * @return mixed $count
-     */
-    public function get_posted_years($id, $limit = false, $viewCount = false)
-    {
-        $this->BlogContent->recursive = -1;
-        $data['blogContent'] = $this->BlogContent->read(null, $id);
-        $this->BlogPost->recursive = -1;
-        $data['postedDates'] = $this->BlogPost->getPostedDates(
-            $id,
-            [
-                'type' => 'year',
-                'limit' => $limit !== '0'? $limit : false,
-                'viewCount' => $viewCount
-            ]
-        );
-        return $data;
-    }
-
-    /**
-     * 最近の投稿用のデータを取得する
-     *
-     * @param int $id
-     * @param mixed $count
-     * @return array
-     */
-    public function get_recent_entries($id, $limit = 5)
-    {
-        $data['blogContent'] = $this->BlogContent->find(
-            'first',
-            [
-                'conditions' => [
-                    'BlogContent.id' => $id
-                ],
-                'recursive' => 0
-            ]
-        );
-        $conditions = array_merge(
-            ['BlogPost.blog_content_id' => $id],
-            $this->BlogPost->getConditionAllowPublish()
-        );
-
-        /* BlogCategoryのBlogPostを外す */
-        $this->BlogPost->BlogCategory->unbindModel(
-            ['hasMany' => ['BlogPost']]
-        );
-
-        /* UserのBlogPostとFavoriteを外す */
-        $this->BlogPost->User->unbindModel(
-            ['hasMany' => ['BlogPost', 'Favorite']]
-        );
-
-        /* BlogContentのBlogPostとBlogCategoryを外す */
-        $this->BlogPost->BlogContent->unbindModel(
-            ['hasMany' => ['BlogPost', 'BlogCategory']]
-        );
-
-        // 毎秒抽出条件が違うのでキャッシュしない
-        $data['recentEntries'] = $this->BlogPost->find('all', [
-            'conditions' => $conditions,
-            'limit' => $limit !== '0'? $limit : false,
-            'order' => 'posted DESC',
-            'recursive' => 2,
-            'cache' => false
-        ]);
-        return $data;
-    }
-
-    /**
      * 記事リストを出力
      * requestAction用
      *
@@ -478,22 +311,24 @@ class BlogController extends BlogFrontAppController
     /**
      * 全体タグ一覧
      * @param $name
+     * @checked
+     * @noTodo
      */
-    public function tags($name = null)
+    public function tags(BlogPostsServiceInterface $service, $name = null)
     {
-        if (empty($name)) {
-            $this->notFound();
-        }
-        $num = 10;
-        if (!empty($this->request->getParam('named.num'))) {
-            $num = $this->request->getParam('named.num');
-        }
-        $tag = $name;
-        $posts = $this->_getBlogPosts([
-            'tag' => $tag,
-            'num' => $num
+        if (empty($name)) $this->notFound();
+        $this->setViewConditions([], [
+            'default' => ['query' => ['limit' => 10]]
         ]);
-        $this->setTitle(rawurldecode($tag));
-        $this->set('posts', $posts);
+        $params = array_merge($this->request->getQueryParams(), ['status' => 'publish']);
+        try {
+            $entities = $this->paginate($service->getIndex(array_merge(['tag' => $name], $params)));
+        } catch (NotFoundException $e) {
+            return $this->redirect(['action' => 'search']);
+        }
+        $this->set([
+            'posts' => $entities,
+            'tag' => rawurldecode($name)
+        ]);
     }
 }

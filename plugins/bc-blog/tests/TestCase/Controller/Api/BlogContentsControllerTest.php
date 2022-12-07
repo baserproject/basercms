@@ -221,6 +221,21 @@ class BlogContentsControllerTest extends BcTestCase
             'use_content' => '1'
         ])->persist();
         ContentFactory::make([
+            'id' => 1,
+            'title' => '',
+            'plugin' => 'BaserCore',
+            'type' => 'ContentFolder',
+            'entity_id' => 1,
+            'url' => '/',
+            'site_id' => 1,
+            'alias_id' => null,
+            'main_site_content_id' => null,
+            'parent_id' => null,
+            'lft' => 1,
+            'rght' => 4,
+            'level' => 1
+        ])->persist();
+        ContentFactory::make([
             'id' => 2,
             'title' => 'news',
             'plugin' => 'BcBlog',

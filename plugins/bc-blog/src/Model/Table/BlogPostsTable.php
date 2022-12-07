@@ -20,6 +20,7 @@ use BaserCore\Event\BcEventDispatcherTrait;
 use BaserCore\Model\Entity\Content;
 use BaserCore\Model\Table\UsersTable;
 use BaserCore\Utility\BcUtil;
+use BcBlog\Model\Entity\BlogCategory;
 use Cake\Core\Plugin;
 use Cake\Database\Driver\Mysql;
 use Cake\Database\Driver\Postgres;
@@ -279,82 +280,43 @@ class BlogPostsTable extends BlogAppTable
         ], $options);
 
         $conditions = [];
-        if ($blogContentId) {
-            $conditions = ['BlogPost.blog_content_id' => $blogContentId];
-        }
+        if ($blogContentId) $conditions = ['BlogPosts.blog_content_id' => $blogContentId];
         $conditions = array_merge($conditions, $this->getConditionAllowPublish());
 
-        if ($options['category']) {
-            $recursive = 1;
-            $this->unbindModel([
-                'belongsTo' => ['User', 'BlogContent'],
-                'hasAndBelongsToMany' => ['BlogTag']
-            ]);
-        } else {
-            $recursive = -1;
-        }
-
         // 毎秒抽出条件が違うのでキャッシュしない
-        $posts = $this->find('all', [
-            'conditions' => $conditions,
-            'order' => 'BlogPost.posted DESC',
-            'recursive' => $recursive,
-        ]);
+        $posts = $this->find()
+            ->contain(['BlogCategories'])
+            ->where($conditions)
+            ->order(['BlogPosts.posted DESC'])
+            ->all();
 
-        $dates = [];
+        $postedDates = [];
         $counter = 0;
-
         foreach($posts as $post) {
-
-            $exists = false;
-            $_date = [];
             $year = date('Y', strtotime($post->posted));
             $month = date('m', strtotime($post->posted));
-            $categoryId = $post->blog_category_id;
-
-            foreach($dates as $key => $date) {
-
-                if (!$options['category'] || $date['BlogCategory']['id'] == $categoryId) {
-                    if ($options['type'] == 'year' && $date['year'] == $year) {
-                        $exists = true;
-                    }
-                    if ($options['type'] == 'month' && $date['year'] == $year && $date['month'] == $month) {
-                        $exists = true;
-                    }
-                }
-
-                if ($exists) {
-                    if ($options['viewCount']) {
-                        $dates[$key]['count']++;
-                    }
-                    break;
-                }
+            if ($options['type'] === 'year') {
+                $key = $year;
+            } else {
+                $key = $year . $month;
             }
-
-            if (!$exists) {
-                if ($options['type'] == 'year') {
-                    $_date['year'] = $year;
-                } elseif ($options['type'] == 'month') {
-                    $_date['year'] = $year;
-                    $_date['month'] = $month;
-                }
-                if ($options['category']) {
-                    $_date['BlogCategory']['id'] = $categoryId;
-                    $_date['BlogCategory']['name'] = $post['BlogCategory']['name'];
-                    $_date['BlogCategory']['title'] = $post['BlogCategory']['title'];
-                }
-                if ($options['viewCount']) {
-                    $_date['count'] = 1;
-                }
-                $dates[] = $_date;
+            if($options['category'] && $post->blog_category) $key .= '-' . $post->blog_category->id;
+            if(!isset($postedDates[$key])) {
+                $postedDate = [
+                    'year' => $year,
+                    'month' => ($options['type'] === 'month')? $month : null,
+                    'count' => ($options['viewCount'])? 1 : null
+                ];
+                if ($options['category'] && $post->blog_category) $postedDate['category'] = $post->blog_category;
+                $postedDates[$key] = $postedDate;
                 $counter++;
+            } else {
+                if (!$options['viewCount']) continue;
+                $postedDates[$key]['count']++;
             }
-
-            if ($options['limit'] !== false && $options['limit'] <= $counter) {
-                break;
-            }
+            if ($options['limit'] !== false && $options['limit'] <= $counter) break;
         }
-        return $dates;
+        return $postedDates;
     }
 
     /**

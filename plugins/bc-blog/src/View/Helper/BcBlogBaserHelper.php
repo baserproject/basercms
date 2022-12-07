@@ -27,7 +27,7 @@ use Cake\View\Helper;
  * @package Blog.View.Helper
  * @property BlogHelper $Blog
  */
-class BlogBaserHelper extends Helper
+class BcBlogBaserHelper extends Helper
 {
 
     /**

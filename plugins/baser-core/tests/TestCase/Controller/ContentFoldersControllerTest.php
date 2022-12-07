@@ -11,7 +11,6 @@
 
 namespace BaserCore\Test\TestCase\Controller;
 
-use Cake\ORM\TableRegistry;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\TestSuite\IntegrationTestTrait;
 use BaserCore\Controller\ContentFoldersController;

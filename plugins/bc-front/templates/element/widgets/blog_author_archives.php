@@ -48,7 +48,7 @@ $baseCurrentUrl = $this->BcBaser->getBlogContentsUrl($id) . 'archives/author/';
 			<?php foreach ($authors as $author): ?>
 				<?php
 				$class = ['bs-widget-list__item'];
-				if ('/' . $this->getRequest()->getPath() === $baseCurrentUrl . $author->name) {
+				if ($this->getRequest()->getPath() === $baseCurrentUrl . $author->name) {
 					$class[] = 'current';
 				}
 				if ($view_count) {

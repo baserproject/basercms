@@ -14,20 +14,18 @@
  * ブログ最近の投稿
  * 呼出箇所：ウィジェット
  *
- * @var BcAppView $this
+ * @var \BcBlog\View\BlogFrontAppView $this
  * @var int $blog_content_id ブログコンテンツID
  * @var string $name タイトル
  * @var bool $use_title タイトルを利用するかどうか
  */
-if (!isset($count)) {
-	$count = 5;
-}
+if (!isset($count)) $count = 5;
 if (isset($blogContent)) {
-	$id = $blogContent['BlogContent']['id'];
+	$id = $blogContent->id;
 } else {
 	$id = $blog_content_id;
 }
-$data = $this->requestAction('/blog/blog/get_recent_entries/' . $id . '/' . $count, ['entityId' => $id]);
+$data = $this->Blog->getViewVarsRecentEntriesWidget($id, $count);
 $recentEntries = $data['recentEntries'];
 $blogContent = $data['blogContent'];
 $baseCurrentUrl = $this->BcBaser->getBlogContentsUrl($id) . 'archives/';
@@ -43,7 +41,7 @@ $baseCurrentUrl = $this->BcBaser->getBlogContentsUrl($id) . 'archives/';
 			<?php foreach ($recentEntries as $recentEntry): ?>
 				<?php
 				$class = ['bs-widget-list__item'];
-				if ('/' . $this->request->url == $baseCurrentUrl . $recentEntry['BlogPost']['no']) {
+				if ($this->getRequest()->getPath() === $baseCurrentUrl . $recentEntry->no) {
 					$class[] = 'current';
 				}
 				?>

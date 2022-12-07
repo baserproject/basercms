@@ -30,5 +30,9 @@ if(!isset($subDir)) {
 	<?php if ($name && $use_title): ?>
 		<h2 class="bs-widget-list"><?php echo $name ?></h2>
 	<?php endif ?>
-	<?php $this->BcBaser->element('widgets' . DS . $template, [], ['subDir' => $subDir]) ?>
+	<?php if($this->_getElementFileName('widgets/' . basename($template, '.php'))): ?>
+	<?php $this->BcBaser->element('widgets' . DS . $template) ?>
+	<?php else: ?>
+	  <?php if(\Cake\Core\Configure::read('debug')) echo __('エラー：テンプレートが正常な場所に配置されていません。') ?>
+	<?php endif ?>
 </div>
