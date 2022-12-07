@@ -78,7 +78,8 @@ class MailFrontService implements MailFrontServiceInterface
             'mailContent' => $mailContent,
             'mailFields' => $this->getMailFields($mailContent->id),
             'mailMessage' => $mailMessage,
-            'editLink' => BcUtil::loginUser()? $this->getEditLink($mailContent->id) : null
+            'editLink' => BcUtil::loginUser()? $this->getEditLink($mailContent->id) : null,
+            'currentWidgetAreaId' => $mailContent->widget_area?? BcSiteConfig::get('widget_area')
         ];
     }
 
@@ -144,7 +145,8 @@ class MailFrontService implements MailFrontServiceInterface
             'mailContent' => $mailContent,
             'mailFields' => $this->getMailFields($mailContent->id),
             'mailMessage' => $mailMessage,
-            'editLink' => BcUtil::loginUser()? $this->getEditLink($mailContent->id) : null
+            'editLink' => BcUtil::loginUser()? $this->getEditLink($mailContent->id) : null,
+            'currentWidgetAreaId' => $mailContent->widget_area?? BcSiteConfig::get('widget_area')
         ];
     }
 

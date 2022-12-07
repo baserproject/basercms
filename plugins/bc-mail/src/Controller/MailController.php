@@ -12,6 +12,7 @@
 namespace BcMail\Controller;
 
 use BaserCore\Error\BcException;
+use BaserCore\Utility\BcSiteConfig;
 use BcMail\Service\Front\MailFrontService;
 use BcMail\Service\Front\MailFrontServiceInterface;
 use BcMail\Service\MailContentsService;
@@ -316,7 +317,10 @@ class MailController extends MailFrontAppController
         $mailContent = $this->getRequest()->getSession()->consume('BcMail.MailContent');
         if (!$mailContent) $this->notFound();
 
-        $this->set('mailContent', $mailContent);
+        $this->set([
+            'mailContent' => $mailContent,
+            'currentWidgetAreaId' => $mailContent->widget_area?? BcSiteConfig::get('widget_area')
+        ]);
         $this->render($service->getThanksTemplate($mailContent));
     }
 

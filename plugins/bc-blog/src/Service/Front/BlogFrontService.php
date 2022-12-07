@@ -12,6 +12,7 @@
 namespace BcBlog\Service\Front;
 
 use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Utility\BcSiteConfig;
 use BaserCore\Utility\BcUtil;
 use BcBlog\Model\Entity\BlogContent;
 use BcBlog\Model\Entity\BlogPost;
@@ -84,7 +85,7 @@ class BlogFrontService implements BlogFrontServiceInterface
                 'action' => 'edit',
                 $blogContent->id
             ] : null,
-            'currentWidgetAreaId' => $blogContent->widget_area
+            'currentWidgetAreaId' => $blogContent->widget_area?? BcSiteConfig::get('widget_area')
         ];
     }
 
@@ -162,7 +163,7 @@ class BlogFrontService implements BlogFrontServiceInterface
                 $request->getAttribute('currentContent')->url,
                 $blogCategory->id
             )),
-            'currentWidgetAreaId' => $blogContent->widget_area
+            'currentWidgetAreaId' => $blogContent->widget_area?? BcSiteConfig::get('widget_area')
         ];
     }
 
@@ -215,7 +216,7 @@ class BlogFrontService implements BlogFrontServiceInterface
             'posts' => $posts,
             'blogArchiveType' => 'author',
             'author' => $author,
-            'currentWidgetAreaId' => $blogContent->widget_area
+            'currentWidgetAreaId' => $blogContent->widget_area?? BcSiteConfig::get('widget_area')
         ];
     }
 
@@ -239,7 +240,7 @@ class BlogFrontService implements BlogFrontServiceInterface
             'posts' => $posts,
             'blogArchiveType' => 'tag',
             'blogTag' => $tag,
-            'currentWidgetAreaId' => $blogContent->widget_area
+            'currentWidgetAreaId' => $blogContent->widget_area?? BcSiteConfig::get('widget_area')
         ];
     }
 
@@ -279,7 +280,7 @@ class BlogFrontService implements BlogFrontServiceInterface
             'year' => $year,
             'month' => $month,
             'day' => $day,
-            'currentWidgetAreaId' => $blogContent->widget_area
+            'currentWidgetAreaId' => $blogContent->widget_area?? BcSiteConfig::get('widget_area')
         ];
     }
 
@@ -326,7 +327,7 @@ class BlogFrontService implements BlogFrontServiceInterface
             'commentUse' => ($isPreview)? false : $blogContent->comment_use,
             'single' => true,
             'crumbs' => $crumbs,
-            'currentWidgetAreaId' => $blogContent->widget_area
+            'currentWidgetAreaId' => $blogContent->widget_area?? BcSiteConfig::get('widget_area')
         ];
     }
 

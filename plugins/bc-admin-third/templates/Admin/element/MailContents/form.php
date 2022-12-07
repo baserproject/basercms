@@ -231,8 +231,11 @@
           &nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
         </th>
         <td class="col-input bca-form-table__input">
-          <?php // TODO ucmitz ウィジェットエリア未実装 ?>
-          <?php //echo $this->BcAdminForm->control('widget_area', ['type' => 'select', 'options' => $this->BcAdminForm->getControlsource('WidgetArea.id'), 'empty' => __d('baser', 'サイト基本設定に従う')]) ?>
+          <?php echo $this->BcAdminForm->control('widget_area', [
+            'type' => 'select',
+            'options' => $this->BcAdminForm->getControlsource('BcWidgetArea.WidgetAreas.id'),
+            'empty' => __d('baser', 'サイト基本設定に従う')
+          ]) ?>
           <i class="bca-icon--question-circle bca-help"></i>
           <?php echo $this->BcAdminForm->error('widget_area') ?>
           <div class="bca-helptext">
