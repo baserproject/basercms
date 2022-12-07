@@ -35,4 +35,16 @@ class WidgetAreasServiceTest extends BcTestCase
         parent::tearDown();
     }
 
+    /**
+     * コントロールソース取得
+     *
+     * @param string $field
+     */
+    public function testGetControlSource()
+    {
+        $this->markTestIncomplete('このテストはまだ確認できていません。WidgetAreasTableより移行済');
+        $result = $this->WidgetArea->getControlSource('id');
+        $this->assertEquals([1 => 'ウィジェットエリア', 2 => 'ブログサイドバー'], $result, 'コントロールソースを取得できません');
+    }
+
 }

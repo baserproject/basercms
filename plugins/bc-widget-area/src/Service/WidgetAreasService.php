@@ -29,6 +29,9 @@ use Throwable;
 class WidgetAreasService implements WidgetAreasServiceInterface
 {
 
+    /**
+     * Constructor
+     */
     public function __construct()
     {
         $this->WidgetAreas = TableRegistry::getTableLocator()->get('BcWidgetArea.WidgetAreas');
@@ -231,6 +234,34 @@ class WidgetAreasService implements WidgetAreasServiceInterface
         }
         $widgetArea->widgets = $widgets;
         return $this->WidgetAreas->saveOrFail($widgetArea);
+    }
+
+    /**
+     * リストを取得する
+     * @return array
+     * @checked
+     * @noTodo
+     */
+    public function getList(): array
+    {
+        return $this->WidgetAreas->find('list')->toArray();
+    }
+
+    /**
+     * コントロールソース取得
+     * @param string $field
+     * @return array
+     * @checked
+     * @noTodo
+     */
+    public function getControlSource(string $field): array
+    {
+        $controllSource['id'] = $this->getList();
+        if (isset($controllSource[$field])) {
+            return $controllSource[$field];
+        } else {
+            return [];
+        }
     }
 
 }

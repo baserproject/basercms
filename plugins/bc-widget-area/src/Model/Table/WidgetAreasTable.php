@@ -47,19 +47,4 @@ class WidgetAreasTable extends AppTable
         ];
     }
 
-    /**
-     * コントロールソース取得
-     * @param string $field
-     * @return array
-     */
-    public function getControlSource($field)
-    {
-        $controllSource['id'] = $this->find('list');
-        if (isset($controllSource[$field])) {
-            return $controllSource[$field];
-        } else {
-            return [];
-        }
-    }
-
 }

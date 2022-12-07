@@ -72,15 +72,4 @@ class WidgetAreaTest extends BaserTestCase
         $this->assertEquals('ウィジェットエリア名は255文字以内で入力してください。', current($this->WidgetArea->validationErrors['name']));
     }
 
-    /**
-     * コントロールソース取得
-     *
-     * @param string $field
-     */
-    public function testGetControlSource()
-    {
-        $result = $this->WidgetArea->getControlSource('id');
-        $this->assertEquals([1 => 'ウィジェットエリア', 2 => 'ブログサイドバー'], $result, 'コントロールソースを取得できません');
-    }
-
 }

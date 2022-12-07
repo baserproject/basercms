@@ -225,7 +225,8 @@ class BlogController extends BlogFrontAppController
                         'blog_content_id' => $blogContent->id,
                         'direction' => $blogContent->list_direction
                     ])),
-                    $author
+                    $author,
+                    $blogContent
                 ));
                 break;
 
@@ -261,7 +262,8 @@ class BlogController extends BlogFrontAppController
                     ])),
                     $year,
                     $month,
-                    $day
+                    $day,
+                    $blogContent
                 ));
                 break;
 

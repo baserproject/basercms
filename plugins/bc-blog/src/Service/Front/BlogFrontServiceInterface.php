@@ -89,7 +89,7 @@ interface BlogFrontServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function getViewVarsForArchivesByAuthor(ResultSet $posts, string $author): array;
+    public function getViewVarsForArchivesByAuthor(ResultSet $posts, string $author, BlogContent $blogContent): array;
 
     /**
      * タグ別アーカイブ一覧の view 用変数を取得する
@@ -116,7 +116,7 @@ interface BlogFrontServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function getViewVarsForArchivesByDate(ResultSet $posts, string $year, string $month, string $day): array;
+    public function getViewVarsForArchivesByDate(ResultSet $posts, string $year, string $month, string $day, BlogContent $blogContent): array;
 
     /**
      * ブログ記事詳細ページの view 用変数を取得する
