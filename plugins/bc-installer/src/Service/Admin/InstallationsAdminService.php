@@ -143,7 +143,9 @@ class InstallationsAdminService extends InstallationsService implements Installa
             $data['dbSchema'] = 'public'; // TODO とりあえずpublic固定
         }
         $sessionData = $request->getSession()->read();
-        $installation = ['Installation' => array_merge($sessionData['Installation'], [
+        $sessionInstallation = [];
+        if(!empty($sessionData['Installation'])) $sessionInstallation = $sessionData['Installation'];
+        $installation = ['Installation' => array_merge($sessionInstallation, [
             'dbType' => $data['dbType'],
             'dbHost' => $data['dbHost'],
             'dbPort' => $data['dbPort'],

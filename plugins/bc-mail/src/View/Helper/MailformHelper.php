@@ -288,13 +288,14 @@ class MailformHelper extends BcFreezeHelper
             'class' => 'auth-captcha-image'
         ], $options);
         $captchaId = mt_rand(0, 99999999);
-        $url = $this->request->getAttribute('currentContent')->url;
-        if (!empty($this->request->getAttribute('currentSite')->same_main_url)) {
-            $url = $this->BcContents->getPureUrl($url, $this->request->getAttribute('currentSite')->id);
+        $request = $this->getView()->getRequest();
+        $url = $request->getAttribute('currentContent')->url;
+        if (!empty($request->getAttribute('currentSite')->same_main_url)) {
+            $url = $this->BcContents->getPureUrl($url, $request->getAttribute('currentSite')->id);
         }
         $output = $this->BcBaser->getImg($url . '/captcha/' . $captchaId, ['alt' => __('認証画像'), 'class' => $options['class']]);
         $output .= $options['separate'] . $this->text($fieldName);
-        $output .= $this->input('MailMessage.captcha_id', ['type' => 'hidden', 'value' => $captchaId]);
+        $output .= $this->control('captcha_id', ['type' => 'hidden', 'value' => $captchaId]);
         echo $output;
     }
 
