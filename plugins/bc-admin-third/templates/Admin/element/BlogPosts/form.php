@@ -34,7 +34,7 @@ $this->BcBaser->i18nScript([
   'alertMessage3' => __d('baser', 'ブログカテゴリの追加に失敗しました。入力したブログカテゴリ名が既に登録されていないか確認してください。'),
   'alertMessage4' => __d('baser', 'ブログカテゴリの追加に失敗しました。')
 ]);
-$this->BcBaser->js('BcBlog.admin/blog_posts/form.bundle', false, [
+$this->BcBaser->js('admin/blog_posts/form.bundle', false, [
   'id' => 'AdminBlogBLogPostsEditScript',
   'data-fullurl' => $fullUrl,
   'data-previewurl' => \Cake\Routing\Router::url(["plugin" => "BaserCore", "controller" => "preview", "action" => "view"]),

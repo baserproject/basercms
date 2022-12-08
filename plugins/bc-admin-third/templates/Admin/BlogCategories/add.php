@@ -22,7 +22,7 @@ $this->BcAdmin->setTitle(sprintf(
   $blogContent->content->title
 ));
 $this->BcAdmin->setHelp('blog_categories_form');
-$this->BcBaser->js('BcBlog.admin/blog_categories/form.bundle', false);
+$this->BcBaser->js('admin/blog_categories/form.bundle', false);
 ?>
 
 

@@ -17,7 +17,7 @@
  */
 
 $this->BcAdmin->setTitle(__d('baser', 'ユーティリティトップ'));
-$this->BcBaser->js('BcAdminThird.admin/utilities/index.bundle', false);
+$this->BcBaser->js('admin/utilities/index.bundle', false);
 ?>
 
 

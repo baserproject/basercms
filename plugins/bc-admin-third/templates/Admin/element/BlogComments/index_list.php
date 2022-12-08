@@ -18,7 +18,7 @@
  * @unitTest
  */
 $this->BcListTable->setColumnNumber(7);
-$this->BcBaser->js('BcBlog.admin/blog_comments/index.bundle', false);
+$this->BcBaser->js('admin/blog_comments/index.bundle', false);
 ?>
 
 

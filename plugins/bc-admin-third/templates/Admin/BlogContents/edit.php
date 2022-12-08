@@ -18,7 +18,7 @@
  */
 $this->BcAdmin->setTitle(__d('baser', 'ブログ設定編集'));
 $this->BcAdmin->setHelp('blog_contents_form');
-$this->BcBaser->js('BcBlog.admin/blog_contents/form.bundle', false);
+$this->BcBaser->js('admin/blog_contents/form.bundle', false);
 $this->BcBaser->i18nScript([
   'confirmMessage1' => __d('baser', 'ブログ設定を保存して、コンテンツテンプレート %s の編集画面に移動します。よろしいですか？')
 ]);
@@ -27,7 +27,7 @@ $this->BcBaser->i18nScript([
 
 <?php echo $this->BcAdminForm->create($blogContent) ?>
 
-<?php $this->BcBaser->element('BcBlog.BlogContents/form') ?>
+<?php $this->BcBaser->element('BlogContents/form') ?>
 
 <?php echo $this->BcAdminForm->submit(__d('baser', '保存'), [
   'div' => false,

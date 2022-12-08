@@ -18,7 +18,7 @@ use BaserCore\View\BcAdminAppView;
  * @var BcAdminAppView $this
  */
 
-$this->BcBaser->js('BcThemeFile.admin/themes/form.bundle', false);
+$this->BcBaser->js('admin/themes/form.bundle', false);
 $params = explode('/', $path);
 $parentPrams = explode('/', $path);
 if ($this->request->action !== 'admin_add') {

@@ -18,7 +18,7 @@
  * @noTodo
  * @unitTest
  */
-$this->BcBaser->js('BcBlog.admin/blog_tags/index.bundle', false);
+$this->BcBaser->js('admin/blog_tags/index.bundle', false);
 $this->BcListTable->setColumnNumber(5);
 ?>
 

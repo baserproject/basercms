@@ -19,7 +19,7 @@
  */
 $this->BcAdmin->setTitle(sprintf(__d('baser', '%s｜カテゴリ一覧'), $blogContent->content->title));
 $this->BcAdmin->setHelp('blog_categories_index');
-$this->BcBaser->js('BcBlog.admin/blog_categories/index.bundle', false);
+$this->BcBaser->js('admin/blog_categories/index.bundle', false);
 $this->BcAdmin->addAdminMainBodyHeaderLinks([
   'url' => ['action' => 'add', $blogContent->id],
   'title' => __d('baser', '新規追加'),
