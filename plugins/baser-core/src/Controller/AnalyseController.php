@@ -247,6 +247,7 @@ class AnalyseController extends AppController
         $file = str_replace('bc-theme-config', 'BcThemeConfig', $file);
         $file = str_replace('bc-theme-file', 'BcThemeFile', $file);
         $file = str_replace('bc-widget-area', 'BcWidgetArea', $file);
+        $file = str_replace('bc-content-link', 'BcContentLink', $file);
         return str_replace('baser-core', 'BaserCore', $file);
     }
 
