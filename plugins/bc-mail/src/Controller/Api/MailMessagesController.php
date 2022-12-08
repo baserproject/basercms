@@ -27,10 +27,19 @@ class MailMessagesController extends BcApiController
     /**
      * [API] 受信メール一覧
      *
+     * @param MailMessagesService $service
+     * @param int $mailContentId
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function index()
+    public function index(MailMessagesServiceInterface $service, int $mailContentId)
     {
-        // TODO 受信メール管理：一覧取得APIを実装
+        $service->setup($mailContentId);
+        $this->set([
+            'mailMessages' => $this->paginate($service->getIndex($this->request->getQueryParams()))
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['mailMessages']);
     }
 
     /**

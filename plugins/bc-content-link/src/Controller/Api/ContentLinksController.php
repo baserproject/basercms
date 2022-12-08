@@ -12,6 +12,7 @@
 namespace BcContentLink\Controller\Api;
 
 use BaserCore\Controller\Api\BcApiController;
+use BaserCore\Error\BcException;
 use BcContentLink\Service\ContentLinksService;
 use BcContentLink\Service\ContentLinksServiceInterface;
 use BaserCore\Annotation\NoTodo;
@@ -19,6 +20,7 @@ use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use Cake\Http\Exception\ForbiddenException;
 use Cake\ORM\Exception\PersistenceFailedException;
+use Throwable;
 
 /**
  * Class ContentLinksController
@@ -27,6 +29,19 @@ use Cake\ORM\Exception\PersistenceFailedException;
  */
 class ContentLinksController extends BcApiController
 {
+
+    /**
+     * initialize
+     * @return void
+     * @checked
+     * @unitTest
+     * @unitTest
+     */
+    public function initialize(): void
+    {
+        parent::initialize();
+        $this->Authentication->allowUnauthenticated(['view']);
+    }
 
     /**
      * コンテンツリンクを登録する（認証要）
@@ -55,19 +70,26 @@ class ContentLinksController extends BcApiController
     public function add(ContentLinksServiceInterface $service)
     {
         $this->request->allowMethod(['post', 'put', 'patch']);
+
+        $entity = $content = $errors = null;
         try {
             $entity = $service->create($this->request->getData());
+            $content = $entity->content;
             $message = __d('baser', 'リンク「{0}」を追加しました。', $entity->content->title);
-        } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
-            $entity = $e->getEntity();
-            $message = __d('baser', "入力エラーです。内容を修正してください。");
+        } catch (PersistenceFailedException $e) {
             $this->setResponse($this->response->withStatus(400));
+            $errors = $e->getEntity()->getErrors();
+            $message = __d('baser', "入力エラーです。内容を修正してください。");
+        } catch (Throwable $e) {
+            $this->setResponse($this->response->withStatus(500));
+            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
         }
+
         $this->set([
             'contentLink' => $entity,
-            'content' => $entity->content,
+            'content' => $content,
             'message' => $message,
-            'errors' => $entity->getErrors()
+            'errors' => $errors
         ]);
         $this->viewBuilder()->setOption('serialize', [
             'contentLink',
@@ -100,22 +122,25 @@ class ContentLinksController extends BcApiController
     public function edit(ContentLinksServiceInterface $service, $id)
     {
         $this->request->allowMethod(['post', 'put']);
-        $contentLink = null;
-        $error = null;
+
+        $contentLink = $errors = null;
 
         try {
             $contentLink = $service->update($service->get($id), $this->request->getData());
             $message = __d('baser', 'コンテンツリンク: 「{0}」を更新しました。', $contentLink->content->title);
-        } catch (\Exception $e) {
+        } catch (PersistenceFailedException $e) {
             $this->setResponse($this->response->withStatus(400));
-            $error = $e->getMessage();
-            $message = __d('baser', '入力エラーです。内容を修正してください。');
+            $errors = $e->getEntity()->getErrors();
+            $message = __d('baser', "入力エラーです。内容を修正してください。");
+        } catch (Throwable $e) {
+            $this->setResponse($this->response->withStatus(500));
+            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
         }
 
         $this->set([
             'message' => $message,
             'contentLink' => $contentLink,
-            'errors' => $error,
+            'errors' => $errors,
         ]);
         $this->viewBuilder()->setOption('serialize', ['message', 'contentLink', 'errors']);
     }
@@ -142,6 +167,8 @@ class ContentLinksController extends BcApiController
     public function delete(ContentLinksServiceInterface $service, $id)
     {
         $this->request->allowMethod(['post', 'delete']);
+
+        $contentLink = $errors = null;
         try {
             $contentLink = $service->get($id);
             if ($service->delete($id)) {
@@ -152,14 +179,17 @@ class ContentLinksController extends BcApiController
             }
         } catch (PersistenceFailedException $e) {
             $this->setResponse($this->response->withStatus(400));
-            $contentLink = $e->getEntity();
-            $message = __d('baser', 'データベース処理中にエラーが発生しました。');
+            $errors = $e->getEntity()->getErrors();
+            $message = __d('baser', "入力エラーです。内容を修正してください。");
+        } catch (Throwable $e) {
+            $this->setResponse($this->response->withStatus(500));
+            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
         }
 
         $this->set([
             'message' => $message,
             'contentLink' => $contentLink,
-            'errors' => $contentLink->getErrors()
+            'errors' => $errors
         ]);
         $this->viewBuilder()->setOption('serialize', ['message', 'contentLink', 'errors']);
     }
@@ -184,26 +214,31 @@ class ContentLinksController extends BcApiController
     {
         $this->request->allowMethod('get');
         $queryParams = $this->getRequest()->getQueryParams();
-        if(isset($queryParams['status'])) {
-            if(!$this->Authentication->getIdentity()) throw new ForbiddenException();
+        if (isset($queryParams['status'])) {
+            if (!$this->Authentication->getIdentity()) throw new ForbiddenException();
         }
 
         $queryParams = array_merge($queryParams, [
             'status' => 'publish'
         ]);
 
-        $contentLink = $message = null;
+        $contentLink = $message = $errors = null;
         try {
             $contentLink = $service->get($id, $queryParams);
-        } catch(\Exception $e) {
-            $this->setResponse($this->response->withStatus(401));
-            $message = $e->getMessage();
+        } catch (PersistenceFailedException $e) {
+            $this->setResponse($this->response->withStatus(400));
+            $errors = $e->getEntity()->getErrors();
+            $message = __d('baser', "入力エラーです。内容を修正してください。");
+        } catch (Throwable $e) {
+            $this->setResponse($this->response->withStatus(500));
+            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
         }
 
         $this->set([
             'contentLink' => $contentLink,
-            'message' => $message
+            'message' => $message,
+            'errors' => $errors
         ]);
-        $this->viewBuilder()->setOption('serialize', ['contentLink', 'message']);
+        $this->viewBuilder()->setOption('serialize', ['contentLink', 'message', 'errors']);
     }
 }
