@@ -14,8 +14,6 @@ namespace BcWidgetArea\Service\Admin;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
-use BaserCore\Service\PluginsService;
-use BaserCore\Service\PluginsServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
 use BcWidgetArea\Model\Entity\WidgetArea;

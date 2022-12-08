@@ -19,6 +19,9 @@ use BcWidgetArea\Service\WidgetAreasServiceInterface;
 use Cake\Core\Configure;
 use Cake\Utility\Inflector;
 use Cake\View\Helper;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * ウィジェットエリアヘルパー

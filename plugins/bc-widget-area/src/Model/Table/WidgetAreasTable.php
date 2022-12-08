@@ -12,6 +12,9 @@
 namespace BcWidgetArea\Model\Table;
 
 use BaserCore\Model\Table\AppTable;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * Class WidgetArea
