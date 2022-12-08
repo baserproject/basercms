@@ -163,7 +163,34 @@ class MailMessagesControllerTest extends BcTestCase
      */
     public function testDelete()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // テストデータを作成する
+        ContentFactory::make([
+            'id' => 9,
+            'name' => 'contact',
+            'plugin' => 'BcMail',
+            'type' => 'MailContent',
+            'entity_id' => 1,
+            'url' => '/contact/',
+            'site_id' => 1,
+            'title' => 'お問い合わせ(※関連Fixture未完了)',
+            'status' => true,
+        ])->persist();
+        MailContentFactory::make(['id' => 1, 'save_info' => 1])->persist();
+        $mailMessageTable = TableRegistry::getTableLocator()->get('BcMail.MailMessages');
+        $mailContentId = 1;
+        $mailMessageTable->setup($mailContentId);
+        // mail_message_1テーブルに１件のレコードを追加する
+        $mailMessageTable->save(new Entity(['id' => 1]));
+
+        // 受信メール追加のAPIを叩く
+        $this->post("/baser/api/bc-mail/mail_messages/delete/$mailContentId/1.json?token=$this->accessToken");
+        $result = json_decode((string)$this->_response->getBody());
+        // レスポンスのコードを確認する
+        $this->assertResponseOk();
+        // レスポンスのメッセージ内容を確認する
+        $this->assertEquals('お問い合わせ(※関連Fixture未完了) への受信データ NO「1」を削除しました。', $result->message);
+        // 削除の結果を確認する
+        $this->assertTrue($result->mailMessage);
     }
 
     /**
