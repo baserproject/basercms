@@ -90,7 +90,20 @@ class MailMessagesControllerTest extends BcTestCase
      */
     public function testView()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // メールメッセージのデータを作成する
+        $mailMessageTable = TableRegistry::getTableLocator()->get('BcMail.MailMessages');
+        $mailContentId = 1;
+        $mailMessageTable->setup($mailContentId);
+        // mail_message_1テーブルに１件のレコードを追加する
+        $mailMessageTable->save(new Entity(['id' => 2]));
+
+        // 受信メール詳細のAPIを叩く
+        $this->get("/baser/api/bc-mail/mail_messages/view/$mailContentId/2.json?token=" . $this->accessToken);
+        // レスポンスのコードを確認する
+        $this->assertResponseOk();
+        // レスポンスのメールメッセージデータを確認する
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals(2, $result->mailMessage->id);
     }
 
     /**

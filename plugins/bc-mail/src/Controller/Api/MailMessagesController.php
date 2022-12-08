@@ -45,10 +45,20 @@ class MailMessagesController extends BcApiController
     /**
      * [API] 受信メール詳細
      *
+     * @param MailMessagesService $service
+     * @param int $mailContentId
+     * @param int $messageId
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function view()
+    public function view(MailMessagesServiceInterface $service, int $mailContentId, int $messageId)
     {
-        // TODO 受信メール管理：単一データ取得APIを実装
+        $service->setup($mailContentId);
+        $this->set([
+            'mailMessage' => $service->get($messageId)
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['mailMessage']);
     }
 
     /**
