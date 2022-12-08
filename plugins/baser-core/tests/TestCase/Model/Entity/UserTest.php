@@ -104,7 +104,8 @@ class UserTest extends BcTestCase
         return [
             ['aiueo', 'yamada', 'tarou', 'aiueo'],
             ['', 'yamada', 'tarou', 'yamada tarou'],
-            ['', '', '', ''],
+            ['', 'yamada', '', 'yamada'],
+            ['', '', '', 'undefined'],
         ];
     }
 }

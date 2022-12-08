@@ -11,6 +11,7 @@
 
 namespace BaserCore\Controller\Component;
 
+use BaserCore\Service\DblogsService;
 use BaserCore\Service\DblogsServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Controller\Component;
@@ -67,6 +68,7 @@ class BcMessageComponent extends Component
 
         if ($saveDblog) {
             try {
+                /** @var DblogsService $dblogs */
                 $dblogs = $this->getService(DblogsServiceInterface::class);
                 $dblogs->create(['message' => $message]);
             } catch (\Exception $e) {

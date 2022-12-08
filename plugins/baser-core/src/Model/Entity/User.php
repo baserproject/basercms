@@ -109,8 +109,13 @@ class User extends EntityAlias
         if (!empty($this->real_name_2)) {
             $userName[] = $this->real_name_2;
         }
-        $userName = implode(' ', $userName);
-        return $userName;
+        if(count($userName) > 1) {
+            return implode(' ', $userName);
+        } elseif(count($userName) === 1) {
+            return $userName[0];
+        } else {
+            return 'undefined';
+        }
     }
 
 }

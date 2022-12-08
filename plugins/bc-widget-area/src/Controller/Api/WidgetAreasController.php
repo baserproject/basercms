@@ -9,7 +9,7 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
- namespace BcWidgetArea\Controller\Api;
+namespace BcWidgetArea\Controller\Api;
 
 use BaserCore\Controller\Api\BcApiController;
 use BaserCore\Annotation\UnitTest;
@@ -25,7 +25,6 @@ use BcWidgetArea\Service\WidgetAreasServiceInterface;
  */
 class WidgetAreasController extends BcApiController
 {
-
 
     /**
      * メールフィールドのバッチ処理
@@ -83,6 +82,7 @@ class WidgetAreasController extends BcApiController
         try {
             $entity = $service->update($entity, $this->getRequest()->getData());
             $message = __d('baser', 'ウィジェットエリア「{0}」を更新しました。', $entity->name);
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (\Throwable $e) {
             $this->setResponse($this->response->withStatus(500));
             $message = __d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
@@ -109,6 +109,7 @@ class WidgetAreasController extends BcApiController
         try {
             $entity = $service->updateWidget($widgetAreaId, $this->getRequest()->getData());
             $message = __d('baser', 'ウィジェットエリア「{0}」を更新しました。', $entity->name);
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (\Throwable $e) {
             $this->setResponse($this->response->withStatus(500));
             $message = __d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
@@ -134,6 +135,7 @@ class WidgetAreasController extends BcApiController
         try {
             $entity = $service->updateSort($widgetAreaId, $this->getRequest()->getData());
             $message = __d('baser', 'ウィジェットエリア「{0}」の並び順を更新しました。', $entity->name);
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (\Throwable $e) {
             $this->setResponse($this->response->withStatus(500));
             $message = __d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
@@ -161,6 +163,7 @@ class WidgetAreasController extends BcApiController
         try {
             $entity = $service->deleteWidget($widgetAreaId, $id);
             $message = __d('baser', 'ウィジェットを削除しました。');
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (\Throwable $e) {
             $this->setResponse($this->response->withStatus(500));
             $message = __d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
