@@ -21,7 +21,7 @@ $this->BcBaser->i18nScript([
   'message6' => __d('baser', 'パスワードは半角英数字(英字は大文字小文字を区別)とスペース、記号(._-:/()#,@[]+=&;{}!$*)のみで入力してください。')
 ]);
 $this->BcAdmin->setTitle(__d('baser', 'baserCMSのインストール｜ステップ４'));
-$this->BcBaser->js('BcInstaller.admin/step4.bundle', false);
+$this->BcBaser->js('admin/installations/step4.bundle', false);
 ?>
 
 

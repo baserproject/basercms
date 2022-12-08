@@ -27,7 +27,7 @@ $this->BcBaser->i18nScript([
   'message7' => __d('baser', 'ドット（.）を含むデータベース名にはインストールできません。'),
   'message8' => __d('baser', 'データベースのポートナンバーを入力してください。')
 ]);
-$this->BcBaser->js('BcInstaller.admin/step3.bundle', false, [
+$this->BcBaser->js('admin/installations/step3.bundle', false, [
   'id' => 'AdminInstallersScript',
   'data-dbSettingOk' => $blDBSettingsOK
 ]);

@@ -35,7 +35,7 @@
  * @var bool $xmlOk
  * @var bool $blRequirementsMet
  */
-$this->BcBaser->js('BcInstaller.admin/step2.bundle', false);
+$this->BcBaser->js('admin/installations/step2.bundle', false);
 $this->BcAdmin->setTitle(__d('baser', 'baserCMSのインストール｜ステップ２'));
 ?>
 

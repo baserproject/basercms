@@ -69,7 +69,6 @@ class SiteConfigsAdminServiceTest extends BcTestCase
         $this->assertTrue(isset($vars['siteConfig']));
         $this->assertTrue(isset($vars['isWritableEnv']));
         $this->assertTrue(isset($vars['modeList']));
-        $this->assertTrue(isset($vars['widgetAreaList']));
         $this->assertTrue(isset($vars['adminThemeList']));
         $this->assertTrue(isset($vars['editorList']));
         $this->assertTrue(isset($vars['mailEncodeList']));
