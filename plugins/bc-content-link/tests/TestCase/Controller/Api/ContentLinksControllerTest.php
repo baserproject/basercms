@@ -74,6 +74,15 @@ class ContentLinksControllerTest extends BcTestCase
     }
 
     /**
+     * test initialize
+     */
+    public function test_initialize()
+    {
+        $controller = new ContentLinksController($this->getRequest());
+        $this->assertEquals($controller->Authentication->unauthenticatedActions, ['view']);
+    }
+
+    /**
      * test add
      */
     public function test_add()
@@ -137,10 +146,10 @@ class ContentLinksControllerTest extends BcTestCase
         $this->assertEquals('/test-edit', $result->contentLink->url);
 
         $this->post('/baser/api/bc-content-link/content_links/edit/10.json?token=' . $this->accessToken, $data);
-        $this->assertResponseCode(400);
+        $this->assertResponseCode(500);
         $result = json_decode((string)$this->_response->getBody());
-        $this->assertEquals('入力エラーです。内容を修正してください。', $result->message);
-        $this->assertEquals('Record not found in table "content_links"', $result->errors);
+        $this->assertEquals('データベース処理中にエラーが発生しました。Record not found in table "content_links"', $result->message);
+
 
         $data = [
             'id' => 1,
@@ -151,10 +160,10 @@ class ContentLinksControllerTest extends BcTestCase
             ]
         ];
         $this->post('/baser/api/bc-content-link/content_links/edit/1.json?token=' . $this->accessToken, $data);
-        $this->assertResponseCode(400);
+        $this->assertResponseCode(500);
         $result = json_decode((string)$this->_response->getBody());
-        $this->assertEquals('入力エラーです。内容を修正してください。', $result->message);
-        $this->assertEquals('Cannot convert value of type `string` to integer', $result->errors);
+        $this->assertEquals('データベース処理中にエラーが発生しました。Cannot convert value of type `string` to integer', $result->message);
+
     }
 
     /**
@@ -185,9 +194,9 @@ class ContentLinksControllerTest extends BcTestCase
         $this->assertResponseCode(405);
 
         $this->post('/baser/api/bc-content-link/content_links/delete/10000.json?token=' . $this->accessToken);
-        $this->assertResponseCode(404);
+        $this->assertResponseCode(500);
         $result = json_decode((string)$this->_response->getBody());
-        $this->assertEquals('Record not found in table "content_links"', $result->message);
+        $this->assertEquals('データベース処理中にエラーが発生しました。Record not found in table "content_links"', $result->message);
     }
 
     /**
@@ -195,6 +204,7 @@ class ContentLinksControllerTest extends BcTestCase
      */
     public function test_view()
     {
+        // データを生成
         ContentLinkFactory::make(['id' => 1, 'url' => '/test-delete'])->persist();
         ContentFactory::make([
             'id' => 1,
@@ -220,14 +230,29 @@ class ContentLinksControllerTest extends BcTestCase
             'status' => false
         ])->persist();
 
-        $this->get('/baser/api/bc-content-link/content_links/view/1.json?token=' . $this->accessToken);
+        // ログインしていないかつ公開ContentLinkIDをテスト場合、
+        $this->get('/baser/api/bc-content-link/content_links/view/1.json');
+        // レスポンスを確認
         $this->assertResponseOk();
+        // 戻る値を確認
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals('test link', $result->contentLink->content->title);
 
-        $this->get('/baser/api/bc-content-link/content_links/view/2.json?token=' . $this->accessToken);
-        $this->assertResponseCode(401);
+        //非公開ContentLinkIDをテスト場合、
+        // APIを呼ぶ
+        $this->get('/baser/api/bc-content-link/content_links/view/2.json');
+        $this->assertResponseCode(500);
         $result = json_decode((string)$this->_response->getBody());
-        $this->assertEquals('Record not found in table "content_links"', $result->message);
+        $this->assertEquals('データベース処理中にエラーが発生しました。Record not found in table "content_links"', $result->message);
+
+        //ログインしていない状態では status パラメーターへへのアクセスを禁止するか確認
+        $this->get('/baser/api/bc-content-link/content_links/view/1.json?status=publish');
+        // レスポンスを確認
+        $this->assertResponseCode(403);
+
+        //ログインしている状態では status パラメーターへへのアクセできるか確認
+        $this->get('/baser/api/bc-content-link/content_links/view/1.json?status=publish&token=' . $this->accessToken);
+        // レスポンスを確認
+        $this->assertResponseOk();
     }
 }
