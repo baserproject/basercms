@@ -40,8 +40,7 @@ $(function () {
             });
         },
         update: function (event, ui) {
-            // jQueryUI 1.8.14 より、 ui.item.attr("id")で id が取得できない
-            if ($(ui.item.prevObject.prevObject).attr("id").match(/^Setting/i)) {
+            if ($(ui.item).attr("id") !== undefined && $(ui.item).attr("id").match(/^Setting/i)) {
                 widgetAreaUpdateSortedIds();
                 return;
             }
