@@ -695,7 +695,11 @@ class InstallationsService implements InstallationsServiceInterface
      */
     public function sendCompleteMail(array $postData)
     {
-        $this->getMailer('BcInstaller.Admin/Installer')->send('installed', [$postData['admin_email']]);
+        try {
+            $this->getMailer('BcInstaller.Admin/Installer')->send('installed', [$postData['admin_email']]);
+        } catch (\Throwable $e) {
+            throw $e;
+        }
     }
 
 }
