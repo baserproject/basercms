@@ -12,97 +12,85 @@
 namespace BcUploader\Controller\Admin;
 
 use BaserCore\Controller\Admin\BcAdminAppController;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
+use BcUploader\Service\UploadCategoriesService;
+use BcUploader\Service\UploadCategoriesServiceInterface;
+use Cake\ORM\Exception\PersistenceFailedException;
+use Throwable;
 
 /**
- * ファイルカテゴリコントローラー
- *
- * @package         Uploader.Controller
+ * アップロードカテゴリコントローラー
  */
 class UploaderCategoriesController extends BcAdminAppController
 {
 
     /**
-     * コンポーネント
-     *
-     * @var        array
-     * @access    public
-     */
-    public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure'];
-
-    /**
      * ファイルカテゴリ一覧
      *
-     * @return    void
-     * @access    public
+     * @param UploadCategoriesService $service
+     * @return void
+     * @checked
+     * @noTodo
      */
-    public function admin_index()
+    public function index(UploadCategoriesServiceInterface $service)
     {
-
-        $this->setTitle(__d('baser', 'カテゴリ一覧'));
-        $default = ['named' => ['num' => $this->siteConfigs['admin_list_num']]];
-        $this->setViewConditions('UploaderCategory', ['default' => $default]);
-        $this->paginate = [
-            'order' => 'UploaderCategory.id',
-            'limit' => $this->passedArgs['num']
-        ];
-        $this->set('datas', $this->paginate('UploaderCategory'));
+        $this->set(['uploaderCategories' => $service->getIndex()->all()]);
     }
 
     /**
      * 新規登録
      *
-     * @return    void
-     * @access    public
+     * @param UploadCategoriesService $service
+     * @return void
+     * @checked
+     * @noTodo
      */
-    public function admin_add()
+    public function add(UploadCategoriesServiceInterface $service)
     {
-
-        if ($this->request->getData()) {
-            $this->UploaderCategory->set($this->request->getData());
-            if ($this->UploaderCategory->save()) {
-                $message = sprintf(__d('baser', 'アップロードファイルカテゴリ「%s」を追加しました。'), $this->request->getData('UploaderCategory.name'));
-                $this->BcMessage->setInfo($message);
-                $this->UploaderCategory->saveDbLog($message);
+        if($this->getRequest()->is(['post', 'put'])) {
+            try {
+                $entity = $service->create($this->getRequest()->getData());
+                $this->BcMessage->setSuccess(__d('baser', 'アップロードカテゴリ「{0}」を追加しました。', $entity->name));
                 $this->redirect(['action' => 'index']);
-            } else {
-                $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
+            } catch (PersistenceFailedException $e) {
+                $entity = $e->getEntity();
+                $this->BcMessage->setError(__d('baser', "入力エラーです。内容を修正してください。"));
+            } catch (Throwable $e) {
+                $this->setResponse($this->response->withStatus(500));
+                $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage()));
             }
         }
-        $this->setTitle(__d('baser', 'カテゴリ新規登録'));
-        $this->render('form');
+        $this->set(['uploaderCategory' => $entity?? $service->getNew()]);
     }
 
     /**
      * 編集
      *
-     * @return    void
-     * @access    public
+     * @param UploadCategoriesService $service
+     * @param $id
+     * @return void
+     * @checked
+     * @noTodo
      */
-    public function admin_edit($id = null)
+    public function edit(UploadCategoriesServiceInterface $service, $id)
     {
-
-
-        /* 除外処理 */
-        if (!$id && empty($this->request->getData())) {
-            $this->BcMessage->setError(__d('baser', '無効なIDです。'));
-            $this->redirect(['action' => 'index']);
-        }
-
-        if (empty($this->request->getData())) {
-            $this->request = $this->request->withData('UploadCategory', $this->UploaderCategory->read(null, $id));
-        } else {
-
-            $this->UploaderCategory->set($this->request->getData());
-            if ($this->UploaderCategory->save()) {
-                $this->BcMessage->setSuccess(sprintf(__d('baser', 'アップロードファイルカテゴリ「%s」を更新しました。'), $this->request->getData('UploaderCategory.name')));
-                $this->redirect(['action' => 'edit', $id]);
-            } else {
-                $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
+        $entity = $service->get($id);
+        if($this->getRequest()->is(['post', 'put'])) {
+            try {
+                $entity = $service->update($entity, $this->getRequest()->getData());
+                $this->BcMessage->setSuccess(__d('baser', 'アップロードカテゴリ「{0}」を更新しました。', $entity->name));
+                $this->redirect(['action' => 'index']);
+            } catch (PersistenceFailedException $e) {
+                $entity = $e->getEntity();
+                $this->BcMessage->setError(__d('baser', "入力エラーです。内容を修正してください。"));
+            } catch (Throwable $e) {
+                $this->setResponse($this->response->withStatus(500));
+                $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage()));
             }
         }
-
-        $this->setTitle(__d('baser', 'カテゴリ編集'));
-        $this->render('form');
+        $this->set(['uploaderCategory' => $entity]);
     }
 
     /**
@@ -110,104 +98,45 @@ class UploaderCategoriesController extends BcAdminAppController
      *
      * @param int $id
      * @return    void
-     * @access    public
+     * @checked
+     * @noTodo
      */
-    public function admin_delete($id = null)
+    public function delete(UploadCategoriesServiceInterface $service, int $id)
     {
-        $this->_checkSubmitToken();
-        if (!$id) {
-            $this->BcMessage->setError(__d('baser', '無効なIDです。'));
-            $this->redirect(['action' => 'index']);
-        }
-
-        // メッセージ用にデータを取得
-        $name = $this->UploaderCategory->field('name', ['UploaderCategory.id' => $id]);
-
-        if ($this->UploaderCategory->delete($id)) {
-            $this->BcMessage->setSuccess(sprintf(__d('baser', 'アップロードファイルカテゴリ「%s」を削除しました。'), $name));
-        } else {
-            $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。'));
-        }
-
-        $this->redirect('index');
-    }
-
-    /**
-     * [ADMIN] 削除処理　(ajax)
-     *
-     * @param int $uploaderCategoryId
-     * @param int $id
-     * @return void
-     */
-    public function admin_ajax_delete($id = null)
-    {
-        $this->_checkSubmitToken();
-
-        if (!$id) {
-            $this->ajaxError(500, __d('baser', '無効な処理です。'));
-        }
-
-        // 削除実行
-        if ($this->_del($id)) {
-            clearViewCache();
-            exit(true);
-        } else {
-            exit();
-        }
-    }
-
-    /**
-     * 一括削除
-     *
-     * @param array $ids
-     * @return boolean
-     */
-    public function _batch_del($ids)
-    {
-
-        if ($ids) {
-            foreach ($ids as $id) {
-                $this->_del($id);
+        $this->request->allowMethod(['post', 'delete']);
+        $entity = $service->get($id);
+        try {
+            if($service->delete($id)) {
+                $this->BcMessage->setSuccess(__d('baser', 'アップロードカテゴリ「{0}」を削除しました。', $entity->name));
+            } else {
+                $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。'));
             }
+        } catch (\Throwable $e) {
+            $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
         }
-        return true;
-    }
-
-    /**
-     * データを削除する
-     *
-     * @param int $id
-     * @return boolean
-     */
-    public function _del($id = null)
-    {
-        // メッセージ用にデータを取得
-        $data = $this->UploaderCategory->read(null, $id);
-        // 削除実行
-        if ($this->UploaderCategory->delete($id)) {
-            $this->UploaderCategory->saveDbLog(sprintf(__d('baser', '%s を削除しました。'), $data['UploaderCategory']['name']));
-            return true;
-        } else {
-            return false;
-        }
+        return $this->redirect(['action' => 'index']);
     }
 
     /**
      * [ADMIN] コピー
      *
+     * @param UploadCategoriesServiceInterface $service
      * @param int $id
-     * @return void
+     * @checked
+     * @noTodo
      */
-    public function admin_ajax_copy($id = null)
+    public function copy(UploadCategoriesServiceInterface $service, $id)
     {
-        $this->_checkSubmitToken();
-        $result = $this->UploaderCategory->copy($id);
-        if ($result) {
-            $result['UploaderCategory']['id'] = $this->UploaderCategory->getInsertID();
-            $this->setViewConditions('UploaderCategory', ['action' => 'admin_index']);
-            $this->set('data', $result);
-        } else {
-            $this->ajaxError(500, $this->UploaderCategory->validationErrors);
+        try {
+            if($service->copy($id)) {
+                $entity = $service->get($id);
+                $this->BcMessage->setSuccess(__d('baser', 'アップロードカテゴリ「{0}」をコピーしました。', $entity->name));
+            } else {
+                $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。'));
+            }
+        } catch (\Throwable $e) {
+            $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
         }
+        return $this->redirect(['action' => 'index']);
     }
 }

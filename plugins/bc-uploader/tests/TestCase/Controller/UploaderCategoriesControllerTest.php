@@ -76,30 +76,6 @@ class UploaderCategoriesControllerTest extends BaserTestCase
     }
 
     /**
-     * [ADMIN] 削除処理　(ajax)
-     */
-    public function testAdmin_ajax_delete()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
-    /**
-     * 一括削除
-     */
-    public function test_batch_del()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
-    /**
-     * データを削除する
-     */
-    public function test_del()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
-    /**
      * [ADMIN] コピー
      */
     public function testAdmin_ajax_copy()

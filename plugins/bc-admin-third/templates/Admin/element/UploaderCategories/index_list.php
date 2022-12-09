@@ -1,29 +1,44 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package            Uploader.View
- * @since           baserCMS v 3.0.10
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) NPO baser foundation
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       https://basercms.net/license/index.html MIT License
+ */
+
+/**
+ * @var \BaserCore\View\BcAdminAppView $this
+ * @var \Cake\ORM\ResultSet $uploaderCategories
+ * @checked
+ * @noTodo
+ * @unitTest
  */
 $this->BcListTable->setColumnNumber(5);
+$this->BcBaser->js('admin/uploader_categories/index.bundle');
 ?>
+
 
 <div class="bca-data-list__top">
   <!-- 一括処理 -->
   <?php if ($this->BcBaser->isAdminUser()): ?>
     <div class="bca-action-table-listup">
-      <?php echo $this->BcAdminForm->control('batch', ['type' => 'select', 'options' => ['del' => __d('baser', '削除')], 'empty' => __d('baser', '一括処理'), 'data-bca-select-size' => 'lg']) ?>
-      <?php echo $this->BcAdminForm->button(__d('baser', '適用'), ['id' => 'BtnApplyBatch', 'disabled' => 'disabled', 'class' => 'bca-btn', 'data-bca-btn-size' => 'lg']) ?>
+      <?php echo $this->BcAdminForm->control('batch', [
+        'type' => 'select',
+        'options' => ['delete' => __d('baser', '削除')],
+        'empty' => __d('baser', '一括処理'),
+        'data-bca-select-size' => 'lg'
+      ]) ?>
+      <?php echo $this->BcAdminForm->button(__d('baser', '適用'), [
+        'id' => 'BtnApplyBatch',
+        'disabled' => 'disabled',
+        'class' => 'bca-btn',
+        'data-bca-btn-size' => 'lg'
+      ]) ?>
     </div>
   <?php endif ?>
-  <div class="bca-data-list__sub">
-    <!-- pagination -->
-    <?php $this->BcBaser->element('pagination') ?>
-  </div>
 </div>
 
 <table class="list-table sort-table bca-table-listup" id="ListTable">
@@ -39,39 +54,49 @@ $this->BcListTable->setColumnNumber(5);
     <th style="white-space: nowrap" class="bca-table-listup__thead-th">
       <?php echo $this->Paginator->sort('id', [
         'asc' => '<i class="bca-icon--asc"></i>' . __d('baser', 'No'),
-        'desc' => '<i class="bca-icon--desc"></i>' . __d('baser', 'No')], ['escape' => false, 'class' => 'btn-direction bca-table-listup__a']) ?>
+        'desc' => '<i class="bca-icon--desc"></i>' . __d('baser', 'No')], [
+        'escape' => false,
+        'class' => 'btn-direction bca-table-listup__a'
+      ]) ?>
     </th>
     <th style="white-space: nowrap" class="bca-table-listup__thead-th">
       <?php echo $this->Paginator->sort('name', [
         'asc' => '<i class="bca-icon--asc"></i>' . __d('baser', 'カテゴリ名'),
-        'desc' => '<i class="bca-icon--desc"></i>' . __d('baser', 'カテゴリ名')], ['escape' => false, 'class' => 'btn-direction bca-table-listup__a']) ?>
+        'desc' => '<i class="bca-icon--desc"></i>' . __d('baser', 'カテゴリ名')], [
+        'escape' => false,
+        'class' => 'btn-direction bca-table-listup__a'
+      ]) ?>
     </th>
     <?php echo $this->BcListTable->dispatchShowHead() ?>
     <th style="white-space: nowrap" class="bca-table-listup__thead-th">
       <?php echo $this->Paginator->sort('created', [
         'asc' => '<i class="bca-icon--asc"></i>' . __d('baser', '登録日'),
-        'desc' => '<i class="bca-icon--desc"></i>' . __d('baser', '登録日')], ['escape' => false, 'class' => 'btn-direction bca-table-listup__a']) ?>
+        'desc' => '<i class="bca-icon--desc"></i>' . __d('baser', '登録日')], [
+        'escape' => false, 'class' =>
+        'btn-direction bca-table-listup__a'
+      ]) ?>
       <br/>
       <?php echo $this->Paginator->sort('modified', [
         'asc' => '<i class="bca-icon--asc"></i>' . __d('baser', '更新日'),
-        'desc' => '<i class="bca-icon--desc"></i>' . __d('baser', '更新日')], ['escape' => false, 'class' => 'btn-direction bca-table-listup__a']) ?>
+        'desc' => '<i class="bca-icon--desc"></i>' . __d('baser', '更新日')], [
+        'escape' => false,
+        'class' => 'btn-direction bca-table-listup__a'
+      ]) ?>
     </th>
     <th class="bca-table-listup__thead-th">アクション</th>
   </tr>
   </thead>
   <tbody>
-  <?php if (!empty($datas)): ?>
-    <?php foreach($datas as $data): ?>
-      <?php $this->BcBaser->element('uploader_categories/index_row', ['data' => $data]) ?>
+  <?php if ($uploaderCategories->count()): ?>
+    <?php foreach($uploaderCategories as $uploaderCategory): ?>
+      <?php $this->BcBaser->element('UploaderCategories/index_row', ['uploaderCategory' => $uploaderCategory]) ?>
     <?php endforeach; ?>
   <?php else: ?>
     <tr>
-      <td colspan="<?php echo $this->BcListTable->getColumnNumber() ?>"><p
-          class="no-data"><?php echo __d('baser', 'データが見つかりませんでした。') ?></p></td>
+      <td colspan="<?php echo $this->BcListTable->getColumnNumber() ?>">
+        <p class="no-data"><?php echo __d('baser', 'データが見つかりませんでした。') ?></p>
+      </td>
     </tr>
   <?php endif; ?>
   </tbody>
 </table>
-
-<!-- list-num -->
-<?php $this->BcBaser->element('list_num') ?>

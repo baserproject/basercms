@@ -15,6 +15,9 @@ use ArrayObject;
 use BaserCore\Model\Table\AppTable;
 use Cake\Datasource\EntityInterface;
 use Cake\Event\EventInterface;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
 
 /**
  * ファイルアップローダーモデル
@@ -61,7 +64,7 @@ class UploaderFilesTable extends AppTable
      * @param string $table
      * @param string $ds
      */
-    public function __construct($id = false, $table = null, $ds = null)
+    /*public function __construct($id = false, $table = null, $ds = null)
     {
         $this->validate = [
             'publish_begin' => [
@@ -110,7 +113,7 @@ class UploaderFilesTable extends AppTable
         // BcUploadBehavior より優先順位をあげる為登録、イベントを登録しなおす
         $this->getEventManager()->detach([$this, 'beforeDelete'], 'Model.beforeDelete');
         $this->getEventManager()->attach([$this, 'beforeDelete'], 'Model.beforeDelete', ['priority' => 5]);
-    }
+    }*/
 
     /**
      * Before Save

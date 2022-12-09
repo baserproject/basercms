@@ -11,7 +11,14 @@
 
  namespace BcUploader\Model\Table;
 
+use BaserCore\Event\BcEventDispatcherTrait;
 use BaserCore\Model\Table\AppTable;
+use Cake\Datasource\EntityInterface;
+use Cake\ORM\Exception\PersistenceFailedException;
+use Cake\Validation\Validator;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * ファイルカテゴリモデル
@@ -22,71 +29,103 @@ class UploaderCategoriesTable extends AppTable
 {
 
     /**
-     * バリデート
-     *
-     * @var        array
-     * @access    public
+     * Trait
      */
-    public $validate = [
-        'name' => [
-            [
-                'rule' => ['notBlank'],
-                'message' => 'カテゴリ名を入力してください。'
-            ]
-        ]
-    ];
+    use BcEventDispatcherTrait;
+
+    /**
+     * Initialize
+     *
+     * @param array $config テーブル設定
+     * @return void
+     * @checked
+     * @noTodo
+     */
+    public function initialize(array $config): void
+    {
+        parent::initialize($config);
+
+        $this->setTable('uploader_categories');
+        $this->setPrimaryKey('id');
+
+        $this->addBehavior('Timestamp');
+        $this->hasMany('UploaderFiles', [
+            'className' => 'BcUploader.UploaderFiles',
+            'order' => 'created DESC',
+            'foreignKey' => 'uploader_category_id',
+            'dependent' => true,
+            'exclusive' => false,
+        ]);
+    }
+
+    /**
+     * MailField constructor.
+     *
+     * @param bool $id
+     * @param null $table
+     * @param null $ds
+     * @checked
+     * @noTodo
+     */
+    public function validationDefault(Validator $validator): Validator
+    {
+        $validator
+            ->integer('id')
+            ->allowEmptyString('id', null, 'create');
+        $validator
+            ->scalar('name')
+            ->notEmptyString('name', __d('baser', 'カテゴリ名を入力してください。'));
+        return $validator;
+    }
 
     /**
      * コピーする
      *
      * @param int $id
-     * @param array $data
-     * @return mixed page Or false
+     * @param EntityInterface $entity
+     * @return EntityInterface|false
+     * @checked
+     * @noTodo
      */
-    public function copy($id = null, $data = [])
+    public function copy($id = null, $entity = [])
     {
-        if ($id) {
-            $data = $this->find('first', ['conditions' => ['UploaderCategory.id' => $id]]);
-        }
-        $oldData = $data;
+        if ($id) $entity = $this->find()->where(['UploaderCategories.id' => $id])->first();
+        $oldEntity = clone $entity;
 
         // EVENT UploaderCategories.beforeCopy
         $event = $this->dispatchLayerEvent('beforeCopy', [
-            'data' => $data,
+            'data' => $entity,
             'id' => $id,
         ]);
         if ($event !== false) {
-            $data = $event->getResult() === true ? $event->getData('data') : $event->getResult();
+            $entity = $event->getResult() === true ? $event->getData('data') : $event->getResult();
         }
 
-        $data['UploaderCategory']['name'] .= '_copy';
-        $data['UploaderCategory']['id'] = $this->getMax('id', ['UploaderCategory.id' => $data['UploaderCategory']['id']]) + 1;
+        $entity->name .= '_copy';
+        unset($entity->id);
+        unset($entity->created);
+        unset($entity->modified);
 
-        unset($data['UploaderCategory']['id']);
-        unset($data['UploaderCategory']['created']);
-        unset($data['UploaderCategory']['modified']);
-
-        $this->create($data);
-        $result = $this->save();
-        if ($result) {
-            $result['UploaderCategory']['id'] = $this->getLastInsertID();
-            $data = $result;
+        try {
+            $entity = $this->saveOrFail($this->patchEntity($this->newEmptyEntity(), $entity->toArray()));
 
             // EVENT UploaderCategories.afterCopy
-            $event = $this->dispatchLayerEvent('afterCopy', [
-                'id' => $data['UploaderCategory']['id'],
-                'data' => $data,
+            $this->dispatchLayerEvent('afterCopy', [
+                'id' => $entity->id,
+                'data' => $entity,
                 'oldId' => $id,
-                'oldData' => $oldData,
+                'oldData' => $oldEntity,
             ]);
 
-            return $result;
-        } else {
-            if (isset($this->validationErrors['name'])) {
-                return $this->copy(null, $data);
-            } else {
-                return false;
+            return $entity;
+        } catch (PersistenceFailedException $e) {
+            $entity = $e->getEntity();
+            if($entity->getError('name')) {
+                return $this->copy(null, $entity);
             }
+            throw $e;
+        } catch (\Throwable $e) {
+            throw $e;
         }
     }
 }

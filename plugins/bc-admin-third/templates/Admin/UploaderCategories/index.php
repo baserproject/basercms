@@ -1,38 +1,28 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package            Uploader.View
- * @since           baserCMS v 3.0.10
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) NPO baser foundation
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       https://basercms.net/license/index.html MIT License
  */
-$this->BcBaser->js([
-  'admin/libs/jquery.baser_ajax_data_list',
-  'admin/libs/jquery.baser_ajax_batch',
-  'admin/libs/baser_ajax_data_list_config',
-  'admin/libs/baser_ajax_batch_config'
-]);
+
+/**
+ * @var \BaserCore\View\BcAdminAppView $this
+ * @checked
+ * @noTodo
+ * @unitTest
+ */
 $this->BcAdmin->addAdminMainBodyHeaderLinks([
   'url' => ['action' => 'add'],
   'title' => __d('baser', '新規追加'),
 ]);
+$this->BcAdmin->setTitle(__d('baser', 'カテゴリ一覧'));
 ?>
 
-<script>
-  $(function () {
-    $.baserAjaxDataList.init();
-    $.baserAjaxBatch.init({url: $("#AjaxBatchUrl").html()});
-  });
-</script>
 
-<div id="AjaxBatchUrl" style="display:none">
-  <?php $this->BcBaser->url(['controller' => 'uploader_categories', 'action' => 'ajax_batch']) ?>
-</div>
-<div id="AlertMessage" class="message" style="display:none">
-</div>
 <div id="DataList" class="bca-data-list">
-  <?php $this->BcBaser->element('uploader_categories/index_list') ?>
+  <?php $this->BcBaser->element('UploaderCategories/index_list') ?>
 </div>

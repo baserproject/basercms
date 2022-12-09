@@ -16,6 +16,8 @@ use BaserCore\BcPlugin;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use BcUploader\ServiceProvider\BcUploaderServiceProvider;
+use Cake\Core\ContainerInterface;
 
 /**
  * plugin for BcUploader
@@ -42,6 +44,17 @@ class Plugin extends BcPlugin
     {
         // ここに必要なアンインストール処理を記述
         return parent::uninstall($options);
+    }
+
+    /**
+     * services
+     * @param ContainerInterface $container
+     * @noTodo
+     * @checked
+     */
+    public function services(ContainerInterface $container): void
+    {
+        $container->addServiceProvider(new BcUploaderServiceProvider());
     }
 
 }
