@@ -16,7 +16,7 @@
  * @noTodo
  * @unitTest
  */
-$this->BcAdmin->setTitle(__d('baser', 'カテゴリ新規登録'));
+$this->BcAdmin->setTitle(__d('baser', 'アップロードカテゴリ新規登録'));
 ?>
 
 

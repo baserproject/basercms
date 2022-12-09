@@ -16,7 +16,7 @@
  * @noTodo
  * @unitTest
  */
-$this->BcAdmin->setTitle(__d('baser', 'カテゴリ編集'));
+$this->BcAdmin->setTitle(__d('baser', 'アップロードカテゴリ編集'));
 ?>
 
 

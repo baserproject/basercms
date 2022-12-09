@@ -43,7 +43,7 @@ return [
                                 'action' => 'index'
                             ]],
                         'UploaderCategories' => [
-                            'title' => __d('baser', 'カテゴリ'),
+                            'title' => __d('baser', 'アップロードカテゴリ'),
                             'url' => [
                                 'prefix' => 'Admin',
                                 'plugin' => 'BcUploader',
