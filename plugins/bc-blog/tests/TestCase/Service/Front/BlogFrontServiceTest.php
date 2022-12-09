@@ -182,7 +182,7 @@ class BlogFrontServiceTest extends BcTestCase
             'id' => 1,
             'template' => 'template-1'
         ])->persist();
-        $BlogContentsService =  $this->getService(BlogContentsServiceInterface::class);
+        $BlogContentsService = $this->getService(BlogContentsServiceInterface::class);
         $rs = $this->BlogFrontService->getIndexTemplate($BlogContentsService->get(1));
         $this->assertEquals($rs, 'Blog/template-1/index');
     }
@@ -430,6 +430,70 @@ class BlogFrontServiceTest extends BcTestCase
      * test getViewVarsForArchivesByAuthor
      */
     public function test_getViewVarsForArchivesByAuthor()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * test getCategoryCrumbs
+     */
+    public function test_getCategoryCrumbs()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * test setupPreviewForArchives
+     */
+    public function test_setupPreviewForArchives()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * test getViewVarsForBlogAuthorArchivesWidget
+     */
+    public function test_getViewVarsForBlogAuthorArchivesWidget()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * test getViewVarsForBlogCalendarWidget
+     */
+    public function test_getViewVarsForBlogCalendarWidget()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * test getViewVarsForBlogCategoryArchivesWidget
+     */
+    public function test_getViewVarsForBlogCategoryArchivesWidget()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * test getViewVarsForBlogYearlyArchivesWidget
+     */
+    public function test_getViewVarsForBlogYearlyArchivesWidget()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * test getViewVarsBlogMonthlyArchivesWidget
+     */
+    public function test_getViewVarsBlogMonthlyArchivesWidget()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * test getViewVarsRecentEntriesWidget
+     */
+    public function test_getViewVarsRecentEntriesWidget()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
