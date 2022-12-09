@@ -15,8 +15,10 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Controller\Api\BcApiController;
+use BcMail\Service\MailContentsServiceInterface;
 use BcMail\Service\MailMessagesService;
 use BcMail\Service\MailMessagesServiceInterface;
+use Cake\ORM\Exception\PersistenceFailedException;
 
 /**
  * メールフィールドコントローラー
@@ -45,19 +47,64 @@ class MailMessagesController extends BcApiController
     /**
      * [API] 受信メール詳細
      *
+     * @param MailMessagesService $service
+     * @param int $mailContentId
+     * @param int $messageId
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function view()
+    public function view(MailMessagesServiceInterface $service, int $mailContentId, int $messageId)
     {
-        // TODO 受信メール管理：単一データ取得APIを実装
+        $service->setup($mailContentId);
+        $this->set([
+            'mailMessage' => $service->get($messageId)
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['mailMessage']);
     }
 
     /**
      * [API] 受信メール追加
      *
+     * @param MailMessagesService $service
+     * @param MailContentsServiceInterface $mailContentsService
+     * @param int $mailContentId
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function add()
+    public function add(
+        MailMessagesServiceInterface $service,
+        MailContentsServiceInterface $mailContentsService,
+        int $mailContentId
+    )
     {
-        // TODO 受信メール管理：新規追加APIを実装
+        $this->request->allowMethod(['post']);
+        try {
+            $service->setup($mailContentId);
+            $mailContent = $mailContentsService->get($mailContentId);
+            $mailMessage = $service->create($mailContent, $this->request->getData());
+            $message = __d(
+                'baser',
+                '{0} への受信データ NO「{1}」を追加しました。',
+                $mailContent->content->title,
+                $mailMessage->id
+            );
+        } catch (PersistenceFailedException $e) {
+            $this->setResponse($this->response->withStatus(400));
+            $mailMessage = $e->getEntity();
+            $message = __d('baser', '入力エラーです。内容を修正してください。');
+        } catch (\Throwable $e) {
+            $this->setResponse($this->response->withStatus(500));
+            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $mailMessage = null;
+        }
+        $this->set([
+            'message' => $message,
+            'mailMessage' => $mailMessage,
+            'errors' => !!$mailMessage ? $mailMessage->getErrors() : null
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['mailMessage', 'message', 'errors']);
     }
 
     /**
@@ -72,10 +119,48 @@ class MailMessagesController extends BcApiController
     /**
      * [API] 受信メール削除
      *
+     * @param MailMessagesService $service
+     * @param MailContentsServiceInterface $mailContentsService,
+     * @param int $mailContentId
+     * @param int $messageId
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function delete()
+    public function delete(
+        MailMessagesServiceInterface $service,
+        MailContentsServiceInterface $mailContentsService,
+        int $mailContentId,
+        int $messageId
+    )
     {
-        // TODO 受信メール管理：削除APIを実装
+        $this->request->allowMethod(['post', 'put']);
+        $mailMessage = $errors = null;
+        try {
+            $service->setup($mailContentId);
+            $mailContent = $mailContentsService->get($mailContentId);
+            $mailMessage = $service->delete($messageId);
+            $message = __d(
+                'baser',
+                '{0} への受信データ NO「{1}」を削除しました。',
+                $mailContent->content->title,
+                $messageId
+            );
+        } catch (PersistenceFailedException $e) {
+            $this->setResponse($this->response->withStatus(400));
+            $mailMessage = $e->getEntity();
+            $message = __d('baser', '入力エラーです。内容を修正してください。');
+            $errors = $mailMessage->getErrors();
+        } catch (\Throwable $e) {
+            $this->setResponse($this->response->withStatus(500));
+            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+        }
+        $this->set([
+            'message' => $message,
+            'mailMessage' => $mailMessage,
+            'errors' => $errors
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['mailMessage', 'message', 'errors']);
     }
 
     /**
