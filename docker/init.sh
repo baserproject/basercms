@@ -7,6 +7,13 @@
 
 echo "[$(date +"%Y/%m/%d %H:%M:%S")] Init Container start."
 
+# msmtprc
+# ブラウザでインストールする場合に、ここでインストール処理を実行させないため、docker_inited を配置してからコンテナを起動する必要がある。
+# その場合でも、msmtprc をコピーする必要があるので、ここにコピー処理を記述するが、
+# baserCMSのコマンドインストールが完了したら、インストールを test.yml に移し
+# docker_inited がない場合だけ実行するように変更する
+cp /var/www/html/docker/msmtp/msmtprc /etc/msmtprc
+
 if [ ! -e '/var/www/html/docker_inited' ]; then
 
     # composer
@@ -23,8 +30,8 @@ if [ ! -e '/var/www/html/docker_inited' ]; then
 
     # jwt
     echo "[$(date +"%Y/%m/%d %H:%M:%S")] Create JWT key."
-    rm /var/www/shared/config/jwt.key
-    rm /var/www/shared/config/jwt.pem
+    rm /var/www/html/config/jwt.key
+    rm /var/www/html/config/jwt.pem
     openssl genrsa -out /var/www/html/config/jwt.key 1024
     openssl rsa -in /var/www/html/config/jwt.key -outform PEM -pubout -out /var/www/html/config/jwt.pem
     chown www-data.www-data /var/www/html/config/jwt.key
