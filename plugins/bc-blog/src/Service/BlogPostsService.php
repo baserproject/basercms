@@ -662,6 +662,7 @@ class BlogPostsService implements BlogPostsServiceInterface
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function batch(string $method, array $ids): bool
     {

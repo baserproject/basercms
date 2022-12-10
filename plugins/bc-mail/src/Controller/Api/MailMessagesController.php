@@ -110,10 +110,49 @@ class MailMessagesController extends BcApiController
     /**
      * [API] 受信メール編集
      *
+     * @param MailMessagesServiceInterface $service
+     * @param MailContentsServiceInterface $mailContentsService
+     * @param int $mailContentId
+     * @param int $id
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function edit()
+    public function edit(
+        MailMessagesServiceInterface $service,
+        MailContentsServiceInterface $mailContentsService,
+        int $mailContentId,
+        int $id
+    )
     {
-        // TODO 受信メール管理：編集APIを実装
+        $this->request->allowMethod(['post']);
+        $mailMessage = $errors = null;
+        try {
+            $service->setup($mailContentId);
+            $entity = $service->get($id);
+            $mailMessage = $service->update($entity, $this->request->getData());
+            $mailContent = $mailContentsService->get($mailContentId);
+            $message = __d(
+                'baser',
+                '{0} への受信データ NO「{1}」を更新しました。',
+                $mailContent->content->title,
+                $mailMessage->id
+            );
+        } catch (PersistenceFailedException $e) {
+            $this->setResponse($this->response->withStatus(400));
+            $mailMessage = $e->getEntity();
+            $errors = $mailMessage->getErrors();
+            $message = __d('baser', '入力エラーです。内容を修正してください。');
+        } catch (\Throwable $e) {
+            $this->setResponse($this->response->withStatus(500));
+            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+        }
+        $this->set([
+            'message' => $message,
+            'mailMessage' => $mailMessage,
+            'errors' => $errors
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['mailMessage', 'message', 'errors']);
     }
 
     /**
@@ -174,6 +213,7 @@ class MailMessagesController extends BcApiController
      * @param MailMessagesService $service
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function batch(MailMessagesServiceInterface $service, $mailContentId)
     {

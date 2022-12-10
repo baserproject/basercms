@@ -12,8 +12,10 @@
 namespace BcBlog\Test\TestCase\Service;
 
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcContainerTrait;
 use BcBlog\Service\BlogPostsService;
 use BcBlog\Service\BlogPostsServiceInterface;
+use BcBlog\Test\Factory\BlogPostFactory;
 
 /**
  * BlogPostsServiceTest
@@ -22,6 +24,17 @@ use BcBlog\Service\BlogPostsServiceInterface;
  */
 class BlogPostsServiceTest extends BcTestCase
 {
+
+    use BcContainerTrait;
+
+    /**
+     * Fixtures
+     *
+     * @var array
+     */
+    public $fixtures = [
+        'plugin.BcBlog.Factory/BlogPosts',
+    ];
 
     /**
      * set up
@@ -324,7 +337,33 @@ class BlogPostsServiceTest extends BcTestCase
      */
     public function testBatch()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // データを生成
+        BlogPostFactory::make(['id' => '1', 'blog_content_id' => '5', 'title' => 'test blog post batch'])->persist();
+        BlogPostFactory::make(['id' => '2', 'blog_content_id' => '5', 'title' => 'test blog post batch'])->persist();
+        BlogPostFactory::make(['id' => '3', 'blog_content_id' => '5', 'title' => 'test blog post batch'])->persist();
+
+        //// 正常系のテスト
+
+        // サービスメソッドを呼ぶ
+        $result = $this->BlogPostsService->batch('delete', [1, 2, 3]);
+        // 戻り値を確認
+        $this->assertTrue($result);
+        // データが削除されていることを確認
+        $blogPosts = $this->BlogPostsService->BlogPosts->find()->where(['blog_content_id' => '5'])->toArray();
+        $this->assertCount(0, $blogPosts);
+
+        //// 異常系のテスト
+
+        // delete で id が指定されていない場合は true を返すこと
+        // サービスメソッドを呼ぶ
+        $result = $this->BlogPostsService->batch('delete', []);
+        // 戻り値を確認
+        $this->assertTrue($result);
+
+        // 存在しない id を指定された場合は例外が発生すること
+        // サービスメソッドを呼ぶ
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        $result = $this->BlogPostsService->batch('delete', [1, 2, 3]);
     }
 
     /**
