@@ -218,10 +218,38 @@ class BlogPostsController extends BcApiController
 
     /**
      * [API] ブログ記事を公開状態に設定のAPI実装
+     *
+     * @param BlogPostsServiceInterface $service
+     * @param $id
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function publish()
+    public function publish(BlogPostsServiceInterface $service, $id)
     {
-        //todo ブログ記事を公開状態に設定のAPI実装
+        $this->request->allowMethod(['patch', 'post', 'put']);
+
+        $errors = null;
+        try {
+            $result = $service->publish($id);
+            if ($result) {
+                $message = __d('baser', 'ブログ記事「%s」を公開状態にしました。', $result->title);
+            } else {
+                $this->setResponse($this->response->withStatus(400));
+                $message = __d('baser', 'データベース処理中にエラーが発生しました。');
+            }
+        } catch (PersistenceFailedException $e) {
+            $this->setResponse($this->response->withStatus(400));
+            $errors = $e->getEntity()->getErrors();
+            $message = __d('baser', "入力エラーです。内容を修正してください。");
+        } catch (Throwable $e) {
+            $this->setResponse($this->response->withStatus(500));
+            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+        }
+
+        $this->set(['message' => $message, 'errors' => $errors]);
+        $this->viewBuilder()->setOption('serialize', ['message', 'errors']);
     }
 
     /**

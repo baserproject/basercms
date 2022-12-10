@@ -254,7 +254,31 @@ class BlogPostsControllerTest extends BcTestCase
      */
     public function test_publish()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データーを生成
+        BlogPostFactory::make([])->unpubish(1, 1)->persist();
+
+        //正常の時を確認
+        //APIをコル
+        $this->post('/baser/api/bc-blog/blog_posts/publish/1.json?token=' . $this->accessToken);
+        //ステータスを確認
+        $this->assertResponseOk();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertMatchesRegularExpression('/ブログ記事「.+」を公開状態にしました。/', $result->message);
+        // データの変更を確認
+        $blogPost = BlogPostFactory::get(1);
+        $this->assertEquals(true, $blogPost['status']);
+        $this->assertEquals(null, $blogPost['publish_begin']);
+        $this->assertEquals(null, $blogPost['publish_end']);
+
+        //存在しないBlogPostIDを公開場合、
+        //APIをコル
+        $this->post('/baser/api/bc-blog/blog_posts/publish/2.json?token=' . $this->accessToken);
+        //ステータスを確認
+        $this->assertResponseCode(500);
+        // 戻り値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('データベース処理中にエラーが発生しました。Record not found in table "blog_posts"', $result->message);
     }
 
     /**
@@ -279,7 +303,7 @@ class BlogPostsControllerTest extends BcTestCase
         $this->assertNull($blogPost->publish_begin);
         $this->assertNull($blogPost->publish_end);
 
-        //存在しないBlogPostIDを削除場合、
+        //存在しないBlogPostIDを非公開場合、
         //APIをコル
         $this->post('/baser/api/bc-blog/blog_posts/unpublish/2.json?token=' . $this->accessToken);
         //ステータスを確認
