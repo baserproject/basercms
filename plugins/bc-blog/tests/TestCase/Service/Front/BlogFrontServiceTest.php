@@ -167,6 +167,9 @@ class BlogFrontServiceTest extends BcTestCase
         $this->assertArrayHasKey('blogContent', $vars);
         $this->assertArrayHasKey('posts', $vars);
         $this->assertArrayHasKey('single', $vars);
+        $this->assertArrayHasKey('editLink', $vars);
+        $this->assertArrayHasKey('currentWidgetAreaId', $vars);
+        $this->assertEquals(2, $vars['currentWidgetAreaId']);
         $this->assertEquals('test', $vars['blogContent']->description);
         $this->assertEquals('default-2', $vars['blogContent']->template);
         $this->assertEquals('/preview', $vars['blogContent']->content->url);
