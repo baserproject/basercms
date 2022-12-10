@@ -158,7 +158,45 @@ class MailMessagesControllerTest extends BcTestCase
      */
     public function testEdit()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        {
+            // テストデータを作成する
+            ContentFactory::make([
+                'id' => 9,
+                'name' => 'contact',
+                'plugin' => 'BcMail',
+                'type' => 'MailContent',
+                'entity_id' => 1,
+                'url' => '/contact/',
+                'site_id' => 1,
+                'title' => 'お問い合わせ(※関連Fixture未完了)',
+                'status' => true,
+            ])->persist();
+            MailContentFactory::make(['id' => 1, 'save_info' => 1])->persist();
+            $mailMessageTable = TableRegistry::getTableLocator()->get('BcMail.MailMessages');
+            $mailMessageTable->setup(1);
+            // mail_message_1テーブルに１件のレコードを追加する
+            $mailMessageTable->save(new Entity(['id' => 1, 'message' => 'message before']));
+
+            // 受信メール追加のAPIを叩く
+            $data = ['id' => 1, 'message' => 'message after'];
+            $this->post("/baser/api/bc-mail/mail_messages/edit/1/1.json?token=$this->accessToken", $data);
+            $result = json_decode((string)$this->_response->getBody());
+            // レスポンスのコードを確認する
+            $this->assertResponseOk();
+            // レスポンスのメッセージ内容を確認する
+            $this->assertEquals('お問い合わせ(※関連Fixture未完了) への受信データ NO「1」を更新しました。', $result->message);
+            // 追加したメールメッセージ内容を確認する
+            $this->assertEquals('message after', $result->mailMessage->message);
+
+            // 無効なメールメッセージデータの場合、エラーになる
+            $data = ['id' => 'text'];
+            $this->post("/baser/api/bc-mail/mail_messages/edit/1/1.json?token=$this->accessToken", $data);
+            $result = json_decode((string)$this->_response->getBody());
+            // レスポンスのコードを確認する
+            $this->assertResponseCode(500);
+            // レスポンスのメッセージ内容を確認する
+            $this->assertEquals('データベース処理中にエラーが発生しました。Cannot convert value of type `string` to integer', $result->message);
+        }
     }
 
     /**
