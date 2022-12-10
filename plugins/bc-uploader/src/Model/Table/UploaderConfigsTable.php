@@ -9,9 +9,13 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
- namespace BcUploader\Model\Table;
+namespace BcUploader\Model\Table;
 
 use BaserCore\Model\Table\AppTable;
+use Cake\Validation\Validator;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
 
 /**
  * ファイルアップローダー設定モデル
@@ -20,6 +24,33 @@ use BaserCore\Model\Table\AppTable;
  */
 class UploaderConfigsTable extends AppTable
 {
+
+    /**
+     * Initialize
+     *
+     * @param array $config テーブル設定
+     * @return void
+     * @checked
+     * @noTodo
+     */
+    public function initialize(array $config): void
+    {
+        parent::initialize($config);
+        $this->addBehavior('BaserCore.BcKeyValue');
+    }
+
+    /**
+     * Validation Default
+     *
+     * @param Validator $validator
+     * @return Validator
+     * @checked
+     */
+    public function validationKeyValue(Validator $validator): Validator
+    {
+        // TODO ucmitz バリデーションを実装
+        return $validator;
+    }
 
     /**
      * バリデート

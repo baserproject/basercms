@@ -16,9 +16,9 @@ use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 
 /**
- * UploadConfigsService
+ * UploaderCategoriesServiceInterface
  */
-class UploadConfigsService implements UploadConfigsServiceInterface
+interface UploaderCategoriesServiceInterface
 {
 
 }

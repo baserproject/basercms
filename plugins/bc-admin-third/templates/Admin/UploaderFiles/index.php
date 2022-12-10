@@ -1,15 +1,24 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package            Uploader.View
- * @since           baserCMS v 3.0.10
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) NPO baser foundation
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       https://basercms.net/license/index.html MIT License
  */
-$this->BcBaser->css('BcUploader.uploader', false);
+
+/**
+ * @var \BaserCore\View\BcAdminAppView $this
+ * @checked
+ * @noTodo
+ * @unitTest
+ */
+$this->BcBaser->css('admin/uploader_files/index', false);
+$this->BcAdmin->setSearch('uploader_files_index');
+$this->BcAdmin->setTitle(__d('baser', 'アップロードファイル一覧'));
 ?>
 
-<?php $this->BcBaser->element('uploader_files/index') ?>
+
+<?php $this->BcBaser->element('UploaderFiles/index') ?>

@@ -43,4 +43,37 @@ class UploaderFile extends Entity
         'id' => false
     ];
 
+    /**
+     * 複数のファイルの存在チェックを行う
+     *
+     * @param string $fileName
+     * @return    array
+     */
+    public function filesExists($fileName, $limited = null)
+    {
+        if (is_null($limited)) {
+            $data = $this->find('first', ['conditions' => ['UploaderFile.name' => $fileName], 'recursive' => -1]);
+            $limited = false;
+            if (!empty($data['UploaderFile']['publish_begin']) || !empty($data['UploaderFile']['publish_end'])) {
+                $limited = true;
+            }
+        }
+        $pathinfo = pathinfo($fileName);
+        $ext = $pathinfo['extension'];
+        $basename = mb_basename($fileName, '.' . $ext);
+        $files['small'] = $this->fileExists($basename . '__small' . '.' . $ext, $limited);
+        $files['midium'] = $this->fileExists($basename . '__midium' . '.' . $ext, $limited);
+        $files['large'] = $this->fileExists($basename . '__large' . '.' . $ext, $limited);
+        return $files;
+    }
+
+    public function dummy()
+    {
+        foreach($dbDatas as $key => $dbData) {
+            $limited = (!empty($dbData['UploaderFile']['publish_begin']) || !empty($dbData['UploaderFile']['publish_end']));
+            $files = $this->UploaderFiles->filesExists($dbData['UploaderFile']['name'], $limited);
+            $dbData = Set::merge($dbData, ['UploaderFile' => $files]);
+            $dbDatas[$key] = $dbData;
+        }
+    }
 }

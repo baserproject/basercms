@@ -20,7 +20,7 @@ App::uses('UploaderCategory', 'BcUploader.Model');
  * @package Feed.Test.Case.Model
  * @property  UploaderCategory $UploaderCategory
  */
-class UploaderCategoryTest extends BaserTestCase
+class UploaderCategoriesTableTest extends BaserTestCase
 {
     /**
      * set up

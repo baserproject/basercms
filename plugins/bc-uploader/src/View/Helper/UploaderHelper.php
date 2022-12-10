@@ -11,12 +11,14 @@
 
  namespace BcUploader\View\Helper;
 
+use Cake\Event\Event;
 use Cake\View\Helper;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
 
 /**
  * アップローダーヘルパー
- *
- * @package         Uploader.View.Helper
  */
 class UploaderHelper extends Helper
 {
@@ -45,13 +47,10 @@ class UploaderHelper extends Helper
     /**
      * Before Render
      *
-     * @return    void
-     * @access    public
+     * @return void
      */
-    public function beforeRender($viewFile)
+    public function beforeRender(Event $event, $viewFile)
     {
-
-        parent::beforeRender($viewFile);
         $this->savedUrl = '/files/uploads/';
         $this->savePath = WWW_ROOT . 'files' . DS . 'uploads' . DS;
     }
@@ -75,7 +74,7 @@ class UploaderHelper extends Helper
         $pathInfo = pathinfo($uploaderFile['name']);
         $ext = $pathInfo['extension'];
         $_options = ['alt' => $uploaderFile['alt']];
-        $options = Set::merge($_options, $options);
+        $options = array_merge($_options, $options);
 
         if (in_array(strtolower($ext), ['gif', 'jpg', 'png'])) {
             if (isset($options['size'])) {

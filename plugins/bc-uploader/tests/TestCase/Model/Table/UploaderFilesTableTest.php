@@ -20,7 +20,7 @@ App::uses('UploaderFile', 'BcUploader.Controller');
  * @package Feed.Test.Case.Controller
  * @property  UploaderFile $UploaderFile
  */
-class UploaderFileTest extends BaserTestCase
+class UploaderFilesTableTest extends BaserTestCase
 {
     /**
      * set up
@@ -70,14 +70,6 @@ class UploaderFileTest extends BaserTestCase
      * 複数のファイルの存在チェックを行う
      */
     public function testFilesExists()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
-    /**
-     * コントロールソースを取得する
-     */
-    public function testGetControlSource()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }

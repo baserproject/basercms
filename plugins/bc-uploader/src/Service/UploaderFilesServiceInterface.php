@@ -16,9 +16,21 @@ use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 
 /**
- * UploadConfigsServiceInterface
+ * UploaderFilesServiceInterface
  */
-interface UploadConfigsServiceInterface
+interface UploaderFilesServiceInterface
 {
+
+    /**
+     * コントロールソースを取得する
+     *
+     * @param string $field フィールド名
+     * @param array $options
+     * @return    mixed    $controlSource    コントロールソース
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getControlSource($field = null, $options = []);
 
 }

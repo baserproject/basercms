@@ -14,12 +14,14 @@ namespace BcUploader\ServiceProvider;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
-use BcUploader\Service\UploadCategoriesService;
-use BcUploader\Service\UploadCategoriesServiceInterface;
-use BcUploader\Service\UploadConfigsService;
-use BcUploader\Service\UploadConfigsServiceInterface;
-use BcUploader\Service\UploadFilesService;
-use BcUploader\Service\UploadFilesServiceInterface;
+use BcUploader\Service\Admin\UploaderFilesAdminService;
+use BcUploader\Service\Admin\UploaderFilesAdminServiceInterface;
+use BcUploader\Service\UploaderCategoriesService;
+use BcUploader\Service\UploaderCategoriesServiceInterface;
+use BcUploader\Service\UploaderConfigsService;
+use BcUploader\Service\UploaderConfigsServiceInterface;
+use BcUploader\Service\UploaderFilesService;
+use BcUploader\Service\UploaderFilesServiceInterface;
 use Cake\Core\ServiceProvider;
 
 /**
@@ -33,9 +35,10 @@ class BcUploaderServiceProvider extends ServiceProvider
      * @var string[]
      */
     protected $provides = [
-        UploadCategoriesServiceInterface::class,
-        UploadConfigsServiceInterface::class,
-        UploadFilesServiceInterface::class
+        UploaderCategoriesServiceInterface::class,
+        UploaderConfigsServiceInterface::class,
+        UploaderFilesServiceInterface::class,
+        UploaderFilesAdminServiceInterface::class
     ];
 
     /**
@@ -47,12 +50,13 @@ class BcUploaderServiceProvider extends ServiceProvider
     public function services($container): void
     {
         $container->defaultToShared(true);
-        // UploadCategories サービス
-        $container->add(UploadCategoriesServiceInterface::class, UploadCategoriesService::class);
-        // UploadConfigs サービス
-        $container->add(UploadConfigsServiceInterface::class, UploadConfigsService::class);
-        // UploadFiles サービス
-        $container->add(UploadFilesServiceInterface::class, UploadFilesService::class);
+        // UploaderCategories サービス
+        $container->add(UploaderCategoriesServiceInterface::class, UploaderCategoriesService::class);
+        // UploaderConfigs サービス
+        $container->add(UploaderConfigsServiceInterface::class, UploaderConfigsService::class);
+        // UploaderFiles サービス
+        $container->add(UploaderFilesServiceInterface::class, UploaderFilesService::class);
+        $container->add(UploaderFilesAdminServiceInterface::class, UploaderFilesAdminService::class);
     }
 
 }

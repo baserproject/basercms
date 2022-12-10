@@ -15,8 +15,8 @@ use BaserCore\Controller\Admin\BcAdminAppController;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
-use BcUploader\Service\UploadCategoriesService;
-use BcUploader\Service\UploadCategoriesServiceInterface;
+use BcUploader\Service\UploaderCategoriesService;
+use BcUploader\Service\UploaderCategoriesServiceInterface;
 use Cake\ORM\Exception\PersistenceFailedException;
 use Throwable;
 
@@ -29,12 +29,12 @@ class UploaderCategoriesController extends BcAdminAppController
     /**
      * ファイルカテゴリ一覧
      *
-     * @param UploadCategoriesService $service
+     * @param UploaderCategoriesService $service
      * @return void
      * @checked
      * @noTodo
      */
-    public function index(UploadCategoriesServiceInterface $service)
+    public function index(UploaderCategoriesServiceInterface $service)
     {
         $this->set(['uploaderCategories' => $service->getIndex()->all()]);
     }
@@ -42,12 +42,12 @@ class UploaderCategoriesController extends BcAdminAppController
     /**
      * 新規登録
      *
-     * @param UploadCategoriesService $service
+     * @param UploaderCategoriesService $service
      * @return void
      * @checked
      * @noTodo
      */
-    public function add(UploadCategoriesServiceInterface $service)
+    public function add(UploaderCategoriesServiceInterface $service)
     {
         if($this->getRequest()->is(['post', 'put'])) {
             try {
@@ -68,13 +68,13 @@ class UploaderCategoriesController extends BcAdminAppController
     /**
      * 編集
      *
-     * @param UploadCategoriesService $service
+     * @param UploaderCategoriesService $service
      * @param $id
      * @return void
      * @checked
      * @noTodo
      */
-    public function edit(UploadCategoriesServiceInterface $service, $id)
+    public function edit(UploaderCategoriesServiceInterface $service, $id)
     {
         $entity = $service->get($id);
         if($this->getRequest()->is(['post', 'put'])) {
@@ -101,7 +101,7 @@ class UploaderCategoriesController extends BcAdminAppController
      * @checked
      * @noTodo
      */
-    public function delete(UploadCategoriesServiceInterface $service, int $id)
+    public function delete(UploaderCategoriesServiceInterface $service, int $id)
     {
         $this->request->allowMethod(['post', 'delete']);
         $entity = $service->get($id);
@@ -120,12 +120,12 @@ class UploaderCategoriesController extends BcAdminAppController
     /**
      * [ADMIN] コピー
      *
-     * @param UploadCategoriesServiceInterface $service
+     * @param UploaderCategoriesServiceInterface $service
      * @param int $id
      * @checked
      * @noTodo
      */
-    public function copy(UploadCategoriesServiceInterface $service, $id)
+    public function copy(UploaderCategoriesServiceInterface $service, $id)
     {
         try {
             if($service->copy($id)) {

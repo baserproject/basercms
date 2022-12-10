@@ -126,22 +126,39 @@ $(function () {
      * アップロードファイル選択時イベント
      */
     function uploaderFileFileChangeHandler() {
-
-        var url = baseUrl + adminPrefix + '/uploader/uploader_files/ajax_upload';
-        var form = $(this);
-        $("#Waiting").show();
-
+        var url = $.bcUtil.apiBaseUrl + 'bc-uploader/uploader_files/upload.json';
+        var $file = $(this);
+        $.bcUtil.showLoader();
         if ($('#UploaderFileFile' + listId).val()) {
             $.bcToken.check(function () {
-                var data = {'_csrfToken': $.bcToken.key};
+                let fd = new FormData();
+                fd.append('file', $file.prop('files')[0]);
+                fd.append('_csrfToken', $.bcToken.key);
                 if ($("#UploaderFileUploaderCategoryId" + listId).length) {
-                    data = $.extend(data, {'data[UploaderFile][uploader_category_id]': $("#UploaderFileUploaderCategoryId" + listId).val()});
+                    fd.append('uploader_category_id', $("#UploaderFileUploaderCategoryId" + listId).val());
                 }
-                form.upload(url, data, uploadSuccessHandler, 'html');
+                return $.ajax({
+                    url: url,
+                    headers: {
+                        "Authorization": $.bcJwt.accessToken,
+                    },
+                    type: 'post',
+                    data: fd,
+                    dataType: 'json',
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    success: uploadSuccessHandler,
+                    // error: function (XMLHttpRequest) {
+                    //     XMLHttpRequest.responseText = null;
+                    //     $.bcUtil.showAjaxError(bcI18n.commonChangePublishFailedMessage, XMLHttpRequest);
+                    // },
+                    // complete: function () {
+                    //     $.bcUtil.hideLoader();
+                    // }
+                });
             }, {useUpdate: false, hideLoader: false});
-
         }
-
     }
 
     /**
@@ -350,26 +367,27 @@ $(function () {
      * Ajax List 取得用のURLを取得する
      */
     function getListUrl() {
-
-        var listUrl = $("#ListUrl" + listId).attr('href');
+        let listUrl = $("#ListUrl" + listId).attr('href');
+        let query = [];
         if ($('#FilterUploaderCategoryId' + listId).length) {
-            listUrl += '/uploader_category_id:' + $('#FilterUploaderCategoryId' + listId).val();
+            query.push('uploader_category_id=' + $('#FilterUploaderCategoryId' + listId).val());
         }
         if ($('input[name="data[Filter][uploader_type]"]:checked').length) {
-            listUrl += '/uploader_type:' + $('input[name="data[Filter][uploader_type]"]:checked').val();
+            query.push('uploader_type=' + $('input[name="data[Filter][uploader_type]"]:checked').val());
         }
         if ($('#FilterName' + listId).val()) {
-            listUrl += '/name:' + encodeURI($('#FilterName' + listId).val());
+            query.push('name=' + encodeURI($('#FilterName' + listId).val()));
+        }
+        if (query.length) {
+            listUrl += '?' + query.join('&');
         }
         return listUrl;
-
     }
 
     /**
      * コンテキストメニューハンドラ
      */
     function contextMenuHander(action, el, pos) {
-
         var delUrl = baseUrl + adminPrefix + '/uploader/uploader_files/delete/' + $("#FileList" + listId + " .selected .id").html();
 
         // IEの場合、action値が正常に取得できないので整形する
@@ -407,8 +425,6 @@ $(function () {
                 }
                 break;
         }
-
     }
-
 
 });

@@ -24,7 +24,7 @@ use Cake\ORM\TableRegistry;
  *
  * @property UploaderCategoriesTable $UploaderCategories
  */
-class UploadCategoriesService implements UploadCategoriesServiceInterface
+class UploaderCategoriesService implements UploaderCategoriesServiceInterface
 {
 
     /**

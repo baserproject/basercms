@@ -13,11 +13,15 @@ namespace BcUploader\Model\Table;
 
 use ArrayObject;
 use BaserCore\Model\Table\AppTable;
+use BaserCore\Utility\BcContainerTrait;
+use BcUploader\Service\UploaderConfigsService;
+use BcUploader\Service\UploaderConfigsServiceInterface;
 use Cake\Datasource\EntityInterface;
 use Cake\Event\EventInterface;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use Cake\Validation\Validator;
 
 /**
  * ファイルアップローダーモデル
@@ -28,19 +32,66 @@ class UploaderFilesTable extends AppTable
 {
 
     /**
-     * behaviors
-     *
-     * @var array
+     * Trait
      */
-    public $actsAs = [
-        'BcUpload' => [
+    use BcContainerTrait;
+
+    /**
+     * Initialize
+     *
+     * @param array $config テーブル設定
+     * @return void
+     * @checked
+     * @noTodo
+     */
+    public function initialize(array $config): void
+    {
+        parent::initialize($config);
+
+        $this->setTable('uploader_files');
+        $this->setPrimaryKey('id');
+
+        $this->addBehavior('Timestamp');
+        $this->belongsTo('UploaderCategories', [
+            'className' => 'BcUploader.UploaderCategories',
+            'foreignKey' => 'uploader_category_id',
+        ]);
+        $this->setupUploadBehavior();
+    }
+
+    public function setupUploadBehavior()
+    {
+        /** @var UploaderConfigsService $uploaderConfigsService */
+        $uploaderConfigsService = $this->getService(UploaderConfigsServiceInterface::class);
+        $uploaderConfig = $uploaderConfigsService->get();
+        $sizes = ['large', 'midium', 'small', 'mobile_large', 'mobile_small'];
+        $imagecopy = [];
+        foreach ($sizes as $size) {
+            if (!isset($uploaderConfig->{$size . '_width'}) || !isset($uploaderConfig->{$size . '_height'})) {
+                continue;
+            }
+            $imagecopy[$size] = ['suffix' => '__' . $size];
+            $imagecopy[$size]['width'] = $uploaderConfig->{$size . '_width'};
+            $imagecopy[$size]['height'] = $uploaderConfig->{$size . '_height'};
+            if (isset($uploaderConfig->{$size . '_thumb'})) {
+                $imagecopy[$size]['thumb'] = $uploaderConfig->{$size . '_thumb'};
+            }
+        }
+        $this->addBehavior('BaserCore.BcUpload', [
             'saveDir' => 'uploads',
             'existsCheckDirs' => ['uploads/limited'],
             'fields' => [
-                'name' => ['type' => 'all']
+                'name' => [
+                    'type' => 'all',
+                    'imagecopy' => $imagecopy
+                ]
             ]
-        ]
-    ];
+        ]);
+        // BcUploadBehavior より優先順位をあげる為登録、イベントを登録しなおす
+        // TODO ucmitz 未実装
+//        $this->getEventManager()->detach([$this, 'beforeDelete'], 'Model.beforeDelete');
+//        $this->getEventManager()->attach([$this, 'beforeDelete'], 'Model.beforeDelete', ['priority' => 5]);
+    }
 
     /**
      * 公開期間をチェックする
@@ -58,62 +109,41 @@ class UploaderFilesTable extends AppTable
     }
 
     /**
-     * コンストラクタ
+     * MailField constructor.
      *
-     * @param int $id
-     * @param string $table
-     * @param string $ds
+     * @param bool $id
+     * @param null $table
+     * @param null $ds
+     * @checked
+     * @noTodo
      */
-    /*public function __construct($id = false, $table = null, $ds = null)
+    public function validationDefault(Validator $validator): Validator
     {
-        $this->validate = [
-            'publish_begin' => [
-                'checkPeriod' => [
-                    'rule' => 'checkPeriod',
-                    'message' => __d('baser', '公開期間が不正です。')
-                ]
-            ],
-            'publish_end' => [
-                'checkPeriod' => [
-                    'rule' => 'checkPeriod',
-                    'message' => __d('baser', '公開期間が不正です。')
-                ]
-            ]
-        ];
-        if (!BcUtil::isAdminUser() || !Configure::read('BcUploader.allowedAdmin')) {
-            $this->validate['name'] = [
-                'fileExt' => [
-                    'rule' => ['fileExt', Configure::read('BcUploader.allowedExt')],
-                    'message' => __d('baser', '許可されていないファイル形式です。')
-                ]
-            ];
-        }
-        parent::__construct($id, $table, $ds);
-        $sizes = ['large', 'midium', 'small', 'mobile_large', 'mobile_small'];
-        $UploaderConfig = ClassRegistry::init('BcUploader.UploaderConfig');
-        $uploaderConfigs = $UploaderConfig->findExpanded();
-        $imagecopy = [];
-
-        foreach ($sizes as $size) {
-            if (!isset($uploaderConfigs[$size . '_width']) || !isset($uploaderConfigs[$size . '_height'])) {
-                continue;
-            }
-            $imagecopy[$size] = ['suffix' => '__' . $size];
-            $imagecopy[$size]['width'] = $uploaderConfigs[$size . '_width'];
-            $imagecopy[$size]['height'] = $uploaderConfigs[$size . '_height'];
-            if (isset($uploaderConfigs[$size . '_thumb'])) {
-                $imagecopy[$size]['thumb'] = $uploaderConfigs[$size . '_thumb'];
-            }
-        }
-
-        $settings = $this->actsAs['BcUpload'];
-        $settings['fields']['name']['imagecopy'] = $imagecopy;
-        $this->Behaviors->attach('BcUpload', $settings);
-
-        // BcUploadBehavior より優先順位をあげる為登録、イベントを登録しなおす
-        $this->getEventManager()->detach([$this, 'beforeDelete'], 'Model.beforeDelete');
-        $this->getEventManager()->attach([$this, 'beforeDelete'], 'Model.beforeDelete', ['priority' => 5]);
-    }*/
+        // TODO ucmitz 未実装
+//        $this->validate = [
+//            'publish_begin' => [
+//                'checkPeriod' => [
+//                    'rule' => 'checkPeriod',
+//                    'message' => __d('baser', '公開期間が不正です。')
+//                ]
+//            ],
+//            'publish_end' => [
+//                'checkPeriod' => [
+//                    'rule' => 'checkPeriod',
+//                    'message' => __d('baser', '公開期間が不正です。')
+//                ]
+//            ]
+//        ];
+//        if (!BcUtil::isAdminUser() || !Configure::read('BcUploader.allowedAdmin')) {
+//            $this->validate['name'] = [
+//                'fileExt' => [
+//                    'rule' => ['fileExt', Configure::read('BcUploader.allowedExt')],
+//                    'message' => __d('baser', '許可されていないファイル形式です。')
+//                ]
+//            ];
+//        }
+        return $validator;
+    }
 
     /**
      * Before Save
@@ -123,8 +153,8 @@ class UploaderFilesTable extends AppTable
      */
     public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
-        parent::beforeSave($options);
-
+        // TODO ucmitz 未実装
+        return true;
         if (!empty($this->data['UploaderFile']['id'])) {
 
             $savePath = WWW_ROOT . 'files' . DS . $this->actsAs['BcUpload']['saveDir'] . DS;
@@ -172,50 +202,6 @@ class UploaderFilesTable extends AppTable
             $savePath = WWW_ROOT . 'files' . DS . $this->actsAs['BcUpload']['saveDir'] . DS . $fileName;
         }
         return file_exists($savePath);
-    }
-
-    /**
-     * 複数のファイルの存在チェックを行う
-     *
-     * @param string $fileName
-     * @return    array
-     */
-    public function filesExists($fileName, $limited = null)
-    {
-        if (is_null($limited)) {
-            $data = $this->find('first', ['conditions' => ['UploaderFile.name' => $fileName], 'recursive' => -1]);
-            $limited = false;
-            if (!empty($data['UploaderFile']['publish_begin']) || !empty($data['UploaderFile']['publish_end'])) {
-                $limited = true;
-            }
-        }
-        $pathinfo = pathinfo($fileName);
-        $ext = $pathinfo['extension'];
-        $basename = mb_basename($fileName, '.' . $ext);
-        $files['small'] = $this->fileExists($basename . '__small' . '.' . $ext, $limited);
-        $files['midium'] = $this->fileExists($basename . '__midium' . '.' . $ext, $limited);
-        $files['large'] = $this->fileExists($basename . '__large' . '.' . $ext, $limited);
-        return $files;
-    }
-
-    /**
-     * コントロールソースを取得する
-     *
-     * @param string $field フィールド名
-     * @param array $options
-     * @return    mixed    $controlSource    コントロールソース
-     */
-    public function getControlSource($field = null, $options = [])
-    {
-        switch ($field) {
-            case 'user_id':
-                $User = ClassRegistry::getObject('User');
-                return $User->getUserList($options);
-            case 'uploader_category_id':
-                $UploaderCategory = ClassRegistry::init('BcUploader.UploaderCategory');
-                return $UploaderCategory->find('list', ['order' => 'UploaderCategory.id']);
-        }
-        return false;
     }
 
     /**

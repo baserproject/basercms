@@ -16,9 +16,9 @@ use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 
 /**
- * UploadFilesAdminService
+ * UploaderFilesAdminServiceInterface
  */
-class UploadFilesAdminService implements UploadFilesAdminServiceInterface
+interface UploaderFilesAdminServiceInterface
 {
 
 }
