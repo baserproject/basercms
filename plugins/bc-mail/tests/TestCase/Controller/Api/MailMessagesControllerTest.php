@@ -14,14 +14,12 @@ namespace BcMail\Test\TestCase\Controller\Api;
 use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\Service\DblogsServiceInterface;
-use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BcMail\Test\Factory\MailContentFactory;
 use Cake\ORM\Entity;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
-use BcMail\Test\Factory\MailContentFactory;
 
 class MailMessagesControllerTest extends BcTestCase
 {
