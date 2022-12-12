@@ -11,13 +11,12 @@
 
 /**
  * @var \BaserCore\View\BcAdminAppView $this
- * @var string $layoutType
  * @checked
  * @noTodo
  * @unitTest
  */
-if ($layoutType === 'table') {
-  $this->BcBaser->element('UploaderFiles/index_list_table');
-} else {
-  $this->BcBaser->element('UploaderFiles/index_list_panel');
-}
+$this->BcAdmin->setTitle(__d('baser', 'アップロードファイル編集'));
+?>
+
+
+<?php $this->BcBaser->element('UploaderFiles/form') ?>

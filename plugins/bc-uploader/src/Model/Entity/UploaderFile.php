@@ -11,11 +11,13 @@
 
 namespace BcUploader\Model\Entity;
 
+use BaserCore\Utility\BcUtil;
 use Cake\I18n\FrozenTime;
 use Cake\ORM\Entity;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use Cake\ORM\TableRegistry;
 
 /**
  * Class UploaderFile
@@ -46,34 +48,101 @@ class UploaderFile extends Entity
     /**
      * 複数のファイルの存在チェックを行う
      *
-     * @param string $fileName
-     * @return    array
+     * @return array
+     * @checked
+     * @noTodo
      */
-    public function filesExists($fileName, $limited = null)
+    public function filesExists()
     {
-        if (is_null($limited)) {
-            $data = $this->find('first', ['conditions' => ['UploaderFile.name' => $fileName], 'recursive' => -1]);
-            $limited = false;
-            if (!empty($data['UploaderFile']['publish_begin']) || !empty($data['UploaderFile']['publish_end'])) {
-                $limited = true;
-            }
-        }
-        $pathinfo = pathinfo($fileName);
-        $ext = $pathinfo['extension'];
-        $basename = mb_basename($fileName, '.' . $ext);
-        $files['small'] = $this->fileExists($basename . '__small' . '.' . $ext, $limited);
-        $files['midium'] = $this->fileExists($basename . '__midium' . '.' . $ext, $limited);
-        $files['large'] = $this->fileExists($basename . '__large' . '.' . $ext, $limited);
-        return $files;
+        return [
+            'small' => $this->small,
+            'midium' => $this->midium,
+            'large' => $this->large
+        ];
     }
 
-    public function dummy()
+    /**
+     * get small
+     *
+     * @return bool
+     * @checked
+     * @noTodo
+     */
+    protected function _getSmall()
     {
-        foreach($dbDatas as $key => $dbData) {
-            $limited = (!empty($dbData['UploaderFile']['publish_begin']) || !empty($dbData['UploaderFile']['publish_end']));
-            $files = $this->UploaderFiles->filesExists($dbData['UploaderFile']['name'], $limited);
-            $dbData = Set::merge($dbData, ['UploaderFile' => $files]);
-            $dbDatas[$key] = $dbData;
-        }
+        return $this->fileExists($this->getFileNameBySize('small'));
     }
+
+    /**
+     * get midium
+     *
+     * @return bool
+     * @checked
+     * @noTodo
+     */
+    protected function _getMidium()
+    {
+        return $this->fileExists($this->getFileNameBySize('midium'));
+    }
+
+    /**
+     * get large
+     *
+     * @return bool
+     * @checked
+     * @noTodo
+     */
+    protected function _getLarge()
+    {
+        return $this->fileExists($this->getFileNameBySize('large'));
+    }
+
+    /**
+     * 各サイズのファイル名を取得する
+     *
+     * @param string $size
+     * @return string
+     * @checked
+     * @noTodo
+     */
+    private function getFileNameBySize(string $size): string
+    {
+        $pathinfo = pathinfo($this->name);
+        $ext = $pathinfo['extension'];
+        $basename = BcUtil::mbBasename($this->name, '.' . $ext);
+        return $basename . '__' . $size . '.' . $ext;
+    }
+
+    /**
+     * ファイルの存在チェックを行う
+     *
+     * @param string $fileName
+     * @return bool
+     * @checked
+     * @noTodo
+     */
+    public function fileExists($fileName)
+    {
+        $uploaderFilesTable = TableRegistry::getTableLocator()->get('BcUploader.UploaderFiles');
+        $settings = $uploaderFilesTable->getSettings();
+        if ($this->isLimited()) {
+            $savePath = WWW_ROOT . 'files' . DS . $settings['saveDir'] . DS . 'limited' . DS . $fileName;
+        } else {
+            $savePath = WWW_ROOT . 'files' . DS . $settings['saveDir'] . DS . $fileName;
+        }
+        return file_exists($savePath);
+    }
+
+    /**
+     * 閲覧制限が設定されているかどうか
+     *
+     * @return bool
+     * @checked
+     * @noTodo
+     */
+    public function isLimited()
+    {
+        return ($this->publish_begin || $this->publish_end);
+    }
+
 }

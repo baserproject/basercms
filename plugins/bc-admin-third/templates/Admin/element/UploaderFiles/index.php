@@ -14,6 +14,8 @@
  *
  * @var \BaserCore\View\BcAdminAppView $this
  * @var \BcUploader\Model\Entity\UploaderConfig $uploaderConfigs
+ * @var int $listId
+ * @var bool $isAjax
  * @checked
  * @noTodo
  * @unitTest
@@ -29,8 +31,7 @@ echo $this->BcBaser->i18nScript([
   'uploaderAlertMessage4' => __d('baser', 'サーバーでの処理に失敗しました。'),
   'uploaderConfirmMessage1' => __d('baser', '本当に削除してもよろしいですか？')
 ], ['block' => false]);
-$this->BcBaser->js(['admin/uploader_files/uploader_list.bundle']);
-if (!isset($listId)) $listId = '';
+$this->BcBaser->js(['admin/uploader_files/index_panel.bundle']);
 ?>
 
 
@@ -44,7 +45,6 @@ if (!isset($listId)) $listId = '';
 <!-- JS用設定値 -->
 <div style="display:none">
   <div id="ListId"><?php echo $listId ?></div>
-  <div id="UploaderImageSettings"><?php if (isset($imageSettings)) : ?><?php echo $this->Js->object($imageSettings) ?><?php endif ?></div>
   <div id="LoginUserId"><?php echo \BaserCore\Utility\BcUtil::loginUser()->id ?></div>
   <div id="LoginUserGroupId"><?php echo \BaserCore\Utility\BcUtil::loginUser()->user_groups[0]->id ?></div>
   <div id="AdminPrefix" style="display:none;"><?php echo \BaserCore\Utility\BcUtil::getAdminPrefix() ?></div>
@@ -56,13 +56,11 @@ if (!isset($listId)) $listId = '';
 <div id="FileList<?php echo $listId ?>" class="file-list"></div>
 
 <!-- list-num -->
-<?php // TODO ucmitz 未実装 ?>
-<?php //if (empty($this->params['isAjax'])): ?>
-<!--  --><?php //$this->BcBaser->element('list_num') ?>
-<?php //endif ?>
+<?php if (!$isAjax): ?>
+  <?php $this->BcBaser->element('list_num') ?>
+<?php endif ?>
 
 <!-- 編集ダイアログ -->
 <div id="EditDialog" title="<?php echo __d('baser', 'ファイル情報編集') ?>">
-  <?php // TODO ucmitz 未実装 ?>
-  <!--  --><?php //$this->BcBaser->element('UploaderFiles/form', ['listId', $listId, 'popup' => true]) ?>
+    <?php $this->BcBaser->element('UploaderFiles/form', ['listId', $listId, 'popup' => true]) ?>
 </div>

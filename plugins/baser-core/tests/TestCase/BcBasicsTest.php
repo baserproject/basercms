@@ -448,21 +448,6 @@ class BcBasicsTest extends BcTestCase
     }
 
     /**
-     * 日本語ファイル名対応版basename
-     */
-    public function testMb_basename()
-    {
-        $result = mb_basename('/hoge/あいうえお.php');
-        $this->assertEquals('あいうえお.php', $result);
-
-        $result = mb_basename('/hoge/あいうえお.phptest', 'test');
-        $this->assertEquals('あいうえお.php', $result, 'suffixを取り除けません');
-
-        $result = mb_basename('/hoge/あいうえおtest.php', 'test');
-        $this->assertEquals('あいうえおtest.php', $result);
-    }
-
-    /**
      * 後方互換のための非推奨メッセージを生成する
      */
     public function testDeprecatedMessage()

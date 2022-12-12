@@ -1108,9 +1108,9 @@ class BcUtil
      *
      * @param string $str
      * @param string $suffix
-     * @return type
+     * @return string
      */
-    public static function mb_basename($str, $suffix = null)
+    public static function mbBasename($str, $suffix = null)
     {
         $tmp = preg_split('/[\/\\\\]/', $str);
         $res = end($tmp);

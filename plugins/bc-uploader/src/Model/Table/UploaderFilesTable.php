@@ -17,6 +17,7 @@ use BaserCore\Utility\BcContainerTrait;
 use BcUploader\Service\UploaderConfigsService;
 use BcUploader\Service\UploaderConfigsServiceInterface;
 use Cake\Datasource\EntityInterface;
+use Cake\Event\Event;
 use Cake\Event\EventInterface;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -188,23 +189,6 @@ class UploaderFilesTable extends AppTable
     }
 
     /**
-     * ファイルの存在チェックを行う
-     *
-     * @param string $fileName
-     * @return    bool
-     */
-    public function fileExists($fileName, $limited = false)
-    {
-
-        if ($limited) {
-            $savePath = WWW_ROOT . 'files' . DS . $this->actsAs['BcUpload']['saveDir'] . DS . 'limited' . DS . $fileName;
-        } else {
-            $savePath = WWW_ROOT . 'files' . DS . $this->actsAs['BcUpload']['saveDir'] . DS . $fileName;
-        }
-        return file_exists($savePath);
-    }
-
-    /**
      * ソースファイルの名称を取得する
      * @param $fileName
      * @return mixed
@@ -218,17 +202,18 @@ class UploaderFilesTable extends AppTable
     /**
      * Before Delete
      *
-     * @param bool $cascade
-     * @return bool
+     * @param Event $event
+     * @checked
+     * @noTodo
      */
-    public function beforeDelete($cascade = true)
+    public function beforeDelete(Event $event)
     {
-        $data = $this->read(null, $this->id);
-        if (!empty($data['UploaderFile']['publish_begin']) || !empty($data['UploaderFile']['publish_end'])) {
-            $this->Behaviors->BcUpload->BcUpload['UploaderFile']->savePath .= 'limited' . DS;
+        $entity = $event->getData('entity');
+        $fileUploader = $this->getFileUploader();
+        if ($entity->isLimited()) {
+            $fileUploader->savePath .= 'limited' . DS;
         } else {
-            $this->Behaviors->BcUpload->BcUpload['UploaderFile']->savePath = preg_replace('/' . preg_quote('limited' . DS, '/') . '$/', '', $this->Behaviors->BcUpload->savePath['UploaderFile']);
+            $fileUploader->savePath = preg_replace('/' . preg_quote('limited' . DS, '/') . '$/', '', $fileUploader->savePath);
         }
-        return parent::beforeDelete($cascade);
     }
 }

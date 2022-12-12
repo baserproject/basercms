@@ -40,7 +40,7 @@ $class = ' class="' . implode(' ', $classies) . '"';
       <span class="midium"><?php echo $uploaderFile->midium ?></span>
       <span class="large"><?php echo $uploaderFile->large ?></span>
       <span class="url">
-        <?php echo $this->BcHtml->url($this->Uploader->getFileUrl($uploaderFile->name)) ?>
+        <?php echo $this->BcHtml->Url->build($this->Uploader->getFileUrl($uploaderFile->name)) ?>
       </span>
       <span class="user-id"><?php echo $uploaderFile->user_id ?></span>
       <span class="name"><?php echo $uploaderFile->name ?></span>
@@ -83,7 +83,8 @@ $class = ' class="' . implode(' ', $classies) . '"';
         'data-bca-btn-type' => 'edit',
         'data-bca-btn-size' => 'lg'
       ]) ?>
-      <?php $this->BcBaser->link('', ['action' => 'delete', $uploaderFile->id], [
+      <?php echo $this->BcAdminForm->postLink('', ['action' => 'delete', $uploaderFile->id], [
+        'confirm' => __d('baser', '{0} を本当に削除してもいいですか？', $uploaderFile->name),
         'title' => __d('baser', '削除'),
         'class' => 'bca-btn-icon',
         'data-bca-btn-type' => 'delete',

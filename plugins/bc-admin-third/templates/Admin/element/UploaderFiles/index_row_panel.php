@@ -30,7 +30,7 @@ $class = ' class="' . implode(' ', $classies) . ' bca-file-list__item"';
 ?>
 
 
-<span<?php echo $class; ?> id="selectedFile<?php echo $uploaderFile->id ?>">
+<span<?php echo $class; ?> id="selectedFile<?php echo $uploaderFile->id ?>" class="uploader-file-row-panel">
 	<?php echo $this->Uploader->file($uploaderFile, [
     'width' => 120,
     'height' => 120,
@@ -38,18 +38,18 @@ $class = ' class="' . implode(' ', $classies) . ' bca-file-list__item"';
     'alt' => h($uploaderFile->alt),
     'style' => 'width:120px;height:120px'
   ]) ?>
-	<div style="text-align:right">
+	<div class="uploader-file-row-panel__alt">
 		<span class="id">
 		  <?php echo $uploaderFile->id ?></span>.<span><?php echo $this->BcText->truncate(h($uploaderFile->alt), 13) ?>
     </span>
 	</div>
 	<span class="name"><?php echo $uploaderFile->name ?></span>
-	<div style="text-align:right;margin-top:2px">
+	<div class="uploader-file-row-panel__created">
 		<span class="created" style="white-space: nowrap">
 			[<?php echo __d('baser', '公開状態') ?>：<?php echo $this->BcText->booleanMark($statusPublish); ?>]&nbsp;<?php echo $this->BcTime->format($uploaderFile->created, 'Y.m.d') ?>
 		</span>
 	</div>
-	<div class="user-name" style="text-align:right">
+	<div class="user-name uploader-file-row-panel__user-name">
 	  <span><?php echo h($this->BcText->arrayValue($uploaderFile->user_id, $users)) ?></span>
   </div>
 	<div style="display:none">
@@ -58,7 +58,7 @@ $class = ' class="' . implode(' ', $classies) . ' bca-file-list__item"';
 		<span class="midium"><?php echo $uploaderFile->midium ?></span>
 		<span class="large"><?php echo $uploaderFile->large ?></span>
 		<span class="url">
-		  <?php echo $this->BcHtml->url($this->Uploader->getFileUrl($uploaderFile->name)) ?>
+		  <?php echo $this->BcHtml->Url->build($this->Uploader->getFileUrl($uploaderFile->name)) ?>
     </span>
 		<span class="user-id"><?php echo $uploaderFile->user_id ?></span>
 		<span class="publish-begin">

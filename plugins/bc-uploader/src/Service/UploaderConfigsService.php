@@ -68,4 +68,27 @@ class UploaderConfigsService implements UploaderConfigsServiceInterface
         $this->entity = null;
     }
 
+    /**
+     * アップローダー設定を更新する
+     *
+     * @param array $postData
+     * @return UploaderConfig|\Cake\Datasource\EntityInterface|false
+     * @noTodo
+     * @checked
+     */
+    public function update(array $postData)
+    {
+        $siteConfig = $this->UploaderConfigs->newEntity($postData, ['validate' => 'keyValue']);
+        if ($siteConfig->hasErrors()) {
+            return $siteConfig;
+        }
+
+        $siteConfigArray = $siteConfig->toArray();
+        if ($this->UploaderConfigs->saveKeyValue($siteConfigArray)) {
+            $this->entity = null;
+            return $this->get();
+        }
+        return false;
+    }
+
 }

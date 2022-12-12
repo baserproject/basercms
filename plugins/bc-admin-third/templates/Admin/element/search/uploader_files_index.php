@@ -22,6 +22,7 @@ if (!isset($listId)) {
 ?>
 
 
+<?php echo $this->BcAdminForm->create(null, ['novalidate' => true, 'type' => 'get', 'url' => ['action' => 'index']]) ?>
 <div class="file-filter submit bca-search__input-list">
 	<span class="bca-search__input-item">
 		<?php echo $this->BcAdminForm->label('name', __d('baser', '名称'), ['class' => 'bca-search__input-item-label']) ?>
@@ -60,12 +61,12 @@ if (!isset($listId)) {
 	</span>
   <span class="button bca-search__btns">
 		<span class="bca-search__btns-item">
-      <?php echo $this->BcAdminForm->submit(__d('baser', '検索'), [
-        'id' => 'BtnFilter' . $listId,
-        'div' => false,
-        'class' => 'button filter-control bca-btn',
-        'data-bca-btn-type' => 'search'
-      ]) ?>
+		  <?php if($listId): ?>
+		  <?php echo $this->BcAdminForm->button(__d('baser', '検索'), ['id' => 'BtnFilter', 'class' => 'bca-btn bca-loading', 'data-bca-btn-type' => 'search']) ?>
+		  <?php else: ?>
+      <?php echo $this->BcAdminForm->button(__d('baser', '検索'), ['id' => 'BtnSearchSubmit', 'class' => 'bca-btn bca-loading', 'data-bca-btn-type' => 'search']) ?>
+      <?php endif ?>
     </span>
 	</span>
 </div>
+<?php echo $this->Form->end() ?>

@@ -1,12 +1,21 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package            Uploader.View
- * @since           baserCMS v 3.0.10
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) NPO baser foundation
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       https://basercms.net/license/index.html MIT License
  */
-$this->BcBaser->element('uploader_files/index');
+
+/**
+ * @var \BaserCore\View\BcAdminAppView $this
+ * @checked
+ * @noTodo
+ * @unitTest
+ */
+?>
+
+
+<?php $this->BcBaser->element('UploaderFiles/index') ?>

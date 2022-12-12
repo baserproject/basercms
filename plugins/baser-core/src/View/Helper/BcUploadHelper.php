@@ -189,14 +189,14 @@ class BcUploadHelper  extends Helper
                     if ($tmp) {
                         $imgOptions['tmp'] = true;
                     }
-                    $out = $this->Html->tag('figure', $this->uploadImage($fieldName, $entity, $imgOptions) . '<br>' . $this->Html->tag('figcaption', BcUtil::mb_basename($value), $figcaptionOptions), $figureOptions);
+                    $out = $this->Html->tag('figure', $this->uploadImage($fieldName, $entity, $imgOptions) . '<br>' . $this->Html->tag('figcaption', BcUtil::mbBasename($value), $figcaptionOptions), $figureOptions);
                 } else {
                     $filePath = $basePath . $value;
                     $linkOptions = ['target' => '_blank'];
                     if (is_array($options['link'])) {
                         $linkOptions = array_merge($linkOptions, $options['link']);
                     }
-                    $out = $this->Html->tag('figure', $this->Html->link(__d('baser', 'ダウンロード') . ' ≫', $filePath, $linkOptions) . '<br>' . $this->Html->tag('figcaption', BcUtil::mb_basename($value), $figcaptionOptions), $figureOptions);
+                    $out = $this->Html->tag('figure', $this->Html->link(__d('baser', 'ダウンロード') . ' ≫', $filePath, $linkOptions) . '<br>' . $this->Html->tag('figcaption', BcUtil::mbBasename($value), $figcaptionOptions), $figureOptions);
                 }
             } else {
                 $out = $value;

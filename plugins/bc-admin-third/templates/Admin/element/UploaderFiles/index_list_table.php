@@ -21,14 +21,13 @@
  */
 // IE文字化け対策
 header('Content-type: text/html; charset=utf-8');
-$users = $this->BcAdminForm->getControlSource("UploaderFile.user_id");
-$uploaderCategories = $this->BcAdminForm->getControlSource("UploaderFile.uploader_category_id");
-$this->passedArgs['action'] = 'ajax_list';
+$users = $this->BcAdminForm->getControlSource("UploaderFiles.user_id");
+$uploaderCategories = $this->BcAdminForm->getControlSource("UploaderFiles.uploader_category_id");
 //==============================================================================
 // Ajaxで呼び出される事が前提のためインラインで呼び出し
 //==============================================================================
 $this->BcBaser->js([
-  'BcUploader.admin/uploader_files/uploader_list_table.bundle'
+  'admin/uploader_files/index_table.bundle'
 ]);
 ?>
 
@@ -40,7 +39,7 @@ $this->BcBaser->js([
       <?php if (!$installMessage): ?>
         <div>
           <?php if ($uploaderCategories): ?>
-            <?php echo $this->BcAdminForm->control('UploaderFile.uploader_category_id', [
+            <?php echo $this->BcAdminForm->control('uploader_category_id', [
               'type' => 'select',
               'options' => $uploaderCategories,
               'empty' => __d('baser', 'カテゴリ指定なし'),
@@ -49,7 +48,7 @@ $this->BcBaser->js([
             ]) ?>&nbsp;
           <?php endif ?>
           <span id="SpanUploadFile<?php echo $listId ?>">
-            <?php echo $this->BcAdminForm->control('UploaderFile.file', [
+            <?php echo $this->BcAdminForm->control('file', [
               'type' => 'file',
               'id' => 'UploaderFileFile' . $listId,
               'class' => 'uploader-file-file',
@@ -73,7 +72,7 @@ $this->BcBaser->js([
           <div>
             <label for="UploaderFileUploaderCategoryId"><?php echo __d('baser', 'アップロード') ?></label>
             <?php if ($uploaderCategories): ?>
-              <?php echo $this->BcAdminForm->control('UploaderFile.uploader_category_id', [
+              <?php echo $this->BcAdminForm->control('uploader_category_id', [
                 'type' => 'select',
                 'options' => $uploaderCategories,
                 'empty' => __d('baser', 'カテゴリ指定なし'),
@@ -81,7 +80,7 @@ $this->BcBaser->js([
               ]) ?>
             <?php endif ?>
             <span id="SpanUploadFile<?php echo $listId ?>">
-              <?php echo $this->BcAdminForm->control('UploaderFile.file', [
+              <?php echo $this->BcAdminForm->control('file', [
                 'type' => 'file',
                 'id' => 'UploaderFileFile' . $listId,
                 'class' => 'uploader-file-file',
@@ -124,7 +123,7 @@ $this->BcBaser->js([
       <?php if ($uploaderFiles->count()): ?>
         <tbody>
         <?php foreach($uploaderFiles as $uploaderFile): ?>
-          <?php $this->BcBaser->element('uploader_files/index_row_table', [
+          <?php $this->BcBaser->element('UploaderFiles/index_row_table', [
             'uploaderFile' => $uploaderFile,
             'users' => $users,
             'uploaderCategories' => $uploaderCategories

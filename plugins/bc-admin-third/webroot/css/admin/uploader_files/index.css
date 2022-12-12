@@ -122,7 +122,7 @@
 }
 #DivPanelList .selectable-file span{
 	white-space:normal!important;
-	color:#333333!important;
+	/*color:#333333!important;*/
 	font-size:10px!important;
 	line-height:12px;
 }
@@ -145,7 +145,7 @@
 	display:none;
 }
 #DivPanelList .selectable-file .created {
-	color:#999!important;
+	/*color:#999!important;*/
 }
 
 /* FileList
@@ -156,11 +156,10 @@
 	white-space: normal;
 	overflow:auto;
 	background-color:#FFF;
-	text-align:center;
 }
 #DivPanelList .file-list-body {
 	margin-top: 5px;
-	background-color: #E6E6E6;
+	background-color: #f2f2f2;
 	padding:5px;
 	margin-left:auto;
 	margin-right:auto;
@@ -169,7 +168,15 @@
 /* selected
 ----------------------------------------------- */
 .file-list-body .selected{
-	background-color:#99CCFF!important;
+	background-color:#424f44!important;
+}
+.file-list-body .selected,
+.file-list-body .selected td,
+.file-list-body .selected td span,
+.cke_reset_all .selected .uploader-file-row-panel__created span,
+.cke_reset_all .selected .uploader-file-row-panel__alt span,
+.cke_reset_all .selected .uploader-file-row-panel__user-name span{
+	color:#fff!important;
 }
 
 /* page-numbers
@@ -290,7 +297,7 @@
 	margin-left:auto;
 	margin-right:auto;
 }
-.cke_dialog_contents .pagination span span a, .pagination .disabled, .pagination .current {
+.cke_dialog_contents .pagination span span a {
     padding: 3px 9px!important;
 	line-height: 18px!important;
 	float:left!important;
@@ -307,7 +314,7 @@
     text-decoration: none!important;
 	float:left!important;
 }
-.cke_dialog_contents .pagination .next, .pagination .prev {
+.cke_dialog_contents .pagination .next {
     margin: 0 2px!important;
     text-decoration: none!important;
     padding: 3px 9px!important;
@@ -324,18 +331,23 @@
 .ui-dialog .uploader-file-image{
 	text-align:center;
 }
-.ui-dialog .uploader-file-image p{
-	margin-bottom:10px;
+/*.ui-dialog .uploader-file-image p{*/
+/*	margin-bottom:10px;*/
+/*}*/
+.ui-dialog .uploader-file-image .image {
+  margin:15px;
+  max-width: 400px;
+}
+.ui-dialog .uploader-file-image .image a{
+  display: inline-block;
+}
+.uploader-file-image__image {
+  width: 100%;
 }
 .ui-dialog .uploader-file-image .url{
 	text-align: left;
-	font-weight: bold;
 	word-wrap: break-word;
-	width: 95%;
-	max-width: 575px;
-	margin-bottom: 15px;
-	border:5px solid #CCC;
-	padding:10px;
+	margin:15px;
 }
 .ui-dialog .uploader-file-image .url a {
 	color:#690;
@@ -385,3 +397,19 @@
 	margin-bottom:10px;
 	font-weight: bold;
 }
+.uploader-file-row-panel__alt {
+  margin-left:6px;
+  margin-top:4px;
+  line-height: 0.8em;
+  text-align:left;
+}
+.uploader-file-row-panel__user-name {
+  line-height: 0.8em;
+  text-align:right;
+}
+.uploader-file-row-panel__created {
+  line-height: 0.8em;
+  text-align:right;
+  margin-top:4px;
+}
+

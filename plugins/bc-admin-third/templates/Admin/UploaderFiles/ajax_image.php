@@ -1,22 +1,37 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package            Uploader.View
- * @since           baserCMS v 3.0.10
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) NPO baser foundation
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       https://basercms.net/license/index.html MIT License
  */
-$url = $this->BcBaser->getUrl($this->Uploader->getFileUrl($file['UploaderFile']['name']));
+
+/**
+ * @var \BaserCore\View\BcAdminAppView $this
+ * @var \BcUploader\Model\Entity\UploaderFile $uploaderFile
+ * @var string $size
+ * @checked
+ * @noTodo
+ * @unitTest
+ */
+$url = $this->BcBaser->getUrl($this->Uploader->getFileUrl($uploaderFile->name));
+$fulUrl = $this->BcBaser->getUrl($this->Uploader->getFileUrl($uploaderFile->name), true);
 ?>
 
-
-<p class="url">
-  <a href="<?php echo $url ?>" target="_blank"><?php echo FULL_BASE_URL . $url ?></a>
-</p>
-<p class="image">
-  <a href="<?php echo $url ?>"
-     target="_blank"><?php echo $this->Uploader->file($file, ['size' => $size, 'alt' => $file['UploaderFile']['name']]) ?></a>
-</p>
+<div class="uploader-file-image-inner">
+  <p class="url">
+    <a href="<?php echo h($url) ?>" target="_blank"><?php echo h($fulUrl) ?></a>
+  </p>
+  <p class="image">
+    <a href="<?php echo h($url) ?>" target="_blank">
+      <?php echo $this->Uploader->file($uploaderFile, [
+        'size' => $size,
+        'alt' => $uploaderFile->name,
+        'class' => 'uploader-file-image__image'
+      ]) ?>
+    </a>
+  </p>
+</div>

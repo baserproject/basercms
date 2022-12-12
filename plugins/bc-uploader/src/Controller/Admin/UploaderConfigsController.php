@@ -12,44 +12,38 @@
 namespace BcUploader\Controller\Admin;
 
 use BaserCore\Controller\Admin\BcAdminAppController;
+use BcUploader\Service\UploaderConfigsService;
+use BcUploader\Service\UploaderConfigsServiceInterface;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
 
 /**
  * ファイルアップローダーコントローラー
- *
- * @package         Uploader.Controller
  */
 class UploaderConfigsController extends BcAdminAppController
 {
 
     /**
-     * コンポーネント
-     *
-     * @var        array
-     * @access    public
-     */
-    public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure'];
-
-    /**
      * [ADMIN] アップローダー設定
      *
-     * @return    void
-     * @access    public
+     * @param UploaderConfigsService $service
+     * @return void
+     * @checked
+     * @noTodo
      */
-    public function admin_index()
+    public function index(UploaderConfigsServiceInterface $service)
     {
-
-        $this->setTitle(__d('baser', 'アップローダープラグイン設定'));
-        if (!$this->request->getData()) {
-            $this->request = $this->request->withData('UploaderConfig',  $this->UploaderConfig->findExpanded());
-        } else {
-            $this->UploaderConfig->set($this->request->getData());
-            if ($this->UploaderConfig->validates()) {
-                $this->UploaderConfig->saveKeyValue($this->request->getData());
-                $this->BcMessage->setInfo(__d('baser', 'アップローダー設定を保存しました。'));
+        if($this->getRequest()->is(['post', 'put'])) {
+            if($service->update($this->getRequest()->getData())) {
+                $this->BcMessage->setSuccess(__d('baser', 'アップローダー設定を保存しました。'));
                 $this->redirect(['action' => 'index']);
             } else {
                 $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
             }
         }
+        $this->set([
+            'uploaderConfig' => $service->get()
+        ]);
     }
 }

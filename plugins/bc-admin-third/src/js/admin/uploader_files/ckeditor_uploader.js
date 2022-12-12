@@ -98,7 +98,7 @@ if (!CKEDITOR.dialog.exists('Image')) {
                         linkElement.append(element, false);
 
                         if (this.getContentElement('info', 'chkCaption').getValue()) {
-                            var imageSettings = $.parseJSON($("#UploaderImageSettings").html());
+                            var imageSettings = $.parseJSON($("#CkeditorUploaderScript").attr('data-imageSettings'));
                             var width;
                             if (this.getValueOf('info', 'rdoSize')) {
                                 width = imageSettings[this.getValueOf('info', 'rdoSize')]['width'];
@@ -348,7 +348,7 @@ if (!CKEDITOR.dialog.exists('Image')) {
 
                                         if (element && imgFlg) {
                                             // 画像のサイズを取得する
-                                            $.get(baseUrl + adminPrefix + '/uploader/uploader_files/ajax_exists_images/' + getFileName(element.getAttribute('src'), ''), null, function (res) {
+                                            $.get($.bcUtil.adminBaseUrl + 'bc-uploader/uploader_files/ajax_exists_images/' + getFileName(element.getAttribute('src'), ''), null, function (res) {
                                                 if (res) {
                                                     rdoSize.find('input[type=radio]').eq(1).prop('disabled', !res.small);
                                                     rdoSize.find('input[type=radio]').eq(2).prop('disabled', !res.midium);
@@ -379,7 +379,7 @@ if (!CKEDITOR.dialog.exists('Image')) {
                                 var fileList = $("#" + this.domId);
 
                                 var inner = '<div id="UploaderSearch" class="corner5" style="display:none"></div>' +
-                                    '<div class="inner" style="text-align:center"><img style="margin-top:120px" src="' + baseUrl + 'img/admin/ajax-loader.gif" /></div>';
+                                    '<div class="inner" style="text-align:center"><img style="margin-top:120px" src="' + $("#CkeditorUploaderScript").attr('data-loaderUrl') + '" /></div>';
                                 fileList.html(inner);
 
                                 var dialog = this.getDialog();
@@ -387,7 +387,7 @@ if (!CKEDITOR.dialog.exists('Image')) {
                                 $.ajax({
                                     type: "GET",
                                     dataType: "html",
-                                    url: baseUrl + adminPrefix + "/uploader/uploader_files/ajax_get_search_box/" + listId,
+                                    url: $.bcUtil.adminBaseUrl + "bc-uploader/uploader_files/ajax_get_search_box/" + listId,
                                     success: function (res) {
                                         $("#UploaderSearch").html(res);
                                         $("#UploaderSearch").slideDown();
@@ -399,7 +399,7 @@ if (!CKEDITOR.dialog.exists('Image')) {
                                 $.ajax({
                                     type: "GET",
                                     dataType: "html",
-                                    url: baseUrl + adminPrefix + "/uploader/uploader_files/index/" + listId,
+                                    url: $.bcUtil.adminBaseUrl + "bc-uploader/uploader_files/ajax_index/" + listId,
                                     success: function (res) {
 
                                         // リストをセット
@@ -413,7 +413,7 @@ if (!CKEDITOR.dialog.exists('Image')) {
 
                                                 // URLの拡張子で画像かどうかを判別
                                                 // ※ URLを直接入力する場合もあるので拡張子で判断
-                                                var filePath = $(this).find("span.url").html();
+                                                var filePath = $(this).find("span.url").html().trim();
                                                 var fileName = $(this).find("span.name").html();
                                                 var formElements2 = $("#" + dialog.getContentElement('info', 'formElements2').domId);
 

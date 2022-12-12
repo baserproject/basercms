@@ -29,6 +29,11 @@ $(function () {
     // 一覧を更新する
     updateFileList();
 
+    $("#BtnFilter").click(function(){
+        updateFileList();
+        return false;
+    });
+
     /* ダイアログを初期化 */
     $("#EditDialog").dialog({
         bgiframe: true,
@@ -38,8 +43,9 @@ $(function () {
         modal: true,
         open: function () {
             var name = $("#FileList" + listId + " .selected .name").html();
-            var imgUrl = baseUrl + adminPrefix + '/uploader/uploader_files/ajax_image/' + name + '/midium';
-            $("#UploaderFileId" + listId).val($("#FileList" + listId + " .selected .id").html());
+            $("#UploaderFileImage" + listId + ' .uploader-file-image-inner').remove();
+            $("#UploadFileImageLoader" + listId).show();
+            $("#UploaderFileId" + listId).val($("#FileList" + listId + " .selected .id").html().trim());
             $("#UploaderFileName" + listId).val(name);
             $("#UploaderFileAlt" + listId).val($("#FileList" + listId + " .selected .alt").html());
 
@@ -70,8 +76,17 @@ $(function () {
             if ($("#_UploaderFileUploaderCategoryId" + listId).length) {
                 $("#_UploaderFileUploaderCategoryId" + listId).val($("#FileList" + listId + " .selected .uploader-category-id").html());
             }
-            $.get(imgUrl, function (res) {
-                $("#UploaderFileImage" + listId).html(res);
+            $.ajax({
+                url: $.bcUtil.adminBaseUrl + 'bc-uploader/uploader_files/ajax_image/' + name + '/large',
+                headers: {
+                    "Authorization": $.bcJwt.accessToken,
+                },
+                type: 'get',
+                dataType: 'html',
+                success: function (res) {
+                    $("#UploadFileImageLoader" + listId).hide();
+                    $("#UploadFileImageLoader" + listId).after(res);
+                }
             });
         },
         buttons: {
@@ -79,45 +94,49 @@ $(function () {
                 text: bcI18n.uploaderCancel,
                 click: function () {
                     $(this).dialog('close');
-                    $("#UploaderFileImage" + listId).html('<img src="' + baseUrl + 'img/admin/ajax-loader.gif" />');
                 }
             },
             save: {
                 text: bcI18n.uploaderSave,
                 click: function () {
                     // 保存処理
-                    var saveButton = $(this);
+                    let saveButton = $(this);
+                    let id = $("#UploaderFileId" + listId).val();
                     $.bcToken.check(function () {
                         // IEでform.serializeを利用した場合、Formタグの中にTableタグがあるとデータが取得できなかった
                         var data = {
-                            "data[UploaderFile][id]": $("#UploaderFileId" + listId).val(),
-                            "data[UploaderFile][name]": $("#UploaderFileName" + listId).val(),
-                            "data[UploaderFile][alt]": $("#UploaderFileAlt" + listId).val(),
-                            "data[UploaderFile][publish_begin]": $("#UploaderFilePublishBegin" + listId).val(),
-                            "data[UploaderFile][publish_end]": $("#UploaderFilePublishEnd" + listId).val(),
-                            "data[UploaderFile][user_id]": $("#UploaderFileUserId" + listId).val(),
-                            "data[UploaderFile][uploader_category_id]": $("#_UploaderFileUploaderCategoryId" + listId).val(),
+                            "id": id,
+                            "name": $("#UploaderFileName" + listId).val(),
+                            "alt": $("#UploaderFileAlt" + listId).val(),
+                            "publish_begin": $("#UploaderFilePublishBegin" + listId).val(),
+                            "publish_end": $("#UploaderFilePublishEnd" + listId).val(),
+                            "user_id": $("#UploaderFileUserId" + listId).val(),
+                            "uploader_category_id": $("#_UploaderFileUploaderCategoryId" + listId).val(),
                             "_csrfToken": $.bcToken.key
                         };
-                        return $.bcUtil.ajax($("#UploaderFileEditForm" + listId).attr('action'), function (res) {
-                            if (res) {
+                        return $.ajax({
+                            url: $.bcUtil.apiBaseUrl + 'bc-uploader/uploader_files/edit/' + id + '.json',
+                            headers: {
+                                "Authorization": $.bcJwt.accessToken,
+                            },
+                            type: 'post',
+                            data: data,
+                            dataType: 'json',
+                            success: function () {
                                 updateFileList();
                                 allFields.removeClass('ui-state-error');
                                 saveButton.dialog('close');
-                                $("#UploaderFileImage" + listId).html('<img src="' + baseUrl + 'img/admin/ajax-loader.gif" />');
-                            } else {
-                                $.bcUtil.hideLoader();
-                                alert(bcI18n.uploaderAlertMessage1);
+                            },
+                            error: function () {
+                                $.bcUtil.showAjaxError(bcI18n.uploaderAlertMessage1, XMLHttpRequest);
                             }
-                            $.bcToken.key = null;
-                        }, {data: data});
+                        });
                     }, {hideLoader: false, useUpdate: false});
                 }
             }
         },
         close: function () {
             allFields.val('').removeClass('ui-state-error');
-            $("#UploaderFileImage" + listId).html('<img src="' + baseUrl + 'img/admin/ajax-loader.gif" />');
         }
 
     });
@@ -148,14 +167,7 @@ $(function () {
                     processData: false,
                     contentType: false,
                     cache: false,
-                    success: uploadSuccessHandler,
-                    // error: function (XMLHttpRequest) {
-                    //     XMLHttpRequest.responseText = null;
-                    //     $.bcUtil.showAjaxError(bcI18n.commonChangePublishFailedMessage, XMLHttpRequest);
-                    // },
-                    // complete: function () {
-                    //     $.bcUtil.hideLoader();
-                    // }
+                    success: uploadSuccessHandler
                 });
             }, {useUpdate: false, hideLoader: false});
         }
@@ -293,7 +305,7 @@ $(function () {
 
         if (listId) {
             $(".selectable-file").bind('mouseenter.selectEvent', function () {
-                $(this).css('background-color', '#FFCC00');
+                $(this).css('background-color', '#fffae7');
             });
             $(".selectable-file").bind('mouseleave.selectEvent', function () {
                 $(this).css('background-color', '#FFFFFF');
@@ -310,7 +322,7 @@ $(function () {
             });
         } else {
             $("#DivPanelList .selectable-file").bind('mouseenter.selectEvent', function () {
-                $(this).css('background-color', '#FFCC00');
+                $(this).css('background-color', '#fffae7');
             });
             $("#DivPanelList .selectable-file").bind('mouseleave.selectEvent', function () {
                 $(this).css('background-color', '#FFFFFF');
@@ -334,9 +346,6 @@ $(function () {
             return false;
         });
 
-        $("#BtnFilter" + listId).bind('click.filterEvent', function () {
-            updateFileList();
-        });
         /*$('#FilterUploaderCategoryId'+listId).bind('change.filterEvent', function() {
             $("#Waiting").show();
             $.get(getListUrl(),updateFileListCompleteHander);
@@ -371,12 +380,22 @@ $(function () {
         let query = [];
         if ($('#FilterUploaderCategoryId' + listId).length) {
             query.push('uploader_category_id=' + $('#FilterUploaderCategoryId' + listId).val());
+        } else {
+            query.push('uploader_category_id=');
         }
-        if ($('input[name="data[Filter][uploader_type]"]:checked').length) {
-            query.push('uploader_type=' + $('input[name="data[Filter][uploader_type]"]:checked').val());
+        if ($('input[name="uploader_type"]:checked').length) {
+            query.push('uploader_type=' + $('input[name="uploader_type"]:checked').val());
+        } else {
+            query.push('uploader_type=all');
         }
         if ($('#FilterName' + listId).val()) {
             query.push('name=' + encodeURI($('#FilterName' + listId).val()));
+        } else {
+            query.push('name=');
+        }
+        const num = location.search.match('limit=([0-9]+)');
+        if(num) {
+            query.push('limit=' + num[1]);
         }
         if (query.length) {
             listUrl += '?' + query.join('&');
@@ -387,18 +406,14 @@ $(function () {
     /**
      * コンテキストメニューハンドラ
      */
-    function contextMenuHander(action, el, pos) {
-        var delUrl = baseUrl + adminPrefix + '/uploader/uploader_files/delete/' + $("#FileList" + listId + " .selected .id").html();
+    function contextMenuHander(action, el) {
+        let delUrl = $.bcUtil.apiBaseUrl + 'bc-uploader/uploader_files/delete/' + $("#FileList" + listId + " .selected .id").html() + '.json';
 
         // IEの場合、action値が正常に取得できないので整形する
-        var pos = action.indexOf("#");
-
-        if (pos != -1) {
-            action = action.substring(pos + 1, action.length);
-        }
+        let pos = action.indexOf("#");
+        if (pos !== -1) action = action.substring(pos + 1, action.length);
 
         switch (action) {
-
             case 'edit':
                 $('#EditDialog').dialog('open');
                 break;

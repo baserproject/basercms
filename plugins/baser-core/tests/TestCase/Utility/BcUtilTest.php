@@ -1278,4 +1278,21 @@ class BcUtilTest extends BcTestCase
         $result = BcUtil::isMigrations();
         $this->assertFalse($result);
     }
+
+    /**
+     * 日本語ファイル名対応版basename
+     */
+    public function testMbBasename()
+    {
+        $this->markTestIncomplete('このテストは未確認です。basics.phpより移行');
+        $result = mbBasename('/hoge/あいうえお.php');
+        $this->assertEquals('あいうえお.php', $result);
+
+        $result = mbBasename('/hoge/あいうえお.phptest', 'test');
+        $this->assertEquals('あいうえお.php', $result, 'suffixを取り除けません');
+
+        $result = mbBasename('/hoge/あいうえおtest.php', 'test');
+        $this->assertEquals('あいうえおtest.php', $result);
+    }
+
 }

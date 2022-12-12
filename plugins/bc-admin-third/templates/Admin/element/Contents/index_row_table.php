@@ -20,8 +20,10 @@ use BaserCore\View\BcAdminAppView;
  * @var array $authorList
  * @var Content $content
  * @var int $count
+ * @checked
+ * @noTodo
+ * @unitTest
  */
-
 $isSiteRelated = $this->BcContents->isSiteRelated($content);
 $isPublish = $this->BcContents->isAllowPublish($content, true);
 $isSiteRoot = $content->site_root;

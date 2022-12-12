@@ -17,6 +17,7 @@ use BaserCore\Annotation\UnitTest;
 use BaserCore\Error\BcException;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
+use Cake\Datasource\EntityInterface;
 use Cake\I18n\FrozenTime;
 use Cake\ORM\TableRegistry;
 
@@ -71,12 +72,12 @@ class UploaderFilesService implements UploaderFilesServiceInterface
     /**
      * 一覧の検索条件を生成する
      *
-     * @param array $data
+     * @param array $params
      * @return array
      * @checked
      * @noTodo
      */
-    protected function createAdminIndexConditions($params)
+    protected function createAdminIndexConditions(array $params)
     {
         $conditions = [];
         if (!empty($params['uploader_category_id'])) {
@@ -134,6 +135,36 @@ class UploaderFilesService implements UploaderFilesServiceInterface
     }
 
     /**
+     * アップロードファイルを取得する
+     *
+     * @param int $id
+     * @return EntityInterface
+     * @checked
+     * @noTodo
+     */
+    public function get(int $id)
+    {
+        return $this->UploaderFiles->get($id);
+    }
+
+    /**
+     * アップロードファイルを削除する
+     *
+     * @param int $id
+     * @return bool
+     * @checked
+     * @noTodo
+     */
+    public function delete(int $id): bool
+    {
+        $entity = $this->UploaderFiles->get($id);
+        if(!$this->isEditable($entity->toArray())) {
+            throw new BcException(__d('baser', 'ファイルの変更権限がありません。' ));
+        }
+        return $this->UploaderFiles->delete($entity);
+    }
+
+    /**
      * アップロードファイルを登録する
      *
      * @param array $postData
@@ -152,12 +183,61 @@ class UploaderFilesService implements UploaderFilesServiceInterface
         }
         if (!empty($postData['publish_begin'])) $postData['publish_begin'] = new FrozenTime($postData['publish_begin']);
         if (!empty($postData['publish_end'])) $postData['publish_end'] = new FrozenTime($postData['publish_end']);
-        if (!empty($postData['user_id'])) $postData['user_id'] = BcUtil::loginUser()->id;
         $postData['file']['name'] = str_replace(['/', '&', '?', '=', '#', ':', '%', '+'], '_', h($postData['file']['name']));
         $postData['name'] = $postData['file'];
         $postData['alt'] = $postData['name']['name'];
-        $entity = $this->UploaderFiles->patchEntity($this->UploaderFiles->newEmptyEntity(), $postData);
+        $entity = $this->UploaderFiles->patchEntity($this->getNew(), $postData);
         return $this->UploaderFiles->saveOrFail($entity);
+    }
+
+    /**
+     * アップロードファイルを更新する
+     *
+     * @param EntityInterface $entity
+     * @param array $postData
+     * @return EntityInterface
+     * @checked
+     * @noTodo
+     */
+    public function update(EntityInterface $entity, array $postData)
+    {
+        if(!$this->isEditable($postData)) {
+            throw new BcException(__d('baser', 'ファイルの変更権限がありません。' ));
+        }
+        $entity = $this->UploaderFiles->patchEntity($entity, $postData);
+        return $this->UploaderFiles->saveOrFail($entity);
+    }
+
+    /**
+     * 編集可能な権限を持っているかどうか
+     *
+     * @param array $postData
+     * @return bool
+     * @checked
+     * @noTodo
+     */
+    public function isEditable(array $postData)
+    {
+        if(!$this->uploaderConfigsService->get()->use_permission) return true;
+        $user = BcUtil::loginUser();
+        if (!BcUtil::isAdminUser($user) && $postData['user_id'] !== $user->id) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * 初期データ取得
+     *
+     * @return \Cake\Datasource\EntityInterface
+     * @checked
+     * @noTodo
+     */
+    public function getNew()
+    {
+        return $this->UploaderFiles->newEntity([
+            'user_id' => BcUtil::loginUser()->id
+        ]);
     }
 
 }
