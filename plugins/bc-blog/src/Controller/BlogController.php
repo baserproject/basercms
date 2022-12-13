@@ -178,6 +178,18 @@ class BlogController extends BlogFrontAppController
 
     /**
      * [PUBLIC] ブログアーカイブを表示する
+     * 
+     * $type として、category / author / tag / date を指定し、ブログ記事をそれぞれのタイプごとにフィルタリングする事ができる。
+     * また、$type を指定しない場合は、詳細ページを表示する。
+     * 
+     * ### URL例
+     * - カテゴリ別記事一覧： /news/archives/category/category-name
+     * - 作成者別記事一覧： /news/archives/author/author-name
+     * - タグ別記事一覧： /news/archives/tag/tag-name
+     * - 年別記事一覧： /news/archives/date/2022
+     * - 月別記事一覧： /news/archives/date/2022/12
+     * - 日別記事一覧： /news/archives/date/2022/12/12
+     * - 詳細ページ：/news/archives/1
      *
      * @param BlogFrontService $service
      * @param BlogContentsService $blogContentsService
