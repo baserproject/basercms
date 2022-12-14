@@ -27,6 +27,39 @@ class WidgetAreasController extends BcApiController
 {
 
     /**
+     * 一覧取得
+     *
+     * @param WidgetAreasService $service
+     */
+    public function index(WidgetAreasServiceInterface $service)
+    {
+        $this->set([
+            'widgetAreas' => $this->paginate($service->getIndex($this->request->getQueryParams()))
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['widgetAreas']);
+    }
+
+    /**
+     * 新規追加
+     *
+     * @param WidgetAreasService $service
+     */
+    public function add(WidgetAreasServiceInterface $service)
+    {
+        // TODO APIを実装してください
+    }
+
+    /**
+     * 削除
+     *
+     * @param WidgetAreasService $service
+     */
+    public function delete(WidgetAreasServiceInterface $service)
+    {
+        // TODO APIを実装してください
+    }
+
+    /**
      * メールフィールドのバッチ処理
      *
      * 指定したメールフィールドに対して削除、公開、非公開の処理を一括で行う

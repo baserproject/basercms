@@ -26,6 +26,7 @@ use BcContentLink\ServiceProvider\BcContentLinkServiceProvider;
 use BcInstaller\ServiceProvider\BcInstallerServiceProvider;
 use BcMail\ServiceProvider\BcMailServiceProvider;
 use BcSearchIndex\ServiceProvider\BcSearchIndexServiceProvider;
+use BcWidgetArea\ServiceProvider\BcWidgetAreaServiceProvider;
 use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
 use Cake\Event\EventListenerInterface;
@@ -213,6 +214,7 @@ class BcTestCase extends TestCase
         $container->addServiceProvider(new BcBlogServiceProvider());
         $container->addServiceProvider(new BcInstallerServiceProvider());
         $container->addServiceProvider(new BcMailServiceProvider());
+        $container->addServiceProvider(new BcWidgetAreaServiceProvider());
         EventManager::instance(new EventManager());
         if(!empty($_SERVER['REQUEST_URI']) && $_SERVER['REQUEST_URI'] === '/s/') {
             $a = 1;

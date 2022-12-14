@@ -74,4 +74,5 @@ session_id('cli');
     ['plugin' => 'BcContentLink'],
     ['plugin' => 'BcInstaller'],
     ['plugin' => 'BcMail'],
+    ['plugin' => 'BcWidgetArea'],
 ]);
