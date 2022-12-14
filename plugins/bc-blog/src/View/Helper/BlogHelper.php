@@ -520,6 +520,7 @@ class BlogHelper extends Helper
      * @return string カテゴリ名
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getCategory($post, $options = [])
     {

@@ -14,8 +14,13 @@ namespace BcBlog\Test\TestCase\View\Helper;
 
 use App\View\AppView;
 use BaserCore\Test\Factory\ContentFactory;
+use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\TestSuite\BcTestCase;
+use BcBlog\Service\BlogPostsService;
+use BcBlog\Service\BlogPostsServiceInterface;
+use BcBlog\Test\Factory\BlogCategoryFactory;
 use BcBlog\Test\Factory\BlogContentFactory;
+use BcBlog\Test\Factory\BlogPostFactory;
 use BcBlog\Test\Scenario\BlogContentScenario;
 use BcBlog\Test\Scenario\MultiSiteBlogScenario;
 use BcBlog\View\Helper\BlogHelper;
@@ -47,6 +52,7 @@ class BlogHelperTest extends BcTestCase
         'plugin.BaserCore.Factory/ContentFolders',
         'plugin.BcBlog.Factory/BlogContents',
         'plugin.BcBlog.Factory/BlogCategories',
+        'plugin.BcBlog.Factory/BlogPosts',
     ];
 
     /**
@@ -335,13 +341,51 @@ class BlogHelperTest extends BcTestCase
      */
     public function testGetCategory()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        //		$post = array('BlogCategory' => array(
-        //			'id' => 1,
-        //			'name' => 'release',
-        //			'title' => 'プレスリリース',
-        //		));
-        //		$this->Blog->getCategory($post);
+        // テストデータを作る
+        BlogPostFactory::make([
+            'id' => 1,
+            'name' => 'test name',
+            'blog_category_id' => 1,
+        ])->persist();
+        BlogCategoryFactory::make([
+            'id' => 1,
+            'blog_content_id' => 1,
+            'name' => 'category_name',
+            'title' => 'category title',
+            'lft' => 1,
+            'rght' => 1,
+        ])->persist();
+        BlogPostFactory::make([
+            'id' => 2,
+            'name' => 'test name 2',
+            'blog_category_id' => 2,
+        ])->persist();
+        BlogCategoryFactory::make([
+            'id' => 2,
+            'blog_content_id' => 2,
+            'name' => '',
+            'title' => 'category title 2',
+            'lft' => 2,
+            'rght' => 2,
+        ])->persist();
+        SiteFactory::make(['id' => 1, 'status' => true])->persist();
+        $this->Blog->getView()->setRequest($this->getRequest()->withAttribute('currentSite', SiteFactory::get(1)));
+
+        // サービスを取得する
+        /** @var BlogPostsService $service */
+        $service = $this->getService(BlogPostsServiceInterface::class);
+
+        // テストを実行する
+        $blogPost = $service->get(1);
+        $result = $this->Blog->getCategory($blogPost);
+        $this->assertEquals('<a href="/news/archives/category/category_name">category title</a>', $result);
+        // URLを作成しない場合のテスト
+        $result = $this->Blog->getCategory($blogPost, ['link' => false]);
+        $this->assertEquals('category title', $result);
+        // カテゴリは空になるテスト
+        $blogPost = $service->get(2);
+        $result = $this->Blog->getCategory($blogPost);
+        $this->assertEmpty($result);
     }
 
     /**
