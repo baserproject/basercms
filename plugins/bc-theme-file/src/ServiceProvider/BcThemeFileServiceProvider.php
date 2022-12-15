@@ -14,8 +14,14 @@ namespace BcThemeFile\ServiceProvider;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use BcThemeFile\Service\Admin\ThemeFilesAdminService;
+use BcThemeFile\Service\Admin\ThemeFilesAdminServiceInterface;
+use BcThemeFile\Service\Admin\ThemeFoldersAdminService;
+use BcThemeFile\Service\Admin\ThemeFoldersAdminServiceInterface;
 use BcThemeFile\Service\ThemeFilesService;
 use BcThemeFile\Service\ThemeFilesServiceInterface;
+use BcThemeFile\Service\ThemeFoldersService;
+use BcThemeFile\Service\ThemeFoldersServiceInterface;
 use Cake\Core\ServiceProvider;
 
 /**
@@ -29,7 +35,10 @@ class BcThemeFileServiceProvider extends ServiceProvider
      * @var string[]
      */
     protected $provides = [
-        ThemeFilesServiceInterface::class
+        ThemeFilesServiceInterface::class,
+        ThemeFilesAdminServiceInterface::class,
+        ThemeFoldersServiceInterface::class,
+        ThemeFoldersAdminServiceInterface::class
     ];
 
     /**
@@ -41,8 +50,12 @@ class BcThemeFileServiceProvider extends ServiceProvider
     public function services($container): void
     {
         $container->defaultToShared(true);
-        // Installations サービス
+        // ThemeFiles サービス
         $container->add(ThemeFilesServiceInterface::class, ThemeFilesService::class);
+        $container->add(ThemeFilesAdminServiceInterface::class, ThemeFilesAdminService::class);
+        // ThemeFolders サービス
+        $container->add(ThemeFoldersServiceInterface::class, ThemeFoldersService::class);
+        $container->add(ThemeFoldersAdminServiceInterface::class, ThemeFoldersAdminService::class);
     }
 
 }

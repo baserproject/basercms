@@ -38,6 +38,8 @@ class WidgetAreasAdminService extends WidgetAreasService implements WidgetAreasA
      *
      * @param EntityInterface|WidgetArea $widgetArea
      * @return array
+     * @checked
+     * @noTodo
      */
     public function getViewVarsForEdit(EntityInterface $widgetArea)
     {
@@ -66,14 +68,14 @@ class WidgetAreasAdminService extends WidgetAreasService implements WidgetAreasA
         $widgetInfos = [0 => [
             'title' => __d('baser', 'コアウィジェット'),
             'plugin' => 'BaserCore',
-            'paths' => [Plugin::templatePath(Configure::read('BcApp.defaultAdminTheme')) . 'Admin' . DS . 'element' . DS . 'widgets']
+            'paths' => [Plugin::templatePath(Configure::read('BcApp.defaultAdminTheme')) . 'Admin' . DS . 'element' . DS . 'widget']
         ]];
         $plugins = BcUtil::getEnablePlugins();
         if (!$plugins) return $widgetInfos;
         $pluginWidgets = [];
         foreach($plugins as $plugin) {
             $pluginWidget['paths'] = [];
-            $path = Plugin::templatePath($plugin->name) . 'Admin' . DS . 'element' . DS . 'widgets';
+            $path = BcUtil::getExistsTemplateDir($plugin->name, 'Admin' . DS . 'element' . DS . 'widget');
             if (!is_dir($path)) continue;
             $pluginWidgets[] = [
                 'title' => $plugin->title . 'ウィジェット',
@@ -84,4 +86,5 @@ class WidgetAreasAdminService extends WidgetAreasService implements WidgetAreasA
         if ($pluginWidgets) $widgetInfos = array_merge_recursive($widgetInfos, $pluginWidgets);
         return $widgetInfos;
     }
+
 }

@@ -12,39 +12,41 @@
 namespace BcThemeFile\Model\Table;
 
 use BaserCore\Model\Table\AppTable;
+use Cake\Validation\Validator;
 
 /**
  * Class ThemeFile
  *
  * テーマファイルモデル
- *
- * @package Baser.Model
  */
 class ThemeFilesTable extends AppTable
 {
 
     /**
-     * use table
+     * Initialize
      *
-     * @var boolean
+     * @param array $config
      */
-    public $useTable = false;
+    public function initialize(array $config): void
+    {
+        parent::initialize($config);
+        $this->setTable('');
+    }
 
     /**
-     * ThemeFile constructor.
-     *
-     * @param bool $id
-     * @param null $table
-     * @param null $ds
+     * Validation default
+     * @param Validator $validator
+     * @return Validator
      */
-    public function __construct($id = false, $table = null, $ds = null)
+    public function validationDefault(Validator $validator): Validator
     {
-        parent::__construct($id, $table, $ds);
-        $this->validate = [
-            'name' => [
-                ['rule' => ['notBlank'], 'message' => __d('baser', 'テーマファイル名を入力してください。'), 'required' => true],
-                ['rule' => ['duplicateThemeFile'], 'on' => 'create', 'message' => __d('baser', '入力されたテーマファイル名は、同一階層に既に存在します。')]]
-        ];
+        // TODO ucmitz 未実装
+//        $this->validate = [
+//            'name' => [
+//                ['rule' => ['notBlank'], 'message' => __d('baser', 'テーマファイル名を入力してください。'), 'required' => true],
+//                ['rule' => ['duplicateThemeFile'], 'on' => 'create', 'message' => __d('baser', '入力されたテーマファイル名は、同一階層に既に存在します。')]]
+//        ];
+        return $validator;
     }
 
     /**

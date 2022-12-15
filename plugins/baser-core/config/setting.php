@@ -243,20 +243,10 @@ return [
 //                            'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'editor_templates', 'action' => 'index'],
 //                            'currentRegex' => '/\/editor_templates\/[^\/]+?/s'
 //                        ],
-//                        'WidgetAreas' => [
-//                            'title' => __d('baser', 'ウィジェットエリア'),
-//                            'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'widget_areas', 'action' => 'index'],
-//                            'currentRegex' => '/\/widget_areas\/[^\/]+?\/[0-9]+/s'
-//                        ],
                         'SiteConfigsInfo' => [
                             'title' => __d('baser', '環境情報'),
                             'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'utilities', 'action' => 'info']
                         ],
-//                        'ThemeFiles' => [
-//                            'title' => __d('baser', 'コアテンプレート確認'),
-//                            'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'theme_files', 'action' => 'index', 'core'],
-//                            'currentRegex' => '/\/theme_files\/[^\/]+?/s'
-//                        ],
                         'UtilitiesMaintenance' => [
                             'title' => __d('baser', 'データメンテナンス'),
                             'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'utilities', 'action' => 'maintenance']

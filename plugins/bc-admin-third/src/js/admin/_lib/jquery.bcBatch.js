@@ -64,7 +64,7 @@
 
                 var form = $('<form/>').append($(config.methodSelect).clone().val($(config.methodSelect).val()));
                 $(config.targetCheckbox + ":checked").each(function(){
-                    var value = $(this).attr('name').replace(/batch_targets\[([0-9]*)\]/, "$1");
+                    var value = $(this).attr('value');
                     if(value) {
                         form.append($('<input name="batch_targets[]" type="hidden">').val(value));
                     }

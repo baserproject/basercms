@@ -66,7 +66,7 @@ class BcWidgetAreaHelper extends Helper
         if (!$no && !empty($this->_View->get('currentWidgetAreaId'))) {
             $no = $this->_View->get('currentWidgetAreaId');
         }
-        if ($no) return $this->BcBaser->getElement('widget_area', ['no' => $no], $options);
+        if ($no) return $this->BcBaser->getElement('BcWidgetArea.widget_area', ['no' => $no], $options);
         return '';
     }
 
@@ -110,7 +110,7 @@ class BcWidgetAreaHelper extends Helper
                     $plugin = Inflector::camelize($params['plugin']) . '.';
                     unset($params['plugin']);
                 }
-                $this->_View->BcBaser->element($plugin . 'widgets/' . $widget[$key]['element'], $params, $options);
+                $this->_View->BcBaser->element($plugin . 'widget/' . $widget[$key]['element'], $params, $options);
             }
         }
     }

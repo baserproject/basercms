@@ -12,42 +12,51 @@
 namespace BcThemeFile\Controller\Admin;
 
 use BaserCore\Controller\Admin\BcAdminAppController;
+use BaserCore\Error\BcFormFailedException;
 use BaserCore\Utility\BcUtil;
+use BcThemeFile\Service\Admin\ThemeFilesAdminService;
+use BcThemeFile\Service\Admin\ThemeFilesAdminServiceInterface;
+use BcThemeFile\Service\Admin\ThemeFoldersAdminService;
+use BcThemeFile\Service\Admin\ThemeFoldersAdminServiceInterface;
+use BcThemeFile\Service\ThemeFilesServiceInterface;
+use BcThemeFile\Service\ThemeFoldersService;
+use BcThemeFile\Service\ThemeFoldersServiceInterface;
+use BcThemeFile\Utility\BcThemeFileUtil;
+use Cake\Controller\ComponentRegistry;
+use Cake\Core\Configure;
+use Cake\Core\Plugin;
+use Cake\Event\EventInterface;
+use Cake\Event\EventManagerInterface;
+use Cake\Filesystem\Folder;
+use Cake\Http\Response;
+use Cake\Http\ServerRequest;
+use Cake\Utility\Inflector;
 
 /**
  * Class ThemeFilesController
  *
  * テーマファイルコントローラー
- *
- * @package Baser.Controller
  */
 class ThemeFilesController extends BcAdminAppController
 {
 
     /**
-     * テーマファイルタイプ
-     *
-     * @var array
-     * @public protected
-     */
-    protected $_tempalteTypes = [];
-
-    /**
-     * コンポーネント
-     *
-     * @var array
-     */
-    public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure'];
-
-    /**
      * ThemeFilesController constructor.
-     *
-     * @param CakeRequest $request
-     * @param CakeResponse $response
+     * @param ServerRequest|null $request
+     * @param Response|null $response
+     * @param string|null $name
+     * @param EventManagerInterface|null $eventManager
+     * @param ComponentRegistry|null $components
      */
-    public function __construct(CakeRequest $request, CakeResponse $response)
+    public function __construct(
+        ?ServerRequest $request = null,
+        ?Response $response = null,
+        ?string $name = null,
+        ?EventManagerInterface $eventManager = null,
+        ?ComponentRegistry $components = null
+    )
     {
-        parent::__construct($request, $response);
+        parent::__construct($request, $response, $name, $eventManager, $components);
         $this->_tempalteTypes = [
             'Layouts' => __d('baser', 'レイアウトテンプレート'),
             'Elements' => __d('baser', 'エレメントテンプレート'),
@@ -59,671 +68,494 @@ class ThemeFilesController extends BcAdminAppController
         ];
 
         // テーマ編集機能が制限されている場合はアクセス禁止
-        if (Configure::read('BcApp.allowedThemeEdit') == false) {
+        if (Configure::read('BcThemeEdit.allowedThemeEdit') === false) {
             $denyList = [
-                'admin_index',
-                'admin_add',
-                'admin_edit',
-                'admin_add_folder',
-                'admin_edit_folder',
+                'index',
+                'add',
+                'edit',
+                'add_folder',
+                'edit_folder',
             ];
-            // coreのindexはアクセス可能
-            if ($this->request->getParam('pass.0') === 'core') {
-                unset($denyList[array_search('admin_index', $denyList)]);
+            // デフォルトテーマのindexはアクセス可能
+            if ($this->isDefaultTheme()) {
+                unset($denyList[array_search('index', $denyList)]);
             }
-            if (in_array($this->request->action, $denyList)) {
+            if (in_array($this->getRequest()->getParam('action'), $denyList)) {
                 $this->notfound();
             }
         }
     }
 
     /**
-     * テーマファイル一覧
+     * 現在の画面のテーマがデフォルトテーマかどうか
      *
-     * @return void
+     * @return bool
      */
-    public function admin_index()
+    protected function isDefaultTheme()
     {
-        $args = $this->_parseArgs(func_get_args());
-        extract($args);
+        return (Inflector::camelize(Configure::read('BcApp.defaultFrontTheme'), '-') === $this->getRequest()->getParam('pass.0'));
+    }
 
-        if (!$theme) {
-            $this->notFound();
-        }
-
-        // タイトル設定
-        $pageTitle = $theme;
-        if ($plugin) {
-            $pageTitle .= '：' . $plugin;
-        }
-        $this->setTitle($pageTitle);
-        if (!empty($this->_tempalteTypes[$type])) {
-            $this->pageTitle .= sprintf(__d('baser', '｜%s一覧'), $this->_tempalteTypes[$type]);
-        }
-
-        if ($type !== 'etc') {
-
-            /* レイアウト／エレメント */
-            $folder = new Folder($fullpath);
-            $files = $folder->read(true, true);
-            $themeFiles = [];
-            $folders = [];
-            $excludeList = ['_notes'];
-            foreach($files[0] as $file) {
-                if (!in_array($file, $excludeList)) {
-                    if ($file === 'admin' && is_link($fullpath . $file)) {
-                        continue;
-                    }
-                    $folder = [];
-                    $folder['name'] = $file;
-                    $folder['type'] = 'folder';
-                    $folders[] = $folder;
-                }
-            }
-            foreach($files[1] as $file) {
-                $themeFile = [];
-                $themeFile['name'] = $file;
-                $themeFile['type'] = $this->_getFileType($file);
-                $themeFiles[] = $themeFile;
-            }
-            $themeFiles = am($folders, $themeFiles);
-        } else {
-
-            /* その他テンプレート */
-            $folder = new Folder($fullpath);
-            $files = $folder->read(true, true);
-            $themeFiles = [];
-            $folders = [];
-            $excludeFolderList = [];
-            $excludeFileList = ['screenshot.png', 'VERSION.txt', 'config.php', 'AppView.php', 'BcAppView.php'];
-            if (!$path) {
-                $excludeFolderList = [
-                    'Layouts',
-                    'Elements',
-                    'Emails',
-                    'Helper',
-                    'Config',
-                    'Plugin',
-                    'img',
-                    'css',
-                    'js',
-                    '_notes'
-                ];
-            }
-            foreach($files[0] as $file) {
-                if (!in_array($file, $excludeFolderList)) {
-                    $folder = [];
-                    $folder['name'] = $file;
-                    $folder['type'] = 'folder';
-                    $folders[] = $folder;
-                }
-            }
-            foreach($files[1] as $file) {
-                if (in_array($file, $excludeFileList)) {
-                    continue;
-                }
-                $themeFile = [];
-                $themeFile['name'] = $file;
-                $themeFile['type'] = $this->_getFileType($file);
-                $themeFiles[] = $themeFile;
-            }
-            $themeFiles = am($folders, $themeFiles);
-        }
-
-        $currentPath = str_replace(ROOT, '', $fullpath);
-        $this->subMenuElements = ['theme_files'];
-        $this->set('themeFiles', $themeFiles);
-        $this->set('currentPath', $currentPath);
-        $this->set('fullpath', $fullpath);
-        $this->set('path', $path);
-        $this->set('theme', $theme);
-        $this->set('plugin', $plugin);
-        $this->set('type', $type);
-        $this->setHelp('theme_files_index');
-        if ($this->request->is('ajax')) {
-            $this->render('ajax_index');
+    /**
+     * Before Render
+     *
+     * @param EventInterface $event
+     * @checked
+     * @noTodo
+     */
+    public function beforeRender(EventInterface $event): void
+    {
+        parent::beforeRender($event);
+        $this->set([
+            'isDefaultTheme' => $this->isDefaultTheme()
+        ]);
+        if($this->isDefaultTheme()) {
+            $this->BcMessage->setWarning(__d('baser', 'デフォルトテーマのため編集できません。編集する場合は、テーマをコピーしてご利用ください。'));
         }
     }
 
     /**
-     * ファイルタイプを取得する
+     * テーマファイル一覧
      *
-     * @param string $file
-     * @return mixed false / type
+     * @param ThemeFilesAdminService $service
+     * @return void
+     * @checked
+     * @noTodo
      */
-    protected function _getFileType($file)
+    public function index(ThemeFilesAdminServiceInterface $service)
     {
-        if (preg_match('/^(.+?)(\.ctp|\.php|\.css|\.js)$/is', $file)) {
-            return 'text';
-        }
-
-        if (preg_match('/^(.+?)(\.png|\.gif|\.jpg|\.jpeg)$/is', $file)) {
-            return 'image';
-        }
-
-        return 'file';
+        $args = $this->parseArgs(func_get_args());
+        if (!$args['theme']) $this->notFound();
+        $this->set($service->getViewVarsForIndex($args));
     }
 
     /**
      * テーマファイル作成
      *
      * @return void
+     * @checked
+     * @noTodo
      */
-    public function admin_add()
+    public function add(ThemeFilesAdminServiceInterface $service)
     {
-        $args = $this->_parseArgs(func_get_args());
-        extract($args);
-        if (!isset($this->_tempalteTypes[$type])) {
-            $this->notFound();
-        }
+        $args = $this->parseArgs(func_get_args());
+        if (!BcThemeFileUtil::getTemplateTypeName($args['type'])) $this->notFound();
 
-        if (!$this->request->getData()) {
+        $entity = $service->getNew($args['fullpath'], $args['type']);
+        $form = $service->getForm($entity->toArray());
 
-            if ($type === 'css' || $type === 'js') {
-                $ext = $type;
-            } else {
-                $ext = 'php';
-            }
-            $this->request = $this->request->withData('ThemeFile.ext', $ext);
-            $this->request = $this->request->withData('ThemeFile.parent', $fullpath);
-        } else {
-
-            $this->ThemeFile->create($this->request->getData());
-            if ($this->ThemeFile->validates()) {
-                $fullpath = $fullpath . $this->request->getData('ThemeFile.name') . '.' . $this->request->getData('ThemeFile.ext');
-                if (!is_dir(dirname($fullpath))) {
-                    $folder = new Folder();
-                    $folder->create(dirname($fullpath), 0777);
-                }
-                $file = new File($fullpath);
-                if ($file->open('w')) {
-                    $file->append($this->request->getData('ThemeFile.contents'));
-                    $file->close();
-                    unset($file);
-                    $result = true;
-                } else {
-                    $result = false;
-                }
-            } else {
-                $result = false;
-            }
-
-            if ($result) {
-                clearViewCache();
-                $this->BcMessage->setInfo(sprintf(__d('baser', 'ファイル %s を作成しました。'), basename($fullpath)));
-                $this->redirect(array_merge(['action' => 'edit', $theme, $type], explode('/', $path), [$this->request->getData('ThemeFile.name') . '.' . $this->request->getData('ThemeFile.ext')]));
-            } else {
-                $this->BcMessage->setError(sprintf(__d('baser', 'ファイル %s の作成に失敗しました。'), basename($fullpath)));
+        if ($this->getRequest()->is(['post', 'put'])) {
+            try {
+                $form = $service->create($this->getRequest()->getData());
+                $entity = $service->get($form->getData('fullpath'));
+                $this->BcMessage->setInfo(sprintf(__d('baser', 'ファイル %s を作成しました。'), $entity->name));
+                $this->redirect(array_merge(
+                    ['action' => 'edit', $args['theme'], $args['type']],
+                    explode('/', $args['path']),
+                    [$entity->name]
+                ));
+            } catch (BcFormFailedException $e) {
+                $form = $e->getForm();
+                $this->BcMessage->setError(__d('baser', 'ファイル {0} の作成に失敗しました。', $entity->name));
+            } catch (\Throwable $e) {
+                $form = $service->getForm($this->getRequest()->getData());
+                $this->BcMessage->setError(__d('baser', 'ファイル {0} の作成に失敗しました。', $entity->name) . $e->getMessage());
             }
         }
 
-        $this->setTitle(sprintf(__d('baser', '%s｜%s作成'), Inflector::camelize($theme), $this->_tempalteTypes[$type]));
-        $this->subMenuElements = ['theme_files'];
-        $this->set('isWritable', is_writable($fullpath));
-        $this->set('currentPath', str_replace(ROOT, '', $fullpath));
-        $this->set('theme', $theme);
-        $this->set('plugin', $plugin);
-        $this->set('type', $type);
-        $this->set('path', $path);
-        $this->setHelp('theme_files_form');
-        $this->render('form');
+        $this->set($service->getViewVarsForEdit($entity, $form, $args));
     }
 
     /**
      * テーマファイル編集
      *
+     * @param ThemeFilesAdminService $service
      * @return void
+     * @checked
+     * @noTodo
      */
-    public function admin_edit()
+    public function edit(ThemeFilesAdminServiceInterface $service)
     {
-        $args = $this->_parseArgs(func_get_args());
-        extract($args);
-        if (!isset($this->_tempalteTypes[$type])) {
-            $this->notFound();
-        }
+        $args = $this->parseArgs(func_get_args());
+        if (!BcThemeFileUtil::getTemplateTypeName($args['type'])) $this->notFound();
 
-        $filename = rawurldecode(basename($path));
+        $themeFile = $service->get($args['fullpath']);
+        $themeFileForm = $service->getForm($themeFile->toArray());
 
-        if (!$this->request->getData()) {
-
-            $file = new File($fullpath);
-            $pathinfo = pathinfo($fullpath);
-            $this->request = $this->request->withData('ThemeFile.name', rawurldecode(basename($file->name, '.' . $pathinfo['extension'])));
-            $this->request = $this->request->withData('ThemeFile.type', $this->_getFileType(rawurldecode(basename($file->name))));
-            $this->request = $this->request->withData('ThemeFile.ext', $pathinfo['extension']);
-            $this->request = $this->request->withData('ThemeFile.parent', dirname($fullpath) . DS);
-            if ($this->request->getData('ThemeFile.type') === 'text') {
-                $this->request = $this->request->withData('ThemeFile.contents', $file->read());
-            }
-        } else {
-
-            $this->ThemeFile->set($this->request->getData());
-            if ($this->ThemeFile->validates()) {
-
-                $oldPath = rawurldecode($fullpath);
-                $newPath = dirname($fullpath) . DS . rawurldecode($this->request->getData('ThemeFile.name'));
-                if ($this->request->getData('ThemeFile.ext')) {
-                    $newPath .= '.' . $this->request->getData('ThemeFile.ext');
-                }
-                $this->request = $this->request->withData('ThemeFile.type', $this->_getFileType(basename($newPath)));
-                if ($this->request->getData('ThemeFile.type') === 'text') {
-                    $file = new File($oldPath);
-                    if ($file->open('w')) {
-                        $file->append($this->request->getData('ThemeFile.contents'));
-                        $file->close();
-                        unset($file);
-                        $result = true;
-                    } else {
-                        $result = false;
-                    }
-                } else {
-                    $result = true;
-                }
-                if ($oldPath != $newPath) {
-                    rename($oldPath, $newPath);
-                }
-            } else {
-                $result = false;
-            }
-
-            if ($result) {
-                clearViewCache();
-                $this->BcMessage->setInfo(sprintf(__d('baser', 'ファイル %s を更新しました。'), $filename));
-                $this->redirect(array_merge([$theme, $plugin, $type], explode('/', dirname($path)), [basename($newPath)]));
-            } else {
-                $this->BcMessage->setError(sprintf(__d('baser', 'ファイル %s の更新に失敗しました。'), $filename));
+        if ($this->getRequest()->is(['post', 'put'])) {
+            try {
+                $themeFileForm = $service->update($this->getRequest()->getData());
+                $themeFile = $service->get($themeFileForm->getData('fullpath'));
+                $this->BcMessage->setInfo(sprintf(__d('baser', 'ファイル %s を更新しました。'), $themeFile->name));
+                $this->redirect(array_merge(
+                    [$args['theme'], $args['plugin'], $args['type']],
+                    explode('/', dirname($args['path'])),
+                    [$themeFile->name]
+                ));
+            } catch (BcFormFailedException $e) {
+                $themeFileForm = $e->getForm();
+                $this->BcMessage->setError(__d('baser', 'ファイル {0} の更新に失敗しました。', $themeFile->name));
+            } catch (\Throwable $e) {
+                $themeFileForm = $service->getForm($this->getRequest()->getData());
+                $this->BcMessage->setError(__d('baser', 'ファイル {0} の更新に失敗しました。', $themeFile->name) . $e->getMessage());
             }
         }
 
-        $this->setTitle(sprintf(__d('baser', '%s｜%s編集'), Inflector::camelize($theme), $this->_tempalteTypes[$type]));
-        $this->subMenuElements = ['theme_files'];
-        $this->set('currentPath', str_replace(ROOT, '', dirname($fullpath)) . DS);
-        $this->set('isWritable', is_writable($fullpath));
-        $this->set('theme', $theme);
-        $this->set('plugin', $plugin);
-        $this->set('type', $type);
-        $this->set('path', $path);
-        $this->setHelp('theme_files_form');
-        $this->render('form');
+        $this->set($service->getViewVarsForEdit($themeFile, $themeFileForm, $args));
     }
 
     /**
      * ファイルを削除する
      *
+     * @param ThemeFilesAdminService $service
      * @return void
+     * @checked
+     * @noTodo
      */
-    public function admin_del()
+    public function delete(ThemeFilesAdminServiceInterface $service)
     {
-        $this->_checkSubmitToken();
-        $args = $this->_parseArgs(func_get_args());
-        extract($args);
-        if (!isset($this->_tempalteTypes[$type])) {
-            $this->notFound();
-        }
+        $this->request->allowMethod(['post', 'delete']);
 
-        if (is_dir($fullpath)) {
-            $folder = new Folder();
-            $result = $folder->delete($fullpath);
-            $target = __d('baser', 'フォルダ');
+        $args = $this->parseArgs(func_get_args());
+        if (!BcThemeFileUtil::getTemplateTypeName($args['type'])) $this->notFound();
+
+        if ($service->delete($args['fullpath'])) {
+            $this->BcMessage->setSuccess(__d('baser', 'ファイル {0} を削除しました。', $args['path']));
         } else {
-            $result = @unlink($fullpath);
-            $target = __d('baser', 'ファイル');
+            $this->BcMessage->setError(__d('baser', 'ファイル {0} の削除に失敗しました。', $args['path']));
         }
 
-        if ($result) {
-            $this->BcMessage->setInfo($target . ' ' . sprintf(__d('baser', '%s を削除しました。'), $path));
-        } else {
-            $this->BcMessage->setError($target . ' ' . sprintf(__d('baser', '%s の削除に失敗しました。'), $path));
-        }
-
-        $this->redirect(array_merge(['action' => 'index', $theme, $type], explode('/', dirname($path))));
+        $this->redirect(array_merge(
+            ['action' => 'index', $args['theme'], $args['type']],
+            explode('/', dirname($args['path']))
+        ));
     }
 
     /**
-     * ファイルを削除する　（ajax）
+     * ファイルを削除する
      *
+     * @param ThemeFoldersAdminService $service
      * @return void
+     * @checked
+     * @noTodo
      */
-    public function admin_ajax_del()
+    public function delete_folder(ThemeFoldersAdminServiceInterface $service)
     {
-        $this->_checkSubmitToken();
-        $args = $this->_parseArgs(func_get_args());
+        $this->request->allowMethod(['post', 'delete']);
 
-        if (!$args) {
-            $this->ajaxError(500, __d('baser', '無効な処理です。'));
-        }
+        $args = $this->parseArgs(func_get_args());
+        if (!BcThemeFileUtil::getTemplateTypeName($args['type'])) $this->notFound();
 
-        extract($args);
-        if (!isset($this->_tempalteTypes[$type])) {
-            $this->ajaxError(500, __d('baser', '無効な処理です。'));
-        }
-
-        if (!$this->_del($args)) {
-            exit();
-        }
-
-        exit(true);
-    }
-
-    /**
-     * 削除
-     *
-     * @param $args
-     * @return bool
-     */
-    protected function _del($args)
-    {
-        extract($args);
-        if (is_dir($fullpath)) {
-            $folder = new Folder();
-            $result = $folder->delete($fullpath);
-            $target = __d('baser', 'フォルダ');
+        if ($service->delete($args['fullpath'])) {
+            $this->BcMessage->setSuccess(__d('baser', 'フォルダ {0} を削除しました。', $args['path']));
         } else {
-            $result = @unlink($fullpath);
-            $target = __d('baser', 'ファイル');
-        }
-        if (!$result) {
-            return false;
+            $this->BcMessage->setError(__d('baser', 'フォルダ {0} の削除に失敗しました。', $args['path']));
         }
 
-        $this->ThemeFile->saveDblog($target . ' ' . sprintf(__d('baser', '%s を削除しました。'), $path));
-        return true;
-    }
-
-    /**
-     * 一括削除
-     *
-     * @param $ids
-     * @return bool
-     */
-    protected function _batch_del($ids)
-    {
-        if (!$ids) {
-            return true;
-        }
-
-        $result = true;
-        foreach($ids as $id) {
-            $args = $this->request->getParam('pass');
-            $args[] = $id;
-            $args = $this->_parseArgs($args);
-            extract($args);
-            if (!isset($this->_tempalteTypes[$type])) {
-                exit();
-            }
-
-            if (is_dir($fullpath)) {
-                $folder = new Folder();
-                $result = $folder->delete($fullpath);
-                $target = __d('baser', 'フォルダ');
-            } else {
-                $result = @unlink($fullpath);
-                $target = __d('baser', 'ファイル');
-            }
-            if ($result) {
-                $this->ThemeFile->saveDblog($target . ' ' . sprintf(__d('baser', '%s を削除しました。'), $path));
-            } else {
-                $result = false;
-            }
-        }
-
-        return true;
+        $this->redirect(array_merge(
+            ['action' => 'index', $args['theme'], $args['type']],
+            explode('/', dirname($args['path']))
+        ));
     }
 
     /**
      * テーマファイル表示
      *
+     * @param ThemeFilesAdminService $service
      * @return    void
-     * @access    public
+     * @checked
+     * @noTodo
      */
-    public function admin_view()
+    public function view(ThemeFilesAdminServiceInterface $service)
     {
-        $args = $this->_parseArgs(func_get_args());
-        extract($args);
-        if (!isset($this->_tempalteTypes[$type])) {
-            $this->notFound();
-        }
+        $args = $this->parseArgs(func_get_args());
+        if (!BcThemeFileUtil::getTemplateTypeName($args['type'])) $this->notFound();
 
-        $pathinfo = pathinfo($fullpath);
-        $file = new File($fullpath);
-        $this->request = $this->request->withData('ThemeFile.name', basename($file->name, '.' . $pathinfo['extension']));
-        $this->request = $this->request->withData('ThemeFile.ext', $pathinfo['extension']);
-        $this->request = $this->request->withData('ThemeFile.contents', $file->read());
-        $this->request = $this->request->withData('ThemeFile.type', $this->_getFileType($file->name));
-
-        $pageTitle = $theme;
-        if ($plugin) {
-            $pageTitle .= '：' . $plugin;
-        }
-        $this->setTitle(sprintf(__d('baser', '%s｜%s表示'), $pageTitle, $this->_tempalteTypes[$type]));
-        $this->subMenuElements = ['theme_files'];
-        $this->set('currentPath', str_replace(ROOT, '', dirname($fullpath)) . '/');
-        $this->set('isWritable', is_writable($fullpath));
-        $this->set('theme', $theme);
-        $this->set('plugin', $plugin);
-        $this->set('type', $type);
-        $this->set('path', $path);
-        $this->render('form');
+        $entity = $service->get($args['fullpath']);
+        $form = $service->getForm($entity->toArray());
+        $this->set($service->getViewVarsForView($entity, $form, $args));
     }
 
     /**
      * テーマファイルをコピーする
      *
      * @return void
+     * @checked
+     * @noTodo
      */
-    public function admin_ajax_copy()
+    public function copy(ThemeFilesAdminServiceInterface $service)
     {
-        $args = $this->_parseArgs(func_get_args());
+        $this->request->allowMethod(['post', 'delete']);
 
-        if (!$args) {
-            $this->ajaxError(500, __d('baser', '無効な処理です。'));
-        }
+        $args = $this->parseArgs(func_get_args());
+        if (!BcThemeFileUtil::getTemplateTypeName($args['type'])) $this->notFound();
 
-        extract($args);
-        if (!isset($this->_tempalteTypes[$type])) {
-            $this->ajaxError(500, __d('baser', '無効な処理です。'));
-        }
-
-        $themeFile = [];
-        if (is_dir($fullpath)) {
-            $newPath = preg_replace('/\/$/is', '', $fullpath) . '_copy';
-            while(true) {
-                if (!is_dir($newPath)) {
-                    break;
-                }
-                $newPath .= '_copy';
-            }
-            $folder = new Folder();
-            $result = $folder->copy(['from' => $fullpath, 'to' => $newPath, 'chmod' => 0777, 'skip' => ['_notes']]);
-            $folder = null;
-            $target = 'フォルダ';
-            $themeFile['name'] = basename(rawurldecode($newPath));
-            $themeFile['type'] = 'folder';
+        if ($service->copy($args['fullpath'])) {
+            $this->BcMessage->setSuccess(__d('baser', 'ファイル {0} をコピーしました。', $args['path']));
         } else {
-            $pathinfo = pathinfo($fullpath);
-            $newPath = $pathinfo['dirname'] . DS . rawurldecode(basename($fullpath, '.' . $pathinfo['extension'])) . '_copy';
-            while(true) {
-                if (!file_exists($newPath . '.' . $pathinfo['extension'])) {
-                    $newPath .= '.' . $pathinfo['extension'];
-                    break;
-                }
-                $newPath .= '_copy';
-            }
-            $result = @copy(rawurldecode($fullpath), $newPath);
-            if ($result) {
-                chmod($newPath, 0666);
-            }
-            $target = 'ファイル';
-            $themeFile['name'] = basename(rawurldecode($newPath));
-            $themeFile['type'] = $this->_getFileType($themeFile['name']);
+            $this->BcMessage->setError(__d('baser', 'ファイル {0} のコピーに失敗しました。上位フォルダのアクセス権限を見直してください。', $args['path']));
         }
 
-        if (!$result) {
-            $this->ThemeFile->saveDblog($target . ' ' . rawurldecode($path) . ' のコピーに失敗しました。');
-            $this->ajaxError(500, __d('baser', '上位フォルダのアクセス権限を見直してください。'));
-            return;
+        $this->redirect(array_merge(
+            ['action' => 'index', $args['theme'], $args['type']],
+            explode('/', dirname($args['path']))
+        ));
+    }
+
+    /**
+     * テーマフォルダをコピーする
+     *
+     * @return void
+     * @checked
+     * @noTodo
+     */
+    public function copy_folder(ThemeFoldersAdminServiceInterface $service)
+    {
+        $this->request->allowMethod(['post', 'delete']);
+
+        $args = $this->parseArgs(func_get_args());
+        if (!BcThemeFileUtil::getTemplateTypeName($args['type'])) $this->notFound();
+
+        if ($service->copy($args['fullpath'])) {
+            $this->BcMessage->setSuccess(__d('baser', 'フォルダ {0} をコピーしました。', $args['path']));
+        } else {
+            $this->BcMessage->setError(__d('baser', 'フォルダ {0} のコピーに失敗しました。上位フォルダのアクセス権限を見直してください。', $args['path']));
         }
 
-        $this->ThemeFile->saveDblog($target . ' ' . rawurldecode($path) . ' をコピーしました。');
-        $this->set('fullpath', $fullpath);
-        $this->set('path', dirname($path));
-        $this->set('theme', $theme);
-        $this->set('plugin', $plugin);
-        $this->set('type', $type);
-        $this->set('data', $themeFile);
+        $this->redirect(array_merge(
+            ['action' => 'index', $args['theme'], $args['type']],
+            explode('/', dirname($args['path']))
+        ));
     }
 
     /**
      * ファイルをアップロードする
      *
+     * @param ThemeFilesAdminService $service
      * @return void
+     * @checked
+     * @noTodo
      */
-    public function admin_upload()
+    public function upload(ThemeFilesAdminServiceInterface $service)
     {
-        $messages = [];
-        if (!$this->request->getData()) {
-            if (BcUtil::isOverPostSize()) {
-                $messages[] = __d('baser', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size'));
-            } else {
-                $this->notFound();
-            }
-        }
-        $args = $this->_parseArgs(func_get_args());
-        extract($args);
-        if (!isset($this->_tempalteTypes[$type])) {
-            $this->notFound();
-        }
-        $filePath = $fullpath . DS . $this->request->getData('ThemeFile.file.name');
-        $Folder = new Folder();
-        $Folder->create(dirname($filePath), 0777);
+        $args = $this->parseArgs(func_get_args());
+        if (!BcThemeFileUtil::getTemplateTypeName($args['type'])) $this->notFound();
 
-        if (@move_uploaded_file($this->request->getData('ThemeFile.file.tmp_name'), $filePath)) {
-            $messages = [__d('baser', 'アップロードに成功しました。')];
-        } else {
-            $messages[] = __d('baser', 'アップロードに失敗しました。');
+        $this->request->allowMethod(['post', 'put']);
+        try {
+            $service->upload($args['fullpath'], $this->getRequest()->getData());
+            $this->BcMessage->setSuccess(__d('baser', 'アップロードに成功しました。'));
+        } catch (\Throwable $e) {
+            $this->BcMessage->setError(__d('baser', 'アップロードに失敗しました。' . $e->getMessage()));
         }
-        $this->BcMessage->setError(implode("\n", $messages));
-        $this->redirect(array_merge(['action' => 'index', $theme, $type], explode('/', $path)));
+        $this->redirect(array_merge(['action' => 'index', $args['theme'], $args['type']], explode('/', $args['path'])));
     }
 
     /**
      * フォルダ追加
      *
+     * @param ThemeFoldersAdminService $service
      * @return void
+     * @checked
+     * @noTodo
      */
-    public function admin_add_folder()
+    public function add_folder(ThemeFoldersAdminServiceInterface $service)
     {
-        $args = $this->_parseArgs(func_get_args());
-        extract($args);
-        if (!isset($this->_tempalteTypes[$type])) {
-            $this->notFound();
-        }
+        $args = $this->parseArgs(func_get_args());
+        if (!BcThemeFileUtil::getTemplateTypeName($args['type'])) $this->notFound();
 
-        if (!$this->request->getData()) {
-            $this->request = $this->request->withData('ThemeFolder.parent', $fullpath);
-        } else {
-            $folder = new Folder();
-            $this->ThemeFolder->create($this->request->getData());
-            if ($this->ThemeFolder->validates() && $folder->create($fullpath . $this->request->getData('ThemeFolder.name'), 0777)) {
-                $this->BcMessage->setInfo('フォルダ ' . $this->request->getData('ThemeFolder.name') . ' を作成しました。');
-                $this->redirect(array_merge(['action' => 'index', $theme, $type], explode('/', $path)));
-            } else {
+        $entity = $service->getNew($args['fullpath']);
+        $form = $service->getForm($entity->toArray());
+
+        if ($this->getRequest()->is(['post', 'put'])) {
+            try {
+                $form = $service->create($this->getRequest()->getData());
+                $entity = $service->get($form->getData('fullpath'));
+                $this->BcMessage->setInfo('フォルダ「' . $entity->name . '」を作成しました。');
+                return $this->redirect(array_merge(
+                    ['action' => 'index', $args['theme'], $args['type']],
+                    explode('/', dirname($args['path']))
+                ));
+            } catch (BcFormFailedException $e) {
+                $form = $e->getForm();
                 $this->BcMessage->setError(__d('baser', 'フォルダの作成に失敗しました。'));
+            } catch (\Throwable $e) {
+                $form = $service->getForm($this->getRequest()->getData());
+                $this->BcMessage->setError(__d('baser', 'フォルダの作成に失敗しました。') . $e->getMessage());
             }
         }
 
-        $this->setTitle(sprintf(__d('baser', '%s｜フォルダ作成'), $theme));
-        $this->subMenuElements = ['theme_files'];
-        $this->set('currentPath', str_replace(ROOT, '', $fullpath));
-        $this->set('isWritable', is_writable($fullpath));
-        $this->set('theme', $theme);
-        $this->set('plugin', $plugin);
-        $this->set('type', $type);
-        $this->set('path', $path);
-        $this->setHelp('theme_files_form_folder');
-        $this->render('form_folder');
+        $this->set($service->getViewVarsForAdd($entity, $form, $args));
     }
 
     /**
      * フォルダ編集
      *
+     * @param ThemeFoldersAdminService $service
      * @return void
+     * @checked
+     * @noTodo
      */
-    public function admin_edit_folder()
+    public function edit_folder(ThemeFoldersAdminServiceInterface $service)
     {
-        $args = $this->_parseArgs(func_get_args());
-        extract($args);
-        if (!isset($this->_tempalteTypes[$type])) {
-            $this->notFound();
-        }
+        $args = $this->parseArgs(func_get_args());
+        if (!BcThemeFileUtil::getTemplateTypeName($args['type'])) $this->notFound();
 
-        if (!$this->request->getData()) {
-            $this->request = $this->request->withData('ThemeFolder.name', basename($path));
-            $this->request = $this->request->withData('ThemeFolder.parent', dirname($fullpath) . DS);
-            $this->request = $this->request->withData('ThemeFolder.pastname', basename($path));
-        } else {
-            $newPath = dirname($fullpath) . DS . $this->request->getData('ThemeFolder.name') . DS;
-            $folder = new Folder();
-            $this->ThemeFolder->set($this->request->getData());
-            if ($this->ThemeFolder->validates()) {
-                if ($fullpath != $newPath) {
-                    if ($folder->move(['from' => $fullpath, 'to' => $newPath, 'chmod' => 0777, 'skip' => ['_notes']])) {
-                        $this->BcMessage->setInfo('フォルダ名を ' . $this->request->getData('ThemeFolder.name') . ' に変更しました。');
-                        $this->redirect(array_merge(['action' => 'index', $theme, $type], explode('/', dirname($path))));
-                    } else {
-                        $this->BcMessage->setError(__d('baser', 'フォルダ名の変更に失敗しました。'));
-                    }
-                } else {
-                    $this->BcMessage->setError(__d('baser', 'フォルダ名に変更はありませんでした。'));
-                    $this->redirect(array_merge(['action' => 'index', $theme, $type], explode('/', dirname($path))));
-                }
-            } else {
+        $entity = $service->get($args['fullpath']);
+        $form = $service->getForm($entity->toArray());
+
+        if ($this->getRequest()->is(['post', 'put'])) {
+            try {
+                $form = $service->update($this->getRequest()->getData());
+                $entity = $service->get($form->getData('fullpath'));
+                $this->BcMessage->setInfo('フォルダ名を ' . $entity->name . ' に変更しました。');
+                return $this->redirect(array_merge(
+                    ['action' => 'index', $args['theme'], $args['type']],
+                    explode('/', dirname($args['path']))
+                ));
+            } catch (BcFormFailedException $e) {
+                $form = $e->getForm();
                 $this->BcMessage->setError(__d('baser', 'フォルダ名の変更に失敗しました。'));
+            } catch (\Throwable $e) {
+                $form = $service->getForm($this->getRequest()->getData());
+                $this->BcMessage->setError(__d('baser', 'フォルダ名の変更に失敗しました。') . $e->getMessage());
             }
         }
-
-        $pageTitle = $theme;
-        $this->setTitle(sprintf(__d('baser', '%s｜フォルダ表示'), $pageTitle));
-        $this->subMenuElements = ['theme_files'];
-        $this->set('currentPath', str_replace(ROOT, '', dirname($fullpath)) . '/');
-        $this->set('isWritable', is_writable($fullpath));
-        $this->set('theme', $theme);
-        $this->set('plugin', $plugin);
-        $this->set('type', $type);
-        $this->set('path', $path);
-        $this->setHelp('theme_files_form_folder');
-        $this->render('form_folder');
+        $this->set($service->getViewVarsForEdit($entity, $form, $args));
     }
 
     /**
      * フォルダ表示
      *
      * @return void
+     * @checked
+     * @noTodo
      */
-    public function admin_view_folder()
+    public function view_folder(ThemeFoldersAdminServiceInterface $service)
     {
-        $args = $this->_parseArgs(func_get_args());
-        extract($args);
-        if (!isset($this->_tempalteTypes[$type])) {
-            $this->notFound();
-        }
+        $args = $this->parseArgs(func_get_args());
+        if (!BcThemeFileUtil::getTemplateTypeName($args['type'])) $this->notFound();
 
-        $this->request = $this->request->withData('ThemeFolder.name', basename($path));
-        $this->request = $this->request->withData('ThemeFolder.parent', dirname($fullpath));
-        $this->request = $this->request->withData('ThemeFolder.pastname', basename($path));
+        $entity = $service->get($args['fullpath']);
+        $form = $service->getForm($entity->toArray());
+        $this->set($service->getViewVarsForView($entity, $form, $args));
+    }
 
-        $pageTitle = $theme;
-        if ($plugin) {
-            $pageTitle .= '：' . $plugin;
+    /**
+     * コアファイルを現在のテーマにコピーする
+     *
+     * @param ThemeFilesAdminService $service
+     * @return void
+     * @checked
+     * @noTodo
+     */
+    public function copy_to_theme(ThemeFilesAdminServiceInterface $service)
+    {
+        $args = $this->parseArgs(func_get_args());
+        if (!BcThemeFileUtil::getTemplateTypeName($args['type'])) $this->notFound();
+
+        $targetPath = $service->copyToTheme($args);
+        $currentTheme = BcUtil::getCurrentTheme();
+        if ($targetPath) {
+            $this->BcMessage->setSuccess(__d('baser',
+                "コアファイル {0} を テーマ {1} の次のパスとしてコピーしました。\n{2}",
+                basename($args['path']),
+                $currentTheme,
+                $targetPath
+            ));
+            return $this->redirect(array_merge(
+                ['action' => 'edit', $currentTheme, $args['plugin'], $args['type']],
+                explode('/', $args['path'])
+            ));
+        } else {
+            $this->BcMessage->setError(__d('baser',
+                'コアファイル {0} のコピーに失敗しました。',
+                basename($args['path'])
+            ));
         }
-        $this->setTitle(sprintf(__d('baser', '%s｜フォルダ表示'), $pageTitle));
-        $this->subMenuElements = ['theme_files'];
-        $this->set('currentPath', str_replace(ROOT, '', dirname($fullpath)) . '/');
-        $this->set('theme', $theme);
-        $this->set('plugin', $plugin);
-        $this->set('type', $type);
-        $this->set('path', $path);
-        $this->render('form_folder');
+        return $this->redirect(array_merge(
+            ['action' => 'view', $args['theme'], $args['plugin'], $args['type']],
+            explode('/', $args['path'])
+        ));
+    }
+
+    /**
+     * コアファイルのフォルダを現在のテーマにコピーする
+     *
+     * @param ThemeFoldersService $service
+     * @return void
+     * @checked
+     * @noTodo
+     */
+    public function copy_folder_to_theme(ThemeFoldersServiceInterface $service)
+    {
+        $args = $this->parseArgs(func_get_args());
+        if (!BcThemeFileUtil::getTemplateTypeName($args['type'])) $this->notFound();
+
+        $targetPath = $service->copyToTheme($args);
+        $currentTheme = BcUtil::getCurrentTheme();
+        if ($targetPath) {
+            $this->BcMessage->setInfo(__d('baser',
+                "コアフォルダ {0} を テーマ {1} の次のパスとしてコピーしました。\n{2}",
+                basename($args['path']),
+                $currentTheme,
+                $targetPath
+            ));
+            $this->redirect(array_merge(
+                ['action' => 'edit_folder', $currentTheme, $args['plugin'], $args['type']],
+                explode('/', $args['path'])
+            ));
+        } else {
+            $this->BcMessage->setError(__d('baser',
+                'コアフォルダ {0} のコピーに失敗しました。',
+                basename($args['path'])
+            ));
+        }
+        $this->redirect(array_merge(
+            ['action' => 'view_folder', $args['theme'], $args['plugin'], $args['type']],
+            explode('/', $args['path'])
+        ));
+    }
+
+    /**
+     * 画像を表示する
+     * コアの画像等も表示可
+     *
+     * @param ThemeFilesAdminService $service
+     * @checked
+     * @noTodo
+     */
+    public function img(ThemeFilesAdminServiceInterface $service)
+    {
+        $this->disableAutoRender();
+        $args = $this->parseArgs(func_get_args());
+        return $this->getResponse()->withStringBody($service->getImg($args));
+    }
+
+    /**
+     * 画像を表示する
+     * コアの画像等も表示可
+     *
+     * @param ThemeFilesAdminService $service
+     * @checked
+     * @noTodo
+     */
+    public function img_thumb(ThemeFilesAdminServiceInterface $service)
+    {
+        $args = func_get_args();
+        unset($args[0]);
+        $args = array_merge($args);
+        $width = $args[0];
+        $height = $args[1];
+        unset($args[0]);
+        unset($args[1]);
+        $args = array_values($args);
+
+        if ($width == 0) $width = 100;
+        if ($height == 0) $height = 100;
+
+        $args = $this->parseArgs($args);
+        return $this->getResponse()->withStringBody($service->getImgThumb($args, $width, $height));
     }
 
     /**
@@ -731,26 +563,45 @@ class ThemeFilesController extends BcAdminAppController
      *
      * @param array $args
      * @return array
+     * @checked
+     * @noTodo
      */
-    protected function _parseArgs($args)
+    protected function parseArgs($args)
     {
-        $data = ['plugin' => '', 'theme' => '', 'type' => '', 'path' => '', 'fullpath' => '', 'assets' => false];
-        $assets = ['css', 'js', 'img'];
+        $data = [
+            'plugin' => '',
+            'theme' => '',
+            'type' => '',
+            'path' => '',
+            'fullpath' => '',
+            'assets' => false
+        ];
+        $assets = [
+            'css',
+            'js',
+            'img'
+        ];
 
-        if (!empty($args[1]) && !isset($this->_tempalteTypes[$args[1]])) {
+        if ($args[0] instanceof ThemeFilesAdminServiceInterface ||
+            $args[0] instanceof ThemeFoldersAdminServiceInterface ||
+            $args[0] instanceof ThemeFilesServiceInterface ||
+            $args[0] instanceof ThemeFoldersServiceInterface
+            ) {
+            unset($args[0]);
+            $args = array_merge($args);
+        }
+        if (!empty($args[1]) && !BcThemeFileUtil::getTemplateTypeName($args[1])) {
             $folder = new Folder(BASER_PLUGINS);
             $files = $folder->read(true, true);
             foreach($files[0] as $file) {
-                if ($args[1] == $file) {
-                    $data['plugin'] = $args[1];
-                    unset($args[1]);
-                    break;
-                }
+                if ($args[1] !== Inflector::camelize($file, '-')) continue;
+                $data['plugin'] = $args[1];
+                unset($args[1]);
+                break;
             }
         }
 
         if ($data['plugin']) {
-
             if (!empty($args[0])) {
                 $data['theme'] = $args[0];
                 unset($args[0]);
@@ -760,7 +611,6 @@ class ThemeFilesController extends BcAdminAppController
                 unset($args[2]);
             }
         } else {
-
             if (!empty($args[0])) {
                 $data['theme'] = $args[0];
                 unset($args[0]);
@@ -771,31 +621,29 @@ class ThemeFilesController extends BcAdminAppController
             }
         }
 
-        if (empty($data['type'])) {
-            $data['type'] = 'Layouts';
-        }
-
-        if (!empty($args)) {
-            $data['path'] = implode(DS, $args);
-            $data['path'] = rawurldecode($data['path']);
-        }
+        if (empty($data['type'])) $data['type'] = 'layout';
+        if (!empty($args)) $data['path'] = rawurldecode(implode(DS, $args));
 
         if ($data['plugin']) {
             if (in_array($data['type'], $assets)) {
                 $data['assets'] = true;
-                $viewPath = BASER_PLUGINS . $data['plugin'] . DS . 'webroot' . DS;
+                $viewPath = BcUtil::getExistsWebrootDir($data['plugin'], '', 'front');
             } else {
-                $viewPath = BASER_PLUGINS . $data['plugin'] . DS . 'View' . DS;
+                $viewPath = BcUtil::getExistsTemplateDir($data['plugin'], '', 'front');
             }
-        } elseif ($data['theme'] === 'core') {
-            if (in_array($data['type'], $assets)) {
-                $data['assets'] = true;
-                $viewPath = BASER_WEBROOT;
-            } else {
-                $viewPath = BASER_VIEWS;
+            if(!$viewPath) {
+                if (in_array($data['type'], $assets)) {
+                    $viewPath = Plugin::path($data['theme']) . 'webroot' . DS . Inflector::underscore($data['plugin']) . DS;
+                } else {
+                    $viewPath = Plugin::templatePath($data['theme']) . 'plugin' . DS . $data['plugin'] . DS;
+                }
             }
         } else {
-            $viewPath = WWW_ROOT . 'theme' . DS . $data['theme'] . DS;
+            if (in_array($data['type'], $assets)) {
+                $viewPath = Plugin::path($data['theme']) . 'webroot' . DS;
+            } else {
+                $viewPath = Plugin::templatePath($data['theme']);
+            }
         }
 
         if ($data['type'] !== 'etc') {
@@ -807,167 +655,7 @@ class ThemeFilesController extends BcAdminAppController
         if ($data['path'] && is_dir($data['fullpath']) && !preg_match('/\/$/', $data['fullpath'])) {
             $data['fullpath'] .= DS;
         }
-
         return $data;
-    }
-
-    /**
-     * コアファイルを現在のテーマにコピーする
-     *
-     * @return void
-     */
-    public function admin_copy_to_theme()
-    {
-        $this->_checkSubmitToken();
-        $args = $this->_parseArgs(func_get_args());
-        extract($args);
-        if (!isset($this->_tempalteTypes[$type])) {
-            $this->notFound();
-        }
-
-        $theme = BcUtil::getCurrentTheme();
-        if ($type !== 'etc') {
-            if ($plugin && $assets) {
-                $themePath = WWW_ROOT . 'theme' . DS . $theme . DS . $plugin . DS . $type . DS . $path;
-            } else {
-                $themePath = WWW_ROOT . 'theme' . DS . $theme . DS . $type . DS . $path;
-            }
-        } else {
-            $themePath = WWW_ROOT . 'theme' . DS . $theme . DS . $path;
-        }
-        $folder = new Folder();
-        $folder->create(dirname($themePath), 0777);
-        if (copy($fullpath, $themePath)) {
-            chmod($themePath, 0666);
-            $_themePath = str_replace(ROOT, '', $themePath);
-            $this->setMessage('コアファイル ' . basename($path) . ' を テーマ ' . Inflector::camelize($theme) . " の次のパスとしてコピーしました。\n" . $_themePath);
-            // 現在のテーマにリダイレクトする場合、混乱するおそれがあるのでとりあえずそのまま
-            //$this->redirect(array_merge(array('action' => 'edit', $theme, $type), explode('/', $path)));
-        } else {
-            $this->BcMessage->setError('コアファイル ' . basename($path) . ' のコピーに失敗しました。');
-        }
-        $this->redirect(array_merge(['action' => 'view', $theme, $plugin, $type], explode('/', $path)));
-    }
-
-    /**
-     * コアファイルのフォルダを現在のテーマにコピーする
-     *
-     * @return void
-     */
-    public function admin_copy_folder_to_theme()
-    {
-        $this->_checkSubmitToken();
-        $args = $this->_parseArgs(func_get_args());
-        extract($args);
-        if (!isset($this->_tempalteTypes[$type])) {
-            $this->notFound();
-        }
-
-        $theme = BcUtil::getCurrentTheme();
-        if ($type !== 'etc') {
-            if ($plugin && $assets) {
-                $themePath = WWW_ROOT . 'theme' . DS . $theme . DS . $plugin . DS . $type . DS;
-            } else {
-                $themePath = WWW_ROOT . 'theme' . DS . $theme . DS . $type . DS;
-            }
-            if ($path) {
-                $themePath .= $path . DS;
-            }
-        } else {
-            $themePath = WWW_ROOT . 'theme' . DS . $theme . DS . $path . DS;
-        }
-        $folder = new Folder();
-        $folder->create(dirname($themePath), 0777);
-        if (!$folder->copy(['from' => $fullpath, 'to' => $themePath, 'chmod' => 0777, 'skip' => ['_notes']])) {
-            $this->BcMessage->setError('コアフォルダ ' . basename($path) . ' のコピーに失敗しました。');
-            $this->redirect(array_merge(['action' => 'view_folder', $theme, $plugin, $type], explode('/', $path)));
-            return;
-        }
-
-        $_themePath = str_replace(ROOT, '', $themePath);
-        $this->BcMessage->setInfo(
-            sprintf(
-                'コアフォルダ %s を テーマ %s の次のパスとしてコピーしました。 %s',
-                basename($path),
-                Inflector::camelize($theme),
-                $_themePath
-            )
-        );
-        // 現在のテーマにリダイレクトする場合、混乱するおそれがあるのでとりあえずそのまま
-        //$this->redirect(array('action' => 'edit', $theme, $type, $path));
-        $this->redirect(
-            array_merge(
-                ['action' => 'view_folder', $theme, $plugin, $type],
-                explode('/', $path)
-            )
-        );
-    }
-
-    /**
-     * 画像を表示する
-     * コアの画像等も表示可
-     *
-     * @param array パス情報
-     * @return void
-     */
-    public function admin_img()
-    {
-        $args = $this->_parseArgs(func_get_args());
-        $contents = ['jpg' => 'jpeg', 'gif' => 'gif', 'png' => 'png'];
-        extract($args);
-        $pathinfo = pathinfo($fullpath);
-
-        if (!isset($this->_tempalteTypes[$type]) || !isset($contents[$pathinfo['extension']]) || !file_exists($fullpath)) {
-            $this->notFound();
-        }
-
-        $file = new File($fullpath);
-        if (!$file->open('r')) {
-            $this->notFound();
-            return;
-        }
-
-        header("Content-Length: " . $file->size());
-        header("Content-type: image/" . $contents[$pathinfo['extension']]);
-        echo $file->read();
-        exit();
-    }
-
-    /**
-     * 画像を表示する
-     * コアの画像等も表示可
-     *
-     * @return void
-     */
-    public function admin_img_thumb()
-    {
-        $args = func_get_args();
-        $width = $args[0];
-        $height = $args[1];
-        unset($args[0]);
-        unset($args[1]);
-        $args = array_values($args);
-
-        if ($width == 0) {
-            $width = 100;
-        }
-        if ($height == 0) {
-            $height = 100;
-        }
-
-        $args = $this->_parseArgs($args);
-        $contents = ['jpeg' => 'jpeg', 'jpg' => 'jpeg', 'gif' => 'gif', 'png' => 'png'];
-        extract($args);
-        $pathinfo = pathinfo($fullpath);
-
-        if (!isset($this->_tempalteTypes[$type]) || !isset($contents[$pathinfo['extension']]) || !file_exists($fullpath)) {
-            $this->notFound();
-        }
-
-        header("Content-type: image/" . $contents[$pathinfo['extension']]);
-        $Imageresizer = new Imageresizer();
-        $Imageresizer->resize($fullpath, null, $width, $height);
-        exit();
     }
 
 }

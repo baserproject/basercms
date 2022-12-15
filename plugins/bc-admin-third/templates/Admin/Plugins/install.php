@@ -21,7 +21,7 @@ use BaserCore\View\BcAdminAppView;
 $this->BcBaser->i18nScript([
   'message1' => __d('baser', 'プラグインのデータを初期化します。よろしいですか？'),
 ]);
-$this->BcBaser->js('admin/plugins/install.bundle', false, [
+$this->BcBaser->js('BcInstaller.admin/plugins/install.bundle', false, [
   'id' => 'AdminPluginInstallScript',
   'data-resetDbUrl' => $this->BcBaser->getUrl(['action' => 'reset_db'])
 ]);

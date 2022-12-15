@@ -41,7 +41,8 @@ $class = ' class="' . implode(' ', $classies) . '"';
       <?php echo $this->BcAdminForm->control('batch_targets.' . $plugin->id, [
         'type' => 'checkbox', 'label' => '<span class="bca-visually-hidden">' . __d('baser', 'チェックする') . '</span>',
         'class' => 'batch-targets bca-checkbox__input',
-        'escape' => false
+        'escape' => false,
+        'value' => $plugin->id
       ]) ?>
     <?php endif ?>
     <?php if ($this->request->getQuery('sortmode')): ?>

@@ -36,8 +36,8 @@ use Cake\Core\Configure;
           <?php endif ?>
         </p>
         <div class="row-tools">
-          <?php if (Configure::read('BcApp.allowedThemeEdit')): ?>
-            <?php $this->BcBaser->link('', ['controller' => 'theme_files', 'action' => 'index', $currentTheme->name], [
+          <?php if (Configure::read('BcThemeFile.allowedThemeEdit')): ?>
+            <?php $this->BcBaser->link('', ['plugin' => 'BcThemeFile', 'controller' => 'ThemeFiles', 'action' => 'index', $currentTheme->name], [
               'title' => __d('baser', 'テンプレート編集'),
               'class' => 'bca-btn-icon', 'data-bca-btn-type' =>
               'file-list', 'data-bca-btn-size' => 'lg'
