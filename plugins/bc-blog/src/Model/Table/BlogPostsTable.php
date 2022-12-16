@@ -458,6 +458,8 @@ class BlogPostsTable extends BlogAppTable
 
     /**
      * 公開状態を取得する
+     * 
+     * 期限が設定されている場合、期限外では公開状態が非公開となる
      *
      * @param array $data モデルデータ
      * @return boolean 公開状態
