@@ -204,7 +204,6 @@ return [
                             'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'themes', 'action' => 'index'],
                             'currentRegex' => '/\/themes\/[^\/]+?/s'
                         ],
-//                        'ThemeConfigs' => ['title' => __d('baser', '設定'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'theme_configs', 'action' => 'form']],
                         'ThemeAdd' => [
                             'title' => __d('baser', '新規追加'),
                             'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'themes', 'action' => 'add']
@@ -238,11 +237,6 @@ return [
                             'title' => __d('baser', 'ユーティリティトップ'),
                             'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'utilities', 'action' => 'index']
                         ],
-//                        'EditorTemplates' => [
-//                            'title' => __d('baser', 'エディタテンプレート'),
-//                            'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'editor_templates', 'action' => 'index'],
-//                            'currentRegex' => '/\/editor_templates\/[^\/]+?/s'
-//                        ],
                         'SiteConfigsInfo' => [
                             'title' => __d('baser', '環境情報'),
                             'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'utilities', 'action' => 'info']

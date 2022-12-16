@@ -10,7 +10,6 @@
  */
 namespace BaserCore\Model\Behavior;
 
-use Cake\Datasource\EntityInterface;
 use Cake\ORM\Behavior;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;

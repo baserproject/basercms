@@ -16,6 +16,7 @@ use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\Note;
 use BaserCore\Model\Table\AppTable;
+use Cake\Validation\Validator;
 
 /**
  * Class ThemeConfig
@@ -28,15 +29,48 @@ class ThemeConfigsTable extends AppTable
 {
 
     /**
-     * ThemeConfig constructor.
+     * Initialize
      *
-     * @param bool $id
-     * @param null $table
-     * @param null $ds
+     * @param array $config テーブル設定
+     * @return void
+     * @checked
+     * @noTodo
      */
-    public function __construct(array $config = [])
+    public function initialize(array $config): void
     {
-        parent::__construct($config);
+        parent::initialize($config);
+        $this->addBehavior('BaserCore.BcKeyValue');
+    }
+
+    /**
+     * デフォルトのバリデーション設定
+     *
+     * @param Validator $validator
+     * @return Validator
+     * @checked
+     * @noTodo
+     */
+    public function validationDefault(Validator $validator): Validator
+    {
+        $validator
+            ->scalar('name')
+            ->maxLength('name', 255, __d('baser', '255文字以内で入力してください。'))
+            ->requirePresence('name', 'create', __d('baser', '設定名を入力してください。'))
+            ->notEmptyString('name', __d('baser', '設定名を入力してください。'));
+        $validator
+            ->scalar('value')
+            ->maxLength('value', 65535, __d('baser', '65535文字以内で入力してください。'));
+        return $validator;
+    }
+
+    /**
+     * KeyValue のバリデーション設定
+     *
+     * @param Validator $validator
+     * @return Validator
+     */
+    public function validationKeyValue(Validator $validator): Validator
+    {
         // TODO ucmitz 未移行
         /*
         $this->validate = [
@@ -47,117 +81,7 @@ class ThemeConfigsTable extends AppTable
             'main_image_4' => [['rule' => ['fileExt', 'gif,jpg,jpeg,jpe,jfif,png'], 'message' => __d('baser', '許可されていないファイルです。')]],
             'main_image_5' => [['rule' => ['fileExt', 'gif,jpg,jpeg,jpe,jfif,png'], 'message' => __d('baser', '許可されていないファイルです。')]]
         ];*/
-    }
-
-    /**
-     * Initialize
-     *
-     * @param array $config テーブル設定
-     * @return void
-     */
-    public function initialize(array $config): void
-    {
-        parent::initialize($config);
-        $this->addBehavior('BaserCore.BcKeyValue');
-    }
-
-    /**
-     * 画像を保存する
-     *
-     * @param array $data
-     * @return array
-     */
-    public function saveImage($data)
-    {
-        // TODO インストール時にfilesの書き込み権限チェック＆フォルダ作成
-
-        $saveDir = WWW_ROOT . 'files' . DS . 'theme_configs' . DS;
-        $images = ['logo', 'main_image_1', 'main_image_2', 'main_image_3', 'main_image_4', 'main_image_5'];
-        $thumbSuffix = '_thumb';
-        $old = $this->getKeyValue();
-
-        foreach($images as $image) {
-            if (!empty($data['ThemeConfig'][$image]['tmp_name'])) {
-                @unlink($saveDir . $old[$image]);
-                $pathinfo = pathinfo($old[$image]);
-                @unlink($saveDir . $pathinfo['filename'] . $thumbSuffix . '.' . $pathinfo['extension']);
-                $fileName = $data['ThemeConfig'][$image]['name'];
-                $ext = pathinfo($fileName, PATHINFO_EXTENSION);
-                $filePath = $saveDir . $image . '.' . $ext;
-                $thumbPath = $saveDir . $image . $thumbSuffix . '.' . $ext;
-                move_uploaded_file($data['ThemeConfig'][$image]['tmp_name'], $filePath);
-                $Imageresizer = new Imageresizer();
-                $Imageresizer->resize($filePath, $thumbPath, 320, 320);
-                $data['ThemeConfig'][$image] = $image . '.' . $ext;
-            } else {
-                unset($data['ThemeConfig'][$image]);
-            }
-        }
-
-        return $data;
-    }
-
-    /**
-     * 画像を削除する
-     *
-     * @param array $data
-     */
-    public function deleteImage($data)
-    {
-        $saveDir = WWW_ROOT . 'files' . DS . 'theme_configs' . DS;
-        $images = ['logo', 'main_image_1', 'main_image_2', 'main_image_3', 'main_image_4', 'main_image_5'];
-        $thumbSuffix = '_thumb';
-        $old = $this->getKeyValue();
-        foreach($images as $image) {
-            if (!empty($data['ThemeConfig'][$image . '_delete'])) {
-                @unlink($saveDir . $old[$image]);
-                $pathinfo = pathinfo($old[$image]);
-                @unlink($saveDir . $pathinfo['filename'] . $thumbSuffix . '.' . $pathinfo['extension']);
-                $data['ThemeConfig'][$image] = '';
-            }
-        }
-
-        return $data;
-    }
-
-    /**
-     * テーマカラー設定を保存する
-     *
-     * @param array $data
-     * @return boolean
-     */
-    public function updateColorConfig($data)
-    {
-
-        $configPath = getViewPath() . 'css' . DS . 'config.css';
-        if (!file_exists($configPath)) {
-            return false;
-        }
-        $File = new File($configPath);
-        $config = $File->read();
-        $settings = [
-            'MAIN' => 'color_main',
-            'SUB' => 'color_sub',
-            'LINK' => 'color_link',
-            'HOVER' => 'color_hover'
-        ];
-        $settingExists = false;
-        foreach($settings as $key => $setting) {
-            if (empty($data['ThemeConfig'][$setting])) {
-                $config = preg_replace("/\n.+?" . $key . ".+?\n/", "\n", $config);
-            } else {
-                $config = str_replace($key, '#' . $data['ThemeConfig'][$setting], $config);
-                $settingExists = true;
-            }
-        }
-        $File = new File(WWW_ROOT . 'files' . DS . 'theme_configs' . DS . 'config.css', true, 0666);
-        $File->write($config);
-        $File->close();
-        if (!$settingExists) {
-            unlink($configPath);
-        }
-        return true;
-
+        return $validator;
     }
 
 }
