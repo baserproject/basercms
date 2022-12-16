@@ -18,6 +18,7 @@ use BaserCore\Error\BcException;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Vendor\Imageresizer;
 use BcThemeConfig\Model\Entity\ThemeConfig;
+use Cake\Core\Plugin;
 use Cake\Datasource\EntityInterface;
 use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
@@ -192,7 +193,7 @@ class ThemeConfigsService implements ThemeConfigsServiceInterface
      */
     public function updateColorConfig($entity)
     {
-        $configPath = BcUtil::getCurrentTheme() . 'webroot' . DS . 'css' . DS . 'config.css';
+        $configPath = Plugin::path(BcUtil::getCurrentTheme()) . 'webroot' . DS . 'css' . DS . 'config.css';
         if (!file_exists($configPath)) {
             return false;
         }
