@@ -14,17 +14,13 @@
  * [ADMIN] エディタテンプレート一覧　テーブル
  *
  * @var BcAppView $this
+ * @var \Cake\ORM\ResultSet $editorTemplates
+ * @checked
+ * @noTodo
+ * @unitTest
  */
 $this->BcListTable->setColumnNumber(5);
 ?>
-
-
-<div class="bca-data-list__top">
-  <div class="bca-data-list__sub">
-    <!-- pagination -->
-    <?php $this->BcBaser->element('pagination') ?>
-  </div>
-</div>
 
 
 <table class="list-table bca-table-listup" id="ListTable">
@@ -36,30 +32,24 @@ $this->BcListTable->setColumnNumber(5);
 
     <?php echo $this->BcListTable->dispatchShowHead() ?>
 
-    <th class="bca-table-listup__thead-th"><?php echo __d('baser', '登録日') ?><br/><?php echo __d('baser', '更新日') ?>
+    <th class="bca-table-listup__thead-th">
+      <?php echo __d('baser', '登録日') ?><br>
+      <?php echo __d('baser', '更新日') ?>
     </th>
     <th class="bca-table-listup__thead-th"><?php echo __d('baser', 'アクション') ?></th>
   </tr>
   </thead>
   <tbody>
-  <?php if (!empty($datas)): ?>
-    <?php foreach($datas as $data): ?>
-      <?php $this->BcBaser->element('editor_templates/index_row', ['data' => $data]) ?>
+  <?php if (!empty($editorTemplates)): ?>
+    <?php foreach($editorTemplates as $editorTemplate): ?>
+      <?php $this->BcBaser->element('EditorTemplates/index_row', ['editorTemplate' => $editorTemplate]) ?>
     <?php endforeach; ?>
   <?php else: ?>
     <tr>
-      <td colspan="<?php echo $this->BcListTable->getColumnNumber() ?>" class="bca-table-listup__tbody-td"><p
-          class="no-data"><?php echo __d('baser', 'データが見つかりませんでした。') ?></p></td>
+      <td colspan="<?php echo $this->BcListTable->getColumnNumber() ?>" class="bca-table-listup__tbody-td">
+        <p class="no-data"><?php echo __d('baser', 'データが見つかりませんでした。') ?></p>
+      </td>
     </tr>
   <?php endif; ?>
   </tbody>
 </table>
-
-<div class="bca-data-list__bottom">
-  <div class="bca-data-list__sub">
-    <!-- pagination -->
-    <?php $this->BcBaser->element('pagination') ?>
-    <!-- list-num -->
-    <?php $this->BcBaser->element('list_num') ?>
-  </div>
-</div>

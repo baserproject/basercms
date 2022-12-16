@@ -73,6 +73,9 @@ class BcCkeditorHelperTest extends BcTestCase
     {
         $this->BcCkeditor->getView()->setTheme('BcAdminThird');
         $fieldName = 'Page.test';
+        $request = $this->getRequest('/')->withAttribute('formTokenData', ['test']);
+        $this->BcCkeditor->getView()->setRequest($request);
+        $this->BcCkeditor->BcAdminForm->create();
         $result = $this->BcCkeditor->editor($fieldName, []);
         $tagList = ['/<span class="bca-textarea"/', '/<textarea name="Page\[test\]"/'];
         foreach ($tagList as $requiredTag) {

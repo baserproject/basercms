@@ -30,6 +30,7 @@ use BaserCore\Annotation\UnitTest;
  * @package Baser.View.Helper
  * @property BcHtmlHelper $BcHtml
  * @property BcUploadHelper $BcUpload
+ * @property BcCkeditorHelper $BcCkeditor
  */
 class BcFormHelper extends FormHelper
 {

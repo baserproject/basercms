@@ -18,6 +18,7 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Event\BcEventDispatcherTrait;
+use Cake\View\Helper\UrlHelper;
 
 
 /**
@@ -26,6 +27,7 @@ use BaserCore\Event\BcEventDispatcherTrait;
  * @package Baser.View.Helper
  * @property BcAdminFormHelper $BcAdminForm
  * @property BcHtmlHelper $BcHtml
+ * @property UrlHelper $Url
  */
 class BcCkeditorHelper extends Helper
 {
@@ -272,8 +274,8 @@ class BcCkeditorHelper extends Helper
                 'editorDisableDraft' => $options['editorDisableDraft'],
                 'editorDisablePublish' => $options['editorDisablePublish'],
                 'previewModeId' => $options['editorPreviewModeId'],
-                'editorUrl' => ($options['editorUseTemplates'])?
-                    $this->Url->build(['plugin' => 'BaserCore', 'prefix' => 'Admin', 'controller' => 'editor_templates', 'action' => 'js']) : '',
+                'editorUrl' => ($options['editorUseTemplates'] && Plugin::isLoaded('BcEditorTemplate'))?
+                    $this->Url->build(['plugin' => 'BcEditorTemplate', 'prefix' => 'Admin', 'controller' => 'editor_templates', 'action' => 'js']) : '',
                 'initialStyle' => $this->style,
                 'editorStyle' => $options['editorStyles'],
                 'themeEditorCsses' => $this->getThemeEditorCsses(),
@@ -288,6 +290,7 @@ class BcCkeditorHelper extends Helper
                     'styles' => $options['editorStyles'],
                 ]
         ])]);
+        $this->BcAdminForm->unlockField('ckeditor.setting.' . $fieldName);
         $this->BcHtml->scriptStart(['block' => true]);
         echo <<< SCRIPT_END
         $(function(){
@@ -311,6 +314,8 @@ class BcCkeditorHelper extends Helper
     {
         if (!$options['editorToolbar']) {
             $options['editorToolbar'] = $this->toolbars[$options['editorToolType']];
+            if(!Plugin::isLoaded('BcEditorTemplate')) return $options;
+
             if ($options['editorUseTemplates']) {
                 switch($options['editorToolType']) {
                     case 'simple':

@@ -11,21 +11,29 @@
  * @since           baserCMS v 0.1.0
  * @license         https://basercms.net/license/index.html
  */
+
+/**
+ * @var \BaserCore\View\BcAdminAppView $this
+ * @var \Cake\ORM\ResultSet $templates
+ * @checked
+ * @noTodo
+ * @unitTest
+ */
 ?>
 
 
 CKEDITOR.addTemplates('default',{
-imagesPath:CKEDITOR.getUrl('<?php echo $this->BcBaser->webroot('/files/editor/') ?>'),
+imagesPath:CKEDITOR.getUrl('<?php echo $this->BcBaser->Url->webroot('/files/editor/') ?>'),
 templates:[
 <?php if ($templates): ?>
   <?php foreach($templates as $key => $template): ?>
     {
-    title:'<?php echo $template['EditorTemplate']['name'] ?>',
-    <?php if (file_exists(WWW_ROOT . 'files' . DS . 'editor' . DS . $template['EditorTemplate']['image'])): ?>
-      image:'<?php echo $template['EditorTemplate']['image'] ?>',
+    title:'<?php echo $template->name ?>',
+    <?php if (file_exists(WWW_ROOT . 'files' . DS . 'editor' . DS . $template->image)): ?>
+      image:'<?php echo $template->image ?>',
     <?php endif ?>
-    description:'<?php echo preg_replace("/(\n|\r)/", "", nl2br($template['EditorTemplate']['description'])) ?>',
-    html:'<?php echo preg_replace('/(\n|\r)/', '', $template['EditorTemplate']['html']) ?>'
+    description:'<?php echo preg_replace("/(\n|\r)/", "", nl2br($template->description)) ?>',
+    html:'<?php echo preg_replace('/(\n|\r)/', '', $template->html) ?>'
     }<?php if (!$this->BcArray->last($templates, $key)): ?>, <?php endif ?>
   <?php endforeach ?>
 <?php endif ?>

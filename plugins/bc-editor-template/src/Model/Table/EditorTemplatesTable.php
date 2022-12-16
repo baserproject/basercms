@@ -12,24 +12,36 @@
 namespace BcEditorTemplate\Model\Table;
 
 use BaserCore\Model\Table\AppTable;
+use BaserCore\Utility\BcUtil;
+use Cake\Validation\Validator;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
 
 /**
  * Class EditorTemplate
  *
  * エディタテンプレート　モデル
- *
- * @package Baser.Model
  */
 class EditorTemplatesTable extends AppTable
 {
 
     /**
-     * behaviors
+     * Initialize
      *
-     * @var    array
+     * @param array $config
+     * @checked
+     * @noTodo
      */
-    public $actsAs = [
-        'BcUpload' => [
+    public function initialize(array $config): void
+    {
+        parent::initialize($config);
+
+        $this->setTable('editor_templates');
+        $this->setPrimaryKey('id');
+
+        $this->addBehavior('Timestamp');
+        $this->addBehavior('BaserCore.BcUpload', [
             'saveDir' => "editor",
             'fields' => [
                 'image' => [
@@ -39,25 +51,42 @@ class EditorTemplatesTable extends AppTable
                     'imageresize' => ['prefix' => 'template', 'width' => '100', 'height' => '100']
                 ]
             ]
-        ]
-    ];
+        ]);
+    }
 
     /**
-     * EditorTemplate constructor.
+     * バリデーション設定
      *
-     * @param bool $id
-     * @param null $table
-     * @param null $ds
+     * @param Validator $validator
+     * @return Validator
+     * @checked
+     * @noTodo
      */
-    public function __construct($id = false, $table = null, $ds = null)
+    public function validationDefault(Validator $validator): Validator
     {
-        parent::__construct($id, $table, $ds);
-        $this->validate = [
-            'name' => [
-                ['rule' => ['notBlank'], 'message' => __d('baser', 'テンプレート名を入力してください。')]],
-            'image' => [
-                ['rule' => ['fileExt', ['gif', 'jpg', 'jpeg', 'jpe', 'jfif', 'png']], 'message' => __d('baser', '許可されていないファイルです。')]]
-        ];
+        $validator
+            ->integer('id')
+            ->allowEmptyString('id', null, 'create');
+        $validator
+            ->scalar('name')
+            ->notEmptyString('name', __d('baser', 'テンプレート名を入力してください。'));
+        $validator
+            ->allowEmptyString('image')
+            ->add('image', [
+                'fileCheck' => [
+                    'rule' => ['fileCheck', BcUtil::convertSize(ini_get('upload_max_filesize'))],
+                    'provider' => 'bc',
+                    'message' => __d('baser', 'ファイルのアップロード制限を超えています。')
+                ]
+            ])
+            ->add('image', [
+                'fileCheck' => [
+                    'rule' => ['fileExt', ['gif', 'jpg', 'jpeg', 'jpe', 'jfif', 'png']],
+                    'provider' => 'bc',
+                    'message' => __d('baser', '許可されていないファイルです。')
+                ]
+            ]);
+        return $validator;
     }
 
 }

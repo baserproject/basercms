@@ -11,9 +11,15 @@
 
 namespace BcEditorTemplate\Controller\Admin;
 
-use BaserCore\Utility\BcUtil;
-use Cake\Event\EventInterface;
+use BaserCore\Error\BcException;
+use BaserCore\Utility\BcSiteConfig;
+use BcEditorTemplate\Service\EditorTemplatesService;
+use BcEditorTemplate\Service\EditorTemplatesServiceInterface;
 use BaserCore\Controller\Admin\BcAdminAppController;
+use Cake\ORM\Exception\PersistenceFailedException;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
 
 /**
  * Class EditorTemplatesController
@@ -21,167 +27,132 @@ use BaserCore\Controller\Admin\BcAdminAppController;
  * エディタテンプレートコントローラー
  *
  * エディタテンプレートの管理を行う
- *
- * @package Baser.Controller
  */
 class EditorTemplatesController extends BcAdminAppController
 {
 
     /**
-     * コンポーネント
+     * エディタテンプレートの一覧を表示する
      *
-     * @var array
+     * @param EditorTemplatesService $service
+     * @checked
+     * @noTodo
      */
-    public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure'];
-
-    /**
-     * beforeFilter
-     *
-     * @return void
-     */
-    public function beforeFilter(EventInterface $event)
+    public function index(EditorTemplatesServiceInterface $service)
     {
-        return // TODO : 一時措置
-        parent::beforeFilter();
-        if (BcSiteConfig::get('editor') && BcSiteConfig::get('editor') !== 'none') {
-            $this->helpers[] = BcSiteConfig::get('editor');
-        }
-    }
-
-    /**
-     * [ADMIN] 一覧
-     */
-    public function admin_index()
-    {
-        $this->setTitle(__d('baser', 'エディタテンプレート一覧'));
-        $this->setHelp('editor_templates_index');
-        $this->set('datas', $this->EditorTemplate->find('all'));
-    }
-
-    /**
-     * [ADMIN] 新規登録
-     */
-    public function admin_add()
-    {
-        $this->setTitle(__d('baser', 'エディタテンプレート新規登録'));
-        $this->setHelp('editor_templates_form');
-
-        if (!$this->request->is(['post', 'put'])) {
-            $this->render('form');
-            return;
-        }
-
-        if (BcUtil::isOverPostSize()) {
-            $this->BcMessage->setError(
-                __d(
-                    'baser',
-                    '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。',
-                    ini_get('post_max_size')
-                )
-            );
-            $this->redirect(['action' => 'add']);
-        }
-        $this->EditorTemplate->create($this->request->getData());
-        $result = $this->EditorTemplate->save();
-        if (!$result) {
-            $this->BcMessage->setError(__d('baser', '保存中にエラーが発生しました。'));
-            $this->render('form');
-            return;
-        }
-
-        // EVENT EditorTemplates.afterAdd
-        $this->dispatchLayerEvent('afterAdd', [
-            'data' => $result
+        $this->set([
+            'editorTemplates' => $service->getIndex()
         ]);
-        $this->BcMessage->setInfo(__d('baser', '保存完了'));
-        $this->redirect(['action' => 'index']);
-//		$this->render('form');
+    }
+
+    /**
+     * エディタテンプレートを新しく登録する
+     *
+     * @param EditorTemplatesService $service
+     * @checked
+     * @noTodo
+     */
+    public function add(EditorTemplatesServiceInterface $service)
+    {
+        if ($this->request->is(['post', 'put'])) {
+            try {
+                $entity = $service->create($this->getRequest()->getData());
+
+                // EVENT EditorTemplates.afterAdd
+                $this->dispatchLayerEvent('afterAdd', [
+                    'data' => $entity
+                ]);
+
+                $this->BcMessage->setSuccess(__d('baser', 'テンプレート「{0}」を追加しました', $entity->name));
+                $this->redirect(['action' => 'index']);
+            } catch (PersistenceFailedException $e) {
+                $entity = $e->getEntity();
+                $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
+            } catch (\Throwable $e) {
+                $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。'));
+            }
+        }
+        $this->set([
+            'editorTemplate' => $entity?? $service->getNew()
+        ]);
+        $this->viewBuilder()->addHelper(BcSiteConfig::get('editor'));
     }
 
     /**
      * [ADMIN] 編集
      *
+     * @param EditorTemplatesService $service
      * @param int $id
+     * @checked
+     * @noTodo
      */
-    public function admin_edit($id)
+    public function edit(EditorTemplatesServiceInterface $service, int $id)
     {
-        $this->setTitle(__d('baser', 'エディタテンプレート編集'));
-        $this->setHelp('editor_templates_form');
+        $entity = $service->get($id);
+        if ($this->request->is(['post', 'put'])) {
+            try {
+                $entity = $service->update($entity, $this->getRequest()->getData());
 
-        if (!$this->request->is(['post', 'put'])) {
-            $this->request = $this->request->withParsedBody($this->EditorTemplate->read(null, $id));
-            $this->render('form');
-            return;
-        }
+                // EVENT EditorTemplates.afterEdit
+                $this->dispatchLayerEvent('afterEdit', [
+                    'data' => $entity
+                ]);
 
-        if (BcUtil::isOverPostSize()) {
-            $this->BcMessage->setError(__d('baser', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size')));
-            $this->redirect(['action' => 'edit', $id]);
+                $this->BcMessage->setSuccess(__d('baser', 'テンプレート「{0}」を更新しました', $entity->name));
+                $this->redirect(['action' => 'index']);
+            } catch (PersistenceFailedException $e) {
+                $entity = $e->getEntity();
+                $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
+            } catch (\Throwable $e) {
+                $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。'));
+            }
         }
-        $this->EditorTemplate->set($this->request->getData());
-        $result = $this->EditorTemplate->save();
-        if (!$result) {
-            $this->BcMessage->setError(__d('baser', '保存中にエラーが発生しました。'));
-            $this->render('form');
-            return;
-        }
-
-        // EVENT EditorTemplates.afterEdit
-        $this->dispatchLayerEvent('afterEdit', [
-            'data' => $result
+        $this->set([
+            'editorTemplate' => $entity
         ]);
-        $this->BcMessage->setInfo(__d('baser', '保存完了'));
-        $this->redirect(['action' => 'index']);
-//		$this->render('form');
+        $this->viewBuilder()->addHelper(BcSiteConfig::get('editor'));
     }
 
     /**
      * [ADMIN] 削除
      *
+     * @param EditorTemplatesService $service
      * @param int $id
+     * @return \Cake\Http\Response|void|null
+     * @checked
+     * @noTodo
      */
-    public function admin_delete($id)
+    public function delete(EditorTemplatesServiceInterface $service, $id)
     {
-        $this->_checkSubmitToken();
-        if (!$id) {
-            $this->BcMessage->setError(__d('baser', '無効なIDです。'));
-            $this->redirect(['action' => 'index']);
-        }
-        $data = $this->EditorTemplate->read(null, $id);
-        if ($this->EditorTemplate->delete($id)) {
-            $this->BcMessage->setSuccess(sprintf(__d('baser', 'エディタテンプレート「%s」を削除しました。'), $data['EditorTemplate']['name']));
-        } else {
-            $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。'));
-        }
-        $this->redirect(['action' => 'index']);
-    }
+        $this->request->allowMethod(['post', 'delete']);
 
-    /**
-     * [ADMIN AJAX] 削除
-     * @param int $id
-     */
-    public function admin_ajax_delete($id)
-    {
-        $this->_checkSubmitToken();
-        if (!$id) {
-            $this->ajaxError(500, __d('baser', '無効な処理です。'));
+        try {
+            $entity = $service->get($id);
+            if ($service->delete($id)) {
+                $this->BcMessage->setSuccess(__d('baser', 'テンプレート「{0}」を削除しました。', $entity->name));
+            }
+        } catch (BcException $e) {
+            $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
         }
-        $data = $this->EditorTemplate->read(null, $id);
-        if ($this->EditorTemplate->delete($id)) {
-            $this->EditorTemplate->saveDbLog(sprintf(__d('baser', 'エディタテンプレート「%s」を削除しました。'), $data['EditorTemplate']['name']));
-            exit(true);
-        }
-        exit();
+
+        return $this->redirect(['action' => 'index', $id]);
     }
 
     /**
      * [ADMIN] CKEditor用テンプレート用のjavascriptを出力する
+     *
+     * @param EditorTemplatesService $service
+     * @checked
+     * @noTodo
      */
-    public function admin_js()
+    public function js(EditorTemplatesServiceInterface $service)
     {
         header('Content-Type: text/javascript; name="editor_templates.js"');
-        $this->layout = 'empty';
-        $this->set('templates', $this->EditorTemplate->find('all'));
+        $this->viewBuilder()->disableAutoLayout();
+        $this->set([
+            'templates' => $service->getIndex()
+        ]);
+        $this->viewBuilder()->addHelper('BaserCore.BcArray');
     }
 
 }

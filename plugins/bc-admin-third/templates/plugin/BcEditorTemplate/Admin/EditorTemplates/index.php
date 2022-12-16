@@ -12,28 +12,20 @@
 
 /**
  * [ADMIN] エディタテンプレートー一覧
+ * @var \BaserCore\View\BcAdminAppView $this
+ * @checked
+ * @noTodo
+ * @unitTest
  */
-$this->BcBaser->js([
-  'admin/libs/jquery.baser_ajax_data_list',
-  'admin/libs/baser_ajax_data_list_config',
-]);
 $this->BcAdmin->addAdminMainBodyHeaderLinks([
   'url' => ['action' => 'add'],
   'title' => __d('baser', '新規追加'),
 ]);
+$this->BcAdmin->setTitle(__d('baser', 'エディタテンプレート一覧'));
+$this->BcAdmin->setHelp('editor_templates_index');
 ?>
 
 
-<script type="text/javascript">
-  $(function () {
-    $.baserAjaxDataList.init();
-  });
-</script>
-
-<div id="AjaxBatchUrl"
-     style="display:none"><?php $this->BcBaser->url(['controller' => 'editor_templates', 'action' => 'ajax_batch']) ?></div>
-<div id="AlertMessage" class="message" style="display:none"></div>
-<div id="MessageBox" style="display:none">
-  <div id="flashMessage" class="notice-message"></div>
+<div id="DataList" class="bca-data-list">
+  <?php $this->BcBaser->element('EditorTemplates/index_list') ?>
 </div>
-<div id="DataList" class="bca-data-list"><?php $this->BcBaser->element('editor_templates/index_list') ?></div>
