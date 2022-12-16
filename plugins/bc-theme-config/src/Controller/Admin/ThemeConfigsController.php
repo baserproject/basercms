@@ -12,71 +12,44 @@
 namespace BcThemeConfig\Controller\Admin;
 
 use BaserCore\Controller\Admin\BcAdminAppController;
-use BaserCore\Utility\BcUtil;
+use BcThemeConfig\Service\ThemeConfigsService;
+use BcThemeConfig\Service\ThemeConfigsServiceInterface;
+use Cake\ORM\Exception\PersistenceFailedException;
 
 /**
  * Class ThemeConfigsController
  *
  * テーマ設定コントローラー
- *
- * @package Baser.Controller
- * @property ThemeConfig $ThemeConfig
  */
 class ThemeConfigsController extends BcAdminAppController
 {
 
     /**
-     * コンポーネント
-     *
-     * @var array
-     */
-    public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure'];
-
-    /**
      * [ADMIN] 設定編集
+     *
+     * @param ThemeConfigsService $service
+     * @checked
+     * @noTodo
      */
-    public function admin_form()
+    public function index(ThemeConfigsServiceInterface $service)
     {
-        $this->setTitle(__d('baser', 'テーマ設定'));
-        $this->setHelp('theme_configs_form');
-
-        if (!$this->request->is(['post', 'put'])) {
-            $this->request = $this->request->withParsedBody(['ThemeConfig' => $this->ThemeConfig->getKeyValue()]);
-            return;
-        }
-
-        if (BcUtil::isOverPostSize()) {
-            $this->BcMessage->setError(
-                __d(
-                    'baser',
-                    '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。',
-                    ini_get('post_max_size')
-                )
-            );
-            $this->redirect(['action' => 'form']);
-        }
-        $this->ThemeConfig->set($this->request->getData());
-        if (!$this->ThemeConfig->validates()) {
-            $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
-            return;
-        }
-
-        $this->ThemeConfig->updateColorConfig($this->request->getData());
-        $data = $this->ThemeConfig->saveImage($this->request->getData());
-        $data = $this->ThemeConfig->deleteImage($data);
-        foreach($data['ThemeConfig'] as $key => $value) {
-            if (preg_match('/main_image_[0-9]_delete/', $key)) {
-                unset($data['ThemeConfig'][$key]);
+        $entity = $service->get();
+        if($this->getRequest()->is(['post', 'put'])) {
+            try {
+                $entity = $service->update($this->getRequest()->getData());
+                $this->BcMessage->setSuccess(__d('baser', 'テーマ設定を保存しました。'));
+                $this->redirect(['action' => 'index']);
+            } catch (PersistenceFailedException $e) {
+                $entity = $e->getEntity();
+                $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
+            } catch (\Throwable $e) {
+                $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
             }
         }
-        if (!$this->ThemeConfig->saveKeyValue($data)) {
-            $this->BcMessage->setError(__d('baser', '保存中にエラーが発生しました。'));
-            return;
-        }
-
-        clearViewCache();
-        $this->BcMessage->setInfo(__d('baser', 'システム設定を保存しました。'));
-        $this->redirect(['action' => 'form']);
+        $this->set([
+            'themeConfig' => $entity
+        ]);
+        $this->viewBuilder()->addHelper('BcThemeConfig.BcThemeConfig');
     }
 
 }
