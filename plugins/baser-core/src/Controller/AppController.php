@@ -81,6 +81,10 @@ class AppController extends BaseController
                 // 原因がわからなくなるので強制的にコピーする
                 if($this->getName() === 'BcError' && !file_exists(CONFIG . 'app_local.php')) {
                     copy(CONFIG . 'app_local.example.php', CONFIG . 'app_local.php');
+                    // app_local.php が存在しない場合、.env もない可能性があるので確認
+                    if(!file_exists(CONFIG . '.env')){
+                        copy(CONFIG . '.env.example', CONFIG . '.env');
+                    }
                 }
                 return $this->redirect('/');
             } else {

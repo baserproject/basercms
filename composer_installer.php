@@ -60,6 +60,7 @@ function command()
     $command = "cd " . ROOT_DIR . "; export HOME={$composerDir} ; {$composerDir}composer.phar install";
     exec($command, $out, $code);
     if ($code !== 0) throw new Exception('ライブラリのインストールに失敗しました。');
+    copy(ROOT_DIR . 'config' . DS . '.env.example', ROOT_DIR . 'config' . DS . '.env');
 }
 
 ?>

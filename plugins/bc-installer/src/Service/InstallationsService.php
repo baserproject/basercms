@@ -581,14 +581,6 @@ class InstallationsService implements InstallationsServiceInterface
     }
 
     /**
-     * 環境設定ファイルを作成する
-     */
-    public function createEnvFile(): void
-    {
-        copy(CONFIG . '.env.example', CONFIG . '.env');
-    }
-
-    /**
      * アップロード用初期フォルダを作成する
      *
      * @checked

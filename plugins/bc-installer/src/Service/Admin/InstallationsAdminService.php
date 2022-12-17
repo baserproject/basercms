@@ -272,8 +272,6 @@ class InstallationsAdminService extends InstallationsService implements Installa
         // インストールファイルを生成する
         $securitySalt = $request->getSession()->read('Installation.salt');
         $this->createInstallFile($this->readDbSetting($request), $securitySalt);
-        // .env ファイルを生成する
-        $this->createEnvFile();
         // アップロード用初期フォルダを作成する
         $this->createDefaultFiles();
         // エディタテンプレート用の画像を配置
