@@ -8,51 +8,50 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
-/**
- * Gulpfile for BcFront
- * Require Gulp4
- */
 const gulp = require("gulp");
+const webpack = require('webpack');
+const webpackStream = require('webpack-stream');
+const webpackConfig = require("./webpack.config");
+const plumber = require('gulp-plumber');
 const sass = require('gulp-sass')(require('sass'));
-const plumber = require("gulp-plumber");
-const uglify = require('gulp-uglify');
-const paths = {
-  srcCss :'./src/css/**/*.scss',
-  distCss :'./webroot/css/',
-  srcJs : './src/js/*.js',
-  destJs : './webroot/js/'
-};
+const postcss = require("gulp-postcss");
+const cssImport = require("postcss-import");
+const JS_DEV_DIR = './src/**/*.js';
+const JS_DIST_DIR = './webroot/';
+const CSS_DEV_DIR = ['./src/**/*.scss', '!./src/css/vendor/**/*.scss'];
+const CSS_DIST_DIR = './webroot/';
 
-// Sass Compile
-gulp.task("sass", function() {
-  return gulp.src(paths.srcCss, {
-      sourcemaps: true
-  })
-  .pipe(plumber({
-      errorHandler: function(err) {
-        console.log(err.messageFormatted);
-        this.emit('end');
-      }
-    }))
-  .pipe(sass())
-  .pipe(gulp.dest(paths.distCss, {
-	  sourcemaps: './maps'
-  }));
+gulp.task('css', () => {
+	const plugins = [
+		cssImport({
+			path: [ '../../node_modules' ]
+		})
+	];
+	return gulp
+	.src(CSS_DEV_DIR, {
+	    sourcemaps: true
+	})
+	.pipe(plumber({
+		errorHandler: function (err) {
+		    console.log(err.message);
+			this.emit('end');
+		},
+	}))
+	.pipe(sass())
+	.pipe(postcss(plugins))
+	.pipe(gulp.dest(CSS_DIST_DIR, {
+	    sourcemaps: true
+	}));
 });
 
-// Minify Javascript
-gulp.task('minjs', function(){
-  gulp.src(paths.srcJs, {sourcemaps: true})
-  .pipe(uglify())
-  .pipe(gulp.dest(paths.destJs));
+gulp.task('bundle', () => {
+	return webpackStream(webpackConfig, webpack)
+	.pipe(gulp.dest(JS_DIST_DIR));
 });
 
-// File Watch
-gulp.task('watch', function(done) {
-  gulp.watch(paths.srcCss, gulp.task('sass'));
-  gulp.watch(paths.srcJs, gulp.task('minjs'));
-  done();
+gulp.task('watch', function(){
+    gulp.watch(CSS_DEV_DIR, gulp.task('css'));
+    gulp.watch(JS_DEV_DIR, gulp.task('bundle'));
 });
 
-// Default
-gulp.task('default', gulp.series('watch'));
+gulp.task('default', gulp.task('watch'));

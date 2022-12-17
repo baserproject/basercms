@@ -38,7 +38,7 @@ use BaserCore\View\AppView;
 		'jquery.colorbox-1.6.1.min',
 		'i18n/ui.datepicker-ja',
 		'jquery-accessibleMegaMenu',
-		'startup'
+		'startup.bundle'
 	]); ?>
 	<?php $this->BcBaser->scripts() ?>
 	<!-- /Elements/google_analytics.php -->
