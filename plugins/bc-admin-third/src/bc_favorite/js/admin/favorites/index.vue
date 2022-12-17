@@ -53,14 +53,14 @@ export default {
     data: function () {
         return {
             favoriteBoxOpened: "none",
-            i18Favorite: 'testest2',
-            favorites: [],
+            i18Favorite: 'お気に入り',
             i18NoData: 'nodata',
-            registerUrl: $.bcUtil.apiBaseUrl + "bc-favorite/favorites/add.json",
             i18Title: 'title',
             i18Url: 'url',
             i18Edit: 'edit',
             i18Delete: 'delete',
+            favorites: [],
+            registerUrl: $.bcUtil.apiBaseUrl + "bc-favorite/favorites/add.json",
             ariaExpanded: 'true',
             baseUrl: $.bcUtil.baseUrl,
             formError: false,
