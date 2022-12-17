@@ -214,6 +214,7 @@ class InstallationsController extends BcAdminAppController
      * データベース設定ファイル[database.php]
      * インストールファイル[install.php]
      *
+     * @param InstallationsAdminService $service
      * @return void
      * @noTodo
      * @checked
