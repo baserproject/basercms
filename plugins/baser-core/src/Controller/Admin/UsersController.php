@@ -188,7 +188,7 @@ class UsersController extends BcAdminAppController
                 $this->dispatchLayerEvent('afterAdd', [
                     'user' => $user
                 ]);
-                $this->BcMessage->setSuccess(__d('baser', 'ユーザー「{0}」を追加しました。', $user->name));
+                $this->BcMessage->setSuccess(__d('baser', 'ユーザー「{0}」を追加しました。', $user->getDisplayName()));
                 return $this->redirect(['action' => 'edit', $user->id]);
             } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
                 $user = $e->getEntity();
@@ -228,7 +228,7 @@ class UsersController extends BcAdminAppController
                 if($service->isSelf($id)) {
                     $service->reLogin($this->request, $this->response);
                 }
-                $this->BcMessage->setSuccess(__d('baser', 'ユーザー「{0}」を更新しました。', $user->name));
+                $this->BcMessage->setSuccess(__d('baser', 'ユーザー「{0}」を更新しました。', $user->getDisplayName()));
                 return $this->redirect(['action' => 'edit', $user->id]);
             } catch (\Exception $e) {
                 $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
@@ -260,7 +260,7 @@ class UsersController extends BcAdminAppController
         $user = $service->get($id);
         try {
             if ($service->delete($id)) {
-                $this->BcMessage->setSuccess(__d('baser', 'ユーザー: {0} を削除しました。', $user->name));
+                $this->BcMessage->setSuccess(__d('baser', 'ユーザー: {0} を削除しました。', $user->getDisplayName()));
             }
         } catch (Exception $e) {
             $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
