@@ -38,18 +38,6 @@ class UploadsController extends AppController
     }
 
     /**
-     * スマートフォンのセッションに保存した一時ファイルを出力する
-     *
-     * @return void
-     */
-    public function smartphone_tmp()
-    {
-        echo $this->output(func_get_args(), func_num_args());
-        exit;
-        // return $this->response->withStringBody($this->output(func_get_args(), func_num_args()));
-    }
-
-    /**
      * セッションに保存した一時ファイルを返す
      *
      * @param  array $args
@@ -119,4 +107,5 @@ class UploadsController extends AppController
         Header("Content-type: " . $type . "; name=" . $name);
         return $data;
     }
+
 }

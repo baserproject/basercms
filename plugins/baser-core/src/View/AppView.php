@@ -52,7 +52,6 @@ class AppView extends View
         // TODO ucmitz 未移行のため暫定措置
         // >>>
 //        $this->loadHelper('BaserCore.BcHtml');
-//        $this->loadHelper('BaserCore.BcWidgetArea');
 //        $this->loadHelper('BaserCore.BcXml');
 //        $this->loadHelper('BaserCore.BcArray');
         // <<<

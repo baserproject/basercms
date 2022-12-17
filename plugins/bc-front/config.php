@@ -12,7 +12,9 @@
 return [
     'type' => 'Theme',
     'title' => __d('baser', 'フロントテーマ'),
-    'description' => __d('baser', 'デフォルトのフロントテーマです。'),
+    'description' => __d('baser', 'デフォルトのフロントテーマです。初期データが２つ入っています。
+■ default：サンプルデータあり版
+■ empty：サンプルデータなし版'),
     'author' => 'baserCMS User Community',
     'url' => 'https://basercms.net',
     'installMessage' => ''

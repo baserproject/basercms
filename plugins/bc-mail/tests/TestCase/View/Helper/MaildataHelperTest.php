@@ -1,5 +1,5 @@
 <?php
-// TODO : コード確認要
+// TODO ucmitz  : コード確認要
 return;
 App::uses('MaildataHelper', 'BcMail.View/Helper');
 App::uses('BcAppView', 'View');

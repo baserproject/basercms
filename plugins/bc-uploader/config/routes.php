@@ -10,7 +10,7 @@
  * @license         https://basercms.net/license/index.html
  */
 
-// TODO 未確認のため代替措置
+// TODO ucmitz 未確認のため代替措置
 /* >>>
 Router::connect('/files/uploads/*', ['plugin' => 'uploader', 'controller' => 'uploader_files', 'action' => 'view_limited_file']);
 <<< */

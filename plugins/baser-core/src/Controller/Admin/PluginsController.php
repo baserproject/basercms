@@ -12,7 +12,6 @@
 namespace BaserCore\Controller\Admin;
 
 use BaserCore\Controller\Component\BcMessageComponent;
-use BaserCore\Error\BcException;
 use BaserCore\Service\Admin\PluginsAdminServiceInterface;
 use BaserCore\Service\PluginsService;
 use BaserCore\Service\PluginsServiceInterface;

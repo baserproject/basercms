@@ -119,4 +119,68 @@ class FavoritesTableTest extends BcTestCase
             ],
         ];
     }
+
+    /**
+     * 偽装ログイン処理
+     *
+     * @param $id ユーザーIDとユーザーグループID
+     * - 1 システム管理者
+     * - 2 サイト運営
+     */
+    public function login($id)
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->Favorite->setSession(new SessionComponent(new ComponentCollection()));
+        $prefix = BcUtil::authSessionKey('Admin');
+        $this->Favorite->_Session->write('Auth.' . $prefix . '.id', $id);
+        $this->Favorite->_Session->write('Auth.' . $prefix . '.user_group_id', $id);
+    }
+
+    /**
+     * validate
+     */
+    public function test権限チェック異常系()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->Favorite->create([
+            'Favorite' => [
+                'url' => '/admin/hoge',
+            ]
+        ]);
+
+        $this->login(2);
+
+        $this->assertFalse($this->Favorite->validates());
+        $this->assertArrayHasKey('url', $this->Favorite->validationErrors);
+        $this->assertEquals('このURLの登録は許可されていません。', current($this->Favorite->validationErrors['url']));
+    }
+
+    public function test権限チェックシステム管理者正常系()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->Favorite->create([
+            'Favorite' => [
+                'url' => '/admin/hoge',
+            ]
+        ]);
+
+        $this->login(1);
+
+        $this->assertTrue($this->Favorite->validates());
+    }
+
+    public function test権限チェックサイト運営者正常系()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->Favorite->create([
+            'Favorite' => [
+                'url' => '/hoge',
+            ]
+        ]);
+
+        $this->login(2);
+
+        $this->assertTrue($this->Favorite->validates());
+    }
+
 }
