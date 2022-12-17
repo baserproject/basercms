@@ -106,7 +106,8 @@ return [
             'BcThemeFile',
             'BcUploader',
             'BcWidgetArea',
-            'BcContentLink'
+            'BcContentLink',
+            'BcFavorite'
         ],
         /**
          * パスワード再発行URLの有効時間(min) デフォルト24時間

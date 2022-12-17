@@ -42,7 +42,7 @@ $class = ' class="' . implode(' ', $classies) . '"';
         'type' => 'checkbox', 'label' => '<span class="bca-visually-hidden">' . __d('baser', 'チェックする') . '</span>',
         'class' => 'batch-targets bca-checkbox__input',
         'escape' => false,
-        'value' => $plugin->id
+        'value' => $plugin->id?? 0
       ]) ?>
     <?php endif ?>
     <?php if ($this->request->getQuery('sortmode')): ?>

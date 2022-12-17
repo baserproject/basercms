@@ -24,7 +24,9 @@
 </template>
 
 <script>
-import {required} from "vuelidate/lib/validators";
+
+const { validationMixin, default: Vuelidate } = require('vuelidate')
+const { required } = require('vuelidate/lib/validators')
 import axios from "axios";
 
 export default {
@@ -114,4 +116,5 @@ export default {
         }
     }
 }
+
 </script>
