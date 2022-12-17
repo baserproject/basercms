@@ -6,9 +6,9 @@ const plumber = require('gulp-plumber');
 const sass = require('gulp-sass')(require('sass'));
 const postcss = require("gulp-postcss");
 const cssImport = require("postcss-import");
-const JS_DEV_DIR = ['./src/js/'];
-const JS_DIST_DIR = './webroot/js/';
-const CSS_DEV_DIR = './src/css/';
+const JS_DEV_DIR = './src/**/*.js';
+const JS_DIST_DIR = './webroot/';
+const CSS_DEV_DIR = './src/css/**/*.scss';
 const CSS_DIST_DIR = './webroot/css/admin/';
 
 gulp.task('css', () => {
@@ -40,8 +40,8 @@ gulp.task('bundle', () => {
 });
 
 gulp.task('watch', function(){
-    gulp.watch(CSS_DEV_DIR + "**/*.scss", gulp.task('css'));
-    gulp.watch(JS_DEV_DIR + "**/*.js", gulp.task('bundle'));
+    gulp.watch(CSS_DEV_DIR, gulp.task('css'));
+    gulp.watch(JS_DEV_DIR, gulp.task('bundle'));
 });
 
 gulp.task('default', gulp.task('watch'));

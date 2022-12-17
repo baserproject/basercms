@@ -30,17 +30,10 @@ if ($isDefaultTheme) {
   $plugins = [0 => ['name' => $theme, 'title' => $theme]];
   $plugins = array_merge($plugins, \BaserCore\Utility\BcUtil::getEnablePlugins());
 }
+$this->BcBaser->js('BcThemeFile.admin/theme_files/submenus.bundle', false);
 ?>
 
 
-<script>
-$(function (){
-    $('#ThemeFilesMenu').accordion({
-        collapsible: true,
-        heightStyle: "content"
-    });
-})
-</script>
 <style>
 .ui-accordion-header {
   border: 1px solid #eee!important;

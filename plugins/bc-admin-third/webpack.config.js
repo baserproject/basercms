@@ -14,9 +14,16 @@ const TerserPlugin = require('terser-webpack-plugin');
 let entries = {};
 webpack = require('webpack');
 
-glob.sync("./src/js/**/*.js").map(function(file){
-    if(!file.replace('./src/js/admin/', '').match(/^_/)) {
-        entries[file.replace('./src/js/', '').split('.').shift()] = file;
+glob.sync("./src/**/*.js").map(function(file){
+    if(!file.search('./src/js/admin/', '')) {
+        if(!file.replace('./src/js/admin/', '').match(/^_/)) {
+            entries[file.replace('./src/', '').split('.').shift()] = file;
+        }
+    } else if(file.match(/\.\/src\/.+\/js\/admin\//, '')) {
+        console.log(file)
+        if(!file.replace(/\.\/src\/.+\/js\/admin\//, '').match(/^_/)) {
+            entries[file.replace(/\.\/src\//, '').split('.').shift()] = file;
+        }
     }
 });
 
@@ -29,7 +36,7 @@ module.exports = {
     },
     optimization: {
         splitChunks: {
-			name: 'admin/vendor',
+			name: 'js/admin/vendor',
 			chunks: 'initial',
         },
         minimizer: [new TerserPlugin({

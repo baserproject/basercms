@@ -36,7 +36,7 @@ $this->BcAdmin->setTitle($pageTitle);
 ?>
 
 
-<?php $this->BcBaser->element('submenus/theme_files'); ?>
+<?php $this->BcBaser->element('ThemeFiles/submenus'); ?>
 
 <!-- current -->
 <div class="em-box bca-current-box"><?php echo __d('baser', '現在の位置') ?>：<?php echo h($currentPath) ?>
