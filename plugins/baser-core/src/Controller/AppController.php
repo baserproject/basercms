@@ -77,6 +77,11 @@ class AppController extends BaseController
         // コンソールの場合は無視する
         if (!(BcUtil::isInstalled() || BcUtil::isConsole())) {
             if (!($request? $request->is('install') : false)) {
+                // app_local.php が存在しない場合は、CakePHPの Internal Server のエラー画面が出て、
+                // 原因がわからなくなるので強制的にコピーする
+                if($this->getName() === 'BcError' && !file_exists(CONFIG . 'app_local.php')) {
+                    copy(CONFIG . 'app_local.example.php', CONFIG . 'app_local.php');
+                }
                 return $this->redirect('/');
             } else {
                 // インストーラーの最初のステップでログイン状態を解除

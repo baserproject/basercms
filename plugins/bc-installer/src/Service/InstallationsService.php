@@ -560,6 +560,14 @@ class InstallationsService implements InstallationsServiceInterface
         }
         $installCoreData[] = '    \'Datasources.default\' => [';
         foreach($dbConfig as $key => $value) {
+            if($key === 'datasource' || $key === 'dataPattern') continue;
+            $installCoreData[] = '        \'' . $key . '\' => \'' . $value . '\',';
+        }
+        $installCoreData[] = '    ],';
+        $installCoreData[] = '    \'Datasources.test\' => [';
+        foreach($dbConfig as $key => $value) {
+            if($key === 'database') $value = 'test_' . $value;
+            if($key === 'datasource' || $key === 'dataPattern') continue;
             $installCoreData[] = '        \'' . $key . '\' => \'' . $value . '\',';
         }
         $installCoreData[] = '    ]';
