@@ -11,6 +11,8 @@
 
 /**
  * [ADMIN] テーマファイル管理メニュー
+ *
+ * @var \BaserCore\View\BcAdminAppView $this
  * @var bool $isDefaultTheme
  * @var string $theme
  */
@@ -31,26 +33,20 @@ if ($isDefaultTheme) {
   $plugins = array_merge($plugins, \BaserCore\Utility\BcUtil::getEnablePlugins());
 }
 $this->BcBaser->js('BcThemeFile.admin/theme_files/submenus.bundle', false);
+$this->BcBaser->css('BcThemeFile.admin/style', false);
 ?>
-
-
-<style>
-.ui-accordion-header {
-  border: 1px solid #eee!important;
-}
-</style>
 
 
 <div class="bca-main__submenu" id="ThemeFilesMenu">
   <?php foreach($plugins as $plugin): ?>
-    <?php if(!\BaserCore\Utility\BcUtil::getExistsTemplateDir($plugin['name'], '', 'front')) continue; ?>
+    <?php if (!\BaserCore\Utility\BcUtil::getExistsTemplateDir($plugin['name'], '', 'front')) continue; ?>
     <h2 class="bca-main__submenu-title">
       <?php echo $plugin['title'] ?>
     </h2>
     <ul class="bca-main__submenu-list clearfix">
       <?php foreach($types as $key => $type): ?>
         <li class="bca-main__submenu-list-item">
-          <?php if($theme !== $plugin['name']): ?>
+          <?php if ($theme !== $plugin['name']): ?>
             <?php $this->BcBaser->link(sprintf(__d('baser', '%s 一覧'), $type), ['action' => 'index', $theme, $plugin['name'], $key]) ?>
           <?php else: ?>
             <?php $this->BcBaser->link(sprintf(__d('baser', '%s 一覧'), $type), ['action' => 'index', $theme, $key]) ?>

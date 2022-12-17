@@ -1,3 +1,13 @@
+/**
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
+ *
+ * @copyright     Copyright (c) NPO baser foundation
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       https://basercms.net/license/index.html MIT License
+ */
+
 const gulp = require("gulp");
 const webpack = require('webpack');
 const webpackStream = require('webpack-stream');
@@ -8,8 +18,8 @@ const postcss = require("gulp-postcss");
 const cssImport = require("postcss-import");
 const JS_DEV_DIR = './src/**/*.js';
 const JS_DIST_DIR = './webroot/';
-const CSS_DEV_DIR = './src/css/**/*.scss';
-const CSS_DIST_DIR = './webroot/css/admin/';
+const CSS_DEV_DIR = ['./src/**/*.scss', '!./src/css/vendor/**/*.scss'];
+const CSS_DIST_DIR = './webroot/';
 
 gulp.task('css', () => {
 	const plugins = [
@@ -18,7 +28,7 @@ gulp.task('css', () => {
 		})
 	];
 	return gulp
-	.src(`${CSS_DEV_DIR}*`, {
+	.src(CSS_DEV_DIR, {
 	    sourcemaps: true
 	})
 	.pipe(plumber({

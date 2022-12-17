@@ -20,7 +20,6 @@ glob.sync("./src/**/*.js").map(function(file){
             entries[file.replace('./src/', '').split('.').shift()] = file;
         }
     } else if(file.match(/\.\/src\/.+\/js\/admin\//, '')) {
-        console.log(file)
         if(!file.replace(/\.\/src\/.+\/js\/admin\//, '').match(/^_/)) {
             entries[file.replace(/\.\/src\//, '').split('.').shift()] = file;
         }
