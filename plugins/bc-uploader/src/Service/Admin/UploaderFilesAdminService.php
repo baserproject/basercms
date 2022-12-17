@@ -53,7 +53,7 @@ class UploaderFilesAdminService extends UploaderFilesService implements Uploader
      * @checked
      * @noTodo
      */
-    public function getViewVarsForAjaxList(ResultSet $entities, int $listId)
+    public function getViewVarsForAjaxList(ResultSet $entities, int $listId = null)
     {
         $uploaderConfig = $this->uploaderConfigsService->get();
         return [
