@@ -7278,12 +7278,12 @@ body * {
   font-size: 1.4rem;
   position: relative;
   flex-basis: 100%;
-  overflow: auto;
   background: #f8f8f8;
   line-height: 1.4;
 }
 .bca-main__body {
   padding: 0;
+  overflow: auto;
 }
 .bca-main__contents {
   padding: 20px;

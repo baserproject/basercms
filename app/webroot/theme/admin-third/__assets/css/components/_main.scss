@@ -2,7 +2,6 @@
   font-size: $label_font_size_small;
   position: relative;
   flex-basis: 100%;
-  overflow: auto;
   background: $color_background_primary;
   line-height:1.4;
   // border-top: 1px solid #ccc;
@@ -10,6 +9,7 @@
   // ❗ .contents-body と同じ要素 ❗
   &__body {
     padding: 0;
+    overflow: auto;
     //a:link {
     //  color:$color_primary;
     //}
