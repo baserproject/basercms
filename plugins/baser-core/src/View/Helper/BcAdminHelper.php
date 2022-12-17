@@ -375,6 +375,7 @@ class BcAdminHelper extends Helper
      */
     public function contentsMenu(): void
     {
+        if(!BcUtil::isInstalled()) return;
         echo $this->_View->element('contents_menu', [
             'isHelp' => (bool)($this->_View->get('help')),
             'isLogin' => (bool)(BcUtil::loginUser()),

@@ -272,6 +272,8 @@ class InstallationsAdminService extends InstallationsService implements Installa
         // インストールファイルを生成する
         $securitySalt = $request->getSession()->read('Installation.salt');
         $this->createInstallFile($this->readDbSetting($request), $securitySalt);
+        // JWTキーを作成する
+        $this->createJwt();
         // アップロード用初期フォルダを作成する
         $this->createDefaultFiles();
         // エディタテンプレート用の画像を配置
