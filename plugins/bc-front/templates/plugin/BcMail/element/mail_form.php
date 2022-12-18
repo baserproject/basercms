@@ -33,7 +33,7 @@ $this->BcBaser->js('BcMail.form-submit', true, ['defer'])
 <?php endif; ?>
 
 <?php $this->Mailform->unlockField('mode') ?>
-<?php echo $this->Mailform->hidden('mode') ?>
+<?php echo $this->Mailform->hidden('mode', ['id' => 'MailMessageMode']) ?>
 
 <table class="bs-mail-form-body">
 	<?php $this->BcBaser->element('mail_input', ['blockStart' => 1]) ?>

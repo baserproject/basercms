@@ -311,11 +311,9 @@ class MailFrontService implements MailFrontServiceInterface
     public function getAttachments(ResultSetInterface $mailFields, EntityInterface $mailMessage): array
     {
         $attachments = [];
-        return $attachments = [];
-        // TODO ucmitz 以下、未実装
         /** @var MailMessagesService $mailMessagesService */
         $mailMessagesService = $this->getService(MailMessagesServiceInterface::class);
-        $settings = $mailMessagesService->MailMessages->getFileUploader()->getSettings();
+        $settings = $mailMessagesService->MailMessages->getFileUploader()->settings;
         foreach($mailFields as $mailField) {
             if (empty($mailMessage->{$mailField->field_name})) continue;
             $value = $mailMessage->{$mailField->field_name};

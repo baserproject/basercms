@@ -225,33 +225,41 @@ class MailController extends MailFrontAppController
             $this->redirect($this->request->getParam('Content.url') . '/index');
         }
 
-        // 戻る
-        if ($this->getRequest()->getData('mode') === 'Back') {
-            $this->set($service->getViewVarsForConfirm(
-                $mailContent,
-                $mailMessagesService->MailMessages->newEntity($this->getRequest()->getData())
-            ));
-            $this->render($service->getConfirmTemplate($mailContent));
-            return;
-        }
+        switch($this->getRequest()->getData('mode')) {
 
-        // データ確認
-        try {
-            $entity = $service->confirm($mailContent, $this->getRequest()->getData());
-        } catch (PersistenceFailedException $e) {
-            $entity = $e->getEntity();
-            $this->BcMessage->setError($e->getMessage());
-        } catch (BcException $e) {
-            $this->BcMessage->setError($e->getMessage());
-            if ($e->getCode() === 500) {
-                return $this->redirect($this->request->getAttribute('currentContent')->url . '/index');
-            }
+            case 'Back': // 戻る
+                $this->set($service->getViewVarsForIndex(
+                    $mailContent,
+                    $mailMessagesService->MailMessages->newEntity($this->getRequest()->getData())
+                ));
+                $this->render($service->getIndexTemplate($mailContent));
+                return;
+
+            case 'Confirm': // データ確認
+                try {
+                    $entity = $service->confirm($mailContent, $this->getRequest()->getData());
+                } catch (PersistenceFailedException $e) {
+                    $entity = $e->getEntity();
+                    $this->BcMessage->setError($e->getMessage());
+                } catch (BcException $e) {
+                    $this->BcMessage->setError($e->getMessage());
+                    if ($e->getCode() === 500) {
+                        return $this->redirect($this->request->getAttribute('currentContent')->url . '/index');
+                    }
+                }
+                $this->render($service->getConfirmTemplate($mailContent));
+                return;
+
+            case 'Submit':
+                break;
+            default:
+                $this->redirect($this->request->getParam('Content.url') . '/index');
         }
 
         // メッセージ保存
         try {
             $mailMessagesService->setup($mailContent->id);
-            $entity = $mailMessagesService->create($mailContent, $entity);
+            $entity = $mailMessagesService->create($mailContent, $this->getRequest()->getData());
         } catch (PersistenceFailedException $e) {
             $entity = $e->getEntity();
             $this->BcMessage->setError(__('入力内容を確認し、再度送信してください。'));
