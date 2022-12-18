@@ -60,7 +60,7 @@ class MailMessageMailer extends BcMailer
             ->setAttachments($attachments)
             ->viewBuilder()
             ->setClassName('BcMail.MailFrontEmail')
-            ->setTemplate($mailContent->mail_template)
+            ->setTemplate('BcMail.' . $mailContent->mail_template)
             ->setVars($data);
         if($mailContent->sender_2) {
             $this->setBcc($mailContent->sender_2);
@@ -111,7 +111,7 @@ class MailMessageMailer extends BcMailer
             ->setSubject($mailContent->subject_user)
             ->viewBuilder()
             ->setClassName('BcMail.MailFrontEmail')
-            ->setTemplate($mailContent->mail_template)
+            ->setTemplate('BcMail.' . $mailContent->mail_template)
             ->setVars($data);
         if (empty($options['toUser'])) return;
         foreach($options['toUser'] as $key => $value) {

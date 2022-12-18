@@ -129,9 +129,9 @@ class MailformHelper extends BcFreezeHelper
                     $address2 = $address1;
                 }
                 $attributes['onKeyUp'] = "AjaxZip3.zip2addr(this,'','{$address1}','{$address2}')";
+                unset($attributes['type']);
                 $out = $this->BcBaser->js('vendor/ajaxzip3', false) .
-                    parent::control($fieldName, array_merge($attributes, [
-                        'type' => 'text',
+                    $this->text($fieldName, array_merge($attributes, [
                         'style' => 'width:auto!important'
                     ]));
                 break;

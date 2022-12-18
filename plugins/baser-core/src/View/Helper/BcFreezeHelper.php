@@ -91,9 +91,7 @@ class BcFreezeHelper extends BcFormHelper
     public function select($fieldName, $options = [], $attributes = []): string
     {
         if ($this->freezed) {
-            // TODO ucmitz 未実装
-//            return $this->freezeControll($fieldName, $options, $attributes);
-            return '';
+            return $this->freezeControll($fieldName, $options, $attributes);
         } else {
             // 横幅を設定する
             // 指定した文字数より足りない文字数分スペースを埋める処理としている為、
@@ -590,7 +588,6 @@ class BcFreezeHelper extends BcFormHelper
     {
 
         $attributes = array_merge(['class' => ''], $attributes);
-        unset($attributes["separator"]);
         if (preg_match_all("/\./", $fieldName, $regs) == 2) {
             [$model, $field, $detail] = explode('.', $fieldName);
         } else {
@@ -632,15 +629,14 @@ class BcFreezeHelper extends BcFormHelper
                 // マルチチェック
             } elseif (!empty($attributes["multiple"]) && $attributes["multiple"] === 'checkbox') {
 
-                $_value = "";
-                foreach($value as $key => $data) {
+                $li = [];
+                foreach($value as $data) {
                     if (isset($options[$data])) {
-                        $_value .= sprintf($this->Html->_tags['li'], null, $options[$data]);
+                        $li[] = $this->Html->tag('li', $options[$data]);
                     }
                 }
-                // TODO ucmitz 未実装
-//                $out = sprintf($this->Html->_tags['ul'], " " . $this->_parseAttributes($attributes, null, '', ' '), $_value);
-//                $out .= $this->hidden($fieldName, ['value' => $value, 'multiple' => true]);
+                $out = $this->Html->tag('ul', implode('', $li), array_merge($attributes, ['escape' => false]));
+                $out .= $this->hidden($fieldName, ['value' => $value, 'multiple' => true]);
 
                 // 一般
             } elseif (empty($detail)) {
