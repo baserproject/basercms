@@ -575,7 +575,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
     public function updateSequence()
     {
         // TODO ucmitz 未実装
-        return true;
+        return;
 
         $db = ConnectionManager::get('default');
         $tables = $db->getSchemaCollection()->listTables();

@@ -20,7 +20,7 @@
  * ロゴと jQuery 以外は、このファイルだけで完結させる。
  */
 define('DS', DIRECTORY_SEPARATOR);
-define('ROOT_DIR', __DIR__ . DS);
+define('ROOT_DIR', dirname(dirname(__DIR__)) . DS);
 $url = $_SERVER['REQUEST_URI'];
 if (preg_match('/\/logo\.png$/', $url)) {
     header('Content-Type: image/png; charset=utf-8');

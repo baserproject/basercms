@@ -43,4 +43,5 @@ jobs:
       - name: Run test suite
         run: |
           cd docker
+          docker exec bc5-php composer run-script install
           docker exec bc5-php composer run-script test

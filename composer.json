@@ -91,7 +91,12 @@
         "cs-check": "phpcs --colors -p  src/ tests/",
         "cs-fix": "phpcbf --colors -p src/ tests/",
         "stan": "phpstan analyse",
+        "install": [
+            "composer install --no-plugins",
+            "bin/cake install https://localhost egashira@catchup.co.jp basercms basercms --host bc5-db --username root --password root"
+        ],
         "test": [
+            "bin/cake setup test",
             "Composer\\Config::disableProcessTimeout",
             "vendor/bin/phpunit --colors=always"
         ]

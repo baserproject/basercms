@@ -13,7 +13,10 @@ namespace BcInstaller;
 
 use BaserCore\BcPlugin;
 use BaserCore\Utility\BcUtil;
+use BcInstaller\Command\InstallCheckCommand;
+use BcInstaller\Command\InstallCommand;
 use BcInstaller\ServiceProvider\BcInstallerServiceProvider;
+use Cake\Console\CommandCollection;
 use Cake\Core\ContainerInterface;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -54,6 +57,19 @@ class Plugin extends BcPlugin
             $routes->fallbacks(InflectedRoute::class);
             parent::routes($routes);
         }
+    }
+
+    /**
+     * コマンド定義
+     *
+     * @param CommandCollection $commands
+     * @return CommandCollection
+     */
+    public function console(CommandCollection $commands): CommandCollection
+    {
+        $commands->add('install', InstallCommand::class);
+        $commands->add('install check', InstallCheckCommand::class);
+        return $commands;
     }
 
 }

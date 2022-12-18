@@ -157,7 +157,7 @@ class InstallationsService implements InstallationsServiceInterface
     public function constructionDb(array $dbConfig, string $dbDataPattern = '', string $adminTheme = ''): bool
     {
         if (!$dbDataPattern) {
-            $dbDataPattern = Configure::read('BcApp.defaultTheme') . '.default';
+            $dbDataPattern = Configure::read('BcApp.defaultFrontTheme') . '.default';
         }
         if (strpos($dbDataPattern, '.') === false) {
             throw new BcException(__d('baser', 'データパターンの形式が不正です。'));
