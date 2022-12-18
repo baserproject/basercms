@@ -77,22 +77,12 @@ class MailController extends MailFrontAppController
             $this->notFound();
         }
         $mailMessagesService = $this->getService(MailMessagesServiceInterface::class);
-        // TODO ucmitz 未実装
-        return;
         $mailMessagesService->MailMessages->setup($this->request->getParam('entityId'));
+
+        return;
         $this->dbDatas['mailContent'] = $this->MailMessage->mailContent;
         $this->dbDatas['mailFields'] = $this->MailMessage->mailFields;
         $this->dbDatas['mailConfig'] = $this->MailConfig->find();
-
-        // ページタイトルをセット
-        $this->setTitle($this->request->getParam('Content.title'));
-
-        if (empty($this->contentId)) {
-            // 配列のインデックスが無いためエラーとなるため修正
-            $this->contentId = $this->request->getParam('entityId');
-        }
-
-        $this->subMenuElements = ['default'];
 
         // 2013/03/14 ryuring
         // baserCMS２系より必須要件をPHP5以上とした為、SecurityComponent を標準で設定する方針に変更

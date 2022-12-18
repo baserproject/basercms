@@ -188,8 +188,12 @@ class MailFrontService implements MailFrontServiceInterface
         $message = $mailMessagesService->MailMessages->newEntity($messageArray);
         if (!$message->getErrors()) {
             $message = $mailMessagesService->MailMessages->saveTmpFiles($messageArray, mt_rand(0, 99999999));
-            // saveTmpFiles() 作成される Entity は無名の Entity のため、MailMessage に変換するため、再度 newEntity() を呼び出す
-            return $mailMessagesService->MailMessages->newEntity($message->toArray());
+            // 2022/12/18 by ryuring
+            // saveTmpFiles() 作成される Entity は無名の Entity のため、MailMessage に変換するため、再度、インスタンス化する
+            // テーブルの newEntity() を利用すると、存在しないフィールド（_tmp 付きのフィールド）が消えてしまうため、
+            // エンティティをそのまま new するが、テーブルの newEntity() を利用しないと、テーブルとの関連付けができず、
+            // フォームの初期化でエラーとなってしまう。そのため、source オプションで明示的にテーブルを指定する
+            return new MailMessage($message->toArray(), ['source' => 'BcMail.MailMessages']);
         } else {
             throw new PersistenceFailedException($message, __('エラー : 入力内容を確認して再度送信してください。'));
         }

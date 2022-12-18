@@ -20,6 +20,7 @@
 if ($freezed) {
 	$this->Mailform->freeze();
 }
+$this->BcUpload->setTable('BcMail.MailMessages');
 ?>
 
 

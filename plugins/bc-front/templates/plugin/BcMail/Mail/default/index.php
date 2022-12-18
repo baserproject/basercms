@@ -18,6 +18,7 @@
  * @noTodo
  * @unitTest
  */
+$this->BcUpload->setTable('BcMail.MailMessages');
 ?>
 
 
