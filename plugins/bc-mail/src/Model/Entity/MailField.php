@@ -35,7 +35,6 @@ use BaserCore\Annotation\Checked;
  * @property int $maxlength
  * @property string $options
  * @property string $class
- * @property string $delimiter
  * @property string $default_value
  * @property string $description
  * @property string $group_field

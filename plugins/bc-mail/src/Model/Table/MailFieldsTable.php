@@ -117,9 +117,6 @@ class MailFieldsTable extends MailAppTable
             ->scalar('class')
             ->maxLength('class', 255, __d('baser', 'クラス名255文字以内で入力してください。'));
         $validator
-            ->scalar('delimiter')
-            ->maxLength('delimiter', 255, __d('baser', '区切り文字は255文字以内で入力してください。'));
-        $validator
             ->scalar('default_value')
             ->maxLength('default_value', 255, __d('baser', '初期値は255文字以内で入力してください。'));
         $validator

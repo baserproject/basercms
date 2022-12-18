@@ -41,7 +41,6 @@ class MailfieldHelper extends Helper
         $attributes['size'] = $data['size'];
         $attributes['rows'] = $data['text_rows'];
         $attributes['maxlength'] = $data['maxlength'];
-        $attributes['separator'] = $data['delimiter'];
         $attributes['class'] = $data['class'];
         if ($data['type'] === 'multi_check') {
             $attributes['multiple'] = true;

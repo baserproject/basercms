@@ -90,11 +90,6 @@ class CreateMailFields extends AbstractMigration
                 'limit' => 255,
                 'null' => true,
             ])
-            ->addColumn('delimiter', 'string', [
-                'default' => null,
-                'limit' => 20,
-                'null' => true,
-            ])
             ->addColumn('default_value', 'string', [
                 'default' => null,
                 'limit' => 255,
