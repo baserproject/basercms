@@ -38,7 +38,7 @@ $this->BcAdmin->setTitle(__d('baser', 'タグ編集'));
     ]) ?>
   </div>
   <div class="bca-actions__sub">
-    <?php $this->BcBaser->link(__d('baser', '削除'), ['action' => 'delete', $this->BcAdminForm->getSourceValue('BlogTag.id')], [
+    <?php $this->BcBaser->link(__d('baser', '削除'), ['action' => 'delete', $blogTag->id], [
       'class' => 'bca-submit-token button bca-btn bca-actions__item',
       'data-bca-btn-type' => 'delete',
       'data-bca-btn-size' => 'sm'
