@@ -354,7 +354,7 @@ class MailMessagesService implements MailMessagesServiceInterface
                 $messageArray[$key] = h(base64UrlsafeDecode($value));
             }
         }
-        return $this->MailMessages->newEntity($messageArray);
+        return $this->MailMessages->newEntity($messageArray, ['validate' => false]);
     }
 
     /**

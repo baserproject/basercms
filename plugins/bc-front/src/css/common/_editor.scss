@@ -409,7 +409,7 @@ $breakPoint: 768px;
     font-family: "SF Pro JP", "SF Pro Text", "SF Pro Icons", "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", "メイリオ", "Meiryo", "ＭＳ Ｐゴシック", "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
   }
 
-  input[type=text], input[type=email], textarea, select {
+  input[type=text], input[type=email], input[type=tel], textarea, select {
     margin: 3px 2px;
     padding: 8px 10px;
     border: 1px solid #ccc;
@@ -442,7 +442,7 @@ $breakPoint: 768px;
       font-family: "SF Pro JP", "SF Pro Text", "SF Pro Icons", "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", "メイリオ", "Meiryo", "ＭＳ Ｐゴシック", "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
     }
 
-    &[type=text], &[type=email] {
+    &[type=text], &[type=email], &[type=tel] {
       font-size: 1em;
 
       &::placeholder {
@@ -473,7 +473,7 @@ $breakPoint: 768px;
   }
 
   input {
-    &[type=text], &[type=email], &[type=password] {
+    &[type=text], &[type=email], &[type=password], &[type=tel] {
       line-height: 1em;
     }
   }
