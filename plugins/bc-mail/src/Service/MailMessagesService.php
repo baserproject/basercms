@@ -58,9 +58,9 @@ class MailMessagesService implements MailMessagesServiceInterface
      * @checked
      * @noTodo
      */
-    public function setup(int $mailContentId)
+    public function setup(int $mailContentId, $postData = [])
     {
-        $this->MailMessages->setup($mailContentId);
+        $this->MailMessages->setup($mailContentId, $postData);
     }
 
     /**

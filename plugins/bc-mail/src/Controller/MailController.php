@@ -77,7 +77,7 @@ class MailController extends MailFrontAppController
             $this->notFound();
         }
         $mailMessagesService = $this->getService(MailMessagesServiceInterface::class);
-        $mailMessagesService->MailMessages->setup($this->request->getParam('entityId'));
+        $mailMessagesService->MailMessages->setup($this->request->getParam('entityId'), $this->getRequest()->getData());
 
         return;
         $this->dbDatas['mailContent'] = $this->MailMessage->mailContent;

@@ -19,6 +19,7 @@ use Cake\ORM\TableRegistry;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use Cake\Validation\Validator;
 
 /**
  * メッセージモデル
@@ -28,13 +29,6 @@ use BaserCore\Annotation\Checked;
  */
 class MailMessagesTable extends MailAppTable
 {
-
-    /**
-     * テーブル
-     *
-     * @var string
-     */
-    public $useTable = false;
 
     /**
      * メールフォーム情報
@@ -49,17 +43,6 @@ class MailMessagesTable extends MailAppTable
      * @var array
      */
     public $mailContent = [];
-
-    /**
-     * ビヘイビア
-     *
-     * @var array
-     */
-    public $actsAs = [
-        'BcUpload' => [
-            'subdirDateFormat' => 'Y/m/'
-        ]
-    ];
 
     /**
      * Initialize method
@@ -90,15 +73,22 @@ class MailMessagesTable extends MailAppTable
      * @param int $mailContentId
      * @return boolean
      */
-    public function setup($mailContentId)
+    public function setup($mailContentId, $postData = [])
     {
         // テーブル名の設定
         $this->setUseTable($mailContentId);
         // アップロード設定
         $this->setupUpload($mailContentId);
+        // バリデーションの設定
+        $this->setupValidate($mailContentId, $postData);
         // スキーマの初期化
         $this->_schema = null;
         return true;
+    }
+
+    public function validationDefault(Validator $validator): Validator
+    {
+        return $this->getValidator('MailMessages');
     }
 
     /**
@@ -160,21 +150,6 @@ class MailMessagesTable extends MailAppTable
     }
 
     /**
-     * バリデート処理
-     *
-     * @param array $options
-     * @return    array
-     * @access    public
-     */
-    public function beforeValidate($options = [])
-    {
-        // バリデーション設定
-        $this->_setValidate();
-
-        return parent::beforeValidate($options);
-    }
-
-    /**
      * Called after data has been checked for errors
      *
      * @return void
@@ -202,100 +177,123 @@ class MailMessagesTable extends MailAppTable
      *
      * @return void
      */
-    protected function _setValidate()
+    protected function setupValidate(int $mailContentId, array $postData)
     {
-        foreach($this->mailFields as $mailField) {
-            $mailField = $mailField['MailField'];
-            if ($mailField['valid'] && !empty($mailField['use_field'])) {
-                // 必須項目
-                if ($mailField['valid'] === 'VALID_NOT_EMPTY' || $mailField['valid'] === 'VALID_EMAIL') {
-                    if ($mailField['type'] === 'file') {
-                        if (!isset($this->data['MailMessage'][$mailField['field_name'] . '_tmp'])) {
-                            $this->validate[$mailField['field_name']] = ['notBlank' => [
-                                'rule' => ['notFileEmpty'],
-                                'message' => __('必須項目です。'),
-                                'required' => true
-                            ]];
+        $mailFieldsTable = TableRegistry::getTableLocator()->get('BcMail.MailFields');
+        $mailFields = $mailFieldsTable->find()->where([
+            'MailFields.mail_content_id' => $mailContentId,
+            'MailFields.use_field' => true
+        ])->all();
+
+        $validator = new $this->_validatorClass();
+
+        foreach($mailFields as $mailField) {
+            if ($mailField->valid && !empty($mailField->use_field)) {
+                if ($mailField->valid === 'VALID_NOT_EMPTY' || $mailField->valid === 'VALID_EMAIL') {
+                    // 必須項目
+                    if ($mailField->type === 'file') {
+                        if (!isset($postData[$mailField->field_name . '_tmp'])) {
+                            $validator->requirePresence($mailField->field_name)
+                                ->add($mailField->field_name, [
+                                'notFileEmpty' => [
+                                    'rule' => 'notFileEmpty',
+                                    'message' => __('必須項目です。')
+                                ]
+                            ]);
                         }
                     } else {
-                        $this->validate[$mailField['field_name']] = ['notBlank' => [
-                            'rule' => ['notBlank'],
-                            'message' => __('必須項目です。'),
-                            'required' => true
-                        ]];
+                        $validator->requirePresence($mailField->field_name)
+                            ->notEmpty($mailField->field_name, __('必須項目です。'));
                     }
+                } elseif ($mailField->valid === '/^(|[0-9]+)$/') {
                     // 半角数字
-                } elseif ($mailField['valid'] === '/^(|[0-9]+)$/') {
-                    $this->validate[$mailField['field_name']] = [
-                        'rule' => '/^(|[0-9]+)$/',
-                        'message' => '半角数字で入力してください。'
-                    ];
+                    $validator->allowEmpty($mailField->field_nam)
+                        ->add($mailField->field_name, [
+                            'alphaNumeric' => [
+                                'rule' => 'alphaNumeric',
+                                'message' => __('半角数字で入力してください。')
+                            ]
+                    ]);
+                } elseif ($mailField->valid === '/^([0-9]+)$/') {
                     // 半角数字（入力必須）
-                } elseif ($mailField['valid'] === '/^([0-9]+)$/') {
-                    $this->validate[$mailField['field_name']] = [
-                        'rule' => '/^([0-9]+)$/',
-                        'message' => __('半角数字で入力してください。')
-                    ];
+                    $validator->notEmpty($mailField->field_nam)
+                        ->add($mailField->field_name, [
+                            'alphaNumeric' => [
+                                'rule' => 'alphaNumeric',
+                                'message' => __('半角数字で入力してください。')
+                            ]
+                    ]);
                 } else {
-                    $this->validate[$mailField['field_name']] = $mailField['valid'];
+                    $validator->allowEmpty($mailField->field_nam)
+                        ->add($mailField->field_name, [
+                            'custom' => [
+                                'rule' => $mailField->valid,
+                                'message' => __('エラーが発生しました。')
+                            ]
+                    ]);
                 }
-                if (!empty($this->data['MailMessage'][$mailField['field_name']]) && $mailField['valid'] == 'VALID_EMAIL') {
-                    $this->validate[$mailField['field_name']] = [
-                        'email' => [
-                            'rule' => ['email'],
-                            'message' => __('形式が無効です。')
-                        ],
-                        'english' => [
-                            'rule' => '/^[a-zA-Z0-9!#$%&\’*+-\/=?^_`{|}~@.]*$/',
-                            'message' => __('半角で入力してください。')
-                        ]
-                    ];
+                if (!empty($postData[$mailField->field_name]) && $mailField->valid == 'VALID_EMAIL') {
+                    $validator->email($mailField->field_nam, __('形式が無効です。'))
+                        ->add($mailField->field_name, [
+                            'english' => [
+                                'rule' => '/^[a-zA-Z0-9!#$%&\’*+-\/=?^_`{|}~@.]*$/',
+                                'message' => __('半角で入力してください。')
+                            ]
+                    ]);
                 }
             }
             // ### 拡張バリデーション
-            if ($mailField['valid_ex'] && !empty($mailField['use_field'])) {
-                $valids = explode(',', $mailField['valid_ex']);
+            if ($mailField->valid_ex && !empty($mailField->use_field)) {
+                $valids = explode(',', $mailField->valid_ex);
                 foreach($valids as $valid) {
-                    $options = preg_split('/(?<!\\\)\|/', $mailField['options']);
+                    $options = preg_split('/(?<!\\\)\|/', $mailField->options);
                     $options = call_user_func_array('aa', $options);
                     switch($valid) {
                         case 'VALID_MAX_FILE_SIZE':
                             if (
                                 !empty($options['maxFileSize']) &&
-                                (isset($this->data['MailMessage'][$mailField['field_name']]['error']) &&
-                                    $this->data['MailMessage'][$mailField['field_name']]['error'] !== UPLOAD_ERR_NO_FILE)
+                                (isset($postData[$mailField->field_name]['error']) &&
+                                    $postData[$mailField->field_name]['error'] !== UPLOAD_ERR_NO_FILE)
                             ) {
-                                $this->validate[$mailField['field_name']]['fileCheck'] = [
-                                    'rule' => ['fileCheck', $this->convertSize($options['maxFileSize'], 'B', 'M')],
-                                    'message' => __d('baser', 'ファイルのアップロードに失敗しました。')
-                                ];
+                                $validator->add($mailField->field_name, [
+                                        'fileCheck' => [
+                                            'rule' => ['fileCheck', $this->convertSize($options['maxFileSize'], 'B', 'M')],
+                                            'message' => __('ファイルのアップロードに失敗しました。')
+                                        ]
+                                ]);
+                                // TODO ucmitz 未検証
                                 // 必須入力としている場合、必須エラーが優先され、ファイルサイズオーバーのエラーメッセージとならないため、バリデーションエラーの優先度を入れ替える
-                                $this->validate[$mailField['field_name']] = array_reverse($this->validate[$mailField['field_name']]);
+                                //$this->validate[$mailField->field_name] = array_reverse($this->validate[$mailField->field_name]);
                             }
                             break;
                         case 'VALID_FILE_EXT':
                             if (!empty($options['fileExt'])) {
-                                $this->validate[$mailField['field_name']]['fileExt'] = [
-                                    'rule' => ['fileExt', $options['fileExt']],
-                                    'message' => __('ファイル形式が無効です。')
-                                ];
+                                $validator->add($mailField->field_name, [
+                                    'fileExt' => [
+                                        'rule' => ['fileExt', $options['fileExt']],
+                                        'message' => __('ファイル形式が無効です。')
+                                    ]
+                                ]);
                             }
                             break;
                         case 'VALID_REGEX':
                             if (!empty($options['regex'])) {
                                 $options['regex'] = str_replace('\|', '|', $options['regex']);
                                 $options['regex'] = str_replace("\0", '', $options['regex']); // ヌルバイト除去
-                                $this->validate[$mailField['field_name']]['regex'] = [
-                                    'rule' => '/\A' . $options['regex'] . '\z/us',
-                                    'message' => __('形式が無効です。'),
-                                    'allowEmpty' => true,
-                                ];
+                                $validator->allowEmpty
+                                    ->add($mailField->field_name, [
+                                        'fileExt' => [
+                                            'rule' => '/\A' . $options['regex'] . '\z/us',
+                                            'message' => __('形式が無効です。')
+                                        ]
+                                ]);
                             }
                             break;
                     }
                 }
             }
         }
+        $this->setValidator('MailMessages', $validator);
     }
 
     /**
