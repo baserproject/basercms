@@ -225,35 +225,13 @@ class MailController extends MailFrontAppController
             $this->redirect($this->request->getParam('Content.url') . '/index');
         }
 
-        switch($this->getRequest()->getData('mode')) {
-
-            case 'Back': // 戻る
-                $this->set($service->getViewVarsForIndex(
-                    $mailContent,
-                    $mailMessagesService->MailMessages->newEntity($this->getRequest()->getData())
-                ));
-                $this->render($service->getIndexTemplate($mailContent));
-                return;
-
-            case 'Confirm': // データ確認
-                try {
-                    $entity = $service->confirm($mailContent, $this->getRequest()->getData());
-                } catch (PersistenceFailedException $e) {
-                    $entity = $e->getEntity();
-                    $this->BcMessage->setError($e->getMessage());
-                } catch (BcException $e) {
-                    $this->BcMessage->setError($e->getMessage());
-                    if ($e->getCode() === 500) {
-                        return $this->redirect($this->request->getAttribute('currentContent')->url . '/index');
-                    }
-                }
-                $this->render($service->getConfirmTemplate($mailContent));
-                return;
-
-            case 'Submit':
-                break;
-            default:
-                $this->redirect($this->request->getParam('Content.url') . '/index');
+        if($this->getRequest()->getData('mode') === 'Back') {
+            $this->set($service->getViewVarsForIndex(
+                $mailContent,
+                $mailMessagesService->MailMessages->newEntity($this->getRequest()->getData())
+            ));
+            $this->render($service->getIndexTemplate($mailContent));
+            return;
         }
 
         // メッセージ保存
