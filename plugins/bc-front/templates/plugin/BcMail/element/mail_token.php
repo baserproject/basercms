@@ -15,11 +15,12 @@
  * @noTodo
  * @unitTest
  */
-echo $this->Html->script(
-	$this->request->is('ajax') ? 'mail_token_ajax' : 'mail_token',
+$this->BcBaser->js(
+	$this->request->is('ajax') ? 'BcMail.mail_token_ajax' : 'BcMail.mail_token',
+	true,
 	['defer']
 );
 ?>
 <script>
-	var getTokenUrl = '<?php echo $this->BcBaser->getUrl('/bc_form/ajax_get_token?requestview=false') ?>';
+	var getTokenUrl = '<?php echo $this->BcBaser->getUrl('/baser-core/bc_form/get_token?requestview=false') ?>';
 </script>

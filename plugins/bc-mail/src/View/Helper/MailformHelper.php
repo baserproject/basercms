@@ -119,31 +119,21 @@ class MailformHelper extends BcFreezeHelper
             case 'autozip':
                 unset($attributes['rows']);
                 unset($attributes['empty']);
-                $count = 0;
-                // TODO ucmitz 以下、未検証
-                // >>>
-//                foreach ($options as $option) {
-//                    switch ($count) {
-//                        case 0:
-//                            $address1 = $this->_name([], $option);
-//                            break;
-//                        case 1:
-//                            $address2 = $this->_name([], $option);
-//                            break;
-//                        default:
-//                            break;
-//                    }
-//                    $count++;
-//                }
-                // <<<
-                if (!isset($address1['name'])) {
-                    $address1['name'] = '';
-                    $address2['name'] = '';
-                } elseif (!isset($address2['name'])) {
-                    $address2['name'] = $address1['name'];
+                $address1 = isset($options[key($options)])? $options[key($options)] : '';
+                next($options);
+                $address2 = isset($options[key($options)])? $options[key($options)] : '';
+                if (!$address1) {
+                    $address1 = '';
+                    $address2 = '';
+                } elseif (!$address2) {
+                    $address2 = $address1;
                 }
-                $attributes['onKeyUp'] = "AjaxZip3.zip2addr(this,'','{$address1['name']}','{$address2['name']}')";
-                $out = $this->Html->script('vendor/ajaxzip3.js') . $this->text($fieldName, $attributes);
+                $attributes['onKeyUp'] = "AjaxZip3.zip2addr(this,'','{$address1}','{$address2}')";
+                $out = $this->BcBaser->js('vendor/ajaxzip3', false) .
+                    parent::control($fieldName, array_merge($attributes, [
+                        'type' => 'text',
+                        'style' => 'width:auto!important'
+                    ]));
                 break;
 
             case 'check':
@@ -162,6 +152,7 @@ class MailformHelper extends BcFreezeHelper
                 $attributes['multiple'] = 'checkbox';
                 $attributes['value'] = null;
                 $attributes['empty'] = false;
+                $attributes['templateVars']['tag'] = 'span';
                 $out = $this->select($fieldName, $options, $attributes);
                 break;
             case 'file':
