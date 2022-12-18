@@ -46,7 +46,7 @@ class BcHtmlHelperTest extends BcTestCase
      */
     public function testGetStripCrumbs()
     {
-        // TODO 暫定措置
+        // TODO ucmitz 暫定措置
         // >>>
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
         // <<<

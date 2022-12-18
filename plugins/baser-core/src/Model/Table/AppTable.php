@@ -68,7 +68,7 @@ class AppTable extends Table
      */
     public function __construct(array $config = [])
     {
-        // TODO 暫定措置
+        // TODO ucmitz 暫定措置
         // >>>
         parent::__construct($config);
         return;
@@ -120,7 +120,7 @@ class AppTable extends Table
      */
     public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
-        // TODO 暫定措置
+        // TODO ucmitz 暫定措置
         // >>>
         return true;
         // <<<
