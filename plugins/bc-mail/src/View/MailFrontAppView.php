@@ -38,7 +38,7 @@ class MailFrontAppView extends BcFrontAppView
         parent::initialize();
         $this->loadHelper('BcMail.Mail');
         $this->loadHelper('BcMail.MailField');
-        $this->loadHelper('BcMail.Mailform');
+        $this->loadHelper('BcMail.Mailform', ['templates' => 'BaserCore.bc_form']);
     }
 
 }
