@@ -308,25 +308,29 @@ class MailformHelper extends BcFreezeHelper
 
     /**
      * メールフィールドのグループの最後か判定する
+     *
+     * - 次のフィールドがないもの
+     * - 次のフィールドがある、次のフィールドとグループが違うもの
+     *
      * @param ResultSet $mailFields
      * @param array $currentMailField
      * @return bool
      */
     public function isGroupLastField($mailFields, $currentMailField)
     {
-        if (empty($currentMailField->group_field)) {
-            return false;
+        if (empty($currentMailField->group_field)) return false;
+        $mailFields = clone $mailFields;
+        foreach ($mailFields as $mailField) {
+            if ($currentMailField === $mailField) break;
         }
-        foreach ($mailFields as $key => $mailField) {
-            if ($currentMailField === $mailField) {
-                break;
-            }
+
+        $mailFields->next();
+        if(!$mailFields->valid()) return true;
+        $nextField = $mailFields->current();
+        if(!$nextField->group_field || $currentMailField->group_field !== $nextField->group_field) {
+            return true;
         }
-        // TODO ucmitz 未実装
-        // 次のレコードの取得方法がわからない
-//        if($nextField && (!$nextField->group_field || $currentMailField->group_field !== $nextField->_group_field)) {
-//            return true;
-//        }
+
         return false;
     }
 
