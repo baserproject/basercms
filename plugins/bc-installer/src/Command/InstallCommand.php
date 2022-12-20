@@ -123,6 +123,9 @@ class InstallCommand extends Command
             $io->err(__d('baser', 'baserCMSのインストールに失敗しました。ログファイルを確認してください。'));
         }
 
+        $siteConfigsService = $this->getService(SiteConfigsServiceInterface::class);
+        $siteConfigsService->putEnv('INSTALL_MODE', 'false');
+
         BcUtil::clearAllCache();
         $io->out(__d('baser', 'baserCMSのインストールが完了しました。'));
     }

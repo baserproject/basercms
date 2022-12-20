@@ -13,6 +13,7 @@ namespace BcInstaller\Controller\Admin;
 
 use BaserCore\Controller\Admin\BcAdminAppController;
 use BaserCore\Error\BcException;
+use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\Utility\BcUtil;
 use BcInstaller\Service\Admin\InstallationsAdminService;
 use BcInstaller\Service\Admin\InstallationsAdminServiceInterface;
@@ -42,6 +43,7 @@ class InstallationsController extends BcAdminAppController
     {
         parent::beforeFilter($event);
         set_time_limit(300);
+        if(!BcUtil::isInstallMode()) $this->notFound();
         // TODO ucmitz 以下、未実装
 //        /* インストール状態判別 */
 //        if (file_exists(APP . 'Config' . DS . 'database.php')) {
@@ -219,13 +221,14 @@ class InstallationsController extends BcAdminAppController
      * @noTodo
      * @checked
      */
-    public function step5(InstallationsAdminServiceInterface $service)
+    public function step5(InstallationsAdminServiceInterface $service, SiteConfigsServiceInterface $siteConfigsService)
     {
         if (!BcUtil::isInstalled()) {
             $service->connectDb($this->getRequest());
             $service->initFiles($this->getRequest());
             $service->initDb($this->getRequest());
             $service->login($this->getRequest(), $this->getResponse());
+            $siteConfigsService->putEnv('INSTALL_MODE', 'false');
 
             BcUtil::clearAllCache();
             if (function_exists('opcache_reset')) opcache_reset();
