@@ -469,21 +469,13 @@ class BcFreezeHelper extends BcFormHelper
      */
     public function tel($fieldName, $attributes = [])
     {
-
         if ($this->freezed) {
-            [$model, $field] = explode('.', $fieldName);
-            if (isset($attributes)) {
-                $attributes = $attributes + ['type' => 'hidden'];
-            } else {
-                $attributes = ['type' => 'hidden'];
-            }
             if (isset($attributes["value"])) {
                 $value = $attributes["value"];
             } else {
-                $value = $this->request->data[$model][$field];
+                $value = $this->getSourceValue($fieldName);
             }
-            $attributes['type'] = 'hidden';
-            return parent::tel($fieldName, $attributes) . h($value);
+            return parent::hidden($fieldName, $attributes) . h($value);
         } else {
             return parent::tel($fieldName, $attributes);
         }
