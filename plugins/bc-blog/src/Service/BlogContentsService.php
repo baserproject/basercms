@@ -117,7 +117,6 @@ class BlogContentsService implements BlogContentsServiceInterface
             'list_count' => 10,
             'list_direction' => 'DESC',
             'feed_count' => 10,
-            'auth_captcha' => 1,
             'tag_use' => false,
             'status' => false,
             'eye_catch_size_thumb_width' => Configure::read('BcBlog.eye_catch_size_thumb_width'),

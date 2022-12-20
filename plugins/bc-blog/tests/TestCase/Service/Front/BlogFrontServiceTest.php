@@ -119,7 +119,6 @@ class BlogFrontServiceTest extends BcTestCase
             'tag_use' => '1',
             'comment_use' => '1',
             'comment_approve' => '0',
-            'auth_captcha' => '1',
             'widget_area' => '2',
             'eye_catch_size' => BcUtil::serialize([
                 'thumb_width' => 600,

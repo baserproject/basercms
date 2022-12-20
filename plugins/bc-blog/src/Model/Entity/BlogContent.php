@@ -29,7 +29,6 @@ use BaserCore\Annotation\Checked;
  * @property bool $tag_use
  * @property bool $comment_use
  * @property bool $comment_approve
- * @property bool $auth_captcha
  * @property int $widget_area
  * @property string $eye_catch_size
  * @property bool $use_content

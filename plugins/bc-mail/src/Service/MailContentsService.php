@@ -62,7 +62,6 @@ class MailContentsService implements MailContentsServiceInterface
             'form_template' => 'default',
             'mail_template' => 'mail_default',
             'use_description' => true,
-            'auth_captcha' => false,
             'ssl_on' => false,
             'save_info' => true
         ], [

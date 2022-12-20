@@ -46,8 +46,7 @@ class MailController extends MailFrontAppController
     {
         parent::initialize();
         $this->loadComponent('BaserCore.BcFrontContents', ['isContentsPage' => false]);
-        // TODO ucmitz 未実装
-//        $this->loadComponent('BaserCore.BcCaptcha');
+        $this->loadComponent('BaserCore.BcCaptcha');
     }
 
     /**
@@ -298,17 +297,6 @@ class MailController extends MailFrontAppController
             'currentWidgetAreaId' => $mailContent->widget_area?? BcSiteConfig::get('widget_area')
         ]);
         $this->render($service->getThanksTemplate($mailContent));
-    }
-
-    /**
-     * 認証用のキャプチャ画像を表示する
-     *
-     * @return void
-     */
-    public function captcha($token = null)
-    {
-        $this->BcCaptcha->render($token);
-        exit();
     }
 
 }

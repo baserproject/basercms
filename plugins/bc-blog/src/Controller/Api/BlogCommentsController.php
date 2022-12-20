@@ -164,20 +164,6 @@ class BlogCommentsController extends BcApiController
             return;
         }
 
-        // 画像認証を行う
-        $captchaResult = true;
-        if ($this->blogContent['BlogContent']['auth_captcha']) {
-            $captchaResult = $this->BcCaptcha->check(
-                $this->request->getData('BlogComment.auth_captcha'),
-                $this->request->getData('BlogComment.captcha_id')
-            );
-            if (!$captchaResult) {
-                $this->set('dbData', false);
-                return false;
-            }
-            $this->request = $this->request->withData('BlogComment.auth_captcha', null);
-        }
-
         $result = $this->BlogComment->add(
             $this->request->getData(),
             $blogContentId,

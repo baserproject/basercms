@@ -12,6 +12,7 @@
 namespace BaserCore\Controller\Component;
 
 use Cake\Controller\Component;
+use KCAPTCHA;
 
 /**
  * Class BcCaptchaComponent
@@ -46,17 +47,6 @@ class BcCaptchaComponent extends Component
      * @var string
      */
     public $convert = '';
-
-    /**
-     * startup
-     *
-     * @param Controller $controller
-     * @return void
-     */
-    public function startup(Controller $controller)
-    {
-        $this->controller = $controller;
-    }
 
     /**
      * キャプチャ画象を表示する

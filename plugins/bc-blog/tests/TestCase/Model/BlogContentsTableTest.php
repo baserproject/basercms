@@ -385,7 +385,6 @@ class BlogContentsTableTest extends BcTestCase
         $this->assertEquals($data['BlogContent']['list_count'], 10);
         $this->assertEquals($data['BlogContent']['list_direction'], 'DESC');
         $this->assertEquals($data['BlogContent']['feed_count'], 10);
-        $this->assertEquals($data['BlogContent']['auth_captcha'], 1);
         $this->assertEquals($data['BlogContent']['tag_use'], false);
         $this->assertEquals($data['BlogContent']['status'], false);
         $this->assertEquals($data['BlogContent']['eye_catch_size_thumb_width'], 600);
@@ -451,7 +450,6 @@ class BlogContentsTableTest extends BcTestCase
             'tag_use' => '1',
             'comment_use' => '1',
             'comment_approve' => '0',
-            'auth_captcha' => '1',
             'widget_area' => '2',
             'eye_catch_size' => '',
             'use_content' => '1'

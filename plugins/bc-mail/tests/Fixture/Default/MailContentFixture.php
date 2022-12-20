@@ -32,7 +32,6 @@ class MailContentFixture extends BaserTestFixture
             'form_template' => 'default',
             'mail_template' => 'mail_default',
             'redirect_url' => 'https://basercms.net/',
-            'auth_captcha' => 1,
             'widget_area' => null,
             'ssl_on' => 0,
             'publish_begin' => null,

@@ -30,7 +30,6 @@ use BaserCore\Annotation\Checked;
  * @property string $form_template
  * @property string $mail_template
  * @property string $redirect_url
- * @property bool $auth_captcha
  * @property int $widget_area
  * @property bool $ssl_on
  * @property bool $save_info

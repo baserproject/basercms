@@ -135,8 +135,6 @@ class MailFrontService implements MailFrontServiceInterface
         } else {
             $freezed = false;
             $error = true;
-            $mailMessage->auth_captcha = null;
-            $mailMessage->captcha_id = null;
         }
 
         return [
@@ -168,19 +166,6 @@ class MailFrontService implements MailFrontServiceInterface
         if (!$this->_checkDirectoryRraversal($mailContent->id, $postData)) {
             throw new BcException(__d('baser', '不正なファイル送信です。'), 500);
         }
-
-        // 画像認証を行う
-        // TODO ucmitz 未実装
-        // BcCaptcha を 通常クラス化する
-//        if ($mailContent->auth_captcha) {
-//            $captchaResult = $this->BcCaptcha->check(
-//                Hash::get($this->request->getData(), 'MailMessage.auth_captcha'),
-//                Hash::get($this->request->getData(), 'MailMessage.captcha_id')
-//            );
-//            if (!$captchaResult) {
-//                $mailMessagesTable->invalidate('auth_captcha');
-//            }
-//        }
 
         /** @var MailMessagesService $mailMessagesService */
         $mailMessagesService = $this->getService(MailMessagesServiceInterface::class);

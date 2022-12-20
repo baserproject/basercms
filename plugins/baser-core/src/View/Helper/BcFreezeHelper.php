@@ -15,8 +15,6 @@ use Cake\Utility\Inflector;
 use BaserCore\Event\BcEventDispatcherTrait;
 /**
  * Class BcFreezeHelper
- *
- * @package Baser.View.Helper
  */
 class BcFreezeHelper extends BcFormHelper
 {

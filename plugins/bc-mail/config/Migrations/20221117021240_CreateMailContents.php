@@ -60,11 +60,6 @@ class CreateMailContents extends AbstractMigration
                 'limit' => 255,
                 'null' => true,
             ])
-            ->addColumn('auth_captcha', 'boolean', [
-                'default' => null,
-                'limit' => null,
-                'null' => true,
-            ])
             ->addColumn('widget_area', 'integer', [
                 'default' => null,
                 'limit' => null,

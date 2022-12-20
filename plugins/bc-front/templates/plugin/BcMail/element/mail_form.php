@@ -39,19 +39,6 @@ $this->BcBaser->js('BcMail.form-submit', true, ['defer'])
 	<?php $this->BcBaser->element('mail_input', ['blockStart' => 1]) ?>
 </table>
 
-<?php if ($mailContent->auth_captcha): ?>
-	<?php if (!$freezed): ?>
-		<div class="bs-mail-form-auth-captcha">
-			<div><?php $this->Mailform->authCaptcha('auth_captcha') ?></div>
-			<div><?php echo __('画像の文字を入力してください') ?></div>
-			<?php echo $this->Mailform->error('auth_captcha', __('入力された文字が間違っています。入力をやり直してください。')) ?>
-		</div>
-	<?php else: ?>
-		<?php echo $this->Mailform->hidden('auth_captcha') ?>
-		<?php echo $this->Mailform->hidden('captcha_id') ?>
-	<?php endif ?>
-<?php endif ?>
-
 <div class="bs-mail-form-submit">
 	<?php if ($freezed): ?>
 		<?php echo $this->Mailform->submit('　' . __('書き直す') . '　', ['div' => false, 'class' => 'form-submit', 'id' => 'BtnMessageBack']) ?>

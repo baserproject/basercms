@@ -55,11 +55,6 @@ class CreateBlogContents extends AbstractMigration
                 'limit' => null,
                 'null' => true,
             ])
-            ->addColumn('auth_captcha', 'boolean', [
-                'default' => null,
-                'limit' => null,
-                'null' => true,
-            ])
             ->addColumn('widget_area', 'integer', [
                 'default' => null,
                 'limit' => null,
