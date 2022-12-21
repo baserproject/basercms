@@ -1,5 +1,5 @@
 {
-    "name": "baserproject/bc-blog",
+    "name": "baserproject/bc-mail",
     "description": "BcBlog plugin for baserCMS",
     "homepage": "https://basercms.net",
     "type": "cakephp-plugin",
