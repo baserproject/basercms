@@ -23,17 +23,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     ]);
 
     $parameters->set(Option::PACKAGE_DIRECTORIES_EXCLUDES, [
-        __DIR__ . '/plugins/bc-blog',
-        __DIR__ . '/plugins/bc-editor-template',
-        __DIR__ . '/plugins/bc-favorite',
-        __DIR__ . '/plugins/bc-installer',
-        __DIR__ . '/plugins/bc-mail',
-        __DIR__ . '/plugins/bc-search-index',
-        __DIR__ . '/plugins/bc-theme-config',
-        __DIR__ . '/plugins/bc-theme-file',
-        __DIR__ . '/plugins/bc-uploader',
-        __DIR__ . '/plugins/bc-widget-area',
         __DIR__ . '/plugins/BcSpaSample',
+        __DIR__ . '/plugins/BcThemeSample',
     ]);
 
     // for "merge" command
