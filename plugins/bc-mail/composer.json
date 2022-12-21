@@ -7,7 +7,7 @@
     "vendor-dir": "../../vendor",
     "require": {
         "php": ">=8.1",
-        "baserproject/baser-core": "^3.0"
+        "baserproject/baser-core": "^3.0.1"
     },
     "autoload": {
         "psr-4": {
