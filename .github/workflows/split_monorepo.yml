@@ -22,8 +22,41 @@ jobs:
                         local_path: 'bc-admin-third'
                         split_repository: 'bc-admin-third'
                     -
+                        local_path: 'bc-blog'
+                        split_repository: 'bc-blog'
+                    -
+                        local_path: 'bc-content-link'
+                        split_repository: 'bc-content-link'
+                    -
+                        local_path: 'bc-editor-template'
+                        split_repository: 'bc-editor-template'
+                    -
+                        local_path: 'bc-favorite'
+                        split_repository: 'bc-favorite'
+                    -
                         local_path: 'bc-front'
                         split_repository: 'bc-front'
+                    -
+                        local_path: 'bc-installer'
+                        split_repository: 'bc-installer'
+                    -
+                        local_path: 'bc-mail'
+                        split_repository: 'bc-mail'
+                    -
+                        local_path: 'bc-search-index'
+                        split_repository: 'bc-search-index'
+                    -
+                        local_path: 'bc-theme-config'
+                        split_repository: 'bc-theme-config'
+                    -
+                        local_path: 'bc-theme-file'
+                        split_repository: 'bc-theme-file'
+                    -
+                        local_path: 'bc-uploader'
+                        split_repository: 'bc-uploader'
+                    -
+                        local_path: 'bc-widget-area'
+                        split_repository: 'bc-widget-area'
         steps:
             -   uses: actions/checkout@v2
             # no tag
