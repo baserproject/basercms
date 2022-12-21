@@ -100,7 +100,8 @@ class MailFieldsService implements MailFieldsServiceInterface
             'mail_content_id' => $mailContentId,
             'type' => 'text',
             'use_field' => true,
-            'no_send' => false
+            'no_send' => false,
+            'valid' => false
         ]);
     }
 

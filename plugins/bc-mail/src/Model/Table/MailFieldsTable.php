@@ -155,16 +155,11 @@ class MailFieldsTable extends MailAppTable
             'password' => __d('baser', 'パスワード'),
             'hidden' => __d('baser', '隠しフィールド')
         ];
-        $source['valid'] = [
-            'VALID_NOT_EMPTY' => __d('baser', '入力必須'),
-            'VALID_EMAIL' => __d('baser', 'Eメールチェック（入力必須）'),
-            '/^(|[0-9]+)$/' => __d('baser', '数値チェック'),
-            '/^([0-9]+)$/' => __d('baser', '数値チェック（入力必須）')
-        ];
         $source['valid_ex'] = [
+            'VALID_EMAIL' => __d('baser', 'Eメール形式チェック'),
             'VALID_EMAIL_CONFIRM' => __d('baser', 'Eメール比較チェック'),
             'VALID_GROUP_COMPLATE' => __d('baser', 'グループチェック'),
-            'VALID_NOT_UNCHECKED' => __d('baser', 'チェックボックス未入力チェック'),
+            'VALID_NUMBER' => __d('baser', '数値チェック'),
             'VALID_DATETIME' => __d('baser', '日付チェック'),
             'VALID_MAX_FILE_SIZE' => __d('baser', 'ファイルアップロードサイズ制限'),
             'VALID_FILE_EXT' => __d('baser', 'ファイル拡張子チェック'),

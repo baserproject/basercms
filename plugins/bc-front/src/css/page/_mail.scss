@@ -95,3 +95,19 @@
     }
   }
 }
+
+/* Error Messages
+----------------------------------------------- */
+.error-message:has(.error-message) {
+  &:before {
+    content: '';
+  }
+  .error-message {
+    &:before {
+      background:none;
+      top:auto;
+    }
+    padding:0 0 0 15px;
+    margin:0;
+  }
+}

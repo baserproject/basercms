@@ -486,25 +486,19 @@ class BcFreezeHelper extends BcFormHelper
      * @param array $attributes html属性
      * - 凍結時に、valueはマスクして表示する。
      * @return    string    htmlタグ
-     * @access    public
+     * @checked
+     * @noTodo
      */
     public function password($fieldName, $attributes = [])
     {
-
         if ($this->freezed) {
-            [$model, $field] = explode('.', $fieldName);
-            if (isset($attributes)) {
-                $attributes = $attributes + ['type' => 'hidden'];
-            } else {
-                $attributes = ['type' => 'hidden'];
-            }
             if (isset($attributes["value"])) {
                 $value = $attributes["value"];
             } else {
-                $value = $this->request->data[$model][$field];
+                $value = $this->getSourceValue($fieldName);
             }
             $value = preg_replace('/./', '*', $value);
-            return parent::password($fieldName, $attributes) . h($value);
+            return parent::hidden($fieldName, $attributes) . h($value);
         } else {
             return parent::password($fieldName, $attributes);
         }
@@ -550,14 +544,13 @@ class BcFreezeHelper extends BcFormHelper
     {
 
         if ($this->freezed) {
-            [$model, $field] = explode('.', $fieldName);
             if (isset($attributes)) {
-                $attributes = am($attributes, ['type' => 'hidden']);
+                $attributes = array_merge($attributes, ['type' => 'hidden']);
             } else {
                 $attributes = ['type' => 'hidden'];
             }
-            if (!empty($this->request->data[$model][$field])) {
-                $value = date('Y/m/d', strtotime($this->request->data[$model][$field]));
+            if (!empty($this->getSourceValue($fieldName))) {
+                $value = date('Y/m/d', strtotime($this->getSourceValue($fieldName)));
             } else {
                 $value = "";
             }

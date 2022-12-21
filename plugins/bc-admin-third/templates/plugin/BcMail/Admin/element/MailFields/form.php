@@ -89,18 +89,31 @@
     </tr>
     <tr id="RowNotEmpty">
       <th
-        class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('not_empty', __d('baser', '必須マーク')) ?></th>
+        class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('not_empty', __d('baser', '入力必須')) ?></th>
       <td class="col-input bca-form-table__input">
+        <?php echo $this->BcAdminForm->control('valid', ['type' => 'checkbox', 'label' => __d('baser', '入力必須とする')]) ?>
+        <?php echo $this->BcAdminForm->error('valid') ?>
         <?php echo $this->BcAdminForm->control('not_empty', ['type' => 'checkbox', 'label' => __d('baser', '項目見出しに必須マークを表示する')]) ?>
         <?php echo $this->BcAdminForm->error('not_empty') ?>
       </td>
     </tr>
-    <tr id="RowValid">
+    <tr id="RowValidEx">
       <th
-        class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('valid', __d('baser', '入力チェック')) ?></th>
+        class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('valid_ex', __d('baser', '入力チェック')) ?></th>
       <td class="col-input bca-form-table__input">
-        <?php echo $this->BcAdminForm->control('valid', ['type' => 'select', 'options' => $this->BcAdminForm->getControlSource('MailFields.valid'), 'empty' => __d('baser', 'なし')]) ?>
-        <?php echo $this->BcAdminForm->error('valid') ?>
+        <?php echo $this->BcAdminForm->control('valid_ex', ['type' => 'multiCheckbox', 'options' => $this->BcAdminForm->getControlSource('MailFields.valid_ex')]) ?>
+        <i class="bca-icon--question-circle bca-help"></i>
+        <?php echo $this->BcAdminForm->error('valid_ex') ?>
+        <div class="bca-helptext">
+          <ul>
+            <li><?php echo __d('baser', 'Eメール比較チェック：利用するには「Eメール」タイプのフィールドを二つ作成し、グループ入力チェックに任意の同じ値を入力します。') ?></li>
+            <li><?php echo __d('baser', 'グループチェック：グループで連帯して入力チェックを行うには同じグループ名を入力します。') ?></li>
+            <li><?php echo __d('baser', '日付チェック：日付形式かどうかのチェックです。') ?></li>
+            <li><?php echo __d('baser', 'ファイルアップロードサイズ制限：利用するには、「ファイル」タイプを選択し、オプション項目に、上限となるサイズを次の形式のように | 区切りで入力します。「maxFileSize|10（単位：MB）」') ?></li>
+            <li><?php echo __d('baser', 'ファイル拡張子チェック：利用するには、「ファイル」タイプを選択し、オプション項目に、アップロードを許可する拡張子を次の形式のように | 区切りで入力します。「fileExt|jpg,pdf」') ?></li>
+            <li><?php echo __d('baser', '正規表現チェック：利用するには、オプション項目に、正規表現を次の形式のように | 区切りで入力します。「regex|\d+」 入力した正規表現は以下の書式で実行されます。 /\A○○○\z/us') ?></li>
+          </ul>
+        </div>
       </td>
     </tr>
     <tr id="RowAttention">
@@ -190,25 +203,6 @@
   </div>
   <div class="bca-collapse" id="mailFieldSettingBody" data-bca-state="">
     <table class="form-table bca-form-table" id="formOptionBody">
-      <tr id="RowValidEx">
-        <th
-          class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('valid_ex', __d('baser', '拡張入力チェック')) ?></th>
-        <td class="col-input bca-form-table__input">
-          <?php echo $this->BcAdminForm->control('valid_ex', ['type' => 'multiCheckbox', 'options' => $this->BcAdminForm->getControlSource('MailFields.valid_ex')]) ?>
-          <i class="bca-icon--question-circle bca-help"></i>
-          <?php echo $this->BcAdminForm->error('valid_ex') ?>
-          <div class="bca-helptext">
-            <ul>
-              <li><?php echo __d('baser', 'Eメール比較チェック：利用するには「Eメール」タイプのフィールドを二つ作成し、グループ入力チェックに任意の同じ値を入力します。') ?></li>
-              <li><?php echo __d('baser', 'グループチェック：グループで連帯して入力チェックを行うには同じグループ名を入力します。') ?></li>
-              <li><?php echo __d('baser', '日付チェック：日付形式かどうかのチェックです。') ?></li>
-              <li><?php echo __d('baser', 'ファイルアップロードサイズ制限：利用するには、「ファイル」タイプを選択し、オプション項目に、上限となるサイズを次の形式のように | 区切りで入力します。「maxFileSize|10（単位：MB）」') ?></li>
-              <li><?php echo __d('baser', 'ファイル拡張子チェック：利用するには、「ファイル」タイプを選択し、オプション項目に、アップロードを許可する拡張子を次の形式のように | 区切りで入力します。「fileExt|jpg,pdf」') ?></li>
-              <li><?php echo __d('baser', '正規表現チェック：利用するには、オプション項目に、正規表現を次の形式のように | 区切りで入力します。「regex|\d+」 入力した正規表現は以下の書式で実行されます。 /\A○○○\z/us') ?></li>
-            </ul>
-          </div>
-        </td>
-      </tr>
       <tr id="RowGroupField">
         <th
           class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('group_field', __d('baser', 'グループ名')) ?></th>

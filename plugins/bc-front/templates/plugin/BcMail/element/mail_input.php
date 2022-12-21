@@ -85,10 +85,10 @@ if (!empty($mailFields)) {
 				    'type' => $field->type,
 				    'options' => $this->Mailfield->getOptions($field)
           ])
-				);
+				) . (($freezed)? '&nbsp;' : '');
 			}
 
-			if (!$freezed || $this->Mailform->getSourceValue("MailMessage." . $field->field_name) !== '') {
+			if (!$freezed || $this->Mailform->getSourceValue($field->field_name) !== '') {
 				echo '<span class="bs-mail-after-attachment">' . $field->after_attachment . '</span>';
 			}
 			if (!$freezed) {

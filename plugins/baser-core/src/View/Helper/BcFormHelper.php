@@ -762,7 +762,7 @@ DOC_END;
      * @return string A generated hidden input
      * @link https://book.cakephp.org/2.0/en/core-libraries/helpers/form.html#FormHelper::hidden
      * @checked
-     * @note(value="未実装につき継承元のコントロールを返却している")
+     * @noTodo
      */
     public function hidden($fieldName, $options = []): string
     {
@@ -780,9 +780,12 @@ DOC_END;
         // multiple な hiddenタグの場合、送信される値は配列で送信されるので値違いで認証がとおらない。
         // という事で、multiple の場合は、あくまでhiddenタグ以外のようにフィールド情報のみを
         // トークンのキーとする事で認証を通すようにする。
+        // CUSTOMIZE ADD 2022/12/21 by ryuring
+        // CakePHP4になり、動作しなくなったため、unlockField を追加
         // >>>
         if (!empty($options['multiple'])) {
             $secure = false;
+            $this->unlockField($fieldName);
         }
         // <<<
 
@@ -935,7 +938,7 @@ DOC_END;
         $year = $month = $day = $hour = $min = $meridian = null;
 
         if (empty($attributes['value'])) {
-            $attributes = $this->getSourceValue($attributes, $fieldName);
+            $attributes = $this->getSourceValue($fieldName);
         }
 
         if ($attributes['value'] === null && $attributes['empty'] != true) {

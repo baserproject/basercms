@@ -14,6 +14,7 @@ namespace BcInstaller\Controller\Admin;
 use BaserCore\Controller\Admin\BcAdminAppController;
 use BaserCore\Error\BcException;
 use BaserCore\Service\SiteConfigsServiceInterface;
+use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
 use BcInstaller\Service\Admin\InstallationsAdminService;
 use BcInstaller\Service\Admin\InstallationsAdminServiceInterface;
@@ -32,6 +33,11 @@ use BaserCore\Annotation\Checked;
  */
 class InstallationsController extends BcAdminAppController
 {
+
+    /**
+     * Trait
+     */
+    use BcContainerTrait;
 
     /**
      * beforeFilter
@@ -221,13 +227,17 @@ class InstallationsController extends BcAdminAppController
      * @noTodo
      * @checked
      */
-    public function step5(InstallationsAdminServiceInterface $service, SiteConfigsServiceInterface $siteConfigsService)
+    public function step5(InstallationsAdminServiceInterface $service)
     {
         if (!BcUtil::isInstalled()) {
             $service->connectDb($this->getRequest());
             $service->initFiles($this->getRequest());
             $service->initDb($this->getRequest());
             $service->login($this->getRequest(), $this->getResponse());
+
+            // コントローラーの引数から注入した場合、DB接続でエラーとなるためここで初期化
+            /** @var SiteConfigsServiceInterface $siteConfigsService */
+            $siteConfigsService = $this->getService(SiteConfigsServiceInterface::class);
             $siteConfigsService->putEnv('INSTALL_MODE', 'false');
 
             BcUtil::clearAllCache();

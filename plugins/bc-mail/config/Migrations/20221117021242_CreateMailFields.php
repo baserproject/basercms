@@ -110,7 +110,7 @@ class CreateMailFields extends AbstractMigration
                 'limit' => 255,
                 'null' => true,
             ])
-            ->addColumn('valid', 'string', [
+            ->addColumn('valid', 'boolean', [
                 'default' => null,
                 'limit' => 255,
                 'null' => true,

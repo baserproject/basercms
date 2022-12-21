@@ -12,6 +12,10 @@
 /**
  * メールフォーム
  *
+ * $this->Mailform->create() にて、valueSources オプションで、context を明示的に指定する。
+ * ファイルフィールドの確認画面にて、$_POST からの配列のデータを取得し Warning となってしまうため。
+ * BcFileUploader により、エンティティは変換されるが、$_POST は変換されない。
+ *
  * @var \BcMail\View\MailFrontAppView $this
  * @var bool $freezed 確認画面かどうか
  * @var array $mailContent メールコンテンツデータ
@@ -27,9 +31,9 @@ $this->BcBaser->js('BcMail.form-submit', true, ['defer'])
 
 
 <?php if (!$freezed): ?>
-	<?php echo $this->Mailform->create($mailMessage, ['url' => $this->BcBaser->getContentsUrl(null, false, null, false) . 'confirm', 'type' => 'file']) ?>
+	<?php echo $this->Mailform->create($mailMessage, ['url' => $this->BcBaser->getContentsUrl(null, false, null, false) . 'confirm', 'type' => 'file', 'valueSources' => ['context']]) ?>
 <?php else: ?>
-	<?php echo $this->Mailform->create($mailMessage, ['url' => $this->BcBaser->getContentsUrl(null, false, null, false)  . 'submit']) ?>
+	<?php echo $this->Mailform->create($mailMessage, ['url' => $this->BcBaser->getContentsUrl(null, false, null, false)  . 'submit', 'valueSources' => ['context']]) ?>
 <?php endif; ?>
 
 <?php $this->Mailform->unlockField('mode') ?>

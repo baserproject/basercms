@@ -192,6 +192,7 @@ class BcFormHelperTest extends BcTestCase
      */
     public function testHidden($fieldName, $options, $expected, $message)
     {
+        $this->BcForm->create();
         $result = $this->BcForm->hidden($fieldName, $options);
         $this->assertMatchesRegularExpression('/' . $expected . '/s', $result, $message);
     }

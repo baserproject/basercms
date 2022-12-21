@@ -11,10 +11,15 @@
 
 namespace BcMail\Model\Table;
 
+use Authentication\PasswordHasher\DefaultPasswordHasher;
 use BaserCore\Error\BcException;
 use BcMail\Model\Entity\MailMessage;
 use Cake\Datasource\ConnectionManager;
+use Cake\Datasource\EntityInterface;
+use Cake\Datasource\ResultSetInterface;
+use Cake\Event\Event;
 use Cake\ORM\Query;
+use Cake\ORM\ResultSet;
 use Cake\ORM\TableRegistry;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -33,7 +38,7 @@ class MailMessagesTable extends MailAppTable
     /**
      * メールフォーム情報
      *
-     * @var array
+     * @var ResultSet
      */
     public $mailFields = [];
 
@@ -71,24 +76,50 @@ class MailMessagesTable extends MailAppTable
      * MailMessageモデルは利用前にこのメソッドを呼び出しておく必要あり
      *
      * @param int $mailContentId
+     * @param array $postData
      * @return boolean
+     * @checked
+     * @noTodo
      */
-    public function setup($mailContentId, $postData = [])
+    public function setup(int $mailContentId, array $postData = [])
     {
         // テーブル名の設定
         $this->setUseTable($mailContentId);
+        // メールフィールドの設定
+        $this->setMailFields($mailContentId);
         // アップロード設定
         $this->setupUpload($mailContentId);
         // バリデーションの設定
-        $this->setupValidate($mailContentId, $postData);
+        $this->setupValidate($postData);
         // スキーマの初期化
         $this->_schema = null;
         return true;
     }
 
+    /**
+     * メールフィールドを取得してセットする。
+     * @param int $mailContentId
+     * @checked
+     * @noTodo
+     */
+    public function setMailFields(int $mailContentId)
+    {
+        $mailFieldsTable = TableRegistry::getTableLocator()->get('BcMail.MailFields');
+        $this->mailFields = $mailFieldsTable->find()->where([
+            'MailFields.mail_content_id' => $mailContentId,
+            'MailFields.use_field' => true
+        ])->all();
+    }
+
+    /**
+     * デフォルトのバリデーションを設定する
+     *
+     * @param Validator $validator
+     * @return Validator
+     */
     public function validationDefault(Validator $validator): Validator
     {
-        return $this->getValidator('MailMessages');
+        return $this->hasValidator('MailMessages')? $this->getValidator('MailMessages') : $validator;
     }
 
     /**
@@ -150,104 +181,85 @@ class MailMessagesTable extends MailAppTable
     }
 
     /**
-     * Called after data has been checked for errors
+     * After Marshal
      *
-     * @return void
+     * @param Event $event
      */
-    public function afterValidate()
+    public function afterMarshal(Event $event)
     {
-        $data = $this->data;
-
-        // Eメール確認チェック
-        $this->_validEmailCofirm($data);
+        $entity = $event->getData('entity');
         // 不完全データチェック
-        $this->_validGroupComplate($data);
-        // 拡張バリデートチェック
-        $this->_validExtends($data);
+        $this->_validGroupComplete($entity);
         // バリデートグループエラーチェック
-        $this->_validGroupErrorCheck();
+        $this->_validGroupErrorCheck($entity);
+        // TODO ucmitz 未実装
         // 和暦不完全データチェック
-        $this->_validWarekiComplate($data);
+//        $this->_validWarekiComplate($entity);
     }
 
     /**
-     * validate（入力チェック）を個別に設定する
-     * VALID_NOT_EMPTY    空不可
-     * VALID_EMAIL        メール形式チェック
+     * バリデーションをを個別に設定する
      *
      * @return void
+     * @checked
      */
-    protected function setupValidate(int $mailContentId, array $postData)
+    protected function setupValidate(array $postData)
     {
-        $mailFieldsTable = TableRegistry::getTableLocator()->get('BcMail.MailFields');
-        $mailFields = $mailFieldsTable->find()->where([
-            'MailFields.mail_content_id' => $mailContentId,
-            'MailFields.use_field' => true
-        ])->all();
-
+        if (!$postData) return;
         $validator = new $this->_validatorClass();
+        $validator->setProvider('mailMessage', 'BcMail\Model\Validation\MailMessageValidation');
 
-        foreach($mailFields as $mailField) {
-            if ($mailField->valid && !empty($mailField->use_field)) {
-                if ($mailField->valid === 'VALID_NOT_EMPTY' || $mailField->valid === 'VALID_EMAIL') {
-                    // 必須項目
-                    if ($mailField->type === 'file') {
-                        if (!isset($postData[$mailField->field_name . '_tmp'])) {
-                            $validator->requirePresence($mailField->field_name)
-                                ->add($mailField->field_name, [
+        foreach($this->mailFields as $mailField) {
+            if ($mailField->valid) {
+                // 必須項目
+                if ($mailField->type === 'file') {
+                    if (!isset($postData[$mailField->field_name . '_tmp'])) {
+                        $validator->requirePresence($mailField->field_name)
+                            ->add($mailField->field_name, [
                                 'notFileEmpty' => [
                                     'rule' => 'notFileEmpty',
                                     'message' => __('必須項目です。')
                                 ]
                             ]);
-                        }
-                    } else {
-                        $validator->requirePresence($mailField->field_name)
-                            ->notEmpty($mailField->field_name, __('必須項目です。'));
                     }
-                } elseif ($mailField->valid === '/^(|[0-9]+)$/') {
-                    // 半角数字
-                    $validator->allowEmpty($mailField->field_nam)
-                        ->add($mailField->field_name, [
-                            'alphaNumeric' => [
-                                'rule' => 'alphaNumeric',
-                                'message' => __('半角数字で入力してください。')
-                            ]
-                    ]);
-                } elseif ($mailField->valid === '/^([0-9]+)$/') {
-                    // 半角数字（入力必須）
-                    $validator->notEmpty($mailField->field_nam)
-                        ->add($mailField->field_name, [
-                            'alphaNumeric' => [
-                                'rule' => 'alphaNumeric',
-                                'message' => __('半角数字で入力してください。')
-                            ]
-                    ]);
                 } else {
-                    $validator->allowEmpty($mailField->field_nam)
-                        ->add($mailField->field_name, [
-                            'custom' => [
-                                'rule' => $mailField->valid,
-                                'message' => __('エラーが発生しました。')
-                            ]
-                    ]);
+                    $validator->requirePresence($mailField->field_name)
+                        ->notEmpty($mailField->field_name, __('必須項目です。'));
                 }
-                if (!empty($postData[$mailField->field_name]) && $mailField->valid == 'VALID_EMAIL') {
-                    $validator->email($mailField->field_nam, __('形式が無効です。'))
-                        ->add($mailField->field_name, [
-                            'english' => [
-                                'rule' => '/^[a-zA-Z0-9!#$%&\’*+-\/=?^_`{|}~@.]*$/',
-                                'message' => __('半角で入力してください。')
-                            ]
-                    ]);
-                }
+            } else {
+                $validator->allowEmpty($mailField->field_name);
             }
+
             // ### 拡張バリデーション
             if ($mailField->valid_ex && !empty($mailField->use_field)) {
                 $valids = explode(',', $mailField->valid_ex);
                 foreach($valids as $valid) {
                     $options = preg_split('/(?<!\\\)\|/', $mailField->options);
-                    $options = call_user_func_array('aa', $options);
+                    /**
+                     * 引数のペアから連想配列を構築する
+                     *
+                     * Example:
+                     * `aa('a','b')`
+                     *
+                     * Would return:
+                     * `array('a'=>'b')`
+                     *
+                     * @return array Associative array
+                     */
+                    $options = call_user_func_array(function() {
+                        $args = func_get_args();
+                        $argc = count($args);
+                        for($i = 0; $i < $argc; $i++) {
+                            if ($i + 1 < $argc) {
+                                $a[$args[$i]] = $args[$i + 1];
+                            } else {
+                                $a[$args[$i]] = null;
+                            }
+                            $i++;
+                        }
+                        return $a;
+                    }, $options);
+
                     switch($valid) {
                         case 'VALID_MAX_FILE_SIZE':
                             if (
@@ -256,16 +268,17 @@ class MailMessagesTable extends MailAppTable
                                     $postData[$mailField->field_name]['error'] !== UPLOAD_ERR_NO_FILE)
                             ) {
                                 $validator->add($mailField->field_name, [
-                                        'fileCheck' => [
-                                            'rule' => ['fileCheck', $this->convertSize($options['maxFileSize'], 'B', 'M')],
-                                            'message' => __('ファイルのアップロードに失敗しました。')
-                                        ]
+                                    'fileCheck' => [
+                                        'rule' => ['fileCheck', $this->convertSize($options['maxFileSize'], 'B', 'M')],
+                                        'message' => __('ファイルのアップロードに失敗しました。')
+                                    ]
                                 ]);
                                 // TODO ucmitz 未検証
                                 // 必須入力としている場合、必須エラーが優先され、ファイルサイズオーバーのエラーメッセージとならないため、バリデーションエラーの優先度を入れ替える
                                 //$this->validate[$mailField->field_name] = array_reverse($this->validate[$mailField->field_name]);
                             }
                             break;
+
                         case 'VALID_FILE_EXT':
                             if (!empty($options['fileExt'])) {
                                 $validator->add($mailField->field_name, [
@@ -276,117 +289,124 @@ class MailMessagesTable extends MailAppTable
                                 ]);
                             }
                             break;
+
                         case 'VALID_REGEX':
                             if (!empty($options['regex'])) {
                                 $options['regex'] = str_replace('\|', '|', $options['regex']);
                                 $options['regex'] = str_replace("\0", '', $options['regex']); // ヌルバイト除去
-                                $validator->allowEmpty
-                                    ->add($mailField->field_name, [
-                                        'fileExt' => [
-                                            'rule' => '/\A' . $options['regex'] . '\z/us',
-                                            'message' => __('形式が無効です。')
-                                        ]
+                                $validator->regex(
+                                    $mailField->field_name,
+                                    '/\A' . $options['regex'] . '\z/us',
+                                    __('形式が無効です。')
+                                );
+                            }
+                            break;
+
+                        case 'VALID_EMAIL':
+                            $validator->email($mailField->field_name, false, __('Eメール形式で入力してください。'))
+                                ->regex(
+                                    $mailField->field_name,
+                                    '/^[a-zA-Z0-9!#$%&\’*+-\/=?^_`{|}~@.]*$/',
+                                    __('半角で入力してください。')
+                                );
+                            break;
+
+                        case 'VALID_NUMBER':
+                            $validator->add($mailField->field_name, [
+                                'alphaNumeric' => [
+                                    'rule' => 'alphaNumeric',
+                                    'message' => __('数値形式で入力してください。')
+                                ]
+                            ]);
+                            break;
+
+                        case 'VALID_DATETIME':
+                            if (is_array($postData[$mailField->field_name])) {
+                                $validator->add($mailField->field_name, [
+                                    'dataArray' => [
+                                        'provider' => 'mailMessage',
+                                        'rule' => 'dataArray',
+                                        'message' => __('日付の形式が無効です。')
+                                    ]
+                                ]);
+                            } else {
+                                $validator->add($mailField->field_name, [
+                                    'dateString' => [
+                                        'provider' => 'mailMessage',
+                                        'rule' => 'dateString',
+                                        'message' => __('日付の形式が無効です。')
+                                    ]
                                 ]);
                             }
                             break;
+
+                        case 'VALID_ZENKAKU_KATAKANA':
+                            $validator->regex(
+                                $mailField->field_name,
+                                '/^(|[ァ-ヾ 　]+)$/u',
+                                __('全て全角カタカナで入力してください。')
+                            );
+                            break;
+
+                        case 'VALID_ZENKAKU_HIRAGANA':
+                            $validator->regex(
+                                $mailField->field_name,
+                                '/^([　 \t\r\n]|[ぁ-ん]|[ー])+$/u',
+                                __('全て全角ひらがなで入力してください。')
+                            );
+                            break;
+
+                        case 'VALID_EMAIL_CONFIRM':
+                            $target = '';
+                            foreach(clone $this->mailFields as $value) {
+                                if ($value->group_valid === $mailField->group_valid &&
+                                    $value->field_name !== $mailField->field_name) {
+                                    $target = $value->field_name;
+                                    break;
+                                }
+                            }
+                            if ($target) {
+                                $validator->add($mailField->field_name, [
+                                    'checkSame' => [
+                                        'provider' => 'mailMessage',
+                                        'rule' => ['checkSame', $target],
+                                        'message' => __('入力データが一致していません。')
+                                    ]
+                                ]);
+                            }
                     }
                 }
             }
         }
+
         $this->setValidator('MailMessages', $validator);
-    }
-
-    /**
-     * 拡張バリデートチェック
-     *
-     * @param array $data
-     * @return void
-     */
-    protected function _validExtends($data)
-    {
-        $dists = [];
-
-        // 対象フィールドを取得
-        foreach($this->mailFields as $row) {
-            $mailField = $row['MailField'];
-            if (empty($mailField['use_field'])) {
-                continue;
-            }
-
-            $valids = explode(',', $mailField['valid_ex']);
-            $field_name = $mailField['field_name'];
-            // マルチチェックボックスのチェックなしチェック
-            if (in_array('VALID_NOT_UNCHECKED', $valids)) {
-                if (empty($data['MailMessage'][$field_name])) {
-                    $this->invalidate($field_name, __('必須項目です。'));
-                }
-                $dists[$field_name][] = @$data['MailMessage'][$field_name];
-                // datetimeの空チェック
-                continue;
-            }
-
-            if (in_array('VALID_DATETIME', $valids)) {
-                if (is_array($data['MailMessage'][$field_name])) {
-                    if (
-                        empty($data['MailMessage'][$field_name]['year']) ||
-                        empty($data['MailMessage'][$field_name]['month']) ||
-                        empty($data['MailMessage'][$field_name]['day'])
-                    ) {
-                        $this->invalidate($field_name, __('日付の形式が無効です。'));
-                    }
-                }
-                if (is_string($data['MailMessage'][$field_name])) {
-                    // カレンダー入力利用時は yyyy/mm/dd で入ってくる
-                    // yyyy/mm/dd 以外の文字列入力も可能であり、そうした際は日付データとして 1970-01-01 となるため認めない
-                    $inputValue = date('Y-m-d', strtotime($data['MailMessage'][$field_name]));
-                    if ($inputValue === '1970-01-01') {
-                        $this->invalidate($field_name, __('日付の形式が無効です。'));
-                    }
-                    if (!$this->checkDate([$field_name => $inputValue])) {
-                        $this->invalidate($field_name, __('日付の形式が無効です。'));
-                    }
-                }
-                continue;
-            }
-
-            if (in_array('VALID_ZENKAKU_KATAKANA', $valids)) {
-                if (!preg_match('/^(|[ァ-ヾ 　]+)$/u', $data['MailMessage'][$field_name])) {
-                    $this->invalidate($field_name, __('全て全角カタカナで入力してください。'));
-                }
-                continue;
-            }
-
-            if (in_array('VALID_ZENKAKU_HIRAGANA', $valids)) {
-                if (!preg_match('/^([　 \t\r\n]|[ぁ-ん]|[ー])+$/u', $data['MailMessage'][$field_name])) {
-                    $this->invalidate($field_name, __('全て全角ひらがなで入力してください。'));
-                }
-            }
-        }
     }
 
     /**
      * バリデートグループエラーチェック
      *
+     * @param EntityInterface $entity
      * @return void
+     * @checked
+     * @noTodo
      */
-    protected function _validGroupErrorCheck()
+    protected function _validGroupErrorCheck(EntityInterface $entity)
     {
         $dists = [];
 
         // 対象フィールドを取得
         foreach($this->mailFields as $mailField) {
-            $mailField = $mailField['MailField'];
             // 対象フィールドがあれば、バリデートグループごとに配列にフィールド名を格納する
-            if (!empty($mailField['use_field']) && $mailField['group_valid']) {
-                $dists[$mailField['group_valid']][] = $mailField['field_name'];
+            if (!empty($mailField->use_field) && $mailField->group_valid) {
+                $dists[$mailField->group_valid][] = $mailField->field_name;
             }
         }
 
         // エラーが発生しているかチェック
         foreach($dists as $key => $dist) {
             foreach($dist as $data) {
-                if (isset($this->validationErrors[$data]) && isset($this->validate[$data])) {
-                    $this->invalidate($key);
+                if ($entity->getError($data)) {
+                    $entity->setError($key, []);
                 }
             }
         }
@@ -395,86 +415,38 @@ class MailMessagesTable extends MailAppTable
     /**
      * 不完全データチェック
      *
-     * @param array $data
+     * @param EntityInterface $entity
      * @return void
+     * @checked
+     * @noTodo
      */
-    protected function _validGroupComplate($data)
+    protected function _validGroupComplete(EntityInterface $entity)
     {
-        $dists = [];
-
         // 対象フィールドを取得
+        $dists = [];
         foreach($this->mailFields as $mailField) {
-            $mailField = $mailField['MailField'];
             // 対象フィールドがあれば、バリデートグループごとに配列に格納する
-            $valids = explode(',', $mailField['valid_ex']);
-            if (in_array('VALID_GROUP_COMPLATE', $valids) && !empty($mailField['use_field'])) {
-                $dists[$mailField['group_valid']][] = [
-                    'name' => $mailField['field_name'],
-                    'value' => @$data['MailMessage'][$mailField['field_name']]
+            $valids = explode(',', $mailField->valid_ex);
+            if (in_array('VALID_GROUP_COMPLATE', $valids)) {
+                $dists[$mailField->group_valid][] = [
+                    'name' => $mailField->field_name,
+                    'value' => $entity->{$mailField->field_name}
                 ];
             }
         }
         // チェック
-        // バリデートグループにおけるデータの埋まり具合をチェックし、全て埋まっていない場合、全て埋まっている場合以外は
-        // 不完全データとみなしエラーとする
+        // バリデートグループにおけるデータの埋まり具合をチェックし、全て埋まっていない場合、
+        // 全て埋まっている場合以外は不完全データとみなしエラーとする
         foreach($dists as $key => $dist) {
             $i = 0;
-            foreach($dist as $data) {
-                if (!empty($data['value'])) {
-                    $i++;
-                }
+            foreach($dist as $value) {
+                if (!empty($value['value'])) $i++;
             }
             $count = count($dist);
             if ($i > 0 && $i < $count) {
-                $this->invalidate($key . '_not_complate', __('入力データが不完全です。'));
+                $entity->setError($key . '_not_complate', [__('入力データが不完全です。')]);
                 foreach($dist as $jValue) {
-                    $this->invalidate($jValue['name']);
-                }
-            }
-        }
-    }
-
-    /**
-     * Eメール確認チェック
-     *
-     * @param array $data
-     * @return void
-     */
-    protected function _validEmailCofirm($data)
-    {
-        $dists = [];
-
-        // 対象フィールドを取得
-        foreach($this->mailFields as $mailField) {
-            $mailField = $mailField['MailField'];
-            if (empty($mailField['use_field'])) {
-                continue;
-            }
-            $valids = explode(',', $mailField['valid_ex']);
-            // 対象フィールドがあれば、バリデートグループごとに配列に格納する
-            if (in_array('VALID_EMAIL_CONFIRM', $valids)) {
-                $dists[$mailField['group_valid']][] = [
-                    'name' => $mailField['field_name'],
-                    'value' => @$data['MailMessage'][$mailField['field_name']],
-                    'isGroupValidComplate' => in_array('VALID_GROUP_COMPLATE', explode(',', $mailField['valid_ex']))
-                ];
-            }
-        }
-        // チェック
-        // バリデートグループにおけるデータ２つを比較し、違えばエラーとする
-        foreach($dists as $key => $dist) {
-            if (count($dist) < 2) {
-                continue;
-            }
-            if (count($dist) == 2) {
-                if ($dist[0]['value'] !== $dist[1]['value']) {
-                    $this->invalidate($key . '_not_same', __('入力データが一致していません。'));
-                    if ($dist[0]['isGroupValidComplate']) {
-                        $this->invalidate($dist[0]['name']);
-                    }
-                    if ($dist[1]['isGroupValidComplate']) {
-                        $this->invalidate($dist[1]['name']);
-                    }
+                    $entity->setError($jValue['name'], []);
                 }
             }
         }
@@ -492,13 +464,12 @@ class MailMessagesTable extends MailAppTable
 
         // 対象フィールドを取得
         foreach($this->mailFields as $mailField) {
-            $mailField = $mailField['MailField'];
-            if ($mailField['type'] !== 'date_time_wareki') {
+            if ($mailField->type !== 'date_time_wareki') {
                 continue;
             }
             $dists[] = [
-                'name' => $mailField['field_name'],
-                'value' => $data['MailMessage'][$mailField['field_name']]
+                'name' => $mailField->field_name,
+                'value' => $data['MailMessage'][$mailField->field_name]
             ];
         }
 
@@ -519,30 +490,30 @@ class MailMessagesTable extends MailAppTable
     /**
      * データベース用のデータに変換する
      *
-     * @param $mailFields
-     * @param $mailMessage
-     * @return MailMessage
+     * @param ResultSetInterface $mailFields
+     * @param EntityInterface $mailMessage
+     * @return EntityInterface
+     * @checked
+     * @noTodo
      */
-    public function convertToDb($mailFields, $mailMessage)
+    public function convertToDb(ResultSetInterface $mailFields, EntityInterface $mailMessage)
     {
         foreach($mailFields as $mailField) {
             if (empty($mailMessage->{$mailField->field_name})) continue;
             $value = $mailMessage->{$mailField->field_name};
             // マルチチェックのデータを｜区切りに変換
             if ($mailField->type === 'multi_check' && $mailField->use_field && $value && is_array($value)) {
-                $mailMessage->{$mailField->field_name} = implode("|", $value);
+                $value = implode("|", $value);
             }
             // パスワードのデータをハッシュ化
-            // TODO ucmitz 未実装
-//            if ($mailField->type === 'password' && !empty($mailMessage->{$mailField->field_name})) {
-//                App::uses('AuthComponent', 'Controller/Component');
-//                $mailMessage->{$mailField->field_name} = AuthComponent::password($mailMessage->{$mailField->field_name});
-//            }
+            if ($mailField->type === 'password' && !empty($value)) {
+                $value = (new DefaultPasswordHasher())->hash($value);
+            }
             // 和暦未入力時に配列をnullに変換
             // - 和暦完全入力時は、lib/Baser/Model/BcAppModel->deconstruct にて日時に変換される
             // - 一部のフィールドしか入力されていない場合は $this->_validWarekiComplate にてエラーになる
             if ($mailField->type === 'date_time_wareki' && is_array($value)) {
-                $mailMessage->{$mailField->field_name} = null;
+                $value = null;
             }
             // 機種依存文字を変換
             $mailMessage->{$mailField->field_name} = $this->replaceText($value);
@@ -712,12 +683,12 @@ class MailMessagesTable extends MailAppTable
             $inData = [];
             $inData['NO'] = $message[$this->alias]['id'];
             foreach($mailFields as $mailField) {
-                if ($mailField['MailField']['type'] === 'file') {
-                    $inData[$mailField['MailField']['field_name'] . ' (' . $mailField['MailField']['name'] . ')'] = $message[$this->alias][$mailField['MailField']['field_name']];
+                if ($mailField->type === 'file') {
+                    $inData[$mailField->field_name . ' (' . $mailField->name . ')'] = $message[$this->alias][$mailField->field_name];
                 } else {
-                    $inData[$mailField['MailField']['field_name'] . ' (' . $mailField['MailField']['name'] . ')'] = $Maildata->toDisplayString(
-                        $mailField['MailField']['type'],
-                        $message[$this->alias][$mailField['MailField']['field_name']],
+                    $inData[$mailField->field_name . ' (' . $mailField->name . ')'] = $Maildata->toDisplayString(
+                        $mailField->type,
+                        $message[$this->alias][$mailField->field_name],
                         $Mailfield->getOptions($mailField['MailField'])
                     );
                 }

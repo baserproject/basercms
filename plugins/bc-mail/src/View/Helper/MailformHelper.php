@@ -280,27 +280,29 @@ class MailformHelper extends BcFreezeHelper
      * @param array $options
      * @param bool $distinct 同じエラーメッセージをまとめる
      * @return array
+     * @checked
+     * @noTodo
      */
     public function getGroupValidErrors($mailFields, $groupValid, $options = [], $distinct = true)
     {
         $errors = [];
         foreach ($mailFields as $mailField) {
-            if ($mailField['MailField']['group_valid'] !== $groupValid) {
-                continue;
+            if ($mailField->group_valid !== $groupValid) continue;
+            if (!in_array('VALID_GROUP_COMPLATE', explode(',', $mailField->valid_ex))) continue;
+
+            $errorMessage = $this->error($mailField->field_name, null, $options);
+            if ($errorMessage && (!$distinct || !array_search($errorMessage, $errors))) {
+                $errors[$mailField->field_name] = $errorMessage;
             }
-            if (!in_array('VALID_GROUP_COMPLATE', explode(',', $mailField['MailField']['valid_ex']))) {
-                continue;
-            }
-            if (!empty($this->validationErrors['MailMessage'][$mailField['MailField']['field_name']])) {
-                foreach ($this->validationErrors['MailMessage'][$mailField['MailField']['field_name']] as $key => $error) {
-                    if ($error === true) {
-                        unset($this->validationErrors['MailMessage'][$mailField['MailField']['field_name']][$key]);
+
+            $context = $this->_getContext();
+            if ($context->hasError($mailField->field_name)) {
+                foreach ($context->error($mailField->field_name) as $key => $error) {
+                    if ($error !== true) {
+                        $entity = $context->entity();
+                        $entity->setError($mailField->field_name, [], true);
                     }
                 }
-            }
-            $errorMessage = $this->error("MailMessage." . $mailField['MailField']['field_name'], null, $options);
-            if ($errorMessage && (!$distinct || !array_search($errorMessage, $errors))) {
-                $errors[$mailField['MailField']['field_name']] = $errorMessage;
             }
         }
         return $errors;
