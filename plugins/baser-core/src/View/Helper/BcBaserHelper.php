@@ -433,7 +433,7 @@ class BcBaserHelper extends Helper
             && !preg_match('/^#/', $_url)) {
 
             $_url = preg_replace("/^\//", "", $_url);
-            if (preg_match('{^\/' . BcUtil::getAdminPrefix() . '\/}', $_url)) {
+            if (preg_match('{^' . BcUtil::getPrefix(true) . '\/}', $_url)) {
                 $admin = true;
             } else {
                 $admin = false;

@@ -199,11 +199,11 @@ class BcAuthHelper extends Helper
      * @noTodo
      * @unitTest
      */
-    public function getLogoutUrl($prefix)
+    public function getLogoutUrl($prefix, $isConverted = false)
     {
         $setting = $this->getPrefixSetting($prefix);
         if(!empty($setting['logoutAction'])) {
-            return Router::url($setting['logoutAction']);
+            return $isConverted? Router::url($setting['logoutAction']) : $setting['logoutAction'];
         } else {
             return '';
         }
