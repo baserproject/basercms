@@ -188,7 +188,12 @@ class BcToolbarHelperTest extends BcTestCase
     {
         $this->assertEquals('', $this->BcToolbar->getLogoutUrl());
         $this->loginAdmin($this->getRequest('/baser/admin'));
-        $this->assertEquals('/baser/admin/baser-core/users/logout', $this->BcToolbar->getLogoutUrl());
+        $this->assertEquals([
+            'prefix' => 'Admin',
+            'plugin' => 'BaserCore',
+            'controller' => 'Users',
+            'action' => 'logout'
+        ], $this->BcToolbar->getLogoutUrl());
     }
 
     /**

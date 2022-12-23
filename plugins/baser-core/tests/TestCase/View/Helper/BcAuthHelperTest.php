@@ -192,7 +192,12 @@ class BcAuthHelperTest extends BcTestCase
     public function testGetLogoutUrl()
     {
         // Adminの場合
-        $this->assertEquals('/baser/admin/baser-core/users/logout', $this->BcAuth->getLogoutUrl('Admin'));
+        $this->assertEquals([
+            'prefix' => 'Admin',
+            'plugin' => 'BaserCore',
+            'controller' => 'Users',
+            'action' => 'logout'
+        ], $this->BcAuth->getLogoutUrl('Admin'));
         // 設定がない場合
         $this->assertEmpty($this->BcAuth->getLogoutUrl('test'));
     }
@@ -206,7 +211,12 @@ class BcAuthHelperTest extends BcTestCase
         // Adminの場合
         $expected = "/baser/admin/baser-core/users/logout";
         $result = $this->BcAuth->getCurrentLogoutUrl();
-        $this->assertEquals($expected, $result);
+        $this->assertEquals([
+            'prefix' => 'Admin',
+            'plugin' => 'BaserCore',
+            'controller' => 'Users',
+            'action' => 'logout'
+        ], $result);
         // ログアウトページURLを変更した場合
         $expected = "/test/users/logout";
         Configure::write('BcPrefixAuth.Admin.logoutAction', $expected);

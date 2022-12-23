@@ -17,6 +17,8 @@ use BaserCore\Test\Scenario\Middleware\BcUpdateFilterMiddlewareScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
+use Cake\Core\Plugin;
+use Cake\Filesystem\File;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -57,6 +59,11 @@ class BcUpdateFilterMiddlewareTest extends BcTestCase
     {
         parent::tearDown();
         unset($this->Middleware);
+        // test_processException の後処理
+        $versionPath = Plugin::path('BaserCore') . 'VERSION.txt';
+        if(file_exists($versionPath . '.bak')) {
+            rename($versionPath . '.bak', $versionPath);
+        }
     }
 
     /**
@@ -66,6 +73,10 @@ class BcUpdateFilterMiddlewareTest extends BcTestCase
     {
         // ソースコードとDBのバージョン違い
         $this->expectException(BcException::class);
+        $versionPath = Plugin::path('BaserCore') . 'VERSION.txt';
+        rename($versionPath, $versionPath . '.bak');
+        $file = new File($versionPath);
+        $file->write('1.0.0');
         $this->Middleware->process($this->getRequest(), $this->Application);
     }
 
