@@ -81,7 +81,11 @@ $this->BcBaser->js('Mail.admin/mail_contents/edit', false);
 				<i class="bca-icon--question-circle btn help bca-help"></i>
 				<?php echo $this->BcForm->error('MailContent.subject_user') ?>
 				<div id="helptextSubjectUser"
-					 class="helptext"><?php echo __d('baser', 'ユーザー宛の自動返信メールの件名に表示します。') ?></div>
+					 class="helptext"><?php
+					 echo __d('baser', 'ユーザー宛の自動返信メールの件名に表示します。');
+					 echo '<br>';
+					 echo __d('baser', '{$フィールド名}といれると、フォームの入力内容を取り入れることができます');
+					 ?></div>
 			</td>
 		</tr>
 		<tr>
@@ -93,7 +97,11 @@ $this->BcBaser->js('Mail.admin/mail_contents/edit', false);
 				<i class="bca-icon--question-circle btn help bca-help"></i>
 				<?php echo $this->BcForm->error('MailContent.subject_admin') ?>
 				<div id="helptextSubjectAdmin"
-					 class="helptext"><?php echo __d('baser', '管理者宛の自動送信メールの件名に表示します。') ?></div>
+					 class="helptext"><?php
+					 echo __d('baser', '管理者宛の自動送信メールの件名に表示します。');
+					 echo '<br>';
+					 echo __d('baser', '{$フィールド名}といれると、フォームの入力内容を取り入れることができます');
+					 ?> ?></div>
 			</td>
 		</tr>
 		<tr>
