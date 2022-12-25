@@ -125,7 +125,7 @@
                 config = _config;
             }
             this.requesting = true;
-            return $.bcUtil.ajax($.baseUrl() + this.url, function (result) {
+            return $.bcUtil.ajax(this.url, function (result) {
                 $.bcToken.key = result;
                 $.bcToken.requesting = false;
                 $('input[name="_csrfToken"]').val($.bcToken.key);
@@ -145,9 +145,9 @@
             form.attr('action', url).attr('method', 'post');
             this.check(function () {
                 form.append($.bcToken.getHiddenToken());
-                if(options.fields) form.append(options.fields);
-                if(options.unlocked) form.append(options.unlocked);
-                if(options.debug) form.append(options.debug);
+                if (options.fields) form.append(options.fields);
+                if (options.unlocked) form.append(options.unlocked);
+                if (options.debug) form.append(options.debug);
                 callback(form);
             }, config);
         },
@@ -203,16 +203,16 @@
                 }
                 let url = $(this).attr('href');
                 let options = {};
-                if($(this).attr('data-post-link-form-id')) {
+                if ($(this).attr('data-post-link-form-id')) {
                     let postLinkForm = $("form[name='" + $(this).attr('data-post-link-form-id') + "']");
                     let fields = postLinkForm.find("input[name='_Token[fields]']");
                     let unlocked = postLinkForm.find("input[name='_Token[unlocked]']");
                     let debug = postLinkForm.find("input[name='_Token[debug]']");
                     url = postLinkForm.attr('action');
                     options = {
-                        fields: (fields.length)? fields : null,
-                        unlocked: (unlocked.length)? unlocked : null,
-                        debug: (debug.length)? debug : null
+                        fields: (fields.length) ? fields : null,
+                        unlocked: (unlocked.length) ? unlocked : null,
+                        debug: (debug.length) ? debug : null
                     }
                 }
                 $.bcToken.submitToken(url, options);

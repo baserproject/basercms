@@ -69,11 +69,11 @@ class BcContentsHelper extends Helper
     public function initialize(array $config): void
     {
         parent::initialize($config);
-        if(!BcUtil::isInstalled()) return;
+        if (!BcUtil::isInstalled()) return;
         $this->_Contents = TableRegistry::getTableLocator()->get('BaserCore.Contents');
         $this->PermissionsService = $this->getService(PermissionsServiceInterface::class);
         $this->ContentsService = $this->getService(ContentsServiceInterface::class);
-        if (BcUtil::isAdminSystem(Router::url())) {
+        if (BcUtil::isAdminSystem()) {
             $this->setup();
         }
         $this->request = $this->getView()->getRequest();
@@ -142,12 +142,12 @@ class BcContentsHelper extends Helper
                 }
             }
             // disabled
-			if(!empty($item['url']['add'])) {
+            if (!empty($item['url']['add'])) {
                 // TODO ucmitz: ユーザグループを配列で全て渡すよう変更が必要
-				$item['addDisabled'] = !($this->PermissionsService->check($item['url']['add'], [$user->user_groups[0]->id]));
-			} else {
-				$item['addDisabled'] = true;
-			}
+                $item['addDisabled'] = !($this->PermissionsService->check($item['url']['add'], [$user->user_groups[0]->id]));
+            } else {
+                $item['addDisabled'] = true;
+            }
             $items[$type] = $item;
         }
         $this->setConfig('items', $items);
@@ -163,7 +163,7 @@ class BcContentsHelper extends Helper
      * @unitTest
      * @noTodo
      */
-    public function isActionAvailable($type, $action, $entityId) : bool
+    public function isActionAvailable($type, $action, $entityId): bool
     {
         $user = BcUtil::loginUser();
         if (!isset($this->getConfig('items')[$type]['url'][$action])) {
@@ -173,7 +173,7 @@ class BcContentsHelper extends Helper
         if (isset($user->user_groups)) {
             $userGroups = $user->user_groups;
             $userGroupIds = [];
-            foreach ($userGroups as $group) {
+            foreach($userGroups as $group) {
                 $userGroupIds[] = $group->id;
             }
             if ($this->PermissionsService->check($url, $userGroupIds)) {
@@ -205,7 +205,7 @@ class BcContentsHelper extends Helper
                 }
             }
         }
-         // TODO: SoftDelete未実装
+        // TODO: SoftDelete未実装
         // $this->_Contents->Behaviors->unload('SoftDelete');
         $contents = $this->_Contents->find('all')->select(['plugin', 'type', 'title'])->where([$conditions]);
         // $this->_Contents->Behaviors->load('SoftDelete');
@@ -366,8 +366,8 @@ class BcContentsHelper extends Helper
         $siteId = $this->_Contents->find()->where(['Contents.id' => $id])->first()->site_id;
         if ($direct) {
             $parents = $this->_Contents->find('path', ['for' => $id])->all()->toArray();
-            if(!isset($parents[count($parents) - 2])) return false;
-                $parent = $parents[count($parents) - 2];
+            if (!isset($parents[count($parents) - 2])) return false;
+            $parent = $parents[count($parents) - 2];
             if ($parent->site_id === $siteId) {
                 return $parent;
             } else {
