@@ -49,7 +49,7 @@ $(function () {
                     }
                 });
                 if (redirect) {
-                    location.href = redirect
+                    location.href = $.bcUtil.baseUrl + redirect
                 } else {
                     location.href = response.redirect
                 }
