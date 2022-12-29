@@ -35,8 +35,8 @@ services:
       - "443:443"
     depends_on:
       - bc5-db
-    command: bash -c "/var/www/html/docker/init.sh && apache2-foreground"
-#    command: bash -c "/var/www/shared/docker/init_lsyncd.sh && /var/www/shared/docker/init.sh && apache2-foreground"
+    command: bash -c "/var/www/html/docker/bin/init.sh && apache2-foreground"
+#    command: bash -c "/var/www/shared/docker/bin/init_lsyncd.sh && /var/www/shared/docker/bin/init.sh && apache2-foreground"
 
   bc5-smtp:
     container_name: bc5-smtp
