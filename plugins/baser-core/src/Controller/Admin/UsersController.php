@@ -93,7 +93,7 @@ class UsersController extends BcAdminAppController
         }
         /* @var UsersService * $service */
         $service->loginToAgent($this->request, $this->response, $id, $this->referer());
-        return $this->redirect($this->Authentication->getLoginRedirect() ?? Router::url(Configure::read('BcPrefixAuth.Admin.loginRedirect')));
+        return $this->redirect($this->Authentication->getLoginRedirect() ?? Configure::read('BcPrefixAuth.Admin.loginRedirect'));
     }
 
     /**
