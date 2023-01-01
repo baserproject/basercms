@@ -162,6 +162,7 @@ class UsersTable extends Table
             ->allowEmptyString('id', null, 'create');
         $validator
             ->scalar('name')
+            ->allowEmptyString('name')
             ->maxLength('name', 255, __d('baser', 'アカウント名は255文字以内で入力してください。'))
             ->add('name', [
                 'nameUnique' => [
