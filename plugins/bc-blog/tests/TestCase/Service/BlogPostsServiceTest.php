@@ -205,7 +205,20 @@ class BlogPostsServiceTest extends BcTestCase
      */
     public function testCreateYearMonthDayCondition()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データ 生成
+        BlogPostFactory::make([
+            'id' => '1',
+            'name' => 'Duong Tai',
+            'blog_content_id' => '2',
+            'posted' => '2021-11-01 08:00:00',
+            'user_id' => '1'
+        ])->persist();
+
+        $result = $this->BlogPostsService->createYearMonthDayCondition([], '2022', '11', '01');
+        //戻り値を確認
+        $this->assertEquals("2022", $result['YEAR(BlogPosts.posted)']);
+        $this->assertEquals("11", $result['MONTH(BlogPosts.posted)']);
+        $this->assertEquals("01", $result['DAY(BlogPosts.posted)']);
     }
 
     /**

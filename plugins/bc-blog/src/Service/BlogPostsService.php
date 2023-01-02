@@ -410,7 +410,7 @@ class BlogPostsService implements BlogPostsServiceInterface
      * @param int $day
      * @return array
      * @checked
-     * @noTodo
+     * @unitTest
      */
     public function createYearMonthDayCondition($conditions, $year, $month, $day)
     {
