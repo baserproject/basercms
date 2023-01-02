@@ -100,7 +100,40 @@ class WidgetAreasControllerTest extends BcTestCase
      */
     public function testDelete()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // テストデータを生成
+        WidgetAreaFactory::make([
+            'id' => 1,
+            'name' => 'test',
+            'widgets' => serialize([
+                [
+                    1 => 'test 1',
+                    2 => 'test 2'
+                ]
+            ])
+        ])->persist();
+
+        //APIを呼ぶ
+        $this->post("/baser/api/bc-widget-area/widget_areas/delete/1.json?token=" . $this->accessToken);
+        // レスポンスコードを確認する
+        $this->assertResponseOk();
+        // 戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        //メッセージを確認
+        $this->assertEquals('ウィジェットエリア「test」を削除しました。', $result->message);
+        //ウィジェットエリアの変化のを確認
+        $this->assertNotEmpty($result->widgetArea);
+        //削除したウィジェットエリアが存在するかどうかを確認
+        $this->assertEquals(0, WidgetAreaFactory::count());
+
+        //存在しないウィジェットエリアを削除の場合、
+        //APIを呼ぶ
+        $this->post("/baser/api/bc-widget-area/widget_areas/delete/1.json?token=" . $this->accessToken);
+        // レスポンスコードを確認する
+        $this->assertResponseCode(400);
+        // 戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        //メッセージを確認
+        $this->assertEquals('データベース処理中にエラーが発生しました。Record not found in table "widget_areas"', $result->message);
     }
 
     /**
