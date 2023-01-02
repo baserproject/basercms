@@ -1,4 +1,9 @@
 <?php
+
+namespace BcFront\View\Helper;
+
+use Cake\View\Helper;
+
 /**
  * BcSampleHelper
  *
@@ -7,7 +12,7 @@
  *
  * 利用例：<?php $this->BcSample->show() ?>
  */
-class BcSampleHelper extends AppHelper {
+class BcSampleHelper extends Helper {
 	public function show() {
 		echo 'BcSample';
 	}
