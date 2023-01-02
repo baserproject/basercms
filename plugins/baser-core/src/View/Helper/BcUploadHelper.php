@@ -440,6 +440,7 @@ class BcUploadHelper  extends Helper
                 break;
             default :
                 if ($link && !($noimage == $fileName)) {
+                    $linkOptions['escape'] = false;
                     $out = $this->Html->link($this->Html->image($mostSizeUrl, $imgOptions), $maxSizeUrl, array_merge($options, $linkOptions));
                 } else {
                     $out = $this->Html->image($mostSizeUrl, array_merge($options, $imgOptions));

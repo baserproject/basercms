@@ -728,26 +728,20 @@ class BlogHelperTest extends BcTestCase
         // link=falseの場合Aタグがない確認する
         $this->assertDoesNotMatchRegularExpression($expected, $result, 'アイキャッチ画像を正しく取得できません');
 
-        // 特殊文字をエスケープするテスト
-        $options = ['table' => 'BcBlog.BlogPosts', 'escape' => true];
-        $result = $this->Blog->getEyeCatch($post, $options);
-        $expected = '/\&quot\;/';
-        $this->assertMatchesRegularExpression($expected, $result, 'アイキャッチ画像を正しく取得できません');
-
         // alt属性のテスト
-        $options = ['table' => 'BcBlog.BlogPosts', 'alt' => 'テスト属性', 'escape' => true];
+        $options = ['table' => 'BcBlog.BlogPosts', 'alt' => 'テスト属性'];
         $result = $this->Blog->getEyeCatch($post, $options);
-        $expected = '/alt=&quot;テスト属性&quot;/';
+        $expected = '/alt="テスト属性"/';
         $this->assertMatchesRegularExpression($expected, $result, 'アイキャッチ画像を正しく取得できません');
 
         // 横幅と高さのテスト
-        $options = ['table' => 'BcBlog.BlogPosts', 'width' => '100', 'height' => '150', 'escape' => true];
+        $options = ['table' => 'BcBlog.BlogPosts', 'width' => '100', 'height' => '150'];
         $result = $this->Blog->getEyeCatch($post, $options);
-        $expected = '/width=&quot;100&quot; height=&quot;150&quot;/';
+        $expected = '/width="100" height="150"/';
         $this->assertMatchesRegularExpression($expected, $result, 'アイキャッチ画像を正しく取得できません');
 
         // 画像が存在しない場合に表示する画像のテスト
-        $options = ['table' => 'BcBlog.BlogPosts', 'noimage' => 'no_image.jpg', 'escape' => true];
+        $options = ['table' => 'BcBlog.BlogPosts', 'noimage' => 'no_image.jpg'];
         $result = $this->Blog->getEyeCatch(BlogPostFactory::get(2), $options);
         $expected = '/\<img src\=\"\/img\/no_image\.jpg\"/';
         $this->assertMatchesRegularExpression($expected, $result, 'アイキャッチ画像を正しく取得できません');
@@ -759,9 +753,9 @@ class BlogHelperTest extends BcTestCase
         $this->assertMatchesRegularExpression($expected, $result, 'アイキャッチ画像を正しく取得できません');
 
         // class属性のテスト
-        $options = ['table' => 'BcBlog.BlogPosts', 'class' => 'thumb-image', 'escape' => true];
+        $options = ['table' => 'BcBlog.BlogPosts', 'class' => 'thumb-image'];
         $result = $this->Blog->getEyeCatch($post, $options);
-        $expected = '/class=&quot;thumb-image&quot;/';
+        $expected = '/class="thumb-image"/';
         $this->assertMatchesRegularExpression($expected, $result, 'アイキャッチ画像を正しく取得できません');
 
         // outputはurlのテスト

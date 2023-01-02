@@ -451,9 +451,9 @@ class BlogHelper extends Helper
         }
         if ($moreLink && trim($post->detail) && trim($post->detail) != "<br>") {
             $out .= '<p class="more">' . $this->Html->link(
-                $moreLink,
-                $this->getContentsUrl($post->blog_content_id, false) . 'archives/' . $post->no . '#post-detail'
-            ) . '</p>';
+                    $moreLink,
+                    $this->getContentsUrl($post->blog_content_id, false) . 'archives/' . $post->no . '#post-detail'
+                ) . '</p>';
         }
         return $out;
     }
@@ -1159,18 +1159,18 @@ class BlogHelper extends Helper
      *
      * @param BlogPost $post ブログ記事
      * @param array $options オプション（初期値 : array()）
-     *    - `imgsize` : 画像サイズ[default|thumb|mobile_thumb]（初期値 : thumb）
+     *  - `imgsize` : 画像サイズ[default|thumb|mobile_thumb]（初期値 : thumb）
      *  - `link` : 大きいサイズの画像へのリンク有無（初期値 : true）
      *  - `escape` : タイトルについてエスケープする場合に true を指定（初期値 : false）
-     *    - `mobile` : モバイルの画像を表示する場合に true を指定（初期値 : false）
-     *    - `alt` : alt属性（初期値 : ''）
-     *    - `width` : 横幅（初期値 : ''）
-     *    - `height` : 高さ（初期値 : ''）
-     *    - `noimage` : 画像が存在しない場合に表示する画像（初期値 : ''）
-     *    - `tmp` : 一時保存データの場合に true を指定（初期値 : false）
-     *    - `class` : タグの class を指定（初期値 : img-eye-catch）
-     *    - `force` : 画像が存在しない場合でも強制的に出力する場合に true を指定する（初期値 : false）
-     *    - `output` : 出力形式 tag, url のを指定できる（初期値 : ''）
+     *  - `mobile` : モバイルの画像を表示する場合に true を指定（初期値 : false）
+     *  - `alt` : alt属性（初期値 : ''）
+     *  - `width` : 横幅（初期値 : ''）
+     *  - `height` : 高さ（初期値 : ''）
+     *  - `noimage` : 画像が存在しない場合に表示する画像（初期値 : ''）
+     *  - `tmp` : 一時保存データの場合に true を指定（初期値 : false）
+     *  - `class` : タグの class を指定（初期値 : img-eye-catch）
+     *  - `force` : 画像が存在しない場合でも強制的に出力する場合に true を指定する（初期値 : false）
+     *  - `output` : 出力形式 tag, url のを指定できる（初期値 : ''）
      *  ※ その他のオプションについては、リンクをつける場合、HtmlHelper::link() を参照、つけない場合、Html::image() を参照
      * @return string アイキャッチ画像のHTML
      * @checked
@@ -1183,7 +1183,7 @@ class BlogHelper extends Helper
         $options = array_merge([
             'imgsize' => 'thumb',
             'link' => true, // 大きいサイズの画像へのリンク有無
-            'escape' => false, // エスケープ
+            'escape' => true, // エスケープ
             'mobile' => false, // モバイル
             'alt' => '', // alt属性
             'width' => '', // 横幅
@@ -1484,7 +1484,7 @@ class BlogHelper extends Helper
      */
     private function _mergePostCountToTagsData(ResultSetInterface $tags, $options)
     {
-        if(!$tags->count()) return $tags;
+        if (!$tags->count()) return $tags;
         $blogTagIds = Hash::extract($tags->toArray(), "{n}.id");
 
         /** @var BlogPostsService $blogPostsService */
@@ -1508,7 +1508,7 @@ class BlogHelper extends Helper
         if (!empty($blogContentIds)) $conditions[] = ['BlogPosts.blog_content_id' => $blogContentIds];
 
         $tagIds = [];
-        if(!empty($conditions['BlogTags.id IN'])) {
+        if (!empty($conditions['BlogTags.id IN'])) {
             $tagIds = $conditions['BlogTags.id IN'];
             unset($conditions['BlogTags.id IN']);
         }
@@ -1521,8 +1521,8 @@ class BlogHelper extends Helper
         $query = $query->select([
             'post_count' => $query->func()->count('BlogPosts.id')
         ]);
-        if($tagIds) {
-            $query = $query->matching('BlogTags', function ($q) use ($tagIds) {
+        if ($tagIds) {
+            $query = $query->matching('BlogTags', function($q) use ($tagIds) {
                 return $q->where(['BlogTags.id IN' => $tagIds]);
             });
         }
@@ -1536,7 +1536,7 @@ class BlogHelper extends Helper
 
         foreach($tags as $tag) {
             foreach($query->all() as $postCount) {
-                if($tag->id === $postCount->get('_matchingData')['BlogTags']->id) {
+                if ($tag->id === $postCount->get('_matchingData')['BlogTags']->id) {
                     $tag->post_count = $postCount->post_count;
                 }
             }
