@@ -29,7 +29,6 @@ use BcBlog\Test\Factory\BlogPostFactory;
 use BcBlog\Test\Factory\BlogTagFactory;
 use BcBlog\Test\Scenario\BlogContentScenario;
 use BcBlog\Test\Scenario\MultiSiteBlogScenario;
-use Cake\Datasource\EntityInterface;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -60,6 +59,7 @@ class BlogFrontServiceTest extends BcTestCase
         'plugin.BcBlog.Factory/BlogContents',
         'plugin.BcBlog.Factory/BlogTags',
         'plugin.BcBlog.Factory/BlogPosts',
+        'plugin.BcBlog.Factory/BlogCategories',
     ];
 
     /**
@@ -441,7 +441,54 @@ class BlogFrontServiceTest extends BcTestCase
      */
     public function test_getCategoryCrumbs()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データ生成
+        $this->loadFixtureScenario(BlogContentScenario::class, 1, 1, null, 'test', '/');
+        BlogPostFactory::make([])->publish(1, 1)->persist();
+        BlogCategoryFactory::make([
+            'id' => 1,
+            'blog_content_id' => 1,
+            'title' => 'title add parent',
+            'name' => 'name-add-parent',
+            'rght' => 1,
+            'lft' => 4,
+            'status' => true
+        ])->persist();
+        BlogCategoryFactory::make([
+            'id' => 2,
+            'blog_content_id' => 1,
+            'title' => 'title add child',
+            'name' => 'name-add-child',
+            'rght' => 2,
+            'lft' => 3,
+            'status' => true
+        ])->persist();
+
+        //$isCategoryPage = true & $count > 1
+        $rs = $this->BlogFrontService->getCategoryCrumbs(
+            "https://basercms.net/",
+            1
+        );
+        //戻る値を確認
+        $this->assertEquals('title add child', $rs[0]['name']);
+        $this->assertEquals('https://basercms.net/archives/category/name-add-child', $rs[0]['url']);
+
+        //$isCategoryPage = true & $count = 1
+        $rs = $this->BlogFrontService->getCategoryCrumbs(
+            "test",
+            2
+        );
+        //戻る値を確認
+        $this->assertEquals([], $rs);
+
+        //$isCategoryPage = false & $count = 1
+        $rs = $this->BlogFrontService->getCategoryCrumbs(
+            "https://basercms.net/",
+            2,
+            false
+        );
+        //戻る値を確認
+        $this->assertEquals('title add child', $rs[0]['name']);
+        $this->assertEquals('https://basercms.net/archives/category/name-add-child', $rs[0]['url']);
     }
 
     /**

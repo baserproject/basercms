@@ -176,6 +176,7 @@ class BlogFrontService implements BlogFrontServiceInterface
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getCategoryCrumbs(string $baseUrl, int $categoryId, $isCategoryPage = true): array
     {
