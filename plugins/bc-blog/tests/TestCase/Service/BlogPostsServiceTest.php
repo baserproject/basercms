@@ -11,6 +11,7 @@
 
 namespace BcBlog\Test\TestCase\Service;
 
+use BaserCore\Test\Factory\UserFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BcBlog\Service\BlogPostsService;
@@ -33,6 +34,7 @@ class BlogPostsServiceTest extends BcTestCase
      * @var array
      */
     public $fixtures = [
+        'plugin.BaserCore.Factory/Users',
         'plugin.BcBlog.Factory/BlogPosts',
     ];
 
@@ -197,7 +199,11 @@ class BlogPostsServiceTest extends BcTestCase
      */
     public function testCreateAuthorCondition()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データ　生成
+        UserFactory::make(['id' => 1, 'name' => 'test name', 'email' => 'test_name@gmail.com'])->persist();
+        //戻り値を確認
+        $result = $this->BlogPostsService->createAuthorCondition([], "test name");
+        $this->assertEquals($result["BlogPosts.user_id"], 1);
     }
 
     /**
