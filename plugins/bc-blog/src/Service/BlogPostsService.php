@@ -382,6 +382,7 @@ class BlogPostsService implements BlogPostsServiceInterface
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function createKeywordCondition($conditions, $keyword)
     {

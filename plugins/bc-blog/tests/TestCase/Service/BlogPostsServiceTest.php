@@ -183,7 +183,21 @@ class BlogPostsServiceTest extends BcTestCase
      */
     public function testCreateKeywordCondition()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $result = $this->BlogPostsService->createKeywordCondition([], "hello");
+        //戻り値を確認
+        $this->assertEquals("%hello%", $result['and'][0]['or'][0]['BlogPosts.name LIKE']);
+        $this->assertEquals("%hello%", $result['and'][0]['or'][1]['BlogPosts.content LIKE']);
+        $this->assertEquals("%hello%", $result['and'][0]['or'][2]['BlogPosts.detail LIKE']);
+
+        //スペースを含むテストデータ
+        $result = $this->BlogPostsService->createKeywordCondition([], "hello world");
+        //戻り値を確認
+        $this->assertEquals("%hello%", $result['and'][0]['or'][0]['BlogPosts.name LIKE']);
+        $this->assertEquals("%hello%", $result['and'][0]['or'][1]['BlogPosts.content LIKE']);
+        $this->assertEquals("%hello%", $result['and'][0]['or'][2]['BlogPosts.detail LIKE']);
+        $this->assertEquals("%world%", $result['and'][1]['or'][0]['BlogPosts.name LIKE']);
+        $this->assertEquals("%world%", $result['and'][1]['or'][1]['BlogPosts.content LIKE']);
+        $this->assertEquals("%world%", $result['and'][1]['or'][2]['BlogPosts.detail LIKE']);
     }
 
     /**
