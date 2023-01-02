@@ -17,6 +17,7 @@ use BaserCore\Utility\BcContainerTrait;
 use BcBlog\Service\BlogPostsService;
 use BcBlog\Service\BlogPostsServiceInterface;
 use BcBlog\Test\Factory\BlogPostFactory;
+use Cake\Datasource\Exception\RecordNotFoundException;
 
 /**
  * BlogPostsServiceTest
@@ -411,7 +412,17 @@ class BlogPostsServiceTest extends BcTestCase
      */
     public function testDelete()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データ 生成
+        BlogPostFactory::make(['id' => '1'])->persist();
+
+        // //存在しているBlogPostIdを削除
+        $result = $this->BlogPostsService->delete(1);
+        //戻り値を確認
+        $this->assertTrue($result);
+
+        //存在しないBlogPostIdを削除
+        $this->expectException(RecordNotFoundException::class);
+        $this->BlogPostsService->get(1);
     }
 
     /**
