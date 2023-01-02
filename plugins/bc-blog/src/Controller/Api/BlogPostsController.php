@@ -338,6 +338,7 @@ class BlogPostsController extends BcApiController
      * @param BlogPostsServiceInterface $service
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function batch(BlogPostsServiceInterface $service)
     {
@@ -363,9 +364,12 @@ class BlogPostsController extends BcApiController
                 false
             );
             $message = __d('baser', '一括処理が完了しました。');
-        } catch (BcException $e) {
+        } catch (PersistenceFailedException $e) {
             $this->setResponse($this->response->withStatus(400));
-            $message = __d('baser', $e->getMessage());
+            $message = __d('baser', "入力エラーです。内容を修正してください。");
+        } catch (Throwable $e) {
+            $this->setResponse($this->response->withStatus(500));
+            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
         }
         $this->set(['message' => $message]);
         $this->viewBuilder()->setOption('serialize', ['message']);

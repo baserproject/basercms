@@ -11,11 +11,13 @@
 
 namespace BcBlog\Test\TestCase\Controller\Api;
 
+use BaserCore\Service\DblogsServiceInterface;
 use BaserCore\Test\Factory\SiteConfigFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BcBlog\Controller\Api\BlogPostsController;
+use BcBlog\Service\BlogPostsServiceInterface;
 use BcBlog\Test\Factory\BlogPostFactory;
 use Cake\Core\Configure;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -45,6 +47,7 @@ class BlogPostsControllerTest extends BcTestCase
         'plugin.BaserCore.Factory/UsersUserGroups',
         'plugin.BaserCore.Factory/UserGroups',
         'plugin.BcBlog.Factory/BlogPosts',
+        'plugin.BaserCore.Factory/Dblogs',
     ];
 
     /**
@@ -254,7 +257,7 @@ class BlogPostsControllerTest extends BcTestCase
     public function test_publish()
     {
         //データーを生成
-        BlogPostFactory::make([])->unpubish(1, 1)->persist();
+        BlogPostFactory::make([])->unpublish(1, 1)->persist();
 
         //正常の時を確認
         //APIをコル
@@ -317,7 +320,86 @@ class BlogPostsControllerTest extends BcTestCase
      */
     public function test_batch()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // サービスクラス
+        $blogPostsService = $this->getService(BlogPostsServiceInterface::class);
+        $dblogsService = $this->getService(DblogsServiceInterface::class);
+
+        //// 正常系のテスト
+        // 非公開状態のデータを生成
+        SiteConfigFactory::make(['name' => 'content_types', 'value' => ''])->persist();
+        BlogPostFactory::make([])->unpublish(1, 1)->persist();
+        BlogPostFactory::make([])->unpublish(2, 1)->persist();
+
+        // 公開状態にするAPIを呼ぶ
+        $this->post('/baser/api/bc-blog/blog_posts/batch.json?token=' . $this->accessToken, [
+            'batch' => 'publish',
+            'batch_targets' => [1, 2]
+        ]);
+        $this->assertResponseOk();
+        // 処理完了メッセージ
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('一括処理が完了しました。', $result->message);
+        // データが公開状態に更新されていること
+        $datas = $blogPostsService->getIndex([])->all();
+        foreach ($datas as $value) {
+            $this->assertTrue($value->status);
+        }
+        //IDを指定してタイトルリストを取得
+        $names = $blogPostsService->getTitlesById([1, 2]);
+        // dblogsが生成されていること
+        $dblogsData = $dblogsService->getDblogs(1)->toArray()[0];
+        $this->assertEquals('ブログ記事「' . implode('」、「', $names) . '」を 公開 しました。', $dblogsData->message);
+        $this->assertEquals(1, $dblogsData->user_id);
+        $this->assertEquals('BlogPosts', $dblogsData->controller);
+        $this->assertEquals('batch', $dblogsData->action);
+
+        // 非公開状態にするAPIを呼ぶ
+        $this->post('/baser/api/bc-blog/blog_posts/batch.json?token=' . $this->accessToken, [
+            'batch' => 'unpublish',
+            'batch_targets' => [1, 2]
+        ]);
+        $this->assertResponseOk();
+        // 処理完了メッセージ
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('一括処理が完了しました。', $result->message);
+        // データが非公開状態に更新されていること
+        $datas = $blogPostsService->getIndex([])->all();
+        foreach ($datas as $value) {
+            $this->assertFalse($value->status);
+        }
+        // dblogsが生成されていること
+        $dblogsData = $dblogsService->getDblogs(1)->toArray()[0];
+        $this->assertEquals('ブログ記事「' . implode('」、「', $names) . '」を 非公開に しました。', $dblogsData->message);
+        $this->assertEquals(1, $dblogsData->user_id);
+        $this->assertEquals('BlogPosts', $dblogsData->controller);
+        $this->assertEquals('batch', $dblogsData->action);
+
+        // 削除するAPIを呼ぶ
+        $this->post('/baser/api/bc-blog/blog_posts/batch.json?token=' . $this->accessToken, [
+            'batch' => 'delete',
+            'batch_targets' => [1, 2]
+        ]);
+        $this->assertResponseOk();
+        // 処理完了メッセージ
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('一括処理が完了しました。', $result->message);
+        // データが削除されていること
+        $data = $blogPostsService->getIndex([])->count();
+        $this->assertEquals(0, $data);
+        // dblogsが生成されていること
+        $dblogsData = $dblogsService->getDblogs(1)->toArray()[0];
+        $this->assertEquals('ブログ記事「' . implode('」、「', $names) . '」を 削除 しました。', $dblogsData->message);
+        $this->assertEquals(1, $dblogsData->user_id);
+        $this->assertEquals('BlogPosts', $dblogsData->controller);
+        $this->assertEquals('batch', $dblogsData->action);
+
+        //// 異常系のテスト
+        // 無効なキーを指定してAPIを呼ぶ
+        $this->post('/baser/api/bc-blog/blog_posts/batch.json?token=' . $this->accessToken, [
+            'batch' => 'error',
+            'batch_targets' => [1, 2]
+        ]);
+        $this->assertResponseCode(500);
     }
 
     /**

@@ -295,7 +295,7 @@ class BlogPostsControllerTest extends BcTestCase
         ])->persist();
         $this->loadFixtureScenario(BlogContentScenario::class, 3, 1, null, 'news', '/news');
         //非公開を設定
-        BlogPostFactory::make([])->unpubish(1,3)->persist();
+        BlogPostFactory::make([])->unpublish(1,3)->persist();
 
         // 公開設定コール
         $this->patch('/baser/admin/bc-blog/blog_posts/publish/3/1');

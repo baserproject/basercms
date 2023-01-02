@@ -45,6 +45,7 @@ class BlogTagsControllerTest extends BcTestCase
         'plugin.BaserCore.Factory/UsersUserGroups',
         'plugin.BaserCore.Factory/UserGroups',
         'plugin.BcBlog.Factory/BlogTags',
+        'plugin.BaserCore.Factory/Dblogs',
     ];
 
     /**
@@ -88,7 +89,11 @@ class BlogTagsControllerTest extends BcTestCase
     public function testIndex()
     {
         // ５件タグを作成する
-        BlogTagFactory::make([], 5)->persist();
+        BlogTagFactory::make([])->persist();
+        BlogTagFactory::make([])->persist();
+        BlogTagFactory::make([])->persist();
+        BlogTagFactory::make([])->persist();
+        BlogTagFactory::make([])->persist();
 
         // クエリはトークンの以外で何も設定しない場合、全てのタグを取得する
         $this->get('/baser/api/bc-blog/blog_tags/index.json?token=' . $this->accessToken);
