@@ -223,7 +223,7 @@ class WidgetAreasController extends BcApiController
         $this->getRequest()->allowMethod(['get']);
 
         $this->set([
-            'widgetArea' => $service->get($id)->toArray()
+            'widgetArea' => $service->get($id)
         ]);
         $this->viewBuilder()->setOption('serialize', ['widgetArea']);
     }
