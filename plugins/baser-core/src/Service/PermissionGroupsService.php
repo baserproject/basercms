@@ -252,7 +252,7 @@ class PermissionGroupsService implements PermissionGroupsServiceInterface
         if (file_exists($pluginPath . 'config' . DS . 'permission.php')) {
             try {
                 Configure::load($plugin . '.permission', 'baser');
-            } catch (BcException) {
+            } catch (BcException $e) {
                 return false;
             }
         } else {
