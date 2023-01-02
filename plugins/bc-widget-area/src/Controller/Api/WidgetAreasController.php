@@ -122,7 +122,7 @@ class WidgetAreasController extends BcApiController
         }
         $this->set([
             'message' => $message,
-            'widgetArea' => $entity? $entity->toArray() : null,
+            'widgetArea' => $entity ? $entity->toArray() : null,
         ]);
         $this->viewBuilder()->setOption('serialize', ['message', 'widgetArea']);
     }
@@ -149,7 +149,7 @@ class WidgetAreasController extends BcApiController
         }
         $this->set([
             'message' => $message,
-            'widgetArea' => $entity? $entity->toArray() : null,
+            'widgetArea' => $entity ? $entity->toArray() : null,
         ]);
         $this->viewBuilder()->setOption('serialize', ['message', 'widgetArea']);
     }
@@ -175,7 +175,7 @@ class WidgetAreasController extends BcApiController
         }
         $this->set([
             'message' => $message,
-            'widgetArea' => $entity? $entity->toArray() : null,
+            'widgetArea' => $entity ? $entity->toArray() : null,
         ]);
         $this->viewBuilder()->setOption('serialize', ['message', 'widgetArea']);
     }
@@ -203,9 +203,28 @@ class WidgetAreasController extends BcApiController
         }
         $this->set([
             'message' => $message,
-            'widgetArea' => $entity? $entity->toArray() : null,
+            'widgetArea' => $entity ? $entity->toArray() : null,
         ]);
         $this->viewBuilder()->setOption('serialize', ['message', 'widgetArea']);
     }
 
+    /**
+     * [API] 単一データ取得
+     *
+     * @param WidgetAreasServiceInterface $service
+     * @param $id
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function view(WidgetAreasServiceInterface $service, $id)
+    {
+        $this->getRequest()->allowMethod(['get']);
+
+        $this->set([
+            'widgetArea' => $service->get($id)->toArray()
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['widgetArea']);
+    }
 }

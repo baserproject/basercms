@@ -143,4 +143,28 @@ class WidgetAreasControllerTest extends BcTestCase
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
 
+    /**
+     * [API] 単一データ取得のテスト
+     */
+    public function test_view()
+    {
+        // テストデータを作る
+        WidgetAreaFactory::make([
+            'id' => 1,
+            'name' => 'test',
+            'widgets' => serialize([
+                [
+                    1 => 'test 1',
+                    2 => 'test 2'
+                ]
+            ])
+        ])->persist();
+        //APIを呼ぶ
+        $this->get('/baser/api/bc-widget-area/widget_areas/view/1.json?token=' . $this->accessToken);
+        // レスポンスコードを確認する
+        $this->assertResponseOk();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertNotEmpty($result->widgetArea);
+    }
 }
