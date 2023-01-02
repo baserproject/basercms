@@ -433,7 +433,44 @@ class BlogFrontServiceTest extends BcTestCase
      */
     public function test_getViewVarsForArchivesByAuthor()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // サービスクラス
+        $blogPostsService = $this->getService(BlogPostsServiceInterface::class);
+        $blogContentsService = $this->getService(BlogContentsServiceInterface::class);
+
+        // データ生成
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(BlogContentScenario::class, 1, 1, null, 'test', '/');
+        BlogPostFactory::make(['id' => '1', 'blog_content_id' => '1'])->persist();
+
+        //// 正常系のテスト
+        // サービスメソッドを呼ぶ
+        $result = $this->BlogFrontService->getViewVarsForArchivesByAuthor(
+            $blogPostsService->getIndex([])->all(),
+            'name',
+            $blogContentsService->get(1)
+        );
+
+        // view 用変数が設定されているか確認
+        $this->assertArrayHasKey('posts', $result);
+        $this->assertArrayHasKey('blogArchiveType', $result);
+        $this->assertArrayHasKey('author', $result);
+        $this->assertArrayHasKey('currentWidgetAreaId', $result);
+        // posts の確認
+        $this->assertEquals($result['posts']->count(), 1);
+        // blogArchiveTypeの確認
+        $this->assertEquals($result['blogArchiveType'], 'author');
+        // author の確認
+        $this->assertEquals($result['author']->id, 1);
+        $this->assertEquals($result['author']->name, 'name');
+
+        //// 異常系のテスト
+        // Author が存在しない場合は例外とする
+        $this->expectException("Cake\Http\Exception\NotFoundException");
+        $this->BlogFrontService->getViewVarsForArchivesByAuthor(
+            $blogPostsService->getIndex([])->all(),
+            'author name test',
+            $blogContentsService->get(1)
+        );
     }
 
     /**
