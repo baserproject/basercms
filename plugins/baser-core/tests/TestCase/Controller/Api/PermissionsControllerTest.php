@@ -147,7 +147,7 @@ class PermissionsControllerTest extends BcTestCase
         $result = json_decode((string)$this->_response->getBody());
         $permission = $permissionsService->getIndex(['id' => $id])->first();
         $this->assertEquals($result->permission->name, $permission->name);
-        $this->assertEquals('アクセス制限設定「システム管理 Update」を更新しました。', $result->message);
+        $this->assertEquals('アクセスルール「システム管理 Update」を更新しました。', $result->message);
 
 
         $dataError["test"] = "システム管理 Update";
@@ -188,7 +188,7 @@ class PermissionsControllerTest extends BcTestCase
         $this->assertResponseSuccess();
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals($result->permission->name, $data->name);
-        $this->assertEquals('アクセス制限設定「test delete」を削除しました。', $result->message);
+        $this->assertEquals('アクセスルール「test delete」を削除しました。', $result->message);
 
         $this->post("/baser/api/baser-core/permissions/delete/test.json?token=" . $this->accessToken);
         $this->assertResponseCode(400);
@@ -221,7 +221,7 @@ class PermissionsControllerTest extends BcTestCase
         $this->post('/baser/api/baser-core/permissions/copy/1.json?token=' . $this->accessToken);
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
-        $this->assertEquals('アクセス制限設定「システム管理」をコピーしました。', $result->message);
+        $this->assertEquals('アクセスルール「システム管理」をコピーしました。', $result->message);
         $this->assertEquals('システム管理', $result->permission->name);
         $this->assertEmpty($result->errors);
 

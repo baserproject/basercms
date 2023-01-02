@@ -14,6 +14,8 @@ namespace BaserCore;
 use BaserCore\Error\BcException;
 use BaserCore\Model\Entity\Site;
 use BaserCore\Model\Table\SitesTable;
+use BaserCore\Service\PermissionGroupsService;
+use BaserCore\Service\PermissionGroupsServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUpdateLog;
 use BaserCore\Utility\BcUtil;
@@ -93,6 +95,7 @@ class BcPlugin extends BasePlugin
      * @param array $options
      *  - `plugin` : プラグイン名
      *  - `connection` : コネクション名
+     *  - `permission` : アクセスルールを作るか作らないか。作らない場合は、システム管理ユーザーが利用可能
      * @unitTest
      * @noTodo
      * @checked
@@ -101,9 +104,12 @@ class BcPlugin extends BasePlugin
     {
         $options = array_merge([
             'plugin' => $this->getName(),
-            'connection' => 'default'
+            'connection' => 'default',
+            'permission' => false
         ], $options);
         $pluginName = $options['plugin'];
+        $permission = $options['permission'];
+        unset($options['permission']);
         BcUtil::clearAllCache();
         $pluginPath = BcUtil::getPluginPath($options['plugin']);
         try {
@@ -118,6 +124,13 @@ class BcPlugin extends BasePlugin
                 }
             }
 
+            // アクセスルールを作成
+            if($permission) {
+                /** @var PermissionGroupsService $permissionGroupsService */
+                $permissionGroupsService = $this->getService(PermissionGroupsServiceInterface::class);
+                $permissionGroupsService->buildByPlugin($pluginName);
+            }
+
             $this->createAssetsSymlink();
 
             BcUtil::clearAllCache();
@@ -127,7 +140,6 @@ class BcPlugin extends BasePlugin
             $this->migrations->rollback($options);
             return false;
         }
-
     }
 
     /**
@@ -194,7 +206,7 @@ class BcPlugin extends BasePlugin
      * @noTodo
      * @unitTest
      */
-    public function createAssetsSymlink():void
+    public function createAssetsSymlink(): void
     {
         $command = ROOT . DS . 'bin' . DS . 'cake plugin assets symlink';
         exec($command);
@@ -234,7 +246,7 @@ class BcPlugin extends BasePlugin
      */
     public function getUpdaters($name = '')
     {
-        if(!$name) $name = $this->getName();
+        if (!$name) $name = $this->getName();
         $targetVerPoint = BcUtil::verpoint(BcUtil::getVersion($name));
         $sourceVerPoint = BcUtil::verpoint(BcUtil::getDbVersion($name));
         if ($sourceVerPoint === false || $targetVerPoint === false) {
@@ -282,7 +294,7 @@ class BcPlugin extends BasePlugin
      */
     public function getUpdateScriptMessages($name = '')
     {
-        if(!$name) $name = $this->getName();
+        if (!$name) $name = $this->getName();
         $targetVerPoint = BcUtil::verpoint(BcUtil::getVersion($name));
         $sourceVerPoint = BcUtil::verpoint(BcUtil::getDbVersion($name));
         if ($sourceVerPoint === false || $targetVerPoint === false) {
@@ -341,6 +353,9 @@ class BcPlugin extends BasePlugin
             $Folder = new Folder();
             $Folder->delete($pluginPath);
         }
+        /** @var PermissionGroupsService $permissionGroupsService */
+        $permissionGroupsService = $this->getService(PermissionGroupsServiceInterface::class);
+        $permissionGroupsService->deleteByPlugin($pluginName);
 
         $plugins = TableRegistry::getTableLocator()->get('BaserCore.Plugins');
         return $plugins->uninstall($pluginName);
@@ -442,7 +457,7 @@ class BcPlugin extends BasePlugin
             return;
         }
 
-       /**
+        /**
          * APIのプラグイン用ルーティング
          * プラグイン名がダッシュ区切りの場合
          */
@@ -455,6 +470,7 @@ class BcPlugin extends BasePlugin
                     ['path' => '/' . Inflector::dasherize($plugin)],
                     function(RouteBuilder $routes) {
                         $routes->setExtensions(['json']);
+                        $routes->resources('{controller}');
                         $routes->connect('/{controller}/index', [], ['routeClass' => InflectedRoute::class]);
                         $routes->fallbacks(InflectedRoute::class);
                     }
@@ -502,18 +518,18 @@ class BcPlugin extends BasePlugin
          * プラグイン名がダッシュ区切りの場合
          */
         $request = Router::getRequest();
-        if(!$request) {
+        if (!$request) {
             $request = ServerRequestFactory::fromGlobals();
         }
         /* @var SitesTable $sitesTable */
         $sitesTable = TableRegistry::getTableLocator()->get('BaserCore.Sites');
         /* @var Site $site */
         $site = $sitesTable->findByUrl($request->getPath());
-        if($site && $site->alias) {
+        if ($site && $site->alias) {
             $routes->plugin(
                 $plugin,
                 ['path' => '/' . $site->alias . '/' . Inflector::dasherize($plugin)],
-                function(RouteBuilder $routes) use ($site){
+                function(RouteBuilder $routes) use ($site) {
                     // BcFrontMiddleware にて、sitePrefix によって currentSite を設定
                     $routes->connect('/{controller}/index', ['sitePrefix' => $site->alias], ['routeClass' => InflectedRoute::class]);
                     $routes->connect('/{controller}/{action}/*', ['sitePrefix' => $site->alias], ['routeClass' => InflectedRoute::class]);

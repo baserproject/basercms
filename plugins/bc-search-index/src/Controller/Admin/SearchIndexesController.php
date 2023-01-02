@@ -13,7 +13,6 @@ namespace BcSearchIndex\Controller\Admin;
 
 use BaserCore\Controller\Admin\BcAdminAppController;
 use BaserCore\Error\BcException;
-use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\Utility\BcSiteConfig;
 use BcSearchIndex\Service\Admin\SearchIndexesAdminService;
 use BcSearchIndex\Service\Admin\SearchIndexesAdminServiceInterface;

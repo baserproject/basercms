@@ -70,8 +70,11 @@ class PluginsController extends BcApiController
         $this->request->allowMethod(['post', 'put']);
         $plugin = $service->getByName($name);
         try {
-            if($service->install($name, $this->request->getData('connection'))) {
-                $service->allow($this->request->getData());
+            if($service->install(
+                $name,
+                $this->request->getData('permission') ?? true,
+                $this->request->getData('connection') ?? 'default'
+            )) {
                 $message = sprintf(__d('baser', 'プラグイン「%s」をインストールしました。'), $name);
             } else {
                 $this->setResponse($this->response->withStatus(400));

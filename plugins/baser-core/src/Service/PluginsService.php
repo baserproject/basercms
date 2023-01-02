@@ -14,6 +14,7 @@ namespace BaserCore\Service;
 use BaserCore\Error\BcException;
 use BaserCore\Model\Entity\Plugin;
 use BaserCore\Model\Table\PluginsTable;
+use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcZip;
 use Cake\Cache\Cache;
 use Cake\Http\Client;
@@ -41,6 +42,11 @@ class PluginsService implements PluginsServiceInterface
 {
 
     /**
+     * Trait
+     */
+    use BcContainerTrait;
+
+    /**
      * Plugins Table
      * @var \Cake\ORM\Table
      */
@@ -48,7 +54,7 @@ class PluginsService implements PluginsServiceInterface
 
     /**
      * PluginsService constructor.
-     * 
+     *
      * @checked
      * @noTodo
      * @unitTest
@@ -60,7 +66,7 @@ class PluginsService implements PluginsServiceInterface
 
     /**
      * プラグインを取得する
-     * 
+     *
      * @param int $id
      * @return EntityInterface
      * @checked
@@ -74,7 +80,7 @@ class PluginsService implements PluginsServiceInterface
 
     /**
      * プラグイン一覧を取得
-     * 
+     *
      * @param string $sortMode
      * @return array $plugins
      * @checked
@@ -118,8 +124,9 @@ class PluginsService implements PluginsServiceInterface
 
     /**
      * プラグインをインストールする
-     * 
+     *
      * @param string $name プラグイン名
+     * @param bool $permission アクセスルールを作るか作らないか
      * @param string $connection test connection指定用
      * @return bool|null
      * @throws Exception
@@ -127,12 +134,11 @@ class PluginsService implements PluginsServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function install($name, $connection = 'default'): ?bool
+    public function install($name, bool $permission, $connection = 'default'): ?bool
     {
+        $options = ['permission' => $permission];
         if($connection) {
-            $options = ['connection' => $connection];
-        } else {
-            $options = [];
+            $options['connection'] = $connection;
         }
         BcUtil::includePluginClass($name);
         $plugins = CakePlugin::getCollection();
@@ -146,7 +152,7 @@ class PluginsService implements PluginsServiceInterface
 
     /**
      * プラグインをアップデートする
-     * 
+     *
      * @param string $name プラグイン名
      * @param string $connection コネクション名
      * @return bool
@@ -200,7 +206,7 @@ class PluginsService implements PluginsServiceInterface
 
     /**
      * プラグインを全て無効化する
-     * 
+     *
      * @return array 無効化したIDのリスト
      * @checked
      * @noTodo
@@ -222,7 +228,7 @@ class PluginsService implements PluginsServiceInterface
 
     /**
      * 複数のIDからプラグインを有効化する
-     * 
+     *
      * @param $ids
      * @checked
      * @noTodo
@@ -240,7 +246,7 @@ class PluginsService implements PluginsServiceInterface
 
     /**
      * バージョンを取得する
-     * 
+     *
      * @param $name
      * @return mixed|string
      * @checked
@@ -259,7 +265,7 @@ class PluginsService implements PluginsServiceInterface
 
     /**
      * プラグインを無効にする
-     * 
+     *
      * @param string $name
      * @checked
      * @noTodo
@@ -272,7 +278,7 @@ class PluginsService implements PluginsServiceInterface
 
     /**
      * プラグインを有効にする
-     * 
+     *
      * @param string $name
      * @checked
      * @noTodo
@@ -285,7 +291,7 @@ class PluginsService implements PluginsServiceInterface
 
     /**
      * プラグイン名からプラグインエンティティを取得
-     * 
+     *
      * @param string $name
      * @return array|EntityInterface|null
      * @checked
@@ -326,12 +332,18 @@ class PluginsService implements PluginsServiceInterface
         if (!$pluginClass->rollbackDb($options) || !$this->Plugins->save($plugin)) {
             throw new Exception(__d('baser', '処理中にエラーが発生しました。プラグインの開発者に確認してください。'));
         }
+
+        // アクセスルールを削除する
+        /** @var PermissionGroupsService $permissionGroupsService */
+        $permissionGroupsService = $this->getService(PermissionGroupsServiceInterface::class);
+        $permissionGroupsService->deleteByPlugin($plugin->name);
+
         BcUtil::clearAllCache();
     }
 
     /**
      * プラグインを削除する
-     * 
+     *
      * @param string $name
      * @param array $connection
      * @checked
@@ -355,7 +367,7 @@ class PluginsService implements PluginsServiceInterface
 
     /**
      * 優先度を変更する
-     * 
+     *
      * @param int $id
      * @param int $offset
      * @param array $conditions
@@ -375,7 +387,7 @@ class PluginsService implements PluginsServiceInterface
 
     /**
      * baserマーケットのプラグイン一覧を取得する
-     * 
+     *
      * @return array|mixed
      * @checked
      * @unitTest
@@ -406,52 +418,6 @@ class PluginsService implements PluginsServiceInterface
             return $baserPlugins;
         }
         return [];
-    }
-
-    /**
-     * ユーザーグループにアクセス許可設定を追加する
-     *
-     * @param array $data リクエストデータ
-     * @return void
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function allow($data): void
-    {
-        $permissions = TableRegistry::getTableLocator()->get('BaserCore.Permissions');
-        $userGroups = $permissions->UserGroups->find('all')->where(['UserGroups.id <>' => Configure::read('BcApp.adminGroupId')]);
-        if (!$userGroups) {
-            return;
-        }
-
-        foreach($userGroups as $userGroup) {
-
-            $permissionAuthPrefix = $permissions->UserGroups->getAuthPrefix($userGroup->id);
-            $url = '/baser/' . $permissionAuthPrefix . '/' . Inflector::underscore($data['name']) . '/*';
-
-            $prePermissions = $permissions->find()->where(['url' => $url])->first();
-            switch($data['permission']) {
-                case 1:
-                    if (!$prePermissions) {
-                        $permission = $permissions->newEmptyEntity();
-                        $permission->name = $data['title'] . ' ' . __d('baser', '管理');
-                        $permission->user_group_id = $userGroup->id;
-                        $permission->auth = 1;
-                        $permission->status = 1;
-                        $permission->url = $url;
-                        $permission->no = $permissions->getMax('no', ['user_group_id' => $userGroup->id]) + 1;
-                        $permission->sort = $permissions->getMax('sort', ['user_group_id' => $userGroup->id]) + 1;
-                        $permissions->save($permission);
-                    }
-                    break;
-                case 2:
-                    if ($prePermissions) {
-                        $permissions->delete($prePermissions->id);
-                    }
-                    break;
-            }
-        }
     }
 
     /**
@@ -509,7 +475,7 @@ class PluginsService implements PluginsServiceInterface
 
     /**
      * 一括処理
-     * 
+     *
      * @param array $ids
      * @return bool
      * @checked
@@ -534,7 +500,7 @@ class PluginsService implements PluginsServiceInterface
 
     /**
      * IDを指定して名前リストを取得する
-     * 
+     *
      * @param $ids
      * @return array
      * @checked

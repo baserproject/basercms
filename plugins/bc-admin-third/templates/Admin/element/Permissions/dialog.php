@@ -1,20 +1,19 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.View
- * @since           baserCMS v 2.0.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) NPO baser foundation
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       https://basercms.net/license/index.html MIT License
  */
 
 use BaserCore\View\BcAdminAppView;
 use Cake\Routing\Router;
 
 /**
- * [ADMIN] アクセス制限管理（ポップアップ）
+ * [ADMIN] アクセスルール登録（ポップアップ）
  * @var BcAdminAppView $this
  * @var array $permissionMethodList
  * @var array $permissionAuthList
@@ -26,7 +25,7 @@ $this->BcBaser->js('admin/permissions/dialog.bundle');
 ?>
 
 
-<div id="PermissionDialog" title="アクセス制限登録" hidden>
+<div id="PermissionDialog" title="アクセスルール登録" hidden>
 
   <?= $this->BcAdminForm->create(null, [
     'novalidate' => true,
@@ -40,6 +39,15 @@ $this->BcBaser->js('admin/permissions/dialog.bundle');
         'type' => 'select',
         'options' => $this->BcAdminForm->getControlSource('BaserCore.Permissions.user_group_id'),
         'id' => 'permission-user-group-id'
+      ]) ?>
+    </dd>
+
+    <dt><?php echo $this->BcAdminForm->label('permission_group_id', __d('baser', 'ルールグループ')) ?></dt>
+    <dd class="col-input">
+      <?php echo $this->BcAdminForm->control('permission_group_id', [
+        'type' => 'select',
+        'options' => $this->BcAdminForm->getControlSource('BaserCore.Permissions.permission_group_id', ['type' => 'Admin']),
+        'id' => 'permission-permission-group-id'
       ]) ?>
     </dd>
 

@@ -1,21 +1,25 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @since           baserCMS v 2.0.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) NPO baser foundation
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       https://basercms.net/license/index.html MIT License
  */
 
 /**
- * [ADMIN] アクセス制限設定一覧　ヘルプ
+ * [ADMIN] アクセスルール一覧　ヘルプ
+ *
+ * @checked
+ * @noTodo
+ * @unitTest
  */
 ?>
 
 
-<p><?php echo __d('baser', 'ユーザーグループごとのアクセス制限を登録します。') ?></p>
+<p><?php echo __d('baser', 'ユーザーグループごとのアクセスルールを登録します。') ?></p>
 <ul>
   <li><?php echo __d('baser', 'ルールを何も追加しない状態では、全てのユーザーが全てのコンテンツにアクセスできるようになっています。') ?></li>
   <li><?php echo __d('baser', 'URL設定ではワイルドカード（*）を利用して一定のURL階層内のコンテンツに対し一度に設定を行う事ができます。') ?></li>

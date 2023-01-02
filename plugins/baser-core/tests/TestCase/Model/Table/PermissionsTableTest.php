@@ -194,25 +194,6 @@ class PermissionsTableTest extends BcTestCase
     }
 
     /**
-     * コントロールソースを取得する
-     *
-     * @param string フィールド名
-     */
-    public function testGetControlSource()
-    {
-        $userGroupList = $this->Permissions->getControlSource('user_group_id');
-        $this->assertGreaterThan(0, count($userGroupList));
-        $keyExist = key_exists(Configure::read('BcApp.adminGroupId'), $userGroupList);
-        $this->assertFalse($keyExist);
-
-        $userGroupList = $this->Permissions->getControlSource('hoge');
-        $this->assertFalse($userGroupList);
-    }
-
-
-
-
-    /**
      * beforeSave
      *
      * @param array $url saveするurl
@@ -246,7 +227,7 @@ class PermissionsTableTest extends BcTestCase
     }
 
     /**
-     * アクセス制限データをコピーする
+     * アクセスルールをコピーする
      *
      * @param int $id
      * @param array $data
@@ -298,7 +279,7 @@ class PermissionsTableTest extends BcTestCase
     public function testGetTargetPermissionsAndSetTargetPermissions(): void
     {
         $this->Permissions->setTargetPermissions([2, 3]);
-        $data = $this->Permissions->getTargePermissions([2, 3]);
+        $data = $this->Permissions->getTargetPermissions([2, 3]);
         $this->assertNotEmpty($data[2]);
         $this->assertNotEmpty($data[2][0]);
     }

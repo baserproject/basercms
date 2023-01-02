@@ -357,11 +357,11 @@ class BcUtil
      * @noTodo
      * @unitTest
      */
-    public static function getEnablePlugins()
+    public static function getEnablePlugins($force = false)
     {
-        if (!BcUtil::isInstalled()) return [];
+        if (!BcUtil::isInstalled() && !$force) return [];
         $enablePlugins = [];
-        if (!Configure::read('debug')) {
+        if (!Configure::read('debug') && !$force) {
             $enablePlugins = Cache::read('enable_plugins', '_bc_env_');
         }
         if (!$enablePlugins) {
@@ -449,7 +449,7 @@ class BcUtil
 
     /**
      * モデルキャッシュを削除する
-     * 
+     *
      * @checked
      * @noTodo
      */

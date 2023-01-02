@@ -79,25 +79,6 @@ class MailContentsController extends MailAdminAppController
     }
 
     /**
-     * 削除
-     *
-     * Controller::requestAction() で呼び出される
-     *
-     * @return bool
-     */
-    public function delete()
-    {
-        if (empty($this->request->getData('entityId'))) {
-            return false;
-        }
-        if ($this->MailContent->delete($this->request->getData('entityId'))) {
-            $this->MailMessage->dropTable($this->request->getData('entityId'));
-            return true;
-        }
-        return false;
-    }
-
-    /**
      * メール編集画面にリダイレクトする
      *
      * @param string $template
@@ -105,7 +86,7 @@ class MailContentsController extends MailAdminAppController
      * @checked
      * @noTodo
      */
-    public function redirectEditMail($template)
+    private function redirectEditMail($template)
     {
         $type = 'email';
         $ext = Configure::read('BcApp.templateExt');
@@ -140,7 +121,7 @@ class MailContentsController extends MailAdminAppController
      * @checked
      * @noTodo
      */
-    public function redirectEditForm($template)
+    private function redirectEditForm($template)
     {
         $path = 'Mail' . DS . $template;
         $theme = BcUtil::getCurrentTheme();

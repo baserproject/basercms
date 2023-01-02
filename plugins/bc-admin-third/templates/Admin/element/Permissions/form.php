@@ -19,6 +19,7 @@ use BaserCore\View\BcAdminAppView;
  * @var Permission $permission
  * @var array $permissionMethodList
  * @var array $permissionAuthList
+ * @var \Cake\ORM\ResultSet $permissionGroups
  * @checked
  * @unitTest
  * @noTodo
@@ -45,6 +46,15 @@ $this->BcBaser->js('admin/permissions/form.bundle', false);
       <th class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('user_group_id', __d('baser', 'ユーザーグループ')) ?></th>
       <td class="col-input bca-form-table__input">
         <?php echo h($currentUserGroup->title) ?>
+      </td>
+    </tr>
+
+    <tr>
+      <th class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('user_group_id', __d('baser', 'アクセスルールグループ')) ?></th>
+      <td class="col-input bca-form-table__input">
+        <?php echo $this->BcAdminForm->control('permission_group_type', ['type' => 'radio', 'options' => $this->BcAdminForm->getControlSource('Permissions.permission_group_type')]) ?>
+        <?php echo $this->BcAdminForm->control('permission_group_id', ['type' => 'select', 'options' => $this->BcAdminForm->getControlSource('Permissions.permission_group_id'), 'empty' => __d('baser', 'アクセスルールグループを選択してください。')] ) ?>
+        <?php echo $this->BcAdminForm->control('permission_group', ['type' => 'hidden', 'value' => json_encode($permissionGroups->toArray())] ) ?>
       </td>
     </tr>
 

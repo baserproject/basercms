@@ -23,6 +23,8 @@ use BaserCore\Service\Admin\DashboardAdminService;
 use BaserCore\Service\Admin\DashboardAdminServiceInterface;
 use BaserCore\Service\Admin\PagesAdminService;
 use BaserCore\Service\Admin\PagesAdminServiceInterface;
+use BaserCore\Service\Admin\PermissionGroupsAdminService;
+use BaserCore\Service\Admin\PermissionGroupsAdminServiceInterface;
 use BaserCore\Service\Admin\PluginsAdminService;
 use BaserCore\Service\Admin\PluginsAdminServiceInterface;
 use BaserCore\Service\Admin\SiteConfigsAdminService;
@@ -55,6 +57,8 @@ use BaserCore\Service\PagesService;
 use BaserCore\Service\PagesServiceInterface;
 use BaserCore\Service\PasswordRequestsService;
 use BaserCore\Service\PasswordRequestsServiceInterface;
+use BaserCore\Service\PermissionGroupsService;
+use BaserCore\Service\PermissionGroupsServiceInterface;
 use BaserCore\Service\PermissionsService;
 use BaserCore\Service\PermissionsServiceInterface;
 use BaserCore\Service\PluginsService;
@@ -123,7 +127,9 @@ class BcServiceProvider extends ServiceProvider
         UtilitiesServiceInterface::class,
         BcFrontContentsServiceInterface::class,
         BcAdminContentsServiceInterface::class,
-        PasswordRequestsServiceInterface::class
+        PasswordRequestsServiceInterface::class,
+        PermissionGroupsServiceInterface::class,
+        PermissionGroupsAdminServiceInterface::class
     ];
 
     /**
@@ -156,6 +162,9 @@ class BcServiceProvider extends ServiceProvider
         $container->add(SiteConfigsAdminServiceInterface::class, SiteConfigsAdminService::class);
         // Permissionsサービス
         $container->add(PermissionsServiceInterface::class, PermissionsService::class);
+        // PermissionGroupsサービス
+        $container->add(PermissionGroupsServiceInterface::class, PermissionGroupsService::class);
+        $container->add(PermissionGroupsAdminServiceInterface::class, PermissionGroupsAdminService::class);
         // Dblogsサービス
         $container->add(DblogsServiceInterface::class, DblogsService::class);
         // Favoriteサービス

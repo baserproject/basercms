@@ -17,9 +17,12 @@ use BaserCore\Model\Entity\Permission;
  * @var AppViewAlias $this
  * @var Permission $permission
  * @var array $currentUserGroup
+ * @checked
+ * @noTodo
+ * @unitTest
  */
 $this->BcAdmin->setHelp('permissions_form');
-$this->BcAdmin->setTitle(sprintf(__d('baser', '%s｜新規アクセス制限設定登録'), $currentUserGroup->title));
+$this->BcAdmin->setTitle(sprintf(__d('baser', '%s｜新規アクセスルール登録'), $currentUserGroup->title));
 ?>
 
 
@@ -28,17 +31,35 @@ $this->BcAdmin->setTitle(sprintf(__d('baser', '%s｜新規アクセス制限設�
 <?php $this->BcBaser->element('Permissions/form') ?>
 
 <div class="submit section bca-actions">
-    <div class="bca-actions__main">
-        <?= $this->BcAdminForm->button(
-                __d('baser', '保存'),
-                 ['div' => false,
-                 'class' => 'button bca-btn bca-actions__item',
-                 'data-bca-btn-type' => 'save',
-                 'data-bca-btn-size' => 'lg',
-                 'data-bca-btn-width' => 'lg',
-                 'id' => 'BtnSave']
-            ) ?>
-    </div>
+  <div class="bca-actions__main">
+    <?php if ($this->getRequest()->getParam('pass.1')): ?>
+      <?php echo $this->BcHtml->link(__d('baser', 'アクセスグループ編集に戻る'), [
+        'controller' => 'PermissionGroups',
+        'action' => 'edit',
+        $currentUserGroup->id,
+        $this->getRequest()->getParam('pass.1')
+      ], [
+        'class' => 'button bca-btn bca-actions__item',
+        'data-bca-btn-type' => 'back-to-list'
+      ]) ?>
+    <?php endif ?>
+    <?php echo $this->BcHtml->link(__d('baser', '一覧に戻る'), [
+      'action' => 'index',
+      $currentUserGroup->id
+    ], [
+      'class' => 'button bca-btn bca-actions__item',
+      'data-bca-btn-type' => 'back-to-list'
+    ]) ?>
+    <?= $this->BcAdminForm->button(
+      __d('baser', '保存'),
+      ['div' => false,
+        'class' => 'button bca-btn bca-actions__item',
+        'data-bca-btn-type' => 'save',
+        'data-bca-btn-size' => 'lg',
+        'data-bca-btn-width' => 'lg',
+        'id' => 'BtnSave']
+    ) ?>
+  </div>
 </div>
 
 <?= $this->BcAdminForm->end() ?>

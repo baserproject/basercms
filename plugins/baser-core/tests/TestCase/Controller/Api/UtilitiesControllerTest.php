@@ -17,7 +17,6 @@ use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\Core\Configure;
 use Cake\Filesystem\File;
-use Cake\Filesystem\Folder;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use Cake\TestSuite\IntegrationTestTrait;
 use Composer\Package\Archiver\ZipArchiver;
@@ -82,7 +81,6 @@ class UtilitiesControllerTest extends BcTestCase
      */
     public function tearDown(): void
     {
-        Configure::clear();
         parent::tearDown();
     }
 

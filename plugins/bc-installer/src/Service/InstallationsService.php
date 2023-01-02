@@ -19,6 +19,8 @@ use BaserCore\Error\BcException;
 use BaserCore\Model\Entity\SiteConfig;
 use BaserCore\Service\BcDatabaseService;
 use BaserCore\Service\BcDatabaseServiceInterface;
+use BaserCore\Service\PermissionGroupsService;
+use BaserCore\Service\PermissionGroupsServiceInterface;
 use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\Service\SitesServiceInterface;
 use BaserCore\Service\ThemesServiceInterface;
@@ -418,6 +420,9 @@ class InstallationsService implements InstallationsServiceInterface
         /* @var BcPlugin $plugin */
         $plugin = Plugin::isLoaded($name);
         if(!$plugin) $plugin = Plugin::getCollection()->create($name);
+
+        // InstallationsService::buildPermissions() で別途アクセスルールを一括で作成するため
+        // ここでは、アクセスルールは作らない（permission オプションを利用しない）
         return $plugin->install();
 
         $paths = App::path('Plugin');
@@ -728,6 +733,16 @@ class InstallationsService implements InstallationsServiceInterface
         } catch (\Throwable $e) {
             throw $e;
         }
+    }
+
+    /**
+     * アクセスルールを構築する
+     */
+    public function buildPermissions()
+    {
+        /** @var PermissionGroupsService $permissionGroupsService */
+        $permissionGroupsService = $this->getService(PermissionGroupsServiceInterface::class);
+        $permissionGroupsService->buildAll();
     }
 
 }

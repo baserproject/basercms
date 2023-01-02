@@ -1,21 +1,22 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.View
- * @since           baserCMS v 0.1.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) NPO baser foundation
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       https://basercms.net/license/index.html MIT License
  */
 
 use BaserCore\View\BcAdminAppView;
 
 /**
- * [ADMIN] アクセス制限設定一覧
+ * [ADMIN] アクセスルール一覧
  *
  * @var BcAdminAppView $this
+ * @var \Cake\ORM\ResultSet $permissions
+ * @var \BaserCore\Model\Entity\UserGroup $currentUserGroup
  * @checked
  * @unitTest
  * @noTodo
@@ -57,9 +58,12 @@ $this->BcListTable->setColumnNumber(6);
       <?php endif ?>
     </th>
     <th class="bca-table-listup__thead-th">No</th>
-    <th class="bca-table-listup__thead-th"><?php echo __d('baser', 'ルール名') ?><br><?php echo __d('baser', 'URL設定') ?>
+    <th class="bca-table-listup__thead-th"><?php echo __d('baser', 'タイプ') ?></th>
+    <th class="bca-table-listup__thead-th"><?php echo __d('baser', 'ルールグループ') ?></th>
+    <th class="bca-table-listup__thead-th">
+      <?php echo __d('baser', 'ルール名') ?><br><?php echo __d('baser', 'URL設定') ?>
     </th>
-    <th class="bca-table-listup__thead-th"><?php echo __d('baser', 'アクセス') ?></th>
+    <th class="bca-table-listup__thead-th"><?php echo __d('baser', '権限') ?></th>
     <?php echo $this->BcListTable->dispatchShowHead() ?>
     <th class="bca-table-listup__thead-th"><?php echo __d('baser', '登録日') ?><br><?php echo __d('baser', '更新日') ?>
     </th>
@@ -67,16 +71,17 @@ $this->BcListTable->setColumnNumber(6);
   </tr>
   </thead>
   <tbody>
-  <?php if (!empty($permissions)): ?>
+  <?php if ($permissions->count()): ?>
     <?php $count = 1 ?>
     <?php foreach($permissions as $permission): ?>
-      <?php $this->BcBaser->element('Permissions/index_row', ['data' => $permission, 'count' => $count]) ?>
+      <?php $this->BcBaser->element('Permissions/index_row', ['permission' => $permission, 'count' => $count]) ?>
       <?php $count++ ?>
     <?php endforeach; ?>
   <?php else: ?>
     <tr>
-      <td colspan="<?php echo $this->BcListTable->getColumnNumber() ?>"><p
-          class="no-data"><?php echo __d('baser', 'データが見つかりませんでした。') ?></p></td>
+      <td colspan="<?php echo $this->BcListTable->getColumnNumber() ?>">
+        <p class="no-data"><?php echo __d('baser', 'データが見つかりませんでした。') ?></p>
+      </td>
     </tr>
   <?php endif; ?>
   </tbody>

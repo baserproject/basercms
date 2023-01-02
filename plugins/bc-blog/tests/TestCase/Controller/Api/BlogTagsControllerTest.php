@@ -79,7 +79,6 @@ class BlogTagsControllerTest extends BcTestCase
      */
     public function tearDown(): void
     {
-        Configure::clear();
         parent::tearDown();
     }
 

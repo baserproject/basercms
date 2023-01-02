@@ -78,7 +78,7 @@ class PermissionsControllerTest extends BcTestCase
     }
 
     /**
-     * アクセス制限設定の一覧を表示する
+     * アクセスルールの一覧を表示する
      */
     public function testIndex()
     {

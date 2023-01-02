@@ -12,7 +12,6 @@
 namespace BcContentLink\Controller\Api;
 
 use BaserCore\Controller\Api\BcApiController;
-use BaserCore\Error\BcException;
 use BcContentLink\Service\ContentLinksService;
 use BcContentLink\Service\ContentLinksServiceInterface;
 use BaserCore\Annotation\NoTodo;

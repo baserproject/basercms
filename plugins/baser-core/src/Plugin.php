@@ -451,7 +451,7 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
          */
         $routes->prefix(
             'Api',
-            ['path' => '/' . Configure::read('BcApp.baserCorePrefix') . '/api'],
+            ['path' => '/' . Configure::read('BcApp.baserCorePrefix') . '/', Configure::read('BcApp.apiPrefix')],
             function(RouteBuilder $routes) {
                 $routes->plugin(
                     'BaserCore',

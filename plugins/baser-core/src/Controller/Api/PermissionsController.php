@@ -25,7 +25,7 @@ use BaserCore\Annotation\UnitTest;
 class PermissionsController extends BcApiController
 {
     /**
-     * [API] 単一アクセス制限設定取得
+     * [API] 単一アクセスルール取得
      * @param PermissionsServiceInterface $service
      * @param int $id
      * @checked
@@ -42,7 +42,7 @@ class PermissionsController extends BcApiController
     }
 
     /**
-     * [API] アクセス制限設定の一覧
+     * [API] アクセスルールの一覧
      * @param PermissionsServiceInterface $service
      * @param int $userGroupId
      * @checked
@@ -71,7 +71,7 @@ class PermissionsController extends BcApiController
         $this->request->allowMethod(['post', 'delete']);
         try {
             $permission = $service->create($this->request->getData());
-            $message = __d('baser', '新規アクセス制限設定「{0}」を追加しました。', $permission->name);
+            $message = __d('baser', '新規アクセスルール「{0}」を追加しました。', $permission->name);
         } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
             $permission = $e->getEntity();
             $this->setResponse($this->response->withStatus(400));
@@ -104,7 +104,7 @@ class PermissionsController extends BcApiController
             $permission = $service->get($permissionId);
             $permissionName = $permission->name;
             $service->delete($permissionId);
-            $message = __d('baser', 'アクセス制限設定「{0}」を削除しました。', $permissionName);
+            $message = __d('baser', 'アクセスルール「{0}」を削除しました。', $permissionName);
         } catch (\Exception $e) {
             $this->setResponse($this->response->withStatus(400));
             $error = $e->getMessage();
@@ -120,7 +120,7 @@ class PermissionsController extends BcApiController
     }
 
     /**
-     * [API] アクセス制限設定コピー
+     * [API] アクセスルールコピー
      *
      * @param PermissionsServiceInterface $service
      * @param int $id
@@ -142,7 +142,7 @@ class PermissionsController extends BcApiController
             try {
                 $permission = $service->copy($id);
                 if ($permission) {
-                    $message = __d('baser', 'アクセス制限設定「{0}」をコピーしました。', $permission->name);
+                    $message = __d('baser', 'アクセスルール「{0}」をコピーしました。', $permission->name);
                 } else {
                     $this->setResponse($this->response->withStatus(400));
                     $message = __d('baser', 'データベース処理中にエラーが発生しました。');
@@ -177,7 +177,7 @@ class PermissionsController extends BcApiController
         $this->request->allowMethod(['post', 'put', 'patch']);
         try {
             $permission = $service->update($service->get($permissionId), $this->request->getData());
-            $message = __d('baser', 'アクセス制限設定「{0}」を更新しました。', $permission->name);
+            $message = __d('baser', 'アクセスルール「{0}」を更新しました。', $permission->name);
         } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
             $this->setResponse($this->response->withStatus(400));
             $permission = $e->getEntity();
@@ -218,7 +218,7 @@ class PermissionsController extends BcApiController
             $names = $service->getNamesById($targets);
             $service->batch($method, $targets);
             $this->BcMessage->setSuccess(
-                sprintf(__d('baser', 'アクセス制限設定 「%s」 を %s しました。'), implode('」、「', $names), $allowMethod[$method]),
+                sprintf(__d('baser', 'アクセスルール 「%s」 を %s しました。'), implode('」、「', $names), $allowMethod[$method]),
                 true,
                 false
             );
@@ -252,7 +252,7 @@ class PermissionsController extends BcApiController
             $this->setResponse($this->response->withStatus(400));
             $message = __d('baser', '一度リロードしてから再実行してみてください。');
         } else {
-            $message = sprintf(__d('baser', 'アクセス制限設定「%s」の並び替えを更新しました。'), $permission->name);
+            $message = sprintf(__d('baser', 'アクセスルール「%s」の並び替えを更新しました。'), $permission->name);
         }
         $this->set([
             'message' => $message,

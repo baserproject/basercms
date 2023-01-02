@@ -30,7 +30,6 @@ use BaserCore\Model\Table\Exception\CopyFailedException;
  * Class UserGroupsController
  * @property UserGroupsTable $UserGroups
  * @property BcMessageComponent $BcMessage
- * @method UserGroup[]|ResultSetInterface paginate($object = null, array $settings = [])
  */
 class UserGroupsController extends BcAdminAppController
 {

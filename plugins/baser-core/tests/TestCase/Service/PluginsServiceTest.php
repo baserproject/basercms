@@ -130,10 +130,10 @@ class PluginsServiceTest extends BcTestCase
     public function testInstall()
     {
         // 正常な場合
-        $this->assertTrue($this->Plugins->install('BcUploader', 'test'));
+        $this->assertTrue($this->Plugins->install('BcUploader', true, 'test'));
         // プラグインがない場合
         try {
-            $this->Plugins->install('UnKnown', 'test');
+            $this->Plugins->install('UnKnown', true, 'test');
         } catch (\Exception $e) {
             $this->assertEquals("Plugin UnKnown could not be found.", $e->getMessage());
         }
@@ -142,7 +142,7 @@ class PluginsServiceTest extends BcTestCase
         $folder = new Folder($pluginPath);
         $folder->create($pluginPath, 0777);
         try {
-            $this->assertNull($this->Plugins->install('BcTest', 'test'));
+            $this->assertNull($this->Plugins->install('BcTest', true, 'test'));
         } catch (\Exception $e) {
             $this->assertEquals("プラグインに Plugin クラスが存在しません。src ディレクトリ配下に作成してください。", $e->getMessage());
         }
@@ -163,7 +163,7 @@ class PluginsServiceTest extends BcTestCase
      */
     public function testResetDb()
     {
-        $this->Plugins->install('BcBlog', 'test');
+        $this->Plugins->install('BcBlog', true, 'test');
         $blogPosts = $this->getTableLocator()->get('BcBlog.plugins');
 
         $rs = $blogPosts->find()->where(['name' => 'BcBlog'])->first();
@@ -191,26 +191,6 @@ class PluginsServiceTest extends BcTestCase
     {
         $plugin = $this->Plugins->get(1);
         $this->assertEquals('BcBlog', $plugin->name);
-    }
-
-    /**
-     * アクセス制限設定を追加する
-     */
-    public function testAllow()
-    {
-        $data = [
-            'name' => 'BcTest',
-            'title' => 'テスト',
-            'status' => "0",
-            'version' => "1.0.0",
-            'permission' => "1"
-        ];
-
-        $this->Plugins->allow($data);
-        $permissions = TableRegistry::getTableLocator()->get('BaserCore.Permissions');
-        $result = $permissions->find('all')->all();
-
-        $this->assertEquals($data['title'] ." 管理", $result->last()->name);
     }
 
     /**
@@ -244,7 +224,7 @@ class PluginsServiceTest extends BcTestCase
     public function test_update()
     {
         // プラグイン
-        $this->Plugins->install('BcSpaSample', 'test');
+        $this->Plugins->install('BcSpaSample', true, 'test');
         $pluginPath = Plugin::path('BcSpaSample');
         rename($pluginPath . 'VERSION.txt', $pluginPath . 'VERSION.bak.txt');
         $file = new File($pluginPath . 'VERSION.txt');

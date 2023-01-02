@@ -90,7 +90,7 @@ class BcBaserHelper extends Helper
     protected $_Page = null;
 
     /**
-     * アクセス制限設定モデル
+     * アクセスルールモデル
      *
      * 一度初期化した後に再利用し、処理速度を向上する為にコンストラクタでセットする。
      *

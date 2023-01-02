@@ -39,7 +39,15 @@ use BaserCore\View\AppView;
     <?php echo $this->BcTime->format($userGroup->modified, 'yyyy-MM-dd') ?></td>
   <td class="bca-table-listup__tbody-td">
     <?php if ($userGroup->name != 'admins'): ?>
-      <?php $this->BcBaser->link('', ['controller' => 'permissions', 'action' => 'index', $userGroup->id], ['title' => __d('baser', '制限'), 'class' => 'bca-btn-icon', 'data-bca-btn-type' => 'permission', 'data-bca-btn-size' => 'lg']) ?>
+      <?php $this->BcBaser->link('', [
+        'controller' => 'permission_groups',
+        'action' => 'index', $userGroup->id
+      ], [
+        'title' => __d('baser', '制限'),
+        'class' => 'bca-btn-icon',
+        'data-bca-btn-type' => 'permission',
+        'data-bca-btn-size' => 'lg'
+      ]) ?>
     <?php endif ?>
     <?php $this->BcBaser->link('', ['action' => 'edit', $userGroup->id], ['title' => __d('baser', '編集'), 'class' => 'bca-btn-icon', 'data-bca-btn-type' => 'edit', 'data-bca-btn-size' => 'lg']) ?>
     <?php echo $this->BcAdminForm->postLink(
@@ -55,7 +63,7 @@ use BaserCore\View\AppView;
         '',
         ['action' => 'delete', $userGroup->id],
         [
-          'confirm' => __d('baser', "{0} を本当に削除してもいいですか？\n\n削除する場合、関連するユーザーは削除されませんが、関連するアクセス制限設定は全て削除されます。\n※ 関連するユーザーは管理者グループに所属する事になります。", $userGroup->name),
+          'confirm' => __d('baser', "{0} を本当に削除してもいいですか？\n\n削除する場合、関連するユーザーは削除されませんが、関連するアクセスルールは全て削除されます。\n※ 関連するユーザーは管理者グループに所属する事になります。", $userGroup->name),
           'title' => __d('baser', '削除'),
           'class' => 'btn-delete bca-btn-icon',
           'data-bca-btn-type' => 'delete',

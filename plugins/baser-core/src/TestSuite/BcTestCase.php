@@ -13,9 +13,6 @@ namespace BaserCore\TestSuite;
 
 use App\Application;
 use Authentication\Authenticator\Result;
-use BaserCore\Middleware\BcAdminMiddleware;
-use BaserCore\Middleware\BcFrontMiddleware;
-use BaserCore\Middleware\BcRequestFilterMiddleware;
 use BaserCore\Plugin;
 use BaserCore\Service\BcDatabaseService;
 use BaserCore\Utility\BcApiUtil;
@@ -34,7 +31,6 @@ use Cake\Event\EventManager;
 use Cake\Filesystem\Folder;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
-use Cake\Http\ServerRequestFactory;
 use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
 use Cake\TestSuite\Fixture\FixtureInjector;
@@ -216,10 +212,6 @@ class BcTestCase extends TestCase
         $container->addServiceProvider(new BcMailServiceProvider());
         $container->addServiceProvider(new BcWidgetAreaServiceProvider());
         EventManager::instance(new EventManager());
-        if(!empty($_SERVER['REQUEST_URI']) && $_SERVER['REQUEST_URI'] === '/s/') {
-            $a = 1;
-        }
-
     }
 
     /**

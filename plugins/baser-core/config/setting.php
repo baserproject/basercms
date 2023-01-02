@@ -67,6 +67,11 @@ return [
          */
         'adminPrefix' => $adminPrefix,
         /**
+         * Web API のプレフィックス
+         * baserコアのプレフィックスの後に付与
+         */
+        'apiPrefix' => 'api',
+        /**
          * 特権管理者グループID
          */
         'adminGroup' => ['admins'],
@@ -181,7 +186,7 @@ return [
                         'UserGroups' => [
                             'title' => __d('baser', 'ユーザーグループ'),
                             'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'user_groups', 'action' => 'index'],
-                            'currentRegex' => '/\/user_groups\/[^\/]+?/s'
+                            'currentRegex' => '/(\/user_groups\/[^\/]+?|\/permission_groups\/[^\/]+?|\/permissions\/[^\/]+?)/s'
                         ],
                     ]
                 ],
@@ -255,6 +260,25 @@ return [
                     ]
                 ]
             ]
+        ]
+    ],
+
+    /**
+     * アクセスルール
+     */
+    'BcPermission' => [
+        'permissionGroupTypes' => [
+            'Admin' => '管理画面',
+            'Api' => 'Web API'
+        ],
+        'defaultAllows' => [
+            '/baser/admin',
+            '/baser/admin/baser-core/dashboard/*',
+            '/baser/admin/baser-core/dblogs/*',
+            '/baser/admin/baser-core/users/logout',
+            '/baser/admin/baser-core/users/back_agent',
+            '/baser/admin/baser-core/password_requests/*',
+            '/baser/admin/baser-core/preview/*'
         ]
     ],
 

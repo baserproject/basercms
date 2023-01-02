@@ -40,8 +40,12 @@ jobs:
           cd docker
           docker-compose logs
 
-      - name: Run test suite
+      - name: Install
         run: |
           cd docker
           docker exec bc5-php composer run-script install
+
+      - name: Run test suite
+        run: |
+          cd docker
           docker exec bc5-php composer run-script test

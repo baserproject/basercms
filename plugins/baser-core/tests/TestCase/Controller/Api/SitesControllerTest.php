@@ -68,7 +68,6 @@ class SitesControllerTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function tearDown(): void
     {
-        Configure::clear();
         parent::tearDown();
     }
 

@@ -1,27 +1,25 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.View
- * @since           baserCMS v 0.1.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) NPO baser foundation
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       https://basercms.net/license/index.html MIT License
  */
-
-use BaserCore\View\BcAdminAppView;
 
 /**
  * プラグインインストール
- * @var BcAdminAppView $this
+ *
+ * @var \BaserCore\View\BcAdminAppView $this
  * @var \BaserCore\Model\Entity\Plugin $plugin
  * @var string $installStatusMessage
  */
 $this->BcBaser->i18nScript([
   'message1' => __d('baser', 'プラグインのデータを初期化します。よろしいですか？'),
 ]);
-$this->BcBaser->js('BcInstaller.admin/plugins/install.bundle', false, [
+$this->BcBaser->js('admin/plugins/install.bundle', false, [
   'id' => 'AdminPluginInstallScript',
   'data-resetDbUrl' => $this->BcBaser->getUrl(['action' => 'reset_db'])
 ]);
@@ -55,7 +53,7 @@ $this->BcAdmin->setHelp('plugins_install');
   <section class="bca-section align-center" data-bca-section-type="form-group">
     <?php echo $this->BcAdminForm->control('permission', [
       'type' => 'radio',
-      'options' => ['1' => __d('baser', '全てのユーザーで利用'), '2' => __d('baser', '管理ユーザーのみ利用')]
+      'options' => ['1' => __d('baser', '全てのユーザーで利用'), '0' => __d('baser', '管理ユーザーのみ利用')]
     ]) ?>
   </section>
 

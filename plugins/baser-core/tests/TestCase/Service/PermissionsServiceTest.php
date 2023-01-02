@@ -14,6 +14,7 @@ namespace BaserCore\Test\TestCase\Service;
 use BaserCore\Test\Factory\PermissionFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Service\PermissionsService;
+use Cake\Core\Configure;
 
 /**
  * BaserCore\Model\Table\PermissionsTable Test Case
@@ -423,10 +424,9 @@ class PermissionsServiceTest extends BcTestCase
     {
         return [
             ['/baser/admin/baser-core/dashboard/test', true],
-            ['/baser/admin/', true],
+            ['/baser/admin', true],
             ['/baser/admin/baser-core/dblogs/test', true],
             ['/baser/admin/baser-core/users/logout', true],
-            ['/baser/admin/baser-core/user_groups', true],
             ['/baser/admin/baser-core/baser-core/test', false],
         ];
     }
@@ -446,4 +446,21 @@ class PermissionsServiceTest extends BcTestCase
         $permissions = $this->PermissionsService->getIndex(['user_group_id' => 100])->all();
         $this->assertEquals(0, count($permissions));
     }
+
+    /**
+     * コントロールソースを取得する
+     *
+     * @param string フィールド名
+     */
+    public function testGetControlSource()
+    {
+        $userGroupList = $this->PermissionsService->getControlSource('user_group_id');
+        $this->assertGreaterThan(0, count($userGroupList));
+        $keyExist = key_exists(Configure::read('BcApp.adminGroupId'), $userGroupList);
+        $this->assertFalse($keyExist);
+
+        $userGroupList = $this->PermissionsService->getControlSource('hoge');
+        $this->assertEmpty($userGroupList);
+    }
+
 }

@@ -25,7 +25,7 @@ interface PluginsServiceInterface
 
     /**
      * プラグインを取得する
-     * 
+     *
      * @param int $id
      * @return EntityInterface
      * @checked
@@ -36,7 +36,7 @@ interface PluginsServiceInterface
 
     /**
      * プラグイン一覧を取得
-     * 
+     *
      * @param string $sortMode
      * @return array $plugins
      * @checked
@@ -47,19 +47,20 @@ interface PluginsServiceInterface
 
     /**
      * プラグインをインストールする
-     * 
+     *
      * @param string $name プラグイン名
+     * @param bool $permission アクセスルールを作るか作らないか
      * @param string $connection test connection指定用
      * @return bool|null
      * @checked
      * @unitTest
      * @noTodo
      */
-    public function install($name, $connection = 'default'): ?bool;
+    public function install($name, bool $permission, $connection = 'default'): ?bool;
 
     /**
      * プラグインをアップデートする
-     * 
+     *
      * @return bool
      * @checked
      * @unitTest
@@ -69,7 +70,7 @@ interface PluginsServiceInterface
 
     /**
      * バージョンを取得する
-     * 
+     *
      * @param $name
      * @return mixed|string
      * @checked
@@ -80,7 +81,7 @@ interface PluginsServiceInterface
 
     /**
      * プラグインを無効にする
-     * 
+     *
      * @param string $name
      * @checked
      * @unitTest
@@ -90,7 +91,7 @@ interface PluginsServiceInterface
 
     /**
      * プラグインを有効にする
-     * 
+     *
      * @param string $name
      * @checked
      * @unitTest
@@ -100,7 +101,7 @@ interface PluginsServiceInterface
 
     /**
      * プラグイン名からプラグインエンティティを取得
-     * 
+     *
      * @param string $name
      * @return array|EntityInterface|null
      * @checked
@@ -111,7 +112,7 @@ interface PluginsServiceInterface
 
     /**
      * データベースをリセットする
-     * 
+     *
      * @param string $name
      * @param array $connection
      * @throws Exception
@@ -123,7 +124,7 @@ interface PluginsServiceInterface
 
     /**
      * プラグインを削除する
-     * 
+     *
      * @param string $name
      * @param string $connection
      * @checked
@@ -134,7 +135,7 @@ interface PluginsServiceInterface
 
     /**
      * 優先度を変更する
-     * 
+     *
      * @param int $id
      * @param int $offset
      * @param array $conditions
@@ -147,7 +148,7 @@ interface PluginsServiceInterface
 
     /**
      * baserマーケットのプラグイン一覧を取得する
-     * 
+     *
      * @return array|mixed
      * @checked
      * @unitTest
@@ -156,19 +157,8 @@ interface PluginsServiceInterface
     public function getMarketPlugins(): array;
 
     /**
-     * ユーザーグループにアクセス許可設定を追加する
-     *
-     * @param array $data リクエストデータ
-     * @return void
-     * @checked
-     * @unitTest
-     * @noTodo
-     */
-    public function allow($data): void;
-
-    /**
      * インストール時の状態を返す
-     * 
+     *
      * @param string $pluginName
      * @return string
      * @checked
@@ -179,7 +169,7 @@ interface PluginsServiceInterface
 
     /**
      * 一括処理
-     * 
+     *
      * @param array $ids
      * @return bool
      * @checked
@@ -190,7 +180,7 @@ interface PluginsServiceInterface
 
     /**
      * IDを指定して名前リストを取得する
-     * 
+     *
      * @param $ids
      * @return array
      * @checked

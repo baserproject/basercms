@@ -47,7 +47,7 @@ class PagesService implements PagesServiceInterface
 
     /**
      * Pageservice constructor.
-     * 
+     *
      * @checked
      * @unitTest
      * @noTodo
@@ -61,7 +61,7 @@ class PagesService implements PagesServiceInterface
 
     /**
      * 初期データ取得
-     * 
+     *
      * @return EntityInterface
      * @checked
      * @noTodo
@@ -74,7 +74,7 @@ class PagesService implements PagesServiceInterface
 
     /**
      * リストデータ取得
-     * 
+     *
      * @return array
      * @checked
      * @noTodo
@@ -90,7 +90,7 @@ class PagesService implements PagesServiceInterface
 
     /**
      * 固定ページを取得する
-     * 
+     *
      * @param int $id
      * @param array $options
      *  - `status`: ステータス。 publish を指定すると公開状態のもののみ取得（初期値：全て）
@@ -105,7 +105,7 @@ class PagesService implements PagesServiceInterface
             'status' => ''
         ], $options);
         $conditions = [];
-        if($options['status'] === 'publish') {
+        if ($options['status'] === 'publish') {
             $conditions = $this->Pages->Contents->getConditionAllowPublish();
         }
         return $this->Pages->get($id, [
@@ -116,7 +116,7 @@ class PagesService implements PagesServiceInterface
 
     /**
      * 固定ページをゴミ箱から取得する
-     * 
+     *
      * @param int $id
      * @return EntityInterface|array
      * @throws RecordNotFoundException
@@ -126,7 +126,7 @@ class PagesService implements PagesServiceInterface
      */
     public function getTrash($id)
     {
-        $page = $this->Pages->findById($id)->contain('Contents', function (Query $q) {
+        $page = $this->Pages->findById($id)->contain('Contents', function(Query $q) {
             return $q->applyOptions(['withDeleted'])->contain(['Sites'])->where(['Contents.deleted_date IS NOT NULL']);
         })->firstOrFail();
         if (isset($page->content)) {
@@ -138,33 +138,53 @@ class PagesService implements PagesServiceInterface
 
     /**
      * ユーザー管理の一覧用のデータを取得
-     * 
+     *
      * @param array|null $queryParams
      * @return Query
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function getIndex(array $queryParams=[]): Query
+    public function getIndex(array $queryParams = []): Query
     {
-        $query = $this->Pages->find('all')->contain('Contents');
-        if (!empty($queryParams['limit'])) {
-            $query->limit($queryParams['limit']);
+        $options = array_merge([
+            'status' => ''
+        ], $queryParams);
+
+        $query = $this->Pages->find()->contain('Contents');
+        if (!empty($options['limit'])) {
+            $query->limit($options['limit']);
         }
 
-        $queryList = ['contents', 'draft'];
+        return $this->createIndexConditions($query, $options);
+    }
 
-        foreach ($queryParams as $key => $value) {
+    /**
+     * 固定ページ一覧用の検索条件を生成する
+     *
+     * @param Query $query
+     * @param array $options
+     * @return Query
+     */
+    protected function createIndexConditions(Query $query, $options = [])
+    {
+        $conditions = [];
+        if ($options['status'] === 'publish') {
+            $conditions = $this->Pages->Contents->getConditionAllowPublish();
+        }
+        $queryList = ['contents', 'draft'];
+        foreach($options as $key => $value) {
             if (in_array($key, $queryList)) {
+                $conditions["$key LIKE"] = '%' . $value . '%';
                 $query->where(["$key LIKE" => '%' . $value . '%']);
             }
         }
-        return $query;
+        return $query->where($conditions);
     }
 
     /**
      * 固定ページ登録
-     * 
+     *
      * @param array $data
      * @param array $options
      * @return \Cake\Datasource\EntityInterface
@@ -182,7 +202,7 @@ class PagesService implements PagesServiceInterface
 
     /**
      * ページ情報を更新する
-     * 
+     *
      * @param EntityInterface $target
      * @param array $pageData
      * @param array $options
@@ -208,7 +228,7 @@ class PagesService implements PagesServiceInterface
 
     /**
      * 物理削除
-     * 
+     *
      * @param int $id
      * @return bool
      * @checked
@@ -237,7 +257,7 @@ class PagesService implements PagesServiceInterface
         $pageTemplates = BcUtil::getTemplateList('Pages', $plugins);
 
         if ($contentId != 1) {
-            /** @var ContentFoldersService $ContentFoldersService  */
+            /** @var ContentFoldersService $ContentFoldersService */
             $ContentFoldersService = $this->getService(ContentFoldersServiceInterface::class);
             $parentTemplate = $ContentFoldersService->getParentTemplate($contentId, 'page');
             $searchKey = array_search($parentTemplate, $pageTemplates);
@@ -284,12 +304,12 @@ class PagesService implements PagesServiceInterface
         if (in_array($field, ['user_id', 'author_id'])) {
             $controlSources[$field] = $this->Users->getUserList($conditions);
         }
-        return isset($controlSources[$field]) ? $controlSources[$field] : false;
+        return isset($controlSources[$field])? $controlSources[$field] : false;
     }
 
     /**
      * 編集リンクを取得する
-     * 
+     *
      * @param ServerRequest $request
      * @return array|string
      * @checked
@@ -298,9 +318,9 @@ class PagesService implements PagesServiceInterface
      */
     public function getEditLink(ServerRequest $request)
     {
-        if(BcUtil::isAdminSystem()) return '';
-        if($request->getParam('controller') !== 'Pages') return '';
-        if($request->getParam('action') !== 'view') return '';
+        if (BcUtil::isAdminSystem()) return '';
+        if ($request->getParam('controller') !== 'Pages') return '';
+        if ($request->getParam('action') !== 'view') return '';
         return [
             'prefix' => 'Admin',
             'controller' => 'Pages',
@@ -311,7 +331,7 @@ class PagesService implements PagesServiceInterface
 
     /**
      * ページテンプレートを取得する
-     * 
+     *
      * @param EntityInterface $page
      * @return mixed
      * @checked
@@ -322,10 +342,10 @@ class PagesService implements PagesServiceInterface
     {
         if ($page->page_template) return $page->page_template;
         $contentFolderService = $this->getService(ContentFoldersServiceInterface::class);
-		return $contentFolderService->getParentTemplate(
-		    $page->content->id,
-		    'page'
-		);
+        return $contentFolderService->getParentTemplate(
+            $page->content->id,
+            'page'
+        );
     }
 
 }

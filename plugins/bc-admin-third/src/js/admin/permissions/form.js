@@ -12,5 +12,31 @@
 $(function () {
     $("#BtnSave").click(function () {
         $.bcUtil.showLoader();
-    })
+    });
+
+    $("input[name='permission_group_type']").click(updatePermissionGroupId);
+
+    let permissionGroupId = $('select#permission-group-id').val();
+    updatePermissionGroupId();
+    if (permissionGroupId) {
+        $('select#permission-group-id').val(permissionGroupId);
+    }
+
+    function updatePermissionGroupId() {
+        $('select#permission-group-id').val('');
+        $('select#permission-group-id option').each(function () {
+            if ($(this).val() !== '') {
+                $(this).remove();
+            }
+        });
+
+        const type = $("input[name='permission_group_type']:checked").val();
+        let permissionGroups = JSON.parse($("#permission-group").val());
+        permissionGroups.forEach(permissionGroup => {
+            if (permissionGroup.type === type) {
+                $("#permission-group-id").append(`<option value="${permissionGroup.id}">${permissionGroup.name}</option>`)
+            }
+        });
+    }
+
 });

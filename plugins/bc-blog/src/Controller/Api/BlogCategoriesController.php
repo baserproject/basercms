@@ -63,46 +63,6 @@ class BlogCategoriesController extends BcApiController
     }
 
     /**
-     * [ADMIN] 追加処理（AJAX）
-     *
-     * @param int $blogContentId
-     */
-    public function admin_ajax_add($blogContentId)
-    {
-
-        if (empty($this->request->getData())) {
-            $this->ajaxError(500, __d('baser', '無効な処理です。'));
-            return;
-        }
-
-        // カテゴリ名が空の場合タイトルから取る
-        if (empty($this->request->getData('BlogCategory.name'))) {
-            $this->request = $this->request->withData('BlogCategory.name',  $this->request->getData('BlogCategory.title'));
-        }
-
-        // マルチバイトを含む場合はエンコードしておく
-        if (strlen($this->request->getData('BlogCategory.name')) !== mb_strlen($this->request->getData('BlogCategory.name'))) {
-            $this->request = $this->request->withData('BlogCategory.name',  substr(urlencode($this->request->getData('BlogCategory.name')), 0, 49));
-        }
-
-        $this->request = $this->request->withData('BlogCategory.blog_content_id',  $blogContentId);
-        $this->request = $this->request->withData('BlogCategory.no', $this->BlogCategory->getMax(
-            'no',
-            ['BlogCategory.blog_content_id' => $blogContentId]
-            )
-            + 1);
-
-        $this->BlogCategory->create($this->request->getData());
-
-        if (!$this->BlogCategory->save()) {
-            $this->ajaxError(500, $this->BlogCategory->validationErrors);
-        }
-
-        echo $this->BlogCategory->getInsertID();
-        exit();
-    }
-
-    /**
      * [API] ブログカテゴリー一覧取得
      *
      * @param BlogCategoriesServiceInterface $service

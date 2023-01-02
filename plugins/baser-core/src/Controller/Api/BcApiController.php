@@ -22,6 +22,7 @@ use BaserCore\Service\UsersServiceInterface;
 use BaserCore\Utility\BcApiUtil;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Event\EventInterface;
+use Cake\Http\Exception\ForbiddenException;
 
 /**
  * Class BcApiController
@@ -44,6 +45,7 @@ class BcApiController extends AppController
     public function initialize(): void
     {
         parent::initialize();
+        if(!filter_var(env('USE_API', true), FILTER_VALIDATE_BOOLEAN)) throw new ForbiddenException(__d('baser', 'Web APIは許可されていません。'));
         $this->loadComponent('Authentication.Authentication');
         $this->Security->setConfig('validatePost', false);
     }

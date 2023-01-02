@@ -23,6 +23,7 @@ use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
 use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
+use Cake\TestSuite\IntegrationTestTrait;
 
 /**
  * Class BcPluginTest
@@ -30,6 +31,11 @@ use Cake\Routing\Router;
  */
 class BcPluginTest extends BcTestCase
 {
+
+    /**
+     * Trait
+     */
+    use IntegrationTestTrait;
 
     /**
      * @var BcPlugin
@@ -44,6 +50,8 @@ class BcPluginTest extends BcTestCase
     protected $fixtures = [
         'plugin.BaserCore.Plugins',
         'plugin.BaserCore.Users',
+        'plugin.BaserCore.UsersUserGroups',
+        'plugin.BaserCore.UserGroups',
         'plugin.BaserCore.SiteConfigs',
         'plugin.BaserCore.Sites',
         'plugin.BaserCore.Contents',
@@ -311,10 +319,12 @@ throw new BcException(\'test\');');
         $configPath = $pluginPath . 'config' . DS;
         $updaterPath = $configPath . 'update' . DS . '0.0.2' . DS;
         $migrationPath = $configPath . 'Migrations' . DS;
+        $seedPath = $configPath . 'Seeds' . DS;
         $srcPath = $pluginPath . 'src' . DS;
         $folder->create($updaterPath);
         $folder->create($srcPath);
         $folder->create($migrationPath);
+        $folder->create($seedPath);
 
         // VERSION.txt
         $file = new File($pluginPath . 'VERSION.txt');
@@ -477,6 +487,63 @@ $table->updateAll([\'name\' => \'2022-06-26\'], []);');
         $this->BcPlugin->applyAsTheme($site, $updateTheme);
         $site = $SiteService->get($targetId);
         $this->assertEquals($updateTheme, $site->theme);
+    }
+
+    /**
+     * test Rest API
+     */
+    public function testRestApi()
+    {
+        Router::resetRoutes();
+        // 件数確認
+        $this->get('/baser/api/baser-core/pages.json');
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals(0, count($result->pages));
+
+        // 一件追加
+        $token = $this->apiLoginAdmin();
+        $this->post('/baser/api/baser-core/pages.json?token=' . $token['access_token'], [
+            'content' => [
+                'parent_id' => 1,
+                'title' => 'sample',
+                'plugin' => 'BaserCore',
+                'type' => 'Page',
+                'site_id' => 1,
+                'alias_id' => '',
+                'entity_id' => '',
+            ],
+            'contents' => '',
+            'draft' => '',
+            'page_template' => '',
+            'code' => ''
+        ]);
+        $result = json_decode((string)$this->_response->getBody());
+        $id = $result->page->id;
+
+        // 件数確認（認証済）
+        $this->get('/baser/api/baser-core/pages.json?token=' . $token['access_token'] . '&' . 'status=');
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals(1, count($result->pages));
+
+        // 変更（公開状態に変更）
+        $this->put('/baser/api/baser-core/pages/' . $id . '.json?token=' . $token['access_token'], [
+            'content' => [
+                'self_status' => 1
+            ]
+        ]);
+
+        // 件数確認（認証なし）
+        $this->get('/baser/api/baser-core/pages.json');
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals(1, count($result->pages));
+
+        // 削除
+        $this->delete('/baser/api/baser-core/pages/' . $id . '.json?token=' . $token['access_token']);
+
+        // 件数確認（認証済）
+        $this->get('/baser/api/baser-core/pages.json?token=' . $token['access_token'] . '&' . 'status=');
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals(0, count($result->pages));
     }
 
 }

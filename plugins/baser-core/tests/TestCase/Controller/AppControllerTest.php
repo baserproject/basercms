@@ -129,6 +129,19 @@ class AppControllerTest extends BcTestCase
 //        $this->assertEquals('BcAdminThird', $this->AppController->viewBuilder()->getTheme());
     }
 
+//    /**
+//     * test beforeFilter
+//     */
+//    public function testBeforeFilter()
+//    {
+//        $this->loginAdmin($this->BcAdminApp->getRequest());
+//        $this->BcAdminApp->beforeFilter(new Event('beforeFilter'));
+//        $this->assertFalse(isset($_SESSION['Flash']['flash'][0]['message']));
+//        $this->loginAdmin($this->BcAdminApp->getRequest(), 2);
+//        $this->BcAdminApp->beforeFilter(new Event('beforeFilter'));
+//        $this->assertEquals('指定されたページへのアクセスは許可されていません。', $_SESSION['Flash']['flash'][0]['message']);
+//    }
+
     /**
      * test beforeRender
      */
@@ -161,7 +174,7 @@ class AppControllerTest extends BcTestCase
     public function test_blackHoleCallback()
     {
         $this->enableCsrfToken();
-        $logPath = ROOT . DS . 'logs' . DS . 'cli-error.log';
+        $logPath = ROOT . 'logs' . DS . 'cli-error.log';
         @unlink($logPath);
         $this->post('/', [
             'name' => 'Test_test_Man'

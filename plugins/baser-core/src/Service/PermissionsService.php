@@ -14,6 +14,7 @@ namespace BaserCore\Service;
 use BaserCore\Error\BcException;
 use BaserCore\Model\Entity\Permission;
 use BaserCore\Model\Table\PermissionsTable;
+use BaserCore\Utility\BcContainerTrait;
 use Cake\Core\Configure;
 use Cake\Http\ServerRequest;
 use Cake\ORM\Query;
@@ -24,6 +25,7 @@ use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\Note;
+use Cake\Utility\Inflector;
 
 /**
  * Class PermissionsService
@@ -31,6 +33,11 @@ use BaserCore\Annotation\Note;
  */
 class PermissionsService implements PermissionsServiceInterface
 {
+
+    /**
+     * Trait
+     */
+    use BcContainerTrait;
 
     /**
      * Permissions Table
@@ -69,17 +76,21 @@ class PermissionsService implements PermissionsServiceInterface
 
     /**
      * パーミッションの新規データ用の初期値を含んだエンティティを取得する
-     * 
+     *
      * @param int $userGroupId
      * @return Permission
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function getNew($userGroupId = null): EntityInterface
+    public function getNew($userGroupId = null, $permissionGroupId = null): EntityInterface
     {
         return $this->Permissions->newEntity(
-            $this->autoFillRecord(['user_group_id' => $userGroupId]),
+            $this->autoFillRecord([
+                'user_group_id' => $userGroupId,
+                'permission_group_id' => $permissionGroupId,
+                'permission_group_type' => ($permissionGroupId)? null : 'Admin'
+            ]),
             ['validate' => 'plain']
         );
     }
@@ -87,7 +98,7 @@ class PermissionsService implements PermissionsServiceInterface
     /**
      * リストデータを取得
      * 対応しない
-     * 
+     *
      * @return array
      * @checked
      * @noTodo
@@ -100,7 +111,7 @@ class PermissionsService implements PermissionsServiceInterface
 
     /**
      * パーミッションを取得する
-     * 
+     *
      * @param int $id
      * @return EntityInterface
      * @checked
@@ -110,13 +121,13 @@ class PermissionsService implements PermissionsServiceInterface
     public function get($id): EntityInterface
     {
         return $this->Permissions->get($id, [
-            'contain' => ['UserGroups'],
+            'contain' => ['UserGroups', 'PermissionGroups'],
         ]);
     }
 
     /**
      * パーミッション管理の一覧用のデータを取得
-     * 
+     *
      * @param array $queryParams
      * @return Query
      * @checked
@@ -125,17 +136,26 @@ class PermissionsService implements PermissionsServiceInterface
      */
     public function getIndex(array $queryParams = []): Query
     {
-        $options = [];
+        $conditions = [];
         if (!empty($queryParams['user_group_id'])) {
-            $options = ['conditions' => ['Permissions.user_group_id' => $queryParams['user_group_id']]];
+            $conditions['Permissions.user_group_id'] = $queryParams['user_group_id'];
         }
-        $query = $this->Permissions->find('all', $options)->order('sort', 'ASC');
+        if (!empty($queryParams['permission_group_id'])) {
+            $conditions['Permissions.permission_group_id'] = $queryParams['permission_group_id'];
+        }
+        if (!empty($queryParams['permission_group_type'])) {
+            $conditions['PermissionGroups.type'] = $queryParams['permission_group_type'];
+        }
+        $query = $this->Permissions->find()
+            ->contain(['PermissionGroups'])
+            ->where($conditions)
+            ->order('sort', 'ASC');
         return $query;
     }
 
     /**
      * パーミッション登録
-     * 
+     *
      * @param ServerRequest $request
      * @return EntityInterface
      * @throws \Cake\ORM\Exception\PersistenceFailedException
@@ -153,7 +173,7 @@ class PermissionsService implements PermissionsServiceInterface
 
     /**
      * パーミッション情報を更新する
-     * 
+     *
      * @param EntityInterface $target
      * @param array $data
      * @return EntityInterface
@@ -228,7 +248,7 @@ class PermissionsService implements PermissionsServiceInterface
 
     /**
      * パーミッション情報を削除する
-     * 
+     *
      * @param int $id
      * @return bool
      * @checked
@@ -269,7 +289,7 @@ class PermissionsService implements PermissionsServiceInterface
 
     /**
      * レコード作成に必要なデータを代入する
-     * 
+     *
      * @param array $data
      * @return array $data
      * @noTodo
@@ -308,18 +328,11 @@ class PermissionsService implements PermissionsServiceInterface
      */
     public function check(string $url, array $userGroupId): bool
     {
-        if (in_array(Configure::read('BcApp.adminGroupId'), $userGroupId)) {
-            return true;
-        }
-        if ($this->checkDefaultDeny($url)) {
-            return false;
-        }
-        if ($this->checkDefaultAllow($url)) {
-            return true;
-        }
+        if (in_array(Configure::read('BcApp.adminGroupId'), $userGroupId)) return true;
+        if ($this->checkDefaultDeny($url)) return false;
+        if ($this->checkDefaultAllow($url)) return true;
 
-        $permissionGroupList = $this->Permissions->getTargePermissions($userGroupId);
-
+        $permissionGroupList = $this->Permissions->getTargetPermissions($userGroupId);
         foreach($permissionGroupList as $permissionGroup) {
             if ($this->checkGroup($url, $permissionGroup)) {
                 return true;
@@ -339,19 +352,10 @@ class PermissionsService implements PermissionsServiceInterface
     private function setDefaultAllow(): void
     {
         // ダッシュボード、ログインユーザーの編集とログアウトは強制的に許可とする
-        $allows = [
-            '/^' . preg_quote($this->adminUrlPrefix . '/', '/') . '?$/',
-            '/^' . preg_quote($this->adminUrlPrefix . '/baser-core/dashboard/', '/') . '.*?/',
-            '/^' . preg_quote($this->adminUrlPrefix . '/baser-core/dblogs/', '/') . '.*?/',
-            '/^' . preg_quote($this->adminUrlPrefix . '/baser-core/users/logout', '/') . '$/',
-            '/^' . preg_quote($this->adminUrlPrefix . '/baser-core/users/back_agent', '/') . '$/',
-            '/^' . preg_quote($this->adminUrlPrefix . '/baser-core/user_groups', '/') . '$/',
-        ];
-        $sessionKey = Configure::read('BcPrefixAuth.Admin.sessionKey');
-        if (!empty($_SESSION[$sessionKey]['id'])) {
-            $allows[] = '/^' . preg_quote($this->adminUrlPrefix . '/baser-core/users/edit/' . $_SESSION[$sessionKey]['id'], '/') . '$/';
+        $allowUrls = Configure::read('BcPermission.defaultAllows');
+        foreach($allowUrls as $url) {
+            $this->addCheck($url, true);
         }
-        $this->defaultAllows = $allows;
     }
 
     /**
@@ -404,17 +408,38 @@ class PermissionsService implements PermissionsServiceInterface
      */
     private function checkGroup(string $url, array $groupPermission): bool
     {
+        // URLのプレフィックスを標準の文字列に戻す
+        foreach(Configure::read('BcPermission.permissionGroupTypes') as $key => $value) {
+            $prefix = Configure::read('BcApp.' . Inflector::variable($key) . 'Prefix');
+            if(!$prefix) continue;
+            $regex = '/^' . preg_quote('/' . Configure::read('BcApp.baserCorePrefix') . '/' . $prefix . '/', '/') . '/';
+            $url = preg_replace($regex, '/baser/' . Inflector::underscore($key) . '/', $url);
+        }
+
         $ret = true;
         foreach($groupPermission as $permission) {
-            $pattern = $permission->url;
-            $pattern = preg_quote($pattern, '/');
-            $pattern = str_replace('\*', '.*?', $pattern);
-            $pattern = '/^' . str_replace('\/.*?', '(|\/.*?)', $pattern) . '$/is';
+            $pattern = $this->convertRegexUrl($permission->url);
             if (preg_match($pattern, $url)) {
                 $ret = $permission->auth;
             }
         }
         return (boolean)$ret;
+    }
+
+    /**
+     * URLを正規表現用の文字列に変換する
+     * @param string $url
+     * @return string
+     */
+    public function convertRegexUrl(string $url)
+    {
+        if(strpos($url, '{loginUserId}') !== false) {
+            $user = BcUtil::loginUser();
+            $url = str_replace('{loginUserId}', $user->id, $url);
+        }
+        $pattern = preg_quote($url, '/');
+        $pattern = str_replace('\*', '.*?', $pattern);
+        return '/^' . str_replace('\/.*?', '(|\/.*?)', $pattern) . '$/is';
     }
 
     /**
@@ -429,10 +454,7 @@ class PermissionsService implements PermissionsServiceInterface
      */
     public function addCheck(string $url, bool $auth)
     {
-        $pattern = preg_quote($url, '/');
-        $pattern = str_replace('\*', '.*?', $pattern);
-        $pattern = '/^' . str_replace('\/.*?', '(|\/.*?)', $pattern) . '$/is';
-
+        $pattern = $this->convertRegexUrl($url);
         if ($auth) {
             $this->defaultAllows[] = $pattern;
         } else {
@@ -497,7 +519,7 @@ class PermissionsService implements PermissionsServiceInterface
 
     /**
      * 一括処理
-     * 
+     *
      * @param array $ids
      * @return bool
      * @checked
@@ -521,7 +543,7 @@ class PermissionsService implements PermissionsServiceInterface
 
     /**
      * IDを指定して名前リストを取得する
-     * 
+     *
      * @param $ids
      * @return array
      * @checked
@@ -531,6 +553,35 @@ class PermissionsService implements PermissionsServiceInterface
     public function getNamesById($ids): array
     {
         return $this->Permissions->find('list')->where(['id IN' => $ids])->toArray();
+    }
+
+    /**
+     * コントロールソースを取得する
+     *
+     * @param string $field
+     * @param array $options
+     * @return array
+     * @checked
+     * @noTodo
+     */
+    public function getControlSource(string $field, array $options = [])
+    {
+        if($field === 'permission_group_id') {
+            $permissionGroupsService = $this->getService(PermissionGroupsServiceInterface::class);
+            return $permissionGroupsService->getList($options);
+        } elseif($field === 'permission_group_type') {
+            return Configure::read('BcPermission.permissionGroupTypes');
+        } elseif($field === 'user_group_id') {
+            $userGroups = TableRegistry::getTableLocator()->get('BaserCore.UserGroups');
+            $groupList = $userGroups->find('list', [
+                'keyField' => 'id',
+                'valueField' => 'title',
+            ])->where([
+                'UserGroups.id !=' => Configure::read('BcApp.adminGroupId')
+            ]);
+            return $groupList->toArray();
+        }
+        return [];
     }
 
 }

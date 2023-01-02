@@ -15,8 +15,8 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Controller\Api\BcApiController;
-use BcUploader\Service\UploadCategoriesService;
-use BcUploader\Service\UploadCategoriesServiceInterface;
+use BcUploader\Service\UploaderCategoriesService;
+use BcUploader\Service\UploaderCategoriesServiceInterface;
 
 /**
  * アップロードカテゴリコントローラー
@@ -32,11 +32,11 @@ class UploaderCategoriesController extends BcApiController
      * ### エラー
      * 受け取ったPOSTデータのキー名 'batch' が 'delete' 以外の値であれば500エラーを発生させる
      *
-     * @param UploadCategoriesService $service
+     * @param UploaderCategoriesService $service
      * @checked
      * @noTodo
      */
-    public function batch(UploadCategoriesServiceInterface $service)
+    public function batch(UploaderCategoriesServiceInterface $service)
     {
         $this->request->allowMethod(['post', 'put']);
         $allowMethod = [

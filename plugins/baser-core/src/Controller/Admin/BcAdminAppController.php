@@ -75,29 +75,6 @@ class BcAdminAppController extends BcAppController
     }
 
     /**
-     * Before Filter
-     * @param EventInterface $event
-     * @return Response|void
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function beforeFilter(EventInterface $event)
-    {
-        parent::beforeFilter($event);
-
-        if(!BcUtil::isInstalled()) return;
-
-        $user = BcUtil::loginUser();
-        /* @var PermissionsServiceInterface $permission */
-        $permission = $this->getService(PermissionsServiceInterface::class);
-        if ($user && !$permission->check($this->getRequest()->getPath(), Hash::extract($user->toArray()['user_groups'], '{n}.id'))) {
-            $this->BcMessage->setError(__d('baser', '指定されたページへのアクセスは許可されていません。'));
-            $this->redirect(Router::url(Configure::read('BcPrefixAuth.Admin.loginRedirect')));
-        }
-    }
-
-    /**
      * Before Render
      * @param EventInterface $event
      * @return \Cake\Http\Response|void|null

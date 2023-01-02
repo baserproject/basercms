@@ -68,7 +68,7 @@ class PagesControllerTest extends BcTestCase
     public function test_initialize()
     {
         $controller = new PagesController($this->getRequest());
-        $this->assertEquals($controller->Authentication->unauthenticatedActions, ['view']);
+        $this->assertEquals($controller->Authentication->unauthenticatedActions, ['view', 'index']);
     }
 
     /**
@@ -78,7 +78,7 @@ class PagesControllerTest extends BcTestCase
      */
     public function testIndex()
     {
-        $this->get('/baser/api/baser-core/pages/index.json?token=' . $this->accessToken);
+        $this->get('/baser/api/baser-core/pages/index.json');
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
         $this->assertMatchesRegularExpression('/<section class="mainHeadline">/', $result->pages[0]->contents);

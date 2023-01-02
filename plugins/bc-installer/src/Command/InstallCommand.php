@@ -176,6 +176,7 @@ class InstallCommand extends Command
         $service->deployEditorTemplateImage();
         $service->executeDefaultUpdates();
         $service->installCorePlugin($args->getOption('data'));
+        $service->buildPermissions();
         $siteConfigsService = $this->getService(SiteConfigsServiceInterface::class);
         $siteConfigsService->putEnv('SITE_URL', $siteUrl);
         $siteConfigsService->putEnv('SSL_URL', $siteUrl);

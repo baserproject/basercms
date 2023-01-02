@@ -81,7 +81,6 @@ class BlogContentsControllerTest extends BcTestCase
      */
     public function tearDown(): void
     {
-        Configure::clear();
         parent::tearDown();
     }
 

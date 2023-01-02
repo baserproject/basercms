@@ -65,6 +65,12 @@ class PermissionsTable extends AppTable
             'joinTable' => 'user_groups',
             'joinType' => 'left'
         ]);
+        $this->belongsTo('PermissionGroups', [
+            'className' => 'BaserCore.PermissionGroups',
+            'foreignKey' => 'permission_group_id',
+            'targetForeignKey' => 'id',
+            'joinType' => 'left'
+        ]);
     }
 
     /**
@@ -132,31 +138,6 @@ class PermissionsTable extends AppTable
     }
 
     /**
-     * コントロールソースを取得する
-     *
-     * @param string フィールド名
-     * @return array コントロールソース
-     *
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function getControlSource($field = null)
-    {
-        if ($field === 'user_group_id') {
-            $userGroups = TableRegistry::getTableLocator()->get('BaserCore.UserGroups');
-            $groupList = $userGroups->find('list', [
-                'keyField' => 'id',
-                'valueField' => 'title',
-            ])->where([
-                'UserGroups.id !=' => Configure::read('BcApp.adminGroupId')
-            ]);
-            return $groupList->toArray();
-        }
-        return false;
-    }
-
-    /**
      * beforeSave
      * urlの先頭に / を付けて絶対パスにする
      *
@@ -178,7 +159,7 @@ class PermissionsTable extends AppTable
     }
 
     /**
-     * アクセス制限データをコピーする
+     * アクセスルールをコピーする
      *
      * @param int $id
      * @param array $data
@@ -196,7 +177,7 @@ class PermissionsTable extends AppTable
         if (empty($data['user_group_id']) || empty($data['name'])) {
             return false;
         }
-        // $idが存在する場合アクセス制限コピー
+        // $idが存在する場合アクセスルールをコピー
         $idExists = $this->find()->where([
             'Permissions.user_group_id' => $data['user_group_id'],
             'Permissions.name' => $data['name'],
@@ -205,7 +186,7 @@ class PermissionsTable extends AppTable
             $data['name'] .= '_copy';
             return $this->copy(null, $data);
         }
-        // $idがない場合新規でアクセス制限作成
+        // $idがない場合新規でアクセスルールを作成
         unset($data['id'], $data['modified'], $data['created']);
         // 新規の場合
         $data['no'] = $this->getMax('no', ['user_group_id' => $data['user_group_id']]) + 1;
@@ -229,11 +210,16 @@ class PermissionsTable extends AppTable
      */
     public function setTargetPermissions(array $userGroups)
     {
-        $permissions = $this->find('all')
+        $permissions = $this->find()
+            ->contain(['PermissionGroups'])
             ->select(['url', 'auth', 'method', 'user_group_id'])
             ->where([
                 'Permissions.user_group_id in' => $userGroups,
                 'Permissions.status' => true,
+                'or' => [
+                    'PermissionGroups.status' => true,
+                    'PermissionGroups.status IS' => null
+                ]
             ])
             ->order([
                 'user_group_id' => 'asc',
@@ -258,7 +244,7 @@ class PermissionsTable extends AppTable
      * @noTodo
      * @unitTest
      */
-    public function getTargePermissions(array $userGroups): array
+    public function getTargetPermissions(array $userGroups): array
     {
         foreach($userGroups as $groupId) {
             if (!isset($this->_targetPermissions[$groupId])) {

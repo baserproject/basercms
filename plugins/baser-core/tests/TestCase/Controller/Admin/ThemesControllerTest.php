@@ -268,7 +268,7 @@ class ThemesControllerTest extends BcTestCase
 
         $this->get('/baser/admin/baser-core/themes/screenshot/BcFront');
         $this->assertResponseOk();
-        $this->assertFileResponse('/var/www/html/plugins/bc-front/screenshot.png');
+        $this->assertFileResponse(ROOT . '/plugins/bc-front/screenshot.png');
 
         $this->get('/baser/admin/baser-core/themes/screenshot/NotExistsTheme');
         $this->assertResponseError();

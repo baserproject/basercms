@@ -1,17 +1,20 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.View
- * @since           baserCMS v 2.0.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) NPO baser foundation
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       https://basercms.net/license/index.html MIT License
  */
 
 /**
- * [ADMIN] アクセス制限設定一覧　ヘルプ
+ * [ADMIN] アクセスルール一覧　ヘルプ
+ *
+ * @checked
+ * @noTodo
+ * @unitTest
  */
 ?>
 
@@ -21,7 +24,7 @@
   <li><?php echo __d('baser', 'ルールを何も追加しない状態では、全てのユーザーが全てのコンテンツにアクセスできるようになっています。') ?></li>
   <li><?php echo __d('baser', '複数のルールを追加した場合は、上から順に設定が上書きされ、下にいくほど優先されます。') ?></li>
   <li><?php echo __d('baser', 'URL設定ではワイルドカード（*）を利用して一定のURL階層内のコンテンツに対し一度に設定を行う事ができます。') ?></li>
-  <li><?php echo __d('baser', '管理者グループ「admins」には、アクセス制限の設定はできません。') ?></li>
+  <li><?php echo __d('baser', '管理者グループ「admins」には、アクセスルールの設定はできません。') ?></li>
   <li><?php echo sprintf(__d('baser', '一覧左上の「並び替え」をクリックすると、その際に各データに表示される %s マークをドラッグアンドドロップして行の並び替えができます。'), '<span class="sort-handle ui-sortable-handle" style="cursor: move;"><i class="bca-btn-icon-text" data-bca-btn-type="draggable"></i>ドラッグ可能</span>') ?></li>
 </ul>
 <div class="example-box">

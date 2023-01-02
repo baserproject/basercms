@@ -325,7 +325,7 @@ class BcAdminHelperTest extends BcTestCase
             'isLogin' => true,
             'isSuperUser' => true
         ]);
-        $needText = '<div id="PermissionDialog" title="アクセス制限登録" hidden>';
+        $needText = '<div id="PermissionDialog" title="アクセスルール登録" hidden>';
         $this->assertNotFalse(strpos($expectedIsSuperUser, $needText));
     }
 

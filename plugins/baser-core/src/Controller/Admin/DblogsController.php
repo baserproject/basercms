@@ -15,7 +15,6 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Service\DblogsServiceInterface;
-use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\Utility\BcSiteConfig;
 use Cake\Http\Exception\NotFoundException;
 

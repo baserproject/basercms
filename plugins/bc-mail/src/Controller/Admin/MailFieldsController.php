@@ -116,18 +116,6 @@ class MailFieldsController extends MailAdminAppController
     }
 
     /**
-     * beforeRender
-     *
-     * @return void
-     */
-    public function beforeRender(EventInterface $event): void
-    {
-        parent::beforeRender($event);
-        // TODO ucmitz 未実装
-//        $this->set('mailContent', $this->mailContent);
-    }
-
-    /**
      * [ADMIN] メールフィールド一覧
      *
      * @param int $mailContentId
@@ -213,46 +201,6 @@ class MailFieldsController extends MailAdminAppController
     }
 
     /**
-     * [ADMIN] 削除処理（Ajax）
-     *
-     * @param int $mailContentId
-     * @param int $id
-     * @return void
-     */
-    public function ajax_delete($mailContentId, $id = null)
-    {
-        $this->_checkSubmitToken();
-        /* 除外処理 */
-        if (!$id) {
-            $this->ajaxError(500, __d('baser', '無効な処理です。'));
-        }
-        // メッセージ用にデータを取得
-        $data = $this->MailField->read(null, $id);
-        $field = Hash::get($data, 'MailField');
-
-        /* 削除処理 */
-        if (!$field || !$this->MailMessage->delMessageField($mailContentId, $field['field_name'])) {
-            $this->ajaxError(
-                500,
-                __d('baser', 'データベースに問題があります。メール受信データ保存用テーブルの更新処理に失敗しました。')
-            );
-            exit;
-        }
-
-        if (!$this->MailField->delete($id)) {
-            exit;
-        }
-
-        $this->MailField->saveDbLog(
-            sprintf(
-                __d('baser', 'メールフィールド「%s」 を削除しました。'),
-                $field['name']
-            )
-        );
-        exit(true);
-    }
-
-    /**
      * [ADMIN] 削除処理
      *
      * @param MailFieldsService $service
@@ -276,51 +224,6 @@ class MailFieldsController extends MailAdminAppController
             $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
         }
         return $this->redirect(['action' => 'index', $mailContentId]);
-    }
-
-    /**
-     * 一括削除
-     *
-     * @param array $ids
-     * @return boolean
-     */
-    protected function _batch_del($ids)
-    {
-        if ($ids) {
-            foreach ($ids as $id) {
-                // メッセージ用にデータを取得
-                $data = $this->MailField->read(null, $id);
-                $field = $data['MailField'];
-                /* 削除処理 */
-                if (!$this->MailMessage->delMessageField($field['mail_content_id'], $field['field_name'])) {
-                    continue;
-                }
-                if (!$this->MailField->delete($id)) {
-                    continue;
-                }
-                $this->MailField->saveDbLog(
-                    sprintf(
-                        __d('baser', 'メールフィールド「%s」 を削除しました。'),
-                        $field['name']
-                    )
-                );
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * フォームの初期値を取得する
-     *
-     * @return array
-     */
-    protected function _getDefaultValue()
-    {
-        $data['MailField']['type'] = 'text';
-        $data['MailField']['use_field'] = 1;
-        $data['MailField']['no_send'] = 0;
-        return $data;
     }
 
     /**
@@ -422,72 +325,4 @@ class MailFieldsController extends MailAdminAppController
         return $this->redirect(['action' => 'index', $mailContentId]);
     }
 
-    /**
-     * 一括公開
-     *
-     * @param array $ids
-     * @return boolean
-     * @access protected
-     */
-    protected function _batch_publish($ids)
-    {
-        if (!$ids) {
-            return true;
-        }
-        foreach ($ids as $id) {
-            $this->_changeStatus($id, true);
-        }
-        return true;
-    }
-
-    /**
-     * 一括非公開
-     *
-     * @param array $ids
-     * @return boolean
-     * @access protected
-     */
-    protected function _batch_unpublish($ids)
-    {
-        if (!$ids) {
-            return true;
-        }
-
-        foreach ($ids as $id) {
-            $this->_changeStatus($id, false);
-        }
-        return true;
-    }
-
-    /**
-     * ステータスを変更する
-     *
-     * @param int $id
-     * @param boolean $status
-     * @return boolean
-     */
-    protected function _changeStatus($id, $status)
-    {
-        $statusTexts = [0 => __d('baser', '無効'), 1 => __d('baser', '有効')];
-        $data = $this->MailField->find(
-            'first',
-            ['conditions' => ['MailField.id' => $id], 'recursive' => -1]
-        );
-        $data['MailField']['use_field'] = $status;
-        $this->MailField->set($data);
-
-        if (!$this->MailField->save()) {
-            return false;
-        }
-
-        $statusText = $statusTexts[$status];
-        $this->MailField->saveDbLog(
-            sprintf(
-                __d('baser', 'メールフィールド「%s」 の設定を %s に変更しました。'),
-                $data['MailField']['name'],
-                $statusText
-            )
-        );
-        return true;
-    }
 }

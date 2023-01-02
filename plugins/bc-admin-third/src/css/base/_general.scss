@@ -23,7 +23,6 @@ body {
   min-width: 960px; // old
   height: 100%; // old
   line-height: 1.15; // normalize.css for bootstrap4の上書き防止
-  background-color: $color_footer;
   @include mq(sp) {
   	min-width: auto;
   }

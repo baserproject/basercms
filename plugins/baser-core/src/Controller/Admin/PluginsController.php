@@ -85,8 +85,11 @@ class PluginsController extends BcAdminAppController
             return;
         } else {
             try {
-                if ($service->install($name, $this->request->getData('connection') ?? 'default')) {
-                    $service->allow($this->request->getData());
+                if ($service->install(
+                    $name,
+                    $this->request->getData('permission'),
+                    $this->request->getData('connection') ?? 'default')
+                ) {
                     $this->BcMessage->setSuccess(sprintf(__d('baser', '新規プラグイン「%s」を baserCMS に登録しました。'), $name));
                     return $this->redirect(['action' => 'index']);
                 } else {
@@ -240,7 +243,7 @@ class PluginsController extends BcAdminAppController
         }
         $plugin = $service->getByName($this->request->getData('name'));
         try {
-            $service->resetDb($this->request->getData('name'), $this->request->getData('connection'));
+            $service->resetDb($this->request->getData('name'), $this->request->getData('connection') ?? 'default');
             $usersService->reLogin($this->request, $this->response);
             $this->BcMessage->setSuccess(
                 sprintf(__d('baser', '%s プラグインのデータを初期化しました。'), $plugin->title)

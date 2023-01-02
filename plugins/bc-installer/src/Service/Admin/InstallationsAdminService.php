@@ -342,7 +342,10 @@ class InstallationsAdminService extends InstallationsService implements Installa
 //            }
 //        }
 
-       // SITE_URL更新
+        // アクセスルールの初期データを構築
+        $this->buildPermissions();
+
+        // SITE_URL更新
         $siteConfigsService = $this->getService(SiteConfigsServiceInterface::class);
         $siteConfigsService->putEnv('SITE_URL', BcUtil::siteUrl());
         $siteConfigsService->putEnv('SSL_URL', BcUtil::siteUrl());
