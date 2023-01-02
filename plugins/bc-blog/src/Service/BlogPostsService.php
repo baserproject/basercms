@@ -706,6 +706,7 @@ class BlogPostsService implements BlogPostsServiceInterface
      * @return Query
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getIndexByAuthor(string $author, array $options = [])
     {
