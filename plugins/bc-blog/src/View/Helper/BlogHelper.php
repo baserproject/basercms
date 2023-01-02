@@ -1173,6 +1173,9 @@ class BlogHelper extends Helper
      *    - `output` : 出力形式 tag, url のを指定できる（初期値 : ''）
      *  ※ その他のオプションについては、リンクをつける場合、HtmlHelper::link() を参照、つけない場合、Html::image() を参照
      * @return string アイキャッチ画像のHTML
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getEyeCatch($post, $options = [])
     {

@@ -701,14 +701,79 @@ class BlogHelperTest extends BcTestCase
      */
     public function testGetEyeCatch()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $post = ['BlogPost' => [
-            'blog_content_id' => 1,
-            'eye_catch' => 'test-eye_catch.jpg'
-        ]];
-        $result = $this->Blog->getEyeCatch($post);
-        $expected = '/\/files\/blog\/1\/blog_posts\/test-eye_catch.jpg/';
+        // テストデータを作る
+        BlogPostFactory::make([
+            'id' => 1,
+            'name' => 'test name',
+            'blog_category_id' => 1,
+            'eye_catch' => 'test-eye_catch.jpg',
+        ])->persist();
+        BlogPostFactory::make([
+            'id' => 2,
+            'name' => 'test name',
+            'blog_category_id' => 1,
+        ])->persist();
+        $post = BlogPostFactory::get(1);
 
+        // $optionはデフォルト値のテスト
+        $options = ['table' => 'BcBlog.BlogPosts', 'escape' => true];
+        $result = $this->Blog->getEyeCatch($post, $options);
+        $expected = '/\/files\/blog\/1\/blog_posts\/test-eye_catch.jpg/';
+        $this->assertMatchesRegularExpression($expected, $result, 'アイキャッチ画像を正しく取得できません');
+
+        // aのタグを設定しないテスト
+        $options = ['table' => 'BcBlog.BlogPosts', 'link' => false];
+        $result = $this->Blog->getEyeCatch($post, $options);
+        $expected = '/\<a href/';
+        // link=falseの場合Aタグがない確認する
+        $this->assertDoesNotMatchRegularExpression($expected, $result, 'アイキャッチ画像を正しく取得できません');
+
+        // 特殊文字をエスケープするテスト
+        $options = ['table' => 'BcBlog.BlogPosts', 'escape' => true];
+        $result = $this->Blog->getEyeCatch($post, $options);
+        $expected = '/\&quot\;/';
+        $this->assertMatchesRegularExpression($expected, $result, 'アイキャッチ画像を正しく取得できません');
+
+        // alt属性のテスト
+        $options = ['table' => 'BcBlog.BlogPosts', 'alt' => 'テスト属性', 'escape' => true];
+        $result = $this->Blog->getEyeCatch($post, $options);
+        $expected = '/alt=&quot;テスト属性&quot;/';
+        $this->assertMatchesRegularExpression($expected, $result, 'アイキャッチ画像を正しく取得できません');
+
+        // 横幅と高さのテスト
+        $options = ['table' => 'BcBlog.BlogPosts', 'width' => '100', 'height' => '150', 'escape' => true];
+        $result = $this->Blog->getEyeCatch($post, $options);
+        $expected = '/width=&quot;100&quot; height=&quot;150&quot;/';
+        $this->assertMatchesRegularExpression($expected, $result, 'アイキャッチ画像を正しく取得できません');
+
+        // 画像が存在しない場合に表示する画像のテスト
+        $options = ['table' => 'BcBlog.BlogPosts', 'noimage' => 'no_image.jpg', 'escape' => true];
+        $result = $this->Blog->getEyeCatch(BlogPostFactory::get(2), $options);
+        $expected = '/\<img src\=\"\/img\/no_image\.jpg\"/';
+        $this->assertMatchesRegularExpression($expected, $result, 'アイキャッチ画像を正しく取得できません');
+
+        // 一時保存データと画像サイズのテスト
+        $options = ['table' => 'BcBlog.BlogPosts', 'tmp' => true, 'imgsize' => 'mobile_thumb'];
+        $result = $this->Blog->getEyeCatch($post, $options);
+        $expected = '/\<img src\=\"\/baser-core\/uploads\/tmp\/mobile_thumb\/test-eye_catch_jpg\"/';
+        $this->assertMatchesRegularExpression($expected, $result, 'アイキャッチ画像を正しく取得できません');
+
+        // class属性のテスト
+        $options = ['table' => 'BcBlog.BlogPosts', 'class' => 'thumb-image', 'escape' => true];
+        $result = $this->Blog->getEyeCatch($post, $options);
+        $expected = '/class=&quot;thumb-image&quot;/';
+        $this->assertMatchesRegularExpression($expected, $result, 'アイキャッチ画像を正しく取得できません');
+
+        // outputはurlのテスト
+        $options = ['table' => 'BcBlog.BlogPosts', 'output' => 'url'];
+        $result = $this->Blog->getEyeCatch($post, $options);
+        $expected = '/files/blog/1/blog_posts/test-eye_catch.jpg?';
+        $this->assertEquals($expected, substr($result, 0, strlen($expected)));
+
+        // outputはtagのテスト
+        $options = ['table' => 'BcBlog.BlogPosts', 'output' => 'tag', 'escape' => true];
+        $result = $this->Blog->getEyeCatch($post, $options);
+        $expected = '/\<img/';
         $this->assertMatchesRegularExpression($expected, $result, 'アイキャッチ画像を正しく取得できません');
     }
 
