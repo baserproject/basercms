@@ -114,6 +114,13 @@ return [
             'BcContentLink',
             'BcFavorite'
         ],
+        'defaultInstallCorePlugins' => [
+            'BcSearchIndex',
+            'BcBlog',
+            'BcMail',
+            'BcThemeConfig',
+            'BcWidgetArea',
+        ],
         /**
          * パスワード再発行URLの有効時間(min) デフォルト24時間
          */

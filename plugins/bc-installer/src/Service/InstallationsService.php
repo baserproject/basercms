@@ -366,7 +366,7 @@ class InstallationsService implements InstallationsServiceInterface
         $version = BcUtil::getVersion();
         $pluginsTable = TableRegistry::getTableLocator()->get('BaserCore.Plugins');
         $priority = intval($pluginsTable->getMax('priority')) + 1;
-        $corePlugins = Configure::read('BcApp.corePlugins');
+        $corePlugins = Configure::read('BcApp.defaultInstallCorePlugins');
         $result = true;
         foreach($corePlugins as $corePlugin) {
             $plugin = $pluginsTable->getPluginConfig($corePlugin);
@@ -395,7 +395,7 @@ class InstallationsService implements InstallationsServiceInterface
     public function installCorePlugin(string $dbDataPattern): bool
     {
         $result = true;
-        $corePlugins = Configure::read('BcApp.corePlugins');
+        $corePlugins = Configure::read('BcApp.defaultInstallCorePlugins');
         foreach($corePlugins as $corePlugin) {
             if (!$this->installPlugin($corePlugin, $dbDataPattern)) {
                 $this->log(sprintf(__d('baser', 'コアプラグイン %s のインストールに失敗しました。'), $corePlugin));

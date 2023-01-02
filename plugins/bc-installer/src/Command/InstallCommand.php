@@ -174,8 +174,8 @@ class InstallCommand extends Command
         // Init db
         $service->createDefaultFiles();
         $service->deployEditorTemplateImage();
-        $service->executeDefaultUpdates();
         $service->installCorePlugin($args->getOption('data'));
+        $service->executeDefaultUpdates();
         $service->buildPermissions();
         $siteConfigsService = $this->getService(SiteConfigsServiceInterface::class);
         $siteConfigsService->putEnv('SITE_URL', $siteUrl);
