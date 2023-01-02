@@ -11,6 +11,7 @@
 
 namespace BcBlog\Test\TestCase\Service\Front;
 
+use BaserCore\Controller\BcFrontAppController;
 use BaserCore\Controller\ContentFoldersController;
 use BaserCore\Service\ContentsServiceInterface;
 use BaserCore\Test\Factory\ContentFactory;
@@ -533,7 +534,101 @@ class BlogFrontServiceTest extends BcTestCase
      */
     public function test_setupPreviewForArchives()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // データを生成
+        $this->loadFixtureScenario(InitAppScenario::class);
+        BlogPostFactory::make([
+            'id' => 1,
+            'blog_content_id' => 1,
+            'no' => 1,
+            'title' => 'blog post title',
+            'status' => true,
+        ])->persist();
+        BlogCategoryFactory::make([
+            'id' => BlogPostFactory::get(1)->get('blog_category_id'),
+            'blog_content_id' => 1,
+            'title' => 'blog post category title',
+            'name' => 'name-post',
+            'rght' => 1,
+            'lft' => 2,
+            'status' => true,
+        ])->persist();
+        BlogContentFactory::make([
+            'id' => 1,
+            'description' => 'test プレビュー用のセットアップ',
+            'template' => 'default',
+            'list_count' => '10',
+            'list_direction' => 'DESC',
+            'feed_count' => '10',
+            'tag_use' => '1',
+            'comment_use' => '1',
+            'comment_approve' => '0',
+            'auth_captcha' => '1',
+            'widget_area' => '2',
+            'eye_catch_size' => BcUtil::serialize([
+                'thumb_width' => 600,
+                'thumb_height' => 600,
+                'mobile_thumb_width' => 150,
+                'mobile_thumb_height' => 150,
+            ]),
+            'use_content' => '1'
+        ])->persist();
+        ContentFactory::make([
+            'id' => 1,
+            'title' => 'content title',
+            'plugin' => 'BcBlog',
+            'type' => 'BlogContent',
+            'entity_id' => 1,
+            'url' => '/test',
+            'site_id' => 1,
+            'alias_id' => null,
+            'main_site_content_id' => null,
+            'parent_id' => null,
+            'lft' => 1,
+            'rght' => 2,
+            'level' => 1,
+            'status' => true,
+        ])->persist();
+        $postBlogContent = [
+            'detail_draft' => 'preview detail_draft',
+            'description' => 'test preview description',
+            'template' => 'default-2',
+            'content' => [
+                'title' => 'preview title',
+                'url' => '/preview',
+            ]
+        ];
+        $controller = new BcFrontAppController(
+            $this->getRequest('/test')
+                ->withParam('entityId', 1)
+                ->withParam('pass', [1])
+                ->withQueryParams(['preview' => 'draft'])
+                ->withParsedBody($postBlogContent)
+        );
+        $controller->viewBuilder()->setVar('crumbs', []);
+
+        // サービスクラスを呼ぶ
+        $this->BlogFrontService->setupPreviewForArchives($controller);
+        // テンプレートを確認
+        $this->assertEquals('Blog/default/single', $controller->viewBuilder()->getTemplate());
+        // view変数が設定されているか確認
+        $vars = $controller->viewBuilder()->getVars();
+        $this->assertArrayHasKey('post', $vars);
+        $this->assertArrayHasKey('blogContent', $vars);
+        $this->assertArrayHasKey('editLink', $vars);
+        $this->assertArrayHasKey('commentUse', $vars);
+        $this->assertArrayHasKey('single', $vars);
+        $this->assertArrayHasKey('crumbs', $vars);
+        // ブログ記事がpostデータにより書き換えられているか確認
+        $this->assertEquals('blog post title', $vars['post']->title);
+        $this->assertEquals('default-2', $vars['post']->template);
+        $this->assertEquals('test preview description', $vars['post']->description);
+        $this->assertEquals('preview detail_draft', $vars['post']->detail);
+
+        $this->assertEquals('test プレビュー用のセットアップ', $vars['blogContent']->description);
+        $this->assertEquals('default', $vars['blogContent']->template);
+
+        $this->assertEquals('/test', $vars['blogContent']->content->url);
+        $this->assertEquals('content title', $vars['blogContent']->content->title);
     }
 
     /**
