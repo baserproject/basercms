@@ -89,7 +89,72 @@ class BlogPostsServiceTest extends BcTestCase
      */
     public function testGetIndex()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // データを生成
+        UserFactory::make(['id' => 2, 'name' => 'test user1'])->persist();
+        UserFactory::make(['id' => 3, 'name' => 'test user2'])->persist();
+        UserFactory::make(['id' => 4, 'name' => 'test user3'])->persist();
+        BlogPostFactory::make(['id' => '1', 'blog_content_id' => '1', 'user_id' => 2, 'title' => 'blog post1 user_id2'])->persist();
+        BlogPostFactory::make(['id' => '2', 'blog_content_id' => '1', 'user_id' => 2, 'title' => 'blog post2 user_id2'])->persist();
+        BlogPostFactory::make(['id' => '3', 'blog_content_id' => '1', 'user_id' => 2, 'title' => 'blog post3 user_id2'])->persist();
+        BlogPostFactory::make(['id' => '4', 'blog_content_id' => '1', 'user_id' => 3, 'title' => 'blog post1 user_id3'])->persist();
+        BlogPostFactory::make(['id' => '5', 'blog_content_id' => '1', 'user_id' => 3, 'title' => 'blog post2 user_id3'])->persist();
+
+        // サービスメソッドを呼ぶ
+        // num 取得件数 2件
+        // direction 並び順 昇順
+        // sort 並び順対象カラム id
+        $result = $this->BlogPostsService->getIndex([
+            'num' => '2',
+            'direction' => 'ASC',
+            'sort' => 'id',
+        ]);
+
+        // 戻り値を確認
+        // 記事を取得できているか
+        $this->assertInstanceOf(\Cake\ORM\Query::class, $result);
+        $this->assertEquals(5, $result->count());
+        $blogPosts = $result->all()->toArray();
+        $this->assertCount(2, $blogPosts);
+        $this->assertEquals('2', $blogPosts[0]->user_id);
+        $this->assertEquals('blog post1 user_id2', $blogPosts[0]->title);
+        $this->assertEquals('2', $blogPosts[1]->user_id);
+        $this->assertEquals('blog post2 user_id2', $blogPosts[1]->title);
+
+        // サービスメソッドを呼ぶ
+        // id BlogPosts.id 4
+        $result = $this->BlogPostsService->getIndex([
+            'id' => '4',
+        ]);
+
+        // 戻り値を確認
+        // 記事を取得できているか
+        $this->assertInstanceOf(\Cake\ORM\Query::class, $result);
+        $this->assertEquals(1, $result->count());
+        $blogPosts = $result->all()->toArray();
+        $this->assertCount(1, $blogPosts);
+        $this->assertEquals('3', $blogPosts[0]->user_id);
+        $this->assertEquals('blog post1 user_id3', $blogPosts[0]->title);
+
+        // サービスメソッドを呼ぶ
+        // 引数が空の場合でもデータが取得できること
+        $result = $this->BlogPostsService->getIndex();
+        // 戻り値を確認
+        // 記事を取得できているか
+        // 指定が無い場合は降順で取得される
+        $this->assertInstanceOf(\Cake\ORM\Query::class, $result);
+        $this->assertEquals(5, $result->count());
+        $blogPosts = $result->all()->toArray();
+        $this->assertCount(5, $blogPosts);
+        $this->assertEquals('3', $blogPosts[0]->user_id);
+        $this->assertEquals('blog post2 user_id3', $blogPosts[0]->title);
+        $this->assertEquals('3', $blogPosts[1]->user_id);
+        $this->assertEquals('blog post1 user_id3', $blogPosts[1]->title);
+        $this->assertEquals('2', $blogPosts[2]->user_id);
+        $this->assertEquals('blog post3 user_id2', $blogPosts[2]->title);
+        $this->assertEquals('2', $blogPosts[3]->user_id);
+        $this->assertEquals('blog post2 user_id2', $blogPosts[3]->title);
+        $this->assertEquals('2', $blogPosts[4]->user_id);
+        $this->assertEquals('blog post1 user_id2', $blogPosts[4]->title);
     }
 
     /**

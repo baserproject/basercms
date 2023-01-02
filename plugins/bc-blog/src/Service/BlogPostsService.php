@@ -98,6 +98,7 @@ class BlogPostsService implements BlogPostsServiceInterface
      * @return \Cake\ORM\Query
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getIndex(array $queryParams = []): Query
     {
