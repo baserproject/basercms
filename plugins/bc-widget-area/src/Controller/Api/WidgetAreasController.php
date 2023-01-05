@@ -74,6 +74,41 @@ class WidgetAreasController extends BcApiController
     }
 
     /**
+     * ウィジェットエリア管理 API 編集
+     *
+     * @param WidgetAreasService $service
+     * @param $id
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function edit(WidgetAreasServiceInterface $service, $id)
+    {
+        $this->request->allowMethod(['post', 'put']);
+
+        $widgetArea = null;
+        try {
+            $widgetArea = $service->update($service->get($id), $this->request->getData());
+            $message = __d('baser', 'ウィジェットエリア「{0}」を更新しました。', $widgetArea->name);
+        } catch (PersistenceFailedException $e) {
+            $widgetArea = $e->getEntity();
+            $this->setResponse($this->response->withStatus(400));
+            $message = __d('baser', '入力エラーです。内容を修正してください。');
+        } catch (\Throwable $e) {
+            $this->setResponse($this->response->withStatus(400));
+            $message = __d('baser', $e->getMessage());
+        }
+
+        $this->set([
+            'message' => $message,
+            'widgetArea' => $widgetArea,
+            'errors' => $widgetArea ? $widgetArea->getErrors() : null
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['widgetArea', 'message', 'errors']);
+    }
+
+    /**
      * 削除
      *
      * @param WidgetAreasServiceInterface $service
