@@ -84,7 +84,38 @@ class WidgetAreasControllerTest extends BcTestCase
      */
     public function testAdd()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $data = [
+            'name' => 'test',
+            'widgets' => serialize([
+                [
+                    1 => 'test 1',
+                    2 => 'test 2'
+                ]
+            ])
+        ];
+
+        //APIを呼ぶ
+        $this->post('/baser/api/bc-widget-area/widget_areas/add.json?token=' . $this->accessToken, $data);
+        // レスポンスコードを確認する
+        $this->assertResponseOk();
+
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        //メッセージを確認
+        $this->assertEquals('新しいウィジェットエリアを保存しました。', $result->message);
+        //widgetAreaを確認
+        $this->assertNotEmpty($result->widgetArea);
+
+        //データが空の場合、
+        $data = [];
+        //APIを呼ぶ
+        $this->post('/baser/api/bc-widget-area/widget_areas/add.json?token=' . $this->accessToken, $data);
+        // レスポンスコードを確認する
+        $this->assertResponseCode(400);
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        //メッセージを確認
+        $this->assertEquals('新しいウィジェットエリアの保存に失敗しました。', $result->message);
     }
 
     /**
