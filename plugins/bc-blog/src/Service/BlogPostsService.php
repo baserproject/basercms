@@ -480,14 +480,21 @@ class BlogPostsService implements BlogPostsServiceInterface
      * @return EntityInterface
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function create(array $postData)
     {
         if (BcUtil::isOverPostSize()) {
             throw new BcException(__d(
                 'baser',
-                '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。',
+                '送信できるデータ量を超えています。合計で {0} 以内のデータを送信してください。',
                 ini_get('post_max_size')
+            ));
+        }
+        if (!isset($postData['blog_content_id']) || empty($postData['blog_content_id'])) {
+            throw new BcException(__d(
+                'baser',
+                'blog_content_id を指定してください。',
             ));
         }
         $postData['no'] = $this->BlogPosts->getMax('no', ['blog_content_id' => $postData['blog_content_id']]) + 1;

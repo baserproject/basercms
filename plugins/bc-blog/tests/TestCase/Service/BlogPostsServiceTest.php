@@ -14,6 +14,7 @@ namespace BcBlog\Test\TestCase\Service;
 use BaserCore\Test\Factory\UserFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Utility\BcUtil;
 use BcBlog\Service\BlogPostsService;
 use BcBlog\Service\BlogPostsServiceInterface;
 use BcBlog\Test\Factory\BlogPostFactory;
@@ -35,7 +36,11 @@ class BlogPostsServiceTest extends BcTestCase
      * @var array
      */
     public $fixtures = [
+        'plugin.BaserCore.Factory/Sites',
+        'plugin.BaserCore.Factory/SiteConfigs',
         'plugin.BaserCore.Factory/Users',
+        'plugin.BaserCore.Factory/UsersUserGroups',
+        'plugin.BaserCore.Factory/UserGroups',
         'plugin.BcBlog.Factory/BlogPosts',
     ];
 
@@ -361,11 +366,76 @@ class BlogPostsServiceTest extends BcTestCase
 
     /**
      * 新規登録
+     * BlogPostsService::create
      */
     public function testCreate()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // パラメータを生成
+        $postData = [
+            'blog_content_id' => 1,
+            'posted' => '2022-12-01 00:00:00',
+            'publish_begin' => '2022-12-01 00:00:00',
+            'publish_end' => '2022-12-31 23:59:59',
+        ];
+        // サービスメソッドを呼ぶ
+        $entity = $this->BlogPostsService->create($postData);
+
+        // 戻り値を確認
+        $this->assertNotEmpty($entity);
+        $this->assertInstanceOf('\Cake\Datasource\EntityInterface', $entity);
+        $this->assertEquals(1, $entity->blog_content_id);
+        $this->assertEquals('2022-12-01 00:00:00', $entity->posted->i18nFormat('yyyy-MM-dd HH:mm:ss'));
+        $this->assertEquals('2022-12-01 00:00:00', $entity->publish_begin->i18nFormat('yyyy-MM-dd HH:mm:ss'));
+        $this->assertEquals('2022-12-31 23:59:59', $entity->publish_end->i18nFormat('yyyy-MM-dd HH:mm:ss'));
+
+        // blog_content_id を指定しなかった場合はエラーとなること
+        $this->expectException('BaserCore\Error\BcException');
+        $this->expectExceptionMessage('blog_content_id を指定してください。');
+        // サービスメソッドを呼ぶ
+        $this->BlogPostsService->create([]);
     }
+
+    /**
+     * 新規登録
+     * BlogPostsService::create
+     * 投稿日エラーのテスト
+     */
+    public function testCreateExceptionPosted()
+    {
+        // パラメータを生成
+        $postData = [
+            'blog_content_id' => 1,
+            'posted' => '',
+            'publish_begin' => '',
+            'publish_end' => '',
+        ];
+
+        // postedが空の場合はエラーとなること
+        $this->expectException('Cake\ORM\Exception\PersistenceFailedException');
+        $this->expectExceptionMessage('Entity save failure. Found the following errors (posted._empty: "投稿日を入力してください。');
+        // サービスメソッドを呼ぶ
+        $this->BlogPostsService->create($postData);
+    }
+
+    /**
+     * 新規登録
+     * BlogPostsService::create
+     * データ量エラーのテスト
+     */
+//    public function testCreateExceptionPostMaxSize()
+//    {
+        // TODO ローカルでは成功するが、GitHubActions上でうまくいかないためコメントアウト（原因不明）
+        // データ量を超えていると仮定する
+//        $postMaxSize = ini_get('post_max_size');
+//        $_SERVER['REQUEST_METHOD'] = 'POST';
+//        $_SERVER['CONTENT_LENGTH'] = BcUtil::convertSize($postMaxSize) + 1;
+//
+//        // データ量を超えている場合はエラーとなること
+//        $this->expectException('BaserCore\Error\BcException');
+//        $this->expectExceptionMessage("送信できるデータ量を超えています。合計で " . $postMaxSize . " 以内のデータを送信してください。");
+//        // サービスメソッドを呼ぶ
+//        $this->BlogPostsService->create([]);
+//    }
 
     /**
      * ブログ記事を更新する
