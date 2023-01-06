@@ -50,6 +50,15 @@ function command()
     if (!is_writable(ROOT_DIR . 'vendor')) {
         throw new Exception('/vendor に書き込み権限がありません。書き込み権限を与えてください。');
     }
+    if (!is_writable(ROOT_DIR . 'config')) {
+        throw new Exception('/config に書き込み権限がありません。書き込み権限を与えてください。');
+    }
+    if (!is_writable(ROOT_DIR . 'tmp')) {
+        throw new Exception('/tmp に書き込み権限がありません。書き込み権限を与えてください。');
+    }
+    if (!is_writable(ROOT_DIR . 'logs')) {
+        throw new Exception('/logs に書き込み権限がありません。書き込み権限を与えてください。');
+    }
     $composerDir = ROOT_DIR . 'composer' . DS;
     $command = "cd {$composerDir}; export HOME={$composerDir}; curl -sS https://getcomposer.org/installer | php";
     exec($command, $out, $code);
@@ -301,7 +310,7 @@ function command()
                                 <img src="./logo.png" alt="ライブラリのインストール" class="bca-login__logo"/>
                             </h1>
                             <p>baserCMSのインストールを開始する前にライブラリのインストールが必要です。
-                            /composer と /vendor フォルダに書き込み権限が必要となります。</p>
+                            /tmp と /logs と /config と /composer と /vendor フォルダに書き込み権限が必要となります。</p>
                             <div class="submit bca-login-form-btn-group">
                                 <button type="submit" class="bca-btn--login bca-btn" data-bca-btn-type="login" id="BtnInstall" tabindex="4">
                                     ライブラリをインストールする
