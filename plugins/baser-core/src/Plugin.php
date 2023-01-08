@@ -29,6 +29,7 @@ use BaserCore\Utility\BcUtil;
 use Cake\Console\CommandCollection;
 use Cake\Core\Configure;
 use Cake\Core\ContainerInterface;
+use Cake\Core\Exception\MissingPluginException;
 use Cake\Core\PluginApplicationInterface;
 use Cake\Event\EventManager;
 use Cake\Http\Middleware\CsrfProtectionMiddleware;
@@ -177,7 +178,13 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
      */
     function loadPlugin(PluginApplicationInterface $application, $plugin, $priority)
     {
-        $application->addPlugin($plugin);
+        try {
+            $application->addPlugin($plugin);
+        } catch (MissingPluginException $e) {
+            $this->log($e->getMessage());
+            return false;
+        }
+
         $pluginPath = BcUtil::getPluginPath($plugin);
         // プラグインイベント登録
         $eventTargets = ['Controller', 'Model', 'View', 'Helper'];
@@ -280,6 +287,12 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
                 } else {
                     return $service;
                 }
+
+                // ログインセッションを持っている場合もログイン状態とみなす
+                $service->loadAuthenticator('Authentication.Session', [
+                    'sessionKey' => $authSetting['sessionKey'],
+                ]);
+
                 $service->loadAuthenticator('Authentication.Jwt', [
                     'secretKey' => $secretKey,
                     'algorithm' => 'RS256',
@@ -314,14 +327,6 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
                         'finder' => 'available'
                     ],
                 ]);
-                // ログインの際のみ、管理画面へのログイン状態を維持するためセッションの設定を追加
-                // TODO ログインURLの判定方法を検討必要
-                // Api用の認証設定をAdminと分けて loginAction と リクエストのURLで判定させる
-                if($request->getParam('controller') === 'Users' && $request->getParam('action') === 'login') {
-                    $service->loadAuthenticator('Authentication.Session', [
-                        'sessionKey' => $authSetting['sessionKey'],
-                    ]);
-                }
                 break;
 
             default:

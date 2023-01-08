@@ -30,38 +30,6 @@ $(function () {
     }
 
     /**
-     * ログイン実行
-     */
-    $("#BtnLogin").click(function () {
-        $.bcUtil.showLoader()
-        alertMessage.fadeOut()
-        $.bcJwt.login(
-            $('#email').val(),
-            $('#password').val(),
-            $('#saved').prop('checked'),
-            function (response) {
-                let query = decodeURIComponent(location.search).replace('?', '').split('&');
-                let redirect
-                query.forEach(function (v) {
-                    let [key, value] = v.split('=')
-                    if (key === 'redirect') {
-                        redirect = value
-                    }
-                });
-                if (redirect) {
-                    location.href = $.bcUtil.baseUrl + redirect
-                } else {
-                    location.href = response.redirect
-                }
-            }, function () {
-                alertMessage.fadeIn()
-                $.bcUtil.hideLoader()
-            }
-        )
-        return false;
-    });
-
-    /**
      * ログインエリア周辺クリック時
      * エンドロールを非表示にする
      */
