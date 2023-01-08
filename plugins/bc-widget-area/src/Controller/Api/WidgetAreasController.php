@@ -17,6 +17,7 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BcWidgetArea\Service\WidgetAreasService;
 use BcWidgetArea\Service\WidgetAreasServiceInterface;
+use Cake\ORM\Exception\PersistenceFailedException;
 
 /**
  * Class WidgetAreasController
@@ -43,10 +44,68 @@ class WidgetAreasController extends BcApiController
      * 新規追加
      *
      * @param WidgetAreasServiceInterface $service
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function add(WidgetAreasServiceInterface $service)
     {
-        // TODO APIを実装してください
+        $this->request->allowMethod(['post', 'put']);
+        $widgetArea = null;
+        try {
+            $widgetArea = $service->create($this->getRequest()->getData());
+            $message = __d('baser', '新しいウィジェットエリアを保存しました。');
+        } catch (PersistenceFailedException $e) {
+            $widgetArea = $e->getEntity();
+            $this->setResponse($this->response->withStatus(400));
+            $message = __d('baser', '新しいウィジェットエリアの保存に失敗しました。');
+        } catch (\Throwable $e) {
+            $this->setResponse($this->response->withStatus(400));
+            $message = __d('baser', $e->getMessage());
+        }
+
+        $this->set([
+            'message' => $message,
+            'widgetArea' => $widgetArea,
+            'errors' => $widgetArea ? $widgetArea->getErrors() : null
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['message', 'widgetArea', 'errors']);
+    }
+
+    /**
+     * ウィジェットエリア管理 API 編集
+     *
+     * @param WidgetAreasService $service
+     * @param $id
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function edit(WidgetAreasServiceInterface $service, $id)
+    {
+        $this->request->allowMethod(['post', 'put']);
+
+        $widgetArea = null;
+        try {
+            $widgetArea = $service->update($service->get($id), $this->request->getData());
+            $message = __d('baser', 'ウィジェットエリア「{0}」を更新しました。', $widgetArea->name);
+        } catch (PersistenceFailedException $e) {
+            $widgetArea = $e->getEntity();
+            $this->setResponse($this->response->withStatus(400));
+            $message = __d('baser', '入力エラーです。内容を修正してください。');
+        } catch (\Throwable $e) {
+            $this->setResponse($this->response->withStatus(400));
+            $message = __d('baser', $e->getMessage());
+        }
+
+        $this->set([
+            'message' => $message,
+            'widgetArea' => $widgetArea,
+            'errors' => $widgetArea ? $widgetArea->getErrors() : null
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['widgetArea', 'message', 'errors']);
     }
 
     /**

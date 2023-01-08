@@ -193,10 +193,10 @@ class BcBaserHelperTest extends BcTestCase
         $element = 'flash/default';
 
         ob_start();
-        $this->BcBaser->element($element, ['message' => 'sampletest']);
+        $this->BcBaser->element($element, ['key'=>'sampleKey', 'message' => 'sampletest']);
         $result = ob_get_clean();
 
-        $expected = $this->BcAdminAppView->element($element, ['message' => 'sampletest']);
+        $expected = $this->BcAdminAppView->element($element, ['key'=>'sampleKey', 'message' => 'sampletest']);
 
         $this->assertEquals($expected, $result);
     }
