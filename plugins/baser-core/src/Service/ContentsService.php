@@ -511,8 +511,10 @@ class ContentsService implements ContentsServiceInterface
             $target = $this->getService($service);
             return $target->delete($content->entity_id);
         } elseif ($isPluginEnabled && class_exists($table)) {
-            $target = TableRegistry::getTableLocator()->get($content->plugin . '.' . Inflector::pluralize($content->type));
-            return $target->delete($content);
+            $tableName = Inflector::pluralize($content->type);
+            $target = TableRegistry::getTableLocator()->get($content->plugin . '.' . $tableName);
+            $entity = $target->find()->where([$tableName . '.id' => $content->entity_id])->first();
+            return $target->delete($entity);
         } else {
             return $this->hardDelete($id);
         }
