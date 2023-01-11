@@ -45,7 +45,7 @@ class BcApiController extends AppController
     public function initialize(): void
     {
         parent::initialize();
-        if(!filter_var(env('USE_API', true), FILTER_VALIDATE_BOOLEAN)) throw new ForbiddenException(__d('baser', 'Web APIは許可されていません。'));
+        if(!filter_var(env('USE_API', false), FILTER_VALIDATE_BOOLEAN)) throw new ForbiddenException(__d('baser', 'Web APIは許可されていません。'));
         $this->loadComponent('Authentication.Authentication');
         $this->Security->setConfig('validatePost', false);
     }
