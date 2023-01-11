@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace BaserCore\Test\Fixture;
+namespace BcThemeConfig\Test\Fixture;
 
 use Cake\TestSuite\Fixture\TestFixture;
 

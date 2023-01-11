@@ -29,6 +29,7 @@ class BcExceptionRendererTest extends BcTestCase
         'plugin.BaserCore.Sites',
         'plugin.BaserCore.SiteConfigs',
         'plugin.BaserCore.Contents',
+        'plugin.BcThemeConfig.ThemeConfigs'
     ];
 
     /**
@@ -36,6 +37,7 @@ class BcExceptionRendererTest extends BcTestCase
      */
     public function setUp(): void
     {
+        $this->setFixtureTruncate();
         parent::setUp();
     }
 

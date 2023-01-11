@@ -263,6 +263,20 @@ class UtilitiesControllerTest extends BcTestCase
             'controller' => 'utilities',
             'action' => 'maintenance'
         ]);
+        // テーブルを初期化
+        $this->truncateTable('blog_categories');
+        $this->truncateTable('blog_contents');
+        $this->truncateTable('blog_posts');
+        $this->truncateTable('blog_posts_blog_tags');
+        $this->truncateTable('blog_tags');
+        $this->truncateTable('content_folders');
+        $this->truncateTable('mail_configs');
+        $this->truncateTable('mail_contents');
+        $this->truncateTable('mail_fields');
+        $this->truncateTable('pages');
+        $this->truncateTable('site_configs');
+        $this->truncateTable('theme_configs');
+        $this->truncateTable('widget_areas');
     }
 
     /**

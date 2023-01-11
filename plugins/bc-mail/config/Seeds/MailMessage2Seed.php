@@ -18,7 +18,7 @@ class MailMessage2Seed extends AbstractSeed
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         $data = [
         ];

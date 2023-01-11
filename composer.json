@@ -93,7 +93,7 @@
         "stan": "phpstan analyse",
         "install": [
             "composer install --no-plugins",
-            "bin/cake install https://localhost egashira@catchup.co.jp basercms basercms --host bc5-db --username root --password root"
+            "bin/cake install https://localhost foo@example.com basercms basercms --host bc5-db --username root --password root"
         ],
         "test": [
             "bin/cake setup test",

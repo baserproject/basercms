@@ -6,6 +6,7 @@
  * into source code version control.
  */
 
+use BaserCore\Error\BcExceptionRenderer;
 use Cake\Cache\Engine\FileEngine;
 use Cake\Log\Engine\FileLog;
 
@@ -104,7 +105,8 @@ return [
         ],
     ],
     'Error' => [
-        'errorLevel' => E_ALL & ~E_USER_DEPRECATED
+        'errorLevel' => E_ALL & ~E_USER_DEPRECATED,
+        'exceptionRenderer' => BcExceptionRenderer::class,
     ],
 
     /*

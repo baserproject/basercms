@@ -124,6 +124,7 @@ class BcContentsRouteTest extends BcTestCase
         $result = Router::parseRequest($this->getRequest($url));
         unset($result['Content']);
         unset($result['Site']);
+        unset($result['_route']);
         $this->assertEquals($expects, $result);
         $siteConfig->putEnv('SITE_URL', $siteUrl);
     }

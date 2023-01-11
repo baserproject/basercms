@@ -122,6 +122,7 @@ class BcContentsRoute extends Route
         $params['Content'] = isset($content)? $content : null;
         $params['Site'] = isset($content->site)? $content->site : null;
         if ($params) {
+            $params['_route'] = $this;
             return $params;
         }
         return null;
@@ -321,7 +322,7 @@ class BcContentsRoute extends Route
                     if ($key == 'page' && !$param) {
                         $param = 1;
                     }
-                    if (!is_array($param)) {
+                    if (!is_array($param) && !is_object($param)) {
                         $named[] = $key . ':' . $param;
                     }
                 } else {
