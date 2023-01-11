@@ -240,7 +240,9 @@ class UsersControllerTest extends BcTestCase
      */
     public function testLogin()
     {
-        $this->get('/baser/admin/baser-core/users/login');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $this->post('/baser/admin/baser-core/users/login');
         $this->assertResponseSuccess();
         $this->assertRedirect('/baser/admin');
     }
