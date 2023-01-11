@@ -599,17 +599,15 @@ class BcUtil
     {
         if (!$theme) $theme = Configure::read('BcApp.defaultFrontTheme');
         if (!$pattern) $pattern = 'default';
+        $base = Plugin::path($theme);
         $paths = [
-            BASER_THEMES . $theme . DS . 'config' . DS . 'data' . DS . $pattern,
-            BASER_THEMES . $theme . DS . 'config' . DS . 'data' . DS . 'default',
-            BASER_THEMES . Inflector::dasherize($theme) . DS . 'config' . DS . 'data' . DS . $pattern,
-            BASER_THEMES . Inflector::dasherize($theme) . DS . 'config' . DS . 'data' . DS . 'default',
+            $base . 'config' . DS . 'data' . DS . $pattern,
+            $base . $theme . DS . 'config' . DS . 'data' . DS . 'default',
         ];
         foreach($paths as $path) {
             if (is_dir($path)) return $path;
         }
         return false;
-
     }
 
     /**

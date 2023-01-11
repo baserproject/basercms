@@ -160,10 +160,10 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
         } else {
             $template = Configure::read('BcApp.defaultFrontTheme');
         }
-        Configure::write('App.paths.templates', array_merge(
-            [ROOT . DS . 'plugins' . DS . $template . DS . 'templates' . DS],
-            Configure::read('App.paths.templates')
-        ));
+        Configure::write('App.paths.templates', array_merge([
+            ROOT . DS . 'plugins' . DS . $template . DS . 'templates' . DS,
+            ROOT . DS . 'vendor' . DS . 'baserproject' . DS . $template . DS . 'templates' . DS
+        ], Configure::read('App.paths.templates')));
     }
 
     /**

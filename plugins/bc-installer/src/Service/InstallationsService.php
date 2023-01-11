@@ -707,14 +707,23 @@ class InstallationsService implements InstallationsServiceInterface
         // コア
         $patterns = $themesService->getDefaultDataPatterns();
         // 外部テーマ
-        $Folder = new Folder(BASER_THEMES);
-        $files = $Folder->read(true, true, false);
-        foreach($files[0] as $theme) {
-            $configPath = BASER_PLUGINS . $theme . DS . 'config.php';
-            if (!file_exists($configPath)) continue;
-            $config = include $configPath;
-            if (!isset($config['type']) || $config['type'] !== 'theme') continue;
-            $patterns = array_merge($patterns, $themesService->getDefaultDataPatterns($theme));
+        $paths = [
+            BASER_THEMES,
+            ROOT . DS . 'vendor' . DS . 'baserproject' . DS
+        ];
+        foreacH($paths as $path) {
+            $Folder = new Folder($path);
+            $files = $Folder->read(true, true, true);
+            foreach($files[0] as $dir) {
+                $theme = basename($dir);
+                $configPath = $dir . DS . 'config.php';
+
+                if (!file_exists($configPath)) continue;
+                $config = include $configPath;
+
+                if (!isset($config['type']) || $config['type'] !== 'Theme') continue;
+                $patterns = array_merge($patterns, $themesService->getDefaultDataPatterns($theme));
+            }
         }
         return $patterns;
     }

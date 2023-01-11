@@ -23,7 +23,18 @@ use BaserCore\Annotation\Note;
 use BaserCore\Utility\BcUtil;
 use Cake\Cache\Cache;
 use Cake\Core\Configure;
+use Cake\Datasource\ConnectionManager;
 use Cake\Validation\Validator;
+
+/**
+ * DB設定読み込み
+ */
+ConnectionManager::drop('default');
+ConnectionManager::drop('test');
+if(file_exists(CONFIG . 'install.php')) {
+    Configure::load('install');
+    ConnectionManager::setConfig(Configure::consume('Datasources'));
+}
 
 /**
  * キャッシュ設定

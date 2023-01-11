@@ -221,7 +221,4 @@ TypeFactory::map('time', StringType::class);
 //Inflector::rules('irregular', ['red' => 'redlings']);
 //Inflector::rules('uninflected', ['dontinflectme']);
 
-if(file_exists(CONFIG . 'install.php')) {
-    Configure::load('install');
-    ConnectionManager::setConfig(Configure::consume('Datasources'));
-}
+

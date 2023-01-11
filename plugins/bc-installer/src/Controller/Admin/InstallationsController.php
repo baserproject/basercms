@@ -203,15 +203,18 @@ class InstallationsController extends BcAdminAppController
                     $service->sendCompleteMail($this->getRequest()->getData());
                     $db->commit();
                     $this->redirect(['action' => 'step5']);
-                } catch (PersistenceFailedException|\Throwable $e) {
+                } catch (PersistenceFailedException $e) {
+                    $db->rollback();
+                    $errMsg = implode("\n・", Hash::extract($e->getEntity()->getErrors(), '{s}.{s}'));
+                    $this->BcMessage->setError(__d('baser', '管理ユーザーを作成できませんでした。') . "\n\n・" . $errMsg);
+                } catch (\Throwable $e) {
                     if($e->getMessage() === 'Could not send email: unknown') {
                         $db->commit();
                         $this->BcMessage->setWarning(__d('baser', 'インストールは完了しましたが、インストール完了メールが送信できませんでした。サーバーのメール設定を見直してください。'));
                         return $this->redirect(['action' => 'step5']);
                     }
                     $db->rollback();
-                    $errMsg = implode("\n・", Hash::extract($e->getEntity()->getErrors(), '{s}.{s}'));
-                    $this->BcMessage->setError(__d('baser', '管理ユーザーを作成できませんでした。') . "\n\n・" . $errMsg);
+                    $this->BcMessage->setError(__d('baser', 'インストール中にエラーが発生しました。') . $e->getMessage());
                 }
             }
         }
