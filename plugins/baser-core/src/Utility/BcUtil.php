@@ -679,6 +679,16 @@ class BcUtil
     }
 
     /**
+     * ユニットテストかどうか
+     *
+     * @return bool
+     */
+    public static function isTest()
+    {
+        return (!empty($_SERVER['argv'][0]) && $_SERVER['argv'][0] === 'vendor/bin/phpunit');
+    }
+
+    /**
      * レイアウトテンプレートのリストを取得する
      *
      * @param string $path

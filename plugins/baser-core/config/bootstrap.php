@@ -39,12 +39,15 @@ if (!env('APP_NAME') && file_exists(CONFIG . '.env')) {
 
 /**
  * DB設定読み込み
+ * ユニットテストの際は、test/bootstrap.php にて実行
  */
-ConnectionManager::drop('default');
-ConnectionManager::drop('test');
-if (file_exists(CONFIG . 'install.php')) {
-    Configure::load('install');
-    ConnectionManager::setConfig(Configure::consume('Datasources'));
+if(!BcUtil::isTest()) {
+    ConnectionManager::drop('default');
+    ConnectionManager::drop('test');
+    if (file_exists(CONFIG . 'install.php')) {
+        Configure::load('install');
+        ConnectionManager::setConfig(Configure::consume('Datasources'));
+    }
 }
 
 /**

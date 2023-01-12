@@ -17,8 +17,8 @@ declare(strict_types=1);
 
 use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
+use Cake\Error\ErrorTrap;
 use Migrations\TestSuite\Migrator;
-use BaserCore\Utility\BcUtil;
 
 /**
  * Test runner bootstrap.
@@ -37,6 +37,22 @@ Configure::write('App.fullBaseUrl', 'http://localhost');
 if (empty($_SERVER['HTTP_HOST'])) {
     Configure::write('App.fullBaseUrl', 'http://localhost');
 }
+
+// エラー設定 2023/01/12 ryuring
+// CakePHP4.4 で PaginatorComponent が非推奨となり、deprecated エラーが発生するため
+// 強制的に errorLevel を書き換えて再設定を実行
+// /plugins/baser-core/config/setting.php にも設定しているが、ユニットテストの際は、何故か反映されない
+// PaginatorComponent の移行が完了できれば削除可
+Configure::write('Error.errorLevel', E_ALL & ~E_USER_DEPRECATED);
+(new ErrorTrap(Configure::read('Error')))->register();
+
+// DB設定読み込み 2023/01/12 ryuring
+// 通常は、/plugins/baser-core/config/bootstrap.php で設定しているが、
+// ユニットテストの際、Migrator の実行前に設定が必要なためここで設定
+ConnectionManager::drop('default');
+ConnectionManager::drop('test');
+Configure::load('install');
+ConnectionManager::setConfig(Configure::consume('Datasources'));
 
 // DebugKit skips settings these connection config if PHP SAPI is CLI / PHPDBG.
 // But since PagesControllerTest is run with debug enabled and DebugKit is loaded
