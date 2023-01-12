@@ -118,7 +118,6 @@ class AppController extends BaseController
     {
         parent::initialize();
         $this->loadComponent('BaserCore.BcMessage');
-        $this->loadComponent('Paginator');
         $this->loadComponent('Security', [
             'blackHoleCallback' => '_blackHoleCallback',
             'validatePost' => true,

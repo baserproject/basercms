@@ -85,7 +85,6 @@ class AppControllerTest extends BcTestCase
     {
         $this->assertNotEmpty($this->AppController->BcMessage);
         $this->assertNotEmpty($this->AppController->Security);
-        $this->assertNotEmpty($this->AppController->Paginator);
         $this->assertEquals('_blackHoleCallback', $this->AppController->Security->getConfig('blackHoleCallback'));
         $this->assertTrue($this->AppController->Security->getConfig('validatePost'));
         $this->assertFalse($this->AppController->Security->getConfig('requireSecure'));
