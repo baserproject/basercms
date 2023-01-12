@@ -260,7 +260,7 @@ return [
          */
         'editors' => [
             'none' => __d('baser', 'なし'),
-            'BcCkeditor' => 'CKEditor'
+            'BaserCore.BcCkeditor' => 'CKEditor'
         ],
         /**
          * アップデートキー
