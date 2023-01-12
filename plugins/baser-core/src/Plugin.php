@@ -35,6 +35,7 @@ use Cake\Event\EventManager;
 use Cake\Http\Middleware\CsrfProtectionMiddleware;
 use Cake\Http\MiddlewareQueue;
 use Cake\Http\ServerRequestFactory;
+use Cake\Log\Log;
 use Cake\Routing\RouteBuilder;
 use Cake\Routing\Router;
 use Cake\Utility\Inflector;
@@ -111,6 +112,8 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
          * baserCMSの各種設定は、ここで上書きできる事を想定
          */
         if (file_exists(CONFIG . 'setting.php')) Configure::load('setting', 'baser');
+
+        Log::setConfig(Configure::consume('Log'));
 
         /**
          * プラグインロード

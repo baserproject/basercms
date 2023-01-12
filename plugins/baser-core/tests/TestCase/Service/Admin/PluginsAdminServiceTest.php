@@ -100,7 +100,7 @@ class PluginsAdminServiceTest extends BcTestCase
         Log::write(LogLevel::INFO, 'test', 'update');
         $this->assertMatchesRegularExpression('/test\n$/', $this->PluginsAdmin->getUpdateLog());
         if (file_exists(LOGS . 'update.backup.log')) {
-            rename(LOGS . 'update.log', LOGS . 'update.log');
+            rename(LOGS . 'update.backup.log', LOGS . 'update.log');
         }
     }
 
