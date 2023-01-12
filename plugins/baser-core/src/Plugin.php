@@ -113,7 +113,14 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
          */
         if (file_exists(CONFIG . 'setting.php')) Configure::load('setting', 'baser');
 
-        Log::setConfig(Configure::consume('Log'));
+        /**
+         * ログ設定
+         * ユニットテストの際、複数回設定するとエラーになるため
+         * 設定済かチェックを実施
+         */
+        if(!Log::getConfig('update')) {
+            Log::setConfig(Configure::consume('Log'));
+        }
 
         /**
          * プラグインロード
