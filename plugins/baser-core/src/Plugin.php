@@ -91,6 +91,17 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
         $_ENV['IS_CONSOLE'] = (substr(php_sapi_name(), 0, 3) === 'cli');
 
         /**
+         * dotenv 設定
+         */
+        if (!env('APP_NAME') && file_exists(CONFIG . '.env')) {
+            $dotenv = new \josegonzalez\Dotenv\Loader([CONFIG . '.env']);
+            $dotenv->parse()
+                ->putenv()
+                ->toEnv()
+                ->toServer();
+        }
+
+        /**
          * インストール状態による初期化設定
          * インストールされている場合は、TMP フォルダの設定を行い、
          * されていない場合は、インストールプラグインをロードする。

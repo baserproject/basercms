@@ -27,17 +27,6 @@ use Cake\Datasource\ConnectionManager;
 use Cake\Validation\Validator;
 
 /**
- * dotenv 設定
- */
-if (!env('APP_NAME') && file_exists(CONFIG . '.env')) {
-    $dotenv = new \josegonzalez\Dotenv\Loader([CONFIG . '.env']);
-    $dotenv->parse()
-        ->putenv()
-        ->toEnv()
-        ->toServer();
-}
-
-/**
  * DB設定読み込み
  * ユニットテストの際は、test/bootstrap.php にて実行
  */
