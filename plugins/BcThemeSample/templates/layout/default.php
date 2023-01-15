@@ -25,22 +25,65 @@ use BaserCore\View\AppView;
 	<?php $this->BcBaser->metaDescription() ?>
 	<?php $this->BcBaser->metaKeywords() ?>
 	<?php $this->BcBaser->icon() ?>
+	<?php $this->BcBaser->css([
+		'style',
+		'jquery-ui/jquery-ui-1.11.4',
+		'colorbox/colorbox-1.6.1',
+		'editor'
+	]) ?>
+	<?php $this->BcBaser->js([
+		'vendor/jquery-1.11.3.min',
+		'vendor/jquery-ui-1.11.4.min',
+		'vendor/jquery.bxslider-4.12.min',
+		'vendor/jquery.colorbox-1.6.1.min',
+		'vendor/i18n/ui.datepicker-ja',
+		'vendor/jquery-accessibleMegaMenu',
+		'startup.bundle'
+	]); ?>
 	<?php $this->BcBaser->scripts() ?>
+	<!-- /Elements/google_analytics.php -->
 	<?php $this->BcBaser->googleAnalytics() ?>
 </head>
 <body id="<?php $this->BcBaser->contentsName() ?>">
 
 <div class="bs-container">
+
+	<!-- /Elements/header.php -->
+	<?php $this->BcBaser->header() ?>
+
+	<?php if ($this->BcBaser->isHome()): ?>
+		<?php $this->BcBaser->mainImage(['all' => true, 'num' => 5, 'width' => '100%', 'class' => 'bs-main-image']) ?>
+	<?php else: ?>
+		<!-- /Elements/crumbs.php -->
+		<?php $this->BcBaser->crumbsList(['onSchema' => true]); ?>
+	<?php endif ?>
+
 	<div class="bs-wrap clearfix">
+
 		<main class="bs-main-contents">
 			<?php $this->BcBaser->flash() ?>
+
+			<?php if($this->BcBaser->isHome()): ?>
+				<!-- /Elements/top_info.php -->
+				<?php $this->BcBaser->element('top_info') ?>
+			<?php endif ?>
+
 			<?php $this->BcBaser->content() ?>
+
+			<!-- /Elements/contents_navi.php -->
 			<?php $this->BcBaser->contentsNavi() ?>
 		</main>
+
 		<section class="bs-sub-contents">
+			<!-- /Elements/widget_area.php -->
 			<?php $this->BcBaser->widgetArea() ?>
 		</section>
+
 	</div>
+
+	<!-- /Elements/footer.php -->
+	<?php $this->BcBaser->footer() ?>
+
 </div>
 
 <?php $this->BcBaser->func() ?>
