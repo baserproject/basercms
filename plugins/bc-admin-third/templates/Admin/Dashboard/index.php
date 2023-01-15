@@ -24,11 +24,11 @@ $this->BcAdmin->setHelp('dashboard_index');
 
 <div class="bca-panel">
   <?php if ($panels): ?>
-    <?php foreach($panels as $key => $templates): ?>
+    <?php foreach($panels as $plugin => $templates): ?>
       <?php foreach($templates as $template): ?>
         <div class="panel-box bca-panel-box">
           <?php if ($template): ?>
-            <?php $this->BcBaser->element("Dashboard/" . $template) ?>
+            <?php $this->BcBaser->element($plugin . ".Dashboard/" . $template) ?>
           <?php endif ?>
         </div>
       <?php endforeach ?>

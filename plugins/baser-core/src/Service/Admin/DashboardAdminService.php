@@ -14,6 +14,7 @@ use BaserCore\Service\ContentsServiceInterface;
 use BaserCore\Service\DblogsServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
+use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -54,13 +55,30 @@ class DashboardAdminService implements DashboardAdminServiceInterface
     {
         $panels = [];
         $plugins = Plugin::loaded();
+        $corePlugins = array_merge(Configure::read('BcApp.core'),  Configure::read('BcApp.corePlugins'));
+
+        foreach($corePlugins as $corePlugin) {
+            $panels[$corePlugin] = BcUtil::getTemplateList('Admin/element/Dashboard', $corePlugin);
+            $key = array_search($corePlugin, $plugins);
+            if($key !== false) unset($plugins[$key]);
+        }
+
         if ($plugins) {
+            $vendorPanels = [];
             foreach($plugins as $plugin) {
                 $templates = BcUtil::getTemplateList('Admin/element/Dashboard', $plugin);
-                $panels[$plugin] = $templates;
+                foreach($templates as $template) {
+                    foreach($panels as $corePlugin => $coreTemplates) {
+                        if(in_array($template, $coreTemplates)) {
+                            unset($panels[$corePlugin][$template]);
+                            break;
+                        }
+                    }
+                }
+                $vendorPanels[$plugin] = $templates;
             }
         }
-        return $panels;
+        return array_merge($panels, $vendorPanels);
     }
 
 }
