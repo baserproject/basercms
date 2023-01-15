@@ -320,19 +320,29 @@ class Asset
                 //}
                 // ---
                 } else {
-                    if(\BaserCore\Utility\BcUtil::isAdminSystem()) {
-                        $defaultThemeName = Configure::read('BcApp.defaultAdminTheme');
+                    $defaultFrontTheme = Configure::read('BcApp.defaultFrontTheme');
+                    $theme = static::inflectString($defaultFrontTheme) . '/';
+                    if (is_file(Configure::read('App.wwwRoot') . $theme . $file)) {
+                        $webPath = $requestWebroot . $theme . $asset[0];
                     } else {
-                        $defaultThemeName = Configure::read('BcApp.defaultFrontTheme');
-                    }
-                    $defaultTheme = static::inflectString($defaultThemeName) . '/';
-                    if (is_file(Configure::read('App.wwwRoot') . $defaultTheme . $file)) {
-                        $webPath = $requestWebroot . $defaultTheme . $asset[0];
-                    } else {
-                        $themePath = Plugin::path($defaultThemeName);
+                        $themePath = Plugin::path($defaultFrontTheme);
                         $path = $themePath . 'webroot/' . $file;
                         if (is_file($path)) {
-                            $webPath = $requestWebroot . $defaultTheme . $asset[0];
+                            $webPath = $requestWebroot . $theme . $asset[0];
+                        } else {
+                            // フロントデフォルトテーマに存在しない場合、管理画面デフォルトテーマを確認
+                            // ツールバーの場合に必要。※ ツールバーを iframe 化したら不要になる可能性あり
+                            $defaultAdminTheme = Configure::read('BcApp.defaultAdminTheme');
+                            $theme = static::inflectString($defaultAdminTheme) . '/';
+                            if (is_file(Configure::read('App.wwwRoot') . $theme . $file)) {
+                                $webPath = $requestWebroot . $theme . $asset[0];
+                            } else {
+                                $themePath = Plugin::path($defaultAdminTheme);
+                                $path = $themePath . 'webroot/' . $file;
+                                if (is_file($path)) {
+                                    $webPath = $requestWebroot . $theme . $asset[0];
+                                }
+                            }
                         }
                     }
                 }

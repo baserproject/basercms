@@ -25,7 +25,7 @@ use BaserCore\View\BcAdminAppView;
  * @unitTest
  */
 // JSの出力について、ツールバーはフロントエンドでも利用するため、inlineに出力する
-$this->BcBaser->js([$currentAdminTheme . '.vendor/jquery.fixedMenu', $currentAdminTheme . '.vendor/outerClick', $currentAdminTheme . '.admin/toolbar.bundle']);
+$this->BcBaser->js(['vendor/jquery.fixedMenu', 'vendor/outerClick', 'admin/toolbar.bundle']);
 ?>
 
 
@@ -34,7 +34,7 @@ $this->BcBaser->js([$currentAdminTheme . '.vendor/jquery.fixedMenu', $currentAdm
 
     <div class="bca-toolbar__logo">
       <?php $this->BcBaser->link(
-        $this->BcBaser->getImg($currentAdminTheme . '.admin/logo_icon.svg', [
+        $this->BcBaser->getImg('admin/logo_icon.svg', [
           'alt' => '',
           'width' => '24',
           'height' => '21',
@@ -52,7 +52,7 @@ $this->BcBaser->js([$currentAdminTheme . '.vendor/jquery.fixedMenu', $currentAdm
           <li>
             <?php $this->BcBaser->link(
               h($currentSite->display_name) . ' ' .
-              $this->BcBaser->getImg($currentAdminTheme . '.admin/btn_dropdown.png', ['width' => 8, 'height' => 11, 'class' => 'bc-btn']),
+              $this->BcBaser->getImg('admin/btn_dropdown.png', ['width' => 8, 'height' => 11, 'class' => 'bc-btn']),
               'javascript:void(0)', [
               'class' => 'title',
               'escapeTitle' => false
@@ -98,7 +98,7 @@ $this->BcBaser->js([$currentAdminTheme . '.vendor/jquery.fixedMenu', $currentAdm
           <li>
             <?php $this->BcBaser->link(
               h($this->BcBaser->getUserName($loginUser)) . ' ' .
-              $this->BcBaser->getImg($currentAdminTheme . '.admin/btn_dropdown.png', ['width' => 8, 'height' => 11, 'class' => 'bc-btn']),
+              $this->BcBaser->getImg('admin/btn_dropdown.png', ['width' => 8, 'height' => 11, 'class' => 'bc-btn']),
               'javascript:void(0)', [
               'class' => 'title',
               'escapeTitle' => false

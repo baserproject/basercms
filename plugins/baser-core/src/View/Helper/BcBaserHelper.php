@@ -1247,8 +1247,7 @@ class BcBaserHelper extends Helper
         if (empty($this->_View->get('preview')) && $toolbar) {
             if ($this->_View->getRequest()->getQuery('toolbar') !== false && $this->_View->getRequest()->getQuery('toolbar') !== 'false') {
                 if ($currentPrefix !== 'Admin' && BcUtil::isAdminUser()) {
-                    $adminTheme = BcUtil::getCurrentAdminTheme();
-                    if($adminTheme) $this->css($adminTheme . '.admin/toolbar');
+                    $this->css('admin/toolbar');
                 }
             }
         }
@@ -1313,7 +1312,7 @@ class BcBaserHelper extends Helper
         if (empty($this->_View->get('preview')) && $toolbar) {
             if ($this->_View->getRequest()->getQuery('toolbar') !== false && $this->_View->getRequest()->getQuery('toolbar') !== 'false') {
                 if ($currentPrefix !== 'Admin' && BcUtil::isAdminUser()) {
-                    $adminTheme = BcUtil::getCurrentAdminTheme();
+                    $adminTheme = Inflector::camelize(Configure::read('BcApp.defaultAdminTheme'), '-');
                     $this->element($adminTheme . '.toolbar');
                 }
             }
