@@ -21,6 +21,7 @@ use BaserCore\Annotation\Checked;
 use BaserCore\Service\UsersServiceInterface;
 use BaserCore\Utility\BcApiUtil;
 use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Utility\BcUtil;
 use Cake\Event\EventInterface;
 use Cake\Http\Exception\ForbiddenException;
 
@@ -45,8 +46,20 @@ class BcApiController extends AppController
     public function initialize(): void
     {
         parent::initialize();
-        if(!$this->getRequest()->is('ajax') && !filter_var(env('USE_API', false), FILTER_VALIDATE_BOOLEAN)) {
-            throw new ForbiddenException(__d('baser', 'Web APIは許可されていません。'));
+
+        if(!filter_var(env('USE_API', false), FILTER_VALIDATE_BOOLEAN)) {
+            if($this->getRequest()->is('ajax')) {
+                $siteDomain = BcUtil::getCurrentDomain();
+                if (empty($_SERVER['HTTP_REFERER'])) {
+                    throw new ForbiddenException(__d('baser', 'Web APIは許可されていません。'));
+                }
+                $refererDomain = BcUtil::getDomain($_SERVER['HTTP_REFERER']);
+                if (!preg_match('/^' . preg_quote($siteDomain, '/') . '/', $refererDomain)) {
+                    throw new ForbiddenException(__d('baser', 'Web APIは許可されていません。'));
+                }
+            } else {
+                throw new ForbiddenException(__d('baser', 'Web APIは許可されていません。'));
+            }
         }
         $this->loadComponent('Authentication.Authentication');
         $this->Security->setConfig('validatePost', false);
