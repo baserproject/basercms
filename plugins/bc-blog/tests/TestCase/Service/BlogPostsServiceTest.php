@@ -20,7 +20,6 @@ use BcBlog\Model\Table\BlogPostsTable;
 use BcBlog\Service\BlogPostsService;
 use BcBlog\Service\BlogPostsServiceInterface;
 use BcBlog\Test\Factory\BlogCategoryFactory;
-use BcBlog\Test\Factory\BlogContentFactory;
 use BcBlog\Test\Factory\BlogPostBlogTagFactory;
 use BcBlog\Test\Factory\BlogPostFactory;
 use BcBlog\Test\Factory\BlogTagFactory;
@@ -56,6 +55,9 @@ class BlogPostsServiceTest extends BcTestCase
         'plugin.BcBlog.Factory/BlogContents',
         'plugin.BaserCore.Factory/Contents',
         'plugin.BcBlog.Factory/BlogTags',
+        'plugin.BaserCore.Factory/Contents',
+        'plugin.BcBlog.Factory/BlogContents',
+        'plugin.BcBlog.Factory/BlogCategories',
         'plugin.BcBlog.Factory/BlogPostsBlogTags',
     ];
 
@@ -332,16 +334,16 @@ class BlogPostsServiceTest extends BcTestCase
         $this->assertEquals(1, $result["BlogPosts.id IN"][0]);
 
         //配列：存在しているタグを確認場合、
-        $result = $this->BlogPostsService->createTagCondition([], ['tag1','tag2']);
+        $result = $this->BlogPostsService->createTagCondition([], ['tag1', 'tag2']);
         $this->assertEquals(1, $result["BlogPosts.id IN"][0]);
         $this->assertEquals(2, $result['BlogPosts.id IN'][1]);
 
         //配列：存在しているタグと存在していないタグを確認場合、
-        $result = $this->BlogPostsService->createTagCondition([], ['tag1111','tag2']);
+        $result = $this->BlogPostsService->createTagCondition([], ['tag1111', 'tag2']);
         $this->assertEquals(2, $result["BlogPosts.id IN"][0]);
 
         //配列：存在していないタグを確認場合、
-        $result = $this->BlogPostsService->createTagCondition([], ['tag1111','tag22222']);
+        $result = $this->BlogPostsService->createTagCondition([], ['tag1111', 'tag22222']);
         $this->assertNull($result["BlogPosts.id IS"]);
     }
 
@@ -660,8 +662,8 @@ class BlogPostsServiceTest extends BcTestCase
      */
 //    public function testCreateExceptionPostMaxSize()
 //    {
-        // TODO ローカルでは成功するが、GitHubActions上でうまくいかないためコメントアウト（原因不明）
-        // データ量を超えていると仮定する
+    // TODO ローカルでは成功するが、GitHubActions上でうまくいかないためコメントアウト（原因不明）
+    // データ量を超えていると仮定する
 //        $postMaxSize = ini_get('post_max_size');
 //        $_SERVER['REQUEST_METHOD'] = 'POST';
 //        $_SERVER['CONTENT_LENGTH'] = BcUtil::convertSize($postMaxSize) + 1;
@@ -729,7 +731,43 @@ class BlogPostsServiceTest extends BcTestCase
      */
     public function testGetControlSource()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        BlogCategoryFactory::make(['id' => 1, 'blog_content_id' => 1, 'title' => 'test title 4'])->persist();
+        BlogTagFactory::make(['id' => 2, 'name' => 'tag name1'])->persist();
+        BlogTagFactory::make(['id' => 3, 'name' => 'tag name2'])->persist();
+        BlogPostBlogTagFactory::make(['blog_tag_id' => 2])->persist();
+        BlogPostBlogTagFactory::make(['blog_tag_id' => 3])->persist();
+        UserFactory::make(['id' => '1', 'name' => 'test 1', 'nickname' => 'James'])->persist();
+        UserFactory::make(['id' => '2', 'nickname' => 'nyc'])->persist();
+
+        //$field = blog_category_id　かつ　blogContentId = 1
+        $result = $this->BlogPostsService->getControlSource('blog_category_id', ['blogContentId' => 1]);
+        //戻り値を確認
+        $this->assertEquals('test title 4', $result[1]);
+
+        //$field = blog_category_id　かつ　配列　blogContentIdと他の変数　
+        $result = $this->BlogPostsService->getControlSource('blog_category_id', ['blogContentId' => 1, 'empty' => 'sd']);
+        //戻り値を確認
+        $this->assertEquals(['' => 'sd', 1 => 'test title 4'], $result);
+
+        //$field = blog_category_id　かつ　配列　存在しないblogContentId
+        $result = $this->BlogPostsService->getControlSource('blog_category_id', ['blogContentId' => '2']);
+        //戻り値を確認
+        $this->assertEquals([], $result);
+
+        //$field = user_id　かつ　空配列
+        $result = $this->BlogPostsService->getControlSource('user_id');
+        //戻り値を確認
+        $this->assertEquals([1 => 'James', 2 => 'nyc'], $result);
+
+        //$field = user_id　かつ　条件配列
+        $result = $this->BlogPostsService->getControlSource('user_id', [['name' => 'test 1']]);
+        //戻り値を確認
+        $this->assertEquals([1 => 'James'], $result);
+
+        //$field = blog_tag_id　かつ　空配列
+        $result = $this->BlogPostsService->getControlSource('blog_tag_id');
+        //戻り値を確認
+        $this->assertEquals([2 => 'tag name1', 3 => 'tag name2'], $result);
     }
 
     /**

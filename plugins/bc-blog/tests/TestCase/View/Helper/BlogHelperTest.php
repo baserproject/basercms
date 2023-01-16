@@ -53,6 +53,8 @@ class BlogHelperTest extends BcTestCase
         'plugin.BcBlog.Factory/BlogContents',
         'plugin.BcBlog.Factory/BlogCategories',
         'plugin.BcBlog.Factory/BlogPosts',
+        'plugin.BcBlog.Factory/BlogTags',
+        'plugin.BcBlog.Factory/BlogPostsBlogTags',
     ];
 
     /**

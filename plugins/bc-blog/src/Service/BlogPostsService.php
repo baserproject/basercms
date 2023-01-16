@@ -562,6 +562,7 @@ class BlogPostsService implements BlogPostsServiceInterface
      * @return array|false
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getControlSource(string $field, array $options = [])
     {
