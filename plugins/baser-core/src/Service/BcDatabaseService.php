@@ -1061,8 +1061,11 @@ class BcDatabaseService implements BcDatabaseServiceInterface
     /**
      * datasource名を取得
      *
-     * @param string datasource name.postgre.mysql.etc.
+     * @param string $datasource datasource name.postgre.mysql.etc.
      * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getDatasourceName($datasource = null)
     {
