@@ -31,11 +31,31 @@ class WidgetAreasController extends BcApiController
      * 一覧取得
      *
      * @param WidgetAreasServiceInterface $service
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function index(WidgetAreasServiceInterface $service)
     {
         $this->set([
             'widgetAreas' => $this->paginate($service->getIndex($this->request->getQueryParams()))
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['widgetAreas']);
+    }
+
+    /**
+     * リストデータ取得
+     *
+     * @param WidgetAreasServiceInterface $service
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function list(WidgetAreasServiceInterface $service){
+        $this->set([
+            'widgetAreas' => $service->getList()
         ]);
         $this->viewBuilder()->setOption('serialize', ['widgetAreas']);
     }

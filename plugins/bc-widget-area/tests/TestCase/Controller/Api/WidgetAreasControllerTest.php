@@ -79,6 +79,22 @@ class WidgetAreasControllerTest extends BcTestCase
         $this->assertNotEmpty($result->widgetAreas);
     }
 
+    public function testList()
+    {
+        // テストデータを作る
+        WidgetAreaFactory::make(['id' => 1, 'name' => 'test name 1', 'widgets' => 'test widgets 1'])->persist();
+        WidgetAreaFactory::make(['id' => 2, 'name' => 'test name 2', 'widgets' => 'test widgets 2'])->persist();
+
+        // ウィジェットエリア一覧のAPIを呼ぶ
+        $this->get("/baser/api/bc-widget-area/widget_areas/list.json?token=" . $this->accessToken);
+        // レスポンスコードを確認する
+        $this->assertResponseOk();
+        // レスポンスのウィジェットエリアリストデータを確認する
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('test name 1', $result->widgetAreas->{1});
+        $this->assertEquals('test name 2', $result->widgetAreas->{2});
+    }
+
     /**
      * [API] 新規追加
      */
