@@ -24,6 +24,7 @@ use BcBlog\Test\Factory\BlogPostBlogTagFactory;
 use BcBlog\Test\Factory\BlogPostFactory;
 use BcBlog\Test\Factory\BlogTagFactory;
 use Cake\Datasource\Exception\RecordNotFoundException;
+use Cake\I18n\FrozenTime;
 
 /**
  * BlogPostsServiceTest
@@ -452,7 +453,24 @@ class BlogPostsServiceTest extends BcTestCase
      */
     public function testGetNew()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データ生成
+        BlogPostFactory::make([])->publish(1, 1)->persist();
+
+        // サービスメソッドを呼ぶ
+        $result = $this->BlogPostsService->getNew(2, 1);
+        //戻り値を確認
+
+        //user_idが生成できるか確認
+        $this->assertEquals("1", $result->user_id);
+
+        //postedが生成できるか確認
+        $this->assertEquals(FrozenTime::now()->i18nFormat('yyyy-MM-dd'), $result->posted->i18nFormat('yyyy-MM-dd'));
+
+        //statusが生成できるか確認
+        $this->assertEquals(false, $result->status);
+
+        //blog_content_idが生成できるか確認
+        $this->assertEquals(2, $result->blog_content_id);
     }
 
     /**
