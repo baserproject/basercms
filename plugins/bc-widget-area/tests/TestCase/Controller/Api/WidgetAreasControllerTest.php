@@ -242,7 +242,32 @@ class WidgetAreasControllerTest extends BcTestCase
      */
     public function testUpdate_title()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // テストデータを生成
+        WidgetAreaFactory::make([
+            'id' => 1,
+            'name' => 'test',
+            'widgets' => serialize([
+                [
+                    1 => 'test 1',
+                    2 => 'test 2'
+                ]
+            ])
+        ])->persist();
+        //編集データーを準備
+        $data = [
+            'name' => 'updated'
+        ];
+
+        // APIを呼ぶ
+        $this->post("/baser/api/bc-widget-area/widget_areas/update_title/1.json?token=" . $this->accessToken, $data);
+        // レスポンスコードを確認する
+        $this->assertResponseOk();
+        // 戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        //メッセージを確認
+        $this->assertEquals('ウィジェットエリア「updated」を更新しました。', $result->message);
+        //ウィジェットエリア名を更新できるか確認すること
+        $this->assertEquals('updated', $result->widgetArea->name);
     }
 
     /**
