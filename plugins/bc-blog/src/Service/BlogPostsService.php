@@ -769,6 +769,10 @@ class BlogPostsService implements BlogPostsServiceInterface
      *
      * @param BlogPost $post ブログ記事
      * @return BlogPost|EntityInterface
+     *
+     * @noTodo
+     * @checked
+     * @unitTest
      */
     public function getPrevPost(BlogPost $post)
     {

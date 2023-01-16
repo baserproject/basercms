@@ -726,7 +726,53 @@ class BlogPostsServiceTest extends BcTestCase
      */
     public function testGetPrevPost()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データ生成
+        BlogPostFactory::make([
+            'id' => 1,
+            'blog_content_id' => 3,
+            'title' => 'blog post 1',
+            'posted' => '2022-10-02 09:00:00',
+            'status' => 1,
+            'publish_begin' => '2021-10-01 09:00:00',
+            'publish_end' => '9999-11-01 09:00:00'
+        ])->persist();
+        BlogPostFactory::make([
+            'id' => 2,
+            'blog_content_id' => 3,
+            'title' => 'blog post 2',
+            'posted' => '2022-10-02 09:00:00',
+            'status' => 1,
+            'publish_begin' => '2021-02-01 09:00:00',
+            'publish_end' => '9999-12-01 09:00:00'
+        ])->persist();
+        BlogPostFactory::make([
+            'id' => 3,
+            'blog_content_id' => 3,
+            'title' => 'blog post 3',
+            'posted' => '2022-08-02 09:00:00',
+            'status' => 1,
+            'publish_begin' => '2021-05-06 09:00:00',
+            'publish_end' => '9999-02-01 09:00:00'
+        ])->persist();
+
+        // 投稿日が年月日時分秒が同一のデータの対応のため、投稿日が同じでIDが大きいデータを検索
+        $result = $this->BlogPostsService->getPrevPost(BlogPostFactory::get(2));
+        //戻り値を確認
+        $this->assertEquals(1, $result->id);
+        $this->assertEquals(3, $result->blog_content_id);
+        $this->assertEquals("blog post 1", $result->title);
+
+        // 投稿日が新しいデータを取得
+        $result = $this->BlogPostsService->getPrevPost(BlogPostFactory::get(1));
+        //戻り値を確認
+        $this->assertEquals(3, $result->id);
+        $this->assertEquals(3, $result->blog_content_id);
+        $this->assertEquals("blog post 3", $result->title);
+
+        //テスト posted 最大, 結果はnullに戻る
+        $result = $this->BlogPostsService->getPrevPost(BlogPostFactory::get(3));
+        //戻り値を確認
+        $this->assertNull($result);
     }
 
     /**
