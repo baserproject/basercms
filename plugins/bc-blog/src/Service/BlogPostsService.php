@@ -806,6 +806,9 @@ class BlogPostsService implements BlogPostsServiceInterface
      *
      * @param BlogPost $post ブログ記事
      * @return BlogPost|EntityInterface
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getNextPost(BlogPost $post)
     {
