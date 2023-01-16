@@ -15,7 +15,6 @@ use BaserCore\Test\Factory\UserFactory;
 use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
-use BaserCore\Utility\BcUtil;
 use BcBlog\Model\Table\BlogPostsTable;
 use BcBlog\Service\BlogPostsService;
 use BcBlog\Service\BlogPostsServiceInterface;
@@ -51,12 +50,9 @@ class BlogPostsServiceTest extends BcTestCase
         'plugin.BaserCore.Factory/UsersUserGroups',
         'plugin.BaserCore.Factory/UserGroups',
         'plugin.BcBlog.Factory/BlogPosts',
-        'plugin.BcBlog.Factory/BlogCategories',
         'plugin.BcBlog.Factory/BlogContents',
         'plugin.BaserCore.Factory/Contents',
         'plugin.BcBlog.Factory/BlogTags',
-        'plugin.BaserCore.Factory/Contents',
-        'plugin.BcBlog.Factory/BlogContents',
         'plugin.BcBlog.Factory/BlogCategories',
         'plugin.BcBlog.Factory/BlogPostsBlogTags',
     ];
