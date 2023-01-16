@@ -523,4 +523,60 @@ class UserActionsSchema extends BcSchema
         $file = new File($expectedFile);
         $file->delete();
     }
+
+    /**
+     * Test connectDb
+     */
+    public function test_connectDb()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * Test getDataSource
+     */
+    public function test_getDataSource()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * Test deleteTables
+     */
+    public function test_deleteTables()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * Test checkDbConnection
+     */
+    public function test_checkDbConnection()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * Test testConnectDb
+     */
+    public function test_testConnectDb()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * Test constructionTable
+     */
+    public function test_constructionTable()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * Test migrate
+     */
+    public function test_migrate()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
 }
