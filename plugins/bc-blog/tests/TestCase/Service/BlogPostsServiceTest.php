@@ -16,6 +16,7 @@ use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
+use BcBlog\Model\Table\BlogPostsTable;
 use BcBlog\Service\BlogPostsService;
 use BcBlog\Service\BlogPostsServiceInterface;
 use BcBlog\Test\Factory\BlogCategoryFactory;
@@ -23,7 +24,9 @@ use BcBlog\Test\Factory\BlogContentFactory;
 use BcBlog\Test\Factory\BlogPostBlogTagFactory;
 use BcBlog\Test\Factory\BlogPostFactory;
 use BcBlog\Test\Factory\BlogTagFactory;
+use BcBlog\Test\Scenario\MultiSiteBlogScenario;
 use Cake\Datasource\Exception\RecordNotFoundException;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use Cake\I18n\FrozenTime;
 
 /**
@@ -35,6 +38,7 @@ class BlogPostsServiceTest extends BcTestCase
 {
 
     use BcContainerTrait;
+    use ScenarioAwareTrait;
 
     /**
      * Fixtures
@@ -406,11 +410,143 @@ class BlogPostsServiceTest extends BcTestCase
 
     /**
      * ページ一覧用の検索条件を生成する
+     * @dataProvider createIndexConditionsDataProvider
      */
-    public function testCreateIndexConditions()
+    public function testCreateIndexConditions($isLoadScenario, $query, $options, $expected)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        if ($isLoadScenario) {
+            $this->loadFixtureScenario(MultiSiteBlogScenario::class);
+            BlogPostFactory::make([])->publish(1, 1)->persist();
+            BlogTagFactory::make(['id' => 1, 'name' => 'tag1'])->persist();
+            BlogPostBlogTagFactory::make(['blog_post_id' => 1, 'blog_tag_id' => 1])->persist();
+            UserFactory::make(['id' => 1, 'name' => 'test_author'])->persist();
+        }
+
+        $result = $this->execPrivateMethod($this->BlogPostsService, "createIndexConditions", [$query, $options]);
+        $this->assertEquals($expected, $result);
     }
+
+    /**
+     * createIndexConditionsテストのデータプロバイダ
+     * @return array
+     */
+    public function createIndexConditionsDataProvider(): array
+    {
+        $blogPost = new BlogPostsTable();
+        return [
+            // 空配列の結果テスト
+            [
+                false,
+                $blogPost->find('all'),
+                [],
+                $blogPost->find('all')
+            ],
+            //$params ID
+            [
+                false,
+                $blogPost->find('all'),
+                ['id' => 1],
+                $blogPost->find('all')->where(['BlogPosts.id' => 1])
+            ],
+            //$params タイトル
+            [
+                false,
+                $blogPost->find('all'),
+                ['title' => 'test title'],
+                $blogPost->find('all')->where(['BlogPosts.title LIKE' => '%test title%'])
+            ],
+            //$params ユーザーID
+            [
+                false,
+                $blogPost->find('all'),
+                ['user_id' => 1], $blogPost->find('all')->where(['BlogPosts.user_id' => 1])
+            ],
+            //$params ブログコンテンツID
+            [
+                false,
+                $blogPost->find('all'),
+                ['blog_content_id' => 1],
+                $blogPost->find('all')->where(['BlogPosts.blog_content_id' => 1])
+            ],
+            //$params サイトID
+            [
+                false,
+                $blogPost->find('all'),
+                ['site_id' => 1],
+                $blogPost->find('all')->where(['Contents.site_id' => 1])
+            ],
+            //$params URL
+            [
+                false,
+                $blogPost->find('all'),
+                ['contentUrl' => '/test'],
+                $blogPost->find('all')->where(['Contents.url' => '/test'])
+            ],
+            //$params カテゴリID
+            [
+                true,
+                $blogPost->find('all'),
+                ['blog_category_id' => 1],
+                $blogPost->find('all')->where(['BlogPosts.blog_category_id IN' => [1, 2]])
+            ],
+            //$params カテゴリ名
+            [
+                true,
+                $blogPost->find('all'),
+                ['category' => 'release', 'force' => true],
+                $blogPost->find('all')->where(['BlogPosts.blog_category_id IN' => [1, 2]])
+            ],
+            //$params タグ名
+            [
+                true,
+                $blogPost->find('all'),
+                ['tag' => 'tag1'],
+                $blogPost->find('all')->where(['BlogPosts.id IN' => 1])
+            ],
+            //$params 年月日
+            [
+                false,
+                $blogPost->find('all'),
+                ['year' => 1994, 'month' => 8, 'day' => 21],
+                $blogPost->find('all')->where([
+                    'YEAR(BlogPosts.posted)' => 1994,
+                    'MONTH(BlogPosts.posted)' => 8,
+                    'DAY(BlogPosts.posted)' => 21
+                ])
+            ],
+            //$params No
+            [
+                false,
+                $blogPost->find('all'),
+                ['no' => 1, 'force' => true],
+                $blogPost->find('all')->where(['BlogPosts.no' => 1])
+            ],
+            //$params キーワード
+            [
+                false,
+                $blogPost->find('all'),
+                ['keyword' => 'test'],
+                $blogPost->find('all')->where([
+                    'and' => [
+                        0 => [
+                            'or' => [
+                                ['BlogPosts.name LIKE' => '%test%'],
+                                ['BlogPosts.content LIKE' => '%test%'],
+                                ['BlogPosts.detail LIKE' => '%test%']
+                            ]
+                        ]
+                    ]
+                ])],
+            //$params 作成者
+            [
+                true,
+                $blogPost->find('all'),
+                ['author' => 'test_author'],
+                $blogPost->find('all')->where(['BlogPosts.user_id' => 1])
+            ],
+        ];
+    }
+
 
     /**
      * 同じタグの関連投稿を取得する

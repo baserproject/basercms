@@ -189,6 +189,7 @@ class BlogPostsService implements BlogPostsServiceInterface
      * @return \Cake\ORM\Query
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function createIndexConditions(Query $query, array $params)
     {
@@ -284,7 +285,7 @@ class BlogPostsService implements BlogPostsServiceInterface
             );
         }
         // NO
-        if ($params['no']) {
+        if (isset($params['no']) && $params['no']) {
             if (!$params['blog_content_id'] && !$params['contentUrl'] && !$params['force']) {
                 trigger_error(__d('baser', 'blog_content_id を指定してください。'), E_USER_WARNING);
             }
