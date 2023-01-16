@@ -678,7 +678,42 @@ class BlogPostsServiceTest extends BcTestCase
      */
     public function testUpdate()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データ生成
+        BlogPostFactory::make([
+            'id' => 1,
+            'title' => 'post title 1',
+            'posted' => '2022-12-01 00:00:00',
+            'publish_begin' => '2022-12-01 00:00:00',
+            'publish_end' => '9999-12-31 23:59:59'
+        ])->persist();
+
+        //データ生成
+        $postData = [
+            'title' => 'title of post 3',
+            'posted' => '2021-11-01 00:00:00',
+            'publish_begin' => '2021-10-01 00:00:00',
+            'publish_end' => '9999-11-30 23:59:59'
+        ];
+        // サービスメソッドを呼ぶ
+        $result = $this->BlogPostsService->update(BlogPostFactory::get(1), $postData);
+        // 戻り値を確認
+        $this->assertEquals("title of post 3", $result["title"]);
+        $this->assertEquals("2021-11-01 00:00:00", $result["posted"]->i18nFormat('yyyy-MM-dd HH:mm:ss'));
+        $this->assertEquals("2021-10-01 00:00:00", $result["publish_begin"]->i18nFormat('yyyy-MM-dd HH:mm:ss'));
+        $this->assertEquals("9999-11-30 23:59:59", $result["publish_end"]->i18nFormat('yyyy-MM-dd HH:mm:ss'));
+
+        // titleがない時を確認すること
+        $postData = [
+            'posted' => '2021-11-01 00:00:00',
+            'publish_begin' => '2021-11-01 00:00:00',
+            'publish_end' => '9999-11-31 23:59:59'
+        ];
+
+        // title を指定しなかった場合はエラーとなること
+        $this->expectException("Cake\ORM\Exception\PersistenceFailedException");
+        $this->expectExceptionMessage("タイトルを入力してください。");
+        // サービスメソッドを呼ぶ
+        $this->BlogPostsService->update(BlogPostFactory::get(1), $postData);
     }
 
     /**
