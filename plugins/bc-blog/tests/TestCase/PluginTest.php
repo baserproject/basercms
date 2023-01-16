@@ -43,6 +43,11 @@ class PluginTest extends BcTestCase
      */
     public $fixtures = [
         'plugin.BaserCore.Factory/Sites',
+        'plugin.BcBlog.Factory/BlogTags',
+        'plugin.BaserCore.Factory/Contents',
+        'plugin.BcBlog.Factory/BlogContents',
+        'plugin.BcBlog.Factory/BlogCategories',
+        'plugin.BcBlog.Factory/BlogPostsBlogTags',
     ];
 
     /**

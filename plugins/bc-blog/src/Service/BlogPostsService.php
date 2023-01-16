@@ -843,6 +843,9 @@ class BlogPostsService implements BlogPostsServiceInterface
      * @param BlogPost $post
      * @param array $options
      * @return array|Query
+     * @noTodo
+     * @checked
+     * @unitTest
      */
     public function getRelatedPosts(BlogPost $post, $options = [])
     {

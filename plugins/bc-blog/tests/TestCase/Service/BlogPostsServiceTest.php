@@ -417,35 +417,26 @@ class BlogPostsServiceTest extends BcTestCase
      */
     public function testGetRelatedPosts()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        // TODO ucmitz BlogHelperから移植した
-        $post = [
-            'BlogPost' => [
-                'id' => 1,
-                'blog_content_id' => 1,
-            ],
-            'BlogTag' => [
-                ['name' => '新製品']
-            ]
-        ];
-        $result = $this->Blog->getRelatedPosts($post);
-        $this->assertEquals($result[0]['BlogPost']['id'], 3, '同じタグの関連投稿を正しく取得できません');
-        $this->assertEquals($result[1]['BlogPost']['id'], 2, '同じタグの関連投稿を正しく取得できません');
+        //データ生成
+        BlogPostFactory::make([])->publish(1, 1)->persist();
+        BlogPostFactory::make([])->publish(2, 1)->persist();
+        BlogPostFactory::make([])->publish(3, 2)->persist();
 
-        $post['BlogPost']['id'] = 2;
-        $post['BlogPost']['blog_content_id'] = 1;
-        $result = $this->Blog->getRelatedPosts($post);
-        $this->assertEquals($result[0]['BlogPost']['id'], 3, '同じタグの関連投稿を正しく取得できません');
+        BlogTagFactory::make(['id' => 1, 'name' => 'name blog tag'])->persist();
+        BlogPostBlogTagFactory::make(['id' => 1, 'blog_post_id' => 1, 'blog_tag_id' => 1])->persist();
+        BlogPostBlogTagFactory::make(['id' => 2, 'blog_post_id' => 2, 'blog_tag_id' => 1])->persist();
 
-        $post['BlogPost']['id'] = 7;
-        $post['BlogPost']['blog_content_id'] = 2;
-        $result = $this->Blog->getRelatedPosts($post);
-        $this->assertEmpty($result, '関連していない投稿を取得しています');
+        $blogPost = $this->BlogPostsService->BlogPosts->get(1, ['contain' => ['BlogTags']]);
+        $result = $this->BlogPostsService->getRelatedPosts($blogPost)->toArray();
+        //戻り値を確認
+        $this->assertEquals(1, $result[0]["blog_content_id"]);
+        $this->assertEquals(2, $result[0]["id"]);
 
-        $post['BlogPost']['id'] = 2;
-        $post['BlogPost']['blog_content_id'] = 3;
-        $result = $this->Blog->getRelatedPosts($post);
-        $this->assertEmpty($result, '関連していない投稿を取得しています');
+        //blog_tagsがNULLを確認すること
+        $blogPost = $this->BlogPostsService->BlogPosts->get(3, ['contain' => ['BlogTags']]);
+        $result = $this->BlogPostsService->getRelatedPosts($blogPost);
+        //結果はnullになる
+        $this->assertCount(0, $result);
     }
 
     /**
