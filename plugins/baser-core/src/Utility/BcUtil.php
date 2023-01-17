@@ -765,7 +765,13 @@ class BcUtil
                     continue;
                 }
                 $config = include $appConfigPath;
-                if (!empty($config['type']) && in_array($config['type'], $themeTypes)) {
+                if (!empty($config['type'])) {
+                    if(!is_array($config['type'])) $config['type'] = [$config['type']];
+                    $isTheme = false;
+                    foreach($config['type'] as $type) {
+                        if(in_array($type, $themeTypes)) $isTheme = true;
+                    }
+                    if(!$isTheme) continue;
                     $name = Inflector::camelize(Inflector::underscore($name));
                     $themes[$name] = $name;
                 }
@@ -789,7 +795,8 @@ class BcUtil
             if (!file_exists(BcUtil::getPluginPath($theme) . 'config.php')) continue;
             $config = include BcUtil::getPluginPath($theme) . 'config.php';
             if ($config === false) continue;
-            if ($config['type'] !== 'Theme') unset($themes[$key]);
+            if(!is_array($config['type'])) $config['type'] = [$config['type']];
+            if (!in_array('Theme', $config['type'])) unset($themes[$key]);
         }
         return $themes;
     }
@@ -807,7 +814,8 @@ class BcUtil
         $themes = self::getAllThemeList();
         foreach($themes as $key => $theme) {
             $config = include BcUtil::getPluginPath($theme) . 'config.php';
-            if ($config['type'] !== 'AdminTheme') unset($themes[$key]);
+            if(!is_array($config['type'])) $config['type'] = [$config['type']];
+            if (!in_array('AdminTheme', $config['type'])) unset($themes[$key]);
         }
         return $themes;
     }

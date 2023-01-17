@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace BaserCore\Model\Entity;
 
+use Cake\Core\Configure;
 use Cake\I18n\FrozenTime;
 use Cake\ORM\Entity;
 
@@ -58,5 +59,39 @@ class Plugin extends Entity
         'adminLink' => true,
         'screenshot' => true
     ];
+
+    public function isPlugin()
+    {
+        return $this->hasType(['CorePlugin', 'Plugin']);
+    }
+
+    public function isCorePlugin()
+    {
+        return (
+            $this->hasType(['CorePlugin', 'Plugin'] &&
+            in_array($this->name, Configure::read('BcApp.corePlugins')))
+        );
+    }
+
+    public function isTheme()
+    {
+        return $this->hasType(['Theme']);
+    }
+
+    public function isAdminTheme()
+    {
+        return $this->hasType(['AdminTheme']);
+    }
+
+    public function hasType($types)
+    {
+        $type = $this->type;
+        if(!$type) return false;
+        if(!is_array($type)) $type = [$type];
+        foreach($type as $value) {
+            if(in_array($value, $types)) return true;
+        }
+        return false;
+    }
 
 }
