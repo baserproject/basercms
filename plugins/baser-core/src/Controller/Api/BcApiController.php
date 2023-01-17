@@ -47,8 +47,8 @@ class BcApiController extends AppController
     {
         parent::initialize();
 
-        if(!filter_var(env('USE_API', false), FILTER_VALIDATE_BOOLEAN)) {
-            if($this->getRequest()->is('ajax')) {
+        if (!filter_var(env('USE_API', false), FILTER_VALIDATE_BOOLEAN)) {
+            if ($this->getRequest()->is('ajax')) {
                 $siteDomain = BcUtil::getCurrentDomain();
                 if (empty($_SERVER['HTTP_REFERER'])) {
                     throw new ForbiddenException(__d('baser', 'Web APIは許可されていません。'));
@@ -95,23 +95,23 @@ class BcApiController extends AppController
     {
         parent::beforeFilter($event);
 
-        if(in_array($this->getRequest()->getParam('action'), $this->Authentication->getUnauthenticatedActions())) {
+        if (in_array($this->getRequest()->getParam('action'), $this->Authentication->getUnauthenticatedActions())) {
             return;
         }
 
         // ユーザーの有効チェック
         $user = $this->Authentication->getResult()->getData();
         $usersService = $this->getService(UsersServiceInterface::class);
-        if($user && !$usersService->isAvailable($user->id)){
+        if ($user && !$usersService->isAvailable($user->id)) {
             $this->setResponse($this->response->withStatus(401));
             return;
         }
 
         // トークンタイプチェック
         $auth = $this->Authentication->getAuthenticationService()->getAuthenticationProvider();
-        if($auth instanceof JwtAuthenticator){
+        if ($auth instanceof JwtAuthenticator) {
             $payload = $auth->getPayload();
-            if($payload->token_type !== 'access_token' && $this->getRequest()->getParam('action') !== 'refresh_token') {
+            if ($payload->token_type !== 'access_token' && $this->getRequest()->getParam('action') !== 'refresh_token') {
                 $this->setResponse($this->response->withStatus(401));
             }
         }

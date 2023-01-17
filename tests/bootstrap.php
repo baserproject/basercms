@@ -15,6 +15,7 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/mit-license.php MIT License
  */
 
+use BaserCore\Error\BcException;
 use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
 use Cake\Error\ErrorTrap;
@@ -72,6 +73,14 @@ ConnectionManager::alias('test_debug_kit', 'debug_kit');
 // does not allow the sessionid to be set after stdout
 // has been written to.
 session_id('cli');
+
+// ユニットテストを実行する前の事前確認
+// GitHubActions で実行する場合は、bin/cake setup test にて、自動的に事前準備をしている
+if(!filter_var(env('USE_API'), FILTER_VALIDATE_BOOLEAN)) {
+    throw new BcException(__d('baser', 'ユニットテストを実行する際は、.env にて USE_API を true に設定してください。'));
+} elseif(!filter_var(env('USE_API'), FILTER_VALIDATE_BOOLEAN)) {
+    throw new BcException(__d('baser', 'ユニットテストを実行する際は、.env にて debug を true に設定してください。'));
+}
 
 // Use migrations to build test database schema.
 //
