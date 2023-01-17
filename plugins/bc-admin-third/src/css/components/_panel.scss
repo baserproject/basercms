@@ -1,7 +1,7 @@
 .bca-panel {
   display: flex;
   flex-wrap: nowrap;
-  justify-content: space-between;
+  grid-gap: 30px;
   & > * {
     width: calc(33.33% - 20px);
   }
