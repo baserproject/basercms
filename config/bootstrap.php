@@ -60,13 +60,13 @@ use Cake\Utility\Security;
  * security risks. See https://github.com/josegonzalez/php-dotenv#general-security-information
  * for more information for recommended practices.
 */
-// if (!env('APP_NAME') && file_exists(CONFIG . '.env')) {
-//     $dotenv = new \josegonzalez\Dotenv\Loader([CONFIG . '.env']);
-//     $dotenv->parse()
-//         ->putenv()
-//         ->toEnv()
-//         ->toServer();
-// }
+if (!env('APP_NAME') && file_exists(CONFIG . '.env')) {
+    $dotenv = new \josegonzalez\Dotenv\Loader([CONFIG . '.env']);
+    $dotenv->parse()
+        ->putenv()
+        ->toEnv()
+        ->toServer();
+}
 
 /*
  * Read configuration file and inject configuration into various
@@ -176,12 +176,12 @@ Security::setSalt(Configure::consume('Security.salt'));
  * If you don't use these checks you can safely remove this code
  * and the mobiledetect package from composer.json.
  */
-ServerRequest::addDetector('mobile', function ($request) {
+ServerRequest::addDetector('mobile', function($request) {
     $detector = new \Detection\MobileDetect();
 
     return $detector->isMobile();
 });
-ServerRequest::addDetector('tablet', function ($request) {
+ServerRequest::addDetector('tablet', function($request) {
     $detector = new \Detection\MobileDetect();
 
     return $detector->isTablet();
