@@ -1,5 +1,6 @@
 .bca-textbox {
   display: inline;
+
   &__input {
     display: inline-block;
     outline: none;
@@ -10,29 +11,36 @@
     line-height: 1.2;
     font-size: $button_font_size_medium;
     color: $color_text_secondary;
-    margin:4px;
+    margin: 4px;
+
     &[data-input-text-size=lg] {
       font-size: $button_font_size_large;
     }
+
     &[data-input-text-size=sm] {
       font-size: $button_font_size_small;
     }
+
     &[data-input-text-size=full-counter] {
       width: calc(100% - 80px);
     }
+
     &[data-margin=bottom] {
       margin-bottom: 10px;
     }
+
     &:disabled {
       background-color: #EEE;
     }
+
     &:focus {
       box-shadow: $focus_shadow;
       border-color: $color_primary;
       border-width: 1px;
-	}
-	&::placeholder {
-		color: $color_text_placeholder;
-	}
+    }
+
+    &::placeholder {
+      color: $color_text_placeholder;
+    }
   }
 }
