@@ -959,7 +959,30 @@ class BlogPostsServiceTest extends BcTestCase
      */
     public function testGetIndexByTag()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // データを生成
+        BlogPostFactory::make([])->publish(1,1)->persist();
+        BlogPostFactory::make([])->publish(2,1)->persist();
+
+        BlogTagFactory::make(['id' => 1, 'name' => 'test tag1'])->persist();
+
+        BlogPostBlogTagFactory::make(['blog_post_id' => 1, 'blog_tag_id' => 1])->persist();
+        BlogPostBlogTagFactory::make(['blog_post_id' => 2, 'blog_tag_id' => 2])->persist();
+
+        // サービスメソッドを呼ぶ
+        // test tag1 の記事を取得、id昇順
+        $result = $this->BlogPostsService->getIndexByTag('test tag1', []);
+
+        // 戻り値を確認
+        // 指定した　tag で記事を取得できているか
+        $this->assertCount(1, $result);
+
+        // サービスメソッドを呼ぶ
+        // 記事が存在しない
+        $result = $this->BlogPostsService->getIndexByTag('test tag0', []);
+
+        // 戻り値を確認
+        // 指定した tag の記事が存在しない
+        $this->assertCount(0, $result);
     }
 
     /**
