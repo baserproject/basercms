@@ -831,7 +831,30 @@ class BlogPostsServiceTest extends BcTestCase
      */
     public function testGetTitlesById()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データ生成
+        BlogPostFactory::make([
+            'id' => 1,
+            'title' => 'post title 1'
+        ])->persist();
+        BlogPostFactory::make([
+            'id' => 2,
+            'title' => 'post title 2'
+        ])->persist();
+
+        $result = $this->BlogPostsService->getTitlesById([1, 2]);
+        //戻り値を確認
+        $this->assertEquals(
+            [
+                1 => 'post title 1',
+                2 => 'post title 2'
+            ],
+            $result
+        );
+
+        //存在しないIDを確認する場合、
+        $result = $this->BlogPostsService->getTitlesById([3]);
+        //結果はnullに戻る
+        $this->assertEmpty($result);
     }
 
     /**
