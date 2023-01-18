@@ -915,7 +915,30 @@ class BlogPostsServiceTest extends BcTestCase
      */
     public function testGetIndexByDate()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // データを生成
+        BlogPostFactory::make([])->byPosted(1, '2022-12-01 00:00:00')->persist();
+        BlogPostFactory::make([])->byPosted(2, '2022-12-02 00:00:00')->persist();
+        BlogPostFactory::make([])->byPosted(3, '2022-11-02 00:00:00')->persist();
+
+        // サービスメソッドを呼ぶ
+        $result = $this->BlogPostsService->getIndexByDate('2022', '12', '01', []);
+        // 戻り値を確認
+        $this->assertCount(1, $result->toArray());
+
+        // 年と月の値を入れる
+        $result = $this->BlogPostsService->getIndexByDate('2022', '12', '', []);
+        // 戻り値を確認);
+        $this->assertCount(2, $result->toArray());
+
+        // 年だけを入れる
+        $result = $this->BlogPostsService->getIndexByDate('2022', '', '', []);
+        // 戻り値を確認);
+        $this->assertCount(3, $result->toArray());
+
+        // 年月日が指定されていない場合は例外とする
+        $this->expectException(\Cake\Http\Exception\NotFoundException::class);
+        // サービスメソッドを呼ぶ
+        $this->BlogPostsService->getIndexByDate('', '', '', []);
     }
 
     /**
