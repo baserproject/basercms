@@ -75,11 +75,11 @@ class ThemeFilesControllerTest extends BcTestCase
     public function test_edit()
     {
         //POSTデータを生成
-        $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout/base_name_1.php';
-        new File($fullpath, true);
+        $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout/';
+        new File($fullpath . 'base_name_1.php', true);
         $data = [
             'mode' => 'create',
-            'fullpath' => $fullpath,
+            'fullpath' => $fullpath . 'base_name_1.php',
             'base_name' => 'base_name_2',
             'contents' => 'this is a content!',
             'ext' => 'php',
@@ -90,7 +90,7 @@ class ThemeFilesControllerTest extends BcTestCase
         $this->assertResponseSuccess();
         //戻る値を確認
         $result = json_decode((string)$this->_response->getBody());
-        $this->assertEquals('ファイル「base_name_2.php」を作成しました。', $result->message);
+        $this->assertEquals('ファイル「base_name_2.php」を更新しました。', $result->message);
         $this->assertEquals($fullpath . 'base_name_2.php', $result->entity->fullpath);
         //実際にファイルが変更されいてるか確認すること
         $this->assertTrue(file_exists($fullpath . 'base_name_2.php'));

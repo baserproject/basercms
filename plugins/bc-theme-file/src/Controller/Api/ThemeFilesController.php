@@ -43,7 +43,7 @@ class ThemeFilesController extends BcApiController
      * @checked
      * @unitTest
      */
-    public function test_edit(ThemeFilesServiceInterface $service)
+    public function edit(ThemeFilesServiceInterface $service)
     {
         $this->request->allowMethod(['post', 'put']);
         try {
