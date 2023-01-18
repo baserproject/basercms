@@ -896,7 +896,19 @@ class BlogPostsServiceTest extends BcTestCase
      */
     public function testGetIndexByCategory()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // データを生成
+        $this->loadFixtureScenario(MultiSiteBlogScenario::class);
+        BlogPostFactory::make(['id' => 1, 'blog_category_id' => 1])->persist();
+        BlogPostFactory::make(['id' => 2, 'blog_category_id' => 1])->persist();
+        BlogPostFactory::make(['id' => 3, 'blog_category_id' => 3])->persist();
+        // サービスメソッドを呼ぶ
+        // カテゴリreleaseの記事を取得、id昇順
+        $result = $this->BlogPostsService->getIndexByCategory('release', [
+            'force' => true,
+        ]);
+        // 戻り値を確認
+        // 指定した　カテゴリ で記事を取得できているか
+        $this->assertCount(2, $result);
     }
 
     /**
