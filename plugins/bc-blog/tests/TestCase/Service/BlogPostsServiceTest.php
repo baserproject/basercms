@@ -772,7 +772,15 @@ class BlogPostsServiceTest extends BcTestCase
      */
     public function testPublish()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // データを生成
+        BlogPostFactory::make([])->unpublish(1, 1)->persist();
+
+        // サービスメソッドを呼ぶ
+        $entity = $this->BlogPostsService->publish(1);
+        //戻る値を確認
+        $this->assertTrue($entity->status);
+        $this->assertNull($entity->publish_begin);
+        $this->assertNull($entity->publish_end);
     }
 
     /**
