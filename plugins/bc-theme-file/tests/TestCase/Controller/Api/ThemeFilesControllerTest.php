@@ -45,7 +45,7 @@ class ThemeFilesControllerTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        SiteFactory::make(['id' => 1, 'status' => true, 'theme' => 'BcSpaSample'])->main()->persist();
+        SiteFactory::make(['id' => 1, 'status' => true, 'theme' => 'BcSpaSample'])->persist();
         UserFactory::make()->admin()->persist();
 
         $token = $this->apiLoginAdmin();
