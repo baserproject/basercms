@@ -48,6 +48,7 @@ class SiteFactory extends CakephpBaseFactory
     public function main(): SiteFactory
     {
         return $this->setField('id', 1)
+            ->setField('theme', 'BcSpaSample')
             ->setField('status', true);
     }
 
