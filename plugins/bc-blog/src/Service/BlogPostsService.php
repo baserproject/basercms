@@ -602,6 +602,7 @@ class BlogPostsService implements BlogPostsServiceInterface
      * @return EntityInterface|false
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function publish(int $id)
     {
@@ -622,6 +623,7 @@ class BlogPostsService implements BlogPostsServiceInterface
      * @return EntityInterface|false
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function unpublish(int $id)
     {
@@ -669,6 +671,7 @@ class BlogPostsService implements BlogPostsServiceInterface
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getTitlesById(array $ids): array
     {
@@ -707,6 +710,7 @@ class BlogPostsService implements BlogPostsServiceInterface
      * @return Query
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getIndexByCategory($category, array $options = [])
     {
@@ -738,6 +742,7 @@ class BlogPostsService implements BlogPostsServiceInterface
      * @return Query
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getIndexByTag(string $tag, array $options = [])
     {
@@ -755,6 +760,7 @@ class BlogPostsService implements BlogPostsServiceInterface
      * @return Query
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getIndexByDate(string $year, string $month, string $day, array $options = [])
     {

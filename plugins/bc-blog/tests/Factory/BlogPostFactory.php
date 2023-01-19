@@ -75,4 +75,12 @@ class BlogPostFactory extends CakephpBaseFactory
             ->setField('blog_content_id', $blogContentId)
             ->setField('status', true);
     }
+
+    public function byPosted($id, $posted)
+    {
+        return self::make([
+            'id' => $id,
+            'posted' => $posted
+        ]);
+    }
 }

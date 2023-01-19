@@ -772,7 +772,15 @@ class BlogPostsServiceTest extends BcTestCase
      */
     public function testPublish()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // データを生成
+        BlogPostFactory::make([])->unpublish(1, 1)->persist();
+
+        // サービスメソッドを呼ぶ
+        $entity = $this->BlogPostsService->publish(1);
+        //戻る値を確認
+        $this->assertTrue($entity->status);
+        $this->assertNull($entity->publish_begin);
+        $this->assertNull($entity->publish_end);
     }
 
     /**
@@ -780,7 +788,16 @@ class BlogPostsServiceTest extends BcTestCase
      */
     public function testUnpublish()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // データを生成
+        BlogPostFactory::make([])->publish(1, 1)->persist();
+
+        // サービスメソッドを呼ぶ
+        $entity = $this->BlogPostsService->unpublish(1);
+
+        // 戻る値を確認
+        $this->assertFalse($entity->status);
+        $this->assertNull($entity->publish_begin);
+        $this->assertNull($entity->publish_end);
     }
 
     /**
@@ -814,7 +831,30 @@ class BlogPostsServiceTest extends BcTestCase
      */
     public function testGetTitlesById()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データ生成
+        BlogPostFactory::make([
+            'id' => 1,
+            'title' => 'post title 1'
+        ])->persist();
+        BlogPostFactory::make([
+            'id' => 2,
+            'title' => 'post title 2'
+        ])->persist();
+
+        $result = $this->BlogPostsService->getTitlesById([1, 2]);
+        //戻り値を確認
+        $this->assertEquals(
+            [
+                1 => 'post title 1',
+                2 => 'post title 2'
+            ],
+            $result
+        );
+
+        //存在しないIDを確認する場合、
+        $result = $this->BlogPostsService->getTitlesById([3]);
+        //結果はnullに戻る
+        $this->assertEmpty($result);
     }
 
     /**
@@ -856,7 +896,19 @@ class BlogPostsServiceTest extends BcTestCase
      */
     public function testGetIndexByCategory()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // データを生成
+        $this->loadFixtureScenario(MultiSiteBlogScenario::class);
+        BlogPostFactory::make(['id' => 1, 'blog_category_id' => 1])->persist();
+        BlogPostFactory::make(['id' => 2, 'blog_category_id' => 1])->persist();
+        BlogPostFactory::make(['id' => 3, 'blog_category_id' => 3])->persist();
+        // サービスメソッドを呼ぶ
+        // カテゴリreleaseの記事を取得、id昇順
+        $result = $this->BlogPostsService->getIndexByCategory('release', [
+            'force' => true,
+        ]);
+        // 戻り値を確認
+        // 指定した　カテゴリ で記事を取得できているか
+        $this->assertCount(2, $result);
     }
 
     /**
@@ -907,7 +959,30 @@ class BlogPostsServiceTest extends BcTestCase
      */
     public function testGetIndexByTag()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // データを生成
+        BlogPostFactory::make([])->publish(1,1)->persist();
+        BlogPostFactory::make([])->publish(2,1)->persist();
+
+        BlogTagFactory::make(['id' => 1, 'name' => 'test tag1'])->persist();
+
+        BlogPostBlogTagFactory::make(['blog_post_id' => 1, 'blog_tag_id' => 1])->persist();
+        BlogPostBlogTagFactory::make(['blog_post_id' => 2, 'blog_tag_id' => 2])->persist();
+
+        // サービスメソッドを呼ぶ
+        // test tag1 の記事を取得、id昇順
+        $result = $this->BlogPostsService->getIndexByTag('test tag1', []);
+
+        // 戻り値を確認
+        // 指定した　tag で記事を取得できているか
+        $this->assertCount(1, $result);
+
+        // サービスメソッドを呼ぶ
+        // 記事が存在しない
+        $result = $this->BlogPostsService->getIndexByTag('test tag0', []);
+
+        // 戻り値を確認
+        // 指定した tag の記事が存在しない
+        $this->assertCount(0, $result);
     }
 
     /**
@@ -915,7 +990,30 @@ class BlogPostsServiceTest extends BcTestCase
      */
     public function testGetIndexByDate()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // データを生成
+        BlogPostFactory::make([])->byPosted(1, '2022-12-01 00:00:00')->persist();
+        BlogPostFactory::make([])->byPosted(2, '2022-12-02 00:00:00')->persist();
+        BlogPostFactory::make([])->byPosted(3, '2022-11-02 00:00:00')->persist();
+
+        // サービスメソッドを呼ぶ
+        $result = $this->BlogPostsService->getIndexByDate('2022', '12', '01', []);
+        // 戻り値を確認
+        $this->assertCount(1, $result->toArray());
+
+        // 年と月の値を入れる
+        $result = $this->BlogPostsService->getIndexByDate('2022', '12', '', []);
+        // 戻り値を確認);
+        $this->assertCount(2, $result->toArray());
+
+        // 年だけを入れる
+        $result = $this->BlogPostsService->getIndexByDate('2022', '', '', []);
+        // 戻り値を確認);
+        $this->assertCount(3, $result->toArray());
+
+        // 年月日が指定されていない場合は例外とする
+        $this->expectException(\Cake\Http\Exception\NotFoundException::class);
+        // サービスメソッドを呼ぶ
+        $this->BlogPostsService->getIndexByDate('', '', '', []);
     }
 
     /**
