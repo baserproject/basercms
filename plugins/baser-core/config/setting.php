@@ -203,6 +203,10 @@ return [
         'adminGroup' => ['admins'],
         // 管理者グループID
         'adminGroupId' => 1,
+        /**
+         * スーパーユーザーID
+         */
+        'superUserId' => 1,
         // お名前ドットコムの場合、CLI版PHPの存在確認の段階で固まってしまう
         'validSyntaxWithPage' => true,
         // 管理者以外のPHPコードを許可するかどうか
