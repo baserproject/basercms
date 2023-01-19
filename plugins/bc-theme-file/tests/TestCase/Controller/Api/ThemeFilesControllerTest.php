@@ -11,7 +11,8 @@
 
 namespace BcThemeFile\Test\TestCase\Controller\Api;
 
-use BaserCore\Test\Scenario\InitAppScenario;
+use BaserCore\Test\Factory\SiteFactory;
+use BaserCore\Test\Factory\UserFactory;
 use BaserCore\TestSuite\BcTestCase;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
@@ -44,7 +45,9 @@ class ThemeFilesControllerTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->loadFixtureScenario(InitAppScenario::class);
+        SiteFactory::make(['id' => 1, 'status' => true, 'theme' => 'BcSpaSample'])->main()->persist();
+        UserFactory::make()->admin()->persist();
+
         $token = $this->apiLoginAdmin();
         $this->accessToken = $token['access_token'];
         $this->refreshToken = $token['refresh_token'];
