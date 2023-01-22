@@ -269,12 +269,13 @@ class AppController extends BaseController
                 continue;
             }
             $inenc = mb_detect_encoding((string)$value);
-            if ($value && $inenc !== $outenc) {
-                // 半角カナは一旦全角に変換する
-                $value = mb_convert_kana($value, 'KV', $inenc);
-                $value = mb_convert_encoding($value, $outenc, $inenc);
-                $data[$key] = $value;
-            }
+            if(!$inenc) continue;
+            if(!in_array($inenc, Configure::read('BcEncode.detectOrder'))) continue;
+            if ($inenc === $outenc) continue;
+            // 半角カナは一旦全角に変換する
+            $value = mb_convert_kana($value, 'KV', $inenc);
+            $value = mb_convert_encoding($value, $outenc, $inenc);
+            $data[$key] = $value;
         }
         return $data;
     }

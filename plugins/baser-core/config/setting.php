@@ -558,7 +558,7 @@ return [
      */
     'BcEncode' => [
         // 文字コードの検出順
-        'detectOrder' => 'UTF-8, ASCII, JIS',
+        'detectOrder' => ['UTF-8', 'ASCII', 'JIS', 'SJIS-win', 'EUC-JP'],
         'mail' => [
             'UTF-8' => 'UTF-8',
             'ISO-2022-JP' => 'ISO-2022-JP'

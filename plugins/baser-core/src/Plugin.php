@@ -111,7 +111,7 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
          * 文字コードの検出順を指定
          */
         if (function_exists('mb_detect_order')) {
-            mb_detect_order(Configure::read('BcEncode.detectOrder'));
+            mb_detect_order(implode(',', Configure::read('BcEncode.detectOrder')));
         }
 
         /**
