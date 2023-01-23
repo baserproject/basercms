@@ -530,4 +530,59 @@ class BcValidationTest extends BcTestCase
             ['<a href="javascript:doSomething();">click me</a>', true],
         ];
     }
+
+    /**
+     * Test checkKatakana
+     *
+     * @return void
+     */
+    public function testCheckKatakana()
+    {
+        $t = [
+            'アい' => false,
+            'ァアイウエオラヰヱヴヸヹヺ・ーヽヾ' => true,
+            ' 　' => true,
+            'ゞカタカナ' => false,
+            'English' => false,
+            '漢字' => false,
+        ];
+        foreach($t as $str => $hope) {
+            $result = $this->BcValidation->checkKatakana($str);
+            $this->assertEquals($result, $hope);
+        }
+
+        $result = $this->BcValidation->checkKatakana('カタカナ除外カタカナ', '除外');
+        $this->assertEquals($result, true);
+
+        $result = $this->BcValidation->checkKatakana('スペースキンシ　 ', '');
+        $this->assertEquals($result, false);
+    }
+
+    /**
+     * Test checkHiragana
+     *
+     * @return void
+     */
+    public function testCheckHiragana()
+    {
+        $t = [
+            'アい' => false,
+            'ぁあぃいぅうぇえぉおかがきぎくぐけげこごさざしじすずせぜそぞただちぢっつづてでとどなにぬねのはばぱひびぴふぶぷへべぺほぼぽまみむめもゃやゅゆょよらりるれろゎわゐゑをんゔゕゖ' => true,
+            ' 　ー' => true,
+            'ヾカタカナ' => false,
+            'English' => false,
+            '漢字' => false,
+        ];
+        foreach($t as $str => $hope) {
+            $result = $this->BcValidation->checkHiragana($str);
+            $this->assertEquals($result, $hope);
+        }
+
+        $result = $this->BcValidation->checkHiragana('ひらがな除外ひらがな', '除外');
+        $this->assertEquals($result, true);
+
+        $result = $this->BcValidation->checkHiragana('すぺーすきんし　 ', '');
+        $this->assertEquals($result, false);
+    }
+
 }
