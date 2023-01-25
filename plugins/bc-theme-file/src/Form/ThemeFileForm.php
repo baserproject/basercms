@@ -74,7 +74,9 @@ class ThemeFileForm extends Form
         if ($entity->type === 'text') {
             $file = new File($oldPath);
             if ($file->open('w')) {
-                $file->append($data['contents']);
+                if (isset($data['contents'])){
+                    $file->append($data['contents']);
+                }
                 $file->close();
                 unset($file);
                 $result = true;
