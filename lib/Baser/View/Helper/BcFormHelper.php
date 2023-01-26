@@ -1539,7 +1539,9 @@ DOC_END;
 			$div = $attributes['div'];
 			unset($attributes['div']);
 		}
-		unset($label['label']);
+		if (isset($label['label'])) {
+			unset($label['label']);
+		}
 
 		$this->_domIdSuffixes = [];
 		foreach($options as $optValue => $optTitle) {
