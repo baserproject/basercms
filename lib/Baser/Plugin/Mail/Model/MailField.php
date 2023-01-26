@@ -212,7 +212,9 @@ class MailField extends MailAppModel
 			'VALID_NOT_EMPTY' => __d('baser', '入力必須'),
 			'VALID_EMAIL' => __d('baser', 'Eメールチェック（入力必須）'),
 			'/^(|[0-9]+)$/' => __d('baser', '数値チェック'),
-			'/^([0-9]+)$/' => __d('baser', '数値チェック（入力必須）')
+			'/^([0-9]+)$/' => __d('baser', '数値チェック（入力必須）'),
+			'/^(|[0-9\-]+)$/' => __d('baser', '数値ハイフンチェック'),
+			'/^([0-9\-]+)$/' => __d('baser', '数値ハイフンチェック（入力必須）')
 		];
 		$source['valid_ex'] = [
 			'VALID_EMAIL_CONFIRM' => __d('baser', 'Eメール比較チェック'),
