@@ -233,7 +233,8 @@ class UsersServiceTest extends BcTestCase
         $request = $this->getRequest('/baser/admin/users/');
         $beforeCookie = $response->getCookie(LoginStoresTable::KEY_NAME);
         $request = $request->withCookieParams([LoginStoresTable::KEY_NAME => $beforeCookie['value']]);
-        $response = $this->Users->checkAutoLogin($request, $response);
+        $result = $this->Users->checkAutoLogin($request, $response);
+        $response = $this->Users->setCookieAutoLoginKey(new Response(), $result->id);
         $afterCookie = $response->getCookie(LoginStoresTable::KEY_NAME);
         $this->assertNotEmpty($afterCookie['value']);
         $this->assertNotEquals($beforeCookie['value'], $afterCookie['value']);
