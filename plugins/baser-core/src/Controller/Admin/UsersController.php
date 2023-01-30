@@ -23,6 +23,7 @@ use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\Http\Exception\ForbiddenException;
 use Cake\Http\Exception\NotFoundException;
 use Cake\Http\Response;
+use Cake\ORM\Exception\PersistenceFailedException;
 use Cake\Routing\Router;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -243,8 +244,11 @@ class UsersController extends BcAdminAppController
                 }
                 $this->BcMessage->setSuccess(__d('baser', 'ユーザー「{0}」を更新しました。', $user->getDisplayName()));
                 return $this->redirect(['action' => 'edit', $user->id]);
-            } catch (\Exception $e) {
+            } catch (PersistenceFailedException $e) {
+                $user = $e->getEntity();
                 $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
+            } catch (\Throwable $e) {
+                $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
             }
         }
         $this->set($service->getViewVarsForEdit($user));

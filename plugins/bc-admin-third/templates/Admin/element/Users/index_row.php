@@ -16,6 +16,7 @@ use BaserCore\View\AppView;
  * users index row
  * @var AppView $this
  * @var User $user
+ * @var User $loginUser
  * @checked
  * @unitTest
  * @noTodo
@@ -43,7 +44,10 @@ use BaserCore\View\AppView;
   <td class="bca-table-listup__tbody-td" style="white-space: nowrap"><?php echo $this->BcTime->format($user->created, 'yyyy-MM-dd') ?><br>
     <?php echo $this->BcTime->format($user->modified, 'yyyy-MM-dd') ?></td>
   <td class="row-tools bca-table-listup__tbody-td bca-table-listup__tbody-td--actions">
+    <?php if ($loginUser->isEditableUser($user)): ?>
     <?php $this->BcBaser->link('', ['action' => 'edit', $user->id], ['title' => __d('baser', '編集'), 'class' => ' bca-btn-icon', 'data-bca-btn-type' => 'edit', 'data-bca-btn-size' => 'lg']) ?>
+    <?php endif ?>
+    <?php if ($loginUser->isDeletableUser($user)): ?>
     <?= $this->BcAdminForm->postLink(
       '',
       ['action' => 'delete', $user->id],
@@ -54,7 +58,8 @@ use BaserCore\View\AppView;
         'data-bca-btn-type' => 'delete',
         'data-bca-btn-size' => 'lg']
     ) ?>
-    <?php if (!$this->BcBaser->isAdminUser($user)): ?>
+    <?php endif ?>
+    <?php if ($loginUser->isEnableLoginAgent($user)): ?>
       <?php $this->BcBaser->link('', ['action' => 'login_agent', $user->id], ['title' => __d('baser', 'ログイン'), 'class' => 'btn-login bca-btn-icon', 'data-bca-btn-type' => 'switch', 'data-bca-btn-size' => 'lg']) ?>
     <?php endif ?>
   </td>

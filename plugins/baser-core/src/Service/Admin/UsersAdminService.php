@@ -16,6 +16,7 @@ use BaserCore\Service\UsersService;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcSiteConfig;
 use BaserCore\Utility\BcUtil;
+use Cake\Core\Configure;
 use Cake\Datasource\EntityInterface;
 use Cake\Http\ServerRequest;
 use BaserCore\Annotation\NoTodo;
@@ -117,9 +118,14 @@ class UsersAdminService extends UsersService implements UsersAdminServiceInterfa
      */
     public function getViewVarsForEdit(EntityInterface $user): array
     {
+        $userGroupList = $this->UserGroupsService->getList();
+        $loginUser = BcUtil::loginUser();
+        if(!$loginUser->isAddableToAdminGroup()) {
+            unset($userGroupList[Configure::read('BcApp.adminGroupId')]);
+        }
         return [
             'user' => $user,
-            'userGroupList' => $this->UserGroupsService->getList(),
+            'userGroupList' => $userGroupList,
             'isUserGroupEditable' => $this->isUserGroupEditable($user->id),
             'isDeletable' => $this->isDeletable($user->id)
         ];
@@ -134,9 +140,14 @@ class UsersAdminService extends UsersService implements UsersAdminServiceInterfa
      */
     public function getViewVarsForAdd(EntityInterface $user): array
     {
+        $userGroupList = $this->UserGroupsService->getList();
+        $loginUser = BcUtil::loginUser();
+        if(!$loginUser->isAddableToAdminGroup()) {
+            unset($userGroupList[Configure::read('BcApp.adminGroupId')]);
+        }
         return [
             'user' => $user,
-            'userGroupList' => $this->UserGroupsService->getList(),
+            'userGroupList' => $userGroupList,
             'isUserGroupEditable' => $this->isUserGroupEditable(null),
         ];
     }

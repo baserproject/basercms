@@ -66,7 +66,27 @@ class ThemeFilesControllerTest extends BcTestCase
      */
     public function test_add()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
+        //POSTデータを生成
+        $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout/';
+        $data = [
+            'mode' => 'create',
+            'fullpath' => $fullpath,
+            'base_name' => 'base_name_1',
+            'contents' => 'this is a content!',
+            'ext' => 'php',
+        ];
+        //APIをコール
+        $this->post('/baser/api/bc-theme-file/theme_files/add.json?token=' . $this->accessToken, $data);
+        //レスポンスコードを確認
+        $this->assertResponseSuccess();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('ファイル「base_name_1.php」を作成しました。', $result->message);
+        $this->assertEquals($fullpath . 'base_name_1.php', $result->entity->fullpath);
+        //実際にファイルが作成されいてるか確認すること
+        $this->assertTrue(file_exists($fullpath . 'base_name_1.php'));
+        //作成されたファイルを削除
+        unlink($fullpath . 'base_name_1.php');
     }
 
     /**

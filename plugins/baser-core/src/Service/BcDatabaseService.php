@@ -638,7 +638,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
 
         $records = [];
         while(($record = BcUtil::fgetcsvReg($fp, 10240)) !== false) {
-            if ($appEncoding != $encoding) {
+            if ($encoding && $appEncoding != $encoding) {
                 mb_convert_variables($appEncoding, $encoding, $record);
             }
             $values = [];

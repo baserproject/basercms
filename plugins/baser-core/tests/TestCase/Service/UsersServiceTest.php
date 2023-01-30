@@ -129,6 +129,7 @@ class UsersServiceTest extends BcTestCase
     public function testCreate()
     {
         $request = $this->getRequest('/');
+        $this->loginAdmin($request);
         $request = $request->withParsedBody([
             'name' => 'ucmitz',
             'user_groups' => [
@@ -153,10 +154,10 @@ class UsersServiceTest extends BcTestCase
     {
         $data = [
             'name' => 'ucmitz',
-            'user_groups' => ['_ids' => [1]]
+            'user_groups' => ['_ids' => [2]]
         ];
         $request = $this->loginAdmin($this->getRequest('/')->withParsedBody($data));
-        $user = $this->Users->get(1);
+        $user = $this->Users->get(2);
         Router::setRequest($request);
         $this->Users->update($user, $request->getData());
         $request = $this->getRequest('/?name=ucmitz');
@@ -169,8 +170,9 @@ class UsersServiceTest extends BcTestCase
      */
     public function testDelete()
     {
-        $this->Users->delete(3);
         $request = $this->getRequest('/');
+        $this->loginAdmin($request);
+        $this->Users->delete(3);
         $users = $this->Users->getIndex($request->getQueryParams());
         $this->assertEquals(2, $users->all()->count());
     }
@@ -180,6 +182,7 @@ class UsersServiceTest extends BcTestCase
      */
     public function testLastAdminDelete()
     {
+        $this->loginAdmin($this->getRequest());
         $this->expectException("Cake\Core\Exception\Exception");
         $this->Users->delete(1);
     }
@@ -230,7 +233,8 @@ class UsersServiceTest extends BcTestCase
         $request = $this->getRequest('/baser/admin/users/');
         $beforeCookie = $response->getCookie(LoginStoresTable::KEY_NAME);
         $request = $request->withCookieParams([LoginStoresTable::KEY_NAME => $beforeCookie['value']]);
-        $response = $this->Users->checkAutoLogin($request, $response);
+        $result = $this->Users->checkAutoLogin($request, $response);
+        $response = $this->Users->setCookieAutoLoginKey(new Response(), $result->id);
         $afterCookie = $response->getCookie(LoginStoresTable::KEY_NAME);
         $this->assertNotEmpty($afterCookie['value']);
         $this->assertNotEquals($beforeCookie['value'], $afterCookie['value']);

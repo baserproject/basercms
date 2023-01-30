@@ -151,6 +151,7 @@ return [
             'session.use_trans_sid' => 0,
             'session.gc_divisor' => 1,
             'session.gc_probability' => 1,
+            'session.cookie_lifetime' => 60 * 24 * 2
         ]
     ],
 
@@ -203,6 +204,10 @@ return [
         'adminGroup' => ['admins'],
         // 管理者グループID
         'adminGroupId' => 1,
+        /**
+         * スーパーユーザーID
+         */
+        'superUserId' => 1,
         // お名前ドットコムの場合、CLI版PHPの存在確認の段階で固まってしまう
         'validSyntaxWithPage' => true,
         // 管理者以外のPHPコードを許可するかどうか
@@ -554,7 +559,7 @@ return [
      */
     'BcEncode' => [
         // 文字コードの検出順
-        'detectOrder' => 'ASCII,JIS,UTF-8,SJIS-win,EUC-JP',
+        'detectOrder' => ['UTF-8', 'ASCII', 'JIS', 'SJIS-win', 'EUC-JP'],
         'mail' => [
             'UTF-8' => 'UTF-8',
             'ISO-2022-JP' => 'ISO-2022-JP'

@@ -13,6 +13,7 @@ namespace BaserCore\Service;
 
 use Authentication\AuthenticationService;
 use Authentication\Identity;
+use BaserCore\Error\BcException;
 use BaserCore\Model\Entity\User;
 use BaserCore\Model\Table\LoginStoresTable;
 use BaserCore\Model\Table\UsersTable;
@@ -29,7 +30,7 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use Cake\Routing\Router;
 use DateTime;
-use Psr\Http\Message\ResponseInterface;
+use Cake\Http\Response;
 
 /**
  * Class UsersService
@@ -42,7 +43,7 @@ class UsersService implements UsersServiceInterface
 
     /**
      * UsersService constructor.
-     * 
+     *
      * @checked
      * @unitTest
      * @noTodo
@@ -55,7 +56,7 @@ class UsersService implements UsersServiceInterface
 
     /**
      * ユーザーの新規データ用の初期値を含んだエンティティを取得する
-     * 
+     *
      * @return User
      * @checked
      * @noTodo
@@ -73,7 +74,7 @@ class UsersService implements UsersServiceInterface
 
     /**
      * ユーザーを取得する
-     * 
+     *
      * @param int $id
      * @return User
      * @checked
@@ -89,7 +90,7 @@ class UsersService implements UsersServiceInterface
 
     /**
      * ユーザー管理の一覧用のデータを取得
-     * 
+     *
      * @param array $queryParams
      * @return Query
      * @checked
@@ -117,7 +118,7 @@ class UsersService implements UsersServiceInterface
 
     /**
      * ユーザー登録
-     * 
+     *
      * @param array $data
      * @return \Cake\Datasource\EntityInterface
      * @throws \Cake\ORM\Exception\PersistenceFailedException
@@ -127,6 +128,12 @@ class UsersService implements UsersServiceInterface
      */
     public function create(array $postData): ?EntityInterface
     {
+        $loginUser = BcUtil::loginUser();
+        if(in_array(Configure::read('BcApp.adminGroupId'), $postData['user_groups']['_ids'])) {
+            if(BcUtil::isInstalled() && !$loginUser->isAddableToAdminGroup()) {
+                throw new BcException(__d('baser', '特権エラーが発生しました。'));
+            }
+        }
         $user = $this->Users->newEmptyEntity();
         $user = $this->Users->patchEntity($user, $postData, ['validate' => 'new']);
         return $this->Users->saveOrFail($user);
@@ -134,7 +141,7 @@ class UsersService implements UsersServiceInterface
 
     /**
      * ユーザー情報を更新する
-     * 
+     *
      * @param EntityInterface $target
      * @param array $postData
      * @return EntityInterface
@@ -151,6 +158,14 @@ class UsersService implements UsersServiceInterface
                 $postData['login_user_id'] = (string) $loginUser['id'];
             }
         }
+        if(!empty($postData['user_groups']['_ids']) && in_array(Configure::read('BcApp.adminGroupId'), $postData['user_groups']['_ids'])) {
+            if(!$loginUser->isAddableToAdminGroup()) {
+                throw new BcException(__d('baser', '特権エラーが発生しました。'));
+            }
+        }
+        if(!$loginUser->isEditableUser($target)) {
+            throw new BcException(__d('baser', '特権エラーが発生しました。'));
+        }
         $user = $this->Users->patchEntity($target, $postData);
         return $this->Users->saveOrFail($user);
     }
@@ -158,7 +173,7 @@ class UsersService implements UsersServiceInterface
     /**
      * ユーザー情報を削除する
      * 最後のシステム管理者でなければ削除
-     * 
+     *
      * @param int $id
      * @return bool
      * @checked
@@ -168,24 +183,16 @@ class UsersService implements UsersServiceInterface
     public function delete($id): bool
     {
         $user = $this->get($id);
-        if ($user->isAdmin()) {
-            $count = $this->Users
-                ->find('all', ['conditions' => ['UsersUserGroups.user_group_id' => Configure::read('BcApp.adminGroupId')]])
-                ->join(['table' => 'users_user_groups',
-                    'alias' => 'UsersUserGroups',
-                    'type' => 'inner',
-                    'conditions' => 'UsersUserGroups.user_id = Users.id'])
-                ->count();
-            if ($count === 1) {
-                throw new Exception(__d('baser', '最後のシステム管理者は削除できません'));
-            }
+        $loginUser = BcUtil::loginUser();
+        if(!$loginUser->isDeletableUser($user)) {
+            throw new BcException(__d('baser', '特権エラーが発生しました。'));
         }
         return $this->Users->delete($user);
     }
 
     /**
      * ユーザーリストを取得する
-     * 
+     *
      * @return mixed
      * @checked
      * @noTodo
@@ -198,16 +205,16 @@ class UsersService implements UsersServiceInterface
 
     /**
      * ログイン
-     * 
+     *
      * @param ServerRequest $request
-     * @param ResponseInterface $response
+     * @param Response $response
      * @param $id
      * @return array|false
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function login(ServerRequest $request, ResponseInterface $response, $id)
+    public function login(ServerRequest $request, Response $response, $id)
     {
         $user = $this->get($id);
         if (!$user) {
@@ -223,15 +230,15 @@ class UsersService implements UsersServiceInterface
 
     /**
      * ログアウト
-     * 
+     *
      * @param ServerRequest $request
-     * @param ResponseInterface $response
+     * @param Response $response
      * @return array|false
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function logout(ServerRequest $request, ResponseInterface $response, $id)
+    public function logout(ServerRequest $request, Response $response, $id)
     {
         if (!$sessionKey = $this->getAuthSessionKey($request->getParam('prefix'))) {
             return false;
@@ -252,7 +259,7 @@ class UsersService implements UsersServiceInterface
 
     /**
      * 認証用のセッションキーを取得
-     * 
+     *
      * @param string $prefix
      * @return false|string
      * @checked
@@ -270,15 +277,15 @@ class UsersService implements UsersServiceInterface
 
     /**
      * 再ログイン
-     * 
+     *
      * @param ServerRequest $request
-     * @param ResponseInterface $response
+     * @param Response $response
      * @return array|false
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function reLogin(ServerRequest $request, ResponseInterface $response)
+    public function reLogin(ServerRequest $request, Response $response)
     {
         $user = BcUtil::loginUser($request->getParam('prefix'));
         if (!$user) {
@@ -293,16 +300,16 @@ class UsersService implements UsersServiceInterface
 
     /**
      * ログイン状態の保存のキー送信
-     * 
-     * @param ResponseInterface
+     *
+     * @param Response
      * @param int $id
-     * @return ResponseInterface
+     * @return Response
      * @see https://book.cakephp.org/4/ja/controllers/request-response.html#response-cookies
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function setCookieAutoLoginKey($response, $id): ResponseInterface
+    public function setCookieAutoLoginKey($response, $id): Response
     {
         $loginStore = $this->LoginStores->addKey('Admin', $id);
         return $response->withCookie(Cookie::create(
@@ -318,7 +325,7 @@ class UsersService implements UsersServiceInterface
 
     /**
      * ログインキーを削除する
-     * 
+     *
      * @param int $id
      * @return int 削除行数
      * @checked
@@ -332,49 +339,39 @@ class UsersService implements UsersServiceInterface
 
     /**
      * ログイン状態の保存確認
-     * 
-     * @return ResponseInterface
+     *
+     * @return User|false
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function checkAutoLogin(ServerRequest $request, ResponseInterface $response): ResponseInterface
+    public function checkAutoLogin(ServerRequest $request, Response $response)
     {
         /* @var AuthenticationService $authentication */
         $authentication = $request->getAttribute('authentication');
-        if(!$authentication) {
-            return $response;
-        }
+        if(!$authentication) return false;
 
         $user = $authentication->getIdentity();
-        if ($user !== null) {
-            return $response;
-        }
+        if ($user !== null) return false;
 
         $autoLoginKey = $request->getCookie(LoginStoresTable::KEY_NAME);
-        if ($autoLoginKey === null) {
-            return $response;
-        }
+        if ($autoLoginKey === null) return false;
 
         $loginStore = $this->LoginStores->getEnableLoginStore($autoLoginKey);
-        if ($loginStore === null) {
-            return $response;
-        }
+        if ($loginStore === null) return false;
 
         $user = $this->get($loginStore->user_id);
-        if ($user === null) {
-            return $response;
-        }
+        if ($user === null) return false;
 
         $authentication->persistIdentity($request, $response, $user);
         // キーのリフレッシュ
-        $loginStore = $this->LoginStores->refresh('Admin', $loginStore->user_id);
-        return $this->setCookieAutoLoginKey($response, $loginStore->user_id);
+        $this->LoginStores->refresh('Admin', $user->id);
+        return $user;
     }
 
     /**
      * 代理ログインを行う
-     * 
+     *
      * @param ServerRequest $request
      * @param int $id
      * @param string $referer
@@ -382,9 +379,13 @@ class UsersService implements UsersServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function loginToAgent(ServerRequest $request, ResponseInterface $response, $id, $referer = ''): bool
+    public function loginToAgent(ServerRequest $request, Response $response, $id, $referer = ''): bool
     {
         $user = BcUtil::loginUser($request->getParam('prefix'));
+        $target = $this->get($id);
+        if(!$user->isEnableLoginAgent($target)) {
+            throw new BcException(__d('baser', '特権エラーが発生しました。'));
+        }
         $this->logout($request, $response, $user->id);
         if($this->login($request, $response, $id)) {
             $session = $request->getSession();
@@ -398,16 +399,16 @@ class UsersService implements UsersServiceInterface
 
     /**
      * 代理ログインから元のユーザーに戻る
-     * 
+     *
      * @param ServerRequest $request
-     * @param ResponseInterface $response
+     * @param Response $response
      * @return array|mixed|string
      * @throws Exception
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function returnLoginUserFromAgent(ServerRequest $request, ResponseInterface $response)
+    public function returnLoginUserFromAgent(ServerRequest $request, Response $response)
     {
         $session = $request->getSession();
         $user = $session->read('AuthAgent.User');

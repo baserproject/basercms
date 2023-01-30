@@ -11,9 +11,11 @@
 
 namespace BaserCore\Service;
 
+use BaserCore\Model\Entity\User;
+use Cake\Http\Response;
 use Cake\Http\ServerRequest;
 use Cake\Core\Exception\Exception;
-use Psr\Http\Message\ResponseInterface;
+
 
 /**
  * Interface UsersServiceInterface
@@ -24,57 +26,57 @@ interface UsersServiceInterface extends CrudBaseServiceInterface
 
     /**
      * ログイン
-     * 
+     *
      * @param ServerRequest $request
-     * @param ResponseInterface $response
+     * @param Response $response
      * @param $id
      * @return array|false
      * @checked
      * @unitTest
      * @noTodo
      */
-    public function login(ServerRequest $request, ResponseInterface $response, $id);
+    public function login(ServerRequest $request, Response $response, $id);
 
     /**
      * ログアウト
-     * 
+     *
      * @param ServerRequest $request
-     * @param ResponseInterface $response
+     * @param Response $response
      * @return array|false
      * @checked
      * @unitTest
      * @noTodo
      */
-    public function logout(ServerRequest $request, ResponseInterface $response, $id);
+    public function logout(ServerRequest $request, Response $response, $id);
 
     /**
      * 再ログイン
-     * 
+     *
      * @param ServerRequest $request
-     * @param ResponseInterface $response
+     * @param Response $response
      * @return array|false
      * @checked
      * @unitTest
      * @noTodo
      */
-    public function reLogin(ServerRequest $request, ResponseInterface $response);
+    public function reLogin(ServerRequest $request, Response $response);
 
     /**
      * ログイン状態の保存のキー送信
-     * 
-     * @param ResponseInterface
+     *
+     * @param Response
      * @param int $id
-     * @return ResponseInterface
+     * @return Response
      * @see https://book.cakephp.org/4/ja/controllers/request-response.html#response-cookies
      * @checked
      * @unitTest
      * @noTodo
      */
-    public function setCookieAutoLoginKey($response, $id): ResponseInterface;
+    public function setCookieAutoLoginKey($response, $id): Response;
 
     /**
      * ログインキーを削除する
-     * 
+     *
      * @param int $id
      * @return int 削除行数
      * @checked
@@ -85,17 +87,17 @@ interface UsersServiceInterface extends CrudBaseServiceInterface
 
     /**
      * ログイン状態の保存確認
-     * 
-     * @return ResponseInterface
+     *
+     * @return User|false
      * @checked
      * @unitTest
      * @noTodo
      */
-    public function checkAutoLogin(ServerRequest $request, ResponseInterface $response): ResponseInterface;
+    public function checkAutoLogin(ServerRequest $request, Response $response);
 
     /**
      * 代理ログインを行う
-     * 
+     *
      * @param ServerRequest $request
      * @param int $id
      * @param string $referer
@@ -103,20 +105,20 @@ interface UsersServiceInterface extends CrudBaseServiceInterface
      * @unitTest
      * @noTodo
      */
-    public function loginToAgent(ServerRequest $request, ResponseInterface $response, $id, $referer = ''): bool;
+    public function loginToAgent(ServerRequest $request, Response $response, $id, $referer = ''): bool;
 
     /**
      * 代理ログインから元のユーザーに戻る
-     * 
+     *
      * @param ServerRequest $request
-     * @param ResponseInterface $response
+     * @param Response $response
      * @return array|mixed|string
      * @throws Exception
      * @checked
      * @unitTest
      * @noTodo
      */
-    public function returnLoginUserFromAgent(ServerRequest $request, ResponseInterface $response);
+    public function returnLoginUserFromAgent(ServerRequest $request, Response $response);
 
     /**
      * ログイン情報をリロードする
@@ -131,7 +133,7 @@ interface UsersServiceInterface extends CrudBaseServiceInterface
 
     /**
      * ユーザーが有効化チェックする
-     * 
+     *
      * @param int $id
      * @return bool
      * @checked
