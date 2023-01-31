@@ -31,6 +31,7 @@ use Cake\Utility\Hash;
  * @property string $real_name_2
  * @property string $email
  * @property string $nickname
+ * @property bool $status
  * @property TimeAlias $created
  * @property TimeAlias $modified
  */
@@ -154,7 +155,8 @@ class User extends EntityAlias
      */
     public function isEditableUser(EntityInterface $targetUser): bool
     {
-        return (($this->id === $targetUser->id) ||
+        return ($this->isSuper() ||
+            ($this->id === $targetUser->id) ||
             ($this->isAdmin() && !$targetUser->isAdmin()));
     }
 
