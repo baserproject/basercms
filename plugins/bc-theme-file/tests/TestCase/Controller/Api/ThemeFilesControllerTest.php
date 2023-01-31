@@ -101,7 +101,7 @@ class ThemeFilesControllerTest extends BcTestCase
             'mode' => 'create',
             'fullpath' => $fullpath . 'base_name_1.php',
             'base_name' => 'base_name_2',
-            'contents' => 'this is a content!',
+            'contents' => 'this is a content changed!',
             'ext' => 'php',
         ];
         //APIをコール
@@ -114,6 +114,11 @@ class ThemeFilesControllerTest extends BcTestCase
         $this->assertEquals($fullpath . 'base_name_2.php', $result->entity->fullpath);
         //実際にファイルが変更されいてるか確認すること
         $this->assertTrue(file_exists($fullpath . 'base_name_2.php'));
+        //ファイルの中身を確認
+        $this->assertEquals('this is a content changed!' , file_get_contents($fullpath . 'base_name_2.php'));
+        //変更した前にファイル名が存在しないか確認すること
+        $this->assertFalse(file_exists($fullpath . 'base_name_1.php'));
+
         //作成されたファイルを削除
         unlink($fullpath . 'base_name_2.php');
     }

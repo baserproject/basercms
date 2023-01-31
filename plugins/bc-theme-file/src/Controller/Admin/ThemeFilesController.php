@@ -11,23 +11,20 @@
 
 namespace BcThemeFile\Controller\Admin;
 
-use BaserCore\Controller\Admin\BcAdminAppController;
 use BaserCore\Error\BcFormFailedException;
 use BaserCore\Utility\BcUtil;
+use BcThemeFile\Controller\ThemeFileAppController;
 use BcThemeFile\Service\Admin\ThemeFilesAdminService;
 use BcThemeFile\Service\Admin\ThemeFilesAdminServiceInterface;
 use BcThemeFile\Service\Admin\ThemeFoldersAdminService;
 use BcThemeFile\Service\Admin\ThemeFoldersAdminServiceInterface;
-use BcThemeFile\Service\ThemeFilesServiceInterface;
 use BcThemeFile\Service\ThemeFoldersService;
 use BcThemeFile\Service\ThemeFoldersServiceInterface;
 use BcThemeFile\Utility\BcThemeFileUtil;
 use Cake\Controller\ComponentRegistry;
 use Cake\Core\Configure;
-use Cake\Core\Plugin;
 use Cake\Event\EventInterface;
 use Cake\Event\EventManagerInterface;
-use Cake\Filesystem\Folder;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
 use Cake\Utility\Inflector;
@@ -40,7 +37,7 @@ use BaserCore\Annotation\Checked;
  *
  * テーマファイルコントローラー
  */
-class ThemeFilesController extends BcAdminAppController
+class ThemeFilesController extends ThemeFileAppController
 {
 
     /**
@@ -559,106 +556,6 @@ class ThemeFilesController extends BcAdminAppController
 
         $args = $this->parseArgs($args);
         return $this->getResponse()->withStringBody($service->getImgThumb($args, $width, $height));
-    }
-
-    /**
-     * 引き数を解析する
-     *
-     * @param array $args
-     * @return array
-     * @checked
-     * @noTodo
-     */
-    protected function parseArgs($args)
-    {
-        $data = [
-            'plugin' => '',
-            'theme' => '',
-            'type' => '',
-            'path' => '',
-            'fullpath' => '',
-            'assets' => false
-        ];
-        $assets = [
-            'css',
-            'js',
-            'img'
-        ];
-
-        if ($args[0] instanceof ThemeFilesAdminServiceInterface ||
-            $args[0] instanceof ThemeFoldersAdminServiceInterface ||
-            $args[0] instanceof ThemeFilesServiceInterface ||
-            $args[0] instanceof ThemeFoldersServiceInterface
-            ) {
-            unset($args[0]);
-            $args = array_merge($args);
-        }
-        if (!empty($args[1]) && !BcThemeFileUtil::getTemplateTypeName($args[1])) {
-            $folder = new Folder(BASER_PLUGINS);
-            $files = $folder->read(true, true);
-            foreach($files[0] as $file) {
-                if ($args[1] !== Inflector::camelize($file, '-')) continue;
-                $data['plugin'] = $args[1];
-                unset($args[1]);
-                break;
-            }
-        }
-
-        if ($data['plugin']) {
-            if (!empty($args[0])) {
-                $data['theme'] = $args[0];
-                unset($args[0]);
-            }
-            if (!empty($args[2])) {
-                $data['type'] = $args[2];
-                unset($args[2]);
-            }
-        } else {
-            if (!empty($args[0])) {
-                $data['theme'] = $args[0];
-                unset($args[0]);
-            }
-            if (!empty($args[1])) {
-                $data['type'] = $args[1];
-                unset($args[1]);
-            }
-        }
-
-        if (empty($data['type'])) $data['type'] = 'layout';
-        if (!empty($args)) $data['path'] = rawurldecode(implode(DS, $args));
-
-        if ($data['plugin']) {
-            if (in_array($data['type'], $assets)) {
-                $data['assets'] = true;
-                $viewPath = BcUtil::getExistsWebrootDir($data['plugin'], '', 'front');
-            } else {
-                $viewPath = BcUtil::getExistsTemplateDir($data['plugin'], '', 'front');
-            }
-            if(!$viewPath) {
-                if (in_array($data['type'], $assets)) {
-                    $viewPath = Plugin::path($data['theme']) . 'webroot' . DS . Inflector::underscore($data['plugin']) . DS;
-                } else {
-                    $viewPath = Plugin::templatePath($data['theme']) . 'plugin' . DS . $data['plugin'] . DS;
-                }
-            }
-        } else {
-            if (in_array($data['type'], $assets)) {
-                $viewPath = Plugin::path($data['theme']) . 'webroot' . DS;
-            } else {
-                $viewPath = Plugin::templatePath($data['theme']);
-            }
-        }
-
-        if ($data['type'] !== 'etc') {
-            $data['fullpath'] = $viewPath . $data['type'] . DS . $data['path'];
-        } else {
-            $data['fullpath'] = $viewPath . $data['path'];
-        }
-
-        if ($data['path'] && is_dir($data['fullpath']) && !preg_match('/\/$/', $data['fullpath'])) {
-            $data['fullpath'] .= DS;
-        }
-        return $data;
     }
 
 }

@@ -14,14 +14,14 @@ namespace BcThemeFile\Controller\Api;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
-use BaserCore\Controller\Api\BcApiController;
 use BaserCore\Error\BcFormFailedException;
+use BcThemeFile\Controller\ThemeFileAppController;
 use BcThemeFile\Service\ThemeFilesServiceInterface;
 
 /**
  * テーマファイルコントローラー
  */
-class ThemeFilesController extends BcApiController
+class ThemeFilesController extends ThemeFileAppController
 {
 
     /**
@@ -67,7 +67,12 @@ class ThemeFilesController extends BcApiController
     {
         $this->request->allowMethod(['post', 'put']);
         try {
-            $themeFileForm = $service->update($this->getRequest()->getData());
+            $themeFileForm = $service->update(
+                array_merge(
+                    $this->parseArgs(func_get_args()),
+                    $this->getRequest()->getData()
+                )
+            );
             $entity = $service->get($themeFileForm->getData('fullpath'));
             $message = __d('baser', 'ファイル「{0}」を更新しました。', $entity->name);
         } catch (BcFormFailedException $e) {
