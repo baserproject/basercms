@@ -206,6 +206,9 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      *
      * @param string $tableName
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function tableExists(string $tableName): bool
     {

@@ -10,6 +10,7 @@
  */
 namespace BaserCore\Test\TestCase\Service;
 
+use BaserCore\Database\Schema\BcSchema;
 use BaserCore\Service\BcDatabaseService;
 use BaserCore\Service\BcDatabaseServiceInterface;
 use BaserCore\Service\SiteConfigsServiceInterface;
@@ -714,5 +715,27 @@ class UserActionsSchema extends BcSchema
     public function test_migrate()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * Test tableExist
+     */
+    public function test_tableExist()
+    {
+        // テーブル生成
+        $table = 'table_test_exist';
+        $columns = [
+            'id' => ['type' => 'integer'],
+            'contents' => ['type' => 'text'],
+        ];
+        $schema = new BcSchema($table, $columns);
+        $schema->create();
+
+        // 対象メソッドを呼ぶ
+        $result = $this->BcDatabaseService->tableExists($table);
+        $this->assertTrue($result, 'テーブルが存在すること');
+
+        // テーブル削除
+        $this->BcDatabaseService->dropTable($table);
     }
 }
