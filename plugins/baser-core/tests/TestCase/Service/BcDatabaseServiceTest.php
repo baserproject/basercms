@@ -621,7 +621,31 @@ class UserActionsSchema extends BcSchema
      */
     public function test_getDataSource()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $conn = $this->BcDatabaseService->getDataSource();
+        $config = $this->getPrivateProperty($conn, "_config");
+        $this->assertEquals('test_basercms', $config['database'], 'データソースが取得できること');
+
+        $conn = $this->BcDatabaseService->getDataSource('test');
+        $config = $this->getPrivateProperty($conn, "_config");
+        $this->assertEquals('test_basercms', $config['database'], 'データソースが取得できること');
+
+        $conn = $this->BcDatabaseService->getDataSource('test_debug_kit');
+        $config = $this->getPrivateProperty($conn, "_config");
+        $this->assertEquals('/var/www/html/tmp/debug_kit.sqlite', $config['database'], 'データソースが取得できること');
+
+        // 指定されたデータソースが存在しない場合はエラー
+        $this->expectException('\Cake\Datasource\Exception\MissingDatasourceConfigException');
+        $conn = $this->BcDatabaseService->getDataSource('test_config');
+    }
+
+    /**
+     * Test getDataSource (MissingDatasourceExceptionの場合)
+     */
+    public function test_getDataSourceMissingDatasourceException()
+    {
+        // 指定されたデータソースが存在しない場合はエラー
+        $this->expectException('\Cake\Datasource\Exception\MissingDatasourceException');
+        $conn = $this->BcDatabaseService->getDataSource('test_config', ['datasource' => 'mysql']);
     }
 
     /**

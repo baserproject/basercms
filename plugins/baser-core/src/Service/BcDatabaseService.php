@@ -1129,6 +1129,9 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      * @param string $configKeyName
      * @param array $dbConfig
      * @return Connection
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getDataSource($dbConfigKeyName = 'default', $dbConfig = null)
     {
