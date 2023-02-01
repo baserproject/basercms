@@ -1089,6 +1089,10 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      * データベースに接続する
      *
      * @param array $config
+     * @return Connection
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function connectDb(array $config, $name = 'default')
     {
@@ -1096,6 +1100,8 @@ class BcDatabaseService implements BcDatabaseServiceInterface
             $config['driver'] = $this->getDatasourceName($config['datasource']);
         }
         if (empty($config['driver'])) return ConnectionManager::get($name);
+        // 接続情報を再構成する場合は、情報を削除してから設定する
+        ConnectionManager::drop($name);
         ConnectionManager::setConfig($name, [
             'className' => Connection::class,
             'driver' => $config['driver'],

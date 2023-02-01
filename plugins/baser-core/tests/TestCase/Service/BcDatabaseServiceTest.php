@@ -594,7 +594,25 @@ class UserActionsSchema extends BcSchema
      */
     public function test_connectDb()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // 接続情報を設定
+        $config = [
+            "datasource" => "MySQL",
+            "database" => "test_basercms",
+            "host" => "bc5-db",
+            "port" => "3306",
+            "username" => "root",
+            "password" => "root",
+            "schema" => "",
+            "prefix" => "mysite_",
+            "encoding" => "utf8"
+        ];
+
+        // テスト対象メソッドを呼ぶ
+        $db = $this->BcDatabaseService->connectDb($config);
+
+        // 接続できていること
+        $this->assertNotEmpty($db);
+        $this->assertTrue($db->isConnected());
     }
 
     /**
