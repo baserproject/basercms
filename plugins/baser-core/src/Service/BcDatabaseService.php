@@ -1145,6 +1145,9 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      * @param string $dbConfigKeyName
      * @param array $dbConfig
      * @return boolean
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function deleteTables($dbConfigKeyName = 'default', $dbConfig = null)
     {

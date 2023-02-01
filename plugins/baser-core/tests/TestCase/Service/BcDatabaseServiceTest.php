@@ -35,6 +35,7 @@ use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\Filesystem\File;
 use Cake\Utility\Inflector;
+use Migrations\Migrations;
 
 /**
  * BcDatabaseServiceTest
@@ -609,7 +610,60 @@ class UserActionsSchema extends BcSchema
      */
     public function test_deleteTables()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // 対象メソッドを呼ぶ
+        $result = $this->BcDatabaseService->deleteTables();
+        $this->assertTrue($result, 'テーブル削除が成功していること');
+
+        $db = $this->BcDatabaseService->getDataSource();
+        $tables = $db->getSchemaCollection()->listTables();
+        $this->assertCount(0, $tables, '全てのテーブルが削除されていること');
+
+        // 後処理
+        $this->test_deleteTablesForMigrations();
+    }
+
+    /**
+     * Test deleteTables 引数ありの場合
+     */
+    public function test_deleteTablesArgs()
+    {
+        // 対象メソッドを呼ぶ
+        $result = $this->BcDatabaseService->deleteTables('test', ['driver' => 'mysql']);
+        $this->assertTrue($result, 'テーブル削除が成功していること');
+
+        $db = $this->BcDatabaseService->getDataSource();
+        $tables = $db->getSchemaCollection()->listTables();
+        $this->assertCount(0, $tables, '全てのテーブルが削除されていること');
+
+        // 後処理
+        $this->test_deleteTablesForMigrations();
+    }
+
+    /**
+     * Test deleteTables
+     * tearDown でテーブルを truncate しており、テーブルが存在しないというエラーが出てしまうので、
+     * テーブルを再作成しておく
+     */
+    private function test_deleteTablesForMigrations()
+    {
+        $migrations = new Migrations();
+        $plugins = [
+            'BaserCore',
+            'BcBlog',
+            'BcSearchIndex',
+            'BcContentLink',
+            'BcMail',
+            'BcWidgetArea',
+            'BcThemeConfig',
+            'BcThemeFile',
+        ];
+        foreach ($plugins as $plugin) {
+            $migrate = $migrations->migrate([
+                'connection' => 'test',
+                'plugin' => $plugin,
+            ]);
+            $this->assertTrue($migrate);
+        }
     }
 
     /**
