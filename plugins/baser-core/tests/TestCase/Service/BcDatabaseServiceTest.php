@@ -87,6 +87,46 @@ class BcDatabaseServiceTest extends BcTestCase
     }
 
     /**
+     * Test initAdapter
+     */
+    public function test_initAdapter()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * Test getMigrationsTable
+     */
+    public function test_getMigrationsTable()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * Test addColumn
+     */
+    public function test_addColumn()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * Test removeColumn
+     */
+    public function test_removeColumn()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * Test renameColumn
+     */
+    public function test_renameColumn()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
      * Gets the database encoding
      * @return void
      */
