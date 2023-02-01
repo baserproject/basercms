@@ -131,4 +131,21 @@ class ThemeFileAppController extends AppController
         }
         return $data;
     }
+
+    /**
+     *  APIのパラメーターを変換する処理
+     *
+     * @param array $args
+     * @return array
+     * @checked
+     * @noTodo
+     */
+    protected function convertApiDataToArgs($postData)
+    {
+        return [
+            $postData['theme'],
+            $postData['type'],
+            $postData['path']
+        ];
+    }
 }

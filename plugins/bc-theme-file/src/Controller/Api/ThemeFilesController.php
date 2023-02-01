@@ -67,10 +67,11 @@ class ThemeFilesController extends ThemeFileAppController
     {
         $this->request->allowMethod(['post', 'put']);
         try {
+            $postData = $this->getRequest()->getData();
             $themeFileForm = $service->update(
                 array_merge(
-                    $this->parseArgs(func_get_args()),
-                    $this->getRequest()->getData()
+                    $this->parseArgs($this->convertApiDataToArgs($postData)),
+                    $postData
                 )
             );
             $entity = $service->get($themeFileForm->getData('fullpath'));
