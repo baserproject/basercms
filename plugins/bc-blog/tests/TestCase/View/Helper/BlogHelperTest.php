@@ -22,6 +22,7 @@ use BcBlog\Test\Factory\BlogCategoryFactory;
 use BcBlog\Test\Factory\BlogContentFactory;
 use BcBlog\Test\Factory\BlogPostFactory;
 use BcBlog\Test\Scenario\BlogContentScenario;
+use BcBlog\Test\Scenario\MultiSiteBlogPostScenario;
 use BcBlog\Test\Scenario\MultiSiteBlogScenario;
 use BcBlog\View\Helper\BlogHelper;
 use Cake\Core\Configure;
@@ -232,39 +233,51 @@ class BlogHelperTest extends BcTestCase
      * ブログ記事のURLを取得する
      *
      * @param int $blogContentId ブログコンテンツID
-     * @param int $no ブログ記事NO
+     * @param string $baseUrl ベースURL
+     * @param bool $useBase ベースとなるURLを付与するかどうか
      * @param string $expects 期待値
      * @dataProvider getPostLinkUrlDataProvider
      */
-    public function testGetPostLinkUrl($blogContentId, $no, $base, $useBase, $expects)
+    public function testGetPostLinkUrl($blogContentId, $baseUrl, $useBase, $expects)
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
+        $this->truncateTable('contents');
+        $this->truncateTable('blog_contents');
+
+        // データ生成
+        $this->loadFixtureScenario(MultiSiteBlogPostScenario::class);
+
+        // ブログ記事を取得
+        $post = BlogPostFactory::find()->where(
+            ['blog_content_id' => $blogContentId]
+        )->first();
+
+        // 現在のサイトを指定
+        $site = SiteFactory::get(1);
+        $request = $this->getRequest(
+            '/', [], 'GET', $baseUrl ? ['base' => $baseUrl] : []
+        )->withAttribute('currentSite', $site);
+        $this->Blog->getView()->setRequest($request);
         $siteUrl = Configure::read('BcEnv.siteUrl');
-        Configure::write('BcEnv.siteUrl', 'http://main.com');
-        $this->loadFixtures('ContentBcContentsRoute', 'SiteBcContentsRoute', 'BlogContentMultiSite');
-        $this->Blog->request = $this->_getRequest('/');
-        $this->Blog->request->base = $base;
-        $post = ['BlogPost' => [
-            'blog_content_id' => $blogContentId,
-            'no' => $no,
-        ]];
+        Configure::write('BcEnv.siteUrl', 'https://main.com');
+
+        // テスト対象メソッド
         $result = $this->Blog->getPostLinkUrl($post, $useBase);
-        Configure::write('BcEnv.siteUrl', $siteUrl);
+        // Configure::write('BcEnv.siteUrl', $siteUrl);
+
         $this->assertEquals($expects, $result, '記事へのリンクを正しく取得できません');
     }
 
     public function getPostLinkUrlDataProvider()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         return [
-            [10, 3, '', false, false],
-            [1, 3, '', false, '/news/archives/3'],
-            [1, 3, '/sub', false, '/news/archives/3'],
-            [1, 3, '/sub', true, '/sub/news/archives/3'],
-            [3, 3, '', false, 'http://main.com/en/news/archives/3'],
-            [4, 3, '', false, 'http://sub.main.com/news/archives/3'],
-            [5, 3, '', false, 'http://another.com/news/archives/3'],
-            [6, 3, '', false, 'http://another.com/news/archives/3']
+            'コンテンツURLなし' => [11, '', false, false],
+            'ベースURLなし' => [6, '', false, '/news/archives/3'],
+            'ベースURLあり' => [6, '/sub', false, '/news/archives/3'],
+            'ベースURLあり、URL付与あり' => [6, '/sub', true, '/sub/news/archives/3'],
+            'sサイト' => [7, '', false, 'https://main.com/s/news/archives/4'],
+            'enサイト' => [8, '', false, 'https://main.com/en/news/archives/5'],
+            '別サイト' => [9, '', false, 'https://example.com/news/archives/6'],
+            'サブドメイン' => [10, '', false, 'https://sub.main.com/archives/7'],
         ];
     }
 
