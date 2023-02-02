@@ -100,4 +100,5 @@ if(!filter_var(env('USE_API'), FILTER_VALIDATE_BOOLEAN)) {
     ['plugin' => 'BcMail'],
     ['plugin' => 'BcWidgetArea'],
     ['plugin' => 'BcThemeConfig'],
+    ['plugin' => 'BcThemeFile'],
 ]);

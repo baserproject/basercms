@@ -501,4 +501,61 @@ class BcValidation extends Validation
         }
         return true;
     }
+
+    /**
+     * 全角カタカナチェック
+     *
+     * @param mixed $value 対象となる値
+     * @param string $addAllow 追加で許可する文字（初期値: 半角スペース・全角スペース）
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     *
+     * 半角と全角のスペースを許容しない場合はvaliadtionのrule設定で空の文字列を渡す
+     * 'rule' => ['checkKatakana', '']
+     */
+    public static function checkKatakana($value, $addAllow = '\s　') : bool
+    {
+        if (!is_string($addAllow)) {
+            $addAllow = '\s　';
+        }
+
+        if ($value === '') {
+            return true;
+        }
+        if(preg_match("/^[ァ-ヾ" . $addAllow . "]+$/u", $value)){
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 全角ひらがなチェック
+     *
+     * @param mixed $value 対象となる値
+     * @param string $addAllow 追加で許可する文字（初期値: 半角スペース・全角スペース・長音）
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     *
+     * 半角と全角のスペースを許容しない場合はvaliadtionのrule設定で空の文字列を渡す
+     * 'rule' => ['checkHiragana', '']
+     *
+     */
+    public static function checkHiragana($value, $addAllow = '\s　ー') : bool
+    {
+        if (!is_string($addAllow)) {
+            $addAllow = '\s　ー';
+        }
+
+        if ($value === '') {
+            return true;
+        }
+        if(preg_match("/^[ぁ-ゞ" . $addAllow . "]+$/u", $value)){
+            return true;
+        }
+        return false;
+    }
 }

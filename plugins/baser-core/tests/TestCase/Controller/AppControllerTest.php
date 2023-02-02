@@ -230,7 +230,7 @@ class AppControllerTest extends BcTestCase
     {
         $data = [
             'test' => [
-                'test' => mb_convert_encoding('あいうえお', 'SJIS-win')
+                'test' => mb_convert_encoding('あいうえお', 'EUC-JP')
             ]
         ];
         $result = $this->execPrivateMethod($this->AppController, '_autoConvertEncodingByArray', [$data, 'UTF-8']);
@@ -244,7 +244,7 @@ class AppControllerTest extends BcTestCase
     {
         $data = [
             'test' => [
-                'test' => mb_convert_encoding('あいうえお', 'SJIS-win')
+                'test' => mb_convert_encoding('あいうえお', 'EUC-JP')
             ]
         ];
         $this->AppController->setRequest($this->AppController->getRequest()->withParsedBody($data));

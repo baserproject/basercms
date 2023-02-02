@@ -108,6 +108,13 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
         parent::bootstrap($application);
 
         /**
+         * 文字コードの検出順を指定
+         */
+        if (function_exists('mb_detect_order')) {
+            mb_detect_order(implode(',', Configure::read('BcEncode.detectOrder')));
+        }
+
+        /**
          * 設定ファイル読み込み
          * baserCMSの各種設定は、ここで上書きできる事を想定
          */

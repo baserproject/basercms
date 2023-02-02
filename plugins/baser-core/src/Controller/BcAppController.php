@@ -82,14 +82,12 @@ class BcAppController extends AppController
     /**
      * beforeFilter
      *
-     * @return void
      * @checked
      * @note(value="マイルストーン２が終わってから確認する")
      */
     public function beforeFilter(EventInterface $event)
     {
-        parent::beforeFilter($event);
-        return;
+        return parent::beforeFilter($event);
 
         // 認証設定
         if (isset($this->BcAuthConfigure)) {

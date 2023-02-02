@@ -66,13 +66,6 @@ require __DIR__ . DS . 'paths.php';
 // <<<
 
 /**
- * 文字コードの検出順を指定
- */
-if (function_exists('mb_detect_order')) {
-    mb_detect_order(Configure::read('BcEncode.detectOrder'));
-}
-
-/**
  * fullBaseUrl
  * コンソールの場合、CakePHP の ShellDispatcher において、
  * http://localhost で設定されるため https に書き換える
