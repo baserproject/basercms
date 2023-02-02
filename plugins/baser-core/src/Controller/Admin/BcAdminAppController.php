@@ -64,6 +64,7 @@ class BcAdminAppController extends BcAppController
      */
     public function beforeFilter(EventInterface $event)
     {
+        if (!BcUtil::isInstalled()) return;
         /** @var UsersService $usersService */
         $usersService = $this->getService(UsersServiceInterface::class);
         $result = $usersService->checkAutoLogin($this->request, $this->response);
