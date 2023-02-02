@@ -128,7 +128,9 @@ class ThemeFilesController extends ThemeFileAppController
         $this->request->allowMethod(['post', 'put']);
 
         try {
-            $args = $this->getRequest()->getData();
+            $args = $this->parseArgs(
+                $this->convertApiDataToArgs($this->getRequest()->getData())
+            );
             $targetPath = $service->copyToTheme($args);
             $currentTheme = BcUtil::getCurrentTheme();
             $message = __d('baser',

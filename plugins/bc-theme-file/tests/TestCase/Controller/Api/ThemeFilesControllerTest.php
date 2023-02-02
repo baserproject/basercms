@@ -174,11 +174,12 @@ class ThemeFilesControllerTest extends BcTestCase
     public function test_copy_to_theme()
     {
         //POSTデータを生成
-        $fullpath = BASER_PLUGINS . 'BcThemeSample/templates/layout/default.php';
+        $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout/';
+        new File($fullpath . 'base_name_1.php', true);
         $data = [
-            'fullpath' => $fullpath,
-            'path' => 'layout.php',
-            'type' => 'etc',
+            'theme' => 'BcThemeSample',
+            'type' => 'layout',
+            'path' => 'base_name_1.php'
         ];
         //APIをコール
         $this->post('/baser/api/bc-theme-file/theme_files/copy_to_theme.json?token=' . $this->accessToken, $data);
@@ -187,13 +188,14 @@ class ThemeFilesControllerTest extends BcTestCase
         //戻る値を確認
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals(
-            'コアフォルダ layout.php を テーマ BcSpaSample の次のパスとしてコピーしました。\n/plugins/BcSpaSample/templates/layout.php。',
+            'コアフォルダ base_name_1.php を テーマ BcSpaSample の次のパスとしてコピーしました。\n/plugins/BcSpaSample/templates/layout/base_name_1.php。',
             $result->message
         );
         //実際にファイルが作成されいてるか確認すること
-        $this->assertTrue(file_exists(BASER_PLUGINS . 'BcSpaSample/templates/layout.php'));
+        $this->assertTrue(file_exists(BASER_PLUGINS . 'BcSpaSample/templates/layout/base_name_1.php'));
         //作成したファイルを削除する
-        unlink(BASER_PLUGINS . 'BcSpaSample/templates/layout.php');
+        unlink(BASER_PLUGINS . 'BcSpaSample/templates/layout/base_name_1.php');
+        unlink($fullpath . 'base_name_1.php');
     }
 
     /**
