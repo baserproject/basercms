@@ -179,7 +179,9 @@ class ThemeFilesControllerTest extends BcTestCase
         $data = [
             'theme' => 'BcThemeSample',
             'type' => 'layout',
-            'path' => 'base_name_1.php'
+            'path' => 'base_name_1.php',
+            'plugin' => '',
+            'assets' => ''
         ];
         //APIをコール
         $this->post('/baser/api/bc-theme-file/theme_files/copy_to_theme.json?token=' . $this->accessToken, $data);

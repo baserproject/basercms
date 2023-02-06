@@ -126,14 +126,13 @@ class ThemeFilesController extends BcApiController
         $this->request->allowMethod(['post', 'put']);
 
         try {
-            $args = $this->parseArgs(
-                $this->convertApiDataToArgs($this->getRequest()->getData())
-            );
-            $targetPath = $service->copyToTheme($args);
+            $data = $this->getRequest()->getData();
+            $data['fullpath'] = $this->getFullpath($data['theme'], $data['type'], $data['path']);
+            $targetPath = $service->copyToTheme($data);
             $currentTheme = BcUtil::getCurrentTheme();
             $message = __d('baser',
                 'コアフォルダ {0} を テーマ {1} の次のパスとしてコピーしました。\n{2}。',
-                basename($args['path']),
+                basename($data['path']),
                 $currentTheme,
                 $targetPath
             );
