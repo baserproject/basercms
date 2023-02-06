@@ -139,7 +139,29 @@ class BcDatabaseServiceTest extends BcTestCase
      */
     public function test_removeColumn()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // テーブル生成
+        $table = 'table_test_remove';
+        $columns = [
+            'id' => ['type' => 'integer'],
+            'remove_column' => ['type' => 'text'],
+        ];
+        $schema = new BcSchema($table, $columns);
+        $schema->create();
+
+        // 対象メソッドを呼ぶ
+        $result = $this->BcDatabaseService->removeColumn($table, 'remove_column');
+        $tableTest = TableRegistry::getTableLocator()
+            ->get('BaserCore.App')
+            ->getConnection()
+            ->getSchemaCollection()
+            ->describe($table);
+        // 戻り値を確認
+        $this->assertTrue($result);
+        // カラムが削除されているか確認
+        $this->assertFalse($tableTest->hasColumn('remove_column'));
+
+        // テストテーブルを削除
+        $this->BcDatabaseService->dropTable($table);
     }
 
     /**

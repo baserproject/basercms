@@ -149,6 +149,9 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      * @param string $tableName
      * @param string $columnName
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function removeColumn(string $tableName, string $columnName)
     {
