@@ -13,6 +13,7 @@ namespace BcThemeFile\Test\TestCase\Controller\Api;
 
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
+use Cake\Filesystem\File;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 class ThemeFilesControllerTest extends BcTestCase
@@ -93,7 +94,59 @@ class ThemeFilesControllerTest extends BcTestCase
      */
     public function test_edit()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
+        //POSTデータを生成
+        $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout/';
+        new File($fullpath . 'base_name_1.php', true);
+        new File($fullpath . 'Admin/default.php', true);
+        $data = [
+            'theme' => 'BcThemeSample',
+            'type' => 'layout',
+            'path' => 'base_name_1.php',
+            'base_name' => 'base_name_2',
+            'contents' => 'this is a content changed!',
+            'ext' => 'php',
+        ];
+        //APIをコール
+        $this->post('/baser/api/bc-theme-file/theme_files/edit.json?token=' . $this->accessToken, $data);
+        //レスポンスコードを確認
+        $this->assertResponseSuccess();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('ファイル「base_name_2.php」を更新しました。', $result->message);
+        $this->assertEquals($fullpath . 'base_name_2.php', $result->entity->fullpath);
+        //実際にファイルが変更されいてるか確認すること
+        $this->assertTrue(file_exists($fullpath . 'base_name_2.php'));
+        //ファイルの中身を確認
+        $this->assertEquals('this is a content changed!' , file_get_contents($fullpath . 'base_name_2.php'));
+        //変更した前にファイル名が存在しないか確認すること
+        $this->assertFalse(file_exists($fullpath . 'base_name_1.php'));
+
+        //path が、Admin/default.php と階層化されている場合、
+        $data = [
+            'theme' => 'BcThemeSample',
+            'type' => 'layout',
+            'path' => 'Admin/default.php',
+            'base_name' => 'default_changed',
+            'contents' => 'this is a content changed!',
+            'ext' => 'php',
+        ];
+        //APIをコール
+        $this->post('/baser/api/bc-theme-file/theme_files/edit.json?token=' . $this->accessToken, $data);
+        //レスポンスコードを確認
+        $this->assertResponseSuccess();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('ファイル「default_changed.php」を更新しました。', $result->message);
+        $this->assertEquals($fullpath . 'Admin/default_changed.php', $result->entity->fullpath);
+        //実際にファイルが変更されいてるか確認すること
+        $this->assertTrue(file_exists($fullpath . 'Admin/default_changed.php'));
+        //ファイルの中身を確認
+        $this->assertEquals('this is a content changed!' , file_get_contents($fullpath . 'Admin/default_changed.php'));
+        //変更した前にファイル名が存在しないか確認すること
+        $this->assertFalse(file_exists($fullpath . 'Admin/default.php'));
+
+        //作成されたファイルを削除
+        unlink($fullpath . 'base_name_2.php');
+        unlink($fullpath . 'Admin/default_changed.php');
     }
 
     /**

@@ -589,7 +589,7 @@ class ThemeFilesController extends BcAdminAppController
             $args[0] instanceof ThemeFoldersAdminServiceInterface ||
             $args[0] instanceof ThemeFilesServiceInterface ||
             $args[0] instanceof ThemeFoldersServiceInterface
-            ) {
+        ) {
             unset($args[0]);
             $args = array_merge($args);
         }
