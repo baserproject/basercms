@@ -36,7 +36,7 @@ class ThemeFoldersController extends BcApiController
      * @checked
      * @noTodo
      */
-    public function batch(ThemeFOldersServiceInterface $service)
+    public function batch(ThemeFoldersServiceInterface $service)
     {
         $this->request->allowMethod(['post', 'put']);
         $allowMethod = [
@@ -50,7 +50,7 @@ class ThemeFoldersController extends BcApiController
         }
         $targets = $this->getRequest()->getData('batch_targets');
         try {
-            if(is_dir($targets[0])) {
+            if (is_dir($targets[0])) {
                 $fullpath = $targets[0];
             } else {
                 $fullpath = dirname($targets[0]);
@@ -69,6 +69,94 @@ class ThemeFoldersController extends BcApiController
         }
         $this->set(['message' => $message]);
         $this->viewBuilder()->setOption('serialize', ['message']);
+    }
+
+    /**
+     * テーマフォルダAPI 一覧取得
+     *
+     * @param ThemeFoldersServiceInterface $service
+     * @return void
+     */
+    public function index(ThemeFoldersServiceInterface $service)
+    {
+        //todo テーマフォルダAPI 一覧取得
+    }
+
+    /**
+     * テーマフォルダAPI テーマフォルダ新規追加
+     *
+     * @param ThemeFoldersServiceInterface $service
+     * @return void
+     */
+    public function add(ThemeFoldersServiceInterface $service)
+    {
+        //todo テーマフォルダAPI テーマフォルダ新規追加
+    }
+
+    /**
+     * テーマフォルダAPI テーマフォルダ編集
+     *
+     * @param ThemeFoldersServiceInterface $service
+     * @return void
+     */
+    public function edit(ThemeFoldersServiceInterface $service)
+    {
+        //todo テーマフォルダAPI テーマフォルダ編集
+    }
+
+    /**
+     * テーマフォルダAPI テーマフォルダ削除
+     *
+     * @param ThemeFoldersServiceInterface $service
+     * @return void
+     */
+    public function delete(ThemeFoldersServiceInterface $service)
+    {
+        //todo テーマフォルダAPI テーマフォルダ削除
+    }
+
+    /**
+     * テーマフォルダAPI テーマフォルダコピー
+     *
+     * @param ThemeFoldersServiceInterface $service
+     * @return void
+     */
+    public function copy(ThemeFoldersServiceInterface $service)
+    {
+        //todo テーマフォルダAPI テーマフォルダコピー
+    }
+
+    /**
+     * テーマフォルダAPI テーマフォルダアップロード
+     *
+     * @param ThemeFoldersServiceInterface $service
+     * @return void
+     */
+    public function upload(ThemeFoldersServiceInterface $service)
+    {
+        //todo テーマフォルダAPI テーマフォルダアップロード
+    }
+
+    /**
+     * テーマフォルダAPI 現在のテーマにテーマフォルダをコピー
+     *
+     * @param ThemeFoldersServiceInterface $service
+     * @return void
+     */
+    public function copy_to_theme(ThemeFoldersServiceInterface $service)
+    {
+        //todo テーマフォルダAPI 現在のテーマにテーマフォルダをコピー
+    }
+
+    /**
+     * テーマフォルダAPI フォルダを表示
+     *
+     * @param ThemeFoldersServiceInterface $service
+     * @return void
+     */
+    public function view(ThemeFoldersServiceInterface $service)
+    {
+        //todo テーマフォルダAPI フォルダを表示
     }
 
 }

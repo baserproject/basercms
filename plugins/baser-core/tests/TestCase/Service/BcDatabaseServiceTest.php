@@ -10,6 +10,7 @@
  */
 namespace BaserCore\Test\TestCase\Service;
 
+use BaserCore\Database\Schema\BcSchema;
 use BaserCore\Service\BcDatabaseService;
 use BaserCore\Service\BcDatabaseServiceInterface;
 use BaserCore\Service\SiteConfigsServiceInterface;
@@ -35,6 +36,7 @@ use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\Filesystem\File;
 use Cake\Utility\Inflector;
+use Migrations\Migrations;
 
 /**
  * BcDatabaseServiceTest
@@ -84,6 +86,46 @@ class BcDatabaseServiceTest extends BcTestCase
     public function tearDown(): void
     {
         parent::tearDown();
+    }
+
+    /**
+     * Test initAdapter
+     */
+    public function test_initAdapter()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * Test getMigrationsTable
+     */
+    public function test_getMigrationsTable()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * Test addColumn
+     */
+    public function test_addColumn()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * Test removeColumn
+     */
+    public function test_removeColumn()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * Test renameColumn
+     */
+    public function test_renameColumn()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
 
     /**
@@ -553,7 +595,25 @@ class UserActionsSchema extends BcSchema
      */
     public function test_connectDb()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // 接続情報を設定
+        $config = [
+            "datasource" => "MySQL",
+            "database" => "test_basercms",
+            "host" => "bc5-db",
+            "port" => "3306",
+            "username" => "root",
+            "password" => "root",
+            "schema" => "",
+            "prefix" => "mysite_",
+            "encoding" => "utf8"
+        ];
+
+        // テスト対象メソッドを呼ぶ
+        $db = $this->BcDatabaseService->connectDb($config);
+
+        // 接続できていること
+        $this->assertNotEmpty($db);
+        $this->assertTrue($db->isConnected());
     }
 
     /**
@@ -561,7 +621,31 @@ class UserActionsSchema extends BcSchema
      */
     public function test_getDataSource()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $conn = $this->BcDatabaseService->getDataSource();
+        $config = $this->getPrivateProperty($conn, "_config");
+        $this->assertEquals('test_basercms', $config['database'], 'データソースが取得できること');
+
+        $conn = $this->BcDatabaseService->getDataSource('test');
+        $config = $this->getPrivateProperty($conn, "_config");
+        $this->assertEquals('test_basercms', $config['database'], 'データソースが取得できること');
+
+        $conn = $this->BcDatabaseService->getDataSource('test_debug_kit');
+        $config = $this->getPrivateProperty($conn, "_config");
+        $this->assertEquals('/var/www/html/tmp/debug_kit.sqlite', $config['database'], 'データソースが取得できること');
+
+        // 指定されたデータソースが存在しない場合はエラー
+        $this->expectException('\Cake\Datasource\Exception\MissingDatasourceConfigException');
+        $conn = $this->BcDatabaseService->getDataSource('test_config');
+    }
+
+    /**
+     * Test getDataSource (MissingDatasourceExceptionの場合)
+     */
+    public function test_getDataSourceMissingDatasourceException()
+    {
+        // 指定されたデータソースが存在しない場合はエラー
+        $this->expectException('\Cake\Datasource\Exception\MissingDatasourceException');
+        $conn = $this->BcDatabaseService->getDataSource('test_config', ['datasource' => 'mysql']);
     }
 
     /**
@@ -569,7 +653,60 @@ class UserActionsSchema extends BcSchema
      */
     public function test_deleteTables()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // 対象メソッドを呼ぶ
+        $result = $this->BcDatabaseService->deleteTables();
+        $this->assertTrue($result, 'テーブル削除が成功していること');
+
+        $db = $this->BcDatabaseService->getDataSource();
+        $tables = $db->getSchemaCollection()->listTables();
+        $this->assertCount(0, $tables, '全てのテーブルが削除されていること');
+
+        // 後処理
+        $this->test_deleteTablesForMigrations();
+    }
+
+    /**
+     * Test deleteTables 引数ありの場合
+     */
+    public function test_deleteTablesArgs()
+    {
+        // 対象メソッドを呼ぶ
+        $result = $this->BcDatabaseService->deleteTables('test', ['driver' => 'mysql']);
+        $this->assertTrue($result, 'テーブル削除が成功していること');
+
+        $db = $this->BcDatabaseService->getDataSource();
+        $tables = $db->getSchemaCollection()->listTables();
+        $this->assertCount(0, $tables, '全てのテーブルが削除されていること');
+
+        // 後処理
+        $this->test_deleteTablesForMigrations();
+    }
+
+    /**
+     * Test deleteTables
+     * tearDown でテーブルを truncate しており、テーブルが存在しないというエラーが出てしまうので、
+     * テーブルを再作成しておく
+     */
+    private function test_deleteTablesForMigrations()
+    {
+        $migrations = new Migrations();
+        $plugins = [
+            'BaserCore',
+            'BcBlog',
+            'BcSearchIndex',
+            'BcContentLink',
+            'BcMail',
+            'BcWidgetArea',
+            'BcThemeConfig',
+            'BcThemeFile',
+        ];
+        foreach ($plugins as $plugin) {
+            $migrate = $migrations->migrate([
+                'connection' => 'test',
+                'plugin' => $plugin,
+            ]);
+            $this->assertTrue($migrate);
+        }
     }
 
     /**
@@ -602,5 +739,27 @@ class UserActionsSchema extends BcSchema
     public function test_migrate()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * Test tableExist
+     */
+    public function test_tableExist()
+    {
+        // テーブル生成
+        $table = 'table_test_exist';
+        $columns = [
+            'id' => ['type' => 'integer'],
+            'contents' => ['type' => 'text'],
+        ];
+        $schema = new BcSchema($table, $columns);
+        $schema->create();
+
+        // 対象メソッドを呼ぶ
+        $result = $this->BcDatabaseService->tableExists($table);
+        $this->assertTrue($result, 'テーブルが存在すること');
+
+        // テーブル削除
+        $this->BcDatabaseService->dropTable($table);
     }
 }

@@ -8,15 +8,11 @@
  * @since         5.0.0
  * @license       https://basercms.net/license/index.html MIT License
  */
-
-use BaserCore\Model\Entity\User;
-use BaserCore\View\AppView;
-
 /**
  * users index row
- * @var AppView $this
- * @var User $user
- * @var User $loginUser
+ * @var \BaserCore\View\BcAdminAppView $this
+ * @var \BaserCore\Model\Entity\User $user
+ * @var \BaserCore\Model\Entity\User $loginUser
  * @checked
  * @unitTest
  * @noTodo
@@ -25,9 +21,12 @@ use BaserCore\View\AppView;
 
 <tr>
   <td class="bca-table-listup__tbody-td"><?php echo $user->id ?></td>
-  <td
-    class="bca-table-listup__tbody-td"><?php $this->BcBaser->link($user->name, ['action' => 'edit', $user->id], ['escape' => true]) ?></td>
-  <td class="bca-table-listup__tbody-td"><?php echo h($user->email) ?></td>
+  <td class="bca-table-listup__tbody-td">
+    <?php $this->BcBaser->link($user->email, ['action' => 'edit', $user->id], ['escape' => true]) ?>
+  </td>
+  <td class="bca-table-listup__tbody-td">
+    <?php echo h($user->name) ?>
+  </td>
   <td class="bca-table-listup__tbody-td"><?php echo h($user->nickname) ?></td>
   <td class="bca-table-listup__tbody-td" style="white-space: nowrap">
     <?php if (!empty($user->user_groups)): ?>
@@ -38,11 +37,17 @@ use BaserCore\View\AppView;
       </ul>
     <?php endif; ?>
   </td>
-  <td class="bca-table-listup__tbody-td" style="white-space: nowrap"><?php echo h($user->real_name_1) ?>
-    &nbsp;<?php echo h($user->real_name_2) ?></td>
+  <td class="bca-table-listup__tbody-td" style="white-space: nowrap">
+    <?php echo h($user->real_name_1) ?>&nbsp;<?php echo h($user->real_name_2) ?>
+  </td>
+  <td class="bca-table-listup__tbody-td">
+    <?php echo $this->BcText->booleanMark($user->status) ?>
+  </td>
   <?php echo $this->BcListTable->dispatchShowRow($user) ?>
-  <td class="bca-table-listup__tbody-td" style="white-space: nowrap"><?php echo $this->BcTime->format($user->created, 'yyyy-MM-dd') ?><br>
-    <?php echo $this->BcTime->format($user->modified, 'yyyy-MM-dd') ?></td>
+  <td class="bca-table-listup__tbody-td" style="white-space: nowrap">
+    <?php echo $this->BcTime->format($user->created, 'yyyy-MM-dd') ?><br>
+    <?php echo $this->BcTime->format($user->modified, 'yyyy-MM-dd') ?>
+  </td>
   <td class="row-tools bca-table-listup__tbody-td bca-table-listup__tbody-td--actions">
     <?php if ($loginUser->isEditableUser($user)): ?>
     <?php $this->BcBaser->link('', ['action' => 'edit', $user->id], ['title' => __d('baser', '編集'), 'class' => ' bca-btn-icon', 'data-bca-btn-type' => 'edit', 'data-bca-btn-size' => 'lg']) ?>

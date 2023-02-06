@@ -151,7 +151,11 @@ return [
             'session.use_trans_sid' => 0,
             'session.gc_divisor' => 1,
             'session.gc_probability' => 1,
-            'session.cookie_lifetime' => 60 * 24 * 2
+            /**
+             * クッキーの有効期限（秒）
+             * デフォルト：1年間
+             */
+            'session.cookie_lifetime' => 60 * 60 * 24 * 365
         ]
     ],
 

@@ -122,6 +122,7 @@ $this->BcBaser->js('admin/users/form.bundle', false);
         <?php echo $this->BcAdminForm->error('name') ?>
       </td>
     </tr>
+
     <tr>
       <th class="col-head bca-form-table__label">
         <?php echo $this->BcAdminForm->label('password_1', __d('baser', 'パスワード')) ?>
@@ -149,7 +150,19 @@ $this->BcBaser->js('admin/users/form.bundle', false);
         <?php echo $this->BcAdminForm->error('password') ?>
       </td>
     </tr>
+
+    <tr>
+      <th class="col-head bca-form-table__label">
+        <?php echo $this->BcAdminForm->label('status', __d('baser', '利用状態')) ?>
+      </th>
+      <td class="col-input bca-form-table__input">
+        <?php echo $this->BcAdminForm->control('status', ['type' => 'checkbox', 'label' => __d('baser', '有効')]) ?>
+        <?php echo $this->BcAdminForm->error('status') ?>
+      </td>
+    </tr>
+
     <?php echo $this->BcAdminForm->dispatchAfterForm() ?>
+
   </table>
 </div>
 

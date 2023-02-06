@@ -16,7 +16,6 @@ use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Controller\Api\BcApiController;
 use BaserCore\Error\BcFormFailedException;
-use BcThemeFile\Controller\ThemeFileAppController;
 use BaserCore\Utility\BcUtil;
 use BcThemeFile\Service\ThemeFilesServiceInterface;
 
@@ -181,5 +180,4 @@ class ThemeFilesController extends BcApiController
     {
         //todo テーマファイルAPI 画像のサムネイルを表示 #1777
     }
-
 }

@@ -20,7 +20,7 @@ use BaserCore\View\AppView;
  * @noTodo
  */
 
-$this->BcListTable->setColumnNumber(7);
+$this->BcListTable->setColumnNumber(9);
 ?>
 
 <div class="bca-data-list__top">
@@ -41,18 +41,18 @@ $this->BcListTable->setColumnNumber(7);
         ['escape' => false, 'class' => 'btn-direction bca-table-listup__a']) ?>
     </th>
     <th class="bca-table-listup__thead-th">
-      <?php echo $this->Paginator->sort('name',
-        [
-          'asc' => '<i class="bca-icon--asc" title="' . __d('baser', '昇順') . '"></i>' . __d('baser', 'アカウント名'),
-          'desc' => '<i class="bca-icon--desc" title="' . __d('baser', '降順') . '"></i>' . __d('baser', 'アカウント名')
-        ],
-        ['escape' => false, 'class' => 'btn-direction bca-table-listup__a']) ?>
-    </th>
-    <th class="bca-table-listup__thead-th">
       <?php echo $this->Paginator->sort('email',
         [
           'asc' => '<i class="bca-icon--asc" title="' . __d('baser', '昇順') . '"></i>' . __d('baser', 'Eメール'),
           'desc' => '<i class="bca-icon--desc" title="' . __d('baser', '降順') . '"></i>' . __d('baser', 'Eメール')
+        ],
+        ['escape' => false, 'class' => 'btn-direction bca-table-listup__a']) ?>
+    </th>
+    <th class="bca-table-listup__thead-th">
+      <?php echo $this->Paginator->sort('name',
+        [
+          'asc' => '<i class="bca-icon--asc" title="' . __d('baser', '昇順') . '"></i>' . __d('baser', 'アカウント名'),
+          'desc' => '<i class="bca-icon--desc" title="' . __d('baser', '降順') . '"></i>' . __d('baser', 'アカウント名')
         ],
         ['escape' => false, 'class' => 'btn-direction bca-table-listup__a']) ?>
     </th>
@@ -75,7 +75,17 @@ $this->BcListTable->setColumnNumber(7);
         ],
         ['escape' => false, 'class' => 'btn-direction bca-table-listup__a']) ?>
     </th>
+
+    <th class="bca-table-listup__thead-th">
+      <?php echo $this->Paginator->sort('status', [
+          'asc' => '<i class="bca-icon--asc" title="' . __d('baser', '昇順') . '"></i>' . __d('baser', '利用状態'),
+          'desc' => '<i class="bca-icon--desc" title="' . __d('baser', '降順') . '"></i>' . __d('baser', '利用状態')
+        ], ['escape' => false, 'class' => 'btn-direction bca-table-listup__a']
+      ) ?>
+    </th>
+
     <?php echo $this->BcListTable->dispatchShowHead() ?>
+
     <th class="bca-table-listup__thead-th">
       <?php echo $this->Paginator->sort('created',
         [
