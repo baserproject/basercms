@@ -19,7 +19,6 @@ use BaserCore\Error\BcFormFailedException;
 use BcThemeFile\Controller\ThemeFileAppController;
 use BaserCore\Utility\BcUtil;
 use BcThemeFile\Service\ThemeFilesServiceInterface;
-use Cake\Core\Plugin;
 
 /**
  * テーマファイルコントローラー
@@ -71,7 +70,7 @@ class ThemeFilesController extends BcApiController
         $this->request->allowMethod(['post', 'put']);
         try {
             $data = $this->getRequest()->getData();
-            $data['fullpath'] = $this->getFullpath($data['theme'], $data['type'], $data['path']);
+            $data['fullpath'] = $service->getFullpath($data['theme'], $data['type'], $data['path']);
             $themeFileForm = $service->update($data);
             $entity = $service->get($themeFileForm->getData('fullpath'));
             $message = __d('baser', 'ファイル「{0}」を更新しました。', $entity->name);
@@ -183,8 +182,4 @@ class ThemeFilesController extends BcApiController
         //todo テーマファイルAPI 画像のサムネイルを表示 #1777
     }
 
-    public function getFullpath(string $theme, string $type, string $path)
-    {
-        return Plugin::templatePath($theme) . $type . DS . $path;
-    }
 }
