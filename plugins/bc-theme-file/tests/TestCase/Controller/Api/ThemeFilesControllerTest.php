@@ -187,7 +187,27 @@ class ThemeFilesControllerTest extends BcTestCase
      */
     public function test_copy()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
+        //テストファイルを作成
+        $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout/';
+        new File($fullpath . 'base_name_1.php', true);
+        //POSTデータを生成
+        $data = [
+            'theme' => 'BcThemeSample',
+            'type' => 'layout',
+            'path' => 'base_name_1.php',
+        ];
+        //APIをコール
+        $this->post('/baser/api/bc-theme-file/theme_files/copy.json?token=' . $this->accessToken, $data);
+        //レスポンスコードを確認
+        $this->assertResponseSuccess();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('ファイル「base_name_1.php」をコピーしました。', $result->message);
+        //実際にファイルが削除されいてるか確認すること
+        $this->assertTrue(file_exists($fullpath . 'base_name_1_copy.php'));
+        //生成されたテストファイルを削除
+        unlink($fullpath . 'base_name_1.php');
+        unlink($fullpath . 'base_name_1_copy.php');
     }
 
     /**
