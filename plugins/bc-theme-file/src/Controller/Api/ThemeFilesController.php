@@ -125,7 +125,7 @@ class ThemeFilesController extends BcApiController
 
         try {
             $data = $this->getRequest()->getData();
-            $data['fullpath'] = $this->getFullpath($data['theme'], $data['type'], $data['path']);
+            $data['fullpath'] = $service->getFullpath($data['theme'], $data['type'], $data['path']);
             $targetPath = $service->copyToTheme($data);
             $currentTheme = BcUtil::getCurrentTheme();
             $message = __d('baser',
