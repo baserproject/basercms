@@ -229,4 +229,9 @@ class ThemeFilesService implements ThemeFilesServiceInterface
         }
     }
 
+    public function getFullpath(string $theme, string $type, string $path)
+    {
+        return Plugin::templatePath($theme) . $type . DS . $path;
+    }
+
 }
