@@ -121,6 +121,9 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      * @param string $type
      * @param array $options
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function addColumn(
         string $tableName,
