@@ -65,7 +65,23 @@ class ThemeFoldersControllerTest extends BcTestCase
      */
     public function test_index()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
+        //POSTデータを生成
+        $data = [
+            'plugin' => '',
+            'theme' => 'BcFront',
+            'type' => 'img',
+            'path' => '',
+            'assets' => false,
+            'token' => $this->accessToken
+        ];
+        $query = http_build_query($data);
+        //APIをコール
+        $this->get('/baser/api/bc-theme-file/theme_folders/index.json?' . $query);
+        //レスポンスコードを確認
+        $this->assertResponseSuccess();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertNotNull($result->themeFiles);
     }
 
     /**
