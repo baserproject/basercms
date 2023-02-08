@@ -123,10 +123,36 @@ class ThemeFoldersController extends BcApiController
      *
      * @param ThemeFoldersServiceInterface $service
      * @return void
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function edit(ThemeFoldersServiceInterface $service)
     {
-        //todo テーマフォルダAPI テーマフォルダ編集
+        $this->request->allowMethod(['post', 'put']);
+
+        try {
+            $data = $this->getRequest()->getData();
+            $data['fullpath'] = $service->getFullpath($data['theme'], $data['type'], $data['path']);
+            $form = $service->update($data);
+            $entity = $service->get($form->getData('fullpath'));
+            $message = __d('baser', 'フォルダ名を「{0}」に変更しました。', $entity->name);
+        } catch (BcFormFailedException $e) {
+            $this->setResponse($this->response->withStatus(400));
+            $errors = $e->getForm()->getErrors();
+            $message = __d('baser', '入力エラーです。内容を修正してください。' . $e->getMessage());
+        } catch (\Throwable $e) {
+            $this->setResponse($this->response->withStatus(400));
+            $message = __d('baser', '処理中にエラーが発生しました。');
+        }
+
+        $this->set([
+            'message' => $message,
+            'entity' => $entity ?? null,
+            'errors' => $errors ?? null
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['message', 'entity', 'errors']);
     }
 
     /**
