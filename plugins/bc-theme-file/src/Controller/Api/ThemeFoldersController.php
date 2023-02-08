@@ -15,6 +15,7 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Controller\Api\BcApiController;
+use BaserCore\Error\BcFormFailedException;
 use BcThemeFile\Service\ThemeFoldersService;
 use BcThemeFile\Service\ThemeFoldersServiceInterface;
 
@@ -79,7 +80,27 @@ class ThemeFoldersController extends BcApiController
      */
     public function index(ThemeFoldersServiceInterface $service)
     {
-        //todo テーマフォルダAPI 一覧取得
+        $this->request->allowMethod(['get']);
+
+        try {
+            $data = $this->getRequest()->getQueryParams();
+            $data['fullpath'] = $service->getFullpath($data['theme'], $data['type'], $data['path']);
+            $themeFiles = $service->getIndex($data);
+        } catch (BcFormFailedException $e) {
+            $this->setResponse($this->response->withStatus(400));
+            $errors = $e->getForm()->getErrors();
+            $message = __d('baser', '入力エラーです。内容を修正してください。' . $e->getMessage());
+        } catch (\Throwable $e) {
+            $this->setResponse($this->response->withStatus(400));
+            $message = __d('baser', '処理中にエラーが発生しました。');
+        }
+
+        $this->set([
+            'themeFiles' => $themeFiles ?? null,
+            'message' => $message ?? null,
+            'errors' => $errors ?? null
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['themeFiles', 'message', 'errors']);
     }
 
     /**
