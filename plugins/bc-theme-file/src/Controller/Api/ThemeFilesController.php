@@ -34,7 +34,9 @@ class ThemeFilesController extends BcApiController
         $this->request->allowMethod(['post', 'put']);
 
         try {
-            $form = $service->create($this->getRequest()->getData());
+            $data = $this->getRequest()->getData();
+            $data['fullpath'] = $service->getFullpath($data['theme'], $data['type'], $data['path']);
+            $form = $service->create($data);
             $entity = $service->get($form->getData('fullpath'));
             $message = __d('baser', 'ファイル「{0}」を作成しました。', $entity->name);
         } catch (BcFormFailedException $e) {

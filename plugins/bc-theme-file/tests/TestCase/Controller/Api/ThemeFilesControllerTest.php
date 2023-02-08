@@ -69,8 +69,9 @@ class ThemeFilesControllerTest extends BcTestCase
         //POSTデータを生成
         $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout/';
         $data = [
-            'mode' => 'create',
-            'fullpath' => $fullpath,
+            'theme' => 'BcThemeSample',
+            'type' => 'layout',
+            'path' => '',
             'base_name' => 'base_name_1',
             'contents' => 'this is a content!',
             'ext' => 'php',
