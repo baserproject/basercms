@@ -197,10 +197,37 @@ class ThemeFoldersController extends BcApiController
      *
      * @param ThemeFoldersServiceInterface $service
      * @return void
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function copy(ThemeFoldersServiceInterface $service)
     {
-        //todo テーマフォルダAPI テーマフォルダコピー
+        $this->request->allowMethod(['post', 'put']);
+
+        try {
+            $data = $this->getRequest()->getData();
+            $data['fullpath'] = $service->getFullpath($data['theme'], $data['type'], $data['path']);
+            if ($service->copy($data['fullpath'])) {
+                $message = __d('baser', 'フォルダ「{0}」をコピーしました。', $data['path']);
+            } else {
+                $message = __d('baser', 'フォルダ「{0}」のコピーに失敗しました。上位フォルダのアクセス権限を見直してください。。', $data['path']);
+            }
+        } catch (BcFormFailedException $e) {
+            $this->setResponse($this->response->withStatus(400));
+            $errors = $e->getForm()->getErrors();
+            $message = __d('baser', '入力エラーです。内容を修正してください。' . $e->getMessage());
+        } catch (\Throwable $e) {
+            $this->setResponse($this->response->withStatus(400));
+            $message = __d('baser', '処理中にエラーが発生しました。');
+        }
+
+        $this->set([
+            'message' => $message,
+            'errors' => $errors ?? null
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['message', 'errors']);
     }
 
     /**

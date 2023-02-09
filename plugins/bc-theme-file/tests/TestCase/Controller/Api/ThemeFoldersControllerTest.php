@@ -158,7 +158,28 @@ class ThemeFoldersControllerTest extends BcTestCase
      */
     public function test_copy()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
+        //テストテーマフォルダを作成
+        $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout/';
+        mkdir($fullpath . 'new_folder');
+        //Postデータを生成
+        $data = [
+            'theme' => 'BcThemeSample',
+            'type' => 'layout',
+            'path' => 'new_folder',
+        ];
+        //APIをコール
+        $this->post('/baser/api/bc-theme-file/theme_folders/copy.json?token=' . $this->accessToken, $data);
+        //レスポンスコードを確認
+        $this->assertResponseSuccess();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        //メッセージを確認
+        $this->assertEquals('フォルダ「new_folder」をコピーしました。', $result->message);
+        //実際にフォルダが変更されいてるか確認すること
+        $this->assertTrue(is_dir($fullpath . 'new_folder_copy'));
+        //生成されたフォルダを削除
+        rmdir($fullpath . 'new_folder');
+        rmdir($fullpath . 'new_folder_copy');
     }
 
     /**
