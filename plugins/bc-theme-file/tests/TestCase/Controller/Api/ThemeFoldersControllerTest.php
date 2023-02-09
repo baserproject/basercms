@@ -102,6 +102,9 @@ class ThemeFoldersControllerTest extends BcTestCase
         $this->assertResponseSuccess();
         //戻る値を確認
         $result = json_decode((string)$this->_response->getBody());
+        //themeFolderを確認
+        $this->assertEquals($fullpath . 'new_folder', $result->themeFolder->fullpath);
+        //メッセージを確認
         $this->assertEquals('フォルダ「new_folder」を作成しました。', $result->message);
         //実際にフォルダが作成されいてるか確認すること
         $this->assertTrue(is_dir($fullpath . 'new_folder'));
@@ -130,6 +133,9 @@ class ThemeFoldersControllerTest extends BcTestCase
         $this->assertResponseSuccess();
         //戻る値を確認
         $result = json_decode((string)$this->_response->getBody());
+        //themeFolderを確認
+        $this->assertEquals($fullpath . 'edit_folder', $result->themeFolder->fullpath);
+        //メッセージを確認
         $this->assertEquals('フォルダ名を「edit_folder」に変更しました。', $result->message);
         //実際にフォルダが変更されいてるか確認すること
         $this->assertTrue(is_dir($fullpath . 'edit_folder'));
