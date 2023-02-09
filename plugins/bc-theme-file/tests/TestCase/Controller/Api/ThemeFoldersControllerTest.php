@@ -89,7 +89,24 @@ class ThemeFoldersControllerTest extends BcTestCase
      */
     public function test_add()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
+        $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout/';
+        $data = [
+            'theme' => 'BcThemeSample',
+            'type' => 'layout',
+            'path' => '',
+            'name' => 'new_folder',
+        ];
+        //APIをコール
+        $this->post('/baser/api/bc-theme-file/theme_folders/add.json?token=' . $this->accessToken, $data);
+        //レスポンスコードを確認
+        $this->assertResponseSuccess();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('フォルダ「new_folder」を作成しました。', $result->message);
+        //実際にフォルダが作成されいてるか確認すること
+        $this->assertTrue(is_dir($fullpath . 'new_folder'));
+        //作成されたフォルダを削除
+        rmdir($fullpath . 'new_folder');
     }
 
     /**

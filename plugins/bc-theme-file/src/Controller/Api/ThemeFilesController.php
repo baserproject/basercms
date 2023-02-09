@@ -34,7 +34,9 @@ class ThemeFilesController extends BcApiController
         $this->request->allowMethod(['post', 'put']);
 
         try {
-            $form = $service->create($this->getRequest()->getData());
+            $data = $this->getRequest()->getData();
+            $data['fullpath'] = $service->getFullpath($data['theme'], $data['type'], $data['path']);
+            $form = $service->create($data);
             $entity = $service->get($form->getData('fullpath'));
             $message = __d('baser', 'ファイル「{0}」を作成しました。', $entity->name);
         } catch (BcFormFailedException $e) {
@@ -177,10 +179,33 @@ class ThemeFilesController extends BcApiController
      * [API] テーマファイル ファイルを表示
      *
      * @param ThemeFilesServiceInterface $service
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function view(ThemeFilesServiceInterface $service)
     {
-        //todo テーマファイルAPI ファイルを表示 #1775
+        $this->request->allowMethod(['get']);
+        try {
+            $data = $this->getRequest()->getQueryParams();
+            $data['fullpath'] = $service->getFullpath($data['theme'], $data['type'], $data['path']);
+            $entity = $service->get($data['fullpath']);
+        } catch (BcFormFailedException $e) {
+            $this->setResponse($this->response->withStatus(400));
+            $errors = $e->getForm()->getErrors();
+            $message = __d('baser', '入力エラーです。内容を修正してください。' . $e->getMessage());
+        } catch (\Throwable $e) {
+            $this->setResponse($this->response->withStatus(400));
+            $message = __d('baser', '処理中にエラーが発生しました。');
+        }
+
+        $this->set([
+            'entity' => $entity ?? null,
+            'message' => $message ?? null,
+            'errors' => $errors ?? null
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['entity', 'message', 'errors']);
     }
 
     /**

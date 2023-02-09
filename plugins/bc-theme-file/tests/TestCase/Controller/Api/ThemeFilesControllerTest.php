@@ -69,8 +69,9 @@ class ThemeFilesControllerTest extends BcTestCase
         //POSTデータを生成
         $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout/';
         $data = [
-            'mode' => 'create',
-            'fullpath' => $fullpath,
+            'theme' => 'BcThemeSample',
+            'type' => 'layout',
+            'path' => '',
             'base_name' => 'base_name_1',
             'contents' => 'this is a content!',
             'ext' => 'php',
@@ -223,7 +224,22 @@ class ThemeFilesControllerTest extends BcTestCase
      */
     public function test_view()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
+        //POSTデータを生成
+        $data = [
+            'theme' => 'BcThemeSample',
+            'type' => 'layout',
+            'path' => 'default.php',
+            'plugin' => '',
+            'token' => $this->accessToken
+        ];
+        $query = http_build_query($data);
+        //APIをコール
+        $this->get('/baser/api/bc-theme-file/theme_files/view.json?' . $query);
+        //レスポンスコードを確認
+        $this->assertResponseSuccess();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertNotNull($result->entity->contents);
     }
 
     /**
