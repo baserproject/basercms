@@ -102,6 +102,9 @@ class ThemeFoldersControllerTest extends BcTestCase
         $this->assertResponseSuccess();
         //戻る値を確認
         $result = json_decode((string)$this->_response->getBody());
+        //themeFolderを確認
+        $this->assertEquals($fullpath . 'new_folder', $result->themeFolder->fullpath);
+        //メッセージを確認
         $this->assertEquals('フォルダ「new_folder」を作成しました。', $result->message);
         //実際にフォルダが作成されいてるか確認すること
         $this->assertTrue(is_dir($fullpath . 'new_folder'));
@@ -114,7 +117,32 @@ class ThemeFoldersControllerTest extends BcTestCase
      */
     public function test_edit()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
+        //テストテーマフォルダを作成
+        $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout/';
+        mkdir($fullpath . 'new_folder');
+        //Postデータを生成
+        $data = [
+            'theme' => 'BcThemeSample',
+            'type' => 'layout',
+            'path' => 'new_folder',
+            'name' => 'edit_folder',
+        ];
+        //APIをコール
+        $this->post('/baser/api/bc-theme-file/theme_folders/edit.json?token=' . $this->accessToken, $data);
+        //レスポンスコードを確認
+        $this->assertResponseSuccess();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        //themeFolderを確認
+        $this->assertEquals($fullpath . 'edit_folder', $result->themeFolder->fullpath);
+        //メッセージを確認
+        $this->assertEquals('フォルダ名を「edit_folder」に変更しました。', $result->message);
+        //実際にフォルダが変更されいてるか確認すること
+        $this->assertTrue(is_dir($fullpath . 'edit_folder'));
+        //変更前のフォルダが存在しないか確認すること
+        $this->assertFalse(is_dir($fullpath . 'new_folder'));
+        //変更されたフォルダを削除
+        rmdir($fullpath . 'edit_folder');
     }
 
     /**

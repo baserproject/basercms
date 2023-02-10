@@ -26,7 +26,7 @@ use Cake\Filesystem\Folder;
 /**
  * ThemeFoldersService
  */
-class ThemeFoldersService implements ThemeFoldersServiceInterface
+class ThemeFoldersService extends BcThemeFileService implements ThemeFoldersServiceInterface
 {
 
     /**
@@ -312,30 +312,5 @@ class ThemeFoldersService implements ThemeFoldersServiceInterface
     public function getForm(array $data)
     {
         return (new ThemeFolderForm())->setData($data);
-    }
-
-    /**
-     * fullpathを作成
-     * @param string $theme
-     * @param string $type
-     * @param string $path
-     * @return string
-     *
-     * @checked
-     * @noTodo
-     */
-    public function getFullpath(string $theme, string $type, string $path)
-    {
-        $assets = [
-            'css',
-            'js',
-            'img'
-        ];
-        if (in_array($type, $assets)) {
-            $viewPath = Plugin::path($theme) . 'webroot' . DS . $type . DS . $path;
-        } else {
-            $viewPath = Plugin::templatePath($theme) . $type . DS . $path;
-        }
-        return $viewPath;
     }
 }

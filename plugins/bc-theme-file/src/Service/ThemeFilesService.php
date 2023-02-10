@@ -27,7 +27,7 @@ use Cake\Filesystem\Folder;
  *
  * @property ThemeFileForm $ThemeFileForm
  */
-class ThemeFilesService implements ThemeFilesServiceInterface
+class ThemeFilesService extends BcThemeFileService implements ThemeFilesServiceInterface
 {
 
     /**
@@ -228,10 +228,4 @@ class ThemeFilesService implements ThemeFilesServiceInterface
             return false;
         }
     }
-
-    public function getFullpath(string $theme, string $type, string $path)
-    {
-        return Plugin::templatePath($theme) . $type . DS . $path;
-    }
-
 }
