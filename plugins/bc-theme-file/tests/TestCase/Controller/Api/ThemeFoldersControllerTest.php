@@ -150,7 +150,33 @@ class ThemeFoldersControllerTest extends BcTestCase
      */
     public function test_delete()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
+        //テストテーマフォルダを作成
+        $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout/';
+        mkdir($fullpath . 'delete_folder');
+        //Postデータを生成
+        $data = [
+            'theme' => 'BcThemeSample',
+            'type' => 'layout',
+            'path' => 'delete_folder',
+        ];
+        //APIをコール
+        $this->post('/baser/api/bc-theme-file/theme_folders/delete.json?token=' . $this->accessToken, $data);
+        //レスポンスコードを確認
+        $this->assertResponseSuccess();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('フォルダ「delete_folder」を削除しました。', $result->message);
+        $this->assertNotNull($result->themeFolder);
+        //実際にフォルダが削除されいてるか確認すること
+        $this->assertFalse(file_exists($fullpath . 'delete_folder'));
+
+        //もう一度APIをコールする場合、エラーを出る
+        $this->post('/baser/api/bc-theme-file/theme_folders/delete.json?token=' . $this->accessToken, $data);
+        //レスポンスコードを確認
+        $this->assertResponseSuccess();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('フォルダ「delete_folder」の削除に失敗しました。', $result->message);
     }
 
     /**

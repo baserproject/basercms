@@ -108,6 +108,7 @@ class ThemeFilesController extends BcApiController
         try {
             $data = $this->getRequest()->getData();
             $data['fullpath'] = $service->getFullpath($data['theme'], $data['type'], $data['path']);
+            $themeFile = $service->get($data['fullpath']);
             if ($service->delete($data['fullpath'])) {
                 $message = __d('baser', 'ファイル「{0}」を削除しました。', $data['path']);
             } else {
@@ -123,11 +124,11 @@ class ThemeFilesController extends BcApiController
         }
 
         $this->set([
+            'themeFile' => $themeFile ?? null,
             'message' => $message,
-            'entity' => $entity ?? null,
             'errors' => $errors ?? null
         ]);
-        $this->viewBuilder()->setOption('serialize', ['message', 'entity', 'errors']);
+        $this->viewBuilder()->setOption('serialize', ['themeFile', 'message', 'errors']);
     }
 
     /**
