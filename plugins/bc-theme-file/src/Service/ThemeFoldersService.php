@@ -132,7 +132,7 @@ class ThemeFoldersService extends BcThemeFileService implements ThemeFoldersServ
         $form = new ThemeFolderForm();
         if ($form->validate($postData)) {
             if ($form->execute($postData)) {
-                $form->set('fullpath', $postData['fullpath'] . $postData['name']);
+                $form->set('fullpath', $postData['fullpath'] . DS . $postData['name']);
                 return $form;
             } else {
                 throw new BcException(__d('baser', 'フォルダの作成に失敗しました。書き込み権限に問題がある可能性があります。'));
