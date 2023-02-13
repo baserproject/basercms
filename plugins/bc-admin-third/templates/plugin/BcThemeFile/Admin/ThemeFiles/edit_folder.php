@@ -42,7 +42,7 @@ $this->BcAdmin->setTitle($pageTitle);
 <?php echo $this->BcAdminForm->create($themeFolderForm, [
   'id' => 'TemplateForm',
   'url' => array_merge(
-    ['controller' => 'theme_files', 'action' => 'edit_folder', $theme, $type],
+    ['controller' => 'theme_files', 'action' => 'edit_folder', $theme, $plugin, $type],
     $params
   )]) ?>
 
@@ -70,7 +70,7 @@ $this->BcAdmin->setTitle($pageTitle);
   <?php if ($isWritable): ?>
     <div class="bca-actions__sub">
       <?php $this->BcBaser->link(__d('baser', '削除'),
-        array_merge(['action' => 'del', $theme, $type], $params), [
+        array_merge(['action' => 'del', $theme, $plugin, $type], $params), [
           'class' => 'bca-submit-token button bca-btn bca-actions__item',
           'data-bca-btn-type' => 'delete',
           'data-bca-btn-size' => 'sm'
