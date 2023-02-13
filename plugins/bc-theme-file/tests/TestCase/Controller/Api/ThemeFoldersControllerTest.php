@@ -188,14 +188,6 @@ class ThemeFoldersControllerTest extends BcTestCase
     }
 
     /**
-     * [API] テーマフォルダ テーマフォルダアップロード
-     */
-    public function test_upload()
-    {
-        $this->markTestIncomplete('このテストは未実装です。');
-    }
-
-    /**
      * [API] テーマフォルダ テーマフォルダコピー
      */
     public function test_copy_to_theme()

@@ -271,4 +271,44 @@ class ThemeFilesControllerTest extends BcTestCase
     {
         $this->markTestIncomplete('このテストは未実装です。');
     }
+
+    /**
+     * [API] テーマフォルダAPI テーマファイルアップロード
+     */
+    public function test_upload()
+    {
+        //テストテーマフォルダを作成
+        $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout/';
+        mkdir($fullpath . 'new_folder', 0777);
+
+        //テストファイルを作成
+        $filePath = TMP  . 'test_upload' . DS;
+        mkdir( TMP  . 'test_upload', 0777);
+        $testFile = $filePath . 'uploadTestFile.html';
+        new File($testFile, true);
+
+        //Postデータを生成
+        $data = [
+            'theme' => 'BcThemeSample',
+            'type' => 'layout',
+            'path' => 'new_folder',
+        ];
+        $this->setUploadFileToRequest('file', $testFile);
+        $this->setUnlockedFields(['file']);
+        //APIをコール
+        $this->post('/baser/api/bc-theme-file/theme_files/upload.json?token=' . $this->accessToken, $data);
+        //レスポンスコードを確認
+        $this->assertResponseSuccess();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('アップロードに成功しました。', $result->message);
+        //実際にファイルが存在するか確認すること
+        $this->assertTrue(file_exists($fullpath . 'new_folder/uploadTestFile.html'));
+
+        //テストファイルとフォルダを削除
+        unlink($testFile);
+        rmdir($filePath);
+        unlink($fullpath . 'new_folder/uploadTestFile.html');
+        rmdir($fullpath . 'new_folder');
+    }
 }

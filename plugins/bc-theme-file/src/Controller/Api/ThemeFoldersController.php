@@ -232,17 +232,6 @@ class ThemeFoldersController extends BcApiController
     }
 
     /**
-     * テーマフォルダAPI テーマフォルダアップロード
-     *
-     * @param ThemeFoldersServiceInterface $service
-     * @return void
-     */
-    public function upload(ThemeFoldersServiceInterface $service)
-    {
-        //todo テーマフォルダAPI テーマフォルダアップロード
-    }
-
-    /**
      * テーマフォルダAPI 現在のテーマにテーマフォルダをコピー
      *
      * @param ThemeFoldersServiceInterface $service
