@@ -148,28 +148,4 @@ class ThemeFilesAdminService extends ThemeFilesService implements ThemeFilesAdmi
         ];
     }
 
-    /**
-     * テーマ内の画像のサムネイルイメージのデータを取得する
-     *
-     * @param array $args
-     * @param int $width
-     * @param int $height
-     * @return false|string
-     */
-    public function getImgThumb(array $args, int $width, int $height)
-    {
-        $contents = ['jpeg' => 'jpeg', 'jpg' => 'jpeg', 'gif' => 'gif', 'png' => 'png'];
-        $pathinfo = pathinfo($args['fullpath']);
-
-        if (!BcThemeFileUtil::getTemplateTypeName($args['type']) || !isset($contents[strtolower($pathinfo['extension'])]) || !file_exists($args['fullpath'])) {
-            throw new NotFoundException();
-        }
-
-        header("Content-type: image/" . $contents[strtolower($pathinfo['extension'])]);
-        $Imageresizer = new Imageresizer();
-        ob_start();
-        $Imageresizer->resize($args['fullpath'], null, $width, $height);
-        return ob_get_clean();
-    }
-
 }

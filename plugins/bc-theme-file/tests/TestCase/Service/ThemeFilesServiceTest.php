@@ -55,4 +55,22 @@ class ThemeFilesServiceTest extends BcTestCase
         $img = $this->ThemeFileService->getImg($data);
         $this->assertNotNull($img);
     }
+
+    /**
+     * test getImgThumb
+     */
+    public function test_getImgThumb()
+    {
+        $data = [
+            'theme' => 'BcFront',
+            'type' => 'img',
+            'path' => 'logo.png',
+            'fullpath' => '/var/www/html/plugins/bc-front/webroot/img/logo.png'
+        ];
+
+        $imgThumb = $this->ThemeFileService->getImgThumb($data, 100, 100);
+        //戻る値を確認
+        $this->assertNotNull($imgThumb['imgThumb']);
+        $this->assertEquals('png', $imgThumb['extension']);
+    }
 }

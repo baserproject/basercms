@@ -562,7 +562,9 @@ class ThemeFilesController extends BcAdminAppController
         if ($height == 0) $height = 100;
 
         $args = $this->parseArgs($args);
-        return $this->getResponse()->withStringBody($service->getImgThumb($args, $width, $height));
+        $imgDetail = $service->getImgThumb($args, $width, $height);
+        header("Content-type: image/" . $imgDetail['extension']);
+        return $this->getResponse()->withStringBody($imgDetail['imgThumb']);
     }
 
     /**
