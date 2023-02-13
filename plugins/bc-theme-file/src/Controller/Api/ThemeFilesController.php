@@ -146,7 +146,8 @@ class ThemeFilesController extends BcApiController
         try {
             $data = $this->getRequest()->getData();
             $data['fullpath'] = $service->getFullpath($data['theme'], $data['type'], $data['path']);
-            if ($service->copy($data['fullpath'])) {
+            $entity = $service->copy($data['fullpath']);
+            if ($entity) {
                 $message = __d('baser', 'ファイル「{0}」をコピーしました。', $data['path']);
             } else {
                 $message = __d('baser', 'ファイル「{0}」のコピーに失敗しました。上位フォルダのアクセス権限を見直してください。', $data['path']);
@@ -157,14 +158,15 @@ class ThemeFilesController extends BcApiController
             $message = __d('baser', '入力エラーです。内容を修正してください。' . $e->getMessage());
         } catch (\Throwable $e) {
             $this->setResponse($this->response->withStatus(400));
-            $message = __d('baser', '処理中にエラーが発生しました。');
+            $message = __d('baser', '処理中にエラーが発生しました。' . $e->getMessage());
         }
 
         $this->set([
             'message' => $message,
+            'themeFile' => $entity ?? null,
             'errors' => $errors ?? null
         ]);
-        $this->viewBuilder()->setOption('serialize', ['message', 'errors']);
+        $this->viewBuilder()->setOption('serialize', ['message', 'themeFile', 'errors']);
     }
 
     /**

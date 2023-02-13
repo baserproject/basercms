@@ -237,7 +237,8 @@ class ThemeFoldersController extends BcApiController
         try {
             $data = $this->getRequest()->getData();
             $data['fullpath'] = $service->getFullpath($data['theme'], $data['type'], $data['path']);
-            if ($service->copy($data['fullpath'])) {
+            $entity = $service->copy($data['fullpath']);
+            if ($entity) {
                 $message = __d('baser', 'フォルダ「{0}」をコピーしました。', $data['path']);
             } else {
                 $message = __d('baser', 'フォルダ「{0}」のコピーに失敗しました。上位フォルダのアクセス権限を見直してください。。', $data['path']);
@@ -252,10 +253,11 @@ class ThemeFoldersController extends BcApiController
         }
 
         $this->set([
+            'themeFolder' => $entity ?? null,
             'message' => $message,
             'errors' => $errors ?? null
         ]);
-        $this->viewBuilder()->setOption('serialize', ['message', 'errors']);
+        $this->viewBuilder()->setOption('serialize', ['themeFolder', 'message', 'errors']);
     }
 
     /**
