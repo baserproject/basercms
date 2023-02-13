@@ -153,7 +153,7 @@ class ThemeFilesController extends BcAdminAppController
                 $entity = $service->get($form->getData('fullpath'));
                 $this->BcMessage->setInfo(sprintf(__d('baser', 'ファイル %s を作成しました。'), $entity->name));
                 $this->redirect(array_merge(
-                    ['action' => 'edit', $args['theme'], $args['type']],
+                    ['action' => 'edit', $args['theme'], $args['plugin'], $args['type']],
                     explode('/', $args['path']),
                     [$entity->name]
                 ));
@@ -229,7 +229,7 @@ class ThemeFilesController extends BcAdminAppController
         }
 
         $this->redirect(array_merge(
-            ['action' => 'index', $args['theme'], $args['type']],
+            ['action' => 'index', $args['theme'], $args['plugin'], $args['type']],
             explode('/', dirname($args['path']))
         ));
     }
@@ -256,7 +256,7 @@ class ThemeFilesController extends BcAdminAppController
         }
 
         $this->redirect(array_merge(
-            ['action' => 'index', $args['theme'], $args['type']],
+            ['action' => 'index', $args['theme'], $args['plugin'], $args['type']],
             explode('/', dirname($args['path']))
         ));
     }
@@ -300,7 +300,7 @@ class ThemeFilesController extends BcAdminAppController
         }
 
         $this->redirect(array_merge(
-            ['action' => 'index', $args['theme'], $args['type']],
+            ['action' => 'index', $args['theme'], $args['plugin'], $args['type']],
             explode('/', dirname($args['path']))
         ));
     }
@@ -326,7 +326,7 @@ class ThemeFilesController extends BcAdminAppController
         }
 
         $this->redirect(array_merge(
-            ['action' => 'index', $args['theme'], $args['type']],
+            ['action' => 'index', $args['theme'], $args['plugin'], $args['type']],
             explode('/', dirname($args['path']))
         ));
     }
@@ -351,7 +351,7 @@ class ThemeFilesController extends BcAdminAppController
         } catch (\Throwable $e) {
             $this->BcMessage->setError(__d('baser', 'アップロードに失敗しました。' . $e->getMessage()));
         }
-        $this->redirect(array_merge(['action' => 'index', $args['theme'], $args['type']], explode('/', $args['path'])));
+        $this->redirect(array_merge(['action' => 'index', $args['theme'], $args['plugin'], $args['type']], explode('/', $args['path'])));
     }
 
     /**
@@ -376,7 +376,7 @@ class ThemeFilesController extends BcAdminAppController
                 $entity = $service->get($form->getData('fullpath'));
                 $this->BcMessage->setInfo('フォルダ「' . $entity->name . '」を作成しました。');
                 return $this->redirect(array_merge(
-                    ['action' => 'index', $args['theme'], $args['type']],
+                    ['action' => 'index', $args['theme'], $args['plugin'], $args['type']],
                     explode('/', dirname($args['path']))
                 ));
             } catch (BcFormFailedException $e) {
@@ -413,7 +413,7 @@ class ThemeFilesController extends BcAdminAppController
                 $entity = $service->get($form->getData('fullpath'));
                 $this->BcMessage->setInfo('フォルダ名を ' . $entity->name . ' に変更しました。');
                 return $this->redirect(array_merge(
-                    ['action' => 'index', $args['theme'], $args['type']],
+                    ['action' => 'index', $args['theme'], $args['plugin'], $args['type']],
                     explode('/', dirname($args['path']))
                 ));
             } catch (BcFormFailedException $e) {
@@ -634,9 +634,9 @@ class ThemeFilesController extends BcAdminAppController
         if ($data['plugin']) {
             if (in_array($data['type'], $assets)) {
                 $data['assets'] = true;
-                $viewPath = BcUtil::getExistsWebrootDir($data['plugin'], '', 'front');
+                $viewPath = BcUtil::getExistsWebrootDir($data['theme'], $data['plugin'], '', 'front');
             } else {
-                $viewPath = BcUtil::getExistsTemplateDir($data['plugin'], '', 'front');
+                $viewPath = BcUtil::getExistsTemplateDir($data['theme'], $data['plugin'], '', 'front');
             }
             if(!$viewPath) {
                 if (in_array($data['type'], $assets)) {

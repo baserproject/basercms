@@ -42,7 +42,7 @@ $this->BcAdmin->setTitle($pageTitle);
 
 <?php echo $this->BcAdminForm->create($themeFolderForm, [
   'id' => 'TemplateForm',
-  'url' => array_merge(['controller' => 'theme_files', 'action' => 'add_folder', $theme, $type], $params)
+  'url' => array_merge(['controller' => 'theme_files', 'action' => 'add_folder', $theme, $plugin, $type], $params)
 ]) ?>
 
 <?php $this->BcBaser->element('ThemeFiles/form_folder') ?>

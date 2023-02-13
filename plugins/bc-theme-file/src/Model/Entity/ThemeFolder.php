@@ -52,12 +52,12 @@ class ThemeFolder extends \Cake\ORM\Entity
      */
     public function __construct(array $properties = [], array $options = [])
     {
+        $properties['fullpath'] = preg_replace('/\/$/', '', $properties['fullpath']);
         if (!empty($options['new'])) {
             $properties['parent'] = $properties['fullpath'];
         } else {
             $properties['parent'] = dirname($properties['fullpath']) . DS;
         }
-           $properties['fullpath'] = preg_replace('/\/$/', '', $properties['fullpath']);
         parent::__construct($properties, $options);
     }
 

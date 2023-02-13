@@ -24,6 +24,7 @@ use Cake\Core\Plugin;
 use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
 use Cake\Http\Exception\NotFoundException;
+use Cake\Utility\Inflector;
 
 /**
  * ThemeFilesService
@@ -213,14 +214,25 @@ class ThemeFilesService extends BcThemeFileService implements ThemeFilesServiceI
     {
         $theme = BcUtil::getCurrentTheme();
         if ($params['type'] !== 'etc') {
-            if ($params['plugin'] && $params['assets']) {
-                // TODO ucmitz 未検証
-                $themePath = Plugin::path($theme) . $params['plugin'] . DS . $params['type'] . DS . $params['path'];
+            if ($params['assets']) {
+                if($params['plugin'] === 'BaserCore') {
+                    $themePath = Plugin::path($theme) . 'webroot' . DS . $params['type'] . DS . $params['path'];
+                } else {
+                    $themePath = Plugin::path($theme) . 'webroot' . DS . Inflector::underscore($params['plugin']) . DS . $params['type'] . DS . $params['path'];
+                }
             } else {
-                $themePath = Plugin::templatePath($theme) . $params['type'] . DS . $params['path'];
+                if($params['plugin'] === 'BaserCore') {
+                    $themePath = Plugin::templatePath($theme) . $params['type'] . DS . $params['path'];
+                } else {
+                    $themePath = Plugin::templatePath($theme) . 'plugin' . DS . $params['plugin'] . DS . $params['type'] . DS . $params['path'];
+                }
             }
         } else {
-            $themePath = Plugin::templatePath($theme) . $params['path'];
+            if($params['plugin'] === 'BaserCore') {
+                $themePath = Plugin::templatePath($theme) . $params['path'];
+            } else {
+                $themePath = Plugin::templatePath($theme) . 'plugin' . DS . $params['plugin'] . DS . $params['path'];
+            }
         }
         $folder = new Folder();
         $folder->create(dirname($themePath), 0777);

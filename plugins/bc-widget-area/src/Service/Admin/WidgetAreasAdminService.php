@@ -75,7 +75,7 @@ class WidgetAreasAdminService extends WidgetAreasService implements WidgetAreasA
         $pluginWidgets = [];
         foreach($plugins as $plugin) {
             $pluginWidget['paths'] = [];
-            $path = BcUtil::getExistsTemplateDir($plugin->name, 'Admin' . DS . 'element' . DS . 'widget');
+            $path = BcUtil::getExistsTemplateDir('', $plugin->name, 'Admin' . DS . 'element' . DS . 'widget');
             if (!is_dir($path)) continue;
             $pluginWidgets[] = [
                 'title' => $plugin->title . 'ウィジェット',

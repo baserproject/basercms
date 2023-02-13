@@ -66,13 +66,35 @@ class ThemeFoldersAdminService extends ThemeFoldersService implements ThemeFolde
             'themeFolderForm' => $form,
             'themeFolder' => $entity,
             'currentPath' => str_replace(ROOT, '', dirname($args['fullpath'])) . DS,
-            'isWritable' => is_writable($args['fullpath']),
+            'isWritable' => $this->isWritableDir($args['fullpath']),
             'theme' => $args['theme'],
             'plugin' => $args['plugin'],
             'type' => $args['type'],
             'path' => $args['path'],
             'pageTitle' => __d('baser', '{0}｜フォルダ作成', Inflector::camelize($args['theme']))
         ];
+    }
+
+    /**
+     * ディレクトリの書き込み権限を確認する
+     *
+     * 対象が存在しない場合、親のディレクトリを確認する
+     *
+     * @param $fullpath
+     * @return bool
+     * @checked
+     * @noTodo
+     */
+    public function isWritableDir($fullpath)
+    {
+        if(strpos($fullpath, '/') === false) return false;
+        while(true) {
+            if(is_dir($fullpath)) {
+                return is_writable($fullpath);
+            } else {
+                $fullpath = dirname($fullpath);
+            }
+        }
     }
 
     /**
