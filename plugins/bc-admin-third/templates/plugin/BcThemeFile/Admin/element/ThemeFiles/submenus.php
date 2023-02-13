@@ -39,7 +39,8 @@ $this->BcBaser->css('BcThemeFile.admin/style', false);
 
 <div class="bca-main__submenu" id="ThemeFilesMenu">
   <?php foreach($plugins as $plugin): ?>
-    <?php if (!\BaserCore\Utility\BcUtil::getExistsTemplateDir($plugin['name'], '', 'front')) continue; ?>
+    <?php if (!\BaserCore\Utility\BcUtil::getExistsTemplateDir($theme, $plugin['name'], '', 'front') &&
+              !\BaserCore\Utility\BcUtil::getExistsWebrootDir($theme, $plugin['name'], '', 'front')) continue; ?>
     <h2 class="bca-main__submenu-title">
       <?php echo $plugin['title'] ?>
     </h2>

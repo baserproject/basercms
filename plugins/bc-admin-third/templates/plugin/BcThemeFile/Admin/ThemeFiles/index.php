@@ -62,7 +62,7 @@ $this->BcAdmin->setTitle($pageTitle);
   <div class="bca-actions__adds">
     <?php if ($writable): ?>
       <?php $this->BcBaser->link('<i class="bca-icon--folder"></i> ' . __d('baser', 'フォルダ新規作成'),
-        array_merge(['action' => 'add_folder', $theme, $type], $params), [
+        array_merge(['action' => 'add_folder', $theme, $plugin, $type], $params), [
           'class' => 'bca-btn',
           'data-bca-btn-type' => 'add',
           'escape' => false
@@ -70,7 +70,7 @@ $this->BcAdmin->setTitle($pageTitle);
     <?php endif ?>
     <?php if (($path || $type != 'etc') && $type != 'img' && $writable): ?>
       <?php $this->BcBaser->link('<i class="bca-icon--file"></i> ' . __d('baser', 'ファイル新規作成'),
-        array_merge(['action' => 'add', $theme, $type], $params), [
+        array_merge(['action' => 'add', $theme, $plugin, $type], $params), [
           'class' => 'bca-btn',
           'data-bca-btn-type' => 'add',
           'escape' => false

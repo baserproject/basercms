@@ -26,7 +26,7 @@ use Cake\Filesystem\Folder;
 /**
  * ThemeFoldersService
  */
-class ThemeFoldersService implements ThemeFoldersServiceInterface
+class ThemeFoldersService extends BcThemeFileService implements ThemeFoldersServiceInterface
 {
 
     /**
@@ -313,6 +313,4 @@ class ThemeFoldersService implements ThemeFoldersServiceInterface
     {
         return (new ThemeFolderForm())->setData($data);
     }
-
-
 }

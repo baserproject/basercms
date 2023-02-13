@@ -1612,10 +1612,14 @@ class BcUtil
      * @param string $type
      * @return false|string
      */
-    public static function getExistsTemplateDir(string $plugin, string $path, string $type = '')
+    public static function getExistsTemplateDir(string $theme, string $plugin, string $path, string $type = '')
     {
-        $frontTheme = BcUtil::getCurrentTheme();
-        $adminTheme = BcUtil::getCurrentAdminTheme();
+        if(!$theme) {
+            $frontTheme = BcUtil::getCurrentTheme();
+            $adminTheme = BcUtil::getCurrentAdminTheme();
+        } else {
+            $frontTheme = $adminTheme = $theme;
+        }
         if ($plugin === 'BaserCore') {
             if ($type === 'front') {
                 $templatePaths = [Plugin::templatePath($frontTheme) . $path];
@@ -1662,10 +1666,14 @@ class BcUtil
      * @param string $type
      * @return false|string
      */
-    public static function getExistsWebrootDir(string $plugin, string $path, string $type = '')
+    public static function getExistsWebrootDir(string $theme, string $plugin, string $path, string $type = '')
     {
-        $frontTheme = BcUtil::getCurrentTheme();
-        $adminTheme = BcUtil::getCurrentAdminTheme();
+        if(!$theme) {
+            $frontTheme = BcUtil::getCurrentTheme();
+            $adminTheme = BcUtil::getCurrentAdminTheme();
+        } else {
+            $frontTheme = $adminTheme = $theme;
+        }
         if ($plugin === 'BaserCore') {
             if ($type === 'front') {
                 $templatePaths = [Plugin::path($frontTheme) . 'webroot' . DS . $path];
@@ -1681,19 +1689,19 @@ class BcUtil
             if ($type === 'front') {
                 $templatePaths = [
                     Plugin::path($frontTheme) . 'webroot' . DS . Inflector::underscore($plugin) . DS . $path,
-                    Plugin::path($plugin) . 'webroot' . DS . $path
                 ];
             } elseif ($type === 'admin') {
                 $templatePaths = [
                     Plugin::path($adminTheme) . 'webroot' . DS . Inflector::underscore($plugin) . DS . $path,
-                    Plugin::path($plugin) . 'webroot' . DS . $path
                 ];
             } else {
                 $templatePaths = [
                     Plugin::path($frontTheme) . 'webroot' . DS . Inflector::underscore($plugin) . DS . $path,
                     Plugin::path($adminTheme) . 'webroot' . DS . Inflector::underscore($plugin) . DS . $path,
-                    Plugin::path($plugin) . 'webroot' . DS . $path
                 ];
+            }
+            if(!$theme) {
+                $templatePaths[] = Plugin::path($plugin) . 'webroot' . DS . $path;
             }
         }
         foreach($templatePaths as $templatePath) {

@@ -109,7 +109,29 @@ class BcDatabaseServiceTest extends BcTestCase
      */
     public function test_addColumn()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // テーブル生成
+        $table = 'table_test_add';
+        $columns = [
+            'id' => ['type' => 'integer'],
+            'contents' => ['type' => 'text'],
+        ];
+        $schema = new BcSchema($table, $columns);
+        $schema->create();
+
+        // 対象メソッドを呼ぶ
+        $result = $this->BcDatabaseService->addColumn($table, 'new_column', 'integer');
+        $tableTest = TableRegistry::getTableLocator()
+            ->get('BaserCore.App')
+            ->getConnection()
+            ->getSchemaCollection()
+            ->describe($table);
+        // 戻り値を確認
+        $this->assertTrue($result);
+        // 新しいカラムが生成されたか確認
+        $this->assertTrue($tableTest->hasColumn('new_column'));
+
+        // テストテーブルを削除
+        $this->BcDatabaseService->dropTable($table);
     }
 
     /**
@@ -117,7 +139,29 @@ class BcDatabaseServiceTest extends BcTestCase
      */
     public function test_removeColumn()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // テーブル生成
+        $table = 'table_test_remove';
+        $columns = [
+            'id' => ['type' => 'integer'],
+            'remove_column' => ['type' => 'text'],
+        ];
+        $schema = new BcSchema($table, $columns);
+        $schema->create();
+
+        // 対象メソッドを呼ぶ
+        $result = $this->BcDatabaseService->removeColumn($table, 'remove_column');
+        $tableTest = TableRegistry::getTableLocator()
+            ->get('BaserCore.App')
+            ->getConnection()
+            ->getSchemaCollection()
+            ->describe($table);
+        // 戻り値を確認
+        $this->assertTrue($result);
+        // カラムが削除されているか確認
+        $this->assertFalse($tableTest->hasColumn('remove_column'));
+
+        // テストテーブルを削除
+        $this->BcDatabaseService->dropTable($table);
     }
 
     /**

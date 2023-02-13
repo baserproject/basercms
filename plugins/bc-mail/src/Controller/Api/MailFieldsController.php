@@ -98,4 +98,81 @@ class MailFieldsController extends BcApiController
         $this->viewBuilder()->setOption('serialize', ['plugin', 'message']);
     }
 
+    /**
+     * [API] メールフィールド API 一覧取得
+     *
+     * @param MailFieldsServiceInterface $service
+     * @return void
+     */
+    public function index(MailFieldsServiceInterface $service)
+    {
+        //todo メールフィールド API 一覧取得
+    }
+
+    /**
+     * [API] メールフィールド API 単一データ取得
+     *
+     * @param MailFieldsServiceInterface $service
+     * @return void
+     */
+    public function view(MailFieldsServiceInterface $service)
+    {
+        //todo メールフィールド API 単一データ取得
+    }
+
+    /**
+     * [API] メールフィールド API リスト取得
+     *
+     * @param MailFieldsServiceInterface $service
+     * @return void
+     */
+    public function list(MailFieldsServiceInterface $service)
+    {
+        //todo メールフィールド API リスト取得
+    }
+
+    /**
+     * [API] メールフィールド API 新規追加
+     *
+     * @param MailFieldsServiceInterface $service
+     * @return void
+     */
+    public function add(MailFieldsServiceInterface $service)
+    {
+        //todo メールフィールド API 新規追加
+    }
+
+
+    /**
+     * [API] メールフィールド API 編集
+     *
+     * @param MailFieldsServiceInterface $service
+     * @return void
+     */
+    public function edit(MailFieldsServiceInterface $service)
+    {
+        //todo メールフィールド API 編集
+    }
+
+    /**
+     * [API] メールフィールド API 削除
+     *
+     * @param MailFieldsServiceInterface $service
+     * @return void
+     */
+    public function delete(MailFieldsServiceInterface $service)
+    {
+        //todo メールフィールド API 削除
+    }
+
+    /**
+     * [API] メールフィールド API コピー
+     *
+     * @param MailFieldsServiceInterface $service
+     * @return void
+     */
+    public function copy(MailFieldsServiceInterface $service)
+    {
+        //todo メールフィールド API コピー
+    }
 }

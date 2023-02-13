@@ -65,7 +65,23 @@ class ThemeFoldersControllerTest extends BcTestCase
      */
     public function test_index()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
+        //POSTデータを生成
+        $data = [
+            'plugin' => '',
+            'theme' => 'BcFront',
+            'type' => 'img',
+            'path' => '',
+            'assets' => false,
+            'token' => $this->accessToken
+        ];
+        $query = http_build_query($data);
+        //APIをコール
+        $this->get('/baser/api/bc-theme-file/theme_folders/index.json?' . $query);
+        //レスポンスコードを確認
+        $this->assertResponseSuccess();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertNotNull($result->themeFiles);
     }
 
     /**
@@ -73,7 +89,27 @@ class ThemeFoldersControllerTest extends BcTestCase
      */
     public function test_add()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
+        $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout/';
+        $data = [
+            'theme' => 'BcThemeSample',
+            'type' => 'layout',
+            'path' => '',
+            'name' => 'new_folder',
+        ];
+        //APIをコール
+        $this->post('/baser/api/bc-theme-file/theme_folders/add.json?token=' . $this->accessToken, $data);
+        //レスポンスコードを確認
+        $this->assertResponseSuccess();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        //themeFolderを確認
+        $this->assertEquals($fullpath . 'new_folder', $result->themeFolder->fullpath);
+        //メッセージを確認
+        $this->assertEquals('フォルダ「new_folder」を作成しました。', $result->message);
+        //実際にフォルダが作成されいてるか確認すること
+        $this->assertTrue(is_dir($fullpath . 'new_folder'));
+        //作成されたフォルダを削除
+        rmdir($fullpath . 'new_folder');
     }
 
     /**
@@ -81,7 +117,32 @@ class ThemeFoldersControllerTest extends BcTestCase
      */
     public function test_edit()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
+        //テストテーマフォルダを作成
+        $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout/';
+        mkdir($fullpath . 'new_folder');
+        //Postデータを生成
+        $data = [
+            'theme' => 'BcThemeSample',
+            'type' => 'layout',
+            'path' => 'new_folder',
+            'name' => 'edit_folder',
+        ];
+        //APIをコール
+        $this->post('/baser/api/bc-theme-file/theme_folders/edit.json?token=' . $this->accessToken, $data);
+        //レスポンスコードを確認
+        $this->assertResponseSuccess();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        //themeFolderを確認
+        $this->assertEquals($fullpath . 'edit_folder', $result->themeFolder->fullpath);
+        //メッセージを確認
+        $this->assertEquals('フォルダ名を「edit_folder」に変更しました。', $result->message);
+        //実際にフォルダが変更されいてるか確認すること
+        $this->assertTrue(is_dir($fullpath . 'edit_folder'));
+        //変更前のフォルダが存在しないか確認すること
+        $this->assertFalse(is_dir($fullpath . 'new_folder'));
+        //変更されたフォルダを削除
+        rmdir($fullpath . 'edit_folder');
     }
 
     /**
@@ -89,7 +150,33 @@ class ThemeFoldersControllerTest extends BcTestCase
      */
     public function test_delete()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
+        //テストテーマフォルダを作成
+        $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout/';
+        mkdir($fullpath . 'delete_folder');
+        //Postデータを生成
+        $data = [
+            'theme' => 'BcThemeSample',
+            'type' => 'layout',
+            'path' => 'delete_folder',
+        ];
+        //APIをコール
+        $this->post('/baser/api/bc-theme-file/theme_folders/delete.json?token=' . $this->accessToken, $data);
+        //レスポンスコードを確認
+        $this->assertResponseSuccess();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('フォルダ「delete_folder」を削除しました。', $result->message);
+        $this->assertNotNull($result->themeFolder);
+        //実際にフォルダが削除されいてるか確認すること
+        $this->assertFalse(file_exists($fullpath . 'delete_folder'));
+
+        //もう一度APIをコールする場合、エラーを出る
+        $this->post('/baser/api/bc-theme-file/theme_folders/delete.json?token=' . $this->accessToken, $data);
+        //レスポンスコードを確認
+        $this->assertResponseSuccess();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('フォルダ「delete_folder」の削除に失敗しました。', $result->message);
     }
 
     /**
@@ -97,15 +184,28 @@ class ThemeFoldersControllerTest extends BcTestCase
      */
     public function test_copy()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
-    }
-
-    /**
-     * [API] テーマフォルダ テーマフォルダアップロード
-     */
-    public function test_upload()
-    {
-        $this->markTestIncomplete('このテストは未実装です。');
+        //テストテーマフォルダを作成
+        $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout/';
+        mkdir($fullpath . 'new_folder');
+        //Postデータを生成
+        $data = [
+            'theme' => 'BcThemeSample',
+            'type' => 'layout',
+            'path' => 'new_folder',
+        ];
+        //APIをコール
+        $this->post('/baser/api/bc-theme-file/theme_folders/copy.json?token=' . $this->accessToken, $data);
+        //レスポンスコードを確認
+        $this->assertResponseSuccess();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        //メッセージを確認
+        $this->assertEquals('フォルダ「new_folder」をコピーしました。', $result->message);
+        //実際にフォルダが変更されいてるか確認すること
+        $this->assertTrue(is_dir($fullpath . 'new_folder_copy'));
+        //生成されたフォルダを削除
+        rmdir($fullpath . 'new_folder');
+        rmdir($fullpath . 'new_folder_copy');
     }
 
     /**
@@ -121,6 +221,21 @@ class ThemeFoldersControllerTest extends BcTestCase
      */
     public function test_view()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
+        //POSTデータを生成
+        $data = [
+            'theme' => 'BcThemeSample',
+            'type' => 'layout',
+            'path' => '',
+            'plugin' => '',
+            'token' => $this->accessToken
+        ];
+        $query = http_build_query($data);
+        //APIをコール
+        $this->get('/baser/api/bc-theme-file/theme_folders/view.json?' . $query);
+        //レスポンスコードを確認
+        $this->assertResponseSuccess();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertNotNull($result->entity);
     }
 }

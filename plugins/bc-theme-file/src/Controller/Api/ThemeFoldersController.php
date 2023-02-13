@@ -15,6 +15,7 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Controller\Api\BcApiController;
+use BaserCore\Error\BcFormFailedException;
 use BcThemeFile\Service\ThemeFoldersService;
 use BcThemeFile\Service\ThemeFoldersServiceInterface;
 
@@ -76,10 +77,34 @@ class ThemeFoldersController extends BcApiController
      *
      * @param ThemeFoldersServiceInterface $service
      * @return void
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function index(ThemeFoldersServiceInterface $service)
     {
-        //todo テーマフォルダAPI 一覧取得
+        $this->request->allowMethod(['get']);
+
+        try {
+            $data = $this->getRequest()->getQueryParams();
+            $data['fullpath'] = $service->getFullpath($data['theme'], $data['type'], $data['path']);
+            $themeFiles = $service->getIndex($data);
+        } catch (BcFormFailedException $e) {
+            $this->setResponse($this->response->withStatus(400));
+            $errors = $e->getForm()->getErrors();
+            $message = __d('baser', '入力エラーです。内容を修正してください。' . $e->getMessage());
+        } catch (\Throwable $e) {
+            $this->setResponse($this->response->withStatus(400));
+            $message = __d('baser', '処理中にエラーが発生しました。');
+        }
+
+        $this->set([
+            'themeFiles' => $themeFiles ?? null,
+            'message' => $message ?? null,
+            'errors' => $errors ?? null
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['themeFiles', 'message', 'errors']);
     }
 
     /**
@@ -87,10 +112,36 @@ class ThemeFoldersController extends BcApiController
      *
      * @param ThemeFoldersServiceInterface $service
      * @return void
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function add(ThemeFoldersServiceInterface $service)
     {
-        //todo テーマフォルダAPI テーマフォルダ新規追加
+        $this->request->allowMethod(['post', 'put']);
+
+        try {
+            $data = $this->getRequest()->getData();
+            $data['fullpath'] = $service->getFullpath($data['theme'], $data['type'], $data['path']);
+            $form = $service->create($data);
+            $themeFolder = $service->get($form->getData('fullpath'));
+            $message = __d('baser', 'フォルダ「{0}」を作成しました。', $themeFolder->name);
+        } catch (BcFormFailedException $e) {
+            $this->setResponse($this->response->withStatus(400));
+            $errors = $e->getForm()->getErrors();
+            $message = __d('baser', '入力エラーです。内容を修正してください。' . $e->getMessage());
+        } catch (\Throwable $e) {
+            $this->setResponse($this->response->withStatus(400));
+            $message = __d('baser', '処理中にエラーが発生しました。');
+        }
+
+        $this->set([
+            'message' => $message,
+            'themeFolder' => $themeFolder ?? null,
+            'errors' => $errors ?? null
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['message', 'themeFolder', 'errors']);
     }
 
     /**
@@ -98,10 +149,36 @@ class ThemeFoldersController extends BcApiController
      *
      * @param ThemeFoldersServiceInterface $service
      * @return void
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function edit(ThemeFoldersServiceInterface $service)
     {
-        //todo テーマフォルダAPI テーマフォルダ編集
+        $this->request->allowMethod(['post', 'put']);
+
+        try {
+            $data = $this->getRequest()->getData();
+            $data['fullpath'] = $service->getFullpath($data['theme'], $data['type'], $data['path']);
+            $form = $service->update($data);
+            $themeFolder = $service->get($form->getData('fullpath'));
+            $message = __d('baser', 'フォルダ名を「{0}」に変更しました。', $themeFolder->name);
+        } catch (BcFormFailedException $e) {
+            $this->setResponse($this->response->withStatus(400));
+            $errors = $e->getForm()->getErrors();
+            $message = __d('baser', '入力エラーです。内容を修正してください。' . $e->getMessage());
+        } catch (\Throwable $e) {
+            $this->setResponse($this->response->withStatus(400));
+            $message = __d('baser', '処理中にエラーが発生しました。');
+        }
+
+        $this->set([
+            'message' => $message,
+            'themeFolder' => $themeFolder ?? null,
+            'errors' => $errors ?? null
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['message', 'themeFolder', 'errors']);
     }
 
     /**
@@ -109,10 +186,38 @@ class ThemeFoldersController extends BcApiController
      *
      * @param ThemeFoldersServiceInterface $service
      * @return void
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function delete(ThemeFoldersServiceInterface $service)
     {
-        //todo テーマフォルダAPI テーマフォルダ削除
+        $this->request->allowMethod(['post', 'put']);
+        try {
+            $data = $this->getRequest()->getData();
+            $data['fullpath'] = $service->getFullpath($data['theme'], $data['type'], $data['path']);
+            $themeFolder = $service->get($data['fullpath']);
+            if ($service->delete($data['fullpath'])) {
+                $message = __d('baser', 'フォルダ「{0}」を削除しました。', $data['path']);
+            } else {
+                $message = __d('baser', 'フォルダ「{0}」の削除に失敗しました。', $data['path']);
+            }
+        } catch (BcFormFailedException $e) {
+            $this->setResponse($this->response->withStatus(400));
+            $errors = $e->getForm()->getErrors();
+            $message = __d('baser', '入力エラーです。内容を修正してください。' . $e->getMessage());
+        } catch (\Throwable $e) {
+            $this->setResponse($this->response->withStatus(400));
+            $message = __d('baser', '処理中にエラーが発生しました。');
+        }
+
+        $this->set([
+            'themeFolder' => $themeFolder ?? null,
+            'message' => $message,
+            'errors' => $errors ?? null
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['themeFolder', 'message', 'errors']);
     }
 
     /**
@@ -120,21 +225,39 @@ class ThemeFoldersController extends BcApiController
      *
      * @param ThemeFoldersServiceInterface $service
      * @return void
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function copy(ThemeFoldersServiceInterface $service)
     {
-        //todo テーマフォルダAPI テーマフォルダコピー
-    }
+        $this->request->allowMethod(['post', 'put']);
 
-    /**
-     * テーマフォルダAPI テーマフォルダアップロード
-     *
-     * @param ThemeFoldersServiceInterface $service
-     * @return void
-     */
-    public function upload(ThemeFoldersServiceInterface $service)
-    {
-        //todo テーマフォルダAPI テーマフォルダアップロード
+        try {
+            $data = $this->getRequest()->getData();
+            $data['fullpath'] = $service->getFullpath($data['theme'], $data['type'], $data['path']);
+            $entity = $service->copy($data['fullpath']);
+            if ($entity) {
+                $message = __d('baser', 'フォルダ「{0}」をコピーしました。', $data['path']);
+            } else {
+                $message = __d('baser', 'フォルダ「{0}」のコピーに失敗しました。上位フォルダのアクセス権限を見直してください。。', $data['path']);
+            }
+        } catch (BcFormFailedException $e) {
+            $this->setResponse($this->response->withStatus(400));
+            $errors = $e->getForm()->getErrors();
+            $message = __d('baser', '入力エラーです。内容を修正してください。' . $e->getMessage());
+        } catch (\Throwable $e) {
+            $this->setResponse($this->response->withStatus(400));
+            $message = __d('baser', '処理中にエラーが発生しました。');
+        }
+
+        $this->set([
+            'themeFolder' => $entity ?? null,
+            'message' => $message,
+            'errors' => $errors ?? null
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['themeFolder', 'message', 'errors']);
     }
 
     /**
@@ -153,10 +276,29 @@ class ThemeFoldersController extends BcApiController
      *
      * @param ThemeFoldersServiceInterface $service
      * @return void
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function view(ThemeFoldersServiceInterface $service)
     {
-        //todo テーマフォルダAPI フォルダを表示
+        $this->request->allowMethod(['get']);
+        try {
+            $data = $this->getRequest()->getQueryParams();
+            $data['fullpath'] = $service->getFullpath($data['theme'], $data['type'], $data['path']);
+            $entity = $service->get($data['fullpath']);
+        } catch (\Throwable $e) {
+            $this->setResponse($this->response->withStatus(400));
+            $message = __d('baser', '処理中にエラーが発生しました。');
+        }
+
+        $this->set([
+            'entity' => $entity ?? null,
+            'message' => $message ?? null,
+            'errors' => $errors ?? null
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['entity', 'message', 'errors']);
     }
 
 }

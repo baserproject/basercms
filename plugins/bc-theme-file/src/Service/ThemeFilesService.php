@@ -17,17 +17,22 @@ use BaserCore\Annotation\UnitTest;
 use BaserCore\Error\BcException;
 use BaserCore\Error\BcFormFailedException;
 use BaserCore\Utility\BcUtil;
+use BaserCore\Vendor\Imageresizer;
 use BcThemeFile\Form\ThemeFileForm;
 use BcThemeFile\Model\Entity\ThemeFile;
+use BcThemeFile\Utility\BcThemeFileUtil;
 use Cake\Core\Plugin;
+use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
+use Cake\Http\Exception\NotFoundException;
+use Cake\Utility\Inflector;
 
 /**
  * ThemeFilesService
  *
  * @property ThemeFileForm $ThemeFileForm
  */
-class ThemeFilesService implements ThemeFilesServiceInterface
+class ThemeFilesService extends BcThemeFileService implements ThemeFilesServiceInterface
 {
 
     /**
@@ -210,14 +215,25 @@ class ThemeFilesService implements ThemeFilesServiceInterface
     {
         $theme = BcUtil::getCurrentTheme();
         if ($params['type'] !== 'etc') {
-            if ($params['plugin'] && $params['assets']) {
-                // TODO ucmitz 未検証
-                $themePath = Plugin::path($theme) . $params['plugin'] . DS . $params['type'] . DS . $params['path'];
+            if ($params['assets']) {
+                if($params['plugin'] === 'BaserCore') {
+                    $themePath = Plugin::path($theme) . 'webroot' . DS . $params['type'] . DS . $params['path'];
+                } else {
+                    $themePath = Plugin::path($theme) . 'webroot' . DS . Inflector::underscore($params['plugin']) . DS . $params['type'] . DS . $params['path'];
+                }
             } else {
-                $themePath = Plugin::templatePath($theme) . $params['type'] . DS . $params['path'];
+                if($params['plugin'] === 'BaserCore') {
+                    $themePath = Plugin::templatePath($theme) . $params['type'] . DS . $params['path'];
+                } else {
+                    $themePath = Plugin::templatePath($theme) . 'plugin' . DS . $params['plugin'] . DS . $params['type'] . DS . $params['path'];
+                }
             }
         } else {
-            $themePath = Plugin::templatePath($theme) . $params['path'];
+            if($params['plugin'] === 'BaserCore') {
+                $themePath = Plugin::templatePath($theme) . $params['path'];
+            } else {
+                $themePath = Plugin::templatePath($theme) . 'plugin' . DS . $params['plugin'] . DS . $params['path'];
+            }
         }
         $folder = new Folder();
         $folder->create(dirname($themePath), 0777);
@@ -229,9 +245,66 @@ class ThemeFilesService implements ThemeFilesServiceInterface
         }
     }
 
-    public function getFullpath(string $theme, string $type, string $path)
+    /**
+     * テーマ内のイメージデータを取得する
+     *
+     * @param $args
+     * @return array
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getImg($args)
     {
-        return Plugin::templatePath($theme) . $type . DS . $path;
+        $contents = ['jpg' => 'jpeg', 'gif' => 'gif', 'png' => 'png'];
+        $pathinfo = pathinfo($args['fullpath']);
+
+        if (!BcThemeFileUtil::getTemplateTypeName($args['type']) || !isset($contents[$pathinfo['extension']]) || !file_exists($args['fullpath'])) {
+            throw new NotFoundException();
+        }
+
+        $file = new File($args['fullpath']);
+        if (!$file->open('r')) {
+            throw new NotFoundException();
+        }
+
+        return [
+            'img' => $file->read(),
+            'size' => $file->size(),
+            'type' => $contents[$pathinfo['extension']]
+        ];
+    }
+
+
+    /**
+     * テーマ内の画像のサムネイルイメージのデータを取得する
+     *
+     * @param array $args
+     * @param int $width
+     * @param int $height
+     * @return array
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getImgThumb(array $args, int $width, int $height)
+    {
+        $contents = ['jpeg' => 'jpeg', 'jpg' => 'jpeg', 'gif' => 'gif', 'png' => 'png'];
+        $pathinfo = pathinfo($args['fullpath']);
+
+        if (!BcThemeFileUtil::getTemplateTypeName($args['type']) || !isset($contents[strtolower($pathinfo['extension'])]) || !file_exists($args['fullpath'])) {
+            throw new NotFoundException();
+        }
+
+        $Imageresizer = new Imageresizer();
+        ob_start();
+        $Imageresizer->resize($args['fullpath'], null, $width, $height);
+        return [
+            'imgThumb' => ob_get_clean(),
+            'extension' => $contents[strtolower($pathinfo['extension'])]
+        ];
     }
 
 }
