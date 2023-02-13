@@ -12,6 +12,7 @@
 namespace BcThemeFile\Test\TestCase\Service;
 
 use BaserCore\TestSuite\BcTestCase;
+use BcThemeFile\Service\ThemeFilesService;
 
 /**
  * ThemeFilesServiceTest
@@ -19,12 +20,16 @@ use BaserCore\TestSuite\BcTestCase;
 class ThemeFilesServiceTest extends BcTestCase
 {
 
+    public $ThemeFileService = null;
+
     /**
      * set up
      */
     public function setUp(): void
     {
+        $this->setFixtureTruncate();
         parent::setUp();
+        $this->ThemeFileService = new ThemeFilesService();
     }
 
     /**
@@ -35,4 +40,19 @@ class ThemeFilesServiceTest extends BcTestCase
         parent::tearDown();
     }
 
+    /**
+     * test getImg
+     */
+    public function test_getImg()
+    {
+        $data = [
+            'theme' => 'BcFront',
+            'type' => 'img',
+            'path' => 'logo.png',
+            'fullpath' => '/var/www/html/plugins/bc-front/webroot/img/logo.png'
+        ];
+
+        $img = $this->ThemeFileService->getImg($data);
+        $this->assertNotNull($img);
+    }
 }

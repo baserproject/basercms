@@ -532,7 +532,11 @@ class ThemeFilesController extends BcAdminAppController
     {
         $this->disableAutoRender();
         $args = $this->parseArgs(func_get_args());
-        return $this->getResponse()->withStringBody($service->getImg($args));
+
+        $imgDetail = $service->getImg($args);
+        header("Content-Length: " . $imgDetail['size']);
+        header("Content-type: image/" . $imgDetail['type']);
+        return $this->getResponse()->withStringBody($imgDetail['img']);
     }
 
     /**

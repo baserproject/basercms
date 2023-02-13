@@ -149,31 +149,6 @@ class ThemeFilesAdminService extends ThemeFilesService implements ThemeFilesAdmi
     }
 
     /**
-     * テーマ内のイメージデータを取得する
-     *
-     * @param $args
-     * @return false|string
-     */
-    public function getImg($args)
-    {
-        $contents = ['jpg' => 'jpeg', 'gif' => 'gif', 'png' => 'png'];
-        $pathinfo = pathinfo($args['fullpath']);
-
-        if (!BcThemeFileUtil::getTemplateTypeName($args['type']) || !isset($contents[$pathinfo['extension']]) || !file_exists($args['fullpath'])) {
-            throw new NotFoundException();
-        }
-
-        $file = new File($args['fullpath']);
-        if (!$file->open('r')) {
-            throw new NotFoundException();
-        }
-
-        header("Content-Length: " . $file->size());
-        header("Content-type: image/" . $contents[$pathinfo['extension']]);
-        return $file->read();
-    }
-
-    /**
      * テーマ内の画像のサムネイルイメージのデータを取得する
      *
      * @param array $args
