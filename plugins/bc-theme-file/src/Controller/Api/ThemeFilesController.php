@@ -244,14 +244,37 @@ class ThemeFilesController extends BcApiController
      * [API] テーマファイル 画像のサムネイルを表示
      *
      * @param ThemeFilesServiceInterface $service
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function img_thumb(ThemeFilesServiceInterface $service)
     {
-        //todo テーマファイルAPI 画像のサムネイルを表示 #1777
+        $this->request->allowMethod(['get']);
+
+        try {
+            $data = $this->getRequest()->getQueryParams();
+            $data['fullpath'] = $service->getFullpath($data['theme'], $data['type'], $data['path']);
+            $imgDetail = $service->getImgThumb($data, $data['width'], $data['height']);
+        } catch (BcFormFailedException $e) {
+            $this->setResponse($this->response->withStatus(400));
+            $errors = $e->getForm()->getErrors();
+            $message = __d('baser', '入力エラーです。内容を修正してください。' . $e->getMessage());
+        } catch (\Throwable $e) {
+            $this->setResponse($this->response->withStatus(400));
+            $message = __d('baser', '処理中にエラーが発生しました。');
+        }
+
+        $this->set([
+            'imgThumb' => base64_encode($imgDetail['imgThumb']),
+            'message' => $message ?? null,
+            'errors' => $errors ?? null
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['imgThumb', 'message', 'errors']);
     }
 
     /**
-     * テーマフォルダAPI テーマファイルアップロード
+     * テーマファイルアAPI テーマファイルアップロード
      *
      * @param ThemeFilesServiceInterface $service
      * @return void

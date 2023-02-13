@@ -269,11 +269,27 @@ class ThemeFilesControllerTest extends BcTestCase
      */
     public function test_img_thumb()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
+        //POSTデータを生成
+        $data = [
+            'theme' => 'BcFront',
+            'type' => 'img',
+            'path' => 'logo.png',
+            'width' => 100,
+            'height' => 100,
+            'token' => $this->accessToken
+        ];
+        $query = http_build_query($data);
+        //APIをコール
+        $this->get('/baser/api/bc-theme-file/theme_files/img_thumb.json?' . $query);
+        //レスポンスコードを確認
+        $this->assertResponseSuccess();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertNotNull(base64_decode($result->imgThumb));
     }
 
     /**
-     * [API] テーマフォルダAPI テーマファイルアップロード
+     * [API] テーマファイルAPI テーマファイルアップロード
      */
     public function test_upload()
     {
