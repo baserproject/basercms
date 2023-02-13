@@ -13,6 +13,7 @@ namespace BcThemeFile\Test\TestCase\Controller\Api;
 
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
+use Cake\Filesystem\Folder;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 class ThemeFoldersControllerTest extends BcTestCase
@@ -92,6 +93,7 @@ class ThemeFoldersControllerTest extends BcTestCase
         $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout/';
         $data = [
             'theme' => 'BcThemeSample',
+            'plugin' => 'BaserCore',
             'type' => 'layout',
             'path' => '',
             'name' => 'new_folder',
@@ -123,6 +125,7 @@ class ThemeFoldersControllerTest extends BcTestCase
         //Postデータを生成
         $data = [
             'theme' => 'BcThemeSample',
+            'plugin' => 'BaserCore',
             'type' => 'layout',
             'path' => 'new_folder',
             'name' => 'edit_folder',
@@ -152,10 +155,11 @@ class ThemeFoldersControllerTest extends BcTestCase
     {
         //テストテーマフォルダを作成
         $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout/';
-        mkdir($fullpath . 'delete_folder');
+        (new Folder())->create($fullpath . 'delete_folder', 0777);
         //Postデータを生成
         $data = [
             'theme' => 'BcThemeSample',
+            'plugin' => 'BaserCore',
             'type' => 'layout',
             'path' => 'delete_folder',
         ];
@@ -186,10 +190,11 @@ class ThemeFoldersControllerTest extends BcTestCase
     {
         //テストテーマフォルダを作成
         $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout/';
-        mkdir($fullpath . 'new_folder');
+        (new Folder())->create($fullpath . 'new_folder', 0777);
         //Postデータを生成
         $data = [
             'theme' => 'BcThemeSample',
+            'plugin' => 'BaserCore',
             'type' => 'layout',
             'path' => 'new_folder',
         ];

@@ -147,11 +147,12 @@ class ThemeFile extends \Cake\ORM\Entity
     protected function _getContents()
     {
         if ($this->type === 'text') {
-            $file = new File($this->fullpath);
-            return $file->read();
-        } else {
-            return '';
+            if(file_exists($this->fullpath)) {
+                $file = new File($this->fullpath);
+                return $file->read();
+            }
         }
+        return '';
     }
 
     /**

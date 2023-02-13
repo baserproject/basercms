@@ -91,8 +91,8 @@ class Imageresizer
         }
 
         if (!$trimming) {
-            $newWidth = $srcWidth / $rate;
-            $newHeight = $srcHeight / $rate;
+            $newWidth = floor($srcWidth / $rate);
+            $newHeight = floor($srcHeight / $rate);
         }
 
         // 新しい画像のベースを作成

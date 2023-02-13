@@ -31,5 +31,5 @@ interface BcThemeFileServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function getFullpath(string $theme, string $type, string $path);
+    public function getFullpath(string $theme, string $plugin, string $type, string $path);
 }

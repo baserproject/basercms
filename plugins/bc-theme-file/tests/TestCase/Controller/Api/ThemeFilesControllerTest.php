@@ -15,6 +15,7 @@ use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\Test\Factory\UserFactory;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\Filesystem\File;
+use Cake\Filesystem\Folder;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 class ThemeFilesControllerTest extends BcTestCase
@@ -78,6 +79,7 @@ class ThemeFilesControllerTest extends BcTestCase
             'base_name' => 'base_name_1',
             'contents' => 'this is a content!',
             'ext' => 'php',
+            'plugin' => 'BaserCore'
         ];
         //APIをコール
         $this->post('/baser/api/bc-theme-file/theme_files/add.json?token=' . $this->accessToken, $data);
@@ -109,6 +111,7 @@ class ThemeFilesControllerTest extends BcTestCase
             'base_name' => 'base_name_2',
             'contents' => 'this is a content changed!',
             'ext' => 'php',
+            'plugin' => 'BaserCore'
         ];
         //APIをコール
         $this->post('/baser/api/bc-theme-file/theme_files/edit.json?token=' . $this->accessToken, $data);
@@ -133,6 +136,7 @@ class ThemeFilesControllerTest extends BcTestCase
             'base_name' => 'default_changed',
             'contents' => 'this is a content changed!',
             'ext' => 'php',
+            'plugin' => 'BaserCore'
         ];
         //APIをコール
         $this->post('/baser/api/bc-theme-file/theme_files/edit.json?token=' . $this->accessToken, $data);
@@ -165,6 +169,7 @@ class ThemeFilesControllerTest extends BcTestCase
         $data = [
             'theme' => 'BcThemeSample',
             'type' => 'layout',
+            'plugin' => 'BaserCore',
             'path' => 'base_name_1.php'
         ];
         //APIをコール
@@ -198,6 +203,7 @@ class ThemeFilesControllerTest extends BcTestCase
         $data = [
             'theme' => 'BcThemeSample',
             'type' => 'layout',
+            'plugin' => 'BaserCore',
             'path' => 'base_name_1.php',
         ];
         //APIをコール
@@ -220,14 +226,13 @@ class ThemeFilesControllerTest extends BcTestCase
     public function test_copy_to_theme()
     {
         //POSTデータを生成
-        $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout/';
+        $fullpath = BASER_PLUGINS . 'bc-front' . '/templates/layout/';
         new File($fullpath . 'base_name_1.php', true);
         $data = [
-            'theme' => 'BcThemeSample',
+            'theme' => 'BcFront',
             'type' => 'layout',
             'path' => 'base_name_1.php',
-            'plugin' => '',
-            'assets' => ''
+            'plugin' => 'BaserCore'
         ];
         //APIをコール
         $this->post('/baser/api/bc-theme-file/theme_files/copy_to_theme.json?token=' . $this->accessToken, $data);
@@ -278,6 +283,7 @@ class ThemeFilesControllerTest extends BcTestCase
         $data = [
             'theme' => 'BcFront',
             'type' => 'img',
+            'plugin' => 'BaserCore',
             'path' => 'logo.png',
             'token' => $this->accessToken
         ];
@@ -300,6 +306,7 @@ class ThemeFilesControllerTest extends BcTestCase
         $data = [
             'theme' => 'BcFront',
             'type' => 'img',
+            'plugin' => 'BaserCore',
             'path' => 'logo.png',
             'width' => 100,
             'height' => 100,
@@ -322,17 +329,18 @@ class ThemeFilesControllerTest extends BcTestCase
     {
         //テストテーマフォルダを作成
         $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout/';
-        mkdir($fullpath . 'new_folder', 0777);
+        (new Folder())->create($fullpath . 'new_folder', 0777);
 
         //テストファイルを作成
         $filePath = TMP  . 'test_upload' . DS;
-        mkdir( TMP  . 'test_upload', 0777);
+        (new Folder())->create($filePath, 0777);
         $testFile = $filePath . 'uploadTestFile.html';
         new File($testFile, true);
 
         //Postデータを生成
         $data = [
             'theme' => 'BcThemeSample',
+            'plugin' => 'BaserCore',
             'type' => 'layout',
             'path' => 'new_folder',
         ];
@@ -349,7 +357,6 @@ class ThemeFilesControllerTest extends BcTestCase
         $this->assertTrue(file_exists($fullpath . 'new_folder/uploadTestFile.html'));
 
         //テストファイルとフォルダを削除
-        unlink($testFile);
         rmdir($filePath);
         unlink($fullpath . 'new_folder/uploadTestFile.html');
         rmdir($fullpath . 'new_folder');

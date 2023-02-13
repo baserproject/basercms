@@ -88,7 +88,7 @@ class ThemeFoldersController extends BcApiController
 
         try {
             $data = $this->getRequest()->getQueryParams();
-            $data['fullpath'] = $service->getFullpath($data['theme'], $data['type'], $data['path']);
+            $data['fullpath'] = $service->getFullpath($data['theme'], $data['plugin'], $data['type'], $data['path']);
             $themeFiles = $service->getIndex($data);
         } catch (BcFormFailedException $e) {
             $this->setResponse($this->response->withStatus(400));
@@ -123,7 +123,7 @@ class ThemeFoldersController extends BcApiController
 
         try {
             $data = $this->getRequest()->getData();
-            $data['fullpath'] = $service->getFullpath($data['theme'], $data['type'], $data['path']);
+            $data['fullpath'] = $service->getFullpath($data['theme'], $data['plugin'], $data['type'], $data['path']);
             $form = $service->create($data);
             $themeFolder = $service->get($form->getData('fullpath'));
             $message = __d('baser', 'フォルダ「{0}」を作成しました。', $themeFolder->name);
@@ -160,7 +160,7 @@ class ThemeFoldersController extends BcApiController
 
         try {
             $data = $this->getRequest()->getData();
-            $data['fullpath'] = $service->getFullpath($data['theme'], $data['type'], $data['path']);
+            $data['fullpath'] = $service->getFullpath($data['theme'], $data['plugin'], $data['type'], $data['path']);
             $form = $service->update($data);
             $themeFolder = $service->get($form->getData('fullpath'));
             $message = __d('baser', 'フォルダ名を「{0}」に変更しました。', $themeFolder->name);
@@ -196,7 +196,7 @@ class ThemeFoldersController extends BcApiController
         $this->request->allowMethod(['post', 'put']);
         try {
             $data = $this->getRequest()->getData();
-            $data['fullpath'] = $service->getFullpath($data['theme'], $data['type'], $data['path']);
+            $data['fullpath'] = $service->getFullpath($data['theme'], $data['plugin'], $data['type'], $data['path']);
             $themeFolder = $service->get($data['fullpath']);
             if ($service->delete($data['fullpath'])) {
                 $message = __d('baser', 'フォルダ「{0}」を削除しました。', $data['path']);
@@ -236,7 +236,7 @@ class ThemeFoldersController extends BcApiController
 
         try {
             $data = $this->getRequest()->getData();
-            $data['fullpath'] = $service->getFullpath($data['theme'], $data['type'], $data['path']);
+            $data['fullpath'] = $service->getFullpath($data['theme'], $data['plugin'], $data['type'], $data['path']);
             $entity = $service->copy($data['fullpath']);
             if ($entity) {
                 $message = __d('baser', 'フォルダ「{0}」をコピーしました。', $data['path']);
@@ -286,7 +286,7 @@ class ThemeFoldersController extends BcApiController
         $this->request->allowMethod(['get']);
         try {
             $data = $this->getRequest()->getQueryParams();
-            $data['fullpath'] = $service->getFullpath($data['theme'], $data['type'], $data['path']);
+            $data['fullpath'] = $service->getFullpath($data['theme'], $data['plugin'], $data['type'], $data['path']);
             $entity = $service->get($data['fullpath']);
         } catch (\Throwable $e) {
             $this->setResponse($this->response->withStatus(400));

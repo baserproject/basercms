@@ -38,7 +38,7 @@ class ThemeFilesController extends BcApiController
 
         try {
             $data = $this->getRequest()->getData();
-            $data['fullpath'] = $service->getFullpath($data['theme'], $data['type'], $data['path']);
+            $data['fullpath'] = $service->getFullpath($data['theme'], $data['plugin'], $data['type'], $data['path']);
             $form = $service->create($data);
             $entity = $service->get($form->getData('fullpath'));
             $message = __d('baser', 'ファイル「{0}」を作成しました。', $entity->name);
@@ -73,7 +73,7 @@ class ThemeFilesController extends BcApiController
         $this->request->allowMethod(['post', 'put']);
         try {
             $data = $this->getRequest()->getData();
-            $data['fullpath'] = $service->getFullpath($data['theme'], $data['type'], $data['path']);
+            $data['fullpath'] = $service->getFullpath($data['theme'], $data['plugin'], $data['type'], $data['path']);
             $themeFileForm = $service->update($data);
             $entity = $service->get($themeFileForm->getData('fullpath'));
             $message = __d('baser', 'ファイル「{0}」を更新しました。', $entity->name);
@@ -108,8 +108,8 @@ class ThemeFilesController extends BcApiController
         $this->request->allowMethod(['post', 'put']);
         try {
             $data = $this->getRequest()->getData();
-            $data['fullpath'] = $service->getFullpath($data['theme'], $data['type'], $data['path']);
-            $themeFile = $service->get($data['fullpath']);
+            $data['fullpath'] = $service->getFullpath($data['theme'], $data['plugin'], $data['type'], $data['path']);
+            $themeFile = $service->get($data['fullpath'])->toArray();
             if ($service->delete($data['fullpath'])) {
                 $message = __d('baser', 'ファイル「{0}」を削除しました。', $data['path']);
             } else {
@@ -129,7 +129,7 @@ class ThemeFilesController extends BcApiController
             'message' => $message,
             'errors' => $errors ?? null
         ]);
-        $this->viewBuilder()->setOption('serialize', ['themeFile', 'message', 'errors']);
+        $this->viewBuilder()->setOption('serialize', ['message', 'errors']);
     }
 
     /**
@@ -146,7 +146,7 @@ class ThemeFilesController extends BcApiController
         $this->request->allowMethod(['post', 'put']);
         try {
             $data = $this->getRequest()->getData();
-            $data['fullpath'] = $service->getFullpath($data['theme'], $data['type'], $data['path']);
+            $data['fullpath'] = $service->getFullpath($data['theme'], $data['plugin'], $data['type'], $data['path']);
             $entity = $service->copy($data['fullpath']);
             if ($entity) {
                 $message = __d('baser', 'ファイル「{0}」をコピーしました。', $data['path']);
@@ -185,7 +185,8 @@ class ThemeFilesController extends BcApiController
 
         try {
             $data = $this->getRequest()->getData();
-            $data['fullpath'] = $service->getFullpath($data['theme'], $data['type'], $data['path']);
+            $data['fullpath'] = $service->getFullpath($data['theme'], $data['plugin'], $data['type'], $data['path']);
+            $data['assets'] = in_array($data['type'], ['css', 'js', 'img']);
             $targetPath = $service->copyToTheme($data);
             $currentTheme = BcUtil::getCurrentTheme();
             $message = __d('baser',
@@ -225,7 +226,7 @@ class ThemeFilesController extends BcApiController
         $this->request->allowMethod(['get']);
         try {
             $data = $this->getRequest()->getQueryParams();
-            $data['fullpath'] = $service->getFullpath($data['theme'], $data['type'], $data['path']);
+            $data['fullpath'] = $service->getFullpath($data['theme'], $data['plugin'], $data['type'], $data['path']);
             $entity = $service->get($data['fullpath']);
         } catch (\Throwable $e) {
             $this->setResponse($this->response->withStatus(400));
@@ -254,7 +255,7 @@ class ThemeFilesController extends BcApiController
 
         try {
             $data = $this->getRequest()->getQueryParams();
-            $data['fullpath'] = $service->getFullpath($data['theme'], $data['type'], $data['path']);
+            $data['fullpath'] = $service->getFullpath($data['theme'], $data['plugin'], $data['type'], $data['path']);
             $imgDetail = $service->getImg($data);
         } catch (BcFormFailedException $e) {
             $this->setResponse($this->response->withStatus(400));
@@ -287,7 +288,7 @@ class ThemeFilesController extends BcApiController
 
         try {
             $data = $this->getRequest()->getQueryParams();
-            $data['fullpath'] = $service->getFullpath($data['theme'], $data['type'], $data['path']);
+            $data['fullpath'] = $service->getFullpath($data['theme'], $data['plugin'], $data['type'], $data['path']);
             $imgDetail = $service->getImgThumb($data, $data['width'], $data['height']);
         } catch (BcFormFailedException $e) {
             $this->setResponse($this->response->withStatus(400));
@@ -321,7 +322,7 @@ class ThemeFilesController extends BcApiController
         $this->request->allowMethod(['post', 'put']);
         try {
             $data = $this->getRequest()->getData();
-            $data['fullpath'] = $service->getFullpath($data['theme'], $data['type'], $data['path']);
+            $data['fullpath'] = $service->getFullpath($data['theme'], $data['plugin'], $data['type'], $data['path']);
             $service->upload($data['fullpath'], $data);
             $message = __d('baser', 'アップロードに成功しました。');
         } catch (BcFormFailedException $e) {
