@@ -258,10 +258,29 @@ class ThemeFoldersController extends BcApiController
      *
      * @param ThemeFoldersServiceInterface $service
      * @return void
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function view(ThemeFoldersServiceInterface $service)
     {
-        //todo テーマフォルダAPI フォルダを表示
+        $this->request->allowMethod(['get']);
+        try {
+            $data = $this->getRequest()->getQueryParams();
+            $data['fullpath'] = $service->getFullpath($data['theme'], $data['type'], $data['path']);
+            $entity = $service->get($data['fullpath']);
+        } catch (\Throwable $e) {
+            $this->setResponse($this->response->withStatus(400));
+            $message = __d('baser', '処理中にエラーが発生しました。');
+        }
+
+        $this->set([
+            'entity' => $entity ?? null,
+            'message' => $message ?? null,
+            'errors' => $errors ?? null
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['entity', 'message', 'errors']);
     }
 
 }

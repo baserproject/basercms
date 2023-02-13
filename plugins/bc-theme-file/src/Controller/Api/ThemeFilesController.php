@@ -194,10 +194,6 @@ class ThemeFilesController extends BcApiController
             $data = $this->getRequest()->getQueryParams();
             $data['fullpath'] = $service->getFullpath($data['theme'], $data['type'], $data['path']);
             $entity = $service->get($data['fullpath']);
-        } catch (BcFormFailedException $e) {
-            $this->setResponse($this->response->withStatus(400));
-            $errors = $e->getForm()->getErrors();
-            $message = __d('baser', '入力エラーです。内容を修正してください。' . $e->getMessage());
         } catch (\Throwable $e) {
             $this->setResponse($this->response->withStatus(400));
             $message = __d('baser', '処理中にエラーが発生しました。');
