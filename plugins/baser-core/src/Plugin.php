@@ -36,6 +36,7 @@ use Cake\Http\Middleware\CsrfProtectionMiddleware;
 use Cake\Http\MiddlewareQueue;
 use Cake\Http\ServerRequestFactory;
 use Cake\Log\Log;
+use Cake\ORM\TableRegistry;
 use Cake\Routing\RouteBuilder;
 use Cake\Routing\Router;
 use Cake\Utility\Inflector;
@@ -135,8 +136,7 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
         if(BcUtil::isTest()) $application->addPlugin('CakephpFixtureFactories');
         $application->addPlugin('Authentication');
         $application->addPlugin('Migrations');
-        $application->addPlugin(Inflector::camelize(Configure::read('BcApp.defaultAdminTheme'), '-'));
-        $application->addPlugin(Inflector::camelize(Configure::read('BcApp.defaultFrontTheme'), '-'));
+        $this->addTheme($application);
         if (!filter_var(env('USE_DEBUG_KIT', true), FILTER_VALIDATE_BOOLEAN)) {
             // 明示的に指定がない場合、DebugKitは重すぎるのでデバッグモードでも利用しない
             \Cake\Core\Plugin::getCollection()->remove('DebugKit');
@@ -163,6 +163,24 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
         $event->on(new BcModelEventDispatcher());
         $event->on(new BcViewEventDispatcher());
         $event->on(new BcContainerEventListener());
+    }
+
+    /**
+     * テーマを追加する
+     *
+     * @param PluginApplicationInterface $application
+     * @noTodo
+     * @checked
+     */
+    public function addTheme(PluginApplicationInterface $application)
+    {
+        $application->addPlugin(Inflector::camelize(Configure::read('BcApp.defaultAdminTheme'), '-'));
+        $application->addPlugin(Inflector::camelize(Configure::read('BcApp.defaultFrontTheme'), '-'));
+        $sitesTable = TableRegistry::getTableLocator()->get('BaserCore.Sites');
+        $sites = $sitesTable->find()->where(['Sites.status' => true]);
+        foreach($sites as $site) {
+            if($site->theme) $application->addPlugin($site->theme);
+        }
     }
 
     /**
