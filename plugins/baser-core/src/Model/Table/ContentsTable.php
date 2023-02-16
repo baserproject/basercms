@@ -1124,12 +1124,10 @@ class ContentsTable extends AppTable
             ['or' => [
                 ['Contents.publish_begin <=' => date('Y-m-d H:i:s')],
                 ['Contents.publish_begin IS' => null],
-                ['Contents.publish_begin' => '0000-00-00 00:00:00']
             ]],
             ['or' => [
                 ['Contents.publish_end >=' => date('Y-m-d H:i:s')],
                 ['Contents.publish_end IS' => null],
-                ['Contents.publish_end' => '0000-00-00 00:00:00']
             ]]
         ];
     }
