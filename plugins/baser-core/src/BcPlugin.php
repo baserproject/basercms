@@ -435,14 +435,19 @@ class BcPlugin extends BasePlugin
          */
         $prefixSettings = Configure::read('BcPrefixAuth');
         foreach($prefixSettings as $prefix => $setting) {
+            $isApi = ($setting['type'] === 'Jwt')? true : false;
             $routes->prefix(
                 $prefix,
                 ['path' => '/' . BcUtil::getBaserCorePrefix() . '/' . $setting['alias']],
-                function(RouteBuilder $routes) use ($plugin) {
+                function(RouteBuilder $routes) use ($plugin, $isApi) {
                     $routes->plugin(
                         $plugin,
                         ['path' => '/' . Inflector::dasherize($plugin)],
-                        function(RouteBuilder $routes) {
+                        function(RouteBuilder $routes) use($isApi) {
+                            if($isApi) {
+                                $routes->setExtensions(['json']);
+                                $routes->resources('{controller}');
+                            }
                             // CakePHPのデフォルトで /index が省略する仕様のため、URLを生成する際は、強制的に /index を付ける仕様に変更
                             $routes->connect('/{controller}/index', [], ['routeClass' => InflectedRoute::class]);
                             $routes->fallbacks(InflectedRoute::class);
@@ -453,32 +458,6 @@ class BcPlugin extends BasePlugin
         }
 
         if (!BcUtil::isInstalled() || BcUtil::isMigrations()) {
-            parent::routes($routes);
-            return;
-        }
-
-        /**
-         * APIのプラグイン用ルーティング
-         * プラグイン名がダッシュ区切りの場合
-         */
-        $routes->prefix(
-            'Api',
-            ['path' => '/' . BcUtil::getBaserCorePrefix() . '/api'],
-            function(RouteBuilder $routes) use ($plugin) {
-                $routes->plugin(
-                    $plugin,
-                    ['path' => '/' . Inflector::dasherize($plugin)],
-                    function(RouteBuilder $routes) {
-                        $routes->setExtensions(['json']);
-                        $routes->resources('{controller}');
-                        $routes->connect('/{controller}/index', [], ['routeClass' => InflectedRoute::class]);
-                        $routes->fallbacks(InflectedRoute::class);
-                    }
-                );
-            }
-        );
-
-        if (!BcUtil::isInstalled()) {
             parent::routes($routes);
             return;
         }

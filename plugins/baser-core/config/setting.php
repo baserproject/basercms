@@ -442,29 +442,44 @@ return [
 
     /**
      * プレフィックス認証
+     *
+     * プレフィックスに紐付ける認証設定を定義する
+     *
+     * - `name`: 認証設定名
+     * - `type`: 認証タイプ（ Session | Jwt ）
+     *    セッション認証、または、 JWT 認証を提供。
+     *    どちらにおいても、テーブルにおける ユーザー名とパスワードで識別する。
+     * - `alias`: URLにおけるエイリアス
+     * - `loginRedirect`: 認証後のリダイレクト先のURL
+     * - `loginAction`: ログインページURL
+     * - `logoutAction`: ログアウトページURL
+     * - `username`: ユーザー識別用テーブルにおけるユーザー名。配列での複数指定が可能
+     * - `password`: ユーザー識別用テーブルにおけるパスワード
+     * - `userModel`: ユーザー識別用のテーブル（プラグイン記法）
+     * - `sessionKey`: セッションを利用する場合のセッションキー
      */
     'BcPrefixAuth' => [
         // 管理画面
         'Admin' => [
-            // 認証設定名
             'name' => __d('baser', '管理システム'),
-            // 認証タイプ
-            'type' => 'Form',
-            // URLにおけるエイリアス
+            'type' => 'Session',
             'alias' => '/' . $adminPrefix,
-            // 認証後リダイレクト先
             'loginRedirect' => ['plugin' => 'BaserCore', 'prefix' => 'Admin', 'controller' => 'Dashboard', 'action' => 'index'],
-            // ログインページURL
             'loginAction' => ['plugin' => 'BaserCore', 'prefix' => 'Admin', 'controller' => 'Users', 'action' => 'login'],
-            // ログアウトページURL
             'logoutAction' => ['plugin' => 'BaserCore', 'prefix' => 'Admin', 'controller' => 'Users', 'action' => 'logout'],
-            // ユーザー名フィールド
             'username' => ['email', 'name'],
-            // パスワードフィールド
             'password' => 'password',
-            // モデル
             'userModel' => 'BaserCore.Users',
-            // セッションキー
+            'sessionKey' => 'AuthAdmin',
+        ],
+        // Api
+        'Api' => [
+            'name' => __d('baser', 'Web API'),
+            'type' => 'Jwt',
+            'alias' => '/api',
+            'username' => ['email', 'name'],
+            'password' => 'password',
+            'userModel' => 'BaserCore.Users',
             'sessionKey' => 'AuthAdmin',
         ],
     ],
