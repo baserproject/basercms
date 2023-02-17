@@ -17,6 +17,7 @@ use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Service\PagesService;
 use BaserCore\Service\PagesServiceInterface;
+use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\Http\Exception\ForbiddenException;
 use Cake\ORM\Exception\PersistenceFailedException;
 
@@ -94,6 +95,9 @@ class PagesController extends BcApiController
         $page = $message = null;
         try {
             $page = $service->get($id, $queryParams);
+        } catch (RecordNotFoundException $e) {
+            $this->setResponse($this->response->withStatus(404));
+            $message = $e->getMessage();
         } catch (\Throwable $e) {
             $this->setResponse($this->response->withStatus(401));
             $message = $e->getMessage();
