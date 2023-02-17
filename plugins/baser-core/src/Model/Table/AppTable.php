@@ -1242,11 +1242,9 @@ class AppTable extends Table
     {
         $conditions[$this->getAlias() . '.' . $this->publishStatusField] = true;
         $conditions[] = ['or' => [[$this->getAlias() . '.' . $this->publishBeginField . ' <=' => date('Y-m-d H:i:s')],
-            [$this->getAlias() . '.' . $this->publishBeginField . ' IS' => null],
-            [$this->getAlias() . '.' . $this->publishBeginField => '0000-00-00 00:00:00']]];
+            [$this->getAlias() . '.' . $this->publishBeginField . ' IS' => null]]];
         $conditions[] = ['or' => [[$this->getAlias() . '.' . $this->publishEndField . ' >=' => date('Y-m-d H:i:s')],
-            [$this->getAlias() . '.' . $this->publishEndField . ' IS' => null],
-            [$this->getAlias() . '.' . $this->publishEndField => '0000-00-00 00:00:00']]];
+            [$this->getAlias() . '.' . $this->publishEndField . ' IS' => null]]];
         return $conditions;
     }
 

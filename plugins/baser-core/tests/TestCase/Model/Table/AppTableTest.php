@@ -154,10 +154,8 @@ class AppTableTest extends BcTestCase
         $this->assertEquals(true, $conditions['AppTable.status']);
         $this->assertArrayHasKey('AppTable.publish_begin <=', $conditions[0]['or'][0]);
         $this->assertEquals(null, $conditions[0]['or'][1]['AppTable.publish_begin IS']);
-        $this->assertEquals('0000-00-00 00:00:00', $conditions[0]['or'][2]['AppTable.publish_begin']);
         $this->assertArrayHasKey('AppTable.publish_end >=', $conditions[1]['or'][0]);
         $this->assertEquals(null, $conditions[1]['or'][1]['AppTable.publish_end IS']);
-        $this->assertEquals('0000-00-00 00:00:00', $conditions[1]['or'][2]['AppTable.publish_end']);
     }
 
 }

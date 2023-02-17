@@ -233,12 +233,10 @@ class UploaderFilesController extends BcAdminAppController
                 ['or' => [
                     ['UploaderFile.publish_begin <=' => date('Y-m-d H:i:s')],
                     ['UploaderFile.publish_begin' => NULL],
-                    ['UploaderFile.publish_begin' => '0000-00-00 00:00:00']
                 ]],
                 ['or' => [
                     ['UploaderFile.publish_end >=' => date('Y-m-d H:i:s')],
                     ['UploaderFile.publish_end' => NULL],
-                    ['UploaderFile.publish_end' => '0000-00-00 00:00:00']
                 ]]
             ];
             $data = $this->UploaderFile->find('first', ['conditions' => $conditions]);
