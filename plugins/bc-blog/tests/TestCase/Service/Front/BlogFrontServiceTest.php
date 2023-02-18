@@ -434,6 +434,7 @@ class BlogFrontServiceTest extends BcTestCase
      */
     public function test_getViewVarsForArchivesByAuthor()
     {
+        $this->getRequest('/baser/admin');
         // サービスクラス
         $blogPostsService = $this->getService(BlogPostsServiceInterface::class);
         $blogContentsService = $this->getService(BlogContentsServiceInterface::class);

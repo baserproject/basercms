@@ -306,6 +306,7 @@ class UsersServiceTest extends BcTestCase
      */
     public function testIsAvailable()
     {
+        $this->getRequest('/baser/admin');
         $this->assertTrue($this->Users->isAvailable(1));
         $this->assertFalse($this->Users->isAvailable(3));
     }

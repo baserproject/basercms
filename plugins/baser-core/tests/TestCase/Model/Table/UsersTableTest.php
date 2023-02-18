@@ -221,10 +221,11 @@ class UsersTableTest extends BcTestCase
      */
     public function test_findAvailable()
     {
+        $this->getRequest('/baser/admin');
         $entity = $this->Users->findAvailable($this->Users->find())->first();
         $this->assertTrue(isset($entity->user_groups));
         $this->assertTrue($entity->status);
-        $this->assertNull($this->Users->findAvailable($this->Users->find()->where(['id' => 3]))->first());
+        $this->assertNull($this->Users->findAvailable($this->Users->find()->where(['Users.id' => 3]))->first());
     }
 
 }

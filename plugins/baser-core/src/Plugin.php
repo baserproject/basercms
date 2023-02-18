@@ -278,7 +278,7 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
             if ($middleware instanceof CsrfProtectionMiddleware) {
                 $middleware->skipCheckCallback(function($request) {
                     $authSetting = Configure::read('BcPrefixAuth.' . $request->getParam('prefix'));
-                    if ($authSetting['type'] === 'Jwt') {
+                    if (!empty($authSetting['type']) && $authSetting['type'] === 'Jwt') {
                         return true;
                     }
                     return false;
