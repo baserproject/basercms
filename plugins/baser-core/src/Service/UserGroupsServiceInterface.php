@@ -14,4 +14,14 @@ namespace BaserCore\Service;
 /**
  * Interface UserGroupsServiceInterface
  */
-interface UserGroupsServiceInterface extends CrudBaseServiceInterface{}
+interface UserGroupsServiceInterface extends CrudBaseServiceInterface{
+
+    /**
+     * コントロールソースを取得する
+     *
+     * @param string $field
+     * @return array
+     */
+    public function getControlSource(string $field): array;
+
+}

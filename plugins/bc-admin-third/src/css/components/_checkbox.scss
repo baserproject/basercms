@@ -90,6 +90,13 @@
       font-size: $label_font_size_small;
     }
   }
+  input[type="checkbox"][disabled] + label:before{
+    background-color: #ddd;
+  }
+  input[type="checkbox"][disabled] + label:after{
+    border-right-color: #999;
+    border-bottom-color: #999;
+  }
 }
 
 //

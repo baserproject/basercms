@@ -7,5 +7,5 @@
  * @since         5.0.0
  * @license       https://basercms.net/license/index.html MIT License
  */
-$((function(){$("#BtnSave").click((function(){$.bcUtil.showLoader()}))}));
+$("#AdminUserGroupsFormScript").attr("data-isAdmin")&&$("#auth-prefix-admin").prop("disabled",!0),$("#UserGroupAdminEditForm").submit((function(){$("#auth-prefix-admin").removeAttr("disabled")})),$("#BtnSave").click((function(){$.bcUtil.showLoader()}));
 //# sourceMappingURL=form.bundle.js.map

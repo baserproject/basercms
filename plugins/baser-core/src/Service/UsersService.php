@@ -442,7 +442,9 @@ class UsersService implements UsersServiceInterface
         $session = $request->getSession();
         $sessionKey = Configure::read('BcPrefixAuth.' . $prefix . '.sessionKey');
         try {
-            $user = $this->Users->find('available')->where(['id' => $sessionUser->id])->first();
+            $user = $this->Users->find('available')->where([
+                'Users.id' => $sessionUser->id
+            ])->first();
             if($user) {
                 $session->write($sessionKey, $user);
                 return true;
@@ -469,7 +471,9 @@ class UsersService implements UsersServiceInterface
      */
     public function isAvailable(int $id): bool
     {
-        return (bool) $this->Users->find('available')->where(['id' => $id])->count();
+        return (bool) $this->Users->find('available')->where([
+            'Users.id' => $id
+        ])->count();
     }
 
 }

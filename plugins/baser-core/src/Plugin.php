@@ -32,6 +32,7 @@ use Cake\Core\ContainerInterface;
 use Cake\Core\Exception\MissingPluginException;
 use Cake\Core\PluginApplicationInterface;
 use Cake\Event\EventManager;
+use Cake\Http\Exception\ForbiddenException;
 use Cake\Http\Middleware\CsrfProtectionMiddleware;
 use Cake\Http\MiddlewareQueue;
 use Cake\Http\ServerRequestFactory;
@@ -276,7 +277,8 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
         foreach($queue->getValue($middlewareQueue) as $middleware) {
             if ($middleware instanceof CsrfProtectionMiddleware) {
                 $middleware->skipCheckCallback(function($request) {
-                    if ($request->getParam('prefix') === 'Api') {
+                    $authSetting = Configure::read('BcPrefixAuth.' . $request->getParam('prefix'));
+                    if ($authSetting['type'] === 'Jwt') {
                         return true;
                     }
                     return false;
@@ -320,7 +322,17 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
                 $this->setupSessionAuth($service, $authSetting);
                 break;
             case 'Jwt':
-                $this->setupJwtAuth($service, $authSetting);
+                if ($this->isEnabledCoreApi($prefix)) {
+                    $this->setupJwtAuth($service, $authSetting);
+                    if($prefix === 'Api') {
+                        // セッションを持っている場合もログイン状態とみなす
+                        $service->loadAuthenticator('Authentication.Session', [
+                            'sessionKey' => $authSetting['sessionKey'],
+                        ]);
+                    }
+                } else {
+                    throw new ForbiddenException(__d('baser', 'Web APIは許可されていません。'));
+                }
                 break;
             default:
                 $this->setupSessionAuth($service, $authSetting);
@@ -328,6 +340,32 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
         }
 
         return $service;
+    }
+
+    /**
+     * APIが利用できるか確認する
+     *
+     * @param string $prefix
+     * @return bool
+     */
+    public function isEnabledCoreApi(string $prefix): bool
+    {
+        if (!filter_var(env('USE_CORE_API', false), FILTER_VALIDATE_BOOLEAN)) {
+            if ($prefix === 'Api') {
+                if (BcUtil::loginUser()) {
+                    $siteDomain = BcUtil::getCurrentDomain();
+                    if (empty($_SERVER['HTTP_REFERER'])) {
+                        return false;
+                    }
+                    $refererDomain = BcUtil::getDomain($_SERVER['HTTP_REFERER']);
+                    if (!preg_match('/^' . preg_quote($siteDomain, '/') . '/', $refererDomain)) {
+                        return false;
+                    }
+                    return true;
+                }
+            }
+        }
+        return true;
     }
 
     /**
@@ -383,11 +421,6 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
         } else {
             return $service;
         }
-
-        // セッションを持っている場合もログイン状態とみなす
-        $service->loadAuthenticator('Authentication.Session', [
-            'sessionKey' => $authSetting['sessionKey'],
-        ]);
 
         $service->loadAuthenticator('Authentication.Jwt', [
             'secretKey' => $secretKey,

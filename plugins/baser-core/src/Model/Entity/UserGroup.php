@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace BaserCore\Model\Entity;
 
+use Cake\Core\Configure;
 use Cake\I18n\FrozenTime;
 use Cake\ORM\Entity;
 
@@ -45,5 +46,15 @@ class UserGroup extends Entity
         'created' => true,
         'users' => true,
     ];
+
+    /**
+     * 管理グループかどうか判定
+     *
+     * @return bool
+     */
+    public function isAdmin(): bool
+    {
+        return (Configure::read('BcApp.adminGroupId') === $this->id);
+    }
 
 }

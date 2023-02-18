@@ -24,7 +24,7 @@ $this->BcAdmin->setHelp('user_groups_form');
 ?>
 
 
-<?= $this->BcAdminForm->create($userGroup, ['novalidate' => true]) ?>
+<?= $this->BcAdminForm->create($userGroup, ['novalidate' => true, 'id' => 'UserGroupAdminEditForm']) ?>
 
 <?php $this->BcBaser->element('UserGroups/form') ?>
 

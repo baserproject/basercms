@@ -436,9 +436,14 @@ class BcPlugin extends BasePlugin
         $prefixSettings = Configure::read('BcPrefixAuth');
         foreach($prefixSettings as $prefix => $setting) {
             $isApi = ($setting['type'] === 'Jwt')? true : false;
+            if(in_array($prefix, ['Admin', 'Api'])) {
+                $path = '/' . BcUtil::getBaserCorePrefix() . '/' . $setting['alias'];
+            } else {
+                $path = '/' . $setting['alias'];
+            }
             $routes->prefix(
                 $prefix,
-                ['path' => '/' . BcUtil::getBaserCorePrefix() . '/' . $setting['alias']],
+                ['path' => $path],
                 function(RouteBuilder $routes) use ($plugin, $isApi) {
                     $routes->plugin(
                         $plugin,

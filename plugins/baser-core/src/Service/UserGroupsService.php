@@ -14,6 +14,7 @@ namespace BaserCore\Service;
 use BaserCore\Model\Entity\UserGroup;
 use BaserCore\Model\Table\UserGroupsTable;
 use BaserCore\Utility\BcContainerTrait;
+use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
 use Cake\Datasource\EntityInterface;
 use Cake\ORM\Query;
@@ -110,10 +111,10 @@ class UserGroupsService implements UserGroupsServiceInterface
      */
     public function create(array $postData): ?EntityInterface
     {
-        $postData['auth_prefix'] = !empty($postData['auth_prefix']) ? implode(',', $postData['auth_prefix']) : "Admin";
+        $postData['auth_prefix'] = !empty($postData['auth_prefix'])? implode(',', $postData['auth_prefix']) : "Admin";
         $userGroup = $this->UserGroups->newEmptyEntity();
         $userGroup = $this->UserGroups->patchEntity($userGroup, $postData);
-        $userGroup =  $this->UserGroups->saveOrFail($userGroup);
+        $userGroup = $this->UserGroups->saveOrFail($userGroup);
         /** @var PermissionGroupsService $permissionGroupsService */
         $permissionGroupsService = $this->getService(PermissionGroupsServiceInterface::class);
         $permissionGroupsService->buildByUserGroup($userGroup->id);
@@ -133,7 +134,7 @@ class UserGroupsService implements UserGroupsServiceInterface
      */
     public function update(EntityInterface $target, array $postData): ?EntityInterface
     {
-        $postData['auth_prefix'] = !empty($postData['auth_prefix']) ? implode(',', $postData['auth_prefix']) : "Admin";
+        $postData['auth_prefix'] = !empty($postData['auth_prefix'])? implode(',', $postData['auth_prefix']) : "Admin";
         $userGroup = $this->UserGroups->patchEntity($target, $postData);
         return $this->UserGroups->saveOrFail($userGroup);
     }
@@ -164,6 +165,39 @@ class UserGroupsService implements UserGroupsServiceInterface
     public function getList(): array
     {
         return $this->UserGroups->find('list', ['keyField' => 'id', 'valueField' => 'title'])->toArray();
+    }
+
+    /**
+     * コントロールソースを取得する
+     *
+     * @param string $field
+     * @return array
+     * @noTodo
+     * @checked
+     */
+    public function getControlSource(string $field): array
+    {
+        if ($field === 'auth_prefix') {
+            return $this->getAuthPrefixes();
+        }
+        return [];
+    }
+
+    /**
+     * 認証プレフィックスのリストを取得する
+     *
+     * @return array
+     * @noTodo
+     * @checked
+     */
+    public function getAuthPrefixes(): array
+    {
+        $authPrefixes = [];
+        foreach(Configure::read('BcPrefixAuth') as $key => $authPrefix) {
+            if($key === 'Api') continue;
+            $authPrefixes[$key] = $authPrefix['name'];
+        }
+        return $authPrefixes;
     }
 
 }

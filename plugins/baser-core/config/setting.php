@@ -447,8 +447,8 @@ return [
      *
      * - `name`: 認証設定名
      * - `type`: 認証タイプ（ Session | Jwt ）
-     *    セッション認証、または、 JWT 認証を提供。
-     *    どちらにおいても、テーブルにおける ユーザー名とパスワードで識別する。
+     *      セッション認証、または、 JWT 認証を提供。
+     *      どちらにおいても、テーブルにおける ユーザー名とパスワードで識別する。
      * - `alias`: URLにおけるエイリアス
      * - `loginRedirect`: 認証後のリダイレクト先のURL
      * - `loginAction`: ログインページURL
@@ -481,7 +481,7 @@ return [
             'password' => 'password',
             'userModel' => 'BaserCore.Users',
             'sessionKey' => 'AuthAdmin',
-        ],
+        ]
     ],
     'Jwt' => [
         // kid（鍵の識別子）

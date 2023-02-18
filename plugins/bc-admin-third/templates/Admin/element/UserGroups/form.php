@@ -22,24 +22,13 @@ use Cake\Core\Configure;
  * @noTodo
  */
 
-$this->BcBaser->js('admin/user_groups/form.bundle', false);
-$authPrefixes = [];
-foreach(Configure::read('BcPrefixAuth') as $key => $authPrefix) {
-  $authPrefixes[$key] = $authPrefix['name'];
-}
+$this->BcBaser->js('admin/user_groups/form.bundle', false, [
+  'id' => 'AdminUserGroupsFormScript',
+  'defer' => true,
+  'data-isAdmin' => $userGroup->isAdmin()
+]);
+$authPrefixes = $this->BcAdminForm->getControlSource('BaserCore.UserGroups.auth_prefix');
 ?>
-
-
-<script type="text/javascript">
-  $(window).load(function () {
-    <?php if ($userGroup->name == 'admins'): ?>
-    $("#UserGroupAuthPrefixAdmin").prop('disabled', true);
-    <?php endif ?>
-    $("#UserGroupAdminEditForm").submit(function () {
-      $("#UserGroupAuthPrefixAdmin").removeAttr('disabled');
-    });
-  });
-</script>
 
 
 <?php echo $this->BcFormTable->dispatchBefore() ?>
@@ -105,11 +94,15 @@ foreach(Configure::read('BcPrefixAuth') as $key => $authPrefix) {
           class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('auth_prefix', __d('baser', '認証プレフィックス設定')) ?>
           &nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span></th>
         <td class="col-input bca-form-table__input">
-          <?php echo $this->BcAdminForm->control('auth_prefix', ['type' => 'multiCheckbox', 'options' => $authPrefixes, 'value' => explode(',', $userGroup->auth_prefix)]) ?>
+          <?php echo $this->BcAdminForm->control('auth_prefix', [
+            'type' => 'multiCheckbox',
+            'options' => $authPrefixes,
+            'value' => explode(',', $userGroup->auth_prefix)
+          ]) ?>
           <i class="bca-icon--question-circle bca-help"></i>
           <?php echo $this->BcAdminForm->error('auth_prefix') ?>
           <div class="bca-helptext">
-            <?php echo __d('baser', '認証プレフィックスの設定を指定します。<br />ユーザーグループ名が admins の場合は編集できません。') ?>
+            <?php echo __d('baser', '認証プレフィックスの設定を指定します。<br>システム管理グループの場合、管理システムの設定は変更できません。') ?>
           </div>
         </td>
       </tr>

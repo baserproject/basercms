@@ -131,7 +131,7 @@ class BcFormHelper extends FormHelper
      *
      * @param string $field フィールド名
      * @param array $options
-     * @return Query|false コントロールソース
+     * @return array|false コントロールソース
      * @checked
      * @noTodo
      * @unitTest

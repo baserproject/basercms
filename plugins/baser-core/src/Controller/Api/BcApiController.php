@@ -46,21 +46,6 @@ class BcApiController extends AppController
     public function initialize(): void
     {
         parent::initialize();
-
-        if (!filter_var(env('USE_API', false), FILTER_VALIDATE_BOOLEAN)) {
-            if ($this->getRequest()->is('ajax')) {
-                $siteDomain = BcUtil::getCurrentDomain();
-                if (empty($_SERVER['HTTP_REFERER'])) {
-                    throw new ForbiddenException(__d('baser', 'Web APIは許可されていません。'));
-                }
-                $refererDomain = BcUtil::getDomain($_SERVER['HTTP_REFERER']);
-                if (!preg_match('/^' . preg_quote($siteDomain, '/') . '/', $refererDomain)) {
-                    throw new ForbiddenException(__d('baser', 'Web APIは許可されていません。'));
-                }
-            } else {
-                throw new ForbiddenException(__d('baser', 'Web APIは許可されていません。'));
-            }
-        }
         $this->loadComponent('Authentication.Authentication');
         $this->Security->setConfig('validatePost', false);
     }

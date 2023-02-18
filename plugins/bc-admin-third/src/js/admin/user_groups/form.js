@@ -9,8 +9,14 @@
  */
 
 
-$(function () {
-    $("#BtnSave").click(function () {
-        $.bcUtil.showLoader();
-    })
+if ($("#AdminUserGroupsFormScript").attr('data-isAdmin')) {
+    $("#auth-prefix-admin").prop('disabled', true);
+}
+
+$("#UserGroupAdminEditForm").submit(function () {
+    $("#auth-prefix-admin").removeAttr('disabled');
+});
+
+$("#BtnSave").click(function () {
+    $.bcUtil.showLoader();
 });
