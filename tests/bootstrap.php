@@ -76,9 +76,9 @@ session_id('cli');
 
 // ユニットテストを実行する前の事前確認
 // GitHubActions で実行する場合は、bin/cake setup test にて、自動的に事前準備をしている
-if(!filter_var(env('USE_API'), FILTER_VALIDATE_BOOLEAN)) {
-    throw new BcException(__d('baser', 'ユニットテストを実行する際は、.env にて USE_API を true に設定してください。'));
-} elseif(!filter_var(env('USE_API'), FILTER_VALIDATE_BOOLEAN)) {
+if(!filter_var(env('USE_CORE_API'), FILTER_VALIDATE_BOOLEAN)) {
+    throw new BcException(__d('baser', 'ユニットテストを実行する際は、.env にて USE_CORE_API を true に設定してください。'));
+} elseif(!filter_var(env('DEBUG'), FILTER_VALIDATE_BOOLEAN)) {
     throw new BcException(__d('baser', 'ユニットテストを実行する際は、.env にて debug を true に設定してください。'));
 }
 
