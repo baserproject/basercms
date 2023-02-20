@@ -15,7 +15,6 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Controller\Api\BcApiController;
-use BcUploader\Service\UploaderCategoriesService;
 use BcUploader\Service\UploaderCategoriesServiceInterface;
 
 /**
@@ -27,10 +26,10 @@ class UploaderCategoriesController extends BcApiController
     /**
      * 一覧取得API
      *
-     * @param UploaderCategoriesService $service
+     * @param UploaderCategoriesServiceInterface $service
      * @return void
      */
-    public function index(UploaderCategoriesService $service)
+    public function index(UploaderCategoriesServiceInterface $service)
     {
         //todo 一覧取得API
     }
@@ -38,10 +37,10 @@ class UploaderCategoriesController extends BcApiController
     /**
      * 新規追加API
      *
-     * @param UploaderCategoriesService $service
+     * @param UploaderCategoriesServiceInterface $service
      * @return void
      */
-    public function add(UploaderCategoriesService $service)
+    public function add(UploaderCategoriesServiceInterface $service)
     {
         //todo 新規追加API
     }
@@ -49,10 +48,10 @@ class UploaderCategoriesController extends BcApiController
     /**
      * 編集API
      *
-     * @param UploaderCategoriesService $service
+     * @param UploaderCategoriesServiceInterface $service
      * @return void
      */
-    public function edit(UploaderCategoriesService $service)
+    public function edit(UploaderCategoriesServiceInterface $service)
     {
         //todo 編集API
     }
@@ -60,10 +59,10 @@ class UploaderCategoriesController extends BcApiController
     /**
      * 削除API
      *
-     * @param UploaderCategoriesService $service
+     * @param UploaderCategoriesServiceInterface $service
      * @return void
      */
-    public function delete(UploaderCategoriesService $service)
+    public function delete(UploaderCategoriesServiceInterface $service)
     {
         //todo 削除API
     }
@@ -71,10 +70,10 @@ class UploaderCategoriesController extends BcApiController
     /**
      * コピーAPI
      *
-     * @param UploaderCategoriesService $service
+     * @param UploaderCategoriesServiceInterface $service
      * @return void
      */
-    public function copy(UploaderCategoriesService $service)
+    public function copy(UploaderCategoriesServiceInterface $service)
     {
         //todo コピーAPI
     }
@@ -87,7 +86,7 @@ class UploaderCategoriesController extends BcApiController
      * ### エラー
      * 受け取ったPOSTデータのキー名 'batch' が 'delete' 以外の値であれば500エラーを発生させる
      *
-     * @param UploaderCategoriesService $service
+     * @param UploaderCategoriesServiceInterface $service
      * @checked
      * @noTodo
      */

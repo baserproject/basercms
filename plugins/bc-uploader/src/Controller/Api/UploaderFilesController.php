@@ -21,7 +21,7 @@ use Cake\ORM\Exception\PersistenceFailedException;
 use Throwable;
 
 /**
- * アップロードカテゴリコントローラー
+ * アップロードファイルコントローラー
  */
 class UploaderFilesController extends BcApiController
 {
@@ -40,7 +40,7 @@ class UploaderFilesController extends BcApiController
     /**
      * [ADMIN] Ajaxファイルアップロード
      *
-     * @param UploaderFilesService $service
+     * @param UploaderFilesServiceInterface $service
      * @checked
      * @noTodo
      */
@@ -72,7 +72,7 @@ class UploaderFilesController extends BcApiController
     /**
      * 編集処理
      *
-     * @param UploaderFilesService $service
+     * @param UploaderFilesServiceInterface $service
      * @param int $id
      * @checked
      * @noTodo
@@ -105,7 +105,7 @@ class UploaderFilesController extends BcApiController
     /**
      * アップロードファイルを削除する
      *
-     * @param UploaderFilesService $service
+     * @param UploaderFilesServiceInterface $service
      * @param int $id
      */
     public function delete(UploaderFilesServiceInterface $service, int $id)
