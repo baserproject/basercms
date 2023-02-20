@@ -27,6 +27,17 @@ class UploaderFilesController extends BcApiController
 {
 
     /**
+     * 一覧取得API
+     *
+     * @param UploaderFilesServiceInterface $service
+     * @return void
+     */
+    public function index(UploaderFilesServiceInterface $service)
+    {
+        //todo 一覧取得API
+    }
+
+    /**
      * [ADMIN] Ajaxファイルアップロード
      *
      * @param UploaderFilesService $service

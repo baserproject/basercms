@@ -1,84 +1,125 @@
 <?php
-// TODO ucmitz  : コード確認要
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Uploader.Test.Case.Controller
- * @since           baserCMS v 4.0.9
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) NPO baser foundation
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       https://basercms.net/license/index.html MIT License
  */
 
-App::uses('UploaderCategoriesController', 'BcUploader.Controller');
+namespace BcUploader\Test\TestCase\Controller\Api;
+
+use BaserCore\Test\Scenario\InitAppScenario;
+use BaserCore\TestSuite\BcTestCase;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
+use Cake\TestSuite\IntegrationTestTrait;
 
 /**
  * Class UploaderCategoriesControllerTest
- *
- * @package Uploader.Test.Case.Controller
- * @property  UploaderCategoriesController $UploaderCategoriesController
  */
-class UploaderCategoriesControllerTest extends BaserTestCase
+class UploaderCategoriesControllerTest extends BcTestCase
 {
 
     /**
-     * set up
-     *
-     * @return void
+     * ScenarioAwareTrait
      */
-    public function setUp()
+    use ScenarioAwareTrait;
+    use IntegrationTestTrait;
+
+    /**
+     * Fixtures
+     *
+     * @var array
+     */
+    public $fixtures = [
+        'plugin.BaserCore.Factory/Sites',
+        'plugin.BaserCore.Factory/SiteConfigs',
+        'plugin.BaserCore.Factory/Users',
+        'plugin.BaserCore.Factory/UsersUserGroups',
+        'plugin.BaserCore.Factory/UserGroups',
+        'plugin.BcUploader.Factory/UploaderFiles',
+        'plugin.BcUploader.Factory/UploaderCategories',
+        'plugin.BcUploader.Factory/UploaderConfigs',
+    ];
+
+    /**
+     * Access Token
+     * @var string
+     */
+    public $accessToken = null;
+
+    /**
+     * Refresh Token
+     * @var null
+     */
+    public $refreshToken = null;
+
+    /**
+     * set up
+     */
+    public function setUp(): void
     {
+        $this->setFixtureTruncate();
         parent::setUp();
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $token = $this->apiLoginAdmin(1);
+        $this->accessToken = $token['access_token'];
+        $this->refreshToken = $token['refresh_token'];
     }
 
     /**
-     * tearDown
+     * Tear Down
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
     }
 
     /**
-     * ファイルカテゴリ一覧
+     * test index
+     * @return void
      */
-    public function testAdmin_index()
+    public function test_index()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
 
     /**
-     * 新規登録
+     * test add
+     * @return void
      */
-    public function testAdmin_add()
+    public function test_add()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
 
     /**
-     * 編集
+     * test edit
+     * @return void
      */
-    public function testAdmin_edit()
+    public function test_edit()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
 
     /**
-     * 削除
+     * test delete
+     * @return void
      */
-    public function testAdmin_delete()
+    public function test_delete()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
 
     /**
-     * [ADMIN] コピー
+     * test batch
+     * @return void
      */
-    public function testAdmin_ajax_copy()
+    public function test_batch()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }

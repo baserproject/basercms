@@ -25,6 +25,61 @@ class UploaderCategoriesController extends BcApiController
 {
 
     /**
+     * 一覧取得API
+     *
+     * @param UploaderCategoriesService $service
+     * @return void
+     */
+    public function index(UploaderCategoriesService $service)
+    {
+        //todo 一覧取得API
+    }
+
+    /**
+     * 新規追加API
+     *
+     * @param UploaderCategoriesService $service
+     * @return void
+     */
+    public function add(UploaderCategoriesService $service)
+    {
+        //todo 新規追加API
+    }
+
+    /**
+     * 編集API
+     *
+     * @param UploaderCategoriesService $service
+     * @return void
+     */
+    public function edit(UploaderCategoriesService $service)
+    {
+        //todo 編集API
+    }
+
+    /**
+     * 削除API
+     *
+     * @param UploaderCategoriesService $service
+     * @return void
+     */
+    public function delete(UploaderCategoriesService $service)
+    {
+        //todo 削除API
+    }
+
+    /**
+     * コピーAPI
+     *
+     * @param UploaderCategoriesService $service
+     * @return void
+     */
+    public function copy(UploaderCategoriesService $service)
+    {
+        //todo コピーAPI
+    }
+
+    /**
      * アップロードカテゴリのバッチ処理
      *
      * 指定したアップロードカテゴリに対して削除、公開、非公開の処理を一括で行う
