@@ -150,14 +150,14 @@ class UsersControllerTest extends BcTestCase
         ];
         $this->post('/baser/admin/baser-core/users/add', $data);
         $this->assertResponseSuccess();
-        $users = $this->getTableLocator()->get('Users');
+        $users = $this->getTableLocator()->get('BaserCore.Users');
         $query = $users->find()->where(['name' => $data['name']]);
         $this->assertEquals(1, $query->count());
 
         // イベントテスト
         $this->entryEventToMock(self::EVENT_LAYER_CONTROLLER, 'BaserCore.Users.afterAdd', function(Event $event) {
             $user = $event->getData('user');
-            $users = TableRegistry::getTableLocator()->get('Users');
+            $users = TableRegistry::getTableLocator()->get('BaserCore.Users');
             $user->name = 'etc';
             $users->save($user);
         });
@@ -196,7 +196,7 @@ class UsersControllerTest extends BcTestCase
         // イベントテスト
         $this->entryEventToMock(self::EVENT_LAYER_CONTROLLER, 'BaserCore.Users.afterEdit', function(Event $event) {
             $user = $event->getData('user');
-            $users = TableRegistry::getTableLocator()->get('Users');
+            $users = TableRegistry::getTableLocator()->get('BaserCore.Users');
             $user->name = 'etc';
             $users->save($user);
         });
@@ -211,7 +211,7 @@ class UsersControllerTest extends BcTestCase
             'nickname' => 'Lorem ipsum dolor sit amet',
         ];
         $this->post('/baser/admin/baser-core/users/edit/1', $data);
-        $users = $this->getTableLocator()->get('Users');
+        $users = $this->getTableLocator()->get('BaserCore.Users');
         $query = $users->find()->where(['name' => 'etc']);
         $this->assertEquals(1, $query->count());
     }

@@ -12,6 +12,7 @@
 namespace BaserCore\View;
 
 use BaserCore\View\Helper\BcFormHelper;
+use BaserCore\View\Helper\BcTimeHelper;
 use BaserCore\View\Helper\BcToolbarHelper;
 use BaserCore\View\Helper\BcUploadHelper;
 use Cake\View\View;
@@ -31,6 +32,7 @@ use BaserCore\Event\BcEventDispatcherTrait;
  * @property BcUploadHelper $BcUpload
  * @property BcToolbarHelper $BcToolbar
  * @property BcFormHelper $BcForm
+ * @property BcTimeHelper $BcTime
  */
 class AppView extends View
 {
@@ -55,6 +57,7 @@ class AppView extends View
 //        $this->loadHelper('BaserCore.BcXml');
 //        $this->loadHelper('BaserCore.BcArray');
         // <<<
+        $this->loadHelper('BaserCore.BcTime');
         $this->loadHelper('BaserCore.BcForm', ['templates' => 'BaserCore.bc_form']);
         $this->loadHelper('BaserCore.BcAdmin');
         $this->loadHelper('BaserCore.BcContents');

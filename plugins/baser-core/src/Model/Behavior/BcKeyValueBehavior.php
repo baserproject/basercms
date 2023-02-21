@@ -113,9 +113,13 @@ class BcKeyValueBehavior extends Behavior
         $record = $this->_table->find()
             ->where(['name' => $key])
             ->first();
-        $record = $this->_table->patchEntity($record, [
-            'value' => $value
-        ]);
+        if($record) {
+            $record = $this->_table->patchEntity($record, [
+                'value' => $value
+            ]);
+        } else {
+            $record = $this->_table->newEntity(['name' => $key, 'value' => $value]);
+        }
         return (bool) $this->_table->save($record);
     }
 

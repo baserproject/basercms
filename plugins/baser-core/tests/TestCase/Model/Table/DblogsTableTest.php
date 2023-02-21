@@ -36,8 +36,7 @@ class DblogsTableTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $config = $this->getTableLocator()->exists('Dblogs')? [] : ['className' => 'BaserCore\Model\Table\DblogsTable'];
-        $this->Dblogs = $this->getTableLocator()->get('Dblogs', $config);
+        $this->Dblogs = $this->getTableLocator()->get('BaserCore.Dblogs');
     }
 
     /**

@@ -52,16 +52,21 @@ class BcAdminContentsService implements BcAdminContentsServiceInterface
             $content->site->relate_main_site && $content->main_site_content_id && $content->type == 'ContentFolder') {
             $related = true;
         }
+
+        /** @var ContentsServiceInterface $contentsService */
         $contentsService = $this->getService(ContentsServiceInterface::class);
+        $publishLink = $contentsService->isAllowPublish($content)? $contentsService->getUrl($content->url, false, $content->site->use_subdomain) : null;
+
         /* @var \BaserCore\Service\SitesService $sitesService */
         $sitesService = $this->getService(SitesServiceInterface::class);
         $siteConfigsService = $this->getService(SiteConfigsServiceInterface::class);
+
         return [
             'content' => $content,
             'related' => $related,
             'currentSiteId' => $content->site_id,
             'mainSiteId' => $content->site->main_site_id,
-            'publishLink' => $contentsService->isAllowPublish($content)? $content->url : null,
+            'publishLink' => $publishLink,
             'parentContents' => $contentsService->getContentFolderList($content->site_id, $options),
             'fullUrl' => $contentsService->getUrl($content->url, true, $content->site->use_subdomain),
             'authorList' => $this->getService(UsersServiceInterface::class)->getList(),

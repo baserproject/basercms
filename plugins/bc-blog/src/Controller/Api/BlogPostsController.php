@@ -16,6 +16,7 @@ use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Error\BcException;
 use BcBlog\Service\BlogPostsServiceInterface;
+use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\Http\Exception\ForbiddenException;
 use Cake\ORM\Exception\PersistenceFailedException;
 use Throwable;
@@ -85,10 +86,9 @@ class BlogPostsController extends BcApiController
         $blogPost = $message = $errors = null;
         try {
             $blogPost = $service->get($id, $queryParams);
-        } catch (PersistenceFailedException $e) {
-            $this->setResponse($this->response->withStatus(400));
-            $errors = $e->getEntity()->getErrors();
-            $message = __d('baser', "入力エラーです。内容を修正してください。");
+        } catch (RecordNotFoundException $e) {
+            $this->setResponse($this->response->withStatus(404));
+            $message = $e->getMessage();
         } catch (Throwable $e) {
             $this->setResponse($this->response->withStatus(500));
             $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());

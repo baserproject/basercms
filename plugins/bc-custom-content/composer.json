@@ -1,0 +1,22 @@
+{
+    "name": "baserproject/bc-custom-content",
+    "description": "BcCustomContent plugin for baserCMS",
+    "homepage": "https://basercms.net",
+    "type": "cakephp-plugin",
+    "license": "MIT",
+    "vendor-dir": "../../vendor",
+    "require": {
+        "php": ">=8.1",
+        "baserproject/baser-core": "^3.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "BcCustomContent\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "BcCustomContent\\Test\\": "tests/"
+        }
+    }
+}

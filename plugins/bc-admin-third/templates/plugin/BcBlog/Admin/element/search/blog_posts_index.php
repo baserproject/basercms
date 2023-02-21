@@ -52,7 +52,7 @@ $users = $this->BcAdminForm->getControlSource("BcBlog.BlogPosts.user_id");
 </p>
 <div class="button bca-search__btns">
   <div class="bca-search__btns-item">
-    <?php echo $this->BcAdminForm->button(__d('baser', '検索'), ['id' => 'BtnSearchSubmit', 'class' => 'bca-btn', 'data-bca-btn-type' => 'search']) ?>
+    <?php echo $this->BcAdminForm->button(__d('baser', '検索'), ['id' => 'BtnSearchSubmit', 'class' => 'bca-btn bca-loading', 'data-bca-btn-type' => 'search']) ?>
   </div>
   <div class="bca-search__btns-item">
     <?php echo $this->BcAdminForm->button(__d('baser', 'クリア'), ['id' => 'BtnSearchClear', 'class' => 'bca-btn', 'data-bca-btn-type' => 'clear']) ?>

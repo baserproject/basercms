@@ -162,7 +162,7 @@ class SitesServiceTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function testPublish()
     {
-        $sites = $this->getTableLocator()->get('Sites');
+        $sites = $this->getTableLocator()->get('BaserCore.Sites');
 
         $site = $sites->find()->order(['id' => 'ASC'])->first();
         $site->status = false;
@@ -181,7 +181,7 @@ class SitesServiceTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function testUnpublish()
     {
-        $sites = $this->getTableLocator()->get('Sites');
+        $sites = $this->getTableLocator()->get('BaserCore.Sites');
 
         $site = $sites->find()->order(['id' => 'ASC'])->first();
         $site->status = true;

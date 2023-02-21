@@ -57,6 +57,7 @@ class BcContentsBehavior extends Behavior
             $this->table->hasOne('Contents', ['className' => 'BaserCore.Contents'])
             ->setForeignKey('entity_id')
             ->setDependent(false)
+            ->setJoinType('INNER')
             ->setConditions([
                 'Contents.type' => Inflector::classify($this->table->getTable()),
                 'Contents.alias_id IS' => null,

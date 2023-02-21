@@ -126,52 +126,52 @@ class BcModelEventDispatcherTest extends BcTestCase
     }
 
     /**
-     * beforeValidate
+     * beforeMarshal
      */
-    public function testBeforeValidate()
+    public function testBeforeMarshal()
     {
         $listener = $this->getMockBuilder(BcModelEventListener::class)
             ->onlyMethods(['implementedEvents'])
-            ->addMethods(['usersBeforeValidate'])
+            ->addMethods(['usersBeforeMarshal'])
             ->getMock();
 
         $listener->method('implementedEvents')
-            ->willReturn(['Model.Users.beforeValidate' => ['callable' => 'usersBeforeValidate']]);
+            ->willReturn(['Model.Users.beforeMarshal' => ['callable' => 'usersBeforeMarshal']]);
 
         $listener->expects($this->once())
-            ->method('usersBeforeValidate');
+            ->method('usersBeforeMarshal');
 
         $this->eventManager
             ->on($listener)
             ->on($this->bcModelEventDispatcher)
             ->dispatch(new Event(
-                'Model.beforeValidate',
+                'Model.beforeMarshal',
                 new UsersTable,
                 []
             ));
     }
 
     /**
-     * afterValidate
+     * afterMarshal
      */
-    public function testAfterValidate()
+    public function testAfterMarshal()
     {
         $listener = $this->getMockBuilder(BcModelEventListener::class)
             ->onlyMethods(['implementedEvents'])
-            ->addMethods(['usersAfterValidate'])
+            ->addMethods(['usersAfterMarshal'])
             ->getMock();
 
         $listener->method('implementedEvents')
-            ->willReturn(['Model.Users.afterValidate' => ['callable' => 'usersAfterValidate']]);
+            ->willReturn(['Model.Users.afterMarshal' => ['callable' => 'usersAfterMarshal']]);
 
         $listener->expects($this->once())
-            ->method('usersAfterValidate');
+            ->method('usersAfterMarshal');
 
         $this->eventManager
             ->on($listener)
             ->on($this->bcModelEventDispatcher)
             ->dispatch(new Event(
-                'Model.afterValidate',
+                'Model.afterMarshal',
                 new UsersTable,
                 []
             ));

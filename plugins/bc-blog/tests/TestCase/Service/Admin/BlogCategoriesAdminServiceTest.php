@@ -79,6 +79,7 @@ class BlogCategoriesAdminServiceTest extends BcTestCase
      */
     public function test_getViewVarsForIndex()
     {
+        ContentFactory::make(['entity_id' => 52, 'plugin' => 'BcBlog', 'type' => 'BlogContent'])->persist();
         BlogContentFactory::make(['id' => 52, 'description' => 'test index'])->persist();
         BlogCategoryFactory::make(['id' => 52, 'title' => 'title index 1', 'blog_content_id' => 52, 'rght' => 7, 'lft' => 8])->persist();
         BlogCategoryFactory::make(['id' => 53, 'title' => 'title index 2', 'blog_content_id' => 52, 'rght' => 9, 'lft' => 10])->persist();
@@ -94,6 +95,7 @@ class BlogCategoriesAdminServiceTest extends BcTestCase
      */
     public function test_getViewVarsForAdd()
     {
+        ContentFactory::make(['entity_id' => 51, 'plugin' => 'BcBlog', 'type' => 'BlogContent'])->persist();
         BlogContentFactory::make(['id' => 51, 'description' => 'test add'])->persist();
         BlogCategoryFactory::make(['id' => 51, 'title' => 'title add', 'name' => 'name-add', 'rght' => 5, 'lft' => 6])->persist();
 

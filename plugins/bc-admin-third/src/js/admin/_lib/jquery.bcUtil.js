@@ -82,6 +82,7 @@ import Cookies from 'js-cookie'
             }
             $.bcUtil.adminBaseUrl = $.bcUtil.baseUrl + '/' + $.bcUtil.baserCorePrefix + '/' + $.bcUtil.adminPrefix + '/';
             $.bcUtil.apiBaseUrl = $.bcUtil.baseUrl + '/' + $.bcUtil.baserCorePrefix + '/api/';
+            this.setUpTextCounter();
         },
         /**
          * アラートメッセージを表示
@@ -272,7 +273,82 @@ import Cookies from 'js-cookie'
                 this.showNoticeMessage(message);
                 Cookies.remove('bcFlashMessage')
             }
-        }
+        },
+
+        /**
+         * ツールチップを初期化する
+         *
+         * @param config
+         */
+        initTooltip: function(config) {
+            let btConfig = {
+                target: '.bca-help',
+                content: '.bca-helptext'
+            };
+            if(config !== undefined) {
+                $.extend(btConfig, config);
+            }
+            let $help = $(btConfig.target);
+            if ($help.bt) {
+                $(btConfig.content).css('display', 'none');
+                $.bt.options.closeWhenOthersOpen = true;
+                $help.bt({
+                    trigger: 'click',
+                    positions: 'top',
+                    shadow: true,
+                    shadowOffsetX: 1,
+                    shadowOffsetY: 1,
+                    shadowBlur: 8,
+                    shadowColor: 'rgba(101,101,101,.6)',
+                    shadowOverlap: false,
+                    noShadowOpts: {
+                        strokeStyle: '#999',
+                        strokeWidth: 1
+                    },
+                    width: '600px',
+                    /*shrinkToFit: true,*/
+                    spikeLength: 12,
+                    spikeGirth: 18,
+                    padding: 20,
+                    cornerRadius: 0,
+                    strokeWidth: 1, /*no stroke*/
+                    strokeStyle: '#656565',
+                    fill: 'rgba(255, 255, 255, 1.00)',
+                    cssStyles: {
+                        fontSize: '14px'
+                    },
+                    showTip: function (box) {
+                        $(box).fadeIn(200);
+                    },
+                    hideTip: function (box, callback) {
+                        $(box).animate({
+                            opacity: 0
+                        }, 100, callback);
+                    },
+                    contentSelector: `$(this).next('${btConfig.content}').html()`
+                });
+            }
+        },
+
+        /**
+         * テキストカウンターをセットアップする
+         */
+        setUpTextCounter(selector) {
+            if(selector === undefined) {
+                selector = ".bca-text-counter";
+            }
+            const $textCounter = $(selector);
+            $textCounter.after('<span class="bca-text-counter-value"></span>');
+            $textCounter.keyup(function (){
+                var len = $(this).val().length;
+                var maxlen = $(this).attr('maxlength');
+                if(!maxlen || maxlen === -1){
+                    maxlen = '-';
+                }
+                $(this).next().html(len+' /<small>'+maxlen+'</small>');
+            });
+            $textCounter.keyup();
+        },
 
     };
 })(jQuery);

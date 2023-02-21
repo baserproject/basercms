@@ -247,7 +247,8 @@ return [
             'BcUploader',
             'BcWidgetArea',
             'BcContentLink',
-            'BcFavorite'
+            'BcFavorite',
+            'BcCustomContent'
         ],
         'defaultInstallCorePlugins' => [
             'BcSearchIndex',
@@ -277,6 +278,13 @@ return [
          * 例）https://localhost/update
          */
         'updateKey' => env('UPDATE_KEY', 'update'),
+
+        /**
+         * 予約語
+         * 主にDBの予約語としてテーブルのフィールドで利用できない名称
+         */
+        'reservedWords' => ['group', 'rows', 'option'],
+
         /**
          * システムナビ
          *

@@ -48,9 +48,8 @@ class PagesTableTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $config = $this->getTableLocator()->exists('Pages') ? [] : ['className' => 'BaserCore\Model\Table\PagesTable'];
-        $this->Pages = $this->getTableLocator()->get('Pages', $config);
-        $this->SearchIndexes = $this->getTableLocator()->get('SearchIndexes');
+        $this->Pages = $this->getTableLocator()->get('BaserCore.Pages');
+        $this->SearchIndexes = $this->getTableLocator()->get('BcSearchIndex.SearchIndexes');
     }
 
     /**

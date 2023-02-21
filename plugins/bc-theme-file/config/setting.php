@@ -38,7 +38,7 @@ return [
                     'menus' => [
                         'ThemeFiles' => [
                             'title' => __d('baser', 'コアテンプレート確認'),
-                            'url' => ['prefix' => 'Admin', 'plugin' => 'BcThemeFile', 'controller' => 'ThemeFiles', 'action' => 'index', $defaultFrontTheme],
+                            'url' => ['prefix' => 'Admin', 'plugin' => 'BcThemeFile', 'controller' => 'ThemeFiles', 'action' => 'index', $defaultFrontTheme, 'BaserCore'],
                             'currentRegex' => '/\/theme_files\/[^\/]+?\/' . $defaultFrontTheme . '/s'
                         ]
                     ]

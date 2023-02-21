@@ -20,7 +20,6 @@ use BaserCore\Event\BcEventDispatcherTrait;
 use BaserCore\Model\Entity\Content;
 use BaserCore\Model\Table\UsersTable;
 use BaserCore\Utility\BcUtil;
-use BcBlog\Model\Entity\BlogCategory;
 use Cake\Core\Plugin;
 use Cake\Database\Driver\Mysql;
 use Cake\Database\Driver\Postgres;
@@ -210,8 +209,8 @@ class BlogPostsTable extends BlogAppTable
             ->integer('user_id')
             ->notEmptyString('user_id', __d('baser', '投稿者を選択してください。'));
         $validator
-            ->allowEmptyString('eyecatch')
-            ->add('eyecatch', [
+            ->allowEmptyString('eye_catch')
+            ->add('eye_catch', [
                 'fileCheck' => [
                     'rule' => ['fileCheck', BcUtil::convertSize(ini_get('upload_max_filesize'))],
                     'provider' => 'bc',
@@ -219,7 +218,7 @@ class BlogPostsTable extends BlogAppTable
                 ]
             ])
             ->add('eyecatch', [
-                'fileCheck' => [
+                'fileExt' => [
                     'rule' => ['fileExt', ['gif', 'jpg', 'jpeg', 'jpe', 'jfif', 'png']],
                     'provider' => 'bc',
                     'message' => __d('baser', '許可されていないファイルです。')
@@ -458,7 +457,7 @@ class BlogPostsTable extends BlogAppTable
 
     /**
      * 公開状態を取得する
-     * 
+     *
      * 期限が設定されている場合、期限外では公開状態が非公開となる
      *
      * @param array $data モデルデータ

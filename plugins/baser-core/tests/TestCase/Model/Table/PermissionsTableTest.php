@@ -53,8 +53,7 @@ class PermissionsTableTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $config = $this->getTableLocator()->exists('Permissions')? [] : ['className' => 'BaserCore\Model\Table\PermissionsTable'];
-        $this->Permissions = $this->getTableLocator()->get('Permissions', $config);
+        $this->Permissions = $this->getTableLocator()->get('BaserCore.Permissions');
     }
 
     /**

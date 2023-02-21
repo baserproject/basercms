@@ -52,9 +52,9 @@ class ContentFoldersControllerTest extends BcTestCase
         parent::setUp();
         $this->loginAdmin($this->getRequest('/baser/admin/baser-core/content_folders'));
         $this->ContentFoldersController = new ContentFoldersController($this->getRequest());
-        $this->ContentFolders = $this->getTableLocator()->get('ContentFolders');
+        $this->ContentFolders = $this->getTableLocator()->get('BaserCore.ContentFolders');
         $this->ContentFoldersService = new ContentFoldersService();
-        $this->Contents = $this->getTableLocator()->get('Contents');
+        $this->Contents = $this->getTableLocator()->get('BaserCore.Contents');
     }
 
     /**

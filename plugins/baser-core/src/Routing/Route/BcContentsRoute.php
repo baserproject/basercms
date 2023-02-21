@@ -11,6 +11,7 @@
 
 namespace BaserCore\Routing\Route;
 
+use BaserCore\Model\Table\ContentsTable;
 use BaserCore\Service\SitesService;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
@@ -92,6 +93,7 @@ class BcContentsRoute extends Route
             }
         }
         $useSubDomain = ($site)? $site->use_subdomain : false;
+        /** @var ContentsTable $contents */
         $contents = TableRegistry::getTableLocator()->get('BaserCore.Contents');
         $content = $contents->findByUrl($checkUrl, $publish, false, $sameUrl, $useSubDomain);
         if (!$content) {

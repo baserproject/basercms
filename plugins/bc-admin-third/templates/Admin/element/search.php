@@ -22,6 +22,7 @@ use BaserCore\View\BcAdminAppView;
  * @var string $adminSearchOpenedTarget 検索エリアの開閉状態を保存するためのURL
  */
 $this->BcBaser->js('admin/search.bundle', true, [
+  'defer' => true,
   'id' => 'AdminSearchScript',
   'data-adminSearchOpened' => $adminSearchOpened,
   'data-adminSearchOpenedTarget' => $adminSearchOpenedTarget

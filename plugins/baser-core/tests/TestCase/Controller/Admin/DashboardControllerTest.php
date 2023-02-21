@@ -40,8 +40,7 @@ class DashboardControllerTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $config = $this->getTableLocator()->exists('Users')? [] : ['className' => 'BaserCore\Model\Table\UsersTable'];
-        $Users = $this->getTableLocator()->get('Users', $config);
+        $Users = $this->getTableLocator()->get('BaserCore.Users');
         $this->session(['AuthAdmin' => $Users->get(1)]);
     }
 

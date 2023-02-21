@@ -51,7 +51,7 @@ class BcControllerEventListenerTest extends BcTestCase
         $this->BcControllerEventListener = new BcControllerEventListener();
         // $BcAdminAppView = new BcAdminAppView($this->getRequest('/baser/admin'));
         // $this->BcAdminAppView = $BcAdminAppView->setPlugin("BcAdminThird");
-        // $this->Content = $this->getTableLocator()->get('Contents')->get(1);
+        // $this->Content = $this->getTableLocator()->get('BaserCore.Contents')->get(1);
     }
 
     /**

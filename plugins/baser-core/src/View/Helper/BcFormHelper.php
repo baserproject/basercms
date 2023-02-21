@@ -59,13 +59,6 @@ class BcFormHelper extends FormHelper
 // CUSTOMIZE ADD 2014/07/02 ryuring
 // >>>
     /**
-     * sizeCounter用の関数読み込み可否
-     *
-     * @var boolean
-     */
-    public $sizeCounterFunctionLoaded = false;
-
-    /**
      * フォームID
      *
      * @var string
@@ -251,7 +244,12 @@ SCRIPT_END;
         }
 
         if ($value && $value != '0000-00-00 00:00:00') {
-            [$dateValue, $timeValue] = explode(' ', $value);
+            if(strpos($value, ' ') !== false) {
+                [$dateValue, $timeValue] = explode(' ', $value);
+            } else {
+                $dateValue = $value;
+                $timeValue = '00:00:00';
+            }
             $dateOptions['value'] = $dateValue;
             $timeOptions['value'] = $timeValue;
         }
@@ -300,7 +298,9 @@ SCRIPT_END;
             $timeTag = $this->BcHtml->tag($tag, $timeTag, $timeDivOptions);
         }
         $hiddenTag = $this->hidden($fieldName, ['value' => $value, 'id' => $options['id']]);
-        $this->unlockField($fieldName);
+        if($this->formProtector) {
+            $this->unlockField($fieldName);
+        }
         $script = <<< SCRIPT_END
 <script>
 $(function(){
@@ -631,11 +631,6 @@ SCRIPT_END;
         } elseif ($options['div'] !== false) {
             unset($options['div']);
         }
-        $counter = false;
-        if (isset($options['counter'])) {
-            $counter = true;
-            unset($options['counter']);
-        }
         // <<<
 
         if ($options['type'] === 'radio' && isset($options['options'])) {
@@ -716,27 +711,6 @@ SCRIPT_END;
         // >>>
         // return $output;
         // ---
-
-        /* カウンター */
-        if (!empty($counter)) {
-            $domId = $this->domId($fieldName, $options);
-            $counter = '<span id="' . $domId . 'Counter' . '" class="bca-size-counter size-counter"></span>';
-            $script = '$("#' . $domId . '").keyup(countSize);$("#' . $domId . '").keyup();';
-            if (!$this->sizeCounterFunctionLoaded) {
-                $script .= <<< DOC_END
-function countSize() {
-	var len = $(this).val().length;
-	var maxlen = $(this).attr('maxlength');
-	if(!maxlen || maxlen == -1){
-		maxlen = '-';
-	}
-	$("#"+$(this).attr('id')+'Counter').html(len+' /<small>'+maxlen+'</small>');
-}
-DOC_END;
-                $this->sizeCounterFunctionLoaded = true;
-            }
-            $output = $output . $counter . $this->Html->scriptblock($script);
-        }
 
         // EVENT Form.afterInput
         $event = $this->dispatchLayerEvent('afterInput', [
@@ -2150,8 +2124,18 @@ DOC_END;
             'label' => false,
             'legend' => false,
             'error' => false,
+            'counter' => false,
             'templateVars' => ['tag' => 'span', 'groupTag' => 'span']
         ], $options);
+
+        if ($options['counter']) {
+            if(!empty($options['class'])) {
+                $options['class'] .= ' bca-text-counter';
+            } else {
+                $options['class'] = 'bca-text-counter';
+            }
+            unset($options['counter']);
+        }
         return parent::control($fieldName, $options);
     }
 // <<<

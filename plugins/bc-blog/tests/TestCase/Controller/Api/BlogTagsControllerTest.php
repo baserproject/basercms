@@ -16,7 +16,6 @@ use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcBlog\Controller\Api\BlogTagsController;
 use BcBlog\Test\Factory\BlogTagFactory;
-use Cake\Core\Configure;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use Cake\TestSuite\IntegrationTestTrait;
 

@@ -19,6 +19,7 @@ use BaserCore\View\BcAdminAppView;
  * @var BcAdminAppView $this
  * @var bool $isHelp
  * @var bool $isLogin
+ * @var bool $isAdminUser
  */
 
 if (!$isLogin) return;
@@ -50,7 +51,7 @@ if ($globalEvent !== false) {
           <?php $this->BcBaser->link(__d('baser', 'ヘルプ'), 'javascript:void(0)', ['id' => 'BtnMenuHelp', 'class' => 'bca-content-menu__link bca-icon--help']) ?>
         </li>
       <?php endif ?>
-      <?php if ($isSuperUser): ?>
+      <?php if ($isAdminUser): ?>
         <li class="bca-content-menu__item">
           <?php $this->BcBaser->element('Permissions/dialog') ?>
           <?php // TODO: button要素に変更 ?>

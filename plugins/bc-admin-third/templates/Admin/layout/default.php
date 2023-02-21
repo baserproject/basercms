@@ -93,7 +93,7 @@ $base = $attributes['base'];
   ]) ?>
   <?php $this->BcBaser->js([
     'admin/startup.bundle'
-  ]) ?>
+  ], true, ['defer' => true]) ?>
   <?php $this->BcBaser->scripts() ?>
 </head>
 

@@ -45,8 +45,8 @@ class BcModelEventDispatcher implements EventListenerInterface
         return [
             'Model.beforeFind' => 'beforeFind',
             'Model.afterFind' => 'afterFind',
-            'Model.beforeValidate' => 'beforeValidate',
-            'Model.afterValidate' => 'afterValidate',
+            'Model.beforeMarshal' => 'beforeMarshal',
+            'Model.afterMarshal' => 'afterMarshal',
             'Model.beforeSave' => 'beforeSave',
             'Model.afterSave' => 'afterSave',
             'Model.beforeDelete' => 'beforeDelete',
@@ -99,7 +99,7 @@ class BcModelEventDispatcher implements EventListenerInterface
     }
 
     /**
-     * beforeValidate
+     * beforeMarshal
      *
      * @param Event $event
      * @return boolean
@@ -107,12 +107,12 @@ class BcModelEventDispatcher implements EventListenerInterface
      * @noTodo
      * @unitTest
      */
-    public function beforeValidate(Event $event): bool
+    public function beforeMarshal(Event $event): bool
     {
         if (!method_exists($event->getSubject(), 'dispatchLayerEvent')) {
             return true;
         }
-        $currentEvent = $event->getSubject()->dispatchLayerEvent('beforeValidate', $event->getData());
+        $currentEvent = $event->getSubject()->dispatchLayerEvent('beforeMarshal', $event->getData());
         if ($currentEvent) {
             if ($currentEvent->isStopped()) {
                 return false;
@@ -122,7 +122,7 @@ class BcModelEventDispatcher implements EventListenerInterface
     }
 
     /**
-     * afterValidate
+     * afterMarshal
      *
      * @param Event $event
      * @return void
@@ -130,12 +130,12 @@ class BcModelEventDispatcher implements EventListenerInterface
      * @noTodo
      * @unitTest
      */
-    public function afterValidate(Event $event): void
+    public function afterMarshal(Event $event): void
     {
         if (!method_exists($event->getSubject(), 'dispatchLayerEvent')) {
             return;
         }
-        $event->getSubject()->dispatchLayerEvent('afterValidate', $event->getData());
+        $event->getSubject()->dispatchLayerEvent('afterMarshal', $event->getData());
     }
 
     /**

@@ -99,6 +99,7 @@ class BcAdminContentsComponentTest extends BcTestCase
         $page = $pagesTable->find()->where(['Contents.id' => 4])->contain(['Contents' => ['Sites']])->first();
         $controller->set('page', $page);
         $controller->setRequest($request->withParam('action', 'edit'));
+        $this->BcAdminContents->setConfig('entityVarName', 'page');
         $this->BcAdminContents->setConfig('useForm', true);
         $this->BcAdminContents->beforeRender();
         $this->assertIsArray($controller->viewBuilder()->getVar('contentsItems'));

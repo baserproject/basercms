@@ -11,6 +11,7 @@
 
 namespace BcBlog\Test\TestCase\Service\Admin;
 
+use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BcBlog\Service\Admin\BlogCommentsAdminService;
 use BcBlog\Test\Factory\BlogContentFactory;
@@ -70,6 +71,7 @@ class BlogCommentsAdminServiceTest extends BcTestCase
     {
         //データ生成
         $this->loadFixtureScenario(BlogCommentsServiceScenario::class);
+        ContentFactory::make(['entity_id' => 1, 'plugin' => 'BcBlog', 'type' => 'BlogContent'])->persist();
         BlogContentFactory::make(['id' => 1, 'description' => 'test view'])->persist();
 
         //メソードをコル

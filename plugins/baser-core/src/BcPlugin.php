@@ -437,7 +437,7 @@ class BcPlugin extends BasePlugin
         foreach($prefixSettings as $prefix => $setting) {
             $isApi = ($setting['type'] === 'Jwt')? true : false;
             if(in_array($prefix, ['Admin', 'Api'])) {
-                $path = '/' . BcUtil::getBaserCorePrefix() . '/' . $setting['alias'];
+                $path = '/' . BcUtil::getBaserCorePrefix() . $setting['alias'];
             } else {
                 $path = '/' . $setting['alias'];
             }
@@ -451,7 +451,7 @@ class BcPlugin extends BasePlugin
                         function(RouteBuilder $routes) use($isApi) {
                             if($isApi) {
                                 $routes->setExtensions(['json']);
-                                $routes->resources('{controller}');
+                                $routes->resources('{controller}', ['connectOptions' => ['routeClass' => InflectedRoute::class]]);
                             }
                             // CakePHPのデフォルトで /index が省略する仕様のため、URLを生成する際は、強制的に /index を付ける仕様に変更
                             $routes->connect('/{controller}/index', [], ['routeClass' => InflectedRoute::class]);

@@ -120,9 +120,9 @@ class BcCkeditorHelperTest extends BcTestCase
         $this->BcCkeditor->getView()->setRequest($request);
         $this->BcCkeditor->BcAdminForm->create();
         $result = $this->execPrivateMethod($this->BcCkeditor, 'build', ["Page.contents", $options]);
-        $this->assertMatchesRegularExpression('/<input type="hidden" name="ckeditor\[setting\]\[Page\]\[contents_tmp\]"/', $result);
+        $this->assertMatchesRegularExpression('/<input type="hidden" name="ContentPreviewMode"/', $result);
         $jsResult = $this->BcCkeditor->getView()->fetch('script');
-        $this->assertMatchesRegularExpression('/let config = JSON\.parse\(\$\(\'#CkeditorSettingContentsTmp\'\)\.val\(\)\)/', $jsResult);
+        $this->assertMatchesRegularExpression('/let config = JSON\.parse\(\'\{"ckeditorField/', $jsResult);
     }
 
     /**

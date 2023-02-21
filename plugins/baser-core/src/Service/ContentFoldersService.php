@@ -55,7 +55,7 @@ class ContentFoldersService implements ContentFoldersServiceInterface
 
     /**
      * ContentFoldersService constructor.
-     * 
+     *
      * @checked
      * @noTodo
      * @unitTest
@@ -68,7 +68,7 @@ class ContentFoldersService implements ContentFoldersServiceInterface
 
     /**
      * 新しいデータの初期値を取得する
-     * 
+     *
      * @return EntityInterface
      * @checked
      * @noTodo
@@ -81,7 +81,7 @@ class ContentFoldersService implements ContentFoldersServiceInterface
 
     /**
      * リストを取得する
-     * 
+     *
      * @return array
      * @checked
      * @noTodo
@@ -97,7 +97,7 @@ class ContentFoldersService implements ContentFoldersServiceInterface
 
     /**
      * コンテンツフォルダーを取得する
-     * 
+     *
      * @param int $id
      * @return EntityInterface
      * @checked
@@ -107,21 +107,22 @@ class ContentFoldersService implements ContentFoldersServiceInterface
     public function get($id, array $queryParams = []): EntityInterface
     {
         $queryParams = array_merge([
-            'status' => ''
+            'status' => '',
+            'contain' => ['Contents' => ['Sites']]
         ], $queryParams);
         $conditions = [];
         if($queryParams['status'] === 'published') {
             $conditions = $this->ContentFolders->Contents->getConditionAllowPublish();
         }
         return $this->ContentFolders->get($id, [
-            'contain' => ['Contents' => ['Sites']],
+            'contain' => $queryParams['contain'],
             'conditions' => $conditions
         ]);
     }
 
     /**
      * コンテンツフォルダーをゴミ箱から取得する
-     * 
+     *
      * @param int $id
      * @return EntityInterface
      * @throws RecordNotFoundException
@@ -143,7 +144,7 @@ class ContentFoldersService implements ContentFoldersServiceInterface
 
     /**
      * コンテンツフォルダー一覧用のデータを取得
-     * 
+     *
      * @param array $queryParams
      * @return Query
      * @checked
@@ -167,7 +168,7 @@ class ContentFoldersService implements ContentFoldersServiceInterface
 
     /**
      * コンテンツフォルダー登録
-     * 
+     *
      * @param array $data
      * @param array $options
      * @return \Cake\Datasource\EntityInterface
@@ -185,7 +186,7 @@ class ContentFoldersService implements ContentFoldersServiceInterface
 
     /**
      * 物理削除
-     * 
+     *
      * @param int $id
      * @return bool
      * @checked
@@ -194,13 +195,13 @@ class ContentFoldersService implements ContentFoldersServiceInterface
      */
     public function delete(int $id): bool
     {
-        $contentFolder = $this->get($id);
+        $contentFolder = $this->get($id, ['contain' => []]);
         return $this->ContentFolders->delete($contentFolder);
     }
 
     /**
      * コンテンツフォルダー情報を更新する
-     * 
+     *
      * @param EntityInterface $target
      * @param array $contentFolderData
      * @param array $options

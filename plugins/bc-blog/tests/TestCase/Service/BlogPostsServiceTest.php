@@ -808,6 +808,9 @@ class BlogPostsServiceTest extends BcTestCase
     public function testPublish()
     {
         // データを生成
+        // データを作成する
+        ContentFactory::make(['entity_id' => 1, 'plugin' => 'BcBlog', 'type' => 'BlogContent'])->persist();
+        BlogContentFactory::make(['id' => 1])->persist();
         BlogPostFactory::make([])->unpublish(1, 1)->persist();
 
         // サービスメソッドを呼ぶ
@@ -824,6 +827,8 @@ class BlogPostsServiceTest extends BcTestCase
     public function testUnpublish()
     {
         // データを生成
+        ContentFactory::make(['entity_id' => 1, 'plugin' => 'BcBlog', 'type' => 'BlogContent'])->persist();
+        BlogContentFactory::make(['id' => 1])->persist();
         BlogPostFactory::make([])->publish(1, 1)->persist();
 
         // サービスメソッドを呼ぶ

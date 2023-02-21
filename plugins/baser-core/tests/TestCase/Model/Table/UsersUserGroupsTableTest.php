@@ -43,8 +43,7 @@ class UsersUserGroupsTableTest extends BcTestCase
     {
         parent::setUp();
         $this->loadFixtures('Users', 'UserGroups', 'UsersUserGroups');
-        $config = $this->getTableLocator()->exists('UsersUserGroups')? [] : ['className' => 'BaserCore\Model\Table\UsersUserGroupsTable'];
-        $this->UsersUserGroups = $this->getTableLocator()->get('UsersUserGroups', $config);
+        $this->UsersUserGroups = $this->getTableLocator()->get('BaserCore.UsersUserGroups');
     }
 
     /**

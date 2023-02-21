@@ -2,6 +2,7 @@
 ##########################
 /config/app_local.php
 /config/.env
+/config/Migrations/schema-dump-default.lock
 /logs/*
 /tmp/*
 /vendor/*
@@ -70,6 +71,7 @@ nbproject/*
 !/plugins/bc-installer
 !/plugins/bc-search-index
 !/plugins/bc-content-link
+!/plugins/bc-custom-content
 !/plugins/BcSpaSample
 !/plugins/BcThemeSample
 /plugins/*/vendor
@@ -98,6 +100,7 @@ node_modules
 /webroot/bc_spa_sample
 /webroot/bc_theme_sample
 /webroot/bc_installer
+/webroot/bc_custom_content
 /webroot/debug_kit
 # jwt
 /config/jwt.key

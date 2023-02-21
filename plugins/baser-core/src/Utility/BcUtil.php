@@ -171,24 +171,11 @@ class BcUtil
      * @noTodo
      * @unitTest
      */
-    public static function isSuperUser(): bool
+    public static function isSuperUser($user = null): bool
     {
-        $loginUser = self::loginUser();
-        if (empty($loginUser)) {
-            return false;
-        }
-
-        if (empty($loginUser->user_groups) || !is_array($loginUser->user_groups)) {
-            return false;
-        }
-
-        foreach($loginUser->user_groups as $userGroup) {
-            if (in_array($userGroup->name, Configure::read('BcApp.adminGroup'))) {
-                return true;
-            }
-        }
-
-        return false;
+        /** @var User $User */
+        $loginUser = $user ?? self::loginUser();
+        return ($loginUser)? $loginUser->isSuper() : false;
     }
 
     /**
@@ -1708,6 +1695,37 @@ class BcUtil
             if (is_dir($templatePath)) return $templatePath;
         }
         return false;
+    }
+
+    /**
+     * 引数のペアから連想配列を構築する
+     *
+     * Example:
+     * `aa('a','b')`
+     *
+     * Would return:
+     * `array('a'=>'b')`
+     *
+     * @return array Associative array
+     */
+    public static function pairToAssoc()
+    {
+        $args = func_get_args();
+        $argc = count($args);
+        if($argc === 1) {
+            if(!$args[0]) return [];
+            $args = preg_split('/(?<!\\\)\|/', $args[0]);
+            $argc = count($args);
+        }
+        for($i = 0; $i < $argc; $i++) {
+            if ($i + 1 < $argc) {
+                $a[$args[$i]] = $args[$i + 1];
+            } else {
+                $a[$args[$i]] = null;
+            }
+            $i++;
+        }
+        return $a;
     }
 
 }

@@ -1,0 +1,150 @@
+.bs-search {
+  margin-bottom: 80px;
+  padding: 20px;
+  background-color: #f8f8f8;
+  border-radius: 10px;
+
+  label {
+    display: block;
+    font-size: 0.9em;
+    padding-left: 5px;
+  }
+
+  &__input-list {
+    margin-bottom: 10px;
+  }
+
+  &__input-item {
+    display: inline-block;
+    margin-bottom: 10px;
+
+    .bca-radio {
+      display: inline-block;
+      min-height: 1.5em;
+      margin: 0.2em 1em 0 0;
+      white-space: nowrap;
+      cursor: pointer;
+
+      label {
+        display: inline-block;
+      }
+    }
+
+    .bca-checkbox {
+      display: inline-block;
+      min-height: 1.5em;
+      margin: 0.2em 1em 0 0;
+      white-space: nowrap;
+      cursor: pointer;
+
+      label {
+        display: inline-block;
+      }
+    }
+
+  }
+
+  &__btns-item {
+    text-align: center;
+  }
+}
+
+.bs-cc {
+  &-description {
+    margin-bottom: 60px;
+  }
+
+  &-entries {
+    letter-spacing: 0.05rem;
+    line-height: 1.6;
+
+    &__item {
+      border-bottom: 1px solid #ddd;
+      margin: 0 !important;
+      padding: 20px 0 20px !important;
+      list-style: none;
+      font-size: 14px;
+
+      a {
+        transition: all 300ms;
+        text-decoration: none;
+
+        &:link,
+        &:visited {
+          color: #000 !important;
+        }
+
+        &:hover {
+          color: #555 !important;
+        }
+      }
+
+      &-title {
+        font-family: "SF Pro JP", "SF Pro Text", "SF Pro Icons", "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", "メイリオ", "Meiryo", "ＭＳ Ｐゴシック", "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
+        display: block;
+        padding: 10px 0;
+        font-size: 16px;
+        line-height: 1.6 !important;
+        font-weight: bold;
+      }
+
+      &-date {
+        text-align: right;
+        display: block;
+        margin: 0 !important;
+        padding-right: 10px;
+        font-size: 13px;
+        letter-spacing: 0;
+        color: #a0a2a8;
+        font-style: italic;
+        font-family: YakuHanJP, "Barlow", "Noto Sans JP", YuGothic, "游ゴシック Medium", "Yu Gothic Medium", "游ゴシック", "Yu Gothic", "メイリオ", sans-serif;
+        @include bs-mq() {
+          margin-bottom: 6px !important;;
+        }
+      }
+    }
+  }
+
+  &-entry {
+    &__date {
+      text-align: right;
+      display: block;
+      margin: 0 !important;
+      padding-right: 10px;
+      font-size: 13px;
+      letter-spacing: 0;
+      color: #a0a2a8;
+      font-style: italic;
+      font-family: YakuHanJP, "Barlow", "Noto Sans JP", YuGothic, "游ゴシック Medium", "Yu Gothic Medium", "游ゴシック", "Yu Gothic", "メイリオ", sans-serif;
+      @include bs-mq() {
+        margin-bottom: 6px !important;;
+      }
+    }
+    &__loop {
+      padding-bottom: 20px!important;
+      margin-bottom: 30px!important;
+      border-bottom:1px solid #ddd;
+      li {
+        margin-bottom: 20px;
+      }
+    }
+    table {
+      th {
+        width: 20%;
+      }
+      td {
+        ul {
+          li {
+            padding-left:0;
+          }
+          li:before {
+            display: none;
+          }
+        }
+        strong {
+          font-weight: bold;
+        }
+      }
+    }
+  }
+}

@@ -111,7 +111,7 @@ class FavoritesControllerTest extends \BaserCore\TestSuite\BcTestCase
         ];
         $this->post('/baser/api/bc-favorite/favorites/add.json?token=' . $this->accessToken, $data);
         $this->assertResponseOk();
-        $favorites = $this->getTableLocator()->get('Favorites');
+        $favorites = $this->getTableLocator()->get('BcFavorite.Favorites');
         $query = $favorites->find()->where(['name' => $data['name']]);
         $this->assertEquals(1, $query->count());
     }
@@ -148,7 +148,7 @@ class FavoritesControllerTest extends \BaserCore\TestSuite\BcTestCase
         ];
         $this->post('/baser/api/bc-favorite/favorites/edit/1.json?token=' . $this->accessToken, $data);
         $this->assertResponseSuccess();
-        $favorites = $this->getTableLocator()->get('Favorites');
+        $favorites = $this->getTableLocator()->get('BcFavorite.Favorites');
         $query = $favorites->find()->where(['name' => $data['name']]);
         $this->assertEquals(1, $query->count());
     }
@@ -164,7 +164,7 @@ class FavoritesControllerTest extends \BaserCore\TestSuite\BcTestCase
         $this->enableCsrfToken();
         $this->post('/baser/api/bc-favorite/favorites/delete/2.json?token=' . $this->accessToken);
         $this->assertResponseSuccess();
-        $favorites = $this->getTableLocator()->get('Favorites');
+        $favorites = $this->getTableLocator()->get('BcFavorite.Favorites');
         $query = $favorites->find()->where(['id' => 2]);
         $this->assertEquals(0, $query->count());
     }

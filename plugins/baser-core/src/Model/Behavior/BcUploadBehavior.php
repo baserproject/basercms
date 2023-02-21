@@ -130,6 +130,22 @@ class BcUploadBehavior extends Behavior
     }
 
     /**
+     * After Marshal
+     *
+     * バリデーションエラーが発生した際、ファイルアップロード対象のデータを元に戻す
+     *
+     * @param EventInterface $event
+     * @param EntityInterface $entity
+     * @param ArrayObject $options
+     */
+    public function afterMarshal(EventInterface $event, EntityInterface $entity, ArrayObject $options)
+    {
+        if ($entity->getErrors()) {
+            $this->BcFileUploader[$this->table()->getAlias()]->rollbackFile($entity);
+        }
+    }
+
+    /**
      * After Save
      *
      * @param EventInterface $event
@@ -159,12 +175,12 @@ class BcUploadBehavior extends Behavior
         $eventManager->off('Model.afterSave');
         $this->table()->save($entity, ['validate' => false]);
         foreach($beforeSaveListeners as $listener) {
-            if(get_class($listener['callable'][0]) !== 'BaserCore\Event\BcModelEventDispatcher' ) {
+            if (get_class($listener['callable'][0]) !== 'BaserCore\Event\BcModelEventDispatcher') {
                 $eventManager->on('Model.beforeSave', [], $listener['callable']);
             }
         }
         foreach($afterSaveListeners as $listener) {
-            if(get_class($listener['callable'][0]) !== 'BaserCore\Event\BcModelEventDispatcher' ) {
+            if (get_class($listener['callable'][0]) !== 'BaserCore\Event\BcModelEventDispatcher') {
                 $eventManager->on('Model.afterSave', [], $listener['callable']);
             }
         }
@@ -245,53 +261,53 @@ class BcUploadBehavior extends Behavior
         return $this->BcFileUploader[$this->table()->getAlias()]->getSaveDir($isTheme, $limited);
     }
 
-	/**
+    /**
      * getFileUploader
      *
-	 * @param $modelName
-	 * @return BcFileUploader|false
-     * @checked
-     * @noTodo
-     * @unitTest
-	 */
-	public function getFileUploader()
-	{
-		return (isset($this->BcFileUploader[$this->table()->getAlias()]))? $this->BcFileUploader[$this->table()->getAlias()] : false;
-	}
-
-	/**
-	 * getOldEntity
-     *
-	 * @param int $id
-	 * @return EntityInterface|null
+     * @param $modelName
+     * @return BcFileUploader|false
      * @checked
      * @noTodo
      * @unitTest
      */
-	public function getOldEntity($id)
-	{
-	    $table = $this->table();
+    public function getFileUploader()
+    {
+        return (isset($this->BcFileUploader[$this->table()->getAlias()]))? $this->BcFileUploader[$this->table()->getAlias()] : false;
+    }
+
+    /**
+     * getOldEntity
+     *
+     * @param int $id
+     * @return EntityInterface|null
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getOldEntity($id)
+    {
+        $table = $this->table();
         $query = $table->find()->where(['id' => $id]);
         if ($table instanceof \BaserCore\Model\Table\ContentsTable) {
             $oldEntity = $query->applyOptions(['withDeleted'])->first();
         } else {
             $oldEntity = $query->first();
         }
-		return ($oldEntity)?: null;
-	}
+        return ($oldEntity)?: null;
+    }
 
-	/**
+    /**
      * 全フィールドのファイル名をフィールド値ベースのファイル名に変更する
      *
-	 * @param EntityInterface $entity
+     * @param EntityInterface $entity
      * @param bool $copy
      * @checked
      * @noTodo
      * @unitTest
-	 */
-	public function renameToBasenameFields($entity, $copy = false)
-	{
-		$this->BcFileUploader[$this->table()->getAlias()]->renameToBasenameFields($entity, $copy);
-	}
+     */
+    public function renameToBasenameFields($entity, $copy = false)
+    {
+        $this->BcFileUploader[$this->table()->getAlias()]->renameToBasenameFields($entity, $copy);
+    }
 
 }

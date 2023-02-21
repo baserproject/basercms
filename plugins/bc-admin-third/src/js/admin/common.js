@@ -23,4 +23,3 @@ import "./_lib/jquery.bcTimeUtil.js";
 import "./_lib/jquery.bcCredit.js";
 import "./_lib/jquery.bcCkeditor.js";
 import "./_module/sidebar.js";
-

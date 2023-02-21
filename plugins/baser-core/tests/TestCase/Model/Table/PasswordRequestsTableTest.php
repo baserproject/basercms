@@ -57,11 +57,8 @@ class PasswordRequestsTableTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $config = $this->getTableLocator()->exists('PasswordRequests')? [] : ['className' => 'BaserCore\Model\Table\PasswordRequestsTable'];
-        $this->PasswordRequests = $this->getTableLocator()->get('PasswordRequests', $config);
-
-        $config = $this->getTableLocator()->exists('Users')? [] : ['className' => 'BaserCore\Model\Table\UsersTable'];
-        $this->Users = $this->getTableLocator()->get('Users', $config);
+        $this->PasswordRequests = $this->getTableLocator()->get('BaserCore.PasswordRequests');
+        $this->Users = $this->getTableLocator()->get('BaserCore.Users');
     }
 
     /**

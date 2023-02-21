@@ -102,14 +102,15 @@ class PagesService implements PagesServiceInterface
     public function get($id, array $options = []): EntityInterface
     {
         $options = array_merge([
-            'status' => ''
+            'status' => '',
+            'contain' => ['Contents' => ['Sites']]
         ], $options);
         $conditions = [];
         if ($options['status'] === 'publish') {
             $conditions = $this->Pages->Contents->getConditionAllowPublish();
         }
         return $this->Pages->get($id, [
-            'contain' => ['Contents' => ['Sites']],
+            'contain' => $options['contain'],
             'conditions' => $conditions
         ]);
     }
@@ -238,7 +239,7 @@ class PagesService implements PagesServiceInterface
      */
     public function delete(int $id): bool
     {
-        $page = $this->get($id);
+        $page = $this->get($id, ['contain' => []]);
         return $this->Pages->delete($page);
     }
 

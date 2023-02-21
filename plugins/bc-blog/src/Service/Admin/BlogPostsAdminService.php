@@ -58,7 +58,7 @@ class BlogPostsAdminService extends BlogPostsService implements BlogPostsAdminSe
         $blogContentsService = $this->getService(BlogContentsServiceInterface::class);
 
         $publishLink = null;
-        if ($request->getAttribute('currentContent')->status) {
+        if ($contentsService->isAllowPublish($request->getAttribute('currentContent'))) {
             $publishLink = $contentsService->getUrl(
                 $request->getAttribute('currentContent')->url,
                 true,
@@ -163,7 +163,7 @@ class BlogPostsAdminService extends BlogPostsService implements BlogPostsAdminSe
      */
     public function getPublishLink(BlogPost $post)
     {
-        if (!$post->status) return '';
+        if (!$this->allowPublish($post)) return '';
         /* @var \BaserCore\Service\ContentsService $contentsService */
         $contentsService = $this->getService(ContentsServiceInterface::class);
         return $contentsService->getUrl(

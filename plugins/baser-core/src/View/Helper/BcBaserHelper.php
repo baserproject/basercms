@@ -441,14 +441,16 @@ class BcBaserHelper extends Helper
             if (Configure::read('App.baseUrl')) {
                 $_url = 'index.php/' . $_url;
             }
-            if (!$ssl && !$admin) {
-                $url = Configure::read('BcEnv.siteUrl') . $_url;
-            } else {
-                $sslUrl = Configure::read('BcEnv.sslUrl');
-                if ($sslUrl) {
-                    $url = $sslUrl . $_url;
+            if(!preg_match('/^(mailto:|tel:)/', $_url)) {
+                if (!$ssl && !$admin) {
+                    $url = Configure::read('BcEnv.siteUrl') . $_url;
                 } else {
-                    $url = '/' . $_url;
+                    $sslUrl = Configure::read('BcEnv.sslUrl');
+                    if ($sslUrl) {
+                        $url = $sslUrl . $_url;
+                    } else {
+                        $url = '/' . $_url;
+                    }
                 }
             }
         }
@@ -460,7 +462,7 @@ class BcBaserHelper extends Helper
         if (!is_array($url)) {
             $url = preg_replace('/^' . preg_quote($this->_View->getRequest()->getAttribute('base'), '/') . '\//', '/', $url);
         }
-        $out = $this->BcHtml->link($title, $url, $options, $confirmMessage);
+        $out = $this->BcHtml->link($title, $url, $options);
 
         // EVENT Html.afterGetLink
         $event = $this->dispatchLayerEvent('afterGetLink', [
@@ -2790,6 +2792,19 @@ END_FLASH;
     public function isContentFolder()
     {
         return $this->BcContents->isFolder();
+    }
+
+    /**
+     * プラグインがロードされているか判定する
+     *
+     * @param string $plugin
+     * @return bool
+     * @checked
+     * @noTodo
+     */
+    public function isPluginLoaded(string $plugin): bool
+    {
+        return Plugin::isLoaded($plugin);
     }
 
 }

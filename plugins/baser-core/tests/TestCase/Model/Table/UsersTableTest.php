@@ -50,12 +50,8 @@ class UsersTableTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $config = $this->getTableLocator()->exists('Users')? [] : ['className' => 'BaserCore\Model\Table\UsersTable'];
-        $this->Users = $this->getTableLocator()->get('Users', $config);
-
-        $config = $this->getTableLocator()->exists('LoginStores')?
-            [] : ['className' => 'BaserCore\Model\Table\LoginStoresTable'];
-        $this->LoginStores = $this->getTableLocator()->get('LoginStores', $config);
+        $this->Users = $this->getTableLocator()->get('BaserCore.Users');
+        $this->LoginStores = $this->getTableLocator()->get('BaserCore.LoginStores');
     }
 
     /**

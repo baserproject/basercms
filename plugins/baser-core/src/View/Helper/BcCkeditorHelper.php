@@ -259,10 +259,7 @@ class BcCkeditorHelper extends Helper
             $domId = Inflector::camelize($fieldName);
         }
 
-        $fieldCamelize = Inflector::camelize($field);
-        $hidden = $this->BcAdminForm->hidden('ckeditor.setting.' . $fieldName, [
-            'id' => 'CkeditorSetting' . $fieldCamelize,
-            'value' => json_encode([
+        $setting = json_encode([
                 'ckeditorField' => "editor_{$field}",
                 'editorStylesSet' => $options['editorStylesSet'],
                 'editorEnterBr' => $options['editorEnterBr'],
@@ -289,17 +286,17 @@ class BcCkeditorHelper extends Helper
                     'baseFloatZIndex' => $options['editorBaseFloatZIndex'],
                     'styles' => $options['editorStyles'],
                 ]
-        ])]);
+        ]);
         $this->BcAdminForm->unlockField('ckeditor.setting.' . $fieldName);
         $this->BcHtml->scriptStart(['block' => true]);
         echo <<< SCRIPT_END
         $(function(){
-            let config = JSON.parse($('#CkeditorSetting{$fieldCamelize}').val());
+            let config = JSON.parse('{$setting}');
             $.bcCkeditor.show(config);
         });
         SCRIPT_END;
         $this->BcHtml->scriptEnd();
-        return $hidden . $previewModeHidden;
+        return $previewModeHidden;
     }
 
     /**

@@ -23,7 +23,8 @@
         "baserproject/bc-mail": "^3.1",
         "baserproject/bc-theme-config": "^3.1",
         "baserproject/bc-widget-area": "^3.1",
-        "imo-tikuwa/cakephp-soft-delete": "^2.0"
+        "imo-tikuwa/cakephp-soft-delete": "^2.0",
+        "ext-mbstring": "*"
     },
     "require-dev": {
         "cakephp/bake": "^2.6",

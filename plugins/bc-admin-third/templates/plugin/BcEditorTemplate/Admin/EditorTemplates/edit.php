@@ -45,7 +45,7 @@ $this->BcBaser->css('admin/ckeditor/editor', true);
     ]) ?>
   </div>
   <div class="bca-actions__sub">
-    <?php $this->BcAdminForm->postLink(__d('baser', '削除'), ['action' => 'delete', $editorTemplate->id], [
+    <?php echo $this->BcAdminForm->postLink(__d('baser', '削除'), ['action' => 'delete', $editorTemplate->id], [
       'block' => true,
       'confirm' => __d('baser', '{0} を本当に削除してもいいですか？', $editorTemplate->name),
       'class' => 'bca-submit-token button bca-btn bca-actions__item',

@@ -63,10 +63,10 @@ class UsersController extends BcAdminAppController
     public function login(UsersAdminServiceInterface $service)
     {
         $this->set($service->getViewVarsForLogin($this->getRequest()));
+        $target = $this->Authentication->getLoginRedirect() ?? Router::url(Configure::read('BcPrefixAuth.Admin.loginRedirect'));
         if ($this->request->is('post')) {
             $result = $this->Authentication->getResult();
             if ($result->isValid()) {
-                $target = $this->Authentication->getLoginRedirect() ?? Router::url(Configure::read('BcPrefixAuth.Admin.loginRedirect'));
                 $user = $result->getData();
                 $service->removeLoginKey($user->id);
                 if ($this->request->is('ssl') && $this->request->getData('saved')) {
@@ -77,6 +77,11 @@ class UsersController extends BcAdminAppController
                 return $this->redirect($target);
             } else {
                 $this->BcMessage->setError(__d('baser', 'Eメール、または、パスワードが間違っています。'));
+            }
+        } else {
+            $result = $this->Authentication->getResult();
+            if ($result->isValid()) {
+                return $this->redirect($target);
             }
         }
     }
@@ -97,7 +102,7 @@ class UsersController extends BcAdminAppController
     public function login_agent(UsersServiceInterface $service, $id): ?Response
     {
         // 特権確認
-        if (BcUtil::isSuperUser() === false) {
+        if (BcUtil::isAdminUser() === false) {
             throw new ForbiddenException();
         }
         // 既に代理ログイン済み

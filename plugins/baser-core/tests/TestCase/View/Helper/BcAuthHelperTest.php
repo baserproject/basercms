@@ -259,19 +259,19 @@ class BcAuthHelperTest extends BcTestCase
 
     /**
      * Test isSuperUser
-     * @dataProvider isSuperUserDataProvider
+     * @dataProvider isAdminUserDataProvider
      * @return void
      */
-    public function testIsSuperUser($id, $expected)
+    public function testIsAdminUser($id, $expected)
     {
         if ($id) {
             $this->loginAdmin($this->getRequest('/baser/admin'), $id);
         }
-        $result = $this->BcAuth->isSuperUser();
+        $result = $this->BcAuth->isAdminUser();
         $this->assertEquals($result, $expected);
     }
 
-    public function isSuperUserDataProvider()
+    public function isAdminUserDataProvider()
     {
         return [
             // ログインしない場合

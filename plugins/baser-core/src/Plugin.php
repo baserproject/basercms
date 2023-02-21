@@ -25,6 +25,7 @@ use BaserCore\Middleware\BcFrontMiddleware;
 use BaserCore\Middleware\BcRedirectSubSiteFilter;
 use BaserCore\Middleware\BcRequestFilterMiddleware;
 use BaserCore\ServiceProvider\BcServiceProvider;
+use BaserCore\Utility\BcEvent;
 use BaserCore\Utility\BcUtil;
 use Cake\Console\CommandCollection;
 use Cake\Core\Configure;
@@ -193,7 +194,7 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
      */
     public function setupDefaultTemplatesPath()
     {
-        if (BcUtil::isAdminSystem()) {
+        if (BcUtil::isAdminSystem() && empty($_REQUEST['preview'])) {
             $template = Configure::read('BcApp.defaultAdminTheme');
         } else {
             $template = Configure::read('BcApp.defaultFrontTheme');
@@ -222,31 +223,7 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
             $this->log($e->getMessage());
             return false;
         }
-
-        $pluginPath = BcUtil::getPluginPath($plugin);
-        // プラグインイベント登録
-        $eventTargets = ['Controller', 'Model', 'View', 'Helper'];
-        foreach($eventTargets as $eventTarget) {
-            $eventClassName = $plugin . $eventTarget . 'EventListener';
-            if (file_exists($pluginPath . 'src' . DS . 'Event' . DS . $eventClassName . '.php')) {
-                $event = EventManager::instance();
-                $class = '\\' . $plugin . '\\Event\\' . $eventClassName;
-                $pluginEvent = new $class();
-                foreach($pluginEvent->events as $key => $options) {
-                    // プラグイン側で priority の設定がされてない場合に設定
-                    if (is_array($options)) {
-                        if (empty($options['priority'])) {
-                            $options['priority'] = $priority;
-                            $pluginEvent->events[$key] = $options;
-                        }
-                    } else {
-                        unset($pluginEvent->events[$key]);
-                        $pluginEvent->events[$options] = ['priority' => $priority];
-                    }
-                }
-                $event->on($pluginEvent, null);
-            }
-        }
+        BcEvent::registerPluginEvent($plugin, $priority);
         return true;
     }
 

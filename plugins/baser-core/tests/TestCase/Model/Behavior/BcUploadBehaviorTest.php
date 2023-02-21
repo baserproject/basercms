@@ -11,7 +11,6 @@
 namespace BaserCore\Test\TestCase\Model\Behavior;
 
 use ArrayObject;
-use BaserCore\Utility\BcFileUploader;
 use Cake\ORM\Entity;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
@@ -119,11 +118,9 @@ class BcUploadBehaviorTest extends BcTestCase
      */
     public function testBeforeMarshal()
     {
-        $result = $this->table->dispatchEvent('Model.beforeMarshal', ['data' => new ArrayObject($this->uploadedData), 'options' => new ArrayObject()]);
+        $this->table->dispatchEvent('Model.beforeMarshal', ['data' => new ArrayObject($this->uploadedData), 'options' => new ArrayObject()]);
         // setupRequestDataが実行されてるか確認
         $this->assertNotNull($this->BcUploadBehavior->BcFileUploader[$this->table->getAlias()]->getUploadingFiles());
-        // 保存前にeyecatchをオブジェクトではなく、stringに変換してるか確認
-        $this->assertEquals("test.png", $result->getData('data')['eyecatch']);
     }
 
     /**

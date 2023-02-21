@@ -12,10 +12,14 @@ namespace BaserCore\Controller;
 
 use BaserCore\ServiceProvider\BcServiceProvider;
 use BaserCore\Utility\BcContainer;
+use Cake\Controller\ComponentRegistry;
 use Cake\Event\EventInterface;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use Cake\Event\EventManagerInterface;
+use Cake\Http\Response;
+use Cake\Http\ServerRequest;
 
 /**
  * BcErrorController
@@ -25,6 +29,23 @@ use BaserCore\Annotation\Checked;
  */
 class BcErrorController extends BcFrontAppController
 {
+
+    /**
+     * Constructor
+     *
+     * @param ServerRequest|null $request
+     * @param Response|null $response
+     * @param string|null $name
+     * @param EventManagerInterface|null $eventManager
+     * @param ComponentRegistry|null $components
+     */
+    public function __construct(?ServerRequest $request = null, ?Response $response = null, ?string $name = null, ?EventManagerInterface $eventManager = null, ?ComponentRegistry $components = null)
+    {
+        parent::__construct($request, $response, $name, $eventManager, $components);
+        $this->setName('Error');
+        $this->setPlugin('');
+    }
+
     /**
      * Initialization hook method.
      *

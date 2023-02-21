@@ -59,6 +59,13 @@ class BcDatabaseService implements BcDatabaseServiceInterface
     use ConfigurationTrait;
 
     /**
+     * PHP←→DBエンコーディングマップ
+     *
+     * @var array
+     */
+    protected $_encodingMaps = ['utf8' => 'UTF-8', 'sjis' => 'SJIS', 'ujis' => 'EUC-JP'];
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -144,6 +151,19 @@ class BcDatabaseService implements BcDatabaseServiceInterface
     }
 
     /**
+     * テーブルにカラムが存在するか確認する
+     *
+     * @param string $tableName
+     * @param string $columnName
+     * @return bool
+     */
+    public function columnExists(string $tableName, string $columnName)
+    {
+        $table = $this->getMigrationsTable($tableName);
+        return $table->hasColumn($columnName);
+    }
+
+    /**
      * テーブルよりカラムを削除する
      *
      * @param string $tableName
@@ -208,6 +228,23 @@ class BcDatabaseService implements BcDatabaseServiceInterface
     }
 
     /**
+     * テーブルをリネームする
+     *
+     * @param string $oldTableName
+     * @param string $newTableName
+     * @return bool
+     */
+    public function renameTable(string $oldTableName, string $newTableName)
+    {
+        $table = $this->getMigrationsTable($oldTableName);
+        $table->rename($newTableName);
+        $table->update();
+        BcUtil::clearModelCache();
+        $this->clearAppTableList();
+        return true;
+    }
+
+    /**
      * テーブルの存在チェックを行う
      *
      * @param string $tableName
@@ -241,13 +278,6 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         $this->clearAppTableList();
         return true;
     }
-
-    /**
-     * PHP←→DBエンコーディングマップ
-     *
-     * @var array
-     */
-    protected $_encodingMaps = ['utf8' => 'UTF-8', 'sjis' => 'SJIS', 'ujis' => 'EUC-JP'];
 
     /**
      * 初期データを読み込む

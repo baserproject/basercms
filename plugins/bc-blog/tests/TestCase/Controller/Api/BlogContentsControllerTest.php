@@ -17,7 +17,6 @@ use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcBlog\Controller\Api\BlogContentsController;
 use BcBlog\Test\Factory\BlogContentFactory;
-use Cake\Core\Configure;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use Cake\TestSuite\IntegrationTestTrait;
 
@@ -104,6 +103,7 @@ class BlogContentsControllerTest extends BcTestCase
      */
     public function test_view()
     {
+        ContentFactory::make(['plugin' => 'BcBlog', 'type' => 'BlogContent', 'entity_id' => 12])->persist();
         BlogContentFactory::make(['id' => 12, 'description' => 'baserCMS inc. [デモ] の最新の情報をお届けします。'])->persist();
 
         $this->get('/baser/api/bc-blog/blog_contents/view/12.json?token=' . $this->accessToken);
@@ -162,6 +162,7 @@ class BlogContentsControllerTest extends BcTestCase
      */
     public function test_edit()
     {
+        ContentFactory::make(['plugin' => 'BcBlog', 'type' => 'BlogContent', 'entity_id' => 100, 'lft' => 1, 'rght' => 2])->persist();
         BlogContentFactory::make(['id' => 100, 'description' => '新しい'])->persist();
         //実行成功
         $data = [
@@ -190,6 +191,7 @@ class BlogContentsControllerTest extends BcTestCase
      */
     public function test_delete()
     {
+        ContentFactory::make(['plugin' => 'BcBlog', 'type' => 'BlogContent', 'entity_id' => 101])->persist();
         BlogContentFactory::make(['id' => 101, 'description' => 'abc'])->persist();
 
         $this->post('/baser/api/bc-blog/blog_contents/delete/101.json?token=' . $this->accessToken);

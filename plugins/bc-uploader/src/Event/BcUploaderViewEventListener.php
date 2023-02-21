@@ -88,7 +88,7 @@ class BcUploaderViewEventListener extends BcViewEventListener
                     'ckeditorLarge' => __d('baser', '大'),
                 ], ['block' => false]);
                 $uploaderFilesTable = TableRegistry::getTableLocator()->get('BcUploader.UploaderFiles');
-                $jscode .= $View->Html->script('admin/uploader_files/ckeditor_uploader.bundle', [
+                $jscode .= $View->Html->script('BcUploader.admin/uploader_files/ckeditor_uploader.bundle', [
                     'id' => 'CkeditorUploaderScript',
                     'block' => false,
                     'data-imageSettings' => json_encode($uploaderFilesTable->getSettings()['fields']['name']['imagecopy']),

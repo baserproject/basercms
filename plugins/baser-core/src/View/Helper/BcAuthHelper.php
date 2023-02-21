@@ -244,11 +244,22 @@ class BcAuthHelper extends Helper
      * @return boolean
      * @checked
      * @noTodo
-     * @unitTest
      */
     public function isSuperUser(): bool
     {
         return BcUtil::isSuperUser();
+    }
+
+    /**
+     * 管理ユーザログイン状態判別
+     *
+     * @return boolean
+     * @checked
+     * @noTodo
+     */
+    public function isAdminUser(): bool
+    {
+        return BcUtil::isAdminUser();
     }
 
     /**

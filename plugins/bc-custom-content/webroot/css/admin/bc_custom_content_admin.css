@@ -1,0 +1,23 @@
+/**
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
+ *
+ * @copyright     Copyright (c) NPO baser foundation
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       https://basercms.net/license/index.html MIT License
+ */
+
+.bca-icon--custom::before {
+    content: "\f013";
+    font-weight: 900;
+    font-family: 'Font Awesome 5 Free';
+}
+
+.jstree-proton .bca-icon--custom {
+    color: #7faa00;
+}
+
+.jstree-proton-contextmenu .bca-icon--custom {
+    color: #7faa00;
+}

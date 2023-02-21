@@ -45,9 +45,7 @@ class AppTableTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $config = $this->getTableLocator()->exists('AppTable')? [] : ['className' => 'BaserCore\Model\Table\AppTable'];
-        $this->App = $this->getTableLocator()->get('BaserCore.AppTable', $config);
-
+        $this->App = $this->getTableLocator()->get('BaserCore.App');
     }
 
     /**
@@ -151,11 +149,11 @@ class AppTableTest extends BcTestCase
     public function testGetConditionAllowPublish()
     {
         $conditions = $this->App->getConditionAllowPublish();
-        $this->assertEquals(true, $conditions['AppTable.status']);
-        $this->assertArrayHasKey('AppTable.publish_begin <=', $conditions[0]['or'][0]);
-        $this->assertEquals(null, $conditions[0]['or'][1]['AppTable.publish_begin IS']);
-        $this->assertArrayHasKey('AppTable.publish_end >=', $conditions[1]['or'][0]);
-        $this->assertEquals(null, $conditions[1]['or'][1]['AppTable.publish_end IS']);
+        $this->assertEquals(true, $conditions['App.status']);
+        $this->assertArrayHasKey('App.publish_begin <=', $conditions[0]['or'][0]);
+        $this->assertEquals(null, $conditions[0]['or'][1]['App.publish_begin IS']);
+        $this->assertArrayHasKey('App.publish_end >=', $conditions[1]['or'][0]);
+        $this->assertEquals(null, $conditions[1]['or'][1]['App.publish_end IS']);
     }
 
 }

@@ -13,6 +13,9 @@ namespace BaserCore\Test\TestCase\Utility;
 
 use BaserCore\Event\BcEventListener;
 use BaserCore\Test\Factory\SiteConfigFactory;
+use BaserCore\Test\Factory\UserFactory;
+use BaserCore\Test\Factory\UserGroupFactory;
+use BaserCore\Test\Factory\UsersUserGroupFactory;
 use Cake\Core\App;
 use Cake\Cache\Cache;
 use Cake\Core\Plugin;
@@ -52,6 +55,9 @@ class BcUtilTest extends BcTestCase
      */
     public function setUp(): void
     {
+        // testIsSuperUser にて FixtureFactory を利用しているため、setFixtureTruncate が必要
+        // 最終的には、全て FixtureFactory に変更予定
+        $this->setFixtureTruncate();
         parent::setUp();
         $this->request = $this->getRequest();
     }
@@ -106,27 +112,33 @@ class BcUtilTest extends BcTestCase
     /**
      * Test isSuperUser
      * @return void
-     * @dataProvider isSuperUserDataProvider
      */
-    public function testIsSuperUser($id, $expects): void
+    public function testIsSuperUser(): void
     {
-        if ($id) {
-            $this->loginAdmin($this->getRequest(), $id);
-        }
-        $result = BcUtil::isSuperUser();
-        $this->assertEquals($expects, $result);
-    }
+        $this->truncateTable('user_groups');
+        $this->truncateTable('users_user_groups');
+        $this->truncateTable('users');
 
-    public function isSuperUserDataProvider()
-    {
-        return [
-            // ログインしてない場合
-            [null, false],
-            // システム管理者の場合
-            [1, true],
-            // サイト運営者などそれ以外の場合
-            [2, false]
-        ];
+        // 未ログイン
+        $this->assertFalse(BcUtil::isSuperUser());
+
+        // 特権ユーザー
+        UserFactory::make()->admin()->persist();
+        $this->loginAdmin($this->getRequest());
+        $this->assertTrue(BcUtil::isSuperUser());
+
+        // 一般管理ユーザー
+        UserFactory::make(['id' => 2])->persist();
+        UsersUserGroupFactory::make(['user_id' => 2, 'user_group_id' => 1])->persist();
+        $this->loginAdmin($this->getRequest(), 2);
+        $this->assertFalse(BcUtil::isSuperUser());
+
+        // 一般ユーザー
+        UserFactory::make(['id' => 3])->persist();
+        UserGroupFactory::make(['id' => 2])->persist();
+        UsersUserGroupFactory::make(['user_id' => 3, 'user_group_id' => 2])->persist();
+        $this->loginAdmin($this->getRequest(), 3);
+        $this->assertFalse(BcUtil::isSuperUser());
     }
 
     /**
@@ -1098,7 +1110,7 @@ class BcUtilTest extends BcTestCase
         }
         // テストAttributeとsetRequest
         $request = BcUtil::createRequest();
-        $this->assertObjectHasAttribute('params', $request);
+        $this->assertTrue(property_exists($request, 'params'));
         // dataを設定する場合
         $request = BcUtil::createRequest('/', ['testKey' => 'testValue']);
         $data = $request->getParsedBody();

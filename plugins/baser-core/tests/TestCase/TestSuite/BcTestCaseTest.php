@@ -101,14 +101,13 @@ class BcTestCaseTest extends BcTestCase
         }
         // テストAttributeとsetRequest
         $request = $this->getRequest();
-        $this->assertObjectHasAttribute('params', $request);
+        $this->assertTrue(property_exists($request, 'params'));
         $this->assertSame($request, Router::getRequest());
         // configを設定する場合
         $session = new Session();
         $session->write('test', 'testGetRequest');
         $request = $this->getRequest('/', [], 'GET', ['session' => $session]);
         $this->assertEquals('testGetRequest', $request->getSession()->read('test'));
-
     }
 
     /**

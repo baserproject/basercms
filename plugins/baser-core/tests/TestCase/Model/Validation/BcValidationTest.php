@@ -252,7 +252,7 @@ class BcValidationTest extends BcTestCase
         return [
             ["test.jpg", 1048576, 0, true],
             ["", 1048576, 0, true],
-            ["test.jpg", null, 2, 'ファイルサイズがオーバーしています。 %s MB以内のファイルをご利用ください。'],
+            ["test.jpg", null, 2, false],
             [null, null, 4, true],
         ];
     }

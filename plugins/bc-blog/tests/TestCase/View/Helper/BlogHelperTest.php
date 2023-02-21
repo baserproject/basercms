@@ -391,14 +391,14 @@ class BlogHelperTest extends BcTestCase
         $service = $this->getService(BlogPostsServiceInterface::class);
 
         // テストを実行する
-        $blogPost = $service->get(1);
+        $blogPost = $service->get(1, ['contain' => ['BlogCategories']]);
         $result = $this->Blog->getCategory($blogPost);
         $this->assertEquals('<a href="/news/archives/category/category_name">category title</a>', $result);
         // URLを作成しない場合のテスト
         $result = $this->Blog->getCategory($blogPost, ['link' => false]);
         $this->assertEquals('category title', $result);
         // カテゴリは空になるテスト
-        $blogPost = $service->get(2);
+        $blogPost = $service->get(2, ['contain' => ['BlogCategories']]);
         $result = $this->Blog->getCategory($blogPost);
         $this->assertEmpty($result);
     }

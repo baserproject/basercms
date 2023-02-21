@@ -52,8 +52,8 @@ class PagesServiceTest extends BcTestCase
     {
         parent::setUp();
         $this->PagesService = new PagesService();
-        $this->Pages = $this->getTableLocator()->get('Pages');
-        $this->Contents = $this->getTableLocator()->get('Contents');
+        $this->Pages = $this->getTableLocator()->get('BaserCore.Pages');
+        $this->Contents = $this->getTableLocator()->get('BaserCore.Contents');
     }
 
     /**
@@ -102,7 +102,7 @@ class PagesServiceTest extends BcTestCase
         $page = $this->PagesService->getTrash(3);
         $this->assertMatchesRegularExpression('/<div class="articleArea bgGray" id="service">/', $page->contents);
         $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
-        $this->expectExceptionMessage('Record not found in table "contents"');
+        $this->expectExceptionMessage('Record not found in table "pages"');
         $this->PagesService->getTrash(2);
     }
 
@@ -138,7 +138,7 @@ class PagesServiceTest extends BcTestCase
     {
         // 条件無しで一覧を取得した場合
         $pages = $this->PagesService->getIndex();
-        $this->assertEquals(9, $pages->all()->count());
+        $this->assertEquals(8, $pages->all()->count());
         $this->assertMatchesRegularExpression('/<section class="mainHeadline">/', $pages->first()->contents);
         // 条件無しで数を制限し、一覧を取得した場合
         $pages2 = $this->PagesService->getIndex(['limit' => 3]);

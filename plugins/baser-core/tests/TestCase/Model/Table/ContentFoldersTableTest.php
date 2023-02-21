@@ -60,9 +60,8 @@ class ContentFoldersTableTest extends BcTestCase
             'SiteConfigs',
             'Contents',
         );
-        $config = $this->getTableLocator()->exists('ContentFolders')? [] : ['className' => 'BaserCore\Model\Table\ContentFoldersTable'];
-        $this->ContentFolders = $this->getTableLocator()->get('ContentFolders', $config);
-        $this->SearchIndexes = $this->getTableLocator()->get('SearchIndexes');
+        $this->ContentFolders = $this->getTableLocator()->get('BaserCore.ContentFolders');
+        $this->SearchIndexes = $this->getTableLocator()->get('BcSearchIndex.SearchIndexes');
     }
 
     /**

@@ -195,10 +195,7 @@ class BcFileUploader
                 $file = $data[$name];
                 $file['uploadable'] = $this->isUploadable($setting['type'], $file['type'], $file);
                 $file['ext'] = BcUtil::decodeContent($file['type'], @$file['name']);
-                if ($file['uploadable']) {
-                    // arrayをstringとして変換
-                    $data[$name] = $file['name'];
-                } elseif (isset($file['error']) && (int) $file['error'] === UPLOAD_ERR_NO_FILE) {
+                if (isset($file['error']) && (int) $file['error'] === UPLOAD_ERR_NO_FILE) {
                     if (isset($data[$name . '_'])) {
                         // 新しいデータが送信されず、既存データを引き継ぐ場合は、元のフィールド名に戻す
                         $data[$name] = $data[$name . '_'];
@@ -1151,6 +1148,22 @@ class BcFileUploader
     public function resetUploaded()
     {
         $this->uploaded = false;
+    }
+
+    /**
+     * ファイルアップロード対象のデータを元に戻す
+     *
+     * @param EntityInterface $entity
+     */
+    public function rollbackFile(EntityInterface $entity)
+    {
+        if(!$entity->getErrors()) return;
+        foreach($this->settings['fields'] as $setting) {
+            // 値を入れ直すとエラー状態がリセットされてしまうので改めてセットしなおす
+            $error = $entity->getError($setting['name']);
+            $entity->{$setting['name']} = $entity->getOriginal($setting['name']);
+            if($error) $entity->setError($setting['name'], $error);
+        }
     }
 
 }

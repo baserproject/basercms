@@ -78,7 +78,12 @@ class BlogPostsService implements BlogPostsServiceInterface
     public function get(int $id, array $options = [])
     {
         $options = array_merge([
-            'status' => ''
+            'status' => '',
+            'contain' => [
+                'BlogContents' => ['Contents' => ['Sites']],
+                'BlogCategories',
+                'BlogTags'
+            ]
         ], $options);
         $conditions = [];
         if ($options['status'] === 'publish') {
@@ -86,10 +91,7 @@ class BlogPostsService implements BlogPostsServiceInterface
         }
         return $this->BlogPosts->get($id, [
             'conditions' => $conditions,
-            'contain' => [
-                'BlogContents' => ['Contents' => ['Sites']],
-                'BlogCategories',
-                'BlogTags']]);
+            'contain' => $options['contain']]);
     }
 
     /**

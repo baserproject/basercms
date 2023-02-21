@@ -181,6 +181,7 @@ class BlogFrontServiceTest extends BcTestCase
      */
     public function test_getIndexTemplate()
     {
+        ContentFactory::make(['entity_id' => 1, 'plugin' => 'BcBlog', 'type' => 'BlogContent'])->persist();
         BlogContentFactory::make([
             'id' => 1,
             'template' => 'template-1'
@@ -211,6 +212,7 @@ class BlogFrontServiceTest extends BcTestCase
         // サービスクラス
         $BlogContentsService = $this->getService(BlogContentsServiceInterface::class);
         // データ生成
+        ContentFactory::make(['entity_id' => 1, 'plugin' => 'BcBlog', 'type' => 'BlogContent'])->persist();
         BlogContentFactory::make(['id' => 1, 'template' => 'template-1'])->persist();
         // ブログコンテンツの設定に依存するメソードをコール
         $rs = $this->BlogFrontService->getArchivesTemplate($BlogContentsService->get(1));

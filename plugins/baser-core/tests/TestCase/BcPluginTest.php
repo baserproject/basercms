@@ -100,7 +100,7 @@ class BcPluginTest extends BcTestCase
     {
         // インストール
         $this->BcPlugin->install(['connection' => 'test']);
-        $plugins = $this->getTableLocator()->get('Plugins')->find()->where(['name' => 'BcBlog'])->first();
+        $plugins = $this->getTableLocator()->get('BaserCore.Plugins')->find()->where(['name' => 'BcBlog'])->first();
         $this->assertEquals(1, $plugins->priority);
 
         // アンインストール
@@ -115,7 +115,7 @@ class BcPluginTest extends BcTestCase
         $folder->create($from, 0777);
         $this->BcPlugin->uninstall(['connection' => 'test']);
         $this->assertFalse(is_dir($from));
-        $plugins = $this->getTableLocator()->get('Plugins')->find()->where(['name' => 'BcBlog'])->first();
+        $plugins = $this->getTableLocator()->get('BaserCore.Plugins')->find()->where(['name' => 'BcBlog'])->first();
         $this->assertNull($plugins);
         $folder->move($from, [
             'from' => $to,

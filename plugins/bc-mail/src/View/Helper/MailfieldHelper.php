@@ -11,6 +11,7 @@
 
 namespace BcMail\View\Helper;
 
+use BaserCore\Utility\BcUtil;
 use BcMail\Model\Entity\MailField;
 use Cake\View\Helper;
 use BaserCore\Annotation\UnitTest;
@@ -48,31 +49,7 @@ class MailfieldHelper extends Helper
             $attributes['type'] = 'tel';
         }
         if (!empty($data['options'])) {
-            $options = preg_split('/(?<!\\\)\|/', $data['options']);
-            /**
-             * 引数のペアから連想配列を構築する
-             *
-             * Example:
-             * `aa('a','b')`
-             *
-             * Would return:
-             * `array('a'=>'b')`
-             *
-             * @return array Associative array
-             */
-            $options = call_user_func_array(function () {
-                $args = func_get_args();
-                $argc = count($args);
-                for($i = 0; $i < $argc; $i++) {
-                    if ($i + 1 < $argc) {
-                        $a[$args[$i]] = $args[$i + 1];
-                    } else {
-                        $a[$args[$i]] = null;
-                    }
-                    $i++;
-                }
-                return $a;
-            }, $options);
+            $options = BcUtil::pairToAssoc($data['options']);
             $attributes = array_merge($attributes, $options);
         }
         return $attributes;

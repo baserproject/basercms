@@ -53,14 +53,15 @@ class ContentLinksService implements ContentLinksServiceInterface
     public function get($id, $options = [])
     {
         $options = array_merge([
-            'status' => ''
+            'status' => '',
+            'contain' => ['Contents' => ['Sites']]
         ], $options);
         $conditions = [];
         if($options['status'] === 'publish') {
             $conditions = $this->ContentLinks->Contents->getConditionAllowPublish();
         }
         return $this->ContentLinks->get($id, [
-            'contain' => ['Contents' => ['Sites']],
+            'contain' => $options['contain'],
             'conditions' => $conditions
         ]);
     }
@@ -109,7 +110,7 @@ class ContentLinksService implements ContentLinksServiceInterface
      */
     public function delete($id): bool
     {
-        $entity = $this->get($id);
+        $entity = $this->get($id, ['contain' => []]);
         return $this->ContentLinks->delete($entity);
     }
 }

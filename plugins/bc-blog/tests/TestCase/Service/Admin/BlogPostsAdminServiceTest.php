@@ -76,7 +76,15 @@ class BlogPostsAdminServiceTest extends BcTestCase
     public function test_getViewVarsForIndex()
     {
         // データを作成する
-        ContentFactory::make(['id' => 4, 'url' => '/index', 'site_id' => 1, 'status' => true])->persist();
+        ContentFactory::make([
+            'id' => 4,
+            'url' => '/index',
+            'site_id' => 1,
+            'status' => true,
+            'entity_id' => 1,
+            'plugin' => 'BcBlog',
+            'type' => 'BlogContent'
+        ])->persist();
         BlogContentFactory::make(['id' => 1])->persist();
         $this->loadFixtureScenario(InitAppScenario::class);
 
@@ -100,6 +108,15 @@ class BlogPostsAdminServiceTest extends BcTestCase
     public function test_getViewVarsForAdd()
     {
         // データを作成する
+        ContentFactory::make([
+            'id' => 4,
+            'url' => '/index',
+            'site_id' => 1,
+            'status' => true,
+            'entity_id' => 1,
+            'plugin' => 'BcBlog',
+            'type' => 'BlogContent'
+        ])->persist();
         BlogPostFactory::make(['id' => 1])->persist();
         BlogContentFactory::make(['id' => 1])->persist();
         $this->loadFixtureScenario(InitAppScenario::class);
@@ -132,6 +149,15 @@ class BlogPostsAdminServiceTest extends BcTestCase
     public function test_getViewVarsForEdit()
     {
         // データを作成する
+        ContentFactory::make([
+            'id' => 4,
+            'url' => '/index',
+            'site_id' => 1,
+            'status' => true,
+            'entity_id' => 1,
+            'plugin' => 'BcBlog',
+            'type' => 'BlogContent'
+        ])->persist();
         BlogPostFactory::make(['id' => 1])->persist();
         BlogContentFactory::make(['id' => 1])->persist();
         $this->loadFixtureScenario(InitAppScenario::class);

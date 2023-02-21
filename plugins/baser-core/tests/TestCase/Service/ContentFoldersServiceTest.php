@@ -62,8 +62,8 @@ class ContentFoldersServiceTest extends BcTestCase
         parent::setUp();
         $this->loginAdmin($this->getRequest());
         $this->ContentFoldersService = new ContentFoldersService();
-        $this->Contents = $this->getTableLocator()->get('Contents');
-        $this->ContentFolders = $this->getTableLocator()->get('ContentFolders');
+        $this->Contents = $this->getTableLocator()->get('BaserCore.Contents');
+        $this->ContentFolders = $this->getTableLocator()->get('BaserCore.ContentFolders');
     }
     /**
      * Tear Down
@@ -103,7 +103,7 @@ class ContentFoldersServiceTest extends BcTestCase
         $this->assertEquals('メインサイト', $contentFolder->content->site->display_name);
         // 論理削除されているコンテンツに紐付いている場合
         $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
-        $this->expectExceptionMessage('Record not found in table "contents"');
+        $this->expectExceptionMessage('Record not found in table "content_folders"');
         $this->ContentFoldersService->getTrash(1);
     }
 
@@ -116,7 +116,7 @@ class ContentFoldersServiceTest extends BcTestCase
     {
         $contentFolders = $this->ContentFoldersService->getIndex();
         $this->assertEquals('baserCMSサンプル', $contentFolders->first()->folder_template);
-        $this->assertEquals(10, $contentFolders->count());
+        $this->assertEquals(8, $contentFolders->count());
     }
     /**
      * Test create
@@ -189,7 +189,7 @@ class ContentFoldersServiceTest extends BcTestCase
     public function testDelete()
     {
         /* @var Content $content */
-        $content = $this->Contents->find()->where(['type' => 'ContentFolder', 'entity_id' => 10])->first();
+        $content = $this->Contents->find()->where(['type' => 'ContentFolder', 'entity_id' => 4])->first();
         $this->assertTrue($this->ContentFoldersService->delete($content->entity_id));
         $this->assertEquals(0, $this->ContentFolders->find()->where(['ContentFolders.id' => $content->entity_id])->count());
         $this->assertEquals(0, $this->Contents->find()

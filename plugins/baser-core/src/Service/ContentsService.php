@@ -69,7 +69,7 @@ class ContentsService implements ContentsServiceInterface
 
     /**
      * Construct
-     * 
+     *
      * @checked
      * @noTodo
      * @unitTest
@@ -82,7 +82,7 @@ class ContentsService implements ContentsServiceInterface
 
     /**
      * 新しいデータの初期値を取得する
-     * 
+     *
      * @return EntityInterface
      * @checked
      * @noTodo
@@ -95,7 +95,7 @@ class ContentsService implements ContentsServiceInterface
 
     /**
      * リストデータを取得
-     * 
+     *
      * @param array $queryParams
      * @return array
      * @checked
@@ -113,7 +113,7 @@ class ContentsService implements ContentsServiceInterface
     /**
      * 新規登録する
      * 対応しない
-     * 
+     *
      * @param array $postData
      * @return EntityInterface|null
      * @checked
@@ -127,7 +127,7 @@ class ContentsService implements ContentsServiceInterface
 
     /**
      * コンテンツを取得する
-     * 
+     *
      * @param int $id
      * @return EntityInterface
      * @checked
@@ -143,7 +143,7 @@ class ContentsService implements ContentsServiceInterface
 
     /**
      * ゴミ箱のコンテンツを取得する
-     * 
+     *
      * @param int $id
      * @return EntityInterface|array
      * @throws \Cake\Datasource\Exception\RecordNotFoundException
@@ -237,7 +237,7 @@ class ContentsService implements ContentsServiceInterface
 
     /**
      * コンテンツ管理の一覧用のデータを取得
-     * 
+     *
      * @param array $queryParams
      * @param string $type
      * @return Query
@@ -301,7 +301,7 @@ class ContentsService implements ContentsServiceInterface
 
     /**
      * getTrashIndex
-     * 
+     *
      * @param array $queryParams
      * @param string $type
      * @return Query
@@ -355,7 +355,7 @@ class ContentsService implements ContentsServiceInterface
 
     /**
      * ツリー構造のデータを コンボボックスのデータ用に変換する
-     * 
+     *
      * @param array $nodes
      * @return array
      * @checked
@@ -465,7 +465,7 @@ class ContentsService implements ContentsServiceInterface
 
     /**
      * コンテンツ情報を削除する
-     * 
+     *
      * @param int $id
      * @param bool $enableTree (デフォルト:false) TreeBehaviorの有無
      * @return bool
@@ -493,7 +493,7 @@ class ContentsService implements ContentsServiceInterface
 
     /**
      * コンテンツ情報と紐付いてるモデルを物理削除する
-     * 
+     *
      * @param int $id
      * @return bool
      * @checked
@@ -507,7 +507,7 @@ class ContentsService implements ContentsServiceInterface
         $service = $content->plugin . '\\Service\\' . Inflector::pluralize($content->type) . 'ServiceInterface';
         $table = $content->plugin . '\\Model\\Table\\' . Inflector::pluralize($content->type) . 'Table';
         $isPluginEnabled = Plugin::isLoaded($content->plugin);
-        if ($isPluginEnabled && interface_exists($service)) {
+        if ($isPluginEnabled && interface_exists($service) && method_exists($service, 'delete')) {
             $target = $this->getService($service);
             return $target->delete($content->entity_id);
         } elseif ($isPluginEnabled && class_exists($table)) {
@@ -615,7 +615,7 @@ class ContentsService implements ContentsServiceInterface
 
     /**
      * コンテンツ情報を取得する
-     * 
+     *
      * @return array
      * @checked
      * @noTodo
@@ -641,7 +641,7 @@ class ContentsService implements ContentsServiceInterface
     /**
      * ツリー構造より論理削除する
      * TODO: キャッシュビヘイビアー実装後復活させる
-     * 
+     *
      * @param $id
      * @return bool
      * @checked
@@ -950,7 +950,7 @@ class ContentsService implements ContentsServiceInterface
     }
 
     /**
-     * 
+     *
      *
      * @checked
      * @noTodo
@@ -1392,7 +1392,7 @@ class ContentsService implements ContentsServiceInterface
     /**
      * エンコードされたURLをデコードせずにパースする
      * ※DBのレコードがエンコードされたまま保存されてる場合があるためその値を取得する際にデコードが邪魔になる際使用する
-     * 
+     *
      * @param string $fullUrl
      * @return array $parsedUrl
      * @checked
@@ -1417,7 +1417,7 @@ class ContentsService implements ContentsServiceInterface
 
     /**
      * ツリー構造のパスを取得する
-     * 
+     *
      * @param string $id
      * @return QueryInterface
      * @checked
@@ -1431,7 +1431,7 @@ class ContentsService implements ContentsServiceInterface
 
     /**
      * 一括処理
-     * 
+     *
      * @param array $ids
      * @return bool
      * @checked
@@ -1455,7 +1455,7 @@ class ContentsService implements ContentsServiceInterface
 
     /**
      * IDを指定してタイトルリストを取得する
-     * 
+     *
      * @param $ids
      * @return array
      * @checked
@@ -1469,7 +1469,7 @@ class ContentsService implements ContentsServiceInterface
 
     /**
      * リネーム処理
-     * 
+     *
      * @param EntityInterface $content
      * @param array $postData
      * @return EntityInterface|null

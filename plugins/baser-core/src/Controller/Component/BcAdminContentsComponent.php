@@ -106,14 +106,18 @@ class BcAdminContentsComponent extends Component
      */
     public function settingForm()
     {
-        EventManager::instance()->on(new BcContentsEventListener($this->getConfig('entityVarName')));
         $controller = $this->getController();
-        $entityName = Inflector::classify($controller->getName());
+        $entityName = $this->getConfig('entityVarName')?? Inflector::classify($controller->getName());
+        EventManager::instance()->on(new BcContentsEventListener($entityName));
 
-        if ($entityName === "Content") {
+        if ($entityName === "content") {
             $content = $controller->viewBuilder()->getVar(Inflector::variable($entityName));
         } else {
             $associated = $controller->viewBuilder()->getVar(Inflector::variable($entityName));
+            if(!isset($associated->content)) {
+                throw new BcException(__d('baser', '編集画面で利用するエンティティに content プロパティが定義されていません。
+                    エンティティを取得する際に、contain を利用して、[\'Contents\' => [\'Sites\']] を指定してください。'));
+            }
             $content = $associated->content;
         }
         $controller->getRequest()->getSession()->write('BcApp.Admin.currentSite', $content->site);

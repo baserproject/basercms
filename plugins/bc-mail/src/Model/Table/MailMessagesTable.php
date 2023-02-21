@@ -13,7 +13,7 @@ namespace BcMail\Model\Table;
 
 use Authentication\PasswordHasher\DefaultPasswordHasher;
 use BaserCore\Error\BcException;
-use BcMail\Model\Entity\MailMessage;
+use BaserCore\Utility\BcUtil;
 use Cake\Datasource\ConnectionManager;
 use Cake\Datasource\EntityInterface;
 use Cake\Datasource\ResultSetInterface;
@@ -208,6 +208,7 @@ class MailMessagesTable extends MailAppTable
         if (!$postData) return;
         $validator = new $this->_validatorClass();
         $validator->setProvider('mailMessage', 'BcMail\Model\Validation\MailMessageValidation');
+        $validator->setProvider('bc', 'BaserCore\Model\Validation\BcValidation');
 
         foreach($this->mailFields as $mailField) {
             if ($mailField->valid) {
@@ -269,7 +270,8 @@ class MailMessagesTable extends MailAppTable
                             ) {
                                 $validator->add($mailField->field_name, [
                                     'fileCheck' => [
-                                        'rule' => ['fileCheck', $this->convertSize($options['maxFileSize'], 'B', 'M')],
+                                        'provider' => 'bc',
+                                        'rule' => ['fileCheck', BcUtil::convertSize($options['maxFileSize'], 'B', 'M')],
                                         'message' => __('ファイルのアップロードに失敗しました。')
                                     ]
                                 ]);
@@ -283,6 +285,7 @@ class MailMessagesTable extends MailAppTable
                             if (!empty($options['fileExt'])) {
                                 $validator->add($mailField->field_name, [
                                     'fileExt' => [
+                                        'provider' => 'bc',
                                         'rule' => ['fileExt', $options['fileExt']],
                                         'message' => __('ファイル形式が無効です。')
                                     ]

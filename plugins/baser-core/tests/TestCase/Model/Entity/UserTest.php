@@ -45,8 +45,7 @@ class UserTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $config = $this->getTableLocator()->exists('Users')? [] : ['className' => 'BaserCore\Model\Table\UsersTable'];
-        $this->User = $this->getTableLocator()->get('Users', $config)->get(1, ['contain' => 'UserGroups']);
+        $this->User = $this->getTableLocator()->get('BaserCore.Users')->get(1, ['contain' => 'UserGroups']);
     }
 
     /**
@@ -88,7 +87,7 @@ class UserTest extends BcTestCase
      */
     public function testGetDisplayName($nickname, $realName1, $realName2, $expect)
     {
-        $userTable = $this->getTableLocator()->get('Users');
+        $userTable = $this->getTableLocator()->get('BaserCore.Users');
         /** @var User $user */
         $user = $userTable->newEntity([
             'nickname' => $nickname,

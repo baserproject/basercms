@@ -12,14 +12,15 @@
 namespace BcBlog\Test\TestCase\Controller\Api;
 
 use BaserCore\Service\DblogsServiceInterface;
+use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Factory\SiteConfigFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BcBlog\Controller\Api\BlogPostsController;
 use BcBlog\Service\BlogPostsServiceInterface;
+use BcBlog\Test\Factory\BlogContentFactory;
 use BcBlog\Test\Factory\BlogPostFactory;
-use Cake\Core\Configure;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -42,10 +43,12 @@ class BlogPostsControllerTest extends BcTestCase
      */
     public $fixtures = [
         'plugin.BaserCore.Factory/Sites',
+        'plugin.BaserCore.Factory/Contents',
         'plugin.BaserCore.Factory/SiteConfigs',
         'plugin.BaserCore.Factory/Users',
         'plugin.BaserCore.Factory/UsersUserGroups',
         'plugin.BaserCore.Factory/UserGroups',
+        'plugin.BcBlog.Factory/BlogContents',
         'plugin.BcBlog.Factory/BlogPosts',
         'plugin.BaserCore.Factory/Dblogs',
     ];
@@ -118,6 +121,8 @@ class BlogPostsControllerTest extends BcTestCase
     public function test_view()
     {
         // データを生成
+        ContentFactory::make(['plugin' => 'BcBlog', 'type' => 'BlogContent', 'entity_id' => 1])->persist();
+        BlogContentFactory::make(['id' => 1])->persist();
         BlogPostFactory::make(['id' => 1, 'blog_content_id' => 1, 'status' => true])->persist();
         // APIを呼ぶ
         $this->get('/baser/api/bc-blog/blog_posts/view/1.json');
@@ -132,10 +137,10 @@ class BlogPostsControllerTest extends BcTestCase
         // APIを呼ぶ
         $this->get('/baser/api/bc-blog/blog_posts/view/100.json?token=' . $this->accessToken);
         // レスポンスを確認
-        $this->assertResponseCode(500);
+        $this->assertResponseCode(404);
         // 戻り値を確認
         $result = json_decode((string)$this->_response->getBody());
-        $this->assertEquals('データベース処理中にエラーが発生しました。Record not found in table "blog_posts"', $result->message);
+        $this->assertEquals('Record not found in table "blog_posts"', $result->message);
 
         //ログインしていない状態では status パラメーターへへのアクセスを禁止するか確認
         $this->get('/baser/api/bc-blog/blog_posts/view/1.json?status=publish');
@@ -199,7 +204,9 @@ class BlogPostsControllerTest extends BcTestCase
     public function test_edit()
     {
         //データを生成
-        BlogPostFactory::make(['id' => 1])->persist();
+        ContentFactory::make(['plugin' => 'BcBlog', 'type' => 'BlogContent', 'entity_id' => 1])->persist();
+        BlogContentFactory::make(['id' => 1])->persist();
+        BlogPostFactory::make(['id' => 1, 'blog_content_id' => 1])->persist();
 
         //正常の時を確認
         //編集データーを生成
@@ -230,7 +237,9 @@ class BlogPostsControllerTest extends BcTestCase
     public function test_copy()
     {
         //データを生成
-        BlogPostFactory::make(['id' => 1, 'title' => 'test'])->persist();
+        ContentFactory::make(['plugin' => 'BcBlog', 'type' => 'BlogContent', 'entity_id' => 1])->persist();
+        BlogContentFactory::make(['id' => 1])->persist();
+        BlogPostFactory::make(['id' => 1, 'title' => 'test', 'blog_content_id' => 1])->persist();
 
         //正常の時を確認
         //APIをコル
@@ -257,6 +266,8 @@ class BlogPostsControllerTest extends BcTestCase
     public function test_publish()
     {
         //データーを生成
+        ContentFactory::make(['plugin' => 'BcBlog', 'type' => 'BlogContent', 'entity_id' => 1])->persist();
+        BlogContentFactory::make(['id' => 1])->persist();
         BlogPostFactory::make([])->unpublish(1, 1)->persist();
 
         //正常の時を確認
@@ -289,7 +300,9 @@ class BlogPostsControllerTest extends BcTestCase
     public function test_unpublish()
     {
         //データーを生成
-        BlogPostFactory::make(['id' => '1'])->persist();
+        ContentFactory::make(['plugin' => 'BcBlog', 'type' => 'BlogContent', 'entity_id' => 1])->persist();
+        BlogContentFactory::make(['id' => 1])->persist();
+        BlogPostFactory::make(['id' => 1, 'blog_content_id' => 1])->persist();
 
         //正常の時を確認
         //APIをコル
@@ -327,6 +340,8 @@ class BlogPostsControllerTest extends BcTestCase
         //// 正常系のテスト
         // 非公開状態のデータを生成
         SiteConfigFactory::make(['name' => 'content_types', 'value' => ''])->persist();
+        ContentFactory::make(['plugin' => 'BcBlog', 'type' => 'BlogContent', 'entity_id' => 1])->persist();
+        BlogContentFactory::make(['id' => 1])->persist();
         BlogPostFactory::make([])->unpublish(1, 1)->persist();
         BlogPostFactory::make([])->unpublish(2, 1)->persist();
 
@@ -409,7 +424,9 @@ class BlogPostsControllerTest extends BcTestCase
     {
         //データを生成
         SiteConfigFactory::make(['name' => 'content_types', 'value' => ''])->persist();
-        BlogPostFactory::make(['id' => 1])->persist();
+        ContentFactory::make(['plugin' => 'BcBlog', 'type' => 'BlogContent', 'entity_id' => 1])->persist();
+        BlogContentFactory::make(['id' => 1])->persist();
+        BlogPostFactory::make(['id' => 1, 'blog_content_id' => 1])->persist();
 
         //正常の時を確認
         //APIをコル

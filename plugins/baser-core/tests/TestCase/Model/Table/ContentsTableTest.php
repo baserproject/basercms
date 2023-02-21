@@ -64,8 +64,7 @@ class ContentsTableTest extends BcTestCase
     {
         parent::setUp();
         $this->loadFixtures('Contents', 'Sites', 'Users', 'UserGroups', 'UsersUserGroups');
-        $config = $this->getTableLocator()->exists('Contents')? [] : ['className' => 'BaserCore\Model\Table\ContentsTable'];
-        $this->Contents = $this->getTableLocator()->get('Contents', $config);
+        $this->Contents = $this->getTableLocator()->get('BaserCore.Contents');
     }
 
     /**

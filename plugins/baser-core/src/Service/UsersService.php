@@ -200,7 +200,13 @@ class UsersService implements UsersServiceInterface
      */
     public function getList(array $queryParams = []): array
     {
-        return $this->Users->getUserList();
+        $options = array_merge([
+            'status' => null
+        ], $queryParams);
+
+        $conditions = [];
+        if(!is_null($options['status'])) $conditions['status'] = $options['status'];
+        return $this->Users->getUserList($conditions);
     }
 
     /**
@@ -364,8 +370,6 @@ class UsersService implements UsersServiceInterface
         if ($user === null) return false;
 
         $authentication->persistIdentity($request, $response, $user);
-        // キーのリフレッシュ
-        $this->LoginStores->refresh('Admin', $user->id);
         return $user;
     }
 
