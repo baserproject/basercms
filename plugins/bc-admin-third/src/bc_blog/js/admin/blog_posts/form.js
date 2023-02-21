@@ -171,8 +171,8 @@ $(function () {
                     click: function () {
                         addCategory(
                             blogContentId,
-                            $('#blogcategory-title').val(),
-                            $('#blogcategory-name').val()
+                            $('#blogcategory-name').val(),
+                            $('#blogcategory-title').val()
                         );
                         return false;
                     }
