@@ -102,11 +102,18 @@ class MailFieldsController extends BcApiController
      * [API] メールフィールド API 一覧取得
      *
      * @param MailFieldsServiceInterface $service
-     * @return void
+     * @param int $mailContentId
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function index(MailFieldsServiceInterface $service)
+    public function index(MailFieldsServiceInterface $service, int $mailContentId)
     {
-        //todo メールフィールド API 一覧取得
+        $this->set([
+            'mailFields' => $service->getIndex($mailContentId, $this->request->getQueryParams())
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['mailFields']);
     }
 
     /**

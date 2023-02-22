@@ -41,8 +41,18 @@ class MailFieldsFactory extends CakephpBaseFactory
     protected function setDefaultTemplate(): void
     {
         $this->setDefaultData(function (Generator $faker) {
-            return [];
+            return [
+                'no' => $faker->randomNumber(),
+                'name' => $faker->text,
+                'field_name' => $faker->text,
+                'head' => $faker->text
+            ];
         });
     }
 
+    public function createFieldTypeText($mailContentId)
+    {
+        return $this->setField('mail_content_id', $mailContentId)
+            ->setField('type', 'text');
+    }
 }

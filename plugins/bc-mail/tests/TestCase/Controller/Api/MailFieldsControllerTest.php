@@ -71,7 +71,16 @@ class MailFieldsControllerTest extends BcTestCase
      */
     public function testIndex()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        MailFieldsFactory::make([])->createFieldTypeText(1)->persist();
+        MailFieldsFactory::make([])->createFieldTypeText(1)->persist();
+        MailFieldsFactory::make([])->createFieldTypeText(2)->persist();
+
+        $this->get("/baser/api/bc-mail/mail_fields/index/1.json?token=" . $this->accessToken);
+        // レスポンスコードを確認する
+        $this->assertResponseOk();
+        // レスポンスのメールメッセージデータを確認する
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertCount(2, $result->mailFields);
     }
 
     /**
