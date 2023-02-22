@@ -13,6 +13,8 @@ namespace BcMail\Test\TestCase\Controller\Api;
 
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcContainerTrait;
+use BcMail\Service\MailMessagesServiceInterface;
 use BcMail\Test\Factory\MailFieldsFactory;
 use BcMail\Test\Scenario\MailFieldsScenario;
 use Cake\TestSuite\IntegrationTestTrait;
@@ -26,7 +28,7 @@ class MailFieldsControllerTest extends BcTestCase
      */
     use ScenarioAwareTrait;
     use IntegrationTestTrait;
-
+    use BcContainerTrait;
     /**
      * Fixtures
      *
@@ -124,7 +126,47 @@ class MailFieldsControllerTest extends BcTestCase
      */
     public function testAdd()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        //テストデータベースを生成
+        $MailMessagesService->createTable(10);
+        //データを生成
+        $data = [
+            'mail_content_id' => 10,
+            'field_name' => 'name_add_1',
+            'type' => 'text',
+            'name' => '性',
+            'head' => 'お名前',
+            'valid' => 0,
+            'not_empty' => 0,
+            'valid_ex' => null,
+            'attention'=>null,
+            'before_attachment'=>null,
+            'after_attachment'=>null,
+            'description'=>null,
+            'source' => '',
+            'size' => null,
+            'text_rows' => null,
+            'maxlength' => 255,
+            'group_field' => null,
+            'group_valid' => null,
+            'options' => null,
+            'class' => null,
+            'default_value' => null,
+            'auto_convert' => null,
+            'use_field' => 1,
+            'no_send' => 0,
+        ];
+        //APIを呼ぶ
+        $this->post("/baser/api/bc-mail/mail_fields/add.json?token=" . $this->accessToken, $data);
+        // レスポンスコードを確認する
+        $this->assertResponseOk();
+        // 戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertNotNull($result->mailField);
+        $this->assertEquals($result->message, '新規メールフィールド「性」を追加しました。');
+
+        //テストデータベースを削除
+        $MailMessagesService->dropTable(10);
     }
 
     /**
