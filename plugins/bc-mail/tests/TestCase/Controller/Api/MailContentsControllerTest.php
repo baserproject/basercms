@@ -184,7 +184,45 @@ class MailContentsControllerTest extends BcTestCase
      */
     public function testDelete()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //メールのコンテンツサービスをコル
+        $mailContentServices = $this->getService(MailContentsServiceInterface::class);
+        //データを生成
+        MailContentFactory::make([
+            'id' => 1,
+            'description' => 'description test',
+            'sender_name' => 'baserCMSサンプル',
+            'subject_user' => '【baserCMS】お問い合わせ頂きありがとうございます。',
+            'subject_admin' => '【baserCMS】お問い合わせを受け付けました',
+            'form_template' => 'default',
+            'mail_template' => 'mail_default',
+            'redirect_url' => '/',
+        ])->persist();
+        ContentFactory::make([
+            'name' => 'name_test',
+            'plugin' => 'BcMail',
+            'type' => 'MailContent',
+            'url' => '/contact/',
+            'title' => 'お問い合わせ',
+            'entity_id' => 1,
+            'rght' => 1,
+            'lft' => 2,
+            'created_date' => '2023-02-16 16:41:37',
+        ])->persist();
+        //APIを呼ぶ
+        $this->post("/baser/api/bc-mail/mail_contents/delete/1.json?token=" . $this->accessToken);
+        // レスポンスコードを確認する
+        $this->assertResponseOk();
+        // 戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertNotNull($result->mailContent);
+        $this->assertNotNull($result->content);
+        // 戻るメッセージを確認
+        $this->assertEquals($result->message, 'メールフォーム「お問い合わせ」を削除しました。');
+
+        //削除したメールコンテンツが存在しないか確認すること
+        $mailContent = $this->getTableLocator()->get('MailContents');
+        $query = $mailContent->find()->where(['id' => 1]);
+        $this->assertEquals(0, $query->count());
     }
 
     /**
