@@ -84,16 +84,41 @@ class MailContentsController extends BcApiController
             'message' => $message,
             'errors' => $entity->getErrors()
         ]);
-        $this->viewBuilder()->setOption('serialize', ['message', 'blogContent', 'content', 'errors']);
+        $this->viewBuilder()->setOption('serialize', ['message', 'mailContent', 'content', 'errors']);
     }
 
     /**
      * メールコンテンツAPI 編集
+     * @param MailContentsServiceInterface $service
+     * @param int $id
      * @return void
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function edit()
+    public function edit(MailContentsServiceInterface $service, $id)
     {
-        //todo メールコンテンツAPI 編集
+        $this->request->allowMethod(['post', 'put', 'patch']);
+        try {
+            $entity = $service->update($service->get($id), $this->request->getData());
+            $message = __d('baser', 'メールフォーム「{0}」を更新しました。', $entity->content->title);
+        } catch (PersistenceFailedException $e) {
+            $entity = $e->getEntity();
+            $message = __d('baser', "入力エラーです。内容を修正してください。");
+            $this->setResponse($this->response->withStatus(400));
+        } catch (\Throwable $e) {
+            $this->setResponse($this->response->withStatus(400));
+            $message = __d('baser', '処理中にエラーが発生しました。');
+        }
+
+        $this->set([
+            'mailContent' => $entity,
+            'content' => $entity->content,
+            'message' => $message,
+            'errors' => $entity->getErrors()
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['message', 'mailContent', 'content', 'errors']);
     }
 
     /**
