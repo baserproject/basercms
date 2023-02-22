@@ -11,6 +11,8 @@
 
 namespace BaserCore\Test\TestCase\Controller\Admin;
 
+use Cake\Core\Configure;
+use Cake\Core\Plugin as CakePlugin;
 use Cake\TestSuite\IntegrationTestTrait;
 use BaserCore\TestSuite\BcTestCase;
 use ReflectionClass;
@@ -62,6 +64,8 @@ class AnalyseControllerTest extends BcTestCase
         $this->get('/baser-core/analyse/index/bc-admin-third.json');
         $this->assertResponseOk();
         $this->assertHeader('Content-Type', 'application/json');
+        // 解析のため、内部的に BcCustomContent を読み込むが他のテストに影響があるため削除
+        CakePlugin::getCollection()->remove('BcCustomContent');
     }
 
     /**
