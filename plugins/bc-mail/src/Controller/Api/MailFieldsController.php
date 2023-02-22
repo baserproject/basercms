@@ -268,10 +268,38 @@ class MailFieldsController extends BcApiController
      * [API] メールフィールド API コピー
      *
      * @param MailFieldsServiceInterface $service
+     * @param int $mailContentId
+     * @param int $id
      * @return void
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function copy(MailFieldsServiceInterface $service)
+    public function copy(MailFieldsServiceInterface $service, int $mailContentId, int $id)
     {
-        //todo メールフィールド API コピー
+        $this->request->allowMethod(['post', 'put', 'patch']);
+        try {
+            if ($service->copy($mailContentId, $id)) {
+                $mailField = $service->get($id);
+                $message = __d('baser', 'メールフィールド「{0}」をコピーしました。', $mailField->name);
+            } else {
+                $message = __d('baser', 'データベース処理中にエラーが発生しました。');
+            }
+        } catch (PersistenceFailedException $e) {
+            $mailField = $e->getEntity();
+            $this->setResponse($this->response->withStatus(400));
+            $message = __d('baser', '入力エラーです。内容を修正してください。');
+        } catch (\Throwable $e) {
+            $this->setResponse($this->response->withStatus(400));
+            $message = __d('baser', '処理中にエラーが発生しました。' . $e->getMessage());
+        }
+
+        $this->set([
+            'message' => $message,
+            'mailField' => $mailField,
+            'errors' => $mailField->getErrors(),
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['mailField', 'message', 'errors']);
     }
 }

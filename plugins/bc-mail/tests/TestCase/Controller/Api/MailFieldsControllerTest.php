@@ -15,6 +15,7 @@ use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BcMail\Service\MailMessagesServiceInterface;
+use BcMail\Service\MailFieldsServiceInterface;
 use BcMail\Test\Factory\MailFieldsFactory;
 use BcMail\Test\Scenario\MailFieldsScenario;
 use Cake\TestSuite\IntegrationTestTrait;
@@ -221,6 +222,32 @@ class MailFieldsControllerTest extends BcTestCase
         $result = json_decode((string)$this->_response->getBody());
         $this->assertNotNull($result->mailField);
         $this->assertEquals($result->message, 'メールフィールド「性」を削除しました。');
+    }
+
+    /**
+     * [API] メールフィールド API 削除
+     */
+    public function testCopy()
+    {
+        //データを生成
+        //メールメッセージサービスをコル
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        $MailFieldsService = $this->getService(MailFieldsServiceInterface::class);
+        //メールメッセージフィルドを追加
+        $MailMessagesService->addMessageField(1, 'name_1');
+        //メールフィルドのデータを生成
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+        //APIを呼ぶ
+        $this->post("/baser/api/bc-mail/mail_fields/copy/1/1.json?token=" . $this->accessToken);
+        // レスポンスコードを確認する
+        $this->assertResponseOk();
+        // 戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertNotNull($result->mailField);
+        $this->assertEquals($result->message, 'メールフィールド「性」をコピーしました。');
+        //メールフィルドがコピーできるか確認
+        $mailField = $MailFieldsService->getIndex(1, ['name' => '性_copy'])->get();
+        $this->assertCount(1, $mailField);
     }
 
     /**
