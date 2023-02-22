@@ -14,6 +14,7 @@ namespace BcMail\Test\TestCase\Controller\Api;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcMail\Test\Factory\MailFieldsFactory;
+use BcMail\Test\Scenario\MailFieldsScenario;
 use Cake\TestSuite\IntegrationTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
@@ -107,7 +108,15 @@ class MailFieldsControllerTest extends BcTestCase
      */
     public function testList()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを生成
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+        //APIを呼ぶ
+        $this->get("/baser/api/bc-mail/mail_fields/list/1.json?token=" . $this->accessToken);
+        // レスポンスコードを確認する
+        $this->assertResponseOk();
+        // 戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertNotNull($result->mailFields);
     }
 
     /**

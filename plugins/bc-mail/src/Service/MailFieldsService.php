@@ -83,9 +83,18 @@ class MailFieldsService implements MailFieldsServiceInterface
 
     /**
      * リスト取得
+     *
+     * @param int $mailContentId
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function getList()
+    public function getList(int $mailContentId)
     {
+        $conditions = [];
+        if ($mailContentId) $conditions = ['MailFields.mail_content_id' => $mailContentId];
+        return $this->MailFields->find('list', ['keyField' => 'id', 'valueField' => 'name'])->where($conditions)->toArray();
     }
 
     /**
