@@ -22,13 +22,14 @@
 define('DS', DIRECTORY_SEPARATOR);
 define('ROOT_DIR', dirname(dirname(__DIR__)) . DS);
 $url = $_SERVER['REQUEST_URI'];
+$phpPath = whichPhp();
 if (preg_match('/\/logo\.png$/', $url)) {
     header('Content-Type: image/png; charset=utf-8');
     echo file_get_contents(ROOT_DIR . 'plugins' . DS . 'bc-admin-third' . DS . 'webroot' . DS . 'img' . DS . 'admin' . DS . 'logo_large.png');
     return;
 } elseif (preg_match('/\/install_composer$/', $url) && $_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
-        command();
+        command($_POST['php_path']);
         echo json_encode([
             'result' => true,
         ]);
@@ -42,8 +43,17 @@ if (preg_match('/\/logo\.png$/', $url)) {
 } elseif (!preg_match('/\/$/', $url)) {
     return;
 }
-function command()
+
+function whichPhp()
 {
+    exec('which php', $out, $code);
+    if ($code === 0) return $out[0];
+    return '';
+}
+
+function command($phpPath)
+{
+    if (!$phpPath) $phpPath = 'php';
     if (!is_writable(ROOT_DIR . 'composer')) {
         throw new Exception('/composer に書き込み権限がありません。書き込み権限を与えてください。');
     }
@@ -60,13 +70,13 @@ function command()
         throw new Exception('/logs に書き込み権限がありません。書き込み権限を与えてください。');
     }
     $composerDir = ROOT_DIR . 'composer' . DS;
-    $command = "cd {$composerDir}; export HOME={$composerDir}; curl -sS https://getcomposer.org/installer | php";
+    $command = "cd {$composerDir}; export HOME={$composerDir}; curl -sS https://getcomposer.org/installer | {$phpPath}";
     exec($command, $out, $code);
     if ($code !== 0) throw new Exception('composer のインストールに失敗しました。');
-    $command = "cd " . ROOT_DIR . "; export HOME={$composerDir} ; {$composerDir}composer.phar self-update";
+    $command = "cd " . ROOT_DIR . "; export HOME={$composerDir} ; {$phpPath} {$composerDir}composer.phar self-update";
     exec($command, $out, $code);
     if ($code !== 0) throw new Exception('composer のアップデートに失敗しました。');
-    $command = "cd " . ROOT_DIR . "; export HOME={$composerDir} ; {$composerDir}composer.phar install";
+    $command = "cd " . ROOT_DIR . "; export HOME={$composerDir} ; {$phpPath} {$composerDir}composer.phar install";
     exec($command, $out, $code);
     if ($code !== 0) throw new Exception('ライブラリのインストールに失敗しました。');
     copy(ROOT_DIR . 'config' . DS . '.env.example', ROOT_DIR . 'config' . DS . '.env');
@@ -184,6 +194,29 @@ function command()
             white-space: nowrap;
         }
 
+        .bca-textbox__input {
+            /*display: block;*/
+            width: 100%;
+            height: 52px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            margin: 0 0 20px;
+            padding: 0.69em 1em;
+            color: #424f44;
+            font-size: 1.6rem;
+            font-weight: bold;
+            line-height: 1;
+            /*-webkit-appearance: none;*/
+            /*-moz-appearance: none;*/
+            /*appearance: none;*/
+        }
+
+        .bca-textbox__input:focus {
+            border-color: #6fa83d;
+            border-width: 1px;
+            outline: none;
+        }
+
         .bca-footer {
             width: 100%;
             color: #ccc;
@@ -258,11 +291,16 @@ function command()
     <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
     <script>
         $(function () {
+            let messageBox = $("#MessageBox");
+            let message = $("#flashMessage");
+            let status = $("#InstallStatus");
+            const phpPathExists = <?php echo ($phpPath)? 'true' : 'false' ?>;
+            if (!phpPathExists) {
+                message.addClass('alert-message').html('PHPのパスが取得できません。<br>確認の上、手動で入力してください。');
+                messageBox.fadeIn(500);
+            }
             $('#BtnInstall').click(function () {
                 $('#BtnInstall').attr('disabled', 'disabled');
-                let messageBox = $("#MessageBox");
-                let message = $("#flashMessage");
-                let status = $("#InstallStatus");
                 message.removeClass();
                 messageBox.hide();
                 status.show().append('Library install start.');
@@ -272,6 +310,7 @@ function command()
                 $.ajax({
                     type: "POST",
                     url: "./install_composer",
+                    data: $("#AdminInstallerForm").serialize(),
                     dataType: "json",
                     success: function (result) {
                         if (result.result) {
@@ -291,12 +330,13 @@ function command()
                         status.html('').hide();
                     }
                 });
+                return false;
             });
         });
     </script>
 </head>
 
-<body id="AdminBaserCoreUsersLogin" class="normal">
+<body id="AdminInstaller" class="normal">
 
 <div id="Page" class="bca-app">
     <header id="Header" class="bca-header"></header>
@@ -309,17 +349,22 @@ function command()
                             <h1 class="bca-login__title">
                                 <img src="./logo.png" alt="ライブラリのインストール" class="bca-login__logo"/>
                             </h1>
-                            <p>baserCMSのインストールを開始する前にライブラリのインストールが必要です。
-                            /tmp と /logs と /config と /composer と /vendor フォルダに書き込み権限が必要となります。</p>
-                            <div class="submit bca-login-form-btn-group">
-                                <button type="submit" class="bca-btn--login bca-btn" data-bca-btn-type="login" id="BtnInstall" tabindex="4">
-                                    ライブラリをインストールする
-                                </button>
-                            </div>
-                            <div id="MessageBox" class="message-box">
-                                <div id="flashMessage" class=""></div>
-                            </div>
-                            <div id="InstallStatus"></div>
+                            <form id="AdminInstallerForm" method="POST">
+                                <p>baserCMSのインストールを開始する前にライブラリのインストールが必要です。
+                                    /tmp と /logs と /config と /composer と /vendor フォルダに書き込み権限が必要となります。</p>
+                                <small>PHPのパス</small>
+                                <input type="text" name="php_path" value="<?php echo $phpPath ?>" class="bca-textbox__input"/>
+
+                                <div class=" submit bca-login-form-btn-group">
+                                    <button type="button" class="bca-btn--login bca-btn" data-bca-btn-type="login" id="BtnInstall" tabindex="4">
+                                        ライブラリをインストールする
+                                    </button>
+                                </div>
+                                <div id="MessageBox" class="message-box">
+                                    <div id="flashMessage" class=""></div>
+                                </div>
+                                <div id="InstallStatus"></div>
+                            </form>
                         </div>
                     </div>
                 </div>

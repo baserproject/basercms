@@ -37,7 +37,9 @@ $isSmartphone = $this->getRequest()->is('smartphone');
 
 	<nav class="bs-header__nav<?php echo ($isSmartphone)? '' : ' use-mega-menu' ?>" id="BsMenuContent">
 		<!-- /Elements/global_menu.php -->
+		<?php if(\BaserCore\Utility\BcUtil::isInstalled()): ?>
 		<?php $this->BcBaser->globalMenu(2) ?>
+		<?php endif ?>
 	</nav>
 
 </header>
