@@ -13,6 +13,7 @@ namespace BcUploader\Test\TestCase\Controller\Api;
 
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
+use Cake\Filesystem\File;
 use BcUploader\Test\Scenario\UploaderFilesScenario;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use Cake\TestSuite\IntegrationTestTrait;
@@ -99,12 +100,37 @@ class UploaderFilesControllerTest extends BcTestCase
     }
 
     /**
-     * test add
-     * @return void
+     * test upload
      */
-    public function test_add()
+    public function test_upload()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $pathTest = TMP . 'test' . DS;
+        $pathUpload = WWW_ROOT . DS . 'files' . DS . 'uploads' . DS;
+
+        //テストファイルを作成
+        new File($pathTest . 'testUpload.txt', true);
+        $testFile = $pathTest . 'testUpload.txt';
+
+        //アップロードファイルを準備
+        $this->setUploadFileToRequest('file', $testFile);
+        $this->setUnlockedFields(['file']);
+
+        //APIをコル
+        $this->post("/baser/api/bc-uploader/uploader_files/upload.json?token=" . $this->accessToken);
+
+        //レスポンスステータスを確認
+        $this->assertResponseOk();
+
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('アップロードファイル「testUpload.txt」を追加しました。', $result->message);
+        $this->assertNotNull($result->uploaderFile);
+
+        //ファイルがアップロードできるか確認
+        $this->assertTrue(file_exists($pathUpload . 'testUpload.txt'));
+
+        //不要ファイルを削除
+        unlink($pathUpload . 'testUpload.txt');
     }
 
     /**
