@@ -16,6 +16,7 @@ use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Controller\Api\BcApiController;
 use BaserCore\Error\BcFormFailedException;
+use BaserCore\Utility\BcUtil;
 use BcThemeFile\Service\ThemeFoldersService;
 use BcThemeFile\Service\ThemeFoldersServiceInterface;
 
@@ -265,10 +266,40 @@ class ThemeFoldersController extends BcApiController
      *
      * @param ThemeFoldersServiceInterface $service
      * @return void
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function copy_to_theme(ThemeFoldersServiceInterface $service)
     {
-        //todo テーマフォルダAPI 現在のテーマにテーマフォルダをコピー
+        $this->request->allowMethod(['post', 'put']);
+
+        try {
+            $data = $this->getRequest()->getData();
+            $data['fullpath'] = $service->getFullpath($data['theme'], $data['plugin'], $data['type'], $data['path']);
+            $targetPath = $service->copyToTheme($data);
+            $currentTheme = BcUtil::getCurrentTheme();
+            $message = __d('baser',
+                'コアフォルダ {0} を テーマ {1} の次のパスとしてコピーしました。\n{2}。',
+                basename($data['path']),
+                $currentTheme,
+                $targetPath
+            );
+        } catch (BcFormFailedException $e) {
+            $this->setResponse($this->response->withStatus(400));
+            $errors = $e->getForm()->getErrors();
+            $message = __d('baser', '入力エラーです。内容を修正してください。' . $e->getMessage());
+        } catch (\Throwable $e) {
+            $this->setResponse($this->response->withStatus(400));
+            $message = __d('baser', '処理中にエラーが発生しました。');
+        }
+
+        $this->set([
+            'message' => $message,
+            'errors' => $errors ?? null
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['message', 'errors']);
     }
 
     /**

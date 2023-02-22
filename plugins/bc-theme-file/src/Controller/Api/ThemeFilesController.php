@@ -190,7 +190,7 @@ class ThemeFilesController extends BcApiController
             $targetPath = $service->copyToTheme($data);
             $currentTheme = BcUtil::getCurrentTheme();
             $message = __d('baser',
-                'コアフォルダ {0} を テーマ {1} の次のパスとしてコピーしました。\n{2}。',
+                'コアファイル {0} を テーマ {1} の次のパスとしてコピーしました。\n{2}。',
                 basename($data['path']),
                 $currentTheme,
                 $targetPath

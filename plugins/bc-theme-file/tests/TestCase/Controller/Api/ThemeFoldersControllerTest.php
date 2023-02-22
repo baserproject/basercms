@@ -11,7 +11,8 @@
 
 namespace BcThemeFile\Test\TestCase\Controller\Api;
 
-use BaserCore\Test\Scenario\InitAppScenario;
+use BaserCore\Test\Factory\SiteFactory;
+use BaserCore\Test\Factory\UserFactory;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\Filesystem\Folder;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -45,7 +46,10 @@ class ThemeFoldersControllerTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->loadFixtureScenario(InitAppScenario::class);
+        //現在のテーマを設定する
+        SiteFactory::make(['id' => 1, 'status' => true, 'theme' => 'BcSpaSample'])->persist();
+        UserFactory::make()->admin()->persist();
+
         $token = $this->apiLoginAdmin();
         $this->accessToken = $token['access_token'];
         $this->refreshToken = $token['refresh_token'];
@@ -218,7 +222,30 @@ class ThemeFoldersControllerTest extends BcTestCase
      */
     public function test_copy_to_theme()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
+        //POSTデータを生成
+        $fullpath = BASER_PLUGINS . '/BcSpaSample/templates/';
+        $data = [
+            'theme' => 'BcFront',
+            'type' => 'Pages',
+            'path' => '',
+            'assets' => '',
+            'plugin' => 'BaserCore'
+        ];
+        //APIをコール
+        $this->post('/baser/api/bc-theme-file/theme_folders/copy_to_theme.json?token=' . $this->accessToken, $data);
+        //レスポンスコードを確認
+        $this->assertResponseSuccess();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals(
+            'コアフォルダ  を テーマ BcSpaSample の次のパスとしてコピーしました。\n/plugins/BcSpaSample/templates/Pages/。',
+            $result->message
+        );
+        //実際にフォルダがコピーできるか確認すること
+        $this->assertTrue(is_dir($fullpath . '/Pages'));
+        //生成されたフォルダを削除
+        unlink($fullpath . '/Pages/default.php');
+        rmdir($fullpath . '/Pages');
     }
 
     /**
