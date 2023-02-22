@@ -82,7 +82,7 @@ class ContentFoldersControllerTest extends BcTestCase
         $this->get('/baser/api/baser-core/content_folders/view/1.json?token=' . $this->accessToken);
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
-        $this->assertEquals("baserCMSサンプル", $result->contentFolders->folder_template);
+        $this->assertEquals("baserCMSサンプル", $result->contentFolder->folder_template);
     }
 
     /**
