@@ -13,6 +13,9 @@ namespace BcCustomContent\Controller;
 
 use BaserCore\Controller\BcFrontAppController;
 use BcCustomContent\Service\Front\CustomContentFrontServiceInterface;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * CustomContentController

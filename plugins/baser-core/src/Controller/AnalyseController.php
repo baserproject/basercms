@@ -11,6 +11,7 @@
 
 namespace BaserCore\Controller;
 
+use Cake\Core\Plugin;
 use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
 use Doctrine\Common\Annotations\AnnotationReader;
@@ -56,6 +57,10 @@ class AnalyseController extends AppController
     public function index($pluginName = null)
     {
         $basePath = ROOT . DS . 'plugins' . DS;
+
+        $plugin = new \BcCustomContent\Plugin();
+        $plugin->loadPlugin();
+
         if ($pluginName) {
             $list = $this->getList($basePath . $pluginName);
         } else {
@@ -230,7 +235,8 @@ class AnalyseController extends AppController
      */
     private function pathToClass($path)
     {
-        $file = str_replace(ROOT . DS . 'plugins', '', $path);
+        $file = str_replace(ROOT . DS . 'plugins' . DS . 'bc-custom-content' . DS . 'plugins', '', $path);
+        $file = str_replace(ROOT . DS . 'plugins', '', $file);
         $file = str_replace('/src', '', $file);
         $file = str_replace('/tests', '/Test', $file);
         $file = str_replace('/', '\\', $file);
@@ -248,6 +254,7 @@ class AnalyseController extends AppController
         $file = str_replace('bc-theme-file', 'BcThemeFile', $file);
         $file = str_replace('bc-widget-area', 'BcWidgetArea', $file);
         $file = str_replace('bc-content-link', 'BcContentLink', $file);
+        $file = str_replace('bc-custom-content', 'BcCustomContent', $file);
         return str_replace('baser-core', 'BaserCore', $file);
     }
 

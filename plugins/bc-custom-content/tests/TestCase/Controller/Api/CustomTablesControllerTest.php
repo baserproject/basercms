@@ -9,7 +9,7 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
-namespace BcCustomContent\Test\TestCase\Controller\Admin;
+namespace BcCustomContent\Test\TestCase\Controller\Api;
 
 use BaserCore\TestSuite\BcTestCase;
 
