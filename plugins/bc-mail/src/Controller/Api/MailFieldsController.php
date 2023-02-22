@@ -17,6 +17,7 @@ use BaserCore\Annotation\UnitTest;
 use BaserCore\Controller\Api\BcApiController;
 use BcMail\Service\MailFieldsService;
 use BcMail\Service\MailFieldsServiceInterface;
+use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\ORM\Exception\PersistenceFailedException;
 
 /**
@@ -230,11 +231,37 @@ class MailFieldsController extends BcApiController
      * [API] メールフィールド API 削除
      *
      * @param MailFieldsServiceInterface $service
+     * @param int $id
      * @return void
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function delete(MailFieldsServiceInterface $service)
+    public function delete(MailFieldsServiceInterface $service, int $id)
     {
-        //todo メールフィールド API 削除
+        $this->request->allowMethod(['post', 'put', 'patch']);
+        $mailField = null;
+        try {
+            $mailField = $service->get($id);
+            if ($service->delete($id)) {
+                $message = __d('baser', 'メールフィールド「{0}」を削除しました。', $mailField->name);
+            } else {
+                $message = __d('baser', 'データベース処理中にエラーが発生しました。');
+            }
+        } catch (RecordNotFoundException $e) {
+            $this->setResponse($this->response->withStatus(404));
+            $message = __d('baser', 'データが見つかりません');
+        } catch (\Throwable $e) {
+            $this->setResponse($this->response->withStatus(400));
+            $message = __d('baser', '処理中にエラーが発生しました。' . $e->getMessage());
+        }
+
+        $this->set([
+            'message' => $message,
+            'mailField' => $mailField
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['mailField', 'message']);
     }
 
     /**

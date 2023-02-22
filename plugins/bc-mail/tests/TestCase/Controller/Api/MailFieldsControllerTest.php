@@ -206,7 +206,21 @@ class MailFieldsControllerTest extends BcTestCase
      */
     public function testDelete()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを生成
+        //メールメッセージサービスをコル
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        //メールメッセージフィルドを追加
+        $MailMessagesService->addMessageField(1, 'name_1');
+        //メールフィルドのデータを生成
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+        //APIを呼ぶ
+        $this->post("/baser/api/bc-mail/mail_fields/delete/1.json?token=" . $this->accessToken);
+        // レスポンスコードを確認する
+        $this->assertResponseOk();
+        // 戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertNotNull($result->mailField);
+        $this->assertEquals($result->message, 'メールフィールド「性」を削除しました。');
     }
 
     /**
