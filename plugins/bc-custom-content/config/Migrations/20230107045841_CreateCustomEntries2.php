@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 use Migrations\AbstractMigration;
 
-class CreateCustomEntries extends AbstractMigration
+class CreateCustomEntries2 extends AbstractMigration
 {
     /**
      * Up Method.
@@ -14,10 +14,25 @@ class CreateCustomEntries extends AbstractMigration
      */
     public function up()
     {
-        $this->table('custom_entry_1_recruit')
+        $this->table('custom_entry_2_occupations')
+            ->addColumn('custom_table_id', 'integer', [
+                'default' => null,
+                'limit' => null,
+                'null' => true,
+            ])
             ->addColumn('parent_id', 'integer', [
                 'default' => null,
                 'limit' => null,
+                'null' => true,
+            ])
+            ->addColumn('name', 'text', [
+                'default' => null,
+                'limit' => null,
+                'null' => true,
+            ])
+            ->addColumn('title', 'string', [
+                'default' => null,
+                'limit' => 255,
                 'null' => true,
             ])
             ->addColumn('level', 'integer', [
@@ -31,6 +46,26 @@ class CreateCustomEntries extends AbstractMigration
                 'null' => true,
             ])
             ->addColumn('rght', 'integer', [
+                'default' => null,
+                'limit' => null,
+                'null' => true,
+            ])
+            ->addColumn('creator_id', 'integer', [
+                'default' => null,
+                'limit' => null,
+                'null' => true,
+            ])
+            ->addColumn('status', 'boolean', [
+                'default' => null,
+                'limit' => null,
+                'null' => true,
+            ])
+            ->addColumn('publish_begin', 'datetime', [
+                'default' => null,
+                'limit' => null,
+                'null' => true,
+            ])
+            ->addColumn('publish_end', 'datetime', [
                 'default' => null,
                 'limit' => null,
                 'null' => true,

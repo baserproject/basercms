@@ -20,22 +20,5 @@ class CustomContentsSeed extends AbstractSeed
      */
     public function run(): void
     {
-        $data = [
-            [
-                'id' => 1,
-                'custom_table_id' => 8,
-                'description' => '採用情報を検索することができます。',
-                'template' => 'default',
-                'widget_area' => 2,
-                'list_count' => 10,
-                'list_order' => 'holiday',
-                'list_direction' => 'DESC',
-                'created' => '2023-01-20 08:57:38',
-                'modified' => '2023-02-03 15:55:23',
-            ],
-        ];
-
-        $table = $this->table('custom_contents');
-        $table->insert($data)->save();
     }
 }

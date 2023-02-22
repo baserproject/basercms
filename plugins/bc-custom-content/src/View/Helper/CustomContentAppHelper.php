@@ -96,8 +96,10 @@ class CustomContentAppHelper extends Helper
      * @param bool $base
      * @return mixed|string
      */
-    public function getEntryUrl(Content $content, CustomEntry $entry, $full = true)
+    public function getEntryUrl(CustomEntry $entry, $full = true)
     {
+        $content = $this->getView()->getRequest()->getAttribute('currentContent');
+        if(!$content) return false;
         /** @var CustomEntriesServiceInterface $entriesService */
         $entriesService = $this->getService(CustomEntriesServiceInterface::class);
         return $entriesService->getUrl($content, $entry, $full);

@@ -5,8 +5,6 @@ use Migrations\AbstractMigration;
 
 class CreateCustomFields extends AbstractMigration
 {
-    public $autoId = false;
-
     /**
      * Up Method.
      *
@@ -17,13 +15,12 @@ class CreateCustomFields extends AbstractMigration
     public function up(): void
     {
         $this->table('custom_fields')
-            ->addPrimaryKey(['id'])
-            ->addColumn('title', 'string', [
+            ->addColumn('name', 'string', [
                 'default' => null,
                 'limit' => 255,
                 'null' => true,
             ])
-            ->addColumn('name', 'string', [
+            ->addColumn('title', 'string', [
                 'default' => null,
                 'limit' => 255,
                 'null' => true,
@@ -34,11 +31,6 @@ class CreateCustomFields extends AbstractMigration
                 'null' => true,
             ])
             ->addColumn('status', 'boolean', [
-                'default' => null,
-                'limit' => null,
-                'null' => true,
-            ])
-            ->addColumn('required', 'boolean', [
                 'default' => null,
                 'limit' => null,
                 'null' => true,
@@ -73,9 +65,9 @@ class CreateCustomFields extends AbstractMigration
                 'limit' => 255,
                 'null' => true,
             ])
-            ->addColumn('placeholder', 'string', [
+            ->addColumn('placeholder', 'text', [
                 'default' => null,
-                'limit' => 255,
+                'limit' => null,
                 'null' => true,
             ])
             ->addColumn('size', 'integer', [
@@ -88,8 +80,8 @@ class CreateCustomFields extends AbstractMigration
                 'limit' => null,
                 'null' => true,
             ])
-            ->addColumn('max_length', 'integer', [
-                'default' => null,
+            ->addColumn('max_length', 'boolean', [
+                'default' => false,
                 'limit' => null,
                 'null' => true,
             ])

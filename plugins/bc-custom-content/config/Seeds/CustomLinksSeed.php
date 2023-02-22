@@ -24,7 +24,7 @@ class CustomLinksSeed extends AbstractSeed
             [
                 'id' => 77,
                 'no' => NULL,
-                'custom_table_id' => 8,
+                'custom_table_id' => 1,
                 'custom_field_id' => 8,
                 'parent_id' => NULL,
                 'lft' => 1,
@@ -55,7 +55,7 @@ class CustomLinksSeed extends AbstractSeed
             [
                 'id' => 78,
                 'no' => NULL,
-                'custom_table_id' => 8,
+                'custom_table_id' => 1,
                 'custom_field_id' => 9,
                 'parent_id' => NULL,
                 'lft' => 1,
@@ -86,7 +86,7 @@ class CustomLinksSeed extends AbstractSeed
             [
                 'id' => 79,
                 'no' => NULL,
-                'custom_table_id' => 8,
+                'custom_table_id' => 1,
                 'custom_field_id' => 10,
                 'parent_id' => NULL,
                 'lft' => 3,
@@ -117,7 +117,7 @@ class CustomLinksSeed extends AbstractSeed
             [
                 'id' => 80,
                 'no' => NULL,
-                'custom_table_id' => 8,
+                'custom_table_id' => 1,
                 'custom_field_id' => 11,
                 'parent_id' => NULL,
                 'lft' => 5,
@@ -148,7 +148,7 @@ class CustomLinksSeed extends AbstractSeed
             [
                 'id' => 81,
                 'no' => NULL,
-                'custom_table_id' => 8,
+                'custom_table_id' => 1,
                 'custom_field_id' => 11,
                 'parent_id' => NULL,
                 'lft' => 7,
@@ -179,7 +179,7 @@ class CustomLinksSeed extends AbstractSeed
             [
                 'id' => 82,
                 'no' => NULL,
-                'custom_table_id' => 8,
+                'custom_table_id' => 1,
                 'custom_field_id' => 11,
                 'parent_id' => NULL,
                 'lft' => 9,
@@ -210,7 +210,7 @@ class CustomLinksSeed extends AbstractSeed
             [
                 'id' => 83,
                 'no' => NULL,
-                'custom_table_id' => 8,
+                'custom_table_id' => 1,
                 'custom_field_id' => 14,
                 'parent_id' => NULL,
                 'lft' => 11,
@@ -241,7 +241,7 @@ class CustomLinksSeed extends AbstractSeed
             [
                 'id' => 84,
                 'no' => NULL,
-                'custom_table_id' => 8,
+                'custom_table_id' => 1,
                 'custom_field_id' => 15,
                 'parent_id' => NULL,
                 'lft' => 13,
@@ -272,7 +272,7 @@ class CustomLinksSeed extends AbstractSeed
             [
                 'id' => 85,
                 'no' => NULL,
-                'custom_table_id' => 8,
+                'custom_table_id' => 1,
                 'custom_field_id' => 16,
                 'parent_id' => 99,
                 'lft' => 16,
@@ -303,7 +303,7 @@ class CustomLinksSeed extends AbstractSeed
             [
                 'id' => 86,
                 'no' => NULL,
-                'custom_table_id' => 8,
+                'custom_table_id' => 1,
                 'custom_field_id' => 17,
                 'parent_id' => NULL,
                 'lft' => 21,
@@ -334,7 +334,7 @@ class CustomLinksSeed extends AbstractSeed
             [
                 'id' => 87,
                 'no' => NULL,
-                'custom_table_id' => 8,
+                'custom_table_id' => 1,
                 'custom_field_id' => 18,
                 'parent_id' => NULL,
                 'lft' => 23,
@@ -365,7 +365,7 @@ class CustomLinksSeed extends AbstractSeed
             [
                 'id' => 88,
                 'no' => NULL,
-                'custom_table_id' => 8,
+                'custom_table_id' => 1,
                 'custom_field_id' => 39,
                 'parent_id' => 103,
                 'lft' => 28,
@@ -396,7 +396,7 @@ class CustomLinksSeed extends AbstractSeed
             [
                 'id' => 89,
                 'no' => NULL,
-                'custom_table_id' => 8,
+                'custom_table_id' => 1,
                 'custom_field_id' => 15,
                 'parent_id' => 101,
                 'lft' => 38,
@@ -427,7 +427,7 @@ class CustomLinksSeed extends AbstractSeed
             [
                 'id' => 94,
                 'no' => NULL,
-                'custom_table_id' => 8,
+                'custom_table_id' => 1,
                 'custom_field_id' => 25,
                 'parent_id' => NULL,
                 'lft' => 51,
@@ -458,7 +458,7 @@ class CustomLinksSeed extends AbstractSeed
             [
                 'id' => 96,
                 'no' => NULL,
-                'custom_table_id' => 8,
+                'custom_table_id' => 1,
                 'custom_field_id' => 33,
                 'parent_id' => NULL,
                 'lft' => 69,
@@ -489,7 +489,7 @@ class CustomLinksSeed extends AbstractSeed
             [
                 'id' => 97,
                 'no' => NULL,
-                'custom_table_id' => 8,
+                'custom_table_id' => 1,
                 'custom_field_id' => 17,
                 'parent_id' => NULL,
                 'lft' => 65,
@@ -520,7 +520,7 @@ class CustomLinksSeed extends AbstractSeed
             [
                 'id' => 99,
                 'no' => NULL,
-                'custom_table_id' => 8,
+                'custom_table_id' => 1,
                 'custom_field_id' => 25,
                 'parent_id' => NULL,
                 'lft' => 15,
@@ -551,7 +551,7 @@ class CustomLinksSeed extends AbstractSeed
             [
                 'id' => 100,
                 'no' => NULL,
-                'custom_table_id' => 8,
+                'custom_table_id' => 1,
                 'custom_field_id' => 18,
                 'parent_id' => 99,
                 'lft' => 18,
@@ -582,7 +582,7 @@ class CustomLinksSeed extends AbstractSeed
             [
                 'id' => 101,
                 'no' => NULL,
-                'custom_table_id' => 8,
+                'custom_table_id' => 1,
                 'custom_field_id' => 25,
                 'parent_id' => NULL,
                 'lft' => 37,
@@ -613,7 +613,7 @@ class CustomLinksSeed extends AbstractSeed
             [
                 'id' => 102,
                 'no' => NULL,
-                'custom_table_id' => 8,
+                'custom_table_id' => 1,
                 'custom_field_id' => 33,
                 'parent_id' => 101,
                 'lft' => 40,
@@ -644,7 +644,7 @@ class CustomLinksSeed extends AbstractSeed
             [
                 'id' => 103,
                 'no' => NULL,
-                'custom_table_id' => 8,
+                'custom_table_id' => 1,
                 'custom_field_id' => 25,
                 'parent_id' => NULL,
                 'lft' => 25,
@@ -675,7 +675,7 @@ class CustomLinksSeed extends AbstractSeed
             [
                 'id' => 104,
                 'no' => NULL,
-                'custom_table_id' => 8,
+                'custom_table_id' => 1,
                 'custom_field_id' => 34,
                 'parent_id' => 103,
                 'lft' => 26,
@@ -706,7 +706,7 @@ class CustomLinksSeed extends AbstractSeed
             [
                 'id' => 105,
                 'no' => NULL,
-                'custom_table_id' => 8,
+                'custom_table_id' => 1,
                 'custom_field_id' => 39,
                 'parent_id' => 103,
                 'lft' => 30,
@@ -737,7 +737,7 @@ class CustomLinksSeed extends AbstractSeed
             [
                 'id' => 106,
                 'no' => NULL,
-                'custom_table_id' => 8,
+                'custom_table_id' => 1,
                 'custom_field_id' => 39,
                 'parent_id' => 103,
                 'lft' => 32,
@@ -768,7 +768,7 @@ class CustomLinksSeed extends AbstractSeed
             [
                 'id' => 107,
                 'no' => NULL,
-                'custom_table_id' => 8,
+                'custom_table_id' => 1,
                 'custom_field_id' => 33,
                 'parent_id' => 103,
                 'lft' => 34,
@@ -799,7 +799,7 @@ class CustomLinksSeed extends AbstractSeed
             [
                 'id' => 108,
                 'no' => NULL,
-                'custom_table_id' => 8,
+                'custom_table_id' => 1,
                 'custom_field_id' => 39,
                 'parent_id' => 94,
                 'lft' => 52,
@@ -830,7 +830,7 @@ class CustomLinksSeed extends AbstractSeed
             [
                 'id' => 109,
                 'no' => NULL,
-                'custom_table_id' => 8,
+                'custom_table_id' => 1,
                 'custom_field_id' => 40,
                 'parent_id' => 94,
                 'lft' => 54,
@@ -861,7 +861,7 @@ class CustomLinksSeed extends AbstractSeed
             [
                 'id' => 110,
                 'no' => NULL,
-                'custom_table_id' => 8,
+                'custom_table_id' => 1,
                 'custom_field_id' => 19,
                 'parent_id' => 94,
                 'lft' => 56,
@@ -892,7 +892,7 @@ class CustomLinksSeed extends AbstractSeed
             [
                 'id' => 111,
                 'no' => NULL,
-                'custom_table_id' => 8,
+                'custom_table_id' => 1,
                 'custom_field_id' => 15,
                 'parent_id' => 94,
                 'lft' => 58,
@@ -923,7 +923,7 @@ class CustomLinksSeed extends AbstractSeed
             [
                 'id' => 112,
                 'no' => NULL,
-                'custom_table_id' => 8,
+                'custom_table_id' => 1,
                 'custom_field_id' => 33,
                 'parent_id' => 94,
                 'lft' => 60,
@@ -954,7 +954,7 @@ class CustomLinksSeed extends AbstractSeed
             [
                 'id' => 143,
                 'no' => NULL,
-                'custom_table_id' => 8,
+                'custom_table_id' => 1,
                 'custom_field_id' => 18,
                 'parent_id' => NULL,
                 'lft' => 43,
@@ -985,7 +985,7 @@ class CustomLinksSeed extends AbstractSeed
             [
                 'id' => 144,
                 'no' => NULL,
-                'custom_table_id' => 8,
+                'custom_table_id' => 1,
                 'custom_field_id' => 18,
                 'parent_id' => NULL,
                 'lft' => 45,
@@ -1016,7 +1016,7 @@ class CustomLinksSeed extends AbstractSeed
             [
                 'id' => 145,
                 'no' => NULL,
-                'custom_table_id' => 8,
+                'custom_table_id' => 1,
                 'custom_field_id' => 18,
                 'parent_id' => NULL,
                 'lft' => 47,
@@ -1047,7 +1047,7 @@ class CustomLinksSeed extends AbstractSeed
             [
                 'id' => 146,
                 'no' => NULL,
-                'custom_table_id' => 8,
+                'custom_table_id' => 1,
                 'custom_field_id' => 18,
                 'parent_id' => NULL,
                 'lft' => 49,
@@ -1078,7 +1078,7 @@ class CustomLinksSeed extends AbstractSeed
             [
                 'id' => 147,
                 'no' => NULL,
-                'custom_table_id' => 8,
+                'custom_table_id' => 1,
                 'custom_field_id' => 18,
                 'parent_id' => NULL,
                 'lft' => 63,
@@ -1109,7 +1109,7 @@ class CustomLinksSeed extends AbstractSeed
             [
                 'id' => 148,
                 'no' => NULL,
-                'custom_table_id' => 8,
+                'custom_table_id' => 1,
                 'custom_field_id' => 18,
                 'parent_id' => NULL,
                 'lft' => 71,

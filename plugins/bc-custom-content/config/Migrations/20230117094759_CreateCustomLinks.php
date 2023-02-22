@@ -5,8 +5,6 @@ use Migrations\AbstractMigration;
 
 class CreateCustomLinks extends AbstractMigration
 {
-    public $autoId = false;
-
     /**
      * Up Method.
      *

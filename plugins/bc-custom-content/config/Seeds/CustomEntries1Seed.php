@@ -6,7 +6,7 @@ use Migrations\AbstractSeed;
 /**
  * CustomEntries seed.
  */
-class CustomEntriesSeed extends AbstractSeed
+class CustomEntries1Seed extends AbstractSeed
 {
     /**
      * Run Method.
@@ -23,14 +23,13 @@ class CustomEntriesSeed extends AbstractSeed
         $data = [
             [
                 'id' => 1,
-                'custom_table_id' => 8,
-                'no' => NULL,
+                'custom_table_id' => 1,
                 'modified' => '2023-02-14 13:57:29',
                 'created' => '2023-01-30 07:09:22',
                 'name' => 'プログラマー',
-                'recruit_category' => '3',
+                'recruit_category' => '1',
                 'feature' => '["土日祝日休み","交通費支給"]',
-                'main_visual' => '2023/02/00000001_main_visual.jpg',
+                'main_visual' => '',
                 'our_business' => '私たちは「一緒に&rdquo;できる&rdquo;を創り出す」を理念のもと、お客様と同じ立場・同じ目線で、お客様とともに課題に立ち向かい成功を創り出していくエンジニアリング企業です。<br />
 2007年の創業以来、地元・福岡の企業のみならず全国600以上のWebサイトやWebシステムの構築に携わってきました。<br />
 2009年には、自社のライブラリであるWebサイトのフレームワークをさらに成長させるため、エコシステムとなるオープンソース「baserCMS」を世の中に送り出し、受託開発を通じてコミットし世の中に貢献しています。',
@@ -145,14 +144,10 @@ class CustomEntriesSeed extends AbstractSeed
 ※福岡市地下鉄空港線 赤坂駅より徒歩２分
 ※試用期間終了後は社内規定に基づき自由出社。リモートワークとして遠隔地勤務も可能',
                 'creator_id' => 1,
-                'published' => NULL,
-                'holiday' => NULL,
                 'textarea_small' => '完全週休2日 / 土日祝休み / 年間休日120日以上 / ゴールデンウィーク / 夏季休暇 / 年末年始休暇 / 年次有給休暇 / 慶弔休暇 / 傷病休暇 / 産前産後休暇 / 育児休暇
 ★有給は積極的に取得する社風です。',
-                'welfare' => NULL,
                 'textarea_small_2' => '社会保険完備(法定による) / MacBookPro支給 / 社内勉強会（週１回） / 有料ビジネスセミナー参加 / 社員旅行 / みんなでランチ（月１回会社負担） / 健康診断（年１回会社負担）/ みんなでヨガ（月１回会社負担） / Wii、ダーツ、人狼ゲームでリフレッシュ / 無限お菓子 / 無限コーヒー /',
                 'etc' => '服装・髪型自由 / ネイル・アクセサリーOK',
-                'application_method' => NULL,
                 'textarea_small_3' => 'まずはこのページ下のフォームよりエントリーください。',
                 'welcoming_skills' => '■ フレームワークの利用経験のある方
 ■ コミュニティ等での活動経験や参加が好きな方',

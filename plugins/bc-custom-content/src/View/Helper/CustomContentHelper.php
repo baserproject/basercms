@@ -129,7 +129,7 @@ class CustomContentHelper extends CustomContentAppHelper
         if ($options['link']) {
             $this->BcBaser->link(
                 $this->getEntryTitle($entry),
-                $this->getEntryUrl($entry->custom_table->custom_content->content, $entry, false),
+                $this->getEntryUrl($entry, false),
             );
         } else {
             echo h($this->getEntryTitle($entry));

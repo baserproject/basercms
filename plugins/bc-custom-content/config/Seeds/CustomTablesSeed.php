@@ -22,7 +22,7 @@ class CustomTablesSeed extends AbstractSeed
     {
         $data = [
             [
-                'id' => 8,
+                'id' => 1,
                 'name' => 'recruit',
                 'title' => '求人情報',
                 'type' => '1',
@@ -32,7 +32,7 @@ class CustomTablesSeed extends AbstractSeed
                 'created' => '2023-01-27 14:25:22',
             ],
             [
-                'id' => 9,
+                'id' => 2,
                 'name' => 'occupations',
                 'title' => '職種マスタ',
                 'type' => '2',
