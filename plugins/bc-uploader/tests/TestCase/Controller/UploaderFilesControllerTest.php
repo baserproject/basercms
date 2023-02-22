@@ -13,6 +13,7 @@ namespace BcUploader\Test\TestCase\Controller\Api;
 
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
+use BcUploader\Test\Scenario\UploaderFilesScenario;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use Cake\TestSuite\IntegrationTestTrait;
 
@@ -85,7 +86,16 @@ class UploaderFilesControllerTest extends BcTestCase
      */
     public function test_index()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを生成
+        $this->loadFixtureScenario(UploaderFilesScenario::class);
+
+        //APIを呼ぶ
+        $this->post("/baser/api/bc-uploader/uploader_files/index.json?token=" . $this->accessToken);
+        // レスポンスコードを確認する
+        $this->assertResponseOk();
+        // 戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertCount(6, $result->uploaderFiles);
     }
 
     /**

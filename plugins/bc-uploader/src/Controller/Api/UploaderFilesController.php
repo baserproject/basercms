@@ -31,10 +31,17 @@ class UploaderFilesController extends BcApiController
      *
      * @param UploaderFilesServiceInterface $service
      * @return void
+     *
+     * @checked
+     * @notodo
+     * @unitTest
      */
     public function index(UploaderFilesServiceInterface $service)
     {
-        //todo 一覧取得API
+        $this->set([
+            'uploaderFiles' => $this->paginate($service->getIndex($this->request->getQueryParams()))
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['uploaderFiles']);
     }
 
     /**
