@@ -15,7 +15,6 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Controller\Api\BcApiController;
-use BcUploader\Service\UploaderFilesService;
 use BcUploader\Service\UploaderFilesServiceInterface;
 use Cake\ORM\Exception\PersistenceFailedException;
 use Throwable;
@@ -50,6 +49,7 @@ class UploaderFilesController extends BcApiController
      * @param UploaderFilesServiceInterface $service
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function upload(UploaderFilesServiceInterface $service)
     {
@@ -83,6 +83,7 @@ class UploaderFilesController extends BcApiController
      * @param int $id
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function edit(UploaderFilesServiceInterface $service, int $id)
     {
