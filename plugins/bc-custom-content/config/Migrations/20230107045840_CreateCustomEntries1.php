@@ -70,12 +70,17 @@ class CreateCustomEntries1 extends AbstractMigration
                 'limit' => null,
                 'null' => true,
             ])
+            ->addColumn('published', 'datetime', [
+                'default' => null,
+                'limit' => null,
+                'null' => true,
+            ])
             ->addColumn('created', 'datetime', [
                 'default' => null,
                 'limit' => null,
                 'null' => true,
             ])
-            ->addColumn('modified', 'integer', [
+            ->addColumn('modified', 'datetime', [
                 'default' => null,
                 'limit' => null,
                 'null' => true,

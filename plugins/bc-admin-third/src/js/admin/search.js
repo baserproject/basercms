@@ -33,9 +33,9 @@ const bcSearchBox = {
         // 検索ボックス開閉
         $('#BtnMenuSearch').click(function(){
             if($('#Search').css('display') === 'none'){
-                search.changeSearchBox(true);
+                bcSearchBox.changeSearchBox(true);
             } else {
-                search.changeSearchBox(false);
+                bcSearchBox.changeSearchBox(false);
             }
         });
         // クリアボタン

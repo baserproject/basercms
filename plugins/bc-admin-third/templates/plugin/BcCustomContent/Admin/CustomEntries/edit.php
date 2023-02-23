@@ -23,8 +23,9 @@ $this->BcAdmin->addAdminMainBodyHeaderLinks([
   'url' => ['action' => 'add', $tableId],
   'title' => __d('baser', '新規追加'),
 ]);
+$entryUrl = '';
 if($customTable->isContentTable()) {
-  $entryUrl = $this->CustomContentAdmin->getEntryUrl($this->request->getAttribute('currentContent'), $entity);
+  $entryUrl = $this->CustomContentAdmin->getEntryUrl($entity);
 }
 $this->BcBaser->js('BcCustomContent.admin/custom_entries/form.bundle', false, [
   'defer' => true,

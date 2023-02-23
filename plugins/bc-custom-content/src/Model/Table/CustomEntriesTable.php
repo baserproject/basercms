@@ -28,6 +28,7 @@ use BcCustomContent\Service\CustomTablesServiceInterface;
 use BcCustomContent\Utility\CustomContentUtil;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
+use Cake\Datasource\EntityInterface;
 use Cake\Event\EventInterface;
 use Cake\ORM\Query;
 use Cake\ORM\ResultSet;
@@ -79,6 +80,12 @@ class CustomEntriesTable extends AppTable
         }
     }
 
+    /**
+     * 検索インデックスを生成する
+     *
+     * @param CustomEntry $entry
+     * @return array
+     */
     public function createSearchIndex(CustomEntry $entry)
     {
         /** @var CustomTablesService $tablesService */
@@ -498,9 +505,11 @@ class CustomEntriesTable extends AppTable
     public function autoConvert(ArrayObject $content)
     {
         foreach($content as $key => $value) {
+            $link = null;
             foreach($this->links as $link) {
                 if ($link->name === $key) break;
             }
+            if(empty($link)) continue;
             $controlType = CustomContentUtil::getPluginSetting($link->custom_field->type, 'controlType');
             if ($controlType === 'file') continue;
             if (is_array($value)) {
