@@ -47,7 +47,7 @@
 <script>
 import axios from "axios";
 import FavoriteForm from "./form.vue";
-import Modal from '../../common/modal.vue';
+import Modal from "../../../../js/common/modal.vue";
 
 export default {
     data: function () {

@@ -19,7 +19,6 @@ use BaserCore\Utility\BcUtil;
  * @var string $currentPageUrl
  */
 $this->BcBaser->js(['BcFavorite.admin/favorites/main.bundle', 'BcFavorite.admin/favorite.bundle'], true);
-$this->BcBaser->css('BcFavorite.admin/style');
 $user = BcUtil::loginUser();
 ?>
 
