@@ -72,15 +72,15 @@ class BcFrontContentsComponentTest extends BcTestCase
      */
     public function testInitialize()
     {
-        // isContentsPageが設定されないとtrueになる
+        // viewContentCrumbが設定されないとfalseになる
         $this->BcFrontContents->initialize([]);
-        $this->assertTrue($this->BcFrontContents->getConfig('isContentsPage'));
+        $this->assertFalse($this->BcFrontContents->getConfig('viewContentCrumb'));
 
-        // isContentsPageが設定されると設定値の通りになる
-        $this->BcFrontContents->initialize(['isContentsPage' => false]);
-        $this->assertFalse($this->BcFrontContents->getConfig('isContentsPage'));
+        // viewContentCrumbが設定されると設定値の通りになる
+        $this->BcFrontContents->initialize(['viewContentCrumb' => false]);
+        $this->assertFalse($this->BcFrontContents->getConfig('viewContentCrumb'));
 
-        // isContentsPageの以外の設定をテスト
+        // viewContentCrumbの以外の設定をテスト
         $this->BcFrontContents->initialize(['configKey' => 'configValue']);
         $this->assertEquals('configValue', $this->BcFrontContents->getConfig('configKey'));
     }

@@ -22,7 +22,7 @@
  */
 $this->BcBaser->setDescription($this->Blog->getTitle() . '｜' . $this->Blog->getPostContent($post, false, false, 50));
 $this->BcUpload->setTable('BcBlog.BlogPosts');
-$this->BcBaser->setTitle($post->name);
+$this->BcBaser->setTitle($post->title);
 ?>
 
 

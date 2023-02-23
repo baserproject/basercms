@@ -43,7 +43,9 @@ class BlogController extends BlogFrontAppController
     public function initialize(): void
     {
         parent::initialize();
-        $this->loadComponent('BaserCore.BcFrontContents', ['isContentsPage' => false]);
+        if($this->getRequest()->getParam('action') !== 'index') {
+            $this->loadComponent('BaserCore.BcFrontContents', ['viewContentCrumb' => true]);
+        }
     }
 
     /**

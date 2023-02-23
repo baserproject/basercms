@@ -52,7 +52,7 @@ class BlogControllerTest extends BcTestCase
         // コンポーネント設定を確認するテスト
         $this->assertNotEmpty($this->BlogController->BcFrontContents);
         // configを確認するテスト
-        $this->assertFalse($this->BlogController->BcFrontContents->getConfig('isContentsPage'));
+        $this->assertTrue($this->BlogController->BcFrontContents->getConfig('viewContentCrumb'));
     }
 
 }

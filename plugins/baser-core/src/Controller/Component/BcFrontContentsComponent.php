@@ -50,7 +50,7 @@ class BcFrontContentsComponent extends Component
      * Initialize
      *
      * 設定の初期化を行う
-     * - `isContentsPage`: 対象コンテンツのページかどうか
+     * - `viewContentCrumb`: コンテンツ管理対象コンテンツのパンくずを表示するかどうか
      *
      * @param array $config
      * @return void
@@ -61,7 +61,7 @@ class BcFrontContentsComponent extends Component
     public function initialize(array $config): void
     {
         $config = array_merge([
-            'isContentsPage' => true
+            'viewContentCrumb' => false
         ], $config);
         $this->setConfig($config);
     }
@@ -98,7 +98,7 @@ class BcFrontContentsComponent extends Component
             $this->setLayout($currentContent);
             /** @var BcFrontContentsService $bcFrontContentsService */
             $bcFrontContentsService = $this->getService(BcFrontContentsServiceInterface::class);
-            $controller->set($bcFrontContentsService->getViewVarsForFront($currentContent, $this->getConfig('isContentsPage')));
+            $controller->set($bcFrontContentsService->getViewVarsForFront($currentContent, $this->getConfig('viewContentCrumb')));
         }
     }
 
