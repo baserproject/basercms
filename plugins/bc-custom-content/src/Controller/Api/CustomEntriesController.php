@@ -39,7 +39,7 @@ class CustomEntriesController extends BcApiController
         $this->request->allowMethod('get');
         $queryParams = $this->getRequest()->getQueryParams();
         if (isset($queryParams['status']) || isset($queryParams['use_api'])) {
-            if (!$this->Authentication->getIdentity()) throw new ForbiddenException();
+            if (!$this->isAdminApiEnabled()) throw new ForbiddenException();
         }
         if(empty($queryParams['custom_table_id'])) {
             throw new BadRequestException(__d('baser', 'パラメーターに custom_table_id を指定してください。'));
@@ -80,7 +80,7 @@ class CustomEntriesController extends BcApiController
         $this->request->allowMethod('get');
         $queryParams = $this->getRequest()->getQueryParams();
         if (isset($queryParams['status']) || isset($queryParams['use_api'])) {
-            if (!$this->Authentication->getIdentity()) throw new ForbiddenException();
+            if (!$this->isAdminApiEnabled()) throw new ForbiddenException();
         }
         if(empty($queryParams['custom_table_id'])) {
             throw new BadRequestException(__d('baser', 'パラメーターに custom_table_id を指定してください。'));

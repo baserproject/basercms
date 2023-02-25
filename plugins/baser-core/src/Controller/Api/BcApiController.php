@@ -18,12 +18,12 @@ use BaserCore\Controller\AppController;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
-use BaserCore\Service\UsersServiceInterface;
+use BaserCore\Error\BcException;
 use BaserCore\Utility\BcApiUtil;
 use BaserCore\Utility\BcContainerTrait;
-use BaserCore\Utility\BcUtil;
+use Cake\Core\Configure;
 use Cake\Event\EventInterface;
-use Cake\Http\Exception\ForbiddenException;
+use Cake\ORM\TableRegistry;
 
 /**
  * Class BcApiController
@@ -84,10 +84,12 @@ class BcApiController extends AppController
             return;
         }
 
+        if (!filter_var(env('USE_CORE_ADMIN_API', false), FILTER_VALIDATE_BOOLEAN)) {
+            $this->setResponse($this->response->withStatus(401));
+        }
+
         // ユーザーの有効チェック
-        $user = $this->Authentication->getResult()->getData();
-        $usersService = $this->getService(UsersServiceInterface::class);
-        if ($user && !$usersService->isAvailable($user->id)) {
+        if (!$this->isAvailableUser()) {
             $this->setResponse($this->response->withStatus(401));
             return;
         }
@@ -100,6 +102,66 @@ class BcApiController extends AppController
                 $this->setResponse($this->response->withStatus(401));
             }
         }
+    }
+
+    /**
+     * 認証が必要なAPIを利用可能かどうか判定
+     *
+     * @return \Authentication\IdentityInterface|false|null
+     */
+    public function isAdminApiEnabled()
+    {
+        if (!filter_var(env('USE_CORE_ADMIN_API', false), FILTER_VALIDATE_BOOLEAN)) {
+            return false;
+        }
+        return (bool) $this->Authentication->getIdentity();
+    }
+
+    /**
+     * ログインユーザーが有効か判定する
+     *
+     * サービスクラス、または、テーブルクラスにおいて、isAvailable / get メソッドが
+     * 存在するかを確認し、あれば実行し、その結果を返す。
+     * ない場合は、 true を返却する
+     *
+     * @return bool
+     */
+    public function isAvailableUser(): bool
+    {
+        // ユーザーの有効チェック
+        $user = $this->Authentication->getResult()->getData();
+        if(!$user) return false;
+
+        $prefix = $this->getRequest()->getParam('prefix');
+        $userModel = Configure::read("BcPrefixAuth.{$prefix}.userModel");
+
+        // サービスクラスチェック
+        [$plugin, $model] = pluginSplit($userModel);
+        if(!$plugin) throw new BcException(__d('baser', 'BcPrefixAuth の userModel の設定ではプラグイン記法を利用してください。'));
+
+        $serviceName = "{$plugin}\\Service\\{$model}ServiceInterface";
+        if (interface_exists($serviceName)) {
+            $service = $this->getService($serviceName);
+            if (method_exists($service, 'isAvailable')) {
+                return $service->isAvailable($user->id);
+            }
+            if (method_exists($service, 'get')) {
+                return (bool)$service->get($user->id);
+            }
+        }
+
+        // テーブルクラスチェック
+        $tableName = "{$plugin}\\Model\\Table\\{$model}Table";
+        if(class_exists($tableName)) {
+            $table = TableRegistry::getTableLocator()->get($userModel);
+            if(method_exists($table, 'isAvailable')) {
+                return $table->isAvailable($user->id);
+            }
+            if(method_exists($table, 'get')) {
+                return (bool) $table->get($user->id);
+            }
+        }
+        throw new BcException(__d('baser', 'BcPrefixAuth の userModel にユーザーの存在確認メソッドが存在しません。'));
     }
 
     /**

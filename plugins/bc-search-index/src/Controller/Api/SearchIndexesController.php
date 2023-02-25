@@ -171,7 +171,7 @@ class SearchIndexesController extends BcApiController
         $this->request->allowMethod('get');
         $queryParams = $this->getRequest()->getQueryParams();
         if(isset($queryParams['status'])) {
-            if(!$this->Authentication->getIdentity()) throw new ForbiddenException();
+            if(!$this->isAdminApiEnabled()) throw new ForbiddenException();
         }
         $queryParams = array_merge($queryParams, [
             'status' => 'publish'
