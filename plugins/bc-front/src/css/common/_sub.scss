@@ -120,7 +120,10 @@
       border-bottom: 1px solid #ddd;
       line-height: 25px;
       list-style: none;
-
+      margin:0;
+      &:before {
+        content:none;
+      }
       a {
         padding: 10px 22px;
         transition: all 300ms;
@@ -162,7 +165,7 @@
       border-bottom: 1px solid #ddd;
       line-height: 25px;
       list-style: none;
-
+      margin:0;
       a {
         padding: 10px 22px;
         transition: all 300ms;
