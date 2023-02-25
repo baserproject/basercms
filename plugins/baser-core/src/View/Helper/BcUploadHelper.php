@@ -10,6 +10,8 @@
  */
 namespace BaserCore\View\Helper;
 
+use BaserCore\Plugin;
+use Cake\Core\Plugin as CakePlugin;
 use Cake\Datasource\EntityInterface;
 use Cake\Event\Event;
 use Cake\ORM\Table;
@@ -321,8 +323,10 @@ class BcUploadHelper  extends Helper
             }
         }
 
-        $fileUrl = '/files/' . str_replace(DS, '/', $settings['saveDir']) . '/';
+        $fileUrl = $this->getBasePath($settings);;
+        $fileUrlInTheme = $this->getBasePath($settings, true);
         $saveDir = $this->table->getSaveDir(false, $options['limited']);
+        $saveDirInTheme = $this->table->getSaveDir(true, $options['limited']);
 
         $settingField = $fieldName;
         if(strpos($fieldName, '.') !== false) {
@@ -393,7 +397,10 @@ class BcUploadHelper  extends Helper
                     $fileExists = false;
                     if (file_exists($saveDir . $file)) {
                         $fileExists = true;
-                    }
+					} elseif (file_exists($saveDirInTheme . $file)) {
+						$fileExists = true;
+						$fileUrl = $fileUrlInTheme;
+					}
 
                     if ($fileExists || $options['force']) {
                         if ($check && !$mostSizeExists) {
@@ -458,6 +465,26 @@ class BcUploadHelper  extends Helper
         }
         return $out;
     }
+
+	/**
+	 * アップロード先のベースパスを取得
+	 *
+	 * @param string $fieldName 格納されているDBのフィールド名、ex) BlogPost.eye_catch
+	 * @param bool $isTheme テーマ内の初期データのパスとするかどうか
+	 * @return string パス
+     * @checked
+     * @noTodo
+	 */
+	public function getBasePath($settings, $isTheme = false)
+	{
+        $theme = BcUtil::getCurrentTheme();
+		if (!$isTheme || !$theme) {
+			return '/files/' . str_replace(DS, '/', $settings['saveDir']) . '/';
+		} else {
+		    $themePath = CakePlugin::path($theme);
+			return $themePath . 'webroot/files/' . str_replace(DS, '/', $settings['saveDir']) . '/';
+		}
+	}
 
     /**
      * アップロードの設定を取得する

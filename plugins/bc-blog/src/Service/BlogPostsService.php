@@ -402,7 +402,7 @@ class BlogPostsService implements BlogPostsServiceInterface
         }
         foreach($keywords as $key => $value) {
             $value = h(rawurldecode($value));
-            $conditions['and'][$key]['or'][] = ['BlogPosts.name LIKE' => "%{$value}%"];
+            $conditions['and'][$key]['or'][] = ['BlogPosts.title LIKE' => "%{$value}%"];
             $conditions['and'][$key]['or'][] = ['BlogPosts.content LIKE' => "%{$value}%"];
             $conditions['and'][$key]['or'][] = ['BlogPosts.detail LIKE' => "%{$value}%"];
         }
