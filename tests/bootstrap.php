@@ -92,7 +92,7 @@ if (!filter_var(env('USE_CORE_API'), FILTER_VALIDATE_BOOLEAN) ||
 // load schema from a SQL dump file with
 // use Cake\TestSuite\Fixture\SchemaLoader;
 // (new SchemaLoader())->loadSqlFiles('./tests/schema.sql', 'test');
-if (!empty($_SERVER['argv'][1])) {
+if (!empty($_SERVER['argv'][1]) && preg_match('/^plugins\//', $_SERVER['argv'][1])) {
     // パス指定をしている場合は、そのパスのプラグイン と BaserCore だけをロードする
     // 他のプラグインが必要な場合は、適宜下記に記述する
     $plugin = \Cake\Utility\Inflector::camelize(preg_replace('/^plugins\/(.+?)\/.+$/', "$1", $_SERVER['argv'][1]), '-');
