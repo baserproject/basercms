@@ -26,6 +26,7 @@ use BcBlog\Test\Factory\BlogPostFactory;
 use BcBlog\Test\Factory\BlogTagFactory;
 use BcBlog\Test\Scenario\MultiSiteBlogScenario;
 use Cake\Datasource\Exception\RecordNotFoundException;
+use Cake\ORM\TableRegistry;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use Cake\I18n\FrozenTime;
 
@@ -516,7 +517,7 @@ class BlogPostsServiceTest extends BcTestCase
                 false,
                 $blogPost->find('all'),
                 ['contentUrl' => '/test'],
-                $blogPost->find('all')->where(['Contents.url' => '/test'])
+                $blogPost->find('all')->contain(['BlogContents' => ['Contents']])->where(['Contents.url' => '/test'])
             ],
             //$params カテゴリID
             [

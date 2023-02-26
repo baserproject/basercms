@@ -127,7 +127,6 @@ class BlogPostsService implements BlogPostsServiceInterface
         if (!empty($options['sort'])) $options['order'] = $options['sort'];
         unset($options['num'], $options['sort']);
 
-        if($options['contentUrl']) $options['contain']['BlogContents'] = 'Contents';
         if ($options['id'] || $options['no']) $options['contain'][] = 'BlogComments';
         $query = $this->BlogPosts->find()->contain($options['contain']);
 
@@ -250,6 +249,7 @@ class BlogPostsService implements BlogPostsServiceInterface
         if (!is_null($params['site_id'])) $conditions['Contents.site_id'] = $params['site_id'];
         // URL
         if ($params['contentUrl']) {
+            $query->contain(['BlogContents' => ['Contents']]);
             if(is_array($params['contentUrl'])) {
                 $conditions['Contents.url IN'] = $params['contentUrl'];
             } else {
