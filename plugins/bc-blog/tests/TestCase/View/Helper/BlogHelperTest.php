@@ -28,7 +28,6 @@ use BcBlog\Test\Scenario\MultiSiteBlogPostScenario;
 use BcBlog\Test\Scenario\MultiSiteBlogScenario;
 use BcBlog\View\Helper\BlogHelper;
 use Cake\Core\Configure;
-use Cake\View\View;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -53,14 +52,15 @@ class BlogHelperTest extends BcTestCase
         'plugin.BaserCore.Factory/Sites',
         'plugin.BaserCore.Factory/Contents',
         'plugin.BaserCore.Factory/ContentFolders',
+        'plugin.BaserCore.Factory/Users',
+        'plugin.BaserCore.Factory/UserGroups',
+        'plugin.BaserCore.Factory/UsersUserGroups',
         'plugin.BcBlog.Factory/BlogContents',
         'plugin.BcBlog.Factory/BlogCategories',
         'plugin.BcBlog.Factory/BlogPosts',
         'plugin.BcBlog.Factory/BlogTags',
         'plugin.BcBlog.Factory/BlogPostsBlogTags',
     ];
-
-    public $autoFixtures = false;
 
     /**
      * setUp
