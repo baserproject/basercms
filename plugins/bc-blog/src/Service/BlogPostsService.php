@@ -122,9 +122,9 @@ class BlogPostsService implements BlogPostsServiceInterface
         $contain = [
             'Users',
             'BlogCategories',
-            'BlogContents',
+            'BlogContents' => ['Contents'],
             'BlogComments',
-            'BlogTags'
+            'BlogTags',
         ];
         if ($options['id'] || $options['no']) $contain[] = 'BlogComments';
         $query = $this->BlogPosts->find()->contain($contain);
@@ -247,7 +247,14 @@ class BlogPostsService implements BlogPostsServiceInterface
         // サイトID
         if (!is_null($params['site_id'])) $conditions['Contents.site_id'] = $params['site_id'];
         // URL
-        if ($params['contentUrl']) $conditions['Contents.url'] = $params['contentUrl'];
+        if ($params['contentUrl']) {
+            if(is_array($params['contentUrl'])) {
+                $conditions['Contents.url IN'] = $params['contentUrl'];
+            } else {
+                $conditions['Contents.url'] = $params['contentUrl'];
+            }
+        }
+        // タグ
         if (!is_null($params['blog_tag_id'])) {
             $query->matching('BlogTags', function($q) use ($params) {
                 return $q->where(['BlogTags.id' => $params['blog_tag_id']]);

@@ -258,4 +258,30 @@ class BlogContentsService implements BlogContentsServiceInterface
         }
     }
 
+    /**
+     * コンテンツテンプレートの相対パスを取得する
+     *
+     * @param array $options
+     * @return string
+     */
+    public function getContentsTemplateRelativePath(array $options): string
+    {
+        $options = array_merge([
+            'template' => 'posts',
+            'contentsTemplate' => 'default',
+            'contentUrl' => ''
+        ], $options);
+
+        if (!$options['contentsTemplate']) {
+            $conditions = array_merge(
+                ['Content.url' => $options['contentUrl']],
+                $this->BlogContents->getConditionAllowPublish()
+            );
+            $blogContent = $this->BlogContents->find()->where($conditions)->first();
+            if ($blogContent) $options['contentsTemplate'] = $blogContent->template;
+        }
+
+        return 'BcBlog...' . DS . 'Blog' . DS . $options['contentsTemplate'] . DS . $options['template'];
+    }
+
 }
