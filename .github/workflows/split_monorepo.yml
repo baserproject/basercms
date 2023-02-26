@@ -60,16 +60,9 @@ jobs:
                         split_repository: 'bc-widget-area'
         steps:
             - uses: actions/checkout@v3
-            - name: add safe directory to build_directory
-              git_config:
-                name: safe.directory
-                scope: global
-                value: '/tmp/monorepo_split/build_directory'
-            - name: add safe directory to workspace
-              git_config:
-                name: safe.directory
-                scope: global
-                value: '/github/workspace'
+            - run: |
+              git config --global --add safe.directory /github/workspace
+              git config --global --add safe.directory /tmp/monorepo_split/build_directory
             # no tag
             -
                 if: "!startsWith(github.ref, 'refs/tags/')"
