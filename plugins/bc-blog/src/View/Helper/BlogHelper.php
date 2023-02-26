@@ -1159,7 +1159,7 @@ class BlogHelper extends Helper
     /**
      * アイキャッチ画像を取得する
      *
-     * @param BlogPost $post ブログ記事
+     * @param BlogPost|EntityInterface $post ブログ記事
      * @param array $options オプション（初期値 : array()）
      *  - `imgsize` : 画像サイズ[default|thumb|mobile_thumb]（初期値 : thumb）
      *  - `link` : 大きいサイズの画像へのリンク有無（初期値 : true）

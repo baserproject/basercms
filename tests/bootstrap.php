@@ -76,10 +76,10 @@ session_id('cli');
 
 // ユニットテストを実行する前の事前確認
 // GitHubActions で実行する場合は、bin/cake setup test にて、自動的に事前準備をしている
-if(!filter_var(env('USE_CORE_API'), FILTER_VALIDATE_BOOLEAN)) {
-    throw new BcException(__d('baser', 'ユニットテストを実行する際は、.env にて USE_CORE_API を true に設定してください。'));
-} elseif(!filter_var(env('DEBUG'), FILTER_VALIDATE_BOOLEAN)) {
-    throw new BcException(__d('baser', 'ユニットテストを実行する際は、.env にて debug を true に設定してください。'));
+if (!filter_var(env('USE_CORE_API'), FILTER_VALIDATE_BOOLEAN) ||
+    !filter_var(env('USE_CORE_ADMIN_API'), FILTER_VALIDATE_BOOLEAN) ||
+    !filter_var(env('DEBUG'), FILTER_VALIDATE_BOOLEAN)) {
+    throw new BcException(__d('baser', 'ユニットテストを実行する際は、.env にて DEBUG、USE_CORE_API、USE_CORE_ADMIN_API を true に設定してください。'));
 }
 
 // Use migrations to build test database schema.
@@ -92,14 +92,25 @@ if(!filter_var(env('USE_CORE_API'), FILTER_VALIDATE_BOOLEAN)) {
 // load schema from a SQL dump file with
 // use Cake\TestSuite\Fixture\SchemaLoader;
 // (new SchemaLoader())->loadSqlFiles('./tests/schema.sql', 'test');
-(new Migrator())->runMany([
-    ['plugin' => 'BaserCore'],
-    ['plugin' => 'BcBlog'],
-    ['plugin' => 'BcSearchIndex'],
-    ['plugin' => 'BcContentLink'],
-    ['plugin' => 'BcMail'],
-    ['plugin' => 'BcWidgetArea'],
-    ['plugin' => 'BcThemeConfig'],
-    ['plugin' => 'BcThemeFile'],
-    ['plugin' => 'BcUploader'],
-]);
+if (!empty($_SERVER['argv'][1])) {
+    // パス指定をしている場合は、そのパスのプラグイン と BaserCore だけをロードする
+    // 他のプラグインが必要な場合は、適宜下記に記述する
+    $plugin = \Cake\Utility\Inflector::camelize(preg_replace('/^plugins\/(.+?)\/.+$/', "$1", $_SERVER['argv'][1]), '-');
+    $targets = [
+        ['plugin' => 'BaserCore'],
+        ['plugin' => $plugin]
+    ];
+} else {
+    $targets = [
+        ['plugin' => 'BaserCore'],
+        ['plugin' => 'BcBlog'],
+        ['plugin' => 'BcSearchIndex'],
+        ['plugin' => 'BcContentLink'],
+        ['plugin' => 'BcMail'],
+        ['plugin' => 'BcWidgetArea'],
+        ['plugin' => 'BcThemeConfig'],
+        ['plugin' => 'BcThemeFile'],
+        ['plugin' => 'BcUploader'],
+    ];
+}
+(new Migrator())->runMany($targets);

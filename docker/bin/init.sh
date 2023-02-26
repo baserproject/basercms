@@ -12,6 +12,9 @@ if [ ! -e '/var/www/html/docker_inited' ]; then
     echo "[$(date +"%Y/%m/%d %H:%M:%S")] create .env."
     cp /var/www/html/config/.env.example /var/www/html/config/.env
 
+    # init baserCMS
+    rm /var/www/html/config/install.php
+
     # msmtprc
     cp /var/www/html/docker/msmtp/msmtprc /etc/msmtprc
 
