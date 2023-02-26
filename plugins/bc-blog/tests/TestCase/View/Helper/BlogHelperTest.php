@@ -60,6 +60,8 @@ class BlogHelperTest extends BcTestCase
         'plugin.BcBlog.Factory/BlogPostsBlogTags',
     ];
 
+    public $autoFixtures = false;
+
     /**
      * setUp
      *

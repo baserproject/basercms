@@ -60,8 +60,6 @@ class BlogPostsServiceTest extends BcTestCase
         'plugin.BcBlog.Factory/BlogPostsBlogTags',
     ];
 
-    public $autoFixtures = false;
-
     /**
      * set up
      *
@@ -472,61 +470,61 @@ class BlogPostsServiceTest extends BcTestCase
     {
         $blogPost = new BlogPostsTable();
         return [
-//            // 空配列の結果テスト
-//            [
-//                false,
-//                $blogPost->find('all'),
-//                [],
-//                $blogPost->find('all')
-//            ],
-//            //$params ID
-//            [
-//                false,
-//                $blogPost->find('all'),
-//                ['id' => 1],
-//                $blogPost->find('all')->where(['BlogPosts.id' => 1])
-//            ],
-//            //$params タイトル
-//            [
-//                false,
-//                $blogPost->find('all'),
-//                ['title' => 'test title'],
-//                $blogPost->find('all')->where(['BlogPosts.title LIKE' => '%test title%'])
-//            ],
-//            //$params ユーザーID
-//            [
-//                false,
-//                $blogPost->find('all'),
-//                ['user_id' => 1], $blogPost->find('all')->where(['BlogPosts.user_id' => 1])
-//            ],
-//            //$params ブログコンテンツID
-//            [
-//                false,
-//                $blogPost->find('all'),
-//                ['blog_content_id' => 1],
-//                $blogPost->find('all')->where(['BlogPosts.blog_content_id' => 1])
-//            ],
-//            //$params サイトID
-//            [
-//                false,
-//                $blogPost->find('all'),
-//                ['site_id' => 1],
-//                $blogPost->find('all')->where(['Contents.site_id' => 1])
-//            ],
-//            //$params URL
-//            [
-//                false,
-//                $blogPost->find('all'),
-//                ['contentUrl' => '/test'],
-//                $blogPost->find('all')->where(['Contents.url' => '/test'])
-//            ],
-//            //$params カテゴリID
-//            [
-//                true,
-//                $blogPost->find('all'),
-//                ['blog_category_id' => 1],
-//                $blogPost->find('all')->where(['BlogPosts.blog_category_id IN' => [1, 2]])
-//            ],
+            // 空配列の結果テスト
+            [
+                false,
+                $blogPost->find('all'),
+                [],
+                $blogPost->find('all')
+            ],
+            //$params ID
+            [
+                false,
+                $blogPost->find('all'),
+                ['id' => 1],
+                $blogPost->find('all')->where(['BlogPosts.id' => 1])
+            ],
+            //$params タイトル
+            [
+                false,
+                $blogPost->find('all'),
+                ['title' => 'test title'],
+                $blogPost->find('all')->where(['BlogPosts.title LIKE' => '%test title%'])
+            ],
+            //$params ユーザーID
+            [
+                false,
+                $blogPost->find('all'),
+                ['user_id' => 1], $blogPost->find('all')->where(['BlogPosts.user_id' => 1])
+            ],
+            //$params ブログコンテンツID
+            [
+                false,
+                $blogPost->find('all'),
+                ['blog_content_id' => 1],
+                $blogPost->find('all')->where(['BlogPosts.blog_content_id' => 1])
+            ],
+            //$params サイトID
+            [
+                false,
+                $blogPost->find('all'),
+                ['site_id' => 1],
+                $blogPost->find('all')->where(['Contents.site_id' => 1])
+            ],
+            //$params URL
+            [
+                false,
+                $blogPost->find('all'),
+                ['contentUrl' => '/test'],
+                $blogPost->find('all')->where(['Contents.url' => '/test'])
+            ],
+            //$params カテゴリID
+            [
+                true,
+                $blogPost->find('all'),
+                ['blog_category_id' => 1],
+                $blogPost->find('all')->where(['BlogPosts.blog_category_id IN' => [1, 2]])
+            ],
             //$params カテゴリ名
             [
                 true,
@@ -541,40 +539,40 @@ class BlogPostsServiceTest extends BcTestCase
                 ['tag' => 'tag1'],
                 $blogPost->find('all')->where(['BlogPosts.id IN' => 1])
             ],
-//            //$params 年月日
-//            [
-//                false,
-//                $blogPost->find('all'),
-//                ['year' => 1994, 'month' => 8, 'day' => 21],
-//                $blogPost->find('all')->where([
-//                    'YEAR(BlogPosts.posted)' => 1994,
-//                    'MONTH(BlogPosts.posted)' => 8,
-//                    'DAY(BlogPosts.posted)' => 21
-//                ])
-//            ],
-//            //$params No
-//            [
-//                false,
-//                $blogPost->find('all'),
-//                ['no' => 1, 'force' => true],
-//                $blogPost->find('all')->where(['BlogPosts.no' => 1])
-//            ],
-            //$params キーワード
-//            [
-//                false,
-//                $blogPost->find('all'),
-//                ['keyword' => 'test'],
-//                $blogPost->find('all')->where([
-//                    'and' => [
-//                        0 => [
-//                            'or' => [
-//                                ['BlogPosts.title LIKE' => '%test%'],
-//                                ['BlogPosts.content LIKE' => '%test%'],
-//                                ['BlogPosts.detail LIKE' => '%test%']
-//                            ]
-//                        ]
-//                    ]
-//                ])],
+            //$params 年月日
+            [
+                false,
+                $blogPost->find('all'),
+                ['year' => 1994, 'month' => 8, 'day' => 21],
+                $blogPost->find('all')->where([
+                    'YEAR(BlogPosts.posted)' => 1994,
+                    'MONTH(BlogPosts.posted)' => 8,
+                    'DAY(BlogPosts.posted)' => 21
+                ])
+            ],
+            //$params No
+            [
+                false,
+                $blogPost->find('all'),
+                ['no' => 1, 'force' => true],
+                $blogPost->find('all')->where(['BlogPosts.no' => 1])
+            ],
+            // $params キーワード
+            [
+                false,
+                $blogPost->find('all'),
+                ['keyword' => 'test'],
+                $blogPost->find('all')->where([
+                    'and' => [
+                        0 => [
+                            'or' => [
+                                ['BlogPosts.title LIKE' => '%test%'],
+                                ['BlogPosts.content LIKE' => '%test%'],
+                                ['BlogPosts.detail LIKE' => '%test%']
+                            ]
+                        ]
+                    ]
+                ])],
             //$params 作成者
             [
                 true,

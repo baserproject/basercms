@@ -100,6 +100,9 @@ if (!empty($_SERVER['argv'][1]) && preg_match('/^plugins\//', $_SERVER['argv'][1
         ['plugin' => 'BaserCore'],
         ['plugin' => $plugin]
     ];
+    if($plugin === 'BcBlog') {
+        $targets[] = ['plugin' => 'BcSearchIndex'];
+    }
 } else {
     $targets = [
         ['plugin' => 'BaserCore'],

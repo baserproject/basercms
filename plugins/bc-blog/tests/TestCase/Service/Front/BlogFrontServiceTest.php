@@ -57,6 +57,7 @@ class BlogFrontServiceTest extends BcTestCase
         'plugin.BaserCore.Factory/UsersUserGroups',
         'plugin.BaserCore.Factory/UserGroups',
         'plugin.BaserCore.Factory/Contents',
+        'plugin.BaserCore.Factory/ContentFolders',
         'plugin.BcBlog.Factory/BlogContents',
         'plugin.BcBlog.Factory/BlogTags',
         'plugin.BcBlog.Factory/BlogPosts',

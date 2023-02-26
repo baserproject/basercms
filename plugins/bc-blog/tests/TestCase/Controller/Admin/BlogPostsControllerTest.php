@@ -17,10 +17,12 @@ use BaserCore\Test\Factory\SiteConfigFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Utility\BcUtil;
 use BcBlog\Controller\Admin\BlogPostsController;
 use BcBlog\Service\BlogPostsServiceInterface;
 use BcBlog\Test\Factory\BlogPostFactory;
 use BcBlog\Test\Scenario\BlogContentScenario;
+use Cake\Core\Plugin;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use Cake\TestSuite\IntegrationTestTrait;
 
@@ -53,6 +55,8 @@ class BlogPostsControllerTest extends BcTestCase
         'plugin.BcBlog.Factory/BlogPosts',
         'plugin.BcBlog.Factory/BlogContents',
         'plugin.BaserCore.Factory/Contents',
+        'plugin.BaserCore.Factory/Dblogs',
+        'plugin.BcSearchIndex.Factory/SearchIndexes'
     ];
 
     /**
