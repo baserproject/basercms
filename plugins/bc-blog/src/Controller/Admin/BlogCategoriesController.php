@@ -63,7 +63,8 @@ class BlogCategoriesController extends BlogAdminAppController
     public function index(
         BlogCategoriesAdminServiceInterface $service,
         int $blogContentId
-    ) {
+    )
+    {
         $this->set($service->getViewVarsForIndex($blogContentId));
     }
 
