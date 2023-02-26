@@ -28,6 +28,9 @@ jobs:
                         local_path: 'bc-content-link'
                         split_repository: 'bc-content-link'
                     -
+                        local_path: 'bc-custom-content'
+                        split_repository: 'bc-custom-content'
+                    -
                         local_path: 'bc-editor-template'
                         split_repository: 'bc-editor-template'
                     -
