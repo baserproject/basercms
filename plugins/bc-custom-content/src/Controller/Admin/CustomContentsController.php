@@ -72,7 +72,7 @@ class CustomContentsController extends CustomContentAdminAppController
             } catch (PersistenceFailedException $e) {
                 $entity = $e->getEntity();
                 $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
-            }  catch (\Throwable $e) {
+            } catch (\Throwable $e) {
                 $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage()));
             }
         }
@@ -86,7 +86,8 @@ class CustomContentsController extends CustomContentAdminAppController
      * @param CustomContentsServiceInterface $service
      * @param int $id
      */
-    public function index(CustomContentsServiceInterface $service, int $id) {
+    public function index(CustomContentsServiceInterface $service, int $id)
+    {
         $this->redirect([
             'controller' => 'CustomEntries',
             'action' => 'index',
