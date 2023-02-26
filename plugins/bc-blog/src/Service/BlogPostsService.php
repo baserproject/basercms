@@ -112,22 +112,24 @@ class BlogPostsService implements BlogPostsServiceInterface
             'order' => 'posted',    // 並び順対象のフィールド
             'sort' => null,
             'id' => null,
-            'no' => null
+            'no' => null,
+            'contentUrl' => null,
+            'contain' => [
+                'Users',
+                'BlogCategories',
+                'BlogContents',
+                'BlogComments',
+                'BlogTags',
+            ]
         ], $queryParams);
 
         if (!empty($options['num'])) $options['limit'] = $options['num'];
         if (!empty($options['sort'])) $options['order'] = $options['sort'];
         unset($options['num'], $options['sort']);
 
-        $contain = [
-            'Users',
-            'BlogCategories',
-            'BlogContents' => ['Contents'],
-            'BlogComments',
-            'BlogTags',
-        ];
-        if ($options['id'] || $options['no']) $contain[] = 'BlogComments';
-        $query = $this->BlogPosts->find()->contain($contain);
+        if($options['contentUrl']) $options['contain']['BlogContents'] = 'Contents';
+        if ($options['id'] || $options['no']) $options['contain'][] = 'BlogComments';
+        $query = $this->BlogPosts->find()->contain($options['contain']);
 
         if ($options['order']) {
             $query->order($this->createOrder($options['order'], $options['direction']));
