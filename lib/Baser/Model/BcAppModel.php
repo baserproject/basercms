@@ -932,14 +932,22 @@ class BcAppModel extends Model
 	public function fileExt($check, $exts)
 	{
 		$file = $check[key($check)];
+		if (!is_array($exts)) {
+			$exts = explode(',', $exts);
+		}
+
+		// FILES形式のチェック
 		if (!empty($file['name'])) {
-			if (!is_array($exts)) {
-				$exts = explode(',', $exts);
-			}
 			$ext = decodeContent($file['type'], $file['name']);
-			if (in_array($ext, $exts)) {
-				return true;
-			} else {
+			if (!in_array($ext, $exts)) {
+				return false;
+			}
+		}
+
+		// 更新時の文字列チェック
+		if (is_string($file)) {
+			$ext = pathinfo($file, PATHINFO_EXTENSION);
+			if (!in_array($ext, $exts)) {
 				return false;
 			}
 		}
