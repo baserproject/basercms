@@ -44,6 +44,8 @@ class CustomContentsController extends CustomContentAdminAppController
      * @param CustomContentsAdminServiceInterface $service
      * @param int $id
      * @return \Cake\Http\Response|void|null
+     * @checked
+     * @noTodo
      */
     public function edit(CustomContentsAdminServiceInterface $service, int $id)
     {
