@@ -17,7 +17,6 @@ use Cake\Core\Configure;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
-use Cake\Core\Plugin;
 use Cake\Event\Event;
 use Cake\View\View;
 
