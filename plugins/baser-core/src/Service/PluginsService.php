@@ -15,6 +15,7 @@ use BaserCore\Error\BcException;
 use BaserCore\Model\Entity\Plugin;
 use BaserCore\Model\Table\PluginsTable;
 use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Utility\BcSiteConfig;
 use BaserCore\Utility\BcUpdateLog;
 use BaserCore\Utility\BcZip;
 use Cake\Cache\Cache;
@@ -674,6 +675,7 @@ class PluginsService implements PluginsServiceInterface
      */
     public function getAvailableCoreVersionInfo()
     {
+        if(!BcSiteConfig::get('use_update_notice')) return [];
         if (Configure::read('debug') > 0) Cache::delete('coreReleaseInfo', '_bc_update_');
 
         $coreReleaseInfo = Cache::read('coreReleaseInfo', '_bc_update_');
@@ -697,7 +699,12 @@ class PluginsService implements PluginsServiceInterface
                         $version = $matches[1];
                         // 同じメジャーバージョンでない場合は無視
                         if (!preg_match('/^' . preg_quote($major) . '/', $version)) continue;
-                        if (!$latest) $latest = $version;
+                        if (!$latest) {
+                            $latest = $version;
+                            $currentVerPoint = BcUtil::verpoint($currentVersion);
+                            $latestVerPoint = BcUtil::verpoint($latest);
+                            if($currentVerPoint > $latestVerPoint) break;
+                        }
                         if ($currentVersion === $version) break;
                         $versions[] = $version;
                     }
