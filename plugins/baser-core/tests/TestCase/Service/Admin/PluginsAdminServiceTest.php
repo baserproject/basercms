@@ -48,6 +48,7 @@ class PluginsAdminServiceTest extends BcTestCase
      */
     public function setUp(): void
     {
+        $this->setFixtureTruncate();
         parent::setUp();
         $this->PluginsAdmin = $this->getService(PluginsAdminServiceInterface::class);
     }
@@ -81,11 +82,14 @@ class PluginsAdminServiceTest extends BcTestCase
             'plugin',
             'scriptNum',
             'scriptMessages',
-            'siteVer',
-            'baserVer',
-            'siteVerPoint',
-            'baserVerPoint',
-            'log'
+            'dbVersion',
+            'programVersion',
+            'dbVerPoint',
+            'programVerPoint',
+            'availableVersion',
+            'log',
+            'requireUpdate',
+            'php'
         ], array_keys($vars));
     }
 

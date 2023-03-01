@@ -158,6 +158,7 @@ class PluginsTable extends AppTable
         if (file_exists($appConfigPath)) {
             $this->patchEntity($pluginRecord, include $appConfigPath);
         }
+        if($name === 'BaserCore') $pluginRecord->title = 'BaserCore';
         return $pluginRecord;
     }
 

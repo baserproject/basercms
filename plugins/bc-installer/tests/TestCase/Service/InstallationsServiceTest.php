@@ -93,7 +93,7 @@ class InstallationsServiceTest extends BcTestCase
     /**
      * test setAdminEmail
      */
-    public function testSetAdminEmail()
+    public function testSetAdminEmailAndVersion()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }

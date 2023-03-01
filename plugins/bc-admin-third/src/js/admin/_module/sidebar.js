@@ -55,10 +55,20 @@ window.addEventListener('DOMContentLoaded', function () {
 				currentSiteId: data.currentSiteId,
 				contentList: contentList,
 				isSystemSettingPage: isSystemSettingPage,
-				systemList: systemList
+				systemList: systemList,
+				availableVersions: null,
+				useUpdateNotice: data.useUpdateNotice
 			},
+            mounted() {
+                if(!this.useUpdateNotice) return;
+                $.get($.bcUtil.apiBaseUrl + 'baser-core/plugins/get_Available_core_version_info.json', function (response){
+                    if(response.availableCoreVersionInfo !== undefined) {
+                        app.availableVersions = response.availableCoreVersionInfo.versions.length;
+                    }
+                });
+            },
 			methods: {
-				openSystem: function () {
+				openSystem () {
 					app.systemExpanded = !app.systemExpanded;
 				}
 			}

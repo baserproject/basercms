@@ -278,17 +278,16 @@ $user = $users->find()->where([\'id\' => 1])->first();
 $user->name = \'hoge\';
 $users->save($user);');
         $file->close();
-        $this->assertTrue($this->BcPlugin->execScript($version));
+        $this->BcPlugin->execScript($version);
         $users = $this->getTableLocator()->get('BaserCore.Users');
         $user = $users->find()->where(['id' => 1])->first();
         $this->assertEquals('hoge', $user->name);
         // 無効スクリプトあり
         $file = new File($versionPath . DS . 'updater.php');
         $file->write('<?php
-use BaserCore\Error\BcException;
-throw new BcException(\'test\');');
+$this->log(\'test\');');
         $file->close();
-        $this->assertFalse($this->BcPlugin->execScript($version));
+        $this->BcPlugin->execScript($version);
         $file = new File(LOGS . 'cli-error.log');
         $log = $file->read();
         $this->assertStringContainsString('test', $log);
@@ -307,9 +306,9 @@ throw new BcException(\'test\');');
     }
 
     /**
-     * test update
+     * test migrate
      */
-    public function test_update()
+    public function test_migrate()
     {
         $pluginPath = ROOT . DS . 'plugins' . DS . 'BcTest' . DS;
         $folder = new Folder();
@@ -317,27 +316,89 @@ throw new BcException(\'test\');');
         // プラグインフォルダを初期化
         $folder->delete($pluginPath);
         $configPath = $pluginPath . 'config' . DS;
-        $updaterPath = $configPath . 'update' . DS . '0.0.2' . DS;
         $migrationPath = $configPath . 'Migrations' . DS;
         $seedPath = $configPath . 'Seeds' . DS;
         $srcPath = $pluginPath . 'src' . DS;
-        $folder->create($updaterPath);
         $folder->create($srcPath);
         $folder->create($migrationPath);
         $folder->create($seedPath);
 
         // VERSION.txt
-        $file = new File($pluginPath . 'VERSION.txt');
-        $file->write('0.0.1');
+        $this->createVersionFile($pluginPath, '0.0.1');
 
         // src/Plugin.php
-        $file = new File($srcPath . 'Plugin.php');
-        $file->write('<?php
-namespace BcTest;
-use BaserCore\BcPlugin;
-class Plugin extends BcPlugin {}');
+        $this->createPluginFile($srcPath);
 
         // config/Migrations/20220626000000_InitialBcTest.php
+        $this->createInitialMigrationFile($migrationPath);
+
+        // インストール実行
+        $plugin = new BcPlugin(['name' => 'BcTest']);
+        $plugin->install(['connection' => 'test']);
+        $db = ConnectionManager::get('test');
+        $collection = $db->getSchemaCollection();
+        $tableSchema = $collection->describe('bc_test');
+        $this->assertEquals('string', $tableSchema->getColumnType('name'));
+
+        // config/Migrations/20220627000000_AlterBcTest.php
+        $this->createAlterMigrationFile($migrationPath);
+
+        // アップデート実行
+        // インストールで利用した BcPluginを使い回すと、マイグレーションのキャッシュが残っていて、
+        // 新しいマイグレーションファイルを認識しないので初期化しなおす
+        $plugin = new BcPlugin(['name' => 'BcTest']);
+        $plugin->migrate(['connection' => 'test']);
+        $tableSchema = $collection->describe('bc_test');
+        $this->assertEquals('datetime', $tableSchema->getColumnType('name'));
+
+        // 初期化
+        $folder->delete($pluginPath);
+        $this->dropTable('bc_test');
+        $this->dropTable('bc_test_phinxlog');
+    }
+
+    /**
+     * プラグインファイルを作成する
+     *
+     * @param $srcPath
+     */
+    public function createPluginFile($srcPath)
+    {
+        $file = new File($srcPath . 'Plugin.php');
+                $file->write('<?php
+        namespace BcTest;
+        use BaserCore\BcPlugin;
+        class Plugin extends BcPlugin {}');
+    }
+
+    /**
+     * Alter のマイグレーションファイルを作成する
+     *
+     * @param $migrationPath
+     */
+    public function createAlterMigrationFile($migrationPath)
+    {
+        $file = new File($migrationPath . '20220627000000_AlterBcTest.php', 'w');
+        $file->write('<?php
+use Migrations\AbstractMigration;
+class AlterBcTest extends AbstractMigration
+{
+    public function change()
+    {
+        $table = $this->table(\'bc_test\');
+        $table->changeColumn(\'name\', \'datetime\');
+        $table->update();
+    }
+}');
+    }
+
+    /**
+     * 初期化用のマイグレーションファイルを作成する
+     *
+     * @param $migrationPath
+     */
+    public function createInitialMigrationFile($migrationPath)
+    {
         $file = new File($migrationPath . '20220626000000_InitialBcTest.php', 'w');
         $file->write('<?php
 use Migrations\AbstractMigration;
@@ -358,118 +419,84 @@ class InitialBcTest extends AbstractMigration
         $this->table(\'bc_test\')->drop()->save();
     }
 }');
-
-        // インストール実行
-        $plugin = new BcPlugin(['name' => 'BcTest']);
-        $plugin->install(['connection' => 'test']);
-        $db = ConnectionManager::get('test');
-        $collection = $db->getSchemaCollection();
-        $tableSchema = $collection->describe('bc_test');
-        $this->assertEquals('string', $tableSchema->getColumnType('name'));
-
-        // VERSION.txt
-        $file = new File($pluginPath . 'VERSION.txt');
-        $file->write('0.0.2');
-
-        // config/Migrations/20220627000000_AlterBcTest.php
-        $file = new File($migrationPath . '20220627000000_AlterBcTest.php', 'w');
-        $file->write('<?php
-use Migrations\AbstractMigration;
-class AlterBcTest extends AbstractMigration
-{
-    public function change()
-    {
-        $table = $this->table(\'bc_test\');
-        $table->changeColumn(\'name\', \'datetime\');
-        $table->update();
     }
-}');
 
-        // config/update/0.0.2/updater.php
+    /**
+     * バージョンファイルを作成する
+     *
+     * @param $pluginPath
+     * @param $version
+     */
+    public function createVersionFile($pluginPath, $version)
+    {
+        $file = new File($pluginPath . 'VERSION.txt');
+        $file->write($version);
+    }
+
+    /**
+     * アップデーターを作成する
+     *
+     * @param $updaterPath
+     */
+    public function createUpdater($updaterPath)
+    {
         $file = new File($updaterPath . 'updater.php', 'w');
         $file->write('<?php
 use Cake\ORM\Entity;
 use Cake\ORM\TableRegistry;
 $table = TableRegistry::getTableLocator()->get(\'BcTest.BcTest\');
 $table->save(new Entity([\'name\' => \'2022-06-26\']));');
+    }
+
+    /**
+     * test execUpdater
+     */
+    public function test_execUpdater()
+    {
+        $pluginPath = ROOT . DS . 'plugins' . DS . 'BcTest' . DS;
+        $folder = new Folder();
+
+        // プラグインフォルダを初期化
+        $folder->delete($pluginPath);
+        $configPath = $pluginPath . 'config' . DS;
+        $migrationPath = $configPath . 'Migrations' . DS;
+        $seedPath = $configPath . 'Seeds' . DS;
+        $srcPath = $pluginPath . 'src' . DS;
+        $folder->create($srcPath);
+        $folder->create($migrationPath);
+        $folder->create($seedPath);
+
+        // VERSION.txt
+        $this->createVersionFile($pluginPath, '0.0.1');
+
+        // config/Migrations/20220626000000_InitialBcTest.php
+        $this->createInitialMigrationFile($migrationPath);
+
+        // src/Plugin.php
+        $this->createPluginFile($srcPath);
+
+        // インストール実行
+        $plugin = new BcPlugin(['name' => 'BcTest']);
+        $plugin->install(['connection' => 'test']);
+
+        // VERSION.txt
+        $this->createVersionFile($pluginPath, '0.0.2');
+
+        // config/update/0.0.2/updater.php
+        $updaterPath = $configPath . 'update' . DS . '0.0.2' . DS;
+        $folder->create($updaterPath);
+        $this->createUpdater($updaterPath);
 
         // アップデート実行
-        // インストールで利用した BcPluginを使い回すと、マイグレーションのキャッシュが残っていて、
-        // 新しいマイグレーションファイルを認識しないので初期化しなおす
-        $plugin = new BcPlugin(['name' => 'BcTest']);
-        $plugin->update(['connection' => 'test']);
-        $tableSchema = $collection->describe('bc_test');
-        $this->assertEquals('datetime', $tableSchema->getColumnType('name'));
+        $plugin->execUpdater();
         $table = $this->getTableLocator()->get('BcTest.BcTest');
         $entity = $table->find()->first();
-        $this->assertEquals('2022/06/26 00:00:00', (string) $entity->name);
+        $this->assertEquals('2022-06-26', (string) $entity->name);
 
         // 初期化
         $folder->delete($pluginPath);
-    }
-
-
-    /**
-     * test update core
-     */
-    public function test_updateCore()
-    {
-        $folder = new Folder();
-
-        // アップデートフォルダを初期化
-        $configPath = BASER . 'config' . DS;
-        $updaterPath = $configPath . 'update' . DS . '5.0.1000' . DS;
-        $folder->delete($updaterPath);
-
-        $migrationPath = $configPath . 'Migrations' . DS;
-        $folder->create($updaterPath);
-        $folder->create($migrationPath);
-
-        // VERSION.txt
-        rename(BASER . 'VERSION.txt', BASER . 'VERSION.bak.txt');
-        $file = new File(BASER . 'VERSION.txt');
-        $file->write('5.0.1000');
-
-        // config/Migrations/30000000000000_AlterUsers.php
-        $migrationFile = $migrationPath . '30000000000000_AlterUsers.php';
-        $file = new File($migrationFile, 'w');
-        $file->write('<?php
-use Migrations\AbstractMigration;
-class AlterUsers extends AbstractMigration
-{
-    public function change()
-    {
-        $table = $this->table(\'users\');
-        $table->changeColumn(\'name\', \'datetime\');
-        $table->update();
-    }
-}');
-
-        // config/update/5.0.1000/updater.php
-        $file = new File($updaterPath . 'updater.php', 'w');
-        $file->write('<?php
-use Cake\ORM\Entity;
-use Cake\ORM\TableRegistry;
-$table = TableRegistry::getTableLocator()->get(\'BaserCore.Users\');
-$table->updateAll([\'name\' => \'2022-06-26\'], []);');
-
-        // アップデート実行
-        // インストールで利用した BcPluginを使い回すと、マイグレーションのキャッシュが残っていて、
-        // 新しいマイグレーションファイルを認識しないので初期化しなおす
-        $plugin = new BcPlugin(['name' => 'BaserCore']);
-        $plugin->update(['connection' => 'test']);
-        $db = ConnectionManager::get('test');
-        $collection = $db->getSchemaCollection();
-        $tableSchema = $collection->describe('users');
-        $this->assertEquals('datetime', $tableSchema->getColumnType('name'));
-        $table = $this->getTableLocator()->get('BaserCore.Users');
-        $entity = $table->find()->first();
-        $this->assertEquals('2022/06/26 00:00:00', (string) $entity->name);
-
-        // 初期化
-        $folder->delete($updaterPath);
-        rename(BASER . 'VERSION.bak.txt', BASER . 'VERSION.txt');
-        unlink($migrationFile);
+        $this->dropTable('bc_test');
+        $this->dropTable('bc_test_phinxlog');
     }
 
     /**

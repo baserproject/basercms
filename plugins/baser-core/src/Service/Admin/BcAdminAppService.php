@@ -15,6 +15,7 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Service\PermissionsServiceInterface;
+use BaserCore\Service\PluginsServiceInterface;
 use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
@@ -39,11 +40,13 @@ class BcAdminAppService implements BcAdminAppServiceInterface
      */
     public function getViewVarsForAll(): array
     {
-        if(!BcUtil::isInstalled()) return [];
+        if (!BcUtil::isInstalled()) return [];
         return [
             'permissionMethodList' => $this->getService(PermissionsServiceInterface::class)->getMethodList(),
             'permissionAuthList' => $this->getService(PermissionsServiceInterface::class)->getAuthList(),
             'useAdminSideBanner' => $this->getService(SiteConfigsServiceInterface::class)->getValue('admin_side_banner'),
+            'useUpdateNotice' => (bool) $this->getService(SiteConfigsServiceInterface::class)->getValue('use_update_notice'),
+            'releaseCoreVersion' => $this->getService(PluginsServiceInterface::class)->getAvailableCoreVersion(),
         ];
     }
 }

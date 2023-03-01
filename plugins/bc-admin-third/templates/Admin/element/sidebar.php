@@ -45,7 +45,6 @@ use BaserCore\View\BcAdminAppView;
         </li>
       </ul>
     </div>
-
     <div v-if="systemList.length" class="bca-nav__system" v-bind:data-content-is-expanded="isSystemSettingPage"
          v-bind:data-bca-state="systemExpanded">
       <h3 class="bca-nav__system-title">
@@ -69,6 +68,17 @@ use BaserCore\View\BcAdminAppView;
           </ul>
         </div>
       </div>
+    </div>
+
+    <div v-if="availableVersions" class="bca-nav__sub-title bca-nav__update">
+      <a href="<?php echo $this->BcBaser->getUri([
+        'plugin' => 'BaserCore',
+        'controller' => 'Plugins',
+        'action' => 'update'
+      ]) ?>" class="bca-nav__sub-title-label bca-icon--update">
+        <span>更新</span>
+        <i class="bca-nav__update-badge">{{ availableVersions }}</i>
+      </a>
     </div>
   </nav>
 

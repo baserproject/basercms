@@ -294,4 +294,15 @@ class PluginsController extends BcApiController
         $this->viewBuilder()->setOption('serialize', ['message']);
     }
 
+    /**
+     * 取得可能なコアのバージョン情報を取得
+     *
+     * @param PluginsServiceInterface $service
+     */
+    public function get_Available_core_version_info(PluginsServiceInterface $service)
+    {
+        $this->set(['availableCoreVersionInfo' => $service->getAvailableCoreVersionInfo()]);
+        $this->viewBuilder()->setOption('serialize', ['availableCoreVersionInfo']);
+    }
+
 }

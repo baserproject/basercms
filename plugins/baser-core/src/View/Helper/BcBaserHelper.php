@@ -160,7 +160,7 @@ class BcBaserHelper extends Helper
         <<< */
         $request = $this->_View->getRequest();
         // プラグインのBaserヘルパを初期化
-        if (BcUtil::isInstalled() && !$request->is('update') && !$request->is('maintenance')) {
+        if (BcUtil::isInstalled() && !$request->is('maintenance')) {
             $this->_initPluginBasers();
         }
     }
@@ -1492,7 +1492,7 @@ class BcBaserHelper extends Helper
      */
     public function getSitePrefix()
     {
-        if (!BcUtil::isInstalled() || $this->getView()->getRequest()->is('update')) {
+        if (!BcUtil::isInstalled()) {
             return '';
         }
         $site = null;

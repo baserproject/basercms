@@ -216,6 +216,22 @@ $this->BcBaser->js('admin/site_configs/index.bundle', false, ['id' => 'AdminSite
         </td>
       </tr>
 
+      <tr>
+        <th class="col-head bca-form-table__label">
+          <?php echo $this->BcAdminForm->label('use_update_notice', __d('baser', 'アップデート通知')) ?>
+        </th>
+        <td class="col-input bca-form-table__input">
+          <?php echo $this->BcAdminForm->control('use_update_notice', [
+            'type' => 'checkbox',
+            'label' => __d('baser', '管理システムのアップデート通知を有効にする')
+          ]) ?>
+          <i class="bca-icon--question-circle bca-help"></i>
+          <div class="bca-helptext"><?php echo __d('baser', '管理システム自体のアップデートに関する通知を有効する場合にはチェックを入れます。
+          左サイドメニューに更新ボタンが表示され、利用可能なアップデートが存在する場合にバッジが付きます。') ?></div>
+          <?php echo $this->BcAdminForm->error('use_update_notice') ?>
+        </td>
+      </tr>
+
       <?php echo $this->BcAdminForm->dispatchAfterForm('Admin') ?>
 
     </table>

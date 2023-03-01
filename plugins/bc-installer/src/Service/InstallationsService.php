@@ -236,11 +236,12 @@ class InstallationsService implements InstallationsServiceInterface
      * @noTodo
      * @unitTest ラッパーメソッドのためユニットテスト不要
      */
-    public function setAdminEmail(string $email)
+    public function setAdminEmailAndVersion(string $email)
     {
         /* @var \BaserCore\Service\SiteConfigsService $siteConfigsService */
         $siteConfigsService = $this->getService(SiteConfigsServiceInterface::class);
-        return $siteConfigsService->setValue('email', $email);
+        return ($siteConfigsService->setValue('email', $email) &&
+            $siteConfigsService->setValue('version', BcUtil::getVersion()));
     }
 
     /**

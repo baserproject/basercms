@@ -43,17 +43,6 @@ if (!BcUtil::isInstalled()) {
 App::uses('BaserPluginApp', 'Controller');
 App::uses('BaserPluginAppModel', 'Model');
 
-
-/**
- * アップデーター
- */
-if ($isUpdater) {
-    $updateKey = Configure::read('BcApp.updateKey');
-    Router::connect('/' . $updateKey, ['controller' => 'updaters', 'action' => 'index']);
-    Router::connect('/' . $updateKey . '/index', ['controller' => 'updaters', 'action' => 'index']);
-    return;
-}
-
 /**
  * プラグイン
  *

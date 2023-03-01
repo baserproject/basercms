@@ -105,6 +105,7 @@ class PluginsController extends BcAdminAppController
 	 * アップデート実行
      * @param PluginsServiceInterface $service
      * @param string $name
+     * @return void
      * @checked
      * @noTodo
      * @unitTest
@@ -116,16 +117,28 @@ class PluginsController extends BcAdminAppController
         $this->set($service->getViewVarsForUpdate($plugin));
         if (!$this->request->is(['put', 'post'])) return;
         try {
-            $service->update($plugin->name, $this->request->getData('connection') ?? 'default');
             if($plugin->name === 'BaserCore') {
+                $request = $this->getRequest();
+                $service->updateCore(
+                    $request->getData('currentVersion'),
+                    $request->getData('targetVersion'),
+                    $request->getData('php'),
+                    $request->getData('connection') ?? 'default'
+                );
                 $this->BcMessage->setInfo(__d('baser', '全てのアップデート処理が完了しました。 {0} にログを出力しています。', LOGS . 'update.log'));
-                return $this->redirect('/');
+                return $this->redirect(['action' => 'update']);
             } else {
+                $service->update($plugin->name, $this->request->getData('connection') ?? 'default');
                 $this->BcMessage->setInfo(__d('baser', 'アップデート処理が完了しました。画面下部のアップデートログを確認してください。'));
                 return $this->redirect(['action' => 'update', $name]);
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->BcMessage->setError($e->getMessage());
+            if($plugin->name === 'BaserCore') {
+                return $this->redirect(['action' => 'update']);
+            } else {
+                return $this->redirect(['action' => 'update', $name]);
+            }
         }
 	}
 

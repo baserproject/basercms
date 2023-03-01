@@ -267,6 +267,13 @@ q {}',
                 'created' => '2022-10-01 09:00:00',
                 'modified' => '2022-10-01 09:00:00'
             ],
+            [
+                'id' => '32',
+                'name' => 'use_update_notice',
+                'value' => '1',
+                'created' => '2022-10-01 09:00:00',
+                'modified' => '2022-10-01 09:00:00'
+            ],
         ];
         $table = $this->table('site_configs');
         $table->insert($data)->save();

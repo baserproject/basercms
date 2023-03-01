@@ -169,18 +169,12 @@ class BcRedirectSubSiteFilterTest extends BcTestCase
 
     /**
      * test Process
-     * 「アップデーターや管理画面へのアクセスの場合には無視する。」を確認
+     * 「管理画面へのアクセスの場合には無視する。」を確認
      */
     public function test_process_admin(): void
     {
         //データ生成
         $this->loadFixtureScenario(InitAppScenario::class);
-
-        //アップデータのURLを確認
-        $request = $this->loginAdmin($this->getRequest('/update'));
-        $this->_response = $this->BcRedirectSubSiteFilter->process($request, $this->Application);
-        //リダイレクトしない確認
-        $this->assertResponseSuccess();
 
         //管理画面へのアクセスを確認
         $request = $this->loginAdmin($this->getRequest('/baser/admin'));

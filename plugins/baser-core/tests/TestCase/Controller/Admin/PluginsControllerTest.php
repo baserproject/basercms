@@ -225,17 +225,26 @@ class PluginsControllerTest extends BcTestCase
     {
         $this->enableSecurityToken();
         $this->enableCsrfToken();
+
         rename(BASER . 'VERSION.txt', BASER . 'VERSION.bak.txt');
+        copy(ROOT . DS . 'composer.json', ROOT . DS . 'composer.json.bak');
+        copy(ROOT . DS . 'composer.lock', ROOT . DS . 'composer.lock.bak');
+
         $file = new File(BASER . 'VERSION.txt');
         $file->write('10.0.0');
         $file->close();
-        $this->put('/update', [
+        $this->put('/baser/admin/baser-core/plugins/update', [
             'connection' => 'test',
-            'update' => 1
+            'update' => 1,
+            'php' => '/usr/local/bin/php',
+            'currentVersion' => '3.0.10',
+            'targetVersion' => '3.0.24'
         ]);
-        $this->assertRedirect('/');
+        $this->assertRedirect('/baser/admin/baser-core/plugins/update');
         $this->assertFlashMessage(sprintf('全てのアップデート処理が完了しました。 %s にログを出力しています。', LOGS . 'update.log'));
         rename(BASER . 'VERSION.bak.txt', BASER . 'VERSION.txt');
+        rename(ROOT . DS . 'composer.json.bak', ROOT . DS . 'composer.json');
+        rename(ROOT . DS . 'composer.lock.bak', ROOT . DS . 'composer.lock');
     }
 
     /**

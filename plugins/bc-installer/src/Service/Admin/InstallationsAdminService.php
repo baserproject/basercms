@@ -238,7 +238,7 @@ class InstallationsAdminService extends InstallationsService implements Installa
     public function initAdmin(ServerRequest $request): void
     {
         // サイト基本設定登録
-        $this->setAdminEmail($request->getData('admin_email'));
+        $this->setAdminEmailAndVersion($request->getData('admin_email'));
         $this->setSiteName($request->getData('site_name'));
 
         // SecuritySalt設定

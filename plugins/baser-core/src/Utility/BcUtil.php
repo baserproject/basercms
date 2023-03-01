@@ -268,7 +268,7 @@ class BcUtil
      * ※ ２つ目以降のバージョン番号は999までとする
      * β版の場合はfalseを返す
      *
-     * @param mixed $version Or false
+     * @param int|false $version
      * @checked
      * @noTodo
      * @unitTest

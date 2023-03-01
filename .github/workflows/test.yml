@@ -9,8 +9,11 @@ name: Test
 
 on:
   push:
+    tags-ignore:
+      - '**'
     branches:
-      - 'dev'
+      - '**'
+      - '!master'
   pull_request:
 
 jobs:

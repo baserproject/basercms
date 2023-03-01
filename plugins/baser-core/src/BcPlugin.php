@@ -143,61 +143,39 @@ class BcPlugin extends BasePlugin
     }
 
     /**
-     * update
+     * マイグレーションを実行する
+     *
      * @param array $options
-     * @return bool
      */
-    public function update($options = []): bool
+    public function migrate($options = [])
     {
         $options = array_merge([
             'plugin' => $this->getName(),
             'connection' => 'default'
         ], $options);
-        BcUtil::clearAllCache();
-        $name = $options['plugin'];
-        $plugins = TableRegistry::getTableLocator()->get('BaserCore.Plugins');
-        $targetVersion = BcUtil::getVersion($name);
-        BcUpdateLog::set(__d('baser', '{0} プラグイン {1} へのアップデートを開始します。', $name, $targetVersion));
+        if (is_dir($this->getPath() . 'config' . DS . 'Migrations')) {
+            $this->migrations->migrate($options);
+        }
+    }
 
-        TableRegistry::getTableLocator()->clear();
-
-        try {
-
-            if (is_dir($this->getPath() . 'config' . DS . 'Migrations')) {
-                $this->migrations->migrate($options);
-            }
-
-            $updaters = $this->getUpdaters();
-            if ($updaters) {
-                asort($updaters);
+    /**
+     * アップデートプログラムを実行する
+     */
+    public function execUpdater()
+    {
+        $updaters = $this->getUpdaters();
+        if ($updaters) {
+            asort($updaters);
+            try {
                 foreach($updaters as $version => $updateVerPoint) {
                     $version = explode('-', $version)[1];
                     BcUpdateLog::set(__d('baser', 'アップデートプログラム {0} を実行します。', $version));
                     $this->execScript($version);
                 }
+            } catch (\Throwable $e) {
+                throw new BcException($e->getMessage());
             }
-
-            if (!isset($updaters['test'])) {
-                $result = $plugins->update($name, $targetVersion);
-            } else {
-                $result = true;
-            }
-
-            $this->createAssetsSymlink();
-
-            BcUpdateLog::set(__d('baser', '{0} プラグイン {1} へのアップデートが完了しました。', $name, $targetVersion));
-            BcUtil::clearAllCache();
-            BcUpdateLog::save();
-            return $result;
-        } catch (BcException $e) {
-            BcUpdateLog::set(__d('baser', 'アップデート処理が途中で失敗しました。'));
-            BcUpdateLog::set($e->getMessage());
-            BcUtil::clearAllCache();
-            BcUpdateLog::save();
-            $this->migrations->rollback($options);
-            return false;
         }
-
     }
 
     /**
@@ -228,9 +206,8 @@ class BcPlugin extends BasePlugin
         if (!file_exists($__path)) return true;
         try {
             include $__path;
-        } catch (BcException $e) {
-            $this->log($e->getMessage());
-            return false;
+        } catch (\Throwable $e) {
+            throw new BcException($e->getMessage());
         }
         return true;
     }

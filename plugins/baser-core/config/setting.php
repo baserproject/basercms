@@ -74,6 +74,9 @@ return [
      * Configure the cache adapters.
      */
     'Cache' => [
+        /**
+         * baserマーケットのテーマ、プラグイン情報等に利用
+         */
         '_bc_env_' => [
             'className' => FileEngine::class,
             'prefix' => 'myapp_bc_env_',
@@ -81,6 +84,17 @@ return [
             'serialize' => true,
             'duration' => '+1 years',
             'url' => env('CACHE_BCENV_URL', null),
+        ],
+        /**
+         * Packagist の BaserCore のバージョンに利用
+         * @see \BaserCore\Service\PluginsService::getAvailableCoreVersion()
+         */
+        '_bc_update_' => [
+            'className' => FileEngine::class,
+            'prefix' => 'myapp_bc_update_',
+            'path' => CACHE . 'environment' . DS,
+            'serialize' => true,
+            'duration' => '+1 days',
         ],
     ],
 
@@ -238,17 +252,17 @@ return [
          * コアプラグイン
          */
         'corePlugins' => [
-            'BcSearchIndex',
             'BcBlog',
-            'BcMail',
+            'BcContentLink',
+            'BcCustomContent',
             'BcEditorTemplate',
+            'BcFavorite',
+            'BcMail',
+            'BcSearchIndex',
             'BcThemeConfig',
             'BcThemeFile',
             'BcUploader',
             'BcWidgetArea',
-            'BcContentLink',
-            'BcFavorite',
-            'BcCustomContent'
         ],
         'defaultInstallCorePlugins' => [
             'BcSearchIndex',
@@ -257,6 +271,12 @@ return [
             'BcThemeConfig',
             'BcWidgetArea',
         ],
+
+        /**
+         * コアのリリース情報を取得するためのURL
+         */
+        'coreReleaseUrl' => 'https://packagist.org/feeds/package.baserproject/baser-core.rss',
+
         /**
          * パスワード再発行URLの有効時間(min) デフォルト24時間
          */
@@ -272,12 +292,6 @@ return [
             'none' => __d('baser', 'なし'),
             'BaserCore.BcCkeditor' => 'CKEditor'
         ],
-        /**
-         * アップデートキー
-         * アップデート時のURLに使用する
-         * 例）https://localhost/update
-         */
-        'updateKey' => env('UPDATE_KEY', 'update'),
 
         /**
          * 予約語

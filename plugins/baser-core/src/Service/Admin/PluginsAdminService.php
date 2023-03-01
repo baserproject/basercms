@@ -53,14 +53,15 @@ class PluginsAdminService extends PluginsService implements PluginsAdminServiceI
      */
     public function getViewVarsForUpdate(EntityInterface $entity): array
     {
-        $targetVersion = BcUtil::getVersion($entity->name);
+        $availableVersion = $this->getAvailableCoreVersion();
+        $programVersion = BcUtil::getVersion($entity->name);
         $dbVersion = BcUtil::getDbVersion($entity->name);
         BcUtil::includePluginClass($entity->name);
         $plugin = CakePlugin::getCollection()->create($entity->name);
         $scriptNum = count($plugin->getUpdaters());
         $scriptMessages = $plugin->getUpdateScriptMessages();
 
-        if($entity->name === 'BaserCore') {
+        if ($entity->name === 'BaserCore') {
             $corePlugins = Configure::read('BcApp.corePlugins');
             foreach($corePlugins as $corePlugin) {
                 $scriptNum += count($plugin->getUpdaters($corePlugin));
@@ -68,16 +69,64 @@ class PluginsAdminService extends PluginsService implements PluginsAdminServiceI
             }
         }
 
+        $programVerPoint = BcUtil::verpoint($programVersion);
+        $dbVerPoint = BcUtil::verpoint($dbVersion);
+
         return [
             'plugin' => $entity,
             'scriptNum' => $scriptNum,
             'scriptMessages' => $scriptMessages,
-            'siteVer' => $dbVersion,
-            'baserVer' => $targetVersion,
-            'siteVerPoint' => BcUtil::verpoint($dbVersion),
-            'baserVerPoint' => BcUtil::verpoint($targetVersion),
-            'log' => $this->getUpdateLog()
+            'dbVersion' => $dbVersion,
+            'programVersion' => $programVersion,
+            'dbVerPoint' => $dbVerPoint,
+            'programVerPoint' => $programVerPoint,
+            'availableVersion' => $availableVersion,
+            'log' => $this->getUpdateLog(),
+            'requireUpdate' => $this->isRequireUpdate(
+                $programVersion,
+                $dbVersion,
+                $availableVersion,
+                $scriptNum
+            ),
+            'php' => $this->whichPhp()
         ];
+    }
+
+    public function whichPhp()
+    {
+        exec('which php', $out, $code);
+        if ($code === 0) return $out[0];
+        return '';
+    }
+
+    /**
+     * アップデートが必要がどうか
+     *
+     * @param string $programVersion
+     * @param string $dbVersion
+     * @param string $availableVersion
+     * @param int|false $scriptNum
+     * @return bool
+     */
+    public function isRequireUpdate(string $programVersion, string $dbVersion, string $availableVersion, $scriptNum)
+    {
+        $programVerPoint = BcUtil::verpoint($programVersion);
+        $dbVerPoint = BcUtil::verpoint($dbVersion);
+        $availableVerPoint = true;
+        if ($availableVersion) {
+            $availableVerPoint = BcUtil::verpoint($dbVersion);
+        }
+        if ($programVerPoint === false || $dbVerPoint === false || $availableVerPoint === false) {
+            return false;
+        }
+        if ($availableVerPoint !== true) {
+            if ($availableVersion !== $programVersion) return true;
+        }
+        if ($programVersion !== $dbVersion || $scriptNum) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**

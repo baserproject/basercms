@@ -105,44 +105,6 @@ class RoutesTest extends BcTestCase
     }
 
     /**
-     * アップデーターのルーティングテスト
-     *
-     * @param string $url URL
-     * @return void
-     *
-     * @dataProvider updateDataProvider
-     */
-    public function testUpdate($url)
-    {
-        Configure::write('BcRequest.isUpdater', true);
-        $params = $this->_getParams($url);
-        Configure::write('BcRequest.isUpdater', false);
-        $expects = [
-            'controller' => 'updaters',
-            'action' => 'index',
-            'plugin' => null,
-            'named' => [],
-            'pass' => [],
-        ];
-        $this->assertEquals($expects, $params);
-    }
-
-    /**
-     * アップデーター用のデータ
-     *
-     * @return array
-     */
-    public function updateDataProvider()
-    {
-        $updateKey = Configure::read('BcApp.updateKey');
-
-        return [
-            ["/{$updateKey}"],
-            ["/{$updateKey}/index"]
-        ];
-    }
-
-    /**
      * 固定ページのルーティングテスト
      *
      * @param string $url URL

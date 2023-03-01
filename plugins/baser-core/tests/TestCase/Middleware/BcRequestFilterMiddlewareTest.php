@@ -245,35 +245,6 @@ class BcRequestFilterMiddlewareTest extends BcTestCase
     }
 
     /**
-     * アップデート用のURLかどうかを判定
-     *
-     * @param bool $expect 期待値
-     * @param string $url URL文字列
-     * @return void
-     * @dataProvider isUpdateDataProvider
-     */
-    public function testIsUpdate($expect, $url)
-    {
-        $this->assertEquals($expect, $this->BcRequestFilterMiddleware->isUpdate($this->getRequest($url)));
-    }
-
-    /**
-     * isUpdate用データプロバイダ
-     *
-     * @return array
-     */
-    public function isUpdateDataProvider()
-    {
-        $slug = env('UPDATE_KEY', 'update');
-        return [
-            [true, "/{$slug}"],
-            [false, '/'],
-            [false, '/service'],
-            [false, '/admin/']
-        ];
-    }
-
-    /**
      * 固定ページ表示用のURLかどうかを判定
      * [注]ルーターによるURLパース後のみ
      *

@@ -9,7 +9,6 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
-use BaserCore\Utility\BcUtil;
 use BaserCore\View\BcAdminAppView;
 
 /**
@@ -19,17 +18,15 @@ use BaserCore\View\BcAdminAppView;
  * @var \Cake\Datasource\EntityInterface $plugin
  * @var int $scriptNum
  * @var array $scriptMessages
- * @var string $siteVer
- * @var string $baserVer
- * @var int $siteVerPoint
- * @var int $baserVerPoint
+ * @var string $dbVersion
+ * @var string $programVersion
+ * @var string $availableVersion
+ * @var int $dbVerPoint
+ * @var int $programVerPoint
  * @var string $log
+ * @var bool $requireUpdate
+ * @var string $php
  */
-if (!($baserVerPoint === false || $siteVerPoint === false) && ($baserVer !== $siteVer || $scriptNum)) {
-  $requireUpdate = true;
-} else {
-  $requireUpdate = false;
-}
 $this->BcAdmin->setTitle(sprintf(__d('baser', '%s｜データベースアップデート'), ($plugin->name === 'BaserCore')? 'baserCMSコア' : $plugin->title . 'プラグイン'));
 $this->BcBaser->i18nScript([
   'confirmMessage1' => __d('baser', 'アップデートを実行します。よろしいですか？'),
@@ -43,14 +40,19 @@ $this->BcBaser->js('admin/plugins/update.bundle', false);
     <?php echo __d('baser', '現在のバージョン状況') ?>
   </h2>
   <ul class="version">
-    <li><?php echo sprintf(__d('baser', '%1$sのバージョン： <strong>%2$s</strong>'), $plugin->title . 'プラグイン', $baserVer) ?></li>
-    <li><?php echo sprintf(__d('baser', '現在のデータベースのバージョン：<strong> %s </strong>'), $siteVer) ?></li>
+    <?php if($availableVersion): ?>
+    <li><?php echo __d('baser', '{0} の利用可能なバージョン： <strong>{1}</strong>', $plugin->title, $availableVersion) ?></li>
+    <li><?php echo __d('baser', '{0} の現在のバージョン： <strong>{1}</strong>', $plugin->title, $programVersion) ?></li>
+    <?php else: ?>
+    <li><?php echo __d('baser', '{0} の現在のプログラムバージョン： <strong>{1}</strong>', $plugin->title, $programVersion) ?></li>
+    <li><?php echo __d('baser', '{0} の現在のデータベースのバージョン：<strong>{1}</strong>', $plugin->title, $dbVersion) ?></li>
+    <?php endif ?>
   </ul>
   <?php if ($scriptNum || $scriptMessages): ?>
     <div class="em-box">
-      <?php if ($baserVerPoint === false || $siteVerPoint === false): ?>
+      <?php if ($programVerPoint === false || $dbVerPoint === false): ?>
         <h3><?php echo __d('baser', 'α版の場合はアップデートサポート外です。') ?></h3>
-      <?php elseif ($baserVer !== $siteVer || $scriptNum): ?>
+      <?php elseif ($programVersion !== $dbVersion || $scriptNum): ?>
         <?php if ($scriptNum): ?>
           <h3><?php echo sprintf(__d('baser', 'アップデートプログラムが <strong>%s つ</strong> あります。'), $scriptNum) ?></h3>
         <?php endif ?>
@@ -110,6 +112,18 @@ $this->BcBaser->js('admin/plugins/update.bundle', false);
     <p><?php echo __d('baser', '「アップデート実行」をクリックしてプラグインのアップデートを完了させてください。') ?></p>
     <?php echo $this->BcAdminForm->create($plugin) ?>
     <?php echo $this->BcAdminForm->control('update', ['type' => 'hidden', 'value' => true]) ?>
+    <?php echo $this->BcAdminForm->control('currentVersion', ['type' => 'hidden', 'value' => $programVersion]) ?>
+    <?php echo $this->BcAdminForm->control('targetVersion', ['type' => 'hidden', 'value' => $availableVersion]) ?>
+    <p>
+      <?php echo __d('baser', 'PHP CLI の実行パス') ?>
+      <?php echo $this->BcAdminForm->control('php', [
+        'type' => 'text',
+        'value' => $php,
+        'size' => 40
+      ]) ?>
+      <br>
+      <small class="php-notice"><?php echo __d('baser', 'PHPのパスが取得できないためアップデートを実行できません。確認の上、手動で入力してください。') ?></small>
+    </p>
     <div class="bca-actions">
       <?php echo $this->BcAdminForm->submit(__d('baser', 'アップデート実行'), [
         'class' => 'button bca-btn bca-actions__item',
@@ -117,7 +131,7 @@ $this->BcBaser->js('admin/plugins/update.bundle', false);
         'data-bca-btn-width' => 'lg',
         'data-bca-btn-type' => 'save',
         'id' => 'BtnUpdate',
-        'div' => false
+        'div' => false,
       ]) ?>
     </div>
     <?php echo $this->BcAdminForm->end() ?>

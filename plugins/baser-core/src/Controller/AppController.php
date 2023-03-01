@@ -153,7 +153,7 @@ class AppController extends BaseController
 
         // インストーラー、アップデーターの場合はテーマを設定して終了
         // コンソールから利用される場合、$isInstall だけでは判定できないので、BC_INSTALLED も判定に入れる
-        if ((!BcUtil::isInstalled() || $this->getRequest()->is('install') || $this->getRequest()->is('update')) && !in_array($this->getName(), ['Error', 'BcError'])) {
+        if ((!BcUtil::isInstalled() || $this->getRequest()->is('install')) && !in_array($this->getName(), ['Error', 'BcError'])) {
             $this->viewBuilder()->setTheme(Configure::read('BcApp.defaultAdminTheme'));
             return;
         }

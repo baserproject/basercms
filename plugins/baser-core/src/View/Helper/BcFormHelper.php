@@ -12,7 +12,6 @@
 namespace BaserCore\View\Helper;
 
 use BaserCore\Utility\BcContainerTrait;
-use Cake\ORM\Query;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
 use Cake\View\Form\EntityContext;
@@ -139,10 +138,10 @@ class BcFormHelper extends FormHelper
         } elseif ($count === 2) {
             [$plugin, $modelName, $field] = explode('.', $field);
         }
-        if(!$modelName) return false;
+        if (!$modelName) return false;
         $serviceName = (($plugin)?: 'App') . '\\Service\\' . $modelName . 'ServiceInterface';
         $modelName = (($plugin)? $plugin . '.' : '') . $modelName;
-        if(method_exists($serviceName, 'getControlSource')) {
+        if (method_exists($serviceName, 'getControlSource')) {
             return $this->getService($serviceName)->getControlSource($field, $options);
         }
         if (empty($modelName)) return false;
@@ -244,7 +243,7 @@ SCRIPT_END;
         }
 
         if ($value && $value != '0000-00-00 00:00:00') {
-            if(strpos($value, ' ') !== false) {
+            if (strpos($value, ' ') !== false) {
                 [$dateValue, $timeValue] = explode(' ', $value);
             } else {
                 $dateValue = $value;
@@ -298,7 +297,7 @@ SCRIPT_END;
             $timeTag = $this->BcHtml->tag($tag, $timeTag, $timeDivOptions);
         }
         $hiddenTag = $this->hidden($fieldName, ['value' => $value, 'id' => $options['id']]);
-        if($this->formProtector) {
+        if ($this->formProtector) {
             $this->unlockField($fieldName);
         }
         $script = <<< SCRIPT_END
@@ -772,7 +771,7 @@ SCRIPT_END;
             $this->formProtector->addField(
                 $options['name'],
                 true,
-                $options['val'] === false ? '0' : (string)$options['val']
+                $options['val'] === false? '0' : (string)$options['val']
             );
         }
 
@@ -1613,11 +1612,11 @@ SCRIPT_END;
                     $context = null;
                 }
             }
-            if(!$context) {
-                $context = empty($request->getParam('controller')) ? false : $request->getParam('controller');
+            if (!$context) {
+                $context = empty($request->getParam('controller'))? false : $request->getParam('controller');
             }
             if ($domId = isset($options['url']['action'])? $options['url']['action'] : $request->getParam('action')) {
-                $formId = Inflector::classify($context) . $request->getParam('prefix') . Inflector::camelize($domId) . 'Form' ;
+                $formId = Inflector::classify($context) . $request->getParam('prefix') . Inflector::camelize($domId) . 'Form';
             } else {
                 $formId = null;
             }
@@ -1687,8 +1686,8 @@ SCRIPT_END;
             'editor' => 'BaserCore.BcCkeditor',
             'style' => 'width:99%;height:540px'
         ], $options);
-        if(!$options['editor']) {
-            /** @var BcCkeditorHelper $bcCkeditor  */
+        if (!$options['editor']) {
+            /** @var BcCkeditorHelper $bcCkeditor */
             $bcCkeditor = $this->getView()->BcCkeditor;
             return $bcCkeditor->editor($fieldName, $options);
         }
@@ -1705,7 +1704,7 @@ SCRIPT_END;
             }
             return $this->input($fieldName, array_merge(['type' => 'textarea'], $_options));
         } else {
-            /** @var BcCkeditorHelper $bcCkeditor  */
+            /** @var BcCkeditorHelper $bcCkeditor */
             $bcCkeditor = $this->getView()->BcCkeditor;
             return $bcCkeditor->editor($fieldName, $options);
         }
@@ -2079,17 +2078,17 @@ DOC_END;
     public function getTable($fieldName)
     {
         $context = $this->context();
-        if(!($context instanceof EntityContext)) return false;
+        if (!($context instanceof EntityContext)) return false;
         $entity = $context->entity(explode('.', $fieldName));
-        if(!$entity) return false;
+        if (!$entity) return false;
 
         $fieldArray = explode('.', $fieldName);
 
-        if(count($fieldArray) === 3) {
+        if (count($fieldArray) === 3) {
             if ($entity && $entity->get($fieldArray[1])) {
                 $entity = $entity->get($fieldArray[1]);
             }
-        } elseif(!in_array(count($fieldArray), [1, 2])) {
+        } elseif (!in_array(count($fieldArray), [1, 2])) {
             return false;
         }
 
@@ -2099,7 +2098,7 @@ DOC_END;
             [$plugin, $name] = pluginSplit($alias);
         }
         $name = Inflector::camelize(Inflector::tableize($name));
-        if($plugin) $name = $plugin . '.' . $name;
+        if ($plugin) $name = $plugin . '.' . $name;
         return TableRegistry::getTableLocator()->get($name);
     }
 
@@ -2129,7 +2128,7 @@ DOC_END;
         ], $options);
 
         if ($options['counter']) {
-            if(!empty($options['class'])) {
+            if (!empty($options['class'])) {
                 $options['class'] .= ' bca-text-counter';
             } else {
                 $options['class'] = 'bca-text-counter';

@@ -230,6 +230,7 @@ class BcAdminHelper extends Helper
         $covertedAdminMenuGroups = $this->convertAdminMenuGroups($adminMenuGroups);
 
         $menuSettings = [
+            'useUpdateNotice' => $this->_View->get('useUpdateNotice'),
             'currentSiteId' => $currentSiteId,
             'menuList' => $covertedAdminMenuGroups
         ];

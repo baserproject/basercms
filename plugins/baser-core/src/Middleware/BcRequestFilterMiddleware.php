@@ -199,21 +199,6 @@ class BcRequestFilterMiddleware implements MiddlewareInterface
     }
 
     /**
-     * アップデート用のURLかどうかを判定
-     *
-     * @param ServerRequestInterface $request リクエスト
-     * @return bool
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function isUpdate(ServerRequestInterface $request)
-    {
-        $slug = '/' . Configure::read('BcApp.updateKey');
-        return ($request->getPath() === $slug);
-    }
-
-    /**
      * 固定ページ表示用のURLかどうかを判定
      * [注]ルーターによるURLパース後のみ
      *

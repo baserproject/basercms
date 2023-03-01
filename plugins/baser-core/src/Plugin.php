@@ -15,7 +15,9 @@ use Authentication\AuthenticationService;
 use Authentication\AuthenticationServiceInterface;
 use Authentication\AuthenticationServiceProviderInterface;
 use Authentication\Middleware\AuthenticationMiddleware;
+use BaserCore\Command\ComposerCommand;
 use BaserCore\Command\SetupTestCommand;
+use BaserCore\Command\UpdateCommand;
 use BaserCore\Event\BcContainerEventListener;
 use BaserCore\Event\BcControllerEventDispatcher;
 use BaserCore\Event\BcModelEventDispatcher;
@@ -239,11 +241,9 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
     public function middleware(MiddlewareQueue $middlewareQueue): MiddlewareQueue
     {
         $middlewareQueue
-            // Authorization (AuthComponent to Authorization)
             ->add(new AuthenticationMiddleware($this))
             ->add(new BcAdminMiddleware())
             ->add(new BcFrontMiddleware())
-//            ->add(new BcUpdateFilterMiddleware())
             ->add(new BcRequestFilterMiddleware())
             ->add(new BcRedirectSubSiteFilter());
 
@@ -445,9 +445,6 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
      * /
      * /install
      *
-     * ### アップデーター
-     * /{update-key}
-     *
      * ### コンテンツルーティング
      * /*
      *
@@ -494,17 +491,6 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
             $property->setAccessible(true);
             $property->setValue($collection, []);
         }
-
-        /**
-         * アップデーター
-         * /config/setting.php にて URLを変更することができる
-         */
-        $routes->connect('/' . Configure::read('BcApp.updateKey'), [
-            'prefix' => 'Admin',
-            'plugin' => 'BaserCore',
-            'controller' => 'Plugins',
-            'action' => 'update'
-        ]);
 
         /**
          * コンテンツルーティング
@@ -573,6 +559,8 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
     public function console(CommandCollection $commands): CommandCollection
     {
         $commands->add('setup test', SetupTestCommand::class);
+        $commands->add('composer', ComposerCommand::class);
+        $commands->add('update', UpdateCommand::class);
         return $commands;
     }
 

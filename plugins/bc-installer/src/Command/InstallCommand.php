@@ -158,7 +158,7 @@ class InstallCommand extends Command
         $service->constructionDb($dbConfig, $args->getOption('data'));
 
         // Init admin
-        $service->setAdminEmail($args->getArgument('adminemail'));
+        $service->setAdminEmailAndVersion($args->getArgument('adminemail'));
         $service->setSiteName($args->getOption('sitename'));
         $salt = $service->setSecuritySalt();
         $service->addDefaultUser([

@@ -16,4 +16,18 @@ $(function () {
         }
         return false;
     });
+    $("#php").change(toggleUpdate);
+    toggleUpdate();
+
+    function toggleUpdate(){
+        const btnUpdate = $("#BtnUpdate");
+        const phpNotice = $(".php-notice");
+        if($("#php").val()) {
+            btnUpdate.removeAttr('disabled');
+            phpNotice.hide();
+        } else {
+            btnUpdate.attr('disabled', 'disabled');
+            phpNotice.show();
+        }
+    }
 });
