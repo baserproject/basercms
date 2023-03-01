@@ -31,6 +31,7 @@ $baserCorePrefix = filter_var(env('BASER_CORE_PREFIX', 'baser'));
 $adminPrefix = filter_var(env('ADMIN_PREFIX', 'admin'));
 
 return [
+
     /*
      * Configure basic information about the application.
      */
@@ -196,58 +197,84 @@ return [
          */
         'host' => (isset($_SERVER['HTTP_HOST']))? $_SERVER['HTTP_HOST'] : null
     ],
+
     'BcApp' => [
-        // デフォルトタイトル設定（インストールの際のエラー時等DB接続まえのエラーで利用）
+
+        /**
+         * デフォルトタイトル設定（インストールの際のエラー時等、DB接続前のエラーで利用）
+         */
         'title' => __d('baser', 'baserCMS'),
-        // テンプレートの基本となる拡張子（.php 推奨）
+
+        /**
+         * テンプレートの基本となる拡張子（.php 推奨）
+         */
         'templateExt' => '.php',
+
         /**
          * baserコアのプレフィックス
          * URLの先頭に付与
          */
         'baserCorePrefix' => $baserCorePrefix,
+
         /**
          * 管理システムのプレフィックス
          * baserコアのプレフィックスの後に付与
          */
         'adminPrefix' => $adminPrefix,
+
         /**
          * Web API のプレフィックス
          * baserコアのプレフィックスの後に付与
          */
         'apiPrefix' => 'api',
+
         /**
          * 特権管理者グループID
          */
         'adminGroup' => ['admins'],
-        // 管理者グループID
+
+        /**
+         * 管理者グループID
+         */
         'adminGroupId' => 1,
+
         /**
          * スーパーユーザーID
          */
         'superUserId' => 1,
-        // お名前ドットコムの場合、CLI版PHPの存在確認の段階で固まってしまう
+
+        /**
+         * お名前ドットコムの場合、CLI版PHPの存在確認の段階で固まってしまう
+         */
         'validSyntaxWithPage' => true,
-        // 管理者以外のPHPコードを許可するかどうか
+
+        /**
+         * 管理者以外のPHPコードを許可するかどうか
+         */
         'allowedPhpOtherThanAdmins' => false,
+
         /**
          * コアパッケージ名
          * プラグイン一覧に表示しないようにする
          */
         'core' => ['BaserCore', 'BcAdminThird', 'BcFront', 'BcInstaller'],
+
         /**
          * デフォルトフロントテーマ
          */
         'defaultFrontTheme' => 'bc-front',
+
         /**
          * デフォルト管理画面テーマ
          */
         'defaultAdminTheme' => 'bc-admin-third',
+
         /**
          * 管理画面をカスタマイズするためのテーマ
          * アッパーキャメルケースで指定する
          */
         'customAdminTheme' => '',
+
         /**
          * コアプラグイン
          */
@@ -278,13 +305,46 @@ return [
         'coreReleaseUrl' => 'https://packagist.org/feeds/package.baserproject/baser-core.rss',
 
         /**
+         * インストール時に composer.json にセットするバージョン
+         * @see \BaserCore\Command\CreateReleaseCommand::setupComposer()
+         */
+        'setupVersion' => '5.*.*',
+
+        /**
+         * リリースパッケージに不要なファイル
+         * @see \BaserCore\Command\CreateReleaseCommand::deleteExcludeFiles()
+         */
+        'excludeReleasePackage' => [
+            '.git',
+            '.github',
+            '__assets',
+            'docker',
+            'tests',
+            '.editorconfig',
+            '.gitattributes',
+            '.gitignore',
+            'monorepo-builder.php',
+            'phpstan.neon',
+            'phpunit.xml.dist'
+        ],
+
+        /**
+         * 開発レポジトリのURL
+         * 配布用パッケージ作成に利用する
+         * @see \BaserCore\Command\CreateReleaseCommand::clonePackage()
+         */
+        'repositoryUrl' => 'https://github.com/baserproject/ucmitz.git',
+
+        /**
          * パスワード再発行URLの有効時間(min) デフォルト24時間
          */
         'passwordRequestAllowTime' => 1440,
+
         /**
          * 管理画面のSSL
          */
         'adminSsl' => filter_var(env('ADMIN_SSL', true), FILTER_VALIDATE_BOOLEAN),
+
         /**
          * エディタ
          */
@@ -505,6 +565,10 @@ return [
             'sessionKey' => 'AuthAdmin',
         ]
     ],
+
+    /**
+     * Jwt認証設定
+     */
     'Jwt' => [
         // kid（鍵の識別子）
         'kid' => 'Xprg7JjhII1HEtGscjyIhf4Y852gSW4qBbiTXUV69R3ewY5QNfiHNqTo6I8iWhpH',
@@ -521,6 +585,10 @@ return [
         // 公開鍵のパス
         'publicKeyPath' => CONFIG . 'jwt.pem'
     ],
+
+    /**
+     * パッケージ内の外部リンク
+     */
     'BcLinks' => [
         'marketThemeRss' => 'https://market.basercms.net/themes.php',
         'marketPluginRss' => 'https://market.basercms.net/plugins.php',
@@ -572,6 +640,7 @@ return [
             ]
         ]
     ],
+
     /**
      * 言語設定
      */
@@ -595,6 +664,7 @@ return [
             ]
         ]
     ],
+
     /**
      * 文字コード設定
      */
@@ -606,6 +676,7 @@ return [
             'ISO-2022-JP' => 'ISO-2022-JP'
         ]
     ],
+
     /**
      * コンテンツ設定
      */

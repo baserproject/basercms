@@ -46,6 +46,7 @@ services:
       - "1025:1025"
 
   bc5-pma:
+    # platform: linux/x86_64 # M1チップの場合はコメントを外す
     container_name: bc5-pma
     image: phpmyadmin/phpmyadmin
     environment:
@@ -75,6 +76,7 @@ services:
     user: root
 
   bc5-pga:
+    # platform: linux/x86_64 # M1チップの場合はコメントを外す
     image: dpage/pgadmin4:3.3
     container_name: bc5-pga
     ports:

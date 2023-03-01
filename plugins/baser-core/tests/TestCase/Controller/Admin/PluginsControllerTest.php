@@ -230,8 +230,16 @@ class PluginsControllerTest extends BcTestCase
         copy(ROOT . DS . 'composer.json', ROOT . DS . 'composer.json.bak');
         copy(ROOT . DS . 'composer.lock', ROOT . DS . 'composer.lock.bak');
 
+        // replace を削除
+        $file = new File(ROOT . DS . 'composer.json');
+        $data = $file->read();
+        $regex = '/("replace": {.+?},)/s';
+        $data = preg_replace($regex, '' , $data);
+        $file->write($data);
+        $file->close();
+
         $file = new File(BASER . 'VERSION.txt');
-        $file->write('10.0.0');
+        $file->write('3.0.10');
         $file->close();
         $this->put('/baser/admin/baser-core/plugins/update', [
             'connection' => 'test',

@@ -71,11 +71,11 @@ class BcComposerTest extends BcTestCase
 
         // アップデート
         BcComposer::setup();
-        $result = BcComposer::require('baser-core', '3.0.25');
+        $result = BcComposer::require('baser-core', '3.0.24');
         $this->assertEquals(0, $result['code']);
         $file = new File($orgPath);
         $data = $file->read();
-        $this->assertNotFalse(strpos($data, '"baserproject/baser-core": "3.0.25"'));
+        $this->assertNotFalse(strpos($data, '"baserproject/baser-core": "3.0.24"'));
 
         // ダウングレード
         BcComposer::setup();
