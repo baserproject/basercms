@@ -10,12 +10,12 @@
  */
 namespace BaserCore\View\Helper;
 
-use BaserCore\Plugin;
 use Cake\Core\Plugin as CakePlugin;
 use Cake\Datasource\EntityInterface;
 use Cake\Event\Event;
 use Cake\ORM\Table;
 use Cake\Utility\Hash;
+use Cake\Utility\Inflector;
 use Cake\View\Helper;
 use Cake\ORM\TableRegistry;
 use BaserCore\Utility\BcUtil;
@@ -481,8 +481,8 @@ class BcUploadHelper  extends Helper
 		if (!$isTheme || !$theme) {
 			return '/files/' . str_replace(DS, '/', $settings['saveDir']) . '/';
 		} else {
-		    $themePath = CakePlugin::path($theme);
-			return $themePath . 'webroot/files/' . str_replace(DS, '/', $settings['saveDir']) . '/';
+		    $themePath = Inflector::underscore($theme);
+			return '/' . $themePath . '/files/' . str_replace(DS, '/', $settings['saveDir']) . '/';
 		}
 	}
 
