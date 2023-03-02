@@ -142,11 +142,24 @@ class BcToolbarHelper extends Helper
     {
         $loginUser = $this->BcAuth->getCurrentLoginUser();
         if (!$loginUser) return '';
+
         if ($this->BcAuth->isCurrentUserAdminAvailable()) {
-            return ['prefix' => 'Admin', 'controller' => 'Users', 'action' => 'edit', $loginUser->id];
+            $prefix = 'Admin';
         } else {
-            return ['prefix' => $this->BcAuth->getCurrentPrefix(), 'controller' => 'Users', 'action' => 'edit', $loginUser->id];
+            $prefix = $this->BcAuth->getCurrentPrefix();
         }
+
+        $model = Configure::read('BcPrefixAuth.' . $prefix . '.userModel');
+        list($plugin,) = pluginSplit($model);
+        if(!$plugin) $plugin = 'BaserCore';
+
+        return [
+            'plugin' => $plugin,
+            'prefix' => $prefix,
+            'controller' => 'Users',
+            'action' => 'edit',
+            $loginUser->id
+        ];
     }
 
     /**

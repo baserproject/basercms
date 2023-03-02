@@ -12,6 +12,7 @@ namespace BaserCore\Controller;
 
 use BaserCore\ServiceProvider\BcServiceProvider;
 use BaserCore\Utility\BcContainer;
+use BaserCore\Utility\BcUtil;
 use Cake\Controller\ComponentRegistry;
 use Cake\Event\EventInterface;
 use BaserCore\Annotation\UnitTest;
@@ -20,6 +21,8 @@ use BaserCore\Annotation\Checked;
 use Cake\Event\EventManagerInterface;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
+use Cake\ORM\TableRegistry;
+use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * BcErrorController
@@ -41,9 +44,32 @@ class BcErrorController extends BcFrontAppController
      */
     public function __construct(?ServerRequest $request = null, ?Response $response = null, ?string $name = null, ?EventManagerInterface $eventManager = null, ?ComponentRegistry $components = null)
     {
+        $request = $this->getCurrent($request);
         parent::__construct($request, $response, $name, $eventManager, $components);
         $this->setName('Error');
         $this->setPlugin('');
+    }
+
+    /**
+     * カレント情報を取得する
+     *
+     * エラー画面を正常にレンダリングするため
+     *
+     * @param ServerRequest $request
+     * @return ServerRequest
+     */
+    protected function getCurrent(ServerRequest $request): ServerRequest
+    {
+        $sitesTable = TableRegistry::getTableLocator()->get('BaserCore.Sites');
+        $contentsTable = TableRegistry::getTableLocator()->get('BaserCore.Contents');
+
+        $url = BcUtil::fullUrl($request->getUri()->getPath());
+        $site = $sitesTable->findByUrl($url);
+        $url = '/';
+        if($site->alias) $url .= $site->alias . '/';
+        $content = $contentsTable->findByUrl($url);
+        $request = $request->withAttribute('currentSite', $site);
+        return $request->withAttribute('currentContent', $content);
     }
 
     /**

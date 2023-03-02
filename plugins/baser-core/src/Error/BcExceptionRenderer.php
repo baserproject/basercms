@@ -13,16 +13,16 @@ namespace BaserCore\Error;
 
 use BaserCore\Controller\BcErrorController;
 use Cake\Controller\Controller;
-use Cake\Error\ExceptionRenderer;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\Note;
+use Cake\Error\Renderer\WebExceptionRenderer;
 
 /**
  * BcExceptionRenderer
  */
-class BcExceptionRenderer extends ExceptionRenderer
+class BcExceptionRenderer extends WebExceptionRenderer
 {
 
     /**
@@ -41,4 +41,5 @@ class BcExceptionRenderer extends ExceptionRenderer
         }
         return $controller;
     }
+
 }

@@ -12,7 +12,6 @@
 namespace BaserCore\Model\Entity;
 
 use BaserCore\Utility\BcUtil;
-use Cake\Http\ServerRequest;
 use Cake\I18n\Time as TimeAlias;
 use Cake\ORM\Entity as EntityAlias;
 use Cake\ORM\TableRegistry;

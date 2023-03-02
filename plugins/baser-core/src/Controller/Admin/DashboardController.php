@@ -11,10 +11,12 @@
 
 namespace BaserCore\Controller\Admin;
 
+use BaserCore\Error\BcException;
 use BaserCore\Service\Admin\DashboardAdminServiceInterface;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use function PHPUnit\Framework\throwException;
 
 /**
  * Class DashboardController
