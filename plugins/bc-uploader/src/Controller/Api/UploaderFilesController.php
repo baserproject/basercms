@@ -16,6 +16,7 @@ use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Controller\Api\BcApiController;
 use BcUploader\Service\UploaderFilesServiceInterface;
+use Cake\Http\Exception\NotFoundException;
 use Cake\ORM\Exception\PersistenceFailedException;
 use Throwable;
 
@@ -115,6 +116,9 @@ class UploaderFilesController extends BcApiController
      *
      * @param UploaderFilesServiceInterface $service
      * @param int $id
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function delete(UploaderFilesServiceInterface $service, int $id)
     {

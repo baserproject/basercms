@@ -15,6 +15,7 @@ use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcMail\Service\MailContentsServiceInterface;
+use BcMail\Test\Scenario\MailContentsScenario;
 use BcMail\Test\Factory\MailContentFactory;
 use Cake\TestSuite\IntegrationTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -109,7 +110,15 @@ class MailContentsControllerTest extends BcTestCase
      */
     public function testList()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを生成
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        //APIを呼ぶ
+        $this->get("/baser/api/bc-mail/mail_contents/list/1.json?token=" . $this->accessToken);
+        // レスポンスコードを確認する
+        $this->assertResponseOk();
+        // 戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertNotNull($result->mailContents);
     }
 
     /**

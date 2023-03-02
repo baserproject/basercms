@@ -18,6 +18,8 @@ use Cake\Core\Exception\Exception;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use Cake\Datasource\Exception\RecordNotFoundException;
+use Cake\ORM\Exception\PersistenceFailedException;
 use Cake\Routing\Router;
 
 /**
@@ -109,10 +111,22 @@ class UsersController extends BcApiController
      */
     public function view(UsersServiceInterface $service, $id)
     {
+        $this->request->allowMethod(['get']);
+        $user = $message = null;
+        try {
+            $user = $service->get($id);
+        } catch (RecordNotFoundException $e) {
+            $this->setResponse($this->response->withStatus(404));
+            $message = __d('baser', 'データが見つかりません。');
+        } catch (\Throwable $e) {
+            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $this->setResponse($this->response->withStatus(500));
+        }
         $this->set([
-            'user' => $service->get($id)
+            'user' => $user,
+            'message' => $message
         ]);
-        $this->viewBuilder()->setOption('serialize', ['user']);
+        $this->viewBuilder()->setOption('serialize', ['user', 'message']);
     }
 
     /**
@@ -124,19 +138,24 @@ class UsersController extends BcApiController
      */
     public function add(UsersServiceInterface $service)
     {
-        $this->request->allowMethod(['post', 'delete']);
+        $this->request->allowMethod(['post']);
+        $user = $errors = null;
         try {
             $user = $service->create($this->request->getData());
             $message = __d('baser', 'ユーザー「{0}」を追加しました。', $user->name);
-        } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
-            $user = $e->getEntity();
+        } catch (PersistenceFailedException $e) {
+            $errors = $e->getEntity()->getErrors();
+            $message = __d('baser', "入力エラーです。内容を修正してください。");
             $this->setResponse($this->response->withStatus(400));
-            $message = __d('baser', '入力エラーです。内容を修正してください。');
+        } catch (\Throwable $e) {
+            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $this->setResponse($this->response->withStatus(500));
         }
+
         $this->set([
             'message' => $message,
             'user' => $user,
-            'errors' => $user->getErrors(),
+            'errors' => $errors
         ]);
         $this->viewBuilder()->setOption('serialize', ['message', 'user', 'errors']);
     }
@@ -149,21 +168,25 @@ class UsersController extends BcApiController
      * @noTodo
      * @unitTest
      */
-    public function edit(UsersServiceInterface $service, $id)
+    public function edit(UsersServiceInterface $service, int $id)
     {
         $this->request->allowMethod(['post', 'put']);
-        $user = $service->get($id);
+        $user = $errors = null;
         try {
-            $user = $service->update($user, $this->request->getData());
+            $user = $service->update($service->get($id), $this->request->getData());
             $message = __d('baser', 'ユーザー「{0}」を更新しました。', $user->name);
-        } catch (\Exception $e) {
+        } catch (PersistenceFailedException $e) {
+            $errors = $e->getEntity()->getErrors();
+            $message = __d('baser', "入力エラーです。内容を修正してください。");
             $this->setResponse($this->response->withStatus(400));
-            $message = __d('baser', '入力エラーです。内容を修正してください。');
+        } catch (\Throwable $e) {
+            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $this->setResponse($this->response->withStatus(500));
         }
         $this->set([
             'message' => $message,
             'user' => $user,
-            'errors' => $user->getErrors(),
+            'errors' => $errors
         ]);
         $this->viewBuilder()->setOption('serialize', ['user', 'message', 'errors']);
     }

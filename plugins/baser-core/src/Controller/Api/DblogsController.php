@@ -16,6 +16,7 @@ use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\Note;
+use Cake\ORM\Exception\PersistenceFailedException;
 
 /**
  * Class DblogsController
@@ -52,19 +53,23 @@ class DblogsController extends BcApiController
     {
         $this->request->allowMethod(['post', 'put']);
 
+        $dblog = $errors = null;
         try {
-            $dblogs = $service->create($this->request->getData());
+            $dblog = $service->create($this->request->getData());
             $message = __d('baser', 'ログを追加しました。');
-        } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
-            $dblogs = $e->getEntity();
-            $message = __d('baser', 'ログを追加できませんでした。');
+        } catch (PersistenceFailedException $e) {
+            $errors = $e->getEntity()->getErrors();
+            $message = __d('baser', "入力エラーです。内容を修正してください。");
             $this->setResponse($this->response->withStatus(400));
+        } catch (\Throwable $e) {
+            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $this->setResponse($this->response->withStatus(500));
         }
 
         $this->set([
             'message' => $message,
-            'dblog' => $dblogs,
-            'errors' => $dblogs->getErrors(),
+            'dblog' => $dblog,
+            'errors' => $errors,
         ]);
         $this->viewBuilder()->setOption('serialize', ['message', 'dblog', 'errors']);
     }
