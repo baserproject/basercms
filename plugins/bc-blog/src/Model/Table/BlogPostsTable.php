@@ -632,7 +632,7 @@ class BlogPostsTable extends BlogAppTable
         }
 
         $data->user_id = BcUtil::loginUser()['id'];
-        $data->name .= '_copy';
+        if($data->name) $data->name .= '_copy';
         $data->title .= '_copy';
         $data->no = $this->getMax('no', ['BlogPosts.blog_content_id' => $data->blog_content_id]) + 1;
         $data->status = false;
