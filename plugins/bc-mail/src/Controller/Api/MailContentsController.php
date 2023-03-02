@@ -55,11 +55,19 @@ class MailContentsController extends BcApiController
 
     /**
      * メールコンテンツAPI リスト取得
+     * @param MailContentsServiceInterface $service
      * @return void
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function list()
+    public function list(MailContentsServiceInterface $service)
     {
-        //todo メールコンテンツAPI リスト取得
+        $this->set([
+            'mailContents' => $service->getList()
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['mailContents']);
     }
 
     /**

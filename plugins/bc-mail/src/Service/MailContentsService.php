@@ -170,9 +170,20 @@ class MailContentsService implements MailContentsServiceInterface
 
     }
 
+    /**
+     * リストデータ取得
+     * @return array
+     *
+     * @checked
+     * @noTodo
+     * @checked
+     */
     public function getList()
     {
-
+        return $this->MailContents->find('list', [
+            'keyField' => 'id',
+            'valueField' => 'content.title'
+        ])->contain(['Contents'])->toArray();
     }
 
     /**

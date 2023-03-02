@@ -14,6 +14,8 @@ namespace BcMail\Test\TestCase\Service;
 use BaserCore\TestSuite\BcTestCase;
 use BcMail\Service\MailContentsService;
 use BcMail\Service\MailContentsServiceInterface;
+use BcMail\Test\Scenario\MailContentsScenario;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * MailContentsServiceTest
@@ -22,6 +24,21 @@ use BcMail\Service\MailContentsServiceInterface;
  */
 class MailContentsServiceTest extends BcTestCase
 {
+
+    /**
+     * ScenarioAwareTrait
+     */
+    use ScenarioAwareTrait;
+
+    /**
+     * Fixtures
+     *
+     * @var array
+     */
+    public $fixtures = [
+        'plugin.BaserCore.Factory/Contents',
+        'plugin.BcMail.Factory/MailContents',
+    ];
 
     /**
      * set up
@@ -63,6 +80,21 @@ class MailContentsServiceTest extends BcTestCase
     public function test_create()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * リストデータ取得
+     */
+    public function test_getList()
+    {
+        //データを生成
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        //一覧データ取得サービスをコル
+        $rs = $this->MailContentsService->getList();
+        //戻る値を確認
+        $this->assertCount(2, $rs);
+        $this->assertEquals('お問い合わせ',$rs[1]);
+        $this->assertEquals('テスト',$rs[2]);
     }
 
 }
