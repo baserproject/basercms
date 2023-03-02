@@ -168,9 +168,7 @@ class BcAppController extends AppController
         if (BcUtil::isAdminSystem()) {
             $this->__updateFirstAccess();
         } else {
-            // テーマのヘルパーをセット
             if (BcUtil::isInstalled()) {
-                $this->setThemeHelpers();
                 // ショートコード
                 App::uses('BcShortCodeEventListener', 'Event');
                 CakeEventManager::instance()->attach(new BcShortCodeEventListener());
@@ -758,31 +756,6 @@ class BcAppController extends AppController
         $this->request->withParam('action', $_action);
         return $return;
         // <<<
-    }
-
-    /**
-     * テーマ用のヘルパーをセットする
-     * 管理画面では読み込まない
-     *
-     * @return void
-     */
-    protected function setThemeHelpers()
-    {
-        if ($this->request->getParam('prefix') === "Admin") {
-            return;
-        }
-
-        $themeHelpersPath = WWW_ROOT . 'theme' . DS . Configure::read('BcSite.theme') . DS . 'Helper';
-        $Folder = new Folder($themeHelpersPath);
-        $files = $Folder->read(true, true);
-        if (empty($files[1])) {
-            return;
-        }
-
-        foreach($files[1] as $file) {
-            $file = str_replace('-', '_', $file);
-            $this->helpers[] = Inflector::camelize(basename($file, 'Helper.php'));
-        }
     }
 
     /**

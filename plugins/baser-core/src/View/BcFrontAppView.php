@@ -11,12 +11,16 @@
 
 namespace BaserCore\View;
 
+use BaserCore\Utility\BcUtil;
 use BaserCore\View\Helper\BcTextHelper;
 use Cake\Core\Configure;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\Note;
+use Cake\Core\Plugin;
+use Cake\Filesystem\Folder;
+use Cake\Utility\Inflector;
 
 /**
  * BcFrontAppView
@@ -40,6 +44,27 @@ class BcFrontAppView extends AppView
             if ($agentHelper) $this->loadHelper($agentHelper);
         }
         $this->loadHelper('BaserCore.BcText');
+        if (BcUtil::isInstalled()) {
+            $this->setThemeHelpers();
+        }
+    }
+
+    /**
+     * テーマ用のヘルパーをセットする
+     *
+     * @return void
+     */
+    protected function setThemeHelpers(): void
+    {
+        $theme = BcUtil::getCurrentTheme();
+        $themeHelpersPath = Plugin::path($theme) . 'src' . DS . 'View' . DS . 'Helper';
+        $Folder = new Folder($themeHelpersPath);
+        $files = $Folder->read(true, true);
+        if (empty($files[1])) return;
+
+        foreach($files[1] as $file) {
+            $this->loadHelper(Inflector::camelize($theme, '-') . '.' . basename($file, 'Helper.php'));
+        }
     }
 
 }
