@@ -121,7 +121,7 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
         $this->get('/baser/api/baser-core/contents/view_trash/16.json?token=' . $this->accessToken);
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
-        $this->assertEquals('削除済みフォルダー(親)', $result->trash->title);
+        $this->assertEquals('削除済みフォルダー(親)', $result->content->title);
     }
 
     /**
@@ -365,7 +365,7 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
     {
         // postDataがない場合
         $this->patch("/baser/api/baser-core/contents/move.json?token=" . $this->accessToken);
-        $this->assertEquals('データ保存中にエラーが発生しました。Record not found in table "contents" with primary key [NULL]', json_decode($this->_response->getBody())->message);
+        $this->assertEquals('データベース処理中にエラーが発生しました。Record not found in table "contents" with primary key [NULL]', json_decode($this->_response->getBody())->message);
         // サービス1をサービス2の後ろに移動する場合
         $title = 'サービス１';
         $originEntity = $this->ContentsService->getIndex(['title' => $title])->first();
