@@ -167,7 +167,7 @@ class BcToolbarHelperTest extends BcTestCase
     {
         $this->assertEquals('', $this->BcToolbar->getAccountSettingUrl());
         $this->loginAdmin($this->getRequest('/baser/admin'));
-        $this->assertEquals(['prefix' => 'Admin', 'controller' => 'Users', 'action' => 'edit', 1], $this->BcToolbar->getAccountSettingUrl());
+        $this->assertEquals(['plugin' => 'BaserCore', 'prefix' => 'Admin', 'controller' => 'Users', 'action' => 'edit', 1], $this->BcToolbar->getAccountSettingUrl());
     }
 
     /**

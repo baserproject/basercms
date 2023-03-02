@@ -27,7 +27,9 @@ class BcComposerTest extends BcTestCase
      */
     public function test_installComposer()
     {
-        unlink(ROOT . DS . 'composer' . DS . 'composer.phar');
+        if(file_exists(ROOT . DS . 'composer' . DS . 'composer.phar')) {
+            unlink(ROOT . DS . 'composer' . DS . 'composer.phar');
+        }
         BcComposer::installComposer();
         $this->assertFileDoesNotExist(BcComposer::$composerDir . 'composer.phar');
 
