@@ -13,7 +13,11 @@ namespace BcBlog\Controller\Admin;
 
 use BaserCore\Controller\Component\BcAdminContentsComponent;
 use BaserCore\Error\BcException;
+use BaserCore\Utility\BcUtil;
 use BcBlog\Service\Admin\BlogContentsAdminServiceInterface;
+use Cake\Core\Configure;
+use Cake\Core\Plugin;
+use Cake\Filesystem\Folder;
 use Cake\ORM\Exception\PersistenceFailedException;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -63,14 +67,13 @@ class BlogContentsController extends BlogAdminAppController
                     __d('baser', 'ブログ「%s」を更新しました。'),
                     $blogContent->content->title
                 ));
-                // TODO ucmitz 未実装
                 // BcThemeFileプラグインの利用状況をチェックした上でリダイレクトする
-                if ($this->request->getData('BlogContents.edit_blog_template')) {
-                    $this->redirectEditBlog(
-                        $this->request->getData('BlogContent.template')
+                if ($this->request->getData('edit_blog')) {
+                    return $this->redirectEditBlog(
+                        $this->request->getData('template')
                     );
                 } else {
-                    $this->redirect(['action' => 'edit', $id]);
+                    return $this->redirect(['action' => 'edit', $id]);
                 }
             } catch (PersistenceFailedException $e) {
                 $blogContent = $e->getEntity();
@@ -87,111 +90,34 @@ class BlogContentsController extends BlogAdminAppController
     }
 
     /**
-     * レイアウト編集画面にリダイレクトする
-     *
-     * @param string $template
-     * @return void
-     */
-    protected function redirectEditLayout($template)
-    {
-        $target = sprintf(
-            "%stheme/%s/Layouts/%s%s",
-            WWW_ROOT,
-            $this->siteConfigs['theme'],
-            $template,
-            $this->ext
-        );
-        $sorces = [
-            sprintf("%sblog/View/Layouts/%s%s", BASER_PLUGINS, $template, $this->ext),
-            sprintf("%sLayouts/%s%s", BASER_VIEWS, $template, $this->ext)
-        ];
-        if (!$this->siteConfigs['theme']) {
-            $this->BcMessage->setError(
-                __d(
-                    'baser',
-                    '現在、「テーマなし」の場合、管理画面でのテンプレート編集はサポートされていません。'
-                )
-            );
-            $this->redirect(['action' => 'index']);
-            return;
-        }
-
-        if (!file_exists($target)) {
-            foreach ($sorces as $source) {
-                if (file_exists($source)) {
-                    copy($source, $target);
-                    chmod($target, 0666);
-                    break;
-                }
-            }
-        }
-        $this->redirect([
-            'plugin' => null,
-            'controller' => 'theme_files',
-            'action' => 'edit',
-            $this->siteConfigs['theme'],
-            'Layouts',
-            $template . $this->ext
-        ]);
-    }
-
-    /**
      * ブログテンプレート編集画面にリダイレクトする
      *
      * @param string $template
-     * @return void
      */
     protected function redirectEditBlog($template)
     {
-        $path = str_replace(DS, '/', 'Blog/' . $template);
-        $target = sprintf(
-            "%stheme/%s/%s",
-            WWW_ROOT,
-            $this->siteConfigs['theme'],
-            $path
-        );
-        if (!$this->siteConfigs['theme']) {
-            $this->BcMessage->setError(
-                __d(
-                    'baser',
-                    '現在、「テーマなし」の場合、管理画面でのテンプレート編集はサポートされていません。'
-                )
-            );
-            $this->redirect(['action' => 'index']);
-            return;
-        }
-
-        if (!file_exists(sprintf('%s/index%s', $target, $this->ext))) {
-            $sources = [
-                sprintf('%sBlog/View/%s', BASER_PLUGINS, $path)
-            ];
-            foreach ($sources as $source) {
-                if (!is_dir($source)) {
-                    continue;
-                }
+        $path = 'Blog' . DS . $template;
+        $theme = BcUtil::getCurrentTheme();
+        $target = Plugin::templatePath($theme) . 'plugin' . DS . 'BcBlog' . DS . $path;
+        $ext = Configure::read('BcApp.templateExt');
+        if (!file_exists($target . DS . 'index' . $ext)) {
+            $source = Plugin::templatePath(Configure::read('BcApp.defaultFrontTheme')) . DS . 'plugin' . DS . 'BcBlog' . DS . $path;
+            if (is_dir($source)) {
                 $folder = new Folder();
                 $folder->create(dirname($target), 0777);
-                $folder->copy([
-                    'from' => $source,
-                    'to' => $target,
-                    'chmod' => 0777,
-                    'skip' => ['_notes']
-                ]);
-                break;
+                $folder->copy($target, ['from' => $source, 'chmod' => 0777]);
             }
         }
-        $this->redirect(
-            array_merge(
-                [
-                    'plugin' => null,
-                    'controller' => 'theme_files',
-                    'action' => 'edit',
-                    $this->siteConfigs['theme'],
-                    'etc'
-                ],
-                explode('/', $path . '/index' . $this->ext)
-            )
-        );
+        $path = str_replace(DS, '/', $path);
+        return $this->redirect(array_merge([
+            'plugin' => 'BcThemeFile',
+            'prefix' => 'Admin',
+            'controller' => 'ThemeFiles',
+            'action' => 'edit',
+            $theme,
+            'BcBlog',
+            'etc'
+        ], explode('/', $path . '/index' . $ext)));
     }
 
 }

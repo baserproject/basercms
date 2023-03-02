@@ -92,9 +92,9 @@ class MailContentsController extends MailAdminAppController
         $ext = Configure::read('BcApp.templateExt');
         $path = 'text' . DS . $template . $ext;
         $theme = BcUtil::getCurrentTheme();
-        $target = Plugin::templatePath($theme) . $type . DS . $path;
+        $target = Plugin::templatePath($theme) . 'plugin' . DS . 'BcMail' . DS . $type . DS . $path;
         if (!file_exists($target)) {
-            $source = Plugin::templatePath(Configure::read('BcApp.defaultFrontTheme')) . $type . DS . $path;
+            $source = Plugin::templatePath(Configure::read('BcApp.defaultFrontTheme')) . DS . 'plugin' . DS . 'BcMail' . DS . $type . DS . $path;
             if (file_exists($source)) {
                 $folder = new Folder();
                 $folder->create(dirname($target), 0777);
@@ -109,6 +109,7 @@ class MailContentsController extends MailAdminAppController
             'controller' => 'ThemeFiles',
             'action' => 'edit',
             $theme,
+            'BcMail',
             $type
         ], explode('/', $path)));
     }
@@ -125,10 +126,10 @@ class MailContentsController extends MailAdminAppController
     {
         $path = 'Mail' . DS . $template;
         $theme = BcUtil::getCurrentTheme();
-        $target = Plugin::templatePath($theme) . $path;
+        $target = Plugin::templatePath($theme) . 'plugin' . DS . 'BcMail' . DS . $path;
         $ext = Configure::read('BcApp.templateExt');
         if (!file_exists($target . DS . 'index' . $ext)) {
-            $source = Plugin::templatePath(Configure::read('BcApp.defaultFrontTheme')) . DS . $path;
+            $source = Plugin::templatePath(Configure::read('BcApp.defaultFrontTheme')) . DS . 'plugin' . DS . 'BcMail' . DS . $path;
             if (is_dir($source)) {
                 $folder = new Folder();
                 $folder->create(dirname($target), 0777);
@@ -142,6 +143,7 @@ class MailContentsController extends MailAdminAppController
             'controller' => 'ThemeFiles',
             'action' => 'edit',
             $theme,
+            'BcMail',
             'etc'
         ], explode('/', $path . '/index' . $ext)));
     }

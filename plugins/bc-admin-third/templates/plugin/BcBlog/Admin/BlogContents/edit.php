@@ -25,7 +25,7 @@ $this->BcBaser->i18nScript([
 ?>
 
 
-<?php echo $this->BcAdminForm->create($blogContent) ?>
+<?php echo $this->BcAdminForm->create($blogContent, ['id' => 'BlogContentAdminEditForm']) ?>
 
 <?php $this->BcBaser->element('BlogContents/form') ?>
 

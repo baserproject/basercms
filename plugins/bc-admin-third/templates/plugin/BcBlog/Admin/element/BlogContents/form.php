@@ -186,7 +186,8 @@ use Cake\Routing\Router;
             'type' => 'select',
             'options' => $this->Blog->getBlogTemplates($blogContent->content->site_id)])
           ?>
-          <?php echo $this->BcAdminForm->control('edit_blog_template', ['type' => 'hidden']) ?>
+          <?php echo $this->BcAdminForm->control('edit_blog', ['type' => 'hidden']) ?>
+          <?php $this->BcAdminForm->unlockField('edit_blog') ?>
           <?php if ($this->getRequest()->getParam('action') === 'edit'): ?>
             <?php $this->BcBaser->link('<i class="bca-icon--edit"></i>' . __d('baser', '編集する'), 'javascript:void(0)', [
               'id' => 'EditBlogTemplate',

@@ -12,14 +12,6 @@ $(function () {
 
     $('input[name="sender_1_"]').click(mailContentSender1ClickHandler);
 
-    $("#EditLayout").click(function () {
-        if (confirm(bcI18n.confirmMessage1.sprintf($("#layout-template").val()))) {
-            $("#edit-layout").val(1);
-            $("#edit-mail-form").val('');
-            $("#edit-mail").val('');
-            $("#MailContentAdminEditForm").submit();
-        }
-    });
     $("#EditForm").click(function () {
         if (confirm(bcI18n.confirmMessage2.sprintf($("#form-template").val()))) {
             $("#edit-layout").val('');

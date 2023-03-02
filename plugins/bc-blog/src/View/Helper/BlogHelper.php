@@ -856,19 +856,9 @@ class BlogHelper extends Helper
      */
     public function getBlogTemplates($siteId = 0)
     {
-        $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
-        $site = $sites->findById($siteId)->first();
-        $theme = BcUtil::getCurrentTheme();
-        if ($site->theme) {
-            $theme = $site->theme;
-        }
-        $templatesPathes = array_merge(App::path('templates', 'BcBlog'), App::path('templates'));
-        if ($theme) {
-            array_unshift($templatesPathes, App::path('templates', $theme)[0]);
-        }
-
+        $templatesPaths = BcUtil::getFrontTemplatePaths($siteId, 'BcBlog');
         $_templates = [];
-        foreach($templatesPathes as $templatePath) {
+        foreach($templatesPaths as $templatePath) {
             $templatePath .= 'Blog' . DS;
             $folder = new Folder($templatePath);
             $files = $folder->read(true, true);

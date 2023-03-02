@@ -14,7 +14,7 @@ namespace BcMail\View\Helper;
 use BaserCore\Service\SitesService;
 use BaserCore\Service\SitesServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
-use Cake\Core\App;
+use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\Filesystem\Folder;
@@ -88,15 +88,7 @@ class MailHelper extends Helper
      */
     public function getFormTemplates($siteId = 1)
     {
-        /* @var SitesService $sitesService */
-        $sitesService = $this->getService(SitesServiceInterface::class);
-        $site = $sitesService->get($siteId);
-        $theme = $site->theme;
-        $templatesPaths = App::path('templates');
-        if ($theme) {
-            $templatesPaths = array_merge(App::path('templates', $theme), $templatesPaths);
-        }
-
+        $templatesPaths = BcUtil::getFrontTemplatePaths($siteId, 'BcMail');
         $templates = [];
         foreach ($templatesPaths as $templatePath) {
             $templatePath .= 'Mail' . DS;
@@ -126,14 +118,7 @@ class MailHelper extends Helper
      */
     public function getMailTemplates($siteId = 1)
     {
-        $sitesService = $this->getService(SitesServiceInterface::class);
-        $site = $sitesService->get($siteId);
-        $theme = $site->theme;
-        $templatesPaths = App::path('templates');
-        if ($theme) {
-            $templatesPaths = array_merge(App::path('templates', $theme), $templatesPaths);
-        }
-
+        $templatesPaths = BcUtil::getFrontTemplatePaths($siteId, 'BcMail');
         $templates = [];
         $ext = Configure::read('BcApp.templateExt');
         foreach ($templatesPaths as $templatePath) {

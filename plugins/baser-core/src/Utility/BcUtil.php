@@ -15,6 +15,7 @@ use BaserCore\Middleware\BcAdminMiddleware;
 use BaserCore\Middleware\BcFrontMiddleware;
 use BaserCore\Middleware\BcRequestFilterMiddleware;
 use BaserCore\Service\PluginsServiceInterface;
+use BaserCore\Service\SitesService;
 use Cake\Core\App;
 use Cake\Cache\Cache;
 use Cake\Core\Plugin;
@@ -726,6 +727,36 @@ class BcUtil
         } else {
             return false;
         }
+    }
+
+    /**
+     * フロントのテンプレートのパス一覧を取得する
+     *
+     * @param $siteId
+     * @return []|array
+     */
+    public static function getFrontTemplatePaths($siteId, $plugin)
+    {
+        /* @var SitesService $sitesService */
+        $sitesTable = TableRegistry::getTableLocator()->get('BaserCore.Sites');
+        $site = $sitesTable->get($siteId);
+
+        $themes = [$site->theme];
+        $rootTheme = BcUtil::getRootTheme();
+        if($rootTheme !== $themes[0]) $themes[] = $rootTheme;
+        $defaultTheme = Configure::read('BcApp.defaultFrontTheme');
+        if(!in_array($defaultTheme, $themes)) $themes[] = $defaultTheme;
+
+        $templatesPaths = [];
+        foreach($themes as $theme) {
+            $themeTemplatesPaths = App::path('templates', $theme);
+            $templatesPaths = array_merge($templatesPaths, [
+                $themeTemplatesPaths[0],
+                $themeTemplatesPaths[0] . 'plugin' . DS . $plugin . DS,
+            ]);
+        }
+        $templatesPaths[] = App::path('templates', $plugin)[0];
+        return $templatesPaths;
     }
 
     /**
