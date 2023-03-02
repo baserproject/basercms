@@ -13,6 +13,8 @@ namespace BcMail\Model\Table;
 
 use BaserCore\Event\BcEventDispatcherTrait;
 use BaserCore\Model\Entity\Content;
+use BaserCore\Utility\BcContainerTrait;
+use BcMail\Service\MailMessagesServiceInterface;
 use Cake\Core\Plugin;
 use Cake\ORM\Exception\PersistenceFailedException;
 use Cake\Validation\Validator;
@@ -23,8 +25,7 @@ use BaserCore\Annotation\Checked;
 /**
  * メールコンテンツモデル
  *
- * @package Mail.Model
- *
+ * @property MailFieldsTable $MailFields
  */
 class MailContentsTable extends MailAppTable
 {
@@ -33,6 +34,7 @@ class MailContentsTable extends MailAppTable
      * Trait
      */
     use BcEventDispatcherTrait;
+    use BcContainerTrait;
 
     /**
      * behaviors
@@ -325,26 +327,25 @@ class MailContentsTable extends MailAppTable
             }
             $newEntity = clone $result;
 
-            // TODO ucmitz 未実装
-//            $mailFields = $this->MailFields->find()
-//                ->where(['MailFields.mail_content_id' => $id])
-//                ->order(['MailFields.sort'])
-//                ->all();
-//            if($mailFields) {
-//                foreach($mailFields as $field) {
-//                    $field->mail_content_id = $newEntity->id;
-//                    if (!$this->MailFields->copy(null, $field, ['sortUpdateOff' => true])) {
-//                        $this->getConnection()->rollback();
-//                        return false;
-//                    }
-//                }
-//            }
+            // メールフィールドコピー
+            $mailFields = $this->MailFields->find()
+                ->where(['MailFields.mail_content_id' => $id])
+                ->order(['MailFields.sort'])
+                ->all();
+            if($mailFields) {
+                foreach($mailFields as $field) {
+                    $field->mail_content_id = $newEntity->id;
+                    if (!$this->MailFields->copy(null, $field, ['sortUpdateOff' => true])) {
+                        $this->getConnection()->rollback();
+                        return false;
+                    }
+                }
+            }
 
-            // TODO ucmitz 未実装
-//            $mailMessages = TableRegistry::getTableLocator()->get('BcMail.MailMessages');
-//            $mailMessages->setup($newEntity->id);
-//            $mailMessages->_sourceConfigured = true; // 設定しておかないと、下記の処理にて内部的にgetDataSouceが走る際にエラーとなってしまう。
-//            $mailMessages->construction($newEntity->id);
+            // メッセージテーブル生成
+            $messagesService = $this->getService(MailMessagesServiceInterface::class);
+            $messagesService->createTable($newEntity->id);
+            $messagesService->construction($newEntity->id);
 
             // TODO ucmitz 未実装
             // >>>
