@@ -17,6 +17,7 @@ use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\Note;
+use Cake\ORM\Exception\PersistenceFailedException;
 
 /**
  * SiteConfigsController
@@ -45,17 +46,28 @@ class SiteConfigsController extends BcApiController
     public function edit(SiteConfigsServiceInterface $service)
     {
         $this->request->allowMethod(['post', 'put']);
-        $siteConfig = $service->update($this->request->getData());
-        if (!$siteConfig->getErrors()) {
-            $message = __d('baser', 'システム基本設定を更新しました。');
-        } else {
+        $siteConfig = $errors = null;
+        try {
+            $siteConfig = $service->update($this->request->getData());
+            if (!$siteConfig->getErrors()) {
+                $message = __d('baser', 'システム基本設定を更新しました。');
+            } else {
+                $this->setResponse($this->response->withStatus(400));
+                $message = __d('baser', '入力エラーです。内容を修正してください。');
+            }
+        } catch (PersistenceFailedException $e) {
+            $errors = $e->getEntity()->getErrors();
+            $message = __d('baser', "入力エラーです。内容を修正してください。");
             $this->setResponse($this->response->withStatus(400));
-            $message = __d('baser', '入力エラーです。内容を修正してください。');
+        } catch (\Throwable $e) {
+            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $this->setResponse($this->response->withStatus(500));
         }
+
         $this->set([
             'message' => $message,
             'siteConfig' => $siteConfig,
-            'errors' => $siteConfig->getErrors(),
+            'errors' => $errors
         ]);
         $this->viewBuilder()->setOption('serialize', ['siteConfig', 'message', 'errors']);
     }
