@@ -167,12 +167,14 @@ class InstallationsService implements InstallationsServiceInterface
         if (!$this->BcDatabase->constructionTable('BaserCore', 'default', $dbConfig)) {
             throw new BcException(__d('baser', 'コアテーブルの構築に失敗しました。'));
         }
-        [$theme, $pattern] = explode('.', $dbDataPattern);
+
         try {
+            $this->installCorePlugin();
+            [$theme, $pattern] = explode('.', $dbDataPattern);
             if (!$this->BcDatabase->loadDefaultDataPattern($theme, $pattern)) {
                 throw new BcException(__d('baser', 'コアの初期データのロードに失敗しました。'));
             }
-        } catch (BcException $e) {
+        } catch (\Throwable $e) {
             throw new BcException(__d('baser', 'コアの初期データのロードに失敗しました。' . $e->getMessage()));
         }
         if (!$this->BcDatabase->initSystemData(['theme' => $theme, 'adminTheme' => $adminTheme])) {
@@ -393,12 +395,12 @@ class InstallationsService implements InstallationsServiceInterface
      * @checked
      * @noTodo
      */
-    public function installCorePlugin(string $dbDataPattern): bool
+    public function installCorePlugin(): bool
     {
         $result = true;
         $corePlugins = Configure::read('BcApp.defaultInstallCorePlugins');
         foreach($corePlugins as $corePlugin) {
-            if (!$this->installPlugin($corePlugin, $dbDataPattern)) {
+            if (!$this->installPlugin($corePlugin)) {
                 $this->log(sprintf(__d('baser', 'コアプラグイン %s のインストールに失敗しました。'), $corePlugin));
                 $result = false;
             }
@@ -414,88 +416,13 @@ class InstallationsService implements InstallationsServiceInterface
      * @return boolean
      * @checked
      */
-    public function installPlugin($name, $dbDataPattern = '')
+    public function installPlugin($name)
     {
         BcUtil::clearAllCache();
         /* @var BcPlugin $plugin */
         $plugin = Plugin::isLoaded($name);
         if(!$plugin) $plugin = Plugin::getCollection()->create($name);
-
-        // InstallationsService::buildPermissions() で別途アクセスルールを一括で作成するため
-        // ここでは、アクセスルールは作らない（permission オプションを利用しない）
         return $plugin->install();
-
-        $paths = App::path('Plugin');
-        $exists = false;
-        foreach($paths as $path) {
-            if (file_exists($path . $name)) {
-                $exists = true;
-                break;
-            }
-        }
-
-        if (!$exists) {
-            return false;
-        }
-
-        $this->Plugin = ClassRegistry::init('Plugin');
-        $data = $this->Plugin->find('first', ['conditions' => ['name' => $name]]);
-        $title = '';
-
-        if (empty($data['Plugin']['db_inited'])) {
-            $initPath = $path . $name . DS . 'Config' . DS . 'init.php';
-            if (file_exists($initPath)) {
-                $this->initPlugin($initPath, $dbDataPattern);
-            }
-        }
-        $configPath = $path . $name . DS . 'config.php';
-        if (file_exists($configPath)) {
-            include $configPath;
-        }
-
-        if (empty($title)) {
-            if (!empty($data['Plugin']['title'])) {
-                $title = $data['Plugin']['title'];
-            } else {
-                $title = $name;
-            }
-        }
-
-        if ($data) {
-            // 既にインストールデータが存在する場合は、DBのバージョンは変更しない
-            $data = array_merge($data['Plugin'], [
-                'name' => $name,
-                'title' => $title,
-                'status' => true,
-                'db_inited' => true
-            ]);
-            $this->Plugin->set($data);
-        } else {
-            $corePlugins = Configure::read('BcApp.corePlugins');
-            if (in_array($name, $corePlugins)) {
-                $version = BcUtil::getVersion();
-            } else {
-                $version = BcUtil::getVersion($name);
-            }
-
-            $priority = intval($this->Plugin->getMax('priority')) + 1;
-            $data = ['Plugin' => [
-                'name' => $name,
-                'title' => $title,
-                'status' => true,
-                'db_inited' => true,
-                'version' => $version,
-                'priority' => $priority
-            ]];
-            $this->Plugin->create($data);
-        }
-
-        // データを保存
-        if ($this->Plugin->save()) {
-            return true;
-        } else {
-            return false;
-        }
     }
 
     /**

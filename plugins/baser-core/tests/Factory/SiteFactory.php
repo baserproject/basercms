@@ -48,6 +48,7 @@ class SiteFactory extends CakephpBaseFactory
     public function main(): SiteFactory
     {
         return $this->setField('id', 1)
+            ->setField('theme', 'BcFront')
             ->setField('status', true);
     }
 
@@ -69,6 +70,7 @@ class SiteFactory extends CakephpBaseFactory
             ->setField('same_main_url', false)
             ->setField('auto_redirect', true)
             ->setField('auto_link', true)
+            ->setField('theme', 'BcFront')
             ->setField('domain_type', null);
     }
 

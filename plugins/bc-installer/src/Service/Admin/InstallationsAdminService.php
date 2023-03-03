@@ -329,20 +329,6 @@ class InstallationsAdminService extends InstallationsService implements Installa
         // データベースのデータを初期設定に更新
         $this->executeDefaultUpdates();
 
-        // テーマの初期データを読み込む
-        // TODO ucmitz テーマの初期データ未実装
-//        [$theme, $pattern] = explode('.', $dbDataPattern);
-//        App::build(['Plugin' => array_merge([BASER_THEMES . Configure::read('BcSite.theme') . DS . 'Plugin' . DS], App::path('Plugin'))]);
-//        $themesPlugins = BcUtil::getCurrentThemesPlugins();
-//        if ($themesPlugins) {
-//            foreach($themesPlugins as $plugin) {
-//                $this->BcManager->installPlugin($plugin);
-//                CakePlugin::load($plugin);
-//                $this->BcManager->resetTables('plugin', $dbConfig = null, $plugin);
-//                $this->BcManager->loadDefaultDataPattern('plugin', null, $pattern, $theme, $plugin);
-//            }
-//        }
-
         // アクセスルールの初期データを構築
         $this->buildPermissions();
 
