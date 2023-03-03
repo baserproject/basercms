@@ -17,6 +17,7 @@ use BaserCore\Utility\BcSiteConfig;
 use BaserCore\Utility\BcUtil;
 use BcMail\Model\Entity\MailContent;
 use BcMail\Model\Entity\MailMessage;
+use BcMail\Service\MailConfigsServiceInterface;
 use BcMail\Service\MailContentsService;
 use BcMail\Service\MailContentsServiceInterface;
 use BcMail\Service\MailFieldsService;
@@ -206,8 +207,8 @@ class MailFrontService implements MailFrontServiceInterface
 
         // メール送信
         try {
-            $mailConfigsTable = TableRegistry::getTableLocator()->get('BcMail.MailConfigs');
-            $mailConfig = $mailConfigsTable->find()->first();
+            $mailConfigsService = $this->getService(MailConfigsServiceInterface::class);
+            $mailConfig = $mailConfigsService->get();
             $adminMail = $this->getAdminMail($mailContent);
             $userMail = $this->getUserMail($mailFields, $mailMessage);
             $attachments = $this->getAttachments($mailFields, $mailMessage);

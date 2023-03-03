@@ -23,13 +23,38 @@ class MailConfigsSeed extends AbstractSeed
         $data = [
             [
                 'id' => 1,
-                'site_name' => 'baserCMS - Based Website Development Project -',
-                'site_url' => 'http://basercms.net/',
-                'site_email' => 'info@basercms.net',
-                'site_tel' => '',
-                'site_fax' => '',
-                'created' => '2016-08-12 00:48:33',
+                'name' => 'site_name',
+                'value' => 'My Site',
                 'modified' => NULL,
+                'created' => NULL,
+            ],
+            [
+                'id' => 2,
+                'name' => 'site_url',
+                'value' => 'https://example.com/',
+                'modified' => NULL,
+                'created' => NULL,
+            ],
+            [
+                'id' => 3,
+                'name' => 'site_email',
+                'value' => 'foo@example.com',
+                'modified' => NULL,
+                'created' => NULL,
+            ],
+            [
+                'id' => 4,
+                'name' => 'site_tel',
+                'value' => NULL,
+                'modified' => NULL,
+                'created' => NULL,
+            ],
+            [
+                'id' => 5,
+                'name' => 'site_fax',
+                'value' => NULL,
+                'modified' => NULL,
+                'created' => NULL,
             ],
         ];
 

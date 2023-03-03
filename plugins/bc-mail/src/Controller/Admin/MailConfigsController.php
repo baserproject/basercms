@@ -11,6 +11,9 @@
 
 namespace BcMail\Controller\Admin;
 
+use BaserCore\Utility\BcUtil;
+use BcMail\Service\MailConfigsServiceInterface;
+
 /**
  * メールフォーム設定コントローラー
  *
@@ -20,33 +23,23 @@ class MailConfigsController extends MailAdminAppController
 {
 
     /**
-     * コンポーネント
-     *
-     * @var array
-     */
-    public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure', 'BcContents'];
-
-    /**
      * [ADMIN] メールフォーム設定
      *
      * @return void
      */
-    public function admin_form()
+    public function index(MailConfigsServiceInterface $service)
     {
-        if (empty($this->request->getData())) {
-            $this->request = $this->request->withParsedBody($this->MailConfig->read(null, 1));
-        } else {
-
-            /* 更新処理 */
-            if ($this->MailConfig->save($this->request->getData())) {
-                $this->BcMessage->setInfo(__d('baser', 'メールフォーム設定を保存しました。'));
-                $this->redirect(['action' => 'form']);
-            } else {
-                $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
+        if ($this->request->is('post')) {
+            $entity = $service->update($this->getRequest()->getData());
+            if (!$entity->getErrors()) {
+                $this->BcMessage->setInfo(__d('baser', 'メールプラグイン設定を保存しました。'));
+                return $this->redirect(['action' => 'index']);
             }
+            $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
+        } else {
+            $entity = $service->get();
         }
-
-        $this->setTitle(__d('baser', 'メールプラグイン基本設定'));
-        $this->setHelp('mail_configs_form');
+        $this->set(['entity' => $entity]);
     }
+
 }

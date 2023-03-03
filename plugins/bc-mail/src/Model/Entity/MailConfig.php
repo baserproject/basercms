@@ -19,12 +19,10 @@ use BaserCore\Annotation\Checked;
 
 /**
  * Class MailConfig
+ *
  * @property int $id
- * @property string $site_name
- * @property string $site_url
- * @property string $site_email
- * @property string $site_tel
- * @property string $site_fax
+ * @property string $name
+ * @property string $value
  * @property FrozenTime $created
  * @property FrozenTime $modified
  */

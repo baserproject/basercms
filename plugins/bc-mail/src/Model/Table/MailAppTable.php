@@ -15,8 +15,6 @@ use BaserCore\Model\Table\AppTable;
 
 /**
  * メールプラグインモデル根底クラス
- *
- * @package         Mail.Model
  */
 class MailAppTable extends AppTable
 {

@@ -21,7 +21,7 @@ return [
                     'MailConfigs' => [
                         'title' => __d('baser', 'メール基本設定'),
                         'url' => [
-                            'Admin' => true,
+                            'prefix' => 'Admin',
                             'plugin' => 'BcMail',
                             'controller' => 'MailConfigs',
                             'action' => 'index'

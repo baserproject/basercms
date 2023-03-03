@@ -12,46 +12,54 @@
 
 /**
  * [ADMIN] メール設定 フォーム
+ * @var \BaserCore\View\BcAdminAppView $this
+ * @var \BcMail\Model\Entity\MailConfig $entity
  */
-$this->BcBaser->js('BcMail.admin/mail_configs/form.bundle', false);
+$this->BcAdmin->setTitle(__d('baser', 'メールプラグイン基本設定'));
+$this->BcAdmin->setHelp('mail_configs_form');
 ?>
 
 
+<h2 class="bca-main__heading" data-bca-heading-size="lg"><?php echo __d('baser', '送信メール署名') ?></h2>
+
 <!-- form -->
-<?php echo $this->BcAdminForm->create('MailConfig', ['url' => ['action' => 'form']]) ?>
+<?php echo $this->BcAdminForm->create($entity) ?>
 
 <?php echo $this->BcFormTable->dispatchBefore() ?>
 
-<?php echo $this->BcAdminForm->control('MailConfig.id', ['type' => 'hidden']) ?>
 <div class="section">
   <table id="FormTable" class="form-table bca-form-table">
     <tr>
-      <th
-        class="bca-form-table__label"><?php echo $this->BcAdminForm->label('MailConfig.site_name', __d('baser', '署名：Webサイト名')) ?></th>
+      <th class="bca-form-table__label">
+        <?php echo $this->BcAdminForm->label('site_name', __d('baser', 'Webサイト名')) ?>
+        &nbsp;<span class="required bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
+      </th>
       <td class="col-input bca-form-table__input">
-        <?php echo $this->BcAdminForm->control('MailConfig.site_name', ['type' => 'text', 'size' => 35, 'maxlength' => 255, 'autofocus' => true]) ?>
+        <?php echo $this->BcAdminForm->control('site_name', ['type' => 'text', 'size' => 35, 'maxlength' => 255, 'autofocus' => true]) ?>
         <i class="bca-icon--question-circle bca-help"></i>
-        <?php echo $this->BcAdminForm->error('MailConfig.site_name') ?>
+        <?php echo $this->BcAdminForm->error('site_name') ?>
         <div class="bca-helptext"><?php echo __d('baser', '自動送信メールの署名に挿入されます。') ?></div>
       </td>
     </tr>
     <tr>
-      <th
-        class="bca-form-table__label"><?php echo $this->BcAdminForm->label('MailConfig.site_url', __d('baser', '署名：WebサイトURL')) ?></th>
+      <th class="bca-form-table__label">
+        <?php echo $this->BcAdminForm->label('site_url', __d('baser', 'WebサイトURL')) ?>
+      </th>
       <td class="col-input bca-form-table__input">
-        <?php echo $this->BcAdminForm->control('MailConfig.site_url', ['type' => 'text', 'size' => 35, 'maxlength' => 255]) ?>
+        <?php echo $this->BcAdminForm->control('site_url', ['type' => 'text', 'size' => 35, 'maxlength' => 255]) ?>
         <i class="bca-icon--question-circle bca-help"></i>
-        <?php echo $this->BcAdminForm->error('MailConfig.site_url') ?>
+        <?php echo $this->BcAdminForm->error('site_url') ?>
         <div class="bca-helptext"><?php echo __d('baser', '自動送信メールの署名に挿入されます。') ?></div>
       </td>
     </tr>
     <tr>
-      <th
-        class="bca-form-table__label"><?php echo $this->BcAdminForm->label('MailConfig.site_email', __d('baser', '署名：Eメール')) ?></th>
+      <th class="bca-form-table__label">
+        <?php echo $this->BcAdminForm->label('site_email', __d('baser', 'Eメール')) ?>
+      </th>
       <td class="col-input bca-form-table__input">
-        <?php echo $this->BcAdminForm->control('MailConfig.site_email', ['type' => 'text', 'size' => 35, 'maxlength' => 255]) ?>
+        <?php echo $this->BcAdminForm->control('site_email', ['type' => 'text', 'size' => 35, 'maxlength' => 255]) ?>
         <i class="bca-icon--question-circle bca-help"></i>
-        <?php echo $this->BcAdminForm->error('MailConfig.site_email') ?>
+        <?php echo $this->BcAdminForm->error('site_email') ?>
         <div class="bca-helptext">
           <ul>
             <li><?php echo __d('baser', '自動送信メールの署名に挿入されます。') ?></li>
@@ -61,22 +69,24 @@ $this->BcBaser->js('BcMail.admin/mail_configs/form.bundle', false);
       </td>
     </tr>
     <tr>
-      <th
-        class="bca-form-table__label"><?php echo $this->BcAdminForm->label('MailConfig.site_tel', __d('baser', '署名：電話番号')) ?></th>
+      <th class="bca-form-table__label">
+        <?php echo $this->BcAdminForm->label('site_tel', __d('baser', '電話番号')) ?>
+      </th>
       <td class="col-input bca-form-table__input">
-        <?php echo $this->BcAdminForm->control('MailConfig.site_tel', ['type' => 'text', 'size' => 35, 'maxlength' => 255]) ?>
+        <?php echo $this->BcAdminForm->control('site_tel', ['type' => 'text', 'size' => 35, 'maxlength' => 255]) ?>
         <i class="bca-icon--question-circle bca-help"></i>
-        <?php echo $this->BcAdminForm->error('MailConfig.site_tel') ?>
+        <?php echo $this->BcAdminForm->error('site_tel') ?>
         <div class="bca-helptext"><?php echo __d('baser', '自動送信メールの署名に挿入されます。') ?></div>
       </td>
     </tr>
     <tr>
-      <th
-        class="bca-form-table__label"><?php echo $this->BcAdminForm->label('MailConfig.site_fax', __d('baser', '署名：FAX番号')) ?></th>
+      <th class="bca-form-table__label">
+        <?php echo $this->BcAdminForm->label('site_fax', __d('baser', 'FAX番号')) ?>
+      </th>
       <td class="col-input bca-form-table__input">
-        <?php echo $this->BcAdminForm->control('MailConfig.site_fax', ['type' => 'text', 'size' => 35, 'maxlength' => 255]) ?>
+        <?php echo $this->BcAdminForm->control('site_fax', ['type' => 'text', 'size' => 35, 'maxlength' => 255]) ?>
         <i class="bca-icon--question-circle bca-help"></i>
-        <?php echo $this->BcAdminForm->error('MailConfig.site_fax') ?>
+        <?php echo $this->BcAdminForm->error('site_fax') ?>
         <div class="bca-helptext"><?php echo __d('baser', '自動送信メールの署名に挿入されます。') ?></div>
       </td>
     </tr>
@@ -88,7 +98,9 @@ $this->BcBaser->js('BcMail.admin/mail_configs/form.bundle', false);
 
 <div class="submit bca-actions">
   <div class="bca-actions__main">
-    <?php echo $this->BcAdminForm->button(__d('baser', '保存'), ['div' => false, 'class' => 'button bca-btn bca-actions__item',
+    <?php echo $this->BcAdminForm->button(__d('baser', '保存'), [
+      'div' => false,
+      'class' => 'button bca-btn bca-actions__item bca-loading',
       'data-bca-btn-type' => 'save',
       'data-bca-btn-size' => 'lg',
       'data-bca-btn-width' => 'lg',
