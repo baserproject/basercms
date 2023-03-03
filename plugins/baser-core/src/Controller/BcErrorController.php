@@ -14,6 +14,7 @@ use BaserCore\ServiceProvider\BcServiceProvider;
 use BaserCore\Utility\BcContainer;
 use BaserCore\Utility\BcUtil;
 use Cake\Controller\ComponentRegistry;
+use Cake\Datasource\Exception\MissingDatasourceConfigException;
 use Cake\Event\EventInterface;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -22,7 +23,6 @@ use Cake\Event\EventManagerInterface;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
 use Cake\ORM\TableRegistry;
-use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * BcErrorController
@@ -60,9 +60,12 @@ class BcErrorController extends BcFrontAppController
      */
     protected function getCurrent(ServerRequest $request): ServerRequest
     {
-        $sitesTable = TableRegistry::getTableLocator()->get('BaserCore.Sites');
-        $contentsTable = TableRegistry::getTableLocator()->get('BaserCore.Contents');
-
+        try {
+            $sitesTable = TableRegistry::getTableLocator()->get('BaserCore.Sites');
+            $contentsTable = TableRegistry::getTableLocator()->get('BaserCore.Contents');
+        } catch(MissingDatasourceConfigException $e) {
+            return $request;
+        }
         $url = BcUtil::fullUrl($request->getUri()->getPath());
         $site = $sitesTable->findByUrl($url);
         $url = '/';

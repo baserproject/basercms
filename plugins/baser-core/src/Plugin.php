@@ -17,6 +17,7 @@ use Authentication\AuthenticationServiceProviderInterface;
 use Authentication\Middleware\AuthenticationMiddleware;
 use BaserCore\Command\ComposerCommand;
 use BaserCore\Command\CreateReleaseCommand;
+use BaserCore\Command\SetupInstallCommand;
 use BaserCore\Command\SetupTestCommand;
 use BaserCore\Command\UpdateCommand;
 use BaserCore\Event\BcContainerEventListener;
@@ -563,6 +564,7 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
         $commands->add('composer', ComposerCommand::class);
         $commands->add('update', UpdateCommand::class);
         $commands->add('create release', CreateReleaseCommand::class);
+        $commands->add('setup install', SetupInstallCommand::class);
         return $commands;
     }
 

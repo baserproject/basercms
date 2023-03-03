@@ -14,7 +14,10 @@ namespace BaserCore\Service;
 use BaserCore\Model\Entity\SiteConfig;
 use BaserCore\Model\Table\SiteConfigsTable;
 use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Utility\BcUtil;
+use BcUploader\Plugin;
 use Cake\Core\Configure;
+use Cake\Datasource\Exception\MissingDatasourceConfigException;
 use Cake\Filesystem\File;
 use Cake\ORM\TableRegistry;
 use BaserCore\Annotation\UnitTest;
@@ -46,19 +49,26 @@ class SiteConfigsService implements SiteConfigsServiceInterface
 
     /**
      * SiteConfigsService constructor.
-     * 
+     *
      * @checked
      * @unitTest
      * @noTodo
      */
     public function __construct()
     {
-        $this->SiteConfigs = TableRegistry::getTableLocator()->get('BaserCore.SiteConfigs');
+        try {
+            $this->SiteConfigs = TableRegistry::getTableLocator()->get('BaserCore.SiteConfigs');
+        } catch(MissingDatasourceConfigException $e) {
+            // インストール前に呼び出す事があるため
+            if(BcUtil::isInstalled()) {
+                throw $e;
+            }
+        }
     }
 
     /**
      * フィールドの値を取得する
-     * 
+     *
      * @param string $fieldName
      * @return string|null
      * @checked
@@ -73,7 +83,7 @@ class SiteConfigsService implements SiteConfigsServiceInterface
 
     /**
      * データを取得する
-     * 
+     *
      * @return array
      * @checked
      * @noTodo
@@ -94,7 +104,7 @@ class SiteConfigsService implements SiteConfigsServiceInterface
 
     /**
      * データを更新する
-     * 
+     *
      * @param array $postData
      * @return SiteConfig|false
      * @checked
@@ -149,7 +159,7 @@ class SiteConfigsService implements SiteConfigsServiceInterface
 
     /**
      * .env が書き込み可能かどうか
-     * 
+     *
      * @return bool
      * @checked
      * @noTodo
@@ -162,7 +172,7 @@ class SiteConfigsService implements SiteConfigsServiceInterface
 
     /**
      * .env に設定値を書き込む
-     * 
+     *
      * @param $key
      * @param $value
      * @return bool
@@ -190,7 +200,7 @@ class SiteConfigsService implements SiteConfigsServiceInterface
 
     /**
      * アプリケーションモードリストを取得
-     * 
+     *
      * @return array
      * @checked
      * @noTodo
@@ -232,7 +242,7 @@ class SiteConfigsService implements SiteConfigsServiceInterface
 
     /**
      * baserCMSのDBのバージョンを取得する
-     * 
+     *
      * @checked
      * @noTodo
      * @unitTest
@@ -244,7 +254,7 @@ class SiteConfigsService implements SiteConfigsServiceInterface
 
     /**
      * キャッシュ用 Entity を削除
-     * 
+     *
      * @checked
      * @noTodo
      * @unitTest
