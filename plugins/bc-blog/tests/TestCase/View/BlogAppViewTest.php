@@ -22,6 +22,17 @@ class BlogAppViewTest extends BcTestCase
 {
 
     /**
+     * Fixtures
+     *
+     * @var array
+     */
+    public $fixtures = [
+        'plugin.BaserCore.Sites',
+        'plugin.BaserCore.Contents',
+        'plugin.BaserCore.ContentFolders'
+    ];
+
+    /**
      * setUp method
      *
      * @return void
@@ -29,7 +40,7 @@ class BlogAppViewTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->BlogFrontAppView = new BlogFrontAppView($this->getRequest());
+
     }
 
     /**
@@ -39,7 +50,6 @@ class BlogAppViewTest extends BcTestCase
      */
     public function tearDown(): void
     {
-        unset($this->BlogFrontAppView);
         parent::tearDown();
     }
 
@@ -50,7 +60,9 @@ class BlogAppViewTest extends BcTestCase
      */
     public function test_initialize(): void
     {
-        $this->assertNotEmpty($this->BlogFrontAppView->Blog);
+        $this->getRequest();
+        $blogFrontAppView = new BlogFrontAppView($this->getRequest());
+        $this->assertNotEmpty($blogFrontAppView->Blog);
     }
 
 }

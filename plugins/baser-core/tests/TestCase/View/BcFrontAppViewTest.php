@@ -45,7 +45,6 @@ class BcFrontAppViewTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->BcFrontAppView = new BcFrontAppView();
     }
 
     /**
@@ -56,7 +55,6 @@ class BcFrontAppViewTest extends BcTestCase
     public function tearDown(): void
     {
         parent::tearDown();
-        unset($this->BcFrontAppView);
     }
 
     /**
@@ -64,14 +62,16 @@ class BcFrontAppViewTest extends BcTestCase
      */
     public function testInitialize()
     {
-        $this->assertFalse(isset($this->BcFrontAppView->BcSmartphone));
+        $this->getRequest();
+        $bcFrontAppView = new BcFrontAppView();
+        $this->assertFalse(isset($bcFrontAppView->BcSmartphone));
         /* @var \BaserCore\Service\SitesServiceInterface $siteService */
         $siteService = $this->getService(SitesServiceInterface::class);
         $site = $siteService->get(2);
         $siteService->update($site, ['status' => true]);
-        $this->BcFrontAppView->setRequest($this->getRequest('/s/'));
-        $this->BcFrontAppView->initialize();
-        $this->assertTrue(isset($this->BcFrontAppView->BcSmartphone));
+        $bcFrontAppView->setRequest($this->getRequest('/s/'));
+        $bcFrontAppView->initialize();
+        $this->assertTrue(isset($bcFrontAppView->BcSmartphone));
     }
 
 }

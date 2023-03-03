@@ -1097,15 +1097,11 @@ class BcUtil
         $theme = Inflector::camelize(Inflector::underscore(Configure::read('BcApp.defaultFrontTheme')));
         if (!BcUtil::isInstalled()) return $theme;
         $request = Router::getRequest();
-        if (BcUtil::isAdminSystem()) {
-            $site = $request->getAttribute('currentSite');
-        } else {
-            $site = $request->getAttribute('currentSite');
-        }
-        if (!$site) {
-            return self::getRootTheme();
-        } elseif ($site->theme) {
+        $site = $request->getAttribute('currentSite');
+        if ($site) {
             return $site->theme;
+        } elseif(self::getRootTheme()) {
+            return self::getRootTheme();
         } else {
             return $theme;
         }
