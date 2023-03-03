@@ -78,7 +78,7 @@ class BcCsvHelper extends Helper
      *
      * @param string $modelName
      * @param array $data
-     * @return void
+     * @return bool
      */
     public function addModelData($modelName, $data)
     {

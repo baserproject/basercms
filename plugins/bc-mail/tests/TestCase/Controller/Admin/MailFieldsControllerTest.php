@@ -102,14 +102,6 @@ class MailFieldsControllerTest extends BaserTestCase
     }
 
     /**
-     * メッセージCSVファイルをダウンロードする
-     */
-    public function testAdmin_download_csv()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
-    /**
      * 並び替えを更新する [AJAX]
      */
     public function testAdmin_ajax_update_sort()

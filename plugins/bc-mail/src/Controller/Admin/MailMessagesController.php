@@ -170,4 +170,16 @@ class MailMessagesController extends MailAdminAppController
         echo file_get_contents($filePath);
         exit();
     }
+
+    /**
+     * メッセージCSVファイルをダウンロードする
+     *
+     * @param int $mailContentId
+     * @return void
+     */
+    public function download_csv(MailMessagesAdminServiceInterface $service, int $mailContentId)
+    {
+        $this->set($service->getViewVarsForDownloadCsv($mailContentId, $this->getRequest()));
+    }
+
 }

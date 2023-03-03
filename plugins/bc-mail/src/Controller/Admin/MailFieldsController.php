@@ -252,35 +252,6 @@ class MailFieldsController extends MailAdminAppController
     }
 
     /**
-     * メッセージCSVファイルをダウンロードする
-     *
-     * @param int $mailContentId
-     * @return void
-     */
-    public function download_csv($mailContentId)
-    {
-        $mailContentId = (int)$mailContentId;
-        if (!$mailContentId || !$this->mailContent || !is_int($mailContentId)) {
-            $this->BcMessage->setError(__d('baser', '無効な処理です。'));
-            $this->redirect(['controller' => 'mail_contents', 'action' => 'index']);
-        }
-        $this->MailMessage->alias = 'MailMessage' . $mailContentId;
-        $this->MailMessage->schema(true);
-        $this->MailMessage->cacheSources = false;
-        $this->MailMessage->setUseTable($mailContentId);
-        $messages = $this->MailMessage->convertMessageToCsv(
-            $mailContentId,
-            $this->MailMessage->find(
-                'all',
-                ['order' => $this->MailMessage->alias . '.created DESC']
-            )
-        );
-        $this->set('encoding', $this->request->getQuery('encoding'));
-        $this->set('messages', $messages);
-        $this->set('contentName', $this->request->getParam('Content.name'));
-    }
-
-    /**
      * [ADMIN] 無効状態にする（AJAX）
      *
      * @param MailFieldsService $service

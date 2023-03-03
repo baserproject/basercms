@@ -14,6 +14,8 @@ namespace BcMail\Model\Table;
 use Authentication\PasswordHasher\DefaultPasswordHasher;
 use BaserCore\Error\BcException;
 use BaserCore\Utility\BcUtil;
+use BcMail\View\Helper\MaildataHelper;
+use BcMail\View\Helper\MailfieldHelper;
 use Cake\Datasource\ConnectionManager;
 use Cake\Datasource\EntityInterface;
 use Cake\Datasource\ResultSetInterface;
@@ -25,6 +27,7 @@ use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use Cake\Validation\Validator;
+use Cake\View\View;
 
 /**
  * メッセージモデル
@@ -665,43 +668,32 @@ class MailMessagesTable extends MailAppTable
      * 受信メッセージの内容を表示状態に変換する
      *
      * @param int $id
-     * @param array $messages
+     * @param $messages
      * @return array
      */
-    public function convertMessageToCsv($id, $messages)
+    public function convertMessageToCsv($messages)
     {
-        App::uses('MailField', 'BcMail.Model');
-        $mailFieldClass = new MailField();
-
-        // フィールドの一覧を取得する
-        $mailFields = $mailFieldClass->find('all', ['conditions' => ['MailField.mail_content_id' => $id], 'order' => 'sort']);
-
         // フィールド名とデータの変換に必要なヘルパーを読み込む
-        App::uses('MaildataHelper', 'BcMail.View/Helper');
-        App::uses('MailfieldHelper', 'BcMail.View/Helper');
-        $Maildata = new MaildataHelper(new View());
-        $Mailfield = new MailfieldHelper(new View());
-
+        $maildataHelper = new MaildataHelper(new View());
+        $csv = [];
         foreach($messages as $key => $message) {
             $inData = [];
-            $inData['NO'] = $message[$this->alias]['id'];
-            foreach($mailFields as $mailField) {
+            $inData['NO'] = $message->id;
+            foreach($this->mailFields as $mailField) {
                 if ($mailField->type === 'file') {
-                    $inData[$mailField->field_name . ' (' . $mailField->name . ')'] = $message[$this->alias][$mailField->field_name];
+                    $inData[$mailField->field_name . ' (' . $mailField->name . ')'] = $message->{$mailField->field_name};
                 } else {
-                    $inData[$mailField->field_name . ' (' . $mailField->name . ')'] = $Maildata->toDisplayString(
+                    $inData[$mailField->field_name . ' (' . $mailField->name . ')'] = $maildataHelper->toDisplayString(
                         $mailField->type,
-                        $message[$this->alias][$mailField->field_name],
-                        $Mailfield->getOptions($mailField['MailField'])
+                        $message->{$mailField->field_name}
                     );
                 }
             }
-            $inData['作成日'] = $message[$this->alias]['created'];
-            $inData['更新日'] = $message[$this->alias]['modified'];
-            $messages[$key][$this->alias] = $inData;
+            $inData['作成日'] = $message->created;
+            $inData['更新日'] = $message->modified;
+            $csv[$key]['MailMessage'] = $inData;
         }
-
-        return $messages;
+        return $csv;
     }
 
     /**

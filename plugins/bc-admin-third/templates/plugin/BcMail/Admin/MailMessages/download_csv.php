@@ -12,7 +12,12 @@
 
 /**
  * [ADMIN] CSVダウンロード
+ * @var \BaserCore\View\BcAdminAppView $this
+ * @var string $encoding
+ * @var array $messages
+ * @var int $mailContentId
+ * @var string $contentName
  */
 $this->BcCsv->encoding = $encoding;
-$this->BcCsv->addModelDatas('MailMessage' . $mailContent['MailContent']['id'], $messages);
+$this->BcCsv->addModelDatas('MailMessage', $messages);
 $this->BcCsv->download($contentName);

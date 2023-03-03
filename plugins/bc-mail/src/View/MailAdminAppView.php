@@ -42,6 +42,7 @@ class MailAdminAppView extends BcAdminAppView
         $this->loadHelper('BcMail.Mailfield');
         $this->loadHelper('BcMail.Maildata');
         $this->loadHelper('BaserCore.BcArray');
+        $this->loadHelper('BaserCore.BcCsv');
     }
 
 }

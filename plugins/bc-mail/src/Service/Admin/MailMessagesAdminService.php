@@ -18,6 +18,7 @@ use BcMail\Model\Entity\MailContent;
 use BcMail\Service\MailContentsService;
 use BcMail\Service\MailContentsServiceInterface;
 use BcMail\Service\MailMessagesService;
+use Cake\Http\ServerRequest;
 use Cake\ORM\ResultSet;
 
 /**
@@ -67,6 +68,23 @@ class MailMessagesAdminService extends MailMessagesService implements MailMessag
             'mailContent' => $mailContent,
             'mailMessage' => $this->get($mailMessageId),
             'mailFields' => $mailContent->mail_fields
+        ];
+    }
+
+    /**
+     * CSVダウンロード用の変数を取得する
+     *
+     * @param int $mailContentId
+     * @param ServerRequest $request
+     * @return array
+     */
+    public function getViewVarsForDownloadCsv(int $mailContentId, ServerRequest $request)
+    {
+        $this->setup($mailContentId);
+        return [
+            'encoding' => $request->getQuery('encoding'),
+            'messages' => $this->MailMessages->convertMessageToCsv($this->getIndex()),
+            'contentName' => $request->getAttribute('currentContent')->name,
         ];
     }
 

@@ -25,7 +25,7 @@ $this->BcAdmin->setHelp('mail_messages_index');
 <div class="panel-box bca-panel-box" id="FunctionBox">
   <?php echo $this->BcAdminForm->create(null, [
     'type' => 'get',
-    'url' => ['controller' => 'MailFields', 'action' => 'download_csv', $mailContent->id]
+    'url' => ['controller' => 'MailMessages', 'action' => 'download_csv', $mailContent->id]
   ]) ?>
   <?php echo $this->BcAdminForm->control('encoding', [
     'type' => 'radio',
