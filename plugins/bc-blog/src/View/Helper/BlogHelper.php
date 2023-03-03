@@ -368,6 +368,7 @@ class BlogHelper extends Helper
      */
     public function getPostLinkUrl($post, $base = true, $full = true)
     {
+        $this->setContent($post->blog_category_id);
         $blogPostsService = $this->getService(BlogPostsServiceInterface::class);
         $url = $blogPostsService->getUrl($this->currentContent, $post, $full);
         if ($base && !$full) {

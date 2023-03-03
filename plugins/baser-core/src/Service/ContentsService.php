@@ -247,7 +247,7 @@ class ContentsService implements ContentsServiceInterface
      */
     public function getIndex(array $queryParams = [], ?string $type = "all"): Query
     {
-        $columns = ConnectionManager::get('default')->getSchemaCollection()->describe('contents')->columns();
+        $columns = $this->Contents->getSchema()->columns();
 
         $query = $this->Contents->find($type)->contain(['Sites']);
 
