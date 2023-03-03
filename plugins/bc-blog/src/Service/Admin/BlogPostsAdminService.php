@@ -149,6 +149,7 @@ class BlogPostsAdminService extends BlogPostsService implements BlogPostsAdminSe
                 Hash::extract($user->user_groups, '{n}.id'),
                 $blogContent->id
             ),
+            'fullUrl' => $this->getUrl($post->blog_content->content, $post, true),
             'publishLink' => $this->getPublishLink($post)
         ];
     }
@@ -164,13 +165,7 @@ class BlogPostsAdminService extends BlogPostsService implements BlogPostsAdminSe
     public function getPublishLink(BlogPost $post)
     {
         if (!$this->allowPublish($post)) return '';
-        /* @var \BaserCore\Service\ContentsService $contentsService */
-        $contentsService = $this->getService(ContentsServiceInterface::class);
-        return $contentsService->getUrl(
-            sprintf("%sarchives/%s", $post->blog_content->content->url, $post->no),
-            true,
-            $post->blog_content->content->site->use_subdomain
-        );
+        return $this->getUrl($post->blog_content->content, $post, true);
     }
 
     /**

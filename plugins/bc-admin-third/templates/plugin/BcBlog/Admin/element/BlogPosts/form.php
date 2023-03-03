@@ -22,11 +22,11 @@
  * @var array $categories
  * @var bool $hasNewCategoryAddablePermission
  * @var bool $hasNewTagAddablePermission
+ * @var string $fullUrl
  * @checked
  * @noTodo
  * @unitTest
  */
-$fullUrl = $this->BcBaser->getUri(rawurldecode($this->request->getAttribute('currentContent')->url) . '/archives/' . $post->no);
 $this->BcBaser->css('admin/ckeditor/editor', true);
 $this->BcBaser->i18nScript([
   'alertMessage1' => __d('baser', 'ブログタグの追加に失敗しました。既に登録されていないか確認してください。'),
@@ -81,7 +81,6 @@ $this->BcBaser->js('BcBlog.admin/blog_posts/form.bundle', false, [
           'size' => 40,
           'maxlength' => 255,
           'autofocus' => true,
-          'data-input-text-size' => 'full-counter',
           'counter' => true
         ]) ?>
         <i class="bca-icon--question-circle bca-help"></i>

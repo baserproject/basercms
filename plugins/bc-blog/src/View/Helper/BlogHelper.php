@@ -320,10 +320,11 @@ class BlogHelper extends Helper
     public function getPostLink($post, $title, $options = [])
     {
         $options = array_merge([
-            'escape' => true
+            'escape' => true,
+            'full' => !$this->isSameSiteBlogContent($post->blog_content_id)
         ], $options);
 
-        $url = $this->getPostLinkUrl($post, false);
+        $url = $this->getPostLinkUrl($post, false, $options['full']);
 
         // EVENT BcBlog.Blog.beforeGetPostLink
         $event = $this->dispatchLayerEvent('beforeGetPostLink', [
@@ -359,22 +360,17 @@ class BlogHelper extends Helper
      *
      * @param BlogPost $post ブログ記事データ
      * @param bool $base ベースとなるURLを付与するかどうか
+     * @param bool $full
      * @return string ブログ記事のURL
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function getPostLinkUrl($post, $base = true)
+    public function getPostLinkUrl($post, $base = true, $full = true)
     {
-        $this->setContent($post->blog_content_id);
-        if (empty($this->currentContent->url)) {
-            return false;
-        }
-        $sitesService = $this->getService(SitesServiceInterface::class);
-        $site = $sitesService->findByUrl($this->currentContent->url);
-        $contentUrl = $this->BcBaser->getContentsUrl($this->currentContent->url, !$this->isSameSiteBlogContent($post->blog_content_id), !empty($site->use_subdomain), false);
-        $url = $contentUrl . 'archives/' . $post->no;
-        if ($base) {
+        $blogPostsService = $this->getService(BlogPostsServiceInterface::class);
+        $url = $blogPostsService->getUrl($this->currentContent, $post, $full);
+        if ($base && !$full) {
             return $this->Url->build($url);
         } else {
             return $url;

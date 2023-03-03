@@ -15,6 +15,9 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Error\BcException;
+use BaserCore\Model\Entity\Content;
+use BaserCore\Service\ContentsServiceInterface;
+use BaserCore\Service\SitesServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
 use BcBlog\Model\Entity\BlogPost;
@@ -892,6 +895,26 @@ class BlogPostsService implements BlogPostsServiceInterface
             ], $this->BlogPosts->getConditionAllowPublish()))
             ->order($options['order'])
             ->limit($options['limit']);
+    }
+
+    /**
+     * ブログ記事のURLを取得する
+     *
+     * @param Content $content
+     * @param BlogPost $post
+     * @param $full
+     * @return string
+     */
+    public function getUrl(Content $content, BlogPost $post, $full)
+    {
+        /** @var SitesServiceInterface $sitesService */
+        $sitesService = $this->getService(SitesServiceInterface::class);
+        $site = $sitesService->findByUrl($content->url);
+        /** @var ContentsServiceInterface $contentsService */
+        $contentsService = $this->getService(ContentsServiceInterface::class);
+        $contentUrl = $contentsService->getUrl(rawurldecode($content->url), $full, !empty($site->use_subdomain), false);
+        $no = ($post->name)?: $post->no;
+        return $contentUrl . 'archives/' . $no;
     }
 
 }

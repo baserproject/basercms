@@ -321,11 +321,6 @@ class InstallationsAdminService extends InstallationsService implements Installa
      */
     public function initDb(ServerRequest $request): void
     {
-
-        // コアプラグインインストール
-        $dbDataPattern = $request->getSession()->read('Installation.dbDataPattern');
-        $this->installCorePlugin($dbDataPattern);
-
         // データベースのデータを初期設定に更新
         $this->executeDefaultUpdates();
 

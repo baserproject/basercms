@@ -28,7 +28,6 @@ use BcCustomContent\Service\CustomTablesServiceInterface;
 use BcCustomContent\Utility\CustomContentUtil;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
-use Cake\Datasource\EntityInterface;
 use Cake\Event\EventInterface;
 use Cake\ORM\Query;
 use Cake\ORM\ResultSet;

@@ -133,7 +133,8 @@ class BlogPostsTable extends BlogAppTable
                     'rule' => 'validateUnique',
                     'provider' => 'table',
                     'message' => __d('baser', '既に登録のあるスラッグです。')
-                ]]);
+                ]])
+            ->regex('name', '/\D/', __d('baser', '数値だけのスラッグを登録することはできません。'));
         $validator
             ->scalar('title')
             ->maxLength('title', 255, __d('baser', 'タイトルは255文字以内で入力してください。'))
@@ -779,17 +780,28 @@ class BlogPostsTable extends BlogAppTable
      * 公開状態の記事をNOより取得する
      *
      * @param int $blogContentId
-     * @param int $no
+     * @param int|string $no
      * @return array|\Cake\Datasource\EntityInterface|null
      * @checked
      * @noTodo
      */
     public function getPublishByNo($blogContentId, $no)
     {
-        return $this->find()->where(array_merge([
+        $conditions = array_merge([
             'BlogPosts.blog_content_id' => $blogContentId,
-            'BlogPosts.no' => $no
-        ], $this->getConditionAllowPublish()))
+        ], $this->getConditionAllowPublish());
+        if (is_numeric($no)) {
+            $conditions = array_merge_recursive(
+                $conditions,
+                ['BlogPosts.no' => $no]
+            );
+        } else {
+            $conditions = array_merge_recursive(
+                $conditions,
+                ['BlogPosts.name' => rawurldecode($no)]
+            );
+        }
+        return $this->find()->where($conditions)
             ->contain([
                 'BlogContents' => ['Contents' => ['Sites']],
                 'BlogCategories',

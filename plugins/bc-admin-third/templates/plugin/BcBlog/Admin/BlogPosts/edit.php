@@ -13,6 +13,7 @@
  * @var \BaserCore\View\BcAdminAppView $this
  * @var \BcBlog\Model\Entity\BlogPost $post
  * @var \BcBlog\Model\Entity\BlogContent $blogContent
+ * @var string $fullUrl
  * @checked
  * @noTodo
  * @unitTest
@@ -31,10 +32,10 @@ $this->BcAdmin->setHelp('blog_posts_form');
     <?php echo $this->BcAdminForm->control('no', ['type' => 'hidden']) ?>
   </span>
   <span class="bca-post__url">
-    <a href="<?php echo $this->BcBaser->getUri(rawurldecode($this->request->getAttribute('currentContent')->url) . '/archives/' . $post->no) ?>"
+    <a href="<?php echo $fullUrl ?>"
        class="bca-text-url" target="_blank" data-toggle="tooltip" data-placement="top" title="公開URLを開きます">
       <i class="bca-icon--globe"></i>
-      <?php echo $this->BcBaser->getUri(rawurldecode($this->request->getAttribute('currentContent')->url) . '/archives/' . $post->no) ?>
+      <?php echo $fullUrl ?>
     </a>
     <?php echo $this->BcAdminForm->button('', [
       'id' => 'BtnCopyUrl',
