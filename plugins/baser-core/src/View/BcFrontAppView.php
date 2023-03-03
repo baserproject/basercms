@@ -57,6 +57,7 @@ class BcFrontAppView extends AppView
     protected function setThemeHelpers(): void
     {
         $theme = BcUtil::getCurrentTheme();
+        if(!$theme) return;
         $themeHelpersPath = Plugin::path($theme) . 'src' . DS . 'View' . DS . 'Helper';
         $Folder = new Folder($themeHelpersPath);
         $files = $Folder->read(true, true);

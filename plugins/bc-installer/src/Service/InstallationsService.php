@@ -417,7 +417,6 @@ class InstallationsService implements InstallationsServiceInterface
     public function installPlugin($name, $dbDataPattern = '')
     {
         BcUtil::clearAllCache();
-        // TODO ucmitz 引数となる $dbDataPattern が利用できる仕様となっていない
         /* @var BcPlugin $plugin */
         $plugin = Plugin::isLoaded($name);
         if(!$plugin) $plugin = Plugin::getCollection()->create($name);
