@@ -16,6 +16,7 @@ use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Utility\BcUtil;
 use BcBlog\Service\BlogContentsServiceInterface;
+use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\ORM\Exception\PersistenceFailedException;
 
 /**
@@ -34,6 +35,7 @@ class BlogContentsController extends BcApiController
      */
     public function index(BlogContentsServiceInterface $blogContentsService)
     {
+        $this->request->allowMethod(['get']);
         $this->set([
             'blogContents' => $this->paginate($blogContentsService->getIndex($this->request->getQueryParams()))
         ]);
@@ -51,10 +53,22 @@ class BlogContentsController extends BcApiController
      */
     public function view(BlogContentsServiceInterface $service, $blogContentId)
     {
+        $this->request->allowMethod(['get']);
+        $blogContent = $message = null;
+        try {
+            $blogContent = $service->get($blogContentId);
+        } catch (RecordNotFoundException $e) {
+            $this->setResponse($this->response->withStatus(404));
+            $message = __d('baser', 'データが見つかりません。');
+        } catch (\Throwable $e) {
+            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $this->setResponse($this->response->withStatus(500));
+        }
         $this->set([
-            'blogContent' => $service->get($blogContentId)
+            'blogContent' => $blogContent,
+            'message' => $message
         ]);
-        $this->viewBuilder()->setOption('serialize', ['blogContent']);
+        $this->viewBuilder()->setOption('serialize', ['blogContent', 'message']);
     }
 
     /**
@@ -82,19 +96,23 @@ class BlogContentsController extends BcApiController
     public function add(BlogContentsServiceInterface $service)
     {
         $this->request->allowMethod(['post', 'put', 'patch']);
+        $blogContent = $errors = null;
         try {
             $blogContent = $service->create($this->request->getData());
             $message = __d('baser', 'ブログ「{0}」を追加しました。', $blogContent->content->title);
-        } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
-            $blogContent = $e->getEntity();
-            $message = __d('baser', "入力エラーです。内容を修正してください。");
+        } catch (PersistenceFailedException $e) {
             $this->setResponse($this->response->withStatus(400));
+            $errors = $e->getEntity()->getErrors();
+            $message = __d('baser', '入力エラーです。内容を修正してください。');
+        } catch (\Throwable $e) {
+            $this->setResponse($this->response->withStatus(500));
+            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
         }
         $this->set([
             'blogContent' => $blogContent,
-            'content' => $blogContent->content,
+            'content' => $blogContent?->content,
             'message' => $message,
-            'errors' => $blogContent->getErrors()
+            'errors' => $errors
         ]);
         $this->viewBuilder()->setOption('serialize', ['message', 'blogContent', 'content', 'errors']);
     }
@@ -111,19 +129,25 @@ class BlogContentsController extends BcApiController
     public function edit(BlogContentsServiceInterface $service, $blogContentId)
     {
         $this->request->allowMethod(['post', 'put', 'patch']);
-
+        $blogContent = $errors = null;
         try {
             $blogContent = $service->update($service->get($blogContentId), $this->request->getData());
             $message = __d('baser', 'ブログ「{0}」を更新しました。', $blogContent->content->title);
         } catch (PersistenceFailedException $e) {
-            $blogContent = $e->getEntity();
             $this->setResponse($this->response->withStatus(400));
+            $errors = $e->getEntity()->getErrors();
             $message = __d('baser', '入力エラーです。内容を修正してください。');
+        } catch (RecordNotFoundException $e) {
+            $this->setResponse($this->response->withStatus(404));
+            $message = __d('baser', 'データが見つかりません。');
+        } catch (\Throwable $e) {
+            $this->setResponse($this->response->withStatus(500));
+            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
         }
         $this->set([
             'message' => $message,
             'blogContent' => $blogContent,
-            'errors' => $blogContent->getErrors()
+            'errors' => $errors
         ]);
         $this->viewBuilder()->setOption('serialize', ['blogContent', 'message', 'errors']);
     }
@@ -139,27 +163,28 @@ class BlogContentsController extends BcApiController
      */
     public function delete(BlogContentsServiceInterface $service, $blogContentId)
     {
-        if ($this->request->is(['post', 'delete'])) {
-            try {
-                $blogContent = $service->get($blogContentId);
-                if ($service->delete($blogContentId)) {
-                    $message = __d('baser', 'ブログコンテンツ「{0}」を削除しました。', $blogContent->description);
-                } else {
-                    $this->setResponse($this->response->withStatus(400));
-                    $message = __d('baser', '入力エラーです。内容を修正してください。');
-                }
-            } catch (PersistenceFailedException $e) {
+        $this->request->allowMethod(['post', 'delete']);
+        $blogContent = null;
+        try {
+            $blogContent = $service->get($blogContentId);
+            if ($service->delete($blogContentId)) {
+                $message = __d('baser', 'ブログコンテンツ「{0}」を削除しました。', $blogContent->description);
+            } else {
                 $this->setResponse($this->response->withStatus(400));
-                $blogContent = $e->getEntity();
-                $message = __d('baser', 'データベース処理中にエラーが発生しました。');
+                $message = __d('baser', '入力エラーです。内容を修正してください。');
             }
-            $this->set([
-                'message' => $message,
-                'blogContent' => $blogContent,
-                'errors' => $blogContent->getErrors()
-            ]);
-            $this->viewBuilder()->setOption('serialize', ['blogContent', 'message', 'errors']);
+        } catch (RecordNotFoundException $e) {
+            $this->setResponse($this->response->withStatus(500));
+            $message = __d('baser', 'データベース処理中にエラーが発生しました。');
+        } catch (\Throwable $e) {
+            $this->setResponse($this->response->withStatus(500));
+            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
         }
+        $this->set([
+            'message' => $message,
+            'blogContent' => $blogContent
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['blogContent', 'message']);
     }
 
     /**
@@ -172,28 +197,30 @@ class BlogContentsController extends BcApiController
     public function copy(BlogContentsServiceInterface $service)
     {
         $this->request->allowMethod(['post', 'put', 'patch']);
-        $errors = null;
+        $blogContent = $content = null;
         try {
             $blogContent = $service->copy($this->request->getData());
             if (!$blogContent) {
                 $this->setResponse($this->response->withStatus(400));
                 $message = __d('baser', 'コピーに失敗しました。データが不整合となっている可能性があります。');
             } else {
+                $content = $blogContent->content;
                 $message = __d('baser', 'ブログのコピー「{0}」を追加しました。', $blogContent->content->title);
             }
 
-        } catch (PersistenceFailedException $e) {
+        } catch (RecordNotFoundException $e) {
+            $this->setResponse($this->response->withStatus(404));
+            $message = __d('baser', 'データが見つかりません。');
+        } catch (\Throwable $e) {
             $this->setResponse($this->response->withStatus(500));
-            $errors = $e->getEntity();
-            $message = __d('baser', 'コピーに失敗しました。データが不整合となっている可能性があります。');
+            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
         }
         $this->set([
             'message' => $message,
             'blogContent' => $blogContent,
-            'content' => $blogContent? $blogContent->content : null,
-            'errors' => $errors,
+            'content' => $content
         ]);
-        $this->viewBuilder()->setOption('serialize', ['blogContent', 'content', 'message', 'errors']);
+        $this->viewBuilder()->setOption('serialize', ['blogContent', 'content', 'message']);
     }
 
 }
