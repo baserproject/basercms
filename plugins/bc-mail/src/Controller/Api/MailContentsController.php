@@ -18,6 +18,7 @@ use BaserCore\Controller\Api\BcApiController;
 use BcMail\Service\MailContentsService;
 use BcMail\Service\MailContentsServiceInterface;
 use Cake\Datasource\Exception\RecordNotFoundException;
+use Cake\Http\Exception\ForbiddenException;
 use Cake\ORM\Exception\PersistenceFailedException;
 
 /**
@@ -27,12 +28,43 @@ class MailContentsController extends BcApiController
 {
 
     /**
-     * メールコンテンツAPI 一覧取得
+     * initialize
      * @return void
+     * @checked
+     * @unitTest
+     * @unitTest
      */
-    public function index()
+    public function initialize(): void
     {
-        //todo メールコンテンツAPI 一覧取得
+        parent::initialize();
+        $this->Authentication->allowUnauthenticated(['index']);
+    }
+
+    /**
+     * メールコンテンツAPI 一覧取得
+     * @param MailContentsServiceInterface $service
+     * @return void
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function index(MailContentsServiceInterface $service)
+    {
+        $this->request->allowMethod('get');
+        $queryParams = $this->getRequest()->getQueryParams();
+        if (isset($queryParams['status'])) {
+            if (!$this->isAdminApiEnabled()) throw new ForbiddenException();
+        }
+
+        $queryParams = array_merge([
+            'status' => 'publish'
+        ], $queryParams);
+
+        $this->set([
+            'mailContents' => $this->paginate($service->getIndex($queryParams))
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['mailContents']);
     }
 
     /**
