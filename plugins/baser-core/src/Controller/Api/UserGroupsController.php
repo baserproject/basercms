@@ -16,6 +16,8 @@ use Cake\Core\Exception\Exception;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use Cake\Datasource\Exception\RecordNotFoundException;
+use Cake\ORM\Exception\PersistenceFailedException;
 
 
 /**
@@ -46,12 +48,24 @@ class UserGroupsController extends BcApiController
      * @noTodo
      * @unitTest
      */
-    public function view(UserGroupsServiceInterface $service, $id)
+    public function view(UserGroupsServiceInterface $service, int $id)
     {
+        $this->request->allowMethod(['get']);
+        $userGroup = $message = null;
+        try {
+            $userGroup = $service->get($id);
+        } catch (RecordNotFoundException $e) {
+            $this->setResponse($this->response->withStatus(404));
+            $message = __d('baser', 'データが見つかりません。');
+        } catch (\Throwable $e) {
+            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $this->setResponse($this->response->withStatus(500));
+        }
         $this->set([
-            'userGroups' => $service->get($id)
+            'userGroup' => $userGroup,
+            'message' => $message
         ]);
-        $this->viewBuilder()->setOption('serialize', ['userGroups']);
+        $this->viewBuilder()->setOption('serialize', ['userGroup', 'message']);
     }
 
     /**
@@ -63,22 +77,26 @@ class UserGroupsController extends BcApiController
      */
     public function add(UserGroupsServiceInterface $service)
     {
-        if ($this->request->is('post')) {
-            try {
-                $userGroups = $service->create($this->request->getData());
-                $message = __d('baser', 'ユーザーグループ「{0}」を追加しました。', $userGroups->name);
-            } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
-                $userGroups = $e->getEntity();
-                $this->setResponse($this->response->withStatus(400));
-                $message = __d('baser', '入力エラーです。内容を修正してください。');
-            }
+        $this->request->allowMethod(['post']);
+        $userGroup = $errors = null;
+        try {
+            $userGroup = $service->create($this->request->getData());
+            $message = __d('baser', 'ユーザーグループ「{0}」を追加しました。', $userGroup->name);
+        } catch (PersistenceFailedException $e) {
+            $errors = $e->getEntity()->getErrors();
+            $message = __d('baser', "入力エラーです。内容を修正してください。");
+            $this->setResponse($this->response->withStatus(400));
+        } catch (\Throwable $e) {
+            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $this->setResponse($this->response->withStatus(500));
         }
+
         $this->set([
             'message' => $message,
-            'userGroups' => $userGroups,
-            'errors' => $userGroups->getErrors(),
+            'userGroup' => $userGroup,
+            'errors' => $errors
         ]);
-        $this->viewBuilder()->setOption('serialize', ['message', 'userGroups', 'errors']);
+        $this->viewBuilder()->setOption('serialize', ['message', 'userGroup', 'errors']);
     }
 
     /**
@@ -89,24 +107,31 @@ class UserGroupsController extends BcApiController
      * @noTodo
      * @unitTest
      */
-    public function edit(UserGroupsServiceInterface $service, $id)
+    public function edit(UserGroupsServiceInterface $service, int $id)
     {
-        $userGroups = $service->get($id);
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            try {
-                $userGroups = $service->update($userGroups, $this->request->getData());
-                $message = __d('baser', 'ユーザーグループ「{0}」を更新しました。', $userGroups->name);
-            } catch (\Exception $e) {
-                $this->setResponse($this->response->withStatus(400));
-                $message = __d('baser', '入力エラーです。内容を修正してください。');
-            }
+        $this->request->allowMethod(['patch', 'post', 'put']);
+        $userGroup = $errors = null;
+        try {
+            $userGroup = $service->update($service->get($id), $this->request->getData());
+            $message = __d('baser', 'ユーザーグループ「{0}」を更新しました。', $userGroup->name);
+        } catch (PersistenceFailedException $e) {
+            $errors = $e->getEntity()->getErrors();
+            $message = __d('baser', "入力エラーです。内容を修正してください。");
+            $this->setResponse($this->response->withStatus(400));
+        } catch (RecordNotFoundException $e) {
+            $this->setResponse($this->response->withStatus(404));
+            $message = __d('baser', 'データが見つかりません。');
+        } catch (\Throwable $e) {
+            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $this->setResponse($this->response->withStatus(500));
         }
+
         $this->set([
             'message' => $message,
-            'userGroups' => $userGroups,
-            'errors' => $userGroups->getErrors(),
+            'userGroup' => $userGroup,
+            'errors' => $errors
         ]);
-        $this->viewBuilder()->setOption('serialize', ['userGroups', 'message', 'errors']);
+        $this->viewBuilder()->setOption('serialize', ['userGroup', 'message', 'errors']);
     }
 
     /**
@@ -117,23 +142,27 @@ class UserGroupsController extends BcApiController
      * @noTodo
      * @unitTest
      */
-    public function delete(UserGroupsServiceInterface $service, $id)
+    public function delete(UserGroupsServiceInterface $service, int $id)
     {
-        $userGroups = $service->get($id);
-        if ($this->request->is(['post', 'delete'])) {
-            try {
-                if ($service->delete($id)) {
-                    $message = __d('baser', 'ユーザー: {0} を削除しました。', $userGroups->name);
-                }
-            } catch (Exception $e) {
-                $message = __d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
-            }
+        $this->request->allowMethod(['post', 'delete']);
+        $userGroup = null;
+        try {
+            $userGroup = $service->get($id);
+            $service->delete($id);
+            $message = __d('baser', 'ユーザー: {0} を削除しました。', $userGroup->name);
+        } catch (RecordNotFoundException $e) {
+            $this->setResponse($this->response->withStatus(404));
+            $message = __d('baser', 'データが見つかりません。');
+        } catch (\Throwable $e) {
+            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $this->setResponse($this->response->withStatus(500));
         }
+
         $this->set([
             'message' => $message,
-            'userGroups' => $userGroups
+            'userGroup' => $userGroup
         ]);
-        $this->viewBuilder()->setOption('serialize', ['userGroups', 'message']);
+        $this->viewBuilder()->setOption('serialize', ['userGroup', 'message']);
     }
 
     /**
@@ -159,12 +188,11 @@ class UserGroupsController extends BcApiController
      * @noTodo
      * @unitTest
      */
-    public function copy(UserGroupsServiceInterface $service, $id)
+    public function copy(UserGroupsServiceInterface $service, int $id)
     {
         $this->request->allowMethod(['patch', 'post', 'put']);
 
         $userGroup = null;
-        $errors = null;
         try {
             $userGroup = $service->get($id);
             $rs = $this->UserGroups->copy($id);
@@ -175,18 +203,19 @@ class UserGroupsController extends BcApiController
                 $this->setResponse($this->response->withStatus(400));
                 $message = __d('baser', 'データベース処理中にエラーが発生しました。');
             }
-        } catch (\Exception $e) {
-            $errors = $e->getMessage();
-            $this->setResponse($this->response->withStatus(400));
-            $message = __d('baser', '入力エラーです。内容を修正してください。');
+        } catch (RecordNotFoundException $e) {
+            $this->setResponse($this->response->withStatus(404));
+            $message = __d('baser', 'データが見つかりません。');
+        } catch (\Throwable $e) {
+            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $this->setResponse($this->response->withStatus(500));
         }
 
         $this->set([
             'message' => $message,
-            'userGroup' => $userGroup,
-            'errors' => $errors,
+            'userGroup' => $userGroup
         ]);
 
-        $this->viewBuilder()->setOption('serialize', ['message', 'userGroup', 'errors']);
+        $this->viewBuilder()->setOption('serialize', ['message', 'userGroup']);
     }
 }
