@@ -17,6 +17,7 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BcWidgetArea\Service\WidgetAreasService;
 use BcWidgetArea\Service\WidgetAreasServiceInterface;
+use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\ORM\Exception\PersistenceFailedException;
 
 /**
@@ -53,7 +54,8 @@ class WidgetAreasController extends BcApiController
      * @noTodo
      * @unitTest
      */
-    public function list(WidgetAreasServiceInterface $service){
+    public function list(WidgetAreasServiceInterface $service)
+    {
         $this->set([
             'widgetAreas' => $service->getList()
         ]);
@@ -72,23 +74,23 @@ class WidgetAreasController extends BcApiController
     public function add(WidgetAreasServiceInterface $service)
     {
         $this->request->allowMethod(['post', 'put']);
-        $widgetArea = null;
+        $widgetArea = $errors = null;
         try {
             $widgetArea = $service->create($this->getRequest()->getData());
             $message = __d('baser', '新しいウィジェットエリアを保存しました。');
         } catch (PersistenceFailedException $e) {
-            $widgetArea = $e->getEntity();
             $this->setResponse($this->response->withStatus(400));
-            $message = __d('baser', '新しいウィジェットエリアの保存に失敗しました。');
+            $errors = $e->getEntity()->getErrors();
+            $message = __d('baser', "入力エラーです。内容を修正してください。");
         } catch (\Throwable $e) {
-            $this->setResponse($this->response->withStatus(400));
-            $message = __d('baser', $e->getMessage());
+            $this->setResponse($this->response->withStatus(500));
+            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
         }
 
         $this->set([
             'message' => $message,
             'widgetArea' => $widgetArea,
-            'errors' => $widgetArea ? $widgetArea->getErrors() : null
+            'errors' => $errors
         ]);
         $this->viewBuilder()->setOption('serialize', ['message', 'widgetArea', 'errors']);
     }
@@ -107,23 +109,26 @@ class WidgetAreasController extends BcApiController
     {
         $this->request->allowMethod(['post', 'put']);
 
-        $widgetArea = null;
+        $widgetArea = $errors = null;
         try {
             $widgetArea = $service->update($service->get($id), $this->request->getData());
             $message = __d('baser', 'ウィジェットエリア「{0}」を更新しました。', $widgetArea->name);
         } catch (PersistenceFailedException $e) {
-            $widgetArea = $e->getEntity();
             $this->setResponse($this->response->withStatus(400));
-            $message = __d('baser', '入力エラーです。内容を修正してください。');
+            $errors = $e->getEntity()->getErrors();
+            $message = __d('baser', "入力エラーです。内容を修正してください。");
+        } catch (RecordNotFoundException $e) {
+            $this->setResponse($this->response->withStatus(404));
+            $message = __d('baser', 'データが見つかりません。');
         } catch (\Throwable $e) {
-            $this->setResponse($this->response->withStatus(400));
-            $message = __d('baser', $e->getMessage());
+            $this->setResponse($this->response->withStatus(500));
+            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
         }
 
         $this->set([
             'message' => $message,
             'widgetArea' => $widgetArea,
-            'errors' => $widgetArea ? $widgetArea->getErrors() : null
+            'errors' => $errors
         ]);
         $this->viewBuilder()->setOption('serialize', ['widgetArea', 'message', 'errors']);
     }
@@ -147,9 +152,12 @@ class WidgetAreasController extends BcApiController
             $widgetArea = $service->get($id);
             $service->delete($id);
             $message = __d('baser', 'ウィジェットエリア「{0}」を削除しました。', $widgetArea->name);
+        } catch (RecordNotFoundException $e) {
+            $this->setResponse($this->response->withStatus(404));
+            $message = __d('baser', 'データが見つかりません。');
         } catch (\Throwable $e) {
-            $this->setResponse($this->response->withStatus(400));
-            $message = __d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
+            $this->setResponse($this->response->withStatus(500));
+            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
         }
 
         $this->set([
@@ -194,8 +202,8 @@ class WidgetAreasController extends BcApiController
             );
             $message = __d('baser', '一括処理が完了しました。');
         } catch (\Throwable $e) {
-            $this->setResponse($this->response->withStatus(400));
-            $message = __d('baser', $e->getMessage());
+            $this->setResponse($this->response->withStatus(500));
+            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
         }
         $this->set(['message' => $message]);
         $this->viewBuilder()->setOption('serialize', ['message']);
@@ -212,20 +220,28 @@ class WidgetAreasController extends BcApiController
     public function update_title(WidgetAreasServiceInterface $service, int $widgetAreaId)
     {
         $this->getRequest()->allowMethod(['post', 'put']);
-        $entity = $service->get($widgetAreaId);
+        $entity = $errors = null;
         try {
-            $entity = $service->update($entity, $this->getRequest()->getData());
+            $entity = $service->update($service->get($widgetAreaId), $this->getRequest()->getData());
             $message = __d('baser', 'ウィジェットエリア「{0}」を更新しました。', $entity->name);
             $this->BcMessage->setSuccess($message, true, false);
+        } catch (PersistenceFailedException $e) {
+            $this->setResponse($this->response->withStatus(400));
+            $errors = $e->getEntity()->getErrors();
+            $message = __d('baser', "入力エラーです。内容を修正してください。");
+        } catch (RecordNotFoundException $e) {
+            $this->setResponse($this->response->withStatus(404));
+            $message = __d('baser', 'データが見つかりません。');
         } catch (\Throwable $e) {
             $this->setResponse($this->response->withStatus(500));
-            $message = __d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
+            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
         }
         $this->set([
             'message' => $message,
-            'widgetArea' => $entity ? $entity->toArray() : null,
+            'widgetArea' => $entity?->toArray(),
+            'errors' => $errors
         ]);
-        $this->viewBuilder()->setOption('serialize', ['message', 'widgetArea']);
+        $this->viewBuilder()->setOption('serialize', ['message', 'widgetArea', 'errors']);
     }
 
     /**
@@ -240,19 +256,28 @@ class WidgetAreasController extends BcApiController
     public function update_widget(WidgetAreasServiceInterface $service, int $widgetAreaId)
     {
         $this->getRequest()->allowMethod(['post', 'put']);
+        $entity = $errors = null;
         try {
             $entity = $service->updateWidget($widgetAreaId, $this->getRequest()->getData());
             $message = __d('baser', 'ウィジェットエリア「{0}」を更新しました。', $entity->name);
             $this->BcMessage->setSuccess($message, true, false);
+        } catch (PersistenceFailedException $e) {
+            $this->setResponse($this->response->withStatus(400));
+            $errors = $e->getEntity()->getErrors();
+            $message = __d('baser', "入力エラーです。内容を修正してください。");
+        } catch (RecordNotFoundException $e) {
+            $this->setResponse($this->response->withStatus(404));
+            $message = __d('baser', 'データが見つかりません。');
         } catch (\Throwable $e) {
             $this->setResponse($this->response->withStatus(500));
-            $message = __d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
+            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
         }
         $this->set([
             'message' => $message,
-            'widgetArea' => $entity ? $entity->toArray() : null,
+            'widgetArea' => $entity?->toArray(),
+            'errors' => $errors
         ]);
-        $this->viewBuilder()->setOption('serialize', ['message', 'widgetArea']);
+        $this->viewBuilder()->setOption('serialize', ['message', 'widgetArea', 'errors']);
     }
 
     /**
@@ -266,19 +291,24 @@ class WidgetAreasController extends BcApiController
     public function update_sort(WidgetAreasServiceInterface $service, int $widgetAreaId)
     {
         $this->getRequest()->allowMethod(['post', 'put']);
+        $entity = $errors = null;
         try {
             $entity = $service->updateSort($widgetAreaId, $this->getRequest()->getData());
             $message = __d('baser', 'ウィジェットエリア「{0}」の並び順を更新しました。', $entity->name);
             $this->BcMessage->setSuccess($message, true, false);
+        } catch (RecordNotFoundException $e) {
+            $this->setResponse($this->response->withStatus(404));
+            $message = __d('baser', 'データが見つかりません。');
         } catch (\Throwable $e) {
             $this->setResponse($this->response->withStatus(500));
-            $message = __d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
+            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
         }
         $this->set([
             'message' => $message,
-            'widgetArea' => $entity ? $entity->toArray() : null,
+            'widgetArea' => $entity?->toArray(),
+            'errors' => $errors
         ]);
-        $this->viewBuilder()->setOption('serialize', ['message', 'widgetArea']);
+        $this->viewBuilder()->setOption('serialize', ['message', 'widgetArea', 'errors']);
     }
 
     /**
@@ -294,17 +324,21 @@ class WidgetAreasController extends BcApiController
     public function delete_widget(WidgetAreasServiceInterface $service, int $widgetAreaId, int $id)
     {
         $this->getRequest()->allowMethod(['post', 'put']);
+        $entity = null;
         try {
             $entity = $service->deleteWidget($widgetAreaId, $id);
             $message = __d('baser', 'ウィジェットを削除しました。');
             $this->BcMessage->setSuccess($message, true, false);
+        } catch (RecordNotFoundException $e) {
+            $this->setResponse($this->response->withStatus(404));
+            $message = __d('baser', 'データが見つかりません。');
         } catch (\Throwable $e) {
             $this->setResponse($this->response->withStatus(500));
-            $message = __d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
+            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
         }
         $this->set([
             'message' => $message,
-            'widgetArea' => $entity ? $entity->toArray() : null,
+            'widgetArea' => $entity?->toArray(),
         ]);
         $this->viewBuilder()->setOption('serialize', ['message', 'widgetArea']);
     }
@@ -322,10 +356,20 @@ class WidgetAreasController extends BcApiController
     public function view(WidgetAreasServiceInterface $service, $id)
     {
         $this->getRequest()->allowMethod(['get']);
-
+        $widgetArea = $message = null;
+        try {
+            $widgetArea = $service->get($id);
+        } catch (RecordNotFoundException $e) {
+            $this->setResponse($this->response->withStatus(404));
+            $message = __d('baser', 'データが見つかりません。');
+        } catch (\Throwable $e) {
+            $this->setResponse($this->response->withStatus(500));
+            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+        }
         $this->set([
-            'widgetArea' => $service->get($id)
+            'widgetArea' => $widgetArea,
+            'message' => $message
         ]);
-        $this->viewBuilder()->setOption('serialize', ['widgetArea']);
+        $this->viewBuilder()->setOption('serialize', ['widgetArea', 'message']);
     }
 }

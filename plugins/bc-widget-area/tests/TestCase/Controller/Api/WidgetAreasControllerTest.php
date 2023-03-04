@@ -131,7 +131,7 @@ class WidgetAreasControllerTest extends BcTestCase
         //戻る値を確認
         $result = json_decode((string)$this->_response->getBody());
         //メッセージを確認
-        $this->assertEquals('新しいウィジェットエリアの保存に失敗しました。', $result->message);
+        $this->assertEquals('入力エラーです。内容を修正してください。', $result->message);
     }
 
     /**
@@ -182,10 +182,10 @@ class WidgetAreasControllerTest extends BcTestCase
         //APIを呼ぶ
         $this->post("/baser/api/bc-widget-area/widget_areas/edit/31.json?token=" . $this->accessToken, $data);
         // レスポンスコードを確認する
-        $this->assertResponseCode(400);
+        $this->assertResponseCode(404);
         // 戻る値を確認
         $result = json_decode((string)$this->_response->getBody());
-        $this->assertEquals('Record not found in table "widget_areas"', $result->message);
+        $this->assertEquals('データが見つかりません。', $result->message);
     }
 
     /**
@@ -222,11 +222,11 @@ class WidgetAreasControllerTest extends BcTestCase
         //APIを呼ぶ
         $this->post("/baser/api/bc-widget-area/widget_areas/delete/1.json?token=" . $this->accessToken);
         // レスポンスコードを確認する
-        $this->assertResponseCode(400);
+        $this->assertResponseCode(404);
         // 戻る値を確認
         $result = json_decode((string)$this->_response->getBody());
         //メッセージを確認
-        $this->assertEquals('データベース処理中にエラーが発生しました。Record not found in table "widget_areas"', $result->message);
+        $this->assertEquals('データが見つかりません。', $result->message);
     }
 
     /**
