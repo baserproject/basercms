@@ -12,19 +12,17 @@
 namespace BaserCore\Model\Table;
 
 use ArrayObject;
+use BaserCore\Utility\BcUtil;
+use Cake\ORM\Association\BelongsToMany;
 use Cake\ORM\Query;
 use Cake\ORM\Table;
 use Cake\Core\Configure;
 use Cake\I18n\FrozenTime;
-use Cake\Filesystem\Folder;
-use Cake\Http\ServerRequest;
 use Cake\Event\EventInterface;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use Cake\Datasource\EntityInterface;
-use Cake\Datasource\ConnectionManager;
-use BaserCore\Controller\AppController;
 
 /**
  * Class AppTable
@@ -62,38 +60,80 @@ class AppTable extends Table
     public $publishEndField = 'publish_end';
 
     /**
-     * コンストラクタ
+     * テーブルをセット
      *
-     * @return void
+     * プレフィックスを追加する
+     *
+     * @param string $table
+     * @return AppTable
+     * @checked
+     * @noTodo
      */
-    public function __construct(array $config = [])
+    public function setTable(string $table)
     {
-        // TODO ucmitz 暫定措置
-        // >>>
-        parent::__construct($config);
-        return;
-        // <<<
-        $db = ConnectionManager::get('default');
-        if (Configure::read('BcRequest.asset')) {
-            parent::__construct($id, $table, $ds);
-            return;
+        $table = $this->addPrefix($table);
+        return parent::setTable($table);
+    }
+
+    /**
+     * テーブルを取得
+     *
+     * プレフィックスを追加する
+     *
+     * @return string
+     * @checked
+     * @noTodo
+     */
+    public function getTable(): string
+    {
+        $table = parent::getTable();
+        $this->_table = $this->addPrefix($table);
+        return $this->_table;
+    }
+
+    /**
+     * Belongs To Many
+     *
+     * joinTable にプレフィックスを追加
+     *
+     * @param string $associated
+     * @param array $options
+     * @return BelongsToMany
+     * @checked
+     * @noTodo
+     */
+    public function belongsToMany(string $associated, array $options = []): BelongsToMany
+    {
+        if(isset($options['joinTable'])) {
+            $options['joinTable'] = $this->addPrefix($options['joinTable']);
         }
-        $request = new ServerRequest();
-        if (isset($db->config['datasource'])) {
-            if ($db->config['datasource'] != '') {
-                parent::__construct($id, $table, $ds);
-            } elseif ($db->config['login'] == 'dummy' &&
-                $db->config['password'] == 'dummy' &&
-                $db->config['database'] == 'dummy' &&
-                $request->url === false) {
-                // データベース設定がインストール段階の状態でトップページへのアクセスの場合、
-                // 初期化ページにリダイレクトする
-                $AppController = new AppController();
-                session_start();
-                $_SESSION['Message']['flash'] = ['message' => __d('baser', 'インストールに失敗している可能性があります。<br />インストールを最初からやり直すにはbaserCMSを初期化してください。'), 'layout' => 'default'];
-                $AppController->redirect(BC_BASE_URL . 'installations/reset');
-            }
+        return parent::belongsToMany($associated, $options);
+    }
+
+    /**
+     * テーブル名にプレフィックスを追加する
+     *
+     * $this->getConnection()->config() を利用するとユニットテストで問題が発生するため、BcUtil::getCurrentDbConfig()を利用する
+     *
+     * $this->getConnection()->config()を利用すると、
+     * そのテーブルに connection が設定されてしまう。
+     *
+     * ユニットテストの dataProvider で、テーブルを初期化する場合、
+     * タイミング的に、接続についてテスト用のエイリアスが設定されていないので、
+     * テスト用の接続ではなく、 default がセットされてしまう。
+     *
+     * @param $table
+     * @return string
+     * @checked
+     * @noTodo
+     */
+    public function addPrefix($table)
+    {
+        $prefix = BcUtil::getCurrentDbConfig()['prefix'];
+        if(!preg_match('/^' . $prefix . '/', $table)) {
+            return $prefix . $table;
         }
+        return $table;
     }
 
     /**

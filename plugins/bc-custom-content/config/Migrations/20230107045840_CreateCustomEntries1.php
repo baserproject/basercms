@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-use Migrations\AbstractMigration;
+use BaserCore\Database\Migration\BcMigration;
 
-class CreateCustomEntries1 extends AbstractMigration
+class CreateCustomEntries1 extends BcMigration
 {
     /**
      * Up Method.

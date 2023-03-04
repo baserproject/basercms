@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-use Migrations\AbstractSeed;
+use BaserCore\Database\Migration\BcSeed;
 
 /**
  * UploaderFiles seed.
  */
-class UploaderFilesSeed extends AbstractSeed
+class UploaderFilesSeed extends BcSeed
 {
     /**
      * Run Method.

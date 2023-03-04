@@ -61,6 +61,16 @@ class BcSchema extends TableSchema
     }
 
     /**
+     * テーブルをセットする
+     *
+     * @param string $table
+     */
+    public function setTable(string $table)
+    {
+        $this->_table = $table;
+    }
+
+    /**
      * コネクション名を取得
      * @return string
      * @checked

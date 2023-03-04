@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-use Migrations\AbstractMigration;
+use BaserCore\Database\Migration\BcMigration;
 
-class CreateSiteConfigs extends AbstractMigration
+class CreateSiteConfigs extends BcMigration
 {
     /**
      * Change Method.
@@ -14,12 +14,7 @@ class CreateSiteConfigs extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table('site_configs', ['id' => false]);
-        $table->addColumn('id', 'integer', [
-            'autoIncrement' => true,
-            'default' => null,
-            'null' => false,
-        ]);
+        $table = $this->table('site_configs');
         $table->addColumn('name', 'string', [
             'default' => null,
             'limit' => 255,
@@ -37,9 +32,6 @@ class CreateSiteConfigs extends AbstractMigration
         $table->addColumn('modified', 'datetime', [
             'default' => null,
             'null' => true,
-        ]);
-        $table->addPrimaryKey([
-            'id',
         ]);
         $table->create();
     }

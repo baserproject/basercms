@@ -229,7 +229,7 @@ class UtilitiesController extends BcAdminAppController
         $this->request->allowMethod(['post']);
         try {
             if ($service->resetData()) {
-                $this->BcMessage->setInfo(__d('baser', 'データのリセットがが完了しました。'));
+                $this->BcMessage->setInfo(__d('baser', 'データのリセットが完了しました。'));
             } else {
                 $this->BcMessage->setError(__d('baser', 'データのリセットが完了しましたが、いくつかの処理に失敗しています。ログを確認してください。'));
             }

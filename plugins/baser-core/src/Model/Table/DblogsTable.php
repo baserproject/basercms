@@ -11,13 +11,12 @@
 
 namespace BaserCore\Model\Table;
 
-use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 
-class DblogsTable extends Table
+class DblogsTable extends AppTable
 {
     /**
      * Initialize

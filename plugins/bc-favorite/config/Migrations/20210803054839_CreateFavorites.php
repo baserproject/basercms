@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-use Migrations\AbstractMigration;
+use BaserCore\Database\Migration\BcMigration;
 
-class CreateFavorites extends AbstractMigration
+class CreateFavorites extends BcMigration
 {
     /**
      * Up Method.
@@ -14,10 +14,8 @@ class CreateFavorites extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table('favorites', ['id' => false]);
+        $table = $this->table('favorites');
         $table
-            ->addColumn('id', 'integer', ['autoIncrement' => true, 'null' => false, 'default' => null, 'limit' => 8])
-            ->addPrimaryKey(['id'])
             ->addColumn('user_id', 'integer', ['null' => true, 'default' => null, 'limit' => 8])
             ->addColumn('name', 'string', ['null' => true, 'default' => null, 'limit' => null])
             ->addColumn('url', 'string', ['null' => true, 'default' => null, 'limit' => null])

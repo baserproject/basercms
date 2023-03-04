@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-use Migrations\AbstractMigration;
+use BaserCore\Database\Migration\BcMigration;
 
-class CreatePermissions extends AbstractMigration
+class CreatePermissions extends BcMigration
 {
     /**
      * Change Method.
@@ -14,12 +14,7 @@ class CreatePermissions extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table('permissions', ['id' => false]);
-        $table->addColumn('id', 'integer', [
-            'autoIncrement' => true,
-            'default' => null,
-            'null' => false,
-        ]);
+        $table = $this->table('permissions');
         $table->addColumn('no', 'integer', [
             'default' => null,
             'limit' => 11,
@@ -65,9 +60,6 @@ class CreatePermissions extends AbstractMigration
         $table->addColumn('modified', 'datetime', [
             'default' => null,
             'null' => true,
-        ]);
-        $table->addPrimaryKey([
-            'id',
         ]);
         $table->create();
     }

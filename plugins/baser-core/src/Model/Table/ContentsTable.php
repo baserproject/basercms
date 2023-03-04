@@ -860,6 +860,7 @@ class ContentsTable extends AppTable
      */
     public function createUrl($id)
     {
+        $prefix = $this->getConnection()->config()['prefix'];
         switch((int)$id) {
             case null:
                 return false;
@@ -878,7 +879,7 @@ class ContentsTable extends AppTable
                 $content = $connection
                     ->newQuery()
                     ->select(['lft', 'rght'])
-                    ->from('contents')
+                    ->from($prefix . 'contents')
                     ->where(['id' => $id, 'deleted_date IS' => null])
                     ->execute()
                     ->fetchAll('assoc');
@@ -890,7 +891,7 @@ class ContentsTable extends AppTable
                 $parents = $connection
                     ->newQuery()
                     ->select(['name', 'plugin', 'type'])
-                    ->from('contents')
+                    ->from($prefix . 'contents')
                     ->where(['lft <=' => $content['lft'], 'rght >=' => $content['rght'], 'deleted_date IS' => null])
                     ->order(['lft' => 'ASC'])
                     ->execute()

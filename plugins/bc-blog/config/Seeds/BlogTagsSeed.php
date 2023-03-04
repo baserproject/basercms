@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-use Migrations\AbstractSeed;
+use BaserCore\Database\Migration\BcSeed;
 
 /**
  * BlogTags seed.
  */
-class BlogTagsSeed extends AbstractSeed
+class BlogTagsSeed extends BcSeed
 {
     /**
      * Run Method.

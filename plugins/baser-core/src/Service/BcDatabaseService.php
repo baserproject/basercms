@@ -13,6 +13,7 @@ namespace BaserCore\Service;
 
 use BaserCore\Database\Schema\BcSchema;
 use BaserCore\Error\BcException;
+use BaserCore\Model\Table\AppTable;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
 use Cake\Cache\Cache;
@@ -397,14 +398,11 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         }
 
         $table = basename($options['path'], '.csv');
-        $appTable = TableRegistry::getTableLocator()
-            ->get('BaserCore.App');
-        $schema = $appTable
-            ->getConnection()
-            ->getSchemaCollection()
-            ->describe($table);
-        $appTable->setTable($table);
-        $appTable->setSchema($schema);
+        $locator = TableRegistry::getTableLocator();
+        $locator->setFallbackClassName(AppTable::class);
+        $appTable = $locator->get(Inflector::camelize($table), ['allowFallbackClass' => true]);
+        $schema = $appTable->getSchema();
+
         $indexField = $schema->getPrimaryKey()[0];
         $records = $this->loadCsvToArray($options['path'], $options['encoding']);
         if ($records) {
@@ -499,6 +497,8 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      */
     public function truncate($table): bool
     {
+        $locator = TableRegistry::getTableLocator();
+        $locator->setFallbackClassName(AppTable::class);
         $table = TableRegistry::getTableLocator()->get(
             Inflector::camelize($table),
             ['allowFallbackClass' => true]
@@ -898,6 +898,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
             ->listTables();
         $plugins = Plugin::loaded();
         $list = [];
+        $prefix = BcUtil::getCurrentDbConfig()['prefix'];
         foreach($plugins as $value) {
             $pluginPath = BcUtil::getPluginPath($value);
             if (!$pluginPath) continue;
@@ -908,9 +909,10 @@ class BcDatabaseService implements BcDatabaseServiceInterface
             if (empty($files[1])) continue;
             foreach($files[1] as $file) {
                 if (!preg_match('/Create([a-zA-Z]+)\./', $file, $matches)) continue;
-                $checkName = Inflector::tableize($matches[1]);
+                $tableName = Inflector::tableize($matches[1]);
+                $checkName = $prefix . $tableName;
                 if (in_array($checkName, $tables)) {
-                    $list[$value][] = $checkName;
+                    $list[$value][] = $tableName;
                 }
             }
         }
@@ -947,6 +949,13 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      */
     public function writeSchema($table, $options)
     {
+        $options = array_merge([
+            'path' => '',
+            'prefix' => ''
+        ], $options);
+
+        $prefixTable = $options['prefix'] . $table;
+
         $dir = dirname($options['path']);
         if (!is_dir($dir)) {
             $folder = new Folder();
@@ -956,7 +965,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
             ->get('BaserCore.App')
             ->getConnection()
             ->getSchemaCollection()
-            ->describe($table);
+            ->describe($prefixTable);
         $schema = $this->_generateSchema($describe);
         $renderer = new View();
         $renderer->disableAutoLayout();
@@ -1080,12 +1089,15 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         $options = array_merge([
             'type' => 'create',
             'path' => '',
-            'file' => ''
+            'file' => '',
+            'prefix' => ''
         ], $options);
         $schemaName = basename($options['file'], '.php');
         require_once $options['path'] . $options['file'];
         /* @var BcSchema $schema */
         $schema = new $schemaName();
+        $schema->setTable($options['prefix'] . $schema->table);
+
         switch($options['type']) {
             case 'create':
                 $schema->create();
@@ -1201,7 +1213,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
     {
         $db = $this->getDataSource($dbConfigKeyName, $dbConfig);
         if (!$dbConfig) $dbConfig = ConnectionManager::getConfig($dbConfigKeyName);
-        $prefix = Configure::read('Datasources.default.prefix');
+        $prefix = BcUtil::getCurrentDbConfig()['prefix'];
         $datasource = strtolower(str_replace('Cake\\Database\\Driver\\', '', $dbConfig['driver']));
         switch($datasource) {
             case 'mysql':

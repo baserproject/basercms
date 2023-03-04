@@ -48,7 +48,7 @@ class UtilitiesService implements UtilitiesServiceInterface
 
     /**
      * コンテンツツリーの構造をチェックする
-     * 
+     *
      * @return bool
      * @checked
      * @noTodo
@@ -70,7 +70,7 @@ class UtilitiesService implements UtilitiesServiceInterface
 
     /**
      * コンテンツツリーをリセットし全て同階層にする
-     * 
+     *
      * @checked
      * @noTodo
      * @unitTest
@@ -84,7 +84,7 @@ class UtilitiesService implements UtilitiesServiceInterface
     /**
      * ツリー構造が壊れていないか確認する
      * CakePHP2系の TreeBehavior より移植
-     * 
+     *
      * @param Table $table
      * @return array|false
      * @checked
@@ -200,7 +200,7 @@ class UtilitiesService implements UtilitiesServiceInterface
 
     /**
      * クレジットを取得する
-     * 
+     *
      * @return mixed|null
      * @checked
      * @noTodo
@@ -233,7 +233,7 @@ class UtilitiesService implements UtilitiesServiceInterface
 
     /**
      * ログのZipファイルを作成する
-     * 
+     *
      * @return Simplezip|false
      * @checked
      * @noTodo
@@ -255,7 +255,7 @@ class UtilitiesService implements UtilitiesServiceInterface
 
     /**
      * ログを削除する
-     * 
+     *
      * @return bool
      * @checked
      * @noTodo
@@ -278,7 +278,7 @@ class UtilitiesService implements UtilitiesServiceInterface
 
     /**
      * DBバックアップを作成する
-     * 
+     *
      * @param $encoding
      * @return Simplezip|false
      * @checked
@@ -346,15 +346,19 @@ class UtilitiesService implements UtilitiesServiceInterface
         $dbService->clearAppTableList();
         $tableList = $dbService->getAppTableList();
 
+        $prefix = BcUtil::getCurrentDbConfig()['prefix'];
+
         foreach($tables as $table) {
-            if (!isset($tableList[$plugin]) || !in_array($table, $tableList[$plugin])) continue;
-            if (!$dbService->writeSchema($table, [
-                'path' => $path
+            $baredTable = preg_replace('/^' . $prefix . '/', '', $table);
+            if (!isset($tableList[$plugin]) || !in_array($baredTable, $tableList[$plugin])) continue;
+            if (!$dbService->writeSchema($baredTable, [
+                'path' => $path,
+                'prefix' => $prefix
             ])) {
                 return false;
             }
             if (!$dbService->writeCsv($table, [
-                'path' => $path . $table . '.csv',
+                'path' => $path . $baredTable . '.csv',
                 'encoding' => $encoding
             ])) {
                 return false;
@@ -365,7 +369,7 @@ class UtilitiesService implements UtilitiesServiceInterface
 
     /**
      * バックアップファイルよりレストアを行う
-     * 
+     *
      * @param array $postData
      * @return bool
      * @checked
@@ -445,6 +449,8 @@ class UtilitiesService implements UtilitiesServiceInterface
         /* @var BcDatabaseService $dbService */
         $dbService = $this->getService(BcDatabaseServiceInterface::class);
 
+        $prefix = BcUtil::getCurrentDbConfig()['prefix'];
+
         // テーブルを削除する
         foreach($files[1] as $file) {
             if (!preg_match("/\.php$/", $file)) continue;
@@ -452,7 +458,8 @@ class UtilitiesService implements UtilitiesServiceInterface
                 $dbService->loadSchema([
                     'type' => 'drop',
                     'path' => $path,
-                    'file' => $file
+                    'file' => $file,
+                    'prefix' => $prefix
                 ]);
             } catch (BcException $e) {
                 $this->log($e->getMessage());
@@ -467,7 +474,8 @@ class UtilitiesService implements UtilitiesServiceInterface
                 if (!$dbService->loadSchema([
                     'type' => 'create',
                     'path' => $path,
-                    'file' => $file
+                    'file' => $file,
+                    'prefix' => $prefix
                 ])) {
                     $result = false;
                     continue;
@@ -500,7 +508,7 @@ class UtilitiesService implements UtilitiesServiceInterface
 
     /**
      * データをリセットする
-     * 
+     *
      * @return bool
      * @checked
      * @noTodo

@@ -76,6 +76,7 @@ class BlogPostsTable extends BlogAppTable
             'className' => 'BcBlog.BlogTags',
             'foreignKey' => 'blog_post_id',
             'targetForeignKey' => 'blog_tag_id',
+            'through' => 'BcBlog.BlogPostsBlogTags',
             'joinTable' => 'blog_posts_blog_tags',
         ]);
         $this->hasMany('BlogComments', [

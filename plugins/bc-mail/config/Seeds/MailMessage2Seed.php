@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-use Migrations\AbstractSeed;
+use BaserCore\Database\Migration\BcSeed;
 
 /**
  * MailMessage2 seed.
  */
-class MailMessage2Seed extends AbstractSeed
+class MailMessage2Seed extends BcSeed
 {
     /**
      * Run Method.

@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-use Migrations\AbstractSeed;
+use BaserCore\Database\Migration\BcSeed;
 
 /**
  * Favorites seed.
  */
-class FavoritesSeed extends AbstractSeed
+class FavoritesSeed extends BcSeed
 {
     /**
      * Run Method.

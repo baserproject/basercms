@@ -13,7 +13,6 @@ namespace BaserCore\Model\Table;
 
 use Cake\Datasource\EntityInterface;
 use Cake\Utility\Security;
-use Cake\ORM\Table;
 use Cake\ORM\Entity;
 use Cake\ORM\RulesChecker;
 use BaserCore\Annotation\NoTodo;
@@ -24,7 +23,7 @@ use BaserCore\Annotation\UnitTest;
  * Class LoginStoresTable
  * @package BaserCore\Model\Table
  */
-class LoginStoresTable extends Table
+class LoginStoresTable extends AppTable
 {
     /**
      * key name

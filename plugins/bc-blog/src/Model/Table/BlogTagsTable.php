@@ -54,6 +54,7 @@ class BlogTagsTable extends BlogAppTable
             'className' => 'BcBlog.BlogPosts',
             'foreignKey' => 'blog_tag_id',
             'targetForeignKey' => 'blog_post_id',
+            'through' => 'BcBlog.BlogPostsBlogTags',
             'joinTable' => 'blog_posts_blog_tags',
         ]);
     }

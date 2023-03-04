@@ -72,6 +72,7 @@ class UserGroupsTable extends AppTable
             'className' => 'BaserCore.Users',
             'foreignKey' => 'user_group_id',
             'targetForeignKey' => 'user_id',
+            'through' => 'BaserCore.UsersUserGroups',
             'joinTable' => 'users_user_groups',
         ]);
         $this->hasMany('Permissions', [

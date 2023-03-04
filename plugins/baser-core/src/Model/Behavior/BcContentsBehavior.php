@@ -53,13 +53,15 @@ class BcContentsBehavior extends Behavior
     public function initialize(array $config): void
     {
         $this->table = $this->table();
+        $prefix = $this->table->getConnection()->config()['prefix'];
+        $type = preg_replace('/^' . $prefix . '/', '', $this->table->getTable());
         if (!$this->table-> __isset('Contents')) {
             $this->table->hasOne('Contents', ['className' => 'BaserCore.Contents'])
             ->setForeignKey('entity_id')
             ->setDependent(false)
             ->setJoinType('INNER')
             ->setConditions([
-                'Contents.type' => Inflector::classify($this->table->getTable()),
+                'Contents.type' => Inflector::classify($type),
                 'Contents.alias_id IS' => null,
             ]);
         }

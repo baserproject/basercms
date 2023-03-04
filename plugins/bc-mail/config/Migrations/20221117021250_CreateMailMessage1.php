@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-use Migrations\AbstractMigration;
+use BaserCore\Database\Migration\BcMigration;
 
-class CreateMailMessage1 extends AbstractMigration
+class CreateMailMessage1 extends BcMigration
 {
     /**
      * Up Method.

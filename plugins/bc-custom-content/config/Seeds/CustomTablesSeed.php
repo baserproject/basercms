@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-use Migrations\AbstractSeed;
+use BaserCore\Database\Migration\BcSeed;
 
 /**
  * CustomTables seed.
  */
-class CustomTablesSeed extends AbstractSeed
+class CustomTablesSeed extends BcSeed
 {
     /**
      * Run Method.

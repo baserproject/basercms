@@ -360,8 +360,10 @@ class BcUtil
             } catch (Exception $ex) {
                 return [];
             }
-            $sources = ConnectionManager::get('default')->getSchemaCollection()->listTables();
-            if (!is_array($sources) || in_array(strtolower('plugins'), array_map('strtolower', $sources))) {
+
+            $prefix =  self::getCurrentDbConfig()['prefix'];
+            $sources = self::getCurrentDb()->getSchemaCollection()->listTables();
+            if (!is_array($sources) || in_array($prefix . strtolower('plugins'), array_map('strtolower', $sources))) {
                 $plugins = $pluginsTable->find('all', ['conditions' => ['status' => true], 'order' => 'priority']);
                 TableRegistry::getTableLocator()->remove('Plugin');
                 if ($plugins->count()) {
@@ -380,6 +382,26 @@ class BcUtil
             }
         }
         return $enablePlugins;
+    }
+
+    /**
+     * 現在のDB接続の設定を取得する
+     *
+     * @return array
+     */
+    public static function getCurrentDbConfig()
+    {
+        return self::getCurrentDb()->config();
+    }
+
+    /**
+     * 現在のDB接続を取得する
+     *
+     * @return \Cake\Database\Connection
+     */
+    public static function getCurrentDb()
+    {
+        return TableRegistry::getTableLocator()->get('BaserCore.App')->getConnection();
     }
 
     /**

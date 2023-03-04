@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-use Migrations\AbstractSeed;
+use BaserCore\Database\Migration\BcSeed;
 
 /**
  * Contents seed.
  */
-class ContentsSeed extends AbstractSeed
+class ContentsSeed extends BcSeed
 {
     /**
      * Run Method.

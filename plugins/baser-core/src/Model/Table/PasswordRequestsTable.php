@@ -16,7 +16,6 @@ use BaserCore\Model\Entity\User;
 use Cake\Datasource\EntityInterface;
 use Cake\ORM\Association\BelongsTo;
 use Cake\ORM\Behavior\TimestampBehavior;
-use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -35,7 +34,7 @@ use BaserCore\Annotation\Checked;
  * @method User findOrCreate($search, callable $callback = null, $options = [])
  * @mixin TimestampBehavior
  */
-class PasswordRequestsTable extends Table
+class PasswordRequestsTable extends AppTable
 {
 
     /**

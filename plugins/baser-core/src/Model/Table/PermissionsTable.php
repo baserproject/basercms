@@ -12,13 +12,11 @@
 namespace BaserCore\Model\Table;
 
 use ArrayObject;
-use Cake\Core\Configure;
 use Cake\Event\EventInterface;
 use Cake\Validation\Validator;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
-use Cake\ORM\TableRegistry;
 use Cake\Datasource\EntityInterface;
 use Cake\Datasource\ConnectionManager;
 use BaserCore\Model\Table\Exception\CopyFailedException;

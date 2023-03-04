@@ -13,9 +13,7 @@ namespace BcBlog\Model\Table;
 
 /**
  * ブログタグリンクモデル
- *
- * @package Blog.Model
  */
-class BlogPostsBlogTag extends BlogAppTable
+class BlogPostsBlogTagsTable extends BlogAppTable
 {
 }

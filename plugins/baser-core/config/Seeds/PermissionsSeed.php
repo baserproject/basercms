@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-use Migrations\AbstractSeed;
+use BaserCore\Database\Migration\BcSeed;
 
 /**
  * Permissions seed.
  */
-class PermissionsSeed extends AbstractSeed
+class PermissionsSeed extends BcSeed
 {
     /**
      * Run Method.

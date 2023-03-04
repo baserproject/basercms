@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-use Migrations\AbstractSeed;
+use BaserCore\Database\Migration\BcSeed;
 
 /**
  * CustomFields seed.
  */
-class CustomFieldsSeed extends AbstractSeed
+class CustomFieldsSeed extends BcSeed
 {
     /**
      * Run Method.

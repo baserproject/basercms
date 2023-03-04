@@ -82,7 +82,7 @@ $this->BcAdmin->setTitle(__d('baser', 'baserCMSのインストール｜ステッ
             <small><?php echo __d('baser', 'データベース名') ?></small>
           </div>
           <div class="float-left">
-            <?php echo $this->BcAdminForm->control('dbPrefix', ['type' => 'text', 'size' => '10', 'id' => 'dbPrefix']); ?>
+            <?php echo $this->BcAdminForm->control('dbPrefix', ['type' => 'text', 'size' => '10', 'id' => 'dbPrefix', 'placeholder' => 'mysite_']); ?>
             <br>
             <small><?php echo __d('baser', 'プレフィックス') ?></small>
           </div>

@@ -83,7 +83,7 @@ class InstallationsAdminService extends InstallationsService implements Installa
             return [
                 'dbType' => 'mysql',
                 'dbHost' => 'localhost',
-                'dbPrefix' => 'mysite_',
+                'dbPrefix' => '',
                 'dbPort' => '3306',
                 'dbName' => 'basercms',
                 'dbDataPattern' => Inflector::camelize(Configure::read('BcApp.defaultFrontTheme'), '-') . '.default'

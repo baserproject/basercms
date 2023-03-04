@@ -12,9 +12,7 @@
 namespace BaserCore\Model\Table;
 
 use ArrayObject;
-use BaserCore\Utility\BcUtil;
 use Cake\ORM\Query;
-use Cake\ORM\Table;
 use Cake\Event\Event;
 use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
@@ -42,7 +40,7 @@ use BaserCore\Annotation\UnitTest;
  * @method User findOrCreate($search, callable $callback = null, $options = [])
  * @mixin TimestampBehavior
  */
-class UsersTable extends Table
+class UsersTable extends AppTable
 {
 
     /**
@@ -70,6 +68,7 @@ class UsersTable extends Table
             'className' => 'BaserCore.UserGroups',
             'foreignKey' => 'user_id',
             'targetForeignKey' => 'user_group_id',
+            'through' => 'BaserCore.UsersUserGroups',
             'joinTable' => 'users_user_groups',
             'joinType' => 'left'
         ]);
@@ -90,26 +89,6 @@ class UsersTable extends Table
         if (!empty($data['password_1']) || !empty($data['password_2'])) {
             $data['password'] = $data['password_1'];
         }
-    }
-
-    /**
-     * beforeSave
-     *
-     * @param type $options
-     * @return boolean
-     */
-    public function beforeSave($options = [])
-    {
-        // TODO ucmitz 暫定措置
-        // >>>
-        return true;
-        // <<<
-
-        if (isset($this->data[$this->getAlias()]['password'])) {
-            App::uses('AuthComponent', 'Controller/Component');
-            $this->data[$this->getAlias()]['password'] = AuthComponent::password($this->data[$this->getAlias()]['password']);
-        }
-        return true;
     }
 
     /**
