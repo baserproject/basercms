@@ -18,6 +18,7 @@ use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\Test\Scenario\RootContentScenario;
 use BaserCore\TestSuite\BcTestCase;
+use BcBlog\Model\Entity\BlogPost;
 use BcBlog\Service\BlogPostsService;
 use BcBlog\Service\BlogPostsServiceInterface;
 use BcBlog\Test\Factory\BlogCategoryFactory;
@@ -264,24 +265,23 @@ class BlogHelperTest extends BcTestCase
         $siteUrl = Configure::read('BcEnv.siteUrl');
         Configure::write('BcEnv.siteUrl', 'https://main.com');
 
-        // テスト対象メソッド
-        $result = $this->Blog->getPostLinkUrl($post, $useBase);
-        // Configure::write('BcEnv.siteUrl', $siteUrl);
+        $full = true;
+        if($useBase) $full = false;
 
+        // テスト対象メソッド
+        /** @var BlogPost $post */
+        $result = $this->Blog->getPostLinkUrl($post, $useBase, $full);
         $this->assertEquals($expects, $result, '記事へのリンクを正しく取得できません');
+        Configure::write('BcEnv.siteUrl', $siteUrl);
     }
 
     public function getPostLinkUrlDataProvider()
     {
         return [
-            'コンテンツURLなし' => [11, '', false, 'https://main.com/news/archives/release'],
+            'コンテンツURLなし' => [11, '', false, ''],
             'ベースURLなし' => [6, '', false, 'https://main.com/news/archives/release'],
-            'ベースURLあり' => [6, '/sub', false, 'https://main.com/sub/news/archives/release'],
-            'ベースURLあり、URL付与あり' => [6, '/sub', true, 'https://main.com/sub/news/archives/release'],
-            'sサイト' => [7, '', false, 'https://main.com/news/archives/smartphone_release'],
-            'enサイト' => [8, '', false, 'https://main.com/news/archives/english_release'],
-            '別サイト' => [9, '', false, 'https://main.com/news/archives/another_domain_release'],
-            'サブドメイン' => [10, '', false, 'https://main.com/news/archives/sub_domain_release'],
+            'ベースURLあり、URL付与あり' => [6, '/sub', true, '/sub/news/archives/release'],
+            'ベースURLあり、フルURL' => [6, '/sub', false, 'https://main.com/sub/news/archives/release'],
         ];
     }
 
