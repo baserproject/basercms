@@ -219,7 +219,7 @@ class UtilitiesService implements UtilitiesServiceInterface
             if (Configure::read('BcLinks.specialThanks')) {
                 $json = file_get_contents(Configure::read('BcLinks.specialThanks'), true);
             } else {
-                throw new BcException(__d('baser', 'スペシャルサンクスのデータが読み込めませんでした。'));
+                throw new BcException(__d('baser_core', 'スペシャルサンクスのデータが読み込めませんでした。'));
             }
             if ($json) {
                 Cache::write('specialThanks', $json, '_bc_env_');
@@ -265,13 +265,13 @@ class UtilitiesService implements UtilitiesServiceInterface
     {
         if (file_exists($this->logPath)) {
             if (unlink($this->logPath)) {
-                $messages[] = __d('baser', 'エラーログを削除しました。');
+                $messages[] = __d('baser_core', 'エラーログを削除しました。');
                 return true;
             } else {
-                $messages[] = __d('baser', 'エラーログが削除できませんでした。');
+                $messages[] = __d('baser_core', 'エラーログが削除できませんでした。');
             }
         } else {
-            $messages[] = __d('baser', 'エラーログが存在しません。');
+            $messages[] = __d('baser_core', 'エラーログが存在しません。');
         }
         throw new BcException(implode("\n", $messages));
     }
@@ -385,8 +385,7 @@ class UtilitiesService implements UtilitiesServiceInterface
         ], $postData);
 
         if (BcUtil::isOverPostSize()) {
-            throw new BcException(__d(
-                'baser',
+            throw new BcException(__d('baser_core',
                 '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。',
                 ini_get('post_max_size')
             ));
@@ -394,9 +393,9 @@ class UtilitiesService implements UtilitiesServiceInterface
 
         if (empty($_FILES['backup']['tmp_name'])) {
             if (!empty($uploaded['backup']) && $uploaded['backup']->getError() === 1) {
-                $message = __d('baser', 'サーバに設定されているサイズ制限を超えています。');
+                $message = __d('baser_core', 'サーバに設定されているサイズ制限を超えています。');
             } else {
-                $message = __d('baser', 'バックアップファイルが送信されませんでした。');
+                $message = __d('baser_core', 'バックアップファイルが送信されませんでした。');
             }
             throw new BcException($message);
         }
@@ -406,7 +405,7 @@ class UtilitiesService implements UtilitiesServiceInterface
         $uploaded['backup']->moveTo($tmpPath . $name);
         $zip = new BcZip();
         if (!$zip->extract($tmpPath . $name, $tmpPath)) {
-            throw new BcException(__d('baser', 'アップロードしたZIPファイルの展開に失敗しました。'));
+            throw new BcException(__d('baser_core', 'アップロードしたZIPファイルの展開に失敗しました。'));
         }
         unlink($tmpPath . $name);
 

@@ -16,7 +16,7 @@
  * @noTodo
  * @unitTest
  */
-$this->BcAdmin->setTitle(__d('baser', 'リンク編集'));
+$this->BcAdmin->setTitle(__d('baser_core', 'リンク編集'));
 ?>
 
 
@@ -26,7 +26,7 @@ $this->BcAdmin->setTitle(__d('baser', 'リンク編集'));
 
 <table class="form-table bca-form-table">
   <tr>
-    <th class="bca-form-table__label"><?php echo __d('baser', 'リンク先URL') ?></th>
+    <th class="bca-form-table__label"><?php echo __d('baser_core', 'リンク先URL') ?></th>
     <td class=" bca-form-table__input">
       <?php echo $this->BcAdminForm->control('url', ['type' => 'text', 'size' => 60, 'placeholder' => 'httpssrc/Controller/ContentLinksController://']) ?>
       <br>
@@ -39,7 +39,7 @@ $this->BcAdmin->setTitle(__d('baser', 'リンク編集'));
 <?php echo $this->BcFormTable->dispatchAfter() ?>
 
 <div class="submit">
-  <?php echo $this->BcAdminForm->submit(__d('baser', '保存'), ['class' => 'button bca-btn',
+  <?php echo $this->BcAdminForm->submit(__d('baser_core', '保存'), ['class' => 'button bca-btn',
     'data-bca-btn-type' => 'save',
     'data-bca-btn-size' => 'lg',
     'data-bca-btn-width' => 'lg',

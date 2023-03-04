@@ -18,18 +18,18 @@ return [
         'adminNavigation' => [
             'Systems' => [
                 'CustomTables' => [
-                    'title' => __d('baser', 'カスタムコンテンツ'),
+                    'title' => __d('baser_core', 'カスタムコンテンツ'),
                     'type' => 'system',
                     'menus' => [
                         // テーブル
                         'CustomTables' => [
-                            'title' => __d('baser', 'テーブル'),
+                            'title' => __d('baser_core', 'テーブル'),
                             'url' => ['prefix' => 'Admin', 'plugin' => 'BcCustomContent', 'controller' => 'CustomTables', 'action' => 'index'],
                             'currentRegex' => '/(\/custom_tables\/[^\/]+?|\/custom_links\/[^\/]+?\/)/s'
                         ],
                         // フィールド
                         'CustomFields' => [
-                            'title' => __d('baser', 'フィールド'),
+                            'title' => __d('baser_core', 'フィールド'),
                             'url' => ['prefix' => 'Admin', 'plugin' => 'BcCustomContent', 'controller' => 'CustomFields', 'action' => 'index'],
                             'currentRegex' => '/\/custom_fields\/[^\/]+?/s'
                         ],
@@ -46,7 +46,7 @@ return [
         'items' => [
             'BcCustomContent' => [
                 'CustomContent' => [
-                    'title' => __d('baser', 'カスタムコンテンツ'),
+                    'title' => __d('baser_core', 'カスタムコンテンツ'),
                     'multiple' => true,
                     'preview' => true,
                     'icon' => 'bca-icon--custom',
@@ -103,19 +103,19 @@ return [
          * フィールドグループ
          */
         'fieldCategories' => [
-            __d('baser', '基本'),
-            __d('baser', '日付'),
-            __d('baser', '選択'),
-            __d('baser', 'コンテンツ'),
-            __d('baser', 'その他')
+            __d('baser_core', '基本'),
+            __d('baser_core', '日付'),
+            __d('baser_core', '選択'),
+            __d('baser_core', 'コンテンツ'),
+            __d('baser_core', 'その他')
         ],
         /**
          * フィールドタイプ
          */
         'fieldTypes' => [
             'group' => [
-                'category' => __d('baser', 'その他'),
-                'label' => __d('baser', 'グループ'),
+                'category' => __d('baser_core', 'その他'),
+                'label' => __d('baser_core', 'グループ'),
             ]
         ]
     ]

@@ -25,7 +25,7 @@ $this->BcBaser->js('admin/permissions/dialog.bundle');
 ?>
 
 
-<div id="PermissionDialog" title="<?php echo __d('baser', 'アクセスルール登録') ?>" hidden>
+<div id="PermissionDialog" title="<?php echo __d('baser_core', 'アクセスルール登録') ?>" hidden>
 
   <?= $this->BcAdminForm->create(null, [
     'novalidate' => true,
@@ -33,7 +33,7 @@ $this->BcBaser->js('admin/permissions/dialog.bundle');
   ]); ?>
 
   <dl>
-    <dt><?php echo $this->BcAdminForm->label('user_group_id', __d('baser', 'ユーザーグループ')) ?></dt>
+    <dt><?php echo $this->BcAdminForm->label('user_group_id', __d('baser_core', 'ユーザーグループ')) ?></dt>
     <dd class="col-input">
       <?php echo $this->BcAdminForm->control('user_group_id', [
         'type' => 'select',
@@ -42,7 +42,7 @@ $this->BcBaser->js('admin/permissions/dialog.bundle');
       ]) ?>
     </dd>
 
-    <dt><?php echo $this->BcAdminForm->label('permission_group_id', __d('baser', 'ルールグループ')) ?></dt>
+    <dt><?php echo $this->BcAdminForm->label('permission_group_id', __d('baser_core', 'ルールグループ')) ?></dt>
     <dd class="col-input">
       <?php echo $this->BcAdminForm->control('permission_group_id', [
         'type' => 'select',
@@ -51,7 +51,7 @@ $this->BcBaser->js('admin/permissions/dialog.bundle');
       ]) ?>
     </dd>
 
-    <dt><?php echo $this->BcAdminForm->label('name', __d('baser', 'ルール名')) ?></dt>
+    <dt><?php echo $this->BcAdminForm->label('name', __d('baser_core', 'ルール名')) ?></dt>
     <dd>
       <?php echo $this->BcAdminForm->control('name', [
         'type' => 'text',
@@ -62,7 +62,7 @@ $this->BcBaser->js('admin/permissions/dialog.bundle');
       ]) ?>
     </dd>
 
-    <dt><?php echo $this->BcAdminForm->label('url', __d('baser', 'URL設定')) ?></dt>
+    <dt><?php echo $this->BcAdminForm->label('url', __d('baser_core', 'URL設定')) ?></dt>
     <dd>
       <?php echo $this->BcAdminForm->control('url', [
         'type' => 'text',
@@ -73,7 +73,7 @@ $this->BcBaser->js('admin/permissions/dialog.bundle');
       ]) ?>
     </dd>
 
-    <dt><?php echo $this->BcAdminForm->label('method', __d('baser', '権限')) ?></dt>
+    <dt><?php echo $this->BcAdminForm->label('method', __d('baser_core', '権限')) ?></dt>
     <dd>
       <?php echo $this->BcAdminForm->control('method', [
         'type' => 'select',
@@ -83,7 +83,7 @@ $this->BcBaser->js('admin/permissions/dialog.bundle');
       <?php echo $this->BcAdminForm->error('method') ?>
     </dd>
 
-    <dt><?php echo $this->BcAdminForm->label('auth', __d('baser', 'アクセス')) ?></dt>
+    <dt><?php echo $this->BcAdminForm->label('auth', __d('baser_core', 'アクセス')) ?></dt>
     <dd>
       <?php echo $this->BcAdminForm->control('auth', [
         'type' => 'radio',

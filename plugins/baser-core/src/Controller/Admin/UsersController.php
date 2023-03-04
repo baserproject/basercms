@@ -73,10 +73,10 @@ class UsersController extends BcAdminAppController
                     // 自動ログイン保存
                     $this->response = $service->setCookieAutoLoginKey($this->response, $user->id);
                 }
-                $this->BcMessage->setInfo(__d('baser', 'ようこそ、{0}さん。', $user->getDisplayName()));
+                $this->BcMessage->setInfo(__d('baser_core', 'ようこそ、{0}さん。', $user->getDisplayName()));
                 return $this->redirect($target);
             } else {
-                $this->BcMessage->setError(__d('baser', 'Eメール、または、パスワードが間違っています。'));
+                $this->BcMessage->setError(__d('baser_core', 'Eメール、または、パスワードが間違っています。'));
             }
         } else {
             $result = $this->Authentication->getResult();
@@ -107,7 +107,7 @@ class UsersController extends BcAdminAppController
         }
         // 既に代理ログイン済み
         if (BcUtil::isAgentUser()) {
-            $this->BcMessage->setError(__d('baser', '既に代理ログイン中のため失敗しました。'));
+            $this->BcMessage->setError(__d('baser_core', '既に代理ログイン中のため失敗しました。'));
             return $this->redirect(['action' => 'index']);
         }
         /* @var UsersService * $service */
@@ -127,7 +127,7 @@ class UsersController extends BcAdminAppController
     {
         try {
             $redirectUrl = $service->returnLoginUserFromAgent($this->request, $this->response);
-            $this->BcMessage->setInfo(__d('baser', '元のユーザーに戻りました。'));
+            $this->BcMessage->setInfo(__d('baser_core', '元のユーザーに戻りました。'));
             return $this->redirect($redirectUrl);
         } catch (\Exception $e) {
             $this->BcMessage->setError($e->getMessage());
@@ -149,7 +149,7 @@ class UsersController extends BcAdminAppController
         /* @var User $user */
         $user = $this->Authentication->getIdentity();
         $service->logout($this->request, $this->response, $user->id);
-        $this->BcMessage->setInfo(__d('baser', 'ログアウトしました'));
+        $this->BcMessage->setInfo(__d('baser_core', 'ログアウトしました'));
         $this->redirect($this->Authentication->logout());
     }
 
@@ -207,11 +207,11 @@ class UsersController extends BcAdminAppController
                 $this->dispatchLayerEvent('afterAdd', [
                     'user' => $user
                 ]);
-                $this->BcMessage->setSuccess(__d('baser', 'ユーザー「{0}」を追加しました。', $user->getDisplayName()));
+                $this->BcMessage->setSuccess(__d('baser_core', 'ユーザー「{0}」を追加しました。', $user->getDisplayName()));
                 return $this->redirect(['action' => 'edit', $user->id]);
             } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
                 $user = $e->getEntity();
-                $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
+                $this->BcMessage->setError(__d('baser_core', '入力エラーです。内容を修正してください。'));
             }
         }
         $this->set($service->getViewVarsForAdd($user ?? $service->getNew()));
@@ -233,7 +233,7 @@ class UsersController extends BcAdminAppController
     public function edit(UsersAdminServiceInterface $service, $id = null)
     {
         if (!$id && empty($this->request->getData())) {
-            $this->BcMessage->setError(__d('baser', '無効なIDです。'));
+            $this->BcMessage->setError(__d('baser_core', '無効なIDです。'));
             $this->redirect(['action' => 'index']);
         }
         $user = $service->get($id);
@@ -247,13 +247,13 @@ class UsersController extends BcAdminAppController
                 if($service->isSelf($id)) {
                     $service->reLogin($this->request, $this->response);
                 }
-                $this->BcMessage->setSuccess(__d('baser', 'ユーザー「{0}」を更新しました。', $user->getDisplayName()));
+                $this->BcMessage->setSuccess(__d('baser_core', 'ユーザー「{0}」を更新しました。', $user->getDisplayName()));
                 return $this->redirect(['action' => 'edit', $user->id]);
             } catch (PersistenceFailedException $e) {
                 $user = $e->getEntity();
-                $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
+                $this->BcMessage->setError(__d('baser_core', '入力エラーです。内容を修正してください。'));
             } catch (\Throwable $e) {
-                $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
+                $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
             }
         }
         $this->set($service->getViewVarsForEdit($user));
@@ -275,17 +275,17 @@ class UsersController extends BcAdminAppController
     public function delete(UsersServiceInterface $service, $id = null)
     {
         if (!$id) {
-            $this->BcMessage->setError(__d('baser', '無効なIDです。'));
+            $this->BcMessage->setError(__d('baser_core', '無効なIDです。'));
             $this->redirect(['action' => 'index']);
         }
         $this->request->allowMethod(['post', 'delete']);
         $user = $service->get($id);
         try {
             if ($service->delete($id)) {
-                $this->BcMessage->setSuccess(__d('baser', 'ユーザー: {0} を削除しました。', $user->getDisplayName()));
+                $this->BcMessage->setSuccess(__d('baser_core', 'ユーザー: {0} を削除しました。', $user->getDisplayName()));
             }
         } catch (Exception $e) {
-            $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
+            $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
         }
         return $this->redirect(['action' => 'index']);
     }

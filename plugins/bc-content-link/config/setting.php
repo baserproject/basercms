@@ -8,7 +8,7 @@ return [
             'BcContentLink' => [
                 'ContentLink' => [
                     'multiple' => true,
-                    'title' => __d('baser', 'リンク'),
+                    'title' => __d('baser_core', 'リンク'),
                     'omitViewAction' => true,
                     'routes' => [
                         'add' => [

@@ -18,7 +18,7 @@ use Cake\Core\Configure;
  */
 
 $this->layout = 'error';
-$this->BcAdmin->setTitle(__d('baser', '内部エラーが発生しました'));
+$this->BcAdmin->setTitle(__d('baser_core', '内部エラーが発生しました'));
 if (Configure::read('debug')) :
     $this->layout = 'dev_error';
 
@@ -51,9 +51,9 @@ endif;
 
 <h2><?php echo $message ?></h2>
 <p class="error">
-  <strong><?php echo __d('baser', 'エラー') ?>: </strong>
+  <strong><?php echo __d('baser_core', 'エラー') ?>: </strong>
   <?php printf(
-    __d('baser', 'アドレス %s に送信されたリクエストは無効です。'),
+    __d('baser_core', 'アドレス %s に送信されたリクエストは無効です。'),
     "<strong>'{$url}'</strong>"
   ); ?>
 </p>

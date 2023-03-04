@@ -20,7 +20,7 @@
  * @noTodo
  * @unitTest
  */
-$this->BcBaser->setTitle(__d('baser', '検索結果一覧'));
+$this->BcBaser->setTitle(__d('baser_core', '検索結果一覧'));
 ?>
 
 
@@ -29,11 +29,11 @@ $this->BcBaser->setTitle(__d('baser', '検索結果一覧'));
 <div class="bs-search-form">
     <?php echo $this->BcForm->create($searchIndexesFront, ['type' => 'get']) ?>
     <?php if ($contentFolders): ?>
-        <?php echo $this->BcForm->control('f', ['type' => 'select', 'options' => $contentFolders, 'empty' => __('カテゴリ')]) ?>
+        <?php echo $this->BcForm->control('f', ['type' => 'select', 'options' => $contentFolders, 'empty' => __d('baser_core''カテゴリ')]) ?>
     <?php endif ?>
-    <?php echo $this->BcForm->control('q', ['placeholder' => __('キーワード'), 'escape' => false, 'div' => false]) ?>
+    <?php echo $this->BcForm->control('q', ['placeholder' => __d('baser_core''キーワード'), 'escape' => false, 'div' => false]) ?>
     <?php echo $this->BcForm->hidden('s') ?>
-    <?php echo $this->BcForm->submit(__('検索'), ['div' => false, 'class' => 'bs-button-small']) ?>
+    <?php echo $this->BcForm->submit(__d('baser_core''検索'), ['div' => false, 'class' => 'bs-button-small']) ?>
     <?php echo $this->BcForm->end() ?>
 </div>
 
@@ -52,9 +52,9 @@ $this->BcBaser->setTitle(__d('baser', '検索結果一覧'));
 	</div>
 	<?php endforeach ?>
 <?php elseif (!isset($query['q'][0])): ?>
-	<p class="bs-search-result__no-data"><?php echo __d('baser', '検索キーワードを入力してください。')?></p>
+	<p class="bs-search-result__no-data"><?php echo __d('baser_core', '検索キーワードを入力してください。')?></p>
 <?php else: ?>
-	<p class="bs-search-result__no-data"><?php echo __d('baser', '該当する結果が存在しませんでした。')?></p>
+	<p class="bs-search-result__no-data"><?php echo __d('baser_core', '該当する結果が存在しませんでした。')?></p>
 <?php endif ?>
 </section>
 

@@ -61,13 +61,13 @@ class ThemeFilesController extends BcAdminAppController
     {
         parent::__construct($request, $response, $name, $eventManager, $components);
         $this->_tempalteTypes = [
-            'Layouts' => __d('baser', 'レイアウトテンプレート'),
-            'Elements' => __d('baser', 'エレメントテンプレート'),
-            'Emails' => __d('baser', 'Eメールテンプレート'),
-            'etc' => __d('baser', 'コンテンツテンプレート'),
-            'css' => __d('baser', 'スタイルシート'),
+            'Layouts' => __d('baser_core', 'レイアウトテンプレート'),
+            'Elements' => __d('baser_core', 'エレメントテンプレート'),
+            'Emails' => __d('baser_core', 'Eメールテンプレート'),
+            'etc' => __d('baser_core', 'コンテンツテンプレート'),
+            'css' => __d('baser_core', 'スタイルシート'),
             'js' => 'Javascript',
-            'img' => __d('baser', 'イメージ')
+            'img' => __d('baser_core', 'イメージ')
         ];
 
         // テーマ編集機能が制限されている場合はアクセス禁止
@@ -113,7 +113,7 @@ class ThemeFilesController extends BcAdminAppController
             'isDefaultTheme' => $this->isDefaultTheme()
         ]);
         if($this->isDefaultTheme()) {
-            $this->BcMessage->setWarning(__d('baser', 'デフォルトテーマのため編集できません。編集する場合は、テーマをコピーしてご利用ください。'));
+            $this->BcMessage->setWarning(__d('baser_core', 'デフォルトテーマのため編集できません。編集する場合は、テーマをコピーしてご利用ください。'));
         }
     }
 
@@ -151,7 +151,7 @@ class ThemeFilesController extends BcAdminAppController
             try {
                 $form = $service->create($this->getRequest()->getData());
                 $entity = $service->get($form->getData('fullpath'));
-                $this->BcMessage->setInfo(sprintf(__d('baser', 'ファイル %s を作成しました。'), $entity->name));
+                $this->BcMessage->setInfo(sprintf(__d('baser_core', 'ファイル %s を作成しました。'), $entity->name));
                 $this->redirect(array_merge(
                     ['action' => 'edit', $args['theme'], $args['plugin'], $args['type']],
                     explode('/', $args['path']),
@@ -159,10 +159,10 @@ class ThemeFilesController extends BcAdminAppController
                 ));
             } catch (BcFormFailedException $e) {
                 $form = $e->getForm();
-                $this->BcMessage->setError(__d('baser', 'ファイル {0} の作成に失敗しました。', $entity->name));
+                $this->BcMessage->setError(__d('baser_core', 'ファイル {0} の作成に失敗しました。', $entity->name));
             } catch (\Throwable $e) {
                 $form = $service->getForm($this->getRequest()->getData());
-                $this->BcMessage->setError(__d('baser', 'ファイル {0} の作成に失敗しました。', $entity->name) . $e->getMessage());
+                $this->BcMessage->setError(__d('baser_core', 'ファイル {0} の作成に失敗しました。', $entity->name) . $e->getMessage());
             }
         }
 
@@ -189,7 +189,7 @@ class ThemeFilesController extends BcAdminAppController
             try {
                 $themeFileForm = $service->update($this->getRequest()->getData());
                 $themeFile = $service->get($themeFileForm->getData('fullpath'));
-                $this->BcMessage->setInfo(sprintf(__d('baser', 'ファイル %s を更新しました。'), $themeFile->name));
+                $this->BcMessage->setInfo(sprintf(__d('baser_core', 'ファイル %s を更新しました。'), $themeFile->name));
                 $this->redirect(array_merge(
                     [$args['theme'], $args['plugin'], $args['type']],
                     explode('/', dirname($args['path'])),
@@ -197,10 +197,10 @@ class ThemeFilesController extends BcAdminAppController
                 ));
             } catch (BcFormFailedException $e) {
                 $themeFileForm = $e->getForm();
-                $this->BcMessage->setError(__d('baser', 'ファイル {0} の更新に失敗しました。', $themeFile->name));
+                $this->BcMessage->setError(__d('baser_core', 'ファイル {0} の更新に失敗しました。', $themeFile->name));
             } catch (\Throwable $e) {
                 $themeFileForm = $service->getForm($this->getRequest()->getData());
-                $this->BcMessage->setError(__d('baser', 'ファイル {0} の更新に失敗しました。', $themeFile->name) . $e->getMessage());
+                $this->BcMessage->setError(__d('baser_core', 'ファイル {0} の更新に失敗しました。', $themeFile->name) . $e->getMessage());
             }
         }
 
@@ -223,9 +223,9 @@ class ThemeFilesController extends BcAdminAppController
         if (!BcThemeFileUtil::getTemplateTypeName($args['type'])) $this->notFound();
 
         if ($service->delete($args['fullpath'])) {
-            $this->BcMessage->setSuccess(__d('baser', 'ファイル {0} を削除しました。', $args['path']));
+            $this->BcMessage->setSuccess(__d('baser_core', 'ファイル {0} を削除しました。', $args['path']));
         } else {
-            $this->BcMessage->setError(__d('baser', 'ファイル {0} の削除に失敗しました。', $args['path']));
+            $this->BcMessage->setError(__d('baser_core', 'ファイル {0} の削除に失敗しました。', $args['path']));
         }
 
         $this->redirect(array_merge(
@@ -250,9 +250,9 @@ class ThemeFilesController extends BcAdminAppController
         if (!BcThemeFileUtil::getTemplateTypeName($args['type'])) $this->notFound();
 
         if ($service->delete($args['fullpath'])) {
-            $this->BcMessage->setSuccess(__d('baser', 'フォルダ {0} を削除しました。', $args['path']));
+            $this->BcMessage->setSuccess(__d('baser_core', 'フォルダ {0} を削除しました。', $args['path']));
         } else {
-            $this->BcMessage->setError(__d('baser', 'フォルダ {0} の削除に失敗しました。', $args['path']));
+            $this->BcMessage->setError(__d('baser_core', 'フォルダ {0} の削除に失敗しました。', $args['path']));
         }
 
         $this->redirect(array_merge(
@@ -294,9 +294,9 @@ class ThemeFilesController extends BcAdminAppController
         if (!BcThemeFileUtil::getTemplateTypeName($args['type'])) $this->notFound();
 
         if ($service->copy($args['fullpath'])) {
-            $this->BcMessage->setSuccess(__d('baser', 'ファイル {0} をコピーしました。', $args['path']));
+            $this->BcMessage->setSuccess(__d('baser_core', 'ファイル {0} をコピーしました。', $args['path']));
         } else {
-            $this->BcMessage->setError(__d('baser', 'ファイル {0} のコピーに失敗しました。上位フォルダのアクセス権限を見直してください。', $args['path']));
+            $this->BcMessage->setError(__d('baser_core', 'ファイル {0} のコピーに失敗しました。上位フォルダのアクセス権限を見直してください。', $args['path']));
         }
 
         $this->redirect(array_merge(
@@ -320,9 +320,9 @@ class ThemeFilesController extends BcAdminAppController
         if (!BcThemeFileUtil::getTemplateTypeName($args['type'])) $this->notFound();
 
         if ($service->copy($args['fullpath'])) {
-            $this->BcMessage->setSuccess(__d('baser', 'フォルダ {0} をコピーしました。', $args['path']));
+            $this->BcMessage->setSuccess(__d('baser_core', 'フォルダ {0} をコピーしました。', $args['path']));
         } else {
-            $this->BcMessage->setError(__d('baser', 'フォルダ {0} のコピーに失敗しました。上位フォルダのアクセス権限を見直してください。', $args['path']));
+            $this->BcMessage->setError(__d('baser_core', 'フォルダ {0} のコピーに失敗しました。上位フォルダのアクセス権限を見直してください。', $args['path']));
         }
 
         $this->redirect(array_merge(
@@ -347,9 +347,9 @@ class ThemeFilesController extends BcAdminAppController
         $this->request->allowMethod(['post', 'put']);
         try {
             $service->upload($args['fullpath'], $this->getRequest()->getData());
-            $this->BcMessage->setSuccess(__d('baser', 'アップロードに成功しました。'));
+            $this->BcMessage->setSuccess(__d('baser_core', 'アップロードに成功しました。'));
         } catch (\Throwable $e) {
-            $this->BcMessage->setError(__d('baser', 'アップロードに失敗しました。' . $e->getMessage()));
+            $this->BcMessage->setError(__d('baser_core', 'アップロードに失敗しました。' . $e->getMessage()));
         }
         $this->redirect(array_merge(['action' => 'index', $args['theme'], $args['plugin'], $args['type']], explode('/', $args['path'])));
     }
@@ -374,17 +374,17 @@ class ThemeFilesController extends BcAdminAppController
             try {
                 $form = $service->create($this->getRequest()->getData());
                 $entity = $service->get($form->getData('fullpath'));
-                $this->BcMessage->setInfo(__d('baser', 'フォルダ「{0}」を作成しました。', $entity->name));
+                $this->BcMessage->setInfo(__d('baser_core', 'フォルダ「{0}」を作成しました。', $entity->name));
                 return $this->redirect(array_merge(
                     ['action' => 'index', $args['theme'], $args['plugin'], $args['type']],
                     explode('/', dirname($args['path']))
                 ));
             } catch (BcFormFailedException $e) {
                 $form = $e->getForm();
-                $this->BcMessage->setError(__d('baser', 'フォルダの作成に失敗しました。'));
+                $this->BcMessage->setError(__d('baser_core', 'フォルダの作成に失敗しました。'));
             } catch (\Throwable $e) {
                 $form = $service->getForm($this->getRequest()->getData());
-                $this->BcMessage->setError(__d('baser', 'フォルダの作成に失敗しました。') . $e->getMessage());
+                $this->BcMessage->setError(__d('baser_core', 'フォルダの作成に失敗しました。') . $e->getMessage());
             }
         }
 
@@ -411,17 +411,17 @@ class ThemeFilesController extends BcAdminAppController
             try {
                 $form = $service->update($this->getRequest()->getData());
                 $entity = $service->get($form->getData('fullpath'));
-                $this->BcMessage->setInfo(__d('baser', 'フォルダ名を {0} に変更しました。', $entity->name));
+                $this->BcMessage->setInfo(__d('baser_core', 'フォルダ名を {0} に変更しました。', $entity->name));
                 return $this->redirect(array_merge(
                     ['action' => 'index', $args['theme'], $args['plugin'], $args['type']],
                     explode('/', dirname($args['path']))
                 ));
             } catch (BcFormFailedException $e) {
                 $form = $e->getForm();
-                $this->BcMessage->setError(__d('baser', 'フォルダ名の変更に失敗しました。'));
+                $this->BcMessage->setError(__d('baser_core', 'フォルダ名の変更に失敗しました。'));
             } catch (\Throwable $e) {
                 $form = $service->getForm($this->getRequest()->getData());
-                $this->BcMessage->setError(__d('baser', 'フォルダ名の変更に失敗しました。') . $e->getMessage());
+                $this->BcMessage->setError(__d('baser_core', 'フォルダ名の変更に失敗しました。') . $e->getMessage());
             }
         }
         $this->set($service->getViewVarsForEdit($entity, $form, $args));
@@ -460,7 +460,7 @@ class ThemeFilesController extends BcAdminAppController
         $targetPath = $service->copyToTheme($args);
         $currentTheme = BcUtil::getCurrentTheme();
         if ($targetPath) {
-            $this->BcMessage->setSuccess(__d('baser',
+            $this->BcMessage->setSuccess(__d('baser_core',
                 "コアファイル {0} を テーマ {1} の次のパスとしてコピーしました。\n{2}",
                 basename($args['path']),
                 $currentTheme,
@@ -471,7 +471,7 @@ class ThemeFilesController extends BcAdminAppController
                 explode('/', $args['path'])
             ));
         } else {
-            $this->BcMessage->setError(__d('baser',
+            $this->BcMessage->setError(__d('baser_core',
                 'コアファイル {0} のコピーに失敗しました。',
                 basename($args['path'])
             ));
@@ -498,7 +498,7 @@ class ThemeFilesController extends BcAdminAppController
         $targetPath = $service->copyToTheme($args);
         $currentTheme = BcUtil::getCurrentTheme();
         if ($targetPath) {
-            $this->BcMessage->setInfo(__d('baser',
+            $this->BcMessage->setInfo(__d('baser_core',
                 "コアフォルダ {0} を テーマ {1} の次のパスとしてコピーしました。\n{2}",
                 basename($args['path']),
                 $currentTheme,
@@ -509,7 +509,7 @@ class ThemeFilesController extends BcAdminAppController
                 explode('/', $args['path'])
             ));
         } else {
-            $this->BcMessage->setError(__d('baser',
+            $this->BcMessage->setError(__d('baser_core',
                 'コアフォルダ {0} のコピーに失敗しました。',
                 basename($args['path'])
             ));

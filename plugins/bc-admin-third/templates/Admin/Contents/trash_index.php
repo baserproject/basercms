@@ -15,7 +15,7 @@
  * @unitTest
  * @noTodo
  */
-$this->BcAdmin->setTitle(__d('baser', 'ゴミ箱'));
+$this->BcAdmin->setTitle(__d('baser_core', 'ゴミ箱'));
 $this->BcBaser->element('Contents/index_setup_tree');
 ?>
 

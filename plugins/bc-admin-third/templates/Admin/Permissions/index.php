@@ -21,7 +21,7 @@ use BaserCore\View\BcAdminAppView;
  * @noTodo
  * @unitTest
  */
-$this->BcAdmin->setTitle(sprintf(__d('baser', '%s｜アクセスルール一覧'), $currentUserGroup->title));
+$this->BcAdmin->setTitle(sprintf(__d('baser_core', '%s｜アクセスルール一覧'), $currentUserGroup->title));
 $this->BcAdmin->setHelp('permissions_index');
 $this->BcAdmin->setSearch('permissions_index');
 $this->BcBaser->js('admin/permissions/index.bundle', false, [
@@ -30,7 +30,7 @@ $this->BcBaser->js('admin/permissions/index.bundle', false, [
 ]);
 $this->BcAdmin->addAdminMainBodyHeaderLinks([
   'url' => ['action' => 'add', $currentUserGroup->id],
-  'title' => __d('baser', '新規追加'),
+  'title' => __d('baser_core', '新規追加'),
 ]);
 ?>
 
@@ -44,7 +44,7 @@ $this->BcAdmin->addAdminMainBodyHeaderLinks([
 
 <div class="submit section bca-actions">
   <div class="bca-actions__main">
-    <?php echo $this->BcHtml->link(__d('baser', 'アクセスルールグループ一覧に戻る'), [
+    <?php echo $this->BcHtml->link(__d('baser_core', 'アクセスルールグループ一覧に戻る'), [
       'controller' => 'PermissionGroups',
       'action' => 'index',
       $currentUserGroup->id

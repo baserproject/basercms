@@ -38,7 +38,7 @@ echo $this->BcAdminForm->hidden($customLink->name, ['value' => ''])
               $loop = \BcCustomContent\Utility\CustomContentUtil::getPluginSetting($child->custom_field->type, 'loop');
               $label = \BcCustomContent\Utility\CustomContentUtil::getPluginSetting($child->custom_field->type, 'label');
               if(!$loop) {
-                echo '<p>' . __d('baser', '{0} は、ループ機能に対応していません。', $label) . '</p>';
+                echo '<p>' . __d('baser_core', '{0} は、ループ機能に対応していません。', $label) . '</p>';
                 continue;
               }
             ?>
@@ -62,7 +62,7 @@ echo $this->BcAdminForm->hidden($customLink->name, ['value' => ''])
           <?php endforeach ?>
         </table>
 
-        <?php echo $this->BcForm->button(__d('baser', '削除'), [
+        <?php echo $this->BcForm->button(__d('baser_core', '削除'), [
           'type' => 'button',
           'class' => 'btn-delete-loop bca-btn',
           'data-delete-target' => 'BcCcLoop' . $customLink->name . '-' . $key
@@ -76,7 +76,7 @@ echo $this->BcAdminForm->hidden($customLink->name, ['value' => ''])
 
 
 <div class="bca-cc-loop-add">
-  <?php echo $this->BcForm->button(__d('baser', '追加'), [
+  <?php echo $this->BcForm->button(__d('baser_core', '追加'), [
     'type' => 'button',
     'class' => 'bca-btn btn-add-loop',
     'id' => 'BtnAddLoop',
@@ -95,7 +95,7 @@ echo $this->BcAdminForm->hidden($customLink->name, ['value' => ''])
         $loop = \BcCustomContent\Utility\CustomContentUtil::getPluginSetting($child->custom_field->type, 'loop');
         $label = \BcCustomContent\Utility\CustomContentUtil::getPluginSetting($child->custom_field->type, 'label');
         if(!$loop) {
-          echo '<p>' . __d('baser', '{0} は、ループ機能に対応していません。', $label) . '</p>';
+          echo '<p>' . __d('baser_core', '{0} は、ループ機能に対応していません。', $label) . '</p>';
           continue;
         }
       ?>
@@ -116,7 +116,7 @@ echo $this->BcAdminForm->hidden($customLink->name, ['value' => ''])
       <?php $this->BcAdminForm->unlockField("{$customLink->name}.__loop-src__.{$child->name}") ?>
     <?php endforeach ?>
   </table>
-  <?php echo $this->BcForm->button(__d('baser', '削除'), [
+  <?php echo $this->BcForm->button(__d('baser_core', '削除'), [
     'type' => 'button',
     'class' => 'btn-delete-loop bca-btn',
     'data-delete-target' => 'BcCcLoop' . $customLink->name

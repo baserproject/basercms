@@ -31,8 +31,8 @@
   <table class="form-table bca-form-table">
     <tr>
       <th class="col-head bca-form-table__label">
-        <?php echo $this->BcAdminForm->label('name', __d('baser', 'カテゴリ名')) ?>
-        &nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
+        <?php echo $this->BcAdminForm->label('name', __d('baser_core', 'カテゴリ名')) ?>
+        &nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser_core', '必須') ?></span>
       </th>
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('name', [
@@ -45,16 +45,16 @@
         <?php echo $this->BcAdminForm->error('name') ?>
         <div class="bca-helptext">
           <ul>
-            <li><?php echo __d('baser', 'URLに利用されます') ?></li>
-            <li><?php echo __d('baser', '半角のみで入力してください') ?></li>
+            <li><?php echo __d('baser_core', 'URLに利用されます') ?></li>
+            <li><?php echo __d('baser_core', '半角のみで入力してください') ?></li>
           </ul>
         </div>
       </td>
     </tr>
     <tr>
       <th class="col-head bca-form-table__label">
-        <?php echo $this->BcAdminForm->label('title', __d('baser', 'カテゴリタイトル')) ?>
-        &nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
+        <?php echo $this->BcAdminForm->label('title', __d('baser_core', 'カテゴリタイトル')) ?>
+        &nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser_core', '必須') ?></span>
       </th>
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('title', [
@@ -68,14 +68,14 @@
     <?php if ($parents): ?>
       <tr>
         <th class="col-head bca-form-table__label">
-          <?php echo $this->BcAdminForm->label('parent_id', __d('baser', '親カテゴリ')) ?>
+          <?php echo $this->BcAdminForm->label('parent_id', __d('baser_core', '親カテゴリ')) ?>
         </th>
         <td class="col-input bca-form-table__input">
           <?php
           echo $this->BcAdminForm->control('parent_id', [
             'type' => 'select',
             'options' => $parents,
-            'empty' => __d('baser', '指定しない'),
+            'empty' => __d('baser_core', '指定しない'),
             'escape' => true])
           ?>
           <?php echo $this->BcAdminForm->error('parent_id') ?>

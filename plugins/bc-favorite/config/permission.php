@@ -20,12 +20,12 @@ return [
          * Web API
          */
         'FavoritesApi' => [
-            'title' => __d('baser', 'お気に入りAPI'),
+            'title' => __d('baser_core', 'お気に入りAPI'),
             'plugin' => 'BcFavorite',
             'type' => 'Api',
             'items' => [
                 // TODO ucmitz 本体側のログインユーザー別制御ができていないため一旦フルアクセスとする
-                'Full' => ['title' => __d('baser', 'フルアクセス'), 'url' => '/baser/api/bc-favorite/favorites/*.json', 'method' => '*', 'auth' => true],
+                'Full' => ['title' => __d('baser_core', 'フルアクセス'), 'url' => '/baser/api/bc-favorite/favorites/*.json', 'method' => '*', 'auth' => true],
             ]
         ],
     ]

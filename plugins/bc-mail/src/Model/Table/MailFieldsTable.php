@@ -67,40 +67,40 @@ class MailFieldsTable extends MailAppTable
             ->allowEmptyString('id', null, 'create');
         $validator
             ->scalar('name')
-            ->notEmptyString('name', __d('baser', '項目名を入力してください。'))
-            ->maxLength('name', 255, __d('baser', '項目名は255文字以内で入力してください。'));
+            ->notEmptyString('name', __d('baser_core', '項目名を入力してください。'))
+            ->maxLength('name', 255, __d('baser_core', '項目名は255文字以内で入力してください。'));
         $validator
             ->scalar('field_name')
-            ->notEmptyString('field_name', __d('baser', 'フィールド名を入力してください。'))
-            ->maxLength('field_name', 255, __d('baser', 'フィールド名は255文字以内で入力してください。'));
+            ->notEmptyString('field_name', __d('baser_core', 'フィールド名を入力してください。'))
+            ->maxLength('field_name', 255, __d('baser_core', 'フィールド名は255文字以内で入力してください。'));
         // TODO ucmitz 未実装
 //            ->add('field_name', [
 //                'halfTextMailField' => [
 //                    'rule' => 'halfTextMailField',
 //                    'provider' => 'table',
-//                    'message' => __d('baser', 'フィールド名は半角英数字のみで入力してください。')
+//                    'message' => __d('baser_core', 'フィールド名は半角英数字のみで入力してください。')
 //                ]])
 //            ->add('field_name', [
 //                'duplicateMailField' => [
 //                    'rule' => 'duplicateMailField',
 //                    'provider' => 'table',
-//                    'message' => __d('baser', '既に登録のあるフィールド名です。')
+//                    'message' => __d('baser_core', '既に登録のあるフィールド名です。')
 //                ]]);
         $validator
             ->scalar('type')
-            ->notEmptyString('type', __d('baser', 'タイプを入力してください。'));
+            ->notEmptyString('type', __d('baser_core', 'タイプを入力してください。'));
         $validator
             ->scalar('head')
-            ->maxLength('head', 255, __d('baser', '項目見出しは255文字以内で入力してください。'));
+            ->maxLength('head', 255, __d('baser_core', '項目見出しは255文字以内で入力してください。'));
         $validator
             ->scalar('attention')
-            ->maxLength('attention', 255, __d('baser', '注意書きは255文字以内で入力してください。'));
+            ->maxLength('attention', 255, __d('baser_core', '注意書きは255文字以内で入力してください。'));
         $validator
             ->scalar('before_attachment')
-            ->maxLength('before_attachment', 255, __d('baser', '前見出しは255文字以内で入力してください。'));
+            ->maxLength('before_attachment', 255, __d('baser_core', '前見出しは255文字以内で入力してください。'));
         $validator
             ->scalar('after_attachment')
-            ->maxLength('after_attachment', 255, __d('baser', '後見出しは255文字以内で入力してください。'));
+            ->maxLength('after_attachment', 255, __d('baser_core', '後見出しは255文字以内で入力してください。'));
         // TODO ucmitz 未実装
 //        $validator
 //            ->scalar('source')
@@ -108,26 +108,26 @@ class MailFieldsTable extends MailAppTable
 //                'sourceMailField' => [
 //                    'rule' => 'sourceMailField',
 //                    'provider' => 'table',
-//                    'message' => __d('baser', '選択リストを入力してください。')
+//                    'message' => __d('baser_core', '選択リストを入力してください。')
 //                ]]);
         $validator
             ->scalar('options')
-            ->maxLength('options', 255, __d('baser', 'オプションは255文字以内で入力してください。'));
+            ->maxLength('options', 255, __d('baser_core', 'オプションは255文字以内で入力してください。'));
         $validator
             ->scalar('class')
-            ->maxLength('class', 255, __d('baser', 'クラス名255文字以内で入力してください。'));
+            ->maxLength('class', 255, __d('baser_core', 'クラス名255文字以内で入力してください。'));
         $validator
             ->scalar('default_value')
-            ->maxLength('default_value', 255, __d('baser', '初期値は255文字以内で入力してください。'));
+            ->maxLength('default_value', 255, __d('baser_core', '初期値は255文字以内で入力してください。'));
         $validator
             ->scalar('description')
-            ->maxLength('options', 255, __d('baser', '説明文は255文字以内で入力してください。'));
+            ->maxLength('options', 255, __d('baser_core', '説明文は255文字以内で入力してください。'));
         $validator
             ->scalar('group_field')
-            ->maxLength('group_field', 255, __d('baser', 'グループフィールドは255文字以内で入力してください。'));
+            ->maxLength('group_field', 255, __d('baser_core', 'グループフィールドは255文字以内で入力してください。'));
         $validator
             ->scalar('group_valid')
-            ->maxLength('group_valid', 255, __d('baser', 'グループ入力チェックは255文字以内で入力してください。'));
+            ->maxLength('group_valid', 255, __d('baser_core', 'グループ入力チェックは255文字以内で入力してください。'));
         return $validator;
     }
 
@@ -140,35 +140,35 @@ class MailFieldsTable extends MailAppTable
     public function getControlSource($field = null)
     {
         $source['type'] = [
-            'text' => __d('baser', 'テキスト'),
-            'textarea' => __d('baser', 'テキストエリア'),
-            'radio' => __d('baser', 'ラジオボタン'),
-            'select' => __d('baser', 'セレクトボックス'),
-            'email' => __d('baser', 'Eメール'),
-            'multi_check' => __d('baser', 'マルチチェックボックス'),
-            'file' => __d('baser', 'ファイル'),
-            'autozip' => __d('baser', '自動補完郵便番号'),
-            'pref' => __d('baser', '都道府県リスト'),
+            'text' => __d('baser_core', 'テキスト'),
+            'textarea' => __d('baser_core', 'テキストエリア'),
+            'radio' => __d('baser_core', 'ラジオボタン'),
+            'select' => __d('baser_core', 'セレクトボックス'),
+            'email' => __d('baser_core', 'Eメール'),
+            'multi_check' => __d('baser_core', 'マルチチェックボックス'),
+            'file' => __d('baser_core', 'ファイル'),
+            'autozip' => __d('baser_core', '自動補完郵便番号'),
+            'pref' => __d('baser_core', '都道府県リスト'),
             // TODO ucmitz 和暦未対応
-//            'date_time_wareki' => __d('baser', '和暦日付'),
-            'date_time_calender' => __d('baser', 'カレンダー'),
-            'tel' => __d('baser', '電話番号'),
-            'password' => __d('baser', 'パスワード'),
-            'hidden' => __d('baser', '隠しフィールド')
+//            'date_time_wareki' => __d('baser_core', '和暦日付'),
+            'date_time_calender' => __d('baser_core', 'カレンダー'),
+            'tel' => __d('baser_core', '電話番号'),
+            'password' => __d('baser_core', 'パスワード'),
+            'hidden' => __d('baser_core', '隠しフィールド')
         ];
         $source['valid_ex'] = [
-            'VALID_EMAIL' => __d('baser', 'Eメール形式チェック'),
-            'VALID_EMAIL_CONFIRM' => __d('baser', 'Eメール比較チェック'),
-            'VALID_GROUP_COMPLATE' => __d('baser', 'グループチェック'),
-            'VALID_NUMBER' => __d('baser', '数値チェック'),
-            'VALID_DATETIME' => __d('baser', '日付チェック'),
-            'VALID_MAX_FILE_SIZE' => __d('baser', 'ファイルアップロードサイズ制限'),
-            'VALID_FILE_EXT' => __d('baser', 'ファイル拡張子チェック'),
-            'VALID_ZENKAKU_KATAKANA' => __d('baser', '全角カタカナチェック'),
-            'VALID_ZENKAKU_HIRAGANA' => __d('baser', '全角ひらがなチェック'),
-            'VALID_REGEX' => __d('baser', '正規表現チェック'),
+            'VALID_EMAIL' => __d('baser_core', 'Eメール形式チェック'),
+            'VALID_EMAIL_CONFIRM' => __d('baser_core', 'Eメール比較チェック'),
+            'VALID_GROUP_COMPLATE' => __d('baser_core', 'グループチェック'),
+            'VALID_NUMBER' => __d('baser_core', '数値チェック'),
+            'VALID_DATETIME' => __d('baser_core', '日付チェック'),
+            'VALID_MAX_FILE_SIZE' => __d('baser_core', 'ファイルアップロードサイズ制限'),
+            'VALID_FILE_EXT' => __d('baser_core', 'ファイル拡張子チェック'),
+            'VALID_ZENKAKU_KATAKANA' => __d('baser_core', '全角カタカナチェック'),
+            'VALID_ZENKAKU_HIRAGANA' => __d('baser_core', '全角ひらがなチェック'),
+            'VALID_REGEX' => __d('baser_core', '正規表現チェック'),
         ];
-        $source['auto_convert'] = ['CONVERT_HANKAKU' => __d('baser', '半角変換')];
+        $source['auto_convert'] = ['CONVERT_HANKAKU' => __d('baser_core', '半角変換')];
         if (!$field) {
             return $source;
         }

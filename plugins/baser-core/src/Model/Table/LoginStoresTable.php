@@ -66,7 +66,7 @@ class LoginStoresTable extends AppTable
      */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
-        $rules->add($rules->isUnique(['store_key'], __d('baser', 'キーが重複しています。')));
+        $rules->add($rules->isUnique(['store_key'], __d('baser_core', 'キーが重複しています。')));
         return $rules;
     }
 
@@ -99,7 +99,7 @@ class LoginStoresTable extends AppTable
         while($this->save($loginStore) === false) {
             $loginStore->store_key = Security::randomString($this->keyLength);
             if ($i++ > 100) {
-                throw new \Exception(__d('baser', '不明なエラー'));
+                throw new \Exception(__d('baser_core', '不明なエラー'));
             }
         }
         return $loginStore;
@@ -168,7 +168,7 @@ class LoginStoresTable extends AppTable
             ])
             ->first();
         if ($loginStore === null) {
-            throw new \Exception(__d('baser', '更新データが見つかりませんでした'));
+            throw new \Exception(__d('baser_core', '更新データが見つかりませんでした'));
         }
         $this->delete($loginStore);
         return $this->addKey($prefix, $user_id);

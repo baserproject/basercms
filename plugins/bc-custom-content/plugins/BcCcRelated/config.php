@@ -11,8 +11,8 @@
 
 return [
     'type' => ['BcCustomContentPlugin'],
-    'title' => __d('baser', 'カスタムコンテンツ：関連データフィールド'),
-    'description' => __d('baser', 'カスタムコンテンツに関連データフィールドを提供する'),
+    'title' => __d('baser_core', 'カスタムコンテンツ：関連データフィールド'),
+    'description' => __d('baser_core', 'カスタムコンテンツに関連データフィールドを提供する'),
     'author' => 'baserCMS User Community',
     'url' => 'https://basercms.net',
 ];

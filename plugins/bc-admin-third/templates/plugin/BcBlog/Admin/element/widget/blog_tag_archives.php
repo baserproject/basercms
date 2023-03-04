@@ -17,12 +17,12 @@
  * @noTodo
  * @unitTest
  */
-$title = __d('baser', 'ブログタグ一覧');
-$description = __d('baser', 'ブログのタグ一覧を表示します。');
+$title = __d('baser_core', 'ブログタグ一覧');
+$description = __d('baser_core', 'ブログのタグ一覧を表示します。');
 ?>
 
 
-<?php echo $this->BcAdminForm->label($key . '.view_count', __d('baser', '記事数表示')) ?>&nbsp;
+<?php echo $this->BcAdminForm->label($key . '.view_count', __d('baser_core', '記事数表示')) ?>&nbsp;
 <?php echo $this->BcAdminForm->control($key . '.view_count', [
   'type' => 'radio',
   'options' => $this->BcText->booleanDoList(''),
@@ -30,9 +30,9 @@ $description = __d('baser', 'ブログのタグ一覧を表示します。');
   'default' => 0
 ]) ?>
 <br>
-<?php echo $this->BcAdminForm->label($key . '.blog_content_id', __d('baser', 'ブログ')) ?>&nbsp;
+<?php echo $this->BcAdminForm->label($key . '.blog_content_id', __d('baser_core', 'ブログ')) ?>&nbsp;
 <?php echo $this->BcAdminForm->control($key . '.blog_content_id', [
   'type' => 'select',
   'options' => $this->BcAdminForm->getControlSource('BcBlog.BlogContents.id'),
-  'empty' => __d('baser', '指定しない')
+  'empty' => __d('baser_core', '指定しない')
 ]) ?>

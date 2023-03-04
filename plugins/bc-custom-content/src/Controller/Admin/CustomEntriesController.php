@@ -43,7 +43,7 @@ class CustomEntriesController extends CustomContentAdminAppController
 
         $tableId = $this->request->getParam('pass.0');
         if(!$tableId) {
-            $this->BcMessage->setWarning(__d('baser', 'カスタムコンテンツにカスタムテーブルが紐付けられていません。カスタムコンテンツの編集画面よりカスタムテーブルを選択してください。'));
+            $this->BcMessage->setWarning(__d('baser_core', 'カスタムコンテンツにカスタムテーブルが紐付けられていません。カスタムコンテンツの編集画面よりカスタムテーブルを選択してください。'));
             return $this->redirect(['plugin' => 'BaserCore', 'controller' => 'Contents', 'action' => 'index']);
         }
 
@@ -59,7 +59,7 @@ class CustomEntriesController extends CustomContentAdminAppController
                 $contentId,
                 $this->getRequest()
             );
-            if (!$request) throw new BcException(__d('baser', 'コンテンツデータが見つかりません。'));
+            if (!$request) throw new BcException(__d('baser_core', 'コンテンツデータが見つかりません。'));
             $this->setRequest($request);
         }
     }
@@ -106,16 +106,16 @@ class CustomEntriesController extends CustomContentAdminAppController
             try {
                 $entity = $service->create($this->getRequest()->getData());
                 $entity = $service->get($entity->id);
-                $this->BcMessage->setSuccess(__d('baser',
+                $this->BcMessage->setSuccess(__d('baser_core',
                     'エントリー「{0}」を追加しました。',
                     $entity->{$entity->custom_table->display_field}
                 ));
                 return $this->redirect(['action' => 'edit', $tableId, $entity->id]);
             } catch (PersistenceFailedException $e) {
                 $entity = $e->getEntity();
-                $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
+                $this->BcMessage->setError(__d('baser_core', '入力エラーです。内容を修正してください。'));
             } catch (\Throwable $e) {
-                $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage()));
+                $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage()));
             }
         }
         $this->set($service->getViewVarsForAdd($tableId, $entity?? $service->getNew($tableId)));
@@ -135,16 +135,16 @@ class CustomEntriesController extends CustomContentAdminAppController
         if($this->getRequest()->is(['post', 'put'])) {
             try {
                 $entity = $service->update($entity, $this->getRequest()->getData());
-                $this->BcMessage->setSuccess(__d('baser',
+                $this->BcMessage->setSuccess(__d('baser_core',
                     'エントリー「{0}」を更新しました。',
                     $entity->{$entity->custom_table->display_field}
                 ));
                 return $this->redirect(['action' => 'edit', $tableId, $entity->id]);
             } catch (PersistenceFailedException $e) {
                 $entity = $e->getEntity();
-                $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
+                $this->BcMessage->setError(__d('baser_core', '入力エラーです。内容を修正してください。'));
             } catch (\Throwable $e) {
-                $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage()));
+                $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage()));
             }
         }
         $this->set($service->getViewVarsForEdit($tableId, $entity));
@@ -165,13 +165,13 @@ class CustomEntriesController extends CustomContentAdminAppController
         try {
             $entity = $service->get($id);
             if ($service->delete($id)) {
-                $this->BcMessage->setSuccess(__d('baser',
+                $this->BcMessage->setSuccess(__d('baser_core',
                     'エントリー「{0}」を削除しました。',
                     $entity->{$entity->custom_table->display_field}
                 ));
             }
         } catch (\Throwable $e) {
-            $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
+            $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
         }
         return $this->redirect(['action' => 'index', $tableId]);
     }
@@ -190,10 +190,10 @@ class CustomEntriesController extends CustomContentAdminAppController
         try {
             $entity = $service->get($id);
             if ($service->moveUp($id)) {
-                $this->BcMessage->setSuccess(__d('baser', 'エントリー「{0}」を上に移動しました。', $entity->title));
+                $this->BcMessage->setSuccess(__d('baser_core', 'エントリー「{0}」を上に移動しました。', $entity->title));
             }
         } catch (\Throwable $e) {
-            $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
+            $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
         }
         $this->redirect([
             'controller' => 'CustomEntries',
@@ -216,10 +216,10 @@ class CustomEntriesController extends CustomContentAdminAppController
         try {
             $entity = $service->get($id);
             if ($service->moveDown($id)) {
-                $this->BcMessage->setSuccess(__d('baser', 'エントリー「{0}」を下に移動しました。', $entity->title));
+                $this->BcMessage->setSuccess(__d('baser_core', 'エントリー「{0}」を下に移動しました。', $entity->title));
             }
         } catch (\Throwable $e) {
-            $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
+            $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
         }
         $this->redirect([
             'controller' => 'CustomEntries',

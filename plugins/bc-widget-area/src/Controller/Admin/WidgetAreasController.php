@@ -57,13 +57,13 @@ class WidgetAreasController extends BcAdminAppController
         if ($this->getRequest()->is(['post', 'put'])) {
             try {
                 $entity = $service->create($this->getRequest()->getData());
-                $this->BcMessage->setInfo(__d('baser', '新しいウィジェットエリアを保存しました。'));
+                $this->BcMessage->setInfo(__d('baser_core', '新しいウィジェットエリアを保存しました。'));
                 $this->redirect(['action' => 'edit', $entity->id]);
             } catch (PersistenceFailedException $e) {
                 $entity = $e->getEntity();
-                $this->BcMessage->setError(__d('baser', '新しいウィジェットエリアの保存に失敗しました。'));
+                $this->BcMessage->setError(__d('baser_core', '新しいウィジェットエリアの保存に失敗しました。'));
             } catch (\Throwable $e) {
-                $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
+                $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
             }
         }
         $this->set(['widgetArea' => $entity?? $service->getNew()]);
@@ -98,12 +98,12 @@ class WidgetAreasController extends BcAdminAppController
         $entity = $service->get($id);
         try {
             if($service->delete($id)) {
-                $this->BcMessage->setSuccess(__d('baser', 'ウィジェットエリア「{0}」を削除しました。', $entity->name));
+                $this->BcMessage->setSuccess(__d('baser_core', 'ウィジェットエリア「{0}」を削除しました。', $entity->name));
             } else {
-                $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。'));
+                $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。'));
             }
         } catch (\Throwable $e) {
-            $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
+            $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
         }
         return $this->redirect(['action' => 'index']);
     }

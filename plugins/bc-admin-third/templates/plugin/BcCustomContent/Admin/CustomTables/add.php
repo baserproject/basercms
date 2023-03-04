@@ -19,7 +19,7 @@
  * @noTodo
  * @unitTest
  */
-$this->BcAdmin->setTitle(__d('baser', ' テーブル新規登録'));
+$this->BcAdmin->setTitle(__d('baser_core', ' テーブル新規登録'));
 ?>
 
 
@@ -29,13 +29,13 @@ $this->BcAdmin->setTitle(__d('baser', ' テーブル新規登録'));
 
 <div class="bca-actions">
   <div class="bca-actions__main">
-    <?php $this->BcBaser->link(__d('baser', '一覧に戻る'),
+    <?php $this->BcBaser->link(__d('baser_core', '一覧に戻る'),
       ['action' => 'index'], [
         'class' => 'button bca-btn',
         'data-bca-btn-type' => 'back-to-list'
       ]) ?>
     &nbsp;&nbsp;
-    <?php echo $this->BcAdminForm->button(__d('baser', '保存'), [
+    <?php echo $this->BcAdminForm->button(__d('baser_core', '保存'), [
       'type' => 'submit',
       'id' => 'BtnSave',
       'div' => false,

@@ -80,11 +80,11 @@ class UserGroupsController extends BcAdminAppController
         if ($this->request->is('post')) {
             try {
                 $userGroup = $service->create($this->request->getData());
-                $this->BcMessage->setSuccess(__d('baser', '新規ユーザーグループ「{0}」を追加しました。', $userGroup->name));
+                $this->BcMessage->setSuccess(__d('baser_core', '新規ユーザーグループ「{0}」を追加しました。', $userGroup->name));
                 return $this->redirect(['action' => 'index']);
             } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
                 $userGroup = $e->getEntity();
-                $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
+                $this->BcMessage->setError(__d('baser_core', '入力エラーです。内容を修正してください。'));
             }
         }
         $this->set('userGroup', $userGroup ?? $service->getNew());
@@ -109,11 +109,11 @@ class UserGroupsController extends BcAdminAppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             try {
                 $userGroup = $service->update($userGroup, $this->request->getData());
-                $this->BcMessage->setSuccess(__d('baser', 'ユーザーグループ「{0}」を更新しました。', $userGroup->name));
+                $this->BcMessage->setSuccess(__d('baser_core', 'ユーザーグループ「{0}」を更新しました。', $userGroup->name));
                 $usersService->reLogin($this->request, $this->response);
                 return $this->redirect(['action' => 'index']);
             } catch (\Exception $e) {
-                $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
+                $this->BcMessage->setError(__d('baser_core', '入力エラーです。内容を修正してください。'));
             }
         }
         $this->set('userGroup', $userGroup);
@@ -136,9 +136,9 @@ class UserGroupsController extends BcAdminAppController
         $this->request->allowMethod(['post', 'delete']);
         $userGroup = $service->get($id);
         if ($service->delete($id)) {
-            $this->BcMessage->setSuccess(__d('baser', 'ユーザーグループ「{0}」を削除しました。', $userGroup->name));
+            $this->BcMessage->setSuccess(__d('baser_core', 'ユーザーグループ「{0}」を削除しました。', $userGroup->name));
         } else {
-            $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。'));
+            $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。'));
         }
         return $this->redirect(['action' => 'index']);
     }
@@ -162,15 +162,15 @@ class UserGroupsController extends BcAdminAppController
         $userGroup = $service->get($id);
         try {
             if ($this->UserGroups->copy($id)) {
-                $this->BcMessage->setSuccess(__d('baser', 'ユーザーグループ「{0}」をコピーしました。', $userGroup->name));
+                $this->BcMessage->setSuccess(__d('baser_core', 'ユーザーグループ「{0}」をコピーしました。', $userGroup->name));
             } else {
-                $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。'));
+                $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。'));
             }
         } catch (\Exception $e) {
             $message = [$e->getMessage()];
             $errors = $e->getErrors();
             if (!empty($errors)) {
-                foreach($errors as $error) $message[] = __d('baser', current($error));
+                foreach($errors as $error) $message[] = __d('baser_core', current($error));
             }
             $this->BcMessage->setError(implode("\n", $message), false);
         }

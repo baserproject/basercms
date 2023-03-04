@@ -14,7 +14,7 @@
  * [ADMIN] パンくずナビゲーション
  */
 if ($this->viewPath !== 'dashboard') {
-  $this->BcBaser->addCrumb('<span itemprop="title" class="bca-icon--home"><span class="bca-icon-label">' . __d('baser', 'ホーム') . '</span></span>', ['plugin' => null, 'controller' => 'dashboard']);
+  $this->BcBaser->addCrumb('<span itemprop="title" class="bca-icon--home"><span class="bca-icon-label">' . __d('baser_core', 'ホーム') . '</span></span>', ['plugin' => null, 'controller' => 'dashboard']);
 }
 $crumbs = $this->BcBaser->getCrumbs();
 if ($this->name === 'CakeError') {

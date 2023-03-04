@@ -70,12 +70,12 @@ class SearchIndexesController extends BcApiController
                 $searchIndex,
                 $this->getRequest()->getData('priority')
             );
-            $message = __d('baser', '検索インデックス「{0}」の優先度を変更しました。', $searchIndex->title);
+            $message = __d('baser_core', '検索インデックス「{0}」の優先度を変更しました。', $searchIndex->title);
         } catch (RecordNotFoundException $e) {
             $this->setResponse($this->response->withStatus(404));
-            $message = __d('baser', 'データが見つかりません。');
+            $message = __d('baser_core', 'データが見つかりません。');
         } catch (\Throwable $e) {
-            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
             $this->setResponse($this->response->withStatus(500));
         }
         $this->set([
@@ -97,7 +97,7 @@ class SearchIndexesController extends BcApiController
     {
         $this->request->allowMethod(['post', 'put']);
         $allowMethod = [
-            'delete' => __d('baser', '削除')
+            'delete' => __d('baser_core', '削除')
         ];
         $method = $this->getRequest()->getData('batch');
         if (!isset($allowMethod[$method])) {
@@ -108,14 +108,14 @@ class SearchIndexesController extends BcApiController
         try {
             $service->batch($method, $this->getRequest()->getData('batch_targets'));
             $this->BcMessage->setSuccess(
-                sprintf(__d('baser', '検索インデックスより NO.%s を %s しました。'), implode(', ', $this->getRequest()->getData('batch_targets')), $allowMethod[$method]),
+                sprintf(__d('baser_core', '検索インデックスより NO.%s を %s しました。'), implode(', ', $this->getRequest()->getData('batch_targets')), $allowMethod[$method]),
                 true,
                 false
             );
-            $message = __d('baser', '一括処理が完了しました。');
+            $message = __d('baser_core', '一括処理が完了しました。');
         } catch (\Throwable $e) {
             $this->setResponse($this->response->withStatus(500));
-            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
         }
         $this->set(['message' => $message]);
         $this->viewBuilder()->setOption('serialize', ['message']);
@@ -135,14 +135,14 @@ class SearchIndexesController extends BcApiController
         $errors = null;
         try {
             if ($searchIndexesService->reconstruct()) {
-                $message = __d('baser', '検索インデックスの再構築に成功しました。');
+                $message = __d('baser_core', '検索インデックスの再構築に成功しました。');
             } else {
                 $this->setResponse($this->response->withStatus(400));
-                $message = __d('baser', '検索インデックスの再構築に失敗しました。');
+                $message = __d('baser_core', '検索インデックスの再構築に失敗しました。');
             }
         } catch (\Throwable $e) {
             $this->setResponse($this->response->withStatus(500));
-            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
         }
 
 
@@ -210,16 +210,16 @@ class SearchIndexesController extends BcApiController
         try {
             $searchIndex = $searchIndexesService->get($id);
             if ($searchIndexesService->delete($id)) {
-                $message = __d('baser', '検索インデックス: {0} を削除しました。', $searchIndex->title);
+                $message = __d('baser_core', '検索インデックス: {0} を削除しました。', $searchIndex->title);
             } else {
                 $this->setResponse($this->response->withStatus(400));
-                $message = __d('baser', 'データベース処理中にエラーが発生しました。');
+                $message = __d('baser_core', 'データベース処理中にエラーが発生しました。');
             }
         } catch (RecordNotFoundException $e) {
             $this->setResponse($this->response->withStatus(404));
-            $message = __d('baser', 'データが見つかりません。');
+            $message = __d('baser_core', 'データが見つかりません。');
         } catch (\Throwable $e) {
-            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
             $this->setResponse($this->response->withStatus(500));
         }
 

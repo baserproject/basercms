@@ -43,8 +43,8 @@ class ThemeFilesTable extends AppTable
         // TODO ucmitz 未実装
 //        $this->validate = [
 //            'name' => [
-//                ['rule' => ['notBlank'], 'message' => __d('baser', 'テーマファイル名を入力してください。'), 'required' => true],
-//                ['rule' => ['duplicateThemeFile'], 'on' => 'create', 'message' => __d('baser', '入力されたテーマファイル名は、同一階層に既に存在します。')]]
+//                ['rule' => ['notBlank'], 'message' => __d('baser_core', 'テーマファイル名を入力してください。'), 'required' => true],
+//                ['rule' => ['duplicateThemeFile'], 'on' => 'create', 'message' => __d('baser_core', '入力されたテーマファイル名は、同一階層に既に存在します。')]]
 //        ];
         return $validator;
     }

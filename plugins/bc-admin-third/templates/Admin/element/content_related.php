@@ -34,7 +34,7 @@ $pureUrl = $this->BcContents->getPureUrl($content->url, $content->site_id);
     <div class="bca-collapse__action">
       <button type="button" class="bca-collapse__btn" data-bca-collapse="collapse"
               data-bca-target="#formRelatedContentsBody" aria-expanded="false"
-              aria-controls="formOptionBody"><?php echo __d('baser', '関連コンテンツ') ?>&nbsp;&nbsp;<i
+              aria-controls="formOptionBody"><?php echo __d('baser_core', '関連コンテンツ') ?>&nbsp;&nbsp;<i
           class="bca-icon--chevron-down bca-collapse__btn-icon"></i></button>
     </div>
     <div class="bca-collapse" id="formRelatedContentsBody" data-bca-state="">
@@ -42,11 +42,11 @@ $pureUrl = $this->BcContents->getPureUrl($content->url, $content->site_id);
       ">
       <thead class="bca-table-listup__thead">
       <tr>
-        <th class="bca-table-listup__thead-th"><?php echo __d('baser', 'サイト名') ?></th>
-        <th class="bca-table-listup__thead-th"><?php echo __d('baser', 'メインサイト') ?></th>
-        <th class="bca-table-listup__thead-th"><?php echo __d('baser', 'タイトル') ?></th>
-        <th class="bca-table-listup__thead-th"><?php echo __d('baser', 'エイリアス') ?></th>
-        <th class="bca-table-listup__thead-th"><?php echo __d('baser', 'アクション') ?></th>
+        <th class="bca-table-listup__thead-th"><?php echo __d('baser_core', 'サイト名') ?></th>
+        <th class="bca-table-listup__thead-th"><?php echo __d('baser_core', 'メインサイト') ?></th>
+        <th class="bca-table-listup__thead-th"><?php echo __d('baser_core', 'タイトル') ?></th>
+        <th class="bca-table-listup__thead-th"><?php echo __d('baser_core', 'エイリアス') ?></th>
+        <th class="bca-table-listup__thead-th"><?php echo __d('baser_core', 'アクション') ?></th>
       </tr>
       </thead>
       <tbody class="bca-table-listup__tbody">
@@ -95,7 +95,7 @@ $pureUrl = $this->BcContents->getPureUrl($content->url, $content->site_id);
                   ）</small>
               <?php endif ?>
             <?php else: ?>
-              <small><?php echo __d('baser', '未登録') ?></small>
+              <small><?php echo __d('baser_core', '未登録') ?></small>
             <?php endif ?>
           </td>
           <td class="cel5 bca-table-listup__tbody-td">
@@ -107,14 +107,14 @@ $pureUrl = $this->BcContents->getPureUrl($content->url, $content->site_id);
             <?php if (!$current): ?>
               <?php if (!empty($relatedContent['Content'])): ?>
                 <?php $this->BcBaser->link('', $relatedContent['Content']->url, [
-                  'title' => __d('baser', '確認'),
+                  'title' => __d('baser_core', '確認'),
                   'target' => '_blank',
                   'class' => 'btn-check bca-btn-icon',
                   'data-bca-btn-type' => 'preview',
                   'data-bca-btn-size' => 'lg'
                 ]) ?>
                 <?php $this->BcBaser->link('', $editUrl, [
-                  'title' => __d('baser', '編集'),
+                  'title' => __d('baser_core', '編集'),
                   'class' => 'btn-edit bca-btn-icon',
                   'data-bca-btn-type' => 'edit',
                   'data-bca-btn-size' => 'lg'
@@ -124,7 +124,7 @@ $pureUrl = $this->BcContents->getPureUrl($content->url, $content->site_id);
                   'class' => 'create-alias btn-alias bca-btn-icon',
                   'data-bca-btn-type' => 'alias',
                   'data-bca-btn-size' => 'lg',
-                  'title' => __d('baser', 'エイリアス作成'),
+                  'title' => __d('baser_core', 'エイリアス作成'),
                   'target' => '_blank',
                   'data-site-id' => $relatedContent['Site']->id,
                   'escape' => false,
@@ -133,7 +133,7 @@ $pureUrl = $this->BcContents->getPureUrl($content->url, $content->site_id);
                   'class' => 'create-copy btn-copy bca-btn-icon',
                   'data-bca-btn-type' => 'copy',
                   'data-bca-btn-size' => 'lg',
-                  'title' => __d('baser', 'コピー作成'),
+                  'title' => __d('baser_core', 'コピー作成'),
                   'target' => '_blank',
                   'data-site-id' => $relatedContent['Site']->id,
                   'escape' => false

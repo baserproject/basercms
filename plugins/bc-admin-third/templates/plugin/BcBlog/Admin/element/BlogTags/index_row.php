@@ -26,7 +26,7 @@
     <?php if ($this->BcBaser->isAdminUser()): ?>
       <?php echo $this->BcAdminForm->control('batch_targets.' . $blogTag->id, [
         'type' => 'checkbox',
-        'label' => '<span class="bca-visually-hidden">' . __d('baser', 'チェックする') . '</span>',
+        'label' => '<span class="bca-visually-hidden">' . __d('baser_core', 'チェックする') . '</span>',
         'class' => 'batch-targets bca-checkbox__input',
         'value' => $blogTag->id,
         'escape' => false
@@ -46,11 +46,11 @@
   <td class="row-tools bca-table-listup__tbody-td bca-table-listup__tbody-td--actions">
     <?php $this->BcBaser->link('',
       ['action' => 'edit', $blogTag->id],
-      ['title' => __d('baser', '編集'), 'class' => 'bca-btn-icon', 'data-bca-btn-type' => 'edit', 'data-bca-btn-size' => 'lg']
+      ['title' => __d('baser_core', '編集'), 'class' => 'bca-btn-icon', 'data-bca-btn-type' => 'edit', 'data-bca-btn-size' => 'lg']
     ) ?>
     <?= $this->BcAdminForm->postLink('', ['action' => 'delete', $blogTag->id], [
-      'confirm' => __d('baser', "このデータを本当に削除してもいいですか？\nこのタグに関連する記事は削除されません。"),
-      'title' => __d('baser', '削除'),
+      'confirm' => __d('baser_core', "このデータを本当に削除してもいいですか？\nこのタグに関連する記事は削除されません。"),
+      'title' => __d('baser_core', '削除'),
       'class' => 'btn-delete bca-btn-icon',
       'data-bca-btn-type' => 'delete',
       'data-bca-btn-size' => 'lg',

@@ -21,15 +21,15 @@
  * @unitTest
  */
 echo $this->BcBaser->i18nScript([
-  'uploaderCancel' => __d('baser', 'キャンセル'),
-  'uploaderSave' => __d('baser', '保存'),
-  'uploaderEdit' => __d('baser', '編集'),
-  'uploaderDelete' => __d('baser', '削除'),
-  'uploaderAlertMessage1' => __d('baser', '更新に失敗しました。入力内容を見直してください。'),
-  'uploaderAlertMessage2' => __d('baser', 'アップロードに失敗しました。ファイルサイズが大きいか、許可されていない形式です。'),
-  'uploaderAlertMessage3' => __d('baser', 'このファイルの編集・削除はできません。'),
-  'uploaderAlertMessage4' => __d('baser', 'サーバーでの処理に失敗しました。'),
-  'uploaderConfirmMessage1' => __d('baser', '本当に削除してもよろしいですか？')
+  'uploaderCancel' => __d('baser_core', 'キャンセル'),
+  'uploaderSave' => __d('baser_core', '保存'),
+  'uploaderEdit' => __d('baser_core', '編集'),
+  'uploaderDelete' => __d('baser_core', '削除'),
+  'uploaderAlertMessage1' => __d('baser_core', '更新に失敗しました。入力内容を見直してください。'),
+  'uploaderAlertMessage2' => __d('baser_core', 'アップロードに失敗しました。ファイルサイズが大きいか、許可されていない形式です。'),
+  'uploaderAlertMessage3' => __d('baser_core', 'このファイルの編集・削除はできません。'),
+  'uploaderAlertMessage4' => __d('baser_core', 'サーバーでの処理に失敗しました。'),
+  'uploaderConfirmMessage1' => __d('baser_core', '本当に削除してもよろしいですか？')
 ], ['block' => false]);
 $this->BcBaser->js(['BcUploader.admin/uploader_files/index_panel.bundle']);
 ?>
@@ -61,6 +61,6 @@ $this->BcBaser->js(['BcUploader.admin/uploader_files/index_panel.bundle']);
 <?php endif ?>
 
 <!-- 編集ダイアログ -->
-<div id="EditDialog" title="<?php echo __d('baser', 'ファイル情報編集') ?>">
+<div id="EditDialog" title="<?php echo __d('baser_core', 'ファイル情報編集') ?>">
     <?php $this->BcBaser->element('UploaderFiles/form', ['listId', $listId, 'popup' => true]) ?>
 </div>

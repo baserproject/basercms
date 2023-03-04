@@ -14,7 +14,7 @@
  * [ADMIN] 検索インデックス一覧
  * @var \BaserCore\View\BcAdminAppView $this
  */
-$this->BcAdmin->setTitle(__d('baser', '検索インデックス一覧'));
+$this->BcAdmin->setTitle(__d('baser_core', '検索インデックス一覧'));
 $this->BcAdmin->setSearch('BcSearchIndex.search_indexes_index');
 $this->BcAdmin->setHelp('BcSearchIndex.search_indexes_index');
 $this->BcBaser->js([
@@ -34,10 +34,9 @@ $this->BcBaser->js([
 
 <div class="submit bca-actions">
   <div class="bca-actions__main">
-    <?php echo $this->BcAdminForm->postLink(__d(
-      'baser', '検索インデックス再構築'),
+    <?php echo $this->BcAdminForm->postLink(__d('baser_core', '検索インデックス再構築'),
       ['controller' => 'search_indexes', 'action' => 'reconstruct'],
-      ['confirm' => __d('baser', '現在の検索インデックスを消去して、再構築します。本当にいいですか？'),
+      ['confirm' => __d('baser_core', '現在の検索インデックスを消去して、再構築します。本当にいいですか？'),
       'class' => 'bca-btn bca-actions__item bca-loading',
       'data-bca-btn-size' => 'lg',
       'data-bca-btn-width' => 'lg']

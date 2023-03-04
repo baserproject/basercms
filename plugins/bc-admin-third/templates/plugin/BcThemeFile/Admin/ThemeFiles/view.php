@@ -49,7 +49,7 @@ $isCopyable = ($isDefaultTheme &&
 
 <div class="submit bca-actions">
   <div class="bca-actions__main">
-  <?php $this->BcBaser->link(__d('baser', '一覧に戻る'),
+  <?php $this->BcBaser->link(__d('baser_core', '一覧に戻る'),
     array_merge(['action' => 'index', $theme, $plugin, $type], explode('/', dirname($path))), [
       'class' => 'button bca-btn',
       'data-bca-btn-type' => 'back-to-list'
@@ -59,10 +59,10 @@ $isCopyable = ($isDefaultTheme &&
   <?php // テーマ編集が許可されていない場合コピー不可 ?>
   <?php if ($isCopyable): ?>
     &nbsp;&nbsp;
-    <?php echo $this->BcAdminForm->postLink(__d('baser', '現在のテーマにコピー'),
+    <?php echo $this->BcAdminForm->postLink(__d('baser_core', '現在のテーマにコピー'),
       array_merge(['action' => 'copy_to_theme', $theme, $plugin, $type], explode('/', $path)), [
         'block' => true,
-        'confirm' => __d('baser',
+        'confirm' => __d('baser_core',
           "本当に現在のテーマ「{0}」にコピーしてもいいですか？\n既に存在するファイルは上書きされます。",
           Cake\Utility\Inflector::camelize(\BaserCore\Utility\BcUtil::getCurrentTheme())
         ),

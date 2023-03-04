@@ -36,10 +36,10 @@ class UploaderConfigsController extends BcAdminAppController
     {
         if($this->getRequest()->is(['post', 'put'])) {
             if($service->update($this->getRequest()->getData())) {
-                $this->BcMessage->setSuccess(__d('baser', 'アップローダー設定を保存しました。'));
+                $this->BcMessage->setSuccess(__d('baser_core', 'アップローダー設定を保存しました。'));
                 $this->redirect(['action' => 'index']);
             } else {
-                $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
+                $this->BcMessage->setError(__d('baser_core', '入力エラーです。内容を修正してください。'));
             }
         }
         $this->set([

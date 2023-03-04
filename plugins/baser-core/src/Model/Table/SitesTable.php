@@ -103,54 +103,54 @@ class SitesTable extends AppTable
             ->allowEmptyString('id', null, 'create');
         $validator
             ->scalar('name')
-            ->maxLength('name', 50, __d('baser', '識別名称は50文字以内で入力してください。'))
-            ->requirePresence('name', 'create', __d('baser', '識別名称を入力してください。'))
-            ->notEmptyString('name', __d('baser', '識別名称を入力してください。'))
+            ->maxLength('name', 50, __d('baser_core', '識別名称は50文字以内で入力してください。'))
+            ->requirePresence('name', 'create', __d('baser_core', '識別名称を入力してください。'))
+            ->notEmptyString('name', __d('baser_core', '識別名称を入力してください。'))
             ->add('name', [
                 'nameUnique' => [
                     'rule' => 'validateUnique',
                     'provider' => 'table',
-                    'message' => __d('baser', '既に利用されている識別名称です。別の名称に変更してください。')
+                    'message' => __d('baser_core', '既に利用されている識別名称です。別の名称に変更してください。')
                 ]])
             ->add('name', [
                 'nameAlphaNumericPlus' => [
                     'rule' => ['alphaNumericPlus'],
                     'provider' => 'bc',
-                    'message' => __d('baser', '識別名称は、半角英数・ハイフン（-）・アンダースコア（_）で入力してください。')
+                    'message' => __d('baser_core', '識別名称は、半角英数・ハイフン（-）・アンダースコア（_）で入力してください。')
                 ]]);
         $validator
             ->scalar('display_name')
-            ->maxLength('display_name', 50, __d('baser', 'サイト名は50文字以内で入力してください。'))
-            ->requirePresence('display_name', 'create', __d('baser', 'サイト名を入力してください。'))
-            ->notEmptyString('display_name', __d('baser', 'サイト名を入力してください。'));
+            ->maxLength('display_name', 50, __d('baser_core', 'サイト名は50文字以内で入力してください。'))
+            ->requirePresence('display_name', 'create', __d('baser_core', 'サイト名を入力してください。'))
+            ->notEmptyString('display_name', __d('baser_core', 'サイト名を入力してください。'));
         $validator
             ->scalar('alias')
-            ->maxLength('alias', 50, __d('baser', 'エイリアスは50文字以内で入力してください。'))
-            ->requirePresence('alias', 'create', __d('baser', 'エイリアスを入力してください。'))
-            ->notEmptyString('alias', __d('baser', 'エイリアスを入力してください。'))
+            ->maxLength('alias', 50, __d('baser_core', 'エイリアスは50文字以内で入力してください。'))
+            ->requirePresence('alias', 'create', __d('baser_core', 'エイリアスを入力してください。'))
+            ->notEmptyString('alias', __d('baser_core', 'エイリアスを入力してください。'))
             ->add('alias', [
                 'aliasUnique' => [
                     'rule' => 'validateUnique',
                     'provider' => 'table',
-                    'message' => __d('baser', '既に利用されているエイリアス名です。別の名称に変更してください。')
+                    'message' => __d('baser_core', '既に利用されているエイリアス名です。別の名称に変更してください。')
                 ]])
             ->add('alias', [
                 'aliasSlashChecks' => [
                     'rule' => 'aliasSlashChecks',
                     'provider' => 'site',
-                    'message' => __d('baser', 'エイリアスには先頭と末尾にスラッシュ（/）は入力できず、また、連続して入力する事もできません。')
+                    'message' => __d('baser_core', 'エイリアスには先頭と末尾にスラッシュ（/）は入力できず、また、連続して入力する事もできません。')
                 ]])
             ->add('alias', [
                 'nameCheckContentExists' => [
                     'rule' => 'checkContentExists',
                     'provider' => 'site',
-                    'message' => __d('baser', 'コンテンツ管理上にエイリアスと同名のコンテンツ、またはフォルダが存在するため利用できません。別の名称にするか、コンテンツ、またはフォルダをリネームしてください。')
+                    'message' => __d('baser_core', 'コンテンツ管理上にエイリアスと同名のコンテンツ、またはフォルダが存在するため利用できません。別の名称にするか、コンテンツ、またはフォルダをリネームしてください。')
                 ]]);
         $validator
             ->scalar('title')
-            ->maxLength('title', 255, __d('baser', 'サイトタイトルは255文字以内で入力してください。'))
-            ->requirePresence('title', 'create', __d('baser', 'サイトタイトルを入力してください。'))
-            ->notEmptyString('title', __d('baser', 'サイトタイトルを入力してください。'));
+            ->maxLength('title', 255, __d('baser_core', 'サイトタイトルは255文字以内で入力してください。'))
+            ->requirePresence('title', 'create', __d('baser_core', 'サイトタイトルを入力してください。'))
+            ->notEmptyString('title', __d('baser_core', 'サイトタイトルを入力してください。'));
         return $validator;
     }
 
@@ -592,7 +592,7 @@ class SitesTable extends AppTable
     public function getSelectableDevices($mainSiteId, $currentSiteId)
     {
         $agents = Configure::read('BcAgent');
-        $devices = ['' => __d('baser', '指定しない')];
+        $devices = ['' => __d('baser_core', '指定しない')];
         $this->setDisplayField('device');
         $conditions = [
             'id IS NOT' => $currentSiteId
@@ -626,7 +626,7 @@ class SitesTable extends AppTable
     public function getSelectableLangs($mainSiteId, $currentSiteId)
     {
         $langs = Configure::read('BcLang');
-        $devices = ['' => __d('baser', '指定しない')];
+        $devices = ['' => __d('baser_core', '指定しない')];
         $this->setDisplayField('lang');
         $conditions = [
             'id IS NOT' => $currentSiteId

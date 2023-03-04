@@ -29,7 +29,7 @@ use BaserCore\View\BcAdminAppView;
   <?php // $this->BcBaser->element('permission') ?>
 
   <nav class="bca-nav__main" data-js-tmpl="AdminMenu" hidden>
-    <h2 class="bca-nav__main-title"><?php echo __d('baser', '管理メニュー') ?></h2>
+    <h2 class="bca-nav__main-title"><?php echo __d('baser_core', '管理メニュー') ?></h2>
     <div v-for="content in contentList" class="bca-nav__sub"
          v-if="content.siteId === currentSiteId || content.siteId === null" v-bind:data-content-type="content.type"
          v-bind:data-content-is-current="content.current" v-bind:data-content-is-expanded="content.expanded">
@@ -48,7 +48,7 @@ use BaserCore\View\BcAdminAppView;
     <div v-if="systemList.length" class="bca-nav__system" v-bind:data-content-is-expanded="isSystemSettingPage"
          v-bind:data-bca-state="systemExpanded">
       <h3 class="bca-nav__system-title">
-        <button class="bca-nav__sub-title-label" @click="openSystem"><span><?php echo __d('baser', '設定') ?></span> <i
+        <button class="bca-nav__sub-title-label" @click="openSystem"><span><?php echo __d('baser_core', '設定') ?></span> <i
             class="bca-icon--chevron-down bca-nav__system-title-icon"></i></button>
       </h3>
       <div class="bca-nav__system-list" v-bind:hidden="!systemExpanded">

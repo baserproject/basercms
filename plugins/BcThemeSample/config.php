@@ -11,8 +11,8 @@
 
 return [
     'type' => 'Theme',
-    'title' => __d('baser', 'サンプルテーマ'),
-    'description' => __d('baser', '制作用のサンプルテーマです。'),
+    'title' => __d('baser_core', 'サンプルテーマ'),
+    'description' => __d('baser_core', '制作用のサンプルテーマです。'),
     'author' => 'baserCMS User Community',
     'url' => 'https://basercms.net',
     'installMessage' => ''

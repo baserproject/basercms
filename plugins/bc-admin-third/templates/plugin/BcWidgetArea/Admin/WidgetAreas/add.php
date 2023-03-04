@@ -18,15 +18,15 @@
  * @noTodo
  * @unitTest
  */
-$this->BcAdmin->setTitle(__d('baser', '新規ウィジェットエリア登録'));
+$this->BcAdmin->setTitle(__d('baser_core', '新規ウィジェットエリア登録'));
 $this->BcAdmin->setHelp('widget_areas_form');
 ?>
 
 
 <?php echo $this->BcAdminForm->create($widgetArea, ['url' => ['action' => 'add']]) ?>
-<?php echo $this->BcAdminForm->label('name', __d('baser', 'ウィジェットエリア名')) ?>&nbsp;
+<?php echo $this->BcAdminForm->label('name', __d('baser_core', 'ウィジェットエリア名')) ?>&nbsp;
 <?php echo $this->BcAdminForm->control('name', ['type' => 'text', 'size' => 40, 'autofocus' => true]) ?>&nbsp;
-<?php echo $this->BcAdminForm->submit(__d('baser', 'エリア名を保存する'), [
+<?php echo $this->BcAdminForm->submit(__d('baser_core', 'エリア名を保存する'), [
     'div' => false,
     'class' => 'button bca-btn',
     'id' => 'WidgetAreaUpdateTitleSubmit',

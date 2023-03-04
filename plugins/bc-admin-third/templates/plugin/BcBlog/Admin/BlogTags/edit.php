@@ -16,7 +16,7 @@
  * @noTodo
  * @unitTest
  */
-$this->BcAdmin->setTitle(__d('baser', 'タグ編集'));
+$this->BcAdmin->setTitle(__d('baser_core', 'タグ編集'));
 ?>
 
 
@@ -28,7 +28,7 @@ $this->BcAdmin->setTitle(__d('baser', 'タグ編集'));
 <!-- button -->
 <div class="submit bca-actions">
   <div class="bca-actions__main">
-    <?php echo $this->BcAdminForm->button(__d('baser', '保存'), [
+    <?php echo $this->BcAdminForm->button(__d('baser_core', '保存'), [
       'div' => false,
       'class' => 'button bca-btn bca-actions__item',
       'id' => 'BtnSave',
@@ -38,11 +38,11 @@ $this->BcAdmin->setTitle(__d('baser', 'タグ編集'));
     ]) ?>
   </div>
   <div class="bca-actions__sub">
-    <?php $this->BcBaser->link(__d('baser', '削除'), ['action' => 'delete', $blogTag->id], [
+    <?php $this->BcBaser->link(__d('baser_core', '削除'), ['action' => 'delete', $blogTag->id], [
       'class' => 'bca-submit-token button bca-btn bca-actions__item',
       'data-bca-btn-type' => 'delete',
       'data-bca-btn-size' => 'sm'
-    ], sprintf(__d('baser', "%s を本当に削除してもいいですか？\nこのタグに関連する記事は削除されません。"), $this->BcAdminForm->getSourceValue('BlogTag.name'))); ?>
+    ], sprintf(__d('baser_core', "%s を本当に削除してもいいですか？\nこのタグに関連する記事は削除されません。"), $this->BcAdminForm->getSourceValue('BlogTag.name'))); ?>
   </div>
 </div>
 

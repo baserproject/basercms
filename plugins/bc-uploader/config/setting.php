@@ -18,7 +18,7 @@ return [
             'Plugins' => [
                 'menus' => [
                     'UploaderConfigs' => [
-                        'title' => __d('baser', 'アップローダー基本設定'),
+                        'title' => __d('baser_core', 'アップローダー基本設定'),
                         'url' => [
                             'prefix' => 'Admin',
                             'plugin' => 'BcUploader',
@@ -30,12 +30,12 @@ return [
             ],
             'Contents' => [
                 'BcUploader' => [
-                    'title' => __d('baser', 'アップロード管理'),
+                    'title' => __d('baser_core', 'アップロード管理'),
                     'type' => 'uploader',
                     'icon' => 'bca-icon--uploader',
                     'menus' => [
                         'UplaoderFiles' => [
-                            'title' => __d('baser', 'アップロードファイル'),
+                            'title' => __d('baser_core', 'アップロードファイル'),
                             'url' => [
                                 'prefix' => 'Admin',
                                 'plugin' => 'BcUploader',
@@ -43,7 +43,7 @@ return [
                                 'action' => 'index'
                             ]],
                         'UploaderCategories' => [
-                            'title' => __d('baser', 'アップロードカテゴリ'),
+                            'title' => __d('baser_core', 'アップロードカテゴリ'),
                             'url' => [
                                 'prefix' => 'Admin',
                                 'plugin' => 'BcUploader',

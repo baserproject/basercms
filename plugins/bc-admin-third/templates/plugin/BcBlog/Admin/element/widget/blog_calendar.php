@@ -16,17 +16,17 @@
  * @noTodo
  * @unitTest
  */
-$title = __d('baser', 'ブログカレンダー');
-$description = __d('baser', 'ブログのカレンダーを表示します。');
+$title = __d('baser_core', 'ブログカレンダー');
+$description = __d('baser_core', 'ブログのカレンダーを表示します。');
 ?>
 
 
-<?php echo $this->BcAdminForm->label($key . '.blog_content_id', __d('baser', 'ブログ')) ?>&nbsp;
+<?php echo $this->BcAdminForm->label($key . '.blog_content_id', __d('baser_core', 'ブログ')) ?>&nbsp;
 <?php echo $this->BcAdminForm->control($key . '.blog_content_id', [
   'type' => 'select',
   'options' => $this->BcAdminForm->getControlSource('BcBlog.BlogContents.id')
 ]) ?>
 <br>
 <small>
-  <?php echo __d('baser', 'ブログページを表示している場合は、上記の設定に関係なく、対象ブログのブログカレンダーを表示します。') ?>
+  <?php echo __d('baser_core', 'ブログページを表示している場合は、上記の設定に関係なく、対象ブログのブログカレンダーを表示します。') ?>
 </small>

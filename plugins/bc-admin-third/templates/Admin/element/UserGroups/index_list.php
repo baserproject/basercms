@@ -40,24 +40,24 @@ $this->BcListTable->setColumnNumber(5);
     <th class="bca-table-listup__thead-th">
       <?php echo $this->Paginator->sort('id',
         [
-          'asc' => '<i class="bca-icon--asc" title="' . __d('baser', '昇順') . '"></i>' . __d('baser', 'No'),
-          'desc' => '<i class="bca-icon--desc" title="' . __d('baser', '降順') . '"></i>' . __d('baser', 'No')
+          'asc' => '<i class="bca-icon--asc" title="' . __d('baser_core', '昇順') . '"></i>' . __d('baser_core', 'No'),
+          'desc' => '<i class="bca-icon--desc" title="' . __d('baser_core', '降順') . '"></i>' . __d('baser_core', 'No')
         ],
         ['escape' => false, 'class' => 'btn-direction bca-table-listup__a']) ?>
     </th>
     <th class="bca-table-listup__thead-th">
       <?php echo $this->Paginator->sort('name',
         [
-          'asc' => '<i class="bca-icon--asc" title="' . __d('baser', '昇順') . '"></i>' . __d('baser', 'ユーザーグループ名'),
-          'desc' => '<i class="bca-icon--desc" title="' . __d('baser', '降順') . '"></i>' . __d('baser', 'ユーザーグループ名')
+          'asc' => '<i class="bca-icon--asc" title="' . __d('baser_core', '昇順') . '"></i>' . __d('baser_core', 'ユーザーグループ名'),
+          'desc' => '<i class="bca-icon--desc" title="' . __d('baser_core', '降順') . '"></i>' . __d('baser_core', 'ユーザーグループ名')
         ],
         ['escape' => false, 'class' => 'btn-direction bca-table-listup__a']) ?>
     </th>
     <th class="bca-table-listup__thead-th">
       <?php echo $this->Paginator->sort('title',
         [
-          'asc' => '<i class="bca-icon--asc" title="' . __d('baser', '昇順') . '"></i>' . __d('baser', '表示名'),
-          'desc' => '<i class="bca-icon--desc" title="' . __d('baser', '降順') . '"></i>' . __d('baser', '表示名')
+          'asc' => '<i class="bca-icon--asc" title="' . __d('baser_core', '昇順') . '"></i>' . __d('baser_core', '表示名'),
+          'desc' => '<i class="bca-icon--desc" title="' . __d('baser_core', '降順') . '"></i>' . __d('baser_core', '表示名')
         ],
         ['escape' => false, 'class' => 'btn-direction bca-table-listup__a']) ?>
     </th>
@@ -65,18 +65,18 @@ $this->BcListTable->setColumnNumber(5);
     <th class="bca-table-listup__thead-th">
       <?php echo $this->Paginator->sort('created',
         [
-          'asc' => '<i class="bca-icon--asc" title="' . __d('baser', '昇順') . '"></i>' . __d('baser', '登録日'),
-          'desc' => '<i class="bca-icon--desc" title="' . __d('baser', '昇順') . '"></i>' . __d('baser', '登録日')
+          'asc' => '<i class="bca-icon--asc" title="' . __d('baser_core', '昇順') . '"></i>' . __d('baser_core', '登録日'),
+          'desc' => '<i class="bca-icon--desc" title="' . __d('baser_core', '昇順') . '"></i>' . __d('baser_core', '登録日')
         ],
         ['escape' => false, 'class' => 'btn-direction bca-table-listup__a']) ?><br/>
       <?php echo $this->Paginator->sort('modified',
         [
-          'asc' => '<i class="bca-icon--asc" title="' . __d('baser', '昇順') . '"></i>' . __d('baser', '更新日'),
-          'desc' => '<i class="bca-icon--desc" title="' . __d('baser', '昇順') . '"></i>' . __d('baser', '更新日')
+          'asc' => '<i class="bca-icon--asc" title="' . __d('baser_core', '昇順') . '"></i>' . __d('baser_core', '更新日'),
+          'desc' => '<i class="bca-icon--desc" title="' . __d('baser_core', '昇順') . '"></i>' . __d('baser_core', '更新日')
         ],
         ['escape' => false, 'class' => 'btn-direction bca-table-listup__a']) ?>
     </th>
-    <th class="bca-table-listup__thead-th"><?php echo __d('baser', 'アクション') ?></th>
+    <th class="bca-table-listup__thead-th"><?php echo __d('baser_core', 'アクション') ?></th>
   </tr>
   </thead>
   <tbody>
@@ -87,7 +87,7 @@ $this->BcListTable->setColumnNumber(5);
   <?php else: ?>
     <tr>
       <td colspan="<?php echo $this->BcListTable->getColumnNumber() ?>"><p
-          class="no-data"><?php echo __d('baser', 'データが見つかりませんでした。') ?></p>
+          class="no-data"><?php echo __d('baser_core', 'データが見つかりませんでした。') ?></p>
       </td>
     </tr>
   <?php endif; ?>

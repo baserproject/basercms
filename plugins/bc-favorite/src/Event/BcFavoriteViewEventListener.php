@@ -57,7 +57,7 @@ class BcFavoriteViewEventListener extends \BaserCore\Event\BcViewEventListener
         }
         $contentsMenu = $event->getData('contentsMenu');
         $view = $event->getSubject();
-        $contentsMenu[] = $view->BcBaser->getLink(__d('baser', 'お気に入りに追加'), 'javascript:void(0)', [
+        $contentsMenu[] = $view->BcBaser->getLink(__d('baser_core', 'お気に入りに追加'), 'javascript:void(0)', [
             'id' => 'BtnFavoriteAdd',
             'data-bca-fn' => 'BtnFavoriteAdd',
             'class' => 'bca-content-menu__link bca-icon--plus-square'

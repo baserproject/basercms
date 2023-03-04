@@ -23,8 +23,8 @@ return [
              * E-mail用テキストボックスを表示するフィールドタイプ
              */
             'BcCcEmail' => [
-                'category' => __d('baser', '基本'),
-                'label' => __d('baser', 'Eメール'),
+                'category' => __d('baser_core', '基本'),
+                'label' => __d('baser_core', 'Eメール'),
                 'columnType' => 'string',
                 'controlType' => 'text',
                 'preview' => true,

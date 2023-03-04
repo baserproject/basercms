@@ -65,7 +65,7 @@ class BlogFrontAppController extends BcFrontAppController
         return $this->sendMail(
             $this->siteConfigs['email'],
             sprintf(
-                __d('baser', '【%s】コメントを受け付けました'),
+                __d('baser_core', '【%s】コメントを受け付けました'),
                 $this->siteConfigs['name']
             ),
             $data,
@@ -124,7 +124,7 @@ class BlogFrontAppController extends BcFrontAppController
             }
             $result = $this->sendMail(
                 $blogComment['email'],
-                sprintf(__('【%s】コメントが投稿されました'), $this->siteConfigs['name']),
+                sprintf(__d('baser_core', '【%s】コメントが投稿されました'), $this->siteConfigs['name']),
                 $data,
                 [
                     'template' => 'BcBlog.blog_comment_contributor',

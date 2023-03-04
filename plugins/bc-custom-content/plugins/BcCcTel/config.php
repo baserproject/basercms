@@ -11,8 +11,8 @@
 
 return [
     'type' => ['BcCustomContentPlugin'],
-    'title' => __d('baser', 'カスタムコンテンツ：TELフィールド'),
-    'description' => __d('baser', 'カスタムコンテンツにTELフィールドを提供する'),
+    'title' => __d('baser_core', 'カスタムコンテンツ：TELフィールド'),
+    'description' => __d('baser_core', 'カスタムコンテンツにTELフィールドを提供する'),
     'author' => 'baserCMS User Community',
     'url' => 'https://basercms.net',
 ];

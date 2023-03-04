@@ -17,10 +17,10 @@
  * @noTodo
  * @unitTest
  */
-$this->BcAdmin->setTitle(__d('baser', 'フィールド一覧'));
+$this->BcAdmin->setTitle(__d('baser_core', 'フィールド一覧'));
 $this->BcAdmin->addAdminMainBodyHeaderLinks([
   'url' => ['action' => 'add'],
-  'title' => __d('baser', '新規追加'),
+  'title' => __d('baser_core', '新規追加'),
 ]);
 ?>
 

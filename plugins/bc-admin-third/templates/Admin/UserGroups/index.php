@@ -18,10 +18,10 @@
  */
 $this->BcAdmin->addAdminMainBodyHeaderLinks([
   'url' => ['action' => 'add'],
-  'title' => __d('baser', '新規追加'),
+  'title' => __d('baser_core', '新規追加'),
 ]);
 $this->BcAdmin->setHelp('user_groups_index');
-$this->BcAdmin->setTitle(__d('baser', 'ユーザーグループ一覧'));
+$this->BcAdmin->setTitle(__d('baser_core', 'ユーザーグループ一覧'));
 ?>
 
 

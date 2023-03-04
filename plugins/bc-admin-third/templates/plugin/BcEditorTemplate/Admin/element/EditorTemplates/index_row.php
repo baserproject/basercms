@@ -47,11 +47,11 @@
   <td class="row-tools bca-table-listup__tbody-td bca-table-listup__tbody-td--actions">
     <?php $this->BcBaser->link('',
       ['action' => 'edit', $editorTemplate->id],
-      ['title' => __d('baser', '編集'), 'class' => ' bca-btn-icon', 'data-bca-btn-type' => 'edit', 'data-bca-btn-size' => 'lg']
+      ['title' => __d('baser_core', '編集'), 'class' => ' bca-btn-icon', 'data-bca-btn-type' => 'edit', 'data-bca-btn-size' => 'lg']
     ) ?>
     <?php echo $this->BcAdminForm->postLink('', ['action' => 'delete', $editorTemplate->id], [
-      'confirm' => __d('baser', '{0} を本当に削除してもいいですか？', $editorTemplate->name),
-      'title' => __d('baser', '削除'),
+      'confirm' => __d('baser_core', '{0} を本当に削除してもいいですか？', $editorTemplate->name),
+      'title' => __d('baser_core', '削除'),
       'class' => 'btn-delete bca-btn-icon',
       'data-bca-btn-type' => 'delete',
       'data-bca-btn-size' => 'lg'

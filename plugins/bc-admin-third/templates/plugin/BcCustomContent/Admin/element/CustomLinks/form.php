@@ -26,7 +26,7 @@ if ($fields->count()) {
   $fieldList = array_combine(\Cake\Utility\Hash::extract($fieldsArray, '{n}.type'), array_values($fieldsArray));
 }
 $this->BcBaser->i18nScript([
-  'confirmMessageOnSaveLink' => __d('baser', 'グループを変更する場合、対象のグループがループ機能を利用している場合に、このフィールドの既存のエントリーデータが失われます。それでも変更してもよろしいですか？'),
+  'confirmMessageOnSaveLink' => __d('baser_core', 'グループを変更する場合、対象のグループがループ機能を利用している場合に、このフィールドの既存のエントリーデータが失われます。それでも変更してもよろしいですか？'),
 ]);
 ?>
 
@@ -70,32 +70,32 @@ $this->BcBaser->i18nScript([
     </tr>
 
     <tr>
-      <th class="col-head bca-form-table__label"><?php echo __d('baser', 'マスターフィールド') ?></th>
+      <th class="col-head bca-form-table__label"><?php echo __d('baser_core', 'マスターフィールド') ?></th>
       <td class="col-input bca-form-table__input">
         {{ linkFieldTitle }}
         （{{ linkTypeTitle }}）
-        <?php $this->BcBaser->link(__d('baser', 'マスタ編集'), '', [
+        <?php $this->BcBaser->link(__d('baser_core', 'マスタ編集'), '', [
           'class' => 'button-small',
           ':href' => 'editFieldLinkUrl',
-          'confirm' => __d('baser', '現在編集中の内容を破棄してカスタムフィールドのマスタ編集画面に移動します。よろしいですか？')
+          'confirm' => __d('baser_core', '現在編集中の内容を破棄してカスタムフィールドのマスタ編集画面に移動します。よろしいですか？')
         ]) ?>
       </td>
     </tr>
 
     <tr v-show="isEnabledParent">
       <th class="col-head bca-form-table__label">
-        <?php echo $this->BcAdminForm->label('parent_id', __d('baser', 'グループ')) ?>
+        <?php echo $this->BcAdminForm->label('parent_id', __d('baser_core', 'グループ')) ?>
       </th>
       <td class="col-input bca-form-table__input">
         <span class="bca-select">
           <select name="parent_id" id="parent-id" class="bca-select__select" v-model="link.parent_id">
-            <option value="title" selected="selected"><?php echo __d('baser', '指定しない') ?></option>
+            <option value="title" selected="selected"><?php echo __d('baser_core', '指定しない') ?></option>
             <option v-for="(value, key) in parentList" :value="key">{{ value }}</option>
           </select>
         </span>
         <i class="bca-icon--question-circle bca-help"></i>
         <div class="bca-helptext">
-          <?php echo __d('baser', '他のフィールドと同じグループとして表示する場合にグループを選択します。') ?>
+          <?php echo __d('baser_core', '他のフィールドと同じグループとして表示する場合にグループを選択します。') ?>
         </div>
         <?php echo $this->BcAdminForm->error('parent_id') ?>
       </td>
@@ -103,8 +103,8 @@ $this->BcBaser->i18nScript([
 
     <tr>
       <th class="col-head bca-form-table__label">
-        <?php echo $this->BcAdminForm->label('name', __d('baser', 'フィールド名')) ?>&nbsp;
-        <span class="required bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
+        <?php echo $this->BcAdminForm->label('name', __d('baser_core', 'フィールド名')) ?>&nbsp;
+        <span class="required bca-label" data-bca-label-type="required"><?php echo __d('baser_core', '必須') ?></span>
       </th>
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('name', [
@@ -115,15 +115,15 @@ $this->BcBaser->i18nScript([
         ]) ?>
         <i class="bca-icon--question-circle bca-help"></i>
         <div class="bca-helptext">
-          <?php echo __d('baser', '半角英数字とアンダースコア（ _ ）のみ利用可能です。') ?>
+          <?php echo __d('baser_core', '半角英数字とアンダースコア（ _ ）のみ利用可能です。') ?>
         </div>
         <div class="error-message error-name"></div>
       </td>
     </tr>
     <tr>
       <th class="col-head bca-form-table__label">
-        <?php echo $this->BcAdminForm->label('title', __d('baser', '項目見出し')) ?>&nbsp;
-        <span class="required bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
+        <?php echo $this->BcAdminForm->label('title', __d('baser_core', '項目見出し')) ?>&nbsp;
+        <span class="required bca-label" data-bca-label-type="required"><?php echo __d('baser_core', '必須') ?></span>
       </th>
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('title', [
@@ -134,7 +134,7 @@ $this->BcBaser->i18nScript([
         ]) ?>
         <i class="bca-icon--question-circle bca-help"></i>
         <div class="bca-helptext">
-          <?php echo __d('baser', '項目の内容が分かりやすい見出しを登録します。日本語が利用できます。') ?>
+          <?php echo __d('baser_core', '項目の内容が分かりやすい見出しを登録します。日本語が利用できます。') ?>
         </div>
         <div class="error-message error-title"></div>
       </td>
@@ -142,12 +142,12 @@ $this->BcBaser->i18nScript([
 
     <tr>
       <th class="col-head bca-form-table__label">
-        <?php echo $this->BcAdminForm->label('status', __d('baser', '利用状況')) ?>
+        <?php echo $this->BcAdminForm->label('status', __d('baser_core', '利用状況')) ?>
       </th>
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('status', [
           'type' => 'checkbox',
-          'label' => __d('baser', '利用する'),
+          'label' => __d('baser_core', '利用する'),
           'v-model' => 'link.status'
         ]) ?>
         <?php echo $this->BcAdminForm->error('status') ?>
@@ -156,12 +156,12 @@ $this->BcBaser->i18nScript([
 
     <tr v-show="!isGroupLink">
       <th class="col-head bca-form-table__label">
-        <?php echo $this->BcAdminForm->label('required', __d('baser', '入力必須')) ?>
+        <?php echo $this->BcAdminForm->label('required', __d('baser_core', '入力必須')) ?>
       </th>
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('required', [
           'type' => 'checkbox',
-          'label' => __d('baser', '入力必須'),
+          'label' => __d('baser_core', '入力必須'),
           'v-model' => 'link.required'
         ]) ?>
         <?php echo $this->BcAdminForm->error('required') ?>
@@ -170,7 +170,7 @@ $this->BcBaser->i18nScript([
 
     <tr>
       <th class="col-head bca-form-table__label">
-        <?php echo $this->BcAdminForm->label('description', __d('baser', '説明文')) ?>
+        <?php echo $this->BcAdminForm->label('description', __d('baser_core', '説明文')) ?>
       </th>
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('description', [
@@ -179,7 +179,7 @@ $this->BcBaser->i18nScript([
         ]) ?>
         <i class="bca-icon--question-circle bca-help"></i>
         <div class="bca-helptext">
-          <?php echo __d('baser', '入力欄の右側に？マークのアイコンを付けツールチップで説明文を表示します。') ?>
+          <?php echo __d('baser_core', '入力欄の右側に？マークのアイコンを付けツールチップで説明文を表示します。') ?>
         </div>
         <?php echo $this->BcAdminForm->error('description') ?>
       </td>
@@ -187,7 +187,7 @@ $this->BcBaser->i18nScript([
 
     <tr>
       <th class="col-head bca-form-table__label">
-        <?php echo $this->BcAdminForm->label('attention', __d('baser', '注意書き')) ?>
+        <?php echo $this->BcAdminForm->label('attention', __d('baser_core', '注意書き')) ?>
       </th>
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('attention', [
@@ -197,14 +197,14 @@ $this->BcBaser->i18nScript([
         ]) ?>
         <i class="bca-icon--question-circle bca-help"></i>
         <div class="bca-helptext">
-          <?php echo __d('baser', '入力欄の次の行に注意書きを表示します。') ?>
+          <?php echo __d('baser_core', '入力欄の次の行に注意書きを表示します。') ?>
         </div>
         <?php echo $this->BcAdminForm->error('attention') ?>
       </td>
     </tr>
     <tr>
       <th class="col-head bca-form-table__label">
-        <?php echo $this->BcAdminForm->label('before_head', __d('baser', '前見出し')) ?>
+        <?php echo $this->BcAdminForm->label('before_head', __d('baser_core', '前見出し')) ?>
       </th>
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('before_head', [
@@ -214,7 +214,7 @@ $this->BcBaser->i18nScript([
         ]) ?>
         <i class="bca-icon--question-circle bca-help"></i>
         <div class="bca-helptext">
-          <?php echo __d('baser', '入力欄の前に文字列を表示します。') ?>
+          <?php echo __d('baser_core', '入力欄の前に文字列を表示します。') ?>
         </div>
         <?php echo $this->BcAdminForm->error('before_head') ?>
       </td>
@@ -222,7 +222,7 @@ $this->BcBaser->i18nScript([
 
     <tr>
       <th class="col-head bca-form-table__label">
-        <?php echo $this->BcAdminForm->label('after_head', __d('baser', '後見出し')) ?>
+        <?php echo $this->BcAdminForm->label('after_head', __d('baser_core', '後見出し')) ?>
       </th>
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('after_head', [
@@ -232,7 +232,7 @@ $this->BcBaser->i18nScript([
         ]) ?>
         <i class="bca-icon--question-circle bca-help"></i>
         <div class="bca-helptext">
-          <?php echo __d('baser', '入力欄の後に文字列を表示します。') ?>
+          <?php echo __d('baser_core', '入力欄の後に文字列を表示します。') ?>
         </div>
         <?php echo $this->BcAdminForm->error('after_head') ?>
       </td>
@@ -240,7 +240,7 @@ $this->BcBaser->i18nScript([
 
     <tr>
       <th class="col-head bca-form-table__label">
-        <?php echo $this->BcAdminForm->label('class', __d('baser', 'クラス')) ?>
+        <?php echo $this->BcAdminForm->label('class', __d('baser_core', 'クラス')) ?>
       </th>
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('class', [
@@ -250,7 +250,7 @@ $this->BcBaser->i18nScript([
         ]) ?>
         <i class="bca-icon--question-circle bca-help"></i>
         <div class="bca-helptext">
-          <?php echo __d('baser', '必要であればHTMl用タグのクラスを指定します。<br>
+          <?php echo __d('baser_core', '必要であればHTMl用タグのクラスを指定します。<br>
           元々のコントロールに付与されているクラスも一緒に設定しないとコントロールのデザインが崩れてしあう場合があります。') ?>
         </div>
         <?php echo $this->BcAdminForm->error('class') ?>
@@ -259,7 +259,7 @@ $this->BcBaser->i18nScript([
 
     <tr>
       <th class="col-head bca-form-table__label">
-        <?php echo $this->BcAdminForm->label('options', __d('baser', 'オプション')) ?>
+        <?php echo $this->BcAdminForm->label('options', __d('baser_core', 'オプション')) ?>
       </th>
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('options', [
@@ -269,7 +269,7 @@ $this->BcBaser->i18nScript([
         ]) ?>
         <i class="bca-icon--question-circle bca-help"></i>
         <div class="bca-helptext">
-          <?php echo __d('baser', 'フィールドのコントロールに対して追加の属性を指定する場合に入力します。
+          <?php echo __d('baser_core', 'フィールドのコントロールに対して追加の属性を指定する場合に入力します。
             属性名と値をパイプ（|）で区切って指定します。複数属性を連続で指定する事ができます。<br>
             例）data-sample1|value1|data-sample2|value2
           ') ?>
@@ -280,53 +280,53 @@ $this->BcBaser->i18nScript([
 
     <tr v-show="isGroupLink">
       <th class="col-head bca-form-table__label">
-        <?php echo $this->BcAdminForm->label('group_valid', __d('baser', 'グループ機能')) ?>
+        <?php echo $this->BcAdminForm->label('group_valid', __d('baser_core', 'グループ機能')) ?>
       </th>
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('group_valid', [
           'type' => 'checkbox',
-          'label' => __d('baser', 'グループチェック有効'),
+          'label' => __d('baser_core', 'グループチェック有効'),
           'v-model' => 'link.group_valid',
           '@change' => 'changeGroupFunction',
           ':disabled' => '!enabledGroupValid'
         ]) ?>
         <i class="bca-icon--question-circle bca-help"></i>
         <div class="bca-helptext">
-          <?php echo __d('baser', 'グループ内における入力エラーが発生した場合に、グループ内の全てのフィールドの下にエラーメッセージをまとめたい場合にチェックを入れます。グループチェックを利用する場合はループ機能は利用できません。') ?>
+          <?php echo __d('baser_core', 'グループ内における入力エラーが発生した場合に、グループ内の全てのフィールドの下にエラーメッセージをまとめたい場合にチェックを入れます。グループチェックを利用する場合はループ機能は利用できません。') ?>
         </div>&nbsp;&nbsp;
         <?php echo $this->BcAdminForm->control('use_loop', [
           'type' => 'checkbox',
-          'label' => __d('baser', 'ループ機能を利用する'),
+          'label' => __d('baser_core', 'ループ機能を利用する'),
           'v-model' => 'link.use_loop',
           '@change' => 'changeGroupFunction',
           ':disabled' => '!enabledUseLoop'
         ]) ?>
         <i class="bca-icon--question-circle bca-help"></i>
         <div class="bca-helptext">
-          <?php echo __d('baser', 'ループ機能を利用するとグループ配下のフィールドを１セットとして複数セットの入力欄を作成する事ができます。ループ機能を利用するとグループチェックは利用できません。') ?>
+          <?php echo __d('baser_core', 'ループ機能を利用するとグループ配下のフィールドを１セットとして複数セットの入力欄を作成する事ができます。ループ機能を利用するとグループチェックは利用できません。') ?>
         </div>
-        <div v-show="(link.rght - link.lft) > 1"><small><?php echo __d('baser', '既に子となる関連フィールドが存在する場合にはループ機能は変更できません。') ?></small></div>
+        <div v-show="(link.rght - link.lft) > 1"><small><?php echo __d('baser_core', '既に子となる関連フィールドが存在する場合にはループ機能は変更できません。') ?></small></div>
       </td>
     </tr>
 
     <tr v-show="!isGroupLink">
       <th class="col-head bca-form-table__label">
-        <?php echo $this->BcAdminForm->label('display_admin_list', __d('baser', '管理画面での動作')) ?>
+        <?php echo $this->BcAdminForm->label('display_admin_list', __d('baser_core', '管理画面での動作')) ?>
       </th>
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('display_admin_list', [
           'type' => 'checkbox',
-          'label' => __d('baser', 'エントリー一覧に項目を表示する'),
+          'label' => __d('baser_core', 'エントリー一覧に項目を表示する'),
           'v-model' => 'link.display_admin_list'
         ]) ?>
         <?php echo $this->BcAdminForm->control('before_linefeed', [
           'type' => 'checkbox',
-          'label' => __d('baser', '入力欄の前に改行を入れる'),
+          'label' => __d('baser_core', '入力欄の前に改行を入れる'),
           'v-model' => 'link.before_linefeed'
         ]) ?>
         <?php echo $this->BcAdminForm->control('after_linefeed', [
           'type' => 'checkbox',
-          'label' => __d('baser', '入力欄の後に改行を入れる'),
+          'label' => __d('baser_core', '入力欄の後に改行を入れる'),
           'v-model' => 'link.after_linefeed'
         ]) ?>
       </td>
@@ -334,12 +334,12 @@ $this->BcBaser->i18nScript([
 
     <tr v-show="!isGroupLink">
       <th class="col-head bca-form-table__label">
-        <?php echo $this->BcAdminForm->label('display_front', __d('baser', 'テーマでの動作')) ?>
+        <?php echo $this->BcAdminForm->label('display_front', __d('baser_core', 'テーマでの動作')) ?>
       </th>
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('display_front', [
           'type' => 'checkbox',
-          'label' => __d('baser', 'テーマのヘルパーで呼び出せる'),
+          'label' => __d('baser_core', 'テーマのヘルパーで呼び出せる'),
           'v-model' => 'link.display_front'
         ]) ?>
       </td>
@@ -347,12 +347,12 @@ $this->BcBaser->i18nScript([
 
     <tr v-show="!isGroupLink">
       <th class="col-head bca-form-table__label">
-        <?php echo $this->BcAdminForm->label('use_api', __d('baser', 'Web API での動作')) ?>
+        <?php echo $this->BcAdminForm->label('use_api', __d('baser_core', 'Web API での動作')) ?>
       </th>
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('use_api', [
           'type' => 'checkbox',
-          'label' => __d('baser', 'Web API の返却値に含める'),
+          'label' => __d('baser_core', 'Web API の返却値に含める'),
           'v-model' => 'link.use_api'
         ]) ?>
       </td>
@@ -360,17 +360,17 @@ $this->BcBaser->i18nScript([
 
     <tr v-show="!isGroupLink">
       <th class="col-head bca-form-table__label">
-        <?php echo $this->BcAdminForm->label('use_api', __d('baser', '検索での動作')) ?>
+        <?php echo $this->BcAdminForm->label('use_api', __d('baser_core', '検索での動作')) ?>
       </th>
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('search_target_admin', [
           'type' => 'checkbox',
-          'label' => __d('baser', '管理画面において検索対象にする'),
+          'label' => __d('baser_core', '管理画面において検索対象にする'),
           'v-model' => 'link.search_target_admin'
         ]) ?>
         <?php echo $this->BcAdminForm->control('search_target_front', [
           'type' => 'checkbox',
-          'label' => __d('baser', 'テーマ、Web API において検索対象にする'),
+          'label' => __d('baser_core', 'テーマ、Web API において検索対象にする'),
           'v-model' => 'link.search_target_front'
         ]) ?>
       </td>

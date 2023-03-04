@@ -19,7 +19,7 @@
  * @unitTest
  */
 $this->BcBaser->css(['Blog.style'], ['inline' => false]);
-$this->BcBaser->setDescription(sprintf(__d('baser', '%s のアーカイブ一覧です。'), $this->BcBaser->getContentsTitle()));
+$this->BcBaser->setDescription(sprintf(__d('baser_core', '%s のアーカイブ一覧です。'), $this->BcBaser->getContentsTitle()));
 $this->BcBaser->setTitle($tag);
 $this->BcUpload->setTable('BcBlog.BlogPosts');
 ?>
@@ -45,7 +45,7 @@ $this->BcUpload->setTable('BcBlog.BlogPosts');
 	</article>
 	<?php endforeach; ?>
 <?php else: ?>
-<p class="bs-blog-no-data"><?php echo __('記事がありません。'); ?></p>
+<p class="bs-blog-no-data"><?php echo __d('baser_core''記事がありません。'); ?></p>
 <?php endif ?>
 </section>
 

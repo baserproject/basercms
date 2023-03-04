@@ -390,7 +390,7 @@ class ContentsService implements ContentsServiceInterface
      */
     public function alias(array $postData)
     {
-        if (empty($postData['alias_id'])) throw new \Exception(__d('baser', 'エイリアスIDを指定してください。'));
+        if (empty($postData['alias_id'])) throw new \Exception(__d('baser_core', 'エイリアスIDを指定してください。'));
         if (empty($postData['parent_id']) && !empty($postData['url'])) {
             $postData['parent_id'] = $this->Contents->copyContentFolderPath($postData['url'], $postData['site_id']);
         }
@@ -876,7 +876,7 @@ class ContentsService implements ContentsServiceInterface
         if ($newTitle) {
             $content->title = $newTitle;
         } else {
-            $content->title = sprintf(__d('baser', '%s のコピー'), $content->title);
+            $content->title = sprintf(__d('baser_core', '%s のコピー'), $content->title);
         }
         $content->self_publish_begin = null;
         $content->self_publish_end = null;
@@ -978,9 +978,9 @@ class ContentsService implements ContentsServiceInterface
     public function move($origin, $target)
     {
         if (!$this->exists($origin['id'])) {
-            throw new BcException(__d('baser', 'データが存在しません。'));
+            throw new BcException(__d('baser_core', 'データが存在しません。'));
         } elseif (!$this->isMovable($origin['id'], $target['parentId'])) {
-            throw new BcException(__d('baser', '同一URLのコンテンツが存在するため処理に失敗しました。（現在のサイトに存在しない場合は、関連サイトに存在します）'));
+            throw new BcException(__d('baser_core', '同一URLのコンテンツが存在するため処理に失敗しました。（現在のサイトに存在しない場合は、関連サイトに存在します）'));
         }
 
         $this->moveRelateSubSiteContent($origin['id'], $target['parentId'], $target['id']);
@@ -1367,7 +1367,7 @@ class ContentsService implements ContentsServiceInterface
     public function getNeighbors(array $options)
     {
         if (empty($options['conditions']) || !array_key_exists('Contents.site_id', $options['conditions'])) {
-            throw new BcException(__d('baser', 'site_idを指定してください。'));
+            throw new BcException(__d('baser_core', 'site_idを指定してください。'));
         };
         $fieldName = $options['field'];
         $previous = $this->Contents->find()
@@ -1446,7 +1446,7 @@ class ContentsService implements ContentsServiceInterface
         foreach($ids as $id) {
             if (!$this->{$method}($id)) {
                 $db->rollback();
-                throw new BcException(__d('baser', 'データベース処理中にエラーが発生しました。'));
+                throw new BcException(__d('baser_core', 'データベース処理中にエラーが発生しました。'));
             }
         }
         $db->commit();
@@ -1480,7 +1480,7 @@ class ContentsService implements ContentsServiceInterface
     public function rename($content, $postData)
     {
         if (empty($postData['id'])) {
-            throw new BcException(__d('baser', '送信データが不正です。'));
+            throw new BcException(__d('baser_core', '送信データが不正です。'));
         }
         $newContent = array_merge($content->toArray(), ['title' => $postData['title']]);
         unset($newContent['site']);

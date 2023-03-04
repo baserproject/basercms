@@ -27,7 +27,7 @@ $this->BcBaser->js('BcBlog.admin/blog_tags/form.bundle', false);
   <table id="FormTable" class="form-table bca-form-table">
     <?php if ($this->getRequest()->getParam('action') === 'edit'): ?>
       <tr>
-        <th class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('id', __d('baser', 'No')) ?></th>
+        <th class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('id', __d('baser_core', 'No')) ?></th>
         <td class="col-input bca-form-table__input">
           <?php echo $this->BcAdminForm->getSourceValue('id') ?>
           <?php echo $this->BcAdminForm->control('id', ['type' => 'hidden']) ?>
@@ -35,8 +35,8 @@ $this->BcBaser->js('BcBlog.admin/blog_tags/form.bundle', false);
       </tr>
     <?php endif; ?>
     <tr>
-      <th class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('name', __d('baser', 'ブログタグ名')) ?>
-        &nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
+      <th class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('name', __d('baser_core', 'ブログタグ名')) ?>
+        &nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser_core', '必須') ?></span>
       </th>
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('name', ['type' => 'text', 'size' => 40, 'maxlength' => 255, 'autofocus' => true]) ?>

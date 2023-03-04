@@ -37,7 +37,7 @@ class UtilitiesController extends BcApiController
         BcUtil::clearAllCache();
 
         $this->set([
-            'message' => __d('baser', 'サーバーキャッシュを削除しました。')
+            'message' => __d('baser_core', 'サーバーキャッシュを削除しました。')
         ]);
         $this->viewBuilder()->setOption('serialize', ['message']);
     }
@@ -54,13 +54,13 @@ class UtilitiesController extends BcApiController
         $this->request->allowMethod(['post']);
         try {
             if ($service->resetContentsTree()) {
-                $message = __d('baser', 'コンテンツのツリー構造をリセットしました。');
+                $message = __d('baser_core', 'コンテンツのツリー構造をリセットしました。');
             } else {
                 $this->setResponse($this->response->withStatus(400));
-                $message = __d('baser', 'コンテンツのツリー構造のリセットに失敗しました。');
+                $message = __d('baser_core', 'コンテンツのツリー構造のリセットに失敗しました。');
             }
         } catch (\Throwable $e) {
-            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
             $this->setResponse($this->response->withStatus(500));
         }
         $this->set([
@@ -82,13 +82,13 @@ class UtilitiesController extends BcApiController
         $this->request->allowMethod(['post']);
         try {
             if ($service->verityContentsTree()) {
-                $message = __d('baser', 'コンテンツのツリー構造に問題はありません。');
+                $message = __d('baser_core', 'コンテンツのツリー構造に問題はありません。');
             } else {
                 $this->setResponse($this->response->withStatus(400));
-                $message = __d('baser', 'コンテンツのツリー構造に問題があります。ログを確認してください。');
+                $message = __d('baser_core', 'コンテンツのツリー構造に問題があります。ログを確認してください。');
             }
         } catch (\Throwable $e) {
-            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
             $this->setResponse($this->response->withStatus(500));
         }
         $this->set([
@@ -112,7 +112,7 @@ class UtilitiesController extends BcApiController
             $result = $service->backupDb($this->request->getQuery('backup_encoding'));
             if (!$result) {
                 $this->setResponse($this->response->withStatus(400));
-                $message = __d('baser', 'バックアップダウンロードが失敗しました。');
+                $message = __d('baser_core', 'バックアップダウンロードが失敗しました。');
             } else {
                 $this->autoRender = false;
                 $result->download('baserbackup_' . str_replace(' ', '_', BcUtil::getVersion()) . '_' . date('Ymd_His'));
@@ -120,7 +120,7 @@ class UtilitiesController extends BcApiController
                 return;
             }
         } catch (\Throwable $e) {
-            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
             $this->setResponse($this->response->withStatus(500));
         }
 
@@ -143,9 +143,9 @@ class UtilitiesController extends BcApiController
         $this->request->allowMethod(['post']);
         try {
             $service->restoreDb($this->getRequest()->getData(), $this->getRequest()->getUploadedFiles());
-            $message = __d('baser', 'データの復元が完了しました。');
+            $message = __d('baser_core', 'データの復元が完了しました。');
         } catch (\Throwable $e) {
-            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
             $this->setResponse($this->response->withStatus(500));
         }
 
@@ -176,9 +176,9 @@ class UtilitiesController extends BcApiController
             }
 
             $this->setResponse($this->response->withStatus(400));
-            $message = __d('baser', 'エラーログが存在しません。');
+            $message = __d('baser_core', 'エラーログが存在しません。');
         } catch (\Throwable $e) {
-            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
             $this->setResponse($this->response->withStatus(500));
         }
 
@@ -200,9 +200,9 @@ class UtilitiesController extends BcApiController
         $this->request->allowMethod(['post']);
         try {
             $service->deleteLog();
-            $message = __d('baser', 'エラーログを削除しました。');
+            $message = __d('baser_core', 'エラーログを削除しました。');
         } catch (\Throwable $e) {
-            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
             $this->setResponse($this->response->withStatus(500));
         }
 

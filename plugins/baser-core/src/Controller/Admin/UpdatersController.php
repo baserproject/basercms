@@ -32,16 +32,16 @@ class UpdatersController extends BcAdminAppController
     public function admin_exec_script()
     {
         if ($this->request->getData()) {
-            $this->setUpdateLog(__d('baser', 'アップデートスクリプトの実行します。'));
+            $this->setUpdateLog(__d('baser_core', 'アップデートスクリプトの実行します。'));
             if ($this->_execScript($this->request->getData('Updater.plugin'), $this->request->getData('Updater.version'))) {
                 BcUtil::clearAllCache();
                 $this->BcManager->deployAdminAssets();
-                $this->setUpdateLog(__d('baser', 'アップデートスクリプトの実行が完了しました。'));
+                $this->setUpdateLog(__d('baser_core', 'アップデートスクリプトの実行が完了しました。'));
                 $this->_writeUpdateLog();
-                $this->BcMessage->setInfo(__d('baser', 'アップデートスクリプトの実行が完了しました。<a href="#UpdateLog">アップデートログ</a>を確認してください。'));
+                $this->BcMessage->setInfo(__d('baser_core', 'アップデートスクリプトの実行が完了しました。<a href="#UpdateLog">アップデートログ</a>を確認してください。'));
                 $this->redirect(['action' => 'exec_script']);
             } else {
-                $this->BcMessage->setError(__d('baser', 'アップデートスクリプトが見つかりません。'));
+                $this->BcMessage->setError(__d('baser_core', 'アップデートスクリプトが見つかりません。'));
             }
         }
 
@@ -52,7 +52,7 @@ class UpdatersController extends BcAdminAppController
             $updateLog = $File->read();
         }
 
-        $this->setTitle(__d('baser', 'アップデートスクリプト実行'));
+        $this->setTitle(__d('baser_core', 'アップデートスクリプト実行'));
         $plugins = $this->Plugin->find('list', ['fields' => ['name', 'title']]);
         $this->set('plugins', $plugins);
         $this->set('log', $updateLog);

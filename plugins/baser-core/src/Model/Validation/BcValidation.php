@@ -187,7 +187,7 @@ class BcValidation extends Validation
         // POSTを前提の検証としているため全ての受信データを検証
         // データの更新時は必ず$_POSTにデータが入っていることを前提とする
         if (!BcUtil::isConsole() && empty($_POST)) {
-            Log::error(__d('baser', 'アップロードされたファイルは、PHPの設定 post_max_size ディレクティブの値を超えています。'));
+            Log::error(__d('baser_core', 'アップロードされたファイルは、PHPの設定 post_max_size ディレクティブの値を超えています。'));
             return false;
         }
         $file = $value;
@@ -210,34 +210,34 @@ class BcValidation extends Validation
                     break;
                 case 1:
                     // UPLOAD_ERR_INI_SIZE
-                    Log::error(__d('baser', 'CODE: {0} アップロードされたファイルは、
+                    Log::error(__d('baser_core', 'CODE: {0} アップロードされたファイルは、
                         php.ini の upload_max_filesize ディレクティブの値を超えています。
                         {1} MB以内のファイルをご利用ください。', $fileErrorCode, BcUtil::convertSize($size, 'M')));
                     return false;
                 case 2:
                     // UPLOAD_ERR_FORM_SIZE
-                    Log::error(__d('baser', 'CODE: {0} アップロードされたファイルは、HTMLで指定された MAX_FILE_SIZE を超えています。
+                    Log::error(__d('baser_core', 'CODE: {0} アップロードされたファイルは、HTMLで指定された MAX_FILE_SIZE を超えています。
                         {1} MB以内のファイルをご利用ください。', $fileErrorCode, BcUtil::convertSize($size, 'M')));
                     return false;
                 case 3:
                     // UPLOAD_ERR_PARTIAL
-                    Log::error(__d('baser', 'CODE: {0} アップロードされたファイルが不完全です。', $fileErrorCode));
+                    Log::error(__d('baser_core', 'CODE: {0} アップロードされたファイルが不完全です。', $fileErrorCode));
                     return false;
                 case 4:
                     // UPLOAD_ERR_NO_FILE
-                     Log::error(__d('baser', 'CODE: {0} ファイルがアップロードされませんでした。', $fileErrorCode));
+                     Log::error(__d('baser_core', 'CODE: {0} ファイルがアップロードされませんでした。', $fileErrorCode));
                      break;
                 case 6:
                     // UPLOAD_ERR_NO_TMP_DIR
-                    Log::error(__d('baser', 'CODE: {0} 一時書込み用のフォルダがありません。テンポラリフォルダの書込み権限を見直してください。', $fileErrorCode));
+                    Log::error(__d('baser_core', 'CODE: {0} 一時書込み用のフォルダがありません。テンポラリフォルダの書込み権限を見直してください。', $fileErrorCode));
                     return false;
                 case 7:
                     // UPLOAD_ERR_CANT_WRITE
-                    Log::error(__d('baser', 'CODE: {0} ディスクへの書き込みに失敗しました。', $fileErrorCode));
-                    return __('何らかの原因でファイルをアップロードできませんでした。Webサイトの管理者に連絡してください。');
+                    Log::error(__d('baser_core', 'CODE: {0} ディスクへの書き込みに失敗しました。', $fileErrorCode));
+                    return __d('baser_core', '何らかの原因でファイルをアップロードできませんでした。Webサイトの管理者に連絡してください。');
                 case 8:
                     // UPLOAD_ERR_EXTENSION
-                    Log::error(__d('baser', 'CODE: {0} PHPの拡張モジュールがファイルのアップロードを中止しました。', $fileErrorCode));
+                    Log::error(__d('baser_core', 'CODE: {0} PHPの拡張モジュールがファイルのアップロードを中止しました。', $fileErrorCode));
                     return false;
                 default:
                     break;
@@ -247,11 +247,11 @@ class BcValidation extends Validation
         if (!empty($file['name'])) {
             // サイズが空の場合は、HTMLのMAX_FILE_SIZEの制限によりサイズオーバー
             if (!$file['size']) {
-                Log::error(__d('baser', 'ファイルサイズがオーバーしています。 %s MB以内のファイルをご利用ください。', BcUtil::convertSize($size, 'M')));
+                Log::error(__d('baser_core', 'ファイルサイズがオーバーしています。 %s MB以内のファイルをご利用ください。', BcUtil::convertSize($size, 'M')));
                 return false;
             }
             if ($file['size'] > $size) {
-                Log::error(__d('baser', 'ファイルサイズがオーバーしています。 %s MB以内のファイルをご利用ください。', BcUtil::convertSize($size, 'M')));
+                Log::error(__d('baser_core', 'ファイルサイズがオーバーしています。 %s MB以内のファイルをご利用ください。', BcUtil::convertSize($size, 'M')));
                 return false;
             }
         }

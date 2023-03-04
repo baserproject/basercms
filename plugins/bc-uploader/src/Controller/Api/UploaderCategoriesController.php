@@ -94,7 +94,7 @@ class UploaderCategoriesController extends BcApiController
     {
         $this->request->allowMethod(['post', 'put']);
         $allowMethod = [
-            'delete' => __d('baser', '削除')
+            'delete' => __d('baser_core', '削除')
         ];
         $method = $this->getRequest()->getData('batch');
         if (!isset($allowMethod[$method])) {
@@ -107,14 +107,14 @@ class UploaderCategoriesController extends BcApiController
             $names = $service->getTitlesById($targets);
             $service->batch($method, $targets);
             $this->BcMessage->setSuccess(
-                sprintf(__d('baser', 'アップロードカテゴリ「%s」を %s しました。'), implode('」、「', $names), $allowMethod[$method]),
+                sprintf(__d('baser_core', 'アップロードカテゴリ「%s」を %s しました。'), implode('」、「', $names), $allowMethod[$method]),
                 true,
                 false
             );
-            $message = __d('baser', '一括処理が完了しました。');
+            $message = __d('baser_core', '一括処理が完了しました。');
         } catch (\Throwable $e) {
             $this->setResponse($this->response->withStatus(400));
-            $message = __d('baser', $e->getMessage());
+            $message = __d('baser_core', $e->getMessage());
         }
         $this->set(['message' => $message]);
         $this->viewBuilder()->setOption('serialize', ['message']);

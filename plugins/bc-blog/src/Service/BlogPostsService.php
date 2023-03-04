@@ -302,7 +302,7 @@ class BlogPostsService implements BlogPostsServiceInterface
         // NO
         if (isset($params['no']) && $params['no']) {
             if (!$params['blog_content_id'] && !$params['contentUrl'] && !$params['force']) {
-                trigger_error(__d('baser', 'blog_content_id を指定してください。'), E_USER_WARNING);
+                trigger_error(__d('baser_core', 'blog_content_id を指定してください。'), E_USER_WARNING);
             }
             $conditions["BlogPosts.no"] = $params['no'];
         }
@@ -343,7 +343,7 @@ class BlogPostsService implements BlogPostsServiceInterface
             $entityIdData = $this->BlogPosts->BlogContents->Contents->find('all', ['Contents.url' => $contentUrl])->first();
             $categoryConditions['BlogCategories.blog_content_id'] = $entityIdData->entity_id;
         } elseif (!$force) {
-            trigger_error(__d('baser', 'blog_content_id を指定してください。'), E_USER_WARNING);
+            trigger_error(__d('baser_core', 'blog_content_id を指定してください。'), E_USER_WARNING);
         }
 
         $categoryData = $this->BlogPosts->BlogCategories->find()->where($categoryConditions)->all()->toArray();
@@ -505,15 +505,13 @@ class BlogPostsService implements BlogPostsServiceInterface
     public function create(array $postData)
     {
         if (BcUtil::isOverPostSize()) {
-            throw new BcException(__d(
-                'baser',
+            throw new BcException(__d('baser_core',
                 '送信できるデータ量を超えています。合計で {0} 以内のデータを送信してください。',
                 ini_get('post_max_size')
             ));
         }
         if (!isset($postData['blog_content_id']) || empty($postData['blog_content_id'])) {
-            throw new BcException(__d(
-                'baser',
+            throw new BcException(__d('baser_core',
                 'blog_content_id を指定してください。',
             ));
         }
@@ -540,8 +538,7 @@ class BlogPostsService implements BlogPostsServiceInterface
     public function update(EntityInterface $post, array $postData)
     {
         if (BcUtil::isOverPostSize()) {
-            throw new BcException(__d(
-                'baser',
+            throw new BcException(__d('baser_core',
                 '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。',
                 ini_get('post_max_size')
             ));
@@ -710,7 +707,7 @@ class BlogPostsService implements BlogPostsServiceInterface
         foreach($ids as $id) {
             if (!$this->$method($id)) {
                 $db->rollback();
-                throw new BcException(__d('baser', 'データベース処理中にエラーが発生しました。'));
+                throw new BcException(__d('baser_core', 'データベース処理中にエラーが発生しました。'));
             }
         }
         $db->commit();

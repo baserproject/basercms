@@ -11,8 +11,8 @@
 
 return [
     'type' => ['BcCustomContentPlugin'],
-    'title' => __d('baser', 'カスタムコンテンツ：パスワードフィールド'),
-    'description' => __d('baser', 'カスタムコンテンツにパスワードフィールドを提供する'),
+    'title' => __d('baser_core', 'カスタムコンテンツ：パスワードフィールド'),
+    'description' => __d('baser_core', 'カスタムコンテンツにパスワードフィールドを提供する'),
     'author' => 'baserCMS User Community',
     'url' => 'https://basercms.net',
 ];

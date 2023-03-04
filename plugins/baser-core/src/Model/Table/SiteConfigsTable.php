@@ -65,12 +65,12 @@ class SiteConfigsTable extends AppTable
     {
         $validator
             ->scalar('name')
-            ->maxLength('name', 255, __d('baser', '255文字以内で入力してください。'))
-            ->requirePresence('name', 'create', __d('baser', '設定名を入力してください。'))
-            ->notEmptyString('name', __d('baser', '設定名を入力してください。'));
+            ->maxLength('name', 255, __d('baser_core', '255文字以内で入力してください。'))
+            ->requirePresence('name', 'create', __d('baser_core', '設定名を入力してください。'))
+            ->notEmptyString('name', __d('baser_core', '設定名を入力してください。'));
         $validator
             ->scalar('value')
-            ->maxLength('value', 65535, __d('baser', '65535文字以内で入力してください。'));
+            ->maxLength('value', 65535, __d('baser_core', '65535文字以内で入力してください。'));
         return $validator;
     }
 
@@ -89,24 +89,24 @@ class SiteConfigsTable extends AppTable
 
         $validator
             ->scalar('email')
-            ->email('email', 255, __d('baser', '管理者メールアドレスの形式が不正です。'))
-            ->notEmptyString('email', __d('baser', '管理者メールアドレスを入力してください。'));
+            ->email('email', 255, __d('baser_core', '管理者メールアドレスの形式が不正です。'))
+            ->notEmptyString('email', __d('baser_core', '管理者メールアドレスを入力してください。'));
         $validator
             ->scalar('mail_encode')
-            ->notEmptyString('mail_encode', __d('baser', 'メール送信文字コードを入力してください。初期値は「ISO-2022-JP」です。'));
+            ->notEmptyString('mail_encode', __d('baser_core', 'メール送信文字コードを入力してください。初期値は「ISO-2022-JP」です。'));
         $validator
             ->scalar('main_site_display_name')
-            ->notEmptyString('main_site_display_name', __d('baser', 'メインサイト表示名を入力してください。'));
+            ->notEmptyString('main_site_display_name', __d('baser_core', 'メインサイト表示名を入力してください。'));
         $validator
             ->scalar('site_url')
-            ->notEmptyString('site_url', __d('baser', 'WebサイトURLを入力してください。'));
+            ->notEmptyString('site_url', __d('baser_core', 'WebサイトURLを入力してください。'));
         $validator
             ->scalar('admin_ssl')
             ->add('admin_ssl', [
                 'adminSSlSslUrlExists' => [
                     'rule' => 'sslUrlExists',
                     'provider' => 'siteConfig',
-                    'message' => __d('baser', '管理画面をSSLで利用するには、SSL用のWebサイトURLを入力してください。')
+                    'message' => __d('baser_core', '管理画面をSSLで利用するには、SSL用のWebサイトURLを入力してください。')
                 ]]);
         return $validator;
     }
@@ -123,8 +123,8 @@ class SiteConfigsTable extends AppTable
     {
         $controlSources = [
             'mode' => [
-                0 => __d('baser', 'ノーマルモード'),
-                1 => __d('baser', 'デバッグモード')
+                0 => __d('baser_core', 'ノーマルモード'),
+                1 => __d('baser_core', 'デバッグモード')
             ]];
         if (isset($controlSources[$field])) {
             return $controlSources[$field];

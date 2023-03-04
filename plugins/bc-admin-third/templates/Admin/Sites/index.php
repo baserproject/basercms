@@ -14,10 +14,10 @@
  * サイト一覧
  * @var \BaserCore\View\BcAdminAppView $this
  */
-$this->BcAdmin->setTitle(__d('baser', 'サイト一覧'));
+$this->BcAdmin->setTitle(__d('baser_core', 'サイト一覧'));
 $this->BcAdmin->addAdminMainBodyHeaderLinks([
   'url' => ['action' => 'add'],
-  'title' => __d('baser', '新規追加'),
+  'title' => __d('baser_core', '新規追加'),
 ]);
 ?>
 

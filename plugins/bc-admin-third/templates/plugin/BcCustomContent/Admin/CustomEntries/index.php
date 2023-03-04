@@ -17,13 +17,13 @@
  * @noTodo
  * @unitTest
  */
-$this->BcAdmin->setTitle(__d('baser', '{0}｜エントリー一覧', $customTable->title));
+$this->BcAdmin->setTitle(__d('baser_core', '{0}｜エントリー一覧', $customTable->title));
 if(!$customTable->has_child) {
   $this->BcAdmin->setSearch('custom_entries_index');
 }
 $this->BcAdmin->addAdminMainBodyHeaderLinks([
   'url' => ['action' => 'add', $tableId],
-  'title' => __d('baser', '新規追加'),
+  'title' => __d('baser_core', '新規追加'),
 ]);
 ?>
 

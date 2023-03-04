@@ -11,8 +11,8 @@
 
 return [
     'type' => ['BcCustomContentPlugin'],
-    'title' => __d('baser', 'カスタムコンテンツ：Eメールフィールド'),
-    'description' => __d('baser', 'カスタムコンテンツにEメールフィールドを提供する'),
+    'title' => __d('baser_core', 'カスタムコンテンツ：Eメールフィールド'),
+    'description' => __d('baser_core', 'カスタムコンテンツにEメールフィールドを提供する'),
     'author' => 'baserCMS User Community',
     'url' => 'https://basercms.net',
 ];

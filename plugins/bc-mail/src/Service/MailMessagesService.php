@@ -141,7 +141,7 @@ class MailMessagesService implements MailMessagesServiceInterface
     public function update(EntityInterface $entity, array $postData): ?EntityInterface
     {
         if (BcUtil::isOverPostSize()) {
-            throw new BcException(__d('baser', '送信できるデータ量を超えています。合計で {0} 以内のデータを送信してください。', ini_get('post_max_size')));
+            throw new BcException(__d('baser_core', '送信できるデータ量を超えています。合計で {0} 以内のデータを送信してください。', ini_get('post_max_size')));
         }
         $entity = $this->MailMessages->patchEntity($entity, $postData);
         return $this->MailMessages->saveOrFail($entity);
@@ -177,7 +177,7 @@ class MailMessagesService implements MailMessagesServiceInterface
         foreach($ids as $id) {
             if (!$this->$method($id)) {
                 $db->rollback();
-                throw new BcException(__d('baser', 'データベース処理中にエラーが発生しました。'));
+                throw new BcException(__d('baser_core', 'データベース処理中にエラーが発生しました。'));
             }
         }
         $db->commit();
@@ -211,7 +211,7 @@ class MailMessagesService implements MailMessagesServiceInterface
     {
         $mailContentId = (int)$mailContentId;
         if (!is_int($mailContentId)) {
-            throw new BcException(__d('baser', 'MailMessageService::createTableName() の引数 $mailContentId は int 型しか受けつけていません。'));
+            throw new BcException(__d('baser_core', 'MailMessageService::createTableName() の引数 $mailContentId は int 型しか受けつけていません。'));
         }
         return 'mail_message_' . $mailContentId;
     }

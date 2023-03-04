@@ -23,8 +23,8 @@ return [
              * 日付（年月日時間）を表示するフィールドタイプ
              */
             'BcCcDateTime' => [
-                'category' => __d('baser', '日付'),
-                'label' => __d('baser', '日付（年月日時間）'),
+                'category' => __d('baser_core', '日付'),
+                'label' => __d('baser_core', '日付（年月日時間）'),
                 'columnType' => 'string',
                 'controlType' => 'dateTimePicker',
                 'useSize' => true

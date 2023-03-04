@@ -36,9 +36,9 @@ foreach ($mailFields as $field) {
 			echo $this->Maildata->control($field->type, $message[$field->field_name], $this->Mailfield->getOptions($field));
 		} else {
 			if($message[$field->field_name]) {
-				echo __('添付あり');
+				echo __d('baser_core''添付あり');
 			} else {
-				echo __('添付なし');
+				echo __d('baser_core''添付なし');
 			}
 		}
 	}

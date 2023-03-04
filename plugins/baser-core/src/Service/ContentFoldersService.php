@@ -238,7 +238,7 @@ class ContentFoldersService implements ContentFoldersServiceInterface
             if ($searchKey !== false) {
                 unset($folderTemplates[$searchKey]);
             }
-            $folderTemplates = ['' => sprintf(__d('baser', '親フォルダの設定に従う（%s）'), $parentTemplate)] + $folderTemplates;
+            $folderTemplates = ['' => sprintf(__d('baser_core', '親フォルダの設定に従う（%s）'), $parentTemplate)] + $folderTemplates;
         }
         return $folderTemplates;
     }

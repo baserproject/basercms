@@ -72,7 +72,7 @@ class BcMessageComponent extends Component
                 $dblogs = $this->getService(DblogsServiceInterface::class);
                 $dblogs->create(['message' => $message]);
             } catch (\Exception $e) {
-                $this->Flash->set(__d('baser', 'DBログの保存に失敗しました。'), [
+                $this->Flash->set(__d('baser_core', 'DBログの保存に失敗しました。'), [
                     'element' => 'default',
                     'params' => ['class' => 'alert-message']
                 ]);

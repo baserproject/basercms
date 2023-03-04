@@ -97,9 +97,9 @@ class PagesController extends BcApiController
             $page = $service->get($id, $queryParams);
         } catch (RecordNotFoundException $e) {
             $this->setResponse($this->response->withStatus(404));
-            $message = __d('baser', 'データが見つかりません');
+            $message = __d('baser_core', 'データが見つかりません');
         } catch (\Throwable $e) {
-            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
             $this->setResponse($this->response->withStatus(500));
         }
 
@@ -125,13 +125,13 @@ class PagesController extends BcApiController
         $page = $errors = null;
         try {
             $page = $service->create($this->request->getData());
-            $message = __d('baser', '固定ページ「{0}」を追加しました。', $page->content->title);
+            $message = __d('baser_core', '固定ページ「{0}」を追加しました。', $page->content->title);
         } catch (PersistenceFailedException $e) {
             $errors = $e->getEntity()->getErrors();
-            $message = __d('baser', "入力エラーです。内容を修正してください。");
+            $message = __d('baser_core', "入力エラーです。内容を修正してください。");
             $this->setResponse($this->response->withStatus(400));
         } catch (\Throwable $e) {
-            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
             $this->setResponse($this->response->withStatus(500));
         }
         $this->set([
@@ -163,12 +163,12 @@ class PagesController extends BcApiController
         try {
             $page = $service->get($id);
             $service->delete($id);
-            $message = __d('baser', '固定ページ: {0} をゴミ箱に移動しました。', $page->content->title);
+            $message = __d('baser_core', '固定ページ: {0} をゴミ箱に移動しました。', $page->content->title);
         } catch (RecordNotFoundException $e) {
             $this->setResponse($this->response->withStatus(404));
-            $message = __d('baser', 'データが見つかりません');
+            $message = __d('baser_core', 'データが見つかりません');
         } catch (\Throwable $e) {
-            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
             $this->setResponse($this->response->withStatus(500));
         }
         $this->set([
@@ -193,13 +193,13 @@ class PagesController extends BcApiController
         $page = $errors = null;
         try {
             $page = $service->update($service->get($id), $this->request->getData());
-            $message = __d('baser', '固定ページ 「{0}」を更新しました。', $page->content->title);
+            $message = __d('baser_core', '固定ページ 「{0}」を更新しました。', $page->content->title);
         } catch (PersistenceFailedException $e) {
             $errors = $e->getEntity()->getErrors();
-            $message = __d('baser', "入力エラーです。内容を修正してください。");
+            $message = __d('baser_core', "入力エラーです。内容を修正してください。");
             $this->setResponse($this->response->withStatus(400));
         } catch (\Throwable $e) {
-            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
             $this->setResponse($this->response->withStatus(500));
         }
         $this->set([
@@ -225,13 +225,13 @@ class PagesController extends BcApiController
         try {
             /* @var PagesService $service */
             $page = $service->copy($this->request->getData());
-            $message = __d('baser', '固定ページのコピー「%s」を追加しました。', $page->content->title);
+            $message = __d('baser_core', '固定ページのコピー「%s」を追加しました。', $page->content->title);
         } catch (PersistenceFailedException $e) {
             $errors = $e->getEntity()->getErrors();
-            $message = __d('baser', "入力エラーです。内容を修正してください。");
+            $message = __d('baser_core', "入力エラーです。内容を修正してください。");
             $this->setResponse($this->response->withStatus(400));
         } catch (\Throwable $e) {
-            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
             $this->setResponse($this->response->withStatus(500));
         }
         $this->set([

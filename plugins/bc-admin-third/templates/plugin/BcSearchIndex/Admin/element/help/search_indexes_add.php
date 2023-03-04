@@ -16,9 +16,9 @@
 ?>
 
 
-<h4><?php echo __d('baser', 'ユーザーヘルプ') ?></h4>
-<p><?php echo __d('baser', 'baserCMSの管理システムで管理できないコンテンツの登録に利用します。') ?></p>
+<h4><?php echo __d('baser_core', 'ユーザーヘルプ') ?></h4>
+<p><?php echo __d('baser_core', 'baserCMSの管理システムで管理できないコンテンツの登録に利用します。') ?></p>
 <ul>
-  <li><?php echo __d('baser', '「管理できないコンテンツ」とは、baserCMSをカスタマイズした場合の新しいURLや、検索インデックスへの自動登録をサポートしていないプラグインのコンテンツURLを指します。') ?></li>
-  <li><?php echo __d('baser', '画像ファイルや、静的HTMLは登録できません。') ?></li>
+  <li><?php echo __d('baser_core', '「管理できないコンテンツ」とは、baserCMSをカスタマイズした場合の新しいURLや、検索インデックスへの自動登録をサポートしていないプラグインのコンテンツURLを指します。') ?></li>
+  <li><?php echo __d('baser_core', '画像ファイルや、静的HTMLは登録できません。') ?></li>
 </ul>

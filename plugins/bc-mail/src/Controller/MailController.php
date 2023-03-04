@@ -181,7 +181,7 @@ class MailController extends MailFrontAppController
         }
 
         if (!$this->getRequest()->getSession()->read('BcMail.valid') || !$this->getRequest()->is(['post', 'put'])) {
-            $this->BcMessage->setError(__d('baser', 'エラーが発生しました。もう一度操作してください。'));
+            $this->BcMessage->setError(__d('baser_core', 'エラーが発生しました。もう一度操作してください。'));
             $this->redirect($this->request->getParam('Content.url') . '/index');
         }
 
@@ -220,7 +220,7 @@ class MailController extends MailFrontAppController
             return;
         }
         if (!$this->getRequest()->getSession()->read('BcMail.valid') || !$this->getRequest()->is(['post', 'put'])) {
-            $this->BcMessage->setError(__d('baser', 'エラーが発生しました。もう一度操作してください。'));
+            $this->BcMessage->setError(__d('baser_core', 'エラーが発生しました。もう一度操作してください。'));
             $this->redirect($this->request->getParam('Content.url') . '/index');
         }
 
@@ -239,12 +239,12 @@ class MailController extends MailFrontAppController
             $entity = $mailMessagesService->create($mailContent, $this->getRequest()->getData());
         } catch (PersistenceFailedException $e) {
             $entity = $e->getEntity();
-            $this->BcMessage->setError(__('入力内容を確認し、再度送信してください。'));
+            $this->BcMessage->setError(__d('baser_core', '入力内容を確認し、再度送信してください。'));
             $this->set($service->getViewVarsForConfirm($mailContent, $entity));
             $this->render($service->getConfirmTemplate($mailContent));
             return;
         } catch (\Throwable $e) {
-            $this->BcMessage->setError(__('エラー : 送信中にエラーが発生しました。しばらくたってから再度送信お願いします。') . $e->getMessage());
+            $this->BcMessage->setError(__d('baser_core', 'エラー : 送信中にエラーが発生しました。しばらくたってから再度送信お願いします。') . $e->getMessage());
             return $this->redirect($this->request->getAttribute('currentContent')->url . '/index');
         }
 
@@ -263,7 +263,7 @@ class MailController extends MailFrontAppController
             $service->sendMail($mailContent, $entity, $sendEmailOptions);
             $this->getRequest()->getSession()->delete('BcMail.valid');
         } catch (\Throwable $e) {
-            $this->BcMessage->setError(__('エラー : 送信中にエラーが発生しました。しばらくたってから再度送信お願いします。') . $e->getMessage());
+            $this->BcMessage->setError(__d('baser_core', 'エラー : 送信中にエラーが発生しました。しばらくたってから再度送信お願いします。') . $e->getMessage());
             return $this->redirect($this->request->getAttribute('currentContent')->url . '/index');
         }
 

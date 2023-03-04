@@ -146,7 +146,7 @@ class InstallationsController extends BcAdminAppController
                 case 'checkDb':
                     try {
                         $service->testConnectDb($service->readDbSetting($this->getRequest()));
-                        $this->BcMessage->setInfo(__d('baser', 'データベースへの接続に成功しました。'));
+                        $this->BcMessage->setInfo(__d('baser_core', 'データベースへの接続に成功しました。'));
                         $blDBSettingsOK = true;
                     } catch (\PDOException $e) {
                         $this->BcMessage->setError($e->getMessage());
@@ -163,10 +163,10 @@ class InstallationsController extends BcAdminAppController
                             $this->request->getData('dbDataPattern'),
                             Configure::read('BcApp.defaultAdminTheme')
                         );
-                        $this->BcMessage->setInfo(__d('baser', 'データベースの構築に成功しました。'));
+                        $this->BcMessage->setInfo(__d('baser_core', 'データベースの構築に成功しました。'));
                         return $this->redirect(['action' => 'step4']);
                     } catch (BcException $e) {
-                        $errorMessage = __d('baser', 'データベースの構築中にエラーが発生しました。') . "\n" . $e->getMessage();
+                        $errorMessage = __d('baser_core', 'データベースの構築中にエラーが発生しました。') . "\n" . $e->getMessage();
                         $this->BcMessage->setError($errorMessage);
                     }
                     break;
@@ -206,15 +206,15 @@ class InstallationsController extends BcAdminAppController
                 } catch (PersistenceFailedException $e) {
                     $db->rollback();
                     $errMsg = implode("\n・", Hash::extract($e->getEntity()->getErrors(), '{s}.{s}'));
-                    $this->BcMessage->setError(__d('baser', '管理ユーザーを作成できませんでした。') . "\n\n・" . $errMsg);
+                    $this->BcMessage->setError(__d('baser_core', '管理ユーザーを作成できませんでした。') . "\n\n・" . $errMsg);
                 } catch (\Throwable $e) {
                     if($e->getMessage() === 'Could not send email: unknown') {
                         $db->commit();
-                        $this->BcMessage->setWarning(__d('baser', 'インストールは完了しましたが、インストール完了メールが送信できませんでした。サーバーのメール設定を見直してください。'));
+                        $this->BcMessage->setWarning(__d('baser_core', 'インストールは完了しましたが、インストール完了メールが送信できませんでした。サーバーのメール設定を見直してください。'));
                         return $this->redirect(['action' => 'step5']);
                     }
                     $db->rollback();
-                    $this->BcMessage->setError(__d('baser', 'インストール中にエラーが発生しました。') . $e->getMessage());
+                    $this->BcMessage->setError(__d('baser_core', 'インストール中にエラーが発生しました。') . $e->getMessage());
                 }
             }
         }
@@ -258,7 +258,7 @@ class InstallationsController extends BcAdminAppController
      */
     public function alert()
     {
-        $this->setTitle(__d('baser', 'baserCMSのインストールを開始できません'));
+        $this->setTitle(__d('baser_core', 'baserCMSのインストールを開始できません'));
     }
 
     /**
@@ -270,7 +270,7 @@ class InstallationsController extends BcAdminAppController
      */
     public function reset()
     {
-        $this->setTitle(__d('baser', 'baserCMSの初期化'));
+        $this->setTitle(__d('baser_core', 'baserCMSの初期化'));
         $this->layoutPath = 'admin';
         $this->layout = 'default';
         $this->subDir = 'admin';
@@ -286,14 +286,11 @@ class InstallationsController extends BcAdminAppController
         }
 
         if (!$this->BcManager->reset($dbConfig)) {
-            $this->BcMessage->setError(
-                __d(
-                    'baser',
-                    'baserCMSを初期化しましたが、正常に処理が行われませんでした。詳細については、エラー・ログを確認してださい。'
-                )
-            );
+            $this->BcMessage->setError(__d('baser_core',
+                'baserCMSを初期化しましたが、正常に処理が行われませんでした。詳細については、エラー・ログを確認してださい。'
+            ));
         } else {
-            $this->BcMessage->setInfo(__d('baser', 'baserCMSを初期化しました。'));
+            $this->BcMessage->setInfo(__d('baser_core', 'baserCMSを初期化しました。'));
         }
         $this->redirect('reset');
     }

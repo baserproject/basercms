@@ -52,18 +52,18 @@ class ContentFoldersController extends BcAdminAppController
     public function edit(ContentFoldersAdminServiceInterface $service, $id = null)
     {
         if (!$id && empty($this->request->getData())) {
-            $this->BcMessage->setError(__d('baser', '無効なIDです。'));
+            $this->BcMessage->setError(__d('baser_core', '無効なIDです。'));
             return $this->redirect(['controller' => 'contents', 'action' => 'index']);
         }
         $contentFolder = $service->get($id);
         if ($this->request->is(['patch', 'post', 'put'])) {
             if (BcUtil::isOverPostSize()) {
-                $this->BcMessage->setError(__d('baser', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size')));
+                $this->BcMessage->setError(__d('baser_core', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size')));
                 $this->redirect(['action' => 'edit', $id]);
             }
             try {
                 $contentFolder = $service->update($contentFolder, $this->request->getData('ContentFolders'), ['reconstructSearchIndices' => true]);
-                $this->BcMessage->setSuccess(sprintf(__d('baser', 'フォルダ「%s」を更新しました。'), $contentFolder->content->title));
+                $this->BcMessage->setSuccess(sprintf(__d('baser_core', 'フォルダ「%s」を更新しました。'), $contentFolder->content->title));
                 return $this->redirect(['action' => 'edit', $id]);
             } catch (\Exception $e) {
                 $this->BcMessage->setError('保存中にエラーが発生しました。入力内容を確認してください。');

@@ -14,12 +14,12 @@
  * @var \BaserCore\View\BcAdminAppView $this
  * @var \BaserCore\Model\Entity\Site $site
  */
-$this->BcAdmin->setTitle(__d('baser', 'サイト新規登録'));
+$this->BcAdmin->setTitle(__d('baser_core', 'サイト新規登録'));
 $this->BcAdmin->setHelp('sites_form');
 $this->BcBaser->i18nScript([
-  'confirmMessage1' => __d('baser', "サブサイトを削除してもよろしいですか？\nサブサイトに関連しているコンテンツは全てゴミ箱に入ります。"),
-  'confirmMessage2' => __d('baser', 'エイリアスを本当に変更してもいいですか？<br><br>エイリアスを変更する場合、サイト全体のURLが変更となる為、保存に時間がかかりますのでご注意ください。'),
-  'confirmTitle1' => __d('baser', 'エイリアス変更')
+  'confirmMessage1' => __d('baser_core', "サブサイトを削除してもよろしいですか？\nサブサイトに関連しているコンテンツは全てゴミ箱に入ります。"),
+  'confirmMessage2' => __d('baser_core', 'エイリアスを本当に変更してもいいですか？<br><br>エイリアスを変更する場合、サイト全体のURLが変更となる為、保存に時間がかかりますのでご注意ください。'),
+  'confirmTitle1' => __d('baser_core', 'エイリアス変更')
 ]);
 $this->BcBaser->js('admin/sites/form.bundle', false);
 ?>
@@ -34,14 +34,14 @@ $this->BcBaser->js('admin/sites/form.bundle', false);
 <?php echo $this->BcFormTable->dispatchAfter() ?>
 
 <div class="submit bca-actions">
-  <?php echo $this->BcHtml->link(__d('baser', '一覧に戻る'),
+  <?php echo $this->BcHtml->link(__d('baser_core', '一覧に戻る'),
     ['admin' => true, 'controller' => 'sites', 'action' => 'index'],
     [
       'class' => 'button bca-btn bca-actions__item',
       'data-bca-btn-type' => 'back-to-list'
     ]
   ) ?>
-  <?php echo $this->BcAdminForm->button(__d('baser', '保存'), [
+  <?php echo $this->BcAdminForm->button(__d('baser_core', '保存'), [
     'div' => false,
     'class' => 'button bca-btn bca-actions__item',
     'data-bca-btn-type' => 'save',

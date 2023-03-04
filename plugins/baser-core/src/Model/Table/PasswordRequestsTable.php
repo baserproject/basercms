@@ -70,10 +70,10 @@ class PasswordRequestsTable extends AppTable
     {
         $validator
             ->scalar('email')
-            ->email('email', true, __d('baser', 'Eメールの形式が不正です。'))
-            ->maxLength('email', 255, __d('baser', 'Eメールは255文字以内で入力してください。'))
-            ->requirePresence('email', 'create', __d('baser', 'Eメールを入力してください。'))
-            ->notEmptyString('email', __d('baser', 'Eメールを入力してください。'));
+            ->email('email', true, __d('baser_core', 'Eメールの形式が不正です。'))
+            ->maxLength('email', 255, __d('baser_core', 'Eメールは255文字以内で入力してください。'))
+            ->requirePresence('email', 'create', __d('baser_core', 'Eメールを入力してください。'))
+            ->notEmptyString('email', __d('baser_core', 'Eメールを入力してください。'));
         return $validator;
     }
 

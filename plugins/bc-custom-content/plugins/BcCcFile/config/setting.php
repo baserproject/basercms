@@ -23,8 +23,8 @@ return [
              * ファイルフィールドを表示するフィールドタイプ
              */
             'BcCcFile' => [
-                'category' => __d('baser', 'コンテンツ'),
-                'label' => __d('baser', 'ファイル'),
+                'category' => __d('baser_core', 'コンテンツ'),
+                'label' => __d('baser_core', 'ファイル'),
                 'columnType' => 'string',
                 'controlType' => 'file',
                 'preview' => true,

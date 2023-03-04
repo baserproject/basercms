@@ -34,7 +34,7 @@ if (!$mailField->use_field) {
     <?php if ($this->BcBaser->isAdminUser()): ?>
       <?php echo $this->BcAdminForm->control('batch_targets.' . $mailField->id, [
         'type' => 'checkbox',
-        'label' => '<span class="bca-visually-hidden">' . __d('baser', 'チェックする') . '</span>',
+        'label' => '<span class="bca-visually-hidden">' . __d('baser_core', 'チェックする') . '</span>',
         'class' => 'batch-targets bca-checkbox__input',
         'value' => $mailField->id,
         'escape' => false
@@ -43,7 +43,7 @@ if (!$mailField->use_field) {
     <?php if ($this->request->getQuery('sortmode')): ?>
       <span class="sort-handle">
         <i class="bca-btn-icon-text" data-bca-btn-type="draggable"></i>
-        <?php echo __d('baser', 'ドラッグ可能') ?>
+        <?php echo __d('baser_core', 'ドラッグ可能') ?>
       </span>
       <?php echo $this->BcAdminForm->hidden('id' . $mailField->id, ['class' => 'id', 'value' => $mailField->id]) ?>
     <?php endif ?>
@@ -67,29 +67,29 @@ if (!$mailField->use_field) {
   <td class="bca-table-listup__tbody-td bca-table-listup__tbody-td--actions">
     <?php if ($mailField->use_field): ?>
     <?php echo $this->BcAdminForm->postLink('', ['action' => 'unpublish', $mailContent->id, $mailField->id], [
-      'title' => __d('baser', '非公開'),
+      'title' => __d('baser_core', '非公開'),
       'class' => 'btn-unpublish bca-btn-icon',
       'data-bca-btn-type' => 'unpublish',
       'data-bca-btn-size' => 'lg'
     ]) ?>
     <?php else: ?>
     <?php echo $this->BcAdminForm->postLink('', ['action' => 'publish', $mailContent->id, $mailField->id], [
-      'title' => __d('baser', '公開'),
+      'title' => __d('baser_core', '公開'),
       'class' => 'btn-publish bca-btn-icon',
       'data-bca-btn-type' => 'publish',
       'data-bca-btn-size' => 'lg'
     ]) ?>
     <?php endif ?>
-    <?php $this->BcBaser->link('', ['action' => 'edit', $mailContent->id, $mailField->id], ['title' => __d('baser', '編集'), 'class' => ' bca-btn-icon', 'data-bca-btn-type' => 'edit', 'data-bca-btn-size' => 'lg']) ?>
+    <?php $this->BcBaser->link('', ['action' => 'edit', $mailContent->id, $mailField->id], ['title' => __d('baser_core', '編集'), 'class' => ' bca-btn-icon', 'data-bca-btn-type' => 'edit', 'data-bca-btn-size' => 'lg']) ?>
     <?php echo $this->BcAdminForm->postLink('', ['action' => 'copy', $mailContent->id, $mailField->id], [
-      'title' => __d('baser', 'コピー'),
+      'title' => __d('baser_core', 'コピー'),
       'class' => 'btn-copy bca-icon--copy bca-btn-icon',
       'data-bca-btn-type' => 'copy',
       'data-bca-btn-size' => 'lg'
     ]) ?>
     <?php echo $this->BcAdminForm->postLink('', ['action' => 'delete', $mailContent->id, $mailField->id], [
-      'confirm' => __d('baser', '{0} を本当に削除してもいいですか？', $mailField->name),
-      'title' => __d('baser', '削除'),
+      'confirm' => __d('baser_core', '{0} を本当に削除してもいいですか？', $mailField->name),
+      'title' => __d('baser_core', '削除'),
       'class' => 'btn-delete bca-btn-icon',
       'data-bca-btn-type' => 'delete',
       'data-bca-btn-size' => 'lg'

@@ -188,7 +188,7 @@ class UsersTableTest extends BcTestCase
             'password_1' => '',
             'password_2' => ''
         ], ['validate' => 'new']);
-        $this->assertEquals($user->getError('password')['_empty'], __d('baser', 'パスワードを入力してください。'));
+        $this->assertEquals($user->getError('password')['_empty'], __d('baser_core', 'パスワードを入力してください。'));
     }
 
     /**

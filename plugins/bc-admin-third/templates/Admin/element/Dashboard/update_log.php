@@ -23,7 +23,7 @@ use BaserCore\Annotation\Checked;
  */
 ?>
 
-<h2 class="bca-panel-box__title"><?php echo __d('baser', '最近の動き') ?></h2>
+<h2 class="bca-panel-box__title"><?php echo __d('baser_core', '最近の動き') ?></h2>
 <div id="DblogList">
   <?php if ($dblogs): ?>
     <div class="bca-update-log">
@@ -46,7 +46,7 @@ use BaserCore\Annotation\Checked;
     </div>
     <?php if ($dblogs->count()): ?>
       <div class="align-right">
-        <?php $this->BcBaser->link(__d('baser', '> 全てのログを見る'), [
+        <?php $this->BcBaser->link(__d('baser_core', '> 全てのログを見る'), [
           'controller' => 'dblogs',
           'action' => 'index'
         ]) ?>

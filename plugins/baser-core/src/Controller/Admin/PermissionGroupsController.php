@@ -54,13 +54,13 @@ class PermissionGroupsController extends BcAdminAppController
         if($this->getRequest()->is(['post', 'put'])) {
             try {
                 $entity = $service->update($entity, $this->getRequest()->getData());
-                $this->BcMessage->setSuccess(__d('baser', 'ルールグループ「{0}」を更新しました。', $entity->name));
+                $this->BcMessage->setSuccess(__d('baser_core', 'ルールグループ「{0}」を更新しました。', $entity->name));
                 $this->redirect(['action' => 'edit', $userGroupId, $id]);
             } catch (PersistenceFailedException $e) {
                 $entity = $e->getEntity();
-                $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
+                $this->BcMessage->setError(__d('baser_core', '入力エラーです。内容を修正してください。'));
             } catch (\Throwable $e) {
-                $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
+                $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
             }
         }
         $this->set($service->getViewVarsForEdit($userGroupId, $entity));
@@ -77,9 +77,9 @@ class PermissionGroupsController extends BcAdminAppController
     {
         $this->request->allowMethod(['post', 'put']);
         if($service->rebuildByUserGroup($userGroupId)) {
-            $this->BcMessage->setSuccess(__d('baser', 'アクセスルールの再構築に成功しました。'));
+            $this->BcMessage->setSuccess(__d('baser_core', 'アクセスルールの再構築に成功しました。'));
         } else {
-            $this->BcMessage->setError(__d('baser', 'アクセスルールの再構築に失敗しました。'));
+            $this->BcMessage->setError(__d('baser_core', 'アクセスルールの再構築に失敗しました。'));
         }
         return $this->redirect(['action' => 'index', $userGroupId]);
     }

@@ -61,9 +61,9 @@ class BlogCommentsController extends BcApiController
             $blogComment = $service->get($blogCommentId);
         } catch (RecordNotFoundException $e) {
             $this->setResponse($this->response->withStatus(404));
-            $message = __d('baser', 'データが見つかりません。');
+            $message = __d('baser_core', 'データが見つかりません。');
         } catch (\Throwable $e) {
-            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
             $this->setResponse($this->response->withStatus(500));
         }
         $this->set([
@@ -89,12 +89,12 @@ class BlogCommentsController extends BcApiController
         try {
             $blogComment = $service->get($blogCommentId);
             $service->delete($blogCommentId);
-            $message = __d('baser', 'ブログコメント「{0}」を削除しました。', $blogComment->no);
+            $message = __d('baser_core', 'ブログコメント「{0}」を削除しました。', $blogComment->no);
         } catch (RecordNotFoundException $e) {
             $this->setResponse($this->response->withStatus(404));
-            $message = __d('baser', 'データが見つかりません。');
+            $message = __d('baser_core', 'データが見つかりません。');
         } catch (\Throwable $e) {
-            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
             $this->setResponse($this->response->withStatus(500));
         }
         $this->set([
@@ -121,9 +121,9 @@ class BlogCommentsController extends BcApiController
     {
         $this->request->allowMethod(['post', 'put']);
         $allowMethod = [
-            'delete' => __d('baser', '削除'),
-            'publish' => __d('baser', '公開'),
-            'unpublish' => __d('baser', '非公開に')
+            'delete' => __d('baser_core', '削除'),
+            'publish' => __d('baser_core', '公開'),
+            'unpublish' => __d('baser_core', '非公開に')
         ];
         $method = $this->getRequest()->getData('batch');
         if (!isset($allowMethod[$method])) {
@@ -136,14 +136,14 @@ class BlogCommentsController extends BcApiController
         try {
             $service->batch($method, $targets);
             $this->BcMessage->setSuccess(
-                sprintf(__d('baser', 'ブログコメント「%s」を %s しました。'), implode(', ', $targets), $allowMethod[$method]),
+                sprintf(__d('baser_core', 'ブログコメント「%s」を %s しました。'), implode(', ', $targets), $allowMethod[$method]),
                 true,
                 false
             );
-            $message = __d('baser', '一括処理が完了しました。');
+            $message = __d('baser_core', '一括処理が完了しました。');
         } catch (Throwable $e) {
             $this->setResponse($this->response->withStatus(500));
-            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
         }
         $this->set(['message' => $message, 'errors' => $errors]);
         $this->viewBuilder()->setOption('serialize', ['message', 'errors']);

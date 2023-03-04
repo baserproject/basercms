@@ -36,113 +36,113 @@
  * @var bool $blRequirementsMet
  */
 $this->BcBaser->js('BcInstaller.admin/installations/step2.bundle', false);
-$this->BcAdmin->setTitle(__d('baser', 'baserCMSのインストール｜ステップ２'));
+$this->BcAdmin->setTitle(__d('baser_core', 'baserCMSのインストール｜ステップ２'));
 ?>
 
 
 <div class="step2">
 
   <div class="em-box bca-em-box">
-    <?php echo __d('baser', 'インストール環境の条件をチェックしました。<br />次に進む為には、「基本必須条件」の赤い項目を全て解決する必要があります。') ?>
+    <?php echo __d('baser_core', 'インストール環境の条件をチェックしました。<br />次に進む為には、「基本必須条件」の赤い項目を全て解決する必要があります。') ?>
   </div>
 
   <div class="section bca-section">
 
     <!-- basic -->
-    <h2 class="bca-main__heading"><?php echo __d('baser', '基本必須条件') ?></h2>
+    <h2 class="bca-main__heading"><?php echo __d('baser_core', '基本必須条件') ?></h2>
     <div class="panel-box bca-panel-box corner10">
       <ul class="section">
         <li class='<?php if ($phpVersionOk) echo 'check'; else echo 'failed'; ?>'>
-          <?php echo __d('baser', 'PHPのバージョン') ?> >= <?php echo $requirePhpVersion; ?>
-          <div class="check-result"><?php echo __d('baser', '現在のPHPバージョン') ?>
+          <?php echo __d('baser_core', 'PHPのバージョン') ?> >= <?php echo $requirePhpVersion; ?>
+          <div class="check-result"><?php echo __d('baser_core', '現在のPHPバージョン') ?>
             ： <?php echo $phpActualVersion; ?>
             <?php if (!$phpVersionOk): ?>
               <br>
-              <small><?php echo __d('baser', 'ご利用のサーバーでは残念ながらbaserCMSを動作させる事はできません') ?></small>
+              <small><?php echo __d('baser_core', 'ご利用のサーバーでは残念ながらbaserCMSを動作させる事はできません') ?></small>
             <?php endif ?>
           </div>
         </li>
         <li class='<?php if ($configDirWritable) echo 'check'; else echo 'failed'; ?>'>
-          <?php echo __d('baser', '{0} フォルダの書き込み権限（707 OR 777 等、サーバー推奨がある場合はそちらに従ってください）', $configDir) ?>
+          <?php echo __d('baser_core', '{0} フォルダの書き込み権限（707 OR 777 等、サーバー推奨がある場合はそちらに従ってください）', $configDir) ?>
           <div class="check-result">
             <?php if ($configDirWritable): ?>
-              <?php echo __d('baser', '書き込み可') ?>
+              <?php echo __d('baser_core', '書き込み可') ?>
             <?php else: ?>
-              <?php echo __d('baser', '書き込み不可') ?><br>
-              <small><?php echo __d('baser', '{0} フォルダに書き込み権限が必要です', $configDir) ?></small>
+              <?php echo __d('baser_core', '書き込み不可') ?><br>
+              <small><?php echo __d('baser_core', '{0} フォルダに書き込み権限が必要です', $configDir) ?></small>
             <?php endif ?>
           </div>
         </li>
         <li class='<?php if ($pluginDirWritable) echo 'check'; else echo 'failed'; ?>'>
-          <?php echo __d('baser', '{0} フォルダの書き込み権限（707 OR 777 等、サーバー推奨がある場合はそちらに従ってください）', $pluginDir) ?>
+          <?php echo __d('baser_core', '{0} フォルダの書き込み権限（707 OR 777 等、サーバー推奨がある場合はそちらに従ってください）', $pluginDir) ?>
           <div class="check-result">
             <?php if ($pluginDirWritable): ?>
-              <?php echo __d('baser', '書き込み可') ?>
+              <?php echo __d('baser_core', '書き込み可') ?>
             <?php else: ?>
-              <?php echo __d('baser', '書き込み不可') ?><br>
-              <small><?php echo __d('baser', '{0} フォルダに書き込み権限が必要です', $pluginDir) ?></small>
+              <?php echo __d('baser_core', '書き込み不可') ?><br>
+              <small><?php echo __d('baser_core', '{0} フォルダに書き込み権限が必要です', $pluginDir) ?></small>
             <?php endif ?>
           </div>
         </li>
         <li class='<?php if ($tmpDirWritable) echo 'check'; else echo 'failed'; ?>'>
-          <?php echo __d('baser', '{0} フォルダの書き込み権限（707 OR 777 等、サーバー推奨がある場合はそちらに従ってください）', $tmpDir) ?>
+          <?php echo __d('baser_core', '{0} フォルダの書き込み権限（707 OR 777 等、サーバー推奨がある場合はそちらに従ってください）', $tmpDir) ?>
           <div class="check-result">
             <?php if ($tmpDirWritable): ?>
-              <?php echo __d('baser', '書き込み可') ?>
+              <?php echo __d('baser_core', '書き込み可') ?>
             <?php else: ?>
-              <?php echo __d('baser', '書き込み不可') ?><br>
-              <small><?php echo __d('baser', '{0} フォルダに書き込み権限が必要です。', $tmpDir) ?></small>
+              <?php echo __d('baser_core', '書き込み不可') ?><br>
+              <small><?php echo __d('baser_core', '{0} フォルダに書き込み権限が必要です。', $tmpDir) ?></small>
             <?php endif ?>
           </div>
         </li>
         <li class='<?php if ($filesDirWritable) echo 'check'; else echo 'failed'; ?>'>
-          <?php echo __d('baser', '{0} フォルダの書き込み権限（707 OR 777 等、サーバー推奨がある場合はそちらに従ってください）', $filesDir) ?>
+          <?php echo __d('baser_core', '{0} フォルダの書き込み権限（707 OR 777 等、サーバー推奨がある場合はそちらに従ってください）', $filesDir) ?>
           <div class="check-result">
             <?php if ($filesDirWritable): ?>
-              <?php echo __d('baser', '書き込み可') ?>
+              <?php echo __d('baser_core', '書き込み可') ?>
             <?php else: ?>
-              <?php echo __d('baser', '書き込み不可') ?><br>
-              <small><?php echo __d('baser', '{0} フォルダに書き込み権限が必要です', $filesDir) ?></small>
+              <?php echo __d('baser_core', '書き込み不可') ?><br>
+              <small><?php echo __d('baser_core', '{0} フォルダに書き込み権限が必要です', $filesDir) ?></small>
             <?php endif ?>
           </div>
         </li>
         <li class='<?php if ($encodingOk) echo 'check';
         else echo 'failed'; ?>'>
-          <?php echo __d('baser', '文字エンコーディングの設定 = UTF-8') ?>
+          <?php echo __d('baser_core', '文字エンコーディングの設定 = UTF-8') ?>
           <div class="check-result">
             <?php echo $encoding ?><br>
             <?php if (!$encodingOk): ?>
-              <small><?php echo __d('baser', 'phpの内部文字エンコーディングがUTF-8である必要があります') ?></small>
+              <small><?php echo __d('baser_core', 'phpの内部文字エンコーディングがUTF-8である必要があります') ?></small>
               <br>
-              <small><?php echo __d('baser', 'php.iniで「mbstring.internal_encoding」をUTF-8に設定してください') ?></small>
+              <small><?php echo __d('baser_core', 'php.iniで「mbstring.internal_encoding」をUTF-8に設定してください') ?></small>
             <?php endif ?>
           </div>
         </li>
         <li class='<?php if ($gdOk) echo 'check';
         else echo 'failed'; ?>'>
-          <?php echo __d('baser', 'GDの利用') ?>
+          <?php echo __d('baser_core', 'GDの利用') ?>
           <div class="check-result">
             <?php if ($gdOk): ?>
-              <?php echo __d('baser', '利用可') ?>
+              <?php echo __d('baser_core', '利用可') ?>
             <?php else: ?>
-              <?php echo __d('baser', '利用不可') ?><br>
-              <small><?php echo __d('baser', 'phpのGDモジュールでPNGが使える必要があります') ?></small>
+              <?php echo __d('baser_core', '利用不可') ?><br>
+              <small><?php echo __d('baser_core', 'phpのGDモジュールでPNGが使える必要があります') ?></small>
               <br>
-              <small><?php echo __d('baser', 'GDモジュールをインストールするか有効にしてください') ?></small>
+              <small><?php echo __d('baser_core', 'GDモジュールをインストールするか有効にしてください') ?></small>
             <?php endif ?>
           </div>
         </li>
         <li class='<?php if ($xmlOk) echo 'check';
         else echo 'failed'; ?>'>
-          <?php echo __d('baser', 'DOMDocumentの利用') ?>
+          <?php echo __d('baser_core', 'DOMDocumentの利用') ?>
           <div class="check-result">
             <?php if ($xmlOk): ?>
-              <?php echo __d('baser', '利用可') ?>
+              <?php echo __d('baser_core', '利用可') ?>
             <?php else: ?>
-              <?php echo __d('baser', '利用不可') ?><br>
-              <small><?php echo __d('baser', 'phpのxmlモジュールでDOMDocumentが使える必要があります') ?></small>
+              <?php echo __d('baser_core', '利用不可') ?><br>
+              <small><?php echo __d('baser_core', 'phpのxmlモジュールでDOMDocumentが使える必要があります') ?></small>
               <br>
-              <small><?php echo __d('baser', 'xmlモジュールをインストールするか有効にしてください') ?></small>
+              <small><?php echo __d('baser_core', 'xmlモジュールをインストールするか有効にしてください') ?></small>
             <?php endif ?>
           </div>
         </li>
@@ -152,23 +152,23 @@ $this->BcAdmin->setTitle(__d('baser', 'baserCMSのインストール｜ステッ
 
   <div class="section bca-section">
     <!-- option -->
-    <h2 class="bca-main__heading"><?php echo __d('baser', 'オプション') ?></h2>
+    <h2 class="bca-main__heading"><?php echo __d('baser_core', 'オプション') ?></h2>
 
     <div class="panel-box bca-panel-box corner10">
-      <h3 class="bca-panel-box__title"><?php echo __d('baser', 'ファイルデータベース') ?></h3>
+      <h3 class="bca-panel-box__title"><?php echo __d('baser_core', 'ファイルデータベース') ?></h3>
       <div class="section"><p
-          class="bca-main__text"><?php echo __d('baser', 'データベースサーバーが利用できない場合には、ファイルベースデータベースの SQLite を利用できます。<br>有効にするには、下記のフォルダへの書き込み権限が必要です ') ?></p>
+          class="bca-main__text"><?php echo __d('baser_core', 'データベースサーバーが利用できない場合には、ファイルベースデータベースの SQLite を利用できます。<br>有効にするには、下記のフォルダへの書き込み権限が必要です ') ?></p>
       </div>
       <ul class="section">
         <li class='<?php if ($dbDirWritable) echo 'check';
         else echo 'failed'; ?>'>
-          <?php echo __d('baser', '{0} の書き込み権限（707 OR 777 等、サーバー推奨がある場合はそちらに従ってください）', $dbDir) ?><br>
+          <?php echo __d('baser_core', '{0} の書き込み権限（707 OR 777 等、サーバー推奨がある場合はそちらに従ってください）', $dbDir) ?><br>
           <div class="check-result">
             <?php if ($dbDirWritable): ?>
-              <?php echo __d('baser', '書き込み可') ?>
+              <?php echo __d('baser_core', '書き込み可') ?>
             <?php else: ?>
-              <?php echo __d('baser', '書き込み不可') ?><br>
-              <small><?php echo __d('baser', 'SQLite を利用するには、{0} フォルダに書き込み権限が必要です', $dbDir) ?></small>
+              <?php echo __d('baser_core', '書き込み不可') ?><br>
+              <small><?php echo __d('baser_core', 'SQLite を利用するには、{0} フォルダに書き込み権限が必要です', $dbDir) ?></small>
             <?php endif ?>
           </div>
         </li>
@@ -176,21 +176,21 @@ $this->BcAdmin->setTitle(__d('baser', 'baserCMSのインストール｜ステッ
     </div>
 
     <div class="panel-box bca-panel-box corner10">
-      <h3 class="bca-panel-box__title"><?php echo __d('baser', 'PHPのメモリ') ?></h3>
+      <h3 class="bca-panel-box__title"><?php echo __d('baser_core', 'PHPのメモリ') ?></h3>
       <div class="section"><p
-          class="bca-main__text"><?php echo sprintf(__d('baser', 'PHPのメモリが %s より低い場合、baserCMSの全ての機能が正常に動作しない可能性があります。'), $requirePhpMemory . " MB") ?>
+          class="bca-main__text"><?php echo sprintf(__d('baser_core', 'PHPのメモリが %s より低い場合、baserCMSの全ての機能が正常に動作しない可能性があります。'), $requirePhpMemory . " MB") ?>
           <br>
-          <small><?php echo __d('baser', 'サーバー環境によってはPHPのメモリ上限が取得できず「0MB」となっている場合もあります。その場合、サーバー業者等へサーバースペックを直接確認してください。') ?></small>
+          <small><?php echo __d('baser_core', 'サーバー環境によってはPHPのメモリ上限が取得できず「0MB」となっている場合もあります。その場合、サーバー業者等へサーバースペックを直接確認してください。') ?></small>
         </p></div>
       <ul class="section">
         <li class='<?php if ($phpMemoryOk) echo 'check';
         else echo 'failed'; ?>'>
-          <?php echo sprintf(__d('baser', 'PHPのメモリ上限 >= %s'), $requirePhpMemory . " MB") ?>
+          <?php echo sprintf(__d('baser_core', 'PHPのメモリ上限 >= %s'), $requirePhpMemory . " MB") ?>
           <div
-            class="check-result"><?php echo sprintf(__d('baser', '現在のPHPのメモリ上限： %s'), '&nbsp;' . $phpMemory . " MB") ?>
+            class="check-result"><?php echo sprintf(__d('baser_core', '現在のPHPのメモリ上限： %s'), '&nbsp;' . $phpMemory . " MB") ?>
             <?php if (!$phpMemoryOk): ?>
               <br>
-              <small><?php echo sprintf(__d('baser', 'php.iniの設定変更が可能であれば、memory_limit の値を%s以上に設定してください'), $requirePhpMemory . " MB") ?></small>
+              <small><?php echo sprintf(__d('baser_core', 'php.iniの設定変更が可能であれば、memory_limit の値を%s以上に設定してください'), $requirePhpMemory . " MB") ?></small>
             <?php endif ?>
           </div>
         </li>
@@ -203,15 +203,15 @@ $this->BcAdmin->setTitle(__d('baser', 'baserCMSのインストール｜ステッ
   <?php $this->BcAdminForm->unlockField('mode') ?>
 
   <div class="submit bca-actions">
-    <?php echo $this->BcAdminForm->button(__d('baser', '再チェック'), ['class' => 'bca-btn bca-actions__item', 'id' => 'BtnCheckAgain']) ?>
+    <?php echo $this->BcAdminForm->button(__d('baser_core', '再チェック'), ['class' => 'bca-btn bca-actions__item', 'id' => 'BtnCheckAgain']) ?>
     <?php if (!$blRequirementsMet): ?>
-      <?php echo $this->BcAdminForm->button(__d('baser', '次のステップへ'), [
+      <?php echo $this->BcAdminForm->button(__d('baser_core', '次のステップへ'), [
         'class' => 'bca-btn bca-actions__item',
         'id' => 'BtnNext',
         'disabled' => 'disabled'
       ]) ?>
     <?php else: ?>
-      <?php echo $this->BcAdminForm->button(__d('baser', '次のステップへ'), [
+      <?php echo $this->BcAdminForm->button(__d('baser_core', '次のステップへ'), [
         'class' => 'bca-btn bca-actions__item',
         'id' => 'BtnNext',
         'data-bca-btn-size' => 'lg',

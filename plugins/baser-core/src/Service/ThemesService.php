@@ -134,8 +134,7 @@ class ThemesService implements ThemesServiceInterface
     public function add(array $postData): string
     {
         if (BcUtil::isOverPostSize()) {
-            throw new BcException(__d(
-                'baser',
+            throw new BcException(__d('baser_core',
                 '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。',
                 ini_get('post_max_size')
             ));
@@ -143,7 +142,7 @@ class ThemesService implements ThemesServiceInterface
         if (empty($_FILES['file']['tmp_name'])) {
             $message = '';
             if ($postData['file']->getError() === 1) {
-                $message = __d('baser', 'サーバに設定されているサイズ制限を超えています。');
+                $message = __d('baser_core', 'サーバに設定されているサイズ制限を超えています。');
             }
             throw new BcException($message);
         }
@@ -152,7 +151,7 @@ class ThemesService implements ThemesServiceInterface
         $srcName = basename($name, '.zip');
         $zip = new BcZip();
         if (!$zip->extract(TMP . $name, TMP)) {
-            throw new BcException(__d('baser', 'アップロードしたZIPファイルの展開に失敗しました。'));
+            throw new BcException(__d('baser_core', 'アップロードしたZIPファイルの展開に失敗しました。'));
         }
 
         $num = 2;
@@ -232,7 +231,7 @@ class ThemesService implements ThemesServiceInterface
         $files = $Folder->read(true, true, false);
         if (!empty($files[0])) {
             $info = array_merge($info, [
-                __d('baser', 'このテーマは下記のプラグインを同梱しています。')
+                __d('baser_core', 'このテーマは下記のプラグインを同梱しています。')
             ]);
             foreach($files[0] as $file) {
                 $info[] = '	・' . $file;
@@ -257,8 +256,8 @@ class ThemesService implements ThemesServiceInterface
         if (preg_match('/\/(' . $theme . '|' . Inflector::dasherize($theme) . ')\//', $path)) {
             if ($info) $info = array_merge($info, ['']);
             $info = array_merge($info, [
-                __d('baser', 'このテーマは初期データを保有しています。'),
-                __d('baser', 'Webサイトにテーマに合ったデータを適用するには、初期データ読込を実行してください。'),
+                __d('baser_core', 'このテーマは初期データを保有しています。'),
+                __d('baser_core', 'Webサイトにテーマに合ったデータを適用するには、初期データ読込を実行してください。'),
             ]);
         }
         return $info;
@@ -304,7 +303,7 @@ class ThemesService implements ThemesServiceInterface
         // データパターンのチェック
         [$theme, $pattern] = explode('.', $dbDataPattern);
         if (!$this->checkDefaultDataPattern($theme, $pattern)) {
-            throw new BcException(__d('baser', '初期データのバージョンが違うか、初期データの構造が壊れています。'));
+            throw new BcException(__d('baser_core', '初期データのバージョンが違うか、初期データの構造が壊れています。'));
         }
 
         // 初期データ読み込み

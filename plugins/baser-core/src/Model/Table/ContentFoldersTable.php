@@ -79,7 +79,7 @@ class ContentFoldersTable extends AppTable
         $validator
             ->integer('id')
             ->allowEmptyString('id', null, 'create')
-            ->add('id', 'valid', ['rule' => 'numeric', 'message' => __d('baser', 'IDに不正な値が利用されています。')]);
+            ->add('id', 'valid', ['rule' => 'numeric', 'message' => __d('baser_core', 'IDに不正な値が利用されています。')]);
         return $validator;
     }
 

@@ -16,11 +16,11 @@
  * @noTodo
  * @unitTest
  */
-$this->BcAdmin->setTitle(sprintf(__d('baser', '%s｜メールフィールド一覧'), $this->getRequest()->getAttribute('currentContent')->title));
+$this->BcAdmin->setTitle(sprintf(__d('baser_core', '%s｜メールフィールド一覧'), $this->getRequest()->getAttribute('currentContent')->title));
 $this->BcAdmin->setHelp('mail_fields_index');
 $this->BcAdmin->addAdminMainBodyHeaderLinks([
   'url' => ['action' => 'add', $this->request->getParam('pass.0')],
-  'title' => __d('baser', '新規フィールド追加'),
+  'title' => __d('baser_core', '新規フィールド追加'),
 ]);
 ?>
 

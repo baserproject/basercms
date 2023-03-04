@@ -56,7 +56,7 @@ class BcCcPrefHelper extends Helper
 		$options = array_merge([
 			'type' => 'select',
 			'options' => array_combine($prefSrc, $prefSrc),
-			'empty' => __d('baser', '指定しない'),
+			'empty' => __d('baser_core', '指定しない'),
 		], $options);
         return $this->BcAdminForm->control($link->name, $options);
     }

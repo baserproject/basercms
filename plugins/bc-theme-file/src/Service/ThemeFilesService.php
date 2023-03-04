@@ -105,10 +105,10 @@ class ThemeFilesService extends BcThemeFileService implements ThemeFilesServiceI
                 $form->set('fullpath', $postData['fullpath'] . $postData['base_name'] . '.' . $postData['ext']);
                 return $form;
             } else {
-                throw new BcException(__d('baser', 'ファイルの作成に失敗しました。書き込み権限に問題がある可能性があります。'));
+                throw new BcException(__d('baser_core', 'ファイルの作成に失敗しました。書き込み権限に問題がある可能性があります。'));
             }
         } else {
-            throw new BcFormFailedException($form, __d('baser', 'ファイルの作成に失敗しました。'));
+            throw new BcFormFailedException($form, __d('baser_core', 'ファイルの作成に失敗しました。'));
         }
     }
 
@@ -129,10 +129,10 @@ class ThemeFilesService extends BcThemeFileService implements ThemeFilesServiceI
                 $themeFileForm->set('fullpath', dirname($postData['fullpath']) . DS . $postData['base_name'] . '.' . $postData['ext']);
                 return $themeFileForm;
             } else {
-                throw new BcException(__d('baser', '書き込み権限に問題がある可能性があります。'));
+                throw new BcException(__d('baser_core', '書き込み権限に問題がある可能性があります。'));
             }
         } else {
-            throw new BcFormFailedException($themeFileForm, __d('baser', 'ファイルの保存に失敗しました。'));
+            throw new BcFormFailedException($themeFileForm, __d('baser_core', 'ファイルの保存に失敗しました。'));
         }
     }
 
@@ -189,8 +189,7 @@ class ThemeFilesService extends BcThemeFileService implements ThemeFilesServiceI
     public function upload(string $fullpath, array $postData)
     {
         if (BcUtil::isOverPostSize()) {
-            throw new BcException(__d(
-                'baser',
+            throw new BcException(__d('baser_core',
                 '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。',
                 ini_get('post_max_size')
             ));
@@ -201,7 +200,7 @@ class ThemeFilesService extends BcThemeFileService implements ThemeFilesServiceI
         if (!move_uploaded_file($postData['file']['tmp_name'], $filePath)) {
             // ユニットテストの際に何故か失敗してしまうので応急措置
             if(!rename($postData['file']['tmp_name'], $filePath)) {
-                throw new BcException(__d('baser', '書き込み権限に問題がある可能性があります。'));
+                throw new BcException(__d('baser_core', '書き込み権限に問題がある可能性があります。'));
             }
         }
     }

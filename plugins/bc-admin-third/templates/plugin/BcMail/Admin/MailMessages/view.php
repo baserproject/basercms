@@ -19,8 +19,7 @@
  * @noTodo
  * @unitTest
  */
-$this->BcAdmin->setTitle(__d(
-  'baser',
+$this->BcAdmin->setTitle(__d('baser_core',
   '{0}｜受信メール詳細',
   $this->getRequest()->getAttribute('currentContent')->title
 ));
@@ -33,7 +32,7 @@ $this->BcAdmin->setTitle(__d(
     <td class="col-input bca-form-table__input"><?php echo $mailMessage->id ?></td>
   </tr>
   <tr>
-    <th class="col-head bca-form-table__label"><?php echo __d('baser', '受信日時') ?></th>
+    <th class="col-head bca-form-table__label"><?php echo __d('baser_core', '受信日時') ?></th>
     <td class="col-input bca-form-table__input"><?php echo $this->BcTime->format($mailMessage->created) ?></td>
   </tr>
   <?php
@@ -87,9 +86,9 @@ $this->BcAdmin->setTitle(__d(
 
 <!-- button -->
 <div class="bca-actions">
-  <?php echo $this->BcAdminForm->postLink(__d('baser', '削除'),
+  <?php echo $this->BcAdminForm->postLink(__d('baser_core', '削除'),
     ['action' => 'delete', $mailContent->id, $mailMessage->id], [
-      'confirm' => __d('baser', '受信メール No「{0}」を削除してもいいですか？', $mailMessage->id),
+      'confirm' => __d('baser_core', '受信メール No「{0}」を削除してもいいですか？', $mailMessage->id),
       'class' => 'bca-submit-token button bca-btn bca-actions__item',
       'data-bca-btn-type' => 'delete',
       'data-bca-btn-size' => 'sm',

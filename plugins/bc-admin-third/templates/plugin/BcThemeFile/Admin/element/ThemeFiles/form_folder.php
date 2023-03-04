@@ -36,8 +36,8 @@
   <table id="FormTable" class="form-table bca-form-table">
     <tr>
       <th class="col-head bca-form-table__label">
-        <?php echo $this->BcAdminForm->label('name', __d('baser', 'フォルダ名')) ?>
-        &nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
+        <?php echo $this->BcAdminForm->label('name', __d('baser_core', 'フォルダ名')) ?>
+        &nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser_core', '必須') ?></span>
       </th>
       <td class="col-input bca-form-table__input">
         <?php if ($this->getRequest()->getParam('action') != 'view_folder'): ?>
@@ -45,7 +45,7 @@
           <i class="bca-icon--question-circle bca-help"></i>
           <div class="bca-helptext">
             <ul>
-              <li><?php echo __d('baser', 'フォルダ名は半角で入力してください。') ?></li>
+              <li><?php echo __d('baser_core', 'フォルダ名は半角で入力してください。') ?></li>
             </ul>
           </div>
           <?php echo $this->BcAdminForm->error('name') ?>

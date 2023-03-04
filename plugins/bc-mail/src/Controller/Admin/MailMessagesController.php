@@ -55,7 +55,7 @@ class MailMessagesController extends MailAdminAppController
     {
         parent::beforeFilter($event);
         $mailContentId = $this->request->getParam('pass.0');
-        if (!$mailContentId) throw new BcException(__d('baser', '不正なURLです。'));
+        if (!$mailContentId) throw new BcException(__d('baser_core', '不正なURLです。'));
         /* @var ContentsService $contentsService */
         $contentsService = $this->getService(ContentsServiceInterface::class);
         $request = $contentsService->setCurrentToRequest(
@@ -63,7 +63,7 @@ class MailMessagesController extends MailAdminAppController
             $mailContentId,
             $this->getRequest()
         );
-        if (!$request) throw new BcException(__d('baser', 'コンテンツデータが見つかりません。'));
+        if (!$request) throw new BcException(__d('baser_core', 'コンテンツデータが見つかりません。'));
         $this->setRequest($request);
     }
 
@@ -136,15 +136,14 @@ class MailMessagesController extends MailAdminAppController
         try {
             $service->setup($mailContentId);
             if ($service->delete($id)) {
-                $this->BcMessage->setSuccess(__d(
-                    'baser',
+                $this->BcMessage->setSuccess(__d('baser_core',
                     '{0} への受信データ NO「{1}」 を削除しました。',
                     $mailContent->content->title,
                     $id
                 ));
             }
         } catch (\Throwable $e) {
-            $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
+            $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
         }
         return $this->redirect(['action' => 'index', $mailContentId]);
     }

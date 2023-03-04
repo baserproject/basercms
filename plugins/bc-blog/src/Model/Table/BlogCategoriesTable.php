@@ -98,25 +98,25 @@ class BlogCategoriesTable extends BlogAppTable
 
         $validator
             ->scalar('name')
-            ->maxLength('name', 255, __d('baser', 'カテゴリ名は255文字以内で入力してください。'))
-            ->requirePresence('name', 'create', __d('baser', 'カテゴリ名を入力してください。'))
-            ->notEmptyString('name', __d('baser', 'カテゴリ名を入力してください。'))
+            ->maxLength('name', 255, __d('baser_core', 'カテゴリ名は255文字以内で入力してください。'))
+            ->requirePresence('name', 'create', __d('baser_core', 'カテゴリ名を入力してください。'))
+            ->notEmptyString('name', __d('baser_core', 'カテゴリ名を入力してください。'))
             ->add('name', [
                 'alphaNumericDashUnderscore' => [
                     'rule' => ['alphaNumericDashUnderscore'],
                     'provider' => 'bc',
-                    'message' => __d('baser', 'カテゴリ名はは半角英数字とハイフン、アンダースコアのみが利用可能です。')]])
+                    'message' => __d('baser_core', 'カテゴリ名はは半角英数字とハイフン、アンダースコアのみが利用可能です。')]])
             ->add('name', [
                 'duplicateBlogCategory' => [
                     'rule' => ['duplicateBlogCategory'],
                     'provider' => 'blogCategory',
-                    'message' => __d('baser', '入力されたカテゴリ名は既に登録されています。')]]);
+                    'message' => __d('baser_core', '入力されたカテゴリ名は既に登録されています。')]]);
 
         $validator
             ->scalar('title')
-            ->maxLength('title', 50, __d('baser', 'カテゴリタイトルは255文字以内で入力してください。'))
-            ->requirePresence('title', 'create', __d('baser', 'カテゴリタイトルを入力してください。'))
-            ->notEmptyString('title', __d('baser', 'カテゴリタイトルを入力してください。'));
+            ->maxLength('title', 50, __d('baser_core', 'カテゴリタイトルは255文字以内で入力してください。'))
+            ->requirePresence('title', 'create', __d('baser_core', 'カテゴリタイトルを入力してください。'))
+            ->notEmptyString('title', __d('baser_core', 'カテゴリタイトルを入力してください。'));
 
         return $validator;
     }

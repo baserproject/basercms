@@ -11,8 +11,8 @@
 
 return [
     'type' => ['BcCustomContentPlugin'],
-    'title' => __d('baser', 'カスタムコンテンツ：チェックボックス'),
-    'description' => __d('baser', 'カスタムコンテンツにチェックボックスを提供する'),
+    'title' => __d('baser_core', 'カスタムコンテンツ：チェックボックス'),
+    'description' => __d('baser_core', 'カスタムコンテンツにチェックボックスを提供する'),
     'author' => 'baserCMS User Community',
     'url' => 'https://basercms.net',
 ];

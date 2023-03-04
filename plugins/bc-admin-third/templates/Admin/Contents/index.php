@@ -18,7 +18,7 @@
  * @noTodo
  */
 
-$this->BcAdmin->setTitle(__d('baser', 'コンテンツ一覧'));
+$this->BcAdmin->setTitle(__d('baser_core', 'コンテンツ一覧'));
 $this->BcAdmin->setSearch('contents_index');
 $this->BcAdmin->setHelp('contents_index');
 $this->BcBaser->element('Contents/index_setup_tree');

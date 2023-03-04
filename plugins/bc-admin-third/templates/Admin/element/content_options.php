@@ -42,7 +42,7 @@ $this->BcUpload->setTable('BaserCore.Contents');
     <table class="form-table bca-form-table" data-bca-table-type="type2">
       <tr>
         <th
-          class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label("content.description", __d('baser', '説明文')) ?></th>
+          class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label("content.description", __d('baser_core', '説明文')) ?></th>
         <td class="col-input bca-form-table__input">
           <?php if ($editable): ?>
             <?php echo $this->BcAdminForm->control("content.description", ['type' => 'textarea', 'cols' => 36, 'rows' => 4, 'data-input-text-size' => 'full-counter']) ?>
@@ -59,7 +59,7 @@ $this->BcUpload->setTable('BaserCore.Contents');
       </tr>
       <tr>
         <th
-          class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label("content.eyecatch", __d('baser', 'アイキャッチ')) ?></th>
+          class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label("content.eyecatch", __d('baser_core', 'アイキャッチ')) ?></th>
         <td class="col-input bca-form-table__input">
           <?php if ($editable): ?>
             <?php echo $this->BcAdminForm->control("content.eyecatch", [
@@ -76,25 +76,25 @@ $this->BcUpload->setTable('BaserCore.Contents');
       </tr>
       <tr>
         <th
-          class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label("content.author_id", __d('baser', '作成者')) ?></th>
+          class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label("content.author_id", __d('baser_core', '作成者')) ?></th>
         <td class="col-input bca-form-table__input">
           <?php if ($editable): ?>
             <?php echo $this->BcAdminForm->control('author_id', ['type' => 'select', 'options' => $authorList]) ?>
             <div style="white-space: nowrap">
-              <small>[<?php echo __d('baser', '作成日') ?>]</small>
+              <small>[<?php echo __d('baser_core', '作成日') ?>]</small>
               <?php echo $this->BcAdminForm->control('created_date', ['type' => 'dateTimePicker', 'size' => 12, 'maxlength' => 10, 'value' => $created_date]); ?>
             </div>
             <div style="white-space: nowrap">
-              <small>[<?php echo __d('baser', '更新日') ?>]</small>
+              <small>[<?php echo __d('baser_core', '更新日') ?>]</small>
               <?php echo $this->BcAdminForm->control('modified_date', ['type' => 'dateTimePicker', 'size' => 12, 'maxlength' => 10, 'value' => $modified_date]); ?>
             </div>
           <?php else: ?>
             <?php echo h($this->BcText->arrayValue($this->BcAdminForm->getSourceValue("content.author_id"), $authorList)) ?>
             <div style="white-space: nowrap">
-              <small>[<?php echo __d('baser', '作成日') ?>]</small> <?= $created_date ?>
+              <small>[<?php echo __d('baser_core', '作成日') ?>]</small> <?= $created_date ?>
             </div>
             <div style="white-space: nowrap">
-              <small>[<?php echo __d('baser', '更新日') ?>]</small> <?= $modified_date ?>
+              <small>[<?php echo __d('baser_core', '更新日') ?>]</small> <?= $modified_date ?>
             </div>
             <?php echo $this->BcAdminForm->hidden("content.author_id") ?>
             <?php echo $this->BcAdminForm->hidden("content.created_date") ?>
@@ -107,7 +107,7 @@ $this->BcUpload->setTable('BaserCore.Contents');
       </tr>
       <tr>
         <th
-          class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label("content.layout_template", __d('baser', 'レイアウトテンプレート')) ?></th>
+          class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label("content.layout_template", __d('baser_core', 'レイアウトテンプレート')) ?></th>
         <td class="col-input bca-form-table__input">
           <?php echo $this->BcAdminForm->control("content.layout_template", ['type' => 'select', 'options' => $layoutTemplates]) ?>
 
@@ -116,46 +116,46 @@ $this->BcUpload->setTable('BaserCore.Contents');
       </tr>
       <tr>
         <th
-          class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label("content.exclude_search", __d('baser', 'その他設定')) ?></th>
+          class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label("content.exclude_search", __d('baser_core', 'その他設定')) ?></th>
         <td class="col-input bca-form-table__input">
           <?php if ($editable): ?>
             <?php if (Cake\Core\Plugin::isloaded('BcSearchIndex')): ?>
               <span style="white-space: nowrap">
                 <?php echo $this->BcAdminForm->control("content.exclude_search", [
                   'type' => 'checkbox',
-                  'label' => __d('baser', 'サイト内検索の検索結果より除外する')
+                  'label' => __d('baser_core', 'サイト内検索の検索結果より除外する')
                 ]) ?>
               </span>
             <?php endif ?>
             <span style="white-space: nowrap">
               <?php echo $this->BcAdminForm->control("content.exclude_menu", [
                 'type' => 'checkbox',
-                'label' => __d('baser', '公開ページのメニューより除外する')
+                'label' => __d('baser_core', '公開ページのメニューより除外する')
               ]) ?>
             </span>
             <span style="white-space: nowrap">
               <?php echo $this->BcAdminForm->control("content.blank_link", [
                 'type' => 'checkbox',
-                'label' => __d('baser', 'メニューのリンクを別ウィンドウ開く')
+                'label' => __d('baser_core', 'メニューのリンクを別ウィンドウ開く')
               ]) ?>
             </span>
           <?php else: ?>
             <?php if (Cake\Core\Plugin::isloaded('BcSearchIndex')): ?>
               <?php if ($this->BcAdminForm->getSourceValue("content.exclude_search")): ?>
-                <span style="white-space: nowrap"><?php echo __d('baser', 'サイト内検索の検索結果より除外する') ?></span>
+                <span style="white-space: nowrap"><?php echo __d('baser_core', 'サイト内検索の検索結果より除外する') ?></span>
               <?php else: ?>
-                <span style="white-space: nowrap"><?php echo __d('baser', 'サイト内検索の検索結果より除外しない') ?></span>
+                <span style="white-space: nowrap"><?php echo __d('baser_core', 'サイト内検索の検索結果より除外しない') ?></span>
               <?php endif ?>
             <?php endif ?>
             <?php if ($this->BcAdminForm->getSourceValue("content.exclude_menu")): ?>
-              <span style="white-space: nowrap"><?php echo __d('baser', '公開ページのメニューより除外する') ?></span>
+              <span style="white-space: nowrap"><?php echo __d('baser_core', '公開ページのメニューより除外する') ?></span>
             <?php else: ?>
-              <span style="white-space: nowrap"><?php echo __d('baser', '公開ページのメニューより除外しない') ?></span>
+              <span style="white-space: nowrap"><?php echo __d('baser_core', '公開ページのメニューより除外しない') ?></span>
             <?php endif ?>
             <?php if ($this->BcAdminForm->getSourceValue("content.blank_link")): ?>
-              <span style="white-space: nowrap"><?php echo __d('baser', 'メニューのリンクを別ウィンドウ開く') ?></span>
+              <span style="white-space: nowrap"><?php echo __d('baser_core', 'メニューのリンクを別ウィンドウ開く') ?></span>
             <?php else: ?>
-              <span style="white-space: nowrap"><?php echo __d('baser', 'メニューのリンクを同じウィンドウに開く') ?></span>
+              <span style="white-space: nowrap"><?php echo __d('baser_core', 'メニューのリンクを同じウィンドウに開く') ?></span>
             <?php endif ?>
             <?php echo $this->BcAdminForm->hidden("content.exclude_search") ?>
             <?php echo $this->BcAdminForm->hidden("content.exclude_menu") ?>

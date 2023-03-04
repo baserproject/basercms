@@ -11,8 +11,8 @@
 
 return [
     'type' => ['BcCustomContentPlugin'],
-    'title' => __d('baser', 'カスタムコンテンツ：マルチチェックボックス'),
-    'description' => __d('baser', 'カスタムコンテンツにマルチチェックボックスを提供する'),
+    'title' => __d('baser_core', 'カスタムコンテンツ：マルチチェックボックス'),
+    'description' => __d('baser_core', 'カスタムコンテンツにマルチチェックボックスを提供する'),
     'author' => 'baserCMS User Community',
     'url' => 'https://basercms.net',
 ];

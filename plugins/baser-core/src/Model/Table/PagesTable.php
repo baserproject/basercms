@@ -106,40 +106,40 @@ class PagesTable extends AppTable
 
         $validator
         ->integer('id')
-        ->numeric('id', __d('baser', 'IDに不正な値が利用されています。'), 'update')
+        ->numeric('id', __d('baser_core', 'IDに不正な値が利用されています。'), 'update')
         ->requirePresence('id', 'update');
 
         $validator
         ->scalar('contents')
         ->allowEmptyString('contents', null)
-        ->maxLengthBytes('contents', 64000, __d('baser', '本稿欄に保存できるデータ量を超えています。'))
+        ->maxLengthBytes('contents', 64000, __d('baser_core', '本稿欄に保存できるデータ量を超えています。'))
         ->add('contents', 'custom', [
             'rule' => ['phpValidSyntax'],
             'provider' => 'page',
-            'message' => __d('baser', '本稿欄でPHPの構文エラーが発生しました。')
+            'message' => __d('baser_core', '本稿欄でPHPの構文エラーが発生しました。')
         ])
         ->add('contents', [
             'containsScript' => [
                 'rule' => ['containsScript'],
                 'provider' => 'bc',
-                'message' => __d('baser', '本稿欄でスクリプトの入力は許可されていません。')
+                'message' => __d('baser_core', '本稿欄でスクリプトの入力は許可されていません。')
             ]
         ]);
 
         $validator
         ->scalar('draft')
         ->allowEmptyString('draft', null)
-        ->maxLengthBytes('draft', 64000, __d('baser', '本稿欄に保存できるデータ量を超えています。'))
+        ->maxLengthBytes('draft', 64000, __d('baser_core', '本稿欄に保存できるデータ量を超えています。'))
         ->add('draft', 'custom', [
             'rule' => ['phpValidSyntax'],
             'provider' => 'page',
-            'message' => __d('baser', '本稿欄でPHPの構文エラーが発生しました。')
+            'message' => __d('baser_core', '本稿欄でPHPの構文エラーが発生しました。')
         ])
         ->add('draft', [
             'containsScript' => [
                 'rule' => ['containsScript'],
                 'provider' => 'bc',
-                'message' => __d('baser', '本稿欄でスクリプトの入力は許可されていません。')
+                'message' => __d('baser_core', '本稿欄でスクリプトの入力は許可されていません。')
             ]
         ]);
 
@@ -216,7 +216,7 @@ class PagesTable extends AppTable
         }
         return [
             'model_id' => $modelId,
-            'type' => __d('baser', 'ページ'),
+            'type' => __d('baser_core', 'ページ'),
             'content_id' => $content->id,
             'site_id' => $content->site_id,
             'title' => $content->title,

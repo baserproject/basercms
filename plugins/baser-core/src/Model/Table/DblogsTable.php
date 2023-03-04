@@ -49,6 +49,6 @@ class DblogsTable extends AppTable
     {
         return $validator
             ->scalar('message')
-            ->maxLength('message', 1000, __d('baser', 'メッセージは1000文字以内で入力してください。'));
+            ->maxLength('message', 1000, __d('baser_core', 'メッセージは1000文字以内で入力してください。'));
     }
 }

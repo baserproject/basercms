@@ -12,11 +12,11 @@
 /**
  * [ADMIN] ローカルナビゲーションウィジェット設定
  */
-$title = __d('baser', 'ローカルナビゲーション');
-$description = __d('baser', 'ページ機能で作成されたページで同一カテゴリ内のタイトルリストを表示します。');
+$title = __d('baser_core', 'ローカルナビゲーション');
+$description = __d('baser_core', 'ページ機能で作成されたページで同一カテゴリ内のタイトルリストを表示します。');
 echo $this->BcAdminForm->hidden($key . '.cache', ['value' => true]);
 ?>
 
 
 <br>
-<small><?php echo __d('baser', 'タイトルを表示する場合、カテゴリ名を表示します。') ?></small>
+<small><?php echo __d('baser_core', 'タイトルを表示する場合、カテゴリ名を表示します。') ?></small>

@@ -64,7 +64,7 @@ class PagesFrontService extends PagesService implements PagesFrontServiceInterfa
                 $pageArray['contents'] = $pageArray['draft'];
             }
             if (!empty($pageArray['contents']) && !BcValidation::containsScript($pageArray['contents'])) {
-                throw new NotFoundException(__d('baser', '本文欄でスクリプトの入力は許可されていません。'));
+                throw new NotFoundException(__d('baser_core', '本文欄でスクリプトの入力は許可されていません。'));
             }
             $page = $this->Pages->patchEntity($page, $pageArray);
             $page->content = $this->Contents->saveTmpFiles($request->getData('content'), mt_rand(0, 99999999));

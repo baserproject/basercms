@@ -133,37 +133,37 @@ class ContentsTable extends AppTable
         $validator
             ->integer('id')
             ->allowEmptyString('id', null, 'create')
-            ->numeric('id', __d('baser', 'IDに不正な値が利用されています。'), 'update')
-            ->requirePresence('id', 'update', __d('baser', 'IDに不正な値が利用されています。'));
+            ->numeric('id', __d('baser_core', 'IDに不正な値が利用されています。'), 'update')
+            ->requirePresence('id', 'update', __d('baser_core', 'IDに不正な値が利用されています。'));
 
         $validator
             ->scalar('name')
-            ->requirePresence('name', 'create', __d('baser', 'nameフィールドが存在しません。'))
-            ->maxLength('name', 230, __d('baser', '名前は230文字以内で入力してください。'))
+            ->requirePresence('name', 'create', __d('baser_core', 'nameフィールドが存在しません。'))
+            ->maxLength('name', 230, __d('baser_core', '名前は230文字以内で入力してください。'))
             ->add('name', [
                 'bcUtileUrlencodeBlank' => [
                     'rule' => ['bcUtileUrlencodeBlank'],
                     'provider' => 'bc',
-                    'message' => __d('baser', 'URLはスペース、全角スペース及び、指定の記号(\\\'|`^"(){}[];/?:@&=+$,%<>#!)だけの名前は付けられません。')
+                    'message' => __d('baser_core', 'URLはスペース、全角スペース及び、指定の記号(\\\'|`^"(){}[];/?:@&=+$,%<>#!)だけの名前は付けられません。')
                 ]
             ])
             ->add('name', [
                 'duplicateRelatedSiteContent' => [
                     'rule' => [$this, 'duplicateRelatedSiteContent'],
-                    'message' => __d('baser', '連携しているサブサイトでスラッグが重複するコンテンツが存在します。重複するコンテンツのスラッグ名を先に変更してください。'),
+                    'message' => __d('baser_core', '連携しているサブサイトでスラッグが重複するコンテンツが存在します。重複するコンテンツのスラッグ名を先に変更してください。'),
                 ]
             ]);
         $validator
             ->scalar('title')
-            ->requirePresence('title', 'create', __d('baser', 'タイトルを入力してください。'))
-            ->notEmptyString('title', __d('baser', 'タイトルを入力してください。'))
-            ->maxLength('title', 230, __d('baser', 'タイトルは230文字以内で入力してください。'))
-            ->regex('title', '/\A(?!.*(\t)).*\z/', __d('baser', 'タイトルはタブを含む名前は付けられません。'))
+            ->requirePresence('title', 'create', __d('baser_core', 'タイトルを入力してください。'))
+            ->notEmptyString('title', __d('baser_core', 'タイトルを入力してください。'))
+            ->maxLength('title', 230, __d('baser_core', 'タイトルは230文字以内で入力してください。'))
+            ->regex('title', '/\A(?!.*(\t)).*\z/', __d('baser_core', 'タイトルはタブを含む名前は付けられません。'))
             ->add('title', [
                 'bcUtileUrlencodeBlank' => [
                     'rule' => ['bcUtileUrlencodeBlank'],
                     'provider' => 'bc',
-                    'message' => __d('baser', 'タイトルはスペース、全角スペース及び、指定の記号(\\\'|`^"(){}[];/?:@&=+$,%<>#!)だけの名前は付けられません。')
+                    'message' => __d('baser_core', 'タイトルはスペース、全角スペース及び、指定の記号(\\\'|`^"(){}[];/?:@&=+$,%<>#!)だけの名前は付けられません。')
                 ]
             ]);
         $validator
@@ -172,7 +172,7 @@ class ContentsTable extends AppTable
                 'fileCheck' => [
                     'rule' => ['fileCheck', BcUtil::convertSize(ini_get('upload_max_filesize'))],
                     'provider' => 'bc',
-                    'message' => __d('baser', 'ファイルのアップロードに失敗しました。')
+                    'message' => __d('baser_core', 'ファイルのアップロードに失敗しました。')
                 ]
             ]);
         $validator
@@ -182,7 +182,7 @@ class ContentsTable extends AppTable
                 'checkDate' => [
                     'rule' => ['checkDate'],
                     'provider' => 'bc',
-                    'message' => __d('baser', '公開開始日に不正な文字列が入っています。')
+                    'message' => __d('baser_core', '公開開始日に不正な文字列が入っています。')
                 ]
             ]);
 
@@ -193,35 +193,35 @@ class ContentsTable extends AppTable
                 'checkDate' => [
                     'rule' => ['checkDate'],
                     'provider' => 'bc',
-                    'message' => __d('baser', '公開終了日に不正な文字列が入っています。')
+                    'message' => __d('baser_core', '公開終了日に不正な文字列が入っています。')
                 ]
             ])
             ->add('self_publish_end', [
                 'checkDateAfterThan' => [
                     'rule' => ['checkDateAfterThan', 'self_publish_begin'],
                     'provider' => 'bc',
-                    'message' => __d('baser', '公開終了日は、公開開始日より新しい日付で入力してください。')
+                    'message' => __d('baser_core', '公開終了日は、公開開始日より新しい日付で入力してください。')
                 ]
             ]);
         $validator
             ->dateTime('created_date')
-            ->requirePresence('created_date', 'create', __d('baser', '作成日がありません。'))
-            ->notEmptyDateTime('created_date', __d('baser', '作成日が空になってます。'))
+            ->requirePresence('created_date', 'create', __d('baser_core', '作成日がありません。'))
+            ->notEmptyDateTime('created_date', __d('baser_core', '作成日が空になってます。'))
             ->add('created_date', [
                 'checkDate' => [
                     'rule' => ['checkDate'],
                     'provider' => 'bc',
-                    'message' => __d('baser', '作成日が正しくありません。')
+                    'message' => __d('baser_core', '作成日が正しくありません。')
                 ]
             ]);
         $validator
             ->datetime('modified_date')
-            ->notEmptyDateTime('modified_date', __d('baser', '更新日が空になってます。'), 'update')
+            ->notEmptyDateTime('modified_date', __d('baser_core', '更新日が空になってます。'), 'update')
             ->add('modified_date', [
                 'checkDate' => [
                     'rule' => ['checkDate'],
                     'provider' => 'bc',
-                    'message' => __d('baser', '更新日が正しくありません。')
+                    'message' => __d('baser_core', '更新日が正しくありません。')
                 ]
             ]);
         return $validator;

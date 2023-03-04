@@ -17,17 +17,17 @@
  * @noTodo
  * @unitTest
  */
-$this->BcAdmin->setTitle(__d('baser', 'データメンテナンス'));
+$this->BcAdmin->setTitle(__d('baser_core', 'データメンテナンス'));
 $this->BcAdmin->setHelp('tools_log');
 ?>
 
 
 <div class="section bca-main__section">
-  <h2 class="bca-main__heading" data-bca-heading-size="lg"><?php echo __d('baser', 'ログ(エラーログ)の取得') ?></h2>
-  <p class="bca-main__text"><?php echo __d('baser', 'ログ(エラーログ)をPCにダウンロードします。') ?></p>
+  <h2 class="bca-main__heading" data-bca-heading-size="lg"><?php echo __d('baser_core', 'ログ(エラーログ)の取得') ?></h2>
+  <p class="bca-main__text"><?php echo __d('baser_core', 'ログ(エラーログ)をPCにダウンロードします。') ?></p>
   <p class="bca-main__text">
     <?php $this->BcBaser->link(
-      __d('baser', 'ダウンロード'),
+      __d('baser_core', 'ダウンロード'),
       ['download'],
       ['class' => 'bca-btn', 'data-bca-btn-type' => 'download']
     ) ?>
@@ -35,16 +35,16 @@ $this->BcAdmin->setHelp('tools_log');
 </div>
 
 <div class="section bca-main__section">
-  <h2 class="bca-main__heading" data-bca-heading-size="lg"><?php echo __d('baser', 'エラーログの削除') ?></h2>
+  <h2 class="bca-main__heading" data-bca-heading-size="lg"><?php echo __d('baser_core', 'エラーログの削除') ?></h2>
 
-  <p class="bca-main__text"><?php echo __d('baser', 'エラーログを削除します。サーバの容量を圧迫する場合時などに利用ください。') ?><br>
-    <?php echo sprintf(__d('baser', 'エラーログのサイズは、%sbytesです。'), number_format($fileSize)) ?>
+  <p class="bca-main__text"><?php echo __d('baser_core', 'エラーログを削除します。サーバの容量を圧迫する場合時などに利用ください。') ?><br>
+    <?php echo sprintf(__d('baser_core', 'エラーログのサイズは、%sbytesです。'), number_format($fileSize)) ?>
   </p>
   <p class="bca-main__text">
-    <?php echo $this->BcAdminForm->postLink(__d('baser', '削除'), ['delete'], [
+    <?php echo $this->BcAdminForm->postLink(__d('baser_core', '削除'), ['delete'], [
       'class' => 'bca-btn',
       'data-bca-btn-type' => 'delete',
-      'confirm' => __d('baser', 'エラーログを削除します。いいですか？')
+      'confirm' => __d('baser_core', 'エラーログを削除します。いいですか？')
     ]) ?>
   </p>
 </div>

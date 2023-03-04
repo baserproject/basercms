@@ -445,7 +445,7 @@ class BcAdminHelper extends Helper
     public function editLink(): void
     {
         if ($this->existsEditLink()) {
-            $this->BcBaser->link(__d('baser', '編集する'), $this->_View->get('editLink'), ['class' => 'tool-menu']);
+            $this->BcBaser->link(__d('baser_core', '編集する'), $this->_View->get('editLink'), ['class' => 'tool-menu']);
         }
     }
 
@@ -469,7 +469,7 @@ class BcAdminHelper extends Helper
                 $fullUrl = true;
             }
             $url = $this->BcContents->getUrl($this->_View->get('publishLink'), $fullUrl, $useSubdomain, false);
-            $this->BcBaser->link(__d('baser', 'サイト確認'), $url, ['class' => 'tool-menu']);
+            $this->BcBaser->link(__d('baser_core', 'サイト確認'), $url, ['class' => 'tool-menu']);
         }
     }
 

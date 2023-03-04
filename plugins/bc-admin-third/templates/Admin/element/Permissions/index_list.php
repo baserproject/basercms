@@ -32,13 +32,13 @@ $this->BcListTable->setColumnNumber(6);
       <?php echo $this->BcAdminForm->control('batch', [
         'type' => 'select',
         'options' => [
-          'unpublish' => __d('baser', '無効'),
-          'publish' => __d('baser', '有効'),
-          'delete' => __d('baser', '削除'),
+          'unpublish' => __d('baser_core', '無効'),
+          'publish' => __d('baser_core', '有効'),
+          'delete' => __d('baser_core', '削除'),
         ],
-        'empty' => __d('baser', '一括処理')
+        'empty' => __d('baser_core', '一括処理')
       ]) ?>
-      <?php echo $this->BcAdminForm->button(__d('baser', '適用'), ['id' => 'BtnApplyBatch', 'disabled' => 'disabled', 'class' => 'bca-btn', 'data-bca-btn-size' => 'lg']) ?>
+      <?php echo $this->BcAdminForm->button(__d('baser_core', '適用'), ['id' => 'BtnApplyBatch', 'disabled' => 'disabled', 'class' => 'bca-btn', 'data-bca-btn-size' => 'lg']) ?>
     </div>
   <?php endif ?>
 </div>
@@ -49,25 +49,25 @@ $this->BcListTable->setColumnNumber(6);
   <tr>
     <th class="list-tool bca-table-listup__thead-th  bca-table-listup__thead-th--select"><?php // 一括選択 ?>
       <?php if ($this->BcBaser->isAdminUser()): ?>
-        <?php echo $this->BcAdminForm->control('checkall', ['type' => 'checkbox', 'label' => __d('baser', '一括選択')]) ?>
+        <?php echo $this->BcAdminForm->control('checkall', ['type' => 'checkbox', 'label' => __d('baser_core', '一括選択')]) ?>
       <?php endif; ?>
       <?php if ($this->request->getQuery('sortmode')): ?>
-        <?php $this->BcBaser->link('<i class="bca-btn-icon-text" data-bca-btn-type="draggable"></i>' . __d('baser', 'ノーマル'), [$currentUserGroup->id, '?' => ['sortmode' => 0]], ['escape' => false]) ?>
+        <?php $this->BcBaser->link('<i class="bca-btn-icon-text" data-bca-btn-type="draggable"></i>' . __d('baser_core', 'ノーマル'), [$currentUserGroup->id, '?' => ['sortmode' => 0]], ['escape' => false]) ?>
       <?php else: ?>
-        <?php $this->BcBaser->link('<i class="bca-btn-icon-text" data-bca-btn-type="draggable"></i>' . __d('baser', '並び替え'), [$currentUserGroup->id, '?' => ['sortmode' => 1]], ['escape' => false]) ?>
+        <?php $this->BcBaser->link('<i class="bca-btn-icon-text" data-bca-btn-type="draggable"></i>' . __d('baser_core', '並び替え'), [$currentUserGroup->id, '?' => ['sortmode' => 1]], ['escape' => false]) ?>
       <?php endif ?>
     </th>
     <th class="bca-table-listup__thead-th">No</th>
-    <th class="bca-table-listup__thead-th"><?php echo __d('baser', 'タイプ') ?></th>
-    <th class="bca-table-listup__thead-th"><?php echo __d('baser', 'ルールグループ') ?></th>
+    <th class="bca-table-listup__thead-th"><?php echo __d('baser_core', 'タイプ') ?></th>
+    <th class="bca-table-listup__thead-th"><?php echo __d('baser_core', 'ルールグループ') ?></th>
     <th class="bca-table-listup__thead-th">
-      <?php echo __d('baser', 'ルール名') ?><br><?php echo __d('baser', 'URL設定') ?>
+      <?php echo __d('baser_core', 'ルール名') ?><br><?php echo __d('baser_core', 'URL設定') ?>
     </th>
-    <th class="bca-table-listup__thead-th"><?php echo __d('baser', '権限') ?></th>
+    <th class="bca-table-listup__thead-th"><?php echo __d('baser_core', '権限') ?></th>
     <?php echo $this->BcListTable->dispatchShowHead() ?>
-    <th class="bca-table-listup__thead-th"><?php echo __d('baser', '登録日') ?><br><?php echo __d('baser', '更新日') ?>
+    <th class="bca-table-listup__thead-th"><?php echo __d('baser_core', '登録日') ?><br><?php echo __d('baser_core', '更新日') ?>
     </th>
-    <th class="bca-table-listup__thead-th"><?php echo __d('baser', 'アクション') ?></th>
+    <th class="bca-table-listup__thead-th"><?php echo __d('baser_core', 'アクション') ?></th>
   </tr>
   </thead>
   <tbody>
@@ -80,7 +80,7 @@ $this->BcListTable->setColumnNumber(6);
   <?php else: ?>
     <tr>
       <td colspan="<?php echo $this->BcListTable->getColumnNumber() ?>">
-        <p class="no-data"><?php echo __d('baser', 'データが見つかりませんでした。') ?></p>
+        <p class="no-data"><?php echo __d('baser_core', 'データが見つかりませんでした。') ?></p>
       </td>
     </tr>
   <?php endif; ?>

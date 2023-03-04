@@ -116,7 +116,7 @@ class CustomContentsService implements CustomContentsServiceInterface
     public function update(EntityInterface $entity, array $pageData, $options = []): ?EntityInterface
     {
         if (BcUtil::isOverPostSize()) {
-            throw new BcException(__d('baser', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size')));
+            throw new BcException(__d('baser_core', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size')));
         }
         $entity = $this->CustomContents->patchEntity($entity, $pageData, $options);
         return $this->CustomContents->saveOrFail($entity);
@@ -137,12 +137,12 @@ class CustomContentsService implements CustomContentsServiceInterface
 
             case 'list_order':
                 if(!isset($options['custom_table_id'])) {
-                    throw new BcException(__d('baser', 'list_order のコントロールソースを取得する場合は、custom_table_id の指定が必要です。'));
+                    throw new BcException(__d('baser_core', 'list_order のコントロールソースを取得する場合は、custom_table_id の指定が必要です。'));
                 }
                 return $this->getListOrders($options['custom_table_id']);
             case 'template':
                 if(!isset($options['site_id'])) {
-                    throw new BcException(__d('baser', 'template のコントロールソースを取得する場合は、site_id の指定が必要です。'));
+                    throw new BcException(__d('baser_core', 'template のコントロールソースを取得する場合は、site_id の指定が必要です。'));
                 }
                 return $this->getTemplates($options['site_id']);
         }
@@ -157,7 +157,7 @@ class CustomContentsService implements CustomContentsServiceInterface
      */
     public function getListOrders(int $tableId): array
     {
-        $list = ['id' => 'No', 'created' => __d('baser', '登録日'), 'modified' => __d('baser', '編集日')];
+        $list = ['id' => 'No', 'created' => __d('baser_core', '登録日'), 'modified' => __d('baser_core', '編集日')];
         if(!$tableId) return $list;
         $table = $this->CustomContents->CustomTables->get($tableId, ['contain' => [
             'CustomLinks' => ['CustomFields']

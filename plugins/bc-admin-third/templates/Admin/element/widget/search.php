@@ -15,5 +15,5 @@
  * @noTodo
  * @unitTest
  */
-$title = __d('baser', 'サイト内検索');
-$description = __d('baser', 'サイト内検索フォームを表示します。');
+$title = __d('baser_core', 'サイト内検索');
+$description = __d('baser_core', 'サイト内検索フォームを表示します。');

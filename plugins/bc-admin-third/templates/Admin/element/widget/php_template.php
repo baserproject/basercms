@@ -17,12 +17,12 @@
  * @noTodo
  * @unitTest
  */
-$title = __d('baser', 'PHPテンプレート');
-$description = __d('baser', 'PHPコードが書かれたテンプレートの読み込みが行えます。');
+$title = __d('baser_core', 'PHPテンプレート');
+$description = __d('baser_core', 'PHPコードが書かれたテンプレートの読み込みが行えます。');
 ?>
 
 
-<?php echo $this->BcAdminForm->label($key . '.template', __d('baser', 'PHPテンプレート名')) ?>
+<?php echo $this->BcAdminForm->label($key . '.template', __d('baser_core', 'PHPテンプレート名')) ?>
 <?php echo $this->BcAdminForm->control($key . '.template', [
   'type' => 'text',
   'size' => 14]
@@ -31,7 +31,7 @@ $description = __d('baser', 'PHPコードが書かれたテンプレートの読
   <small>
     <?php
     $themeDir = preg_replace('/' . preg_quote(\BaserCore\Utility\BcUtil::docRoot(), '/') . '/', '', BASER_THEMES, 1);
-    echo sprintf(__d('baser', 'テンプレートを利用中のテーマ内の次のパスに保存してください。<br>%s{テーマ名}/templates/element/widgets/'), $themeDir);
+    echo sprintf(__d('baser_core', 'テンプレートを利用中のテーマ内の次のパスに保存してください。<br>%s{テーマ名}/templates/element/widgets/'), $themeDir);
     ?>
   </small>
 </p>

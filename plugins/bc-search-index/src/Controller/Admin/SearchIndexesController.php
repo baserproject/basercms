@@ -98,15 +98,15 @@ class SearchIndexesController extends BcAdminAppController
     {
         $this->request->allowMethod(['post', 'delete']);
         if (!$id) {
-            $this->BcMessage->setError(__d('baser', '無効なIDです。'));
+            $this->BcMessage->setError(__d('baser_core', '無効なIDです。'));
             $this->redirect(['action' => 'index']);
         }
         try {
             if ($service->delete($id)) {
-                $this->BcMessage->setSuccess(__d('baser', '検索インデックスより No.{0} を削除しました。', $id));
+                $this->BcMessage->setSuccess(__d('baser_core', '検索インデックスより No.{0} を削除しました。', $id));
             }
         } catch (BcException $e) {
-            $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
+            $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
         }
         return $this->redirect(['action' => 'index']);
     }
@@ -121,9 +121,9 @@ class SearchIndexesController extends BcAdminAppController
     {
         $this->request->allowMethod(['post']);
         if ($service->reconstruct()) {
-            $this->BcMessage->setSuccess(__d('baser', '検索インデックスの再構築に成功しました。'));
+            $this->BcMessage->setSuccess(__d('baser_core', '検索インデックスの再構築に成功しました。'));
         } else {
-            $this->BcMessage->setError(__d('baser', '検索インデックスの再構築に失敗しました。'));
+            $this->BcMessage->setError(__d('baser_core', '検索インデックスの再構築に失敗しました。'));
         }
         $this->redirect(['action' => 'index']);
     }

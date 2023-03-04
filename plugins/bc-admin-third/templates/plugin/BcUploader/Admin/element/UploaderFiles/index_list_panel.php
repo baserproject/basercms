@@ -33,13 +33,13 @@ $uploaderCategories = $this->BcAdminForm->getControlSource("UploaderFiles.upload
     <?php if (!$installMessage): ?>
       <div id="UploaderForm" class="clearfix">
         <div>
-          <?php echo $this->BcAdminForm->label('uploader_category_id', __d('baser', 'アップロード')) ?>
+          <?php echo $this->BcAdminForm->label('uploader_category_id', __d('baser_core', 'アップロード')) ?>
           &nbsp;
           <?php if ($uploaderCategories): ?>
             <?php echo $this->BcAdminForm->control('uploader_category_id', [
               'type' => 'select',
               'options' => $uploaderCategories,
-              'empty' => __d('baser', 'カテゴリ指定なし'),
+              'empty' => __d('baser_core', 'カテゴリ指定なし'),
               'id' => 'UploaderFileUploaderCategoryId' . $listId
             ]) ?>&nbsp;
           <?php endif ?>
@@ -67,7 +67,7 @@ $uploaderCategories = $this->BcAdminForm->getControlSource("UploaderFiles.upload
         <?php $this->BcBaser->element('UploaderFiles/index_row_panel', ['uploaderFile' => $uploaderFile, 'users' => $users]) ?>
       <?php endforeach ?>
     <?php else: ?>
-      <p class="no-data bca-file-list__no-data"><?php echo __d('baser', 'ファイルが存在しません') ?></p>
+      <p class="no-data bca-file-list__no-data"><?php echo __d('baser_core', 'ファイルが存在しません') ?></p>
     <?php endif ?>
   </div>
 

@@ -17,21 +17,21 @@
  * @var string $baserVersion
  * @var string $cakeVersion
  */
-$this->BcAdmin->setTitle(__d('baser', '環境情報'));
+$this->BcAdmin->setTitle(__d('baser_core', '環境情報'));
 ?>
 
 <section class="bca-section">
-  <h2 class="bca-main__heading" data-bca-heading-size="lg"><?php echo __d('baser', 'baserCMS環境') ?></h2>
+  <h2 class="bca-main__heading" data-bca-heading-size="lg"><?php echo __d('baser_core', 'baserCMS環境') ?></h2>
   <ul>
-    <li><?php echo __d('baser', '設置フォルダ') ?>： <?php echo ROOT . DS ?></li>
-    <li><?php echo __d('baser', 'データベース') ?>： <?php echo $datasource ?></li>
-    <li><?php echo __d('baser', 'baserCMSバージョン') ?>： <?php echo $baserVersion ?></li>
-    <li><?php echo __d('baser', 'CakePHPバージョン') ?>： <?php echo $cakeVersion ?></li>
+    <li><?php echo __d('baser_core', '設置フォルダ') ?>： <?php echo ROOT . DS ?></li>
+    <li><?php echo __d('baser_core', 'データベース') ?>： <?php echo $datasource ?></li>
+    <li><?php echo __d('baser_core', 'baserCMSバージョン') ?>： <?php echo $baserVersion ?></li>
+    <li><?php echo __d('baser_core', 'CakePHPバージョン') ?>： <?php echo $cakeVersion ?></li>
   </ul>
 </section>
 
 <section class="bca-section">
-  <h2 class="bca-main__heading" data-bca-heading-size="lg"><?php echo __d('baser', 'PHP環境') ?></h2>
+  <h2 class="bca-main__heading" data-bca-heading-size="lg"><?php echo __d('baser_core', 'PHP環境') ?></h2>
   <iframe
     src="<?php $this->BcBaser->url(['action' => 'phpinfo']) ?>"
     class="phpinfo"

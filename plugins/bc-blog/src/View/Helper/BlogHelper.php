@@ -431,7 +431,7 @@ class BlogHelper extends Helper
     public function getPostContent($post, $moreText = true, $moreLink = false, $cut = false, $lastText = false)
     {
         if ($moreLink === true) {
-            $moreLink = __d('baser', '≫ 続きを読む');
+            $moreLink = __d('baser_core', '≫ 続きを読む');
         }
         $out = '';
         if ($this->currentBlogContent->use_content) {
@@ -1587,7 +1587,7 @@ class BlogHelper extends Helper
         ], $options);
 
         if (!$contentsName && empty($options['contentsTemplate'])) {
-            throw new BcException(__d('baser', '$contentsName を省略時は、contentsTemplate オプションで、コンテンツテンプレート名を指定してください。'));
+            throw new BcException(__d('baser_core', '$contentsName を省略時は、contentsTemplate オプションで、コンテンツテンプレート名を指定してください。'));
         }
 
         $blogPosts = $this->getPosts($contentsName, $num, $options);

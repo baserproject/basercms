@@ -310,7 +310,7 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
                         ]);
                     }
                 } else {
-                    throw new ForbiddenException(__d('baser', 'Web APIは許可されていません。'));
+                    throw new ForbiddenException(__d('baser_core', 'Web APIは許可されていません。'));
                 }
                 break;
             default:

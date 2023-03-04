@@ -11,8 +11,8 @@
 
 return [
     'type' => 'Theme',
-    'title' => __d('baser', 'フロントテーマ'),
-    'description' => __d('baser', 'デフォルトのフロントテーマです。初期データが２つ入っています。
+    'title' => __d('baser_core', 'フロントテーマ'),
+    'description' => __d('baser_core', 'デフォルトのフロントテーマです。初期データが２つ入っています。
 ■ default：サンプルデータあり版
 ■ empty：サンプルデータなし版'),
     'author' => 'baserCMS User Community',

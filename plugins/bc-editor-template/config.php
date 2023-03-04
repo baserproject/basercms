@@ -11,8 +11,8 @@
 
 return [
     'type' => 'CorePlugin',
-    'title' => __d('baser', 'エディターテンプレート'),
-    'description' => __d('baser', 'CKEditorのテンプレート管理機能'),
+    'title' => __d('baser_core', 'エディターテンプレート'),
+    'description' => __d('baser_core', 'CKEditorのテンプレート管理機能'),
     'author' => 'baserCMS User Community',
     'url' => 'https://basercms.net',
     'installMessage' => ''

@@ -394,7 +394,7 @@ class BcFreezeHelper extends BcFormHelper
             } else {
                 $delValue = $this->getSourceValue($fieldName . '_delete');
                 if ($delValue) {
-                    return parent::hidden($fieldName, ['value' => $value]) . parent::hidden($fieldName . '_delete', ['value' => true]) . $this->BcUpload->fileLink($fieldName, $this->_getContext()->entity(), $options) . '<br>' . __d('baser', '削除する');
+                    return parent::hidden($fieldName, ['value' => $value]) . parent::hidden($fieldName . '_delete', ['value' => true]) . $this->BcUpload->fileLink($fieldName, $this->_getContext()->entity(), $options) . '<br>' . __d('baser_core', '削除する');
                 } else {
                     return parent::hidden($fieldName, ['value' => $value]) . $this->BcUpload->fileLink($fieldName, $this->_getContext()->entity(), $options);
                 }
@@ -455,7 +455,7 @@ class BcFreezeHelper extends BcFormHelper
                 $path = DS . $imageAttributes['dir'] . DS . Inflector::tableize($model) . DS . $imageAttributes['id'] . DS . $field . "." . $imageAttributes['ext'] . "?" . rand();
                 unset($imageAttributes['ext']);
                 $output = sprintf($this->Html->_tags['image'], $path, $this->Html->_parseAttributes($imageAttributes));
-                $output .= "<br />" . $this->checkbox($fieldName . "_delete", ['label' => __d('baser', '削除する')]);
+                $output .= "<br />" . $this->checkbox($fieldName . "_delete", ['label' => __d('baser_core', '削除する')]);
             }
             return parent::file($fieldName, $attributes) . "<br />" . $output;
         }

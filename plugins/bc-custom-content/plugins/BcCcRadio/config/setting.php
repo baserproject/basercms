@@ -23,8 +23,8 @@ return [
              * ラジオボタンを表示するフィールドタイプ
              */
             'BcCcRadio' => [
-                'category' => __d('baser', '選択'),
-                'label' => __d('baser', 'ラジオボタン'),
+                'category' => __d('baser_core', '選択'),
+                'label' => __d('baser_core', 'ラジオボタン'),
                 'columnType' => 'string',
                 'controlType' => 'radio',
                 'useSource' => true,

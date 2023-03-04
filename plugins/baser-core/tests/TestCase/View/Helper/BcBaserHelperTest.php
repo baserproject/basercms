@@ -442,8 +442,8 @@ class BcBaserHelperTest extends BcTestCase
     public function testI18nScript()
     {
         $this->BcBaser->i18nScript([
-            'commonCancel' => __d('baser', 'キャンセル'),
-            'commonSave' => __d('baser', '保存')
+            'commonCancel' => __d('baser_core', 'キャンセル'),
+            'commonSave' => __d('baser_core', '保存')
         ]);
         $encoded1 = "commonCancel = ". json_encode('キャンセル');
         $encoded2 = "commonSave = " . json_encode('保存');

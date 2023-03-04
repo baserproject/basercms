@@ -44,7 +44,7 @@ $isCopyable = ($isDefaultTheme &&
 
 <!-- current -->
 <div class="em-box bca-current-box">
-  <?php echo __d('baser', '現在の位置') ?>：<?php echo h($currentPath) ?>
+  <?php echo __d('baser_core', '現在の位置') ?>：<?php echo h($currentPath) ?>
 </div>
 
 <?php echo $this->BcAdminForm->create($themeFolderForm, [
@@ -55,17 +55,17 @@ $isCopyable = ($isDefaultTheme &&
 
 <div class="submit bca-actions">
   <div class="bca-actions__main">
-  <?php $this->BcBaser->link(__d('baser', '一覧に戻る'),
+  <?php $this->BcBaser->link(__d('baser_core', '一覧に戻る'),
     array_merge(['action' => 'index', $theme, $plugin, $type], explode('/', dirname($path))), [
       'class' => 'button bca-btn',
       'data-bca-btn-type' => 'back-to-list'
   ]); ?>
   <?php if ($isCopyable): ?>
     &nbsp;&nbsp;
-    <?php echo $this->BcAdminForm->postLink(__d('baser', '現在のテーマにコピー'),
+    <?php echo $this->BcAdminForm->postLink(__d('baser_core', '現在のテーマにコピー'),
       array_merge(['action' => 'copy_folder_to_theme', $theme, $plugin, $type], $params), [
         'block' => true,
-        'confirm' => __d('baser',
+        'confirm' => __d('baser_core',
           "本当に現在のテーマ「{0}」にコピーしてもいいですか？\n既に存在するファイルは上書きされます。",
           Cake\Utility\Inflector::camelize(\BaserCore\Utility\BcUtil::getCurrentTheme())),
         'class' => 'bca-submit-token bca-btn',

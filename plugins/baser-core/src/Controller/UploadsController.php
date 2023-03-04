@@ -64,7 +64,7 @@ class UploadsController extends AppController
         $type = $sessionData['type'];
         $ext = BcUtil::decodeContent($type, $name);
         if (!$ext) {
-            $this->BcMessage->setError(__d('baser', '拡張子が間違っています。'));
+            $this->BcMessage->setError(__d('baser_core', '拡張子が間違っています。'));
             $this->notFound();
         }
 

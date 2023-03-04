@@ -16,7 +16,7 @@
  * @noTodo
  * @unitTest
  */
-$this->BcAdmin->setTitle(__d('baser', '新規タグ登録'));
+$this->BcAdmin->setTitle(__d('baser_core', '新規タグ登録'));
 
 ?>
 
@@ -29,7 +29,7 @@ $this->BcAdmin->setTitle(__d('baser', '新規タグ登録'));
 <!-- button -->
 <div class="submit bca-actions">
   <div class="bca-actions__main">
-    <?php echo $this->BcAdminForm->button(__d('baser', '保存'), [
+    <?php echo $this->BcAdminForm->button(__d('baser_core', '保存'), [
       'div' => false,
       'class' => 'button bca-btn bca-actions__item',
       'id' => 'BtnSave',

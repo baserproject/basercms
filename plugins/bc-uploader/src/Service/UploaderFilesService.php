@@ -159,7 +159,7 @@ class UploaderFilesService implements UploaderFilesServiceInterface
     {
         $entity = $this->UploaderFiles->get($id);
         if(!$this->isEditable($entity->toArray())) {
-            throw new BcException(__d('baser', 'ファイルの変更権限がありません。' ));
+            throw new BcException(__d('baser_core', 'ファイルの変更権限がありません。' ));
         }
         return $this->UploaderFiles->delete($entity);
     }
@@ -175,8 +175,7 @@ class UploaderFilesService implements UploaderFilesServiceInterface
     public function create(array $postData)
     {
         if (BcUtil::isOverPostSize()) {
-            throw new BcException(__d(
-                'baser',
+            throw new BcException(__d('baser_core',
                 '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。',
                 ini_get('post_max_size')
             ));
@@ -202,7 +201,7 @@ class UploaderFilesService implements UploaderFilesServiceInterface
     public function update(EntityInterface $entity, array $postData)
     {
         if(!$this->isEditable($postData)) {
-            throw new BcException(__d('baser', 'ファイルの変更権限がありません。' ));
+            throw new BcException(__d('baser_core', 'ファイルの変更権限がありません。' ));
         }
         $entity = $this->UploaderFiles->patchEntity($entity, $postData);
         return $this->UploaderFiles->saveOrFail($entity);

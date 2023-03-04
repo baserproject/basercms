@@ -35,12 +35,12 @@ $type = (isset($permissionGroupTypes[$permission->permission_group->type]))? $pe
 <tr id="Row<?php echo $count ?>" <?php echo $class; ?>>
   <td class="row-tools bca-table-listup__tbody-td ">
     <?php if ($this->BcBaser->isAdminUser()): ?>
-      <?php echo $this->BcAdminForm->control('batch_targets.' . $permission->id, ['type' => 'checkbox', 'label' => '<span class="bca-visually-hidden">' . __d('baser', 'チェックする') . '</span>', 'class' => 'batch-targets bca-checkbox__input', 'value' => $permission->id, 'escape' => false]) ?>
+      <?php echo $this->BcAdminForm->control('batch_targets.' . $permission->id, ['type' => 'checkbox', 'label' => '<span class="bca-visually-hidden">' . __d('baser_core', 'チェックする') . '</span>', 'class' => 'batch-targets bca-checkbox__input', 'value' => $permission->id, 'escape' => false]) ?>
     <?php endif ?>
     <?php if ($this->request->getQuery('sortmode')): ?>
       <span class="sort-handle">
         <i class="bca-btn-icon-text" data-bca-btn-type="draggable"></i>
-        <?php echo __d('baser', 'ドラッグ可能') ?>
+        <?php echo __d('baser_core', 'ドラッグ可能') ?>
       </span>
       <?php echo $this->BcAdminForm->control('id' . $permission->id, ['type' => 'hidden', 'class' => 'id', 'value' => $permission->id]) ?>
     <?php endif ?>
@@ -66,7 +66,7 @@ $type = (isset($permissionGroupTypes[$permission->permission_group->type]))? $pe
       '',
       ['action' => 'unpublish', $permission->id],
       ['block' => true,
-        'title' => __d('baser', '無効'),
+        'title' => __d('baser_core', '無効'),
         'class' => 'btn-unpublish bca-btn-icon',
         'data-bca-btn-type' => 'unpublish',
         'data-bca-btn-size' => 'lg']
@@ -76,7 +76,7 @@ $type = (isset($permissionGroupTypes[$permission->permission_group->type]))? $pe
       '',
       ['action' => 'publish', $permission->id],
       ['block' => true,
-        'title' => __d('baser', '有効'),
+        'title' => __d('baser_core', '有効'),
         'class' => 'btn-publish bca-btn-icon',
         'data-bca-btn-type' => 'publish',
         'data-bca-btn-size' => 'lg']
@@ -87,7 +87,7 @@ $type = (isset($permissionGroupTypes[$permission->permission_group->type]))? $pe
       $currentUserGroup->id,
       $permission->id
     ], [
-      'title' => __d('baser', '編集'),
+      'title' => __d('baser_core', '編集'),
       'class' => ' bca-btn-icon',
       'data-bca-btn-type' => 'edit',
       'data-bca-btn-size' => 'lg'
@@ -96,8 +96,8 @@ $type = (isset($permissionGroupTypes[$permission->permission_group->type]))? $pe
       '',
       ['action' => 'copy', $permission->id],
       ['block' => true,
-        'confirm' => __d('baser', "{0} を複製してもいいですか？", $permission->name),
-        'title' => __d('baser', '複製'),
+        'confirm' => __d('baser_core', "{0} を複製してもいいですか？", $permission->name),
+        'title' => __d('baser_core', '複製'),
         'class' => 'btn-copy bca-btn-icon',
         'data-bca-btn-type' => 'copy',
         'data-bca-btn-size' => 'lg']
@@ -106,8 +106,8 @@ $type = (isset($permissionGroupTypes[$permission->permission_group->type]))? $pe
       '',
       ['action' => 'delete', $permission->id],
       [
-        'confirm' => __d('baser', "{0} を本当に削除してもいいですか？", $permission->name),
-        'title' => __d('baser', '削除'),
+        'confirm' => __d('baser_core', "{0} を本当に削除してもいいですか？", $permission->name),
+        'title' => __d('baser_core', '削除'),
         'class' => 'btn-delete bca-btn-icon',
         'data-bca-btn-type' => 'delete',
         'data-bca-btn-size' => 'lg']

@@ -143,8 +143,7 @@ class BlogContentsService implements BlogContentsServiceInterface
     public function update(EntityInterface $target, array $postData)
     {
         if (BcUtil::isOverPostSize()) {
-            throw new BcException(__d(
-                'baser',
+            throw new BcException(__d('baser_core',
                 '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。',
                 ini_get('post_max_size')
             ));

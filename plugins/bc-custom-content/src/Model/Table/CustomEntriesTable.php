@@ -93,7 +93,7 @@ class CustomEntriesTable extends AppTable
         /** @var Content $content */
         $content = $this->CustomTables->CustomContents->Contents->findByType('BcCustomContent.CustomContent', $contentId);
         return [
-            'type' => __d('baser', 'カスタムコンテンツ'),
+            'type' => __d('baser_core', 'カスタムコンテンツ'),
             'model_id' => $entry->id,
             'content_id' => $content->id,
             'site_id' => $content->site_id,
@@ -213,7 +213,7 @@ class CustomEntriesTable extends AppTable
             /** @var CustomLink $link */
             if ($link->required) {
                 $validator->requirePresence($link->name)
-                    ->notEmptyString($link->name, __d('baser', '{0} は必須項目です。', $link->title));
+                    ->notEmptyString($link->name, __d('baser_core', '{0} は必須項目です。', $link->title));
             } else {
                 $validator->allowEmptyString($link->name);
             }
@@ -249,7 +249,7 @@ class CustomEntriesTable extends AppTable
                 'fileCheck' => [
                     'provider' => 'bc',
                     'rule' => ['fileCheck', BcUtil::convertSize($maxFileSize, 'B', 'M')],
-                    'message' => __d('baser', 'ファイルサイズがオーバーしています。 {0} MB以内のファイルをご利用ください。', $maxFileSize)
+                    'message' => __d('baser_core', 'ファイルサイズがオーバーしています。 {0} MB以内のファイルをご利用ください。', $maxFileSize)
                 ]
             ]);
         }
@@ -272,7 +272,7 @@ class CustomEntriesTable extends AppTable
             'fileExt' => [
                 'provider' => 'bc',
                 'rule' => ['fileExt', $fileExt],
-                'message' => __d('baser', 'ファイル形式が無効です。拡張子 {0} のファイルをご利用ください。', implode(', ', $fileExt))
+                'message' => __d('baser_core', 'ファイル形式が無効です。拡張子 {0} のファイルをご利用ください。', implode(', ', $fileExt))
             ]
         ]);
         return $validator;
@@ -296,7 +296,7 @@ class CustomEntriesTable extends AppTable
                 'checkSame' => [
                     'provider' => 'mailMessage',
                     'rule' => ['checkSame', $field->meta['BcCustomContent']['email_confirm']],
-                    'message' => __d('baser', '入力データが一致していません。')
+                    'message' => __d('baser_core', '入力データが一致していません。')
                 ]
             ]);
         }
@@ -319,7 +319,7 @@ class CustomEntriesTable extends AppTable
             $validator->regex(
                 $link->name,
                 '/\A' . $regex . '\z/us',
-                $field->regex_error_message?: __d('baser', '形式が無効です。')
+                $field->regex_error_message?: __d('baser_core', '形式が無効です。')
             );
         }
         return $validator;
@@ -336,11 +336,11 @@ class CustomEntriesTable extends AppTable
     {
         $field = $link->custom_field;
         if ($field->validate && in_array('EMAIL', $field->validate)) {
-            $validator->email($link->name, false, __d('baser', 'Eメール形式で入力してください。'))
+            $validator->email($link->name, false, __d('baser_core', 'Eメール形式で入力してください。'))
                 ->regex(
                     $link->name,
                     '/^[a-zA-Z0-9!#$%&\’*+-\/=?^_`{|}~@.]*$/',
-                    __d('baser', '半角で入力してください。')
+                    __d('baser_core', '半角で入力してください。')
                 );
         }
         return $validator;
@@ -360,7 +360,7 @@ class CustomEntriesTable extends AppTable
             $validator->add($link->name, [
                 'numeric' => [
                     'rule' => 'numeric',
-                    'message' => __d('baser', '数値形式で入力してください。')
+                    'message' => __d('baser_core', '数値形式で入力してください。')
                 ]
             ]);
         }
@@ -381,7 +381,7 @@ class CustomEntriesTable extends AppTable
             $validator->add($link->name, [
                 'asciiAlphaNumeric' => [
                     'rule' => 'asciiAlphaNumeric',
-                    'message' => __d('baser', '半角英数で入力してください。')
+                    'message' => __d('baser_core', '半角英数で入力してください。')
                 ]
             ]);
         }
@@ -403,7 +403,7 @@ class CustomEntriesTable extends AppTable
                 'checkKatakana' => [
                     'provider' => 'bc',
                     'rule' => 'checkKatakana',
-                    'message' => __d('baser', '全角カタカナで入力してください。')
+                    'message' => __d('baser_core', '全角カタカナで入力してください。')
                 ]
             ]);
         }
@@ -425,7 +425,7 @@ class CustomEntriesTable extends AppTable
                 'checkHiragana' => [
                     'provider' => 'bc',
                     'rule' => 'checkHiragana',
-                    'message' => __d('baser', '全角ひらがなで入力してください。')
+                    'message' => __d('baser_core', '全角ひらがなで入力してください。')
                 ]
             ]);
         }
@@ -449,7 +449,7 @@ class CustomEntriesTable extends AppTable
                     'dataArray' => [
                         'provider' => 'mailMessage',
                         'rule' => 'dataArray',
-                        'message' => __d('baser', '日付の形式が無効です。')
+                        'message' => __d('baser_core', '日付の形式が無効です。')
                     ]
                 ]);
             } else {
@@ -457,7 +457,7 @@ class CustomEntriesTable extends AppTable
                     'dateString' => [
                         'provider' => 'mailMessage',
                         'rule' => 'dateString',
-                        'message' => __d('baser', '日付の形式が無効です。')
+                        'message' => __d('baser_core', '日付の形式が無効です。')
                     ]
                 ]);
             }
@@ -475,10 +475,10 @@ class CustomEntriesTable extends AppTable
     {
         if ($this->hasValidator('customEntry')) $validator = $this->getValidator('customEntry');
         $validator->requirePresence('title')
-            ->notEmptyString('title', __d('baser', 'タイトルは必須項目です。'));
+            ->notEmptyString('title', __d('baser_core', 'タイトルは必須項目です。'));
         $validator
             ->allowEmptyString('name')
-            ->regex('name', '/\D/', __d('baser', '数値だけのスラッグを登録することはできません。'));
+            ->regex('name', '/\D/', __d('baser_core', '数値だけのスラッグを登録することはできません。'));
         return $validator;
     }
 

@@ -15,14 +15,14 @@
  * @noTodo
  * @unitTest
  */
-$this->BcAdmin->setTitle(__d('baser', 'パスワードのリセット完了'));
+$this->BcAdmin->setTitle(__d('baser_core', 'パスワードのリセット完了'));
 ?>
 
 <div class="section">
-  <p><?php echo __d('baser', 'パスワードを変更しました。') ?></p>
+  <p><?php echo __d('baser_core', 'パスワードを変更しました。') ?></p>
   <p>
     <?php $this->BcBaser->link(
-      __d('baser', 'ログイン'), ['controller' => 'users', 'action' => 'login'],
+      __d('baser_core', 'ログイン'), ['controller' => 'users', 'action' => 'login'],
       ['class' => 'bca-btn', 'data-bca-btn-size' => 'lg', 'data-bca-btn-width' => 'lg']
     ) ?>
   </p>

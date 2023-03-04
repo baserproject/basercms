@@ -125,13 +125,13 @@ class UploaderFilesTable extends AppTable
 //            'publish_begin' => [
 //                'checkPeriod' => [
 //                    'rule' => 'checkPeriod',
-//                    'message' => __d('baser', '公開期間が不正です。')
+//                    'message' => __d('baser_core', '公開期間が不正です。')
 //                ]
 //            ],
 //            'publish_end' => [
 //                'checkPeriod' => [
 //                    'rule' => 'checkPeriod',
-//                    'message' => __d('baser', '公開期間が不正です。')
+//                    'message' => __d('baser_core', '公開期間が不正です。')
 //                ]
 //            ]
 //        ];
@@ -139,7 +139,7 @@ class UploaderFilesTable extends AppTable
 //            $this->validate['name'] = [
 //                'fileExt' => [
 //                    'rule' => ['fileExt', Configure::read('BcUploader.allowedExt')],
-//                    'message' => __d('baser', '許可されていないファイル形式です。')
+//                    'message' => __d('baser_core', '許可されていないファイル形式です。')
 //                ]
 //            ];
 //        }

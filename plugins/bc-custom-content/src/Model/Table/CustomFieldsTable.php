@@ -62,23 +62,23 @@ class CustomFieldsTable extends AppTable
         $validator->setProvider('user', 'BaserCore\Model\Validation\UserValidation');
         $validator
             ->scalar('name')
-            ->notEmptyString('name', __d('baser', 'フィールド名を入力してください。'))
-            ->maxLength('name', 255, __d('baser', 'フィールド名は255文字以内で入力してください。'))
-            ->regex('name', '/^[a-z0-9_]+$/', __d('baser', 'フィールド名は半角英数字とアンダースコアのみで入力してください。'))
+            ->notEmptyString('name', __d('baser_core', 'フィールド名を入力してください。'))
+            ->maxLength('name', 255, __d('baser_core', 'フィールド名は255文字以内で入力してください。'))
+            ->regex('name', '/^[a-z0-9_]+$/', __d('baser_core', 'フィールド名は半角英数字とアンダースコアのみで入力してください。'))
             ->add('name', [
                 'validateUnique' => [
                     'rule' => 'validateUnique',
                     'provider' => 'table',
-                    'message' => __d('baser', '既に登録のあるフィールド名です。')
+                    'message' => __d('baser_core', '既に登録のあるフィールド名です。')
                 ]
             ]);
         $validator
             ->scalar('title')
-            ->notEmptyString('title', __d('baser', '項目見出しを入力してください。'))
-            ->maxLength('title', 255, __d('baser', '項目見出しは255文字以内で入力してください。'));
+            ->notEmptyString('title', __d('baser_core', '項目見出しを入力してください。'))
+            ->maxLength('title', 255, __d('baser_core', '項目見出しは255文字以内で入力してください。'));
         $validator
             ->scalar('type')
-            ->notEmptyString('type', __d('baser', 'タイプを入力してください。'));
+            ->notEmptyString('type', __d('baser_core', 'タイプを入力してください。'));
         return $validator;
     }
 

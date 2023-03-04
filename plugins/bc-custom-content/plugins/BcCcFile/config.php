@@ -11,8 +11,8 @@
 
 return [
     'type' => ['BcCustomContentPlugin'],
-    'title' => __d('baser', 'カスタムコンテンツ：ファイルフィールド'),
-    'description' => __d('baser', 'カスタムコンテンツにファイルフィールドを提供する'),
+    'title' => __d('baser_core', 'カスタムコンテンツ：ファイルフィールド'),
+    'description' => __d('baser_core', 'カスタムコンテンツにファイルフィールドを提供する'),
     'author' => 'baserCMS User Community',
     'url' => 'https://basercms.net',
 ];

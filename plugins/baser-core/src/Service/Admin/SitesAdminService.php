@@ -126,7 +126,7 @@ class SitesAdminService extends SitesService implements SitesAdminServiceInterfa
     {
         $themes = $this->getThemeList();
         if(!$this->isMainOnCurrentDisplay($site)) {
-            $defaultThemeName = __d('baser', 'メインサイトに従う');
+            $defaultThemeName = __d('baser_core', 'メインサイトに従う');
             $mainTheme = $this->Sites->getRootMain()->theme;
             if (!empty($mainTheme)) {
                 if (in_array($mainTheme, $themes)) {

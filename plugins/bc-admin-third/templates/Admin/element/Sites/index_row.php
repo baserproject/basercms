@@ -67,22 +67,22 @@ $url = $this->BcContents->getUrl($site_alias, true, $site->use_subdomain);
       <?php echo $this->BcAdminForm->postLink(
         '',
         ['action' => 'unpublish', $site->id],
-        ['title' => __d('baser', '非公開'),
+        ['title' => __d('baser_core', '非公開'),
           'class' => 'btn-unpublish bca-btn-icon',
           'data-bca-btn-type' => 'unpublish',
           'data-bca-btn-size' => 'lg']
       ) ?>
-      <?php $this->BcBaser->link('', $url, ['title' => __d('baser', '確認'), 'target' => '_blank', 'class' => 'bca-btn-icon', 'data-bca-btn-type' => 'preview', 'data-bca-btn-size' => 'lg']) ?>
+      <?php $this->BcBaser->link('', $url, ['title' => __d('baser_core', '確認'), 'target' => '_blank', 'class' => 'bca-btn-icon', 'data-bca-btn-type' => 'preview', 'data-bca-btn-size' => 'lg']) ?>
     <?php else: ?>
       <?php echo $this->BcAdminForm->postLink(
         '',
         ['action' => 'publish', $site->id],
-        ['title' => __d('baser', '公開'),
+        ['title' => __d('baser_core', '公開'),
           'class' => 'btn-publish bca-btn-icon',
           'data-bca-btn-type' => 'publish',
           'data-bca-btn-size' => 'lg']
       ) ?>
     <?php endif ?>
-    <?php $this->BcBaser->link('', ['action' => 'edit', $site->id], ['title' => __d('baser', '編集'), 'class' => ' bca-btn-icon', 'data-bca-btn-type' => 'edit', 'data-bca-btn-size' => 'lg']) ?>
+    <?php $this->BcBaser->link('', ['action' => 'edit', $site->id], ['title' => __d('baser_core', '編集'), 'class' => ' bca-btn-icon', 'data-bca-btn-type' => 'edit', 'data-bca-btn-size' => 'lg']) ?>
   </td>
 </tr>

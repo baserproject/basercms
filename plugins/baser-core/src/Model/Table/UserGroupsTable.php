@@ -101,32 +101,32 @@ class UserGroupsTable extends AppTable
 
         $validator
             ->scalar('name')
-            ->maxLength('name', 50, __d('baser', 'ユーザーグループ名は50文字以内で入力してください。'))
-            ->requirePresence('name', 'create', __d('baser', 'ユーザーグループ名を入力してください。'))
-            ->notEmptyString('name', __d('baser', 'ユーザーグループ名を入力してください。'))
+            ->maxLength('name', 50, __d('baser_core', 'ユーザーグループ名は50文字以内で入力してください。'))
+            ->requirePresence('name', 'create', __d('baser_core', 'ユーザーグループ名を入力してください。'))
+            ->notEmptyString('name', __d('baser_core', 'ユーザーグループ名を入力してください。'))
             ->add('name', [
                 'name_halfText' => [
                     'rule' => 'halfText',
                     'provider' => 'bc',
-                    'message' => __d('baser', 'ユーザーグループ名は半角のみで入力してください。')
+                    'message' => __d('baser_core', 'ユーザーグループ名は半角のみで入力してください。')
                 ],
                 'name_unique' => [
                     'rule' => 'validateUnique',
                     'provider' => 'table',
-                    'message' => __d('baser', '既に登録のあるユーザーグループ名です。')
+                    'message' => __d('baser_core', '既に登録のあるユーザーグループ名です。')
                 ]
             ]);
 
         $validator
             ->scalar('title')
-            ->maxLength('title', 50, __d('baser', '表示名は50文字以内で入力してください。'))
-            ->requirePresence('title', 'create', __d('baser', '表示名を入力してください。'))
-            ->notEmptyString('title', __d('baser', '表示名を入力してください。'));
+            ->maxLength('title', 50, __d('baser_core', '表示名は50文字以内で入力してください。'))
+            ->requirePresence('title', 'create', __d('baser_core', '表示名を入力してください。'))
+            ->notEmptyString('title', __d('baser_core', '表示名を入力してください。'));
 
         $validator
             ->scalar('auth_prefix')
-            ->requirePresence('auth_prefix', 'create', __d('baser', '認証プレフィックスを選択してください。'))
-            ->notEmptyString('auth_prefix', __d('baser', '認証プレフィックスを選択してください。'));
+            ->requirePresence('auth_prefix', 'create', __d('baser_core', '認証プレフィックスを選択してください。'))
+            ->notEmptyString('auth_prefix', __d('baser_core', '認証プレフィックスを選択してください。'));
 
         $validator
             ->boolean('use_move_contents')
@@ -158,7 +158,7 @@ class UserGroupsTable extends AppTable
 
         $entity = $this->newEntity($userGroup->toArray());
         if ($errors = $entity->getErrors()) {
-            $exception = new CopyFailedException(__d('baser', '処理に失敗しました。'));
+            $exception = new CopyFailedException(__d('baser_core', '処理に失敗しました。'));
             $exception->setErrors($errors);
             throw $exception;
         }

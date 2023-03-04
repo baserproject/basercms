@@ -88,9 +88,9 @@ class BlogCommentsController extends BlogAdminAppController
         $this->request->allowMethod(['post', 'delete']);
         $entity = $service->get($id);
         if ($service->delete($id)) {
-            $this->BcMessage->setSuccess(__d('baser', 'ブログコメント No{0} を削除しました。', $entity->no));
+            $this->BcMessage->setSuccess(__d('baser_core', 'ブログコメント No{0} を削除しました。', $entity->no));
         } else {
-            $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。'));
+            $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。'));
         }
         $url = ['action' => 'index', $blogContentId];
         if($this->getRequest()->getQuery('blog_post_id')) {
@@ -118,9 +118,9 @@ class BlogCommentsController extends BlogAdminAppController
         $this->request->allowMethod(['patch', 'post', 'put']);
         $result = $service->unpublish($id);
         if ($result) {
-            $this->BcMessage->setSuccess(sprintf(__d('baser', 'ブログコメント No.%s を非公開状態にしました。'), $result->no));
+            $this->BcMessage->setSuccess(sprintf(__d('baser_core', 'ブログコメント No.%s を非公開状態にしました。'), $result->no));
         } else {
-            $this->BcMessage->setSuccess(__d('baser', 'データベース処理中にエラーが発生しました。'));
+            $this->BcMessage->setSuccess(__d('baser_core', 'データベース処理中にエラーが発生しました。'));
         }
         $url = ['action' => 'index', $blogContentId];
         if($this->getRequest()->getQuery('blog_post_id')) {
@@ -148,9 +148,9 @@ class BlogCommentsController extends BlogAdminAppController
         $this->request->allowMethod(['patch', 'post', 'put']);
         $result = $service->publish($id);
         if ($result) {
-            $this->BcMessage->setSuccess(sprintf(__d('baser', 'ブログコメント No.%s を公開状態にしました。'), $result->no));
+            $this->BcMessage->setSuccess(sprintf(__d('baser_core', 'ブログコメント No.%s を公開状態にしました。'), $result->no));
         } else {
-            $this->BcMessage->setSuccess(__d('baser', 'データベース処理中にエラーが発生しました。'));
+            $this->BcMessage->setSuccess(__d('baser_core', 'データベース処理中にエラーが発生しました。'));
         }
         $url = ['action' => 'index', $blogContentId];
         if($this->getRequest()->getQuery('blog_post_id')) {

@@ -42,9 +42,9 @@ class ThemeFoldersTable extends AppTable
         parent::__construct($id, $table, $ds);
         $this->validate = [
             'name' => [
-                ['rule' => ['notBlank'], 'message' => __d('baser', 'テーマフォルダ名を入力してください。'), 'required' => true],
-                ['rule' => ['halfText'], 'message' => __d('baser', 'テーマフォルダ名は半角のみで入力してください。')],
-                ['rule' => ['duplicateThemeFolder'], 'on' => 'create', 'message' => __d('baser', '入力されたテーマフォルダ名は、同一階層に既に存在します。')]]
+                ['rule' => ['notBlank'], 'message' => __d('baser_core', 'テーマフォルダ名を入力してください。'), 'required' => true],
+                ['rule' => ['halfText'], 'message' => __d('baser_core', 'テーマフォルダ名は半角のみで入力してください。')],
+                ['rule' => ['duplicateThemeFolder'], 'on' => 'create', 'message' => __d('baser_core', '入力されたテーマフォルダ名は、同一階層に既に存在します。')]]
         ];
     }
 

@@ -52,12 +52,12 @@ class MailConfigsTable extends MailAppTable
     {
         $validator
             ->scalar('name')
-            ->maxLength('name', 255, __d('baser', '255文字以内で入力してください。'))
-            ->requirePresence('name', 'create', __d('baser', '設定名を入力してください。'))
-            ->notEmptyString('name', __d('baser', '設定名を入力してください。'));
+            ->maxLength('name', 255, __d('baser_core', '255文字以内で入力してください。'))
+            ->requirePresence('name', 'create', __d('baser_core', '設定名を入力してください。'))
+            ->notEmptyString('name', __d('baser_core', '設定名を入力してください。'));
         $validator
             ->scalar('value')
-            ->maxLength('value', 65535, __d('baser', '65535文字以内で入力してください。'));
+            ->maxLength('value', 65535, __d('baser_core', '65535文字以内で入力してください。'));
         return $validator;
     }
 
@@ -74,7 +74,7 @@ class MailConfigsTable extends MailAppTable
     {
         $validator
             ->scalar('site_name')
-            ->notEmptyString('site_name', __d('baser', 'Webサイト名を入力してください。'));
+            ->notEmptyString('site_name', __d('baser_core', 'Webサイト名を入力してください。'));
         return $validator;
     }
 

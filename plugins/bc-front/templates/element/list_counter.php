@@ -23,7 +23,7 @@
   <div class="bs-search__result-text">
     <?php echo $this->Paginator->counter(
       sprintf(
-        __d('baser', '%s で検索した結果 %s〜%s件目 / %s 件'),
+        __d('baser_core', '%s で検索した結果 %s〜%s件目 / %s 件'),
         sprintf('<strong>%s</strong>', implode(' ', $query)),
         '<strong>{{start}}</strong>',
         '<strong>{{end}}</strong>',

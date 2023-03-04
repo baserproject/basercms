@@ -21,9 +21,9 @@
  */
 $this->BcAdmin->setHelp('blog_comments_index');
 if ($blogPost) {
-    $this->BcAdmin->setTitle(sprintf(__d('baser', '%s｜コメント一覧'), $blogPost->title));
+    $this->BcAdmin->setTitle(sprintf(__d('baser_core', '%s｜コメント一覧'), $blogPost->title));
 } else {
-    $this->BcAdmin->setTitle(sprintf(__d('baser', '%s｜コメント一覧'), $blogContent->content->title));
+    $this->BcAdmin->setTitle(sprintf(__d('baser_core', '%s｜コメント一覧'), $blogContent->content->title));
 }
 ?>
 

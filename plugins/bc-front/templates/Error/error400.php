@@ -46,9 +46,9 @@ endif;
 
 <h2 class="bs-error-title"><?php echo $message ?></h2>
 <div class="bs-error-body">
-	<strong><?php echo __('エラー'); ?>: </strong>
+	<strong><?php echo __d('baser_core''エラー'); ?>: </strong>
 	<?php printf(
-		__('アドレス %s に送信されたリクエストは無効です。'),
+		__d('baser_core''アドレス %s に送信されたリクエストは無効です。'),
 		"<strong>'{$url}'</strong>"
 	); ?>
 </div>

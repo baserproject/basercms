@@ -19,9 +19,9 @@
 
 $this->BcAdmin->addAdminMainBodyHeaderLinks([
   'url' => ['action' => 'add'],
-  'title' => __d('baser', '新規追加'),
+  'title' => __d('baser_core', '新規追加'),
 ]);
-$this->BcAdmin->setTitle(__d('baser', 'ユーザー一覧'));
+$this->BcAdmin->setTitle(__d('baser_core', 'ユーザー一覧'));
 $this->BcAdmin->setSearch('users_index');
 $this->BcAdmin->setHelp('users_index');
 $this->BcBaser->js('admin/users/index.bundle', false);

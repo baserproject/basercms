@@ -15,10 +15,10 @@
 ?>
 
 
-<p><?php echo __d('baser', 'テーマファイルの作成・編集・削除が行えます。') ?></p>
+<p><?php echo __d('baser_core', 'テーマファイルの作成・編集・削除が行えます。') ?></p>
 <ul>
-  <li><?php echo sprintf(__d('baser', 'ファイルを作成・編集するには、ファイル名、内容を入力して %s ボタンをクリックします。'), '<a href="#" class="bca-btn" data-bca-btn-type="save" data-bca-btn-size="xs">保存</a>') ?></li>
-  <li><?php echo sprintf(__d('baser', 'ファイルを削除するには、 %s ボタンをクリックします。'), '<a href="#" class="bca-btn" data-bca-btn-type="delete" data-bca-btn-size="xs">削除</a>'); ?></li>
-  <li><?php echo __d('baser', '現在のテーマにコピーするには、「現在のテーマにコピー」ボタンをクリックします。（core テーマのみ）') ?></li>
+  <li><?php echo sprintf(__d('baser_core', 'ファイルを作成・編集するには、ファイル名、内容を入力して %s ボタンをクリックします。'), '<a href="#" class="bca-btn" data-bca-btn-type="save" data-bca-btn-size="xs">保存</a>') ?></li>
+  <li><?php echo sprintf(__d('baser_core', 'ファイルを削除するには、 %s ボタンをクリックします。'), '<a href="#" class="bca-btn" data-bca-btn-type="delete" data-bca-btn-size="xs">削除</a>'); ?></li>
+  <li><?php echo __d('baser_core', '現在のテーマにコピーするには、「現在のテーマにコピー」ボタンをクリックします。（core テーマのみ）') ?></li>
 </ul>
-<p><small>※ <?php echo __d('baser', '画像ファイルの編集は行えません。新しい画像をアップロードするには、一覧よりアップロードしてください') ?></small></p>
+<p><small>※ <?php echo __d('baser_core', '画像ファイルの編集は行えません。新しい画像をアップロードするには、一覧よりアップロードしてください') ?></small></p>

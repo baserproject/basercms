@@ -23,8 +23,8 @@ return [
              * パスワード用テキストボックスを表示するフィールドタイプ
              */
             'BcCcPassword' => [
-                'category' => __d('baser', '基本'),
-                'label' => __d('baser', 'パスワード'),
+                'category' => __d('baser_core', '基本'),
+                'label' => __d('baser_core', 'パスワード'),
                 'columnType' => 'string',
                 'controlType' => 'password',
                 'preview' => true,

@@ -144,39 +144,39 @@ class UsersTable extends AppTable
         $validator
             ->scalar('name')
             ->allowEmptyString('name')
-            ->maxLength('name', 255, __d('baser', 'アカウント名は255文字以内で入力してください。'))
+            ->maxLength('name', 255, __d('baser_core', 'アカウント名は255文字以内で入力してください。'))
             ->add('name', [
                 'nameUnique' => [
                     'rule' => 'validateUnique',
                     'provider' => 'table',
-                    'message' => __d('baser', '既に登録のあるアカウント名です。')
+                    'message' => __d('baser_core', '既に登録のあるアカウント名です。')
                 ]])
             ->add('name', [
                 'nameAlphaNumericPlus' => [
                     'rule' => ['alphaNumericPlus'],
                     'provider' => 'bc',
-                    'message' => __d('baser', 'アカウント名は半角英数字とハイフン、アンダースコアのみで入力してください。')
+                    'message' => __d('baser_core', 'アカウント名は半角英数字とハイフン、アンダースコアのみで入力してください。')
                 ]]);
         $validator
             ->scalar('real_name_1')
-            ->maxLength('real_name_1', 50, __d('baser', '名前[姓]は50文字以内で入力してください。'))
-            ->requirePresence('real_name_1', 'create', __d('baser', '名前[姓]を入力してください。'))
-            ->notEmptyString('real_name_1', __d('baser', '名前[姓]を入力してください。'));
+            ->maxLength('real_name_1', 50, __d('baser_core', '名前[姓]は50文字以内で入力してください。'))
+            ->requirePresence('real_name_1', 'create', __d('baser_core', '名前[姓]を入力してください。'))
+            ->notEmptyString('real_name_1', __d('baser_core', '名前[姓]を入力してください。'));
         $validator
             ->scalar('real_name_2')
-            ->maxLength('real_name_2', 50, __d('baser', '名前[名]は50文字以内で入力してください。'))
+            ->maxLength('real_name_2', 50, __d('baser_core', '名前[名]は50文字以内で入力してください。'))
             ->allowEmptyString('real_name_2');
         $validator
             ->scalar('nickname')
-            ->maxLength('nickname', 255, __d('baser', 'ニックネームは255文字以内で入力してください。'))
+            ->maxLength('nickname', 255, __d('baser_core', 'ニックネームは255文字以内で入力してください。'))
             ->allowEmptyString('nickname');
         $validator
-            ->requirePresence('user_groups', 'create', __d('baser', 'グループを選択してください。'))
+            ->requirePresence('user_groups', 'create', __d('baser_core', 'グループを選択してください。'))
             ->add('user_groups', [
                 'userGroupsNotEmptyMultiple' => [
                     'rule' => 'notEmptyMultiple',
                     'provider' => 'bc',
-                    'message' => __d('baser', 'グループを選択してください。')
+                    'message' => __d('baser_core', 'グループを選択してください。')
                 ]
             ])
             ->add('user_groups', [
@@ -184,36 +184,36 @@ class UsersTable extends AppTable
                     'rule' => 'willChangeSelfGroup',
                     'provider' => 'user',
                     'on' => 'update',
-                    'message' => __d('baser', '自分のアカウントのグループは変更できません。')
+                    'message' => __d('baser_core', '自分のアカウントのグループは変更できません。')
                 ]
             ]);
         $validator
-            ->requirePresence('email', 'create', __d('baser', 'Eメールを入力してください。'))
+            ->requirePresence('email', 'create', __d('baser_core', 'Eメールを入力してください。'))
             ->scalar('email')
-            ->email('email', true, __d('baser', 'Eメールの形式が不正です。'))
-            ->maxLength('email', 255, __d('baser', 'Eメールは255文字以内で入力してください。'))
-            ->notEmptyString('email', __d('baser', 'Eメールを入力してください。'))
+            ->email('email', true, __d('baser_core', 'Eメールの形式が不正です。'))
+            ->maxLength('email', 255, __d('baser_core', 'Eメールは255文字以内で入力してください。'))
+            ->notEmptyString('email', __d('baser_core', 'Eメールを入力してください。'))
             ->add('email', [
                 'nameUnique' => [
                     'rule' => 'validateUnique',
                     'provider' => 'table',
-                    'message' => __d('baser', '既に登録のあるEメールです。')
+                    'message' => __d('baser_core', '既に登録のあるEメールです。')
                 ]]);
         $validator
             ->scalar('password')
-            ->minLength('password', 6, __d('baser', 'パスワードは6文字以上で入力してください。'))
-            ->maxLength('password', 255, __d('baser', 'パスワードは255文字以内で入力してください。'))
+            ->minLength('password', 6, __d('baser_core', 'パスワードは6文字以上で入力してください。'))
+            ->maxLength('password', 255, __d('baser_core', 'パスワードは255文字以内で入力してください。'))
             ->add('password', [
                 'passwordAlphaNumericPlus' => [
                     'rule' => ['alphaNumericPlus', ' \.:\/\(\)#,@\[\]\+=&;\{\}!\$\*'],
                     'provider' => 'bc',
-                    'message' => __d('baser', 'パスワードは半角英数字(英字は大文字小文字を区別)とスペース、記号(._-:/()#,@[]+=&;{}!$*)のみで入力してください。')
+                    'message' => __d('baser_core', 'パスワードは半角英数字(英字は大文字小文字を区別)とスペース、記号(._-:/()#,@[]+=&;{}!$*)のみで入力してください。')
                 ]])
             ->add('password', [
                 'passwordConfirm' => [
                     'rule' => ['confirm', ['password_1', 'password_2']],
                     'provider' => 'bc',
-                    'message' => __d('baser', __d('baser', 'パスワードが同じものではありません。'))
+                    'message' => __d('baser_core', __d('baser_core', 'パスワードが同じものではありません。'))
                 ]]);
 
         return $validator;
@@ -230,8 +230,8 @@ class UsersTable extends AppTable
     public function validationNew(Validator $validator): Validator
     {
         $this->validationDefault($validator)
-            ->requirePresence('password', 'create', __d('baser', 'パスワードを入力してください。'))
-            ->notEmptyString('password', __d('baser', 'パスワードを入力してください。'));
+            ->requirePresence('password', 'create', __d('baser_core', 'パスワードを入力してください。'))
+            ->notEmptyString('password', __d('baser_core', 'パスワードを入力してください。'));
         return $validator;
     }
 
@@ -247,19 +247,19 @@ class UsersTable extends AppTable
     {
         $validator
             ->scalar('password')
-            ->minLength('password', 6, __d('baser', 'パスワードは6文字以上で入力してください。'))
-            ->maxLength('password', 255, __d('baser', 'パスワードは255文字以内で入力してください。'))
+            ->minLength('password', 6, __d('baser_core', 'パスワードは6文字以上で入力してください。'))
+            ->maxLength('password', 255, __d('baser_core', 'パスワードは255文字以内で入力してください。'))
             ->add('password', [
                 'passwordAlphaNumericPlus' => [
                     'rule' => ['alphaNumericPlus', ' \.:\/\(\)#,@\[\]\+=&;\{\}!\$\*'],
                     'provider' => 'bc',
-                    'message' => __d('baser', 'パスワードは半角英数字(英字は大文字小文字を区別)とスペース、記号(._-:/()#,@[]+=&;{}!$*)のみで入力してください。')
+                    'message' => __d('baser_core', 'パスワードは半角英数字(英字は大文字小文字を区別)とスペース、記号(._-:/()#,@[]+=&;{}!$*)のみで入力してください。')
                 ]])
             ->add('password', [
                 'passwordConfirm' => [
                     'rule' => ['confirm', ['password_1', 'password_2']],
                     'provider' => 'bc',
-                    'message' => __d('baser', __d('baser', 'パスワードが同じものではありません。'))
+                    'message' => __d('baser_core', __d('baser_core', 'パスワードが同じものではありません。'))
                 ]]);
 
         return $validator;

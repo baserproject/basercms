@@ -308,7 +308,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         foreach($plugins as $plugin) {
             if (!$this->_loadDefaultDataPattern($pattern, $theme, $plugin, $excludes)) {
                 $result = false;
-                $this->log(sprintf(__d('baser', '%s %s の初期データのロードに失敗しました。'), $theme . '.' . $pattern, $plugin));
+                $this->log(sprintf(__d('baser_core', '%s %s の初期データのロードに失敗しました。'), $theme . '.' . $pattern, $plugin));
             }
         }
 
@@ -320,14 +320,14 @@ class BcDatabaseService implements BcDatabaseServiceInterface
                 foreach($plugins as $plugin) {
                     if (!$this->_loadDefaultDataPattern($pattern, $theme, $plugin, $excludes)) {
                         $result = false;
-                        $this->log(sprintf(__d('baser', '%s %s の初期データのロードに失敗しました。'), $theme . '.' . $pattern, $plugin));
+                        $this->log(sprintf(__d('baser_core', '%s %s の初期データのロードに失敗しました。'), $theme . '.' . $pattern, $plugin));
                     }
                 }
             }
             if ($result) {
-                throw new BcException(__d('baser', '初期データの読み込みに失敗しましたので baserCMSコアの初期データを読み込みました。ログを確認してください。'));
+                throw new BcException(__d('baser_core', '初期データの読み込みに失敗しましたので baserCMSコアの初期データを読み込みました。ログを確認してください。'));
             } else {
-                throw new BcException(__d('baser', '初期データの読み込みに失敗しました。データが不完全な状態です。正常に動作しない可能性があります。ログを確認してください。'));
+                throw new BcException(__d('baser_core', '初期データの読み込みに失敗しました。データが不完全な状態です。正常に動作しない可能性があります。ログを確認してください。'));
             }
         }
         return $result;
@@ -365,7 +365,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
                 $table = basename($file, '.csv');
                 if ($table !== $targetTable) continue;
                 if (!$this->loadCsv(['path' => $file, 'encoding' => 'auto'])) {
-                    $this->log(sprintf(__d('baser', '%s の読み込みに失敗。'), $file));
+                    $this->log(sprintf(__d('baser_core', '%s の読み込みに失敗。'), $file));
                     $result = false;
                 } else {
                     break;
@@ -555,7 +555,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         //======================================================================
         if (!$options['excludeUsers']) {
             if (!$this->truncate('users')) {
-                $this->log(__d('baser', 'users テーブルの初期化に失敗。'));
+                $this->log(__d('baser_core', 'users テーブルの初期化に失敗。'));
                 $result = false;
             }
         }
@@ -578,7 +578,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         }
 
         if (!$result) {
-            $this->log(__d('baser', 'システムデータの初期化に失敗しました。'));
+            $this->log(__d('baser_core', 'システムデータの初期化に失敗しました。'));
         }
         return $result;
     }
@@ -600,7 +600,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         $MailMessage = new MailMessage();
         $result = true;
         if (!$MailMessage->reconstructionAll()) {
-            $this->log(__d('baser', 'メールプラグインのメール受信用テーブルの生成に失敗しました。'));
+            $this->log(__d('baser_core', 'メールプラグインのメール受信用テーブルの生成に失敗しました。'));
             $result = false;
         }
         BcUtil::clearAllCache();
@@ -1303,18 +1303,18 @@ class BcDatabaseService implements BcDatabaseServiceInterface
                 case 'sqlite':
                     if (file_exists($database)) {
                         if (!is_writable($database)) {
-                            throw new BcException(__d('baser', "データベースファイルに書き込み権限がありません。"));
+                            throw new BcException(__d('baser_core', "データベースファイルに書き込み権限がありません。"));
                         }
                     } else {
                         if (!is_writable(dirname($database))) {
-                            throw new BcException(__d('baser', 'データベースの保存フォルダに書き込み権限がありません。'));
+                            throw new BcException(__d('baser_core', 'データベースの保存フォルダに書き込み権限がありません。'));
                         }
                     }
                     $dsn = "sqlite:" . $database;
                     $pdo = new PDO($dsn);
                     break;
                 default:
-                    throw new BcException(__d('baser', 'ドライバが見つかりません Driver is not defined.(MySQL|Postgres|SQLite)'));
+                    throw new BcException(__d('baser_core', 'ドライバが見つかりません Driver is not defined.(MySQL|Postgres|SQLite)'));
             }
             unset($pdo);
         } catch (PDOException $e) {
@@ -1334,11 +1334,11 @@ class BcDatabaseService implements BcDatabaseServiceInterface
             $this->checkDbConnection($config);
         } catch (PDOException $e) {
             if ($e->getCode() === 2002) {
-                throw new PDOException(__d('baser', "データベースへの接続でエラーが発生しました。データベース設定を見直してください。\nサーバー上に指定されたデータベースが存在しない可能性が高いです。\n" . $e->getMessage()));
+                throw new PDOException(__d('baser_core', "データベースへの接続でエラーが発生しました。データベース設定を見直してください。\nサーバー上に指定されたデータベースが存在しない可能性が高いです。\n" . $e->getMessage()));
             }
             throw $e;
         } catch (BcException $e) {
-            $message = __d('baser', "データベースへの接続でエラーが発生しました。データベース設定を見直してください。\nサーバー上に指定されたデータベースが存在しない可能性が高いです。");
+            $message = __d('baser_core', "データベースへの接続でエラーが発生しました。データベース設定を見直してください。\nサーバー上に指定されたデータベースが存在しない可能性が高いです。");
             if (preg_match('/with message \'(.+?)\' in/s', $e->getMessage(), $matches)) {
                 $message .= "\n" . $matches[1];
             }
@@ -1350,7 +1350,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         $db = $this->connectDb($config);
 
         if (!$db->isConnected()) {
-            throw new BcException(__d('baser', "データベースへの接続でエラーが発生しました。データベース設定を見直してください。"));
+            throw new BcException(__d('baser_core', "データベースへの接続でエラーが発生しました。データベース設定を見直してください。"));
         }
 
         //version check
@@ -1359,7 +1359,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
             case 'Cake\Database\Driver\Mysql' :
                 $result = $db->execute("SELECT version() as version")->fetch();
                 if (version_compare($result[0], Configure::read('BcRequire.MySQLVersion')) == -1) {
-                    throw new BcException(sprintf(__d('baser', 'データベースのバージョンが %s 以上か確認してください。'), Configure::read('BcRequire.MySQLVersion')));
+                    throw new BcException(sprintf(__d('baser_core', 'データベースのバージョンが %s 以上か確認してください。'), Configure::read('BcRequire.MySQLVersion')));
                 }
                 break;
             case 'Cake\Database\Driver\Postgres' :
@@ -1367,7 +1367,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
                 $result = $db->query("SELECT version() as version")->fetch();
                 [, $version] = explode(" ", $result[0]);
                 if (version_compare(trim($version), Configure::read('BcRequire.PostgreSQLVersion')) == -1) {
-                    throw new BcException(sprintf(__d('baser', 'データベースのバージョンが %s 以上か確認してください。'), Configure::read('BcRequire.PostgreSQLVersion')));
+                    throw new BcException(sprintf(__d('baser_core', 'データベースのバージョンが %s 以上か確認してください。'), Configure::read('BcRequire.PostgreSQLVersion')));
                 }
                 break;
         }
@@ -1378,7 +1378,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
             $db->execute("CREATE TABLE $randomtablename (a varchar(10))");
             $db->execute('drop TABLE ' . $randomtablename);
         } catch (PDOException $e) {
-            throw new PDOException(__d('baser', "データベースへの接続でエラーが発生しました。\n") . $e->getMessage());
+            throw new PDOException(__d('baser_core', "データベースへの接続でエラーが発生しました。\n") . $e->getMessage());
         }
 
         // データベースのテーブルをチェック
@@ -1388,7 +1388,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
             return strpos($tableName, $prefix) === 0;
         });
         if (count($duplicateTableNames) > 0) {
-            throw new BcException(__d('baser', 'データベースへの接続に成功しましたが、プレフィックスが重複するテーブルが存在します。') . implode(', ', $duplicateTableNames));
+            throw new BcException(__d('baser_core', 'データベースへの接続に成功しましたが、プレフィックスが重複するテーブルが存在します。') . implode(', ', $duplicateTableNames));
         }
     }
 

@@ -11,8 +11,8 @@
 
 return [
     'type' => ['BcCustomContentPlugin'],
-    'title' => __d('baser', 'カスタムコンテンツ：ラジオボタン'),
-    'description' => __d('baser', 'カスタムコンテンツにラジオボタンを提供する'),
+    'title' => __d('baser_core', 'カスタムコンテンツ：ラジオボタン'),
+    'description' => __d('baser_core', 'カスタムコンテンツにラジオボタンを提供する'),
     'author' => 'baserCMS User Community',
     'url' => 'https://basercms.net',
 ];

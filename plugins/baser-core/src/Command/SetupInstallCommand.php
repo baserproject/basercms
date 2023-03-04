@@ -42,7 +42,7 @@ class SetupInstallCommand extends Command
         if(file_exists(ROOT . DS . 'config' . DS . 'install.php')) {
             unlink(ROOT . DS . 'config' . DS . 'install.php');
         }
-        $io->out(__d('baser', 'インストールの準備ができました。'));
+        $io->out(__d('baser_core', 'インストールの準備ができました。'));
     }
 
 }

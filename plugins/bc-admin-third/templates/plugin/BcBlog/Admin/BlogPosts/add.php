@@ -17,7 +17,7 @@
  * @noTodo
  * @unitTest
  */
-$this->BcAdmin->setTitle(sprintf(__d('baser', '%s｜新規記事登録'), $this->getRequest()->getAttribute('currentContent')->title));
+$this->BcAdmin->setTitle(sprintf(__d('baser_core', '%s｜新規記事登録'), $this->getRequest()->getAttribute('currentContent')->title));
 $this->BcAdmin->setHelp('blog_posts_form');
 ?>
 
@@ -28,14 +28,14 @@ $this->BcAdmin->setHelp('blog_posts_form');
 
 <section class="bca-actions">
   <div class="bca-actions__main">
-    <?php echo $this->BcAdminForm->button(__d('baser', 'プレビュー'),
+    <?php echo $this->BcAdminForm->button(__d('baser_core', 'プレビュー'),
       [
         'id' => 'BtnPreview',
         'div' => false,
         'class' => 'button bca-btn bca-actions__item',
         'data-bca-btn-type' => 'preview',
       ]) ?>
-    <?php echo $this->BcAdminForm->button(__d('baser', '保存'),
+    <?php echo $this->BcAdminForm->button(__d('baser_core', '保存'),
       [
         'type' => 'submit',
         'id' => 'BtnSave',

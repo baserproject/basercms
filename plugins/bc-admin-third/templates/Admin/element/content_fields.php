@@ -37,16 +37,16 @@ $this->BcBaser->js('admin/contents/edit.bundle', false, ['id' => 'AdminContentsE
   'data-settings' => $this->BcContents->getJsonItems()
 ]);
 $this->BcBaser->i18nScript([
-  'contentsEditConfirmMessage1' => __d('baser', 'コンテンツをゴミ箱に移動してもよろしいですか？'),
-  'contentsEditConfirmMessage2' => __d('baser', "エイリアスを削除してもよろしいですか？\nエイリアスはゴミ箱に入らず完全に削除されます。"),
-  'contentsEditConfirmMessage3' => __d('baser', 'このコンテンツを元に %s にエイリアスを作成します。よろしいですか？'),
-  'contentsEditConfirmMessage4' => __d('baser', 'このコンテンツを元に %s にコピーを作成します。よろしいですか？'),
-  'contentsEditInfoMessage1' => __d('baser', 'エイリアスを作成しました。作成先の編集画面に移動しますのでしばらくお待ち下さい。'),
-  'contentsEditInfoMessage2' => __d('baser', 'コピーを作成しました。作成先の編集画面に移動しますのでしばらくお待ち下さい。'),
-  'contentsEditAlertMessage1' => __d('baser', 'エイリアスの作成に失敗しました。'),
-  'contentsEditAlertMessage2' => __d('baser', '指定したサイトの同じ階層上にフォルダではない同名のコンテンツが存在します。エイリアスの作成を実行する前に、指定したサイト上の同名コンテンツを確認し名称を変更してください。'),
-  'contentsEditAlertMessage3' => __d('baser', '指定したサイトの同じ階層上にフォルダではない同名のコンテンツが存在します。コピーの作成を実行する前に、指定したサイト上の同名コンテンツを確認し名称を変更してください。'),
-  'contentsEditAlertmessage4' => __d('baser', 'コピーの作成に失敗しました。')
+  'contentsEditConfirmMessage1' => __d('baser_core', 'コンテンツをゴミ箱に移動してもよろしいですか？'),
+  'contentsEditConfirmMessage2' => __d('baser_core', "エイリアスを削除してもよろしいですか？\nエイリアスはゴミ箱に入らず完全に削除されます。"),
+  'contentsEditConfirmMessage3' => __d('baser_core', 'このコンテンツを元に %s にエイリアスを作成します。よろしいですか？'),
+  'contentsEditConfirmMessage4' => __d('baser_core', 'このコンテンツを元に %s にコピーを作成します。よろしいですか？'),
+  'contentsEditInfoMessage1' => __d('baser_core', 'エイリアスを作成しました。作成先の編集画面に移動しますのでしばらくお待ち下さい。'),
+  'contentsEditInfoMessage2' => __d('baser_core', 'コピーを作成しました。作成先の編集画面に移動しますのでしばらくお待ち下さい。'),
+  'contentsEditAlertMessage1' => __d('baser_core', 'エイリアスの作成に失敗しました。'),
+  'contentsEditAlertMessage2' => __d('baser_core', '指定したサイトの同じ階層上にフォルダではない同名のコンテンツが存在します。エイリアスの作成を実行する前に、指定したサイト上の同名コンテンツを確認し名称を変更してください。'),
+  'contentsEditAlertMessage3' => __d('baser_core', '指定したサイトの同じ階層上にフォルダではない同名のコンテンツが存在します。コピーの作成を実行する前に、指定したサイト上の同名コンテンツを確認し名称を変更してください。'),
+  'contentsEditAlertmessage4' => __d('baser_core', 'コピーの作成に失敗しました。')
 ]);
 $isOmitViewAction = $this->BcContents->getConfig('items')[$content->type]['omitViewAction'];
 
@@ -92,7 +92,7 @@ $editable = $this->BcContents->isEditable($content);
 <div class="bca-section bca-section__post-top">
   <span class="bca-post__url">
 	  <a href="<?php echo h($fullUrl) ?>" class="bca-text-url" target="_blank" data-toggle="tooltip"
-       data-placement="top" title="<?php echo __d('baser', '公開URLを開きます') ?>"><i
+       data-placement="top" title="<?php echo __d('baser_core', '公開URLを開きます') ?>"><i
         class="bca-icon--globe"></i><?php echo rawurldecode($fullUrl) ?></a>
 	  <?php echo $this->BcAdminForm->button('', [
       'id' => 'BtnCopyUrl',
@@ -108,7 +108,7 @@ $editable = $this->BcContents->isEditable($content);
   <table class="form-table bca-form-table" data-bca-table-type="type2">
     <tr>
       <th class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label("content.name", 'URL') ?>
-        &nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
+        &nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser_core', '必須') ?></span>
       </th>
       <td class="col-input bca-form-table__input">
         <?php if (!$content->site_root): ?>
@@ -133,9 +133,9 @@ $editable = $this->BcContents->isEditable($content);
     </tr>
     <tr>
       <th class="col-head bca-form-table__label">
-        <?php echo $this->BcAdminForm->label("content.title", __d('baser', 'タイトル')) ?>
+        <?php echo $this->BcAdminForm->label("content.title", __d('baser_core', 'タイトル')) ?>
         &nbsp;
-        <span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
+        <span class="bca-label" data-bca-label-type="required"><?php echo __d('baser_core', '必須') ?></span>
       </th>
       <td class="col-input bca-form-table__input">
         <?php if ($editable): ?>
@@ -149,41 +149,41 @@ $editable = $this->BcContents->isEditable($content);
     </tr>
     <tr>
       <th
-        class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label("content.self_status", __d('baser', '公開状態')) ?>
-        &nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
+        class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label("content.self_status", __d('baser_core', '公開状態')) ?>
+        &nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser_core', '必須') ?></span>
       </th>
       <td class="col-input bca-form-table__input">
         <?php if ($editable): ?>
-          <?php echo $this->BcAdminForm->control("content.self_status", ['type' => 'radio', 'options' => $this->BcText->booleanDoList(__d('baser', '公開'))]) ?>
+          <?php echo $this->BcAdminForm->control("content.self_status", ['type' => 'radio', 'options' => $this->BcText->booleanDoList(__d('baser_core', '公開'))]) ?>
         <?php else: ?>
-          <?php echo $this->BcText->arrayValue($this->BcAdminForm->getSourceValue("content.self_status"), $this->BcText->booleanDoList(__d('baser', '公開'))) ?>
+          <?php echo $this->BcText->arrayValue($this->BcAdminForm->getSourceValue("content.self_status"), $this->BcText->booleanDoList(__d('baser_core', '公開'))) ?>
           <?php echo $this->BcAdminForm->hidden("content.self_status") ?>
         <?php endif ?>
         <br>
         <?php echo $this->BcAdminForm->error("content.self_status") ?>
         <?php if ((bool)$this->BcAdminForm->getSourceValue("content.status") != (bool)$this->BcAdminForm->getSourceValue("content.self_status")): ?>
-          <p>※ <?php echo __d('baser', '親フォルダの設定を継承し非公開状態となっています') ?></p>
+          <p>※ <?php echo __d('baser_core', '親フォルダの設定を継承し非公開状態となっています') ?></p>
         <?php endif ?>
       </td>
     </tr>
     <tr>
       <th
-        class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label("content.self_status", __d('baser', '公開日時')) ?></th>
+        class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label("content.self_status", __d('baser_core', '公開日時')) ?></th>
       <td class="col-input bca-form-table__input">
         <?php if ($editable): ?>
           <?php echo $this->BcAdminForm->control("content.self_publish_begin", [
             'type' => 'dateTimePicker',
             'size' => 12,
             'maxlength' => 10,
-            'dateLabel' => ['text' => __d('baser', '開始日付')],
-            'timeLabel' => ['text' => __d('baser', '開始時間')]
+            'dateLabel' => ['text' => __d('baser_core', '開始日付')],
+            'timeLabel' => ['text' => __d('baser_core', '開始時間')]
           ]) ?>
           &nbsp;〜&nbsp;
           <?php echo $this->BcAdminForm->control("content.self_publish_end", [
             'type' => 'dateTimePicker',
             'size' => 12, 'maxlength' => 10,
-            'dateLabel' => ['text' => __d('baser', '終了日付')],
-            'timeLabel' => ['text' => __d('baser', '終了時間')]
+            'dateLabel' => ['text' => __d('baser_core', '終了日付')],
+            'timeLabel' => ['text' => __d('baser_core', '終了時間')]
           ]) ?>
         <?php else: ?>
           <?php if ($this->BcAdminForm->getSourceValue("content.self_publish_begin") || $this->BcAdminForm->getSourceValue("content.self_publish_end")): ?>
@@ -197,7 +197,7 @@ $editable = $this->BcContents->isEditable($content);
         <?php echo $this->BcAdminForm->error("content.self_publish_end") ?>
         <?php if (($this->BcAdminForm->getSourceValue("content.publish_begin") != $this->BcAdminForm->getSourceValue("content.self_publish_begin")) ||
           ($this->BcAdminForm->getSourceValue("content.publish_end") != $this->BcAdminForm->getSourceValue("content.self_publish_end"))): ?>
-          <p>※ <?php echo __d('baser', '親フォルダの設定を継承し公開期間が設定されている状態となっています') ?><br>
+          <p>※ <?php echo __d('baser_core', '親フォルダの設定を継承し公開期間が設定されている状態となっています') ?><br>
             （<?php echo $this->BcTime->format($content->publish_begin, 'yyyy/MM/dd HH:mm') ?>
             〜
             <?php echo $this->BcTime->format($content->publish_end, 'yyyy/MM/dd HH:mm') ?>）

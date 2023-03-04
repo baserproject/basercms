@@ -66,24 +66,24 @@ class PluginsTable extends AppTable
 
         $validator
             ->scalar('name')
-            ->maxLength('name', 50, __d('baser', 'プラグイン名は50文字以内としてください。'))
-            ->notEmptyString('name', __d('baser', 'プラグイン名は必須です。'))
+            ->maxLength('name', 50, __d('baser_core', 'プラグイン名は50文字以内としてください。'))
+            ->notEmptyString('name', __d('baser_core', 'プラグイン名は必須です。'))
             ->add('name', [
                 'nameUnique' => [
                     'rule' => 'validateUnique',
                     'provider' => 'table',
-                    'message' => __d('baser', '指定のプラグインは既に使用されています。')
+                    'message' => __d('baser_core', '指定のプラグインは既に使用されています。')
                 ]])
             ->add('name', [
                 'nameAlphaNumericPlus' => [
                     'rule' => ['alphaNumericPlus'],
                     'provider' => 'bc',
-                    'message' => __d('baser', 'プラグイン名は半角英数字とハイフン、アンダースコアのみが利用可能です。')
+                    'message' => __d('baser_core', 'プラグイン名は半角英数字とハイフン、アンダースコアのみが利用可能です。')
                 ]]);
 
         $validator
             ->scalar('title')
-            ->maxLength('title', 50, __d('baser', 'プラグインタイトルは50文字以内としてください。'));
+            ->maxLength('title', 50, __d('baser_core', 'プラグインタイトルは50文字以内としてください。'));
 
         return $validator;
     }

@@ -11,8 +11,8 @@
 
 return [
     'type' => 'CorePlugin',
-    'title' => __d('baser', 'サイト内検索'),
-    'description' => __d('baser', 'サイト内の横断検索機能'),
+    'title' => __d('baser_core', 'サイト内検索'),
+    'description' => __d('baser_core', 'サイト内の横断検索機能'),
     'author' => 'baserCMS User Community',
     'url' => 'https://basercms.net',
     'installMessage' => ''

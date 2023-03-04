@@ -16,7 +16,7 @@
  * @var \BaserCore\Model\Entity\Site $site
  * @var bool $isMainOnCurrentDisplay
  */
-$this->BcAdmin->setTitle(__d('baser', 'サイト編集'));
+$this->BcAdmin->setTitle(__d('baser_core', 'サイト編集'));
 $this->BcAdmin->setHelp('sites_form');
 ?>
 
@@ -27,11 +27,11 @@ $this->BcAdmin->setHelp('sites_form');
 
 <div class="submit bca-actions">
   <div class="bca-actions__main">
-    <?php echo $this->BcHtml->link(__d('baser', '一覧に戻る'), ['action' => 'index'], [
+    <?php echo $this->BcHtml->link(__d('baser_core', '一覧に戻る'), ['action' => 'index'], [
       'class' => 'button bca-btn bca-actions__item',
       'data-bca-btn-type' => 'back-to-list'
     ]) ?>
-    <?php echo $this->BcAdminForm->button(__d('baser', '保存'), [
+    <?php echo $this->BcAdminForm->button(__d('baser_core', '保存'), [
       'div' => false,
       'class' => 'button bca-btn bca-actions__item',
       'data-bca-btn-type' => 'save',
@@ -43,10 +43,10 @@ $this->BcAdmin->setHelp('sites_form');
   <?php if(!$isMainOnCurrentDisplay): ?>
   <div class="bca-actions__sub">
       <?= $this->BcAdminForm->postLink(
-        __d('baser', '削除'),
+        __d('baser_core', '削除'),
         ['action' => 'delete', $site->id],
         ['block' => true,
-          'confirm' => __d('baser', '{0} を本当に削除してもいいですか？', $site->display_name),
+          'confirm' => __d('baser_core', '{0} を本当に削除してもいいですか？', $site->display_name),
           'class' => 'bca-submit-token button bca-btn bca-actions__item',
           'data-bca-btn-type' => 'delete',
           'data-bca-btn-size' => 'sm'

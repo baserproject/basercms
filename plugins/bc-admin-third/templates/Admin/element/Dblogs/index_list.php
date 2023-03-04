@@ -22,10 +22,10 @@ $this->BcListTable->setColumnNumber(4);
 <div class="bca-data-list__top">
   <?php if ($this->BcBaser->isAdminUser() && $dblogs->count()): ?>
     <div class="submit clear bca-update-log__delete">
-      <?php echo $this->BcAdminForm->postButton(__d('baser', 'ログを全て削除'), ['action' => 'delete_all'], [
+      <?php echo $this->BcAdminForm->postButton(__d('baser_core', 'ログを全て削除'), ['action' => 'delete_all'], [
           'class' => 'button bca-submit-token bca-btn',
           'data-bca-btn-type' => 'delete',
-          'confirm' => __d('baser', '最近の動きのログを削除します。いいですか？')
+          'confirm' => __d('baser_core', '最近の動きのログを削除します。いいですか？')
       ]) ?>
     </div>
   <?php endif ?>
@@ -40,32 +40,32 @@ $this->BcListTable->setColumnNumber(4);
       <th class="list-tool bca-table-listup__thead-th  bca-table-listup__thead-th--select">
         <?php echo $this->Paginator->sort('id',
           [
-            'asc' => '<i class="bca-icon--asc" title="' . __d('baser', 'No') . '"></i>' . __d('baser', 'No'),
-            'desc' => '<i class="bca-icon--desc" title="' . __d('baser', 'No') . '"></i>' . __d('baser', 'No')
+            'asc' => '<i class="bca-icon--asc" title="' . __d('baser_core', 'No') . '"></i>' . __d('baser_core', 'No'),
+            'desc' => '<i class="bca-icon--desc" title="' . __d('baser_core', 'No') . '"></i>' . __d('baser_core', 'No')
           ],
           ['escape' => false, 'class' => 'btn-direction bca-table-listup__a']) ?>
       </th>
       <th class="bca-table-listup__thead-th">
         <?php echo $this->Paginator->sort('message',
           [
-            'asc' => '<i class="bca-icon--asc" title="' . __d('baser', '内容') . '"></i>' . __d('baser', '内容'),
-            'desc' => '<i class="bca-icon--desc" title="' . __d('baser', '内容') . '"></i>' . __d('baser', '内容')
+            'asc' => '<i class="bca-icon--asc" title="' . __d('baser_core', '内容') . '"></i>' . __d('baser_core', '内容'),
+            'desc' => '<i class="bca-icon--desc" title="' . __d('baser_core', '内容') . '"></i>' . __d('baser_core', '内容')
           ],
           ['escape' => false, 'class' => 'btn-direction bca-table-listup__a']) ?>
       </th>
       <th class="bca-table-listup__thead-th">
         <?php echo $this->Paginator->sort('message',
           [
-            'asc' => '<i class="bca-icon--asc" title="' . __d('baser', 'ユーザー') . '"></i>' . __d('baser', 'ユーザー'),
-            'desc' => '<i class="bca-icon--desc" title="' . __d('baser', 'ユーザー') . '"></i>' . __d('baser', 'ユーザー')
+            'asc' => '<i class="bca-icon--asc" title="' . __d('baser_core', 'ユーザー') . '"></i>' . __d('baser_core', 'ユーザー'),
+            'desc' => '<i class="bca-icon--desc" title="' . __d('baser_core', 'ユーザー') . '"></i>' . __d('baser_core', 'ユーザー')
           ],
           ['escape' => false, 'class' => 'btn-direction bca-table-listup__a']) ?>
       </th>
       <th class="bca-table-listup__thead-th">
         <?php echo $this->Paginator->sort('message',
           [
-            'asc' => '<i class="bca-icon--asc" title="' . __d('baser', '操作日時') . '"></i>' . __d('baser', '操作日時'),
-            'desc' => '<i class="bca-icon--desc" title="' . __d('baser', '操作日時') . '"></i>' . __d('baser', '操作日時')
+            'asc' => '<i class="bca-icon--asc" title="' . __d('baser_core', '操作日時') . '"></i>' . __d('baser_core', '操作日時'),
+            'desc' => '<i class="bca-icon--desc" title="' . __d('baser_core', '操作日時') . '"></i>' . __d('baser_core', '操作日時')
           ],
           ['escape' => false, 'class' => 'btn-direction bca-table-listup__a']) ?>
       </th>
@@ -79,7 +79,7 @@ $this->BcListTable->setColumnNumber(4);
     <?php else: ?>
       <tr>
         <td colspan="<?php echo $this->BcListTable->getColumnNumber() ?>">
-          <p class="no-data"><?php echo __d('baser', 'データが見つかりませんでした。') ?></p>
+          <p class="no-data"><?php echo __d('baser_core', 'データが見つかりませんでした。') ?></p>
         </td>
       </tr>
     <?php endif; ?>

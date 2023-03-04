@@ -11,8 +11,8 @@
 
 return [
     'type' => 'CorePlugin',
-    'title' => __d('baser', 'テーマファイル管理'),
-    'description' => __d('baser', 'テーマ内のファイルを管理する機能'),
+    'title' => __d('baser_core', 'テーマファイル管理'),
+    'description' => __d('baser_core', 'テーマ内のファイルを管理する機能'),
     'author' => 'baserCMS User Community',
     'url' => 'https://basercms.net',
     'installMessage' => ''

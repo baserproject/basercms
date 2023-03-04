@@ -58,28 +58,28 @@ class BlogContentsTable extends BlogAppTable
             ->allowEmptyString('id', null, 'create');
 
         $validator->scalar('list_count')
-            ->notEmptyString('list_count', __d('baser', '一覧表示件数を入力してください。'))
-            ->range('list_count', [0, 101], __d('baser', '一覧表示件数は100までの数値で入力してください。'))
+            ->notEmptyString('list_count', __d('baser_core', '一覧表示件数を入力してください。'))
+            ->range('list_count', [0, 101], __d('baser_core', '一覧表示件数は100までの数値で入力してください。'))
             ->add('list_count', 'halfText', [
                 'provider' => 'bc',
                 'rule' => 'halfText',
-                'message' => __d('baser', '一覧表示件数は半角で入力してください。')]);
+                'message' => __d('baser_core', '一覧表示件数は半角で入力してください。')]);
 
         $validator->scalar('template')
-            ->maxLength('template', 20, __d('baser', 'コンテンツテンプレート名は半角で入力してください。'))
-            ->notEmptyString('template', __d('baser', 'コンテンツテンプレート名を入力してください。'))
+            ->maxLength('template', 20, __d('baser_core', 'コンテンツテンプレート名は半角で入力してください。'))
+            ->notEmptyString('template', __d('baser_core', 'コンテンツテンプレート名を入力してください。'))
             ->add('template', 'halfText', [
                 'provider' => 'bc',
                 'rule' => 'halfText',
-                'message' => __d('baser', 'コンテンツテンプレート名は半角で入力してください。')]);
+                'message' => __d('baser_core', 'コンテンツテンプレート名は半角で入力してください。')]);
 
         $validator->scalar('list_direction')
-            ->notEmptyString('list_direction', __d('baser', '一覧に表示する順番を指定してください。'));
+            ->notEmptyString('list_direction', __d('baser_core', '一覧に表示する順番を指定してください。'));
 
         $validator->add('eye_catch_size_thumb_width', 'checkEyeCatchSize', [
             'provider' => 'blogContent',
             'rule' => 'checkEyeCatchSize',
-            'message' => __d('baser', 'アイキャッチ画像のサイズが不正です。')]);
+            'message' => __d('baser_core', 'アイキャッチ画像のサイズが不正です。')]);
 
         return $validator;
     }
@@ -178,7 +178,7 @@ class BlogContentsTable extends BlogAppTable
     public function createSearchIndex($blogContent)
     {
         return [
-            'type' => __d('baser', 'ブログ'),
+            'type' => __d('baser_core', 'ブログ'),
             'model_id' => $blogContent->id,
             'content_id' => $blogContent->content->id,
             'site_id' => $blogContent->content->site_id,

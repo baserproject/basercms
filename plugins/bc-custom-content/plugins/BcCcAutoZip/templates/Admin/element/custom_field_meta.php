@@ -22,20 +22,20 @@
 
 <tr id="RowMetaBcCcAutoZip" class="bca-row-meta">
     <th class="col-head bca-form-table__label">
-        <?php echo $this->BcAdminForm->label('', __d('baser', '自動補完郵便番号設定')) ?>
+        <?php echo $this->BcAdminForm->label('', __d('baser_core', '自動補完郵便番号設定')) ?>
     </th>
     <td class="col-input bca-form-table__input">
-        <?php echo $this->BcAdminForm->label('meta.BcCcAutoZip.pref', __d('baser', '都道府県フィールド名')) ?>&nbsp;&nbsp;
+        <?php echo $this->BcAdminForm->label('meta.BcCcAutoZip.pref', __d('baser_core', '都道府県フィールド名')) ?>&nbsp;&nbsp;
         <?php echo $this->BcAdminForm->control('meta.BcCcAutoZip.pref', ['type' => 'text', 'size' => 20]) ?>&nbsp;
         <i class="bca-icon--question-circle bca-help"></i>　　
         <div class="bca-helptext">
-          <?php echo __d('baser', '自動補完の対象となる都道府県のフィールド名を設定します。利用しているテーブルに紐づく関連フィールドのフィールド名となりますので注意が必要です。') ?>
+          <?php echo __d('baser_core', '自動補完の対象となる都道府県のフィールド名を設定します。利用しているテーブルに紐づく関連フィールドのフィールド名となりますので注意が必要です。') ?>
         </div>
-        <?php echo $this->BcAdminForm->label('meta.BcCcAutoZip.address', __d('baser', '住所フィールド')) ?>&nbsp;&nbsp;
+        <?php echo $this->BcAdminForm->label('meta.BcCcAutoZip.address', __d('baser_core', '住所フィールド')) ?>&nbsp;&nbsp;
         <?php echo $this->BcAdminForm->control('meta.BcCcAutoZip.address', ['type' => 'text', 'size' => 20]) ?>
         <i class="bca-icon--question-circle bca-help"></i>　　
         <div class="bca-helptext">
-          <?php echo __d('baser', '自動補完の対象となる住所のフィールド名を設定します。利用しているテーブルに紐づく関連フィールドのフィールド名となりますので注意が必要です。') ?>
+          <?php echo __d('baser_core', '自動補完の対象となる住所のフィールド名を設定します。利用しているテーブルに紐づく関連フィールドのフィールド名となりますので注意が必要です。') ?>
         </div>
 
         <?php echo $this->BcAdminForm->error('meta.BcCcRelated.pref') ?>

@@ -101,7 +101,7 @@ class BcUploadHelper  extends Helper
      */
     public function fileLink($fieldName, $entity, $options = [])
     {
-        if(!($entity instanceof EntityInterface)) throw new BcException(__d('baser', '第２引数に EntityInterface を指定してください。'));
+        if(!($entity instanceof EntityInterface)) throw new BcException(__d('baser_core', '第２引数に EntityInterface を指定してください。'));
         $options = array_merge([
             'imgsize' => 'medium', // 画像サイズ
             'rel' => '', // rel属性
@@ -198,7 +198,7 @@ class BcUploadHelper  extends Helper
                     if (is_array($options['link'])) {
                         $linkOptions = array_merge($linkOptions, $options['link']);
                     }
-                    $out = $this->Html->tag('figure', $this->Html->link(__d('baser', 'ダウンロード') . ' ≫', $filePath, $linkOptions) . '<br>' . $this->Html->tag('figcaption', BcUtil::mbBasename($value), $figcaptionOptions), $figureOptions);
+                    $out = $this->Html->tag('figure', $this->Html->link(__d('baser_core', 'ダウンロード') . ' ≫', $filePath, $linkOptions) . '<br>' . $this->Html->tag('figcaption', BcUtil::mbBasename($value), $figcaptionOptions), $figureOptions);
                 }
             } else {
                 $out = $value;
@@ -237,7 +237,7 @@ class BcUploadHelper  extends Helper
      */
     public function uploadImage($fieldName, $entity, $options = [])
     {
-        if(!($entity instanceof EntityInterface)) throw new BcException(__d('baser', '第２引数に EntityInterface を指定してください。'));
+        if(!($entity instanceof EntityInterface)) throw new BcException(__d('baser_core', '第２引数に EntityInterface を指定してください。'));
         $options = array_merge([
             'imgsize' => 'medium', // 画像サイズ
             'escape' => false, // エスケープ
@@ -527,10 +527,10 @@ class BcUploadHelper  extends Helper
             $this->table = TableRegistry::getTableLocator()->get($options['table']);
         }
         if (is_null($this->table)) {
-            throw new BcException(__d('baser', 'BcUploadHelper を利用するには、$this->BcUpload->setTable() か、 $this->BcUpload->fileLink() または、$this->BcUpload->uploadImage() の第３引数の `table` キーでテーブル名を指定してください。'));
+            throw new BcException(__d('baser_core', 'BcUploadHelper を利用するには、$this->BcUpload->setTable() か、 $this->BcUpload->fileLink() または、$this->BcUpload->uploadImage() の第３引数の `table` キーでテーブル名を指定してください。'));
         }
         if (!$this->table->hasBehavior('BcUpload')) {
-            throw new BcException(__d('baser', 'BcUploadHelper を利用するには、テーブル {0} で BcUploadBehavior の利用設定が必要です。
+            throw new BcException(__d('baser_core', 'BcUploadHelper を利用するには、テーブル {0} で BcUploadBehavior の利用設定が必要です。
             テーブルを変更するには、$options[\'table\'] でテーブル名を指定してください。', get_class($this->table)));
         }
     }

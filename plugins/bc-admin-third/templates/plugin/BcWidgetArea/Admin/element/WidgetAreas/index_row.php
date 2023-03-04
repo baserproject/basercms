@@ -26,7 +26,7 @@
     <?php if ($this->BcBaser->isAdminUser()): ?>
       <?php echo $this->BcAdminForm->control('batch_targets.' . $widgetArea->id, [
         'type' => 'checkbox',
-        'label' => '<span class="bca-visually-hidden">' . __d('baser', 'チェックする') . '</span>',
+        'label' => '<span class="bca-visually-hidden">' . __d('baser_core', 'チェックする') . '</span>',
         'class' => 'batch-targets bca-checkbox__input',
         'value' => $widgetArea->id,
         'escape' => false
@@ -48,14 +48,14 @@
   </td>
   <td class="bca-table-listup__tbody-td bca-table-listup__tbody-td--actions">
     <?php $this->BcBaser->link('', ['action' => 'edit', $widgetArea->id], [
-      'title' => __d('baser', '編集'),
+      'title' => __d('baser_core', '編集'),
       'class' => 'bca-btn-icon',
       'data-bca-btn-type' => 'edit',
       'data-bca-btn-size' => 'lg'
     ]); ?>
     <?php echo $this->BcAdminForm->postLink('', ['action' => 'delete', $widgetArea->id], [
-      'confirm' => __d('baser', '{0} を本当に削除してもいいですか？', $widgetArea->name),
-      'title' => __d('baser', '削除'),
+      'confirm' => __d('baser_core', '{0} を本当に削除してもいいですか？', $widgetArea->name),
+      'title' => __d('baser_core', '削除'),
       'class' => 'btn-delete bca-btn-icon',
       'data-bca-btn-type' => 'delete',
       'data-bca-btn-size' => 'lg'

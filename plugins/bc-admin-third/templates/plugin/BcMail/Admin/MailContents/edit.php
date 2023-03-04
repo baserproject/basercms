@@ -18,12 +18,12 @@
  * @unitTest
  */
 $this->BcBaser->i18nScript([
-  'confirmMessage1' => __d('baser', 'メールフォーム設定を保存して、レイアウトテンプレート %s の編集画面に移動します。よろしいですか？'),
-  'confirmMessage2' => __d('baser', 'メールフォーム設定を保存して、メールフォームテンプレート %s の編集画面に移動します。よろしいですか？'),
-  'confirmMessage3' => __d('baser', 'メールフォーム設定を保存して、送信メールテンプレート %s の編集画面に移動します。よろしいですか？')
+  'confirmMessage1' => __d('baser_core', 'メールフォーム設定を保存して、レイアウトテンプレート %s の編集画面に移動します。よろしいですか？'),
+  'confirmMessage2' => __d('baser_core', 'メールフォーム設定を保存して、メールフォームテンプレート %s の編集画面に移動します。よろしいですか？'),
+  'confirmMessage3' => __d('baser_core', 'メールフォーム設定を保存して、送信メールテンプレート %s の編集画面に移動します。よろしいですか？')
 ]);
 $this->BcBaser->js('BcMail.admin/mail_contents/form.bundle', false);
-$this->BcAdmin->setTitle(__d('baser', 'メールフォーム設定編集'));
+$this->BcAdmin->setTitle(__d('baser_core', 'メールフォーム設定編集'));
 $this->BcAdmin->setHelp('mail_contents_form');
 ?>
 
@@ -36,7 +36,7 @@ $this->BcAdmin->setHelp('mail_contents_form');
 <!-- button -->
 <div class="submit">
   <div class="bca-actions__main">
-    <?php echo $this->BcAdminForm->submit(__d('baser', '保存'), [
+    <?php echo $this->BcAdminForm->submit(__d('baser_core', '保存'), [
       'div' => false,
       'class' => 'button bca-btn bca-actions__item',
       'id' => 'BtnSave',

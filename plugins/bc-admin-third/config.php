@@ -11,8 +11,8 @@
 
 return [
     'type' => 'AdminTheme',
-    'title' => __d('baser', 'BcAdminThird'),
-    'description' => __d('baser', 'デフォルトの管理画面テーマです。'),
+    'title' => __d('baser_core', 'BcAdminThird'),
+    'description' => __d('baser_core', 'デフォルトの管理画面テーマです。'),
     'author' => 'baserCMS User Community',
     'url' => 'https://basercms.net',
     'installMessage' => ''

@@ -46,7 +46,7 @@ class ThemeFoldersAdminService extends ThemeFoldersService implements ThemeFolde
             'plugin' => $args['plugin'],
             'type' => $args['type'],
             'path' => $args['path'],
-            'pageTitle' => __d('baser', '{0}｜フォルダ編集', Inflector::camelize($args['theme']))
+            'pageTitle' => __d('baser_core', '{0}｜フォルダ編集', Inflector::camelize($args['theme']))
         ];
     }
 
@@ -71,7 +71,7 @@ class ThemeFoldersAdminService extends ThemeFoldersService implements ThemeFolde
             'plugin' => $args['plugin'],
             'type' => $args['type'],
             'path' => $args['path'],
-            'pageTitle' => __d('baser', '{0}｜フォルダ作成', Inflector::camelize($args['theme']))
+            'pageTitle' => __d('baser_core', '{0}｜フォルダ作成', Inflector::camelize($args['theme']))
         ];
     }
 
@@ -118,7 +118,7 @@ class ThemeFoldersAdminService extends ThemeFoldersService implements ThemeFolde
             'plugin' => $args['plugin'],
             'type' => $args['type'],
             'path' => $args['path'],
-            'pageTitle' => __d('baser', '{0}｜フォルダ表示', Inflector::camelize($args['theme']))
+            'pageTitle' => __d('baser_core', '{0}｜フォルダ表示', Inflector::camelize($args['theme']))
         ];
     }
 

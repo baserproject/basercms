@@ -32,12 +32,12 @@ class ComposerCommand extends Command
     protected function buildOptionParser(\Cake\Console\ConsoleOptionParser $parser): \Cake\Console\ConsoleOptionParser
     {
         $parser->addArgument('version', [
-            'help' => __d('baser', 'アップデート対象のバージョン番号'),
+            'help' => __d('baser_core', 'アップデート対象のバージョン番号'),
             'default' => '',
             'required' => true
         ]);
         $parser->addOption('php', [
-            'help' => __d('baser', 'データベース接続名'),
+            'help' => __d('baser_core', 'データベース接続名'),
             'default' => 'php'
         ]);
         return $parser;
@@ -55,7 +55,7 @@ class ComposerCommand extends Command
         try {
             BcComposer::setup($args->getOption('php'));
         } catch (\Throwable $e) {
-            $message = __d('baser', 'Composer によるアップデートが失敗しました。');
+            $message = __d('baser_core', 'Composer によるアップデートが失敗しました。');
             $this->log($message, LogLevel::ERROR, 'update');
             $this->log($e->getMessage(), LogLevel::ERROR, 'update');
             $io->out($message);
@@ -63,9 +63,9 @@ class ComposerCommand extends Command
         }
         $result = BcComposer::require('baser-core', $args->getArgument('version'));
         if($result['code'] === 0) {
-            $io->out(__d('baser', 'Composer によるアップデートが完了しました。'));
+            $io->out(__d('baser_core', 'Composer によるアップデートが完了しました。'));
         } else {
-            $message = __d('baser', 'Composer によるアップデートが失敗しました。update ログを確認してください。');
+            $message = __d('baser_core', 'Composer によるアップデートが失敗しました。update ログを確認してください。');
             $this->log($message, LogLevel::ERROR, 'update');
             $this->log(implode("\n", $result['out']), LogLevel::ERROR, 'update');
             $io->out($message);

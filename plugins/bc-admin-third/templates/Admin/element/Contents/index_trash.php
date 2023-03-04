@@ -17,5 +17,5 @@
     <?php $this->BcBaser->element('Contents/index_list_tree'); ?>
   </div>
 <?php else: ?>
-  <div class="tree-empty"><?php echo __d('baser', 'ゴミ箱は空です') ?></div>
+  <div class="tree-empty"><?php echo __d('baser_core', 'ゴミ箱は空です') ?></div>
 <?php endif ?>

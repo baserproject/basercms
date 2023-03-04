@@ -146,7 +146,7 @@ class WidgetAreasService implements WidgetAreasServiceInterface
         foreach($ids as $id) {
             if (!$this->$method($id)) {
                 $db->rollback();
-                throw new BcException(__d('baser', 'データベース処理中にエラーが発生しました。'));
+                throw new BcException(__d('baser_core', 'データベース処理中にエラーが発生しました。'));
             }
         }
         $db->commit();

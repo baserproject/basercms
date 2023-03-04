@@ -39,9 +39,9 @@ $this->BcAdmin->setTitle($pageTitle);
 <?php $this->BcBaser->element('ThemeFiles/submenus'); ?>
 
 <!-- current -->
-<div class="em-box bca-current-box"><?php echo __d('baser', '現在の位置') ?>：<?php echo h($currentPath) ?>
+<div class="em-box bca-current-box"><?php echo __d('baser_core', '現在の位置') ?>：<?php echo h($currentPath) ?>
   <?php if (!$writable): ?>
-    　<span style="color:#FF3300">[<?php echo __d('baser', '書込不可') ?>]</span>
+    　<span style="color:#FF3300">[<?php echo __d('baser_core', '書込不可') ?>]</span>
   <?php endif ?>
 </div>
 
@@ -61,7 +61,7 @@ $this->BcAdmin->setTitle($pageTitle);
   <?php endif ?>
   <div class="bca-actions__adds">
     <?php if ($writable): ?>
-      <?php $this->BcBaser->link('<i class="bca-icon--folder"></i> ' . __d('baser', 'フォルダ新規作成'),
+      <?php $this->BcBaser->link('<i class="bca-icon--folder"></i> ' . __d('baser_core', 'フォルダ新規作成'),
         array_merge(['action' => 'add_folder', $theme, $plugin, $type], $params), [
           'class' => 'bca-btn',
           'data-bca-btn-type' => 'add',
@@ -69,7 +69,7 @@ $this->BcAdmin->setTitle($pageTitle);
       ]) ?>
     <?php endif ?>
     <?php if (($path || $type != 'etc') && $type != 'img' && $writable): ?>
-      <?php $this->BcBaser->link('<i class="bca-icon--file"></i> ' . __d('baser', 'ファイル新規作成'),
+      <?php $this->BcBaser->link('<i class="bca-icon--file"></i> ' . __d('baser_core', 'ファイル新規作成'),
         array_merge(['action' => 'add', $theme, $plugin, $type], $params), [
           'class' => 'bca-btn',
           'data-bca-btn-type' => 'add',

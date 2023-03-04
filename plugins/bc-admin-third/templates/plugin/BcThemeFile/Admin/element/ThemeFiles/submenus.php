@@ -17,16 +17,16 @@
  * @var string $theme
  */
 $types = [
-  'layout' => __d('baser', 'レイアウト'),
-  'element' => __d('baser', 'エレメント'),
-  'email' => __d('baser', 'Eメール'),
-  'etc' => __d('baser', 'コンテンツ'),
+  'layout' => __d('baser_core', 'レイアウト'),
+  'element' => __d('baser_core', 'エレメント'),
+  'email' => __d('baser_core', 'Eメール'),
+  'etc' => __d('baser_core', 'コンテンツ'),
   'css' => 'CSS',
-  'img' => __d('baser', 'イメージ'),
+  'img' => __d('baser_core', 'イメージ'),
   'js' => 'Javascript'
 ];
 if ($isDefaultTheme) {
-  $plugins = [0 => ['name' => 'BaserCore', 'title' => __d('baser', 'コア')]];
+  $plugins = [0 => ['name' => 'BaserCore', 'title' => __d('baser_core', 'コア')]];
   $plugins = array_merge($plugins, \BaserCore\Utility\BcUtil::getEnablePlugins());
 } else {
   $plugins = [0 => ['name' => $theme, 'title' => $theme]];
@@ -48,9 +48,9 @@ $this->BcBaser->css('BcThemeFile.admin/style', false);
       <?php foreach($types as $key => $type): ?>
         <li class="bca-main__submenu-list-item">
           <?php if ($theme !== $plugin['name']): ?>
-            <?php $this->BcBaser->link(sprintf(__d('baser', '%s 一覧'), $type), ['action' => 'index', $theme, $plugin['name'], $key]) ?>
+            <?php $this->BcBaser->link(sprintf(__d('baser_core', '%s 一覧'), $type), ['action' => 'index', $theme, $plugin['name'], $key]) ?>
           <?php else: ?>
-            <?php $this->BcBaser->link(sprintf(__d('baser', '%s 一覧'), $type), ['action' => 'index', $theme, $key]) ?>
+            <?php $this->BcBaser->link(sprintf(__d('baser_core', '%s 一覧'), $type), ['action' => 'index', $theme, $key]) ?>
           <?php endif ?>
         </li>
       <?php endforeach ?>

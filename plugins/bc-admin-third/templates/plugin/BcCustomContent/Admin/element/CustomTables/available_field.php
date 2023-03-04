@@ -34,8 +34,8 @@ $this->BcAdminForm->unlockField('template');
 <!-- template -->
 <div class="custom-field-content sortable template template-field-<?php echo h($field->name) ?>">
   <div class="custom-field-content__head">
-    <div class="custom-field-content__head-delete"><?php echo __d('baser', '削除') ?></div>
-    <div class="custom-field-content__head-setting"><?php echo __d('baser', '設定') ?></div>
+    <div class="custom-field-content__head-delete"><?php echo __d('baser_core', '削除') ?></div>
+    <div class="custom-field-content__head-setting"><?php echo __d('baser_core', '設定') ?></div>
     <div class="custom-field-content__head-title">
       <span class="custom-field-content__head-text"><?php echo h($field->title) ?></span>
       <small>（<?php echo h($field->getTypeTitle()) ?>）</small>

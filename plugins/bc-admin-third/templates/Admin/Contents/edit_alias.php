@@ -15,7 +15,7 @@
  * @var \BaserCore\View\BcAdminAppView $this
  * @var \BaserCore\Model\Entity\Content $content
  */
-$this->BcAdmin->setTitle(__d('baser', 'エイリアス編集'));
+$this->BcAdmin->setTitle(__d('baser_core', 'エイリアス編集'));
 ?>
 
 
@@ -29,7 +29,7 @@ $this->BcAdmin->setTitle(__d('baser', 'エイリアス編集'));
 <?php echo $this->BcFormTable->dispatchAfter() ?>
 
 <div class="submit">
-  <?php echo $this->BcAdminForm->submit(__d('baser', '保存'), [
+  <?php echo $this->BcAdminForm->submit(__d('baser_core', '保存'), [
     'class' => 'bca-btn',
     'data-bca-btn-type' => 'save',
     'data-bca-btn-size' => 'lg',

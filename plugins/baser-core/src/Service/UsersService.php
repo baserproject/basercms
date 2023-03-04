@@ -131,7 +131,7 @@ class UsersService implements UsersServiceInterface
         $loginUser = BcUtil::loginUser();
         if(in_array(Configure::read('BcApp.adminGroupId'), $postData['user_groups']['_ids'])) {
             if(BcUtil::isInstalled() && !$loginUser->isAddableToAdminGroup()) {
-                throw new BcException(__d('baser', '特権エラーが発生しました。'));
+                throw new BcException(__d('baser_core', '特権エラーが発生しました。'));
             }
         }
         $user = $this->Users->newEmptyEntity();
@@ -160,11 +160,11 @@ class UsersService implements UsersServiceInterface
         }
         if(!empty($postData['user_groups']['_ids']) && in_array(Configure::read('BcApp.adminGroupId'), $postData['user_groups']['_ids'])) {
             if(!$loginUser->isAddableToAdminGroup()) {
-                throw new BcException(__d('baser', '特権エラーが発生しました。'));
+                throw new BcException(__d('baser_core', '特権エラーが発生しました。'));
             }
         }
         if(!$loginUser->isEditableUser($target)) {
-            throw new BcException(__d('baser', '特権エラーが発生しました。'));
+            throw new BcException(__d('baser_core', '特権エラーが発生しました。'));
         }
         $user = $this->Users->patchEntity($target, $postData);
         return $this->Users->saveOrFail($user);
@@ -185,7 +185,7 @@ class UsersService implements UsersServiceInterface
         $user = $this->get($id);
         $loginUser = BcUtil::loginUser();
         if(!$loginUser->isDeletableUser($user)) {
-            throw new BcException(__d('baser', '特権エラーが発生しました。'));
+            throw new BcException(__d('baser_core', '特権エラーが発生しました。'));
         }
         return $this->Users->delete($user);
     }
@@ -388,7 +388,7 @@ class UsersService implements UsersServiceInterface
         $user = BcUtil::loginUser($request->getParam('prefix'));
         $target = $this->get($id);
         if(!$user->isEnableLoginAgent($target)) {
-            throw new BcException(__d('baser', '特権エラーが発生しました。'));
+            throw new BcException(__d('baser_core', '特権エラーが発生しました。'));
         }
         $this->logout($request, $response, $user->id);
         if($this->login($request, $response, $id)) {
@@ -417,7 +417,7 @@ class UsersService implements UsersServiceInterface
         $session = $request->getSession();
         $user = $session->read('AuthAgent.User');
         if (empty($user)) {
-            throw new Exception(__d('baser', '対象データが見つかりません。'));
+            throw new Exception(__d('baser_core', '対象データが見つかりません。'));
         }
         $currentUser = BcUtil::loginUser($request->getParam('prefix'));
         $this->logout($request, $response, $currentUser->id);

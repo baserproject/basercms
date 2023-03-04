@@ -11,8 +11,8 @@
 
 return [
     'type' => 'CorePlugin',
-    'title' => __d('baser', 'テーマ設定'),
-    'description' => __d('baser', 'テーマ拡張の設定機能'),
+    'title' => __d('baser_core', 'テーマ設定'),
+    'description' => __d('baser_core', 'テーマ拡張の設定機能'),
     'author' => 'baserCMS User Community',
     'url' => 'https://basercms.net',
     'installMessage' => ''

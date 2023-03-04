@@ -100,7 +100,7 @@ class BlogPostsAdminService extends BlogPostsService implements BlogPostsAdminSe
             'categories' => $this->getControlSource('blog_category_id', [
                 'blogContentId' => $blogContent->id,
                 'postEditable' => true,
-                'empty' => __d('baser', '指定しない')
+                'empty' => __d('baser_core', '指定しない')
             ]),
             'hasNewCategoryAddablePermission' => $this->BlogPosts->BlogCategories->hasNewCategoryAddablePermission(
                 Hash::extract($user->user_groups, '{n}.id'),
@@ -140,7 +140,7 @@ class BlogPostsAdminService extends BlogPostsService implements BlogPostsAdminSe
             'categories' => $this->getControlSource('blog_category_id', [
                 'blogContentId' => $blogContent->id,
                 'postEditable' => true,
-                'empty' => __d('baser', '指定しない')
+                'empty' => __d('baser_core', '指定しない')
             ]),
             'hasNewCategoryAddablePermission' => $this->BlogPosts->BlogCategories->hasNewCategoryAddablePermission(
                 Hash::extract($user->user_groups, '{n}.id'),

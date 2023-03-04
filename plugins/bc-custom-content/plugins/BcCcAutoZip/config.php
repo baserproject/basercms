@@ -11,8 +11,8 @@
 
 return [
     'type' => ['BcCustomContentPlugin'],
-    'title' => __d('baser', 'カスタムコンテンツ：自動補完郵便番号フィールド'),
-    'description' => __d('baser', 'カスタムコンテンツに自動補完郵便番号フィールドを提供する'),
+    'title' => __d('baser_core', 'カスタムコンテンツ：自動補完郵便番号フィールド'),
+    'description' => __d('baser_core', 'カスタムコンテンツに自動補完郵便番号フィールドを提供する'),
     'author' => 'baserCMS User Community',
     'url' => 'https://basercms.net',
 ];

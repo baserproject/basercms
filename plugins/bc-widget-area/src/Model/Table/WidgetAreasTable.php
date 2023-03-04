@@ -45,8 +45,8 @@ class WidgetAreasTable extends AppTable
         parent::__construct($id, $table, $ds);
         $this->validate = [
             'name' => [
-                'notBlank' => ['rule' => ['notBlank'], 'message' => __d('baser', 'ウィジェットエリア名を入力してください。')],
-                'maxLength' => ['rule' => ['maxLength', 255], 'message' => __d('baser', 'ウィジェットエリア名は255文字以内で入力してください。')]]
+                'notBlank' => ['rule' => ['notBlank'], 'message' => __d('baser_core', 'ウィジェットエリア名を入力してください。')],
+                'maxLength' => ['rule' => ['maxLength', 255], 'message' => __d('baser_core', 'ウィジェットエリア名は255文字以内で入力してください。')]]
         ];
     }
 

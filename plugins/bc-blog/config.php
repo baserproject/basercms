@@ -11,8 +11,8 @@
 
 return [
     'type' => 'CorePlugin',
-    'title' => __d('baser', 'ブログ'),
-    'description' => __d('baser', '複数設置可能なシンプルブログ'),
+    'title' => __d('baser_core', 'ブログ'),
+    'description' => __d('baser_core', '複数設置可能なシンプルブログ'),
     'author' => 'baserCMS User Community',
     'url' => 'https://basercms.net',
     'installMessage' => ''

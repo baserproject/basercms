@@ -216,8 +216,7 @@ class PagesService implements PagesServiceInterface
     public function update(EntityInterface $target, array $pageData, $options = []): ?EntityInterface
     {
         if (BcUtil::isOverPostSize()) {
-            throw new BcException(__d(
-                'baser',
+            throw new BcException(__d('baser_core',
                 '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。',
                 ini_get('post_max_size')
             ));
@@ -265,7 +264,7 @@ class PagesService implements PagesServiceInterface
             if ($searchKey !== false) {
                 unset($pageTemplates[$searchKey]);
             }
-            $pageTemplates = ['' => sprintf(__d('baser', '親フォルダの設定に従う（%s）'), $parentTemplate)] + $pageTemplates;
+            $pageTemplates = ['' => sprintf(__d('baser_core', '親フォルダの設定に従う（%s）'), $parentTemplate)] + $pageTemplates;
         }
         return $pageTemplates;
     }

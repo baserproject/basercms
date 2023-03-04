@@ -31,8 +31,8 @@
   <?php endif; ?>
   <tr>
     <th class="bca-form-table__label">
-      <?php echo $this->BcAdminForm->label('name', __d('baser', 'カテゴリ名')) ?>
-      &nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
+      <?php echo $this->BcAdminForm->label('name', __d('baser_core', 'カテゴリ名')) ?>
+      &nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser_core', '必須') ?></span>
     </th>
     <td class="bca-form-table__input">
       <?php echo $this->BcAdminForm->control('name', [

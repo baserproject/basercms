@@ -69,21 +69,21 @@ class EditorTemplatesTable extends AppTable
             ->allowEmptyString('id', null, 'create');
         $validator
             ->scalar('name')
-            ->notEmptyString('name', __d('baser', 'テンプレート名を入力してください。'));
+            ->notEmptyString('name', __d('baser_core', 'テンプレート名を入力してください。'));
         $validator
             ->allowEmptyString('image')
             ->add('image', [
                 'fileCheck' => [
                     'rule' => ['fileCheck', BcUtil::convertSize(ini_get('upload_max_filesize'))],
                     'provider' => 'bc',
-                    'message' => __d('baser', 'ファイルのアップロード制限を超えています。')
+                    'message' => __d('baser_core', 'ファイルのアップロード制限を超えています。')
                 ]
             ])
             ->add('image', [
                 'fileCheck' => [
                     'rule' => ['fileExt', ['gif', 'jpg', 'jpeg', 'jpe', 'jfif', 'png']],
                     'provider' => 'bc',
-                    'message' => __d('baser', '許可されていないファイルです。')
+                    'message' => __d('baser_core', '許可されていないファイルです。')
                 ]
             ]);
         return $validator;

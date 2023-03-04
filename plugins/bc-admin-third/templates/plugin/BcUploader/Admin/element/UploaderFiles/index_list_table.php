@@ -42,7 +42,7 @@ $this->BcBaser->js([
             <?php echo $this->BcAdminForm->control('uploader_category_id', [
               'type' => 'select',
               'options' => $uploaderCategories,
-              'empty' => __d('baser', 'カテゴリ指定なし'),
+              'empty' => __d('baser_core', 'カテゴリ指定なし'),
               'id' => 'UploaderFileUploaderCategoryId' . $listId,
               'style' => 'width:100px'
             ]) ?>&nbsp;
@@ -70,12 +70,12 @@ $this->BcBaser->js([
       <div id="UploaderForm">
         <?php if (!$installMessage): ?>
           <div>
-            <label for="UploaderFileUploaderCategoryId"><?php echo __d('baser', 'アップロード') ?></label>
+            <label for="UploaderFileUploaderCategoryId"><?php echo __d('baser_core', 'アップロード') ?></label>
             <?php if ($uploaderCategories): ?>
               <?php echo $this->BcAdminForm->control('uploader_category_id', [
                 'type' => 'select',
                 'options' => $uploaderCategories,
-                'empty' => __d('baser', 'カテゴリ指定なし'),
+                'empty' => __d('baser_core', 'カテゴリ指定なし'),
                 'id' => 'UploaderFileUploaderCategoryId' . $listId
               ]) ?>
             <?php endif ?>
@@ -103,20 +103,20 @@ $this->BcBaser->js([
       <thead class="bca-table-listup__thead">
       <tr>
         <th class="bca-table-listup__thead-th">No</th>
-        <th class="bca-table-listup__thead-th"><?php echo __d('baser', 'イメージ') ?></th>
-        <th class="bca-table-listup__thead-th"><?php echo __d('baser', 'カテゴリ') ?></th>
+        <th class="bca-table-listup__thead-th"><?php echo __d('baser_core', 'イメージ') ?></th>
+        <th class="bca-table-listup__thead-th"><?php echo __d('baser_core', 'カテゴリ') ?></th>
         <th class="bca-table-listup__thead-th">
-          <?php echo __d('baser', 'ファイル名') ?><br>
-          <?php echo __d('baser', '説明文') ?>
+          <?php echo __d('baser_core', 'ファイル名') ?><br>
+          <?php echo __d('baser_core', '説明文') ?>
         </th>
-        <th class="bca-table-listup__thead-th"><?php echo __d('baser', '公開状態') ?></th>
-        <th class="bca-table-listup__thead-th"><?php echo __d('baser', '投稿者') ?></th>
+        <th class="bca-table-listup__thead-th"><?php echo __d('baser_core', '公開状態') ?></th>
+        <th class="bca-table-listup__thead-th"><?php echo __d('baser_core', '投稿者') ?></th>
         <th class="bca-table-listup__thead-th">
-          <?php echo __d('baser', '投稿日') ?><br>
-          <?php echo __d('baser', '編集日') ?>
+          <?php echo __d('baser_core', '投稿日') ?><br>
+          <?php echo __d('baser_core', '編集日') ?>
         </th>
         <?php if (!$listId): ?>
-          <th class="bca-table-listup__thead-th"><?php echo __d('baser', 'アクション') ?></th>
+          <th class="bca-table-listup__thead-th"><?php echo __d('baser_core', 'アクション') ?></th>
         <?php endif ?>
       </tr>
       </thead>
@@ -133,7 +133,7 @@ $this->BcBaser->js([
       <?php else: ?>
         <tbody>
         <tr>
-          <td colspan="8" class="no-data"><?php echo __d('baser', 'ファイルが存在しません') ?></td>
+          <td colspan="8" class="no-data"><?php echo __d('baser_core', 'ファイルが存在しません') ?></td>
         </tr>
         </tbody>
       <?php endif ?>

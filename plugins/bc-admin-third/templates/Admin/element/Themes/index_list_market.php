@@ -34,6 +34,6 @@
       <?php $this->BcBaser->element('Themes/index_row_market', ['data' => $data, 'key' => $key++]) ?>
     <?php endforeach; ?>
   <?php else: ?>
-    <li class="no-data"><?php echo __d('baser', 'baserマーケットのテーマを読み込めませんでした。') ?></li>
+    <li class="no-data"><?php echo __d('baser_core', 'baserマーケットのテーマを読み込めませんでした。') ?></li>
   <?php endif; ?>
 </ul>

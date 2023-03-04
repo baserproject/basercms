@@ -78,16 +78,16 @@ class PagesController extends BcAdminAppController
                 ]);
 
                 $url = $contentsService->getUrl($page->content->url, true, $page->content->site->useSubDomain);
-                $this->BcMessage->setSuccess(sprintf(__d('baser', "固定ページ「%s」を更新しました。\n%s"), $page->content->title, rawurldecode($url)));
+                $this->BcMessage->setSuccess(sprintf(__d('baser_core', "固定ページ「%s」を更新しました。\n%s"), $page->content->title, rawurldecode($url)));
                 return $this->redirect(['action' => 'edit', $id]);
             } catch (PersistenceFailedException $e) {
                 $page = $e->getEntity();
                 $this->BcMessage->setError(
-                    __d('baser', '入力エラーです。内容を修正してください。')
+                    __d('baser_core', '入力エラーです。内容を修正してください。')
                 );
             }  catch (\Exception $e) {
                 $this->BcMessage->setError(
-                    __d('baser', '入力エラーです。内容を修正してください。' . $e->getMessage())
+                    __d('baser_core', '入力エラーです。内容を修正してください。' . $e->getMessage())
                 );
             }
         }

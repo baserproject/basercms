@@ -41,8 +41,8 @@ $this->Paginator->setTemplates([
 
 <div class="bs-pagination">
   <?php if ($pageCount > 1): ?>
-      <?php echo $this->Paginator->prev('< '. __('前へ')) ?>
+      <?php echo $this->Paginator->prev('< '. __d('baser_core''前へ')) ?>
       <?php echo $this->Html->tag('span', $this->Paginator->numbers(['separator' => '', 'modulus' => $modules])) ?>
-      <?php echo $this->Paginator->next(__('次へ'). ' >') ?>
+      <?php echo $this->Paginator->next(__d('baser_core''次へ'). ' >') ?>
   <?php endif ?>
 </div>

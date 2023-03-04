@@ -65,9 +65,9 @@ class DblogsController extends BcAdminAppController
         }
 
         if ($service->deleteAll()) {
-            $this->BcMessage->setInfo(__d('baser', '最近の動きのログを削除しました。'));
+            $this->BcMessage->setInfo(__d('baser_core', '最近の動きのログを削除しました。'));
         } else {
-            $this->BcMessage->setError(__d('baser', '最近の動きのログ削除に失敗しました。'));
+            $this->BcMessage->setError(__d('baser_core', '最近の動きのログ削除に失敗しました。'));
         }
         $this->redirect(['controller' => 'dashboard', 'action' => 'index']);
     }

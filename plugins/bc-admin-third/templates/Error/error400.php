@@ -17,7 +17,7 @@ use Cake\Core\Configure;
  * @var string $url URL
  */
 $this->layout = 'error';
-$this->BcAdmin->setTitle(__d('baser', 'ページが存在しません'));
+$this->BcAdmin->setTitle(__d('baser_core', 'ページが存在しません'));
 if (Configure::read('debug')) :
     $this->layout = 'dev_error';
 
@@ -46,9 +46,9 @@ endif;
 
 <h2><?php echo $message ?></h2>
 <p class="error">
-  <strong><?php echo __d('baser', 'エラー') ?>: </strong>
+  <strong><?php echo __d('baser_core', 'エラー') ?>: </strong>
   <?php printf(
-    __d('baser', 'アドレス %s に送信されたリクエストは無効です。'),
+    __d('baser_core', 'アドレス %s に送信されたリクエストは無効です。'),
     "<strong>'{$url}'</strong>"
   ); ?>
 </p>

@@ -17,9 +17,9 @@
  */
 $this->BcAdmin->addAdminMainBodyHeaderLinks([
   'url' => ['action' => 'add'],
-  'title' => __d('baser', '新規追加'),
+  'title' => __d('baser_core', '新規追加'),
 ]);
-$this->BcAdmin->setTitle(__d('baser', 'アップロードカテゴリ一覧'));
+$this->BcAdmin->setTitle(__d('baser_core', 'アップロードカテゴリ一覧'));
 ?>
 
 

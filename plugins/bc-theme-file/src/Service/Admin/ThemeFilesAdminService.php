@@ -65,7 +65,7 @@ class ThemeFilesAdminService extends ThemeFilesService implements ThemeFilesAdmi
         $pageTitle = $args['theme'];
         if ($args['plugin']) $pageTitle .= '：' . $args['plugin'];
         if (BcThemeFileUtil::getTemplateTypeName($args['type'])) {
-            $pageTitle .= __d('baser', '｜{0}一覧', BcThemeFileUtil::getTemplateTypeName($args['type']));
+            $pageTitle .= __d('baser_core', '｜{0}一覧', BcThemeFileUtil::getTemplateTypeName($args['type']));
         }
         return [
             'themeFiles' => $this->ThemeFoldersService->getIndex($args),
@@ -98,7 +98,7 @@ class ThemeFilesAdminService extends ThemeFilesService implements ThemeFilesAdmi
             'plugin' => $args['plugin'],
             'type' => $args['type'],
             'path' => $args['path'],
-            'pageTitle' => __d('baser', '{0}｜{1}作成', Inflector::camelize($args['theme']), BcThemeFileUtil::getTemplateTypeName($args['type']))
+            'pageTitle' => __d('baser_core', '{0}｜{1}作成', Inflector::camelize($args['theme']), BcThemeFileUtil::getTemplateTypeName($args['type']))
         ];
     }
 
@@ -121,7 +121,7 @@ class ThemeFilesAdminService extends ThemeFilesService implements ThemeFilesAdmi
             'plugin' => $args['plugin'],
             'type' => $args['type'],
             'path' => $args['path'],
-            'pageTitle' => __d('baser', '{0}｜{1}編集', Inflector::camelize($args['theme']), BcThemeFileUtil::getTemplateTypeName($args['type']))
+            'pageTitle' => __d('baser_core', '{0}｜{1}編集', Inflector::camelize($args['theme']), BcThemeFileUtil::getTemplateTypeName($args['type']))
         ];
     }
 
@@ -144,7 +144,7 @@ class ThemeFilesAdminService extends ThemeFilesService implements ThemeFilesAdmi
             'plugin' => $args['plugin'],
             'type' => $args['type'],
             'path' => $args['path'],
-            'pageTitle' => __d('baser', '{0}｜{1}表示', Inflector::camelize($args['theme']), BcThemeFileUtil::getTemplateTypeName($args['type']))
+            'pageTitle' => __d('baser_core', '{0}｜{1}表示', Inflector::camelize($args['theme']), BcThemeFileUtil::getTemplateTypeName($args['type']))
         ];
     }
 

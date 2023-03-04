@@ -11,8 +11,8 @@
 
 return [
     'type' => ['BcCustomContentPlugin'],
-    'title' => __d('baser', 'カスタムコンテンツ：Wysiwyg エディタ'),
-    'description' => __d('baser', 'カスタムコンテンツに Wysiwyg エディタ フィールドを提供する'),
+    'title' => __d('baser_core', 'カスタムコンテンツ：Wysiwyg エディタ'),
+    'description' => __d('baser_core', 'カスタムコンテンツに Wysiwyg エディタ フィールドを提供する'),
     'author' => 'baserCMS User Community',
     'url' => 'https://basercms.net',
 ];

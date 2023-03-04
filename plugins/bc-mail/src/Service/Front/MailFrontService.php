@@ -158,14 +158,14 @@ class MailFrontService implements MailFrontServiceInterface
     public function confirm(EntityInterface $mailContent, array $postData): EntityInterface
     {
         if (BcUtil::isOverPostSize()) {
-            throw new BcException(__(
+            throw new BcException(__d('baser_core',
                 '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。',
                 ini_get('post_max_size')
             ));
         }
         // fileタイプへの送信データ検証
         if (!$this->_checkDirectoryRraversal($mailContent->id, $postData)) {
-            throw new BcException(__d('baser', '不正なファイル送信です。'), 500);
+            throw new BcException(__d('baser_core', '不正なファイル送信です。'), 500);
         }
 
         /** @var MailMessagesService $mailMessagesService */
@@ -181,7 +181,7 @@ class MailFrontService implements MailFrontServiceInterface
             // フォームの初期化でエラーとなってしまう。そのため、source オプションで明示的にテーブルを指定する
             return new MailMessage($message->toArray(), ['source' => 'BcMail.MailMessages']);
         } else {
-            throw new PersistenceFailedException($message, __('エラー : 入力内容を確認して再度送信してください。'));
+            throw new PersistenceFailedException($message, __d('baser_core', 'エラー : 入力内容を確認して再度送信してください。'));
         }
     }
 

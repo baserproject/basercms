@@ -33,7 +33,7 @@ $priorities = [
     <?php if ($this->BcBaser->isAdminUser()): ?>
       <?php echo $this->BcAdminForm->control('batch_targets.' . $searchIndex->id, [
         'type' => 'checkbox',
-        'label' => '<span class="bca-visually-hidden">' . __d('baser', 'チェックする') . '</span>',
+        'label' => '<span class="bca-visually-hidden">' . __d('baser_core', 'チェックする') . '</span>',
         'class' => 'batch-targets bca-checkbox__input',
         'value' => $searchIndex->id,
         'escape' => false
@@ -43,7 +43,7 @@ $priorities = [
   <td class="bca-table-listup__tbody-td"><?php echo $searchIndex->id ?></td>
   <td class="bca-table-listup__tbody-td" style="width:15%">
     <?php echo $searchIndex->type ?><br>
-    <?php $this->BcBaser->link($this->BcText->noValue($searchIndex->title, __d('baser', '設定なし')), \BaserCore\Utility\BcUtil::siteUrl() . preg_replace('/^\//', '', $searchIndex->url), ['target' => '_blank', 'escape' => true]) ?>
+    <?php $this->BcBaser->link($this->BcText->noValue($searchIndex->title, __d('baser_core', '設定なし')), \BaserCore\Utility\BcUtil::siteUrl() . preg_replace('/^\//', '', $searchIndex->url), ['target' => '_blank', 'escape' => true]) ?>
   </td>
   <td class="bca-table-listup__tbody-td"><?php echo h($this->Text->truncate($searchIndex->detail, 50)) ?></td>
   <td class="bca-table-listup__tbody-td" style="width:10%;text-align:center">
@@ -71,8 +71,8 @@ $priorities = [
     <?= $this->BcAdminForm->postLink(
     '',
     ['action' => 'delete', $searchIndex->id],
-    ['confirm' => __d('baser', "検索インデックス No.{0} を本当に削除してもいいですか？", $searchIndex->id),
-      'title' => __d('baser', '削除'),
+    ['confirm' => __d('baser_core', "検索インデックス No.{0} を本当に削除してもいいですか？", $searchIndex->id),
+      'title' => __d('baser_core', '削除'),
       'class' => 'btn-delete bca-btn-icon',
       'data-bca-btn-type' => 'delete',
       'data-bca-btn-size' => 'lg']

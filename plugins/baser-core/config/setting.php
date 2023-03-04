@@ -203,7 +203,7 @@ return [
         /**
          * デフォルトタイトル設定（インストールの際のエラー時等、DB接続前のエラーで利用）
          */
-        'title' => __d('baser', 'baserCMS'),
+        'title' => __d('baser_core', 'baserCMS'),
 
         /**
          * テンプレートの基本となる拡張子（.php 推奨）
@@ -349,7 +349,7 @@ return [
          * エディタ
          */
         'editors' => [
-            'none' => __d('baser', 'なし'),
+            'none' => __d('baser_core', 'なし'),
             'BaserCore.BcCkeditor' => 'CKEditor'
         ],
 
@@ -379,108 +379,108 @@ return [
         'adminNavigation' => [
             'Contents' => [
                 'Dashboard' => [
-                    'title' => __d('baser', 'ダッシュボード'),
+                    'title' => __d('baser_core', 'ダッシュボード'),
                     'type' => 'dashboard',
                     'url' => '/' . $baserCorePrefix . '/' . $adminPrefix,
                 ],
                 'Contents' => [
-                    'title' => __d('baser', 'コンテンツ管理'),
+                    'title' => __d('baser_core', 'コンテンツ管理'),
                     'type' => 'contents',
                     'menus' => [
-                        'Contents' => ['title' => __d('baser', 'コンテンツ'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'contents', 'action' => 'index']],
-                        'ContentsTrash' => ['title' => __d('baser', 'ゴミ箱'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'contents', 'action' => 'trash_index']],
+                        'Contents' => ['title' => __d('baser_core', 'コンテンツ'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'contents', 'action' => 'index']],
+                        'ContentsTrash' => ['title' => __d('baser_core', 'ゴミ箱'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'contents', 'action' => 'trash_index']],
                     ]
                 ],
             ],
             'Systems' => [
                 'SiteConfigs' => [
-                    'title' => __d('baser', 'システム基本設定'),
+                    'title' => __d('baser_core', 'システム基本設定'),
                     'type' => 'system',
                     'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'site_configs', 'action' => 'index']
                 ],
                 'Users' => [
-                    'title' => __d('baser', 'ユーザー管理'),
+                    'title' => __d('baser_core', 'ユーザー管理'),
                     'type' => 'system',
                     'menus' => [
                         'Users' => [
-                            'title' => __d('baser', 'ユーザー'),
+                            'title' => __d('baser_core', 'ユーザー'),
                             'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'users', 'action' => 'index'],
                             'currentRegex' => '/\/users\/[^\/]+?/s'
                         ],
                         'UserGroups' => [
-                            'title' => __d('baser', 'ユーザーグループ'),
+                            'title' => __d('baser_core', 'ユーザーグループ'),
                             'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'user_groups', 'action' => 'index'],
                             'currentRegex' => '/(\/user_groups\/[^\/]+?|\/permission_groups\/[^\/]+?|\/permissions\/[^\/]+?)/s'
                         ],
                     ]
                 ],
                 'Sites' => [
-                    'title' => __d('baser', 'サイト管理'),
+                    'title' => __d('baser_core', 'サイト管理'),
                     'type' => 'system',
                     'menus' => [
                         'Sites' => [
-                            'title' => __d('baser', 'サイト'),
+                            'title' => __d('baser_core', 'サイト'),
                             'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'sites', 'action' => 'index'],
                             'currentRegex' => '/\/sites\/.+?/s'
                         ],
                     ]
                 ],
                 'Theme' => [
-                    'title' => __d('baser', 'テーマ管理'),
+                    'title' => __d('baser_core', 'テーマ管理'),
                     'type' => 'system',
                     'menus' => [
                         'Themes' => [
-                            'title' => __d('baser', 'テーマ'),
+                            'title' => __d('baser_core', 'テーマ'),
                             'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'themes', 'action' => 'index'],
                             'currentRegex' => '/\/themes\/[^\/]+?/s'
                         ],
                         'ThemeAdd' => [
-                            'title' => __d('baser', '新規追加'),
+                            'title' => __d('baser_core', '新規追加'),
                             'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'themes', 'action' => 'add']
                         ],
                         'ThemesDownload' => [
-                            'title' => __d('baser', '利用中テーマダウンロード'),
+                            'title' => __d('baser_core', '利用中テーマダウンロード'),
                             'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'themes', 'action' => 'download']
                         ],
                         'ThemesDownloadDefaultDataPattern' => [
-                            'title' => __d('baser', 'テーマ用初期データダウンロード'),
+                            'title' => __d('baser_core', 'テーマ用初期データダウンロード'),
                             'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'themes', 'action' => 'download_default_data_pattern']
                         ],
                     ]
                 ],
                 'Plugin' => [
-                    'title' => __d('baser', 'プラグイン管理'),
+                    'title' => __d('baser_core', 'プラグイン管理'),
                     'type' => 'system',
                     'menus' => [
                         'Plugins' => [
-                            'title' => __d('baser', 'プラグイン'),
+                            'title' => __d('baser_core', 'プラグイン'),
                             'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'plugins', 'action' => 'index'],
                             'currentRegex' => '/\/plugins\/[^\/]+?/s'
                         ],
                     ]
                 ],
                 'Utilities' => [
-                    'title' => __d('baser', 'ユーティリティ'),
+                    'title' => __d('baser_core', 'ユーティリティ'),
                     'type' => 'system',
                     'menus' => [
                         'Utilities' => [
-                            'title' => __d('baser', 'ユーティリティトップ'),
+                            'title' => __d('baser_core', 'ユーティリティトップ'),
                             'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'utilities', 'action' => 'index']
                         ],
                         'SiteConfigsInfo' => [
-                            'title' => __d('baser', '環境情報'),
+                            'title' => __d('baser_core', '環境情報'),
                             'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'utilities', 'action' => 'info']
                         ],
                         'UtilitiesMaintenance' => [
-                            'title' => __d('baser', 'データメンテナンス'),
+                            'title' => __d('baser_core', 'データメンテナンス'),
                             'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'utilities', 'action' => 'maintenance']
                         ],
                         'UtilitiesLog' => [
-                            'title' => __d('baser', 'ログメンテナンス'),
+                            'title' => __d('baser_core', 'ログメンテナンス'),
                             'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'utilities', 'action' => 'log_maintenance']
                         ],
-//                        'UtilitiesWriteSchema' => ['title' => __d('baser', 'スキーマファイル生成'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'utilities', 'action' => 'write_schema']],
-//                        'UtilitiesLoadSchema' => ['title' => __d('baser', 'スキーマファイル読込'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'utilities', 'action' => 'load_schema']],
+//                        'UtilitiesWriteSchema' => ['title' => __d('baser_core', 'スキーマファイル生成'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'utilities', 'action' => 'write_schema']],
+//                        'UtilitiesLoadSchema' => ['title' => __d('baser_core', 'スキーマファイル読込'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'utilities', 'action' => 'load_schema']],
                     ]
                 ]
             ]
@@ -492,7 +492,7 @@ return [
      */
     'BcPermission' => [
         'permissionGroupTypes' => [
-            'Admin' => __d('baser', '管理画面'),
+            'Admin' => __d('baser_core', '管理画面'),
             'Api' => 'Web API'
         ],
         'defaultAllows' => [
@@ -543,7 +543,7 @@ return [
     'BcPrefixAuth' => [
         // 管理画面
         'Admin' => [
-            'name' => __d('baser', '管理システム'),
+            'name' => __d('baser_core', '管理システム'),
             'type' => 'Session',
             'alias' => '/' . $adminPrefix,
             'loginRedirect' => ['plugin' => 'BaserCore', 'prefix' => 'Admin', 'controller' => 'Dashboard', 'action' => 'index'],
@@ -556,7 +556,7 @@ return [
         ],
         // Api
         'Api' => [
-            'name' => __d('baser', 'Web API'),
+            'name' => __d('baser_core', 'Web API'),
             'type' => 'Jwt',
             'alias' => '/api',
             'username' => ['email', 'name'],
@@ -606,7 +606,7 @@ return [
      */
     'BcAgent' => [
         'mobile' => [
-            'name' => __d('baser', 'ケータイ'),
+            'name' => __d('baser_core', 'ケータイ'),
             'helper' => 'BaserCore.BcMobile',
             'agents' => [
                 'Googlebot-Mobile',
@@ -621,7 +621,7 @@ return [
             'sessionId' => true
         ],
         'smartphone' => [
-            'name' => __d('baser', 'スマートフォン'),
+            'name' => __d('baser_core', 'スマートフォン'),
             'helper' => 'BaserCore.BcSmartphone',
             'agents' => [
                 'iPhone',            // Apple iPhone
@@ -646,19 +646,19 @@ return [
      */
     'BcLang' => [
         'english' => [
-            'name' => __d('baser', '英語'),
+            'name' => __d('baser_core', '英語'),
             'langs' => [
                 'en'
             ]
         ],
         'chinese' => [
-            'name' => __d('baser', '中国語'),
+            'name' => __d('baser_core', '中国語'),
             'langs' => [
                 'zh'
             ]
         ],
         'spanish' => [
-            'name' => __d('baser', 'スペイン'),
+            'name' => __d('baser_core', 'スペイン'),
             'langs' => [
                 'es'
             ]
@@ -684,7 +684,7 @@ return [
         'items' => [
             'BaserCore' => [
                 'Default' => [
-                    'title' => __d('baser', '無所属コンテンツ'),
+                    'title' => __d('baser_core', '無所属コンテンツ'),
                     'omitViewAction' => true,
                     'routes' => [
                         'add' => [
@@ -707,7 +707,7 @@ return [
                 'ContentFolder' => [
                     'multiple' => true,
                     'preview' => true,
-                    'title' => __d('baser', 'フォルダー'),
+                    'title' => __d('baser_core', 'フォルダー'),
                     'routes' => [
                         'add' => [
                             'prefix' => 'Api',
@@ -727,7 +727,7 @@ return [
                     'icon' => 'bca-icon--folder',
                 ],
                 'Page' => [
-                    'title' => __d('baser', '固定ページ'),
+                    'title' => __d('baser_core', '固定ページ'),
                     'multiple' => true,
                     'preview' => true,
                     'icon' => 'bca-icon--file',
@@ -756,7 +756,7 @@ return [
                 ],
                 'ContentAlias' => [
                     'multiple' => true,
-                    'title' => __d('baser', 'エイリアス'),
+                    'title' => __d('baser_core', 'エイリアス'),
                     'icon' => 'bca-icon--alias',
                     'routes' => [
                         'add' => [

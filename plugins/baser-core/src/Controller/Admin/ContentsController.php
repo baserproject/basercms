@@ -151,30 +151,30 @@ class ContentsController extends BcAdminAppController
     public function edit_alias(ContentsServiceInterface $service, $id)
     {
         if (!$id && empty($this->request->getData())) {
-            $this->BcMessage->setError(__d('baser', '無効な処理です。'));
+            $this->BcMessage->setError(__d('baser_core', '無効な処理です。'));
             return $this->redirect(['action' => 'index']);
         }
         $alias = $service->get($id);
         if ($this->request->is(['post', 'put'])) {
             if (BcUtil::isOverPostSize()) {
-                $this->BcMessage->setError(__d('baser', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size')));
+                $this->BcMessage->setError(__d('baser_core', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size')));
                 $this->redirect(['action' => 'edit_alias', $id]);
             }
             try {
                 $alias = $service->update($alias, $this->request->getData('content'));
                 $content = $service->get($alias->alias_id);
                 $message = Configure::read('BcContents.items.' . $content->plugin . '.' . $content->type . '.title') .
-                    sprintf(__d('baser', '「%s」のエイリアス「%s」を編集しました。'), $content->title, $alias->title);
+                    sprintf(__d('baser_core', '「%s」のエイリアス「%s」を編集しました。'), $content->title, $alias->title);
                 $this->BcMessage->setSuccess($message);
                 $this->redirect(['action' => 'edit_alias', $id]);
             } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
                 $alias = $e->getEntity();
-                $this->BcMessage->setError(__d('baser', "保存中にエラーが発生しました。入力内容を確認してください。") . "\n" . $alias->getErrors());
+                $this->BcMessage->setError(__d('baser_core', "保存中にエラーが発生しました。入力内容を確認してください。") . "\n" . $alias->getErrors());
             }
         } else {
             $this->request = $this->request->withData('Contents', $alias);
             if (!$this->request->getData()) {
-                $this->BcMessage->setError(__d('baser', '無効な処理です。'));
+                $this->BcMessage->setError(__d('baser_core', '無効な処理です。'));
                 $this->redirect(['action' => 'index']);
             }
         }
@@ -194,7 +194,7 @@ class ContentsController extends BcAdminAppController
     public function trash_return(ContentsServiceInterface $service, $id)
     {
         if (empty($id)) {
-            $this->ajaxError(500, __d('baser', '無効な処理です。'));
+            $this->ajaxError(500, __d('baser_core', '無効な処理です。'));
         }
         $this->disableAutoRender();
 
@@ -208,10 +208,10 @@ class ContentsController extends BcAdminAppController
             $this->dispatchLayerEvent('afterTrashReturn', [
                 'data' => $id
             ]);
-            $this->BcMessage->setSuccess(sprintf(__d('baser', 'ゴミ箱「%s」を戻しました。'), $restored->title));
+            $this->BcMessage->setSuccess(sprintf(__d('baser_core', 'ゴミ箱「%s」を戻しました。'), $restored->title));
             return $this->redirect(['action' => 'index']);
         } else {
-            $this->BcMessage->setError(__d('baser', 'ゴミ箱から戻す事に失敗しました。'));
+            $this->BcMessage->setError(__d('baser_core', 'ゴミ箱から戻す事に失敗しました。'));
             return $this->redirect(['action' => 'trash_index']);
         }
     }
@@ -241,17 +241,17 @@ class ContentsController extends BcAdminAppController
 
                 $typeName = Configure::read('BcContents.items.' . $content->plugin . '.' . $content->type . '.title');
                 if(!$content->alias_id) {
-                    $message = $typeName . sprintf(__d('baser', '「%s」をゴミ箱に移動しました。'), $content->title);
+                    $message = $typeName . sprintf(__d('baser_core', '「%s」をゴミ箱に移動しました。'), $content->title);
                 } else {
-                    $message = sprintf(__d('baser', '%s のエイリアス「%s」を削除しました。'), $typeName, $content->title);
+                    $message = sprintf(__d('baser_core', '%s のエイリアス「%s」を削除しました。'), $typeName, $content->title);
                 }
                 $this->BcMessage->setSuccess($message, true);
                 $this->redirect(['action' => 'index']);
             } else {
-                $this->BcMessage->setError(__d('baser', '削除中にエラーが発生しました。'));
+                $this->BcMessage->setError(__d('baser_core', '削除中にエラーが発生しました。'));
             }
         } else {
-            $this->BcMessage->setError(__d('baser', '不正なリクエストです。'));
+            $this->BcMessage->setError(__d('baser_core', '不正なリクエストです。'));
         }
 	}
 

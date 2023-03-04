@@ -16,16 +16,16 @@
 ?>
 
 
-<p><?php echo __d('baser', 'スキーマファイルは、データベースの構造を読み取り、CakePHPのスキーマファイルとして出力できます。') ?></p>
-<p><?php echo __d('baser', 'コアパッケージやプラグインの新規テーブル作成、テーブル構造変更の際に利用すると便利です。') ?></p>
-<p><?php echo __d('baser', '新規インストール時に利用するファイルは、次のフォルダ内に配置します。') ?></p>
+<p><?php echo __d('baser_core', 'スキーマファイルは、データベースの構造を読み取り、CakePHPのスキーマファイルとして出力できます。') ?></p>
+<p><?php echo __d('baser_core', 'コアパッケージやプラグインの新規テーブル作成、テーブル構造変更の際に利用すると便利です。') ?></p>
+<p><?php echo __d('baser_core', '新規インストール時に利用するファイルは、次のフォルダ内に配置します。') ?></p>
 <ul>
-  <li><?php echo __d('baser', 'baserCMSコア・・・/lib/Baser/Config/Schema/') ?></li>
-  <li><?php echo __d('baser', 'プラグイン・・・/{プラグインフォルダ}/Config/Schema/') ?></li>
+  <li><?php echo __d('baser_core', 'baserCMSコア・・・/lib/Baser/Config/Schema/') ?></li>
+  <li><?php echo __d('baser_core', 'プラグイン・・・/{プラグインフォルダ}/Config/Schema/') ?></li>
 </ul>
 
-<p><?php echo __d('baser', 'アップデート時に利用するファイルは、次のフォルダ内に配置します。') ?></p>
+<p><?php echo __d('baser_core', 'アップデート時に利用するファイルは、次のフォルダ内に配置します。') ?></p>
 <ul>
-  <li><?php echo __d('baser', 'baserCMSコア・・・/lib/Baser/Config/update/{バージョン番号}/') ?></li>
-  <li><?php echo __d('baser', 'プラグイン・・・/{プラグインフォルダ}/config/update/{バージョン番号}/') ?></li>
+  <li><?php echo __d('baser_core', 'baserCMSコア・・・/lib/Baser/Config/update/{バージョン番号}/') ?></li>
+  <li><?php echo __d('baser_core', 'プラグイン・・・/{プラグインフォルダ}/config/update/{バージョン番号}/') ?></li>
 </ul>

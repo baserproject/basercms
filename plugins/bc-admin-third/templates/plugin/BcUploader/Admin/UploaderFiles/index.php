@@ -17,7 +17,7 @@
  */
 $this->BcBaser->css('admin/uploader_files/index', false);
 $this->BcAdmin->setSearch('uploader_files_index');
-$this->BcAdmin->setTitle(__d('baser', 'アップロードファイル一覧'));
+$this->BcAdmin->setTitle(__d('baser_core', 'アップロードファイル一覧'));
 ?>
 
 

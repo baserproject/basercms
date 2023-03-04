@@ -50,7 +50,7 @@
   </td>
   <td class="bca-table-listup__tbody-td bca-table-listup__tbody-td--actions">
     <?php $this->BcBaser->link('', $this->Blog->getCategoryUrl($blogCategory->id), [
-        'title' => __d('baser', '確認'),
+        'title' => __d('baser_core', '確認'),
         'target' => '_blank',
         'class' => 'bca-btn-icon',
         'data-bca-btn-type' => 'preview',
@@ -60,7 +60,7 @@
       <?php $this->BcBaser->link('',
         ['action' => 'edit', $blogContent->id, $blogCategory->id],
         [
-          'title' => __d('baser', '編集'),
+          'title' => __d('baser_core', '編集'),
           'class' => 'bca-btn-icon',
           'data-bca-btn-type' => 'edit',
           'data-bca-btn-size' => 'lg'
@@ -69,8 +69,8 @@
       <?= $this->BcAdminForm->postLink('',
         ['action' => 'delete', $blogContent->id, $blogCategory->id],
         [
-          'confirm' => __d('baser', "このデータを本当に削除してもいいですか？\n\nこのカテゴリに関連する記事は、どのカテゴリにも関連しない状態として残ります。"),
-          'title' => __d('baser', '削除'),
+          'confirm' => __d('baser_core', "このデータを本当に削除してもいいですか？\n\nこのカテゴリに関連する記事は、どのカテゴリにも関連しない状態として残ります。"),
+          'title' => __d('baser_core', '削除'),
           'class' => 'btn-delete bca-btn-icon',
           'data-bca-btn-type' => 'delete',
           'data-bca-btn-size' => 'lg',

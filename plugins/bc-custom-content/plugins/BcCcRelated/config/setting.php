@@ -23,8 +23,8 @@ return [
              * 関連データを表示するフィールドタイプ
              */
             'BcCcRelated' => [
-                'category' => __d('baser', '選択'),
-                'label' => __d('baser', '関連データ'),
+                'category' => __d('baser_core', '選択'),
+                'label' => __d('baser_core', '関連データ'),
                 'columnType' => 'string',
                 'controlType' => 'select',
                 'preview' => true,

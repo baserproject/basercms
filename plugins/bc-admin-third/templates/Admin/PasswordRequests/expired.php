@@ -15,9 +15,9 @@
  * @noTodo
  * @unitTest
  */
-$this->BcAdmin->setTitle(__d('baser', 'Not Found'));
+$this->BcAdmin->setTitle(__d('baser_core', 'Not Found'));
 ?>
 
 <div class="section">
-  <p><?php echo __d('baser', 'ページの有効期限が切れているか、もしくは誤ったURLにアクセスしています。') ?></p>
+  <p><?php echo __d('baser_core', 'ページの有効期限が切れているか、もしくは誤ったURLにアクセスしています。') ?></p>
 </div>

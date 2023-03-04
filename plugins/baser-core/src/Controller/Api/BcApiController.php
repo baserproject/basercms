@@ -137,7 +137,7 @@ class BcApiController extends AppController
 
         // サービスクラスチェック
         [$plugin, $model] = pluginSplit($userModel);
-        if(!$plugin) throw new BcException(__d('baser', 'BcPrefixAuth の userModel の設定ではプラグイン記法を利用してください。'));
+        if(!$plugin) throw new BcException(__d('baser_core', 'BcPrefixAuth の userModel の設定ではプラグイン記法を利用してください。'));
 
         $serviceName = "{$plugin}\\Service\\{$model}ServiceInterface";
         if (interface_exists($serviceName)) {
@@ -161,7 +161,7 @@ class BcApiController extends AppController
                 return (bool) $table->get($user->id);
             }
         }
-        throw new BcException(__d('baser', 'BcPrefixAuth の userModel にユーザーの存在確認メソッドが存在しません。'));
+        throw new BcException(__d('baser_core', 'BcPrefixAuth の userModel にユーザーの存在確認メソッドが存在しません。'));
     }
 
     /**

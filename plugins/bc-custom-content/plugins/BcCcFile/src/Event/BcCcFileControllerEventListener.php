@@ -72,11 +72,11 @@ class BcCcFileControllerEventListener extends BcControllerEventListener
         $controller = $event->getSubject();
         if($this->isAction('Index', false)) {
             $table = $controller->viewBuilder()->getVar('customTable');
-            if(!$table) throw new BcException(__d('baser', 'ビュー変数 $customTable がセットされていません。'));
+            if(!$table) throw new BcException(__d('baser_core', 'ビュー変数 $customTable がセットされていません。'));
             $this->setupUploader($table->id);
         } elseif($this->isAction('View', false)) {
             $entry = $controller->viewBuilder()->getVar('customEntry');
-            if(!$entry) throw new BcException(__d('baser', 'ビュー変数 $customEntry がセットされていません。'));
+            if(!$entry) throw new BcException(__d('baser_core', 'ビュー変数 $customEntry がセットされていません。'));
             $this->setupUploader($entry->custom_table_id);
         }
     }

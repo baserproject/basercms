@@ -94,7 +94,7 @@ class BcAdminContentsService implements BcAdminContentsServiceInterface
             if (in_array($parentTemplate, $templates)) {
                 unset($templates[$parentTemplate]);
             }
-            $templates = array_merge($templates, ['' => __d('baser', '親フォルダの設定に従う') . '（' . $parentTemplate . '）']);
+            $templates = array_merge($templates, ['' => __d('baser_core', '親フォルダの設定に従う') . '（' . $parentTemplate . '）']);
         }
         return $templates;
     }

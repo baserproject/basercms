@@ -20,11 +20,11 @@ return [
          * 管理画面
          */
         'ContentLinksAdmin' => [
-            'title' => __d('baser', 'コンテンツリンク管理'),
+            'title' => __d('baser_core', 'コンテンツリンク管理'),
             'plugin' => 'BcContentLink',
             'type' => 'Admin',
             'items' => [
-                'Edit' => ['title' => __d('baser', '編集'), 'url' => '/baser/admin/bc-content-link/content_links/edit/*', 'method' => 'POST', 'auth' => true],
+                'Edit' => ['title' => __d('baser_core', '編集'), 'url' => '/baser/admin/bc-content-link/content_links/edit/*', 'method' => 'POST', 'auth' => true],
             ]
         ],
 
@@ -32,14 +32,14 @@ return [
          * Web API
          */
         'ContentLinksApi' => [
-            'title' => __d('baser', 'コンテンツリンクAPI'),
+            'title' => __d('baser_core', 'コンテンツリンクAPI'),
             'plugin' => 'BcContentLink',
             'type' => 'Api',
             'items' => [
-                'Add' => ['title' => __d('baser', '新規登録'), 'url' => '/baser/api/bc-content-link/content_links/add.json', 'method' => 'POST', 'auth' => true],
-                'Delete' => ['title' => __d('baser', '削除'), 'url' => '/baser/api/bc-content-link/content_links/delete/*.json', 'method' => 'POST', 'auth' => true],
-                'Edit' => ['title' => __d('baser', '編集'), 'url' => '/baser/api/bc-content-link/content_links/edit/*.json', 'method' => 'POST', 'auth' => true],
-                'View' => ['title' => __d('baser', '単一取得'), 'url' => '/baser/api/bc-content-link/content_links/view/*.json', 'method' => 'GET', 'auth' => true],
+                'Add' => ['title' => __d('baser_core', '新規登録'), 'url' => '/baser/api/bc-content-link/content_links/add.json', 'method' => 'POST', 'auth' => true],
+                'Delete' => ['title' => __d('baser_core', '削除'), 'url' => '/baser/api/bc-content-link/content_links/delete/*.json', 'method' => 'POST', 'auth' => true],
+                'Edit' => ['title' => __d('baser_core', '編集'), 'url' => '/baser/api/bc-content-link/content_links/edit/*.json', 'method' => 'POST', 'auth' => true],
+                'View' => ['title' => __d('baser_core', '単一取得'), 'url' => '/baser/api/bc-content-link/content_links/view/*.json', 'method' => 'GET', 'auth' => true],
             ]
         ],
     ]

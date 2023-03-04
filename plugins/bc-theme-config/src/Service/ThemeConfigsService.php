@@ -87,8 +87,7 @@ class ThemeConfigsService implements ThemeConfigsServiceInterface
     public function update(array $postData)
     {
         if (BcUtil::isOverPostSize()) {
-            throw new BcException(__d(
-                'baser',
+            throw new BcException(__d('baser_core',
                 '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。',
                 ini_get('post_max_size')
             ));
@@ -96,7 +95,7 @@ class ThemeConfigsService implements ThemeConfigsServiceInterface
 
         $entity = $this->ThemeConfigs->newEntity($postData, ['validate' => 'keyValue']);
         if ($entity->hasErrors()) {
-            throw new PersistenceFailedException($entity, __d('baser', '入力エラーです。内容を修正してください。'));
+            throw new PersistenceFailedException($entity, __d('baser_core', '入力エラーです。内容を修正してください。'));
         }
 
         $this->updateColorConfig($entity);

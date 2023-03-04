@@ -18,7 +18,7 @@ use BaserCore\Model\Entity\User;
  * @var User $user
  * @var bool $isDeletable
  */
-$this->BcAdmin->setTitle(__d('baser', 'ユーザー編集'));
+$this->BcAdmin->setTitle(__d('baser_core', 'ユーザー編集'));
 $this->BcAdmin->setHelp('users_form');
 ?>
 
@@ -29,7 +29,7 @@ $this->BcAdmin->setHelp('users_form');
 
 <div class="submit section bca-actions">
   <div class="bca-actions__main">
-    <?php echo $this->BcHtml->link(__d('baser', '一覧に戻る'),
+    <?php echo $this->BcHtml->link(__d('baser_core', '一覧に戻る'),
       ['admin' => true, 'controller' => 'users', 'action' => 'index'],
       [
         'class' => 'button bca-btn bca-actions__item',
@@ -37,7 +37,7 @@ $this->BcAdmin->setHelp('users_form');
       ]
     ) ?>
     <?= $this->BcAdminForm->button(
-      __d('baser', '保存'),
+      __d('baser_core', '保存'),
       ['div' => false,
         'class' => 'button bca-btn bca-actions__item',
         'data-bca-btn-type' => 'save',
@@ -49,10 +49,10 @@ $this->BcAdmin->setHelp('users_form');
   <?php if ($isDeletable): ?>
     <div class="bca-actions__sub">
       <?= $this->BcAdminForm->postLink(
-        __d('baser', '削除'),
+        __d('baser_core', '削除'),
         ['action' => 'delete', $user->id],
         ['block' => true,
-          'confirm' => __d('baser', '{0} を本当に削除してもいいですか？', $user->name),
+          'confirm' => __d('baser_core', '{0} を本当に削除してもいいですか？', $user->name),
           'class' => 'bca-submit-token button bca-btn bca-actions__item',
           'data-bca-btn-type' => 'delete',
           'data-bca-btn-size' => 'sm']

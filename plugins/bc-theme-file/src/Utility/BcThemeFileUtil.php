@@ -26,13 +26,13 @@ class BcThemeFileUtil
     public static function getTemplateTypeName(string $type)
     {
         $templateTypes = [
-            'layout' => __d('baser', 'レイアウトテンプレート'),
-            'element' => __d('baser', 'エレメントテンプレート'),
-            'email' => __d('baser', 'Eメールテンプレート'),
-            'etc' => __d('baser', 'コンテンツテンプレート'),
-            'css' => __d('baser', 'スタイルシート'),
+            'layout' => __d('baser_core', 'レイアウトテンプレート'),
+            'element' => __d('baser_core', 'エレメントテンプレート'),
+            'email' => __d('baser_core', 'Eメールテンプレート'),
+            'etc' => __d('baser_core', 'コンテンツテンプレート'),
+            'css' => __d('baser_core', 'スタイルシート'),
             'js' => 'Javascript',
-            'img' => __d('baser', 'イメージ')
+            'img' => __d('baser_core', 'イメージ')
         ];
         if (isset($templateTypes[$type])) {
             return $templateTypes[$type];

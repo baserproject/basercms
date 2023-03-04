@@ -18,7 +18,7 @@ use BaserCore\Utility\BcUtil;
 
 $adminPrefix = Configure::read('Routing.prefixes.0');
 $this->BcBaser->i18nScript([
-  'message' => __d('baser', '本当にbaserCMSを初期化してもよろしいですか？')
+  'message' => __d('baser_core', '本当にbaserCMSを初期化してもよろしいですか？')
 ]);
 ?>
 
@@ -37,24 +37,24 @@ $this->BcBaser->i18nScript([
 
 <?php if (!$complete): ?>
 
-  <p class="bca-main__text"><?php echo __d('baser', 'baserCMSを初期化します。データベースのデータも全て削除されます。') ?></p>
+  <p class="bca-main__text"><?php echo __d('baser_core', 'baserCMSを初期化します。データベースのデータも全て削除されます。') ?></p>
   <?php if (BcUtil::isInstalled()): ?>
-    <p class="bca-main__text"><?php echo __d('baser', 'データベースのバックアップをとられていない場合は必ずバックアップを保存してから実行してください。') ?></p>
+    <p class="bca-main__text"><?php echo __d('baser_core', 'データベースのバックアップをとられていない場合は必ずバックアップを保存してから実行してください。') ?></p>
     <ul>
-      <li><?php $this->BcBaser->link(__d('baser', 'バックアップはこちらから'), ['admin' => true, 'controller' => 'tools', 'action' => 'maintenance', 'backup', '?' => ['backup_encoding' => 'UTF-8']]) ?></li>
+      <li><?php $this->BcBaser->link(__d('baser_core', 'バックアップはこちらから'), ['admin' => true, 'controller' => 'tools', 'action' => 'maintenance', 'backup', '?' => ['backup_encoding' => 'UTF-8']]) ?></li>
     </ul>
   <?php endif ?>
   <div class="submit bca-actions">
     <?php echo $this->BcAdminForm->create('Installation', ['url' => ['action' => 'reset']]) ?>
     <?php echo $this->BcAdminForm->control('Installation.reset', ['type' => 'hidden', 'value' => true]) ?>
-    <?php echo $this->BcAdminForm->end(['label' => __d('baser', '初期化する'), 'class' => 'button', 'class' => 'button bca-btn bca-actions__item']) ?>
+    <?php echo $this->BcAdminForm->end(['label' => __d('baser_core', '初期化する'), 'class' => 'button', 'class' => 'button bca-btn bca-actions__item']) ?>
   </div>
 <?php else: ?>
 
   <div class="section">
-    <p class="bca-main__text"><?php echo __d('baser', '引き続きbaserCMSのインストールを行うには、「インストールページへ」ボタンをクリックしてください。') ?></p>
+    <p class="bca-main__text"><?php echo __d('baser_core', '引き続きbaserCMSのインストールを行うには、「インストールページへ」ボタンをクリックしてください。') ?></p>
   </div>
   <div class="submit bca-actions">
-    <?php $this->BcBaser->link(__d('baser', 'インストールページへ'), '/', ['class' => 'button bca-btn bca-actions__item']) ?>
+    <?php $this->BcBaser->link(__d('baser_core', 'インストールページへ'), '/', ['class' => 'button bca-btn bca-actions__item']) ?>
   </div>
 <?php endif ?>

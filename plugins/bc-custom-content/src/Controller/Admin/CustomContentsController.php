@@ -69,13 +69,13 @@ class CustomContentsController extends CustomContentAdminAppController
                     'request' => $this->request,
                 ]);
 
-                $this->BcMessage->setSuccess(__d('baser', "カスタムコンテンツ「{0}」を更新しました。", $entity->content->title));
+                $this->BcMessage->setSuccess(__d('baser_core', "カスタムコンテンツ「{0}」を更新しました。", $entity->content->title));
                 return $this->redirect(['action' => 'edit', $id]);
             } catch (PersistenceFailedException $e) {
                 $entity = $e->getEntity();
-                $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
+                $this->BcMessage->setError(__d('baser_core', '入力エラーです。内容を修正してください。'));
             } catch (\Throwable $e) {
-                $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage()));
+                $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage()));
             }
         }
 

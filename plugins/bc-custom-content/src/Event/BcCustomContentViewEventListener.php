@@ -70,7 +70,7 @@ class BcCustomContentViewEventListener extends \BaserCore\Event\BcViewEventListe
                 $tableId = $customContent->custom_table->id;
                 return [
                     'CustomEntries' . $tableId => [
-                        'title' => __d('baser', 'エントリー'),
+                        'title' => __d('baser_core', 'エントリー'),
                         'url' => [
                             'prefix' => 'Admin',
                             'plugin' => 'BcCustomContent',
@@ -81,7 +81,7 @@ class BcCustomContentViewEventListener extends \BaserCore\Event\BcViewEventListe
                         'currentRegex' => '/\/bc-custom-content\/custom_entries\/[^\/]+?\/' . $tableId . '($|\/)/s'
                     ],
                     'CustomContentEdit' . $tableId => [
-                        'title' => __d('baser', 'コンテンツ設定'),
+                        'title' => __d('baser_core', 'コンテンツ設定'),
                         'url' => [
                             'prefix' => 'Admin',
                             'plugin' => 'BcCustomContent',

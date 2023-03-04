@@ -19,13 +19,13 @@ class InstallResetCommand extends Command
     public function reset()
     {
         if (Configure::read('debug') != -1) {
-            $this->err(__d('baser', 'baserCMSの初期化を行うには、debug を -1 に設定する必要があります。'));
+            $this->err(__d('baser_core', 'baserCMSの初期化を行うには、debug を -1 に設定する必要があります。'));
             return false;
         }
         if (!$this->_reset()) {
-            $this->err(__d('baser', 'baserCMSのリセットに失敗しました。ログファイルを確認してください。'));
+            $this->err(__d('baser_core', 'baserCMSのリセットに失敗しました。ログファイルを確認してください。'));
         }
-        $this->out(__d('baser', 'baserCMSのリセットが完了しました。'));
+        $this->out(__d('baser_core', 'baserCMSのリセットが完了しました。'));
     }
 
     /**

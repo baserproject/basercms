@@ -43,9 +43,9 @@ class FavoritesController extends BcApiController
             $favorite = $service->get($id);
         } catch (RecordNotFoundException $e) {
             $this->setResponse($this->response->withStatus(404));
-            $message = __d('baser', 'データが見つかりません。');
+            $message = __d('baser_core', 'データが見つかりません。');
         } catch (\Throwable $e) {
-            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
             $this->setResponse($this->response->withStatus(500));
         }
         $this->set([
@@ -83,14 +83,14 @@ class FavoritesController extends BcApiController
         $favorite = $errors = null;
         try {
             $favorite = $service->create($this->request->getData());
-            $message = __d('baser', 'お気に入り「{0}」を追加しました。', $favorite->name);
+            $message = __d('baser_core', 'お気に入り「{0}」を追加しました。', $favorite->name);
         } catch (PersistenceFailedException $e) {
             $this->setResponse($this->response->withStatus(400));
             $errors = $e->getEntity()->getErrors();
-            $message = __d('baser', '入力エラーです。内容を修正してください。');
+            $message = __d('baser_core', '入力エラーです。内容を修正してください。');
         } catch (\Throwable $e) {
             $this->setResponse($this->response->withStatus(500));
-            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
         }
         $this->set([
             'message' => $message,
@@ -113,17 +113,17 @@ class FavoritesController extends BcApiController
         $favorite = $errors = null;
         try {
             $favorite = $service->update($service->get($id), $this->request->getData());
-            $message = __d('baser', 'お気に入り「{0}」を更新しました。', $favorite->name);
+            $message = __d('baser_core', 'お気に入り「{0}」を更新しました。', $favorite->name);
         } catch (PersistenceFailedException $e) {
             $this->setResponse($this->response->withStatus(400));
             $errors = $e->getEntity()->getErrors();
-            $message = __d('baser', '入力エラーです。内容を修正してください。');
+            $message = __d('baser_core', '入力エラーです。内容を修正してください。');
         } catch (RecordNotFoundException $e) {
             $this->setResponse($this->response->withStatus(404));
-            $message = __d('baser', 'データが見つかりません。');
+            $message = __d('baser_core', 'データが見つかりません。');
         } catch (\Throwable $e) {
             $this->setResponse($this->response->withStatus(500));
-            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
         }
         $this->set([
             'message' => $message,
@@ -147,14 +147,14 @@ class FavoritesController extends BcApiController
         try {
             $favorite = $service->get($id);
             if ($service->delete($id)) {
-                $message = __d('baser', 'お気に入り: {0} を削除しました。', $favorite->name);
+                $message = __d('baser_core', 'お気に入り: {0} を削除しました。', $favorite->name);
             }
         } catch (RecordNotFoundException $e) {
             $this->setResponse($this->response->withStatus(404));
-            $message = __d('baser', 'データが見つかりません。');
+            $message = __d('baser_core', 'データが見つかりません。');
         } catch (\Throwable $e) {
             $this->setResponse($this->response->withStatus(500));
-            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
         }
         $this->set([
             'message' => $message,
@@ -183,7 +183,7 @@ class FavoritesController extends BcApiController
             if ($result) BcUtil::clearAllCache();
         } catch (\Throwable $e) {
             $this->setResponse($this->response->withStatus(500));
-            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
         }
 
         $this->set([
@@ -209,7 +209,7 @@ class FavoritesController extends BcApiController
             }
         } catch (\Throwable $e) {
             $this->setResponse($this->response->withStatus(500));
-            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
         }
         $this->set([
             'message' => $message
@@ -231,7 +231,7 @@ class FavoritesController extends BcApiController
                 'result' => $result
             ]);
         } catch (\Throwable $e) {
-            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
             $this->setResponse($this->response->withStatus(500));
         }
         $this->set([

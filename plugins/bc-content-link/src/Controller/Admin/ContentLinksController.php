@@ -65,16 +65,16 @@ class ContentLinksController extends BcAdminAppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             try {
                 $contentLink = $service->update($contentLink, $this->request->getData());
-                $this->BcMessage->setSuccess(sprintf(__d('baser', "リンク「%s」を更新しました。"), $contentLink->content->title));
+                $this->BcMessage->setSuccess(sprintf(__d('baser_core', "リンク「%s」を更新しました。"), $contentLink->content->title));
                 return $this->redirect(['action' => 'edit', $id]);
             } catch (PersistenceFailedException $e) {
                 $contentLink = $e->getEntity();
                 $this->BcMessage->setError(
-                    __d('baser', '入力エラーです。内容を修正してください。')
+                    __d('baser_core', '入力エラーです。内容を修正してください。')
                 );
             }  catch (\Exception $e) {
                 $this->BcMessage->setError(
-                    __d('baser', '入力エラーです。内容を修正してください。' . $e->getMessage())
+                    __d('baser_core', '入力エラーです。内容を修正してください。' . $e->getMessage())
                 );
             }
         }

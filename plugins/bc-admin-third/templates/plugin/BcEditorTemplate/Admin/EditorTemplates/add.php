@@ -20,7 +20,7 @@
  * @unitTest
  */
 $this->BcBaser->js('BcEditorTemplate.admin/editor_templates/form.bundle', false);
-$this->BcAdmin->setTitle(__d('baser', 'エディタテンプレート新規登録'));
+$this->BcAdmin->setTitle(__d('baser_core', 'エディタテンプレート新規登録'));
 $this->BcAdmin->setHelp('editor_templates_form');
 $this->BcBaser->css('admin/ckeditor/editor', true);
 ?>
@@ -33,7 +33,7 @@ $this->BcBaser->css('admin/ckeditor/editor', true);
 <!-- button -->
 <div class="bca-actions">
   <div class="bca-actions__main">
-    <?php echo $this->BcAdminForm->button(__d('baser', '保存'), [
+    <?php echo $this->BcAdminForm->button(__d('baser_core', '保存'), [
       'type' => 'submit',
       'id' => 'BtnSave',
       'div' => false,

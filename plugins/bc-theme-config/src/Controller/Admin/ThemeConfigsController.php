@@ -40,13 +40,13 @@ class ThemeConfigsController extends BcAdminAppController
         if($this->getRequest()->is(['post', 'put'])) {
             try {
                 $entity = $service->update($this->getRequest()->getData());
-                $this->BcMessage->setSuccess(__d('baser', 'テーマ設定を保存しました。'));
+                $this->BcMessage->setSuccess(__d('baser_core', 'テーマ設定を保存しました。'));
                 $this->redirect(['action' => 'index']);
             } catch (PersistenceFailedException $e) {
                 $entity = $e->getEntity();
-                $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
+                $this->BcMessage->setError(__d('baser_core', '入力エラーです。内容を修正してください。'));
             } catch (\Throwable $e) {
-                $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
+                $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
             }
         }
         $this->set([

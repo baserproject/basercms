@@ -17,7 +17,7 @@
  * @var string $installStatusMessage
  */
 $this->BcBaser->i18nScript([
-  'message1' => __d('baser', 'プラグインのデータを初期化します。よろしいですか？'),
+  'message1' => __d('baser_core', 'プラグインのデータを初期化します。よろしいですか？'),
 ]);
 $this->BcBaser->js('admin/plugins/install.bundle', false, [
   'id' => 'AdminPluginInstallScript',
@@ -25,9 +25,9 @@ $this->BcBaser->js('admin/plugins/install.bundle', false, [
 ]);
 $this->BcAdmin->addAdminMainBodyHeaderLinks([
   'url' => ['action' => 'add'],
-  'title' => __d('baser', '新規追加'),
+  'title' => __d('baser_core', '新規追加'),
 ]);
-$this->BcAdmin->setTitle(__d('baser', '新規プラグイン登録'));
+$this->BcAdmin->setTitle(__d('baser_core', '新規プラグイン登録'));
 $this->BcAdmin->setHelp('plugins_install');
 ?>
 
@@ -53,7 +53,7 @@ $this->BcAdmin->setHelp('plugins_install');
   <section class="bca-section align-center" data-bca-section-type="form-group">
     <?php echo $this->BcAdminForm->control('permission', [
       'type' => 'radio',
-      'options' => ['1' => __d('baser', '全てのユーザーで利用'), '0' => __d('baser', '管理ユーザーのみ利用')]
+      'options' => ['1' => __d('baser_core', '全てのユーザーで利用'), '0' => __d('baser_core', '管理ユーザーのみ利用')]
     ]) ?>
   </section>
 
@@ -65,12 +65,12 @@ $this->BcAdmin->setHelp('plugins_install');
 
   <div class="bca-actions">
     <?php if ($plugin->db_init): ?>
-      <?php echo $this->BcAdminForm->submit(__d('baser', 'プラグインのデータを初期化する'), [
+      <?php echo $this->BcAdminForm->submit(__d('baser_core', 'プラグインのデータを初期化する'), [
         'div' => false,
         'class' => 'button bca-btn bca-actions__item',
         'id' => 'BtnReset'
       ]) ?>
-      <?php echo $this->BcAdminForm->submit(__d('baser', '有効化'), [
+      <?php echo $this->BcAdminForm->submit(__d('baser_core', '有効化'), [
         'div' => false,
         'class' => 'button bca-btn bca-actions__item',
         'data-bca-btn-type' => 'save',
@@ -79,7 +79,7 @@ $this->BcAdmin->setHelp('plugins_install');
         'id' => 'BtnSave'
       ]) ?>&nbsp;&nbsp;
     <?php else: ?>
-      <?php echo $this->BcAdminForm->submit(__d('baser', 'インストール'), [
+      <?php echo $this->BcAdminForm->submit(__d('baser_core', 'インストール'), [
         'div' => false,
         'class' => 'button bca-btn bca-actions__item',
         'data-bca-btn-type' => 'save',

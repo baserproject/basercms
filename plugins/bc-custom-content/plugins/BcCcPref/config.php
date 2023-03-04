@@ -11,8 +11,8 @@
 
 return [
     'type' => ['BcCustomContentPlugin'],
-    'title' => __d('baser', 'カスタムコンテンツ：都道府県リスト'),
-    'description' => __d('baser', 'カスタムコンテンツに都道府県リストを提供する'),
+    'title' => __d('baser_core', 'カスタムコンテンツ：都道府県リスト'),
+    'description' => __d('baser_core', 'カスタムコンテンツに都道府県リストを提供する'),
     'author' => 'baserCMS User Community',
     'url' => 'https://basercms.net',
 ];

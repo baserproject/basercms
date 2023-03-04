@@ -32,7 +32,7 @@ if (!$popup) $users = $this->BcAdminForm->getControlSource("UploaderFiles.user_i
        target="_blank"
        data-toggle="tooltip"
        data-placement="top"
-       title="" data-original-title="<?php echo __d('baser', '公開URLを開きます') ?>">
+       title="" data-original-title="<?php echo __d('baser_core', '公開URLを開きます') ?>">
 	  <i class="bca-icon--globe"></i><?php echo $url ?></a>
   </span>
   </div>
@@ -79,7 +79,7 @@ if (!$popup) $users = $this->BcAdminForm->getControlSource("UploaderFiles.user_i
   <?php if (!$popup): ?>
     <tr>
       <th class="bca-form-table__label">
-        <?php echo $this->BcAdminForm->label('name', __d('baser', 'アップロードファイル')) ?>
+        <?php echo $this->BcAdminForm->label('name', __d('baser_core', 'アップロードファイル')) ?>
       </th>
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('name', [
@@ -92,7 +92,7 @@ if (!$popup) $users = $this->BcAdminForm->getControlSource("UploaderFiles.user_i
   <?php else: ?>
     <tr>
       <th class="col-head bca-form-table__label">
-        <?php echo $this->BcAdminForm->label('name', __d('baser', 'ファイル名')) ?>
+        <?php echo $this->BcAdminForm->label('name', __d('baser_core', 'ファイル名')) ?>
       </th>
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('name', [
@@ -102,13 +102,13 @@ if (!$popup) $users = $this->BcAdminForm->getControlSource("UploaderFiles.user_i
           'id' => 'UploaderFileName' . $listId,
           'class' => 'uploader-file-name'
         ]) ?>
-        <?php echo $this->BcAdminForm->error('name', __d('baser', 'ファイル名を入力して下さい')) ?>&nbsp;
+        <?php echo $this->BcAdminForm->error('name', __d('baser_core', 'ファイル名を入力して下さい')) ?>&nbsp;
       </td>
     </tr>
   <?php endif ?>
   <tr>
     <th class="col-head bca-form-table__label">
-      <?php echo $this->BcAdminForm->label('alt', __d('baser', '説明文')) ?>
+      <?php echo $this->BcAdminForm->label('alt', __d('baser_core', '説明文')) ?>
     </th>
     <td class="col-input bca-form-table__input">
       <?php echo $this->BcAdminForm->control('alt', [
@@ -122,15 +122,15 @@ if (!$popup) $users = $this->BcAdminForm->getControlSource("UploaderFiles.user_i
   </tr>
   <tr>
     <th class="col-head bca-form-table__label">
-      <?php echo $this->BcAdminForm->label('publish_begin_date', __d('baser', '公開期間')) ?>
+      <?php echo $this->BcAdminForm->label('publish_begin_date', __d('baser_core', '公開期間')) ?>
     </th>
     <td class="col-input bca-form-table__input">
       <?php echo $this->BcAdminForm->control('publish_begin', [
         'type' => 'dateTimePicker',
         'size' => 12,
         'maxlength' => 10,
-        'dateLabel' => ['text' => __d('baser', '開始日付')],
-        'timeLabel' => ['text' => __d('baser', '開始時間')],
+        'dateLabel' => ['text' => __d('baser_core', '開始日付')],
+        'timeLabel' => ['text' => __d('baser_core', '開始時間')],
         'id' => 'UploaderFilePublishBegin' . $listId
       ]) ?>
       &nbsp;〜&nbsp;
@@ -138,8 +138,8 @@ if (!$popup) $users = $this->BcAdminForm->getControlSource("UploaderFiles.user_i
         'type' => 'dateTimePicker',
         'size' => 12,
         'maxlength' => 10,
-        'dateLabel' => ['text' => __d('baser', '終了日付')],
-        'timeLabel' => ['text' => __d('baser', '終了時間')],
+        'dateLabel' => ['text' => __d('baser_core', '終了日付')],
+        'timeLabel' => ['text' => __d('baser_core', '終了時間')],
         'id' => 'UploaderFilePublishEnd' . $listId
       ]) ?>
       <?php echo $this->BcAdminForm->error('publish_begin') ?>
@@ -149,19 +149,19 @@ if (!$popup) $users = $this->BcAdminForm->getControlSource("UploaderFiles.user_i
   <?php if ($uploaderCategories): ?>
     <tr>
       <th
-        class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('uploader_category_id', __d('baser', 'カテゴリ')) ?></th>
+        class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('uploader_category_id', __d('baser_core', 'カテゴリ')) ?></th>
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('uploader_category_id', [
           'type' => 'select',
           'options' => $uploaderCategories,
-          'empty' => __d('baser', '指定なし'),
+          'empty' => __d('baser_core', '指定なし'),
           'id' => '_UploaderFileUploaderCategoryId' . $listId
         ]) ?>
       </td>
     </tr>
   <?php endif ?>
   <tr>
-    <th class="col-head bca-form-table__label"><?php echo __d('baser', '登録者') ?></th>
+    <th class="col-head bca-form-table__label"><?php echo __d('baser_core', '登録者') ?></th>
     <td class="col-input bca-form-table__input">
 			<span id="UploaderFileUserName<?php echo $listId ?>">
 			<?php if (!$popup): ?>
@@ -180,7 +180,7 @@ if (!$popup) $users = $this->BcAdminForm->getControlSource("UploaderFiles.user_i
 <?php if (!$popup): ?>
   <div class="submit bca-actions">
     <div class="bca-actions__main">
-      <?php echo $this->BcAdminForm->submit(__d('baser', '保存'), [
+      <?php echo $this->BcAdminForm->submit(__d('baser_core', '保存'), [
         'div' => false,
         'class' => 'bca-btn bca-loading',
         'data-bca-btn-type' => 'add',
@@ -190,9 +190,9 @@ if (!$popup) $users = $this->BcAdminForm->getControlSource("UploaderFiles.user_i
       ]) ?>
     </div>
     <div class="bca-actions__sub">
-      <?php echo $this->BcAdminForm->postLink(__d('baser', '削除'), ['action' => 'delete', $uploaderFile->id], [
+      <?php echo $this->BcAdminForm->postLink(__d('baser_core', '削除'), ['action' => 'delete', $uploaderFile->id], [
         'block' => true,
-        'confirm' => __d('baser', '{0} を本当に削除してもいいですか？', $uploaderFile->name),
+        'confirm' => __d('baser_core', '{0} を本当に削除してもいいですか？', $uploaderFile->name),
         'class' =>
         'bca-btn', 'data-bca-btn-type' => 'delete'
       ]) ?>

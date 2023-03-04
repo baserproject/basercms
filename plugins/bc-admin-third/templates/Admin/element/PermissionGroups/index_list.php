@@ -26,14 +26,14 @@ $i = 1;
   <thead class="bca-table-listup__thead">
   <tr>
     <th class="bca-table-listup__thead-th">No</th>
-    <th class="bca-table-listup__thead-th"><?php echo __d('baser', 'ルールグループ名') ?></th>
-    <th class="bca-table-listup__thead-th"><?php echo __d('baser', '設定数') ?></th>
-    <th class="bca-table-listup__thead-th"><?php echo __d('baser', '有効') ?></th>
+    <th class="bca-table-listup__thead-th"><?php echo __d('baser_core', 'ルールグループ名') ?></th>
+    <th class="bca-table-listup__thead-th"><?php echo __d('baser_core', '設定数') ?></th>
+    <th class="bca-table-listup__thead-th"><?php echo __d('baser_core', '有効') ?></th>
     <?php echo $this->BcListTable->dispatchShowHead() ?>
     <th class="bca-table-listup__thead-th">
-      <?php echo __d('baser', '登録日') ?><br><?php echo __d('baser', '更新日') ?>
+      <?php echo __d('baser_core', '登録日') ?><br><?php echo __d('baser_core', '更新日') ?>
     </th>
-    <th class="bca-table-listup__thead-th"><?php echo __d('baser', 'アクション') ?></th>
+    <th class="bca-table-listup__thead-th"><?php echo __d('baser_core', 'アクション') ?></th>
   </tr>
   </thead>
   <tbody>
@@ -44,7 +44,7 @@ $i = 1;
   <?php else: ?>
     <tr>
       <td colspan="<?php echo $this->BcListTable->getColumnNumber() ?>">
-        <p class="no-data"><?php echo __d('baser', 'データが見つかりませんでした。') ?></p>
+        <p class="no-data"><?php echo __d('baser_core', 'データが見つかりませんでした。') ?></p>
       </td>
     </tr>
   <?php endif; ?>

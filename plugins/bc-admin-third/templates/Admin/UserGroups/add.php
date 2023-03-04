@@ -17,7 +17,7 @@
  * @noTodo
  * @unitTest
  */
-$this->BcAdmin->setTitle(__d('baser', '新規ユーザーグループ登録'));
+$this->BcAdmin->setTitle(__d('baser_core', '新規ユーザーグループ登録'));
 $this->BcAdmin->setHelp('user_groups_form');
 ?>
 
@@ -28,7 +28,7 @@ $this->BcAdmin->setHelp('user_groups_form');
 <div class="submit bc-align-center section bca-actions">
   <div class="bca-actions__main">
     <?= $this->BcAdminForm->button(
-      __d('baser', '保存'),
+      __d('baser_core', '保存'),
       ['div' => false,
         'class' => 'button bca-btn bca-actions__item',
         'data-bca-btn-type' => 'save',

@@ -71,22 +71,22 @@ if (!$blogComment->status) {
     <?php if ($blogPost): ?>
       <?php if($blogComment->status): ?>
         <?= $this->BcAdminForm->postLink('', ['action' => 'unpublish', $blogContent->id, $blogComment->id, '?' => ['blog_post_id' => $blogComment->blog_post_id]], [
-          'title' => __d('baser', '非公開'),
+          'title' => __d('baser_core', '非公開'),
           'class' => 'btn-unpublish bca-btn-icon',
           'data-bca-btn-type' => 'unpublish',
           'data-bca-btn-size' => 'lg'
         ]) ?>
         <?php else: ?>
         <?= $this->BcAdminForm->postLink('', ['action' => 'publish', $blogContent->id, $blogComment->id, '?' => ['blog_post_id' => $blogComment->blog_post_id]], [
-          'title' => __d('baser', '公開'),
+          'title' => __d('baser_core', '公開'),
           'class' => 'btn-publish bca-btn-icon',
           'data-bca-btn-type' => 'publish',
           'data-bca-btn-size' => 'lg'
         ]) ?>
         <?php endif ?>
         <?= $this->BcAdminForm->postLink('', ['action' => 'delete', $blogContent->id, $blogComment->id, '?' => ['blog_post_id' => $blogComment->blog_post_id]], [
-          'confirm' => __d('baser', "{0} を本当に削除してもいいですか？", $blogComment->name),
-          'title' => __d('baser', '非公開'),
+          'confirm' => __d('baser_core', "{0} を本当に削除してもいいですか？", $blogComment->name),
+          'title' => __d('baser_core', '非公開'),
           'class' => 'btn-delete bca-btn-icon',
           'data-bca-btn-type' => 'delete',
           'data-bca-btn-size' => 'lg'
@@ -94,22 +94,22 @@ if (!$blogComment->status) {
     <?php else: ?>
       <?php if($blogComment->status): ?>
         <?= $this->BcAdminForm->postLink('', ['action' => 'unpublish', $blogContent->id, $blogComment->id], [
-          'title' => __d('baser', '非公開'),
+          'title' => __d('baser_core', '非公開'),
           'class' => 'btn-unpublish bca-btn-icon',
           'data-bca-btn-type' => 'unpublish',
           'data-bca-btn-size' => 'lg'
         ]) ?>
         <?php else: ?>
         <?= $this->BcAdminForm->postLink('', ['action' => 'publish', $blogContent->id, $blogComment->id], [
-          'title' => __d('baser', '公開'),
+          'title' => __d('baser_core', '公開'),
           'class' => 'btn-publish bca-btn-icon',
           'data-bca-btn-type' => 'publish',
           'data-bca-btn-size' => 'lg'
         ]) ?>
         <?php endif ?>
         <?= $this->BcAdminForm->postLink('', ['action' => 'delete', $blogContent->id, $blogComment->id], [
-          'confirm' => __d('baser', "{0} を本当に削除してもいいですか？", $blogComment->name),
-          'title' => __d('baser', '非公開'),
+          'confirm' => __d('baser_core', "{0} を本当に削除してもいいですか？", $blogComment->name),
+          'title' => __d('baser_core', '非公開'),
           'class' => 'btn-delete bca-btn-icon',
           'data-bca-btn-type' => 'delete',
           'data-bca-btn-size' => 'lg'

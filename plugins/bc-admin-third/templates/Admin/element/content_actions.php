@@ -15,21 +15,21 @@
  * @var string $currentAction 現在の画面のアクションボタン
  * @var bool $isAlias
  */
-$deleteButtonText = __d('baser', 'ゴミ箱');
+$deleteButtonText = __d('baser_core', 'ゴミ箱');
 if ($isAlias) {
-  $deleteButtonText = __d('baser', '削除');
+  $deleteButtonText = __d('baser_core', '削除');
 }
 ?>
 
 
 <div class="bca-actions">
   <div class="bca-actions__main">
-    <?php echo $this->BcHtml->link(__d('baser', '一覧に戻る'), ['controller' => 'contents', 'action' => 'index', '?' => ['site_id' => $currentSiteId]], [
+    <?php echo $this->BcHtml->link(__d('baser_core', '一覧に戻る'), ['controller' => 'contents', 'action' => 'index', '?' => ['site_id' => $currentSiteId]], [
       'class' => 'button bca-btn bca-actions__item',
       'data-bca-btn-type' => 'back-to-list'
     ]) ?>
     <?php if ($isAvailablePreview): ?>
-      <?php echo $this->BcAdminForm->button(__d('baser', 'プレビュー'), [
+      <?php echo $this->BcAdminForm->button(__d('baser_core', 'プレビュー'), [
         'class' => 'button bca-btn bca-actions__item',
         'data-bca-btn-type' => 'preview',
         'id' => 'BtnPreview'

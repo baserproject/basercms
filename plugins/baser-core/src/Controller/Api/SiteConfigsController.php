@@ -50,17 +50,17 @@ class SiteConfigsController extends BcApiController
         try {
             $siteConfig = $service->update($this->request->getData());
             if (!$siteConfig->getErrors()) {
-                $message = __d('baser', 'システム基本設定を更新しました。');
+                $message = __d('baser_core', 'システム基本設定を更新しました。');
             } else {
                 $this->setResponse($this->response->withStatus(400));
-                $message = __d('baser', '入力エラーです。内容を修正してください。');
+                $message = __d('baser_core', '入力エラーです。内容を修正してください。');
             }
         } catch (PersistenceFailedException $e) {
             $errors = $e->getEntity()->getErrors();
-            $message = __d('baser', "入力エラーです。内容を修正してください。");
+            $message = __d('baser_core', "入力エラーです。内容を修正してください。");
             $this->setResponse($this->response->withStatus(400));
         } catch (\Throwable $e) {
-            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
             $this->setResponse($this->response->withStatus(500));
         }
 
@@ -90,11 +90,11 @@ class SiteConfigsController extends BcApiController
         // TODO ucmitz 未実装ためコメントアウト
         /* >>>
         if (!$this->sendMail(
-            $siteConfigs['email'], __d('baser', 'メール送信テスト'),
+            $siteConfigs['email'], __d('baser_core', 'メール送信テスト'),
             sprintf('%s からのメール送信テストです。', $siteConfigs['formal_name']) . "\n" . $siteUrl
         )) {
             $this->setResponse($this->response->withStatus(401));
-            $message = __d('baser', 'ログを確認してください。');
+            $message = __d('baser_core', 'ログを確認してください。');
         }
         <<< */
         $this->set('message', $message);

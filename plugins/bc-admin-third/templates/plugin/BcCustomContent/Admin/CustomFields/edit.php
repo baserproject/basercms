@@ -18,10 +18,10 @@
  * @noTodo
  * @unitTest
  */
-$this->BcAdmin->setTitle(__d('baser', 'フィールド編集'));
+$this->BcAdmin->setTitle(__d('baser_core', 'フィールド編集'));
 $this->BcAdmin->addAdminMainBodyHeaderLinks([
   'url' => ['action' => 'add'],
-  'title' => __d('baser', '新規追加'),
+  'title' => __d('baser_core', '新規追加'),
 ]);
 ?>
 
@@ -33,12 +33,12 @@ $this->BcAdmin->addAdminMainBodyHeaderLinks([
 
 <div class="bca-actions">
   <div class="bca-actions__main">
-    <?php $this->BcBaser->link(__d('baser', '一覧に戻る'),
+    <?php $this->BcBaser->link(__d('baser_core', '一覧に戻る'),
       ['action' => 'index'], [
         'class' => 'button bca-btn',
         'data-bca-btn-type' => 'back-to-list'
       ]) ?>&nbsp;&nbsp;
-    <?php echo $this->BcAdminForm->submit(__d('baser', '保存'), [
+    <?php echo $this->BcAdminForm->submit(__d('baser_core', '保存'), [
       'div' => false,
       'class' => 'bca-btn bca-loading',
       'data-bca-btn-type' => 'save',
@@ -48,10 +48,10 @@ $this->BcAdmin->addAdminMainBodyHeaderLinks([
     ]) ?>
   </div>
   <div class="bca-actions__sub">
-    <?php echo $this->BcAdminForm->postLink(__d('baser', '削除'),
+    <?php echo $this->BcAdminForm->postLink(__d('baser_core', '削除'),
     ['action' => 'delete', $entity->id], [
       'block' => true,
-      'confirm' => __d('baser', "{0} を本当に削除してもいいですか？\n\n利用しているテーブルのフィールドもデータごと削除されてしまいますのでご注意ください。", $entity->title),
+      'confirm' => __d('baser_core', "{0} を本当に削除してもいいですか？\n\n利用しているテーブルのフィールドもデータごと削除されてしまいますのでご注意ください。", $entity->title),
       'class' => 'bca-submit-token button bca-btn bca-actions__item',
       'data-bca-btn-type' => 'delete',
       'data-bca-btn-size' => 'sm',

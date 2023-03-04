@@ -57,13 +57,13 @@
       <table class="form-table bca-form-table" data-bca-table-type="type2">
         <tr>
           <th class="bca-form-table__label">
-            <?php echo $this->BcAdminForm->label('page_template', __d('baser', '固定ページテンプレート')) ?>
+            <?php echo $this->BcAdminForm->label('page_template', __d('baser_core', '固定ページテンプレート')) ?>
           </th>
           <td class="col-input bca-form-table__input">
             <?php echo $this->BcAdminForm->control('page_template', ['type' => 'select', 'options' => $pageTemplateList]) ?>
             <i class="bca-icon--question-circle bca-help"></i>
             <div class="bca-helptext">
-              <?php echo __d('baser', 'テーマフォルダ内の、templates/Page/ にテンプレートを配置する事で、ここでテンプレートを選択できます。') ?>
+              <?php echo __d('baser_core', 'テーマフォルダ内の、templates/Page/ にテンプレートを配置する事で、ここでテンプレートを選択できます。') ?>
             </div>
             <?php echo $this->BcAdminForm->error('page_template') ?>
           </td>

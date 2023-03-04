@@ -19,7 +19,7 @@
  * @noTodo
  * @unitTest
  */
-$this->BcAdmin->setTitle(__d('baser', 'ユーザーグループ編集'));
+$this->BcAdmin->setTitle(__d('baser_core', 'ユーザーグループ編集'));
 $this->BcAdmin->setHelp('user_groups_form');
 ?>
 
@@ -31,7 +31,7 @@ $this->BcAdmin->setHelp('user_groups_form');
 <div class="submit bc-align-center section bca-actions">
   <div class="bca-actions__main">
     <?= $this->BcAdminForm->button(
-      __d('baser', '保存'),
+      __d('baser_core', '保存'),
       ['div' => false,
         'class' => 'button bca-btn bca-actions__item',
         'data-bca-btn-type' => 'save',
@@ -43,10 +43,10 @@ $this->BcAdmin->setHelp('user_groups_form');
   <div class="bca-actions__sub">
     <?php if ($userGroup->name != 'admins'): ?>
       <?= $this->BcAdminForm->postLink(
-        __d('baser', '削除'),
+        __d('baser_core', '削除'),
         ['action' => 'delete', $userGroup->id],
         ['block' => true,
-          'confirm' => __d('baser', "{0} を本当に削除してもいいですか？\n\n削除する場合、関連するユーザーは削除されませんが、関連するアクセスルールは全て削除されます。\n※ 関連するユーザーは管理者グループに所属する事になります。", $userGroup->name),
+          'confirm' => __d('baser_core', "{0} を本当に削除してもいいですか？\n\n削除する場合、関連するユーザーは削除されませんが、関連するアクセスルールは全て削除されます。\n※ 関連するユーザーは管理者グループに所属する事になります。", $userGroup->name),
           'class' => 'bca-submit-token button bca-btn bca-actions__item',
           'data-bca-btn-type' => 'delete',
           'data-bca-btn-size' => 'sm']

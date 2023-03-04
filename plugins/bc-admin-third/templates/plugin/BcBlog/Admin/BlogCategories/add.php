@@ -18,7 +18,7 @@
  * @unitTest
  */
 $this->BcAdmin->setTitle(sprintf(
-  __d('baser', '%s｜新規カテゴリ登録'),
+  __d('baser_core', '%s｜新規カテゴリ登録'),
   $blogContent->content->title
 ));
 $this->BcAdmin->setHelp('blog_categories_form');
@@ -36,7 +36,7 @@ $this->BcBaser->js('BcBlog.admin/blog_categories/form.bundle', false);
 
 <div class="bca-actions">
   <div class="bca-actions__main">
-    <?php echo $this->BcAdminForm->button(__d('baser', '保存'), [
+    <?php echo $this->BcAdminForm->button(__d('baser_core', '保存'), [
       'div' => false,
       'class' => 'bca-btn bca-actions__item bca-loading',
       'data-bca-btn-type' => 'save',

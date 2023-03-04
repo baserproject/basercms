@@ -66,7 +66,7 @@ if(!empty($customTable->custom_content)) {
     <?php if(!empty($customTable->custom_content)): ?>
       <?php if($isAllowPublish): ?>
         <?php $this->BcBaser->link('', $fullUrl, [
-          'title' => __d('baser', '確認'),
+          'title' => __d('baser_core', '確認'),
           'class' => 'btn-check bca-btn-icon',
           'data-bca-btn-type' => 'preview',
           'data-bca-btn-size' => 'lg',
@@ -74,7 +74,7 @@ if(!empty($customTable->custom_content)) {
         ]) ?>
       <?php else: ?>
         <?php $this->BcBaser->link('', [], [
-          'title' => __d('baser', '確認'),
+          'title' => __d('baser_core', '確認'),
           'class' => 'btn-check bca-btn-icon',
           'data-bca-btn-type' => 'preview',
           'data-bca-btn-size' => 'lg',
@@ -85,7 +85,7 @@ if(!empty($customTable->custom_content)) {
     <?php endif ?>
     <?php $this->BcBaser->link('',
       ['action' => 'edit', $tableId, $entity->id], [
-        'title' => __d('baser', '編集'),
+        'title' => __d('baser_core', '編集'),
         'class' => ' bca-btn-icon',
         'data-bca-btn-type' => 'edit',
         'data-bca-btn-size' => 'lg'
@@ -95,7 +95,7 @@ if(!empty($customTable->custom_content)) {
     <?php if($this->CustomContentAdmin->isEnabledMoveUpEntry($entities, $entity)): ?>
       <?php echo $this->BcAdminForm->postLink('',
         ['controller' => 'CustomEntries', 'action' => 'move_up', $tableId, $entity->id], [
-          'title' => __d('baser', '上へ移動'),
+          'title' => __d('baser_core', '上へ移動'),
           'class' => ' bca-btn-icon',
           'data-bca-btn-type' => 'arrow-up',
           'data-bca-btn-size' => 'lg'
@@ -104,7 +104,7 @@ if(!empty($customTable->custom_content)) {
     <?php else: ?>
       <?php $this->BcBaser->link('',
         [], [
-          'title' => __d('baser', '上へ移動'),
+          'title' => __d('baser_core', '上へ移動'),
           'class' => ' bca-btn-icon',
           'data-bca-btn-type' => 'arrow-up',
           'data-bca-btn-size' => 'lg',
@@ -115,7 +115,7 @@ if(!empty($customTable->custom_content)) {
     <?php if($this->CustomContentAdmin->isEnabledMoveDownEntry($entities, $entity)): ?>
       <?php echo $this->BcAdminForm->postLink('',
         ['controller' => 'CustomEntries', 'action' => 'move_down', $tableId, $entity->id], [
-          'title' => __d('baser', '下へ移動'),
+          'title' => __d('baser_core', '下へ移動'),
           'class' => ' bca-btn-icon',
           'data-bca-btn-type' => 'arrow-down',
           'data-bca-btn-size' => 'lg'
@@ -124,7 +124,7 @@ if(!empty($customTable->custom_content)) {
     <?php else: ?>
       <?php $this->BcBaser->link('',
         [], [
-          'title' => __d('baser', '下へ移動'),
+          'title' => __d('baser_core', '下へ移動'),
           'class' => ' bca-btn-icon',
           'data-bca-btn-type' => 'arrow-down',
           'data-bca-btn-size' => 'lg',

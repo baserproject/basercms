@@ -38,7 +38,7 @@
   <td class="row-tools bca-table-listup__tbody-td bca-table-listup__tbody-td--actions">
     <?php $this->BcBaser->link('',
       ['action' => 'edit', $entity->id], [
-        'title' => __d('baser', '編集'),
+        'title' => __d('baser_core', '編集'),
         'class' => ' bca-btn-icon',
         'data-bca-btn-type' => 'edit',
         'data-bca-btn-size' => 'lg'
@@ -46,7 +46,7 @@
     ) ?>
     <?php $this->BcBaser->link('',
       ['controller' => 'CustomEntries', 'action' => 'index', $entity->id], [
-        'title' => __d('baser', '管理'),
+        'title' => __d('baser_core', '管理'),
         'class' => 'btn-check bca-btn-icon',
         'data-bca-btn-type' => 'th-list',
         'data-bca-btn-size' => 'lg'

@@ -79,7 +79,7 @@ class BcComposer {
         if(!file_exists(self::$composerDir . 'composer.phar')) {
             $result = self::installComposer();
             if(!file_exists(self::$composerDir . 'composer.phar')) {
-                throw new Exception(__d('baser', 'composer がインストールできません。{0}', implode("\n", $result['out'])));
+                throw new Exception(__d('baser_core', 'composer がインストールできません。{0}', implode("\n", $result['out'])));
             }
             self::selfUpdate();
         }
@@ -94,19 +94,19 @@ class BcComposer {
     {
         $error = [];
         if (!is_writable(ROOT . DS . 'composer')) {
-            $error[] = __d('baser', '/composer に書き込み権限がありません。書き込み権限を与えてください。');
+            $error[] = __d('baser_core', '/composer に書き込み権限がありません。書き込み権限を与えてください。');
         }
         if (!is_writable(ROOT . DS . 'vendor')) {
-            $error[] = __d('baser', '/vendor に書き込み権限がありません。書き込み権限を与えてください。');
+            $error[] = __d('baser_core', '/vendor に書き込み権限がありません。書き込み権限を与えてください。');
         }
         if (!is_writable(ROOT . DS . 'config')) {
-            $error[] = __d('baser', '/config に書き込み権限がありません。書き込み権限を与えてください。');
+            $error[] = __d('baser_core', '/config に書き込み権限がありません。書き込み権限を与えてください。');
         }
         if (!is_writable(ROOT . DS . 'tmp')) {
-            $error[] = __d('baser', '/tmp に書き込み権限がありません。書き込み権限を与えてください。');
+            $error[] = __d('baser_core', '/tmp に書き込み権限がありません。書き込み権限を与えてください。');
         }
         if (!is_writable(ROOT . DS . 'logs')) {
-            $error = __d('baser', '/logs に書き込み権限がありません。書き込み権限を与えてください。');
+            $error = __d('baser_core', '/logs に書き込み権限がありません。書き込み権限を与えてください。');
         }
         if($error) {
             throw new Exception(implode('\n', $error));

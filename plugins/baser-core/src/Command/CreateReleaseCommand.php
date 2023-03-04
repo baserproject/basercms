@@ -43,30 +43,30 @@ class CreateReleaseCommand extends Command
             $folder->delete();
         }
 
-        $io->out(__d('baser', 'リリースパッケージを作成します。', TMP));
+        $io->out(__d('baser_core', 'リリースパッケージを作成します。', TMP));
         $io->out();
 
-        $io->out(__d('baser', '- {0} にパッケージをクローンします。', TMP));
+        $io->out(__d('baser_core', '- {0} にパッケージをクローンします。', TMP));
         $this->clonePackage($packagePath);
 
-        $io->out(__d('baser', '- composer.json をセットアップします。'));
+        $io->out(__d('baser_core', '- composer.json をセットアップします。'));
         $this->setupComposer($packagePath);
 
-        $io->out(__d('baser', '- プラグインを初期化します。'));
+        $io->out(__d('baser_core', '- プラグインを初期化します。'));
         $this->deletePlugins($packagePath);
 
-        $io->out(__d('baser', '- 不要ファイルを削除します。'));
+        $io->out(__d('baser_core', '- 不要ファイルを削除します。'));
         $this->deleteExcludeFiles($packagePath);
 
-        $io->out(__d('baser', '- Zip ファイルを作成します。'));
+        $io->out(__d('baser_core', '- Zip ファイルを作成します。'));
         $this->createZip($packagePath);
 
-        $io->out(__d('baser', '- クリーニング処理を実行します。'));
+        $io->out(__d('baser_core', '- クリーニング処理を実行します。'));
         $folder = new Folder($packagePath);
         $folder->delete();
 
         $io->out();
-        $io->out(__d('baser', 'リリースパッケージの作成が完了しました。/tmp/basercms.zip を確認してください。'));
+        $io->out(__d('baser_core', 'リリースパッケージの作成が完了しました。/tmp/basercms.zip を確認してください。'));
     }
 
     /**

@@ -35,8 +35,8 @@
     <?php endif ?>
     <tr>
       <th class="col-head bca-form-table__label">
-        <?php echo $this->BcAdminForm->label('name', __d('baser', 'テンプレート名')) ?>&nbsp;
-        <span class="required bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
+        <?php echo $this->BcAdminForm->label('name', __d('baser_core', 'テンプレート名')) ?>&nbsp;
+        <span class="required bca-label" data-bca-label-type="required"><?php echo __d('baser_core', '必須') ?></span>
       </th>
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('name', ['type' => 'text', 'size' => 20, 'maxlength' => 50]) ?>
@@ -45,7 +45,7 @@
     </tr>
     <tr>
       <th class="col-head bca-form-table__label">
-        <?php echo $this->BcAdminForm->label('image', __d('baser', 'アイコン画像')) ?>
+        <?php echo $this->BcAdminForm->label('image', __d('baser_core', 'アイコン画像')) ?>
       </th>
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('image', ['type' => 'file']) ?>
@@ -54,7 +54,7 @@
     </tr>
     <tr>
       <th class="col-head bca-form-table__label">
-        <?php echo $this->BcAdminForm->label('description', __d('baser', '説明文')) ?>
+        <?php echo $this->BcAdminForm->label('description', __d('baser_core', '説明文')) ?>
       </th>
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('description', ['type' => 'textarea', 'cols' => 60, 'rows' => 2]) ?>
@@ -63,7 +63,7 @@
     </tr>
     <tr>
       <th class="col-head bca-form-table__label">
-        <?php echo $this->BcAdminForm->label('html', __d('baser', 'コンテンツ')) ?>
+        <?php echo $this->BcAdminForm->label('html', __d('baser_core', 'コンテンツ')) ?>
       </th>
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->ckeditor('html', ['editorWidth' => 'auto', 'editorUseTemplates' => false]) ?>

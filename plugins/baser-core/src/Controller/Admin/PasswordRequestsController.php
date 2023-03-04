@@ -61,10 +61,10 @@ class PasswordRequestsController extends BcAdminAppController
 
         $passwordRequest = $service->update($passwordRequest, $this->request->getData());
         if (!$passwordRequest) {
-            $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
+            $this->BcMessage->setError(__d('baser_core', '入力エラーです。内容を修正してください。'));
             return;
         }
-        $this->BcMessage->setSuccess(__d('baser', 'パスワードのリセットを受付ました。該当メールアドレスが存在した場合、変更URLを送信いたしました。'));
+        $this->BcMessage->setSuccess(__d('baser_core', 'パスワードのリセットを受付ました。該当メールアドレスが存在した場合、変更URLを送信いたしました。'));
         $this->redirect(['action' => 'entry']);
     }
 
@@ -93,7 +93,7 @@ class PasswordRequestsController extends BcAdminAppController
             $this->set('user', $e->getEntity());
             return;
         } catch (BcException $e) {
-            $this->BcMessage->setError(__('baser', 'システムエラーが発生しました。'));
+            $this->BcMessage->setError(__d('baser_core', 'システムエラーが発生しました。'));
             return;
         }
         $this->redirect(['action' => 'done']);

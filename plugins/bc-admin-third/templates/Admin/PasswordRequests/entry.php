@@ -16,11 +16,11 @@
  * @noTodo
  * @unitTest
  */
-$this->BcAdmin->setTitle(__d('baser', 'パスワードのリセット'));
+$this->BcAdmin->setTitle(__d('baser_core', 'パスワードのリセット'));
 ?>
 
 <div class="section">
-  <p><?php echo __d('baser', 'パスワードを忘れた方は、登録されているメールアドレスを送信してください。<br />パスワードの再発行URLをメールでお知らせします。') ?></p>
+  <p><?php echo __d('baser_core', 'パスワードを忘れた方は、登録されているメールアドレスを送信してください。<br />パスワードの再発行URLをメールでお知らせします。') ?></p>
 
   <?= $this->BcAdminForm->create($passwordRequest, ['novalidate' => true]) ?>
   <div class="submit">
@@ -29,7 +29,7 @@ $this->BcAdmin->setTitle(__d('baser', 'パスワードのリセット'));
     </p>
 
     <?= $this->BcAdminForm->button(
-      __d('baser', '保存'),
+      __d('baser_core', '保存'),
       ['div' => false,
         'class' => 'button bca-btn bca-actions__item',
         'data-bca-btn-type' => 'save',

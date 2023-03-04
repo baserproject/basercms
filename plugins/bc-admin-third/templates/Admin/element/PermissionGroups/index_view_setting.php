@@ -21,7 +21,7 @@
 <div class="panel-box bca-panel-box" id="ViewSetting">
   <div class="bca-panel-box__inline-fields">
     <div class="bca-panel-box__inline-fields-item">
-      <label class="bca-panel-box__inline-fields-title"><?php echo __d('baser', 'タイプ') ?></label>
+      <label class="bca-panel-box__inline-fields-title"><?php echo __d('baser_core', 'タイプ') ?></label>
       <?php echo $this->BcAdminForm->control('list_type', [
         'type' => 'radio',
         'options' => $this->BcAdminForm->getControlSource('Permissions.permission_group_type')

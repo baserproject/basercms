@@ -42,7 +42,7 @@ class CustomEntriesController extends BcApiController
             if (!$this->isAdminApiEnabled()) throw new ForbiddenException();
         }
         if(empty($queryParams['custom_table_id'])) {
-            throw new BadRequestException(__d('baser', 'パラメーターに custom_table_id を指定してください。'));
+            throw new BadRequestException(__d('baser_core', 'パラメーターに custom_table_id を指定してください。'));
         }
 
         $queryParams = array_merge([
@@ -56,10 +56,10 @@ class CustomEntriesController extends BcApiController
             $entity = $service->get($id, $queryParams);
         } catch (RecordNotFoundException $e) {
             $this->setResponse($this->response->withStatus(404));
-            $message = __d('baser', "データが見つかりません。");
+            $message = __d('baser_core', "データが見つかりません。");
         } catch (Throwable $e) {
             $this->setResponse($this->response->withStatus(500));
-            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
         }
 
         $this->set([
@@ -83,7 +83,7 @@ class CustomEntriesController extends BcApiController
             if (!$this->isAdminApiEnabled()) throw new ForbiddenException();
         }
         if(empty($queryParams['custom_table_id'])) {
-            throw new BadRequestException(__d('baser', 'パラメーターに custom_table_id を指定してください。'));
+            throw new BadRequestException(__d('baser_core', 'パラメーターに custom_table_id を指定してください。'));
         }
 
         $queryParams = array_merge([
@@ -97,7 +97,7 @@ class CustomEntriesController extends BcApiController
             $entities = $service->getIndex($queryParams);
         } catch (Throwable $e) {
             $this->setResponse($this->response->withStatus(500));
-            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
         }
 
         $this->set([

@@ -20,9 +20,9 @@
 $creators = $this->BcAdminForm->getControlSource('BcCustomContent.CustomEntries.creator_id');
 
 if($customTable->isContentTable()) {
-  $titleLabel = __d('baser', 'タイトル・スラッグ');
+  $titleLabel = __d('baser_core', 'タイトル・スラッグ');
 } else {
-  $titleLabel = __d('baser', 'タイトル');
+  $titleLabel = __d('baser_core', 'タイトル');
 }
 ?>
 
@@ -40,21 +40,21 @@ if($customTable->isContentTable()) {
 
 <?php if($customTable->isContentTable()): ?>
   <span class="bca-search__input-item">
-  <?php echo $this->BcAdminForm->label('status', __d('baser', '公開状態'), ['class' => 'bca-search__input-item-label']) ?>
+  <?php echo $this->BcAdminForm->label('status', __d('baser_core', '公開状態'), ['class' => 'bca-search__input-item-label']) ?>
   <?php echo $this->BcAdminForm->control('status', [
     'type' => 'select',
-    'options' => ['publish' => __d('baser', '○'), 'unpublish' => __d('baser', 'ー')],
-    'empty' => __d('baser', '指定なし')
+    'options' => ['publish' => __d('baser_core', '○'), 'unpublish' => __d('baser_core', 'ー')],
+    'empty' => __d('baser_core', '指定なし')
   ]) ?>
   </span>
 <?php endif ?>
 
   <span class="bca-search__input-item">
-  <?php echo $this->BcAdminForm->label('creator_id', __d('baser', '作成者'), ['class' => 'bca-search__input-item-label']) ?>
+  <?php echo $this->BcAdminForm->label('creator_id', __d('baser_core', '作成者'), ['class' => 'bca-search__input-item-label']) ?>
   <?php echo $this->BcAdminForm->control('creator_id', [
     'type' => 'select',
     'options' => $creators,
-    'empty' => __d('baser', '指定なし')
+    'empty' => __d('baser_core', '指定なし')
   ]) ?>
   </span>
 
@@ -75,10 +75,10 @@ if($customTable->isContentTable()) {
 
 <div class="button bca-search__btns">
   <div class="bca-search__btns-item">
-    <?php echo $this->BcAdminForm->button(__d('baser', '検索'), ['id' => 'BtnSearchSubmit', 'class' => 'bca-btn bca-loading', 'data-bca-btn-type' => 'search']) ?>
+    <?php echo $this->BcAdminForm->button(__d('baser_core', '検索'), ['id' => 'BtnSearchSubmit', 'class' => 'bca-btn bca-loading', 'data-bca-btn-type' => 'search']) ?>
   </div>
   <div class="bca-search__btns-item">
-    <?php echo $this->BcAdminForm->button(__d('baser', 'クリア'), ['id' => 'BtnSearchClear', 'class' => 'bca-btn', 'data-bca-btn-type' => 'clear']) ?>
+    <?php echo $this->BcAdminForm->button(__d('baser_core', 'クリア'), ['id' => 'BtnSearchClear', 'class' => 'bca-btn', 'data-bca-btn-type' => 'clear']) ?>
   </div>
 </div>
 

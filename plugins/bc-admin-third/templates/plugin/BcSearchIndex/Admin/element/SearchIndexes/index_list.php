@@ -27,8 +27,8 @@ $this->BcListTable->setColumnNumber(9);
   <!-- 一括処理 -->
   <?php if ($this->BcBaser->isAdminUser()): ?>
     <div>
-      <?php echo $this->BcAdminForm->control('batch', ['type' => 'select', 'options' => ['delete' => __d('baser', '削除')], 'empty' => __d('baser', '一括処理')]) ?>
-      <?php echo $this->BcAdminForm->button(__d('baser', '適用'), ['id' => 'BtnApplyBatch', 'disabled' => 'disabled', 'class' => 'bca-btn']) ?>
+      <?php echo $this->BcAdminForm->control('batch', ['type' => 'select', 'options' => ['delete' => __d('baser_core', '削除')], 'empty' => __d('baser_core', '一括処理')]) ?>
+      <?php echo $this->BcAdminForm->button(__d('baser_core', '適用'), ['id' => 'BtnApplyBatch', 'disabled' => 'disabled', 'class' => 'bca-btn']) ?>
     </div>
   <?php endif ?>
   <!-- pagination -->
@@ -40,19 +40,19 @@ $this->BcListTable->setColumnNumber(9);
   <thead class="bca-table-listup__thead">
   <tr>
     <th class="list-tool bca-table-listup__thead-th bca-table-listup__thead-th--select">
-      <?php echo $this->BcAdminForm->control('checkall', ['type' => 'checkbox', 'label' => __d('baser', '一括選択')]) ?>
+      <?php echo $this->BcAdminForm->control('checkall', ['type' => 'checkbox', 'label' => __d('baser_core', '一括選択')]) ?>
     </th>
     <th class="bca-table-listup__thead-th">No</th>
-    <th class="bca-table-listup__thead-th"><?php echo __d('baser', 'タイプ') ?><br><?php echo __d('baser', 'タイトル') ?>
+    <th class="bca-table-listup__thead-th"><?php echo __d('baser_core', 'タイプ') ?><br><?php echo __d('baser_core', 'タイトル') ?>
     </th>
-    <th class="bca-table-listup__thead-th"><?php echo __d('baser', 'コンテンツ内容') ?></th>
-    <th class="bca-table-listup__thead-th"><?php echo __d('baser', '公開状態') ?></th>
-    <th class="bca-table-listup__thead-th"><?php echo __d('baser', '公開期間') ?></th>
+    <th class="bca-table-listup__thead-th"><?php echo __d('baser_core', 'コンテンツ内容') ?></th>
+    <th class="bca-table-listup__thead-th"><?php echo __d('baser_core', '公開状態') ?></th>
+    <th class="bca-table-listup__thead-th"><?php echo __d('baser_core', '公開期間') ?></th>
     <?php echo $this->BcListTable->dispatchShowHead() ?>
-    <th class="bca-table-listup__thead-th"><?php echo __d('baser', '登録日') ?><br><?php echo __d('baser', '更新日') ?>
+    <th class="bca-table-listup__thead-th"><?php echo __d('baser_core', '登録日') ?><br><?php echo __d('baser_core', '更新日') ?>
     </th>
-    <th class="bca-table-listup__thead-th"><?php echo __d('baser', '優先度') ?></th>
-    <th class="bca-table-listup__thead-th"><?php echo __d('baser', 'アクション') ?></th>
+    <th class="bca-table-listup__thead-th"><?php echo __d('baser_core', '優先度') ?></th>
+    <th class="bca-table-listup__thead-th"><?php echo __d('baser_core', 'アクション') ?></th>
   </tr>
   </thead>
   <tbody>
@@ -65,7 +65,7 @@ $this->BcListTable->setColumnNumber(9);
   <?php else: ?>
     <tr>
       <td colspan="<?php echo $this->BcListTable->getColumnNumber() ?>"><p
-          class="no-data"><?php echo __d('baser', 'データが見つかりませんでした。') ?></p></td>
+          class="no-data"><?php echo __d('baser_core', 'データが見つかりませんでした。') ?></p></td>
     </tr>
   <?php endif; ?>
   </tbody>

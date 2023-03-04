@@ -88,11 +88,11 @@ class UploaderFilesAdminService extends UploaderFilesService implements Uploader
             $folder->create($limitedPath, 0777);
             if (!is_dir($limitedPath)) {
                 if (is_writable($filesPath)) {
-                    $installMessage = sprintf(__d('baser', '%sを作成し、書き込み権限を与えてください'), $viewSavePath);
+                    $installMessage = sprintf(__d('baser_core', '%sを作成し、書き込み権限を与えてください'), $viewSavePath);
                 } elseif (!is_dir($filesPath)) {
-                    $installMessage = sprintf(__d('baser', '作成し、%sに書き込み権限を与えてください'), $viewFilesPath);
+                    $installMessage = sprintf(__d('baser_core', '作成し、%sに書き込み権限を与えてください'), $viewFilesPath);
                 } else {
-                    $installMessage = sprintf(__d('baser', '%sに書き込み権限を与えてください'), $viewFilesPath);
+                    $installMessage = sprintf(__d('baser_core', '%sに書き込み権限を与えてください'), $viewFilesPath);
                 }
             } else {
                 $File = new File($limitedPath . DS . '.htaccess');
@@ -100,13 +100,13 @@ class UploaderFilesAdminService extends UploaderFilesService implements Uploader
                 $File->write($htaccess);
                 $File->close();
                 if (!file_exists($limitedPath . DS . '.htaccess')) {
-                    $installMessage = __d('baser', '現在、アップロードファイルの公開期間の指定ができません。' .
+                    $installMessage = __d('baser_core', '現在、アップロードファイルの公開期間の指定ができません。' .
                         '指定できるようにするには、{0} に書き込み権限を与えてください。', $viewLimitedPath);
                 }
             }
         } else {
             if (!is_writable($savePath)) {
-                $installMessage = sprintf(__d('baser', '%sに書き込み権限を与えてください'), $viewSavePath);
+                $installMessage = sprintf(__d('baser_core', '%sに書き込み権限を与えてください'), $viewSavePath);
             }
         }
         return $installMessage;

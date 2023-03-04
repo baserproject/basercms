@@ -11,8 +11,8 @@
 
 return [
     'type' => 'CorePlugin',
-    'title' => __d('baser', 'コンテンツリンク'),
-    'description' => __d('baser', 'コンテンツ管理を利用してメニューを生成する場合にメニューにリンクを配置する事ができます。'),
+    'title' => __d('baser_core', 'コンテンツリンク'),
+    'description' => __d('baser_core', 'コンテンツ管理を利用してメニューを生成する場合にメニューにリンクを配置する事ができます。'),
     'author' => 'baserCMS User Community',
     'url' => 'https://basercms.net',
     'installMessage' => ''

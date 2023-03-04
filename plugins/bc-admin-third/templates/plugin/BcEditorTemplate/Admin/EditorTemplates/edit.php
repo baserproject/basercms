@@ -20,7 +20,7 @@
  * @unitTest
  */
 $this->BcBaser->js('BcEditorTemplate.admin/editor_templates/form.bundle', false);
-$this->BcAdmin->setTitle(__d('baser', 'エディタテンプレート編集'));
+$this->BcAdmin->setTitle(__d('baser_core', 'エディタテンプレート編集'));
 $this->BcAdmin->setHelp('editor_templates_form');
 $this->BcBaser->css('admin/ckeditor/editor', true);
 ?>
@@ -34,7 +34,7 @@ $this->BcBaser->css('admin/ckeditor/editor', true);
 <!-- button -->
 <div class="bca-actions">
   <div class="bca-actions__main">
-    <?php echo $this->BcAdminForm->button(__d('baser', '保存'), [
+    <?php echo $this->BcAdminForm->button(__d('baser_core', '保存'), [
       'type' => 'submit',
       'id' => 'BtnSave',
       'div' => false,
@@ -45,9 +45,9 @@ $this->BcBaser->css('admin/ckeditor/editor', true);
     ]) ?>
   </div>
   <div class="bca-actions__sub">
-    <?php echo $this->BcAdminForm->postLink(__d('baser', '削除'), ['action' => 'delete', $editorTemplate->id], [
+    <?php echo $this->BcAdminForm->postLink(__d('baser_core', '削除'), ['action' => 'delete', $editorTemplate->id], [
       'block' => true,
-      'confirm' => __d('baser', '{0} を本当に削除してもいいですか？', $editorTemplate->name),
+      'confirm' => __d('baser_core', '{0} を本当に削除してもいいですか？', $editorTemplate->name),
       'class' => 'bca-submit-token button bca-btn bca-actions__item',
       'data-bca-btn-type' => 'delete',
       'data-bca-btn-size' => 'sm',

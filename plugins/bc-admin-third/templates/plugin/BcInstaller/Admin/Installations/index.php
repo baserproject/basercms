@@ -13,27 +13,27 @@
  * [PUBLISH] インストーラー初期ページ
  * @var \BaserCore\View\BcAdminAppView $this
  */
-$this->BcAdmin->setTitle(__d('baser', 'baserCMSのインストール'));
+$this->BcAdmin->setTitle(__d('baser_core', 'baserCMSのインストール'));
 ?>
 
 
 <div class="step-1">
 
   <div class="em-box bca-em-box">
-    <?php echo sprintf(__d('baser', '%s のインストールを開始します。<br>よろしければ「インストール開始」ボタンをクリックしてください。'), \Cake\Core\Configure::read('BcApp.title')) ?>
+    <?php echo sprintf(__d('baser_core', '%s のインストールを開始します。<br>よろしければ「インストール開始」ボタンをクリックしてください。'), \Cake\Core\Configure::read('BcApp.title')) ?>
   </div>
 
   <div class="section bca-section">
     <p class="bca-main__text">
-      <?php echo __d('baser', 'baserCMSではファイルベースのデータベースをサポートしています。<br>SQLite３ を利用すれば、インストールにデータベースサーバーは必要ありません。') ?>
+      <?php echo __d('baser_core', 'baserCMSではファイルベースのデータベースをサポートしています。<br>SQLite３ を利用すれば、インストールにデータベースサーバーは必要ありません。') ?>
     </p>
     <p class="bca-main__text">
-      <small>※ <?php echo __d('baser', '膨大なデータの操作、データベースによる複雑な処理が必要な場合は、MySQL または PostgreSQL の利用を推奨します。') ?></small>
+      <small>※ <?php echo __d('baser_core', '膨大なデータの操作、データベースによる複雑な処理が必要な場合は、MySQL または PostgreSQL の利用を推奨します。') ?></small>
     </p>
   </div>
   <div class="submit bca-actions">
     <?php echo $this->BcAdminForm->create(null, ['url' => ['action' => 'step2'], 'type' => 'post']) ?>
-    <?php echo $this->BcAdminForm->button('<span>' . __d('baser', 'インストール開始') . '</span>', [
+    <?php echo $this->BcAdminForm->button('<span>' . __d('baser_core', 'インストール開始') . '</span>', [
       'class' => 'bca-btn bca-actions__item bca-loading',
       'data-bca-btn-size' => 'lg',
       'data-bca-btn-width' => 'lg',

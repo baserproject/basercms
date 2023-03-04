@@ -27,7 +27,7 @@
 <div class="bs-search__input-list">
 
   <span class="bs-search__input-item">
-  <?php echo $this->BcForm->label('title', __d('baser', 'タイトル'), ['class' => 'bca-search__input-item-label']) ?>
+  <?php echo $this->BcForm->label('title', __d('baser_core', 'タイトル'), ['class' => 'bca-search__input-item-label']) ?>
   <?php echo $this->BcForm->control('title', [
     'type' => 'text',
   ]) ?>
@@ -48,7 +48,7 @@
 
 <div class="button bs-search__btns">
   <div class="bs-search__btns-item">
-    <?php echo $this->BcForm->button(__d('baser', '検索'), ['id' => 'BtnSearchSubmit', 'class' => 'bs-button', 'data-bca-btn-type' => 'search']) ?>
+    <?php echo $this->BcForm->button(__d('baser_core', '検索'), ['id' => 'BtnSearchSubmit', 'class' => 'bs-button', 'data-bca-btn-type' => 'search']) ?>
   </div>
 </div>
 

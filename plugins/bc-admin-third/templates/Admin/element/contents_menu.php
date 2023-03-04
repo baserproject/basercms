@@ -48,14 +48,14 @@ if ($globalEvent !== false) {
       <?php if ($isHelp): ?>
         <li class="bca-content-menu__item">
           <?php // TODO: button要素に変更 ?>
-          <?php $this->BcBaser->link(__d('baser', 'ヘルプ'), 'javascript:void(0)', ['id' => 'BtnMenuHelp', 'class' => 'bca-content-menu__link bca-icon--help']) ?>
+          <?php $this->BcBaser->link(__d('baser_core', 'ヘルプ'), 'javascript:void(0)', ['id' => 'BtnMenuHelp', 'class' => 'bca-content-menu__link bca-icon--help']) ?>
         </li>
       <?php endif ?>
       <?php if ($isAdminUser): ?>
         <li class="bca-content-menu__item">
           <?php $this->BcBaser->element('Permissions/dialog') ?>
           <?php // TODO: button要素に変更 ?>
-          <?php $this->BcBaser->link(__d('baser', 'ルール追加'), 'javascript:void(0)', ['id' => 'BtnMenuPermission', 'class' => 'bca-content-menu__link bca-icon--permission']) ?></li>
+          <?php $this->BcBaser->link(__d('baser_core', 'ルール追加'), 'javascript:void(0)', ['id' => 'BtnMenuPermission', 'class' => 'bca-content-menu__link bca-icon--permission']) ?></li>
       <?php endif ?>
     </ul>
   </div>

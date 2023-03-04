@@ -174,20 +174,20 @@ class CustomFieldsService implements CustomFieldsServiceInterface
             return $this->getFieldTypes();
         } elseif ($field === 'validate') {
             return [
-                'EMAIL' => __d('baser', 'Eメール形式チェック'),
-                'EMAIL_CONFIRM' => __d('baser', 'Eメール比較チェック'),
-                'NUMBER' => __d('baser', '数値チェック'),
-                'HANKAKU' => __d('baser', '半角英数チェック'),
-                'ZENKAKU_KATAKANA' => __d('baser', '全角カタカナチェック'),
-                'ZENKAKU_HIRAGANA' => __d('baser', '全角ひらがなチェック'),
-                'DATETIME' => __d('baser', '日付チェック'),
-                'MAX_FILE_SIZE' => __d('baser', 'ファイルアップロードサイズ制限'),
-                'FILE_EXT' => __d('baser', 'ファイル拡張子チェック'),
+                'EMAIL' => __d('baser_core', 'Eメール形式チェック'),
+                'EMAIL_CONFIRM' => __d('baser_core', 'Eメール比較チェック'),
+                'NUMBER' => __d('baser_core', '数値チェック'),
+                'HANKAKU' => __d('baser_core', '半角英数チェック'),
+                'ZENKAKU_KATAKANA' => __d('baser_core', '全角カタカナチェック'),
+                'ZENKAKU_HIRAGANA' => __d('baser_core', '全角ひらがなチェック'),
+                'DATETIME' => __d('baser_core', '日付チェック'),
+                'MAX_FILE_SIZE' => __d('baser_core', 'ファイルアップロードサイズ制限'),
+                'FILE_EXT' => __d('baser_core', 'ファイル拡張子チェック'),
             ];
         } elseif ($field === 'auto_convert') {
             return [
-                'CONVERT_HANKAKU' => __d('baser', '半角変換'),
-                'CONVERT_ZENKAKU' => __d('baser', '全角変換'),
+                'CONVERT_HANKAKU' => __d('baser_core', '半角変換'),
+                'CONVERT_ZENKAKU' => __d('baser_core', '全角変換'),
             ];
         }
         return [];

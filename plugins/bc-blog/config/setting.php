@@ -22,7 +22,7 @@ return [
             'Plugins' => [
                 'menus' => [
                     'BlogTags' => [
-                        'title' => __d('baser', 'ブログタグ設定'),
+                        'title' => __d('baser_core', 'ブログタグ設定'),
                         'url' => [
                             'Admin' => true,
                             'plugin' => 'BcBlog',
@@ -37,7 +37,7 @@ return [
         'items' => [
             'BcBlog' => [
                 'BlogContent' => [
-                    'title' => __d('baser', 'ブログ'),
+                    'title' => __d('baser_core', 'ブログ'),
                     'multiple' => true,
                     'preview' => true,
                     'icon' => 'bca-icon--blog',

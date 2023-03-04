@@ -63,7 +63,7 @@ class BcAdminContentsComponent extends Component
     {
         parent::initialize($config);
         if (!isset($config['entityVarName'])) {
-            throw new BcException(__d('baser', '編集画面で利用するエンティティの変数名を entityVarName として定義してください。'));
+            throw new BcException(__d('baser_core', '編集画面で利用するエンティティの変数名を entityVarName として定義してください。'));
         }
         $this->setupAdmin();
     }
@@ -115,7 +115,7 @@ class BcAdminContentsComponent extends Component
         } else {
             $associated = $controller->viewBuilder()->getVar(Inflector::variable($entityName));
             if(!isset($associated->content)) {
-                throw new BcException(__d('baser', '編集画面で利用するエンティティに content プロパティが定義されていません。
+                throw new BcException(__d('baser_core', '編集画面で利用するエンティティに content プロパティが定義されていません。
                     エンティティを取得する際に、contain を利用して、[\'Contents\' => [\'Sites\']] を指定してください。'));
             }
             $content = $associated->content;

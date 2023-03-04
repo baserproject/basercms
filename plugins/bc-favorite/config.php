@@ -11,8 +11,8 @@
 
 return [
     'type' => 'CorePlugin',
-    'title' => __d('baser', 'お気に入り'),
-    'description' => __d('baser', 'ユーザーごとに管理画面内のお気に入りを設定できる機能'),
+    'title' => __d('baser_core', 'お気に入り'),
+    'description' => __d('baser_core', 'ユーザーごとに管理画面内のお気に入りを設定できる機能'),
     'author' => 'baserCMS User Community',
     'url' => 'https://basercms.net',
     'installMessage' => ''

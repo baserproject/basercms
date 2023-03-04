@@ -48,7 +48,7 @@ if ($links) {
 
 <?php if ($link): ?>
   <dl class="list-num bca-list-num">
-    <dt class="bca-list-num__title"><?php echo __d('baser', '表示件数') ?></dt>
+    <dt class="bca-list-num__title"><?php echo __d('baser_core', '表示件数') ?></dt>
     <dd class="bca-list-num__data"><?php echo $link ?></dd>
   </dl>
 <?php endif ?>

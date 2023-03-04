@@ -135,10 +135,10 @@ class ThemeFoldersService extends BcThemeFileService implements ThemeFoldersServ
                 $form->set('fullpath', $postData['fullpath'] . DS . $postData['name']);
                 return $form;
             } else {
-                throw new BcException(__d('baser', 'フォルダの作成に失敗しました。書き込み権限に問題がある可能性があります。'));
+                throw new BcException(__d('baser_core', 'フォルダの作成に失敗しました。書き込み権限に問題がある可能性があります。'));
             }
         } else {
-            throw new BcFormFailedException($form, __d('baser', 'フォルダの作成に失敗しました。'));
+            throw new BcFormFailedException($form, __d('baser_core', 'フォルダの作成に失敗しました。'));
         }
     }
 
@@ -159,10 +159,10 @@ class ThemeFoldersService extends BcThemeFileService implements ThemeFoldersServ
                 $form->set('fullpath', dirname($postData['fullpath']) . DS . $postData['name']);
                 return $form;
             } else {
-                throw new BcException(__d('baser', 'フォルダのリネームに失敗しました。書き込み権限に問題がある可能性があります。'));
+                throw new BcException(__d('baser_core', 'フォルダのリネームに失敗しました。書き込み権限に問題がある可能性があります。'));
             }
         } else {
-            throw new BcFormFailedException($form, __d('baser', 'フォルダのリネームに失敗しました。'));
+            throw new BcFormFailedException($form, __d('baser_core', 'フォルダのリネームに失敗しました。'));
         }
     }
 
@@ -237,7 +237,7 @@ class ThemeFoldersService extends BcThemeFileService implements ThemeFoldersServ
                 $service = $themeFilesService;
             }
             if (!$service->$method($path)) {
-                throw new BcException(__d('baser', 'エラーが発生しました。書き込み権限に問題がある可能性があります。'));
+                throw new BcException(__d('baser_core', 'エラーが発生しました。書き込み権限に問題がある可能性があります。'));
             }
         }
         return true;

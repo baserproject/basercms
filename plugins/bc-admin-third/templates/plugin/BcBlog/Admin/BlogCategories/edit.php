@@ -18,7 +18,7 @@
  * @unitTest
  */
 $this->BcAdmin->setTitle(sprintf(
-  __d('baser', '%s｜カテゴリ編集'),
+  __d('baser_core', '%s｜カテゴリ編集'),
   $blogContent->content->title
 ));
 $this->BcAdmin->setHelp('blog_categories_form');
@@ -42,7 +42,7 @@ $fullUrl = $this->BcBaser->getContentsUrl(
        class="bca-text-url"
        target="_blank"
        data-toggle="tooltip"
-       data-placement="top" title="<?php echo __d('baser', '公開URLを開きます') ?>">
+       data-placement="top" title="<?php echo __d('baser_core', '公開URLを開きます') ?>">
 	    <i class="bca-icon--globe"></i>
 	    <?php echo $this->BcBaser->getUri($fullUrl) ?>
 	  </a>
@@ -68,7 +68,7 @@ $fullUrl = $this->BcBaser->getContentsUrl(
 
 <div class="bca-actions">
   <div class="bca-actions__main">
-    <?php echo $this->BcAdminForm->button(__d('baser', '保存'), [
+    <?php echo $this->BcAdminForm->button(__d('baser_core', '保存'), [
       'div' => false,
       'class' => 'bca-btn bca-actions__item bca-loading',
       'data-bca-btn-type' => 'save',
@@ -77,7 +77,7 @@ $fullUrl = $this->BcBaser->getContentsUrl(
     ]) ?>
   </div>
   <div class="bca-actions__sub">
-    <?php echo $this->BcAdminForm->postLink(__d('baser', '削除'),
+    <?php echo $this->BcAdminForm->postLink(__d('baser_core', '削除'),
       ['action' => 'delete', $blogContent->id, $blogCategory->id],
       [
         'block' => true,

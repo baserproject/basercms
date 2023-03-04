@@ -132,7 +132,7 @@ class MailFieldsService implements MailFieldsServiceInterface
             if (!$entity->getErrors()) {
                 if (!$this->MailMessagesService->addMessageField($postData['mail_content_id'], $postData['field_name'])) {
                     $this->MailFields->getConnection()->rollback();
-                    throw new BcException(__d('baser', 'データベースに問題があります。メール受信データ保存用テーブルの更新処理に失敗しました。'));
+                    throw new BcException(__d('baser_core', 'データベースに問題があります。メール受信データ保存用テーブルの更新処理に失敗しました。'));
                 }
             }
             $result = $this->MailFields->saveOrFail($entity);
@@ -161,7 +161,7 @@ class MailFieldsService implements MailFieldsServiceInterface
         if (!$entity->getErrors() && $entity->field_name !== $oldFieldName) {
             if (!$this->MailMessagesService->renameMessageField($entity->mail_content_id, $oldFieldName, $entity->field_name)) {
                 $this->MailFields->getConnection()->rollback();
-                throw new BcException(__d('baser', 'データベースに問題があります。メール受信データ保存用テーブルの更新処理に失敗しました。'));
+                throw new BcException(__d('baser_core', 'データベースに問題があります。メール受信データ保存用テーブルの更新処理に失敗しました。'));
             }
         }
         try {
@@ -185,7 +185,7 @@ class MailFieldsService implements MailFieldsServiceInterface
         $entity = $this->MailFields->get($id);
         $this->MailFields->getConnection()->begin();
         if(!$this->MailMessagesService->deleteMessageField($entity->mail_content_id, $entity->field_name)) {
-            throw new BcException(__d('baser', 'データベースに問題があります。メール受信データ保存用テーブルの更新処理に失敗しました。'));
+            throw new BcException(__d('baser_core', 'データベースに問題があります。メール受信データ保存用テーブルの更新処理に失敗しました。'));
         }
         try {
             $result = $this->MailFields->delete($entity);
@@ -272,7 +272,7 @@ class MailFieldsService implements MailFieldsServiceInterface
         foreach($ids as $id) {
             if (!$this->$method($id)) {
                 $db->rollback();
-                throw new BcException(__d('baser', 'データベース処理中にエラーが発生しました。'));
+                throw new BcException(__d('baser_core', 'データベース処理中にエラーが発生しました。'));
             }
         }
         $db->commit();

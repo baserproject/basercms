@@ -11,8 +11,8 @@
 
 return [
     'type' => ['BcCustomContentPlugin'],
-    'title' => __d('baser', 'カスタムコンテンツ：テキストエリアフィールド'),
-    'description' => __d('baser', 'カスタムコンテンツにテキストエリアフィールドを提供する'),
+    'title' => __d('baser_core', 'カスタムコンテンツ：テキストエリアフィールド'),
+    'description' => __d('baser_core', 'カスタムコンテンツにテキストエリアフィールドを提供する'),
     'author' => 'baserCMS User Community',
     'url' => 'https://basercms.net',
 ];

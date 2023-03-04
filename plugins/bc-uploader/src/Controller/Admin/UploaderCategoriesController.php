@@ -52,14 +52,14 @@ class UploaderCategoriesController extends BcAdminAppController
         if($this->getRequest()->is(['post', 'put'])) {
             try {
                 $entity = $service->create($this->getRequest()->getData());
-                $this->BcMessage->setSuccess(__d('baser', 'アップロードカテゴリ「{0}」を追加しました。', $entity->name));
+                $this->BcMessage->setSuccess(__d('baser_core', 'アップロードカテゴリ「{0}」を追加しました。', $entity->name));
                 $this->redirect(['action' => 'index']);
             } catch (PersistenceFailedException $e) {
                 $entity = $e->getEntity();
-                $this->BcMessage->setError(__d('baser', "入力エラーです。内容を修正してください。"));
+                $this->BcMessage->setError(__d('baser_core', "入力エラーです。内容を修正してください。"));
             } catch (Throwable $e) {
                 $this->setResponse($this->response->withStatus(500));
-                $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage()));
+                $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage()));
             }
         }
         $this->set(['uploaderCategory' => $entity?? $service->getNew()]);
@@ -80,14 +80,14 @@ class UploaderCategoriesController extends BcAdminAppController
         if($this->getRequest()->is(['post', 'put'])) {
             try {
                 $entity = $service->update($entity, $this->getRequest()->getData());
-                $this->BcMessage->setSuccess(__d('baser', 'アップロードカテゴリ「{0}」を更新しました。', $entity->name));
+                $this->BcMessage->setSuccess(__d('baser_core', 'アップロードカテゴリ「{0}」を更新しました。', $entity->name));
                 $this->redirect(['action' => 'index']);
             } catch (PersistenceFailedException $e) {
                 $entity = $e->getEntity();
-                $this->BcMessage->setError(__d('baser', "入力エラーです。内容を修正してください。"));
+                $this->BcMessage->setError(__d('baser_core', "入力エラーです。内容を修正してください。"));
             } catch (Throwable $e) {
                 $this->setResponse($this->response->withStatus(500));
-                $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage()));
+                $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage()));
             }
         }
         $this->set(['uploaderCategory' => $entity]);
@@ -107,12 +107,12 @@ class UploaderCategoriesController extends BcAdminAppController
         $entity = $service->get($id);
         try {
             if($service->delete($id)) {
-                $this->BcMessage->setSuccess(__d('baser', 'アップロードカテゴリ「{0}」を削除しました。', $entity->name));
+                $this->BcMessage->setSuccess(__d('baser_core', 'アップロードカテゴリ「{0}」を削除しました。', $entity->name));
             } else {
-                $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。'));
+                $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。'));
             }
         } catch (\Throwable $e) {
-            $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
+            $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
         }
         return $this->redirect(['action' => 'index']);
     }
@@ -130,12 +130,12 @@ class UploaderCategoriesController extends BcAdminAppController
         try {
             if($service->copy($id)) {
                 $entity = $service->get($id);
-                $this->BcMessage->setSuccess(__d('baser', 'アップロードカテゴリ「{0}」をコピーしました。', $entity->name));
+                $this->BcMessage->setSuccess(__d('baser_core', 'アップロードカテゴリ「{0}」をコピーしました。', $entity->name));
             } else {
-                $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。'));
+                $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。'));
             }
         } catch (\Throwable $e) {
-            $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
+            $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
         }
         return $this->redirect(['action' => 'index']);
     }

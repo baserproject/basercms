@@ -18,17 +18,17 @@
 
 <div class="corner10 panel-box bca-panel-box section">
   <?php echo $this->BcAdminForm->create('Updater', ['url' => ['action' => $this->request->action]]) ?>
-  <p><?php echo $this->BcAdminForm->label('Updater.plugin', __d('baser', 'タイプ')) ?>
-    &nbsp;<?php echo $this->BcAdminForm->control('Updater.plugin', ['type' => 'select', 'options' => $plugins, 'empty' => __d('baser', 'コア')]) ?></p>
-  <p><?php echo $this->BcAdminForm->label('Updater.version', __d('baser', 'バージョン')) ?>
+  <p><?php echo $this->BcAdminForm->label('Updater.plugin', __d('baser_core', 'タイプ')) ?>
+    &nbsp;<?php echo $this->BcAdminForm->control('Updater.plugin', ['type' => 'select', 'options' => $plugins, 'empty' => __d('baser_core', 'コア')]) ?></p>
+  <p><?php echo $this->BcAdminForm->label('Updater.version', __d('baser_core', 'バージョン')) ?>
     &nbsp;<?php echo $this->BcAdminForm->control('Updater.version', ['type' => 'text']) ?></p>
-  <?php echo $this->BcAdminForm->end(['label' => __d('baser', '実行'), 'class' => 'button']) ?>
+  <?php echo $this->BcAdminForm->end(['label' => __d('baser_core', '実行'), 'class' => 'button']) ?>
 </div>
 
 
 <?php if ($log): ?>
   <div class="corner10 panel-box bca-panel-box section" id="UpdateLog">
-    <h2><?php echo __d('baser', 'アップデートログ') ?></h2>
+    <h2><?php echo __d('baser_core', 'アップデートログ') ?></h2>
     <?php echo $this->BcAdminForm->textarea('Updater.log', [
       'value' => $log,
       'style' => 'width:99%;height:200px;font-size:12px',

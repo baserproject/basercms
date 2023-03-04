@@ -27,7 +27,7 @@ use BaserCore\View\BcAdminAppView;
  * @unitTest
  * @noTodo
  */
-$this->BcAdmin->setTitle(__d('baser', 'フォルダ編集'));
+$this->BcAdmin->setTitle(__d('baser_core', 'フォルダ編集'));
 $this->BcBaser->js('admin/content_folders/edit.bundle', false);
 ?>
 
@@ -38,14 +38,14 @@ $this->BcBaser->js('admin/content_folders/edit.bundle', false);
 <table class="form-table bca-form-table" data-bca-table-type="type2">
   <tr>
     <th
-      class="bca-form-table__label"><?php echo $this->BcAdminForm->label('ContentFolders.folder_template', __d('baser', 'フォルダーテンプレート')) ?></th>
+      class="bca-form-table__label"><?php echo $this->BcAdminForm->label('ContentFolders.folder_template', __d('baser_core', 'フォルダーテンプレート')) ?></th>
     <td class="bca-form-table__input">
       <?php echo $this->BcAdminForm->control('ContentFolders.folder_template', ['type' => 'select', 'options' => $folderTemplateList]) ?>
     </td>
   </tr>
   <tr>
     <th
-      class="bca-form-table__label"><?php echo $this->BcAdminForm->label('ContentFolders.page_template', __d('baser', '固定ページテンプレート')) ?></th>
+      class="bca-form-table__label"><?php echo $this->BcAdminForm->label('ContentFolders.page_template', __d('baser_core', '固定ページテンプレート')) ?></th>
     <td class="bca-form-table__input">
       <?php echo $this->BcAdminForm->control('ContentFolders.page_template', ['type' => 'select', 'options' => $pageTemplateList]) ?>
     </td>
@@ -55,7 +55,7 @@ $this->BcBaser->js('admin/content_folders/edit.bundle', false);
 
 <?php echo $this->BcFormTable->dispatchAfter() ?>
 
-<?php echo $this->BcAdminForm->submit(__d('baser', '保存'), [
+<?php echo $this->BcAdminForm->submit(__d('baser_core', '保存'), [
     'class' => 'button bca-btn bca-actions__item',
     'data-bca-btn-type' => 'save',
     'data-bca-btn-size' => 'lg',

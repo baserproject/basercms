@@ -446,7 +446,7 @@ class BcAppController extends AppController
                 $cakeEmail->addTo($to);
             }
         } catch (Exception $e) {
-            $this->BcMessage->setError($e->getMessage() . ' ' . __d('baser', '送信先のメールアドレスが不正です。'));
+            $this->BcMessage->setError($e->getMessage() . ' ' . __d('baser_core', '送信先のメールアドレスが不正です。'));
             return false;
         }
 
@@ -481,7 +481,7 @@ class BcAppController extends AppController
         try {
             $cakeEmail->from($from, $fromName);
         } catch (Exception $e) {
-            $this->setMessage($e->getMessage() . ' ' . __d('baser', '送信元のメールアドレスが不正です。'), true, false, true);
+            $this->setMessage($e->getMessage() . ' ' . __d('baser_core', '送信元のメールアドレスが不正です。'), true, false, true);
             return false;
         }
 

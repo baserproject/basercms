@@ -102,85 +102,85 @@ class MailContentsTable extends MailAppTable
                 [
                     'rule' => 'numeric',
                     'on' => 'update',
-                    'message' => __d('baser', 'IDに不正な値が利用されています。')
+                    'message' => __d('baser_core', 'IDに不正な値が利用されています。')
                 ]
             ],
             'sender_name' => [
                 [
                     'rule' => ['notBlank'],
-                    'message' => __d('baser', '送信先名を入力してください。')
+                    'message' => __d('baser_core', '送信先名を入力してください。')
                 ],
                 [
                     'rule' => ['maxLength', 255],
-                    'message' => __d('baser', '送信先名は255文字以内で入力してください。')
+                    'message' => __d('baser_core', '送信先名は255文字以内で入力してください。')
                 ]
             ],
             'subject_user' => [
                 [
                     'rule' => ['notBlank'],
-                    'message' => __d('baser', '自動返信メール件名[ユーザー宛]を入力してください。')
+                    'message' => __d('baser_core', '自動返信メール件名[ユーザー宛]を入力してください。')
                 ],
                 [
                     'rule' => ['maxLength', 255],
-                    'message' => __d('baser', '自動返信メール件名[ユーザー宛]は255文字以内で入力してください。')
+                    'message' => __d('baser_core', '自動返信メール件名[ユーザー宛]は255文字以内で入力してください。')
                 ]
             ],
             'subject_admin' => [
                 [
                     'rule' => ['notBlank'],
-                    'message' => __d('baser', '自動送信メール件名[管理者宛]を入力してください。')
+                    'message' => __d('baser_core', '自動送信メール件名[管理者宛]を入力してください。')
                 ],
                 [
                     'rule' => ['maxLength', 255],
-                    'message' => __d('baser', '自動返信メール件名[管理者宛]は255文字以内で入力してください。')
+                    'message' => __d('baser_core', '自動返信メール件名[管理者宛]は255文字以内で入力してください。')
                 ]
             ],
             'form_template' => [
                 [
                     'rule' => ['halfText'],
-                    'message' => __d('baser', 'メールフォームテンプレート名は半角のみで入力してください。'),
+                    'message' => __d('baser_core', 'メールフォームテンプレート名は半角のみで入力してください。'),
                     'allowEmpty' => false
                 ],
                 [
                     'rule' => ['maxLength', 20],
-                    'message' => __d('baser', 'フォームテンプレート名は20文字以内で入力してください。')
+                    'message' => __d('baser_core', 'フォームテンプレート名は20文字以内で入力してください。')
                 ]
             ],
             'mail_template' => [
                 [
                     'rule' => ['halfText'],
-                    'message' => __d('baser', '送信メールテンプレートは半角のみで入力してください。'),
+                    'message' => __d('baser_core', '送信メールテンプレートは半角のみで入力してください。'),
                     'allowEmpty' => false
                 ],
                 [
                     'rule' => ['maxLength', 20],
-                    'message' => __d('baser', 'メールテンプレート名は20文字以内で入力してください。')
+                    'message' => __d('baser_core', 'メールテンプレート名は20文字以内で入力してください。')
                 ]
             ],
             'redirect_url' => [
                 [
                     'rule' => ['maxLength', 255],
-                    'message' => __d('baser', 'リダイレクトURLは255文字以内で入力してください。')
+                    'message' => __d('baser_core', 'リダイレクトURLは255文字以内で入力してください。')
                 ]
             ],
             'sender_1' => [
                 [
                     'rule' => ['emails'],
                     'allowEmpty' => true,
-                    'message' => __d('baser', '送信先メールアドレスの形式が不正です。')
+                    'message' => __d('baser_core', '送信先メールアドレスの形式が不正です。')
                 ]
             ],
             'sender_2' => [
                 [
                     'rule' => ['emails'],
                     'allowEmpty' => true,
-                    'message' => __d('baser', '送信先メールアドレスの形式が不正です。')
+                    'message' => __d('baser_core', '送信先メールアドレスの形式が不正です。')
                 ]
             ],
             'ssl_on' => [
                 [
                     'rule' => 'checkSslUrl',
-                    "message" => __d('baser', 'SSL通信を利用するには、システム設定で、事前にSSL通信用のWebサイトURLを指定してください。')
+                    "message" => __d('baser_core', 'SSL通信を利用するには、システム設定で、事前にSSL通信用のWebサイトURLを指定してください。')
                 ]
             ]
         ];
@@ -249,7 +249,7 @@ class MailContentsTable extends MailAppTable
         return [
             'SearchIndex' =>
             [
-                'type'          => __d('baser', 'メール'),
+                'type'          => __d('baser_core', 'メール'),
                 'model_id'      => (!empty($mailContent['id'])) ? $mailContent['id'] : $this->id,
                 'content_id'    => $content['id'],
                 'site_id'       => $content['site_id'],

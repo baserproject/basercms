@@ -29,11 +29,11 @@ $this->BcBaser->js('BcMail.admin/mail_messages/index.bundle', false, [
   <div class="bca-action-table-listup">
     <?php echo $this->BcAdminForm->control('batch', [
       'type' => 'select',
-      'options' => ['delete' => __d('baser', '削除')],
-      'empty' => __d('baser', '一括処理'),
+      'options' => ['delete' => __d('baser_core', '削除')],
+      'empty' => __d('baser_core', '一括処理'),
       'data-bca-select-size' => 'lg'
     ]) ?>
-    <?php echo $this->BcAdminForm->button(__d('baser', '適用'), [
+    <?php echo $this->BcAdminForm->button(__d('baser_core', '適用'), [
       'id' => 'BtnApplyBatch',
       'disabled' => 'disabled',
       'class' => 'bca-btn',
@@ -51,26 +51,26 @@ $this->BcBaser->js('BcMail.admin/mail_messages/index.bundle', false, [
   <thead class="bca-table-listup__thead">
   <tr>
     <th class="list-tool bca-table-listup__thead-th bca-table-listup__thead-th--select"><?php // 一括選択 ?>
-      <?php echo $this->BcAdminForm->control('checkall', ['type' => 'checkbox', 'label' => __d('baser', '一括選択')]) ?>
+      <?php echo $this->BcAdminForm->control('checkall', ['type' => 'checkbox', 'label' => __d('baser_core', '一括選択')]) ?>
     </th>
     <th class="bca-table-listup__thead-th" style="white-space: nowrap"><?php // id ?>
       <?php echo $this->Paginator->sort('id', [
-          'asc' => '<i class="bca-icon--asc"></i>' . __d('baser', 'No'),
-          'desc' => '<i class="bca-icon--desc"></i>' . __d('baser', 'No')
+          'asc' => '<i class="bca-icon--asc"></i>' . __d('baser_core', 'No'),
+          'desc' => '<i class="bca-icon--desc"></i>' . __d('baser_core', 'No')
         ], ['escape' => false, 'class' => 'btn-direction bca-table-listup__a'
       ]) ?>
     </th>
     <th class="bca-table-listup__thead-th"><?php // 受信日時 ?>
       <?php echo $this->Paginator->sort('name', [
-          'asc' => '<i class="bca-icon--asc"></i>' . __d('baser', '受信日時'),
-          'desc' => '<i class="bca-icon--desc"></i>' . __d('baser', '受信日時')
+          'asc' => '<i class="bca-icon--asc"></i>' . __d('baser_core', '受信日時'),
+          'desc' => '<i class="bca-icon--desc"></i>' . __d('baser_core', '受信日時')
         ], ['escape' => false, 'class' => 'btn-direction bca-table-listup__a'
       ]) ?>
     </th>
     <th class="bca-table-listup__thead-th" style="white-space: nowrap">受信内容</th>
     <th class="bca-table-listup__thead-th" style="white-space: nowrap">添付</th>
     <?php echo $this->BcListTable->dispatchShowHead() ?>
-    <th class="bca-table-listup__thead-th"><?php echo __d('baser', 'アクション') ?></th>
+    <th class="bca-table-listup__thead-th"><?php echo __d('baser_core', 'アクション') ?></th>
   </tr>
   </thead>
   <tbody class="bca-table-listup__tbody">

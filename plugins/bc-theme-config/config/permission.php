@@ -20,11 +20,11 @@ return [
          * 管理画面
          */
         'ThemeConfigsAdmin' => [
-            'title' => __d('baser', 'テーマ設定'),
+            'title' => __d('baser_core', 'テーマ設定'),
             'plugin' => 'BcThemeConfig',
             'type' => 'Admin',
             'items' => [
-                'Index' => ['title' => __d('baser', '一覧'), 'url' => '/baser/admin/bc-theme-config/theme_configs/index', 'method' => 'GET', 'auth' => false],
+                'Index' => ['title' => __d('baser_core', '一覧'), 'url' => '/baser/admin/bc-theme-config/theme_configs/index', 'method' => 'GET', 'auth' => false],
             ]
         ],
 
@@ -32,12 +32,12 @@ return [
          * Web API
          */
         'ThemeConfigsApi' => [
-            'title' => __d('baser', 'テーマ設定API'),
+            'title' => __d('baser_core', 'テーマ設定API'),
             'plugin' => 'BcThemeConfig',
             'type' => 'Api',
             'items' => [
-                'View' => ['title' => __d('baser', '設定取得'), 'url' => '/baser/api/bc-theme-config/theme_configs/view.json', 'method' => 'GET', 'auth' => true],
-                'Edit' => ['title' => __d('baser', '編集'), 'url' => '/baser/api/bc-theme-config/theme_configs/edit.json', 'method' => 'POST', 'auth' => false],
+                'View' => ['title' => __d('baser_core', '設定取得'), 'url' => '/baser/api/bc-theme-config/theme_configs/view.json', 'method' => 'GET', 'auth' => true],
+                'Edit' => ['title' => __d('baser_core', '編集'), 'url' => '/baser/api/bc-theme-config/theme_configs/edit.json', 'method' => 'POST', 'auth' => false],
             ]
         ],
     ]

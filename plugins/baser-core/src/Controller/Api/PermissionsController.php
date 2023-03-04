@@ -42,9 +42,9 @@ class PermissionsController extends BcApiController
             $permission = $service->get($id);
         } catch (RecordNotFoundException $e) {
             $this->setResponse($this->response->withStatus(404));
-            $message = __d('baser', 'データが見つかりません。');
+            $message = __d('baser_core', 'データが見つかりません。');
         } catch (\Throwable $e) {
-            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
             $this->setResponse($this->response->withStatus(500));
         }
         $this->set([
@@ -85,13 +85,13 @@ class PermissionsController extends BcApiController
         $permission = $errors = null;
         try {
             $permission = $service->create($this->request->getData());
-            $message = __d('baser', '新規アクセスルール「{0}」を追加しました。', $permission->name);
+            $message = __d('baser_core', '新規アクセスルール「{0}」を追加しました。', $permission->name);
         } catch (PersistenceFailedException $e) {
             $errors = $e->getEntity()->getErrors();
-            $message = __d('baser', "入力エラーです。内容を修正してください。");
+            $message = __d('baser_core', "入力エラーです。内容を修正してください。");
             $this->setResponse($this->response->withStatus(400));
         } catch (\Throwable $e) {
-            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
             $this->setResponse($this->response->withStatus(500));
         }
         $this->set([
@@ -118,12 +118,12 @@ class PermissionsController extends BcApiController
         try {
             $permission = $service->get($permissionId);
             $service->delete($permissionId);
-            $message = __d('baser', 'アクセスルール「{0}」を削除しました。', $permission->name);
+            $message = __d('baser_core', 'アクセスルール「{0}」を削除しました。', $permission->name);
         } catch (RecordNotFoundException $e) {
             $this->setResponse($this->response->withStatus(404));
-            $message = __d('baser', 'データが見つかりません。');
+            $message = __d('baser_core', 'データが見つかりません。');
         } catch (\Throwable $e) {
-            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
             $this->setResponse($this->response->withStatus(500));
         }
 
@@ -150,19 +150,19 @@ class PermissionsController extends BcApiController
         try {
             $permission = $service->copy($id);
             if ($permission) {
-                $message = __d('baser', 'アクセスルール「{0}」をコピーしました。', $permission->name);
+                $message = __d('baser_core', 'アクセスルール「{0}」をコピーしました。', $permission->name);
             } else {
                 $this->setResponse($this->response->withStatus(400));
-                $message = __d('baser', 'データベース処理中にエラーが発生しました。');
+                $message = __d('baser_core', 'データベース処理中にエラーが発生しました。');
             }
         } catch (PersistenceFailedException $e) {
             $errors = $e->getEntity()->getErrors();
-            $message = __d('baser', "入力エラーです。内容を修正してください。");
+            $message = __d('baser_core', "入力エラーです。内容を修正してください。");
         } catch (RecordNotFoundException $e) {
             $this->setResponse($this->response->withStatus(404));
-            $message = __d('baser', 'データが見つかりません。');
+            $message = __d('baser_core', 'データが見つかりません。');
         } catch (\Throwable $e) {
-            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
             $this->setResponse($this->response->withStatus(500));
         }
 
@@ -190,16 +190,16 @@ class PermissionsController extends BcApiController
         $permission = $errors = null;
         try {
             $permission = $service->update($service->get($permissionId), $this->request->getData());
-            $message = __d('baser', 'アクセスルール「{0}」を更新しました。', $permission->name);
+            $message = __d('baser_core', 'アクセスルール「{0}」を更新しました。', $permission->name);
         } catch (PersistenceFailedException $e) {
             $errors = $e->getEntity()->getErrors();
-            $message = __d('baser', "入力エラーです。内容を修正してください。");
+            $message = __d('baser_core', "入力エラーです。内容を修正してください。");
             $this->setResponse($this->response->withStatus(400));
         } catch (RecordNotFoundException $e) {
             $this->setResponse($this->response->withStatus(404));
-            $message = __d('baser', 'データが見つかりません。');
+            $message = __d('baser_core', 'データが見つかりません。');
         } catch (\Throwable $e) {
-            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
             $this->setResponse($this->response->withStatus(500));
         }
         $this->set([
@@ -222,9 +222,9 @@ class PermissionsController extends BcApiController
     {
         $this->request->allowMethod(['post', 'put']);
         $allowMethod = [
-            'publish' => __d('baser', '有効化'),
-            'unpublish' => __d('baser', '無効化'),
-            'delete' => __d('baser', '削除'),
+            'publish' => __d('baser_core', '有効化'),
+            'unpublish' => __d('baser_core', '無効化'),
+            'delete' => __d('baser_core', '削除'),
         ];
         $method = $this->getRequest()->getData('batch');
         if (!isset($allowMethod[$method])) {
@@ -238,13 +238,13 @@ class PermissionsController extends BcApiController
             $names = $service->getNamesById($targets);
             $service->batch($method, $targets);
             $this->BcMessage->setSuccess(
-                sprintf(__d('baser', 'アクセスルール 「%s」 を %s しました。'), implode('」、「', $names), $allowMethod[$method]),
+                sprintf(__d('baser_core', 'アクセスルール 「%s」 を %s しました。'), implode('」、「', $names), $allowMethod[$method]),
                 true,
                 false
             );
-            $message = __d('baser', '一括処理が完了しました。');
+            $message = __d('baser_core', '一括処理が完了しました。');
         } catch (\Throwable $e) {
-            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
             $this->setResponse($this->response->withStatus(500));
         }
         $this->set([
@@ -273,9 +273,9 @@ class PermissionsController extends BcApiController
         $permission = $service->get($this->request->getData('id'));
         if (!$service->changeSort($this->request->getData('id'), $this->request->getData('offset'), $conditions)) {
             $this->setResponse($this->response->withStatus(400));
-            $message = __d('baser', '一度リロードしてから再実行してみてください。');
+            $message = __d('baser_core', '一度リロードしてから再実行してみてください。');
         } else {
-            $message = sprintf(__d('baser', 'アクセスルール「%s」の並び替えを更新しました。'), $permission->name);
+            $message = sprintf(__d('baser_core', 'アクセスルール「%s」の並び替えを更新しました。'), $permission->name);
         }
         $this->set([
             'message' => $message,

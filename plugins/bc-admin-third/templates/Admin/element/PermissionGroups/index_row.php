@@ -45,7 +45,7 @@ if (!$entity->status) {
   </td>
   <td class="bca-table-listup__tbody-td bca-table-listup__tbody-td--actions">
     <?php $this->BcBaser->link('', ['action' => 'edit', $currentUserGroup->id, $entity->id], [
-      'title' => __d('baser', '編集'),
+      'title' => __d('baser_core', '編集'),
       'class' => ' bca-btn-icon',
       'data-bca-btn-type' => 'edit',
       'data-bca-btn-size' => 'lg'

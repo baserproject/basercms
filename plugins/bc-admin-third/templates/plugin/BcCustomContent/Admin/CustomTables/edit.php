@@ -21,7 +21,7 @@
  * @noTodo
  * @unitTest
  */
-$this->BcAdmin->setTitle(__d('baser', '{0}｜テーブル編集', $entity->title));
+$this->BcAdmin->setTitle(__d('baser_core', '{0}｜テーブル編集', $entity->title));
 ?>
 
 
@@ -48,18 +48,18 @@ $this->BcAdmin->setTitle(__d('baser', '{0}｜テーブル編集', $entity->title
 
 <div class="bca-actions">
   <div class="bca-actions__main">
-    <?php $this->BcBaser->link(__d('baser', '一覧に戻る'),
+    <?php $this->BcBaser->link(__d('baser_core', '一覧に戻る'),
       ['action' => 'index'], [
         'class' => 'button bca-btn',
         'data-bca-btn-type' => 'back-to-list'
       ]) ?>
     &nbsp;&nbsp;
-    <?php $this->BcBaser->link(__d('baser', 'エントリー登録画面確認'),
+    <?php $this->BcBaser->link(__d('baser_core', 'エントリー登録画面確認'),
       ['controller' => 'CustomEntries', 'action' => 'add', $entity->id], [
         'class' => 'button bca-btn',
         'target' => '_blank'
       ]) ?>&nbsp;&nbsp;
-    <?php echo $this->BcAdminForm->button(__d('baser', '保存'), [
+    <?php echo $this->BcAdminForm->button(__d('baser_core', '保存'), [
       'type' => 'submit',
       'id' => 'BtnSave',
       'div' => false,
@@ -70,10 +70,10 @@ $this->BcAdmin->setTitle(__d('baser', '{0}｜テーブル編集', $entity->title
     ]) ?>
   </div>
   <div class="bca-actions__sub">
-    <?php echo $this->BcAdminForm->postLink(__d('baser', '削除'),
+    <?php echo $this->BcAdminForm->postLink(__d('baser_core', '削除'),
       ['action' => 'delete', $entity->id], [
         'block' => true,
-        'confirm' => __d('baser', "{0} を本当に削除してもいいですか？\n\n関連するエントリーやフィールドは全て削除されますのでご注意ください。", $entity->title),
+        'confirm' => __d('baser_core', "{0} を本当に削除してもいいですか？\n\n関連するエントリーやフィールドは全て削除されますのでご注意ください。", $entity->title),
         'class' => 'bca-submit-token button bca-btn bca-actions__item',
         'data-bca-btn-type' => 'delete',
         'data-bca-btn-size' => 'sm',

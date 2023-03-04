@@ -27,10 +27,10 @@ $this->BcUpload->setTable('BcMail.MailMessages');
 <h2 class="bs-mail-title"><?php $this->BcBaser->contentsTitle() ?></h2>
 
 <?php if ($freezed): ?>
-<h3 class="bs-mail-title-sub"><?php echo __('入力内容の確認') ?></h3>
-<p><?php echo __('入力した内容に間違いがなければ「送信する」ボタンをクリックしてください。') ?></p>
+<h3 class="bs-mail-title-sub"><?php echo __d('baser_core''入力内容の確認') ?></h3>
+<p><?php echo __d('baser_core''入力した内容に間違いがなければ「送信する」ボタンをクリックしてください。') ?></p>
 <?php else: ?>
-<h3 class="bs-mail-title-sub"><?php echo __('入力フォーム') ?></h3>
+<h3 class="bs-mail-title-sub"><?php echo __d('baser_core''入力フォーム') ?></h3>
 <?php endif ?>
 
 <div class="bs-mail-form">

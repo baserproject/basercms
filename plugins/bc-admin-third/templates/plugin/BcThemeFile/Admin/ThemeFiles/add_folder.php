@@ -36,7 +36,7 @@ $this->BcAdmin->setTitle($pageTitle);
 
 <!-- current -->
 <div class="em-box bca-current-box">
-  <?php echo __d('baser', '現在の位置') ?>：<?php echo h($currentPath) ?>
+  <?php echo __d('baser_core', '現在の位置') ?>：<?php echo h($currentPath) ?>
 </div>
 
 
@@ -49,13 +49,13 @@ $this->BcAdmin->setTitle($pageTitle);
 
 <div class="submit bca-actions">
   <div class="bca-actions__main">
-    <?php $this->BcBaser->link(__d('baser', '一覧に戻る'),
+    <?php $this->BcBaser->link(__d('baser_core', '一覧に戻る'),
       array_merge(['action' => 'index', $theme, $plugin, $type], explode('/', $path)), [
         'class' => 'button bca-btn',
         'data-bca-btn-type' => 'back-to-list'
       ]); ?>
     &nbsp;&nbsp;
-    <?php echo $this->BcAdminForm->button(__d('baser', '保存'), [
+    <?php echo $this->BcAdminForm->button(__d('baser_core', '保存'), [
       'div' => false,
       'class' => 'button bca-btn bca-actions__item',
       'data-bca-btn-type' => 'save',

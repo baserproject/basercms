@@ -206,7 +206,7 @@ class CustomContentAdminHelper extends CustomContentAppHelper
         if ($link->description) {
             return '<i class="bca-icon--question-circle bca-help"></i>' .
                 '<div class="bca-helptext">' .
-                __d('baser', $link->description) .
+                __d('baser_core', $link->description) .
                 '</div>';
         }
         return '';

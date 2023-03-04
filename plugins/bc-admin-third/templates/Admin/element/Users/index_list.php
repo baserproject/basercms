@@ -35,51 +35,51 @@ $this->BcListTable->setColumnNumber(9);
     <th class="bca-table-listup__thead-th">
       <?php echo $this->Paginator->sort('id',
         [
-          'asc' => '<i class="bca-icon--asc" title="' . __d('baser', '昇順') . '"></i>' . __d('baser', 'No'),
-          'desc' => '<i class="bca-icon--desc" title="' . __d('baser', '降順') . '"></i>' . __d('baser', 'No')
+          'asc' => '<i class="bca-icon--asc" title="' . __d('baser_core', '昇順') . '"></i>' . __d('baser_core', 'No'),
+          'desc' => '<i class="bca-icon--desc" title="' . __d('baser_core', '降順') . '"></i>' . __d('baser_core', 'No')
         ],
         ['escape' => false, 'class' => 'btn-direction bca-table-listup__a']) ?>
     </th>
     <th class="bca-table-listup__thead-th">
       <?php echo $this->Paginator->sort('email',
         [
-          'asc' => '<i class="bca-icon--asc" title="' . __d('baser', '昇順') . '"></i>' . __d('baser', 'Eメール'),
-          'desc' => '<i class="bca-icon--desc" title="' . __d('baser', '降順') . '"></i>' . __d('baser', 'Eメール')
+          'asc' => '<i class="bca-icon--asc" title="' . __d('baser_core', '昇順') . '"></i>' . __d('baser_core', 'Eメール'),
+          'desc' => '<i class="bca-icon--desc" title="' . __d('baser_core', '降順') . '"></i>' . __d('baser_core', 'Eメール')
         ],
         ['escape' => false, 'class' => 'btn-direction bca-table-listup__a']) ?>
     </th>
     <th class="bca-table-listup__thead-th">
       <?php echo $this->Paginator->sort('name',
         [
-          'asc' => '<i class="bca-icon--asc" title="' . __d('baser', '昇順') . '"></i>' . __d('baser', 'アカウント名'),
-          'desc' => '<i class="bca-icon--desc" title="' . __d('baser', '降順') . '"></i>' . __d('baser', 'アカウント名')
+          'asc' => '<i class="bca-icon--asc" title="' . __d('baser_core', '昇順') . '"></i>' . __d('baser_core', 'アカウント名'),
+          'desc' => '<i class="bca-icon--desc" title="' . __d('baser_core', '降順') . '"></i>' . __d('baser_core', 'アカウント名')
         ],
         ['escape' => false, 'class' => 'btn-direction bca-table-listup__a']) ?>
     </th>
     <th class="bca-table-listup__thead-th">
       <?php echo $this->Paginator->sort('nickname',
         [
-          'asc' => '<i class="bca-icon--asc" title="' . __d('baser', '昇順') . '"></i>' . __d('baser', 'ニックネーム'),
-          'desc' => '<i class="bca-icon--desc" title="' . __d('baser', '降順') . '"></i>' . __d('baser', 'ニックネーム')
+          'asc' => '<i class="bca-icon--asc" title="' . __d('baser_core', '昇順') . '"></i>' . __d('baser_core', 'ニックネーム'),
+          'desc' => '<i class="bca-icon--desc" title="' . __d('baser_core', '降順') . '"></i>' . __d('baser_core', 'ニックネーム')
         ],
         ['escape' => false, 'class' => 'btn-direction bca-table-listup__a']) ?>
     </th>
     <th class="bca-table-listup__thead-th">
-      <?php echo __d('baser', 'グループ') ?>
+      <?php echo __d('baser_core', 'グループ') ?>
     </th>
     <th class="bca-table-listup__thead-th">
       <?php echo $this->Paginator->sort('real_name_1',
         [
-          'asc' => '<i class="bca-icon--asc" title="' . __d('baser', '昇順') . '"></i>' . __d('baser', '氏名'),
-          'desc' => '<i class="bca-icon--desc" title="' . __d('baser', '降順') . '"></i>' . __d('baser', '氏名')
+          'asc' => '<i class="bca-icon--asc" title="' . __d('baser_core', '昇順') . '"></i>' . __d('baser_core', '氏名'),
+          'desc' => '<i class="bca-icon--desc" title="' . __d('baser_core', '降順') . '"></i>' . __d('baser_core', '氏名')
         ],
         ['escape' => false, 'class' => 'btn-direction bca-table-listup__a']) ?>
     </th>
 
     <th class="bca-table-listup__thead-th">
       <?php echo $this->Paginator->sort('status', [
-          'asc' => '<i class="bca-icon--asc" title="' . __d('baser', '昇順') . '"></i>' . __d('baser', '利用状態'),
-          'desc' => '<i class="bca-icon--desc" title="' . __d('baser', '降順') . '"></i>' . __d('baser', '利用状態')
+          'asc' => '<i class="bca-icon--asc" title="' . __d('baser_core', '昇順') . '"></i>' . __d('baser_core', '利用状態'),
+          'desc' => '<i class="bca-icon--desc" title="' . __d('baser_core', '降順') . '"></i>' . __d('baser_core', '利用状態')
         ], ['escape' => false, 'class' => 'btn-direction bca-table-listup__a']
       ) ?>
     </th>
@@ -89,18 +89,18 @@ $this->BcListTable->setColumnNumber(9);
     <th class="bca-table-listup__thead-th">
       <?php echo $this->Paginator->sort('created',
         [
-          'asc' => '<i class="bca-icon--asc" title="' . __d('baser', '昇順') . '"></i>' . __d('baser', '登録日'),
-          'desc' => '<i class="bca-icon--desc" title="' . __d('baser', '降順') . '"></i>' . __d('baser', '登録日')
+          'asc' => '<i class="bca-icon--asc" title="' . __d('baser_core', '昇順') . '"></i>' . __d('baser_core', '登録日'),
+          'desc' => '<i class="bca-icon--desc" title="' . __d('baser_core', '降順') . '"></i>' . __d('baser_core', '登録日')
         ],
         ['escape' => false, 'class' => 'btn-direction bca-table-listup__a']) ?><br/>
       <?php echo $this->Paginator->sort('modified',
         [
-          'asc' => '<i class="bca-icon--asc" title="' . __d('baser', '昇順') . '"></i>' . __d('baser', '更新日'),
-          'desc' => '<i class="bca-icon--desc" title="' . __d('baser', '降順') . '"></i>' . __d('baser', '更新日')
+          'asc' => '<i class="bca-icon--asc" title="' . __d('baser_core', '昇順') . '"></i>' . __d('baser_core', '更新日'),
+          'desc' => '<i class="bca-icon--desc" title="' . __d('baser_core', '降順') . '"></i>' . __d('baser_core', '更新日')
         ],
         ['escape' => false, 'class' => 'btn-direction bca-table-listup__a']) ?>
     </th>
-    <th class="bca-table-listup__thead-th"><?php echo __d('baser', 'アクション') ?></th>
+    <th class="bca-table-listup__thead-th"><?php echo __d('baser_core', 'アクション') ?></th>
   </tr>
   </thead>
   <tbody>
@@ -111,7 +111,7 @@ $this->BcListTable->setColumnNumber(9);
   <?php else: ?>
     <tr>
       <td colspan="<?php echo $this->BcListTable->getColumnNumber() ?>">
-        <p class="no-data"><?php echo __d('baser', 'データが見つかりませんでした。') ?></p></td>
+        <p class="no-data"><?php echo __d('baser_core', 'データが見つかりませんでした。') ?></p></td>
     </tr>
   <?php endif; ?>
   </tbody>

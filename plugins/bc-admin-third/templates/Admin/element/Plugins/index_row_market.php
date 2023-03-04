@@ -26,8 +26,8 @@ use BaserCore\View\AppView;
     <div>
       <?php $this->BcBaser->link('', $data['link'], [
         'target' => '_blank',
-        'aria-label' => __d('baser', 'ダウンロードサイトへ移動する'),
-        'title' => __d('baser', 'ダウンロードサイトへ移動する'),
+        'aria-label' => __d('baser_core', 'ダウンロードサイトへ移動する'),
+        'title' => __d('baser_core', 'ダウンロードサイトへ移動する'),
         'class' => 'btn-download bca-btn-icon',
         'data-bca-btn-type' => 'download',
         'data-bca-btn-size' => 'lg'

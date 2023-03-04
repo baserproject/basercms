@@ -23,16 +23,16 @@ echo $this->BcAdminForm->control('ViewSetting.mode', ['type' => 'hidden', 'value
 <div class="panel-box bca-panel-box" id="ViewSetting">
   <div class="bca-panel-box__inline-fields">
     <div class="bca-panel-box__inline-fields-item">
-      <label class="bca-panel-box__inline-fields-title"><?php echo __d('baser', '表示') ?></label>
+      <label class="bca-panel-box__inline-fields-title"><?php echo __d('baser_core', '表示') ?></label>
       <?php echo $this->BcAdminForm->control('ViewSetting.list_type', ['type' => 'radio', 'options' => [
-        1 => __d('baser', 'ツリー形式'),
-        2 => __d('baser', '表形式')
+        1 => __d('baser_core', 'ツリー形式'),
+        2 => __d('baser_core', '表形式')
       ]]) ?>
     </div>
     <div class="bca-panel-box__inline-fields-separator"></div>
     <div id="GrpChangeTreeOpenClose">
-      <button id="BtnOpenTree" class="bca-btn"><?php echo __d('baser', '全て展開') ?></button>
-      <button id="BtnCloseTree" class="bca-btn"><?php echo __d('baser', '全て閉じる') ?></button>
+      <button id="BtnOpenTree" class="bca-btn"><?php echo __d('baser_core', '全て展開') ?></button>
+      <button id="BtnCloseTree" class="bca-btn"><?php echo __d('baser_core', '全て閉じる') ?></button>
     </div>
   </div>
 </div>

@@ -20,7 +20,7 @@ class ReinstallCommand extends Command
     public function reinstall()
     {
         if (Configure::read('debug') != -1) {
-            $this->err(__d('baser', 'baserCMSの初期化を行うには、debug を -1 に設定する必要があります。'));
+            $this->err(__d('baser_core', 'baserCMSの初期化を行うには、debug を -1 に設定する必要があります。'));
             return false;
         }
         $result = true;
@@ -32,7 +32,7 @@ class ReinstallCommand extends Command
             $result = false;
         }
         if (!$result) {
-            $this->err(__d('baser', 'baserCMSの再インストールに失敗しました。ログファイルを確認してください。'));
+            $this->err(__d('baser_core', 'baserCMSの再インストールに失敗しました。ログファイルを確認してください。'));
         }
     }
 

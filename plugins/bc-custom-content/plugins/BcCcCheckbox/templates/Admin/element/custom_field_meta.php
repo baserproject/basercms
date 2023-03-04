@@ -22,10 +22,10 @@
 
 <tr id="RowMetaBcCcCheckbox" class="bca-row-meta">
     <th class="col-head bca-form-table__label">
-        <?php echo $this->BcAdminForm->label('', __d('baser', 'チェックボックス設定')) ?>
+        <?php echo $this->BcAdminForm->label('', __d('baser_core', 'チェックボックス設定')) ?>
     </th>
     <td class="col-input bca-form-table__input">
-        <?php echo $this->BcAdminForm->label('meta.BcCcCheckbox.label', __d('baser', 'ラベル')) ?>&nbsp;&nbsp;
+        <?php echo $this->BcAdminForm->label('meta.BcCcCheckbox.label', __d('baser_core', 'ラベル')) ?>&nbsp;&nbsp;
         <?php echo $this->BcAdminForm->control('meta.BcCcCheckbox.label', [
             'type' => 'text',
             'size' => 60,

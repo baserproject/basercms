@@ -91,14 +91,14 @@ class BlogTagsController extends BlogAdminAppController
             try {
                 $blogTag = $service->create($this->request->getData());
                 $this->BcMessage->setSuccess(sprintf(
-                    __d('baser', 'タグ「%s」を追加しました。'),
+                    __d('baser_core', 'タグ「%s」を追加しました。'),
                     $blogTag->name
                 ));
                 $this->redirect(['action' => 'index']);
             } catch (PersistenceFailedException $e) {
                 $blogTag = $e->getEntity();
                 $this->BcMessage->setError(
-                    __d('baser', 'エラーが発生しました。内容を確認してください。')
+                    __d('baser_core', 'エラーが発生しました。内容を確認してください。')
                 );
             }
         }
@@ -125,14 +125,14 @@ class BlogTagsController extends BlogAdminAppController
                 /* @var BlogTag $blogTag */
                 $blogTag = $service->update($blogTag, $this->getRequest()->getData());
                 $this->BcMessage->setSuccess(sprintf(
-                    __d('baser', 'タグ「%s」を更新しました。'),
+                    __d('baser_core', 'タグ「%s」を更新しました。'),
                     $blogTag->name
                 ));
                 $this->redirect(['action' => 'index']);
             } catch (PersistenceFailedException $e) {
                 $blogTag = $e->getEntity();
                 $this->BcMessage->setError(
-                    __d('baser', 'エラーが発生しました。内容を確認してください。')
+                    __d('baser_core', 'エラーが発生しました。内容を確認してください。')
                 );
             }
         }
@@ -157,10 +157,10 @@ class BlogTagsController extends BlogAdminAppController
         try {
             $blogTag = $service->get($id);
             if ($service->delete($id)) {
-                $this->BcMessage->setSuccess(__d('baser', 'ブログタグ「{0}」を削除しました。', $blogTag->name));
+                $this->BcMessage->setSuccess(__d('baser_core', 'ブログタグ「{0}」を削除しました。', $blogTag->name));
             }
         } catch (BcException $e) {
-            $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
+            $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
         }
         return $this->redirect(['action' => 'index']);
     }

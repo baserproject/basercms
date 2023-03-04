@@ -46,13 +46,13 @@ if (!$customTable->isContentTable()) {
     <?php if ($customTable->has_child): ?>
       <tr>
         <th class="col-head bca-form-table__label">
-          <?php echo $this->BcAdminForm->label('parent_id', __d('baser', '親エントリー')) ?>
+          <?php echo $this->BcAdminForm->label('parent_id', __d('baser_core', '親エントリー')) ?>
         </th>
         <td class="col-input bca-form-table__input">
           <?php echo $this->BcAdminForm->control('parent_id', [
             'type' => 'select',
             'options' => $this->BcAdminForm->getControlSource('BcCustomContent.CustomEntries.parent_id', ['selfId' => $entity->id]),
-            'empty' => __d('baser', '指定しない')
+            'empty' => __d('baser_core', '指定しない')
           ]) ?>&nbsp;
           <?php echo $this->BcAdminForm->error('parent_id') ?>
         </td>
@@ -61,25 +61,25 @@ if (!$customTable->isContentTable()) {
 
     <tr>
       <th class="col-head bca-form-table__label">
-        <?php echo $this->BcAdminForm->label('title', __d('baser', 'タイトル')) ?>&nbsp;
-        <span class="required bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
+        <?php echo $this->BcAdminForm->label('title', __d('baser_core', 'タイトル')) ?>&nbsp;
+        <span class="required bca-label" data-bca-label-type="required"><?php echo __d('baser_core', '必須') ?></span>
       </th>
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('title', [
           'type' => 'text',
           'size' => 60,
-          'placeholder' => __d('baser', 'エントリーのタイトルを入力します')
+          'placeholder' => __d('baser_core', 'エントリーのタイトルを入力します')
         ]) ?>&nbsp;
         <?php if ($customTable->isContentTable()): ?>
           <small>[スラッグ]</small>
           <?php echo $this->BcAdminForm->control('name', [
             'type' => 'text',
             'size' => 30,
-            'placeholder' => __d('baser', 'スラッグ')
+            'placeholder' => __d('baser_core', 'スラッグ')
           ]) ?>
           <i class="bca-icon--question-circle bca-help"></i>
           <div class="bca-helptext">
-            <?php echo __d('baser', 'スラッグはURLで利用します。スラッグを入力すると、次のようなURLでアクセスできますが入力しない場合はエントリーNOを利用します。<br>/content-name/view/slag') ?>
+            <?php echo __d('baser_core', 'スラッグはURLで利用します。スラッグを入力すると、次のようなURLでアクセスできますが入力しない場合はエントリーNOを利用します。<br>/content-name/view/slag') ?>
           </div>
         <?php endif ?>
         <?php echo $this->BcAdminForm->error('title') ?>
@@ -89,7 +89,7 @@ if (!$customTable->isContentTable()) {
 
     <tr>
       <th class="col-head bca-form-table__label">
-        <?php echo $this->BcAdminForm->label('published', __d('baser', '登録情報')) ?>
+        <?php echo $this->BcAdminForm->label('published', __d('baser_core', '登録情報')) ?>
       </th>
       <td class="col-input bca-form-table__input">
         <?php if ($customTable->isContentTable()): ?>
@@ -97,11 +97,11 @@ if (!$customTable->isContentTable()) {
             'type' => 'dateTimePicker',
             'size' => 12,
             'maxlength' => 10,
-            'dateLabel' => ['text' => __d('baser', '公開日付')],
-            'timeLabel' => ['text' => __d('baser', '公開時間')]
+            'dateLabel' => ['text' => __d('baser_core', '公開日付')],
+            'timeLabel' => ['text' => __d('baser_core', '公開時間')]
           ]) ?>&nbsp;&nbsp;
         <?php endif ?>
-        <?php echo $this->BcAdminForm->label('creator_id', __d('baser', '作成者')) ?>
+        <?php echo $this->BcAdminForm->label('creator_id', __d('baser_core', '作成者')) ?>
         <?php if (\BaserCore\Utility\BcUtil::isAdminUser()): ?>
           <?php echo $this->BcAdminForm->control('creator_id', [
             'type' => 'select',
@@ -120,12 +120,12 @@ if (!$customTable->isContentTable()) {
     <?php if ($customTable->isContentTable()): ?>
       <tr>
         <th class="col-head bca-form-table__label">
-          <?php echo $this->BcAdminForm->label('status', __d('baser', '公開状態')) ?>
+          <?php echo $this->BcAdminForm->label('status', __d('baser_core', '公開状態')) ?>
         </th>
         <td class="col-input bca-form-table__input">
           <?php echo $this->BcAdminForm->control('status', [
             'type' => 'radio',
-            'options' => [0 => __d('baser', '非公開'), 1 => __d('baser', '公開')]
+            'options' => [0 => __d('baser_core', '非公開'), 1 => __d('baser_core', '公開')]
           ]) ?>
           <?php echo $this->BcAdminForm->error('status') ?>
         </td>
@@ -133,7 +133,7 @@ if (!$customTable->isContentTable()) {
 
       <tr>
         <th class="col-head bca-form-table__label">
-          <?php echo $this->BcAdminForm->label('publish_begin', __d('baser', '公開期間')) ?>
+          <?php echo $this->BcAdminForm->label('publish_begin', __d('baser_core', '公開期間')) ?>
         </th>
         <td class="col-input bca-form-table__input">
         <span class="bca-datetimepicker__group">
@@ -142,8 +142,8 @@ if (!$customTable->isContentTable()) {
               'type' => 'dateTimePicker',
               'size' => 12,
               'maxlength' => 10,
-              'dateLabel' => ['text' => __d('baser', '開始日付')],
-              'timeLabel' => ['text' => __d('baser', '開始時間')]
+              'dateLabel' => ['text' => __d('baser_core', '開始日付')],
+              'timeLabel' => ['text' => __d('baser_core', '開始時間')]
             ]) ?>
           </span>
           <span class="bca-datetimepicker__delimiter">〜</span>
@@ -152,8 +152,8 @@ if (!$customTable->isContentTable()) {
               'type' => 'dateTimePicker',
               'size' => 12,
               'maxlength' => 10,
-              'dateLabel' => ['text' => __d('baser', '終了日付')],
-              'timeLabel' => ['text' => __d('baser', '終了時間')]
+              'dateLabel' => ['text' => __d('baser_core', '終了日付')],
+              'timeLabel' => ['text' => __d('baser_core', '終了時間')]
             ]) ?>
             </span>
         </span>

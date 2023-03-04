@@ -19,7 +19,7 @@
  * @unitTest
  */
 $this->BcBaser->js('BcMail.admin/mail_fields/form.bundle', false);
-$this->BcAdmin->setTitle(__d('baser', '{0}｜新規メールフィールド登録', $this->getRequest()->getAttribute('currentContent')->title));
+$this->BcAdmin->setTitle(__d('baser_core', '{0}｜新規メールフィールド登録', $this->getRequest()->getAttribute('currentContent')->title));
 $this->BcAdmin->setHelp('mail_fields_form');
 ?>
 
@@ -34,7 +34,7 @@ $this->BcAdmin->setHelp('mail_fields_form');
 
 <div class="submit bca-actions">
   <div class="bca-actions__main">
-    <?php echo $this->BcAdminForm->button(__d('baser', '保存'), [
+    <?php echo $this->BcAdminForm->button(__d('baser_core', '保存'), [
       'div' => false,
       'class' => 'button bca-btn bca-actions__item',
       'id' => 'BtnSave',

@@ -56,9 +56,9 @@ class UserGroupsController extends BcApiController
             $userGroup = $service->get($id);
         } catch (RecordNotFoundException $e) {
             $this->setResponse($this->response->withStatus(404));
-            $message = __d('baser', 'データが見つかりません。');
+            $message = __d('baser_core', 'データが見つかりません。');
         } catch (\Throwable $e) {
-            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
             $this->setResponse($this->response->withStatus(500));
         }
         $this->set([
@@ -81,13 +81,13 @@ class UserGroupsController extends BcApiController
         $userGroup = $errors = null;
         try {
             $userGroup = $service->create($this->request->getData());
-            $message = __d('baser', 'ユーザーグループ「{0}」を追加しました。', $userGroup->name);
+            $message = __d('baser_core', 'ユーザーグループ「{0}」を追加しました。', $userGroup->name);
         } catch (PersistenceFailedException $e) {
             $errors = $e->getEntity()->getErrors();
-            $message = __d('baser', "入力エラーです。内容を修正してください。");
+            $message = __d('baser_core', "入力エラーです。内容を修正してください。");
             $this->setResponse($this->response->withStatus(400));
         } catch (\Throwable $e) {
-            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
             $this->setResponse($this->response->withStatus(500));
         }
 
@@ -113,16 +113,16 @@ class UserGroupsController extends BcApiController
         $userGroup = $errors = null;
         try {
             $userGroup = $service->update($service->get($id), $this->request->getData());
-            $message = __d('baser', 'ユーザーグループ「{0}」を更新しました。', $userGroup->name);
+            $message = __d('baser_core', 'ユーザーグループ「{0}」を更新しました。', $userGroup->name);
         } catch (PersistenceFailedException $e) {
             $errors = $e->getEntity()->getErrors();
-            $message = __d('baser', "入力エラーです。内容を修正してください。");
+            $message = __d('baser_core', "入力エラーです。内容を修正してください。");
             $this->setResponse($this->response->withStatus(400));
         } catch (RecordNotFoundException $e) {
             $this->setResponse($this->response->withStatus(404));
-            $message = __d('baser', 'データが見つかりません。');
+            $message = __d('baser_core', 'データが見つかりません。');
         } catch (\Throwable $e) {
-            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
             $this->setResponse($this->response->withStatus(500));
         }
 
@@ -149,12 +149,12 @@ class UserGroupsController extends BcApiController
         try {
             $userGroup = $service->get($id);
             $service->delete($id);
-            $message = __d('baser', 'ユーザー: {0} を削除しました。', $userGroup->name);
+            $message = __d('baser_core', 'ユーザー: {0} を削除しました。', $userGroup->name);
         } catch (RecordNotFoundException $e) {
             $this->setResponse($this->response->withStatus(404));
-            $message = __d('baser', 'データが見つかりません。');
+            $message = __d('baser_core', 'データが見つかりません。');
         } catch (\Throwable $e) {
-            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
             $this->setResponse($this->response->withStatus(500));
         }
 
@@ -197,17 +197,17 @@ class UserGroupsController extends BcApiController
             $userGroup = $service->get($id);
             $rs = $this->UserGroups->copy($id);
             if ($rs) {
-                $message = __d('baser', 'ユーザーグループ「{0}」をコピーしました。', $userGroup->name);
+                $message = __d('baser_core', 'ユーザーグループ「{0}」をコピーしました。', $userGroup->name);
                 $userGroup = $rs;
             } else {
                 $this->setResponse($this->response->withStatus(400));
-                $message = __d('baser', 'データベース処理中にエラーが発生しました。');
+                $message = __d('baser_core', 'データベース処理中にエラーが発生しました。');
             }
         } catch (RecordNotFoundException $e) {
             $this->setResponse($this->response->withStatus(404));
-            $message = __d('baser', 'データが見つかりません。');
+            $message = __d('baser_core', 'データが見つかりません。');
         } catch (\Throwable $e) {
-            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
             $this->setResponse($this->response->withStatus(500));
         }
 

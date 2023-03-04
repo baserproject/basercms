@@ -40,6 +40,6 @@
   </article>
   <?php endforeach ?>
 <?php else: ?>
-  <p><?php echo __('エントリーが存在しません。') ?></p>
+  <p><?php echo __d('baser_core''エントリーが存在しません。') ?></p>
 <?php endif ?>
 </section>

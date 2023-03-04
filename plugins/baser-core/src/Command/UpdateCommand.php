@@ -41,7 +41,7 @@ class UpdateCommand extends Command
     protected function buildOptionParser(\Cake\Console\ConsoleOptionParser $parser): \Cake\Console\ConsoleOptionParser
     {
         $parser->addOption('connection', [
-            'help' => __d('baser', 'データベース接続名'),
+            'help' => __d('baser_core', 'データベース接続名'),
             'default' => 'default'
         ]);
         return $parser;
@@ -59,9 +59,9 @@ class UpdateCommand extends Command
         $connection = $args->getOption('connection');
         $pluginsService = $this->getService(PluginsServiceInterface::class);
         if($pluginsService->update('BaserCore', $connection)) {
-            $io->out(__d('baser', 'Migration と アップデーターによるアップデートが完了しました。'));
+            $io->out(__d('baser_core', 'Migration と アップデーターによるアップデートが完了しました。'));
         } else {
-            $message = __d('baser', 'Migration と アップデーターによるアップデートが失敗しました。');
+            $message = __d('baser_core', 'Migration と アップデーターによるアップデートが失敗しました。');
             $this->log($message, LogLevel::ERROR, 'update');
             $io->out($message);
             exit(1);

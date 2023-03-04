@@ -50,22 +50,22 @@
   </td>
   <td class="row-tools bca-table-listup__tbody-td bca-table-listup__tbody-td--actions">
     <?php if ($loginUser->isEditableUser($user)): ?>
-    <?php $this->BcBaser->link('', ['action' => 'edit', $user->id], ['title' => __d('baser', '編集'), 'class' => ' bca-btn-icon', 'data-bca-btn-type' => 'edit', 'data-bca-btn-size' => 'lg']) ?>
+    <?php $this->BcBaser->link('', ['action' => 'edit', $user->id], ['title' => __d('baser_core', '編集'), 'class' => ' bca-btn-icon', 'data-bca-btn-type' => 'edit', 'data-bca-btn-size' => 'lg']) ?>
     <?php endif ?>
     <?php if ($loginUser->isDeletableUser($user)): ?>
     <?= $this->BcAdminForm->postLink(
       '',
       ['action' => 'delete', $user->id],
       [
-        'confirm' => __d('baser', "{0} を本当に削除してもいいですか？", $user->name),
-        'title' => __d('baser', '削除'),
+        'confirm' => __d('baser_core', "{0} を本当に削除してもいいですか？", $user->name),
+        'title' => __d('baser_core', '削除'),
         'class' => 'btn-delete bca-btn-icon',
         'data-bca-btn-type' => 'delete',
         'data-bca-btn-size' => 'lg']
     ) ?>
     <?php endif ?>
     <?php if ($loginUser->isEnableLoginAgent($user)): ?>
-      <?php $this->BcBaser->link('', ['action' => 'login_agent', $user->id], ['title' => __d('baser', 'ログイン'), 'class' => 'btn-login bca-btn-icon', 'data-bca-btn-type' => 'switch', 'data-bca-btn-size' => 'lg']) ?>
+      <?php $this->BcBaser->link('', ['action' => 'login_agent', $user->id], ['title' => __d('baser_core', 'ログイン'), 'class' => 'btn-login bca-btn-icon', 'data-bca-btn-type' => 'switch', 'data-bca-btn-size' => 'lg']) ?>
     <?php endif ?>
   </td>
 </tr>

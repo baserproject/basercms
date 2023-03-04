@@ -64,23 +64,23 @@ class CustomLinksTable extends AppTable
     {
         $validator
             ->scalar('name')
-            ->maxLength('name', 255, __d('baser', '255文字以内で入力してください。'))
-            ->notEmptyString('name', __d('baser', 'フィールド名を入力してください。'))
-            ->regex('name', '/^[a-z0-9_]+$/', __d('baser', 'フィールド名は半角英数字とアンダースコアのみで入力してください。'))
+            ->maxLength('name', 255, __d('baser_core', '255文字以内で入力してください。'))
+            ->notEmptyString('name', __d('baser_core', 'フィールド名を入力してください。'))
+            ->regex('name', '/^[a-z0-9_]+$/', __d('baser_core', 'フィールド名は半角英数字とアンダースコアのみで入力してください。'))
             ->add('name', [[
                 'rule' => ['validateUnique', ['scope' => 'custom_table_id']],
                 'provider' => 'table',
-                'message' => __d('baser', '既に登録のあるフィールド名です。')
+                'message' => __d('baser_core', '既に登録のあるフィールド名です。')
             ]])
             ->add('name', [[
                 'rule' => ['reserved'],
                 'provider' => 'bc',
-                'message' => __d('baser', '{0} はシステム予約名称のため利用できません。', implode(', ', Configure::read('BcApp.reservedWords')))
+                'message' => __d('baser_core', '{0} はシステム予約名称のため利用できません。', implode(', ', Configure::read('BcApp.reservedWords')))
             ]]);
         $validator
             ->scalar('title')
-            ->maxLength('title', 255, __d('baser', '255文字以内で入力してください。'))
-            ->notEmptyString('title', __d('baser', 'タイトルを入力してください。'));
+            ->maxLength('title', 255, __d('baser_core', '255文字以内で入力してください。'))
+            ->notEmptyString('title', __d('baser_core', 'タイトルを入力してください。'));
 
         return $validator;
     }

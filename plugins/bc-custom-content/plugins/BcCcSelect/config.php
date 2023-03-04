@@ -11,8 +11,8 @@
 
 return [
     'type' => ['BcCustomContentPlugin'],
-    'title' => __d('baser', 'カスタムコンテンツ：セレクトボックス'),
-    'description' => __d('baser', 'カスタムコンテンツにセレクトボックスを提供する'),
+    'title' => __d('baser_core', 'カスタムコンテンツ：セレクトボックス'),
+    'description' => __d('baser_core', 'カスタムコンテンツにセレクトボックスを提供する'),
     'author' => 'baserCMS User Community',
     'url' => 'https://basercms.net',
 ];

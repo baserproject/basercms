@@ -60,7 +60,7 @@ class MailContentsController extends MailAdminAppController
         if ($this->getRequest()->is(['post', 'PUT'])) {
             try {
                 $entity = $service->update($entity, $this->getRequest()->getData());
-                $this->BcMessage->setSuccess(__d('baser', 'メールフォーム「{0}」を更新しました。', $entity->content->title));
+                $this->BcMessage->setSuccess(__d('baser_core', 'メールフォーム「{0}」を更新しました。', $entity->content->title));
                 if ($this->getRequest()->getData('edit_mail_form') && Plugin::isLoaded('BcThemeFile')) {
                     return $this->redirectEditForm($this->getRequest()->getData('form_template'));
                 } elseif ($this->getRequest()->getData('edit_mail') && Plugin::isLoaded('BcThemeFile')) {
@@ -70,9 +70,9 @@ class MailContentsController extends MailAdminAppController
                 }
             } catch (PersistenceFailedException $e) {
                 $entity = $e->getEntity();
-                $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
+                $this->BcMessage->setError(__d('baser_core', '入力エラーです。内容を修正してください。'));
             } catch (BcException $e) {
-                $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
+                $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
             }
         }
         $this->set($service->getViewVarsForEdit($entity));

@@ -33,10 +33,10 @@ class CustomContentsController extends BcApiController
         $this->request->allowMethod(['post', 'put', 'patch']);
         try {
             $entity = $service->create($this->request->getData());
-            $message = __d('baser', 'カスタムコンテンツ「{0}」を追加しました。', $entity->content->title);
+            $message = __d('baser_core', 'カスタムコンテンツ「{0}」を追加しました。', $entity->content->title);
         } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
             $entity = $e->getEntity();
-            $message = __d('baser', "入力エラーです。内容を修正してください。\n");
+            $message = __d('baser_core', "入力エラーです。内容を修正してください。\n");
             $this->setResponse($this->response->withStatus(400));
         }
         $this->set([

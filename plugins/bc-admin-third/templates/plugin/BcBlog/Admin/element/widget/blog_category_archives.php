@@ -16,8 +16,8 @@
  * @noTodo
  * @unitTest
  */
-$title = __d('baser', 'カテゴリ一覧');
-$description = __d('baser', 'カテゴリ一覧を表示します。');
+$title = __d('baser_core', 'カテゴリ一覧');
+$description = __d('baser_core', 'カテゴリ一覧を表示します。');
 ?>
 
 
@@ -40,13 +40,13 @@ $description = __d('baser', 'カテゴリ一覧を表示します。');
 </script>
 
 
-<?php echo $this->BcAdminForm->label($key . '.limit', __d('baser', '表示数')) ?>&nbsp;
+<?php echo $this->BcAdminForm->label($key . '.limit', __d('baser_core', '表示数')) ?>&nbsp;
 <?php echo $this->BcAdminForm->control($key . '.limit', [
   'type' => 'text',
   'size' => 6
 ]) ?>&nbsp;件
 <br>
-<?php echo $this->BcAdminForm->label($key . '.view_count', __d('baser', '記事数表示')) ?>&nbsp;
+<?php echo $this->BcAdminForm->label($key . '.view_count', __d('baser_core', '記事数表示')) ?>&nbsp;
 <?php echo $this->BcAdminForm->control($key . '.view_count', [
   'type' => 'radio',
   'options' => $this->BcText->booleanDoList(''),
@@ -56,18 +56,18 @@ $description = __d('baser', 'カテゴリ一覧を表示します。');
 <br>
 <?php echo $this->BcAdminForm->control($key . '.by_year', [
   'type' => 'checkbox',
-  'label' => __d('baser', '年別に表示する')
+  'label' => __d('baser_core', '年別に表示する')
 ]) ?>
 <br>
-<p id="Span<?php echo $key ?>Depth"><?php echo $this->BcAdminForm->label($key . '.depth', __d('baser', '深さ')) ?>&nbsp;
+<p id="Span<?php echo $key ?>Depth"><?php echo $this->BcAdminForm->label($key . '.depth', __d('baser_core', '深さ')) ?>&nbsp;
   <?php echo $this->BcAdminForm->control($key . '.depth', ['type' => 'text', 'size' => 6, 'default' => 1]) ?>
-  &nbsp;<?php echo __d('baser', '階層') ?></p>
-<?php echo $this->BcAdminForm->label($key . '.blog_content_id', __d('baser', 'ブログ')) ?>&nbsp;
+  &nbsp;<?php echo __d('baser_core', '階層') ?></p>
+<?php echo $this->BcAdminForm->label($key . '.blog_content_id', __d('baser_core', 'ブログ')) ?>&nbsp;
 <?php echo $this->BcAdminForm->control($key . '.blog_content_id', [
   'type' => 'select',
   'options' => $this->BcAdminForm->getControlSource('BcBlog.BlogContents.id')
 ]) ?>
 <br>
 <small>
-  <?php echo __d('baser', 'ブログページを表示している場合は、上記の設定に関係なく、<br>対象ブログのカテゴリ一覧を表示します。') ?>
+  <?php echo __d('baser_core', 'ブログページを表示している場合は、上記の設定に関係なく、<br>対象ブログのカテゴリ一覧を表示します。') ?>
 </small>

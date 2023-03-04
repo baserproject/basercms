@@ -31,11 +31,11 @@ $title = '';
 if($blogArchiveType === 'category') $title = $blogCategory->title;
 if($blogArchiveType === 'author') $title = $author->getDisplayName();
 if($blogArchiveType === 'tag') $title = rawurldecode($blogTag->name);
-if($blogArchiveType === 'daily') $title = sprintf(__('%s年%s月%s日'), $year, $month, $day);
-if($blogArchiveType === 'monthly') $title = sprintf(__('%s年%s月'), $year, $month);
-if($blogArchiveType === 'yearly') $title = sprintf(__('%s年'), $year);
+if($blogArchiveType === 'daily') $title = sprintf(__d('baser_core''%s年%s月%s日'), $year, $month, $day);
+if($blogArchiveType === 'monthly') $title = sprintf(__d('baser_core''%s年%s月'), $year, $month);
+if($blogArchiveType === 'yearly') $title = sprintf(__d('baser_core''%s年'), $year);
 $this->BcBaser->setTitle($title);
-$this->BcBaser->setDescription($this->Blog->getTitle() . '｜' . $this->BcBaser->getContentsTitle() . __('のアーカイブ一覧です。'));
+$this->BcBaser->setDescription($this->Blog->getTitle() . '｜' . $this->BcBaser->getContentsTitle() . __d('baser_core''のアーカイブ一覧です。'));
 $this->BcUpload->setTable('BcBlog.BlogPosts');
 ?>
 
@@ -62,7 +62,7 @@ $this->BcUpload->setTable('BcBlog.BlogPosts');
 	</article>
 	<?php endforeach; ?>
 <?php else: ?>
-<p class="bs-blog-no-data"><?php echo __('記事がありません。'); ?></p>
+<p class="bs-blog-no-data"><?php echo __d('baser_core''記事がありません。'); ?></p>
 <?php endif ?>
 </section>
 

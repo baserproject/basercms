@@ -17,7 +17,7 @@
  * @noTodo
  */
 
-$this->BcAdmin->setTitle(__d('baser', '最近の動き'));
+$this->BcAdmin->setTitle(__d('baser_core', '最近の動き'));
 $this->BcAdmin->setSearch('dblogs_index');
 ?>
 

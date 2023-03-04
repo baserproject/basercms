@@ -76,12 +76,12 @@ class BcBlogViewEventListener extends \BaserCore\Event\BcViewEventListener
                 $route = ['Admin' => true, 'plugin' => 'BcBlog', 'action' => 'index', $blogContent->id];
                 $menus = [
                     'BlogPosts' . $blogContent->id => [
-                        'title' => __d('baser', '記事'),
+                        'title' => __d('baser_core', '記事'),
                         'url' => array_merge($route, ['controller' => 'blog_posts']),
                         'currentRegex' => '/\/bc-blog\/blog_posts\/[^\/]+?\/' . $blogContent->id . '($|\/)/s'
                     ],
                     'BlogCategories' . $blogContent->id => [
-                        'title' => __d('baser', 'カテゴリ'),
+                        'title' => __d('baser_core', 'カテゴリ'),
                         'url' => array_merge($route, ['controller' => 'blog_categories']),
                         'currentRegex' => '/\/bc-blog\/blog_categories\/[^\/]+?\/' . $blogContent->id . '($|\/)/s'
                     ]
@@ -89,7 +89,7 @@ class BcBlogViewEventListener extends \BaserCore\Event\BcViewEventListener
                 if ($blogContent->tag_use) {
                     $menus = array_merge($menus, [
                         'BlogTags' . $blogContent->id => [
-                            'title' => __d('baser', 'タグ'),
+                            'title' => __d('baser_core', 'タグ'),
                             'url' => array_merge($route, ['controller' => 'blog_tags']),
                             'currentRegex' => '/\/bc-blog\/blog_tags\/[^\/]+?/s'
                         ]
@@ -98,14 +98,14 @@ class BcBlogViewEventListener extends \BaserCore\Event\BcViewEventListener
                 if ($blogContent->comment_use) {
                     $menus = array_merge($menus, [
                         'BlogComments' . $blogContent->id => [
-                            'title' => __d('baser', 'コメント'),
+                            'title' => __d('baser_core', 'コメント'),
                             'url' => array_merge($route, ['controller' => 'blog_comments'])
                         ]
                     ]);
                 }
                 $menus = array_merge($menus, [
                     'BlogContentsEdit' . $blogContent->id => [
-                        'title' => __d('baser', '設定'),
+                        'title' => __d('baser_core', '設定'),
                         'url' => array_merge($route, ['controller' => 'blog_contents', 'action' => 'edit'])
                     ]
                 ]);

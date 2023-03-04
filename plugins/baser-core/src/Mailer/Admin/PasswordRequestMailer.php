@@ -36,7 +36,7 @@ class PasswordRequestMailer extends BcAdminMailer
      */
     public function resetPassword(EntityInterface $user, EntityInterface $passwordRequest)
     {
-        $subject = __d('baser', 'パスワード再発行');
+        $subject = __d('baser_core', 'パスワード再発行');
         $passwordRequestData = $passwordRequest->toArray();
         $createtime = $passwordRequestData['created']->timestamp;
         $agoInStr = '+' . Configure::read('BcApp.passwordRequestAllowTime') . ' min';

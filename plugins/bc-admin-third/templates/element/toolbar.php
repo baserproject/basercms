@@ -107,27 +107,27 @@ $this->BcBaser->js(['vendor/jquery.fixedMenu', 'vendor/outerClick', 'admin/toolb
               <?php if ($this->BcToolbar->isAvailableBackAgent()): ?>
                 <li>
                   <?php $this->BcBaser->link(
-                    __d('baser', '元のユーザーに戻る'),
+                    __d('baser_core', '元のユーザーに戻る'),
                     ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'users', 'action' => 'back_agent']
                   ) ?>
                 </li>
               <?php endif ?>
               <?php if ($this->BcToolbar->isAvailableAccountSetting()): ?>
-                <li><?php $this->BcBaser->link(__d('baser', 'アカウント設定'), $this->BcToolbar->getAccountSettingUrl()) ?></li>
+                <li><?php $this->BcBaser->link(__d('baser_core', 'アカウント設定'), $this->BcToolbar->getAccountSettingUrl()) ?></li>
               <?php endif ?>
-              <li><?php $this->BcBaser->link(__d('baser', 'ログアウト'), $this->BcToolbar->getLogoutUrl(), ['id' => 'BtnLogout']) ?></li>
+              <li><?php $this->BcBaser->link(__d('baser_core', 'ログアウト'), $this->BcToolbar->getLogoutUrl(), ['id' => 'BtnLogout']) ?></li>
             </ul>
           </li>
           <?php if ($this->BcToolbar->isAvailableLogin()): ?>
             <li>
               <?php $this->BcBaser->link(
-                __d('baser', 'ログインしていません ') .
+                __d('baser_core', 'ログインしていません ') .
                 $this->BcBaser->getImg($currentAdminTheme . '.admin/btn_dropdown.png', ['width' => 8, 'height' => 11, 'class' => 'bc-btn']),
                 'javascript:void(0)',
                 ['class' => 'title', 'escapeTitle' => false]
               ) ?>
               <ul>
-                <li><?php $this->BcBaser->link(__d('baser', 'ログイン'), $this->BcToolbar->getLoginUrl()) ?></li>
+                <li><?php $this->BcBaser->link(__d('baser_core', 'ログイン'), $this->BcToolbar->getLoginUrl()) ?></li>
               </ul>
             </li>
           <?php endif ?>
@@ -135,9 +135,9 @@ $this->BcBaser->js(['vendor/jquery.fixedMenu', 'vendor/outerClick', 'admin/toolb
           <?php if ($this->BcToolbar->isAvailableClearCache()): ?>
             <li>
               <?php $this->BcBaser->link(
-                __d('baser', 'キャッシュクリア'),
+                __d('baser_core', 'キャッシュクリア'),
                 ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'Utilities', 'action' => 'clear_cache'],
-                ['confirm' => __d('baser', 'キャッシュクリアします。いいですか？')]
+                ['confirm' => __d('baser_core', 'キャッシュクリアします。いいですか？')]
               ) ?>
             </li>
           <?php endif ?>

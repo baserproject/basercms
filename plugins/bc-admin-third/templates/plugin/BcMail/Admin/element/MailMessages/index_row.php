@@ -66,14 +66,14 @@
   </td>
   <td class="row-tools bca-table-listup__tbody-td bca-table-listup__tbody-td--actions">
     <?php $this->BcBaser->link('', ['action' => 'view', $mailContent->id, $mailMessage->id], [
-      'title' => __d('baser', '詳細'),
+      'title' => __d('baser_core', '詳細'),
       'class' => 'btn-view bca-btn-icon',
       'data-bca-btn-type' => 'preview',
       'data-bca-btn-size' => 'lg'
     ]) ?>
     <?php echo $this->BcAdminForm->postLink('', ['action' => 'delete', $mailContent->id, $mailMessage->id], [
-      'confirm' => __d('baser', "No.{0} を本当に削除してもいいですか？", $mailMessage->id),
-      'title' => __d('baser', '削除'),
+      'confirm' => __d('baser_core', "No.{0} を本当に削除してもいいですか？", $mailMessage->id),
+      'title' => __d('baser_core', '削除'),
       'class' => 'btn-delete bca-btn-icon',
       'data-bca-btn-type' => 'delete',
       'data-bca-btn-size' => 'lg'

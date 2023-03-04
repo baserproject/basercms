@@ -9,4 +9,4 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 ?>
-<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
+<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser_core', '必須') ?></span>

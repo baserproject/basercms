@@ -64,7 +64,7 @@ class BlogContentsController extends BlogAdminAppController
             try {
                 $blogContent = $service->update($blogContent, $this->getRequest()->getData());
                 $this->BcMessage->setSuccess(sprintf(
-                    __d('baser', 'ブログ「%s」を更新しました。'),
+                    __d('baser_core', 'ブログ「%s」を更新しました。'),
                     $blogContent->content->title
                 ));
                 // BcThemeFileプラグインの利用状況をチェックした上でリダイレクトする
@@ -78,11 +78,11 @@ class BlogContentsController extends BlogAdminAppController
             } catch (PersistenceFailedException $e) {
                 $blogContent = $e->getEntity();
                 $this->BcMessage->setError(
-                    __d('baser', '入力エラーです。内容を修正してください。')
+                    __d('baser_core', '入力エラーです。内容を修正してください。')
                 );
             } catch (BcException $e) {
                 $this->BcMessage->setError(
-                    __d('baser', '入力エラーです。内容を修正してください。' . $e->getMessage())
+                    __d('baser_core', '入力エラーです。内容を修正してください。' . $e->getMessage())
                 );
             }
         }

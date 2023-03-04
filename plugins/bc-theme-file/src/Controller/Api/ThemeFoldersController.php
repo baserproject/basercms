@@ -43,7 +43,7 @@ class ThemeFoldersController extends BcApiController
     {
         $this->request->allowMethod(['post', 'put']);
         $allowMethod = [
-            'delete' => __d('baser', '削除'),
+            'delete' => __d('baser_core', '削除'),
         ];
         $method = $this->getRequest()->getData('batch');
         if (!isset($allowMethod[$method])) {
@@ -62,14 +62,14 @@ class ThemeFoldersController extends BcApiController
             $names = $service->getNamesByFullpath($targets);
             $service->batch($method, $targets);
             $this->BcMessage->setSuccess(
-                __d('baser', 'フォルダー {0} 内の「{1}」を {2} しました。', $fullpath, implode('」、「', $names), $allowMethod[$method]),
+                __d('baser_core', 'フォルダー {0} 内の「{1}」を {2} しました。', $fullpath, implode('」、「', $names), $allowMethod[$method]),
                 true,
                 false
             );
-            $message = __d('baser', '一括処理が完了しました。');
+            $message = __d('baser_core', '一括処理が完了しました。');
         } catch (\Throwable $e) {
             $this->setResponse($this->response->withStatus(500));
-            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
         }
         $this->set(['message' => $message, 'errors' => $errors]);
         $this->viewBuilder()->setOption('serialize', ['message', 'errors']);
@@ -95,7 +95,7 @@ class ThemeFoldersController extends BcApiController
             $themeFiles = $service->getIndex($data);
         } catch (\Throwable $e) {
             $this->setResponse($this->response->withStatus(500));
-            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
         }
 
         $this->set([
@@ -124,14 +124,14 @@ class ThemeFoldersController extends BcApiController
             $data['fullpath'] = $service->getFullpath($data['theme'], $data['plugin'], $data['type'], $data['path']);
             $form = $service->create($data);
             $themeFolder = $service->get($form->getData('fullpath'));
-            $message = __d('baser', 'フォルダ「{0}」を作成しました。', $themeFolder->name);
+            $message = __d('baser_core', 'フォルダ「{0}」を作成しました。', $themeFolder->name);
         } catch (BcFormFailedException $e) {
             $this->setResponse($this->response->withStatus(400));
-            $message = __d('baser', '入力エラーです。内容を修正してください。');
+            $message = __d('baser_core', '入力エラーです。内容を修正してください。');
             $errors = $e->getEntity()->getErrors();
         } catch (\Throwable $e) {
             $this->setResponse($this->response->withStatus(500));
-            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
         }
 
         $this->set([
@@ -161,14 +161,14 @@ class ThemeFoldersController extends BcApiController
             $data['fullpath'] = $service->getFullpath($data['theme'], $data['plugin'], $data['type'], $data['path']);
             $form = $service->update($data);
             $themeFolder = $service->get($form->getData('fullpath'));
-            $message = __d('baser', 'フォルダ名を「{0}」に変更しました。', $themeFolder->name);
+            $message = __d('baser_core', 'フォルダ名を「{0}」に変更しました。', $themeFolder->name);
         } catch (BcFormFailedException $e) {
             $this->setResponse($this->response->withStatus(400));
-            $message = __d('baser', '入力エラーです。内容を修正してください。');
+            $message = __d('baser_core', '入力エラーです。内容を修正してください。');
             $errors = $e->getEntity()->getErrors();
         } catch (\Throwable $e) {
             $this->setResponse($this->response->withStatus(500));
-            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
         }
 
         $this->set([
@@ -197,13 +197,13 @@ class ThemeFoldersController extends BcApiController
             $data['fullpath'] = $service->getFullpath($data['theme'], $data['plugin'], $data['type'], $data['path']);
             $themeFolder = $service->get($data['fullpath']);
             if ($service->delete($data['fullpath'])) {
-                $message = __d('baser', 'フォルダ「{0}」を削除しました。', $data['path']);
+                $message = __d('baser_core', 'フォルダ「{0}」を削除しました。', $data['path']);
             } else {
-                $message = __d('baser', 'フォルダ「{0}」の削除に失敗しました。', $data['path']);
+                $message = __d('baser_core', 'フォルダ「{0}」の削除に失敗しました。', $data['path']);
             }
         } catch (\Throwable $e) {
             $this->setResponse($this->response->withStatus(500));
-            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
         }
 
         $this->set([
@@ -232,13 +232,13 @@ class ThemeFoldersController extends BcApiController
             $data['fullpath'] = $service->getFullpath($data['theme'], $data['plugin'], $data['type'], $data['path']);
             $entity = $service->copy($data['fullpath']);
             if ($entity) {
-                $message = __d('baser', 'フォルダ「{0}」をコピーしました。', $data['path']);
+                $message = __d('baser_core', 'フォルダ「{0}」をコピーしました。', $data['path']);
             } else {
-                $message = __d('baser', 'フォルダ「{0}」のコピーに失敗しました。上位フォルダのアクセス権限を見直してください。。', $data['path']);
+                $message = __d('baser_core', 'フォルダ「{0}」のコピーに失敗しました。上位フォルダのアクセス権限を見直してください。。', $data['path']);
             }
         } catch (\Throwable $e) {
             $this->setResponse($this->response->withStatus(500));
-            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
         }
 
         $this->set([
@@ -267,7 +267,7 @@ class ThemeFoldersController extends BcApiController
             $data['fullpath'] = $service->getFullpath($data['theme'], $data['plugin'], $data['type'], $data['path']);
             $targetPath = $service->copyToTheme($data);
             $currentTheme = BcUtil::getCurrentTheme();
-            $message = __d('baser',
+            $message = __d('baser_core',
                 'コアフォルダ {0} を テーマ {1} の次のパスとしてコピーしました。\n{2}。',
                 basename($data['path']),
                 $currentTheme,
@@ -275,7 +275,7 @@ class ThemeFoldersController extends BcApiController
             );
         } catch (\Throwable $e) {
             $this->setResponse($this->response->withStatus(500));
-            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
         }
 
         $this->set([
@@ -303,7 +303,7 @@ class ThemeFoldersController extends BcApiController
             $entity = $service->get($data['fullpath']);
         } catch (\Throwable $e) {
             $this->setResponse($this->response->withStatus(500));
-            $message = __d('baser', '処理中にエラーが発生しました。');
+            $message = __d('baser_core', '処理中にエラーが発生しました。');
         }
 
         $this->set([

@@ -58,7 +58,7 @@ class MailFieldsController extends MailAdminAppController
         $this->_checkEnv();
 
         $mailContentId = $this->request->getParam('pass.0');
-        if (!$mailContentId) throw new BcException(__d('baser', '不正なURLです。'));
+        if (!$mailContentId) throw new BcException(__d('baser_core', '不正なURLです。'));
         /* @var ContentsService $contentsService */
         $contentsService = $this->getService(ContentsServiceInterface::class);
         $request = $contentsService->setCurrentToRequest(
@@ -66,7 +66,7 @@ class MailFieldsController extends MailAdminAppController
             $mailContentId,
             $this->getRequest()
         );
-        if (!$request) throw new BcException(__d('baser', 'コンテンツデータが見つかりません。'));
+        if (!$request) throw new BcException(__d('baser_core', 'コンテンツデータが見つかりません。'));
         $this->setRequest($request);
 
         // TODO ucmitz 以下、未精査
@@ -100,7 +100,7 @@ class MailFieldsController extends MailAdminAppController
             $Folder->create($savePath, 0777);
             if (!is_dir($savePath)) {
                 $this->BcMessage->setError(
-                    __d('baser', 'ファイルフィールドを利用している場合、フォームより送信したファイルフィールドのデータは公開された状態となっています。URLを直接閲覧すると参照できてしまいます。参照されないようにするためには、{0} に書き込み権限を与えてください。', WWW_ROOT . 'files/mail/')
+                    __d('baser_core', 'ファイルフィールドを利用している場合、フォームより送信したファイルフィールドのデータは公開された状態となっています。URLを直接閲覧すると参照できてしまいます。参照されないようにするためには、{0} に書き込み権限を与えてください。', WWW_ROOT . 'files/mail/')
                 );
             }
             $File = new File($savePath . DS . '.htaccess');
@@ -109,7 +109,7 @@ class MailFieldsController extends MailAdminAppController
             $File->close();
             if (!file_exists($savePath . DS . '.htaccess')) {
                 $this->BcMessage->setError(
-                    __d('baser', 'ファイルフィールドを利用している場合、フォームより送信したファイルフィールドのデータは公開された状態となっています。URLを直接閲覧すると参照できてしまいます。参照されないようにするためには、{0} に書き込み権限を与えてください。', WWW_ROOT . 'files/mail/limited/')
+                    __d('baser_core', 'ファイルフィールドを利用している場合、フォームより送信したファイルフィールドのデータは公開された状態となっています。URLを直接閲覧すると参照できてしまいます。参照されないようにするためには、{0} に書き込み権限を与えてください。', WWW_ROOT . 'files/mail/limited/')
                 );
             }
         }
@@ -146,7 +146,7 @@ class MailFieldsController extends MailAdminAppController
         if($this->getRequest()->is(['post', 'put'])) {
             try {
                 $entity = $service->create($this->getRequest()->getData());
-                $this->BcMessage->setSuccess(__d('baser', '新規メールフィールド「{0}」を追加しました。', $entity->name));
+                $this->BcMessage->setSuccess(__d('baser_core', '新規メールフィールド「{0}」を追加しました。', $entity->name));
                 $this->redirect([
                     'controller' => 'mail_fields',
                     'action' => 'index',
@@ -154,9 +154,9 @@ class MailFieldsController extends MailAdminAppController
                 ]);
             } catch (PersistenceFailedException $e) {
                 $entity = $e->getEntity();
-                $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
+                $this->BcMessage->setError(__d('baser_core', '入力エラーです。内容を修正してください。'));
             } catch (Exception $e) {
-                $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage()));
+                $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage()));
             }
         }
         $this->set($service->getViewVarsForAdd(
@@ -181,7 +181,7 @@ class MailFieldsController extends MailAdminAppController
         if($this->getRequest()->is(['post', 'put'])) {
             try {
                 $entity = $service->update($entity, $this->getRequest()->getData());
-                $this->BcMessage->setSuccess(__d('baser', 'メールフィールド「{0}」を更新しました。', $entity->name));
+                $this->BcMessage->setSuccess(__d('baser_core', 'メールフィールド「{0}」を更新しました。', $entity->name));
                 $this->redirect([
                     'controller' => 'mail_fields',
                     'action' => 'index',
@@ -189,9 +189,9 @@ class MailFieldsController extends MailAdminAppController
                 ]);
             } catch (PersistenceFailedException $e) {
                 $entity = $e->getEntity();
-                $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
+                $this->BcMessage->setError(__d('baser_core', '入力エラーです。内容を修正してください。'));
             } catch (Exception $e) {
-                $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage()));
+                $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage()));
             }
         }
         $this->set($service->getViewVarsForEdit(
@@ -216,12 +216,12 @@ class MailFieldsController extends MailAdminAppController
         $entity = $service->get($id);
         try {
             if($service->delete($id)) {
-                $this->BcMessage->setSuccess(__d('baser', 'メールフィールド「{0}」を削除しました。', $entity->name));
+                $this->BcMessage->setSuccess(__d('baser_core', 'メールフィールド「{0}」を削除しました。', $entity->name));
             } else {
-                $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。'));
+                $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。'));
             }
         } catch (\Throwable $e) {
-            $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
+            $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
         }
         return $this->redirect(['action' => 'index', $mailContentId]);
     }
@@ -241,12 +241,12 @@ class MailFieldsController extends MailAdminAppController
         try {
             if($service->copy($mailContentId, $id)) {
                 $entity = $service->get($id);
-                $this->BcMessage->setSuccess(__d('baser', 'メールフィールド「{0}」をコピーしました。', $entity->name));
+                $this->BcMessage->setSuccess(__d('baser_core', 'メールフィールド「{0}」をコピーしました。', $entity->name));
             } else {
-                $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。'));
+                $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。'));
             }
         } catch (\Throwable $e) {
-            $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
+            $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
         }
         return $this->redirect(['action' => 'index', $mailContentId]);
     }
@@ -266,9 +266,9 @@ class MailFieldsController extends MailAdminAppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $result = $service->unpublish($id);
             if ($result) {
-                $this->BcMessage->setSuccess(sprintf(__d('baser', 'メールフィールド「%s」を無効状態にしました。'), $result->name));
+                $this->BcMessage->setSuccess(sprintf(__d('baser_core', 'メールフィールド「%s」を無効状態にしました。'), $result->name));
             } else {
-                $this->BcMessage->setSuccess(__d('baser', 'データベース処理中にエラーが発生しました。'));
+                $this->BcMessage->setSuccess(__d('baser_core', 'データベース処理中にエラーが発生しました。'));
             }
         }
         return $this->redirect(['action' => 'index', $mailContentId]);
@@ -288,9 +288,9 @@ class MailFieldsController extends MailAdminAppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $result = $service->publish($id);
             if ($result) {
-                $this->BcMessage->setSuccess(sprintf(__d('baser', 'メールフィールド「%s」を有効状態にしました。'), $result->name));
+                $this->BcMessage->setSuccess(sprintf(__d('baser_core', 'メールフィールド「%s」を有効状態にしました。'), $result->name));
             } else {
-                $this->BcMessage->setSuccess(__d('baser', 'データベース処理中にエラーが発生しました。'));
+                $this->BcMessage->setSuccess(__d('baser_core', 'データベース処理中にエラーが発生しました。'));
             }
         }
         return $this->redirect(['action' => 'index', $mailContentId]);

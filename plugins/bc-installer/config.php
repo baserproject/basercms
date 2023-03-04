@@ -11,8 +11,8 @@
 
 return [
     'type' => 'CorePlugin',
-    'title' => __d('baser', 'インストーラー'),
-    'description' => __d('baser', 'baserCMSのインストーラー'),
+    'title' => __d('baser_core', 'インストーラー'),
+    'description' => __d('baser_core', 'baserCMSのインストーラー'),
     'author' => 'baserCMS User Community',
     'url' => 'https://basercms.net',
     'installMessage' => ''

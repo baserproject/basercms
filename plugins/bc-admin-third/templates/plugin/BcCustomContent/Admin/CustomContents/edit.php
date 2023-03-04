@@ -18,7 +18,7 @@
  * @noTodo
  * @unitTest
  */
-$this->BcAdmin->setTitle(__d('baser', 'カスタムコンテンツ設定編集'));
+$this->BcAdmin->setTitle(__d('baser_core', 'カスタムコンテンツ設定編集'));
 ?>
 
 
@@ -27,7 +27,7 @@ $this->BcAdmin->setTitle(__d('baser', 'カスタムコンテンツ設定編集')
 
 <?php $this->BcBaser->element('CustomContents/form') ?>
 
-<?php echo $this->BcAdminForm->submit(__d('baser', '保存'), [
+<?php echo $this->BcAdminForm->submit(__d('baser_core', '保存'), [
   'div' => false,
   'class' => 'button bca-btn',
   'data-bca-btn-type' => 'save',

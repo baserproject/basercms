@@ -31,7 +31,7 @@ return [
                 'Utilities' => [
                     'menus' => [
                         'SearchIndices' => [
-                            'title' => __d('baser', '検索インデックス'),
+                            'title' => __d('baser_core', '検索インデックス'),
                             'url' => [
                                 'prefix' => 'Admin',
                                 'plugin' => 'BcSearchIndex',

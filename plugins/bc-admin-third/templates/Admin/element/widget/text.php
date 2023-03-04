@@ -17,8 +17,8 @@
  * @noTodo
  * @unitTest
  */
-$title = __d('baser', 'テキスト');
-$description = __d('baser', 'テキストやHTMLの入力ができます。');
+$title = __d('baser_core', 'テキスト');
+$description = __d('baser_core', 'テキストやHTMLの入力ができます。');
 echo $this->BcAdminForm->control($key . '.text', [
   'type' => 'textarea',
   'cols' => 38,

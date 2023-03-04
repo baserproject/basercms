@@ -39,8 +39,8 @@ $action = $this->getRequest()->getParam('action');
   <table id="FormTable" class="form-table bca-form-table">
     <tr>
       <th class="col-head bca-form-table__label">
-        <?php echo $this->BcAdminForm->label('name', __d('baser', 'ファイル名')) ?>
-        &nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
+        <?php echo $this->BcAdminForm->label('name', __d('baser_core', 'ファイル名')) ?>
+        &nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser_core', '必須') ?></span>
       </th>
       <td class="col-input bca-form-table__input">
         <?php if ($action != 'view'): ?>
@@ -52,7 +52,7 @@ $action = $this->getRequest()->getParam('action');
           <?php echo $this->BcAdminForm->error('name') ?>
           <div class="bca-helptext">
             <ul>
-              <li><?php echo __d('baser', 'ファイル名は半角で入力してください。') ?></li>
+              <li><?php echo __d('baser_core', 'ファイル名は半角で入力してください。') ?></li>
             </ul>
           </div>
         <?php else: ?>
@@ -64,7 +64,7 @@ $action = $this->getRequest()->getParam('action');
     <?php if ($action == 'add' || (($action == 'edit' || $action == 'view') && in_array($themeFile->type, ['text', 'image']))): ?>
       <tr>
         <th class="col-head bca-form-table__label">
-          <?php echo $this->BcAdminForm->label('contents', __d('baser', '内容')) ?>
+          <?php echo $this->BcAdminForm->label('contents', __d('baser_core', '内容')) ?>
         </th>
         <td class="col-input bca-form-table__input">
           <?php if (($action == 'edit' || $action == 'view') && $themeFile->type == 'image'): ?>

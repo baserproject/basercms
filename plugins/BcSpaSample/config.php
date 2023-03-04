@@ -11,8 +11,8 @@
 
 return [
     'type' => 'Plugin',
-    'title' => __d('baser', 'SPAサンプル'),
-    'description' => __d('baser', 'SPAのサンプルプラグインです'),
+    'title' => __d('baser_core', 'SPAサンプル'),
+    'description' => __d('baser_core', 'SPAのサンプルプラグインです'),
     'author' => 'baserCMS User Community',
     'url' => 'https://basercms.net',
     'installMessage' => ''

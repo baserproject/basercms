@@ -38,7 +38,7 @@ class ToolsTable extends AppTable
     public function getControlSource($field)
     {
         // スキーマ用モデルリスト
-        $controlSources['connection'] = ['core' => __d('baser', 'baser（コア）'), 'plugin' => __d('baser', 'plugin（プラグイン）')];
+        $controlSources['connection'] = ['core' => __d('baser_core', 'baser（コア）'), 'plugin' => __d('baser_core', 'plugin（プラグイン）')];
         $controlSources = $this->getListModels($field);
         if (isset($controlSources)) {
             return $controlSources;

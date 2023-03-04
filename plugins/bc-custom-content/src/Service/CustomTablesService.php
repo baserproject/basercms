@@ -153,7 +153,7 @@ class CustomTablesService implements CustomTablesServiceInterface
             // テーブルの作成処理
             if (!$customEntriesService->createTable($entity->id)) {
                 $this->CustomTables->getConnection()->rollback();
-                throw new BcException(__d('baser', 'データベースに問題があります。エントリー保存用テーブルの生成処理に失敗しました。'));
+                throw new BcException(__d('baser_core', 'データベースに問題があります。エントリー保存用テーブルの生成処理に失敗しました。'));
             }
         } catch (\Throwable $e) {
             $this->CustomTables->getConnection()->rollback();
@@ -199,7 +199,7 @@ class CustomTablesService implements CustomTablesServiceInterface
             // テーブルのリネーム処理
             if (!$customEntriesService->renameTable($entity->id, $oldName)) {
                 $this->CustomTables->getConnection()->rollback();
-                throw new BcException(__d('baser', 'データベースに問題があります。エントリー保存用テーブルのリネーム処理に失敗しました。'));
+                throw new BcException(__d('baser_core', 'データベースに問題があります。エントリー保存用テーブルのリネーム処理に失敗しました。'));
             }
 
             // フィールドの追加処理
@@ -268,7 +268,7 @@ class CustomTablesService implements CustomTablesServiceInterface
                     'valueField' => 'title'
                 ])->where(['custom_table_id' => $options['id']])->toArray();
             }
-            return array_merge(['title' => __d('baser', 'タイトル'), 'name' => __d('baser', 'スラッグ')], $displayFields);
+            return array_merge(['title' => __d('baser_core', 'タイトル'), 'name' => __d('baser_core', 'スラッグ')], $displayFields);
         }
         return [];
     }

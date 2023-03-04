@@ -42,17 +42,16 @@ class BcWidgetAreaHelperEventListener extends BcHelperEventListener
         if($event->getData('id') !== 'SiteConfigFormForm') return;
         $view = $event->getSubject();
         $event->setData(['fields' => [[
-            'title' => $view->BcAdminForm->label('widget_area', __d('baser', '標準ウィジェットエリア')),
+            'title' => $view->BcAdminForm->label('widget_area', __d('baser_core', '標準ウィジェットエリア')),
             'input' => $view->BcAdminForm->control('widget_area', [
                 'type' => 'select',
-                'options' => $view->BcAdminForm->getControlSource('BcWidgetArea.WidgetAreas.id'), 'empty' => __d('baser', 'なし')
+                'options' => $view->BcAdminForm->getControlSource('BcWidgetArea.WidgetAreas.id'), 'empty' => __d('baser_core', 'なし')
             ]) .
             '&nbsp;<i class="bca-icon--question-circle bca-help"></i>' .
             '<div class="bca-helptext">' .
-                __d(
-                    'baser',
+                __d('baser_core',
                     'ウィジェットエリアは「{0}」より追加できます。',
-                    $view->BcBaser->getLink(__d('baser', 'ウィジェットエリア管理'), [
+                    $view->BcBaser->getLink(__d('baser_core', 'ウィジェットエリア管理'), [
                         'plugin' => 'BcWidgetArea',
                         'controller' => 'widget_areas',
                         'action' => 'index'

@@ -24,8 +24,8 @@
 
 <div class="custom-field-group sortable" id="InUseField<?php echo $i ?>">
   <div class="custom-field-content__head">
-    <div class="custom-field-content__head-delete"><?php echo __d('baser', '削除') ?></div>
-    <div class="custom-field-content__head-setting"><?php echo __d('baser', '設定') ?></div>
+    <div class="custom-field-content__head-delete"><?php echo __d('baser_core', '削除') ?></div>
+    <div class="custom-field-content__head-setting"><?php echo __d('baser_core', '設定') ?></div>
     <div class="custom-field-content__head-title">
       <span class="custom-field-content__head-text"><?php echo "{{ linkTitleById({$customLink->id}) }}" ?></span>
       <small>（<?php echo "{{ linkFieldTitleById({$customLink->id}) }}" ?>）</small>
@@ -56,7 +56,7 @@
       'class' => 'bca-textbox__input custom-field-setting__name',
       'v-model' => "linkTitleById({$customLink->id})"
     ]) ?>
-    <?php $this->BcBaser->link(__d('baser', '詳細編集'), '#', [
+    <?php $this->BcBaser->link(__d('baser_core', '詳細編集'), '#', [
       'class' => 'button-small',
       '@click' => "openLinkDetail({$customLink->id})"
     ]) ?>

@@ -162,23 +162,23 @@ class InstallationsService implements InstallationsServiceInterface
             $dbDataPattern = Configure::read('BcApp.defaultFrontTheme') . '.default';
         }
         if (strpos($dbDataPattern, '.') === false) {
-            throw new BcException(__d('baser', 'データパターンの形式が不正です。'));
+            throw new BcException(__d('baser_core', 'データパターンの形式が不正です。'));
         }
         if (!$this->BcDatabase->constructionTable('BaserCore', 'default', $dbConfig)) {
-            throw new BcException(__d('baser', 'コアテーブルの構築に失敗しました。'));
+            throw new BcException(__d('baser_core', 'コアテーブルの構築に失敗しました。'));
         }
 
         try {
             $this->installCorePlugin();
             [$theme, $pattern] = explode('.', $dbDataPattern);
             if (!$this->BcDatabase->loadDefaultDataPattern($theme, $pattern)) {
-                throw new BcException(__d('baser', 'コアの初期データのロードに失敗しました。'));
+                throw new BcException(__d('baser_core', 'コアの初期データのロードに失敗しました。'));
             }
         } catch (\Throwable $e) {
-            throw new BcException(__d('baser', 'コアの初期データのロードに失敗しました。' . $e->getMessage()));
+            throw new BcException(__d('baser_core', 'コアの初期データのロードに失敗しました。' . $e->getMessage()));
         }
         if (!$this->BcDatabase->initSystemData(['theme' => $theme, 'adminTheme' => $adminTheme])) {
-            throw new BcException(__d('baser', 'システムデータの初期化に失敗しました。'));
+            throw new BcException(__d('baser_core', 'システムデータの初期化に失敗しました。'));
         }
         $datasource = strtolower(str_replace('Cake\\Database\\Driver\\', '', $dbConfig['driver']));
         if ($datasource === 'postgres') {
@@ -325,11 +325,11 @@ class InstallationsService implements InstallationsServiceInterface
     {
         $result = true;
         if (!$this->_updatePluginStatus()) {
-            $this->log(__d('baser', 'プラグインの有効化に失敗しました。'));
+            $this->log(__d('baser_core', 'プラグインの有効化に失敗しました。'));
             $result = false;
         }
         if (!$this->_updateContents()) {
-            $this->log(__d('baser', 'コンテンツの更新に失敗しました。'));
+            $this->log(__d('baser_core', 'コンテンツの更新に失敗しました。'));
             $result = false;
         }
         return $result;
@@ -401,7 +401,7 @@ class InstallationsService implements InstallationsServiceInterface
         $corePlugins = Configure::read('BcApp.defaultInstallCorePlugins');
         foreach($corePlugins as $corePlugin) {
             if (!$this->installPlugin($corePlugin)) {
-                $this->log(sprintf(__d('baser', 'コアプラグイン %s のインストールに失敗しました。'), $corePlugin));
+                $this->log(sprintf(__d('baser_core', 'コアプラグイン %s のインストールに失敗しました。'), $corePlugin));
                 $result = false;
             }
         }

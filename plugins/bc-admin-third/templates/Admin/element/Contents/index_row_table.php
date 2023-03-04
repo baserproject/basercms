@@ -72,7 +72,7 @@ if ($content->self_status) {
       <?php echo $this->BcAdminForm->control(
         'batch_targets.' . $content->id, [
         'type' => 'checkbox',
-        'label' => '<span class="bca-visually-hidden">' . __d('baser', 'チェックする') . '</span>',
+        'label' => '<span class="bca-visually-hidden">' . __d('baser_core', 'チェックする') . '</span>',
         'class' => 'batch-targets bca-checkbox__input',
         'value' => $content->id,
         'escape' => false
@@ -117,14 +117,14 @@ if ($content->self_status) {
     <?php if ($isPublish): ?>
       <?php $this->BcBaser->link('',
         $fullUrl, [
-          'title' => __d('baser', '確認'),
+          'title' => __d('baser_core', '確認'),
           'class' => 'btn-check bca-btn-icon',
           'data-bca-btn-type' => 'preview',
           'data-bca-btn-size' => 'lg',
           'target' => '_blank'
         ]) ?>
     <?php else: ?>
-      <a title="<?php echo __d('baser', '確認') ?>"
+      <a title="<?php echo __d('baser_core', '確認') ?>"
          class="btn bca-btn-icon"
          data-bca-btn-type="preview"
          data-bca-btn-size="lg"
@@ -136,13 +136,13 @@ if ($content->self_status) {
     <?php if (!$manageDisabled && !empty($items[$type]['routes']['manage'])): ?>
       <?php $this->BcBaser->link('',
         array_merge($items[$type]['routes']['manage'], $urlParams), [
-          'title' => __d('baser', '管理'),
+          'title' => __d('baser_core', '管理'),
           'class' => 'btn-check bca-btn-icon',
           'data-bca-btn-type' => 'th-list',
           'data-bca-btn-size' => 'lg'
         ]) ?>
     <?php else: ?>
-      <a title="<?php echo __d('baser', '管理') ?>"
+      <a title="<?php echo __d('baser_core', '管理') ?>"
          class="btn bca-btn-icon"
          data-bca-btn-type="th-list"
          data-bca-btn-size="lg"
@@ -154,20 +154,20 @@ if ($content->self_status) {
     <?php if (!$isSiteRoot && !$isSiteRelated && !$editDisabled): ?>
       <?php $this->BcBaser->link('',
         ['prefix' => 'Api', 'action' => 'change_status', '_ext' => 'json'], [
-          'title' => __d('baser', '非公開'),
+          'title' => __d('baser_core', '非公開'),
           'class' => 'btn-unpublish bca-btn-icon',
           'data-bca-btn-type' => 'unpublish',
           'data-bca-btn-size' => 'lg'
         ]) ?>
       <?php $this->BcBaser->link('',
         ['prefix' => 'Api', 'action' => 'change_status', '_ext' => 'json'], [
-          'title' => __d('baser', '公開'),
+          'title' => __d('baser_core', '公開'),
           'class' => 'btn-publish bca-btn-icon',
           'data-bca-btn-type' => 'publish',
           'data-bca-btn-size' => 'lg'
         ]) ?>
     <?php else: ?>
-      <a title="<?php echo __d('baser', '非公開') ?>"
+      <a title="<?php echo __d('baser_core', '非公開') ?>"
          class="btn bca-btn-icon"
          data-bca-btn-type="unpublish"
          data-bca-btn-size="lg"
@@ -179,13 +179,13 @@ if ($content->self_status) {
     <?php if (!$editDisabled && $type != 'ContentFolder' && !empty($items[$type]['routes']['copy'])): ?>
       <?php $this->BcBaser->link('',
         array_merge($items[$type]['routes']['copy'], $urlParams, ['_ext' => 'json']), [
-          'title' => __d('baser', 'コピー'),
+          'title' => __d('baser_core', 'コピー'),
           'class' => 'btn-copy bca-btn-icon',
           'data-bca-btn-type' => 'copy',
           'data-bca-btn-size' => 'lg'
         ]) ?>
     <?php else: ?>
-      <a title="<?php echo __d('baser', 'コピー') ?>"
+      <a title="<?php echo __d('baser_core', 'コピー') ?>"
          class="bca-btn-icon"
          data-bca-btn-type="copy"
          data-bca-btn-size="lg"
@@ -197,7 +197,7 @@ if ($content->self_status) {
     <?php if (!$editDisabled): ?>
       <?php $this->BcBaser->link('',
         array_merge($items[$type]['routes']['edit'], $urlParams), [
-          'title' => __d('baser', '編集'),
+          'title' => __d('baser_core', '編集'),
           'class' => 'btn-edit bca-btn-icon',
           'data-bca-btn-type' => 'edit',
           'data-bca-btn-size' => 'lg'
@@ -208,11 +208,11 @@ if ($content->self_status) {
     <?php if (!$editDisabled && !$isSiteRoot): ?>
       <?php $this->BcBaser->link('',
         ['prefix' => 'Api', 'action' => 'delete', $content->id, '_ext' => 'json'], [
-          'title' => __d('baser', '削除'),
+          'title' => __d('baser_core', '削除'),
           'class' => 'btn-delete bca-btn-icon',
           'data-bca-btn-type' => 'delete',
           'data-bca-btn-size' => 'lg',
-          'data-confirm-message' => __d('baser', '{0} を本当に削除してもいいですか？', $content->title)
+          'data-confirm-message' => __d('baser_core', '{0} を本当に削除してもいいですか？', $content->title)
         ]) ?>
     <?php endif ?>
 

@@ -46,7 +46,7 @@ $class = ' class="' . implode(' ', $classies) . ' bca-file-list__item"';
 	<span class="name"><?php echo $uploaderFile->name ?></span>
 	<div class="uploader-file-row-panel__created">
 		<span class="created" style="white-space: nowrap">
-			[<?php echo __d('baser', '公開状態') ?>：<?php echo $this->BcText->booleanMark($statusPublish); ?>]&nbsp;<?php echo $this->BcTime->format($uploaderFile->created, 'Y.m.d') ?>
+			[<?php echo __d('baser_core', '公開状態') ?>：<?php echo $this->BcText->booleanMark($statusPublish); ?>]&nbsp;<?php echo $this->BcTime->format($uploaderFile->created, 'Y.m.d') ?>
 		</span>
 	</div>
 	<div class="user-name uploader-file-row-panel__user-name">

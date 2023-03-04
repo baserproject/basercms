@@ -77,7 +77,7 @@ class PreviewController extends BcAdminAppController
                 }
             }
         } catch (\Cake\Http\Exception\NotFoundException $e) {
-            $this->BcMessage->setError(__d('baser', $e->getMessage()));
+            $this->BcMessage->setError(__d('baser_core', $e->getMessage()));
             return $this->redirect($this->referer());
         }
     }

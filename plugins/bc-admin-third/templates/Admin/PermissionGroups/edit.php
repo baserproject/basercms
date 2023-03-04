@@ -21,7 +21,7 @@
  * @noTodo
  * @unitTest
  */
-$this->BcAdmin->setTitle(sprintf(__d('baser', '%s｜アクセスルールグループ編集'), $currentUserGroup->title));
+$this->BcAdmin->setTitle(sprintf(__d('baser_core', '%s｜アクセスルールグループ編集'), $currentUserGroup->title));
 ?>
 
 
@@ -34,22 +34,22 @@ $this->BcAdmin->setTitle(sprintf(__d('baser', '%s｜アクセスルールグル�
 <div class="section">
   <table id="FormTable" class="form-table bca-form-table">
     <tr>
-      <th class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('user_group_id', __d('baser', 'ユーザーグループ')) ?></th>
+      <th class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('user_group_id', __d('baser_core', 'ユーザーグループ')) ?></th>
       <td class="col-input bca-form-table__input">
         <?php echo h($currentUserGroup->title) ?>
       </td>
     </tr>
 
     <tr>
-      <th class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('type', __d('baser', 'タイプ')) ?></th>
+      <th class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('type', __d('baser_core', 'タイプ')) ?></th>
       <td class="col-input bca-form-table__input">
         <?php echo h($entity->type) ?>
       </td>
     </tr>
 
     <tr>
-      <th class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('name', __d('baser', 'ルールグループ名')) ?>
-        &nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
+      <th class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('name', __d('baser_core', 'ルールグループ名')) ?>
+        &nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser_core', '必須') ?></span>
       </th>
       <td class="col-input bca-form-table__input">
         <?php echo h($entity->name) ?>
@@ -57,8 +57,8 @@ $this->BcAdmin->setTitle(sprintf(__d('baser', '%s｜アクセスルールグル�
     </tr>
 
     <tr>
-      <th class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('name', __d('baser', 'ルール')) ?>
-        &nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
+      <th class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('name', __d('baser_core', 'ルール')) ?>
+        &nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser_core', '必須') ?></span>
       </th>
       <td class="col-input bca-form-table__input">
 
@@ -76,8 +76,8 @@ $this->BcAdmin->setTitle(sprintf(__d('baser', '%s｜アクセスルールグル�
               <?php echo $this->BcAdminForm->control('permissions.' . $key . '.method', ['type' => 'select', 'options' => $permissionMethodList]) ?>
               &nbsp;&nbsp;&nbsp;&nbsp;
               <?php echo $this->BcAdminForm->control('permissions.' . $key . '.auth', ['type' => 'radio', 'options' => $permissionAuthList]) ?>
-              <?php echo $this->BcAdminForm->control('permissions.' . $key . '.status', ['type' => 'checkbox', 'label' => __d('baser', '有効')]) ?>
-              <?php $this->BcBaser->link(__d('baser', '詳細'), [
+              <?php echo $this->BcAdminForm->control('permissions.' . $key . '.status', ['type' => 'checkbox', 'label' => __d('baser_core', '有効')]) ?>
+              <?php $this->BcBaser->link(__d('baser_core', '詳細'), [
                 'controller' => 'Permissions',
                 'action' => 'edit',
                 $currentUserGroup->id,
@@ -96,7 +96,7 @@ $this->BcAdmin->setTitle(sprintf(__d('baser', '%s｜アクセスルールグル�
           </table>
         <?php endif ?>
 
-        <?php echo $this->BcHtml->link(__d('baser', '新規追加'), [
+        <?php echo $this->BcHtml->link(__d('baser_core', '新規追加'), [
           'controller' => 'Permissions',
           'action' => 'add',
           $currentUserGroup->id,
@@ -110,9 +110,9 @@ $this->BcAdmin->setTitle(sprintf(__d('baser', '%s｜アクセスルールグル�
     </tr>
 
     <tr>
-      <th class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('status', __d('baser', '利用状態')) ?></th>
+      <th class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('status', __d('baser_core', '利用状態')) ?></th>
       <td class="col-input bca-form-table__input">
-        <?php echo $this->BcAdminForm->control('status', ['type' => 'checkbox', 'label' => __d('baser', '有効')]) ?>
+        <?php echo $this->BcAdminForm->control('status', ['type' => 'checkbox', 'label' => __d('baser_core', '有効')]) ?>
         <?php echo $this->BcAdminForm->error('status') ?>
       </td>
     </tr>
@@ -123,13 +123,13 @@ $this->BcAdmin->setTitle(sprintf(__d('baser', '%s｜アクセスルールグル�
 
 <div class="submit section bca-actions">
   <div class="bca-actions__main">
-    <?php echo $this->BcHtml->link(__d('baser', '一覧に戻る'),
+    <?php echo $this->BcHtml->link(__d('baser_core', '一覧に戻る'),
       ['action' => 'index', $currentUserGroup->id], [
         'class' => 'button bca-btn bca-actions__item',
         'data-bca-btn-type' => 'back-to-list'
       ]) ?>
     <?= $this->BcAdminForm->button(
-      __d('baser', '保存'),
+      __d('baser_core', '保存'),
       ['div' => false,
         'class' => 'button bca-btn bca-actions__item bca-loading',
         'data-bca-btn-type' => 'save',

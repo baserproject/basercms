@@ -77,13 +77,13 @@ class BlogTagsTable extends BlogAppTable
 
         $validator
             ->scalar('name')
-            ->requirePresence('name', 'create', __d('baser', 'ブログタグを入力してください。'))
-            ->notEmptyString('name', __d('baser', 'ブログタグを入力してください。'))
+            ->requirePresence('name', 'create', __d('baser_core', 'ブログタグを入力してください。'))
+            ->notEmptyString('name', __d('baser_core', 'ブログタグを入力してください。'))
             ->add('name', [
                 'duplicate' => [
                     'rule' => 'validateUnique',
                     'provider' => 'table',
-                    'message' => __d('baser', '既に登録のあるタグです。')
+                    'message' => __d('baser_core', '既に登録のあるタグです。')
         ]]);
         return $validator;
     }

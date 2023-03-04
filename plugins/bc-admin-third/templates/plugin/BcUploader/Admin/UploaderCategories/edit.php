@@ -16,7 +16,7 @@
  * @noTodo
  * @unitTest
  */
-$this->BcAdmin->setTitle(__d('baser', 'アップロードカテゴリ編集'));
+$this->BcAdmin->setTitle(__d('baser_core', 'アップロードカテゴリ編集'));
 ?>
 
 
@@ -27,7 +27,7 @@ $this->BcAdmin->setTitle(__d('baser', 'アップロードカテゴリ編集'));
 
 <div class="submit bca-actions">
   <div class="bca-actions__main">
-    <?php echo $this->BcAdminForm->button(__d('baser', '更新'), [
+    <?php echo $this->BcAdminForm->button(__d('baser_core', '更新'), [
       'div' => false,
       'class' => 'button bca-btn bca-actions__item',
       'data-bca-btn-type' =>
@@ -36,9 +36,9 @@ $this->BcAdmin->setTitle(__d('baser', 'アップロードカテゴリ編集'));
     ]) ?>
   </div>
   <div class="bca-actions__sub">
-    <?php echo $this->BcAdminForm->postLink(__d('baser', '削除'),
+    <?php echo $this->BcAdminForm->postLink(__d('baser_core', '削除'),
       ['action' => 'delete', $this->BcAdminForm->getSourceValue('id')], [
-        'confirm' => sprintf(__d('baser', '%s を本当に削除してもいいですか？'), $this->BcAdminForm->getSourceValue('name')),
+        'confirm' => sprintf(__d('baser_core', '%s を本当に削除してもいいですか？'), $this->BcAdminForm->getSourceValue('name')),
         'block' => true,
         'class' => 'bca-submit-token button bca-btn bca-actions__item',
         'data-bca-btn-type' => 'delete',

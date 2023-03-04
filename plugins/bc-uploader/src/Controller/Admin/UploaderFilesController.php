@@ -158,19 +158,19 @@ class UploaderFilesController extends BcAdminAppController
     {
         $entity = $service->get($id);
         if(!$service->isEditable($entity->toArray())) {
-            $this->BcMessage->setWarning(__d('baser', '編集権限がありません。'));
+            $this->BcMessage->setWarning(__d('baser_core', '編集権限がありません。'));
             return $this->redirect(['action' => 'index']);
         }
         if ($this->getRequest()->is(['post', 'put'])) {
             try {
                 $entity = $service->update($entity, $this->getRequest()->getData());
-                $this->BcMessage->setInfo(__d('baser', 'アップロードファイル「{0}」を更新しました。', $entity->name));
+                $this->BcMessage->setInfo(__d('baser_core', 'アップロードファイル「{0}」を更新しました。', $entity->name));
                 $this->redirect(['action' => 'index']);
             } catch (PersistenceFailedException $e) {
                 $entity = $e->getEntity();
-                $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
+                $this->BcMessage->setError(__d('baser_core', '入力エラーです。内容を修正してください。'));
             } catch (\Throwable $e) {
-                $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。'));
+                $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。'));
             }
         }
         $this->set([
@@ -194,10 +194,10 @@ class UploaderFilesController extends BcAdminAppController
         try {
             $entity = $service->get($id);
             if ($service->delete($id)) {
-                $this->BcMessage->setSuccess(__d('baser', 'アップロードファイル「{0}」を削除しました。', $entity->name));
+                $this->BcMessage->setSuccess(__d('baser_core', 'アップロードファイル「{0}」を削除しました。', $entity->name));
             }
         } catch (BcException $e) {
-            $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
+            $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
         }
 
         return $this->redirect(['action' => 'index']);

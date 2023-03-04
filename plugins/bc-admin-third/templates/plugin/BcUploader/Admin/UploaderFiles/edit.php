@@ -15,7 +15,7 @@
  * @noTodo
  * @unitTest
  */
-$this->BcAdmin->setTitle(__d('baser', 'アップロードファイル編集'));
+$this->BcAdmin->setTitle(__d('baser_core', 'アップロードファイル編集'));
 ?>
 
 

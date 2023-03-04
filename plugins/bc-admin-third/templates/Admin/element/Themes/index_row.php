@@ -39,8 +39,8 @@ use Cake\Utility\Inflector;
   <p class="row-tools">
     <?php if ($theme->name !== $currentThemeName): ?>
       <?php echo $this->BcAdminForm->postLink('', ['action' => 'apply', $theme->name], [
-        'title' => __d('baser', '適用'),
-        'confirm' => __d('baser', 'テーマを適用します。よろしいですか？'),
+        'title' => __d('baser_core', '適用'),
+        'confirm' => __d('baser_core', 'テーマを適用します。よろしいですか？'),
         'class' => 'btn-apply bca-btn-icon',
         'data-bca-btn-type' => 'apply',
         'data-bca-btn-size' => 'lg',
@@ -48,15 +48,15 @@ use Cake\Utility\Inflector;
       ]) ?>
     <?php endif ?>
     <?php echo $this->BcAdminForm->postLink('', ['action' => 'copy', $theme->name], [
-      'title' => __d('baser', 'テーマコピー'),
+      'title' => __d('baser_core', 'テーマコピー'),
       'class' => 'btn-copy bca-btn-icon',
       'data-bca-btn-type' => 'copy',
       'data-bca-btn-size' => 'lg',
       'block' => true
     ]) ?>
     <?php echo $this->BcAdminForm->postLink('', ['action' => 'delete', $theme->name], [
-      'title' => __d('baser', 'テーマ削除'),
-      'confirm' => __d('baser', "このデータを本当に削除してもよろしいですか？\\n※ 削除したデータは元に戻すことができません。"),
+      'title' => __d('baser_core', 'テーマ削除'),
+      'confirm' => __d('baser_core', "このデータを本当に削除してもよろしいですか？\\n※ 削除したデータは元に戻すことができません。"),
       'class' => 'btn-delete bca-btn-icon',
       'data-bca-btn-type' => 'delete',
       'data-bca-btn-size' => 'lg',
@@ -67,8 +67,8 @@ use Cake\Utility\Inflector;
     $this->fetch('postLink');
     $this->reset('postLink');
   ?>
-  <p class="theme-version"><?php echo __d('baser', 'バージョン') ?>：<?php echo $theme->version ?></p>
-  <p class="theme-author"><?php echo __d('baser', '制作者') ?>：
+  <p class="theme-version"><?php echo __d('baser_core', 'バージョン') ?>：<?php echo $theme->version ?></p>
+  <p class="theme-author"><?php echo __d('baser_core', '制作者') ?>：
     <?php if (!empty($theme->url) && !empty($theme->author)): ?>
       <?php $this->BcBaser->link($theme->author, $theme->url, ['target' => '_blank', 'escape' => true]) ?>
     <?php else: ?>
@@ -87,9 +87,9 @@ use Cake\Utility\Inflector;
       <div class="theme-name">
         <strong><?php echo h($theme->title) ?></strong>&nbsp;(&nbsp;<?php echo $theme->name ?>&nbsp;)
       </div>
-      <div class="theme-version"><?php echo __d('baser', 'バージョン') ?>：<?php echo $theme->version ?></div>
+      <div class="theme-version"><?php echo __d('baser_core', 'バージョン') ?>：<?php echo $theme->version ?></div>
       <div class="theme-author">
-        <?php echo __d('baser', '制作者') ?>：
+        <?php echo __d('baser_core', '制作者') ?>：
         <?php if (!empty($theme->url) && !empty($theme->author)): ?>
           <?php $this->BcBaser->link($theme->author, $theme->url, ['target' => '_blank', 'escape' => true]) ?>
         <?php else: ?>

@@ -34,7 +34,7 @@
       <tr v-show="showPreview['<?php echo $link->id ?>']">
         <th class="col-head bca-form-table__label">
           <?php echo $this->BcAdminForm->label($link->name, '{{link.title}}') ?>&nbsp;&nbsp;
-          <span class="bca-label" data-bca-label-type="required" v-show="link.required"><?php echo __d('baser', '必須') ?></span>
+          <span class="bca-label" data-bca-label-type="required" v-show="link.required"><?php echo __d('baser_core', '必須') ?></span>
         </th>
         <td class="col-input bca-form-table__input">
           <span>{{ link.before_head }}</span>

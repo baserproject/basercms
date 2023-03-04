@@ -58,9 +58,9 @@ class ContentFoldersController extends BcApiController
             $contentFolder = $service->get($id);
         } catch (RecordNotFoundException $e) {
             $this->setResponse($this->response->withStatus(404));
-            $message = __d('baser', 'データが見つかりません');
+            $message = __d('baser_core', 'データが見つかりません');
         } catch (\Throwable $e) {
-            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
             $this->setResponse($this->response->withStatus(500));
         }
 
@@ -85,13 +85,13 @@ class ContentFoldersController extends BcApiController
         $contentFolder = $errors = null;
         try {
             $contentFolder = $service->create($this->request->getData());
-            $message = __d('baser', 'コンテンツフォルダ「{0}」を追加しました。', $contentFolder->content->title);
+            $message = __d('baser_core', 'コンテンツフォルダ「{0}」を追加しました。', $contentFolder->content->title);
         } catch (PersistenceFailedException $e) {
             $errors = $e->getEntity()->getErrors();
-            $message = __d('baser', "入力エラーです。内容を修正してください。");
+            $message = __d('baser_core', "入力エラーです。内容を修正してください。");
             $this->setResponse($this->response->withStatus(400));
         } catch (\Throwable $e) {
-            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
             $this->setResponse($this->response->withStatus(500));
         }
 
@@ -125,12 +125,12 @@ class ContentFoldersController extends BcApiController
         try {
             $contentFolder = $service->get($id);
             $service->delete($id);
-            $message = __d('baser', 'コンテンツフォルダ: {0} を削除しました。', $contentFolder->content->title);
+            $message = __d('baser_core', 'コンテンツフォルダ: {0} を削除しました。', $contentFolder->content->title);
         } catch (RecordNotFoundException $e) {
             $this->setResponse($this->response->withStatus(404));
-            $message = __d('baser', 'データが見つかりません');
+            $message = __d('baser_core', 'データが見つかりません');
         } catch (\Throwable $e) {
-            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
             $this->setResponse($this->response->withStatus(500));
         }
 
@@ -157,13 +157,13 @@ class ContentFoldersController extends BcApiController
         $contentFolder = $errors = null;
         try {
             $contentFolder = $service->update($service->get($id), $this->request->getData());
-            $message = __d('baser', 'フォルダー「{0}」を更新しました。', $contentFolder->content->title);
+            $message = __d('baser_core', 'フォルダー「{0}」を更新しました。', $contentFolder->content->title);
         } catch (PersistenceFailedException $e) {
             $errors = $e->getEntity()->getErrors();
-            $message = __d('baser', "入力エラーです。内容を修正してください。");
+            $message = __d('baser_core', "入力エラーです。内容を修正してください。");
             $this->setResponse($this->response->withStatus(400));
         } catch (\Throwable $e) {
-            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
             $this->setResponse($this->response->withStatus(500));
         }
 

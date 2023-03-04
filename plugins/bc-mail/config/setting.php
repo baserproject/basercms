@@ -19,7 +19,7 @@ return [
             'Plugins' => [
                 'menus' => [
                     'MailConfigs' => [
-                        'title' => __d('baser', 'メール基本設定'),
+                        'title' => __d('baser_core', 'メール基本設定'),
                         'url' => [
                             'prefix' => 'Admin',
                             'plugin' => 'BcMail',
@@ -38,7 +38,7 @@ return [
         'items' => [
             'BcMail' => [
                 'MailContent' => [
-                    'title' => __d('baser', 'メールフォーム'),
+                    'title' => __d('baser_core', 'メールフォーム'),
                     'multiple' => true,
                     'preview' => true,
                     'icon' => 'bca-icon--mail',

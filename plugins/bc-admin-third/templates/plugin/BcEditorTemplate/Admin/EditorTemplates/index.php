@@ -19,9 +19,9 @@
  */
 $this->BcAdmin->addAdminMainBodyHeaderLinks([
   'url' => ['action' => 'add'],
-  'title' => __d('baser', '新規追加'),
+  'title' => __d('baser_core', '新規追加'),
 ]);
-$this->BcAdmin->setTitle(__d('baser', 'エディタテンプレート一覧'));
+$this->BcAdmin->setTitle(__d('baser_core', 'エディタテンプレート一覧'));
 $this->BcAdmin->setHelp('editor_templates_index');
 ?>
 

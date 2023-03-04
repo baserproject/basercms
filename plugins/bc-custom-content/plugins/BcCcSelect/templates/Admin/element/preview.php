@@ -13,8 +13,8 @@
 
 <span class="bca-select">
     <select name="preview[BcCcSelect]" id="preview-bcccselect" class="bca-select__select" v-model="entity.default_value">
-        <option value=""><?php echo __d('baser', '指定しない') ?></option>
+        <option value=""><?php echo __d('baser_core', '指定しない') ?></option>
         <option v-for="value in arraySource" :value="value">{{value}}</option>
     </select>
-    <br><span v-show="arraySource.length < 1"><?php echo __d('baser', '選択リストを入力してください。') ?></span>
+    <br><span v-show="arraySource.length < 1"><?php echo __d('baser_core', '選択リストを入力してください。') ?></span>
 </span>

@@ -39,7 +39,7 @@ array_push($params, $themeFile->name);
     <?php if ($this->BcBaser->isAdminUser() && !$isDefaultTheme): ?>
       <?php echo $this->BcAdminForm->control('batch', [
           'type' => 'checkbox',
-          'label' => '<span class="bca-visually-hidden">' . __d('baser', 'チェックする') . '</span>',
+          'label' => '<span class="bca-visually-hidden">' . __d('baser_core', 'チェックする') . '</span>',
           'class' => 'batch-targets bca-checkbox__input',
           'value' => $themeFile->fullpath,
           'escape' => false,
@@ -88,41 +88,41 @@ array_push($params, $themeFile->name);
 
       <?php if ($themeFile->type === 'folder'): ?>
         <?php echo $this->BcAdminForm->postLink('', array_merge(['action' => 'copy_folder', $theme, $plugin, $type], $params), [
-          'title' => __d('baser', 'コピー'),
+          'title' => __d('baser_core', 'コピー'),
           'class' => 'btn-copy bca-btn-icon',
           'data-bca-btn-type' => 'copy',
           'data-bca-btn-size' => 'lg'
         ]) ?>
         <?php $this->BcBaser->link('', array_merge(['action' => 'edit_folder', $theme, $plugin, $type], $params), [
-          'title' => __d('baser', '編集'),
+          'title' => __d('baser_core', '編集'),
           'class' => 'bca-btn-icon',
           'data-bca-btn-type' => 'edit',
           'data-bca-btn-size' => 'lg'
         ]) ?>
         <?php echo $this->BcAdminForm->postLink('', array_merge(['action' => 'delete_folder', $theme, $plugin, $type], $params), [
-          'confirm' => __d('baser', 'フォルダ {0} を本当に削除してもよろしいですか？', $themeFile->name),
-          'title' => __d('baser', '削除'),
+          'confirm' => __d('baser_core', 'フォルダ {0} を本当に削除してもよろしいですか？', $themeFile->name),
+          'title' => __d('baser_core', '削除'),
           'class' => 'btn-delete bca-btn-icon',
           'data-bca-btn-type' => 'delete',
           'data-bca-btn-size' => 'lg'
         ]) ?>
       <?php else: ?>
         <?php echo $this->BcAdminForm->postLink('', array_merge(['action' => 'copy', $theme, $plugin, $type], $params), [
-          'title' => __d('baser', 'コピー'),
+          'title' => __d('baser_core', 'コピー'),
           'class' => 'btn-copy bca-btn-icon',
           'data-bca-btn-type' => 'copy',
           'data-bca-btn-size' => 'lg'
         ]) ?>
         <?php $this->BcBaser->link('', array_merge(['action' => 'edit', $theme, $plugin, $type], $params), [
-          'title' => __d('baser', '編集'),
+          'title' => __d('baser_core', '編集'),
           'escape' => false,
           'class' => 'bca-btn-icon',
           'data-bca-btn-type' => 'edit',
           'data-bca-btn-size' => 'lg'
         ]) ?>
         <?php echo $this->BcAdminForm->postLink('', array_merge(['action' => 'delete', $theme, $plugin, $type], $params), [
-          'confirm' => __d('baser', 'ファイル {0} を本当に削除してもよろしいですか？', $themeFile->name),
-          'title' => __d('baser', '削除'),
+          'confirm' => __d('baser_core', 'ファイル {0} を本当に削除してもよろしいですか？', $themeFile->name),
+          'title' => __d('baser_core', '削除'),
           'class' => 'btn-delete bca-btn-icon',
           'data-bca-btn-type' => 'delete',
           'data-bca-btn-size' => 'lg'

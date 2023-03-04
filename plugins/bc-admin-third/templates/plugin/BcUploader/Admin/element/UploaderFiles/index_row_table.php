@@ -78,14 +78,14 @@ $class = ' class="' . implode(' ', $classies) . '"';
   <?php if (!$listId): ?>
     <td class="row-tools bca-table-listup__tbody-td bca-table-listup__tbody-td--actions" style="width:15%">
       <?php $this->BcBaser->link('', ['action' => 'edit', $uploaderFile->id], [
-        'title' => __d('baser', '編集'),
+        'title' => __d('baser_core', '編集'),
         'class' => 'bca-btn-icon',
         'data-bca-btn-type' => 'edit',
         'data-bca-btn-size' => 'lg'
       ]) ?>
       <?php echo $this->BcAdminForm->postLink('', ['action' => 'delete', $uploaderFile->id], [
-        'confirm' => __d('baser', '{0} を本当に削除してもいいですか？', $uploaderFile->name),
-        'title' => __d('baser', '削除'),
+        'confirm' => __d('baser_core', '{0} を本当に削除してもいいですか？', $uploaderFile->name),
+        'title' => __d('baser_core', '削除'),
         'class' => 'bca-btn-icon',
         'data-bca-btn-type' => 'delete',
         'data-bca-btn-size' => 'lg'

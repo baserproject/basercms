@@ -70,7 +70,7 @@ class BlogPostsController extends BlogAdminAppController
     {
         parent::beforeFilter($event);
         $blogContentId = $this->request->getParam('pass.0');
-        if (!$blogContentId) throw new BcException(__d('baser', '不正なURLです。'));
+        if (!$blogContentId) throw new BcException(__d('baser_core', '不正なURLです。'));
 
         /* @var ContentsService $contentsService */
         $contentsService = $this->getService(ContentsServiceInterface::class);
@@ -80,7 +80,7 @@ class BlogPostsController extends BlogAdminAppController
             $this->getRequest()
         );
 
-        if (!$request) throw new BcException(__d('baser', 'コンテンツデータが見つかりません。'));
+        if (!$request) throw new BcException(__d('baser_core', 'コンテンツデータが見つかりません。'));
 
         $this->setRequest($request);
 
@@ -172,7 +172,7 @@ class BlogPostsController extends BlogAdminAppController
             }
             try {
                 $post = $service->create($this->request->getData());
-                $this->BcMessage->setSuccess(sprintf(__d('baser', '記事「%s」を追加しました。'), $post->title));
+                $this->BcMessage->setSuccess(sprintf(__d('baser_core', '記事「%s」を追加しました。'), $post->title));
                 // EVENT BlogPosts.afterAdd
                 $this->dispatchLayerEvent('afterAdd', [
                     'data' => $post
@@ -182,12 +182,12 @@ class BlogPostsController extends BlogAdminAppController
                 $post = $e->getEntity();
                 // 入力時アイキャッチの配列問題で表示がエラーとなるため、$this->request->data は空にする
                 $this->setRequest($this->getRequest()->withParsedBody([]));
-                $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
+                $this->BcMessage->setError(__d('baser_core', '入力エラーです。内容を修正してください。'));
             } catch (BcException $e) {
                 if ($e->getCode() === "23000") {
-                    $this->BcMessage->setError(__d('baser', '同時更新エラーです。しばらく経ってから保存してください。'));
+                    $this->BcMessage->setError(__d('baser_core', '同時更新エラーです。しばらく経ってから保存してください。'));
                 } else {
-                    $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。'));
+                    $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。'));
                 }
             }
         }
@@ -228,7 +228,7 @@ class BlogPostsController extends BlogAdminAppController
             try {
                 // データを保存
                 $post = $service->update($post, $this->request->getData());
-                $this->BcMessage->setSuccess(sprintf(__d('baser', '記事「%s」を更新しました。'), $post->title));
+                $this->BcMessage->setSuccess(sprintf(__d('baser_core', '記事「%s」を更新しました。'), $post->title));
                 // EVENT BlogPosts.afterEdit
                 $this->dispatchLayerEvent('afterEdit', [
                     'data' => $post
@@ -238,12 +238,12 @@ class BlogPostsController extends BlogAdminAppController
                 $post = $e->getEntity();
                 // 入力時アイキャッチの配列問題で表示がエラーとなるため、$this->request->data は空にする
                 $this->setRequest($this->getRequest()->withParsedBody([]));
-                $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
+                $this->BcMessage->setError(__d('baser_core', '入力エラーです。内容を修正してください。'));
             } catch (BcException $e) {
                 if ($e->getCode() === "23000") {
-                    $this->BcMessage->setError(__d('baser', '同時更新エラーです。しばらく経ってから保存してください。'));
+                    $this->BcMessage->setError(__d('baser_core', '同時更新エラーです。しばらく経ってから保存してください。'));
                 } else {
-                    $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。'));
+                    $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。'));
                 }
             }
         }
@@ -270,10 +270,10 @@ class BlogPostsController extends BlogAdminAppController
         try {
             $blogPost = $service->get($id);
             if ($service->delete($id)) {
-                $this->BcMessage->setSuccess(__d('baser', 'ブログ記事「{0}」を削除しました。', $blogPost->title));
+                $this->BcMessage->setSuccess(__d('baser_core', 'ブログ記事「{0}」を削除しました。', $blogPost->title));
             }
         } catch (BcException $e) {
-            $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
+            $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
         }
 
         return $this->redirect(['action' => 'index', $blogContentId]);
@@ -296,9 +296,9 @@ class BlogPostsController extends BlogAdminAppController
             /* @var BlogPostsService $service */
             $result = $service->unpublish($id);
             if ($result) {
-                $this->BcMessage->setSuccess(sprintf(__d('baser', 'ブログ記事「%s」を非公開状態にしました。'), $result->title));
+                $this->BcMessage->setSuccess(sprintf(__d('baser_core', 'ブログ記事「%s」を非公開状態にしました。'), $result->title));
             } else {
-                $this->BcMessage->setSuccess(__d('baser', 'データベース処理中にエラーが発生しました。'));
+                $this->BcMessage->setSuccess(__d('baser_core', 'データベース処理中にエラーが発生しました。'));
             }
         }
         return $this->redirect(['action' => 'index', $blogContentId]);
@@ -321,9 +321,9 @@ class BlogPostsController extends BlogAdminAppController
             try {
                 /* @var BlogPostsService $service */
                 $result = $service->publish($id);
-                $this->BcMessage->setSuccess(sprintf(__d('baser', 'ブログ記事「%s」を公開状態にしました。'), $result->title));
+                $this->BcMessage->setSuccess(sprintf(__d('baser_core', 'ブログ記事「%s」を公開状態にしました。'), $result->title));
             } catch (BcException $e) {
-                $this->BcMessage->setSuccess(__d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
+                $this->BcMessage->setSuccess(__d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
             }
         }
         return $this->redirect(['action' => 'index', $blogContentId]);
@@ -349,11 +349,11 @@ class BlogPostsController extends BlogAdminAppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             try {
                 $service->copy($id);
-                $this->BcMessage->setSuccess(sprintf(__d('baser', 'ブログ記事「%s」をコピーしました。'), $post->title));
+                $this->BcMessage->setSuccess(sprintf(__d('baser_core', 'ブログ記事「%s」をコピーしました。'), $post->title));
                 return $this->redirect(['action' => 'index', $blogContentId]);
 
             } catch (\Exception $e) {
-                $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
+                $this->BcMessage->setError(__d('baser_core', '入力エラーです。内容を修正してください。'));
             }
         }
         return $this->redirect(['action' => 'index', $blogContentId]);

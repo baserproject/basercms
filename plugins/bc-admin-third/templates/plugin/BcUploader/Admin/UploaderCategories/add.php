@@ -16,7 +16,7 @@
  * @noTodo
  * @unitTest
  */
-$this->BcAdmin->setTitle(__d('baser', 'アップロードカテゴリ新規登録'));
+$this->BcAdmin->setTitle(__d('baser_core', 'アップロードカテゴリ新規登録'));
 ?>
 
 
@@ -26,7 +26,7 @@ $this->BcAdmin->setTitle(__d('baser', 'アップロードカテゴリ新規登�
 
 <div class="submit bca-actions">
   <div class="bca-actions__main">
-    <?php echo $this->BcAdminForm->button(__d('baser', '登録'), [
+    <?php echo $this->BcAdminForm->button(__d('baser_core', '登録'), [
       'div' => false,
       'class' => 'button bca-btn bca-actions__item',
       'data-bca-btn-type' => 'save',

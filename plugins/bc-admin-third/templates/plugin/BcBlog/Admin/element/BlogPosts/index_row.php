@@ -30,7 +30,7 @@ use Cake\Utility\Hash;
     <?php if ($this->BcBaser->isAdminUser()): ?>
       <?php echo $this->BcAdminForm->control('batch_targets.' . $post->id, [
         'type' => 'checkbox',
-        'label' => '<span class="bca-visually-hidden">' . __d('baser', 'チェックする') . '</span>',
+        'label' => '<span class="bca-visually-hidden">' . __d('baser_core', 'チェックする') . '</span>',
         'class' => 'batch-targets bca-checkbox__input',
         'value' => $post->id,
         'escape' => false
@@ -98,7 +98,7 @@ use Cake\Utility\Hash;
       '',
       ['action' => 'unpublish', $post->blog_content->id, $post->id],
       [
-        'title' => __d('baser', '非公開'),
+        'title' => __d('baser_core', '非公開'),
         'class' => 'btn-unpublish bca-btn-icon',
         'data-bca-btn-type' => 'unpublish',
         'data-bca-btn-size' => 'lg']
@@ -108,7 +108,7 @@ use Cake\Utility\Hash;
       '',
       ['action' => 'publish', $post->blog_content->id, $post->id],
       [
-        'title' => __d('baser', '公開'),
+        'title' => __d('baser_core', '公開'),
         'class' => 'btn-unpublish bca-btn-icon',
         'data-bca-btn-type' => 'unpublish',
         'data-bca-btn-size' => 'lg']
@@ -116,17 +116,17 @@ use Cake\Utility\Hash;
     <?php endif ?>
     <?php $this->BcBaser->link('',
       $this->request->getAttribute('currentContent')->url . '/archives/' . $post->no,
-      ['title' => __d('baser', '確認'), 'target' => '_blank', 'class' => 'bca-btn-icon', 'data-bca-btn-type' => 'preview', 'data-bca-btn-size' => 'lg']
+      ['title' => __d('baser_core', '確認'), 'target' => '_blank', 'class' => 'bca-btn-icon', 'data-bca-btn-type' => 'preview', 'data-bca-btn-size' => 'lg']
     ) ?>
     <?php $this->BcBaser->link('',
       ['action' => 'edit', $post->blog_content->id, $post->id],
-      ['title' => __d('baser', '編集'), 'class' => ' bca-btn-icon', 'data-bca-btn-type' => 'edit', 'data-bca-btn-size' => 'lg']
+      ['title' => __d('baser_core', '編集'), 'class' => ' bca-btn-icon', 'data-bca-btn-type' => 'edit', 'data-bca-btn-size' => 'lg']
     ) ?>
     <?= $this->BcAdminForm->postLink(
       '',
       ['action' => 'copy', $post->blog_content->id, $post->id],
       [
-        'title' => __d('baser', 'コピー'),
+        'title' => __d('baser_core', 'コピー'),
         'class' => 'btn-copy bca-btn-icon',
         'data-bca-btn-type' => 'copy',
         'data-bca-btn-size' => 'lg']
@@ -135,8 +135,8 @@ use Cake\Utility\Hash;
       '',
       ['action' => 'delete', $post->blog_content->id, $post->id],
       [
-        'confirm' => __d('baser', "{0} を本当に削除してもいいですか？", $post->title),
-        'title' => __d('baser', '削除'),
+        'confirm' => __d('baser_core', "{0} を本当に削除してもいいですか？", $post->title),
+        'title' => __d('baser_core', '削除'),
         'class' => 'btn-delete bca-btn-icon',
         'data-bca-btn-type' => 'delete',
         'data-bca-btn-size' => 'lg']

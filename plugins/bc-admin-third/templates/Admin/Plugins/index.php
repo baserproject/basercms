@@ -15,14 +15,14 @@
  * @unitTest
  */
 $this->BcBaser->i18nScript([
-  'message1' => __d('baser', "このデータを本当に無効にしてもいいですか？\nプラグインフォルダ内のファイル、データベースに保存した情報は削除されずそのまま残ります。")
+  'message1' => __d('baser_core', "このデータを本当に無効にしてもいいですか？\nプラグインフォルダ内のファイル、データベースに保存した情報は削除されずそのまま残ります。")
 ]);
 $this->BcBaser->js('admin/plugins/index.bundle', false);
 $this->BcAdmin->addAdminMainBodyHeaderLinks([
   'url' => ['action' => 'add'],
-  'title' => __d('baser', '新規追加'),
+  'title' => __d('baser_core', '新規追加'),
 ]);
-$this->BcAdmin->setTitle(__d('baser', 'プラグイン一覧'));
+$this->BcAdmin->setTitle(__d('baser_core', 'プラグイン一覧'));
 $this->BcAdmin->setHelp('plugins_index');
 ?>
 
@@ -34,8 +34,8 @@ $this->BcAdmin->setHelp('plugins_index');
 
 <div id="tabs">
   <ul>
-    <li><a href="#DataList"><?php echo __d('baser', '所有プラグイン') ?></a></li>
-    <li><a href="#BaserMarket"><?php echo __d('baser', 'baserマーケット') ?></a></li>
+    <li><a href="#DataList"><?php echo __d('baser_core', '所有プラグイン') ?></a></li>
+    <li><a href="#BaserMarket"><?php echo __d('baser_core', 'baserマーケット') ?></a></li>
   </ul>
   <div id="DataList" class="bca-data-list"><?php $this->BcBaser->element('Plugins/index_list') ?></div>
   <div id="BaserMarket">

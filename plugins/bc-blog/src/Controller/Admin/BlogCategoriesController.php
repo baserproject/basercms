@@ -85,13 +85,13 @@ class BlogCategoriesController extends BlogAdminAppController
                 /* @var BlogCategory $blogCategory */
                 $blogCategory = $service->create($blogContentId, $this->request->getData());
                 $this->BcMessage->setSuccess(sprintf(
-                    __d('baser', 'カテゴリー「%s」を追加しました。'),
+                    __d('baser_core', 'カテゴリー「%s」を追加しました。'),
                     $blogCategory->name
                 ));
                 return $this->redirect(['action' => 'index', $blogContentId]);
             } catch (PersistenceFailedException $e) {
                 $blogCategory = $e->getEntity();
-                $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
+                $this->BcMessage->setError(__d('baser_core', '入力エラーです。内容を修正してください。'));
             }
         }
         $this->set($service->getViewVarsForAdd(
@@ -119,13 +119,13 @@ class BlogCategoriesController extends BlogAdminAppController
                 /* @var BlogCategory $blogCategory */
                 $blogCategory = $service->update($blogCategory, $this->request->getData());
                 $this->BcMessage->setSuccess(sprintf(
-                    __d('baser', 'カテゴリー「%s」を更新しました。'),
+                    __d('baser_core', 'カテゴリー「%s」を更新しました。'),
                     $blogCategory->name
                 ));
                 $this->redirect(['action' => 'index', $blogContentId]);
             } catch (PersistenceFailedException $e) {
                 $blogCategory = $e->getEntity();
-                $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
+                $this->BcMessage->setError(__d('baser_core', '入力エラーです。内容を修正してください。'));
             }
         }
         $this->set($service->getViewVarsForEdit(
@@ -152,11 +152,11 @@ class BlogCategoriesController extends BlogAdminAppController
         $blogCategory = $service->get($id);
         if ($service->delete($id)) {
             $this->BcMessage->setSuccess(sprintf(
-                __d('baser', '%s を削除しました。'),
+                __d('baser_core', '%s を削除しました。'),
                 $blogCategory->name
             ));
         } else {
-            $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。'));
+            $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。'));
         }
         $this->redirect(['action' => 'index', $blogContentId]);
     }

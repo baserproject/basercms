@@ -56,9 +56,9 @@ class MailContentsService implements MailContentsServiceInterface
     public function getNew()
     {
         return $this->MailContents->newEntity([
-            'sender_name' => __d('baser', '送信先名を入力してください'),
-            'subject_user' => __d('baser', 'お問い合わせ頂きありがとうございます'),
-            'subject_admin' => __d('baser', 'お問い合わせを頂きました'),
+            'sender_name' => __d('baser_core', '送信先名を入力してください'),
+            'subject_user' => __d('baser_core', 'お問い合わせ頂きありがとうございます'),
+            'subject_admin' => __d('baser_core', 'お問い合わせを頂きました'),
             'layout_template' => 'default',
             'form_template' => 'default',
             'mail_template' => 'mail_default',
@@ -92,7 +92,7 @@ class MailContentsService implements MailContentsServiceInterface
             $mailMessagesService = $this->getService(MailMessagesServiceInterface::class);
             if (!$mailMessagesService->createTable($mailContent->id)) {
                 $this->MailContents->getConnection()->rollback();
-                throw new BcException(__d('baser', 'データベースに問題があります。メール受信データ保存用テーブルの更新処理に失敗しました。'));
+                throw new BcException(__d('baser_core', 'データベースに問題があります。メール受信データ保存用テーブルの更新処理に失敗しました。'));
             }
         } catch (\Throwable $e) {
             $this->MailContents->getConnection()->rollback();
@@ -113,7 +113,7 @@ class MailContentsService implements MailContentsServiceInterface
     public function update(EntityInterface $entity, array $postData): ?EntityInterface
     {
         if (BcUtil::isOverPostSize()) {
-            throw new BcException(__d('baser', '送信できるデータ量を超えています。合計で {0} 以内のデータを送信してください。', ini_get('post_max_size')));
+            throw new BcException(__d('baser_core', '送信できるデータ量を超えています。合計で {0} 以内のデータを送信してください。', ini_get('post_max_size')));
         }
         if (empty($postData['sender_1_'])) {
             $postData['sender_1'] = '';

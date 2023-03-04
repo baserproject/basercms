@@ -96,9 +96,9 @@ class BcGooglemapsHelper extends Helper
         $script = $this->_getScript();
         if ($script) {
             if ($width || $height) {
-                echo '<div id="' . $this->mapId . '" style="width: ' . $width . 'px; height:' . $height . 'px"><noscript>※ ' . __d('baser', 'JavaScript を有効にしてください。') . '</noscript></div>';
+                echo '<div id="' . $this->mapId . '" style="width: ' . $width . 'px; height:' . $height . 'px"><noscript>※ ' . __d('baser_core', 'JavaScript を有効にしてください。') . '</noscript></div>';
             } else {
-                echo '<div id="' . $this->mapId . '"><noscript>※ ' . __d('baser', 'JavaScript を有効にしてください。') . '</noscript></div>';
+                echo '<div id="' . $this->mapId . '"><noscript>※ ' . __d('baser_core', 'JavaScript を有効にしてください。') . '</noscript></div>';
             }
             echo $script;
             return true;
@@ -166,7 +166,7 @@ DOC_END;
         $apiKey = empty($this->BcBaser->siteConfig['google_maps_api_key'])? "" : $this->BcBaser->siteConfig['google_maps_api_key'];
         if (empty($apiKey)) {
             $adminLink = $this->BcBaser->getUrl(["admin" => true, 'plugin' => '', 'controller' => 'site_configs', 'action' => 'form']);
-            echo sprintf(__d('baser', 'Googleマップを利用するには、Google Maps APIのキーの登録が必要です。<a href="https://developers.google.com/maps/web/" target="_blank">キーを取得</a>して、<a href="%s">システム管理</a>より設定してください。'), $adminLink);
+            echo sprintf(__d('baser_core', 'Googleマップを利用するには、Google Maps APIのキーの登録が必要です。<a href="https://developers.google.com/maps/web/" target="_blank">キーを取得</a>して、<a href="%s">システム管理</a>より設定してください。'), $adminLink);
         }
         $apiUrl = 'https://maps.google.com/maps/api/js';
         $googleScript = '<script src="' . $apiUrl . '?key=' . $apiKey . '"></script>';

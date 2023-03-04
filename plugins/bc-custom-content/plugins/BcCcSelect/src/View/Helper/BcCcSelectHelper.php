@@ -80,7 +80,7 @@ class BcCcSelectHelper extends Helper
     public function searchControl(CustomLink $link, array $options = []): string
     {
         $options = array_merge([
-            'empty' => __d('baser', '指定しない'),
+            'empty' => __d('baser_core', '指定しない'),
         ], $options);
         return $this->control($link, $options);
     }

@@ -54,12 +54,12 @@ class ThemeConfigsTable extends AppTable
     {
         $validator
             ->scalar('name')
-            ->maxLength('name', 255, __d('baser', '255文字以内で入力してください。'))
-            ->requirePresence('name', 'create', __d('baser', '設定名を入力してください。'))
-            ->notEmptyString('name', __d('baser', '設定名を入力してください。'));
+            ->maxLength('name', 255, __d('baser_core', '255文字以内で入力してください。'))
+            ->requirePresence('name', 'create', __d('baser_core', '設定名を入力してください。'))
+            ->notEmptyString('name', __d('baser_core', '設定名を入力してください。'));
         $validator
             ->scalar('value')
-            ->maxLength('value', 65535, __d('baser', '65535文字以内で入力してください。'));
+            ->maxLength('value', 65535, __d('baser_core', '65535文字以内で入力してください。'));
         return $validator;
     }
 
@@ -74,12 +74,12 @@ class ThemeConfigsTable extends AppTable
         // TODO ucmitz 未移行
         /*
         $this->validate = [
-            'logo' => [['rule' => ['fileExt', 'gif,jpg,jpeg,jpe,jfif,png'], 'message' => __d('baser', '許可されていないファイルです。')]],
-            'main_image_1' => [['rule' => ['fileExt', 'gif,jpg,jpeg,jpe,jfif,png'], 'message' => __d('baser', '許可されていないファイルです。')]],
-            'main_image_2' => [['rule' => ['fileExt', 'gif,jpg,jpeg,jpe,jfif,png'], 'message' => __d('baser', '許可されていないファイルです。')]],
-            'main_image_3' => [['rule' => ['fileExt', 'gif,jpg,jpeg,jpe,jfif,png'], 'message' => __d('baser', '許可されていないファイルです。')]],
-            'main_image_4' => [['rule' => ['fileExt', 'gif,jpg,jpeg,jpe,jfif,png'], 'message' => __d('baser', '許可されていないファイルです。')]],
-            'main_image_5' => [['rule' => ['fileExt', 'gif,jpg,jpeg,jpe,jfif,png'], 'message' => __d('baser', '許可されていないファイルです。')]]
+            'logo' => [['rule' => ['fileExt', 'gif,jpg,jpeg,jpe,jfif,png'], 'message' => __d('baser_core', '許可されていないファイルです。')]],
+            'main_image_1' => [['rule' => ['fileExt', 'gif,jpg,jpeg,jpe,jfif,png'], 'message' => __d('baser_core', '許可されていないファイルです。')]],
+            'main_image_2' => [['rule' => ['fileExt', 'gif,jpg,jpeg,jpe,jfif,png'], 'message' => __d('baser_core', '許可されていないファイルです。')]],
+            'main_image_3' => [['rule' => ['fileExt', 'gif,jpg,jpeg,jpe,jfif,png'], 'message' => __d('baser_core', '許可されていないファイルです。')]],
+            'main_image_4' => [['rule' => ['fileExt', 'gif,jpg,jpeg,jpe,jfif,png'], 'message' => __d('baser_core', '許可されていないファイルです。')]],
+            'main_image_5' => [['rule' => ['fileExt', 'gif,jpg,jpeg,jpe,jfif,png'], 'message' => __d('baser_core', '許可されていないファイルです。')]]
         ];*/
         return $validator;
     }

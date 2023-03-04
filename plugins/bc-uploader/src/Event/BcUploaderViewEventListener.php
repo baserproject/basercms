@@ -63,29 +63,29 @@ class BcUploaderViewEventListener extends BcViewEventListener
                 $jscode = $this->BcHtml->scriptBlock("var baseUrl ='" . $View->getRequest()->getAttribute('base') . "/';");
                 $jscode .= $this->BcHtml->scriptBlock("var adminPrefix ='" . BcUtil::getAdminPrefix() . "';");
                 $jscode .= $this->BcHtml->i18nScript([
-                    'ckeditorTitle' => __d('baser', 'ファイルプロパティ'),
-                    'ckeditorAlertMessage1' => __d('baser', '画像を選択するか、URLを直接入力して下さい。'),
-                    'ckeditorInfoLabel' => __d('baser', 'イメージ情報'),
-                    'ckeditorInfoTitle' => __d('baser', 'イメージ情報'),
-                    'ckeditorDescriptionLabel' => __d('baser', '説明文'),
-                    'ckeditorCaptionLabel' => __d('baser', 'キャプション'),
-                    'ckeditorHspaceLabel' => __d('baser', '横間隔'),
-                    'ckeditorVspaceLabel' => __d('baser', '縦間隔'),
-                    'ckeditorAlignLabel' => __d('baser', '行揃え'),
-                    'ckeditorLeft' => __d('baser', '左'),
-                    'ckeditorAbsBottom' => __d('baser', '下部(絶対的)'),
-                    'ckeditorAbsMiddle' => __d('baser', '中央(絶対的)'),
-                    'ckeditorBaseline' => __d('baser', 'ベースライン'),
-                    'ckeditorBottom' => __d('baser', '下'),
-                    'ckeditorMiddle' => __d('baser', '中央'),
-                    'ckeditorRight' => __d('baser', '右'),
-                    'ckeditorTextTop' => __d('baser', 'テキスト上部'),
-                    'ckeditorTop' => __d('baser', '上'),
-                    'ckeditorSizeLabel' => __d('baser', 'サイズ'),
-                    'ckeditorOriginSize' => __d('baser', '元サイズ'),
-                    'ckeditorSmall' => __d('baser', '小'),
-                    'ckeditorMidium' => __d('baser', '中'),
-                    'ckeditorLarge' => __d('baser', '大'),
+                    'ckeditorTitle' => __d('baser_core', 'ファイルプロパティ'),
+                    'ckeditorAlertMessage1' => __d('baser_core', '画像を選択するか、URLを直接入力して下さい。'),
+                    'ckeditorInfoLabel' => __d('baser_core', 'イメージ情報'),
+                    'ckeditorInfoTitle' => __d('baser_core', 'イメージ情報'),
+                    'ckeditorDescriptionLabel' => __d('baser_core', '説明文'),
+                    'ckeditorCaptionLabel' => __d('baser_core', 'キャプション'),
+                    'ckeditorHspaceLabel' => __d('baser_core', '横間隔'),
+                    'ckeditorVspaceLabel' => __d('baser_core', '縦間隔'),
+                    'ckeditorAlignLabel' => __d('baser_core', '行揃え'),
+                    'ckeditorLeft' => __d('baser_core', '左'),
+                    'ckeditorAbsBottom' => __d('baser_core', '下部(絶対的)'),
+                    'ckeditorAbsMiddle' => __d('baser_core', '中央(絶対的)'),
+                    'ckeditorBaseline' => __d('baser_core', 'ベースライン'),
+                    'ckeditorBottom' => __d('baser_core', '下'),
+                    'ckeditorMiddle' => __d('baser_core', '中央'),
+                    'ckeditorRight' => __d('baser_core', '右'),
+                    'ckeditorTextTop' => __d('baser_core', 'テキスト上部'),
+                    'ckeditorTop' => __d('baser_core', '上'),
+                    'ckeditorSizeLabel' => __d('baser_core', 'サイズ'),
+                    'ckeditorOriginSize' => __d('baser_core', '元サイズ'),
+                    'ckeditorSmall' => __d('baser_core', '小'),
+                    'ckeditorMidium' => __d('baser_core', '中'),
+                    'ckeditorLarge' => __d('baser_core', '大'),
                 ], ['block' => false]);
                 $uploaderFilesTable = TableRegistry::getTableLocator()->get('BcUploader.UploaderFiles');
                 $jscode .= $View->Html->script('BcUploader.admin/uploader_files/ckeditor_uploader.bundle', [
@@ -134,7 +134,7 @@ class BcUploaderViewEventListener extends BcViewEventListener
     {
         $fieldName = 'editor_' . Inflector::underscore($id);
         $css = $this->BcHtml->Url->css('admin/uploader_files/contents.css');
-        $label = __d('baser', 'アップローダー');
+        $label = __d('baser_core', 'アップローダー');
         return <<< DOC_END
 			$(function(){
 				if(!(CKEDITOR.config.contentsCss instanceof Array)) {

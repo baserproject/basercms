@@ -17,5 +17,5 @@
     <?php $this->BcBaser->element('Contents/index_list_tree'); ?>
   </div>
 <?php else: ?>
-  <div class="tree-empty"><?php echo __d('baser', 'データが登録されていません。') ?></div>
+  <div class="tree-empty"><?php echo __d('baser_core', 'データが登録されていません。') ?></div>
 <?php endif ?>

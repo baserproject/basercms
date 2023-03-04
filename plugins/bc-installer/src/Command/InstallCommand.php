@@ -47,49 +47,49 @@ class InstallCommand extends Command
     protected function buildOptionParser(\Cake\Console\ConsoleOptionParser $parser): \Cake\Console\ConsoleOptionParser
     {
         $parser->addArgument('siteurl', [
-            'help' => __d('baser', 'サイトURL'),
+            'help' => __d('baser_core', 'サイトURL'),
             'default' => '',
             'required' => true
         ])->addArgument('adminemail', [
-            'help' => __d('baser', '管理者メールアドレス'),
+            'help' => __d('baser_core', '管理者メールアドレス'),
             'default' => '',
             'required' => true
         ])->addArgument('adminpassword', [
-            'help' => __d('baser', '管理者パスワード'),
+            'help' => __d('baser_core', '管理者パスワード'),
             'default' => '',
             'required' => true
         ])->addArgument('database', [
-            'help' => __d('baser', 'データベース名'),
+            'help' => __d('baser_core', 'データベース名'),
             'default' => 'basercms',
             'required' => true
         ]);
 
         $parser->addOption('datasource', [
-            'help' => __d('baser', 'データベースタイプ ( mysql or postgresql or sqlite )'),
+            'help' => __d('baser_core', 'データベースタイプ ( mysql or postgresql or sqlite )'),
             'default' => 'mysql',
         ])->addOption('host', [
-            'help' => __d('baser', 'データベースホスト名'),
+            'help' => __d('baser_core', 'データベースホスト名'),
             'default' => 'localhost',
         ])->addOption('username', [
-            'help' => __d('baser', 'データベースログインユーザー名'),
+            'help' => __d('baser_core', 'データベースログインユーザー名'),
             'default' => '',
         ])->addOption('password', [
-            'help' => __d('baser', 'データベースログインパスワード'),
+            'help' => __d('baser_core', 'データベースログインパスワード'),
             'default' => '',
         ])->addOption('prefix', [
-            'help' => __d('baser', 'データベーステーブルプレフィックス'),
+            'help' => __d('baser_core', 'データベーステーブルプレフィックス'),
             'default' => ''
         ])->addOption('port', [
-            'help' => __d('baser', 'データベースポート番号'),
+            'help' => __d('baser_core', 'データベースポート番号'),
             'default' => ''
         ])->addOption('baseurl', [
-            'help' => __d('baser', 'ベースとなるURL'),
+            'help' => __d('baser_core', 'ベースとなるURL'),
             'default' => '/'
         ])->addOption('sitename', [
-            'help' => __d('baser', 'サイト名'),
+            'help' => __d('baser_core', 'サイト名'),
             'default' => 'My Site'
         ])->addOption('data', [
-            'help' => __d('baser', '初期データパターン'),
+            'help' => __d('baser_core', '初期データパターン'),
             'default' => Configure::read('BcApp.defaultFrontTheme') . '.default'
         ]);
         return $parser;
@@ -112,22 +112,22 @@ class InstallCommand extends Command
         }
 
         if (BcUtil::isInstalled()) {
-            $io->err(__d('baser', '既にインストール済です。 cake install reset を実行してください。'));
+            $io->err(__d('baser_core', '既にインストール済です。 cake install reset を実行してください。'));
             return;
         }
         if (!BcUtil::isInstallMode()) {
-            $io->err(__d('baser', 'baserCMSのインストールを行うには、.env の　INSTALL_MODE を true に設定する必要があります。'));
+            $io->err(__d('baser_core', 'baserCMSのインストールを行うには、.env の　INSTALL_MODE を true に設定する必要があります。'));
             return;
         }
         if (!$this->install($args, $io, $dbConfig)) {
-            $io->err(__d('baser', 'baserCMSのインストールに失敗しました。ログファイルを確認してください。'));
+            $io->err(__d('baser_core', 'baserCMSのインストールに失敗しました。ログファイルを確認してください。'));
         }
 
         $siteConfigsService = $this->getService(SiteConfigsServiceInterface::class);
         $siteConfigsService->putEnv('INSTALL_MODE', 'false');
 
         BcUtil::clearAllCache();
-        $io->out(__d('baser', 'baserCMSのインストールが完了しました。'));
+        $io->out(__d('baser_core', 'baserCMSのインストールが完了しました。'));
     }
 
     /**
@@ -210,7 +210,7 @@ class InstallCommand extends Command
         if (!in_array($dbConfig['datasource'], $drivers)) return false;
         if ((!$dbConfig['username'] || !$dbConfig['password'] || !$dbConfig['host']) &&
             ($dbConfig['datasource'] == 'mysql' || $dbConfig['datasource'] == 'postgres')) {
-            throw new BcException(__d('baser', '{0} の場合は、host / username / password をオプションで指定する必要があります。', $dbConfig['datasource']));
+            throw new BcException(__d('baser_core', '{0} の場合は、host / username / password をオプションで指定する必要があります。', $dbConfig['datasource']));
         }
         if (empty($localhost['port'])) {
             if ($dbConfig['datasource'] === 'mysql') {

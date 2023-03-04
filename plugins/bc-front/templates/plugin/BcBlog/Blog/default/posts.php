@@ -51,5 +51,5 @@
   </ul>
   <div class="bs-top-post-to-list"><?php $this->BcBaser->link('VIEW ALL', $this->Blog->getContentsUrl($post->blog_content_id, false)) ?></div>
 <?php else: ?>
-  <p class="bs-top-post-no-data"><?php echo __('記事がありません。'); ?></p>
+  <p class="bs-top-post-no-data"><?php echo __d('baser_core''記事がありません。'); ?></p>
 <?php endif ?>

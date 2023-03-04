@@ -48,7 +48,7 @@ class UtilitiesController extends BcAdminAppController
     {
         $this->_checkReferer();
         BcUtil::clearAllCache();
-        $this->BcMessage->setInfo(__d('baser', 'サーバーキャッシュを削除しました。'));
+        $this->BcMessage->setInfo(__d('baser_core', 'サーバーキャッシュを削除しました。'));
         $this->redirect($this->referer());
     }
 
@@ -113,9 +113,9 @@ class UtilitiesController extends BcAdminAppController
                 $this->request->allowMethod(['post']);
                 try {
                     $service->restoreDb($this->getRequest()->getData(), $this->getRequest()->getUploadedFiles());
-                    $this->BcMessage->setInfo(__d('baser', 'データの復元が完了しました。'));
+                    $this->BcMessage->setInfo(__d('baser_core', 'データの復元が完了しました。'));
                 } catch (BcException $e) {
-                    $this->BcMessage->setError(__d('baser', 'データの復元に失敗しました。ログの確認を行なって下さい。') . $e->getMessage());
+                    $this->BcMessage->setError(__d('baser_core', 'データの復元に失敗しました。ログの確認を行なって下さい。') . $e->getMessage());
                 }
                 $this->redirect(['action' => 'maintenance']);
         }
@@ -148,7 +148,7 @@ class UtilitiesController extends BcAdminAppController
                 $this->request->allowMethod(['post']);
                 try {
                     $service->deleteLog();
-                    $this->BcMessage->setInfo(__d('baser', 'エラーログを削除しました。'));
+                    $this->BcMessage->setInfo(__d('baser_core', 'エラーログを削除しました。'));
                 } catch (BcException $e) {
                     $this->BcMessage->setError($e->getMessage());
                 }
@@ -170,9 +170,9 @@ class UtilitiesController extends BcAdminAppController
     {
         $this->request->allowMethod(['post']);
         if ($service->resetContentsTree()) {
-            $this->BcMessage->setSuccess(__d('baser', 'コンテンツのツリー構造をリセットしました。'));
+            $this->BcMessage->setSuccess(__d('baser_core', 'コンテンツのツリー構造をリセットしました。'));
         } else {
-            $this->BcMessage->setError(__d('baser', 'コンテンツのツリー構造のリセットに失敗しました。'));
+            $this->BcMessage->setError(__d('baser_core', 'コンテンツのツリー構造のリセットに失敗しました。'));
         }
         $this->redirect(['action' => 'index']);
     }
@@ -191,9 +191,9 @@ class UtilitiesController extends BcAdminAppController
     {
         $this->request->allowMethod(['post']);
         if (!$service->verityContentsTree()) {
-            $this->BcMessage->setError(__d('baser', 'コンテンツのツリー構造に問題があります。ログを確認してください。'));
+            $this->BcMessage->setError(__d('baser_core', 'コンテンツのツリー構造に問題があります。ログを確認してください。'));
         } else {
-            $this->BcMessage->setSuccess(__d('baser', 'コンテンツのツリー構造に問題はありません。'), false);
+            $this->BcMessage->setSuccess(__d('baser_core', 'コンテンツのツリー構造に問題はありません。'), false);
         }
         $this->redirect(['action' => 'index']);
     }
@@ -229,12 +229,12 @@ class UtilitiesController extends BcAdminAppController
         $this->request->allowMethod(['post']);
         try {
             if ($service->resetData()) {
-                $this->BcMessage->setInfo(__d('baser', 'データのリセットが完了しました。'));
+                $this->BcMessage->setInfo(__d('baser_core', 'データのリセットが完了しました。'));
             } else {
-                $this->BcMessage->setError(__d('baser', 'データのリセットが完了しましたが、いくつかの処理に失敗しています。ログを確認してください。'));
+                $this->BcMessage->setError(__d('baser_core', 'データのリセットが完了しましたが、いくつかの処理に失敗しています。ログを確認してください。'));
             }
         } catch (BcException $e) {
-            $this->BcMessage->setError(__d('baser', 'データのリセットに失敗しました。' . $e->getMessage()));
+            $this->BcMessage->setError(__d('baser_core', 'データのリセットに失敗しました。' . $e->getMessage()));
         }
         $this->redirect(['action' => 'maintenance']);
     }

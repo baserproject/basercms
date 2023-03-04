@@ -19,7 +19,7 @@
  */
 $this->BcBaser->css('admin/ckeditor/editor', true);
 $this->BcBaser->js('admin/pages/edit.bundle', false);
-$this->BcAdmin->setTitle(__d('baser', '固定ページ情報編集'));
+$this->BcAdmin->setTitle(__d('baser_core', '固定ページ情報編集'));
 $this->BcAdmin->setHelp('pages_form');
 ?>
 
@@ -29,7 +29,7 @@ $this->BcAdmin->setHelp('pages_form');
 
 <?php $this->BcBaser->element('BaserCore.Pages/form') ?>
 
-<?php echo $this->BcAdminForm->submit(__d('baser', '保存'), [
+<?php echo $this->BcAdminForm->submit(__d('baser_core', '保存'), [
   'div' => false,
   'class' => 'button bca-btn',
   'data-bca-btn-type' => 'save',

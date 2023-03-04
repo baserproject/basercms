@@ -38,8 +38,8 @@ if (empty($data['authorUrl'])) {
   <p class="row-tools">
     <?php $this->BcBaser->link('', $data['link'], ['target' => '_blank', 'class' => 'bca-btn-icon', 'data-bca-btn-type' => 'download', 'data-bca-btn-size' => 'lg']) ?>
   </p>
-  <p class="theme-version"><?php echo __d('baser', 'バージョン') ?>：<?php echo $data['version'] ?></p>
-  <p class="theme-author"><?php echo __d('baser', '制作者') ?>：
+  <p class="theme-version"><?php echo __d('baser_core', 'バージョン') ?>：<?php echo $data['version'] ?></p>
+  <p class="theme-author"><?php echo __d('baser_core', '制作者') ?>：
     <?php if (!empty($data['authorLink']) && !empty($data['author'])): ?>
       <?php $this->BcBaser->link($data['author'], $data['authorLink'], ['target' => '_blank', 'escape' => true]) ?>
     <?php else: ?>
@@ -56,8 +56,8 @@ if (empty($data['authorUrl'])) {
         <?php endif ?>
       </div>
       <div class="theme-name"><strong><?php echo h($data['title']) ?></strong></div>
-      <div class="theme-version"><?php echo __d('baser', 'バージョン') ?>：<?php echo $data['version'] ?></div>
-      <div class="theme-author"><?php echo __d('baser', '制作者') ?>：
+      <div class="theme-version"><?php echo __d('baser_core', 'バージョン') ?>：<?php echo $data['version'] ?></div>
+      <div class="theme-author"><?php echo __d('baser_core', '制作者') ?>：
         <?php if (!empty($data['authorLink']) && !empty($data['author'])): ?>
           <?php $this->BcBaser->link($data['author'], $data['authorLink'], ['target' => '_blank', 'escape' => true]) ?>
         <?php else: ?>

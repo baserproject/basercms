@@ -95,11 +95,11 @@ class SitesController extends BcAdminAppController
                 }
                 <<< */
 
-                $this->BcMessage->setSuccess(sprintf(__d('baser', 'サイト「%s」を追加しました。'), $site->display_name));
+                $this->BcMessage->setSuccess(sprintf(__d('baser_core', 'サイト「%s」を追加しました。'), $site->display_name));
                 return $this->redirect(['action' => 'edit', $site->id]);
             } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
                 $site = $e->getEntity();
-                $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
+                $this->BcMessage->setError(__d('baser_core', '入力エラーです。内容を修正してください。'));
             }
         }
 
@@ -147,10 +147,10 @@ class SitesController extends BcAdminAppController
                 }
                 <<< */
 
-                $this->BcMessage->setSuccess(sprintf(__d('baser', 'サイト「%s」を更新しました。'), $site->display_name));
+                $this->BcMessage->setSuccess(sprintf(__d('baser_core', 'サイト「%s」を更新しました。'), $site->display_name));
                 $this->redirect(['action' => 'edit', $id]);
             } catch (\Exception $e) {
-                $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
+                $this->BcMessage->setError(__d('baser_core', '入力エラーです。内容を修正してください。'));
             }
         }
         $this->set($service->getViewVarsForEdit($site));
@@ -172,7 +172,7 @@ class SitesController extends BcAdminAppController
 
         if ($this->request->is(['patch', 'post', 'put'])) {
             if ($service->publish($siteId)) {
-                $this->BcMessage->setSuccess(sprintf(__d('baser', 'サイト「%s」を公開しました。'),
+                $this->BcMessage->setSuccess(sprintf(__d('baser_core', 'サイト「%s」を公開しました。'),
                     $site->name));
             }
         }
@@ -195,7 +195,7 @@ class SitesController extends BcAdminAppController
 
         if ($this->request->is(['patch', 'post', 'put'])) {
             if ($service->unpublish($siteId)) {
-                $this->BcMessage->setSuccess(sprintf(__d('baser', 'サイト「%s」を非公開にしました。'),
+                $this->BcMessage->setSuccess(sprintf(__d('baser_core', 'サイト「%s」を非公開にしました。'),
                     $site->name));
             }
         }
@@ -214,7 +214,7 @@ class SitesController extends BcAdminAppController
     public function delete(SitesServiceInterface $service, $id)
     {
         if (!$id) {
-            $this->BcMessage->setError(__d('baser', '無効なIDです。'));
+            $this->BcMessage->setError(__d('baser_core', '無効なIDです。'));
             $this->redirect(['action' => 'index']);
         }
         $this->request->allowMethod(['post', 'delete']);
@@ -225,10 +225,10 @@ class SitesController extends BcAdminAppController
                     $session = $this->request->getSession();
                     $session->delete('BcApp.Admin.currentSite');
                 }
-                $this->BcMessage->setSuccess(__d('baser', 'サイト: {0} を削除しました。', $site->name));
+                $this->BcMessage->setSuccess(__d('baser_core', 'サイト: {0} を削除しました。', $site->name));
             }
         } catch (Exception $e) {
-            $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
+            $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
         }
         return $this->redirect(['action' => 'index']);
     }

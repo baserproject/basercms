@@ -23,8 +23,8 @@ return [
              * 都道府県リストを表示するフィールドタイプ
              */
             'BcCcPref' => [
-                'category' => __d('baser', '選択'),
-                'label' => __d('baser', '都道府県リスト'),
+                'category' => __d('baser_core', '選択'),
+                'label' => __d('baser_core', '都道府県リスト'),
                 'columnType' => 'string',
                 'controlType' => 'select',
                 'preview' => true,

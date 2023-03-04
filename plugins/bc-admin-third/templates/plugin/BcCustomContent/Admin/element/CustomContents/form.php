@@ -28,7 +28,7 @@
   <table class="form-table bca-form-table" data-bca-table-type="type2">
     <tr>
       <th class="col-head bca-form-table__label">
-        <?php echo $this->BcAdminForm->label('description', __d('baser', '説明文')) ?>
+        <?php echo $this->BcAdminForm->label('description', __d('baser_core', '説明文')) ?>
       </th>
       <td class="col-input bca-form-table__input">
         <?php
@@ -45,19 +45,19 @@
 
     <tr>
       <th class="bca-form-table__label">
-        <?php echo $this->BcAdminForm->label('custom_table_id', __d('baser', 'テーブル')) ?>
+        <?php echo $this->BcAdminForm->label('custom_table_id', __d('baser_core', 'テーブル')) ?>
       </th>
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('custom_table_id', [
           'type' => 'select',
           'options' => $customTables,
-          'empty' => __d('baser', 'テーブルを選択してください')
+          'empty' => __d('baser_core', 'テーブルを選択してください')
         ]) ?>
         <i class="bca-icon--question-circle bca-help"></i>
         <div class="bca-helptext">
-          <?php echo __d('baser', 'コンテンツに紐付けるテーブルを選択します。') ?>
+          <?php echo __d('baser_core', 'コンテンツに紐付けるテーブルを選択します。') ?>
         </div>
-        &nbsp;&nbsp;<?php $this->BcBaser->link(__d('baser', 'テーブル設定に移動'), [
+        &nbsp;&nbsp;<?php $this->BcBaser->link(__d('baser_core', 'テーブル設定に移動'), [
           'controller' => 'CustomTables',
           'action' => 'edit',
           $entity->custom_table_id
@@ -92,8 +92,8 @@
 
       <tr>
         <th class="col-head bca-form-table__label">
-          <?php echo $this->BcAdminForm->label('list_count', __d('baser', '一覧表示件数')) ?>&nbsp;
-          <span class="required bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
+          <?php echo $this->BcAdminForm->label('list_count', __d('baser_core', '一覧表示件数')) ?>&nbsp;
+          <span class="required bca-label" data-bca-label-type="required"><?php echo __d('baser_core', '必須') ?></span>
         </th>
         <td class="col-input bca-form-table__input">
           <?php echo $this->BcAdminForm->control('list_count', ['type' => 'text', 'size' => 10, 'maxlength' => 255]) ?>
@@ -102,8 +102,8 @@
           <?php echo $this->BcAdminForm->error('list_count') ?>
           <div class="bca-helptext">
             <ul>
-              <li><?php echo __d('baser', 'フロントエンドの一覧に表示する件数を指定します。') ?></li>
-              <li><?php echo __d('baser', '半角数字で入力してください。') ?></li>
+              <li><?php echo __d('baser_core', 'フロントエンドの一覧に表示する件数を指定します。') ?></li>
+              <li><?php echo __d('baser_core', '半角数字で入力してください。') ?></li>
             </ul>
           </div>
         </td>
@@ -111,7 +111,7 @@
 
       <tr>
         <th class="col-head bca-form-table__label">
-          <?php echo $this->BcAdminForm->label('list_order', __d('baser', '一覧の並び順')) ?>
+          <?php echo $this->BcAdminForm->label('list_order', __d('baser_core', '一覧の並び順')) ?>
         </th>
         <td class="col-input bca-form-table__input">
           <?php echo $this->BcAdminForm->control('list_order', [
@@ -123,22 +123,22 @@
           <?php echo $this->BcAdminForm->control('list_direction', [
             'type' => 'select',
             'options' => [
-              'DESC' => __d('baser', '降順'),
-              'ASC' => __d('baser', '昇順')
+              'DESC' => __d('baser_core', '降順'),
+              'ASC' => __d('baser_core', '昇順')
             ]]) ?>
           <i class="bca-icon--question-circle bca-help"></i>
           <?php echo $this->BcAdminForm->error('list_order') ?>
           <?php echo $this->BcAdminForm->error('list_direction') ?>
           <div class="bca-helptext">
-            <?php echo __d('baser', 'フロントエンドの一覧におけるエントリーの並び順を指定します。') ?>
+            <?php echo __d('baser_core', 'フロントエンドの一覧におけるエントリーの並び順を指定します。') ?>
           </div>
         </td>
       </tr>
 
       <tr>
         <th class="col-head bca-form-table__label">
-          <?php echo $this->BcAdminForm->label('template', __d('baser', 'コンテンツテンプレート名')) ?>&nbsp;
-          <span class="required bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
+          <?php echo $this->BcAdminForm->label('template', __d('baser_core', 'コンテンツテンプレート名')) ?>&nbsp;
+          <span class="required bca-label" data-bca-label-type="required"><?php echo __d('baser_core', '必須') ?></span>
         </th>
         <td class="col-input bca-form-table__input">
           <?php echo $this->BcAdminForm->control('template', [
@@ -150,7 +150,7 @@
           <i class="bca-icon--question-circle bca-help"></i>
           <?php echo $this->BcAdminForm->error('template') ?>
           <div class="bca-helptext">
-            <?php echo __d('baser', 'フロントエンドで利用するテンプレートを指定します。') ?>
+            <?php echo __d('baser_core', 'フロントエンドで利用するテンプレートを指定します。') ?>
           </div>
         </td>
       </tr>
@@ -158,22 +158,22 @@
       <?php if($this->BcBaser->isPluginLoaded('BcWidgetArea')): ?>
       <tr>
         <th class="col-head bca-form-table__label">
-          <?php echo $this->BcAdminForm->label('widget_area', __d('baser', 'ウィジェットエリア')) ?>&nbsp;
-          <span class="required bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
+          <?php echo $this->BcAdminForm->label('widget_area', __d('baser_core', 'ウィジェットエリア')) ?>&nbsp;
+          <span class="required bca-label" data-bca-label-type="required"><?php echo __d('baser_core', '必須') ?></span>
         </th>
         <td class="col-input bca-form-table__input">
           <?php echo $this->BcAdminForm->control('widget_area', [
             'type' => 'select',
             'options' => $this->BcAdminForm->getControlsource('BcWidgetArea.WidgetAreas.id'),
-            'empty' => __d('baser', 'サイト基本設定に従う')
+            'empty' => __d('baser_core', 'サイト基本設定に従う')
           ]) ?>
           <i class="bca-icon--question-circle bca-help"></i>
           <?php echo $this->BcAdminForm->error('widget_area') ?>
           <div class="bca-helptext">
-            <?php echo __d('baser', 'フロントエンドで利用するウィジェットエリアを指定します。') ?><br>
-            <?php echo __d('baser', 'ウィジェットエリアはウィジェットエリア管理より追加できます。') ?><br>
+            <?php echo __d('baser_core', 'フロントエンドで利用するウィジェットエリアを指定します。') ?><br>
+            <?php echo __d('baser_core', 'ウィジェットエリアはウィジェットエリア管理より追加できます。') ?><br>
             <ul>
-              <li><?php $this->BcBaser->link(__d('baser', 'ウィジェットエリア管理'), [
+              <li><?php $this->BcBaser->link(__d('baser_core', 'ウィジェットエリア管理'), [
                 'plugin' => 'BcWidgetArea',
                 'controller' => 'WidgetAreas',
                 'action' => 'index'

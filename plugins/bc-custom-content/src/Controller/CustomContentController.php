@@ -52,7 +52,7 @@ class CustomContentController extends BcFrontAppController
         );
 
         if(!$customContent->custom_table_id) {
-            $this->BcMessage->setWarning(__d('baser', 'カスタムコンテンツにカスタムテーブルが紐付けられていません。カスタムコンテンツの編集画面よりカスタムテーブルを選択してください。'));
+            $this->BcMessage->setWarning(__d('baser_core', 'カスタムコンテンツにカスタムテーブルが紐付けられていません。カスタムコンテンツの編集画面よりカスタムテーブルを選択してください。'));
             $this->notFound();
         }
 
@@ -73,7 +73,7 @@ class CustomContentController extends BcFrontAppController
     public function view(CustomContentFrontServiceInterface $service, $entryId)
     {
         if(!$this->getRequest()->getAttribute('currentContent')->entity_id) {
-            $this->BcMessage->setWarning(__d('baser', 'カスタムコンテンツにカスタムテーブルが紐付けられていません。カスタムコンテンツの編集画面よりカスタムテーブルを選択してください。'));
+            $this->BcMessage->setWarning(__d('baser_core', 'カスタムコンテンツにカスタムテーブルが紐付けられていません。カスタムコンテンツの編集画面よりカスタムテーブルを選択してください。'));
             $this->notFound();
         }
         $customContent = $service->getCustomContent(
@@ -81,7 +81,7 @@ class CustomContentController extends BcFrontAppController
         );
 
         if(!$customContent->custom_table_id) {
-            $this->BcMessage->setWarning(__d('baser', 'カスタムコンテンツにカスタムテーブルが紐付けられていません。カスタムコンテンツの編集画面よりカスタムテーブルを選択してください。'));
+            $this->BcMessage->setWarning(__d('baser_core', 'カスタムコンテンツにカスタムテーブルが紐付けられていません。カスタムコンテンツの編集画面よりカスタムテーブルを選択してください。'));
             $this->notFound();
         }
 

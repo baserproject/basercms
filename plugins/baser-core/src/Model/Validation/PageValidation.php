@@ -70,7 +70,7 @@ class PageValidation extends Validation
         if ($exit === 0) {
             return true;
         }
-        $message = __d('baser', 'PHPの構文エラーです') . '： ' . PHP_EOL . implode(' ' . PHP_EOL, $output);
+        $message = __d('baser_core', 'PHPの構文エラーです') . '： ' . PHP_EOL . implode(' ' . PHP_EOL, $output);
         return $message;
     }
 }

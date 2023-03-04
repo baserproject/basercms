@@ -48,10 +48,10 @@ class SiteConfigsController extends BcAdminAppController
             $siteConfig = $service->update($this->getRequest()->getData());
             if (!$siteConfig->getErrors()) {
                 BcUtil::clearAllCache();
-                $this->BcMessage->setInfo(__d('baser', 'システム設定を保存しました。'));
+                $this->BcMessage->setInfo(__d('baser_core', 'システム設定を保存しました。'));
                 return $this->redirect(['action' => 'index']);
             }
-            $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
+            $this->BcMessage->setError(__d('baser_core', '入力エラーです。内容を修正してください。'));
         } else {
             $siteConfig = $service->get();
         }

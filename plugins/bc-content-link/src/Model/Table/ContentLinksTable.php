@@ -59,12 +59,12 @@ class ContentLinksTable extends AppTable
     {
         $validator
         ->integer('id')
-        ->numeric('id', __d('baser', 'IDに不正な値が利用されています。'), 'update')
+        ->numeric('id', __d('baser_core', 'IDに不正な値が利用されています。'), 'update')
         ->requirePresence('id', 'update');
 
         $validator
         ->scalar('url')
-        ->notEmptyString('url', __d('baser', 'リンク先URLを入力してください。'), 'update');
+        ->notEmptyString('url', __d('baser_core', 'リンク先URLを入力してください。'), 'update');
 
         return $validator;
     }

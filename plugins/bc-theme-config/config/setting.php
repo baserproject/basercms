@@ -22,7 +22,7 @@ return [
                 'Theme' => [
                     'menus' => [
                         'ThemeConfigs' => [
-                            'title' => __d('baser', '設定'),
+                            'title' => __d('baser_core', '設定'),
                             'url' => ['prefix' => 'Admin', 'plugin' => 'BcThemeConfig', 'controller' => 'ThemeConfigs', 'action' => 'index']
                         ]
                     ]

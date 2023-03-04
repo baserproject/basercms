@@ -17,7 +17,7 @@ return [
                 'Utilities' => [
                     'menus' => [
                         'EditorTemplates' => [
-                            'title' => __d('baser', 'エディタテンプレート'),
+                            'title' => __d('baser_core', 'エディタテンプレート'),
                             'url' => ['prefix' => 'Admin', 'plugin' => 'BcEditorTemplate', 'controller' => 'EditorTemplates', 'action' => 'index'],
                             'currentRegex' => '/\/editor_templates\/[^\/]+?/s'
                         ],

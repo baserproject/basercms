@@ -232,7 +232,7 @@ class PermissionGroupsService implements PermissionGroupsServiceInterface
     public function buildDefaultEtcRuleGroup(string $type, string $name)
     {
         $permissionGroup = new PermissionGroup([
-            'name' => __d('baser', '{0} その他', $name),
+            'name' => __d('baser_core', '{0} その他', $name),
             'type' => $type,
             'plugin' => null
         ]);
@@ -331,7 +331,7 @@ class PermissionGroupsService implements PermissionGroupsServiceInterface
         $permissionsService = $this->getService(PermissionsServiceInterface::class);
         $url = '/baser/' . Inflector::underscore($type) . '/' . Inflector::dasherize($plugin) . '/*';
         $permissionsService->create([
-            'name' => __d('baser', 'フルアクセス'),
+            'name' => __d('baser_core', 'フルアクセス'),
             'permission_group_id' => $permissionGroup->id,
             'user_group_id' => $userGroupId,
             'url' => $url,

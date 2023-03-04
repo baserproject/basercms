@@ -29,10 +29,10 @@
  */
 $this->BcBaser->css('admin/ckeditor/editor', true);
 $this->BcBaser->i18nScript([
-  'alertMessage1' => __d('baser', 'ブログタグの追加に失敗しました。既に登録されていないか確認してください。'),
-  'alertMessage2' => __d('baser', 'ブログタグの追加に失敗しました。'),
-  'alertMessage3' => __d('baser', 'ブログカテゴリの追加に失敗しました。入力したブログカテゴリ名が既に登録されていないか確認してください。'),
-  'alertMessage4' => __d('baser', 'ブログカテゴリの追加に失敗しました。')
+  'alertMessage1' => __d('baser_core', 'ブログタグの追加に失敗しました。既に登録されていないか確認してください。'),
+  'alertMessage2' => __d('baser_core', 'ブログタグの追加に失敗しました。'),
+  'alertMessage3' => __d('baser_core', 'ブログカテゴリの追加に失敗しました。入力したブログカテゴリ名が既に登録されていないか確認してください。'),
+  'alertMessage4' => __d('baser_core', 'ブログカテゴリの追加に失敗しました。')
 ]);
 $this->BcBaser->js('BcBlog.admin/blog_posts/form.bundle', false, [
   'id' => 'AdminBlogBLogPostsEditScript',
@@ -54,9 +54,9 @@ $this->BcBaser->js('BcBlog.admin/blog_posts/form.bundle', false, [
   <table id="FormTable" class="form-table bca-form-table">
     <tr>
       <th class="col-head bca-form-table__label">
-        <?php echo $this->BcAdminForm->label('title', __d('baser', 'タイトル')) ?>
+        <?php echo $this->BcAdminForm->label('title', __d('baser_core', 'タイトル')) ?>
         &nbsp;<span class="required bca-label" data-bca-label-type="required">
-          <?php echo __d('baser', '必須') ?>
+          <?php echo __d('baser_core', '必須') ?>
         </span>
       </th>
       <td class="col-input bca-form-table__input">
@@ -73,7 +73,7 @@ $this->BcBaser->js('BcBlog.admin/blog_posts/form.bundle', false, [
     </tr>
     <tr>
       <th class="col-head bca-form-table__label">
-        <?php echo $this->BcAdminForm->label('name', __d('baser', 'スラッグ')) ?>
+        <?php echo $this->BcAdminForm->label('name', __d('baser_core', 'スラッグ')) ?>
       </th>
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('name', [
@@ -85,7 +85,7 @@ $this->BcBaser->js('BcBlog.admin/blog_posts/form.bundle', false, [
         ]) ?>
         <i class="bca-icon--question-circle bca-help"></i>
         <div class="bca-helptext">
-          <?php echo __d('baser', 'スラッグはURLで利用します。スラッグを入力すると、次のようなURLでアクセスできますが入力しない場合は記事NOを利用します。<br>/news/archives/slag') ?>
+          <?php echo __d('baser_core', 'スラッグはURLで利用します。スラッグを入力すると、次のようなURLでアクセスできますが入力しない場合は記事NOを利用します。<br>/news/archives/slag') ?>
         </div>
         <?php echo $this->BcAdminForm->error('name') ?>
       </td>
@@ -93,7 +93,7 @@ $this->BcBaser->js('BcBlog.admin/blog_posts/form.bundle', false, [
     <?php if ($categories): ?>
       <tr>
         <th class="col-head bca-form-table__label">
-          <?php echo $this->BcAdminForm->label('blog_category_id', __d('baser', 'カテゴリー')) ?>
+          <?php echo $this->BcAdminForm->label('blog_category_id', __d('baser_core', 'カテゴリー')) ?>
         </th>
         <td class="col-input bca-form-table__input">
           <?php echo $this->BcAdminForm->control('blog_category_id', [
@@ -102,7 +102,7 @@ $this->BcBaser->js('BcBlog.admin/blog_posts/form.bundle', false, [
             'escape' => true
           ]) ?>&nbsp
           <?php if ($hasNewCategoryAddablePermission): ?>
-            <?php echo $this->BcAdminForm->button(__d('baser', '新しいカテゴリを追加'), ['id' => 'BtnAddBlogCategory', 'class' => 'bca-btn']) ?>
+            <?php echo $this->BcAdminForm->button(__d('baser_core', '新しいカテゴリを追加'), ['id' => 'BtnAddBlogCategory', 'class' => 'bca-btn']) ?>
           <?php endif ?>
           <?php echo $this->BcAdminForm->error('blog_category_id') ?>
         </td>
@@ -110,7 +110,7 @@ $this->BcBaser->js('BcBlog.admin/blog_posts/form.bundle', false, [
     <?php endif ?>
     <tr>
       <th class="col-head bca-form-table__label">
-        <?php echo $this->BcAdminForm->label('eye_catch', __d('baser', 'アイキャッチ画像')) ?>
+        <?php echo $this->BcAdminForm->label('eye_catch', __d('baser_core', 'アイキャッチ画像')) ?>
       </th>
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('eye_catch', [
@@ -129,7 +129,7 @@ $this->BcBaser->js('BcBlog.admin/blog_posts/form.bundle', false, [
 <?php if (!empty($blogContent->use_content)): ?>
   <section class="bca-section bca-section__post-content">
     <label for="BlogPostContentTmp"
-           class="bca-form-table__label -label"><?php echo $this->BcAdminForm->label('content', __d('baser', '概要')) ?></label>
+           class="bca-form-table__label -label"><?php echo $this->BcAdminForm->label('content', __d('baser_core', '概要')) ?></label>
     <span class="bca-form-table__input-wrap">
 	  <?php echo $this->BcAdminForm->ckeditor('content', [
       'editorWidth' => 'auto',
@@ -163,7 +163,7 @@ $this->BcBaser->js('BcBlog.admin/blog_posts/form.bundle', false, [
     <?php if (!empty($blogContent->tag_use)): ?>
       <tr>
         <th class="col-head bca-form-table__label">
-          <?php echo $this->BcAdminForm->label('blog_tags._ids', __d('baser', 'タグ')) ?>
+          <?php echo $this->BcAdminForm->label('blog_tags._ids', __d('baser_core', 'タグ')) ?>
         </th>
         <td class="col-input bca-form-table__input">
           <div id="BlogTags" class="bca-form-table__group bca-blogtags">
@@ -178,7 +178,7 @@ $this->BcBaser->js('BcBlog.admin/blog_posts/form.bundle', false, [
               <?php echo $this->BcAdminForm->control('blog_tag_name', [
                 'type' => 'text'
               ]) ?>
-              <?php echo $this->BcAdminForm->button(__d('baser', '新しいタグを追加'), [
+              <?php echo $this->BcAdminForm->button(__d('baser_core', '新しいタグを追加'), [
                 'id' => 'BtnAddBlogTag',
                 'class' => 'bca-btn'
               ]) ?>
@@ -189,22 +189,22 @@ $this->BcBaser->js('BcBlog.admin/blog_posts/form.bundle', false, [
     <?php endif ?>
     <tr>
       <th class="col-head bca-form-table__label">
-        <?php echo $this->BcAdminForm->label('status', __d('baser', '公開状態')) ?>
+        <?php echo $this->BcAdminForm->label('status', __d('baser_core', '公開状態')) ?>
         &nbsp;<span class="required bca-label" data-bca-label-type="required">
-          <?php echo __d('baser', '必須') ?>
+          <?php echo __d('baser_core', '必須') ?>
         </span>
       </th>
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('status', [
           'type' => 'radio',
-          'options' => [0 => __d('baser', '非公開'), 1 => __d('baser', '公開')]
+          'options' => [0 => __d('baser_core', '非公開'), 1 => __d('baser_core', '公開')]
         ]) ?>
         <?php echo $this->BcAdminForm->error('status') ?>
       </td>
     </tr>
     <tr>
       <th class="col-head bca-form-table__label">
-        <?php echo $this->BcAdminForm->label('status', __d('baser', '公開日時')) ?>
+        <?php echo $this->BcAdminForm->label('status', __d('baser_core', '公開日時')) ?>
       </th>
       <td class="col-input bca-form-table__input">
         <span class="bca-datetimepicker__group">
@@ -213,8 +213,8 @@ $this->BcBaser->js('BcBlog.admin/blog_posts/form.bundle', false, [
               'type' => 'dateTimePicker',
               'size' => 12,
               'maxlength' => 10,
-              'dateLabel' => ['text' => __d('baser', '開始日付')],
-              'timeLabel' => ['text' => __d('baser', '開始時間')]
+              'dateLabel' => ['text' => __d('baser_core', '開始日付')],
+              'timeLabel' => ['text' => __d('baser_core', '開始時間')]
             ], true) ?>
           </span>
           <span class="bca-datetimepicker__delimiter">〜</span>
@@ -223,8 +223,8 @@ $this->BcBaser->js('BcBlog.admin/blog_posts/form.bundle', false, [
               'type' => 'dateTimePicker',
               'size' => 12,
               'maxlength' => 10,
-              'dateLabel' => ['text' => __d('baser', '終了日付')],
-              'timeLabel' => ['text' => __d('baser', '終了時間')]
+              'dateLabel' => ['text' => __d('baser_core', '終了日付')],
+              'timeLabel' => ['text' => __d('baser_core', '終了時間')]
             ], true) ?>
             </span>
         </span>
@@ -234,22 +234,22 @@ $this->BcBaser->js('BcBlog.admin/blog_posts/form.bundle', false, [
     </tr>
     <tr>
       <th class="col-head bca-form-table__label">
-        <?php echo $this->BcAdminForm->label('status', __d('baser', 'サイト内検索')) ?>
+        <?php echo $this->BcAdminForm->label('status', __d('baser_core', 'サイト内検索')) ?>
         &nbsp
       </th>
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('exclude_search', [
           'type' => 'checkbox',
-          'label' => __d('baser', 'サイト内検索の検索結果より除外する')
+          'label' => __d('baser_core', 'サイト内検索の検索結果より除外する')
         ]) ?>
       </td>
     </tr>
     <tr>
       <th
         class="col-head bca-form-table__label">
-        <?php echo $this->BcAdminForm->label('user_id', __d('baser', '作成者')) ?>
+        <?php echo $this->BcAdminForm->label('user_id', __d('baser_core', '作成者')) ?>
         &nbsp;<span class="required bca-label" data-bca-label-type="required">
-          <?php echo __d('baser', '必須') ?>
+          <?php echo __d('baser_core', '必須') ?>
         </span>
       </th>
       <td class="col-input bca-form-table__input">
@@ -269,9 +269,9 @@ $this->BcBaser->js('BcBlog.admin/blog_posts/form.bundle', false, [
     </tr>
     <tr>
       <th class="col-head bca-form-table__label">
-        <?php echo $this->BcAdminForm->label('posted', __d('baser', '投稿日時')) ?>
+        <?php echo $this->BcAdminForm->label('posted', __d('baser_core', '投稿日時')) ?>
         &nbsp;<span class="required bca-label" data-bca-label-type="required">
-          <?php echo __d('baser', '必須') ?>
+          <?php echo __d('baser_core', '必須') ?>
         </span>
       </th>
       <td class="col-input bca-form-table__input">
@@ -290,21 +290,21 @@ $this->BcBaser->js('BcBlog.admin/blog_posts/form.bundle', false, [
 <?php echo $this->BcFormTable->dispatchAfter() ?>
 
 
-<div id="AddBlogCategoryForm" title="<?php echo __d('baser', 'カテゴリ新規追加') ?>" style="display:none">
+<div id="AddBlogCategoryForm" title="<?php echo __d('baser_core', 'カテゴリ新規追加') ?>" style="display:none">
   <dl>
-    <dt><?php echo $this->BcAdminForm->label('BlogCategory.title', __d('baser', 'カテゴリタイトル')) ?></dt>
+    <dt><?php echo $this->BcAdminForm->label('BlogCategory.title', __d('baser_core', 'カテゴリタイトル')) ?></dt>
     <dd>
       <?php echo $this->BcAdminForm->control('BlogCategory.title', ['type' => 'text', 'size' => 40, 'maxlength' => 255, 'value' => '', 'autofocus' => true]) ?>
     </dd>
-    <dt><?php echo $this->BcAdminForm->label('BlogCategory.name', __d('baser', 'カテゴリ名')) ?></dt>
+    <dt><?php echo $this->BcAdminForm->label('BlogCategory.name', __d('baser_core', 'カテゴリ名')) ?></dt>
     <dd>
       <?php echo $this->BcAdminForm->control('BlogCategory.name', ['type' => 'text', 'size' => 40, 'maxlength' => 255, 'value' => '']) ?>
       <i class="bca-icon--question-circle bca-help"></i>
       <div class="bca-helptext">
         <ul>
-          <li><?php echo __d('baser', 'URLに利用されます') ?></li>
-          <li><?php echo __d('baser', '半角のみで入力してください') ?></li>
-          <li><?php echo __d('baser', '空の場合はカテゴリタイトルから値が自動で設定されます') ?></li>
+          <li><?php echo __d('baser_core', 'URLに利用されます') ?></li>
+          <li><?php echo __d('baser_core', '半角のみで入力してください') ?></li>
+          <li><?php echo __d('baser_core', '空の場合はカテゴリタイトルから値が自動で設定されます') ?></li>
         </ul>
       </div>
     </dd>

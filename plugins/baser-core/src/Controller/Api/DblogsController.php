@@ -56,13 +56,13 @@ class DblogsController extends BcApiController
         $dblog = $errors = null;
         try {
             $dblog = $service->create($this->request->getData());
-            $message = __d('baser', 'ログを追加しました。');
+            $message = __d('baser_core', 'ログを追加しました。');
         } catch (PersistenceFailedException $e) {
             $errors = $e->getEntity()->getErrors();
-            $message = __d('baser', "入力エラーです。内容を修正してください。");
+            $message = __d('baser_core', "入力エラーです。内容を修正してください。");
             $this->setResponse($this->response->withStatus(400));
         } catch (\Throwable $e) {
-            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
             $this->setResponse($this->response->withStatus(500));
         }
 
@@ -86,10 +86,10 @@ class DblogsController extends BcApiController
         $this->request->allowMethod(['post', 'put']);
 
         if ($service->deleteAll()) {
-            $message = __d('baser', '最近の動きのログを削除しました。');
+            $message = __d('baser_core', '最近の動きのログを削除しました。');
         } else {
             $this->setResponse($this->response->withStatus(400));
-            $message = __d('baser', '最近の動きのログ削除に失敗しました。');
+            $message = __d('baser_core', '最近の動きのログ削除に失敗しました。');
         }
         $this->set([
             'message' => $message,

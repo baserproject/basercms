@@ -46,21 +46,21 @@ $this->BcAdminForm->unlockField("custom_links");
     <?php endif ?>
     <tr>
       <th class="col-head bca-form-table__label">
-        <?php echo $this->BcAdminForm->label('type', __d('baser', 'テーブルタイプ')) ?>&nbsp;
-        <span class="required bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
+        <?php echo $this->BcAdminForm->label('type', __d('baser_core', 'テーブルタイプ')) ?>&nbsp;
+        <span class="required bca-label" data-bca-label-type="required"><?php echo __d('baser_core', '必須') ?></span>
       </th>
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('type', [
           'type' => 'radio',
-          'options' => [1 => __d('baser', 'コンテンツ'), 2 => __d('baser', 'マスタ')]
+          'options' => [1 => __d('baser_core', 'コンテンツ'), 2 => __d('baser_core', 'マスタ')]
         ]) ?>&nbsp;&nbsp;
         <span id="SpanHasChild" hidden>（&nbsp;<?php echo $this->BcAdminForm->control('has_child', [
             'type' => 'checkbox',
-            'label' => __d('baser', '階層構造を持つ')
+            'label' => __d('baser_core', '階層構造を持つ')
           ]) ?>）
         &nbsp;<i class="bca-icon--question-circle bca-help"></i>
         <div class="bca-helptext">
-          <?php echo __d('baser', 'テーブルタイプでコンテンツを選択すると、コンテンツ管理にて配置する事ができます。
+          <?php echo __d('baser_core', 'テーブルタイプでコンテンツを選択すると、コンテンツ管理にて配置する事ができます。
           マスタを選択すると他のテーブルのラジオボタンやセレクトボックスのデータソースとして利用する事ができます。<br><br>
           なお、マスタの場合は、データの階層構造を持てるように設定する事ができます。') ?>
         </div>
@@ -71,8 +71,8 @@ $this->BcAdminForm->unlockField("custom_links");
     </tr>
     <tr>
       <th class="col-head bca-form-table__label">
-        <?php echo $this->BcAdminForm->label('name', __d('baser', '識別名')) ?>&nbsp;
-        <span class="required bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
+        <?php echo $this->BcAdminForm->label('name', __d('baser_core', '識別名')) ?>&nbsp;
+        <span class="required bca-label" data-bca-label-type="required"><?php echo __d('baser_core', '必須') ?></span>
       </th>
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('name', ['type' => 'text', 'size' => 40, 'maxlength' => 255]) ?>
@@ -82,8 +82,8 @@ $this->BcAdminForm->unlockField("custom_links");
 
     <tr>
       <th class="col-head bca-form-table__label">
-        <?php echo $this->BcAdminForm->label('title', __d('baser', 'タイトル')) ?>&nbsp;
-        <span class="required bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
+        <?php echo $this->BcAdminForm->label('title', __d('baser_core', 'タイトル')) ?>&nbsp;
+        <span class="required bca-label" data-bca-label-type="required"><?php echo __d('baser_core', '必須') ?></span>
       </th>
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('title', ['type' => 'text', 'size' => 40, 'maxlength' => 255]) ?>
@@ -93,7 +93,7 @@ $this->BcAdminForm->unlockField("custom_links");
 
     <tr id="RowDisplayField">
       <th class="col-head bca-form-table__label">
-        <?php echo $this->BcAdminForm->label('display_field', __d('baser', '表示名称フィールド')) ?>
+        <?php echo $this->BcAdminForm->label('display_field', __d('baser_core', '表示名称フィールド')) ?>
       </th>
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('display_field', [
@@ -102,7 +102,7 @@ $this->BcAdminForm->unlockField("custom_links");
         ]) ?>
         <i class="bca-icon--question-circle bca-help"></i>
         <div class="bca-helptext">
-          <?php echo __d('baser', 'エントリーの登録、編集、削除時に表示名称として利用するフィールドを指定します。指定しない場合は、初期状態で保持する No フィールドを利用します。') ?>
+          <?php echo __d('baser_core', 'エントリーの登録、編集、削除時に表示名称として利用するフィールドを指定します。指定しない場合は、初期状態で保持する No フィールドを利用します。') ?>
         </div>
         <?php echo $this->BcAdminForm->error('display_field') ?>
       </td>
@@ -138,7 +138,7 @@ $this->BcAdminForm->unlockField("custom_links");
   <div class="custom-field-setting__panel">
     <h2>
       利用できるフィールド&nbsp;&nbsp;
-      <?php $this->BcBaser->link(__d('baser', '新規登録'),
+      <?php $this->BcBaser->link(__d('baser_core', '新規登録'),
         ['controller' => 'CustomFields', 'action' => 'add'], [
           'class' => 'bca-btn',
           'data-bca-btn-type' => 'add',

@@ -21,7 +21,7 @@ use BaserCore\View\AppView;
  * @unitTest
  */
 
-$this->BcAdmin->setTitle(__d('baser', 'ログイン'));
+$this->BcAdmin->setTitle(__d('baser_core', 'ログイン'));
 $this->BcBaser->js('admin/users/login.bundle', false, [
   'id' => 'AdminUsersLoginScript',
   'data-isEnableLoginCredit' => $isEnableLoginCredit
@@ -38,15 +38,15 @@ $this->BcBaser->js('admin/users/login.bundle', false, [
     </h1>
     <?= $this->BcAdminForm->create() ?>
     <div class="login-input bca-login-form-item">
-      <?php echo $this->BcAdminForm->label('email', __d('baser', 'Eメール')) ?>
+      <?php echo $this->BcAdminForm->label('email', __d('baser_core', 'Eメール')) ?>
       <?= $this->BcAdminForm->control('email', ['type' => 'text', 'tabindex' => 1, 'autofocus' => true]) ?>
     </div>
     <div class="login-input bca-login-form-item">
-      <?php echo $this->BcAdminForm->label('password', __d('baser', 'パスワード')) ?>
+      <?php echo $this->BcAdminForm->label('password', __d('baser_core', 'パスワード')) ?>
       <?= $this->BcAdminForm->control('password', ['type' => 'password', 'tabindex' => 2]) ?>
     </div>
     <div class="submit bca-login-form-btn-group">
-      <?= $this->BcAdminForm->button(__d('baser', 'ログイン'), [
+      <?= $this->BcAdminForm->button(__d('baser_core', 'ログイン'), [
         'type' => 'submit',
         'div' => false,
         'class' => 'bca-btn--login bca-btn',
@@ -60,14 +60,14 @@ $this->BcBaser->js('admin/users/login.bundle', false, [
         <div class="bca-login-form-checker">
           <?php echo $this->BcAdminForm->control('saved', [
             'type' => 'checkbox',
-            'label' => __d('baser', 'ログイン状態を保存する'),
+            'label' => __d('baser_core', 'ログイン状態を保存する'),
             'class' => 'bca-checkbox__input bca-login-form-checkbox ',
             'tabindex' => 3
           ]); ?>
         </div>
       <?php endif; ?>
       <div class="bca-login-forgot-pass">
-        <?php $this->BcBaser->link(__d('baser', 'パスワードを忘れた場合はこちら'), ['controller' => 'password_requests', 'action' => 'entry', $this->request->getParam('prefix') => true]) ?>
+        <?php $this->BcBaser->link(__d('baser_core', 'パスワードを忘れた場合はこちら'), ['controller' => 'password_requests', 'action' => 'entry', $this->request->getParam('prefix') => true]) ?>
       </div>
     </div>
     <?= $this->BcAdminForm->end() ?>

@@ -66,7 +66,7 @@ class WidgetAreasAdminService extends WidgetAreasService implements WidgetAreasA
     protected function getWidgetInfos()
     {
         $widgetInfos = [0 => [
-            'title' => __d('baser', 'コアウィジェット'),
+            'title' => __d('baser_core', 'コアウィジェット'),
             'plugin' => 'BaserCore',
             'paths' => [Plugin::templatePath(Configure::read('BcApp.defaultAdminTheme')) . 'Admin' . DS . 'element' . DS . 'widget']
         ]];
@@ -78,7 +78,7 @@ class WidgetAreasAdminService extends WidgetAreasService implements WidgetAreasA
             $path = BcUtil::getExistsTemplateDir('', $plugin->name, 'Admin' . DS . 'element' . DS . 'widget');
             if (!is_dir($path)) continue;
             $pluginWidgets[] = [
-                'title' => $plugin->title . __d('baser', 'ウィジェット'),
+                'title' => $plugin->title . __d('baser_core', 'ウィジェット'),
                 'plugin' => $plugin->name,
                 'paths' => [$path]
             ];

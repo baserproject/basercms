@@ -22,7 +22,7 @@ use BaserCore\Model\Entity\Permission;
  * @unitTest
  */
 $this->BcAdmin->setHelp('permissions_form');
-$this->BcAdmin->setTitle(sprintf(__d('baser', '%s｜新規アクセスルール登録'), $currentUserGroup->title));
+$this->BcAdmin->setTitle(sprintf(__d('baser_core', '%s｜新規アクセスルール登録'), $currentUserGroup->title));
 ?>
 
 
@@ -33,7 +33,7 @@ $this->BcAdmin->setTitle(sprintf(__d('baser', '%s｜新規アクセスルール�
 <div class="submit section bca-actions">
   <div class="bca-actions__main">
     <?php if ($this->getRequest()->getParam('pass.1')): ?>
-      <?php echo $this->BcHtml->link(__d('baser', 'アクセスグループ編集に戻る'), [
+      <?php echo $this->BcHtml->link(__d('baser_core', 'アクセスグループ編集に戻る'), [
         'controller' => 'PermissionGroups',
         'action' => 'edit',
         $currentUserGroup->id,
@@ -43,7 +43,7 @@ $this->BcAdmin->setTitle(sprintf(__d('baser', '%s｜新規アクセスルール�
         'data-bca-btn-type' => 'back-to-list'
       ]) ?>
     <?php endif ?>
-    <?php echo $this->BcHtml->link(__d('baser', '一覧に戻る'), [
+    <?php echo $this->BcHtml->link(__d('baser_core', '一覧に戻る'), [
       'action' => 'index',
       $currentUserGroup->id
     ], [
@@ -51,7 +51,7 @@ $this->BcAdmin->setTitle(sprintf(__d('baser', '%s｜新規アクセスルール�
       'data-bca-btn-type' => 'back-to-list'
     ]) ?>
     <?= $this->BcAdminForm->button(
-      __d('baser', '保存'),
+      __d('baser_core', '保存'),
       ['div' => false,
         'class' => 'button bca-btn bca-actions__item',
         'data-bca-btn-type' => 'save',

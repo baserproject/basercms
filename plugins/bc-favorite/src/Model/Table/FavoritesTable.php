@@ -68,18 +68,18 @@ class FavoritesTable extends AppTable
 
         $validator
             ->scalar('name')
-            ->requirePresence('name', true, __d('baser', 'タイトルは必須です。'))
-            ->notEmptyString('name', __d('baser', 'タイトルは必須です。'));
+            ->requirePresence('name', true, __d('baser_core', 'タイトルは必須です。'))
+            ->notEmptyString('name', __d('baser_core', 'タイトルは必須です。'));
         $validator
             ->scalar('url')
             ->add('url', 'isPermitted', [
                 'rule' => ['isPermitted', $this->getService(PermissionsServiceInterface::class)],
                 'provider' => 'favorite',
-                'message' => __d('baser', 'このURLの登録は許可されていません。')])
-            ->notEmptyString('url', __d('baser', 'URLは必須です。'));
+                'message' => __d('baser_core', 'このURLの登録は許可されていません。')])
+            ->notEmptyString('url', __d('baser_core', 'URLは必須です。'));
         $validator
             ->scalar('user_id')
-            ->notEmptyString('user_id', __d('baser', 'ユーザーIDは必須です。'));
+            ->notEmptyString('user_id', __d('baser_core', 'ユーザーIDは必須です。'));
         return $validator;
     }
 

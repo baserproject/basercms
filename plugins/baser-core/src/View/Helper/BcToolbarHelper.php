@@ -225,9 +225,9 @@ class BcToolbarHelper extends Helper
     {
         switch($this->getMode()) {
             case 'debug':
-                return __d('baser', 'デバッグモード');
+                return __d('baser_core', 'デバッグモード');
             case 'install':
-                return __d('baser', 'インストールモード');
+                return __d('baser_core', 'インストールモード');
         }
         return '';
     }
@@ -243,9 +243,9 @@ class BcToolbarHelper extends Helper
     {
         switch($this->getMode()) {
             case 'debug':
-                return __d('baser', 'デバッグモードです。運営を開始する前にシステム設定よりノーマルモードに戻しましょう。');
+                return __d('baser_core', 'デバッグモードです。運営を開始する前にシステム設定よりノーマルモードに戻しましょう。');
             case 'install':
-                return __d('baser', 'インストールモードです。運営を開始する前にシステム設定よりノーマルモードに戻しましょう。');
+                return __d('baser_core', 'インストールモードです。運営を開始する前にシステム設定よりノーマルモードに戻しましょう。');
         }
         return '';
     }
@@ -321,8 +321,8 @@ class BcToolbarHelper extends Helper
     public function getLogoText()
     {
         $texts = [
-            'install' => __d('baser', 'インストールマニュアル'),
-            'update' => __d('baser', 'アップデートマニュアル'),
+            'install' => __d('baser_core', 'インストールマニュアル'),
+            'update' => __d('baser_core', 'アップデートマニュアル'),
             'normal' => 'サイト表示',
             'frontAdminAvailable' => 'ダッシュボード',
             'frontAdminNotAvailable' => $this->BcAuth->getCurrentName(),

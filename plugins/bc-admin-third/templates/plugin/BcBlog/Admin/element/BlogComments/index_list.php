@@ -28,11 +28,11 @@ $this->BcBaser->js('BcBlog.admin/blog_comments/index.bundle', false);
     <div class="bca-action-table-listup">
       <?php echo $this->BcAdminForm->control('batch', [
         'type' => 'select',
-        'options' => ['publish' => __('baser', '公開'), 'unpublish' => __d('baser', '非公開'), 'delete' => __d('baser', '削除')],
-        'empty' => __d('baser', '一括処理'),
+        'options' => ['publish' => __d('baser_core', '公開'), 'unpublish' => __d('baser_core', '非公開'), 'delete' => __d('baser_core', '削除')],
+        'empty' => __d('baser_core', '一括処理'),
         'data-bca-select-size' => 'lg'
       ]) ?>
-      <?php echo $this->BcAdminForm->button(__d('baser', '適用'), ['id' => 'BtnApplyBatch', 'disabled' => 'disabled', 'class' => 'bca-btn', 'data-bca-btn-size' => 'lg']) ?>
+      <?php echo $this->BcAdminForm->button(__d('baser_core', '適用'), ['id' => 'BtnApplyBatch', 'disabled' => 'disabled', 'class' => 'bca-btn', 'data-bca-btn-size' => 'lg']) ?>
     </div>
   <?php endif ?>
   <div class="bca-data-list__sub">
@@ -45,19 +45,19 @@ $this->BcBaser->js('BcBlog.admin/blog_comments/index.bundle', false);
   <thead class="bca-table-listup__thead ">
   <tr>
     <th class="list-tool bca-table-listup__thead-th bca-table-listup__thead-th--select"><?php // 一括選択 ?>
-      <?php echo $this->BcAdminForm->control('checkall', ['type' => 'checkbox', 'label' => __d('baser', '一括選択')]) ?>
+      <?php echo $this->BcAdminForm->control('checkall', ['type' => 'checkbox', 'label' => __d('baser_core', '一括選択')]) ?>
     </th>
     <th class="bca-table-listup__thead-th">
       <?php
       echo $this->Paginator->sort('no',
-        ['asc' => '<i class="bca-icon--asc"></i>' . __d('baser', 'No'), 'desc' => '<i class="bca-icon--desc"></i>' . __d('baser', 'No')],
+        ['asc' => '<i class="bca-icon--asc"></i>' . __d('baser_core', 'No'), 'desc' => '<i class="bca-icon--desc"></i>' . __d('baser_core', 'No')],
         ['escape' => false, 'class' => 'btn-direction bca-table-listup__a']
       );
       ?>
     </th>
     <th class="bca-table-listup__thead-th">
       <?php echo $this->Paginator->sort('name',
-        ['asc' => '<i class="bca-icon--asc"></i>' . __d('baser', '投稿者'), 'desc' => '<i class="bca-icon--desc"></i>' . __d('baser', '投稿者')],
+        ['asc' => '<i class="bca-icon--asc"></i>' . __d('baser_core', '投稿者'), 'desc' => '<i class="bca-icon--desc"></i>' . __d('baser_core', '投稿者')],
         ['escape' => false, 'class' => 'btn-direction bca-table-listup__a']
       );
       ?>
@@ -65,14 +65,14 @@ $this->BcBaser->js('BcBlog.admin/blog_comments/index.bundle', false);
     <th class="bca-table-listup__thead-th">
       <?php
       echo $this->Paginator->sort('email',
-        ['asc' => '<i class="bca-icon--asc"></i>' . __d('baser', 'メール'), 'desc' => '<i class="bca-icon--desc"></i>' . __d('baser', 'メール')],
+        ['asc' => '<i class="bca-icon--asc"></i>' . __d('baser_core', 'メール'), 'desc' => '<i class="bca-icon--desc"></i>' . __d('baser_core', 'メール')],
         ['escape' => false, 'class' => 'btn-direction bca-table-listup__a']
       );
       ?>
       <br/>
       <?php
       echo $this->Paginator->sort('url',
-        ['asc' => '<i class="bca-icon--asc"></i>' . __d('baser', 'URL'), 'desc' => '<i class="bca-icon--desc"></i>' . __d('baser', 'URL')],
+        ['asc' => '<i class="bca-icon--asc"></i>' . __d('baser_core', 'URL'), 'desc' => '<i class="bca-icon--desc"></i>' . __d('baser_core', 'URL')],
         ['escape' => false, 'class' => 'btn-direction bca-table-listup__a']
       );
       ?>
@@ -80,7 +80,7 @@ $this->BcBaser->js('BcBlog.admin/blog_comments/index.bundle', false);
     <th class="bca-table-listup__thead-th">
       <?php
       echo $this->Paginator->sort('message',
-        ['asc' => '<i class="bca-icon--asc"></i>' . __d('baser', 'メッセージ'), 'desc' => '<i class="bca-icon--desc"></i>' . __d('baser', 'メッセージ')],
+        ['asc' => '<i class="bca-icon--asc"></i>' . __d('baser_core', 'メッセージ'), 'desc' => '<i class="bca-icon--desc"></i>' . __d('baser_core', 'メッセージ')],
         ['escape' => false, 'class' => 'btn-direction bca-table-listup__a']
       );
       ?>
@@ -89,20 +89,20 @@ $this->BcBaser->js('BcBlog.admin/blog_comments/index.bundle', false);
     <th class="bca-table-listup__thead-th">
       <?php
       echo $this->Paginator->sort('created',
-        ['asc' => '<i class="bca-icon--asc"></i>' . __d('baser', '投稿日'), 'desc' => '<i class="bca-icon--desc"></i>' . __d('baser', '投稿日')],
+        ['asc' => '<i class="bca-icon--asc"></i>' . __d('baser_core', '投稿日'), 'desc' => '<i class="bca-icon--desc"></i>' . __d('baser_core', '投稿日')],
         ['escape' => false, 'class' => 'btn-direction bca-table-listup__a']
       );
       ?>
       <br/>
       <?php
       echo $this->Paginator->sort('modified',
-        ['asc' => '<i class="bca-icon--asc"></i>' . __d('baser', '更新日'), 'desc' => '<i class="bca-icon--desc"></i>' . __d('baser', '更新日')],
+        ['asc' => '<i class="bca-icon--asc"></i>' . __d('baser_core', '更新日'), 'desc' => '<i class="bca-icon--desc"></i>' . __d('baser_core', '更新日')],
         ['escape' => false, 'class' => 'btn-direction bca-table-listup__a']
       );
       ?>
     </th>
     <th class="bca-table-listup__thead-th"><?php // アクション ?>
-      <?php echo __d('baser', 'アクション') ?>
+      <?php echo __d('baser_core', 'アクション') ?>
     </th>
   </tr>
   </thead>
@@ -114,7 +114,7 @@ $this->BcBaser->js('BcBlog.admin/blog_comments/index.bundle', false);
   <?php else: ?>
     <tr>
       <td colspan="<?php echo $this->BcListTable->getColumnNumber() ?>" class="bca-table-listup__tbody-td"><p
-          class="no-data"><?php echo __d('baser', 'データが見つかりませんでした。') ?></p></td>
+          class="no-data"><?php echo __d('baser_core', 'データが見つかりませんでした。') ?></p></td>
     </tr>
   <?php endif; ?>
   </tbody>

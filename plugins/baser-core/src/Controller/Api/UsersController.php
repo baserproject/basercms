@@ -62,7 +62,7 @@ class UsersController extends BcApiController
             if ($this->request->is('ssl') && $this->request->getData('saved')) {
                 $this->response = $service->setCookieAutoLoginKey($this->response, $user->id);
             }
-            $this->BcMessage->setInfo(__d('baser', 'ようこそ、{0}さん。', $user->getDisplayName()));
+            $this->BcMessage->setInfo(__d('baser_core', 'ようこそ、{0}さん。', $user->getDisplayName()));
             $json['redirect'] = $redirect;
         }
         $this->set('json', $json);
@@ -117,9 +117,9 @@ class UsersController extends BcApiController
             $user = $service->get($id);
         } catch (RecordNotFoundException $e) {
             $this->setResponse($this->response->withStatus(404));
-            $message = __d('baser', 'データが見つかりません。');
+            $message = __d('baser_core', 'データが見つかりません。');
         } catch (\Throwable $e) {
-            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
             $this->setResponse($this->response->withStatus(500));
         }
         $this->set([
@@ -142,13 +142,13 @@ class UsersController extends BcApiController
         $user = $errors = null;
         try {
             $user = $service->create($this->request->getData());
-            $message = __d('baser', 'ユーザー「{0}」を追加しました。', $user->name);
+            $message = __d('baser_core', 'ユーザー「{0}」を追加しました。', $user->name);
         } catch (PersistenceFailedException $e) {
             $errors = $e->getEntity()->getErrors();
-            $message = __d('baser', "入力エラーです。内容を修正してください。");
+            $message = __d('baser_core', "入力エラーです。内容を修正してください。");
             $this->setResponse($this->response->withStatus(400));
         } catch (\Throwable $e) {
-            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
             $this->setResponse($this->response->withStatus(500));
         }
 
@@ -174,13 +174,13 @@ class UsersController extends BcApiController
         $user = $errors = null;
         try {
             $user = $service->update($service->get($id), $this->request->getData());
-            $message = __d('baser', 'ユーザー「{0}」を更新しました。', $user->name);
+            $message = __d('baser_core', 'ユーザー「{0}」を更新しました。', $user->name);
         } catch (PersistenceFailedException $e) {
             $errors = $e->getEntity()->getErrors();
-            $message = __d('baser', "入力エラーです。内容を修正してください。");
+            $message = __d('baser_core', "入力エラーです。内容を修正してください。");
             $this->setResponse($this->response->withStatus(400));
         } catch (\Throwable $e) {
-            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
             $this->setResponse($this->response->withStatus(500));
         }
         $this->set([
@@ -205,11 +205,11 @@ class UsersController extends BcApiController
         $user = $service->get($id);
         try {
             if ($service->delete($id)) {
-                $message = __d('baser', 'ユーザー: {0} を削除しました。', $user->name);
+                $message = __d('baser_core', 'ユーザー: {0} を削除しました。', $user->name);
             }
         } catch (Exception $e) {
             $this->setResponse($this->response->withStatus(400));
-            $message = __d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
         }
         $this->set([
             'message' => $message,

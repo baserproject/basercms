@@ -23,8 +23,8 @@ return [
              * マルチチェックボックスを表示するフィールドタイプ
              */
             'BcCcMultiple' => [
-                'category' => __d('baser', '選択'),
-                'label' => __d('baser', 'マルチチェックボックス'),
+                'category' => __d('baser_core', '選択'),
+                'label' => __d('baser_core', 'マルチチェックボックス'),
                 'columnType' => 'string',
                 'controlType' => 'multiCheckbox',
                 'preview' => true,

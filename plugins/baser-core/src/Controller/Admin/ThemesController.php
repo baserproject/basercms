@@ -53,10 +53,10 @@ class ThemesController extends BcAdminAppController
         if ($this->request->is('post')) {
             try {
                 $name = $service->add($this->getRequest()->getUploadedFiles());
-                $this->BcMessage->setInfo(__d('baser', 'テーマファイル「{0}」を追加しました。', $name));
+                $this->BcMessage->setInfo(__d('baser_core', 'テーマファイル「{0}」を追加しました。', $name));
                 $this->redirect(['action' => 'index']);
             } catch (BcException $e) {
-                $this->BcMessage->setError(__d('baser', 'ファイルのアップロードに失敗しました。') . $e->getMessage());
+                $this->BcMessage->setError(__d('baser_core', 'ファイルのアップロードに失敗しました。') . $e->getMessage());
             }
         }
     }
@@ -85,7 +85,7 @@ class ThemesController extends BcAdminAppController
     {
         $this->request->allowMethod(['post']);
         if (empty($this->getRequest()->getData('default_data_pattern'))) {
-            $this->BcMessage->setError(__d('baser', '不正な操作です。'));
+            $this->BcMessage->setError(__d('baser_core', '不正な操作です。'));
             return $this->redirect(['action' => 'index']);
         }
         try {
@@ -94,14 +94,14 @@ class ThemesController extends BcAdminAppController
                 $this->getRequest()->getData('default_data_pattern')
             );
         } catch (BcException $e) {
-            $this->BcMessage->setError(__d('baser', '初期データの読み込みに失敗しました。' . $e->getMessage()));
+            $this->BcMessage->setError(__d('baser_core', '初期データの読み込みに失敗しました。' . $e->getMessage()));
             return $this->redirect(['action' => 'index']);
         }
         if (!$result) {
-            $this->BcMessage->setError(__d('baser', '初期データの読み込みが完了しましたが、いくつかの処理に失敗しています。ログを確認してください。'));
+            $this->BcMessage->setError(__d('baser_core', '初期データの読み込みが完了しましたが、いくつかの処理に失敗しています。ログを確認してください。'));
             return $this->redirect(['action' => 'index']);
         }
-        $this->BcMessage->setInfo(__d('baser', '初期データの読み込みが完了しました。'));
+        $this->BcMessage->setInfo(__d('baser_core', '初期データの読み込みが完了しました。'));
         return $this->redirect(['action' => 'index']);
     }
 
@@ -120,9 +120,9 @@ class ThemesController extends BcAdminAppController
         if (!$theme) $this->notFound();
         try {
             $service->copy($theme);
-            $this->BcMessage->setInfo(__d('baser', 'テーマ「{0}」をコピーしました。', $theme));
+            $this->BcMessage->setInfo(__d('baser_core', 'テーマ「{0}」をコピーしました。', $theme));
         } catch (BcException $e) {
-            $this->BcMessage->setError(__d('baser', 'テーマフォルダのアクセス権限を見直してください。' . $e->getMessage()));
+            $this->BcMessage->setError(__d('baser_core', 'テーマフォルダのアクセス権限を見直してください。' . $e->getMessage()));
         }
         $this->redirect(['action' => 'index']);
     }
@@ -142,9 +142,9 @@ class ThemesController extends BcAdminAppController
         if (!$theme) $this->notFound();
         try {
             $service->delete($theme);
-            $this->BcMessage->setInfo(__d('baser', 'テーマ「{0}」を削除しました。', $theme));
+            $this->BcMessage->setInfo(__d('baser_core', 'テーマ「{0}」を削除しました。', $theme));
         } catch (BcException $e) {
-            $this->BcMessage->setError(__d('baser', 'テーマフォルダのアクセス権限を見直してください。' . $e->getMessage()));
+            $this->BcMessage->setError(__d('baser_core', 'テーマフォルダのアクセス権限を見直してください。' . $e->getMessage()));
         }
         $this->redirect(['action' => 'index']);
     }
@@ -165,11 +165,11 @@ class ThemesController extends BcAdminAppController
         if (!$theme) $this->notFound();
         try {
             $info = $service->apply($this->getRequest()->getAttribute('currentSite'), $theme);
-            $message = [__d('baser', 'テーマ「{0}」を適用しました。', $theme)];
+            $message = [__d('baser_core', 'テーマ「{0}」を適用しました。', $theme)];
             if ($info) $message = array_merge($message, [''], $info);
             $this->BcMessage->setInfo(implode("\n", $message));
         } catch (BcException $e) {
-            $this->BcMessage->setError(__d('baser', 'テーマの適用に失敗しました。', $e->getMessage()));
+            $this->BcMessage->setError(__d('baser_core', 'テーマの適用に失敗しました。', $e->getMessage()));
         }
         $this->redirect(['action' => 'index']);
     }

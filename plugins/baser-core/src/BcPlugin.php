@@ -169,7 +169,7 @@ class BcPlugin extends BasePlugin
             try {
                 foreach($updaters as $version => $updateVerPoint) {
                     $version = explode('-', $version)[1];
-                    BcUpdateLog::set(__d('baser', 'アップデートプログラム {0} を実行します。', $version));
+                    BcUpdateLog::set(__d('baser_core', 'アップデートプログラム {0} を実行します。', $version));
                     $this->execScript($version);
                 }
             } catch (\Throwable $e) {

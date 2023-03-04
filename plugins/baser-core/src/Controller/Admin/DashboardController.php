@@ -35,7 +35,7 @@ class DashboardController extends BcAdminAppController
      */
     public function index(DashboardAdminServiceInterface $service)
     {
-        $this->setTitle(__d('baser', 'ダッシュボード'));
+        $this->setTitle(__d('baser_core', 'ダッシュボード'));
         $this->set($service->getViewVarsForIndex(5));
     }
 

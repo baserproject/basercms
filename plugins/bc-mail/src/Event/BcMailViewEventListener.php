@@ -65,17 +65,17 @@ class BcMailViewEventListener extends \BaserCore\Event\BcViewEventListener
                 $route = ['Admin' => true, 'plugin' => 'BcMail', 'action' => 'index', $entity->id];
                 return [
                     'MailMessages' . $entity->id => [
-                        'title' => __d('baser', '受信メール'),
+                        'title' => __d('baser_core', '受信メール'),
                         'url' => array_merge($route, ['controller' => 'MailMessages']),
                         'currentRegex' => '/\/bc-mail\/mail_messages\/[^\/]+?\/' . $entity->id . '($|\/)/s'
                     ],
                     'MailFields' . $entity->id => [
-                        'title' => __d('baser', 'フィールド'),
+                        'title' => __d('baser_core', 'フィールド'),
                         'url' => array_merge($route, ['controller' => 'MailFields']),
                         'currentRegex' => '/\/bc-mail\/mail_fields\/[^\/]+?\/' . $entity->id . '($|\/)/s'
                     ],
                     'MailContentsEdit' . $entity->id => [
-                        'title' => __d('baser', '設定'),
+                        'title' => __d('baser_core', '設定'),
                         'url' => array_merge($route, ['controller' => 'MailContents', 'action' => 'edit'])
                     ]
                 ];

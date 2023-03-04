@@ -16,22 +16,22 @@
  * @noTodo
  * @unitTest
  */
-$this->BcAdmin->setTitle(__d('baser', 'パスワードのリセット'));
+$this->BcAdmin->setTitle(__d('baser_core', 'パスワードのリセット'));
 ?>
 
 <div class="section">
-  <p><?php echo __d('baser', '新しいパスワードを入力してください。') ?></p>
+  <p><?php echo __d('baser_core', '新しいパスワードを入力してください。') ?></p>
 
   <?= $this->BcAdminForm->create($user, ['novalidate' => true]) ?>
   <div class="submit">
     <p>
-      <?php echo $this->BcAdminForm->control('password_1', ['type' => 'password', 'size' => '50', 'maxlength' => 255, 'placeholder' => __d('baser', 'パスワード')]) ?>
-      <?php echo $this->BcAdminForm->control('password_2', ['type' => 'password', 'size' => '50', 'maxlength' => 255, 'placeholder' => __d('baser', '再入力')]) ?>
+      <?php echo $this->BcAdminForm->control('password_1', ['type' => 'password', 'size' => '50', 'maxlength' => 255, 'placeholder' => __d('baser_core', 'パスワード')]) ?>
+      <?php echo $this->BcAdminForm->control('password_2', ['type' => 'password', 'size' => '50', 'maxlength' => 255, 'placeholder' => __d('baser_core', '再入力')]) ?>
       <?php echo $this->BcAdminForm->error('password') ?>
     </p>
 
     <?= $this->BcAdminForm->button(
-      __d('baser', '保存'),
+      __d('baser_core', '保存'),
       ['div' => false,
         'class' => 'button bca-btn bca-actions__item',
         'data-bca-btn-type' => 'save',

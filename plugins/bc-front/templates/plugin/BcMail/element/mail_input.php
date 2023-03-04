@@ -47,9 +47,9 @@ if (!empty($mailFields)) {
 				}
 				echo '>' . "\n" . '        <th class="col-head" width="150">' . $this->Mailform->label("MailMessage." . $field->field_name . "", $field->head);
 				if ($field->not_empty) {
-					echo '<span class="required">' . __('必須') . '</span>';
+					echo '<span class="required">' . __d('baser_core''必須') . '</span>';
 				} else {
-					echo '<span class="normal">' . __('任意') . '</span>';
+					echo '<span class="normal">' . __d('baser_core''任意') . '</span>';
 				}
 				echo '</th>' . "\n" . '        <td class="col-input">';
 			}
@@ -110,8 +110,8 @@ if (!empty($mailFields)) {
 						}
 					}
 				}
-				echo $this->Mailform->error("MailMessage." . $field->group_valid . "_not_same", __("入力データが一致していません。"));
-				echo $this->Mailform->error("MailMessage." . $field->group_valid . "_not_complate", __("入力データが不完全です。"));
+				echo $this->Mailform->error("MailMessage." . $field->group_valid . "_not_same", __d('baser_core'"入力データが一致していません。"));
+				echo $this->Mailform->error("MailMessage." . $field->group_valid . "_not_complate", __d('baser_core'"入力データが不完全です。"));
 			} elseif(!empty($field->group_field)) {
 				$isRequiredToClose = false;
 			}

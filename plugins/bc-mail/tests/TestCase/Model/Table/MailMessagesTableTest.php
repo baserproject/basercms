@@ -147,17 +147,17 @@ class MailMessageTest extends BaserTestCase
                     'name_1' => '', 'name_2' => '', // バリデートグループエラーチェック
                 ],
                 [
-                    'name_1' => [__('必須項目です。')],
-                    'name_2' => [__('必須項目です。')],
-                    'email_1' => [__('形式が無効です。')],
-                    'email_2' => [__('形式が無効です。')],
-                    'root' => [__('必須項目です。')],
-                    'email_not_same' => [__('入力データが一致していません。')],
-                    'tel_not_complate' => [__('入力データが不完全です。')],
+                    'name_1' => [__d('baser_core', '必須項目です。')],
+                    'name_2' => [__d('baser_core', '必須項目です。')],
+                    'email_1' => [__d('baser_core', '形式が無効です。')],
+                    'email_2' => [__d('baser_core', '形式が無効です。')],
+                    'root' => [__d('baser_core', '必須項目です。')],
+                    'email_not_same' => [__d('baser_core', '入力データが一致していません。')],
+                    'tel_not_complate' => [__d('baser_core', '入力データが不完全です。')],
                     'tel_1' => [true],
                     'tel_2' => [true],
                     'tel_3' => [true],
-                    'category' => [__('必須項目です。')],
+                    'category' => [__d('baser_core', '必須項目です。')],
                     'name' => [true, true],
                     'email' => [true, true]
                 ], 'バリデーションチェックが正しく行われていません'

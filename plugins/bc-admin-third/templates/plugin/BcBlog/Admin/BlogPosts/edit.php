@@ -18,7 +18,7 @@
  * @noTodo
  * @unitTest
  */
-$this->BcAdmin->setTitle(sprintf(__d('baser', '%s｜記事編集'), $this->getRequest()->getAttribute('currentContent')->title));
+$this->BcAdmin->setTitle(sprintf(__d('baser_core', '%s｜記事編集'), $this->getRequest()->getAttribute('currentContent')->title));
 $this->BcAdmin->setHelp('blog_posts_form');
 ?>
 
@@ -33,7 +33,7 @@ $this->BcAdmin->setHelp('blog_posts_form');
   </span>
   <span class="bca-post__url">
     <a href="<?php echo $fullUrl ?>"
-       class="bca-text-url" target="_blank" data-toggle="tooltip" data-placement="top" title="<?php echo __d('baser', '公開URLを開きます') ?>">
+       class="bca-text-url" target="_blank" data-toggle="tooltip" data-placement="top" title="<?php echo __d('baser_core', '公開URLを開きます') ?>">
       <i class="bca-icon--globe"></i>
       <?php echo $fullUrl ?>
     </a>
@@ -53,14 +53,14 @@ $this->BcAdmin->setHelp('blog_posts_form');
 <!-- button -->
 <section class="bca-actions">
   <div class="bca-actions__main">
-    <?php echo $this->BcAdminForm->button(__d('baser', 'プレビュー'),
+    <?php echo $this->BcAdminForm->button(__d('baser_core', 'プレビュー'),
       [
         'id' => 'BtnPreview',
         'div' => false,
         'class' => 'button bca-btn bca-actions__item',
         'data-bca-btn-type' => 'preview',
       ]) ?>
-    <?php echo $this->BcAdminForm->button(__d('baser', '保存'),
+    <?php echo $this->BcAdminForm->button(__d('baser_core', '保存'),
       [
         'type' => 'submit',
         'id' => 'BtnSave',
@@ -73,10 +73,10 @@ $this->BcAdmin->setHelp('blog_posts_form');
   </div>
   <div class="bca-actions__sub">
       <?= $this->BcAdminForm->postLink(
-        __d('baser', '削除'),
+        __d('baser_core', '削除'),
         ['action' => 'delete', $blogContent->id, $post->id],
         ['block' => true,
-          'confirm' => __d('baser', "{0} を本当に削除してもいいですか？\n\nブログ記事はゴミ箱に入らず完全に消去されます。", $post->name),
+          'confirm' => __d('baser_core', "{0} を本当に削除してもいいですか？\n\nブログ記事はゴミ箱に入らず完全に消去されます。", $post->name),
           'class' => 'bca-submit-token button bca-btn bca-actions__item',
           'data-bca-btn-type' => 'delete',
           'data-bca-btn-size' => 'sm']

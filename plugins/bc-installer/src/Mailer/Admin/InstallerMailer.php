@@ -37,7 +37,7 @@ class InstallerMailer extends BcAdminMailer
     public function installed(string $email)
     {
         $this->setTo($email)
-            ->setSubject(__d('baser', 'baserCMSインストール完了'))
+            ->setSubject(__d('baser_core', 'baserCMSインストール完了'))
             ->viewBuilder()
             ->setTemplate('installed')
             ->setVars([
