@@ -191,7 +191,10 @@ class BcTestCase extends TestCase
      */
     public function setUp(): void
     {
-        $this->classMethod();
+        // ユニットテストの全体テストでメソッド名を表示する際に利用
+        if(filter_var(env('SHOW_TEST_METHOD', false), FILTER_VALIDATE_BOOLEAN)) {
+            $this->classMethod();
+        }
         if (!$this->autoFixtures) {
             $this->setUpFixtureManager();
         }
@@ -221,7 +224,9 @@ class BcTestCase extends TestCase
     public function classMethod()
     {
         $test = $this->providedTests[0];
-        echo $test->getTarget() . "\n";
+        echo "\n" . $test->getTarget() . ' ';
+        ob_end_flush();
+        ob_start();
     }
 
     /**
@@ -447,7 +452,7 @@ class BcTestCase extends TestCase
      */
     public function setUploadFileToRequest($name, $path, $fileName = '', $error = UPLOAD_ERR_OK)
     {
-        if(!file_exists($path)) return false;
+        if (!file_exists($path)) return false;
         if (!$fileName) $fileName = basename($path);
         $size = filesize($path);
         $type = BcUtil::getContentType($fileName);
