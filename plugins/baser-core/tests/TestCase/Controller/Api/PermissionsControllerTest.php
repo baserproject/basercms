@@ -190,10 +190,10 @@ class PermissionsControllerTest extends BcTestCase
         $this->assertEquals($result->permission->name, $data->name);
         $this->assertEquals('アクセスルール「test delete」を削除しました。', $result->message);
 
-        $this->post("/baser/api/baser-core/permissions/delete/test.json?token=" . $this->accessToken);
-        $this->assertResponseCode(400);
+        $this->post("/baser/api/baser-core/permissions/delete/2222.json?token=" . $this->accessToken);
+        $this->assertResponseCode(404);
         $result = json_decode((string)$this->_response->getBody());
-        $this->assertEquals('データベース処理中にエラーが発生しました。Cannot convert value of type `string` to integer', $result->message);
+        $this->assertEquals('データが見つかりません。', $result->message);
     }
 
     /**
@@ -223,14 +223,11 @@ class PermissionsControllerTest extends BcTestCase
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals('アクセスルール「システム管理」をコピーしました。', $result->message);
         $this->assertEquals('システム管理', $result->permission->name);
-        $this->assertEmpty($result->errors);
 
-        $this->post('/baser/api/baser-core/permissions/copy/test.json?token=' . $this->accessToken);
-        $this->assertResponseCode(400);
+        $this->post('/baser/api/baser-core/permissions/copy/2222.json?token=' . $this->accessToken);
+        $this->assertResponseCode(404);
         $result = json_decode((string)$this->_response->getBody());
-        $this->assertEmpty($result->permission);
-        $this->assertNull($result->errors);
-        $this->assertEquals('処理に失敗しました。', $result->message);
+        $this->assertEquals('データが見つかりません。', $result->message);
     }
 
 

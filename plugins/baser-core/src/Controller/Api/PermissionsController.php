@@ -17,6 +17,8 @@ use BaserCore\Service\PermissionsServiceInterface;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use Cake\Datasource\Exception\RecordNotFoundException;
+use Cake\ORM\Exception\PersistenceFailedException;
 
 /**
  * Class PermissionsController
@@ -32,13 +34,24 @@ class PermissionsController extends BcApiController
      * @unitTest
      * @noTodo
      */
-    public function view(PermissionsServiceInterface $service, $id)
+    public function view(PermissionsServiceInterface $service, int $id)
     {
         $this->request->allowMethod(['get']);
+        $permission = $message = null;
+        try {
+            $permission = $service->get($id);
+        } catch (RecordNotFoundException $e) {
+            $this->setResponse($this->response->withStatus(404));
+            $message = __d('baser', 'データが見つかりません。');
+        } catch (\Throwable $e) {
+            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $this->setResponse($this->response->withStatus(500));
+        }
         $this->set([
-            'permission' => $service->get($id)
+            'permission' => $permission,
+            'message' => $message
         ]);
-        $this->viewBuilder()->setOption('serialize', ['permission']);
+        $this->viewBuilder()->setOption('serialize', ['permission', 'message']);
     }
 
     /**
@@ -49,7 +62,7 @@ class PermissionsController extends BcApiController
      * @noTodo
      * @unitTest
      */
-    public function index(PermissionsServiceInterface $service, $userGroupId)
+    public function index(PermissionsServiceInterface $service, int $userGroupId)
     {
         $this->request->allowMethod(['get']);
 
@@ -69,18 +82,22 @@ class PermissionsController extends BcApiController
     public function add(PermissionsServiceInterface $service)
     {
         $this->request->allowMethod(['post', 'delete']);
+        $permission = $errors = null;
         try {
             $permission = $service->create($this->request->getData());
             $message = __d('baser', '新規アクセスルール「{0}」を追加しました。', $permission->name);
-        } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
-            $permission = $e->getEntity();
+        } catch (PersistenceFailedException $e) {
+            $errors = $e->getEntity()->getErrors();
+            $message = __d('baser', "入力エラーです。内容を修正してください。");
             $this->setResponse($this->response->withStatus(400));
-            $message = __d('baser', '入力エラーです。内容を修正してください。');
+        } catch (\Throwable $e) {
+            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $this->setResponse($this->response->withStatus(500));
         }
         $this->set([
             'message' => $message,
             'permission' => $permission,
-            'errors' => $permission->getErrors(),
+            'errors' => $errors,
         ]);
         $this->viewBuilder()->setOption('serialize', ['message', 'permission', 'errors']);
     }
@@ -94,29 +111,27 @@ class PermissionsController extends BcApiController
      * @noTodo
      * @unitTest
      */
-    public function delete(PermissionsServiceInterface $service, $permissionId)
+    public function delete(PermissionsServiceInterface $service, int $permissionId)
     {
         $this->request->allowMethod(['post', 'put', 'patch']);
-
-        $error = null;
         $permission = null;
         try {
             $permission = $service->get($permissionId);
-            $permissionName = $permission->name;
             $service->delete($permissionId);
-            $message = __d('baser', 'アクセスルール「{0}」を削除しました。', $permissionName);
-        } catch (\Exception $e) {
-            $this->setResponse($this->response->withStatus(400));
-            $error = $e->getMessage();
-            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $error);
+            $message = __d('baser', 'アクセスルール「{0}」を削除しました。', $permission->name);
+        } catch (RecordNotFoundException $e) {
+            $this->setResponse($this->response->withStatus(404));
+            $message = __d('baser', 'データが見つかりません。');
+        } catch (\Throwable $e) {
+            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $this->setResponse($this->response->withStatus(500));
         }
 
         $this->set([
             'message' => $message,
             'permission' => $permission,
-            'error' => $error,
         ]);
-        $this->viewBuilder()->setOption('serialize', ['permission', 'message', 'error']);
+        $this->viewBuilder()->setOption('serialize', ['permission', 'message']);
     }
 
     /**
@@ -128,36 +143,33 @@ class PermissionsController extends BcApiController
      * @noTodo
      * @unitTest
      */
-    public function copy(PermissionsServiceInterface $service, $id)
+    public function copy(PermissionsServiceInterface $service, int $id)
     {
         $this->request->allowMethod(['patch', 'post', 'put']);
-
-        $permission = null;
-        $errors = null;
-
-        if (!$id || !is_numeric($id)) {
-            $this->setResponse($this->response->withStatus(400));
-            $message = __d('baser', '処理に失敗しました。');
-        } else {
-            try {
-                $permission = $service->copy($id);
-                if ($permission) {
-                    $message = __d('baser', 'アクセスルール「{0}」をコピーしました。', $permission->name);
-                } else {
-                    $this->setResponse($this->response->withStatus(400));
-                    $message = __d('baser', 'データベース処理中にエラーが発生しました。');
-                }
-            } catch (\Exception $e) {
-                $errors = $e->getMessage();
+        $permission = $errors = null;
+        try {
+            $permission = $service->copy($id);
+            if ($permission) {
+                $message = __d('baser', 'アクセスルール「{0}」をコピーしました。', $permission->name);
+            } else {
                 $this->setResponse($this->response->withStatus(400));
-                $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $errors);
+                $message = __d('baser', 'データベース処理中にエラーが発生しました。');
             }
+        } catch (PersistenceFailedException $e) {
+            $errors = $e->getEntity()->getErrors();
+            $message = __d('baser', "入力エラーです。内容を修正してください。");
+        } catch (RecordNotFoundException $e) {
+            $this->setResponse($this->response->withStatus(404));
+            $message = __d('baser', 'データが見つかりません。');
+        } catch (\Throwable $e) {
+            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $this->setResponse($this->response->withStatus(500));
         }
 
         $this->set([
             'message' => $message,
             'permission' => $permission,
-            'errors' => $errors,
+            'errors' => $errors
         ]);
 
         $this->viewBuilder()->setOption('serialize', ['message', 'permission', 'errors']);
@@ -172,21 +184,28 @@ class PermissionsController extends BcApiController
      * @noTodo
      * @unitTest
      */
-    public function edit(PermissionsServiceInterface $service, $permissionId)
+    public function edit(PermissionsServiceInterface $service, int $permissionId)
     {
         $this->request->allowMethod(['post', 'put', 'patch']);
+        $permission = $errors = null;
         try {
             $permission = $service->update($service->get($permissionId), $this->request->getData());
             $message = __d('baser', 'アクセスルール「{0}」を更新しました。', $permission->name);
-        } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
+        } catch (PersistenceFailedException $e) {
+            $errors = $e->getEntity()->getErrors();
+            $message = __d('baser', "入力エラーです。内容を修正してください。");
             $this->setResponse($this->response->withStatus(400));
-            $permission = $e->getEntity();
-            $message = __d('baser', '入力エラーです。内容を修正してください。');
+        } catch (RecordNotFoundException $e) {
+            $this->setResponse($this->response->withStatus(404));
+            $message = __d('baser', 'データが見つかりません。');
+        } catch (\Throwable $e) {
+            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $this->setResponse($this->response->withStatus(500));
         }
         $this->set([
             'message' => $message,
             'permission' => $permission,
-            'errors' => $permission->getErrors(),
+            'errors' => $errors,
         ]);
         $this->viewBuilder()->setOption('serialize', ['permission', 'message', 'errors']);
     }
@@ -213,6 +232,7 @@ class PermissionsController extends BcApiController
             $this->viewBuilder()->setOption('serialize', []);
             return;
         }
+        $errors = null;
         $targets = $this->getRequest()->getData('batch_targets');
         try {
             $names = $service->getNamesById($targets);
@@ -223,12 +243,15 @@ class PermissionsController extends BcApiController
                 false
             );
             $message = __d('baser', '一括処理が完了しました。');
-        } catch (BcException $e) {
-            $this->setResponse($this->response->withStatus(400));
-            $message = __d('baser', $e->getMessage());
+        } catch (\Throwable $e) {
+            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $this->setResponse($this->response->withStatus(500));
         }
-        $this->set(['message' => $message]);
-        $this->viewBuilder()->setOption('serialize', ['message']);
+        $this->set([
+            'message' => $message,
+            'errors' => $errors
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['message', 'errors']);
     }
 
     /**
@@ -241,7 +264,7 @@ class PermissionsController extends BcApiController
      * @noTodo
      * @unitTest
      */
-    public function update_sort(PermissionsServiceInterface $service, $userGroupId)
+    public function update_sort(PermissionsServiceInterface $service, int $userGroupId)
     {
         $this->request->allowMethod(['post']);
         $conditions = [
