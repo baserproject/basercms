@@ -17,6 +17,7 @@ use BaserCore\Annotation\UnitTest;
 use BaserCore\Error\BcException;
 use BcBlog\Service\BlogTagsService;
 use BcBlog\Service\BlogTagsServiceInterface;
+use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\ORM\Exception\PersistenceFailedException;
 use Throwable;
 
@@ -36,6 +37,7 @@ class BlogTagsController extends BcApiController
      */
     public function index(BlogTagsServiceInterface $service)
     {
+        $this->request->allowMethod(['get']);
         $this->set([
             'blogTags' => $this->paginate($service->getIndex($this->request->getQueryParams()))
         ]);
@@ -53,10 +55,22 @@ class BlogTagsController extends BcApiController
      */
     public function view(BlogTagsServiceInterface $service, $blogTagId)
     {
+        $this->request->allowMethod(['get']);
+        $blogTag = $message = null;
+        try {
+            $blogTag = $service->get($blogTagId);
+        } catch (RecordNotFoundException $e) {
+            $this->setResponse($this->response->withStatus(404));
+            $message = __d('baser', 'データが見つかりません。');
+        } catch (\Throwable $e) {
+            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $this->setResponse($this->response->withStatus(500));
+        }
         $this->set([
-            'blogTag' => $service->get($blogTagId)
+            'blogTag' => $blogTag,
+            'message' => $message
         ]);
-        $this->viewBuilder()->setOption('serialize', ['blogTag']);
+        $this->viewBuilder()->setOption('serialize', ['blogTag', 'message']);
     }
 
     /**
@@ -71,23 +85,26 @@ class BlogTagsController extends BcApiController
      */
     public function add(BlogTagsServiceInterface $service)
     {
-        if ($this->request->is('post')) {
-            try {
-                /* @var \BcBlog\Service\BlogTagsService $service */
-                $blogTag = $service->create($this->request->getData());
-                $message = __d('baser', 'ブログタグ「{0}」を追加しました。', $blogTag->name);
-            } catch (PersistenceFailedException $e) {
-                $blogTag = $e->getEntity();
-                $this->setResponse($this->response->withStatus(400));
-                $message = __d('baser', '入力エラーです。内容を修正してください。');
-            }
-            $this->set([
-                'message' => $message,
-                'blogTag' => $blogTag,
-                'errors' => $blogTag->getErrors(),
-            ]);
-            $this->viewBuilder()->setOption('serialize', ['message', 'blogTag', 'errors']);
+        $this->request->allowMethod(['post', 'put', 'patch']);
+        $blogTag = $errors = null;
+        try {
+            /* @var \BcBlog\Service\BlogTagsService $service */
+            $blogTag = $service->create($this->request->getData());
+            $message = __d('baser', 'ブログタグ「{0}」を追加しました。', $blogTag->name);
+        } catch (PersistenceFailedException $e) {
+            $this->setResponse($this->response->withStatus(400));
+            $errors = $e->getEntity()->getErrors();
+            $message = __d('baser', '入力エラーです。内容を修正してください。');
+        } catch (\Throwable $e) {
+            $this->setResponse($this->response->withStatus(500));
+            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
         }
+        $this->set([
+            'message' => $message,
+            'blogTag' => $blogTag,
+            'errors' => $errors
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['message', 'blogTag', 'errors']);
     }
 
     /**
@@ -102,19 +119,25 @@ class BlogTagsController extends BcApiController
     public function edit(BlogTagsServiceInterface $service, $blogTagId)
     {
         $this->request->allowMethod(['post', 'put', 'patch']);
-
+        $blogTag = $errors = null;
         try {
             $blogTag = $service->update($service->get($blogTagId), $this->request->getData());
             $message = __d('baser', 'ブログタグ「{0}」を更新しました。', $blogTag->name);
         } catch (PersistenceFailedException $e) {
-            $blogTag = $e->getEntity();
             $this->setResponse($this->response->withStatus(400));
+            $errors = $e->getEntity()->getErrors();
             $message = __d('baser', '入力エラーです。内容を修正してください。');
+        } catch (RecordNotFoundException $e) {
+            $this->setResponse($this->response->withStatus(404));
+            $message = __d('baser', 'データが見つかりません。');
+        } catch (\Throwable $e) {
+            $this->setResponse($this->response->withStatus(500));
+            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
         }
         $this->set([
             'message' => $message,
             'blogTag' => $blogTag,
-            'errors' => $blogTag->getErrors()
+            'errors' => $errors
         ]);
         $this->viewBuilder()->setOption('serialize', ['blogTag', 'message', 'errors']);
     }
@@ -130,25 +153,24 @@ class BlogTagsController extends BcApiController
      */
     public function delete(BlogTagsServiceInterface $service, $blogTagId)
     {
-        $this->request->allowMethod(['post', 'put']);
+        $this->request->allowMethod(['post', 'delete']);
+        $blogTag = null;
         try {
             $blogTag = $service->get($blogTagId);
             $service->delete($blogTagId);
             $message = __d('baser', 'ブログタグ「{0}」を削除しました。', $blogTag->name);
-        } catch (PersistenceFailedException $e) {
-            $this->setResponse($this->response->withStatus(400));
-            $blogTag = $e->getEntity();
-            $message = __d('baser', '入力エラーです。内容を修正してください。');
+        } catch (RecordNotFoundException $e) {
+            $this->setResponse($this->response->withStatus(404));
+            $message = __d('baser', 'データが見つかりません。');
         } catch (Throwable $e) {
             $this->setResponse($this->response->withStatus(500));
             $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
         }
         $this->set([
             'message' => $message,
-            'blogTag' => $blogTag,
-            'errors' => $blogTag->getErrors()
+            'blogTag' => $blogTag
         ]);
-        $this->viewBuilder()->setOption('serialize', ['blogTag', 'message', 'errors']);
+        $this->viewBuilder()->setOption('serialize', ['blogTag', 'message']);
     }
 
     /**
@@ -187,9 +209,9 @@ class BlogTagsController extends BcApiController
                 false
             );
             $message = __d('baser', '一括処理が完了しました。');
-        } catch (BcException $e) {
-            $this->setResponse($this->response->withStatus(400));
-            $message = __d('baser', $e->getMessage());
+        } catch (\Throwable $e) {
+            $this->setResponse($this->response->withStatus(500));
+            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
         }
         $this->set(['message' => $message]);
         $this->viewBuilder()->setOption('serialize', ['message']);

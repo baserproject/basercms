@@ -116,7 +116,7 @@ class BlogTagsControllerTest extends BcTestCase
         // ブログタグのデータを作成する
         BlogTagFactory::make(['id' => 1, 'name' => 'tag1'])->persist();
         // 単一ブログタグー取得APIを叩く
-        $this->post('/baser/api/bc-blog/blog_tags/view/1.json?token=' . $this->accessToken);
+        $this->get('/baser/api/bc-blog/blog_tags/view/1.json?token=' . $this->accessToken);
         // OKレスポンスを確認する
         $this->assertResponseOk();
         // レスポンスのデータを確認する
@@ -175,7 +175,8 @@ class BlogTagsControllerTest extends BcTestCase
         $this->assertResponseCode(400);
         $result = json_decode((string)$this->_response->getBody());
         // 編集が失敗の場合、データが変わらないことを確認する
-        $this->assertEquals('tag2', $result->blogTag->name);
+        $blogTag = BlogTagFactory::get(1);
+        $this->assertEquals('tag2', $blogTag->name);
         // レスポンスのメッセージとエラーメッセージを確認する
         $this->assertEquals('入力エラーです。内容を修正してください。', $result->message);
         $this->assertEquals('ブログタグを入力してください。', $result->errors->name->_empty);
