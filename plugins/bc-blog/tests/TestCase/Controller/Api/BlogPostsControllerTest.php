@@ -140,7 +140,7 @@ class BlogPostsControllerTest extends BcTestCase
         $this->assertResponseCode(404);
         // 戻り値を確認
         $result = json_decode((string)$this->_response->getBody());
-        $this->assertEquals('Record not found in table "blog_posts"', $result->message);
+        $this->assertEquals('データが見つかりません。', $result->message);
 
         //ログインしていない状態では status パラメーターへへのアクセスを禁止するか確認
         $this->get('/baser/api/bc-blog/blog_posts/view/1.json?status=publish');
@@ -254,10 +254,10 @@ class BlogPostsControllerTest extends BcTestCase
         //存在しないBlogPostIDをコビー場合、
         $this->post('/baser/api/bc-blog/blog_posts/copy/100000.json?token=' . $this->accessToken);
         //ステータスを確認
-        $this->assertResponseCode(500);
+        $this->assertResponseCode(404);
         //戻る値を確認
         $result = json_decode((string)$this->_response->getBody());
-        $this->assertEquals('データベース処理中にエラーが発生しました。Record not found in table "blog_posts"', $result->message);
+        $this->assertEquals('データが見つかりません。', $result->message);
     }
 
     /**
@@ -288,10 +288,10 @@ class BlogPostsControllerTest extends BcTestCase
         //APIをコル
         $this->post('/baser/api/bc-blog/blog_posts/publish/2.json?token=' . $this->accessToken);
         //ステータスを確認
-        $this->assertResponseCode(500);
-        // 戻り値を確認
+        $this->assertResponseCode(404);
+        //戻る値を確認
         $result = json_decode((string)$this->_response->getBody());
-        $this->assertEquals('データベース処理中にエラーが発生しました。Record not found in table "blog_posts"', $result->message);
+        $this->assertEquals('データが見つかりません。', $result->message);
     }
 
     /**
@@ -322,10 +322,10 @@ class BlogPostsControllerTest extends BcTestCase
         //APIをコル
         $this->post('/baser/api/bc-blog/blog_posts/unpublish/2.json?token=' . $this->accessToken);
         //ステータスを確認
-        $this->assertResponseCode(500);
-        // 戻り値を確認
+        $this->assertResponseCode(404);
+        //戻る値を確認
         $result = json_decode((string)$this->_response->getBody());
-        $this->assertEquals('データベース処理中にエラーが発生しました。Record not found in table "blog_posts"', $result->message);
+        $this->assertEquals('データが見つかりません。', $result->message);
     }
 
     /**
@@ -441,9 +441,9 @@ class BlogPostsControllerTest extends BcTestCase
         //存在しないBlogPostIDを削除場合、
         $this->post('/baser/api/bc-blog/blog_posts/delete/1.json?token=' . $this->accessToken);
         //ステータスを確認
-        $this->assertResponseCode(500);
+        $this->assertResponseCode(404);
         //戻る値を確認
         $result = json_decode((string)$this->_response->getBody());
-        $this->assertEquals('データベース処理中にエラーが発生しました。Record not found in table "blog_posts"', $result->message);
+        $this->assertEquals('データが見つかりません。', $result->message);
     }
 }
