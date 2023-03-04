@@ -299,8 +299,9 @@ class PluginsController extends BcApiController
      *
      * @param PluginsServiceInterface $service
      */
-    public function get_Available_core_version_info(PluginsServiceInterface $service)
+    public function get_available_core_version_info(PluginsServiceInterface $service)
     {
+        $this->setResponse($this->response->withStatus(200));
         $this->set(['availableCoreVersionInfo' => $service->getAvailableCoreVersionInfo()]);
         $this->viewBuilder()->setOption('serialize', ['availableCoreVersionInfo']);
     }

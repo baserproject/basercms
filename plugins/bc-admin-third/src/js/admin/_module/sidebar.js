@@ -61,7 +61,7 @@ window.addEventListener('DOMContentLoaded', function () {
 			},
             mounted() {
                 if(!this.useUpdateNotice) return;
-                $.get($.bcUtil.apiBaseUrl + 'baser-core/plugins/get_Available_core_version_info.json', function (response){
+                $.get($.bcUtil.apiBaseUrl + 'baser-core/plugins/get_available_core_version_info.json', function (response){
                     if(response.availableCoreVersionInfo !== undefined) {
                         app.availableVersions = response.availableCoreVersionInfo.versions.length;
                     }
