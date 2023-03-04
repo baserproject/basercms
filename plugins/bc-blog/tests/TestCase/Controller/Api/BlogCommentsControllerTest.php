@@ -121,7 +121,7 @@ class BlogCommentsControllerTest extends BcTestCase
         // ブログコメントのデータを作成する
         BlogCommentFactory::make(['id' => 1, 'message' => 'いいね！'])->persist();
         // 単一ブログコメント取得APIを叩く
-        $this->post('/baser/api/bc-blog/blog_comments/view/1.json?token=' . $this->accessToken);
+        $this->get('/baser/api/bc-blog/blog_comments/view/1.json?token=' . $this->accessToken);
         // OKレスポンスを確認する
         $this->assertResponseOk();
         // レスポンスのデータを確認する
