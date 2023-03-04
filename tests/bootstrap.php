@@ -79,7 +79,7 @@ session_id('cli');
 if (!filter_var(env('USE_CORE_API'), FILTER_VALIDATE_BOOLEAN) ||
     !filter_var(env('USE_CORE_ADMIN_API'), FILTER_VALIDATE_BOOLEAN) ||
     !filter_var(env('DEBUG'), FILTER_VALIDATE_BOOLEAN)) {
-    throw new BcException(__d('baser', 'ユニットテストを実行する際は、.env にて DEBUG、USE_CORE_API、USE_CORE_ADMIN_API を true に設定してください。'));
+    exit(__d('baser', 'ユニットテストを実行する際は、bin/cake setup test を実行して .env の設定を変更してください。') . "\n");
 }
 
 // Use migrations to build test database schema.
