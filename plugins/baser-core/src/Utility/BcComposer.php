@@ -123,7 +123,7 @@ class BcComposer {
      */
     public static function installComposer()
     {
-        $command = 'cd ' . self::$composerDir . '; ' . self::$export . ' curl -sS https://getcomposer.org/installer' . ' | ' . self::$php;
+        $command = 'cd ' . self::$composerDir . '; ' . self::$export . ' curl -sS https://getcomposer.org/installer' . ' | ' . self::$php . ' 2>&1';
         exec($command, $out, $code);
         return [
             'out' => $out,
@@ -143,7 +143,7 @@ class BcComposer {
      */
     public static function require(string $package, string $version)
     {
-        return self::execCommand("require baserproject/{$package}:{$version} --with-all-dependencies 2>&1");
+        return self::execCommand("require baserproject/{$package}:{$version} --with-all-dependencies");
     }
 
     /**
@@ -190,7 +190,7 @@ class BcComposer {
      */
     public static function createCommand(string $command)
     {
-        return  self::$cd . ' ' . self::$export . ' ' . self::$php . ' ' . self::$composerDir . 'composer.phar ' . $command;
+        return  self::$cd . ' ' . self::$export . ' ' . self::$php . ' ' . self::$composerDir . 'composer.phar ' . $command . ' 2>&1';
     }
 
 }
