@@ -16,7 +16,7 @@ use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Controller\Api\BcApiController;
 use BcUploader\Service\UploaderFilesServiceInterface;
-use Cake\Http\Exception\NotFoundException;
+use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\ORM\Exception\PersistenceFailedException;
 use Throwable;
 
@@ -56,13 +56,13 @@ class UploaderFilesController extends BcApiController
     {
         $this->request->allowMethod(['post', 'put', 'patch']);
 
-        $entity = null;
+        $entity = $errors = null;
         try {
             $entity = $service->create($this->request->getData());
             $message = __d('baser', 'アップロードファイル「{0}」を追加しました。', $entity->name);
         } catch (PersistenceFailedException $e) {
             $this->setResponse($this->response->withStatus(400));
-            $entity = $e->getEntity();
+            $errors = $e->getEntity()->getErrors();
             $message = __d('baser', "入力エラーです。内容を修正してください。");
         } catch (Throwable $e) {
             $this->setResponse($this->response->withStatus(500));
@@ -72,7 +72,7 @@ class UploaderFilesController extends BcApiController
         $this->set([
             'uploaderFile' => $entity,
             'message' => $message,
-            'errors' => $entity ?? $entity->getErrors()
+            'errors' => $errors
         ]);
         $this->viewBuilder()->setOption('serialize', ['message', 'uploaderFile', 'errors']);
     }
@@ -90,14 +90,17 @@ class UploaderFilesController extends BcApiController
     {
         $this->request->allowMethod(['post', 'put', 'patch']);
 
-        $entity = $service->get($id);
+        $entity = $errors = null;
         try {
-            $entity = $service->update($entity, $this->getRequest()->getData());
+            $entity = $service->update($service->get($id), $this->getRequest()->getData());
             $message = __d('baser', 'アップロードファイル「{0}」を更新しました。', $entity->name);
         } catch (PersistenceFailedException $e) {
             $this->setResponse($this->response->withStatus(400));
-            $entity = $e->getEntity();
+            $errors = $e->getEntity()->getErrors();
             $message = __d('baser', "入力エラーです。内容を修正してください。");
+        } catch (RecordNotFoundException $e) {
+            $this->setResponse($this->response->withStatus(404));
+            $message = __d('baser', 'データが見つかりません。');
         } catch (Throwable $e) {
             $this->setResponse($this->response->withStatus(500));
             $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
@@ -106,7 +109,7 @@ class UploaderFilesController extends BcApiController
         $this->set([
             'uploaderFile' => $entity,
             'message' => $message,
-            'errors' => $entity ?? $entity->getErrors()
+            'errors' => $errors
         ]);
         $this->viewBuilder()->setOption('serialize', ['message', 'uploaderFile', 'errors']);
     }
@@ -123,22 +126,24 @@ class UploaderFilesController extends BcApiController
     public function delete(UploaderFilesServiceInterface $service, int $id)
     {
         $this->request->allowMethod(['post', 'put']);
-        $entity = $errors = null;
+        $entity = null;
         try {
             $entity = $service->get($id);
             $service->delete($id);
             $message = __d('baser', 'アップロードファイル「{0}」を削除しました。', $entity->name);
+        } catch (RecordNotFoundException $e) {
+            $this->setResponse($this->response->withStatus(404));
+            $message = __d('baser', 'データが見つかりません。');
         } catch (Throwable $e) {
             $this->setResponse($this->response->withStatus(500));
             $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
         }
 
         $this->set([
-            'uploadFile' => $entity,
-            'message' => $message,
-            'errors' => $errors,
+            'uploaderFile' => $entity,
+            'message' => $message
         ]);
-        $this->viewBuilder()->setOption('serialize', ['uploadFile', 'message', 'errors']);
+        $this->viewBuilder()->setOption('serialize', ['uploadFile', 'message']);
     }
 
 }
