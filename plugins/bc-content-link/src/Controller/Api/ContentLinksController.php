@@ -17,6 +17,7 @@ use BcContentLink\Service\ContentLinksServiceInterface;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\Http\Exception\ForbiddenException;
 use Cake\ORM\Exception\PersistenceFailedException;
 use Throwable;
@@ -131,6 +132,9 @@ class ContentLinksController extends BcApiController
             $this->setResponse($this->response->withStatus(400));
             $errors = $e->getEntity()->getErrors();
             $message = __d('baser', "入力エラーです。内容を修正してください。");
+        } catch (RecordNotFoundException $e) {
+            $this->setResponse($this->response->withStatus(404));
+            $message = __d('baser', 'データが見つかりません。');
         } catch (Throwable $e) {
             $this->setResponse($this->response->withStatus(500));
             $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
@@ -167,7 +171,7 @@ class ContentLinksController extends BcApiController
     {
         $this->request->allowMethod(['post', 'delete']);
 
-        $contentLink = $errors = null;
+        $contentLink = null;
         try {
             $contentLink = $service->get($id);
             if ($service->delete($id)) {
@@ -176,10 +180,9 @@ class ContentLinksController extends BcApiController
                 $this->setResponse($this->response->withStatus(400));
                 $message = __d('baser', 'データベース処理中にエラーが発生しました。');
             }
-        } catch (PersistenceFailedException $e) {
-            $this->setResponse($this->response->withStatus(400));
-            $errors = $e->getEntity()->getErrors();
-            $message = __d('baser', "入力エラーです。内容を修正してください。");
+        } catch (RecordNotFoundException $e) {
+            $this->setResponse($this->response->withStatus(404));
+            $message = __d('baser', 'データが見つかりません。');
         } catch (Throwable $e) {
             $this->setResponse($this->response->withStatus(500));
             $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
@@ -187,10 +190,9 @@ class ContentLinksController extends BcApiController
 
         $this->set([
             'message' => $message,
-            'contentLink' => $contentLink,
-            'errors' => $errors
+            'contentLink' => $contentLink
         ]);
-        $this->viewBuilder()->setOption('serialize', ['message', 'contentLink', 'errors']);
+        $this->viewBuilder()->setOption('serialize', ['message', 'contentLink']);
     }
 
     /**
@@ -221,13 +223,12 @@ class ContentLinksController extends BcApiController
             'status' => 'publish'
         ]);
 
-        $contentLink = $message = $errors = null;
+        $contentLink = $message = null;
         try {
             $contentLink = $service->get($id, $queryParams);
-        } catch (PersistenceFailedException $e) {
-            $this->setResponse($this->response->withStatus(400));
-            $errors = $e->getEntity()->getErrors();
-            $message = __d('baser', "入力エラーです。内容を修正してください。");
+        } catch (RecordNotFoundException $e) {
+            $this->setResponse($this->response->withStatus(404));
+            $message = __d('baser', 'データが見つかりません。');
         } catch (Throwable $e) {
             $this->setResponse($this->response->withStatus(500));
             $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
@@ -235,9 +236,8 @@ class ContentLinksController extends BcApiController
 
         $this->set([
             'contentLink' => $contentLink,
-            'message' => $message,
-            'errors' => $errors
+            'message' => $message
         ]);
-        $this->viewBuilder()->setOption('serialize', ['contentLink', 'message', 'errors']);
+        $this->viewBuilder()->setOption('serialize', ['contentLink', 'message']);
     }
 }
