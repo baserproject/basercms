@@ -259,9 +259,9 @@ class SearchIndexesControllerTest extends BcTestCase
         $this->assertResponseCode(405);
 
         $this->post('/baser/api/bc-search-index/search_indexes/delete/0.json?token=' . $this->accessToken);
-        $this->assertResponseCode(400);
+        $this->assertResponseCode(404);
         $result = json_decode((string)$this->_response->getBody());
-        $this->assertEquals('データベース処理中にエラーが発生しました。Record not found in table "search_indexes"', $result->message);
+        $this->assertEquals('データが見つかりません。', $result->message);
     }
 
     /**
