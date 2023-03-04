@@ -100,7 +100,7 @@ class MailFieldsController extends MailAdminAppController
             $Folder->create($savePath, 0777);
             if (!is_dir($savePath)) {
                 $this->BcMessage->setError(
-                    'ファイルフィールドを利用している場合、フォームより送信したファイルフィールドのデータは公開された状態となっています。URLを直接閲覧すると参照できてしまいます。参照されないようにするためには、' . WWW_ROOT . 'files/mail/ に書き込み権限を与えてください。'
+                    __d('baser', 'ファイルフィールドを利用している場合、フォームより送信したファイルフィールドのデータは公開された状態となっています。URLを直接閲覧すると参照できてしまいます。参照されないようにするためには、{0} に書き込み権限を与えてください。', WWW_ROOT . 'files/mail/')
                 );
             }
             $File = new File($savePath . DS . '.htaccess');
@@ -109,7 +109,7 @@ class MailFieldsController extends MailAdminAppController
             $File->close();
             if (!file_exists($savePath . DS . '.htaccess')) {
                 $this->BcMessage->setError(
-                    'ファイルフィールドを利用している場合、フォームより送信したファイルフィールドのデータは公開された状態となっています。URLを直接閲覧すると参照できてしまいます。参照されないようにするためには、' . WWW_ROOT . 'files/mail/limited/ に書き込み権限を与えてください。'
+                    __d('baser', 'ファイルフィールドを利用している場合、フォームより送信したファイルフィールドのデータは公開された状態となっています。URLを直接閲覧すると参照できてしまいます。参照されないようにするためには、{0} に書き込み権限を与えてください。', WWW_ROOT . 'files/mail/limited/')
                 );
             }
         }

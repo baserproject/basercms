@@ -170,7 +170,7 @@ return [
                 'LogMaintenance' => ['title' => __d('baser', 'ログメンテナンス'), 'url' => '/baser/admin/baser-core/utilities/log_maintenance/*', 'method' => 'POST', 'auth' => false],
                 'Maintenance' => ['title' => __d('baser', 'データメンテナンス'), 'url' => '/baser/admin/baser-core/utilities/maintenance/*', 'method' => 'POST', 'auth' => false],
                 'Phpinfo' => ['title' => __d('baser', 'PHPインフォ'), 'url' => '/baser/admin/baser-core/utilities/phpinfo', 'method' => 'GET', 'auth' => true],
-                'ResetContentsTree' => ['title' => __d('ツリー構造リセット', 'トップ'), 'url' => '/baser/admin/baser-core/utilities/reset_contents_tree', 'method' => 'POST', 'auth' => false],
+                'ResetContentsTree' => ['title' => __d('baser', 'ツリー構造リセット', 'トップ'), 'url' => '/baser/admin/baser-core/utilities/reset_contents_tree', 'method' => 'POST', 'auth' => false],
                 'ResetData' => ['title' => __d('baser', 'コア初期データ読み込み'), 'url' => '/baser/admin/baser-core/utilities/reset_data', 'method' => 'POST', 'auth' => false],
                 'VerityContents_tree' => ['title' => __d('baser', 'ツリー構造チェック'), 'url' => '/baser/admin/baser-core/utilities/verity_contents_tree', 'method' => 'POST', 'auth' => false],
             ]
@@ -180,7 +180,7 @@ return [
          * Web API
          */
         'ContentFoldersApi' => [
-            'title' => 'コンテンツフォルダーAPI',
+            'title' => __d('baser', 'コンテンツフォルダーAPI'),
             'plugin' => 'BaserCore',
             'type' => 'Api',
             'items' => [
@@ -193,7 +193,7 @@ return [
         ],
 
         'ContentsApi' => [
-            'title' => 'コンテンツAPI',
+            'title' => __d('baser', 'コンテンツAPI'),
             'plugin' => 'BaserCore',
             'type' => 'Api',
             'items' => [
@@ -218,7 +218,7 @@ return [
         ],
 
         'DblogsApi' => [
-            'title' => '操作ログAPI',
+            'title' => __d('baser', '操作ログAPI'),
             'plugin' => 'BaserCore',
             'type' => 'Api',
             'items' => [
@@ -229,7 +229,7 @@ return [
         ],
 
         'PagesApi' => [
-            'title' => '固定ページAPI',
+            'title' => __d('baser', '固定ページAPI'),
             'plugin' => 'BaserCore',
             'type' => 'Api',
             'items' => [
@@ -243,7 +243,7 @@ return [
         ],
 
         'PermissionsApi' => [
-            'title' => 'アクセスルールAPI',
+            'title' => __d('baser', 'アクセスルールAPI'),
             'plugin' => 'BaserCore',
             'type' => 'Api',
             'items' => [
@@ -259,7 +259,7 @@ return [
         ],
 
         'PluginsApi' => [
-            'title' => 'プラグインAPI',
+            'title' => __d('baser', 'プラグインAPI'),
             'plugin' => 'BaserCore',
             'type' => 'Api',
             'items' => [
@@ -278,7 +278,7 @@ return [
         ],
 
         'SiteConfigsApi' => [
-            'title' => 'システム基本設定API',
+            'title' => __d('baser', 'システム基本設定API'),
             'plugin' => 'BaserCore',
             'type' => 'Api',
             'items' => [
@@ -289,7 +289,7 @@ return [
         ],
 
         'SitesApi' => [
-            'title' => 'サイトAPI',
+            'title' => __d('baser', 'サイトAPI'),
             'plugin' => 'BaserCore',
             'type' => 'Api',
             'items' => [
@@ -303,7 +303,7 @@ return [
         ],
 
         'ThemesApi' => [
-            'title' => 'テーマAPI',
+            'title' => __d('baser', 'テーマAPI'),
             'plugin' => 'BaserCore',
             'type' => 'Api',
             'items' => [
@@ -319,7 +319,7 @@ return [
         ],
 
         'UserGroupsApi' => [
-            'title' => 'ユーザーグループAPI',
+            'title' => __d('baser', 'ユーザーグループAPI'),
             'plugin' => 'BaserCore',
             'type' => 'Api',
             'items' => [
@@ -334,7 +334,7 @@ return [
         ],
 
         'UsersApi' => [
-            'title' => 'ユーザーAPI',
+            'title' => __d('baser', 'ユーザーAPI'),
             'plugin' => 'BaserCore',
             'type' => 'Api',
             'items' => [
@@ -347,7 +347,7 @@ return [
         ],
 
         'UtilitiesApi' => [
-            'title' => 'ユーティリティAPI',
+            'title' => __d('baser', 'ユーティリティAPI'),
             'plugin' => 'BaserCore',
             'type' => 'Api',
             'items' => [

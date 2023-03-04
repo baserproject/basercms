@@ -48,8 +48,8 @@ return [
              * `loop`: ループ機能に対応しているかどうか（デフォルト false）
              */
             'BcCcText' => [
-                'category' => '基本',
-                'label' => 'テキスト',
+                'category' => __d('baser', '基本'),
+                'label' => __d('baser', 'テキスト'),
                 'columnType' => 'string',
                 'controlType' => 'text',
                 'preview' => true,

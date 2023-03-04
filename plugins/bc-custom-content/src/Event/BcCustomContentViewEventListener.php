@@ -81,7 +81,7 @@ class BcCustomContentViewEventListener extends \BaserCore\Event\BcViewEventListe
                         'currentRegex' => '/\/bc-custom-content\/custom_entries\/[^\/]+?\/' . $tableId . '($|\/)/s'
                     ],
                     'CustomContentEdit' . $tableId => [
-                        'title' => 'コンテンツ設定',
+                        'title' => __d('baser', 'コンテンツ設定'),
                         'url' => [
                             'prefix' => 'Admin',
                             'plugin' => 'BcCustomContent',

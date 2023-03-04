@@ -188,7 +188,7 @@ $this->BcBaser->js('BcCustomContent.admin/custom_fields/form.bundle', false, [
         <?php echo $this->BcAdminForm->control('regex_error_message', [
           'type' => 'text',
           'size' => 60,
-          'placeholder' => '正規表現チェックでのエラーメッセージ',
+          'placeholder' => __d('baser', '正規表現チェックでのエラーメッセージ'),
           'v-model' => 'entity.regex_error_message'
         ]) ?>&nbsp;
         <i class="bca-icon--question-circle bca-help"></i>

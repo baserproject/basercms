@@ -42,9 +42,9 @@ class MailFieldsController extends BcApiController
     {
         $this->request->allowMethod(['post', 'put']);
         $allowMethod = [
-            'delete' => '削除',
-            'publish' => '有効化',
-            'unpublish' => '無効化'
+            'delete' => __d('baser', '削除'),
+            'publish' => __d('baser', '有効化'),
+            'unpublish' => __d('baser', '無効化')
         ];
         $method = $this->getRequest()->getData('batch');
         if (!isset($allowMethod[$method])) {

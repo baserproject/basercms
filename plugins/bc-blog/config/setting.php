@@ -22,7 +22,7 @@ return [
             'Plugins' => [
                 'menus' => [
                     'BlogTags' => [
-                        'title' => 'ブログタグ設定',
+                        'title' => __d('baser', 'ブログタグ設定'),
                         'url' => [
                             'Admin' => true,
                             'plugin' => 'BcBlog',

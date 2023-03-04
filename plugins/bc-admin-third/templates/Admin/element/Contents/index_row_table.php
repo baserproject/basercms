@@ -124,7 +124,7 @@ if ($content->self_status) {
           'target' => '_blank'
         ]) ?>
     <?php else: ?>
-      <a title="確認"
+      <a title="<?php echo __d('baser', '確認') ?>"
          class="btn bca-btn-icon"
          data-bca-btn-type="preview"
          data-bca-btn-size="lg"
@@ -142,7 +142,7 @@ if ($content->self_status) {
           'data-bca-btn-size' => 'lg'
         ]) ?>
     <?php else: ?>
-      <a title="管理"
+      <a title="<?php echo __d('baser', '管理') ?>"
          class="btn bca-btn-icon"
          data-bca-btn-type="th-list"
          data-bca-btn-size="lg"
@@ -167,7 +167,7 @@ if ($content->self_status) {
           'data-bca-btn-size' => 'lg'
         ]) ?>
     <?php else: ?>
-      <a title="非公開"
+      <a title="<?php echo __d('baser', '非公開') ?>"
          class="btn bca-btn-icon"
          data-bca-btn-type="unpublish"
          data-bca-btn-size="lg"
@@ -185,7 +185,7 @@ if ($content->self_status) {
           'data-bca-btn-size' => 'lg'
         ]) ?>
     <?php else: ?>
-      <a title="コピー"
+      <a title="<?php echo __d('baser', 'コピー') ?>"
          class="bca-btn-icon"
          data-bca-btn-type="copy"
          data-bca-btn-size="lg"

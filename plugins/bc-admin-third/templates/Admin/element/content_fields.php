@@ -154,9 +154,9 @@ $editable = $this->BcContents->isEditable($content);
       </th>
       <td class="col-input bca-form-table__input">
         <?php if ($editable): ?>
-          <?php echo $this->BcAdminForm->control("content.self_status", ['type' => 'radio', 'options' => $this->BcText->booleanDoList('公開')]) ?>
+          <?php echo $this->BcAdminForm->control("content.self_status", ['type' => 'radio', 'options' => $this->BcText->booleanDoList(__d('baser', '公開'))]) ?>
         <?php else: ?>
-          <?php echo $this->BcText->arrayValue($this->BcAdminForm->getSourceValue("content.self_status"), $this->BcText->booleanDoList('公開')) ?>
+          <?php echo $this->BcText->arrayValue($this->BcAdminForm->getSourceValue("content.self_status"), $this->BcText->booleanDoList(__d('baser', '公開'))) ?>
           <?php echo $this->BcAdminForm->hidden("content.self_status") ?>
         <?php endif ?>
         <br>
@@ -175,15 +175,15 @@ $editable = $this->BcContents->isEditable($content);
             'type' => 'dateTimePicker',
             'size' => 12,
             'maxlength' => 10,
-            'dateLabel' => ['text' => '開始日付'],
-            'timeLabel' => ['text' => '開始時間']
+            'dateLabel' => ['text' => __d('baser', '開始日付')],
+            'timeLabel' => ['text' => __d('baser', '開始時間')]
           ]) ?>
           &nbsp;〜&nbsp;
           <?php echo $this->BcAdminForm->control("content.self_publish_end", [
             'type' => 'dateTimePicker',
             'size' => 12, 'maxlength' => 10,
-            'dateLabel' => ['text' => '終了日付'],
-            'timeLabel' => ['text' => '終了時間']
+            'dateLabel' => ['text' => __d('baser', '終了日付')],
+            'timeLabel' => ['text' => __d('baser', '終了時間')]
           ]) ?>
         <?php else: ?>
           <?php if ($this->BcAdminForm->getSourceValue("content.self_publish_begin") || $this->BcAdminForm->getSourceValue("content.self_publish_end")): ?>

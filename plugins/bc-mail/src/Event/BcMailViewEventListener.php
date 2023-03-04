@@ -45,7 +45,7 @@ class BcMailViewEventListener extends \BaserCore\Event\BcViewEventListener
 
     /**
      * 管理画面メニュー用のデータをセットする
-     * 
+     *
      * @checked
      * @noTodo
      * @unitTest
@@ -65,17 +65,17 @@ class BcMailViewEventListener extends \BaserCore\Event\BcViewEventListener
                 $route = ['Admin' => true, 'plugin' => 'BcMail', 'action' => 'index', $entity->id];
                 return [
                     'MailMessages' . $entity->id => [
-                        'title' => '受信メール',
+                        'title' => __d('baser', '受信メール'),
                         'url' => array_merge($route, ['controller' => 'MailMessages']),
                         'currentRegex' => '/\/bc-mail\/mail_messages\/[^\/]+?\/' . $entity->id . '($|\/)/s'
                     ],
                     'MailFields' . $entity->id => [
-                        'title' => 'フィールド',
+                        'title' => __d('baser', 'フィールド'),
                         'url' => array_merge($route, ['controller' => 'MailFields']),
                         'currentRegex' => '/\/bc-mail\/mail_fields\/[^\/]+?\/' . $entity->id . '($|\/)/s'
                     ],
                     'MailContentsEdit' . $entity->id => [
-                        'title' => '設定',
+                        'title' => __d('baser', '設定'),
                         'url' => array_merge($route, ['controller' => 'MailContents', 'action' => 'edit'])
                     ]
                 ];

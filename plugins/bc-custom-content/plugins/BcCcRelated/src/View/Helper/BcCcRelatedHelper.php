@@ -81,7 +81,7 @@ class BcCcRelatedHelper extends Helper
         $options = array_merge([
             'type' => 'select',
             'options' => $entriesService->getList($conditions),
-            'empty' => '選択してください',
+            'empty' => __d('baser', '選択してください'),
         ], $options);
 
         // プレビューの場合はテーブルIDが存在しない

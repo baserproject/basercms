@@ -43,7 +43,7 @@ class ThemeFoldersController extends BcApiController
     {
         $this->request->allowMethod(['post', 'put']);
         $allowMethod = [
-            'delete' => '削除',
+            'delete' => __d('baser', '削除'),
         ];
         $method = $this->getRequest()->getData('batch');
         if (!isset($allowMethod[$method])) {

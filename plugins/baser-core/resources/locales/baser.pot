@@ -1,0 +1,1873 @@
+# LANGUAGE translation of CakePHP Application
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2023-03-04 21:03+0900\n"
+"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: ./plugins/baser-core/src/BcPlugin.php:172
+msgid "アップデートプログラム {0} を実行します。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Command/ComposerCommand.php:35
+msgid "アップデート対象のバージョン番号"
+msgstr ""
+
+#: ./plugins/baser-core/src/Command/ComposerCommand.php:40
+#: ./plugins/baser-core/src/Command/UpdateCommand.php:44
+msgid "データベース接続名"
+msgstr ""
+
+#: ./plugins/baser-core/src/Command/ComposerCommand.php:58
+msgid "Composer によるアップデートが失敗しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Command/ComposerCommand.php:66
+msgid "Composer によるアップデートが完了しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Command/ComposerCommand.php:68
+msgid "Composer によるアップデートが失敗しました。update ログを確認してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Command/CreateReleaseCommand.php:46
+msgid "リリースパッケージを作成します。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Command/CreateReleaseCommand.php:49
+msgid "- {0} にパッケージをクローンします。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Command/CreateReleaseCommand.php:52
+msgid "- composer.json をセットアップします。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Command/CreateReleaseCommand.php:55
+msgid "- プラグインを初期化します。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Command/CreateReleaseCommand.php:58
+msgid "- 不要ファイルを削除します。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Command/CreateReleaseCommand.php:61
+msgid "- Zip ファイルを作成します。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Command/CreateReleaseCommand.php:64
+msgid "- クリーニング処理を実行します。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Command/CreateReleaseCommand.php:69
+msgid "リリースパッケージの作成が完了しました。/tmp/basercms.zip を確認してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Command/SetupInstallCommand.php:45
+msgid "インストールの準備ができました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Command/SetupTestCommand.php:44
+msgid "ユニットテストの準備ができました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Command/UpdateCommand.php:62
+msgid "Migration と アップデーターによるアップデートが完了しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Command/UpdateCommand.php:64
+msgid "Migration と アップデーターによるアップデートが失敗しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/ContentFoldersController.php:55
+#: ./plugins/baser-core/src/Controller/Admin/SitesController.php:217
+#: ./plugins/baser-core/src/Controller/Admin/UsersController.php:236
+#: ./plugins/baser-core/src/Controller/Admin/UsersController.php:278
+msgid "無効なIDです。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/ContentFoldersController.php:61
+#: ./plugins/baser-core/src/Controller/Admin/ContentsController.php:160
+#: ./plugins/baser-core/src/Service/PagesService.php:219
+#: ./plugins/baser-core/src/Service/PluginsService.php:628
+#: ./plugins/baser-core/src/Service/ThemesService.php:137
+#: ./plugins/baser-core/src/Service/UtilitiesService.php:388
+msgid "送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/ContentFoldersController.php:66
+msgid "フォルダ「%s」を更新しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/ContentsController.php:154
+#: ./plugins/baser-core/src/Controller/Admin/ContentsController.php:177
+#: ./plugins/baser-core/src/Controller/Admin/ContentsController.php:197
+#: ./plugins/baser-core/src/Controller/Admin/PluginsController.php:157
+#: ./plugins/baser-core/src/Controller/Admin/PluginsController.php:184
+#: ./plugins/baser-core/src/Controller/Admin/PluginsController.php:254
+#: ./plugins/baser-core/src/Controller/Api/ContentsController.php:321
+#: ./plugins/baser-core/src/Controller/Api/ContentsController.php:354
+msgid "無効な処理です。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/ContentsController.php:167
+msgid "「%s」のエイリアス「%s」を編集しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/ContentsController.php:172
+msgid "保存中にエラーが発生しました。入力内容を確認してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/ContentsController.php:211
+msgid "ゴミ箱「%s」を戻しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/ContentsController.php:214
+msgid "ゴミ箱から戻す事に失敗しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/ContentsController.php:244
+msgid "「%s」をゴミ箱に移動しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/ContentsController.php:246
+msgid "%s のエイリアス「%s」を削除しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/ContentsController.php:251
+msgid "削除中にエラーが発生しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/ContentsController.php:254
+msgid "不正なリクエストです。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/DashboardController.php:38
+msgid "ダッシュボード"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/DblogsController.php:68
+#: ./plugins/baser-core/src/Controller/Api/DblogsController.php:89
+msgid "最近の動きのログを削除しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/DblogsController.php:70
+#: ./plugins/baser-core/src/Controller/Api/DblogsController.php:92
+msgid "最近の動きのログ削除に失敗しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/PagesController.php:81
+msgid "固定ページ「%s」を更新しました。\n%s"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/PagesController.php:86
+#: ./plugins/baser-core/src/Controller/Admin/PagesController.php:90
+#: ./plugins/baser-core/src/Controller/Admin/PasswordRequestsController.php:64
+#: ./plugins/baser-core/src/Controller/Admin/PermissionGroupsController.php:61
+#: ./plugins/baser-core/src/Controller/Admin/PermissionsController.php:123
+#: ./plugins/baser-core/src/Controller/Admin/PermissionsController.php:162
+#: ./plugins/baser-core/src/Controller/Admin/PermissionsController.php:212
+#: ./plugins/baser-core/src/Controller/Admin/SiteConfigsController.php:54
+#: ./plugins/baser-core/src/Controller/Admin/SitesController.php:102
+#: ./plugins/baser-core/src/Controller/Admin/SitesController.php:153
+#: ./plugins/baser-core/src/Controller/Admin/UserGroupsController.php:87
+#: ./plugins/baser-core/src/Controller/Admin/UserGroupsController.php:116
+#: ./plugins/baser-core/src/Controller/Admin/UsersController.php:214
+#: ./plugins/baser-core/src/Controller/Admin/UsersController.php:254
+#: ./plugins/baser-core/src/Controller/Api/ContentFoldersController.php:91
+#: ./plugins/baser-core/src/Controller/Api/ContentFoldersController.php:163
+#: ./plugins/baser-core/src/Controller/Api/ContentsController.php:228
+#: ./plugins/baser-core/src/Controller/Api/ContentsController.php:313
+#: ./plugins/baser-core/src/Controller/Api/ContentsController.php:417
+#: ./plugins/baser-core/src/Controller/Api/ContentsController.php:450
+#: ./plugins/baser-core/src/Controller/Api/ContentsController.php:525
+#: ./plugins/baser-core/src/Controller/Api/ContentsController.php:580
+#: ./plugins/baser-core/src/Controller/Api/DblogsController.php:62
+#: ./plugins/baser-core/src/Controller/Api/PagesController.php:131
+#: ./plugins/baser-core/src/Controller/Api/PagesController.php:199
+#: ./plugins/baser-core/src/Controller/Api/PagesController.php:231
+#: ./plugins/baser-core/src/Controller/Api/PermissionsController.php:91
+#: ./plugins/baser-core/src/Controller/Api/PermissionsController.php:160
+#: ./plugins/baser-core/src/Controller/Api/PermissionsController.php:196
+#: ./plugins/baser-core/src/Controller/Api/PluginsController.php:261
+#: ./plugins/baser-core/src/Controller/Api/SiteConfigsController.php:56
+#: ./plugins/baser-core/src/Controller/Api/SiteConfigsController.php:60
+#: ./plugins/baser-core/src/Controller/Api/SitesController.php:87
+#: ./plugins/baser-core/src/Controller/Api/SitesController.php:118
+#: ./plugins/baser-core/src/Controller/Api/UserGroupsController.php:87
+#: ./plugins/baser-core/src/Controller/Api/UserGroupsController.php:119
+#: ./plugins/baser-core/src/Controller/Api/UsersController.php:148
+#: ./plugins/baser-core/src/Controller/Api/UsersController.php:180
+msgid "入力エラーです。内容を修正してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/PasswordRequestsController.php:67
+msgid "パスワードのリセットを受付ました。該当メールアドレスが存在した場合、変更URLを送信いたしました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/PermissionGroupsController.php:57
+msgid "ルールグループ「{0}」を更新しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/PermissionGroupsController.php:63
+#: ./plugins/baser-core/src/Controller/Admin/SitesController.php:231
+#: ./plugins/baser-core/src/Controller/Admin/UserGroupsController.php:141
+#: ./plugins/baser-core/src/Controller/Admin/UserGroupsController.php:167
+#: ./plugins/baser-core/src/Controller/Admin/UsersController.php:256
+#: ./plugins/baser-core/src/Controller/Admin/UsersController.php:288
+#: ./plugins/baser-core/src/Controller/Api/ContentFoldersController.php:63
+#: ./plugins/baser-core/src/Controller/Api/ContentFoldersController.php:94
+#: ./plugins/baser-core/src/Controller/Api/ContentFoldersController.php:133
+#: ./plugins/baser-core/src/Controller/Api/ContentFoldersController.php:166
+#: ./plugins/baser-core/src/Controller/Api/ContentsController.php:45
+#: ./plugins/baser-core/src/Controller/Api/ContentsController.php:73
+#: ./plugins/baser-core/src/Controller/Api/ContentsController.php:157
+#: ./plugins/baser-core/src/Controller/Api/ContentsController.php:202
+#: ./plugins/baser-core/src/Controller/Api/ContentsController.php:231
+#: ./plugins/baser-core/src/Controller/Api/ContentsController.php:267
+#: ./plugins/baser-core/src/Controller/Api/ContentsController.php:316
+#: ./plugins/baser-core/src/Controller/Api/ContentsController.php:420
+#: ./plugins/baser-core/src/Controller/Api/ContentsController.php:453
+#: ./plugins/baser-core/src/Controller/Api/ContentsController.php:528
+#: ./plugins/baser-core/src/Controller/Api/ContentsController.php:583
+#: ./plugins/baser-core/src/Controller/Api/DblogsController.php:65
+#: ./plugins/baser-core/src/Controller/Api/PagesController.php:102
+#: ./plugins/baser-core/src/Controller/Api/PagesController.php:134
+#: ./plugins/baser-core/src/Controller/Api/PagesController.php:171
+#: ./plugins/baser-core/src/Controller/Api/PagesController.php:202
+#: ./plugins/baser-core/src/Controller/Api/PagesController.php:234
+#: ./plugins/baser-core/src/Controller/Api/PermissionsController.php:47
+#: ./plugins/baser-core/src/Controller/Api/PermissionsController.php:94
+#: ./plugins/baser-core/src/Controller/Api/PermissionsController.php:126
+#: ./plugins/baser-core/src/Controller/Api/PermissionsController.php:156
+#: ./plugins/baser-core/src/Controller/Api/PermissionsController.php:165
+#: ./plugins/baser-core/src/Controller/Api/PermissionsController.php:202
+#: ./plugins/baser-core/src/Controller/Api/PermissionsController.php:247
+#: ./plugins/baser-core/src/Controller/Api/PluginsController.php:50
+#: ./plugins/baser-core/src/Controller/Api/PluginsController.php:103
+#: ./plugins/baser-core/src/Controller/Api/PluginsController.php:138
+#: ./plugins/baser-core/src/Controller/Api/PluginsController.php:172
+#: ./plugins/baser-core/src/Controller/Api/PluginsController.php:203
+#: ./plugins/baser-core/src/Controller/Api/PluginsController.php:234
+#: ./plugins/baser-core/src/Controller/Api/PluginsController.php:264
+#: ./plugins/baser-core/src/Controller/Api/PluginsController.php:296
+#: ./plugins/baser-core/src/Controller/Api/PluginsController.php:353
+#: ./plugins/baser-core/src/Controller/Api/SiteConfigsController.php:63
+#: ./plugins/baser-core/src/Controller/Api/SitesController.php:46
+#: ./plugins/baser-core/src/Controller/Api/SitesController.php:90
+#: ./plugins/baser-core/src/Controller/Api/SitesController.php:124
+#: ./plugins/baser-core/src/Controller/Api/SitesController.php:155
+#: ./plugins/baser-core/src/Controller/Api/ThemesController.php:48
+#: ./plugins/baser-core/src/Controller/Api/ThemesController.php:88
+#: ./plugins/baser-core/src/Controller/Api/ThemesController.php:117
+#: ./plugins/baser-core/src/Controller/Api/ThemesController.php:153
+#: ./plugins/baser-core/src/Controller/Api/ThemesController.php:191
+#: ./plugins/baser-core/src/Controller/Api/UserGroupsController.php:61
+#: ./plugins/baser-core/src/Controller/Api/UserGroupsController.php:90
+#: ./plugins/baser-core/src/Controller/Api/UserGroupsController.php:125
+#: ./plugins/baser-core/src/Controller/Api/UserGroupsController.php:157
+#: ./plugins/baser-core/src/Controller/Api/UserGroupsController.php:204
+#: ./plugins/baser-core/src/Controller/Api/UserGroupsController.php:210
+#: ./plugins/baser-core/src/Controller/Api/UsersController.php:122
+#: ./plugins/baser-core/src/Controller/Api/UsersController.php:151
+#: ./plugins/baser-core/src/Controller/Api/UsersController.php:183
+#: ./plugins/baser-core/src/Controller/Api/UsersController.php:212
+#: ./plugins/baser-core/src/Controller/Api/UtilitiesController.php:63
+#: ./plugins/baser-core/src/Controller/Api/UtilitiesController.php:91
+#: ./plugins/baser-core/src/Controller/Api/UtilitiesController.php:123
+#: ./plugins/baser-core/src/Controller/Api/UtilitiesController.php:148
+#: ./plugins/baser-core/src/Controller/Api/UtilitiesController.php:181
+#: ./plugins/baser-core/src/Controller/Api/UtilitiesController.php:205
+#: ./plugins/baser-core/src/Service/ContentsService.php:1449
+#: ./plugins/baser-core/src/Service/PermissionsService.php:537
+#: ./plugins/baser-core/src/Service/PluginsService.php:582
+msgid "データベース処理中にエラーが発生しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/PermissionGroupsController.php:80
+msgid "アクセスルールの再構築に成功しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/PermissionGroupsController.php:82
+msgid "アクセスルールの再構築に失敗しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/PermissionsController.php:115
+msgid "新規アクセスルール「%s」を追加しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/PermissionsController.php:155
+msgid "アクセスルール「%s」を更新しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/PermissionsController.php:188
+msgid "アクセスルール「%s」を削除しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/PermissionsController.php:209
+msgid "アクセスルール「%s」を複製しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/PermissionsController.php:233
+msgid "アクセスルール「%s」を無効にしました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/PermissionsController.php:256
+msgid "アクセスルール「%s」を有効にしました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/PluginsController.php:93
+msgid "新規プラグイン「%s」を baserCMS に登録しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/PluginsController.php:96
+#: ./plugins/baser-core/src/Controller/Api/PluginsController.php:97
+msgid "プラグインに問題がある為インストールを完了できません。プラグインの開発者に確認してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/PluginsController.php:128
+msgid "全てのアップデート処理が完了しました。 {0} にログを出力しています。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/PluginsController.php:132
+msgid "アップデート処理が完了しました。画面下部のアップデートログを確認してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/PluginsController.php:161
+#: ./plugins/baser-core/src/Controller/Api/PluginsController.php:129
+msgid "プラグイン「%s」を無効にしました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/PluginsController.php:163
+#: ./plugins/baser-core/src/Controller/Api/PluginsController.php:132
+msgid "プラグインの無効化に失敗しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/PluginsController.php:189
+#: ./plugins/baser-core/src/Controller/Api/PluginsController.php:229
+msgid "プラグイン「%s」を削除しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/PluginsController.php:191
+#: ./plugins/baser-core/src/Service/PluginsService.php:449
+msgid "プラグインの削除に失敗しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/PluginsController.php:213
+#: ./plugins/baser-core/src/Controller/Api/PluginsController.php:258
+msgid "新規プラグイン「%s」を追加しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/PluginsController.php:216
+#: ./plugins/baser-core/src/Controller/Admin/ThemesController.php:59
+#: ./plugins/baser-core/src/Model/Table/ContentsTable.php:175
+msgid "ファイルのアップロードに失敗しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/PluginsController.php:262
+#: ./plugins/baser-core/src/Controller/Api/PluginsController.php:198
+msgid "%s プラグインのデータを初期化しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/PluginsController.php:265
+msgid "リセット処理中にエラーが発生しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/SiteConfigsController.php:51
+msgid "システム設定を保存しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/SitesController.php:98
+msgid "サイト「%s」を追加しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/SitesController.php:150
+msgid "サイト「%s」を更新しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/SitesController.php:175
+msgid "サイト「%s」を公開しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/SitesController.php:198
+msgid "サイト「%s」を非公開にしました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/SitesController.php:228
+#: ./plugins/baser-core/src/Controller/Api/SitesController.php:150
+msgid "サイト: {0} を削除しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/ThemesController.php:56
+msgid "テーマファイル「{0}」を追加しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/ThemesController.php:88
+#: ./plugins/baser-core/src/Controller/Api/ThemesController.php:180
+msgid "不正な操作です。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/ThemesController.php:97
+msgid "初期データの読み込みに失敗しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/ThemesController.php:101
+#: ./plugins/baser-core/src/Controller/Api/ThemesController.php:186
+msgid "初期データの読み込みが完了しましたが、いくつかの処理に失敗しています。ログを確認してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/ThemesController.php:104
+#: ./plugins/baser-core/src/Controller/Api/ThemesController.php:188
+msgid "初期データの読み込みが完了しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/ThemesController.php:123
+#: ./plugins/baser-core/src/Controller/Api/ThemesController.php:146
+msgid "テーマ「{0}」をコピーしました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/ThemesController.php:125
+#: ./plugins/baser-core/src/Controller/Admin/ThemesController.php:147
+msgid "テーマフォルダのアクセス権限を見直してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/ThemesController.php:145
+#: ./plugins/baser-core/src/Controller/Api/ThemesController.php:115
+msgid "テーマ「{0}」を削除しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/ThemesController.php:168
+#: ./plugins/baser-core/src/Controller/Api/ThemesController.php:221
+msgid "テーマ「{0}」を適用しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/ThemesController.php:172
+#: ./plugins/baser-core/src/Controller/Api/ThemesController.php:229
+msgid "テーマの適用に失敗しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/UpdatersController.php:35
+msgid "アップデートスクリプトの実行します。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/UpdatersController.php:39
+msgid "アップデートスクリプトの実行が完了しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/UpdatersController.php:41
+msgid "アップデートスクリプトの実行が完了しました。<a href=\"#UpdateLog\">アップデートログ</a>を確認してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/UpdatersController.php:44
+msgid "アップデートスクリプトが見つかりません。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/UpdatersController.php:55
+msgid "アップデートスクリプト実行"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/UserGroupsController.php:83
+msgid "新規ユーザーグループ「{0}」を追加しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/UserGroupsController.php:112
+#: ./plugins/baser-core/src/Controller/Api/UserGroupsController.php:116
+msgid "ユーザーグループ「{0}」を更新しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/UserGroupsController.php:139
+msgid "ユーザーグループ「{0}」を削除しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/UserGroupsController.php:165
+#: ./plugins/baser-core/src/Controller/Api/UserGroupsController.php:200
+msgid "ユーザーグループ「{0}」をコピーしました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/UsersController.php:76
+#: ./plugins/baser-core/src/Controller/Api/UsersController.php:65
+msgid "ようこそ、{0}さん。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/UsersController.php:79
+msgid "Eメール、または、パスワードが間違っています。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/UsersController.php:110
+msgid "既に代理ログイン中のため失敗しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/UsersController.php:130
+msgid "元のユーザーに戻りました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/UsersController.php:152
+msgid "ログアウトしました"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/UsersController.php:210
+#: ./plugins/baser-core/src/Controller/Api/UsersController.php:145
+msgid "ユーザー「{0}」を追加しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/UsersController.php:250
+#: ./plugins/baser-core/src/Controller/Api/UsersController.php:177
+msgid "ユーザー「{0}」を更新しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/UsersController.php:285
+#: ./plugins/baser-core/src/Controller/Api/UserGroupsController.php:152
+#: ./plugins/baser-core/src/Controller/Api/UsersController.php:208
+msgid "ユーザー: {0} を削除しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/UtilitiesController.php:51
+#: ./plugins/baser-core/src/Controller/Api/UtilitiesController.php:40
+msgid "サーバーキャッシュを削除しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/UtilitiesController.php:116
+#: ./plugins/baser-core/src/Controller/Api/UtilitiesController.php:146
+msgid "データの復元が完了しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/UtilitiesController.php:118
+msgid "データの復元に失敗しました。ログの確認を行なって下さい。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/UtilitiesController.php:151
+#: ./plugins/baser-core/src/Controller/Api/UtilitiesController.php:203
+#: ./plugins/baser-core/src/Service/UtilitiesService.php:268
+msgid "エラーログを削除しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/UtilitiesController.php:173
+#: ./plugins/baser-core/src/Controller/Api/UtilitiesController.php:57
+msgid "コンテンツのツリー構造をリセットしました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/UtilitiesController.php:175
+#: ./plugins/baser-core/src/Controller/Api/UtilitiesController.php:60
+msgid "コンテンツのツリー構造のリセットに失敗しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/UtilitiesController.php:194
+#: ./plugins/baser-core/src/Controller/Api/UtilitiesController.php:88
+msgid "コンテンツのツリー構造に問題があります。ログを確認してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/UtilitiesController.php:196
+#: ./plugins/baser-core/src/Controller/Api/UtilitiesController.php:85
+msgid "コンテンツのツリー構造に問題はありません。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/UtilitiesController.php:232
+msgid "データのリセットが完了しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/UtilitiesController.php:234
+msgid "データのリセットが完了しましたが、いくつかの処理に失敗しています。ログを確認してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/UtilitiesController.php:237
+msgid "データのリセットに失敗しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Api/BcApiController.php:140
+msgid "BcPrefixAuth の userModel の設定ではプラグイン記法を利用してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Api/BcApiController.php:164
+msgid "BcPrefixAuth の userModel にユーザーの存在確認メソッドが存在しません。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Api/ContentFoldersController.php:61
+#: ./plugins/baser-core/src/Controller/Api/ContentFoldersController.php:131
+#: ./plugins/baser-core/src/Controller/Api/ContentsController.php:43
+#: ./plugins/baser-core/src/Controller/Api/ContentsController.php:71
+#: ./plugins/baser-core/src/Controller/Api/ContentsController.php:155
+#: ./plugins/baser-core/src/Controller/Api/ContentsController.php:200
+#: ./plugins/baser-core/src/Controller/Api/ContentsController.php:265
+#: ./plugins/baser-core/src/Controller/Api/PagesController.php:100
+#: ./plugins/baser-core/src/Controller/Api/PagesController.php:169
+#: ./plugins/baser-core/src/Controller/Api/PluginsController.php:48
+#: ./plugins/baser-core/src/Controller/Api/PluginsController.php:136
+#: ./plugins/baser-core/src/Controller/Api/PluginsController.php:170
+#: ./plugins/baser-core/src/Controller/Api/PluginsController.php:201
+#: ./plugins/baser-core/src/Controller/Api/PluginsController.php:232
+#: ./plugins/baser-core/src/Controller/Api/SitesController.php:153
+msgid "データが見つかりません"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Api/ContentFoldersController.php:88
+msgid "コンテンツフォルダ「{0}」を追加しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Api/ContentFoldersController.php:128
+msgid "コンテンツフォルダ: {0} を削除しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Api/ContentFoldersController.php:160
+msgid "フォルダー「{0}」を更新しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Api/ContentsController.php:144
+#: ./plugins/baser-core/src/Controller/Api/ContentsController.php:148
+msgid "コンテンツ: {0}を削除しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Api/ContentsController.php:191
+msgid "ゴミ箱を空にしました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Api/ContentsController.php:225
+msgid "コンテンツ「{0}」を更新しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Api/ContentsController.php:259
+msgid "ゴミ箱: {0} を元に戻しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Api/ContentsController.php:261
+msgid "ゴミ箱の復元に失敗しました"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Api/ContentsController.php:303
+msgid "コンテンツ: {0} を公開しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Api/ContentsController.php:307
+msgid "コンテンツ: {0} を非公開にしました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Api/ContentsController.php:321
+msgid "データが不足しています"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Api/ContentsController.php:411
+msgid "「%s」を「%s」に名称変更しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Api/ContentsController.php:447
+msgid "{0} を作成しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Api/ContentsController.php:511
+msgid "コンテンツ「%s」の配置を移動しました。\n%s > %s"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Api/ContentsController.php:532
+msgid "コンテンツ一覧を表示後、他のログインユーザーがコンテンツの並び順を更新しました。<br>一度リロードしてから並び替えてください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Api/ContentsController.php:557
+msgid "公開"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Api/ContentsController.php:573
+msgid "コンテンツ 「%s」 を %s しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Api/ContentsController.php:577
+#: ./plugins/baser-core/src/Controller/Api/PermissionsController.php:245
+#: ./plugins/baser-core/src/Controller/Api/PluginsController.php:351
+msgid "一括処理が完了しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Api/DblogsController.php:59
+msgid "ログを追加しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Api/PagesController.php:128
+msgid "固定ページ「{0}」を追加しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Api/PagesController.php:166
+msgid "固定ページ: {0} をゴミ箱に移動しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Api/PagesController.php:196
+msgid "固定ページ 「{0}」を更新しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Api/PagesController.php:228
+msgid "固定ページのコピー「%s」を追加しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Api/PermissionsController.php:45
+#: ./plugins/baser-core/src/Controller/Api/PermissionsController.php:124
+#: ./plugins/baser-core/src/Controller/Api/PermissionsController.php:163
+#: ./plugins/baser-core/src/Controller/Api/PermissionsController.php:200
+#: ./plugins/baser-core/src/Controller/Api/PluginsController.php:101
+#: ./plugins/baser-core/src/Controller/Api/SitesController.php:44
+#: ./plugins/baser-core/src/Controller/Api/SitesController.php:122
+#: ./plugins/baser-core/src/Controller/Api/ThemesController.php:226
+#: ./plugins/baser-core/src/Controller/Api/UserGroupsController.php:59
+#: ./plugins/baser-core/src/Controller/Api/UserGroupsController.php:123
+#: ./plugins/baser-core/src/Controller/Api/UserGroupsController.php:155
+#: ./plugins/baser-core/src/Controller/Api/UserGroupsController.php:208
+#: ./plugins/baser-core/src/Controller/Api/UsersController.php:120
+msgid "データが見つかりません。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Api/PermissionsController.php:88
+msgid "新規アクセスルール「{0}」を追加しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Api/PermissionsController.php:121
+msgid "アクセスルール「{0}」を削除しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Api/PermissionsController.php:153
+msgid "アクセスルール「{0}」をコピーしました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Api/PermissionsController.php:193
+msgid "アクセスルール「{0}」を更新しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Api/PermissionsController.php:225
+msgid "有効化"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Api/PermissionsController.php:226
+#: ./plugins/baser-core/src/Controller/Api/PluginsController.php:333
+msgid "無効化"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Api/PermissionsController.php:227
+msgid "削除"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Api/PermissionsController.php:241
+msgid "アクセスルール 「%s」 を %s しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Api/PermissionsController.php:276
+#: ./plugins/baser-core/src/Controller/Api/PluginsController.php:291
+msgid "一度リロードしてから再実行してみてください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Api/PermissionsController.php:278
+msgid "アクセスルール「%s」の並び替えを更新しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Api/PluginsController.php:94
+msgid "プラグイン「%s」をインストールしました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Api/PluginsController.php:163
+msgid "プラグイン「%s」を有効にしました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Api/PluginsController.php:166
+msgid "プラグインの有効化に失敗しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Api/PluginsController.php:293
+msgid "プラグイン「%s」の並び替えを更新しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Api/PluginsController.php:347
+msgid "プラグイン 「%s」 を %s しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Api/SiteConfigsController.php:53
+msgid "システム基本設定を更新しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Api/SitesController.php:84
+msgid "サイト「{0}」を追加しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Api/SitesController.php:115
+msgid "サイト「{0}」を更新しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Api/ThemesController.php:86
+msgid "テーマファイル「"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Api/ThemesController.php:149
+msgid "テーマ「{0}」のコピーに失敗しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Api/UserGroupsController.php:84
+msgid "ユーザーグループ「{0}」を追加しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Api/UtilitiesController.php:115
+msgid "バックアップダウンロードが失敗しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Api/UtilitiesController.php:179
+#: ./plugins/baser-core/src/Service/UtilitiesService.php:274
+msgid "エラーログが存在しません。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/AppController.php:163
+msgid "指定されたAPIエンドポイントへのアクセスは許可されていません。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/AppController.php:165
+msgid "指定されたページへのアクセスは許可されていません。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/AppController.php:233
+msgid "不正なリクエストと判断されました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/AppController.php:517
+msgid "見つかりませんでした。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/BcAppController.php:449
+msgid "送信先のメールアドレスが不正です。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/BcAppController.php:484
+msgid "送信元のメールアドレスが不正です。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Component/BcAdminContentsComponent.php:66
+msgid "編集画面で利用するエンティティの変数名を entityVarName として定義してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Component/BcAdminContentsComponent.php:118
+msgid "編集画面で利用するエンティティに content プロパティが定義されていません。\n                    エンティティを取得する際に、contain を利用して、['Contents' => ['Sites']] を指定してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Component/BcMessageComponent.php:75
+msgid "DBログの保存に失敗しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/MaintenanceController.php:28
+msgid "メンテナンス中"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/UploadsController.php:67
+msgid "拡張子が間違っています。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Mailer/Admin/PasswordRequestMailer.php:39
+msgid "パスワード再発行"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Behavior/BcContentsBehavior.php:86
+msgid "関連するコンテンツがありません"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/ContentFoldersTable.php:82
+#: ./plugins/baser-core/src/Model/Table/ContentsTable.php:136
+#: ./plugins/baser-core/src/Model/Table/ContentsTable.php:137
+#: ./plugins/baser-core/src/Model/Table/PagesTable.php:109
+msgid "IDに不正な値が利用されています。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/ContentsTable.php:141
+msgid "nameフィールドが存在しません。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/ContentsTable.php:142
+msgid "名前は230文字以内で入力してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/ContentsTable.php:147
+msgid "URLはスペース、全角スペース及び、指定の記号(\\'|`^\"(){}[];/?:@&=+$,%<>#!)だけの名前は付けられません。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/ContentsTable.php:153
+msgid "連携しているサブサイトでスラッグが重複するコンテンツが存在します。重複するコンテンツのスラッグ名を先に変更してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/ContentsTable.php:158
+#: ./plugins/baser-core/src/Model/Table/ContentsTable.php:159
+msgid "タイトルを入力してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/ContentsTable.php:160
+msgid "タイトルは230文字以内で入力してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/ContentsTable.php:161
+msgid "タイトルはタブを含む名前は付けられません。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/ContentsTable.php:166
+msgid "タイトルはスペース、全角スペース及び、指定の記号(\\'|`^\"(){}[];/?:@&=+$,%<>#!)だけの名前は付けられません。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/ContentsTable.php:185
+msgid "公開開始日に不正な文字列が入っています。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/ContentsTable.php:196
+msgid "公開終了日に不正な文字列が入っています。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/ContentsTable.php:203
+msgid "公開終了日は、公開開始日より新しい日付で入力してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/ContentsTable.php:208
+msgid "作成日がありません。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/ContentsTable.php:209
+msgid "作成日が空になってます。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/ContentsTable.php:214
+msgid "作成日が正しくありません。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/ContentsTable.php:219
+msgid "更新日が空になってます。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/ContentsTable.php:224
+msgid "更新日が正しくありません。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/DblogsTable.php:52
+msgid "メッセージは1000文字以内で入力してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/LoginStoresTable.php:69
+msgid "キーが重複しています。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/LoginStoresTable.php:102
+msgid "不明なエラー"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/LoginStoresTable.php:171
+msgid "更新データが見つかりませんでした"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/PagesTable.php:115
+#: ./plugins/baser-core/src/Model/Table/PagesTable.php:132
+msgid "本稿欄に保存できるデータ量を超えています。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/PagesTable.php:119
+#: ./plugins/baser-core/src/Model/Table/PagesTable.php:136
+msgid "本稿欄でPHPの構文エラーが発生しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/PagesTable.php:125
+#: ./plugins/baser-core/src/Model/Table/PagesTable.php:142
+msgid "本稿欄でスクリプトの入力は許可されていません。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/PagesTable.php:219
+msgid "ページ"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/PasswordRequestsTable.php:73
+#: ./plugins/baser-core/src/Model/Table/UsersTable.php:193
+msgid "Eメールの形式が不正です。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/PasswordRequestsTable.php:74
+#: ./plugins/baser-core/src/Model/Table/UsersTable.php:194
+msgid "Eメールは255文字以内で入力してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/PasswordRequestsTable.php:75
+#: ./plugins/baser-core/src/Model/Table/PasswordRequestsTable.php:76
+#: ./plugins/baser-core/src/Model/Table/UsersTable.php:191
+#: ./plugins/baser-core/src/Model/Table/UsersTable.php:195
+msgid "Eメールを入力してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/PermissionsTable.php:95
+msgid "設定名は255文字以内で入力してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/PermissionsTable.php:96
+#: ./plugins/baser-core/src/Model/Table/SiteConfigsTable.php:69
+#: ./plugins/baser-core/src/Model/Table/SiteConfigsTable.php:70
+msgid "設定名を入力してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/PermissionsTable.php:100
+#: ./plugins/baser-core/src/Model/Table/PermissionsTable.php:127
+msgid "ユーザーグループを選択してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/PermissionsTable.php:104
+msgid "設定URLは255文字以内で入力してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/PermissionsTable.php:105
+msgid "設定URLを入力してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/PermissionsTable.php:194
+#: ./plugins/baser-core/src/Model/Table/UserGroupsTable.php:161
+msgid "処理に失敗しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/PluginsTable.php:69
+msgid "プラグイン名は50文字以内としてください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/PluginsTable.php:70
+msgid "プラグイン名は必須です。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/PluginsTable.php:75
+msgid "指定のプラグインは既に使用されています。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/PluginsTable.php:81
+msgid "プラグイン名は半角英数字とハイフン、アンダースコアのみが利用可能です。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/PluginsTable.php:86
+msgid "プラグインタイトルは50文字以内としてください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/SiteConfigsTable.php:68
+msgid "255文字以内で入力してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/SiteConfigsTable.php:73
+msgid "65535文字以内で入力してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/SiteConfigsTable.php:92
+msgid "管理者メールアドレスの形式が不正です。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/SiteConfigsTable.php:93
+msgid "管理者メールアドレスを入力してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/SiteConfigsTable.php:96
+msgid "メール送信文字コードを入力してください。初期値は「ISO-2022-JP」です。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/SiteConfigsTable.php:99
+msgid "メインサイト表示名を入力してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/SiteConfigsTable.php:102
+msgid "WebサイトURLを入力してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/SiteConfigsTable.php:109
+msgid "管理画面をSSLで利用するには、SSL用のWebサイトURLを入力してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/SiteConfigsTable.php:126
+msgid "ノーマルモード"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/SiteConfigsTable.php:127
+#: ./plugins/baser-core/src/View/Helper/BcToolbarHelper.php:228
+msgid "デバッグモード"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/SitesTable.php:106
+msgid "識別名称は50文字以内で入力してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/SitesTable.php:107
+#: ./plugins/baser-core/src/Model/Table/SitesTable.php:108
+msgid "識別名称を入力してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/SitesTable.php:113
+msgid "既に利用されている識別名称です。別の名称に変更してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/SitesTable.php:119
+msgid "識別名称は、半角英数・ハイフン（-）・アンダースコア（_）で入力してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/SitesTable.php:123
+msgid "サイト名は50文字以内で入力してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/SitesTable.php:124
+#: ./plugins/baser-core/src/Model/Table/SitesTable.php:125
+msgid "サイト名を入力してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/SitesTable.php:128
+msgid "エイリアスは50文字以内で入力してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/SitesTable.php:129
+#: ./plugins/baser-core/src/Model/Table/SitesTable.php:130
+msgid "エイリアスを入力してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/SitesTable.php:135
+msgid "既に利用されているエイリアス名です。別の名称に変更してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/SitesTable.php:141
+msgid "エイリアスには先頭と末尾にスラッシュ（/）は入力できず、また、連続して入力する事もできません。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/SitesTable.php:147
+msgid "コンテンツ管理上にエイリアスと同名のコンテンツ、またはフォルダが存在するため利用できません。別の名称にするか、コンテンツ、またはフォルダをリネームしてください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/SitesTable.php:151
+msgid "サイトタイトルは255文字以内で入力してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/SitesTable.php:152
+#: ./plugins/baser-core/src/Model/Table/SitesTable.php:153
+msgid "サイトタイトルを入力してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/SitesTable.php:595
+#: ./plugins/baser-core/src/Model/Table/SitesTable.php:629
+msgid "指定しない"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/ToolsTable.php:41
+msgid "baser（コア）"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/ToolsTable.php:41
+msgid "plugin（プラグイン）"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/UserGroupsTable.php:104
+msgid "ユーザーグループ名は50文字以内で入力してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/UserGroupsTable.php:105
+#: ./plugins/baser-core/src/Model/Table/UserGroupsTable.php:106
+msgid "ユーザーグループ名を入力してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/UserGroupsTable.php:111
+msgid "ユーザーグループ名は半角のみで入力してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/UserGroupsTable.php:116
+msgid "既に登録のあるユーザーグループ名です。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/UserGroupsTable.php:122
+msgid "表示名は50文字以内で入力してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/UserGroupsTable.php:123
+#: ./plugins/baser-core/src/Model/Table/UserGroupsTable.php:124
+msgid "表示名を入力してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/UserGroupsTable.php:128
+#: ./plugins/baser-core/src/Model/Table/UserGroupsTable.php:129
+msgid "認証プレフィックスを選択してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/UsersTable.php:147
+msgid "アカウント名は255文字以内で入力してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/UsersTable.php:152
+msgid "既に登録のあるアカウント名です。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/UsersTable.php:158
+msgid "アカウント名は半角英数字とハイフン、アンダースコアのみで入力してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/UsersTable.php:162
+msgid "名前[姓]は50文字以内で入力してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/UsersTable.php:163
+#: ./plugins/baser-core/src/Model/Table/UsersTable.php:164
+msgid "名前[姓]を入力してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/UsersTable.php:167
+msgid "名前[名]は50文字以内で入力してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/UsersTable.php:171
+msgid "ニックネームは255文字以内で入力してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/UsersTable.php:174
+#: ./plugins/baser-core/src/Model/Table/UsersTable.php:179
+msgid "グループを選択してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/UsersTable.php:187
+msgid "自分のアカウントのグループは変更できません。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/UsersTable.php:200
+msgid "既に登録のあるEメールです。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/UsersTable.php:204
+#: ./plugins/baser-core/src/Model/Table/UsersTable.php:250
+msgid "パスワードは6文字以上で入力してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/UsersTable.php:205
+#: ./plugins/baser-core/src/Model/Table/UsersTable.php:251
+msgid "パスワードは255文字以内で入力してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/UsersTable.php:210
+#: ./plugins/baser-core/src/Model/Table/UsersTable.php:256
+msgid "パスワードは半角英数字(英字は大文字小文字を区別)とスペース、記号(._-:/()#,@[]+=&;{}!$*)のみで入力してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/UsersTable.php:216
+#: ./plugins/baser-core/src/Model/Table/UsersTable.php:262
+msgid "パスワードが同じものではありません。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/UsersTable.php:233
+#: ./plugins/baser-core/src/Model/Table/UsersTable.php:234
+msgid "パスワードを入力してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Validation/BcValidation.php:190
+msgid "アップロードされたファイルは、PHPの設定 post_max_size ディレクティブの値を超えています。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Validation/BcValidation.php:213
+msgid "CODE: {0} アップロードされたファイルは、\n                        php.ini の upload_max_filesize ディレクティブの値を超えています。\n                        {1} MB以内のファイルをご利用ください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Validation/BcValidation.php:219
+msgid "CODE: {0} アップロードされたファイルは、HTMLで指定された MAX_FILE_SIZE を超えています。\n                        {1} MB以内のファイルをご利用ください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Validation/BcValidation.php:224
+msgid "CODE: {0} アップロードされたファイルが不完全です。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Validation/BcValidation.php:228
+msgid "CODE: {0} ファイルがアップロードされませんでした。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Validation/BcValidation.php:232
+msgid "CODE: {0} 一時書込み用のフォルダがありません。テンポラリフォルダの書込み権限を見直してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Validation/BcValidation.php:236
+msgid "CODE: {0} ディスクへの書き込みに失敗しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Validation/BcValidation.php:240
+msgid "CODE: {0} PHPの拡張モジュールがファイルのアップロードを中止しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Validation/BcValidation.php:250
+#: ./plugins/baser-core/src/Model/Validation/BcValidation.php:254
+msgid "ファイルサイズがオーバーしています。 %s MB以内のファイルをご利用ください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Validation/PageValidation.php:73
+msgid "PHPの構文エラーです"
+msgstr ""
+
+#: ./plugins/baser-core/src/Plugin.php:313
+msgid "Web APIは許可されていません。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Service/Admin/BcAdminContentsService.php:97
+msgid "親フォルダの設定に従う"
+msgstr ""
+
+#: ./plugins/baser-core/src/Service/Admin/SitesAdminService.php:129
+msgid "メインサイトに従う"
+msgstr ""
+
+#: ./plugins/baser-core/src/Service/BcDatabaseService.php:311
+#: ./plugins/baser-core/src/Service/BcDatabaseService.php:323
+msgid "%s %s の初期データのロードに失敗しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Service/BcDatabaseService.php:328
+msgid "初期データの読み込みに失敗しましたので baserCMSコアの初期データを読み込みました。ログを確認してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Service/BcDatabaseService.php:330
+msgid "初期データの読み込みに失敗しました。データが不完全な状態です。正常に動作しない可能性があります。ログを確認してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Service/BcDatabaseService.php:368
+msgid "%s の読み込みに失敗。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Service/BcDatabaseService.php:558
+msgid "users テーブルの初期化に失敗。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Service/BcDatabaseService.php:581
+msgid "システムデータの初期化に失敗しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Service/BcDatabaseService.php:603
+msgid "メールプラグインのメール受信用テーブルの生成に失敗しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Service/BcDatabaseService.php:1306
+msgid "データベースファイルに書き込み権限がありません。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Service/BcDatabaseService.php:1310
+msgid "データベースの保存フォルダに書き込み権限がありません。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Service/BcDatabaseService.php:1317
+msgid "ドライバが見つかりません Driver is not defined.(MySQL|Postgres|SQLite)"
+msgstr ""
+
+#: ./plugins/baser-core/src/Service/BcDatabaseService.php:1337
+msgid "データベースへの接続でエラーが発生しました。データベース設定を見直してください。\nサーバー上に指定されたデータベースが存在しない可能性が高いです。\n"
+msgstr ""
+
+#: ./plugins/baser-core/src/Service/BcDatabaseService.php:1341
+msgid "データベースへの接続でエラーが発生しました。データベース設定を見直してください。\nサーバー上に指定されたデータベースが存在しない可能性が高いです。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Service/BcDatabaseService.php:1353
+msgid "データベースへの接続でエラーが発生しました。データベース設定を見直してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Service/BcDatabaseService.php:1362
+#: ./plugins/baser-core/src/Service/BcDatabaseService.php:1370
+msgid "データベースのバージョンが %s 以上か確認してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Service/BcDatabaseService.php:1381
+msgid "データベースへの接続でエラーが発生しました。\n"
+msgstr ""
+
+#: ./plugins/baser-core/src/Service/BcDatabaseService.php:1391
+msgid "データベースへの接続に成功しましたが、プレフィックスが重複するテーブルが存在します。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Service/ContentFoldersService.php:241
+#: ./plugins/baser-core/src/Service/PagesService.php:268
+msgid "親フォルダの設定に従う（%s）"
+msgstr ""
+
+#: ./plugins/baser-core/src/Service/ContentsService.php:393
+msgid "エイリアスIDを指定してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Service/ContentsService.php:879
+msgid "%s のコピー"
+msgstr ""
+
+#: ./plugins/baser-core/src/Service/ContentsService.php:981
+msgid "データが存在しません。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Service/ContentsService.php:983
+msgid "同一URLのコンテンツが存在するため処理に失敗しました。（現在のサイトに存在しない場合は、関連サイトに存在します）"
+msgstr ""
+
+#: ./plugins/baser-core/src/Service/ContentsService.php:1370
+msgid "site_idを指定してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Service/ContentsService.php:1483
+msgid "送信データが不正です。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Service/Front/PagesFrontService.php:67
+msgid "本文欄でスクリプトの入力は許可されていません。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Service/PermissionGroupsService.php:235
+msgid "{0} その他"
+msgstr ""
+
+#: ./plugins/baser-core/src/Service/PermissionGroupsService.php:334
+msgid "フルアクセス"
+msgstr ""
+
+#: ./plugins/baser-core/src/Service/PluginsService.php:150
+msgid "プラグインに Plugin クラスが存在しません。src ディレクトリ配下に作成してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Service/PluginsService.php:198
+msgid "{0} プラグイン {1} へのアップデートを開始します。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Service/PluginsService.php:225
+#: ./plugins/baser-core/src/Service/PluginsService.php:245
+msgid "アップデート処理が途中で失敗しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Service/PluginsService.php:237
+msgid "{0} プラグイン {1} へのアップデートが完了しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Service/PluginsService.php:276
+msgid "プログラムファイルのアップデートに失敗しました。ログを確認してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Service/PluginsService.php:288
+msgid "アップデートスクリプトの処理が失敗したので、プログラムファイルを元に戻そうとしましたが失敗しました。。ログを確認してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Service/PluginsService.php:290
+msgid "アップデートスクリプトの処理が失敗したので、プログラムファイルを元に戻しました。。ログを確認してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Service/PluginsService.php:416
+#: ./plugins/baser-core/src/Service/PluginsService.php:452
+msgid "プラグインに Plugin クラスが存在しません。手動で削除してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Service/PluginsService.php:421
+msgid "処理中にエラーが発生しました。プラグインの開発者に確認してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Service/PluginsService.php:637
+#: ./plugins/baser-core/src/Service/ThemesService.php:146
+#: ./plugins/baser-core/src/Service/UtilitiesService.php:397
+msgid "サーバに設定されているサイズ制限を超えています。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Service/PluginsService.php:646
+#: ./plugins/baser-core/src/Service/ThemesService.php:155
+#: ./plugins/baser-core/src/Service/UtilitiesService.php:409
+msgid "アップロードしたZIPファイルの展開に失敗しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Service/SitesService.php:186
+msgid "メインサイトは削除できません。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Service/ThemesService.php:235
+msgid "このテーマは下記のプラグインを同梱しています。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Service/ThemesService.php:260
+msgid "このテーマは初期データを保有しています。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Service/ThemesService.php:261
+msgid "Webサイトにテーマに合ったデータを適用するには、初期データ読込を実行してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Service/ThemesService.php:307
+msgid "初期データのバージョンが違うか、初期データの構造が壊れています。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Service/UsersService.php:134
+#: ./plugins/baser-core/src/Service/UsersService.php:163
+#: ./plugins/baser-core/src/Service/UsersService.php:167
+#: ./plugins/baser-core/src/Service/UsersService.php:188
+#: ./plugins/baser-core/src/Service/UsersService.php:391
+msgid "特権エラーが発生しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Service/UsersService.php:420
+msgid "対象データが見つかりません。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Service/UtilitiesService.php:222
+msgid "スペシャルサンクスのデータが読み込めませんでした。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Service/UtilitiesService.php:271
+msgid "エラーログが削除できませんでした。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Service/UtilitiesService.php:399
+msgid "バックアップファイルが送信されませんでした。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Utility/BcComposer.php:82
+msgid "composer がインストールできません。{0}"
+msgstr ""
+
+#: ./plugins/baser-core/src/Utility/BcComposer.php:97
+msgid "/composer に書き込み権限がありません。書き込み権限を与えてください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Utility/BcComposer.php:100
+msgid "/vendor に書き込み権限がありません。書き込み権限を与えてください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Utility/BcComposer.php:103
+msgid "/config に書き込み権限がありません。書き込み権限を与えてください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Utility/BcComposer.php:106
+msgid "/tmp に書き込み権限がありません。書き込み権限を与えてください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Utility/BcComposer.php:109
+msgid "/logs に書き込み権限がありません。書き込み権限を与えてください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcAdminFormHelper.php:72
+msgid "日付"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcAdminHelper.php:448
+msgid "編集する"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcAdminHelper.php:472
+msgid "サイト確認"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcCkeditorHelper.php:96
+msgid "青見出し"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcCkeditorHelper.php:99
+msgid "赤見出し"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcCkeditorHelper.php:102
+msgid "黄マーカー"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcCkeditorHelper.php:105
+msgid "緑マーカー"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcCkeditorHelper.php:108
+msgid "大文字"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcCkeditorHelper.php:110
+msgid "小文字"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcCkeditorHelper.php:112
+msgid "コード"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcCkeditorHelper.php:114
+msgid "削除文"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcCkeditorHelper.php:116
+msgid "挿入文"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcCkeditorHelper.php:118
+msgid "引用"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcCkeditorHelper.php:120
+msgid "インライン"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcContentsHelper.php:250
+msgid "プラグインの BcContent 設定が間違っています。"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcFormHelper.php:1853
+msgid "追加"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcFormHelper.php:2024
+#: ./plugins/baser-core/src/View/Helper/BcFreezeHelper.php:397
+#: ./plugins/baser-core/src/View/Helper/BcFreezeHelper.php:458
+msgid "削除する"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcGooglemapsHelper.php:99
+#: ./plugins/baser-core/src/View/Helper/BcGooglemapsHelper.php:101
+msgid "JavaScript を有効にしてください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcGooglemapsHelper.php:169
+msgid "Googleマップを利用するには、Google Maps APIのキーの登録が必要です。<a href=\"https://developers.google.com/maps/web/\" target=\"_blank\">キーを取得</a>して、<a href=\"%s\">システム管理</a>より設定してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcTextHelper.php:78
+msgid "無"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcTextHelper.php:78
+msgid "有"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcTextHelper.php:88
+msgid "不可"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcTextHelper.php:88
+msgid "可"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcTextHelper.php:100
+msgid "%s しない"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcTextHelper.php:101
+msgid "%s する"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcTextHelper.php:130
+msgid "都道府県"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcTextHelper.php:134
+msgid "北海道"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcTextHelper.php:134
+msgid "青森県"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcTextHelper.php:134
+msgid "岩手県"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcTextHelper.php:134
+msgid "宮城県"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcTextHelper.php:134
+msgid "秋田県"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcTextHelper.php:134
+msgid "山形県"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcTextHelper.php:134
+msgid "福島県"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcTextHelper.php:135
+msgid "茨城県"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcTextHelper.php:135
+msgid "栃木県"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcTextHelper.php:135
+msgid "群馬県"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcTextHelper.php:135
+msgid "埼玉県"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcTextHelper.php:135
+msgid "千葉県"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcTextHelper.php:135
+msgid "東京都"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcTextHelper.php:135
+msgid "神奈川県"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcTextHelper.php:136
+msgid "新潟県"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcTextHelper.php:136
+msgid "富山県"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcTextHelper.php:136
+msgid "石川県"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcTextHelper.php:136
+msgid "福井県"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcTextHelper.php:136
+msgid "山梨県"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcTextHelper.php:136
+msgid "長野県"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcTextHelper.php:136
+msgid "岐阜県"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcTextHelper.php:137
+msgid "静岡県"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcTextHelper.php:137
+msgid "愛知県"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcTextHelper.php:137
+msgid "三重県"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcTextHelper.php:137
+msgid "滋賀県"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcTextHelper.php:137
+msgid "京都府"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcTextHelper.php:137
+msgid "大阪府"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcTextHelper.php:137
+msgid "兵庫県"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcTextHelper.php:138
+msgid "奈良県"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcTextHelper.php:138
+msgid "和歌山県"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcTextHelper.php:138
+msgid "鳥取県"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcTextHelper.php:138
+msgid "島根県"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcTextHelper.php:138
+msgid "岡山県"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcTextHelper.php:138
+msgid "広島県"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcTextHelper.php:138
+msgid "山口県"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcTextHelper.php:139
+msgid "徳島県"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcTextHelper.php:139
+msgid "香川県"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcTextHelper.php:139
+msgid "愛媛県"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcTextHelper.php:139
+msgid "高知県"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcTextHelper.php:139
+msgid "福岡県"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcTextHelper.php:139
+msgid "佐賀県"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcTextHelper.php:139
+msgid "長崎県"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcTextHelper.php:140
+msgid "熊本県"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcTextHelper.php:140
+msgid "大分県"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcTextHelper.php:140
+msgid "宮崎県"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcTextHelper.php:140
+msgid "鹿児島県"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcTextHelper.php:140
+msgid "沖縄県"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcTextHelper.php:154
+msgid "男"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcTextHelper.php:154
+msgid "女"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcTextHelper.php:419
+msgid "無効"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcTextHelper.php:419
+msgid "有効"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcToolbarHelper.php:230
+msgid "インストールモード"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcToolbarHelper.php:246
+msgid "デバッグモードです。運営を開始する前にシステム設定よりノーマルモードに戻しましょう。"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcToolbarHelper.php:248
+msgid "インストールモードです。運営を開始する前にシステム設定よりノーマルモードに戻しましょう。"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcToolbarHelper.php:324
+msgid "インストールマニュアル"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcToolbarHelper.php:325
+msgid "アップデートマニュアル"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcUploadHelper.php:104
+#: ./plugins/baser-core/src/View/Helper/BcUploadHelper.php:240
+msgid "第２引数に EntityInterface を指定してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcUploadHelper.php:201
+msgid "ダウンロード"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcUploadHelper.php:530
+msgid "BcUploadHelper を利用するには、$this->BcUpload->setTable() か、 $this->BcUpload->fileLink() または、$this->BcUpload->uploadImage() の第３引数の `table` キーでテーブル名を指定してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/View/Helper/BcUploadHelper.php:533
+msgid "BcUploadHelper を利用するには、テーブル {0} で BcUploadBehavior の利用設定が必要です。\n            テーブルを変更するには、$options['table'] でテーブル名を指定してください。"
+msgstr ""
+

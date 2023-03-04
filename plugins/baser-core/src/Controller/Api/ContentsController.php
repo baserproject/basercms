@@ -141,11 +141,11 @@ class ContentsController extends BcApiController
                     'data' => $id
                 ]);
 
-                $text = "コンテンツ: " . $content->title . "を削除しました。";
+                $text = __d('baser', "コンテンツ: {0}を削除しました。", $content->title);
                 if ($children) {
                     $content = array_merge([$content], $children->toArray());
                     foreach ($children as $child) {
-                        $text .= "\nコンテンツ: " . $child->title . "を削除しました。";
+                        $text .= "\n" . __d('baser', "コンテンツ: {0}を削除しました。", $child->title);
                     }
                 }
                 $message = __d('baser', $text);
@@ -318,7 +318,7 @@ class ContentsController extends BcApiController
             }
         } else {
             $this->setResponse($this->response->withStatus(400));
-            $message = __d('baser', '無効な処理です。') . "データが不足しています";
+            $message = __d('baser', '無効な処理です。') . __d('baser', "データが不足しています");
         }
 
         // EVENT Contents.afterChangeStatus
@@ -554,7 +554,7 @@ class ContentsController extends BcApiController
     {
         $this->request->allowMethod(['post', 'put']);
         $allowMethod = [
-            'publish' => '公開',
+            'publish' => __d('baser', '公開'),
             'unpublish' => '非公開に',
             'delete' => '削除',
         ];

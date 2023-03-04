@@ -331,9 +331,9 @@ class BlogPostsController extends BcApiController
     {
         $this->request->allowMethod(['post', 'put']);
         $allowMethod = [
-            'delete' => '削除',
-            'publish' => '公開',
-            'unpublish' => '非公開に'
+            'delete' => __d('baser', '削除'),
+            'publish' => __d('baser', '公開'),
+            'unpublish' => __d('baser', '非公開に')
         ];
         $method = $this->getRequest()->getData('batch');
         if (!isset($allowMethod[$method])) {

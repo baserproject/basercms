@@ -331,7 +331,7 @@ class PermissionGroupsService implements PermissionGroupsServiceInterface
         $permissionsService = $this->getService(PermissionsServiceInterface::class);
         $url = '/baser/' . Inflector::underscore($type) . '/' . Inflector::dasherize($plugin) . '/*';
         $permissionsService->create([
-            'name' => 'フルアクセス',
+            'name' => __d('baser', 'フルアクセス'),
             'permission_group_id' => $permissionGroup->id,
             'user_group_id' => $userGroupId,
             'url' => $url,

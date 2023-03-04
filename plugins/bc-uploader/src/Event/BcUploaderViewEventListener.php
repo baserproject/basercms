@@ -134,6 +134,7 @@ class BcUploaderViewEventListener extends BcViewEventListener
     {
         $fieldName = 'editor_' . Inflector::underscore($id);
         $css = $this->BcHtml->Url->css('admin/uploader_files/contents.css');
+        $label = __d('baser', 'アップローダー');
         return <<< DOC_END
 			$(function(){
 				if(!(CKEDITOR.config.contentsCss instanceof Array)) {
@@ -142,7 +143,7 @@ class BcUploaderViewEventListener extends BcViewEventListener
 				CKEDITOR.config.contentsCss.push('{$css}');
 				$.bcCkeditor.editor['{$fieldName}'].on( 'pluginsLoaded', function( ev ) {
 					$.bcCkeditor.editor['{$fieldName}'].addCommand( 'baserUploader', new CKEDITOR.dialogCommand( 'baserUploaderDialog' ));
-					$.bcCkeditor.editor['{$fieldName}'].ui.addButton( 'BaserUploader', { icon: 'image', label : 'アップローダー', command : 'baserUploader' });
+					$.bcCkeditor.editor['{$fieldName}'].ui.addButton( 'BaserUploader', { icon: 'image', label : '{$label}', command : 'baserUploader' });
 				});
 			});
 DOC_END;

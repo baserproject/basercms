@@ -23,8 +23,8 @@ return [
              * 日付（年月日）を表示するフィールドタイプ
              */
             'BcCcDate' => [
-                'category' => '日付',
-                'label' => '日付（年月日）',
+                'category' => __d('baser', '日付'),
+                'label' => __d('baser', '日付（年月日）'),
                 'columnType' => 'string',
                 'controlType' => 'date',
                 'preview' => true,

@@ -103,19 +103,19 @@ return [
          * フィールドグループ
          */
         'fieldCategories' => [
-            '基本',
-            '日付',
-            '選択',
-            'コンテンツ',
-            'その他'
+            __d('baser', '基本'),
+            __d('baser', '日付'),
+            __d('baser', '選択'),
+            __d('baser', 'コンテンツ'),
+            __d('baser', 'その他')
         ],
         /**
          * フィールドタイプ
          */
         'fieldTypes' => [
             'group' => [
-                'category' => 'その他',
-                'label' => 'グループ',
+                'category' => __d('baser', 'その他'),
+                'label' => __d('baser', 'グループ'),
             ]
         ]
     ]

@@ -42,7 +42,7 @@ $fullUrl = $this->BcBaser->getContentsUrl(
        class="bca-text-url"
        target="_blank"
        data-toggle="tooltip"
-       data-placement="top" title="公開URLを開きます">
+       data-placement="top" title="<?php echo __d('baser', '公開URLを開きます') ?>">
 	    <i class="bca-icon--globe"></i>
 	    <?php echo $this->BcBaser->getUri($fullUrl) ?>
 	  </a>

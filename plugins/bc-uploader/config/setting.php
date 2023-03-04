@@ -18,7 +18,7 @@ return [
             'Plugins' => [
                 'menus' => [
                     'UploaderConfigs' => [
-                        'title' => 'アップローダー基本設定',
+                        'title' => __d('baser', 'アップローダー基本設定'),
                         'url' => [
                             'prefix' => 'Admin',
                             'plugin' => 'BcUploader',

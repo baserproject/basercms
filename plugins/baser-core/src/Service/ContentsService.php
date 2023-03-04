@@ -390,7 +390,7 @@ class ContentsService implements ContentsServiceInterface
      */
     public function alias(array $postData)
     {
-        if (empty($postData['alias_id'])) throw new \Exception('エイリアスIDを指定してください。');
+        if (empty($postData['alias_id'])) throw new \Exception(__d('baser', 'エイリアスIDを指定してください。'));
         if (empty($postData['parent_id']) && !empty($postData['url'])) {
             $postData['parent_id'] = $this->Contents->copyContentFolderPath($postData['url'], $postData['site_id']);
         }

@@ -23,8 +23,8 @@ return [
              * TEL用テキストボックスを表示するフィールドタイプ
              */
             'BcCcTel' => [
-                'category' => '基本',
-                'label' => '電話番号',
+                'category' => __d('baser', '基本'),
+                'label' => __d('baser', '電話番号'),
                 'columnType' => 'string',
                 'controlType' => 'text',
                 'preview' => true,

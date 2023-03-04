@@ -157,7 +157,7 @@ class CustomContentsService implements CustomContentsServiceInterface
      */
     public function getListOrders(int $tableId): array
     {
-        $list = ['id' => 'No', 'created' => '登録日', '編集日'];
+        $list = ['id' => 'No', 'created' => __d('baser', '登録日'), 'modified' => __d('baser', '編集日')];
         if(!$tableId) return $list;
         $table = $this->CustomContents->CustomTables->get($tableId, ['contain' => [
             'CustomLinks' => ['CustomFields']

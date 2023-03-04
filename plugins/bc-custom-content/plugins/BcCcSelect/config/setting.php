@@ -23,8 +23,8 @@ return [
              * セレクトボックスを表示するフィールドタイプ
              */
             'BcCcSelect' => [
-                'category' => '選択',
-                'label' => 'セレクトボックス',
+                'category' => __d('baser', '選択'),
+                'label' => __d('baser', 'セレクトボックス'),
                 'columnType' => 'string',
                 'controlType' => 'select',
                 'preview' => true,

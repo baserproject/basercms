@@ -73,7 +73,7 @@ class UsersController extends BcAdminAppController
                     // 自動ログイン保存
                     $this->response = $service->setCookieAutoLoginKey($this->response, $user->id);
                 }
-                $this->BcMessage->setInfo(__d('baser', 'ようこそ、' . $user->getDisplayName() . 'さん。'));
+                $this->BcMessage->setInfo(__d('baser', 'ようこそ、{0}さん。', $user->getDisplayName()));
                 return $this->redirect($target);
             } else {
                 $this->BcMessage->setError(__d('baser', 'Eメール、または、パスワードが間違っています。'));

@@ -69,7 +69,7 @@ class BcAdminFormHelper extends BcFormHelper
                     $options = array_replace_recursive([
                         'dateInput' => ['class' => 'bca-datetimepicker__date-input'],
                         'dateDiv' => ['tag' => 'span', 'class' => 'bca-datetimepicker__date'],
-                        'dateLabel' => ['text' => '日付', 'class' => 'bca-datetimepicker__date-label'],
+                        'dateLabel' => ['text' => __d('baser', '日付'), 'class' => 'bca-datetimepicker__date-label'],
                         'timeInput' => ['class' => 'bca-datetimepicker__time-input'],
                         'timeDiv' => ['tag' => 'span', 'class' => 'bca-datetimepicker__time'],
                         'timeLabel' => ['text' => '時間', 'class' => 'bca-datetimepicker__time-label']

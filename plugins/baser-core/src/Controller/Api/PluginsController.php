@@ -330,7 +330,7 @@ class PluginsController extends BcApiController
     {
         $this->request->allowMethod(['post', 'put']);
         $allowMethod = [
-            'detach' => '無効化'
+            'detach' => __d('baser', '無効化')
         ];
         $method = $this->getRequest()->getData('batch');
         if (!isset($allowMethod[$method])) {

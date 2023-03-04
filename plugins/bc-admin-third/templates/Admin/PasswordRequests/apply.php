@@ -25,8 +25,8 @@ $this->BcAdmin->setTitle(__d('baser', 'パスワードのリセット'));
   <?= $this->BcAdminForm->create($user, ['novalidate' => true]) ?>
   <div class="submit">
     <p>
-      <?php echo $this->BcAdminForm->control('password_1', ['type' => 'password', 'size' => '50', 'maxlength' => 255, 'placeholder' => 'パスワード']) ?>
-      <?php echo $this->BcAdminForm->control('password_2', ['type' => 'password', 'size' => '50', 'maxlength' => 255, 'placeholder' => '再入力']) ?>
+      <?php echo $this->BcAdminForm->control('password_1', ['type' => 'password', 'size' => '50', 'maxlength' => 255, 'placeholder' => __d('baser', 'パスワード')]) ?>
+      <?php echo $this->BcAdminForm->control('password_2', ['type' => 'password', 'size' => '50', 'maxlength' => 255, 'placeholder' => __d('baser', '再入力')]) ?>
       <?php echo $this->BcAdminForm->error('password') ?>
     </p>
 

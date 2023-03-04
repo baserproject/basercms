@@ -181,7 +181,7 @@ class MailController extends MailFrontAppController
         }
 
         if (!$this->getRequest()->getSession()->read('BcMail.valid') || !$this->getRequest()->is(['post', 'put'])) {
-            $this->BcMessage->setError('エラーが発生しました。もう一度操作してください。');
+            $this->BcMessage->setError(__d('baser', 'エラーが発生しました。もう一度操作してください。'));
             $this->redirect($this->request->getParam('Content.url') . '/index');
         }
 
@@ -220,7 +220,7 @@ class MailController extends MailFrontAppController
             return;
         }
         if (!$this->getRequest()->getSession()->read('BcMail.valid') || !$this->getRequest()->is(['post', 'put'])) {
-            $this->BcMessage->setError('エラーが発生しました。もう一度操作してください。');
+            $this->BcMessage->setError(__d('baser', 'エラーが発生しました。もう一度操作してください。'));
             $this->redirect($this->request->getParam('Content.url') . '/index');
         }
 

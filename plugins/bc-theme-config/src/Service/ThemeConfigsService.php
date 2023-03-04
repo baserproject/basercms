@@ -96,7 +96,7 @@ class ThemeConfigsService implements ThemeConfigsServiceInterface
 
         $entity = $this->ThemeConfigs->newEntity($postData, ['validate' => 'keyValue']);
         if ($entity->hasErrors()) {
-            throw new PersistenceFailedException($entity, '入力エラーです。内容を修正してください。');
+            throw new PersistenceFailedException($entity, __d('baser', '入力エラーです。内容を修正してください。'));
         }
 
         $this->updateColorConfig($entity);

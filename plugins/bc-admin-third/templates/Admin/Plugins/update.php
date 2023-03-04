@@ -27,7 +27,7 @@ use BaserCore\View\BcAdminAppView;
  * @var bool $requireUpdate
  * @var string $php
  */
-$this->BcAdmin->setTitle(sprintf(__d('baser', '%s｜データベースアップデート'), ($plugin->name === 'BaserCore')? 'baserCMSコア' : $plugin->title . 'プラグイン'));
+$this->BcAdmin->setTitle(sprintf(__d('baser', '%s｜データベースアップデート'), ($plugin->name === 'BaserCore')? __d('baser', 'baserCMSコア') : $plugin->title . __d('baser', 'プラグイン')));
 $this->BcBaser->i18nScript([
   'confirmMessage1' => __d('baser', 'アップデートを実行します。よろしいですか？'),
 ]);

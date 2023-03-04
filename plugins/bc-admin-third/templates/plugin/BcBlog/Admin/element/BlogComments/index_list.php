@@ -28,7 +28,7 @@ $this->BcBaser->js('BcBlog.admin/blog_comments/index.bundle', false);
     <div class="bca-action-table-listup">
       <?php echo $this->BcAdminForm->control('batch', [
         'type' => 'select',
-        'options' => ['publish' => '公開', 'unpublish' => __d('baser', '非公開'), 'delete' => __d('baser', '削除')],
+        'options' => ['publish' => __('baser', '公開'), 'unpublish' => __d('baser', '非公開'), 'delete' => __d('baser', '削除')],
         'empty' => __d('baser', '一括処理'),
         'data-bca-select-size' => 'lg'
       ]) ?>

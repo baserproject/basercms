@@ -23,8 +23,8 @@ return [
              * 自動補完郵便番号フィールドを表示するフィールドタイプ
              */
             'BcCcAutoZip' => [
-                'category' => 'その他',
-                'label' => '自動補完郵便番号',
+                'category' => __d('baser', 'その他'),
+                'label' => __d('baser', '自動補完郵便番号'),
                 'columnType' => 'string',
                 'controlType' => 'text',
                 'useSize' => true,

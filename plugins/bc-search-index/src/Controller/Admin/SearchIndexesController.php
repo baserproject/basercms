@@ -121,9 +121,9 @@ class SearchIndexesController extends BcAdminAppController
     {
         $this->request->allowMethod(['post']);
         if ($service->reconstruct()) {
-            $this->BcMessage->setSuccess('検索インデックスの再構築に成功しました。');
+            $this->BcMessage->setSuccess(__d('baser', '検索インデックスの再構築に成功しました。'));
         } else {
-            $this->BcMessage->setError('検索インデックスの再構築に失敗しました。');
+            $this->BcMessage->setError(__d('baser', '検索インデックスの再構築に失敗しました。'));
         }
         $this->redirect(['action' => 'index']);
     }

@@ -62,7 +62,7 @@ class UsersController extends BcApiController
             if ($this->request->is('ssl') && $this->request->getData('saved')) {
                 $this->response = $service->setCookieAutoLoginKey($this->response, $user->id);
             }
-            $this->BcMessage->setInfo(__d('baser', 'ようこそ、' . $user->getDisplayName() . 'さん。'));
+            $this->BcMessage->setInfo(__d('baser', 'ようこそ、{0}さん。', $user->getDisplayName()));
             $json['redirect'] = $redirect;
         }
         $this->set('json', $json);

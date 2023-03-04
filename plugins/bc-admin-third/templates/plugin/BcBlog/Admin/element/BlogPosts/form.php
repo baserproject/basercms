@@ -213,8 +213,8 @@ $this->BcBaser->js('BcBlog.admin/blog_posts/form.bundle', false, [
               'type' => 'dateTimePicker',
               'size' => 12,
               'maxlength' => 10,
-              'dateLabel' => ['text' => '開始日付'],
-              'timeLabel' => ['text' => '開始時間']
+              'dateLabel' => ['text' => __d('baser', '開始日付')],
+              'timeLabel' => ['text' => __d('baser', '開始時間')]
             ], true) ?>
           </span>
           <span class="bca-datetimepicker__delimiter">〜</span>
@@ -223,8 +223,8 @@ $this->BcBaser->js('BcBlog.admin/blog_posts/form.bundle', false, [
               'type' => 'dateTimePicker',
               'size' => 12,
               'maxlength' => 10,
-              'dateLabel' => ['text' => '終了日付'],
-              'timeLabel' => ['text' => '終了時間']
+              'dateLabel' => ['text' => __d('baser', '終了日付')],
+              'timeLabel' => ['text' => __d('baser', '終了時間')]
             ], true) ?>
             </span>
         </span>

@@ -492,7 +492,7 @@ return [
      */
     'BcPermission' => [
         'permissionGroupTypes' => [
-            'Admin' => '管理画面',
+            'Admin' => __d('baser', '管理画面'),
             'Api' => 'Web API'
         ],
         'defaultAllows' => [

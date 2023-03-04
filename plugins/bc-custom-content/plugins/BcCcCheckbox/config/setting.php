@@ -23,8 +23,8 @@ return [
              * チェックボックスを表示するフィールドタイプ
              */
             'BcCcCheckbox' => [
-                'category' => '選択',
-                'label' => 'チェックボックス',
+                'category' => __d('baser', '選択'),
+                'label' => __d('baser', 'チェックボックス'),
                 'columnType' => 'boolean',
                 'controlType' => 'checkbox',
                 'preview' => true,

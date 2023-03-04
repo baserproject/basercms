@@ -25,7 +25,7 @@ $this->BcBaser->js('admin/permissions/dialog.bundle');
 ?>
 
 
-<div id="PermissionDialog" title="アクセスルール登録" hidden>
+<div id="PermissionDialog" title="<?php echo __d('baser', 'アクセスルール登録') ?>" hidden>
 
   <?= $this->BcAdminForm->create(null, [
     'novalidate' => true,

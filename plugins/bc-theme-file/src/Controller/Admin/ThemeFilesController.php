@@ -374,7 +374,7 @@ class ThemeFilesController extends BcAdminAppController
             try {
                 $form = $service->create($this->getRequest()->getData());
                 $entity = $service->get($form->getData('fullpath'));
-                $this->BcMessage->setInfo('フォルダ「' . $entity->name . '」を作成しました。');
+                $this->BcMessage->setInfo(__d('baser', 'フォルダ「{0}」を作成しました。', $entity->name));
                 return $this->redirect(array_merge(
                     ['action' => 'index', $args['theme'], $args['plugin'], $args['type']],
                     explode('/', dirname($args['path']))
@@ -411,7 +411,7 @@ class ThemeFilesController extends BcAdminAppController
             try {
                 $form = $service->update($this->getRequest()->getData());
                 $entity = $service->get($form->getData('fullpath'));
-                $this->BcMessage->setInfo('フォルダ名を ' . $entity->name . ' に変更しました。');
+                $this->BcMessage->setInfo(__d('baser', 'フォルダ名を {0} に変更しました。', $entity->name));
                 return $this->redirect(array_merge(
                     ['action' => 'index', $args['theme'], $args['plugin'], $args['type']],
                     explode('/', dirname($args['path']))

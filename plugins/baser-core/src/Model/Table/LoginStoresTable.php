@@ -66,7 +66,7 @@ class LoginStoresTable extends AppTable
      */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
-        $rules->add($rules->isUnique(['store_key'], 'キーが重複しています。'));
+        $rules->add($rules->isUnique(['store_key'], __d('baser', 'キーが重複しています。')));
         return $rules;
     }
 

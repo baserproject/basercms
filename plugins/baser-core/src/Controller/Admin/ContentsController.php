@@ -169,7 +169,7 @@ class ContentsController extends BcAdminAppController
                 $this->redirect(['action' => 'edit_alias', $id]);
             } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
                 $alias = $e->getEntity();
-                $this->BcMessage->setError("保存中にエラーが発生しました。入力内容を確認してください。\n" . $alias->getErrors());
+                $this->BcMessage->setError(__d('baser', "保存中にエラーが発生しました。入力内容を確認してください。") . "\n" . $alias->getErrors());
             }
         } else {
             $this->request = $this->request->withData('Contents', $alias);
@@ -211,7 +211,7 @@ class ContentsController extends BcAdminAppController
             $this->BcMessage->setSuccess(sprintf(__d('baser', 'ゴミ箱「%s」を戻しました。'), $restored->title));
             return $this->redirect(['action' => 'index']);
         } else {
-            $this->BcMessage->setError('ゴミ箱から戻す事に失敗しました。');
+            $this->BcMessage->setError(__d('baser', 'ゴミ箱から戻す事に失敗しました。'));
             return $this->redirect(['action' => 'trash_index']);
         }
     }

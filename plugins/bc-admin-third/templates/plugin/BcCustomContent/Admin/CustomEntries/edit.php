@@ -46,7 +46,7 @@ $this->BcBaser->js('BcCustomContent.admin/custom_entries/form.bundle', false, [
   </span>
   <span class="bca-post__url">
     <a href="<?php echo $entryUrl ?>"
-       class="bca-text-url" target="_blank" data-toggle="tooltip" data-placement="top" title="公開URLを開きます">
+       class="bca-text-url" target="_blank" data-toggle="tooltip" data-placement="top" title="<?php echo __d('baser', '公開URLを開きます') ?>">
       <i class="bca-icon--globe"></i>
       <?php echo $entryUrl ?>
     </a>

@@ -88,7 +88,7 @@ $class = ' class="' . implode(' ', $classies) . '"';
     <?php endif ?>
     <?php if ($plugin->admin_link && $plugin->status && !$plugin->update && !$plugin->old_version): ?>
       <?php $this->BcBaser->link('', $plugin->admin_link, [
-        'aria-label' => 'このプラグインの設定を行う',
+        'aria-label' => __d('baser', 'このプラグインの設定を行う'),
         'title' => __d('baser', '管理'),
         'class' => 'btn-setting  bca-btn-icon',
         'data-bca-btn-type' => 'setting',

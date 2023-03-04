@@ -57,7 +57,7 @@
         <div class="bca-helptext">
           <?php echo __d('baser', 'コンテンツに紐付けるテーブルを選択します。') ?>
         </div>
-        &nbsp;&nbsp;<?php $this->BcBaser->link('テーブル設定に移動', [
+        &nbsp;&nbsp;<?php $this->BcBaser->link(__d('baser', 'テーブル設定に移動'), [
           'controller' => 'CustomTables',
           'action' => 'edit',
           $entity->custom_table_id

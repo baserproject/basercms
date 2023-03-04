@@ -23,8 +23,8 @@ return [
              * テキストエリアを表示するフィールドタイプ
              */
             'BcCcTextarea' => [
-                'category' => '基本',
-                'label' => 'テキストエリア',
+                'category' => __d('baser', '基本'),
+                'label' => __d('baser', 'テキストエリア'),
                 'columnType' => 'text',
                 'controlType' => 'textarea',
                 'preview' => true,
