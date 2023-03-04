@@ -144,9 +144,9 @@ class UtilitiesControllerTest extends BcTestCase
     public function test_restore_db()
     {
         $this->post('/baser/api/baser-core/utilities/restore_db.json?token=' . $this->accessToken, ['encoding' => 'utf8']);
-        $this->assertResponseCode(400);
+        $this->assertResponseCode(500);
         $result = json_decode((string)$this->_response->getBody());
-        $this->assertEquals('データの復元に失敗しました。ログの確認を行なって下さい。バックアップファイルが送信されませんでした。', $result->message);
+        $this->assertEquals('データベース処理中にエラーが発生しました。バックアップファイルが送信されませんでした。', $result->message);
 
         $zipSrcPath = TMP;
 
@@ -198,9 +198,9 @@ class UtilitiesControllerTest extends BcTestCase
         $this->assertResponseOk();
 
         $this->post('/baser/api/baser-core/utilities/delete_log.json?token=' . $this->accessToken);
-        $this->assertResponseCode(400);
+        $this->assertResponseCode(500);
         $result = json_decode((string)$this->_response->getBody());
-        $this->assertEquals($result->message, "エラーログをを削除できません。エラーログが存在しません。");
+        $this->assertEquals($result->message, "データベース処理中にエラーが発生しました。エラーログが存在しません。");
     }
 
 
