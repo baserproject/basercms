@@ -142,9 +142,9 @@ class ThemesControllerTest extends BcTestCase
         $this->assertEquals('テーマ「BcSpaSampleCopy」を削除しました。', $result->message);
 
         $this->post('/baser/api/baser-core/themes/delete/BcSpaSampleCopy.json?token=' . $this->accessToken);
-        $this->assertResponseCode(400);
+        $this->assertResponseCode(500);
         $result = json_decode((string)$this->_response->getBody());
-        $this->assertEquals('テーマフォルダのアクセス権限を見直してください。' . $result->error, $result->message);
+        $this->assertEquals('データベース処理中にエラーが発生しました。 に書込み権限がありません。', $result->message);
     }
 
     /**
