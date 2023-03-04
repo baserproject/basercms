@@ -67,6 +67,21 @@ class MailContentsServiceTest extends BcTestCase
     }
 
     /**
+     * 一覧データ取得
+     */
+    public function test_getIndex()
+    {
+        //データを生成
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        //一覧データ取得サービスをコル
+        $rs = $this->MailContentsService->getIndex([])->toArray();
+        //戻る値を確認
+        $this->assertCount(2, $rs);
+        $this->assertEquals($rs[1]->description, 'description test');
+        $this->assertEquals($rs[1]->content->title, 'お問い合わせ');
+    }
+
+    /**
      * test getNew
      */
     public function test_getNew()

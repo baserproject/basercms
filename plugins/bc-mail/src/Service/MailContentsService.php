@@ -175,19 +175,30 @@ class MailContentsService implements MailContentsServiceInterface
      */
     public function getIndex(array $queryParams = []): Query
     {
-        $query = $this->MailContents->find()->order([
-            'MailContents.id'
-        ]);
+        $options = array_merge([
+            'num' => null,
+            'limit' => null,
+            'direction' => 'DESC',    // 並び方向
+            'order' => 'posted',    // 並び順対象のフィールド
+            'sort' => null,
+            'id' => null,
+            'no' => null,
+            'status' => null,
+        ], $queryParams);
 
-        if (!empty($queryParams['limit'])) {
-            $query->limit($queryParams['limit']);
+        if (!empty($options['num'])) $options['limit'] = $options['num'];
+        if (!empty($options['sort'])) $options['order'] = $options['sort'];
+        unset($options['num'], $options['sort']);
+
+        // ステータス
+        $conditions = [];
+        if ($options['status'] === 'publish') {
+            $conditions = $this->MailContents->Contents->getConditionAllowPublish();
         }
 
-        if (!empty($queryParams['description'])) {
-            $query->where(['description LIKE' => '%' . $queryParams['description'] . '%']);
-        }
-
-        return $query;
+        $query = $this->MailContents->find()->contain('Contents');
+        if (!is_null($options['limit'])) $query->limit($options['limit']);
+        return $query->where($conditions);
     }
 
     /**
