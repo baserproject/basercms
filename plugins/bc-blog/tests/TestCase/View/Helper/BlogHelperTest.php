@@ -274,14 +274,14 @@ class BlogHelperTest extends BcTestCase
     public function getPostLinkUrlDataProvider()
     {
         return [
-            'コンテンツURLなし' => [11, '', false, false],
-            'ベースURLなし' => [6, '', false, '/news/archives/3'],
-            'ベースURLあり' => [6, '/sub', false, '/news/archives/3'],
-            'ベースURLあり、URL付与あり' => [6, '/sub', true, '/sub/news/archives/3'],
-            'sサイト' => [7, '', false, 'https://main.com/s/news/archives/4'],
-            'enサイト' => [8, '', false, 'https://main.com/en/news/archives/5'],
-            '別サイト' => [9, '', false, 'https://example.com/news/archives/6'],
-            'サブドメイン' => [10, '', false, 'https://sub.main.com/archives/7'],
+            'コンテンツURLなし' => [11, '', false, 'https://main.com/news/archives/release'],
+            'ベースURLなし' => [6, '', false, 'https://main.com/news/archives/release'],
+            'ベースURLあり' => [6, '/sub', false, 'https://main.com/sub/news/archives/release'],
+            'ベースURLあり、URL付与あり' => [6, '/sub', true, 'https://main.com/sub/news/archives/release'],
+            'sサイト' => [7, '', false, 'https://main.com/news/archives/smartphone_release'],
+            'enサイト' => [8, '', false, 'https://main.com/news/archives/english_release'],
+            '別サイト' => [9, '', false, 'https://main.com/news/archives/another_domain_release'],
+            'サブドメイン' => [10, '', false, 'https://main.com/news/archives/sub_domain_release'],
         ];
     }
 

@@ -158,7 +158,7 @@ class BlogPostsAdminServiceTest extends BcTestCase
             'plugin' => 'BcBlog',
             'type' => 'BlogContent'
         ])->persist();
-        BlogPostFactory::make(['id' => 1])->persist();
+        BlogPostFactory::make(['id' => 1, 'blog_content_id' => 1])->persist();
         BlogContentFactory::make(['id' => 1])->persist();
         $this->loadFixtureScenario(InitAppScenario::class);
 
