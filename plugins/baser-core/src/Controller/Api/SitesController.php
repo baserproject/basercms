@@ -12,6 +12,8 @@
 namespace BaserCore\Controller\Api;
 
 use BaserCore\Service\SitesServiceInterface;
+use Cake\Datasource\Exception\RecordNotFoundException;
+use Cake\ORM\Exception\PersistenceFailedException;
 use Exception;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -31,12 +33,24 @@ class SitesController extends BcApiController
      * @noTodo
      * @unitTest
      */
-    public function view(SitesServiceInterface $service, $id)
+    public function view(SitesServiceInterface $service, int $id)
     {
+        $this->request->allowMethod(['get']);
+        $site = $message = null;
+        try {
+            $site = $service->get($id);
+        } catch (RecordNotFoundException $e) {
+            $this->setResponse($this->response->withStatus(404));
+            $message = __d('baser', 'データが見つかりません。');
+        } catch (\Throwable $e) {
+            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $this->setResponse($this->response->withStatus(500));
+        }
         $this->set([
-            'site' => $service->get($id)
+            'site' => $site,
+            'message' => $message
         ]);
-        $this->viewBuilder()->setOption('serialize', ['site']);
+        $this->viewBuilder()->setOption('serialize', ['site', 'message']);
     }
 
     /**
@@ -64,18 +78,22 @@ class SitesController extends BcApiController
     public function add(SitesServiceInterface $service)
     {
         $this->request->allowMethod(['post', 'delete']);
+        $site = $errors = null;
         try {
             $site = $service->create($this->request->getData());
             $message = __d('baser', 'サイト「{0}」を追加しました。', $site->name);
-        } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
-            $site = $e->getEntity();
+        } catch (PersistenceFailedException $e) {
+            $errors = $e->getEntity()->getErrors();
+            $message = __d('baser', "入力エラーです。内容を修正してください。");
             $this->setResponse($this->response->withStatus(400));
-            $message = __d('baser', '入力エラーです。内容を修正してください。');
+        } catch (\Throwable $e) {
+            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $this->setResponse($this->response->withStatus(500));
         }
         $this->set([
             'message' => $message,
             'site' => $site,
-            'errors' => $site->getErrors(),
+            'errors' => $errors
         ]);
         $this->viewBuilder()->setOption('serialize', ['message', 'site', 'errors']);
     }
@@ -88,21 +106,28 @@ class SitesController extends BcApiController
      * @noTodo
      * @unitTest
      */
-    public function edit(SitesServiceInterface $service, $id)
+    public function edit(SitesServiceInterface $service, int $id)
     {
         $this->request->allowMethod(['post', 'put']);
-        $site = $service->get($id);
+        $site = $errors = null;
         try {
-            $site = $service->update($site, $this->request->getData());
+            $site = $service->update($service->get($id), $this->request->getData());
             $message = __d('baser', 'サイト「{0}」を更新しました。', $site->name);
-        } catch (\Exception $e) {
+        } catch (PersistenceFailedException $e) {
+            $errors = $e->getEntity()->getErrors();
+            $message = __d('baser', "入力エラーです。内容を修正してください。");
             $this->setResponse($this->response->withStatus(400));
-            $message = __d('baser', '入力エラーです。内容を修正してください。');
+        } catch (RecordNotFoundException $e) {
+            $this->setResponse($this->response->withStatus(404));
+            $message = __d('baser', 'データが見つかりません。');
+        } catch (\Throwable $e) {
+            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $this->setResponse($this->response->withStatus(500));
         }
         $this->set([
             'message' => $message,
             'site' => $site,
-            'errors' => $site->getErrors(),
+            'errors' => $errors,
         ]);
         $this->viewBuilder()->setOption('serialize', ['site', 'message', 'errors']);
     }
@@ -115,17 +140,20 @@ class SitesController extends BcApiController
      * @noTodo
      * @unitTest
      */
-    public function delete(SitesServiceInterface $service, $id)
+    public function delete(SitesServiceInterface $service, int $id)
     {
         $this->request->allowMethod(['post', 'delete']);
-        $site = $service->get($id);
+        $site = null;
         try {
-            if ($service->delete($id)) {
-                $message = __d('baser', 'サイト: {0} を削除しました。', $site->name);
-            }
-        } catch (Exception $e) {
-            $this->setResponse($this->response->withStatus(400));
-            $message = __d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
+            $site = $service->get($id);
+            $service->delete($id);
+            $message = __d('baser', 'サイト: {0} を削除しました。', $site->name);
+        } catch (RecordNotFoundException $e) {
+            $this->setResponse($this->response->withStatus(404));
+            $message = __d('baser', 'データが見つかりません');
+        } catch (\Throwable $e) {
+            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $this->setResponse($this->response->withStatus(500));
         }
         $this->set([
             'message' => $message,
