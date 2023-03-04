@@ -76,7 +76,7 @@ $entryDates = $data['entryDates'];
   //曜日を取得するために時間をセット
   $today = mktime(0, 0, 0, $month, $day, $year);
   //曜日の配列
-  $date = [__d('baser_core''日'), __d('baser_core''月'), __d('baser_core''火'), __d('baser_core''水'), __d('baser_core''木'), __d('baser_core''金'), __d('baser_core''土')];
+  $date = [__d('baser_core', '日'), __d('baser_core', '月'), __d('baser_core', '火'), __d('baser_core', '水'), __d('baser_core', '木'), __d('baser_core', '金'), __d('baser_core', '土')];
 
   //カレンダーを表示する
   //先月の場合
@@ -110,13 +110,13 @@ $entryDates = $data['entryDates'];
 
   echo '
 <tr>
-<th class="sunday">' . __d('baser_core''日') . '</th>
-<th>' . __d('baser_core''月') . '</th>
-<th>' . __d('baser_core''火') . '</th>
-<th>' . __d('baser_core''水') . '</th>
-<th>' . __d('baser_core''木') . '</th>
-<th>' . __d('baser_core''金') . '</th>
-<th class="saturday">' . __d('baser_core''土') . '</th>
+<th class="sunday">' . __d('baser_core', '日') . '</th>
+<th>' . __d('baser_core', '月') . '</th>
+<th>' . __d('baser_core', '火') . '</th>
+<th>' . __d('baser_core', '水') . '</th>
+<th>' . __d('baser_core', '木') . '</th>
+<th>' . __d('baser_core', '金') . '</th>
+<th class="saturday">' . __d('baser_core', '土') . '</th>
 </tr>
 ';
 

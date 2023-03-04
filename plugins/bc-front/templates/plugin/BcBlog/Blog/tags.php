@@ -45,7 +45,7 @@ $this->BcUpload->setTable('BcBlog.BlogPosts');
 	</article>
 	<?php endforeach; ?>
 <?php else: ?>
-<p class="bs-blog-no-data"><?php echo __d('baser_core''記事がありません。'); ?></p>
+<p class="bs-blog-no-data"><?php echo __d('baser_core', '記事がありません。'); ?></p>
 <?php endif ?>
 </section>
 

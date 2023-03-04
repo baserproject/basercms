@@ -21,19 +21,19 @@
 
                                            <?php echo $other['date'] ?>　
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━
-　　　　　　　　　　　　　　　　◆◇　<?php echo __d('baser_core''受信完了メール') ?>　◇◆　
+　　　　　　　　　　　　　　　　◆◇　<?php echo __d('baser_core', '受信完了メール') ?>　◇◆　
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 <?php if ($other['mode'] === 'user'): ?>
-  <?php echo __d('baser_core''この度は、ご連絡ありがとうございます。') ?>　
-  <?php echo __d('baser_core''送信内容は下記のようになっております。') ?>　
+  <?php echo __d('baser_core', 'この度は、ご連絡ありがとうございます。') ?>　
+  <?php echo __d('baser_core', '送信内容は下記のようになっております。') ?>　
 <?php elseif ($other['mode'] === 'admin'): ?>
-　<?php echo $mailConfig->site_name ?> <?php echo __d('baser_core''へ連絡を受け付けました。') ?>　
-　<?php echo __d('baser_core''受信内容は下記のとおりです。') ?>　
+　<?php echo $mailConfig->site_name ?> <?php echo __d('baser_core', 'へ連絡を受け付けました。') ?>　
+　<?php echo __d('baser_core', '受信内容は下記のとおりです。') ?>　
 <?php endif; ?>
 　
 ━━━━◇◆━━━━━━━━━━━━━━━━━━━━━
-　◆ <?php echo __d('baser_core''送信内容') ?>　
+　◆ <?php echo __d('baser_core', '送信内容') ?>　
 ━━━━━━━━━━━━━━━━━━━━━◆◇━━━━
 <?php echo $this->element('../email/text/mail_data') ?>
 
@@ -42,12 +42,12 @@
 ───────────────────────────
 
 <?php if ($other['mode'] === 'user'): ?>
-  <?php echo __d('baser_core''なお、このメールは自動返信メールとなっております。') ?>　
-  　<?php echo __d('baser_core''メールを確認させて頂き次第、早急にご連絡させていただきます。') ?>　
-  　<?php echo __d('baser_core''恐れ入りますがしばらくお待ちください。') ?>　
+  <?php echo __d('baser_core', 'なお、このメールは自動返信メールとなっております。') ?>　
+  　<?php echo __d('baser_core', 'メールを確認させて頂き次第、早急にご連絡させていただきます。') ?>　
+  　<?php echo __d('baser_core', '恐れ入りますがしばらくお待ちください。') ?>　
 <?php elseif ($other['mode'] === 'admin'): ?>
-  <?php echo __d('baser_core''なお、このメールは自動転送システムです。') ?>　
-  　<?php echo __d('baser_core''受け付けた旨のメールもユーザーへ送られています。') ?>　
+  <?php echo __d('baser_core', 'なお、このメールは自動転送システムです。') ?>　
+  　<?php echo __d('baser_core', '受け付けた旨のメールもユーザーへ送られています。') ?>　
 <?php endif; ?>
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━

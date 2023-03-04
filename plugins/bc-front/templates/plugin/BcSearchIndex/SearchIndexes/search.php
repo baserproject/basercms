@@ -29,11 +29,11 @@ $this->BcBaser->setTitle(__d('baser_core', '検索結果一覧'));
 <div class="bs-search-form">
     <?php echo $this->BcForm->create($searchIndexesFront, ['type' => 'get']) ?>
     <?php if ($contentFolders): ?>
-        <?php echo $this->BcForm->control('f', ['type' => 'select', 'options' => $contentFolders, 'empty' => __d('baser_core''カテゴリ')]) ?>
+        <?php echo $this->BcForm->control('f', ['type' => 'select', 'options' => $contentFolders, 'empty' => __d('baser_core', 'カテゴリ')]) ?>
     <?php endif ?>
-    <?php echo $this->BcForm->control('q', ['placeholder' => __d('baser_core''キーワード'), 'escape' => false, 'div' => false]) ?>
+    <?php echo $this->BcForm->control('q', ['placeholder' => __d('baser_core', 'キーワード'), 'escape' => false, 'div' => false]) ?>
     <?php echo $this->BcForm->hidden('s') ?>
-    <?php echo $this->BcForm->submit(__d('baser_core''検索'), ['div' => false, 'class' => 'bs-button-small']) ?>
+    <?php echo $this->BcForm->submit(__d('baser_core', '検索'), ['div' => false, 'class' => 'bs-button-small']) ?>
     <?php echo $this->BcForm->end() ?>
 </div>
 

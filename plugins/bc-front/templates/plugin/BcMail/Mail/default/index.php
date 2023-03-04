@@ -24,7 +24,7 @@ $this->BcUpload->setTable('BcMail.MailMessages');
 
 <h2 class="bs-mail-title"><?php $this->BcBaser->contentsTitle() ?></h2>
 
-<h3 class="bs-mail-title-sub"><?php echo __d('baser_core''入力フォーム') ?></h3>
+<h3 class="bs-mail-title-sub"><?php echo __d('baser_core', '入力フォーム') ?></h3>
 
 <?php if ($this->Mail->descriptionExists()): ?>
 	<div class="bs-mail-description"><?php $this->Mail->description() ?></div>

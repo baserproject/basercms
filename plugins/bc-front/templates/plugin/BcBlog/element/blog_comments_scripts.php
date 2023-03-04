@@ -22,12 +22,12 @@ $this->BcBaser->js('BcBlog.blog_comments_scripts.js', true, [
 	'defer',
 	'once' => true,
 	'id' => 'BlogCommentsScripts',
-	'data-alertMessageName' => __d('baser_core''お名前を入力してください'),
-	'data-alertMessageComment' => __d('baser_core''コメントを入力してください'),
-	'data-alertMessageAuthImage' => __d('baser_core''画像の文字を入力してください'),
-	'data-alertMessageAuthComplate' => __d('baser_core''送信が完了しました。送信された内容は確認後公開させて頂きます。'),
-	'data-alertMessageComplate' => __d('baser_core''コメントの送信が完了しました。'),
-	'data-alertMessageError' => __d('baser_core''コメントの送信に失敗しました。入力内容を見なおしてください。'),
+	'data-alertMessageName' => __d('baser_core', 'お名前を入力してください'),
+	'data-alertMessageComment' => __d('baser_core', 'コメントを入力してください'),
+	'data-alertMessageAuthImage' => __d('baser_core', '画像の文字を入力してください'),
+	'data-alertMessageAuthComplate' => __d('baser_core', '送信が完了しました。送信された内容は確認後公開させて頂きます。'),
+	'data-alertMessageComplate' => __d('baser_core', 'コメントの送信が完了しました。'),
+	'data-alertMessageError' => __d('baser_core', 'コメントの送信に失敗しました。入力内容を見なおしてください。'),
 ]);
 ?>
 

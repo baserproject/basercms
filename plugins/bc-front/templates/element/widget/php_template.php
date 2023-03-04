@@ -33,6 +33,6 @@ if(!isset($subDir)) {
 	<?php if($this->_getElementFileName('widgets/' . basename($template, '.php'))): ?>
 	<?php $this->BcBaser->element('widgets' . DS . $template) ?>
 	<?php else: ?>
-	  <?php if(\Cake\Core\Configure::read('debug')) echo __d('baser_core''エラー：テンプレートが正常な場所に配置されていません。') ?>
+	  <?php if(\Cake\Core\Configure::read('debug')) echo __d('baser_core', 'エラー：テンプレートが正常な場所に配置されていません。') ?>
 	<?php endif ?>
 </div>

@@ -23,7 +23,7 @@ $relatedPosts = $this->Blog->getRelatedPosts($post);
 
 <?php if ($relatedPosts): ?>
 	<div class="bs-blog-related-posts">
-		<h4 class="contents-head"><?php echo __d('baser_core''関連記事') ?></h4>
+		<h4 class="contents-head"><?php echo __d('baser_core', '関連記事') ?></h4>
 		<ul>
 			<?php foreach($relatedPosts as $relatedPost): ?>
 				<li><?php $this->Blog->postTitle($relatedPost) ?></li>
