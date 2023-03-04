@@ -149,6 +149,15 @@ class MailMessagesControllerTest extends BcTestCase
         $this->assertResponseCode(500);
         // レスポンスのメッセージ内容を確認する
         $this->assertEquals('データベース処理中にエラーが発生しました。Cannot convert value of type `string` to integer', $result->message);
+
+        //404エラーテスト
+        $data = ['id' => 2, 'message' => 'test message'];
+        $this->post("/baser/api/bc-mail/mail_messages/add/22222.json?token=$this->accessToken", $data);
+        $result = json_decode((string)$this->_response->getBody());
+        // レスポンスのコードを確認する
+        $this->assertResponseCode(404);
+        // レスポンスのメッセージ内容を確認する
+        $this->assertEquals('データが見つかりません。', $result->message);
     }
 
     /**
