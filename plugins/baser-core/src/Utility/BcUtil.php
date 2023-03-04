@@ -673,7 +673,8 @@ class BcUtil
      */
     public static function isTest()
     {
-        return (!empty($_SERVER['argv'][0]) && $_SERVER['argv'][0] === 'vendor/bin/phpunit');
+        return (!empty($_SERVER['argv'][0]) &&
+            preg_match('/vendor\/bin\/phpunit$/', $_SERVER['argv'][0]));
     }
 
     /**

@@ -191,6 +191,7 @@ class BcTestCase extends TestCase
      */
     public function setUp(): void
     {
+        $this->classMethod();
         if (!$this->autoFixtures) {
             $this->setUpFixtureManager();
         }
@@ -212,6 +213,15 @@ class BcTestCase extends TestCase
         $container->addServiceProvider(new BcMailServiceProvider());
         $container->addServiceProvider(new BcWidgetAreaServiceProvider());
         EventManager::instance(new EventManager());
+    }
+
+    /**
+     * クラスメソッド名を取得する
+     */
+    public function classMethod()
+    {
+        $test = $this->providedTests[0];
+        echo $test->getTarget() . "\n";
     }
 
     /**

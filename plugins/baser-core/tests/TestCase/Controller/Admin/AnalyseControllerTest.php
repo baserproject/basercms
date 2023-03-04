@@ -11,7 +11,6 @@
 
 namespace BaserCore\Test\TestCase\Controller\Admin;
 
-use Cake\Core\Configure;
 use Cake\Core\Plugin as CakePlugin;
 use Cake\TestSuite\IntegrationTestTrait;
 use BaserCore\TestSuite\BcTestCase;
