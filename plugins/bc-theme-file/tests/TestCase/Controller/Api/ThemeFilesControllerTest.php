@@ -241,7 +241,7 @@ class ThemeFilesControllerTest extends BcTestCase
         //戻る値を確認
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals(
-            'コアフォルダ base_name_1.php を テーマ BcSpaSample の次のパスとしてコピーしました。\n/plugins/BcSpaSample/templates/layout/base_name_1.php。',
+            'コアファイル base_name_1.php を テーマ BcSpaSample の次のパスとしてコピーしました。\n/plugins/BcSpaSample/templates/layout/base_name_1.php。',
             $result->message
         );
         //実際にファイルが作成されいてるか確認すること
