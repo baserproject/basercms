@@ -49,52 +49,6 @@ class InstallationsController extends BcAdminAppController
     {
         parent::beforeFilter($event);
         set_time_limit(300);
-        if(!BcUtil::isInstallMode()) $this->notFound();
-        // TODO ucmitz 以下、未実装
-//        /* インストール状態判別 */
-//        if (file_exists(APP . 'Config' . DS . 'database.php')) {
-//            ConnectionManager::sourceList();
-//            $db = ConnectionManager::$config;
-//            if ($db->default['datasource'] != '') {
-//                $installed = 'complete';
-//            } else {
-//                $installed = 'half';
-//            }
-//        } else {
-//            $installed = 'yet';
-//        }
-//
-//        switch($this->request->action) {
-//            case 'alert':
-//                break;
-//            case 'reset':
-//                if (Configure::read('debug') != -1) {
-//                    $this->notFound();
-//                }
-//                break;
-//            default:
-//                if ($installed === 'complete') {
-//                    if ($this->request->action !== 'step5') {
-//                        $this->notFound();
-//                    }
-//                } else {
-//                    $installationData = Cache::read('Installation', 'default');
-//                    if (empty($installationData['lastStep'])) {
-//                        if (Configure::read('debug') == 0) {
-//                            $this->redirect(['action' => 'alert']);
-//                            return;
-//                        }
-//                    }
-//                }
-//                break;
-//        }
-
-        /*if (strpos($this->request->webroot, 'webroot') === false) {
-            $this->request->webroot = DS;
-        }*/
-
-//        $this->Security->csrfCheck = false;
-//        $this->Security->validatePost = false;
     }
 
     /**
@@ -249,50 +203,6 @@ class InstallationsController extends BcAdminAppController
             BcUtil::clearAllCache();
             if (function_exists('opcache_reset')) opcache_reset();
         }
-    }
-
-    /**
-     * インストール不能警告メッセージを表示
-     *
-     * @return void
-     */
-    public function alert()
-    {
-        $this->setTitle(__d('baser_core', 'baserCMSのインストールを開始できません'));
-    }
-
-    /**
-     * baserCMSを初期化する
-     * debug フラグが -1 の場合のみ実行可能
-     *
-     * @return    void
-     * @access    public
-     */
-    public function reset()
-    {
-        $this->setTitle(__d('baser_core', 'baserCMSの初期化'));
-        $this->layoutPath = 'admin';
-        $this->layout = 'default';
-        $this->subDir = 'admin';
-
-        if (empty($this->request->getData('Installation.reset'))) {
-            $this->set('complete', !BcUtil::isInstalled()? true : false);
-            return;
-        }
-
-        $dbConfig = $this->_readDbSetting();
-        if (!$dbConfig) {
-            $dbConfig = getDbConfig('default');
-        }
-
-        if (!$this->BcManager->reset($dbConfig)) {
-            $this->BcMessage->setError(__d('baser_core',
-                'baserCMSを初期化しましたが、正常に処理が行われませんでした。詳細については、エラー・ログを確認してださい。'
-            ));
-        } else {
-            $this->BcMessage->setInfo(__d('baser_core', 'baserCMSを初期化しました。'));
-        }
-        $this->redirect('reset');
     }
 
 }

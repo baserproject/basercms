@@ -443,10 +443,6 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
      *
      * 次のルートを設定するが、未インストール時はインストーラーのみ設定し他はスキップする。
      *
-     * ### インストーラー
-     * /
-     * /install
-     *
      * ### コンテンツルーティング
      * /*
      *

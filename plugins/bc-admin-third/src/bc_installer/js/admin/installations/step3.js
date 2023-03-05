@@ -29,13 +29,10 @@ $(function () {
             } else if ($dbName.val() === "") {
                 alert(bcI18n.message3);
                 result = false;
-            } else if ($dbPrefix.val() === "") {
-                alert(bcI18n.message4);
-                result = false;
-            } else if (!$dbPrefix.val().match(/[_]$/)) {
+            } else if ($dbPrefix.val() && !$dbPrefix.val().match(/[_]$/)) {
                 alert(bcI18n.message5);
                 result = false;
-            } else if (!$dbPrefix.val().match(/^[a-zA-z0-9_]+_$/)) {
+            } else if ($dbPrefix.val() && !$dbPrefix.val().match(/^[a-zA-z0-9_]+_$/)) {
                 alert(bcI18n.message6);
                 result = false;
             } else if ($dbName.val().match(/^.*\..*$/)) {
@@ -88,7 +85,6 @@ function initForm() {
         host = 'localhost';
         dbName = 'baser';
         port = '3306';
-        prefix = 'mysite_';
     } else if ($dbType.val() === 'postgres') {
         $('#liDbHost').show(500);
         $('#liDbUser').show(500);
@@ -97,7 +93,6 @@ function initForm() {
         host = 'localhost';
         dbName = 'baser';
         port = '5432';
-        prefix = 'mysite_';
     } else if ($dbType.val() === 'sqlite') {
         $('#liDbHost').hide(500);
         $('#liDbUser').hide(500);
@@ -116,6 +111,5 @@ function initForm() {
     if (!$dbHost.val()) $dbHost.val(host);
     if (!$dbName.val()) $dbName.val(dbName);
     if (!$dbPort.val()) $dbPort.val(port);
-    if (!$dbPrefix.val()) $dbPrefix.val(prefix);
     $dbHost.focus();
 }

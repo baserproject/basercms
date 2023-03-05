@@ -297,12 +297,15 @@ class BcToolbarHelper extends Helper
     {
         if(!BcUtil::isInstalled()) return Configure::read('BcLinks.installManual');
         $currentSite = $this->_View->getRequest()->getAttribute('currentSite');
-        /* @var SitesService $siteService */
-        $siteService = $this->getService(SitesServiceInterface::class);
-        $content = $siteService->getRootContent($currentSite->id);
         $normalUrl = '/';
-        if($content) $normalUrl = $this->BcBaser->getContentsUrl($content->url, true, $currentSite->use_subdomain);
+        if($currentSite) {
+            /* @var SitesService $siteService */
+            $siteService = $this->getService(SitesServiceInterface::class);
+            $content = $siteService->getRootContent($currentSite->id);
+            if($content) $normalUrl = $this->BcBaser->getContentsUrl($content->url, true, $currentSite->use_subdomain);
+        }
         $links = [
+            'install' => '',
             'update' => Configure::read('BcLinks.updateManual'),
             'normal' => $normalUrl,
             'frontAdminAvailable' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'dashboard', 'action' => 'index'],

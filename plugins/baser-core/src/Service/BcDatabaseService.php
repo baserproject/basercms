@@ -1389,6 +1389,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         // データベースのテーブルをチェック
         $tableNames = $db->getSchemaCollection()->listTables();
         $prefix = Hash::get($config, 'prefix');
+        if(!$prefix) return;
         $duplicateTableNames = array_filter($tableNames, function($tableName) use ($prefix) {
             return strpos($tableName, $prefix) === 0;
         });
