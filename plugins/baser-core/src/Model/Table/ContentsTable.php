@@ -971,7 +971,9 @@ class ContentsTable extends AppTable
             if ($site->alias) {
                 $prefix = $site->alias;
             }
-            $url = preg_replace('/^\/' . preg_quote($prefix, '/') . '\//', '/', $content->url);
+            if($prefix) {
+                $url = preg_replace('/^\/' . preg_quote($prefix, '/') . '\//', '/', $content->url);
+            }
             $mainSitePrefix = $this->Sites->getPrefix($site->main_site_id);
             if ($mainSitePrefix) {
                 $url = '/' . $mainSitePrefix . $url;

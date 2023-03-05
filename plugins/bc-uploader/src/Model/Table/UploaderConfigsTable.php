@@ -44,60 +44,43 @@ class UploaderConfigsTable extends AppTable
      *
      * @param Validator $validator
      * @return Validator
+     * @noTodo
      * @checked
+     * @unitTest
      */
     public function validationKeyValue(Validator $validator): Validator
     {
-        // TODO ucmitz バリデーションを実装
+        $validator
+            ->scalar('large_width')
+            ->notEmptyString('large_width', __d('baser_core', 'PCサイズ（大）[幅] を入力してください。'));
+        $validator
+            ->scalar('large_height')
+            ->notEmptyString('large_height', __d('baser_core', 'PCサイズ（大）[高さ] を入力してください。'));
+        $validator
+            ->scalar('midium_width')
+            ->notEmptyString('midium_width', __d('baser_core', 'PCサイズ（中）[幅] を入力してください。'));
+        $validator
+            ->scalar('midium_height')
+            ->notEmptyString('midium_height', __d('baser_core', 'PCサイズ（中）[高さ] を入力してください。'));
+        $validator
+            ->scalar('small_width')
+            ->notEmptyString('small_width', __d('baser_core', 'PCサイズ（小）[幅] を入力してください。'));
+        $validator
+            ->scalar('small_height')
+            ->notEmptyString('small_height', __d('baser_core', 'PCサイズ（小）[高さ] を入力してください。'));
+        $validator
+            ->scalar('mobile_large_width')
+            ->notEmptyString('mobile_large_width', __d('baser_core', 'モバイルサイズ（大）[幅] を入力してください。'));
+        $validator
+            ->scalar('mobile_large_height')
+            ->notEmptyString('large_width', __d('baser_core', 'モバイルサイズ（大）[高さ] を入力してください。'));
+        $validator
+            ->scalar('mobile_small_width')
+            ->notEmptyString('mobile_small_width', __d('baser_core', 'モバイルサイズ（小）[幅] を入力してください。'));
+        $validator
+            ->scalar('mobile_small_height')
+            ->notEmptyString('mobile_small_height', __d('baser_core', 'モバイルサイズ（小）[幅] を入力してください。'));
         return $validator;
     }
 
-    /**
-     * バリデート
-     *
-     * @var        array
-     * @access    public
-     */
-    public $validate = [
-        'large_width' => [[
-            'rule' => ['notBlank'],
-            'message' => 'PCサイズ（大）[幅] を入力してください。'
-        ]],
-        'large_height' => [[
-            'rule' => ['notBlank'],
-            'message' => 'PCサイズ（大）[高さ] を入力してください。'
-        ]],
-        'midium_width' => [[
-            'rule' => ['notBlank'],
-            'message' => 'PCサイズ（中）[幅] を入力してください。'
-        ]],
-        'midium_height' => [[
-            'rule' => ['notBlank'],
-            'message' => 'PCサイズ（中）[高さ] を入力してください。'
-        ]],
-        'small_width' => [[
-            'rule' => ['notBlank'],
-            'message' => 'PCサイズ（小）[幅] を入力してください。'
-        ]],
-        'small_height' => [[
-            'rule' => ['notBlank'],
-            'message' => 'PCサイズ（小）[高さ] を入力してください。'
-        ]],
-        'mobile_large_width' => [[
-            'rule' => ['notBlank'],
-            'message' => '携帯サイズ（大）[幅] を入力してください。'
-        ]],
-        'mobile_large_height' => [[
-            'rule' => ['notBlank'],
-            'message' => '携帯サイズ（大）[高さ] を入力してください。'
-        ]],
-        'mobile_small_width' => [[
-            'rule' => ['notBlank'],
-            'message' => '携帯サイズ（小）[幅] を入力してください。'
-        ]],
-        'mobile_small_height' => [[
-            'rule' => ['notBlank'],
-            'message' => '携帯サイズ（小）[幅] を入力してください。'
-        ]]
-    ];
 }

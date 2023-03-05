@@ -11,13 +11,7 @@
 
 namespace BaserCore\Test\TestCase\Utility;
 
-use Cake\Core\App;
-use Cake\Cache\Cache;
-use Cake\Core\Plugin;
 use Cake\Core\Configure;
-use Cake\Filesystem\File;
-use Cake\Filesystem\Folder;
-use BaserCore\Utility\BcUtil;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcAgent;
 

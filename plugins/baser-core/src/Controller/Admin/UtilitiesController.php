@@ -114,7 +114,7 @@ class UtilitiesController extends BcAdminAppController
                 try {
                     $service->restoreDb($this->getRequest()->getData(), $this->getRequest()->getUploadedFiles());
                     $this->BcMessage->setInfo(__d('baser_core', 'データの復元が完了しました。'));
-                } catch (BcException $e) {
+                } catch (\Throwable $e) {
                     $this->BcMessage->setError(__d('baser_core', 'データの復元に失敗しました。ログの確認を行なって下さい。') . $e->getMessage());
                 }
                 $this->redirect(['action' => 'maintenance']);

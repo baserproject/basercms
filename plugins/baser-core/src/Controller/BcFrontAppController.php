@@ -10,6 +10,7 @@
  */
 namespace BaserCore\Controller;
 
+use BaserCore\Event\BcShortCodeEventListener;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
 use Cake\Event\EventInterface;
@@ -57,6 +58,10 @@ class BcFrontAppController extends AppController
 //            $this->viewBuilder()->setLayoutPath($subDir);
 //            $this->viewBuilder()->setTemplatePath($this->getName() . DS . $subDir);
 //        }
+        if (BcUtil::isInstalled()) {
+            // ショートコード
+            $this->getEventManager()->on(new BcShortCodeEventListener());
+        }
         if (!isset($this->RequestHandler) || !$this->RequestHandler->prefers('json')) {
             $this->setupFrontView();
         }

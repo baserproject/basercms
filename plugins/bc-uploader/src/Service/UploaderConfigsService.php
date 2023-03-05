@@ -78,12 +78,12 @@ class UploaderConfigsService implements UploaderConfigsServiceInterface
      */
     public function update(array $postData)
     {
-        $siteConfig = $this->UploaderConfigs->newEntity($postData, ['validate' => 'keyValue']);
-        if ($siteConfig->hasErrors()) {
-            return $siteConfig;
+        $uploaderConfig = $this->UploaderConfigs->newEntity($postData, ['validate' => 'keyValue']);
+        if ($uploaderConfig->hasErrors()) {
+            return $uploaderConfig;
         }
 
-        $siteConfigArray = $siteConfig->toArray();
+        $siteConfigArray = $uploaderConfig->toArray();
         if ($this->UploaderConfigs->saveKeyValue($siteConfigArray)) {
             $this->entity = null;
             return $this->get();

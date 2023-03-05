@@ -298,6 +298,9 @@ class BcDatabaseService implements BcDatabaseServiceInterface
             BcUtil::getCurrentThemesPlugins()
         );
 
+		$db = BcUtil::getCurrentDb();
+		$db->begin();
+
         // データを削除する
         $excludes = ['plugins', 'dblogs', 'users'];
         $this->resetAllTables($excludes);
@@ -305,12 +308,17 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         $result = true;
         $this->clearAppTableList();
 
-        foreach($plugins as $plugin) {
-            if (!$this->_loadDefaultDataPattern($pattern, $theme, $plugin, $excludes)) {
-                $result = false;
-                $this->log(sprintf(__d('baser_core', '%s %s の初期データのロードに失敗しました。'), $theme . '.' . $pattern, $plugin));
-            }
-        }
+		try {
+			foreach($plugins as $plugin) {
+				if (!$this->_loadDefaultDataPattern($pattern, $theme, $plugin, $excludes)) {
+					$result = false;
+					$this->log(sprintf(__d('baser_core', '%s %s の初期データのロードに失敗しました。'), $theme . '.' . $pattern, $plugin));
+				}
+			}
+		} catch (\Throwable $e) {
+			$db->rollback();
+			return false;
+		}
 
         if (!$result) {
             $this->resetAllTables($excludes);
@@ -325,11 +333,15 @@ class BcDatabaseService implements BcDatabaseServiceInterface
                 }
             }
             if ($result) {
+            	$db->commit();
                 throw new BcException(__d('baser_core', '初期データの読み込みに失敗しましたので baserCMSコアの初期データを読み込みました。ログを確認してください。'));
             } else {
+            	$db->rollback();
                 throw new BcException(__d('baser_core', '初期データの読み込みに失敗しました。データが不完全な状態です。正常に動作しない可能性があります。ログを確認してください。'));
             }
         }
+
+        $db->commit();
         return $result;
     }
 
@@ -364,12 +376,16 @@ class BcDatabaseService implements BcDatabaseServiceInterface
                 if (!preg_match('/\.csv$/', $file)) continue;
                 $table = basename($file, '.csv');
                 if ($table !== $targetTable) continue;
-                if (!$this->loadCsv(['path' => $file, 'encoding' => 'auto'])) {
-                    $this->log(sprintf(__d('baser_core', '%s の読み込みに失敗。'), $file));
-                    $result = false;
-                } else {
-                    break;
-                }
+                try {
+					if (!$this->loadCsv(['path' => $file, 'encoding' => 'auto'])) {
+						$this->log(sprintf(__d('baser_core', '%s の読み込みに失敗。'), $file));
+						$result = false;
+					} else {
+						break;
+					}
+				} catch(\Throwable $e) {
+					throw $e;
+				}
             }
         }
         return $result;
@@ -412,24 +428,22 @@ class BcDatabaseService implements BcDatabaseServiceInterface
                     if ($key === $indexField && empty($value)) {
                         unset($record[$indexField]);
                     }
+                    $type = $schema->getColumnType($key);
                     if ($key === 'created' && empty($value)) {
                         $record['created'] = date('Y-m-d H:i:s');
-                    } elseif ($schema->getColumnType($key) === 'datetime' && empty($value)) {
+                    } elseif ($type === 'datetime' && empty($value)) {
                         $record[$key] = null;
-                    }
-                    if ($schema->getColumnType($key) === 'boolean' && empty($value)) {
+                    } elseif ($type === 'boolean' && empty($value)) {
                         $record[$key] = 0;
+                    } elseif (in_array($type, ['string', 'text']) && is_null($value)) {
+                        $record[$key] = '';
                     }
                 }
                 try {
-                    if (!$appTable->saveOrFail(new Entity($record))) {
-                        return false;
-                    }
-                } catch (BcException $e) {
-                    $this->log($e->getMessage());
-                    return false;
-                }
-
+					$appTable->saveOrFail($appTable->newEntity($record, ['validate' => false]), ['atomic' => false]);
+				} catch (\Throwable $e){
+					throw $e;
+				}
             }
         }
 

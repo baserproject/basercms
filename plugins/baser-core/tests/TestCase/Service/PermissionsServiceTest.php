@@ -437,9 +437,9 @@ class PermissionsServiceTest extends BcTestCase
      */
     public function testBatch()
     {
-        PermissionFactory::make(['id' => 100, 'user_group_id' => 100, 'status' => 1], 1)->persist();
-        PermissionFactory::make(['id' => 101, 'user_group_id' => 100, 'status' => 1], 1)->persist();
-        PermissionFactory::make(['id' => 102, 'user_group_id' => 100, 'status' => 1], 1)->persist();
+        PermissionFactory::make(['id' => 100, 'no' => 1, 'user_group_id' => 100, 'status' => 1], 1)->persist();
+        PermissionFactory::make(['id' => 101, 'no' => 2, 'user_group_id' => 100, 'status' => 1], 1)->persist();
+        PermissionFactory::make(['id' => 102, 'no' => 3, 'user_group_id' => 100, 'status' => 1], 1)->persist();
 
         $this->PermissionsService->batch('delete', [100, 101, 102]);
 

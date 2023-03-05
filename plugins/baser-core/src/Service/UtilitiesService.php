@@ -27,6 +27,7 @@ use Cake\ORM\TableRegistry;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use Throwable;
 
 /**
  * UtilitiesService
@@ -410,17 +411,10 @@ class UtilitiesService implements UtilitiesServiceInterface
         unlink($tmpPath . $name);
 
         $result = true;
-        $db = TableRegistry::getTableLocator()->get('BaserCore.App')->getConnection();
-        $db->begin();
         try {
             /* @var \BaserCore\Service\BcDatabaseService $dbService */
-            if ($this->_loadBackup($tmpPath, $postData['encoding'])) {
-                $db->commit();
-            } else {
-                $db->rollback();
-            }
-        } catch (BcException $e) {
-            $db->rollback();
+            $this->_loadBackup($tmpPath, $postData['encoding']);
+        } catch (\Throwable $e) {
             throw $e;
         }
 
@@ -434,7 +428,7 @@ class UtilitiesService implements UtilitiesServiceInterface
      *
      * @param string $path スキーマファイルのパス
      * @param $encoding
-     * @return boolean
+     * @return void
      * @checked
      * @noTodo
      * @unitTest
@@ -443,13 +437,15 @@ class UtilitiesService implements UtilitiesServiceInterface
     {
         $folder = new Folder($path);
         $files = $folder->read(true, true);
-        if (!is_array($files[1])) return false;
+        if (!is_array($files[1])) return;
 
         /* @var BcDatabaseService $dbService */
         $dbService = $this->getService(BcDatabaseServiceInterface::class);
 
         $prefix = BcUtil::getCurrentDbConfig()['prefix'];
 
+        $db = BcUtil::getCurrentDb();
+        $db->begin();
         // テーブルを削除する
         foreach($files[1] as $file) {
             if (!preg_match("/\.php$/", $file)) continue;
@@ -460,13 +456,13 @@ class UtilitiesService implements UtilitiesServiceInterface
                     'file' => $file,
                     'prefix' => $prefix
                 ]);
-            } catch (BcException $e) {
-                $this->log($e->getMessage());
+            } catch (Throwable $e) {
+                $db->rollback();
+                throw $e;
             }
         }
 
         // テーブルを読み込む
-        $result = true;
         foreach($files[1] as $file) {
             if (!preg_match("/\.php$/", $file)) continue;
             try {
@@ -476,12 +472,11 @@ class UtilitiesService implements UtilitiesServiceInterface
                     'file' => $file,
                     'prefix' => $prefix
                 ])) {
-                    $result = false;
                     continue;
                 }
-            } catch (BcException $e) {
-                $result = false;
-                $this->log($e->getMessage());
+            } catch (Throwable $e) {
+                $db->rollback();
+                throw $e;
             }
         }
 
@@ -493,16 +488,14 @@ class UtilitiesService implements UtilitiesServiceInterface
                     'path' => $path . $file,
                     'encoding' => $encoding
                 ])) {
-                    $result = false;
                     continue;
                 }
-            } catch (BcException $e) {
-                $result = false;
-                $this->log($e->getMessage());
+            } catch (Throwable $e) {
+                $db->rollback();
+                throw $e;
             }
         }
-
-        return $result;
+        $db->commit();
     }
 
     /**
@@ -522,7 +515,7 @@ class UtilitiesService implements UtilitiesServiceInterface
                 BcUtil::getRootTheme(),
                 Configure::read('BcApp.defaultFrontTheme') . '.default'
             );
-        } catch (BcException $e) {
+        } catch (\Throwable $e) {
             throw $e;
         }
     }

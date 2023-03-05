@@ -1,25 +1,28 @@
 <?php
-// TODO ucmitz  : コード確認要
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.Event
- * @since           baserCMS v 4.0.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) NPO baser foundation
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       https://basercms.net/license/index.html MIT License
  */
+
+namespace BaserCore\Event;
+
+use BaserCore\Utility\BcUtil;
+use Cake\Core\Configure;
+use Cake\Event\Event;
+use Cake\Event\EventListenerInterface;
+use Cake\View\View;
 
 /**
  * Class BcShortCodeEventListener
  *
  * baserCMS Short Code Event Listener
- *
- * @package Baser.Event
  */
-class BcShortCodeEventListener extends CakeObject implements CakeEventListener
+class BcShortCodeEventListener implements EventListenerInterface
 {
 
     /**
@@ -27,7 +30,7 @@ class BcShortCodeEventListener extends CakeObject implements CakeEventListener
      *
      * @return array
      */
-    public function implementedEvents()
+    public function implementedEvents(): array
     {
         return [
             'View.afterRender' => ['callable' => 'afterRender']
@@ -41,11 +44,9 @@ class BcShortCodeEventListener extends CakeObject implements CakeEventListener
      */
     public function afterRender(Event $event)
     {
-        if (BcUtil::isAdminSystem()) {
-            return;
-        }
-        $View = $event->getSubject();
-        $this->_execShortCode($View);
+        if (BcUtil::isAdminSystem()) return;
+        $view = $event->getSubject();
+        $this->_execShortCode($view);
     }
 
     /**
@@ -53,23 +54,19 @@ class BcShortCodeEventListener extends CakeObject implements CakeEventListener
      *
      * @param View $View
      */
-    protected function _execShortCode($View)
+    protected function _execShortCode(View $view)
     {
         $shortCodes = Configure::read('BcShortCode');
-        if (!$shortCodes) {
-            return;
-        }
-        $output = $View->output;
-        if (!is_array($shortCodes)) {
-            $shortCodes = [$shortCodes];
-        }
+        if (!$shortCodes) return;
+
+        $output = $view->fetch('content');
+        if (!is_array($shortCodes)) $shortCodes = [$shortCodes];
 
         foreach($shortCodes as $plugin => $values) {
             foreach($values as $shortCode) {
                 $func = explode('.', $shortCode);
-                if (empty($func[0]) || empty($func[1])) {
-                    continue;
-                }
+                if (empty($func[0]) || empty($func[1])) continue;
+
                 $regex = '/(\[' . preg_quote($shortCode, '/') . '(|\s(.*?))\])/';
 
                 if (preg_match_all($regex, $output, $matches)) {
@@ -81,27 +78,27 @@ class BcShortCodeEventListener extends CakeObject implements CakeEventListener
                             $args = explode(',', $matches[3][$k]);
                             foreach($args as $key => $value) {
                                 if (strpos($value, '|') !== false) {
-                                    $args[$key] = call_user_func_array('aa', explode("|", $value));
+                                    $args[$key] = BcUtil::pairToAssoc($value);
                                 }
                             }
                         }
 
-
-                        if (isset($View->{$func[0]})) {
-                            $Helper = $View->{$func[0]};
+                        if (isset($view->{$func[0]})) {
+                            $Helper = $view->{$func[0]};
                         } else {
                             $plugin .= '.';
-                            $className = $func[0] . 'Helper';
-                            App::uses($className, $plugin . 'View/Helper');
-                            $Helper = new $className($View);
+                            $className = $plugin . "\\" . "View\\Helper\\" . $func[0] . 'Helper';
+                            $Helper = new $className($view);
                         }
-                        $result = call_user_func_array([$Helper, $func[1]], $args);
-                        $output = str_replace($target, $result, $output);
+                        if(method_exists($Helper, $func[1])) {
+                            $result = call_user_func_array([$Helper, $func[1]], $args);
+                            $output = str_replace($target, $result, $output);
+                        }
                     }
                 }
             }
         }
-        $View->output = $output;
+        $view->assign('content', $output);
     }
 
 }

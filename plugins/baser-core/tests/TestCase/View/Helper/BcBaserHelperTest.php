@@ -55,6 +55,7 @@ class BcBaserHelperTest extends BcTestCase
         'plugin.BaserCore.Contents',
         'plugin.BaserCore.ContentFolders',
         'plugin.BaserCore.Permissions',
+        'plugin.BaserCore.Plugins',
         // TODO: basercms4系より移植
         // 'baser.Default.Page',    // メソッド内で読み込む
         // 'baser.Default.Content',    // メソッド内で読み込む
@@ -638,8 +639,8 @@ class BcBaserHelperTest extends BcTestCase
                 'prefix' => 'Admin',
                 'plugin' => 'BcBlog',
                 'controller' => 'BlogPosts',
-                'action' =>
-                'edit', 1
+                'action' => 'edit',
+                1
             ], false, false, '/baser/admin/bc-blog/blog_posts/edit/1'],
             // サブフォルダ
             ['/sampletest', false, '/sub', '/sub/sampletest'],

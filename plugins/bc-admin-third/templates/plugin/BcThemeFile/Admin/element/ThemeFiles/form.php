@@ -70,8 +70,13 @@ $action = $this->getRequest()->getParam('action');
           <?php if (($action == 'edit' || $action == 'view') && $themeFile->type == 'image'): ?>
             <div style="margin:20px auto">
               <?php $this->BcBaser->link(
-                $this->BcBaser->getImg(array_merge(['action' => 'img_thumb', 550, 550, $theme, $plugin, $type], explode('/', $path)), ['alt' => basename($path)]), array_merge(['action' => 'img', $theme, $plugin, $type], explode('/', $path)), ['rel' => 'colorbox', 'title' => basename($path)]
-              ); ?>
+                $this->BcBaser->getImg(array_merge(
+                  ['action' => 'img_thumb', 550, 550, $theme, $plugin, $type],
+                  explode('/', $path)
+                ), ['alt' => basename($path)]), array_merge(
+                  ['action' => 'img', $theme, $plugin, $type],
+                  explode('/', $path)
+              ), ['rel' => 'colorbox', 'title' => basename($path), 'escape' => false]); ?>
             </div>
           <?php elseif ($action == 'add' || $themeFile->type == 'text'): ?>
             <?php if ($action != 'view'): ?>

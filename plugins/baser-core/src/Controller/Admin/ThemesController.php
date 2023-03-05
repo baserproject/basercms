@@ -93,7 +93,7 @@ class ThemesController extends BcAdminAppController
                 BcUtil::getRootTheme(),
                 $this->getRequest()->getData('default_data_pattern')
             );
-        } catch (BcException $e) {
+        } catch (\Throwable $e) {
             $this->BcMessage->setError(__d('baser_core', '初期データの読み込みに失敗しました。' . $e->getMessage()));
             return $this->redirect(['action' => 'index']);
         }

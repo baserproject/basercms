@@ -75,7 +75,7 @@ class SiteConfigsTable extends AppTable
     }
 
     /**
-     * Validation Default
+     * Validation Key Value
      *
      * @param Validator $validator
      * @return Validator

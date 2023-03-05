@@ -34,8 +34,10 @@ class UploaderConfigsController extends BcAdminAppController
      */
     public function index(UploaderConfigsServiceInterface $service)
     {
+        $uploaderConfig = $service->get();
         if($this->getRequest()->is(['post', 'put'])) {
-            if($service->update($this->getRequest()->getData())) {
+            $uploaderConfig = $service->update($this->getRequest()->getData());
+            if (!$uploaderConfig->getErrors()) {
                 $this->BcMessage->setSuccess(__d('baser_core', 'アップローダー設定を保存しました。'));
                 $this->redirect(['action' => 'index']);
             } else {
@@ -43,7 +45,7 @@ class UploaderConfigsController extends BcAdminAppController
             }
         }
         $this->set([
-            'uploaderConfig' => $service->get()
+            'uploaderConfig' => $uploaderConfig
         ]);
     }
 }

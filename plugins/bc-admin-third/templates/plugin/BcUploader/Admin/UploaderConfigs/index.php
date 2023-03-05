@@ -111,7 +111,7 @@ $this->BcAdmin->setTitle(__d('baser_core', 'アップローダープラグイン
     <tr>
       <th class="bca-form-table__label"><span class="bca-label" data-bca-label-type="required">
         <?php echo __d('baser_core', '必須') ?></span>&nbsp;
-        <?php echo $this->BcAdminForm->label('mobile_large_width', __d('baser_core', '携帯サイズ（大）')) ?>
+        <?php echo $this->BcAdminForm->label('mobile_large_width', __d('baser_core', 'モバイルサイズ（大）')) ?>
       </th>
       <td class="bca-form-table__input">
         <small>[<?php echo __d('baser_core', '幅') ?>]</small>&nbsp;
@@ -135,7 +135,7 @@ $this->BcAdmin->setTitle(__d('baser_core', 'アップローダープラグイン
     <tr>
       <th class="bca-form-table__label"><span class="bca-label" data-bca-label-type="required">
         <?php echo __d('baser_core', '必須') ?></span>&nbsp;
-        <?php echo $this->BcAdminForm->label('mobile_small_width', __d('baser_core', '携帯サイズ（小）')) ?>
+        <?php echo $this->BcAdminForm->label('mobile_small_width', __d('baser_core', 'モバイルサイズ（小）')) ?>
       </th>
       <td class="bca-form-table__input">
         <small>[<?php echo __d('baser_core', '幅') ?>]</small>&nbsp;

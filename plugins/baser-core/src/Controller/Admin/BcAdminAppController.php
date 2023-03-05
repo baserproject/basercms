@@ -14,9 +14,12 @@ namespace BaserCore\Controller\Admin;
 use Authentication\Controller\Component\AuthenticationComponent;
 use BaserCore\Controller\BcAppController;
 use BaserCore\Service\Admin\BcAdminAppServiceInterface;
+use BaserCore\Service\SiteConfigsService;
+use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\Service\UsersService;
 use BaserCore\Service\UsersServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Utility\BcSiteConfig;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
 use Cake\Event\EventInterface;
@@ -94,6 +97,22 @@ class BcAdminAppController extends BcAppController
         $this->viewBuilder()->setClassName('BaserCore.BcAdminApp');
         $this->setAdminTheme();
         $this->set($this->getService(BcAdminAppServiceInterface::class)->getViewVarsForAll());
+        $this->__updateFirstAccess();
+    }
+
+    /**
+     * 初回アクセスメッセージ用のフラグを更新する
+     *
+     * @return void
+     */
+    private function __updateFirstAccess()
+    {
+        // 初回アクセスメッセージ表示設定
+        if (!empty(BcSiteConfig::get('first_access'))) {
+            /** @var SiteConfigsService $siteConfigsService */
+            $siteConfigsService = $this->getService(SiteConfigsServiceInterface::class);
+            $siteConfigsService->setValue('first_access', false);
+        }
     }
 
     /**

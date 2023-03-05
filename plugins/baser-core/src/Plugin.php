@@ -491,6 +491,11 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
         }
 
         /**
+         * メンテナンス
+         */
+        $routes->connect('/maintenance', ['plugin' => 'BaserCore', 'controller' => 'Maintenance', 'action' => 'index']);
+
+        /**
          * コンテンツルーティング
          */
         $routes->connect('/*', [], ['routeClass' => 'BaserCore.BcContentsRoute']);

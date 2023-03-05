@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: baserCMS\n"
 "POT-Creation-Date: 2023-03-04 22:41+0900\n"
-"PO-Revision-Date: 2023-03-04 23:00+0900\n"
+"PO-Revision-Date: 2023-03-05 22:59+0900\n"
 "Last-Translator: ryuring\n"
 "Language-Team: baserCMS Users Community <info@basercms.net>\n"
 "Language: en\n"
@@ -498,10 +498,8 @@ msgstr "Help"
 #: plugins/baser-core/config/permission.php:167
 #: plugins/baser-core/config/permission.php:354
 #: plugins/bc-admin-third/templates/element/toolbar.php:138
-#, fuzzy
-#| msgid "キャッシュ時間"
 msgid "キャッシュクリア"
-msgstr "Cache Tinme"
+msgstr "Delete Cache"
 
 #: plugins/baser-core/config/permission.php:168
 #, fuzzy
@@ -2927,13 +2925,9 @@ msgstr "Failed uploading the file."
 
 #: plugins/baser-core/src/Model/Validation/BcValidation.php:250
 #: plugins/baser-core/src/Model/Validation/BcValidation.php:254
-#, fuzzy
-#| msgid ""
-#| "送信できるデータ量を超えています。合計で %s 以内のデータを送信してくださ"
-#| "い。"
 msgid ""
 "ファイルサイズがオーバーしています。 %s MB以内のファイルをご利用ください。"
-msgstr "Exceeding sendable data size. Please send data size within %s."
+msgstr "File size is over. Please use the file of %s MB or less."
 
 #: plugins/baser-core/src/Model/Validation/PageValidation.php:73
 msgid "PHPの構文エラーです"
@@ -7455,10 +7449,8 @@ msgstr "Category List"
 
 #: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/BlogComments/index.php:24
 #: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/BlogComments/index.php:26
-#, fuzzy
-#| msgid "コメント一覧"
 msgid "%s｜コメント一覧"
-msgstr "Comment List"
+msgstr "%s｜Comment List"
 
 #: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/BlogContents/edit.php:19
 #, fuzzy
@@ -9956,7 +9948,7 @@ msgstr "Mail Sending"
 #: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:91
 #: plugins/bc-front/templates/plugin/BcMail/element/mail_form.php:49
 msgid "送信する"
-msgstr "Send"
+msgstr "Submit"
 
 #: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailFields/form.php:296
 msgid "送信しない"
@@ -11205,10 +11197,8 @@ msgid "【%s】コメントを受け付けました"
 msgstr "【%s】Comment Accepted"
 
 #: plugins/bc-blog/src/Controller/BlogFrontAppController.php:127
-#, fuzzy
-#| msgid "コメントが投稿されました"
 msgid "【%s】コメントが投稿されました"
-msgstr "Comment posted"
+msgstr "【%s】Comment Posted"
 
 #: plugins/bc-blog/src/Event/BcBlogViewEventListener.php:79
 msgid "記事"
@@ -11964,17 +11954,15 @@ msgstr ""
 #: plugins/bc-front/templates/plugin/BcMail/element/mail_input.php:113
 #: plugins/bc-mail/src/Model/Table/MailMessagesTable.php:378
 #: plugins/bc-mail/tests/TestCase/Model/Table/MailMessagesTableTest.php:155
-#, fuzzy
-#| msgid "データが選択されていません。"
 msgid "入力データが一致していません。"
-msgstr "Data is not selected."
+msgstr "Input data do not match."
 
 #: plugins/bc-custom-content/src/Model/Table/CustomEntriesTable.php:322
 #: plugins/bc-mail/src/Model/Table/MailMessagesTable.php:305
 #: plugins/bc-mail/tests/TestCase/Model/Table/MailMessagesTableTest.php:152
 #: plugins/bc-mail/tests/TestCase/Model/Table/MailMessagesTableTest.php:153
 msgid "形式が無効です。"
-msgstr ""
+msgstr "Invalid format"
 
 #: plugins/bc-custom-content/src/Model/Table/CustomEntriesTable.php:339
 #: plugins/bc-mail/src/Model/Table/MailMessagesTable.php:311
@@ -12019,10 +12007,8 @@ msgstr "Please enter with half-size characters only."
 #: plugins/bc-custom-content/src/Model/Table/CustomEntriesTable.php:460
 #: plugins/bc-mail/src/Model/Table/MailMessagesTable.php:334
 #: plugins/bc-mail/src/Model/Table/MailMessagesTable.php:342
-#, fuzzy
-#| msgid "投稿日の形式が不正です。"
 msgid "日付の形式が無効です。"
-msgstr "Post Date's format is invalid."
+msgstr "Invalid date format."
 
 #: plugins/bc-custom-content/src/Model/Table/CustomEntriesTable.php:478
 msgid "タイトルは必須項目です。"
@@ -12299,22 +12285,16 @@ msgid ""
 msgstr ""
 
 #: plugins/bc-front/templates/Maintenance/index.php:23
-#, fuzzy
-#| msgid "送信内容は下記のようになっております。"
 msgid "ご迷惑をおかけしております。"
-msgstr "Sending content is as follows."
+msgstr "Sorry for your inconvenience."
 
 #: plugins/bc-front/templates/Maintenance/index.php:24
-#, fuzzy
-#| msgid "メンテナンス中"
 msgid "現在メンテナンス中です。"
-msgstr "Under maintanance"
+msgstr "It’s under maintenance."
 
 #: plugins/bc-front/templates/Maintenance/index.php:25
-#, fuzzy
-#| msgid "恐れ入りますがしばらくお待ちください。"
 msgid "もうしばらくお待ちください。"
-msgstr "Sorry, but please wait for a moment."
+msgstr "Please wait for a moment."
 
 #: plugins/bc-front/templates/element/google_maps.php:55
 msgid ""
@@ -12324,26 +12304,16 @@ msgstr ""
 "Couldn’t load Google Maps. Please check right address is set in Admin Screen."
 
 #: plugins/bc-front/templates/element/list_counter.php:26
-#, fuzzy
-#| msgid ""
-#| "<strong>%s</strong> で検索した結果 <strong>%%start%%〜%%end%%</strong>件"
-#| "目 / %%count%% 件"
 msgid "%s で検索した結果 %s〜%s件目 / %s 件"
-msgstr ""
-"Results searched with <strong>%s</strong> <strong>%%start%%～%%end%%</"
-"strong> / %%count%%"
+msgstr "Result searched by %s　%s 〜 %s / %s"
 
 #: plugins/bc-front/templates/element/paginations/simple.php:44
-#, fuzzy
-#| msgid "< 前へ"
 msgid "前へ"
-msgstr "< Prev"
+msgstr "Previous"
 
 #: plugins/bc-front/templates/element/paginations/simple.php:46
-#, fuzzy
-#| msgid "次へ >"
 msgid "次へ"
-msgstr "Next >"
+msgstr "Next"
 
 #: plugins/bc-front/templates/element/update_info.php:25
 msgid "最終更新日"
@@ -12355,11 +12325,11 @@ msgstr ""
 
 #: plugins/bc-front/templates/plugin/BcBlog/Blog/default/archives.php:34
 msgid "%s年%s月%s日"
-msgstr ""
+msgstr "%s/%s/%s"
 
 #: plugins/bc-front/templates/plugin/BcBlog/Blog/default/archives.php:35
 msgid "%s年%s月"
-msgstr ""
+msgstr "%s/%s"
 
 #: plugins/bc-front/templates/plugin/BcBlog/Blog/default/archives.php:36
 msgid "%s年"
@@ -12384,17 +12354,13 @@ msgstr "%s's Archive List."
 
 #: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:31
 msgid "この記事へのコメント"
-msgstr ""
+msgstr "Comment on this article"
 
 #: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:44
-#, fuzzy
-#| msgid "コメント"
 msgid "コメントを送る"
-msgstr "Comment"
+msgstr "Send comments"
 
 #: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:57
-#, fuzzy
-#| msgid "名前"
 msgid "お名前"
 msgstr "Name"
 
@@ -12407,91 +12373,77 @@ msgstr "Send to Another Mail Address"
 #: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:68
 #: plugins/bc-front/templates/plugin/BcMail/element/mail_input.php:52
 msgid "任意"
-msgstr ""
+msgstr "Any"
 
 #: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:79
 msgid "認証画象"
-msgstr ""
+msgstr "Authentication Image"
 
 #: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:86
 #: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments_scripts.php:27
-#, fuzzy
-#| msgid "姓を入力してください"
 msgid "画像の文字を入力してください"
-msgstr "Enter Lastname"
+msgstr "Please enter the letters of the image"
 
 #: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments_scripts.php:25
-#, fuzzy
-#| msgid "お名前を入力してください。"
 msgid "お名前を入力してください"
-msgstr "Please enter Name."
+msgstr "Please enter your name"
 
 #: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments_scripts.php:26
-#, fuzzy
-#| msgid "コメントを入力してください。"
 msgid "コメントを入力してください"
-msgstr "Please enter Comment."
+msgstr "Please enter comments"
 
 #: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments_scripts.php:28
 msgid "送信が完了しました。送信された内容は確認後公開させて頂きます。"
 msgstr ""
+"Submission has been completed. After confirming the contents we will make it "
+"public."
 
 #: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments_scripts.php:29
-#, fuzzy
-#| msgid "データの復元が完了しました。"
 msgid "コメントの送信が完了しました。"
-msgstr "Finished restoring data."
+msgstr "Comment submission has been completed."
 
 #: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments_scripts.php:30
-#, fuzzy
-#| msgid "更新に失敗しました。入力内容を見直してください。"
 msgid "コメントの送信に失敗しました。入力内容を見なおしてください。"
-msgstr "Failed updating. Please check entered content."
+msgstr "Failed to submit comment. Please check the input contents."
 
 #: plugins/bc-front/templates/plugin/BcBlog/element/blog_related_posts.php:26
 msgid "関連記事"
-msgstr ""
+msgstr "Related article"
 
 #: plugins/bc-front/templates/plugin/BcBlog/element/widget/blog_calendar.php:79
 #: plugins/bc-front/templates/plugin/BcBlog/element/widget/blog_calendar.php:113
-#, fuzzy
-#| msgid "1日"
 msgid "日"
-msgstr "1 Day"
+msgstr "Sun"
 
 #: plugins/bc-front/templates/plugin/BcBlog/element/widget/blog_calendar.php:79
 #: plugins/bc-front/templates/plugin/BcBlog/element/widget/blog_calendar.php:114
-#, fuzzy
-#| msgid "有"
 msgid "月"
-msgstr "Available"
+msgstr "Mon"
 
 #: plugins/bc-front/templates/plugin/BcBlog/element/widget/blog_calendar.php:79
 #: plugins/bc-front/templates/plugin/BcBlog/element/widget/blog_calendar.php:115
 msgid "火"
-msgstr ""
+msgstr "Tue"
 
 #: plugins/bc-front/templates/plugin/BcBlog/element/widget/blog_calendar.php:79
 #: plugins/bc-front/templates/plugin/BcBlog/element/widget/blog_calendar.php:116
 msgid "水"
-msgstr ""
+msgstr "Wed"
 
 #: plugins/bc-front/templates/plugin/BcBlog/element/widget/blog_calendar.php:79
 #: plugins/bc-front/templates/plugin/BcBlog/element/widget/blog_calendar.php:117
-#, fuzzy
-#| msgid "有"
 msgid "木"
-msgstr "Available"
+msgstr "Thu"
 
 #: plugins/bc-front/templates/plugin/BcBlog/element/widget/blog_calendar.php:79
 #: plugins/bc-front/templates/plugin/BcBlog/element/widget/blog_calendar.php:118
 msgid "金"
-msgstr ""
+msgstr "Fri"
 
 #: plugins/bc-front/templates/plugin/BcBlog/element/widget/blog_calendar.php:79
 #: plugins/bc-front/templates/plugin/BcBlog/element/widget/blog_calendar.php:119
 msgid "土"
-msgstr ""
+msgstr "Sat"
 
 #: plugins/bc-front/templates/plugin/BcBlog/email/text/blog_comment_admin.php:28
 msgid "コメントを受付けました"
@@ -12504,7 +12456,7 @@ msgstr "Accepted the comment to %s."
 #: plugins/bc-front/templates/plugin/BcBlog/email/text/blog_comment_admin.php:32
 #: plugins/bc-front/templates/plugin/BcMail/email/text/mail_default.php:32
 msgid "受信内容は下記のとおりです。"
-msgstr "Recieved content is as follows."
+msgstr "Received content is as follows."
 
 #: plugins/bc-front/templates/plugin/BcBlog/email/text/blog_comment_admin.php:38
 msgid "コメント内容 "
@@ -12535,77 +12487,61 @@ msgstr "Error log doesn't exist."
 
 #: plugins/bc-front/templates/plugin/BcMail/Mail/default/confirm.php:30
 msgid "入力内容の確認"
-msgstr ""
+msgstr "Confirm"
 
 #: plugins/bc-front/templates/plugin/BcMail/Mail/default/confirm.php:31
-#, fuzzy
-#| msgid ""
-#| "%sのインストールを開始します。<br />よろしければ「インストール開始」ボタン"
-#| "をクリックしてください。"
 msgid ""
 "入力した内容に間違いがなければ「送信する」ボタンをクリックしてください。"
 msgstr ""
-"Installing %s.<br />Please click “Start Installation” button if you are ok."
+"If there is no mistake in the contents entered, please click Submit button."
 
 #: plugins/bc-front/templates/plugin/BcMail/Mail/default/confirm.php:33
 #: plugins/bc-front/templates/plugin/BcMail/Mail/default/index.php:27
-#, fuzzy
-#| msgid "メールフォーム"
 msgid "入力フォーム"
-msgstr "Mail Form"
+msgstr "Input form"
 
 #: plugins/bc-front/templates/plugin/BcMail/Mail/default/submit.php:34
-#, fuzzy
-#| msgid "メール送信"
 msgid "メール送信完了"
-msgstr "Mail Sending"
+msgstr "Completed mail submission"
 
 #: plugins/bc-front/templates/plugin/BcMail/Mail/default/submit.php:37
-#, fuzzy
-#| msgid "お問い合わせ頂きありがとうございます"
 msgid "お問い合わせ頂きありがとうございました。"
-msgstr "Thank you for inquiry"
+msgstr "Thank you for your inquiry."
 
 #: plugins/bc-front/templates/plugin/BcMail/Mail/default/submit.php:38
-#, fuzzy
-#| msgid "メールを確認させて頂き次第、早急にご連絡させていただきます。"
 msgid "確認次第、ご連絡させて頂きます。"
-msgstr "We will contact you as soon as possible after checking mail."
+msgstr "As soon as we confirm it, we will contact you."
 
 #: plugins/bc-front/templates/plugin/BcMail/Mail/default/submit.php:40
 msgid "%s 秒後にトップページへ自動的に移動します。"
-msgstr ""
+msgstr "It moves automatically to the top page after %s seconds."
 
 #: plugins/bc-front/templates/plugin/BcMail/Mail/default/submit.php:41
-#, fuzzy
-#| msgid "いいね！をクリックして普及にご協力ください。"
 msgid "移動しない場合はコチラをクリックしてください。"
-msgstr "Please support spreading by clicking Like!"
+msgstr "If you can not move, please click here."
 
 #: plugins/bc-front/templates/plugin/BcMail/Mail/default/unpublish.php:24
 msgid "受付中止"
-msgstr ""
+msgstr "Stop Reception"
 
 #: plugins/bc-front/templates/plugin/BcMail/Mail/default/unpublish.php:26
 msgid "現在、受付を中止しています。"
-msgstr ""
+msgstr "The reception is suspended now."
 
 #: plugins/bc-front/templates/plugin/BcMail/element/mail_form.php:48
 msgid "書き直す"
-msgstr ""
+msgstr "Rewrite"
 
 #: plugins/bc-front/templates/plugin/BcMail/element/mail_form.php:52
 msgid "入力内容を確認する"
-msgstr ""
+msgstr "Confirm"
 
 #: plugins/bc-front/templates/plugin/BcMail/element/mail_input.php:114
 #: plugins/bc-mail/src/Model/Table/MailMessagesTable.php:452
 #: plugins/bc-mail/src/Model/Table/MailMessagesTable.php:490
 #: plugins/bc-mail/tests/TestCase/Model/Table/MailMessagesTableTest.php:156
-#, fuzzy
-#| msgid "データが存在しません。"
 msgid "入力データが不完全です。"
-msgstr "Data does not exist."
+msgstr "Input data is incomplete."
 
 #: plugins/bc-front/templates/plugin/BcMail/email/text/mail_data.php:39
 msgid "添付あり"
@@ -12669,7 +12605,7 @@ msgstr "Please enter Search Keyword."
 
 #: plugins/bc-front/templates/plugin/BcSearchIndex/SearchIndexes/search.php:57
 msgid "該当する結果が存在しませんでした。"
-msgstr "Applicable result was not found."
+msgstr "Correspond result doesn’t exist."
 
 #: plugins/bc-installer/config.php:14
 #, fuzzy
@@ -13195,12 +13131,12 @@ msgstr "Input error. Please fix the contents."
 
 #: plugins/bc-mail/src/Controller/MailController.php:247
 #: plugins/bc-mail/src/Controller/MailController.php:266
-#, fuzzy
-#| msgid "処理中にエラーが発生しました。プラグインの開発者に確認してください。"
 msgid ""
 "エラー : 送信中にエラーが発生しました。しばらくたってから再度送信お願いしま"
 "す。"
-msgstr "Error occurred when processing. Please contact the Plugin’s developer."
+msgstr ""
+"Error : An error occurred during submission. Please wait for a while before "
+"send it again."
 
 #: plugins/bc-mail/src/Event/BcMailViewEventListener.php:68
 msgid "受信メール"
@@ -13346,19 +13282,15 @@ msgstr ""
 #: plugins/bc-mail/tests/TestCase/Model/Table/MailMessagesTableTest.php:154
 #: plugins/bc-mail/tests/TestCase/Model/Table/MailMessagesTableTest.php:160
 msgid "必須項目です。"
-msgstr ""
+msgstr "It’s Required."
 
 #: plugins/bc-mail/src/Model/Table/MailMessagesTable.php:292
-#, fuzzy
-#| msgid "ファイルが存在しません"
 msgid "ファイル形式が無効です。"
-msgstr "File does not exist."
+msgstr "Invalid file format."
 
 #: plugins/bc-mail/src/Model/Table/MailMessagesTable.php:352
-#, fuzzy
-#| msgid "タイプを入力してください。"
 msgid "全て全角カタカナで入力してください。"
-msgstr "Please enter Type."
+msgstr "Please enter all with full-size katakana."
 
 #: plugins/bc-mail/src/Model/Table/MailMessagesTable.php:360
 #, fuzzy
@@ -13373,10 +13305,8 @@ msgid "不正なファイル送信です。"
 msgstr "Open following file."
 
 #: plugins/bc-mail/src/Service/Front/MailFrontService.php:184
-#, fuzzy
-#| msgid "エラーが発生しました。内容を確認してください。"
 msgid "エラー : 入力内容を確認して再度送信してください。"
-msgstr "Error occured. Check content."
+msgstr "Error : Confirm your entries and send again."
 
 #: plugins/bc-mail/src/Service/MailContentsService.php:59
 #, fuzzy

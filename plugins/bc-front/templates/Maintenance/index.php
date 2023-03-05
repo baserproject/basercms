@@ -13,7 +13,9 @@
 /**
  * メンテナンスページ
  * 呼出箇所：メンテナンス設定時
+ * @var \BaserCore\View\BcFrontAppView $this
  */
+$this->BcBaser->setTitle(__d('baser_core', 'メンテナンス中'));
 ?>
 
 

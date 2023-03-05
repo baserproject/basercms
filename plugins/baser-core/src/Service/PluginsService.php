@@ -675,7 +675,6 @@ class PluginsService implements PluginsServiceInterface
     public function getAvailableCoreVersionInfo()
     {
         if(!BcSiteConfig::get('use_update_notice')) return [];
-        if (Configure::read('debug') > 0) Cache::delete('coreReleaseInfo', '_bc_update_');
 
         $coreReleaseInfo = Cache::read('coreReleaseInfo', '_bc_update_');
         if (!$coreReleaseInfo) {

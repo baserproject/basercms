@@ -1,56 +1,63 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package         Baser.View
- * @since           baserCMS v 4.4.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) NPO baser foundation
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       https://basercms.net/license/index.html MIT License
  */
 
 /**
- * グールグルマップ：スマホ用
+ * グールグルマップ
  *
- * $this->BcBaser->googleMaps() で呼び出す
- *
- * @var BcAppView $this
+ * @var \BaserCore\View\AppView $this
+ * @var string $mapId
+ * @var string $width
+ * @var string $height
+ * @var string $zoom
+ * @var string $address
+ * @var string $title
+ * @var string $markerText
+ * @var string $latitude
+ * @var string $longitude
+ * @var string $apiKey
+ * @var string $apiUrl
  */
-$_width = 600;
-$_height = 400;
-$_zoom = 16;
-$_mapId = 'map';
-$_address = $this->BcBaser->siteConfig['address'];
-$_markerText = '<span class="sitename">' . $this->BcBaser->siteConfig['name'] . '</span><br><span class="address">' . $_address . '</span>';
-if (isset($width)) {
-	$_width = $width;
+if ($apiKey) {
+  $this->BcBaser->js($apiUrl, false);
+  $this->BcBaser->js('google_maps.bundle', false, [
+    'id' => 'BsGoogleMapsScript',
+    'defer' => 'defer',
+    'data-zoom' => $zoom,
+    'data-address' => $address,
+    'data-mapId' => $mapId,
+    'data-title' => $title,
+    'data-markerText' => $markerText,
+    'data-latitude' => $latitude,
+    'data-longitude' => $longitude
+  ]);
 }
-if (isset($height)) {
-	$_height = $height;
-}
-if (isset($zoom)) {
-	$_zoom = $zoom;
-}
-if (isset($mapId)) {
-	$_mapId = $mapId;
-}
-if (isset($address)) {
-	$_address = $address;
-}
-if (isset($markerText)) {
-	$_markerText = $markerText;
-}
-if (isset($longitude)) {
-	$this->BcGooglemaps->longitude = $longitude;
-}
-if (isset($latitude)) {
-	$this->BcGooglemaps->latitude = $latitude;
-}
-$this->BcGooglemaps->mapId = $_mapId;
-$this->BcGooglemaps->zoom = $_zoom;
-$this->BcGooglemaps->title = $this->BcBaser->siteConfig['name'];
-$this->BcGooglemaps->markerText = $_markerText;
-if (!$this->BcGooglemaps->load($_address, $_width, $_height)) {
-	echo __d('baser_core', 'Google Maps を読み込めません。管理画面で正しい住所が設定されているか確認してください。');
-}
+?>
+
+
+<?php if (empty($apiKey)): ?>
+  <p>
+    <?php echo __d('baser_core', 'Googleマップを利用するには、Google Maps APIのキーの登録が必要です。') ?>
+    <a href="https://developers.google.com/maps/web/" target="_blank">キーを取得</a>して、
+    <?php echo __d('baser_core',
+      '{0} より設定してください。',
+      $this->BcBaser->getLink(__d('baser_core', 'システム管理'), [
+        'prefix' => 'Admin',
+        'plugin' => 'BaserCore',
+        'controller' => 'SiteConfigs',
+        'action' => 'index'
+      ])
+    ) ?>
+  </p>
+<?php else: ?>
+  <div id="<?php echo $mapId ?>" style="width: <?php echo $width ?>px; height:<?php echo $height ?>px">
+    <noscript>※ <?php echo __d('baser_core', 'JavaScript を有効にしてください。') ?></noscript>
+  </div>
+<?php endif ?>

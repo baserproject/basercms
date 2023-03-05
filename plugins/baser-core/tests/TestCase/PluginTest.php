@@ -21,7 +21,6 @@ use Cake\Core\Container;
 use Cake\Event\EventManager;
 use Cake\Http\MiddlewareQueue;
 use Authentication\Middleware\AuthenticationMiddleware;
-use Cake\Http\ServerRequest;
 use Cake\Routing\Router;
 use Cake\Filesystem\File;
 

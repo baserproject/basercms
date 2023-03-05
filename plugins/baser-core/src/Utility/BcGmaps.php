@@ -11,9 +11,15 @@
 
 namespace BaserCore\Utility;
 
+use BaserCore\Error\BcException;
+use Cake\Cache\Cache;
+use Cake\Http\Client;
+use Cake\Http\Client\Exception\NetworkException;
+use Cake\Utility\Exception\XmlException;
+use Cake\Utility\Xml;
+
 /**
  * Class BcGmaps
- *
  */
 class BcGmaps
 {
@@ -51,61 +57,62 @@ class BcGmaps
      */
     public function __construct($apiKey)
     {
+        if(!$apiKey) {
+            throw new BcException(__d('baser_core', 'システム基本設定にて、Google Maps API キーを入力してください。'));
+        }
         $this->_gmapsApiUrl = self::GMAPS_API_BASE_URL . "?key=" . $apiKey;
     }
 
     /**
-     * getInfoLocation
+     * ロケーション情報を取得する
      *
      * @param string $address
      * @return array|null
      */
-    public function getInfoLocation($address)
+    public function getLocation($address)
     {
-        if (!empty($address)) {
-            return $this->_geocode($address);
-        }
-        return null;
-    }
+        if(!$address) return null;
+        $encodedAddress = base64_encode($address);
+        $location = Cache::read($encodedAddress, '_bc_gmaps_');
 
-    /**
-     * connect to Google Maps
-     *
-     * @param string $param
-     * @return array|null
-     */
-    protected function _geocode($param)
-    {
-        $requestUrl = $this->_gmapsApiUrl . "&address=" . urlencode($param);
-        App::uses('Xml', 'Utility');
-        try {
-            $xml = retry(self::RETRY_TIMES, function() use ($requestUrl) {
-                // @var SimpleXMLElement $reuslt
-                $result = Xml::build($requestUrl);
-                if (!empty($result->error_message)) {
-                    throw new XmlException($result->error_message);
+        if($location) {
+            return $location;
+        } else {
+            $requestUrl = $this->_gmapsApiUrl . "&address=" . urlencode($address);
+            try {
+                $xml = BcUtil::retry(self::RETRY_TIMES, function() use ($requestUrl) {
+                    $http = new Client();
+                    try {
+                        $response = $http->get($requestUrl);
+                    } catch (NetworkException $e) {
+                        return [];
+                    }
+                    $result = Xml::build($response->getStringBody());
+                    if (!empty($result->error_message)) {
+                        throw new XmlException($result->error_message);
+                    }
+                    return $result;
+                }, self::RETRY_INTERVAL);
+                $xmlArray = Xml::toArray($xml);
+            } catch (\Throwable $e) {
+                return null;
+            }
+
+            $xml = $xmlArray['GeocodeResponse'];
+            $result = null;
+            if (!empty($xml['result']['geometry'])) {
+                $result = $xml['result'];
+            } elseif (!empty($xml['result'][0])) {
+                $result = $xml['result'][0];
+            }
+
+            if (isset($result['geometry']['location'])) {
+                $point = $result['geometry']['location'];
+                if (!empty($point)) {
+                    $location = ['latitude' => $point['lat'], 'longitude' => $point['lng']];
+                    Cache::write($encodedAddress, $location, '_bc_gmaps_');
+                    return $location;
                 }
-                return $result;
-            }, self::RETRY_INTERVAL);
-            $xmlArray = Xml::toArray($xml);
-        } catch (XmlException $e) {
-            return null;
-        } catch (\Exception $e) {
-            return null;
-        }
-
-        $xml = $xmlArray['GeocodeResponse'];
-        $result = null;
-        if (!empty($xml['result']['geometry'])) {
-            $result = $xml['result'];
-        } elseif (!empty($xml['result'][0])) {
-            $result = $xml['result'][0];
-        }
-
-        if (isset($result['geometry']['location'])) {
-            $point = $result['geometry']['location'];
-            if (!empty($point)) {
-                return ['latitude' => $point['lat'], 'longitude' => $point['lng']];
             }
         }
         return null;

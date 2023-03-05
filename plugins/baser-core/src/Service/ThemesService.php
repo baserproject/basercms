@@ -310,7 +310,7 @@ class ThemesService implements ThemesServiceInterface
         $result = true;
         try {
             if (!$dbService->loadDefaultDataPattern($theme, $pattern)) $result = false;
-        } catch (BcException $e) {
+        } catch (\Throwable $e) {
             throw $e;
         }
 

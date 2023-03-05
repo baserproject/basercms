@@ -12,10 +12,8 @@ namespace BaserCore\Test\TestCase\Model\Behavior;
 
 use ArrayObject;
 use Cake\ORM\Entity;
-use Cake\ORM\Marshaller;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Service\ContentsService;
-use BaserCore\Model\Table\ContentsTable;
 use BaserCore\Model\Table\ContentFoldersTable;
 use BaserCore\Model\Behavior\BcContentsBehavior;
 
@@ -90,12 +88,12 @@ class BcContentsBehaviorTest extends BcTestCase
     public function testAfterMarshal()
     {
         $contentFolder = $this->table->find()->first();
-        $result = $this->table->dispatchEvent('Model.afterMarshal', ['entity' => $contentFolder, 'data' => new ArrayObject($contentFolder->toArray()), 'options' => new ArrayObject()]);
+        $result = $this->table->dispatchEvent('Model.afterMarshal', ['entity' => $contentFolder, 'data' => new ArrayObject($contentFolder->toArray()), 'options' => new ArrayObject(['validate' => true])]);
         $contentFolder = $result->getData('entity');
         $this->assertEquals(['content' => ['_required' => "関連するコンテンツがありません"]], $contentFolder->getErrors());
         // プラグインとタイプが設定されてるかをテストする
         $contentFolder = $this->table->find()->contain("Contents")->first();
-        $result = $this->table->dispatchEvent('Model.afterMarshal', ['entity' => $contentFolder, 'data' => new ArrayObject($contentFolder->toArray()), 'options' => new ArrayObject()]);
+        $result = $this->table->dispatchEvent('Model.afterMarshal', ['entity' => $contentFolder, 'data' => new ArrayObject($contentFolder->toArray()), 'options' => new ArrayObject(['validate' => true])]);
         $contentFolder = $result->getData('entity');
         $this->assertEquals('BaserCore', $contentFolder->content->plugin);
         $this->assertEquals('ContentFolder', $contentFolder->content->type);

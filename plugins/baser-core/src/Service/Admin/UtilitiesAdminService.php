@@ -14,6 +14,8 @@ namespace BaserCore\Service\Admin;
 use BaserCore\Service\UtilitiesService;
 use BaserCore\Utility\BcSiteConfig;
 use Cake\Core\Configure;
+use Cake\Database\Driver\Mysql;
+use Cake\ORM\Locator\TableLocator;
 use Cake\ORM\TableRegistry;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -34,10 +36,17 @@ class UtilitiesAdminService extends UtilitiesService implements UtilitiesAdminSe
      */
     public function getViewVarsForInfo(): array
     {
+        $db = TableRegistry::getTableLocator()->get('BaserCore.App')->getConnection();
+        $driver = $db->config()['driver'];
+        $sqlMode = '';
+        if($driver === Mysql::class) {
+            $sqlMode = $db->query('SELECT @@global.sql_mode;')->fetch()[0];
+        }
         return [
             'datasource' => $this->_getDriver(),
             'baserVersion' => BcSiteConfig::get('version'),
-            'cakeVersion' => Configure::version()
+            'cakeVersion' => Configure::version(),
+            'sqlMode' => $sqlMode
         ];
     }
 

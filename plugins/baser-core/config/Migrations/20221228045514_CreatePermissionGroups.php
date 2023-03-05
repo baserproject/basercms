@@ -33,7 +33,7 @@ class CreatePermissionGroups extends BcMigration
             ->addColumn('status', 'boolean', [
                 'default' => true,
                 'limit' => null,
-                'null' => false,
+                'null' => true,
             ])
             ->addColumn('created', 'datetime', [
                 'default' => null,

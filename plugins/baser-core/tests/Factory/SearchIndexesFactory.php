@@ -41,7 +41,7 @@ class SearchIndexesFactory extends CakephpBaseFactory
     {
         $this->setDefaultData(function (Generator $faker) {
             return [
-                'name' => $faker->text
+                'name' => $faker->text()
             ];
         });
     }

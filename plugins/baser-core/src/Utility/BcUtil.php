@@ -1778,4 +1778,30 @@ class BcUtil
         return $a;
     }
 
+    /**
+     * 処理を実行し、例外が発生した場合は指定した回数だけリトライする
+     * @param int $times リトライ回数
+     * @param callable $callback 実行する処理
+     * @param int $interval 試行の間隔（ミリ秒）
+     * @return mixed
+     * @throws Exception
+     */
+    public static function retry($times, callable $callback, $interval = 0)
+    {
+        if ($times <= 0) {
+            throw new \InvalidArgumentException(__d('baser', 'リトライ回数は正の整数値で指定してください。'));
+        }
+        $times--;
+
+        while(true) {
+            try {
+                return $callback();
+            } catch (\Exception $e) {
+                if ($times <= 0) throw $e;
+                $times--;
+                if ($interval > 0) usleep($interval * 1000);
+            }
+        }
+    }
+
 }

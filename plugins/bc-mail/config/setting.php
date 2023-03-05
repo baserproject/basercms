@@ -82,7 +82,7 @@ return [
      */
     'BcShortCode' => [
         'BcMail' => [
-            'BcMail.getForm'
+            'Mail.getForm'
         ]
     ]
 ];

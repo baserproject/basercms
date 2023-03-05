@@ -97,6 +97,17 @@ return [
             'serialize' => true,
             'duration' => '+1 days',
         ],
+        /**
+         * Google Mapsの ロケーション情報に利用
+         * @see \BaserCore\Utility\BcGmaps::getLocation()
+         */
+        '_bc_gmaps_' => [
+            'className' => FileEngine::class,
+            'prefix' => 'myapp_bc_gmaps_',
+            'path' => CACHE . 'environment' . DS,
+            'serialize' => true,
+            'duration' => '+1 months',
+        ],
     ],
 
     /*
@@ -772,6 +783,14 @@ return [
                     ]
                 ]
             ]
+        ]
+    ],
+    /**
+     * ショートコード
+     */
+    'BcShortCode' => [
+        'BaserCore' => [
+            'BcBaser.getGoogleMaps'
         ]
     ]
 ];

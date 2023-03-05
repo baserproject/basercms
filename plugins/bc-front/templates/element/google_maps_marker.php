@@ -9,20 +9,15 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
-namespace BaserCore\Controller;
-
 /**
- * メンテナンスコントローラー
+ * グールグルマップマーカー
+ *
+ * @var \BaserCore\View\AppView $this
+ * @var string $title
+ * @var string $address
  */
-class MaintenanceController extends BcFrontAppController
-{
+ ?>
 
-    /**
-     * メンテナンス中ページを表示する
-     */
-    public function index()
-    {
-        $this->getResponse()->withStatus(503);
-    }
 
-}
+<span class="sitename"><?php echo h($title) ?></span><br>
+<span class="address"><?php echo h($address) ?></span>

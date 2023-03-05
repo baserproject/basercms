@@ -40,6 +40,7 @@ use BaserCore\Annotation\Doc;
  * @property BcAuthHelper $BcAuth
  * @property BreadcrumbsHelper $Breadcrumbs
  * @property BcContentsHelper $BcContents
+ * @property BcGoogleMapsHelper $BcGoogleMaps
  */
 class BcBaserHelper extends Helper
 {
@@ -62,7 +63,8 @@ class BcBaserHelper extends Helper
         'BaserCore.BcPage',
         'BaserCore.BcContents',
         'BaserCore.BcAuth',
-        'Breadcrumbs'
+        'Breadcrumbs',
+        'BaserCore.BcGoogleMaps'
     ];
 
     /**
@@ -2282,26 +2284,32 @@ END_FLASH;
      * Google Maps を出力する
      *
      * @param array $data 読み込むテンプレートに引き継ぐパラメータ（初期値 : array()）
-     * @param array $options オプション（初期値 : array()）
-     *    ※ その他のパラメータについては、View::element() を参照
      * @return void
+     * @noTodo
+     * @checked
+     * @unitTest ラッパーメソッドに付きテスト不要
      */
-    public function googleMaps($data = [], $options = [])
+    public function googleMaps($data = [])
     {
-        echo $this->getGoogleMaps($data, $options);
+        echo $this->getGoogleMaps($data);
     }
 
     /**
      * Google Maps を取得する
      *
      * @param array $data 読み込むテンプレートに引き継ぐパラメータ（初期値 : array()）
-     * @param array $options オプション（初期値 : array()）
-     *    ※ その他のパラメータについては、View::element() を参照
      * @return string
+     * @noTodo
+     * @checked
+     * @unitTest ラッパーメソッドに付きテスト不要
      */
-    public function getGoogleMaps($data = [], $options = [])
+    public function getGoogleMaps($data = [])
     {
-        return $this->getElement('google_maps', $data, $options);
+        try {
+            return $this->BcGoogleMaps->load($data);
+        } catch (\Throwable $e) {
+            return $e->getMessage();
+        }
     }
 
     /**

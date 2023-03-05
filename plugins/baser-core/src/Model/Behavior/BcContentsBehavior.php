@@ -82,12 +82,14 @@ class BcContentsBehavior extends Behavior
      */
     public function afterMarshal(EventInterface $event, EntityInterface $entity, ArrayObject $data, ArrayObject $options)
     {
-        if (!isset($data['content'])) {
-            $entity->setError('content', ['_required' => __d('baser_core', '関連するコンテンツがありません')]);
-        } else {
-            [$plugin, $type] = pluginSplit($this->table->getRegistryAlias());
-            $entity->content->plugin = $entity->content->plugin ?? $plugin;
-            $entity->content->type = $entity->content->type ?? Inflector::classify($type);
+        if($options['validate']) {
+            if (!isset($data['content'])) {
+                $entity->setError('content', ['_required' => __d('baser_core', '関連するコンテンツがありません')]);
+            } else {
+                [$plugin, $type] = pluginSplit($this->table->getRegistryAlias());
+                $entity->content->plugin = $entity->content->plugin ?? $plugin;
+                $entity->content->type = $entity->content->type ?? Inflector::classify($type);
+            }
         }
     }
 

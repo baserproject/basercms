@@ -140,7 +140,8 @@ class UtilitiesServiceTest extends BcTestCase
      * test _getMax
      * @return void
      */
-    public function test_getMax(){
+    public function test_getMax()
+    {
         ContentFactory::make(['id' => 200, 'name' => 'BaserCore 6', 'type' => 'ContentFolder', 'lft' => 5, 'rght' => 6])->persist();
         ContentFactory::make(['id' => 201, 'name' => 'BaserCore 7', 'type' => 'ContentFolder', 'lft' => 1, 'rght' => 4])->persist();
         ContentFactory::make(['id' => 202, 'name' => 'BaserCore 8', 'type' => 'ContentFolder', 'lft' => 7, 'rght' => 8])->persist();
@@ -172,7 +173,7 @@ class UtilitiesServiceTest extends BcTestCase
             unlink($logPath);
         }
 
-        foreach ($dbSample as $item) {
+        foreach($dbSample as $item) {
             ContentFactory::make($item)->persist();
         }
 
@@ -221,15 +222,16 @@ class UtilitiesServiceTest extends BcTestCase
      */
     public function test_verify($dbSample, $expect)
     {
-        foreach ($dbSample as $item){
+        foreach($dbSample as $item) {
             ContentFactory::make($item)->persist();
         }
 
         $contentsTable = TableRegistry::getTableLocator()->get('BaserCore.Contents');
         $rs = $this->execPrivateMethod($this->UtilitiesService, '_verify', [$contentsTable]);
-        $this->assertEquals($rs,$expect);
+        $this->assertEquals($rs, $expect);
 
     }
+
     public function _verifyProvider()
     {
 
@@ -373,11 +375,12 @@ class UtilitiesServiceTest extends BcTestCase
      * test restoreDb
      * @return void
      */
-    public function test_restoreDb(){
+    public function test_restoreDb()
+    {
         $this->loadFixtureScenario(InitAppScenario::class);
         // バックアップファイルを作成してアップロード
         $zipSrcPath = TMP;
-        $this->execPrivateMethod(new UtilitiesService(), '_writeBackup', [$zipSrcPath . 'schema/', 'BcSearchIndex', 'utf8']);
+        $this->execPrivateMethod(new UtilitiesService(), '_writeBackup', [$zipSrcPath . 'schema/', 'BaserCore', 'utf8']);
         $zip = new ZipArchiver();
         $testFile = $zipSrcPath . 'test.zip';
         $zip->archive($zipSrcPath . 'schema', $testFile, true);
@@ -401,7 +404,8 @@ class UtilitiesServiceTest extends BcTestCase
      * test _loadBackup
      * @return void
      */
-    public function test_loadBackup(){
+    public function test_loadBackup()
+    {
         // データを作成
         $this->loadFixtureScenario(InitAppScenario::class);
         // バックアップを作成し、展開

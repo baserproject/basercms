@@ -29,7 +29,6 @@ class BcExceptionRendererTest extends BcTestCase
         'plugin.BaserCore.Sites',
         'plugin.BaserCore.SiteConfigs',
         'plugin.BaserCore.Contents',
-        'plugin.BcThemeConfig.ThemeConfigs'
     ];
 
     /**

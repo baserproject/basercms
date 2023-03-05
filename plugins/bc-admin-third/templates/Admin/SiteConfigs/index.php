@@ -82,7 +82,7 @@ $this->BcBaser->js('admin/site_configs/index.bundle', false, ['id' => 'AdminSite
         </div>
       </td>
     </tr>
-    <?php /* TODO ucmitz 未実装のためコメントアウト ?>
+
     <tr>
       <th class="col-head bca-form-table__label">
         <?php echo $this->BcAdminForm->label('maintenance', __d('baser_core', '公開状態')) ?>
@@ -102,7 +102,7 @@ $this->BcBaser->js('admin/site_configs/index.bundle', false, ['id' => 'AdminSite
         </div>
       </td>
     </tr>
-    */ ?>
+
     <tr>
       <th class="col-head bca-form-table__label">
         <?php echo $this->BcAdminForm->label('mode', __d('baser_core', '制作・開発モード')) ?>
@@ -237,7 +237,6 @@ $this->BcBaser->js('admin/site_configs/index.bundle', false, ['id' => 'AdminSite
     </table>
   </div>
 </section>
-<?php /* TODO ucmitz 未実装のためコメントアウト ?>
 
 <section class="bca-section" data-bca-section-type='form-group'>
   <div class="bca-collapse__action">
@@ -268,7 +267,7 @@ $this->BcBaser->js('admin/site_configs/index.bundle', false, ['id' => 'AdminSite
               入力例2) 〒819-0041 福岡県福岡市中央区大名2-11-25<br><br>
               建物名を含めるとうまく表示されない場合があります。<br>
               その時は建物名を省略して試してください。<br>
-              APIキーを入力しないと地図が表示されない場合があります。
+              APIキーを入力しないと地図が表示されない場合があります。<br>
               <a href="https://developers.google.com/maps/web/" target="_blank">「ウェブ向け Google Maps API」</a>'
             ) ?>
           </div>
@@ -283,6 +282,8 @@ $this->BcBaser->js('admin/site_configs/index.bundle', false, ['id' => 'AdminSite
           <?php echo $this->BcAdminForm->error('google_maps_api_key') ?>
         </td>
       </tr>
+
+<?php /* TODO ucmitz 未実装のためコメントアウト ?>
       <tr>
         <th class="col-head bca-form-table__label">
           <?php echo $this->BcAdminForm->label('google_analytics_id', __d('baser_core', 'Google Analytics<br>トラッキングID'), ['escape' => false]) ?>
@@ -339,6 +340,7 @@ $this->BcBaser->js('admin/site_configs/index.bundle', false, ['id' => 'AdminSite
           </div>
         </td>
       </tr>
+*/ ?>
 
       <?php echo $this->BcAdminForm->dispatchAfterForm('OuterService') ?>
 
@@ -347,7 +349,7 @@ $this->BcBaser->js('admin/site_configs/index.bundle', false, ['id' => 'AdminSite
   </div>
 
 </section>
-*/ ?>
+
 <section class="bca-section" data-bca-section-type='form-group'>
   <div class="bca-collapse__action">
     <button type="button"

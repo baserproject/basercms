@@ -43,9 +43,9 @@ class MailFieldsFactory extends CakephpBaseFactory
         $this->setDefaultData(function (Generator $faker) {
             return [
                 'no' => $faker->randomNumber(),
-                'name' => $faker->text,
-                'field_name' => $faker->text,
-                'head' => $faker->text
+                'name' => $faker->text(),
+                'field_name' => $faker->text(),
+                'head' => $faker->text()
             ];
         });
     }

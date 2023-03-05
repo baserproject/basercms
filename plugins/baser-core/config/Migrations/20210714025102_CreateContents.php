@@ -6,13 +6,13 @@ use BaserCore\Database\Migration\BcMigration;
 class CreateContents extends BcMigration
 {
     /**
-     * Change Method.
+     * Up Method.
      *
      * More information on this method is available here:
      * https://book.cakephp.org/phinx/0/en/migrations.html#the-change-method
      * @return void
      */
-    public function change()
+    public function up()
     {
         $this->table('contents')
             ->addColumn('name', 'text', ['null' => true, 'default' => null, 'limit' => null])

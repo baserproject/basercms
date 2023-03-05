@@ -27,6 +27,7 @@ use BaserCore\Service\ThemesServiceInterface;
 use BaserCore\Service\UsersServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
+use BcSearchIndex\Service\SearchIndexesServiceInterface;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Database\Connection;
@@ -332,6 +333,9 @@ class InstallationsService implements InstallationsServiceInterface
             $this->log(__d('baser_core', 'コンテンツの更新に失敗しました。'));
             $result = false;
         }
+        /** @var SearchIndexesServiceInterface $searchIndexesService */
+        $searchIndexesService = $this->getService(SearchIndexesServiceInterface::class);
+        $searchIndexesService->reconstruct();
         return $result;
     }
 
@@ -399,6 +403,12 @@ class InstallationsService implements InstallationsServiceInterface
     {
         $result = true;
         $corePlugins = Configure::read('BcApp.defaultInstallCorePlugins');
+
+        // BcSearchIndex についてインストール時に検索インデックスの構築を行うため、最後に移動
+        $key = array_search('BcSearchIndex', $corePlugins);
+        unset($corePlugins[$key]);
+        $corePlugins[] = 'BcSearchIndex';
+
         foreach($corePlugins as $corePlugin) {
             if (!$this->installPlugin($corePlugin)) {
                 $this->log(sprintf(__d('baser_core', 'コアプラグイン %s のインストールに失敗しました。'), $corePlugin));

@@ -11,6 +11,9 @@
 
 namespace BaserCore\Controller;
 
+use BaserCore\Event\BcShortCodeEventListener;
+use BaserCore\Service\SiteConfigsService;
+use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcSiteConfig;
 use Cake\Core\Exception\Exception;
@@ -163,18 +166,9 @@ class BcAppController extends AppController
     public function beforeRender(EventInterface $event): void
     {
         parent::beforeRender($event);
+
         // TODO ucmitz 未確認
         return;
-        if (BcUtil::isAdminSystem()) {
-            $this->__updateFirstAccess();
-        } else {
-            if (BcUtil::isInstalled()) {
-                // ショートコード
-                App::uses('BcShortCodeEventListener', 'Event');
-                CakeEventManager::instance()->attach(new BcShortCodeEventListener());
-            }
-        }
-
         // テンプレートの拡張子
         // RSSの場合、RequestHandlerのstartupで強制的に拡張子を.ctpに切り替えられてしまう為、
         // beforeRenderでも再設定する仕様にした
@@ -193,21 +187,6 @@ class BcAppController extends AppController
         $this->set('isSSL', $this->request->is('ssl'));
         $this->set('safeModeOn', ini_get('safe_mode'));
         $this->set('baserVersion', BcUtil::getVersion());
-    }
-
-    /**
-     * 初回アクセスメッセージ用のフラグを更新する
-     *
-     * @return void
-     */
-    private function __updateFirstAccess()
-    {
-        // 初回アクセスメッセージ表示設定
-        if ($this->request->getParam('prefix') === "Admin" && !empty(BcSiteConfig::get('first_access'))) {
-            $data = ['SiteConfig' => ['first_access' => false]];
-            $SiteConfig = ClassRegistry::init('SiteConfig', 'Model');
-            $SiteConfig->saveKeyValue($data);
-        }
     }
 
     /**

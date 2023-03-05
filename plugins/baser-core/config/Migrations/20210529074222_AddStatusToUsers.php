@@ -17,7 +17,7 @@ class AddStatusToUsers extends BcMigration
         $table = $this->table('users');
         $table->addColumn('status', 'boolean', [
             'default' => true,
-            'null' => false,
+            'null' => true,
         ]);
         $table->update();
     }

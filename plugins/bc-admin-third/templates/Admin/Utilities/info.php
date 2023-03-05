@@ -16,6 +16,7 @@
  * @var string $datasource
  * @var string $baserVersion
  * @var string $cakeVersion
+ * @var string $sqlMode
  */
 $this->BcAdmin->setTitle(__d('baser_core', '環境情報'));
 ?>
@@ -25,6 +26,9 @@ $this->BcAdmin->setTitle(__d('baser_core', '環境情報'));
   <ul>
     <li><?php echo __d('baser_core', '設置フォルダ') ?>： <?php echo ROOT . DS ?></li>
     <li><?php echo __d('baser_core', 'データベース') ?>： <?php echo $datasource ?></li>
+    <?php if($sqlMode): ?>
+    <li><?php echo __d('baser_core', 'SQLモード') ?>： <?php echo $sqlMode ?></li>
+    <?php endif ?>
     <li><?php echo __d('baser_core', 'baserCMSバージョン') ?>： <?php echo $baserVersion ?></li>
     <li><?php echo __d('baser_core', 'CakePHPバージョン') ?>： <?php echo $cakeVersion ?></li>
   </ul>

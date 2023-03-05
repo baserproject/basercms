@@ -110,8 +110,8 @@ if (!empty($mailFields)) {
 						}
 					}
 				}
-				echo $this->Mailform->error("MailMessage." . $field->group_valid . "_not_same", __d('baser_core'"入力データが一致していません。"));
-				echo $this->Mailform->error("MailMessage." . $field->group_valid . "_not_complate", __d('baser_core'"入力データが不完全です。"));
+				echo $this->Mailform->error("MailMessage." . $field->group_valid . "_not_same", __d('baser_core', "入力データが一致していません。"));
+				echo $this->Mailform->error("MailMessage." . $field->group_valid . "_not_complate", __d('baser_core', "入力データが不完全です。"));
 			} elseif(!empty($field->group_field)) {
 				$isRequiredToClose = false;
 			}
