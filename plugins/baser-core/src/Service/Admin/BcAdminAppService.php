@@ -18,6 +18,7 @@ use BaserCore\Service\PermissionsServiceInterface;
 use BaserCore\Service\PluginsServiceInterface;
 use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Utility\BcSiteConfig;
 use BaserCore\Utility\BcUtil;
 
 /**
@@ -47,6 +48,7 @@ class BcAdminAppService implements BcAdminAppServiceInterface
             'useAdminSideBanner' => $this->getService(SiteConfigsServiceInterface::class)->getValue('admin_side_banner'),
             'useUpdateNotice' => (bool) $this->getService(SiteConfigsServiceInterface::class)->getValue('use_update_notice'),
             'releaseCoreVersion' => $this->getService(PluginsServiceInterface::class)->getAvailableCoreVersion(),
+            'firstAccess' => BcSiteConfig::get('first_access')
         ];
     }
 }

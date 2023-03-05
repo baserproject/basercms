@@ -135,6 +135,8 @@ $base = $attributes['base'];
 
         </div>
 
+        <?php $this->BcAdmin->firstAccess() ?>
+
         <?php $this->BcAdmin->help() ?>
 
         <?php $this->BcAdmin->search() ?>
