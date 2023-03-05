@@ -224,7 +224,7 @@ class InstallationsService implements InstallationsServiceInterface
             $this->BcDatabase->testConnectDb($config);
         } catch (PDOException $e) {
             throw $e;
-        } catch (BcException $e) {
+        } catch (\Throwable $e) {
             throw $e;
         }
     }

@@ -110,7 +110,7 @@ class CreateMailFields extends BcMigration
                 'limit' => 255,
                 'null' => true,
             ])
-            ->addColumn('valid', 'boolean', [
+            ->addColumn('valid', 'string', [
                 'default' => null,
                 'limit' => 255,
                 'null' => true,
