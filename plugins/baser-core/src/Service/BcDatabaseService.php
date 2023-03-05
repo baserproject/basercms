@@ -682,7 +682,11 @@ class BcDatabaseService implements BcDatabaseServiceInterface
             }
             $values = [];
             foreach($record as $key => $value) {
-                $values[$head[$key]] = $value;
+                if(!$value) {
+                    $values[$head[$key]] = null;
+                } else {
+                    $values[$head[$key]] = $value;
+                }
             }
             $records[] = $values;
         }
@@ -1219,7 +1223,8 @@ class BcDatabaseService implements BcDatabaseServiceInterface
             case 'mysql':
                 $sources = $db->getSchemaCollection()->listTables();
                 foreach($sources as $source) {
-                    if (!preg_match("/^" . $prefix . "([^_].+)$/", $source)) continue;
+                    if (!preg_match('/_phinxlog$/', $source) &&
+                        !preg_match("/^" . $prefix . "([^_].+)$/", $source)) continue;
                     try {
                         $db->execute('DROP TABLE ' . $source);
                     } catch (BcException $e) {
