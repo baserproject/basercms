@@ -145,28 +145,6 @@ class BlogContentsTable extends BlogAppTable
     }
 
     /**
-     * afterSave
-     * @param EventInterface $event
-     * @param EntityInterface $entity
-     * @param \ArrayObject $options
-     * @checked
-     */
-    public function afterSave(EventInterface $event, EntityInterface $entity, \ArrayObject $options)
-    {
-        if (Plugin::isLoaded('BcSearchIndex') && !$this->isExcluded()) {
-            // URLが変更となった場合に更新する
-//            $datas = $this->BlogPost->find('all', [
-//                'conditions' => ['BlogPost.blog_content_id' => $this->data['BlogContent']['id']],
-//                'recursive' => -1
-//            ]);
-//            foreach ($datas as $data) {
-//                $this->BlogPost->set($data);
-//                $this->BlogPost->afterSave(true);
-//            }
-        }
-    }
-
-    /**
      * 検索用データを生成する
      *
      * @param EntityInterface $blogContent

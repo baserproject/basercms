@@ -62,11 +62,16 @@ class BlogContentsController extends BlogAdminAppController
         $blogContent = $service->get($id);
         if ($this->request->is(['post', 'put'])) {
             try {
+                $oldContent = clone $blogContent->content;
                 $blogContent = $service->update($blogContent, $this->getRequest()->getData());
-                $this->BcMessage->setSuccess(sprintf(
-                    __d('baser_core', 'ブログ「%s」を更新しました。'),
-                    $blogContent->content->title
-                ));
+                $message = __d('baser_core', 'ブログ「{0}」を更新しました。', $blogContent->content->title);
+                if($service->checkRequireSearchIndexReconstruction($oldContent, $blogContent->content)) {
+                    $message .= "\n\n" . __d('baser',
+                        'URL、または、公開状態を変更したので、検索インデックスの再構築が必要です。
+                        設定 > ユーティリティ > 検索インデックス より、検索インデックスの再構築を行ってください。'
+                    );
+                }
+                $this->BcMessage->setSuccess($message);
                 // BcThemeFileプラグインの利用状況をチェックした上でリダイレクトする
                 if ($this->request->getData('edit_blog')) {
                     return $this->redirectEditBlog(
