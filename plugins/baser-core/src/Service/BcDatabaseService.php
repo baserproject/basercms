@@ -586,7 +586,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         // sites の初期データを設定
         $sitesTable = TableRegistry::getTableLocator()->get('BaserCore.Sites');
         $site = $sitesTable->get(1);
-        $site->theme = $options['theme'];
+        $site->theme = Inflector::camelize($options['theme'], '-');
         if (!$sitesTable->save($site)) {
             $result = false;
         }
