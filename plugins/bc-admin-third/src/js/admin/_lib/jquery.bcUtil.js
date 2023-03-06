@@ -58,6 +58,7 @@ import Cookies from 'js-cookie'
          * @param config
          */
         init: function (config) {
+            if(config === undefined) config = {};
             var adminScript = $("#AdminScript");
             $.bcUtil.baseUrl = adminScript.attr('data-baseUrl');
             $.bcUtil.baserCorePrefix = adminScript.attr('data-baserCorePrefix');
@@ -205,9 +206,6 @@ import Cookies from 'js-cookie'
             }
             var ajaxConfig = {
                 url: url,
-                headers: {
-                    "Authorization": $.bcJwt.accessToken,
-                },
                 type: 'POST',
                 dataType: 'html',
                 beforeSend: function () {

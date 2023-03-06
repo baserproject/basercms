@@ -14,13 +14,13 @@
  * ブログコメント送信メール（管理者）
  * 呼出箇所：ブログコメント（コメント送信時）
  *
- * @var BcAppView $this
- * @var array $Content コンテンツデータ
- * @var array $BlogComment ブログコメントデータ
- * @var array $BlogPost ブログ記事データ
- * @var array $BlogContent ブログコンテンツデータ
+ * @var \BaserCore\View\BcFrontAppView $this
+ * @var \BcBlog\Model\Entity\BlogPost $blogPost ブログ記事データ
+ * @var \BcBlog\Model\Entity\BlogComment $blogComment
+ * @var string $contentTitle
+ * @var string $postUrl
+ * @var string $adminUrl
  */
-$adminPrefix = BcUtil::getAdminPrefix();
 ?>
 
                                            <?php echo date('Y-m-d H:i:s') ?>　
@@ -28,24 +28,24 @@ $adminPrefix = BcUtil::getAdminPrefix();
 　　　　　　　　◆◇　<?php echo __d('baser_core', 'コメントを受付けました')?>　◇◆
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-　<?php echo sprintf(__d('baser_core', '%sへのコメントを受け付けました。'), $Content['title'])?>　
+　<?php echo __d('baser_core', '{0} へのコメントを受け付けました。', $contentTitle)?>　
 　<?php echo __d('baser_core', '受信内容は下記のとおりです。')?>　
 
-　「<?php echo $BlogPost['name'] ?>」　
-　<?php echo $this->BcBaser->getUri($Content['url'] . '/archives/' . $BlogPost['no'], false) ?>　
+　「<?php echo $blogPost->title ?>」　
+　<?php echo $postUrl ?>　
 
 ━━━━◇◆━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 　◆ <?php echo __d('baser_core', 'コメント内容 ')?>　
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━◆◇━━━━
 
-<?php echo __d('baser_core', '送信者名')?>： <?php echo ($BlogComment['name']) ?>　
-<?php echo __d('baser_core', 'Ｅメール')?>： <?php echo ($BlogComment['email']) ?>　
-ＵＲＬ　： <?php echo ($BlogComment['url']) ?>　
+<?php echo __d('baser_core', '送信者名')?>： <?php echo ($blogComment->name) ?>　
+<?php echo __d('baser_core', 'Ｅメール')?>： <?php echo ($blogComment->email) ?>　
+ＵＲＬ　： <?php echo ($blogComment->url) ?>　
 
-<?php echo ($BlogComment['message']) ?>　
+<?php echo ($blogComment->message) ?>　
 
 <?php echo __d('baser_core', 'コメントの公開状態を変更する場合は次のURLよりご確認ください。')?>　
-<?php echo $this->BcBaser->getUri('/' . $adminPrefix . '/blog/blog_comments/index/' . $BlogContent['id'], false) ?>　
+<?php echo $adminUrl ?>　
 　
 　
 　

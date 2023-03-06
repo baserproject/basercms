@@ -15,23 +15,23 @@
  * 呼出箇所：ブログ記事詳細
  *
  * @var BcAppView $this
- * @var array $dbData コメントデータ
+ * @var \BcBlog\Model\Entity\BlogComment $blogComment コメントデータ
  */
 ?>
 
 
-<?php if (!empty($dbData)): ?>
-	<?php if ($dbData['status']): ?>
-<div class="bs-blog-comment__list-item" id="Comment<?php echo $dbData['no'] ?>">
+<?php if (!empty($blogComment)): ?>
+	<?php if ($blogComment->status): ?>
+<div class="bs-blog-comment__list-item" id="Comment<?php echo $blogComment->no ?>">
 	<div class="bs-blog-comment__list-item-name">
-		<?php if ($dbData['url']): ?>
-			<?php $this->BcBaser->link($dbData['name'], $dbData['url'], ['target' => '_blank', 'escape' => true]) ?>
+		<?php if ($blogComment->url): ?>
+			<?php $this->BcBaser->link($blogComment->name, $blogComment->url, ['target' => '_blank', 'escape' => true]) ?>
 		<?php else: ?>
-			<?php echo h($dbData['name']) ?>
+			<?php echo h($blogComment->name) ?>
 		<?php endif ?>
 	</div>
 	<div class="bs-blog-comment__list-item-message">
-		<?php echo nl2br($this->BcText->autoLinkUrls($dbData['message'])) ?>
+		<?php echo nl2br($this->BcText->autoLinkUrls($blogComment->message)) ?>
 	</div>
 </div>
 	<?php endif ?>

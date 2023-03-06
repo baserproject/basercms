@@ -15,8 +15,17 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Error\BcException;
+use BaserCore\Service\ContentsService;
+use BaserCore\Service\ContentsServiceInterface;
+use BaserCore\Utility\BcContainerTrait;
+use BcBlog\Model\Entity\BlogComment;
+use BcBlog\Model\Entity\BlogContent;
+use BcBlog\Model\Entity\BlogPost;
 use BcBlog\Model\Table\BlogCommentsTable;
+use Cake\Datasource\EntityInterface;
+use Cake\Mailer\MailerAwareTrait;
 use Cake\ORM\TableRegistry;
+use Cake\Routing\Router;
 
 /**
  * BlogCommentsService
@@ -25,6 +34,12 @@ use Cake\ORM\TableRegistry;
  */
 class BlogCommentsService implements BlogCommentsServiceInterface
 {
+
+    /**
+     * Trait
+     */
+    use MailerAwareTrait;
+    use BcContainerTrait;
 
     /**
      * ブログコメントを初期化する
@@ -73,6 +88,168 @@ class BlogCommentsService implements BlogCommentsServiceInterface
      */
     public function get(int $id) {
         return $this->BlogComments->get($id, ['contain' => ['BlogPosts']]);
+    }
+
+    /**
+     * ブログコメントの初期値を取得する
+     *
+     * @return EntityInterface 初期値データ
+     */
+    public function getNew()
+    {
+        return $this->BlogComments->newEntity([
+            'name' => 'NO NAME'
+        ]);
+    }
+
+    /**
+     * ブログコメントを登録する
+     *
+     * @param int $blogContentId
+     * @param int $blogPostId
+     * @param array $postData
+     * @return EntityInterface
+     */
+    public function add(int $blogContentId, int $blogPostId, array $postData)
+    {
+        $postData = array_merge([
+            'url' => null,
+            'email' => null,
+            'auth_captcha' => null,
+            'captcha_id' => null
+        ], $postData);
+
+        /** @var BlogContent $blogContent */
+        $blogContent = $this->getBlogContent($blogContentId);
+        if(!$blogContent->comment_use) throw new BcException(__d('baser_core', 'コメント機能は無効になっています。'));
+
+        // 画像認証を行う
+//        if ($blogContent->auth_captcha) {
+//            if (!$this->BcCaptcha->check($postData['auth_captcha'], $postData['captcha_id'])) {
+//                throw new BcException(__d('baser_core', '画像認証に失敗しました。'));
+//            }
+//        }
+
+        // Modelのバリデートに引っかからないための対処
+        $postData['url'] = str_replace('&#45;', '-', $postData['url']);
+        $postData['email'] = str_replace('&#45;', '-', $postData['email']);
+        $postData['blog_post_id'] = $blogPostId;
+        $postData['blog_content_id'] = $blogContentId;
+        if ($blogContent->comment_approve) {
+            $postData['status'] = false;
+        } else {
+            $postData['status'] = true;
+        }
+        $postData['no'] = $this->BlogComments->getMax('no', ['blog_content_id' => $blogContentId]) + 1;
+
+        $entity = $this->BlogComments->patchEntity($this->getNew(), $postData);
+        return $this->BlogComments->saveOrFail($entity);
+    }
+
+    /**
+     * ブログコンテンツを取得する
+     *
+     * @param $blogContentId
+     * @return EntityInterface
+     */
+    public function getBlogContent($blogContentId)
+    {
+        return $this->BlogComments->BlogContents->get($blogContentId);
+    }
+
+    /**
+     * 管理者にコメント通知メールを送信する
+     *
+     * @param EntityInterface|BlogComment $entity
+     * @return void
+     * @throws \Throwable
+     */
+    public function sendCommentToAdmin(EntityInterface $entity)
+    {
+        /** @var BlogPostsService $blogPostsService */
+        $blogPostsService = $this->getService(BlogPostsServiceInterface::class);
+
+        /** @var BlogPost $blogPost */
+        $blogPost = $blogPostsService->get($entity->blog_post_id);
+
+        /** @var ContentsService $contentService */
+        $contentService = $this->getService(ContentsServiceInterface::class);
+
+        $content = $blogPost->blog_content->content;
+        $site = $content->site;
+        $postUrl = $contentService->getUrl($content->url .  '/archives/' . $blogPost->no, true, $site->use_subdomain);
+        try {
+            $this->getMailer('BcBlog.BlogComment')->send('sendCommentToAdmin', [$site->title, [
+                'blogComment' => $entity,
+                'blogPost' => $blogPost,
+                'contentTitle' => $content->title,
+                'postUrl' => $postUrl,
+                'adminUrl' => Router::url([
+                    'plugin' => 'BcBlog',
+                    'prefix' => 'Admin',
+                    'controller' => 'BlogComments',
+                    'action' => 'index',
+                    $entity->blog_content_id
+                ], true)
+            ]]);
+        } catch (\Throwable $e) {
+            throw $e;
+        }
+    }
+
+    /**
+     * コメント送信者にコメント通知メールを送信する
+     *
+     * @param EntityInterface|BlogComment $entity
+     * @return void
+     * @throws \Throwable
+     */
+    public function sendCommentToContributor(EntityInterface $entity)
+    {
+        /** @var BlogPostsService $blogPostsService */
+        $blogPostsService = $this->getService(BlogPostsServiceInterface::class);
+
+        /** @var BlogPost $blogPost */
+        $blogPost = $blogPostsService->get($entity->blog_post_id, [
+            'contain' => [
+                'BlogContents' => ['Contents' => ['Sites']],
+                'BlogComments'
+            ]
+        ]);
+
+        // 公開されているコメントがない場合は true を返して終了
+        if (!$blogPost->blog_comments) return;
+
+        $content = $blogPost->blog_content->content;
+        $site = $content->site;
+
+        /** @var ContentsService $contentService */
+        $contentService = $this->getService(ContentsServiceInterface::class);
+        $postUrl = $contentService->getUrl($content->url .  '/archives/' . $blogPost->no, true, $site->use_subdomain);
+
+        $sent = [];
+        foreach($blogPost->blog_comments as $blogComment) {
+            if(!$blogComment->email) continue;
+            if (!$blogComment->status) {
+                $sent[] = $blogComment->email;
+                continue;
+            }
+            if (in_array($blogComment->email, $sent)) continue;
+            try {
+                $this->getMailer('BcBlog.BlogComment')->send('sendCommentToUser', [
+                    $site->title,
+                    $blogComment->email,
+                    [
+                        'blogComment' => $entity,
+                        'blogPost' => $blogPost,
+                        'contentTitle' => $content->title,
+                        'postUrl' => $postUrl,
+                ]]);
+            } catch (\Throwable $e) {
+                throw $e;
+            }
+            $sent[] = $blogComment->email;
+        }
     }
 
     /**

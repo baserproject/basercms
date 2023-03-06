@@ -51,6 +51,7 @@ use Cake\ORM\Entity;
  * @property bool $blank_link
  * @property FrozenDate $created
  * @property FrozenDate $modified
+ * @property Site $site
  */
 class Content extends Entity
 {

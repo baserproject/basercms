@@ -171,6 +171,11 @@ class InstallationsService implements InstallationsServiceInterface
 
         try {
             $this->installCorePlugin();
+        } catch (\Throwable $e) {
+            throw new BcException(__d('baser_core', 'コアプラグインのインストールに失敗しました。'));
+        }
+
+        try {
             [$theme, $pattern] = explode('.', $dbDataPattern);
             if (!$this->BcDatabase->loadDefaultDataPattern($theme, $pattern)) {
                 throw new BcException(__d('baser_core', 'コアの初期データのロードに失敗しました。'));
@@ -178,6 +183,7 @@ class InstallationsService implements InstallationsServiceInterface
         } catch (\Throwable $e) {
             throw new BcException(__d('baser_core', 'コアの初期データのロードに失敗しました。' . $e->getMessage()));
         }
+
         if (!$this->BcDatabase->initSystemData(['theme' => $theme, 'adminTheme' => $adminTheme])) {
             throw new BcException(__d('baser_core', 'システムデータの初期化に失敗しました。'));
         }

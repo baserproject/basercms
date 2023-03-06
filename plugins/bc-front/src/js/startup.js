@@ -28,6 +28,10 @@ $(function(){
 		focusClass: "focus",
 		openClass: "open"
 	});
+
+    $.bcUtil.init();
+	$.bcToken.setTokenUrl($.bcUtil.baseUrl + '/baser-core/bc_form/get_token?requestview=false');
+
     function clickMenuBtn() {
         if(isOpenedMenu) {
             isOpenedMenu = false;

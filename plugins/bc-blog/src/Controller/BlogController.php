@@ -11,7 +11,9 @@
 
 namespace BcBlog\Controller;
 
+use BaserCore\Error\BcException;
 use BcBlog\Model\Entity\BlogContent;
+use BcBlog\Service\BlogCommentsServiceInterface;
 use BcBlog\Service\BlogContentsService;
 use BcBlog\Service\BlogContentsServiceInterface;
 use BcBlog\Service\BlogPostsService;
@@ -23,6 +25,8 @@ use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use Cake\Http\Exception\NotFoundException;
+use Cake\ORM\Exception\PersistenceFailedException;
+use Throwable;
 
 /**
  * ブログ記事コントローラー
@@ -65,9 +69,6 @@ class BlogController extends BlogFrontAppController
                 // 後方互換のため pass もチェック
                 $blogContentId = $this->request->getParam('pass');
             }
-            if (!$blogContentId) {
-                $this->notFound();
-            }
         }
 
         if (empty($this->request->getAttribute('currentContent'))) {
@@ -97,8 +98,7 @@ class BlogController extends BlogFrontAppController
 
         // コメント送信用のトークンを出力する為にセキュリティコンポーネントを利用しているが、
         // 表示用のコントローラーなのでポストデータのチェックは必要ない
-        $this->Security->validatePost = false;
-        $this->Security->csrfCheck = false;
+        $this->Security->setConfig('validatePost', false);
     }
 
     /**
@@ -350,4 +350,52 @@ class BlogController extends BlogFrontAppController
             'tag' => rawurldecode($name)
         ]);
     }
+
+    /**
+     * ブログコメントを登録する
+     *
+     * 画像認証を行い認証されればブログのコメントを登録する
+     * コメント承認を利用していないブログの場合、公開されているコメント投稿者にアラートを送信する
+     */
+    public function ajax_add_comment(BlogCommentsServiceInterface $service)
+    {
+        $this->request->allowMethod(['post', 'put']);
+        $postData = $this->getRequest()->getData();
+
+        if(!$postData['blog_content_id']) {
+            throw new BcException(__d('baser_core', 'パラメーターに blog_content_id が指定されていません。'));
+        }
+        if(!$postData['blog_post_id']) {
+            throw new BcException(__d('baser_core', 'パラメーターに blog_post_id が指定されていません。'));
+        }
+
+        try {
+            $entity = $service->add($postData['blog_content_id'], $postData['blog_post_id'], $postData);
+        } catch (PersistenceFailedException $e) {
+            $entity = $e->getEntity();
+            $message = __d('baser_core', '入力エラーです。内容を見直してください。');
+            $this->setResponse($this->response->withStatus(400, $message));
+            return $this->response->withStringBody(json_encode($entity->getErrors()));
+        } catch (BcException $e) {
+            $message = $e->getMessage();
+            return $this->response->withStatus(400, $message);
+        } catch (Throwable $e) {
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            return $this->response->withStatus(500, $message);
+        }
+
+        $blogContent = $service->getBlogContent($postData['blog_content_id']);
+        $service->sendCommentToAdmin($entity);
+        // コメント承認機能を利用していない場合は、公開されているコメント投稿者に送信
+        if(!$blogContent->comment_approve) {
+            $service->sendCommentToContributor($entity);
+        }
+
+        $this->set([
+            'blogComment' => $entity?? null,
+        ]);
+        $this->viewBuilder()->disableAutoLayout();
+        $this->render('element/blog_comment');
+    }
+
 }

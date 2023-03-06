@@ -806,7 +806,9 @@ class BlogPostsTable extends BlogAppTable
             ->contain([
                 'BlogContents' => ['Contents' => ['Sites']],
                 'BlogCategories',
-                'BlogTags'])
+                'BlogTags',
+                'BlogComments'
+            ])
             ->first();
     }
 

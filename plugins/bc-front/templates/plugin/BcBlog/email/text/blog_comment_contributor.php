@@ -14,11 +14,10 @@
  * ブログコメント送信メール（コメント送信者）
  * 呼出箇所：ブログコメント（コメント送信時）
  *
- * @var BcAppView $this
- * @var array $Content コンテンツデータ
- * @var array $BlogComment ブログコメントデータ
- * @var array $BlogPost ブログ記事データ
- * @var array $BlogContent ブログコンテンツデータ
+ * @var \BaserCore\View\BcFrontAppView $this
+ * @var \BcBlog\Model\Entity\BlogPost $blogPost ブログ記事データ
+ * @var \BcBlog\Model\Entity\BlogComment $blogComment
+ * @var string $postUrl
  */
 ?>
 
@@ -27,10 +26,10 @@
 　　　　　　　　◆◇　<?php echo __d('baser_core', 'コメントが投稿されました')?>　◇◆
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-<?php echo sprintf(__d('baser_core', '%sさんが、「%s」にコメントしました。'), $BlogComment['name'], $BlogPost['name'])?>　
-<?php echo $this->BcBaser->getUri($Content['url'] . 'archives/' . $BlogPost['no'], false) ?>　
+<?php echo __d('baser_core', '{0} さんが、「{1}」にコメントしました。', $blogComment->name, $blogPost->title) ?>　
+<?php echo $postUrl ?>　
 
-<?php echo ($BlogComment['message']) ?>　
+<?php echo ($blogComment->message) ?>　
 　
 　
 　

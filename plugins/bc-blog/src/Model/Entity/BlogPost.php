@@ -38,6 +38,7 @@ use Cake\ORM\Entity;
  * @property string $eye_catch
  * @property FrozenTime $created
  * @property FrozenTime $modified
+ * @property BlogContent $blog_content
  */
 class BlogPost extends Entity
 {
