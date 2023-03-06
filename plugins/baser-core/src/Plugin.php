@@ -186,7 +186,10 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
         $sitesTable = TableRegistry::getTableLocator()->get('BaserCore.Sites');
         $sites = $sitesTable->find()->where(['Sites.status' => true]);
         foreach($sites as $site) {
-            if ($site->theme) $application->addPlugin($site->theme);
+            if ($site->theme) {
+                BcUtil::includePluginClass($site->theme);
+                $application->addPlugin($site->theme);
+            }
         }
     }
 
