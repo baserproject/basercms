@@ -19,6 +19,7 @@ use Cake\Form\Schema;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use Cake\Validation\Validator;
 
 /**
  * ThemeFileForm
@@ -91,6 +92,44 @@ class ThemeFileForm extends Form
             rename($oldPath, $newPath);
         }
         return $result;
+    }
+
+    /**
+     * Validation default
+     * @param Validator $validator
+     * @return Validator
+     */
+    public function validationDefault(Validator $validator): Validator
+    {
+        $validator
+            ->scalar('base_name')
+            ->requirePresence('base_name', 'create', __d('baser_core', 'テーマファイル名を入力してください。'))
+            ->notEmptyString('base_name', __d('baser_core', 'テーマファイル名を入力してください。'))
+            ->add('base_name', [
+                'duplicateThemeFile' => [
+                    'provider' => 'form',
+                    'rule' => ['duplicateThemeFile'],
+                    'message' => __d('baser_core', '入力されたテーマファイル名は、同一階層に既に存在します。')
+                ]]);
+        return $validator;
+    }
+
+    /**
+     * ファイルの重複チェック
+     *
+     * @param array $check
+     * @return    boolean
+     */
+    public function duplicateThemeFile($value, $context = null)
+    {
+        if (!$value) return true;
+        if($context['data']['mode'] !== 'create') return true;
+        $target = $context['data']['parent'] . $value . '.' . $context['data']['ext'];
+        if (is_file($target)) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
 }

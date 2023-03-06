@@ -43,7 +43,7 @@ class BcFormFailedException extends CakeException {
      */
     public function __construct(ValidatorAwareInterface $form, $message, ?int $code = null, ?Throwable $previous = null)
     {
-        $this->_entity = $form;
+        $this->_form = $form;
         if (is_array($message)) {
             $errors = [];
             foreach (Hash::flatten($form->getErrors()) as $field => $error) {
