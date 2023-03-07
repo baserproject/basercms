@@ -10,6 +10,7 @@
  */
 namespace BaserCore\Service\Admin;
 
+use BaserCore\Service\BcOfficialApiServiceInterface;
 use BaserCore\Service\ContentsServiceInterface;
 use BaserCore\Service\DblogsServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
@@ -43,7 +44,8 @@ class DashboardAdminService implements DashboardAdminServiceInterface
         return [
             'panels' => $this->getPanels(),
             'dblogs' => $this->getService(DblogsServiceInterface::class)->getDblogs($logNum),
-            'contentsInfo' => $this->getService(ContentsServiceInterface::class)->getContentsInfo()
+            'contentsInfo' => $this->getService(ContentsServiceInterface::class)->getContentsInfo(),
+            'baserNews' => $this->getService(BcOfficialApiServiceInterface::class)->getRss('baserNewsRss')
         ];
     }
 

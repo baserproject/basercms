@@ -391,30 +391,8 @@ class ThemesService implements ThemesServiceInterface
      */
     public function getMarketThemes(): array
     {
-        if (Configure::read('debug')) {
-            Cache::delete('baserMarketThemes');
-        }
-        $baserThemes = Cache::read('baserMarketThemes', '_bc_env_');
-        if (!$baserThemes) {
-            $Xml = new Xml();
-            try {
-                $client = new Client([
-                    'host' => '',
-                    'redirect' => true,
-                ]);
-                $response = $client->get(Configure::read('BcLinks.marketThemeRss'));
-                $baserThemes = $Xml->build($response->getBody()->getContents());
-                $baserThemes = $Xml->toArray($baserThemes->channel);
-                $baserThemes = $baserThemes['channel']['item'];
-            } catch (BcException $e) {
-                return [];
-            }
-            Cache::write('baserMarketThemes', $baserThemes, '_bc_env_');
-        }
-        if ($baserThemes) {
-            return $baserThemes;
-        }
-        return [];
+        $bcOfficialApiService = $this->getService(BcOfficialApiServiceInterface::class);
+        return $bcOfficialApiService->getRss('marketThemeRss');
     }
 
     /**

@@ -43,6 +43,8 @@ use BaserCore\Service\BcCaptchaService;
 use BaserCore\Service\BcCaptchaServiceInterface;
 use BaserCore\Service\BcDatabaseService;
 use BaserCore\Service\BcDatabaseServiceInterface;
+use BaserCore\Service\BcOfficialApiService;
+use BaserCore\Service\BcOfficialApiServiceInterface;
 use BaserCore\Service\ContentFoldersService;
 use BaserCore\Service\ContentFoldersServiceInterface;
 use BaserCore\Service\ContentsService;
@@ -132,7 +134,8 @@ class BcServiceProvider extends ServiceProvider
         PasswordRequestsServiceInterface::class,
         PermissionGroupsServiceInterface::class,
         PermissionGroupsAdminServiceInterface::class,
-        BcCaptchaServiceInterface::class
+        BcCaptchaServiceInterface::class,
+        BcOfficialApiServiceInterface::class
     ];
 
     /**
@@ -203,6 +206,8 @@ class BcServiceProvider extends ServiceProvider
         $container->add(PasswordRequestsServiceInterface::class, PasswordRequestsService::class);
         // BcCaptcha サービス
         $container->add(BcCaptchaServiceInterface::class, BcCaptchaService::class);
+        // BcOfficialApi サービス
+        $container->add(BcOfficialApiServiceInterface::class, BcOfficialApiService::class);
     }
 
 }

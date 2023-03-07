@@ -76,7 +76,7 @@ return [
      */
     'Cache' => [
         /**
-         * baserマーケットのテーマ、プラグイン情報等に利用
+         * 環境情報に利用
          */
         '_bc_env_' => [
             'className' => FileEngine::class,
@@ -87,8 +87,9 @@ return [
             'url' => env('CACHE_BCENV_URL', null),
         ],
         /**
-         * Packagist の BaserCore のバージョンに利用
+         * Packagist の BaserCore のバージョン、baserマーケットのテーマ、プラグイン情報、baserオフィシャルニュースに利用
          * @see \BaserCore\Service\PluginsService::getAvailableCoreVersion()
+         * @see \BaserCore\Service\BcOfficialApiService::getRss()
          */
         '_bc_update_' => [
             'className' => FileEngine::class,
@@ -601,9 +602,14 @@ return [
      * パッケージ内の外部リンク
      */
     'BcLinks' => [
+        // baserマーケット テーマRSS
         'marketThemeRss' => 'https://market.basercms.net/themes.php',
+        // baserマーケット プラグインRSS
         'marketPluginRss' => 'https://market.basercms.net/plugins.php',
+        // スペシャルサンクス
         'specialThanks' => 'https://basercms.net/special_thanks/special_thanks/ajax_users',
+        // baserCMSオフィシャルニュース
+        'baserNewsRss' => 'https://basercms.net/news/index.rss',
         // インストールマニュアル
         // TODO ucmitz リンク先を準備した上で変更要
         'installManual' => 'https://wiki.basercms.net/%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%E3%82%AC%E3%82%A4%E3%83%89',

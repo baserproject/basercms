@@ -483,29 +483,8 @@ class PluginsService implements PluginsServiceInterface
      */
     public function getMarketPlugins(): array
     {
-        if (Configure::read('debug') > 0) {
-            Cache::delete('baserMarketPlugins', '_bc_env_');
-        }
-        if (!($baserPlugins = Cache::read('baserMarketPlugins', '_bc_env_'))) {
-            $Xml = new Xml();
-            try {
-                $client = new Client([
-                    'host' => '',
-                    'redirect' => true,
-                ]);
-                $response = $client->get(Configure::read('BcLinks.marketPluginRss'));
-                $baserPlugins = $Xml->build($response->getBody()->getContents());
-                $baserPlugins = $Xml->toArray($baserPlugins->channel);
-                $baserPlugins = $baserPlugins['channel']['item'];
-            } catch (Exception $e) {
-                return [];
-            }
-            Cache::write('baserMarketPlugins', $baserPlugins, '_bc_env_');
-        }
-        if ($baserPlugins) {
-            return $baserPlugins;
-        }
-        return [];
+        $bcOfficialApiService = $this->getService(BcOfficialApiServiceInterface::class);
+        return $bcOfficialApiService->getRss('marketPluginRss');
     }
 
     /**
