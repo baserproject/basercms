@@ -174,6 +174,22 @@
           </div>
         </td>
       </tr>
+
+			<tr>
+				<th class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('auth_captcha', __d('baser', 'イメージ認証')) ?></th>
+				<td class="col-input bca-form-table__input">
+					<?php echo $this->BcAdminForm->control('auth_captcha', ['type' => 'checkbox', 'label' => __d('baser', '利用する')]) ?>
+					<i class="bca-icon--question-circle btn help bca-help"></i>
+					<?php echo $this->BcAdminForm->error('auth_captcha') ?>
+					<div class="bca-helptext">
+						<ul>
+							<li><?php echo __d('baser', 'メールフォーム送信の際、表示された画像の文字入力させる事で認証を行ないます。') ?></li>
+							<li><?php echo __d('baser', 'スパムなどいたずら送信が多いが多い場合に設定すると便利です。') ?></li>
+						</ul>
+					</div>
+				</td>
+			</tr>
+
       <tr>
         <th class="col-head bca-form-table__label">
           <?php echo $this->BcAdminForm->label('ssl_on', __d('baser_core', 'SSL通信')) ?>

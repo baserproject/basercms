@@ -11,6 +11,7 @@
 
 namespace BcMail\View\Helper;
 
+use BaserCore\View\Helper\BcBaserHelper;
 use BaserCore\View\Helper\BcFreezeHelper;
 use Cake\ORM\ResultSet;
 use BaserCore\Annotation\UnitTest;
@@ -19,6 +20,8 @@ use BaserCore\Annotation\Checked;
 
 /**
  * メールフォームヘルパー
+ *
+ * @property BcBaserHelper $BcBaser
  */
 class MailformHelper extends BcFreezeHelper
 {
@@ -250,11 +253,12 @@ class MailformHelper extends BcFreezeHelper
     /**
      * 認証キャプチャを表示する
      *
+     * @param $fieldName
      * @param array $options オプション（初期値 : []）
      *    - `separate` : 画像と入力欄の区切り（初期値：''）
      *    - `class` : CSSクラス名（初期値：auth-captcha-image）
      */
-    public function authCaptcha($fieldName, $options = [])
+    public function authCaptcha(string $fieldName, array $options = [])
     {
         $options = array_merge([
             'separate' => '',
@@ -266,10 +270,12 @@ class MailformHelper extends BcFreezeHelper
         if (!empty($request->getAttribute('currentSite')->same_main_url)) {
             $url = $this->BcContents->getPureUrl($url, $request->getAttribute('currentSite')->id);
         }
-        $output = $this->BcBaser->getImg($url . '/captcha/' . $captchaId, ['alt' => __d('baser_core', '認証画像'), 'class' => $options['class']]);
-        $output .= $options['separate'] . $this->text($fieldName);
-        $output .= $this->control('captcha_id', ['type' => 'hidden', 'value' => $captchaId]);
-        echo $output;
+        $options['helper']->element('auth_captcha', [
+            'fieldName' => $fieldName,
+            'captchaUrl' => $url . 'captcha/' . $captchaId,
+            'captchaId' => $captchaId,
+            'options' => $options,
+        ]);
     }
 
     /**

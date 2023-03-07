@@ -12,6 +12,7 @@
 namespace BcMail\Controller;
 
 use BaserCore\Error\BcException;
+use BaserCore\Service\BcCaptchaServiceInterface;
 use BaserCore\Utility\BcSiteConfig;
 use BcMail\Service\Front\MailFrontService;
 use BcMail\Service\Front\MailFrontServiceInterface;
@@ -46,7 +47,6 @@ class MailController extends MailFrontAppController
     {
         parent::initialize();
         $this->loadComponent('BaserCore.BcFrontContents', ['viewContentCrumb' => true]);
-        $this->loadComponent('BaserCore.BcCaptcha');
     }
 
     /**
@@ -172,7 +172,11 @@ class MailController extends MailFrontAppController
      * @checked
      * @noTodo
      */
-    public function confirm(MailFrontServiceInterface $service, MailContentsServiceInterface $mailContentsService)
+    public function confirm(
+        MailFrontServiceInterface $service,
+        MailContentsServiceInterface $mailContentsService,
+        MailMessagesServiceInterface $mailMessagesService,
+        BcCaptchaServiceInterface $bcCaptchaService)
     {
         $mailContent = $mailContentsService->get($this->request->getParam('entityId'));
         if (!$service->isAccepting($mailContent)) {
@@ -186,9 +190,20 @@ class MailController extends MailFrontAppController
         }
 
         try {
+            // 画像認証
+            if ($mailContent->auth_captcha && !$bcCaptchaService->check(
+                $this->getRequest(),
+                $this->getRequest()->getData('captcha_id'),
+                $this->getRequest()->getData('auth_captcha')
+            )) {
+                $mailMessage = $mailMessagesService->MailMessages->newEntity($this->getRequest()->getData());
+                $mailMessage->setError('auth_captcha', __d('baser_core', '画像の文字が間違っています。再度入力してください。'));
+                throw new PersistenceFailedException($mailMessage, __d('baser_core', '入力エラーです。内容を見直してください。'));
+            }
             $mailMessage = $service->confirm($mailContent, $this->getRequest()->getData());
         } catch (PersistenceFailedException $e) {
             $mailMessage = $e->getEntity();
+            $mailMessage->auth_captcha = '';
             $this->BcMessage->setError($e->getMessage());
         } catch (BcException $e) {
             $this->BcMessage->setError($e->getMessage());
@@ -211,7 +226,8 @@ class MailController extends MailFrontAppController
     public function submit(
         MailFrontServiceInterface $service,
         MailContentsServiceInterface $mailContentsService,
-        MailMessagesServiceInterface $mailMessagesService
+        MailMessagesServiceInterface $mailMessagesService,
+        BcCaptchaServiceInterface $bcCaptchaService
     )
     {
         $mailContent = $mailContentsService->get($this->request->getParam('entityId'));
@@ -235,10 +251,22 @@ class MailController extends MailFrontAppController
 
         // メッセージ保存
         try {
+            // 画像認証
+            if ($mailContent->auth_captcha && !$bcCaptchaService->check(
+                $this->getRequest(),
+                $this->getRequest()->getData('captcha_id'),
+                $this->getRequest()->getData('auth_captcha')
+            )) {
+                $mailMessage = $mailMessagesService->MailMessages->newEntity($this->getRequest()->getData());
+                $mailMessage->setError('auth_captcha', __d('baser_core', '画像の文字が間違っています。再度入力してください。'));
+                throw new PersistenceFailedException($mailMessage, __d('baser_core', '入力エラーです。内容を見直してください。'));
+            }
+
             $mailMessagesService->setup($mailContent->id);
             $entity = $mailMessagesService->create($mailContent, $this->getRequest()->getData());
         } catch (PersistenceFailedException $e) {
             $entity = $e->getEntity();
+            $mailMessage->auth_captcha = '';
             $this->BcMessage->setError(__d('baser_core', '入力内容を確認し、再度送信してください。'));
             $this->set($service->getViewVarsForConfirm($mailContent, $entity));
             $this->render($service->getConfirmTemplate($mailContent));
@@ -297,6 +325,18 @@ class MailController extends MailFrontAppController
             'currentWidgetAreaId' => $mailContent->widget_area?? BcSiteConfig::get('widget_area')
         ]);
         $this->render($service->getThanksTemplate($mailContent));
+    }
+
+    /**
+     * 認証用のキャプチャ画像を表示する
+     *
+     * @return void
+     */
+    public function captcha(BcCaptchaServiceInterface $service, string $token)
+    {
+        $this->viewBuilder()->disableAutoLayout();
+        $service->render($this->getRequest(), $token);
+        exit();
     }
 
 }

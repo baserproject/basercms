@@ -35,6 +35,7 @@ class MailContentsSeed extends BcSeed
                 'widget_area' => NULL,
                 'ssl_on' => 0,
                 'save_info' => 1,
+                'auth_captcha' => 1,
                 'publish_begin' => NULL,
                 'publish_end' => NULL,
                 'created' => '2016-08-07 23:10:38',
