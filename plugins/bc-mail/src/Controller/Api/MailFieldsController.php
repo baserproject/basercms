@@ -122,7 +122,7 @@ class MailFieldsController extends BcApiController
         $this->request->allowMethod(['get']);
         $mailFields = $message = null;
         try {
-            $mailFields = $service->getIndex($mailContentId, $this->request->getQueryParams());
+            $mailFields = $this->paginate($service->getIndex($mailContentId, $this->request->getQueryParams()));
         } catch (RecordNotFoundException $e) {
             $this->setResponse($this->response->withStatus(404));
             $message = __d('baser_core', 'データが見つかりません。');

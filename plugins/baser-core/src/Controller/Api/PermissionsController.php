@@ -67,7 +67,7 @@ class PermissionsController extends BcApiController
         $this->request->allowMethod(['get']);
 
         $this->request = $this->request->withQueryParams(['user_group_id' => $userGroupId]);
-        $this->set('permissions', $service->getIndex($this->request->getQueryParams()));
+        $this->set('permissions', $this->paginate($service->getIndex($this->request->getQueryParams())));
         $this->viewBuilder()->setOption('serialize', ['permissions']);
     }
 

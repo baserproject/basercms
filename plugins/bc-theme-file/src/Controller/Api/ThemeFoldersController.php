@@ -92,7 +92,7 @@ class ThemeFoldersController extends BcApiController
         try {
             $data = $this->getRequest()->getQueryParams();
             $data['fullpath'] = $service->getFullpath($data['theme'], $data['plugin'], $data['type'], $data['path']);
-            $themeFiles = $service->getIndex($data);
+            $themeFiles = $this->paginate($service->getIndex($data));
         } catch (\Throwable $e) {
             $this->setResponse($this->response->withStatus(500));
             $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
