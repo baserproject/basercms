@@ -39,7 +39,7 @@ class BlogCommentsTable extends BlogAppTable
         $validator
             ->scalar('email')
             ->allowEmptyString('email')
-            ->email('email',  __d('baser_core', 'Eメールの形式が不正です。'))
+            ->email('email',  false, __d('baser_core', 'Eメールの形式が不正です。'))
             ->maxLength('email', 255, __d('baser_core', 'Eメールは255文字以内で入力してください。'));
         $validator
             ->scalar('url')

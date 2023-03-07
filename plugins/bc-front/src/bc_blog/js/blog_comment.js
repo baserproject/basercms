@@ -29,6 +29,11 @@ const bcBlog = {
     captchaId: null,
 
     /**
+     * キャプチャのベースURL
+     */
+    authCaptchaImageBaseUrl: null,
+
+    /**
      * 初期化
      */
     mounted() {
@@ -36,6 +41,7 @@ const bcBlog = {
         bcBlog.commentApprove = $script.attr('data-commentApprove');
         bcBlog.authCaptcha = $script.attr('data-authCaptcha');
         bcBlog.captchaId = $script.attr('data-captchaId');
+        bcBlog.authCaptchaImageBaseUrl = $script.attr('data-authCaptchaImageBaseUrl');
         bcBlog.initView();
         bcBlog.registerEvents();
     },
@@ -81,6 +87,10 @@ const bcBlog = {
                     $("#ResultMessage").slideUp();
                 },
                 success: function (result) {
+                    if(bcBlog.authCaptcha) {
+                        bcBlog.loadAuthCaptcha();
+                        $("#BlogCommentAuthCaptcha").val('');
+                    }
                     if (result) {
                         bcBlog.initView()
                         $("#BlogCommentAuthCaptcha").val('');
@@ -111,6 +121,29 @@ const bcBlog = {
     },
 
     /**
+     * エラー処理
+     */
+    postError(result) {
+        if(bcBlog.authCaptcha) {
+            bcBlog.loadAuthCaptcha();
+            $("#BlogCommentAuthCaptcha").val('');
+        }
+        let message = bcI18n.alertMessageError;
+        if(result.responseText) {
+            response = JSON.parse(result.responseText);
+        }
+        message += '<br>' + response.message;
+        if(response.errors) {
+            Object.keys(response.errors).forEach(function(k) {
+                Object.keys(response.errors[k]).forEach(function(f){
+                    message += '<br>' + response.errors[k][f];
+                });
+            });
+        }
+        $("#ResultMessage").html(message).slideDown();
+    },
+
+    /**
      * バリデーション
      */
     validate() {
@@ -122,7 +155,7 @@ const bcBlog = {
             msg += bcI18n.alertMessageComment + '\n';
         }
         if (bcBlog.authCaptcha) {
-            if (!$("#auth_captcha").val()) {
+            if (!$("#auth-captcha").val()) {
                 msg += bcI18n.alertMessageAuthImage + '\n';
             }
         }
@@ -134,31 +167,19 @@ const bcBlog = {
     },
 
     /**
-     * エラー処理
-     */
-    postError(result) {
-        if(bcBlog.authCaptcha) {
-            bcBlog.loadAuthCaptcha();
-            $("#BlogCommentAuthCaptcha").val('');
-        }
-        console.log(JSON.parse(result.responseText));
-        $("#ResultMessage").html(bcI18n.alertMessageError).slideDown();
-    },
-
-    /**
      * キャプチャ画像を読み込む
      */
     loadAuthCaptcha() {
         if (bcBlog.authCaptcha) {
-            let captchaId = Math.floor(Math.random() * 100);
-            let src = $("#BlogCommentCaptchaUrl").html() + '?' + captchaId;
-            $("#AuthCaptchaImage").hide();
-            $("#CaptchaLoader").show();
-            $("#AuthCaptchaImage").on('load', function () {
-                $("#CaptchaLoader").hide();
-                $("#AuthCaptchaImage").fadeIn(1000);
+            const $authCaptchaImage = $("#AuthCaptchaImage");
+            const $captchaLoader = $("#CaptchaLoader");
+            $authCaptchaImage.hide();
+            $captchaLoader.show();
+            $authCaptchaImage.on('load', function () {
+                $captchaLoader.hide();
+                $authCaptchaImage.fadeIn(1000);
             });
-            $("#AuthCaptchaImage").attr('src', src);
+            $authCaptchaImage.attr('src', bcBlog.authCaptchaImageBaseUrl + '/' + bcBlog.captchaId);
         }
     }
 

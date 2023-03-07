@@ -12,6 +12,7 @@
 namespace BcBlog\Controller;
 
 use BaserCore\Error\BcException;
+use BaserCore\Service\BcCaptchaServiceInterface;
 use BcBlog\Model\Entity\BlogContent;
 use BcBlog\Service\BlogCommentsServiceInterface;
 use BcBlog\Service\BlogContentsService;
@@ -47,7 +48,7 @@ class BlogController extends BlogFrontAppController
     public function initialize(): void
     {
         parent::initialize();
-        if($this->getRequest()->getParam('action') !== 'index') {
+        if ($this->getRequest()->getParam('action') !== 'index') {
             $this->loadComponent('BaserCore.BcFrontContents', ['viewContentCrumb' => true]);
         }
     }
@@ -357,45 +358,73 @@ class BlogController extends BlogFrontAppController
      * 画像認証を行い認証されればブログのコメントを登録する
      * コメント承認を利用していないブログの場合、公開されているコメント投稿者にアラートを送信する
      */
-    public function ajax_add_comment(BlogCommentsServiceInterface $service)
+    public function ajax_add_comment(BlogCommentsServiceInterface $service, BcCaptchaServiceInterface $bcCaptchaService)
     {
         $this->request->allowMethod(['post', 'put']);
         $postData = $this->getRequest()->getData();
 
-        if(!$postData['blog_content_id']) {
+        if (!$postData['blog_content_id']) {
             throw new BcException(__d('baser_core', 'パラメーターに blog_content_id が指定されていません。'));
         }
-        if(!$postData['blog_post_id']) {
+        if (!$postData['blog_post_id']) {
             throw new BcException(__d('baser_core', 'パラメーターに blog_post_id が指定されていません。'));
         }
 
+        $blogContent = $service->getBlogContent($postData['blog_content_id']);
         try {
+            if ($blogContent->auth_captcha && !$bcCaptchaService->check(
+                $this->getRequest(),
+                $this->getRequest()->getData('captcha_id'),
+                $this->getRequest()->getData('auth_captcha')
+            )) {
+                $message = __d('baser_core', '画像の文字が間違っています。再度入力してください。');
+                return $this->response->withStatus(400)->withStringBody(json_encode([
+                    'message'=> $message
+                ]));
+            }
             $entity = $service->add($postData['blog_content_id'], $postData['blog_post_id'], $postData);
         } catch (PersistenceFailedException $e) {
             $entity = $e->getEntity();
             $message = __d('baser_core', '入力エラーです。内容を見直してください。');
-            $this->setResponse($this->response->withStatus(400, $message));
-            return $this->response->withStringBody(json_encode($entity->getErrors()));
+            return $this->response->withStatus(400)->withStringBody(json_encode([
+                'message' => $message,
+                'errors' => $entity->getErrors()
+            ]));
         } catch (BcException $e) {
             $message = $e->getMessage();
-            return $this->response->withStatus(400, $message);
+            return $this->response->withStatus(400)->withStringBody(json_encode([
+                'message'=> $message
+            ]));
         } catch (Throwable $e) {
             $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
-            return $this->response->withStatus(500, $message);
+            return $this->response->withStatus(500)->withStringBody(json_encode([
+                'message'=> $message
+            ]));
         }
 
-        $blogContent = $service->getBlogContent($postData['blog_content_id']);
         $service->sendCommentToAdmin($entity);
         // コメント承認機能を利用していない場合は、公開されているコメント投稿者に送信
-        if(!$blogContent->comment_approve) {
+        if (!$blogContent->comment_approve) {
             $service->sendCommentToContributor($entity);
         }
 
         $this->set([
-            'blogComment' => $entity?? null,
+            'blogComment' => $entity ?? null,
         ]);
         $this->viewBuilder()->disableAutoLayout();
         $this->render('element/blog_comment');
+    }
+
+    /**
+     * 認証用のキャプチャ画像を表示する
+     *
+     * @return void
+     */
+    public function captcha(BcCaptchaServiceInterface $service, string $token)
+    {
+        $this->viewBuilder()->disableAutoLayout();
+        $service->render($this->getRequest(), $token);
+        exit();
     }
 
 }

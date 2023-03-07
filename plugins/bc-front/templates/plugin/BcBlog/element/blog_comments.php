@@ -31,6 +31,11 @@ $this->BcBaser->js('BcBlog.blog_comment.bundle.js', true, [
   'data-captchaId' => $captchaId,
   'data-commentApprove' => $blogContent->comment_approve,
   'data-authCaptcha' => $blogContent->auth_captcha,
+  'data-authCaptchaImageBaseUrl' => $this->BcBaser->getUrl([
+    'plugin' => 'BcBlog',
+    'controller' => 'Blog',
+    'action' => 'captcha'
+  ])
 ]);
 ?>
 
@@ -86,13 +91,19 @@ $this->BcBaser->js('BcBlog.blog_comment.bundle.js', true, [
 
   <?php if ($blogContent->auth_captcha): ?>
     <div class="bs-blog-comment__auth-captcha">
-      <img src="" alt="<?php echo __d('baser_core', '認証画象') ?>" class="auth-captcha-image" id="AuthCaptchaImage" style="display:none">
+      <img
+        src=""
+        alt="<?php echo __d('baser_core', '認証画象') ?>"
+        class="auth-captcha-image"
+        id="AuthCaptchaImage"
+        style="display:none;margin-left:3px;"
+      >
       <?php $this->BcBaser->img('admin/captcha_loader.gif', [
         'alt' => 'Loading...',
         'class' => 'auth-captcha-image',
-        'id' => 'CaptchaLoader'
+        'id' => 'CaptchaLoader',
       ]) ?>
-      <?php echo $this->BcForm->text('auth_captcha') ?>
+      <?php echo $this->BcForm->control('auth_captcha', ['type' => 'text', 'size' => 25]) ?>
       &nbsp;<?php echo __d('baser_core', '画像の文字を入力してください') ?>
     </div>
   <?php endif ?>

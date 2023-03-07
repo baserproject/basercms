@@ -159,24 +159,4 @@ class BlogCommentsController extends BlogAdminAppController
         return $this->redirect($url);
     }
 
-    /**
-     * 認証用のキャプチャ画像を表示する
-     *
-     * @return void
-     */
-    public function captcha($token = null)
-    {
-        $this->BcCaptcha->render($token);
-        exit();
-    }
-
-    /**
-     * コメント送信用にAjax経由でトークンを取得するアクション
-     */
-    public function get_token()
-    {
-        $this->_checkReferer();
-        $this->autoRender = false;
-        return $this->getToken();
-    }
 }
