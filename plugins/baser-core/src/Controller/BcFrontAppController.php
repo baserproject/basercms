@@ -37,7 +37,8 @@ class BcFrontAppController extends AppController
      */
     public function beforeFilter(EventInterface $event)
     {
-        parent::beforeFilter($event);
+        $response = parent::beforeFilter($event);
+        if($response) return $response;
         $response = $this->redirectIfIsNotSameSite();
         if ($response) return $response;
     }

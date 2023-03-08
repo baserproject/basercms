@@ -70,7 +70,8 @@ class MailController extends MailFrontAppController
      */
     public function beforeFilter(EventInterface $event)
     {
-        parent::beforeFilter($event);
+        $redirect = parent::beforeFilter($event);
+        if($redirect) return $redirect;
 
         if (!$this->request->getParam('entityId')) {
             $this->notFound();

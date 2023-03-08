@@ -163,7 +163,7 @@ class AppController extends BaseController
                 throw new ForbiddenException(__d('baser_core', '指定されたAPIエンドポイントへのアクセスは許可されていません。'));
             } else {
                 $this->BcMessage->setError(__d('baser_core', '指定されたページへのアクセスは許可されていません。'));
-                $this->redirect(Configure::read('BcPrefixAuth.Admin.loginRedirect'));
+                return $this->redirect(Configure::read('BcPrefixAuth.Admin.loginRedirect'));
             }
         }
 

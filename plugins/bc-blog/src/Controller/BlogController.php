@@ -60,7 +60,9 @@ class BlogController extends BlogFrontAppController
      */
     public function beforeFilter(EventInterface $event)
     {
-        parent::beforeFilter($event);
+        $response = parent::beforeFilter($event);
+        if($response) return $response;
+
         $blogContentId = null;
 
         if ($this->request->getParam('action') !== 'tags') {
