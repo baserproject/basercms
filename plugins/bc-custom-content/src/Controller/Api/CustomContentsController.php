@@ -12,16 +12,37 @@
 namespace BcCustomContent\Controller\Api;
 
 use BaserCore\Controller\Api\BcApiController;
+use BcCustomContent\Service\CustomContentsServiceInterface;
+use Cake\Datasource\Exception\RecordNotFoundException;
+use Cake\ORM\Exception\PersistenceFailedException;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
-use BcCustomContent\Service\CustomContentsServiceInterface;
 
 /**
  * CustomContentsController
  */
 class CustomContentsController extends BcApiController
 {
+    /**
+     * 一覧取得API
+     *
+     * @param CustomContentsServiceInterface $service
+     */
+    public function index(CustomContentsServiceInterface $service)
+    {
+        //todo 一覧取得API
+    }
+
+    /**
+     * 単一データAPI
+     *
+     * @param CustomContentsServiceInterface $service
+     */
+    public function view(CustomContentsServiceInterface $service)
+    {
+        //todo 単一データAPI
+    }
 
     /**
      * カスタムコンテンツの新規追加
@@ -53,4 +74,33 @@ class CustomContentsController extends BcApiController
         ]);
     }
 
+    /**
+     * 編集API
+     *
+     * @param CustomContentsServiceInterface $service
+     */
+    public function edit(CustomContentsServiceInterface $service)
+    {
+        //todo 編集API
+    }
+
+    /**
+     * 削除API
+     *
+     * @param CustomContentsServiceInterface $service
+     */
+    public function delete(CustomContentsServiceInterface $service)
+    {
+        //todo 削除API
+    }
+
+    /**
+     * リストAPI
+     *
+     * @param CustomContentsServiceInterface $service
+     */
+    public function list(CustomContentsServiceInterface $service)
+    {
+        //todo リストAPI
+    }
 }
