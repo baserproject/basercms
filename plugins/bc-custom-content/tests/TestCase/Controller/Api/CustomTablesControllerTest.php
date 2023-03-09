@@ -40,6 +40,7 @@ class CustomTablesControllerTest extends BcTestCase
         'plugin.BaserCore.Factory/UsersUserGroups',
         'plugin.BaserCore.Factory/UserGroups',
         'plugin.BcCustomContent.Factory/CustomTables',
+        'plugin.BcCustomContent.Factory/CustomLinks',
     ];
 
     /**
