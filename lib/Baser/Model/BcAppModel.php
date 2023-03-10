@@ -945,7 +945,7 @@ class BcAppModel extends Model
 		}
 
 		// 更新時の文字列チェック
-		if (is_string($file)) {
+		if (!empty($file) && is_string($file)) {
 			$ext = pathinfo($file, PATHINFO_EXTENSION);
 			if (!in_array($ext, $exts)) {
 				return false;
