@@ -25,6 +25,36 @@ class CustomLinksController extends BcApiController
 {
 
     /**
+     * 一覧取得API
+     *
+     * @param CustomLinksServiceInterface $service
+     */
+    public function index(CustomLinksServiceInterface $service)
+    {
+        //todo 一覧取得API
+    }
+
+    /**
+     * 単一データAPI
+     *
+     * @param CustomLinksServiceInterface $service
+     */
+    public function view(CustomLinksServiceInterface $service)
+    {
+        //todo 単一データAPI
+    }
+
+    /**
+     * 新規追加API
+     *
+     * @param CustomLinksServiceInterface $service
+     */
+    public function add(CustomLinksServiceInterface $service)
+    {
+        //todo 新規追加API
+    }
+
+    /**
      * カスタムリンク編集API
      *
      * @param CustomLinksServiceInterface $service
@@ -57,6 +87,26 @@ class CustomLinksController extends BcApiController
         ]);
 
         $this->viewBuilder()->setOption('serialize', ['customLink', 'message', 'errors']);
+    }
+
+    /**
+     * 削除API
+     *
+     * @param CustomLinksServiceInterface $service
+     */
+    public function delete(CustomLinksServiceInterface $service)
+    {
+        //todo 削除API
+    }
+
+    /**
+     * リストAPI
+     *
+     * @param CustomLinksServiceInterface $service
+     */
+    public function list(CustomLinksServiceInterface $service)
+    {
+        //todo リストAPI
     }
 
     /**

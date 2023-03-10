@@ -17,9 +17,9 @@ use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use Cake\TestSuite\IntegrationTestTrait;
 
 /**
- * Class CustomFieldsControllerTest
+ * Class CustomLinksControllerTest
  */
-class CustomFieldsControllerTest extends BcTestCase
+class CustomLinksControllerTest extends BcTestCase
 {
 
     /**
