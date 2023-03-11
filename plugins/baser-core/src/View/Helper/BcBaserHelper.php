@@ -11,6 +11,7 @@
 
 namespace BaserCore\View\Helper;
 
+use BaserCore\Utility\BcSiteConfig;
 use Cake\Core\Plugin;
 use Cake\Datasource\EntityInterface;
 use Cake\Utility\Hash;
@@ -412,9 +413,10 @@ class BcBaserHelper extends Helper
 
         // 認証チェック
         $user = Bcutil::loginUser();
-        if ($user && BcUtil::isInstalled()) {
-            $userGruops = array_column($user->user_groups, 'id');
-            if (!$this->PermissionsService->check($_url, $userGruops)) {
+        if (BcUtil::isInstalled()) {
+            $userGroups = [];
+            if($user) $userGroups = array_column($user->user_groups, 'id');
+            if (!$this->PermissionsService->check($_url, $userGroups)) {
                 $enabled = false;
             }
         }
@@ -718,6 +720,7 @@ class BcBaserHelper extends Helper
         if ($underscore) {
             $contentsName = Inflector::underscore($contentsName);
         } else {
+            $contentsName = str_replace('-', '_', $contentsName);
             $contentsName = Inflector::camelize($contentsName);
         }
 
@@ -1250,14 +1253,14 @@ class BcBaserHelper extends Helper
         // - ログインしている
         if (empty($this->_View->get('preview')) && $toolbar) {
             if ($this->_View->getRequest()->getQuery('toolbar') !== false && $this->_View->getRequest()->getQuery('toolbar') !== 'false') {
-                if ($currentPrefix !== 'Admin' && BcUtil::isAdminUser()) {
+                if ($currentPrefix !== 'Admin' && BcUtil::loginUser()) {
                     $this->css('admin/toolbar');
                 }
             }
         }
 
         if (empty($this->_View->get('preview')) && Configure::read('BcWidget.editLinkAtFront')) {
-            if ($currentPrefix !== 'Admin' && BcUtil::isAdminUser()) {
+            if ($currentPrefix !== 'Admin' && BcUtil::loginUser()) {
                 $this->css('admin/widget_link');
             }
         }
@@ -1315,7 +1318,7 @@ class BcBaserHelper extends Helper
         // - ログインしている
         if (empty($this->_View->get('preview')) && $toolbar) {
             if ($this->_View->getRequest()->getQuery('toolbar') !== false && $this->_View->getRequest()->getQuery('toolbar') !== 'false') {
-                if ($currentPrefix !== 'Admin' && BcUtil::isAdminUser()) {
+                if ($currentPrefix !== 'Admin' && BcUtil::loginUser()) {
                     $adminTheme = Inflector::camelize(Configure::read('BcApp.defaultAdminTheme'), '-');
                     $this->element($adminTheme . '.toolbar');
                 }
@@ -2275,7 +2278,7 @@ END_FLASH;
     public function googleAnalytics($data = [], $options = [])
     {
         $data = array_merge([
-            'useUniversalAnalytics' => (bool)@$this->siteConfig['use_universal_analytics']
+            'useUniversalAnalytics' => (bool) BcSiteConfig::get('use_universal_analytics')
         ], $data);
         $this->element('google_analytics', $data, $options);
     }

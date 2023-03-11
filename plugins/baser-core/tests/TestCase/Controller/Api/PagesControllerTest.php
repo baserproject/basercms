@@ -13,6 +13,7 @@ namespace BaserCore\Test\TestCase\Controller\Api;
 
 use BaserCore\Controller\Api\PagesController;
 use BaserCore\Service\PagesService;
+use BaserCore\Test\Factory\PermissionFactory;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\TestSuite\IntegrationTestTrait;
 
@@ -36,6 +37,7 @@ class PagesControllerTest extends BcTestCase
         'plugin.BaserCore.Contents',
         'plugin.BaserCore.Sites',
         'plugin.BaserCore.SiteConfigs',
+        'plugin.BaserCore.Factory/Permissions',
     ];
 
     /**
@@ -78,6 +80,7 @@ class PagesControllerTest extends BcTestCase
      */
     public function testIndex()
     {
+        PermissionFactory::make()->allowGuest('/baser/api/*')->persist();
         $this->get('/baser/api/baser-core/pages/index.json');
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());

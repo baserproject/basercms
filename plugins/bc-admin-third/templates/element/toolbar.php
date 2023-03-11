@@ -47,7 +47,7 @@ $this->BcBaser->js(['vendor/jquery.fixedMenu', 'vendor/outerClick', 'admin/toolb
     </div>
 
     <div id="ToolMenu" class="bca-toolbar__tools">
-      <?php if ($otherSites): ?>
+      <?php if (!empty($otherSites)): ?>
         <ul class="clearfix">
           <li>
             <?php $this->BcBaser->link(

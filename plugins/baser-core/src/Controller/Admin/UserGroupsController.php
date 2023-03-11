@@ -17,8 +17,6 @@ use Cake\Http\Response;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
-use BaserCore\Model\Entity\UserGroup;
-use Cake\Datasource\ResultSetInterface;
 use BaserCore\Model\Table\UserGroupsTable;
 use BaserCore\Service\UsersServiceInterface;
 use BaserCore\Service\UserGroupsServiceInterface;

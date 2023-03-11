@@ -34,7 +34,7 @@ class UserGroupsPaginationFixture extends TestFixture
             $this->records[] = [
                 'name' => 'pagination' . $i,
                 'title' => 'ページネーション' . $i,
-                'auth_prefix' => 'admin',
+                'auth_prefix' => 'Admin',
                 'use_move_contents' => false,
                 'created' => date('Y-m-d H:i:s'),
                 'modified' => date('Y-m-d H:i:s')

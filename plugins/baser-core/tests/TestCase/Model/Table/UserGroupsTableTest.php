@@ -68,7 +68,7 @@ class UserGroupsTableTest extends BcTestCase
     public function testInitialize()
     {
         $this->assertEquals('user_groups', $this->UserGroups->getTable());
-        $this->assertEquals('name', $this->UserGroups->getDisplayField());
+        $this->assertEquals('title', $this->UserGroups->getDisplayField());
         $this->assertEquals('id', $this->UserGroups->getPrimaryKey());
         $this->assertIsBool($this->UserGroups->hasBehavior('Timestamp'));
         $this->assertEquals('Users', $this->UserGroups->getAssociation('Users')->getName());

@@ -409,7 +409,7 @@ $breakPoint: 768px;
     font-family: "SF Pro JP", "SF Pro Text", "SF Pro Icons", "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", "メイリオ", "Meiryo", "ＭＳ Ｐゴシック", "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
   }
 
-  input[type=text], input[type=email], input[type=tel], textarea, select {
+  input[type=text], input[type=email], input[type=tel], input[type=password], textarea, select {
     margin: 3px 2px;
     padding: 8px 10px;
     border: 1px solid #ccc;
@@ -419,15 +419,6 @@ $breakPoint: 768px;
   }
 
   input {
-    &[type=password] {
-      margin: 3px 2px;
-      padding: 3px 1px;
-      border: 1px solid #ccc;
-      -webkit-border-radius: 3px;
-      -moz-border-radius: 3px;
-      border-radius: 3px;
-    }
-
     &[type=checkbox] {
       vertical-align: middle;
     }
@@ -442,7 +433,7 @@ $breakPoint: 768px;
       font-family: "SF Pro JP", "SF Pro Text", "SF Pro Icons", "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", "メイリオ", "Meiryo", "ＭＳ Ｐゴシック", "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
     }
 
-    &[type=text], &[type=email], &[type=tel] {
+    &[type=text], &[type=email], &[type=tel], &[type=password] {
       font-size: 1em;
 
       &::placeholder {
@@ -457,13 +448,10 @@ $breakPoint: 768px;
     }
   }
 
-  textarea, input[type=password] {
-    font-size: 1em;
-    padding: 3px 3px;
-  }
-
   textarea {
     width: 95%;
+    font-size: 1em;
+    padding: 3px 3px;
 
     &:active,
     &:focus {

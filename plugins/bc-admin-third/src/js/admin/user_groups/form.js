@@ -9,14 +9,62 @@
  */
 
 
-if ($("#AdminUserGroupsFormScript").attr('data-isAdmin')) {
-    $("#auth-prefix-admin").prop('disabled', true);
-}
+/**
+ * userGroupsForm
+ */
+const userGroupsForm = {
 
-$("#UserGroupAdminEditForm").submit(function () {
-    $("#auth-prefix-admin").removeAttr('disabled');
-});
+    /**
+     * 初期化
+     */
+    mounted() {
+        this.initView();
+    },
 
-$("#BtnSave").click(function () {
-    $.bcUtil.showLoader();
-});
+    /**
+     * 表示初期化
+     */
+    initView() {
+        if ($("#AdminUserGroupsFormScript").attr('data-isAdmin')) {
+            $("#auth_prefix_Admin").prop('disabled', true);
+        }
+        this.initAuthPrefixSettings();
+        this.registerEvents();
+    },
+
+    /**
+     * イベント登録
+     */
+    registerEvents() {
+        $("#UserGroupAdminEditForm, #UserGroupAdminAddForm").submit(function () {
+            $("#auth_prefix_Admin").removeAttr('disabled');
+            $("input[name='auth_prefix[]']").each(function(){
+                $("input[name='auth_prefix_settings[" + $(this).val() + "][type]']")
+                    .removeAttr('disabled');
+            });
+        });
+        $("input[name='auth_prefix[]']").click(this.initAuthPrefixSettings)
+    },
+
+    /**
+     * 認証プレックス初期化
+     */
+    initAuthPrefixSettings() {
+        $("input[name='auth_prefix[]']").each(function(){
+            if(!$(this).prop('checked')) {
+                $("input[name='auth_prefix_settings[" + $(this).val() + "][type]']")
+                    .prop('disabled', true);
+            } else {
+                $("input[name='auth_prefix_settings[" + $(this).val() + "][type]']")
+                    .prop('disabled', false);
+            }
+        });
+    }
+
+};
+
+userGroupsForm.mounted();
+
+
+
+

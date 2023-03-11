@@ -72,6 +72,10 @@
       box-shadow: 0 0 0 4px #fff inset;
     }
 
+    &:disabled + label:before {
+      background: #ddd;
+    }
+
     &:checked:disabled + label:before {
       background: #ddd;
     }

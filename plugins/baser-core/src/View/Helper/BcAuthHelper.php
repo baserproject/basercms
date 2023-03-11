@@ -53,11 +53,7 @@ class BcAuthHelper extends Helper
         $currentPrefix = '';
         $request = $this->_View->getRequest();
         if (!empty($request)) {
-            if (!empty($request->getParam('prefix'))) {
-                $currentPrefix = $request->getParam('prefix');
-            } else {
-                $currentPrefix = 'Front';
-            }
+            $currentPrefix = BcUtil::getRequestPrefix($request);
         }
         return $currentPrefix;
     }
@@ -84,7 +80,9 @@ class BcAuthHelper extends Helper
      */
     public function getPrefixSetting($prefix)
     {
-        return Configure::read('BcPrefixAuth.' . $prefix);
+        $setting = Configure::read('BcPrefixAuth.' . $prefix);
+        if(!empty($setting['disabled'])) return [];
+        return $setting;
     }
 
     /**

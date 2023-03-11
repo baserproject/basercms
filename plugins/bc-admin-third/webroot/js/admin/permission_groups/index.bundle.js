@@ -1,11 +1,2 @@
-/**
- * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Permission Community <https://basercms.net/community/>
- *
- * @copyright     Copyright (c) baserCMS Permission Community
- * @link          https://basercms.net baserCMS Project
- * @since         5.0.0
- * @license       https://basercms.net/license/index.html MIT License
- */
-$((function(){var i=$("#AdminPermissionGroupsIndexScript").attr("data-userGroupId");$('input[name="list_type"]').click((function(){$.bcUtil.showLoader(),location.href="".concat($.bcUtil.adminBaseUrl,"baser-core/permission_groups/index/").concat(i,"?list_type=").concat($(this).val())}))}));
+({mounted:function(){this.registerEvents(),"0"===$("#filter-user-group-id").val()&&$("#list-type-admin").parent().hide()},registerEvents:function(){$("#filter-user-group-id").change(this.initList),$('input[name="list_type"]').click(this.initList)},initList:function(){$.bcUtil.showLoader();var i=$("#filter-user-group-id").val(),t=$('input[name="list_type"]:checked').val();location.href="".concat($.bcUtil.adminBaseUrl,"baser-core/permission_groups/index/").concat(i,"?list_type=").concat(t)}}).mounted();
 //# sourceMappingURL=index.bundle.js.map

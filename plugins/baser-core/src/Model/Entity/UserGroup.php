@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace BaserCore\Model\Entity;
 
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 use Cake\Core\Configure;
 use Cake\I18n\FrozenTime;
 use Cake\ORM\Entity;
@@ -25,6 +28,7 @@ use Cake\ORM\Entity;
  * @property string|null $title
  * @property string|null $auth_prefix
  * @property bool|null $use_move_contents
+ * @property string $auth_prefix_settings
  * @property FrozenTime|null $modified
  * @property FrozenTime|null $created
  * @property User[] $users
@@ -38,13 +42,7 @@ class UserGroup extends Entity
      * @var array
      */
     protected $_accessible = [
-        'name' => true,
-        'title' => true,
-        'auth_prefix' => true,
-        'use_move_contents' => true,
-        'modified' => true,
-        'created' => true,
-        'users' => true,
+        '*' => true,
     ];
 
     /**
@@ -55,6 +53,88 @@ class UserGroup extends Entity
     public function isAdmin(): bool
     {
         return (Configure::read('BcApp.adminGroupId') === $this->id);
+    }
+
+    /**
+     * 利用可能なプレフィックスかどうか判定
+     *
+     * @param string $prefix
+     * @return bool
+     * @checked
+     * @noTodo
+     */
+    public function isAuthPrefixAvailabled(string $prefix): bool
+    {
+        return in_array($prefix, $this->getAuthPrefixArray());
+    }
+
+    /**
+     * 認証プレフィックスを配列で取得
+     *
+     * @return string[]
+     * @checked
+     * @noTodo
+     */
+    public function getAuthPrefixArray(): array
+    {
+        if($this->auth_prefix) {
+            return explode(',', $this->auth_prefix);
+        } else {
+            return [];
+        }
+    }
+
+    /**
+     * １つ以上の認証プレフィックス設定を配列で取得
+     *
+     * @return array
+     * @checked
+     * @noTodo
+     */
+    public function getAuthPrefixSettingsArray(): array
+    {
+        if($this->auth_prefix_settings) {
+            return json_decode($this->auth_prefix_settings, true);
+        } else {
+            return [];
+        }
+    }
+
+    /**
+     * １つの認証プレフィックス設定を取得
+     *
+     * @param string $prefix
+     * @return array
+     * @checked
+     * @noTodo
+     */
+    public function getAuthPrefixSettings(string $prefix): array
+    {
+        $settings = $this->getAuthPrefixSettingsArray();
+        if(isset($settings[$prefix])) {
+            return $settings[$prefix];
+        } else {
+            return [];
+        }
+    }
+
+    /**
+     * 指定した認証プレフィックスの設定値を取得
+     *
+     * @param string $prefix
+     * @param string $name
+     * @return string
+     * @checked
+     * @noTodo
+     */
+    public function getAuthPrefixSetting(string $prefix, string $name): string
+    {
+        $settings = $this->getAuthPrefixSettings($prefix);
+        if(isset($settings[$name])) {
+            return $settings[$name];
+        } else {
+            return '';
+        }
     }
 
 }

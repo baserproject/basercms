@@ -15,6 +15,7 @@ use Cake\Datasource\EntityInterface;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use Cake\ORM\Query;
 
 /**
  * PermissionGroupsServiceInterface
@@ -59,12 +60,12 @@ interface PermissionGroupsServiceInterface
      *
      * @param int $userGroupId
      * @param array $queryParams
-     * @return \Cake\Datasource\ResultSetInterface
+     * @return Query
      * @noTodo
      * @checked
      * @unitTest
      */
-    public function getIndex(int $userGroupId, array $queryParams);
+    public function getIndex(int $userGroupId, array $queryParams): Query;
 
     /**
      * アクセスルールグループのリストを取得する
@@ -96,18 +97,6 @@ interface PermissionGroupsServiceInterface
      * @unitTest
      */
     public function buildByUserGroup(int $userGroupId);
-
-    /**
-     * デフォルトの拒否ルールを構築する
-     *
-     * @param int $userGroupId
-     * @param string $type
-     * @param string $name
-     * @noTodo
-     * @checked
-     * @unitTest
-     */
-    public function buildDefaultDenyRule(int $userGroupId, string $type, string $name);
 
     /**
      * ユーザーを指定してアクセスルールを再構築する
@@ -150,20 +139,6 @@ interface PermissionGroupsServiceInterface
     public function buildAll();
 
     /**
-     * デフォルトのその他のルールグループを作成する
-     *
-     * タイプを指定してタイプごとに作る
-     *
-     * @param string $type
-     * @param string $name
-     * @return EntityInterface|false
-     * @noTodo
-     * @checked
-     * @unitTest
-     */
-    public function buildDefaultEtcRuleGroup(string $type, string $name);
-
-    /**
      * アクセスルールを構築する
      *
      * @param int $userGroupId
@@ -187,5 +162,13 @@ interface PermissionGroupsServiceInterface
      * @unitTest
      */
     public function buildAllowAllMethodByPlugin(int $userGroupId, string $plugin, string $type, string $typeName);
+
+    /**
+     * コントロールソースを取得する
+     *
+     * @param string $field
+     * @return array
+     */
+	public function getControlSource(string $field): array;
 
 }

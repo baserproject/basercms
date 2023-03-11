@@ -135,7 +135,7 @@ class EditorTemplatesController extends BcAdminAppController
             $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
         }
 
-        return $this->redirect(['action' => 'index', $id]);
+        return $this->redirect(['action' => 'index']);
     }
 
     /**

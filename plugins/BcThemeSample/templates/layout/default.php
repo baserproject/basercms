@@ -15,6 +15,9 @@ use BaserCore\View\AppView;
  * 呼出箇所：全ページ
  * @var AppView $this
  */
+$request = $this->getRequest();
+$attributes = $request->getAttributes();
+$base = $attributes['base'];
 ?>
 <?php $this->BcBaser->docType('html5') ?>
 <html>
@@ -38,6 +41,13 @@ use BaserCore\View\AppView;
 		'vendor/jquery.colorbox-1.6.1.min',
 		'vendor/i18n/ui.datepicker-ja',
 		'vendor/jquery-accessibleMegaMenu',
+	]); ?>
+  <?php $this->BcBaser->js('common.bundle', true, [
+	  'id' => 'AdminScript',
+    'data-baseUrl' => h($base),
+    'data-baserCorePrefix' => \Cake\Utility\Inflector::underscore(\BaserCore\Utility\BcUtil::getBaserCorePrefix()),
+	]) ?>
+	<?php $this->BcBaser->js([
 		'startup.bundle'
 	]); ?>
 	<?php $this->BcBaser->scripts() ?>

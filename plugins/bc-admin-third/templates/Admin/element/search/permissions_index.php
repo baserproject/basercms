@@ -13,7 +13,7 @@
  * Permission Index Search
  *
  * @var \BaserCore\View\BcAdminAppView $this
- * @var \BaserCore\Model\Entity\UserGroup $currentUserGroup
+ * @var int $userGroupId
  * @checked
  * @unitTest
  * @noTodo
@@ -24,7 +24,7 @@
 <?php echo $this->BcAdminForm->create(null, [
   'novalidate' => true,
   'type' => 'get',
-  'url' => ['action' => 'index', $currentUserGroup->id]
+  'url' => ['action' => 'index', $userGroupId]
 ]) ?>
 
 <p class="bca-search__input-list">
@@ -38,7 +38,7 @@
     ]) ?>
   </span>
   <span class="bca-search__input-item">
-		<?php echo $this->BcAdminForm->label('permission_group_id', __d('baser_core', 'グループ'), ['class' => 'bca-search__input-item-label']) ?>
+		<?php echo $this->BcAdminForm->label('permission_group_id', __d('baser_core', 'アクセスルールグループ'), ['class' => 'bca-search__input-item-label']) ?>
     <?php echo $this->BcAdminForm->control('permission_group_id', [
       'type' => 'select',
       'options' => $this->BcAdminForm->getControlSource('Permissions.permission_group_id'),

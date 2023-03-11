@@ -14,6 +14,7 @@ namespace BaserCore\Service;
 use BaserCore\Model\Entity\PasswordRequest;
 use BaserCore\Model\Table\PasswordRequestsTable;
 use Cake\Datasource\EntityInterface;
+use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\Mailer\MailerAwareTrait;
 use Cake\ORM\TableRegistry;
 use DateTime;
@@ -97,7 +98,7 @@ class PasswordRequestsService implements PasswordRequestsServiceInterface
         $user = $usersTable->find()
             ->where(['Users.email' => $postData['email']])
             ->first();
-        if (empty($user)) return false;
+        if (empty($user)) throw new RecordNotFoundException(__d('baser_core', 'ユーザーが存在しません。'));
         $passwordRequest->user_id = $user->id;
         $passwordRequest->used = 0;
         $passwordRequest->setRequestKey();

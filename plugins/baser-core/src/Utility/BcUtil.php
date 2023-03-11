@@ -27,6 +27,7 @@ use Cake\Routing\Router;
 use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
 use Cake\ORM\TableRegistry;
+use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
 use Cake\Database\Exception;
 use BaserCore\Annotation\Note;
@@ -35,9 +36,9 @@ use BaserCore\Model\Entity\User;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use Cake\Http\ServerRequestFactory;
-use Cake\Datasource\ConnectionManager;
 use Authentication\Authenticator\Result;
 use BaserCore\Service\SiteConfigsServiceInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use ReflectionClass;
 
 /**
@@ -361,7 +362,7 @@ class BcUtil
                 return [];
             }
 
-            $prefix =  self::getCurrentDbConfig()['prefix'];
+            $prefix = self::getCurrentDbConfig()['prefix'];
             $sources = self::getCurrentDb()->getSchemaCollection()->listTables();
             if (!is_array($sources) || in_array($prefix . strtolower('plugins'), array_map('strtolower', $sources))) {
                 $plugins = $pluginsTable->find('all', ['conditions' => ['status' => true], 'order' => 'priority']);
@@ -766,9 +767,9 @@ class BcUtil
 
         $themes = [$site->theme];
         $rootTheme = BcUtil::getRootTheme();
-        if($rootTheme !== $themes[0]) $themes[] = $rootTheme;
+        if ($rootTheme !== $themes[0]) $themes[] = $rootTheme;
         $defaultTheme = Configure::read('BcApp.defaultFrontTheme');
-        if(!in_array($defaultTheme, $themes)) $themes[] = $defaultTheme;
+        if (!in_array($defaultTheme, $themes)) $themes[] = $defaultTheme;
 
         $templatesPaths = [];
         foreach($themes as $theme) {
@@ -807,12 +808,12 @@ class BcUtil
                 }
                 $config = include $appConfigPath;
                 if (!empty($config['type'])) {
-                    if(!is_array($config['type'])) $config['type'] = [$config['type']];
+                    if (!is_array($config['type'])) $config['type'] = [$config['type']];
                     $isTheme = false;
                     foreach($config['type'] as $type) {
-                        if(in_array($type, $themeTypes)) $isTheme = true;
+                        if (in_array($type, $themeTypes)) $isTheme = true;
                     }
-                    if(!$isTheme) continue;
+                    if (!$isTheme) continue;
                     $name = Inflector::camelize(Inflector::underscore($name));
                     $themes[$name] = $name;
                 }
@@ -836,7 +837,7 @@ class BcUtil
             if (!file_exists(BcUtil::getPluginPath($theme) . 'config.php')) continue;
             $config = include BcUtil::getPluginPath($theme) . 'config.php';
             if ($config === false) continue;
-            if(!is_array($config['type'])) $config['type'] = [$config['type']];
+            if (!is_array($config['type'])) $config['type'] = [$config['type']];
             if (!in_array('Theme', $config['type'])) unset($themes[$key]);
         }
         return $themes;
@@ -855,7 +856,7 @@ class BcUtil
         $themes = self::getAllThemeList();
         foreach($themes as $key => $theme) {
             $config = include BcUtil::getPluginPath($theme) . 'config.php';
-            if(!is_array($config['type'])) $config['type'] = [$config['type']];
+            if (!is_array($config['type'])) $config['type'] = [$config['type']];
             if (!in_array('AdminTheme', $config['type'])) unset($themes[$key]);
         }
         return $themes;
@@ -1123,7 +1124,7 @@ class BcUtil
         $site = $request->getAttribute('currentSite');
         if ($site) {
             return $site->theme;
-        } elseif(self::getRootTheme()) {
+        } elseif (self::getRootTheme()) {
             return self::getRootTheme();
         } else {
             return $theme;
@@ -1651,7 +1652,7 @@ class BcUtil
      */
     public static function getExistsTemplateDir(string $theme, string $plugin, string $path, string $type = '')
     {
-        if(!$theme) {
+        if (!$theme) {
             $frontTheme = BcUtil::getCurrentTheme();
             $adminTheme = BcUtil::getCurrentAdminTheme();
         } else {
@@ -1705,7 +1706,7 @@ class BcUtil
      */
     public static function getExistsWebrootDir(string $theme, string $plugin, string $path, string $type = '')
     {
-        if(!$theme) {
+        if (!$theme) {
             $frontTheme = BcUtil::getCurrentTheme();
             $adminTheme = BcUtil::getCurrentAdminTheme();
         } else {
@@ -1737,7 +1738,7 @@ class BcUtil
                     Plugin::path($adminTheme) . 'webroot' . DS . Inflector::underscore($plugin) . DS . $path,
                 ];
             }
-            if(!$theme) {
+            if (!$theme) {
                 $templatePaths[] = Plugin::path($plugin) . 'webroot' . DS . $path;
             }
         }
@@ -1762,8 +1763,8 @@ class BcUtil
     {
         $args = func_get_args();
         $argc = count($args);
-        if($argc === 1) {
-            if(!$args[0]) return [];
+        if ($argc === 1) {
+            if (!$args[0]) return [];
             $args = preg_split('/(?<!\\\)\|/', $args[0]);
             $argc = count($args);
         }
@@ -1802,6 +1803,59 @@ class BcUtil
                 if ($interval > 0) usleep($interval * 1000);
             }
         }
+    }
+
+    /**
+     * リファラが現在のサイトと同じかどうか判定
+     *
+     * @return bool
+     * @checked
+     * @noTodo
+     */
+    public static function isSameReferrerAsCurrent()
+    {
+        $siteDomain = BcUtil::getCurrentDomain();
+        if (empty($_SERVER['HTTP_REFERER'])) {
+            return false;
+        }
+        $refererDomain = BcUtil::getDomain($_SERVER['HTTP_REFERER']);
+        if (!preg_match('/^' . preg_quote($siteDomain, '/') . '/', $refererDomain)) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * 認証プレフィックスのリストを取得
+     *
+     * @return array
+     * @checked
+     * @noTodo
+     */
+    public static function getAuthPrefixList()
+    {
+        $authPrefixes = [];
+        foreach(Configure::read('BcPrefixAuth') as $key => $authPrefix) {
+            if($key === 'Api' && !filter_var(env('USE_CORE_API', false), FILTER_VALIDATE_BOOLEAN)) continue;
+            if(!empty($authPrefix['disabled'])) continue;
+            $authPrefixes[$key] = $authPrefix['name'];
+        }
+        return $authPrefixes;
+    }
+
+    /**
+     * 指定したリクエストのプレフィックスを取得する
+     *
+     * @param ServerRequest $request
+     * @return string
+     * @checked
+     * @noTodo
+     */
+    public static function getRequestPrefix(ServerRequestInterface $request)
+    {
+        $prefix = $request->getParam('prefix');
+        if (!$prefix) $prefix = 'Front';
+        return $prefix;
     }
 
 }

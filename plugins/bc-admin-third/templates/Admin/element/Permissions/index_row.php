@@ -14,7 +14,7 @@
  *
  * @var \BaserCore\View\BcAdminAppView $this
  * @var \BaserCore\Model\Entity\Permission $permission
- * @var \BaserCore\Model\Entity\UserGroup $currentUserGroup
+ * @var int $userGroupId
  * @var int $count
  * @checked
  * @unitTest
@@ -49,7 +49,7 @@ $type = (isset($permissionGroupTypes[$permission->permission_group->type]))? $pe
   <td class="bca-table-listup__tbody-td" nowrap="nowrap"><?php echo $type ?></td>
   <td class="bca-table-listup__tbody-td"><?php echo h($permission->permission_group->name) ?></td>
   <td class="bca-table-listup__tbody-td">
-    <?php $this->BcBaser->link($permission->name, ['action' => 'edit', $currentUserGroup->id, $permission->id], ['escape' => true]) ?>
+    <?php $this->BcBaser->link($permission->name, ['action' => 'edit', $userGroupId, $permission->id], ['escape' => true]) ?>
     <br>
     <?php echo $permission->url; ?>
   </td>
@@ -84,7 +84,7 @@ $type = (isset($permissionGroupTypes[$permission->permission_group->type]))? $pe
     <?php endif; ?>
     <?php $this->BcBaser->link('', [
       'action' => 'edit',
-      $currentUserGroup->id,
+      $userGroupId,
       $permission->id
     ], [
       'title' => __d('baser_core', '編集'),

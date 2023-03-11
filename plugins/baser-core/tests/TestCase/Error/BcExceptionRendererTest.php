@@ -11,6 +11,7 @@
 
 namespace BaserCore\Test\TestCase\Error;
 
+use BaserCore\Test\Factory\PermissionFactory;
 use Cake\Core\Configure;
 use BaserCore\TestSuite\BcTestCase;
 
@@ -29,6 +30,7 @@ class BcExceptionRendererTest extends BcTestCase
         'plugin.BaserCore.Sites',
         'plugin.BaserCore.SiteConfigs',
         'plugin.BaserCore.Contents',
+        'plugin.BaserCore.Factory/Permissions',
     ];
 
     /**
@@ -58,6 +60,7 @@ class BcExceptionRendererTest extends BcTestCase
         // デバッグモードが有効だとcakeのエラー画面が表示されるため一時的に無効にする
         $debug = Configure::read('debug');
         Configure::write('debug', false);
+        PermissionFactory::make()->allowGuest('/baser/api/*')->persist();
 
         $this->get('/baser/admin/baser-core/users_test/');
         $this->assertResponseError();

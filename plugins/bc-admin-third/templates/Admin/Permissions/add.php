@@ -16,13 +16,14 @@ use BaserCore\Model\Entity\Permission;
  * Permissions Add
  * @var AppViewAlias $this
  * @var Permission $permission
- * @var array $currentUserGroup
+ * @var int $userGroupId
+ * @var string $userGroupTitle
  * @checked
  * @noTodo
  * @unitTest
  */
 $this->BcAdmin->setHelp('permissions_form');
-$this->BcAdmin->setTitle(sprintf(__d('baser_core', '%s｜新規アクセスルール登録'), $currentUserGroup->title));
+$this->BcAdmin->setTitle(sprintf(__d('baser_core', '%s｜新規アクセスルール登録'), $userGroupTitle));
 ?>
 
 
@@ -33,19 +34,19 @@ $this->BcAdmin->setTitle(sprintf(__d('baser_core', '%s｜新規アクセスル�
 <div class="submit section bca-actions">
   <div class="bca-actions__main">
     <?php if ($this->getRequest()->getParam('pass.1')): ?>
-      <?php echo $this->BcHtml->link(__d('baser_core', 'アクセスグループ編集に戻る'), [
+      <?php $this->BcHtml->link(__d('baser_core', 'アクセスグループ編集に戻る'), [
         'controller' => 'PermissionGroups',
         'action' => 'edit',
-        $currentUserGroup->id,
+        $userGroupId,
         $this->getRequest()->getParam('pass.1')
       ], [
         'class' => 'button bca-btn bca-actions__item',
         'data-bca-btn-type' => 'back-to-list'
       ]) ?>
     <?php endif ?>
-    <?php echo $this->BcHtml->link(__d('baser_core', '一覧に戻る'), [
+    <?php $this->BcHtml->link(__d('baser_core', '一覧に戻る'), [
       'action' => 'index',
-      $currentUserGroup->id
+      $userGroupId
     ], [
       'class' => 'button bca-btn bca-actions__item',
       'data-bca-btn-type' => 'back-to-list'

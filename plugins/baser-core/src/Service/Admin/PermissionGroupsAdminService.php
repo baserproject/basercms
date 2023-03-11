@@ -35,9 +35,15 @@ class PermissionGroupsAdminService extends PermissionGroupsService implements Pe
      */
     public function getViewVarsForIndex(int $userGroupId, ServerRequest $request): array
     {
+        if($userGroupId) {
+            $currentUserGroup = $this->UserGroups->get($userGroupId);
+        }
         return [
-            'entities' => $this->getIndex($userGroupId, $request->getQueryParams()),
-            'currentUserGroup' => $this->UserGroups->get($userGroupId)
+            'entities' => $this->getIndex($userGroupId, array_merge(
+                ['permission_amount' => true],
+                $request->getQueryParams()
+            )),
+            'userGroupId' => $currentUserGroup->id ?? "0"
         ];
     }
 
@@ -50,11 +56,15 @@ class PermissionGroupsAdminService extends PermissionGroupsService implements Pe
      * @checked
      * @noTodo
      */
-    public function getViewVarsForEdit(int $userGroupId, EntityInterface $entity): array
+    public function getViewVarsForForm(int $userGroupId, EntityInterface $entity): array
     {
+        if($userGroupId) {
+            $currentUserGroup = $this->UserGroups->get($userGroupId);
+        }
         return [
             'entity' => $entity,
-            'currentUserGroup' => $this->UserGroups->get($userGroupId)
+            'userGroupTitle' => $currentUserGroup->title?? __d('baser_core', 'ゲスト'),
+            'userGroupId' => $currentUserGroup->id ?? "0"
         ];
     }
 

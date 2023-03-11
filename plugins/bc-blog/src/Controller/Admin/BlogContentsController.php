@@ -23,6 +23,7 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use Exception;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * ブログコンテンツコントローラー
@@ -54,7 +55,7 @@ class BlogContentsController extends BlogAdminAppController
      * [ADMIN] 編集処理
      *
      * @param int $id
-     * @return void
+     * @return void|ResponseInterface
      * @checked
      */
     public function edit(BlogContentsAdminServiceInterface $service, int $id)

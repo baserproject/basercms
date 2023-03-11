@@ -359,6 +359,7 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testGetLink($title, $url, $option, $expected)
     {
+        $this->loginAdmin($this->getRequest());
         if (!empty($option['prefix'])) {
             $this->BcBaser->getView()->setRequest($this->getRequest('/admin'));
         }

@@ -10,7 +10,6 @@
  */
 
 use BaserCore\Model\Entity\UserGroup;
-use BaserCore\View\AppView;
 use Cake\Core\Configure;
 
 /**
@@ -90,19 +89,45 @@ $authPrefixes = $this->BcAdminForm->getControlSource('BaserCore.UserGroups.auth_
     </tr>
     <?php if (count($authPrefixes) > 1): ?>
       <tr>
-        <th
-          class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('auth_prefix', __d('baser_core', '認証プレフィックス設定')) ?>
-          &nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser_core', '必須') ?></span></th>
+        <th class="col-head bca-form-table__label">
+          <?php echo $this->BcAdminForm->label('auth_prefix', __d('baser_core', '認証プレフィックス設定')) ?>
+          &nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser_core', '必須') ?></span>
+        </th>
         <td class="col-input bca-form-table__input">
-          <?php echo $this->BcAdminForm->control('auth_prefix', [
-            'type' => 'multiCheckbox',
-            'options' => $authPrefixes,
-            'value' => explode(',', $userGroup->auth_prefix)
-          ]) ?>
+          <table>
+            <?php foreach($authPrefixes as $prefix => $label): ?>
+              <tr>
+                <td>
+                  <?php echo $this->BcAdminForm->control('auth_prefix[]', [
+                    'type' => 'checkbox',
+                    'label' => $label,
+                    'value' => $prefix,
+                    'checked' => $userGroup->isAuthPrefixAvailabled($prefix),
+                    'hiddenField' => false,
+                    'id' => 'auth_prefix_' . $prefix
+                  ]) ?>
+                </td>
+                <?php if(Configure::read('BcApp.adminGroupId') !== (int)$userGroup->id): ?>
+                <td>
+                  <?php $settings = $userGroup->getAuthPrefixSettingsArray() ?>
+                  <?php echo $this->BcAdminForm->control('auth_prefix_settings.' . $prefix . '.type', [
+                    'type' => 'radio',
+                    'value' => $userGroup->getAuthPrefixSetting($prefix, 'type'),
+                    'options' => [
+                      '1' => __d('baser_core', 'フルアクセス'),
+                      '2' => __d('baser_core', '限定アクセス')
+                  ]]) ?>
+                </td>
+                <?php endif ?>
+              </tr>
+            <?php endforeach ?>
+          </table>
           <i class="bca-icon--question-circle bca-help"></i>
           <?php echo $this->BcAdminForm->error('auth_prefix') ?>
           <div class="bca-helptext">
-            <?php echo __d('baser_core', '認証プレフィックスの設定を指定します。<br>システム管理グループの場合、管理システムの設定は変更できません。') ?>
+            <?php echo __d('baser_core', '認証プレフィックスの設定を指定します。<br>
+                システム管理グループの場合、管理システムの設定は変更できず、管理システム以外を有効にしたとしてもフルアクセスが前提となります。<br><br>
+                なお、限定アクセスの場合、詳細な設定はアクセスルール設定より行います。') ?>
           </div>
         </td>
       </tr>

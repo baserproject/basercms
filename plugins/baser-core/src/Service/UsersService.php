@@ -438,7 +438,7 @@ class UsersService implements UsersServiceInterface
      */
     public function reload(ServerRequest $request)
     {
-        $prefix = $request->getParam('prefix');
+        $prefix = BcUtil::getRequestPrefix($request);
         $sessionUser = BcUtil::loginUser($prefix);
         if ($sessionUser === false) {
             return true;

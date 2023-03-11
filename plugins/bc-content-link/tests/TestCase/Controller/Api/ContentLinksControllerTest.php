@@ -12,11 +12,11 @@
 namespace BcContentLink\Test\TestCase\Controller\Api;
 
 use BaserCore\Test\Factory\ContentFactory;
+use BaserCore\Test\Factory\PermissionFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcContentLink\Controller\Api\ContentLinksController;
 use BcContentLink\Test\Factory\ContentLinkFactory;
-use Cake\Core\Configure;
 use Cake\TestSuite\IntegrationTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
@@ -45,6 +45,7 @@ class ContentLinksControllerTest extends BcTestCase
         'plugin.BaserCore.Factory/UsersUserGroups',
         'plugin.BcContentLink.Factory/ContentLinks',
         'plugin.BaserCore.Factory/Contents',
+        'plugin.BaserCore.Factory/Permissions',
     ];
 
     /**
@@ -231,6 +232,7 @@ class ContentLinksControllerTest extends BcTestCase
         ])->persist();
 
         // ログインしていないかつ公開ContentLinkIDをテスト場合、
+        PermissionFactory::make()->allowGuest('/baser/api/*')->persist();
         $this->get('/baser/api/bc-content-link/content_links/view/1.json');
         // レスポンスを確認
         $this->assertResponseOk();

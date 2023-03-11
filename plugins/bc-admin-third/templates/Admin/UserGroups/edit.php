@@ -21,6 +21,10 @@
  */
 $this->BcAdmin->setTitle(__d('baser_core', 'ユーザーグループ編集'));
 $this->BcAdmin->setHelp('user_groups_form');
+$this->BcAdmin->addAdminMainBodyHeaderLinks([
+  'url' => ['action' => 'add'],
+  'title' => __d('baser_core', '新規追加'),
+]);
 ?>
 
 
@@ -30,10 +34,26 @@ $this->BcAdmin->setHelp('user_groups_form');
 
 <div class="submit bc-align-center section bca-actions">
   <div class="bca-actions__main">
+    <?php echo $this->BcHtml->link(__d('baser_core', '一覧に戻る'),
+      ['admin' => true, 'controller' => 'UserGroups', 'action' => 'index'],
+      [
+        'class' => 'button bca-btn bca-actions__item',
+        'data-bca-btn-type' => 'back-to-list'
+      ]
+    ) ?>
+    <?php if(\Cake\Core\Configure::read('BcApp.adminGroupId') !== (int)$userGroup->id): ?>
+    <?php $this->BcBaser->link(__d('baser_core', 'アクセスルール設定'), [
+      'controller' => 'PermissionGroups',
+      'action' => 'index',
+      $userGroup->id
+    ], [
+      'class' => 'bca-btn bca-actions__item'
+    ]) ?>
+    <?php endif ?>
     <?= $this->BcAdminForm->button(
       __d('baser_core', '保存'),
       ['div' => false,
-        'class' => 'button bca-btn bca-actions__item',
+        'class' => 'button bca-btn bca-actions__item bca-loading',
         'data-bca-btn-type' => 'save',
         'data-bca-btn-size' => 'lg',
         'data-bca-btn-width' => 'lg',

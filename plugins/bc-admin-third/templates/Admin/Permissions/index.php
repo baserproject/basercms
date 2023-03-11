@@ -16,20 +16,24 @@ use BaserCore\View\BcAdminAppView;
  * [ADMIN] アクセスルール一覧
  *
  * @var BcAdminAppView $this
- * @var UserGroup $currentUserGroup
+ * @var int $userGroupId
+ * @var string $userGroupTitle
+ * @var \Cake\ORM\ResultSet $permissionGroups
  * @checked
  * @noTodo
  * @unitTest
  */
-$this->BcAdmin->setTitle(sprintf(__d('baser_core', '%s｜アクセスルール一覧'), $currentUserGroup->title));
+$this->BcAdmin->setTitle(sprintf(__d('baser_core', '%s｜アクセスルール一覧'), $userGroupTitle));
 $this->BcAdmin->setHelp('permissions_index');
 $this->BcAdmin->setSearch('permissions_index');
 $this->BcBaser->js('admin/permissions/index.bundle', false, [
   'id' => 'AdminPermissionsIndexScript',
-  'data-userGroupId' => $currentUserGroup->id
+  'defer' => true,
+  'data-userGroupId' => $userGroupId,
+  'data-permissionGroups' => json_encode($permissionGroups)
 ]);
 $this->BcAdmin->addAdminMainBodyHeaderLinks([
-  'url' => ['action' => 'add', $currentUserGroup->id],
+  'url' => ['action' => 'add', $userGroupId],
   'title' => __d('baser_core', '新規追加'),
 ]);
 ?>
@@ -47,7 +51,7 @@ $this->BcAdmin->addAdminMainBodyHeaderLinks([
     <?php echo $this->BcHtml->link(__d('baser_core', 'アクセスルールグループ一覧に戻る'), [
       'controller' => 'PermissionGroups',
       'action' => 'index',
-      $currentUserGroup->id
+      $userGroupId
     ], [
       'class' => 'button bca-btn bca-actions__item',
       'data-bca-btn-type' => 'back-to-list'

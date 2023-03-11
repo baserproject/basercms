@@ -13,7 +13,6 @@ namespace BaserCore\Test\TestCase\Controller\Api;
 
 use BaserCore\Controller\Api\UsersController;
 use BaserCore\TestSuite\BcTestCase;
-use Cake\Core\Configure;
 use Cake\TestSuite\IntegrationTestTrait;
 
 /**

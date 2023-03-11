@@ -11,6 +11,7 @@
 
 namespace BaserCore\Test\TestCase\Controller\Admin;
 
+use BaserCore\Test\Factory\PermissionGroupFactory;
 use Cake\Event\Event;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\TestSuite\IntegrationTestTrait;
@@ -45,6 +46,7 @@ class PermissionsControllerTest extends BcTestCase
      */
     public function setUp(): void
     {
+        $this->setFixtureTruncate();
         parent::setUp();
         $request = $this->getRequest('/baser/admin/baser-core/users/');
         $request = $this->loginAdmin($request);
@@ -82,8 +84,9 @@ class PermissionsControllerTest extends BcTestCase
      */
     public function testIndex()
     {
-        $this->get('/baser/admin/baser-core/permissions/index');
+        $this->get('/baser/admin/baser-core/permissions/index/5');
         $this->assertResponseError();
+        PermissionGroupFactory::make(['id' => 1])->persist();
         $this->get('/baser/admin/baser-core/permissions/index/1');
         $this->assertResponseOk();
     }

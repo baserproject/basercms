@@ -14,6 +14,7 @@ namespace BaserCore\Service;
 use BaserCore\Model\Entity\UserGroup;
 use BaserCore\Model\Table\UserGroupsTable;
 use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
 use Cake\Datasource\EntityInterface;
@@ -36,7 +37,7 @@ class UserGroupsService implements UserGroupsServiceInterface
 
     /**
      * UserGroups Table
-     * @var \Cake\ORM\Table
+     * @var \Cake\ORM\Table|UserGroupsTable
      */
     public $UserGroups;
 
@@ -80,6 +81,7 @@ class UserGroupsService implements UserGroupsServiceInterface
     {
         return $this->UserGroups->newEntity([
             'auth_prefix' => 'Admin',
+            'auth_prefix_settings' => '{"Admin":{"type":"2"},"Api":{"type":"2"}}'
         ], [
             'validate' => false,
         ]);
@@ -96,7 +98,21 @@ class UserGroupsService implements UserGroupsServiceInterface
      */
     public function getIndex($options = []): Query
     {
-        return $this->UserGroups->find();
+        $options = array_merge([
+            'finder' => 'all',
+            'exclude_admin' => false,
+            'order' => null
+        ], $options);
+
+        $query = $this->UserGroups->find($options['finder']);
+
+        if($options['exclude_admin']) {
+            $query->where(['id <>' => Configure::read('BcApp.adminGroupId')]);
+        }
+
+        if(!is_null($options['order'])) $query->order($options['order']);
+
+        return $query;
     }
 
     /**
@@ -111,6 +127,9 @@ class UserGroupsService implements UserGroupsServiceInterface
      */
     public function create(array $postData): ?EntityInterface
     {
+        if(!empty($postData['auth_prefix_settings'])) {
+            $postData['auth_prefix_settings'] = json_encode($postData['auth_prefix_settings']);
+        }
         $postData['auth_prefix'] = !empty($postData['auth_prefix'])? implode(',', $postData['auth_prefix']) : "Admin";
         $userGroup = $this->UserGroups->newEmptyEntity();
         $userGroup = $this->UserGroups->patchEntity($userGroup, $postData);
@@ -124,7 +143,7 @@ class UserGroupsService implements UserGroupsServiceInterface
     /**
      * ユーザーグループ情報を更新する
      *
-     * @param EntityInterface $target
+     * @param EntityInterface|UserGroup $target
      * @param array $postData
      * @return EntityInterface
      * @throws \Cake\ORM\Exception\PersistenceFailedException
@@ -134,6 +153,11 @@ class UserGroupsService implements UserGroupsServiceInterface
      */
     public function update(EntityInterface $target, array $postData): ?EntityInterface
     {
+        if(!empty($postData['auth_prefix_settings'])) {
+            $current = $target->getAuthPrefixSettingsArray();
+            if($current) $postData = array_merge($current, $postData);
+            $postData['auth_prefix_settings'] = json_encode($postData['auth_prefix_settings']);
+        }
         $postData['auth_prefix'] = !empty($postData['auth_prefix'])? implode(',', $postData['auth_prefix']) : "Admin";
         $userGroup = $this->UserGroups->patchEntity($target, $postData);
         return $this->UserGroups->saveOrFail($userGroup);
@@ -178,26 +202,9 @@ class UserGroupsService implements UserGroupsServiceInterface
     public function getControlSource(string $field): array
     {
         if ($field === 'auth_prefix') {
-            return $this->getAuthPrefixes();
+            return BcUtil::getAuthPrefixList();
         }
         return [];
-    }
-
-    /**
-     * 認証プレフィックスのリストを取得する
-     *
-     * @return array
-     * @noTodo
-     * @checked
-     */
-    public function getAuthPrefixes(): array
-    {
-        $authPrefixes = [];
-        foreach(Configure::read('BcPrefixAuth') as $key => $authPrefix) {
-            if($key === 'Api') continue;
-            $authPrefixes[$key] = $authPrefix['name'];
-        }
-        return $authPrefixes;
     }
 
 }

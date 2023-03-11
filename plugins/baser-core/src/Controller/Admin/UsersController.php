@@ -55,7 +55,6 @@ class UsersController extends BcAdminAppController
      * 管理画面へログインする
      *
      * @param UsersAdminServiceInterface $service
-     * @return void
      * @checked
      * @noTodo
      * @unitTest

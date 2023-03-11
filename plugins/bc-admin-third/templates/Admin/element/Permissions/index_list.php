@@ -16,13 +16,13 @@ use BaserCore\View\BcAdminAppView;
  *
  * @var BcAdminAppView $this
  * @var \Cake\ORM\ResultSet $permissions
- * @var \BaserCore\Model\Entity\UserGroup $currentUserGroup
+ * @var int $userGroupId
  * @checked
  * @unitTest
  * @noTodo
  */
 
-$this->BcListTable->setColumnNumber(6);
+$this->BcListTable->setColumnNumber(8);
 ?>
 
 
@@ -52,9 +52,9 @@ $this->BcListTable->setColumnNumber(6);
         <?php echo $this->BcAdminForm->control('checkall', ['type' => 'checkbox', 'label' => __d('baser_core', '一括選択')]) ?>
       <?php endif; ?>
       <?php if ($this->request->getQuery('sortmode')): ?>
-        <?php $this->BcBaser->link('<i class="bca-btn-icon-text" data-bca-btn-type="draggable"></i>' . __d('baser_core', 'ノーマル'), [$currentUserGroup->id, '?' => ['sortmode' => 0]], ['escape' => false]) ?>
+        <?php $this->BcBaser->link('<i class="bca-btn-icon-text" data-bca-btn-type="draggable"></i>' . __d('baser_core', 'ノーマル'), [$userGroupId, '?' => ['sortmode' => 0]], ['escape' => false]) ?>
       <?php else: ?>
-        <?php $this->BcBaser->link('<i class="bca-btn-icon-text" data-bca-btn-type="draggable"></i>' . __d('baser_core', '並び替え'), [$currentUserGroup->id, '?' => ['sortmode' => 1]], ['escape' => false]) ?>
+        <?php $this->BcBaser->link('<i class="bca-btn-icon-text" data-bca-btn-type="draggable"></i>' . __d('baser_core', '並び替え'), [$userGroupId, '?' => ['sortmode' => 1]], ['escape' => false]) ?>
       <?php endif ?>
     </th>
     <th class="bca-table-listup__thead-th">No</th>

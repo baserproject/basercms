@@ -13,6 +13,7 @@ namespace BaserCore\Test\TestCase;
 
 use BaserCore\BcPlugin;
 use BaserCore\Service\SitesService;
+use BaserCore\Test\Factory\PermissionFactory;
 use BaserCore\Test\Factory\PluginFactory;
 use BaserCore\Test\Factory\UserFactory;
 use BaserCore\TestSuite\BcTestCase;
@@ -55,6 +56,7 @@ class BcPluginTest extends BcTestCase
         'plugin.BaserCore.SiteConfigs',
         'plugin.BaserCore.Sites',
         'plugin.BaserCore.Contents',
+        'plugin.BaserCore.Factory/Permissions',
     ];
 
     /**
@@ -523,6 +525,7 @@ $table->save(new Entity([\'name\' => \'2022-06-26\']));');
     {
         Router::resetRoutes();
         // 件数確認
+        PermissionFactory::make()->allowGuest('/baser/api/*')->persist();
         $this->get('/baser/api/baser-core/pages.json');
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals(0, count($result->pages));

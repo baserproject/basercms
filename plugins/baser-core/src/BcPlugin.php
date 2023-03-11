@@ -412,6 +412,8 @@ class BcPlugin extends BasePlugin
          */
         $prefixSettings = Configure::read('BcPrefixAuth');
         foreach($prefixSettings as $prefix => $setting) {
+            if(empty($setting['type'])) throw new BcException(__d('baser_core', 'BcPrefixAuth の {0} で type が指定されていません。', $prefix));
+            if(empty($setting['alias'])) throw new BcException(__d('baser_core', 'BcPrefixAuth の {0} で alias が指定されていません。', $prefix));
             $isApi = ($setting['type'] === 'Jwt')? true : false;
             if(in_array($prefix, ['Admin', 'Api'])) {
                 $path = '/' . BcUtil::getBaserCorePrefix() . $setting['alias'];

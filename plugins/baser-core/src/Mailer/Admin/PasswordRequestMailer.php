@@ -41,9 +41,10 @@ class PasswordRequestMailer extends BcAdminMailer
         $createtime = $passwordRequestData['created']->timestamp;
         $agoInStr = '+' . Configure::read('BcApp.passwordRequestAllowTime') . ' min';
         $timelimit = date('Y/m/d H:i', strtotime($agoInStr, $createtime));
+        $current = Router::getRequest();
         $url = Router::url([
             'plugin' => 'BaserCore',
-            'prefix' => 'Admin',
+            'prefix' => $current->getParam('prefix'),
             'controller' => 'password_requests',
             'action' => 'apply',
             $passwordRequestData['request_key'],

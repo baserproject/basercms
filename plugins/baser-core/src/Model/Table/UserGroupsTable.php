@@ -82,6 +82,7 @@ class UserGroupsTable extends AppTable
             'dependent' => true,
             'exclusive' => false,
         ]);
+        $this->setDisplayField('title');
     }
 
     /**

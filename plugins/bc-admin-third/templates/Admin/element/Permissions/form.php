@@ -15,7 +15,7 @@ use BaserCore\View\BcAdminAppView;
 
 /**
  * @var BcAdminAppView $this
- * @var array $currentUserGroup
+ * @var string $userGroupTitle
  * @var Permission $permission
  * @var array $permissionMethodList
  * @var array $permissionAuthList
@@ -45,7 +45,7 @@ $this->BcBaser->js('admin/permissions/form.bundle', false);
     <tr>
       <th class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('user_group_id', __d('baser_core', 'ユーザーグループ')) ?></th>
       <td class="col-input bca-form-table__input">
-        <?php echo h($currentUserGroup->title) ?>
+        <?php echo h($userGroupTitle) ?>
       </td>
     </tr>
 
@@ -55,6 +55,7 @@ $this->BcBaser->js('admin/permissions/form.bundle', false);
         <?php echo $this->BcAdminForm->control('permission_group_type', ['type' => 'radio', 'options' => $this->BcAdminForm->getControlSource('Permissions.permission_group_type')]) ?>
         <?php echo $this->BcAdminForm->control('permission_group_id', ['type' => 'select', 'options' => $this->BcAdminForm->getControlSource('Permissions.permission_group_id'), 'empty' => __d('baser_core', 'アクセスルールグループを選択してください。')] ) ?>
         <?php echo $this->BcAdminForm->control('permission_group', ['type' => 'hidden', 'value' => json_encode($permissionGroups->toArray())] ) ?>
+        <?php echo $this->BcAdminForm->error('permission_group_id') ?>
       </td>
     </tr>
 

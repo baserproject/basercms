@@ -25,6 +25,8 @@ use BaserCore\Service\Admin\PagesAdminService;
 use BaserCore\Service\Admin\PagesAdminServiceInterface;
 use BaserCore\Service\Admin\PermissionGroupsAdminService;
 use BaserCore\Service\Admin\PermissionGroupsAdminServiceInterface;
+use BaserCore\Service\Admin\PermissionsAdminService;
+use BaserCore\Service\Admin\PermissionsAdminServiceInterface;
 use BaserCore\Service\Admin\PluginsAdminService;
 use BaserCore\Service\Admin\PluginsAdminServiceInterface;
 use BaserCore\Service\Admin\SiteConfigsAdminService;
@@ -135,7 +137,8 @@ class BcServiceProvider extends ServiceProvider
         PermissionGroupsServiceInterface::class,
         PermissionGroupsAdminServiceInterface::class,
         BcCaptchaServiceInterface::class,
-        BcOfficialApiServiceInterface::class
+        BcOfficialApiServiceInterface::class,
+        PermissionsAdminServiceInterface::class
     ];
 
     /**
@@ -208,6 +211,8 @@ class BcServiceProvider extends ServiceProvider
         $container->add(BcCaptchaServiceInterface::class, BcCaptchaService::class);
         // BcOfficialApi サービス
         $container->add(BcOfficialApiServiceInterface::class, BcOfficialApiService::class);
+        // PermissionAdmin サービス
+        $container->add(PermissionsAdminServiceInterface::class, PermissionsAdminService::class);
     }
 
 }

@@ -1,11 +1,2 @@
-/**
- * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Permission Community <https://basercms.net/community/>
- *
- * @copyright     Copyright (c) baserCMS Permission Community
- * @link          https://basercms.net baserCMS Project
- * @since         5.0.0
- * @license       https://basercms.net/license/index.html MIT License
- */
-$("#AdminUserGroupsFormScript").attr("data-isAdmin")&&$("#auth-prefix-admin").prop("disabled",!0),$("#UserGroupAdminEditForm").submit((function(){$("#auth-prefix-admin").removeAttr("disabled")})),$("#BtnSave").click((function(){$.bcUtil.showLoader()}));
+({mounted:function(){this.initView()},initView:function(){$("#AdminUserGroupsFormScript").attr("data-isAdmin")&&$("#auth_prefix_Admin").prop("disabled",!0),this.initAuthPrefixSettings(),this.registerEvents()},registerEvents:function(){$("#UserGroupAdminEditForm, #UserGroupAdminAddForm").submit((function(){$("#auth_prefix_Admin").removeAttr("disabled"),$("input[name='auth_prefix[]']").each((function(){$("input[name='auth_prefix_settings["+$(this).val()+"][type]']").removeAttr("disabled")}))})),$("input[name='auth_prefix[]']").click(this.initAuthPrefixSettings)},initAuthPrefixSettings:function(){$("input[name='auth_prefix[]']").each((function(){$(this).prop("checked")?$("input[name='auth_prefix_settings["+$(this).val()+"][type]']").prop("disabled",!1):$("input[name='auth_prefix_settings["+$(this).val()+"][type]']").prop("disabled",!0)}))}}).mounted();
 //# sourceMappingURL=form.bundle.js.map

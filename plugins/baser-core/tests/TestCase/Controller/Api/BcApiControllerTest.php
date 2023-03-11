@@ -106,7 +106,7 @@ class BcApiControllerTest extends BcTestCase
         $user->status = false;
         $users->save($user);
         $this->get('/baser/api/baser-core/users/index.json?token=' . $token['access_token']);
-        $this->assertResponseCode(401);
+        $this->assertResponseCode(403);
     }
 
     /**

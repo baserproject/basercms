@@ -14,7 +14,7 @@
  *
  * @var \BaserCore\View\BcAdminAppView $this
  * @var \BaserCore\Model\Entity\PermissionGroup $entity
- * @var \BaserCore\Model\Entity\UserGroup $currentUserGroup
+ * @var int $userGroupId
  * @var int $count
  * @checked
  * @unitTest
@@ -30,7 +30,7 @@ if (!$entity->status) {
 <tr<?php echo $class ?>>
   <td class="bca-table-listup__tbody-td"><?php echo $count ?></td>
   <td class="bca-table-listup__tbody-td">
-    <?php $this->BcBaser->link($entity->name, ['action' => 'edit', $currentUserGroup->id, $entity->id], ['escape' => true]) ?>
+    <?php $this->BcBaser->link($entity->name, ['action' => 'edit', $userGroupId, $entity->id], ['escape' => true]) ?>
   </td>
   <td class="bca-table-listup__tbody-td">
     <?php echo $entity->amount ?>
@@ -44,7 +44,7 @@ if (!$entity->status) {
     <?php echo $this->BcTime->format($entity->modified); ?>
   </td>
   <td class="bca-table-listup__tbody-td bca-table-listup__tbody-td--actions">
-    <?php $this->BcBaser->link('', ['action' => 'edit', $currentUserGroup->id, $entity->id], [
+    <?php $this->BcBaser->link('', ['action' => 'edit', $userGroupId, $entity->id], [
       'title' => __d('baser_core', '編集'),
       'class' => ' bca-btn-icon',
       'data-bca-btn-type' => 'edit',

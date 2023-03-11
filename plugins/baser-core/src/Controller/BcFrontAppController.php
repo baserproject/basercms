@@ -28,6 +28,22 @@ class BcFrontAppController extends AppController
 {
 
     /**
+     * Initialize
+     * @checked
+     * @unitTest
+     */
+    public function initialize(): void
+    {
+        parent::initialize();
+        // フロント認証が有効、かつ、permissionType が 2（ブラックリスト）の場合以外に認証を設定
+        if(!Configure::read('BcPrefixAuth.Front.disabled') && (int) Configure::read('BcPrefixAuth.Front.permissionType') !== 2) {
+            $this->loadComponent('Authentication.Authentication', [
+                'logoutRedirect' => Router::url(Configure::read("BcPrefixAuth.Front.loginAction"), true),
+            ]);
+        }
+    }
+
+    /**
      * Before Filter
      * @param EventInterface $event
      * @return Response|void

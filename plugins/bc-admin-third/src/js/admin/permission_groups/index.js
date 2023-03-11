@@ -8,10 +8,37 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
-$(function () {
-    const userGroupId = $("#AdminPermissionGroupsIndexScript").attr('data-userGroupId');
-    $('input[name="list_type"]').click(function(){
+
+const permissionGroupsIndex = {
+
+    /**
+     * 初期化
+     */
+    mounted() {
+        this.registerEvents();
+        if($('#filter-user-group-id').val() === '0') {
+            $('#list-type-admin').parent().hide();
+        }
+    },
+
+    /**
+     * イベント登録
+     */
+    registerEvents() {
+        $('#filter-user-group-id').change(this.initList);
+        $('input[name="list_type"]').click(this.initList);
+    },
+
+    /**
+     * 一覧を初期化
+     */
+    initList() {
         $.bcUtil.showLoader();
-        location.href = `${$.bcUtil.adminBaseUrl}baser-core/permission_groups/index/${userGroupId}?list_type=${$(this).val()}`;
-    });
-});
+        let userGroupId = $('#filter-user-group-id').val();
+        let listType = $('input[name="list_type"]:checked').val();
+        location.href = `${$.bcUtil.adminBaseUrl}baser-core/permission_groups/index/${userGroupId}?list_type=${listType}`;
+    }
+
+}
+
+permissionGroupsIndex.mounted();

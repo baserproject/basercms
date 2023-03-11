@@ -36,7 +36,7 @@ interface PermissionGroupsAdminServiceInterface
     public function getViewVarsForIndex(int $userGroupId, ServerRequest $request): array;
 
     /**
-     * 編集画面用の View 変数を取得する
+     * 新規登録、編集画面用の View 変数を取得する
      *
      * @param int $userGroupId
      * @param EntityInterface $entity
@@ -45,6 +45,6 @@ interface PermissionGroupsAdminServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function getViewVarsForEdit(int $userGroupId, EntityInterface $entity): array;
+    public function getViewVarsForForm(int $userGroupId, EntityInterface $entity): array;
 
 }

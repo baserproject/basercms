@@ -286,10 +286,10 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
     public function getAuthenticationService(ServerRequestInterface $request): AuthenticationServiceInterface
     {
         $service = new AuthenticationService();
-        $prefix = $request->getParam('prefix');
+        $prefix = BcUtil::getRequestPrefix($request);
         $authSetting = Configure::read('BcPrefixAuth.' . $prefix);
 
-        if (!$authSetting || !BcUtil::isInstalled()) {
+        if (!$this->isRequiredAuthentication($authSetting)) {
             $service->loadAuthenticator('Authentication.Form');
             if (!empty($authSetting['sessionKey'])) {
                 $service->loadAuthenticator('Authentication.Session', [
@@ -325,25 +325,31 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
     }
 
     /**
+     * 認証が必要か判定する
+     *
+     * @param array $authSetting
+     * @return bool
+     */
+    public function isRequiredAuthentication(array $authSetting)
+    {
+        if(!$authSetting) return false;
+        if(!empty($authSetting['disabled'])) return false;
+        if(!BcUtil::isInstalled()) return false;
+        return true;
+    }
+
+    /**
      * APIが利用できるか確認する
      *
      * @param string $prefix
      * @return bool
      */
-    public function isEnabledCoreApi(string $prefix): bool
+    public static function isEnabledCoreApi(string $prefix): bool
     {
         if (!filter_var(env('USE_CORE_API', false), FILTER_VALIDATE_BOOLEAN)) {
             if ($prefix === 'Api') {
                 if (BcUtil::loginUser()) {
-                    $siteDomain = BcUtil::getCurrentDomain();
-                    if (empty($_SERVER['HTTP_REFERER'])) {
-                        return false;
-                    }
-                    $refererDomain = BcUtil::getDomain($_SERVER['HTTP_REFERER']);
-                    if (!preg_match('/^' . preg_quote($siteDomain, '/') . '/', $refererDomain)) {
-                        return false;
-                    }
-                    return true;
+                    return BcUtil::isSameReferrerAsCurrent();
                 }
             }
         }

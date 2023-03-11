@@ -13,6 +13,7 @@ namespace BcBlog\Test\TestCase\Controller\Api;
 
 use BaserCore\Service\DblogsServiceInterface;
 use BaserCore\Test\Factory\ContentFactory;
+use BaserCore\Test\Factory\PermissionFactory;
 use BaserCore\Test\Factory\SiteConfigFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
@@ -51,6 +52,7 @@ class BlogPostsControllerTest extends BcTestCase
         'plugin.BcBlog.Factory/BlogContents',
         'plugin.BcBlog.Factory/BlogPosts',
         'plugin.BaserCore.Factory/Dblogs',
+        'plugin.BaserCore.Factory/Permissions',
     ];
 
     /**
@@ -124,6 +126,8 @@ class BlogPostsControllerTest extends BcTestCase
         ContentFactory::make(['plugin' => 'BcBlog', 'type' => 'BlogContent', 'entity_id' => 1])->persist();
         BlogContentFactory::make(['id' => 1])->persist();
         BlogPostFactory::make(['id' => 1, 'blog_content_id' => 1, 'status' => true])->persist();
+        PermissionFactory::make()->allowGuest('/baser/api/*')->persist();
+
         // APIを呼ぶ
         $this->get('/baser/api/bc-blog/blog_posts/view/1.json');
         // レスポンスを確認

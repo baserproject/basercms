@@ -337,21 +337,29 @@ class BcToolbarHelperTest extends BcTestCase
     public function testGetLogoLinkOptions()
     {
         // フロントで管理画面利用不可
-        $this->assertEquals(['title' => 'baserCMS'], $this->BcToolbar->getLogoLinkOptions());
+        $this->assertEquals([
+            'title' => 'baserCMS',
+            'class' => 'bca-toolbar__logo-link',
+            'escapeTitle' => false
+        ], $this->BcToolbar->getLogoLinkOptions());
+
         // フロントで管理画面利用可能
         $this->loginAdmin($this->getRequest('/baser/admin'));
         $options = $this->BcToolbar->getLogoLinkOptions();
         $this->assertTrue(in_array('bca-toolbar__logo-link', $options));
+
         // ノーマル
         $bcToolbar = new BcToolbarHelper(new View($this->getRequest('/baser/admin/baser-core/users/login')));
         $options = $bcToolbar->getLogoLinkOptions();
         $this->assertTrue(in_array('bca-toolbar__logo-link', $options));
+
         // アップデーター
         Configure::write('BcRequest.isUpdater', true);
         $options = $bcToolbar->getLogoLinkOptions();
         $this->assertTrue(in_array('bca-toolbar__logo-link', $options));
         $this->assertTrue(in_array('_blank', $options));
         Configure::write('BcRequest.isUpdater', false);
+
         // インストーラー
         $bcToolbar = new BcToolbarHelper(new View(null, null, null, ['name' => 'Installations']));
         $options = $bcToolbar->getLogoLinkOptions();

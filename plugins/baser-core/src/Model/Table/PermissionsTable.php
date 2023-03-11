@@ -94,16 +94,19 @@ class PermissionsTable extends AppTable
             ->scalar('name')
             ->maxLength('name', 255, __d('baser_core', '設定名は255文字以内で入力してください。'))
             ->notEmptyString('name', __d('baser_core', '設定名を入力してください。'))
-            ->requirePresence('name', true);
+            ->requirePresence('name');
         $validator
             ->integer('user_group_id')
             ->notEmptyString('user_group_id', __d('baser_core', 'ユーザーグループを選択してください。'))
-            ->requirePresence('user_group_id', true);
+            ->requirePresence('user_group_id');
+        $validator
+            ->integer('permission_group_id')
+            ->notEmptyString('permission_group_id', __d('baser_core', 'アクセスルールグループを選択してください。'));
         $validator
             ->scalar('url')
             ->maxLength('url', 255, __d('baser_core', '設定URLは255文字以内で入力してください。'))
             ->notEmptyString('url', __d('baser_core', '設定URLを入力してください。'))
-            ->requirePresence('user_group_id', true);
+            ->requirePresence('user_group_id');
         return $validator;
     }
 
@@ -244,6 +247,7 @@ class PermissionsTable extends AppTable
      */
     public function getTargetPermissions(array $userGroups): array
     {
+        if(!$userGroups) $userGroups = [0];
         foreach($userGroups as $groupId) {
             if (!isset($this->_targetPermissions[$groupId])) {
                 $this->setTargetPermissions($userGroups);

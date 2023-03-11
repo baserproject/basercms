@@ -12,14 +12,20 @@
 /**
  * @var \BaserCore\View\BcAdminAppView $this
  * @var \BaserCore\Model\Entity\UserGroup $currentUserGroup
+ * @var int $userGroupId
  * @checked
  * @noTodo
  * @unitTest
  */
-$this->BcAdmin->setTitle(sprintf(__d('baser_core', '%s｜アクセスルールグループ一覧'), $currentUserGroup->title));
+$this->BcAdmin->addAdminMainBodyHeaderLinks(['url' => [
+  'action' => 'add',
+  $userGroupId,
+  $this->getRequest()->getData('list_type')
+], 'title' => __d('baser_core', '新規追加')]);
+$this->BcAdmin->setTitle(sprintf(__d('baser_core', 'アクセスルールグループ一覧')));
 $this->BcBaser->js('admin/permission_groups/index.bundle', false, [
   'id' => 'AdminPermissionGroupsIndexScript',
-  'data-userGroupId' => $currentUserGroup->id
+  'defer' => true
 ]);
 ?>
 
@@ -34,7 +40,7 @@ $this->BcBaser->js('admin/permission_groups/index.bundle', false, [
   <div class="bca-actions__main">
     <?php echo $this->BcAdminForm->postLink(__d('baser_core', 'ルールを再構築する'), [
       'action' => 'rebuild_by_user_group',
-      $currentUserGroup->id
+      $userGroupId
     ], [
       'confirm' => __d('baser_core', 'このユーザーグループのアクセスルールを再構築します。これまでの変更内容はリセットされます。よろしいですか？'),
       'class' => 'bca-btn bca-actions__item',
@@ -44,7 +50,8 @@ $this->BcBaser->js('admin/permission_groups/index.bundle', false, [
     <?php echo $this->BcHtml->link(__d('baser_core', 'アクセスルール一覧に移動'), [
       'controller' => 'Permissions',
       'action' => 'index',
-      $currentUserGroup->id
+      $userGroupId,
+      '?' => ['permission_group_type' => $this->getRequest()->getData('list_type')]
     ], [
       'class' => 'bca-btn bca-actions__item',
     ]) ?>

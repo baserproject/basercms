@@ -298,6 +298,7 @@ class PermissionsServiceTest extends BcTestCase
      */
     public function testCheck($url, $userGroup, $expected)
     {
+        $this->loadPlugins(['BcBlog']);
         $this->PermissionsService->addCheck("/fuga", false);
         $this->PermissionsService->addCheck("/piyo", true);
         $result = $this->PermissionsService->check($url, $userGroup);
@@ -314,9 +315,9 @@ class PermissionsServiceTest extends BcTestCase
             ['/piyo', [2], true],
             ['/baser/admin/baser-core/users/logout', [2], true],
             ['/baser/admin/pages/2000', [2], true],
-            ['/baser/admin/bc-blog/blog_post/edit/100', [2, 3], true],
-            ['/baser/admin/bc-blog/blog_post/edit/100', [2], false],
-            ['/baser/admin/bc-blog/blog_post/add', [2, 3], false],
+            ['/baser/admin/bc-blog/blog_posts/edit/100', [2, 3], true],
+            ['/baser/admin/bc-blog/blog_posts/edit/100', [2], false],
+            ['/baser/admin/bc-blog/blog_posts/add', [2, 3], false],
             ['/baser/admin/baser-core/contents/delete', [2, 3], true],
         ];
     }

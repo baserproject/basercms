@@ -13,6 +13,7 @@ namespace BaserCore\Service;
 
 use BaserCore\Error\BcException;
 use BaserCore\Model\Entity\Permission;
+use BaserCore\Model\Entity\UserGroup;
 use BaserCore\Model\Table\PermissionsTable;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Core\Configure;
@@ -25,6 +26,7 @@ use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\Note;
+use Cake\Routing\Router;
 use Cake\Utility\Inflector;
 
 /**
@@ -83,7 +85,7 @@ class PermissionsService implements PermissionsServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function getNew($userGroupId = null, $permissionGroupId = null): EntityInterface
+    public function getNew(int $userGroupId = null, int $permissionGroupId = null): EntityInterface
     {
         return $this->Permissions->newEntity(
             $this->autoFillRecord([
@@ -235,7 +237,7 @@ class PermissionsService implements PermissionsServiceInterface
         $permission->id = null;
         $permission->no = null;
         $permission->sort = null;
-        $data = $permission->toarray();
+        $data = $permission->toArray();
         $data = $this->autoFillRecord($data);
         try {
             return $this->create($data);
@@ -332,9 +334,21 @@ class PermissionsService implements PermissionsServiceInterface
         if ($this->checkDefaultDeny($url)) return false;
         if ($this->checkDefaultAllow($url)) return true;
 
+        $userGroupsService = $this->getService(UserGroupsServiceInterface::class);
+
         $permissionGroupList = $this->Permissions->getTargetPermissions($userGroupId);
-        foreach($permissionGroupList as $permissionGroup) {
-            if ($this->checkGroup($url, $permissionGroup)) {
+        if($permissionGroupList) {
+            foreach($permissionGroupList as $userGroupId => $permissionGroup) {
+                $userGroup = null;
+                if($userGroupId) {
+                    $userGroup = $userGroupsService->get($userGroupId);
+                }
+                if ($this->checkGroup($url, $permissionGroup, $userGroup)) {
+                    return true;
+                }
+            }
+        } else {
+            if ($this->checkGroup($url, [], null)) {
                 return true;
             }
         }
@@ -401,22 +415,71 @@ class PermissionsService implements PermissionsServiceInterface
      *
      * @param string $url
      * @param array $groupPermission
+     * @param UserGroup|EntityInterface|null $userGroup
      * @return boolean
      * @checked
      * @unitTest
      * @noTodo
      */
-    private function checkGroup(string $url, array $groupPermission): bool
+    private function checkGroup(string $url, array $groupPermission, $userGroup): bool
     {
+        // ドメイン部分を除外
+        if(preg_match('/^(http(s|):\/\/[^\/]+?\/)(.*?)$/', $url, $matches)) {
+            if(in_array($matches[1], [Configure::read('BcEnv.siteUrl'), Configure::read('BcEnv.sslUrl')])) {
+                $url = str_replace([Configure::read('BcEnv.siteUrl'), Configure::read('BcEnv.sslUrl')], '', $url);
+                if(!$url) $url = '/';
+            } else {
+                return true;
+            }
+        }
+
+        // プレフィックスを取得するためリバースルーティングで解析
+        try {
+            $urlArray = Router::parseRequest(new ServerRequest(['url' => $url]));
+        } catch(\Throwable $e) {
+            return true;
+        }
+
+        // プレフィックスがない場合はフロントとみなす
+        if(empty($urlArray['prefix'])) {
+            $prefix = 'Front';
+        } else {
+            $prefix = $urlArray['prefix'];
+        }
+
+        $prefixAuthSetting = array_merge([
+            'disabled' => false,
+            'permissionType' => 1
+        ], Configure::read("BcPrefixAuth.{$prefix}"));
+
+        // 設定が無効の場合は無条件に true
+        if($prefixAuthSetting['disabled']) return true;
+
+        // フルアクセスの場合は true
+        if($userGroup) {
+            $type = (int)$userGroup->getAuthPrefixSetting($prefix, 'type');
+            if ($type === 1) return true;
+        }
+
+        if($prefix === 'Api') {
+            // 管理画面からAPIのURLを参照した場合は無条件に true
+            if (BcUtil::isAdminSystem()) return true;
+            // 管理画面から呼び出された API は無条件に true
+            if (BcUtil::isSameReferrerAsCurrent()) return true;
+        }
+
         // URLのプレフィックスを標準の文字列に戻す
-        foreach(Configure::read('BcPermission.permissionGroupTypes') as $key => $value) {
-            $prefix = Configure::read('BcApp.' . Inflector::variable($key) . 'Prefix');
-            if(!$prefix) continue;
-            $regex = '/^' . preg_quote('/' . Configure::read('BcApp.baserCorePrefix') . '/' . $prefix . '/', '/') . '/';
+        foreach(Configure::read('BcPrefixAuth') as $key => $value) {
+            $prefixAreas = Configure::read('BcApp.' . Inflector::variable($key) . 'Prefix');
+            if(!$prefixAreas) continue;
+            $regex = '/^' . preg_quote('/' . Configure::read('BcApp.baserCorePrefix') . '/' . $prefixAreas . '/', '/') . '/';
             $url = preg_replace($regex, '/baser/' . Inflector::underscore($key) . '/', $url);
         }
 
-        $ret = true;
+        // permissionType
+        // 1: ホワイトリスト（全部拒否して一部許可を設定）
+        // 2: ブラックリスト（全部許可して一部拒否を設定）
+        $ret = ((int) $prefixAuthSetting['permissionType'] === 2);
         foreach($groupPermission as $permission) {
             $pattern = $this->convertRegexUrl($permission->url);
             if (preg_match($pattern, $url)) {
@@ -570,7 +633,7 @@ class PermissionsService implements PermissionsServiceInterface
             $permissionGroupsService = $this->getService(PermissionGroupsServiceInterface::class);
             return $permissionGroupsService->getList($options);
         } elseif($field === 'permission_group_type') {
-            return Configure::read('BcPermission.permissionGroupTypes');
+            return BcUtil::getAuthPrefixList();
         } elseif($field === 'user_group_id') {
             $userGroups = TableRegistry::getTableLocator()->get('BaserCore.UserGroups');
             $groupList = $userGroups->find('list', [

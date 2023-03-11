@@ -347,7 +347,7 @@ class BcToolbarHelper extends Helper
             'update' => ['target' => '_blank', 'class' => 'bca-toolbar__logo-link', 'escapeTitle' => false],
             'normal' => ['class' => 'bca-toolbar__logo-link', 'escapeTitle' => false],
             'frontAdminAvailable' => ['class' => 'bca-toolbar__logo-link', 'escapeTitle' => false],
-            'frontAdminNotAvailable' => ['title' => $this->BcAuth->getCurrentName()],
+            'frontAdminNotAvailable' => ['class' => 'bca-toolbar__logo-link', 'title' => $this->BcAuth->getCurrentName(), 'escapeTitle' => false],
         ];
         return $options[$this->getLogoType()];
     }

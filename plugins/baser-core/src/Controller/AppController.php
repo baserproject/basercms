@@ -124,11 +124,6 @@ class AppController extends BaseController
             'requireSecure' => false,
             'unlockedFields' => ['x', 'y', 'MAX_FILE_SIZE']
         ]);
-
-        // TODO ucmitz 未移行のためコメントアウト
-        // >>>
-//        $this->loadComponent('BaserCore.BcEmail');
-        // <<<
     }
 
     /**
@@ -159,11 +154,12 @@ class AppController extends BaseController
         }
 
         if(!$this->checkPermission()) {
-            if ($this->getRequest()->getParam('prefix') === 'Api') {
+            $prefix = BcUtil::getRequestPrefix($this->getRequest());
+            if ($prefix === 'Api') {
                 throw new ForbiddenException(__d('baser_core', '指定されたAPIエンドポイントへのアクセスは許可されていません。'));
             } else {
                 $this->BcMessage->setError(__d('baser_core', '指定されたページへのアクセスは許可されていません。'));
-                return $this->redirect(Configure::read('BcPrefixAuth.Admin.loginRedirect'));
+                return $this->redirect(Configure::read("BcPrefixAuth.{$prefix}.loginRedirect"));
             }
         }
 
@@ -182,10 +178,14 @@ class AppController extends BaseController
     private function checkPermission()
     {
         $user = BcUtil::loginUser();
-        if(!$user) return true;
+        if($user) {
+            $userGroupsIds = Hash::extract($user->toArray()['user_groups'], '{n}.id');
+        } else {
+            $userGroupsIds = [];
+        }
         /* @var PermissionsServiceInterface $permission */
         $permission = $this->getService(PermissionsServiceInterface::class);
-        return $permission->check($this->getRequest()->getPath(), Hash::extract($user->toArray()['user_groups'], '{n}.id'));
+        return $permission->check($this->getRequest()->getPath(), $userGroupsIds);
     }
 
     /**
