@@ -145,10 +145,32 @@ class CustomFieldsController extends BcApiController
      * 削除API
      *
      * @param CustomFieldsServiceInterface $service
+     * @param int $id
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function delete(CustomFieldsServiceInterface $service)
+    public function delete(CustomFieldsServiceInterface $service, int $id)
     {
-        //todo 削除API
+        $this->request->allowMethod(['post', 'delete']);
+        $customField = null;
+        try {
+            $customField = $service->get($id);
+            $service->delete($id);
+            $message = __d('baser_core', 'フィールド「{0}」を削除しました。', $customField->title);
+        } catch (RecordNotFoundException $e) {
+            $this->setResponse($this->response->withStatus(404));
+            $message = __d('baser_core', 'データが見つかりません。');
+        } catch (\Throwable $e) {
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $this->setResponse($this->response->withStatus(500));
+        }
+        $this->set([
+            'message' => $message,
+            'customField' => $customField
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['customField', 'message']);
     }
 
     /**

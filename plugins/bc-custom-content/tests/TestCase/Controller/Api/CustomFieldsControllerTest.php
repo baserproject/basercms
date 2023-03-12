@@ -11,8 +11,11 @@
 
 namespace BcCustomContent\Test\TestCase\Controller\Api;
 
+use BaserCore\Service\BcDatabaseServiceInterface;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcContainerTrait;
+use BcCustomContent\Service\CustomTablesServiceInterface;
 use BcCustomContent\Test\Factory\CustomFieldFactory;
 use BcCustomContent\Test\Scenario\CustomFieldsScenario;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -28,7 +31,7 @@ class CustomFieldsControllerTest extends BcTestCase
      * ScenarioAwareTrait
      */
     use ScenarioAwareTrait;
-    use IntegrationTestTrait;
+    use BcContainerTrait;
 
     /**
      * Fixtures
@@ -43,6 +46,7 @@ class CustomFieldsControllerTest extends BcTestCase
         'plugin.BaserCore.Factory/UserGroups',
         'plugin.BcCustomContent.Factory/CustomFields',
         'plugin.BcCustomContent.Factory/CustomLinks',
+        'plugin.BcCustomContent.Factory/CustomTables',
     ];
 
     /**
@@ -196,7 +200,40 @@ class CustomFieldsControllerTest extends BcTestCase
      */
     public function test_delete()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //サービスをコル
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+
+        //データを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+        $dataBaseService->addColumn('custom_entry_1_recruit', 'recruit_category', 'text');
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+        //APIを呼ぶ
+        $this->post('/baser/api/bc-custom-content/custom_fields/delete/1.json?token=' . $this->accessToken);
+        //ステータスを確認
+        $this->assertResponseOk();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('フィールド「求人分類」を削除しました。', $result->message);
+        $this->assertEquals('求人分類', $result->customField->title);
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_recruit');
+
+        //存在しないIDを指定したの場合、
+        //APIを呼ぶ
+        $this->post('/baser/api/bc-custom-content/custom_fields/delete/11.json?token=' . $this->accessToken);
+        //ステータスを確認
+        $this->assertResponseCode(404);
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('データが見つかりません。', $result->message);
     }
 
     /**
