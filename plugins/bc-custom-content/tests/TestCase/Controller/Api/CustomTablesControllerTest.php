@@ -283,6 +283,33 @@ class CustomTablesControllerTest extends BcTestCase
      */
     public function test_list()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //サービスをコル
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+
+        //テストデータを生成
+        $customTable->create([
+            'type' => 'contact',
+            'name' => 'contact',
+            'title' => 'お問い合わせタイトル',
+            'display_field' => 'お問い合わせ'
+        ]);
+        $customTable->create([
+            'type' => 'recruit',
+            'name' => 'recruit',
+            'title' => '求人',
+            'display_field' => '求人'
+        ]);
+        //APIを呼ぶ
+        $this->get('/baser/api/bc-custom-content/custom_tables/list.json?token=' . $this->accessToken);
+        //ステータスを確認
+        $this->assertResponseOk();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('お問い合わせタイトル', $result->customTables->{1});
+        $this->assertEquals('求人', $result->customTables->{2});
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_contact');
+        $dataBaseService->dropTable('custom_entry_2_recruit');
     }
 }

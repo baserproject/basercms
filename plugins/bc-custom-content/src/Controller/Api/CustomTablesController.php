@@ -182,9 +182,17 @@ class CustomTablesController extends BcApiController
      * リストAPI
      *
      * @param CustomTablesServiceInterface $service
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function list(CustomTablesServiceInterface $service)
     {
-        //todo リストAPI
+        $this->request->allowMethod('get');
+        $this->set([
+            'customTables' => $service->getList($this->request->getQueryParams())
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['customTables']);
     }
 }
