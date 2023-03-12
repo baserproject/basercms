@@ -106,9 +106,17 @@ class CustomFieldsController extends BcApiController
      * リストAPI
      *
      * @param CustomFieldsServiceInterface $service
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function list(CustomFieldsServiceInterface $service)
     {
-        //todo リストAPI
+        $this->request->allowMethod('get');
+        $this->set([
+            'customFields' => $service->getList()
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['customFields']);
     }
 }
