@@ -28,10 +28,20 @@ class CustomFieldsController extends BcApiController
      * 一覧取得API
      *
      * @param CustomFieldsServiceInterface $service
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function index(CustomFieldsServiceInterface $service)
     {
-        //todo 一覧取得API
+        $this->request->allowMethod('get');
+        $this->set([
+            'customFields' => $this->paginate(
+                $service->getIndex($this->request->getQueryParams())
+            )
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['customFields']);
     }
 
     /**
