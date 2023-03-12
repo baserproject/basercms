@@ -33,10 +33,15 @@ class ThemeConfigsController extends BcApiController
      * @param ThemeConfigsServiceInterface $service
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function view(ThemeConfigsServiceInterface $service)
     {
-        //todo [API] 取得
+        $this->request->allowMethod(['get']);
+        $this->set([
+            'themeConfig' => $service->get()
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['themeConfig']);
     }
 
     /**

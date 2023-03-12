@@ -13,6 +13,7 @@ namespace BcThemeConfig\Test\TestCase\Controller\Api;
 
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
+use BcThemeConfig\Test\Scenario\ThemeConfigsScenario;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use Cake\TestSuite\IntegrationTestTrait;
 
@@ -81,7 +82,18 @@ class ThemeConfigsControllerTest extends BcTestCase
      */
     public function test_view()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを生成
+        $this->loadFixtureScenario(ThemeConfigsScenario::class);
+        //APIをコル
+        $this->get('/baser/api/bc-theme-config/theme_configs/view.json?token=' . $this->accessToken);
+        //ステータスを確認
+        $this->assertResponseOk();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        //全て４件を取得できるか確認
+        $this->assertCount(4, get_object_vars($result->themeConfig));
+        //単位Objectの値を確認
+        $this->assertEquals('2B7BB9', $result->themeConfig->color_hover);
     }
 
     /**
