@@ -14,10 +14,14 @@ namespace BaserCore\Test\TestCase\Service;
 use BaserCore\Service\PasswordRequestsService;
 use BaserCore\Service\PasswordRequestsServiceInterface;
 use BaserCore\Test\Factory\PasswordRequestFactory;
+use BaserCore\Test\Factory\SiteConfigFactory;
+use BaserCore\Test\Factory\UserFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
+use BaserCore\Test\Scenario\SmallSetContentsScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Core\Configure;
+use Cake\Datasource\Exception\RecordNotFoundException;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -129,7 +133,21 @@ class PasswordRequestsServiceTest extends BcTestCase
      */
     public function testUpdate()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(SmallSetContentsScenario::class);
+        $this->getRequest();
+        UserFactory::make(['email' => 'foo@example.com'])->persist();
+        SiteConfigFactory::make(['name' => 'email', 'value' => 'bar@example.com'])->persist();
+        SiteConfigFactory::make(['name' => 'formal_name', 'value' => 'name'])->persist();
+
+        // 正常系
+        $result = $this->service->update($this->service->getNew(), ['email' => 'foo@example.com']);
+        $this->assertStringContainsString('パスワードの再発行手続きを受け付けました', $result['message']);
+        $this->assertStringContainsString('From: name <bar@example.com>', $result['headers']);
+
+        // ユーザーが存在しない
+        $this->expectException(RecordNotFoundException::class);
+        $this->service->update($this->service->getNew(), ['email' => 'non@example.com']);
     }
 
     /**

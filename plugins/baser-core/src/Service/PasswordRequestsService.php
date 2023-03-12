@@ -86,12 +86,12 @@ class PasswordRequestsService implements PasswordRequestsServiceInterface
      *
      * @param EntityInterface|PasswordRequest $entity
      * @param array $postData
-     * @return EntityInterface|false
+     * @return array|false
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function update($entity, $postData): ?EntityInterface
+    public function update($entity, $postData): ?array
     {
         $passwordRequest = $this->PasswordRequests->patchEntity($entity, $postData);
         $usersTable = TableRegistry::getTableLocator()->get('BaserCore.Users');
@@ -102,9 +102,10 @@ class PasswordRequestsService implements PasswordRequestsServiceInterface
         $passwordRequest->user_id = $user->id;
         $passwordRequest->used = 0;
         $passwordRequest->setRequestKey();
-        $result = $this->PasswordRequests->saveOrFail($passwordRequest);
-        $this->getMailer('BaserCore.Admin/PasswordRequest')->send('resetPassword', [$user, $passwordRequest]);
-        return $result;
+        if ($this->PasswordRequests->saveOrFail($passwordRequest)){
+            return $this->getMailer('BaserCore.Admin/PasswordRequest')->send('resetPassword', [$user, $passwordRequest]);
+        }
+        return false;
     }
 
     /**
