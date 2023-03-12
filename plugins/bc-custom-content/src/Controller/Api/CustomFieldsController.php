@@ -38,10 +38,28 @@ class CustomFieldsController extends BcApiController
      * 単一データAPI
      *
      * @param CustomFieldsServiceInterface $service
+     * @param int $id
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function view(CustomFieldsServiceInterface $service)
+    public function view(CustomFieldsServiceInterface $service, int $id)
     {
-        //todo 単一データAPI
+        $this->request->allowMethod('get');
+        $customField = $message = null;
+        try {
+            $customField = $service->get($id);
+        } catch (RecordNotFoundException $e) {
+            $this->setResponse($this->response->withStatus(404));
+            $message = __d('baser_core', 'データが見つかりません');
+        }
+
+        $this->set([
+            'customField' => $customField,
+            'message' => $message
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['message', 'customField']);
     }
 
     /**
