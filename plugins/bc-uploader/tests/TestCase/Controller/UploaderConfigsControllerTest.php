@@ -13,6 +13,7 @@ namespace BcUploader\Test\TestCase\Controller\Api;
 
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
+use BcUploader\Test\Factory\UploaderConfigFactory;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use Cake\TestSuite\IntegrationTestTrait;
 
@@ -85,7 +86,17 @@ class UploaderConfigsControllerTest extends BcTestCase
      */
     public function test_view()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを生成
+        UploaderConfigFactory::make(['name' => 'name_1', 'value' => 'value_1'])->persist();
+        UploaderConfigFactory::make(['name' => 'name_2', 'value' => 'value_2'])->persist();
+        //APIを呼ぶ
+        $this->get("/baser/api/bc-uploader/uploader_configs/view.json?token=" . $this->accessToken);
+        //ステータスを確認
+        $this->assertResponseSuccess();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('value_1', $result->uploaderConfig->name_1);
+        $this->assertEquals('value_2', $result->uploaderConfig->name_2);
     }
 
     /**

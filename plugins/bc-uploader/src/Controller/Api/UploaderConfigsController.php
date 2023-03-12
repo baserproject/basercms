@@ -30,10 +30,17 @@ class UploaderConfigsController extends BcApiController
      *
      * @param UploaderConfigsServiceInterface $service
      * @return void
+     * @checked
+     * @notodo
+     * @unitTest
      */
     public function view(UploaderConfigsServiceInterface $service)
     {
-        //todo 取得API
+        $this->request->allowMethod(['get']);
+        $this->set([
+            'uploaderConfig' => $service->get()
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['uploaderConfig']);
     }
 
     /**
