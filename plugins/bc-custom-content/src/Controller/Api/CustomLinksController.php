@@ -16,6 +16,7 @@ use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BcCustomContent\Service\CustomLinksServiceInterface;
+use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\ORM\Exception\PersistenceFailedException;
 
 /**
@@ -38,10 +39,28 @@ class CustomLinksController extends BcApiController
      * 単一データAPI
      *
      * @param CustomLinksServiceInterface $service
+     * @param int $id
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function view(CustomLinksServiceInterface $service)
+    public function view(CustomLinksServiceInterface $service, int $id)
     {
-        //todo 単一データAPI
+        $this->request->allowMethod('get');
+        $customLink = $message = null;
+        try {
+            $customLink = $service->get($id);
+        } catch (RecordNotFoundException $e) {
+            $this->setResponse($this->response->withStatus(404));
+            $message = __d('baser_core', 'データが見つかりません');
+        }
+
+        $this->set([
+            'customLink' => $customLink,
+            'message' => $message
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['message', 'customLink']);
     }
 
     /**
