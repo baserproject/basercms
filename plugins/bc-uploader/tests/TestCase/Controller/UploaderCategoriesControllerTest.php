@@ -14,6 +14,7 @@ namespace BcUploader\Test\TestCase\Controller\Api;
 use BaserCore\Service\DblogsServiceInterface;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
+use BcUploader\Test\Scenario\UploaderFilesScenario;
 use BcUploader\Service\UploaderCategoriesServiceInterface;
 use BcUploader\Test\Scenario\UploaderCategoriesScenario;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -89,7 +90,14 @@ class UploaderCategoriesControllerTest extends BcTestCase
      */
     public function test_index()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loadFixtureScenario(UploaderFilesScenario::class);
+        //APIを呼ぶ
+        $this->get("/baser/api/bc-uploader/uploader_categories/index.json?token=" . $this->accessToken);
+        //ステータスを確認
+        $this->assertResponseSuccess();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertCount(2, $result->uploaderCategories);
     }
 
     /**

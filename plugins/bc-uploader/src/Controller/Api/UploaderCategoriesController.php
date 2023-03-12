@@ -29,11 +29,20 @@ class UploaderCategoriesController extends BcApiController
      * 一覧取得API
      *
      * @param UploaderCategoriesServiceInterface $service
-     * @return void
+     *
+     * @checked
+     * @notodo
+     * @unitTest
      */
     public function index(UploaderCategoriesServiceInterface $service)
     {
-        //todo 一覧取得API
+        $this->request->allowMethod(['get']);
+        $this->set([
+            'uploaderCategories' => $this->paginate(
+                $service->getIndex($this->request->getQueryParams())
+            )
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['uploaderCategories']);
     }
 
     /**
