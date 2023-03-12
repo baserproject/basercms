@@ -11,8 +11,11 @@
 
 namespace BcUploader\Test\TestCase\Controller\Api;
 
+use BaserCore\Service\DblogsServiceInterface;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
+use BcUploader\Service\UploaderCategoriesServiceInterface;
+use BcUploader\Test\Scenario\UploaderCategoriesScenario;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use Cake\TestSuite\IntegrationTestTrait;
 
@@ -42,6 +45,7 @@ class UploaderCategoriesControllerTest extends BcTestCase
         'plugin.BcUploader.Factory/UploaderFiles',
         'plugin.BcUploader.Factory/UploaderCategories',
         'plugin.BcUploader.Factory/UploaderConfigs',
+        'plugin.BaserCore.Factory/Dblogs',
     ];
 
     /**
@@ -157,6 +161,51 @@ class UploaderCategoriesControllerTest extends BcTestCase
      */
     public function test_batch()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // サービスクラス
+        $uploaderCategoriesService = $this->getService(UploaderCategoriesServiceInterface::class);
+        $dblogsService = $this->getService(DblogsServiceInterface::class);
+        //テストデーターを生成
+        $this->loadFixtureScenario(UploaderCategoriesScenario::class);
+        $data = [
+            'batch' => 'delete',
+            'batch_targets' => [1, 2, 3]
+        ];
+        //APIを呼ぶ
+        $this->post("/baser/api/bc-uploader/uploader_categories/batch.json?token=" . $this->accessToken, $data);
+        //ステータスを確認
+        $this->assertResponseSuccess();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('一括処理が完了しました。', $result->message);
+
+        // dblogsが生成されているか確認すること
+        $dblogsData = $dblogsService->getDblogs(1)->toArray()[0];
+        $this->assertEquals('アップロードカテゴリ「blog」、「contact」、「service」を 削除 しました。', $dblogsData->message);
+        $this->assertEquals(1, $dblogsData->user_id);
+        $this->assertEquals('UploaderCategories', $dblogsData->controller);
+        $this->assertEquals('batch', $dblogsData->action);
+
+        // データが削除されているか確認すること
+        $uploaderCategories = $uploaderCategoriesService->getIndex([])->all();
+        $this->assertCount(0, $uploaderCategories);
+
+        //存在しないアップロードカテゴリIDを指定した場合、
+        //APIを呼ぶ
+        $this->post("/baser/api/bc-uploader/uploader_categories/batch.json?token=" . $this->accessToken, $data);
+        //ステータスを確認
+        $this->assertResponseCode(404);
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('データが見つかりません。', $result->message);
+
+        // 無効な$allowMethodを指定の場合は、
+        $data = [
+            'batch' => 'add',
+            'batch_targets' => [1, 2, 3]
+        ];
+        //APIを呼ぶ
+        $this->post("/baser/api/bc-uploader/uploader_categories/batch.json?token=" . $this->accessToken, $data);
+        //ステータスを確認
+        $this->assertResponseCode(500);
     }
 }

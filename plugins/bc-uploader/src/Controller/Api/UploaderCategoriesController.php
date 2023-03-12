@@ -16,6 +16,7 @@ use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Controller\Api\BcApiController;
 use BcUploader\Service\UploaderCategoriesServiceInterface;
+use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\ORM\Exception\PersistenceFailedException;
 
 /**
@@ -111,6 +112,7 @@ class UploaderCategoriesController extends BcApiController
      * @param UploaderCategoriesServiceInterface $service
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function batch(UploaderCategoriesServiceInterface $service)
     {
@@ -134,9 +136,12 @@ class UploaderCategoriesController extends BcApiController
                 false
             );
             $message = __d('baser_core', '一括処理が完了しました。');
+        } catch (RecordNotFoundException $e) {
+            $this->setResponse($this->response->withStatus(404));
+            $message = __d('baser_core', 'データが見つかりません。');
         } catch (\Throwable $e) {
-            $this->setResponse($this->response->withStatus(400));
-            $message = __d('baser_core', $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $this->setResponse($this->response->withStatus(500));
         }
         $this->set(['message' => $message]);
         $this->viewBuilder()->setOption('serialize', ['message']);
