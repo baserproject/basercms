@@ -112,10 +112,36 @@ class EditorTemplatesController extends BcApiController
      * 編集API
      *
      * @param EditorTemplatesServiceInterface $service
+     * @param int $id
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function edit(EditorTemplatesServiceInterface $service)
+    public function edit(EditorTemplatesServiceInterface $service, int $id)
     {
-        //todo 編集API
+        $this->request->allowMethod(['post', 'put', 'patch']);
+        $editorTemplate = $errors = null;
+        try {
+            $editorTemplate = $service->update($service->get($id), $this->request->getData());
+            $message = __d('baser_core', 'エディタテンプレート「{0}」を更新しました。', $editorTemplate->name);
+        } catch (PersistenceFailedException $e) {
+            $errors = $e->getEntity()->getErrors();
+            $message = __d('baser_core', "入力エラーです。内容を修正してください。");
+            $this->setResponse($this->response->withStatus(400));
+        } catch (RecordNotFoundException $e) {
+            $this->setResponse($this->response->withStatus(404));
+            $message = __d('baser_core', 'データが見つかりません。');
+        } catch (\Throwable $e) {
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $this->setResponse($this->response->withStatus(500));
+        }
+        $this->set([
+            'message' => $message,
+            'editorTemplate' => $editorTemplate,
+            'errors' => $errors,
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['editorTemplate', 'message', 'errors']);
     }
 
     /**

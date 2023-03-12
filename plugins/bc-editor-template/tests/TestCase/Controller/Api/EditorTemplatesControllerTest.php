@@ -149,7 +149,31 @@ class EditorTemplatesControllerTest extends BcTestCase
      */
     public function test_edit()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loadFixtureScenario(EditorTemplatesScenario::class);
+        $this->post('/baser/api/bc-editor-template/editor_templates/edit/1.json?token=' . $this->accessToken, ['name' => 'name edit']);
+        //ステータスを確認
+        $this->assertResponseOk();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('エディタテンプレート「name edit」を更新しました。', $result->message);
+        $this->assertEquals('name edit', $result->editorTemplate->name);
+
+        //無効なIDを指定した場合、
+        $this->post('/baser/api/bc-editor-template/editor_templates/edit/10.json?token=' . $this->accessToken, ['name' => 'name edit']);
+        //ステータスを確認
+        $this->assertResponseCode(404);
+        //メッセージ内容を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('データが見つかりません。', $result->message);
+
+        //無効なIDを指定した場合、
+        $this->post('/baser/api/bc-editor-template/editor_templates/edit/1.json?token=' . $this->accessToken, ['name' => '']);
+        //ステータスを確認
+        $this->assertResponseCode(400);
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('入力エラーです。内容を修正してください。', $result->message);
+        $this->assertEquals('テンプレート名を入力してください。', $result->errors->name->_empty);
     }
 
     /**
