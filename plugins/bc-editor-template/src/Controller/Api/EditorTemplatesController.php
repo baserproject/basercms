@@ -33,10 +33,17 @@ class EditorTemplatesController extends BcApiController
      * 一覧取得API
      *
      * @param EditorTemplatesServiceInterface $service
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function index(EditorTemplatesServiceInterface $service)
     {
-        //todo 一覧取得API
+        $this->request->allowMethod(['get']);
+        $this->set([
+            'editorTemplates' => $this->paginate($service->getIndex())
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['editorTemplates']);
     }
 
     /**
