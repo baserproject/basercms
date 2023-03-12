@@ -12,6 +12,7 @@
 namespace BcFavorite\Service;
 
 use Cake\Datasource\EntityInterface;
+use Cake\ORM\Exception\PersistenceFailedException;
 use Cake\ORM\Query;
 use Cake\ORM\TableRegistry;
 use BaserCore\Annotation\UnitTest;
@@ -103,7 +104,7 @@ class FavoritesService implements FavoritesServiceInterface
      * @param EntityInterface $target
      * @param array $postData
      * @return EntityInterface
-     * @throws \Cake\ORM\Exception\PersistenceFailedExceptions
+     * @throws PersistenceFailedException
      * @checked
      * @noTodo
      * @unitTest
@@ -111,7 +112,7 @@ class FavoritesService implements FavoritesServiceInterface
     public function update(EntityInterface $target, array $postData)
     {
         $favorite = $this->Favorites->patchEntity($target, $postData);
-        return $this->Favorites->saveOrFail($target);
+        return $this->Favorites->saveOrFail($favorite);
     }
 
     /**

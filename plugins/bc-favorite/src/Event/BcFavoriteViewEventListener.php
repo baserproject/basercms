@@ -12,7 +12,6 @@
 namespace BcFavorite\Event;
 
 use BaserCore\Utility\BcUtil;
-use BaserCore\View\Helper\BcBaserHelper;
 use Cake\Event\EventInterface;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;

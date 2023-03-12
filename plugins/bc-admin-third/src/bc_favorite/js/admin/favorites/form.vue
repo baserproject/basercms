@@ -1,23 +1,36 @@
+<!--
+/**
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ *
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
+ */
+-->
+
+
 <template>
     <form method="POST" id="FavoriteAjaxForm">
+        <h2 class="bca-main__header-title">{{ windowTitle }}</h2>
         <input type="hidden" name="id" :value="id"/>
         <input type="hidden" name="user_id" :value="userId"/>
         <input type="hidden" name="_csrfToken"/>
         <dl>
-            <!-- TDDO: ucmitz favorite-nameをnameに変更する? -->
-            <dt><label for="favorite-name">{{ i18Title }}</label></dt>
+            <dt><label for="FavoriteName">{{ labelTitle }}</label></dt>
             <dd>
                 <span class="bca-textbox">
-                    <input class="required" type="text" v-model="name" id="FavoriteName" placeholder="タイトル" size=30 name="name" @input="formUpdated"/>
-                </span>
-                <div class="invalid-feedback" v-if="$v.name.$invalid" style="color:red">必須です</div>
+                    <input class="required" type="text" v-model="name" id="FavoriteName" :placeholder="labelTitle" size=30 name="name" @input="formUpdated" autofocus/>
+                </span><br>
+                <div class="invalid-feedback" v-if="$v.name.$invalid">{{ alertRequire }}</div>
             </dd>
-            <dt><label for="favorite-url"/>{{ i18Url }}</dt>
+            <dt><label for="FavoriteUrl"/>{{ labelUrl }}</dt>
             <dd>
                 <span class="bca-textbox">
-                    <input class="required" type="text" v-model="url" id="FavoriteUrl" placeholder="URL" size=30 name="url" @input="formUpdated"/>
-                </span>
-                <div class="invalid-feedback" v-if="$v.url.$invalid" style="color:red">必須です</div>
+                    <input class="required" type="text" v-model="url" id="FavoriteUrl" :placeholder="labelUrl" size=30 name="url" @input="formUpdated"/>
+                </span><br>
+                <div class="invalid-feedback" v-if="$v.url.$invalid">{{ alertRequire }}</div>
             </dd>
         </dl>
     </form>
@@ -25,43 +38,85 @@
 
 <script>
 
-const { validationMixin, default: Vuelidate } = require('vuelidate')
-const { required } = require('vuelidate/lib/validators')
+const {validationMixin, default: Vuelidate} = require('vuelidate')
+const {required} = require('vuelidate/lib/validators')
 import axios from "axios";
 
 export default {
+    /**
+     * name
+     */
     name: "FavoriteForm",
+
+    /**
+     * Data
+     */
     data() {
         return {
-            i18Title: 'title',
-            i18Url: 'url',
+            alertRequire: bcI18n.alertRequire,
+            windowTitle: null,
+            addTitle: bcI18n.addTitle,
+            editTitle: bcI18n.editTitle,
+            labelTitle: bcI18n.labelTitle,
+            labelUrl: bcI18n.labelUrl,
             name: '',
             url: '',
             id: ''
         }
     },
+
+    /**
+     * Validations
+     */
     validations: {
         name: {required},
         url: {required}
     },
-    props: ['userId', 'currentPageName', 'currentPageUrl', 'currentFavorite'],
+
+    /**
+     * props
+     */
+    props: [
+        'userId',
+        'currentPageName',
+        'currentPageUrl',
+        'currentFavorite',
+    ],
+
+    /**
+     * Mounted
+     */
     mounted() {
-        if(this.currentFavorite) {
+        if (this.currentFavorite) {
             this.id = this.currentFavorite.id;
             this.name = this.currentFavorite.name;
             this.url = this.currentFavorite.url;
+            this.windowTitle = this.editTitle;
         } else {
             this.name = this.currentPageName;
             this.url = this.currentPageUrl;
+            this.windowTitle = this.addTitle;
         }
     },
+
+    /**
+     * Methods
+     */
     methods: {
+
+        /**
+         * Form Updated
+         */
         formUpdated: function () {
             this.$emit("formUpdated", this.$v.$invalid);
         },
+
+        /**
+         * Form Submit
+         */
         formSubmit: function () {
             let apiUrl;
-            if(this.id) {
+            if (this.id) {
                 apiUrl = $.bcUtil.apiBaseUrl + "bc-favorite/favorites/edit/" + this.id + '.json';
             } else {
                 apiUrl = $.bcUtil.apiBaseUrl + "bc-favorite/favorites/add" + '.json';

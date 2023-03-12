@@ -73,7 +73,7 @@ class FavoritesTable extends AppTable
         $validator
             ->scalar('url')
             ->add('url', 'isPermitted', [
-                'rule' => ['isPermitted', $this->getService(PermissionsServiceInterface::class)],
+                'rule' => ['isPermitted'],
                 'provider' => 'favorite',
                 'message' => __d('baser_core', 'このURLの登録は許可されていません。')])
             ->notEmptyString('url', __d('baser_core', 'URLは必須です。'));

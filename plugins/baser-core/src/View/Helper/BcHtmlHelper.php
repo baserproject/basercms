@@ -73,7 +73,7 @@ class BcHtmlHelper extends HtmlHelper
         if ($options['declaration']) {
             $code = 'var ';
         }
-        $code .= h($variable) . ' = ' . json_encode($value) . ";";
+        $code .= h($variable) . ' = ' . json_encode($value, JSON_UNESCAPED_UNICODE) . ";";
         unset($options['declaration'], $options['escape']);
         $result = $this->scriptBlock($code, $options);
         if (!$options['block']) {

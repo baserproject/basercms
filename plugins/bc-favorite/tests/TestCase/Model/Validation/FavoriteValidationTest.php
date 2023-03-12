@@ -82,7 +82,7 @@ class FavoriteValidationTest extends BcTestCase
         if($isAdmin) {
             $this->loginAdmin($this->getRequest('/'), $id);
         }
-        $this->assertEquals($expected, $this->FavoriteValidation->isPermitted($url, $this->getService(PermissionServiceInterface::class)));
+        $this->assertEquals($expected, $this->FavoriteValidation->isPermitted($url));
     }
 
     public function isPermittedDataProvider()

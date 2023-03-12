@@ -12,6 +12,8 @@
 namespace BcFavorite\Model\Validation;
 
 use BaserCore\Service\PermissionServiceInterface;
+use BaserCore\Service\PermissionsServiceInterface;
+use BaserCore\Utility\BcContainer;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
 use Cake\Validation\Validation;
@@ -37,12 +39,11 @@ class FavoriteValidation extends Validation
      * 管理者グループは全て true を返却
      *
      * @param array $check
-     * @param PermissionServiceInterface $permissionService
      * @checked
      * @noTodo
      * @unitTest
      */
-    public static function isPermitted($url, $permissionService)
+    public static function isPermitted($url)
     {
         if (BcUtil::isAdminUser()) {
             return true;
@@ -51,6 +52,7 @@ class FavoriteValidation extends Validation
         if (!$userGroups) {
             return false;
         }
+        $permissionService = BcContainer::get()->get(PermissionsServiceInterface::class);
         return $permissionService->check($url, array_column($userGroups, 'id'));
     }
 }

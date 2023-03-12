@@ -19,7 +19,6 @@ use BaserCore\Utility\BcUtil;
 use BcFavorite\Service\FavoritesServiceInterface;
 use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\ORM\Exception\PersistenceFailedException;
-use Exception;
 
 /**
  * Class FavoritesController
