@@ -124,7 +124,31 @@ class CustomFieldsControllerTest extends BcTestCase
      */
     public function test_add()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $data = [
+            'title' => '求人分類',
+            'name' => 'recruit_category',
+            'type' => 'BcCcRelated',
+            'status' => 1,
+            'default_value' => '新卒採用',
+        ];
+        //APIを呼ぶ
+        $this->post('/baser/api/bc-custom-content/custom_fields/add.json?token=' . $this->accessToken, $data);
+        //ステータスを確認
+        $this->assertResponseOk();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('フィールド「求人分類」を追加しました。', $result->message);
+        $this->assertEquals('求人分類', $result->customField->title);
+
+        //エラーを発生したの場合、
+        //APIを呼ぶ
+        $this->post('/baser/api/bc-custom-content/custom_fields/add.json?token=' . $this->accessToken, ['title' => null]);
+        //ステータスを確認
+        $this->assertResponseCode(400);
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('入力エラーです。内容を修正してください。', $result->message);
+        $this->assertEquals('項目見出しを入力してください。', $result->errors->title->_empty);
     }
 
     /**

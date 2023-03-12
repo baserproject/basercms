@@ -76,10 +76,33 @@ class CustomFieldsController extends BcApiController
      * 新規追加API
      *
      * @param CustomFieldsServiceInterface $service
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function add(CustomFieldsServiceInterface $service)
     {
-        //todo 新規追加API
+        $this->request->allowMethod(['post']);
+        $customField = $errors = null;
+        try {
+            $customField = $service->create($this->request->getData());
+            $message = __d('baser_core', 'フィールド「{0}」を追加しました。', $customField->title);
+        } catch (PersistenceFailedException $e) {
+            $errors = $e->getEntity()->getErrors();
+            $message = __d('baser_core', "入力エラーです。内容を修正してください。");
+            $this->setResponse($this->response->withStatus(400));
+        } catch (\Throwable $e) {
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $this->setResponse($this->response->withStatus(500));
+        }
+
+        $this->set([
+            'message' => $message,
+            'customField' => $customField,
+            'errors' => $errors
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['message', 'customField', 'errors']);
     }
 
     /**
