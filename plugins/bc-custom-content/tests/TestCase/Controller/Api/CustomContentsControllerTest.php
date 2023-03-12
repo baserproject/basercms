@@ -163,7 +163,40 @@ class CustomContentsControllerTest extends BcTestCase
      */
     public function test_edit()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        $data = [
+            'custom_table_id' => 1,
+            'description' => 'test custom content change',
+            'template' => 'template_change',
+            'content' => [
+                'title' => 'custom content change'
+            ]
+        ];
+        $this->post('/baser/api/bc-custom-content/custom_contents/edit/1.json?token=' . $this->accessToken, $data);
+        //ステータスを確認
+        $this->assertResponseOk();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('カスタムコンテンツ「custom content change」を更新しました。', $result->message);
+        $this->assertEquals('test custom content change', $result->customContent->description);
+        $this->assertEquals('custom content change', $result->content->title);
+
+        //無効なIDを指定した場合、
+        $this->post('/baser/api/bc-custom-content/custom_contents/edit/11.json?token=' . $this->accessToken, $data);
+        //ステータスを確認
+        $this->assertResponseCode(404);
+        //メッセージ内容を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('データが見つかりません。', $result->message);
+
+        //無効なIDを指定した場合、
+        $this->post('/baser/api/bc-custom-content/custom_contents/edit/1.json?token=' . $this->accessToken, []);
+        //ステータスを確認
+        $this->assertResponseCode(400);
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('入力エラーです。内容を修正してください。', $result->message);
+        $this->assertEquals('関連するコンテンツがありません', $result->errors->content->_required);
     }
 
     /**
