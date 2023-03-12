@@ -181,10 +181,18 @@ class EditorTemplatesController extends BcApiController
      * リストAPI
      *
      * @param EditorTemplatesServiceInterface $service
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function list(EditorTemplatesServiceInterface $service)
     {
-        //todo リストAPI
+        $this->request->allowMethod(['get']);
+        $this->set([
+            'editorTemplates' => $service->getList()
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['editorTemplates']);
     }
 
 }
