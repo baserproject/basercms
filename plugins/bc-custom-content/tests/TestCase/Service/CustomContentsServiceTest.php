@@ -15,6 +15,7 @@ use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BcCustomContent\Service\CustomContentsService;
 use BcCustomContent\Service\CustomContentsServiceInterface;
+use BcCustomContent\Test\Factory\CustomContentFactory;
 use BcCustomContent\Test\Scenario\CustomContentsScenario;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
@@ -109,6 +110,24 @@ class CustomContentsServiceTest extends BcTestCase
     public function test_update()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * test create
+     */
+    public function test_delete()
+    {
+        //データを生成
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        //テストメソッドを呼ぶ
+        $result = $this->CustomContentsService->delete(1);
+        //戻る値を確認
+        $this->assertTrue($result);
+
+        //削除したコンテンツが存在するか確認
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        $this->expectExceptionMessage('Record not found in table "custom_contents"');
+        $this->CustomContentsService->get(1);
     }
 
     /**

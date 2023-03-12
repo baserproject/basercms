@@ -148,6 +148,20 @@ class CustomContentsService implements CustomContentsServiceInterface
     }
 
     /**
+     * @param $id
+     * @return bool
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function delete($id): bool
+    {
+        $customContent = $this->get($id, ['contain' => []]);
+        return $this->CustomContents->delete($customContent);
+    }
+
+    /**
      * カスタムコンテンツに関連するコントロールのソースを取得する
      *
      * @param string $field

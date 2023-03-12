@@ -204,7 +204,24 @@ class CustomContentsControllerTest extends BcTestCase
      */
     public function test_delete()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+
+        $this->post('/baser/api/bc-custom-content/custom_contents/delete/1.json?token=' . $this->accessToken);
+        //ステータスを確認
+        $this->assertResponseOk();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('カスタムコンテンツ「サービスタイトル」を削除しました。', $result->message);
+        $this->assertNotNull($result->customContent);
+        $this->assertNotNull($result->content);
+
+        //無効なIDを指定した場合、
+        $this->post('/baser/api/bc-custom-content/custom_contents/delete/11.json?token=' . $this->accessToken);
+        //ステータスを確認
+        $this->assertResponseCode(404);
+        //メッセージ内容を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('データが見つかりません。', $result->message);
     }
 
     /**

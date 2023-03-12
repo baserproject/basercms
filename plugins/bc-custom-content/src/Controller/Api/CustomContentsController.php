@@ -156,10 +156,33 @@ class CustomContentsController extends BcApiController
      * 削除API
      *
      * @param CustomContentsServiceInterface $service
+     * @param int $id
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function delete(CustomContentsServiceInterface $service)
+    public function delete(CustomContentsServiceInterface $service, int $id)
     {
-        //todo 削除API
+        $this->request->allowMethod(['post', 'delete']);
+        $customContent = null;
+        try {
+            $customContent = $service->get($id);
+            $service->delete($id);
+            $message = __d('baser_core', 'カスタムコンテンツ「{0}」を削除しました。', $customContent->content->title);
+        } catch (RecordNotFoundException $e) {
+            $this->setResponse($this->response->withStatus(404));
+            $message = __d('baser_core', 'データが見つかりません。');
+        } catch (\Throwable $e) {
+            $this->setResponse($this->response->withStatus(500));
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+        }
+        $this->set([
+            'message' => $message,
+            'customContent' => $customContent,
+            'content' => $customContent?->content,
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['customContent', 'content', 'message']);
     }
 
     /**
