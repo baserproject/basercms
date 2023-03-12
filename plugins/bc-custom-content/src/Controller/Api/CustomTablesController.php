@@ -38,10 +38,30 @@ class CustomTablesController extends BcApiController
      * 単一データAPI
      *
      * @param CustomTablesServiceInterface $service
+     * @param int $id
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function view(CustomTablesServiceInterface $service)
+    public function view(CustomTablesServiceInterface $service, int $id)
     {
-        //todo 単一データAPI
+        $this->request->allowMethod(['get']);
+        $customTable = $message = null;
+        try {
+            $customTable = $service->get($id, $this->request->getQueryParams());
+        } catch (RecordNotFoundException $e) {
+            $this->setResponse($this->response->withStatus(404));
+            $message = __d('baser_core', 'データが見つかりません。');
+        } catch (\Throwable $e) {
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $this->setResponse($this->response->withStatus(500));
+        }
+        $this->set([
+            'customTable' => $customTable,
+            'message' => $message
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['message', 'customTable']);
     }
 
     /**
