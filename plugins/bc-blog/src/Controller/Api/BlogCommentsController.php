@@ -8,6 +8,7 @@
  * @since         5.0.0
  * @license       https://basercms.net/license/index.html MIT License
  */
+
 namespace BcBlog\Controller\Api;
 
 use BaserCore\Controller\Api\BcApiController;
@@ -19,7 +20,6 @@ use BcBlog\Service\BlogCommentsService;
 use BcBlog\Service\BlogCommentsServiceInterface;
 use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\ORM\Exception\PersistenceFailedException;
-use CakephpFixtureFactories\Error\PersistenceException;
 use Throwable;
 
 /**
@@ -76,9 +76,9 @@ class BlogCommentsController extends BcApiController
 
     /**
      * [API] ブログコメント削除
+     *
      * @param BlogCommentsServiceInterface $service
      * @param $blogCommentId
-     *
      * @checked
      * @noTodo
      * @unitTest
@@ -163,10 +163,10 @@ class BlogCommentsController extends BcApiController
         $this->request->allowMethod(['post', 'put']);
         $postData = $this->getRequest()->getData();
 
-        if(!$postData['blog_content_id']) {
+        if (!$postData['blog_content_id']) {
             throw new BcException(__d('baser_core', 'パラメーターに blog_content_id が指定されていません。'));
         }
-        if(!$postData['blog_post_id']) {
+        if (!$postData['blog_post_id']) {
             throw new BcException(__d('baser_core', 'パラメーターに blog_post_id が指定されていません。'));
         }
 
@@ -185,13 +185,13 @@ class BlogCommentsController extends BcApiController
 
         $blogContent = $service->getBlogContent($postData['blog_content_id']);
         $service->sendCommentToAdmin($entity);
-        if($blogContent->comment_approve) {
+        if ($blogContent->comment_approve) {
             $service->sendCommentToContributor($entity);
         }
 
         $this->set([
-            'blogComment' => $entity?? null,
-            'message' => $message?? '',
+            'blogComment' => $entity ?? null,
+            'message' => $message ?? '',
             'errors' => $entity?->getErrors()
         ]);
         $this->viewBuilder()->setOption('serialize', [

@@ -18,7 +18,6 @@ use BaserCore\Utility\BcContainerTrait;
 use BcBlog\Controller\Api\BlogCommentsController;
 use BcBlog\Service\BlogCommentsServiceInterface;
 use BcBlog\Test\Factory\BlogCommentFactory;
-use Cake\Core\Configure;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use Cake\TestSuite\IntegrationTestTrait;
 
@@ -182,7 +181,7 @@ class BlogCommentsControllerTest extends BcTestCase
         $this->assertEquals('一括処理が完了しました。', $result->message);
         // データが更新されていること
         $datas = $blogCommentsService->getIndex([])->all();
-        foreach ($datas as $value) {
+        foreach($datas as $value) {
             $this->assertTrue($value->status);
         }
         // dblogsが生成されていること
@@ -203,7 +202,7 @@ class BlogCommentsControllerTest extends BcTestCase
         $this->assertEquals('一括処理が完了しました。', $result->message);
         // データが更新されていること
         $datas = $blogCommentsService->getIndex([])->all();
-        foreach ($datas as $value) {
+        foreach($datas as $value) {
             $this->assertFalse($value->status);
         }
         // dblogsが生成されていること
