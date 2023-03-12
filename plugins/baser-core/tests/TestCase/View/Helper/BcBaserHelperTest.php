@@ -447,8 +447,8 @@ class BcBaserHelperTest extends BcTestCase
             'commonCancel' => __d('baser_core', 'キャンセル'),
             'commonSave' => __d('baser_core', '保存')
         ]);
-        $encoded1 = "commonCancel = ". json_encode('キャンセル');
-        $encoded2 = "commonSave = " . json_encode('保存');
+        $encoded1 = "commonCancel = ". json_encode('キャンセル', JSON_UNESCAPED_UNICODE);
+        $encoded2 = "commonSave = " . json_encode('保存', JSON_UNESCAPED_UNICODE);
 
         $result = $this->BcAdminAppView->fetch('script');
         $this->assertStringContainsString($encoded1, $result);
