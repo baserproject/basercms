@@ -122,10 +122,33 @@ class EditorTemplatesController extends BcApiController
      * 削除API
      *
      * @param EditorTemplatesServiceInterface $service
+     * @param int $id
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function delete(EditorTemplatesServiceInterface $service)
+    public function delete(EditorTemplatesServiceInterface $service, int $id)
     {
-        //todo 削除API
+        $this->request->allowMethod(['post', 'delete']);
+        $editorTemplate = null;
+        try {
+            $editorTemplate = $service->get($id);
+            $service->delete($id);
+            $message = __d('baser_core', 'エディタテンプレート「{0}」を削除しました。', $editorTemplate->name);
+        } catch (RecordNotFoundException $e) {
+            $this->setResponse($this->response->withStatus(404));
+            $message = __d('baser_core', 'データが見つかりません。');
+        } catch (\Throwable $e) {
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $this->setResponse($this->response->withStatus(500));
+        }
+
+        $this->set([
+            'message' => $message,
+            'editorTemplate' => $editorTemplate,
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['editorTemplate', 'message']);
     }
 
     /**

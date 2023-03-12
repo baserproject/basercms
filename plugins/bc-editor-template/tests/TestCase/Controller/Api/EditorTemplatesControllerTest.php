@@ -157,7 +157,23 @@ class EditorTemplatesControllerTest extends BcTestCase
      */
     public function test_delete()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを生成
+        $this->loadFixtureScenario(EditorTemplatesScenario::class);
+        $this->post('/baser/api/bc-editor-template/editor_templates/delete/1.json?token=' . $this->accessToken);
+        //ステータスを確認
+        $this->assertResponseOk();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('エディタテンプレート「画像（左）とテキスト」を削除しました。', $result->message);
+        $this->assertEquals('画像（左）とテキスト', $result->editorTemplate->name);
+
+        //無効なIDを指定した場合、
+        $this->post('/baser/api/bc-editor-template/editor_templates/delete/10.json?token=' . $this->accessToken);
+        //ステータスを確認
+        $this->assertResponseCode(404);
+        //メッセージ内容を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('データが見つかりません。', $result->message);
     }
 
     /**
