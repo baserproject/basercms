@@ -20,6 +20,7 @@ use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Datasource\EntityInterface;
 use Cake\Filesystem\Folder;
+use Cake\ORM\Query;
 use Cake\ORM\TableRegistry;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -44,6 +45,30 @@ class CustomContentsService implements CustomContentsServiceInterface
     public function __construct()
     {
         $this->CustomContents = TableRegistry::getTableLocator()->get('BcCustomContent.CustomContents');
+    }
+
+    /**
+     * カスタムコンテンツの一覧データ取得する
+     * @param array $queryParams
+     * @return Query
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getIndex(array $queryParams = []): Query
+    {
+        $query = $this->CustomContents->find()->contain('Contents');
+
+        if (!empty($queryParams['limit'])) {
+            $query->limit($queryParams['limit']);
+        }
+
+        if (!empty($queryParams['description'])) {
+            $query->where(['description LIKE' => '%' . $queryParams['description'] . '%']);
+        }
+
+        return $query;
     }
 
     /**

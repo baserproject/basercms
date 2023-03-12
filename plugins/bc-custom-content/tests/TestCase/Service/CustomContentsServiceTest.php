@@ -15,6 +15,7 @@ use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BcCustomContent\Service\CustomContentsService;
 use BcCustomContent\Service\CustomContentsServiceInterface;
+use BcCustomContent\Test\Scenario\CustomContentsScenario;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -68,7 +69,14 @@ class CustomContentsServiceTest extends BcTestCase
      */
     public function test_getIndex()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを生成
+        $this->loadFixtureScenario(CustomContentsScenario::class);
+        //テストメソッドを呼ぶ
+        $result = $this->CustomContentsService->getIndex([])->toArray();
+        //戻る値を確認
+        $this->assertCount(2, $result);
+        $this->assertEquals('サービステスト', $result[0]->description);
+        $this->assertEquals('/recruit/', $result[1]->content->url);
     }
 
     /**

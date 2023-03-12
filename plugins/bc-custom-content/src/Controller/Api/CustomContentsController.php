@@ -28,10 +28,17 @@ class CustomContentsController extends BcApiController
      * 一覧取得API
      *
      * @param CustomContentsServiceInterface $service
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function index(CustomContentsServiceInterface $service)
     {
-        //todo 一覧取得API
+        $this->set([
+            'customContents' => $this->paginate($service->getIndex($this->request->getQueryParams()))
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['customContents']);
     }
 
     /**
