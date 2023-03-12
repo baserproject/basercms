@@ -28,10 +28,20 @@ class CustomTablesController extends BcApiController
      * 一覧取得API
      *
      * @param CustomTablesServiceInterface $service
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function index(CustomTablesServiceInterface $service)
     {
-        //todo 一覧取得API
+        $this->request->allowMethod('get');
+        $this->set([
+            'customTables' => $this->paginate(
+                $service->getIndex($this->request->getQueryParams())
+            )
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['customTables']);
     }
 
     /**
