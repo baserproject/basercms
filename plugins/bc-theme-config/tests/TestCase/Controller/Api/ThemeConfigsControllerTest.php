@@ -13,6 +13,7 @@ namespace BcThemeConfig\Test\TestCase\Controller\Api;
 
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
+use BcThemeConfig\Test\Scenario\ThemeConfigsScenario;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use Cake\TestSuite\IntegrationTestTrait;
 
@@ -81,7 +82,18 @@ class ThemeConfigsControllerTest extends BcTestCase
      */
     public function test_view()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを生成
+        $this->loadFixtureScenario(ThemeConfigsScenario::class);
+        //APIをコル
+        $this->get('/baser/api/bc-theme-config/theme_configs/view.json?token=' . $this->accessToken);
+        //ステータスを確認
+        $this->assertResponseOk();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        //全て４件を取得できるか確認
+        $this->assertCount(4, get_object_vars($result->themeConfig));
+        //単位Objectの値を確認
+        $this->assertEquals('2B7BB9', $result->themeConfig->color_hover);
     }
 
     /**
@@ -89,7 +101,46 @@ class ThemeConfigsControllerTest extends BcTestCase
      */
     public function test_edit()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //アップローダープラグインを追加
+        $data = [
+            'name_add' => 'value_add'
+        ];
+        //APIを呼ぶ
+        $this->post("/baser/api/bc-theme-config/theme_configs/edit.json?token=" . $this->accessToken, $data);
+        //ステータスを確認
+        $this->assertResponseSuccess();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('テーマ設定を保存しました。', $result->message);
+        $this->assertEquals('value_add', $result->themeConfig->name_add);
+
+        //アップローダープラグインを更新
+        $data = [
+            'name_add' => 'value_edit'
+        ];
+        //APIを呼ぶ
+        $this->post("/baser/api/bc-theme-config/theme_configs/edit.json?token=" . $this->accessToken, $data);
+        //ステータスを確認
+        $this->assertResponseSuccess();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('テーマ設定を保存しました。', $result->message);
+        $this->assertEquals('value_edit', $result->themeConfig->name_add);
+
+        //アップローダープラグインを保存する時エラーを発生
+        $data = [
+            'test'
+        ];
+        //APIを呼ぶ
+        $this->post("/baser/api/bc-theme-config/theme_configs/edit.json?token=" . $this->accessToken, $data);
+        //ステータスを確認
+        $this->assertResponseCode(500);
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals(
+            'データベース処理中にエラーが発生しました。Cake\ORM\Entity::get(): Argument #1 ($field) must be of type string, int given, called in /var/www/html/vendor/cakephp/cakephp/src/Datasource/EntityTrait.php on line 557',
+            $result->message
+        );
     }
 
 }

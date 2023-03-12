@@ -13,6 +13,7 @@ namespace BcEditorTemplate\Test\TestCase\Controller\Api;
 
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
+use BcEditorTemplate\Test\Scenario\EditorTemplatesScenario;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use Cake\TestSuite\IntegrationTestTrait;
 
@@ -81,7 +82,13 @@ class EditorTemplatesControllerTest extends BcTestCase
      */
     public function test_index()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを生成
+        $this->loadFixtureScenario(EditorTemplatesScenario::class);
+        $this->get('/baser/api/bc-editor-template/editor_templates/index.json?token=' . $this->accessToken);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        // エディターテンプレート一覧は全て3件が返す
+        $this->assertCount(3, $result->editorTemplates);
     }
 
     /**
@@ -89,7 +96,22 @@ class EditorTemplatesControllerTest extends BcTestCase
      */
     public function test_view()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを生成
+        $this->loadFixtureScenario(EditorTemplatesScenario::class);
+        $this->get('/baser/api/bc-editor-template/editor_templates/view/1.json?token=' . $this->accessToken);
+        //ステータスを確認
+        $this->assertResponseOk();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('画像（左）とテキスト', $result->editorTemplate->name);
+
+        //存在しないIDを指定の場合、
+        $this->get('/baser/api/bc-editor-template/editor_templates/view/10.json?token=' . $this->accessToken);
+        //ステータスを確認
+        $this->assertResponseCode(404);
+        //メッセージ内容を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('データが見つかりません。', $result->message);
     }
 
     /**
@@ -97,7 +119,29 @@ class EditorTemplatesControllerTest extends BcTestCase
      */
     public function test_add()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを生成
+        $data = [
+            'name' => '画像（左）とテキスト',
+            'image' => 'template1.gif',
+            'description' => 'test description',
+            'html' => 'test html'
+        ];
+        $this->post('/baser/api/bc-editor-template/editor_templates/add.json?token=' . $this->accessToken, $data);
+        //ステータスを確認
+        $this->assertResponseOk();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('エディタテンプレート「画像（左）とテキスト」を追加しました。', $result->message);
+        $this->assertEquals('画像（左）とテキスト', $result->editorTemplate->name);
+
+        //テンプレート名を指定しない場合、
+        $this->post('/baser/api/bc-editor-template/editor_templates/add.json?token=' . $this->accessToken, ['name' => '']);
+        //ステータスを確認
+        $this->assertResponseCode(400);
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('入力エラーです。内容を修正してください。', $result->message);
+        $this->assertEquals('テンプレート名を入力してください。', $result->errors->name->_empty);
     }
 
     /**
@@ -105,7 +149,31 @@ class EditorTemplatesControllerTest extends BcTestCase
      */
     public function test_edit()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loadFixtureScenario(EditorTemplatesScenario::class);
+        $this->post('/baser/api/bc-editor-template/editor_templates/edit/1.json?token=' . $this->accessToken, ['name' => 'name edit']);
+        //ステータスを確認
+        $this->assertResponseOk();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('エディタテンプレート「name edit」を更新しました。', $result->message);
+        $this->assertEquals('name edit', $result->editorTemplate->name);
+
+        //無効なIDを指定した場合、
+        $this->post('/baser/api/bc-editor-template/editor_templates/edit/10.json?token=' . $this->accessToken, ['name' => 'name edit']);
+        //ステータスを確認
+        $this->assertResponseCode(404);
+        //メッセージ内容を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('データが見つかりません。', $result->message);
+
+        //無効なIDを指定した場合、
+        $this->post('/baser/api/bc-editor-template/editor_templates/edit/1.json?token=' . $this->accessToken, ['name' => '']);
+        //ステータスを確認
+        $this->assertResponseCode(400);
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('入力エラーです。内容を修正してください。', $result->message);
+        $this->assertEquals('テンプレート名を入力してください。', $result->errors->name->_empty);
     }
 
     /**
@@ -113,7 +181,23 @@ class EditorTemplatesControllerTest extends BcTestCase
      */
     public function test_delete()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを生成
+        $this->loadFixtureScenario(EditorTemplatesScenario::class);
+        $this->post('/baser/api/bc-editor-template/editor_templates/delete/1.json?token=' . $this->accessToken);
+        //ステータスを確認
+        $this->assertResponseOk();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('エディタテンプレート「画像（左）とテキスト」を削除しました。', $result->message);
+        $this->assertEquals('画像（左）とテキスト', $result->editorTemplate->name);
+
+        //無効なIDを指定した場合、
+        $this->post('/baser/api/bc-editor-template/editor_templates/delete/10.json?token=' . $this->accessToken);
+        //ステータスを確認
+        $this->assertResponseCode(404);
+        //メッセージ内容を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('データが見つかりません。', $result->message);
     }
 
     /**
@@ -121,6 +205,14 @@ class EditorTemplatesControllerTest extends BcTestCase
      */
     public function test_list()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを生成
+        $this->loadFixtureScenario(EditorTemplatesScenario::class);
+        //APIを呼ぶ
+        $this->get('/baser/api/bc-editor-template/editor_templates/list.json?token=' . $this->accessToken);
+        //ステータスを確認
+        $this->assertResponseOk();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals(get_object_vars($result->editorTemplates)[3], 'テキスト２段組');
     }
 }

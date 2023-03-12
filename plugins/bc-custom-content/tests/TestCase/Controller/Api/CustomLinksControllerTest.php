@@ -13,6 +13,7 @@ namespace BcCustomContent\Test\TestCase\Controller\Api;
 
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
+use BcCustomContent\Test\Scenario\CustomFieldsScenario;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use Cake\TestSuite\IntegrationTestTrait;
 
@@ -82,7 +83,15 @@ class CustomLinksControllerTest extends BcTestCase
      */
     public function test_index()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを生成
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+        //APIを呼ぶ
+        $this->get('/baser/api/bc-custom-content/custom_links/index/1.json?token=' . $this->accessToken);
+        //ステータスを確認
+        $this->assertResponseOk();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertCount(2, $result->customLinks);
     }
 
     /**
@@ -90,7 +99,16 @@ class CustomLinksControllerTest extends BcTestCase
      */
     public function test_view()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを生成
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+        //APIを呼ぶ
+        $this->get('/baser/api/bc-custom-content/custom_links/view/1.json?token=' . $this->accessToken);
+        //ステータスを確認
+        $this->assertResponseOk();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertNotNull($result->customLink);
+        $this->assertEquals('求人分類', $result->customLink->custom_field->title);
     }
 
     /**
@@ -118,10 +136,19 @@ class CustomLinksControllerTest extends BcTestCase
     }
 
     /**
-     * test batch
+     * test list
      */
     public function test_list()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを生成
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+        //APIを呼ぶ
+        $this->get('/baser/api/bc-custom-content/custom_links/list/1.json?token=' . $this->accessToken);
+        //ステータスを確認
+        $this->assertResponseOk();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('求人分類', $result->customLinks->{1});
+        $this->assertEquals('この仕事の特徴', $result->customLinks->{2});
     }
 }

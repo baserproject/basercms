@@ -16,6 +16,7 @@ use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BcCustomContent\Service\CustomLinksServiceInterface;
+use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\ORM\Exception\PersistenceFailedException;
 
 /**
@@ -28,20 +29,49 @@ class CustomLinksController extends BcApiController
      * 一覧取得API
      *
      * @param CustomLinksServiceInterface $service
+     * @param int $id
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function index(CustomLinksServiceInterface $service)
+    public function index(CustomLinksServiceInterface $service, int $id)
     {
-        //todo 一覧取得API
+        $this->request->allowMethod('get');
+        $this->set([
+            'customLinks' => $this->paginate(
+                $service->getIndex($id, $this->request->getQueryParams())
+            )
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['customLinks']);
     }
 
     /**
      * 単一データAPI
      *
      * @param CustomLinksServiceInterface $service
+     * @param int $id
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function view(CustomLinksServiceInterface $service)
+    public function view(CustomLinksServiceInterface $service, int $id)
     {
-        //todo 単一データAPI
+        $this->request->allowMethod('get');
+        $customLink = $message = null;
+        try {
+            $customLink = $service->get($id);
+        } catch (RecordNotFoundException $e) {
+            $this->setResponse($this->response->withStatus(404));
+            $message = __d('baser_core', 'データが見つかりません');
+        }
+
+        $this->set([
+            'customLink' => $customLink,
+            'message' => $message
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['message', 'customLink']);
     }
 
     /**
@@ -103,10 +133,19 @@ class CustomLinksController extends BcApiController
      * リストAPI
      *
      * @param CustomLinksServiceInterface $service
+     * @param int $id
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function list(CustomLinksServiceInterface $service)
+    public function list(CustomLinksServiceInterface $service, int $id)
     {
-        //todo リストAPI
+        $this->request->allowMethod('get');
+        $this->set([
+            'customLinks' => $service->getList($id)
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['customLinks']);
     }
 
     /**

@@ -20,6 +20,7 @@ use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Datasource\EntityInterface;
 use Cake\Filesystem\Folder;
+use Cake\ORM\Query;
 use Cake\ORM\TableRegistry;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -44,6 +45,30 @@ class CustomContentsService implements CustomContentsServiceInterface
     public function __construct()
     {
         $this->CustomContents = TableRegistry::getTableLocator()->get('BcCustomContent.CustomContents');
+    }
+
+    /**
+     * カスタムコンテンツの一覧データ取得する
+     * @param array $queryParams
+     * @return Query
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getIndex(array $queryParams = []): Query
+    {
+        $query = $this->CustomContents->find()->contain('Contents');
+
+        if (!empty($queryParams['limit'])) {
+            $query->limit($queryParams['limit']);
+        }
+
+        if (!empty($queryParams['description'])) {
+            $query->where(['description LIKE' => '%' . $queryParams['description'] . '%']);
+        }
+
+        return $query;
     }
 
     /**
@@ -120,6 +145,20 @@ class CustomContentsService implements CustomContentsServiceInterface
         }
         $entity = $this->CustomContents->patchEntity($entity, $pageData, $options);
         return $this->CustomContents->saveOrFail($entity);
+    }
+
+    /**
+     * @param $id
+     * @return bool
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function delete($id): bool
+    {
+        $customContent = $this->get($id, ['contain' => []]);
+        return $this->CustomContents->delete($customContent);
     }
 
     /**
@@ -223,4 +262,19 @@ class CustomContentsService implements CustomContentsServiceInterface
         }
     }
 
+    /**
+     * リストを取得する
+     *
+     * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getList(): array
+    {
+        return $this->CustomContents->find('list', [
+            'keyField' => 'id',
+            'valueField' => 'content.title'
+        ])->contain(['Contents'])->toArray();
+    }
 }

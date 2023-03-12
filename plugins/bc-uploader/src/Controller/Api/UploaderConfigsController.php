@@ -16,6 +16,7 @@ use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Controller\Api\BcApiController;
 use BcUploader\Service\UploaderConfigsServiceInterface;
+use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\ORM\Exception\PersistenceFailedException;
 use Throwable;
 
@@ -30,10 +31,17 @@ class UploaderConfigsController extends BcApiController
      *
      * @param UploaderConfigsServiceInterface $service
      * @return void
+     * @checked
+     * @notodo
+     * @unitTest
      */
     public function view(UploaderConfigsServiceInterface $service)
     {
-        //todo 取得API
+        $this->request->allowMethod(['get']);
+        $this->set([
+            'uploaderConfig' => $service->get()
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['uploaderConfig']);
     }
 
     /**
@@ -41,10 +49,31 @@ class UploaderConfigsController extends BcApiController
      *
      * @param UploaderConfigsServiceInterface $service
      * @return void
+     * @checked
+     * @notodo
+     * @unitTest
      */
     public function edit(UploaderConfigsServiceInterface $service)
     {
-        //todo 保存API
+        $this->request->allowMethod(['post', 'put', 'patch']);
+        $uploaderConfig = $errors = null;
+        try {
+            $uploaderConfig = $service->update($this->request->getData());
+            $message = __d('baser_core', 'アップローダープラグインを保存しました。', );
+        } catch (PersistenceFailedException $e) {
+            $errors = $e->getEntity()->getErrors();
+            $message = __d('baser_core', "入力エラーです。内容を修正してください。");
+            $this->setResponse($this->response->withStatus(400));
+        } catch (\Throwable $e) {
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $this->setResponse($this->response->withStatus(500));
+        }
+        $this->set([
+            'uploaderConfig' => $uploaderConfig,
+            'message' => $message,
+            'errors' => $errors,
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['uploaderConfig', 'message', 'errors']);
     }
 
 }

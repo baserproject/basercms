@@ -33,10 +33,15 @@ class ThemeConfigsController extends BcApiController
      * @param ThemeConfigsServiceInterface $service
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function view(ThemeConfigsServiceInterface $service)
     {
-        //todo [API] 取得
+        $this->request->allowMethod(['get']);
+        $this->set([
+            'themeConfig' => $service->get()
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['themeConfig']);
     }
 
     /**
@@ -45,10 +50,29 @@ class ThemeConfigsController extends BcApiController
      * @param ThemeConfigsServiceInterface $service
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function edit(ThemeConfigsServiceInterface $service)
     {
-        //todo [API] 保存
+        $this->request->allowMethod(['post', 'put', 'patch']);
+        $themeConfig = $errors = null;
+        try {
+            $themeConfig = $service->update($this->request->getData());
+            $message = __d('baser_core', 'テーマ設定を保存しました。');
+        } catch (PersistenceFailedException $e) {
+            $errors = $e->getEntity()->getErrors();
+            $message = __d('baser_core', "入力エラーです。内容を修正してください。");
+            $this->setResponse($this->response->withStatus(400));
+        } catch (\Throwable $e) {
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $this->setResponse($this->response->withStatus(500));
+        }
+        $this->set([
+            'themeConfig' => $themeConfig,
+            'message' => $message,
+            'errors' => $errors,
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['themeConfig', 'message', 'errors']);
     }
 
 }

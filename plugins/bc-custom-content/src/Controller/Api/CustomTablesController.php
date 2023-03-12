@@ -28,59 +28,171 @@ class CustomTablesController extends BcApiController
      * 一覧取得API
      *
      * @param CustomTablesServiceInterface $service
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function index(CustomTablesServiceInterface $service)
     {
-        //todo 一覧取得API
+        $this->request->allowMethod('get');
+        $this->set([
+            'customTables' => $this->paginate(
+                $service->getIndex($this->request->getQueryParams())
+            )
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['customTables']);
     }
 
     /**
      * 単一データAPI
      *
      * @param CustomTablesServiceInterface $service
+     * @param int $id
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function view(CustomTablesServiceInterface $service)
+    public function view(CustomTablesServiceInterface $service, int $id)
     {
-        //todo 単一データAPI
+        $this->request->allowMethod(['get']);
+        $customTable = $message = null;
+        try {
+            $customTable = $service->get($id, $this->request->getQueryParams());
+        } catch (RecordNotFoundException $e) {
+            $this->setResponse($this->response->withStatus(404));
+            $message = __d('baser_core', 'データが見つかりません。');
+        } catch (\Throwable $e) {
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $this->setResponse($this->response->withStatus(500));
+        }
+        $this->set([
+            'customTable' => $customTable,
+            'message' => $message
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['message', 'customTable']);
     }
 
     /**
      * 新規追加API
      *
      * @param CustomTablesServiceInterface $service
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function add(CustomTablesServiceInterface $service)
     {
-        //todo 新規追加API
+        $this->request->allowMethod(['post', 'delete']);
+        $customTable = $errors = null;
+        try {
+            $customTable = $service->create($this->request->getData());
+            $message = __d('baser_core', 'テーブル「{0}」を追加しました。', $customTable->title);
+        } catch (PersistenceFailedException $e) {
+            $errors = $e->getEntity()->getErrors();
+            $message = __d('baser_core', "入力エラーです。内容を修正してください。");
+            $this->setResponse($this->response->withStatus(400));
+        } catch (\Throwable $e) {
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $this->setResponse($this->response->withStatus(500));
+        }
+        $this->set([
+            'message' => $message,
+            'customTable' => $customTable,
+            'errors' => $errors,
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['message', 'customTable', 'errors']);
     }
 
     /**
      * 編集API
      *
      * @param CustomTablesServiceInterface $service
+     * @param int $id
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function edit(CustomTablesServiceInterface $service)
+    public function edit(CustomTablesServiceInterface $service, int $id)
     {
-        //todo 編集API
+        $this->request->allowMethod(['post', 'put']);
+        $customTable = $errors = null;
+        try {
+            $customTable = $service->update($service->get($id), $this->request->getData());
+            $message = __d('baser_core', 'テーブル「{0}」を更新しました。', $customTable->title);
+        } catch (PersistenceFailedException $e) {
+            $errors = $e->getEntity()->getErrors();
+            $message = __d('baser_core', "入力エラーです。内容を修正してください。");
+            $this->setResponse($this->response->withStatus(400));
+        } catch (\Throwable $e) {
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $this->setResponse($this->response->withStatus(500));
+        }
+
+        $this->set([
+            'customTable' => $customTable,
+            'message' => $message,
+            'errors' => $errors,
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['customTable', 'message', 'errors']);
     }
 
     /**
      * 削除API
      *
      * @param CustomTablesServiceInterface $service
+     * @param int $id
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function delete(CustomTablesServiceInterface $service)
+    public function delete(CustomTablesServiceInterface $service, int $id)
     {
-        //todo 削除API
+        $this->request->allowMethod(['post', 'delete']);
+
+        $customTable = null;
+        try {
+            $customTable = $service->get($id);
+            if ($service->delete($id)) {
+                $message = __d('baser_core', 'テーブル「{0}」を削除しました。', $customTable->title);
+            } else {
+                $this->setResponse($this->response->withStatus(400));
+                $message = __d('baser_core', 'データベース処理中にエラーが発生しました。');
+            }
+        } catch (RecordNotFoundException $e) {
+            $this->setResponse($this->response->withStatus(404));
+            $message = __d('baser_core', 'データが見つかりません。');
+        } catch (\Throwable $e) {
+            $this->setResponse($this->response->withStatus(500));
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+        }
+
+        $this->set([
+            'message' => $message,
+            'customTable' => $customTable
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['message', 'customTable']);
     }
 
     /**
      * リストAPI
      *
      * @param CustomTablesServiceInterface $service
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function list(CustomTablesServiceInterface $service)
     {
-        //todo リストAPI
+        $this->request->allowMethod('get');
+        $this->set([
+            'customTables' => $service->getList($this->request->getQueryParams())
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['customTables']);
     }
 }
