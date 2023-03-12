@@ -114,10 +114,38 @@ class CustomTablesController extends BcApiController
      * 削除API
      *
      * @param CustomTablesServiceInterface $service
+     * @param int $id
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function delete(CustomTablesServiceInterface $service)
+    public function delete(CustomTablesServiceInterface $service, int $id)
     {
-        //todo 削除API
+        $this->request->allowMethod(['post', 'delete']);
+
+        $customTable = null;
+        try {
+            $customTable = $service->get($id);
+            if ($service->delete($id)) {
+                $message = __d('baser_core', 'テーブル「{0}」を削除しました。', $customTable->title);
+            } else {
+                $this->setResponse($this->response->withStatus(400));
+                $message = __d('baser_core', 'データベース処理中にエラーが発生しました。');
+            }
+        } catch (RecordNotFoundException $e) {
+            $this->setResponse($this->response->withStatus(404));
+            $message = __d('baser_core', 'データが見つかりません。');
+        } catch (\Throwable $e) {
+            $this->setResponse($this->response->withStatus(500));
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+        }
+
+        $this->set([
+            'message' => $message,
+            'customTable' => $customTable
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['message', 'customTable']);
     }
 
     /**

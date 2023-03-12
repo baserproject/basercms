@@ -193,7 +193,36 @@ class CustomTablesControllerTest extends BcTestCase
      */
     public function test_delete()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //サービスをコル
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+
+        //テストデータを生成
+        $customTable->create([
+            'type' => 'contact',
+            'name' => 'contact',
+            'title' => 'お問い合わせタイトル',
+            'display_field' => 'お問い合わせ'
+        ]);
+
+        //APIを呼ぶ
+        $this->post('/baser/api/bc-custom-content/custom_tables/delete/1.json?token=' . $this->accessToken);
+        //ステータスを確認
+        $this->assertResponseOk();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('テーブル「お問い合わせタイトル」を削除しました。', $result->message);
+        $this->assertEquals('contact', $result->customTable->name);
+        //テーブル名が存在しないの確認
+        $this->assertFalse($dataBaseService->tableExists('custom_entry_1_contact'));
+
+        //エラーを発生した時をテスト
+        $this->post('/baser/api/bc-custom-content/custom_tables/delete/1.json?token=' . $this->accessToken);
+        //ステータスを確認
+        $this->assertResponseCode(404);
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('データが見つかりません。', $result->message);
     }
 
     /**
