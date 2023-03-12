@@ -29,10 +29,21 @@ class CustomLinksController extends BcApiController
      * 一覧取得API
      *
      * @param CustomLinksServiceInterface $service
+     * @param int $id
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function index(CustomLinksServiceInterface $service)
+    public function index(CustomLinksServiceInterface $service, int $id)
     {
-        //todo 一覧取得API
+        $this->request->allowMethod('get');
+        $this->set([
+            'customLinks' => $this->paginate(
+                $service->getIndex($id, $this->request->getQueryParams())
+            )
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['customLinks']);
     }
 
     /**
