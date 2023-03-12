@@ -109,10 +109,36 @@ class CustomFieldsController extends BcApiController
      * 編集API
      *
      * @param CustomFieldsServiceInterface $service
+     * @param int $id
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function edit(CustomFieldsServiceInterface $service)
+    public function edit(CustomFieldsServiceInterface $service, int $id)
     {
-        //todo 編集API
+        $this->request->allowMethod(['post', 'put']);
+        $customField = $errors = null;
+        try {
+            $customField = $service->update($service->get($id), $this->request->getData());
+            $message = __d('baser_core', 'フィールド「{0}」を更新しました。', $customField->title);
+        } catch (PersistenceFailedException $e) {
+            $errors = $e->getEntity()->getErrors();
+            $message = __d('baser_core', "入力エラーです。内容を修正してください。");
+            $this->setResponse($this->response->withStatus(400));
+        } catch (RecordNotFoundException $e) {
+            $this->setResponse($this->response->withStatus(404));
+            $message = __d('baser_core', 'データが見つかりません。');
+        } catch (\Throwable $e) {
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $this->setResponse($this->response->withStatus(500));
+        }
+        $this->set([
+            'message' => $message,
+            'customField' => $customField,
+            'errors' => $errors
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['customField', 'message', 'errors']);
     }
 
     /**

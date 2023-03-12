@@ -13,6 +13,7 @@ namespace BcCustomContent\Test\TestCase\Controller\Api;
 
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
+use BcCustomContent\Test\Factory\CustomFieldFactory;
 use BcCustomContent\Test\Scenario\CustomFieldsScenario;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use Cake\TestSuite\IntegrationTestTrait;
@@ -156,7 +157,38 @@ class CustomFieldsControllerTest extends BcTestCase
      */
     public function test_edit()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを生成
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+        $data = CustomFieldFactory::get(1);
+        $data['title'] = 'test edit title';
+        //APIを呼ぶ
+        $this->post('/baser/api/bc-custom-content/custom_fields/edit/1.json?token=' . $this->accessToken, $data->toArray());
+        //ステータスを確認
+        $this->assertResponseOk();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('フィールド「test edit title」を更新しました。', $result->message);
+        $this->assertEquals('test edit title', $result->customField->title);
+
+        //タイトルを指定しない場合、
+        $data['title'] = null;
+        //APIを呼ぶ
+        $this->post('/baser/api/bc-custom-content/custom_fields/edit/1.json?token=' . $this->accessToken, $data->toArray());
+        //ステータスを確認
+        $this->assertResponseCode(400);
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('入力エラーです。内容を修正してください。', $result->message);
+        $this->assertEquals('項目見出しを入力してください。', $result->errors->title->_empty);
+
+        //存在しないIDを指定したの場合、
+        //APIを呼ぶ
+        $this->post('/baser/api/bc-custom-content/custom_fields/edit/11.json?token=' . $this->accessToken, $data->toArray());
+        //ステータスを確認
+        $this->assertResponseCode(404);
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('データが見つかりません。', $result->message);
     }
 
     /**
