@@ -38,10 +38,30 @@ class CustomContentsController extends BcApiController
      * 単一データAPI
      *
      * @param CustomContentsServiceInterface $service
+     * @param int $id
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function view(CustomContentsServiceInterface $service)
+    public function view(CustomContentsServiceInterface $service, int $id)
     {
-        //todo 単一データAPI
+        $this->request->allowMethod(['get']);
+        $customContent = $message = null;
+        try {
+            $customContent = $service->get($id, $this->request->getQueryParams());
+        } catch (RecordNotFoundException $e) {
+            $this->setResponse($this->response->withStatus(404));
+            $message = __d('baser_core', 'データが見つかりません。');
+        } catch (\Throwable $e) {
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $this->setResponse($this->response->withStatus(500));
+        }
+        $this->set([
+            'customContent' => $customContent,
+            'message' => $message
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['message', 'customContent']);
     }
 
     /**
