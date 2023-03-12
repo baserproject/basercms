@@ -48,10 +48,32 @@ class CustomTablesController extends BcApiController
      * 新規追加API
      *
      * @param CustomTablesServiceInterface $service
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function add(CustomTablesServiceInterface $service)
     {
-        //todo 新規追加API
+        $this->request->allowMethod(['post', 'delete']);
+        $customTable = $errors = null;
+        try {
+            $customTable = $service->create($this->request->getData());
+            $message = __d('baser_core', 'テーブル「{0}」を追加しました。', $customTable->title);
+        } catch (PersistenceFailedException $e) {
+            $errors = $e->getEntity()->getErrors();
+            $message = __d('baser_core', "入力エラーです。内容を修正してください。");
+            $this->setResponse($this->response->withStatus(400));
+        } catch (\Throwable $e) {
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $this->setResponse($this->response->withStatus(500));
+        }
+        $this->set([
+            'message' => $message,
+            'customTable' => $customTable,
+            'errors' => $errors,
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['message', 'customTable', 'errors']);
     }
 
     /**

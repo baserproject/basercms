@@ -11,6 +11,7 @@
 
 namespace BcCustomContent\Test\TestCase\Controller\Api;
 
+use BaserCore\Service\BcDatabaseServiceInterface;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -97,7 +98,45 @@ class CustomTablesControllerTest extends BcTestCase
      */
     public function test_add()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //テストデータを生成
+        $data = [
+            'type' => 'contact',
+            'name' => 'contact',
+            'title' => 'お問い合わせタイトル',
+            'display_field' => 'お問い合わせ'
+        ];
+        //APIを呼ぶ
+        $this->post('/baser/api/bc-custom-content/custom_tables/add.json?token=' . $this->accessToken, $data);
+        //ステータスを確認
+        $this->assertResponseOk();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('テーブル「お問い合わせタイトル」を追加しました。', $result->message);
+        $this->assertEquals('contact', $result->customTable->name);
+
+        //自動テーブルが生成できるか確認すること
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $this->assertTrue($dataBaseService->tableExists('custom_entry_1_contact'));
+
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_contact');
+
+        //エラーを発生した時のテスト
+        //テストデータを生成
+        $data = [
+            'type' => 'contact',
+            'name' => 'お問い合わせタイトル',
+        ];
+        //APIを呼ぶ
+        $this->post('/baser/api/bc-custom-content/custom_tables/add.json?token=' . $this->accessToken, $data);
+        //ステータスを確認
+        $this->assertResponseCode(400);
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('入力エラーです。内容を修正してください。', $result->message);
+        $this->assertEquals(
+            '識別名は半角英数字とアンダースコアのみで入力してください。',
+            $result->errors->name->regex);
     }
 
     /**
