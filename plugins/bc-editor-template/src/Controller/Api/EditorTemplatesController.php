@@ -50,10 +50,30 @@ class EditorTemplatesController extends BcApiController
      * 単一データAPI
      *
      * @param EditorTemplatesServiceInterface $service
+     * @param int $id
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function view(EditorTemplatesServiceInterface $service)
+    public function view(EditorTemplatesServiceInterface $service, int $id)
     {
-        //todo 単一データAPI
+        $this->request->allowMethod(['get']);
+        $editorTemplate = $message = null;
+        try {
+            $editorTemplate = $service->get($id);
+        } catch (RecordNotFoundException $e) {
+            $this->setResponse($this->response->withStatus(404));
+            $message = __d('baser_core', 'データが見つかりません。');
+        } catch (\Throwable $e) {
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $this->setResponse($this->response->withStatus(500));
+        }
+        $this->set([
+            'editorTemplate' => $editorTemplate,
+            'message' => $message
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['editorTemplate', 'message']);
     }
 
     /**
