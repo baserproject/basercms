@@ -248,4 +248,19 @@ class CustomContentsService implements CustomContentsServiceInterface
         }
     }
 
+    /**
+     * リストを取得する
+     *
+     * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getList(): array
+    {
+        return $this->CustomContents->find('list', [
+            'keyField' => 'id',
+            'valueField' => 'content.title'
+        ])->contain(['Contents'])->toArray();
+    }
 }

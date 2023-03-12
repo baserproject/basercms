@@ -125,9 +125,16 @@ class CustomContentsController extends BcApiController
      * リストAPI
      *
      * @param CustomContentsServiceInterface $service
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function list(CustomContentsServiceInterface $service)
     {
-        //todo リストAPI
+        $this->set([
+            'customContents' => $service->getList()
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['customContents']);
     }
 }
