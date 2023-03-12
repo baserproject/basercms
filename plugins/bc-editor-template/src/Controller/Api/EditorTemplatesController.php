@@ -80,10 +80,32 @@ class EditorTemplatesController extends BcApiController
      * 新規追加API
      *
      * @param EditorTemplatesServiceInterface $service
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function add(EditorTemplatesServiceInterface $service)
     {
-        //todo 新規追加API
+        $this->request->allowMethod(['post', 'post']);
+        $editorTemplate = $errors = null;
+        try {
+            $editorTemplate = $service->create($this->request->getData());
+            $message = __d('baser_core', 'エディタテンプレート「{0}」を追加しました。', $editorTemplate->name);
+        } catch (PersistenceFailedException $e) {
+            $errors = $e->getEntity()->getErrors();
+            $message = __d('baser_core', "入力エラーです。内容を修正してください。");
+            $this->setResponse($this->response->withStatus(400));
+        } catch (\Throwable $e) {
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $this->setResponse($this->response->withStatus(500));
+        }
+        $this->set([
+            'message' => $message,
+            'editorTemplate' => $editorTemplate,
+            'errors' => $errors,
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['message', 'editorTemplate', 'errors']);
     }
 
     /**

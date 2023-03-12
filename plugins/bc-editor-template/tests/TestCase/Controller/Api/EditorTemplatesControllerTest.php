@@ -119,7 +119,29 @@ class EditorTemplatesControllerTest extends BcTestCase
      */
     public function test_add()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを生成
+        $data = [
+            'name' => '画像（左）とテキスト',
+            'image' => 'template1.gif',
+            'description' => 'test description',
+            'html' => 'test html'
+        ];
+        $this->post('/baser/api/bc-editor-template/editor_templates/add.json?token=' . $this->accessToken, $data);
+        //ステータスを確認
+        $this->assertResponseOk();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('エディタテンプレート「画像（左）とテキスト」を追加しました。', $result->message);
+        $this->assertEquals('画像（左）とテキスト', $result->editorTemplate->name);
+
+        //テンプレート名を指定しない場合、
+        $this->post('/baser/api/bc-editor-template/editor_templates/add.json?token=' . $this->accessToken, ['name' => '']);
+        //ステータスを確認
+        $this->assertResponseCode(400);
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('入力エラーです。内容を修正してください。', $result->message);
+        $this->assertEquals('テンプレート名を入力してください。', $result->errors->name->_empty);
     }
 
     /**
