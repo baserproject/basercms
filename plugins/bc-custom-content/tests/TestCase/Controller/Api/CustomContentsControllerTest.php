@@ -124,7 +124,38 @@ class CustomContentsControllerTest extends BcTestCase
      */
     public function test_add()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $data = [
+            'custom_table_id' => 1,
+            'description' => 'test custom content add',
+            'template' => 'template_add',
+            'content' => [
+                'title' => 'custom content add'
+            ]
+        ];
+        //APIを呼ぶ
+        $this->post('/baser/api/bc-custom-content/custom_contents/add.json?token=' . $this->accessToken, $data);
+        //ステータスを確認
+        $this->assertResponseOk();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('カスタムコンテンツ「custom content add」を追加しました。', $result->message);
+        $this->assertNotNull($result->customContent);
+        $this->assertNotNull($result->content);
+
+        //コンテンツを指定しない場合、
+        $data = [
+            'custom_table_id' => 1,
+            'description' => 'test custom content add',
+            'template' => 'template_add'
+        ];
+        //APIを呼ぶ
+        $this->post('/baser/api/bc-custom-content/custom_contents/add.json?token=' . $this->accessToken, $data);
+        //ステータスを確認
+        $this->assertResponseCode(400);
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('入力エラーです。内容を修正してください。', $result->message);
+        $this->assertEquals('関連するコンテンツがありません', $result->errors->content->_required);
     }
 
     /**

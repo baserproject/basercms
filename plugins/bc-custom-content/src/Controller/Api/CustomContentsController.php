@@ -75,23 +75,32 @@ class CustomContentsController extends BcApiController
      * カスタムコンテンツの新規追加
      *
      * @param CustomContentsServiceInterface $service
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function add(CustomContentsServiceInterface $service)
     {
         $this->request->allowMethod(['post', 'put', 'patch']);
+        $entity = $errors = null;
         try {
             $entity = $service->create($this->request->getData());
             $message = __d('baser_core', 'カスタムコンテンツ「{0}」を追加しました。', $entity->content->title);
-        } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
-            $entity = $e->getEntity();
-            $message = __d('baser_core', "入力エラーです。内容を修正してください。\n");
+        } catch (PersistenceFailedException $e) {
+            $errors = $e->getEntity()->getErrors();
+            $message = __d('baser_core', "入力エラーです。内容を修正してください。");
             $this->setResponse($this->response->withStatus(400));
+        } catch (\Throwable $e) {
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $this->setResponse($this->response->withStatus(500));
         }
+
         $this->set([
             'customContent' => $entity,
-            'content' => $entity->content,
+            'content' => $entity?->content,
             'message' => $message,
-            'errors' => $entity->getErrors()
+            'errors' => $errors
         ]);
         $this->viewBuilder()->setOption('serialize', [
             'customContent',
