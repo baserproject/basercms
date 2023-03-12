@@ -88,6 +88,22 @@ class CustomLinksService implements CustomLinksServiceInterface
     }
 
     /**
+     * @param int $tableId
+     * @return array
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getList(int $tableId): array
+    {
+        $conditions = ['CustomLinks.custom_table_id' => $tableId];
+        return $this->CustomLinks
+            ->find('list', ['keyField' => 'id', 'valueField' => 'title'])
+            ->where($conditions)->toArray();
+    }
+
+    /**
      * 関連フィールドを編集する
      *
      * @param EntityInterface $entity

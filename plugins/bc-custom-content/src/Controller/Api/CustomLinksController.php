@@ -133,10 +133,19 @@ class CustomLinksController extends BcApiController
      * リストAPI
      *
      * @param CustomLinksServiceInterface $service
+     * @param int $id
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function list(CustomLinksServiceInterface $service)
+    public function list(CustomLinksServiceInterface $service, int $id)
     {
-        //todo リストAPI
+        $this->request->allowMethod('get');
+        $this->set([
+            'customLinks' => $service->getList($id)
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['customLinks']);
     }
 
     /**
