@@ -176,7 +176,7 @@ return [
             'session.save_path' => TMP . 'sessions',
             'session.use_cookies' => 1,
             'session.use_trans_sid' => 0,
-            'session.gc_divisor' => 1,
+            'session.gc_divisor' => 100,
             'session.gc_probability' => 1,
             /**
              * クッキーの有効期限（秒）
