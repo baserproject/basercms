@@ -13,6 +13,7 @@ namespace BaserCore\View\Helper;
 
 use BaserCore\Model\Entity\Content;
 use Cake\Datasource\EntityInterface;
+use Cake\Utility\Hash;
 use Exception;
 use Cake\View\Helper;
 use Cake\Core\Configure;
@@ -143,8 +144,7 @@ class BcContentsHelper extends Helper
             }
             // disabled
             if (!empty($item['url']['add'])) {
-                // TODO ucmitz: ユーザグループを配列で全て渡すよう変更が必要
-                $item['addDisabled'] = !($this->PermissionsService->check($item['url']['add'], [$user->user_groups[0]->id]));
+                $item['addDisabled'] = !($this->PermissionsService->check($item['url']['add'], Hash::extract($user->user_groups, '{n}.id')));
             } else {
                 $item['addDisabled'] = true;
             }
