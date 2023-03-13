@@ -143,11 +143,26 @@ class CustomEntriesController extends BcApiController
     }
 
     /**
-     * カスタムエントリー　追加
+     * カスタムエントリー　リスト
      * @param CustomEntriesServiceInterface $service
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function list(CustomEntriesServiceInterface $service)
     {
-        //todo 追加
+        $this->request->allowMethod('get');
+
+        $queryParams = $this->getRequest()->getQueryParams();
+        if (empty($queryParams['custom_table_id'])) {
+            throw new BadRequestException(__d('baser_core', 'パラメーターに custom_table_id を指定してください。'));
+        }
+
+        $service->setup($queryParams['custom_table_id']);
+        $this->set([
+            'entries' => $service->getList()
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['entries']);
     }
 }
