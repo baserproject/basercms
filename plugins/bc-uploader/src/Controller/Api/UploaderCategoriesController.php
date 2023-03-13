@@ -60,13 +60,13 @@ class UploaderCategoriesController extends BcApiController
         $uploaderCategory = $errors = null;
         try {
             $uploaderCategory = $service->create($this->request->getData());
-            $message = __d('baser', '新規アップロードカテゴリ「{0}」を追加しました。', $uploaderCategory->name);
+            $message = __d('baser_core', '新規アップロードカテゴリ「{0}」を追加しました。', $uploaderCategory->name);
         } catch (PersistenceFailedException $e) {
             $errors = $e->getEntity()->getErrors();
-            $message = __d('baser', "入力エラーです。内容を修正してください。");
+            $message = __d('baser_core', "入力エラーです。内容を修正してください。");
             $this->setResponse($this->response->withStatus(400));
         } catch (\Throwable $e) {
-            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
             $this->setResponse($this->response->withStatus(500));
         }
         $this->set([
