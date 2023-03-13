@@ -312,30 +312,4 @@ class MailFieldsTable extends MailAppTable
         return implode("\n", $sourceList);
     }
 
-    /**
-     * After Delete
-     */
-    public function afterDelete()
-    {
-        // TODO ucmitz 未実装
-//        parent::afterDelete();
-//        // フロントエンドでは、MailContentのキャッシュを利用する為削除しておく
-//        $MailContent = ClassRegistry::init('BcMail.MailContent');
-//        $MailContent->delCache();
-    }
-
-    /**
-     * After Save
-     *
-     * @param bool $created
-     * @param array $options
-     */
-    public function afterSave($created, $options = [])
-    {
-        // TODO ucmitz 未実装
-//        parent::afterSave($created, $options);
-//        // フロントエンドでは、MailContentのキャッシュを利用する為削除しておく
-//        $MailContent = ClassRegistry::init('BcMail.MailContent');
-//        $MailContent->delCache();
-    }
 }
