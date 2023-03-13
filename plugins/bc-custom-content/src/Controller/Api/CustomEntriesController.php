@@ -33,6 +33,10 @@ class CustomEntriesController extends BcApiController
      * @param CustomEntriesServiceInterface $service
      * @param int $tableId
      * @param $id
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function view(CustomEntriesServiceInterface $service, $id)
     {
