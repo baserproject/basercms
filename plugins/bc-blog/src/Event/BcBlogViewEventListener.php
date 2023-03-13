@@ -68,7 +68,7 @@ class BcBlogViewEventListener extends \BaserCore\Event\BcViewEventListener
         $blogContents = $blogContentTable->find()
             ->contain('Contents')
             ->where($blogContentTable->Contents->getConditionAllowPublish())
-            ->order(['BlogContents.id'])
+            ->order(['Contents.lft'])
             ->all();
         $blogContentMenus = [];
         foreach($blogContents as $blogContent) {
