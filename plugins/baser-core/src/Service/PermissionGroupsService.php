@@ -13,6 +13,7 @@ namespace BaserCore\Service;
 
 use BaserCore\Error\BcException;
 use BaserCore\Model\Entity\PermissionGroup;
+use BaserCore\Model\Entity\UserGroup;
 use BaserCore\Model\Table\PermissionGroupsTable;
 use BaserCore\Model\Table\PluginsTable;
 use BaserCore\Model\Table\UserGroupsTable;
@@ -289,6 +290,9 @@ class PermissionGroupsService implements PermissionGroupsServiceInterface
 				$permissionGroup = $this->PermissionGroups->save($permissionGroup);
 			}
 
+            // ゲストの場合、Front のタイプじゃない場合は作成しない
+            if($userGroupId === 0 && $setting['type'] !== 'Front') continue;
+
 			if (!$setting['items']) continue;
 
 			// Permission 作成
@@ -354,11 +358,13 @@ class PermissionGroupsService implements PermissionGroupsServiceInterface
      * @param string $field
      * @return array
      */
-	public function getControlSource(string $field): array
+	public function getControlSource(string $field, array $options = []): array
     {
+        /** @var UserGroupsService $userGroupsService */
+        $userGroupsService = $this->getService(UserGroupsServiceInterface::class);
+
         if($field === 'user_group_id') {
-            /** @var UserGroupsService $userGroupsService */
-            $userGroupsService = $this->getService(UserGroupsServiceInterface::class);
+
             $userGroups = $userGroupsService->getIndex([
                 'finder' => 'list',
                 'exclude_admin' => true
@@ -367,6 +373,28 @@ class PermissionGroupsService implements PermissionGroupsServiceInterface
                 $userGroups = ['0' => __d('baser_core', 'ゲスト')] + $userGroups;
             }
             return $userGroups;
+
+        } elseif($field === 'auth_prefix') {
+
+            $prefixes = BcUtil::getAuthPrefixList();
+            /** @var UserGroup $userGroup */
+            if(isset($options['user_group_id'])) {
+                $available = [];
+                if((int) $options['user_group_id'] !== 0) {
+                    $userGroup = $userGroupsService->get($options['user_group_id']);
+                    $available = $userGroup->getAuthPrefixArray();
+                }
+                if(!Configure::read('BcPrefixAuth.Front.disabled')) {
+                    $available[] = 'Front';
+                }
+                foreach($prefixes as $key => $prefix) {
+                    if(!in_array($key, $available)) {
+                        unset($prefixes[$key]);
+                    }
+                }
+            }
+            return $prefixes;
+
         }
         return [];
     }

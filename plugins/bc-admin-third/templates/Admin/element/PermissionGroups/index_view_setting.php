@@ -11,6 +11,7 @@
 
 /**
  * @var \BaserCore\View\BcAdminAppView $this
+ * @var int $userGroupId
  * @checked
  * @unitTest
  * @noTodo
@@ -33,7 +34,9 @@
       <label class="bca-panel-box__inline-fields-title"><?php echo __d('baser_core', 'タイプ') ?></label>
       <?php echo $this->BcAdminForm->control('list_type', [
         'type' => 'radio',
-        'options' => \BaserCore\Utility\BcUtil::getAuthPrefixList()
+        'options' => $this->BcAdminForm->getControlSource('BaserCore.PermissionGroups.auth_prefix', [
+          'user_group_id' => $userGroupId
+        ])
       ]) ?>
     </div>
 
