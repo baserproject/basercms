@@ -41,7 +41,7 @@ class CustomEntriesController extends BcApiController
         if (isset($queryParams['status']) || isset($queryParams['use_api'])) {
             if (!$this->isAdminApiEnabled()) throw new ForbiddenException();
         }
-        if(empty($queryParams['custom_table_id'])) {
+        if (empty($queryParams['custom_table_id'])) {
             throw new BadRequestException(__d('baser_core', 'パラメーターに custom_table_id を指定してください。'));
         }
 
@@ -82,7 +82,7 @@ class CustomEntriesController extends BcApiController
         if (isset($queryParams['status']) || isset($queryParams['use_api'])) {
             if (!$this->isAdminApiEnabled()) throw new ForbiddenException();
         }
-        if(empty($queryParams['custom_table_id'])) {
+        if (empty($queryParams['custom_table_id'])) {
             throw new BadRequestException(__d('baser_core', 'パラメーターに custom_table_id を指定してください。'));
         }
 
@@ -107,4 +107,39 @@ class CustomEntriesController extends BcApiController
         $this->viewBuilder()->setOption('serialize', ['entries', 'message']);
     }
 
+    /**
+     * カスタムエントリー　追加
+     * @param CustomEntriesServiceInterface $service
+     */
+    public function add(CustomEntriesServiceInterface $service)
+    {
+        //todo 追加
+    }
+
+    /**
+     * カスタムエントリー　編集
+     * @param CustomEntriesServiceInterface $service
+     */
+    public function edit(CustomEntriesServiceInterface $service)
+    {
+        //todo 編集
+    }
+
+    /**
+     * カスタムエントリー　削除
+     * @param CustomEntriesServiceInterface $service
+     */
+    public function delete(CustomEntriesServiceInterface $service)
+    {
+        //todo 削除
+    }
+
+    /**
+     * カスタムエントリー　追加
+     * @param CustomEntriesServiceInterface $service
+     */
+    public function list(CustomEntriesServiceInterface $service)
+    {
+        //todo 追加
+    }
 }
