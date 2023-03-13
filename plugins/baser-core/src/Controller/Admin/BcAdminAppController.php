@@ -97,7 +97,9 @@ class BcAdminAppController extends BcAppController
         $this->viewBuilder()->setClassName('BaserCore.BcAdminApp');
         $this->setAdminTheme();
         $this->set($this->getService(BcAdminAppServiceInterface::class)->getViewVarsForAll());
-        $this->__updateFirstAccess();
+        if(BcUtil::isInstalled()) {
+            $this->__updateFirstAccess();
+        }
     }
 
     /**
