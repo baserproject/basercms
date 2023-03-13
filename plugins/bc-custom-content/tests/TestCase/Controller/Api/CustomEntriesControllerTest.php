@@ -11,10 +11,13 @@
 
 namespace BcCustomContent\Test\TestCase\Controller\Api;
 
+use BaserCore\Service\BcDatabaseServiceInterface;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcContainerTrait;
+use BcCustomContent\Service\CustomTablesServiceInterface;
+use BcCustomContent\Test\Scenario\CustomEntriesScenario;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
-use Cake\TestSuite\IntegrationTestTrait;
 
 /**
  * Class CustomContentsControllerTest
@@ -26,7 +29,7 @@ class CustomEntriesControllerTest extends BcTestCase
      * ScenarioAwareTrait
      */
     use ScenarioAwareTrait;
-    use IntegrationTestTrait;
+    use BcContainerTrait;
 
     /**
      * Fixtures
@@ -38,7 +41,8 @@ class CustomEntriesControllerTest extends BcTestCase
         'plugin.BaserCore.Factory/SiteConfigs',
         'plugin.BaserCore.Factory/Users',
         'plugin.BaserCore.Factory/UsersUserGroups',
-        'plugin.BaserCore.Factory/UserGroups'
+        'plugin.BaserCore.Factory/UserGroups',
+        'plugin.BcCustomContent.Factory/CustomTables',
     ];
 
     /**
@@ -80,7 +84,46 @@ class CustomEntriesControllerTest extends BcTestCase
      */
     public function test_index()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        //カスタムテーブルとカスタムエントリテーブルを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+        //フィクチャーからデーターを生成
+        $this->loadFixtureScenario(CustomEntriesScenario::class);
+        //APIを呼ぶ
+        $this->get('/baser/api/bc-custom-content/custom_entries/index.json?custom_table_id=1&token=' . $this->accessToken);
+        //ステータスを確認
+        $this->assertResponseOk();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertNotNull($result->entries);
+
+        //custom_table_idを指定しない場合、
+        $this->get('/baser/api/bc-custom-content/custom_entries/index.json?token=' . $this->accessToken);
+        //ステータスを確認
+        $this->assertResponseCode(400);
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('パラメーターに custom_table_id を指定してください。', $result->message);
+
+        //ログインしていない状態では status パラメーターへへのアクセスを禁止するか確認
+        $this->get('/baser/api/bc-custom-content/custom_entries/index.json?custom_table_id=1&status=publish');
+        // レスポンスを確認
+        $this->assertResponseCode(403);
+
+        //ログインしている状態では status パラメーターへへのアクセできるか確認
+        $this->get('/baser/api/bc-custom-content/custom_entries/index.json?custom_table_id=1&status=publish&token=' . $this->accessToken);
+        // レスポンスを確認
+        $this->assertResponseOk();
+
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_recruit_categories');
     }
 
     /**
@@ -88,7 +131,53 @@ class CustomEntriesControllerTest extends BcTestCase
      */
     public function test_view()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        //カスタムテーブルとカスタムエントリテーブルを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+        //フィクチャーからデーターを生成
+        $this->loadFixtureScenario(CustomEntriesScenario::class);
+        //APIを呼ぶ
+        $this->get('/baser/api/bc-custom-content/custom_entries/view/1.json?custom_table_id=1&token=' . $this->accessToken);
+        //ステータスを確認
+        $this->assertResponseOk();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertNotNull($result->entry);
+
+        //custom_table_idを指定しない場合、
+        $this->get('/baser/api/bc-custom-content/custom_entries/view/1.json?token=' . $this->accessToken);
+        //ステータスを確認
+        $this->assertResponseCode(400);
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('パラメーターに custom_table_id を指定してください。', $result->message);
+
+        //ログインしていない状態では status パラメーターへへのアクセスを禁止するか確認
+        $this->get('/baser/api/bc-custom-content/custom_entries/view/1.json?custom_table_id=1&status=publish');
+        // レスポンスを確認
+        $this->assertResponseCode(403);
+
+        //ログインしている状態では status パラメーターへへのアクセできるか確認
+        $this->get('/baser/api/bc-custom-content/custom_entries/view/1.json?custom_table_id=1&status=publish&token=' . $this->accessToken);
+        // レスポンスを確認
+        $this->assertResponseOk();
+
+        //存在しないIDを指定した場合、
+        // APIを呼ぶ
+        $this->get('/baser/api/bc-custom-content/custom_entries/view/11.json?custom_table_id=11&status=publish&token=' . $this->accessToken);
+        $this->assertResponseCode(404);
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('データが見つかりません。', $result->message);
+
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_recruit_categories');
     }
 
     /**
@@ -120,6 +209,28 @@ class CustomEntriesControllerTest extends BcTestCase
      */
     public function test_list()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        //カスタムテーブルとカスタムエントリテーブルを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+        //フィクチャーからデーターを生成
+        $this->loadFixtureScenario(CustomEntriesScenario::class);
+        //APIを呼ぶ
+        $this->get('/baser/api/bc-custom-content/custom_entries/list.json?custom_table_id=1&token=' . $this->accessToken);
+        //ステータスを確認
+        $this->assertResponseOk();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertNotNull($result->entries);
+
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_recruit_categories');
     }
 }

@@ -269,6 +269,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      *
      * @param string $tableName
      * @return bool
+     * @unitTest
      */
     public function dropTable(string $tableName)
     {

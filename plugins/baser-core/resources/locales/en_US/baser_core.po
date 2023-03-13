@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: baserCMS\n"
-"POT-Creation-Date: 2023-03-04 22:41+0900\n"
-"PO-Revision-Date: 2023-03-05 22:59+0900\n"
+"POT-Creation-Date: 2023-03-13 13:32+0900\n"
+"PO-Revision-Date: 2023-03-13 13:40+0900\n"
 "Last-Translator: ryuring\n"
 "Language-Team: baserCMS Users Community <info@basercms.net>\n"
 "Language: en\n"
@@ -49,6 +49,7 @@ msgstr "Contents Folder"
 #: plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/CustomFields/index_row.php:44
 #: plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/CustomTables/index_row.php:41
 #: plugins/bc-admin-third/templates/plugin/BcEditorTemplate/Admin/element/EditorTemplates/index_row.php:50
+#: plugins/bc-admin-third/templates/plugin/BcFavorite/Admin/element/favorite_menu.php:29
 #: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailFields/index_row.php:83
 #: plugins/bc-admin-third/templates/plugin/BcThemeFile/Admin/element/ThemeFiles/index_row.php:97
 #: plugins/bc-admin-third/templates/plugin/BcThemeFile/Admin/element/ThemeFiles/index_row.php:117
@@ -90,7 +91,7 @@ msgid "編集"
 msgstr "Edit"
 
 #: plugins/baser-core/config/permission.php:31
-#: plugins/baser-core/config/setting.php:387
+#: plugins/baser-core/config/setting.php:394
 #: plugins/bc-admin-third/templates/Admin/Utilities/index.php:37
 msgid "コンテンツ管理"
 msgstr "Contents"
@@ -122,7 +123,7 @@ msgid "一覧"
 msgstr "List"
 
 #: plugins/baser-core/config/permission.php:36
-#: plugins/baser-core/config/setting.php:391
+#: plugins/baser-core/config/setting.php:398
 #: plugins/bc-admin-third/templates/Admin/Contents/trash_index.php:18
 #: plugins/bc-admin-third/templates/Admin/element/content_actions.php:18
 msgid "ゴミ箱"
@@ -145,10 +146,8 @@ msgid "固定ページ管理"
 msgstr "Static Page"
 
 #: plugins/baser-core/config/permission.php:52
-#, fuzzy
-#| msgid "ユーザーグループ管理"
 msgid "アクセスルールグループ管理"
-msgstr "User Group"
+msgstr "Access rule group management"
 
 #: plugins/baser-core/config/permission.php:58
 msgid "ルール再構築"
@@ -205,8 +204,10 @@ msgstr "Add"
 #: plugins/baser-core/config/permission.php:328
 #: plugins/baser-core/config/permission.php:345
 #: plugins/baser-core/src/Controller/Api/PermissionsController.php:227
+#: plugins/bc-admin-third/templates/Admin/PermissionGroups/edit.php:62
+#: plugins/bc-admin-third/templates/Admin/Permissions/edit.php:66
 #: plugins/bc-admin-third/templates/Admin/Sites/edit.php:46
-#: plugins/bc-admin-third/templates/Admin/UserGroups/edit.php:46
+#: plugins/bc-admin-third/templates/Admin/UserGroups/edit.php:66
 #: plugins/bc-admin-third/templates/Admin/Users/edit.php:52
 #: plugins/bc-admin-third/templates/Admin/Utilities/log_maintenance.php:44
 #: plugins/bc-admin-third/templates/Admin/element/Contents/index_list_table.php:34
@@ -238,6 +239,7 @@ msgstr "Add"
 #: plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/CustomTables/in_use_group_field.php:27
 #: plugins/bc-admin-third/templates/plugin/BcEditorTemplate/Admin/EditorTemplates/edit.php:48
 #: plugins/bc-admin-third/templates/plugin/BcEditorTemplate/Admin/element/EditorTemplates/index_row.php:54
+#: plugins/bc-admin-third/templates/plugin/BcFavorite/Admin/element/favorite_menu.php:30
 #: plugins/bc-admin-third/templates/plugin/BcMail/Admin/MailFields/edit.php:51
 #: plugins/bc-admin-third/templates/plugin/BcMail/Admin/MailMessages/view.php:89
 #: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailFields/index_list.php:35
@@ -270,7 +272,7 @@ msgstr "Add"
 #: plugins/bc-blog/config/permission.php:120
 #: plugins/bc-blog/config/permission.php:136
 #: plugins/bc-blog/config/permission.php:152
-#: plugins/bc-blog/src/Controller/Api/BlogCommentsController.php:124
+#: plugins/bc-blog/src/Controller/Api/BlogCommentsController.php:125
 #: plugins/bc-blog/src/Controller/Api/BlogPostsController.php:334
 #: plugins/bc-blog/src/Controller/Api/BlogTagsController.php:194
 #: plugins/bc-content-link/config/permission.php:40
@@ -293,7 +295,7 @@ msgstr "Add"
 #: plugins/bc-uploader/config/permission.php:53
 #: plugins/bc-uploader/config/permission.php:70
 #: plugins/bc-uploader/config/permission.php:94
-#: plugins/bc-uploader/src/Controller/Api/UploaderCategoriesController.php:97
+#: plugins/bc-uploader/src/Controller/Api/UploaderCategoriesController.php:130
 #: plugins/bc-widget-area/config/permission.php:28
 #: plugins/bc-widget-area/config/permission.php:44
 #: plugins/bc-widget-area/src/Controller/Api/WidgetAreasController.php:186
@@ -342,7 +344,7 @@ msgid "非公開設定"
 msgstr "Publicity Settings"
 
 #: plugins/baser-core/config/permission.php:78
-#: plugins/baser-core/config/setting.php:452
+#: plugins/baser-core/config/setting.php:464
 msgid "プラグイン管理"
 msgstr "Plugins"
 
@@ -396,7 +398,7 @@ msgid "アップデート"
 msgstr "Update"
 
 #: plugins/baser-core/config/permission.php:94
-#: plugins/baser-core/config/setting.php:397
+#: plugins/baser-core/config/setting.php:404
 #: plugins/bc-admin-third/templates/Admin/SiteConfigs/index.php:27
 #, fuzzy
 #| msgid "システム設定"
@@ -404,14 +406,14 @@ msgid "システム基本設定"
 msgstr "System"
 
 #: plugins/baser-core/config/permission.php:103
-#: plugins/baser-core/config/setting.php:418
+#: plugins/baser-core/config/setting.php:430
 #, fuzzy
 #| msgid "サブサイト管理"
 msgid "サイト管理"
 msgstr "Subsite"
 
 #: plugins/baser-core/config/permission.php:117
-#: plugins/baser-core/config/setting.php:429
+#: plugins/baser-core/config/setting.php:441
 msgid "テーマ管理"
 msgstr "Themes"
 
@@ -469,8 +471,8 @@ msgid "ユーザーグループ管理"
 msgstr "User Group"
 
 #: plugins/baser-core/config/permission.php:148
-#: plugins/baser-core/config/setting.php:402
-#: plugins/bc-admin-third/templates/Admin/element/Permissions/form.php:66
+#: plugins/baser-core/config/setting.php:409
+#: plugins/bc-admin-third/templates/Admin/element/Permissions/form.php:67
 msgid "ユーザー管理"
 msgstr "User"
 
@@ -485,7 +487,7 @@ msgid "代理ログイン"
 msgstr "Login"
 
 #: plugins/baser-core/config/permission.php:162
-#: plugins/baser-core/config/setting.php:463
+#: plugins/baser-core/config/setting.php:475
 msgid "ユーティリティ"
 msgstr "Utility"
 
@@ -508,18 +510,18 @@ msgid "クレジット"
 msgstr "Show Credits"
 
 #: plugins/baser-core/config/permission.php:169
-#: plugins/baser-core/config/setting.php:471
-#: plugins/bc-admin-third/templates/Admin/Utilities/info.php:20
+#: plugins/baser-core/config/setting.php:483
+#: plugins/bc-admin-third/templates/Admin/Utilities/info.php:21
 msgid "環境情報"
 msgstr "Environment Info"
 
 #: plugins/baser-core/config/permission.php:170
-#: plugins/baser-core/config/setting.php:479
+#: plugins/baser-core/config/setting.php:491
 msgid "ログメンテナンス"
 msgstr "Log Maintenance"
 
 #: plugins/baser-core/config/permission.php:171
-#: plugins/baser-core/config/setting.php:475
+#: plugins/baser-core/config/setting.php:487
 #: plugins/bc-admin-third/templates/Admin/Utilities/log_maintenance.php:20
 #: plugins/bc-admin-third/templates/Admin/Utilities/maintenance.php:19
 msgid "データメンテナンス"
@@ -815,23 +817,23 @@ msgstr "Backup Data"
 msgid "検索ボックス開閉状態保存"
 msgstr ""
 
-#: plugins/baser-core/config/setting.php:206
+#: plugins/baser-core/config/setting.php:218
 msgid "baserCMS"
 msgstr "baserCMS"
 
-#: plugins/baser-core/config/setting.php:352
+#: plugins/baser-core/config/setting.php:359
 #: plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/CustomFields/form.php:237
 #: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailFields/form.php:280
 #: plugins/bc-widget-area/src/Event/BcWidgetAreaHelperEventListener.php:48
 msgid "なし"
 msgstr "None"
 
-#: plugins/baser-core/config/setting.php:382
+#: plugins/baser-core/config/setting.php:389
 #: plugins/baser-core/src/Controller/Admin/DashboardController.php:38
 msgid "ダッシュボード"
 msgstr "Dashboard"
 
-#: plugins/baser-core/config/setting.php:390
+#: plugins/baser-core/config/setting.php:397
 #: plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/CustomTables/form.php:55
 #: plugins/bc-admin-third/templates/plugin/BcEditorTemplate/Admin/element/EditorTemplates/form.php:66
 #: plugins/bc-admin-third/templates/plugin/BcThemeFile/Admin/element/ThemeFiles/submenus.php:23
@@ -842,40 +844,52 @@ msgstr "Dashboard"
 msgid "コンテンツ"
 msgstr "Content"
 
-#: plugins/baser-core/config/setting.php:406
+#: plugins/baser-core/config/setting.php:413
 #: plugins/bc-admin-third/templates/Admin/element/Dblogs/index_list.php:59
 #: plugins/bc-admin-third/templates/Admin/element/Dblogs/index_list.php:60
 #: plugins/bc-admin-third/templates/Admin/element/search/dblogs_index.php:29
 msgid "ユーザー"
 msgstr "User"
 
-#: plugins/baser-core/config/setting.php:411
-#: plugins/bc-admin-third/templates/Admin/PermissionGroups/edit.php:37
+#: plugins/baser-core/config/setting.php:418
+#: plugins/bc-admin-third/templates/Admin/element/PermissionGroups/form.php:33
+#: plugins/bc-admin-third/templates/Admin/element/PermissionGroups/index_view_setting.php:26
 #: plugins/bc-admin-third/templates/Admin/element/Permissions/dialog.php:36
 #: plugins/bc-admin-third/templates/Admin/element/Permissions/form.php:46
 #: plugins/bc-admin-third/templates/Admin/element/search/users_index.php:28
 msgid "ユーザーグループ"
 msgstr "User Group"
 
-#: plugins/baser-core/config/setting.php:422
+#: plugins/baser-core/config/setting.php:423
+#: plugins/bc-admin-third/templates/Admin/element/Permissions/form.php:53
+#: plugins/bc-admin-third/templates/Admin/element/search/permissions_index.php:41
+#, fuzzy
+#| msgid "ユーザーグループ"
+msgid "アクセスルールグループ"
+msgstr "User Group"
+
+#: plugins/baser-core/config/setting.php:434
 #: plugins/bc-admin-third/templates/Admin/element/content_info.php:52
 msgid "サイト"
 msgstr "Site"
 
-#: plugins/baser-core/config/setting.php:433
+#: plugins/baser-core/config/setting.php:445
 #: plugins/bc-admin-third/templates/Admin/element/Sites/form.php:178
 #: plugins/bc-admin-third/templates/Admin/element/Sites/index_list.php:104
 msgid "テーマ"
 msgstr "Theme"
 
-#: plugins/baser-core/config/setting.php:438
-#: plugins/bc-admin-third/templates/Admin/PermissionGroups/edit.php:99
-#: plugins/bc-admin-third/templates/Admin/Permissions/index.php:33
+#: plugins/baser-core/config/setting.php:450
+#: plugins/bc-admin-third/templates/Admin/PermissionGroups/edit.php:32
+#: plugins/bc-admin-third/templates/Admin/PermissionGroups/index.php:24
+#: plugins/bc-admin-third/templates/Admin/Permissions/index.php:37
 #: plugins/bc-admin-third/templates/Admin/Plugins/index.php:23
 #: plugins/bc-admin-third/templates/Admin/Plugins/install.php:28
 #: plugins/bc-admin-third/templates/Admin/Sites/index.php:20
+#: plugins/bc-admin-third/templates/Admin/UserGroups/edit.php:26
 #: plugins/bc-admin-third/templates/Admin/UserGroups/index.php:21
 #: plugins/bc-admin-third/templates/Admin/Users/index.php:22
+#: plugins/bc-admin-third/templates/Admin/element/PermissionGroups/form.php:97
 #: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/BlogCategories/index.php:25
 #: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/BlogTags/index.php:23
 #: plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/CustomEntries/edit.php:24
@@ -900,73 +914,67 @@ msgstr "Theme"
 msgid "新規追加"
 msgstr "Add"
 
-#: plugins/baser-core/config/setting.php:442
+#: plugins/baser-core/config/setting.php:454
 msgid "利用中テーマダウンロード"
 msgstr "Download Theme"
 
-#: plugins/baser-core/config/setting.php:446
+#: plugins/baser-core/config/setting.php:458
 msgid "テーマ用初期データダウンロード"
 msgstr "Download Initial Data for Theme"
 
-#: plugins/baser-core/config/setting.php:456
+#: plugins/baser-core/config/setting.php:468
 #: plugins/bc-admin-third/templates/Admin/Plugins/update.php:30
 #: plugins/bc-admin-third/templates/Admin/element/content_info.php:40
 msgid "プラグイン"
 msgstr "Plugin"
 
-#: plugins/baser-core/config/setting.php:467
+#: plugins/baser-core/config/setting.php:479
 #: plugins/bc-admin-third/templates/Admin/Utilities/index.php:19
 msgid "ユーティリティトップ"
 msgstr "Utility Top"
 
-#: plugins/baser-core/config/setting.php:495
-#, fuzzy
-#| msgid "管理画面SSL設定"
-msgid "管理画面"
-msgstr "Admin Screen SSL Settings"
-
-#: plugins/baser-core/config/setting.php:546
+#: plugins/baser-core/config/setting.php:565
 msgid "管理システム"
 msgstr "Admin System"
 
-#: plugins/baser-core/config/setting.php:559
+#: plugins/baser-core/config/setting.php:579
 msgid "Web API"
 msgstr ""
 
-#: plugins/baser-core/config/setting.php:609
+#: plugins/baser-core/config/setting.php:650
 msgid "ケータイ"
 msgstr "Feature Phone"
 
-#: plugins/baser-core/config/setting.php:624
+#: plugins/baser-core/config/setting.php:665
 msgid "スマートフォン"
 msgstr "Smartphone"
 
-#: plugins/baser-core/config/setting.php:649
+#: plugins/baser-core/config/setting.php:690
 msgid "英語"
 msgstr "English"
 
-#: plugins/baser-core/config/setting.php:655
+#: plugins/baser-core/config/setting.php:696
 msgid "中国語"
 msgstr ""
 
-#: plugins/baser-core/config/setting.php:661
+#: plugins/baser-core/config/setting.php:702
 msgid "スペイン"
 msgstr ""
 
-#: plugins/baser-core/config/setting.php:687
+#: plugins/baser-core/config/setting.php:728
 #: plugins/bc-admin-third/templates/Admin/element/Contents/form_alias.php:30
 msgid "無所属コンテンツ"
 msgstr "Independent Content"
 
-#: plugins/baser-core/config/setting.php:710
+#: plugins/baser-core/config/setting.php:751
 msgid "フォルダー"
 msgstr "Folder"
 
-#: plugins/baser-core/config/setting.php:730
+#: plugins/baser-core/config/setting.php:771
 msgid "固定ページ"
 msgstr "Static Page"
 
-#: plugins/baser-core/config/setting.php:759
+#: plugins/baser-core/config/setting.php:800
 #: plugins/bc-admin-third/templates/Admin/element/Sites/form.php:61
 #: plugins/bc-admin-third/templates/Admin/element/Sites/index_list.php:67
 #: plugins/bc-admin-third/templates/Admin/element/content_info.php:62
@@ -979,6 +987,14 @@ msgstr "Alias"
 #| msgid "アップデートスクリプトの実行します。"
 msgid "アップデートプログラム {0} を実行します。"
 msgstr "Running update script."
+
+#: plugins/baser-core/src/BcPlugin.php:415
+msgid "BcPrefixAuth の {0} で type が指定されていません。"
+msgstr ""
+
+#: plugins/baser-core/src/BcPlugin.php:416
+msgid "BcPrefixAuth の {0} で alias が指定されていません。"
+msgstr ""
 
 #: plugins/baser-core/src/Command/ComposerCommand.php:35
 #, fuzzy
@@ -1087,8 +1103,8 @@ msgstr "Failed File Upload."
 
 #: plugins/baser-core/src/Controller/Admin/ContentFoldersController.php:55
 #: plugins/baser-core/src/Controller/Admin/SitesController.php:217
-#: plugins/baser-core/src/Controller/Admin/UsersController.php:236
-#: plugins/baser-core/src/Controller/Admin/UsersController.php:278
+#: plugins/baser-core/src/Controller/Admin/UsersController.php:235
+#: plugins/baser-core/src/Controller/Admin/UsersController.php:277
 #: plugins/bc-search-index/src/Controller/Admin/SearchIndexesController.php:101
 msgid "無効なIDです。"
 msgstr "It's an invalid ID."
@@ -1096,12 +1112,12 @@ msgstr "It's an invalid ID."
 #: plugins/baser-core/src/Controller/Admin/ContentFoldersController.php:61
 #: plugins/baser-core/src/Controller/Admin/ContentsController.php:160
 #: plugins/baser-core/src/Service/PagesService.php:219
-#: plugins/baser-core/src/Service/PluginsService.php:628
+#: plugins/baser-core/src/Service/PluginsService.php:607
 #: plugins/baser-core/src/Service/ThemesService.php:137
-#: plugins/baser-core/src/Service/UtilitiesService.php:388
-#: plugins/bc-blog/src/Service/BlogContentsService.php:146
+#: plugins/baser-core/src/Service/UtilitiesService.php:389
+#: plugins/bc-blog/src/Service/BlogContentsService.php:149
 #: plugins/bc-blog/src/Service/BlogPostsService.php:541
-#: plugins/bc-custom-content/src/Service/CustomContentsService.php:119
+#: plugins/bc-custom-content/src/Service/CustomContentsService.php:144
 #: plugins/bc-editor-template/src/Service/EditorTemplatesService.php:90
 #: plugins/bc-editor-template/src/Service/EditorTemplatesService.php:111
 #: plugins/bc-mail/src/Service/Front/MailFrontService.php:161
@@ -1185,17 +1201,18 @@ msgstr "Updated Static Page “%s”."
 #: plugins/baser-core/src/Controller/Admin/PagesController.php:86
 #: plugins/baser-core/src/Controller/Admin/PagesController.php:90
 #: plugins/baser-core/src/Controller/Admin/PasswordRequestsController.php:64
-#: plugins/baser-core/src/Controller/Admin/PermissionGroupsController.php:61
-#: plugins/baser-core/src/Controller/Admin/PermissionsController.php:123
-#: plugins/baser-core/src/Controller/Admin/PermissionsController.php:162
-#: plugins/baser-core/src/Controller/Admin/PermissionsController.php:212
+#: plugins/baser-core/src/Controller/Admin/PermissionGroupsController.php:72
+#: plugins/baser-core/src/Controller/Admin/PermissionGroupsController.php:100
+#: plugins/baser-core/src/Controller/Admin/PermissionsController.php:120
+#: plugins/baser-core/src/Controller/Admin/PermissionsController.php:157
+#: plugins/baser-core/src/Controller/Admin/PermissionsController.php:208
 #: plugins/baser-core/src/Controller/Admin/SiteConfigsController.php:54
 #: plugins/baser-core/src/Controller/Admin/SitesController.php:102
 #: plugins/baser-core/src/Controller/Admin/SitesController.php:153
-#: plugins/baser-core/src/Controller/Admin/UserGroupsController.php:87
-#: plugins/baser-core/src/Controller/Admin/UserGroupsController.php:116
-#: plugins/baser-core/src/Controller/Admin/UsersController.php:214
-#: plugins/baser-core/src/Controller/Admin/UsersController.php:254
+#: plugins/baser-core/src/Controller/Admin/UserGroupsController.php:85
+#: plugins/baser-core/src/Controller/Admin/UserGroupsController.php:114
+#: plugins/baser-core/src/Controller/Admin/UsersController.php:213
+#: plugins/baser-core/src/Controller/Admin/UsersController.php:253
 #: plugins/baser-core/src/Controller/Api/ContentFoldersController.php:91
 #: plugins/baser-core/src/Controller/Api/ContentFoldersController.php:163
 #: plugins/baser-core/src/Controller/Api/ContentsController.php:228
@@ -1220,10 +1237,11 @@ msgstr "Updated Static Page “%s”."
 #: plugins/baser-core/src/Controller/Api/UserGroupsController.php:119
 #: plugins/baser-core/src/Controller/Api/UsersController.php:148
 #: plugins/baser-core/src/Controller/Api/UsersController.php:180
+#: plugins/baser-core/src/Controller/PasswordRequestsController.php:69
 #: plugins/bc-blog/src/Controller/Admin/BlogCategoriesController.php:94
 #: plugins/bc-blog/src/Controller/Admin/BlogCategoriesController.php:128
-#: plugins/bc-blog/src/Controller/Admin/BlogContentsController.php:81
-#: plugins/bc-blog/src/Controller/Admin/BlogContentsController.php:85
+#: plugins/bc-blog/src/Controller/Admin/BlogContentsController.php:87
+#: plugins/bc-blog/src/Controller/Admin/BlogContentsController.php:91
 #: plugins/bc-blog/src/Controller/Admin/BlogPostsController.php:185
 #: plugins/bc-blog/src/Controller/Admin/BlogPostsController.php:241
 #: plugins/bc-blog/src/Controller/Admin/BlogPostsController.php:356
@@ -1247,11 +1265,19 @@ msgstr "Updated Static Page “%s”."
 #: plugins/bc-custom-content/src/Controller/Admin/CustomFieldsController.php:78
 #: plugins/bc-custom-content/src/Controller/Admin/CustomTablesController.php:51
 #: plugins/bc-custom-content/src/Controller/Admin/CustomTablesController.php:79
-#: plugins/bc-custom-content/src/Controller/Api/CustomLinksController.php:46
+#: plugins/bc-custom-content/src/Controller/Api/CustomContentsController.php:92
+#: plugins/bc-custom-content/src/Controller/Api/CustomContentsController.php:132
+#: plugins/bc-custom-content/src/Controller/Api/CustomFieldsController.php:93
+#: plugins/bc-custom-content/src/Controller/Api/CustomFieldsController.php:127
+#: plugins/bc-custom-content/src/Controller/Api/CustomLinksController.php:106
+#: plugins/bc-custom-content/src/Controller/Api/CustomTablesController.php:95
+#: plugins/bc-custom-content/src/Controller/Api/CustomTablesController.php:128
 #: plugins/bc-editor-template/src/Controller/Admin/EditorTemplatesController.php:70
 #: plugins/bc-editor-template/src/Controller/Admin/EditorTemplatesController.php:105
-#: plugins/bc-favorite/src/Controller/Api/FavoritesController.php:90
-#: plugins/bc-favorite/src/Controller/Api/FavoritesController.php:120
+#: plugins/bc-editor-template/src/Controller/Api/EditorTemplatesController.php:97
+#: plugins/bc-editor-template/src/Controller/Api/EditorTemplatesController.php:130
+#: plugins/bc-favorite/src/Controller/Api/FavoritesController.php:89
+#: plugins/bc-favorite/src/Controller/Api/FavoritesController.php:119
 #: plugins/bc-mail/src/Controller/Admin/MailConfigsController.php:38
 #: plugins/bc-mail/src/Controller/Admin/MailContentsController.php:73
 #: plugins/bc-mail/src/Controller/Admin/MailFieldsController.php:157
@@ -1263,6 +1289,7 @@ msgstr "Updated Static Page “%s”."
 #: plugins/bc-mail/src/Controller/Api/MailMessagesController.php:123
 #: plugins/bc-mail/src/Controller/Api/MailMessagesController.php:174
 #: plugins/bc-theme-config/src/Controller/Admin/ThemeConfigsController.php:47
+#: plugins/bc-theme-config/src/Controller/Api/ThemeConfigsController.php:64
 #: plugins/bc-theme-config/src/Service/ThemeConfigsService.php:98
 #: plugins/bc-theme-file/src/Controller/Api/ThemeFilesController.php:47
 #: plugins/bc-theme-file/src/Controller/Api/ThemeFilesController.php:82
@@ -1271,8 +1298,10 @@ msgstr "Updated Static Page “%s”."
 #: plugins/bc-theme-file/src/Controller/Api/ThemeFoldersController.php:167
 #: plugins/bc-uploader/src/Controller/Admin/UploaderCategoriesController.php:59
 #: plugins/bc-uploader/src/Controller/Admin/UploaderCategoriesController.php:87
-#: plugins/bc-uploader/src/Controller/Admin/UploaderConfigsController.php:42
+#: plugins/bc-uploader/src/Controller/Admin/UploaderConfigsController.php:44
 #: plugins/bc-uploader/src/Controller/Admin/UploaderFilesController.php:171
+#: plugins/bc-uploader/src/Controller/Api/UploaderCategoriesController.php:66
+#: plugins/bc-uploader/src/Controller/Api/UploaderConfigsController.php:65
 #: plugins/bc-uploader/src/Controller/Api/UploaderFilesController.php:66
 #: plugins/bc-uploader/src/Controller/Api/UploaderFilesController.php:100
 #: plugins/bc-widget-area/src/Controller/Api/WidgetAreasController.php:84
@@ -1283,29 +1312,39 @@ msgid "入力エラーです。内容を修正してください。"
 msgstr "Input error. Please fix the contents."
 
 #: plugins/baser-core/src/Controller/Admin/PasswordRequestsController.php:67
+#: plugins/baser-core/src/Controller/PasswordRequestsController.php:82
 msgid ""
 "パスワードのリセットを受付ました。該当メールアドレスが存在した場合、変更URLを"
 "送信いたしました。"
 msgstr ""
 
 #: plugins/baser-core/src/Controller/Admin/PasswordRequestsController.php:96
+#: plugins/baser-core/src/Controller/PasswordRequestsController.php:111
 #, fuzzy
 #| msgid "削除中にエラーが発生しました。"
 msgid "システムエラーが発生しました。"
 msgstr "Error has occurred when deleting."
 
-#: plugins/baser-core/src/Controller/Admin/PermissionGroupsController.php:57
+#: plugins/baser-core/src/Controller/Admin/PermissionGroupsController.php:43
+#, fuzzy
+#| msgid "ユーザーグループを選択してください。"
+msgid "アクセスルールを設定できるユーザーグループがありません。"
+msgstr "Please select User Group."
+
+#: plugins/baser-core/src/Controller/Admin/PermissionGroupsController.php:68
 #, fuzzy
 #| msgid "メールフォーム「%s」を更新しました。"
-msgid "ルールグループ「{0}」を更新しました。"
+msgid "ルールグループ「{0}」を登録しました。"
 msgstr "Updated Mail Form “%s”."
 
-#: plugins/baser-core/src/Controller/Admin/PermissionGroupsController.php:63
+#: plugins/baser-core/src/Controller/Admin/PermissionGroupsController.php:74
+#: plugins/baser-core/src/Controller/Admin/PermissionGroupsController.php:102
+#: plugins/baser-core/src/Controller/Admin/PermissionGroupsController.php:124
 #: plugins/baser-core/src/Controller/Admin/SitesController.php:231
-#: plugins/baser-core/src/Controller/Admin/UserGroupsController.php:141
-#: plugins/baser-core/src/Controller/Admin/UserGroupsController.php:167
-#: plugins/baser-core/src/Controller/Admin/UsersController.php:256
-#: plugins/baser-core/src/Controller/Admin/UsersController.php:288
+#: plugins/baser-core/src/Controller/Admin/UserGroupsController.php:139
+#: plugins/baser-core/src/Controller/Admin/UserGroupsController.php:165
+#: plugins/baser-core/src/Controller/Admin/UsersController.php:255
+#: plugins/baser-core/src/Controller/Admin/UsersController.php:287
 #: plugins/baser-core/src/Controller/Api/ContentFoldersController.php:63
 #: plugins/baser-core/src/Controller/Api/ContentFoldersController.php:94
 #: plugins/baser-core/src/Controller/Api/ContentFoldersController.php:133
@@ -1370,8 +1409,8 @@ msgstr "Updated Mail Form “%s”."
 #: plugins/baser-core/src/Controller/Api/UtilitiesController.php:181
 #: plugins/baser-core/src/Controller/Api/UtilitiesController.php:205
 #: plugins/baser-core/src/Service/ContentsService.php:1449
-#: plugins/baser-core/src/Service/PermissionsService.php:537
-#: plugins/baser-core/src/Service/PluginsService.php:582
+#: plugins/baser-core/src/Service/PermissionsService.php:600
+#: plugins/baser-core/src/Service/PluginsService.php:561
 #: plugins/bc-blog/src/Controller/Admin/BlogCategoriesController.php:159
 #: plugins/bc-blog/src/Controller/Admin/BlogCommentsController.php:93
 #: plugins/bc-blog/src/Controller/Admin/BlogCommentsController.php:123
@@ -1390,9 +1429,10 @@ msgstr "Updated Mail Form “%s”."
 #: plugins/bc-blog/src/Controller/Api/BlogCategoriesController.php:215
 #: plugins/bc-blog/src/Controller/Api/BlogCategoriesController.php:245
 #: plugins/bc-blog/src/Controller/Api/BlogCategoriesController.php:251
-#: plugins/bc-blog/src/Controller/Api/BlogCommentsController.php:66
-#: plugins/bc-blog/src/Controller/Api/BlogCommentsController.php:97
-#: plugins/bc-blog/src/Controller/Api/BlogCommentsController.php:146
+#: plugins/bc-blog/src/Controller/Api/BlogCommentsController.php:67
+#: plugins/bc-blog/src/Controller/Api/BlogCommentsController.php:98
+#: plugins/bc-blog/src/Controller/Api/BlogCommentsController.php:147
+#: plugins/bc-blog/src/Controller/Api/BlogCommentsController.php:182
 #: plugins/bc-blog/src/Controller/Api/BlogContentsController.php:64
 #: plugins/bc-blog/src/Controller/Api/BlogContentsController.php:109
 #: plugins/bc-blog/src/Controller/Api/BlogContentsController.php:145
@@ -1414,8 +1454,9 @@ msgstr "Updated Mail Form “%s”."
 #: plugins/bc-blog/src/Controller/Api/BlogTagsController.php:135
 #: plugins/bc-blog/src/Controller/Api/BlogTagsController.php:167
 #: plugins/bc-blog/src/Controller/Api/BlogTagsController.php:214
+#: plugins/bc-blog/src/Controller/BlogController.php:401
 #: plugins/bc-blog/src/Service/BlogCategoriesService.php:256
-#: plugins/bc-blog/src/Service/BlogCommentsService.php:151
+#: plugins/bc-blog/src/Service/BlogCommentsService.php:328
 #: plugins/bc-blog/src/Service/BlogPostsService.php:710
 #: plugins/bc-blog/src/Service/BlogTagsService.php:230
 #: plugins/bc-content-link/src/Controller/Api/ContentLinksController.php:85
@@ -1435,19 +1476,35 @@ msgstr "Updated Mail Form “%s”."
 #: plugins/bc-custom-content/src/Controller/Admin/CustomTablesController.php:53
 #: plugins/bc-custom-content/src/Controller/Admin/CustomTablesController.php:81
 #: plugins/bc-custom-content/src/Controller/Admin/CustomTablesController.php:103
+#: plugins/bc-custom-content/src/Controller/Api/CustomContentsController.php:64
+#: plugins/bc-custom-content/src/Controller/Api/CustomContentsController.php:95
+#: plugins/bc-custom-content/src/Controller/Api/CustomContentsController.php:138
+#: plugins/bc-custom-content/src/Controller/Api/CustomContentsController.php:178
 #: plugins/bc-custom-content/src/Controller/Api/CustomEntriesController.php:62
 #: plugins/bc-custom-content/src/Controller/Api/CustomEntriesController.php:100
-#: plugins/bc-custom-content/src/Controller/Api/CustomLinksController.php:50
+#: plugins/bc-custom-content/src/Controller/Api/CustomFieldsController.php:96
+#: plugins/bc-custom-content/src/Controller/Api/CustomFieldsController.php:133
+#: plugins/bc-custom-content/src/Controller/Api/CustomFieldsController.php:166
+#: plugins/bc-custom-content/src/Controller/Api/CustomLinksController.php:110
+#: plugins/bc-custom-content/src/Controller/Api/CustomTablesController.php:67
+#: plugins/bc-custom-content/src/Controller/Api/CustomTablesController.php:98
+#: plugins/bc-custom-content/src/Controller/Api/CustomTablesController.php:131
+#: plugins/bc-custom-content/src/Controller/Api/CustomTablesController.php:164
+#: plugins/bc-custom-content/src/Controller/Api/CustomTablesController.php:171
 #: plugins/bc-editor-template/src/Controller/Admin/EditorTemplatesController.php:72
 #: plugins/bc-editor-template/src/Controller/Admin/EditorTemplatesController.php:107
 #: plugins/bc-editor-template/src/Controller/Admin/EditorTemplatesController.php:135
-#: plugins/bc-favorite/src/Controller/Api/FavoritesController.php:48
-#: plugins/bc-favorite/src/Controller/Api/FavoritesController.php:93
-#: plugins/bc-favorite/src/Controller/Api/FavoritesController.php:126
-#: plugins/bc-favorite/src/Controller/Api/FavoritesController.php:157
-#: plugins/bc-favorite/src/Controller/Api/FavoritesController.php:186
-#: plugins/bc-favorite/src/Controller/Api/FavoritesController.php:212
-#: plugins/bc-favorite/src/Controller/Api/FavoritesController.php:234
+#: plugins/bc-editor-template/src/Controller/Api/EditorTemplatesController.php:69
+#: plugins/bc-editor-template/src/Controller/Api/EditorTemplatesController.php:100
+#: plugins/bc-editor-template/src/Controller/Api/EditorTemplatesController.php:136
+#: plugins/bc-editor-template/src/Controller/Api/EditorTemplatesController.php:169
+#: plugins/bc-favorite/src/Controller/Api/FavoritesController.php:47
+#: plugins/bc-favorite/src/Controller/Api/FavoritesController.php:92
+#: plugins/bc-favorite/src/Controller/Api/FavoritesController.php:125
+#: plugins/bc-favorite/src/Controller/Api/FavoritesController.php:156
+#: plugins/bc-favorite/src/Controller/Api/FavoritesController.php:185
+#: plugins/bc-favorite/src/Controller/Api/FavoritesController.php:211
+#: plugins/bc-favorite/src/Controller/Api/FavoritesController.php:233
 #: plugins/bc-mail/src/Controller/Admin/MailContentsController.php:75
 #: plugins/bc-mail/src/Controller/Admin/MailFieldsController.php:159
 #: plugins/bc-mail/src/Controller/Admin/MailFieldsController.php:194
@@ -1485,6 +1542,7 @@ msgstr "Updated Mail Form “%s”."
 #: plugins/bc-search-index/src/Controller/Api/SearchIndexesController.php:222
 #: plugins/bc-search-index/src/Service/SearchIndexesService.php:338
 #: plugins/bc-theme-config/src/Controller/Admin/ThemeConfigsController.php:49
+#: plugins/bc-theme-config/src/Controller/Api/ThemeConfigsController.php:67
 #: plugins/bc-theme-file/src/Controller/Api/ThemeFoldersController.php:72
 #: plugins/bc-theme-file/src/Controller/Api/ThemeFoldersController.php:98
 #: plugins/bc-theme-file/src/Controller/Api/ThemeFoldersController.php:134
@@ -1500,6 +1558,9 @@ msgstr "Updated Mail Form “%s”."
 #: plugins/bc-uploader/src/Controller/Admin/UploaderCategoriesController.php:138
 #: plugins/bc-uploader/src/Controller/Admin/UploaderFilesController.php:173
 #: plugins/bc-uploader/src/Controller/Admin/UploaderFilesController.php:200
+#: plugins/bc-uploader/src/Controller/Api/UploaderCategoriesController.php:69
+#: plugins/bc-uploader/src/Controller/Api/UploaderCategoriesController.php:152
+#: plugins/bc-uploader/src/Controller/Api/UploaderConfigsController.php:68
 #: plugins/bc-uploader/src/Controller/Api/UploaderFilesController.php:69
 #: plugins/bc-uploader/src/Controller/Api/UploaderFilesController.php:106
 #: plugins/bc-uploader/src/Controller/Api/UploaderFilesController.php:139
@@ -1520,49 +1581,61 @@ msgstr "Updated Mail Form “%s”."
 msgid "データベース処理中にエラーが発生しました。"
 msgstr "An error has occured when processing database."
 
-#: plugins/baser-core/src/Controller/Admin/PermissionGroupsController.php:80
+#: plugins/baser-core/src/Controller/Admin/PermissionGroupsController.php:96
+#, fuzzy
+#| msgid "メールフォーム「%s」を更新しました。"
+msgid "ルールグループ「{0}」を更新しました。"
+msgstr "Updated Mail Form “%s”."
+
+#: plugins/baser-core/src/Controller/Admin/PermissionGroupsController.php:121
+#, fuzzy
+#| msgid "カテゴリー「%s」を削除しました。"
+msgid "アクセスグループ「{0}」を削除しました。"
+msgstr "Deleted Category \"%s\"."
+
+#: plugins/baser-core/src/Controller/Admin/PermissionGroupsController.php:140
 #, fuzzy
 #| msgid "データベースの構築に成功しました。"
 msgid "アクセスルールの再構築に成功しました。"
 msgstr "Succeeded constructing the database."
 
-#: plugins/baser-core/src/Controller/Admin/PermissionGroupsController.php:82
+#: plugins/baser-core/src/Controller/Admin/PermissionGroupsController.php:142
 #, fuzzy
 #| msgid "コアテーブルの構築に失敗しました。"
 msgid "アクセスルールの再構築に失敗しました。"
 msgstr "Failed constructing Core table."
 
-#: plugins/baser-core/src/Controller/Admin/PermissionsController.php:115
+#: plugins/baser-core/src/Controller/Admin/PermissionsController.php:112
 #, fuzzy
 #| msgid "新規アクセス制限設定「%s」を追加しました。"
 msgid "新規アクセスルール「%s」を追加しました。"
 msgstr "Added new Access Restriction Settings “%s”."
 
-#: plugins/baser-core/src/Controller/Admin/PermissionsController.php:155
+#: plugins/baser-core/src/Controller/Admin/PermissionsController.php:150
 #, fuzzy
 #| msgid "カテゴリー「%s」を更新しました。"
 msgid "アクセスルール「%s」を更新しました。"
 msgstr "Updated Category \"%s\"."
 
-#: plugins/baser-core/src/Controller/Admin/PermissionsController.php:188
+#: plugins/baser-core/src/Controller/Admin/PermissionsController.php:184
 #, fuzzy
 #| msgid "カテゴリー「%s」を削除しました。"
 msgid "アクセスルール「%s」を削除しました。"
 msgstr "Deleted Category \"%s\"."
 
-#: plugins/baser-core/src/Controller/Admin/PermissionsController.php:209
+#: plugins/baser-core/src/Controller/Admin/PermissionsController.php:205
 #, fuzzy
 #| msgid "カテゴリー「%s」を追加しました。"
 msgid "アクセスルール「%s」を複製しました。"
 msgstr "Added Category \"%s\"."
 
-#: plugins/baser-core/src/Controller/Admin/PermissionsController.php:233
+#: plugins/baser-core/src/Controller/Admin/PermissionsController.php:229
 #, fuzzy
 #| msgid "プラグイン「%s」 を 無効化しました。"
 msgid "アクセスルール「%s」を無効にしました。"
 msgstr "Disabled Plugin “%s”."
 
-#: plugins/baser-core/src/Controller/Admin/PermissionsController.php:256
+#: plugins/baser-core/src/Controller/Admin/PermissionsController.php:252
 #, fuzzy
 #| msgid "カテゴリー「%s」を追加しました。"
 msgid "アクセスルール「%s」を有効にしました。"
@@ -1772,74 +1845,77 @@ msgstr "Couldn't find update script."
 msgid "アップデートスクリプト実行"
 msgstr "Run Update Script"
 
-#: plugins/baser-core/src/Controller/Admin/UserGroupsController.php:83
+#: plugins/baser-core/src/Controller/Admin/UserGroupsController.php:81
 #, fuzzy
 #| msgid "新規メールフォーム「%s」を追加しました。"
 msgid "新規ユーザーグループ「{0}」を追加しました。"
 msgstr "Added Mail Form “%s”."
 
-#: plugins/baser-core/src/Controller/Admin/UserGroupsController.php:112
+#: plugins/baser-core/src/Controller/Admin/UserGroupsController.php:110
 #: plugins/baser-core/src/Controller/Api/UserGroupsController.php:116
 #, fuzzy
 #| msgid "メールフォーム「%s」を更新しました。"
 msgid "ユーザーグループ「{0}」を更新しました。"
 msgstr "Updated Mail Form “%s”."
 
-#: plugins/baser-core/src/Controller/Admin/UserGroupsController.php:139
+#: plugins/baser-core/src/Controller/Admin/UserGroupsController.php:137
 #, fuzzy
 #| msgid "メールフィールド「%s」を削除しました。"
 msgid "ユーザーグループ「{0}」を削除しました。"
 msgstr "Deleted Mail Field “%s”"
 
-#: plugins/baser-core/src/Controller/Admin/UserGroupsController.php:165
+#: plugins/baser-core/src/Controller/Admin/UserGroupsController.php:163
 #: plugins/baser-core/src/Controller/Api/UserGroupsController.php:200
 #, fuzzy
 #| msgid "ユーザーグループを選択してください。"
 msgid "ユーザーグループ「{0}」をコピーしました。"
 msgstr "Please select User Group."
 
-#: plugins/baser-core/src/Controller/Admin/UsersController.php:76
+#: plugins/baser-core/src/Controller/Admin/UsersController.php:75
 #: plugins/baser-core/src/Controller/Api/UsersController.php:65
+#: plugins/baser-core/src/Controller/UsersController.php:68
 #, fuzzy
 #| msgid "ようこそ、%s さん。"
 msgid "ようこそ、{0}さん。"
 msgstr "Welcome, %s."
 
-#: plugins/baser-core/src/Controller/Admin/UsersController.php:79
+#: plugins/baser-core/src/Controller/Admin/UsersController.php:78
+#: plugins/baser-core/src/Controller/UsersController.php:71
 #, fuzzy
 #| msgid "アカウント名、パスワードが間違っています。"
 msgid "Eメール、または、パスワードが間違っています。"
 msgstr "Account name or password is wrong."
 
-#: plugins/baser-core/src/Controller/Admin/UsersController.php:110
+#: plugins/baser-core/src/Controller/Admin/UsersController.php:109
 #, fuzzy
 #| msgid "プラグインの有効化に失敗しました。"
 msgid "既に代理ログイン中のため失敗しました。"
 msgstr "Failed enabling Plugin"
 
-#: plugins/baser-core/src/Controller/Admin/UsersController.php:130
+#: plugins/baser-core/src/Controller/Admin/UsersController.php:129
 msgid "元のユーザーに戻りました。"
 msgstr "Back to the previous User."
 
-#: plugins/baser-core/src/Controller/Admin/UsersController.php:152
+#: plugins/baser-core/src/Controller/Admin/UsersController.php:151
+#: plugins/baser-core/src/Controller/UsersController.php:95
 msgid "ログアウトしました"
 msgstr "Logged-out"
 
-#: plugins/baser-core/src/Controller/Admin/UsersController.php:210
+#: plugins/baser-core/src/Controller/Admin/UsersController.php:209
 #: plugins/baser-core/src/Controller/Api/UsersController.php:145
 #, fuzzy
 #| msgid "リンク「%s」を追加しました。"
 msgid "ユーザー「{0}」を追加しました。"
 msgstr "Added Link \"%s\"."
 
-#: plugins/baser-core/src/Controller/Admin/UsersController.php:250
+#: plugins/baser-core/src/Controller/Admin/UsersController.php:249
 #: plugins/baser-core/src/Controller/Api/UsersController.php:177
 #, fuzzy
 #| msgid "リンク「%s」を更新しました。"
 msgid "ユーザー「{0}」を更新しました。"
 msgstr "Updated Link \"%s\"."
 
-#: plugins/baser-core/src/Controller/Admin/UsersController.php:285
+#: plugins/baser-core/src/Controller/Admin/UsersController.php:284
 #: plugins/baser-core/src/Controller/Api/UserGroupsController.php:152
 #: plugins/baser-core/src/Controller/Api/UsersController.php:208
 #, fuzzy
@@ -1863,7 +1939,7 @@ msgstr "Failed restoring data. Please confirm log."
 
 #: plugins/baser-core/src/Controller/Admin/UtilitiesController.php:151
 #: plugins/baser-core/src/Controller/Api/UtilitiesController.php:203
-#: plugins/baser-core/src/Service/UtilitiesService.php:268
+#: plugins/baser-core/src/Service/UtilitiesService.php:269
 msgid "エラーログを削除しました。"
 msgstr "Deleted error log."
 
@@ -1934,6 +2010,8 @@ msgstr ""
 #: plugins/baser-core/src/Controller/Api/PluginsController.php:201
 #: plugins/baser-core/src/Controller/Api/PluginsController.php:232
 #: plugins/baser-core/src/Controller/Api/SitesController.php:153
+#: plugins/bc-custom-content/src/Controller/Api/CustomFieldsController.php:65
+#: plugins/bc-custom-content/src/Controller/Api/CustomLinksController.php:67
 #: plugins/bc-mail/src/Controller/Api/MailContentsController.php:206
 #: plugins/bc-mail/src/Controller/Api/MailFieldsController.php:290
 #: plugins/bc-mail/src/Controller/Api/MailFieldsController.php:328
@@ -2050,7 +2128,7 @@ msgstr ""
 #: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogPosts/index_row.php:111
 #: plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/CustomEntries/form.php:128
 #: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailFields/index_row.php:77
-#: plugins/bc-blog/src/Controller/Api/BlogCommentsController.php:125
+#: plugins/bc-blog/src/Controller/Api/BlogCommentsController.php:126
 #: plugins/bc-blog/src/Controller/Api/BlogPostsController.php:335
 msgid "公開"
 msgstr "Public"
@@ -2065,14 +2143,14 @@ msgstr "Added Category \"%s\"."
 #: plugins/baser-core/src/Controller/Api/PermissionsController.php:245
 #: plugins/baser-core/src/Controller/Api/PluginsController.php:351
 #: plugins/bc-blog/src/Controller/Api/BlogCategoriesController.php:57
-#: plugins/bc-blog/src/Controller/Api/BlogCommentsController.php:143
+#: plugins/bc-blog/src/Controller/Api/BlogCommentsController.php:144
 #: plugins/bc-blog/src/Controller/Api/BlogPostsController.php:353
 #: plugins/bc-blog/src/Controller/Api/BlogTagsController.php:211
 #: plugins/bc-mail/src/Controller/Api/MailFieldsController.php:64
 #: plugins/bc-mail/src/Controller/Api/MailMessagesController.php:269
 #: plugins/bc-search-index/src/Controller/Api/SearchIndexesController.php:115
 #: plugins/bc-theme-file/src/Controller/Api/ThemeFoldersController.php:69
-#: plugins/bc-uploader/src/Controller/Api/UploaderCategoriesController.php:114
+#: plugins/bc-uploader/src/Controller/Api/UploaderCategoriesController.php:147
 #: plugins/bc-widget-area/src/Controller/Api/WidgetAreasController.php:203
 #, fuzzy
 #| msgid "処理が完了しました。"
@@ -2125,8 +2203,8 @@ msgstr "Added Static Page’s copy “%s”."
 #: plugins/bc-blog/src/Controller/Api/BlogCategoriesController.php:145
 #: plugins/bc-blog/src/Controller/Api/BlogCategoriesController.php:213
 #: plugins/bc-blog/src/Controller/Api/BlogCategoriesController.php:249
-#: plugins/bc-blog/src/Controller/Api/BlogCommentsController.php:64
-#: plugins/bc-blog/src/Controller/Api/BlogCommentsController.php:95
+#: plugins/bc-blog/src/Controller/Api/BlogCommentsController.php:65
+#: plugins/bc-blog/src/Controller/Api/BlogCommentsController.php:96
 #: plugins/bc-blog/src/Controller/Api/BlogContentsController.php:62
 #: plugins/bc-blog/src/Controller/Api/BlogContentsController.php:142
 #: plugins/bc-blog/src/Controller/Api/BlogContentsController.php:213
@@ -2142,10 +2220,20 @@ msgstr "Added Static Page’s copy “%s”."
 #: plugins/bc-content-link/src/Controller/Api/ContentLinksController.php:137
 #: plugins/bc-content-link/src/Controller/Api/ContentLinksController.php:185
 #: plugins/bc-content-link/src/Controller/Api/ContentLinksController.php:231
+#: plugins/bc-custom-content/src/Controller/Api/CustomContentsController.php:62
+#: plugins/bc-custom-content/src/Controller/Api/CustomContentsController.php:136
+#: plugins/bc-custom-content/src/Controller/Api/CustomContentsController.php:175
 #: plugins/bc-custom-content/src/Controller/Api/CustomEntriesController.php:59
-#: plugins/bc-favorite/src/Controller/Api/FavoritesController.php:46
-#: plugins/bc-favorite/src/Controller/Api/FavoritesController.php:123
-#: plugins/bc-favorite/src/Controller/Api/FavoritesController.php:154
+#: plugins/bc-custom-content/src/Controller/Api/CustomFieldsController.php:131
+#: plugins/bc-custom-content/src/Controller/Api/CustomFieldsController.php:164
+#: plugins/bc-custom-content/src/Controller/Api/CustomTablesController.php:65
+#: plugins/bc-custom-content/src/Controller/Api/CustomTablesController.php:168
+#: plugins/bc-editor-template/src/Controller/Api/EditorTemplatesController.php:67
+#: plugins/bc-editor-template/src/Controller/Api/EditorTemplatesController.php:134
+#: plugins/bc-editor-template/src/Controller/Api/EditorTemplatesController.php:167
+#: plugins/bc-favorite/src/Controller/Api/FavoritesController.php:45
+#: plugins/bc-favorite/src/Controller/Api/FavoritesController.php:122
+#: plugins/bc-favorite/src/Controller/Api/FavoritesController.php:153
 #: plugins/bc-mail/src/Controller/Api/MailContentsController.php:88
 #: plugins/bc-mail/src/Controller/Api/MailContentsController.php:168
 #: plugins/bc-mail/src/Controller/Api/MailContentsController.php:242
@@ -2159,6 +2247,7 @@ msgstr "Added Static Page’s copy “%s”."
 #: plugins/bc-mail/src/Controller/Api/MailMessagesController.php:221
 #: plugins/bc-search-index/src/Controller/Api/SearchIndexesController.php:76
 #: plugins/bc-search-index/src/Controller/Api/SearchIndexesController.php:220
+#: plugins/bc-uploader/src/Controller/Api/UploaderCategoriesController.php:150
 #: plugins/bc-uploader/src/Controller/Api/UploaderFilesController.php:103
 #: plugins/bc-uploader/src/Controller/Api/UploaderFilesController.php:136
 #: plugins/bc-widget-area/src/Controller/Api/WidgetAreasController.php:122
@@ -2228,7 +2317,7 @@ msgid "プラグイン「%s」を有効にしました。"
 msgstr "Disabled Plugin “%s”."
 
 #: plugins/baser-core/src/Controller/Api/PluginsController.php:166
-#: plugins/bc-installer/src/Service/InstallationsService.php:328
+#: plugins/bc-installer/src/Service/InstallationsService.php:335
 msgid "プラグインの有効化に失敗しました。"
 msgstr "Failed enabling Plugin"
 
@@ -2287,17 +2376,17 @@ msgid "バックアップダウンロードが失敗しました。"
 msgstr "Failed File Upload."
 
 #: plugins/baser-core/src/Controller/Api/UtilitiesController.php:179
-#: plugins/baser-core/src/Service/UtilitiesService.php:274
+#: plugins/baser-core/src/Service/UtilitiesService.php:275
 msgid "エラーログが存在しません。"
 msgstr "Error log doesn't exist."
 
-#: plugins/baser-core/src/Controller/AppController.php:163
+#: plugins/baser-core/src/Controller/AppController.php:159
 #, fuzzy
 #| msgid "指定されたページへのアクセスは許可されていません。"
 msgid "指定されたAPIエンドポイントへのアクセスは許可されていません。"
 msgstr "Access to the specified page is not allowed."
 
-#: plugins/baser-core/src/Controller/AppController.php:165
+#: plugins/baser-core/src/Controller/AppController.php:161
 msgid "指定されたページへのアクセスは許可されていません。"
 msgstr "Access to the specified page is not allowed."
 
@@ -2311,11 +2400,11 @@ msgstr "Failed creating Alias."
 msgid "見つかりませんでした。"
 msgstr "Not found."
 
-#: plugins/baser-core/src/Controller/BcAppController.php:449
+#: plugins/baser-core/src/Controller/BcAppController.php:428
 msgid "送信先のメールアドレスが不正です。"
 msgstr "Destination e-mail address was illegal."
 
-#: plugins/baser-core/src/Controller/BcAppController.php:484
+#: plugins/baser-core/src/Controller/BcAppController.php:463
 msgid "送信元のメールアドレスが不正です。"
 msgstr "Sender e-mail address was illegal."
 
@@ -2338,10 +2427,24 @@ msgstr ""
 msgid "DBログの保存に失敗しました。"
 msgstr "Failed saving."
 
-#: plugins/baser-core/src/Controller/MaintenanceController.php:28
-#: plugins/bc-front/templates/Maintenance/index.php:20
-msgid "メンテナンス中"
-msgstr "Under maintanance"
+#: plugins/baser-core/src/Controller/PasswordRequestsController.php:79
+#: plugins/bc-mail/src/Controller/Api/MailContentsController.php:171
+#: plugins/bc-mail/src/Controller/Api/MailContentsController.php:209
+#: plugins/bc-mail/src/Controller/Api/MailFieldsController.php:255
+#: plugins/bc-mail/src/Controller/Api/MailFieldsController.php:293
+#: plugins/bc-mail/src/Controller/Api/MailFieldsController.php:331
+#: plugins/bc-theme-file/src/Controller/Api/ThemeFilesController.php:51
+#: plugins/bc-theme-file/src/Controller/Api/ThemeFilesController.php:86
+#: plugins/bc-theme-file/src/Controller/Api/ThemeFilesController.php:120
+#: plugins/bc-theme-file/src/Controller/Api/ThemeFilesController.php:153
+#: plugins/bc-theme-file/src/Controller/Api/ThemeFilesController.php:190
+#: plugins/bc-theme-file/src/Controller/Api/ThemeFilesController.php:218
+#: plugins/bc-theme-file/src/Controller/Api/ThemeFilesController.php:247
+#: plugins/bc-theme-file/src/Controller/Api/ThemeFilesController.php:279
+#: plugins/bc-theme-file/src/Controller/Api/ThemeFilesController.php:310
+#: plugins/bc-theme-file/src/Controller/Api/ThemeFoldersController.php:306
+msgid "処理中にエラーが発生しました。"
+msgstr "Error occurred during processing."
 
 #: plugins/baser-core/src/Controller/UploadsController.php:67
 #, fuzzy
@@ -2355,7 +2458,7 @@ msgstr "URL's format is wrong."
 msgid "パスワード再発行"
 msgstr "Password"
 
-#: plugins/baser-core/src/Model/Behavior/BcContentsBehavior.php:86
+#: plugins/baser-core/src/Model/Behavior/BcContentsBehavior.php:87
 #, fuzzy
 #| msgid "変更できるテーマがありません。"
 msgid "関連するコンテンツがありません"
@@ -2510,11 +2613,13 @@ msgstr "Page"
 
 #: plugins/baser-core/src/Model/Table/PasswordRequestsTable.php:73
 #: plugins/baser-core/src/Model/Table/UsersTable.php:193
+#: plugins/bc-blog/src/Model/Table/BlogCommentsTable.php:42
 msgid "Eメールの形式が不正です。"
 msgstr "E-mail's format is invalid."
 
 #: plugins/baser-core/src/Model/Table/PasswordRequestsTable.php:74
 #: plugins/baser-core/src/Model/Table/UsersTable.php:194
+#: plugins/bc-blog/src/Model/Table/BlogCommentsTable.php:43
 msgid "Eメールは255文字以内で入力してください。"
 msgstr "Please enter E-mail within 255 characters."
 
@@ -2542,20 +2647,27 @@ msgid "設定名を入力してください。"
 msgstr "Enter Setting Name."
 
 #: plugins/baser-core/src/Model/Table/PermissionsTable.php:100
-#: plugins/baser-core/src/Model/Table/PermissionsTable.php:127
+#: plugins/baser-core/src/Model/Table/PermissionsTable.php:130
 msgid "ユーザーグループを選択してください。"
 msgstr "Please select User Group."
 
 #: plugins/baser-core/src/Model/Table/PermissionsTable.php:104
+#: plugins/bc-admin-third/templates/Admin/element/Permissions/form.php:56
+#, fuzzy
+#| msgid "ユーザーグループを選択してください。"
+msgid "アクセスルールグループを選択してください。"
+msgstr "Please select User Group."
+
+#: plugins/baser-core/src/Model/Table/PermissionsTable.php:107
 msgid "設定URLは255文字以内で入力してください。"
 msgstr "Please enter Setting URL within 255 characters."
 
-#: plugins/baser-core/src/Model/Table/PermissionsTable.php:105
+#: plugins/baser-core/src/Model/Table/PermissionsTable.php:108
 msgid "設定URLを入力してください。"
 msgstr "Please enter Setting URL."
 
-#: plugins/baser-core/src/Model/Table/PermissionsTable.php:194
-#: plugins/baser-core/src/Model/Table/UserGroupsTable.php:161
+#: plugins/baser-core/src/Model/Table/PermissionsTable.php:197
+#: plugins/baser-core/src/Model/Table/UserGroupsTable.php:162
 #: plugins/bc-admin-third/templates/Admin/element/Users/form.php:26
 #: plugins/bc-admin-third/templates/Admin/layout/default.php:49
 msgid "処理に失敗しました。"
@@ -2744,34 +2856,34 @@ msgstr "baser (Core)"
 msgid "plugin（プラグイン）"
 msgstr "plugin (Plugin)"
 
-#: plugins/baser-core/src/Model/Table/UserGroupsTable.php:104
+#: plugins/baser-core/src/Model/Table/UserGroupsTable.php:105
 msgid "ユーザーグループ名は50文字以内で入力してください。"
 msgstr "Please enter User Group Name within 50 characters."
 
-#: plugins/baser-core/src/Model/Table/UserGroupsTable.php:105
 #: plugins/baser-core/src/Model/Table/UserGroupsTable.php:106
+#: plugins/baser-core/src/Model/Table/UserGroupsTable.php:107
 msgid "ユーザーグループ名を入力してください。"
 msgstr "Please enter User Group Name."
 
-#: plugins/baser-core/src/Model/Table/UserGroupsTable.php:111
+#: plugins/baser-core/src/Model/Table/UserGroupsTable.php:112
 msgid "ユーザーグループ名は半角のみで入力してください。"
 msgstr "Please enter User Group Name with only half-size characters."
 
-#: plugins/baser-core/src/Model/Table/UserGroupsTable.php:116
+#: plugins/baser-core/src/Model/Table/UserGroupsTable.php:117
 msgid "既に登録のあるユーザーグループ名です。"
 msgstr "User Group Name is already registered."
 
-#: plugins/baser-core/src/Model/Table/UserGroupsTable.php:122
+#: plugins/baser-core/src/Model/Table/UserGroupsTable.php:123
 msgid "表示名は50文字以内で入力してください。"
 msgstr "Please enter Display Name within 50 characters."
 
-#: plugins/baser-core/src/Model/Table/UserGroupsTable.php:123
 #: plugins/baser-core/src/Model/Table/UserGroupsTable.php:124
+#: plugins/baser-core/src/Model/Table/UserGroupsTable.php:125
 msgid "表示名を入力してください。"
 msgstr "Please enter Display Name."
 
-#: plugins/baser-core/src/Model/Table/UserGroupsTable.php:128
 #: plugins/baser-core/src/Model/Table/UserGroupsTable.php:129
+#: plugins/baser-core/src/Model/Table/UserGroupsTable.php:130
 #, fuzzy
 #| msgid "認証プレフィックスを入力してください。"
 msgid "認証プレフィックスを選択してください。"
@@ -2933,7 +3045,7 @@ msgstr "File size is over. Please use the file of %s MB or less."
 msgid "PHPの構文エラーです"
 msgstr "PHP syntax error"
 
-#: plugins/baser-core/src/Plugin.php:313
+#: plugins/baser-core/src/Plugin.php:316
 #, fuzzy
 #| msgid "このURLの登録は許可されていません。"
 msgid "Web APIは許可されていません。"
@@ -2943,20 +3055,30 @@ msgstr "This URL's registration is not allowed."
 msgid "親フォルダの設定に従う"
 msgstr "Follow Parent Folder’s settings"
 
+#: plugins/baser-core/src/Service/Admin/PermissionGroupsAdminService.php:66
+#: plugins/baser-core/src/Service/Admin/PermissionsAdminService.php:51
+#: plugins/baser-core/src/Service/Admin/PermissionsAdminService.php:78
+#: plugins/baser-core/src/Service/Admin/PermissionsAdminService.php:101
+#: plugins/baser-core/src/Service/PermissionGroupsService.php:373
+#, fuzzy
+#| msgid "サイト"
+msgid "ゲスト"
+msgstr "Site"
+
 #: plugins/baser-core/src/Service/Admin/SitesAdminService.php:129
 #, fuzzy
 #| msgid "メインサイト"
 msgid "メインサイトに従う"
 msgstr "Main Site"
 
-#: plugins/baser-core/src/Service/BcDatabaseService.php:311
-#: plugins/baser-core/src/Service/BcDatabaseService.php:323
+#: plugins/baser-core/src/Service/BcDatabaseService.php:315
+#: plugins/baser-core/src/Service/BcDatabaseService.php:331
 #, fuzzy
 #| msgid "%s の初期データのロードに失敗しました。"
 msgid "%s %s の初期データのロードに失敗しました。"
 msgstr "Failed loading of %s’s initial data."
 
-#: plugins/baser-core/src/Service/BcDatabaseService.php:328
+#: plugins/baser-core/src/Service/BcDatabaseService.php:337
 #, fuzzy
 #| msgid ""
 #| "初期データの読み込みに失敗しましたので baserCMSコアの初期データを読み込み"
@@ -2968,7 +3090,7 @@ msgstr ""
 "Loaded baserCMS Core’s initial data because loading of initial data has "
 "failed."
 
-#: plugins/baser-core/src/Service/BcDatabaseService.php:330
+#: plugins/baser-core/src/Service/BcDatabaseService.php:340
 #, fuzzy
 #| msgid ""
 #| "初期データの読み込みに失敗しました。データが不完全な状態です。正常に動作し"
@@ -2980,39 +3102,39 @@ msgstr ""
 "Failed loading of initial data. Data is incomplete. It might not run "
 "normally."
 
-#: plugins/baser-core/src/Service/BcDatabaseService.php:368
+#: plugins/baser-core/src/Service/BcDatabaseService.php:381
 msgid "%s の読み込みに失敗。"
 msgstr "Failed loading %s."
 
-#: plugins/baser-core/src/Service/BcDatabaseService.php:558
+#: plugins/baser-core/src/Service/BcDatabaseService.php:572
 msgid "users テーブルの初期化に失敗。"
 msgstr "Failed initializing users table."
 
-#: plugins/baser-core/src/Service/BcDatabaseService.php:581
-#: plugins/bc-installer/src/Service/InstallationsService.php:181
+#: plugins/baser-core/src/Service/BcDatabaseService.php:595
+#: plugins/bc-installer/src/Service/InstallationsService.php:188
 msgid "システムデータの初期化に失敗しました。"
 msgstr "Failed system data's initialization."
 
-#: plugins/baser-core/src/Service/BcDatabaseService.php:603
+#: plugins/baser-core/src/Service/BcDatabaseService.php:617
 msgid "メールプラグインのメール受信用テーブルの生成に失敗しました。"
 msgstr "Failed creating Mail Plugin’s mail receiving table."
 
-#: plugins/baser-core/src/Service/BcDatabaseService.php:1306
+#: plugins/baser-core/src/Service/BcDatabaseService.php:1325
 msgid "データベースファイルに書き込み権限がありません。"
 msgstr "There is no write permission to database files."
 
-#: plugins/baser-core/src/Service/BcDatabaseService.php:1310
+#: plugins/baser-core/src/Service/BcDatabaseService.php:1329
 msgid "データベースの保存フォルダに書き込み権限がありません。"
 msgstr "There is no write permission to database's saving folder"
 
-#: plugins/baser-core/src/Service/BcDatabaseService.php:1317
+#: plugins/baser-core/src/Service/BcDatabaseService.php:1336
 #, fuzzy
 #| msgid ""
 #| "ドライバが見つかりません Driver is not defined.(MySQL|Postgres|SQLite|CSV)"
 msgid "ドライバが見つかりません Driver is not defined.(MySQL|Postgres|SQLite)"
 msgstr "Driver is not defined.(MySQL|Postgres|SQLite|CSV)"
 
-#: plugins/baser-core/src/Service/BcDatabaseService.php:1337
+#: plugins/baser-core/src/Service/BcDatabaseService.php:1356
 #, fuzzy
 #| msgid ""
 #| "データベースへの接続でエラーが発生しました。データベース設定を見直してくだ"
@@ -3025,7 +3147,7 @@ msgstr ""
 "Error has occurred when connecting to the database. Please re-check the "
 "database config.<br>It’s likely specified database is not on server."
 
-#: plugins/baser-core/src/Service/BcDatabaseService.php:1341
+#: plugins/baser-core/src/Service/BcDatabaseService.php:1360
 #, fuzzy
 #| msgid ""
 #| "データベースへの接続でエラーが発生しました。データベース設定を見直してくだ"
@@ -3038,7 +3160,7 @@ msgstr ""
 "Error has occurred when connecting to the database. Please re-check the "
 "database config.<br>It’s likely specified database is not on server."
 
-#: plugins/baser-core/src/Service/BcDatabaseService.php:1353
+#: plugins/baser-core/src/Service/BcDatabaseService.php:1372
 msgid ""
 "データベースへの接続でエラーが発生しました。データベース設定を見直してくださ"
 "い。"
@@ -3046,18 +3168,18 @@ msgstr ""
 "Error has occurred connecting to the database. Please re-check the database "
 "config."
 
-#: plugins/baser-core/src/Service/BcDatabaseService.php:1362
-#: plugins/baser-core/src/Service/BcDatabaseService.php:1370
+#: plugins/baser-core/src/Service/BcDatabaseService.php:1381
+#: plugins/baser-core/src/Service/BcDatabaseService.php:1389
 msgid "データベースのバージョンが %s 以上か確認してください。"
 msgstr "Please confirm the database version is %s or newer."
 
-#: plugins/baser-core/src/Service/BcDatabaseService.php:1381
+#: plugins/baser-core/src/Service/BcDatabaseService.php:1400
 #, fuzzy
 #| msgid "データベースへの接続でエラーが発生しました。"
 msgid "データベースへの接続でエラーが発生しました。\n"
 msgstr "Error has occurred when connecting to the database."
 
-#: plugins/baser-core/src/Service/BcDatabaseService.php:1391
+#: plugins/baser-core/src/Service/BcDatabaseService.php:1411
 msgid ""
 "データベースへの接続に成功しましたが、プレフィックスが重複するテーブルが存在"
 "します。"
@@ -3110,16 +3232,23 @@ msgstr "Destination e-mail address was illegal."
 msgid "本文欄でスクリプトの入力は許可されていません。"
 msgstr "Access to the specified page is not allowed."
 
-#: plugins/baser-core/src/Service/PermissionGroupsService.php:235
-msgid "{0} その他"
-msgstr ""
+#: plugins/baser-core/src/Service/PasswordRequestsService.php:101
+#, fuzzy
+#| msgid "データが存在しません。"
+msgid "ユーザーが存在しません。"
+msgstr "Data does not exist."
 
-#: plugins/baser-core/src/Service/PermissionGroupsService.php:334
+#: plugins/baser-core/src/Service/PermissionGroupsService.php:345
+#: plugins/bc-admin-third/templates/Admin/element/UserGroups/form.php:117
 #: plugins/bc-favorite/config/permission.php:28
 #, fuzzy
 #| msgid "アクセス"
 msgid "フルアクセス"
 msgstr "Access"
+
+#: plugins/baser-core/src/Service/PermissionGroupsService.php:434
+msgid "{0} その他"
+msgstr ""
 
 #: plugins/baser-core/src/Service/PluginsService.php:150
 msgid ""
@@ -3183,15 +3312,15 @@ msgstr "Please delete Theme Folder manually."
 msgid "処理中にエラーが発生しました。プラグインの開発者に確認してください。"
 msgstr "Error occurred when processing. Please contact the Plugin’s developer."
 
-#: plugins/baser-core/src/Service/PluginsService.php:636
+#: plugins/baser-core/src/Service/PluginsService.php:615
 #: plugins/baser-core/src/Service/ThemesService.php:145
-#: plugins/baser-core/src/Service/UtilitiesService.php:396
+#: plugins/baser-core/src/Service/UtilitiesService.php:397
 msgid "サーバに設定されているサイズ制限を超えています。"
 msgstr "The size is exceeding the size restriction of the server."
 
-#: plugins/baser-core/src/Service/PluginsService.php:645
+#: plugins/baser-core/src/Service/PluginsService.php:624
 #: plugins/baser-core/src/Service/ThemesService.php:154
-#: plugins/baser-core/src/Service/UtilitiesService.php:408
+#: plugins/baser-core/src/Service/UtilitiesService.php:409
 msgid "アップロードしたZIPファイルの展開に失敗しました。"
 msgstr "Failed extracting the uploaded zip file."
 
@@ -3238,17 +3367,17 @@ msgstr "Error has occurred when deleting."
 msgid "対象データが見つかりません。"
 msgstr "Couldn't find the data."
 
-#: plugins/baser-core/src/Service/UtilitiesService.php:222
+#: plugins/baser-core/src/Service/UtilitiesService.php:223
 #, fuzzy
 #| msgid "スペシャルサンクスデータが取得できませんでした。"
 msgid "スペシャルサンクスのデータが読み込めませんでした。"
 msgstr "Couldn’t fetch Special Thanks data."
 
-#: plugins/baser-core/src/Service/UtilitiesService.php:271
+#: plugins/baser-core/src/Service/UtilitiesService.php:272
 msgid "エラーログが削除できませんでした。"
 msgstr "Couldn't delete error log."
 
-#: plugins/baser-core/src/Service/UtilitiesService.php:398
+#: plugins/baser-core/src/Service/UtilitiesService.php:399
 #, fuzzy
 #| msgid "データが送信できませんでした。"
 msgid "バックアップファイルが送信されませんでした。"
@@ -3310,6 +3439,16 @@ msgstr ""
 "Couldn't give the write permission to /app/Config . Give the write "
 "permission to it manually."
 
+#: plugins/baser-core/src/Utility/BcGmaps.php:61
+#, fuzzy
+#| msgid "データベースユーザー名を入力してください。"
+msgid "システム基本設定にて、Google Maps API キーを入力してください。"
+msgstr "Please enter username for database."
+
+#: plugins/baser-core/src/Utility/BcUtil.php:1793
+msgid "リトライ回数は正の整数値で指定してください。"
+msgstr "Please specify retry number with positive integers."
+
 #: plugins/baser-core/src/View/Helper/BcAdminFormHelper.php:72
 #: plugins/bc-custom-content/config/setting.php:107
 #: plugins/bc-custom-content/plugins/BcCcDate/config/setting.php:26
@@ -3319,14 +3458,14 @@ msgstr ""
 msgid "日付"
 msgstr "Attachment"
 
-#: plugins/baser-core/src/View/Helper/BcAdminHelper.php:448
-#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogContents/form.php:192
-#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:244
-#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:265
+#: plugins/baser-core/src/View/Helper/BcAdminHelper.php:449
+#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogContents/form.php:208
+#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:260
+#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:281
 msgid "編集する"
 msgstr "Edit"
 
-#: plugins/baser-core/src/View/Helper/BcAdminHelper.php:472
+#: plugins/baser-core/src/View/Helper/BcAdminHelper.php:473
 msgid "サイト確認"
 msgstr "View Site"
 
@@ -3395,20 +3534,11 @@ msgstr "Add"
 msgid "削除する"
 msgstr "Delete"
 
-#: plugins/baser-core/src/View/Helper/BcGooglemapsHelper.php:99
-#: plugins/baser-core/src/View/Helper/BcGooglemapsHelper.php:101
-msgid "JavaScript を有効にしてください。"
-msgstr "Please enable JavaScript."
-
-#: plugins/baser-core/src/View/Helper/BcGooglemapsHelper.php:169
+#: plugins/baser-core/src/View/Helper/BcGoogleMapsHelper.php:67
 msgid ""
-"Googleマップを利用するには、Google Maps APIのキーの登録が必要です。<a "
-"href=\"https://developers.google.com/maps/web/\" target=\"_blank\">キーを取得"
-"</a>して、<a href=\"%s\">システム管理</a>より設定してください。"
+"システム基本設定で住所を指定するか、パラーメーター address を指定してくださ"
+"い。"
 msgstr ""
-"You have to register Google Maps API’s key to use Google Maps.<a "
-"href=“https://developers.google.com/maps/web/“ target=“_blank”>Get key</a>, "
-"and set it from <a href=“%s”>System</a>."
 
 #: plugins/baser-core/src/View/Helper/BcTextHelper.php:78
 msgid "無"
@@ -3646,10 +3776,10 @@ msgid "無効"
 msgstr "Disable"
 
 #: plugins/baser-core/src/View/Helper/BcTextHelper.php:419
-#: plugins/bc-admin-third/templates/Admin/PermissionGroups/edit.php:79
-#: plugins/bc-admin-third/templates/Admin/PermissionGroups/edit.php:115
+#: plugins/bc-admin-third/templates/Admin/element/PermissionGroups/form.php:77
+#: plugins/bc-admin-third/templates/Admin/element/PermissionGroups/form.php:114
 #: plugins/bc-admin-third/templates/Admin/element/PermissionGroups/index_list.php:31
-#: plugins/bc-admin-third/templates/Admin/element/Permissions/form.php:109
+#: plugins/bc-admin-third/templates/Admin/element/Permissions/form.php:110
 #: plugins/bc-admin-third/templates/Admin/element/Permissions/index_list.php:36
 #: plugins/bc-admin-third/templates/Admin/element/Permissions/index_row.php:79
 #: plugins/bc-admin-third/templates/Admin/element/Users/form.php:159
@@ -3677,11 +3807,11 @@ msgstr ""
 "Installation Mode now. Set back to Normal Mode in System Settings before "
 "starting operation."
 
-#: plugins/baser-core/src/View/Helper/BcToolbarHelper.php:324
+#: plugins/baser-core/src/View/Helper/BcToolbarHelper.php:327
 msgid "インストールマニュアル"
 msgstr "Install Manual"
 
-#: plugins/baser-core/src/View/Helper/BcToolbarHelper.php:325
+#: plugins/baser-core/src/View/Helper/BcToolbarHelper.php:328
 msgid "アップデートマニュアル"
 msgstr "Update Manual"
 
@@ -3713,27 +3843,29 @@ msgstr ""
 "You must set BcUploadBehavior’s using settings in Model to use "
 "BcUploadHelper."
 
-#: plugins/baser-core/tests/TestCase/View/Helper/BcBaserHelperTest.php:445
+#: plugins/baser-core/tests/TestCase/View/Helper/BcBaserHelperTest.php:447
 #: plugins/bc-admin-third/templates/Admin/layout/default.php:45
+#: plugins/bc-admin-third/templates/plugin/BcFavorite/Admin/element/favorite_menu.php:26
 #: plugins/bc-admin-third/templates/plugin/BcUploader/Admin/element/UploaderFiles/index.php:24
 msgid "キャンセル"
 msgstr "Cancel"
 
-#: plugins/baser-core/tests/TestCase/View/Helper/BcBaserHelperTest.php:446
+#: plugins/baser-core/tests/TestCase/View/Helper/BcBaserHelperTest.php:448
 #: plugins/bc-admin-third/templates/Admin/ContentFolders/edit.php:58
 #: plugins/bc-admin-third/templates/Admin/Contents/edit.php:22
 #: plugins/bc-admin-third/templates/Admin/Contents/edit_alias.php:32
 #: plugins/bc-admin-third/templates/Admin/Pages/edit.php:32
 #: plugins/bc-admin-third/templates/Admin/PasswordRequests/apply.php:34
 #: plugins/bc-admin-third/templates/Admin/PasswordRequests/entry.php:32
-#: plugins/bc-admin-third/templates/Admin/PermissionGroups/edit.php:132
-#: plugins/bc-admin-third/templates/Admin/Permissions/add.php:54
-#: plugins/bc-admin-third/templates/Admin/Permissions/edit.php:54
-#: plugins/bc-admin-third/templates/Admin/SiteConfigs/index.php:659
+#: plugins/bc-admin-third/templates/Admin/PermissionGroups/add.php:42
+#: plugins/bc-admin-third/templates/Admin/PermissionGroups/edit.php:51
+#: plugins/bc-admin-third/templates/Admin/Permissions/add.php:55
+#: plugins/bc-admin-third/templates/Admin/Permissions/edit.php:55
+#: plugins/bc-admin-third/templates/Admin/SiteConfigs/index.php:661
 #: plugins/bc-admin-third/templates/Admin/Sites/add.php:44
 #: plugins/bc-admin-third/templates/Admin/Sites/edit.php:34
-#: plugins/bc-admin-third/templates/Admin/UserGroups/add.php:31
-#: plugins/bc-admin-third/templates/Admin/UserGroups/edit.php:34
+#: plugins/bc-admin-third/templates/Admin/UserGroups/add.php:38
+#: plugins/bc-admin-third/templates/Admin/UserGroups/edit.php:54
 #: plugins/bc-admin-third/templates/Admin/Users/add.php:39
 #: plugins/bc-admin-third/templates/Admin/Users/edit.php:40
 #: plugins/bc-admin-third/templates/Admin/layout/default.php:46
@@ -3767,8 +3899,27 @@ msgstr "Cancel"
 #: plugins/bc-admin-third/templates/plugin/BcUploader/Admin/element/UploaderFiles/index.php:25
 #: plugins/bc-admin-third/templates/plugin/BcWidgetArea/Admin/WidgetAreas/edit.php:128
 #: plugins/bc-admin-third/templates/plugin/BcWidgetArea/Admin/WidgetAreas/edit.php:213
+#: plugins/bc-front/templates/PasswordRequests/apply.php:48
 msgid "保存"
 msgstr "Save"
+
+#: plugins/BcSpaSample/config.php:14
+msgid "SPAサンプル"
+msgstr ""
+
+#: plugins/BcSpaSample/config.php:15
+#, fuzzy
+#| msgid "メールプラグイン"
+msgid "SPAのサンプルプラグインです"
+msgstr "Mail Plugin"
+
+#: plugins/BcThemeSample/config.php:14
+msgid "サンプルテーマ"
+msgstr ""
+
+#: plugins/BcThemeSample/config.php:15
+msgid "制作用のサンプルテーマです。"
+msgstr ""
 
 #: plugins/bc-admin-third/config.php:14
 msgid "BcAdminThird"
@@ -3811,10 +3962,13 @@ msgstr "Edit Static Page information"
 
 #: plugins/bc-admin-third/templates/Admin/PasswordRequests/apply.php:19
 #: plugins/bc-admin-third/templates/Admin/PasswordRequests/entry.php:19
+#: plugins/bc-front/templates/PasswordRequests/apply.php:19
+#: plugins/bc-front/templates/PasswordRequests/entry.php:19
 msgid "パスワードのリセット"
 msgstr "Reset Password"
 
 #: plugins/bc-admin-third/templates/Admin/PasswordRequests/apply.php:23
+#: plugins/bc-front/templates/PasswordRequests/apply.php:25
 #, fuzzy
 #| msgid "検索キーワードを入力してください。"
 msgid "新しいパスワードを入力してください。"
@@ -3826,21 +3980,26 @@ msgstr "Please enter Search Keyword."
 #: plugins/bc-admin-third/templates/plugin/BcInstaller/Admin/Installations/step3.php:75
 #: plugins/bc-admin-third/templates/plugin/BcInstaller/Admin/Installations/step4.php:54
 #: plugins/bc-custom-content/plugins/BcCcPassword/config/setting.php:27
+#: plugins/bc-front/templates/PasswordRequests/apply.php:34
+#: plugins/bc-front/templates/Users/login.php:46
 #: plugins/bc-mail/src/Model/Table/MailFieldsTable.php:156
 msgid "パスワード"
 msgstr "Password"
 
 #: plugins/bc-admin-third/templates/Admin/PasswordRequests/apply.php:29
+#: plugins/bc-front/templates/PasswordRequests/apply.php:41
 msgid "再入力"
 msgstr ""
 
 #: plugins/bc-admin-third/templates/Admin/PasswordRequests/done.php:18
+#: plugins/bc-front/templates/PasswordRequests/done.php:18
 #, fuzzy
 #| msgid "パスワードのリセット"
 msgid "パスワードのリセット完了"
 msgstr "Reset Password"
 
 #: plugins/bc-admin-third/templates/Admin/PasswordRequests/done.php:22
+#: plugins/bc-front/templates/PasswordRequests/done.php:24
 #, fuzzy
 #| msgid "フィード「%s」を更新しました。"
 msgid "パスワードを変更しました。"
@@ -3851,10 +4010,14 @@ msgstr "Updated Feed \"%s\"."
 #: plugins/bc-admin-third/templates/Admin/Users/login.php:49
 #: plugins/bc-admin-third/templates/Admin/element/Users/index_row.php:68
 #: plugins/bc-admin-third/templates/element/toolbar.php:130
+#: plugins/bc-front/templates/PasswordRequests/done.php:27
+#: plugins/bc-front/templates/Users/login.php:24
+#: plugins/bc-front/templates/Users/login.php:54
 msgid "ログイン"
 msgstr "Login"
 
 #: plugins/bc-admin-third/templates/Admin/PasswordRequests/entry.php:23
+#: plugins/bc-front/templates/PasswordRequests/entry.php:25
 #, fuzzy
 #| msgid ""
 #| "パスワードを忘れた方は、登録されているメールアドレスを送信してください。"
@@ -3867,148 +4030,29 @@ msgstr ""
 "notify new password by mail."
 
 #: plugins/bc-admin-third/templates/Admin/PasswordRequests/expired.php:18
+#: plugins/bc-front/templates/PasswordRequests/expired.php:18
 msgid "Not Found"
 msgstr ""
 
 #: plugins/bc-admin-third/templates/Admin/PasswordRequests/expired.php:22
+#: plugins/bc-front/templates/PasswordRequests/expired.php:24
 msgid "ページの有効期限が切れているか、もしくは誤ったURLにアクセスしています。"
 msgstr ""
 
-#: plugins/bc-admin-third/templates/Admin/PermissionGroups/edit.php:24
+#: plugins/bc-admin-third/templates/Admin/PermissionGroups/add.php:25
 #, fuzzy
 #| msgid "ユーザーグループ編集"
-msgid "%s｜アクセスルールグループ編集"
+msgid "%s｜アクセスルールグループ新規登録"
 msgstr "Edit User Group"
 
-#: plugins/bc-admin-third/templates/Admin/PermissionGroups/edit.php:44
-#: plugins/bc-admin-third/templates/Admin/Updaters/exec_script.php:21
-#: plugins/bc-admin-third/templates/Admin/element/Contents/index_list_table.php:66
-#: plugins/bc-admin-third/templates/Admin/element/PermissionGroups/index_view_setting.php:24
-#: plugins/bc-admin-third/templates/Admin/element/Permissions/index_list.php:61
-#: plugins/bc-admin-third/templates/Admin/element/content_info.php:54
-#: plugins/bc-admin-third/templates/Admin/element/search/contents_index.php:39
-#: plugins/bc-admin-third/templates/Admin/element/search/permissions_index.php:32
-#: plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/CustomFields/form.php:86
-#: plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/CustomFields/index_list.php:49
-#: plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/CustomFields/index_list.php:50
-#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailFields/form.php:64
-#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailFields/index_list.php:72
-#: plugins/bc-admin-third/templates/plugin/BcSearchIndex/Admin/element/SearchIndexes/index_list.php:46
-#: plugins/bc-admin-third/templates/plugin/BcSearchIndex/Admin/element/search/search_indexes_index.php:35
-#: plugins/bc-admin-third/templates/plugin/BcUploader/Admin/element/search/uploader_files_index.php:49
-msgid "タイプ"
-msgstr "Type"
-
-#: plugins/bc-admin-third/templates/Admin/PermissionGroups/edit.php:51
-#: plugins/bc-admin-third/templates/Admin/element/PermissionGroups/index_list.php:29
-#, fuzzy
-#| msgid "ユーザーグループ名"
-msgid "ルールグループ名"
-msgstr "User Group Name"
-
-#: plugins/bc-admin-third/templates/Admin/PermissionGroups/edit.php:52
-#: plugins/bc-admin-third/templates/Admin/PermissionGroups/edit.php:61
-#: plugins/bc-admin-third/templates/Admin/SiteConfigs/index.php:52
-#: plugins/bc-admin-third/templates/Admin/SiteConfigs/index.php:62
-#: plugins/bc-admin-third/templates/Admin/Utilities/load_schema.php:26
-#: plugins/bc-admin-third/templates/Admin/Utilities/load_schema.php:39
-#: plugins/bc-admin-third/templates/Admin/Utilities/write_schema.php:24
-#: plugins/bc-admin-third/templates/Admin/Utilities/write_schema.php:37
-#: plugins/bc-admin-third/templates/Admin/element/Permissions/form.php:63
-#: plugins/bc-admin-third/templates/Admin/element/Permissions/form.php:76
-#: plugins/bc-admin-third/templates/Admin/element/Sites/form.php:54
-#: plugins/bc-admin-third/templates/Admin/element/Sites/form.php:73
-#: plugins/bc-admin-third/templates/Admin/element/Sites/form.php:84
-#: plugins/bc-admin-third/templates/Admin/element/UserGroups/form.php:50
-#: plugins/bc-admin-third/templates/Admin/element/UserGroups/form.php:70
-#: plugins/bc-admin-third/templates/Admin/element/UserGroups/form.php:95
-#: plugins/bc-admin-third/templates/Admin/element/Users/form.php:59
-#: plugins/bc-admin-third/templates/Admin/element/Users/form.php:84
-#: plugins/bc-admin-third/templates/Admin/element/Users/form.php:100
-#: plugins/bc-admin-third/templates/Admin/element/Users/form.php:130
-#: plugins/bc-admin-third/templates/Admin/element/content_fields.php:111
-#: plugins/bc-admin-third/templates/Admin/element/content_fields.php:138
-#: plugins/bc-admin-third/templates/Admin/element/content_fields.php:153
-#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogCategories/form.php:35
-#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogCategories/form.php:57
-#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogContents/form.php:71
-#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogContents/form.php:105
-#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogContents/form.php:158
-#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogContents/form.php:181
-#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogContents/form.php:210
-#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogPosts/form.php:59
-#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogPosts/form.php:194
-#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogPosts/form.php:252
-#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogPosts/form.php:274
-#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogTags/form.php:39
-#: plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/CustomContents/form.php:96
-#: plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/CustomContents/form.php:141
-#: plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/CustomContents/form.php:162
-#: plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/CustomEntries/form.php:65
-#: plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/CustomFields/form.php:48
-#: plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/CustomFields/form.php:67
-#: plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/CustomFields/index_list.php:55
-#: plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/CustomFields/index_list.php:56
-#: plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/CustomLinks/form.php:107
-#: plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/CustomLinks/form.php:126
-#: plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/CustomLinks/preview.php:37
-#: plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/CustomTables/form.php:50
-#: plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/CustomTables/form.php:75
-#: plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/CustomTables/form.php:86
-#: plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/required.php:12
-#: plugins/bc-admin-third/templates/plugin/BcEditorTemplate/Admin/element/EditorTemplates/form.php:39
-#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/MailConfigs/index.php:35
-#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:47
-#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:63
-#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:75
-#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:87
-#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:215
-#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:234
-#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:258
-#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailFields/form.php:41
-#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailFields/form.php:53
-#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailFields/form.php:65
-#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailFields/index_list.php:74
-#: plugins/bc-admin-third/templates/plugin/BcThemeFile/Admin/element/ThemeFiles/form.php:43
-#: plugins/bc-admin-third/templates/plugin/BcThemeFile/Admin/element/ThemeFiles/form_folder.php:40
-#: plugins/bc-admin-third/templates/plugin/BcUploader/Admin/UploaderConfigs/index.php:34
-#: plugins/bc-admin-third/templates/plugin/BcUploader/Admin/UploaderConfigs/index.php:59
-#: plugins/bc-admin-third/templates/plugin/BcUploader/Admin/UploaderConfigs/index.php:83
-#: plugins/bc-admin-third/templates/plugin/BcUploader/Admin/UploaderConfigs/index.php:113
-#: plugins/bc-admin-third/templates/plugin/BcUploader/Admin/UploaderConfigs/index.php:137
-#: plugins/bc-admin-third/templates/plugin/BcUploader/Admin/element/UploaderCategories/form.php:35
-#: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:57
-#: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:61
-#: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:72
-#: plugins/bc-front/templates/plugin/BcMail/element/mail_input.php:50
-msgid "必須"
-msgstr "Required"
-
-#: plugins/bc-admin-third/templates/Admin/PermissionGroups/edit.php:60
-#, fuzzy
-#| msgid "メール"
-msgid "ルール"
-msgstr "Mail"
-
-#: plugins/bc-admin-third/templates/Admin/PermissionGroups/edit.php:80
-#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailMessages/index_row.php:69
-msgid "詳細"
-msgstr "Detail"
-
-#: plugins/bc-admin-third/templates/Admin/PermissionGroups/edit.php:113
-#: plugins/bc-admin-third/templates/Admin/element/Permissions/form.php:107
-#: plugins/bc-admin-third/templates/Admin/element/Users/form.php:156
-#: plugins/bc-admin-third/templates/Admin/element/Users/index_list.php:81
-#: plugins/bc-admin-third/templates/Admin/element/Users/index_list.php:82
-#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailFields/form.php:286
-msgid "利用状態"
-msgstr "Using Status"
-
-#: plugins/bc-admin-third/templates/Admin/PermissionGroups/edit.php:126
-#: plugins/bc-admin-third/templates/Admin/Permissions/add.php:46
-#: plugins/bc-admin-third/templates/Admin/Permissions/edit.php:46
+#: plugins/bc-admin-third/templates/Admin/PermissionGroups/add.php:36
+#: plugins/bc-admin-third/templates/Admin/PermissionGroups/edit.php:45
+#: plugins/bc-admin-third/templates/Admin/Permissions/add.php:47
+#: plugins/bc-admin-third/templates/Admin/Permissions/edit.php:47
 #: plugins/bc-admin-third/templates/Admin/Sites/add.php:37
 #: plugins/bc-admin-third/templates/Admin/Sites/edit.php:30
+#: plugins/bc-admin-third/templates/Admin/UserGroups/add.php:30
+#: plugins/bc-admin-third/templates/Admin/UserGroups/edit.php:37
 #: plugins/bc-admin-third/templates/Admin/Users/add.php:31
 #: plugins/bc-admin-third/templates/Admin/Users/edit.php:32
 #: plugins/bc-admin-third/templates/Admin/element/content_actions.php:27
@@ -4027,17 +4071,48 @@ msgstr "Using Status"
 msgid "一覧に戻る"
 msgstr "Back to List"
 
-#: plugins/bc-admin-third/templates/Admin/PermissionGroups/index.php:19
+#: plugins/bc-admin-third/templates/Admin/PermissionGroups/edit.php:25
+#, fuzzy
+#| msgid "ユーザーグループ編集"
+msgid "%s｜アクセスルールグループ編集"
+msgstr "Edit User Group"
+
+#: plugins/bc-admin-third/templates/Admin/PermissionGroups/edit.php:65
+#: plugins/bc-admin-third/templates/Admin/Permissions/edit.php:69
+#: plugins/bc-admin-third/templates/Admin/Sites/edit.php:49
+#: plugins/bc-admin-third/templates/Admin/Users/edit.php:55
+#: plugins/bc-admin-third/templates/Admin/element/Contents/index_row_table.php:215
+#: plugins/bc-admin-third/templates/Admin/element/Permissions/index_row.php:109
+#: plugins/bc-admin-third/templates/Admin/element/Users/index_row.php:60
+#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogComments/index_row.php:88
+#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogComments/index_row.php:111
+#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogPosts/index_row.php:138
+#: plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/CustomEntries/edit.php:93
+#: plugins/bc-admin-third/templates/plugin/BcEditorTemplate/Admin/EditorTemplates/edit.php:50
+#: plugins/bc-admin-third/templates/plugin/BcEditorTemplate/Admin/element/EditorTemplates/index_row.php:53
+#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/MailFields/edit.php:58
+#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailFields/index_row.php:91
+#: plugins/bc-admin-third/templates/plugin/BcThemeFile/Admin/ThemeFiles/edit.php:80
+#: plugins/bc-admin-third/templates/plugin/BcUploader/Admin/element/UploaderCategories/index_row.php:57
+#: plugins/bc-admin-third/templates/plugin/BcUploader/Admin/element/UploaderFiles/form.php:195
+#: plugins/bc-admin-third/templates/plugin/BcUploader/Admin/element/UploaderFiles/index_row_table.php:87
+#: plugins/bc-admin-third/templates/plugin/BcWidgetArea/Admin/element/WidgetAreas/index_row.php:57
+#, fuzzy
+#| msgid "%s を本当に削除してもいいですか？"
+msgid "{0} を本当に削除してもいいですか？"
+msgstr "Are you sure to delete %s?"
+
+#: plugins/bc-admin-third/templates/Admin/PermissionGroups/index.php:25
 #, fuzzy
 #| msgid "ユーザーグループ一覧"
-msgid "%s｜アクセスルールグループ一覧"
+msgid "アクセスルールグループ一覧"
 msgstr "User Group List"
 
-#: plugins/bc-admin-third/templates/Admin/PermissionGroups/index.php:35
+#: plugins/bc-admin-third/templates/Admin/PermissionGroups/index.php:41
 msgid "ルールを再構築する"
 msgstr ""
 
-#: plugins/bc-admin-third/templates/Admin/PermissionGroups/index.php:39
+#: plugins/bc-admin-third/templates/Admin/PermissionGroups/index.php:45
 #, fuzzy
 #| msgid ""
 #| "プラグインをアップロードし、そのままインストールします。よろしいですか？"
@@ -4046,38 +4121,38 @@ msgid ""
 "セットされます。よろしいですか？"
 msgstr "Uploading and installing Plugin. Are you sure?"
 
-#: plugins/bc-admin-third/templates/Admin/PermissionGroups/index.php:44
+#: plugins/bc-admin-third/templates/Admin/PermissionGroups/index.php:50
 #, fuzzy
 #| msgid "プラグイン一覧に移動する"
 msgid "アクセスルール一覧に移動"
 msgstr "Move to Plugin List"
 
-#: plugins/bc-admin-third/templates/Admin/Permissions/add.php:25
+#: plugins/bc-admin-third/templates/Admin/Permissions/add.php:26
 #, fuzzy
 #| msgid "新規アクセス制限設定登録"
 msgid "%s｜新規アクセスルール登録"
 msgstr "Add Access Restriction Settings"
 
-#: plugins/bc-admin-third/templates/Admin/Permissions/add.php:36
-#: plugins/bc-admin-third/templates/Admin/Permissions/edit.php:36
+#: plugins/bc-admin-third/templates/Admin/Permissions/add.php:37
+#: plugins/bc-admin-third/templates/Admin/Permissions/edit.php:37
 #, fuzzy
 #| msgid "ユーザーグループ編集"
 msgid "アクセスグループ編集に戻る"
 msgstr "Edit User Group"
 
-#: plugins/bc-admin-third/templates/Admin/Permissions/edit.php:25
+#: plugins/bc-admin-third/templates/Admin/Permissions/edit.php:26
 #, fuzzy
 #| msgid "アクセス制限設定編集"
 msgid "%s｜アクセスルール編集"
 msgstr "Edit Access Restriction Settings"
 
-#: plugins/bc-admin-third/templates/Admin/Permissions/index.php:24
+#: plugins/bc-admin-third/templates/Admin/Permissions/index.php:26
 #, fuzzy
 #| msgid "アクセス制限設定一覧"
 msgid "%s｜アクセスルール一覧"
 msgstr "Access Restriction Settings List"
 
-#: plugins/bc-admin-third/templates/Admin/Permissions/index.php:47
+#: plugins/bc-admin-third/templates/Admin/Permissions/index.php:51
 #, fuzzy
 #| msgid "ユーザーグループ一覧"
 msgid "アクセスルールグループ一覧に戻る"
@@ -4352,6 +4427,84 @@ msgstr "Basic Item"
 msgid "管理者メールアドレス"
 msgstr "Admin Mail Address"
 
+#: plugins/bc-admin-third/templates/Admin/SiteConfigs/index.php:52
+#: plugins/bc-admin-third/templates/Admin/SiteConfigs/index.php:62
+#: plugins/bc-admin-third/templates/Admin/Utilities/load_schema.php:26
+#: plugins/bc-admin-third/templates/Admin/Utilities/load_schema.php:39
+#: plugins/bc-admin-third/templates/Admin/Utilities/write_schema.php:24
+#: plugins/bc-admin-third/templates/Admin/Utilities/write_schema.php:37
+#: plugins/bc-admin-third/templates/Admin/element/PermissionGroups/form.php:49
+#: plugins/bc-admin-third/templates/Admin/element/PermissionGroups/form.php:59
+#: plugins/bc-admin-third/templates/Admin/element/Permissions/form.php:64
+#: plugins/bc-admin-third/templates/Admin/element/Permissions/form.php:77
+#: plugins/bc-admin-third/templates/Admin/element/Sites/form.php:54
+#: plugins/bc-admin-third/templates/Admin/element/Sites/form.php:73
+#: plugins/bc-admin-third/templates/Admin/element/Sites/form.php:84
+#: plugins/bc-admin-third/templates/Admin/element/UserGroups/form.php:49
+#: plugins/bc-admin-third/templates/Admin/element/UserGroups/form.php:69
+#: plugins/bc-admin-third/templates/Admin/element/UserGroups/form.php:94
+#: plugins/bc-admin-third/templates/Admin/element/Users/form.php:59
+#: plugins/bc-admin-third/templates/Admin/element/Users/form.php:84
+#: plugins/bc-admin-third/templates/Admin/element/Users/form.php:100
+#: plugins/bc-admin-third/templates/Admin/element/Users/form.php:130
+#: plugins/bc-admin-third/templates/Admin/element/content_fields.php:111
+#: plugins/bc-admin-third/templates/Admin/element/content_fields.php:138
+#: plugins/bc-admin-third/templates/Admin/element/content_fields.php:153
+#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogCategories/form.php:35
+#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogCategories/form.php:57
+#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogContents/form.php:71
+#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogContents/form.php:105
+#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogContents/form.php:174
+#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogContents/form.php:197
+#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogContents/form.php:226
+#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogPosts/form.php:59
+#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogPosts/form.php:194
+#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogPosts/form.php:252
+#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogPosts/form.php:274
+#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogTags/form.php:39
+#: plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/CustomContents/form.php:96
+#: plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/CustomContents/form.php:141
+#: plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/CustomContents/form.php:162
+#: plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/CustomEntries/form.php:65
+#: plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/CustomFields/form.php:48
+#: plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/CustomFields/form.php:67
+#: plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/CustomFields/index_list.php:55
+#: plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/CustomFields/index_list.php:56
+#: plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/CustomLinks/form.php:107
+#: plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/CustomLinks/form.php:126
+#: plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/CustomLinks/preview.php:37
+#: plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/CustomTables/form.php:50
+#: plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/CustomTables/form.php:75
+#: plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/CustomTables/form.php:86
+#: plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/required.php:12
+#: plugins/bc-admin-third/templates/plugin/BcEditorTemplate/Admin/element/EditorTemplates/form.php:39
+#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/MailConfigs/index.php:35
+#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:47
+#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:63
+#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:75
+#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:87
+#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:231
+#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:250
+#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:274
+#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailFields/form.php:41
+#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailFields/form.php:53
+#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailFields/form.php:65
+#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailFields/index_list.php:74
+#: plugins/bc-admin-third/templates/plugin/BcThemeFile/Admin/element/ThemeFiles/form.php:43
+#: plugins/bc-admin-third/templates/plugin/BcThemeFile/Admin/element/ThemeFiles/form_folder.php:40
+#: plugins/bc-admin-third/templates/plugin/BcUploader/Admin/UploaderConfigs/index.php:34
+#: plugins/bc-admin-third/templates/plugin/BcUploader/Admin/UploaderConfigs/index.php:59
+#: plugins/bc-admin-third/templates/plugin/BcUploader/Admin/UploaderConfigs/index.php:83
+#: plugins/bc-admin-third/templates/plugin/BcUploader/Admin/UploaderConfigs/index.php:113
+#: plugins/bc-admin-third/templates/plugin/BcUploader/Admin/UploaderConfigs/index.php:137
+#: plugins/bc-admin-third/templates/plugin/BcUploader/Admin/element/UploaderCategories/form.php:35
+#: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:68
+#: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:73
+#: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:87
+#: plugins/bc-front/templates/plugin/BcMail/element/mail_input.php:50
+msgid "必須"
+msgstr "Required"
+
 #: plugins/bc-admin-third/templates/Admin/SiteConfigs/index.php:61
 #: plugins/bc-admin-third/templates/plugin/BcMail/Admin/MailConfigs/index.php:46
 msgid "WebサイトURL"
@@ -4364,6 +4517,52 @@ msgid ""
 msgstr ""
 "Specify baserCMS’s deployed URL. Also specify URL used for SSL connection if "
 "you use SSL connection in Admin Screen etc."
+
+#: plugins/bc-admin-third/templates/Admin/SiteConfigs/index.php:88
+#: plugins/bc-admin-third/templates/Admin/element/Contents/index_list_table.php:83
+#: plugins/bc-admin-third/templates/Admin/element/Sites/form.php:188
+#: plugins/bc-admin-third/templates/Admin/element/Sites/index_list.php:75
+#: plugins/bc-admin-third/templates/Admin/element/content_fields.php:152
+#: plugins/bc-admin-third/templates/Admin/element/search/contents_index.php:43
+#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogPosts/form.php:192
+#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/search/blog_posts_index.php:44
+#: plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/CustomEntries/form.php:123
+#: plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/search/custom_entries_index.php:43
+#: plugins/bc-admin-third/templates/plugin/BcSearchIndex/Admin/element/SearchIndexes/index_list.php:49
+#: plugins/bc-admin-third/templates/plugin/BcSearchIndex/Admin/element/search/search_indexes_index.php:51
+#: plugins/bc-admin-third/templates/plugin/BcUploader/Admin/element/UploaderFiles/index_list_table.php:112
+#: plugins/bc-admin-third/templates/plugin/BcUploader/Admin/element/UploaderFiles/index_row_panel.php:49
+msgid "公開状態"
+msgstr "Public Status"
+
+#: plugins/bc-admin-third/templates/Admin/SiteConfigs/index.php:93
+msgid "公開中"
+msgstr "Public"
+
+#: plugins/bc-admin-third/templates/Admin/SiteConfigs/index.php:93
+#: plugins/bc-front/templates/Maintenance/index.php:18
+#: plugins/bc-front/templates/Maintenance/index.php:22
+msgid "メンテナンス中"
+msgstr "Under maintanance"
+
+#: plugins/bc-admin-third/templates/Admin/SiteConfigs/index.php:97
+#, fuzzy
+#| msgid ""
+#| "公開状態を指定します。<br />メンテナンス中の場合に、公開ページを確認するに"
+#| "は、管理画面にログインする必要があります。<br>ただし、制作・開発モードがデ"
+#| "バッグモードに設定されている場合は、メンテナンス中にしていても公開ページが"
+#| "表示されてしまいますので注意が必要です。"
+msgid ""
+"公開状態を指定します。<br>\n"
+"            メンテナンス中の場合に、公開ページを確認するには、管理画面にログ"
+"インする必要があります。<br>\n"
+"            ただし、制作・開発モードがデバッグモードに設定されている場合は、"
+"メンテナンス中にしていても公開ページが表示されてしまいますので注意が必要で"
+"す。"
+msgstr ""
+"Set Public Status.<br />You must login to Admin Screen to check Public Pages "
+"in maintenance.<br>Please note Public Page will be displayed if Creation / "
+"Development Mode was set to Debug Mode."
 
 #: plugins/bc-admin-third/templates/Admin/SiteConfigs/index.php:108
 msgid "制作・開発モード"
@@ -4487,15 +4686,56 @@ msgid ""
 "在する場合にバッジが付きます。"
 msgstr ""
 
-#: plugins/bc-admin-third/templates/Admin/SiteConfigs/index.php:385
+#: plugins/bc-admin-third/templates/Admin/SiteConfigs/index.php:258
+msgid "GoogleMaps住所"
+msgstr "GoogleMaps Address"
+
+#: plugins/bc-admin-third/templates/Admin/SiteConfigs/index.php:261
+msgid "住所"
+msgstr "Address"
+
+#: plugins/bc-admin-third/templates/Admin/SiteConfigs/index.php:264
+#, fuzzy
+#| msgid ""
+#| "GoogleMapを利用する場合は地図を表示させたい住所を入力してください。郵便番"
+#| "号からでも大丈夫です。<br><br>入力例1) 福岡市中央区大名2-11-25<br>入力例"
+#| "2) 〒819-0041 福岡県福岡市中央区大名2-11-25<br><br>建物名を含めるとうまく"
+#| "表示されない場合があります。<br>その時は建物名を省略して試してください。"
+#| "<br>APIキーを入力しないと地図が表示されない場合があります。<a "
+#| "href=\"https://developers.google.com/maps/web/\" target=\"_blank\">「ウェ"
+#| "ブ向け Google Maps API」</a>"
+msgid ""
+"GoogleMapを利用する場合は地図を表示させたい住所を入力してください。郵便番号か"
+"らでも大丈夫です。<br><br>\n"
+"              入力例1) 福岡市中央区大名2-11-25<br>\n"
+"              入力例2) 〒819-0041 福岡県福岡市中央区大名2-11-25<br><br>\n"
+"              建物名を含めるとうまく表示されない場合があります。<br>\n"
+"              その時は建物名を省略して試してください。<br>\n"
+"              APIキーを入力しないと地図が表示されない場合があります。<br>\n"
+"              <a href=\"https://developers.google.com/maps/web/\" "
+"target=\"_blank\">「ウェブ向け Google Maps API」</a>"
+msgstr ""
+"Please enter address that you want to display map to use GoogleMaps. Postal "
+"number is accepted.<br><br>Example 1) 福岡市中央区大名2-11-25<br>Example 2) "
+"〒819-0041 福岡県福岡市中央区大名2-11-25<br><br>It may not be displayed "
+"properly if you included building name.<br>If so, try omitting building name."
+"<br>Map may not be displayed if API key wasn’t entered<a href=“https://"
+"developers.google.com/maps/web/“ target=“_blank”>”Google Maps API for web”</"
+"a>"
+
+#: plugins/bc-admin-third/templates/Admin/SiteConfigs/index.php:279
+msgid "APIキー"
+msgstr "API Key"
+
+#: plugins/bc-admin-third/templates/Admin/SiteConfigs/index.php:387
 msgid "デバイス・言語設定"
 msgstr "Device / Language Settings"
 
-#: plugins/bc-admin-third/templates/Admin/SiteConfigs/index.php:390
+#: plugins/bc-admin-third/templates/Admin/SiteConfigs/index.php:392
 msgid "サブサイトでデバイス設定を利用する"
 msgstr "Use Device Settings on Sub Site"
 
-#: plugins/bc-admin-third/templates/Admin/SiteConfigs/index.php:394
+#: plugins/bc-admin-third/templates/Admin/SiteConfigs/index.php:396
 #: plugins/bc-admin-third/templates/Admin/element/Sites/form.php:136
 msgid ""
 "サブサイトにデバイス属性を持たせ、サイトアクセス時、ユーザーエージェントを判"
@@ -4504,11 +4744,11 @@ msgstr ""
 "Use function that displays appropriate site by giving device attribute to "
 "Subsite and judging user agent when site was accessed."
 
-#: plugins/bc-admin-third/templates/Admin/SiteConfigs/index.php:399
+#: plugins/bc-admin-third/templates/Admin/SiteConfigs/index.php:401
 msgid "サブサイトで言語設定を利用する"
 msgstr "Use Language Settings on Sub Site"
 
-#: plugins/bc-admin-third/templates/Admin/SiteConfigs/index.php:403
+#: plugins/bc-admin-third/templates/Admin/SiteConfigs/index.php:405
 #: plugins/bc-admin-third/templates/Admin/element/Sites/form.php:144
 msgid ""
 "サブサイトに言語属性を持たせ、サイトアクセス時、ブラウザの言語設定を判定し適"
@@ -4517,40 +4757,40 @@ msgstr ""
 "Use function that displays appropriate site by giving language attribute to "
 "Subsite and judging browser’s language settings when site was accessed."
 
-#: plugins/bc-admin-third/templates/Admin/SiteConfigs/index.php:424
+#: plugins/bc-admin-third/templates/Admin/SiteConfigs/index.php:426
 #, fuzzy
 #| msgid "エディタ設定関連"
 msgid "エディタ設定"
 msgstr "Editor Settings"
 
-#: plugins/bc-admin-third/templates/Admin/SiteConfigs/index.php:432
+#: plugins/bc-admin-third/templates/Admin/SiteConfigs/index.php:434
 msgid "エディタタイプ"
 msgstr "Editor Type"
 
-#: plugins/bc-admin-third/templates/Admin/SiteConfigs/index.php:443
+#: plugins/bc-admin-third/templates/Admin/SiteConfigs/index.php:445
 msgid "改行モード"
 msgstr "Line Break Mode"
 
-#: plugins/bc-admin-third/templates/Admin/SiteConfigs/index.php:449
+#: plugins/bc-admin-third/templates/Admin/SiteConfigs/index.php:451
 msgid "改行時に段落を挿入する"
 msgstr "Insert paragraph when breaking line"
 
-#: plugins/bc-admin-third/templates/Admin/SiteConfigs/index.php:450
+#: plugins/bc-admin-third/templates/Admin/SiteConfigs/index.php:452
 msgid "改行時にBRタグを挿入する"
 msgstr "Insert BR tag when breaking line"
 
-#: plugins/bc-admin-third/templates/Admin/SiteConfigs/index.php:457
+#: plugins/bc-admin-third/templates/Admin/SiteConfigs/index.php:459
 msgid "エディタスタイルセット"
 msgstr "Editor Style Set"
 
-#: plugins/bc-admin-third/templates/Admin/SiteConfigs/index.php:469
+#: plugins/bc-admin-third/templates/Admin/SiteConfigs/index.php:471
 msgid ""
 "固定ページなどで利用するエディタのスタイルセットをCSS形式で記述する事ができま"
 "す。"
 msgstr ""
 "You can write style set of editor used by Static Page etc by CSS format."
 
-#: plugins/bc-admin-third/templates/Admin/SiteConfigs/index.php:470
+#: plugins/bc-admin-third/templates/Admin/SiteConfigs/index.php:472
 #: plugins/bc-admin-third/templates/Admin/element/Contents/index_list_table.php:77
 #: plugins/bc-admin-third/templates/Admin/element/content_fields.php:136
 #: plugins/bc-admin-third/templates/Admin/element/content_related.php:47
@@ -4576,7 +4816,7 @@ msgstr ""
 msgid "タイトル"
 msgstr "Title"
 
-#: plugins/bc-admin-third/templates/Admin/SiteConfigs/index.php:471
+#: plugins/bc-admin-third/templates/Admin/SiteConfigs/index.php:473
 #: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogPosts/form.php:166
 #: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogPosts/index_list.php:85
 #: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/search/blog_posts_index.php:39
@@ -4585,20 +4825,20 @@ msgstr "Title"
 msgid "タグ"
 msgstr "Tag"
 
-#: plugins/bc-admin-third/templates/Admin/SiteConfigs/index.php:472
+#: plugins/bc-admin-third/templates/Admin/SiteConfigs/index.php:474
 msgid "プロパティ名：プロパティ値"
 msgstr "Property Name: Property Value"
 
-#: plugins/bc-admin-third/templates/Admin/SiteConfigs/index.php:475
+#: plugins/bc-admin-third/templates/Admin/SiteConfigs/index.php:477
 msgid "記述例"
 msgstr "Example of Writing"
 
-#: plugins/bc-admin-third/templates/Admin/SiteConfigs/index.php:476
-#: plugins/bc-admin-third/templates/Admin/SiteConfigs/index.php:484
+#: plugins/bc-admin-third/templates/Admin/SiteConfigs/index.php:478
+#: plugins/bc-admin-third/templates/Admin/SiteConfigs/index.php:486
 msgid "見出し"
 msgstr "Header"
 
-#: plugins/bc-admin-third/templates/Admin/SiteConfigs/index.php:482
+#: plugins/bc-admin-third/templates/Admin/SiteConfigs/index.php:484
 msgid "タグにプロパティを設定しない場合は次のように記述します。"
 msgstr "Write as follows if you don’t set Property to Tag."
 
@@ -4636,29 +4876,6 @@ msgstr "Change Alias"
 #| msgid "サブサイト編集"
 msgid "サイト編集"
 msgstr "Edit Subsite"
-
-#: plugins/bc-admin-third/templates/Admin/Sites/edit.php:49
-#: plugins/bc-admin-third/templates/Admin/Users/edit.php:55
-#: plugins/bc-admin-third/templates/Admin/element/Contents/index_row_table.php:215
-#: plugins/bc-admin-third/templates/Admin/element/Permissions/index_row.php:109
-#: plugins/bc-admin-third/templates/Admin/element/Users/index_row.php:60
-#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogComments/index_row.php:88
-#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogComments/index_row.php:111
-#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogPosts/index_row.php:138
-#: plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/CustomEntries/edit.php:93
-#: plugins/bc-admin-third/templates/plugin/BcEditorTemplate/Admin/EditorTemplates/edit.php:50
-#: plugins/bc-admin-third/templates/plugin/BcEditorTemplate/Admin/element/EditorTemplates/index_row.php:53
-#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/MailFields/edit.php:58
-#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailFields/index_row.php:91
-#: plugins/bc-admin-third/templates/plugin/BcThemeFile/Admin/ThemeFiles/edit.php:80
-#: plugins/bc-admin-third/templates/plugin/BcUploader/Admin/element/UploaderCategories/index_row.php:57
-#: plugins/bc-admin-third/templates/plugin/BcUploader/Admin/element/UploaderFiles/form.php:195
-#: plugins/bc-admin-third/templates/plugin/BcUploader/Admin/element/UploaderFiles/index_row_table.php:87
-#: plugins/bc-admin-third/templates/plugin/BcWidgetArea/Admin/element/WidgetAreas/index_row.php:57
-#, fuzzy
-#| msgid "%s を本当に削除してもいいですか？"
-msgid "{0} を本当に削除してもいいですか？"
-msgstr "Are you sure to delete %s?"
 
 #: plugins/bc-admin-third/templates/Admin/Sites/index.php:17
 #, fuzzy
@@ -4716,6 +4933,25 @@ msgstr "Theme List"
 msgid "所有テーマ"
 msgstr "Owned Theme"
 
+#: plugins/bc-admin-third/templates/Admin/Updaters/exec_script.php:21
+#: plugins/bc-admin-third/templates/Admin/element/Contents/index_list_table.php:66
+#: plugins/bc-admin-third/templates/Admin/element/PermissionGroups/form.php:40
+#: plugins/bc-admin-third/templates/Admin/element/PermissionGroups/index_view_setting.php:34
+#: plugins/bc-admin-third/templates/Admin/element/Permissions/index_list.php:61
+#: plugins/bc-admin-third/templates/Admin/element/content_info.php:54
+#: plugins/bc-admin-third/templates/Admin/element/search/contents_index.php:39
+#: plugins/bc-admin-third/templates/Admin/element/search/permissions_index.php:32
+#: plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/CustomFields/form.php:86
+#: plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/CustomFields/index_list.php:49
+#: plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/CustomFields/index_list.php:50
+#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailFields/form.php:64
+#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailFields/index_list.php:72
+#: plugins/bc-admin-third/templates/plugin/BcSearchIndex/Admin/element/SearchIndexes/index_list.php:46
+#: plugins/bc-admin-third/templates/plugin/BcSearchIndex/Admin/element/search/search_indexes_index.php:35
+#: plugins/bc-admin-third/templates/plugin/BcUploader/Admin/element/search/uploader_files_index.php:49
+msgid "タイプ"
+msgstr "Type"
+
 #: plugins/bc-admin-third/templates/Admin/Updaters/exec_script.php:22
 #: plugins/bc-admin-third/templates/plugin/BcThemeFile/Admin/element/ThemeFiles/submenus.php:29
 msgid "コア"
@@ -4744,7 +4980,13 @@ msgstr "Add User Group"
 msgid "ユーザーグループ編集"
 msgstr "Edit User Group"
 
-#: plugins/bc-admin-third/templates/Admin/UserGroups/edit.php:49
+#: plugins/bc-admin-third/templates/Admin/UserGroups/edit.php:45
+#, fuzzy
+#| msgid "アクセス"
+msgid "アクセスルール設定"
+msgstr "Access"
+
+#: plugins/bc-admin-third/templates/Admin/UserGroups/edit.php:69
 #: plugins/bc-admin-third/templates/Admin/element/UserGroups/index_row.php:66
 #, fuzzy
 #| msgid ""
@@ -4792,15 +5034,18 @@ msgstr "User List"
 #: plugins/bc-admin-third/templates/plugin/BcThemeFile/Admin/element/ThemeFiles/submenus.php:22
 #: plugins/bc-admin-third/templates/plugin/BcThemeFile/Admin/element/help/theme_files_index.php:33
 #: plugins/bc-custom-content/plugins/BcCcEmail/config/setting.php:27
+#: plugins/bc-front/templates/Users/login.php:37
 #: plugins/bc-mail/src/Model/Table/MailFieldsTable.php:147
 msgid "Eメール"
 msgstr "E-mail"
 
 #: plugins/bc-admin-third/templates/Admin/Users/login.php:63
+#: plugins/bc-front/templates/Users/login.php:68
 msgid "ログイン状態を保存する"
 msgstr "Save Login Status"
 
 #: plugins/bc-admin-third/templates/Admin/Users/login.php:70
+#: plugins/bc-front/templates/Users/login.php:75
 msgid "パスワードを忘れた場合はこちら"
 msgstr "Click here if you forgot password"
 
@@ -4813,6 +5058,7 @@ msgstr ""
 "notify new password by mail."
 
 #: plugins/bc-admin-third/templates/Admin/Users/reset_password.php:32
+#: plugins/bc-front/templates/PasswordRequests/entry.php:34
 msgid "送信"
 msgstr "Send"
 
@@ -4874,27 +5120,31 @@ msgstr ""
 msgid "クレジットを表示"
 msgstr "Show Credits"
 
-#: plugins/bc-admin-third/templates/Admin/Utilities/info.php:24
+#: plugins/bc-admin-third/templates/Admin/Utilities/info.php:25
 msgid "baserCMS環境"
 msgstr "baserCMS Environment"
 
-#: plugins/bc-admin-third/templates/Admin/Utilities/info.php:26
+#: plugins/bc-admin-third/templates/Admin/Utilities/info.php:27
 msgid "設置フォルダ"
 msgstr "Deployed Folder"
 
-#: plugins/bc-admin-third/templates/Admin/Utilities/info.php:27
+#: plugins/bc-admin-third/templates/Admin/Utilities/info.php:28
 msgid "データベース"
 msgstr "Database"
 
-#: plugins/bc-admin-third/templates/Admin/Utilities/info.php:28
+#: plugins/bc-admin-third/templates/Admin/Utilities/info.php:30
+msgid "SQLモード"
+msgstr ""
+
+#: plugins/bc-admin-third/templates/Admin/Utilities/info.php:32
 msgid "baserCMSバージョン"
 msgstr "baserCMS Version"
 
-#: plugins/bc-admin-third/templates/Admin/Utilities/info.php:29
+#: plugins/bc-admin-third/templates/Admin/Utilities/info.php:33
 msgid "CakePHPバージョン"
 msgstr "CakePHP Version"
 
-#: plugins/bc-admin-third/templates/Admin/Utilities/info.php:34
+#: plugins/bc-admin-third/templates/Admin/Utilities/info.php:38
 msgid "PHP環境"
 msgstr "PHP Environment"
 
@@ -5097,24 +5347,9 @@ msgstr ""
 
 #: plugins/bc-admin-third/templates/Admin/element/Contents/index_list_table.php:72
 #: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogComments/index_list.php:75
+#: plugins/bc-admin-third/templates/plugin/BcFavorite/Admin/element/favorite_menu.php:22
 msgid "URL"
 msgstr ""
-
-#: plugins/bc-admin-third/templates/Admin/element/Contents/index_list_table.php:83
-#: plugins/bc-admin-third/templates/Admin/element/Sites/form.php:188
-#: plugins/bc-admin-third/templates/Admin/element/Sites/index_list.php:75
-#: plugins/bc-admin-third/templates/Admin/element/content_fields.php:152
-#: plugins/bc-admin-third/templates/Admin/element/search/contents_index.php:43
-#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogPosts/form.php:192
-#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/search/blog_posts_index.php:44
-#: plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/CustomEntries/form.php:123
-#: plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/search/custom_entries_index.php:43
-#: plugins/bc-admin-third/templates/plugin/BcSearchIndex/Admin/element/SearchIndexes/index_list.php:49
-#: plugins/bc-admin-third/templates/plugin/BcSearchIndex/Admin/element/search/search_indexes_index.php:51
-#: plugins/bc-admin-third/templates/plugin/BcUploader/Admin/element/UploaderFiles/index_list_table.php:112
-#: plugins/bc-admin-third/templates/plugin/BcUploader/Admin/element/UploaderFiles/index_row_panel.php:49
-msgid "公開状態"
-msgstr "Public Status"
 
 #: plugins/bc-admin-third/templates/Admin/element/Contents/index_list_table.php:89
 #: plugins/bc-admin-third/templates/Admin/element/content_options.php:79
@@ -5366,11 +5601,11 @@ msgstr "Expand All"
 msgid "全て閉じる"
 msgstr "Close All"
 
-#: plugins/bc-admin-third/templates/Admin/element/Dashboard/baser_news.php:23
+#: plugins/bc-admin-third/templates/Admin/element/Dashboard/baser_news.php:21
 msgid "baserCMSニュース"
 msgstr "baserCMS News"
 
-#: plugins/bc-admin-third/templates/Admin/element/Dashboard/baser_news.php:29
+#: plugins/bc-admin-third/templates/Admin/element/Dashboard/baser_news.php:47
 #, fuzzy
 #| msgid ""
 #| "baserCMSについて、不具合の発見・改善要望がありましたら<a href=\"http://"
@@ -5436,6 +5671,33 @@ msgstr ""
 "You can select Template here by placing Pages/templates Template in Theme "
 "Folder."
 
+#: plugins/bc-admin-third/templates/Admin/element/PermissionGroups/form.php:48
+#: plugins/bc-admin-third/templates/Admin/element/PermissionGroups/index_list.php:29
+#, fuzzy
+#| msgid "ユーザーグループ名"
+msgid "ルールグループ名"
+msgstr "User Group Name"
+
+#: plugins/bc-admin-third/templates/Admin/element/PermissionGroups/form.php:58
+#, fuzzy
+#| msgid "メール"
+msgid "ルール"
+msgstr "Mail"
+
+#: plugins/bc-admin-third/templates/Admin/element/PermissionGroups/form.php:78
+#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailMessages/index_row.php:69
+msgid "詳細"
+msgstr "Detail"
+
+#: plugins/bc-admin-third/templates/Admin/element/PermissionGroups/form.php:112
+#: plugins/bc-admin-third/templates/Admin/element/Permissions/form.php:108
+#: plugins/bc-admin-third/templates/Admin/element/Users/form.php:156
+#: plugins/bc-admin-third/templates/Admin/element/Users/index_list.php:81
+#: plugins/bc-admin-third/templates/Admin/element/Users/index_list.php:82
+#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailFields/form.php:286
+msgid "利用状態"
+msgstr "Using Status"
+
 #: plugins/bc-admin-third/templates/Admin/element/PermissionGroups/index_list.php:30
 #, fuzzy
 #| msgid "設定"
@@ -5464,7 +5726,7 @@ msgstr "Settings"
 #: plugins/bc-admin-third/templates/plugin/BcUploader/Admin/element/UploaderCategories/index_list.php:73
 #: plugins/bc-admin-third/templates/plugin/BcUploader/Admin/element/UploaderCategories/index_list.php:74
 #: plugins/bc-admin-third/templates/plugin/BcWidgetArea/Admin/element/WidgetAreas/index_list.php:62
-#: plugins/bc-custom-content/src/Service/CustomContentsService.php:160
+#: plugins/bc-custom-content/src/Service/CustomContentsService.php:199
 msgid "登録日"
 msgstr "Added Date"
 
@@ -5482,53 +5744,41 @@ msgid "ルールグループ"
 msgstr "User Group"
 
 #: plugins/bc-admin-third/templates/Admin/element/Permissions/dialog.php:54
-#: plugins/bc-admin-third/templates/Admin/element/Permissions/form.php:62
+#: plugins/bc-admin-third/templates/Admin/element/Permissions/form.php:63
 #: plugins/bc-admin-third/templates/Admin/element/Permissions/index_list.php:64
 msgid "ルール名"
 msgstr "Rule Name"
 
 #: plugins/bc-admin-third/templates/Admin/element/Permissions/dialog.php:65
-#: plugins/bc-admin-third/templates/Admin/element/Permissions/form.php:75
+#: plugins/bc-admin-third/templates/Admin/element/Permissions/form.php:76
 #: plugins/bc-admin-third/templates/Admin/element/Permissions/index_list.php:64
 msgid "URL設定"
 msgstr "URL Settings"
 
 #: plugins/bc-admin-third/templates/Admin/element/Permissions/dialog.php:76
-#: plugins/bc-admin-third/templates/Admin/element/Permissions/form.php:93
+#: plugins/bc-admin-third/templates/Admin/element/Permissions/form.php:94
 #: plugins/bc-admin-third/templates/Admin/element/Permissions/index_list.php:66
 msgid "権限"
 msgstr ""
 
 #: plugins/bc-admin-third/templates/Admin/element/Permissions/dialog.php:86
-#: plugins/bc-admin-third/templates/Admin/element/Permissions/form.php:100
+#: plugins/bc-admin-third/templates/Admin/element/Permissions/form.php:101
 msgid "アクセス"
 msgstr "Access"
 
-#: plugins/bc-admin-third/templates/Admin/element/Permissions/form.php:53
-#, fuzzy
-#| msgid "ユーザーグループ"
-msgid "アクセスルールグループ"
-msgstr "User Group"
-
-#: plugins/bc-admin-third/templates/Admin/element/Permissions/form.php:56
-#, fuzzy
-#| msgid "ユーザーグループを選択してください。"
-msgid "アクセスルールグループを選択してください。"
-msgstr "Please select User Group."
-
-#: plugins/bc-admin-third/templates/Admin/element/Permissions/form.php:69
+#: plugins/bc-admin-third/templates/Admin/element/Permissions/form.php:70
 msgid ""
 "ルール名には日本語が利用できます。特定しやすいわかりやすい名称を入力してくだ"
 "さい。"
 msgstr "Please enter identifiable and understandable name."
 
-#: plugins/bc-admin-third/templates/Admin/element/Permissions/form.php:84
+#: plugins/bc-admin-third/templates/Admin/element/Permissions/form.php:85
 #, fuzzy
 #| msgid "スラッグを入力してください。"
 msgid "スラッシュから始まるURLを入力してください。"
 msgstr "Please enter Slug."
 
-#: plugins/bc-admin-third/templates/Admin/element/Permissions/form.php:85
+#: plugins/bc-admin-third/templates/Admin/element/Permissions/form.php:86
 #, fuzzy
 #| msgid ""
 #| "特定のフォルダ配下に対しアクセスできないようにする場合などにはワイルドカー"
@@ -5899,43 +6149,43 @@ msgstr ""
 "Are you sure you want to delete this data?\n"
 "Caution: You won't be able to restore deleted data."
 
-#: plugins/bc-admin-third/templates/Admin/element/UserGroups/form.php:49
+#: plugins/bc-admin-third/templates/Admin/element/UserGroups/form.php:48
 #: plugins/bc-admin-third/templates/Admin/element/UserGroups/index_list.php:51
 #: plugins/bc-admin-third/templates/Admin/element/UserGroups/index_list.php:52
 msgid "ユーザーグループ名"
 msgstr "User Group Name"
 
-#: plugins/bc-admin-third/templates/Admin/element/UserGroups/form.php:61
+#: plugins/bc-admin-third/templates/Admin/element/UserGroups/form.php:60
 msgid "重複しない識別名称を半角のみで入力してください。"
 msgstr ""
 "Please enter unique Identification Name with only half-size characters."
 
-#: plugins/bc-admin-third/templates/Admin/element/UserGroups/form.php:62
+#: plugins/bc-admin-third/templates/Admin/element/UserGroups/form.php:61
 msgid "admins の場合は変更できません。"
 msgstr "Can’t change if it’s admins"
 
-#: plugins/bc-admin-third/templates/Admin/element/UserGroups/form.php:69
+#: plugins/bc-admin-third/templates/Admin/element/UserGroups/form.php:68
 #: plugins/bc-admin-third/templates/Admin/element/UserGroups/index_list.php:59
 #: plugins/bc-admin-third/templates/Admin/element/UserGroups/index_list.php:60
 msgid "表示名"
 msgstr "Display Name"
 
-#: plugins/bc-admin-third/templates/Admin/element/UserGroups/form.php:74
+#: plugins/bc-admin-third/templates/Admin/element/UserGroups/form.php:73
 msgid "日本語が入力できますのでわかりやすい名称を入力します。"
 msgstr "Enter understandable name."
 
-#: plugins/bc-admin-third/templates/Admin/element/UserGroups/form.php:80
+#: plugins/bc-admin-third/templates/Admin/element/UserGroups/form.php:79
 #: plugins/bc-custom-content/config/setting.php:110
 #: plugins/bc-custom-content/config/setting.php:117
 #: plugins/bc-custom-content/plugins/BcCcAutoZip/config/setting.php:26
 msgid "その他"
 msgstr "Misc"
 
-#: plugins/bc-admin-third/templates/Admin/element/UserGroups/form.php:83
+#: plugins/bc-admin-third/templates/Admin/element/UserGroups/form.php:82
 msgid "コンテンツのドラッグ＆ドロップ移動機能を利用する"
 msgstr "Use Drag & Drop function of Content"
 
-#: plugins/bc-admin-third/templates/Admin/element/UserGroups/form.php:86
+#: plugins/bc-admin-third/templates/Admin/element/UserGroups/form.php:85
 msgid ""
 "コンテンツ一覧のツリー構造において、ドラッグ＆ドロップでコンテンツの移動を許"
 "可するかどうかを設定します。"
@@ -5943,21 +6193,24 @@ msgstr ""
 "Set whether to allow moving Content by drag & drop in Content List Tree "
 "Structures or no."
 
-#: plugins/bc-admin-third/templates/Admin/element/UserGroups/form.php:94
+#: plugins/bc-admin-third/templates/Admin/element/UserGroups/form.php:93
 msgid "認証プレフィックス設定"
 msgstr "Authentication Prefix Settings"
 
-#: plugins/bc-admin-third/templates/Admin/element/UserGroups/form.php:105
+#: plugins/bc-admin-third/templates/Admin/element/UserGroups/form.php:118
 #, fuzzy
-#| msgid ""
-#| "認証プレフィックスの設定を指定します。<br />ユーザーグループ名が admins の"
-#| "場合は編集できません。"
+#| msgid "アクセス"
+msgid "限定アクセス"
+msgstr "Access"
+
+#: plugins/bc-admin-third/templates/Admin/element/UserGroups/form.php:128
 msgid ""
-"認証プレフィックスの設定を指定します。<br>システム管理グループの場合、管理シ"
-"ステムの設定は変更できません。"
+"認証プレフィックスの設定を指定します。<br>\n"
+"                システム管理グループの場合、管理システムの設定は変更できず、"
+"管理システム以外を有効にしたとしてもフルアクセスが前提となります。<br><br>\n"
+"                なお、限定アクセスの場合、詳細な設定はアクセスルール設定より"
+"行います。"
 msgstr ""
-"Specify Authentication Prefix.<br />It can’t be edited if User Group Name "
-"was admins."
 
 #: plugins/bc-admin-third/templates/Admin/element/UserGroups/index_list.php:43
 #: plugins/bc-admin-third/templates/Admin/element/UserGroups/index_list.php:51
@@ -6052,7 +6305,7 @@ msgstr "Enter Firstname"
 #: plugins/bc-admin-third/templates/Admin/element/Users/form.php:73
 #: plugins/bc-admin-third/templates/Admin/element/Users/index_list.php:62
 #: plugins/bc-admin-third/templates/Admin/element/Users/index_list.php:63
-#: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:57
+#: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:67
 msgid "ニックネーム"
 msgstr "Nickname"
 
@@ -6063,7 +6316,6 @@ msgstr "Nickname will be used for all displays when it was set."
 
 #: plugins/bc-admin-third/templates/Admin/element/Users/form.php:83
 #: plugins/bc-admin-third/templates/Admin/element/Users/index_list.php:68
-#: plugins/bc-admin-third/templates/Admin/element/search/permissions_index.php:41
 #: plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/CustomLinks/form.php:87
 #: plugins/bc-custom-content/config/setting.php:118
 msgid "グループ"
@@ -6380,6 +6632,25 @@ msgstr ""
 #: plugins/bc-front/templates/element/crumbs.php:25
 msgid "ホーム"
 msgstr "Home"
+
+#: plugins/bc-admin-third/templates/Admin/element/first_access.php:20
+msgid "baserCMSへようこそ。"
+msgstr "Welcome to baserCMS."
+
+#: plugins/bc-admin-third/templates/Admin/element/first_access.php:22
+msgid "右上のヘルプより画面のヘルプが確認できます。"
+msgstr ""
+
+#: plugins/bc-admin-third/templates/Admin/element/first_access.php:23
+#, fuzzy
+#| msgid ""
+#| "まずは、画面上部のメニュー、「コンテンツ管理」よりWebサイトの全体像を確認"
+#| "しましょう。"
+msgid ""
+"まずは、画面左のメニュー、「コンテンツ管理」よりWebサイトの全体像を確認しま"
+"しょう。"
+msgstr ""
+"Let’s check big picture of Web site from “Content” menu on upper screen."
 
 #: plugins/bc-admin-third/templates/Admin/element/help/contents_index.php:20
 msgid ""
@@ -7305,7 +7576,7 @@ msgid "管理ページ"
 msgstr "Admin Page"
 
 #: plugins/bc-admin-third/templates/email/text/installed.php:37
-#: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:61
+#: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:72
 #, fuzzy
 #| msgid "送信先メールアドレス"
 msgid "メールアドレス"
@@ -7418,12 +7689,14 @@ msgid "baserCMSの開発状況や、今後の開発タスクなどが確認で�
 msgstr "You can check baserCMS’s developing status and tasks for future."
 
 #: plugins/bc-admin-third/templates/email/text/password_request.php:19
+#: plugins/bc-front/templates/email/text/password_request.php:19
 #, fuzzy
 #| msgid "【%s】コメントを受け付けました"
 msgid "パスワードの再発行手続きを受け付けました。"
 msgstr "【%s】Comment Accepted"
 
 #: plugins/bc-admin-third/templates/email/text/password_request.php:20
+#: plugins/bc-front/templates/email/text/password_request.php:20
 #, fuzzy
 #| msgid "下記のURLよりbaserCMSのアップデートを完了してください。"
 msgid "下記のURLにアクセスし新しいパスワードを登録してください。"
@@ -7646,11 +7919,13 @@ msgstr "Comment Receive Function"
 
 #: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogContents/form.php:130
 #: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogContents/form.php:139
-#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogContents/form.php:150
-#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogContents/form.php:255
+#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogContents/form.php:149
+#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogContents/form.php:166
+#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogContents/form.php:271
 #: plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/CustomFields/form.php:309
 #: plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/CustomLinks/form.php:150
-#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:182
+#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:181
+#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:198
 #: plugins/bc-admin-third/templates/plugin/BcWidgetArea/Admin/WidgetAreas/edit.php:127
 #: plugins/bc-admin-third/templates/plugin/BcWidgetArea/Admin/WidgetAreas/edit.php:212
 msgid "利用する"
@@ -7669,53 +7944,69 @@ msgstr ""
 "if you use Approve function."
 
 #: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogContents/form.php:147
+msgid "コメントイメージ認証"
+msgstr "Comment Image Authentication"
+
+#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogContents/form.php:154
+msgid ""
+"ブログコメント送信の際、表示された画像の文字入力させる事で認証を行ないます。"
+msgstr ""
+"Authorize with inputing characters that of displayed image when sending Blog "
+"Comment."
+
+#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogContents/form.php:155
+#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:187
+msgid "スパムなどいたずら送信が多いが多い場合に設定すると便利です。"
+msgstr "It's useful when there are many spams."
+
+#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogContents/form.php:163
 msgid "タグ機能"
 msgstr "Tag Function"
 
-#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogContents/form.php:156
+#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogContents/form.php:172
 #: plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/CustomContents/form.php:161
-#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:214
+#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:230
 #: plugins/bc-widget-area/config/setting.php:22
 msgid "ウィジェットエリア"
 msgstr "Widget Area"
 
-#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogContents/form.php:165
+#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogContents/form.php:181
 #: plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/CustomContents/form.php:168
-#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:221
+#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:237
 msgid "サイト基本設定に従う"
 msgstr "Follow Basic Site Settings"
 
-#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogContents/form.php:170
+#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogContents/form.php:186
 #, fuzzy
 #| msgid "公開ページ全般で利用するウィジェットエリアを指定します。"
 msgid "ブログコンテンツで利用するウィジェットエリアを指定します。"
 msgstr "Specify Widget Area used by general Public Pages."
 
-#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogContents/form.php:171
+#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogContents/form.php:187
 #: plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/CustomContents/form.php:174
 #, fuzzy
 #| msgid "ウィジェットエリアは「%s」より追加できます。"
 msgid "ウィジェットエリアはウィジェットエリア管理より追加できます。"
 msgstr "Widget Area can be added from \"%s\"."
 
-#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogContents/form.php:180
+#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogContents/form.php:196
 #: plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/CustomContents/form.php:140
 msgid "コンテンツテンプレート名"
 msgstr "Content Template Name"
 
-#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogContents/form.php:201
+#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogContents/form.php:217
 msgid "ブログの本体のテンプレートを指定します。"
 msgstr "Specify the Blog body's Template."
 
-#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogContents/form.php:202
+#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogContents/form.php:218
 msgid "「編集する」からテンプレートの内容を編集する事ができます。"
 msgstr "You can edit Template content from \"Edit\"."
 
-#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogContents/form.php:209
+#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogContents/form.php:225
 msgid "アイキャッチ画像サイズ"
 msgstr "Eye-catch Image Size"
 
-#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogContents/form.php:217
+#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogContents/form.php:233
 #: plugins/bc-admin-third/templates/plugin/BcUploader/Admin/UploaderConfigs/index.php:38
 #: plugins/bc-admin-third/templates/plugin/BcUploader/Admin/UploaderConfigs/index.php:63
 #: plugins/bc-admin-third/templates/plugin/BcUploader/Admin/UploaderConfigs/index.php:87
@@ -7724,7 +8015,7 @@ msgstr "Eye-catch Image Size"
 msgid "幅"
 msgstr "Width"
 
-#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogContents/form.php:218
+#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogContents/form.php:234
 #: plugins/bc-admin-third/templates/plugin/BcUploader/Admin/UploaderConfigs/index.php:46
 #: plugins/bc-admin-third/templates/plugin/BcUploader/Admin/UploaderConfigs/index.php:70
 #: plugins/bc-admin-third/templates/plugin/BcUploader/Admin/UploaderConfigs/index.php:94
@@ -7734,19 +8025,19 @@ msgstr "Width"
 msgid "高さ"
 msgstr "Height"
 
-#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogContents/form.php:223
+#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogContents/form.php:239
 msgid "PCサイズ"
 msgstr "PC Size"
 
-#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogContents/form.php:232
+#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogContents/form.php:248
 msgid "携帯サイズ"
 msgstr "Phone Size"
 
-#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogContents/form.php:245
+#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogContents/form.php:261
 msgid "アイキャッチ画像のサイズを指定します。"
 msgstr "Specify Eye-catch Image's size."
 
-#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogContents/form.php:252
+#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogContents/form.php:268
 msgid "記事概要"
 msgstr "Article Summary"
 
@@ -7842,7 +8133,7 @@ msgstr "Category"
 
 #: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogPosts/index_list.php:89
 #: plugins/bc-blog/src/Event/BcBlogViewEventListener.php:101
-#: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:72
+#: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:86
 msgid "コメント"
 msgstr "Comment"
 
@@ -8055,7 +8346,7 @@ msgstr "Display Article Number"
 #: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/widget/blog_tag_archives.php:33
 #: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/widget/blog_yearly_archives.php:47
 #: plugins/bc-blog/config.php:14 plugins/bc-blog/config/setting.php:40
-#: plugins/bc-blog/src/Model/Table/BlogContentsTable.php:181
+#: plugins/bc-blog/src/Model/Table/BlogContentsTable.php:159
 #: plugins/bc-blog/src/Model/Table/BlogPostsTable.php:599
 msgid "ブログ"
 msgstr "Blog"
@@ -8336,7 +8627,7 @@ msgid "フロントエンドで利用するウィジェットエリアを指定�
 msgstr "Specify Widget Area used by general Public Pages."
 
 #: plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/CustomContents/form.php:176
-#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:226
+#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:242
 #: plugins/bc-widget-area/config/permission.php:23
 #: plugins/bc-widget-area/src/Event/BcWidgetAreaHelperEventListener.php:54
 msgid "ウィジェットエリア管理"
@@ -8884,6 +9175,45 @@ msgstr ""
 "You can mange Editor’s Template used by Static Page etc.<br />Use this if "
 "you want to register HTML blocks with id or class as template, or if you "
 "want to register blocks that lay out images."
+
+#: plugins/bc-admin-third/templates/plugin/BcFavorite/Admin/element/favorite_menu.php:21
+msgid "お気に入り名"
+msgstr ""
+
+#: plugins/bc-admin-third/templates/plugin/BcFavorite/Admin/element/favorite_menu.php:23
+msgid "お気に入り登録"
+msgstr ""
+
+#: plugins/bc-admin-third/templates/plugin/BcFavorite/Admin/element/favorite_menu.php:24
+msgid "お気に入り編集"
+msgstr ""
+
+#: plugins/bc-admin-third/templates/plugin/BcFavorite/Admin/element/favorite_menu.php:25
+msgid "確定"
+msgstr ""
+
+#: plugins/bc-admin-third/templates/plugin/BcFavorite/Admin/element/favorite_menu.php:27
+#: plugins/bc-favorite/config.php:14
+msgid "お気に入り"
+msgstr ""
+
+#: plugins/bc-admin-third/templates/plugin/BcFavorite/Admin/element/favorite_menu.php:28
+#, fuzzy
+#| msgid "記事がありません"
+msgid "登録がありません"
+msgstr "Article not found"
+
+#: plugins/bc-admin-third/templates/plugin/BcFavorite/Admin/element/favorite_menu.php:31
+#, fuzzy
+#| msgid "サーバーでの処理に失敗しました。"
+msgid "サーバーの処理に失敗しました。"
+msgstr "Failed processing on server."
+
+#: plugins/bc-admin-third/templates/plugin/BcFavorite/Admin/element/favorite_menu.php:32
+#, fuzzy
+#| msgid "必須項目です。"
+msgid "必須項目です"
+msgstr "It’s Required."
 
 #: plugins/bc-admin-third/templates/plugin/BcInstaller/Admin/Installations/alert.php:20
 #, fuzzy
@@ -9690,10 +10020,21 @@ msgstr ""
 "Mail Form to database"
 
 #: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:179
+msgid "イメージ認証"
+msgstr "Image Authentication"
+
+#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:186
+msgid ""
+"メールフォーム送信の際、表示された画像の文字入力させる事で認証を行ないます。"
+msgstr ""
+"Authorize with entering characters that are displayed image when sending "
+"Mail Form."
+
+#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:195
 msgid "SSL通信"
 msgstr "SSL Connection"
 
-#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:184
+#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:200
 msgid ""
 "管理者ページでSSLを利用する場合は、事前にSSLの申込、設定が必要です。また、SSL"
 "通信で利用するURLをシステム設定で指定している必要があります。"
@@ -9701,7 +10042,7 @@ msgstr ""
 "You have to request and set SSL before using SSL on Admin Page. Also, You "
 "have to specify URL used by SSL connection in System Settings."
 
-#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:186
+#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:202
 #, fuzzy
 #| msgid ""
 #| "SSL通信を利用するには、%s で、事前にSSL通信用のWebサイトURLを指定してくだ"
@@ -9712,23 +10053,23 @@ msgid ""
 msgstr ""
 "Please specify Web site URL for SSL connection before using SSL connecting."
 
-#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:188
+#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:204
 msgid "システム設定"
 msgstr "System"
 
-#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:197
+#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:213
 msgid "BCC用送信先メールアドレス"
 msgstr "Destination Mail Address for BCC"
 
-#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:205
+#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:221
 msgid "BCC（ブラインドカーボンコピー）用のメールアドレスを指定します。"
 msgstr "Specify mail address for BCC (Blind Carbon Copy)."
 
-#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:206
+#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:222
 msgid "複数の送信先を指定するには、カンマで区切って入力します。"
 msgstr "Enter splitting by commas to specify multiple destinations."
 
-#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:226
+#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:242
 msgid ""
 "メールコンテンツで利用するウィジェットエリアを指定します。<br>ウィジェットエ"
 "リアは「%s」より追加できます。"
@@ -9736,19 +10077,19 @@ msgstr ""
 "Specify Widget Area used by Mail Contents.<br />Widget Area can be added "
 "from “%s”."
 
-#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:233
+#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:249
 msgid "メールフォームテンプレート名"
 msgstr "Mail Form Template Name"
 
-#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:250
+#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:266
 msgid "メールフォーム本体のテンプレートを指定します。"
 msgstr "Specify Template for Mail Form body."
 
-#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:257
+#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:273
 msgid "送信メールテンプレート名"
 msgstr "Sending Mail Template Name"
 
-#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:271
+#: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:287
 msgid "送信するメールのテンプレートを指定します。"
 msgstr "Specify sending mail's Template."
 
@@ -9945,8 +10286,8 @@ msgid "メール送信"
 msgstr "Mail Sending"
 
 #: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailFields/form.php:296
-#: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:91
-#: plugins/bc-front/templates/plugin/BcMail/element/mail_form.php:49
+#: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:112
+#: plugins/bc-front/templates/plugin/BcMail/element/mail_form.php:53
 msgid "送信する"
 msgstr "Submit"
 
@@ -10595,12 +10936,16 @@ msgid "正方形に切り抜く"
 msgstr "Crp to Square"
 
 #: plugins/bc-admin-third/templates/plugin/BcUploader/Admin/UploaderConfigs/index.php:114
-msgid "携帯サイズ（大）"
-msgstr "Phone Size (Large)"
+#, fuzzy
+#| msgid "PCサイズ（大）"
+msgid "モバイルサイズ（大）"
+msgstr "PC Size (Large)"
 
 #: plugins/bc-admin-third/templates/plugin/BcUploader/Admin/UploaderConfigs/index.php:138
-msgid "携帯サイズ（小）"
-msgstr "Phone Size (Small)"
+#, fuzzy
+#| msgid "PCサイズ（小）"
+msgid "モバイルサイズ（小）"
+msgstr "PC Size (Small)"
 
 #: plugins/bc-admin-third/templates/plugin/BcUploader/Admin/UploaderConfigs/index.php:178
 msgid "レイアウトタイプ"
@@ -10685,7 +11030,7 @@ msgid "ファイルが存在しません"
 msgstr "File does not exist."
 
 #: plugins/bc-admin-third/templates/plugin/BcUploader/Admin/element/UploaderFiles/index_list_table.php:116
-#: plugins/bc-custom-content/src/Service/CustomContentsService.php:160
+#: plugins/bc-custom-content/src/Service/CustomContentsService.php:199
 msgid "編集日"
 msgstr "Edit Date"
 
@@ -10993,9 +11338,19 @@ msgstr "Added Blog's Copy \"%s\"."
 msgid "ブログコメント No.%s を公開状態にしました。"
 msgstr "Added Blog's Copy \"%s\"."
 
-#: plugins/bc-blog/src/Controller/Admin/BlogContentsController.php:67
-msgid "ブログ「%s」を更新しました。"
+#: plugins/bc-blog/src/Controller/Admin/BlogContentsController.php:68
+#: plugins/bc-blog/src/Controller/Api/BlogContentsController.php:135
+#, fuzzy
+#| msgid "ブログ「%s」を更新しました。"
+msgid "ブログ「{0}」を更新しました。"
 msgstr "Updated Blog \"%s\"."
+
+#: plugins/bc-blog/src/Controller/Admin/BlogContentsController.php:70
+msgid ""
+"URL、または、公開状態を変更したので、検索インデックスの再構築が必要です。\n"
+"                        設定 > ユーティリティ > 検索インデックス より、検索イ"
+"ンデックスの再構築を行ってください。"
+msgstr ""
 
 #: plugins/bc-blog/src/Controller/Admin/BlogPostsController.php:73
 #: plugins/bc-mail/src/Controller/Admin/MailFieldsController.php:61
@@ -11098,34 +11453,42 @@ msgstr "Updated Category \"%s\"."
 msgid "ブログカテゴリー「{0}」を削除しました。"
 msgstr "Deleted Category \"%s\"."
 
-#: plugins/bc-blog/src/Controller/Api/BlogCommentsController.php:92
+#: plugins/bc-blog/src/Controller/Api/BlogCommentsController.php:93
 #, fuzzy
 #| msgid "ブログのコピー「%s」を追加しました。"
 msgid "ブログコメント「{0}」を削除しました。"
 msgstr "Added Blog's Copy \"%s\"."
 
-#: plugins/bc-blog/src/Controller/Api/BlogCommentsController.php:126
+#: plugins/bc-blog/src/Controller/Api/BlogCommentsController.php:127
 #: plugins/bc-blog/src/Controller/Api/BlogPostsController.php:336
 msgid "非公開に"
 msgstr ""
 
-#: plugins/bc-blog/src/Controller/Api/BlogCommentsController.php:139
+#: plugins/bc-blog/src/Controller/Api/BlogCommentsController.php:140
 #, fuzzy
 #| msgid "ブログのコピー「%s」を追加しました。"
 msgid "ブログコメント「%s」を %s しました。"
 msgstr "Added Blog's Copy \"%s\"."
+
+#: plugins/bc-blog/src/Controller/Api/BlogCommentsController.php:167
+#: plugins/bc-blog/src/Controller/BlogController.php:369
+#, fuzzy
+#| msgid "メッセージを指定してください。"
+msgid "パラメーターに blog_content_id が指定されていません。"
+msgstr "Please specify message."
+
+#: plugins/bc-blog/src/Controller/Api/BlogCommentsController.php:170
+#: plugins/bc-blog/src/Controller/BlogController.php:372
+#, fuzzy
+#| msgid "メッセージを指定してください。"
+msgid "パラメーターに blog_post_id が指定されていません。"
+msgstr "Please specify message."
 
 #: plugins/bc-blog/src/Controller/Api/BlogContentsController.php:102
 #, fuzzy
 #| msgid "ブログ「%s」を追加しました。"
 msgid "ブログ「{0}」を追加しました。"
 msgstr "Added Blog \"%s\"."
-
-#: plugins/bc-blog/src/Controller/Api/BlogContentsController.php:135
-#, fuzzy
-#| msgid "ブログ「%s」を更新しました。"
-msgid "ブログ「{0}」を更新しました。"
-msgstr "Updated Blog \"%s\"."
 
 #: plugins/bc-blog/src/Controller/Api/BlogContentsController.php:171
 #, fuzzy
@@ -11192,17 +11555,37 @@ msgstr "Updated Blog \"%s\"."
 msgid "ブログタグ「%s」を %s しました。"
 msgstr "Added Blog \"%s\"."
 
-#: plugins/bc-blog/src/Controller/BlogFrontAppController.php:68
-msgid "【%s】コメントを受け付けました"
-msgstr "【%s】Comment Accepted"
+#: plugins/bc-blog/src/Controller/BlogController.php:382
+#: plugins/bc-mail/src/Controller/MailController.php:201
+#: plugins/bc-mail/src/Controller/MailController.php:262
+#, fuzzy
+#| msgid "画像の文字を入力してください"
+msgid "画像の文字が間違っています。再度入力してください。"
+msgstr "Please enter the letters of the image"
 
-#: plugins/bc-blog/src/Controller/BlogFrontAppController.php:127
-msgid "【%s】コメントが投稿されました"
-msgstr "【%s】Comment Posted"
+#: plugins/bc-blog/src/Controller/BlogController.php:390
+#: plugins/bc-mail/src/Controller/MailController.php:202
+#: plugins/bc-mail/src/Controller/MailController.php:263
+#, fuzzy
+#| msgid "入力エラーです。内容を修正してください。"
+msgid "入力エラーです。内容を見直してください。"
+msgstr "Input error. Please fix the contents."
 
 #: plugins/bc-blog/src/Event/BcBlogViewEventListener.php:79
 msgid "記事"
 msgstr "Articles"
+
+#: plugins/bc-blog/src/Mailer/BlogCommentMailer.php:47
+#, fuzzy
+#| msgid "【%s】コメントを受け付けました"
+msgid "【{0}】コメントを受け付けました"
+msgstr "【%s】Comment Accepted"
+
+#: plugins/bc-blog/src/Mailer/BlogCommentMailer.php:70
+#, fuzzy
+#| msgid "【%s】コメントが投稿されました"
+msgid "【{0}】コメントが投稿されました"
+msgstr "【%s】Comment Posted"
 
 #: plugins/bc-blog/src/Model/Table/BlogCategoriesTable.php:101
 #, fuzzy
@@ -11244,6 +11627,34 @@ msgstr "Please enter Blog Category Title within 255 characters."
 #| msgid "ブログカテゴリタイトルを入力してください。"
 msgid "カテゴリタイトルを入力してください。"
 msgstr "Please enter Blog Category Title."
+
+#: plugins/bc-blog/src/Model/Table/BlogCommentsTable.php:37
+#, fuzzy
+#| msgid "お名前を入力してください"
+msgid "お名前を入力してください。"
+msgstr "Please enter your name"
+
+#: plugins/bc-blog/src/Model/Table/BlogCommentsTable.php:38
+#, fuzzy
+#| msgid "お名前は50文字以内で入力してください。"
+msgid "お名前は50文字以内で入力してください。"
+msgstr "Please enter Name within 50 characters."
+
+#: plugins/bc-blog/src/Model/Table/BlogCommentsTable.php:47
+msgid "URLの形式が不正です。"
+msgstr "URL's format is invalid."
+
+#: plugins/bc-blog/src/Model/Table/BlogCommentsTable.php:48
+#, fuzzy
+#| msgid "設定URLは255文字以内で入力してください。"
+msgid "URLは255文字以内で入力してください。"
+msgstr "Please enter Setting URL within 255 characters."
+
+#: plugins/bc-blog/src/Model/Table/BlogCommentsTable.php:51
+#, fuzzy
+#| msgid "コメントを入力してください"
+msgid "コメントを入力してください。"
+msgstr "Please enter comments"
 
 #: plugins/bc-blog/src/Model/Table/BlogContentsTable.php:61
 #, fuzzy
@@ -11360,6 +11771,12 @@ msgstr "Please enter Blog Tag."
 #: plugins/bc-blog/src/Model/Table/BlogTagsTable.php:86
 msgid "既に登録のあるタグです。"
 msgstr "Tag is already registered."
+
+#: plugins/bc-blog/src/Service/BlogCommentsService.php:124
+#, fuzzy
+#| msgid "コメントを入力してください"
+msgid "コメント機能は無効になっています。"
+msgstr "Please enter comments"
 
 #: plugins/bc-blog/src/Service/BlogPostsService.php:305
 #: plugins/bc-blog/src/Service/BlogPostsService.php:346
@@ -11822,6 +12239,7 @@ msgid "シンプル"
 msgstr ""
 
 #: plugins/bc-custom-content/src/Controller/Admin/CustomContentsController.php:72
+#: plugins/bc-custom-content/src/Controller/Api/CustomContentsController.php:129
 #, fuzzy
 #| msgid "カテゴリー「%s」を更新しました。"
 msgid "カスタムコンテンツ「{0}」を更新しました。"
@@ -11879,6 +12297,7 @@ msgid "フィールド「{0}」を更新しました"
 msgstr "Updated Feed \"%s\"."
 
 #: plugins/bc-custom-content/src/Controller/Admin/CustomFieldsController.php:101
+#: plugins/bc-custom-content/src/Controller/Api/CustomFieldsController.php:161
 #, fuzzy
 #| msgid "フィード「%s」を削除しました。"
 msgid "フィールド「{0}」を削除しました。"
@@ -11897,22 +12316,23 @@ msgid "テーブル「{0}」を更新しました"
 msgstr "Updated Folder \"%s\"."
 
 #: plugins/bc-custom-content/src/Controller/Admin/CustomTablesController.php:100
+#: plugins/bc-custom-content/src/Controller/Api/CustomTablesController.php:161
 #, fuzzy
 #| msgid "フィード「%s」を削除しました。"
 msgid "テーブル「{0}」を削除しました。"
 msgstr "Deleted Feed \"%s\"."
 
-#: plugins/bc-custom-content/src/Controller/Api/CustomContentsController.php:36
+#: plugins/bc-custom-content/src/Controller/Api/CustomContentsController.php:89
 #, fuzzy
 #| msgid "カテゴリー「%s」を追加しました。"
 msgid "カスタムコンテンツ「{0}」を追加しました。"
 msgstr "Added Category \"%s\"."
 
-#: plugins/bc-custom-content/src/Controller/Api/CustomContentsController.php:39
+#: plugins/bc-custom-content/src/Controller/Api/CustomContentsController.php:172
 #, fuzzy
-#| msgid "入力エラーです。内容を修正してください。"
-msgid "入力エラーです。内容を修正してください。\n"
-msgstr "Input error. Please fix the contents."
+#| msgid "カテゴリー「%s」を追加しました。"
+msgid "カスタムコンテンツ「{0}」を削除しました。"
+msgstr "Added Category \"%s\"."
 
 #: plugins/bc-custom-content/src/Controller/Api/CustomEntriesController.php:45
 #: plugins/bc-custom-content/src/Controller/Api/CustomEntriesController.php:86
@@ -11921,11 +12341,35 @@ msgstr "Input error. Please fix the contents."
 msgid "パラメーターに custom_table_id を指定してください。"
 msgstr "Please specify message."
 
-#: plugins/bc-custom-content/src/Controller/Api/CustomLinksController.php:42
+#: plugins/bc-custom-content/src/Controller/Api/CustomFieldsController.php:90
+#, fuzzy
+#| msgid "フィード「%s」を追加しました。"
+msgid "フィールド「{0}」を追加しました。"
+msgstr "Added Feed \"%s\"."
+
+#: plugins/bc-custom-content/src/Controller/Api/CustomFieldsController.php:124
+#, fuzzy
+#| msgid "フィード「%s」を更新しました。"
+msgid "フィールド「{0}」を更新しました。"
+msgstr "Updated Feed \"%s\"."
+
+#: plugins/bc-custom-content/src/Controller/Api/CustomLinksController.php:102
 #, fuzzy
 #| msgid "リンク「%s」を更新しました。"
 msgid "カスタムリンク「{0}」を更新しました。"
 msgstr "Updated Link \"%s\"."
+
+#: plugins/bc-custom-content/src/Controller/Api/CustomTablesController.php:92
+#, fuzzy
+#| msgid "フォルダ「%s」を追加しました。"
+msgid "テーブル「{0}」を追加しました。"
+msgstr "Added Folder \"%s\"."
+
+#: plugins/bc-custom-content/src/Controller/Api/CustomTablesController.php:125
+#, fuzzy
+#| msgid "フォルダ「%s」を更新しました。"
+msgid "テーブル「{0}」を更新しました。"
+msgstr "Updated Folder \"%s\"."
 
 #: plugins/bc-custom-content/src/Event/BcCustomContentViewEventListener.php:73
 msgid "エントリー"
@@ -12085,13 +12529,13 @@ msgstr ""
 msgid "既に登録のある識別名です。"
 msgstr "Tag is already registered."
 
-#: plugins/bc-custom-content/src/Service/CustomContentsService.php:140
+#: plugins/bc-custom-content/src/Service/CustomContentsService.php:179
 msgid ""
 "list_order のコントロールソースを取得する場合は、custom_table_id の指定が必要"
 "です。"
 msgstr ""
 
-#: plugins/bc-custom-content/src/Service/CustomContentsService.php:145
+#: plugins/bc-custom-content/src/Service/CustomContentsService.php:184
 msgid ""
 "template のコントロールソースを取得する場合は、site_id の指定が必要です。"
 msgstr ""
@@ -12214,13 +12658,27 @@ msgstr "Updated Mail Form “%s”."
 msgid "テンプレート「{0}」を削除しました。"
 msgstr "Deleted Editor Template \"%s\"."
 
+#: plugins/bc-editor-template/src/Controller/Api/EditorTemplatesController.php:94
+#, fuzzy
+#| msgid "メールフォーム「%s」を追加しました。"
+msgid "エディタテンプレート「{0}」を追加しました。"
+msgstr "Added Mail Form “%s”."
+
+#: plugins/bc-editor-template/src/Controller/Api/EditorTemplatesController.php:127
+#, fuzzy
+#| msgid "メールフォーム「%s」を更新しました。"
+msgid "エディタテンプレート「{0}」を更新しました。"
+msgstr "Updated Mail Form “%s”."
+
+#: plugins/bc-editor-template/src/Controller/Api/EditorTemplatesController.php:164
+#, fuzzy
+#| msgid "エディタテンプレート「%s」を削除しました。"
+msgid "エディタテンプレート「{0}」を削除しました。"
+msgstr "Deleted Editor Template \"%s\"."
+
 #: plugins/bc-editor-template/src/Model/Table/EditorTemplatesTable.php:72
 msgid "テンプレート名を入力してください。"
 msgstr "Please enter Template name."
-
-#: plugins/bc-favorite/config.php:14
-msgid "お気に入り"
-msgstr ""
 
 #: plugins/bc-favorite/config.php:15
 msgid "ユーザーごとに管理画面内のお気に入りを設定できる機能"
@@ -12230,25 +12688,25 @@ msgstr ""
 msgid "お気に入りAPI"
 msgstr ""
 
-#: plugins/bc-favorite/src/Controller/Api/FavoritesController.php:86
+#: plugins/bc-favorite/src/Controller/Api/FavoritesController.php:85
 #, fuzzy
 #| msgid "タグ「%s」を追加しました。"
 msgid "お気に入り「{0}」を追加しました。"
 msgstr "Added Tag \"%s\"."
 
-#: plugins/bc-favorite/src/Controller/Api/FavoritesController.php:116
+#: plugins/bc-favorite/src/Controller/Api/FavoritesController.php:115
 #, fuzzy
 #| msgid "タグ「%s」を更新しました。"
 msgid "お気に入り「{0}」を更新しました。"
 msgstr "Updated Tag \"%s\"."
 
-#: plugins/bc-favorite/src/Controller/Api/FavoritesController.php:150
+#: plugins/bc-favorite/src/Controller/Api/FavoritesController.php:149
 #, fuzzy
 #| msgid "よく使う項目: %s を削除しました。"
 msgid "お気に入り: {0} を削除しました。"
 msgstr "Deleted the favorite menu %s ."
 
-#: plugins/bc-favorite/src/Event/BcFavoriteViewEventListener.php:60
+#: plugins/bc-favorite/src/Event/BcFavoriteViewEventListener.php:59
 msgid "お気に入りに追加"
 msgstr ""
 
@@ -12284,24 +12742,35 @@ msgid ""
 "■ empty：サンプルデータなし版"
 msgstr ""
 
-#: plugins/bc-front/templates/Maintenance/index.php:23
+#: plugins/bc-front/templates/Maintenance/index.php:25
 msgid "ご迷惑をおかけしております。"
 msgstr "Sorry for your inconvenience."
 
-#: plugins/bc-front/templates/Maintenance/index.php:24
+#: plugins/bc-front/templates/Maintenance/index.php:26
 msgid "現在メンテナンス中です。"
 msgstr "It’s under maintenance."
 
-#: plugins/bc-front/templates/Maintenance/index.php:25
+#: plugins/bc-front/templates/Maintenance/index.php:27
 msgid "もうしばらくお待ちください。"
 msgstr "Please wait for a moment."
 
-#: plugins/bc-front/templates/element/google_maps.php:55
-msgid ""
-"Google Maps を読み込めません。管理画面で正しい住所が設定されているか確認して"
-"ください。"
+#: plugins/bc-front/templates/element/google_maps.php:47
+msgid "Googleマップを利用するには、Google Maps APIのキーの登録が必要です。"
 msgstr ""
-"Couldn’t load Google Maps. Please check right address is set in Admin Screen."
+
+#: plugins/bc-front/templates/element/google_maps.php:49
+#, fuzzy
+#| msgid "ログを確認してください。"
+msgid "{0} より設定してください。"
+msgstr "Please check the log."
+
+#: plugins/bc-front/templates/element/google_maps.php:51
+msgid "システム管理"
+msgstr "System"
+
+#: plugins/bc-front/templates/element/google_maps.php:61
+msgid "JavaScript を有効にしてください。"
+msgstr "Please enable JavaScript."
 
 #: plugins/bc-front/templates/element/list_counter.php:26
 msgid "%s で検索した結果 %s〜%s件目 / %s 件"
@@ -12352,59 +12821,56 @@ msgstr "Article not found."
 msgid "%s のアーカイブ一覧です。"
 msgstr "%s's Archive List."
 
-#: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:31
-msgid "この記事へのコメント"
-msgstr "Comment on this article"
-
-#: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:44
-msgid "コメントを送る"
-msgstr "Send comments"
-
-#: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:57
-msgid "お名前"
-msgstr "Name"
-
-#: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:64
-#, fuzzy
-#| msgid "別のメールアドレスに送信する"
-msgid "メールアドレスは公開されません"
-msgstr "Send to Another Mail Address"
-
-#: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:68
-#: plugins/bc-front/templates/plugin/BcMail/element/mail_input.php:52
-msgid "任意"
-msgstr "Any"
-
-#: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:79
-msgid "認証画象"
-msgstr "Authentication Image"
-
-#: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:86
-#: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments_scripts.php:27
-msgid "画像の文字を入力してください"
-msgstr "Please enter the letters of the image"
-
-#: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments_scripts.php:25
+#: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:22
 msgid "お名前を入力してください"
 msgstr "Please enter your name"
 
-#: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments_scripts.php:26
+#: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:23
 msgid "コメントを入力してください"
 msgstr "Please enter comments"
 
-#: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments_scripts.php:28
+#: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:24
+#: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:107
+#: plugins/bc-front/templates/plugin/BcMail/element/auth_captcha.php:35
+msgid "画像の文字を入力してください"
+msgstr "Please enter the letters of the image"
+
+#: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:25
 msgid "送信が完了しました。送信された内容は確認後公開させて頂きます。"
 msgstr ""
 "Submission has been completed. After confirming the contents we will make it "
 "public."
 
-#: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments_scripts.php:29
-msgid "コメントの送信が完了しました。"
-msgstr "Comment submission has been completed."
-
-#: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments_scripts.php:30
+#: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:26
 msgid "コメントの送信に失敗しました。入力内容を見なおしてください。"
 msgstr "Failed to submit comment. Please check the input contents."
+
+#: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:45
+msgid "この記事へのコメント"
+msgstr "Comment on this article"
+
+#: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:58
+msgid "コメントを送る"
+msgstr "Send comments"
+
+#: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:67
+msgid "お名前"
+msgstr "Name"
+
+#: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:77
+#, fuzzy
+#| msgid "別のメールアドレスに送信する"
+msgid "メールアドレスは公開されません"
+msgstr "Send to Another Mail Address"
+
+#: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:82
+#: plugins/bc-front/templates/plugin/BcMail/element/mail_input.php:52
+msgid "任意"
+msgstr "Any"
+
+#: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:96
+msgid "認証画象"
+msgstr "Authentication Image"
 
 #: plugins/bc-front/templates/plugin/BcBlog/element/blog_related_posts.php:26
 msgid "関連記事"
@@ -12450,7 +12916,9 @@ msgid "コメントを受付けました"
 msgstr "Comment accepted"
 
 #: plugins/bc-front/templates/plugin/BcBlog/email/text/blog_comment_admin.php:31
-msgid "%sへのコメントを受け付けました。"
+#, fuzzy
+#| msgid "%sへのコメントを受け付けました。"
+msgid "{0} へのコメントを受け付けました。"
 msgstr "Accepted the comment to %s."
 
 #: plugins/bc-front/templates/plugin/BcBlog/email/text/blog_comment_admin.php:32
@@ -12471,12 +12939,14 @@ msgid "コメントの公開状態を変更する場合は次のURLよりご確�
 msgstr ""
 "Please confirm on the next URL if you want to change Comment's publicity."
 
-#: plugins/bc-front/templates/plugin/BcBlog/email/text/blog_comment_contributor.php:27
+#: plugins/bc-front/templates/plugin/BcBlog/email/text/blog_comment_contributor.php:26
 msgid "コメントが投稿されました"
 msgstr "Comment posted"
 
-#: plugins/bc-front/templates/plugin/BcBlog/email/text/blog_comment_contributor.php:30
-msgid "%sさんが、「%s」にコメントしました。"
+#: plugins/bc-front/templates/plugin/BcBlog/email/text/blog_comment_contributor.php:29
+#, fuzzy
+#| msgid "%sさんが、「%s」にコメントしました。"
+msgid "{0} さんが、「{1}」にコメントしました。"
 msgstr "%s commented on \"%s\"."
 
 #: plugins/bc-front/templates/plugin/BcCustomContent/CustomContent/default/index.php:43
@@ -12528,11 +12998,15 @@ msgstr "Stop Reception"
 msgid "現在、受付を中止しています。"
 msgstr "The reception is suspended now."
 
-#: plugins/bc-front/templates/plugin/BcMail/element/mail_form.php:48
+#: plugins/bc-front/templates/plugin/BcMail/element/auth_captcha.php:30
+msgid "認証画像"
+msgstr "Authorization Image"
+
+#: plugins/bc-front/templates/plugin/BcMail/element/mail_form.php:52
 msgid "書き直す"
 msgstr "Rewrite"
 
-#: plugins/bc-front/templates/plugin/BcMail/element/mail_form.php:52
+#: plugins/bc-front/templates/plugin/BcMail/element/mail_form.php:56
 msgid "入力内容を確認する"
 msgstr "Confirm"
 
@@ -12827,23 +13301,23 @@ msgid ""
 "baserCMSの再インストールに失敗しました。ログファイルを確認してください。"
 msgstr "Failed baserCMS re-installation. Please check the log file."
 
-#: plugins/bc-installer/src/Controller/Admin/InstallationsController.php:149
+#: plugins/bc-installer/src/Controller/Admin/InstallationsController.php:103
 msgid "データベースへの接続に成功しました。"
 msgstr "Succeeded connecting to the database."
 
-#: plugins/bc-installer/src/Controller/Admin/InstallationsController.php:166
+#: plugins/bc-installer/src/Controller/Admin/InstallationsController.php:120
 msgid "データベースの構築に成功しました。"
 msgstr "Succeeded constructing the database."
 
-#: plugins/bc-installer/src/Controller/Admin/InstallationsController.php:169
+#: plugins/bc-installer/src/Controller/Admin/InstallationsController.php:123
 msgid "データベースの構築中にエラーが発生しました。"
 msgstr "Error has occurred when constructing the database."
 
-#: plugins/bc-installer/src/Controller/Admin/InstallationsController.php:209
+#: plugins/bc-installer/src/Controller/Admin/InstallationsController.php:163
 msgid "管理ユーザーを作成できませんでした。"
 msgstr "Couldn’t create an admin user."
 
-#: plugins/bc-installer/src/Controller/Admin/InstallationsController.php:213
+#: plugins/bc-installer/src/Controller/Admin/InstallationsController.php:167
 #, fuzzy
 #| msgid ""
 #| "データベースへの接続でエラーが発生しました。データベース設定を見直してくだ"
@@ -12855,54 +13329,38 @@ msgstr ""
 "Error has occurred connecting to the database. Please re-check the database "
 "config."
 
-#: plugins/bc-installer/src/Controller/Admin/InstallationsController.php:217
+#: plugins/bc-installer/src/Controller/Admin/InstallationsController.php:171
 #, fuzzy
 #| msgid "データベース処理中にエラーが発生しました。"
 msgid "インストール中にエラーが発生しました。"
 msgstr "An error has occured when processing database."
 
-#: plugins/bc-installer/src/Controller/Admin/InstallationsController.php:261
-msgid "baserCMSのインストールを開始できません"
-msgstr "Couldn’t start installation of baserCMS"
-
-#: plugins/bc-installer/src/Controller/Admin/InstallationsController.php:273
-msgid "baserCMSの初期化"
-msgstr "Initialize baserCMS"
-
-#: plugins/bc-installer/src/Controller/Admin/InstallationsController.php:289
-msgid ""
-"baserCMSを初期化しましたが、正常に処理が行われませんでした。詳細については、"
-"エラー・ログを確認してださい。"
-msgstr ""
-"Initialized baserCMS, but process wasn’t done normally. Please check the "
-"error log for the detail."
-
-#: plugins/bc-installer/src/Controller/Admin/InstallationsController.php:293
-msgid "baserCMSを初期化しました。"
-msgstr "Initialized baserCMS."
-
 #: plugins/bc-installer/src/Mailer/Admin/InstallerMailer.php:40
 msgid "baserCMSインストール完了"
 msgstr "Completed installing baserCMS"
 
-#: plugins/bc-installer/src/Service/InstallationsService.php:165
+#: plugins/bc-installer/src/Service/InstallationsService.php:166
 msgid "データパターンの形式が不正です。"
 msgstr "Data pattern's format is illegal."
 
-#: plugins/bc-installer/src/Service/InstallationsService.php:168
+#: plugins/bc-installer/src/Service/InstallationsService.php:169
 msgid "コアテーブルの構築に失敗しました。"
 msgstr "Failed constructing Core table."
 
 #: plugins/bc-installer/src/Service/InstallationsService.php:175
-#: plugins/bc-installer/src/Service/InstallationsService.php:178
+msgid "コアプラグインのインストールに失敗しました。"
+msgstr "Failed installing Core Plugin."
+
+#: plugins/bc-installer/src/Service/InstallationsService.php:181
+#: plugins/bc-installer/src/Service/InstallationsService.php:184
 msgid "コアの初期データのロードに失敗しました。"
 msgstr "Failed loading of Core’s initial data."
 
-#: plugins/bc-installer/src/Service/InstallationsService.php:332
+#: plugins/bc-installer/src/Service/InstallationsService.php:339
 msgid "コンテンツの更新に失敗しました。"
 msgstr "Failed updating Contents."
 
-#: plugins/bc-installer/src/Service/InstallationsService.php:404
+#: plugins/bc-installer/src/Service/InstallationsService.php:420
 msgid "コアプラグイン %s のインストールに失敗しました。"
 msgstr "Failed installing Core Plugin %s."
 
@@ -13050,24 +13508,6 @@ msgstr "Deleted %s’s Received Data No “%s” ."
 msgid "メールフォーム「{0}」を追加しました。"
 msgstr "Added Mail Form “%s”."
 
-#: plugins/bc-mail/src/Controller/Api/MailContentsController.php:171
-#: plugins/bc-mail/src/Controller/Api/MailContentsController.php:209
-#: plugins/bc-mail/src/Controller/Api/MailFieldsController.php:255
-#: plugins/bc-mail/src/Controller/Api/MailFieldsController.php:293
-#: plugins/bc-mail/src/Controller/Api/MailFieldsController.php:331
-#: plugins/bc-theme-file/src/Controller/Api/ThemeFilesController.php:51
-#: plugins/bc-theme-file/src/Controller/Api/ThemeFilesController.php:86
-#: plugins/bc-theme-file/src/Controller/Api/ThemeFilesController.php:120
-#: plugins/bc-theme-file/src/Controller/Api/ThemeFilesController.php:153
-#: plugins/bc-theme-file/src/Controller/Api/ThemeFilesController.php:190
-#: plugins/bc-theme-file/src/Controller/Api/ThemeFilesController.php:218
-#: plugins/bc-theme-file/src/Controller/Api/ThemeFilesController.php:247
-#: plugins/bc-theme-file/src/Controller/Api/ThemeFilesController.php:279
-#: plugins/bc-theme-file/src/Controller/Api/ThemeFilesController.php:310
-#: plugins/bc-theme-file/src/Controller/Api/ThemeFoldersController.php:306
-msgid "処理中にエラーが発生しました。"
-msgstr "Error occurred during processing."
-
 #: plugins/bc-mail/src/Controller/Api/MailContentsController.php:200
 #, fuzzy
 #| msgid "メールフィールド「%s」を削除しました。"
@@ -13116,21 +13556,21 @@ msgstr "Deleted %s’s Received Data No “%s” ."
 msgid "メールメッセージ No %s を %s しました。"
 msgstr "Added Mail Form “%s”."
 
-#: plugins/bc-mail/src/Controller/MailController.php:184
-#: plugins/bc-mail/src/Controller/MailController.php:223
+#: plugins/bc-mail/src/Controller/MailController.php:189
+#: plugins/bc-mail/src/Controller/MailController.php:240
 #, fuzzy
 #| msgid "エラーが発生しました。内容を確認してください。"
 msgid "エラーが発生しました。もう一度操作してください。"
 msgstr "Error occured. Check content."
 
-#: plugins/bc-mail/src/Controller/MailController.php:242
+#: plugins/bc-mail/src/Controller/MailController.php:271
 #, fuzzy
 #| msgid "入力エラーです。内容を修正してください。"
 msgid "入力内容を確認し、再度送信してください。"
 msgstr "Input error. Please fix the contents."
 
-#: plugins/bc-mail/src/Controller/MailController.php:247
-#: plugins/bc-mail/src/Controller/MailController.php:266
+#: plugins/bc-mail/src/Controller/MailController.php:276
+#: plugins/bc-mail/src/Controller/MailController.php:295
 msgid ""
 "エラー : 送信中にエラーが発生しました。しばらくたってから再度送信お願いしま"
 "す。"
@@ -13337,10 +13777,6 @@ msgstr ""
 msgid "Y年 m月 d日"
 msgstr "Y/m/d"
 
-#: plugins/bc-mail/src/View/Helper/MailformHelper.php:269
-msgid "認証画像"
-msgstr "Authorization Image"
-
 #: plugins/bc-search-index/config.php:15
 #, fuzzy
 #| msgid "サイト内検索"
@@ -13414,6 +13850,7 @@ msgid "テーマ設定API"
 msgstr "Theme Settings"
 
 #: plugins/bc-theme-config/src/Controller/Admin/ThemeConfigsController.php:43
+#: plugins/bc-theme-config/src/Controller/Api/ThemeConfigsController.php:61
 #, fuzzy
 #| msgid "システム設定を保存しました。"
 msgid "テーマ設定を保存しました。"
@@ -13774,6 +14211,15 @@ msgstr "Please re-check the top Folder’s Access Restriction."
 msgid "コアフォルダ {0} を テーマ {1} の次のパスとしてコピーしました。\\n{2}。"
 msgstr ""
 
+#: plugins/bc-theme-file/src/Form/ThemeFileForm.php:106
+#: plugins/bc-theme-file/src/Form/ThemeFileForm.php:107
+msgid "テーマファイル名を入力してください。"
+msgstr "Please enter Theme File Name."
+
+#: plugins/bc-theme-file/src/Form/ThemeFileForm.php:112
+msgid "入力されたテーマファイル名は、同一階層に既に存在します。"
+msgstr "Entered Theme File Name already exists on the same directory."
+
 #: plugins/bc-theme-file/src/Model/Table/ThemeFoldersTable.php:45
 msgid "テーマフォルダ名を入力してください。"
 msgstr "Please Enter Theme Folder Name."
@@ -13961,7 +14407,7 @@ msgstr "Deleted Upload File Category \"%s\"."
 msgid "アップロードカテゴリ「{0}」をコピーしました。"
 msgstr "Added Upload File Category \"%s\"."
 
-#: plugins/bc-uploader/src/Controller/Admin/UploaderConfigsController.php:39
+#: plugins/bc-uploader/src/Controller/Admin/UploaderConfigsController.php:41
 msgid "アップローダー設定を保存しました。"
 msgstr "Saved Uploader settings."
 
@@ -13985,11 +14431,23 @@ msgstr "Updated Upload File Category \"%s\"."
 msgid "アップロードファイル「{0}」を削除しました。"
 msgstr "Deleted Upload File Category \"%s\"."
 
-#: plugins/bc-uploader/src/Controller/Api/UploaderCategoriesController.php:110
+#: plugins/bc-uploader/src/Controller/Api/UploaderCategoriesController.php:63
+#, fuzzy
+#| msgid "アップロードファイルカテゴリ「%s」を追加しました。"
+msgid "新規アップロードカテゴリ「{0}」を追加しました。"
+msgstr "Added Upload File Category \"%s\"."
+
+#: plugins/bc-uploader/src/Controller/Api/UploaderCategoriesController.php:143
 #, fuzzy
 #| msgid "アップロードファイルカテゴリ「%s」を追加しました。"
 msgid "アップロードカテゴリ「%s」を %s しました。"
 msgstr "Added Upload File Category \"%s\"."
+
+#: plugins/bc-uploader/src/Controller/Api/UploaderConfigsController.php:62
+#, fuzzy
+#| msgid "アップローダー設定を保存しました。"
+msgid "アップローダープラグインを保存しました。"
+msgstr "Saved Uploader settings."
 
 #: plugins/bc-uploader/src/Controller/Api/UploaderFilesController.php:62
 #, fuzzy
@@ -14083,6 +14541,61 @@ msgstr "Medium"
 #: plugins/bc-uploader/src/Event/BcUploaderViewEventListener.php:88
 msgid "大"
 msgstr "Large"
+
+#: plugins/bc-uploader/src/Model/Table/UploaderConfigsTable.php:55
+#, fuzzy
+#| msgid "Webサイト名を入力してください。"
+msgid "PCサイズ（大）[幅] を入力してください。"
+msgstr "Please enter Website Name."
+
+#: plugins/bc-uploader/src/Model/Table/UploaderConfigsTable.php:58
+#, fuzzy
+#| msgid "Webサイト名を入力してください。"
+msgid "PCサイズ（大）[高さ] を入力してください。"
+msgstr "Please enter Website Name."
+
+#: plugins/bc-uploader/src/Model/Table/UploaderConfigsTable.php:61
+#, fuzzy
+#| msgid "Webサイト名を入力してください。"
+msgid "PCサイズ（中）[幅] を入力してください。"
+msgstr "Please enter Website Name."
+
+#: plugins/bc-uploader/src/Model/Table/UploaderConfigsTable.php:64
+#, fuzzy
+#| msgid "タイトルを入力してください。"
+msgid "PCサイズ（中）[高さ] を入力してください。"
+msgstr "Please enter title."
+
+#: plugins/bc-uploader/src/Model/Table/UploaderConfigsTable.php:67
+#, fuzzy
+#| msgid "Webサイト名を入力してください。"
+msgid "PCサイズ（小）[幅] を入力してください。"
+msgstr "Please enter Website Name."
+
+#: plugins/bc-uploader/src/Model/Table/UploaderConfigsTable.php:70
+#, fuzzy
+#| msgid "Webサイト名を入力してください。"
+msgid "PCサイズ（小）[高さ] を入力してください。"
+msgstr "Please enter Website Name."
+
+#: plugins/bc-uploader/src/Model/Table/UploaderConfigsTable.php:73
+#, fuzzy
+#| msgid "メインサイト表示名を入力してください。"
+msgid "モバイルサイズ（大）[幅] を入力してください。"
+msgstr "Please enter Mainsite Display Name."
+
+#: plugins/bc-uploader/src/Model/Table/UploaderConfigsTable.php:76
+#, fuzzy
+#| msgid "サブサイト名を入力してください。"
+msgid "モバイルサイズ（大）[高さ] を入力してください。"
+msgstr "Please enter Subsite Name."
+
+#: plugins/bc-uploader/src/Model/Table/UploaderConfigsTable.php:79
+#: plugins/bc-uploader/src/Model/Table/UploaderConfigsTable.php:82
+#, fuzzy
+#| msgid "サブサイト名を入力してください。"
+msgid "モバイルサイズ（小）[幅] を入力してください。"
+msgstr "Please enter Subsite Name."
 
 #: plugins/bc-uploader/src/Service/Admin/UploaderFilesAdminService.php:91
 msgid "%sを作成し、書き込み権限を与えてください"
@@ -14202,6 +14715,71 @@ msgstr "Core Widget"
 msgid "ウィジェット"
 msgstr "Widgets"
 
+#, fuzzy
+#~| msgid "管理画面SSL設定"
+#~ msgid "管理画面"
+#~ msgstr "Admin Screen SSL Settings"
+
+#~ msgid ""
+#~ "Googleマップを利用するには、Google Maps APIのキーの登録が必要です。<a "
+#~ "href=\"https://developers.google.com/maps/web/\" target=\"_blank\">キーを"
+#~ "取得</a>して、<a href=\"%s\">システム管理</a>より設定してください。"
+#~ msgstr ""
+#~ "You have to register Google Maps API’s key to use Google Maps.<a "
+#~ "href=“https://developers.google.com/maps/web/“ target=“_blank”>Get key</"
+#~ "a>, and set it from <a href=“%s”>System</a>."
+
+#, fuzzy
+#~| msgid ""
+#~| "認証プレフィックスの設定を指定します。<br />ユーザーグループ名が admins "
+#~| "の場合は編集できません。"
+#~ msgid ""
+#~ "認証プレフィックスの設定を指定します。<br>システム管理グループの場合、管理"
+#~ "システムの設定は変更できません。"
+#~ msgstr ""
+#~ "Specify Authentication Prefix.<br />It can’t be edited if User Group Name "
+#~ "was admins."
+
+#~ msgid "携帯サイズ（大）"
+#~ msgstr "Phone Size (Large)"
+
+#~ msgid "携帯サイズ（小）"
+#~ msgstr "Phone Size (Small)"
+
+#~ msgid "ブログ「%s」を更新しました。"
+#~ msgstr "Updated Blog \"%s\"."
+
+#, fuzzy
+#~| msgid "入力エラーです。内容を修正してください。"
+#~ msgid "入力エラーです。内容を修正してください。\n"
+#~ msgstr "Input error. Please fix the contents."
+
+#~ msgid ""
+#~ "Google Maps を読み込めません。管理画面で正しい住所が設定されているか確認し"
+#~ "てください。"
+#~ msgstr ""
+#~ "Couldn’t load Google Maps. Please check right address is set in Admin "
+#~ "Screen."
+
+#~ msgid "コメントの送信が完了しました。"
+#~ msgstr "Comment submission has been completed."
+
+#~ msgid "baserCMSのインストールを開始できません"
+#~ msgstr "Couldn’t start installation of baserCMS"
+
+#~ msgid "baserCMSの初期化"
+#~ msgstr "Initialize baserCMS"
+
+#~ msgid ""
+#~ "baserCMSを初期化しましたが、正常に処理が行われませんでした。詳細について"
+#~ "は、エラー・ログを確認してださい。"
+#~ msgstr ""
+#~ "Initialized baserCMS, but process wasn’t done normally. Please check the "
+#~ "error log for the detail."
+
+#~ msgid "baserCMSを初期化しました。"
+#~ msgstr "Initialized baserCMS."
+
 #~ msgid "baserCMSアップデート"
 #~ msgstr "Update baserCMS"
 
@@ -14210,9 +14788,6 @@ msgstr "Widgets"
 
 #~ msgid "バージョン %s で削除される予定です。"
 #~ msgstr "It's going to be deleted on version %s."
-
-#~ msgid "リトライ回数は正の整数値で指定してください。"
-#~ msgstr "Please specify retry number with positive integers."
 
 #~ msgid ""
 #~ "プログラムとデータベースのバージョンが異なるため、強制終了します。データ"
@@ -14394,9 +14969,6 @@ msgstr "Widgets"
 #~ msgid ".htaccessファイルが含まれるプラグインはアップロードできません。"
 #~ msgstr "Upload edited file to server."
 
-#~ msgid "ログを確認してください。"
-#~ msgstr "Please check the log."
-
 #~ msgid "サブサイト「%s」 を、%s に設定しました。"
 #~ msgstr "Set Subsite “%s” to %s."
 
@@ -14534,9 +15106,6 @@ msgstr "Widgets"
 #~ msgstr ""
 #~ "Failed updating database's data. Please re-check the settings of database."
 
-#~ msgid "コアプラグインのインストールに失敗しました。"
-#~ msgstr "Failed installing Core Plugin."
-
 #~ msgid ""
 #~ "管理システムのアセットファイルの配置に失敗しました。テーマフォルダの書き込"
 #~ "み権限を確認してください。"
@@ -14671,9 +15240,6 @@ msgstr "Widgets"
 #~ "Method: Plugin::alterDb() is deprecated since version 4.0.0. Please use "
 #~ "Plugin::initDb()."
 
-#~ msgid "サブサイト名を入力してください。"
-#~ msgstr "Please enter Subsite Name."
-
 #~ msgid ""
 #~ "エイリアスは、半角英数・ハイフン（-）・アンダースコア（_）・スラッシュ"
 #~ "（/）・ドット（.）で入力してください。"
@@ -14700,12 +15266,6 @@ msgstr "Widgets"
 
 #~ msgid "URLは半角英数字のみで入力してください。"
 #~ msgstr "Please enter URL with only half-size alphabets and numbers."
-
-#~ msgid "テーマファイル名を入力してください。"
-#~ msgstr "Please enter Theme File Name."
-
-#~ msgid "入力されたテーマファイル名は、同一階層に既に存在します。"
-#~ msgstr "Entered Theme File Name already exists on the same directory."
 
 #~ msgid "アカウント名を入力してください。"
 #~ msgstr "Please enter Account Name."
@@ -14755,9 +15315,6 @@ msgstr "Widgets"
 #~ msgid "カテゴリ名は半角のみで入力してください。"
 #~ msgstr "Please enter Blog Category Name with only half-size characters."
 
-#~ msgid "URLの形式が不正です。"
-#~ msgstr "URL's format is invalid."
-
 #~ msgid "レイアウトテンプレート名は半角で入力してください。"
 #~ msgstr "Please enter Layout Template Name with half-size characters."
 
@@ -14769,9 +15326,6 @@ msgstr "Widgets"
 
 #~ msgid "%s｜%sのアーカイブ一覧です。"
 #~ msgstr "%s | %s's Archive List."
-
-#~ msgid "記事がありません"
-#~ msgstr "Article not found"
 
 #~ msgid "このカテゴリのURL：%s"
 #~ msgstr "This Category’s URL: %s"
@@ -14817,19 +15371,6 @@ msgstr "Widgets"
 
 #~ msgid "となります。"
 #~ msgstr "."
-
-#~ msgid "コメントイメージ認証"
-#~ msgstr "Comment Image Authentication"
-
-#~ msgid ""
-#~ "ブログコメント送信の際、表示された画像の文字入力させる事で認証を行ないま"
-#~ "す。"
-#~ msgstr ""
-#~ "Authorize with inputing characters that of displayed image when sending "
-#~ "Blog Comment."
-
-#~ msgid "スパムなどいたずら送信が多いが多い場合に設定すると便利です。"
-#~ msgstr "It's useful when there are many spams."
 
 #~ msgid ""
 #~ "ブログコンテンツで利用するウィジェットエリアを指定します。<br>ウィジェット"
@@ -15169,9 +15710,6 @@ msgstr "Widgets"
 #~ "This method is deprecated. There is no alternative. Please delete this "
 #~ "line."
 
-#~ msgid "メールプラグイン"
-#~ msgstr "Mail Plugin"
-
 #~ msgid "基本設定"
 #~ msgstr "Basic Settings"
 
@@ -15336,16 +15874,6 @@ msgstr "Widgets"
 #~ "す。"
 #~ msgstr "Displayed on Auto-Reply Mail Sender."
 
-#~ msgid "イメージ認証"
-#~ msgstr "Image Authentication"
-
-#~ msgid ""
-#~ "メールフォーム送信の際、表示された画像の文字入力させる事で認証を行ないま"
-#~ "す。"
-#~ msgstr ""
-#~ "Authorize with entering characters that are displayed image when sending "
-#~ "Mail Form."
-
 #~ msgid ""
 #~ "Eメールを選択すると、メールフォーム送信の際、入力されたEメール宛に自動返信"
 #~ "メールを送信します。<br />\n"
@@ -15416,9 +15944,6 @@ msgstr "Widgets"
 
 #~ msgid "baserCMSロゴ"
 #~ msgstr "baserCMS Logo"
-
-#~ msgid "システム管理"
-#~ msgstr "System"
 
 #~ msgid "baserCMS 公式サイト"
 #~ msgstr "baserCMS Official Site"
@@ -15954,9 +16479,6 @@ msgstr "Widgets"
 #~ msgid "よく使う項目の追加に失敗しました。"
 #~ msgstr "Failed adding Favorite Item."
 
-#~ msgid "baserCMSへようこそ。"
-#~ msgstr "Welcome to baserCMS."
-
 #~ msgid ""
 #~ "画面右上の「システムナビ」より管理システムの全ての機能にアクセスする事がで"
 #~ "きます。"
@@ -15970,12 +16492,6 @@ msgstr "Widgets"
 #~ msgstr ""
 #~ "You can register frequently used function as Favorite by clicking “Add” "
 #~ "on “Favorite Items” on left screen."
-
-#~ msgid ""
-#~ "まずは、画面上部のメニュー、「コンテンツ管理」よりWebサイトの全体像を確認"
-#~ "しましょう。"
-#~ msgstr ""
-#~ "Let’s check big picture of Web site from “Content” menu on upper screen."
 
 #~ msgid ""
 #~ "ご迷惑をおかけしております。<br />現在メンテナンス中です。<br />もうしばら"
@@ -16070,32 +16586,6 @@ msgstr "Widgets"
 #~ msgid "管理システムの<br>テーマ"
 #~ msgstr "Admin System Login"
 
-#~ msgid "GoogleMaps住所"
-#~ msgstr "GoogleMaps Address"
-
-#~ msgid "住所"
-#~ msgstr "Address"
-
-#~ msgid ""
-#~ "GoogleMapを利用する場合は地図を表示させたい住所を入力してください。郵便番"
-#~ "号からでも大丈夫です。<br><br>入力例1) 福岡市中央区大名2-11-25<br>入力例"
-#~ "2) 〒819-0041 福岡県福岡市中央区大名2-11-25<br><br>建物名を含めるとうまく"
-#~ "表示されない場合があります。<br>その時は建物名を省略して試してください。"
-#~ "<br>APIキーを入力しないと地図が表示されない場合があります。<a "
-#~ "href=\"https://developers.google.com/maps/web/\" target=\"_blank\">「ウェ"
-#~ "ブ向け Google Maps API」</a>"
-#~ msgstr ""
-#~ "Please enter address that you want to display map to use GoogleMaps. "
-#~ "Postal number is accepted.<br><br>Example 1) 福岡市中央区大名"
-#~ "2-11-25<br>Example 2) 〒819-0041 福岡県福岡市中央区大名2-11-25<br><br>It "
-#~ "may not be displayed properly if you included building name.<br>If so, "
-#~ "try omitting building name.<br>Map may not be displayed if API key wasn’t "
-#~ "entered<a href=“https://developers.google.com/maps/web/“ "
-#~ "target=“_blank”>”Google Maps API for web”</a>"
-
-#~ msgid "APIキー"
-#~ msgstr "API Key"
-
 #~ msgid "Google Analytics<br />トラッキングID"
 #~ msgstr "Google Analytics<br />Tracking ID"
 
@@ -16137,19 +16627,6 @@ msgstr "Widgets"
 #~ msgid ""
 #~ "サブサイトを利用する際に、メインサイトを特定する識別名称を設定します。"
 #~ msgstr "Set Identification Name to identify Main Site when using Subsite."
-
-#~ msgid "公開中"
-#~ msgstr "Public"
-
-#~ msgid ""
-#~ "公開状態を指定します。<br />メンテナンス中の場合に、公開ページを確認するに"
-#~ "は、管理画面にログインする必要があります。<br>ただし、制作・開発モードがデ"
-#~ "バッグモードに設定されている場合は、メンテナンス中にしていても公開ページが"
-#~ "表示されてしまいますので注意が必要です。"
-#~ msgstr ""
-#~ "Set Public Status.<br />You must login to Admin Screen to check Public "
-#~ "Pages in maintenance.<br>Please note Public Page will be displayed if "
-#~ "Creation / Development Mode was set to Debug Mode."
 
 #~ msgid "メール設定関連"
 #~ msgstr "Mail Settings"

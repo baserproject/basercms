@@ -96,7 +96,7 @@ class CustomLinksController extends BcApiController
     public function edit(CustomLinksServiceInterface $service, $id)
     {
         $this->request->allowMethod(['post', 'put', 'patch']);
-
+        $entity = null;
         try {
             $entity = $service->update($service->get($id), $this->request->getData());
             $message = __d('baser_core', 'カスタムリンク「{0}」を更新しました。', $entity->title);
@@ -104,6 +104,9 @@ class CustomLinksController extends BcApiController
             $this->setResponse($this->response->withStatus(400));
             $entity = $e->getEntity();
             $message = __d('baser_core', '入力エラーです。内容を修正してください。');
+        } catch (RecordNotFoundException $e) {
+            $this->setResponse($this->response->withStatus(404));
+            $message = __d('baser_core', 'データが見つかりません。');
         } catch (\Throwable $e) {
             $entity = $e->getEntity();
             $this->setResponse($this->response->withStatus(500));
@@ -113,7 +116,7 @@ class CustomLinksController extends BcApiController
         $this->set([
             'message' => $message,
             'customLink' => $entity,
-            'errors' => $entity->getErrors(),
+            'errors' => $entity?->getErrors(),
         ]);
 
         $this->viewBuilder()->setOption('serialize', ['customLink', 'message', 'errors']);
@@ -123,10 +126,36 @@ class CustomLinksController extends BcApiController
      * 削除API
      *
      * @param CustomLinksServiceInterface $service
+     * @param int $id
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function delete(CustomLinksServiceInterface $service)
+    public function delete(CustomLinksServiceInterface $service, int $id)
     {
-        //todo 削除API
+        $this->request->allowMethod(['post', 'delete']);
+        $customLink = null;
+        try {
+            $customLink = $service->get($id);
+            if ($service->delete($id)) {
+                $message = __d('baser_core', 'カスタムリンク「{0}」を削除しました。', $customLink->title);
+            } else {
+                $this->setResponse($this->response->withStatus(500));
+                $message = __d('baser_core', 'データベース処理中にエラーが発生しました。');
+            }
+        } catch (RecordNotFoundException $e) {
+            $this->setResponse($this->response->withStatus(404));
+            $message = __d('baser_core', 'データが見つかりません。');
+        } catch (\Throwable $e) {
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $this->setResponse($this->response->withStatus(500));
+        }
+        $this->set([
+            'message' => $message,
+            'customLink' => $customLink
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['customLink', 'message']);
     }
 
     /**

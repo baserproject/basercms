@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: CakePHP 4.4.11\n"
-"POT-Creation-Date: 2023-03-13 13:27+0900\n"
+"POT-Creation-Date: 2023-03-13 13:32+0900\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -68,18 +68,14 @@ msgstr ""
 
 #: ./templates/Error/error400.php:36
 #: ./templates/Error/error500.php:40
-#: ./tmp/basercms/templates/Error/error400.php:36
-#: ./tmp/basercms/templates/Error/error500.php:40
 msgid "Error"
 msgstr ""
 
 #: ./templates/Error/error400.php:37
-#: ./tmp/basercms/templates/Error/error400.php:37
 msgid "The requested address {0} was not found on this server."
 msgstr ""
 
 #: ./templates/Error/error500.php:38
-#: ./tmp/basercms/templates/Error/error500.php:38
 msgid "An Internal Error Has Occurred"
 msgstr ""
 

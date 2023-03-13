@@ -33,6 +33,10 @@ class CustomEntriesController extends BcApiController
      * @param CustomEntriesServiceInterface $service
      * @param int $tableId
      * @param $id
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function view(CustomEntriesServiceInterface $service, $id)
     {
@@ -41,7 +45,7 @@ class CustomEntriesController extends BcApiController
         if (isset($queryParams['status']) || isset($queryParams['use_api'])) {
             if (!$this->isAdminApiEnabled()) throw new ForbiddenException();
         }
-        if(empty($queryParams['custom_table_id'])) {
+        if (empty($queryParams['custom_table_id'])) {
             throw new BadRequestException(__d('baser_core', 'パラメーターに custom_table_id を指定してください。'));
         }
 
@@ -74,6 +78,10 @@ class CustomEntriesController extends BcApiController
      *
      * @param CustomEntriesServiceInterface $service
      * @param int $tableId
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function index(CustomEntriesServiceInterface $service)
     {
@@ -82,7 +90,7 @@ class CustomEntriesController extends BcApiController
         if (isset($queryParams['status']) || isset($queryParams['use_api'])) {
             if (!$this->isAdminApiEnabled()) throw new ForbiddenException();
         }
-        if(empty($queryParams['custom_table_id'])) {
+        if (empty($queryParams['custom_table_id'])) {
             throw new BadRequestException(__d('baser_core', 'パラメーターに custom_table_id を指定してください。'));
         }
 
@@ -107,4 +115,54 @@ class CustomEntriesController extends BcApiController
         $this->viewBuilder()->setOption('serialize', ['entries', 'message']);
     }
 
+    /**
+     * カスタムエントリー　追加
+     * @param CustomEntriesServiceInterface $service
+     */
+    public function add(CustomEntriesServiceInterface $service)
+    {
+        //todo 追加
+    }
+
+    /**
+     * カスタムエントリー　編集
+     * @param CustomEntriesServiceInterface $service
+     */
+    public function edit(CustomEntriesServiceInterface $service)
+    {
+        //todo 編集
+    }
+
+    /**
+     * カスタムエントリー　削除
+     * @param CustomEntriesServiceInterface $service
+     */
+    public function delete(CustomEntriesServiceInterface $service)
+    {
+        //todo 削除
+    }
+
+    /**
+     * カスタムエントリー　リスト
+     * @param CustomEntriesServiceInterface $service
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function list(CustomEntriesServiceInterface $service)
+    {
+        $this->request->allowMethod('get');
+
+        $queryParams = $this->getRequest()->getQueryParams();
+        if (empty($queryParams['custom_table_id'])) {
+            throw new BadRequestException(__d('baser_core', 'パラメーターに custom_table_id を指定してください。'));
+        }
+
+        $service->setup($queryParams['custom_table_id']);
+        $this->set([
+            'entries' => $service->getList()
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['entries']);
+    }
 }
