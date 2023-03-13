@@ -155,6 +155,33 @@ class UploaderCategoriesControllerTest extends BcTestCase
     }
 
     /**
+     * test copy
+     * @return void
+     */
+    public function test_copy()
+    {
+        //テストデーターを生成
+        $this->loadFixtureScenario(UploaderCategoriesScenario::class);
+        //APIを呼ぶ
+        $this->post("/baser/api/bc-uploader/uploader_categories/copy/1.json?token=" . $this->accessToken);
+        //ステータスを確認
+        $this->assertResponseSuccess();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('アップロードカテゴリ「blog_copy」をコピーしました。', $result->message);
+        $this->assertEquals('blog_copy', $result->uploaderCategory->name);
+
+        //無効なアップロードカテゴリIDを指定した場合、
+        //APIを呼ぶ
+        $this->post("/baser/api/bc-uploader/uploader_categories/copy/11.json?token=" . $this->accessToken);
+        //ステータスを確認
+        $this->assertResponseCode(500);
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('データベース処理中にエラーが発生しました。__clone method called on non-object', $result->message);
+    }
+
+    /**
      * test delete
      * @return void
      */
