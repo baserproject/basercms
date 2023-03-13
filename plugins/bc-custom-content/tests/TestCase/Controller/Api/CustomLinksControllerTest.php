@@ -11,11 +11,13 @@
 
 namespace BcCustomContent\Test\TestCase\Controller\Api;
 
+use BaserCore\Service\BcDatabaseServiceInterface;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcContainerTrait;
+use BcCustomContent\Service\CustomTablesServiceInterface;
 use BcCustomContent\Test\Scenario\CustomFieldsScenario;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
-use Cake\TestSuite\IntegrationTestTrait;
 
 /**
  * Class CustomLinksControllerTest
@@ -27,7 +29,7 @@ class CustomLinksControllerTest extends BcTestCase
      * ScenarioAwareTrait
      */
     use ScenarioAwareTrait;
-    use IntegrationTestTrait;
+    use BcContainerTrait;
 
     /**
      * Fixtures
@@ -132,7 +134,41 @@ class CustomLinksControllerTest extends BcTestCase
      */
     public function test_delete()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを生成
+        $this->loadFixtureScenario(CustomFieldsScenario::class);
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        //カスタムテーブルとカスタムエントリテーブルを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_category',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+        //カスタムエントリテーブルでrecruit_categoryフィルドを生成
+        $dataBaseService->addColumn('custom_entry_1_recruit_category', 'recruit_category', 'integer');
+        //APIを呼ぶ
+        $this->post('/baser/api/bc-custom-content/custom_links/delete/1.json?token=' . $this->accessToken);
+        //ステータスを確認
+        $this->assertResponseOk();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertNotNull($result->customLink);
+        $this->assertEquals('カスタムリンク「求人分類」を削除しました。', $result->message);
+        //custom_entry_1_recruit_categoryテーブルにrecruit_categoryが存在しないか確認すること
+        $this->assertFalse($dataBaseService->columnExists('custom_entry_1_recruit_category', 'recruit_category'));
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_recruit_category');
+
+        //存在しないBlogPostIDを削除場合、
+        $this->post('/baser/api/bc-custom-content/custom_links/delete/11.json?token=' . $this->accessToken);
+        //ステータスを確認
+        $this->assertResponseCode(404);
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('データが見つかりません。', $result->message);
     }
 
     /**

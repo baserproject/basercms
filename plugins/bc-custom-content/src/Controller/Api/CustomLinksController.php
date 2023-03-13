@@ -123,10 +123,36 @@ class CustomLinksController extends BcApiController
      * 削除API
      *
      * @param CustomLinksServiceInterface $service
+     * @param int $id
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function delete(CustomLinksServiceInterface $service)
+    public function delete(CustomLinksServiceInterface $service, int $id)
     {
-        //todo 削除API
+        $this->request->allowMethod(['post', 'delete']);
+        $customLink = null;
+        try {
+            $customLink = $service->get($id);
+            if ($service->delete($id)) {
+                $message = __d('baser_core', 'カスタムリンク「{0}」を削除しました。', $customLink->title);
+            } else {
+                $this->setResponse($this->response->withStatus(500));
+                $message = __d('baser_core', 'データベース処理中にエラーが発生しました。');
+            }
+        } catch (RecordNotFoundException $e) {
+            $this->setResponse($this->response->withStatus(404));
+            $message = __d('baser_core', 'データが見つかりません。');
+        } catch (\Throwable $e) {
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $this->setResponse($this->response->withStatus(500));
+        }
+        $this->set([
+            'message' => $message,
+            'customLink' => $customLink
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['customLink', 'message']);
     }
 
     /**
