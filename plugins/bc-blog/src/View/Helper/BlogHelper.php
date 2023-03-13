@@ -148,16 +148,20 @@ class BlogHelper extends Helper
             if ($blogContentUpdated) {
                 $contentTable = TableRegistry::getTableLocator()->get('BaserCore.Contents');
                 // 現在のサイトにエイリアスが存在するのであればそちらを優先する
-                $content = $contentTable->find()->where([
-                    'Contents.entity_id' => $this->currentBlogContent->id,
-                    'Contents.type' => 'BlogContent',
-                    'Contents.alias_id IS NOT' => null,
-                    'Contents.site_id' => $this->_View->getRequest()->getAttribute('currentSite')->id
-                ])->first();
+                $site = $this->_View->getRequest()->getAttribute('currentSite');
+                if(!empty($site->id)) {
+                    $content = $contentTable->find()->where([
+                        'Contents.entity_id' => $this->currentBlogContent->id,
+                        'Contents.type' => 'BlogContent',
+                        'Contents.alias_id IS NOT' => null,
+                        'Contents.site_id' => $site->id
+                    ])->first();
+                }
                 if (!$content) {
                     $content = $contentTable->find()->where([
                         'Contents.entity_id' => $this->currentBlogContent->id,
-                        'Contents.type' => 'BlogContent'
+                        'Contents.type' => 'BlogContent',
+                        'Contents.alias_id' => null,
                     ])->first();
                 }
                 $this->currentContent = $content;
