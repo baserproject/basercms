@@ -12,7 +12,7 @@
  * @var \BaserCore\View\BcAdminAppView $this
  * @var bool $firstAccess
  */
-if (!$firstAccess) return;
+if (empty($firstAccess)) return;
 ?>
 
 
