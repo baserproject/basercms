@@ -187,7 +187,25 @@ class UploaderCategoriesControllerTest extends BcTestCase
      */
     public function test_delete()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //テストデーターを生成
+        $this->loadFixtureScenario(UploaderCategoriesScenario::class);
+        //APIを呼ぶ
+        $this->post("/baser/api/bc-uploader/uploader_categories/delete/1.json?token=" . $this->accessToken);
+        //ステータスを確認
+        $this->assertResponseSuccess();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('アップロードカテゴリ「blog」を削除しました。', $result->message);
+        $this->assertEquals('blog', $result->uploaderCategory->name);
+
+        //無効なアップロードカテゴリIDを指定した場合、
+        //APIを呼ぶ
+        $this->post("/baser/api/bc-uploader/uploader_categories/delete/10.json?token=" . $this->accessToken);
+        //ステータスを確認
+        $this->assertResponseCode(404);
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('データが見つかりません。', $result->message);
     }
 
     /**
