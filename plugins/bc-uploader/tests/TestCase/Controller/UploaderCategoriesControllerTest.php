@@ -151,7 +151,38 @@ class UploaderCategoriesControllerTest extends BcTestCase
      */
     public function test_edit()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //テストデーターを生成
+        $this->loadFixtureScenario(UploaderCategoriesScenario::class);
+        $data = [
+            'name' => '更新!'
+        ];
+        //APIを呼ぶ
+        $this->post("/baser/api/bc-uploader/uploader_categories/edit/1.json?token=" . $this->accessToken, $data);
+        //ステータスを確認
+        $this->assertResponseSuccess();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('アップロードカテゴリ「更新!」を更新しました。', $result->message);
+        $this->assertEquals('更新!', $result->uploaderCategory->name);
+
+        //無効なアップロードカテゴリIDを指定した場合、
+        //APIを呼ぶ
+        $this->post("/baser/api/bc-uploader/uploader_categories/edit/10.json?token=" . $this->accessToken, $data);
+        //ステータスを確認
+        $this->assertResponseCode(404);
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('データが見つかりません。', $result->message);
+
+        //入力内容はヌルの場合、
+        //APIを呼ぶ
+        $this->post("/baser/api/bc-uploader/uploader_categories/edit/1.json?token=" . $this->accessToken, ['name' => '']);
+        //ステータスを確認
+        $this->assertResponseCode(400);
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('入力エラーです。内容を修正してください。', $result->message);
+        $this->assertEquals('カテゴリ名を入力してください。', $result->errors->name->_empty);
     }
 
     /**

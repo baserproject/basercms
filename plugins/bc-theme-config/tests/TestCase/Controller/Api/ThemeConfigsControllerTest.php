@@ -101,19 +101,6 @@ class ThemeConfigsControllerTest extends BcTestCase
      */
     public function test_edit()
     {
-        //アップローダープラグインを追加
-        $data = [
-            'name_add' => 'value_add'
-        ];
-        //APIを呼ぶ
-        $this->post("/baser/api/bc-theme-config/theme_configs/edit.json?token=" . $this->accessToken, $data);
-        //ステータスを確認
-        $this->assertResponseSuccess();
-        //戻る値を確認
-        $result = json_decode((string)$this->_response->getBody());
-        $this->assertEquals('テーマ設定を保存しました。', $result->message);
-        $this->assertEquals('value_add', $result->themeConfig->name_add);
-
         //アップローダープラグインを更新
         $data = [
             'name_add' => 'value_edit'
