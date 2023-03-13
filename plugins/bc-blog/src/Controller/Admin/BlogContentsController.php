@@ -67,7 +67,7 @@ class BlogContentsController extends BlogAdminAppController
                 $blogContent = $service->update($blogContent, $this->getRequest()->getData());
                 $message = __d('baser_core', 'ブログ「{0}」を更新しました。', $blogContent->content->title);
                 if($service->checkRequireSearchIndexReconstruction($oldContent, $blogContent->content)) {
-                    $message .= "\n\n" . __d('baser',
+                    $message .= "\n\n" . __d('baser_core',
                         'URL、または、公開状態を変更したので、検索インデックスの再構築が必要です。
                         設定 > ユーティリティ > 検索インデックス より、検索インデックスの再構築を行ってください。'
                     );

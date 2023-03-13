@@ -60,13 +60,13 @@ class UploaderCategoriesController extends BcApiController
         $uploaderCategory = $errors = null;
         try {
             $uploaderCategory = $service->create($this->request->getData());
-            $message = __d('baser', '新規アップロードカテゴリ「{0}」を追加しました。', $uploaderCategory->name);
+            $message = __d('baser_core', '新規アップロードカテゴリ「{0}」を追加しました。', $uploaderCategory->name);
         } catch (PersistenceFailedException $e) {
             $errors = $e->getEntity()->getErrors();
-            $message = __d('baser', "入力エラーです。内容を修正してください。");
+            $message = __d('baser_core', "入力エラーです。内容を修正してください。");
             $this->setResponse($this->response->withStatus(400));
         } catch (\Throwable $e) {
-            $message = __d('baser', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
             $this->setResponse($this->response->withStatus(500));
         }
         $this->set([
@@ -81,33 +81,107 @@ class UploaderCategoriesController extends BcApiController
      * 編集API
      *
      * @param UploaderCategoriesServiceInterface $service
-     * @return void
+     * @param int $id
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function edit(UploaderCategoriesServiceInterface $service)
+    public function edit(UploaderCategoriesServiceInterface $service, int $id)
     {
-        //todo 編集API
+        $this->request->allowMethod(['post', 'put', 'patch']);
+        $uploaderCategory = $errors = null;
+        try {
+            $uploaderCategory = $service->update($service->get($id), $this->request->getData());
+            $message = __d('baser_core', 'アップロードカテゴリ「{0}」を更新しました。', $uploaderCategory->name);
+        } catch (PersistenceFailedException $e) {
+            $errors = $e->getEntity()->getErrors();
+            $message = __d('baser_core', "入力エラーです。内容を修正してください。");
+            $this->setResponse($this->response->withStatus(400));
+        } catch (RecordNotFoundException $e) {
+            $this->setResponse($this->response->withStatus(404));
+            $message = __d('baser_core', 'データが見つかりません。');
+        } catch (\Throwable $e) {
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $this->setResponse($this->response->withStatus(500));
+        }
+        $this->set([
+            'message' => $message,
+            'uploaderCategory' => $uploaderCategory,
+            'errors' => $errors
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['uploaderCategory', 'message', 'errors']);
     }
 
     /**
      * 削除API
      *
      * @param UploaderCategoriesServiceInterface $service
-     * @return void
+     * @param int $id
+     *
+     * @checked
+     * @notodo
+     * @unitTest
      */
-    public function delete(UploaderCategoriesServiceInterface $service)
+    public function delete(UploaderCategoriesServiceInterface $service, int $id)
     {
-        //todo 削除API
+        $this->request->allowMethod(['post', 'delete']);
+        $uploaderCategory = null;
+        try {
+            $uploaderCategory = $service->get($id);
+            if ($service->delete($id)) {
+                $message = __d('baser_core', 'アップロードカテゴリ「{0}」を削除しました。', $uploaderCategory->name);
+            } else {
+                $this->setResponse($this->response->withStatus(500));
+                $message = __d('baser_core', 'データベース処理中にエラーが発生しました。');
+            }
+        } catch (RecordNotFoundException $e) {
+            $this->setResponse($this->response->withStatus(404));
+            $message = __d('baser_core', 'データが見つかりません。');
+        } catch (\Throwable $e) {
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $this->setResponse($this->response->withStatus(500));
+        }
+        $this->set([
+            'message' => $message,
+            'uploaderCategory' => $uploaderCategory
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['uploaderCategory', 'message']);
     }
 
     /**
      * コピーAPI
      *
      * @param UploaderCategoriesServiceInterface $service
-     * @return void
+     * @param int $id
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function copy(UploaderCategoriesServiceInterface $service)
+    public function copy(UploaderCategoriesServiceInterface $service, int $id)
     {
-        //todo コピーAPI
+        $this->request->allowMethod(['patch', 'post', 'put']);
+        $uploaderCategory = null;
+        try {
+            $uploaderCategory = $service->copy($id);
+            if ($uploaderCategory) {
+                $message = __d('baser_core', 'アップロードカテゴリ「{0}」をコピーしました。', $uploaderCategory->name);
+            } else {
+                $this->setResponse($this->response->withStatus(400));
+                $message = __d('baser_core', 'データベース処理中にエラーが発生しました。');
+            }
+        } catch (\Throwable $e) {
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $this->setResponse($this->response->withStatus(500));
+        }
+
+        $this->set([
+            'message' => $message,
+            'uploaderCategory' => $uploaderCategory
+        ]);
+
+        $this->viewBuilder()->setOption('serialize', ['message', 'uploaderCategory']);
     }
 
     /**

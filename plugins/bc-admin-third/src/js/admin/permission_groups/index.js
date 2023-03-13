@@ -16,26 +16,26 @@ const permissionGroupsIndex = {
      */
     mounted() {
         this.registerEvents();
-        if($('#filter-user-group-id').val() === '0') {
-            $('#list-type-admin').parent().hide();
-        }
     },
 
     /**
      * イベント登録
      */
     registerEvents() {
-        $('#filter-user-group-id').change(this.initList);
-        $('input[name="list_type"]').click(this.initList);
+        $('#filter-user-group-id').change(this.changeList);
+        $('input[name="list_type"]').click(this.changeList);
     },
 
     /**
      * 一覧を初期化
      */
-    initList() {
+    changeList() {
         $.bcUtil.showLoader();
         let userGroupId = $('#filter-user-group-id').val();
         let listType = $('input[name="list_type"]:checked').val();
+        if(userGroupId === '0') {
+            listType = 'Front';
+        }
         location.href = `${$.bcUtil.adminBaseUrl}baser-core/permission_groups/index/${userGroupId}?list_type=${listType}`;
     }
 

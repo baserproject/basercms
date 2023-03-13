@@ -1790,7 +1790,7 @@ class BcUtil
     public static function retry($times, callable $callback, $interval = 0)
     {
         if ($times <= 0) {
-            throw new \InvalidArgumentException(__d('baser', 'リトライ回数は正の整数値で指定してください。'));
+            throw new \InvalidArgumentException(__d('baser_core', 'リトライ回数は正の整数値で指定してください。'));
         }
         $times--;
 

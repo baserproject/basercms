@@ -12,14 +12,14 @@
  * @var \BaserCore\View\BcAdminAppView $this
  * @var bool $firstAccess
  */
-if (!$firstAccess) return;
+if (empty($firstAccess)) return;
 ?>
 
 
 <div id="FirstMessage" class="em-box bca-em-box" style="text-align:left">
-  <?php echo __d('baser', 'baserCMSへようこそ。') ?><br>
+  <?php echo __d('baser_core', 'baserCMSへようこそ。') ?><br>
   <ul style="font-weight:normal;font-size:14px;">
-    <li><?php echo __d('baser', '右上のヘルプより画面のヘルプが確認できます。') ?></li>
-    <li><?php echo __d('baser', 'まずは、画面左のメニュー、「コンテンツ管理」よりWebサイトの全体像を確認しましょう。') ?></li>
+    <li><?php echo __d('baser_core', '右上のヘルプより画面のヘルプが確認できます。') ?></li>
+    <li><?php echo __d('baser_core', 'まずは、画面左のメニュー、「コンテンツ管理」よりWebサイトの全体像を確認しましょう。') ?></li>
   </ul>
 </div>
