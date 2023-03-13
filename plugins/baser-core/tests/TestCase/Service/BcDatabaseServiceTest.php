@@ -806,4 +806,27 @@ class UserActionsSchema extends BcSchema
         // テーブル削除
         $this->BcDatabaseService->dropTable($table);
     }
+
+    /**
+     * Test dropTable
+     */
+    public function test_dropTable()
+    {
+        // テーブル生成
+        $table = 'table_test_exist';
+        $columns = [
+            'id' => ['type' => 'integer'],
+            'contents' => ['type' => 'text'],
+        ];
+        $schema = new BcSchema($table, $columns);
+        $schema->create();
+
+        // 対象メソッドを呼ぶ
+        $result = $this->BcDatabaseService->dropTable($table);
+        $this->assertTrue($result, 'テーブル削除しました。');
+
+        // テーブル存在のチェック
+        $result = $this->BcDatabaseService->tableExists($table);
+        $this->assertFalse($result, 'テーブルが存在しないこと');
+    }
 }
