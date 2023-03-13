@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2023-03-13 13:27+0900\n"
+"POT-Creation-Date: 2023-03-13 13:32+0900\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -1183,6 +1183,7 @@ msgstr ""
 #: ./plugins/bc-uploader/src/Controller/Admin/UploaderCategoriesController.php:87
 #: ./plugins/bc-uploader/src/Controller/Admin/UploaderConfigsController.php:44
 #: ./plugins/bc-uploader/src/Controller/Admin/UploaderFilesController.php:171
+#: ./plugins/bc-uploader/src/Controller/Api/UploaderCategoriesController.php:66
 #: ./plugins/bc-uploader/src/Controller/Api/UploaderConfigsController.php:65
 #: ./plugins/bc-uploader/src/Controller/Api/UploaderFilesController.php:66
 #: ./plugins/bc-uploader/src/Controller/Api/UploaderFilesController.php:100
@@ -1432,6 +1433,7 @@ msgstr ""
 #: ./plugins/bc-uploader/src/Controller/Admin/UploaderCategoriesController.php:138
 #: ./plugins/bc-uploader/src/Controller/Admin/UploaderFilesController.php:173
 #: ./plugins/bc-uploader/src/Controller/Admin/UploaderFilesController.php:200
+#: ./plugins/bc-uploader/src/Controller/Api/UploaderCategoriesController.php:69
 #: ./plugins/bc-uploader/src/Controller/Api/UploaderCategoriesController.php:152
 #: ./plugins/bc-uploader/src/Controller/Api/UploaderConfigsController.php:68
 #: ./plugins/bc-uploader/src/Controller/Api/UploaderFilesController.php:69
@@ -2858,6 +2860,10 @@ msgstr ""
 msgid "システム基本設定にて、Google Maps API キーを入力してください。"
 msgstr ""
 
+#: ./plugins/baser-core/src/Utility/BcUtil.php:1793
+msgid "リトライ回数は正の整数値で指定してください。"
+msgstr ""
+
 #: ./plugins/baser-core/src/View/Helper/BcAdminFormHelper.php:72
 #: ./plugins/bc-custom-content/config/setting.php:107
 #: ./plugins/bc-custom-content/plugins/BcCcDate/config/setting.php:26
@@ -3292,18 +3298,10 @@ msgid "SPAのサンプルプラグインです"
 msgstr ""
 
 #: ./plugins/BcThemeSample/config.php:14
-#: ./plugins/BcThemeSample2/config.php:14
-#: ./plugins/BcThemeSample3/config.php:14
-#: ./plugins/BcThemeSample4/config.php:14
-#: ./tmp/BcThemeSample2/config.php:14
 msgid "サンプルテーマ"
 msgstr ""
 
 #: ./plugins/BcThemeSample/config.php:15
-#: ./plugins/BcThemeSample2/config.php:15
-#: ./plugins/BcThemeSample3/config.php:15
-#: ./plugins/BcThemeSample4/config.php:15
-#: ./tmp/BcThemeSample2/config.php:15
 msgid "制作用のサンプルテーマです。"
 msgstr ""
 
@@ -5479,6 +5477,18 @@ msgstr ""
 msgid "ホーム"
 msgstr ""
 
+#: ./plugins/bc-admin-third/templates/Admin/element/first_access.php:20
+msgid "baserCMSへようこそ。"
+msgstr ""
+
+#: ./plugins/bc-admin-third/templates/Admin/element/first_access.php:22
+msgid "右上のヘルプより画面のヘルプが確認できます。"
+msgstr ""
+
+#: ./plugins/bc-admin-third/templates/Admin/element/first_access.php:23
+msgid "まずは、画面左のメニュー、「コンテンツ管理」よりWebサイトの全体像を確認しましょう。"
+msgstr ""
+
 #: ./plugins/bc-admin-third/templates/Admin/element/help/contents_index.php:20
 msgid "コンテンツ管理では、固定ページや、ブログやメールフォームなど、Webページを生成するコンテンツの新規追加や編集・削除などが行えます。"
 msgstr ""
@@ -6373,10 +6383,12 @@ msgstr ""
 
 #: ./plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogContents/form.php:130
 #: ./plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogContents/form.php:139
+#: ./plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogContents/form.php:149
 #: ./plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogContents/form.php:166
 #: ./plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogContents/form.php:271
 #: ./plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/CustomFields/form.php:309
 #: ./plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/CustomLinks/form.php:150
+#: ./plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:181
 #: ./plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:198
 #: ./plugins/bc-admin-third/templates/plugin/BcWidgetArea/Admin/WidgetAreas/edit.php:127
 #: ./plugins/bc-admin-third/templates/plugin/BcWidgetArea/Admin/WidgetAreas/edit.php:212
@@ -6389,6 +6401,19 @@ msgstr ""
 
 #: ./plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogContents/form.php:142
 msgid "承認機能を利用すると、コメントが投稿されてもすぐに公開されず、管理者側で確認する事ができます。"
+msgstr ""
+
+#: ./plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogContents/form.php:147
+msgid "コメントイメージ認証"
+msgstr ""
+
+#: ./plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogContents/form.php:154
+msgid "ブログコメント送信の際、表示された画像の文字入力させる事で認証を行ないます。"
+msgstr ""
+
+#: ./plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogContents/form.php:155
+#: ./plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:187
+msgid "スパムなどいたずら送信が多いが多い場合に設定すると便利です。"
 msgstr ""
 
 #: ./plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogContents/form.php:163
@@ -7925,6 +7950,14 @@ msgstr ""
 msgid "メールフォームから送信された情報をデータベースに保存したくない場合は、保存しないを指定してください。"
 msgstr ""
 
+#: ./plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:179
+msgid "イメージ認証"
+msgstr ""
+
+#: ./plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:186
+msgid "メールフォーム送信の際、表示された画像の文字入力させる事で認証を行ないます。"
+msgstr ""
+
 #: ./plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:195
 msgid "SSL通信"
 msgstr ""
@@ -8844,6 +8877,10 @@ msgstr ""
 #: ./plugins/bc-blog/src/Controller/Admin/BlogContentsController.php:68
 #: ./plugins/bc-blog/src/Controller/Api/BlogContentsController.php:135
 msgid "ブログ「{0}」を更新しました。"
+msgstr ""
+
+#: ./plugins/bc-blog/src/Controller/Admin/BlogContentsController.php:70
+msgid "URL、または、公開状態を変更したので、検索インデックスの再構築が必要です。\n                        設定 > ユーティリティ > 検索インデックス より、検索インデックスの再構築を行ってください。"
 msgstr ""
 
 #: ./plugins/bc-blog/src/Controller/Admin/BlogPostsController.php:73
@@ -11236,6 +11273,10 @@ msgstr ""
 #: ./plugins/bc-uploader/src/Controller/Admin/UploaderFilesController.php:197
 #: ./plugins/bc-uploader/src/Controller/Api/UploaderFilesController.php:133
 msgid "アップロードファイル「{0}」を削除しました。"
+msgstr ""
+
+#: ./plugins/bc-uploader/src/Controller/Api/UploaderCategoriesController.php:63
+msgid "新規アップロードカテゴリ「{0}」を追加しました。"
 msgstr ""
 
 #: ./plugins/bc-uploader/src/Controller/Api/UploaderCategoriesController.php:143

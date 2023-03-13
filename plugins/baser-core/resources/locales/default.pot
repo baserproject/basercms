@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2023-03-13 13:27+0900\n"
+"POT-Creation-Date: 2023-03-13 13:32+0900\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -153,7 +153,6 @@ msgid "ページトップへ戻る"
 msgstr ""
 
 #: ./templates/layout/error.php:40
-#: ./tmp/basercms/templates/layout/error.php:40
 msgid "Back"
 msgstr ""
 
