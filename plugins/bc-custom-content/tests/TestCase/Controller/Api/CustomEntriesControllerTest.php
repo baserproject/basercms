@@ -185,7 +185,56 @@ class CustomEntriesControllerTest extends BcTestCase
      */
     public function test_add()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+        //カスタムテーブルとカスタムエントリテーブルを生成
+        $customTable->create([
+            'id' => 1,
+            'name' => 'recruit_categories',
+            'title' => '求人情報',
+            'type' => '1',
+            'display_field' => 'title',
+            'has_child' => 0
+        ]);
+        //追加データを準備
+        $data = [
+            'custom_table_id' => 1,
+            'name' => 'プログラマー',
+            'title' => 'プログラマー',
+            'creator_id' => 1,
+            'lft' => 1,
+            'rght' => 2,
+            'level' => 0,
+            'status' => 1
+        ];
+        //APIを呼ぶ
+        $this->post('/baser/api/bc-custom-content/custom_entries/add.json?custom_table_id=1&token=' . $this->accessToken, $data);
+        //ステータスを確認
+        $this->assertResponseOk();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertNotNull($result->entry);
+        $this->assertEquals('フィールド「プログラマー」を追加しました。', $result->message);
+
+        //タイトルがない場合、
+        //存在しないBlogPostIDを削除場合、
+        $this->post('/baser/api/bc-custom-content/custom_entries/add.json?custom_table_id=1&token=' . $this->accessToken, []);
+        //ステータスを確認
+        $this->assertResponseCode(400);
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('入力エラーです。内容を修正してください。', $result->message);
+        $this->assertEquals('タイトルは必須項目です。', $result->errors->title->_empty);
+
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_recruit_categories');
+
+        //custom_table_idを指定しない場合、
+        $this->get('/baser/api/bc-custom-content/custom_entries/add.json?token=' . $this->accessToken, []);
+        //ステータスを確認
+        $this->assertResponseCode(400);
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('パラメーターに custom_table_id を指定してください。', $result->message);
     }
 
     /**

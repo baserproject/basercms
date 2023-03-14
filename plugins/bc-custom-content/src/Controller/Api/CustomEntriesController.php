@@ -19,6 +19,7 @@ use BcCustomContent\Service\CustomEntriesServiceInterface;
 use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Exception\ForbiddenException;
+use Cake\ORM\Exception\PersistenceFailedException;
 use Throwable;
 
 /**
@@ -118,10 +119,39 @@ class CustomEntriesController extends BcApiController
     /**
      * カスタムエントリー　追加
      * @param CustomEntriesServiceInterface $service
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function add(CustomEntriesServiceInterface $service)
     {
-        //todo 追加
+        $this->request->allowMethod(['post']);
+        $queryParams = $this->getRequest()->getQueryParams();
+        if (empty($queryParams['custom_table_id'])) {
+            throw new BadRequestException(__d('baser_core', 'パラメーターに custom_table_id を指定してください。'));
+        }
+
+        $entry = $errors = null;
+        try {
+            $service->setup($queryParams['custom_table_id'], $this->getRequest()->getData());
+            $entry = $service->create($this->request->getData());
+            $message = __d('baser_core', 'フィールド「{0}」を追加しました。', $entry->title);
+        } catch (PersistenceFailedException $e) {
+            $errors = $e->getEntity()->getErrors();
+            $message = __d('baser_core', "入力エラーです。内容を修正してください。");
+            $this->setResponse($this->response->withStatus(400));
+        } catch (\Throwable $e) {
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $this->setResponse($this->response->withStatus(500));
+        }
+
+        $this->set([
+            'message' => $message,
+            'entry' => $entry,
+            'errors' => $errors
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['message', 'entry', 'errors']);
     }
 
     /**
