@@ -157,10 +157,42 @@ class CustomEntriesController extends BcApiController
     /**
      * カスタムエントリー　編集
      * @param CustomEntriesServiceInterface $service
+     * @param int $id
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function edit(CustomEntriesServiceInterface $service)
+    public function edit(CustomEntriesServiceInterface $service, int $id)
     {
-        //todo 編集
+        $this->request->allowMethod(['patch', 'post', 'put']);
+        $queryParams = $this->getRequest()->getQueryParams();
+        if (empty($queryParams['custom_table_id'])) {
+            throw new BadRequestException(__d('baser_core', 'パラメーターに custom_table_id を指定してください。'));
+        }
+        $entry = $errors = null;
+        try {
+            $service->setup($queryParams['custom_table_id'], $this->getRequest()->getData());
+            $entry = $service->update($service->get($id), $this->request->getData());
+            $message = __d('baser_core', 'フィールド「{0}」を更新しました。', $entry->title);
+        } catch (PersistenceFailedException $e) {
+            $errors = $e->getEntity()->getErrors();
+            $message = __d('baser_core', "入力エラーです。内容を修正してください。");
+            $this->setResponse($this->response->withStatus(400));
+        } catch (RecordNotFoundException $e) {
+            $this->setResponse($this->response->withStatus(404));
+            $message = __d('baser_core', 'データが見つかりません。');
+        } catch (\Throwable $e) {
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $this->setResponse($this->response->withStatus(500));
+        }
+
+        $this->set([
+            'message' => $message,
+            'entry' => $entry,
+            'errors' => $errors
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['entry', 'message', 'errors']);
     }
 
     /**
