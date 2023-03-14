@@ -119,7 +119,50 @@ class CustomLinksControllerTest extends BcTestCase
      */
     public function test_add()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+
+        //テストデータを生成
+        $customTable->create([
+            'type' => 'recruit',
+            'name' => 'recruit',
+            'title' => '求人情報',
+            'display_field' => '求人情報'
+        ]);
+        //Postデータを用意
+        $data = [
+            'custom_table_id' => 1,
+            'custom_field_id' => 1,
+            'lft' => 1,
+            'rght' => 2,
+            'name' => 'recruit_category_add',
+            'title' => '求人分類',
+            'type' => 'text'
+        ];
+        //APIを呼ぶ
+        $this->post('/baser/api/bc-custom-content/custom_links/add.json?token=' . $this->accessToken, $data);
+        //ステータスを確認
+        $this->assertResponseOk();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertNotNull($result->customLink);
+        $this->assertEquals('カスタムリンク「求人分類」を追加しました。', $result->message);
+        //custom_entryテーブルにフィルドが生成されたか確認
+        $this->assertTrue($dataBaseService->columnExists('custom_entry_1_recruit', 'recruit_category_add'));
+
+        //タイトルがない場合、
+        //存在しないBlogPostIDを削除場合、
+        $this->post('/baser/api/bc-custom-content/custom_links/add.json?token=' . $this->accessToken, ['title' => '']);
+        //ステータスを確認
+        $this->assertResponseCode(400);
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('入力エラーです。内容を修正してください。', $result->message);
+        $this->assertEquals('タイトルを入力してください。', $result->errors->title->_empty);
+
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_recruit');
+
     }
 
     /**

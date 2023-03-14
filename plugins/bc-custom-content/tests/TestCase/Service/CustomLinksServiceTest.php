@@ -11,10 +11,12 @@
 
 namespace BcCustomContent\Test\TestCase\Service;
 
+use BaserCore\Service\BcDatabaseServiceInterface;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BcCustomContent\Service\CustomLinksService;
 use BcCustomContent\Service\CustomLinksServiceInterface;
+use BcCustomContent\Service\CustomTablesServiceInterface;
 use BcCustomContent\Test\Scenario\CustomFieldsScenario;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
@@ -44,6 +46,7 @@ class CustomLinksServiceTest extends BcTestCase
     public $fixtures = [
         'plugin.BcCustomContent.Factory/CustomFields',
         'plugin.BcCustomContent.Factory/CustomLinks',
+        'plugin.BcCustomContent.Factory/CustomTables',
     ];
 
     /**
@@ -51,6 +54,7 @@ class CustomLinksServiceTest extends BcTestCase
      */
     public function setUp(): void
     {
+        $this->setFixtureTruncate();
         parent::setUp();
         $this->CustomLinksService = $this->getService(CustomLinksServiceInterface::class);
     }
@@ -93,7 +97,36 @@ class CustomLinksServiceTest extends BcTestCase
      */
     public function test_create()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $dataBaseService = $this->getService(BcDatabaseServiceInterface::class);
+        $customTable = $this->getService(CustomTablesServiceInterface::class);
+
+        //テストデータを生成
+        $customTable->create([
+            'type' => 'contact',
+            'name' => 'contact',
+            'title' => 'お問い合わせタイトル',
+            'display_field' => 'お問い合わせ'
+        ]);
+
+        //postDataを用意
+        $data = [
+            'custom_table_id' => 1,
+            'custom_field_id' => 1,
+            'lft' => 1,
+            'rght' => 2,
+            'name' => 'contact_column',
+            'title' => 'お問い合わせ',
+            'type' => 'text'
+        ];
+        //サービスメソッドを呼ぶ
+        $result = $this->CustomLinksService->create($data);
+        //戻る値を確認
+        $this->assertEquals('contact_column', $result->name);
+        $this->assertEquals('お問い合わせ', $result->title);
+        //custom_entryテーブルにフィルドが生成されたか確認
+        $this->assertTrue($dataBaseService->columnExists('custom_entry_1_contact', 'contact_column'));
+        //不要なテーブルを削除
+        $dataBaseService->dropTable('custom_entry_1_contact');
     }
 
     /**

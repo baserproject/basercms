@@ -78,10 +78,32 @@ class CustomLinksController extends BcApiController
      * 新規追加API
      *
      * @param CustomLinksServiceInterface $service
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function add(CustomLinksServiceInterface $service)
     {
-        //todo 新規追加API
+        $this->request->allowMethod(['post']);
+        $customLink = $errors = null;
+        try {
+            $customLink = $service->create($this->request->getData());
+            $message = sprintf(__d('baser_core', 'カスタムリンク「%s」を追加しました。'), $customLink->title);
+        } catch (PersistenceFailedException $e) {
+            $errors = $e->getEntity()->getErrors();
+            $message = __d('baser_core', "入力エラーです。内容を修正してください。");
+            $this->setResponse($this->response->withStatus(400));
+        } catch (\Throwable $e) {
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $this->setResponse($this->response->withStatus(500));
+        }
+        $this->set([
+            'customLink' => $customLink,
+            'message' => $message,
+            'errors' => $errors
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['customLink', 'message', 'errors']);
     }
 
     /**
