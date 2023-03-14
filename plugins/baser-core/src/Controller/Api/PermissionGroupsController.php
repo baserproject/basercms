@@ -16,6 +16,7 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use Cake\Datasource\Exception\RecordNotFoundException;
+use Cake\Http\Exception\BadRequestException;
 use Cake\ORM\Exception\PersistenceFailedException;
 
 /**
@@ -27,19 +28,54 @@ class PermissionGroupsController extends BcApiController
      * [API] 単一アクセスルールグループ取得
      * @param PermissionGroupsServiceInterface $service
      * @param int $id
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function view(PermissionGroupsServiceInterface $service, int $id)
     {
-        //todo 単一アクセスルールグループ取得
+        $this->request->allowMethod(['get']);
+        $permissionGroup = $message = null;
+        try {
+            $permissionGroup = $service->get($id);
+        } catch (RecordNotFoundException $e) {
+            $this->setResponse($this->response->withStatus(404));
+            $message = __d('baser_core', 'データが見つかりません。');
+        } catch (\Throwable $e) {
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $this->setResponse($this->response->withStatus(500));
+        }
+        $this->set([
+            'permissionGroup' => $permissionGroup,
+            'message' => $message
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['permissionGroup', 'message']);
     }
 
     /**
      * [API] アクセスルールグループの一覧
      * @param PermissionGroupsServiceInterface $service
+     * @param int $groupId
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function index(PermissionGroupsServiceInterface $service)
     {
-        //todo アクセスルールグループの一覧
+        $this->request->allowMethod(['get']);
+
+        $queryParams = $this->getRequest()->getQueryParams();
+        if (empty($queryParams['user_group_id'])) {
+            throw new BadRequestException(__d('baser_core', 'パラメーターに user_group_id を指定してください。'));
+        }
+        $this->set([
+            'permissionGroups' => $this->paginate(
+                $service->getIndex($queryParams['user_group_id'], $this->getRequest()->getQueryParams())
+            )
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['permissionGroups']);
     }
 
     /**
