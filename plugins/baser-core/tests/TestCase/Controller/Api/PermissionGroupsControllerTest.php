@@ -12,6 +12,7 @@
 namespace BaserCore\Test\TestCase\Controller\Api;
 
 use BaserCore\Test\Scenario\InitAppScenario;
+use BaserCore\Test\Scenario\PermissionGroupsScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Core\Configure;
@@ -128,7 +129,28 @@ class PermissionGroupsControllerTest extends BcTestCase
      */
     public function test_edit()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loadFixtureScenario(PermissionGroupsScenario::class);
+        //Postデータを用意
+        $data = [
+            'name' => 'システム基本設定　Update',
+        ];
+        //APIをコール
+        $this->post('/baser/api/baser-core/permission_groups/edit/1.json?token=' . $this->accessToken, $data);
+        //ステータスを確認
+        $this->assertResponseSuccess();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertNotNull($result->permissionGroup);
+        $this->assertEquals('ルールグループ「システム基本設定　Update」を更新しました。', $result->message);
+
+        //存在しないIDを指定した場合。
+        //APIをコール
+        $this->post('/baser/api/baser-core/permission_groups/edit/11.json?token=' . $this->accessToken, $data);
+        //ステータスを確認
+        $this->assertResponseCode(404);
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('データが見つかりません。', $result->message);
     }
 
     /**

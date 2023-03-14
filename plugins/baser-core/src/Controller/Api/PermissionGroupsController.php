@@ -11,7 +11,6 @@
 
 namespace BaserCore\Controller\Api;
 
-use BaserCore\Error\BcException;
 use BaserCore\Service\PermissionGroupsServiceInterface;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -93,10 +92,36 @@ class PermissionGroupsController extends BcApiController
      *
      * @param PermissionGroupsServiceInterface $service
      * @param int $id
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function edit(PermissionGroupsServiceInterface $service, int $id)
     {
-        //todo 編集処理
+        $this->request->allowMethod(['post', 'put']);
+        $permissionGroup = $errors = null;
+        try {
+            $permissionGroup = $service->update($service->get($id), $this->request->getData());
+            $message = __d('baser_core', 'ルールグループ「{0}」を更新しました。', $permissionGroup->name);
+        } catch (PersistenceFailedException $e) {
+            $errors = $e->getEntity()->getErrors();
+            $message = __d('baser_core', "入力エラーです。内容を修正してください。");
+            $this->setResponse($this->response->withStatus(400));
+        } catch (RecordNotFoundException $e) {
+            $this->setResponse($this->response->withStatus(404));
+            $message = __d('baser_core', 'データが見つかりません。');
+        } catch (\Throwable $e) {
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $this->setResponse($this->response->withStatus(500));
+        }
+
+        $this->set([
+            'permissionGroup' => $permissionGroup,
+            'message' => $message,
+            'errors' => $errors,
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['permissionGroup', 'message', 'errors']);
     }
 
 
