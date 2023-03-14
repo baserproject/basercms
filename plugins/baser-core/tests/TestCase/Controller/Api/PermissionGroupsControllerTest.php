@@ -91,7 +91,11 @@ class PermissionGroupsControllerTest extends BcTestCase
      */
     public function test_index()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loadFixtureScenario(PermissionGroupsScenario::class);
+        $this->get('/baser/api/baser-core/permission_groups/index.json?user_group_id=1&token=' . $this->accessToken);
+        $this->assertResponseSuccess();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertCount(3, $result->permissionGroups);
     }
 
     /**

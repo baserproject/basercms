@@ -16,6 +16,7 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use Cake\Datasource\Exception\RecordNotFoundException;
+use Cake\Http\Exception\BadRequestException;
 use Cake\ORM\Exception\PersistenceFailedException;
 
 /**
@@ -55,10 +56,26 @@ class PermissionGroupsController extends BcApiController
     /**
      * [API] アクセスルールグループの一覧
      * @param PermissionGroupsServiceInterface $service
+     * @param int $groupId
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function index(PermissionGroupsServiceInterface $service)
     {
-        //todo アクセスルールグループの一覧
+        $this->request->allowMethod(['get']);
+
+        $queryParams = $this->getRequest()->getQueryParams();
+        if (empty($queryParams['user_group_id'])) {
+            throw new BadRequestException(__d('baser_core', 'パラメーターに user_group_id を指定してください。'));
+        }
+        $this->set([
+            'permissionGroups' => $this->paginate(
+                $service->getIndex($queryParams['user_group_id'], $this->getRequest()->getQueryParams())
+            )
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['permissionGroups']);
     }
 
     /**
