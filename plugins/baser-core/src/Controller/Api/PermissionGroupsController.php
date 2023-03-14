@@ -47,10 +47,34 @@ class PermissionGroupsController extends BcApiController
      * 登録処理
      *
      * @param PermissionGroupsServiceInterface $service
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function add(PermissionGroupsServiceInterface $service)
     {
-        //todo 登録処理
+        $this->request->allowMethod(['post', 'put']);
+
+        $permissionGroup = $errors = null;
+        try {
+            $permissionGroup = $service->create($this->request->getData());
+            $message = __d('baser_core', 'ルールグループ「{0}」を登録しました。', $permissionGroup->name);
+        } catch (PersistenceFailedException $e) {
+            $errors = $e->getEntity()->getErrors();
+            $message = __d('baser_core', "入力エラーです。内容を修正してください。");
+            $this->setResponse($this->response->withStatus(400));
+        } catch (\Throwable $e) {
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $this->setResponse($this->response->withStatus(500));
+        }
+
+        $this->set([
+            'message' => $message,
+            'permissionGroup' => $permissionGroup,
+            'errors' => $errors,
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['message', 'permissionGroup', 'errors']);
     }
 
     /**

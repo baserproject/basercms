@@ -106,7 +106,21 @@ class PermissionGroupsControllerTest extends BcTestCase
      */
     public function test_add()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //Postデータを用意
+        $data = [
+            'name' => 'システム基本設定　テスト',
+            'type' => 'Admin',
+            'plugin' => 'BaserCore',
+            'status' => 1
+        ];
+        //APIをコール
+        $this->post('/baser/api/baser-core/permission_groups/add.json?token=' . $this->accessToken, $data);
+        //ステータスを確認
+        $this->assertResponseSuccess();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertNotNull($result->permissionGroup);
+        $this->assertEquals('ルールグループ「システム基本設定　テスト」を登録しました。', $result->message);
     }
 
     /**
