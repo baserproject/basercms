@@ -201,7 +201,7 @@ class PagesServiceTest extends BcTestCase
             [1, 'BcFront', ['default' => 'default']],
             [4, 'BcFront', ['' => '親フォルダの設定に従う（default）']],
             [4, ['BcFront', 'BaserCore'], ['' => '親フォルダの設定に従う（default）']],
-            [11, ['BcFront', 'BcAdminThrid'], ['' => '親フォルダの設定に従う（サービスページ）', 'default' => 'default']]
+            [11, ['BcFront', 'BcAdminThird'], ['' => '親フォルダの設定に従う（サービスページ）', 'default' => 'default']]
         ];
     }
 
