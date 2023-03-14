@@ -15,11 +15,14 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Controller\Api\BcApiController;
+use BaserCore\View\Helper\BcCsvHelper;
+use BcMail\Service\Admin\MailMessagesAdminServiceInterface;
 use BcMail\Service\MailContentsServiceInterface;
 use BcMail\Service\MailMessagesService;
 use BcMail\Service\MailMessagesServiceInterface;
 use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\ORM\Exception\PersistenceFailedException;
+use Cake\View\View;
 
 /**
  * メールフィールドコントローラー
@@ -278,10 +281,17 @@ class MailMessagesController extends BcApiController
     /**
      * [API] CSVダウンロード
      *
+     * @checked
+     * @noTodo
      */
-    public function download()
+    public function download(MailMessagesAdminServiceInterface $service, int $mailContentId)
     {
-        // TODO 受信メール管理：受信メールCSVダウンロードAPIを実装
+        $this->request->allowMethod(['get']);
+        $result = $service->getViewVarsForDownloadCsv($mailContentId, $this->getRequest());
+        $bcCsvHelper = new BcCsvHelper(new View());
+        $bcCsvHelper->encoding = $result['encoding'];
+        $bcCsvHelper->addModelDatas('MailMessage', $result['messages']);
+        $bcCsvHelper->download($result['contentName']);
     }
 
 }
