@@ -198,10 +198,37 @@ class CustomEntriesController extends BcApiController
     /**
      * カスタムエントリー　削除
      * @param CustomEntriesServiceInterface $service
+     * @param int $id
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function delete(CustomEntriesServiceInterface $service)
+    public function delete(CustomEntriesServiceInterface $service, int $id)
     {
-        //todo 削除
+        $this->request->allowMethod(['post', 'delete']);
+        $queryParams = $this->getRequest()->getQueryParams();
+        if (empty($queryParams['custom_table_id'])) {
+            throw new BadRequestException(__d('baser_core', 'パラメーターに custom_table_id を指定してください。'));
+        }
+        $entry = null;
+        try {
+            $service->setup($queryParams['custom_table_id']);
+            $entry = $service->get($id);
+            $service->delete($id);
+            $message = __d('baser_core', 'フィールド「{0}」を削除しました。', $entry->title);
+        } catch (RecordNotFoundException $e) {
+            $this->setResponse($this->response->withStatus(404));
+            $message = __d('baser_core', 'データが見つかりません。');
+        } catch (\Throwable $e) {
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $this->setResponse($this->response->withStatus(500));
+        }
+        $this->set([
+            'message' => $message,
+            'entry' => $entry
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['entry', 'message']);
     }
 
     /**
