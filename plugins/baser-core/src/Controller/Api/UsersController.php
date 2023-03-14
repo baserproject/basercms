@@ -56,14 +56,12 @@ class UsersController extends BcApiController
         if (!$result->isValid() || !$json = $this->getAccessToken($this->Authentication->getResult())) {
             $this->setResponse($this->response->withStatus(401));
         } else {
-            $redirect = $this->Authentication->getLoginRedirect() ?? Router::url(Configure::read('BcPrefixAuth.Admin.loginRedirect'));
             $user = $result->getData();
             $service->removeLoginKey($user->id);
             if ($this->request->is('ssl') && $this->request->getData('saved')) {
                 $this->response = $service->setCookieAutoLoginKey($this->response, $user->id);
             }
             $this->BcMessage->setInfo(__d('baser_core', 'ようこそ、{0}さん。', $user->getDisplayName()));
-            $json['redirect'] = $redirect;
         }
         $this->set('json', $json);
         $this->viewBuilder()->setOption('serialize', 'json');
@@ -142,7 +140,7 @@ class UsersController extends BcApiController
         $user = $errors = null;
         try {
             $user = $service->create($this->request->getData());
-            $message = __d('baser_core', 'ユーザー「{0}」を追加しました。', $user->name);
+            $message = __d('baser_core', 'ユーザー「{0}」を追加しました。', $user->real_name_1);
         } catch (PersistenceFailedException $e) {
             $errors = $e->getEntity()->getErrors();
             $message = __d('baser_core', "入力エラーです。内容を修正してください。");
@@ -170,11 +168,11 @@ class UsersController extends BcApiController
      */
     public function edit(UsersServiceInterface $service, int $id)
     {
-        $this->request->allowMethod(['post', 'put']);
+        $this->request->allowMethod(['post', 'put', 'patch']);
         $user = $errors = null;
         try {
             $user = $service->update($service->get($id), $this->request->getData());
-            $message = __d('baser_core', 'ユーザー「{0}」を更新しました。', $user->name);
+            $message = __d('baser_core', 'ユーザー「{0}」を更新しました。', $user->real_name_1);
         } catch (PersistenceFailedException $e) {
             $errors = $e->getEntity()->getErrors();
             $message = __d('baser_core', "入力エラーです。内容を修正してください。");
@@ -205,7 +203,7 @@ class UsersController extends BcApiController
         $user = $service->get($id);
         try {
             if ($service->delete($id)) {
-                $message = __d('baser_core', 'ユーザー: {0} を削除しました。', $user->name);
+                $message = __d('baser_core', 'ユーザー: {0} を削除しました。', $user->real_name_1);
             }
         } catch (Exception $e) {
             $this->setResponse($this->response->withStatus(400));

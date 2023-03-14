@@ -129,6 +129,9 @@ class UsersService implements UsersServiceInterface
     public function create(array $postData): ?EntityInterface
     {
         $loginUser = BcUtil::loginUser();
+        if(empty($postData['user_groups']['_ids'])) {
+            throw new BcException(__d('baser_core', 'user_groups[_ids][] を指定してください。'));
+        }
         if(in_array(Configure::read('BcApp.adminGroupId'), $postData['user_groups']['_ids'])) {
             if(BcUtil::isInstalled() && !$loginUser->isAddableToAdminGroup()) {
                 throw new BcException(__d('baser_core', '特権エラーが発生しました。'));

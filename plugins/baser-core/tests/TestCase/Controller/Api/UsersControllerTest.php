@@ -91,7 +91,6 @@ class UsersControllerTest extends BcTestCase
         $this->assertResponseOk();
         $this->assertFlashMessage('ようこそ、ニックネーム1さん。');
         $body = json_decode($this->_getBodyAsString());
-        $this->assertEquals('/baser/admin', $body->redirect);
         $this->get('/baser/api/baser-core/users/refresh_token.json?token=' . $body->refresh_token);
         $this->assertResponseContains('access_token');
         $this->post('https://localhost/baser/api/baser-core/users/login.json', [
@@ -213,8 +212,5 @@ class UsersControllerTest extends BcTestCase
         $this->post('/baser/api/baser-core/users/login.json', ['email' => 'testuser1@example.com', 'password' => 'password']);
         $this->assertResponseOk();
         $this->assertFlashMessage('ようこそ、ニックネーム1さん。');
-
-        $body = json_decode($this->_getBodyAsString());
-        $this->assertEquals('/baser/admin', $body->redirect);
     }
 }
