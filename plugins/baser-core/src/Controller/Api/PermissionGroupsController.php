@@ -81,10 +81,31 @@ class PermissionGroupsController extends BcApiController
      *
      * @param PermissionGroupsServiceInterface $service
      * @param int $id
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function delete(PermissionGroupsServiceInterface $service, int $id)
     {
-        //todo 削除処理
+        $this->request->allowMethod(['post', 'delete']);
+        $permissionGroup = null;
+        try {
+            $permissionGroup = $service->get($id);
+            $service->delete($id);
+            $message = __d('baser_core', 'ルールグループ「{0}」を削除しました。', $permissionGroup->name);
+        } catch (RecordNotFoundException $e) {
+            $this->setResponse($this->response->withStatus(404));
+            $message = __d('baser_core', 'データが見つかりません。');
+        } catch (\Throwable $e) {
+            $this->setResponse($this->response->withStatus(500));
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+        }
+        $this->set([
+            'message' => $message,
+            'permissionGroup' => $permissionGroup
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['permissionGroup', 'message']);
     }
 
     /**
