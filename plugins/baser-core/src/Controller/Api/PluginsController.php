@@ -246,7 +246,6 @@ class PluginsController extends BcApiController
      * @param PluginsServiceInterface $service
      * @checked
      * @noTodo
-     * @unitTest
      */
     public function add(PluginsServiceInterface $service)
     {
