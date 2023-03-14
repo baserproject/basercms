@@ -150,11 +150,30 @@ class PermissionGroupsController extends BcApiController
      * [API] ユーザーグループを指定してアクセスルールを再構築する
      *
      * @param PermissionGroupsServiceInterface $service
-     * @param int $id
+     * @param int $userGroupId
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function rebuild_by_user_group(PermissionGroupsServiceInterface $service, int $id)
+    public function rebuild_by_user_group(PermissionGroupsServiceInterface $service, int $userGroupId)
     {
-        //todo ユーザーグループを指定してアクセスルールを再構築する
+        $this->request->allowMethod(['post', 'put']);
+        try {
+            if ($service->rebuildByUserGroup($userGroupId)) {
+                $message = __d('baser_core', 'アクセスルールの再構築に成功しました。');
+            } else {
+                $message = __d('baser_core', 'アクセスルールの再構築に失敗しました。');
+            }
+        } catch (\Throwable $e) {
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $this->setResponse($this->response->withStatus(500));
+        }
+
+        $this->set([
+            'message' => $message,
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['message']);
     }
 
 }

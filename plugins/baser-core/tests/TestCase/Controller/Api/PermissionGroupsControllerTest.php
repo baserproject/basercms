@@ -180,6 +180,13 @@ class PermissionGroupsControllerTest extends BcTestCase
 
     public function test_rebuild_by_user_group()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loadFixtureScenario(PermissionGroupsScenario::class);
+        //APIをコール
+        $this->post('/baser/api/baser-core/permission_groups/rebuild_by_user_group/1.json?token=' . $this->accessToken);
+        //ステータスを確認
+        $this->assertResponseSuccess();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('アクセスルールの再構築に成功しました。', $result->message);
     }
 }
