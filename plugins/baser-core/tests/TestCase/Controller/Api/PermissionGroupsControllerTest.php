@@ -99,7 +99,19 @@ class PermissionGroupsControllerTest extends BcTestCase
      */
     public function test_view()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loadFixtureScenario(PermissionGroupsScenario::class);
+        $this->get('/baser/api/baser-core/permission_groups/view/1.json?token=' . $this->accessToken);
+        $this->assertResponseSuccess();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertNotNull($result->permissionGroup->name);
+
+        //存在しないIDを指定した場合、
+        $this->get('/baser/api/baser-core/permission_groups/view/11.json?token=' . $this->accessToken);
+        //ステータスを確認
+        $this->assertResponseCode(404);
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('データが見つかりません。', $result->message);
     }
 
     /**
