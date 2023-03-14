@@ -161,7 +161,7 @@ class BlogHelper extends Helper
                     $content = $contentTable->find()->where([
                         'Contents.entity_id' => $this->currentBlogContent->id,
                         'Contents.type' => 'BlogContent',
-                        'Contents.alias_id' => null,
+                        'Contents.alias_id IS' => null,
                     ])->first();
                 }
                 $this->currentContent = $content;
