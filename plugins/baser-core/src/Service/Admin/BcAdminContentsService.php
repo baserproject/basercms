@@ -87,7 +87,7 @@ class BcAdminContentsService implements BcAdminContentsServiceInterface
     public function getLayoutTemplates(EntityInterface $content)
     {
         $theme = $content->site->theme;
-        $templates = BcUtil::getTemplateList('Layouts', [$content->plugin, $theme]);
+        $templates = BcUtil::getTemplateList('layout', [$content->plugin, $theme]);
         $contentsService = $this->getService(ContentsAdminServiceInterface::class);
         if ($content->id != 1) {
             $parentTemplate = $contentsService->getParentLayoutTemplate($content->id);
