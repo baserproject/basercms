@@ -189,7 +189,7 @@ class BlogTagsController extends BcApiController
      */
     public function batch(BlogTagsServiceInterface $service)
     {
-        $this->request->allowMethod(['post', 'put']);
+        $this->request->allowMethod(['post', 'put', 'patch']);
         $allowMethod = [
             'delete' => __d('baser_core', '削除'),
         ];

@@ -276,7 +276,7 @@ class MailFieldsController extends BcApiController
      */
     public function delete(MailFieldsServiceInterface $service, int $id)
     {
-        $this->request->allowMethod(['post', 'put', 'patch']);
+        $this->request->allowMethod(['post', 'put', 'delete']);
         $mailField = null;
         try {
             $mailField = $service->get($id);

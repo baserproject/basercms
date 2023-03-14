@@ -158,7 +158,7 @@ class MailMessagesController extends BcApiController
         int $id
     )
     {
-        $this->request->allowMethod(['post']);
+        $this->request->allowMethod(['post', 'patch']);
         $mailMessage = $errors = null;
         try {
             $service->setup($mailContentId);
@@ -208,7 +208,7 @@ class MailMessagesController extends BcApiController
         int $messageId
     )
     {
-        $this->request->allowMethod(['post', 'put']);
+        $this->request->allowMethod(['post', 'put', 'delete']);
         $mailMessage = $errors = null;
         try {
             $service->setup($mailContentId);

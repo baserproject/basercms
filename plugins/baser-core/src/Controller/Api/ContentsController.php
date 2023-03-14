@@ -218,7 +218,7 @@ class ContentsController extends BcApiController
      */
     public function edit(ContentsServiceInterface $service, int $id)
     {
-        $this->request->allowMethod(['post', 'put']);
+        $this->request->allowMethod(['post', 'put', 'patch']);
         $content = $errors = null;
         try {
             $content = $service->update($service->get($id), $this->request->getData());

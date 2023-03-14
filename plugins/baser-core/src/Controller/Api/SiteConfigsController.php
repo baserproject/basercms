@@ -45,7 +45,7 @@ class SiteConfigsController extends BcApiController
      */
     public function edit(SiteConfigsServiceInterface $service)
     {
-        $this->request->allowMethod(['post', 'put']);
+        $this->request->allowMethod(['post', 'put', 'patch']);
         $siteConfig = $errors = null;
         try {
             $siteConfig = $service->update($this->request->getData());

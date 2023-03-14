@@ -120,7 +120,7 @@ class PagesController extends BcApiController
      */
     public function add(PagesServiceInterface $service)
     {
-        $this->request->allowMethod(['post', 'put', 'patch']);
+        $this->request->allowMethod(['post', 'put']);
 
         $page = $errors = null;
         try {

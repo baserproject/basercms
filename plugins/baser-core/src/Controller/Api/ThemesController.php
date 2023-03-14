@@ -106,7 +106,7 @@ class ThemesController extends BcApiController
      */
     public function delete(ThemesServiceInterface $service, string $theme)
     {
-        $this->request->allowMethod(['post']);
+        $this->request->allowMethod(['post', 'delete']);
 
         $themeDetail = null;
         try {

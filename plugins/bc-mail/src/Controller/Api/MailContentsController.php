@@ -192,7 +192,7 @@ class MailContentsController extends BcApiController
      */
     public function delete(MailContentsServiceInterface $service, int $id)
     {
-        $this->request->allowMethod(['post', 'put', 'patch']);
+        $this->request->allowMethod(['post', 'put', 'delete']);
         $mailContent = null;
         try {
             $mailContent = $service->get($id);

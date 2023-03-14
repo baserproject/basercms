@@ -77,7 +77,7 @@ class SitesController extends BcApiController
      */
     public function add(SitesServiceInterface $service)
     {
-        $this->request->allowMethod(['post', 'delete']);
+        $this->request->allowMethod(['post']);
         $site = $errors = null;
         try {
             $site = $service->create($this->request->getData());
@@ -108,7 +108,7 @@ class SitesController extends BcApiController
      */
     public function edit(SitesServiceInterface $service, int $id)
     {
-        $this->request->allowMethod(['post', 'put']);
+        $this->request->allowMethod(['post', 'put', 'patch']);
         $site = $errors = null;
         try {
             $site = $service->update($service->get($id), $this->request->getData());

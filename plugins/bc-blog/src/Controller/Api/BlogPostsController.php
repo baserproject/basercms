@@ -291,7 +291,7 @@ class BlogPostsController extends BcApiController
      */
     public function delete(BlogPostsServiceInterface $service, $id)
     {
-        $this->request->allowMethod(['post', 'put']);
+        $this->request->allowMethod(['post', 'put', 'delete']);
 
         $blogPost = null;
         try {

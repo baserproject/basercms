@@ -81,7 +81,7 @@ class ContentFoldersController extends BcApiController
      */
     public function add(ContentFoldersServiceInterface $service)
     {
-        $this->request->allowMethod(['post', 'put', 'patch']);
+        $this->request->allowMethod(['post', 'put']);
         $contentFolder = $errors = null;
         try {
             $contentFolder = $service->create($this->request->getData());
