@@ -99,6 +99,18 @@ class PermissionGroupsControllerTest extends BcTestCase
     }
 
     /**
+     * test index
+     */
+    public function test_list()
+    {
+        $this->loadFixtureScenario(PermissionGroupsScenario::class);
+        $this->get('/baser/api/baser-core/permission_groups/list.json?token=' . $this->accessToken);
+        $this->assertResponseSuccess();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertNotNull($result->permissionGroups);
+    }
+
+    /**
      * test view
      */
     public function test_view()
