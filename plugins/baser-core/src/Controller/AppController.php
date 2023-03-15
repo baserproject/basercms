@@ -178,7 +178,7 @@ class AppController extends BaseController
     private function checkPermission()
     {
         $user = BcUtil::loginUser();
-        if($user) {
+        if($user && $user->user_groups) {
             $userGroupsIds = Hash::extract($user->toArray()['user_groups'], '{n}.id');
         } else {
             $userGroupsIds = [];

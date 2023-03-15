@@ -124,7 +124,7 @@ class BcAuthHelper extends Helper
     public function getCurrentUserPrefixes(): array
     {
         $user = BcUtil::loginUser();
-        if(!$user) return [];
+        if(!$user || !$user->user_groups) return [];
 		$prefixes = [];
 		foreach($user->user_groups as $userGroup) {
 		    $prefix = explode(',', $userGroup->auth_prefix);

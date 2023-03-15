@@ -115,34 +115,49 @@ class BcUtil
 
     /**
      * 認証領域を指定してログインユーザーのデータを取得する
-     * セッションクラスが設定されていない場合にはスーパーグローバル変数を利用する
+     *
+     * - 第一優先：authenticationから取得
+     *  - モデルが BaserCore.Users の場合、ユーザーグループがなかったら取得する
+     * - 第二優先：現在のリクエストに紐づくセッションから取得
+     * - 第三優先：上記で取得できない場合、プレフィックスが Front だったら、Admin でセッションから取得
      *
      * @return User|false
      * @checked
      * @noTodo
      * @unitTest
      */
-    public static function loginUser($prefix = 'Admin')
+    public static function loginUser($prefix = null)
     {
         $request = Router::getRequest();
         if (!$request) return false;
 
-        $authenticator = $request->getAttribute('authentication');
-        if (!$authenticator) return BcUtil::loginUserFromSession($prefix);
-
-        /** @var Result $result */
-        $result = $authenticator->getResult();
-        if (isset($result) && $result->isValid()) {
-            /* @var User $user */
-            $user = $result->getData();
-            if (is_null($user->user_groups)) {
-                $userTable = TableRegistry::getTableLocator()->get('BaserCore.Users');
-                $user = $userTable->get($user->id, ['contain' => ['UserGroups']]);
-            }
-            return $user;
-        } else {
-            return BcUtil::loginUserFromSession($prefix);
+        if(!$prefix) {
+            $prefix = BcUtil::getRequestPrefix($request);
         }
+
+        $authenticator = $request->getAttribute('authentication');
+        if($authenticator) {
+            /** @var Result $result */
+            $result = $authenticator->getResult();
+            if (!empty($result) && $result->isValid()) {
+                /* @var User $user */
+                $user = $result->getData();
+                if (is_null($user->user_groups)) {
+                    $userModel = Configure::read("BcPrefixAuth.{$prefix}.userModel");
+                    if($userModel === 'BaserCore.Users') {
+                        $userTable = TableRegistry::getTableLocator()->get('BaserCore.Users');
+                        $user = $userTable->get($user->id, ['contain' => ['UserGroups']]);
+                    }
+                }
+                return $user;
+            }
+        }
+
+        $user = BcUtil::loginUserFromSession($prefix);
+        if(!$user && $prefix === 'Front') {
+            return BcUtil::loginUserFromSession('Admin');
+        }
+        return $user;
     }
 
     /**

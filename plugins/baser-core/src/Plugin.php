@@ -387,7 +387,7 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
             'resolver' => [
                 'className' => 'Authentication.Orm',
                 'userModel' => $authSetting['userModel'],
-                'finder' => 'available'
+                'finder' => $authSetting['finder']?? 'available'
             ],
         ]);
         return $service;
@@ -423,7 +423,7 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
             'resolver' => [
                 'className' => 'Authentication.Orm',
                 'userModel' => $authSetting['userModel'],
-                'finder' => 'available'
+                'finder' => $authSetting['finder']?? 'available'
             ],
         ]);
         $service->loadAuthenticator('Authentication.Form', [
@@ -441,7 +441,7 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
             'resolver' => [
                 'className' => 'Authentication.Orm',
                 'userModel' => $authSetting['userModel'],
-                'finder' => 'available'
+                'finder' => $authSetting['finder']?? 'available'
             ],
         ]);
         return $service;

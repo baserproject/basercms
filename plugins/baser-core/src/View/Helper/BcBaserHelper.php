@@ -11,6 +11,7 @@
 
 namespace BaserCore\View\Helper;
 
+use BaserCore\Model\Entity\User;
 use BaserCore\Utility\BcSiteConfig;
 use Cake\Core\Plugin;
 use Cake\Datasource\EntityInterface;
@@ -415,7 +416,7 @@ class BcBaserHelper extends Helper
         $user = Bcutil::loginUser();
         if (BcUtil::isInstalled()) {
             $userGroups = [];
-            if($user) $userGroups = array_column($user->user_groups, 'id');
+            if($user && $user->user_groups) $userGroups = array_column($user->user_groups, 'id');
             if (!$this->PermissionsService->check($_url, $userGroups)) {
                 $enabled = false;
             }
