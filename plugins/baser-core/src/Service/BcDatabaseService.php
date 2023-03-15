@@ -210,6 +210,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      * @param string $tableName
      * @param array $columns
      * @return bool
+     * @unitTest
      */
     public function createTable(string $tableName, array $columns = [])
     {

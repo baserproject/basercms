@@ -173,6 +173,26 @@ class BcDatabaseServiceTest extends BcTestCase
     }
 
     /**
+     * Test createTable
+     */
+    public function test_createTable(){
+        // テーブル生成
+        $table = 'table_test_create';
+        $columns = [
+            'no' => ['type' => 'integer'],
+            'contents' => ['type' => 'text'],
+        ];
+        // テスト対象メソッドを呼ぶ
+        $result = $this->BcDatabaseService->createTable($table, $columns);
+        $this->assertTrue($result);
+        // check exist
+        $result = $this->BcDatabaseService->tableExists($table);
+        $this->assertTrue($result);
+        // drop table
+        $this->BcDatabaseService->dropTable($table);
+    }
+
+    /**
      * Gets the database encoding
      * @return void
      */
