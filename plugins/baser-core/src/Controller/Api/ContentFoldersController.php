@@ -36,7 +36,7 @@ class ContentFoldersController extends BcApiController
     {
         $this->request->allowMethod('get');
         $this->set([
-            'contentFolders' => $this->paginate($service->getIndex())
+            'contentFolders' => $this->paginate($service->getIndex(['contain' => []]))
         ]);
         $this->viewBuilder()->setOption('serialize', ['contentFolders']);
     }
@@ -66,7 +66,7 @@ class ContentFoldersController extends BcApiController
 
         $this->set([
             'contentFolder' => $contentFolder,
-            'content' => $contentFolder ?? $contentFolder->content,
+            'content' => $contentFolder?->content,
             'message' => $message,
         ]);
         $this->viewBuilder()->setOption('serialize', ['contentFolder', 'content', 'message']);
@@ -97,7 +97,7 @@ class ContentFoldersController extends BcApiController
 
         $this->set([
             'contentFolder' => $contentFolder,
-            'content' => $contentFolder ?? $contentFolder->content,
+            'content' => $contentFolder?->content,
             'message' => $message,
             'errors' => $errors
         ]);

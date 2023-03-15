@@ -137,8 +137,18 @@ class ContentsTable extends AppTable
             ->requirePresence('id', 'update', __d('baser_core', 'IDに不正な値が利用されています。'));
 
         $validator
+            ->integer('site_id')
+            ->requirePresence('site_id', 'create', __d('baser_core', 'content[site_id] フィールドが存在しません。'))
+            ->notEmptyString('site_id', __d('baser_core', 'サイトIDを入力してください。'));
+
+        $validator
+            ->integer('parent_id')
+            ->requirePresence('parent_id', 'create', __d('baser_core', 'content[parent_id] フィールドが存在しません。'))
+            ->notEmptyString('parent_id', __d('baser_core', '親フォルダを入力してください。'));
+
+        $validator
             ->scalar('name')
-            ->requirePresence('name', 'create', __d('baser_core', 'nameフィールドが存在しません。'))
+            ->requirePresence('name', 'create', __d('baser_core', 'content[name] フィールドが存在しません。'))
             ->maxLength('name', 230, __d('baser_core', '名前は230文字以内で入力してください。'))
             ->add('name', [
                 'bcUtileUrlencodeBlank' => [
@@ -155,7 +165,7 @@ class ContentsTable extends AppTable
             ]);
         $validator
             ->scalar('title')
-            ->requirePresence('title', 'create', __d('baser_core', 'タイトルを入力してください。'))
+            ->requirePresence('title', 'create', __d('baser_core', 'content[title] フィールドが存在しません。'))
             ->notEmptyString('title', __d('baser_core', 'タイトルを入力してください。'))
             ->maxLength('title', 230, __d('baser_core', 'タイトルは230文字以内で入力してください。'))
             ->regex('title', '/\A(?!.*(\t)).*\z/', __d('baser_core', 'タイトルはタブを含む名前は付けられません。'))

@@ -14,6 +14,7 @@ namespace BcBlog\Test\TestCase\Controller\Api;
 use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Factory\SiteConfigFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
+use BaserCore\Test\Scenario\SmallSetContentsScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcBlog\Controller\Api\BlogContentsController;
 use BcBlog\Test\Factory\BlogContentFactory;
@@ -46,6 +47,8 @@ class BlogContentsControllerTest extends BcTestCase
         'plugin.BaserCore.Factory/UserGroups',
         'plugin.BcBlog.Factory/BlogContents',
         'plugin.BaserCore.Factory/Contents',
+        'plugin.BaserCore.Factory/Pages',
+        'plugin.BaserCore.Factory/ContentFolders',
     ];
 
     /**
@@ -135,10 +138,13 @@ class BlogContentsControllerTest extends BcTestCase
      */
     public function test_add()
     {
+        $this->loadFixtureScenario(SmallSetContentsScenario::class);
         $data = [
             'description' => 'baserCMS inc. [デモ] の最新の情報をお届けします。',
             'content' => [
-                "title" => "新しい ブログ"
+                "title" => "新しい ブログ",
+                'site_id' => 1,
+                'parent_id' => 1
             ]
         ];
         $this->post('/baser/api/bc-blog/blog_contents/add.json?token=' . $this->accessToken, $data);

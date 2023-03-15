@@ -18,6 +18,7 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\Note;
+use Cake\ORM\Exception\PersistenceFailedException;
 
 /**
  * Class ContentFoldersController
@@ -62,11 +63,14 @@ class ContentFoldersController extends BcAdminAppController
                 $this->redirect(['action' => 'edit', $id]);
             }
             try {
-                $contentFolder = $service->update($contentFolder, $this->request->getData('ContentFolders'), ['reconstructSearchIndices' => true]);
+                $contentFolder = $service->update($contentFolder, $this->request->getData(), ['reconstructSearchIndices' => true]);
                 $this->BcMessage->setSuccess(sprintf(__d('baser_core', 'フォルダ「%s」を更新しました。'), $contentFolder->content->title));
                 return $this->redirect(['action' => 'edit', $id]);
-            } catch (\Exception $e) {
-                $this->BcMessage->setError('保存中にエラーが発生しました。入力内容を確認してください。');
+            } catch (PersistenceFailedException $e) {
+                $contentFolder = $e->getEntity();
+                $this->BcMessage->setError(__d('base_core', '入力エラーが発生しました。入力内容を確認してください。'));
+            } catch (\Throwable $e) {
+                $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage()));
             }
         }
         $this->set($service->getViewVarsForEdit($contentFolder));

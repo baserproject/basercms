@@ -15,6 +15,7 @@ use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Factory\SiteConfigFactory;
 use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
+use BaserCore\Test\Scenario\SmallSetContentsScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcBlog\Service\BlogContentsService;
 use BcBlog\Test\Factory\BlogContentFactory;
@@ -148,11 +149,14 @@ class BlogContentsServiceTest extends BcTestCase
     public function test_update()
     {
         BlogContentFactory::make(['id' => 100, 'description' => '新しい'])->persist();
+        $this->loadFixtureScenario(SmallSetContentsScenario::class);
         $data = [
             'id' => 100,
             'description' => '更新した!',
             'content' => [
                 'title' => '更新 ブログ',
+                'site_id' => 1,
+                'parent_id' => 1
             ]
         ];
 
@@ -174,10 +178,13 @@ class BlogContentsServiceTest extends BcTestCase
      */
     public function test_create()
     {
+        $this->loadFixtureScenario(SmallSetContentsScenario::class);
         $data = [
             'description' => '新しい ブログコンテンツ',
             'content' => [
-                'title' => '新しい ブログ'
+                'title' => '新しい ブログ',
+                'site_id' => 1,
+                'parent_id' => 1
             ]
         ];
         $blogContent = $this->BlogContentsService->create($data);

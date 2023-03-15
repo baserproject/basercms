@@ -174,8 +174,10 @@ class ContentFoldersServiceTest extends BcTestCase
             [
                 ['folder_template' => 'テストcreate', 'content' => []],
                 ['content' => [
-                    'title' => ['_required' => "タイトルを入力してください。"],
-                    'name' => ['_required' => "nameフィールドが存在しません。"]
+                    'title' => ['_required' => "content[title] フィールドが存在しません。"],
+                    'name' => ['_required' => "content[name] フィールドが存在しません。"],
+                    'site_id' => ['_required' => "content[site_id] フィールドが存在しません。"],
+                    'parent_id' => ['_required' => "content[parent_id] フィールドが存在しません。"],
                     ]]
             ],
         ];
@@ -227,7 +229,10 @@ class ContentFoldersServiceTest extends BcTestCase
     {
         Router::setRequest($this->loginAdmin($this->getRequest()));
         try {
-            $contentFolder = $this->ContentFoldersService->getIndex(['folder_template' => "testEdit"])->first();
+            $contentFolder = $this->ContentFoldersService->getIndex([
+                'folder_template' => "testEdit",
+                'contain' => []
+            ])->first();
             $contentFolder = $this->ContentFoldersService->update($contentFolder, $postData);
         } catch (PersistenceFailedException $e) {
             $contentFolder = $e->getEntity();

@@ -153,15 +153,22 @@ class ContentFoldersService implements ContentFoldersServiceInterface
      */
     public function getIndex(array $queryParams=[]): Query
     {
-        $query = $this->ContentFolders->find('all')->contain('Contents');
-        if (!empty($queryParams['limit'])) {
-            $query->limit($queryParams['limit']);
+        $options = array_merge([
+            'contain' => ['Contents'],
+            'limit' => null,
+            'folder_template' => null,
+            'page_template' => null
+        ], $queryParams);
+
+        $query = $this->ContentFolders->find()->contain($options['contain']);
+        if (!is_null($options['limit'])) {
+            $query->limit($options['limit']);
         }
-        if (!empty($queryParams['folder_template'])) {
-            $query->where(['folder_template LIKE' => '%' . $queryParams['folder_template'] . '%']);
+        if (!is_null($options['folder_template'])) {
+            $query->where(['folder_template LIKE' => '%' . $options['folder_template'] . '%']);
         }
-        if (!empty($queryParams['page_template'])) {
-            $query->where(['page_template LIKE' => '%' . $queryParams['page_template'] . '%']);
+        if (!is_null($options['page_template'])) {
+            $query->where(['page_template LIKE' => '%' . $options['page_template'] . '%']);
         }
         return $query;
     }

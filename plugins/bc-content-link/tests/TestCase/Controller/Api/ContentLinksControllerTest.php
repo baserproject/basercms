@@ -14,6 +14,7 @@ namespace BcContentLink\Test\TestCase\Controller\Api;
 use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Factory\PermissionFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
+use BaserCore\Test\Scenario\SmallSetContentsScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcContentLink\Controller\Api\ContentLinksController;
 use BcContentLink\Test\Factory\ContentLinkFactory;
@@ -45,6 +46,9 @@ class ContentLinksControllerTest extends BcTestCase
         'plugin.BaserCore.Factory/UsersUserGroups',
         'plugin.BcContentLink.Factory/ContentLinks',
         'plugin.BaserCore.Factory/Contents',
+        'plugin.BaserCore.Factory/Pages',
+        'plugin.BaserCore.Factory/ContentFolders',
+        'plugin.BaserCore.Factory/SiteConfigs',
         'plugin.BaserCore.Factory/Permissions',
     ];
 
@@ -87,6 +91,7 @@ class ContentLinksControllerTest extends BcTestCase
      */
     public function test_add()
     {
+        $this->loadFixtureScenario(SmallSetContentsScenario::class);
         $data = [
             'url' => '/test-add',
             'content' => [
@@ -97,6 +102,7 @@ class ContentLinksControllerTest extends BcTestCase
                 'lft' => 1,
                 'rght' => 2,
                 'entity_id' => 1,
+                'parent_id' => '1'
             ]
         ];
         $this->post('/baser/api/bc-content-link/content_links/add.json?token=' . $this->accessToken, $data);

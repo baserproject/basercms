@@ -115,7 +115,7 @@ class ContentsTableTest extends BcTestCase
         foreach($validator->getIterator() as $key => $value) {
             $fields[] = $key;
         }
-        $this->assertEquals(['id', 'name', 'title', 'eyecatch', 'self_publish_begin', 'self_publish_end', 'created_date', 'modified_date'], $fields);
+        $this->assertEquals(['id', 'site_id', 'parent_id', 'name', 'title', 'eyecatch', 'self_publish_begin', 'self_publish_end', 'created_date', 'modified_date'], $fields);
     }
 
     /**
@@ -143,15 +143,20 @@ class ContentsTableTest extends BcTestCase
                     'created_date' => '',
                 ],
                 [
+                    'site_id' => ['_required' => 'content[site_id] フィールドが存在しません。'],
+                    'parent_id' => ['_required' => 'content[parent_id] フィールドが存在しません。'],
                     'title' => ['_empty' => 'タイトルを入力してください。'],
                     'created_date' => ['_empty' => '作成日が空になってます。'],
                 ]
             ],
             [
-                [],
                 [
-                    'name' => ['_required' => 'nameフィールドが存在しません。'],
-                    'title' => ['_required' => 'タイトルを入力してください。'],
+                    'site_id' => '1',
+                    'parent_id' => '1'
+                ],
+                [
+                    'name' => ['_required' => 'content[name] フィールドが存在しません。'],
+                    'title' => ['_required' => 'content[title] フィールドが存在しません。'],
                 ]
             ],
         ];

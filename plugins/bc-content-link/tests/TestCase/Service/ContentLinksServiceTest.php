@@ -11,6 +11,7 @@
 
 namespace BcContentLink\Test\TestCase\Service;
 
+use BaserCore\Test\Scenario\SmallSetContentsScenario;
 use BcContentLink\Test\Scenario\ContentLinksServiceScenario;
 use BaserCore\Test\Factory\ContentFactory;
 use BcContentLink\Service\ContentLinksService;
@@ -104,6 +105,7 @@ class ContentLinksServiceTest extends BcTestCase
      */
     public function test_create(): void
     {
+        $this->loadFixtureScenario(SmallSetContentsScenario::class);
         $data = [
             'url' => '/test-create',
             'content' => [
@@ -114,6 +116,7 @@ class ContentLinksServiceTest extends BcTestCase
                 'lft' => 1,
                 'rght' => 2,
                 'name' => 'test create',
+                'parent_id' => 1
             ]
         ];
         $rs = $this->ContentLinksService->create($data);
