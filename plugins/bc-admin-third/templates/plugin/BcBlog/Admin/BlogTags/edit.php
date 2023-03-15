@@ -38,12 +38,18 @@ $this->BcAdmin->setTitle(__d('baser_core', 'タグ編集'));
     ]) ?>
   </div>
   <div class="bca-actions__sub">
-    <?php $this->BcBaser->link(__d('baser_core', '削除'), ['action' => 'delete', $blogTag->id], [
-      'class' => 'bca-submit-token button bca-btn bca-actions__item',
-      'data-bca-btn-type' => 'delete',
-      'data-bca-btn-size' => 'sm'
-    ], sprintf(__d('baser_core', "%s を本当に削除してもいいですか？\nこのタグに関連する記事は削除されません。"), $this->BcAdminForm->getSourceValue('BlogTag.name'))); ?>
+    <?= $this->BcAdminForm->postLink(
+      __d('baser_core', '削除'),
+      ['action' => 'delete', $blogTag->id],
+      ['block' => true,
+        'confirm' => __d('baser_core', "{0} を本当に削除してもいいですか？\nこのタグに関連する記事は削除されません。", $this->BcAdminForm->getSourceValue('name')),
+        'class' => 'bca-submit-token button bca-btn bca-actions__item',
+        'data-bca-btn-type' => 'delete',
+        'data-bca-btn-size' => 'sm']
+    ) ?>
   </div>
 </div>
 
 <?php echo $this->BcAdminForm->end() ?>
+
+<?= $this->fetch('postLink') ?>
