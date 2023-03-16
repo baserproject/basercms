@@ -154,10 +154,29 @@ class BcUtil
         }
 
         $user = BcUtil::loginUserFromSession($prefix);
-        if(!$user && $prefix === 'Front') {
-            return BcUtil::loginUserFromSession('Admin');
+        if(!$user) {
+            $users = self::getLoggedInUsers(false);
+            if(!empty($users[0])) $user = $users[0];
         }
         return $user;
+    }
+
+    public static function getLoggedInUsers($assoc = true)
+    {
+        $users = [];
+        $prefixSettings = array_reverse(Configure::read('BcPrefixAuth'));
+        foreacH($prefixSettings as $key => $prefixSetting) {
+            if(!empty($prefixSetting['disabled'])) continue;
+            $user = BcUtil::loginUserFromSession($key);
+            if($user) {
+                if($assoc) {
+                    $users[$key] = $user;
+                } else {
+                    $users[] = $user;
+                }
+            }
+        }
+        return $users;
     }
 
     /**
