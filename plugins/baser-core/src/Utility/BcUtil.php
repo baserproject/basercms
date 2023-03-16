@@ -119,7 +119,9 @@ class BcUtil
      * - 第一優先：authenticationから取得
      *  - モデルが BaserCore.Users の場合、ユーザーグループがなかったら取得する
      * - 第二優先：現在のリクエストに紐づくセッションから取得
-     * - 第三優先：上記で取得できない場合、プレフィックスが Front だったら、Admin でセッションから取得
+     * - 第三優先：上記で取得できない場合、プレフィックスが Front だったの場合に、
+     *      他の領域のログインセッションより取得する。
+     *      複数のログインセッションにログインしている場合は定義順の降順で最初のログイン情報を取得
      *
      * @return User|false
      * @checked
@@ -153,14 +155,25 @@ class BcUtil
             }
         }
 
-        $user = BcUtil::loginUserFromSession($prefix);
-        if(!$user) {
-            $users = self::getLoggedInUsers(false);
-            if(!empty($users[0])) $user = $users[0];
+        if($prefix === 'Front') {
+            $user = BcUtil::loginUserFromSession($prefix);
+            if (!$user) {
+                $users = self::getLoggedInUsers(false);
+                if (!empty($users[0])) $user = $users[0];
+            }
         }
         return $user;
     }
 
+    /**
+     * ログイン済のユーザー情報をログイン領域ごとに取得する
+     *
+     * @param bool $assoc ログイン領域のプレフィックスをキーとして連想配列で取得するかどうか
+     *                      false の場合は、通常の配列として取得する
+     * @return array
+     * @checked
+     * @noTodo
+     */
     public static function getLoggedInUsers($assoc = true)
     {
         $users = [];
