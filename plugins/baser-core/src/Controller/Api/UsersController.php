@@ -51,12 +51,24 @@ class UsersController extends BcApiController
      */
     public function login(UsersServiceInterface $service)
     {
+        // EVENT Users.beforeLogin
+        $event = $this->dispatchLayerEvent('beforeLogin', [
+            'user' => $this->request
+        ]);
+        if ($event !== false) {
+            $this->request = ($event->getResult() === null || $event->getResult() === true)? $event->getData('user') : $event->getResult();
+        }
+
         $result = $this->Authentication->getResult();
         $json = [];
         if (!$result->isValid() || !$json = $this->getAccessToken($this->Authentication->getResult())) {
             $this->setResponse($this->response->withStatus(401));
         } else {
             $user = $result->getData();
+            // EVENT Users.afterLogin
+            $this->dispatchLayerEvent('afterLogin', [
+                'user' => $user
+            ]);
             $service->removeLoginKey($user->id);
             if ($this->request->is('ssl') && $this->request->getData('saved')) {
                 $this->response = $service->setCookieAutoLoginKey($this->response, $user->id);

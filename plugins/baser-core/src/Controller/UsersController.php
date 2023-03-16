@@ -56,10 +56,24 @@ class UsersController extends BcFrontAppController
     {
         $this->set($service->getViewVarsForLogin($this->getRequest()));
         $target = $this->Authentication->getLoginRedirect() ?? Router::url(Configure::read('BcPrefixAuth.Front.loginRedirect'));
+
+        // EVENT Users.beforeLogin
+        $event = $this->dispatchLayerEvent('beforeLogin', [
+            'user' => $this->request
+        ]);
+        if ($event !== false) {
+            $this->request = ($event->getResult() === null || $event->getResult() === true)? $event->getData('user') : $event->getResult();
+        }
+
         if ($this->request->is('post')) {
             $result = $this->Authentication->getResult();
             if ($result->isValid()) {
                 $user = $result->getData();
+                // EVENT Users.afterLogin
+                $this->dispatchLayerEvent('afterLogin', [
+                    'user' => $user,
+                    'loginRedirect' => $target
+                ]);
                 $service->removeLoginKey($user->id);
                 if ($this->request->is('ssl') && $this->request->getData('saved')) {
                     // 自動ログイン保存
