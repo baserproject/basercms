@@ -86,7 +86,8 @@ class UsersTable extends AppTable
      */
     public function beforeMarshal(Event $event, ArrayObject $data, ArrayObject $options)
     {
-        if ($data['password_1'] !== '' || $data['password_2'] !== '') {
+        if ((isset($data['password_1']) && $data['password_1'] !== '') ||
+            (isset($data['password_2']) && $data['password_2'] !== '')) {
             $data['password'] = $data['password_1'];
         }
     }
