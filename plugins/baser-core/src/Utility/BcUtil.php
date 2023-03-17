@@ -155,6 +155,7 @@ class BcUtil
             }
         }
 
+        $user = false;
         if($prefix === 'Front') {
             $user = BcUtil::loginUserFromSession($prefix);
             if (!$user) {
