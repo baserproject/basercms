@@ -100,7 +100,7 @@ class BcToolbarHelper extends Helper
      */
     public function isAvailableBackAgent(): bool
     {
-        return $this->BcAuth->isAgentUser();
+        return ($this->BcAuth->isAgentUser() && $this->BcAuth->isCurrentUserAdminAvailable());
     }
 
     /**

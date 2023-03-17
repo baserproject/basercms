@@ -148,7 +148,8 @@ class BcAuthHelper extends Helper
      */
     public function isCurrentUserAdminAvailable(): bool
     {
-        return in_array('Admin', $this->getCurrentUserPrefixes());
+        return (in_array('Admin', $this->getCurrentUserPrefixes()) &&
+            BcUtil::loginUserFromSession());
     }
 
 
