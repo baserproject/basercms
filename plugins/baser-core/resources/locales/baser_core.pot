@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2023-03-13 13:32+0900\n"
+"POT-Creation-Date: 2023-03-16 10:33+0900\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -217,7 +217,7 @@ msgstr ""
 #: ./plugins/bc-admin-third/templates/Admin/element/content_actions.php:20
 #: ./plugins/bc-admin-third/templates/plugin/BcBlog/Admin/BlogCategories/edit.php:80
 #: ./plugins/bc-admin-third/templates/plugin/BcBlog/Admin/BlogPosts/edit.php:76
-#: ./plugins/bc-admin-third/templates/plugin/BcBlog/Admin/BlogTags/edit.php:41
+#: ./plugins/bc-admin-third/templates/plugin/BcBlog/Admin/BlogTags/edit.php:42
 #: ./plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogCategories/index_list.php:30
 #: ./plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogCategories/index_row.php:73
 #: ./plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogComments/index_list.php:31
@@ -280,7 +280,7 @@ msgstr ""
 #: ./plugins/bc-mail/config/permission.php:107
 #: ./plugins/bc-mail/config/permission.php:121
 #: ./plugins/bc-mail/src/Controller/Api/MailFieldsController.php:45
-#: ./plugins/bc-mail/src/Controller/Api/MailMessagesController.php:251
+#: ./plugins/bc-mail/src/Controller/Api/MailMessagesController.php:254
 #: ./plugins/bc-search-index/config/permission.php:27
 #: ./plugins/bc-search-index/config/permission.php:43
 #: ./plugins/bc-search-index/src/Controller/Api/SearchIndexesController.php:100
@@ -291,7 +291,7 @@ msgstr ""
 #: ./plugins/bc-uploader/config/permission.php:53
 #: ./plugins/bc-uploader/config/permission.php:70
 #: ./plugins/bc-uploader/config/permission.php:94
-#: ./plugins/bc-uploader/src/Controller/Api/UploaderCategoriesController.php:130
+#: ./plugins/bc-uploader/src/Controller/Api/UploaderCategoriesController.php:204
 #: ./plugins/bc-widget-area/config/permission.php:28
 #: ./plugins/bc-widget-area/config/permission.php:44
 #: ./plugins/bc-widget-area/src/Controller/Api/WidgetAreasController.php:186
@@ -356,7 +356,7 @@ msgstr ""
 #: ./plugins/baser-core/config/permission.php:85
 #: ./plugins/baser-core/config/permission.php:269
 #: ./plugins/baser-core/src/Controller/Api/PermissionsController.php:226
-#: ./plugins/baser-core/src/Controller/Api/PluginsController.php:333
+#: ./plugins/baser-core/src/Controller/Api/PluginsController.php:332
 #: ./plugins/bc-mail/src/Controller/Api/MailFieldsController.php:47
 msgid "無効化"
 msgstr ""
@@ -993,15 +993,15 @@ msgstr ""
 msgid "Migration と アップデーターによるアップデートが失敗しました。"
 msgstr ""
 
-#: ./plugins/baser-core/src/Controller/Admin/ContentFoldersController.php:55
+#: ./plugins/baser-core/src/Controller/Admin/ContentFoldersController.php:56
 #: ./plugins/baser-core/src/Controller/Admin/SitesController.php:217
-#: ./plugins/baser-core/src/Controller/Admin/UsersController.php:235
-#: ./plugins/baser-core/src/Controller/Admin/UsersController.php:277
+#: ./plugins/baser-core/src/Controller/Admin/UsersController.php:249
+#: ./plugins/baser-core/src/Controller/Admin/UsersController.php:291
 #: ./plugins/bc-search-index/src/Controller/Admin/SearchIndexesController.php:101
 msgid "無効なIDです。"
 msgstr ""
 
-#: ./plugins/baser-core/src/Controller/Admin/ContentFoldersController.php:61
+#: ./plugins/baser-core/src/Controller/Admin/ContentFoldersController.php:62
 #: ./plugins/baser-core/src/Controller/Admin/ContentsController.php:160
 #: ./plugins/baser-core/src/Service/PagesService.php:219
 #: ./plugins/baser-core/src/Service/PluginsService.php:607
@@ -1019,207 +1019,19 @@ msgstr ""
 msgid "送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。"
 msgstr ""
 
-#: ./plugins/baser-core/src/Controller/Admin/ContentFoldersController.php:66
+#: ./plugins/baser-core/src/Controller/Admin/ContentFoldersController.php:67
 msgid "フォルダ「%s」を更新しました。"
 msgstr ""
 
-#: ./plugins/baser-core/src/Controller/Admin/ContentsController.php:154
-#: ./plugins/baser-core/src/Controller/Admin/ContentsController.php:177
-#: ./plugins/baser-core/src/Controller/Admin/ContentsController.php:197
-#: ./plugins/baser-core/src/Controller/Admin/PluginsController.php:157
-#: ./plugins/baser-core/src/Controller/Admin/PluginsController.php:184
-#: ./plugins/baser-core/src/Controller/Admin/PluginsController.php:254
-#: ./plugins/baser-core/src/Controller/Api/ContentsController.php:321
-#: ./plugins/baser-core/src/Controller/Api/ContentsController.php:354
-msgid "無効な処理です。"
-msgstr ""
-
-#: ./plugins/baser-core/src/Controller/Admin/ContentsController.php:167
-msgid "「%s」のエイリアス「%s」を編集しました。"
-msgstr ""
-
-#: ./plugins/baser-core/src/Controller/Admin/ContentsController.php:172
-msgid "保存中にエラーが発生しました。入力内容を確認してください。"
-msgstr ""
-
-#: ./plugins/baser-core/src/Controller/Admin/ContentsController.php:211
-msgid "ゴミ箱「%s」を戻しました。"
-msgstr ""
-
-#: ./plugins/baser-core/src/Controller/Admin/ContentsController.php:214
-#: ./plugins/bc-admin-third/templates/Admin/element/Contents/index_setup_tree.php:42
-msgid "ゴミ箱から戻す事に失敗しました。"
-msgstr ""
-
-#: ./plugins/baser-core/src/Controller/Admin/ContentsController.php:244
-msgid "「%s」をゴミ箱に移動しました。"
-msgstr ""
-
-#: ./plugins/baser-core/src/Controller/Admin/ContentsController.php:246
-msgid "%s のエイリアス「%s」を削除しました。"
-msgstr ""
-
-#: ./plugins/baser-core/src/Controller/Admin/ContentsController.php:251
-msgid "削除中にエラーが発生しました。"
-msgstr ""
-
-#: ./plugins/baser-core/src/Controller/Admin/ContentsController.php:254
-msgid "不正なリクエストです。"
-msgstr ""
-
-#: ./plugins/baser-core/src/Controller/Admin/DblogsController.php:68
-#: ./plugins/baser-core/src/Controller/Api/DblogsController.php:89
-msgid "最近の動きのログを削除しました。"
-msgstr ""
-
-#: ./plugins/baser-core/src/Controller/Admin/DblogsController.php:70
-#: ./plugins/baser-core/src/Controller/Api/DblogsController.php:92
-msgid "最近の動きのログ削除に失敗しました。"
-msgstr ""
-
-#: ./plugins/baser-core/src/Controller/Admin/PagesController.php:81
-msgid "固定ページ「%s」を更新しました。\n%s"
-msgstr ""
-
-#: ./plugins/baser-core/src/Controller/Admin/PagesController.php:86
-#: ./plugins/baser-core/src/Controller/Admin/PagesController.php:90
-#: ./plugins/baser-core/src/Controller/Admin/PasswordRequestsController.php:64
-#: ./plugins/baser-core/src/Controller/Admin/PermissionGroupsController.php:72
-#: ./plugins/baser-core/src/Controller/Admin/PermissionGroupsController.php:100
-#: ./plugins/baser-core/src/Controller/Admin/PermissionsController.php:120
-#: ./plugins/baser-core/src/Controller/Admin/PermissionsController.php:157
-#: ./plugins/baser-core/src/Controller/Admin/PermissionsController.php:208
-#: ./plugins/baser-core/src/Controller/Admin/SiteConfigsController.php:54
-#: ./plugins/baser-core/src/Controller/Admin/SitesController.php:102
-#: ./plugins/baser-core/src/Controller/Admin/SitesController.php:153
-#: ./plugins/baser-core/src/Controller/Admin/UserGroupsController.php:85
-#: ./plugins/baser-core/src/Controller/Admin/UserGroupsController.php:114
-#: ./plugins/baser-core/src/Controller/Admin/UsersController.php:213
-#: ./plugins/baser-core/src/Controller/Admin/UsersController.php:253
-#: ./plugins/baser-core/src/Controller/Api/ContentFoldersController.php:91
-#: ./plugins/baser-core/src/Controller/Api/ContentFoldersController.php:163
-#: ./plugins/baser-core/src/Controller/Api/ContentsController.php:228
-#: ./plugins/baser-core/src/Controller/Api/ContentsController.php:313
-#: ./plugins/baser-core/src/Controller/Api/ContentsController.php:417
-#: ./plugins/baser-core/src/Controller/Api/ContentsController.php:450
-#: ./plugins/baser-core/src/Controller/Api/ContentsController.php:525
-#: ./plugins/baser-core/src/Controller/Api/ContentsController.php:580
-#: ./plugins/baser-core/src/Controller/Api/DblogsController.php:62
-#: ./plugins/baser-core/src/Controller/Api/PagesController.php:131
-#: ./plugins/baser-core/src/Controller/Api/PagesController.php:199
-#: ./plugins/baser-core/src/Controller/Api/PagesController.php:231
-#: ./plugins/baser-core/src/Controller/Api/PermissionsController.php:91
-#: ./plugins/baser-core/src/Controller/Api/PermissionsController.php:160
-#: ./plugins/baser-core/src/Controller/Api/PermissionsController.php:196
-#: ./plugins/baser-core/src/Controller/Api/PluginsController.php:261
-#: ./plugins/baser-core/src/Controller/Api/SiteConfigsController.php:56
-#: ./plugins/baser-core/src/Controller/Api/SiteConfigsController.php:60
-#: ./plugins/baser-core/src/Controller/Api/SitesController.php:87
-#: ./plugins/baser-core/src/Controller/Api/SitesController.php:118
-#: ./plugins/baser-core/src/Controller/Api/UserGroupsController.php:87
-#: ./plugins/baser-core/src/Controller/Api/UserGroupsController.php:119
-#: ./plugins/baser-core/src/Controller/Api/UsersController.php:148
-#: ./plugins/baser-core/src/Controller/Api/UsersController.php:180
-#: ./plugins/baser-core/src/Controller/PasswordRequestsController.php:69
-#: ./plugins/bc-blog/src/Controller/Admin/BlogCategoriesController.php:94
-#: ./plugins/bc-blog/src/Controller/Admin/BlogCategoriesController.php:128
-#: ./plugins/bc-blog/src/Controller/Admin/BlogContentsController.php:87
-#: ./plugins/bc-blog/src/Controller/Admin/BlogContentsController.php:91
-#: ./plugins/bc-blog/src/Controller/Admin/BlogPostsController.php:185
-#: ./plugins/bc-blog/src/Controller/Admin/BlogPostsController.php:241
-#: ./plugins/bc-blog/src/Controller/Admin/BlogPostsController.php:356
-#: ./plugins/bc-blog/src/Controller/Api/BlogCategoriesController.php:175
-#: ./plugins/bc-blog/src/Controller/Api/BlogCategoriesController.php:209
-#: ./plugins/bc-blog/src/Controller/Api/BlogContentsController.php:106
-#: ./plugins/bc-blog/src/Controller/Api/BlogContentsController.php:139
-#: ./plugins/bc-blog/src/Controller/Api/BlogContentsController.php:174
-#: ./plugins/bc-blog/src/Controller/Api/BlogPostsController.php:124
-#: ./plugins/bc-blog/src/Controller/Api/BlogPostsController.php:161
-#: ./plugins/bc-blog/src/Controller/Api/BlogTagsController.php:97
-#: ./plugins/bc-blog/src/Controller/Api/BlogTagsController.php:129
-#: ./plugins/bc-content-link/src/Controller/Admin/ContentLinksController.php:73
-#: ./plugins/bc-content-link/src/Controller/Admin/ContentLinksController.php:77
-#: ./plugins/bc-content-link/src/Controller/Api/ContentLinksController.php:82
-#: ./plugins/bc-content-link/src/Controller/Api/ContentLinksController.php:134
-#: ./plugins/bc-custom-content/src/Controller/Admin/CustomContentsController.php:76
-#: ./plugins/bc-custom-content/src/Controller/Admin/CustomEntriesController.php:116
-#: ./plugins/bc-custom-content/src/Controller/Admin/CustomEntriesController.php:145
-#: ./plugins/bc-custom-content/src/Controller/Admin/CustomFieldsController.php:51
-#: ./plugins/bc-custom-content/src/Controller/Admin/CustomFieldsController.php:78
-#: ./plugins/bc-custom-content/src/Controller/Admin/CustomTablesController.php:51
-#: ./plugins/bc-custom-content/src/Controller/Admin/CustomTablesController.php:79
-#: ./plugins/bc-custom-content/src/Controller/Api/CustomContentsController.php:92
-#: ./plugins/bc-custom-content/src/Controller/Api/CustomContentsController.php:132
-#: ./plugins/bc-custom-content/src/Controller/Api/CustomFieldsController.php:93
-#: ./plugins/bc-custom-content/src/Controller/Api/CustomFieldsController.php:127
-#: ./plugins/bc-custom-content/src/Controller/Api/CustomLinksController.php:106
-#: ./plugins/bc-custom-content/src/Controller/Api/CustomTablesController.php:95
-#: ./plugins/bc-custom-content/src/Controller/Api/CustomTablesController.php:128
-#: ./plugins/bc-editor-template/src/Controller/Admin/EditorTemplatesController.php:70
-#: ./plugins/bc-editor-template/src/Controller/Admin/EditorTemplatesController.php:105
-#: ./plugins/bc-editor-template/src/Controller/Api/EditorTemplatesController.php:97
-#: ./plugins/bc-editor-template/src/Controller/Api/EditorTemplatesController.php:130
-#: ./plugins/bc-favorite/src/Controller/Api/FavoritesController.php:89
-#: ./plugins/bc-favorite/src/Controller/Api/FavoritesController.php:119
-#: ./plugins/bc-mail/src/Controller/Admin/MailConfigsController.php:38
-#: ./plugins/bc-mail/src/Controller/Admin/MailContentsController.php:73
-#: ./plugins/bc-mail/src/Controller/Admin/MailFieldsController.php:157
-#: ./plugins/bc-mail/src/Controller/Admin/MailFieldsController.php:192
-#: ./plugins/bc-mail/src/Controller/Api/MailContentsController.php:131
-#: ./plugins/bc-mail/src/Controller/Api/MailContentsController.php:164
-#: ./plugins/bc-mail/src/Controller/Api/MailFieldsController.php:209
-#: ./plugins/bc-mail/src/Controller/Api/MailFieldsController.php:249
-#: ./plugins/bc-mail/src/Controller/Api/MailMessagesController.php:123
-#: ./plugins/bc-mail/src/Controller/Api/MailMessagesController.php:174
-#: ./plugins/bc-theme-config/src/Controller/Admin/ThemeConfigsController.php:47
-#: ./plugins/bc-theme-config/src/Controller/Api/ThemeConfigsController.php:64
-#: ./plugins/bc-theme-config/src/Service/ThemeConfigsService.php:98
-#: ./plugins/bc-theme-file/src/Controller/Api/ThemeFilesController.php:47
-#: ./plugins/bc-theme-file/src/Controller/Api/ThemeFilesController.php:82
-#: ./plugins/bc-theme-file/src/Controller/Api/ThemeFilesController.php:275
-#: ./plugins/bc-theme-file/src/Controller/Api/ThemeFoldersController.php:130
-#: ./plugins/bc-theme-file/src/Controller/Api/ThemeFoldersController.php:167
-#: ./plugins/bc-uploader/src/Controller/Admin/UploaderCategoriesController.php:59
-#: ./plugins/bc-uploader/src/Controller/Admin/UploaderCategoriesController.php:87
-#: ./plugins/bc-uploader/src/Controller/Admin/UploaderConfigsController.php:44
-#: ./plugins/bc-uploader/src/Controller/Admin/UploaderFilesController.php:171
-#: ./plugins/bc-uploader/src/Controller/Api/UploaderCategoriesController.php:66
-#: ./plugins/bc-uploader/src/Controller/Api/UploaderConfigsController.php:65
-#: ./plugins/bc-uploader/src/Controller/Api/UploaderFilesController.php:66
-#: ./plugins/bc-uploader/src/Controller/Api/UploaderFilesController.php:100
-#: ./plugins/bc-widget-area/src/Controller/Api/WidgetAreasController.php:84
-#: ./plugins/bc-widget-area/src/Controller/Api/WidgetAreasController.php:119
-#: ./plugins/bc-widget-area/src/Controller/Api/WidgetAreasController.php:231
-#: ./plugins/bc-widget-area/src/Controller/Api/WidgetAreasController.php:267
-msgid "入力エラーです。内容を修正してください。"
-msgstr ""
-
-#: ./plugins/baser-core/src/Controller/Admin/PasswordRequestsController.php:67
-#: ./plugins/baser-core/src/Controller/PasswordRequestsController.php:82
-msgid "パスワードのリセットを受付ました。該当メールアドレスが存在した場合、変更URLを送信いたしました。"
-msgstr ""
-
-#: ./plugins/baser-core/src/Controller/Admin/PasswordRequestsController.php:96
-#: ./plugins/baser-core/src/Controller/PasswordRequestsController.php:111
-msgid "システムエラーが発生しました。"
-msgstr ""
-
-#: ./plugins/baser-core/src/Controller/Admin/PermissionGroupsController.php:43
-msgid "アクセスルールを設定できるユーザーグループがありません。"
-msgstr ""
-
-#: ./plugins/baser-core/src/Controller/Admin/PermissionGroupsController.php:68
-msgid "ルールグループ「{0}」を登録しました。"
-msgstr ""
-
+#: ./plugins/baser-core/src/Controller/Admin/ContentFoldersController.php:73
 #: ./plugins/baser-core/src/Controller/Admin/PermissionGroupsController.php:74
 #: ./plugins/baser-core/src/Controller/Admin/PermissionGroupsController.php:102
 #: ./plugins/baser-core/src/Controller/Admin/PermissionGroupsController.php:124
 #: ./plugins/baser-core/src/Controller/Admin/SitesController.php:231
 #: ./plugins/baser-core/src/Controller/Admin/UserGroupsController.php:139
 #: ./plugins/baser-core/src/Controller/Admin/UserGroupsController.php:165
-#: ./plugins/baser-core/src/Controller/Admin/UsersController.php:255
-#: ./plugins/baser-core/src/Controller/Admin/UsersController.php:287
+#: ./plugins/baser-core/src/Controller/Admin/UsersController.php:269
+#: ./plugins/baser-core/src/Controller/Admin/UsersController.php:301
 #: ./plugins/baser-core/src/Controller/Api/ContentFoldersController.php:63
 #: ./plugins/baser-core/src/Controller/Api/ContentFoldersController.php:94
 #: ./plugins/baser-core/src/Controller/Api/ContentFoldersController.php:133
@@ -1241,6 +1053,11 @@ msgstr ""
 #: ./plugins/baser-core/src/Controller/Api/PagesController.php:171
 #: ./plugins/baser-core/src/Controller/Api/PagesController.php:202
 #: ./plugins/baser-core/src/Controller/Api/PagesController.php:234
+#: ./plugins/baser-core/src/Controller/Api/PermissionGroupsController.php:46
+#: ./plugins/baser-core/src/Controller/Api/PermissionGroupsController.php:119
+#: ./plugins/baser-core/src/Controller/Api/PermissionGroupsController.php:154
+#: ./plugins/baser-core/src/Controller/Api/PermissionGroupsController.php:188
+#: ./plugins/baser-core/src/Controller/Api/PermissionGroupsController.php:221
 #: ./plugins/baser-core/src/Controller/Api/PermissionsController.php:47
 #: ./plugins/baser-core/src/Controller/Api/PermissionsController.php:94
 #: ./plugins/baser-core/src/Controller/Api/PermissionsController.php:126
@@ -1254,9 +1071,9 @@ msgstr ""
 #: ./plugins/baser-core/src/Controller/Api/PluginsController.php:172
 #: ./plugins/baser-core/src/Controller/Api/PluginsController.php:203
 #: ./plugins/baser-core/src/Controller/Api/PluginsController.php:234
-#: ./plugins/baser-core/src/Controller/Api/PluginsController.php:264
-#: ./plugins/baser-core/src/Controller/Api/PluginsController.php:296
-#: ./plugins/baser-core/src/Controller/Api/PluginsController.php:353
+#: ./plugins/baser-core/src/Controller/Api/PluginsController.php:263
+#: ./plugins/baser-core/src/Controller/Api/PluginsController.php:295
+#: ./plugins/baser-core/src/Controller/Api/PluginsController.php:352
 #: ./plugins/baser-core/src/Controller/Api/SiteConfigsController.php:63
 #: ./plugins/baser-core/src/Controller/Api/SitesController.php:46
 #: ./plugins/baser-core/src/Controller/Api/SitesController.php:90
@@ -1273,10 +1090,10 @@ msgstr ""
 #: ./plugins/baser-core/src/Controller/Api/UserGroupsController.php:157
 #: ./plugins/baser-core/src/Controller/Api/UserGroupsController.php:204
 #: ./plugins/baser-core/src/Controller/Api/UserGroupsController.php:210
-#: ./plugins/baser-core/src/Controller/Api/UsersController.php:122
-#: ./plugins/baser-core/src/Controller/Api/UsersController.php:151
-#: ./plugins/baser-core/src/Controller/Api/UsersController.php:183
-#: ./plugins/baser-core/src/Controller/Api/UsersController.php:212
+#: ./plugins/baser-core/src/Controller/Api/UsersController.php:132
+#: ./plugins/baser-core/src/Controller/Api/UsersController.php:161
+#: ./plugins/baser-core/src/Controller/Api/UsersController.php:193
+#: ./plugins/baser-core/src/Controller/Api/UsersController.php:222
 #: ./plugins/baser-core/src/Controller/Api/UtilitiesController.php:63
 #: ./plugins/baser-core/src/Controller/Api/UtilitiesController.php:91
 #: ./plugins/baser-core/src/Controller/Api/UtilitiesController.php:123
@@ -1355,12 +1172,18 @@ msgstr ""
 #: ./plugins/bc-custom-content/src/Controller/Api/CustomContentsController.php:95
 #: ./plugins/bc-custom-content/src/Controller/Api/CustomContentsController.php:138
 #: ./plugins/bc-custom-content/src/Controller/Api/CustomContentsController.php:178
-#: ./plugins/bc-custom-content/src/Controller/Api/CustomEntriesController.php:62
-#: ./plugins/bc-custom-content/src/Controller/Api/CustomEntriesController.php:100
+#: ./plugins/bc-custom-content/src/Controller/Api/CustomEntriesController.php:67
+#: ./plugins/bc-custom-content/src/Controller/Api/CustomEntriesController.php:109
+#: ./plugins/bc-custom-content/src/Controller/Api/CustomEntriesController.php:145
+#: ./plugins/bc-custom-content/src/Controller/Api/CustomEntriesController.php:186
+#: ./plugins/bc-custom-content/src/Controller/Api/CustomEntriesController.php:224
 #: ./plugins/bc-custom-content/src/Controller/Api/CustomFieldsController.php:96
 #: ./plugins/bc-custom-content/src/Controller/Api/CustomFieldsController.php:133
 #: ./plugins/bc-custom-content/src/Controller/Api/CustomFieldsController.php:166
-#: ./plugins/bc-custom-content/src/Controller/Api/CustomLinksController.php:110
+#: ./plugins/bc-custom-content/src/Controller/Api/CustomLinksController.php:98
+#: ./plugins/bc-custom-content/src/Controller/Api/CustomLinksController.php:135
+#: ./plugins/bc-custom-content/src/Controller/Api/CustomLinksController.php:167
+#: ./plugins/bc-custom-content/src/Controller/Api/CustomLinksController.php:173
 #: ./plugins/bc-custom-content/src/Controller/Api/CustomTablesController.php:67
 #: ./plugins/bc-custom-content/src/Controller/Api/CustomTablesController.php:98
 #: ./plugins/bc-custom-content/src/Controller/Api/CustomTablesController.php:131
@@ -1401,12 +1224,12 @@ msgstr ""
 #: ./plugins/bc-mail/src/Controller/Api/MailFieldsController.php:213
 #: ./plugins/bc-mail/src/Controller/Api/MailFieldsController.php:286
 #: ./plugins/bc-mail/src/Controller/Api/MailFieldsController.php:324
-#: ./plugins/bc-mail/src/Controller/Api/MailMessagesController.php:50
-#: ./plugins/bc-mail/src/Controller/Api/MailMessagesController.php:82
-#: ./plugins/bc-mail/src/Controller/Api/MailMessagesController.php:129
-#: ./plugins/bc-mail/src/Controller/Api/MailMessagesController.php:180
-#: ./plugins/bc-mail/src/Controller/Api/MailMessagesController.php:224
-#: ./plugins/bc-mail/src/Controller/Api/MailMessagesController.php:272
+#: ./plugins/bc-mail/src/Controller/Api/MailMessagesController.php:53
+#: ./plugins/bc-mail/src/Controller/Api/MailMessagesController.php:85
+#: ./plugins/bc-mail/src/Controller/Api/MailMessagesController.php:132
+#: ./plugins/bc-mail/src/Controller/Api/MailMessagesController.php:183
+#: ./plugins/bc-mail/src/Controller/Api/MailMessagesController.php:227
+#: ./plugins/bc-mail/src/Controller/Api/MailMessagesController.php:275
 #: ./plugins/bc-mail/src/Service/MailFieldsService.php:275
 #: ./plugins/bc-mail/src/Service/MailMessagesService.php:180
 #: ./plugins/bc-search-index/src/Controller/Admin/SearchIndexesController.php:109
@@ -1434,7 +1257,12 @@ msgstr ""
 #: ./plugins/bc-uploader/src/Controller/Admin/UploaderFilesController.php:173
 #: ./plugins/bc-uploader/src/Controller/Admin/UploaderFilesController.php:200
 #: ./plugins/bc-uploader/src/Controller/Api/UploaderCategoriesController.php:69
-#: ./plugins/bc-uploader/src/Controller/Api/UploaderCategoriesController.php:152
+#: ./plugins/bc-uploader/src/Controller/Api/UploaderCategoriesController.php:105
+#: ./plugins/bc-uploader/src/Controller/Api/UploaderCategoriesController.php:136
+#: ./plugins/bc-uploader/src/Controller/Api/UploaderCategoriesController.php:142
+#: ./plugins/bc-uploader/src/Controller/Api/UploaderCategoriesController.php:172
+#: ./plugins/bc-uploader/src/Controller/Api/UploaderCategoriesController.php:175
+#: ./plugins/bc-uploader/src/Controller/Api/UploaderCategoriesController.php:226
 #: ./plugins/bc-uploader/src/Controller/Api/UploaderConfigsController.php:68
 #: ./plugins/bc-uploader/src/Controller/Api/UploaderFilesController.php:69
 #: ./plugins/bc-uploader/src/Controller/Api/UploaderFilesController.php:106
@@ -1456,7 +1284,204 @@ msgstr ""
 msgid "データベース処理中にエラーが発生しました。"
 msgstr ""
 
+#: ./plugins/baser-core/src/Controller/Admin/ContentsController.php:154
+#: ./plugins/baser-core/src/Controller/Admin/ContentsController.php:177
+#: ./plugins/baser-core/src/Controller/Admin/ContentsController.php:197
+#: ./plugins/baser-core/src/Controller/Admin/PluginsController.php:157
+#: ./plugins/baser-core/src/Controller/Admin/PluginsController.php:184
+#: ./plugins/baser-core/src/Controller/Admin/PluginsController.php:254
+#: ./plugins/baser-core/src/Controller/Api/ContentsController.php:321
+#: ./plugins/baser-core/src/Controller/Api/ContentsController.php:354
+msgid "無効な処理です。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/ContentsController.php:167
+msgid "「%s」のエイリアス「%s」を編集しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/ContentsController.php:172
+msgid "保存中にエラーが発生しました。入力内容を確認してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/ContentsController.php:211
+msgid "ゴミ箱「%s」を戻しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/ContentsController.php:214
+#: ./plugins/bc-admin-third/templates/Admin/element/Contents/index_setup_tree.php:42
+msgid "ゴミ箱から戻す事に失敗しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/ContentsController.php:244
+msgid "「%s」をゴミ箱に移動しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/ContentsController.php:246
+msgid "%s のエイリアス「%s」を削除しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/ContentsController.php:251
+msgid "削除中にエラーが発生しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/ContentsController.php:254
+msgid "不正なリクエストです。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/DblogsController.php:68
+#: ./plugins/baser-core/src/Controller/Api/DblogsController.php:89
+msgid "最近の動きのログを削除しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/DblogsController.php:70
+#: ./plugins/baser-core/src/Controller/Api/DblogsController.php:92
+msgid "最近の動きのログ削除に失敗しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/PagesController.php:81
+msgid "固定ページ「%s」を更新しました。\n%s"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/PagesController.php:86
+#: ./plugins/baser-core/src/Controller/Admin/PagesController.php:90
+#: ./plugins/baser-core/src/Controller/Admin/PasswordRequestsController.php:64
+#: ./plugins/baser-core/src/Controller/Admin/PermissionGroupsController.php:72
+#: ./plugins/baser-core/src/Controller/Admin/PermissionGroupsController.php:100
+#: ./plugins/baser-core/src/Controller/Admin/PermissionsController.php:120
+#: ./plugins/baser-core/src/Controller/Admin/PermissionsController.php:157
+#: ./plugins/baser-core/src/Controller/Admin/PermissionsController.php:208
+#: ./plugins/baser-core/src/Controller/Admin/SiteConfigsController.php:54
+#: ./plugins/baser-core/src/Controller/Admin/SitesController.php:102
+#: ./plugins/baser-core/src/Controller/Admin/SitesController.php:153
+#: ./plugins/baser-core/src/Controller/Admin/UserGroupsController.php:85
+#: ./plugins/baser-core/src/Controller/Admin/UserGroupsController.php:114
+#: ./plugins/baser-core/src/Controller/Admin/UsersController.php:227
+#: ./plugins/baser-core/src/Controller/Admin/UsersController.php:267
+#: ./plugins/baser-core/src/Controller/Api/ContentFoldersController.php:91
+#: ./plugins/baser-core/src/Controller/Api/ContentFoldersController.php:163
+#: ./plugins/baser-core/src/Controller/Api/ContentsController.php:228
+#: ./plugins/baser-core/src/Controller/Api/ContentsController.php:313
+#: ./plugins/baser-core/src/Controller/Api/ContentsController.php:417
+#: ./plugins/baser-core/src/Controller/Api/ContentsController.php:450
+#: ./plugins/baser-core/src/Controller/Api/ContentsController.php:525
+#: ./plugins/baser-core/src/Controller/Api/ContentsController.php:580
+#: ./plugins/baser-core/src/Controller/Api/DblogsController.php:62
+#: ./plugins/baser-core/src/Controller/Api/PagesController.php:131
+#: ./plugins/baser-core/src/Controller/Api/PagesController.php:199
+#: ./plugins/baser-core/src/Controller/Api/PagesController.php:231
+#: ./plugins/baser-core/src/Controller/Api/PermissionGroupsController.php:116
+#: ./plugins/baser-core/src/Controller/Api/PermissionGroupsController.php:182
+#: ./plugins/baser-core/src/Controller/Api/PermissionsController.php:91
+#: ./plugins/baser-core/src/Controller/Api/PermissionsController.php:160
+#: ./plugins/baser-core/src/Controller/Api/PermissionsController.php:196
+#: ./plugins/baser-core/src/Controller/Api/PluginsController.php:260
+#: ./plugins/baser-core/src/Controller/Api/SiteConfigsController.php:56
+#: ./plugins/baser-core/src/Controller/Api/SiteConfigsController.php:60
+#: ./plugins/baser-core/src/Controller/Api/SitesController.php:87
+#: ./plugins/baser-core/src/Controller/Api/SitesController.php:118
+#: ./plugins/baser-core/src/Controller/Api/UserGroupsController.php:87
+#: ./plugins/baser-core/src/Controller/Api/UserGroupsController.php:119
+#: ./plugins/baser-core/src/Controller/Api/UsersController.php:158
+#: ./plugins/baser-core/src/Controller/Api/UsersController.php:190
+#: ./plugins/baser-core/src/Controller/PasswordRequestsController.php:69
+#: ./plugins/bc-blog/src/Controller/Admin/BlogCategoriesController.php:94
+#: ./plugins/bc-blog/src/Controller/Admin/BlogCategoriesController.php:128
+#: ./plugins/bc-blog/src/Controller/Admin/BlogContentsController.php:87
+#: ./plugins/bc-blog/src/Controller/Admin/BlogContentsController.php:91
+#: ./plugins/bc-blog/src/Controller/Admin/BlogPostsController.php:185
+#: ./plugins/bc-blog/src/Controller/Admin/BlogPostsController.php:241
+#: ./plugins/bc-blog/src/Controller/Admin/BlogPostsController.php:356
+#: ./plugins/bc-blog/src/Controller/Api/BlogCategoriesController.php:175
+#: ./plugins/bc-blog/src/Controller/Api/BlogCategoriesController.php:209
+#: ./plugins/bc-blog/src/Controller/Api/BlogContentsController.php:106
+#: ./plugins/bc-blog/src/Controller/Api/BlogContentsController.php:139
+#: ./plugins/bc-blog/src/Controller/Api/BlogContentsController.php:174
+#: ./plugins/bc-blog/src/Controller/Api/BlogPostsController.php:124
+#: ./plugins/bc-blog/src/Controller/Api/BlogPostsController.php:161
+#: ./plugins/bc-blog/src/Controller/Api/BlogTagsController.php:97
+#: ./plugins/bc-blog/src/Controller/Api/BlogTagsController.php:129
+#: ./plugins/bc-content-link/src/Controller/Admin/ContentLinksController.php:73
+#: ./plugins/bc-content-link/src/Controller/Admin/ContentLinksController.php:77
+#: ./plugins/bc-content-link/src/Controller/Api/ContentLinksController.php:82
+#: ./plugins/bc-content-link/src/Controller/Api/ContentLinksController.php:134
+#: ./plugins/bc-custom-content/src/Controller/Admin/CustomContentsController.php:76
+#: ./plugins/bc-custom-content/src/Controller/Admin/CustomEntriesController.php:116
+#: ./plugins/bc-custom-content/src/Controller/Admin/CustomEntriesController.php:145
+#: ./plugins/bc-custom-content/src/Controller/Admin/CustomFieldsController.php:51
+#: ./plugins/bc-custom-content/src/Controller/Admin/CustomFieldsController.php:78
+#: ./plugins/bc-custom-content/src/Controller/Admin/CustomTablesController.php:51
+#: ./plugins/bc-custom-content/src/Controller/Admin/CustomTablesController.php:79
+#: ./plugins/bc-custom-content/src/Controller/Api/CustomContentsController.php:92
+#: ./plugins/bc-custom-content/src/Controller/Api/CustomContentsController.php:132
+#: ./plugins/bc-custom-content/src/Controller/Api/CustomEntriesController.php:142
+#: ./plugins/bc-custom-content/src/Controller/Api/CustomEntriesController.php:180
+#: ./plugins/bc-custom-content/src/Controller/Api/CustomFieldsController.php:93
+#: ./plugins/bc-custom-content/src/Controller/Api/CustomFieldsController.php:127
+#: ./plugins/bc-custom-content/src/Controller/Api/CustomLinksController.php:95
+#: ./plugins/bc-custom-content/src/Controller/Api/CustomLinksController.php:128
+#: ./plugins/bc-custom-content/src/Controller/Api/CustomTablesController.php:95
+#: ./plugins/bc-custom-content/src/Controller/Api/CustomTablesController.php:128
+#: ./plugins/bc-editor-template/src/Controller/Admin/EditorTemplatesController.php:70
+#: ./plugins/bc-editor-template/src/Controller/Admin/EditorTemplatesController.php:105
+#: ./plugins/bc-editor-template/src/Controller/Api/EditorTemplatesController.php:97
+#: ./plugins/bc-editor-template/src/Controller/Api/EditorTemplatesController.php:130
+#: ./plugins/bc-favorite/src/Controller/Api/FavoritesController.php:89
+#: ./plugins/bc-favorite/src/Controller/Api/FavoritesController.php:119
+#: ./plugins/bc-mail/src/Controller/Admin/MailConfigsController.php:38
+#: ./plugins/bc-mail/src/Controller/Admin/MailContentsController.php:73
+#: ./plugins/bc-mail/src/Controller/Admin/MailFieldsController.php:157
+#: ./plugins/bc-mail/src/Controller/Admin/MailFieldsController.php:192
+#: ./plugins/bc-mail/src/Controller/Api/MailContentsController.php:131
+#: ./plugins/bc-mail/src/Controller/Api/MailContentsController.php:164
+#: ./plugins/bc-mail/src/Controller/Api/MailFieldsController.php:209
+#: ./plugins/bc-mail/src/Controller/Api/MailFieldsController.php:249
+#: ./plugins/bc-mail/src/Controller/Api/MailMessagesController.php:126
+#: ./plugins/bc-mail/src/Controller/Api/MailMessagesController.php:177
+#: ./plugins/bc-theme-config/src/Controller/Admin/ThemeConfigsController.php:47
+#: ./plugins/bc-theme-config/src/Controller/Api/ThemeConfigsController.php:64
+#: ./plugins/bc-theme-config/src/Service/ThemeConfigsService.php:98
+#: ./plugins/bc-theme-file/src/Controller/Api/ThemeFilesController.php:47
+#: ./plugins/bc-theme-file/src/Controller/Api/ThemeFilesController.php:82
+#: ./plugins/bc-theme-file/src/Controller/Api/ThemeFilesController.php:275
+#: ./plugins/bc-theme-file/src/Controller/Api/ThemeFoldersController.php:130
+#: ./plugins/bc-theme-file/src/Controller/Api/ThemeFoldersController.php:167
+#: ./plugins/bc-uploader/src/Controller/Admin/UploaderCategoriesController.php:59
+#: ./plugins/bc-uploader/src/Controller/Admin/UploaderCategoriesController.php:87
+#: ./plugins/bc-uploader/src/Controller/Admin/UploaderConfigsController.php:44
+#: ./plugins/bc-uploader/src/Controller/Admin/UploaderFilesController.php:171
+#: ./plugins/bc-uploader/src/Controller/Api/UploaderCategoriesController.php:66
+#: ./plugins/bc-uploader/src/Controller/Api/UploaderCategoriesController.php:99
+#: ./plugins/bc-uploader/src/Controller/Api/UploaderConfigsController.php:65
+#: ./plugins/bc-uploader/src/Controller/Api/UploaderFilesController.php:66
+#: ./plugins/bc-uploader/src/Controller/Api/UploaderFilesController.php:100
+#: ./plugins/bc-widget-area/src/Controller/Api/WidgetAreasController.php:84
+#: ./plugins/bc-widget-area/src/Controller/Api/WidgetAreasController.php:119
+#: ./plugins/bc-widget-area/src/Controller/Api/WidgetAreasController.php:231
+#: ./plugins/bc-widget-area/src/Controller/Api/WidgetAreasController.php:267
+msgid "入力エラーです。内容を修正してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/PasswordRequestsController.php:67
+#: ./plugins/baser-core/src/Controller/PasswordRequestsController.php:82
+msgid "パスワードのリセットを受付ました。該当メールアドレスが存在した場合、変更URLを送信いたしました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/PasswordRequestsController.php:96
+#: ./plugins/baser-core/src/Controller/PasswordRequestsController.php:111
+msgid "システムエラーが発生しました。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/PermissionGroupsController.php:43
+msgid "アクセスルールを設定できるユーザーグループがありません。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Admin/PermissionGroupsController.php:68
+#: ./plugins/baser-core/src/Controller/Api/PermissionGroupsController.php:113
+msgid "ルールグループ「{0}」を登録しました。"
+msgstr ""
+
 #: ./plugins/baser-core/src/Controller/Admin/PermissionGroupsController.php:96
+#: ./plugins/baser-core/src/Controller/Api/PermissionGroupsController.php:179
 msgid "ルールグループ「{0}」を更新しました。"
 msgstr ""
 
@@ -1465,10 +1490,12 @@ msgid "アクセスグループ「{0}」を削除しました。"
 msgstr ""
 
 #: ./plugins/baser-core/src/Controller/Admin/PermissionGroupsController.php:140
+#: ./plugins/baser-core/src/Controller/Api/PermissionGroupsController.php:216
 msgid "アクセスルールの再構築に成功しました。"
 msgstr ""
 
 #: ./plugins/baser-core/src/Controller/Admin/PermissionGroupsController.php:142
+#: ./plugins/baser-core/src/Controller/Api/PermissionGroupsController.php:218
 msgid "アクセスルールの再構築に失敗しました。"
 msgstr ""
 
@@ -1534,13 +1561,13 @@ msgid "プラグインの削除に失敗しました。"
 msgstr ""
 
 #: ./plugins/baser-core/src/Controller/Admin/PluginsController.php:213
-#: ./plugins/baser-core/src/Controller/Api/PluginsController.php:258
+#: ./plugins/baser-core/src/Controller/Api/PluginsController.php:257
 msgid "新規プラグイン「%s」を追加しました。"
 msgstr ""
 
 #: ./plugins/baser-core/src/Controller/Admin/PluginsController.php:216
 #: ./plugins/baser-core/src/Controller/Admin/ThemesController.php:59
-#: ./plugins/baser-core/src/Model/Table/ContentsTable.php:175
+#: ./plugins/baser-core/src/Model/Table/ContentsTable.php:185
 #: ./plugins/bc-mail/src/Model/Table/MailMessagesTable.php:277
 msgid "ファイルのアップロードに失敗しました。"
 msgstr ""
@@ -1665,43 +1692,43 @@ msgstr ""
 msgid "ユーザーグループ「{0}」をコピーしました。"
 msgstr ""
 
-#: ./plugins/baser-core/src/Controller/Admin/UsersController.php:75
-#: ./plugins/baser-core/src/Controller/Api/UsersController.php:65
-#: ./plugins/baser-core/src/Controller/UsersController.php:68
+#: ./plugins/baser-core/src/Controller/Admin/UsersController.php:89
+#: ./plugins/baser-core/src/Controller/Api/UsersController.php:76
+#: ./plugins/baser-core/src/Controller/UsersController.php:82
 msgid "ようこそ、{0}さん。"
 msgstr ""
 
-#: ./plugins/baser-core/src/Controller/Admin/UsersController.php:78
-#: ./plugins/baser-core/src/Controller/UsersController.php:71
+#: ./plugins/baser-core/src/Controller/Admin/UsersController.php:92
+#: ./plugins/baser-core/src/Controller/UsersController.php:85
 msgid "Eメール、または、パスワードが間違っています。"
 msgstr ""
 
-#: ./plugins/baser-core/src/Controller/Admin/UsersController.php:109
+#: ./plugins/baser-core/src/Controller/Admin/UsersController.php:123
 msgid "既に代理ログイン中のため失敗しました。"
 msgstr ""
 
-#: ./plugins/baser-core/src/Controller/Admin/UsersController.php:129
+#: ./plugins/baser-core/src/Controller/Admin/UsersController.php:143
 msgid "元のユーザーに戻りました。"
 msgstr ""
 
-#: ./plugins/baser-core/src/Controller/Admin/UsersController.php:151
-#: ./plugins/baser-core/src/Controller/UsersController.php:95
+#: ./plugins/baser-core/src/Controller/Admin/UsersController.php:165
+#: ./plugins/baser-core/src/Controller/UsersController.php:109
 msgid "ログアウトしました"
 msgstr ""
 
-#: ./plugins/baser-core/src/Controller/Admin/UsersController.php:209
-#: ./plugins/baser-core/src/Controller/Api/UsersController.php:145
+#: ./plugins/baser-core/src/Controller/Admin/UsersController.php:223
+#: ./plugins/baser-core/src/Controller/Api/UsersController.php:155
 msgid "ユーザー「{0}」を追加しました。"
 msgstr ""
 
-#: ./plugins/baser-core/src/Controller/Admin/UsersController.php:249
-#: ./plugins/baser-core/src/Controller/Api/UsersController.php:177
+#: ./plugins/baser-core/src/Controller/Admin/UsersController.php:263
+#: ./plugins/baser-core/src/Controller/Api/UsersController.php:187
 msgid "ユーザー「{0}」を更新しました。"
 msgstr ""
 
-#: ./plugins/baser-core/src/Controller/Admin/UsersController.php:284
+#: ./plugins/baser-core/src/Controller/Admin/UsersController.php:298
 #: ./plugins/baser-core/src/Controller/Api/UserGroupsController.php:152
-#: ./plugins/baser-core/src/Controller/Api/UsersController.php:208
+#: ./plugins/baser-core/src/Controller/Api/UsersController.php:218
 msgid "ユーザー: {0} を削除しました。"
 msgstr ""
 
@@ -1875,16 +1902,16 @@ msgstr ""
 
 #: ./plugins/baser-core/src/Controller/Api/ContentsController.php:577
 #: ./plugins/baser-core/src/Controller/Api/PermissionsController.php:245
-#: ./plugins/baser-core/src/Controller/Api/PluginsController.php:351
+#: ./plugins/baser-core/src/Controller/Api/PluginsController.php:350
 #: ./plugins/bc-blog/src/Controller/Api/BlogCategoriesController.php:57
 #: ./plugins/bc-blog/src/Controller/Api/BlogCommentsController.php:144
 #: ./plugins/bc-blog/src/Controller/Api/BlogPostsController.php:353
 #: ./plugins/bc-blog/src/Controller/Api/BlogTagsController.php:211
 #: ./plugins/bc-mail/src/Controller/Api/MailFieldsController.php:64
-#: ./plugins/bc-mail/src/Controller/Api/MailMessagesController.php:269
+#: ./plugins/bc-mail/src/Controller/Api/MailMessagesController.php:272
 #: ./plugins/bc-search-index/src/Controller/Api/SearchIndexesController.php:115
 #: ./plugins/bc-theme-file/src/Controller/Api/ThemeFoldersController.php:69
-#: ./plugins/bc-uploader/src/Controller/Api/UploaderCategoriesController.php:147
+#: ./plugins/bc-uploader/src/Controller/Api/UploaderCategoriesController.php:221
 #: ./plugins/bc-widget-area/src/Controller/Api/WidgetAreasController.php:203
 msgid "一括処理が完了しました。"
 msgstr ""
@@ -1909,6 +1936,9 @@ msgstr ""
 msgid "固定ページのコピー「%s」を追加しました。"
 msgstr ""
 
+#: ./plugins/baser-core/src/Controller/Api/PermissionGroupsController.php:44
+#: ./plugins/baser-core/src/Controller/Api/PermissionGroupsController.php:151
+#: ./plugins/baser-core/src/Controller/Api/PermissionGroupsController.php:186
 #: ./plugins/baser-core/src/Controller/Api/PermissionsController.php:45
 #: ./plugins/baser-core/src/Controller/Api/PermissionsController.php:124
 #: ./plugins/baser-core/src/Controller/Api/PermissionsController.php:163
@@ -1921,7 +1951,7 @@ msgstr ""
 #: ./plugins/baser-core/src/Controller/Api/UserGroupsController.php:123
 #: ./plugins/baser-core/src/Controller/Api/UserGroupsController.php:155
 #: ./plugins/baser-core/src/Controller/Api/UserGroupsController.php:208
-#: ./plugins/baser-core/src/Controller/Api/UsersController.php:120
+#: ./plugins/baser-core/src/Controller/Api/UsersController.php:130
 #: ./plugins/bc-blog/src/Controller/Api/BlogCategoriesController.php:85
 #: ./plugins/bc-blog/src/Controller/Api/BlogCategoriesController.php:115
 #: ./plugins/bc-blog/src/Controller/Api/BlogCategoriesController.php:145
@@ -1947,9 +1977,13 @@ msgstr ""
 #: ./plugins/bc-custom-content/src/Controller/Api/CustomContentsController.php:62
 #: ./plugins/bc-custom-content/src/Controller/Api/CustomContentsController.php:136
 #: ./plugins/bc-custom-content/src/Controller/Api/CustomContentsController.php:175
-#: ./plugins/bc-custom-content/src/Controller/Api/CustomEntriesController.php:59
+#: ./plugins/bc-custom-content/src/Controller/Api/CustomEntriesController.php:64
+#: ./plugins/bc-custom-content/src/Controller/Api/CustomEntriesController.php:184
+#: ./plugins/bc-custom-content/src/Controller/Api/CustomEntriesController.php:222
 #: ./plugins/bc-custom-content/src/Controller/Api/CustomFieldsController.php:131
 #: ./plugins/bc-custom-content/src/Controller/Api/CustomFieldsController.php:164
+#: ./plugins/bc-custom-content/src/Controller/Api/CustomLinksController.php:131
+#: ./plugins/bc-custom-content/src/Controller/Api/CustomLinksController.php:171
 #: ./plugins/bc-custom-content/src/Controller/Api/CustomTablesController.php:65
 #: ./plugins/bc-custom-content/src/Controller/Api/CustomTablesController.php:168
 #: ./plugins/bc-editor-template/src/Controller/Api/EditorTemplatesController.php:67
@@ -1964,14 +1998,16 @@ msgstr ""
 #: ./plugins/bc-mail/src/Controller/Api/MailFieldsController.php:128
 #: ./plugins/bc-mail/src/Controller/Api/MailFieldsController.php:178
 #: ./plugins/bc-mail/src/Controller/Api/MailFieldsController.php:252
-#: ./plugins/bc-mail/src/Controller/Api/MailMessagesController.php:48
-#: ./plugins/bc-mail/src/Controller/Api/MailMessagesController.php:80
-#: ./plugins/bc-mail/src/Controller/Api/MailMessagesController.php:126
-#: ./plugins/bc-mail/src/Controller/Api/MailMessagesController.php:177
-#: ./plugins/bc-mail/src/Controller/Api/MailMessagesController.php:221
+#: ./plugins/bc-mail/src/Controller/Api/MailMessagesController.php:51
+#: ./plugins/bc-mail/src/Controller/Api/MailMessagesController.php:83
+#: ./plugins/bc-mail/src/Controller/Api/MailMessagesController.php:129
+#: ./plugins/bc-mail/src/Controller/Api/MailMessagesController.php:180
+#: ./plugins/bc-mail/src/Controller/Api/MailMessagesController.php:224
 #: ./plugins/bc-search-index/src/Controller/Api/SearchIndexesController.php:76
 #: ./plugins/bc-search-index/src/Controller/Api/SearchIndexesController.php:220
-#: ./plugins/bc-uploader/src/Controller/Api/UploaderCategoriesController.php:150
+#: ./plugins/bc-uploader/src/Controller/Api/UploaderCategoriesController.php:103
+#: ./plugins/bc-uploader/src/Controller/Api/UploaderCategoriesController.php:140
+#: ./plugins/bc-uploader/src/Controller/Api/UploaderCategoriesController.php:224
 #: ./plugins/bc-uploader/src/Controller/Api/UploaderFilesController.php:103
 #: ./plugins/bc-uploader/src/Controller/Api/UploaderFilesController.php:136
 #: ./plugins/bc-widget-area/src/Controller/Api/WidgetAreasController.php:122
@@ -1982,6 +2018,14 @@ msgstr ""
 #: ./plugins/bc-widget-area/src/Controller/Api/WidgetAreasController.php:334
 #: ./plugins/bc-widget-area/src/Controller/Api/WidgetAreasController.php:364
 msgid "データが見つかりません。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Api/PermissionGroupsController.php:70
+msgid "パラメーターに user_group_id を指定してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Controller/Api/PermissionGroupsController.php:148
+msgid "ルールグループ「{0}」を削除しました。"
 msgstr ""
 
 #: ./plugins/baser-core/src/Controller/Api/PermissionsController.php:88
@@ -2005,7 +2049,7 @@ msgid "アクセスルール 「%s」 を %s しました。"
 msgstr ""
 
 #: ./plugins/baser-core/src/Controller/Api/PermissionsController.php:276
-#: ./plugins/baser-core/src/Controller/Api/PluginsController.php:291
+#: ./plugins/baser-core/src/Controller/Api/PluginsController.php:290
 #: ./plugins/bc-mail/src/Controller/Api/MailFieldsController.php:94
 msgid "一度リロードしてから再実行してみてください。"
 msgstr ""
@@ -2027,11 +2071,11 @@ msgstr ""
 msgid "プラグインの有効化に失敗しました。"
 msgstr ""
 
-#: ./plugins/baser-core/src/Controller/Api/PluginsController.php:293
+#: ./plugins/baser-core/src/Controller/Api/PluginsController.php:292
 msgid "プラグイン「%s」の並び替えを更新しました。"
 msgstr ""
 
-#: ./plugins/baser-core/src/Controller/Api/PluginsController.php:347
+#: ./plugins/baser-core/src/Controller/Api/PluginsController.php:346
 msgid "プラグイン 「%s」 を %s しました。"
 msgstr ""
 
@@ -2145,23 +2189,42 @@ msgid "IDに不正な値が利用されています。"
 msgstr ""
 
 #: ./plugins/baser-core/src/Model/Table/ContentsTable.php:141
-msgid "nameフィールドが存在しません。"
+msgid "content[site_id] フィールドが存在しません。"
 msgstr ""
 
 #: ./plugins/baser-core/src/Model/Table/ContentsTable.php:142
-msgid "名前は230文字以内で入力してください。"
+msgid "サイトIDを入力してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/ContentsTable.php:146
+msgid "content[parent_id] フィールドが存在しません。"
 msgstr ""
 
 #: ./plugins/baser-core/src/Model/Table/ContentsTable.php:147
+msgid "親フォルダを入力してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/ContentsTable.php:151
+msgid "content[name] フィールドが存在しません。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/ContentsTable.php:152
+msgid "名前は230文字以内で入力してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/ContentsTable.php:157
 msgid "URLはスペース、全角スペース及び、指定の記号(\\'|`^\"(){}[];/?:@&=+$,%<>#!)だけの名前は付けられません。"
 msgstr ""
 
-#: ./plugins/baser-core/src/Model/Table/ContentsTable.php:153
+#: ./plugins/baser-core/src/Model/Table/ContentsTable.php:163
 msgid "連携しているサブサイトでスラッグが重複するコンテンツが存在します。重複するコンテンツのスラッグ名を先に変更してください。"
 msgstr ""
 
-#: ./plugins/baser-core/src/Model/Table/ContentsTable.php:158
-#: ./plugins/baser-core/src/Model/Table/ContentsTable.php:159
+#: ./plugins/baser-core/src/Model/Table/ContentsTable.php:168
+msgid "content[title] フィールドが存在しません。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Model/Table/ContentsTable.php:169
 #: ./plugins/bc-blog/src/Model/Table/BlogPostsTable.php:142
 #: ./plugins/bc-blog/src/Model/Table/BlogPostsTable.php:143
 #: ./plugins/bc-custom-content/src/Model/Table/CustomLinksTable.php:83
@@ -2169,47 +2232,47 @@ msgstr ""
 msgid "タイトルを入力してください。"
 msgstr ""
 
-#: ./plugins/baser-core/src/Model/Table/ContentsTable.php:160
+#: ./plugins/baser-core/src/Model/Table/ContentsTable.php:170
 msgid "タイトルは230文字以内で入力してください。"
 msgstr ""
 
-#: ./plugins/baser-core/src/Model/Table/ContentsTable.php:161
+#: ./plugins/baser-core/src/Model/Table/ContentsTable.php:171
 msgid "タイトルはタブを含む名前は付けられません。"
 msgstr ""
 
-#: ./plugins/baser-core/src/Model/Table/ContentsTable.php:166
+#: ./plugins/baser-core/src/Model/Table/ContentsTable.php:176
 msgid "タイトルはスペース、全角スペース及び、指定の記号(\\'|`^\"(){}[];/?:@&=+$,%<>#!)だけの名前は付けられません。"
 msgstr ""
 
-#: ./plugins/baser-core/src/Model/Table/ContentsTable.php:185
+#: ./plugins/baser-core/src/Model/Table/ContentsTable.php:195
 msgid "公開開始日に不正な文字列が入っています。"
 msgstr ""
 
-#: ./plugins/baser-core/src/Model/Table/ContentsTable.php:196
+#: ./plugins/baser-core/src/Model/Table/ContentsTable.php:206
 msgid "公開終了日に不正な文字列が入っています。"
 msgstr ""
 
-#: ./plugins/baser-core/src/Model/Table/ContentsTable.php:203
+#: ./plugins/baser-core/src/Model/Table/ContentsTable.php:213
 msgid "公開終了日は、公開開始日より新しい日付で入力してください。"
 msgstr ""
 
-#: ./plugins/baser-core/src/Model/Table/ContentsTable.php:208
+#: ./plugins/baser-core/src/Model/Table/ContentsTable.php:218
 msgid "作成日がありません。"
 msgstr ""
 
-#: ./plugins/baser-core/src/Model/Table/ContentsTable.php:209
+#: ./plugins/baser-core/src/Model/Table/ContentsTable.php:219
 msgid "作成日が空になってます。"
 msgstr ""
 
-#: ./plugins/baser-core/src/Model/Table/ContentsTable.php:214
+#: ./plugins/baser-core/src/Model/Table/ContentsTable.php:224
 msgid "作成日が正しくありません。"
 msgstr ""
 
-#: ./plugins/baser-core/src/Model/Table/ContentsTable.php:219
+#: ./plugins/baser-core/src/Model/Table/ContentsTable.php:229
 msgid "更新日が空になってます。"
 msgstr ""
 
-#: ./plugins/baser-core/src/Model/Table/ContentsTable.php:224
+#: ./plugins/baser-core/src/Model/Table/ContentsTable.php:234
 msgid "更新日が正しくありません。"
 msgstr ""
 
@@ -2623,74 +2686,74 @@ msgstr ""
 msgid "メインサイトに従う"
 msgstr ""
 
-#: ./plugins/baser-core/src/Service/BcDatabaseService.php:315
-#: ./plugins/baser-core/src/Service/BcDatabaseService.php:331
+#: ./plugins/baser-core/src/Service/BcDatabaseService.php:317
+#: ./plugins/baser-core/src/Service/BcDatabaseService.php:333
 msgid "%s %s の初期データのロードに失敗しました。"
 msgstr ""
 
-#: ./plugins/baser-core/src/Service/BcDatabaseService.php:337
+#: ./plugins/baser-core/src/Service/BcDatabaseService.php:339
 msgid "初期データの読み込みに失敗しましたので baserCMSコアの初期データを読み込みました。ログを確認してください。"
 msgstr ""
 
-#: ./plugins/baser-core/src/Service/BcDatabaseService.php:340
+#: ./plugins/baser-core/src/Service/BcDatabaseService.php:342
 msgid "初期データの読み込みに失敗しました。データが不完全な状態です。正常に動作しない可能性があります。ログを確認してください。"
 msgstr ""
 
-#: ./plugins/baser-core/src/Service/BcDatabaseService.php:381
+#: ./plugins/baser-core/src/Service/BcDatabaseService.php:383
 msgid "%s の読み込みに失敗。"
 msgstr ""
 
-#: ./plugins/baser-core/src/Service/BcDatabaseService.php:572
+#: ./plugins/baser-core/src/Service/BcDatabaseService.php:574
 msgid "users テーブルの初期化に失敗。"
 msgstr ""
 
-#: ./plugins/baser-core/src/Service/BcDatabaseService.php:595
+#: ./plugins/baser-core/src/Service/BcDatabaseService.php:597
 #: ./plugins/bc-installer/src/Service/InstallationsService.php:188
 msgid "システムデータの初期化に失敗しました。"
 msgstr ""
 
-#: ./plugins/baser-core/src/Service/BcDatabaseService.php:617
+#: ./plugins/baser-core/src/Service/BcDatabaseService.php:619
 msgid "メールプラグインのメール受信用テーブルの生成に失敗しました。"
 msgstr ""
 
-#: ./plugins/baser-core/src/Service/BcDatabaseService.php:1325
+#: ./plugins/baser-core/src/Service/BcDatabaseService.php:1327
 msgid "データベースファイルに書き込み権限がありません。"
 msgstr ""
 
-#: ./plugins/baser-core/src/Service/BcDatabaseService.php:1329
+#: ./plugins/baser-core/src/Service/BcDatabaseService.php:1331
 msgid "データベースの保存フォルダに書き込み権限がありません。"
 msgstr ""
 
-#: ./plugins/baser-core/src/Service/BcDatabaseService.php:1336
+#: ./plugins/baser-core/src/Service/BcDatabaseService.php:1338
 msgid "ドライバが見つかりません Driver is not defined.(MySQL|Postgres|SQLite)"
 msgstr ""
 
-#: ./plugins/baser-core/src/Service/BcDatabaseService.php:1356
+#: ./plugins/baser-core/src/Service/BcDatabaseService.php:1358
 msgid "データベースへの接続でエラーが発生しました。データベース設定を見直してください。\nサーバー上に指定されたデータベースが存在しない可能性が高いです。\n"
 msgstr ""
 
-#: ./plugins/baser-core/src/Service/BcDatabaseService.php:1360
+#: ./plugins/baser-core/src/Service/BcDatabaseService.php:1362
 msgid "データベースへの接続でエラーが発生しました。データベース設定を見直してください。\nサーバー上に指定されたデータベースが存在しない可能性が高いです。"
 msgstr ""
 
-#: ./plugins/baser-core/src/Service/BcDatabaseService.php:1372
+#: ./plugins/baser-core/src/Service/BcDatabaseService.php:1374
 msgid "データベースへの接続でエラーが発生しました。データベース設定を見直してください。"
 msgstr ""
 
-#: ./plugins/baser-core/src/Service/BcDatabaseService.php:1381
-#: ./plugins/baser-core/src/Service/BcDatabaseService.php:1389
+#: ./plugins/baser-core/src/Service/BcDatabaseService.php:1383
+#: ./plugins/baser-core/src/Service/BcDatabaseService.php:1391
 msgid "データベースのバージョンが %s 以上か確認してください。"
 msgstr ""
 
-#: ./plugins/baser-core/src/Service/BcDatabaseService.php:1400
+#: ./plugins/baser-core/src/Service/BcDatabaseService.php:1402
 msgid "データベースへの接続でエラーが発生しました。\n"
 msgstr ""
 
-#: ./plugins/baser-core/src/Service/BcDatabaseService.php:1411
+#: ./plugins/baser-core/src/Service/BcDatabaseService.php:1413
 msgid "データベースへの接続に成功しましたが、プレフィックスが重複するテーブルが存在します。"
 msgstr ""
 
-#: ./plugins/baser-core/src/Service/ContentFoldersService.php:241
+#: ./plugins/baser-core/src/Service/ContentFoldersService.php:248
 #: ./plugins/baser-core/src/Service/PagesService.php:267
 msgid "親フォルダの設定に従う（%s）"
 msgstr ""
@@ -2808,15 +2871,19 @@ msgstr ""
 msgid "初期データのバージョンが違うか、初期データの構造が壊れています。"
 msgstr ""
 
-#: ./plugins/baser-core/src/Service/UsersService.php:134
-#: ./plugins/baser-core/src/Service/UsersService.php:163
-#: ./plugins/baser-core/src/Service/UsersService.php:167
-#: ./plugins/baser-core/src/Service/UsersService.php:188
-#: ./plugins/baser-core/src/Service/UsersService.php:391
+#: ./plugins/baser-core/src/Service/UsersService.php:133
+msgid "user_groups[_ids][] を指定してください。"
+msgstr ""
+
+#: ./plugins/baser-core/src/Service/UsersService.php:137
+#: ./plugins/baser-core/src/Service/UsersService.php:166
+#: ./plugins/baser-core/src/Service/UsersService.php:170
+#: ./plugins/baser-core/src/Service/UsersService.php:191
+#: ./plugins/baser-core/src/Service/UsersService.php:394
 msgid "特権エラーが発生しました。"
 msgstr ""
 
-#: ./plugins/baser-core/src/Service/UsersService.php:420
+#: ./plugins/baser-core/src/Service/UsersService.php:423
 msgid "対象データが見つかりません。"
 msgstr ""
 
@@ -2860,7 +2927,7 @@ msgstr ""
 msgid "システム基本設定にて、Google Maps API キーを入力してください。"
 msgstr ""
 
-#: ./plugins/baser-core/src/Utility/BcUtil.php:1793
+#: ./plugins/baser-core/src/Utility/BcUtil.php:1808
 msgid "リトライ回数は正の整数値で指定してください。"
 msgstr ""
 
@@ -6265,7 +6332,7 @@ msgid "タグ編集"
 msgstr ""
 
 #: ./plugins/bc-admin-third/templates/plugin/BcBlog/Admin/BlogTags/edit.php:45
-msgid "%s を本当に削除してもいいですか？\nこのタグに関連する記事は削除されません。"
+msgid "{0} を本当に削除してもいいですか？\nこのタグに関連する記事は削除されません。"
 msgstr ""
 
 #: ./plugins/bc-admin-third/templates/plugin/BcBlog/Admin/BlogTags/index.php:20
@@ -9215,11 +9282,11 @@ msgstr ""
 msgid "送信できるデータ量を超えています。合計で {0} 以内のデータを送信してください。"
 msgstr ""
 
-#: ./plugins/bc-blog/src/View/Helper/BlogHelper.php:434
+#: ./plugins/bc-blog/src/View/Helper/BlogHelper.php:438
 msgid "≫ 続きを読む"
 msgstr ""
 
-#: ./plugins/bc-blog/src/View/Helper/BlogHelper.php:1590
+#: ./plugins/bc-blog/src/View/Helper/BlogHelper.php:1594
 msgid "$contentsName を省略時は、contentsTemplate オプションで、コンテンツテンプレート名を指定してください。"
 msgstr ""
 
@@ -9614,6 +9681,7 @@ msgid "フィールド「{0}」を更新しました"
 msgstr ""
 
 #: ./plugins/bc-custom-content/src/Controller/Admin/CustomFieldsController.php:101
+#: ./plugins/bc-custom-content/src/Controller/Api/CustomEntriesController.php:219
 #: ./plugins/bc-custom-content/src/Controller/Api/CustomFieldsController.php:161
 msgid "フィールド「{0}」を削除しました。"
 msgstr ""
@@ -9639,21 +9707,35 @@ msgstr ""
 msgid "カスタムコンテンツ「{0}」を削除しました。"
 msgstr ""
 
-#: ./plugins/bc-custom-content/src/Controller/Api/CustomEntriesController.php:45
-#: ./plugins/bc-custom-content/src/Controller/Api/CustomEntriesController.php:86
+#: ./plugins/bc-custom-content/src/Controller/Api/CustomEntriesController.php:50
+#: ./plugins/bc-custom-content/src/Controller/Api/CustomEntriesController.php:95
+#: ./plugins/bc-custom-content/src/Controller/Api/CustomEntriesController.php:132
+#: ./plugins/bc-custom-content/src/Controller/Api/CustomEntriesController.php:171
+#: ./plugins/bc-custom-content/src/Controller/Api/CustomEntriesController.php:212
+#: ./plugins/bc-custom-content/src/Controller/Api/CustomEntriesController.php:248
 msgid "パラメーターに custom_table_id を指定してください。"
 msgstr ""
 
+#: ./plugins/bc-custom-content/src/Controller/Api/CustomEntriesController.php:139
 #: ./plugins/bc-custom-content/src/Controller/Api/CustomFieldsController.php:90
 msgid "フィールド「{0}」を追加しました。"
 msgstr ""
 
+#: ./plugins/bc-custom-content/src/Controller/Api/CustomEntriesController.php:177
 #: ./plugins/bc-custom-content/src/Controller/Api/CustomFieldsController.php:124
 msgid "フィールド「{0}」を更新しました。"
 msgstr ""
 
-#: ./plugins/bc-custom-content/src/Controller/Api/CustomLinksController.php:102
+#: ./plugins/bc-custom-content/src/Controller/Api/CustomLinksController.php:92
+msgid "カスタムリンク「%s」を追加しました。"
+msgstr ""
+
+#: ./plugins/bc-custom-content/src/Controller/Api/CustomLinksController.php:124
 msgid "カスタムリンク「{0}」を更新しました。"
+msgstr ""
+
+#: ./plugins/bc-custom-content/src/Controller/Api/CustomLinksController.php:164
+msgid "カスタムリンク「{0}」を削除しました。"
 msgstr ""
 
 #: ./plugins/bc-custom-content/src/Controller/Api/CustomTablesController.php:92
@@ -10586,19 +10668,19 @@ msgstr ""
 msgid "メールフィールド「%s」の並び替えを更新しました。"
 msgstr ""
 
-#: ./plugins/bc-mail/src/Controller/Api/MailMessagesController.php:115
+#: ./plugins/bc-mail/src/Controller/Api/MailMessagesController.php:118
 msgid "{0} への受信データ NO「{1}」を追加しました。"
 msgstr ""
 
-#: ./plugins/bc-mail/src/Controller/Api/MailMessagesController.php:165
+#: ./plugins/bc-mail/src/Controller/Api/MailMessagesController.php:168
 msgid "{0} への受信データ NO「{1}」を更新しました。"
 msgstr ""
 
-#: ./plugins/bc-mail/src/Controller/Api/MailMessagesController.php:214
+#: ./plugins/bc-mail/src/Controller/Api/MailMessagesController.php:217
 msgid "{0} への受信データ NO「{1}」を削除しました。"
 msgstr ""
 
-#: ./plugins/bc-mail/src/Controller/Api/MailMessagesController.php:265
+#: ./plugins/bc-mail/src/Controller/Api/MailMessagesController.php:268
 msgid "メールメッセージ No %s を %s しました。"
 msgstr ""
 
@@ -11246,14 +11328,17 @@ msgid "アップロードカテゴリ「{0}」を追加しました。"
 msgstr ""
 
 #: ./plugins/bc-uploader/src/Controller/Admin/UploaderCategoriesController.php:83
+#: ./plugins/bc-uploader/src/Controller/Api/UploaderCategoriesController.php:96
 msgid "アップロードカテゴリ「{0}」を更新しました。"
 msgstr ""
 
 #: ./plugins/bc-uploader/src/Controller/Admin/UploaderCategoriesController.php:110
+#: ./plugins/bc-uploader/src/Controller/Api/UploaderCategoriesController.php:133
 msgid "アップロードカテゴリ「{0}」を削除しました。"
 msgstr ""
 
 #: ./plugins/bc-uploader/src/Controller/Admin/UploaderCategoriesController.php:133
+#: ./plugins/bc-uploader/src/Controller/Api/UploaderCategoriesController.php:169
 msgid "アップロードカテゴリ「{0}」をコピーしました。"
 msgstr ""
 
@@ -11279,7 +11364,7 @@ msgstr ""
 msgid "新規アップロードカテゴリ「{0}」を追加しました。"
 msgstr ""
 
-#: ./plugins/bc-uploader/src/Controller/Api/UploaderCategoriesController.php:143
+#: ./plugins/bc-uploader/src/Controller/Api/UploaderCategoriesController.php:217
 msgid "アップロードカテゴリ「%s」を %s しました。"
 msgstr ""
 

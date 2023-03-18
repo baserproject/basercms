@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: baserCMS\n"
-"POT-Creation-Date: 2023-03-13 13:32+0900\n"
-"PO-Revision-Date: 2023-03-13 13:40+0900\n"
+"POT-Creation-Date: 2023-03-16 10:33+0900\n"
+"PO-Revision-Date: 2023-03-18 01:31+0900\n"
 "Last-Translator: ryuring\n"
 "Language-Team: baserCMS Users Community <info@basercms.net>\n"
 "Language: en\n"
@@ -16,7 +16,7 @@ msgstr ""
 
 #: plugins/baser-core/config/permission.php:22
 msgid "コンテンツフォルダ管理"
-msgstr "Contents Folder"
+msgstr "Content Folder Management"
 
 #: plugins/baser-core/config/permission.php:26
 #: plugins/baser-core/config/permission.php:47
@@ -94,7 +94,7 @@ msgstr "Edit"
 #: plugins/baser-core/config/setting.php:394
 #: plugins/bc-admin-third/templates/Admin/Utilities/index.php:37
 msgid "コンテンツ管理"
-msgstr "Contents"
+msgstr "Content Management"
 
 #: plugins/baser-core/config/permission.php:35
 #: plugins/baser-core/config/permission.php:56
@@ -136,28 +136,24 @@ msgstr "Edit Alias"
 
 #: plugins/baser-core/config/permission.php:38
 #: plugins/baser-core/config/permission.php:215
-#, fuzzy
-#| msgid "ゴミ箱から戻す事に失敗しました。"
 msgid "ゴミ箱から戻す"
-msgstr "Failed restoring from Trash."
+msgstr "Get it back from the trash"
 
 #: plugins/baser-core/config/permission.php:43
 msgid "固定ページ管理"
-msgstr "Static Page"
+msgstr "Static Page Management"
 
 #: plugins/baser-core/config/permission.php:52
 msgid "アクセスルールグループ管理"
-msgstr "Access rule group management"
+msgstr "Access Rule Group Management"
 
 #: plugins/baser-core/config/permission.php:58
 msgid "ルール再構築"
-msgstr ""
+msgstr "Rule restructuring"
 
 #: plugins/baser-core/config/permission.php:63
-#, fuzzy
-#| msgid "アクセス制限設定管理"
 msgid "アクセスルール管理"
-msgstr "Manage Access Restriction Settings"
+msgstr "Access Rule Management"
 
 #: plugins/baser-core/config/permission.php:68
 #: plugins/baser-core/config/permission.php:108
@@ -187,7 +183,7 @@ msgstr "Manage Access Restriction Settings"
 #: plugins/bc-uploader/config/permission.php:27
 #: plugins/bc-widget-area/config/permission.php:27
 msgid "新規登録"
-msgstr "Add"
+msgstr "New Registration"
 
 #: plugins/baser-core/config/permission.php:70
 #: plugins/baser-core/config/permission.php:110
@@ -221,7 +217,7 @@ msgstr "Add"
 #: plugins/bc-admin-third/templates/Admin/element/content_actions.php:20
 #: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/BlogCategories/edit.php:80
 #: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/BlogPosts/edit.php:76
-#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/BlogTags/edit.php:41
+#: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/BlogTags/edit.php:42
 #: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogCategories/index_list.php:30
 #: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogCategories/index_row.php:73
 #: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogComments/index_list.php:31
@@ -284,7 +280,7 @@ msgstr "Add"
 #: plugins/bc-mail/config/permission.php:107
 #: plugins/bc-mail/config/permission.php:121
 #: plugins/bc-mail/src/Controller/Api/MailFieldsController.php:45
-#: plugins/bc-mail/src/Controller/Api/MailMessagesController.php:251
+#: plugins/bc-mail/src/Controller/Api/MailMessagesController.php:254
 #: plugins/bc-search-index/config/permission.php:27
 #: plugins/bc-search-index/config/permission.php:43
 #: plugins/bc-search-index/src/Controller/Api/SearchIndexesController.php:100
@@ -295,7 +291,7 @@ msgstr "Add"
 #: plugins/bc-uploader/config/permission.php:53
 #: plugins/bc-uploader/config/permission.php:70
 #: plugins/bc-uploader/config/permission.php:94
-#: plugins/bc-uploader/src/Controller/Api/UploaderCategoriesController.php:130
+#: plugins/bc-uploader/src/Controller/Api/UploaderCategoriesController.php:204
 #: plugins/bc-widget-area/config/permission.php:28
 #: plugins/bc-widget-area/config/permission.php:44
 #: plugins/bc-widget-area/src/Controller/Api/WidgetAreasController.php:186
@@ -338,36 +334,30 @@ msgstr "Publicity Settings"
 
 #: plugins/baser-core/config/permission.php:73
 #: plugins/baser-core/config/permission.php:112
-#, fuzzy
-#| msgid "公開設定"
 msgid "非公開設定"
-msgstr "Publicity Settings"
+msgstr "Private Settings"
 
 #: plugins/baser-core/config/permission.php:78
 #: plugins/baser-core/config/setting.php:464
 msgid "プラグイン管理"
-msgstr "Plugins"
+msgstr "Plugin Management"
 
 #: plugins/baser-core/config/permission.php:83
 #: plugins/bc-admin-third/templates/plugin/BcInstaller/Admin/Installations/step4.php:70
 #: plugins/bc-admin-third/templates/plugin/BcUploader/Admin/UploaderCategories/add.php:29
 msgid "登録"
-msgstr "Add"
+msgstr "Registration"
 
 #: plugins/baser-core/config/permission.php:84
 #: plugins/baser-core/config/permission.php:270
-#, fuzzy
-#| msgid "フィードプラグイン"
 msgid "マーケットのプラグインを取得"
-msgstr "Feed Plugin"
+msgstr "Get Market Plugins"
 
 #: plugins/baser-core/config/permission.php:85
 #: plugins/baser-core/config/permission.php:269
 #: plugins/baser-core/src/Controller/Api/PermissionsController.php:226
-#: plugins/baser-core/src/Controller/Api/PluginsController.php:333
+#: plugins/baser-core/src/Controller/Api/PluginsController.php:332
 #: plugins/bc-mail/src/Controller/Api/MailFieldsController.php:47
-#, fuzzy
-#| msgid "無効"
 msgid "無効化"
 msgstr "Disable"
 
@@ -380,17 +370,13 @@ msgstr "Install"
 
 #: plugins/baser-core/config/permission.php:87
 #: plugins/baser-core/config/permission.php:273
-#, fuzzy
-#| msgid "データベース"
 msgid "データベース初期化"
-msgstr "Database"
+msgstr "Database initialization"
 
 #: plugins/baser-core/config/permission.php:88
 #: plugins/baser-core/config/permission.php:274
-#, fuzzy
-#| msgid "インストール"
 msgid "アンインストール"
-msgstr "Install"
+msgstr "Uninstall"
 
 #: plugins/baser-core/config/permission.php:89
 #: plugins/bc-admin-third/templates/Admin/element/Plugins/index_row.php:83
@@ -400,22 +386,18 @@ msgstr "Update"
 #: plugins/baser-core/config/permission.php:94
 #: plugins/baser-core/config/setting.php:404
 #: plugins/bc-admin-third/templates/Admin/SiteConfigs/index.php:27
-#, fuzzy
-#| msgid "システム設定"
 msgid "システム基本設定"
-msgstr "System"
+msgstr "System Basic Settings"
 
 #: plugins/baser-core/config/permission.php:103
 #: plugins/baser-core/config/setting.php:430
-#, fuzzy
-#| msgid "サブサイト管理"
 msgid "サイト管理"
-msgstr "Subsite"
+msgstr "Site Management"
 
 #: plugins/baser-core/config/permission.php:117
 #: plugins/baser-core/config/setting.php:441
 msgid "テーマ管理"
-msgstr "Themes"
+msgstr "Theme Management"
 
 #: plugins/baser-core/config/permission.php:125
 #: plugins/baser-core/config/permission.php:311
@@ -445,46 +427,40 @@ msgid "ダウンロード"
 msgstr "Download"
 
 #: plugins/baser-core/config/permission.php:127
-#, fuzzy
-#| msgid "テーマ用初期データダウンロード"
 msgid "初期データダウンロード"
-msgstr "Download Initial Data for Theme"
+msgstr "Initial data download"
 
 #: plugins/baser-core/config/permission.php:128
 msgid "マーケットのテーマ取得"
-msgstr ""
+msgstr "Get Market Themes"
 
 #: plugins/baser-core/config/permission.php:129
 #: plugins/baser-core/config/permission.php:316
-#, fuzzy
-#| msgid "初期データ読込"
 msgid "初期データ読み込み"
-msgstr "Load Initial Data"
+msgstr "Initial data loading"
 
 #: plugins/baser-core/config/permission.php:130
 msgid "スクリーンショット"
-msgstr ""
+msgstr "Screenshot"
 
 #: plugins/baser-core/config/permission.php:135
 #: plugins/bc-admin-third/templates/Admin/element/Users/form.php:89
 msgid "ユーザーグループ管理"
-msgstr "User Group"
+msgstr "User Group Management"
 
 #: plugins/baser-core/config/permission.php:148
 #: plugins/baser-core/config/setting.php:409
 #: plugins/bc-admin-third/templates/Admin/element/Permissions/form.php:67
 msgid "ユーザー管理"
-msgstr "User"
+msgstr "User Management"
 
 #: plugins/baser-core/config/permission.php:155
 msgid "自身の編集"
-msgstr ""
+msgstr "Edit yourself"
 
 #: plugins/baser-core/config/permission.php:157
-#, fuzzy
-#| msgid "ログイン"
 msgid "代理ログイン"
-msgstr "Login"
+msgstr "Proxy Login"
 
 #: plugins/baser-core/config/permission.php:162
 #: plugins/baser-core/config/setting.php:475
@@ -492,20 +468,16 @@ msgid "ユーティリティ"
 msgstr "Utility"
 
 #: plugins/baser-core/config/permission.php:166
-#, fuzzy
-#| msgid "ヘルプ"
 msgid "トップ"
-msgstr "Help"
+msgstr "Top"
 
 #: plugins/baser-core/config/permission.php:167
 #: plugins/baser-core/config/permission.php:354
 #: plugins/bc-admin-third/templates/element/toolbar.php:138
 msgid "キャッシュクリア"
-msgstr "Delete Cache"
+msgstr "Clear Cache"
 
 #: plugins/baser-core/config/permission.php:168
-#, fuzzy
-#| msgid "クレジットを表示"
 msgid "クレジット"
 msgstr "Show Credits"
 
@@ -529,32 +501,29 @@ msgstr "Data Maintenance"
 
 #: plugins/baser-core/config/permission.php:172
 msgid "PHPインフォ"
-msgstr ""
+msgstr "PHP Info"
 
+# 日本語：ツリー再構築
+# 英　訳：Tree Rebuild
+# としてはどうか？
 #: plugins/baser-core/config/permission.php:173
 #: plugins/baser-core/config/permission.php:358
 #: plugins/bc-admin-third/templates/Admin/Utilities/index.php:47
 msgid "ツリー構造リセット"
-msgstr "Reset Tree Structures"
+msgstr "Tree Structure Reset"
 
 #: plugins/baser-core/config/permission.php:174
-#, fuzzy
-#| msgid "初期データ読込"
 msgid "コア初期データ読み込み"
-msgstr "Load Initial Data"
+msgstr "Core initial data loading"
 
 #: plugins/baser-core/config/permission.php:175
 #: plugins/baser-core/config/permission.php:361
-#, fuzzy
-#| msgid "ツリー構造をチェックする"
 msgid "ツリー構造チェック"
-msgstr "Check Tree Structures"
+msgstr "Tree Structure Check"
 
 #: plugins/baser-core/config/permission.php:183
-#, fuzzy
-#| msgid "コンテンツメニュー"
 msgid "コンテンツフォルダーAPI"
-msgstr "Contents Menu"
+msgstr "Content Folder API"
 
 #: plugins/baser-core/config/permission.php:187
 #: plugins/baser-core/config/permission.php:200
@@ -580,7 +549,7 @@ msgstr "Contents Menu"
 #: plugins/bc-uploader/config/permission.php:67
 #: plugins/bc-uploader/config/permission.php:91
 msgid "一覧取得"
-msgstr ""
+msgstr "Get List"
 
 #: plugins/baser-core/config/permission.php:188
 #: plugins/baser-core/config/permission.php:201
@@ -604,84 +573,68 @@ msgstr ""
 #: plugins/bc-theme-file/config/permission.php:60
 #: plugins/bc-theme-file/config/permission.php:79
 msgid "単一取得"
-msgstr ""
+msgstr "Get Single"
 
 #: plugins/baser-core/config/permission.php:196
-#, fuzzy
-#| msgid "コンテンツID"
 msgid "コンテンツAPI"
-msgstr "Content ID"
+msgstr "Content API"
 
 #: plugins/baser-core/config/permission.php:205
-#, fuzzy
-#| msgid "エイリアス"
 msgid "エイリアス登録"
-msgstr "Alias"
+msgstr "Alias Registration"
 
 #: plugins/baser-core/config/permission.php:206
 msgid "バッチ処理"
-msgstr ""
+msgstr "Batch Processes"
 
 #: plugins/baser-core/config/permission.php:207
-#, fuzzy
-#| msgid "公開状態"
 msgid "公開状態変更"
-msgstr "Public Status"
+msgstr "Change of publication status"
 
 #: plugins/baser-core/config/permission.php:208
 msgid "存在確認"
-msgstr ""
+msgstr "Existence confirmation"
 
 #: plugins/baser-core/config/permission.php:209
-#, fuzzy
-#| msgid "フォルダ"
 msgid "フォルダ一覧取得"
-msgstr "Folder"
+msgstr "Get Folder List"
 
 #: plugins/baser-core/config/permission.php:210
 msgid "フルURL取得"
-msgstr ""
+msgstr "Get Full URL"
 
 #: plugins/baser-core/config/permission.php:211
-#, fuzzy
-#| msgid "数値チェック"
 msgid "一意性チェック"
-msgstr "Number Check"
+msgstr "Uniqueness check"
 
 #: plugins/baser-core/config/permission.php:212
-#, fuzzy
-#| msgid "上へ移動"
 msgid "移動"
 msgstr "Move Up"
 
 #: plugins/baser-core/config/permission.php:213
 msgid "リネーム"
-msgstr ""
+msgstr "Rename"
 
 #: plugins/baser-core/config/permission.php:214
 #: plugins/bc-admin-third/templates/Admin/element/Contents/index_setup_tree.php:36
 msgid "ゴミ箱を空にする"
-msgstr "Empty Trash"
+msgstr "Empty the Trash"
 
 #: plugins/baser-core/config/permission.php:216
 msgid "ゴミ箱内一覧"
-msgstr ""
+msgstr "List in Trash"
 
 #: plugins/baser-core/config/permission.php:221
 msgid "操作ログAPI"
-msgstr ""
+msgstr "Operations Log API"
 
 #: plugins/baser-core/config/permission.php:232
-#, fuzzy
-#| msgid "固定ページ"
 msgid "固定ページAPI"
-msgstr "Static Page"
+msgstr "Static Page API"
 
 #: plugins/baser-core/config/permission.php:246
-#, fuzzy
-#| msgid "アクセス"
 msgid "アクセスルールAPI"
-msgstr "Access"
+msgstr "Access Rules API"
 
 #: plugins/baser-core/config/permission.php:256
 #: plugins/baser-core/config/permission.php:268
@@ -710,16 +663,17 @@ msgstr "Access"
 msgid "一括処理"
 msgstr "Bulk Process"
 
+# 日本語：並べ替え
+# 英　訳：Sorting
+# としてはどうでしょうか？
 #: plugins/baser-core/config/permission.php:257
 #: plugins/baser-core/config/permission.php:275
 msgid "並び順変更"
-msgstr ""
+msgstr "Change sort order"
 
 #: plugins/baser-core/config/permission.php:262
-#, fuzzy
-#| msgid "プラグイン"
 msgid "プラグインAPI"
-msgstr "Plugin"
+msgstr "Plugin API"
 
 #: plugins/baser-core/config/permission.php:267
 #: plugins/baser-core/src/Controller/Api/PermissionsController.php:225
@@ -729,45 +683,39 @@ msgid "有効化"
 msgstr "Enable"
 
 #: plugins/baser-core/config/permission.php:281
-#, fuzzy
-#| msgid "システム設定"
 msgid "システム基本設定API"
-msgstr "System"
+msgstr "System Preferences API"
 
 #: plugins/baser-core/config/permission.php:285
 msgid "メール送信テスト"
-msgstr "Mail Sending Test"
+msgstr "Email Sending Test"
 
 #: plugins/baser-core/config/permission.php:287
 #: plugins/bc-mail/config/permission.php:76
 #: plugins/bc-theme-config/config/permission.php:39
 #: plugins/bc-uploader/config/permission.php:81
 msgid "設定取得"
-msgstr ""
+msgstr "Get Settings"
 
 #: plugins/baser-core/config/permission.php:292
 msgid "サイトAPI"
-msgstr ""
+msgstr "Site API"
 
 #: plugins/baser-core/config/permission.php:299
 msgid "選択可能な言語とデバイス取得"
-msgstr ""
+msgstr "Selectable language and device acquisition"
 
 #: plugins/baser-core/config/permission.php:306
 msgid "テーマAPI"
-msgstr ""
+msgstr "Theme API"
 
 #: plugins/baser-core/config/permission.php:314
-#, fuzzy
-#| msgid "baserマーケットのテーマを読み込めませんでした。"
 msgid "マーケットのテーマを取得"
-msgstr "Couldn’t load the baser Market's Theme."
+msgstr "Get Market Theme"
 
 #: plugins/baser-core/config/permission.php:322
-#, fuzzy
-#| msgid "ユーザーグループ"
 msgid "ユーザーグループAPI"
-msgstr "User Group"
+msgstr "User Group API"
 
 #: plugins/baser-core/config/permission.php:331
 #: plugins/bc-blog/config/permission.php:95
@@ -777,45 +725,35 @@ msgstr "User Group"
 #: plugins/bc-mail/config/permission.php:104
 #: plugins/bc-uploader/config/permission.php:52
 msgid "リスト取得"
-msgstr ""
+msgstr "Get List"
 
 #: plugins/baser-core/config/permission.php:337
-#, fuzzy
-#| msgid "ユーザー"
 msgid "ユーザーAPI"
-msgstr "User"
+msgstr "User API"
 
 #: plugins/baser-core/config/permission.php:350
-#, fuzzy
-#| msgid "ユーティリティ"
 msgid "ユーティリティAPI"
-msgstr "Utility"
+msgstr "Utility API"
 
 #: plugins/baser-core/config/permission.php:355
 msgid "ログ削除"
-msgstr ""
+msgstr "Delete Log"
 
 #: plugins/baser-core/config/permission.php:356
-#, fuzzy
-#| msgid "テーマダウンロード"
 msgid "DBバックアップダウンロード"
-msgstr "Download Theme"
+msgstr "DB Backup Download"
 
 #: plugins/baser-core/config/permission.php:357
-#, fuzzy
-#| msgid "ダウンロード"
 msgid "ログダウンロード"
-msgstr "Download"
+msgstr "Log Download"
 
 #: plugins/baser-core/config/permission.php:359
-#, fuzzy
-#| msgid "データのバックアップ"
 msgid "DBバックアップ復元"
-msgstr "Backup Data"
+msgstr "DB Backup Restore"
 
 #: plugins/baser-core/config/permission.php:360
 msgid "検索ボックス開閉状態保存"
-msgstr ""
+msgstr "Search box opening and closing state save"
 
 #: plugins/baser-core/config/setting.php:218
 msgid "baserCMS"
@@ -863,10 +801,8 @@ msgstr "User Group"
 #: plugins/baser-core/config/setting.php:423
 #: plugins/bc-admin-third/templates/Admin/element/Permissions/form.php:53
 #: plugins/bc-admin-third/templates/Admin/element/search/permissions_index.php:41
-#, fuzzy
-#| msgid "ユーザーグループ"
 msgid "アクセスルールグループ"
-msgstr "User Group"
+msgstr "Access Rule Group"
 
 #: plugins/baser-core/config/setting.php:434
 #: plugins/bc-admin-third/templates/Admin/element/content_info.php:52
@@ -912,11 +848,11 @@ msgstr "Theme"
 #: plugins/bc-uploader/config/permission.php:92
 #: plugins/bc-widget-area/config/permission.php:42
 msgid "新規追加"
-msgstr "Add"
+msgstr "Add New"
 
 #: plugins/baser-core/config/setting.php:454
 msgid "利用中テーマダウンロード"
-msgstr "Download Theme"
+msgstr "Download current theme"
 
 #: plugins/baser-core/config/setting.php:458
 msgid "テーマ用初期データダウンロード"
@@ -1101,15 +1037,15 @@ msgstr "Completed running update script."
 msgid "Migration と アップデーターによるアップデートが失敗しました。"
 msgstr "Failed File Upload."
 
-#: plugins/baser-core/src/Controller/Admin/ContentFoldersController.php:55
+#: plugins/baser-core/src/Controller/Admin/ContentFoldersController.php:56
 #: plugins/baser-core/src/Controller/Admin/SitesController.php:217
-#: plugins/baser-core/src/Controller/Admin/UsersController.php:235
-#: plugins/baser-core/src/Controller/Admin/UsersController.php:277
+#: plugins/baser-core/src/Controller/Admin/UsersController.php:249
+#: plugins/baser-core/src/Controller/Admin/UsersController.php:291
 #: plugins/bc-search-index/src/Controller/Admin/SearchIndexesController.php:101
 msgid "無効なIDです。"
 msgstr "It's an invalid ID."
 
-#: plugins/baser-core/src/Controller/Admin/ContentFoldersController.php:61
+#: plugins/baser-core/src/Controller/Admin/ContentFoldersController.php:62
 #: plugins/baser-core/src/Controller/Admin/ContentsController.php:160
 #: plugins/baser-core/src/Service/PagesService.php:219
 #: plugins/baser-core/src/Service/PluginsService.php:607
@@ -1128,9 +1064,270 @@ msgid ""
 "送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。"
 msgstr "Exceeding sendable data size. Please send data size within %s."
 
-#: plugins/baser-core/src/Controller/Admin/ContentFoldersController.php:66
+#: plugins/baser-core/src/Controller/Admin/ContentFoldersController.php:67
 msgid "フォルダ「%s」を更新しました。"
 msgstr "Updated Folder \"%s\"."
+
+#: plugins/baser-core/src/Controller/Admin/ContentFoldersController.php:73
+#: plugins/baser-core/src/Controller/Admin/PermissionGroupsController.php:74
+#: plugins/baser-core/src/Controller/Admin/PermissionGroupsController.php:102
+#: plugins/baser-core/src/Controller/Admin/PermissionGroupsController.php:124
+#: plugins/baser-core/src/Controller/Admin/SitesController.php:231
+#: plugins/baser-core/src/Controller/Admin/UserGroupsController.php:139
+#: plugins/baser-core/src/Controller/Admin/UserGroupsController.php:165
+#: plugins/baser-core/src/Controller/Admin/UsersController.php:269
+#: plugins/baser-core/src/Controller/Admin/UsersController.php:301
+#: plugins/baser-core/src/Controller/Api/ContentFoldersController.php:63
+#: plugins/baser-core/src/Controller/Api/ContentFoldersController.php:94
+#: plugins/baser-core/src/Controller/Api/ContentFoldersController.php:133
+#: plugins/baser-core/src/Controller/Api/ContentFoldersController.php:166
+#: plugins/baser-core/src/Controller/Api/ContentsController.php:45
+#: plugins/baser-core/src/Controller/Api/ContentsController.php:73
+#: plugins/baser-core/src/Controller/Api/ContentsController.php:157
+#: plugins/baser-core/src/Controller/Api/ContentsController.php:202
+#: plugins/baser-core/src/Controller/Api/ContentsController.php:231
+#: plugins/baser-core/src/Controller/Api/ContentsController.php:267
+#: plugins/baser-core/src/Controller/Api/ContentsController.php:316
+#: plugins/baser-core/src/Controller/Api/ContentsController.php:420
+#: plugins/baser-core/src/Controller/Api/ContentsController.php:453
+#: plugins/baser-core/src/Controller/Api/ContentsController.php:528
+#: plugins/baser-core/src/Controller/Api/ContentsController.php:583
+#: plugins/baser-core/src/Controller/Api/DblogsController.php:65
+#: plugins/baser-core/src/Controller/Api/PagesController.php:102
+#: plugins/baser-core/src/Controller/Api/PagesController.php:134
+#: plugins/baser-core/src/Controller/Api/PagesController.php:171
+#: plugins/baser-core/src/Controller/Api/PagesController.php:202
+#: plugins/baser-core/src/Controller/Api/PagesController.php:234
+#: plugins/baser-core/src/Controller/Api/PermissionGroupsController.php:46
+#: plugins/baser-core/src/Controller/Api/PermissionGroupsController.php:119
+#: plugins/baser-core/src/Controller/Api/PermissionGroupsController.php:154
+#: plugins/baser-core/src/Controller/Api/PermissionGroupsController.php:188
+#: plugins/baser-core/src/Controller/Api/PermissionGroupsController.php:221
+#: plugins/baser-core/src/Controller/Api/PermissionsController.php:47
+#: plugins/baser-core/src/Controller/Api/PermissionsController.php:94
+#: plugins/baser-core/src/Controller/Api/PermissionsController.php:126
+#: plugins/baser-core/src/Controller/Api/PermissionsController.php:156
+#: plugins/baser-core/src/Controller/Api/PermissionsController.php:165
+#: plugins/baser-core/src/Controller/Api/PermissionsController.php:202
+#: plugins/baser-core/src/Controller/Api/PermissionsController.php:247
+#: plugins/baser-core/src/Controller/Api/PluginsController.php:50
+#: plugins/baser-core/src/Controller/Api/PluginsController.php:103
+#: plugins/baser-core/src/Controller/Api/PluginsController.php:138
+#: plugins/baser-core/src/Controller/Api/PluginsController.php:172
+#: plugins/baser-core/src/Controller/Api/PluginsController.php:203
+#: plugins/baser-core/src/Controller/Api/PluginsController.php:234
+#: plugins/baser-core/src/Controller/Api/PluginsController.php:263
+#: plugins/baser-core/src/Controller/Api/PluginsController.php:295
+#: plugins/baser-core/src/Controller/Api/PluginsController.php:352
+#: plugins/baser-core/src/Controller/Api/SiteConfigsController.php:63
+#: plugins/baser-core/src/Controller/Api/SitesController.php:46
+#: plugins/baser-core/src/Controller/Api/SitesController.php:90
+#: plugins/baser-core/src/Controller/Api/SitesController.php:124
+#: plugins/baser-core/src/Controller/Api/SitesController.php:155
+#: plugins/baser-core/src/Controller/Api/ThemesController.php:48
+#: plugins/baser-core/src/Controller/Api/ThemesController.php:88
+#: plugins/baser-core/src/Controller/Api/ThemesController.php:117
+#: plugins/baser-core/src/Controller/Api/ThemesController.php:153
+#: plugins/baser-core/src/Controller/Api/ThemesController.php:191
+#: plugins/baser-core/src/Controller/Api/UserGroupsController.php:61
+#: plugins/baser-core/src/Controller/Api/UserGroupsController.php:90
+#: plugins/baser-core/src/Controller/Api/UserGroupsController.php:125
+#: plugins/baser-core/src/Controller/Api/UserGroupsController.php:157
+#: plugins/baser-core/src/Controller/Api/UserGroupsController.php:204
+#: plugins/baser-core/src/Controller/Api/UserGroupsController.php:210
+#: plugins/baser-core/src/Controller/Api/UsersController.php:132
+#: plugins/baser-core/src/Controller/Api/UsersController.php:161
+#: plugins/baser-core/src/Controller/Api/UsersController.php:193
+#: plugins/baser-core/src/Controller/Api/UsersController.php:222
+#: plugins/baser-core/src/Controller/Api/UtilitiesController.php:63
+#: plugins/baser-core/src/Controller/Api/UtilitiesController.php:91
+#: plugins/baser-core/src/Controller/Api/UtilitiesController.php:123
+#: plugins/baser-core/src/Controller/Api/UtilitiesController.php:148
+#: plugins/baser-core/src/Controller/Api/UtilitiesController.php:181
+#: plugins/baser-core/src/Controller/Api/UtilitiesController.php:205
+#: plugins/baser-core/src/Service/ContentsService.php:1449
+#: plugins/baser-core/src/Service/PermissionsService.php:600
+#: plugins/baser-core/src/Service/PluginsService.php:561
+#: plugins/bc-blog/src/Controller/Admin/BlogCategoriesController.php:159
+#: plugins/bc-blog/src/Controller/Admin/BlogCommentsController.php:93
+#: plugins/bc-blog/src/Controller/Admin/BlogCommentsController.php:123
+#: plugins/bc-blog/src/Controller/Admin/BlogCommentsController.php:153
+#: plugins/bc-blog/src/Controller/Admin/BlogPostsController.php:190
+#: plugins/bc-blog/src/Controller/Admin/BlogPostsController.php:246
+#: plugins/bc-blog/src/Controller/Admin/BlogPostsController.php:276
+#: plugins/bc-blog/src/Controller/Admin/BlogPostsController.php:301
+#: plugins/bc-blog/src/Controller/Admin/BlogPostsController.php:326
+#: plugins/bc-blog/src/Controller/Admin/BlogTagsController.php:163
+#: plugins/bc-blog/src/Controller/Api/BlogCategoriesController.php:59
+#: plugins/bc-blog/src/Controller/Api/BlogCategoriesController.php:87
+#: plugins/bc-blog/src/Controller/Api/BlogCategoriesController.php:117
+#: plugins/bc-blog/src/Controller/Api/BlogCategoriesController.php:147
+#: plugins/bc-blog/src/Controller/Api/BlogCategoriesController.php:178
+#: plugins/bc-blog/src/Controller/Api/BlogCategoriesController.php:215
+#: plugins/bc-blog/src/Controller/Api/BlogCategoriesController.php:245
+#: plugins/bc-blog/src/Controller/Api/BlogCategoriesController.php:251
+#: plugins/bc-blog/src/Controller/Api/BlogCommentsController.php:67
+#: plugins/bc-blog/src/Controller/Api/BlogCommentsController.php:98
+#: plugins/bc-blog/src/Controller/Api/BlogCommentsController.php:147
+#: plugins/bc-blog/src/Controller/Api/BlogCommentsController.php:182
+#: plugins/bc-blog/src/Controller/Api/BlogContentsController.php:64
+#: plugins/bc-blog/src/Controller/Api/BlogContentsController.php:109
+#: plugins/bc-blog/src/Controller/Api/BlogContentsController.php:145
+#: plugins/bc-blog/src/Controller/Api/BlogContentsController.php:178
+#: plugins/bc-blog/src/Controller/Api/BlogContentsController.php:181
+#: plugins/bc-blog/src/Controller/Api/BlogContentsController.php:216
+#: plugins/bc-blog/src/Controller/Api/BlogPostsController.php:93
+#: plugins/bc-blog/src/Controller/Api/BlogPostsController.php:127
+#: plugins/bc-blog/src/Controller/Api/BlogPostsController.php:167
+#: plugins/bc-blog/src/Controller/Api/BlogPostsController.php:203
+#: plugins/bc-blog/src/Controller/Api/BlogPostsController.php:233
+#: plugins/bc-blog/src/Controller/Api/BlogPostsController.php:240
+#: plugins/bc-blog/src/Controller/Api/BlogPostsController.php:266
+#: plugins/bc-blog/src/Controller/Api/BlogPostsController.php:273
+#: plugins/bc-blog/src/Controller/Api/BlogPostsController.php:306
+#: plugins/bc-blog/src/Controller/Api/BlogPostsController.php:356
+#: plugins/bc-blog/src/Controller/Api/BlogTagsController.php:66
+#: plugins/bc-blog/src/Controller/Api/BlogTagsController.php:100
+#: plugins/bc-blog/src/Controller/Api/BlogTagsController.php:135
+#: plugins/bc-blog/src/Controller/Api/BlogTagsController.php:167
+#: plugins/bc-blog/src/Controller/Api/BlogTagsController.php:214
+#: plugins/bc-blog/src/Controller/BlogController.php:401
+#: plugins/bc-blog/src/Service/BlogCategoriesService.php:256
+#: plugins/bc-blog/src/Service/BlogCommentsService.php:328
+#: plugins/bc-blog/src/Service/BlogPostsService.php:710
+#: plugins/bc-blog/src/Service/BlogTagsService.php:230
+#: plugins/bc-content-link/src/Controller/Api/ContentLinksController.php:85
+#: plugins/bc-content-link/src/Controller/Api/ContentLinksController.php:140
+#: plugins/bc-content-link/src/Controller/Api/ContentLinksController.php:181
+#: plugins/bc-content-link/src/Controller/Api/ContentLinksController.php:188
+#: plugins/bc-content-link/src/Controller/Api/ContentLinksController.php:234
+#: plugins/bc-custom-content/src/Controller/Admin/CustomContentsController.php:78
+#: plugins/bc-custom-content/src/Controller/Admin/CustomEntriesController.php:118
+#: plugins/bc-custom-content/src/Controller/Admin/CustomEntriesController.php:147
+#: plugins/bc-custom-content/src/Controller/Admin/CustomEntriesController.php:174
+#: plugins/bc-custom-content/src/Controller/Admin/CustomEntriesController.php:196
+#: plugins/bc-custom-content/src/Controller/Admin/CustomEntriesController.php:222
+#: plugins/bc-custom-content/src/Controller/Admin/CustomFieldsController.php:53
+#: plugins/bc-custom-content/src/Controller/Admin/CustomFieldsController.php:80
+#: plugins/bc-custom-content/src/Controller/Admin/CustomFieldsController.php:104
+#: plugins/bc-custom-content/src/Controller/Admin/CustomTablesController.php:53
+#: plugins/bc-custom-content/src/Controller/Admin/CustomTablesController.php:81
+#: plugins/bc-custom-content/src/Controller/Admin/CustomTablesController.php:103
+#: plugins/bc-custom-content/src/Controller/Api/CustomContentsController.php:64
+#: plugins/bc-custom-content/src/Controller/Api/CustomContentsController.php:95
+#: plugins/bc-custom-content/src/Controller/Api/CustomContentsController.php:138
+#: plugins/bc-custom-content/src/Controller/Api/CustomContentsController.php:178
+#: plugins/bc-custom-content/src/Controller/Api/CustomEntriesController.php:67
+#: plugins/bc-custom-content/src/Controller/Api/CustomEntriesController.php:109
+#: plugins/bc-custom-content/src/Controller/Api/CustomEntriesController.php:145
+#: plugins/bc-custom-content/src/Controller/Api/CustomEntriesController.php:186
+#: plugins/bc-custom-content/src/Controller/Api/CustomEntriesController.php:224
+#: plugins/bc-custom-content/src/Controller/Api/CustomFieldsController.php:96
+#: plugins/bc-custom-content/src/Controller/Api/CustomFieldsController.php:133
+#: plugins/bc-custom-content/src/Controller/Api/CustomFieldsController.php:166
+#: plugins/bc-custom-content/src/Controller/Api/CustomLinksController.php:98
+#: plugins/bc-custom-content/src/Controller/Api/CustomLinksController.php:135
+#: plugins/bc-custom-content/src/Controller/Api/CustomLinksController.php:167
+#: plugins/bc-custom-content/src/Controller/Api/CustomLinksController.php:173
+#: plugins/bc-custom-content/src/Controller/Api/CustomTablesController.php:67
+#: plugins/bc-custom-content/src/Controller/Api/CustomTablesController.php:98
+#: plugins/bc-custom-content/src/Controller/Api/CustomTablesController.php:131
+#: plugins/bc-custom-content/src/Controller/Api/CustomTablesController.php:164
+#: plugins/bc-custom-content/src/Controller/Api/CustomTablesController.php:171
+#: plugins/bc-editor-template/src/Controller/Admin/EditorTemplatesController.php:72
+#: plugins/bc-editor-template/src/Controller/Admin/EditorTemplatesController.php:107
+#: plugins/bc-editor-template/src/Controller/Admin/EditorTemplatesController.php:135
+#: plugins/bc-editor-template/src/Controller/Api/EditorTemplatesController.php:69
+#: plugins/bc-editor-template/src/Controller/Api/EditorTemplatesController.php:100
+#: plugins/bc-editor-template/src/Controller/Api/EditorTemplatesController.php:136
+#: plugins/bc-editor-template/src/Controller/Api/EditorTemplatesController.php:169
+#: plugins/bc-favorite/src/Controller/Api/FavoritesController.php:47
+#: plugins/bc-favorite/src/Controller/Api/FavoritesController.php:92
+#: plugins/bc-favorite/src/Controller/Api/FavoritesController.php:125
+#: plugins/bc-favorite/src/Controller/Api/FavoritesController.php:156
+#: plugins/bc-favorite/src/Controller/Api/FavoritesController.php:185
+#: plugins/bc-favorite/src/Controller/Api/FavoritesController.php:211
+#: plugins/bc-favorite/src/Controller/Api/FavoritesController.php:233
+#: plugins/bc-mail/src/Controller/Admin/MailContentsController.php:75
+#: plugins/bc-mail/src/Controller/Admin/MailFieldsController.php:159
+#: plugins/bc-mail/src/Controller/Admin/MailFieldsController.php:194
+#: plugins/bc-mail/src/Controller/Admin/MailFieldsController.php:221
+#: plugins/bc-mail/src/Controller/Admin/MailFieldsController.php:224
+#: plugins/bc-mail/src/Controller/Admin/MailFieldsController.php:246
+#: plugins/bc-mail/src/Controller/Admin/MailFieldsController.php:249
+#: plugins/bc-mail/src/Controller/Admin/MailFieldsController.php:271
+#: plugins/bc-mail/src/Controller/Admin/MailFieldsController.php:293
+#: plugins/bc-mail/src/Controller/Admin/MailMessagesController.php:146
+#: plugins/bc-mail/src/Controller/Api/MailContentsController.php:90
+#: plugins/bc-mail/src/Controller/Api/MailContentsController.php:134
+#: plugins/bc-mail/src/Controller/Api/MailContentsController.php:202
+#: plugins/bc-mail/src/Controller/Api/MailContentsController.php:244
+#: plugins/bc-mail/src/Controller/Api/MailFieldsController.php:67
+#: plugins/bc-mail/src/Controller/Api/MailFieldsController.php:100
+#: plugins/bc-mail/src/Controller/Api/MailFieldsController.php:130
+#: plugins/bc-mail/src/Controller/Api/MailFieldsController.php:180
+#: plugins/bc-mail/src/Controller/Api/MailFieldsController.php:213
+#: plugins/bc-mail/src/Controller/Api/MailFieldsController.php:286
+#: plugins/bc-mail/src/Controller/Api/MailFieldsController.php:324
+#: plugins/bc-mail/src/Controller/Api/MailMessagesController.php:53
+#: plugins/bc-mail/src/Controller/Api/MailMessagesController.php:85
+#: plugins/bc-mail/src/Controller/Api/MailMessagesController.php:132
+#: plugins/bc-mail/src/Controller/Api/MailMessagesController.php:183
+#: plugins/bc-mail/src/Controller/Api/MailMessagesController.php:227
+#: plugins/bc-mail/src/Controller/Api/MailMessagesController.php:275
+#: plugins/bc-mail/src/Service/MailFieldsService.php:275
+#: plugins/bc-mail/src/Service/MailMessagesService.php:180
+#: plugins/bc-search-index/src/Controller/Admin/SearchIndexesController.php:109
+#: plugins/bc-search-index/src/Controller/Api/SearchIndexesController.php:78
+#: plugins/bc-search-index/src/Controller/Api/SearchIndexesController.php:118
+#: plugins/bc-search-index/src/Controller/Api/SearchIndexesController.php:145
+#: plugins/bc-search-index/src/Controller/Api/SearchIndexesController.php:216
+#: plugins/bc-search-index/src/Controller/Api/SearchIndexesController.php:222
+#: plugins/bc-search-index/src/Service/SearchIndexesService.php:338
+#: plugins/bc-theme-config/src/Controller/Admin/ThemeConfigsController.php:49
+#: plugins/bc-theme-config/src/Controller/Api/ThemeConfigsController.php:67
+#: plugins/bc-theme-file/src/Controller/Api/ThemeFoldersController.php:72
+#: plugins/bc-theme-file/src/Controller/Api/ThemeFoldersController.php:98
+#: plugins/bc-theme-file/src/Controller/Api/ThemeFoldersController.php:134
+#: plugins/bc-theme-file/src/Controller/Api/ThemeFoldersController.php:171
+#: plugins/bc-theme-file/src/Controller/Api/ThemeFoldersController.php:206
+#: plugins/bc-theme-file/src/Controller/Api/ThemeFoldersController.php:241
+#: plugins/bc-theme-file/src/Controller/Api/ThemeFoldersController.php:278
+#: plugins/bc-uploader/src/Controller/Admin/UploaderCategoriesController.php:62
+#: plugins/bc-uploader/src/Controller/Admin/UploaderCategoriesController.php:90
+#: plugins/bc-uploader/src/Controller/Admin/UploaderCategoriesController.php:112
+#: plugins/bc-uploader/src/Controller/Admin/UploaderCategoriesController.php:115
+#: plugins/bc-uploader/src/Controller/Admin/UploaderCategoriesController.php:135
+#: plugins/bc-uploader/src/Controller/Admin/UploaderCategoriesController.php:138
+#: plugins/bc-uploader/src/Controller/Admin/UploaderFilesController.php:173
+#: plugins/bc-uploader/src/Controller/Admin/UploaderFilesController.php:200
+#: plugins/bc-uploader/src/Controller/Api/UploaderCategoriesController.php:69
+#: plugins/bc-uploader/src/Controller/Api/UploaderCategoriesController.php:105
+#: plugins/bc-uploader/src/Controller/Api/UploaderCategoriesController.php:136
+#: plugins/bc-uploader/src/Controller/Api/UploaderCategoriesController.php:142
+#: plugins/bc-uploader/src/Controller/Api/UploaderCategoriesController.php:172
+#: plugins/bc-uploader/src/Controller/Api/UploaderCategoriesController.php:175
+#: plugins/bc-uploader/src/Controller/Api/UploaderCategoriesController.php:226
+#: plugins/bc-uploader/src/Controller/Api/UploaderConfigsController.php:68
+#: plugins/bc-uploader/src/Controller/Api/UploaderFilesController.php:69
+#: plugins/bc-uploader/src/Controller/Api/UploaderFilesController.php:106
+#: plugins/bc-uploader/src/Controller/Api/UploaderFilesController.php:139
+#: plugins/bc-uploader/src/Service/UploaderCategoriesService.php:146
+#: plugins/bc-widget-area/src/Controller/Admin/WidgetAreasController.php:66
+#: plugins/bc-widget-area/src/Controller/Admin/WidgetAreasController.php:103
+#: plugins/bc-widget-area/src/Controller/Admin/WidgetAreasController.php:106
+#: plugins/bc-widget-area/src/Controller/Api/WidgetAreasController.php:87
+#: plugins/bc-widget-area/src/Controller/Api/WidgetAreasController.php:125
+#: plugins/bc-widget-area/src/Controller/Api/WidgetAreasController.php:160
+#: plugins/bc-widget-area/src/Controller/Api/WidgetAreasController.php:206
+#: plugins/bc-widget-area/src/Controller/Api/WidgetAreasController.php:237
+#: plugins/bc-widget-area/src/Controller/Api/WidgetAreasController.php:273
+#: plugins/bc-widget-area/src/Controller/Api/WidgetAreasController.php:304
+#: plugins/bc-widget-area/src/Controller/Api/WidgetAreasController.php:337
+#: plugins/bc-widget-area/src/Controller/Api/WidgetAreasController.php:367
+#: plugins/bc-widget-area/src/Service/WidgetAreasService.php:149
+msgid "データベース処理中にエラーが発生しました。"
+msgstr "An error has occured when processing database."
 
 #: plugins/baser-core/src/Controller/Admin/ContentsController.php:154
 #: plugins/baser-core/src/Controller/Admin/ContentsController.php:177
@@ -1211,8 +1408,8 @@ msgstr "Updated Static Page “%s”."
 #: plugins/baser-core/src/Controller/Admin/SitesController.php:153
 #: plugins/baser-core/src/Controller/Admin/UserGroupsController.php:85
 #: plugins/baser-core/src/Controller/Admin/UserGroupsController.php:114
-#: plugins/baser-core/src/Controller/Admin/UsersController.php:213
-#: plugins/baser-core/src/Controller/Admin/UsersController.php:253
+#: plugins/baser-core/src/Controller/Admin/UsersController.php:227
+#: plugins/baser-core/src/Controller/Admin/UsersController.php:267
 #: plugins/baser-core/src/Controller/Api/ContentFoldersController.php:91
 #: plugins/baser-core/src/Controller/Api/ContentFoldersController.php:163
 #: plugins/baser-core/src/Controller/Api/ContentsController.php:228
@@ -1225,18 +1422,20 @@ msgstr "Updated Static Page “%s”."
 #: plugins/baser-core/src/Controller/Api/PagesController.php:131
 #: plugins/baser-core/src/Controller/Api/PagesController.php:199
 #: plugins/baser-core/src/Controller/Api/PagesController.php:231
+#: plugins/baser-core/src/Controller/Api/PermissionGroupsController.php:116
+#: plugins/baser-core/src/Controller/Api/PermissionGroupsController.php:182
 #: plugins/baser-core/src/Controller/Api/PermissionsController.php:91
 #: plugins/baser-core/src/Controller/Api/PermissionsController.php:160
 #: plugins/baser-core/src/Controller/Api/PermissionsController.php:196
-#: plugins/baser-core/src/Controller/Api/PluginsController.php:261
+#: plugins/baser-core/src/Controller/Api/PluginsController.php:260
 #: plugins/baser-core/src/Controller/Api/SiteConfigsController.php:56
 #: plugins/baser-core/src/Controller/Api/SiteConfigsController.php:60
 #: plugins/baser-core/src/Controller/Api/SitesController.php:87
 #: plugins/baser-core/src/Controller/Api/SitesController.php:118
 #: plugins/baser-core/src/Controller/Api/UserGroupsController.php:87
 #: plugins/baser-core/src/Controller/Api/UserGroupsController.php:119
-#: plugins/baser-core/src/Controller/Api/UsersController.php:148
-#: plugins/baser-core/src/Controller/Api/UsersController.php:180
+#: plugins/baser-core/src/Controller/Api/UsersController.php:158
+#: plugins/baser-core/src/Controller/Api/UsersController.php:190
 #: plugins/baser-core/src/Controller/PasswordRequestsController.php:69
 #: plugins/bc-blog/src/Controller/Admin/BlogCategoriesController.php:94
 #: plugins/bc-blog/src/Controller/Admin/BlogCategoriesController.php:128
@@ -1267,9 +1466,12 @@ msgstr "Updated Static Page “%s”."
 #: plugins/bc-custom-content/src/Controller/Admin/CustomTablesController.php:79
 #: plugins/bc-custom-content/src/Controller/Api/CustomContentsController.php:92
 #: plugins/bc-custom-content/src/Controller/Api/CustomContentsController.php:132
+#: plugins/bc-custom-content/src/Controller/Api/CustomEntriesController.php:142
+#: plugins/bc-custom-content/src/Controller/Api/CustomEntriesController.php:180
 #: plugins/bc-custom-content/src/Controller/Api/CustomFieldsController.php:93
 #: plugins/bc-custom-content/src/Controller/Api/CustomFieldsController.php:127
-#: plugins/bc-custom-content/src/Controller/Api/CustomLinksController.php:106
+#: plugins/bc-custom-content/src/Controller/Api/CustomLinksController.php:95
+#: plugins/bc-custom-content/src/Controller/Api/CustomLinksController.php:128
 #: plugins/bc-custom-content/src/Controller/Api/CustomTablesController.php:95
 #: plugins/bc-custom-content/src/Controller/Api/CustomTablesController.php:128
 #: plugins/bc-editor-template/src/Controller/Admin/EditorTemplatesController.php:70
@@ -1286,8 +1488,8 @@ msgstr "Updated Static Page “%s”."
 #: plugins/bc-mail/src/Controller/Api/MailContentsController.php:164
 #: plugins/bc-mail/src/Controller/Api/MailFieldsController.php:209
 #: plugins/bc-mail/src/Controller/Api/MailFieldsController.php:249
-#: plugins/bc-mail/src/Controller/Api/MailMessagesController.php:123
-#: plugins/bc-mail/src/Controller/Api/MailMessagesController.php:174
+#: plugins/bc-mail/src/Controller/Api/MailMessagesController.php:126
+#: plugins/bc-mail/src/Controller/Api/MailMessagesController.php:177
 #: plugins/bc-theme-config/src/Controller/Admin/ThemeConfigsController.php:47
 #: plugins/bc-theme-config/src/Controller/Api/ThemeConfigsController.php:64
 #: plugins/bc-theme-config/src/Service/ThemeConfigsService.php:98
@@ -1301,6 +1503,7 @@ msgstr "Updated Static Page “%s”."
 #: plugins/bc-uploader/src/Controller/Admin/UploaderConfigsController.php:44
 #: plugins/bc-uploader/src/Controller/Admin/UploaderFilesController.php:171
 #: plugins/bc-uploader/src/Controller/Api/UploaderCategoriesController.php:66
+#: plugins/bc-uploader/src/Controller/Api/UploaderCategoriesController.php:99
 #: plugins/bc-uploader/src/Controller/Api/UploaderConfigsController.php:65
 #: plugins/bc-uploader/src/Controller/Api/UploaderFilesController.php:66
 #: plugins/bc-uploader/src/Controller/Api/UploaderFilesController.php:100
@@ -1332,256 +1535,14 @@ msgid "アクセスルールを設定できるユーザーグループがあり�
 msgstr "Please select User Group."
 
 #: plugins/baser-core/src/Controller/Admin/PermissionGroupsController.php:68
+#: plugins/baser-core/src/Controller/Api/PermissionGroupsController.php:113
 #, fuzzy
 #| msgid "メールフォーム「%s」を更新しました。"
 msgid "ルールグループ「{0}」を登録しました。"
 msgstr "Updated Mail Form “%s”."
 
-#: plugins/baser-core/src/Controller/Admin/PermissionGroupsController.php:74
-#: plugins/baser-core/src/Controller/Admin/PermissionGroupsController.php:102
-#: plugins/baser-core/src/Controller/Admin/PermissionGroupsController.php:124
-#: plugins/baser-core/src/Controller/Admin/SitesController.php:231
-#: plugins/baser-core/src/Controller/Admin/UserGroupsController.php:139
-#: plugins/baser-core/src/Controller/Admin/UserGroupsController.php:165
-#: plugins/baser-core/src/Controller/Admin/UsersController.php:255
-#: plugins/baser-core/src/Controller/Admin/UsersController.php:287
-#: plugins/baser-core/src/Controller/Api/ContentFoldersController.php:63
-#: plugins/baser-core/src/Controller/Api/ContentFoldersController.php:94
-#: plugins/baser-core/src/Controller/Api/ContentFoldersController.php:133
-#: plugins/baser-core/src/Controller/Api/ContentFoldersController.php:166
-#: plugins/baser-core/src/Controller/Api/ContentsController.php:45
-#: plugins/baser-core/src/Controller/Api/ContentsController.php:73
-#: plugins/baser-core/src/Controller/Api/ContentsController.php:157
-#: plugins/baser-core/src/Controller/Api/ContentsController.php:202
-#: plugins/baser-core/src/Controller/Api/ContentsController.php:231
-#: plugins/baser-core/src/Controller/Api/ContentsController.php:267
-#: plugins/baser-core/src/Controller/Api/ContentsController.php:316
-#: plugins/baser-core/src/Controller/Api/ContentsController.php:420
-#: plugins/baser-core/src/Controller/Api/ContentsController.php:453
-#: plugins/baser-core/src/Controller/Api/ContentsController.php:528
-#: plugins/baser-core/src/Controller/Api/ContentsController.php:583
-#: plugins/baser-core/src/Controller/Api/DblogsController.php:65
-#: plugins/baser-core/src/Controller/Api/PagesController.php:102
-#: plugins/baser-core/src/Controller/Api/PagesController.php:134
-#: plugins/baser-core/src/Controller/Api/PagesController.php:171
-#: plugins/baser-core/src/Controller/Api/PagesController.php:202
-#: plugins/baser-core/src/Controller/Api/PagesController.php:234
-#: plugins/baser-core/src/Controller/Api/PermissionsController.php:47
-#: plugins/baser-core/src/Controller/Api/PermissionsController.php:94
-#: plugins/baser-core/src/Controller/Api/PermissionsController.php:126
-#: plugins/baser-core/src/Controller/Api/PermissionsController.php:156
-#: plugins/baser-core/src/Controller/Api/PermissionsController.php:165
-#: plugins/baser-core/src/Controller/Api/PermissionsController.php:202
-#: plugins/baser-core/src/Controller/Api/PermissionsController.php:247
-#: plugins/baser-core/src/Controller/Api/PluginsController.php:50
-#: plugins/baser-core/src/Controller/Api/PluginsController.php:103
-#: plugins/baser-core/src/Controller/Api/PluginsController.php:138
-#: plugins/baser-core/src/Controller/Api/PluginsController.php:172
-#: plugins/baser-core/src/Controller/Api/PluginsController.php:203
-#: plugins/baser-core/src/Controller/Api/PluginsController.php:234
-#: plugins/baser-core/src/Controller/Api/PluginsController.php:264
-#: plugins/baser-core/src/Controller/Api/PluginsController.php:296
-#: plugins/baser-core/src/Controller/Api/PluginsController.php:353
-#: plugins/baser-core/src/Controller/Api/SiteConfigsController.php:63
-#: plugins/baser-core/src/Controller/Api/SitesController.php:46
-#: plugins/baser-core/src/Controller/Api/SitesController.php:90
-#: plugins/baser-core/src/Controller/Api/SitesController.php:124
-#: plugins/baser-core/src/Controller/Api/SitesController.php:155
-#: plugins/baser-core/src/Controller/Api/ThemesController.php:48
-#: plugins/baser-core/src/Controller/Api/ThemesController.php:88
-#: plugins/baser-core/src/Controller/Api/ThemesController.php:117
-#: plugins/baser-core/src/Controller/Api/ThemesController.php:153
-#: plugins/baser-core/src/Controller/Api/ThemesController.php:191
-#: plugins/baser-core/src/Controller/Api/UserGroupsController.php:61
-#: plugins/baser-core/src/Controller/Api/UserGroupsController.php:90
-#: plugins/baser-core/src/Controller/Api/UserGroupsController.php:125
-#: plugins/baser-core/src/Controller/Api/UserGroupsController.php:157
-#: plugins/baser-core/src/Controller/Api/UserGroupsController.php:204
-#: plugins/baser-core/src/Controller/Api/UserGroupsController.php:210
-#: plugins/baser-core/src/Controller/Api/UsersController.php:122
-#: plugins/baser-core/src/Controller/Api/UsersController.php:151
-#: plugins/baser-core/src/Controller/Api/UsersController.php:183
-#: plugins/baser-core/src/Controller/Api/UsersController.php:212
-#: plugins/baser-core/src/Controller/Api/UtilitiesController.php:63
-#: plugins/baser-core/src/Controller/Api/UtilitiesController.php:91
-#: plugins/baser-core/src/Controller/Api/UtilitiesController.php:123
-#: plugins/baser-core/src/Controller/Api/UtilitiesController.php:148
-#: plugins/baser-core/src/Controller/Api/UtilitiesController.php:181
-#: plugins/baser-core/src/Controller/Api/UtilitiesController.php:205
-#: plugins/baser-core/src/Service/ContentsService.php:1449
-#: plugins/baser-core/src/Service/PermissionsService.php:600
-#: plugins/baser-core/src/Service/PluginsService.php:561
-#: plugins/bc-blog/src/Controller/Admin/BlogCategoriesController.php:159
-#: plugins/bc-blog/src/Controller/Admin/BlogCommentsController.php:93
-#: plugins/bc-blog/src/Controller/Admin/BlogCommentsController.php:123
-#: plugins/bc-blog/src/Controller/Admin/BlogCommentsController.php:153
-#: plugins/bc-blog/src/Controller/Admin/BlogPostsController.php:190
-#: plugins/bc-blog/src/Controller/Admin/BlogPostsController.php:246
-#: plugins/bc-blog/src/Controller/Admin/BlogPostsController.php:276
-#: plugins/bc-blog/src/Controller/Admin/BlogPostsController.php:301
-#: plugins/bc-blog/src/Controller/Admin/BlogPostsController.php:326
-#: plugins/bc-blog/src/Controller/Admin/BlogTagsController.php:163
-#: plugins/bc-blog/src/Controller/Api/BlogCategoriesController.php:59
-#: plugins/bc-blog/src/Controller/Api/BlogCategoriesController.php:87
-#: plugins/bc-blog/src/Controller/Api/BlogCategoriesController.php:117
-#: plugins/bc-blog/src/Controller/Api/BlogCategoriesController.php:147
-#: plugins/bc-blog/src/Controller/Api/BlogCategoriesController.php:178
-#: plugins/bc-blog/src/Controller/Api/BlogCategoriesController.php:215
-#: plugins/bc-blog/src/Controller/Api/BlogCategoriesController.php:245
-#: plugins/bc-blog/src/Controller/Api/BlogCategoriesController.php:251
-#: plugins/bc-blog/src/Controller/Api/BlogCommentsController.php:67
-#: plugins/bc-blog/src/Controller/Api/BlogCommentsController.php:98
-#: plugins/bc-blog/src/Controller/Api/BlogCommentsController.php:147
-#: plugins/bc-blog/src/Controller/Api/BlogCommentsController.php:182
-#: plugins/bc-blog/src/Controller/Api/BlogContentsController.php:64
-#: plugins/bc-blog/src/Controller/Api/BlogContentsController.php:109
-#: plugins/bc-blog/src/Controller/Api/BlogContentsController.php:145
-#: plugins/bc-blog/src/Controller/Api/BlogContentsController.php:178
-#: plugins/bc-blog/src/Controller/Api/BlogContentsController.php:181
-#: plugins/bc-blog/src/Controller/Api/BlogContentsController.php:216
-#: plugins/bc-blog/src/Controller/Api/BlogPostsController.php:93
-#: plugins/bc-blog/src/Controller/Api/BlogPostsController.php:127
-#: plugins/bc-blog/src/Controller/Api/BlogPostsController.php:167
-#: plugins/bc-blog/src/Controller/Api/BlogPostsController.php:203
-#: plugins/bc-blog/src/Controller/Api/BlogPostsController.php:233
-#: plugins/bc-blog/src/Controller/Api/BlogPostsController.php:240
-#: plugins/bc-blog/src/Controller/Api/BlogPostsController.php:266
-#: plugins/bc-blog/src/Controller/Api/BlogPostsController.php:273
-#: plugins/bc-blog/src/Controller/Api/BlogPostsController.php:306
-#: plugins/bc-blog/src/Controller/Api/BlogPostsController.php:356
-#: plugins/bc-blog/src/Controller/Api/BlogTagsController.php:66
-#: plugins/bc-blog/src/Controller/Api/BlogTagsController.php:100
-#: plugins/bc-blog/src/Controller/Api/BlogTagsController.php:135
-#: plugins/bc-blog/src/Controller/Api/BlogTagsController.php:167
-#: plugins/bc-blog/src/Controller/Api/BlogTagsController.php:214
-#: plugins/bc-blog/src/Controller/BlogController.php:401
-#: plugins/bc-blog/src/Service/BlogCategoriesService.php:256
-#: plugins/bc-blog/src/Service/BlogCommentsService.php:328
-#: plugins/bc-blog/src/Service/BlogPostsService.php:710
-#: plugins/bc-blog/src/Service/BlogTagsService.php:230
-#: plugins/bc-content-link/src/Controller/Api/ContentLinksController.php:85
-#: plugins/bc-content-link/src/Controller/Api/ContentLinksController.php:140
-#: plugins/bc-content-link/src/Controller/Api/ContentLinksController.php:181
-#: plugins/bc-content-link/src/Controller/Api/ContentLinksController.php:188
-#: plugins/bc-content-link/src/Controller/Api/ContentLinksController.php:234
-#: plugins/bc-custom-content/src/Controller/Admin/CustomContentsController.php:78
-#: plugins/bc-custom-content/src/Controller/Admin/CustomEntriesController.php:118
-#: plugins/bc-custom-content/src/Controller/Admin/CustomEntriesController.php:147
-#: plugins/bc-custom-content/src/Controller/Admin/CustomEntriesController.php:174
-#: plugins/bc-custom-content/src/Controller/Admin/CustomEntriesController.php:196
-#: plugins/bc-custom-content/src/Controller/Admin/CustomEntriesController.php:222
-#: plugins/bc-custom-content/src/Controller/Admin/CustomFieldsController.php:53
-#: plugins/bc-custom-content/src/Controller/Admin/CustomFieldsController.php:80
-#: plugins/bc-custom-content/src/Controller/Admin/CustomFieldsController.php:104
-#: plugins/bc-custom-content/src/Controller/Admin/CustomTablesController.php:53
-#: plugins/bc-custom-content/src/Controller/Admin/CustomTablesController.php:81
-#: plugins/bc-custom-content/src/Controller/Admin/CustomTablesController.php:103
-#: plugins/bc-custom-content/src/Controller/Api/CustomContentsController.php:64
-#: plugins/bc-custom-content/src/Controller/Api/CustomContentsController.php:95
-#: plugins/bc-custom-content/src/Controller/Api/CustomContentsController.php:138
-#: plugins/bc-custom-content/src/Controller/Api/CustomContentsController.php:178
-#: plugins/bc-custom-content/src/Controller/Api/CustomEntriesController.php:62
-#: plugins/bc-custom-content/src/Controller/Api/CustomEntriesController.php:100
-#: plugins/bc-custom-content/src/Controller/Api/CustomFieldsController.php:96
-#: plugins/bc-custom-content/src/Controller/Api/CustomFieldsController.php:133
-#: plugins/bc-custom-content/src/Controller/Api/CustomFieldsController.php:166
-#: plugins/bc-custom-content/src/Controller/Api/CustomLinksController.php:110
-#: plugins/bc-custom-content/src/Controller/Api/CustomTablesController.php:67
-#: plugins/bc-custom-content/src/Controller/Api/CustomTablesController.php:98
-#: plugins/bc-custom-content/src/Controller/Api/CustomTablesController.php:131
-#: plugins/bc-custom-content/src/Controller/Api/CustomTablesController.php:164
-#: plugins/bc-custom-content/src/Controller/Api/CustomTablesController.php:171
-#: plugins/bc-editor-template/src/Controller/Admin/EditorTemplatesController.php:72
-#: plugins/bc-editor-template/src/Controller/Admin/EditorTemplatesController.php:107
-#: plugins/bc-editor-template/src/Controller/Admin/EditorTemplatesController.php:135
-#: plugins/bc-editor-template/src/Controller/Api/EditorTemplatesController.php:69
-#: plugins/bc-editor-template/src/Controller/Api/EditorTemplatesController.php:100
-#: plugins/bc-editor-template/src/Controller/Api/EditorTemplatesController.php:136
-#: plugins/bc-editor-template/src/Controller/Api/EditorTemplatesController.php:169
-#: plugins/bc-favorite/src/Controller/Api/FavoritesController.php:47
-#: plugins/bc-favorite/src/Controller/Api/FavoritesController.php:92
-#: plugins/bc-favorite/src/Controller/Api/FavoritesController.php:125
-#: plugins/bc-favorite/src/Controller/Api/FavoritesController.php:156
-#: plugins/bc-favorite/src/Controller/Api/FavoritesController.php:185
-#: plugins/bc-favorite/src/Controller/Api/FavoritesController.php:211
-#: plugins/bc-favorite/src/Controller/Api/FavoritesController.php:233
-#: plugins/bc-mail/src/Controller/Admin/MailContentsController.php:75
-#: plugins/bc-mail/src/Controller/Admin/MailFieldsController.php:159
-#: plugins/bc-mail/src/Controller/Admin/MailFieldsController.php:194
-#: plugins/bc-mail/src/Controller/Admin/MailFieldsController.php:221
-#: plugins/bc-mail/src/Controller/Admin/MailFieldsController.php:224
-#: plugins/bc-mail/src/Controller/Admin/MailFieldsController.php:246
-#: plugins/bc-mail/src/Controller/Admin/MailFieldsController.php:249
-#: plugins/bc-mail/src/Controller/Admin/MailFieldsController.php:271
-#: plugins/bc-mail/src/Controller/Admin/MailFieldsController.php:293
-#: plugins/bc-mail/src/Controller/Admin/MailMessagesController.php:146
-#: plugins/bc-mail/src/Controller/Api/MailContentsController.php:90
-#: plugins/bc-mail/src/Controller/Api/MailContentsController.php:134
-#: plugins/bc-mail/src/Controller/Api/MailContentsController.php:202
-#: plugins/bc-mail/src/Controller/Api/MailContentsController.php:244
-#: plugins/bc-mail/src/Controller/Api/MailFieldsController.php:67
-#: plugins/bc-mail/src/Controller/Api/MailFieldsController.php:100
-#: plugins/bc-mail/src/Controller/Api/MailFieldsController.php:130
-#: plugins/bc-mail/src/Controller/Api/MailFieldsController.php:180
-#: plugins/bc-mail/src/Controller/Api/MailFieldsController.php:213
-#: plugins/bc-mail/src/Controller/Api/MailFieldsController.php:286
-#: plugins/bc-mail/src/Controller/Api/MailFieldsController.php:324
-#: plugins/bc-mail/src/Controller/Api/MailMessagesController.php:50
-#: plugins/bc-mail/src/Controller/Api/MailMessagesController.php:82
-#: plugins/bc-mail/src/Controller/Api/MailMessagesController.php:129
-#: plugins/bc-mail/src/Controller/Api/MailMessagesController.php:180
-#: plugins/bc-mail/src/Controller/Api/MailMessagesController.php:224
-#: plugins/bc-mail/src/Controller/Api/MailMessagesController.php:272
-#: plugins/bc-mail/src/Service/MailFieldsService.php:275
-#: plugins/bc-mail/src/Service/MailMessagesService.php:180
-#: plugins/bc-search-index/src/Controller/Admin/SearchIndexesController.php:109
-#: plugins/bc-search-index/src/Controller/Api/SearchIndexesController.php:78
-#: plugins/bc-search-index/src/Controller/Api/SearchIndexesController.php:118
-#: plugins/bc-search-index/src/Controller/Api/SearchIndexesController.php:145
-#: plugins/bc-search-index/src/Controller/Api/SearchIndexesController.php:216
-#: plugins/bc-search-index/src/Controller/Api/SearchIndexesController.php:222
-#: plugins/bc-search-index/src/Service/SearchIndexesService.php:338
-#: plugins/bc-theme-config/src/Controller/Admin/ThemeConfigsController.php:49
-#: plugins/bc-theme-config/src/Controller/Api/ThemeConfigsController.php:67
-#: plugins/bc-theme-file/src/Controller/Api/ThemeFoldersController.php:72
-#: plugins/bc-theme-file/src/Controller/Api/ThemeFoldersController.php:98
-#: plugins/bc-theme-file/src/Controller/Api/ThemeFoldersController.php:134
-#: plugins/bc-theme-file/src/Controller/Api/ThemeFoldersController.php:171
-#: plugins/bc-theme-file/src/Controller/Api/ThemeFoldersController.php:206
-#: plugins/bc-theme-file/src/Controller/Api/ThemeFoldersController.php:241
-#: plugins/bc-theme-file/src/Controller/Api/ThemeFoldersController.php:278
-#: plugins/bc-uploader/src/Controller/Admin/UploaderCategoriesController.php:62
-#: plugins/bc-uploader/src/Controller/Admin/UploaderCategoriesController.php:90
-#: plugins/bc-uploader/src/Controller/Admin/UploaderCategoriesController.php:112
-#: plugins/bc-uploader/src/Controller/Admin/UploaderCategoriesController.php:115
-#: plugins/bc-uploader/src/Controller/Admin/UploaderCategoriesController.php:135
-#: plugins/bc-uploader/src/Controller/Admin/UploaderCategoriesController.php:138
-#: plugins/bc-uploader/src/Controller/Admin/UploaderFilesController.php:173
-#: plugins/bc-uploader/src/Controller/Admin/UploaderFilesController.php:200
-#: plugins/bc-uploader/src/Controller/Api/UploaderCategoriesController.php:69
-#: plugins/bc-uploader/src/Controller/Api/UploaderCategoriesController.php:152
-#: plugins/bc-uploader/src/Controller/Api/UploaderConfigsController.php:68
-#: plugins/bc-uploader/src/Controller/Api/UploaderFilesController.php:69
-#: plugins/bc-uploader/src/Controller/Api/UploaderFilesController.php:106
-#: plugins/bc-uploader/src/Controller/Api/UploaderFilesController.php:139
-#: plugins/bc-uploader/src/Service/UploaderCategoriesService.php:146
-#: plugins/bc-widget-area/src/Controller/Admin/WidgetAreasController.php:66
-#: plugins/bc-widget-area/src/Controller/Admin/WidgetAreasController.php:103
-#: plugins/bc-widget-area/src/Controller/Admin/WidgetAreasController.php:106
-#: plugins/bc-widget-area/src/Controller/Api/WidgetAreasController.php:87
-#: plugins/bc-widget-area/src/Controller/Api/WidgetAreasController.php:125
-#: plugins/bc-widget-area/src/Controller/Api/WidgetAreasController.php:160
-#: plugins/bc-widget-area/src/Controller/Api/WidgetAreasController.php:206
-#: plugins/bc-widget-area/src/Controller/Api/WidgetAreasController.php:237
-#: plugins/bc-widget-area/src/Controller/Api/WidgetAreasController.php:273
-#: plugins/bc-widget-area/src/Controller/Api/WidgetAreasController.php:304
-#: plugins/bc-widget-area/src/Controller/Api/WidgetAreasController.php:337
-#: plugins/bc-widget-area/src/Controller/Api/WidgetAreasController.php:367
-#: plugins/bc-widget-area/src/Service/WidgetAreasService.php:149
-msgid "データベース処理中にエラーが発生しました。"
-msgstr "An error has occured when processing database."
-
 #: plugins/baser-core/src/Controller/Admin/PermissionGroupsController.php:96
+#: plugins/baser-core/src/Controller/Api/PermissionGroupsController.php:179
 #, fuzzy
 #| msgid "メールフォーム「%s」を更新しました。"
 msgid "ルールグループ「{0}」を更新しました。"
@@ -1594,12 +1555,14 @@ msgid "アクセスグループ「{0}」を削除しました。"
 msgstr "Deleted Category \"%s\"."
 
 #: plugins/baser-core/src/Controller/Admin/PermissionGroupsController.php:140
+#: plugins/baser-core/src/Controller/Api/PermissionGroupsController.php:216
 #, fuzzy
 #| msgid "データベースの構築に成功しました。"
 msgid "アクセスルールの再構築に成功しました。"
 msgstr "Succeeded constructing the database."
 
 #: plugins/baser-core/src/Controller/Admin/PermissionGroupsController.php:142
+#: plugins/baser-core/src/Controller/Api/PermissionGroupsController.php:218
 #, fuzzy
 #| msgid "コアテーブルの構築に失敗しました。"
 msgid "アクセスルールの再構築に失敗しました。"
@@ -1702,13 +1665,13 @@ msgid "プラグインの削除に失敗しました。"
 msgstr "Failed enabling Plugin"
 
 #: plugins/baser-core/src/Controller/Admin/PluginsController.php:213
-#: plugins/baser-core/src/Controller/Api/PluginsController.php:258
+#: plugins/baser-core/src/Controller/Api/PluginsController.php:257
 msgid "新規プラグイン「%s」を追加しました。"
 msgstr "Added the new Plugin “%s”."
 
 #: plugins/baser-core/src/Controller/Admin/PluginsController.php:216
 #: plugins/baser-core/src/Controller/Admin/ThemesController.php:59
-#: plugins/baser-core/src/Model/Table/ContentsTable.php:175
+#: plugins/baser-core/src/Model/Table/ContentsTable.php:185
 #: plugins/bc-mail/src/Model/Table/MailMessagesTable.php:277
 msgid "ファイルのアップロードに失敗しました。"
 msgstr "Failed uploading the file."
@@ -1871,53 +1834,53 @@ msgstr "Deleted Mail Field “%s”"
 msgid "ユーザーグループ「{0}」をコピーしました。"
 msgstr "Please select User Group."
 
-#: plugins/baser-core/src/Controller/Admin/UsersController.php:75
-#: plugins/baser-core/src/Controller/Api/UsersController.php:65
-#: plugins/baser-core/src/Controller/UsersController.php:68
+#: plugins/baser-core/src/Controller/Admin/UsersController.php:89
+#: plugins/baser-core/src/Controller/Api/UsersController.php:76
+#: plugins/baser-core/src/Controller/UsersController.php:82
 #, fuzzy
 #| msgid "ようこそ、%s さん。"
 msgid "ようこそ、{0}さん。"
 msgstr "Welcome, %s."
 
-#: plugins/baser-core/src/Controller/Admin/UsersController.php:78
-#: plugins/baser-core/src/Controller/UsersController.php:71
+#: plugins/baser-core/src/Controller/Admin/UsersController.php:92
+#: plugins/baser-core/src/Controller/UsersController.php:85
 #, fuzzy
 #| msgid "アカウント名、パスワードが間違っています。"
 msgid "Eメール、または、パスワードが間違っています。"
 msgstr "Account name or password is wrong."
 
-#: plugins/baser-core/src/Controller/Admin/UsersController.php:109
+#: plugins/baser-core/src/Controller/Admin/UsersController.php:123
 #, fuzzy
 #| msgid "プラグインの有効化に失敗しました。"
 msgid "既に代理ログイン中のため失敗しました。"
 msgstr "Failed enabling Plugin"
 
-#: plugins/baser-core/src/Controller/Admin/UsersController.php:129
+#: plugins/baser-core/src/Controller/Admin/UsersController.php:143
 msgid "元のユーザーに戻りました。"
 msgstr "Back to the previous User."
 
-#: plugins/baser-core/src/Controller/Admin/UsersController.php:151
-#: plugins/baser-core/src/Controller/UsersController.php:95
+#: plugins/baser-core/src/Controller/Admin/UsersController.php:165
+#: plugins/baser-core/src/Controller/UsersController.php:109
 msgid "ログアウトしました"
 msgstr "Logged-out"
 
-#: plugins/baser-core/src/Controller/Admin/UsersController.php:209
-#: plugins/baser-core/src/Controller/Api/UsersController.php:145
+#: plugins/baser-core/src/Controller/Admin/UsersController.php:223
+#: plugins/baser-core/src/Controller/Api/UsersController.php:155
 #, fuzzy
 #| msgid "リンク「%s」を追加しました。"
 msgid "ユーザー「{0}」を追加しました。"
 msgstr "Added Link \"%s\"."
 
-#: plugins/baser-core/src/Controller/Admin/UsersController.php:249
-#: plugins/baser-core/src/Controller/Api/UsersController.php:177
+#: plugins/baser-core/src/Controller/Admin/UsersController.php:263
+#: plugins/baser-core/src/Controller/Api/UsersController.php:187
 #, fuzzy
 #| msgid "リンク「%s」を更新しました。"
 msgid "ユーザー「{0}」を更新しました。"
 msgstr "Updated Link \"%s\"."
 
-#: plugins/baser-core/src/Controller/Admin/UsersController.php:284
+#: plugins/baser-core/src/Controller/Admin/UsersController.php:298
 #: plugins/baser-core/src/Controller/Api/UserGroupsController.php:152
-#: plugins/baser-core/src/Controller/Api/UsersController.php:208
+#: plugins/baser-core/src/Controller/Api/UsersController.php:218
 #, fuzzy
 #| msgid "エラーログを削除しました。"
 msgid "ユーザー: {0} を削除しました。"
@@ -2141,16 +2104,16 @@ msgstr "Added Category \"%s\"."
 
 #: plugins/baser-core/src/Controller/Api/ContentsController.php:577
 #: plugins/baser-core/src/Controller/Api/PermissionsController.php:245
-#: plugins/baser-core/src/Controller/Api/PluginsController.php:351
+#: plugins/baser-core/src/Controller/Api/PluginsController.php:350
 #: plugins/bc-blog/src/Controller/Api/BlogCategoriesController.php:57
 #: plugins/bc-blog/src/Controller/Api/BlogCommentsController.php:144
 #: plugins/bc-blog/src/Controller/Api/BlogPostsController.php:353
 #: plugins/bc-blog/src/Controller/Api/BlogTagsController.php:211
 #: plugins/bc-mail/src/Controller/Api/MailFieldsController.php:64
-#: plugins/bc-mail/src/Controller/Api/MailMessagesController.php:269
+#: plugins/bc-mail/src/Controller/Api/MailMessagesController.php:272
 #: plugins/bc-search-index/src/Controller/Api/SearchIndexesController.php:115
 #: plugins/bc-theme-file/src/Controller/Api/ThemeFoldersController.php:69
-#: plugins/bc-uploader/src/Controller/Api/UploaderCategoriesController.php:147
+#: plugins/bc-uploader/src/Controller/Api/UploaderCategoriesController.php:221
 #: plugins/bc-widget-area/src/Controller/Api/WidgetAreasController.php:203
 #, fuzzy
 #| msgid "処理が完了しました。"
@@ -2185,6 +2148,9 @@ msgstr "Updated Static Page “%s”."
 msgid "固定ページのコピー「%s」を追加しました。"
 msgstr "Added Static Page’s copy “%s”."
 
+#: plugins/baser-core/src/Controller/Api/PermissionGroupsController.php:44
+#: plugins/baser-core/src/Controller/Api/PermissionGroupsController.php:151
+#: plugins/baser-core/src/Controller/Api/PermissionGroupsController.php:186
 #: plugins/baser-core/src/Controller/Api/PermissionsController.php:45
 #: plugins/baser-core/src/Controller/Api/PermissionsController.php:124
 #: plugins/baser-core/src/Controller/Api/PermissionsController.php:163
@@ -2197,7 +2163,7 @@ msgstr "Added Static Page’s copy “%s”."
 #: plugins/baser-core/src/Controller/Api/UserGroupsController.php:123
 #: plugins/baser-core/src/Controller/Api/UserGroupsController.php:155
 #: plugins/baser-core/src/Controller/Api/UserGroupsController.php:208
-#: plugins/baser-core/src/Controller/Api/UsersController.php:120
+#: plugins/baser-core/src/Controller/Api/UsersController.php:130
 #: plugins/bc-blog/src/Controller/Api/BlogCategoriesController.php:85
 #: plugins/bc-blog/src/Controller/Api/BlogCategoriesController.php:115
 #: plugins/bc-blog/src/Controller/Api/BlogCategoriesController.php:145
@@ -2223,9 +2189,13 @@ msgstr "Added Static Page’s copy “%s”."
 #: plugins/bc-custom-content/src/Controller/Api/CustomContentsController.php:62
 #: plugins/bc-custom-content/src/Controller/Api/CustomContentsController.php:136
 #: plugins/bc-custom-content/src/Controller/Api/CustomContentsController.php:175
-#: plugins/bc-custom-content/src/Controller/Api/CustomEntriesController.php:59
+#: plugins/bc-custom-content/src/Controller/Api/CustomEntriesController.php:64
+#: plugins/bc-custom-content/src/Controller/Api/CustomEntriesController.php:184
+#: plugins/bc-custom-content/src/Controller/Api/CustomEntriesController.php:222
 #: plugins/bc-custom-content/src/Controller/Api/CustomFieldsController.php:131
 #: plugins/bc-custom-content/src/Controller/Api/CustomFieldsController.php:164
+#: plugins/bc-custom-content/src/Controller/Api/CustomLinksController.php:131
+#: plugins/bc-custom-content/src/Controller/Api/CustomLinksController.php:171
 #: plugins/bc-custom-content/src/Controller/Api/CustomTablesController.php:65
 #: plugins/bc-custom-content/src/Controller/Api/CustomTablesController.php:168
 #: plugins/bc-editor-template/src/Controller/Api/EditorTemplatesController.php:67
@@ -2240,14 +2210,16 @@ msgstr "Added Static Page’s copy “%s”."
 #: plugins/bc-mail/src/Controller/Api/MailFieldsController.php:128
 #: plugins/bc-mail/src/Controller/Api/MailFieldsController.php:178
 #: plugins/bc-mail/src/Controller/Api/MailFieldsController.php:252
-#: plugins/bc-mail/src/Controller/Api/MailMessagesController.php:48
-#: plugins/bc-mail/src/Controller/Api/MailMessagesController.php:80
-#: plugins/bc-mail/src/Controller/Api/MailMessagesController.php:126
-#: plugins/bc-mail/src/Controller/Api/MailMessagesController.php:177
-#: plugins/bc-mail/src/Controller/Api/MailMessagesController.php:221
+#: plugins/bc-mail/src/Controller/Api/MailMessagesController.php:51
+#: plugins/bc-mail/src/Controller/Api/MailMessagesController.php:83
+#: plugins/bc-mail/src/Controller/Api/MailMessagesController.php:129
+#: plugins/bc-mail/src/Controller/Api/MailMessagesController.php:180
+#: plugins/bc-mail/src/Controller/Api/MailMessagesController.php:224
 #: plugins/bc-search-index/src/Controller/Api/SearchIndexesController.php:76
 #: plugins/bc-search-index/src/Controller/Api/SearchIndexesController.php:220
-#: plugins/bc-uploader/src/Controller/Api/UploaderCategoriesController.php:150
+#: plugins/bc-uploader/src/Controller/Api/UploaderCategoriesController.php:103
+#: plugins/bc-uploader/src/Controller/Api/UploaderCategoriesController.php:140
+#: plugins/bc-uploader/src/Controller/Api/UploaderCategoriesController.php:224
 #: plugins/bc-uploader/src/Controller/Api/UploaderFilesController.php:103
 #: plugins/bc-uploader/src/Controller/Api/UploaderFilesController.php:136
 #: plugins/bc-widget-area/src/Controller/Api/WidgetAreasController.php:122
@@ -2261,6 +2233,18 @@ msgstr "Added Static Page’s copy “%s”."
 #| msgid "データが見つかりませんでした。"
 msgid "データが見つかりません。"
 msgstr "Couldn't find the data."
+
+#: plugins/baser-core/src/Controller/Api/PermissionGroupsController.php:70
+#, fuzzy
+#| msgid "メッセージを指定してください。"
+msgid "パラメーターに user_group_id を指定してください。"
+msgstr "Please specify message."
+
+#: plugins/baser-core/src/Controller/Api/PermissionGroupsController.php:148
+#, fuzzy
+#| msgid "メールフィールド「%s」を削除しました。"
+msgid "ルールグループ「{0}」を削除しました。"
+msgstr "Deleted Mail Field “%s”"
 
 #: plugins/baser-core/src/Controller/Api/PermissionsController.php:88
 #, fuzzy
@@ -2293,7 +2277,7 @@ msgid "アクセスルール 「%s」 を %s しました。"
 msgstr "Added Category \"%s\"."
 
 #: plugins/baser-core/src/Controller/Api/PermissionsController.php:276
-#: plugins/baser-core/src/Controller/Api/PluginsController.php:291
+#: plugins/baser-core/src/Controller/Api/PluginsController.php:290
 #: plugins/bc-mail/src/Controller/Api/MailFieldsController.php:94
 msgid "一度リロードしてから再実行してみてください。"
 msgstr "Please re-run it after reloading."
@@ -2321,13 +2305,13 @@ msgstr "Disabled Plugin “%s”."
 msgid "プラグインの有効化に失敗しました。"
 msgstr "Failed enabling Plugin"
 
-#: plugins/baser-core/src/Controller/Api/PluginsController.php:293
+#: plugins/baser-core/src/Controller/Api/PluginsController.php:292
 #, fuzzy
 #| msgid "サブサイト「%s」を更新しました。"
 msgid "プラグイン「%s」の並び替えを更新しました。"
 msgstr "Updated Subsite “%s”."
 
-#: plugins/baser-core/src/Controller/Api/PluginsController.php:347
+#: plugins/baser-core/src/Controller/Api/PluginsController.php:346
 #, fuzzy
 #| msgid "プラグイン「%s」 を 無効化しました。"
 msgid "プラグイン 「%s」 を %s しました。"
@@ -2476,16 +2460,40 @@ msgstr "Use of invalid value to ID."
 #: plugins/baser-core/src/Model/Table/ContentsTable.php:141
 #, fuzzy
 #| msgid "データが存在しません。"
-msgid "nameフィールドが存在しません。"
+msgid "content[site_id] フィールドが存在しません。"
 msgstr "Data does not exist."
 
 #: plugins/baser-core/src/Model/Table/ContentsTable.php:142
+#, fuzzy
+#| msgid "Webサイト名を入力してください。"
+msgid "サイトIDを入力してください。"
+msgstr "Please enter Website Name."
+
+#: plugins/baser-core/src/Model/Table/ContentsTable.php:146
+#, fuzzy
+#| msgid "データが存在しません。"
+msgid "content[parent_id] フィールドが存在しません。"
+msgstr "Data does not exist."
+
+#: plugins/baser-core/src/Model/Table/ContentsTable.php:147
+#, fuzzy
+#| msgid "フィード設定名を入力してください。"
+msgid "親フォルダを入力してください。"
+msgstr "Please enter Feed Settings Name."
+
+#: plugins/baser-core/src/Model/Table/ContentsTable.php:151
+#, fuzzy
+#| msgid "データが存在しません。"
+msgid "content[name] フィールドが存在しません。"
+msgstr "Data does not exist."
+
+#: plugins/baser-core/src/Model/Table/ContentsTable.php:152
 #, fuzzy
 #| msgid "お名前は50文字以内で入力してください。"
 msgid "名前は230文字以内で入力してください。"
 msgstr "Please enter Name within 50 characters."
 
-#: plugins/baser-core/src/Model/Table/ContentsTable.php:147
+#: plugins/baser-core/src/Model/Table/ContentsTable.php:157
 msgid ""
 "URLはスペース、全角スペース及び、指定の記号(\\'|`^\"(){}[];/?:@&=+$,%<>#!)だ"
 "けの名前は付けられません。"
@@ -2493,7 +2501,7 @@ msgstr ""
 "URL can't named only with half-size spaces, full-size spaces, and specific "
 "signs (\\'|`^\"(){}[];/?:@&=+$,%<>#!)."
 
-#: plugins/baser-core/src/Model/Table/ContentsTable.php:153
+#: plugins/baser-core/src/Model/Table/ContentsTable.php:163
 msgid ""
 "連携しているサブサイトでスラッグが重複するコンテンツが存在します。重複するコ"
 "ンテンツのスラッグ名を先に変更してください。"
@@ -2501,8 +2509,13 @@ msgstr ""
 "There is a Content with duplicated Slug on related Subsite. Please rename "
 "duplicated Content Slug's name first."
 
-#: plugins/baser-core/src/Model/Table/ContentsTable.php:158
-#: plugins/baser-core/src/Model/Table/ContentsTable.php:159
+#: plugins/baser-core/src/Model/Table/ContentsTable.php:168
+#, fuzzy
+#| msgid "データが存在しません。"
+msgid "content[title] フィールドが存在しません。"
+msgstr "Data does not exist."
+
+#: plugins/baser-core/src/Model/Table/ContentsTable.php:169
 #: plugins/bc-blog/src/Model/Table/BlogPostsTable.php:142
 #: plugins/bc-blog/src/Model/Table/BlogPostsTable.php:143
 #: plugins/bc-custom-content/src/Model/Table/CustomLinksTable.php:83
@@ -2510,15 +2523,15 @@ msgstr ""
 msgid "タイトルを入力してください。"
 msgstr "Please enter title."
 
-#: plugins/baser-core/src/Model/Table/ContentsTable.php:160
+#: plugins/baser-core/src/Model/Table/ContentsTable.php:170
 msgid "タイトルは230文字以内で入力してください。"
 msgstr "Enter title within 230 characters."
 
-#: plugins/baser-core/src/Model/Table/ContentsTable.php:161
+#: plugins/baser-core/src/Model/Table/ContentsTable.php:171
 msgid "タイトルはタブを含む名前は付けられません。"
 msgstr ""
 
-#: plugins/baser-core/src/Model/Table/ContentsTable.php:166
+#: plugins/baser-core/src/Model/Table/ContentsTable.php:176
 msgid ""
 "タイトルはスペース、全角スペース及び、指定の記号(\\'|`^\"(){}[];/?:@&=+$,"
 "%<>#!)だけの名前は付けられません。"
@@ -2526,39 +2539,39 @@ msgstr ""
 "Title can't named only with half-size spaces, full-size spaces, and specific "
 "signs (\\'|`^\"(){}[];/?:@&=+$,%<>#!)."
 
-#: plugins/baser-core/src/Model/Table/ContentsTable.php:185
+#: plugins/baser-core/src/Model/Table/ContentsTable.php:195
 msgid "公開開始日に不正な文字列が入っています。"
 msgstr "There are invalid strings in Public Start Date."
 
-#: plugins/baser-core/src/Model/Table/ContentsTable.php:196
+#: plugins/baser-core/src/Model/Table/ContentsTable.php:206
 msgid "公開終了日に不正な文字列が入っています。"
 msgstr "There are invalid strings in Public End Date."
 
-#: plugins/baser-core/src/Model/Table/ContentsTable.php:203
+#: plugins/baser-core/src/Model/Table/ContentsTable.php:213
 msgid "公開終了日は、公開開始日より新しい日付で入力してください。"
 msgstr "Please enter Public End Date with date newer than Public Start Date."
 
-#: plugins/baser-core/src/Model/Table/ContentsTable.php:208
+#: plugins/baser-core/src/Model/Table/ContentsTable.php:218
 #, fuzzy
 #| msgid "記事がありません。"
 msgid "作成日がありません。"
 msgstr "Article not found."
 
-#: plugins/baser-core/src/Model/Table/ContentsTable.php:209
+#: plugins/baser-core/src/Model/Table/ContentsTable.php:219
 msgid "作成日が空になってます。"
 msgstr ""
 
-#: plugins/baser-core/src/Model/Table/ContentsTable.php:214
+#: plugins/baser-core/src/Model/Table/ContentsTable.php:224
 #, fuzzy
 #| msgid "記事がありません。"
 msgid "作成日が正しくありません。"
 msgstr "Article not found."
 
-#: plugins/baser-core/src/Model/Table/ContentsTable.php:219
+#: plugins/baser-core/src/Model/Table/ContentsTable.php:229
 msgid "更新日が空になってます。"
 msgstr ""
 
-#: plugins/baser-core/src/Model/Table/ContentsTable.php:224
+#: plugins/baser-core/src/Model/Table/ContentsTable.php:234
 #, fuzzy
 #| msgid "変更できるテーマがありません。"
 msgid "更新日が正しくありません。"
@@ -3071,14 +3084,14 @@ msgstr "Site"
 msgid "メインサイトに従う"
 msgstr "Main Site"
 
-#: plugins/baser-core/src/Service/BcDatabaseService.php:315
-#: plugins/baser-core/src/Service/BcDatabaseService.php:331
+#: plugins/baser-core/src/Service/BcDatabaseService.php:317
+#: plugins/baser-core/src/Service/BcDatabaseService.php:333
 #, fuzzy
 #| msgid "%s の初期データのロードに失敗しました。"
 msgid "%s %s の初期データのロードに失敗しました。"
 msgstr "Failed loading of %s’s initial data."
 
-#: plugins/baser-core/src/Service/BcDatabaseService.php:337
+#: plugins/baser-core/src/Service/BcDatabaseService.php:339
 #, fuzzy
 #| msgid ""
 #| "初期データの読み込みに失敗しましたので baserCMSコアの初期データを読み込み"
@@ -3090,7 +3103,7 @@ msgstr ""
 "Loaded baserCMS Core’s initial data because loading of initial data has "
 "failed."
 
-#: plugins/baser-core/src/Service/BcDatabaseService.php:340
+#: plugins/baser-core/src/Service/BcDatabaseService.php:342
 #, fuzzy
 #| msgid ""
 #| "初期データの読み込みに失敗しました。データが不完全な状態です。正常に動作し"
@@ -3102,39 +3115,39 @@ msgstr ""
 "Failed loading of initial data. Data is incomplete. It might not run "
 "normally."
 
-#: plugins/baser-core/src/Service/BcDatabaseService.php:381
+#: plugins/baser-core/src/Service/BcDatabaseService.php:383
 msgid "%s の読み込みに失敗。"
 msgstr "Failed loading %s."
 
-#: plugins/baser-core/src/Service/BcDatabaseService.php:572
+#: plugins/baser-core/src/Service/BcDatabaseService.php:574
 msgid "users テーブルの初期化に失敗。"
 msgstr "Failed initializing users table."
 
-#: plugins/baser-core/src/Service/BcDatabaseService.php:595
+#: plugins/baser-core/src/Service/BcDatabaseService.php:597
 #: plugins/bc-installer/src/Service/InstallationsService.php:188
 msgid "システムデータの初期化に失敗しました。"
 msgstr "Failed system data's initialization."
 
-#: plugins/baser-core/src/Service/BcDatabaseService.php:617
+#: plugins/baser-core/src/Service/BcDatabaseService.php:619
 msgid "メールプラグインのメール受信用テーブルの生成に失敗しました。"
 msgstr "Failed creating Mail Plugin’s mail receiving table."
 
-#: plugins/baser-core/src/Service/BcDatabaseService.php:1325
+#: plugins/baser-core/src/Service/BcDatabaseService.php:1327
 msgid "データベースファイルに書き込み権限がありません。"
 msgstr "There is no write permission to database files."
 
-#: plugins/baser-core/src/Service/BcDatabaseService.php:1329
+#: plugins/baser-core/src/Service/BcDatabaseService.php:1331
 msgid "データベースの保存フォルダに書き込み権限がありません。"
 msgstr "There is no write permission to database's saving folder"
 
-#: plugins/baser-core/src/Service/BcDatabaseService.php:1336
+#: plugins/baser-core/src/Service/BcDatabaseService.php:1338
 #, fuzzy
 #| msgid ""
 #| "ドライバが見つかりません Driver is not defined.(MySQL|Postgres|SQLite|CSV)"
 msgid "ドライバが見つかりません Driver is not defined.(MySQL|Postgres|SQLite)"
 msgstr "Driver is not defined.(MySQL|Postgres|SQLite|CSV)"
 
-#: plugins/baser-core/src/Service/BcDatabaseService.php:1356
+#: plugins/baser-core/src/Service/BcDatabaseService.php:1358
 #, fuzzy
 #| msgid ""
 #| "データベースへの接続でエラーが発生しました。データベース設定を見直してくだ"
@@ -3147,7 +3160,7 @@ msgstr ""
 "Error has occurred when connecting to the database. Please re-check the "
 "database config.<br>It’s likely specified database is not on server."
 
-#: plugins/baser-core/src/Service/BcDatabaseService.php:1360
+#: plugins/baser-core/src/Service/BcDatabaseService.php:1362
 #, fuzzy
 #| msgid ""
 #| "データベースへの接続でエラーが発生しました。データベース設定を見直してくだ"
@@ -3160,7 +3173,7 @@ msgstr ""
 "Error has occurred when connecting to the database. Please re-check the "
 "database config.<br>It’s likely specified database is not on server."
 
-#: plugins/baser-core/src/Service/BcDatabaseService.php:1372
+#: plugins/baser-core/src/Service/BcDatabaseService.php:1374
 msgid ""
 "データベースへの接続でエラーが発生しました。データベース設定を見直してくださ"
 "い。"
@@ -3168,25 +3181,25 @@ msgstr ""
 "Error has occurred connecting to the database. Please re-check the database "
 "config."
 
-#: plugins/baser-core/src/Service/BcDatabaseService.php:1381
-#: plugins/baser-core/src/Service/BcDatabaseService.php:1389
+#: plugins/baser-core/src/Service/BcDatabaseService.php:1383
+#: plugins/baser-core/src/Service/BcDatabaseService.php:1391
 msgid "データベースのバージョンが %s 以上か確認してください。"
 msgstr "Please confirm the database version is %s or newer."
 
-#: plugins/baser-core/src/Service/BcDatabaseService.php:1400
+#: plugins/baser-core/src/Service/BcDatabaseService.php:1402
 #, fuzzy
 #| msgid "データベースへの接続でエラーが発生しました。"
 msgid "データベースへの接続でエラーが発生しました。\n"
 msgstr "Error has occurred when connecting to the database."
 
-#: plugins/baser-core/src/Service/BcDatabaseService.php:1411
+#: plugins/baser-core/src/Service/BcDatabaseService.php:1413
 msgid ""
 "データベースへの接続に成功しましたが、プレフィックスが重複するテーブルが存在"
 "します。"
 msgstr ""
 "Succeeded connecting to the database, but duplicated prefix tables exist."
 
-#: plugins/baser-core/src/Service/ContentFoldersService.php:241
+#: plugins/baser-core/src/Service/ContentFoldersService.php:248
 #: plugins/baser-core/src/Service/PagesService.php:267
 msgid "親フォルダの設定に従う（%s）"
 msgstr "Follow Parent Folder’s settings (%s)"
@@ -3351,17 +3364,23 @@ msgid "初期データのバージョンが違うか、初期データの構造�
 msgstr ""
 "Initial data’s version is different, or initial data’s structure is broken."
 
-#: plugins/baser-core/src/Service/UsersService.php:134
-#: plugins/baser-core/src/Service/UsersService.php:163
-#: plugins/baser-core/src/Service/UsersService.php:167
-#: plugins/baser-core/src/Service/UsersService.php:188
-#: plugins/baser-core/src/Service/UsersService.php:391
+#: plugins/baser-core/src/Service/UsersService.php:133
+#, fuzzy
+#| msgid "contentId を指定してください。"
+msgid "user_groups[_ids][] を指定してください。"
+msgstr "Please specify contentId."
+
+#: plugins/baser-core/src/Service/UsersService.php:137
+#: plugins/baser-core/src/Service/UsersService.php:166
+#: plugins/baser-core/src/Service/UsersService.php:170
+#: plugins/baser-core/src/Service/UsersService.php:191
+#: plugins/baser-core/src/Service/UsersService.php:394
 #, fuzzy
 #| msgid "削除中にエラーが発生しました。"
 msgid "特権エラーが発生しました。"
 msgstr "Error has occurred when deleting."
 
-#: plugins/baser-core/src/Service/UsersService.php:420
+#: plugins/baser-core/src/Service/UsersService.php:423
 #, fuzzy
 #| msgid "データが見つかりませんでした。"
 msgid "対象データが見つかりません。"
@@ -3445,7 +3464,7 @@ msgstr ""
 msgid "システム基本設定にて、Google Maps API キーを入力してください。"
 msgstr "Please enter username for database."
 
-#: plugins/baser-core/src/Utility/BcUtil.php:1793
+#: plugins/baser-core/src/Utility/BcUtil.php:1808
 msgid "リトライ回数は正の整数値で指定してください。"
 msgstr "Please specify retry number with positive integers."
 
@@ -7786,7 +7805,7 @@ msgstr "Edit Tag: %s"
 #| "このデータを本当に削除してもいいですか？\n"
 #| "このタグに関連する記事は削除されません。"
 msgid ""
-"%s を本当に削除してもいいですか？\n"
+"{0} を本当に削除してもいいですか？\n"
 "このタグに関連する記事は削除されません。"
 msgstr ""
 "Are you sure to delete this data?\n"
@@ -11797,11 +11816,11 @@ msgid ""
 "送信できるデータ量を超えています。合計で {0} 以内のデータを送信してください。"
 msgstr "Exceeding sendable data size. Please send data size within %s."
 
-#: plugins/bc-blog/src/View/Helper/BlogHelper.php:434
+#: plugins/bc-blog/src/View/Helper/BlogHelper.php:438
 msgid "≫ 続きを読む"
 msgstr "≫ Read More"
 
-#: plugins/bc-blog/src/View/Helper/BlogHelper.php:1590
+#: plugins/bc-blog/src/View/Helper/BlogHelper.php:1594
 msgid ""
 "$contentsName を省略時は、contentsTemplate オプションで、コンテンツテンプレー"
 "ト名を指定してください。"
@@ -12297,6 +12316,7 @@ msgid "フィールド「{0}」を更新しました"
 msgstr "Updated Feed \"%s\"."
 
 #: plugins/bc-custom-content/src/Controller/Admin/CustomFieldsController.php:101
+#: plugins/bc-custom-content/src/Controller/Api/CustomEntriesController.php:219
 #: plugins/bc-custom-content/src/Controller/Api/CustomFieldsController.php:161
 #, fuzzy
 #| msgid "フィード「%s」を削除しました。"
@@ -12334,30 +12354,48 @@ msgstr "Added Category \"%s\"."
 msgid "カスタムコンテンツ「{0}」を削除しました。"
 msgstr "Added Category \"%s\"."
 
-#: plugins/bc-custom-content/src/Controller/Api/CustomEntriesController.php:45
-#: plugins/bc-custom-content/src/Controller/Api/CustomEntriesController.php:86
+#: plugins/bc-custom-content/src/Controller/Api/CustomEntriesController.php:50
+#: plugins/bc-custom-content/src/Controller/Api/CustomEntriesController.php:95
+#: plugins/bc-custom-content/src/Controller/Api/CustomEntriesController.php:132
+#: plugins/bc-custom-content/src/Controller/Api/CustomEntriesController.php:171
+#: plugins/bc-custom-content/src/Controller/Api/CustomEntriesController.php:212
+#: plugins/bc-custom-content/src/Controller/Api/CustomEntriesController.php:248
 #, fuzzy
 #| msgid "メッセージを指定してください。"
 msgid "パラメーターに custom_table_id を指定してください。"
 msgstr "Please specify message."
 
+#: plugins/bc-custom-content/src/Controller/Api/CustomEntriesController.php:139
 #: plugins/bc-custom-content/src/Controller/Api/CustomFieldsController.php:90
 #, fuzzy
 #| msgid "フィード「%s」を追加しました。"
 msgid "フィールド「{0}」を追加しました。"
 msgstr "Added Feed \"%s\"."
 
+#: plugins/bc-custom-content/src/Controller/Api/CustomEntriesController.php:177
 #: plugins/bc-custom-content/src/Controller/Api/CustomFieldsController.php:124
 #, fuzzy
 #| msgid "フィード「%s」を更新しました。"
 msgid "フィールド「{0}」を更新しました。"
 msgstr "Updated Feed \"%s\"."
 
-#: plugins/bc-custom-content/src/Controller/Api/CustomLinksController.php:102
+#: plugins/bc-custom-content/src/Controller/Api/CustomLinksController.php:92
+#, fuzzy
+#| msgid "カテゴリー「%s」を追加しました。"
+msgid "カスタムリンク「%s」を追加しました。"
+msgstr "Added Category \"%s\"."
+
+#: plugins/bc-custom-content/src/Controller/Api/CustomLinksController.php:124
 #, fuzzy
 #| msgid "リンク「%s」を更新しました。"
 msgid "カスタムリンク「{0}」を更新しました。"
 msgstr "Updated Link \"%s\"."
+
+#: plugins/bc-custom-content/src/Controller/Api/CustomLinksController.php:164
+#, fuzzy
+#| msgid "カテゴリー「%s」を追加しました。"
+msgid "カスタムリンク「{0}」を削除しました。"
+msgstr "Added Category \"%s\"."
 
 #: plugins/bc-custom-content/src/Controller/Api/CustomTablesController.php:92
 #, fuzzy
@@ -13532,25 +13570,25 @@ msgstr "Updated Mail Field “%s”."
 msgid "メールフィールド「%s」の並び替えを更新しました。"
 msgstr "Updated Mail Field “%s”."
 
-#: plugins/bc-mail/src/Controller/Api/MailMessagesController.php:115
+#: plugins/bc-mail/src/Controller/Api/MailMessagesController.php:118
 #, fuzzy
 #| msgid "%s への受信データ NO「%s」 を削除しました。"
 msgid "{0} への受信データ NO「{1}」を追加しました。"
 msgstr "Deleted %s’s Received Data No “%s” ."
 
-#: plugins/bc-mail/src/Controller/Api/MailMessagesController.php:165
+#: plugins/bc-mail/src/Controller/Api/MailMessagesController.php:168
 #, fuzzy
 #| msgid "%s への受信データ NO「%s」 を削除しました。"
 msgid "{0} への受信データ NO「{1}」を更新しました。"
 msgstr "Deleted %s’s Received Data No “%s” ."
 
-#: plugins/bc-mail/src/Controller/Api/MailMessagesController.php:214
+#: plugins/bc-mail/src/Controller/Api/MailMessagesController.php:217
 #, fuzzy
 #| msgid "%s への受信データ NO「%s」 を削除しました。"
 msgid "{0} への受信データ NO「{1}」を削除しました。"
 msgstr "Deleted %s’s Received Data No “%s” ."
 
-#: plugins/bc-mail/src/Controller/Api/MailMessagesController.php:265
+#: plugins/bc-mail/src/Controller/Api/MailMessagesController.php:268
 #, fuzzy
 #| msgid "メールフォーム「%s」を追加しました。"
 msgid "メールメッセージ No %s を %s しました。"
@@ -14390,18 +14428,21 @@ msgid "アップロードカテゴリ「{0}」を追加しました。"
 msgstr "Added Upload File Category \"%s\"."
 
 #: plugins/bc-uploader/src/Controller/Admin/UploaderCategoriesController.php:83
+#: plugins/bc-uploader/src/Controller/Api/UploaderCategoriesController.php:96
 #, fuzzy
 #| msgid "アップロードファイルカテゴリ「%s」を更新しました。"
 msgid "アップロードカテゴリ「{0}」を更新しました。"
 msgstr "Updated Upload File Category \"%s\"."
 
 #: plugins/bc-uploader/src/Controller/Admin/UploaderCategoriesController.php:110
+#: plugins/bc-uploader/src/Controller/Api/UploaderCategoriesController.php:133
 #, fuzzy
 #| msgid "アップロードファイルカテゴリ「%s」を削除しました。"
 msgid "アップロードカテゴリ「{0}」を削除しました。"
 msgstr "Deleted Upload File Category \"%s\"."
 
 #: plugins/bc-uploader/src/Controller/Admin/UploaderCategoriesController.php:133
+#: plugins/bc-uploader/src/Controller/Api/UploaderCategoriesController.php:169
 #, fuzzy
 #| msgid "アップロードファイルカテゴリ「%s」を追加しました。"
 msgid "アップロードカテゴリ「{0}」をコピーしました。"
@@ -14437,7 +14478,7 @@ msgstr "Deleted Upload File Category \"%s\"."
 msgid "新規アップロードカテゴリ「{0}」を追加しました。"
 msgstr "Added Upload File Category \"%s\"."
 
-#: plugins/bc-uploader/src/Controller/Api/UploaderCategoriesController.php:143
+#: plugins/bc-uploader/src/Controller/Api/UploaderCategoriesController.php:217
 #, fuzzy
 #| msgid "アップロードファイルカテゴリ「%s」を追加しました。"
 msgid "アップロードカテゴリ「%s」を %s しました。"
