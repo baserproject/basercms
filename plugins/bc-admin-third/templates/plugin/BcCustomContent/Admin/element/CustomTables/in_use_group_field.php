@@ -52,9 +52,8 @@
     <?php echo $this->BcAdminForm->control("custom_links.{$customLink->id}.title", [
       'type' => 'text',
       'size' => 40,
-      'value' => $customLink->title,
+      ':value' => "linkTitleById({$customLink->id})",
       'class' => 'bca-textbox__input custom-field-setting__name',
-      'v-model' => "linkTitleById({$customLink->id})"
     ]) ?>
     <?php $this->BcBaser->link(__d('baser_core', '詳細編集'), '#', [
       'class' => 'button-small',
