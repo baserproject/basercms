@@ -4769,7 +4769,7 @@ msgid "操作日時"
 msgstr ""
 
 #: ./plugins/bc-admin-third/templates/Admin/element/Pages/form.php:66
-msgid "テーマフォルダ内の、templates/Page/ にテンプレートを配置する事で、ここでテンプレートを選択できます。"
+msgid "テーマフォルダ内の、templates/Pages/ にテンプレートを配置する事で、ここでテンプレートを選択できます。"
 msgstr ""
 
 #: ./plugins/bc-admin-third/templates/Admin/element/PermissionGroups/form.php:48

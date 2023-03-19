@@ -63,7 +63,7 @@
             <?php echo $this->BcAdminForm->control('page_template', ['type' => 'select', 'options' => $pageTemplateList]) ?>
             <i class="bca-icon--question-circle bca-help"></i>
             <div class="bca-helptext">
-              <?php echo __d('baser_core', 'テーマフォルダ内の、templates/Page/ にテンプレートを配置する事で、ここでテンプレートを選択できます。') ?>
+              <?php echo __d('baser_core', 'テーマフォルダ内の、templates/Pages/ にテンプレートを配置する事で、ここでテンプレートを選択できます。') ?>
             </div>
             <?php echo $this->BcAdminForm->error('page_template') ?>
           </td>
