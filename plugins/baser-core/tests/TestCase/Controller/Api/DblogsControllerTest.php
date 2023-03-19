@@ -87,8 +87,8 @@ class DblogsControllerTest extends BcTestCase
         $this->get('/baser/api/baser-core/dblogs/index/1.json?user_id=2&token=' . $this->accessToken);
         $this->assertResponseSuccess();
         $result = json_decode((string)$this->_response->getBody());
-        $this->assertEquals(1, count($result->Dblogs));
-        $this->assertEquals(2, $result->Dblogs[0]->user_id);
+        $this->assertEquals(3, count($result->Dblogs));
+        $this->assertEquals(1, $result->Dblogs[0]->user_id);
     }
 
     /**

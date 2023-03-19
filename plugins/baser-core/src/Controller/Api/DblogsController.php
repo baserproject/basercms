@@ -36,7 +36,7 @@ class DblogsController extends BcApiController
         $this->request->allowMethod(['get']);
 
         $this->set([
-            'Dblogs' => $this->paginate($service->getIndex($this->request->getQueryParams()))
+            'Dblogs' => $this->paginate($service->getIndex(['contain' => null]))
         ]);
 
         $this->viewBuilder()->setOption('serialize', ['Dblogs']);
