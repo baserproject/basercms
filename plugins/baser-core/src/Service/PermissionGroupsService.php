@@ -53,12 +53,15 @@ class PermissionGroupsService implements PermissionGroupsServiceInterface
 	}
 
 	/**
-	 * アクセスルールグループを単一取得
-	 *
-	 * @param int $id
-	 * @param int $userGroupId
-	 * @return EntityInterface
-	 */
+     * アクセスルールグループを単一取得
+     *
+     * @param int $id
+     * @param int $userGroupId
+     * @return EntityInterface
+     * @unitTest
+     * @noTodo
+     * @checked
+     */
 	public function get(int $id, int $userGroupId = null)
 	{
 		$options = [];
