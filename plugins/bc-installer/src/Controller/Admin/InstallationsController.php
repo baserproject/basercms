@@ -20,6 +20,7 @@ use BcInstaller\Service\Admin\InstallationsAdminService;
 use BcInstaller\Service\Admin\InstallationsAdminServiceInterface;
 use Cake\Core\Configure;
 use Cake\Event\EventInterface;
+use Cake\Http\Cookie\Cookie;
 use Cake\ORM\Exception\PersistenceFailedException;
 use Cake\Utility\Hash;
 use BaserCore\Annotation\UnitTest;
@@ -61,6 +62,8 @@ class InstallationsController extends BcAdminAppController
     public function index()
     {
         BcUtil::clearAllCache();
+        // クッキーを削除。インストール中のCSRF エラーの発生防止
+        $this->setResponse($this->getResponse()->withExpiredCookie(new Cookie('csrfToken')));
     }
 
     /**

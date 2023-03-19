@@ -32,15 +32,14 @@ $this->BcAdmin->setTitle(__d('baser_core', 'baserCMSのインストール'));
     </p>
   </div>
   <div class="submit bca-actions">
-    <?php echo $this->BcAdminForm->create(null, ['url' => ['action' => 'step2'], 'type' => 'post']) ?>
-    <?php echo $this->BcAdminForm->button('<span>' . __d('baser_core', 'インストール開始') . '</span>', [
+    <?php $this->BcBaser->link('<span>' . __d('baser_core', 'インストール開始') . '</span>',
+      ['action' => 'step2'], [
       'class' => 'bca-btn bca-actions__item bca-loading',
       'data-bca-btn-size' => 'lg',
       'data-bca-btn-width' => 'lg',
       'data-bca-btn-type' => 'save',
       'escapeTitle' => false
       ]) ?>
-    <?php echo $this->BcAdminForm->end() ?>
   </div>
 
 </div>
