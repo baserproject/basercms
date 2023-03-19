@@ -50,8 +50,11 @@ class BlogPostsController extends BcApiController
      */
     public function index(BlogPostsServiceInterface $service)
     {
+        $queryParams = array_merge([
+            'contain' => null,
+        ], $this->getRequest()->getQueryParams());
         $this->set([
-            'blogPosts' => $this->paginate($service->getIndex($this->request->getQueryParams()))
+            'blogPosts' => $this->paginate($service->getIndex($queryParams))
         ]);
         $this->viewBuilder()->setOption('serialize', ['blogPosts']);
     }
