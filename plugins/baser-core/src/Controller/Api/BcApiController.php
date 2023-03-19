@@ -88,6 +88,8 @@ class BcApiController extends AppController
             return;
         }
 
+        // 管理画面APIが許可されていない場合は弾く
+        // ただし、同じリファラからのアクセスは、Webブラウザの管理画面からのAJAXとして通す
         if (!filter_var(env('USE_CORE_ADMIN_API', false), FILTER_VALIDATE_BOOLEAN)) {
             if (!BcUtil::isSameReferrerAsCurrent()) {
                 return $this->response->withStatus(401);
