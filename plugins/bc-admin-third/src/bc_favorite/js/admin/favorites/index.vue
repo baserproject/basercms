@@ -196,7 +196,7 @@ export default {
                 // ボタンの制御
                 this.favoriteBoxOpened = 'block';
                 this.ariaExpanded = 'false';
-                axios.post(baseUrl + '1.json', {}, {
+                axios.post(baseUrl + '/1.json', {}, {
                     headers: {
                         "Authorization": $.bcJwt.accessToken,
                     }

@@ -291,7 +291,7 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
 
         if (!$this->isRequiredAuthentication($authSetting)) {
             $service->loadAuthenticator('Authentication.Form');
-            if (!empty($authSetting['sessionKey']) && empty($authSetting['disabled'])) {
+            if (!empty($authSetting['sessionKey'])) {
                 $service->loadAuthenticator('Authentication.Session', [
                     'sessionKey' => $authSetting['sessionKey'],
                 ]);
