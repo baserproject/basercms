@@ -39,8 +39,11 @@ class BlogCommentsController extends BcApiController
     public function index(BlogCommentsServiceInterface $service)
     {
         $this->request->allowMethod(['get']);
+        $queryParams = array_merge([
+            'contain' => null,
+        ], $this->getRequest()->getQueryParams());
         $this->set([
-            'blogComments' => $this->paginate($service->getIndex($this->request->getQueryParams()))
+            'blogComments' => $this->paginate($service->getIndex($queryParams))
         ]);
         $this->viewBuilder()->setOption('serialize', ['blogComments']);
     }
