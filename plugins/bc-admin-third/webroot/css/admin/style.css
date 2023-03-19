@@ -5575,6 +5575,7 @@ body * {
 }
 .bca-main__body {
   padding: 0;
+  overflow: auto;
 }
 .bca-main__contents {
   padding: 20px;
