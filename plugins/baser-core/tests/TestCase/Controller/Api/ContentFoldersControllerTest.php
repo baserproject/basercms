@@ -133,7 +133,7 @@ class ContentFoldersControllerTest extends BcTestCase
         $data = $this->ContentFoldersService->getIndex(['folder_template' => "testEdit"])->first();
         $data->content->name = "contentFolderTestUpdate";
         $id = $data->id;
-        $this->post("/baser/api/baser-core/content_folders/edit/${id}.json?token=". $this->accessToken, $data->toArray());
+        $this->post("/baser/api/baser-core/content_folders/edit/${id}.json?token=" . $this->accessToken, $data->toArray());
         $this->assertResponseSuccess();
         $query = $this->ContentFoldersService->getIndex(['folder_template' => $data['folder_template']]);
         $this->assertEquals(1, $query->all()->count());

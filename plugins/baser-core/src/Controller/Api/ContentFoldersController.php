@@ -36,7 +36,7 @@ class ContentFoldersController extends BcApiController
     {
         $this->request->allowMethod('get');
         $this->set([
-            'contentFolders' => $this->paginate($service->getIndex(['contain' => []]))
+            'contentFolders' => $this->paginate($service->getIndex(['contain' => null]))
         ]);
         $this->viewBuilder()->setOption('serialize', ['contentFolders']);
     }
@@ -58,7 +58,7 @@ class ContentFoldersController extends BcApiController
             $contentFolder = $service->get($id);
         } catch (RecordNotFoundException $e) {
             $this->setResponse($this->response->withStatus(404));
-            $message = __d('baser_core', 'データが見つかりません');
+            $message = __d('baser_core', 'データが見つかりません。');
         } catch (\Throwable $e) {
             $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
             $this->setResponse($this->response->withStatus(500));
@@ -128,7 +128,7 @@ class ContentFoldersController extends BcApiController
             $message = __d('baser_core', 'コンテンツフォルダ: {0} を削除しました。', $contentFolder->content->title);
         } catch (RecordNotFoundException $e) {
             $this->setResponse($this->response->withStatus(404));
-            $message = __d('baser_core', 'データが見つかりません');
+            $message = __d('baser_core', 'データが見つかりません。');
         } catch (\Throwable $e) {
             $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
             $this->setResponse($this->response->withStatus(500));
