@@ -131,7 +131,9 @@ class MailHelperTest extends BaserTestCase
         $expected = [
             'mail_default' => 'mail_default',
             'default' => 'default',
-            'reset_password' => 'reset_password'
+            'reset_password' => 'reset_password',
+            'send_activate_url' => 'send_activate_url',
+            'send_activate_urls' => 'send_activate_urls',
         ];
         $this->assertEquals($result, $expected, 'メールテンプレートの取得結果が違います。');
     }
