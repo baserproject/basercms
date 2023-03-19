@@ -1306,9 +1306,9 @@ class BlogHelper extends Helper
         ], $options);
         $blogContentId = $options['blogContentId'];
         unset($options['blogContentId']);
-        /* @var BlogCategory $BlogCategory */
-        $BlogCategory = ClassRegistry::init('BcBlog.BlogCategory');
-        return $BlogCategory->getCategoryList($blogContentId, $options);
+        /* @var BlogCategories $blogCategoriesTable */
+        $blogCategoriesTable = TableRegistry::getTableLocator()->get('BcBlog.BlogCategories');
+        return $blogCategoriesTable->getCategoryList($blogContentId, $options);
     }
 
     /**
