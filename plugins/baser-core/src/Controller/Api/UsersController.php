@@ -105,8 +105,11 @@ class UsersController extends BcApiController
      */
     public function index(UsersServiceInterface $service)
     {
+        $queryParams = array_merge([
+            'contain' => null,
+        ], $this->getRequest()->getQueryParams());
         $this->set([
-            'users' => $this->paginate($service->getIndex($this->request->getQueryParams()))
+            'users' => $this->paginate($service->getIndex($queryParams))
         ]);
         $this->viewBuilder()->setOption('serialize', ['users']);
     }
