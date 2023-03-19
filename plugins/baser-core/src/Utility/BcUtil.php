@@ -119,7 +119,7 @@ class BcUtil
      * - 第一優先：authenticationから取得
      *  - モデルが BaserCore.Users の場合、ユーザーグループがなかったら取得する
      * - 第二優先：現在のリクエストに紐づくセッションから取得
-     * - 第三優先：上記で取得できない場合、プレフィックスが Front だったの場合に、
+     * - 第三優先：上記で取得できない場合、プレフィックスが Front だった場合に、
      *      他の領域のログインセッションより取得する。
      *      複数のログインセッションにログインしている場合は定義順の降順で最初のログイン情報を取得
      *
@@ -154,7 +154,7 @@ class BcUtil
                 return $user;
             }
         }
-		
+
         $user = false;
         if($prefix === 'Front') {
             $user = BcUtil::loginUserFromSession($prefix);
