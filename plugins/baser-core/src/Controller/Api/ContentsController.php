@@ -93,9 +93,9 @@ class ContentsController extends BcApiController
      */
     public function index(ContentsServiceInterface $service, string $type = "index")
     {
-        switch($type) {
+        switch ($type) {
             case "index":
-                $data = $this->paginate($service->getIndex($this->request->getQueryParams()));
+                $data = $this->paginate($service->getIndex(['contain' => null]));
                 break;
             case "trash":
                 $data = $this->paginate($service->getTrashIndex($this->request->getQueryParams(), 'threaded')->order(['site_id', 'lft']));
