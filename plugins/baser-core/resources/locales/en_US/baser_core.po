@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: baserCMS\n"
 "POT-Creation-Date: 2023-03-16 10:33+0900\n"
-"PO-Revision-Date: 2023-03-18 15:13+0900\n"
+"PO-Revision-Date: 2023-03-18 18:39+0900\n"
 "Last-Translator: ryuring\n"
 "Language-Team: baserCMS Users Community <info@basercms.net>\n"
 "Language: en\n"
@@ -871,11 +871,11 @@ msgstr "Utility Top"
 
 #: plugins/baser-core/config/setting.php:565
 msgid "管理システム"
-msgstr "Admin System"
+msgstr "Management System"
 
 #: plugins/baser-core/config/setting.php:579
 msgid "Web API"
-msgstr ""
+msgstr "Web API"
 
 #: plugins/baser-core/config/setting.php:650
 msgid "ケータイ"
@@ -891,11 +891,11 @@ msgstr "English"
 
 #: plugins/baser-core/config/setting.php:696
 msgid "中国語"
-msgstr ""
+msgstr "Chinese"
 
 #: plugins/baser-core/config/setting.php:702
 msgid "スペイン"
-msgstr ""
+msgstr "Spain"
 
 #: plugins/baser-core/config/setting.php:728
 #: plugins/bc-admin-third/templates/Admin/element/Contents/form_alias.php:30
@@ -919,123 +919,89 @@ msgid "エイリアス"
 msgstr "Alias"
 
 #: plugins/baser-core/src/BcPlugin.php:172
-#, fuzzy
-#| msgid "アップデートスクリプトの実行します。"
 msgid "アップデートプログラム {0} を実行します。"
-msgstr "Running update script."
+msgstr "Run Update {0}."
 
 #: plugins/baser-core/src/BcPlugin.php:415
 msgid "BcPrefixAuth の {0} で type が指定されていません。"
-msgstr ""
+msgstr "The type is not specified in the BcPrefixAuth {0}."
 
 #: plugins/baser-core/src/BcPlugin.php:416
 msgid "BcPrefixAuth の {0} で alias が指定されていません。"
-msgstr ""
+msgstr "The alias is not specified in the BcPrefixAuth {0}."
 
 #: plugins/baser-core/src/Command/ComposerCommand.php:35
-#, fuzzy
-#| msgid "アップデートマニュアル"
 msgid "アップデート対象のバージョン番号"
-msgstr "Update Manual"
+msgstr "Version number to be updated"
 
 #: plugins/baser-core/src/Command/ComposerCommand.php:40
 #: plugins/baser-core/src/Command/UpdateCommand.php:44
-#, fuzzy
-#| msgid "データベース名"
 msgid "データベース接続名"
-msgstr "Database Name"
+msgstr "Database connection Name"
 
 #: plugins/baser-core/src/Command/ComposerCommand.php:58
-#, fuzzy
-#| msgid "ファイルアップロードに失敗しました。"
 msgid "Composer によるアップデートが失敗しました。"
-msgstr "Failed File Upload."
+msgstr "Composer update failed."
 
 #: plugins/baser-core/src/Command/ComposerCommand.php:66
-#, fuzzy
-#| msgid "baserCMSのインストールが完了しました。"
 msgid "Composer によるアップデートが完了しました。"
-msgstr "Completed baserCMS installation."
+msgstr "Composer has completed the update."
 
 #: plugins/baser-core/src/Command/ComposerCommand.php:68
-#, fuzzy
-#| msgid ""
-#| "baserCMSのインストールに失敗しました。ログファイルを確認してください。"
 msgid ""
 "Composer によるアップデートが失敗しました。update ログを確認してください。"
-msgstr "Failed baserCMS installation. Please check the log file."
+msgstr "Composer update failed. Check the update log."
 
 #: plugins/baser-core/src/Command/CreateReleaseCommand.php:46
-#, fuzzy
-#| msgid "ファイル %s を作成しました。"
 msgid "リリースパッケージを作成します。"
-msgstr "Created File %s."
+msgstr "Create a release package."
 
 #: plugins/baser-core/src/Command/CreateReleaseCommand.php:49
-#, fuzzy
-#| msgid "アップデートスクリプトの実行します。"
 msgid "- {0} にパッケージをクローンします。"
-msgstr "Running update script."
+msgstr "- Clone the package to {0}."
 
 #: plugins/baser-core/src/Command/CreateReleaseCommand.php:52
 msgid "- composer.json をセットアップします。"
-msgstr ""
+msgstr "- Set up composer.json."
 
 #: plugins/baser-core/src/Command/CreateReleaseCommand.php:55
-#, fuzzy
-#| msgid "%s プラグインのデータを初期化しました。"
 msgid "- プラグインを初期化します。"
-msgstr "Initialized Plugin %s’sdata."
+msgstr "- Initialize the plugin."
 
 #: plugins/baser-core/src/Command/CreateReleaseCommand.php:58
-#, fuzzy
-#| msgid "次のファイルを開きます。"
 msgid "- 不要ファイルを削除します。"
-msgstr "Open following file."
+msgstr "- Delete unnecessary files."
 
 #: plugins/baser-core/src/Command/CreateReleaseCommand.php:61
-#, fuzzy
-#| msgid "ファイル %s を作成しました。"
 msgid "- Zip ファイルを作成します。"
-msgstr "Created File %s."
+msgstr "- Create a zip file."
 
 #: plugins/baser-core/src/Command/CreateReleaseCommand.php:64
-#, fuzzy
-#| msgid "アップデート処理を開始します。"
 msgid "- クリーニング処理を実行します。"
-msgstr "Starting update process."
+msgstr "- Perform a cleaning process."
 
 #: plugins/baser-core/src/Command/CreateReleaseCommand.php:69
-#, fuzzy
-#| msgid "エラーが発生しました。内容を確認してください。"
 msgid ""
 "リリースパッケージの作成が完了しました。/tmp/basercms.zip を確認してくださ"
 "い。"
-msgstr "Error occured. Check content."
+msgstr ""
+"You have finished creating your release package. Check /tmp/basercms.zip."
 
 #: plugins/baser-core/src/Command/SetupInstallCommand.php:45
-#, fuzzy
-#| msgid "baserCMSのインストールが完了しました。"
 msgid "インストールの準備ができました。"
-msgstr "Completed baserCMS installation."
+msgstr "Ready to install."
 
 #: plugins/baser-core/src/Command/SetupTestCommand.php:44
-#, fuzzy
-#| msgid "アップデートスクリプトの実行が完了しました。"
 msgid "ユニットテストの準備ができました。"
-msgstr "Completed running update script."
+msgstr "Unit testing is ready."
 
 #: plugins/baser-core/src/Command/UpdateCommand.php:62
-#, fuzzy
-#| msgid "アップデートスクリプトの実行が完了しました。"
 msgid "Migration と アップデーターによるアップデートが完了しました。"
-msgstr "Completed running update script."
+msgstr "The Migration and Updater updates are complete."
 
 #: plugins/baser-core/src/Command/UpdateCommand.php:64
-#, fuzzy
-#| msgid "ファイルアップロードに失敗しました。"
 msgid "Migration と アップデーターによるアップデートが失敗しました。"
-msgstr "Failed File Upload."
+msgstr "Migration and updater update failed."
 
 #: plugins/baser-core/src/Controller/Admin/ContentFoldersController.php:56
 #: plugins/baser-core/src/Controller/Admin/SitesController.php:217
@@ -1345,16 +1311,12 @@ msgid "「%s」のエイリアス「%s」を編集しました。"
 msgstr "Edited “%s”’s Alias “%s”."
 
 #: plugins/baser-core/src/Controller/Admin/ContentsController.php:172
-#, fuzzy
-#| msgid "エラーが発生しました。内容を確認してください。"
 msgid "保存中にエラーが発生しました。入力内容を確認してください。"
-msgstr "Error occured. Check content."
+msgstr "An error occurred while saving. Please confirm your entries."
 
 #: plugins/baser-core/src/Controller/Admin/ContentsController.php:211
-#, fuzzy
-#| msgid "タグ「%s」を更新しました。"
 msgid "ゴミ箱「%s」を戻しました。"
-msgstr "Updated Tag \"%s\"."
+msgstr "I put the trash can \"%s\" back."
 
 #: plugins/baser-core/src/Controller/Admin/ContentsController.php:214
 #: plugins/bc-admin-third/templates/Admin/element/Contents/index_setup_tree.php:42
@@ -1375,7 +1337,7 @@ msgstr "Error has occurred when deleting."
 
 #: plugins/baser-core/src/Controller/Admin/ContentsController.php:254
 msgid "不正なリクエストです。"
-msgstr ""
+msgstr "Bad request."
 
 #: plugins/baser-core/src/Controller/Admin/DblogsController.php:68
 #: plugins/baser-core/src/Controller/Api/DblogsController.php:89
@@ -1388,12 +1350,12 @@ msgid "最近の動きのログ削除に失敗しました。"
 msgstr "Failed deleting the recent activity log."
 
 #: plugins/baser-core/src/Controller/Admin/PagesController.php:81
-#, fuzzy
-#| msgid "固定ページ「%s」を更新しました。"
 msgid ""
 "固定ページ「%s」を更新しました。\n"
 "%s"
-msgstr "Updated Static Page “%s”."
+msgstr ""
+"Fixed page \"%s\" was updated.\n"
+"%s"
 
 #: plugins/baser-core/src/Controller/Admin/PagesController.php:86
 #: plugins/baser-core/src/Controller/Admin/PagesController.php:90
@@ -1520,39 +1482,31 @@ msgid ""
 "パスワードのリセットを受付ました。該当メールアドレスが存在した場合、変更URLを"
 "送信いたしました。"
 msgstr ""
+"Your password has been reset. If the corresponding e-mail address exists, we "
+"have sent you the URL to change."
 
 #: plugins/baser-core/src/Controller/Admin/PasswordRequestsController.php:96
 #: plugins/baser-core/src/Controller/PasswordRequestsController.php:111
-#, fuzzy
-#| msgid "削除中にエラーが発生しました。"
 msgid "システムエラーが発生しました。"
-msgstr "Error has occurred when deleting."
+msgstr "something wrong.... "
 
 #: plugins/baser-core/src/Controller/Admin/PermissionGroupsController.php:43
-#, fuzzy
-#| msgid "ユーザーグループを選択してください。"
 msgid "アクセスルールを設定できるユーザーグループがありません。"
-msgstr "Please select User Group."
+msgstr "There are no user groups for which you can configure access rules."
 
 #: plugins/baser-core/src/Controller/Admin/PermissionGroupsController.php:68
 #: plugins/baser-core/src/Controller/Api/PermissionGroupsController.php:113
-#, fuzzy
-#| msgid "メールフォーム「%s」を更新しました。"
 msgid "ルールグループ「{0}」を登録しました。"
-msgstr "Updated Mail Form “%s”."
+msgstr "Rule group \"{0}\" has been created."
 
 #: plugins/baser-core/src/Controller/Admin/PermissionGroupsController.php:96
 #: plugins/baser-core/src/Controller/Api/PermissionGroupsController.php:179
-#, fuzzy
-#| msgid "メールフォーム「%s」を更新しました。"
 msgid "ルールグループ「{0}」を更新しました。"
-msgstr "Updated Mail Form “%s”."
+msgstr "Rule group \"{0}\" was updated."
 
 #: plugins/baser-core/src/Controller/Admin/PermissionGroupsController.php:121
-#, fuzzy
-#| msgid "カテゴリー「%s」を削除しました。"
 msgid "アクセスグループ「{0}」を削除しました。"
-msgstr "Deleted Category \"%s\"."
+msgstr "Access group \"{0}\" was deleted."
 
 #: plugins/baser-core/src/Controller/Admin/PermissionGroupsController.php:140
 #: plugins/baser-core/src/Controller/Api/PermissionGroupsController.php:216
@@ -1587,7 +1541,6 @@ msgid "アクセスルール「%s」を削除しました。"
 msgstr "Deleted Category \"%s\"."
 
 #: plugins/baser-core/src/Controller/Admin/PermissionsController.php:205
-#, fuzzy
 #| msgid "カテゴリー「%s」を追加しました。"
 msgid "アクセスルール「%s」を複製しました。"
 msgstr "Added Category \"%s\"."

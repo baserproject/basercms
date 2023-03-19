@@ -68,7 +68,7 @@ class ContentFoldersController extends BcAdminAppController
                 return $this->redirect(['action' => 'edit', $id]);
             } catch (PersistenceFailedException $e) {
                 $contentFolder = $e->getEntity();
-                $this->BcMessage->setError(__d('base_core', '入力エラーが発生しました。入力内容を確認してください。'));
+                $this->BcMessage->setError(__d('baser_core', '入力エラーが発生しました。入力内容を確認してください。'));
             } catch (\Throwable $e) {
                 $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage()));
             }
