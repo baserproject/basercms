@@ -72,7 +72,7 @@ class MailFieldsTable extends MailAppTable
         $validator
             ->scalar('field_name')
             ->notEmptyString('field_name', __d('baser_core', 'フィールド名を入力してください。'))
-            ->maxLength('field_name', 255, __d('baser_core', 'フィールド名は255文字以内で入力してください。'));
+            ->maxLength('field_name', 50, __d('baser_core', 'フィールド名は50文字以内で入力してください。'));
         // TODO ucmitz 未実装
 //            ->add('field_name', [
 //                'halfTextMailField' => [
