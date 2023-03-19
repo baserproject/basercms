@@ -22,6 +22,7 @@ use BaserCore\Annotation\Checked;
 use BaserCore\Error\BcException;
 use BaserCore\Utility\BcApiUtil;
 use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Utility\BcUtil;
 use Cake\Controller\Exception\AuthSecurityException;
 use Cake\Core\Configure;
 use Cake\Event\EventInterface;
@@ -87,8 +88,10 @@ class BcApiController extends AppController
             return;
         }
 
-        if (!$this->isAdminApiEnabled()) {
-            return $this->response->withStatus(401);
+        if (!filter_var(env('USE_CORE_ADMIN_API', false), FILTER_VALIDATE_BOOLEAN)) {
+            if (!BcUtil::isSameReferrerAsCurrent()) {
+                return $this->response->withStatus(401);
+            }
         }
 
         // ユーザーの有効チェック
@@ -113,8 +116,10 @@ class BcApiController extends AppController
      */
     public function isAdminApiEnabled()
     {
-        if($this->Authentication->getIdentity()) return true;
-        return (filter_var(env('USE_CORE_ADMIN_API', false), FILTER_VALIDATE_BOOLEAN));
+        if (!filter_var(env('USE_CORE_ADMIN_API', false), FILTER_VALIDATE_BOOLEAN)) {
+            return false;
+        }
+        return (bool) $this->Authentication->getIdentity();
     }
 
     /**

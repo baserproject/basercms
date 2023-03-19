@@ -127,8 +127,8 @@ class BcThemeConfigHelper extends Helper
             'thumb' => false,
             'class' => '',
             'popup' => false,
-            'alt' => $data[$name . '_alt' . $num],
-            'link' => $data[$name . '_link' . $num],
+            'alt' => $data[$name . '_alt' . $num]?? null,
+            'link' => $data[$name . '_link' . $num]?? null,
             'maxWidth' => '',
             'maxHeight' => '',
             'width' => '',
@@ -138,7 +138,7 @@ class BcThemeConfigHelper extends Helper
         ], $options);
         $name = $name . $num;
 
-        if ($data[$name]) {
+        if (!empty($data[$name])) {
             $pathinfo = pathinfo($data[$name]);
             $uploadPath = $dir . $data[$name];
             $uploadThumbPath = $dir . $pathinfo['filename'] . $thumbSuffix . '.' . $pathinfo['extension'];
@@ -146,7 +146,7 @@ class BcThemeConfigHelper extends Helper
             $uploadThumbUrl = '/files/theme_configs/' . $pathinfo['filename'] . $thumbSuffix . '.' . $pathinfo['extension'];
         }
 
-        if ($data[$name]) {
+        if (!empty($data[$name])) {
             if (!$options['thumb']) {
                 if (file_exists($uploadPath)) {
                     $imgPath = $uploadPath;
