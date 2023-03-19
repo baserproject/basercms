@@ -138,6 +138,10 @@ class PermissionsService implements PermissionsServiceInterface
      */
     public function getIndex(array $queryParams = []): Query
     {
+        $queryParams = array_merge([
+            'contain' => ['PermissionGroups']
+        ], $queryParams);
+
         $conditions = [];
         if (!empty($queryParams['user_group_id'])) {
             $conditions['Permissions.user_group_id'] = $queryParams['user_group_id'];
@@ -149,7 +153,7 @@ class PermissionsService implements PermissionsServiceInterface
             $conditions['PermissionGroups.type'] = $queryParams['permission_group_type'];
         }
         $query = $this->Permissions->find()
-            ->contain(['PermissionGroups'])
+            ->contain($queryParams['contain'])
             ->where($conditions)
             ->order('sort', 'ASC');
         return $query;
