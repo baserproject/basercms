@@ -14,6 +14,7 @@ namespace BcMail\Controller;
 use BaserCore\Error\BcException;
 use BaserCore\Service\BcCaptchaServiceInterface;
 use BaserCore\Utility\BcSiteConfig;
+use BcMail\Model\Entity\MailMessage;
 use BcMail\Service\Front\MailFrontService;
 use BcMail\Service\Front\MailFrontServiceInterface;
 use BcMail\Service\MailContentsService;
@@ -197,7 +198,8 @@ class MailController extends MailFrontAppController
                 $this->getRequest()->getData('captcha_id'),
                 $this->getRequest()->getData('auth_captcha')
             )) {
-                $mailMessage = $mailMessagesService->MailMessages->newEntity($this->getRequest()->getData());
+                // newEntity() だと配列が消えてしまうため、エンティティクラスで直接変換
+                $mailMessage = new MailMessage($this->getRequest()->getData(), ['source' => 'BcMail.MailMessages']);
                 $mailMessage->setError('auth_captcha', __d('baser_core', '画像の文字が間違っています。再度入力してください。'));
                 throw new PersistenceFailedException($mailMessage, __d('baser_core', '入力エラーです。内容を見直してください。'));
             }
@@ -242,9 +244,10 @@ class MailController extends MailFrontAppController
         }
 
         if($this->getRequest()->getData('mode') === 'Back') {
+            // newEntity() だと配列が消えてしまうため、エンティティクラスで直接変換
             $this->set($service->getViewVarsForIndex(
                 $mailContent,
-                $mailMessagesService->MailMessages->newEntity($this->getRequest()->getData())
+                new MailMessage($this->getRequest()->getData(), ['source' => 'BcMail.MailMessages'])
             ));
             $this->render($service->getIndexTemplate($mailContent));
             return;

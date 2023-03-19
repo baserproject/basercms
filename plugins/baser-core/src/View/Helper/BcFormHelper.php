@@ -807,6 +807,7 @@ SCRIPT_END;
         // ---
         if ($multiple && is_array($value)) {
             $out = [];
+            $options['name'] = $options['name'] . '[]';
             foreach($value as $v) {
                 $options['val'] = $v;
                 $out[] = $this->widget('hidden', $options);;

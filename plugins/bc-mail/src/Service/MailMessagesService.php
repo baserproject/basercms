@@ -113,11 +113,13 @@ class MailMessagesService implements MailMessagesServiceInterface
     public function create(EntityInterface $mailContent, $postData)
     {
         if (!$postData instanceof EntityInterface) {
-            $entity = $this->MailMessages->patchEntity($this->MailMessages->newEmptyEntity(), $postData);
+            // newEntity() だと配列が消えてしまうため、エンティティクラスで直接変換
+            $entity = new MailMessage($postData, ['source' => 'BcMail.MailMessages']);
         } else {
             $entity = $postData;
         }
-        if (!$entity->getErrors()) {
+        $validateEntity = $this->MailMessages->patchEntity($this->MailMessages->newEmptyEntity(), $entity->toArray());
+        if (!$validateEntity->getErrors()) {
             $mailFieldsTable = TableRegistry::getTableLocator()->get('BcMail.MailFields');
             $mailFields = $mailFieldsTable->find()->where(['MailFields.mail_content_id' => $mailContent->id, 'MailFields.use_field' => true])->all();
             $this->MailMessages->convertToDb($mailFields, $entity);
