@@ -109,8 +109,8 @@ use Cake\Utility\Hash;
       ['action' => 'publish', $post->blog_content->id, $post->id],
       [
         'title' => __d('baser_core', '公開'),
-        'class' => 'btn-unpublish bca-btn-icon',
-        'data-bca-btn-type' => 'unpublish',
+        'class' => 'btn-publish bca-btn-icon',
+        'data-bca-btn-type' => 'publish',
         'data-bca-btn-size' => 'lg']
     ) ?>
     <?php endif ?>
