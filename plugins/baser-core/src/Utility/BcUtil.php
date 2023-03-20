@@ -123,6 +123,8 @@ class BcUtil
      *      他の領域のログインセッションより取得する。
      *      複数のログインセッションにログインしている場合は定義順の降順で最初のログイン情報を取得
      *
+     * $prefix を指定したとしても authentication より取得できた場合はそちらを優先する
+     *
      * @return User|false
      * @checked
      * @noTodo
