@@ -406,7 +406,7 @@ class BcAdminHelperTest extends BcTestCase
         $this->BcAdmin->getView()->set('editLink', '');
         $this->assertEquals(false, $this->BcAdmin->existsEditLink());
         // 存在する
-        $request = $this->loginAdmin($this->getRequest('/service/service1'));
+        $request = $this->loginAdmin($this->getRequest('/baser/admin'));
         $this->BcAdmin->getView()->setRequest($request);
         $this->BcAdmin->getView()->set('editLink', 'hoge');
         new BcPageHelper($this->BcAdmin->getView());
@@ -447,7 +447,7 @@ class BcAdminHelperTest extends BcTestCase
         $result = ob_get_clean();
         $this->assertEmpty($result);
         // リンクあり
-        $request = $this->loginAdmin($this->getRequest('/service/service1'));
+        $request = $this->loginAdmin($this->getRequest('/baser/admin'));
         $this->BcAdmin->getView()->setRequest($request);
         $this->BcAdmin->getView()->set('editLink', '/baser/admin/baser-core/pages/edit/5');
         ob_start();

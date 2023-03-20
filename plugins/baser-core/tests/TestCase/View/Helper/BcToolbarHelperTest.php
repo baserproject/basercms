@@ -123,7 +123,7 @@ class BcToolbarHelperTest extends BcTestCase
     public function testIsAvailableBackAgent()
     {
         $this->assertFalse($this->BcToolbar->isAvailableBackAgent());
-        $request = $this->getRequest();
+        $request = $this->getRequest('/baser/admin');
         $this->loginAdmin($request);
         $session = $request->getSession();
         $session->write('AuthAgent', ['test']);
