@@ -57,7 +57,8 @@ class PagesController extends BcApiController
         }
 
         $queryParams = array_merge([
-            'status' => 'publish'
+            'status' => 'publish',
+            'contain' => null
         ], $queryParams);
 
         $this->set([
