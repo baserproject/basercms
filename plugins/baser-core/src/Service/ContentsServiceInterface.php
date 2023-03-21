@@ -28,7 +28,7 @@ interface ContentsServiceInterface extends CrudBaseServiceInterface
 
     /**
      * ゴミ箱のコンテンツを取得する
-     * 
+     *
      * @param int $id
      * @return EntityInterface|array
      * @throws \Cake\Datasource\Exception\RecordNotFoundException
@@ -62,15 +62,27 @@ interface ContentsServiceInterface extends CrudBaseServiceInterface
     public function getTreeIndex(array $queryParams): Query;
 
     /**
-     * getTableConditions
+     * setConditions
      *
-     * @param  array $queryParams
-     * @return array
+     * @param Query $query
+     * @param array $queryParams
+     * @return Query
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function getTableConditions(array $queryParams): array;
+    public function setConditions(Query $query, array $queryParams): Query;
+
+    /**
+     * テーブル用のコンテンツ管理の一覧データを取得
+     *
+     * @param  array $queryParams
+     * @return Query
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getIndex(array $queryParams = []): Query;
 
     /**
      * テーブル用のコンテンツ管理の一覧データを取得
@@ -85,7 +97,7 @@ interface ContentsServiceInterface extends CrudBaseServiceInterface
 
     /**
      * getTrashIndex
-     * 
+     *
      * @param array $queryParams
      * @param string $type
      * @return Query
@@ -110,7 +122,7 @@ interface ContentsServiceInterface extends CrudBaseServiceInterface
 
     /**
      * ツリー構造のデータを コンボボックスのデータ用に変換する
-     * 
+     *
      * @param $nodes
      * @return array
      * @checked
@@ -133,7 +145,7 @@ interface ContentsServiceInterface extends CrudBaseServiceInterface
 
     /**
      * コンテンツ情報を削除する
-     * 
+     *
      * @param int $id
      * @param bool $enableTree(デフォルト:false) TreeBehaviorの有無
      * @return bool
@@ -145,7 +157,7 @@ interface ContentsServiceInterface extends CrudBaseServiceInterface
 
     /**
      * コンテンツ情報と紐付いてるモデルを削除する
-     * 
+     *
      * @param int $id
      * @return bool
      * @checked
@@ -200,7 +212,7 @@ interface ContentsServiceInterface extends CrudBaseServiceInterface
 
     /**
      * コンテンツ情報を取得する
-     * 
+     *
      * @return array
      * @checked
      * @noTodo
@@ -405,7 +417,7 @@ interface ContentsServiceInterface extends CrudBaseServiceInterface
     /**
      * エンコードされたURLをデコードせずにパースする
      * ※DBのレコードがエンコードされたまま保存されてる場合があるためその値を取得する際にデコードが邪魔になる際使用する
-     * 
+     *
      * @param  string $fullUrl
      * @return array $parsedUrl
      * @checked
@@ -416,7 +428,7 @@ interface ContentsServiceInterface extends CrudBaseServiceInterface
 
     /**
      * ツリー構造のパスを取得する
-     * 
+     *
      * @param string $id
      * @return QueryInterface
      * @checked
@@ -427,7 +439,7 @@ interface ContentsServiceInterface extends CrudBaseServiceInterface
 
     /**
      * IDを指定してタイトルリストを取得する
-     * 
+     *
      * @param $ids
      * @return array
      * @checked
@@ -438,7 +450,7 @@ interface ContentsServiceInterface extends CrudBaseServiceInterface
 
     /**
      * 一括処理
-     * 
+     *
      * @param array $ids
      * @return bool
      * @checked

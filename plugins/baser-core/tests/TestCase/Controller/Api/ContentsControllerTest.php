@@ -132,23 +132,32 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
     public function testIndex(): void
     {
         // indexテスト
-        $this->get('/baser/api/baser-core/contents/index.json?token=' . $this->accessToken);
+        $this->get('/baser/api/baser-core/contents.json?token=' . $this->accessToken);
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals('', $result->contents[0]->name);
-        // trashテスト
-        $this->get('/baser/api/baser-core/contents/index/trash.json?token=' . $this->accessToken);
-        $this->assertResponseOk();
-        $result = json_decode((string)$this->_response->getBody());
-        $this->assertNotNull($result->contents[0]->deleted_date);
         // treeテスト
-        $this->get('/baser/api/baser-core/contents/index/tree.json?site_id=1&token=' . $this->accessToken);
+        $this->get('/baser/api/baser-core/contents/index.json?site_id=1&list_type=tree&token=' . $this->accessToken);
         $this->assertResponseOk();
         // tableテスト
-        $this->get('/baser/api/baser-core/contents/index/table.json?site_id=1&folder_id=6&name=サービス&type=Page&token=' . $this->accessToken);
+        $this->get('/baser/api/baser-core/contents/index.json?site_id=1&folder_id=6&name=サービス&type=Page&token=' . $this->accessToken);
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals(3, count($result->contents));
+    }
+
+    /**
+     * Test index method
+     *
+     * @return void
+     */
+    public function testIndexTrash(): void
+    {
+        // trashテスト
+        $this->get('/baser/api/baser-core/contents/index_trash.json?token=' . $this->accessToken);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertNotNull($result->contents[0]->deleted_date);
     }
 
     /**
@@ -187,7 +196,7 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals("ゴミ箱を空にしました。", $result->message);
-        $this->get('/baser/api/baser-core/contents/index/trash.json?type=ContentFolder&token=' . $this->accessToken);
+        $this->get('/baser/api/baser-core/contents/index_trash.json?type=ContentFolder&token=' . $this->accessToken);
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEmpty($result->contents);
     }

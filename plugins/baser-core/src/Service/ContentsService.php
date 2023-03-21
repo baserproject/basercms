@@ -28,7 +28,6 @@ use BaserCore\Model\Entity\Content;
 use Cake\ORM\Behavior\TreeBehavior;
 use Cake\Datasource\EntityInterface;
 use BaserCore\Model\Table\SitesTable;
-use Cake\Datasource\ConnectionManager;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Model\Table\ContentsTable;
 use Cake\Datasource\Exception\RecordNotFoundException;
@@ -202,37 +201,67 @@ class ContentsService implements ContentsServiceInterface
     /**
      * テーブルインデックス用の条件を返す
      *
+     * @param Query $query
      * @param array $queryParams
-     * @return array
+     * @return Query $query
      * @checked
      * @noTodo
-     * @unitTest
      */
-    public function getTableConditions(array $queryParams): array
+    public function setConditions(Query $query, array $queryParams): Query
     {
-        $customFields = ['name', 'folder_id', 'self_status'];
-        foreach($queryParams as $key => $value) {
-            if (!empty($queryParams[$key])) {
-                if (!in_array($key, $customFields)) {
-                    $conditions[$key] = $value;
-                } else {
-                    if ($key === 'name') {
-                        $conditions['OR'] = [
-                            'name LIKE' => '%' . $value . '%',
-                            'title LIKE' => '%' . $value . '%'
-                        ];
-                        $conditions['name'] = $value;
-                    }
-                    if ($key === 'folder_id') {
-                        $conditions['folder_id'] = $value;
-                    }
-                    if ($key === 'self_status' && $value !== '') {
-                        $conditions['self_status'] = $value;
-                    }
-                }
+        $params = array_merge([
+            'id' => null,
+            'type' => null,
+            'type!' => null,
+            'parent_id' => null,
+            'author_id' => null,
+            'site_id' => null,
+            'title' => null,
+            'name' => null,
+            'status' => null,
+            'folder_id' => null,
+        ], $queryParams);
+
+        $conditions = [];
+
+        // type
+        if(!empty($params['id'])) $conditions['Contents.id'] = $params['id'];
+        // type
+        if(!empty($params['type'])) $conditions['Contents.type'] = $params['type'];
+        if(!empty($params['type!'])) $conditions['Contents.type IS NOT'] = $params['type!'];
+        // author_id
+        if(!empty($params['parent_id'])) $conditions['Contents.parent_id'] = $params['parent_id'];
+        // author_id
+        if(!empty($params['author_id'])) $conditions['Contents.author_id'] = $params['author_id'];
+        // site_id
+        if(!empty($params['site_id'])) $conditions['Contents.site_id'] = $params['site_id'];
+        // title
+        if(!empty($params['title'])) $conditions['Contents.title LIKE'] = '%' . $params['title'] . '%';
+
+        // name
+        if(!empty($params['name']) ) {
+            $conditions[] = ['OR' => [
+                'Contents.name LIKE' => '%' . $params['name'] . '%',
+                'Contents.title LIKE' => '%' . $params['name'] . '%'
+            ]];
+        }
+
+        // status
+        if (!is_null($params['status'])) {
+            if($params['status'] === 'publish') {
+                $conditions = array_merge($conditions, $this->Contents->getConditionAllowPublish());
+            } elseif($params['status'] === 'unpublish') {
+                $conditions['NOT'] = $this->Contents->getConditionAllowPublish();
             }
         }
-        return $conditions;
+
+        // folder_id
+        if (!is_null($params['folder_id']) && $params['folder_id']) {
+            $folder = $this->Contents->find()->select(['lft', 'rght'])->where(['id' => $queryParams['folder_id']])->first();
+            $conditions[] = ['Contents.rght <' => $folder->rght, 'Contents.lft >' => $folder->lft];
+        }
+
+        return $query->where($conditions);
     }
 
     /**
@@ -251,41 +280,17 @@ class ContentsService implements ContentsServiceInterface
             'contain' => ['Sites'],
         ], $queryParams);
 
-        $columns = $this->Contents->getSchema()->columns();
-
         $query = $this->Contents->find($type)->contain($queryParams['contain']);
 
         if (!empty($queryParams['withTrash'])) {
             $query = $query->applyOptions(['withDeleted']);
         }
 
-        if (!empty($queryParams['name'])) {
-            $query = $query->where(['OR' => [
-                'Contents.name LIKE' => '%' . $queryParams['name'] . '%',
-                'Contents.title LIKE' => '%' . $queryParams['name'] . '%'
-            ]]);
-            unset($queryParams['name']);
-        }
-
-        if (!empty($queryParams['folder_id'])) {
-            $folder = $this->Contents->find()->select(['lft', 'rght'])->where(['id' => $queryParams['folder_id']])->first();
-            $query = $query->andWhere(['rght <' => $folder->rght, 'lft >' => $folder->lft]);
-        }
-
-        foreach ($queryParams as $key => $value) {
-            if (is_null($value)) continue;
-            if (in_array($key, $columns)) {
-                $query = $query->andWhere(['Contents.' . $key => $value]);
-            } elseif ($key[-1] === '!' && in_array($key = mb_substr($key, 0, -1), $columns)) {
-                $query = $query->andWhere(['Contents.' . $key . " IS NOT " => $value]);
-            }
-        }
-
         if (!empty($queryParams['limit'])) {
             $query = $query->limit($queryParams['limit']);
         }
 
-        return $query;
+        return $this->setConditions($query, $queryParams);
     }
 
     /**
@@ -299,9 +304,8 @@ class ContentsService implements ContentsServiceInterface
      */
     public function getTableIndex(array $queryParams): Query
     {
-        return $this->getIndex($this->getTableConditions($queryParams));
+        return $this->getIndex($queryParams);
     }
-
 
     /**
      * getTrashIndex

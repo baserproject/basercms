@@ -115,41 +115,12 @@ class ContentsServiceTest extends BcTestCase
     }
 
     /**
-     * testGetTableConditions
-     *
-     * @return void
-     */
-    public function testGetTableConditions()
-    {
-        $request = $this->getRequest()->withQueryParams([
-            'site_id' => 1,
-            'open' => '1',
-            'name' => 'テスト',
-            'type' => 'ContentFolder',
-            'self_status' => '1',
-            'author_id' => '',
-        ]);
-        $result = $this->ContentsService->getTableConditions($request->getQueryParams());
-        $this->assertEquals([
-            'OR' => [
-                'name LIKE' => '%テスト%',
-                'title LIKE' => '%テスト%',
-            ],
-            'name' => 'テスト',
-            'self_status' => '1',
-            'type' => 'ContentFolder',
-            'site_id' => 1,
-            'open' => '1'
-        ], $result);
-    }
-
-    /**
      * testgetTableIndex
      *
      * @return void
      * @dataProvider getTableIndexDataProvider
      */
-    public function testgetTableIndex($conditions, $expected): void
+    public function testGetTableIndex($conditions, $expected): void
     {
         $result = $this->ContentsService->getTableIndex($conditions);
         $this->assertEquals($expected, $result->count());
@@ -171,7 +142,7 @@ class ContentsServiceTest extends BcTestCase
                 'folder_id' => '',
                 'name' => '',
                 'type' => 'ContentFolder',
-                'self_status' => '1',
+                'status' => 'publish',
                 'author_id' => '',
             ], 7],
             [[
@@ -180,7 +151,7 @@ class ContentsServiceTest extends BcTestCase
                 'folder_id' => '6',
                 'name' => 'サービス',
                 'type' => 'Page',
-                'self_status' => '',
+                'status' => '',
                 'author_id' => '',
             ], 3],
         ];
@@ -204,19 +175,19 @@ class ContentsServiceTest extends BcTestCase
         $contents = $this->ContentsService->getIndex($request->getQueryParams());
         $this->assertEquals(1, $contents->all()->count());
         // softDeleteの場合
-        $request = $this->getRequest('/?status=1');
+        $request = $this->getRequest('/?status=publish');
         $contents = $this->ContentsService->getIndex($request->getQueryParams());
         $this->assertEquals(19, $contents->all()->count());
         // ゴミ箱を含むの場合
-        $request = $this->getRequest('/?status=1&withTrash=true');
+        $request = $this->getRequest('/?status=publish&withTrash=true');
         $contents = $this->ContentsService->getIndex($request->getQueryParams());
         $this->assertEquals(22, $contents->all()->count());
         // 否定の場合
-        $request = $this->getRequest('/?status=1&type!=Page');
+        $request = $this->getRequest('/?status=publish&type!=Page');
         $contents = $this->ContentsService->getIndex($request->getQueryParams());
         $this->assertEquals(11, $contents->all()->count());
         // フォルダIDを指定する場合
-        $request = $this->getRequest('/?status=1&folder_id=6');
+        $request = $this->getRequest('/?status=publish&folder_id=6');
         $contents = $this->ContentsService->getIndex($request->getQueryParams());
         $this->assertEquals(3, $contents->all()->count());
     }

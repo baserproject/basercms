@@ -40,8 +40,8 @@
     <?= $this->BcAdminForm->control('type', ['type' => 'select', 'options' => $typeList, 'empty' => __d('baser_core', '指定なし')]) ?>
 	</span>
   <span class="bca-search__input-item">
-		<?= $this->BcAdminForm->label('self_status', __d('baser_core', '公開状態'), ['class' => 'bca-search__input-item-label']) ?>
-    <?= $this->BcAdminForm->control('self_status', ['type' => 'select', 'options' => $this->BcText->booleanMarkList(), 'empty' => __d('baser_core', '指定なし')]) ?>
+		<?= $this->BcAdminForm->label('status', __d('baser_core', '公開状態'), ['class' => 'bca-search__input-item-label']) ?>
+    <?= $this->BcAdminForm->control('status', ['type' => 'select', 'options' => ['unpublish' => "―", 'publish' => "○"], 'empty' => __d('baser_core', '指定なし')]) ?>
 	</span>
   <span class="bca-search__input-item">
 		<?= $this->BcAdminForm->label('author_id', __d('baser_core', '作成者'), ['class' => 'bca-search__input-item-label']) ?>
@@ -50,7 +50,18 @@
   <?= $this->BcSearchBox->dispatchShowField(); ?>
 </p>
 <div class="button bca-search__btns">
-  <div  class="bca-search__btns-item"><?= $this->BcAdminForm->button(__d('baser_core', '検索'), ['id' => 'BtnSearchSubmit', 'class' => 'bca-btn', 'data-bca-btn-type' => 'search']) ?></div>
-  <div class="bca-search__btns-item"><?php $this->BcBaser->link(__d('baser_core', 'クリア'), "javascript:void(0)", ['id' => 'BtnSearchClear', 'class' => 'bca-btn', 'data-bca-btn-type' => 'clear']) ?></div>
+  <div  class="bca-search__btns-item">
+    <?= $this->BcAdminForm->button(__d('baser_core', '検索'), [
+      'id' => 'BtnSearchSubmit',
+      'class' => 'bca-btn bca-loading',
+      'data-bca-btn-type' => 'search'
+    ]) ?>
+  </div>
+  <div class="bca-search__btns-item">
+    <?php $this->BcBaser->link(__d('baser_core', 'クリア'), "javascript:void(0)", [
+      'id' => 'BtnSearchClear',
+      'class' => 'bca-btn',
+      'data-bca-btn-type' => 'clear'
+    ]) ?></div>
 </div>
 <?= $this->BcAdminForm->end() ?>
