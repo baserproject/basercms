@@ -57,7 +57,10 @@ class UploaderCategoriesService implements UploaderCategoriesServiceInterface
      */
     public function getIndex(array $queryParams = [])
     {
-        return $this->UploaderCategories->find()->contain(['UploaderFiles']);
+        $options = array_merge([
+            'contain' => ['UploaderFiles']
+        ], $queryParams);
+        return $this->UploaderCategories->find()->contain($options['contain']);
     }
 
     /**
