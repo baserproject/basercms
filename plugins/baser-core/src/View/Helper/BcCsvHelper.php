@@ -48,6 +48,13 @@ class BcCsvHelper extends Helper
     public $encoding = 'UTF-8';
 
     /**
+     * BOMファイルヘッダの出力
+     *
+     * @var boolean
+     */
+    public $exportBom = true;
+
+    /**
      * 出力データテンポラリファイルポインタ
      * @private string
      */
@@ -129,7 +136,6 @@ class BcCsvHelper extends Helper
      */
     protected function _perseKey($data)
     {
-
         if (!is_array($data))
             return false;
 
@@ -154,7 +160,6 @@ class BcCsvHelper extends Helper
      */
     protected function _perseValue($data)
     {
-
         if (!is_array($data))
             return false;
 
@@ -190,6 +195,9 @@ class BcCsvHelper extends Helper
             }
             Header("Content-disposition: attachment; filename=" . $fileName . ".csv");
             Header("Content-type: application/octet-stream; name=" . $fileName . ".csv");
+            if ($this->exportBom) {
+                echo pack('C*', 0xEF, 0xBB, 0xBF);
+            }
             if ($this->exportCsvHead) {
                 echo $this->csvHead;
             }
