@@ -227,7 +227,7 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
     public function testTrash_return()
     {
         $id = $this->ContentsService->getTrashIndex()->first()->id;
-        $this->get("/baser/api/baser-core/contents/trash_return/{$id}.json?token=" . $this->accessToken);
+        $this->post("/baser/api/baser-core/contents/trash_return/{$id}.json?token=" . $this->accessToken);
         $this->assertResponseOk();
         $this->assertNotEmpty($this->ContentsService->get($id));
     }
