@@ -10,7 +10,7 @@ msgstr ""
 "Language-Team: baserCMS Users Community <info@basercms.net>\n"
 "Language: en\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 3.2.2\n"
 
@@ -1028,7 +1028,9 @@ msgstr "It's an invalid ID."
 #: plugins/bc-uploader/src/Service/UploaderFilesService.php:178
 msgid ""
 "送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。"
-msgstr "Exceeding sendable data size. Please send data size within %s."
+msgstr ""
+"You have exceeded the amount of data that can be sent. Send no more than %s "
+"total data."
 
 #: plugins/baser-core/src/Controller/Admin/ContentFoldersController.php:67
 msgid "フォルダ「%s」を更新しました。"
@@ -1354,7 +1356,7 @@ msgid ""
 "固定ページ「%s」を更新しました。\n"
 "%s"
 msgstr ""
-"Fixed page \"%s\" was updated.\n"
+"Static page \"%s\" was updated.\n"
 "%s"
 
 #: plugins/baser-core/src/Controller/Admin/PagesController.php:86
@@ -1510,52 +1512,37 @@ msgstr "Access group \"{0}\" was deleted."
 
 #: plugins/baser-core/src/Controller/Admin/PermissionGroupsController.php:140
 #: plugins/baser-core/src/Controller/Api/PermissionGroupsController.php:216
-#, fuzzy
-#| msgid "データベースの構築に成功しました。"
 msgid "アクセスルールの再構築に成功しました。"
-msgstr "Succeeded constructing the database."
+msgstr "The access rule was successfully rebuilt."
 
 #: plugins/baser-core/src/Controller/Admin/PermissionGroupsController.php:142
 #: plugins/baser-core/src/Controller/Api/PermissionGroupsController.php:218
-#, fuzzy
-#| msgid "コアテーブルの構築に失敗しました。"
 msgid "アクセスルールの再構築に失敗しました。"
-msgstr "Failed constructing Core table."
+msgstr "Access rule rebuild failed."
 
 #: plugins/baser-core/src/Controller/Admin/PermissionsController.php:112
-#, fuzzy
-#| msgid "新規アクセス制限設定「%s」を追加しました。"
 msgid "新規アクセスルール「%s」を追加しました。"
-msgstr "Added new Access Restriction Settings “%s”."
+msgstr "A new access rule \"%s\" has been added."
 
 #: plugins/baser-core/src/Controller/Admin/PermissionsController.php:150
-#, fuzzy
-#| msgid "カテゴリー「%s」を更新しました。"
 msgid "アクセスルール「%s」を更新しました。"
-msgstr "Updated Category \"%s\"."
+msgstr "Access rule \"%s\" was updated."
 
 #: plugins/baser-core/src/Controller/Admin/PermissionsController.php:184
-#, fuzzy
-#| msgid "カテゴリー「%s」を削除しました。"
 msgid "アクセスルール「%s」を削除しました。"
-msgstr "Deleted Category \"%s\"."
+msgstr "Access rule \"%s\" was deleted."
 
 #: plugins/baser-core/src/Controller/Admin/PermissionsController.php:205
-#| msgid "カテゴリー「%s」を追加しました。"
 msgid "アクセスルール「%s」を複製しました。"
-msgstr "Added Category \"%s\"."
+msgstr "Copied Access rule \"%s\"."
 
 #: plugins/baser-core/src/Controller/Admin/PermissionsController.php:229
-#, fuzzy
-#| msgid "プラグイン「%s」 を 無効化しました。"
 msgid "アクセスルール「%s」を無効にしました。"
-msgstr "Disabled Plugin “%s”."
+msgstr "Access rule \"%s\" disabled."
 
 #: plugins/baser-core/src/Controller/Admin/PermissionsController.php:252
-#, fuzzy
-#| msgid "カテゴリー「%s」を追加しました。"
 msgid "アクセスルール「%s」を有効にしました。"
-msgstr "Added Category \"%s\"."
+msgstr "Access rule \"%s\" enabled."
 
 #: plugins/baser-core/src/Controller/Admin/PluginsController.php:93
 msgid "新規プラグイン「%s」を baserCMS に登録しました。"
@@ -1571,51 +1558,36 @@ msgstr ""
 "the Plugin’s developer."
 
 #: plugins/baser-core/src/Controller/Admin/PluginsController.php:128
-#, fuzzy
-#| msgid ""
-#| "全てのアップデート処理が完了しました。<a href=\"#UpdateLog\">アップデート"
-#| "ログ</a>を確認してください。"
 msgid "全てのアップデート処理が完了しました。 {0} にログを出力しています。"
-msgstr ""
-"Completed all update process. Check <a href=\"#UpdateLog\">update log</a>."
+msgstr "All update processes are complete. Logging to {0}."
 
 #: plugins/baser-core/src/Controller/Admin/PluginsController.php:132
-#, fuzzy
-#| msgid ""
-#| "アップデート処理が完了しました。<a href=\"#UpdateLog\">アップデートログ</"
-#| "a>を確認してください。"
 msgid ""
 "アップデート処理が完了しました。画面下部のアップデートログを確認してくださ"
 "い。"
-msgstr "Completed update process. Check <a href=\"#UpdateLog\">update log</a>."
+msgstr ""
+"The update process is complete. Check the update log at the bottom of the "
+"screen."
 
 #: plugins/baser-core/src/Controller/Admin/PluginsController.php:161
 #: plugins/baser-core/src/Controller/Api/PluginsController.php:129
-#, fuzzy
-#| msgid "プラグイン「%s」 を 無効化しました。"
 msgid "プラグイン「%s」を無効にしました。"
-msgstr "Disabled Plugin “%s”."
+msgstr "Disabled plugin \"%s\"."
 
 #: plugins/baser-core/src/Controller/Admin/PluginsController.php:163
 #: plugins/baser-core/src/Controller/Api/PluginsController.php:132
-#, fuzzy
-#| msgid "プラグインの有効化に失敗しました。"
 msgid "プラグインの無効化に失敗しました。"
-msgstr "Failed enabling Plugin"
+msgstr "Failed to disable plugin."
 
 #: plugins/baser-core/src/Controller/Admin/PluginsController.php:189
 #: plugins/baser-core/src/Controller/Api/PluginsController.php:229
-#, fuzzy
-#| msgid "プラグイン「%s」 を完全に削除しました。"
 msgid "プラグイン「%s」を削除しました。"
-msgstr "Removed the Plugin “%s” completely."
+msgstr "Removed plugin \"%s\"."
 
 #: plugins/baser-core/src/Controller/Admin/PluginsController.php:191
 #: plugins/baser-core/src/Service/PluginsService.php:449
-#, fuzzy
-#| msgid "プラグインの有効化に失敗しました。"
 msgid "プラグインの削除に失敗しました。"
-msgstr "Failed enabling Plugin"
+msgstr "Failed to remove plugin."
 
 #: plugins/baser-core/src/Controller/Admin/PluginsController.php:213
 #: plugins/baser-core/src/Controller/Api/PluginsController.php:257
@@ -1635,45 +1607,33 @@ msgid "%s プラグインのデータを初期化しました。"
 msgstr "Initialized Plugin %s’sdata."
 
 #: plugins/baser-core/src/Controller/Admin/PluginsController.php:265
-#, fuzzy
-#| msgid "データベース処理中にエラーが発生しました。"
 msgid "リセット処理中にエラーが発生しました。"
-msgstr "An error has occured when processing database."
+msgstr "An error occurred during the reset process."
 
 #: plugins/baser-core/src/Controller/Admin/SiteConfigsController.php:51
 msgid "システム設定を保存しました。"
 msgstr "Saved System Settings."
 
 #: plugins/baser-core/src/Controller/Admin/SitesController.php:98
-#, fuzzy
-#| msgid "サブサイト「%s」を追加しました。"
 msgid "サイト「%s」を追加しました。"
-msgstr "Added Subsite “%s”."
+msgstr "Added Site “%s”."
 
 #: plugins/baser-core/src/Controller/Admin/SitesController.php:150
-#, fuzzy
-#| msgid "サブサイト「%s」を更新しました。"
 msgid "サイト「%s」を更新しました。"
-msgstr "Updated Subsite “%s”."
+msgstr "Updated Site “%s”."
 
 #: plugins/baser-core/src/Controller/Admin/SitesController.php:175
-#, fuzzy
-#| msgid "サブサイト「%s」 を削除しました。"
 msgid "サイト「%s」を公開しました。"
-msgstr "Deleted Subsite “%s”."
+msgstr "The site \"%s\" has been released."
 
 #: plugins/baser-core/src/Controller/Admin/SitesController.php:198
-#, fuzzy
-#| msgid "サブサイト「%s」 を削除しました。"
 msgid "サイト「%s」を非公開にしました。"
-msgstr "Deleted Subsite “%s”."
+msgstr "The site \"%s\" was made private."
 
 #: plugins/baser-core/src/Controller/Admin/SitesController.php:228
 #: plugins/baser-core/src/Controller/Api/SitesController.php:150
-#, fuzzy
-#| msgid "サブサイト「%s」 を削除しました。"
 msgid "サイト: {0} を削除しました。"
-msgstr "Deleted Subsite “%s”."
+msgstr "Site: Removed {0}."
 
 #: plugins/baser-core/src/Controller/Admin/ThemesController.php:56
 #, fuzzy
