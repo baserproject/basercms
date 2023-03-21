@@ -65,20 +65,21 @@ class MailFieldsService implements MailFieldsServiceInterface
     public function getIndex(int $mailContentId, array $queryParams = [])
     {
         $options = array_merge([
-            'use_field' => null
-        ]);
+            'use_field' => null,
+            'contain' => ['MailContents']
+        ], $queryParams);
 
         $conditions = ['MailFields.mail_content_id' => $mailContentId];
-        if(!is_null($options['use_field'])) $conditions['use_field'] = $options['use_field'];
+        if (!is_null($options['use_field'])) $conditions['use_field'] = $options['use_field'];
 
         $query = $this->MailFields->find()
-            ->contain(['MailContents'])
+            ->contain($options['contain'])
             ->order(['MailFields.sort'])
             ->where($conditions);
         if (!empty($queryParams['limit'])) {
             $query->limit($queryParams['limit']);
         }
-        return $query->all();
+        return $query;
     }
 
     /**
