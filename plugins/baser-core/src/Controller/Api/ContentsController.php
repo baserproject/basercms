@@ -145,12 +145,13 @@ class ContentsController extends BcApiController
      * @noTodo
      * @unitTest
      */
-    public function delete(ContentsServiceInterface $service)
+    public function delete(ContentsServiceInterface $service, $id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
         $content = $message = $errors = null;
         try {
-            $id = $this->request->getData('id');
+            if(!$id) $id = $this->request->getData('id');
+
             $content = $service->get($id);
             $children = $service->getChildren($id);
             // EVENT Contents.beforeDelete
