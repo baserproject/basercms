@@ -158,11 +158,14 @@ class PermissionGroupsService implements PermissionGroupsServiceInterface
 	}
 
 	/**
-	 * アクセスルールグループのリストを取得する
-	 *
-	 * @param array $options
-	 * @return array
-	 */
+     * アクセスルールグループのリストを取得する
+     *
+     * @param array $options
+     * @return array
+     * @noTodo
+     * @unitTest
+     * @checked
+     */
 	public function getList(array $options = [])
 	{
 		$query = $this->PermissionGroups->find('list');

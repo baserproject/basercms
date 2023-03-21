@@ -184,6 +184,7 @@ class MailContentsService implements MailContentsServiceInterface
             'id' => null,
             'no' => null,
             'status' => null,
+            'contain' => ['Contents']
         ], $queryParams);
 
         if (!empty($options['num'])) $options['limit'] = $options['num'];
@@ -196,7 +197,13 @@ class MailContentsService implements MailContentsServiceInterface
             $conditions = $this->MailContents->Contents->getConditionAllowPublish();
         }
 
-        $query = $this->MailContents->find()->contain('Contents');
+        if (is_null($options['contain'])) {
+            $fields = $this->MailContents->getSchema()->columns();
+            $query = $this->MailContents->find()->contain('Contents')->select($fields);
+        }else{
+            $query = $this->MailContents->find()->contain($options['contain']);
+        }
+
         if (!is_null($options['limit'])) $query->limit($options['limit']);
         return $query->where($conditions);
     }

@@ -75,6 +75,37 @@ class PermissionGroupsServiceTest extends BcTestCase
     }
 
     /**
+     * Test getList
+     *
+     * @return void
+     */
+    public function testGetList(): void
+    {
+        $this->loadFixtureScenario(PermissionGroupsScenario::class);
+        $result = $this->PermissionGroups->getList();
+        $this->assertCount(3, $result);
+        PermissionGroupFactory::make([
+            'name' => 'group 1',
+            'type' => 'Supper',
+            'plugin' => 'BaserCore',
+            'status' => 1
+        ])->persist();
+        PermissionGroupFactory::make([
+            'name' => 'group 2',
+            'type' => 'Supper',
+            'plugin' => 'BaserCore',
+            'status' => 1
+        ])->persist();
+        $result = $this->PermissionGroups->getList();
+        $this->assertCount(5, $result);
+        $this->assertContains('group 1', $result);
+        $option = ['type' => 'Supper'];
+        $result = $this->PermissionGroups->getList($option);
+        $this->assertCount(2, $result);
+        $this->assertContains('group 2', $result);
+    }
+
+    /**
      * Test get
      *
      * @return void

@@ -37,9 +37,13 @@ class UploaderCategoriesController extends BcApiController
     public function index(UploaderCategoriesServiceInterface $service)
     {
         $this->request->allowMethod(['get']);
+
+        $queryParams = array_merge([
+            'contain' => null,
+        ], $this->request->getQueryParams());
         $this->set([
             'uploaderCategories' => $this->paginate(
-                $service->getIndex($this->request->getQueryParams())
+                $service->getIndex($queryParams)
             )
         ]);
         $this->viewBuilder()->setOption('serialize', ['uploaderCategories']);

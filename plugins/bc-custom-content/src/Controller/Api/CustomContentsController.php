@@ -35,8 +35,12 @@ class CustomContentsController extends BcApiController
      */
     public function index(CustomContentsServiceInterface $service)
     {
+        $queryParams = array_merge([
+            'contain' => null,
+        ], $this->request->getQueryParams());
+
         $this->set([
-            'customContents' => $this->paginate($service->getIndex($this->request->getQueryParams()))
+            'customContents' => $this->paginate($service->getIndex($queryParams))
         ]);
         $this->viewBuilder()->setOption('serialize', ['customContents']);
     }

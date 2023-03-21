@@ -58,6 +58,7 @@ class MailContentsController extends BcApiController
         }
 
         $queryParams = array_merge([
+            'contain' => null,
             'status' => 'publish'
         ], $queryParams);
 
