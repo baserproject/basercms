@@ -26,6 +26,8 @@
 
 <?= $this->BcAdminForm->create($contentsSearch, ['type' => 'get', 'id' => 'ContentIndexForm'], ) ?>
 <?= $this->BcAdminForm->control('open', ['type' => 'hidden', 'value' => true]) ?>
+<?= $this->BcAdminForm->control('list_type', ['type' => 'hidden']) ?>
+
 <p class="bca-search__input-list">
 	<span class="bca-search__input-item">
 		<?= $this->BcAdminForm->label('folder_id', __d('baser_core', 'フォルダ'), ['class' => 'bca-search__input-item-label']) ?>

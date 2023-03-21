@@ -41,14 +41,10 @@ $(function () {
                 break;
         }
 
-        // 検索ボックス
-        let searchBox = $("#Search");
-        let contentsIndexSearchOpened = $("#SearchBoxOpened").html();
-        if (contentsIndexSearchOpened) {
-            searchBox.show();
-        } else {
-            searchBox.hide();
-        }
+        $("#BtnSearchSubmit").click(function (){
+            $("#list-type").val(2);
+            return true;
+        });
 
         // サイトが変わった場合は検索ボックスをリセット
         if (e !== undefined && e.target.id === 'viewsetting-site-id') {
@@ -107,8 +103,9 @@ $(function () {
      * 表形式のリストをロードする
      */
     function loadTable() {
-        let url = $.bcUtil.adminBaseUrl + 'baser-core' + '/contents/index?list_type=2';
-        location.href = url + '&' + decodeURI($("#ContentIndexForm").serialize());
+        let url = $.bcUtil.adminBaseUrl + 'baser-core' + '/contents/index?';
+        $("#list-type").val(2);
+        location.href = url + decodeURI($("#ContentIndexForm").serialize());
     }
 
     /**
