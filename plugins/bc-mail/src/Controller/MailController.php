@@ -206,7 +206,6 @@ class MailController extends MailFrontAppController
             $mailMessage = $service->confirm($mailContent, $this->getRequest()->getData());
         } catch (PersistenceFailedException $e) {
             $mailMessage = $e->getEntity();
-            $mailMessage->auth_captcha = '';
             $this->BcMessage->setError($e->getMessage());
         } catch (BcException $e) {
             $this->BcMessage->setError($e->getMessage());
