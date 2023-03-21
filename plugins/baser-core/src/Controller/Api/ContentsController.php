@@ -11,6 +11,7 @@
 
 namespace BaserCore\Controller\Api;
 
+use BaserCore\Service\ContentsService;
 use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\Http\Exception\ForbiddenException;
 use Cake\ORM\Exception\PersistenceFailedException;
@@ -124,16 +125,16 @@ class ContentsController extends BcApiController
     /**
      * ゴミ箱内のコンテンツ一覧を取得する
      *
-     * @param ContentsServiceInterface $service
+     * @param ContentsService $service
      * @return void
      */
     public function index_trash(ContentsServiceInterface $service)
     {
-        $data = $this->paginate($service->getTrashIndex(
+        $entities = $this->paginate($service->getTrashIndex(
             $this->request->getQueryParams(), 'threaded'
         )->order(['site_id', 'lft']));
 
-        $this->set(['contents' => $data]);
+        $this->set(['contents' => $entities]);
         $this->viewBuilder()->setOption('serialize', ['contents']);
     }
 
@@ -277,7 +278,7 @@ class ContentsController extends BcApiController
      */
     public function trash_return(ContentsServiceInterface $service, int $id)
     {
-        $this->request->allowMethod(['get', 'head']);
+        $this->request->allowMethod(['post', 'put', 'patch']);
         $restored = null;
         try {
             if ($restored = $service->restore($id)) {
@@ -417,7 +418,7 @@ class ContentsController extends BcApiController
      * リネーム
      *
      * 新規登録時の初回リネーム時は、name にも保存する
-     * @param ContentsServiceInterface $service
+     * @param ContentsService $service
      * @return void
      * @checked
      * @noTodo
@@ -429,12 +430,12 @@ class ContentsController extends BcApiController
         $newContent = $url = $errors = null;
         try {
             $oldContent = $service->get($this->request->getData('id'));
+            $oldTitle = $oldContent->title;
             $newContent = $service->rename($oldContent, $this->getRequest()->getData());
             $url = $service->getUrlById($newContent->id);
             $this->setResponse($this->response->withStatus(200));
-            $message = sprintf(
-                __d('baser_core', '「%s」を「%s」に名称変更しました。'),
-                $oldContent->title,
+            $message = __d('baser_core', '「{0}」を「{1}」に名称変更しました。',
+                $oldTitle,
                 $newContent->title
             );
         } catch (PersistenceFailedException $e) {
@@ -509,7 +510,7 @@ class ContentsController extends BcApiController
 
     /**
      * 並び順を移動する
-     * @param ContentsServiceInterface $service
+     * @param ContentsService $service
      * @return void
      * @checked
      * @noTodo
