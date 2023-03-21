@@ -13,6 +13,7 @@ namespace BcMail\Test\TestCase\Controller\Api;
 
 use BaserCore\Controller\Api\PagesController;
 use BaserCore\Test\Factory\ContentFactory;
+use BaserCore\Test\Factory\PermissionFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcMail\Test\Scenario\MailContentsScenario;
@@ -85,6 +86,7 @@ class MailContentsControllerTest extends BcTestCase
     public function testIndex()
     {
         //データを生成
+        PermissionFactory::make()->allowGuest('/baser/api/*')->persist();
         $this->loadFixtureScenario(MailContentsScenario::class);
         //APIを呼ぶ
         $this->get("/baser/api/bc-mail/mail_contents/index.json");

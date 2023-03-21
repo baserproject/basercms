@@ -51,6 +51,7 @@ class MailContentsScenario implements FixtureScenarioInterface
             'entity_id' => 1,
             'rght' => 1,
             'lft' => 2,
+            'status'=> true,
             'created_date' => '2023-02-16 16:41:37',
         ])->persist();
 
@@ -73,6 +74,7 @@ class MailContentsScenario implements FixtureScenarioInterface
             'entity_id' => 2,
             'rght' => 1,
             'lft' => 2,
+            'status'=> true,
             'created_date' => '2023-02-16 16:41:37',
         ])->persist();
     }
