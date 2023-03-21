@@ -58,7 +58,11 @@ class CustomContentsService implements CustomContentsServiceInterface
      */
     public function getIndex(array $queryParams = []): Query
     {
-        $query = $this->CustomContents->find()->contain('Contents');
+        $queryParams = array_merge([
+            'contain' => ['Contents']
+        ], $queryParams);
+
+        $query = $this->CustomContents->find()->contain($queryParams['contain']);
 
         if (!empty($queryParams['limit'])) {
             $query->limit($queryParams['limit']);
