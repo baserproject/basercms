@@ -38,8 +38,11 @@ class BlogTagsController extends BcApiController
     public function index(BlogTagsServiceInterface $service)
     {
         $this->request->allowMethod(['get']);
+        $queryParams = array_merge([
+            'contain' => null,
+        ], $this->getRequest()->getQueryParams());
         $this->set([
-            'blogTags' => $this->paginate($service->getIndex($this->request->getQueryParams()))
+            'blogTags' => $this->paginate($service->getIndex($queryParams))
         ]);
         $this->viewBuilder()->setOption('serialize', ['blogTags']);
     }
