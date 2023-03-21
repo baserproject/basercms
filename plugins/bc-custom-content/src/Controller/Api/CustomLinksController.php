@@ -38,9 +38,13 @@ class CustomLinksController extends BcApiController
     public function index(CustomLinksServiceInterface $service, int $id)
     {
         $this->request->allowMethod('get');
+
+        $queryParams = array_merge([
+            'contain' => null,
+        ], $this->request->getQueryParams());
         $this->set([
             'customLinks' => $this->paginate(
-                $service->getIndex($id, $this->request->getQueryParams())
+                $service->getIndex($id, $queryParams)
             )
         ]);
         $this->viewBuilder()->setOption('serialize', ['customLinks']);

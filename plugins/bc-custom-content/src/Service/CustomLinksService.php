@@ -68,23 +68,24 @@ class CustomLinksService implements CustomLinksServiceInterface
         $options = array_merge([
             'finder' => 'threaded',
             'status' => null,
-            'for' => null
+            'for' => null,
+            'contain' => ['CustomFields']
         ], $options);
 
         $conditions = ['CustomLinks.custom_table_id' => $tableId];
-        if(!is_null($options['status']) && $options['status'] !== 'all') {
+        if (!is_null($options['status']) && $options['status'] !== 'all') {
             $conditions['CustomLinks.status'] = $options['status'];
         }
 
         $findOptions = [];
-        if(!is_null($options['for'])) {
+        if (!is_null($options['for'])) {
             $findOptions['for'] = $options['for'];
         }
 
         return $this->CustomLinks->find($options['finder'], $findOptions)
             ->order('lft ASC')
             ->where($conditions)
-            ->contain(['CustomFields']);
+            ->contain($options['contain']);
     }
 
     /**
