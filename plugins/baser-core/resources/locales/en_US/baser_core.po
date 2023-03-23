@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: baserCMS\n"
-"POT-Creation-Date: 2023-03-16 10:33+0900\n"
-"PO-Revision-Date: 2023-03-18 18:39+0900\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2023-03-22 18:33+0900\n"
 "Last-Translator: ryuring\n"
 "Language-Team: baserCMS Users Community <info@basercms.net>\n"
 "Language: en\n"
@@ -4999,18 +4999,14 @@ msgid "サーバーキャッシュ削除"
 msgstr "Server Cache"
 
 #: plugins/bc-admin-third/templates/Admin/Utilities/index.php:27
-#, fuzzy
-#| msgid ""
-#| "baserCMSは、表示速度向上の為、サーバーサイドのキャッシュ機構利用していま"
-#| "す。<br>これによりテンプレートを直接編集した際など、変更内容が反映されない"
-#| "場合がありますので、その際には、サーバーサイドのキャッシュを削除します。"
 msgid ""
 "baserCMSは、表示速度向上のため、サーバーサイドのキャッシュ機構を利用していま"
 "す。<br>これによりテンプレートを直接編集した際など、変更内容が反映されない場"
 "合がありますので、その際には、サーバーサイドのキャッシュを削除します。"
 msgstr ""
-"baserCMS uses cache mechanism to speed up displaying.<br>Delete server side "
-"cache if changed content was not applied when you edited Template directly."
+"baserCMS uses a server-side caching mechanism to improve display speed."
+"<br>This may not reflect the changes when you edit the template directly, so "
+"in that case, delete the server-side cache."
 
 #: plugins/bc-admin-third/templates/Admin/Utilities/index.php:29
 msgid "サーバーキャッシュを削除する"
@@ -5357,7 +5353,7 @@ msgstr "Updated Date"
 #: plugins/bc-admin-third/templates/plugin/BcUploader/Admin/element/UploaderFiles/index_list_table.php:119
 #: plugins/bc-admin-third/templates/plugin/BcWidgetArea/Admin/element/WidgetAreas/index_list.php:65
 msgid "アクション"
-msgstr ""
+msgstr "Action"
 
 #: plugins/bc-admin-third/templates/Admin/element/Contents/index_list_table.php:126
 #: plugins/bc-admin-third/templates/Admin/element/Dblogs/index_list.php:82
@@ -5538,11 +5534,6 @@ msgid "baserCMSニュース"
 msgstr "baserCMS News"
 
 #: plugins/bc-admin-third/templates/Admin/element/Dashboard/baser_news.php:47
-#, fuzzy
-#| msgid ""
-#| "baserCMSについて、不具合の発見・改善要望がありましたら<a href=\"http://"
-#| "forum.basercms.net\" target=\"_blank\">ユーザーズフォーラム</a> よりお知ら"
-#| "せください。"
 msgid ""
 "baserCMSについて、不具合の発見・改善要望がありましたら<a href=\"https://"
 "forum.basercms.net\" target=\"_blank\">ユーザーズフォーラム</a> よりお知らせ"
@@ -6558,7 +6549,7 @@ msgstr "Help"
 
 #: plugins/bc-admin-third/templates/Admin/element/contents_menu.php:58
 msgid "ルール追加"
-msgstr ""
+msgstr "Add Rule"
 
 #: plugins/bc-admin-third/templates/Admin/element/crumbs.php:17
 #: plugins/bc-front/templates/element/crumbs.php:25
@@ -9186,10 +9177,6 @@ msgid "baserCMSのインストール"
 msgstr "Install baserCMS"
 
 #: plugins/bc-admin-third/templates/plugin/BcInstaller/Admin/Installations/index.php:23
-#, fuzzy
-#| msgid ""
-#| "%sのインストールを開始します。<br />よろしければ「インストール開始」ボタン"
-#| "をクリックしてください。"
 msgid ""
 "%s のインストールを開始します。<br>よろしければ「インストール開始」ボタンをク"
 "リックしてください。"
@@ -9197,28 +9184,20 @@ msgstr ""
 "Installing %s.<br />Please click “Start Installation” button if you are ok."
 
 #: plugins/bc-admin-third/templates/plugin/BcInstaller/Admin/Installations/index.php:28
-#, fuzzy
-#| msgid ""
-#| "baserCMSではファイルベースのデータベースをサポートしています。SQLite３ を"
-#| "利用すれば、インストールにデータベースサーバーは必要ありません。"
 msgid ""
 "baserCMSではファイルベースのデータベースをサポートしています。<br>SQLite３ を"
 "利用すれば、インストールにデータベースサーバーは必要ありません。"
 msgstr ""
-"baserCMS supports file based database. Database server won’t be needed for "
-"installation if you used SQLite 3."
+"baserCMS supports file-based databases.<br>SQLite3 does not require a "
+"database server for installation."
 
 #: plugins/bc-admin-third/templates/plugin/BcInstaller/Admin/Installations/index.php:31
-#, fuzzy
-#| msgid ""
-#| "膨大なデータの操作、データベースによる複雑な処理が必要な場合は、MySQLなど"
-#| "のデータベースサーバーの利用を推奨します。"
 msgid ""
 "膨大なデータの操作、データベースによる複雑な処理が必要な場合は、MySQL または "
 "PostgreSQL の利用を推奨します。"
 msgstr ""
-"Use of Database server like MySQL is recommended if huge data manipulation "
-"or complex processing by database are needed."
+"If you need to manipulate large amounts of data or perform complex "
+"processing with databases, MySQL or PostgreSQL is recommended."
 
 #: plugins/bc-admin-third/templates/plugin/BcInstaller/Admin/Installations/index.php:36
 msgid "インストール開始"
@@ -9292,16 +9271,12 @@ msgstr "Sorry, you can’t run baserCMS on using server"
 #: plugins/bc-admin-third/templates/plugin/BcInstaller/Admin/Installations/step2.php:77
 #: plugins/bc-admin-third/templates/plugin/BcInstaller/Admin/Installations/step2.php:88
 #: plugins/bc-admin-third/templates/plugin/BcInstaller/Admin/Installations/step2.php:99
-#, fuzzy
-#| msgid ""
-#| "/js フォルダの書き込み権限（707 OR 777 等、サーバー推奨がある場合はそちら"
-#| "に従ってください）"
 msgid ""
 "{0} フォルダの書き込み権限（707 OR 777 等、サーバー推奨がある場合はそちらに"
 "従ってください）"
 msgstr ""
-"Write permission to /js folder (707 OR 777 etc. Follow server "
-"recommendations if they exist)"
+"{0} Write permissions for the folder (follow server recommendations, such as "
+"707 OR 777)"
 
 #: plugins/bc-admin-third/templates/plugin/BcInstaller/Admin/Installations/step2.php:69
 #: plugins/bc-admin-third/templates/plugin/BcInstaller/Admin/Installations/step2.php:80
@@ -9384,36 +9359,25 @@ msgid "ファイルデータベース"
 msgstr "File Database"
 
 #: plugins/bc-admin-third/templates/plugin/BcInstaller/Admin/Installations/step2.php:160
-#, fuzzy
-#| msgid ""
-#| "データベースサーバーが利用できない場合には、ファイルベースデータベースの "
-#| "SQLite を利用できます。有効にするには、下記のフォルダへの書き込み権限が必"
-#| "要です "
 msgid ""
 "データベースサーバーが利用できない場合には、ファイルベースデータベースの "
 "SQLite を利用できます。<br>有効にするには、下記のフォルダへの書き込み権限が必"
 "要です "
 msgstr ""
-"You can use SQLite that is file based database if you can’t use database "
-"server. You must set write permission to following folders to enable it"
+"If the database server is not available, you can use SQLite for the file-"
+"based database.<br>to enable it you must have write permission to the "
+"following folder "
 
 #: plugins/bc-admin-third/templates/plugin/BcInstaller/Admin/Installations/step2.php:165
-#, fuzzy
-#| msgid ""
-#| "/app/db/ の書き込み権限（707 OR 777 等、サーバー推奨がある場合はそちらに"
-#| "従ってください）"
 msgid ""
 "{0} の書き込み権限（707 OR 777 等、サーバー推奨がある場合はそちらに従ってくだ"
 "さい）"
 msgstr ""
-"Write permission to /app/db/ folder (707 OR 777 etc. Follow server "
-"recommendations if they exist)"
+"{0} write permissions (follow server recommendations, such as 707 OR 777)"
 
 #: plugins/bc-admin-third/templates/plugin/BcInstaller/Admin/Installations/step2.php:171
-#, fuzzy
-#| msgid "SQLite を利用するには、/app/db/ フォルダに書き込み権限が必要です"
 msgid "SQLite を利用するには、{0} フォルダに書き込み権限が必要です"
-msgstr "You need write permission to /app/db folder to use SQLite"
+msgstr "to use SQLite you must have write permissions on the {0} folder"
 
 #: plugins/bc-admin-third/templates/plugin/BcInstaller/Admin/Installations/step2.php:179
 msgid "PHPのメモリ"
@@ -9506,23 +9470,16 @@ msgid "baserCMSのインストール｜ステップ３"
 msgstr "baserCMS installation｜step 3"
 
 #: plugins/bc-admin-third/templates/plugin/BcInstaller/Admin/Installations/step3.php:45
-#, fuzzy
-#| msgid ""
-#| "データベースサーバーの場合は、データベースの接続情報を入力し接続テストを実"
-#| "行してください。<br>MySQL / PostgreSQLの場合は、データベースが存在し初期化"
-#| "されている必要があります。<br><strong>既に用意したデータベースにデータが存"
-#| "在する場合は、初期データで上書きされてしまうので注意してください。<br>プレ"
-#| "フィックスを活用しましょう。</strong>"
 msgid ""
 "データベースサーバーの場合は、データベースの接続情報を入力し接続テストを実行"
 "してください。<br>MySQL / PostgreSQLの場合は、データベースが存在し初期化され"
 "ている必要があります。<br><strong>既に用意したデータベースにデータが存在する"
 "場合は、初期データで上書きされてしまうので注意してください。</strong>"
 msgstr ""
-"Please enter database’s connection info and do connection test if it’s "
-"database server.<br>Database must be exist and initialized if it’s MySQL or "
-"PostgreSQL.<br><strong>Please note data will be initialized by initial data "
-"if data exist in prepared database.<br>Use prefix.</strong>"
+"For a database server, enter the database connection information and run the "
+"connection test.<br>For MySQL/PostgreSQL, the database must exist and be "
+"initialized.<br><strong>Note that if data exists in the database already "
+"prepared, it will be overwritten by the initial data.</strong>"
 
 #: plugins/bc-admin-third/templates/plugin/BcInstaller/Admin/Installations/step3.php:48
 msgid "データベース設定"
@@ -9579,20 +9536,16 @@ msgstr ""
 "actual environment."
 
 #: plugins/bc-admin-third/templates/plugin/BcInstaller/Admin/Installations/step3.php:107
-#, fuzzy
-#| msgid "グループ初期データに設定"
 msgid "フロントテーマと初期データ"
-msgstr "Set as Group's Initial Data"
+msgstr "Front theme and initial data"
 
 #: plugins/bc-admin-third/templates/plugin/BcInstaller/Admin/Installations/step3.php:109
-#, fuzzy
-#| msgid ""
-#| "コアパッケージや、テーマが保有するデモンストレーション用データを選択しま"
-#| "す。"
 msgid ""
 "利用するフロント側のデザインテーマと、コアパッケージやデザインテーマが保有す"
 "るデモンストレーション用データを選択します。"
-msgstr "Select Core Package or demonstration data hold by Theme."
+msgstr ""
+"Select the front design theme to use and the demonstration data held by the "
+"core package or design theme."
 
 #: plugins/bc-admin-third/templates/plugin/BcInstaller/Admin/Installations/step3.php:115
 msgid "初めてインストールされる方は、%s を選択してください。"
@@ -9632,10 +9585,8 @@ msgstr ""
 "or Password you entered here."
 
 #: plugins/bc-admin-third/templates/plugin/BcInstaller/Admin/Installations/step4.php:34
-#, fuzzy
-#| msgid "管理ユーザー登録"
 msgid "サイト名と管理ユーザー登録"
-msgstr "Add Admin User"
+msgstr "Site name and administrative user registration"
 
 #: plugins/bc-admin-third/templates/plugin/BcInstaller/Admin/Installations/step4.php:50
 #, fuzzy
@@ -9656,8 +9607,6 @@ msgstr ""
 "large), spaces, symbols(._-:/()#,@[]+=&amp;;{}!$*)"
 
 #: plugins/bc-admin-third/templates/plugin/BcInstaller/Admin/Installations/step4.php:61
-#, fuzzy
-#| msgid "確認の為もう一度入力してください"
 msgid "確認のためもう一度入力してください"
 msgstr "Please re-enter to confirm"
 
@@ -9666,16 +9615,12 @@ msgid "baserCMSのインストール完了！"
 msgstr "baserCMS installation completed!"
 
 #: plugins/bc-admin-third/templates/plugin/BcInstaller/Admin/Installations/step5.php:23
-#, fuzzy
-#| msgid ""
-#| "おめでとうございます！baserCMSのインストールが無事完了しました！ <br />管"
-#| "理用メールアドレスへインストール完了メールを送信しています。"
 msgid ""
 "おめでとうございます！baserCMSのインストールが無事完了しました！ <br>管理用"
 "メールアドレスへインストール完了メールを送信しています。"
 msgstr ""
-"Congratulations! baserCMS installation completed!<br />Installation "
-"completion mail has been sent to mail address for Admin has sent."
+"Congratulations! baserCMS installation completed successfully! <br>An "
+"installation completion email is sent to the management email address."
 
 #: plugins/bc-admin-third/templates/plugin/BcInstaller/Admin/Installations/step5.php:26
 msgid "次は何をしますか？"
@@ -9716,10 +9661,8 @@ msgid "メールプラグイン基本設定"
 msgstr "Mail Plugin Basic Settings"
 
 #: plugins/bc-admin-third/templates/plugin/BcMail/Admin/MailConfigs/index.php:23
-#, fuzzy
-#| msgid "受信メール"
 msgid "送信メール署名"
-msgstr "Received Mails"
+msgstr "Received EMails"
 
 #: plugins/bc-admin-third/templates/plugin/BcMail/Admin/MailConfigs/index.php:34
 msgid "Webサイト名"
@@ -9777,7 +9720,7 @@ msgstr ""
 
 #: plugins/bc-admin-third/templates/plugin/BcMail/Admin/MailContents/edit.php:26
 msgid "メールフォーム設定編集"
-msgstr "Mail Form Settings"
+msgstr "Edit mail form settings"
 
 #: plugins/bc-admin-third/templates/plugin/BcMail/Admin/MailContents/index.php:27
 #, fuzzy
@@ -9792,28 +9735,20 @@ msgstr ""
 "Caution: All the Fields set to this Mail Form will be deleted."
 
 #: plugins/bc-admin-third/templates/plugin/BcMail/Admin/MailFields/add.php:22
-#, fuzzy
-#| msgid "[%s] 新規メールフィールド登録"
 msgid "{0}｜新規メールフィールド登録"
-msgstr "[%s] Add Mail Field"
+msgstr "{0}|New Email Field Registration"
 
 #: plugins/bc-admin-third/templates/plugin/BcMail/Admin/MailFields/edit.php:22
-#, fuzzy
-#| msgid "[%s] メールフィールド編集： %s"
 msgid "{0}｜メールフィールド編集"
-msgstr "[%s] Edit Mail Field"
+msgstr "{0}|Edit Email Field"
 
 #: plugins/bc-admin-third/templates/plugin/BcMail/Admin/MailFields/index.php:19
-#, fuzzy
-#| msgid "メールフィールド一覧"
 msgid "%s｜メールフィールド一覧"
-msgstr "Mail Field List"
+msgstr "%s|Email Field List"
 
 #: plugins/bc-admin-third/templates/plugin/BcMail/Admin/MailMessages/index.php:17
-#, fuzzy
-#| msgid "%s｜受信メール一覧"
 msgid "{0}｜受信メール一覧"
-msgstr "%s｜Received Mail List"
+msgstr "%s｜Received Email List"
 
 #: plugins/bc-admin-third/templates/plugin/BcMail/Admin/MailMessages/index.php:35
 #: plugins/bc-mail/config/permission.php:64
@@ -12978,7 +12913,7 @@ msgstr ""
 
 #: plugins/bc-front/templates/plugin/BcMail/email/text/mail_default.php:24
 msgid "受信完了メール"
-msgstr ""
+msgstr "Received email"
 
 #: plugins/bc-front/templates/plugin/BcMail/email/text/mail_default.php:28
 #, fuzzy
@@ -13531,7 +13466,7 @@ msgstr ""
 
 #: plugins/bc-mail/src/Event/BcMailViewEventListener.php:68
 msgid "受信メール"
-msgstr "Received Mails"
+msgstr "Received Emails"
 
 #: plugins/bc-mail/src/Model/Table/MailConfigsTable.php:77
 msgid "Webサイト名を入力してください。"
