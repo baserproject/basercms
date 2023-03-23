@@ -101,15 +101,20 @@ class BcUploadBehavior extends ModelBehavior
 	 *
 	 * @param Model $Model
 	 * @param array $options
-	 * @return mixed
+	 * @return void
 	 */
 	public function afterValidate(Model $Model, $options = [])
 	{
-		if($this->validatingLock[$Model->alias]) return true;
-        $Model->data[$Model->alias] = $this->BcFileUploader[$Model->alias]->setupRequestData(isset($Model->data[$Model->alias])? $Model->data[$Model->alias] : $Model->data);
-        $Model->data[$Model->alias] = $this->BcFileUploader[$Model->alias]->setupTmpData(isset($Model->data[$Model->alias])? $Model->data[$Model->alias] : $Model->data);
-        $this->oldEntity[$Model->alias] = (!empty($Model->data[$Model->alias]['id']))? $this->getOldEntity($Model, $Model->data[$Model->alias]['id']) : [];
-        $this->validatingLock[$Model->alias] = true;
+		if ($Model->validationErrors) {
+			return;
+		}
+		if ($this->validatingLock[$Model->alias]) {
+			return;
+		}
+		$Model->data[$Model->alias] = $this->BcFileUploader[$Model->alias]->setupRequestData(isset($Model->data[$Model->alias])? $Model->data[$Model->alias] : $Model->data);
+		$Model->data[$Model->alias] = $this->BcFileUploader[$Model->alias]->setupTmpData(isset($Model->data[$Model->alias])? $Model->data[$Model->alias] : $Model->data);
+		$this->oldEntity[$Model->alias] = (!empty($Model->data[$Model->alias]['id']))? $this->getOldEntity($Model, $Model->data[$Model->alias]['id']) : [];
+		$this->validatingLock[$Model->alias] = true;
 
 		// @deprecated 後方互換 since v4.5.6, v5.0.0 で削除予定
 		// CuApprover-4.3.2以下に対応するための処理
@@ -133,8 +138,6 @@ class BcUploadBehavior extends ModelBehavior
 			}
 		}
 		// <<<
-
-        return true;
 	}
 
 	/**
