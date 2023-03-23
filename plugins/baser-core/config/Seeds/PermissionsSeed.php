@@ -30,7 +30,7 @@ class PermissionsSeed extends BcSeed
                 'url' => '/baser/admin/*',
                 'auth' => 0,
                 'status' => 1,
-                'created' => '2022-10-01 09:00:00',
+                'created' => NULL,
                 'method' => 'ALL',
                 'modified' => null,
             ],
@@ -44,7 +44,7 @@ class PermissionsSeed extends BcSeed
                 'auth' => 1,
                 'status' => 1,
                 'method' => 'ALL',
-                'created' => '2022-10-01 09:00:00',
+                'created' => NULL,
                 'modified' => null,
             ],
             [
@@ -57,8 +57,8 @@ class PermissionsSeed extends BcSeed
                 'auth' => 1,
                 'status' => 1,
                 'method' => 'ALL',
-                'created' => '2022-10-01 09:00:00',
-                'modified' => '2022-10-01 09:00:00',
+                'created' => NULL,
+                'modified' => NULL,
             ],
             [
                 'id' => 4,
@@ -70,8 +70,8 @@ class PermissionsSeed extends BcSeed
                 'auth' => 1,
                 'status' => 1,
                 'method' => 'ALL',
-                'created' => '2022-10-01 09:00:00',
-                'modified' => '2022-10-01 09:00:00',
+                'created' => NULL,
+                'modified' => NULL,
             ],
             [
                 'id' => 5,
@@ -83,8 +83,8 @@ class PermissionsSeed extends BcSeed
                 'auth' => 1,
                 'status' => 1,
                 'method' => 'ALL',
-                'created' => '2022-10-01 09:00:00',
-                'modified' => '2022-10-01 09:00:00',
+                'created' => NULL,
+                'modified' => NULL,
             ],
             [
                 'id' => 6,
@@ -96,7 +96,7 @@ class PermissionsSeed extends BcSeed
                 'auth' => 1,
                 'status' => 1,
                 'method' => 'ALL',
-                'created' => '2022-10-01 09:00:00',
+                'created' => NULL,
                 'modified' => null,
             ],
             [
@@ -109,8 +109,8 @@ class PermissionsSeed extends BcSeed
                 'auth' => 1,
                 'status' => 1,
                 'method' => 'ALL',
-                'created' => '2022-10-01 09:00:00',
-                'modified' => '2022-10-01 09:00:00',
+                'created' => NULL,
+                'modified' => NULL,
             ],
             [
                 'id' => 8,
@@ -122,8 +122,8 @@ class PermissionsSeed extends BcSeed
                 'auth' => 1,
                 'status' => 1,
                 'method' => 'ALL',
-                'created' => '2022-10-01 09:00:00',
-                'modified' => '2022-10-01 09:00:00',
+                'created' => NULL,
+                'modified' => NULL,
             ],
             [
                 'id' => 9,
@@ -135,7 +135,7 @@ class PermissionsSeed extends BcSeed
                 'auth' => 1,
                 'status' => 1,
                 'method' => 'ALL',
-                'created' => '2022-10-01 09:00:00',
+                'created' => NULL,
                 'modified' => null,
             ],
             [
@@ -148,8 +148,8 @@ class PermissionsSeed extends BcSeed
                 'auth' => 1,
                 'status' => 1,
                 'method' => 'ALL',
-                'created' => '2022-10-01 09:00:00',
-                'modified' => '2022-10-01 09:00:00',
+                'created' => NULL,
+                'modified' => NULL,
             ],
             [
                 'id' => 11,
@@ -161,8 +161,8 @@ class PermissionsSeed extends BcSeed
                 'auth' => 1,
                 'status' => 1,
                 'method' => 'ALL',
-                'created' => '2022-10-01 09:00:00',
-                'modified' => '2022-10-01 09:00:00',
+                'created' => NULL,
+                'modified' => NULL,
             ]
         ];
 

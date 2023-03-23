@@ -28,8 +28,8 @@ class CustomTablesSeed extends BcSeed
                 'type' => '1',
                 'display_field' => 'title',
                 'has_child' => 0,
-                'modified' => '2023-02-12 23:31:04',
-                'created' => '2023-01-27 14:25:22',
+                'modified' => NULL,
+                'created' => NULL,
             ],
             [
                 'id' => 2,
@@ -38,8 +38,8 @@ class CustomTablesSeed extends BcSeed
                 'type' => '2',
                 'display_field' => 'title',
                 'has_child' => 1,
-                'modified' => '2023-02-03 16:43:34',
-                'created' => '2023-01-30 09:29:14',
+                'modified' => NULL,
+                'created' => NULL,
             ],
         ];
 

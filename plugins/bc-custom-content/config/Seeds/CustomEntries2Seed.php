@@ -24,8 +24,8 @@ class CustomEntries2Seed extends BcSeed
             [
                 'id' => 1,
                 'custom_table_id' => 2,
-                'modified' => '2023-02-14 13:57:29',
-                'created' => '2023-01-30 07:09:22',
+                'modified' => NULL,
+                'created' => NULL,
                 'name' => 'プログラマー',
                 'title' => 'プログラマー',
                 'creator_id' => 1,
@@ -35,7 +35,7 @@ class CustomEntries2Seed extends BcSeed
                 'status' => 1,
                 'publish_begin' => NULL,
                 'publish_end' => NULL,
-                'published' => '2023-02-14 13:57:29',
+                'published' => NULL,
             ],
         ];
 

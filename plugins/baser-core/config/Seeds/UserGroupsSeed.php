@@ -28,8 +28,8 @@ class UserGroupsSeed extends BcSeed
                 'auth_prefix' => 'Admin,Api',
                 'auth_prefix_settings' => '',
                 'use_move_contents' => '1',
-                'modified' => '2022-10-01 09:00:00',
-                'created' => '2022-10-01 09:00:00',
+                'modified' => NULL,
+                'created' => NULL,
             ],
             [
                 'id' => '2',
@@ -39,7 +39,7 @@ class UserGroupsSeed extends BcSeed
                 'auth_prefix_settings' => '{"Admin":{"type":"2"},"Api":{"type":"2"}}',
                 'use_move_contents' => '0',
                 'modified' => NULL,
-                'created' => '2022-10-01 09:00:00',
+                'created' => NULL,
             ],
         ];
 

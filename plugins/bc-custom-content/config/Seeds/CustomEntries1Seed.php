@@ -24,9 +24,9 @@ class CustomEntries1Seed extends BcSeed
             [
                 'id' => 1,
                 'custom_table_id' => 1,
-                'published' => '2023-02-14 13:57:29',
-                'modified' => '2023-02-14 13:57:29',
-                'created' => '2023-01-30 07:09:22',
+                'published' => NULL,
+                'modified' => NULL,
+                'created' => NULL,
                 'name' => 'プログラマー',
                 'recruit_category' => '1',
                 'feature' => '["土日祝日休み","交通費支給"]',
