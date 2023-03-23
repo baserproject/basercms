@@ -92,12 +92,6 @@ class SiteConfigsTable extends AppTable
             ->email('email', 255, __d('baser_core', '管理者メールアドレスの形式が不正です。'))
             ->notEmptyString('email', __d('baser_core', '管理者メールアドレスを入力してください。'));
         $validator
-            ->scalar('mail_encode')
-            ->notEmptyString('mail_encode', __d('baser_core', 'メール送信文字コードを入力してください。初期値は「ISO-2022-JP」です。'));
-        $validator
-            ->scalar('main_site_display_name')
-            ->notEmptyString('main_site_display_name', __d('baser_core', 'メインサイト表示名を入力してください。'));
-        $validator
             ->scalar('site_url')
             ->notEmptyString('site_url', __d('baser_core', 'WebサイトURLを入力してください。'));
         $validator

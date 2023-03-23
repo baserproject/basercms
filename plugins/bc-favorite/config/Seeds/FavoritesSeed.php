@@ -27,8 +27,8 @@ class FavoritesSeed extends BcSeed
                 'name' => 'クレジット',
                 'url' => 'javascript:$.bcCredit.show();',
                 'sort' => '1',
-                'created' => '2020-12-03 14:41:39',
-                'modified' => '2020-12-03 14:41:39',
+                'created' => NULL,
+                'modified' => NULL,
             ]
         ];
 

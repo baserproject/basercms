@@ -129,7 +129,6 @@ class BcAdminContentsComponentTest extends BcTestCase
         $this->assertInstanceOf("BaserCore\Model\Entity\Content", $vars["content"]);
         $this->assertIsArray($vars["relatedContents"]);
         $this->assertEquals($content->site_id == 1 ? null : 1, $vars["mainSiteId"]);
-        $this->assertEquals("パソコン", $vars["mainSiteDisplayName"]);
         $this->assertIsArray($vars["sites"]);
         $this->assertNotNull($vars["layoutTemplates"]);
         $this->assertIsString($vars["publishLink"]);
@@ -155,7 +154,6 @@ class BcAdminContentsComponentTest extends BcTestCase
         $this->assertInstanceOf("BaserCore\Model\Entity\Content", $vars["content"]);
         $this->assertIsArray($vars["relatedContents"]);
         $this->assertEquals($contentFolder->content->site_id == 1 ? null : 1, $vars["mainSiteId"]);
-        $this->assertEquals("パソコン", $vars["mainSiteDisplayName"]);
         $this->assertIsArray($vars["sites"]);
         $this->assertNotNull($vars["layoutTemplates"]);
         $this->assertIsString($vars["publishLink"]);

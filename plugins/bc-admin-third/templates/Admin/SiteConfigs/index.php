@@ -283,7 +283,6 @@ $this->BcBaser->js('admin/site_configs/index.bundle', false, ['id' => 'AdminSite
         </td>
       </tr>
 
-<?php /* TODO ucmitz 未実装のためコメントアウト ?>
       <tr>
         <th class="col-head bca-form-table__label">
           <?php echo $this->BcAdminForm->label('google_analytics_id', __d('baser_core', 'Google Analytics<br>トラッキングID'), ['escape' => false]) ?>
@@ -294,7 +293,7 @@ $this->BcBaser->js('admin/site_configs/index.bundle', false, ['id' => 'AdminSite
           <div class="bca-helptext">
             <?php echo __d('baser_core',
               'Googleの無料のアクセス解析サービス <a href="http://www.google.com/intl/ja/analytics/" target="_blank">Google Analytics</a> を
-              利用される方は、取得したトラッキングID (UA-000000-01 のような文字列）を入力してください。'
+              利用される方は、取得したトラッキングID (G-0000000000 のような文字列）を入力してください。'
             ) ?>
             <br/>
             ※<?php echo __d('baser_core', '事前に<a href="http://www.google.com/intl/ja/analytics/" target="_blank">Google Analytics</a> で登録作業が必要です。') ?>
@@ -302,14 +301,12 @@ $this->BcBaser->js('admin/site_configs/index.bundle', false, ['id' => 'AdminSite
             <?php echo __d('baser_core', 'テンプレートで利用する場合は、 <pre>&lt;?php $this->BcBaser->googleAnalytics() ?&gt;</pre> で出力します。') ?>
           </div>
           <?php echo $this->BcAdminForm->error('google_analytics_id') ?><br/>
-          <?php echo sprintf(__d('baser_core', 'ユニバーサルアナリティクスを&nbsp;&nbsp;%s'), $this->BcAdminForm->control('use_universal_analytics', ['type' => 'radio', 'options' => ['0' => __d('baser_core', '利用していない'), '1' => __d('baser_core', '利用している')]])) ?>
         </td>
       </tr>
 
-
       <tr>
         <th class="col-head bca-form-table__label">
-          <?php echo $this->BcAdminForm->label('outer_service_output_header', __d('baser_core', 'ヘッダ埋め込みスクリプト')) ?>
+          <?php echo $this->BcAdminForm->label('outer_service_output_header', __d('baser_core', 'ヘッダー埋め込みスクリプト')) ?>
         </th>
 
         <td class="col-input bca-form-table__input">
@@ -340,7 +337,6 @@ $this->BcBaser->js('admin/site_configs/index.bundle', false, ['id' => 'AdminSite
           </div>
         </td>
       </tr>
-*/ ?>
 
       <?php echo $this->BcAdminForm->dispatchAfterForm('OuterService') ?>
 
@@ -364,24 +360,7 @@ $this->BcBaser->js('admin/site_configs/index.bundle', false, ['id' => 'AdminSite
   </div>
   <div class="bca-collapse" id="formSubSiteSettingBody" data-bca-state="">
     <table class="form-table bca-form-table section" data-bca-table-type="type2">
-      <?php /* TODO ucmitz 未実装のためコメントアウト（不要な可能性が高い、その場合、DBのデータの精査を行う）?>
-      <tr>
-        <th class="col-head bca-form-table__label">
-          <?php echo $this->BcAdminForm->label('main_site_display_name', __d('baser_core', 'メインサイト表示名称')) ?>
-          &nbsp;<span class="required bca-label" data-bca-label-type="required"><?php echo __d('baser_core', '必須') ?></span>
-        </th>
-        <td class="col-input bca-form-table__input">
-          <?php echo $this->BcAdminForm->control('main_site_display_name', [
-            'type' => 'text',
-            'size' => 35,
-            'maxlength' => 255
-          ]) ?>
-          <i class="bca-icon--question-circle bca-help"></i>
-          <div class="bca-helptext"><?php echo __d('baser_core', 'サブサイトを利用する際に、メインサイトを特定する識別名称を設定します。') ?></div>
-          <?php echo $this->BcAdminForm->error('main_site_display_name') ?>
-        </td>
-      </tr>
-      */ ?>
+
       <tr>
         <th class="col-head bca-form-table__label">
           <?php echo $this->BcAdminForm->label('use_site_device_setting', __d('baser_core', 'デバイス・言語設定')) ?>
@@ -448,8 +427,8 @@ $this->BcBaser->js('admin/site_configs/index.bundle', false, ['id' => 'AdminSite
           <?php echo $this->BcAdminForm->control('editor_enter_br', [
             'type' => 'radio',
             'options' => [
-              '0' => __d('baser_core', '改行時に段落を挿入する'),
-              '1' => __d('baser_core', '改行時にBRタグを挿入する')
+              0 => __d('baser_core', '改行時に段落を挿入する'),
+              1 => __d('baser_core', '改行時にBRタグを挿入する')
             ]])
           ?>
         </td>
@@ -496,7 +475,6 @@ h2 {}
   </div>
 </section>
 
-<?php /* TODO ucmitz 未実装のためコメントアウト?>
 <section class="bca-section" data-bca-section-type='form-group'>
   <div class="bca-collapse__action">
     <button type="button"
@@ -511,22 +489,7 @@ h2 {}
   </div>
   <div class="bca-collapse" id="formMailSettingBody" data-bca-state="">
     <table class="form-table bca-form-table" data-bca-table-type="type2">
-      <tr>
-        <th class="bca-form-table__label">
-          <?php echo $this->BcAdminForm->label('mail_encode', __d('baser_core', 'メール送信文字コード')) ?>
-        </th>
-        <td class="col-input bca-form-table__input">
-          <?php echo $this->BcAdminForm->control('mail_encode', [
-            'type' => 'select',
-            'options' => $mailEncodeList
-          ]) ?>
-          <i class="bca-icon--question-circle bca-help"></i>
-          <div class="bca-helptext">
-            <?php echo __d('baser_core', '送信メールの文字コードを選択します。<br>受信したメールが文字化けする場合に変更します。') ?>
-          </div>
-          <?php echo $this->BcAdminForm->error('mail_encode') ?>
-        </td>
-      </tr>
+
       <tr>
         <th class="bca-form-table__label">
           <?php echo $this->BcAdminForm->label('smtp_host', __d('baser_core', 'SMTP設定')) ?></th>
@@ -627,7 +590,8 @@ h2 {}
             　<span id=ResultCheckSendmail></span>
             <?php $this->BcBaser->img('admin/ajax-loader-s.gif', [
               'id' => 'AjaxLoaderCheckSendmail',
-              'style' => 'display:none'
+              'style' => 'display:none',
+              'class' => 'bca-small-loader'
             ]) ?>
           </div>
         </td>
@@ -645,7 +609,7 @@ h2 {}
           ]) ?>
           <i class="bca-icon--question-circle bca-help"></i>
           <div class="bca-helptext"><?php echo __d('baser_core', '標準機能によるメール送信時にオプションを追加します。') ?></div>
-          <?php echo $this->BcAdminForm->error('mail_encode') ?>
+          <?php echo $this->BcAdminForm->error('mail_additional_parameters') ?>
         </td>
       </tr>
 
@@ -654,7 +618,7 @@ h2 {}
     </table>
   </div>
 </section>
-*/ ?>
+
 <?php echo $this->BcFormTable->dispatchAfter() ?>
 
 <div class="bca-actions">

@@ -77,7 +77,7 @@ class SiteConfigsController extends BcApiController
      * @checked
      * @note(value="メール送信機能を実装してから対応する")
      */
-    public function check_sendmail()
+    public function check_sendmail(SiteConfigsServiceInterface $service)
     {
         $this->request->allowMethod(['post', 'put']);
         $siteConfigs = $this->request->getData();
@@ -87,16 +87,19 @@ class SiteConfigsController extends BcApiController
         } else {
             $siteUrl = Configure::read('BcEnv.siteUrl');
         }
-        // TODO ucmitz 未実装ためコメントアウト
-        /* >>>
-        if (!$this->sendMail(
-            $siteConfigs['email'], __d('baser_core', 'メール送信テスト'),
-            sprintf('%s からのメール送信テストです。', $siteConfigs['formal_name']) . "\n" . $siteUrl
-        )) {
+
+        try {
+            $service->sendTestMail(
+                $this->getRequest()->getData(),
+                $siteConfigs['email'],
+                __d('baser_core', 'メール送信テスト'),
+                __d('baser_core', "メール送信テストです。") . "\n" . $siteUrl
+            );
+        } catch (\Throwable $e) {
             $this->setResponse($this->response->withStatus(401));
             $message = __d('baser_core', 'ログを確認してください。');
         }
-        <<< */
+
         $this->set('message', $message);
         $this->viewBuilder()->setOption('serialize', ['message']);
     }

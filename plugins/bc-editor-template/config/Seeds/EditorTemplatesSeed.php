@@ -36,7 +36,7 @@ class EditorTemplatesSeed extends BcSeed
 </div>
 <p>新しいブロックを挿入します。不要な場合はこの段落を削除します</p>',
                 'modified' => NULL,
-                'created' => '2015-06-26 20:34:05',
+                'created' => NULL,
             ],
             [
                 'id' => 2,
@@ -53,7 +53,7 @@ class EditorTemplatesSeed extends BcSeed
 </div>
 <p>新しいブロックを挿入します。不要な場合はこの段落を削除します</p>',
                 'modified' => NULL,
-                'created' => '2015-06-26 20:34:05',
+                'created' => NULL,
             ],
             [
                 'id' => 3,
@@ -81,7 +81,7 @@ class EditorTemplatesSeed extends BcSeed
 <p>
 新しいブロックを挿入します。不要な場合はこの段落を削除します</p>',
                 'modified' => NULL,
-                'created' => '2015-06-26 20:34:05',
+                'created' => NULL,
             ],
         ];
 

@@ -600,6 +600,10 @@
   display: none;
 }
 
+.bca-small-loader {
+  width:16px;
+  vertical-align:middle;
+}
 
 #UploaderForm .uploader-file-file {
     font-size: $label_font_size_small!important;

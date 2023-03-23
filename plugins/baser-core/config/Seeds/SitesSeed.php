@@ -40,8 +40,8 @@ class SitesSeed extends BcSeed
                 'auto_redirect' => '0',
                 'auto_link' => '0',
                 'domain_type' => '0',
-                'created' => '2022-10-01 09:00:00',
-                'modified' => '2022-10-01 09:00:00',
+                'created' => NULL,
+                'modified' => NULL,
             ],
         ];
 

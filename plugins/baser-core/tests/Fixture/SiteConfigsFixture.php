@@ -64,13 +64,6 @@ class SiteConfigsFixture extends TestFixture
             'modified' => '2021-01-27 13:01:58'
         ],
         [
-            'id' => '6',
-            'name' => 'mail_encode',
-            'value' => 'UTF-8',
-            'created' => '2021-01-27 12:56:52',
-            'modified' => '2021-01-27 13:01:58'
-        ],
-        [
             'id' => '7',
             'name' => 'smtp_host',
             'value' => '',
@@ -113,23 +106,9 @@ class SiteConfigsFixture extends TestFixture
             'modified' => '2021-01-27 13:01:58'
         ],
         [
-            'id' => '13',
-            'name' => 'content_categories',
-            'value' => 'YTowOnt9',
-            'created' => '2021-01-27 12:56:52',
-            'modified' => '2021-01-27 12:58:25'
-        ],
-        [
             'id' => '14',
             'name' => 'content_types',
             'value' => 'YTozOntzOjk6IuODluODreOCsCI7czo5OiLjg5bjg63jgrAiO3M6OToi44Oa44O844K4IjtzOjk6IuODmuODvOOCuCI7czo5OiLjg6Hjg7zjg6siO3M6OToi44Oh44O844OrIjt9',
-            'created' => '2021-01-27 12:56:52',
-            'modified' => '2021-01-27 12:58:25'
-        ],
-        [
-            'id' => '15',
-            'name' => 'category_permission',
-            'value' => '',
             'created' => '2021-01-27 12:56:52',
             'modified' => '2021-01-27 12:58:25'
         ],
@@ -226,23 +205,9 @@ q {}',
             'modified' => '2021-01-27 12:58:25'
         ],
         [
-            'id' => '25',
-            'name' => 'use_universal_analytics',
-            'value' => '1',
-            'created' => '2021-01-27 12:58:10',
-            'modified' => '2021-01-27 12:58:25'
-        ],
-        [
             'id' => '26',
             'name' => 'google_maps_api_key',
             'value' => '',
-            'created' => '2021-01-27 12:58:10',
-            'modified' => '2021-01-27 12:58:25'
-        ],
-        [
-            'id' => '27',
-            'name' => 'main_site_display_name',
-            'value' => 'パソコン',
             'created' => '2021-01-27 12:58:10',
             'modified' => '2021-01-27 12:58:25'
         ],

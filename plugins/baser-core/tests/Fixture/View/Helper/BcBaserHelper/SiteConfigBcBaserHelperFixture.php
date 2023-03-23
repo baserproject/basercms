@@ -78,13 +78,6 @@ class SiteConfigBcBaserHelperFixture extends BaserTestFixture
             'modified' => '2015-01-27 13:01:58'
         ],
         [
-            'id' => '9',
-            'name' => 'mail_encode',
-            'value' => 'UTF-8',
-            'created' => '2015-01-27 12:56:52',
-            'modified' => '2015-01-27 13:01:58'
-        ],
-        [
             'id' => '10',
             'name' => 'smtp_host',
             'value' => '',
@@ -134,23 +127,9 @@ class SiteConfigBcBaserHelperFixture extends BaserTestFixture
             'modified' => '2015-01-27 13:01:58'
         ],
         [
-            'id' => '17',
-            'name' => 'content_categories',
-            'value' => 'YTowOnt9',
-            'created' => '2015-01-27 12:56:52',
-            'modified' => '2015-01-27 12:58:25'
-        ],
-        [
             'id' => '18',
             'name' => 'content_types',
             'value' => 'YTozOntzOjk6IuODluODreOCsCI7czo5OiLjg5bjg63jgrAiO3M6OToi44Oa44O844K4IjtzOjk6IuODmuODvOOCuCI7czo5OiLjg6Hjg7zjg6siO3M6OToi44Oh44O844OrIjt9',
-            'created' => '2015-01-27 12:56:52',
-            'modified' => '2015-01-27 12:58:25'
-        ],
-        [
-            'id' => '19',
-            'name' => 'category_permission',
-            'value' => '',
             'created' => '2015-01-27 12:56:52',
             'modified' => '2015-01-27 12:58:25'
         ],
@@ -247,23 +226,9 @@ q {}',
             'modified' => '2015-01-27 12:58:25'
         ],
         [
-            'id' => '29',
-            'name' => 'use_universal_analytics',
-            'value' => '1',
-            'created' => '2015-01-27 12:58:10',
-            'modified' => '2015-01-27 12:58:25'
-        ],
-        [
             'id' => '30',
             'name' => 'google_maps_api_key',
             'value' => '',
-            'created' => '2015-01-27 12:58:10',
-            'modified' => '2015-01-27 12:58:25'
-        ],
-        [
-            'id' => '31',
-            'name' => 'main_site_display_name',
-            'value' => 'パソコン',
             'created' => '2015-01-27 12:58:10',
             'modified' => '2015-01-27 12:58:25'
         ],

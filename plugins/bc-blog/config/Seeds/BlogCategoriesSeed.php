@@ -31,7 +31,7 @@ class BlogCategoriesSeed extends BcSeed
                 'parent_id' => NULL,
                 'lft' => 1,
                 'rght' => 2,
-                'created' => '2022-10-01 09:00:00',
+                'created' => NULL,
                 'modified' => NULL,
             ],
         ];

@@ -48,7 +48,8 @@ $this->BcAdmin->setHelp('widget_areas_form');
   'data-bca-btn-type' => 'save'
 ]) ?>&nbsp;
 <?php $this->BcBaser->img('admin/ajax-loader-s.gif', [
-  'style' => 'vertical-align:middle;display:none;width:16px',
+  'style' => 'display:none;',
+  'class' => 'bca-small-loader',
   'id' => 'WidgetAreaUpdateTitleLoader'
 ]) ?>
 <?php echo $this->BcAdminForm->error('name') ?>
@@ -122,7 +123,7 @@ $this->BcAdmin->setHelp('widget_areas_form');
                     </p>
                     <?php echo $widget['setting'] ?>
                     <p>
-                      <?php $this->BcBaser->img('admin/ajax-loader-s.gif', ['style' => 'vertical-align:middle;display:none', 'id' => 'WidgetUpdateWidgetLoader', 'class' => 'loader']) ?>
+                      <?php $this->BcBaser->img('admin/ajax-loader-s.gif', ['style' => 'display:none', 'id' => 'WidgetUpdateWidgetLoader', 'class' => 'bca-small-loader']) ?>
                       <?php echo $this->BcAdminForm->control('Widget.use_title', ['type' => 'checkbox', 'label' => __d('baser_core', 'タイトルを表示'), 'class' => 'bca-checkbox__input use_title', 'checked' => 'checked']) ?>
                       <?php echo $this->BcAdminForm->control('Widget.status', ['type' => 'checkbox', 'label' => __d('baser_core', '利用する'), 'class' => 'bca-checkbox__input status']) ?>
                       <?php echo $this->BcAdminForm->submit(__d('baser_core', '保存'), [
@@ -149,9 +150,9 @@ $this->BcAdmin->setHelp('widget_areas_form');
         <h2>
           <?php echo __d('baser_core', '利用中のウィジェット ') ?>
           <?php $this->BcBaser->img('admin/ajax-loader-s.gif', [
-            'style' => 'vertical-align:middle;display:none;width:16px',
+            'style' => 'display:none',
             'id' => 'WidgetAreaUpdateSortLoader',
-            'class' => 'loader'
+            'class' => 'bca-small-loader'
           ]) ?>
         </h2>
 
@@ -204,9 +205,9 @@ $this->BcAdmin->setHelp('widget_areas_form');
                 <?php endif ?>
                 <p>
                   <?php $this->BcBaser->img('admin/ajax-loader-s.gif', [
-                    'style' => 'vertical-align:middle;display:none;width:16px',
+                    'style' => 'display:none',
                     'id' => 'WidgetUpdateWidgetLoader' . $widget[$key]['id'],
-                    'class' => 'loader'
+                    'class' => 'bca-small-loader'
                   ]) ?>
                   <?php echo $this->BcAdminForm->control($key . '.use_title', ['type' => 'checkbox', 'label' => __d('baser_core', 'タイトルを表示'), 'class' => 'bca-checkbox__input use_title']) ?>
                   <?php echo $this->BcAdminForm->control($key . '.status', ['type' => 'checkbox', 'label' => __d('baser_core', '利用する'), 'class' => 'bca-checkbox__input status']) ?>

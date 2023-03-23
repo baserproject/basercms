@@ -82,7 +82,6 @@ class BcAdminContentsServiceTest extends BcTestCase
         $this->assertIsArray($vars['authorList']);
         $this->assertIsArray($vars['sites']);
         $this->assertIsArray($vars['relatedContents']);
-        $this->assertArrayHasKey('mainSiteDisplayName', $vars);
         $this->assertIsArray($vars['layoutTemplates']);
     }
 

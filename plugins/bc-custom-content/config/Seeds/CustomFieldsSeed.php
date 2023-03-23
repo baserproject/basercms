@@ -38,8 +38,8 @@ class CustomFieldsSeed extends BcSeed
                 'max_length' => NULL,
                 'source' => '',
                 'meta' => '{"BcCcAutoZip":{"pref":"","address":""},"BcCcCheckbox":{"label":""},"BcCcRelated":{"custom_table_id":"1","filter_name":"","filter_value":""},"BcCcWysiwyg":{"width":"","height":"","editor_tool_type":"simple"},"BcCustomContent":{"email_confirm":"","max_file_size":"","file_ext":""}}',
-                'created' => '2023-01-30 06:22:47',
-                'modified' => '2023-02-20 11:18:32',
+                'created' => NULL,
+                'modified' => NULL,
                 'line' => NULL,
             ],
             [
@@ -66,8 +66,8 @@ class CustomFieldsSeed extends BcSeed
 資格取得支援
 職場内禁煙',
                 'meta' => '{"BcCcAutoZip":{"pref":"","address":""},"BcCcCheckbox":{"label":""},"BcCcRelated":{"custom_table_id":"1","filter_name":"","filter_value":""},"BcCcWysiwyg":{"width":"","height":"","editor_tool_type":"simple"},"BcCustomContent":{"email_confirm":"","max_file_size":"","file_ext":""}}',
-                'created' => '2023-01-30 06:23:41',
-                'modified' => '2023-02-20 11:21:03',
+                'created' => NULL,
+                'modified' => NULL,
                 'line' => NULL,
             ],
             [
@@ -87,8 +87,8 @@ class CustomFieldsSeed extends BcSeed
                 'max_length' => NULL,
                 'source' => '',
                 'meta' => '{"BcCcAutoZip":{"pref":"","address":""},"BcCcCheckbox":{"label":""},"BcCcRelated":{"custom_table_id":"1","filter_name":"","filter_value":""},"BcCcWysiwyg":{"width":"","height":"","editor_tool_type":"simple"},"BcCustomContent":{"email_confirm":"","max_file_size":"20","file_ext":"jpg,png,gif"}}',
-                'created' => '2023-01-30 06:25:10',
-                'modified' => '2023-02-08 13:52:21',
+                'created' => NULL,
+                'modified' => NULL,
                 'line' => NULL,
             ],
             [
@@ -108,8 +108,8 @@ class CustomFieldsSeed extends BcSeed
                 'max_length' => NULL,
                 'source' => '',
                 'meta' => '{"BcCcAutoZip":{"pref":"","address":""},"BcCcCheckbox":{"label":""},"BcCcRelated":{"custom_table_id":"1","filter_name":"","filter_value":""},"BcCcWysiwyg":{"width":"100%","height":"150px","editor_tool_type":"simple"},"BcCustomContent":{"email_confirm":"","max_file_size":"","file_ext":""}}',
-                'created' => '2023-01-30 06:26:52',
-                'modified' => '2023-02-12 23:14:42',
+                'created' => NULL,
+                'modified' => NULL,
                 'line' => NULL,
             ],
             [
@@ -129,8 +129,8 @@ class CustomFieldsSeed extends BcSeed
                 'max_length' => NULL,
                 'source' => NULL,
                 'meta' => NULL,
-                'created' => '2023-01-30 06:30:21',
-                'modified' => '2023-01-30 06:30:21',
+                'created' => NULL,
+                'modified' => NULL,
                 'line' => NULL,
             ],
             [
@@ -150,8 +150,8 @@ class CustomFieldsSeed extends BcSeed
                 'max_length' => NULL,
                 'source' => '',
                 'meta' => '{"BcCcAutoZip":{"pref":"","address":""},"BcCcCheckbox":{"label":""},"BcCcRelated":{"custom_table_id":"1","filter_name":"","filter_value":""},"BcCcWysiwyg":{"width":"","height":"","editor_tool_type":"simple"},"BcCustomContent":{"email_confirm":"","max_file_size":"","file_ext":""}}',
-                'created' => '2023-01-30 06:31:21',
-                'modified' => '2023-02-13 19:55:16',
+                'created' => NULL,
+                'modified' => NULL,
                 'line' => NULL,
             ],
             [
@@ -173,8 +173,8 @@ class CustomFieldsSeed extends BcSeed
 派遣
 アルバイト',
                 'meta' => NULL,
-                'created' => '2023-01-30 06:32:00',
-                'modified' => '2023-02-04 21:21:45',
+                'created' => NULL,
+                'modified' => NULL,
                 'line' => NULL,
             ],
             [
@@ -194,8 +194,8 @@ class CustomFieldsSeed extends BcSeed
                 'max_length' => NULL,
                 'source' => '',
                 'meta' => '{"BcCcAutoZip":{"pref":"","address":""},"BcCcCheckbox":{"label":""},"BcCcRelated":{"custom_table_id":"1","filter_name":"","filter_value":""},"BcCcWysiwyg":{"width":"","height":"","editor_tool_type":"simple"},"BcCustomContent":{"email_confirm":"","max_file_size":"","file_ext":""}}',
-                'created' => '2023-01-30 06:32:49',
-                'modified' => '2023-02-20 11:16:48',
+                'created' => NULL,
+                'modified' => NULL,
                 'line' => 12,
             ],
             [
@@ -215,8 +215,8 @@ class CustomFieldsSeed extends BcSeed
                 'max_length' => NULL,
                 'source' => '',
                 'meta' => '{"BcCcAutoZip":{"pref":"","address":""},"BcCcCheckbox":{"label":""},"BcCcRelated":{"custom_table_id":"1","filter_name":"","filter_value":""},"BcCcWysiwyg":{"width":"","height":"","editor_tool_type":"simple"},"BcCustomContent":{"email_confirm":"","max_file_size":"","file_ext":""}}',
-                'created' => '2023-01-30 06:33:56',
-                'modified' => '2023-02-14 13:25:03',
+                'created' => NULL,
+                'modified' => NULL,
                 'line' => 2,
             ],
             [
@@ -236,8 +236,8 @@ class CustomFieldsSeed extends BcSeed
                 'max_length' => NULL,
                 'source' => '',
                 'meta' => '{"BcCcAutoZip":{"pref":"","address":""},"BcCcCheckbox":{"label":""},"BcCcRelated":{"custom_table_id":"1","filter_name":"","filter_value":""},"BcCcWysiwyg":{"width":"","height":"","editor_tool_type":"simple"},"BcCustomContent":{"email_confirm":"","max_file_size":"","file_ext":""}}',
-                'created' => '2023-01-30 06:34:30',
-                'modified' => '2023-02-12 23:43:54',
+                'created' => NULL,
+                'modified' => NULL,
                 'line' => NULL,
             ],
             [
@@ -257,8 +257,8 @@ class CustomFieldsSeed extends BcSeed
                 'max_length' => NULL,
                 'source' => '',
                 'meta' => '{"BcCcAutoZip":{"pref":"","address":""},"BcCcCheckbox":{"label":""},"BcCcRelated":{"custom_table_id":"1","filter_name":"","filter_value":""},"BcCcWysiwyg":{"width":"","height":"","editor_tool_type":"simple"},"BcCustomContent":{"email_confirm":"","max_file_size":"","file_ext":""}}',
-                'created' => '2023-01-30 06:37:56',
-                'modified' => '2023-02-20 10:15:53',
+                'created' => NULL,
+                'modified' => NULL,
                 'line' => NULL,
             ],
             [
@@ -278,8 +278,8 @@ class CustomFieldsSeed extends BcSeed
                 'max_length' => NULL,
                 'source' => '',
                 'meta' => '{"BcCcAutoZip":{"pref":"","address":""},"BcCcCheckbox":{"label":""},"BcCcRelated":{"custom_table_id":"1","filter_name":"","filter_value":""},"BcCcWysiwyg":{"width":"","height":"","editor_tool_type":"simple"},"BcCustomContent":{"email_confirm":"","max_file_size":"","file_ext":""}}',
-                'created' => '2023-01-30 09:54:20',
-                'modified' => '2023-02-12 23:34:39',
+                'created' => NULL,
+                'modified' => NULL,
                 'line' => 6,
             ],
             [
@@ -303,8 +303,8 @@ class CustomFieldsSeed extends BcSeed
 
 ',
                 'meta' => NULL,
-                'created' => '2023-01-30 10:18:59',
-                'modified' => '2023-02-04 21:24:09',
+                'created' => NULL,
+                'modified' => NULL,
                 'line' => NULL,
             ],
             [
@@ -324,8 +324,8 @@ class CustomFieldsSeed extends BcSeed
                 'max_length' => NULL,
                 'source' => '',
                 'meta' => '{"BcCcAutoZip":{"pref":"","address":""},"BcCcCheckbox":{"label":""},"BcCcRelated":{"custom_table_id":"1","filter_name":"","filter_value":""},"BcCcWysiwyg":{"width":"","height":"","editor_tool_type":"simple"},"BcCustomContent":{"email_confirm":"","max_file_size":"","file_ext":""}}',
-                'created' => '2023-01-30 10:28:25',
-                'modified' => '2023-02-20 18:13:02',
+                'created' => NULL,
+                'modified' => NULL,
                 'line' => NULL,
             ],
             [
@@ -345,8 +345,8 @@ class CustomFieldsSeed extends BcSeed
                 'max_length' => NULL,
                 'source' => '',
                 'meta' => '{"BcCcAutoZip":{"pref":"","address":""},"BcCcCheckbox":{"label":""},"BcCcRelated":{"custom_table_id":"1","filter_name":"","filter_value":""},"BcCcWysiwyg":{"width":"","height":"","editor_tool_type":"simple"},"BcCustomContent":{"email_confirm":""}}',
-                'created' => '2023-01-30 10:29:01',
-                'modified' => '2023-02-20 11:18:22',
+                'created' => NULL,
+                'modified' => NULL,
                 'line' => NULL,
             ],
         ];

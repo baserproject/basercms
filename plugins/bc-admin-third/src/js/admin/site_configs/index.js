@@ -45,8 +45,8 @@ $(function () {
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     var errorMessage = '';
-                    if (XMLHttpRequest.responseText) {
-                        errorMessage = XMLHttpRequest.responseText;
+                    if (XMLHttpRequest.responseJSON.message) {
+                        errorMessage = XMLHttpRequest.responseJSON.message;
                     } else {
                         errorMessage = errorThrown;
                     }
@@ -91,7 +91,7 @@ $(function () {
      * エディタ切替時イベント
      */
     function siteConfigEditorClickHandler() {
-        if ($('input[name="editor"]:checked').val() === 'BcCkeditor') {
+        if ($('input[name="editor"]:checked').val() === 'BaserCore.BcCkeditor') {
             $(".ckeditor-option").show();
         } else {
             $(".ckeditor-option").hide();

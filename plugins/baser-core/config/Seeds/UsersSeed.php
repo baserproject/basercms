@@ -29,8 +29,8 @@ class UsersSeed extends BcSeed
                 'real_name_2' => '',
                 'email' => 'admin@example.com',
                 'nickname' => '',
-                'created' => '2022-10-01 09:00:00',
-                'modified' => '2022-10-01 09:00:00',
+                'created' => NULL,
+                'modified' => NULL,
             ],
             [
                 'id' => '2',
@@ -40,8 +40,8 @@ class UsersSeed extends BcSeed
                 'real_name_2' => '',
                 'email' => 'operator@example.com',
                 'nickname' => '',
-                'created' => '2022-10-01 09:00:00',
-                'modified' => '2022-10-01 09:00:00',
+                'created' => NULL,
+                'modified' => NULL,
             ],
         ];
 

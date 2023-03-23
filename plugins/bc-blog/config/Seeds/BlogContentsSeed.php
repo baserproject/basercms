@@ -35,8 +35,8 @@ class BlogContentsSeed extends BcSeed
                 'widget_area' => 2,
                 'eye_catch_size' => 'YTo0OntzOjExOiJ0aHVtYl93aWR0aCI7czozOiIzMDAiO3M6MTI6InRodW1iX2hlaWdodCI7czozOiIzMDAiO3M6MTg6Im1vYmlsZV90aHVtYl93aWR0aCI7czozOiIxMDAiO3M6MTk6Im1vYmlsZV90aHVtYl9oZWlnaHQiO3M6MzoiMTAwIjt9',
                 'use_content' => true,
-                'created' => '2022-10-01 09:00:00',
-                'modified' => '2022-10-01 09:00:00',
+                'created' => NULL,
+                'modified' => NULL,
             ],
             [
                 'id' => 2,
@@ -52,8 +52,8 @@ class BlogContentsSeed extends BcSeed
                 'widget_area' => NULL,
                 'eye_catch_size' => 'YTo0OntzOjExOiJ0aHVtYl93aWR0aCI7aTo2MDA7czoxMjoidGh1bWJfaGVpZ2h0IjtpOjYwMDtzOjE4OiJtb2JpbGVfdGh1bWJfd2lkdGgiO2k6MTUwO3M6MTk6Im1vYmlsZV90aHVtYl9oZWlnaHQiO2k6MTUwO30=',
                 'use_content' => true,
-                'created' => '2022-10-01 09:00:00',
-                'modified' => '2022-10-01 09:00:00',
+                'created' => NULL,
+                'modified' => NULL,
             ],
         ];
 

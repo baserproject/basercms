@@ -85,7 +85,6 @@ class SiteConfigsControllerTest extends \BaserCore\TestSuite\BcTestCase
         $this->assertEquals($siteConfig["email"], $result->siteConfig->email);
         $this->assertEquals($siteConfig["theme"], $result->siteConfig->theme);
         $this->assertEquals($siteConfig["editor_styles"], $result->siteConfig->editor_styles);
-        $this->assertEquals($siteConfig["main_site_display_name"], $result->siteConfig->main_site_display_name);
     }
 
     /**

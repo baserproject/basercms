@@ -24,7 +24,7 @@ class BlogTagsSeed extends BcSeed
             [
                 'id' => 1,
                 'name' => '新製品',
-                'created' => '2022-10-01 09:00:00',
+                'created' => NULL,
                 'modified' => NULL,
             ],
         ];

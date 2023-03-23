@@ -38,8 +38,8 @@ class MailContentsSeed extends BcSeed
                 'auth_captcha' => 1,
                 'publish_begin' => NULL,
                 'publish_end' => NULL,
-                'created' => '2016-08-07 23:10:38',
-                'modified' => '2020-09-14 19:37:11',
+                'created' => NULL,
+                'modified' => NULL,
             ]
         ];
 

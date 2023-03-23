@@ -30,7 +30,7 @@ class PluginsSeed extends BcSeed
                 'db_init' => '1',
                 'priority' => '1',
                 'created' => NULL,
-                'modified' => '2022-10-01 09:00:00',
+                'modified' => NULL,
             ],
             [
                 'id' => '2',
@@ -41,7 +41,7 @@ class PluginsSeed extends BcSeed
                 'db_init' => '1',
                 'priority' => '2',
                 'created' => NULL,
-                'modified' => '2022-10-01 09:00:00',
+                'modified' => NULL,
             ]
         ];
 

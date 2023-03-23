@@ -50,8 +50,8 @@ class PagesSeed extends BcSeed
 <p>サンプルデータを入っていないものを利用したい場合は、テーマ管理より「empty」を選択し「初期データ読込」ボタンをクリックしてください。</p>',
                 'draft' => '',
                 'page_template' => '',
-                'modified' => '2022-10-01 09:00:00',
-                'created' => '2022-10-01 09:00:00',
+                'modified' => NULL,
+                'created' => NULL,
             ],
             [
                 'id' => 2,
@@ -90,8 +90,8 @@ class PagesSeed extends BcSeed
 <?php $this->BcBaser->googleMaps(["width" => 585]) ?>',
                 'draft' => '',
                 'page_template' => '',
-                'modified' => '2022-10-01 09:00:00',
-                'created' => '2022-10-01 09:00:00',
+                'modified' => NULL,
+                'created' => NULL,
             ],
             [
                 'id' => 3,
@@ -104,8 +104,8 @@ class PagesSeed extends BcSeed
 <p>サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。</p>',
                 'draft' => '',
                 'page_template' => '',
-                'modified' => '2022-10-01 09:00:00',
-                'created' => '2022-10-01 09:00:00',
+                'modified' => NULL,
+                'created' => NULL,
             ],
             [
                 'id' => 5,
@@ -163,8 +163,8 @@ class PagesSeed extends BcSeed
 <p>&nbsp;</p>',
                 'draft' => '',
                 'page_template' => '',
-                'modified' => '2022-10-01 09:00:00',
-                'created' => '2022-10-01 09:00:00',
+                'modified' => NULL,
+                'created' => NULL,
             ],
             [
                 'id' => 6,
@@ -177,8 +177,8 @@ class PagesSeed extends BcSeed
 <p>サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。</p>',
                 'draft' => '',
                 'page_template' => '',
-                'modified' => '2022-10-01 09:00:00',
-                'created' => '2022-10-01 09:00:00',
+                'modified' => NULL,
+                'created' => NULL,
             ],
             [
                 'id' => 7,
@@ -191,8 +191,8 @@ class PagesSeed extends BcSeed
 <p>サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。</p>',
                 'draft' => '',
                 'page_template' => '',
-                'modified' => '2022-10-01 09:00:00',
-                'created' => '2022-10-01 09:00:00',
+                'modified' => NULL,
+                'created' => NULL,
             ],
         ];
 
