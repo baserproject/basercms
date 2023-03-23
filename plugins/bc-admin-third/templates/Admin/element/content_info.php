@@ -11,7 +11,8 @@
 
 /**
  * コンテンツ情報
- * @var string $mainSiteDisplayName メインサイト表示名称
+ *
+ * @var \BaserCore\View\BcAdminAppView $this
  * @checked
  * @noTodo
  * @unitTest
@@ -49,7 +50,7 @@
             <span><?php echo __d('baser_core', 'データ更新日') ?></span>：<?php echo $this->BcAdminForm->getSourceValue("content.modified"); ?>
           </li>
           <li class="bca-list__item">
-            <span><?php echo __d('baser_core', 'サイト') ?></span>：<?php echo h($this->BcText->noValue($this->BcAdminForm->getSourceValue("content.site.display_name"), $mainSiteDisplayName)) ?>
+            <span><?php echo __d('baser_core', 'サイト') ?></span>：<?php echo h($this->BcAdminForm->getSourceValue("content.site.display_name")) ?>
           </li>
           <li class="bca-list__item"><span><?php echo __d('baser_core', 'タイプ') ?></span>：
             <?php if (!$this->BcAdminForm->getSourceValue("content.alias_id")): ?>
