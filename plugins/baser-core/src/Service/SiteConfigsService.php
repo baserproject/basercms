@@ -15,10 +15,10 @@ use BaserCore\Model\Entity\SiteConfig;
 use BaserCore\Model\Table\SiteConfigsTable;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
-use BcUploader\Plugin;
 use Cake\Core\Configure;
 use Cake\Datasource\Exception\MissingDatasourceConfigException;
 use Cake\Filesystem\File;
+use Cake\Mailer\MailerAwareTrait;
 use Cake\ORM\TableRegistry;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -33,6 +33,7 @@ class SiteConfigsService implements SiteConfigsServiceInterface
     /**
      * Trait
      */
+    use MailerAwareTrait;
     use BcContainerTrait;
 
     /**
@@ -262,6 +263,29 @@ class SiteConfigsService implements SiteConfigsServiceInterface
     public function clearCache()
     {
         $this->entity = null;
+    }
+
+    /**
+     * テストメールを送信する
+     *
+     * @param array $postData
+     * @param string $email
+     * @param string $subject
+     * @param string $body
+     * @return void
+     * @throws \Throwable
+     */
+    public function sendTestMail(array $postData, string $email, string $subject, string $body)
+    {
+        $this->entity = new SiteConfig($postData);
+        try {
+            $this->getMailer('BaserCore.Bc')
+                ->setTo($email)
+                ->setSubject($subject)
+                ->deliver($body);
+        } catch (\Throwable $e) {
+            throw $e;
+        }
     }
 
 }

@@ -78,13 +78,6 @@ class SiteConfigBcBaserHelperFixture extends BaserTestFixture
             'modified' => '2015-01-27 13:01:58'
         ],
         [
-            'id' => '9',
-            'name' => 'mail_encode',
-            'value' => 'UTF-8',
-            'created' => '2015-01-27 12:56:52',
-            'modified' => '2015-01-27 13:01:58'
-        ],
-        [
             'id' => '10',
             'name' => 'smtp_host',
             'value' => '',

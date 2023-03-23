@@ -45,8 +45,8 @@ $(function () {
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     var errorMessage = '';
-                    if (XMLHttpRequest.responseText) {
-                        errorMessage = XMLHttpRequest.responseText;
+                    if (XMLHttpRequest.responseJSON.message) {
+                        errorMessage = XMLHttpRequest.responseJSON.message;
                     } else {
                         errorMessage = errorThrown;
                     }

@@ -64,13 +64,6 @@ class SiteConfigsFixture extends TestFixture
             'modified' => '2021-01-27 13:01:58'
         ],
         [
-            'id' => '6',
-            'name' => 'mail_encode',
-            'value' => 'UTF-8',
-            'created' => '2021-01-27 12:56:52',
-            'modified' => '2021-01-27 13:01:58'
-        ],
-        [
             'id' => '7',
             'name' => 'smtp_host',
             'value' => '',

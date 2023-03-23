@@ -489,22 +489,7 @@ h2 {}
   </div>
   <div class="bca-collapse" id="formMailSettingBody" data-bca-state="">
     <table class="form-table bca-form-table" data-bca-table-type="type2">
-      <tr>
-        <th class="bca-form-table__label">
-          <?php echo $this->BcAdminForm->label('mail_encode', __d('baser_core', 'メール送信文字コード')) ?>
-        </th>
-        <td class="col-input bca-form-table__input">
-          <?php echo $this->BcAdminForm->control('mail_encode', [
-            'type' => 'select',
-            'options' => $mailEncodeList
-          ]) ?>
-          <i class="bca-icon--question-circle bca-help"></i>
-          <div class="bca-helptext">
-            <?php echo __d('baser_core', '送信メールの文字コードを選択します。<br>受信したメールが文字化けする場合に変更します。') ?>
-          </div>
-          <?php echo $this->BcAdminForm->error('mail_encode') ?>
-        </td>
-      </tr>
+
       <tr>
         <th class="bca-form-table__label">
           <?php echo $this->BcAdminForm->label('smtp_host', __d('baser_core', 'SMTP設定')) ?></th>
@@ -605,7 +590,8 @@ h2 {}
             　<span id=ResultCheckSendmail></span>
             <?php $this->BcBaser->img('admin/ajax-loader-s.gif', [
               'id' => 'AjaxLoaderCheckSendmail',
-              'style' => 'display:none'
+              'style' => 'display:none',
+              'class' => 'bca-small-loader'
             ]) ?>
           </div>
         </td>
@@ -623,7 +609,7 @@ h2 {}
           ]) ?>
           <i class="bca-icon--question-circle bca-help"></i>
           <div class="bca-helptext"><?php echo __d('baser_core', '標準機能によるメール送信時にオプションを追加します。') ?></div>
-          <?php echo $this->BcAdminForm->error('mail_encode') ?>
+          <?php echo $this->BcAdminForm->error('mail_additional_parameters') ?>
         </td>
       </tr>
 

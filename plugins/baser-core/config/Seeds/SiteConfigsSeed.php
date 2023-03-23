@@ -50,13 +50,6 @@ class SiteConfigsSeed extends BcSeed
                 'modified' => ''
             ],
             [
-                'id' => '5',
-                'name' => 'mail_encode',
-                'value' => 'UTF-8',
-                'created' => '',
-                'modified' => ''
-            ],
-            [
                 'id' => '6',
                 'name' => 'smtp_host',
                 'value' => '',
