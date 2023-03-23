@@ -147,7 +147,7 @@ class PagesControllerTest extends BcTestCase
         $data->content->name = "pageTestUpdate";
         $data->contents = "pageTestUpdate";
         $id = $data->id;
-        $this->post("/baser/api/baser-core/pages/edit/${id}.json?token=". $this->accessToken, $data->toArray());
+        $this->post("/baser/api/baser-core/pages/edit/{$id}.json?token=". $this->accessToken, $data->toArray());
         $this->assertResponseSuccess();
         $query = $this->PagesService->getIndex(['contents' => $data->contents]);
         $this->assertEquals(1, $query->all()->count());

@@ -184,7 +184,7 @@ class PermissionsControllerTest extends BcTestCase
         $data = $permissionsService->get($id);
 
 
-        $this->post("/baser/api/baser-core/permissions/delete/${id}.json?token=" . $this->accessToken);
+        $this->post("/baser/api/baser-core/permissions/delete/{$id}.json?token=" . $this->accessToken);
         $this->assertResponseSuccess();
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals($result->permission->name, $data->name);

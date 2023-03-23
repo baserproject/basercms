@@ -33,5 +33,5 @@ $this->BcBaser->element('Contents/index_setup_tree');
 <?php $this->BcBaser->element('Contents/index_view_setting') ?>
 
 <div id="DataList" class="bca-data-list">
-  <?php $this->BcBaser->element("Contents/${template}"); ?>
+  <?php $this->BcBaser->element("Contents/{$template}"); ?>
 </div>
