@@ -11,7 +11,6 @@
 
 namespace BaserCore\View\Helper;
 
-use BaserCore\Model\Entity\User;
 use BaserCore\Utility\BcSiteConfig;
 use Cake\Core\Plugin;
 use Cake\Datasource\EntityInterface;
@@ -1270,7 +1269,7 @@ class BcBaserHelper extends Helper
             $plugins = Plugin::loaded();
             if ($plugins) {
                 foreach($plugins as $plugin) {
-                    $cssName = 'admin' . DS . Inflector::underscore($plugin) . '_admin';
+                    $cssName = 'admin/' . Inflector::underscore($plugin) . '_admin';
                     $path = Plugin::path($plugin) . 'webroot' . DS . 'css' . DS . $cssName . '.css';
                     if (file_exists($path)) {
                         $this->css($plugin . '.' . $cssName);
