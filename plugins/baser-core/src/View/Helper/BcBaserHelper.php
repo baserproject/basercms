@@ -2279,7 +2279,7 @@ END_FLASH;
     public function googleAnalytics($data = [], $options = [])
     {
         $data = array_merge([
-            'useUniversalAnalytics' => (bool) BcSiteConfig::get('use_universal_analytics')
+            'googleAnalyticsId' => (bool) BcSiteConfig::get('google_analytics_id')
         ], $data);
         $this->element('google_analytics', $data, $options);
     }
