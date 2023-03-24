@@ -111,7 +111,7 @@ class ContentFoldersService implements ContentFoldersServiceInterface
             'contain' => ['Contents' => ['Sites']]
         ], $queryParams);
         $conditions = [];
-        if($queryParams['status'] === 'published') {
+        if ($queryParams['status'] === 'publish') {
             $conditions = $this->ContentFolders->Contents->getConditionAllowPublish();
         }
         return $this->ContentFolders->get($id, [
