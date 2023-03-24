@@ -17,6 +17,7 @@ use BaserCore\Annotation\UnitTest;
 use BaserCore\Utility\BcUtil;
 use BcBlog\Service\BlogContentsServiceInterface;
 use Cake\Datasource\Exception\RecordNotFoundException;
+use Cake\Http\Exception\ForbiddenException;
 use Cake\ORM\Exception\PersistenceFailedException;
 
 /**
@@ -24,6 +25,19 @@ use Cake\ORM\Exception\PersistenceFailedException;
  */
 class BlogContentsController extends BcApiController
 {
+
+    /**
+     * initialize
+     * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function initialize(): void
+    {
+        parent::initialize();
+        $this->Authentication->allowUnauthenticated(['index', 'view']);
+    }
 
     /**
      * [API] ブログコンテンツー一覧取得
@@ -36,8 +50,18 @@ class BlogContentsController extends BcApiController
     public function index(BlogContentsServiceInterface $blogContentsService)
     {
         $this->request->allowMethod(['get']);
+
+        $queryParams = $this->getRequest()->getQueryParams();
+        if (isset($queryParams['status'])) {
+            if (!$this->isAdminApiEnabled()) throw new ForbiddenException();
+        }
+
+        $queryParams = array_merge([
+            'status' => 'publish'
+        ], $queryParams);
+
         $this->set([
-            'blogContents' => $this->paginate($blogContentsService->getIndex($this->request->getQueryParams()))
+            'blogContents' => $this->paginate($blogContentsService->getIndex($queryParams))
         ]);
         $this->viewBuilder()->setOption('serialize', ['blogContents']);
     }
@@ -54,9 +78,19 @@ class BlogContentsController extends BcApiController
     public function view(BlogContentsServiceInterface $service, $blogContentId)
     {
         $this->request->allowMethod(['get']);
+
+        $queryParams = $this->getRequest()->getQueryParams();
+        if (isset($queryParams['status'])) {
+            if (!$this->isAdminApiEnabled()) throw new ForbiddenException();
+        }
+
+        $queryParams = array_merge([
+            'status' => 'publish'
+        ], $queryParams);
+
         $blogContent = $message = null;
         try {
-            $blogContent = $service->get($blogContentId);
+            $blogContent = $service->get($blogContentId, $queryParams);
         } catch (RecordNotFoundException $e) {
             $this->setResponse($this->response->withStatus(404));
             $message = __d('baser_core', 'データが見つかりません。');
