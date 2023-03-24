@@ -18,6 +18,7 @@ use BaserCore\Test\Scenario\SmallSetContentsScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcBlog\Controller\Api\BlogContentsController;
 use BcBlog\Test\Factory\BlogContentFactory;
+use BcBlog\Test\Scenario\BlogContentScenario;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use Cake\TestSuite\IntegrationTestTrait;
 
@@ -87,14 +88,21 @@ class BlogContentsControllerTest extends BcTestCase
     }
 
     /**
+     * test initialize
+     */
+    public function test_initialize()
+    {
+        $controller = new BlogContentsController($this->getRequest());
+        $this->assertEquals($controller->Authentication->unauthenticatedActions, ['index', 'view']);
+    }
+
+    /**
      * test index
      */
     public function test_index()
     {
-        $this->truncateTable('blog_contents');
-        BlogContentFactory::make(['id' => 10, 'description' => 'baserCMS inc. [デモ] の最新の情報をお届けします。'])->persist();
-        BlogContentFactory::make(['id' => 11, 'description' => 'ディスクリプション'])->persist();
-
+        $this->loadFixtureScenario(BlogContentScenario::class, 1, 1, null, 'news1', '/news/');
+        $this->loadFixtureScenario(BlogContentScenario::class, 2, 1, null, 'news2', '/news/');
         $this->get('/baser/api/bc-blog/blog_contents/index.json?token=' . $this->accessToken);
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
@@ -106,7 +114,7 @@ class BlogContentsControllerTest extends BcTestCase
      */
     public function test_view()
     {
-        ContentFactory::make(['plugin' => 'BcBlog', 'type' => 'BlogContent', 'entity_id' => 12])->persist();
+        ContentFactory::make(['plugin' => 'BcBlog', 'type' => 'BlogContent', 'entity_id' => 12, 'status' => true])->persist();
         BlogContentFactory::make(['id' => 12, 'description' => 'baserCMS inc. [デモ] の最新の情報をお届けします。'])->persist();
 
         $this->get('/baser/api/bc-blog/blog_contents/view/12.json?token=' . $this->accessToken);

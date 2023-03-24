@@ -13,6 +13,7 @@ namespace BcCustomContent\Test\TestCase\Controller\Api;
 
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
+use BcCustomContent\Controller\Api\CustomContentsController;
 use BcCustomContent\Test\Scenario\CustomContentsScenario;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use Cake\TestSuite\IntegrationTestTrait;
@@ -76,6 +77,15 @@ class CustomContentsControllerTest extends BcTestCase
     public function tearDown(): void
     {
         parent::tearDown();
+    }
+
+    /**
+     * test initialize
+     */
+    public function test_initialize()
+    {
+        $controller = new CustomContentsController($this->getRequest());
+        $this->assertEquals($controller->Authentication->unauthenticatedActions, ['index', 'view']);
     }
 
     /**

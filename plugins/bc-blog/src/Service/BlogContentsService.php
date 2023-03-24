@@ -61,6 +61,10 @@ class BlogContentsService implements BlogContentsServiceInterface
      */
     public function getIndex(array $queryParams = []): Query
     {
+        $queryParams = array_merge([
+            'status' => ''
+        ], $queryParams);
+
         $query = $this->BlogContents->find()->order([
             'BlogContents.id'
         ]);
@@ -71,6 +75,12 @@ class BlogContentsService implements BlogContentsServiceInterface
 
         if (!empty($queryParams['description'])) {
             $query->where(['description LIKE' => '%' . $queryParams['description'] . '%']);
+        }
+
+        if ($queryParams['status'] === 'publish') {
+            $fields = $this->BlogContents->getSchema()->columns();
+            $query = $query->contain(['Contents'])->select($fields);
+            $query->where($this->BlogContents->Contents->getConditionAllowPublish());
         }
 
         return $query;
