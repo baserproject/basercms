@@ -28,6 +28,19 @@ class BlogTagsController extends BcApiController
 {
 
     /**
+     * initialize
+     * @return void
+     * @checked
+     * @unitTest
+     * @unitTest
+     */
+    public function initialize(): void
+    {
+        parent::initialize();
+        $this->Authentication->allowUnauthenticated(['index', 'view']);
+    }
+
+    /**
      * [API] ブログタグ一覧取得
      *
      * @param BlogTagsServiceInterface $service
