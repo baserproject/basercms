@@ -17,6 +17,7 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use Cake\Datasource\Exception\RecordNotFoundException;
+use Cake\Http\Exception\ForbiddenException;
 use Cake\ORM\Exception\PersistenceFailedException;
 
 /**
@@ -24,6 +25,19 @@ use Cake\ORM\Exception\PersistenceFailedException;
  */
 class BlogCategoriesController extends BcApiController
 {
+
+    /**
+     * initialize
+     * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function initialize(): void
+    {
+        parent::initialize();
+        $this->Authentication->allowUnauthenticated(['index', 'view', 'list']);
+    }
 
     /**
      * バッチ処理
@@ -77,9 +91,19 @@ class BlogCategoriesController extends BcApiController
     public function index(BlogCategoriesServiceInterface $service, $blogContentId)
     {
         $this->request->allowMethod(['get']);
+
+        $queryParams = $this->getRequest()->getQueryParams();
+        if (isset($queryParams['status'])) {
+            if (!$this->isAdminApiEnabled()) throw new ForbiddenException();
+        }
+
+        $queryParams = array_merge([
+            'status' => 'publish'
+        ], $queryParams);
+
         $blogCategories = $message = null;
         try {
-            $blogCategories = $this->paginate($service->getIndex($blogContentId, $this->request->getQueryParams()));
+            $blogCategories = $this->paginate($service->getIndex($blogContentId, $queryParams));
         } catch (RecordNotFoundException $e) {
             $this->setResponse($this->response->withStatus(404));
             $message = __d('baser_core', 'データが見つかりません。');
@@ -107,9 +131,18 @@ class BlogCategoriesController extends BcApiController
     public function view(BlogCategoriesServiceInterface $service, $blogCategoryId)
     {
         $this->request->allowMethod(['get']);
+        $queryParams = $this->getRequest()->getQueryParams();
+        if (isset($queryParams['status'])) {
+            if (!$this->isAdminApiEnabled()) throw new ForbiddenException();
+        }
+
+        $queryParams = array_merge([
+            'status' => 'publish'
+        ], $queryParams);
+
         $blogCategory = $message = null;
         try {
-            $blogCategory = $service->get($blogCategoryId);
+            $blogCategory = $service->get($blogCategoryId, $queryParams);
         } catch (RecordNotFoundException $e) {
             $this->setResponse($this->response->withStatus(404));
             $message = __d('baser_core', 'データが見つかりません。');
@@ -137,9 +170,18 @@ class BlogCategoriesController extends BcApiController
     public function list(BlogCategoriesServiceInterface $service, $blogContentId)
     {
         $this->request->allowMethod(['get']);
+        $queryParams = $this->getRequest()->getQueryParams();
+        if (isset($queryParams['status'])) {
+            if (!$this->isAdminApiEnabled()) throw new ForbiddenException();
+        }
+
+        $queryParams = array_merge([
+            'status' => 'publish'
+        ], $queryParams);
+
         $blogCategories = $message = null;
         try {
-            $blogCategories = $service->getList($blogContentId);
+            $blogCategories = $service->getList($blogContentId, $queryParams);
         } catch (RecordNotFoundException $e) {
             $this->setResponse($this->response->withStatus(404));
             $message = __d('baser_core', 'データが見つかりません。');

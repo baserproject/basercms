@@ -13,6 +13,8 @@ namespace BcBlog\Test\TestCase\Service;
 
 use BcBlog\Service\BlogCategoriesService;
 use BcBlog\Test\Factory\BlogCategoryFactory;
+use BcBlog\Test\Factory\BlogPostFactory;
+use BcBlog\Test\Scenario\BlogContentScenario;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use Cake\TestSuite\IntegrationTestTrait;
 
@@ -35,6 +37,10 @@ class BlogCategoriesServiceTest extends \BaserCore\TestSuite\BcTestCase
      */
     protected $fixtures = [
         'plugin.BcBlog.Factory/BlogCategories',
+        'plugin.BcBlog.Factory/BlogComments',
+        'plugin.BcBlog.Factory/BlogContents',
+        'plugin.BaserCore.Factory/Contents',
+        'plugin.BcBlog.Factory/BlogPosts',
     ];
 
     /**
@@ -104,10 +110,19 @@ class BlogCategoriesServiceTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function testGetIndex()
     {
-        BlogCategoryFactory::make(['blog_content_id' => 111, 'name' => 'data1'])->persist();
+        $this->loadFixtureScenario(
+            BlogContentScenario::class,
+            1,  // id
+            1, // siteId
+            null, // parentId
+            'news1', // name
+            '/news/' // url
+        );
+        BlogPostFactory::make(['id' => 1, 'blog_content_id'=> 1, 'blog_category_id'=> 1, 'status' => true])->persist();
+        BlogCategoryFactory::make(['blog_content_id' => 1, 'name' => 'data1'])->persist();
         BlogCategoryFactory::make(['blog_content_id' => 2, 'name' => 'data2'])->persist();
-        BlogCategoryFactory::make(['blog_content_id' => 111, 'name' => 'data3'])->persist();
-        $blogCategories = $this->BlogCategories->getIndex(111, []);
+        BlogCategoryFactory::make(['blog_content_id' => 1, 'name' => 'data3'])->persist();
+        $blogCategories = $this->BlogCategories->getIndex(1, []);
         $this->assertCount(2, $blogCategories);
     }
 
@@ -283,6 +298,15 @@ class BlogCategoriesServiceTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function test_getList()
     {
+        $this->loadFixtureScenario(
+            BlogContentScenario::class,
+            1,  // id
+            1, // siteId
+            null, // parentId
+            'news1', // name
+            '/news/' // url
+        );
+        BlogPostFactory::make(['id' => 1, 'blog_content_id'=> 1, 'blog_category_id'=> 1, 'status' => true])->persist();
         BlogCategoryFactory::make(['id' => 100, 'title' => 'title 100', 'name' => 'name-100', 'blog_content_id' => 1])->persist();
         BlogCategoryFactory::make(['id' => 101, 'title' => 'title 101', 'name' => 'name-101', 'blog_content_id' => 1])->persist();
         BlogCategoryFactory::make(['id' => 102, 'title' => 'title 102', 'name' => 'name-102', 'blog_content_id' => 1])->persist();
