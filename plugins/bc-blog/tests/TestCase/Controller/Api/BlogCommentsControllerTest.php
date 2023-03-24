@@ -12,12 +12,16 @@
 namespace BcBlog\Test\TestCase\Controller\Api;
 
 use BaserCore\Service\DblogsServiceInterface;
+use BaserCore\Test\Factory\PermissionFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BcBlog\Controller\Api\BlogCommentsController;
 use BcBlog\Service\BlogCommentsServiceInterface;
 use BcBlog\Test\Factory\BlogCommentFactory;
+use BcBlog\Test\Factory\BlogPostFactory;
+use BcBlog\Test\Scenario\BlogCommentsScenario;
+use BcBlog\Test\Scenario\BlogContentScenario;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use Cake\TestSuite\IntegrationTestTrait;
 
@@ -53,6 +57,7 @@ class BlogCommentsControllerTest extends BcTestCase
         'plugin.BcBlog.Factory/BlogComments',
         'plugin.BcBlog.Factory/BlogContents',
         'plugin.BaserCore.Factory/Contents',
+        'plugin.BcBlog.Factory/BlogPosts',
     ];
 
     /**
@@ -91,25 +96,62 @@ class BlogCommentsControllerTest extends BcTestCase
     }
 
     /**
+     * test initialize
+     */
+    public function test_initialize()
+    {
+        $controller = new BlogCommentsController($this->getRequest());
+        $this->assertEquals($controller->Authentication->unauthenticatedActions, ['index', 'view']);
+    }
+
+    /**
      * test index
      */
     public function test_index()
     {
-        // ５件コメントを作成する
-        BlogCommentFactory::make([], 5)->persist();
+        // コメントを作成する
+        $this->loadFixtureScenario(
+            BlogContentScenario::class,
+            1,  // id
+            1, // siteId
+            null, // parentId
+            'news1', // name
+            '/news/' // url
+        );
+        BlogPostFactory::make(['id' => 1, 'blog_content_id'=> 1, 'status' => true])->persist();
+        $this->loadFixtureScenario(BlogCommentsScenario::class,);
+
 
         // クエリはトークンの以外で何も設定しない場合、全てのコメントを取得する
         $this->get('/baser/api/bc-blog/blog_comments/index.json?token=' . $this->accessToken);
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
-        // コメント一覧は全て５件が返す
-        $this->assertCount(5, $result->blogComments);
+        // コメント一覧は全て3件が返す
+        $this->assertCount(3, $result->blogComments);
 
         // クエリを設定し(limit = 4)、該当の結果が返す
         $this->get('/baser/api/bc-blog/blog_comments/index.json?limit=4&token=' . $this->accessToken);
         $result = json_decode((string)$this->_response->getBody());
-        // コメント一覧は４件が返す
-        $this->assertCount(4, $result->blogComments);
+        // コメント一覧は3件が返す
+        $this->assertCount(3, $result->blogComments);
+
+        //ログインしていない状態ではステータス＝trueしか取得できない
+        PermissionFactory::make()->allowGuest('/baser/api/*')->persist();
+        $this->get('/baser/api/bc-blog/blog_comments/index.json');
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        // コメント一覧は全て３件が返す
+        $this->assertCount(3, $result->blogComments);
+
+        //ログインしていない状態では status パラメーターへへのアクセスを禁止するか確認
+        $this->get('/baser/api/bc-blog/blog_comments/index.json?status=unpublish');
+        // レスポンスを確認
+        $this->assertResponseCode(403);
+
+        //ログインしている状態では status パラメーターへへのアクセできるか確認
+        $this->get('/baser/api/bc-blog/blog_comments/index.json?status=unpublish&token=' . $this->accessToken);
+        // レスポンスを確認
+        $this->assertResponseOk();
     }
 
     /**

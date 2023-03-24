@@ -19,6 +19,7 @@ use BaserCore\Error\BcException;
 use BcBlog\Service\BlogCommentsService;
 use BcBlog\Service\BlogCommentsServiceInterface;
 use Cake\Datasource\Exception\RecordNotFoundException;
+use Cake\Http\Exception\ForbiddenException;
 use Cake\ORM\Exception\PersistenceFailedException;
 use Throwable;
 
@@ -27,6 +28,19 @@ use Throwable;
  */
 class BlogCommentsController extends BcApiController
 {
+
+    /**
+     * initialize
+     * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function initialize(): void
+    {
+        parent::initialize();
+        $this->Authentication->allowUnauthenticated(['index', 'view']);
+    }
 
     /**
      * [API] ブログコメント一覧取得
@@ -39,9 +53,17 @@ class BlogCommentsController extends BcApiController
     public function index(BlogCommentsServiceInterface $service)
     {
         $this->request->allowMethod(['get']);
+
+        $queryParams = $this->getRequest()->getQueryParams();
+        if (isset($queryParams['status'])) {
+            if (!$this->isAdminApiEnabled()) throw new ForbiddenException();
+        }
+
         $queryParams = array_merge([
+            'status' => 'publish',
             'contain' => null,
-        ], $this->getRequest()->getQueryParams());
+        ], $queryParams);
+
         $this->set([
             'blogComments' => $this->paginate($service->getIndex($queryParams))
         ]);
