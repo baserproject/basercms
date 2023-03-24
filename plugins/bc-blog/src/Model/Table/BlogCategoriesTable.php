@@ -77,6 +77,11 @@ class BlogCategoriesTable extends BlogAppTable
             'dependent' => false,
             'exclusive' => false,
         ]);
+
+        $this->belongsTo('BlogContents', [
+            'className' => 'BcBlog.BlogContents',
+            'foreignKey' => 'blog_content_id',
+        ]);
     }
 
     /**
