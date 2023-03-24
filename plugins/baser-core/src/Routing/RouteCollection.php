@@ -35,14 +35,14 @@ class RouteCollection
     /**
      * The routes connected to this collection.
      *
-     * @var array
+     * @var array<string, array<\Cake\Routing\Route\Route>>
      */
     protected $_routeTable = [];
 
     /**
      * The hash map of named routes that are in this collection.
      *
-     * @var \Cake\Routing\Route\Route[]
+     * @var array<\Cake\Routing\Route\Route>
      */
     protected $_named = [];
 
@@ -70,7 +70,7 @@ class RouteCollection
     /**
      * Route extensions
      *
-     * @var string[]
+     * @var array<string>
      */
     protected $_extensions = [];
 
@@ -78,7 +78,7 @@ class RouteCollection
      * Add a route to the collection.
      *
      * @param \Cake\Routing\Route\Route $route The route object to add.
-     * @param array $options Additional options for the route. Primarily for the
+     * @param array<string, mixed> $options Additional options for the route. Primarily for the
      *   `_name` option, which enables named routes.
      * @return void
      */
@@ -99,9 +99,7 @@ class RouteCollection
 
         // Generated names.
         $name = $route->getName();
-        if (!isset($this->_routeTable[$name])) {
-            $this->_routeTable[$name] = [];
-        }
+        $this->_routeTable[$name] = $this->_routeTable[$name] ?? [];
         $this->_routeTable[$name][] = $route;
 
         // Index path prefixes (for parsing)
@@ -124,7 +122,7 @@ class RouteCollection
      */
     public function parse(string $url, string $method = ''): array
     {
-        $decoded = rawurldecode($url);
+        $decoded = urldecode($url);
 
         // Sort path segments matching longest paths first.
         krsort($this->_paths);
@@ -173,7 +171,7 @@ class RouteCollection
     public function parseRequest(ServerRequestInterface $request): array
     {
         $uri = $request->getUri();
-        $urlPath = rawurldecode($uri->getPath());
+        $urlPath = urldecode($uri->getPath());
 
         // Sort path segments matching longest paths first.
         krsort($this->_paths);
@@ -204,7 +202,7 @@ class RouteCollection
      * and newer style urls containing '_name'
      *
      * @param array $url The url to match.
-     * @return string[] The set of names of the url
+     * @return array<string> The set of names of the url
      */
     protected function _getNames(array $url): array
     {
@@ -220,9 +218,9 @@ class RouteCollection
         $action = strtolower($url['action']);
 
         $names = [
-            "${controller}:${action}",
-            "${controller}:_action",
-            "_controller:${action}",
+            "{$controller}:{$action}",
+            "{$controller}:_action",
+            "_controller:{$action}",
             '_controller:_action',
         ];
 
@@ -234,13 +232,13 @@ class RouteCollection
         // Only a plugin
         if ($prefix === false) {
             return [
-                "${plugin}.${controller}:${action}",
-                "${plugin}.${controller}:_action",
-                "${plugin}._controller:${action}",
-                "${plugin}._controller:_action",
-                "_plugin.${controller}:${action}",
-                "_plugin.${controller}:_action",
-                "_plugin._controller:${action}",
+                "{$plugin}.{$controller}:{$action}",
+                "{$plugin}.{$controller}:_action",
+                "{$plugin}._controller:{$action}",
+                "{$plugin}._controller:_action",
+                "_plugin.{$controller}:{$action}",
+                "_plugin.{$controller}:_action",
+                "_plugin._controller:{$action}",
                 '_plugin._controller:_action',
             ];
         }
@@ -248,13 +246,13 @@ class RouteCollection
         // Only a prefix
         if ($plugin === false) {
             return [
-                "${prefix}:${controller}:${action}",
-                "${prefix}:${controller}:_action",
-                "${prefix}:_controller:${action}",
-                "${prefix}:_controller:_action",
-                "_prefix:${controller}:${action}",
-                "_prefix:${controller}:_action",
-                "_prefix:_controller:${action}",
+                "{$prefix}:{$controller}:{$action}",
+                "{$prefix}:{$controller}:_action",
+                "{$prefix}:_controller:{$action}",
+                "{$prefix}:_controller:_action",
+                "_prefix:{$controller}:{$action}",
+                "_prefix:{$controller}:_action",
+                "_prefix:_controller:{$action}",
                 '_prefix:_controller:_action',
             ];
         }
@@ -262,21 +260,21 @@ class RouteCollection
         // Prefix and plugin has the most options
         // as there are 4 factors.
         return [
-            "${prefix}:${plugin}.${controller}:${action}",
-            "${prefix}:${plugin}.${controller}:_action",
-            "${prefix}:${plugin}._controller:${action}",
-            "${prefix}:${plugin}._controller:_action",
-            "${prefix}:_plugin.${controller}:${action}",
-            "${prefix}:_plugin.${controller}:_action",
-            "${prefix}:_plugin._controller:${action}",
-            "${prefix}:_plugin._controller:_action",
-            "_prefix:${plugin}.${controller}:${action}",
-            "_prefix:${plugin}.${controller}:_action",
-            "_prefix:${plugin}._controller:${action}",
-            "_prefix:${plugin}._controller:_action",
-            "_prefix:_plugin.${controller}:${action}",
-            "_prefix:_plugin.${controller}:_action",
-            "_prefix:_plugin._controller:${action}",
+            "{$prefix}:{$plugin}.{$controller}:{$action}",
+            "{$prefix}:{$plugin}.{$controller}:_action",
+            "{$prefix}:{$plugin}._controller:{$action}",
+            "{$prefix}:{$plugin}._controller:_action",
+            "{$prefix}:_plugin.{$controller}:{$action}",
+            "{$prefix}:_plugin.{$controller}:_action",
+            "{$prefix}:_plugin._controller:{$action}",
+            "{$prefix}:_plugin._controller:_action",
+            "_prefix:{$plugin}.{$controller}:{$action}",
+            "_prefix:{$plugin}.{$controller}:_action",
+            "_prefix:{$plugin}._controller:{$action}",
+            "_prefix:{$plugin}._controller:_action",
+            "_prefix:_plugin.{$controller}:{$action}",
+            "_prefix:_plugin.{$controller}:_action",
+            "_prefix:_plugin._controller:{$action}",
             '_prefix:_plugin._controller:_action',
         ];
     }
@@ -318,7 +316,6 @@ class RouteCollection
             if (empty($this->_routeTable[$name])) {
                 continue;
             }
-            /** @var \Cake\Routing\Route\Route $route */
             foreach ($this->_routeTable[$name] as $route) {
                 $match = $route->match($url, $context);
                 if ($match) {
@@ -344,7 +341,7 @@ class RouteCollection
     /**
      * Get all the connected routes as a flat list.
      *
-     * @return \Cake\Routing\Route\Route[]
+     * @return array<\Cake\Routing\Route\Route>
      */
     public function routes(): array
     {
@@ -360,7 +357,7 @@ class RouteCollection
     /**
      * Get the connected named routes.
      *
-     * @return \Cake\Routing\Route\Route[]
+     * @return array<\Cake\Routing\Route\Route>
      */
     public function named(): array
     {
@@ -370,7 +367,7 @@ class RouteCollection
     /**
      * Get the extensions that can be handled.
      *
-     * @return string[] The valid extensions.
+     * @return array<string> The valid extensions.
      */
     public function getExtensions(): array
     {
@@ -380,7 +377,7 @@ class RouteCollection
     /**
      * Set the extensions that the route collection can handle.
      *
-     * @param string[] $extensions The list of extensions to set.
+     * @param array<string> $extensions The list of extensions to set.
      * @param bool $merge Whether to merge with or override existing extensions.
      *   Defaults to `true`.
      * @return $this
@@ -405,7 +402,7 @@ class RouteCollection
      * scope or any child scopes that share the same RouteCollection.
      *
      * @param string $name The name of the middleware. Used when applying middleware to a scope.
-     * @param string|\Closure|\Psr\Http\Server\MiddlewareInterface $middleware The middleware to register.
+     * @param \Psr\Http\Server\MiddlewareInterface|\Closure|string $middleware The middleware to register.
      * @return $this
      * @throws \RuntimeException
      */
@@ -420,7 +417,7 @@ class RouteCollection
      * Add middleware to a middleware group
      *
      * @param string $name Name of the middleware group
-     * @param string[] $middlewareNames Names of the middleware
+     * @param array<string> $middlewareNames Names of the middleware
      * @return $this
      * @throws \RuntimeException
      */
@@ -479,7 +476,7 @@ class RouteCollection
     /**
      * Get an array of middleware given a list of names
      *
-     * @param string[] $names The names of the middleware or groups to fetch
+     * @param array<string> $names The names of the middleware or groups to fetch
      * @return array An array of middleware. If any of the passed names are groups,
      *   the groups middleware will be flattened into the returned list.
      * @throws \RuntimeException when a requested middleware does not exist.

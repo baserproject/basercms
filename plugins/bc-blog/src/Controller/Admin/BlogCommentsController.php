@@ -45,7 +45,7 @@ class BlogCommentsController extends BlogAdminAppController
             'group' => $blogContentId,
             'default' => [
                 'query' => [
-                    'num' => BcSiteConfig::get('admin_list_num'),
+                    'limit' => BcSiteConfig::get('admin_list_num'),
                     'sort' => 'BlogComments.created',
                     'direction' => 'DESC'
                 ]

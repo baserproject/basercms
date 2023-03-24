@@ -523,7 +523,7 @@ class BcFileUploaderTest extends BcTestCase
         $targetPath = $this->savePath . str_replace(['.', '/'], ['_', '_'], $targetName);
 
         $data = new ArrayObject([
-            "${fieldName}_tmp" => $entity->eyecatch_tmp,
+            "{$fieldName}_tmp" => $entity->eyecatch_tmp,
         ]);
         // セッションからファイルを保存
         $this->BcFileUploader->moveFileSessionToTmp($data, $fieldName);

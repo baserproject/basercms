@@ -11,6 +11,7 @@
 
 namespace BaserCore\Test\TestCase\Controller\Api;
 
+use BaserCore\Controller\Api\ContentsController;
 use BaserCore\Test\Factory\PageFactory;
 use BcBlog\Test\Factory\BlogContentFactory;
 use Cake\Core\Configure;
@@ -96,6 +97,15 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
     {
         Configure::clear();
         parent::tearDown();
+    }
+
+    /**
+     * test initialize
+     */
+    public function test_initialize()
+    {
+        $controller = new ContentsController($this->getRequest());
+        $this->assertEquals($controller->Authentication->unauthenticatedActions, ['index', 'view']);
     }
 
     /**
@@ -212,7 +222,7 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
         $id = $data->id;
         $data->name = 'ControllerEdit';
         $data->site->name = 'ucmitz'; // site側でエラーが出るため
-        $this->post("/baser/api/baser-core/contents/edit/${id}.json?token=" . $this->accessToken, $data->toArray());
+        $this->post("/baser/api/baser-core/contents/edit/{$id}.json?token=" . $this->accessToken, $data->toArray());
         $this->assertResponseSuccess();
         // updateRelateSubSiteContentにより、連携されてるサイトに同コンテンツが生成されるため2個となる
         $query = $this->ContentsService->getIndex(['name' => 'ControllerEdit']);
@@ -393,7 +403,7 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
             ]
         ];
         $this->patch("/baser/api/baser-core/contents/move.json?token=" . $this->accessToken, $data);
-        $this->assertEquals("コンテンツ「${title}」の配置を移動しました。\n/service/service1 > /service1", json_decode($this->_response->getBody())->message);
+        $this->assertEquals("コンテンツ「{$title}」の配置を移動しました。\n/service/service1 > /service1", json_decode($this->_response->getBody())->message);
         $service2Left = $this->ContentsService->get(($originEntity->id + $targetEntity->id) / 2)->lft;
         $this->assertGreaterThan($service2Left, json_decode($this->_response->getBody())->content->lft);
     }

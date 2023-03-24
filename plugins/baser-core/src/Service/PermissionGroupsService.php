@@ -189,10 +189,10 @@ class PermissionGroupsService implements PermissionGroupsServiceInterface
 	}
 
 	/**
-	 * ユーザーグループを指定してアクセスグループを構築する
-	 *
-	 * @param int $userGroupId
-	 */
+     * ユーザーグループを指定してアクセスグループを構築する
+     *
+     * @param int $userGroupId
+     */
 	public function buildByUserGroup(int $userGroupId)
 	{
 		// 有効なプラグインをキャッシュなしで強制的に取得する
@@ -216,10 +216,12 @@ class PermissionGroupsService implements PermissionGroupsServiceInterface
 	}
 
 	/**
-	 * ユーザーを指定してアクセスルールを削除する
-	 *
-	 * @param int $userGroupId
-	 */
+     * ユーザーを指定してアクセスルールを削除する
+     *
+     * @param int $userGroupId
+     * @noTodo
+     * @unitTest
+     */
 	public function deleteByUserGroup(int $userGroupId)
 	{
 		$this->PermissionGroups->Permissions->deleteAll(['user_group_id' => $userGroupId]);

@@ -16,6 +16,8 @@ use BaserCore\TestSuite\BcTestCase;
 use BcBlog\Controller\Api\BlogCategoriesController;
 use BcBlog\Service\BlogCategoriesService;
 use BcBlog\Test\Factory\BlogCategoryFactory;
+use BcBlog\Test\Factory\BlogPostFactory;
+use BcBlog\Test\Scenario\BlogContentScenario;
 use Cake\Core\Configure;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 use Cake\TestSuite\IntegrationTestTrait;
@@ -47,6 +49,10 @@ class BlogCategoriesControllerTest extends BcTestCase
         'plugin.BaserCore.Factory/UserGroups',
         'plugin.BaserCore.Factory/Dblogs',
         'plugin.BcBlog.Factory/BlogCategories',
+        'plugin.BcBlog.Factory/BlogComments',
+        'plugin.BcBlog.Factory/BlogContents',
+        'plugin.BaserCore.Factory/Contents',
+        'plugin.BcBlog.Factory/BlogPosts',
     ];
 
     /**
@@ -90,9 +96,18 @@ class BlogCategoriesControllerTest extends BcTestCase
      */
     public function test_index()
     {
-        BlogCategoryFactory::make(['blog_content_id' => 1])->persist();
-        BlogCategoryFactory::make(['blog_content_id' => 1])->persist();
-        BlogCategoryFactory::make(['blog_content_id' => 2])->persist();
+        $this->loadFixtureScenario(
+            BlogContentScenario::class,
+            1,  // id
+            1, // siteId
+            null, // parentId
+            'news1', // name
+            '/news/' // url
+        );
+        BlogPostFactory::make(['id' => 1, 'blog_content_id'=> 1, 'blog_category_id'=> 1, 'status' => true])->persist();
+        BlogCategoryFactory::make(['id'=>1,'blog_content_id' => 1])->persist();
+        BlogCategoryFactory::make(['id'=>2,'blog_content_id' => 1])->persist();
+        BlogCategoryFactory::make(['id'=>3,'blog_content_id' => 3])->persist();
 
         $this->get('/baser/api/bc-blog/blog_categories/index/1.json?token=' . $this->accessToken);
         $this->assertResponseOk();
@@ -106,8 +121,16 @@ class BlogCategoriesControllerTest extends BcTestCase
      */
     public function test_view()
     {
-        BlogCategoryFactory::make(['id' => 1, 'name' => 'Blog Category 1'])->persist();
-        BlogCategoryFactory::make(['id' => 2, 'name' => 'Blog Category 2'])->persist();
+        $this->loadFixtureScenario(
+            BlogContentScenario::class,
+            1,  // id
+            1, // siteId
+            null, // parentId
+            'news1', // name
+            '/news/' // url
+        );
+        BlogPostFactory::make(['id' => 1, 'blog_content_id' => 1, 'blog_category_id' => 1, 'status' => true])->persist();
+        BlogCategoryFactory::make(['id' => 1, 'blog_content_id' => 1, 'name' => 'Blog Category 1'])->persist();
 
         $this->get('/baser/api/bc-blog/blog_categories/view/1.json?token=' . $this->accessToken);
         $this->assertResponseOk();
@@ -122,6 +145,15 @@ class BlogCategoriesControllerTest extends BcTestCase
      */
     public function test_list()
     {
+        $this->loadFixtureScenario(
+            BlogContentScenario::class,
+            1,  // id
+            1, // siteId
+            null, // parentId
+            'news1', // name
+            '/news/' // url
+        );
+        BlogPostFactory::make(['id' => 1, 'blog_content_id'=> 1, 'blog_category_id'=> 1, 'status' => true])->persist();
         BlogCategoryFactory::make(['id' => 3, 'title' => 'title 3', 'name' => 'name-3', 'blog_content_id' => 1])->persist();
 
         $this->get('/baser/api/bc-blog/blog_categories/list/1.json?token=' . $this->accessToken);

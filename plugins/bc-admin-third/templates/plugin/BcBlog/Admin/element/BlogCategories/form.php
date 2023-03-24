@@ -24,6 +24,8 @@
 
 
 <?php echo $this->BcAdminForm->control('blog_content_id', ['type' => 'hidden']) ?>
+<?php echo $this->BcAdminForm->control('status', ['type' => 'hidden']) ?>
+
 <?php echo $this->BcFormTable->dispatchBefore() ?>
 
 <!-- form -->

@@ -56,9 +56,20 @@ class BlogCategoriesService implements BlogCategoriesServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function get(int $id): EntityInterface
+    public function get(int $id, array $queryParams = []): EntityInterface
     {
-        return $this->BlogCategories->get($id);
+        $queryParams = array_merge([
+            'status' => ''
+        ], $queryParams);
+        $conditions = $contain = [];
+        if ($queryParams['status'] === 'publish') {
+            $contain = ['BlogContents' => ['Contents']];
+            $conditions = $this->BlogCategories->BlogContents->Contents->getConditionAllowPublish();
+        }
+        return $this->BlogCategories->get($id, [
+            'conditions' => $conditions,
+            'contain' => $contain
+        ]);
     }
 
     /**
@@ -74,9 +85,22 @@ class BlogCategoriesService implements BlogCategoriesServiceInterface
      */
     public function getIndex(int $blogContentId, array $queryParams, $type = 'all'): Query
     {
+        $queryParams = array_merge([
+            'status' => ''
+        ], $queryParams);
+
+        $query = $this->BlogCategories->find($type);
+
+        if ($queryParams['status'] === 'publish') {
+            $fields = $this->BlogCategories->getSchema()->columns();
+            $query = $query->contain(['BlogContents' => ['Contents']])
+                ->select($fields);
+            $query->where($this->BlogCategories->BlogContents->Contents->getConditionAllowPublish());
+        }
+
         $conditions = [];
-        if($blogContentId) $conditions = ['BlogCategories.blog_content_id' => $blogContentId];
-        return $this->BlogCategories->find($type)->where($conditions);
+        if ($blogContentId) $conditions = ['BlogCategories.blog_content_id' => $blogContentId];
+        return $query->where($conditions);
     }
 
     /**
@@ -172,6 +196,7 @@ class BlogCategoriesService implements BlogCategoriesServiceInterface
     {
         return $this->BlogCategories->newEntity([
             'blog_content_id' => $blogContentId,
+            'status' => true
         ], [
             'validate' => false,
         ]);
@@ -282,10 +307,21 @@ class BlogCategoriesService implements BlogCategoriesServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function getList($blogContentId): array
+    public function getList($blogContentId, array $queryParams = []): array
     {
+        $queryParams = array_merge([
+            'status' => ''
+        ], $queryParams);
+
+        $query = $this->BlogCategories->find('list', ['keyField' => 'id', 'valueField' => 'title'])
+            ->contain(['BlogContents' => ['Contents']]);
+
+        if ($queryParams['status'] === 'publish') {
+            $query->where($this->BlogCategories->BlogContents->Contents->getConditionAllowPublish());
+        }
+
         $conditions = [];
         if ($blogContentId) $conditions = ['BlogCategories.blog_content_id' => $blogContentId];
-        return $this->BlogCategories->find('list', ['keyField' => 'id', 'valueField' => 'title'])->where($conditions)->toArray();
+        return $query->where($conditions)->toArray();
     }
 }

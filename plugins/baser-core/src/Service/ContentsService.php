@@ -133,10 +133,20 @@ class ContentsService implements ContentsServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function get($id): EntityInterface
+    public function get($id, array $queryParams = []): EntityInterface
     {
+        $queryParams = array_merge([
+            'status' => '',
+            'contain' => ['Sites']
+        ], $queryParams);
+
+        $conditions = [];
+        if ($queryParams['status'] === 'publish') {
+            $conditions = $this->Contents->getConditionAllowPublish();
+        }
         return $this->Contents->get($id, [
-            'contain' => ['Sites'],
+            'contain' => $queryParams['contain'],
+            'conditions' => $conditions
         ]);
     }
 
