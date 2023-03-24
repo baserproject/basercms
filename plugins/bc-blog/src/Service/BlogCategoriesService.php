@@ -172,6 +172,7 @@ class BlogCategoriesService implements BlogCategoriesServiceInterface
     {
         return $this->BlogCategories->newEntity([
             'blog_content_id' => $blogContentId,
+            'status' => true
         ], [
             'validate' => false,
         ]);
