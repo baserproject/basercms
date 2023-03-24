@@ -26,6 +26,18 @@ use BaserCore\Service\ContentsServiceInterface;
  */
 class ContentsController extends BcApiController
 {
+    /**
+     * initialize
+     * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function initialize(): void
+    {
+        parent::initialize();
+        $this->Authentication->allowUnauthenticated(['index', 'view']);
+    }
 
     /**
      * コンテンツ情報取得
