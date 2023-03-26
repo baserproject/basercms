@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: baserCMS\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2023-03-24 22:46+0900\n"
+"PO-Revision-Date: 2023-03-27 00:07+0900\n"
 "Last-Translator: ryuring\n"
 "Language-Team: baserCMS Users Community <info@basercms.net>\n"
 "Language: en\n"
@@ -2633,10 +2633,8 @@ msgstr "Please enter Display Name."
 
 #: plugins/baser-core/src/Model/Table/UserGroupsTable.php:129
 #: plugins/baser-core/src/Model/Table/UserGroupsTable.php:130
-#, fuzzy
-#| msgid "認証プレフィックスを入力してください。"
 msgid "認証プレフィックスを選択してください。"
-msgstr "Please enter Authorization Prefix."
+msgstr "Choose an authentication prefix."
 
 #: plugins/baser-core/src/Model/Table/UsersTable.php:147
 msgid "アカウント名は255文字以内で入力してください。"
@@ -2667,10 +2665,8 @@ msgid "名前[名]は50文字以内で入力してください。"
 msgstr "Please enter [Firstname] within 50 characters."
 
 #: plugins/baser-core/src/Model/Table/UsersTable.php:171
-#, fuzzy
-#| msgid "パスワードは255文字以内で入力してください。"
 msgid "ニックネームは255文字以内で入力してください。"
-msgstr "Please enter password within 255 characters."
+msgstr "Your nickname cannot exceed 255 characters."
 
 #: plugins/baser-core/src/Model/Table/UsersTable.php:174
 #: plugins/baser-core/src/Model/Table/UsersTable.php:179
@@ -2682,10 +2678,8 @@ msgid "自分のアカウントのグループは変更できません。"
 msgstr "Can't change your Account's Group."
 
 #: plugins/baser-core/src/Model/Table/UsersTable.php:200
-#, fuzzy
-#| msgid "既に登録のあるタグです。"
 msgid "既に登録のあるEメールです。"
-msgstr "Tag is already registered."
+msgstr "This is Email that you have already registered."
 
 #: plugins/baser-core/src/Model/Table/UsersTable.php:204
 #: plugins/baser-core/src/Model/Table/UsersTable.php:250
@@ -2715,16 +2709,16 @@ msgstr "The password is not the same."
 #: plugins/baser-core/src/Model/Table/UsersTable.php:233
 #: plugins/baser-core/src/Model/Table/UsersTable.php:234
 #: plugins/baser-core/tests/TestCase/Model/Table/UsersTableTest.php:191
-#, fuzzy
-#| msgid "フィードURLを入力してください。"
 msgid "パスワードを入力してください。"
-msgstr "Please enter Feed URL."
+msgstr "Please enter your password."
 
 #: plugins/baser-core/src/Model/Validation/BcValidation.php:190
 msgid ""
 "アップロードされたファイルは、PHPの設定 post_max_size ディレクティブの値を超"
 "えています。"
 msgstr ""
+"The uploaded file exceeds the value of the PHP configuration post_max_size "
+"directive."
 
 #: plugins/baser-core/src/Model/Validation/BcValidation.php:213
 msgid ""
@@ -2733,6 +2727,10 @@ msgid ""
 "えています。\n"
 "                        {1} MB以内のファイルをご利用ください。"
 msgstr ""
+"CODE: {0} Uploaded files are\n"
+"                        The value of the upload_max_filesize directive in "
+"php.ini has been exceeded.\n"
+"                        Please use a file within {1} MB."
 
 #: plugins/baser-core/src/Model/Validation/BcValidation.php:219
 msgid ""
@@ -2740,49 +2738,40 @@ msgid ""
 "ています。\n"
 "                        {1} MB以内のファイルをご利用ください。"
 msgstr ""
+"CODE: {0} The uploaded file exceeds the MAX_FILE_SIZE specified in HTML.\n"
+"                        Please use a file within {1} MB."
 
 #: plugins/baser-core/src/Model/Validation/BcValidation.php:224
-#, fuzzy
-#| msgid "アップロードしたZIPファイルの展開に失敗しました。"
 msgid "CODE: {0} アップロードされたファイルが不完全です。"
-msgstr "Failed extracting the uploaded zip file."
+msgstr "CODE: {0} The uploaded file is incomplete."
 
 #: plugins/baser-core/src/Model/Validation/BcValidation.php:228
-#, fuzzy
-#| msgid "ファイルのアップロードに失敗しました。"
 msgid "CODE: {0} ファイルがアップロードされませんでした。"
-msgstr "Failed uploading the file."
+msgstr "CODE: {0} file was not uploaded."
 
 #: plugins/baser-core/src/Model/Validation/BcValidation.php:232
-#, fuzzy
-#| msgid ""
-#| "テーマの配置に失敗しました。テーマフォルダの書き込み権限を確認してくださ"
-#| "い。"
 msgid ""
 "CODE: {0} 一時書込み用のフォルダがありません。テンポラリフォルダの書込み権限"
 "を見直してください。"
-msgstr "Failed placing Theme. Please check Theme Folder's write permission."
+msgstr ""
+"CODE: {0} There is no folder for temporary writes. Review the write "
+"permissions of the temporary folder."
 
 #: plugins/baser-core/src/Model/Validation/BcValidation.php:236
-#, fuzzy
-#| msgid "スキーマファイルの読み込みに失敗しました。"
 msgid "CODE: {0} ディスクへの書き込みに失敗しました。"
-msgstr "Failed loading Scheme File."
+msgstr "CODE: {0} Failed to write to disk."
 
 #: plugins/baser-core/src/Model/Validation/BcValidation.php:237
-#, fuzzy
-#| msgid ""
-#| "入力されたログイン情報を確認できませんでした。もう一度入力してください。"
 msgid ""
 "何らかの原因でファイルをアップロードできませんでした。Webサイトの管理者に連絡"
 "してください。"
-msgstr "Couldn't confirm entered login info. Please re-enter."
+msgstr ""
+"The file could not be uploaded for some reason. Contact the administrator of "
+"the website."
 
 #: plugins/baser-core/src/Model/Validation/BcValidation.php:240
-#, fuzzy
-#| msgid "ファイルのアップロードに失敗しました。"
 msgid "CODE: {0} PHPの拡張モジュールがファイルのアップロードを中止しました。"
-msgstr "Failed uploading the file."
+msgstr "CODE: {0} PHP extension stopped uploading files."
 
 #: plugins/baser-core/src/Model/Validation/BcValidation.php:250
 #: plugins/baser-core/src/Model/Validation/BcValidation.php:254
@@ -2795,30 +2784,24 @@ msgid "PHPの構文エラーです"
 msgstr "PHP syntax error"
 
 #: plugins/baser-core/src/Plugin.php:316
-#, fuzzy
-#| msgid "このURLの登録は許可されていません。"
 msgid "Web APIは許可されていません。"
-msgstr "This URL's registration is not allowed."
+msgstr "Web APIs are not allowed."
 
 #: plugins/baser-core/src/Service/Admin/BcAdminContentsService.php:97
 msgid "親フォルダの設定に従う"
-msgstr "Follow Parent Folder’s settings"
+msgstr "Follow the parent folder settings"
 
 #: plugins/baser-core/src/Service/Admin/PermissionGroupsAdminService.php:66
 #: plugins/baser-core/src/Service/Admin/PermissionsAdminService.php:51
 #: plugins/baser-core/src/Service/Admin/PermissionsAdminService.php:78
 #: plugins/baser-core/src/Service/Admin/PermissionsAdminService.php:101
 #: plugins/baser-core/src/Service/PermissionGroupsService.php:373
-#, fuzzy
-#| msgid "サイト"
 msgid "ゲスト"
-msgstr "Site"
+msgstr "Guest"
 
 #: plugins/baser-core/src/Service/Admin/SitesAdminService.php:129
-#, fuzzy
-#| msgid "メインサイト"
 msgid "メインサイトに従う"
-msgstr "Main Site"
+msgstr "Follow the main site"
 
 #: plugins/baser-core/src/Service/BcDatabaseService.php:317
 #: plugins/baser-core/src/Service/BcDatabaseService.php:333
@@ -2941,10 +2924,8 @@ msgid "親フォルダの設定に従う（%s）"
 msgstr "Follow Parent Folder’s settings (%s)"
 
 #: plugins/baser-core/src/Service/ContentsService.php:393
-#, fuzzy
-#| msgid "メッセージを指定してください。"
 msgid "エイリアスIDを指定してください。"
-msgstr "Please specify message."
+msgstr "Specify the alias ID."
 
 #: plugins/baser-core/src/Service/ContentsService.php:879
 #: plugins/bc-admin-third/templates/Admin/element/Contents/index_setup_tree.php:48
@@ -2970,30 +2951,22 @@ msgid "site_idを指定してください。"
 msgstr "Please specify contentId."
 
 #: plugins/baser-core/src/Service/ContentsService.php:1483
-#, fuzzy
-#| msgid "送信先のメールアドレスが不正です。"
 msgid "送信データが不正です。"
-msgstr "Destination e-mail address was illegal."
+msgstr "The transmitted data is invalid."
 
 #: plugins/baser-core/src/Service/Front/PagesFrontService.php:67
-#, fuzzy
-#| msgid "指定されたページへのアクセスは許可されていません。"
 msgid "本文欄でスクリプトの入力は許可されていません。"
-msgstr "Access to the specified page is not allowed."
+msgstr "Script input is not allowed in the body field."
 
 #: plugins/baser-core/src/Service/PasswordRequestsService.php:101
-#, fuzzy
-#| msgid "データが存在しません。"
 msgid "ユーザーが存在しません。"
-msgstr "Data does not exist."
+msgstr "The user does not exist."
 
 #: plugins/baser-core/src/Service/PermissionGroupsService.php:345
 #: plugins/bc-admin-third/templates/Admin/element/UserGroups/form.php:117
 #: plugins/bc-favorite/config/permission.php:28
-#, fuzzy
-#| msgid "アクセス"
 msgid "フルアクセス"
-msgstr "Access"
+msgstr "Full Access"
 
 #: plugins/baser-core/src/Service/PermissionGroupsService.php:434
 msgid "{0} その他"
