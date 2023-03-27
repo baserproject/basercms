@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: baserCMS\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2023-03-27 00:07+0900\n"
+"PO-Revision-Date: 2023-03-27 17:46+0900\n"
 "Last-Translator: ryuring\n"
 "Language-Team: baserCMS Users Community <info@basercms.net>\n"
 "Language: en\n"
@@ -2805,34 +2805,24 @@ msgstr "Follow the main site"
 
 #: plugins/baser-core/src/Service/BcDatabaseService.php:317
 #: plugins/baser-core/src/Service/BcDatabaseService.php:333
-#, fuzzy
-#| msgid "%s の初期データのロードに失敗しました。"
 msgid "%s %s の初期データのロードに失敗しました。"
-msgstr "Failed loading of %s’s initial data."
+msgstr "Failed to load %s %s initial data."
 
 #: plugins/baser-core/src/Service/BcDatabaseService.php:339
-#, fuzzy
-#| msgid ""
-#| "初期データの読み込みに失敗しましたので baserCMSコアの初期データを読み込み"
-#| "ました。"
 msgid ""
 "初期データの読み込みに失敗しましたので baserCMSコアの初期データを読み込みまし"
 "た。ログを確認してください。"
 msgstr ""
-"Loaded baserCMS Core’s initial data because loading of initial data has "
-"failed."
+"Initial data loading failed, so baserCMS core initial data was loaded. Check "
+"the logs."
 
 #: plugins/baser-core/src/Service/BcDatabaseService.php:342
-#, fuzzy
-#| msgid ""
-#| "初期データの読み込みに失敗しました。データが不完全な状態です。正常に動作し"
-#| "ない可能性があります。"
 msgid ""
 "初期データの読み込みに失敗しました。データが不完全な状態です。正常に動作しな"
 "い可能性があります。ログを確認してください。"
 msgstr ""
-"Failed loading of initial data. Data is incomplete. It might not run "
-"normally."
+"Failed to load initial data. The data is incomplete. It may not work "
+"properly. Check the logs."
 
 #: plugins/baser-core/src/Service/BcDatabaseService.php:383
 msgid "%s の読み込みに失敗。"
@@ -2860,37 +2850,28 @@ msgid "データベースの保存フォルダに書き込み権限がありま�
 msgstr "There is no write permission to database's saving folder"
 
 #: plugins/baser-core/src/Service/BcDatabaseService.php:1338
-#, fuzzy
-#| msgid ""
-#| "ドライバが見つかりません Driver is not defined.(MySQL|Postgres|SQLite|CSV)"
 msgid "ドライバが見つかりません Driver is not defined.(MySQL|Postgres|SQLite)"
-msgstr "Driver is not defined.(MySQL|Postgres|SQLite|CSV)"
+msgstr "Driver not found Driver is not defined. (MySQL| Postgres| SQLite)"
 
 #: plugins/baser-core/src/Service/BcDatabaseService.php:1358
-#, fuzzy
-#| msgid ""
-#| "データベースへの接続でエラーが発生しました。データベース設定を見直してくだ"
-#| "さい。<br>サーバー上に指定されたデータベースが存在しない可能性が高いです。"
 msgid ""
 "データベースへの接続でエラーが発生しました。データベース設定を見直してくださ"
 "い。\n"
 "サーバー上に指定されたデータベースが存在しない可能性が高いです。\n"
 msgstr ""
-"Error has occurred when connecting to the database. Please re-check the "
-"database config.<br>It’s likely specified database is not on server."
+"Error occurred connecting to the database. Review your database settings.\n"
+"It is highly likely that the specified database does not exist on the "
+"server.\n"
 
 #: plugins/baser-core/src/Service/BcDatabaseService.php:1362
-#, fuzzy
-#| msgid ""
-#| "データベースへの接続でエラーが発生しました。データベース設定を見直してくだ"
-#| "さい。<br>サーバー上に指定されたデータベースが存在しない可能性が高いです。"
 msgid ""
 "データベースへの接続でエラーが発生しました。データベース設定を見直してくださ"
 "い。\n"
 "サーバー上に指定されたデータベースが存在しない可能性が高いです。"
 msgstr ""
-"Error has occurred when connecting to the database. Please re-check the "
-"database config.<br>It’s likely specified database is not on server."
+"An error occurred connecting to the database. Review your database "
+"settings.\n"
+"It is highly likely that the specified database does not exist on the server."
 
 #: plugins/baser-core/src/Service/BcDatabaseService.php:1374
 msgid ""
@@ -2906,10 +2887,8 @@ msgid "データベースのバージョンが %s 以上か確認してくださ
 msgstr "Please confirm the database version is %s or newer."
 
 #: plugins/baser-core/src/Service/BcDatabaseService.php:1402
-#, fuzzy
-#| msgid "データベースへの接続でエラーが発生しました。"
 msgid "データベースへの接続でエラーが発生しました。\n"
-msgstr "Error has occurred when connecting to the database."
+msgstr "Error occurred connecting to the database.\n"
 
 #: plugins/baser-core/src/Service/BcDatabaseService.php:1413
 msgid ""
@@ -2937,18 +2916,16 @@ msgid "データが存在しません。"
 msgstr "Data does not exist."
 
 #: plugins/baser-core/src/Service/ContentsService.php:983
-#, fuzzy
-#| msgid "同一URLのコンテンツが存在するため処理に失敗しました。"
 msgid ""
 "同一URLのコンテンツが存在するため処理に失敗しました。（現在のサイトに存在しな"
 "い場合は、関連サイトに存在します）"
-msgstr "Failed processing because the same URL Contents exists."
+msgstr ""
+"Processing failed because there is content with the same URL. (If it does "
+"not exist in the current site, it exists in the related site)"
 
 #: plugins/baser-core/src/Service/ContentsService.php:1370
-#, fuzzy
-#| msgid "contentId を指定してください。"
 msgid "site_idを指定してください。"
-msgstr "Please specify contentId."
+msgstr "Specify the site_id."
 
 #: plugins/baser-core/src/Service/ContentsService.php:1483
 msgid "送信データが不正です。"
@@ -2970,19 +2947,18 @@ msgstr "Full Access"
 
 #: plugins/baser-core/src/Service/PermissionGroupsService.php:434
 msgid "{0} その他"
-msgstr ""
+msgstr "{0} Other"
 
 #: plugins/baser-core/src/Service/PluginsService.php:150
 msgid ""
 "プラグインに Plugin クラスが存在しません。src ディレクトリ配下に作成してくだ"
 "さい。"
 msgstr ""
+"The plugin does not have a Plugin class. Create it under the src directory."
 
 #: plugins/baser-core/src/Service/PluginsService.php:198
-#, fuzzy
-#| msgid "アップデート処理を開始します。"
 msgid "{0} プラグイン {1} へのアップデートを開始します。"
-msgstr "Starting update process."
+msgstr "{0} Start update to plugin {1}."
 
 #: plugins/baser-core/src/Service/PluginsService.php:225
 #: plugins/baser-core/src/Service/PluginsService.php:245
@@ -2990,45 +2966,34 @@ msgid "アップデート処理が途中で失敗しました。"
 msgstr "Failed update process in the middle."
 
 #: plugins/baser-core/src/Service/PluginsService.php:237
-#, fuzzy
-#| msgid "ファイルのアップロードに失敗しました。"
 msgid "{0} プラグイン {1} へのアップデートが完了しました。"
-msgstr "Failed uploading the file."
+msgstr "{0} Update to plugin {1} completed."
 
 #: plugins/baser-core/src/Service/PluginsService.php:276
-#, fuzzy
-#| msgid ""
-#| "baserCMSのインストールに失敗しました。ログファイルを確認してください。"
 msgid ""
 "プログラムファイルのアップデートに失敗しました。ログを確認してください。"
-msgstr "Failed baserCMS installation. Please check the log file."
+msgstr "Program file update failed. Check the logs."
 
 #: plugins/baser-core/src/Service/PluginsService.php:288
-#, fuzzy
-#| msgid ""
-#| "アップデートスクリプトの実行が完了しました。<a href=\"#UpdateLog\">アップ"
-#| "デートログ</a>を確認してください。"
 msgid ""
 "アップデートスクリプトの処理が失敗したので、プログラムファイルを元に戻そうと"
 "しましたが失敗しました。。ログを確認してください。"
-msgstr "Completed update script. Check <a href=\"#UpdateLog\">update log</a>."
+msgstr ""
+"The update script failed to process, so I tried to restore the program files "
+"but failed. Check the logs."
 
 #: plugins/baser-core/src/Service/PluginsService.php:290
-#, fuzzy
-#| msgid ""
-#| "アップデートスクリプトの実行が完了しました。<a href=\"#UpdateLog\">アップ"
-#| "デートログ</a>を確認してください。"
 msgid ""
 "アップデートスクリプトの処理が失敗したので、プログラムファイルを元に戻しまし"
 "た。。ログを確認してください。"
-msgstr "Completed update script. Check <a href=\"#UpdateLog\">update log</a>."
+msgstr ""
+"The update script process failed, so I moved the program files back. Check "
+"the logs."
 
 #: plugins/baser-core/src/Service/PluginsService.php:416
 #: plugins/baser-core/src/Service/PluginsService.php:452
-#, fuzzy
-#| msgid "テーマフォルダを手動で削除してください。"
 msgid "プラグインに Plugin クラスが存在しません。手動で削除してください。"
-msgstr "Please delete Theme Folder manually."
+msgstr "The plugin does not have a Plugin class. Remove it manually."
 
 #: plugins/baser-core/src/Service/PluginsService.php:421
 msgid "処理中にエラーが発生しました。プラグインの開発者に確認してください。"
@@ -3047,10 +3012,8 @@ msgid "アップロードしたZIPファイルの展開に失敗しました。"
 msgstr "Failed extracting the uploaded zip file."
 
 #: plugins/baser-core/src/Service/SitesService.php:186
-#, fuzzy
-#| msgid "このユーザーは削除できません。"
 msgid "メインサイトは削除できません。"
-msgstr "Can't delete this User."
+msgstr "You cannot delete the main site."
 
 #: plugins/baser-core/src/Service/ThemesService.php:234
 msgid "このテーマは下記のプラグインを同梱しています。"
@@ -3074,104 +3037,60 @@ msgstr ""
 "Initial data’s version is different, or initial data’s structure is broken."
 
 #: plugins/baser-core/src/Service/UsersService.php:133
-#, fuzzy
-#| msgid "contentId を指定してください。"
 msgid "user_groups[_ids][] を指定してください。"
-msgstr "Please specify contentId."
+msgstr "Specify user_groups[_ids][]."
 
 #: plugins/baser-core/src/Service/UsersService.php:137
 #: plugins/baser-core/src/Service/UsersService.php:166
 #: plugins/baser-core/src/Service/UsersService.php:170
 #: plugins/baser-core/src/Service/UsersService.php:191
 #: plugins/baser-core/src/Service/UsersService.php:394
-#, fuzzy
-#| msgid "削除中にエラーが発生しました。"
 msgid "特権エラーが発生しました。"
-msgstr "Error has occurred when deleting."
+msgstr "A privilege error occurred."
 
 #: plugins/baser-core/src/Service/UsersService.php:423
-#, fuzzy
-#| msgid "データが見つかりませんでした。"
 msgid "対象データが見つかりません。"
-msgstr "Couldn't find the data."
+msgstr "Target data not found."
 
 #: plugins/baser-core/src/Service/UtilitiesService.php:223
-#, fuzzy
-#| msgid "スペシャルサンクスデータが取得できませんでした。"
 msgid "スペシャルサンクスのデータが読み込めませんでした。"
-msgstr "Couldn’t fetch Special Thanks data."
+msgstr "Special Thanks data could not be loaded."
 
 #: plugins/baser-core/src/Service/UtilitiesService.php:272
 msgid "エラーログが削除できませんでした。"
 msgstr "Couldn't delete error log."
 
 #: plugins/baser-core/src/Service/UtilitiesService.php:399
-#, fuzzy
-#| msgid "データが送信できませんでした。"
 msgid "バックアップファイルが送信されませんでした。"
-msgstr "Couldn’t send data."
+msgstr "The backup file was not sent."
 
 #: plugins/baser-core/src/Utility/BcComposer.php:82
-#, fuzzy
-#| msgid "baserCMSのインストールを開始できません"
 msgid "composer がインストールできません。{0}"
-msgstr "Couldn’t start installation of baserCMS"
+msgstr "Composer cannot be installed. {0}"
 
 #: plugins/baser-core/src/Utility/BcComposer.php:97
-#, fuzzy
-#| msgid ""
-#| "/app/Config/ に書き込み権限を与える事ができませんでした。手動で書き込み権"
-#| "限を与えてください。"
 msgid "/composer に書き込み権限がありません。書き込み権限を与えてください。"
-msgstr ""
-"Couldn't give the write permission to /app/Config . Give the write "
-"permission to it manually."
+msgstr "/composer does not have write permission. Give write permission."
 
 #: plugins/baser-core/src/Utility/BcComposer.php:100
-#, fuzzy
-#| msgid ""
-#| "/app/Config/ に書き込み権限を与える事ができませんでした。手動で書き込み権"
-#| "限を与えてください。"
 msgid "/vendor に書き込み権限がありません。書き込み権限を与えてください。"
-msgstr ""
-"Couldn't give the write permission to /app/Config . Give the write "
-"permission to it manually."
+msgstr "/vendor does not have write permission. Give write permission."
 
 #: plugins/baser-core/src/Utility/BcComposer.php:103
-#, fuzzy
-#| msgid ""
-#| "/app/Config/ に書き込み権限を与える事ができませんでした。手動で書き込み権"
-#| "限を与えてください。"
 msgid "/config に書き込み権限がありません。書き込み権限を与えてください。"
-msgstr ""
-"Couldn't give the write permission to /app/Config . Give the write "
-"permission to it manually."
+msgstr "/config does not have write permission. Give write permission."
 
 #: plugins/baser-core/src/Utility/BcComposer.php:106
-#, fuzzy
-#| msgid ""
-#| "/app/Config/ に書き込み権限を与える事ができませんでした。手動で書き込み権"
-#| "限を与えてください。"
 msgid "/tmp に書き込み権限がありません。書き込み権限を与えてください。"
-msgstr ""
-"Couldn't give the write permission to /app/Config . Give the write "
-"permission to it manually."
+msgstr "/tmp does not have write permission. Give write permission."
 
 #: plugins/baser-core/src/Utility/BcComposer.php:109
-#, fuzzy
-#| msgid ""
-#| "/app/Config/ に書き込み権限を与える事ができませんでした。手動で書き込み権"
-#| "限を与えてください。"
 msgid "/logs に書き込み権限がありません。書き込み権限を与えてください。"
-msgstr ""
-"Couldn't give the write permission to /app/Config . Give the write "
-"permission to it manually."
+msgstr "/logs does not have write permission. Give write permission."
 
 #: plugins/baser-core/src/Utility/BcGmaps.php:61
-#, fuzzy
-#| msgid "データベースユーザー名を入力してください。"
 msgid "システム基本設定にて、Google Maps API キーを入力してください。"
-msgstr "Please enter username for database."
+msgstr "In the system preferences, enter your Google Maps API key."
 
 #: plugins/baser-core/src/Utility/BcUtil.php:1808
 msgid "リトライ回数は正の整数値で指定してください。"
@@ -3181,10 +3100,8 @@ msgstr "Please specify retry number with positive integers."
 #: plugins/bc-custom-content/config/setting.php:107
 #: plugins/bc-custom-content/plugins/BcCcDate/config/setting.php:26
 #: plugins/bc-custom-content/plugins/BcCcDateTime/config/setting.php:26
-#, fuzzy
-#| msgid "添付"
 msgid "日付"
-msgstr "Attachment"
+msgstr "Date"
 
 #: plugins/baser-core/src/View/Helper/BcAdminHelper.php:449
 #: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogContents/form.php:208
@@ -3267,6 +3184,8 @@ msgid ""
 "システム基本設定で住所を指定するか、パラーメーター address を指定してくださ"
 "い。"
 msgstr ""
+"Specify the address in the system preferences or specify the parameter "
+"address."
 
 #: plugins/baser-core/src/View/Helper/BcTextHelper.php:78
 msgid "無"
@@ -3286,11 +3205,11 @@ msgstr "Allowed"
 
 #: plugins/baser-core/src/View/Helper/BcTextHelper.php:100
 msgid "%s しない"
-msgstr ""
+msgstr "%s DO"
 
 #: plugins/baser-core/src/View/Helper/BcTextHelper.php:101
 msgid "%s する"
-msgstr ""
+msgstr "%s TO"
 
 #: plugins/baser-core/src/View/Helper/BcTextHelper.php:130
 #, fuzzy
