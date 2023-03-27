@@ -14,6 +14,7 @@ namespace BcCustomContent\Controller\Api;
 use BaserCore\Controller\Api\BcApiController;
 use BcCustomContent\Service\CustomContentsServiceInterface;
 use Cake\Datasource\Exception\RecordNotFoundException;
+use Cake\Http\Exception\ForbiddenException;
 use Cake\ORM\Exception\PersistenceFailedException;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -24,6 +25,20 @@ use BaserCore\Annotation\Checked;
  */
 class CustomContentsController extends BcApiController
 {
+
+    /**
+     * initialize
+     * @return void
+     * @checked
+     * @unitTest
+     * @unitTest
+     */
+    public function initialize(): void
+    {
+        parent::initialize();
+        $this->Authentication->allowUnauthenticated(['index', 'view']);
+    }
+
     /**
      * 一覧取得API
      *
@@ -35,9 +50,17 @@ class CustomContentsController extends BcApiController
      */
     public function index(CustomContentsServiceInterface $service)
     {
+        $this->request->allowMethod(['get']);
+
+        $queryParams = $this->getRequest()->getQueryParams();
+        if (isset($queryParams['status'])) {
+            if (!$this->isAdminApiEnabled()) throw new ForbiddenException();
+        }
+
         $queryParams = array_merge([
             'contain' => null,
-        ], $this->request->getQueryParams());
+            'status' => 'publish'
+        ], $queryParams);
 
         $this->set([
             'customContents' => $this->paginate($service->getIndex($queryParams))
@@ -58,9 +81,19 @@ class CustomContentsController extends BcApiController
     public function view(CustomContentsServiceInterface $service, int $id)
     {
         $this->request->allowMethod(['get']);
+
+        $queryParams = $this->getRequest()->getQueryParams();
+        if (isset($queryParams['status'])) {
+            if (!$this->isAdminApiEnabled()) throw new ForbiddenException();
+        }
+
+        $queryParams = array_merge([
+            'status' => 'publish'
+        ], $queryParams);
+
         $customContent = $message = null;
         try {
-            $customContent = $service->get($id, $this->request->getQueryParams());
+            $customContent = $service->get($id, $queryParams);
         } catch (RecordNotFoundException $e) {
             $this->setResponse($this->response->withStatus(404));
             $message = __d('baser_core', 'データが見つかりません。');

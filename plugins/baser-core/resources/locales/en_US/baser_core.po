@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: baserCMS\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2023-03-22 18:33+0900\n"
+"PO-Revision-Date: 2023-03-27 00:07+0900\n"
 "Last-Translator: ryuring\n"
 "Language-Team: baserCMS Users Community <info@basercms.net>\n"
 "Language: en\n"
@@ -661,7 +661,7 @@ msgstr "Access Rules API"
 #: plugins/bc-uploader/config/permission.php:72
 #: plugins/bc-widget-area/config/permission.php:43
 msgid "一括処理"
-msgstr "Bulk Process"
+msgstr "Batch processing"
 
 # 日本語：並べ替え
 # 英　訳：Sorting
@@ -1636,10 +1636,8 @@ msgid "サイト: {0} を削除しました。"
 msgstr "Site: Removed {0}."
 
 #: plugins/baser-core/src/Controller/Admin/ThemesController.php:56
-#, fuzzy
-#| msgid "メールフォーム「%s」を追加しました。"
 msgid "テーマファイル「{0}」を追加しました。"
-msgstr "Added Mail Form “%s”."
+msgstr "Theme file \"{0}\" was added."
 
 #: plugins/baser-core/src/Controller/Admin/ThemesController.php:88
 #: plugins/baser-core/src/Controller/Api/ThemesController.php:180
@@ -1647,10 +1645,8 @@ msgid "不正な操作です。"
 msgstr "Illegal manipulation."
 
 #: plugins/baser-core/src/Controller/Admin/ThemesController.php:97
-#, fuzzy
-#| msgid "初期データの読み込みが完了しました。"
 msgid "初期データの読み込みに失敗しました。"
-msgstr "Completed loading of initial data."
+msgstr "Failed to load initial data."
 
 #: plugins/baser-core/src/Controller/Admin/ThemesController.php:101
 #: plugins/baser-core/src/Controller/Api/ThemesController.php:186
@@ -1668,10 +1664,8 @@ msgstr "Completed loading of initial data."
 
 #: plugins/baser-core/src/Controller/Admin/ThemesController.php:123
 #: plugins/baser-core/src/Controller/Api/ThemesController.php:146
-#, fuzzy
-#| msgid "フィード「%s」を追加しました。"
 msgid "テーマ「{0}」をコピーしました。"
-msgstr "Added Feed \"%s\"."
+msgstr "Copied the theme \"{0}\"."
 
 #: plugins/baser-core/src/Controller/Admin/ThemesController.php:125
 #: plugins/baser-core/src/Controller/Admin/ThemesController.php:147
@@ -1680,24 +1674,18 @@ msgstr "Please re-check Theme Folder's access permission."
 
 #: plugins/baser-core/src/Controller/Admin/ThemesController.php:145
 #: plugins/baser-core/src/Controller/Api/ThemesController.php:115
-#, fuzzy
-#| msgid "フィード「%s」を削除しました。"
 msgid "テーマ「{0}」を削除しました。"
-msgstr "Deleted Feed \"%s\"."
+msgstr "Deleted theme \"{0}\"."
 
 #: plugins/baser-core/src/Controller/Admin/ThemesController.php:168
 #: plugins/baser-core/src/Controller/Api/ThemesController.php:221
-#, fuzzy
-#| msgid "フィード「%s」を削除しました。"
 msgid "テーマ「{0}」を適用しました。"
-msgstr "Deleted Feed \"%s\"."
+msgstr "Applied the theme \"{0}\"."
 
 #: plugins/baser-core/src/Controller/Admin/ThemesController.php:172
 #: plugins/baser-core/src/Controller/Api/ThemesController.php:229
-#, fuzzy
-#| msgid "コアテーブルの構築に失敗しました。"
 msgid "テーマの適用に失敗しました。"
-msgstr "Failed constructing Core table."
+msgstr "Failed to apply theme."
 
 #: plugins/baser-core/src/Controller/Admin/UpdatersController.php:35
 msgid "アップデートスクリプトの実行します。"
@@ -1722,51 +1710,37 @@ msgid "アップデートスクリプト実行"
 msgstr "Run Update Script"
 
 #: plugins/baser-core/src/Controller/Admin/UserGroupsController.php:81
-#, fuzzy
-#| msgid "新規メールフォーム「%s」を追加しました。"
 msgid "新規ユーザーグループ「{0}」を追加しました。"
-msgstr "Added Mail Form “%s”."
+msgstr "New user group \"{0}\" has been added."
 
 #: plugins/baser-core/src/Controller/Admin/UserGroupsController.php:110
 #: plugins/baser-core/src/Controller/Api/UserGroupsController.php:116
-#, fuzzy
-#| msgid "メールフォーム「%s」を更新しました。"
 msgid "ユーザーグループ「{0}」を更新しました。"
-msgstr "Updated Mail Form “%s”."
+msgstr "User group \"{0}\" was updated."
 
 #: plugins/baser-core/src/Controller/Admin/UserGroupsController.php:137
-#, fuzzy
-#| msgid "メールフィールド「%s」を削除しました。"
 msgid "ユーザーグループ「{0}」を削除しました。"
-msgstr "Deleted Mail Field “%s”"
+msgstr "User group \"{0}\" was deleted."
 
 #: plugins/baser-core/src/Controller/Admin/UserGroupsController.php:163
 #: plugins/baser-core/src/Controller/Api/UserGroupsController.php:200
-#, fuzzy
-#| msgid "ユーザーグループを選択してください。"
 msgid "ユーザーグループ「{0}」をコピーしました。"
-msgstr "Please select User Group."
+msgstr "User group \"{0}\" copied."
 
 #: plugins/baser-core/src/Controller/Admin/UsersController.php:89
 #: plugins/baser-core/src/Controller/Api/UsersController.php:76
 #: plugins/baser-core/src/Controller/UsersController.php:82
-#, fuzzy
-#| msgid "ようこそ、%s さん。"
 msgid "ようこそ、{0}さん。"
-msgstr "Welcome, %s."
+msgstr "Welcome, Mx. %s."
 
 #: plugins/baser-core/src/Controller/Admin/UsersController.php:92
 #: plugins/baser-core/src/Controller/UsersController.php:85
-#, fuzzy
-#| msgid "アカウント名、パスワードが間違っています。"
 msgid "Eメール、または、パスワードが間違っています。"
-msgstr "Account name or password is wrong."
+msgstr "The email or password is incorrect."
 
 #: plugins/baser-core/src/Controller/Admin/UsersController.php:123
-#, fuzzy
-#| msgid "プラグインの有効化に失敗しました。"
 msgid "既に代理ログイン中のため失敗しました。"
-msgstr "Failed enabling Plugin"
+msgstr "Failed because you are already logging in as a proxy."
 
 #: plugins/baser-core/src/Controller/Admin/UsersController.php:143
 msgid "元のユーザーに戻りました。"
@@ -1775,34 +1749,28 @@ msgstr "Back to the previous User."
 #: plugins/baser-core/src/Controller/Admin/UsersController.php:165
 #: plugins/baser-core/src/Controller/UsersController.php:109
 msgid "ログアウトしました"
-msgstr "Logged-out"
+msgstr "Logged out"
 
 #: plugins/baser-core/src/Controller/Admin/UsersController.php:223
 #: plugins/baser-core/src/Controller/Api/UsersController.php:155
-#, fuzzy
-#| msgid "リンク「%s」を追加しました。"
 msgid "ユーザー「{0}」を追加しました。"
-msgstr "Added Link \"%s\"."
+msgstr "Added user \"{0}\"."
 
 #: plugins/baser-core/src/Controller/Admin/UsersController.php:263
 #: plugins/baser-core/src/Controller/Api/UsersController.php:187
-#, fuzzy
-#| msgid "リンク「%s」を更新しました。"
 msgid "ユーザー「{0}」を更新しました。"
-msgstr "Updated Link \"%s\"."
+msgstr "User \"{0}\" was updated."
 
 #: plugins/baser-core/src/Controller/Admin/UsersController.php:298
 #: plugins/baser-core/src/Controller/Api/UserGroupsController.php:152
 #: plugins/baser-core/src/Controller/Api/UsersController.php:218
-#, fuzzy
-#| msgid "エラーログを削除しました。"
 msgid "ユーザー: {0} を削除しました。"
-msgstr "Deleted error log."
+msgstr "User: Deleted {0}."
 
 #: plugins/baser-core/src/Controller/Admin/UtilitiesController.php:51
 #: plugins/baser-core/src/Controller/Api/UtilitiesController.php:40
 msgid "サーバーキャッシュを削除しました。"
-msgstr "Deleted Server Cache."
+msgstr "Cleared server cache."
 
 #: plugins/baser-core/src/Controller/Admin/UtilitiesController.php:116
 #: plugins/baser-core/src/Controller/Api/UtilitiesController.php:146
@@ -1840,36 +1808,28 @@ msgid "コンテンツのツリー構造に問題はありません。"
 msgstr "There is no problem in Content's tree structures."
 
 #: plugins/baser-core/src/Controller/Admin/UtilitiesController.php:232
-#, fuzzy
-#| msgid "データの復元が完了しました。"
 msgid "データのリセットが完了しました。"
-msgstr "Finished restoring data."
+msgstr "The data reset is complete."
 
 #: plugins/baser-core/src/Controller/Admin/UtilitiesController.php:234
-#, fuzzy
-#| msgid ""
-#| "初期データの読み込みが完了しましたが、いくつかの処理に失敗しています。ログ"
-#| "を確認してください。"
 msgid ""
 "データのリセットが完了しましたが、いくつかの処理に失敗しています。ログを確認"
 "してください。"
 msgstr ""
-"Completed loading of initial data, but some processes failed. Please check "
-"the log."
+"The data reset is complete, but some operations are failing. Check the logs."
 
 #: plugins/baser-core/src/Controller/Admin/UtilitiesController.php:237
-#, fuzzy
-#| msgid "%s の初期データのロードに失敗しました。"
 msgid "データのリセットに失敗しました。"
-msgstr "Failed loading of %s’s initial data."
+msgstr "Data reset failed."
 
 #: plugins/baser-core/src/Controller/Api/BcApiController.php:140
 msgid "BcPrefixAuth の userModel の設定ではプラグイン記法を利用してください。"
-msgstr ""
+msgstr "Use plugin notation for BcPrefixAuth’s userModel setting."
 
 #: plugins/baser-core/src/Controller/Api/BcApiController.php:164
 msgid "BcPrefixAuth の userModel にユーザーの存在確認メソッドが存在しません。"
 msgstr ""
+"User existence check method does not exist in userModel of BcPrefixAuth."
 
 #: plugins/baser-core/src/Controller/Api/ContentFoldersController.php:61
 #: plugins/baser-core/src/Controller/Api/ContentFoldersController.php:131
@@ -1891,95 +1851,69 @@ msgstr ""
 #: plugins/bc-mail/src/Controller/Api/MailContentsController.php:206
 #: plugins/bc-mail/src/Controller/Api/MailFieldsController.php:290
 #: plugins/bc-mail/src/Controller/Api/MailFieldsController.php:328
-#, fuzzy
-#| msgid "クラスが見つかりません"
 msgid "データが見つかりません"
-msgstr "Class not found"
+msgstr "No data found"
 
 #: plugins/baser-core/src/Controller/Api/ContentFoldersController.php:88
-#, fuzzy
-#| msgid "メールフォーム「%s」を追加しました。"
 msgid "コンテンツフォルダ「{0}」を追加しました。"
-msgstr "Added Mail Form “%s”."
+msgstr "Content folder \"{0}\" has been added."
 
 #: plugins/baser-core/src/Controller/Api/ContentFoldersController.php:128
-#, fuzzy
-#| msgid "サーバーキャッシュを削除しました。"
 msgid "コンテンツフォルダ: {0} を削除しました。"
-msgstr "Deleted Server Cache."
+msgstr "Content folder: {0} deleted."
 
 #: plugins/baser-core/src/Controller/Api/ContentFoldersController.php:160
-#, fuzzy
-#| msgid "フォルダ「%s」を更新しました。"
 msgid "フォルダー「{0}」を更新しました。"
-msgstr "Updated Folder \"%s\"."
+msgstr "Folder \"{0}\" was updated."
 
 #: plugins/baser-core/src/Controller/Api/ContentsController.php:144
 #: plugins/baser-core/src/Controller/Api/ContentsController.php:148
-#, fuzzy
-#| msgid "エラーログを削除しました。"
 msgid "コンテンツ: {0}を削除しました。"
-msgstr "Deleted error log."
+msgstr "Content: Deleted {0}."
 
 #: plugins/baser-core/src/Controller/Api/ContentsController.php:191
-#, fuzzy
-#| msgid "ゴミ箱を空にする事に失敗しました。"
 msgid "ゴミ箱を空にしました。"
-msgstr "Failed emptying Trash."
+msgstr "Emptied the trash."
 
 #: plugins/baser-core/src/Controller/Api/ContentsController.php:225
-#, fuzzy
-#| msgid "カテゴリー「%s」を更新しました。"
 msgid "コンテンツ「{0}」を更新しました。"
-msgstr "Updated Category \"%s\"."
+msgstr "\"{0}\" content was updated."
 
 #: plugins/baser-core/src/Controller/Api/ContentsController.php:259
-#, fuzzy
-#| msgid "ゴミ箱を空にする事に失敗しました。"
 msgid "ゴミ箱: {0} を元に戻しました。"
-msgstr "Failed emptying Trash."
+msgstr "Trash: Restored {0}."
 
 #: plugins/baser-core/src/Controller/Api/ContentsController.php:261
-#, fuzzy
-#| msgid "コピーに失敗しました。"
 msgid "ゴミ箱の復元に失敗しました"
-msgstr "Failed copying."
+msgstr "Trash restore failed"
 
 #: plugins/baser-core/src/Controller/Api/ContentsController.php:303
-#, fuzzy
-#| msgid "エラーログを削除しました。"
 msgid "コンテンツ: {0} を公開しました。"
-msgstr "Deleted error log."
+msgstr "Content: {0} was published."
 
 #: plugins/baser-core/src/Controller/Api/ContentsController.php:307
-#, fuzzy
-#| msgid "コンテンツの更新に失敗しました。"
 msgid "コンテンツ: {0} を非公開にしました。"
-msgstr "Failed updating Contents."
+msgstr "Content: {0} is now private."
 
 #: plugins/baser-core/src/Controller/Api/ContentsController.php:321
-#, fuzzy
-#| msgid "データが選択されていません。"
 msgid "データが不足しています"
-msgstr "Data is not selected."
+msgstr "Insufficient data"
 
 #: plugins/baser-core/src/Controller/Api/ContentsController.php:411
 msgid "「%s」を「%s」に名称変更しました。"
 msgstr "Renamed “%s” to “%s”."
 
 #: plugins/baser-core/src/Controller/Api/ContentsController.php:447
-#, fuzzy
-#| msgid "ファイル %s を作成しました。"
 msgid "{0} を作成しました。"
-msgstr "Created File %s."
+msgstr "{0} created."
 
 #: plugins/baser-core/src/Controller/Api/ContentsController.php:511
-#, fuzzy
-#| msgid "カテゴリー「%s」を追加しました。"
 msgid ""
 "コンテンツ「%s」の配置を移動しました。\n"
 "%s > %s"
-msgstr "Added Category \"%s\"."
+msgstr ""
+"Moved the placement of content \"%s\".\n"
+"%s > %s"
 
 #: plugins/baser-core/src/Controller/Api/ContentsController.php:532
 msgid ""
@@ -2010,10 +1944,8 @@ msgid "公開"
 msgstr "Public"
 
 #: plugins/baser-core/src/Controller/Api/ContentsController.php:573
-#, fuzzy
-#| msgid "カテゴリー「%s」を追加しました。"
 msgid "コンテンツ 「%s」 を %s しました。"
-msgstr "Added Category \"%s\"."
+msgstr "Content \"%s\" has been %s."
 
 #: plugins/baser-core/src/Controller/Api/ContentsController.php:577
 #: plugins/baser-core/src/Controller/Api/PermissionsController.php:245
@@ -2028,34 +1960,24 @@ msgstr "Added Category \"%s\"."
 #: plugins/bc-theme-file/src/Controller/Api/ThemeFoldersController.php:69
 #: plugins/bc-uploader/src/Controller/Api/UploaderCategoriesController.php:221
 #: plugins/bc-widget-area/src/Controller/Api/WidgetAreasController.php:203
-#, fuzzy
-#| msgid "処理が完了しました。"
 msgid "一括処理が完了しました。"
-msgstr "Completed processing."
+msgstr "The batch process is complete."
 
 #: plugins/baser-core/src/Controller/Api/DblogsController.php:59
-#, fuzzy
-#| msgid "ブログ「%s」を追加しました。"
 msgid "ログを追加しました。"
-msgstr "Added Blog \"%s\"."
+msgstr "Added logs."
 
 #: plugins/baser-core/src/Controller/Api/PagesController.php:128
-#, fuzzy
-#| msgid "固定ページ「%s」を追加しました。"
 msgid "固定ページ「{0}」を追加しました。"
-msgstr "Added Static Page “%s”."
+msgstr "Static page \"{0}\" was added."
 
 #: plugins/baser-core/src/Controller/Api/PagesController.php:166
-#, fuzzy
-#| msgid "「%s」をゴミ箱に移動しました。"
 msgid "固定ページ: {0} をゴミ箱に移動しました。"
-msgstr "Moved “%s” to the Trash."
+msgstr "Static pages: {0} moved to trash."
 
 #: plugins/baser-core/src/Controller/Api/PagesController.php:196
-#, fuzzy
-#| msgid "固定ページ「%s」を更新しました。"
 msgid "固定ページ 「{0}」を更新しました。"
-msgstr "Updated Static Page “%s”."
+msgstr "Static page \"{0}\" was updated."
 
 #: plugins/baser-core/src/Controller/Api/PagesController.php:228
 msgid "固定ページのコピー「%s」を追加しました。"
@@ -2142,52 +2064,36 @@ msgstr "Added Static Page’s copy “%s”."
 #: plugins/bc-widget-area/src/Controller/Api/WidgetAreasController.php:301
 #: plugins/bc-widget-area/src/Controller/Api/WidgetAreasController.php:334
 #: plugins/bc-widget-area/src/Controller/Api/WidgetAreasController.php:364
-#, fuzzy
-#| msgid "データが見つかりませんでした。"
 msgid "データが見つかりません。"
-msgstr "Couldn't find the data."
+msgstr "No data found."
 
 #: plugins/baser-core/src/Controller/Api/PermissionGroupsController.php:70
-#, fuzzy
-#| msgid "メッセージを指定してください。"
 msgid "パラメーターに user_group_id を指定してください。"
-msgstr "Please specify message."
+msgstr "Specify user_group_id for the parameter."
 
 #: plugins/baser-core/src/Controller/Api/PermissionGroupsController.php:148
-#, fuzzy
-#| msgid "メールフィールド「%s」を削除しました。"
 msgid "ルールグループ「{0}」を削除しました。"
-msgstr "Deleted Mail Field “%s”"
+msgstr "Deleted rule group \"{0}\"."
 
 #: plugins/baser-core/src/Controller/Api/PermissionsController.php:88
-#, fuzzy
-#| msgid "新規アクセス制限設定「%s」を追加しました。"
 msgid "新規アクセスルール「{0}」を追加しました。"
-msgstr "Added new Access Restriction Settings “%s”."
+msgstr "New access rule \"{0}\" has been added."
 
 #: plugins/baser-core/src/Controller/Api/PermissionsController.php:121
-#, fuzzy
-#| msgid "カテゴリー「%s」を削除しました。"
 msgid "アクセスルール「{0}」を削除しました。"
-msgstr "Deleted Category \"%s\"."
+msgstr "Access rule \"{0}\" was deleted."
 
 #: plugins/baser-core/src/Controller/Api/PermissionsController.php:153
-#, fuzzy
-#| msgid "カテゴリー「%s」を追加しました。"
 msgid "アクセスルール「{0}」をコピーしました。"
-msgstr "Added Category \"%s\"."
+msgstr "Access rule \"{0}\" copied."
 
 #: plugins/baser-core/src/Controller/Api/PermissionsController.php:193
-#, fuzzy
-#| msgid "カテゴリー「%s」を更新しました。"
 msgid "アクセスルール「{0}」を更新しました。"
-msgstr "Updated Category \"%s\"."
+msgstr "Access rule \"{0}\" was updated."
 
 #: plugins/baser-core/src/Controller/Api/PermissionsController.php:241
-#, fuzzy
-#| msgid "カテゴリー「%s」を追加しました。"
 msgid "アクセスルール 「%s」 を %s しました。"
-msgstr "Added Category \"%s\"."
+msgstr "Access rule \"%s\" has been %s."
 
 #: plugins/baser-core/src/Controller/Api/PermissionsController.php:276
 #: plugins/baser-core/src/Controller/Api/PluginsController.php:290
@@ -2196,22 +2102,16 @@ msgid "一度リロードしてから再実行してみてください。"
 msgstr "Please re-run it after reloading."
 
 #: plugins/baser-core/src/Controller/Api/PermissionsController.php:278
-#, fuzzy
-#| msgid "カテゴリー「%s」を更新しました。"
 msgid "アクセスルール「%s」の並び替えを更新しました。"
-msgstr "Updated Category \"%s\"."
+msgstr "The sorting of access rules \"%s\" has been updated."
 
 #: plugins/baser-core/src/Controller/Api/PluginsController.php:94
-#, fuzzy
-#| msgid "コアプラグイン %s のインストールに失敗しました。"
 msgid "プラグイン「%s」をインストールしました。"
-msgstr "Failed installing Core Plugin %s."
+msgstr "I installed the plugin \"%s\"."
 
 #: plugins/baser-core/src/Controller/Api/PluginsController.php:163
-#, fuzzy
-#| msgid "プラグイン「%s」 を 無効化しました。"
 msgid "プラグイン「%s」を有効にしました。"
-msgstr "Disabled Plugin “%s”."
+msgstr "Plugin \"%s\" enabled."
 
 #: plugins/baser-core/src/Controller/Api/PluginsController.php:166
 #: plugins/bc-installer/src/Service/InstallationsService.php:335
@@ -2219,58 +2119,40 @@ msgid "プラグインの有効化に失敗しました。"
 msgstr "Failed enabling Plugin"
 
 #: plugins/baser-core/src/Controller/Api/PluginsController.php:292
-#, fuzzy
-#| msgid "サブサイト「%s」を更新しました。"
 msgid "プラグイン「%s」の並び替えを更新しました。"
-msgstr "Updated Subsite “%s”."
+msgstr "Updated the rearrangement of plug-in \"%s\"."
 
 #: plugins/baser-core/src/Controller/Api/PluginsController.php:346
-#, fuzzy
-#| msgid "プラグイン「%s」 を 無効化しました。"
 msgid "プラグイン 「%s」 を %s しました。"
-msgstr "Disabled Plugin “%s”."
+msgstr "Plugin \"%s\" has been %s."
 
 #: plugins/baser-core/src/Controller/Api/SiteConfigsController.php:53
-#, fuzzy
-#| msgid "システム設定を保存しました。"
 msgid "システム基本設定を更新しました。"
-msgstr "Saved System Settings."
+msgstr "System basic settings have been updated."
 
 #: plugins/baser-core/src/Controller/Api/SitesController.php:84
-#, fuzzy
-#| msgid "サブサイト「%s」を追加しました。"
 msgid "サイト「{0}」を追加しました。"
-msgstr "Added Subsite “%s”."
+msgstr "Site \"{0}\" was added."
 
 #: plugins/baser-core/src/Controller/Api/SitesController.php:115
-#, fuzzy
-#| msgid "サブサイト「%s」を更新しました。"
 msgid "サイト「{0}」を更新しました。"
-msgstr "Updated Subsite “%s”."
+msgstr "Site \"{0}\" was updated."
 
 #: plugins/baser-core/src/Controller/Api/ThemesController.php:86
-#, fuzzy
-#| msgid "テーマファイル名"
 msgid "テーマファイル「"
-msgstr "Theme File Name"
+msgstr "Theme file \""
 
 #: plugins/baser-core/src/Controller/Api/ThemesController.php:149
-#, fuzzy
-#| msgid "コピーに失敗しました。"
 msgid "テーマ「{0}」のコピーに失敗しました。"
-msgstr "Failed copying."
+msgstr "Failed to copy theme \"{0}\"."
 
 #: plugins/baser-core/src/Controller/Api/UserGroupsController.php:84
-#, fuzzy
-#| msgid "メールフォーム「%s」を追加しました。"
 msgid "ユーザーグループ「{0}」を追加しました。"
-msgstr "Added Mail Form “%s”."
+msgstr "User group \"{0}\" was added."
 
 #: plugins/baser-core/src/Controller/Api/UtilitiesController.php:115
-#, fuzzy
-#| msgid "ファイルアップロードに失敗しました。"
 msgid "バックアップダウンロードが失敗しました。"
-msgstr "Failed File Upload."
+msgstr "Backup download failed."
 
 #: plugins/baser-core/src/Controller/Api/UtilitiesController.php:179
 #: plugins/baser-core/src/Service/UtilitiesService.php:275
@@ -2278,20 +2160,16 @@ msgid "エラーログが存在しません。"
 msgstr "Error log doesn't exist."
 
 #: plugins/baser-core/src/Controller/AppController.php:159
-#, fuzzy
-#| msgid "指定されたページへのアクセスは許可されていません。"
 msgid "指定されたAPIエンドポイントへのアクセスは許可されていません。"
-msgstr "Access to the specified page is not allowed."
+msgstr "Access to the specified API endpoint is not allowed."
 
 #: plugins/baser-core/src/Controller/AppController.php:161
 msgid "指定されたページへのアクセスは許可されていません。"
 msgstr "Access to the specified page is not allowed."
 
 #: plugins/baser-core/src/Controller/AppController.php:233
-#, fuzzy
-#| msgid "エイリアスの作成に失敗しました。"
 msgid "不正なリクエストと判断されました。"
-msgstr "Failed creating Alias."
+msgstr "The request was determined to be invalid."
 
 #: plugins/baser-core/src/Controller/AppController.php:517
 msgid "見つかりませんでした。"
@@ -2299,17 +2177,19 @@ msgstr "Not found."
 
 #: plugins/baser-core/src/Controller/BcAppController.php:428
 msgid "送信先のメールアドレスが不正です。"
-msgstr "Destination e-mail address was illegal."
+msgstr "Destination Email address was illegal."
 
 #: plugins/baser-core/src/Controller/BcAppController.php:463
 msgid "送信元のメールアドレスが不正です。"
-msgstr "Sender e-mail address was illegal."
+msgstr "Sender Email address was illegal."
 
 #: plugins/baser-core/src/Controller/Component/BcAdminContentsComponent.php:66
 msgid ""
 "編集画面で利用するエンティティの変数名を entityVarName として定義してくださ"
 "い。"
 msgstr ""
+"Define the variable name of the entity to be used on the edit screen as "
+"entityVarName."
 
 #: plugins/baser-core/src/Controller/Component/BcAdminContentsComponent.php:118
 msgid ""
@@ -2317,12 +2197,13 @@ msgid ""
 "                    エンティティを取得する際に、contain を利用して、"
 "['Contents' => ['Sites']] を指定してください。"
 msgstr ""
+"The content property is not defined for the entity used in the edit screen.\n"
+"                    When retrieving entities, use include to specify "
+"['Contents'=> ['Sites']]."
 
 #: plugins/baser-core/src/Controller/Component/BcMessageComponent.php:75
-#, fuzzy
-#| msgid "保存に失敗しました。"
 msgid "DBログの保存に失敗しました。"
-msgstr "Failed saving."
+msgstr "Failed to save DB log."
 
 #: plugins/baser-core/src/Controller/PasswordRequestsController.php:79
 #: plugins/bc-mail/src/Controller/Api/MailContentsController.php:171
@@ -2344,22 +2225,16 @@ msgid "処理中にエラーが発生しました。"
 msgstr "Error occurred during processing."
 
 #: plugins/baser-core/src/Controller/UploadsController.php:67
-#, fuzzy
-#| msgid "URLの形式が間違っています。"
 msgid "拡張子が間違っています。"
-msgstr "URL's format is wrong."
+msgstr "The extension is incorrect."
 
 #: plugins/baser-core/src/Mailer/Admin/PasswordRequestMailer.php:39
-#, fuzzy
-#| msgid "パスワード"
 msgid "パスワード再発行"
-msgstr "Password"
+msgstr "Password reissue"
 
 #: plugins/baser-core/src/Model/Behavior/BcContentsBehavior.php:87
-#, fuzzy
-#| msgid "変更できるテーマがありません。"
 msgid "関連するコンテンツがありません"
-msgstr "There is no changeble Theme."
+msgstr "No associated content"
 
 #: plugins/baser-core/src/Model/Table/ContentFoldersTable.php:82
 #: plugins/baser-core/src/Model/Table/ContentsTable.php:136
@@ -2371,40 +2246,28 @@ msgid "IDに不正な値が利用されています。"
 msgstr "Use of invalid value to ID."
 
 #: plugins/baser-core/src/Model/Table/ContentsTable.php:141
-#, fuzzy
-#| msgid "データが存在しません。"
 msgid "content[site_id] フィールドが存在しません。"
-msgstr "Data does not exist."
+msgstr "The content[site_id] field does not exist."
 
 #: plugins/baser-core/src/Model/Table/ContentsTable.php:142
-#, fuzzy
-#| msgid "Webサイト名を入力してください。"
 msgid "サイトIDを入力してください。"
-msgstr "Please enter Website Name."
+msgstr "Please enter your Site ID."
 
 #: plugins/baser-core/src/Model/Table/ContentsTable.php:146
-#, fuzzy
-#| msgid "データが存在しません。"
 msgid "content[parent_id] フィールドが存在しません。"
-msgstr "Data does not exist."
+msgstr "The content[parent_id] field does not exist."
 
 #: plugins/baser-core/src/Model/Table/ContentsTable.php:147
-#, fuzzy
-#| msgid "フィード設定名を入力してください。"
 msgid "親フォルダを入力してください。"
-msgstr "Please enter Feed Settings Name."
+msgstr "Please enter the parent folder."
 
 #: plugins/baser-core/src/Model/Table/ContentsTable.php:151
-#, fuzzy
-#| msgid "データが存在しません。"
 msgid "content[name] フィールドが存在しません。"
-msgstr "Data does not exist."
+msgstr "The content[name] field does not exist."
 
 #: plugins/baser-core/src/Model/Table/ContentsTable.php:152
-#, fuzzy
-#| msgid "お名前は50文字以内で入力してください。"
 msgid "名前は230文字以内で入力してください。"
-msgstr "Please enter Name within 50 characters."
+msgstr "The name cannot exceed 230 characters."
 
 #: plugins/baser-core/src/Model/Table/ContentsTable.php:157
 msgid ""
@@ -2423,10 +2286,8 @@ msgstr ""
 "duplicated Content Slug's name first."
 
 #: plugins/baser-core/src/Model/Table/ContentsTable.php:168
-#, fuzzy
-#| msgid "データが存在しません。"
 msgid "content[title] フィールドが存在しません。"
-msgstr "Data does not exist."
+msgstr "The content[title] field does not exist."
 
 #: plugins/baser-core/src/Model/Table/ContentsTable.php:169
 #: plugins/bc-blog/src/Model/Table/BlogPostsTable.php:142
@@ -2442,7 +2303,7 @@ msgstr "Enter title within 230 characters."
 
 #: plugins/baser-core/src/Model/Table/ContentsTable.php:171
 msgid "タイトルはタブを含む名前は付けられません。"
-msgstr ""
+msgstr "The title is not named including tabs."
 
 #: plugins/baser-core/src/Model/Table/ContentsTable.php:176
 msgid ""
@@ -2465,52 +2326,40 @@ msgid "公開終了日は、公開開始日より新しい日付で入力して�
 msgstr "Please enter Public End Date with date newer than Public Start Date."
 
 #: plugins/baser-core/src/Model/Table/ContentsTable.php:218
-#, fuzzy
-#| msgid "記事がありません。"
 msgid "作成日がありません。"
-msgstr "Article not found."
+msgstr "There is no creation date."
 
 #: plugins/baser-core/src/Model/Table/ContentsTable.php:219
 msgid "作成日が空になってます。"
-msgstr ""
+msgstr "The creation date is empty."
 
 #: plugins/baser-core/src/Model/Table/ContentsTable.php:224
-#, fuzzy
-#| msgid "記事がありません。"
 msgid "作成日が正しくありません。"
-msgstr "Article not found."
+msgstr "The creation date is incorrect."
 
 #: plugins/baser-core/src/Model/Table/ContentsTable.php:229
 msgid "更新日が空になってます。"
-msgstr ""
+msgstr "The renewal date is empty."
 
 #: plugins/baser-core/src/Model/Table/ContentsTable.php:234
-#, fuzzy
-#| msgid "変更できるテーマがありません。"
 msgid "更新日が正しくありません。"
-msgstr "There is no changeble Theme."
+msgstr "The renewal date is incorrect."
 
 #: plugins/baser-core/src/Model/Table/DblogsTable.php:52
-#, fuzzy
-#| msgid "Eメールは255文字以内で入力してください。"
 msgid "メッセージは1000文字以内で入力してください。"
-msgstr "Please enter E-mail within 255 characters."
+msgstr "Please enter the message within 1000 characters."
 
 #: plugins/baser-core/src/Model/Table/LoginStoresTable.php:69
-#, fuzzy
-#| msgid "ログインしていません "
 msgid "キーが重複しています。"
-msgstr "Not Logged-in"
+msgstr "Duplicate key."
 
 #: plugins/baser-core/src/Model/Table/LoginStoresTable.php:102
 msgid "不明なエラー"
-msgstr ""
+msgstr "Unknown error"
 
 #: plugins/baser-core/src/Model/Table/LoginStoresTable.php:171
-#, fuzzy
-#| msgid "データが見つかりませんでした。"
 msgid "更新データが見つかりませんでした"
-msgstr "Couldn't find the data."
+msgstr "No update data was found"
 
 #: plugins/baser-core/src/Model/Table/PagesTable.php:115
 #: plugins/baser-core/src/Model/Table/PagesTable.php:132
@@ -2520,18 +2369,14 @@ msgstr "Exceeding savable data amount for body."
 
 #: plugins/baser-core/src/Model/Table/PagesTable.php:119
 #: plugins/baser-core/src/Model/Table/PagesTable.php:136
-#, fuzzy
-#| msgid "PHPの構文エラーが発生しました。"
 msgid "本稿欄でPHPの構文エラーが発生しました。"
-msgstr "PHP syntax error occured."
+msgstr "A PHP syntax error occurred in this article."
 
 #: plugins/baser-core/src/Model/Table/PagesTable.php:125
 #: plugins/baser-core/src/Model/Table/PagesTable.php:142
 #: plugins/bc-blog/src/Model/Table/BlogPostsTable.php:160
-#, fuzzy
-#| msgid "指定されたページへのアクセスは許可されていません。"
 msgid "本稿欄でスクリプトの入力は許可されていません。"
-msgstr "Access to the specified page is not allowed."
+msgstr "Entering scripts is not allowed in this article."
 
 #: plugins/baser-core/src/Model/Table/PagesTable.php:219
 msgid "ページ"
@@ -2553,10 +2398,8 @@ msgstr "Please enter E-mail within 255 characters."
 #: plugins/baser-core/src/Model/Table/PasswordRequestsTable.php:76
 #: plugins/baser-core/src/Model/Table/UsersTable.php:191
 #: plugins/baser-core/src/Model/Table/UsersTable.php:195
-#, fuzzy
-#| msgid "テーマ名を入力してください。"
 msgid "Eメールを入力してください。"
-msgstr "Please Enter Theme Name."
+msgstr "Please enter your Email."
 
 #: plugins/baser-core/src/Model/Table/PermissionsTable.php:95
 msgid "設定名は255文字以内で入力してください。"
@@ -2579,10 +2422,8 @@ msgstr "Please select User Group."
 
 #: plugins/baser-core/src/Model/Table/PermissionsTable.php:104
 #: plugins/bc-admin-third/templates/Admin/element/Permissions/form.php:56
-#, fuzzy
-#| msgid "ユーザーグループを選択してください。"
 msgid "アクセスルールグループを選択してください。"
-msgstr "Please select User Group."
+msgstr "Select an access rule group."
 
 #: plugins/baser-core/src/Model/Table/PermissionsTable.php:107
 msgid "設定URLは255文字以内で入力してください。"
@@ -2604,29 +2445,22 @@ msgid "プラグイン名は50文字以内としてください。"
 msgstr "Plugin Name must be within 50 characters."
 
 #: plugins/baser-core/src/Model/Table/PluginsTable.php:70
-#, fuzzy
-#| msgid "プラグイン名"
 msgid "プラグイン名は必須です。"
-msgstr "Plugin Name"
+msgstr "The plug-in name is required."
 
 #: plugins/baser-core/src/Model/Table/PluginsTable.php:75
 msgid "指定のプラグインは既に使用されています。"
 msgstr "Specified Plugin is already in use."
 
 #: plugins/baser-core/src/Model/Table/PluginsTable.php:81
-#, fuzzy
-#| msgid ""
-#| "プラグイン名は半角英数字、ハイフン、アンダースコアのみが利用可能です。"
 msgid "プラグイン名は半角英数字とハイフン、アンダースコアのみが利用可能です。"
 msgstr ""
-"Only half-size alphabets and numbers, hyphen, underscore can be used as "
-"Plugin Name."
+"Only half-width alphanumeric characters, hyphens, and underscores are "
+"allowed for plug-in names."
 
 #: plugins/baser-core/src/Model/Table/PluginsTable.php:86
-#, fuzzy
-#| msgid "プラグインタイトルは50文字以内とします。"
 msgid "プラグインタイトルは50文字以内としてください。"
-msgstr "Plugin Title must be within 50 characters."
+msgstr "The plug-in title cannot exceed 50 characters."
 
 #: plugins/baser-core/src/Model/Table/SiteConfigsTable.php:68
 #: plugins/bc-custom-content/src/Model/Table/CustomLinksTable.php:67
@@ -2635,26 +2469,22 @@ msgstr "Plugin Title must be within 50 characters."
 #: plugins/bc-custom-content/src/Model/Table/CustomTablesTable.php:106
 #: plugins/bc-mail/src/Model/Table/MailConfigsTable.php:55
 #: plugins/bc-theme-config/src/Model/Table/ThemeConfigsTable.php:57
-#, fuzzy
-#| msgid "URLは255文字以内で入力してください。"
 msgid "255文字以内で入力してください。"
-msgstr "Please enter URL within 255 characters."
+msgstr "Please enter up to 255 characters."
 
 #: plugins/baser-core/src/Model/Table/SiteConfigsTable.php:73
 #: plugins/bc-mail/src/Model/Table/MailConfigsTable.php:60
 #: plugins/bc-theme-config/src/Model/Table/ThemeConfigsTable.php:62
-#, fuzzy
-#| msgid "URLは255文字以内で入力してください。"
 msgid "65535文字以内で入力してください。"
-msgstr "Please enter URL within 255 characters."
+msgstr "Please enter within 65535 characters."
 
 #: plugins/baser-core/src/Model/Table/SiteConfigsTable.php:92
 msgid "管理者メールアドレスの形式が不正です。"
-msgstr "Admin Mail Address' format is invalid."
+msgstr "Admin Email Address' format is invalid."
 
 #: plugins/baser-core/src/Model/Table/SiteConfigsTable.php:93
 msgid "管理者メールアドレスを入力してください。"
-msgstr "Please enter Admin Mail Address."
+msgstr "Please enter Admin Email Address."
 
 #: plugins/baser-core/src/Model/Table/SiteConfigsTable.php:96
 msgid "メール送信文字コードを入力してください。初期値は「ISO-2022-JP」です。"
@@ -2702,18 +2532,14 @@ msgstr ""
 "hyphen (-), underscore (_)."
 
 #: plugins/baser-core/src/Model/Table/SitesTable.php:123
-#, fuzzy
-#| msgid "サブサイト名は50文字以内で入力してください。"
 msgid "サイト名は50文字以内で入力してください。"
-msgstr "Please enter Subsite Name within 50 characters."
+msgstr "The site name cannot exceed 50 characters."
 
 #: plugins/baser-core/src/Model/Table/SitesTable.php:124
 #: plugins/baser-core/src/Model/Table/SitesTable.php:125
 #: plugins/bc-admin-third/templates/plugin/BcInstaller/Admin/Installations/step4.php:17
-#, fuzzy
-#| msgid "Webサイト名を入力してください。"
 msgid "サイト名を入力してください。"
-msgstr "Please enter Website Name."
+msgstr "Please enter a site name."
 
 #: plugins/baser-core/src/Model/Table/SitesTable.php:128
 msgid "エイリアスは50文字以内で入力してください。"
@@ -2721,10 +2547,8 @@ msgstr "Please enter Alias within 50 characters."
 
 #: plugins/baser-core/src/Model/Table/SitesTable.php:129
 #: plugins/baser-core/src/Model/Table/SitesTable.php:130
-#, fuzzy
-#| msgid "タイプを入力してください。"
 msgid "エイリアスを入力してください。"
-msgstr "Please enter Type."
+msgstr "Please enter an alias."
 
 #: plugins/baser-core/src/Model/Table/SitesTable.php:135
 msgid "既に利用されているエイリアス名です。別の名称に変更してください。"
@@ -2744,19 +2568,18 @@ msgid ""
 "利用できません。別の名称にするか、コンテンツ、またはフォルダをリネームしてく"
 "ださい。"
 msgstr ""
+"It is not available because there is content or folder with the same name as "
+"the alias in the Content Collection. Please use a different name or rename "
+"the content or folder."
 
 #: plugins/baser-core/src/Model/Table/SitesTable.php:151
-#, fuzzy
-#| msgid "サブサイトタイトルは255文字以内で入力してください。"
 msgid "サイトタイトルは255文字以内で入力してください。"
-msgstr "Please enter Subsite Title within 255 characters."
+msgstr "The site title cannot exceed 255 characters."
 
 #: plugins/baser-core/src/Model/Table/SitesTable.php:152
 #: plugins/baser-core/src/Model/Table/SitesTable.php:153
-#, fuzzy
-#| msgid "Webサイトタイトルを入力してください。"
 msgid "サイトタイトルを入力してください。"
-msgstr "Please enter Website Title."
+msgstr "Please enter a site title."
 
 #: plugins/baser-core/src/Model/Table/SitesTable.php:595
 #: plugins/baser-core/src/Model/Table/SitesTable.php:629
@@ -2810,10 +2633,8 @@ msgstr "Please enter Display Name."
 
 #: plugins/baser-core/src/Model/Table/UserGroupsTable.php:129
 #: plugins/baser-core/src/Model/Table/UserGroupsTable.php:130
-#, fuzzy
-#| msgid "認証プレフィックスを入力してください。"
 msgid "認証プレフィックスを選択してください。"
-msgstr "Please enter Authorization Prefix."
+msgstr "Choose an authentication prefix."
 
 #: plugins/baser-core/src/Model/Table/UsersTable.php:147
 msgid "アカウント名は255文字以内で入力してください。"
@@ -2844,10 +2665,8 @@ msgid "名前[名]は50文字以内で入力してください。"
 msgstr "Please enter [Firstname] within 50 characters."
 
 #: plugins/baser-core/src/Model/Table/UsersTable.php:171
-#, fuzzy
-#| msgid "パスワードは255文字以内で入力してください。"
 msgid "ニックネームは255文字以内で入力してください。"
-msgstr "Please enter password within 255 characters."
+msgstr "Your nickname cannot exceed 255 characters."
 
 #: plugins/baser-core/src/Model/Table/UsersTable.php:174
 #: plugins/baser-core/src/Model/Table/UsersTable.php:179
@@ -2859,10 +2678,8 @@ msgid "自分のアカウントのグループは変更できません。"
 msgstr "Can't change your Account's Group."
 
 #: plugins/baser-core/src/Model/Table/UsersTable.php:200
-#, fuzzy
-#| msgid "既に登録のあるタグです。"
 msgid "既に登録のあるEメールです。"
-msgstr "Tag is already registered."
+msgstr "This is Email that you have already registered."
 
 #: plugins/baser-core/src/Model/Table/UsersTable.php:204
 #: plugins/baser-core/src/Model/Table/UsersTable.php:250
@@ -2892,16 +2709,16 @@ msgstr "The password is not the same."
 #: plugins/baser-core/src/Model/Table/UsersTable.php:233
 #: plugins/baser-core/src/Model/Table/UsersTable.php:234
 #: plugins/baser-core/tests/TestCase/Model/Table/UsersTableTest.php:191
-#, fuzzy
-#| msgid "フィードURLを入力してください。"
 msgid "パスワードを入力してください。"
-msgstr "Please enter Feed URL."
+msgstr "Please enter your password."
 
 #: plugins/baser-core/src/Model/Validation/BcValidation.php:190
 msgid ""
 "アップロードされたファイルは、PHPの設定 post_max_size ディレクティブの値を超"
 "えています。"
 msgstr ""
+"The uploaded file exceeds the value of the PHP configuration post_max_size "
+"directive."
 
 #: plugins/baser-core/src/Model/Validation/BcValidation.php:213
 msgid ""
@@ -2910,6 +2727,10 @@ msgid ""
 "えています。\n"
 "                        {1} MB以内のファイルをご利用ください。"
 msgstr ""
+"CODE: {0} Uploaded files are\n"
+"                        The value of the upload_max_filesize directive in "
+"php.ini has been exceeded.\n"
+"                        Please use a file within {1} MB."
 
 #: plugins/baser-core/src/Model/Validation/BcValidation.php:219
 msgid ""
@@ -2917,49 +2738,40 @@ msgid ""
 "ています。\n"
 "                        {1} MB以内のファイルをご利用ください。"
 msgstr ""
+"CODE: {0} The uploaded file exceeds the MAX_FILE_SIZE specified in HTML.\n"
+"                        Please use a file within {1} MB."
 
 #: plugins/baser-core/src/Model/Validation/BcValidation.php:224
-#, fuzzy
-#| msgid "アップロードしたZIPファイルの展開に失敗しました。"
 msgid "CODE: {0} アップロードされたファイルが不完全です。"
-msgstr "Failed extracting the uploaded zip file."
+msgstr "CODE: {0} The uploaded file is incomplete."
 
 #: plugins/baser-core/src/Model/Validation/BcValidation.php:228
-#, fuzzy
-#| msgid "ファイルのアップロードに失敗しました。"
 msgid "CODE: {0} ファイルがアップロードされませんでした。"
-msgstr "Failed uploading the file."
+msgstr "CODE: {0} file was not uploaded."
 
 #: plugins/baser-core/src/Model/Validation/BcValidation.php:232
-#, fuzzy
-#| msgid ""
-#| "テーマの配置に失敗しました。テーマフォルダの書き込み権限を確認してくださ"
-#| "い。"
 msgid ""
 "CODE: {0} 一時書込み用のフォルダがありません。テンポラリフォルダの書込み権限"
 "を見直してください。"
-msgstr "Failed placing Theme. Please check Theme Folder's write permission."
+msgstr ""
+"CODE: {0} There is no folder for temporary writes. Review the write "
+"permissions of the temporary folder."
 
 #: plugins/baser-core/src/Model/Validation/BcValidation.php:236
-#, fuzzy
-#| msgid "スキーマファイルの読み込みに失敗しました。"
 msgid "CODE: {0} ディスクへの書き込みに失敗しました。"
-msgstr "Failed loading Scheme File."
+msgstr "CODE: {0} Failed to write to disk."
 
 #: plugins/baser-core/src/Model/Validation/BcValidation.php:237
-#, fuzzy
-#| msgid ""
-#| "入力されたログイン情報を確認できませんでした。もう一度入力してください。"
 msgid ""
 "何らかの原因でファイルをアップロードできませんでした。Webサイトの管理者に連絡"
 "してください。"
-msgstr "Couldn't confirm entered login info. Please re-enter."
+msgstr ""
+"The file could not be uploaded for some reason. Contact the administrator of "
+"the website."
 
 #: plugins/baser-core/src/Model/Validation/BcValidation.php:240
-#, fuzzy
-#| msgid "ファイルのアップロードに失敗しました。"
 msgid "CODE: {0} PHPの拡張モジュールがファイルのアップロードを中止しました。"
-msgstr "Failed uploading the file."
+msgstr "CODE: {0} PHP extension stopped uploading files."
 
 #: plugins/baser-core/src/Model/Validation/BcValidation.php:250
 #: plugins/baser-core/src/Model/Validation/BcValidation.php:254
@@ -2972,30 +2784,24 @@ msgid "PHPの構文エラーです"
 msgstr "PHP syntax error"
 
 #: plugins/baser-core/src/Plugin.php:316
-#, fuzzy
-#| msgid "このURLの登録は許可されていません。"
 msgid "Web APIは許可されていません。"
-msgstr "This URL's registration is not allowed."
+msgstr "Web APIs are not allowed."
 
 #: plugins/baser-core/src/Service/Admin/BcAdminContentsService.php:97
 msgid "親フォルダの設定に従う"
-msgstr "Follow Parent Folder’s settings"
+msgstr "Follow the parent folder settings"
 
 #: plugins/baser-core/src/Service/Admin/PermissionGroupsAdminService.php:66
 #: plugins/baser-core/src/Service/Admin/PermissionsAdminService.php:51
 #: plugins/baser-core/src/Service/Admin/PermissionsAdminService.php:78
 #: plugins/baser-core/src/Service/Admin/PermissionsAdminService.php:101
 #: plugins/baser-core/src/Service/PermissionGroupsService.php:373
-#, fuzzy
-#| msgid "サイト"
 msgid "ゲスト"
-msgstr "Site"
+msgstr "Guest"
 
 #: plugins/baser-core/src/Service/Admin/SitesAdminService.php:129
-#, fuzzy
-#| msgid "メインサイト"
 msgid "メインサイトに従う"
-msgstr "Main Site"
+msgstr "Follow the main site"
 
 #: plugins/baser-core/src/Service/BcDatabaseService.php:317
 #: plugins/baser-core/src/Service/BcDatabaseService.php:333
@@ -3043,7 +2849,7 @@ msgstr "Failed system data's initialization."
 
 #: plugins/baser-core/src/Service/BcDatabaseService.php:619
 msgid "メールプラグインのメール受信用テーブルの生成に失敗しました。"
-msgstr "Failed creating Mail Plugin’s mail receiving table."
+msgstr "Failed to generate Email plug-in's table for receiving Email."
 
 #: plugins/baser-core/src/Service/BcDatabaseService.php:1327
 msgid "データベースファイルに書き込み権限がありません。"
@@ -3118,10 +2924,8 @@ msgid "親フォルダの設定に従う（%s）"
 msgstr "Follow Parent Folder’s settings (%s)"
 
 #: plugins/baser-core/src/Service/ContentsService.php:393
-#, fuzzy
-#| msgid "メッセージを指定してください。"
 msgid "エイリアスIDを指定してください。"
-msgstr "Please specify message."
+msgstr "Specify the alias ID."
 
 #: plugins/baser-core/src/Service/ContentsService.php:879
 #: plugins/bc-admin-third/templates/Admin/element/Contents/index_setup_tree.php:48
@@ -3147,30 +2951,22 @@ msgid "site_idを指定してください。"
 msgstr "Please specify contentId."
 
 #: plugins/baser-core/src/Service/ContentsService.php:1483
-#, fuzzy
-#| msgid "送信先のメールアドレスが不正です。"
 msgid "送信データが不正です。"
-msgstr "Destination e-mail address was illegal."
+msgstr "The transmitted data is invalid."
 
 #: plugins/baser-core/src/Service/Front/PagesFrontService.php:67
-#, fuzzy
-#| msgid "指定されたページへのアクセスは許可されていません。"
 msgid "本文欄でスクリプトの入力は許可されていません。"
-msgstr "Access to the specified page is not allowed."
+msgstr "Script input is not allowed in the body field."
 
 #: plugins/baser-core/src/Service/PasswordRequestsService.php:101
-#, fuzzy
-#| msgid "データが存在しません。"
 msgid "ユーザーが存在しません。"
-msgstr "Data does not exist."
+msgstr "The user does not exist."
 
 #: plugins/baser-core/src/Service/PermissionGroupsService.php:345
 #: plugins/bc-admin-third/templates/Admin/element/UserGroups/form.php:117
 #: plugins/bc-favorite/config/permission.php:28
-#, fuzzy
-#| msgid "アクセス"
 msgid "フルアクセス"
-msgstr "Access"
+msgstr "Full Access"
 
 #: plugins/baser-core/src/Service/PermissionGroupsService.php:434
 msgid "{0} その他"
@@ -5247,7 +5043,7 @@ msgstr "Private"
 #: plugins/bc-admin-third/templates/plugin/BcUploader/Admin/element/UploaderCategories/index_list.php:50
 #: plugins/bc-admin-third/templates/plugin/BcWidgetArea/Admin/element/WidgetAreas/index_list.php:55
 msgid "一括選択"
-msgstr "Bulk Selection"
+msgstr "Batch selection"
 
 #: plugins/bc-admin-third/templates/Admin/element/Contents/index_list_table.php:60
 #: plugins/bc-admin-third/templates/Admin/element/Dblogs/index_list.php:43
@@ -5376,7 +5172,7 @@ msgstr "Action"
 #: plugins/bc-admin-third/templates/plugin/BcUploader/Admin/element/UploaderCategories/index_list.php:97
 #: plugins/bc-admin-third/templates/plugin/BcWidgetArea/Admin/element/WidgetAreas/index_list.php:78
 msgid "データが見つかりませんでした。"
-msgstr "Couldn't find the data."
+msgstr "Data not found."
 
 #: plugins/bc-admin-third/templates/Admin/element/Contents/index_row_table.php:75
 #: plugins/bc-admin-third/templates/Admin/element/Permissions/index_row.php:38
@@ -6391,7 +6187,7 @@ msgstr "It’s set to be Private by inheriting Parent Folder’s settings."
 #: plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/CustomEntries/index_list.php:81
 #: plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/element/CustomEntries/index_list.php:82
 msgid "公開日時"
-msgstr ""
+msgstr "Publication date and time"
 
 #: plugins/bc-admin-third/templates/Admin/element/content_fields.php:178
 #: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogPosts/form.php:216
@@ -6399,7 +6195,7 @@ msgstr ""
 #: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:142
 #: plugins/bc-admin-third/templates/plugin/BcUploader/Admin/element/UploaderFiles/form.php:132
 msgid "開始日付"
-msgstr ""
+msgstr "Start Date"
 
 #: plugins/bc-admin-third/templates/Admin/element/content_fields.php:179
 #: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogPosts/form.php:217
@@ -6407,7 +6203,7 @@ msgstr ""
 #: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:143
 #: plugins/bc-admin-third/templates/plugin/BcUploader/Admin/element/UploaderFiles/form.php:133
 msgid "開始時間"
-msgstr ""
+msgstr "Start Time"
 
 #: plugins/bc-admin-third/templates/Admin/element/content_fields.php:185
 #: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogPosts/form.php:226
@@ -6415,7 +6211,7 @@ msgstr ""
 #: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:150
 #: plugins/bc-admin-third/templates/plugin/BcUploader/Admin/element/UploaderFiles/form.php:141
 msgid "終了日付"
-msgstr ""
+msgstr "End Date"
 
 #: plugins/bc-admin-third/templates/Admin/element/content_fields.php:186
 #: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogPosts/form.php:227
@@ -6423,7 +6219,7 @@ msgstr ""
 #: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:151
 #: plugins/bc-admin-third/templates/plugin/BcUploader/Admin/element/UploaderFiles/form.php:142
 msgid "終了時間"
-msgstr ""
+msgstr "End Time"
 
 #: plugins/bc-admin-third/templates/Admin/element/content_fields.php:200
 msgid "親フォルダの設定を継承し公開期間が設定されている状態となっています"
@@ -6580,8 +6376,8 @@ msgid ""
 "コンテンツ管理では、固定ページや、ブログやメールフォームなど、Webページを生成"
 "するコンテンツの新規追加や編集・削除などが行えます。"
 msgstr ""
-"You can add, edit or delete contents that generate Web page like Static "
-"Page, Blog, Mail Form in Manage Contents."
+"In content management, you can add, edit, and delete content that generates "
+"web pages, such as static pages, blogs, and email forms."
 
 #: plugins/bc-admin-third/templates/Admin/element/help/contents_index.php:22
 msgid ""
@@ -6589,9 +6385,9 @@ msgid ""
 "行うには、ツリー形式を選択します。また、削除や公開設定についての一括処理や、"
 "コンテンツの検索を行うには、表形式を選択します。"
 msgstr ""
-"You can select “Tree Format” and “Table Format” in List. Select Tree Format "
-"to add new Content. Also, Select Table Format to Bulk Process deleting and "
-"publishing or searching Contents."
+"You can select \"Tree Format\" or \"Table Format” for the list, and select "
+"Tree format to add new content. You can also select Table Format to bulk "
+"delete and publish settings, and to search for content."
 
 #: plugins/bc-admin-third/templates/Admin/element/help/contents_index.php:23
 #, fuzzy
@@ -6705,8 +6501,8 @@ msgid ""
 "URL設定ではワイルドカード（*）を利用して一定のURL階層内のコンテンツに対し一度"
 "に設定を行う事ができます。"
 msgstr ""
-"You can do settings in bulk to Content in fixed URL directories by using "
-"wildcard (*) in URL Settings."
+"URL settings can be configured for content within a certain URL hierarchy at "
+"once using wildcards (*)."
 
 #: plugins/bc-admin-third/templates/Admin/element/help/permissions_form.php:28
 msgid "（例）ページ管理全体を許可しない設定"
@@ -7187,7 +6983,7 @@ msgstr "%s"
 
 #: plugins/bc-admin-third/templates/Admin/element/search.php:43
 msgid "絞り込み検索"
-msgstr ""
+msgstr "Filter Search Results"
 
 #: plugins/bc-admin-third/templates/Admin/element/search/contents_index.php:31
 #: plugins/bc-admin-third/templates/plugin/BcSearchIndex/Admin/element/search/search_indexes_index.php:43
@@ -7342,7 +7138,7 @@ msgstr "Failed saving."
 
 #: plugins/bc-admin-third/templates/Admin/layout/default.php:50
 msgid "一括処理に失敗しました。"
-msgstr "Failed Bulk Processing."
+msgstr "Batch processing failed."
 
 #: plugins/bc-admin-third/templates/Admin/layout/default.php:51
 msgid "データ取得に失敗しました。"
@@ -7649,10 +7445,8 @@ msgid "%s｜コメント一覧"
 msgstr "%s｜Comment List"
 
 #: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/BlogContents/edit.php:19
-#, fuzzy
-#| msgid "ブログ設定編集：%s"
 msgid "ブログ設定編集"
-msgstr "Edit Blog settings: %s"
+msgstr "Edit Blog Settings"
 
 #: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/BlogContents/edit.php:23
 msgid ""
@@ -8431,10 +8225,8 @@ msgstr ""
 
 #: plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/CustomFields/add.php:21
 #: plugins/bc-admin-third/templates/plugin/BcMail/Admin/MailFields/index.php:23
-#, fuzzy
-#| msgid "フィールド"
 msgid "新規フィールド追加"
-msgstr "Fields"
+msgstr "Add New Field"
 
 #: plugins/bc-admin-third/templates/plugin/BcCustomContent/Admin/CustomFields/edit.php:21
 #, fuzzy
@@ -9720,7 +9512,7 @@ msgstr ""
 
 #: plugins/bc-admin-third/templates/plugin/BcMail/Admin/MailContents/edit.php:26
 msgid "メールフォーム設定編集"
-msgstr "Edit mail form settings"
+msgstr "Edit Email Form Settings"
 
 #: plugins/bc-admin-third/templates/plugin/BcMail/Admin/MailContents/index.php:27
 #, fuzzy
@@ -9744,11 +9536,11 @@ msgstr "{0}|Edit Email Field"
 
 #: plugins/bc-admin-third/templates/plugin/BcMail/Admin/MailFields/index.php:19
 msgid "%s｜メールフィールド一覧"
-msgstr "%s|Email Field List"
+msgstr "%s | Email Field List"
 
 #: plugins/bc-admin-third/templates/plugin/BcMail/Admin/MailMessages/index.php:17
 msgid "{0}｜受信メール一覧"
-msgstr "%s｜Received Email List"
+msgstr "{0}｜Received Email List"
 
 #: plugins/bc-admin-third/templates/plugin/BcMail/Admin/MailMessages/index.php:35
 #: plugins/bc-mail/config/permission.php:64
@@ -9775,25 +9567,23 @@ msgstr "Are you sure you want to delete Receiving Mail NO “%s@?"
 
 #: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:27
 msgid "メールフォーム説明文"
-msgstr "Mail Form Description"
+msgstr "Email Form Description"
 
 #: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:46
 msgid "送信先メールアドレス"
-msgstr "Destination Mail Address"
+msgstr "Destination Email Address"
 
 #: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:52
 msgid "管理者用メールアドレスに送信する"
-msgstr "Send to Admin Mail Address"
+msgstr "Send to Admin Email Address"
 
 #: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:52
 msgid "別のメールアドレスに送信する"
-msgstr "Send to Another Mail Address"
+msgstr "Send to Another Email Address"
 
 #: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:56
-#, fuzzy
-#| msgid "管理者メールアドレスを入力してください。"
 msgid "メールアドレスを入力してください"
-msgstr "Please enter Admin Mail Address."
+msgstr "Please enter Email Address."
 
 #: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:62
 #: plugins/bc-front/templates/plugin/BcBlog/email/text/blog_comment_admin.php:41
@@ -9804,13 +9594,13 @@ msgstr "Submitter"
 #, fuzzy
 #| msgid "ユーザー宛の自動返信メールの件名に表示します。"
 msgid "自動返信メールの送信者に表示します。"
-msgstr "Displayed on Auto-Reply Mail to User."
+msgstr "Displayed on Auto-Reply Email to User."
 
 #: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:74
 #, fuzzy
 #| msgid "自動返信メール件名<br />[ユーザー宛]"
 msgid "自動返信メール件名<br>[ユーザー宛]"
-msgstr "Auto-Reply Mail Number<br />[To User]"
+msgstr "Auto-Reply Email Number<br />[To User]"
 
 #: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:81
 msgid "ユーザー宛の自動返信メールの件名に表示します。"
@@ -9820,7 +9610,7 @@ msgstr "Displayed on Auto-Reply Mail to User."
 #, fuzzy
 #| msgid "自動送信メール件名<br />[管理者宛]"
 msgid "自動送信メール件名<br>[管理者宛]"
-msgstr "Auto-Reply Mail Number<br />[To Admin]"
+msgstr "Auto-Reply Email Number<br />[To Admin]"
 
 #: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:93
 msgid "管理者宛の自動送信メールの件名に表示します。"
@@ -9843,7 +9633,7 @@ msgstr "Specify complete URL from http."
 #: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:126
 #: plugins/bc-admin-third/templates/plugin/BcUploader/Admin/UploaderConfigs/index.php:174
 msgid "詳細設定"
-msgstr ""
+msgstr "Advanced Settings"
 
 #: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:134
 msgid "フォーム受付期間"
@@ -9926,7 +9716,7 @@ msgstr "System"
 
 #: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:213
 msgid "BCC用送信先メールアドレス"
-msgstr "Destination Mail Address for BCC"
+msgstr "Destination Email Address for BCC"
 
 #: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:221
 msgid "BCC（ブラインドカーボンコピー）用のメールアドレスを指定します。"
@@ -9946,7 +9736,7 @@ msgstr ""
 
 #: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:249
 msgid "メールフォームテンプレート名"
-msgstr "Mail Form Template Name"
+msgstr "Email Form Template Name"
 
 #: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:266
 msgid "メールフォーム本体のテンプレートを指定します。"
@@ -9954,7 +9744,7 @@ msgstr "Specify Template for Mail Form body."
 
 #: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:273
 msgid "送信メールテンプレート名"
-msgstr "Sending Mail Template Name"
+msgstr "Sending Email Template Name"
 
 #: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailContents/form.php:287
 msgid "送信するメールのテンプレートを指定します。"
@@ -10150,7 +9940,7 @@ msgstr "Using"
 
 #: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailFields/form.php:294
 msgid "メール送信"
-msgstr "Mail Sending"
+msgstr "Email Sending"
 
 #: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailFields/form.php:296
 #: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:112
@@ -10177,7 +9967,7 @@ msgid ""
 "メールフォームプラグイン共通の基本設定が行えます。<br>署名は、自動返信メール"
 "のフッターに挿入されます。"
 msgstr ""
-"You can do common basic settings for Mail Form Plugin.<br />Signature will "
+"You can do common basic settings for Email Form Plugin.<br />Signature will "
 "be inserted on auto-reply mail’s footer."
 
 #: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/help/mail_contents_form.php:19
@@ -10196,10 +9986,10 @@ msgid ""
 "プレート名を変更します。<br><small>※ テンプレート名を変更した場合は、新しい名"
 "称のテンプレートを作成しアップロードする必要があります。</small>"
 msgstr ""
-"Registering basic settings for Mail Form Content.<br />You can have "
-"different design for each Mail Form. If so, change Template Name by clicking "
-"“Option” on bottom screen.<br /><small>Caution: You have to create newly "
-"named Template and upload it to change Template Name.</small><br /><a "
+"Registering basic settings for Email Form Content.<br />You can have "
+"different design for each Email Form. If so, change Template Name by "
+"clicking “Option” on bottom screen.<br /><small>Caution: You have to create "
+"newly named Template and upload it to change Template Name.</small><br /><a "
 "class=“outside-link” href=“https://basercms.net/manuals/designers/6.html” "
 "target=“_blank”>メールフォームのテンプレートを変更する"
 
@@ -10214,7 +10004,7 @@ msgid ""
 "め、入力チェックの設定等、便利な機能を用意しています。<br>各項目の詳細につい"
 "ては、各ヘルプメッセージを確認してください。"
 msgstr ""
-"Registering Mail Form’s Field (Item).<br />There are useful functions like "
+"Registering Email Form’s Field (Item).<br />There are useful functions like "
 "Item’s Type and Input Check’s settings.<br />Please check each help message "
 "for each Item’s detail."
 
@@ -10279,8 +10069,8 @@ msgid ""
 "受信メールの詳細確認、削除が行えます。操作対象データのアクション欄のボタンを"
 "クリックします。"
 msgstr ""
-"You can check detail and delete Received Mail. Click button on target data’s "
-"control field."
+"You can check detail and delete Received Email. Click button on target "
+"data’s control field."
 
 #: plugins/bc-admin-third/templates/plugin/BcSearchIndex/Admin/SearchIndexes/index.php:17
 msgid "検索インデックス一覧"
@@ -10734,7 +10524,7 @@ msgstr "Template File of Common Component"
 #, fuzzy
 #| msgid "送信メールテンプレート名"
 msgid "送信メール用のテンプレートファイル"
-msgstr "Sending Mail Template Name"
+msgstr "Sending Email Template Name"
 
 #: plugins/bc-admin-third/templates/plugin/BcThemeFile/Admin/element/help/theme_files_index.php:34
 msgid "Webページのコンテンツ部分のテンプレートファイル"
@@ -11721,10 +11511,8 @@ msgid "コンテンツリンク: 「{0}」を更新しました。"
 msgstr "Updated Link \"%s\"."
 
 #: plugins/bc-content-link/src/Controller/Api/ContentLinksController.php:178
-#, fuzzy
-#| msgid "サーバーキャッシュを削除しました。"
 msgid "コンテンツリンク: {0} を削除しました。"
-msgstr "Deleted Server Cache."
+msgstr "Content link: Deleted {0}."
 
 #: plugins/bc-content-link/src/Model/Table/ContentLinksTable.php:67
 msgid "リンク先URLを入力してください。"
@@ -11767,10 +11555,8 @@ msgstr "Basic Item"
 #: plugins/bc-custom-content/plugins/BcCcRadio/config/setting.php:26
 #: plugins/bc-custom-content/plugins/BcCcRelated/config/setting.php:26
 #: plugins/bc-custom-content/plugins/BcCcSelect/config/setting.php:26
-#, fuzzy
-#| msgid "一括選択"
 msgid "選択"
-msgstr "Bulk Selection"
+msgstr "Selection"
 
 #: plugins/bc-custom-content/plugins/BcCcAutoZip/config.php:14
 msgid "カスタムコンテンツ：自動補完郵便番号フィールド"
@@ -11840,10 +11626,8 @@ msgid "チェックボックス設定"
 msgstr "Multi Checkbox"
 
 #: plugins/bc-custom-content/plugins/BcCcCheckbox/templates/Admin/element/custom_field_meta.php:28
-#, fuzzy
-#| msgid "メール"
 msgid "ラベル"
-msgstr "Mail"
+msgstr "label"
 
 #: plugins/bc-custom-content/plugins/BcCcDate/config.php:14
 msgid "カスタムコンテンツ：日付（年月日）フィールド"
@@ -12527,16 +12311,12 @@ msgid "エディタテンプレート"
 msgstr "Editor Template"
 
 #: plugins/bc-editor-template/src/Controller/Admin/EditorTemplatesController.php:66
-#, fuzzy
-#| msgid "メールフォーム「%s」を追加しました。"
 msgid "テンプレート「{0}」を追加しました"
-msgstr "Added Mail Form “%s”."
+msgstr "Added template \"{0}\""
 
 #: plugins/bc-editor-template/src/Controller/Admin/EditorTemplatesController.php:101
-#, fuzzy
-#| msgid "メールフォーム「%s」を更新しました。"
 msgid "テンプレート「{0}」を更新しました"
-msgstr "Updated Mail Form “%s”."
+msgstr "Template \"{0}\" was updated."
 
 #: plugins/bc-editor-template/src/Controller/Admin/EditorTemplatesController.php:132
 #, fuzzy
@@ -12545,16 +12325,12 @@ msgid "テンプレート「{0}」を削除しました。"
 msgstr "Deleted Editor Template \"%s\"."
 
 #: plugins/bc-editor-template/src/Controller/Api/EditorTemplatesController.php:94
-#, fuzzy
-#| msgid "メールフォーム「%s」を追加しました。"
 msgid "エディタテンプレート「{0}」を追加しました。"
-msgstr "Added Mail Form “%s”."
+msgstr "Editor template \"{0}\" was added."
 
 #: plugins/bc-editor-template/src/Controller/Api/EditorTemplatesController.php:127
-#, fuzzy
-#| msgid "メールフォーム「%s」を更新しました。"
 msgid "エディタテンプレート「{0}」を更新しました。"
-msgstr "Updated Mail Form “%s”."
+msgstr "Editor template \"{0}\" was updated."
 
 #: plugins/bc-editor-template/src/Controller/Api/EditorTemplatesController.php:164
 #, fuzzy
@@ -12744,10 +12520,8 @@ msgid "お名前"
 msgstr "Name"
 
 #: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:77
-#, fuzzy
-#| msgid "別のメールアドレスに送信する"
 msgid "メールアドレスは公開されません"
-msgstr "Send to Another Mail Address"
+msgstr "Your email address will not be published"
 
 #: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:82
 #: plugins/bc-front/templates/plugin/BcMail/element/mail_input.php:52
@@ -12905,11 +12679,11 @@ msgstr "Input data is incomplete."
 
 #: plugins/bc-front/templates/plugin/BcMail/email/text/mail_data.php:39
 msgid "添付あり"
-msgstr ""
+msgstr "Attached"
 
 #: plugins/bc-front/templates/plugin/BcMail/email/text/mail_data.php:41
 msgid "添付なし"
-msgstr ""
+msgstr "Not attached"
 
 #: plugins/bc-front/templates/plugin/BcMail/email/text/mail_default.php:24
 msgid "受信完了メール"
@@ -13147,13 +12921,10 @@ msgid "既にインストール済です。 cake install reset を実行して�
 msgstr "It's already installed. Run cake bc_manager reset."
 
 #: plugins/bc-installer/src/Command/InstallCommand.php:119
-#, fuzzy
-#| msgid ""
-#| "baserCMSのインストールを行うには、debug を -1 に設定する必要があります。"
 msgid ""
 "baserCMSのインストールを行うには、.env の　INSTALL_MODE を true に設定する必"
 "要があります。"
-msgstr "You must set debug to -1 to install baserCMS."
+msgstr "To install baserCMS, INSTALL_MODE in .env must be set to true."
 
 #: plugins/bc-installer/src/Command/InstallCommand.php:123
 msgid "baserCMSのインストールに失敗しました。ログファイルを確認してください。"
@@ -13252,87 +13023,65 @@ msgstr "Failed installing Core Plugin %s."
 
 #: plugins/bc-mail/config.php:14 plugins/bc-mail/config/setting.php:41
 msgid "メールフォーム"
-msgstr "Mail Form"
+msgstr "Email Form"
 
 #: plugins/bc-mail/config.php:15
 msgid "複数設置可能の高機能メールフォーム"
-msgstr "Multi-placable high functional Mail Form"
+msgstr "Multi-placable high functional Email Form"
 
 #: plugins/bc-mail/config/permission.php:23
-#, fuzzy
-#| msgid "メールフォーム設定編集"
 msgid "メールフォーム設定"
-msgstr "Mail Form Settings"
+msgstr "Email Form Settings"
 
 #: plugins/bc-mail/config/permission.php:32
-#, fuzzy
-#| msgid "コンテンツ管理"
 msgid "メールコンテンツ管理"
-msgstr "Contents"
+msgstr "Email Content Management"
 
 #: plugins/bc-mail/config/permission.php:41
-#, fuzzy
-#| msgid "[%s] メールフィールド編集： %s"
 msgid "メールフィールド管理"
-msgstr "[%s] Edit Mail Field"
+msgstr "Email Field Management"
 
 #: plugins/bc-mail/config/permission.php:56
-#, fuzzy
-#| msgid "メッセージ"
 msgid "メールメッセージ管理"
-msgstr "Message"
+msgstr "Email Message Management"
 
 #: plugins/bc-mail/config/permission.php:60
-#, fuzzy
-#| msgid "ファイル"
 msgid "添付ファイル表示"
-msgstr "File"
+msgstr "Attachment view"
 
 #: plugins/bc-mail/config/permission.php:72
-#, fuzzy
-#| msgid "メールフォーム設定編集"
 msgid "メールフォーム設定API"
-msgstr "Mail Form Settings"
+msgstr "Email Form Configuration API"
 
 #: plugins/bc-mail/config/permission.php:82
-#, fuzzy
-#| msgid "コンテンツID"
 msgid "メールコンテンツAPI"
-msgstr "Content ID"
+msgstr "Email Content API"
 
 #: plugins/bc-mail/config/permission.php:98
-#, fuzzy
-#| msgid "メールフィールド一覧"
 msgid "メールフィールドAPI"
-msgstr "Mail Field List"
+msgstr "Email Field API"
 
 #: plugins/bc-mail/config/permission.php:110
 #: plugins/bc-widget-area/config/permission.php:47
 msgid "並び順更新"
-msgstr ""
+msgstr "Sort Order Update"
 
 #: plugins/bc-mail/config/permission.php:115
-#, fuzzy
-#| msgid "メッセージ"
 msgid "メールメッセージAPI"
-msgstr "Message"
+msgstr "Email Message API"
 
 #: plugins/bc-mail/config/setting.php:22
 msgid "メール基本設定"
-msgstr "Basic Mail Settings"
+msgstr "Email preferences"
 
 #: plugins/bc-mail/src/Controller/Admin/MailConfigsController.php:35
-#, fuzzy
-#| msgid "メールフォーム設定を保存しました。"
 msgid "メールプラグイン設定を保存しました。"
-msgstr "Saved Mail Form Settings."
+msgstr "Email plugin settings saved."
 
 #: plugins/bc-mail/src/Controller/Admin/MailContentsController.php:63
 #: plugins/bc-mail/src/Controller/Api/MailContentsController.php:161
-#, fuzzy
-#| msgid "メールフォーム「%s」を更新しました。"
 msgid "メールフォーム「{0}」を更新しました。"
-msgstr "Updated Mail Form “%s”."
+msgstr "Email form \"{0}\" was updated."
 
 #: plugins/bc-mail/src/Controller/Admin/MailFieldsController.php:103
 #: plugins/bc-mail/src/Controller/Admin/MailFieldsController.php:112
@@ -13341,119 +13090,86 @@ msgid ""
 "のデータは公開された状態となっています。URLを直接閲覧すると参照できてしまいま"
 "す。参照されないようにするためには、{0} に書き込み権限を与えてください。"
 msgstr ""
+"When using a file field, the data of the file field submitted from the form "
+"is in the public state. You can refer to it by browsing the URL directly. To "
+"avoid reference, give write permission to {0}."
 
 #: plugins/bc-mail/src/Controller/Admin/MailFieldsController.php:149
 #: plugins/bc-mail/src/Controller/Api/MailFieldsController.php:206
-#, fuzzy
-#| msgid "新規メールフィールド「%s」を追加しました。"
 msgid "新規メールフィールド「{0}」を追加しました。"
-msgstr "Added Mail Field “%s”."
+msgstr "Added a new Email field \"{0}\"."
 
 #: plugins/bc-mail/src/Controller/Admin/MailFieldsController.php:184
 #: plugins/bc-mail/src/Controller/Api/MailFieldsController.php:245
-#, fuzzy
-#| msgid "メールフィールド「%s」を更新しました。"
 msgid "メールフィールド「{0}」を更新しました。"
-msgstr "Updated Mail Field “%s”."
+msgstr "Email field \"{0}\" was updated."
 
 #: plugins/bc-mail/src/Controller/Admin/MailFieldsController.php:219
 #: plugins/bc-mail/src/Controller/Api/MailFieldsController.php:284
-#, fuzzy
-#| msgid "メールフィールド「%s」を削除しました。"
 msgid "メールフィールド「{0}」を削除しました。"
-msgstr "Deleted Mail Field “%s”"
+msgstr "Deleted Email field \"{0}\"."
 
 #: plugins/bc-mail/src/Controller/Admin/MailFieldsController.php:244
 #: plugins/bc-mail/src/Controller/Api/MailFieldsController.php:322
-#, fuzzy
-#| msgid "メールフィールド「%s」を更新しました。"
 msgid "メールフィールド「{0}」をコピーしました。"
-msgstr "Updated Mail Field “%s”."
+msgstr "Copied Email field “{0}”."
 
 #: plugins/bc-mail/src/Controller/Admin/MailFieldsController.php:269
-#, fuzzy
-#| msgid "メールフィールド「%s」を削除しました。"
 msgid "メールフィールド「%s」を無効状態にしました。"
-msgstr "Deleted Mail Field “%s”"
+msgstr "Email field \"%s\" has been disabled."
 
 #: plugins/bc-mail/src/Controller/Admin/MailFieldsController.php:291
-#, fuzzy
-#| msgid "メールフィールド「%s」を更新しました。"
 msgid "メールフィールド「%s」を有効状態にしました。"
-msgstr "Updated Mail Field “%s”."
+msgstr "Email field \"%s\" has been enabled."
 
 #: plugins/bc-mail/src/Controller/Admin/MailMessagesController.php:139
-#, fuzzy
-#| msgid "%s への受信データ NO「%s」 を削除しました。"
 msgid "{0} への受信データ NO「{1}」 を削除しました。"
-msgstr "Deleted %s’s Received Data No “%s” ."
+msgstr "Deleted incoming data NO \"{1}\" to {0}."
 
 #: plugins/bc-mail/src/Controller/Api/MailContentsController.php:128
-#, fuzzy
-#| msgid "メールフォーム「%s」を追加しました。"
 msgid "メールフォーム「{0}」を追加しました。"
-msgstr "Added Mail Form “%s”."
+msgstr "Email form \"{0}\" was added."
 
 #: plugins/bc-mail/src/Controller/Api/MailContentsController.php:200
-#, fuzzy
-#| msgid "メールフィールド「%s」を削除しました。"
 msgid "メールフォーム「{0}」を削除しました。"
-msgstr "Deleted Mail Field “%s”"
+msgstr "Email form \"{0}\" was deleted."
 
 #: plugins/bc-mail/src/Controller/Api/MailContentsController.php:237
-#, fuzzy
-#| msgid "メールフォームのコピー「%s」を追加しました。"
 msgid "メールフォームのコピー「{0}」を追加しました。"
-msgstr "Added Mail Form’s Copy “%s”."
+msgstr "Added copy of Email form “{0}”."
 
 #: plugins/bc-mail/src/Controller/Api/MailFieldsController.php:60
-#, fuzzy
-#| msgid "メールフィールド「%s」を更新しました。"
 msgid "メールフィールド「%s」を %s しました。"
-msgstr "Updated Mail Field “%s”."
+msgstr "Email field \"%s\" has been %s."
 
 #: plugins/bc-mail/src/Controller/Api/MailFieldsController.php:96
-#, fuzzy
-#| msgid "メールフィールド「%s」を更新しました。"
 msgid "メールフィールド「%s」の並び替えを更新しました。"
-msgstr "Updated Mail Field “%s”."
+msgstr "The sorting of the email field \"%s\" has been updated."
 
 #: plugins/bc-mail/src/Controller/Api/MailMessagesController.php:118
-#, fuzzy
-#| msgid "%s への受信データ NO「%s」 を削除しました。"
 msgid "{0} への受信データ NO「{1}」を追加しました。"
-msgstr "Deleted %s’s Received Data No “%s” ."
+msgstr "Added received data NO \"{1}\" to {0}."
 
 #: plugins/bc-mail/src/Controller/Api/MailMessagesController.php:168
-#, fuzzy
-#| msgid "%s への受信データ NO「%s」 を削除しました。"
 msgid "{0} への受信データ NO「{1}」を更新しました。"
-msgstr "Deleted %s’s Received Data No “%s” ."
+msgstr "Updated received data NO “{1}” to {0}."
 
 #: plugins/bc-mail/src/Controller/Api/MailMessagesController.php:217
-#, fuzzy
-#| msgid "%s への受信データ NO「%s」 を削除しました。"
 msgid "{0} への受信データ NO「{1}」を削除しました。"
-msgstr "Deleted %s’s Received Data No “%s” ."
+msgstr "Deleted received data NO “{1}” to {0}."
 
 #: plugins/bc-mail/src/Controller/Api/MailMessagesController.php:268
-#, fuzzy
-#| msgid "メールフォーム「%s」を追加しました。"
 msgid "メールメッセージ No %s を %s しました。"
-msgstr "Added Mail Form “%s”."
+msgstr "Email message No %s %s."
 
 #: plugins/bc-mail/src/Controller/MailController.php:189
 #: plugins/bc-mail/src/Controller/MailController.php:240
-#, fuzzy
-#| msgid "エラーが発生しました。内容を確認してください。"
 msgid "エラーが発生しました。もう一度操作してください。"
-msgstr "Error occured. Check content."
+msgstr "An error occurred. Please try again."
 
 #: plugins/bc-mail/src/Controller/MailController.php:271
-#, fuzzy
-#| msgid "入力エラーです。内容を修正してください。"
 msgid "入力内容を確認し、再度送信してください。"
-msgstr "Input error. Please fix the contents."
+msgstr "Please check your entries and send again."
 
 #: plugins/bc-mail/src/Controller/MailController.php:276
 #: plugins/bc-mail/src/Controller/MailController.php:295
@@ -13473,10 +13189,8 @@ msgid "Webサイト名を入力してください。"
 msgstr "Please enter Website Name."
 
 #: plugins/bc-mail/src/Model/Table/MailContentsTable.php:111
-#, fuzzy
-#| msgid "項目名を入力してください。"
 msgid "送信先名を入力してください。"
-msgstr "Please enter Item Name."
+msgstr "Please enter a destination name."
 
 #: plugins/bc-mail/src/Model/Table/MailContentsTable.php:115
 msgid "送信先名は255文字以内で入力してください。"
@@ -13556,10 +13270,8 @@ msgid "オプションは255文字以内で入力してください。"
 msgstr "Please enter Option within 255 characters."
 
 #: plugins/bc-mail/src/Model/Table/MailFieldsTable.php:118
-#, fuzzy
-#| msgid "クラス名は255文字以内で入力してください。"
 msgid "クラス名255文字以内で入力してください。"
-msgstr "Please enter Class Name within 255 characters."
+msgstr "Please enter the class name within 255 characters."
 
 #: plugins/bc-mail/src/Model/Table/MailFieldsTable.php:121
 msgid "初期値は255文字以内で入力してください。"
@@ -13586,10 +13298,8 @@ msgid "グループチェック"
 msgstr "Group Check"
 
 #: plugins/bc-mail/src/Model/Table/MailFieldsTable.php:169
-#, fuzzy
-#| msgid "数値チェック"
 msgid "正規表現チェック"
-msgstr "Number Check"
+msgstr "Regular expression Check"
 
 #: plugins/bc-mail/src/Model/Table/MailMessagesTable.php:151
 #: plugins/bc-mail/src/Service/MailMessagesService.php:214
@@ -13625,20 +13335,16 @@ msgid "全て全角ひらがなで入力してください。"
 msgstr "Please enter with half-size characters only."
 
 #: plugins/bc-mail/src/Service/Front/MailFrontService.php:168
-#, fuzzy
-#| msgid "次のファイルを開きます。"
 msgid "不正なファイル送信です。"
-msgstr "Open following file."
+msgstr "Illegal file submission."
 
 #: plugins/bc-mail/src/Service/Front/MailFrontService.php:184
 msgid "エラー : 入力内容を確認して再度送信してください。"
 msgstr "Error : Confirm your entries and send again."
 
 #: plugins/bc-mail/src/Service/MailContentsService.php:59
-#, fuzzy
-#| msgid "名を入力してください"
 msgid "送信先名を入力してください"
-msgstr "Enter Firstname"
+msgstr "Please enter a destination name"
 
 #: plugins/bc-mail/src/Service/MailContentsService.php:60
 msgid "お問い合わせ頂きありがとうございます"
@@ -13646,7 +13352,7 @@ msgstr "Thank you for inquiry"
 
 #: plugins/bc-mail/src/Service/MailContentsService.php:61
 msgid "お問い合わせを頂きました"
-msgstr "Received inquiry"
+msgstr "We received an inquiry"
 
 #: plugins/bc-mail/src/Service/MailContentsService.php:95
 #: plugins/bc-mail/src/Service/MailFieldsService.php:135
@@ -13664,217 +13370,165 @@ msgid "Y年 m月 d日"
 msgstr "Y/m/d"
 
 #: plugins/bc-search-index/config.php:15
-#, fuzzy
-#| msgid "サイト内検索"
 msgid "サイト内の横断検索機能"
-msgstr "In-site Search"
+msgstr "Cross-site search function"
 
 #: plugins/bc-search-index/config/permission.php:23
 msgid "検索インデックス管理"
-msgstr "Search Index"
+msgstr "Search index management"
 
 #: plugins/bc-search-index/config/permission.php:37
-#, fuzzy
-#| msgid "検索インデックス"
 msgid "検索インデックスAPI"
-msgstr "Search Index"
+msgstr "Search Index API"
 
 #: plugins/bc-search-index/config/permission.php:42
 msgid "優先度変更"
-msgstr ""
+msgstr "Priority changes"
 
 #: plugins/bc-search-index/config/setting.php:34
 msgid "検索インデックス"
 msgstr "Search Index"
 
 #: plugins/bc-search-index/src/Controller/Admin/SearchIndexesController.php:106
-#, fuzzy
-#| msgid "検索インデックスより NO.%s を削除しました。"
 msgid "検索インデックスより No.{0} を削除しました。"
-msgstr "Removed NO.%s from Search Index."
+msgstr "No.{0} has been delete from Search Index."
 
 #: plugins/bc-search-index/src/Controller/Admin/SearchIndexesController.php:124
 #: plugins/bc-search-index/src/Controller/Api/SearchIndexesController.php:138
-#, fuzzy
-#| msgid "データベースの構築に成功しました。"
 msgid "検索インデックスの再構築に成功しました。"
-msgstr "Succeeded constructing the database."
+msgstr "Search Index was successfully rebuilt."
 
 #: plugins/bc-search-index/src/Controller/Admin/SearchIndexesController.php:126
 #: plugins/bc-search-index/src/Controller/Api/SearchIndexesController.php:141
-#, fuzzy
-#| msgid "コアテーブルの構築に失敗しました。"
 msgid "検索インデックスの再構築に失敗しました。"
-msgstr "Failed constructing Core table."
+msgstr "Search Index rebuild failed."
 
 #: plugins/bc-search-index/src/Controller/Api/SearchIndexesController.php:73
-#, fuzzy
-#| msgid "検索インデックスより NO.%s を削除しました。"
 msgid "検索インデックス「{0}」の優先度を変更しました。"
-msgstr "Removed NO.%s from Search Index."
+msgstr "Changed the priority of the search index \"{0}\"."
 
 #: plugins/bc-search-index/src/Controller/Api/SearchIndexesController.php:111
-#, fuzzy
-#| msgid "検索インデックスより NO.%s を削除しました。"
 msgid "検索インデックスより NO.%s を %s しました。"
-msgstr "Removed NO.%s from Search Index."
+msgstr "NO.%s %s from the search index."
 
 #: plugins/bc-search-index/src/Controller/Api/SearchIndexesController.php:213
-#, fuzzy
-#| msgid "検索インデックスより NO.%s を削除しました。"
 msgid "検索インデックス: {0} を削除しました。"
-msgstr "Removed NO.%s from Search Index."
+msgstr "Search index: Deleted {0}."
 
 #: plugins/bc-theme-config/config.php:15
 msgid "テーマ拡張の設定機能"
-msgstr ""
+msgstr "Theme extension setting features"
 
 #: plugins/bc-theme-config/config/permission.php:35
-#, fuzzy
-#| msgid "テーマ設定"
 msgid "テーマ設定API"
-msgstr "Theme Settings"
+msgstr "Theme Settings API"
 
 #: plugins/bc-theme-config/src/Controller/Admin/ThemeConfigsController.php:43
 #: plugins/bc-theme-config/src/Controller/Api/ThemeConfigsController.php:61
-#, fuzzy
-#| msgid "システム設定を保存しました。"
 msgid "テーマ設定を保存しました。"
-msgstr "Saved System Settings."
+msgstr "Saved theme settings."
 
 #: plugins/bc-theme-file/config.php:14
 #: plugins/bc-theme-file/config/permission.php:23
-#, fuzzy
-#| msgid "テーマファイル名"
 msgid "テーマファイル管理"
-msgstr "Theme File Name"
+msgstr "Theme File Management"
 
 #: plugins/bc-theme-file/config.php:15
-#, fuzzy
-#| msgid "テーマ設定ファイル"
 msgid "テーマ内のファイルを管理する機能"
-msgstr "Theme Settings File"
+msgstr "Ability to manage files in themes"
 
 #: plugins/bc-theme-file/config/permission.php:27
-#, fuzzy
-#| msgid "サブサイト新規登録"
 msgid "ファイル新規登録"
-msgstr "Add Subsite"
+msgstr "New file registration"
 
 #: plugins/bc-theme-file/config/permission.php:28
-#, fuzzy
-#| msgid "フォルダ新規作成"
 msgid "フォルダ新規登録"
-msgstr "Add Folder"
+msgstr "Create a new folder"
 
 #: plugins/bc-theme-file/config/permission.php:29
-#, fuzzy
-#| msgid "ファイルデータベース"
 msgid "ファイルコピー"
-msgstr "File Database"
+msgstr "Copy File"
 
 #: plugins/bc-theme-file/config/permission.php:30
-#, fuzzy
-#| msgid "フォルダー"
 msgid "フォルダコピー"
-msgstr "Folder"
+msgstr "Copy Folder"
 
 #: plugins/bc-theme-file/config/permission.php:31
 #: plugins/bc-theme-file/config/permission.php:78
-#, fuzzy
-#| msgid "フォルダーテンプレート"
 msgid "フォルダをテーマにコピー"
-msgstr "Folder Template"
+msgstr "Copy Folder to Theme"
 
 #: plugins/bc-theme-file/config/permission.php:32
 #: plugins/bc-theme-file/config/permission.php:59
-#, fuzzy
-#| msgid "ファイルデータベース"
 msgid "ファイルをテーマにコピー"
-msgstr "File Database"
+msgstr "Copy Files to Theme"
 
 #: plugins/bc-theme-file/config/permission.php:33
-#, fuzzy
-#| msgid "ファイル"
 msgid "ファイル削除"
-msgstr "File"
+msgstr "File Delete"
 
 #: plugins/bc-theme-file/config/permission.php:34
-#, fuzzy
-#| msgid "フォルダ"
 msgid "フォルダ削除"
-msgstr "Folder"
+msgstr "Delete Folder"
 
 #: plugins/bc-theme-file/config/permission.php:35
-#, fuzzy
-#| msgid "ファイル情報編集"
 msgid "ファイル編集"
-msgstr "Edit File Info"
+msgstr "File Editing"
 
 #: plugins/bc-theme-file/config/permission.php:37
 #: plugins/bc-theme-file/config/permission.php:61
 #: plugins/bc-uploader/config/permission.php:50
 msgid "画像取得"
-msgstr ""
+msgstr "Get Image"
 
 #: plugins/bc-theme-file/config/permission.php:38
 #: plugins/bc-theme-file/config/permission.php:62
 msgid "サムネイル画像取得"
-msgstr ""
+msgstr "Get Thumbnail image"
 
 #: plugins/bc-theme-file/config/permission.php:40
-#, fuzzy
-#| msgid "プラグインアップロード"
 msgid "ファイルアップロード"
-msgstr "Upload Plugin"
+msgstr "File Upload"
 
 #: plugins/bc-theme-file/config/permission.php:41
-#, fuzzy
-#| msgid "ファイル"
 msgid "ファイル表示"
-msgstr "File"
+msgstr "File View"
 
 #: plugins/bc-theme-file/config/permission.php:42
-#, fuzzy
-#| msgid "フォルダ"
 msgid "フォルダ表示"
-msgstr "Folder"
+msgstr "Folder View"
 
 #: plugins/bc-theme-file/config/permission.php:51
-#, fuzzy
-#| msgid "テーマファイル名"
 msgid "テーマファイルAPI"
-msgstr "Theme File Name"
+msgstr "Theme File API"
 
 #: plugins/bc-theme-file/config/permission.php:68
-#, fuzzy
-#| msgid "テーマフォルダ"
 msgid "テーマフォルダAPI"
-msgstr "Theme Folder"
+msgstr "Theme Folder API"
 
 #: plugins/bc-theme-file/config/setting.php:40
 msgid "コアテンプレート確認"
-msgstr "Confirm Core Template"
+msgstr "Check Core Template"
 
 #: plugins/bc-theme-file/src/Controller/Admin/ThemeFilesController.php:65
 #: plugins/bc-theme-file/src/Utility/BcThemeFileUtil.php:30
 msgid "エレメントテンプレート"
-msgstr "Element Template"
+msgstr "Element Templates"
 
 #: plugins/bc-theme-file/src/Controller/Admin/ThemeFilesController.php:66
 #: plugins/bc-theme-file/src/Utility/BcThemeFileUtil.php:31
 msgid "Eメールテンプレート"
-msgstr "E-mail Template"
+msgstr "Email Templates"
 
 #: plugins/bc-theme-file/src/Controller/Admin/ThemeFilesController.php:67
 #: plugins/bc-theme-file/src/Utility/BcThemeFileUtil.php:32
 msgid "コンテンツテンプレート"
-msgstr "Content Template"
+msgstr "Content Templates"
 
 #: plugins/bc-theme-file/src/Controller/Admin/ThemeFilesController.php:68
 #: plugins/bc-theme-file/src/Utility/BcThemeFileUtil.php:33
 msgid "スタイルシート"
-msgstr "Stylesheet"
+msgstr "Style Sheets"
 
 #: plugins/bc-theme-file/src/Controller/Admin/ThemeFilesController.php:116
 msgid ""
@@ -14054,6 +13708,7 @@ msgstr "Please re-check the top Folder’s Access Restriction."
 #: plugins/bc-theme-file/src/Controller/Api/ThemeFilesController.php:182
 msgid "コアファイル {0} を テーマ {1} の次のパスとしてコピーしました。\\n{2}。"
 msgstr ""
+"I copied the core file {0} as the following path in theme {1}: \\n{2}。"
 
 #: plugins/bc-theme-file/src/Controller/Api/ThemeFoldersController.php:65
 #, fuzzy
@@ -14062,40 +13717,33 @@ msgid "フォルダー {0} 内の「{1}」を {2} しました。"
 msgstr "Added Folder \"%s\"."
 
 #: plugins/bc-theme-file/src/Controller/Api/ThemeFoldersController.php:164
-#, fuzzy
-#| msgid "フォルダ「%s」を更新しました。"
 msgid "フォルダ名を「{0}」に変更しました。"
-msgstr "Updated Folder \"%s\"."
+msgstr "Folder name changed to “{0}”."
 
 #: plugins/bc-theme-file/src/Controller/Api/ThemeFoldersController.php:200
-#, fuzzy
-#| msgid "フィード「%s」を削除しました。"
 msgid "フォルダ「{0}」を削除しました。"
-msgstr "Deleted Feed \"%s\"."
+msgstr "Deleted folder \"{0}\"."
 
 #: plugins/bc-theme-file/src/Controller/Api/ThemeFoldersController.php:202
-#, fuzzy
-#| msgid "フォルダ名の変更に失敗しました。"
 msgid "フォルダ「{0}」の削除に失敗しました。"
-msgstr "Failed renaming the Folder."
+msgstr "Failed to delete folder \"{0}\"."
 
 #: plugins/bc-theme-file/src/Controller/Api/ThemeFoldersController.php:235
-#, fuzzy
-#| msgid "フォルダ「%s」を追加しました。"
 msgid "フォルダ「{0}」をコピーしました。"
-msgstr "Added Folder \"%s\"."
+msgstr "Copied folder \"{0}\"."
 
 #: plugins/bc-theme-file/src/Controller/Api/ThemeFoldersController.php:237
-#, fuzzy
-#| msgid "上位フォルダのアクセス権限を見直してください。"
 msgid ""
 "フォルダ「{0}」のコピーに失敗しました。上位フォルダのアクセス権限を見直してく"
 "ださい。。"
-msgstr "Please re-check the top Folder’s Access Restriction."
+msgstr ""
+"Failed to copy folder \"{0}\". Please review the access permissions of the "
+"upper folder."
 
 #: plugins/bc-theme-file/src/Controller/Api/ThemeFoldersController.php:270
 msgid "コアフォルダ {0} を テーマ {1} の次のパスとしてコピーしました。\\n{2}。"
 msgstr ""
+"I copied the core folder {0} as the following path in theme {1}: \\n{2}。"
 
 #: plugins/bc-theme-file/src/Form/ThemeFileForm.php:106
 #: plugins/bc-theme-file/src/Form/ThemeFileForm.php:107
@@ -14120,37 +13768,31 @@ msgstr "Entered Theme Folder Name already exists on the same directory."
 
 #: plugins/bc-theme-file/src/Service/Admin/ThemeFilesAdminService.php:68
 msgid "｜{0}一覧"
-msgstr ""
+msgstr "| {0} List"
 
 #: plugins/bc-theme-file/src/Service/Admin/ThemeFilesAdminService.php:101
 msgid "{0}｜{1}作成"
-msgstr ""
+msgstr "{0} | {1} Create"
 
 #: plugins/bc-theme-file/src/Service/Admin/ThemeFilesAdminService.php:124
 msgid "{0}｜{1}編集"
-msgstr ""
+msgstr "{0} | {1} Edit"
 
 #: plugins/bc-theme-file/src/Service/Admin/ThemeFilesAdminService.php:147
 msgid "{0}｜{1}表示"
-msgstr ""
+msgstr "{0} | {1} View"
 
 #: plugins/bc-theme-file/src/Service/Admin/ThemeFoldersAdminService.php:49
-#, fuzzy
-#| msgid "フォルダ編集"
 msgid "{0}｜フォルダ編集"
-msgstr "Edit Folder"
+msgstr "{0} | Folder Editing"
 
 #: plugins/bc-theme-file/src/Service/Admin/ThemeFoldersAdminService.php:74
-#, fuzzy
-#| msgid "フォルダ新規作成"
 msgid "{0}｜フォルダ作成"
-msgstr "Add Folder"
+msgstr "{0} | Create Folder"
 
 #: plugins/bc-theme-file/src/Service/Admin/ThemeFoldersAdminService.php:121
-#, fuzzy
-#| msgid "フォルダ"
 msgid "{0}｜フォルダ表示"
-msgstr "Folder"
+msgstr "{0} | Folder View"
 
 #: plugins/bc-theme-file/src/Service/ThemeFilesService.php:108
 #, fuzzy
@@ -14218,42 +13860,32 @@ msgid "登録ボタンをクリックする前に、サーバー上の "
 msgstr "Before clicking Add button, on server"
 
 #: plugins/bc-uploader/config/permission.php:23
-#, fuzzy
-#| msgid "アップロードファイル管理"
 msgid "アップロードカテゴリ管理"
-msgstr "Upload File"
+msgstr "Upload Category Management"
 
 #: plugins/bc-uploader/config/permission.php:36
-#, fuzzy
-#| msgid "アップローダー基本設定"
 msgid "アップローダー設定"
-msgstr "Uploader Basic Settings"
+msgstr "Uploader settings"
 
 #: plugins/bc-uploader/config/permission.php:45
 msgid "アップロードファイル管理"
-msgstr "Upload File"
+msgstr "Upload File Management"
 
 #: plugins/bc-uploader/config/permission.php:49
 msgid "検索ボックス取得"
-msgstr ""
+msgstr "Get Search Box"
 
 #: plugins/bc-uploader/config/permission.php:63
-#, fuzzy
-#| msgid "アップロードファイル"
 msgid "アップロードカテゴリAPI"
-msgstr "Upload File"
+msgstr "Upload Category API"
 
 #: plugins/bc-uploader/config/permission.php:77
-#, fuzzy
-#| msgid "アップローダー基本設定"
 msgid "アップローダー設定API"
-msgstr "Uploader Basic Settings"
+msgstr "Uploader Configuration API"
 
 #: plugins/bc-uploader/config/permission.php:87
-#, fuzzy
-#| msgid "アップロードファイル"
 msgid "アップロードファイルAPI"
-msgstr "Upload File"
+msgstr "Upload File API"
 
 #: plugins/bc-uploader/config/setting.php:21
 msgid "アップローダー基本設定"
@@ -14261,13 +13893,11 @@ msgstr "Uploader Basic Settings"
 
 #: plugins/bc-uploader/config/setting.php:33
 msgid "アップロード管理"
-msgstr "Upload Files"
+msgstr "Upload Management"
 
 #: plugins/bc-uploader/config/setting.php:46
-#, fuzzy
-#| msgid "アップロードファイル"
 msgid "アップロードカテゴリ"
-msgstr "Upload File"
+msgstr "Upload Category"
 
 #: plugins/bc-uploader/src/Controller/Admin/UploaderCategoriesController.php:55
 #, fuzzy
@@ -14301,10 +13931,8 @@ msgid "アップローダー設定を保存しました。"
 msgstr "Saved Uploader settings."
 
 #: plugins/bc-uploader/src/Controller/Admin/UploaderFilesController.php:161
-#, fuzzy
-#| msgid "記事がありません。"
 msgid "編集権限がありません。"
-msgstr "Article not found."
+msgstr "You do not have edit permissions."
 
 #: plugins/bc-uploader/src/Controller/Admin/UploaderFilesController.php:167
 #: plugins/bc-uploader/src/Controller/Api/UploaderFilesController.php:96
@@ -14507,40 +14135,28 @@ msgstr ""
 
 #: plugins/bc-uploader/src/Service/UploaderFilesService.php:162
 #: plugins/bc-uploader/src/Service/UploaderFilesService.php:204
-#, fuzzy
-#| msgid "データベースファイルに書き込み権限がありません。"
 msgid "ファイルの変更権限がありません。"
-msgstr "There is no write permission to database files."
+msgstr "You do not have permission to modify the file."
 
 #: plugins/bc-widget-area/config.php:14
-#, fuzzy
-#| msgid "ウィジェットエリア管理"
 msgid "ウイジェットエリア管理"
-msgstr "Manage Widget Area"
+msgstr "Widget Area Management"
 
 #: plugins/bc-widget-area/config.php:15
-#, fuzzy
-#| msgid "ウィジェットエリア管理"
 msgid "ウィジェットエリアを管理する機能"
-msgstr "Manage Widget Area"
+msgstr "Ability to manage widget areas"
 
 #: plugins/bc-widget-area/config/permission.php:38
-#, fuzzy
-#| msgid "ウィジェットエリア"
 msgid "ウィジェットエリアAPI"
-msgstr "Widget Area"
+msgstr "Widget Area API"
 
 #: plugins/bc-widget-area/config/permission.php:45
-#, fuzzy
-#| msgid "ウィジェット管理"
 msgid "ウィジェット削除"
-msgstr "Widgets"
+msgstr "Delete Widget"
 
 #: plugins/bc-widget-area/config/permission.php:48
-#, fuzzy
-#| msgid "タイトル"
 msgid "タイトル更新"
-msgstr "Title"
+msgstr "Title Update"
 
 #: plugins/bc-widget-area/src/Controller/Admin/WidgetAreasController.php:60
 #: plugins/bc-widget-area/src/Controller/Api/WidgetAreasController.php:80
@@ -14553,40 +14169,30 @@ msgstr "Failed saving the new Widget Area."
 
 #: plugins/bc-widget-area/src/Controller/Admin/WidgetAreasController.php:101
 #: plugins/bc-widget-area/src/Controller/Api/WidgetAreasController.php:154
-#, fuzzy
-#| msgid "ウィジェットエリア名を保存しました。"
 msgid "ウィジェットエリア「{0}」を削除しました。"
-msgstr "Saved Widget Area Name."
+msgstr "Deleted widget area \"{0}\"."
 
 #: plugins/bc-widget-area/src/Controller/Api/WidgetAreasController.php:115
 #: plugins/bc-widget-area/src/Controller/Api/WidgetAreasController.php:226
 #: plugins/bc-widget-area/src/Controller/Api/WidgetAreasController.php:262
-#, fuzzy
-#| msgid "ウィジェットエリア名を保存しました。"
 msgid "ウィジェットエリア「{0}」を更新しました。"
-msgstr "Saved Widget Area Name."
+msgstr "Widget area \"{0}\" was updated."
 
 #: plugins/bc-widget-area/src/Controller/Api/WidgetAreasController.php:199
-#, fuzzy
-#| msgid "ウィジェットエリア名を保存しました。"
 msgid "ウィジェットエリア「%s」を %s しました。"
-msgstr "Saved Widget Area Name."
+msgstr "Widget area \"%s\" has been %s."
 
 #: plugins/bc-widget-area/src/Controller/Api/WidgetAreasController.php:297
-#, fuzzy
-#| msgid "ウィジェットエリア名の保存に失敗しました。"
 msgid "ウィジェットエリア「{0}」の並び順を更新しました。"
-msgstr "Failed saving Widget Area Name."
+msgstr "The sort order of the widget area \"{0}\" has been updated."
 
 #: plugins/bc-widget-area/src/Event/BcWidgetAreaHelperEventListener.php:45
 msgid "標準ウィジェットエリア"
 msgstr "Standard Widget Area"
 
 #: plugins/bc-widget-area/src/Event/BcWidgetAreaHelperEventListener.php:52
-#, fuzzy
-#| msgid "ウィジェットエリアは「%s」より追加できます。"
 msgid "ウィジェットエリアは「{0}」より追加できます。"
-msgstr "Widget Area can be added from \"%s\"."
+msgstr "You can add a widget area from \"{0}\"."
 
 #: plugins/bc-widget-area/src/Model/Table/WidgetAreasTable.php:48
 msgid "ウィジェットエリア名を入力してください。"

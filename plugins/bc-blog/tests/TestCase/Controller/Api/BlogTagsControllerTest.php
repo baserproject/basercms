@@ -83,6 +83,15 @@ class BlogTagsControllerTest extends BcTestCase
     }
 
     /**
+     * test initialize
+     */
+    public function test_initialize()
+    {
+        $controller = new BlogTagsController($this->getRequest());
+        $this->assertEquals($controller->Authentication->unauthenticatedActions, ['index',  'view']);
+    }
+
+    /**
      * test index
      */
     public function testIndex()

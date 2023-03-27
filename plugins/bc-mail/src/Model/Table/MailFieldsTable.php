@@ -130,14 +130,17 @@ class MailFieldsTable extends MailAppTable
             ->maxLength('group_valid', 255, __d('baser_core', 'グループ入力チェックは255文字以内で入力してください。'));
         $validator
             ->scalar('size')
+            ->allowEmptyString('size')
             ->naturalNumber('size', __d('baser_core', '表示サイズは半角数字のみで入力してください。'))
             ->maxLength('size', 9, __d('baser_core', '表示サイズは9文字以内で入力してください。'));
         $validator
             ->scalar('rows')
+            ->allowEmptyString('rows')
             ->naturalNumber('rows', __d('baser_core', '行数は半角数字のみで入力してください。'))
             ->maxLength('rows', 9, __d('baser_core', '行数は9文字以内で入力してください。'));
         $validator
             ->scalar('maxlength')
+            ->allowEmptyString('maxlength')
             ->naturalNumber('maxlength', __d('baser_core', '最大値は半角数字のみで入力してください。'))
             ->maxLength('maxlength', 9, __d('baser_core', '最大値は9文字以内で入力してください。'));
         return $validator;

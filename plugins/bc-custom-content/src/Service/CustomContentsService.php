@@ -62,10 +62,19 @@ class CustomContentsService implements CustomContentsServiceInterface
             'contain' => ['Contents']
         ], $queryParams);
 
-        $query = $this->CustomContents->find()->contain($queryParams['contain']);
+        if (is_null($queryParams['contain'])) {
+            $fields = $this->CustomContents->getSchema()->columns();
+            $query = $this->CustomContents->find()->contain(['Contents'])->select($fields);
+        } else {
+            $query = $this->CustomContents->find()->contain($queryParams['contain']);
+        }
 
         if (!empty($queryParams['limit'])) {
             $query->limit($queryParams['limit']);
+        }
+
+        if ($queryParams['status'] === 'publish') {
+            $query->where($this->CustomContents->Contents->getConditionAllowPublish());
         }
 
         if (!empty($queryParams['description'])) {
