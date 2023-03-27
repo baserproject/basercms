@@ -36,7 +36,7 @@ $this->BcAdmin->setTitle(__d('baser_core', 'baserCMSのインストール完了�
         </li>
         <li><a href="https://basercms.net" title="baserCMS公式サイト" target="_blank" class="outside-link">
             <?php echo __d('baser_core', 'baserCMS公式サイトで情報を探す') ?></a></li>
-        <li><a href="https://wiki.basercms.net" title="baserCMS公式ガイド" target="_blank" class="outside-link">
+        <li><a href="https://baserproject.github.io/" title="baserCMS公式ガイド" target="_blank" class="outside-link">
             <?php echo __d('baser_core', 'baserCMS公式ガイドで学ぶ') ?></a></li>
         <li><a href="https://forum.basercms.net" title="baserCMSユーザーズフォーラム" target="_blank" class="outside-link">
             <?php echo __d('baser_core', 'フォーラムにインストールの不具合を報告する') ?></a></li>
