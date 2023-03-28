@@ -132,7 +132,7 @@ class DblogsService implements DblogsServiceInterface
     {
         $request = Router::getRequest();
         $data = [
-            'message' => $postData['message'],
+            'message' => $postData['message'] ?? null,
             'controller' => $request->getParam('controller'),
             'action' => $request->getParam('action')
         ];
