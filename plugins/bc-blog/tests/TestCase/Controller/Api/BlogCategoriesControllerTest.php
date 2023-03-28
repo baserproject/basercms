@@ -104,15 +104,15 @@ class BlogCategoriesControllerTest extends BcTestCase
             'news1', // name
             '/news/' // url
         );
-        BlogPostFactory::make(['id' => 1, 'blog_content_id'=> 1, 'blog_category_id'=> 1, 'status' => true])->persist();
-        BlogCategoryFactory::make(['id'=>1,'blog_content_id' => 1])->persist();
-        BlogCategoryFactory::make(['id'=>2,'blog_content_id' => 1])->persist();
-        BlogCategoryFactory::make(['id'=>3,'blog_content_id' => 3])->persist();
+        BlogPostFactory::make(['id' => 1, 'blog_content_id' => 1, 'blog_category_id' => 1, 'status' => true])->persist();
+        BlogCategoryFactory::make(['id' => 1, 'blog_content_id' => 1, 'status' => true])->persist();
+        BlogCategoryFactory::make(['id' => 2, 'blog_content_id' => 1, 'status' => false])->persist();
+        BlogCategoryFactory::make(['id' => 3, 'blog_content_id' => 3, 'status' => true])->persist();
 
         $this->get('/baser/api/bc-blog/blog_categories/index/1.json?token=' . $this->accessToken);
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
-        $this->assertCount(2, $result->blogCategories);
+        $this->assertCount(1, $result->blogCategories);
     }
 
     /**
@@ -153,7 +153,7 @@ class BlogCategoriesControllerTest extends BcTestCase
             'news1', // name
             '/news/' // url
         );
-        BlogPostFactory::make(['id' => 1, 'blog_content_id'=> 1, 'blog_category_id'=> 1, 'status' => true])->persist();
+        BlogPostFactory::make(['id' => 1, 'blog_content_id' => 1, 'blog_category_id' => 1, 'status' => true])->persist();
         BlogCategoryFactory::make(['id' => 3, 'title' => 'title 3', 'name' => 'name-3', 'blog_content_id' => 1])->persist();
 
         $this->get('/baser/api/bc-blog/blog_categories/list/1.json?token=' . $this->accessToken);
