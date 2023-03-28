@@ -17,6 +17,8 @@ use BaserCore\TestSuite\BcTestCase;
 use BcBlog\Controller\Admin\BlogCommentsController;
 use BcBlog\Test\Factory\BlogCommentFactory;
 use BcBlog\Test\Scenario\BlogCommentsScenario;
+use BcBlog\Test\Scenario\BlogCommentsServiceScenario;
+use BcBlog\Test\Scenario\BlogContentScenario;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -44,6 +46,9 @@ class BlogCommentsControllerTest extends BcTestCase
         'plugin.BaserCore.Factory/UsersUserGroups',
         'plugin.BaserCore.Factory/UserGroups',
         'plugin.BcBlog.Factory/BlogComments',
+        'plugin.BcBlog.Factory/BlogContents',
+        'plugin.BaserCore.Factory/Contents',
+        'plugin.BcBlog.Factory/BlogPosts',
     ];
 
     /**
@@ -84,7 +89,15 @@ class BlogCommentsControllerTest extends BcTestCase
     {
         $this->enableSecurityToken();
         $this->enableCsrfToken();
-        $this->loadFixtureScenario(BlogCommentsScenario::class);
+        $this->loadFixtureScenario(
+            BlogContentScenario::class,
+            1,  // id
+            1, // siteId
+            null, // parentId
+            'news1', // name
+            '/news/' // url
+        );
+        $this->loadFixtureScenario(BlogCommentsServiceScenario::class);
 
         $this->delete("/baser/admin/bc-blog/blog_comments/delete/1/1");
         $this->assertResponseCode(302);
@@ -110,7 +123,15 @@ class BlogCommentsControllerTest extends BcTestCase
     {
         $this->enableSecurityToken();
         $this->enableCsrfToken();
-        $this->loadFixtureScenario(BlogCommentsScenario::class);
+        $this->loadFixtureScenario(
+            BlogContentScenario::class,
+            1,  // id
+            1, // siteId
+            null, // parentId
+            'news1', // name
+            '/news/' // url
+        );
+        $this->loadFixtureScenario(BlogCommentsServiceScenario::class);
 
         $this->post("/baser/admin/bc-blog/blog_comments/publish/1/3");
         $this->assertResponseCode(302);
@@ -129,7 +150,15 @@ class BlogCommentsControllerTest extends BcTestCase
     {
         $this->enableSecurityToken();
         $this->enableCsrfToken();
-        $this->loadFixtureScenario(BlogCommentsScenario::class);
+        $this->loadFixtureScenario(
+            BlogContentScenario::class,
+            1,  // id
+            1, // siteId
+            null, // parentId
+            'news1', // name
+            '/news/' // url
+        );
+        $this->loadFixtureScenario(BlogCommentsServiceScenario::class);
 
         $this->post("/baser/admin/bc-blog/blog_comments/unpublish/1/2");
         $this->assertResponseCode(302);
