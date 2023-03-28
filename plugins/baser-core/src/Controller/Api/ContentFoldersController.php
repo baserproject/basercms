@@ -49,8 +49,18 @@ class ContentFoldersController extends BcApiController
     public function index(ContentFoldersServiceInterface $service)
     {
         $this->request->allowMethod('get');
+
+        $queryParams = $this->getRequest()->getQueryParams();
+        if (isset($queryParams['status'])) {
+            if (!$this->isAdminApiEnabled()) throw new ForbiddenException();
+        }
+        $queryParams = array_merge([
+            'status' => 'publish',
+            'contain' => null,
+        ], $queryParams);
+
         $this->set([
-            'contentFolders' => $this->paginate($service->getIndex(['contain' => null]))
+            'contentFolders' => $this->paginate($service->getIndex($queryParams))
         ]);
         $this->viewBuilder()->setOption('serialize', ['contentFolders']);
     }
