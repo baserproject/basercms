@@ -125,7 +125,7 @@ class CustomEntriesService implements CustomEntriesServiceInterface
             'limit' => null,
             'direction' => '',    // 並び方向
             'order' => '',    // 並び順対象のフィールド
-            'contain' => ['CustomTables'],
+            'contain' => ['CustomTables' => ['CustomContents' => ['Contents']]],
             'status' => '',
             'use_api' => null
         ], $queryParams);
@@ -194,7 +194,7 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      */
     public function createIndexConditions(Query $query, array $params)
     {
-        foreach($params as $key => $value) {
+        foreach ($params as $key => $value) {
             if ($value === '') unset($params[$key]);
         }
         if (empty($params)) return $query;
@@ -208,6 +208,13 @@ class CustomEntriesService implements CustomEntriesServiceInterface
         // 公開状態
         if ($params['status'] === 'publish') {
             $conditions = $this->CustomEntries->getConditionAllowPublish();
+            $params['contain'] = ['CustomTables' => ['CustomContents' => ['Contents']]];
+            $fields = $this->CustomEntries->getSchema()->columns();
+            $query->select($fields);
+            $conditions = array_merge_recursive(
+                $conditions,
+                $this->CustomEntries->CustomTables->CustomContents->Contents->getConditionAllowPublish()
+            );
         } elseif ($params['status'] === 'unpublish') {
             $conditions = ['CustomEntries.status' => false];
         } else {
@@ -235,7 +242,7 @@ class CustomEntriesService implements CustomEntriesServiceInterface
         $links = $linksService->getIndex($this->CustomEntries->tableId, ['finder' => 'all'])->all()->toArray();
         $linksArray = array_combine(Hash::extract($links, '{n}.name'), array_values($links));
         if ($linksArray) {
-            foreach($params as $key => $value) {
+            foreach ($params as $key => $value) {
                 if (!isset($linksArray[$key])) continue;
 
                 /** @var CustomLink $link */
@@ -252,7 +259,7 @@ class CustomEntriesService implements CustomEntriesServiceInterface
                     $conditions["CustomEntries.$key LIKE"] = '%' . $value . '%';
                 } elseif ($controlType === 'multiCheckbox' && is_array($value)) {
                     $c = [];
-                    foreach($value as $v) {
+                    foreach ($value as $v) {
                         $c[] = ["CustomEntries.$key LIKE" => '%"' . $v . '"%'];
                     }
                     $conditions[] = ['AND' => $c];
@@ -311,7 +318,7 @@ class CustomEntriesService implements CustomEntriesServiceInterface
     public function get($id, array $options = [])
     {
         $options = array_merge([
-            'contain' => ['CustomTables'],
+            'contain' => ['CustomTables' => ['CustomContents' => ['Contents']]],
             'status' => '',
             'use_api' => null,
         ], $options);
@@ -319,6 +326,10 @@ class CustomEntriesService implements CustomEntriesServiceInterface
         $conditions = [];
         if ($options['status'] === 'publish') {
             $conditions = $this->CustomEntries->getConditionAllowPublish();
+            $conditions = array_merge_recursive(
+                $conditions,
+                $this->CustomEntries->CustomTables->CustomContents->Contents->getConditionAllowPublish()
+            );
         }
 
         if (is_numeric($id)) {
