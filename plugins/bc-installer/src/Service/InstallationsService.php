@@ -31,13 +31,16 @@ use BcSearchIndex\Service\SearchIndexesServiceInterface;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Database\Connection;
+use Cake\Database\Driver\Sqlite;
 use Cake\Filesystem\Folder;
 use Cake\I18n\FrozenTime;
 use Cake\Log\LogTrait;
 use Cake\Mailer\MailerAwareTrait;
 use Cake\ORM\Exception\PersistenceFailedException;
 use Cake\ORM\TableRegistry;
+use PDO;
 use PDOException;
+use SQLite3;
 
 /**
  * InstallationsService
@@ -210,7 +213,7 @@ class InstallationsService implements InstallationsServiceInterface
         }
         if (!empty($type) && !empty($name)) {
             if ($type == 'sqlite') {
-                return APP . 'db' . DS . 'sqlite' . DS . $name . '.db';
+                return ROOT . DS . 'db' . DS . 'sqlite' . DS . $name . '.db';
             }
         }
         return $name;
@@ -514,7 +517,13 @@ class InstallationsService implements InstallationsServiceInterface
         $installCoreData[] = '    ],';
         $installCoreData[] = '    \'Datasources.test\' => [';
         foreach($dbConfig as $key => $value) {
-            if($key === 'database') $value = 'test_' . $value;
+            if($key === 'database') {
+                if(str_replace('\\\\', '\\', $dbConfig['driver']) === Sqlite::class) {
+                    $value = dirname($value) . DS . 'test_' . basename($value);
+                } else {
+                    $value = 'test_' . $value;
+                }
+            }
             if($key === 'datasource' || $key === 'dataPattern') continue;
             $installCoreData[] = '        \'' . $key . '\' => \'' . $value . '\',';
         }
@@ -609,9 +618,6 @@ class InstallationsService implements InstallationsServiceInterface
      */
     protected function _getDbSource(): array
     {
-        // TODO uctmiz 未実装
-        return ['mysql' => 'MySQL'];
-
         /* DBソース取得 */
         $dbsource = [];
         $folder = new Folder();
@@ -626,7 +632,7 @@ class InstallationsService implements InstallationsServiceInterface
         }
         /* SQLite利用可否チェック */
         if (in_array('sqlite', $pdoDrivers) && extension_loaded('sqlite3') && class_exists('SQLite3')) {
-            $dbFolderPath = APP . 'db' . DS . 'sqlite';
+            $dbFolderPath = ROOT . DS . 'db' . DS . 'sqlite';
             if (is_writable(dirname($dbFolderPath)) && $folder->create($dbFolderPath, 0777)) {
                 $info = SQLite3::version();
                 if (version_compare($info['versionString'], Configure::read('BcRequire.winSQLiteVersion'), '>')) {

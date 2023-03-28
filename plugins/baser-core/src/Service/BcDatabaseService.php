@@ -1261,7 +1261,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
                 $sql = "SELECT sequence_name FROM INFORMATION_SCHEMA.sequences WHERE sequence_schema = '{$dbConfig['schema']}';";
                 $sequences = [];
                 try {
-                    $sequences = $db->query($sql);
+                    $sequences = $db->execute($sql)->fetchAll('assoc');
                 } catch (BcException $e) {
                 }
                 if ($sequences) {
@@ -1278,7 +1278,9 @@ class BcDatabaseService implements BcDatabaseServiceInterface
                 break;
 
             case 'sqlite':
-                @unlink($dbConfig['database']);
+                if(file_exists($dbConfig['database'])) {
+                    unlink($dbConfig['database']);
+                }
                 break;
         }
         return true;
@@ -1427,11 +1429,11 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         $db = $this->getDataSource($dbConfigKeyName, $dbConfig);
         if (!$dbConfig) $dbConfig = ConnectionManager::getConfig($dbConfigKeyName);
         $datasource = strtolower(str_replace('Cake\\Database\\Driver\\', '', $dbConfig['driver']));
-        if (!$db->isConnected()) {
-            return false;
-        } elseif ($datasource == 'sqlite') {
+        if ($datasource == 'sqlite') {
             $db->connect();
             chmod($dbConfig['database'], 0666);
+        } elseif (!$db->isConnected()) {
+            return false;
         }
         return $this->migrate($plugin, $dbConfigKeyName);
     }
