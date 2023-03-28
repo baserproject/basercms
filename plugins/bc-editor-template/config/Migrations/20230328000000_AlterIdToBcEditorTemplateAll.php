@@ -15,7 +15,7 @@ class AlterIdToBcEditorTemplateAll extends BcMigration
      */
     public function change()
     {
-        $this->table('editor_teplates')
+        $this->table('editor_templates')
             ->changeColumn('id', 'integer', [
                 'identity' => true,
                 'generated' => PostgresAdapter::GENERATED_BY_DEFAULT

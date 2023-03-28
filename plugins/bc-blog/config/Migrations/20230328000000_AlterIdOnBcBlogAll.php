@@ -4,16 +4,16 @@ declare(strict_types=1);
 use BaserCore\Database\Migration\BcMigration;
 use Phinx\Db\Adapter\PostgresAdapter;
 
-class AlterIdToBcBlogAll extends BcMigration
+class AlterIdOnBcBlogAll extends BcMigration
 {
     /**
-     * Change Method.
+     * Up Method.
      *
      * More information on this method is available here:
-     * https://book.cakephp.org/phinx/0/en/migrations.html#the-change-method
+     * https://book.cakephp.org/phinx/0/en/migrations.html#the-up-method
      * @return void
      */
-    public function change()
+    public function up()
     {
         $this->table('blog_contents')
             ->changeColumn('id', 'integer', [
@@ -51,6 +51,18 @@ class AlterIdToBcBlogAll extends BcMigration
                 'generated' => PostgresAdapter::GENERATED_BY_DEFAULT
             ])
             ->update();
+    }
+
+    /**
+     * Down Method.
+     *
+     * More information on this method is available here:
+     * https://book.cakephp.org/phinx/0/en/migrations.html#the-down-method
+     * @return void
+     */
+    public function down()
+    {
+
     }
 
 }
