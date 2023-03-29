@@ -190,7 +190,7 @@ class PluginsController extends BcApiController
      */
     public function reset_db(PluginsServiceInterface $service, $name)
     {
-        $this->request->allowMethod(['put']);
+        $this->request->allowMethod(['post', 'put']);
         $plugin = null;
         try {
             $plugin = $service->getByName($name);
