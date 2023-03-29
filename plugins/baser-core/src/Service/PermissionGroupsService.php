@@ -102,12 +102,15 @@ class PermissionGroupsService implements PermissionGroupsServiceInterface
 	}
 
 	/**
-	 * アクセスルールグループを更新する
-	 *
-	 * @param EntityInterface $entity
-	 * @param array $postData
-	 * @return EntityInterface
-	 */
+     * アクセスルールグループを更新する
+     *
+     * @param EntityInterface $entity
+     * @param array $postData
+     * @return EntityInterface
+     * @noTodo
+     * @checked
+     * @unitTest
+     */
 	public function update(EntityInterface $entity, array $postData)
 	{
 		$entity = $this->PermissionGroups->patchEntity($entity, $postData);

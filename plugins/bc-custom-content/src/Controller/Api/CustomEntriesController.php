@@ -29,6 +29,19 @@ class CustomEntriesController extends BcApiController
 {
 
     /**
+     * initialize
+     * @return void
+     * @checked
+     * @unitTest
+     * @unitTest
+     */
+    public function initialize(): void
+    {
+        parent::initialize();
+        $this->Authentication->allowUnauthenticated(['index', 'view']);
+    }
+
+    /**
      * カスタムエントリーの単一データを取得する
      *
      * @param CustomEntriesServiceInterface $service

@@ -82,9 +82,19 @@ class BlogCommentsController extends BcApiController
     public function view(BlogCommentsServiceInterface $service, $blogCommentId)
     {
         $this->request->allowMethod(['get']);
+
+        $queryParams = $this->getRequest()->getQueryParams();
+        if (isset($queryParams['status'])) {
+            if (!$this->isAdminApiEnabled()) throw new ForbiddenException();
+        }
+
+        $queryParams = array_merge([
+            'status' => 'publish'
+        ], $queryParams);
+
         $blogComment = $message = null;
         try {
-            $blogComment = $service->get($blogCommentId);
+            $blogComment = $service->get($blogCommentId, $queryParams);
         } catch (RecordNotFoundException $e) {
             $this->setResponse($this->response->withStatus(404));
             $message = __d('baser_core', 'データが見つかりません。');

@@ -161,4 +161,24 @@ class PermissionGroupsServiceTest extends BcTestCase
         $data2 = $this->PermissionGroups->get(1, 99);
         $this->assertCount(0, $data2->permissions);
     }
+
+    /**
+     * Test update
+     *
+     * @return void
+     */
+    public function testUpdate(): void
+    {
+        $this->loadFixtureScenario(PermissionGroupsScenario::class);
+        $data1 = $this->PermissionGroups->get(1);
+        $this->PermissionGroups->update($data1, [
+            'name' => 'name update test',
+            'type' => 'super',
+            'plugin' => 'update'
+        ]);
+        $data2 = $this->PermissionGroups->get(1);
+        $this->assertEquals('name update test', $data2->name);
+        $this->assertEquals('super', $data2->type);
+        $this->assertEquals('update', $data2->plugin);
+    }
 }
