@@ -8,11 +8,9 @@ echo "[$(date +"%Y/%m/%d %H:%M:%S")] Init Container start."
 
 if [ ! -e '/var/www/html/docker_inited' ]; then
 
-    # .env
-    echo "[$(date +"%Y/%m/%d %H:%M:%S")] create .env."
-    cp /var/www/html/config/.env.example /var/www/html/config/.env
-
     # init baserCMS
+    echo "[$(date +"%Y/%m/%d %H:%M:%S")] init baserCMS"
+    rm /var/www/html/config/.env
     rm /var/www/html/config/install.php
 
     # msmtprc
