@@ -30,7 +30,6 @@ use Cake\Http\Session;
 /**
  * TODO: $this->getRequest();などをsetupに統一する
  * Class BcUtilTest
- * @package BaserCore\Test\TestCase\Utility
  */
 class BcUtilTest extends BcTestCase
 {

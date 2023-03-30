@@ -28,7 +28,6 @@ use Cake\Validation\Validator;
 /**
  * ブログコンテンツモデル
  *
- * @package Blog.Model
  * @property ContentsTable $Contents
  * @property BlogPostsTable $BlogPosts
  */

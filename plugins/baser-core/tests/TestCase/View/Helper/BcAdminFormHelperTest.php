@@ -18,7 +18,6 @@ use BaserCore\View\Helper\BcFormHelper;
 
 /**
  * Class BcAdminFormHelperTest
- * @package BaserCore\Test\TestCase\View\Helper
  * @property BcAdminFormHelper $BcAdminForm
  * @property BcFormHelper $BcForm
  */

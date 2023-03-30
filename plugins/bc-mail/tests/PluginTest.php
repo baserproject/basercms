@@ -20,7 +20,6 @@ return;
 
 /**
  * Class BcPluginTest
- * @package BaserCore\Test\TestCase
  */
 class BcPluginTest extends BcTestCase
 {

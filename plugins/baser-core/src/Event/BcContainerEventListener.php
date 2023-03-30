@@ -20,7 +20,6 @@ use BaserCore\Annotation\Checked;
 
 /**
  * Class BcContainerEventListener
- * @package BaserCore\Event
  */
 class BcContainerEventListener implements EventListenerInterface
 {

@@ -16,7 +16,6 @@ use BaserCore\TestSuite\BcTestCase;
 
 /**
  * Class UserGroupsServiceTest
- * @package BaserCore\Test\TestCase\Service
  * @property UserGroupsService $UserGroups
  */
 class UserGroupsServiceTest extends BcTestCase

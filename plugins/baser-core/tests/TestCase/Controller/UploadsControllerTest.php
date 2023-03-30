@@ -17,7 +17,6 @@ use BaserCore\Controller\UploadsController;
 /**
  * Class UploadsControllerTest
  *
- * @package Baser.Test.Case.Controller
  * @property  UploadsController $UploadsController
  */
 class UploadsControllerTest extends BcTestCase

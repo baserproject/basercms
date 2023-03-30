@@ -28,7 +28,6 @@ use BaserCore\Annotation\UnitTest;
  *
  * 検索インデックス管理ビヘイビア
  *
- * @package Baser.Model.Behavior
  */
 class BcSearchIndexManagerBehavior extends Behavior
 {

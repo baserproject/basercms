@@ -18,7 +18,6 @@ use Cake\Filesystem\File;
 /**
  * Class BcSchemaTest
  *
- * @package BaserCore\Test\TestCase\Database\Schema
  */
 class BcSchemaTest extends BcTestCase
 {

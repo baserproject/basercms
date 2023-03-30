@@ -32,7 +32,6 @@ use Throwable;
 /**
  * アップロードヘルパー
  *
- * @package Baser.View.Helper
  * @property HtmlHelper $Html
  * @property SiteConfigsServiceInterface $siteConfigService
  */

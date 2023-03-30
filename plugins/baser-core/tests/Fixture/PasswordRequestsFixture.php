@@ -15,7 +15,6 @@ use Cake\TestSuite\Fixture\TestFixture;
 
 /**
  * Class PasswordRequestsFixture
- * @package BaserCore\Test\Fixture
  */
 class PasswordRequestsFixture extends TestFixture
 {

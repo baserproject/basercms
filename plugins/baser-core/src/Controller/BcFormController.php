@@ -17,7 +17,6 @@ use BaserCore\Annotation\Checked;
 
 /**
  * Class BcFormController
- * @package BaserCore\Controller
  */
 class BcFormController extends AppController
 {

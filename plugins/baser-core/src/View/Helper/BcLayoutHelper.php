@@ -17,7 +17,6 @@ use Cake\View\Helper;
 /**
  * レイアウトヘルパ
  *
- * @package Baser.View.Helper
  */
 class BcLayoutHelper extends Helper
 {

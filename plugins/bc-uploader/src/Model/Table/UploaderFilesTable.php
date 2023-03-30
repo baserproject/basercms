@@ -27,7 +27,6 @@ use Cake\Validation\Validator;
 /**
  * ファイルアップローダーモデル
  *
- * @package        Uploader.Model
  */
 class UploaderFilesTable extends AppTable
 {

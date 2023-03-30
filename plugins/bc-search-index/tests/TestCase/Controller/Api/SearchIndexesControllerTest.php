@@ -24,7 +24,6 @@ use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class SearchIndexesControllerTest
- * @package BcSearchIndex\Test\TestCase\Controller\Api
  * @property SearchIndexesController $SearchIndexesController
  */
 class SearchIndexesControllerTest extends BcTestCase

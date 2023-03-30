@@ -17,7 +17,6 @@ use BaserCore\Model\Table\PermissionsTable as TablePermissionsTable;
 
 /**
  * Class AppTableTest
- * @package BaserCore\Test\TestCase\Model\Table
  */
 class AppTableTest extends BcTestCase
 {

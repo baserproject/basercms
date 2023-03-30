@@ -16,7 +16,6 @@ use Cake\View\Helper\TextHelper;
 
 /**
  * Class BcTextHelper
- * @package BaserCore\View\Helper
  */
 class BcTextHelper extends TextHelper
 {

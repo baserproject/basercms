@@ -35,7 +35,6 @@ use Laminas\Diactoros\UploadedFile;
 
 /**
  * Class UtilitiesServiceTest
- * @package BaserCore\Test\TestCase\Service
  * @property UtilitiesService $UtilitiesService
  */
 class UtilitiesServiceTest extends BcTestCase

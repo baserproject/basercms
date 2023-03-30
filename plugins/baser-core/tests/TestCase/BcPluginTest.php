@@ -28,7 +28,6 @@ use Cake\TestSuite\IntegrationTestTrait;
 
 /**
  * Class BcPluginTest
- * @package BaserCore\Test\TestCase
  */
 class BcPluginTest extends BcTestCase
 {

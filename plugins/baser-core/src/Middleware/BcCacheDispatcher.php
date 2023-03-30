@@ -19,7 +19,6 @@ use Psr\Http\Server\RequestHandlerInterface;
 /**
  * Class BcCacheDispatcher
  *
- * @package Baser.Routing.Filter
  */
 class BcCacheDispatcher implements MiddlewareInterface
 {

@@ -22,7 +22,6 @@ use BaserCore\Annotation\UnitTest;
 /**
  * スマホヘルパー
  *
- * @package Baser.View.Helper
  */
 class BcSmartphoneHelper extends Helper
 {

@@ -7,7 +7,6 @@ return;
  *
  * @copyright       Copyright (c) baserCMS Users Community
  * @link            https://basercms.net baserCMS Project
- * @package         Baser.Test.Case.Controller
  * @since           baserCMS v 4.0.9
  * @license         https://basercms.net/license/index.html
  */
@@ -17,7 +16,6 @@ App::uses('EditorTemplatesController', 'Controller');
 /**
  * Class EditorTemplatesControllerTest
  *
- * @package Baser.Test.Case.Controller
  * @property  EditorTemplatesController $EditorTemplatesController
  */
 class EditorTemplatesControllerTest extends BcTestCase

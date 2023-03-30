@@ -19,7 +19,6 @@ use BaserCore\Annotation\Checked;
 
 /**
  * Class Page
- * @package BaserCore\Model\Entity
  * @property int $id
  * @property string $contents
  * @property string $draft

@@ -36,7 +36,6 @@ use BaserCore\Annotation\Doc;
 /**
  * コンテンツヘルパ
  *
- * @package BaserCore\View\Helper
  * @var BcContentsHelper $this
  * @property ContentsTable $_Contents
  * @property PermissionsService $PermissionsService

@@ -24,7 +24,6 @@ use Cake\TestSuite\IntegrationTestTrait;
 
 /**
  * Class BlogCategoriesControllerTest
- * @package BcBlog\Test\TestCase\Controller\Api
  * @property BlogCategoriesController $BlogCategoriesController
  */
 class BlogCategoriesControllerTest extends BcTestCase

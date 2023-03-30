@@ -18,7 +18,6 @@ use BaserCore\TestSuite\BcTestCase;
 
 /**
  * Class PasswordRequestsControllerTest
- * @package BaserCore\Test\TestCase\Controller
  */
 class PasswordRequestsControllerTest extends BcTestCase
 {

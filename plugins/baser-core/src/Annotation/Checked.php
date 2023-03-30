@@ -17,7 +17,6 @@ namespace BaserCore\Annotation;
 
 /**
  * Class Checked
- * @package BaserCore\Annotation
  * @Annotation
  */
 final class Checked

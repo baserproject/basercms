@@ -21,7 +21,6 @@ use BaserCore\Annotation\UnitTest;
 
 /**
  * Interface ContentsServiceInterface
- * @package BaserCore\Service
  */
 interface ContentsServiceInterface extends CrudBaseServiceInterface
 {

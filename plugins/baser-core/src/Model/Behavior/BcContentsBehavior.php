@@ -25,7 +25,6 @@ use BaserCore\Annotation\UnitTest;
 
 /**
  * Class BcContentsBehavior
- * @package BaserCore\Model\Behavior
  */
 class BcContentsBehavior extends Behavior
 {

@@ -19,7 +19,6 @@ use BaserCore\Annotation\Checked;
 
 /**
  * Class Plugin
- * @package BcSearchIndex
  */
 class Plugin extends BcPlugin
 {

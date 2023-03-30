@@ -18,7 +18,6 @@ use Cake\Event\Event;
 /**
  * Class BcSearchIndexManagerBehavioreTest
  *
- * @package Baser.Test.Case.Model
  */
 class BcSearchIndexManagerBehaviorTest extends BcTestCase
 {

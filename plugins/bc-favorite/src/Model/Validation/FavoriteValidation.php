@@ -23,7 +23,6 @@ use BaserCore\Annotation\UnitTest;
 
 /**
  * Class BcValidation
- * @package BcFavorite\Model\Validation
  */
 class FavoriteValidation extends Validation
 {

@@ -19,7 +19,6 @@ use BaserCore\Annotation\Checked;
 
 /**
  * Class Dblog
- * @package BaserCore\Model\Entity
  * @property int $id
  * @property string $message
  * @property string $user_id

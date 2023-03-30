@@ -7,7 +7,6 @@ return;
  *
  * @copyright       Copyright (c) baserCMS Users Community
  * @link            https://basercms.net baserCMS Project
- * @package         Uploader.Test.Case
  * @since           baserCMS v 4.0.9
  * @license         https://basercms.net/license/index.html
  */

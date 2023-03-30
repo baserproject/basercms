@@ -21,7 +21,6 @@ use BaserCore\Annotation\Checked;
 /**
  * メールフィールドモデル
  *
- * @package Mail.Model
  *
  */
 class MailFieldsTable extends MailAppTable

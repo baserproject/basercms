@@ -22,7 +22,6 @@ use Cake\ORM\Entity;
 
 /**
  * Class UserGroup
- * @package BaserCore\Model\Entity
  * @property int $id
  * @property string $name
  * @property string|null $title

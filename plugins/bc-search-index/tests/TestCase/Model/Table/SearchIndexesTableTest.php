@@ -16,7 +16,6 @@ use BaserCore\TestSuite\BcTestCase;
 
 /**
  * Class SearchIndexesTableTest
- * @package BaserCore\Test\TestCase\Model\Table
  * @property SearchIndexesTable $SearchIndexes
  */
 class SearchIndexesTableTest extends BcTestCase

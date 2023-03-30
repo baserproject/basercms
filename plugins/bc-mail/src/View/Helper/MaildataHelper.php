@@ -19,7 +19,6 @@ use BaserCore\Annotation\Checked;
 /**
  * メールデータヘルパー
  *
- * @package Mail.View.Helper
  * @property BcBaserHelper $BcBaser
  *
  */

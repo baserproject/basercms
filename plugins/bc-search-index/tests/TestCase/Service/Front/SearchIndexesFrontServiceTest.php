@@ -23,7 +23,6 @@ use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class SearchIndexesFrontServiceTest
- * @package BcSearchIndex\Test\TestCase\Service\Front
  */
 class SearchIndexesFrontServiceTest extends BcTestCase
 {

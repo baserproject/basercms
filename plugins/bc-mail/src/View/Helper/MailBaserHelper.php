@@ -18,7 +18,6 @@ use Cake\View\Helper;
  *
  * テーマより利用される事を前提としたヘルパー。テーマで必要となる機能を提供する。
  *
- * @package Mail.View.Helper
  * @property CakeRequest $request
  */
 class MailBaserHelper extends Helper

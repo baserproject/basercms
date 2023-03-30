@@ -24,7 +24,6 @@ use BaserCore\Event\BcContentsEventListener;
 
 /**
  * Class BcFormHelperTest
- * @package BaserCore\Test\TestCase\View\Helper
  * @property BcFormHelper $BcForm
  */
 class BcFormHelperTest extends BcTestCase

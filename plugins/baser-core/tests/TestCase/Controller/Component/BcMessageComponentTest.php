@@ -20,7 +20,6 @@ use BaserCore\Controller\Component\BcMessageComponent;
 /**
  * Class BcMessageTestController
  *
- * @package BaserCore\Test\TestCase\Controller\Component
  * @property BcMessageComponent $BcMessage
  */
 class BcMessageTestController extends Controller
@@ -34,7 +33,6 @@ class BcMessageTestController extends Controller
 
 /**
  * BaserCore\Controller\BcMessageComponent Test Case
- * @package BaserCore\Test\TestCase\Controller\Component;
  * @property BcMessageComponent $BcMessage
  */
 class BcMessageComponentTest extends BcTestCase

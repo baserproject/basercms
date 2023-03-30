@@ -16,7 +16,6 @@ use BaserCore\View\AppView;
 
 /**
  * Class AppViewTest
- * @package BaserCore\Test\TestCase\View;
  * @property AppView $AppView
  */
 class AppViewTest extends BcTestCase

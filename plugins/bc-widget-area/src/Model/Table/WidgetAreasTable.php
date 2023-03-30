@@ -21,7 +21,6 @@ use BaserCore\Annotation\Checked;
  *
  * ウィジェットエリアモデル
  *
- * @package Baser.Model
  */
 class WidgetAreasTable extends AppTable
 {

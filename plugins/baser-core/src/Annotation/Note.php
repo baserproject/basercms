@@ -13,7 +13,6 @@ namespace BaserCore\Annotation;
 
 /**
  * Class UnitTest
- * @package BaserCore\Annotation
  * @Annotation
  */
 final class Note

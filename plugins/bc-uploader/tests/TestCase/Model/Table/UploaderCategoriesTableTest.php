@@ -7,7 +7,6 @@ return;
  *
  * @copyright       Copyright (c) baserCMS Users Community
  * @link            https://basercms.net baserCMS Project
- * @package         Uploader.Test.Case.Model
  * @since           baserCMS v 4.0.9
  * @license         https://basercms.net/license/index.html
  */
@@ -17,7 +16,6 @@ App::uses('UploaderCategory', 'BcUploader.Model');
 /**
  * Class UploaderCategoryTest
  *
- * @package Feed.Test.Case.Model
  * @property  UploaderCategory $UploaderCategory
  */
 class UploaderCategoriesTableTest extends BaserTestCase

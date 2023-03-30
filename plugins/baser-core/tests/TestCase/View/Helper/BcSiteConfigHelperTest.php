@@ -18,7 +18,6 @@ use BaserCore\View\Helper\BcSiteConfigHelper;
 /**
  * Class BcSiteConfigHelperTest
  *
- * @package BaserCore\Test\TestCase\View\Helper
  */
 class BcSiteConfigHelperTest extends BcTestCase
 {

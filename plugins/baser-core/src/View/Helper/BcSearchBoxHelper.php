@@ -21,7 +21,6 @@ use BaserCore\Annotation\Checked;
 /**
  * 検索ボックスヘルパ
  * Class BcSearchBoxHelper
- * @package BaserCore\View\Helper
  */
 class BcSearchBoxHelper extends Helper
 {

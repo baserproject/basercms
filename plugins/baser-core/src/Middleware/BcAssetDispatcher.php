@@ -26,7 +26,6 @@ use Psr\Http\Server\RequestHandlerInterface;
  *        /app/View/webroot/css/style.css
  *        /lib/Baser/View/webroot/css/style.css
  *
- * @package Baser.Routing.Filter
  */
 class BcAssetDispatcher implements MiddlewareInterface
 {

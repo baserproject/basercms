@@ -14,7 +14,6 @@ namespace BaserCore\Utility;
 /**
  * Class BcLang
  *
- * @package Baser.Lib
  */
 class BcLang extends BcAbstractDetector
 {

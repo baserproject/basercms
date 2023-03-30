@@ -26,7 +26,6 @@ use Laminas\Diactoros\UploadedFile;
 
 /**
  * Class PluginsServiceTest
- * @package BaserCore\Test\TestCase\Service
  * @property PluginsService $Plugins
  */
 class PluginsServiceTest extends BcTestCase

@@ -27,7 +27,6 @@ use Cake\ORM\Exception\PersistenceFailedException;
  *
  * https://localhost/baser/api/baser-core/themes/action_name.json で呼び出す
  *
- * @package BaserCore\Controller\Api
  */
 class ThemesController extends BcApiController
 {

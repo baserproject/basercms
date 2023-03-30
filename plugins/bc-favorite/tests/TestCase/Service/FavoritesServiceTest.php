@@ -17,7 +17,6 @@ use BcFavorite\Service\FavoritesService;
 
 /**
  * Class FavoritesServiceTest
- * @package BcFavorite\Test\TestCase\Service
  * @property FavoritesService $FavoritesService
  */
 class FavoritesServiceTest extends BcTestCase

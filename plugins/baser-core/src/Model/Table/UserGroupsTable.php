@@ -25,7 +25,6 @@ use BaserCore\Annotation\Checked;
 
 /**
  * Class UserGroupsTable
- * @package BaserCore\Model\Table
  * @property UsersTable&BelongsToMany $Users
  * @method UserGroup newEmptyEntity()
  * @method UserGroup newEntity(array $data, array $options = [])

@@ -40,7 +40,6 @@ use BaserCore\Annotation\Checked;
 
 /**
  * Class plugin
- * @package BaserCore
  */
 class BcPlugin extends BasePlugin
 {

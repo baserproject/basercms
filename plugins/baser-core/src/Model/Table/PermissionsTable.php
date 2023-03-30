@@ -24,7 +24,6 @@ use BaserCore\Model\Table\Exception\CopyFailedException;
 /**
  * Class PermissionTable
  *
- * @package BaserCore\Model\Table
  */
 class PermissionsTable extends AppTable
 {

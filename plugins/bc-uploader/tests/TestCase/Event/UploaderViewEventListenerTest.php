@@ -7,7 +7,6 @@ return;
  *
  * @copyright       Copyright (c) baserCMS Users Community
  * @link            https://basercms.net baserCMS Project
- * @package         Uploader.Test.Case.Event
  * @since           baserCMS v 4.0.9
  * @license         https://basercms.net/license/index.html
  */
@@ -17,7 +16,6 @@ App::uses('UploaderViewEventListener', 'BcUploader.Event');
 /**
  * Class UploaderViewEventListenerTest
  *
- * @package Uploader.Test.Case.Event
  * @property  UploaderViewEventListener $UploaderViewEventListener
  */
 class UploaderViewEventListenerTest extends BaserTestCase

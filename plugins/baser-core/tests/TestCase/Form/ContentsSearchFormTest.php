@@ -17,7 +17,6 @@ use Cake\Form\Schema;
 
 /**
  * Class ContentsSearchFormTest
- * @package BaserCore\Test\TestCase\Form
  */
 class ContentsSearchFormTest extends BcTestCase
 {

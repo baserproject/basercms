@@ -19,7 +19,6 @@ use BaserCore\Annotation\Checked;
 
 /**
  * Class SiteValidation
- * @package BaserCore\Model\Validation
  */
 class SiteValidation extends Validation
 {

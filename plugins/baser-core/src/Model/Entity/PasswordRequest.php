@@ -22,7 +22,6 @@ use BaserCore\Annotation\Checked;
 
 /**
  * Class PasswordRequest
- * @package BaserCore\Model\Entity
  * @property int $id
  * @property int $user_id
  * @property string $request_key

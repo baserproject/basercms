@@ -5,7 +5,6 @@
  *
  * @copyright       Copyright (c) baserCMS Users Community
  * @link            https://basercms.net baserCMS Project
- * @package         Blog.Test.Case.Controller
  * @since           baserCMS v 4.0.9
  * @license         https://basercms.net/license/index.html
  */
@@ -18,7 +17,6 @@ use BcBlog\Controller\Admin\BlogContentsController;
 /**
  * Class BlogContentsControllerTest
  *
- * @package Blog.Test.Case.Controller
  * @property  BlogContentsController $BlogContentsController
  */
 class BlogContentsControllerTest extends BcTestCase

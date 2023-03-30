@@ -18,7 +18,6 @@ use BaserCore\Annotation\NoTodo;
 
 /**
  * Class CopyFailedException
- * @package BaserCore\Model\Table\Execption
  * @property array $errors
  */
 class CopyFailedException extends Exception

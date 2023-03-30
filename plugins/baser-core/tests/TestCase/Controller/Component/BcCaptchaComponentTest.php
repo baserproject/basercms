@@ -7,7 +7,6 @@ return;
  *
  * @copyright       Copyright (c) baserCMS Users Community
  * @link            https://basercms.net baserCMS Project
- * @package         Baser.Test.Case.Controller.Component
  * @since           baserCMS v 3.0.0-beta
  * @license         https://basercms.net/license/index.html
  */
@@ -18,7 +17,6 @@ App::uses('Controller', 'Controller');
 /**
  * 偽コントローラ
  *
- * @package Baser.Test.Case.Controller.Component
  */
 class BcCaptchaTestController extends Controller
 {

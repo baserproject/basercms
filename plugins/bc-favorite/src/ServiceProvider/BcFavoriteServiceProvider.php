@@ -20,7 +20,6 @@ use BaserCore\Annotation\UnitTest;
 
 /**
  * Class BcFavoriteServiceProvider
- * @package BcFavorite\ServiceProvider
  */
 class BcFavoriteServiceProvider extends ServiceProvider
 {

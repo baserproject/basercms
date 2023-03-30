@@ -20,7 +20,6 @@ use BaserCore\Annotation\Checked;
 
 /**
  * Class BcListTableHelper
- * @package BaserCore\View\Helper
  * @uses BcListTableHelper
  */
 class BcListTableHelper extends Helper

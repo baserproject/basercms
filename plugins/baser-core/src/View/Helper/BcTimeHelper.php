@@ -16,7 +16,6 @@ use Cake\View\Helper\TimeHelper;
 
 /**
  * Class BcTimeHelper
- * @package BaserCore\View\Helper
  */
 class BcTimeHelper extends TimeHelper
 {

@@ -26,7 +26,6 @@ use Cake\Filesystem\File;
 
 /**
  * Class PluginTest
- * @package BaserCore\Test\TestCase
  * @property Plugin $Plugin
  */
 class PluginTest extends BcTestCase

@@ -38,7 +38,6 @@ use BaserCore\Annotation\UnitTest;
 
 /**
  * Class ContentsService
- * @package BaserCore\Service
  * @property ContentsTable $Contents
  * @checked
  * @noTodo

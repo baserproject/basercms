@@ -28,7 +28,6 @@ use BaserCore\Annotation\NoTodo;
 
 /**
  * Class PagesService
- * @package BaserCore\Service
  * @property PagesTable $Pages
  */
 class PagesService implements PagesServiceInterface

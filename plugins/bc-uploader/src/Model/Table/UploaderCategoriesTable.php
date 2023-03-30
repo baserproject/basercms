@@ -23,7 +23,6 @@ use BaserCore\Annotation\Checked;
 /**
  * ファイルカテゴリモデル
  *
- * @package         Uploader.Model
  */
 class UploaderCategoriesTable extends AppTable
 {

@@ -27,7 +27,6 @@ use BaserCore\Annotation\Checked;
 /**
  * メールヘルパー
  *
- * @package Mail.View.Helper
  *
  */
 class MailHelper extends Helper

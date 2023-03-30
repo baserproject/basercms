@@ -17,7 +17,6 @@ use BaserCore\Model\Table\SiteConfigsTable;
 
 /**
  * Class SiteConfigsTableTest
- * @package BaserCore\Test\TestCase\Model\Table
  * @property SiteConfigsTable $SiteConfigs
  */
 class SiteConfigsTableTest extends BcTestCase

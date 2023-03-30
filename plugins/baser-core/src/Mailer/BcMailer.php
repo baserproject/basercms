@@ -21,8 +21,7 @@ use Cake\Routing\Router;
 
 /**
  * Class BcMailer
- * @package BaserCore\Mailer
- */
+*/
 class BcMailer extends Mailer
 {
 

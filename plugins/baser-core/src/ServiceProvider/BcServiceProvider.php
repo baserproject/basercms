@@ -92,7 +92,6 @@ use BaserCore\Annotation\UnitTest;
 
 /**
  * Class BcServiceProvider
- * @package BaserCore\ServiceProvider
  */
 class BcServiceProvider extends ServiceProvider
 {

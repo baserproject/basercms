@@ -27,7 +27,6 @@ use BaserCore\Annotation\UnitTest;
 /**
  * 受信メールコントローラー
  *
- * @package Mail.Controller
  */
 class MailMessagesController extends MailAdminAppController
 {

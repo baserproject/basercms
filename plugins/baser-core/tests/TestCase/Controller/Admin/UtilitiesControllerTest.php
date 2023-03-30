@@ -28,7 +28,6 @@ use Composer\Package\Archiver\ZipArchiver;
 
 /**
  * class UtilitiesControllerTest
- * @package BaserCore\Controller\Admin\UtilitiesController;
  */
 class UtilitiesControllerTest extends BcTestCase
 {

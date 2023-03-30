@@ -24,7 +24,6 @@ use Cake\View\Helper\UrlHelper;
 /**
  * Class BcCkeditorHelper
  *
- * @package Baser.View.Helper
  * @property BcAdminFormHelper $BcAdminForm
  * @property BcHtmlHelper $BcHtml
  * @property UrlHelper $Url

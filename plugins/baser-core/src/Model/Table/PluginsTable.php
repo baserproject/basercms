@@ -24,7 +24,6 @@ use Cake\Validation\Validator;
 
 /**
  * Class PluginsTable
- * @package BaserCore\Model\Table
  */
 class PluginsTable extends AppTable
 {

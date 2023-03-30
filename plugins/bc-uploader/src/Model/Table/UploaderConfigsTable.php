@@ -20,7 +20,6 @@ use BaserCore\Annotation\UnitTest;
 /**
  * ファイルアップローダー設定モデル
  *
- * @package         Uploader.Model
  */
 class UploaderConfigsTable extends AppTable
 {

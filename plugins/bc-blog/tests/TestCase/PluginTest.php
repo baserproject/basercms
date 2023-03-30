@@ -27,7 +27,6 @@ use Cake\Routing\Router;
 
 /**
  * Class BcPluginTest
- * @package BaserCore\Test\TestCase
  */
 class PluginTest extends BcTestCase
 {

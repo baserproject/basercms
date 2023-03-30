@@ -30,7 +30,6 @@ use BaserCore\Annotation\UnitTest;
 
 /**
  * Class ContentFoldersService
- * @package BaserCore\Service
  * @property ContentFoldersTable $ContentFolders
  */
 class ContentFoldersService implements ContentFoldersServiceInterface

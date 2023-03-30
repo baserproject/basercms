@@ -18,7 +18,6 @@ use Cake\Core\Exception\CakeException;
  *
  * CakeException 拡張クラス
  *
- * @package BaserCore.Error
  */
 class BcException extends CakeException
 {

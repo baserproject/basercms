@@ -18,7 +18,6 @@ use BaserCore\Annotation\Checked;
 
 /**
  * Class SiteConfig
- * @package BaserCore\Model\Entity
  */
 class SiteConfig extends EntityAlias
 {
