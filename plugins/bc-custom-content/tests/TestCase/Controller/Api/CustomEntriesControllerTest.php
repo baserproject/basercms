@@ -15,7 +15,9 @@ use BaserCore\Service\BcDatabaseServiceInterface;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
+use BcCustomContent\Controller\Api\CustomEntriesController;
 use BcCustomContent\Service\CustomTablesServiceInterface;
+use BcCustomContent\Test\Scenario\CustomContentsScenario;
 use BcCustomContent\Test\Scenario\CustomEntriesScenario;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
@@ -43,6 +45,8 @@ class CustomEntriesControllerTest extends BcTestCase
         'plugin.BaserCore.Factory/UsersUserGroups',
         'plugin.BaserCore.Factory/UserGroups',
         'plugin.BcCustomContent.Factory/CustomTables',
+        'plugin.BcCustomContent.Factory/CustomContents',
+        'plugin.BaserCore.Factory/Contents',
     ];
 
     /**
@@ -80,6 +84,15 @@ class CustomEntriesControllerTest extends BcTestCase
     }
 
     /**
+     * test initialize
+     */
+    public function test_initialize()
+    {
+        $controller = new CustomEntriesController($this->getRequest());
+        $this->assertEquals($controller->Authentication->unauthenticatedActions, ['index', 'view']);
+    }
+
+    /**
      * test index
      */
     public function test_index()
@@ -96,6 +109,7 @@ class CustomEntriesControllerTest extends BcTestCase
             'has_child' => 0
         ]);
         //フィクチャーからデーターを生成
+        $this->loadFixtureScenario(CustomContentsScenario::class);
         $this->loadFixtureScenario(CustomEntriesScenario::class);
         //APIを呼ぶ
         $this->get('/baser/api/bc-custom-content/custom_entries/index.json?custom_table_id=1&token=' . $this->accessToken);
@@ -143,6 +157,7 @@ class CustomEntriesControllerTest extends BcTestCase
             'has_child' => 0
         ]);
         //フィクチャーからデーターを生成
+        $this->loadFixtureScenario(CustomContentsScenario::class);
         $this->loadFixtureScenario(CustomEntriesScenario::class);
         //APIを呼ぶ
         $this->get('/baser/api/bc-custom-content/custom_entries/view/1.json?custom_table_id=1&token=' . $this->accessToken);
@@ -254,6 +269,7 @@ class CustomEntriesControllerTest extends BcTestCase
             'has_child' => 0
         ]);
         //フィクチャーからデーターを生成
+        $this->loadFixtureScenario(CustomContentsScenario::class);
         $this->loadFixtureScenario(CustomEntriesScenario::class);
         $data = [
             'title' => 'title updated',
@@ -307,6 +323,7 @@ class CustomEntriesControllerTest extends BcTestCase
             'has_child' => 0
         ]);
         //フィクチャーからデーターを生成
+        $this->loadFixtureScenario(CustomContentsScenario::class);
         $this->loadFixtureScenario(CustomEntriesScenario::class);
 
         //APIを呼ぶ
@@ -345,6 +362,7 @@ class CustomEntriesControllerTest extends BcTestCase
             'has_child' => 0
         ]);
         //フィクチャーからデーターを生成
+        $this->loadFixtureScenario(CustomContentsScenario::class);
         $this->loadFixtureScenario(CustomEntriesScenario::class);
         //APIを呼ぶ
         $this->get('/baser/api/bc-custom-content/custom_entries/list.json?custom_table_id=1&token=' . $this->accessToken);

@@ -37,7 +37,7 @@ class BlogPostsController extends BcApiController
     public function initialize(): void
     {
         parent::initialize();
-        $this->Authentication->allowUnauthenticated(['view']);
+        $this->Authentication->allowUnauthenticated(['index', 'view']);
     }
 
     /**
@@ -50,9 +50,17 @@ class BlogPostsController extends BcApiController
      */
     public function index(BlogPostsServiceInterface $service)
     {
+        $this->request->allowMethod('get');
+
+        $queryParams = $this->getRequest()->getQueryParams();
+        if (isset($queryParams['status'])) {
+            if (!$this->isAdminApiEnabled()) throw new ForbiddenException();
+        }
+
         $queryParams = array_merge([
             'contain' => null,
-        ], $this->getRequest()->getQueryParams());
+            'status' => 'publish'
+        ], $queryParams);
         $this->set([
             'blogPosts' => $this->paginate($service->getIndex($queryParams))
         ]);

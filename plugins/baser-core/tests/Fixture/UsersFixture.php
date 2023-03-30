@@ -15,7 +15,6 @@ use Cake\TestSuite\Fixture\TestFixture;
 
 /**
  * Class UsersFixture
- * @package BaserCore\Test\Fixture
  */
 class UsersFixture extends TestFixture
 {

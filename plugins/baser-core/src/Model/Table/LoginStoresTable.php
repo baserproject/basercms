@@ -21,7 +21,6 @@ use BaserCore\Annotation\UnitTest;
 
 /**
  * Class LoginStoresTable
- * @package BaserCore\Model\Table
  */
 class LoginStoresTable extends AppTable
 {

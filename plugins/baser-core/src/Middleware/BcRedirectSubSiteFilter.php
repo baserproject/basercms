@@ -27,7 +27,6 @@ use BaserCore\Annotation\UnitTest;
  *
  * ユーザーエージェントにより、関連するサブサイトにリダイレクトを行う
  *
- * @package Baser.Routing.Filter
  */
 class BcRedirectSubSiteFilter implements MiddlewareInterface
 {

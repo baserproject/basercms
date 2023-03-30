@@ -19,7 +19,6 @@ use BaserCore\Annotation\Checked;
 
 /**
  * Class SearchIndex
- * @package BaserCore\Model\Entity
  * @property int $id
  * @property string $type
  * @property string $model

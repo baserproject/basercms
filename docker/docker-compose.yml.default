@@ -62,7 +62,7 @@ services:
        - ./phpmyadmin/sessions:/sessions
 
   bc5-pg:
-    image: postgres:10.5
+    image: postgres:15.2
     container_name: bc5-pg
     ports:
       - 5432:5432

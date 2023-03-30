@@ -24,7 +24,6 @@ use Cake\View\Helper;
  * BcBaserHeleper へのインターフェイスを提供する役割だけとし、
  * 実装をできるだけこのクラスで持たないようにし、BlogHelper 等で実装する
  *
- * @package Blog.View.Helper
  * @property BlogHelper $Blog
  */
 class BcBlogBaserHelper extends Helper

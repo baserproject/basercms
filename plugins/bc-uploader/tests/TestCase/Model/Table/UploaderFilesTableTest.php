@@ -7,7 +7,6 @@ return;
  *
  * @copyright       Copyright (c) baserCMS Users Community
  * @link            https://basercms.net baserCMS Project
- * @package         Uploader.Test.Case.Controller
  * @since           baserCMS v 4.0.9
  * @license         https://basercms.net/license/index.html
  */
@@ -17,7 +16,6 @@ App::uses('UploaderFile', 'BcUploader.Controller');
 /**
  * Class UploaderFileTest
  *
- * @package Feed.Test.Case.Controller
  * @property  UploaderFile $UploaderFile
  */
 class UploaderFilesTableTest extends BaserTestCase

@@ -28,7 +28,6 @@ use BaserCore\Annotation\NoTodo;
 
 /**
  * Class PagesService
- * @package BaserCore\Service
  * @property PagesTable $Pages
  */
 class PagesService implements PagesServiceInterface
@@ -288,11 +287,11 @@ class PagesService implements PagesServiceInterface
     public function copy($postData)
     {
         return $this->Pages->copy(
-            $postData['entity_id'],
-            $postData['parent_id'],
-            $postData['title'],
+            $postData['entity_id'] ?? null,
+            $postData['parent_id'] ?? null,
+            $postData['title'] ?? null,
             BcUtil::loginUser()->id,
-            $postData['site_id']
+            $postData['site_id'] ?? null
         );
     }
 

@@ -17,7 +17,6 @@ use BaserCore\TestSuite\BcTestCase;
 /**
  * Class UsersUserGroupsTableTest
  *
- * @package BaserCore\Model\Table\UsersUserGroupsTable
  * @property UsersUserGroupsTable $UsersUserGroups
  */
 class UsersUserGroupsTableTest extends BcTestCase

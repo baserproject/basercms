@@ -21,7 +21,6 @@ use ReflectionClass;
 
 /**
  * Class BcAdminAppViewTest
- * @package BaserCore\Test\TestCase\View;
  * @property BcAdminAppView $BcAdminAppView
  */
 class BcAdminAppViewTest extends BcTestCase

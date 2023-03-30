@@ -50,7 +50,6 @@ use BaserCore\Annotation\UnitTest;
 
 /**
  * ブログヘルパー
- * @package Blog.View.Helper
  * @property BcTimeHelper $BcTime BcTimeヘルパ
  * @property BcBaserHelper $BcBaser BcBaserヘルパ
  * @property BcUploadHelper $BcUpload BcUploadヘルパ

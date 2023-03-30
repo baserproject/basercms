@@ -7,7 +7,6 @@ return;
  *
  * @copyright       Copyright (c) baserCMS Users Community
  * @link            https://basercms.net baserCMS Project
- * @package         Uploader.Test.Case.View.Helper
  * @since           baserCMS v 4.0.9
  * @license         https://basercms.net/license/index.html
  */
@@ -17,7 +16,6 @@ App::uses('UploaderHelper', 'BcUploader.View.Helper');
 /**
  * Class UploaderHelperTest
  *
- * @package Feed.Test.Case.View.Helper
  * @property  UploaderHelper $UploaderHelper
  */
 class UploaderHelperTest extends BaserTestCase

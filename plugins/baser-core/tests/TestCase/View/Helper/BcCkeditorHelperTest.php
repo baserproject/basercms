@@ -20,7 +20,6 @@ use Cake\Core\PluginCollection;
 /**
  * text helper library.
  *
- * @package Baser.Test.Case.View.Helper
  * @property BcCkeditorHelper $BcCkeditor
  */
 class BcCkeditorHelperTest extends BcTestCase

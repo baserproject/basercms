@@ -5,7 +5,6 @@
  *
  * @copyright       Copyright (c) baserCMS Users Community
  * @link            https://basercms.net baserCMS Project
- * @package         Blog.Test.Case
  * @since           baserCMS v 3.0.0
  * @license         https://basercms.net/license/index.html
  */
@@ -34,7 +33,6 @@ use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 /**
  * Blog helper library.
  *
- * @package Baser.Test.Case
  * @property BlogHelper $Blog
  */
 class BlogHelperTest extends BcTestCase

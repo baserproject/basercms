@@ -7,7 +7,6 @@ return;
  *
  * @copyright       Copyright (c) baserCMS Users Community
  * @link            https://basercms.net baserCMS Project
- * @package         Baser.Test.Case.View.Helper
  * @since           baserCMS v 3.0.0
  * @license         https://basercms.net/license/index.html
  */
@@ -22,7 +21,6 @@ App::uses('BcFormHelper', 'View/Helper');
 /**
  * text helper library.
  *
- * @package Baser.Test.Case.View.Helper
  * @property BcTextHelper $Helper
  */
 class BcTextHelperTest extends BcTestCase

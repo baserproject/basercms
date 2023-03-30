@@ -18,7 +18,6 @@ use BaserCore\TestSuite\BcTestCase;
 
 /**
  * Class FavoriteValidationTest
- * @package BcFavorite\Test\TestCase\Model\Validation
  * @property FavoriteValidation $FavoriteValidation
  */
 class FavoriteValidationTest extends BcTestCase

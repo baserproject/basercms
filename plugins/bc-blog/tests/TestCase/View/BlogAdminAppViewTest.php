@@ -5,7 +5,6 @@
  *
  * @copyright       Copyright (c) baserCMS Users Community
  * @link            https://basercms.net baserCMS Project
- * @package         Baser.Test.Case.View.Helper
  * @since           baserCMS v 3.0.6
  * @license         https://basercms.net/license/index.html
  */
@@ -18,7 +17,6 @@ use BaserCore\TestSuite\BcTestCase;
 /**
  * BcContents helper library.
  *
- * @package Baser.Test.Case
  * @property BlogAdminAppView $BlogAdminAppView
  */
 class BlogAdminAppViewTest extends BcTestCase

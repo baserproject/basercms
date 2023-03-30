@@ -16,7 +16,6 @@ use BaserCore\TestSuite\BcTestCase;
 
 /**
  * Class BcKeyValueBehaviorTest
- * @package BaserCore\Test\TestCase\Model\Behavior
  * @property SiteConfigsTable $SiteConfigs
  */
 class BcKeyValueBehaviorTest extends BcTestCase

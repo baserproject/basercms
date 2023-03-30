@@ -107,6 +107,15 @@ class BlogCommentsServiceTest extends BcTestCase
      */
     public function testGet()
     {
+        // コメントを作成する
+        $this->loadFixtureScenario(
+            BlogContentScenario::class,
+            1,  // id
+            1, // siteId
+            null, // parentId
+            'news1', // name
+            '/news/' // url
+        );
         $this->loadFixtureScenario(BlogCommentsServiceScenario::class);
 
         // ブログコメントの単一データを取得するテスト
@@ -121,6 +130,15 @@ class BlogCommentsServiceTest extends BcTestCase
      */
     public function testPublish()
     {
+        // コメントを作成する
+        $this->loadFixtureScenario(
+            BlogContentScenario::class,
+            1,  // id
+            1, // siteId
+            null, // parentId
+            'news1', // name
+            '/news/' // url
+        );
         $this->loadFixtureScenario(BlogCommentsServiceScenario::class);
 
         $comment = $this->BlogCommentsService->publish(3);
@@ -132,6 +150,15 @@ class BlogCommentsServiceTest extends BcTestCase
      */
     public function testUnpublish()
     {
+        // コメントを作成する
+        $this->loadFixtureScenario(
+            BlogContentScenario::class,
+            1,  // id
+            1, // siteId
+            null, // parentId
+            'news1', // name
+            '/news/' // url
+        );
         $this->loadFixtureScenario(BlogCommentsServiceScenario::class);
 
         $comment = $this->BlogCommentsService->unpublish(1);
@@ -152,9 +179,7 @@ class BlogCommentsServiceTest extends BcTestCase
             'news1', // name
             '/news/' // url
         );
-        BlogPostFactory::make(['id' => 1, 'blog_content_id'=> 1, 'status' => true])->persist();
-        $this->loadFixtureScenario(BlogCommentsScenario::class,);
-
+        $this->loadFixtureScenario(BlogCommentsServiceScenario::class);
         $count = $this->BlogCommentsService->getIndex(['blog_post_id' => 1])->count();
 
         // ブログコメントを削除するテスト
@@ -179,9 +204,7 @@ class BlogCommentsServiceTest extends BcTestCase
             'news1', // name
             '/news/' // url
         );
-        BlogPostFactory::make(['id' => 1, 'blog_content_id'=> 1, 'status' => true])->persist();
-        $this->loadFixtureScenario(BlogCommentsScenario::class,);
-
+        $this->loadFixtureScenario(BlogCommentsServiceScenario::class);
         $ids = [1, 2, 3];
 
         // 一括でブログコメントを非公開するテスト

@@ -18,7 +18,6 @@ use BaserCore\Annotation\Checked;
 
 /**
  * Class SiteConfigValidation
- * @package BaserCore\Model\Validation
  */
 class SiteConfigValidation extends Validation
 {

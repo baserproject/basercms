@@ -24,7 +24,6 @@ use BaserCore\Annotation\Note;
 
 /**
  * Class BcAuthHelper
- * @package BaserCore\View\Helper
  * @property BcBaserHelper $BcBaser
  * @uses BcAuthHelper
  */

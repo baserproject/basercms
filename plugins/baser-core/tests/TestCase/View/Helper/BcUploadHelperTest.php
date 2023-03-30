@@ -20,7 +20,6 @@ use BaserCore\View\Helper\BcUploadHelper;
 /**
  * test for BcUploadHelper
  *
- * @package         Baser.Test.Case.View.Helper
  * @property  BcUploadHelper $BcUpload
  */
 class BcUploadHelperTest extends BcTestCase

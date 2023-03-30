@@ -25,7 +25,6 @@ use BaserCore\Controller\Component\BcAdminContentsComponent;
 /**
  * Class BcAdminContentsComponentTest
  *
- * @package BaserCore\Test\TestCase\Controller\Component
  * @property BcAdminContentsComponent $BcAdminContents
  */
 class BcAdminContentsComponentTest extends BcTestCase

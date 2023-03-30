@@ -7,7 +7,6 @@
  *
  * @copyright       Copyright (c) baserCMS Users Community
  * @link            https://basercms.net baserCMS Project
- * @package         Baser.View
  * @since           baserCMS v 0.1.0
  * @license         https://basercms.net/license/index.html
  */

@@ -5,8 +5,6 @@
  *
  * @copyright        Copyright (c) Catchup, Inc.
  * @link             https://catchup.co.jp
- * @package          CuCfText.View.Helper
- * @license          MIT LICENSE
  */
 
 namespace BcCcText\View\Helper;

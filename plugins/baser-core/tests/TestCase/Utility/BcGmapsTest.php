@@ -7,7 +7,6 @@ return;
  *
  * @copyright       Copyright (c) baserCMS Users Community
  * @link            https://basercms.net baserCMS Project
- * @package         Baser.Test.Case.Lib
  * @since           baserCMS v 4.0.10
  * @license         https://basercms.net/license/index.html
  */
@@ -16,7 +15,6 @@ App::uses('BcGmaps', 'Lib');
 /**
  * Class BcGmapsTest
  *
- * @package Baser.Test.Case.Lib
  * @property BcGmaps $BcGmaps
  */
 class BcGmapsTest extends BcTestCase

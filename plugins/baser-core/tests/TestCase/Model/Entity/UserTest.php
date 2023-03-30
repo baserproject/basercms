@@ -16,7 +16,6 @@ use BaserCore\TestSuite\BcTestCase;
 
 /**
  * Class UserTest
- * @package BaserCore\Test\TestCase\Model\Entity
  */
 class UserTest extends BcTestCase
 {

@@ -18,7 +18,6 @@ use BaserCore\Model\Table\AppTable;
  *
  * テーマフォルダモデル
  *
- * @package Baser.Model
  */
 class ThemeFoldersTable extends AppTable
 {

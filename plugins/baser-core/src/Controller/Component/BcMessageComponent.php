@@ -23,7 +23,6 @@ use BaserCore\Annotation\Checked;
 /**
  * Class BcMessageComponent
  * 表示面へのメッセージをコントロールする為のコンポーネント
- * @package BaserCore\Controller\Component
  * @property FlashComponent $Flash
  */
 class BcMessageComponent extends Component

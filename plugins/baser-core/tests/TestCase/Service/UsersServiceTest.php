@@ -22,7 +22,6 @@ use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class UsersServiceTest
- * @package BaserCore\Test\TestCase\Service
  * @property UsersService $Users
  */
 class UsersServiceTest extends BcTestCase

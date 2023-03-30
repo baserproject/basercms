@@ -172,7 +172,7 @@ class SitesController extends BcApiController
      * @noTodo
      * @unitTest
      */
-    public function get_selectable_devices_and_lang(SitesServiceInterface $service, $mainSiteId, $currentSiteId = null)
+    public function get_selectable_devices_and_lang(SitesServiceInterface $service, $mainSiteId = null, $currentSiteId = null)
     {
         $this->set([
             'devices' => $service->getSelectableDevices($mainSiteId, $currentSiteId),

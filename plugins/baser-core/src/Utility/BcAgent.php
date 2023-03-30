@@ -16,7 +16,6 @@ use BaserCore\Annotation\UnitTest;
 /**
  * Class BcAgent
  *
- * @package Baser.Lib
  */
 class BcAgent extends BcAbstractDetector
 {

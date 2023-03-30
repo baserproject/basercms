@@ -22,7 +22,6 @@ use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * Class Site
- * @package BaserCore\Model\Entity
  * @property int $id
  * @property string $name
  * @property int $main_site_id

@@ -33,7 +33,6 @@ use BaserCore\Annotation\Note;
  * - フロントエンドでコンテンツデータを設定
  *        Controller / View にて、$this->request->getAttribute('currentContent') で参照できる
  *
- * @package BaserCore\Controller\Component
  * @property Controller $_Controller
  * @property ServerRequest $Request
  * @property ContentsServiceInterface $ContentsService

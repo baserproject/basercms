@@ -17,7 +17,6 @@ namespace BaserCore\Model\Table;
  *
  * ツールモデル
  *
- * @package Baser.Model
  */
 class ToolsTable extends AppTable
 {

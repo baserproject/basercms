@@ -6,7 +6,6 @@
  *
  * @copyright       Copyright (c) baserCMS Users Community
  * @link            https://basercms.net baserCMS Project
- * @package         Blog.Test.Case.Controller
  * @since           baserCMS v 4.0.9
  * @license         https://basercms.net/license/index.html
  */

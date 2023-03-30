@@ -21,6 +21,7 @@ use BcInstaller\Service\Admin\InstallationsAdminServiceInterface;
 use Cake\Core\Configure;
 use Cake\Event\EventInterface;
 use Cake\Http\Cookie\Cookie;
+use Cake\Http\Response;
 use Cake\ORM\Exception\PersistenceFailedException;
 use Cake\Utility\Hash;
 use BaserCore\Annotation\UnitTest;
@@ -85,7 +86,7 @@ class InstallationsController extends BcAdminAppController
     /**
      * Step 3: データベースの接続設定
      *
-     * @return void
+     * @return void|Response
      * @noTodo
      * @checked
      */
@@ -122,7 +123,7 @@ class InstallationsController extends BcAdminAppController
                         );
                         $this->BcMessage->setInfo(__d('baser_core', 'データベースの構築に成功しました。'));
                         return $this->redirect(['action' => 'step4']);
-                    } catch (BcException $e) {
+                    } catch (\Throwable $e) {
                         $errorMessage = __d('baser_core', 'データベースの構築中にエラーが発生しました。') . "\n" . $e->getMessage();
                         $this->BcMessage->setError($errorMessage);
                     }

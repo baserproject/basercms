@@ -22,7 +22,6 @@ use BaserCore\Annotation\Note;
 
 /**
  * Class PageValidation
- * @package BaserCore\Model\Validation
  */
 class PageValidation extends Validation
 {

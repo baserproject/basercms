@@ -25,7 +25,6 @@ use BaserCore\Controller\Component\BcFrontContentsComponent;
 /**
  * Class BcFrontContentsComponentTest
  *
- * @package BaserCore\Test\TestCase\Controller\Component
  * @property BcFrontContentsComponent $BcFrontContents
  */
 class BcFrontContentsComponentTest extends BcTestCase

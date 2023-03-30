@@ -20,7 +20,6 @@ use BaserCore\Annotation\Checked;
 
 /**
  * Class Plugin
- * @package BcEditorTemplate
  */
 class Plugin extends BcPlugin
 {

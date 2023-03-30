@@ -25,7 +25,6 @@ use BaserCore\Annotation\UnitTest;
 /**
  * UploaderViewEventListener
  *
- * @package Uploader.Event
  * @property BcHtmlHelper $BcHtml
  */
 class BcUploaderViewEventListener extends BcViewEventListener

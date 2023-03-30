@@ -20,7 +20,6 @@ use Cake\Event\EventInterface;
 
 /**
  * Class AppController
- * @package BcBlog\Controller
  */
 class AppController extends BaseController
 {

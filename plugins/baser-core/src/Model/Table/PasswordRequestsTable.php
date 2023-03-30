@@ -23,7 +23,6 @@ use BaserCore\Annotation\Checked;
 
 /**
  * Class UsersTable
- * @package BaserCore\Model\Table
  * @property BelongsTo $UserGroups
  * @method User get($primaryKey, $options = [])
  * @method User newEntity($data = null, array $options = [])

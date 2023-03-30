@@ -20,7 +20,6 @@ use Cake\Core\ContainerInterface;
 
 /**
  * Class Plugin
- * @package BcThemeFile
  */
 class Plugin extends BcPlugin
 {

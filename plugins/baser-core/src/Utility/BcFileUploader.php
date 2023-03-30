@@ -191,6 +191,7 @@ class BcFileUploader
         $files = [];
         foreach($this->settings['fields'] as $setting) {
             $name = $setting['name'];
+            $file = [];
             if (!empty($data[$name]) && is_array($data[$name])) {
                 $file = $data[$name];
                 $file['uploadable'] = $this->isUploadable($setting['type'], $file['type'], $file);

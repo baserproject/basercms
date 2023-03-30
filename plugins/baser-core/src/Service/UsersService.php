@@ -34,7 +34,6 @@ use Cake\Http\Response;
 
 /**
  * Class UsersService
- * @package BaserCore\Service
  * @property UsersTable $Users
  * @property LoginStoresTable $LoginStores
  */

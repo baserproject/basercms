@@ -16,7 +16,6 @@ use BaserCore\TestSuite\BcTestCase;
 
 /**
  * Class PasswordRequest
- * @package BaserCore\Test\TestCase\Model\Entity
  */
 class PasswordRequestTest extends BcTestCase
 {

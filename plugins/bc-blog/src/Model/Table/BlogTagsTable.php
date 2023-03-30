@@ -22,7 +22,6 @@ use Cake\Validation\Validator;
 /**
  * ブログタグモデル
  *
- * @package Blog.Model
  */
 class BlogTagsTable extends BlogAppTable
 {

@@ -15,14 +15,13 @@ use Cake\Datasource\ResultSetInterface;
 
 /**
  * Interface DblogsServiceInterface
- * @package BaserCore\Service
  */
 interface DblogsServiceInterface extends CrudBaseServiceInterface
 {
 
     /**
      * 最新のDBログ一覧を取得
-     * 
+     *
      * @param int $limit
      * @checked
      * @noTodo
@@ -32,7 +31,7 @@ interface DblogsServiceInterface extends CrudBaseServiceInterface
 
     /**
      * DBログをすべて削除
-     * 
+     *
      * @return int
      * @checked
      * @noTodo

@@ -90,16 +90,17 @@ class BlogCategoriesService implements BlogCategoriesServiceInterface
         ], $queryParams);
 
         $query = $this->BlogCategories->find($type);
-
+        $conditions = [];
         if ($queryParams['status'] === 'publish') {
             $fields = $this->BlogCategories->getSchema()->columns();
             $query = $query->contain(['BlogContents' => ['Contents']])
                 ->select($fields);
-            $query->where($this->BlogCategories->BlogContents->Contents->getConditionAllowPublish());
+            $conditions = $this->BlogCategories->BlogContents->Contents->getConditionAllowPublish();
+            $conditions = array_merge($conditions, ['BlogCategories.status' => true]);
         }
 
-        $conditions = [];
-        if ($blogContentId) $conditions = ['BlogCategories.blog_content_id' => $blogContentId];
+
+        if ($blogContentId) $conditions = array_merge($conditions, ['BlogCategories.blog_content_id' => $blogContentId]);
         return $query->where($conditions);
     }
 

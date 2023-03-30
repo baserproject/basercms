@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<phpdocumentor
+        configVersion="3"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="https://www.phpdoc.org"
+        xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/phpDocumentor/phpDocumentor/master/data/xsd/phpdoc.xsd"
+>
+    <paths>
+        <output>reference</output>
+    </paths>
+    <version number="latest">
+        <api>
+            <source dsn=".">
+                <path>plugins/baser-core/src</path>
+                <path>plugins/bc-admin-third/src</path>
+                <path>plugins/bc-blog/src</path>
+                <path>plugins/bc-content-link/src</path>
+                <path>plugins/bc-custom-content/src</path>
+                <path>plugins/bc-editor-template/src</path>
+                <path>plugins/bc-favorite/src</path>
+                <path>plugins/bc-front/src</path>
+                <path>plugins/bc-installer/src</path>
+                <path>plugins/bc-mail/src</path>
+                <path>plugins/bc-search-index/src</path>
+                <path>plugins/bc-theme-config/src</path>
+                <path>plugins/bc-theme-file/src</path>
+                <path>plugins/bc-uploader/src</path>
+                <path>plugins/bc-widget-area/src</path>
+            </source>
+        </api>
+    </version>
+</phpdocumentor>

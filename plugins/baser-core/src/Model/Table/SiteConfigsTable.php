@@ -25,7 +25,6 @@ use BaserCore\Utility\BcUtil;
  *
  * システム設定モデル
  *
- * @package BaserCore\Model\Table
  * @method SiteConfig newEntity($data = null, array $options = [])
  * @method BcKeyValueBehavior saveValue($key, $value)
  */

@@ -13,7 +13,6 @@ namespace BaserCore\Annotation;
 
 /**
  * Class NoTodo
- * @package BaserCore\Annotation
  * @Annotation
  */
 final class NoTodo

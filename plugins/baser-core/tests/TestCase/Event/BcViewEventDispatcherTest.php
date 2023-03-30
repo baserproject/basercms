@@ -21,7 +21,6 @@ use Cake\Event\EventManager;
 /**
  * Class BcViewEventDispatcherTest
  *
- * @package Baser.Test.Case.Event
  * @property  BcViewEventDispatcher $bcViewEventDispatcher
  */
 class BcViewEventDispatcherTest extends BcTestCase

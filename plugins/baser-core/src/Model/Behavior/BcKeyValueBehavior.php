@@ -17,7 +17,6 @@ use BaserCore\Annotation\Checked;
 
 /**
  * Class BcKeyValueBehavior
- * @package BaserCore\Model\Table
  */
 class BcKeyValueBehavior extends Behavior
 {

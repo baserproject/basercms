@@ -19,7 +19,6 @@ use Cake\ORM\Entity;
 
 /**
  * Class Plugin
- * @package BaserCore\Model\Entity
  * @property int $id
  * @property string $name
  * @property string|null $title

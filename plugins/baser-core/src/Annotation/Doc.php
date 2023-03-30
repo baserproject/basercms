@@ -13,7 +13,6 @@ namespace BaserCore\Annotation;
 
 /**
  * Class Doc
- * @package BaserCore\Annotation
  * @Annotation
  */
 final class Doc

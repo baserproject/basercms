@@ -19,7 +19,6 @@ use BaserCore\Model\Behavior\BcContentsBehavior;
 
 /**
  * Class BcContentsBehaviorTest
- * @package BaserCore\Test\TestCase\Model\Behavior
  * @property ContentFoldersTable $ContentsFolder
  *
  */

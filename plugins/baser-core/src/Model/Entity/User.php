@@ -23,7 +23,6 @@ use Cake\Utility\Hash;
 
 /**
  * Class User
- * @package BaserCore\Model\Entity
  * @property int $id
  * @property string $name
  * @property string $password

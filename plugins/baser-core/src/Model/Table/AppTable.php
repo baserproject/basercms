@@ -26,7 +26,6 @@ use Cake\Datasource\EntityInterface;
 
 /**
  * Class AppTable
- * @package BaserCore\Model\Table
  */
 class AppTable extends Table
 {

@@ -17,7 +17,6 @@ use Cake\Validation\Validator;
 
 /**
  * Class UserGroupsTableTest
- * @package BaserCore\Test\TestCase\Model\Table
  * @property UserGroupsTable $UserGroups
  */
 class UserGroupsTableTest extends BcTestCase

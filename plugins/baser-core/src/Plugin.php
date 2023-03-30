@@ -56,7 +56,6 @@ use ReflectionProperty;
 
 /**
  * Class plugin
- * @package BaserCore
  */
 class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
 {

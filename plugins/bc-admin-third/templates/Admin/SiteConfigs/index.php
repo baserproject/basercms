@@ -5,7 +5,6 @@
  *
  * @copyright       Copyright (c) baserCMS Users Community
  * @link            https://basercms.net baserCMS Project
- * @package         Baser.View
  * @since           baserCMS v 0.1.0
  * @license         https://basercms.net/license/index.html
  */
@@ -368,20 +367,20 @@ $this->BcBaser->js('admin/site_configs/index.bundle', false, ['id' => 'AdminSite
         <td class="col-input bca-form-table__input">
           <?php echo $this->BcAdminForm->control('use_site_device_setting', [
             'type' => 'checkbox',
-            'label' => __d('baser_core', 'サブサイトでデバイス設定を利用する')
+            'label' => __d('baser_core', 'サイト管理でデバイス設定を利用する')
           ]) ?>
           <i class="bca-icon--question-circle bca-help"></i>
           <div class="bca-helptext">
-            <?php echo __d('baser_core', 'サブサイトにデバイス属性を持たせ、サイトアクセス時、ユーザーエージェントを判定し適切なサイトを表示する機能を利用します。') ?>
+            <?php echo __d('baser_core', 'サイトにデバイス属性を持たせ、サイトアクセス時、ユーザーエージェントを判定し適切なサイトを表示する機能を利用します。') ?>
           </div>
           <br>
           <?php echo $this->BcAdminForm->control('use_site_lang_setting', [
             'type' => 'checkbox',
-            'label' => __d('baser_core', 'サブサイトで言語設定を利用する')
+            'label' => __d('baser_core', 'サイト管理で言語設定を利用する')
           ]) ?>
           <i class="bca-icon--question-circle bca-help"></i>
           <div class="bca-helptext">
-            <?php echo __d('baser_core', 'サブサイトに言語属性を持たせ、サイトアクセス時、ブラウザの言語設定を判定し適切なサイトを表示する機能を利用します。') ?>
+            <?php echo __d('baser_core', 'サイトに言語属性を持たせ、サイトアクセス時、ブラウザの言語設定を判定し適切なサイトを表示する機能を利用します。') ?>
           </div>
           <?php echo $this->BcAdminForm->error('use_site_device_setting') ?>
           <?php echo $this->BcAdminForm->error('use_site_lang_setting') ?>

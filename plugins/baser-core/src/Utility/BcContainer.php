@@ -18,7 +18,6 @@ use BaserCore\Annotation\Checked;
 
 /**
  * Class BcContainer
- * @package BaserCore\Utility
  */
 class BcContainer
 {

@@ -20,7 +20,6 @@ use Cake\Core\ContainerInterface;
 
 /**
  * Class Plugin
- * @package BcWidgetArea
  */
 class Plugin extends BcPlugin
 {

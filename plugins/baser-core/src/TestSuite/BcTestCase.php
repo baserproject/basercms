@@ -50,7 +50,6 @@ use BaserCore\ServiceProvider\BcServiceProvider;
 
 /**
  * Class BcTestCase
- * @package BaserCore\TestSuite
  */
 class BcTestCase extends TestCase
 {

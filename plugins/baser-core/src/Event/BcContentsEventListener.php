@@ -29,7 +29,6 @@ use BaserCore\Annotation\UnitTest;
  * 階層コンテンツと連携したフォーム画面を表示する為のイベント
  * BcContentsComponent でコントロールされる
  *
- * @package Baser.Event
  */
 class BcContentsEventListener extends BcEventListener
 {

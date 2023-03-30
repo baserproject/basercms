@@ -19,7 +19,6 @@ use Cake\ORM\TableRegistry;
 
 /**
  * Class Permission
- * @package BaserCore\Model\Entity
  * @property int $id
  * @property int $no
  * @property int $sort

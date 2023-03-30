@@ -40,7 +40,6 @@ use BaserCore\Annotation\UnitTest;
  *
  * サイトモデル
  * @method Site newEntity($data = null, array $options = [])
- * @package Baser.Model
  */
 class SitesTable extends AppTable
 {

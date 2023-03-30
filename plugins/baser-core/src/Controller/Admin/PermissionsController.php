@@ -28,7 +28,6 @@ use Cake\ORM\TableRegistry;
 /**
  * Class PermissionsController
  *
- * @package BaserCore\Controller\Admin
  * @property UserGroupsTable $UserGroups
  * @property PermissionsTable $Permissions
  * @property AuthenticationComponent $Authentication

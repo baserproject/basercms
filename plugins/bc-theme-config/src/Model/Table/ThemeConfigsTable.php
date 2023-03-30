@@ -23,7 +23,6 @@ use Cake\Validation\Validator;
  *
  * テーマ設定モデル
  *
- * @package Baser.Model
  */
 class ThemeConfigsTable extends AppTable
 {

@@ -21,7 +21,6 @@ use Cake\Event\EventManager;
 /**
  * Class BcModelEventDispatcherTest
  *
- * @package Baser.Test.Case.Event
  * @property  BcModelEventDispatcher $bcModelEventDispatcher
  * @property eventManager $eventManager
  */

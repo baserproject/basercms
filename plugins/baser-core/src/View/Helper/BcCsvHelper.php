@@ -17,7 +17,6 @@ use Cake\View\Helper;
 /**
  * CSVヘルパー
  *
- * @package Baser.View.Helper
  */
 class BcCsvHelper extends Helper
 {

@@ -26,7 +26,6 @@ use BaserCore\Annotation\UnitTest;
 /**
  * FormHelper 拡張クラス
  *
- * @package Baser.View.Helper
  * @property BcHtmlHelper $BcHtml
  * @property BcUploadHelper $BcUpload
  * @property BcCkeditorHelper $BcCkeditor

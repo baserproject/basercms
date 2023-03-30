@@ -23,7 +23,6 @@ use BaserCore\Annotation\Checked;
 
 /**
  * Class UserValidation
- * @package BaserCore\Model\Validation
  */
 class UserValidation extends Validation
 {

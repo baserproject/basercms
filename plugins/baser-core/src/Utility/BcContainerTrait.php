@@ -17,7 +17,6 @@ use BaserCore\Annotation\Checked;
 
 /**
  * Trait BcContainerTrait
- * @package BaserCore\Utility
  */
 trait BcContainerTrait
 {

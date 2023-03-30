@@ -17,7 +17,6 @@ use Cake\Core\Container;
 
 /**
  * Class BcServiceProviderTest
- * @package BaserCore\Test\TestCase\ServiceProvider
  * @property BcServiceProvider $Provider
  */
 class BcServiceProviderTest extends BcTestCase

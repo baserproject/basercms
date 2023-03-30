@@ -32,7 +32,6 @@ use BaserCore\View\Helper\BcBaserHelper;
 
 /**
  * Class BcBaserHelperTest
- * @package BaserCore\Test\TestCase\View\Helper
  * @property HtmlHelper $Html
  * @property BcBaserHelper $BcBaser
  * @property FlashHelper $Flash

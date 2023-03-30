@@ -7,13 +7,11 @@ return;
  *
  * @copyright       Copyright (c) baserCMS Users Community
  * @link            https://basercms.net baserCMS Project
- * @package         Uploader.Test.Case
  * @since           baserCMS v 3.0.10
  * @license         https://basercms.net/license/index.html
  */
 
 /**
- * @package Uploader.Test.Case
  */
 class UploaderAllTest extends CakeTestSuite
 {

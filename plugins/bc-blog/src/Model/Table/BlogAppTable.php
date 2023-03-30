@@ -15,8 +15,6 @@ use BaserCore\Model\Table\AppTable;
 
 /**
  * ブログモデル基底クラス
- *
- * @package         Blog.Model
  */
 class BlogAppTable extends AppTable
 {

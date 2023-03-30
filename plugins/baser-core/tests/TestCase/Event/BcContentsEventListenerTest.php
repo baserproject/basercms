@@ -20,7 +20,6 @@ use BaserCore\Event\BcContentsEventListener;
 /**
  * Class BcContentsEventListenerTest
  *
- * @package BaserCore\Test\TestCase\Event
  * @property  BcContentsEventListener $BcContentsEventListener
  */
 class BcContentsEventListenerTest extends BcTestCase

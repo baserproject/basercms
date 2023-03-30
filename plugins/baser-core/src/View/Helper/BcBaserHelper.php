@@ -483,7 +483,7 @@ class BcBaserHelper extends Helper
     /**
      * 管理者グループかどうかチェックする
      *
-     * @param array| BaserCore\Model\Entity\User $user ユーザー（初期値 : null）※ 指定しない場合は、現在のログインユーザーについてチェックする
+     * @param array|\BaserCore\Model\Entity\User $user ユーザー（初期値 : null）※ 指定しない場合は、現在のログインユーザーについてチェックする
      * @return bool 管理者グループの場合は true を返す
      * @checked
      * @noTodo
@@ -1396,7 +1396,8 @@ class BcBaserHelper extends Helper
      * @param mixed $path CSSファイルのパス（css フォルダからの相対パス）拡張子は省略可
      * @param bool $inline コンテンツ内に Javascript を出力するかどうか（初期値 : true）
      * @param mixed $options オプション
-     * ※💣inline=false→block=trueに変更になったため注意 @return string|void
+     * ※💣inline=false→block=trueに変更になったため注意
+     * @return string|void
      * @checked
      * @unitTest
      * @noTodo
@@ -2386,7 +2387,7 @@ END_FLASH;
     /**
      * WebサイトURLを出力する
      *
-     * @param boolean ssl （初期値 : false）
+     * @param bool ssl （初期値 : false）
      * @return void
      */
     public function siteUrl($ssl = false)
@@ -2397,7 +2398,7 @@ END_FLASH;
     /**
      * WebサイトURLを取得する
      *
-     * @param boolean ssl （初期値 : false）
+     * @param bool ssl （初期値 : false）
      * @return string サイト基本設定のWebサイト名
      */
     public function getSiteUrl($ssl = false)
@@ -2630,7 +2631,6 @@ END_FLASH;
     /**
      * alternate タグ出力
      * スマホサイトが存在し、別URLの場合に出力する
-     * @param $contentUrl
      */
     public function setAlternateUrl()
     {
@@ -2661,7 +2661,7 @@ END_FLASH;
     /**
      * トップページのタイトルをセットする
      *
-     * @param $title
+     * @param string $title
      */
     public function setHomeTitle($title = null)
     {
@@ -2768,8 +2768,8 @@ END_FLASH;
     /**
      * IDがコンテンツ自身の親のIDかを判定する
      *
-     * @param $id コンテンツ自身のID
-     * @param $parentId 親として判定するID
+     * @param int $id コンテンツ自身のID
+     * @param int $parentId 親として判定するID
      * @return bool
      */
     public function isContentsParentId($id, $parentId)

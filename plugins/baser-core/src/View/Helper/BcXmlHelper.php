@@ -17,7 +17,6 @@ use Cake\View\Helper;
 /**
  * XMLヘルパー拡張
  *
- * @package Baser.View.Helper
  */
 class BcXmlHelper extends Helper
 {

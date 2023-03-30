@@ -19,7 +19,6 @@ use Cake\Core\Exception\Exception;
 
 /**
  * Interface UsersServiceInterface
- * @package BaserCore\Service
  */
 interface UsersServiceInterface extends CrudBaseServiceInterface
 {

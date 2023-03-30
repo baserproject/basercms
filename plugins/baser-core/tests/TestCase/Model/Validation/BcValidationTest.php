@@ -18,7 +18,6 @@ use BaserCore\Model\Validation\BcValidation;
 
 /**
  * Class BcValidationTest
- * @package BaserCore\Test\TestCase\Model\Validation
  * @property BcValidation $BcValidation
  */
 class BcValidationTest extends BcTestCase

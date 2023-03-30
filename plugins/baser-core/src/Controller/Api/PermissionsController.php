@@ -117,7 +117,7 @@ class PermissionsController extends BcApiController
      */
     public function delete(PermissionsServiceInterface $service, int $permissionId)
     {
-        $this->request->allowMethod(['post', 'put', 'patch']);
+        $this->request->allowMethod(['post', 'delete']);
         $permission = null;
         try {
             $permission = $service->get($permissionId);
@@ -274,18 +274,28 @@ class PermissionsController extends BcApiController
         $conditions = [
             'user_group_id' => $userGroupId,
         ];
-        $permission = $service->get($this->request->getData('id'));
-        if (!$service->changeSort($this->request->getData('id'), $this->request->getData('offset'), $conditions)) {
-            $this->setResponse($this->response->withStatus(400));
-            $message = __d('baser_core', '一度リロードしてから再実行してみてください。');
-        } else {
-            $message = sprintf(__d('baser_core', 'アクセスルール「%s」の並び替えを更新しました。'), $permission->name);
+        $permission = null;
+        try {
+            $permission = $service->get($this->request->getData('id'));
+            if (!$service->changeSort($this->request->getData('id'), $this->request->getData('offset'), $conditions)) {
+                $this->setResponse($this->response->withStatus(400));
+                $message = __d('baser_core', '一度リロードしてから再実行してみてください。');
+            } else {
+                $message = sprintf(__d('baser_core', 'アクセスルール「%s」の並び替えを更新しました。'), $permission->name);
+            }
+        } catch (RecordNotFoundException $e) {
+            $this->setResponse($this->response->withStatus(404));
+            $message = __d('baser_core', 'データが見つかりません。');
+        } catch (\Throwable $e) {
+            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
+            $this->setResponse($this->response->withStatus(500));
         }
+
         $this->set([
             'message' => $message,
             'permission' => $permission
         ]);
-        $this->viewBuilder()->setOption('serialize', ['plugin', 'message']);
+        $this->viewBuilder()->setOption('serialize', ['permission', 'message']);
     }
 
 }

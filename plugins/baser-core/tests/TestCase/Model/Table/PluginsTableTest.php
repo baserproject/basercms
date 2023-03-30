@@ -19,7 +19,6 @@ use Cake\Validation\Validator;
 
 /**
  * Class PluginsTableTest
- * @package BaserCore\Test\TestCase\Model\Table
  * @property PluginsTable $Plugins
  */
 class PluginsTableTest extends BcTestCase

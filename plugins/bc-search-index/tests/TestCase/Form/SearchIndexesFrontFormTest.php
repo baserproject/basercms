@@ -17,7 +17,6 @@ use Cake\Form\Schema;
 
 /**
  * Class SearchIndexesFrontFormTest
- * @package BcSearchIndex\Test\TestCase\Form
  */
 class SearchIndexesFrontFormTest extends BcTestCase
 {

@@ -31,7 +31,6 @@ use Cake\View\View;
 /**
  * メッセージモデル
  *
- * @package Mail.Model
  *
  */
 class MailMessagesTable extends MailAppTable

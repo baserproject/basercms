@@ -25,7 +25,6 @@ use Cake\Datasource\EntityInterface;
 
 /**
  * Class ContentFoldersTable
- * @package BaserCore\Model\Table
  */
 class ContentFoldersTable extends AppTable
 {

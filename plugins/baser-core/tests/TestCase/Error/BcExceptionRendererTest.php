@@ -21,7 +21,6 @@ use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class BcExceptionRendererTest
- * @package BaserCore\Test\TestCase\Error
  */
 class BcExceptionRendererTest extends BcTestCase
 {

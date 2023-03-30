@@ -11,6 +11,7 @@
 
 namespace BaserCore\Test\TestCase\Controller\Api;
 
+use BaserCore\Controller\Api\ContentFoldersController;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\TestSuite\IntegrationTestTrait;
 use BaserCore\Service\ContentFoldersService;
@@ -59,6 +60,15 @@ class ContentFoldersControllerTest extends BcTestCase
         $this->accessToken = $token['access_token'];
         $this->refreshToken = $token['refresh_token'];
         $this->ContentFoldersService = new ContentFoldersService();
+    }
+
+    /**
+     * test initialize
+     */
+    public function test_initialize()
+    {
+        $controller = new ContentFoldersController($this->getRequest());
+        $this->assertEquals($controller->Authentication->unauthenticatedActions, ['index', 'view']);
     }
 
     /**

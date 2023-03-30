@@ -112,6 +112,9 @@ node_modules
 !/composer/.gitkeep
 # vendor
 !/vendor/.gitkeep
+# db
+/db/*
+!/db/.gitkeep
 # etc
 LOCAL_TODO.md
 LOCAL_Q&A.md

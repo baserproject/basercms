@@ -17,7 +17,6 @@ use BcMail\Service\MailConfigsServiceInterface;
 /**
  * メールフォーム設定コントローラー
  *
- * @package Mail.Controller
  */
 class MailConfigsController extends MailAdminAppController
 {

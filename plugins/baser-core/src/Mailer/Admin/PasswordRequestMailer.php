@@ -22,7 +22,6 @@ use BaserCore\Annotation\Checked;
 
 /**
  * Class PasswordRequestMailer
- * @package BaserCore\Mailer
  */
 class PasswordRequestMailer extends BcAdminMailer
 {

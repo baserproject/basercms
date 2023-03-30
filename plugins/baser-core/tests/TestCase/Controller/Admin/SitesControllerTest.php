@@ -21,7 +21,6 @@ use Cake\TestSuite\IntegrationTestTrait;
 
 /**
  * Class SitesControllerTest
- * @package BaserCore\Test\TestCase\Controller\Admin
  */
 class SitesControllerTest extends BcTestCase
 {

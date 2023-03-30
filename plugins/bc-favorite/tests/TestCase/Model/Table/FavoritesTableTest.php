@@ -17,7 +17,6 @@ use BaserCore\Utility\BcUtil;
 
 /**
  * Class FavoriteTableTest
- * @package BcFavorite\Test\TestCase\Model\Table
  */
 class FavoritesTableTest extends BcTestCase
 {
