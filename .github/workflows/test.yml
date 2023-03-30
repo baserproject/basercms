@@ -73,6 +73,6 @@ jobs:
           cd baserproject.github.io
           cp -pr ../reference ./5/plugin/
           git add -A
-          git commit -m "[actions] update baserCMS Api Reference"
+          git commit -m "[actions] update baserCMS Api Reference" || echo "No changes to commit"
           git push origin master
 
