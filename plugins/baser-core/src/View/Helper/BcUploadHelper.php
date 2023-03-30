@@ -144,6 +144,10 @@ class BcUploadHelper  extends Helper
 
         if (empty($options['value'])) {
             $value = Hash::get($entity, $fieldName);
+            if (!$value && strpos($fieldName, '.') !== false) {
+                [, $fieldName] = explode('.', $fieldName);
+                $value = Hash::get($entity, $fieldName);
+            }
         } else {
             $value = $options['value'];
         }
