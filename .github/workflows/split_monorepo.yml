@@ -67,7 +67,7 @@ jobs:
                 name: Monorepo Split of ${{ matrix.package }}
                 uses: "symplify/monorepo-split-github-action@v2.3.0"
                 env:
-                    GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+                    GITHUB_TOKEN: ${{ secrets.TOKEN }}
                 with:
                     package_directory: 'plugins/${{ matrix.package.local_path }}'
                     repository_organization: 'baserproject'
@@ -81,7 +81,7 @@ jobs:
                 name: Monorepo Tagged Split of ${{ matrix.package }}
                 uses: "symplify/monorepo-split-github-action@v2.3.0"
                 env:
-                    GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+                    GITHUB_TOKEN: ${{ secrets.TOKEN }}
                 with:
                     tag: ${GITHUB_REF#refs/tags/}
                     package_directory: 'plugins/${{ matrix.package.local_path }}'
