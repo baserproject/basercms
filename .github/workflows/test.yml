@@ -61,7 +61,7 @@ jobs:
         run: |
           cd docker
           docker exec bc5-php wget https://phpdoc.org/phpDocumentor.phar
-          docker exec bc5-php php phpDocumentor.phar --title="baserCMS クラスメソッドリファレンス"
+          docker exec bc5-php php phpDocumentor.phar --title="baserCMS クラスリファレンス"
 
       - name: Deploy to Github Pages
         env:
