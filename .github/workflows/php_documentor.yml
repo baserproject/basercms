@@ -1,0 +1,54 @@
+#
+# php_documentor.yml
+# PhpDocumentor で作成したページを GitHub Pages にデプロイする
+#
+
+name: PhpDocumentor
+
+on:
+  push:
+    branches:
+      - 'master'
+
+jobs:
+  test:
+    name: PhpDocumentor
+
+    runs-on: ubuntu-20.04
+
+    strategy:
+      matrix:
+        php-version: ['8.1']
+
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Run compose
+        run: |
+          cd docker
+          cp docker-compose.yml.default docker-compose.yml
+          sed -i -e "s/basercms:php8.1/basercms:php${{ matrix.php-version }}/g" docker-compose.yml
+          sed -i -e "s/XDEBUG_MODE: \"debug\"/XDEBUG_MODE: \"off\"/g" docker-compose.yml
+          docker-compose up -d
+
+      - name: PhpDocumentor
+        run: |
+          cd docker
+          docker exec bc5-php wget https://phpdoc.org/phpDocumentor.phar
+          docker exec bc5-php php phpDocumentor.phar --title="baserCMS クラスリファレンス"
+
+      - name: Deploy to Github Pages
+        env:
+          TOKEN: ${{ secrets.TOKEN }}
+        run: |
+          git config --global user.name 'ryuring'
+          git config --global user.email 'ryuring55@github.com'
+          git clone https://ryuring:${TOKEN}@github.com/baserproject/baserproject.github.io.git
+          cd baserproject.github.io
+          cp -pr ../reference ./5/plugin/
+          git add -A
+          git commit -m "[actions] update baserCMS Class Method Reference" || echo "No changes to commit"
+          git push origin master
+

@@ -18,6 +18,7 @@ use BaserCore\Controller\Api\BcApiController;
 use BcMail\Service\MailFieldsService;
 use BcMail\Service\MailFieldsServiceInterface;
 use Cake\Datasource\Exception\RecordNotFoundException;
+use Cake\Http\Exception\ForbiddenException;
 use Cake\ORM\Exception\PersistenceFailedException;
 
 /**
@@ -25,6 +26,19 @@ use Cake\ORM\Exception\PersistenceFailedException;
  */
 class MailFieldsController extends BcApiController
 {
+
+    /**
+     * initialize
+     * @return void
+     * @checked
+     * @unitTest
+     * @unitTest
+     */
+    public function initialize(): void
+    {
+        parent::initialize();
+        $this->Authentication->allowUnauthenticated(['index', 'view']);
+    }
 
     /**
      * メールフィールドのバッチ処理
@@ -120,11 +134,18 @@ class MailFieldsController extends BcApiController
     public function index(MailFieldsServiceInterface $service, int $mailContentId)
     {
         $this->request->allowMethod(['get']);
+
+        $queryParams = $this->getRequest()->getQueryParams();
+        if (isset($queryParams['status'])) {
+            if (!$this->isAdminApiEnabled()) throw new ForbiddenException();
+        }
+
         $mailFields = $message = null;
         try {
             $queryParams = array_merge([
                 'contain' => null,
-            ], $this->request->getQueryParams());
+                'status' => 'publish'
+            ], $queryParams);
             $mailFields = $this->paginate($service->getIndex($mailContentId, $queryParams));
         } catch (RecordNotFoundException $e) {
             $this->setResponse($this->response->withStatus(404));
@@ -154,8 +175,19 @@ class MailFieldsController extends BcApiController
      */
     public function view(MailFieldsServiceInterface $service, int $id)
     {
+        $this->request->allowMethod(['get']);
+
+        $queryParams = $this->getRequest()->getQueryParams();
+        if (isset($queryParams['status'])) {
+            if (!$this->isAdminApiEnabled()) throw new ForbiddenException();
+        }
+        $queryParams = array_merge([
+            'status' => 'publish',
+            'contain' => null
+        ], $queryParams);
+
         $this->set([
-            'mailField' => $service->get($id)
+            'mailField' => $service->get($id, $queryParams)
         ]);
         $this->viewBuilder()->setOption('serialize', ['mailField']);
     }

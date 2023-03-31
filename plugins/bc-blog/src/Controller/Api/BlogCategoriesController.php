@@ -82,13 +82,12 @@ class BlogCategoriesController extends BcApiController
      * [API] ブログカテゴリー一覧取得
      *
      * @param BlogCategoriesServiceInterface $service
-     * @param $blogContentId
      *
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function index(BlogCategoriesServiceInterface $service, $blogContentId)
+    public function index(BlogCategoriesServiceInterface $service)
     {
         $this->request->allowMethod(['get']);
 
@@ -97,13 +96,18 @@ class BlogCategoriesController extends BcApiController
             if (!$this->isAdminApiEnabled()) throw new ForbiddenException();
         }
 
+
+        if (!isset($queryParams['blog_content_id']) || empty($queryParams['blog_content_id'])) {
+            throw new BcException(__d('baser_core', 'パラメーターに blog_content_id が指定されていません。'));
+        }
+
         $queryParams = array_merge([
             'status' => 'publish'
         ], $queryParams);
 
         $blogCategories = $message = null;
         try {
-            $blogCategories = $this->paginate($service->getIndex($blogContentId, $queryParams));
+            $blogCategories = $this->paginate($service->getIndex($queryParams['blog_content_id'], $queryParams));
         } catch (RecordNotFoundException $e) {
             $this->setResponse($this->response->withStatus(404));
             $message = __d('baser_core', 'データが見つかりません。');
@@ -161,18 +165,21 @@ class BlogCategoriesController extends BcApiController
      * [API] ブログカテゴリーリスト取得
      *
      * @param BlogCategoriesServiceInterface $service
-     * @param $blogContentId
      *
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function list(BlogCategoriesServiceInterface $service, $blogContentId)
+    public function list(BlogCategoriesServiceInterface $service)
     {
         $this->request->allowMethod(['get']);
         $queryParams = $this->getRequest()->getQueryParams();
         if (isset($queryParams['status'])) {
             if (!$this->isAdminApiEnabled()) throw new ForbiddenException();
+        }
+
+        if (!isset($queryParams['blog_content_id']) || empty($queryParams['blog_content_id'])) {
+            throw new BcException(__d('baser_core', 'パラメーターに blog_content_id が指定されていません。'));
         }
 
         $queryParams = array_merge([
@@ -181,7 +188,7 @@ class BlogCategoriesController extends BcApiController
 
         $blogCategories = $message = null;
         try {
-            $blogCategories = $service->getList($blogContentId, $queryParams);
+            $blogCategories = $service->getList($queryParams['blog_content_id'], $queryParams);
         } catch (RecordNotFoundException $e) {
             $this->setResponse($this->response->withStatus(404));
             $message = __d('baser_core', 'データが見つかりません。');
@@ -199,18 +206,24 @@ class BlogCategoriesController extends BcApiController
     /**
      * [API] ブログカテゴリー新規追加
      * @param BlogCategoriesServiceInterface $service
-     * @param $blogContentId
      *
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function add(BlogCategoriesServiceInterface $service, $blogContentId)
+    public function add(BlogCategoriesServiceInterface $service)
     {
         $this->request->allowMethod(['post']);
+
+        $postData = $this->getRequest()->getData();
+
+        if (!isset($postData['blog_content_id']) || empty($postData['blog_content_id'])) {
+            throw new BcException(__d('baser_core', 'パラメーターに blog_content_id が指定されていません。'));
+        }
+
         $blogCategory = $errors = null;
         try {
-            $blogCategory = $service->create($blogContentId, $this->request->getData());
+            $blogCategory = $service->create($postData['blog_content_id'], $postData);
             $message = __d('baser_core', 'ブログカテゴリー「{0}」を追加しました。', $blogCategory->name);
         } catch (PersistenceFailedException $e) {
             $errors = $e->getEntity()->getErrors();

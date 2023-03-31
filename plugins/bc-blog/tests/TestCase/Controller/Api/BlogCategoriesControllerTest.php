@@ -11,6 +11,7 @@
 
 namespace BcBlog\Test\TestCase\Controller\Api;
 
+use BaserCore\Test\Factory\PermissionFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcBlog\Controller\Api\BlogCategoriesController;
@@ -108,7 +109,7 @@ class BlogCategoriesControllerTest extends BcTestCase
         BlogCategoryFactory::make(['id' => 2, 'blog_content_id' => 1, 'status' => false])->persist();
         BlogCategoryFactory::make(['id' => 3, 'blog_content_id' => 3, 'status' => true])->persist();
 
-        $this->get('/baser/api/bc-blog/blog_categories/index/1.json?token=' . $this->accessToken);
+        $this->get('/baser/api/bc-blog/blog_categories/index.json?blog_content_id=1&token=' . $this->accessToken);
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
         $this->assertCount(1, $result->blogCategories);
@@ -144,6 +145,7 @@ class BlogCategoriesControllerTest extends BcTestCase
      */
     public function test_list()
     {
+        PermissionFactory::make()->allowGuest('/baser/api/*')->persist();
         $this->loadFixtureScenario(
             BlogContentScenario::class,
             1,  // id
@@ -155,7 +157,7 @@ class BlogCategoriesControllerTest extends BcTestCase
         BlogPostFactory::make(['id' => 1, 'blog_content_id' => 1, 'blog_category_id' => 1, 'status' => true])->persist();
         BlogCategoryFactory::make(['id' => 3, 'title' => 'title 3', 'name' => 'name-3', 'blog_content_id' => 1])->persist();
 
-        $this->get('/baser/api/bc-blog/blog_categories/list/1.json?token=' . $this->accessToken);
+        $this->get('/baser/api/bc-blog/blog_categories/list.json?blog_content_id=1&token=' . $this->accessToken);
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals(get_object_vars($result->blogCategories)[3], 'title 3');
@@ -167,7 +169,7 @@ class BlogCategoriesControllerTest extends BcTestCase
      */
     public function test_add()
     {
-        $data = ['name' => 'blog-category-add', 'title' => 'test title'];
+        $data = ['blog_content_id' => 1, 'name' => 'blog-category-add', 'title' => 'test title'];
         $this->post('/baser/api/bc-blog/blog_categories/add/1.json?token=' . $this->accessToken, $data);
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
@@ -175,7 +177,7 @@ class BlogCategoriesControllerTest extends BcTestCase
         $this->assertEquals('test title', $result->blogCategory->title);
         $this->assertEquals('ブログカテゴリー「blog-category-add」を追加しました。', $result->message);
 
-        $this->post('/baser/api/bc-blog/blog_categories/add/1.json?token=' . $this->accessToken, $data);
+        $this->post('/baser/api/bc-blog/blog_categories/add.json?token=' . $this->accessToken, $data);
         $this->assertResponseCode(400);
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals('入力エラーです。内容を修正してください。', $result->message);

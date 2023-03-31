@@ -198,10 +198,11 @@ class BlogCommentsController extends BcApiController
         $this->request->allowMethod(['post', 'put']);
         $postData = $this->getRequest()->getData();
 
-        if (!$postData['blog_content_id']) {
+        if (!isset($queryParams['blog_content_id']) && !$postData['blog_content_id']) {
             throw new BcException(__d('baser_core', 'パラメーターに blog_content_id が指定されていません。'));
         }
-        if (!$postData['blog_post_id']) {
+
+        if (!isset($queryParams['blog_post_id']) && !$postData['blog_post_id']) {
             throw new BcException(__d('baser_core', 'パラメーターに blog_post_id が指定されていません。'));
         }
 
