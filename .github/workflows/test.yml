@@ -56,23 +56,3 @@ jobs:
         run: |
           cd docker
           docker exec bc5-php composer run-script test
-
-      - name: PhpDocumentor
-        run: |
-          cd docker
-          docker exec bc5-php wget https://phpdoc.org/phpDocumentor.phar
-          docker exec bc5-php php phpDocumentor.phar --title="baserCMS クラスリファレンス"
-
-      - name: Deploy to Github Pages
-        env:
-          TOKEN: ${{ secrets.TOKEN }}
-        run: |
-          git config --global user.name 'ryuring'
-          git config --global user.email 'ryuring55@github.com'
-          git clone https://ryuring:${TOKEN}@github.com/baserproject/baserproject.github.io.git
-          cd baserproject.github.io
-          cp -pr ../reference ./5/plugin/
-          git add -A
-          git commit -m "[actions] update baserCMS Class Method Reference" || echo "No changes to commit"
-          git push origin master
-
