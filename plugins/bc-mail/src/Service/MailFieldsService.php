@@ -48,13 +48,28 @@ class MailFieldsService implements MailFieldsServiceInterface
 
     /**
      * 単一データ取得
+     * @param int $id
+     * @param array $queryParams
      * @return EntityInterface|MailField
      * @checked
      * @noTodo
      */
-    public function get(int $id)
+    public function get(int $id, array $queryParams = [])
     {
-        return $this->MailFields->get($id);
+        $queryParams = array_merge([
+            'status' => ''
+        ], $queryParams);
+
+        $conditions = [];
+        if ($queryParams['status'] === 'publish') {
+            $conditions = $this->MailFields->MailContents->Contents->getConditionAllowPublish();
+            $conditions['use_field'] = true;
+        }
+
+        return $this->MailFields->get($id, [
+            'contain' => ['MailContents' => ['Contents']],
+            'conditions' => $conditions
+        ]);
     }
 
     /**
@@ -66,7 +81,8 @@ class MailFieldsService implements MailFieldsServiceInterface
     {
         $options = array_merge([
             'use_field' => null,
-            'contain' => ['MailContents']
+            'status' => '',
+            'contain' => ['MailContents' => ['Contents']]
         ], $queryParams);
 
         $conditions = ['MailFields.mail_content_id' => $mailContentId];
@@ -74,12 +90,17 @@ class MailFieldsService implements MailFieldsServiceInterface
 
         $query = $this->MailFields->find()
             ->contain($options['contain'])
-            ->order(['MailFields.sort'])
-            ->where($conditions);
+            ->order(['MailFields.sort']);
         if (!empty($queryParams['limit'])) {
             $query->limit($queryParams['limit']);
         }
-        return $query;
+
+        if ($options['status'] === 'publish') {
+            $conditions['use_field'] = true;
+            $conditions = array_merge($conditions, $this->MailFields->MailContents->Contents->getConditionAllowPublish());
+        }
+
+        return $query->where($conditions);
     }
 
     /**
