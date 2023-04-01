@@ -88,7 +88,7 @@ class CustomContentFrontService extends BcFrontContentsService implements Custom
 
         $this->entriesService->setup($customContent->custom_table_id);
         $params = array_merge_recursive([
-            'contain' => ['CustomTables'],
+            'contain' => ['CustomTables' => ['CustomContents' => ['Contents']]],
             'status' => 'publish',
             'order' => $customContent->list_order,
             'direction' => $customContent->list_direction,
