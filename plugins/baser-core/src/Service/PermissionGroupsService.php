@@ -44,8 +44,11 @@ class PermissionGroupsService implements PermissionGroupsServiceInterface
 	use BcContainerTrait;
 
 	/**
-	 * Constructor
-	 */
+     * Constructor
+     * @noTodo
+     * @unitTest
+     * @checked
+     */
 	public function __construct()
 	{
 		$this->PermissionGroups = TableRegistry::getTableLocator()->get('BaserCore.PermissionGroups');

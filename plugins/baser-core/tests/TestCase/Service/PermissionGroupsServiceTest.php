@@ -72,6 +72,15 @@ class PermissionGroupsServiceTest extends BcTestCase
     }
 
     /**
+     * test __construct
+     */
+    public function test__construct(): void
+    {
+        $this->assertTrue(isset($this->PermissionGroups->PermissionGroups));
+        $this->assertTrue(isset($this->PermissionGroups->UserGroups));
+    }
+
+    /**
      * test build
      */
     public function testBuild()
