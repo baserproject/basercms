@@ -111,6 +111,23 @@ class PermissionGroupsServiceTest extends BcTestCase
     }
 
     /**
+     * Test buildDefaultEtcRuleGroup
+     *
+     * @return void
+     */
+    public function testBuildDefaultEtcRuleGroup(): void
+    {
+        $this->loadFixtureScenario(PermissionGroupsScenario::class);
+        $type = 'Nghiem';
+        $name = 'Nghiem';
+        $this->PermissionGroups->buildDefaultEtcRuleGroup($type, $name);
+        $pg = $this->PermissionGroups->getIndex(1, [])
+            ->where(['type' => $type, 'name like' => $name . '%'])
+            ->all();
+        $this->assertCount(1, $pg);
+    }
+
+    /**
      * Test get
      *
      * @return void

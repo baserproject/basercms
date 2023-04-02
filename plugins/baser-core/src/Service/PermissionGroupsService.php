@@ -441,6 +441,9 @@ class PermissionGroupsService implements PermissionGroupsServiceInterface
      * @param string $type
      * @param string $name
      * @return EntityInterface|false
+     * @noTodo
+     * @unitTest
+     * @checked
      */
     public function buildDefaultEtcRuleGroup(string $type, string $name)
     {
