@@ -15,7 +15,7 @@ $(function () {
      * 一括処理実装
      */
     $.bcBatch.init({
-        batchUrl: $.bcUtil.apiBaseUrl + 'bc-uploader' + '/uploader_categories/batch.json',
+        batchUrl: $.bcUtil.apiAdminBaseUrl + 'bc-uploader' + '/uploader_categories/batch.json',
     });
 
 });

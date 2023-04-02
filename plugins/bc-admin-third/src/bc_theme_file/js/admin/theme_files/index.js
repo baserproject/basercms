@@ -14,7 +14,7 @@ $(function () {
      * 一括処理実装
      */
     $.bcBatch.init({
-        batchUrl: $.bcUtil.apiBaseUrl + 'bc-theme-file' + '/theme_folders/batch.json',
+        batchUrl: $.bcUtil.apiAdminBaseUrl + 'bc-theme-file' + '/theme_folders/batch.json',
     });
 
     $("#file").change(function () {

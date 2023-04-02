@@ -12,32 +12,18 @@
 namespace BcCustomContent\Controller\Api;
 
 use BaserCore\Controller\Api\BcApiController;
-use BaserCore\Annotation\UnitTest;
-use BaserCore\Annotation\NoTodo;
-use BaserCore\Annotation\Checked;
 use BcCustomContent\Service\CustomLinksServiceInterface;
 use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\Http\Exception\ForbiddenException;
-use Cake\ORM\Exception\PersistenceFailedException;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * CustomLinksController
  */
 class CustomLinksController extends BcApiController
 {
-
-    /**
-     * initialize
-     * @return void
-     * @checked
-     * @unitTest
-     * @unitTest
-     */
-    public function initialize(): void
-    {
-        parent::initialize();
-        $this->Authentication->allowUnauthenticated(['index', 'view']);
-    }
 
     /**
      * 一覧取得API
@@ -55,7 +41,7 @@ class CustomLinksController extends BcApiController
 
         $queryParams = $this->getRequest()->getQueryParams();
         if (isset($queryParams['status'])) {
-            if (!$this->isAdminApiEnabled()) throw new ForbiddenException();
+            throw new ForbiddenException();
         }
 
         $queryParams = array_merge([
@@ -87,7 +73,7 @@ class CustomLinksController extends BcApiController
 
         $queryParams = $this->getRequest()->getQueryParams();
         if (isset($queryParams['status'])) {
-            if (!$this->isAdminApiEnabled()) throw new ForbiddenException();
+            throw new ForbiddenException();
         }
 
         $queryParams = array_merge([
@@ -107,144 +93,6 @@ class CustomLinksController extends BcApiController
             'message' => $message
         ]);
         $this->viewBuilder()->setOption('serialize', ['message', 'customLink']);
-    }
-
-    /**
-     * 新規追加API
-     *
-     * @param CustomLinksServiceInterface $service
-     *
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function add(CustomLinksServiceInterface $service)
-    {
-        $this->request->allowMethod(['post']);
-        $customLink = $errors = null;
-        try {
-            $customLink = $service->create($this->request->getData());
-            $message = sprintf(__d('baser_core', 'カスタムリンク「%s」を追加しました。'), $customLink->title);
-        } catch (PersistenceFailedException $e) {
-            $errors = $e->getEntity()->getErrors();
-            $message = __d('baser_core', "入力エラーです。内容を修正してください。");
-            $this->setResponse($this->response->withStatus(400));
-        } catch (\Throwable $e) {
-            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
-            $this->setResponse($this->response->withStatus(500));
-        }
-        $this->set([
-            'customLink' => $customLink,
-            'message' => $message,
-            'errors' => $errors
-        ]);
-        $this->viewBuilder()->setOption('serialize', ['customLink', 'message', 'errors']);
-    }
-
-    /**
-     * カスタムリンク編集API
-     *
-     * @param CustomLinksServiceInterface $service
-     * @param $id
-     *
-     * @checked
-     * @noTodo
-     */
-    public function edit(CustomLinksServiceInterface $service, $id)
-    {
-        $this->request->allowMethod(['post', 'put', 'patch']);
-        $entity = null;
-        try {
-            $entity = $service->update($service->get($id), $this->request->getData());
-            $message = __d('baser_core', 'カスタムリンク「{0}」を更新しました。', $entity->title);
-        } catch (PersistenceFailedException $e) {
-            $this->setResponse($this->response->withStatus(400));
-            $entity = $e->getEntity();
-            $message = __d('baser_core', '入力エラーです。内容を修正してください。');
-        } catch (RecordNotFoundException $e) {
-            $this->setResponse($this->response->withStatus(404));
-            $message = __d('baser_core', 'データが見つかりません。');
-        } catch (\Throwable $e) {
-            $entity = $e->getEntity();
-            $this->setResponse($this->response->withStatus(500));
-            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
-        }
-
-        $this->set([
-            'message' => $message,
-            'customLink' => $entity,
-            'errors' => $entity?->getErrors(),
-        ]);
-
-        $this->viewBuilder()->setOption('serialize', ['customLink', 'message', 'errors']);
-    }
-
-    /**
-     * 削除API
-     *
-     * @param CustomLinksServiceInterface $service
-     * @param int $id
-     *
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function delete(CustomLinksServiceInterface $service, int $id)
-    {
-        $this->request->allowMethod(['post', 'delete']);
-        $customLink = null;
-        try {
-            $customLink = $service->get($id);
-            if ($service->delete($id)) {
-                $message = __d('baser_core', 'カスタムリンク「{0}」を削除しました。', $customLink->title);
-            } else {
-                $this->setResponse($this->response->withStatus(500));
-                $message = __d('baser_core', 'データベース処理中にエラーが発生しました。');
-            }
-        } catch (RecordNotFoundException $e) {
-            $this->setResponse($this->response->withStatus(404));
-            $message = __d('baser_core', 'データが見つかりません。');
-        } catch (\Throwable $e) {
-            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
-            $this->setResponse($this->response->withStatus(500));
-        }
-        $this->set([
-            'message' => $message,
-            'customLink' => $customLink
-        ]);
-        $this->viewBuilder()->setOption('serialize', ['customLink', 'message']);
-    }
-
-    /**
-     * リストAPI
-     *
-     * @param CustomLinksServiceInterface $service
-     * @param int $id
-     *
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function list(CustomLinksServiceInterface $service, int $id)
-    {
-        $this->request->allowMethod('get');
-        $this->set([
-            'customLinks' => $service->getList($id)
-        ]);
-        $this->viewBuilder()->setOption('serialize', ['customLinks']);
-    }
-
-    /**
-     * カスタムリンクの親のリストを取得する
-     *
-     * @param CustomLinksServiceInterface $service
-     * @param int $tableId
-     */
-    public function get_parent_list(CustomLinksServiceInterface $service, int $tableId)
-    {
-        $parentList = $service->getControlSource('parent_id', ['tableId' => $tableId]);
-        $this->set(['parentList' => $parentList]);
-        $this->viewBuilder()->setOption('serialize', ['parentList']);
     }
 
 }

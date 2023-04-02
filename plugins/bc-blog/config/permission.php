@@ -85,7 +85,7 @@ return [
         'BlogCategoriesApi' => [
             'title' => __d('baser_core', 'ブログカテゴリAPI'),
             'plugin' => 'BcBlog',
-            'type' => 'Api',
+            'type' => 'Api/Admin',
             'items' => [
                 'Add' => ['title' => __d('baser_core', '新規追加'), 'url' => '/baser/api/bc-blog/blog_categories/add/*.json', 'method' => 'POST', 'auth' => true],
                 'Batch' => ['title' => __d('baser_core', '一括処理'), 'url' => '/baser/api/bc-blog/blog_categories/batch.json', 'method' => 'POST', 'auth' => true],
@@ -100,7 +100,7 @@ return [
         'BlogCommentsApi' => [
             'title' => __d('baser_core', 'ブログコメントAPI'),
             'plugin' => 'BcBlog',
-            'type' => 'Api',
+            'type' => 'Api/Admin',
             'items' => [
                 'Add' => ['title' => __d('baser_core', '新規追加'), 'url' => '/baser/api/bc-blog/blog_comments/add/*.json', 'method' => 'POST', 'auth' => true],
                 'Batch' => ['title' => __d('baser_core', '一括処理'), 'url' => '/baser/api/bc-blog/blog_comments/batch.json', 'method' => 'POST', 'auth' => true],
@@ -113,7 +113,7 @@ return [
         'BlogContentsApi' => [
             'title' => __d('baser_core', 'ブログコンテンツAPI'),
             'plugin' => 'BcBlog',
-            'type' => 'Api',
+            'type' => 'Api/Admin',
             'items' => [
                 'Add' => ['title' => __d('baser_core', '新規追加'), 'url' => '/baser/api/bc-blog/blog_contents/add.json', 'method' => 'POST', 'auth' => true],
                 'Copy' => ['title' => __d('baser_core', 'コピー'), 'url' => '/baser/api/bc-blog/blog_contents/copy.json', 'method' => 'POST', 'auth' => true],
@@ -128,7 +128,7 @@ return [
         'BlogPostsApi' => [
             'title' => __d('baser_core', 'ブログ記事API'),
             'plugin' => 'BcBlog',
-            'type' => 'Api',
+            'type' => 'Api/Admin',
             'items' => [
                 'Add' => ['title' => __d('baser_core', '新規追加'), 'url' => '/baser/api/bc-blog/blog_posts/add.json', 'method' => 'POST', 'auth' => true],
                 'Batch' => ['title' => __d('baser_core', '一括処理'), 'url' => '/baser/api/bc-blog/blog_posts/batch.json', 'method' => 'POST', 'auth' => true],
@@ -145,7 +145,7 @@ return [
         'BlogTagsApi' => [
             'title' => __d('baser_core', 'ブログタグAPI'),
             'plugin' => 'BcBlog',
-            'type' => 'Api',
+            'type' => 'Api/Admin',
             'items' => [
                 'Add' => ['title' => __d('baser_core', '新規追加'), 'url' => '/baser/api/bc-blog/blog_tags/add.json', 'method' => 'POST', 'auth' => true],
                 'batch' => ['title' => __d('baser_core', '一括処理'), 'url' => '/baser/api/bc-blog/blog_tags/batch.json', 'method' => 'POST', 'auth' => true],

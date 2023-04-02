@@ -15,7 +15,6 @@ use BaserCore\Controller\Api\BcApiController;
 use BcCustomContent\Service\CustomContentsServiceInterface;
 use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\Http\Exception\ForbiddenException;
-use Cake\ORM\Exception\PersistenceFailedException;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -25,19 +24,6 @@ use BaserCore\Annotation\Checked;
  */
 class CustomContentsController extends BcApiController
 {
-
-    /**
-     * initialize
-     * @return void
-     * @checked
-     * @unitTest
-     * @unitTest
-     */
-    public function initialize(): void
-    {
-        parent::initialize();
-        $this->Authentication->allowUnauthenticated(['index', 'view']);
-    }
 
     /**
      * 一覧取得API
@@ -54,7 +40,7 @@ class CustomContentsController extends BcApiController
 
         $queryParams = $this->getRequest()->getQueryParams();
         if (isset($queryParams['status'])) {
-            if (!$this->isAdminApiEnabled()) throw new ForbiddenException();
+            throw new ForbiddenException();
         }
 
         $queryParams = array_merge([
@@ -84,7 +70,7 @@ class CustomContentsController extends BcApiController
 
         $queryParams = $this->getRequest()->getQueryParams();
         if (isset($queryParams['status'])) {
-            if (!$this->isAdminApiEnabled()) throw new ForbiddenException();
+            throw new ForbiddenException();
         }
 
         $queryParams = array_merge([
@@ -108,134 +94,4 @@ class CustomContentsController extends BcApiController
         $this->viewBuilder()->setOption('serialize', ['message', 'customContent']);
     }
 
-    /**
-     * カスタムコンテンツの新規追加
-     *
-     * @param CustomContentsServiceInterface $service
-     *
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function add(CustomContentsServiceInterface $service)
-    {
-        $this->request->allowMethod(['post', 'put', 'patch']);
-        $entity = $errors = null;
-        try {
-            $entity = $service->create($this->request->getData());
-            $message = __d('baser_core', 'カスタムコンテンツ「{0}」を追加しました。', $entity->content->title);
-        } catch (PersistenceFailedException $e) {
-            $errors = $e->getEntity()->getErrors();
-            $message = __d('baser_core', "入力エラーです。内容を修正してください。");
-            $this->setResponse($this->response->withStatus(400));
-        } catch (\Throwable $e) {
-            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
-            $this->setResponse($this->response->withStatus(500));
-        }
-
-        $this->set([
-            'customContent' => $entity,
-            'content' => $entity?->content,
-            'message' => $message,
-            'errors' => $errors
-        ]);
-        $this->viewBuilder()->setOption('serialize', [
-            'customContent',
-            'content',
-            'message',
-            'errors'
-        ]);
-    }
-
-    /**
-     * 編集API
-     *
-     * @param CustomContentsServiceInterface $service
-     * @param int $id
-     *
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function edit(CustomContentsServiceInterface $service, int $id)
-    {
-        $this->request->allowMethod(['post', 'put', 'patch']);
-        $customContent = $errors = null;
-        try {
-            $customContent = $service->update($service->get($id), $this->request->getData());
-            $message = __d('baser_core', 'カスタムコンテンツ「{0}」を更新しました。', $customContent->content->title);
-        } catch (PersistenceFailedException $e) {
-            $errors = $e->getEntity()->getErrors();
-            $message = __d('baser_core', "入力エラーです。内容を修正してください。");
-            $this->setResponse($this->response->withStatus(400));
-        } catch (RecordNotFoundException $e) {
-            $this->setResponse($this->response->withStatus(404));
-            $message = __d('baser_core', 'データが見つかりません。');
-        } catch (\Throwable $e) {
-            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
-            $this->setResponse($this->response->withStatus(500));
-        }
-        $this->set([
-            'customContent' => $customContent,
-            'content' => $customContent?->content,
-            'message' => $message,
-            'errors' => $errors,
-        ]);
-        $this->viewBuilder()->setOption('serialize', [
-            'customContent',
-            'content',
-            'message',
-            'errors'
-        ]);
-    }
-
-    /**
-     * 削除API
-     *
-     * @param CustomContentsServiceInterface $service
-     * @param int $id
-     *
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function delete(CustomContentsServiceInterface $service, int $id)
-    {
-        $this->request->allowMethod(['post', 'delete']);
-        $customContent = null;
-        try {
-            $customContent = $service->get($id);
-            $service->delete($id);
-            $message = __d('baser_core', 'カスタムコンテンツ「{0}」を削除しました。', $customContent->content->title);
-        } catch (RecordNotFoundException $e) {
-            $this->setResponse($this->response->withStatus(404));
-            $message = __d('baser_core', 'データが見つかりません。');
-        } catch (\Throwable $e) {
-            $this->setResponse($this->response->withStatus(500));
-            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
-        }
-        $this->set([
-            'message' => $message,
-            'customContent' => $customContent,
-            'content' => $customContent?->content,
-        ]);
-        $this->viewBuilder()->setOption('serialize', ['customContent', 'content', 'message']);
-    }
-
-    /**
-     * リストAPI
-     *
-     * @param CustomContentsServiceInterface $service
-     *
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function list(CustomContentsServiceInterface $service)
-    {
-        $this->set([
-            'customContents' => $service->getList()
-        ]);
-        $this->viewBuilder()->setOption('serialize', ['customContents']);
-    }
 }

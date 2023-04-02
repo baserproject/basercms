@@ -65,15 +65,6 @@ class PagesControllerTest extends BcTestCase
     }
 
     /**
-     * test initialize
-     */
-    public function test_initialize()
-    {
-        $controller = new PagesController($this->getRequest());
-        $this->assertEquals($controller->Authentication->unauthenticatedActions, ['view', 'index']);
-    }
-
-    /**
      * Test index method
      *
      * @return void
@@ -98,78 +89,4 @@ class PagesControllerTest extends BcTestCase
         $this->assertMatchesRegularExpression('/<section class="mainHeadline">/', $result->page->contents);
     }
 
-    /**
-     * Test add method
-     *
-     * @return void
-     */
-    public function testAdd()
-    {
-        $this->loginAdmin($this->getRequest());
-        $data = [
-            'page_template' => 'テストcreate',
-            'content' => [
-                "parent_id" => "1",
-                "title" => "新しい フォルダー",
-                "plugin" => 'BaserCore',
-                "type" => "Page",
-                "site_id" => "1",
-                "alias_id" => "",
-                "entity_id" => "",
-            ]
-        ];
-        $this->post('/baser/api/baser-core/pages/add.json?token=' . $this->accessToken, $data);
-        $this->assertResponseOk();
-        $Pages = $this->getTableLocator()->get('Pages');
-        $query = $Pages->find()->where(['page_template' => $data['page_template']]);
-        $this->assertEquals(1, $query->count());
-    }
-
-    /**
-     * Test delete method
-     *
-     * @return void
-     */
-    public function testDelete()
-    {
-        $this->delete('/baser/api/baser-core/pages/delete/2.json?token=' . $this->accessToken);
-        $this->assertResponseSuccess();
-    }
-
-    /**
-     * Test edit method
-     *
-     * @return void
-     */
-    public function testEdit()
-    {
-        $data = $this->PagesService->getIndex(['contents' => '<section class="mainHeadline">'])->first();
-        $data->content->name = "pageTestUpdate";
-        $data->contents = "pageTestUpdate";
-        $id = $data->id;
-        $this->post("/baser/api/baser-core/pages/edit/{$id}.json?token=". $this->accessToken, $data->toArray());
-        $this->assertResponseSuccess();
-        $query = $this->PagesService->getIndex(['contents' => $data->contents]);
-        $this->assertEquals(1, $query->all()->count());
-        $this->assertEquals("pageTestUpdate", $query->all()->first()->content->name);
-    }
-
-    /**
-     * testCopy
-     *
-     * @return void
-     */
-    public function testCopy()
-    {
-        $data = [
-            'id' =>4,
-            'entity_id' =>2,
-            'parent_id' =>1,
-            'title' => 'hoge1',
-            'site_id' =>1
-        ];
-        $this->post("/baser/api/baser-core/pages/copy/2.json?token=". $this->accessToken, $data);
-        $this->assertResponseSuccess();
-        $this->assertFalse($this->PagesService->getIndex(['title' => $data['title']])->all()->isEmpty());
-    }
 }

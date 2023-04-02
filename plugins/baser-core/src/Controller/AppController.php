@@ -155,7 +155,7 @@ class AppController extends BaseController
 
         if(!$this->checkPermission()) {
             $prefix = BcUtil::getRequestPrefix($this->getRequest());
-            if ($prefix === 'Api') {
+            if ($prefix === 'Api/Admin') {
                 throw new ForbiddenException(__d('baser_core', '指定されたAPIエンドポイントへのアクセスは許可されていません。'));
             } else {
                 $this->BcMessage->setError(__d('baser_core', '指定されたページへのアクセスは許可されていません。'));

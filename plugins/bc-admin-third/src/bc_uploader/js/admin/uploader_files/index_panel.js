@@ -115,7 +115,7 @@ $(function () {
                             "_csrfToken": $.bcToken.key
                         };
                         return $.ajax({
-                            url: $.bcUtil.apiBaseUrl + 'bc-uploader/uploader_files/edit/' + id + '.json',
+                            url: $.bcUtil.apiAdminBaseUrl + 'bc-uploader/uploader_files/edit/' + id + '.json',
                             headers: {
                                 "Authorization": $.bcJwt.accessToken,
                             },
@@ -145,7 +145,7 @@ $(function () {
      * アップロードファイル選択時イベント
      */
     function uploaderFileFileChangeHandler() {
-        var url = $.bcUtil.apiBaseUrl + 'bc-uploader/uploader_files/upload.json';
+        var url = $.bcUtil.apiAdminBaseUrl + 'bc-uploader/uploader_files/upload.json';
         var $file = $(this);
         $.bcUtil.showLoader();
         if ($('#UploaderFileFile' + listId).val()) {
@@ -407,7 +407,7 @@ $(function () {
      * コンテキストメニューハンドラ
      */
     function contextMenuHander(action, el) {
-        let delUrl = $.bcUtil.apiBaseUrl + 'bc-uploader/uploader_files/delete/' + $("#FileList" + listId + " .selected .id").html() + '.json';
+        let delUrl = $.bcUtil.apiAdminBaseUrl + 'bc-uploader/uploader_files/delete/' + $("#FileList" + listId + " .selected .id").html() + '.json';
 
         // IEの場合、action値が正常に取得できないので整形する
         let pos = action.indexOf("#");

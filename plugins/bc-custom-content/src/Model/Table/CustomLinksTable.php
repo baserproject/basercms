@@ -52,6 +52,9 @@ class CustomLinksTable extends AppTable
         $this->belongsTo('CustomFields')
             ->setClassName('BcCustomContent.CustomFields')
             ->setForeignKey('custom_field_id');
+        $this->belongsTo('CustomTables')
+            ->setClassName('BcCustomContent.CustomTables')
+            ->setForeignKey('custom_table_id');
     }
 
     /**

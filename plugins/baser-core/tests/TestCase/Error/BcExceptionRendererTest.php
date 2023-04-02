@@ -14,7 +14,6 @@ namespace BaserCore\Test\TestCase\Error;
 use BaserCore\Test\Factory\PermissionFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\Test\Scenario\SmallSetContentsScenario;
-use BcThemeConfig\Test\Factory\ThemeConfigFactory;
 use Cake\Core\Configure;
 use BaserCore\TestSuite\BcTestCase;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -94,7 +93,7 @@ class BcExceptionRendererTest extends BcTestCase
         $this->assertResponseError();
         $this->assertResponseContains('bs-container');
 
-        $this->post('/baser/api/baser-core/users/add.json');
+        $this->post('/baser/api/admin/baser-core/users/add.json');
         $this->assertResponseCode(401);
 
         Configure::write('debug', $debug);

@@ -50,7 +50,7 @@ return [
         'ThemeFilesApi' => [
             'title' => __d('baser_core', 'テーマファイルAPI'),
             'plugin' => 'BcThemeFile',
-            'type' => 'Api',
+            'type' => 'Api/Admin',
             'items' => [
                 'Add' => ['title' => __d('baser_core', '新規登録'), 'url' => '/baser/api/bc-theme-file/theme_files/add.json', 'method' => 'POST', 'auth' => false],
                 'Edit' => ['title' => __d('baser_core', '編集'), 'url' => '/baser/api/bc-theme-file/theme_files/edit.json', 'method' => 'POST', 'auth' => false],
@@ -67,7 +67,7 @@ return [
         'ThemeFoldersApi' => [
             'title' => __d('baser_core', 'テーマフォルダAPI'),
             'plugin' => 'BcThemeFile',
-            'type' => 'Api',
+            'type' => 'Api/Admin',
             'items' => [
                 'Index' => ['title' => __d('baser_core', '一覧'), 'url' => '/baser/api/bc-theme-file/theme_folders/index.json', 'method' => 'GET', 'auth' => false],
                 'Add' => ['title' => __d('baser_core', '新規登録'), 'url' => '/baser/api/bc-theme-file/theme_folders/add.json', 'method' => 'POST', 'auth' => false],

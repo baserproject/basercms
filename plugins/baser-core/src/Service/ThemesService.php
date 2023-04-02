@@ -178,12 +178,18 @@ class ThemesService implements ThemesServiceInterface
      */
     public function apply(Site $site, string $theme): array
     {
-        // テーマ梱包のプラグインを無効化
-        $this->detachCurrentThemesPlugins();
-
         // テーマを適用
         BcUtil::includePluginClass($theme);
-        Plugin::getCollection()->get($theme)->applyAsTheme($site, $theme);
+
+        $plugin = Plugin::getCollection()->get($theme);
+        if(method_exists($plugin, 'applyAsTheme')) {
+            $plugin->applyAsTheme($site, $theme);
+        } else {
+            throw new BcException(__d('baser_core', 'src フォルダに Plugin クラスが配置されていません。'));
+        }
+
+        // テーマ梱包のプラグインを無効化
+        $this->detachCurrentThemesPlugins();
 
         // テーマが梱包するプラグイン情報を取得
         $info = $this->getThemesPluginsInfo($theme);

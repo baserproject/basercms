@@ -152,14 +152,14 @@ if ($content->self_status) {
     <!-- 公開・非公開 -->
     <?php if (!$isSiteRoot && !$isSiteRelated && !$editDisabled): ?>
       <?php $this->BcBaser->link('',
-        ['prefix' => 'Api', 'action' => 'change_status', '_ext' => 'json'], [
+        ['prefix' => 'Api/Admin', 'action' => 'change_status', '_ext' => 'json'], [
           'title' => __d('baser_core', '非公開'),
           'class' => 'btn-unpublish bca-btn-icon',
           'data-bca-btn-type' => 'unpublish',
           'data-bca-btn-size' => 'lg'
         ]) ?>
       <?php $this->BcBaser->link('',
-        ['prefix' => 'Api', 'action' => 'change_status', '_ext' => 'json'], [
+        ['prefix' => 'Api/Admin', 'action' => 'change_status', '_ext' => 'json'], [
           'title' => __d('baser_core', '公開'),
           'class' => 'btn-publish bca-btn-icon',
           'data-bca-btn-type' => 'publish',
@@ -206,7 +206,7 @@ if ($content->self_status) {
     <!-- 削除 -->
     <?php if (!$editDisabled && !$isSiteRoot): ?>
       <?php $this->BcBaser->link('',
-        ['prefix' => 'Api', 'action' => 'delete', $content->id, '_ext' => 'json'], [
+        ['prefix' => 'Api/Admin', 'action' => 'delete', $content->id, '_ext' => 'json'], [
           'title' => __d('baser_core', '削除'),
           'class' => 'btn-delete bca-btn-icon',
           'data-bca-btn-type' => 'delete',

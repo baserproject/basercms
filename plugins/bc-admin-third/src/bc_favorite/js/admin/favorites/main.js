@@ -119,7 +119,7 @@ const favoriteList = {
                 '_csrfToken': $.bcToken.key
             };
             return $.ajax({
-                url: $.bcUtil.apiBaseUrl + 'bc-favorite/favorites/change_sort.json',
+                url: $.bcUtil.apiAdminBaseUrl + 'bc-favorite/favorites/change_sort.json',
                 headers: {
                     "Authorization": $.bcJwt.accessToken,
                 },

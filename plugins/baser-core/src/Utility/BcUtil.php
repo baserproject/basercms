@@ -206,7 +206,7 @@ class BcUtil
     {
         $request = Router::getRequest();
         $sessionKey = BcUtil::authSessionKey($prefix);
-        if ($request->getSession()->check($sessionKey)) {
+        if ($sessionKey && $request->getSession()->check($sessionKey)) {
             return $request->getSession()->read($sessionKey);
         } else {
             return false;
@@ -1885,7 +1885,7 @@ class BcUtil
     {
         $authPrefixes = [];
         foreach(Configure::read('BcPrefixAuth') as $key => $authPrefix) {
-            if($key === 'Api' && !filter_var(env('USE_CORE_API', false), FILTER_VALIDATE_BOOLEAN)) continue;
+            if(!empty($authPrefix['isRestApi']) && !filter_var(env('USE_CORE_API', false), FILTER_VALIDATE_BOOLEAN)) continue;
             if(!empty($authPrefix['disabled'])) continue;
             $authPrefixes[$key] = $authPrefix['name'];
         }

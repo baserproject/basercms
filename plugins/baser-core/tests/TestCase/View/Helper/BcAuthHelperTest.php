@@ -145,7 +145,7 @@ class BcAuthHelperTest extends BcTestCase
     {
         $this->loginAdmin($this->getRequest('/baser/admin'));
         $result = $this->BcAuth->getCurrentUserPrefixes();
-        $this->assertEquals(['Admin'], $result);
+        $this->assertEquals(['Admin', 'Api/Admin'], $result);
     }
 
     /**

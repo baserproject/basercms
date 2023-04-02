@@ -14,6 +14,8 @@ namespace BaserCore;
 use Authentication\AuthenticationService;
 use Authentication\AuthenticationServiceInterface;
 use Authentication\AuthenticationServiceProviderInterface;
+use Authentication\Authenticator\JwtAuthenticator;
+use Authentication\Authenticator\SessionAuthenticator;
 use Authentication\Middleware\AuthenticationMiddleware;
 use BaserCore\Command\ComposerCommand;
 use BaserCore\Command\CreateReleaseCommand;
@@ -245,7 +247,7 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
     public function middleware(MiddlewareQueue $middlewareQueue): MiddlewareQueue
     {
         $middlewareQueue
-            ->add(new AuthenticationMiddleware($this))
+            ->insertBefore(CsrfProtectionMiddleware::class, new AuthenticationMiddleware($this))
             ->add(new BcAdminMiddleware())
             ->add(new BcFrontMiddleware())
             ->add(new BcRequestFilterMiddleware())
@@ -259,8 +261,9 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
             if ($middleware instanceof CsrfProtectionMiddleware) {
                 $middleware->skipCheckCallback(function($request) {
                     $authSetting = Configure::read('BcPrefixAuth.' . $request->getParam('prefix'));
-                    if (!empty($authSetting['type']) && $authSetting['type'] === 'Jwt') {
-                        return true;
+                    if (!empty($authSetting['isRestApi'])) {
+                        $authenticator = $request->getAttribute('authentication')->getAuthenticationProvider();
+                        if(!$authenticator instanceof SessionAuthenticator) return true;
                     }
                     return false;
                 });
@@ -305,7 +308,7 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
             case 'Jwt':
                 if ($this->isEnabledCoreApi($prefix)) {
                     $this->setupJwtAuth($service, $authSetting);
-                    if($prefix === 'Api') {
+                    if($prefix === 'Api/Admin') {
                         // セッションを持っている場合もログイン状態とみなす
                         $service->loadAuthenticator('Authentication.Session', [
                             'sessionKey' => $authSetting['sessionKey'],
@@ -314,9 +317,6 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
                 } else {
                     throw new ForbiddenException(__d('baser_core', 'Web APIは許可されていません。'));
                 }
-                break;
-            default:
-                $this->setupSessionAuth($service, $authSetting);
                 break;
         }
 
@@ -331,7 +331,7 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
      */
     public function isRequiredAuthentication(array $authSetting)
     {
-        if(!$authSetting) return false;
+        if(!$authSetting || empty($authSetting['type'])) return false;
         if(!empty($authSetting['disabled'])) return false;
         if(!BcUtil::isInstalled()) return false;
         return true;
@@ -346,7 +346,7 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
     public static function isEnabledCoreApi(string $prefix): bool
     {
         if (!filter_var(env('USE_CORE_API', false), FILTER_VALIDATE_BOOLEAN)) {
-            if ($prefix === 'Api') {
+            if ($prefix === 'Api/Admin') {
                 if (BcUtil::loginUser()) {
                     return BcUtil::isSameReferrerAsCurrent();
                 }
@@ -527,7 +527,7 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
          * /baser/api/baser-core/.well-known/jwks.json でアクセス
          */
         $routes->prefix(
-            'Api',
+            'Api/Admin',
             ['path' => '/' . Configure::read('BcApp.baserCorePrefix') . '/', Configure::read('BcApp.apiPrefix')],
             function(RouteBuilder $routes) {
                 $routes->plugin(

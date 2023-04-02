@@ -87,7 +87,7 @@ $(function () {
         if (confirm(bcI18n.contentsEditConfirmMessage3.sprintf(displayName))) {
             $.bcToken.check(function () {
                 return $.ajax({
-                    url: $.bcUtil.apiBaseUrl + 'baser-core/contents/is_unique_content',
+                    url: $.bcUtil.apiAdminBaseUrl + 'baser-core/contents/is_unique_content',
                     headers: {
                         "Authorization": $.bcJwt.accessToken,
                     },
@@ -160,7 +160,7 @@ $(function () {
         if (confirm(bcI18n.contentsEditConfirmMessage4.sprintf(displayName))) {
             $.bcToken.check(function () {
                 return $.ajax({
-                    url: $.bcUtil.apiBaseUrl + 'baser-core/contents/is_unique_content',
+                    url: $.bcUtil.apiAdminBaseUrl + 'baser-core/contents/is_unique_content',
                     headers: {
                         "Authorization": $.bcJwt.accessToken,
                     },

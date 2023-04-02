@@ -48,7 +48,7 @@ return [
                             'action' => 'index'
                         ],
                         'add' => [
-                            'prefix' => 'Api',
+                            'prefix' => 'Api/Admin',
                             'plugin' => 'BcBlog',
                             'controller' => 'BlogContents',
                             'action' => 'add'
@@ -71,7 +71,7 @@ return [
                             'action' => 'index'
                         ],
                         'copy' => [
-                            'prefix' => 'Api',
+                            'prefix' => 'Api/Admin',
                             'plugin' => 'BcBlog',
                             'controller' => 'BlogContents',
                             'action' => 'copy'

@@ -95,7 +95,7 @@ export default {
             i18nEdit: bcI18n.i18nEdit,
             i18nDelete: bcI18n.i18nDelete,
             favorites: [],
-            registerUrl: $.bcUtil.apiBaseUrl + "bc-favorite/favorites/add.json",
+            registerUrl: $.bcUtil.apiAdminBaseUrl + "bc-favorite/favorites/add.json",
             ariaExpanded: 'true',
             baseUrl: $.bcUtil.baseUrl,
             formError: false,
@@ -144,7 +144,7 @@ export default {
             // 一覧呼び出し
             this.refresh();
             // 開閉
-            var url = $.bcUtil.apiBaseUrl + "bc-favorite/favorites/get_favorite_box_opened.json";
+            var url = $.bcUtil.apiAdminBaseUrl + "bc-favorite/favorites/get_favorite_box_opened.json";
             axios.get(url, {
                 headers: {
                     "Authorization": $.bcJwt.accessToken,
@@ -182,7 +182,7 @@ export default {
          * Change Open Favorite
          */
         changeOpenFavorite: function () {
-            const baseUrl = $.bcUtil.apiBaseUrl + "bc-favorite/favorites/save_favorite_box";
+            const baseUrl = $.bcUtil.apiAdminBaseUrl + "bc-favorite/favorites/save_favorite_box";
             if (this.favoriteBoxOpened === 'block') {
                 // ボタンの制御
                 this.favoriteBoxOpened = 'none';
@@ -209,7 +209,7 @@ export default {
          */
         refresh: function () {
             // 一覧呼び出し
-            const indexUrl = $.bcUtil.apiBaseUrl + "bc-favorite/favorites/index.json";
+            const indexUrl = $.bcUtil.apiAdminBaseUrl + "bc-favorite/favorites/index.json";
             axios.get(indexUrl, {
                 headers: {
                     "Authorization": $.bcJwt.accessToken,
@@ -252,7 +252,7 @@ export default {
                     var id = this.currentFavorite.id;
                     $.bcToken.check(function () {
                         $("#Waiting").show();
-                        axios.post($.bcUtil.apiBaseUrl + "bc-favorite/favorites/delete/" + id + ".json", {}, {
+                        axios.post($.bcUtil.apiAdminBaseUrl + "bc-favorite/favorites/delete/" + id + ".json", {}, {
                             headers: {
                                 "Authorization": $.bcJwt.accessToken,
                             }

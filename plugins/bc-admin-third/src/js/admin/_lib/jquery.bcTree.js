@@ -325,7 +325,7 @@
                                         "action": function (obj) {
                                             $.bcToken.check(function () {
                                                 return $.ajax({
-                                                    url: $.bcUtil.apiBaseUrl + 'baser-core/contents/change_status',
+                                                    url: $.bcUtil.apiAdminBaseUrl + 'baser-core/contents/change_status',
                                                     headers: {
                                                         "Authorization": $.bcJwt.accessToken,
                                                     },
@@ -366,7 +366,7 @@
                                         "action": function (obj) {
                                             $.bcToken.check(function () {
                                                 return $.ajax({
-                                                    url: $.bcUtil.apiBaseUrl + 'baser-core' + '/contents/change_status',
+                                                    url: $.bcUtil.apiAdminBaseUrl + 'baser-core' + '/contents/change_status',
                                                     headers: {
                                                         "Authorization": $.bcJwt.accessToken,
                                                     },
@@ -503,7 +503,7 @@
                                     "action": function (obj) {
                                         if (data.alias) {
                                             $.ajax({
-                                                url: $.bcUtil.apiBaseUrl + 'baser-core/contents/exists/' + data.contentAliasId,
+                                                url: $.bcUtil.apiAdminBaseUrl + 'baser-core/contents/exists/' + data.contentAliasId,
                                                 headers: {
                                                     "Authorization": $.bcJwt.accessToken,
                                                 },
@@ -536,7 +536,7 @@
                                         if (confirm(bcI18n.bcTreeConfirmMessage1)) {
                                             $.bcToken.check(function () {
                                                 return $.ajax({
-                                                    url: $.bcUtil.apiBaseUrl + 'baser-core/contents/trash_empty',
+                                                    url: $.bcUtil.apiAdminBaseUrl + 'baser-core/contents/trash_empty',
                                                     headers: {
                                                         "Authorization": $.bcJwt.accessToken,
                                                     },
@@ -866,7 +866,7 @@
             var url = '';
             // シングルコンテンツでデータが既に存在する場合 エイリアス作成の場合
             if ((!$.bcTree.settings[data.contentType]['multiple'] && $.bcTree.settings[data.contentType]['exists']) || data.contentAliasId) {
-                url = $.bcUtil.apiBaseUrl + 'baser-core' + '/contents/add_alias';
+                url = $.bcUtil.apiAdminBaseUrl + 'baser-core' + '/contents/add_alias';
                 data.alias = true;
             } else {
                 url = $.bcTree.settings[data.contentType]['url']['add'];
@@ -920,7 +920,7 @@
                                 $.bcUtil.hideLoader();
                             }
                         }).then(function () {
-                            return $.bcUtil.ajax($.bcUtil.apiBaseUrl + 'baser-core' + '/contents/get_full_url/' + data.contentId, {}, {
+                            return $.bcUtil.ajax($.bcUtil.apiAdminBaseUrl + 'baser-core' + '/contents/get_full_url/' + data.contentId, {}, {
                                 type: 'GET',
                                 dataType: 'json'
                             }).done(function (result) {
@@ -975,7 +975,7 @@
             var data = node.data.jstree;
             $.bcToken.check(function () {
                 return $.ajax({
-                    url: $.bcUtil.apiBaseUrl + 'baser-core/contents/delete',
+                    url: $.bcUtil.apiAdminBaseUrl + 'baser-core/contents/delete',
                     headers: {
                         "Authorization": $.bcJwt.accessToken,
                     },
@@ -1055,7 +1055,7 @@
                             .replace(/'/g, '&#039;')
                             .replace(/</g, '&lt;')
                             .replace(/>/g, '&gt;');
-                        $.ajax($.bcUtil.apiBaseUrl + 'baser-core/contents/get_full_url/' + data.contentId, {
+                        $.ajax($.bcUtil.apiAdminBaseUrl + 'baser-core/contents/get_full_url/' + data.contentId, {
                             headers: {
                                 "Authorization": $.bcJwt.accessToken,
                             },
@@ -1105,7 +1105,7 @@
                 }
                 $.bcToken.check(function () {
                     return $.ajax({
-                        url: $.bcUtil.apiBaseUrl + 'baser-core/contents/rename',
+                        url: $.bcUtil.apiAdminBaseUrl + 'baser-core/contents/rename',
                         headers: {
                             "Authorization": $.bcJwt.accessToken,
                         },
@@ -1217,7 +1217,7 @@
             }
             $.bcToken.check(function () {
                 return $.ajax({
-                    url: $.bcUtil.apiBaseUrl + 'baser-core/contents/move',
+                    url: $.bcUtil.apiAdminBaseUrl + 'baser-core/contents/move',
                     headers: {
                         "Authorization": $.bcJwt.accessToken,
                     },

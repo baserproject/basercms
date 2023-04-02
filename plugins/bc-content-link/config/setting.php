@@ -12,7 +12,7 @@ return [
                     'omitViewAction' => true,
                     'routes' => [
                         'add' => [
-                            'prefix' => 'Api',
+                            'prefix' => 'Api/Admin',
                             'plugin' => 'BcContentLink',
                             'controller' => 'ContentLinks',
                             'action' => 'add'

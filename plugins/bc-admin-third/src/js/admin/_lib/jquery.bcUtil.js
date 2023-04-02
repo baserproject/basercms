@@ -43,6 +43,11 @@ import Cookies from 'js-cookie'
         apiBaseUrl: null,
 
         /**
+         * 管理画面用APIのベースURL
+         */
+        apiAdminBaseUrl: null,
+
+        /**
          * Ajaxローダーのパス
          */
         ajaxLoaderPath: null,
@@ -83,8 +88,10 @@ import Cookies from 'js-cookie'
             }
             $.bcUtil.adminBaseUrl = $.bcUtil.baseUrl + '/' + $.bcUtil.baserCorePrefix + '/' + $.bcUtil.adminPrefix + '/';
             $.bcUtil.apiBaseUrl = $.bcUtil.baseUrl + '/' + $.bcUtil.baserCorePrefix + '/api/';
+            $.bcUtil.apiAdminBaseUrl = $.bcUtil.baseUrl + '/' + $.bcUtil.baserCorePrefix + '/api/admin/';
             this.setUpTextCounter();
         },
+
         /**
          * アラートメッセージを表示
          *

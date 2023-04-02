@@ -34,7 +34,7 @@ return [
         'ContentLinksApi' => [
             'title' => __d('baser_core', 'コンテンツリンクAPI'),
             'plugin' => 'BcContentLink',
-            'type' => 'Api',
+            'type' => 'Api/Admin',
             'items' => [
                 'Add' => ['title' => __d('baser_core', '新規登録'), 'url' => '/baser/api/bc-content-link/content_links/add.json', 'method' => 'POST', 'auth' => true],
                 'Delete' => ['title' => __d('baser_core', '削除'), 'url' => '/baser/api/bc-content-link/content_links/delete/*.json', 'method' => 'POST', 'auth' => true],

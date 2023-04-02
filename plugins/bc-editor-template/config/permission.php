@@ -38,7 +38,7 @@ return [
         'EditorTemplatesApi' => [
             'title' => __d('baser_core', 'エディターテンプレートAPI'),
             'plugin' => 'BcEditorTemplate',
-            'type' => 'Api',
+            'type' => 'Api/Admin',
             'items' => [
                 'Add' => ['title' => __d('baser_core', '新規登録'), 'url' => '/baser/api/bc-editor-template/editor_templates/add.json', 'method' => 'POST', 'auth' => true],
                 'Delete' => ['title' => __d('baser_core', '削除'), 'url' => '/baser/api/bc-editor-template/editor_templates/delete/*.json', 'method' => 'POST', 'auth' => true],

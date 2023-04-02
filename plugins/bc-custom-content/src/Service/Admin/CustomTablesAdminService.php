@@ -49,7 +49,11 @@ class CustomTablesAdminService extends CustomTablesService implements CustomTabl
 
         /** @var CustomLinksService $linksService */
         $linksService = $this->getService(CustomLinksServiceInterface::class);
-        $flatLinks = $linksService->getIndex($entity->id, ['finder' => 'all', 'status' => 'all'])->all()->toArray();
+        $flatLinks = $linksService->getIndex($entity->id, [
+            'finder' => 'all',
+            'status' => 'all',
+            'contain' => ['CustomFields']
+        ])->all()->toArray();
         $flatLinks = array_combine(Hash::extract($flatLinks, '{n}.id'), array_values($flatLinks));
         /** @var CustomLink $entity */
         return [

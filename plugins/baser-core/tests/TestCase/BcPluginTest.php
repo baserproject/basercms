@@ -531,7 +531,7 @@ $table->save(new Entity([\'name\' => \'2022-06-26\']));');
 
         // 一件追加
         $token = $this->apiLoginAdmin();
-        $this->post('/baser/api/baser-core/pages.json?token=' . $token['access_token'], [
+        $this->post('/baser/api/admin/baser-core/pages.json?token=' . $token['access_token'], [
             'content' => [
                 'parent_id' => 1,
                 'title' => 'sample',
@@ -550,12 +550,12 @@ $table->save(new Entity([\'name\' => \'2022-06-26\']));');
         $id = $result->page->id;
 
         // 件数確認（認証済）
-        $this->get('/baser/api/baser-core/pages.json?token=' . $token['access_token'] . '&' . 'status=');
+        $this->get('/baser/api/admin/baser-core/pages.json?token=' . $token['access_token'] . '&' . 'status=');
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals(1, count($result->pages));
 
         // 変更（公開状態に変更）
-        $this->put('/baser/api/baser-core/pages/' . $id . '.json?token=' . $token['access_token'], [
+        $this->put('/baser/api/admin/baser-core/pages/' . $id . '.json?token=' . $token['access_token'], [
             'content' => [
                 'self_status' => 1
             ]
@@ -567,10 +567,10 @@ $table->save(new Entity([\'name\' => \'2022-06-26\']));');
         $this->assertEquals(1, count($result->pages));
 
         // 削除
-        $this->delete('/baser/api/baser-core/pages/' . $id . '.json?token=' . $token['access_token']);
+        $this->delete('/baser/api/admin/baser-core/pages/' . $id . '.json?token=' . $token['access_token']);
 
         // 件数確認（認証済）
-        $this->get('/baser/api/baser-core/pages.json?token=' . $token['access_token'] . '&' . 'status=');
+        $this->get('/baser/api/admin/baser-core/pages.json?token=' . $token['access_token'] . '&' . 'status=');
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals(0, count($result->pages));
     }

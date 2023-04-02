@@ -14,7 +14,7 @@ $(function () {
      * 一括処理実装
      */
     $.bcBatch.init({
-        batchUrl: $.bcUtil.apiBaseUrl + 'bc-widget-area' + '/widget_areas/batch.json',
+        batchUrl: $.bcUtil.apiAdminBaseUrl + 'bc-widget-area' + '/widget_areas/batch.json',
     });
 
 });

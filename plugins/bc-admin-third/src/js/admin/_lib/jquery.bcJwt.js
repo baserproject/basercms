@@ -31,7 +31,7 @@
          */
         login: function (email, password, saved, successCallback, errorCallback) {
             $.ajax({
-                url: $.bcUtil.apiBaseUrl + 'baser-core/users/login.json',
+                url: $.bcUtil.apiAdminBaseUrl + 'baser-core/users/login.json',
                 type: 'post',
                 data: {
                     email: email,
@@ -62,7 +62,7 @@
                 return
             }
             $.ajax({
-                url: $.bcUtil.apiBaseUrl + 'baser-core/users/refresh_token.json',
+                url: $.bcUtil.apiAdminBaseUrl + 'baser-core/users/refresh_token.json',
                 type: 'get',
                 async: false,
                 headers: {

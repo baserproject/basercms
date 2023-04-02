@@ -37,7 +37,7 @@ return [
         'WidgetAreasApi' => [
             'title' => __d('baser_core', 'ウィジェットエリアAPI'),
             'plugin' => 'BcWidgetArea',
-            'type' => 'Api',
+            'type' => 'Api/Admin',
             'items' => [
                 'Add' => ['title' => __d('baser_core', '新規追加'), 'url' => '/baser/api/bc-widget-area/widget_areas/add.json', 'method' => 'POST', 'auth' => false],
                 'Batch' => ['title' => __d('baser_core', '一括処理'), 'url' => '/baser/api/bc-widget-area/widget_areas/batch.json', 'method' => 'POST', 'auth' => false],

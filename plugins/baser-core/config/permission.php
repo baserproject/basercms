@@ -182,7 +182,7 @@ return [
         'ContentFoldersApi' => [
             'title' => __d('baser_core', 'コンテンツフォルダーAPI'),
             'plugin' => 'BaserCore',
-            'type' => 'Api',
+            'type' => 'Api/Admin',
             'items' => [
                 'Index' => ['title' => __d('baser_core', '一覧取得'), 'url' => '/baser/api/baser-core/content_folders/index.json', 'method' => '*', 'auth' => true],
                 'View' => ['title' => __d('baser_core', '単一取得'), 'url' => '/baser/api/baser-core/content_folders/view/*.json', 'method' => '*', 'auth' => true],
@@ -195,7 +195,7 @@ return [
         'ContentsApi' => [
             'title' => __d('baser_core', 'コンテンツAPI'),
             'plugin' => 'BaserCore',
-            'type' => 'Api',
+            'type' => 'Api/Admin',
             'items' => [
                 'Index' => ['title' => __d('baser_core', '一覧取得'), 'url' => '/baser/api/baser-core/contents/index.json', 'method' => '*', 'auth' => true],
                 'View' => ['title' => __d('baser_core', '単一取得'), 'url' => '/baser/api/baser-core/contents/view/*.json', 'method' => '*', 'auth' => true],
@@ -220,7 +220,7 @@ return [
         'DblogsApi' => [
             'title' => __d('baser_core', '操作ログAPI'),
             'plugin' => 'BaserCore',
-            'type' => 'Api',
+            'type' => 'Api/Admin',
             'items' => [
                 'Index' => ['title' => __d('baser_core', '一覧取得'), 'url' => '/baser/api/baser-core/dblogs/index.json', 'method' => '*', 'auth' => true],
                 'Add' => ['title' => __d('baser_core', '新規登録'), 'url' => '/baser/api/baser-core/dblogs/add.json', 'method' => 'POST', 'auth' => true],
@@ -231,7 +231,7 @@ return [
         'PagesApi' => [
             'title' => __d('baser_core', '固定ページAPI'),
             'plugin' => 'BaserCore',
-            'type' => 'Api',
+            'type' => 'Api/Admin',
             'items' => [
                 'Index' => ['title' => __d('baser_core', '一覧取得'), 'url' => '/baser/api/baser-core/pages/index.json', 'method' => '*', 'auth' => true],
                 'View' => ['title' => __d('baser_core', '単一取得'), 'url' => '/baser/api/baser-core/pages/view/*.json', 'method' => '*', 'auth' => true],
@@ -245,7 +245,7 @@ return [
         'PermissionsApi' => [
             'title' => __d('baser_core', 'アクセスルールAPI'),
             'plugin' => 'BaserCore',
-            'type' => 'Api',
+            'type' => 'Api/Admin',
             'items' => [
                 'Index' => ['title' => __d('baser_core', '一覧取得'), 'url' => '/baser/api/baser-core/permissions/index/*.json', 'method' => '*', 'auth' => false],
                 'View' => ['title' => __d('baser_core', '単一取得'), 'url' => '/baser/api/baser-core/permissions/view/*.json', 'method' => '*', 'auth' => false],
@@ -261,7 +261,7 @@ return [
         'PluginsApi' => [
             'title' => __d('baser_core', 'プラグインAPI'),
             'plugin' => 'BaserCore',
-            'type' => 'Api',
+            'type' => 'Api/Admin',
             'items' => [
                 'Add' => ['title' => __d('baser_core', '新規登録'), 'url' => '/baser/api/baser-core/plugins/add.json', 'method' => 'POST', 'auth' => false],
                 'Attach' => ['title' => __d('baser_core', '有効化'), 'url' => '/baser/api/baser-core/plugins/attach/*.json', 'method' => 'POST', 'auth' => false],
@@ -280,7 +280,7 @@ return [
         'SiteConfigsApi' => [
             'title' => __d('baser_core', 'システム基本設定API'),
             'plugin' => 'BaserCore',
-            'type' => 'Api',
+            'type' => 'Api/Admin',
             'items' => [
                 'CheckSendmail' => ['title' => __d('baser_core', 'メール送信テスト'), 'url' => '/baser/api/baser-core/site_configs/check_sendmail.json', 'method' => 'POST', 'auth' => false],
                 'Edit' => ['title' => __d('baser_core', '編集'), 'url' => '/baser/api/baser-core/site_configs/edit.json', 'method' => 'POST', 'auth' => false],
@@ -291,7 +291,7 @@ return [
         'SitesApi' => [
             'title' => __d('baser_core', 'サイトAPI'),
             'plugin' => 'BaserCore',
-            'type' => 'Api',
+            'type' => 'Api/Admin',
             'items' => [
                 'Add' => ['title' => __d('baser_core', '新規登録'), 'url' => '/baser/api/baser-core/sites/add.json', 'method' => 'POST', 'auth' => false],
                 'Delete' => ['title' => __d('baser_core', '削除'), 'url' => '/baser/api/baser-core/sites/delete/*.json', 'method' => 'POST', 'auth' => false],
@@ -305,7 +305,7 @@ return [
         'ThemesApi' => [
             'title' => __d('baser_core', 'テーマAPI'),
             'plugin' => 'BaserCore',
-            'type' => 'Api',
+            'type' => 'Api/Admin',
             'items' => [
                 'Add' => ['title' => __d('baser_core', '新規登録'), 'url' => '/baser/api/baser-core/themes/add.json', 'method' => 'POST', 'auth' => false],
                 'Apply' => ['title' => __d('baser_core', '適用'), 'url' => '/baser/api/baser-core/themes/apply/*.json', 'method' => 'POST', 'auth' => false],
@@ -321,7 +321,7 @@ return [
         'UserGroupsApi' => [
             'title' => __d('baser_core', 'ユーザーグループAPI'),
             'plugin' => 'BaserCore',
-            'type' => 'Api',
+            'type' => 'Api/Admin',
             'items' => [
                 'Add' => ['title' => __d('baser_core', '新規登録'), 'url' => '/baser/api/baser-core/user_groups/add.json', 'method' => 'POST', 'auth' => false],
                 'copy' => ['title' => __d('baser_core', 'コピー'), 'url' => '/baser/api/baser-core/user_groups/copy/*.json', 'method' => 'POST', 'auth' => false],
@@ -336,7 +336,7 @@ return [
         'UsersApi' => [
             'title' => __d('baser_core', 'ユーザーAPI'),
             'plugin' => 'BaserCore',
-            'type' => 'Api',
+            'type' => 'Api/Admin',
             'items' => [
                 'Index' => ['title' => __d('baser_core', '一覧取得'), 'url' => '/baser/api/baser-core/users/index.json', 'method' => 'GET', 'auth' => false],
                 'View' => ['title' => __d('baser_core', '単一取得'), 'url' => '/baser/api/baser-core/users/view/*.json', 'method' => 'GET', 'auth' => false],
@@ -349,7 +349,7 @@ return [
         'UtilitiesApi' => [
             'title' => __d('baser_core', 'ユーティリティAPI'),
             'plugin' => 'BaserCore',
-            'type' => 'Api',
+            'type' => 'Api/Admin',
             'items' => [
                 'clear_cache' => ['title' => __d('baser_core', 'キャッシュクリア'), 'url' => '/baser/api/baser-core/utilities/clear_cache.json', 'method' => 'GET', 'auth' => true],
                 'delete_log' => ['title' => __d('baser_core', 'ログ削除'), 'url' => '/baser/api/baser-core/utilities/delete_log.json', 'method' => 'POST', 'auth' => false],

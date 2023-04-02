@@ -55,7 +55,7 @@ class UserGroupFactory extends CakephpBaseFactory
         return $this->setField('id', 1)
             ->setField('name', 'admins')
             ->setField('title', 'システム管理')
-            ->setField('auth_prefix', 'Admin')
+            ->setField('auth_prefix', 'Admin, Api/Admin')
             ->setField('use_move_contents', 1);
     }
 

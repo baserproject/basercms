@@ -52,7 +52,7 @@ const bcSearchBox = {
      */
     changeSearchBox(open, time) {
         if(time === undefined) time = 300;
-        var url = $.bcUtil.apiBaseUrl + 'baser-core/utilities/save_search_opened/' + this.searchOpenedTarget;
+        var url = $.bcUtil.apiAdminBaseUrl + 'baser-core/utilities/save_search_opened/' + this.searchOpenedTarget;
         if(open){
             $('#Search').slideDown(time);
             url += '/1.json';
@@ -60,10 +60,15 @@ const bcSearchBox = {
             $('#Search').slideUp(time);
             url += '.json';
         }
-        $.ajax({
-            type: "POST",
-            url: url
-        });
+        $.bcToken.check(function(){
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: {
+                    '_csrfToken': $.bcToken.key
+                },
+            });
+        }, {loaderType : 'none'});
     }
 
 }

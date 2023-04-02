@@ -44,7 +44,7 @@ $(function () {
         if(mainSiteId === undefined) {
             mainSiteId = 1;
         }
-        var url = $.bcUtil.apiBaseUrl + 'baser-core/sites/get_selectable_devices_and_lang/' + mainSiteId;
+        var url = $.bcUtil.apiAdminBaseUrl + 'baser-core/sites/get_selectable_devices_and_lang/' + mainSiteId;
         if(currentId !== undefined) {
             url += '/' + currentId;
         }

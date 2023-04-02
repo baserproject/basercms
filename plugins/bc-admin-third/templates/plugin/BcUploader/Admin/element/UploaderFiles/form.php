@@ -41,7 +41,7 @@ if (!$popup) $users = $this->BcAdminForm->getControlSource("UploaderFiles.user_i
 
 <?php if ($popup): ?>
   <?php echo $this->BcAdminForm->create(null, [
-    'url' => ['prefix' => 'Api', 'action' => 'edit'],
+    'url' => ['prefix' => 'Api/Admin', 'action' => 'edit'],
     'id' => 'UploaderFileEditForm' . $listId
   ]) ?>
 <?php else: ?>

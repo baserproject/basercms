@@ -19,6 +19,7 @@ use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
 use Cake\Core\Container;
 use Cake\Event\EventManager;
+use Cake\Http\Middleware\CsrfProtectionMiddleware;
 use Cake\Http\MiddlewareQueue;
 use Authentication\Middleware\AuthenticationMiddleware;
 use Cake\Routing\Router;
@@ -173,6 +174,7 @@ return [];
     public function testMiddleware(): void
     {
         $middleware = new MiddlewareQueue();
+        $middleware->add(CsrfProtectionMiddleware::class);
         $middlewareQueue = $this->Plugin->middleware($middleware);
         $this->assertInstanceOf(AuthenticationMiddleware::class, $middlewareQueue->current());
     }
@@ -210,8 +212,8 @@ return [];
     public function getAuthenticationServiceDataProvider()
     {
         return [
-            // APIの場合
-            ['Api', ['Jwt', 'Form'], 'JwtSubject', []],
+            // Api/Admin の場合
+            ['Api/Admin', ['Jwt', 'Form'], 'JwtSubject', []],
             // Adminの場合
             ['Admin', ['Session', 'Form'], 'Password', ['unauthenticatedRedirect' => '/baser/admin/baser-core/users/login']],
             // // それ以外の場合

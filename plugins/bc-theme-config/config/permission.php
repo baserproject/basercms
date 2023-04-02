@@ -34,7 +34,7 @@ return [
         'ThemeConfigsApi' => [
             'title' => __d('baser_core', 'テーマ設定API'),
             'plugin' => 'BcThemeConfig',
-            'type' => 'Api',
+            'type' => 'Api/Admin',
             'items' => [
                 'View' => ['title' => __d('baser_core', '設定取得'), 'url' => '/baser/api/bc-theme-config/theme_configs/view.json', 'method' => 'GET', 'auth' => true],
                 'Edit' => ['title' => __d('baser_core', '編集'), 'url' => '/baser/api/bc-theme-config/theme_configs/edit.json', 'method' => 'POST', 'auth' => false],

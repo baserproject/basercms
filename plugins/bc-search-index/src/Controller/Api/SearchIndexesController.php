@@ -13,32 +13,17 @@ namespace BcSearchIndex\Controller\Api;
 
 use BaserCore\Controller\Api\BcApiController;
 use BcSearchIndex\Service\SearchIndexesServiceInterface;
-use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\Event\EventInterface;
+use Cake\Http\Exception\ForbiddenException;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
-use Cake\Http\Exception\ForbiddenException;
-use Cake\ORM\Exception\PersistenceFailedException;
 
 /**
  * SearchIndicesController
  */
 class SearchIndexesController extends BcApiController
 {
-
-    /**
-     * initialize
-     * @return void
-     * @checked
-     * @unitTest
-     * @noTodo
-     */
-    public function initialize(): void
-    {
-        parent::initialize();
-        $this->Authentication->allowUnauthenticated(['index']);
-    }
 
     /**
      * Before filter
@@ -53,103 +38,6 @@ class SearchIndexesController extends BcApiController
         parent::beforeFilter($event);
         $this->Security->setConfig('validatePost', false);
     }
-
-    /**
-     * [AJAX] 優先順位を変更する
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function change_priority(SearchIndexesServiceInterface $service, $id)
-    {
-        $this->request->allowMethod(['post', 'put']);
-        $searchIndex = null;
-        try {
-            $searchIndex = $service->get($id);
-            $searchIndex = $service->changePriority(
-                $searchIndex,
-                $this->getRequest()->getData('priority')
-            );
-            $message = __d('baser_core', '検索インデックス「{0}」の優先度を変更しました。', $searchIndex->title);
-        } catch (RecordNotFoundException $e) {
-            $this->setResponse($this->response->withStatus(404));
-            $message = __d('baser_core', 'データが見つかりません。');
-        } catch (\Throwable $e) {
-            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
-            $this->setResponse($this->response->withStatus(500));
-        }
-        $this->set([
-            'message' => $message,
-            'searchIndex' => $searchIndex,
-        ]);
-        $this->viewBuilder()->setOption('serialize', ['searchIndex', 'message']);
-    }
-
-    /**
-     * バッチ処理
-     *
-     * @param SearchIndexesServiceInterface $service
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function batch(SearchIndexesServiceInterface $service)
-    {
-        $this->request->allowMethod(['post', 'put']);
-        $allowMethod = [
-            'delete' => __d('baser_core', '削除')
-        ];
-        $method = $this->getRequest()->getData('batch');
-        if (!isset($allowMethod[$method])) {
-            $this->setResponse($this->response->withStatus(500));
-            $this->viewBuilder()->setOption('serialize', []);
-            return;
-        }
-        try {
-            $service->batch($method, $this->getRequest()->getData('batch_targets'));
-            $this->BcMessage->setSuccess(
-                sprintf(__d('baser_core', '検索インデックスより NO.%s を %s しました。'), implode(', ', $this->getRequest()->getData('batch_targets')), $allowMethod[$method]),
-                true,
-                false
-            );
-            $message = __d('baser_core', '一括処理が完了しました。');
-        } catch (\Throwable $e) {
-            $this->setResponse($this->response->withStatus(500));
-            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
-        }
-        $this->set(['message' => $message]);
-        $this->viewBuilder()->setOption('serialize', ['message']);
-    }
-
-    /***
-     * [API] 検索インデックスを再構築する
-     * @param SearchIndexesServiceInterface $searchIndexesService
-     *
-     * @noTodo
-     * @checked
-     * @unitTest
-     */
-    public function reconstruct(SearchIndexesServiceInterface $searchIndexesService)
-    {
-        $this->request->allowMethod(['post']);
-        $errors = null;
-        try {
-            if ($searchIndexesService->reconstruct()) {
-                $message = __d('baser_core', '検索インデックスの再構築に成功しました。');
-            } else {
-                $this->setResponse($this->response->withStatus(400));
-                $message = __d('baser_core', '検索インデックスの再構築に失敗しました。');
-            }
-        } catch (\Throwable $e) {
-            $this->setResponse($this->response->withStatus(500));
-            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
-        }
-
-
-        $this->set(['message' => $message, 'errors' => $errors]);
-        $this->viewBuilder()->setOption('serialize', ['message', 'errors']);
-    }
-
 
     /**
      * [API] 検索インデックス一覧取得
@@ -182,7 +70,7 @@ class SearchIndexesController extends BcApiController
         $this->request->allowMethod('get');
         $queryParams = $this->getRequest()->getQueryParams();
         if (isset($queryParams['status'])) {
-            if (!$this->isAdminApiEnabled()) throw new ForbiddenException();
+            throw new ForbiddenException();
         }
         $queryParams = array_merge($queryParams, [
             'status' => 'publish'
@@ -191,43 +79,6 @@ class SearchIndexesController extends BcApiController
             'searchIndexes' => $this->paginate($searchIndexesService->getIndex($queryParams))
         ]);
         $this->viewBuilder()->setOption('serialize', ['searchIndexes']);
-    }
-
-    /**
-     * [API] 検索インデックス削除
-     * @param SearchIndexesServiceInterface $searchIndexesService
-     * @param $id
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function delete(SearchIndexesServiceInterface $searchIndexesService, $id)
-    {
-        $this->request->allowMethod(['post', 'delete']);
-
-        $searchIndex = null;
-
-        try {
-            $searchIndex = $searchIndexesService->get($id);
-            if ($searchIndexesService->delete($id)) {
-                $message = __d('baser_core', '検索インデックス: {0} を削除しました。', $searchIndex->title);
-            } else {
-                $this->setResponse($this->response->withStatus(400));
-                $message = __d('baser_core', 'データベース処理中にエラーが発生しました。');
-            }
-        } catch (RecordNotFoundException $e) {
-            $this->setResponse($this->response->withStatus(404));
-            $message = __d('baser_core', 'データが見つかりません。');
-        } catch (\Throwable $e) {
-            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
-            $this->setResponse($this->response->withStatus(500));
-        }
-
-        $this->set([
-            'message' => $message,
-            'searchIndex' => $searchIndex
-        ]);
-        $this->viewBuilder()->setOption('serialize', ['searchIndex', 'message']);
     }
 
 }

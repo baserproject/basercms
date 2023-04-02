@@ -117,9 +117,9 @@ export default {
         formSubmit: function () {
             let apiUrl;
             if (this.id) {
-                apiUrl = $.bcUtil.apiBaseUrl + "bc-favorite/favorites/edit/" + this.id + '.json';
+                apiUrl = $.bcUtil.apiAdminBaseUrl + "bc-favorite/favorites/edit/" + this.id + '.json';
             } else {
-                apiUrl = $.bcUtil.apiBaseUrl + "bc-favorite/favorites/add" + '.json';
+                apiUrl = $.bcUtil.apiAdminBaseUrl + "bc-favorite/favorites/add" + '.json';
             }
             let userId = this.userId;
             let name = this.name;

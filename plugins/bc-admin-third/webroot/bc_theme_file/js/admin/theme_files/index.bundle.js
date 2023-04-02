@@ -7,5 +7,5 @@
  * @since         5.0.0
  * @license       https://basercms.net/license/index.html MIT License
  */
-$((function(){$.bcBatch.init({batchUrl:$.bcUtil.apiBaseUrl+"bc-theme-file/theme_folders/batch.json"}),$("#file").change((function(){$.bcUtil.showLoader(),$("#ThemeFileUpload").submit()}))}));
+$((function(){$.bcBatch.init({batchUrl:$.bcUtil.apiAdminBaseUrl+"bc-theme-file/theme_folders/batch.json"}),$("#file").change((function(){$.bcUtil.showLoader(),$("#ThemeFileUpload").submit()}))}));
 //# sourceMappingURL=index.bundle.js.map
