@@ -191,7 +191,12 @@ class BlogCommentsController extends BcApiController
      * 画像認証を行い認証されればブログのコメントを登録する
      * コメント承認を利用していないブログの場合、公開されているコメント投稿者にアラートを送信する
      *
-     * @return void | bool
+     * @param BlogCommentsServiceInterface $service
+     * @throws Throwable
+     *
+     * @noTodo
+     * @checked
+     * @unitTest
      */
     public function add(BlogCommentsServiceInterface $service)
     {

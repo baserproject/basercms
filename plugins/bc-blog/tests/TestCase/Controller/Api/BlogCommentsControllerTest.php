@@ -118,7 +118,7 @@ class BlogCommentsControllerTest extends BcTestCase
             'news1', // name
             '/news/' // url
         );
-        BlogPostFactory::make(['id' => 1, 'blog_content_id'=> 1, 'status' => true])->persist();
+        BlogPostFactory::make(['id' => 1, 'blog_content_id' => 1, 'status' => true])->persist();
         $this->loadFixtureScenario(BlogCommentsScenario::class,);
 
 
@@ -235,7 +235,7 @@ class BlogCommentsControllerTest extends BcTestCase
         $this->assertEquals('一括処理が完了しました。', $result->message);
         // データが更新されていること
         $datas = $blogCommentsService->getIndex([])->all();
-        foreach($datas as $value) {
+        foreach ($datas as $value) {
             $this->assertTrue($value->status);
         }
         // dblogsが生成されていること
@@ -256,7 +256,7 @@ class BlogCommentsControllerTest extends BcTestCase
         $this->assertEquals('一括処理が完了しました。', $result->message);
         // データが更新されていること
         $datas = $blogCommentsService->getIndex([])->all();
-        foreach($datas as $value) {
+        foreach ($datas as $value) {
             $this->assertFalse($value->status);
         }
         // dblogsが生成されていること
@@ -294,4 +294,55 @@ class BlogCommentsControllerTest extends BcTestCase
         $this->assertResponseCode(500);
     }
 
+    /**
+     * test add
+     */
+    public function test_add()
+    {
+        $this->loadFixtureScenario(
+            BlogContentScenario::class,
+            1,  // id
+            1, // siteId
+            null, // parentId
+            'news1', // name
+            '/news/' // url
+        );
+        BlogPostFactory::make(['id' => 1, 'blog_content_id' => 1, 'status' => true])->persist();
+        $postData = [
+            'blog_content_id' => 1,
+            'blog_post_id' => 1,
+            'message' => 'いいね！'
+        ];
+
+        $this->post('/baser/api/bc-blog/blog_comments/add.json?token=' . $this->accessToken, $postData);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertNotNull($result->blogComment);
+
+        //blog_post_idを指定しない場合、
+        $postData = [
+            'blog_post_id' => '',
+            'blog_content_id' => 1,
+            'message' => 'いいね！'
+        ];
+        $this->post('/baser/api/bc-blog/blog_comments/add.json?token=' . $this->accessToken, $postData);
+        //ステータスを確認
+        $this->assertResponseCode(500);
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('パラメーターに blog_post_id が指定されていません。', $result->message);
+
+        //blog_content_idを指定しない場合、
+        $postData = [
+            'blog_post_id' => 1,
+            'blog_content_id' => '',
+            'message' => 'いいね！'
+        ];
+        $this->post('/baser/api/bc-blog/blog_comments/add.json?token=' . $this->accessToken, $postData);
+        //ステータスを確認
+        $this->assertResponseCode(500);
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('パラメーターに blog_content_id が指定されていません。', $result->message);
+    }
 }
