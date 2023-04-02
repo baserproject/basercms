@@ -121,7 +121,7 @@ class ContentLinksController extends BcApiController
      */
     public function edit(ContentLinksServiceInterface $service, $id)
     {
-        $this->request->allowMethod(['post', 'put']);
+        $this->request->allowMethod(['post', 'put', 'patch']);
 
         $contentLink = $errors = null;
 
