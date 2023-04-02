@@ -9,8 +9,11 @@ echo "[$(date +"%Y/%m/%d %H:%M:%S")] Init Container start."
 if [ ! -e '/var/www/html/docker_inited' ]; then
 
     # init baserCMS
+    # .env について、ライブラリのインストーラーでコピーする仕様になっているが、
+    # GitHubActions のユニットテストの際には、composer コマンドでインストールするため、
+    # ここでコピーする
     echo "[$(date +"%Y/%m/%d %H:%M:%S")] init baserCMS"
-    rm /var/www/html/config/.env
+    cp /var/www/html/config/.env.example /var/www/html/config/.env
     rm /var/www/html/config/install.php
 
     # msmtprc
