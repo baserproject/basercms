@@ -1885,6 +1885,7 @@ class BcUtil
     {
         $authPrefixes = [];
         foreach(Configure::read('BcPrefixAuth') as $key => $authPrefix) {
+            if($key === 'Api') continue;
             if(!empty($authPrefix['isRestApi']) && !filter_var(env('USE_CORE_API', false), FILTER_VALIDATE_BOOLEAN)) continue;
             if(!empty($authPrefix['disabled'])) continue;
             $authPrefixes[$key] = $authPrefix['name'];
