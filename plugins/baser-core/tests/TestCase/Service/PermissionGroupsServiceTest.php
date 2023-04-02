@@ -204,7 +204,7 @@ class PermissionGroupsServiceTest extends BcTestCase
         $ug = UserGroupFactory::make([
             'name' => 'Nghiem',
             'title' => 'Nghiem title',
-            'auth_prefix' => 'Api,Nghiem'
+            'auth_prefix' => 'Api/Admin,Nghiem'
         ])->persist();
         $field = 'user_group_id';
         $result = $this->PermissionGroups->getControlSource($field);
