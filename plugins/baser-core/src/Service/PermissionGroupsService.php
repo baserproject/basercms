@@ -123,6 +123,9 @@ class PermissionGroupsService implements PermissionGroupsServiceInterface
      * @param int $userGroupId
      * @param array $queryParams
      * @return Query
+     * @notodo
+     * @unitTest
+     * @checked
      */
 	public function getIndex(int $userGroupId, array $queryParams): Query
 	{

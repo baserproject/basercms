@@ -181,4 +181,60 @@ class PermissionGroupsServiceTest extends BcTestCase
         $this->assertEquals('super', $data2->type);
         $this->assertEquals('update', $data2->plugin);
     }
+
+    /**
+     * Test getIndex
+     *
+     * @return void
+     */
+    public function testGetIndex(): void
+    {
+        $this->loadFixtureScenario(PermissionGroupsScenario::class);
+        PermissionGroupFactory::make([
+            'name' => 'group 1',
+            'type' => 'Supper',
+            'plugin' => 'BaserCore',
+            'status' => 1
+        ])->persist();
+        PermissionGroupFactory::make([
+            'name' => 'group 2',
+            'type' => 'Supper',
+            'plugin' => 'BaserCore',
+            'status' => 1
+        ])->persist();
+
+        $param = [
+            'list_type' => null,
+            'permission_amount' => false
+        ];
+        $data1 = $this->PermissionGroups->getIndex(1, $param);
+        $this->assertCount(5, $data1->all());
+
+        $param = [
+            'list_type' => 'Admin',
+            'permission_amount' => false
+        ];
+        $data1 = $this->PermissionGroups->getIndex(1, $param);
+        $this->assertCount(3, $data1->all());
+
+        $param = [
+            'list_type' => 'kami_sama',
+            'permission_amount' => false
+        ];
+        $data1 = $this->PermissionGroups->getIndex(1, $param);
+        $this->assertCount(0, $data1->all());
+
+        $param = [
+            'list_type' => 'Admin',
+            'permission_amount' => true
+        ];
+        $data1 = $this->PermissionGroups->getIndex(1, $param);
+        $this->assertCount(3, $data1->all());
+        $data1 = $this->PermissionGroups->getIndex(1, $param);
+        $this->assertEquals(0, $data1->where(['PermissionGroups.id' => 1])->first()->amount);
+        $data1 = $this->PermissionGroups->getIndex(1, $param);
+        $this->assertEquals(1, $data1->where(['PermissionGroups.id' => 2])->first()->amount);
+        $data1 = $this->PermissionGroups->getIndex(1, $param);
+        $this->assertEquals(1, $data1->where(['PermissionGroups.id' => 3])->first()->amount);
+    }
 }
