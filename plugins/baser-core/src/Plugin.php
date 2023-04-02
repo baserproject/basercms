@@ -351,8 +351,10 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
                     return BcUtil::isSameReferrerAsCurrent();
                 }
             }
+        } else {
+            return true;
         }
-        return true;
+        return false;
     }
 
     /**
