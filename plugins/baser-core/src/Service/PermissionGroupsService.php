@@ -373,7 +373,11 @@ class PermissionGroupsService implements PermissionGroupsServiceInterface
      * コントロールソースを取得する
      *
      * @param string $field
+     * @param array $options
      * @return array
+     * @noTodo
+     * @unitTest
+     * @checked
      */
 	public function getControlSource(string $field, array $options = []): array
     {
