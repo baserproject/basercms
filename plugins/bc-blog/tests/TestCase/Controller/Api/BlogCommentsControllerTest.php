@@ -13,6 +13,7 @@ namespace BcBlog\Test\TestCase\Controller\Api;
 
 use BaserCore\Service\DblogsServiceInterface;
 use BaserCore\Test\Factory\PermissionFactory;
+use BaserCore\Test\Factory\SiteConfigFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
@@ -299,6 +300,7 @@ class BlogCommentsControllerTest extends BcTestCase
      */
     public function test_add()
     {
+        SiteConfigFactory::make(['name' => 'email', 'value' => 'foo@example.com'])->persist();
         $this->loadFixtureScenario(
             BlogContentScenario::class,
             1,  // id

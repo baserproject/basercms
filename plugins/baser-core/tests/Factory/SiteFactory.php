@@ -36,7 +36,8 @@ class SiteFactory extends CakephpBaseFactory
     {
         $this->setDefaultData(function (Generator $faker) {
             return [
-                'name' => $faker->text(50)
+                'name' => $faker->text(50),
+                'title' => $faker->text(50)
             ];
         });
     }

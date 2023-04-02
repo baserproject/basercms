@@ -144,8 +144,8 @@ class BlogCommentsService implements BlogCommentsServiceInterface
     public function add(int $blogContentId, int $blogPostId, array $postData)
     {
         $postData = array_merge([
-            'url' => null,
-            'email' => null,
+            'url' => '',
+            'email' => '',
             'auth_captcha' => null,
             'captcha_id' => null
         ], $postData);
