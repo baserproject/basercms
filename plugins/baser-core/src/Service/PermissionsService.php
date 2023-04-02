@@ -497,6 +497,9 @@ class PermissionsService implements PermissionsServiceInterface
      * URLを正規表現用の文字列に変換する
      * @param string $url
      * @return string
+     * @noTodo
+     * @unitTest
+     * @checked
      */
     public function convertRegexUrl(string $url)
     {
