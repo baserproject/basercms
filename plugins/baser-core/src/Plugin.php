@@ -253,7 +253,7 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
             ->add(new BcRequestFilterMiddleware())
             ->add(new BcRedirectSubSiteFilter());
 
-        // APIへのアクセスの場合、CSRFを強制的に利用しない設定に変更
+        // APIへのアクセスの場合、セッションによる認証以外は、CSRFを利用しない設定とする
         $ref = new ReflectionClass($middlewareQueue);
         $queue = $ref->getProperty('queue');
         $queue->setAccessible(true);
