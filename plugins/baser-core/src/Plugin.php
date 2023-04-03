@@ -211,15 +211,22 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
      */
     public function setupDefaultTemplatesPath()
     {
+        $admin = Configure::read('BcApp.defaultAdminTheme');
+        $front = Configure::read('BcApp.defaultFrontTheme');
         if (BcUtil::isAdminSystem() && empty($_REQUEST['preview'])) {
-            $template = Configure::read('BcApp.defaultAdminTheme');
+            Configure::write('App.paths.templates', array_merge([
+                ROOT . DS . 'plugins' . DS . $admin . DS . 'templates' . DS,
+                ROOT . DS . 'vendor' . DS . 'baserproject' . DS . $admin . DS . 'templates' . DS
+            ], Configure::read('App.paths.templates')));
         } else {
-            $template = Configure::read('BcApp.defaultFrontTheme');
+            Configure::write('App.paths.templates', array_merge([
+                ROOT . DS . 'plugins' . DS . $front . DS . 'templates' . DS,
+                ROOT . DS . 'vendor' . DS . 'baserproject' . DS . $front . DS . 'templates' . DS,
+                ROOT . DS . 'plugins' . DS . $admin . DS . 'templates' . DS,
+                ROOT . DS . 'vendor' . DS . 'baserproject' . DS . $admin . DS . 'templates' . DS
+            ], Configure::read('App.paths.templates')));
         }
-        Configure::write('App.paths.templates', array_merge([
-            ROOT . DS . 'plugins' . DS . $template . DS . 'templates' . DS,
-            ROOT . DS . 'vendor' . DS . 'baserproject' . DS . $template . DS . 'templates' . DS
-        ], Configure::read('App.paths.templates')));
+
     }
 
     /**
