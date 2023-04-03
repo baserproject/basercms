@@ -6,7 +6,7 @@
     "license": "MIT",
     "require": {
         "php": ">=8.1",
-        "baserproject/baser-core": "^4.2"
+        "baserproject/baser-core": "^4.3"
     },
     "autoload": {
         "psr-4": {
