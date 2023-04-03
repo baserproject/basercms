@@ -98,7 +98,7 @@ use Cake\Utility\Hash;
       ['action' => 'unpublish', $post->blog_content->id, $post->id],
       [
         'title' => __d('baser_core', '非公開'),
-        'class' => 'btn-unpublish bca-btn-icon',
+        'class' => 'btn-unpublish bca-btn-icon bca-loading',
         'data-bca-btn-type' => 'unpublish',
         'data-bca-btn-size' => 'lg']
     ) ?>
@@ -108,7 +108,7 @@ use Cake\Utility\Hash;
       ['action' => 'publish', $post->blog_content->id, $post->id],
       [
         'title' => __d('baser_core', '公開'),
-        'class' => 'btn-publish bca-btn-icon',
+        'class' => 'btn-publish bca-btn-icon bca-loading',
         'data-bca-btn-type' => 'publish',
         'data-bca-btn-size' => 'lg']
     ) ?>
@@ -126,7 +126,7 @@ use Cake\Utility\Hash;
       ['action' => 'copy', $post->blog_content->id, $post->id],
       [
         'title' => __d('baser_core', 'コピー'),
-        'class' => 'btn-copy bca-btn-icon',
+        'class' => 'btn-copy bca-btn-icon bca-loading',
         'data-bca-btn-type' => 'copy',
         'data-bca-btn-size' => 'lg']
     ) ?>
@@ -136,7 +136,7 @@ use Cake\Utility\Hash;
       [
         'confirm' => __d('baser_core', "{0} を本当に削除してもいいですか？", $post->title),
         'title' => __d('baser_core', '削除'),
-        'class' => 'btn-delete bca-btn-icon',
+        'class' => 'btn-delete bca-btn-icon bca-loading',
         'data-bca-btn-type' => 'delete',
         'data-bca-btn-size' => 'lg']
     ) ?>
