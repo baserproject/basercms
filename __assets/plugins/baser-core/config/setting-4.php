@@ -164,10 +164,6 @@ $config['BcApp'] = [
     'excludeListAddPrefix' => [],
     // generator のメタタグを出力するかどうか
     'outputMetaGenerator' => true,
-    // システムメッセージの言語につてサイト設定を利用する
-    // 	- false：ブラウザ
-    // 	- true：サイト設定
-    'systemMessageLangFromSiteSetting' => false
 ];
 
 /**

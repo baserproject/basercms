@@ -15,6 +15,7 @@ use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
 use Cake\Event\EventInterface;
 use Cake\Http\Response;
+use Cake\I18n\I18n;
 use Cake\Routing\Router;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -53,6 +54,17 @@ class BcFrontAppController extends AppController
      */
     public function beforeFilter(EventInterface $event)
     {
+        /**
+         * フロントページ用言語設定
+         */
+        $currentSite = $this->getRequest()->getAttribute('currentSite');
+        if ($currentSite) {
+            $lang = Configure::read('BcLang.' . $currentSite->lang);
+        }
+        if (Configure::read('BcApp.systemMessageLangFromSiteSetting') && isset($lang['langs'][0])) {
+            I18n::setLocale($lang['langs'][0]);
+        }
+
         $response = parent::beforeFilter($event);
         if($response) return $response;
         $response = $this->redirectIfIsNotSameSite();
