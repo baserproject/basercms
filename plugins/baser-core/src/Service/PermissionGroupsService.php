@@ -237,10 +237,13 @@ class PermissionGroupsService implements PermissionGroupsServiceInterface
 	}
 
 	/**
-	 * プラグインを指定してアクセスルールを削除する
-	 *
-	 * @param string $plugin
-	 */
+     * プラグインを指定してアクセスルールを削除する
+     *
+     * @param string $plugin
+     * @noTodo
+     * @unitTest
+     * @checked
+     */
 	public function deleteByPlugin(string $plugin)
 	{
 		$permissionGroups = $this->PermissionGroups->find()->where(['PermissionGroups.plugin' => $plugin])->all();

@@ -299,4 +299,33 @@ class PermissionGroupsServiceTest extends BcTestCase
         $data1 = $this->PermissionGroups->getIndex(1, $param);
         $this->assertEquals(1, $data1->where(['PermissionGroups.id' => 3])->first()->amount);
     }
+
+    /**
+     * Test deleteByPlugin
+     *
+     * @return void
+     */
+    public function testDeleteByPlugin(): void
+    {
+        $this->loadFixtureScenario(PermissionGroupsScenario::class);
+        $result = $this->PermissionGroups->getList();
+        $this->assertCount(3, $result);
+        PermissionGroupFactory::make([
+            'name' => 'group 1',
+            'type' => 'Supper',
+            'plugin' => 'Nghiem',
+            'status' => 1
+        ])->persist();
+        PermissionGroupFactory::make([
+            'name' => 'group 2',
+            'type' => 'Supper',
+            'plugin' => 'Nghiem',
+            'status' => 1
+        ])->persist();
+        $result = $this->PermissionGroups->getList();
+        $this->assertCount(5, $result);
+        $this->PermissionGroups->deleteByPlugin('Nghiem');
+        $result = $this->PermissionGroups->getList();
+        $this->assertCount(3, $result);
+    }
 }
