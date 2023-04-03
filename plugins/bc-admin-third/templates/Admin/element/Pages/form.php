@@ -24,8 +24,6 @@
 ?>
 
 
-<?php echo $this->BcAdminForm->control('id', ['type' => 'hidden']) ?>
-
 <?php echo $this->BcFormTable->dispatchBefore() ?>
 <div class="bca-section bca-section-editor-area">
   <?php echo $this->BcAdminForm->editor('contents', array_merge([
@@ -50,7 +48,8 @@
         data-bca-target="#pageSettingBody"
         aria-expanded="false"
         aria-controls="pageSettingBody">
-        詳細設定&nbsp;&nbsp;<i class="bca-icon--chevron-down bca-collapse__btn-icon"></i>
+          <?php echo __d('baser_core', '詳細設定') ?>&nbsp;&nbsp;
+          <i class="bca-icon--chevron-down bca-collapse__btn-icon"></i>
       </button>
     </div>
     <div class="bca-collapse" id="pageSettingBody" data-bca-state="">

@@ -20,7 +20,7 @@
 ?>
 
 
-<?php if (in_array($this->request->getParam('action'), ['edit', 'edit_alias'])): ?>
+<?php if (in_array($this->request->getParam('action'), ['add', 'edit', 'edit_alias'])): ?>
   <section id="EtcSetting" class="bca-section" data-bca-section-type="form-group">
     <div class="bca-collapse__action">
       <button type="button" class="bca-collapse__btn" data-bca-collapse="collapse"

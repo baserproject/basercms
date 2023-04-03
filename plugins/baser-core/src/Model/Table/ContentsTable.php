@@ -306,7 +306,7 @@ class ContentsTable extends AppTable
         $isNew = empty($content['id']) || !empty($options['firstCreate']);
         if ($isNew) {
             // IEのURL制限が2083文字のため、全て全角文字を想定し231文字でカット
-            if (!isset($content['name']) && !empty($content['title'])) {
+            if (empty($content['name']) && !empty($content['title'])) {
                 $content['name'] = BcUtil::urlencode(mb_substr($content['title'], 0, 230, 'UTF-8'));
             }
             if (!isset($content['self_status'])) {

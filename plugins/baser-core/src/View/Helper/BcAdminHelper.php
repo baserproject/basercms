@@ -413,6 +413,22 @@ class BcAdminHelper extends Helper
     }
 
     /**
+     * 現在のページで固定ページの新規登録が有効かどうか
+     *
+     * フロントページでコンテンツフォルダを表示している事が条件
+     *
+     * @return bool
+     * @checked
+     * @noTodo
+     */
+    public function existsAddLink()
+    {
+        if(BcUtil::isAdminSystem()) return false;
+        $content = $this->getView()->getRequest()->getAttribute('currentContent');
+        return ($content && $content->type === 'ContentFolder' && $this->BcAuth->isCurrentUserAdminAvailable());
+    }
+
+    /**
      * 編集リンクを設定する
      * @param string|array $link
      * @checked
@@ -448,6 +464,26 @@ class BcAdminHelper extends Helper
         if ($this->existsEditLink()) {
             $this->BcBaser->link(__d('baser_core', '編集する'), $this->_View->get('editLink'), ['class' => 'tool-menu']);
         }
+    }
+
+    /**
+     * 固定ページ新規追加画面へのリンクを出力する
+     *
+     * @return void
+     * @checked
+     * @noTodo
+     */
+    public function addLink(): void
+    {
+        if(BcUtil::isAdminSystem()) return;
+        $content = $this->getView()->getRequest()->getAttribute('currentContent');
+        if(!$content) return;
+        $this->BcBaser->link(__d('baser', '新規ページ追加'), [
+            'prefix' => 'Admin',
+            'plugin' => 'BaserCore',
+            'controller' => 'Pages',
+            'action' => 'add', $content->id
+        ], ['class' => 'tool-menu']);
     }
 
     /**

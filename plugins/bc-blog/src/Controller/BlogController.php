@@ -238,6 +238,7 @@ class BlogController extends BlogFrontAppController
                 break;
 
             case 'author':
+				if(count($pass) > 2) $this->notFound();
                 $author = isset($pass[1])? $pass[1] : '';
                 $this->set($service->getViewVarsForArchivesByAuthor(
                     $this->paginate($blogPostsService->getIndexByAuthor($author, [
@@ -251,6 +252,7 @@ class BlogController extends BlogFrontAppController
                 break;
 
             case 'tag':
+				if(count($pass) > 2) $this->notFound();
                 $tag = isset($pass[1])? $pass[1] : '';
                 $this->set($service->getViewVarsForArchivesByTag(
                     $this->paginate($blogPostsService->getIndexByTag($tag, [
@@ -264,6 +266,7 @@ class BlogController extends BlogFrontAppController
                 break;
 
             case 'date':
+				if(count($pass) > 4) $this->notFound();
                 $year = $month = $day = '';
                 if (isset($pass[1]) && preg_match('/^\d{4}$/', $pass[1])) {
                     $year = $pass[1];
@@ -288,6 +291,7 @@ class BlogController extends BlogFrontAppController
                 break;
 
             default:
+				if(count($pass) > 1) $this->notFound();
                 $this->set($service->getViewVarsForSingle(
                     $this->getRequest(),
                     $blogContent,

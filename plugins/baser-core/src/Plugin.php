@@ -14,7 +14,6 @@ namespace BaserCore;
 use Authentication\AuthenticationService;
 use Authentication\AuthenticationServiceInterface;
 use Authentication\AuthenticationServiceProviderInterface;
-use Authentication\Authenticator\JwtAuthenticator;
 use Authentication\Authenticator\SessionAuthenticator;
 use Authentication\Middleware\AuthenticationMiddleware;
 use BaserCore\Command\ComposerCommand;
@@ -32,6 +31,7 @@ use BaserCore\Middleware\BcRedirectSubSiteFilter;
 use BaserCore\Middleware\BcRequestFilterMiddleware;
 use BaserCore\ServiceProvider\BcServiceProvider;
 use BaserCore\Utility\BcEvent;
+use BaserCore\Utility\BcLang;
 use BaserCore\Utility\BcUtil;
 use Cake\Console\CommandCollection;
 use Cake\Core\Configure;
@@ -43,6 +43,7 @@ use Cake\Http\Exception\ForbiddenException;
 use Cake\Http\Middleware\CsrfProtectionMiddleware;
 use Cake\Http\MiddlewareQueue;
 use Cake\Http\ServerRequestFactory;
+use Cake\I18n\I18n;
 use Cake\Log\Log;
 use Cake\ORM\TableRegistry;
 use Cake\Routing\RouteBuilder;
@@ -97,6 +98,14 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
          * BcUtil::isConsole で利用
          */
         $_ENV['IS_CONSOLE'] = (substr(php_sapi_name(), 0, 3) === 'cli');
+
+        /**
+         * 言語設定
+         * ブラウザよりベースとなる言語を設定
+         */
+        if(isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
+            I18n::setLocale(BcLang::parseLang($_SERVER['HTTP_ACCEPT_LANGUAGE']));
+        }
 
         /**
          * インストール状態による初期化設定

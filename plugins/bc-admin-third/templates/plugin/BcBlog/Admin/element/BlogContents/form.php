@@ -58,7 +58,7 @@ use Cake\Routing\Router;
       data-bca-target="#blogContentsSettingBody"
       aria-expanded="false"
       aria-controls="blogContentsSettingBody">
-      詳細設定&nbsp;&nbsp;
+      <?php echo __d('baser_core', '詳細設定') ?>&nbsp;&nbsp;
       <i class="bca-icon--chevron-down bca-collapse__btn-icon"></i>
     </button>
   </div>

@@ -208,7 +208,8 @@ SCRIPT_END;
             'timeInput' => [],
             'timeDiv' => ['tag' => 'span'],
             'timeLabel' => ['text' => '時間'],
-            'id' => $this->_domId($fieldName)
+            'id' => $this->_domId($fieldName),
+            'timeStep' => 30
         ], $options);
 
         $dateOptions = array_merge($options, [
@@ -228,9 +229,10 @@ SCRIPT_END;
             'maxlength' => 8,
             'escape' => true,
             'id' => $options['id'] . '-time',
+            'step' => $options['timeStep'],
         ], $options['timeInput']);
 
-        unset($options['dateDiv'], $options['dateLabel'], $options['timeDiv'], $options['timeLabel'], $options['dateInput'], $options['timeInput']);
+        unset($options['dateDiv'], $options['dateLabel'], $options['timeDiv'], $options['timeLabel'], $options['dateInput'], $options['timeInput'], $options['timeStep']);
         unset($dateOptions['dateDiv'], $dateOptions['dateLabel'], $dateOptions['timeDiv'], $dateOptions['timeLabel'], $dateOptions['dateInput'], $dateOptions['timeInput']);
         unset($timeOptions['dateDiv'], $timeOptions['dateLabel'], $timeOptions['timeDiv'], $timeOptions['timeLabel'], $timeOptions['dateInput'], $timeOptions['timeInput']);
 
@@ -251,6 +253,9 @@ SCRIPT_END;
             $dateOptions['value'] = $dateValue;
             $timeOptions['value'] = $timeValue;
         }
+
+		$step = $timeOptions['step'];
+		unset($timeOptions['step']);
 
         $dateDivOptions = $timeDivOptions = $dateLabelOptions = $timeLabelOptions = null;
         if (!empty($dateOptions['div'])) {
@@ -305,7 +310,7 @@ $(function(){
     var id = "{$options['id']}";
     var time = $("#" + id + "-time");
     var date = $("#" + id + "-date");
-    time.timepicker({ 'timeFormat': 'H:i' });
+    time.timepicker({ 'timeFormat': 'H:i', 'step': {$step} });
     date.add(time).change(function(){
         if(date.val() && !time.val()) {
             time.val('00:00');

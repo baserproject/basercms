@@ -65,7 +65,7 @@ class ContentsAdminService extends ContentsService implements ContentsAdminServi
     protected function _isAvailablePreview($content)
     {
         $setting = Configure::read('BcContents.items.' . $content->plugin . '.' . $content->type);
-        return (!empty($setting['preview']));
+        return ($content->id && !empty($setting['preview']));
     }
 
     /**
@@ -82,7 +82,7 @@ class ContentsAdminService extends ContentsService implements ContentsAdminServi
         $path = BcUtil::getPrefix() . 'baser-core/contents/delete';
         $userGroupIds = Hash::extract(BcUtil::loginUser()->user_groups, '{n}.id');
         $service = $this->getService(PermissionsServiceInterface::class);
-        return $service->check($path, $userGroupIds) && !$content->site_root;
+        return ($content->id && $service->check($path, $userGroupIds) && !$content->site_root);
     }
 
     /**

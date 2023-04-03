@@ -68,6 +68,21 @@ class BcToolbarHelper extends Helper
     }
 
     /**
+     * 現在のページで固定ページの新規登録が有効かどうか
+     *
+     * フロントページでコンテンツフォルダを表示している事が条件
+     *
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest ラッパーメソッドのためユニットテストはスキップ
+     */
+    public function isAvailableAddLink(): bool
+    {
+        return $this->BcAdmin->existsAddLink();
+    }
+
+    /**
      * モードの表示が利用可能かどうか
      * @return bool
      * @checked
@@ -354,6 +369,7 @@ class BcToolbarHelper extends Helper
 
     /**
      * 編集画面リンク出力
+     *
      * @checked
      * @noTodo
      * @unitTest
@@ -365,6 +381,7 @@ class BcToolbarHelper extends Helper
 
     /**
      * 公開画面リンク出力
+     *
      * @checked
      * @noTodo
      * @unitTest
@@ -372,6 +389,18 @@ class BcToolbarHelper extends Helper
     public function publishLink()
     {
         $this->BcAdmin->publishLink();
+    }
+
+    /**
+     * 固定ページ新規追加画面へのリンクを出力する
+     *
+     * @checked
+     * @noTodo
+     * @unitTest ラッパーメソッドのためスキップ
+     */
+    public function addLink()
+    {
+        $this->BcAdmin->addLink();
     }
 
 }

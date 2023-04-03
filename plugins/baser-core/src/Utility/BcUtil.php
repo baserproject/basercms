@@ -500,6 +500,8 @@ class BcUtil
         Cache::clear('_cake_core_');
         self::clearModelCache();
         Cache::clear('_bc_env_');
+        Cache::clear('_bc_update_');
+        Cache::clear('_bc_gmaps_');
         //TODO ucmitz : viewキャッシュ削除
         // clearCache();
         //TODO ucmitz : dataキャッシュ削除
@@ -696,7 +698,10 @@ class BcUtil
         $value = @unserialize(base64_decode($value));
         // 下位互換のため、しばらくの間、失敗した場合の再変換を行う v.3.0.2
         if ($value === false) {
-            $value = unserialize($_value);
+			$value = @unserialize($_value);
+			if($value === false) {
+				return '';
+			}
         }
         return $value;
     }

@@ -78,6 +78,11 @@ $this->BcBaser->js(['vendor/jquery.fixedMenu', 'vendor/outerClick', 'admin/toolb
           <?php $this->BcToolbar->editLink() ?>
         </div>
       <?php endif ?>
+			<?php if($this->BcToolbar->isAvailableAddLink()): ?>
+				<div class="bca-toolbar__tools-button bca-toolbar__tools-button-add">
+					<?php $this->BcToolbar->addLink() ?>
+				</div>
+			<?php endif ?>
       <?php if ($this->BcToolbar->isAvailablePublishLink()): ?>
         <div class="bca-toolbar__tools-button bca-toolbar__tools-button-publish">
           <?php $this->BcToolbar->publishLink() ?>

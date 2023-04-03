@@ -28,7 +28,12 @@ $(function () {
             $.bcCkeditor.editor.editor_contents_tmp.execCommand('synchronize');
         }
         $.bcToken.check(function () {
-            $("#PageAdminEditForm").submit();
+            if($("#PageAdminEditForm").length) {
+                $("#PageAdminEditForm").submit();
+            }
+            if($("#PageAdminAddForm").length) {
+                $("#PageAdminAddForm").submit();
+            }
         }, {useUpdate: false, hideLoader: false});
         return false;
     });

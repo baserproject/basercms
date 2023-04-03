@@ -237,10 +237,13 @@ class PermissionGroupsService implements PermissionGroupsServiceInterface
 	}
 
 	/**
-	 * プラグインを指定してアクセスルールを削除する
-	 *
-	 * @param string $plugin
-	 */
+     * プラグインを指定してアクセスルールを削除する
+     *
+     * @param string $plugin
+     * @noTodo
+     * @unitTest
+     * @checked
+     */
 	public function deleteByPlugin(string $plugin)
 	{
 		$permissionGroups = $this->PermissionGroups->find()->where(['PermissionGroups.plugin' => $plugin])->all();
@@ -250,8 +253,11 @@ class PermissionGroupsService implements PermissionGroupsServiceInterface
 	}
 
 	/**
-	 * アクセスルールを全て構築する
-	 */
+     * アクセスルールを全て構築する
+     * @noTodo
+     * @unitTest
+     * @checked
+     */
 	public function buildAll()
 	{
 	    $userGroupsService = $this->getService(UserGroupsServiceInterface::class);
@@ -331,13 +337,16 @@ class PermissionGroupsService implements PermissionGroupsServiceInterface
 	}
 
 	/**
-	 * 指定したプラグインについて全てを許可するアクセスルールを構築する
-	 *
-	 * @param int $userGroupId
-	 * @param string $plugin
-	 * @param string $type
-	 * @param string $typeName
-	 */
+     * 指定したプラグインについて全てを許可するアクセスルールを構築する
+     *
+     * @param int $userGroupId
+     * @param string $plugin
+     * @param string $type
+     * @param string $typeName
+     * @noTodo
+     * @unitTest
+     * @checked
+     */
 	public function buildAllowAllMethodByPlugin(int $userGroupId, string $plugin, string $type, string $typeName)
 	{
 		/** @var PluginsTable $pluginsTable */

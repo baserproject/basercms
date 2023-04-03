@@ -9,10 +9,6 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
-use BaserCore\Model\Entity\Content;
-use Cake\ORM\Query;
-use BaserCore\Utility\BcUtil;
-
 /**
  * 関連コンテンツ
  * @var \BaserCore\View\BcAdminAppView $this
@@ -20,11 +16,12 @@ use BaserCore\Utility\BcUtil;
  * @var array $relatedContents 関連コンテンツ
  * @var array $sites サイトリスト
  * @var int $currentSiteId 現在のサイトID
- * @var Content $content
+ * @var \BaserCore\Model\Entity\Content $content
  * @checked
  * @noTodo
  * @unitTest
  */
+if(!$content->url) return;
 $pureUrl = $this->BcContents->getPureUrl($content->url, $content->site_id);
 ?>
 
@@ -62,7 +59,7 @@ $pureUrl = $this->BcContents->getPureUrl($content->url, $content->site_id);
             }
             $editUrl .= '/content_id:' . $relatedContent['Content']->id . '#RelatedContentsSetting';
           } else {
-            $editUrl = '/' . BcUtil::getAdminPrefix() . '/contents/edit_alias/' . $relatedContent['Content']->id . '#RelatedContentsSetting';
+            $editUrl = '/' . \BaserCore\Utility\BcUtil::getAdminPrefix() . '/contents/edit_alias/' . $relatedContent['Content']->id . '#RelatedContentsSetting';
           }
           if ($this->BcAdminForm->getSourceValue('content.id') === $relatedContent['Content']->id) {
             $current = true;

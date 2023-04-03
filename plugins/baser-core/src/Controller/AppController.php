@@ -138,6 +138,12 @@ class AppController extends BaseController
     {
         parent::beforeFilter($event);
 
+		// index.php をつけたURLの場合、base の値が正常でなくなり、
+		// 内部リンクが影響を受けておかしくなってしまうため強制的に Not Found とする
+		if(preg_match('/\/index\.php\//', $this->getRequest()->getAttribute('base'))) {
+			$this->notFound();
+		}
+
         if (!$this->getRequest()->is('requestview')) return;
 
         $response = $this->redirectIfIsRequireMaintenance();
@@ -230,7 +236,7 @@ class AppController extends BaseController
      */
     public function _blackHoleCallback($err, $exception)
     {
-        $message = __d('baser_core', '不正なリクエストと判断されました。') . "\n" . $exception->getMessage();
+        $message = __d('baser_core', '不正なリクエストと判断されました。もしくは、システムが受信できるデータ上限より大きなデータが送信された可能性があります') . "\n" . $exception->getMessage();
         throw new BadRequestException($message);
     }
 
