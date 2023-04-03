@@ -337,8 +337,16 @@ class SitesService implements SitesServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function getRelatedContents($contentId)
+    public function getRelatedContents(?int $contentId, int $parentId = null)
     {
+		if(!$contentId) {
+		    if($parentId) {
+                $contentId = $parentId;
+            } else {
+                return [];
+            }
+		}
+
         /* @var Content $content */
         $content = $this->Sites->Contents->get($contentId, ['contain' => ['Sites']]);
         $isMainSite = $this->Sites->isMain($content->site->id);

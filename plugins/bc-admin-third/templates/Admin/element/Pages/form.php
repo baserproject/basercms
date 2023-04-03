@@ -24,8 +24,6 @@
 ?>
 
 
-<?php echo $this->BcAdminForm->control('id', ['type' => 'hidden']) ?>
-
 <?php echo $this->BcFormTable->dispatchBefore() ?>
 <div class="bca-section bca-section-editor-area">
   <?php echo $this->BcAdminForm->editor('contents', array_merge([

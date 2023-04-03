@@ -24,7 +24,7 @@ use BaserCore\Model\Entity\ContentFolder;
  * @var Content $content
  * @var ContentFolder $contentFolder
  * @var array $parentContents
- * @var array $fullUrl
+ * @var string $fullUrl
  * @checked
  * @noTodo
  * @unitTest
@@ -89,6 +89,7 @@ $editable = $this->BcContents->isEditable($content);
 <?php echo $this->BcAdminForm->hidden("content.publish_begin") ?>
 
 
+<?php if($fullUrl): ?>
 <div class="bca-section bca-section__post-top">
   <span class="bca-post__url">
 	  <a href="<?php echo h($fullUrl) ?>" class="bca-text-url" target="_blank" data-toggle="tooltip"
@@ -103,6 +104,7 @@ $editable = $this->BcContents->isEditable($content);
       'data-bca-btn-size' => 'sm'
     ]) ?>
 </div>
+<?php endif ?>
 
 <section id="BasicSetting" class="bca-section">
   <table class="form-table bca-form-table" data-bca-table-type="type2">

@@ -673,8 +673,17 @@ class BcContentsHelper extends Helper
      */
     public function getFolderLinkedUrl(EntityInterface $content)
     {
-        $urlArray = explode('/', preg_replace('/(^\/|\/$)/', '', $content->url));
-        unset($urlArray[count($urlArray) - 1]);
+		if($content->url) {
+			$urlArray = explode('/', preg_replace('/(^\/|\/$)/', '', $content->url));
+			unset($urlArray[count($urlArray) - 1]);
+		} elseif($content->parent_id) {
+			$parent = $this->ContentsService->get($content->parent_id);
+			$urlArray = explode('/', preg_replace('/(^\/|\/$)/', '', $parent->url));
+		}
+		if(count($urlArray) === 1 && !$urlArray[0]) {
+			$urlArray = [];
+		}
+
         if ($content->site->same_main_url) {
             $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
             $site = $sites->findById($content->site->main_site_id)->first();

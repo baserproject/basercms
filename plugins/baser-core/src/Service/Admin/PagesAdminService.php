@@ -34,6 +34,45 @@ class PagesAdminService extends PagesService implements PagesAdminServiceInterfa
     use BcContainerTrait;
 
     /**
+     * 新規登録画面用の view 変数を取得する
+     *
+     * @param EntityInterface $page
+     * @return array
+     * @checked
+     * @noTodo
+     */
+    public function getViewVarsForAdd(EntityInterface $page): array
+    {
+		// エディタオプション
+		$editorOptions = ['editorDisableDraft' => true];
+        $editorStyles = BcSiteConfig::get('editor_styles');
+		if ($editorStyles) {
+			$CKEditorStyleParser = new CKEditorStyleParser();
+			$editorOptions = array_merge($editorOptions, [
+				'editorStylesSet' => 'default',
+				'editorStyles' => [
+					'default' => $CKEditorStyleParser->parse($editorStyles)
+				]
+			]);
+		}
+
+		// ページテンプレートリスト
+		$theme = [Inflector::camelize(Configure::read('BcApp.defaultFrontTheme'))];
+		$siteService = $this->getService(SitesServiceInterface::class);
+		$site = $siteService->findById($page->content->site_id)->first();
+		if (!empty($site) && $site->theme && $site->theme != $theme[0]) {
+			$theme[] = $site->theme;
+		}
+		return [
+            'page' => $page,
+            'pageTemplateList' => $this->getPageTemplateList($page->content->id, $theme),
+		    'editor' => BcSiteConfig::get('editor'),
+            'editorOptions' => $editorOptions,
+            'editorEnterBr' => BcSiteConfig::get('editor_enter_br')
+		];
+    }
+
+    /**
      * 編集画面用の view 変数を取得する
      * @param EntityInterface $page
      * @return array

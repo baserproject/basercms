@@ -66,9 +66,38 @@ class PagesService implements PagesServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function getNew(): EntityInterface
+    public function getNew(int $parentId = null, string $name = ''): EntityInterface
     {
-        return $this->Pages->newEntity([]);
+        $parent  = null;
+		if($parentId) {
+            $parent = $this->Contents->find()->where([
+                'Contents.type' => 'ContentFolder',
+                'Contents.id' => $parentId,
+            ])->first();
+		}
+		if (!$parent) {
+			return $this->Pages->newEntity([]);
+		} else {
+            if($name) {
+                $title = $name;
+                $name = BcUtil::urlencode(mb_substr($name, 0, 230, 'UTF-8'));
+            } else {
+                $title = '';
+            }
+		    return $this->Pages->newEntity([
+				'content' => [
+                    'name' => $name,
+                    'title' => $title,
+                    'type' => 'Page',
+                    'plugin' => 'BaserCore',
+                    'alias_id' => null,
+                    'site_root' => false,
+                    'site_id' => $parent->site_id,
+                    'parent_id' => $parent->id,
+                    'self_status' => false
+                ]
+			], ['associated' => ['Contents' => ['validate' => false]]]);
+		}
     }
 
     /**
@@ -202,6 +231,12 @@ class PagesService implements PagesServiceInterface
      */
     public function create(array $postData, $options = []): ?EntityInterface
     {
+        if (BcUtil::isOverPostSize()) {
+            throw new BcException(__d('baser_core',
+                '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。',
+                ini_get('post_max_size')
+            ));
+        }
         $page = $this->Pages->newEmptyEntity();
         $page = $this->Pages->patchEntity($page, $postData, $options);
         return $this->Pages->saveOrFail($page);
@@ -262,7 +297,7 @@ class PagesService implements PagesServiceInterface
     {
         $pageTemplates = BcUtil::getTemplateList('Pages', $plugins);
 
-        if ($contentId != 1) {
+        if ($contentId && $contentId != 1) {
             /** @var ContentFoldersService $ContentFoldersService */
             $ContentFoldersService = $this->getService(ContentFoldersServiceInterface::class);
             $parentTemplate = $ContentFoldersService->getParentTemplate($contentId, 'page');

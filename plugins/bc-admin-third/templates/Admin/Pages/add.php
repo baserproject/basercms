@@ -10,7 +10,7 @@
  */
 
 /**
- * [ADMIN] ページ編集フォーム
+ * [ADMIN] ページ登録フォーム
  * @var \BaserCore\View\BcAdminAppView $this
  * @var \BaserCore\Model\Entity\Page $page
  * @checked
@@ -19,13 +19,12 @@
  */
 $this->BcBaser->css('admin/ckeditor/editor', true);
 $this->BcBaser->js('admin/pages/edit.bundle', false);
-$this->BcAdmin->setTitle(__d('baser_core', '固定ページ情報編集'));
+$this->BcAdmin->setTitle(__d('baser_core', '固定ページ情報新規登録'));
 $this->BcAdmin->setHelp('pages_form');
 ?>
 
 
-<?php echo $this->BcAdminForm->create($page, ['id' => 'PageAdminEditForm', 'novalidate' => true]) ?>
-<?php echo $this->BcAdminForm->control('id', ['type' => 'hidden']) ?>
+<?php echo $this->BcAdminForm->create($page, ['id' => 'PageAdminAddForm', 'novalidate' => true]) ?>
 <?php echo $this->BcAdminForm->control('mode', ['type' => 'hidden']) ?>
 
 <?php $this->BcBaser->element('BaserCore.Pages/form') ?>
