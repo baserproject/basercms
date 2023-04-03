@@ -1308,7 +1308,9 @@ class BcBaserHelper extends Helper
      */
     public function func()
     {
-        echo BcSiteConfig::get('outer_service_output_footer');
+        if (BcUtil::isInstalled() && !BcUtil::isAdminSystem()) {
+            echo BcSiteConfig::get('outer_service_output_footer');
+        }
 
         $currentPrefix = $this->BcAuth->getCurrentPrefix();
         $authPrefix = Configure::read('BcPrefixAuth.' . $currentPrefix);
