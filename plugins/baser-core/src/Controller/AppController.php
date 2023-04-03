@@ -138,6 +138,12 @@ class AppController extends BaseController
     {
         parent::beforeFilter($event);
 
+		// index.php をつけたURLの場合、base の値が正常でなくなり、
+		// 内部リンクが影響を受けておかしくなってしまうため強制的に Not Found とする
+		if(preg_match('/\/index\.php\//', $this->getRequest()->getAttribute('base'))) {
+			$this->notFound();
+		}
+
         if (!$this->getRequest()->is('requestview')) return;
 
         $response = $this->redirectIfIsRequireMaintenance();
