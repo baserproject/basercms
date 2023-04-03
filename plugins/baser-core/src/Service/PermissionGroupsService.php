@@ -44,8 +44,11 @@ class PermissionGroupsService implements PermissionGroupsServiceInterface
 	use BcContainerTrait;
 
 	/**
-	 * Constructor
-	 */
+     * Constructor
+     * @noTodo
+     * @unitTest
+     * @checked
+     */
 	public function __construct()
 	{
 		$this->PermissionGroups = TableRegistry::getTableLocator()->get('BaserCore.PermissionGroups');
@@ -123,6 +126,9 @@ class PermissionGroupsService implements PermissionGroupsServiceInterface
      * @param int $userGroupId
      * @param array $queryParams
      * @return Query
+     * @notodo
+     * @unitTest
+     * @checked
      */
 	public function getIndex(int $userGroupId, array $queryParams): Query
 	{
@@ -367,7 +373,11 @@ class PermissionGroupsService implements PermissionGroupsServiceInterface
      * コントロールソースを取得する
      *
      * @param string $field
+     * @param array $options
      * @return array
+     * @noTodo
+     * @unitTest
+     * @checked
      */
 	public function getControlSource(string $field, array $options = []): array
     {
@@ -438,6 +448,9 @@ class PermissionGroupsService implements PermissionGroupsServiceInterface
      * @param string $type
      * @param string $name
      * @return EntityInterface|false
+     * @noTodo
+     * @unitTest
+     * @checked
      */
     public function buildDefaultEtcRuleGroup(string $type, string $name)
     {

@@ -71,7 +71,7 @@ return [
         'MailConfigsApi' => [
             'title' => __d('baser_core', 'メールフォーム設定API'),
             'plugin' => 'BcMail',
-            'type' => 'Api',
+            'type' => 'Api/Admin',
             'items' => [
                 'view' => ['title' => __d('baser_core', '設定取得'), 'url' => '/baser/api/bc-mail/mail_configs/view.json', 'method' => 'GET', 'auth' => true],
                 'edit' => ['title' => __d('baser_core', '編集'), 'url' => '/baser/api/bc-mail/mail_configs/edit.json', 'method' => 'POST', 'auth' => false],
@@ -81,7 +81,7 @@ return [
         'MailContentsApi' => [
             'title' => __d('baser_core', 'メールコンテンツAPI'),
             'plugin' => 'BcMail',
-            'type' => 'Api',
+            'type' => 'Api/Admin',
             'items' => [
                 'index' => ['title' => __d('baser_core', '一覧取得'), 'url' => '/baser/api/bc-mail/mail_contents/index.json', 'method' => 'GET', 'auth' => true],
                 'view' => ['title' => __d('baser_core', '単一取得'), 'url' => '/baser/api/bc-mail/mail_contents/view/*.json', 'method' => 'GET', 'auth' => true],
@@ -97,7 +97,7 @@ return [
         'MailFieldsApi' => [
             'title' => __d('baser_core', 'メールフィールドAPI'),
             'plugin' => 'BcMail',
-            'type' => 'Api',
+            'type' => 'Api/Admin',
             'items' => [
                 'index' => ['title' => __d('baser_core', '一覧取得'), 'url' => '/baser/api/bc-mail/mail_fields/index/*.json', 'method' => 'GET', 'auth' => true],
                 'view' => ['title' => __d('baser_core', '単一取得'), 'url' => '/baser/api/bc-mail/mail_fields/view/*.json', 'method' => 'GET', 'auth' => true],
@@ -114,7 +114,7 @@ return [
         'MailMessagesApi' => [
             'title' => __d('baser_core', 'メールメッセージAPI'),
             'plugin' => 'BcMail',
-            'type' => 'Api',
+            'type' => 'Api/Admin',
             'items' => [
                 'add' => ['title' => __d('baser_core', '新規登録'), 'url' => '/baser/api/bc-mail/mail_messages/add/*.json', 'method' => 'POST', 'auth' => true],
                 'batch' => ['title' => __d('baser_core', '一括処理'), 'url' => '/baser/api/bc-mail/mail_messages/batch/*.json', 'method' => 'POST', 'auth' => true],

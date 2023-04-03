@@ -50,7 +50,7 @@ return [
                             'action' => 'index'
                         ],
                         'add' => [
-                            'prefix' => 'Api',
+                            'prefix' => 'Api/Admin',
                             'plugin' => 'BcMail',
                             'controller' => 'MailContents',
                             'action' => 'add'
@@ -67,7 +67,7 @@ return [
                             'action' => 'index'
                         ],
                         'copy' => [
-                            'prefix' => 'Api',
+                            'prefix' => 'Api/Admin',
                             'plugin' => 'BcMail',
                             'controller' => 'MailContents',
                             'action' => 'copy'

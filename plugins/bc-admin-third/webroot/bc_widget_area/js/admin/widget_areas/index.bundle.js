@@ -7,5 +7,5 @@
  * @since         5.0.0
  * @license       https://basercms.net/license/index.html MIT License
  */
-$((function(){$.bcBatch.init({batchUrl:$.bcUtil.apiBaseUrl+"bc-widget-area/widget_areas/batch.json"})}));
+$((function(){$.bcBatch.init({batchUrl:$.bcUtil.apiAdminBaseUrl+"bc-widget-area/widget_areas/batch.json"})}));
 //# sourceMappingURL=index.bundle.js.map

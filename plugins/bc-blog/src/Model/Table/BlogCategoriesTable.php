@@ -330,7 +330,7 @@ class BlogCategoriesTable extends BlogAppTable
         $permissionsService = $this->getService(PermissionsServiceInterface::class);
         $addUrl = preg_replace('|^/index.php|', '', Router::url([
             'plugin' => 'BcBlog',
-            'prefix' => 'Api',
+            'prefix' => 'Api/Admin',
             'controller' => 'BlogCategories',
             'action' => 'add',
             $blogContentId

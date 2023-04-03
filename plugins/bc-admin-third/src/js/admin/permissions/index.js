@@ -37,11 +37,11 @@ const permissionGroupsIndex = {
     initView() {
         // 並び替え機能実装
         $.bcSortable.init({
-            updateSortUrl: $.bcUtil.apiBaseUrl + 'baser-core' + '/permissions/update_sort/' + this.userGroupId + '.json'
+            updateSortUrl: $.bcUtil.apiAdminBaseUrl + 'baser-core' + '/permissions/update_sort/' + this.userGroupId + '.json'
         });
         // 一括処理実装
         $.bcBatch.init({
-            batchUrl: $.bcUtil.apiBaseUrl + 'baser-core' + '/permissions/batch.json'
+            batchUrl: $.bcUtil.apiAdminBaseUrl + 'baser-core' + '/permissions/batch.json'
         });
         this.initPermissionGroups();
         this.registerEvents();

@@ -63,15 +63,6 @@ class ContentFoldersControllerTest extends BcTestCase
     }
 
     /**
-     * test initialize
-     */
-    public function test_initialize()
-    {
-        $controller = new ContentFoldersController($this->getRequest());
-        $this->assertEquals($controller->Authentication->unauthenticatedActions, ['index', 'view']);
-    }
-
-    /**
      * Test index method
      *
      * @return void
@@ -95,58 +86,4 @@ class ContentFoldersControllerTest extends BcTestCase
         $this->assertEquals("baserCMSサンプル", $result->contentFolder->folder_template);
     }
 
-    /**
-     * Test add method
-     *
-     * @return void
-     */
-    public function testAdd()
-    {
-        $this->loginAdmin($this->getRequest());
-        $data = [
-            'folder_template' => 'テストcreate',
-            'content' => [
-                "parent_id" => "1",
-                "title" => "新しい フォルダー",
-                "plugin" => 'BaserCore',
-                "type" => "ContentFolder",
-                "site_id" => "1",
-                "alias_id" => "",
-                "entity_id" => "",
-            ]
-        ];
-        $this->post('/baser/api/baser-core/content_folders/add.json?token=' . $this->accessToken, $data);
-        $this->assertResponseOk();
-        $ContentFolders = $this->getTableLocator()->get('ContentFolders');
-        $query = $ContentFolders->find()->where(['folder_template' => $data['folder_template']]);
-        $this->assertEquals(1, $query->count());
-    }
-
-    /**
-     * Test delete method
-     *
-     * @return void
-     */
-    public function testDelete()
-    {
-        $this->delete('/baser/api/baser-core/content_folders/delete/1.json?token=' . $this->accessToken);
-        $this->assertResponseSuccess();
-    }
-
-    /**
-     * Test edit method
-     *
-     * @return void
-     */
-    public function testEdit()
-    {
-        $data = $this->ContentFoldersService->getIndex(['folder_template' => "testEdit"])->first();
-        $data->content->name = "contentFolderTestUpdate";
-        $id = $data->id;
-        $this->post("/baser/api/baser-core/content_folders/edit/{$id}.json?token=" . $this->accessToken, $data->toArray());
-        $this->assertResponseSuccess();
-        $query = $this->ContentFoldersService->getIndex(['folder_template' => $data['folder_template']]);
-        $this->assertEquals(1, $query->all()->count());
-        $this->assertEquals("contentFolderTestUpdate", $query->all()->first()->content->name);
-    }
 }

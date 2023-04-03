@@ -60,7 +60,7 @@ return [
                         ],
                         // 新規追加
                         'add' => [
-                            'prefix' => 'Api',
+                            'prefix' => 'Api/Admin',
                             'plugin' => 'BcCustomContent',
                             'controller' => 'CustomContents',
                             'action' => 'add'
@@ -80,7 +80,7 @@ return [
                         ],
                         // コピー
                         'copy' => [
-                            'prefix' => 'Api',
+                            'prefix' => 'Api/Admin',
                             'plugin' => 'BcCustomContent',
                             'controller' => 'CustomContents',
                             'action' => 'copy'

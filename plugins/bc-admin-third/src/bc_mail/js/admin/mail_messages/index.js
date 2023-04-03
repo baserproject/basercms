@@ -16,7 +16,7 @@ $(function () {
      * 一括処理実装
      */
     $.bcBatch.init({
-        batchUrl: $.bcUtil.apiBaseUrl + 'bc-mail' + '/mail_messages/batch/' + mailContentId + '.json',
+        batchUrl: $.bcUtil.apiAdminBaseUrl + 'bc-mail' + '/mail_messages/batch/' + mailContentId + '.json',
     });
 
 });

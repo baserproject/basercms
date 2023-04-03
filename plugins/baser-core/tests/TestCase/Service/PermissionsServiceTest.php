@@ -14,6 +14,7 @@ namespace BaserCore\Test\TestCase\Service;
 use BaserCore\Test\Factory\PermissionFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Service\PermissionsService;
+use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
 
 /**
@@ -430,6 +431,30 @@ class PermissionsServiceTest extends BcTestCase
             ['/baser/admin/baser-core/users/logout', true],
             ['/baser/admin/baser-core/baser-core/test', false],
         ];
+    }
+
+    /**
+     * test convertRegexUrl
+     * @return void
+     */
+    public function testConvertRegexUrl(): void
+    {
+        $this->loginAdmin($this->getRequest('/'));
+        $user = BcUtil::loginUser();
+        $url = 'https://www.nhk.or.jp';
+        $result = $this->PermissionsService->convertRegexUrl($url);
+        $url2 = '/^https\:\/\/www\.nhk\.or\.jp$/is';
+        $this->assertEquals($url2, $result);
+
+        $url = 'https://www.nhk.or.jp/{loginUserId}';
+        $result = $this->PermissionsService->convertRegexUrl($url);
+        $url2 = '/^https\:\/\/www\.nhk\.or\.jp\/' . $user->id . '$/is';
+        $this->assertEquals($url2, $result);
+
+        $url = '/admin/posts/*';
+        $expected = '/^\/admin\/posts(|\/.*?)$/is';
+        $result = $this->PermissionsService->convertRegexUrl($url);
+        $this->assertEquals($expected, $result);
     }
 
     /**

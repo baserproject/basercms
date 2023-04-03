@@ -30,7 +30,7 @@ class UserGroupsFixture extends TestFixture
             'id' => 1,
             'name' => 'admins',
             'title' => 'システム管理',
-            'auth_prefix' => 'Admin',
+            'auth_prefix' => 'Admin,Api/Admin',
             'auth_prefix_settings' => '',
             'use_move_contents' => true,
             'created' => '2017-05-03 10:57:07',
@@ -41,7 +41,7 @@ class UserGroupsFixture extends TestFixture
             'name' => 'operators',
             'title' => 'サイト運営者',
             'auth_prefix' => 'Admin',
-            'auth_prefix_settings' => '{"Admin":{"type":"2"},"Api":{"type":"2"}}',
+            'auth_prefix_settings' => '{"Admin":{"type":"2"},"Api/Admin":{"type":"2"}}',
             'use_move_contents' => false,
             'created' => '2017-05-03 10:57:07',
             'modified' => '2017-05-03 10:57:07'

@@ -15,7 +15,7 @@ $(function () {
      * 一括処理実装
      */
     $.bcBatch.init({
-        batchUrl: $.bcUtil.apiBaseUrl + 'bc-search-index' + '/search_indexes/batch.json',
+        batchUrl: $.bcUtil.apiAdminBaseUrl + 'bc-search-index' + '/search_indexes/batch.json',
     });
 
     /**
@@ -27,7 +27,7 @@ $(function () {
         $.bcToken.check(function () {
             return $.ajax({
                 type: "POST",
-                url: $.bcUtil.apiBaseUrl + 'bc-search-index' + '/search_indexes/change_priority/' + id + '.json',
+                url: $.bcUtil.apiAdminBaseUrl + 'bc-search-index' + '/search_indexes/change_priority/' + id + '.json',
                 headers: {
                     "Authorization": $.bcJwt.accessToken,
                 },
@@ -58,7 +58,7 @@ $(function () {
      */
     $("#site-id").change(function () {
         $.ajax({
-            url: $.bcUtil.apiBaseUrl + 'baser-core' + '/contents/get_content_folder_list/' + $(this).val() + '.json',
+            url: $.bcUtil.apiAdminBaseUrl + 'baser-core' + '/contents/get_content_folder_list/' + $(this).val() + '.json',
             headers: {
                 "Authorization": $.bcJwt.accessToken,
             },

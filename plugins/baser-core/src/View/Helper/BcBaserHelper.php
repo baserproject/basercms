@@ -1237,6 +1237,8 @@ class BcBaserHelper extends Helper
      */
     public function scripts()
     {
+        echo BcSiteConfig::get('outer_service_output_header');
+
         $currentPrefix = $this->BcAuth->getCurrentPrefix();
         $authPrefix = Configure::read('BcPrefixAuth.' . $currentPrefix);
         $toolbar = true;
@@ -1304,6 +1306,8 @@ class BcBaserHelper extends Helper
      */
     public function func()
     {
+        echo BcSiteConfig::get('outer_service_output_footer');
+
         $currentPrefix = $this->BcAuth->getCurrentPrefix();
         $authPrefix = Configure::read('BcPrefixAuth.' . $currentPrefix);
         $toolbar = true;

@@ -11,7 +11,6 @@
 
 namespace BcBlog\Test\TestCase\Controller\Api;
 
-use BaserCore\Service\DblogsServiceInterface;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcBlog\Controller\Api\BlogTagsController;
@@ -83,15 +82,6 @@ class BlogTagsControllerTest extends BcTestCase
     }
 
     /**
-     * test initialize
-     */
-    public function test_initialize()
-    {
-        $controller = new BlogTagsController($this->getRequest());
-        $this->assertEquals($controller->Authentication->unauthenticatedActions, ['index',  'view']);
-    }
-
-    /**
      * test index
      */
     public function testIndex()
@@ -132,114 +122,6 @@ class BlogTagsControllerTest extends BcTestCase
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals(1, $result->blogTag->id);
         $this->assertEquals('tag1', $result->blogTag->name);
-    }
-
-    /**
-     * test add
-     */
-    public function testAdd()
-    {
-        // ブログタグ名
-        $data = [
-            'name' => 'test tag add',
-        ];
-        // ブログタグ登録コール
-        $this->post('/baser/api/bc-blog/blog_tags/add.json?token=' . $this->accessToken, $data);
-        $this->assertResponseOk();
-        $result = json_decode((string)$this->_response->getBody());
-        $this->assertEquals('ブログタグ「test tag add」を追加しました。', $result->message);
-        $this->assertEquals(1, $result->blogTag->id);
-        $this->assertEquals('test tag add', $result->blogTag->name);
-        $this->assertNotEmpty($result->blogTag->created);
-        $this->assertNotEmpty($result->blogTag->modified);
-
-        // error
-        // 同じブログタグを登録
-        $this->post('/baser/api/bc-blog/blog_tags/add.json?token=' . $this->accessToken, $data);
-        $this->assertResponseCode(400);
-        $result = json_decode((string)$this->_response->getBody());
-        $this->assertEquals('入力エラーです。内容を修正してください。', $result->message);
-    }
-
-    /**
-     * test edit
-     */
-    public function testEdit()
-    {
-        // タグのデータを作成する
-        BlogTagFactory::make(['id' => 1, 'name' => 'tag1'])->persist();
-
-        // 編集が成功のテスト
-        $this->post('/baser/api/bc-blog/blog_tags/edit/1.json?token=' . $this->accessToken, ['name' => 'tag2']);
-        $this->assertResponseOk();
-        $result = json_decode((string)$this->_response->getBody());
-        // 成功のメッセージを確認する
-        $this->assertEquals('ブログタグ「tag2」を更新しました。', $result->message);
-        // 編集した後のタグデータを確認する
-        $this->assertEquals(1, $result->blogTag->id);
-        $this->assertEquals('tag2', $result->blogTag->name);
-
-        // 編集が失敗のテスト
-        $this->post('/baser/api/bc-blog/blog_tags/edit/1.json?token=' . $this->accessToken, ['name' => '']);
-        $this->assertResponseCode(400);
-        $result = json_decode((string)$this->_response->getBody());
-        // 編集が失敗の場合、データが変わらないことを確認する
-        $blogTag = BlogTagFactory::get(1);
-        $this->assertEquals('tag2', $blogTag->name);
-        // レスポンスのメッセージとエラーメッセージを確認する
-        $this->assertEquals('入力エラーです。内容を修正してください。', $result->message);
-        $this->assertEquals('ブログタグを入力してください。', $result->errors->name->_empty);
-    }
-
-    /**
-     * test delete
-     */
-    public function testDelete()
-    {
-        // タグのデータを作成する
-        BlogTagFactory::make(['id' => 1, 'name' => 'tag1'])->persist();
-
-        // タグ削除APIを叩く
-        $this->post('/baser/api/bc-blog/blog_tags/delete/1.json?token=' . $this->accessToken);
-        // レスポンスのステータスを確認する
-        $this->assertResponseOk();
-        $result = json_decode((string)$this->_response->getBody());
-        // レスポンスのメッセージを確認する
-        $this->assertEquals('ブログタグ「tag1」を削除しました。', $result->message);
-        // 削除されたタグのidを確認する
-        $this->assertEquals(1, $result->blogTag->id);
-    }
-
-    /**
-     * test batch
-     */
-    public function testBatch()
-    {
-        // delete以外のHTTPメソッドには500エラーを返す
-        $this->post('/baser/api/bc-blog/blog_tags/batch.json?token=' . $this->accessToken, ['batch' => 'test']);
-        $this->assertResponseCode(500);
-
-        // データを作成する
-        BlogTagFactory::make(['id' => 1, 'name' => 'tag1'])->persist();
-        BlogTagFactory::make(['id' => 2, 'name' => 'tag2'])->persist();
-
-        $data = [
-            'batch' => 'delete',
-            'batch_targets' => [1, 2],
-        ];
-        $this->post('/baser/api/bc-blog/blog_tags/batch.json?token=' . $this->accessToken, $data);
-        // バッチの実行が成功
-        $this->assertResponseOk();
-        $result = json_decode((string)$this->_response->getBody());
-        // レスポンスのメッセージを確認する
-        $this->assertEquals('一括処理が完了しました。', $result->message);
-        // DBログに保存するかどうか確認する
-        $dbLogService = $this->getService(DblogsServiceInterface::class);
-        $dbLog = $dbLogService->getDblogs(1)->toArray()[0];
-        $this->assertEquals('ブログタグ「tag1」、「tag2」を 削除 しました。', $dbLog->message);
-        $this->assertEquals(1, $dbLog->id);
-        $this->assertEquals('BlogTags', $dbLog->controller);
-        $this->assertEquals('batch', $dbLog->action);
     }
 
 }

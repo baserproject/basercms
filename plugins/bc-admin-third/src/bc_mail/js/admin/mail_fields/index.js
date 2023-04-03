@@ -15,14 +15,14 @@ $(function () {
      * 並び替え機能実装
      */
     $.bcSortable.init({
-        updateSortUrl: $.bcUtil.apiBaseUrl + 'bc-mail' + '/mail_fields/update_sort/' + mailContentId + '.json'
+        updateSortUrl: $.bcUtil.apiAdminBaseUrl + 'bc-mail' + '/mail_fields/update_sort/' + mailContentId + '.json'
     });
 
     /**
      * 一括処理実装
      */
     $.bcBatch.init({
-        batchUrl: $.bcUtil.apiBaseUrl + 'bc-mail' + '/mail_fields/batch.json',
+        batchUrl: $.bcUtil.apiAdminBaseUrl + 'bc-mail' + '/mail_fields/batch.json',
     });
 
 });

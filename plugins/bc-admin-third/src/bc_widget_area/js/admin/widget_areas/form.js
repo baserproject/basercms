@@ -182,7 +182,7 @@ $(function () {
                 headers: {
                     "Authorization": $.bcJwt.accessToken,
                 },
-                url: `${$.bcUtil.apiBaseUrl}bc-widget-area/widget_areas/delete_widget/${widgetAreaId}/${id}.json`,
+                url: `${$.bcUtil.apiAdminBaseUrl}bc-widget-area/widget_areas/delete_widget/${widgetAreaId}/${id}.json`,
                 type: 'POST',
                 data: {
                     _csrfToken: $.bcToken.key
@@ -227,7 +227,7 @@ $(function () {
                 headers: {
                     "Authorization": $.bcJwt.accessToken,
                 },
-                url: `${$.bcUtil.apiBaseUrl}bc-widget-area/widget_areas/update_sort/${widgetAreaId}.json`,
+                url: `${$.bcUtil.apiAdminBaseUrl}bc-widget-area/widget_areas/update_sort/${widgetAreaId}.json`,
                 type: 'POST',
                 data: {
                     _csrfToken: $.bcToken.key,
@@ -265,7 +265,7 @@ $(function () {
                 headers: {
                     "Authorization": $.bcJwt.accessToken,
                 },
-                url: `${$.bcUtil.apiBaseUrl}bc-widget-area/widget_areas/update_title/${widgetAreaId}.json`,
+                url: `${$.bcUtil.apiAdminBaseUrl}bc-widget-area/widget_areas/update_title/${widgetAreaId}.json`,
                 type: 'POST',
                 data: $("#WidgetAreaUpdateTitleForm").serialize(),
                 dataType: 'json',
@@ -305,7 +305,7 @@ $(function () {
                 headers: {
                     "Authorization": $.bcJwt.accessToken,
                 },
-                url: $.bcUtil.apiBaseUrl + 'bc-widget-area/widget_areas/update_widget/' + widgetAreaId + '.json',
+                url: $.bcUtil.apiAdminBaseUrl + 'bc-widget-area/widget_areas/update_widget/' + widgetAreaId + '.json',
                 type: 'POST',
                 data: $form.serialize(),
                 dataType: 'json',

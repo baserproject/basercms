@@ -238,7 +238,7 @@ let customLinks = new Vue({
         },
 
         loadParentList: function() {
-            let url = $.bcUtil.apiBaseUrl + 'bc-custom-content/custom_links/get_parent_list/' + this.link.custom_table_id + '.json';
+            let url = $.bcUtil.apiAdminBaseUrl + 'bc-custom-content/custom_links/get_parent_list/' + this.link.custom_table_id + '.json';
             axios.get(url)
                 .then(response => {
                     if(response.data.parentList) {
@@ -286,7 +286,7 @@ let customLinks = new Vue({
             }
             this.hideError();
             $.bcUtil.showLoader();
-            let url = $.bcUtil.apiBaseUrl + 'bc-custom-content/custom_links/edit/' + this.link.id + '.json';
+            let url = $.bcUtil.apiAdminBaseUrl + 'bc-custom-content/custom_links/edit/' + this.link.id + '.json';
             axios.post(url, this.link)
                 .then(response => {
                     $.bcUtil.hideLoader();

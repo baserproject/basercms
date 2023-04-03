@@ -14,7 +14,7 @@ $(function () {
      * 一括処理実装
      */
     $.bcBatch.init({
-        batchUrl: $.bcUtil.apiBaseUrl + 'bc-blog/blog_categories/batch.json'
+        batchUrl: $.bcUtil.apiAdminBaseUrl + 'bc-blog/blog_categories/batch.json'
     });
 
 });

@@ -61,18 +61,6 @@ class BcApiControllerTest extends BcTestCase
     }
 
     /**
-     * Test index method
-     *
-     * @return void
-     */
-    public function testInitialize()
-    {
-        $controller = new BcApiController($this->getRequest());
-        $this->assertTrue(isset($controller->Authentication));
-        $this->assertFalse($controller->Security->getConfig('validatePost'));
-    }
-
-    /**
      * test getAccessToken
      */
     public function testGetAccessToken()
@@ -84,29 +72,6 @@ class BcApiControllerTest extends BcTestCase
         $this->assertArrayHasKey('access_token', $result);
         $result = $controller->getAccessToken(new Result(null, Result::FAILURE_CREDENTIALS_INVALID));
         $this->assertEquals([], $result);
-    }
-
-    /**
-     * Test index method
-     *
-     * @return void
-     */
-    public function testBeforeFilter()
-    {
-        $this->loadFixtures('Users', 'UserGroups', 'UsersUserGroups', 'LoginStores');
-        $token = $this->apiLoginAdmin(1);
-        // トークンタイプチェック
-        $this->get('/baser/api/baser-core/users/index.json?token=' . $token['refresh_token']);
-        $this->assertResponseCode(401);
-        $this->get('/baser/api/baser-core/users/index.json?token=' . $token['access_token']);
-        $this->assertResponseOk();
-        // ユーザーの有効チェック
-        $users = $this->getTableLocator()->get('BaserCore.Users');
-        $user = $users->get(1);
-        $user->status = false;
-        $users->save($user);
-        $this->get('/baser/api/baser-core/users/index.json?token=' . $token['access_token']);
-        $this->assertResponseCode(403);
     }
 
     /**

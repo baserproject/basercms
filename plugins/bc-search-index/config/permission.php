@@ -36,7 +36,7 @@ return [
         'SearchIndexesApi' => [
             'title' => __d('baser_core', '検索インデックスAPI'),
             'plugin' => 'BcSearchIndex',
-            'type' => 'Api',
+            'type' => 'Api/Admin',
             'items' => [
                 'Batch' => ['title' => __d('baser_core', '一括処理'), 'url' => '/baser/api/bc-search-index/search_indexes/batch.json', 'method' => 'POST', 'auth' => false],
                 'ChangePriority' => ['title' => __d('baser_core', '優先度変更'), 'url' => '/baser/api/bc-search-index/search_indexes/change_priority/*.json', 'method' => 'POST', 'auth' => false],

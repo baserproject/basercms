@@ -11,13 +11,11 @@
 
 namespace BcBlog\Test\TestCase\Controller\Api;
 
-use BaserCore\Service\DblogsServiceInterface;
 use BaserCore\Test\Factory\PermissionFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BcBlog\Controller\Api\BlogCommentsController;
-use BcBlog\Service\BlogCommentsServiceInterface;
 use BcBlog\Test\Factory\BlogPostFactory;
 use BcBlog\Test\Scenario\BlogCommentsScenario;
 use BcBlog\Test\Scenario\BlogCommentsServiceScenario;
@@ -96,15 +94,6 @@ class BlogCommentsControllerTest extends BcTestCase
     }
 
     /**
-     * test initialize
-     */
-    public function test_initialize()
-    {
-        $controller = new BlogCommentsController($this->getRequest());
-        $this->assertEquals($controller->Authentication->unauthenticatedActions, ['index', 'view']);
-    }
-
-    /**
      * test index
      */
     public function test_index()
@@ -118,7 +107,7 @@ class BlogCommentsControllerTest extends BcTestCase
             'news1', // name
             '/news/' // url
         );
-        BlogPostFactory::make(['id' => 1, 'blog_content_id'=> 1, 'status' => true])->persist();
+        BlogPostFactory::make(['id' => 1, 'blog_content_id' => 1, 'status' => true])->persist();
         $this->loadFixtureScenario(BlogCommentsScenario::class,);
 
 
@@ -147,11 +136,6 @@ class BlogCommentsControllerTest extends BcTestCase
         $this->get('/baser/api/bc-blog/blog_comments/index.json?status=unpublish');
         // レスポンスを確認
         $this->assertResponseCode(403);
-
-        //ログインしている状態では status パラメーターへへのアクセできるか確認
-        $this->get('/baser/api/bc-blog/blog_comments/index.json?status=unpublish&token=' . $this->accessToken);
-        // レスポンスを確認
-        $this->assertResponseOk();
     }
 
     /**
@@ -177,121 +161,6 @@ class BlogCommentsControllerTest extends BcTestCase
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals(1, $result->blogComment->id);
         $this->assertEquals('ホームページの開設おめでとうございます。（ダミー）', $result->blogComment->message);
-    }
-
-    /**
-     * test delete
-     */
-    public function test_delete()
-    {
-        // コメントを作成する
-        $this->loadFixtureScenario(
-            BlogContentScenario::class,
-            1,  // id
-            1, // siteId
-            null, // parentId
-            'news1', // name
-            '/news/' // url
-        );
-        $this->loadFixtureScenario(BlogCommentsServiceScenario::class);
-        // APIを叩く
-        $this->post('/baser/api/bc-blog/blog_comments/delete/1.json?token=' . $this->accessToken);
-        $this->assertResponseOk();
-        $result = json_decode((string)$this->_response->getBody());
-        // 削除されたコメントのidを確認する
-        $this->assertEquals(1, $result->blogComment->id);
-        // レスポンスのメッセージを確認する
-        $this->assertEquals('ブログコメント「1」を削除しました。', $result->message);
-    }
-
-    /**
-     * test batch
-     */
-    public function test_batch()
-    {
-        // サービスクラス
-        $blogCommentsService = $this->getService(BlogCommentsServiceInterface::class);
-        $dblogsService = $this->getService(DblogsServiceInterface::class);
-
-        // データ生成
-        $this->loadFixtureScenario(
-            BlogContentScenario::class,
-            1,  // id
-            1, // siteId
-            null, // parentId
-            'news1', // name
-            '/news/' // url
-        );
-        $this->loadFixtureScenario(BlogCommentsServiceScenario::class);
-
-        //// 公開バッチ処理コール
-        $this->post('/baser/api/bc-blog/blog_comments/batch.json?token=' . $this->accessToken, [
-            'batch' => 'publish',
-            'batch_targets' => [1, 2, 3]
-        ]);
-        $this->assertResponseOk();
-        // 処理完了メッセージ
-        $result = json_decode((string)$this->_response->getBody());
-        $this->assertEquals('一括処理が完了しました。', $result->message);
-        // データが更新されていること
-        $datas = $blogCommentsService->getIndex([])->all();
-        foreach($datas as $value) {
-            $this->assertTrue($value->status);
-        }
-        // dblogsが生成されていること
-        $dblogsData = $dblogsService->getDblogs(1)->toArray()[0];
-        $this->assertEquals('ブログコメント「1, 2, 3」を 公開 しました。', $dblogsData->message);
-        $this->assertEquals(1, $dblogsData->user_id);
-        $this->assertEquals('BlogComments', $dblogsData->controller);
-        $this->assertEquals('batch', $dblogsData->action);
-
-        //// 非公開バッチ処理コール
-        $this->post('/baser/api/bc-blog/blog_comments/batch.json?token=' . $this->accessToken, [
-            'batch' => 'unpublish',
-            'batch_targets' => [1, 2, 3]
-        ]);
-        $this->assertResponseOk();
-        // 処理完了メッセージ
-        $result = json_decode((string)$this->_response->getBody());
-        $this->assertEquals('一括処理が完了しました。', $result->message);
-        // データが更新されていること
-        $datas = $blogCommentsService->getIndex([])->all();
-        foreach($datas as $value) {
-            $this->assertFalse($value->status);
-        }
-        // dblogsが生成されていること
-        $dblogsData = $dblogsService->getDblogs(1)->toArray()[0];
-        $this->assertEquals('ブログコメント「1, 2, 3」を 非公開に しました。', $dblogsData->message);
-        $this->assertEquals(1, $dblogsData->user_id);
-        $this->assertEquals('BlogComments', $dblogsData->controller);
-        $this->assertEquals('batch', $dblogsData->action);
-
-        //// 削除バッチ処理コール
-        $this->post('/baser/api/bc-blog/blog_comments/batch.json?token=' . $this->accessToken, [
-            'batch' => 'delete',
-            'batch_targets' => [1, 2, 3]
-        ]);
-        $this->assertResponseOk();
-        // 処理完了メッセージ
-        $result = json_decode((string)$this->_response->getBody());
-        $this->assertEquals('一括処理が完了しました。', $result->message);
-        // データ削除されていること
-        $data = $blogCommentsService->getIndex([])->count();
-        $this->assertEquals(0, $data);
-        // dblogsが生成されていること
-        $dblogsData = $dblogsService->getDblogs(1)->toArray()[0];
-        $this->assertEquals('ブログコメント「1, 2, 3」を 削除 しました。', $dblogsData->message);
-        $this->assertEquals(1, $dblogsData->user_id);
-        $this->assertEquals('BlogComments', $dblogsData->controller);
-        $this->assertEquals('batch', $dblogsData->action);
-
-        // error
-        // 無効なキーを指定
-        $this->post('/baser/api/bc-blog/blog_comments/batch.json?token=' . $this->accessToken, [
-            'batch' => 'new',
-            'batch_targets' => [11, 21]
-        ]);
-        $this->assertResponseCode(500);
     }
 
 }

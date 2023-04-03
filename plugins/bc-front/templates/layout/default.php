@@ -57,6 +57,8 @@ $base = $attributes['base'];
 </head>
 <body id="<?php $this->BcBaser->contentsName() ?>">
 
+<?php $this->BcBaser->func() ?>
+
 <div class="bs-container">
 
 	<!-- /Elements/header.php -->
@@ -97,6 +99,5 @@ $base = $attributes['base'];
 
 </div>
 
-<?php $this->BcBaser->func() ?>
 </body>
 </html>

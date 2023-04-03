@@ -99,7 +99,7 @@ $(function () {
         $.bcToken.check(function () {
             return $.ajax({
                 type: "POST",
-                url: $.bcUtil.apiBaseUrl + 'bc-blog/blog_tags/add.json',
+                url: $.bcUtil.apiAdminBaseUrl + 'bc-blog/blog_tags/add.json',
                 headers: {
                     "Authorization": $.bcJwt.accessToken,
                 },
@@ -194,7 +194,7 @@ $(function () {
         $.bcToken.check(function () {
             return $.ajax({
                 type: "post",
-                url: $.bcUtil.apiBaseUrl + 'bc-blog/blog_categories/add/' + blogContentId + '.json',
+                url: $.bcUtil.apiAdminBaseUrl + 'bc-blog/blog_categories/add/' + blogContentId + '.json',
                 headers: {
                     "Authorization": $.bcJwt.accessToken,
                 },

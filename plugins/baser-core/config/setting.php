@@ -517,8 +517,8 @@ return [
             '/baser-core/users/login',
             '/baser-core/users/logout',
             '/baser-core/password_requests/*',
-            '/baser/api/baser-core/users/login.json',
-            '/baser/api/baser-core/users/refresh_token.json'
+            '/baser/api/admin/baser-core/users/login.json',
+            '/baser/api/admin/baser-core/users/refresh_token.json'
         ]
     ],
 
@@ -558,6 +558,8 @@ return [
      *      - 1.ホワイトリスト: 全て拒否してアクセスルールで許可を設定
      *      - 2.ブラックリスト: 全て許可してアクセスルールで拒否を設定
      * - `disabled`: 設定を無効にする場合は true に設定（キーがない場合は有効とみなす）
+     * - `withCorePrefix`: プレフィックスの前に baserのコアプレフィックスを追加するかどうか
+     * - `isRestApi`: REST API かどうか
      */
     'BcPrefixAuth' => [
         // 管理画面
@@ -573,17 +575,27 @@ return [
             'userModel' => 'BaserCore.Users',
             'permissionType' => 1,
             'sessionKey' => 'AuthAdmin',
+            'withCorePrefix' => true
         ],
         // Api
         'Api' => [
             'name' => __d('baser_core', 'Web API'),
-            'type' => 'Jwt',
             'alias' => '/api',
+            'withCorePrefix' => true,
+            'isRestApi' => true
+        ],
+        // Api/Admin
+        'Api/Admin' => [
+            'name' => __d('baser_core', 'Admin Web API'),
+            'type' => 'Jwt',
+            'alias' => '/api/admin',
             'username' => ['email', 'name'],
             'password' => 'password',
             'userModel' => 'BaserCore.Users',
             'permissionType' => 1,
             'sessionKey' => 'AuthAdmin',
+            'withCorePrefix' => true,
+            'isRestApi' => true
         ],
         // フロントページ
         'Front' => [
@@ -751,7 +763,7 @@ return [
                     'title' => __d('baser_core', 'フォルダー'),
                     'routes' => [
                         'add' => [
-                            'prefix' => 'Api',
+                            'prefix' => 'Api/Admin',
                             'controller' => 'ContentFolders',
                             'action' => 'add'
                         ],
@@ -775,7 +787,7 @@ return [
                     'omitViewAction' => true,
                     'routes' => [
                         'add' => [
-                            'prefix' => 'Api',
+                            'prefix' => 'Api/Admin',
                             'controller' => 'Pages',
                             'action' => 'add'
                         ],
@@ -789,7 +801,7 @@ return [
                             'action' => 'view'
                         ],
                         'copy' => [
-                            'prefix' => 'Api',
+                            'prefix' => 'Api/Admin',
                             'controller' => 'Pages',
                             'action' => 'copy'
                         ]
@@ -801,7 +813,7 @@ return [
                     'icon' => 'bca-icon--alias',
                     'routes' => [
                         'add' => [
-                            'prefix' => 'Api',
+                            'prefix' => 'Api/Admin',
                             'controller' => 'Contents',
                             'action' => 'add_alias'
                         ],

@@ -796,7 +796,7 @@ class BlogPostsService implements BlogPostsServiceInterface
      * 前の記事を取得する
      *
      * @param BlogPost $post ブログ記事
-     * @return BlogPost|EntityInterface
+     * @return BlogPost|EntityInterface|null
      *
      * @noTodo
      * @checked
@@ -804,6 +804,7 @@ class BlogPostsService implements BlogPostsServiceInterface
      */
     public function getPrevPost(BlogPost $post)
     {
+        if(is_null($post->posted)) return null;
         $order = 'BlogPosts.posted DESC, BlogPosts.id DESC';
         // 投稿日が年月日時分秒が同一のデータの対応のため、投稿日が同じでIDが大きいデータを検索
         $conditions = array_merge_recursive([
@@ -833,13 +834,14 @@ class BlogPostsService implements BlogPostsServiceInterface
      * 次の記事を取得する
      *
      * @param BlogPost $post ブログ記事
-     * @return BlogPost|EntityInterface
+     * @return BlogPost|EntityInterface|null
      * @checked
      * @noTodo
      * @unitTest
      */
     public function getNextPost(BlogPost $post)
     {
+        if(is_null($post->posted)) return null;
         $order = 'BlogPosts.posted, BlogPosts.id';
         // 投稿日が年月日時分秒が同一のデータの対応のため、投稿日が同じでIDが小さいデータを検索
         $conditions = array_merge_recursive([

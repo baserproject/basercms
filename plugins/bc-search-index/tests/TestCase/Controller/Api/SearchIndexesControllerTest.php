@@ -15,9 +15,6 @@ use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\Test\Scenario\SearchIndexesSearchScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcSearchIndex\Controller\Api\SearchIndexesController;
-use BcSearchIndex\Service\SearchIndexesService;
-use BcSearchIndex\Test\Factory\SearchIndexFactory;
-use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\TestSuite\IntegrationTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -76,14 +73,6 @@ class SearchIndexesControllerTest extends BcTestCase
     }
 
     /**
-     * testBeforeRender
-     */
-    public function testBeforeRender()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
-    /**
      * test beforeFilter
      * @return void
      */
@@ -96,46 +85,6 @@ class SearchIndexesControllerTest extends BcTestCase
         $event = new Event('filter');
         $searchIndexes->beforeFilter($event);
         $this->assertFalse($searchIndexes->Security->getConfig('validatePost'));
-    }
-
-    /**
-     * test change_priority
-     * @return void
-     */
-    public function testChangePriority()
-    {
-        SearchIndexFactory::make(['id' => 1, 'title' => 'test data', 'type' => 'admin', 'site_id' => 1], 1)->persist();
-        $this->enableSecurityToken();
-        $this->enableCsrfToken();
-
-        $this->get('/baser/api/bc-search-index/search_indexes/change_priority/1.json?token=' . $this->accessToken);
-        $this->assertResponseCode(405);
-
-        $data = [
-            'priority' => 10
-        ];
-        $this->post('/baser/api/bc-search-index/search_indexes/change_priority/1.json?token=' . $this->accessToken, $data);
-        $this->assertResponseSuccess();
-        $result = json_decode((string)$this->_response->getBody());
-
-        $this->assertEquals('検索インデックス「test data」の優先度を変更しました。', $result->message);
-        $this->assertEquals(10, $result->searchIndex->priority);
-
-    }
-
-    /**
-     * test reconstruct
-     * @return void
-     */
-    public function testReconstruct()
-    {
-        $this->post('/baser/api/bc-search-index/search_indexes/reconstruct.json?token=' . $this->accessToken);
-        $this->assertResponseOk();
-        $result = json_decode((string)$this->_response->getBody());
-        $this->assertEquals('検索インデックスの再構築に成功しました。', $result->message);
-
-        $this->get('/baser/api/bc-search-index/search_indexes/reconstruct.json?token=' . $this->accessToken);
-        $this->assertResponseCode(405);
     }
 
     /**
@@ -238,57 +187,6 @@ class SearchIndexesControllerTest extends BcTestCase
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals('会社案内', $result->searchIndexes[0]->title);
-    }
-
-    /**
-     * test delete
-     * @return void
-     */
-    public function testDelete()
-    {
-        SearchIndexFactory::make(['id' => 3, 'title' => 'test data delete', 'type' => 'admin', 'site_id' => 0], 1)->persist();
-
-        $this->post('/baser/api/bc-search-index/search_indexes/delete/3.json?token=' . $this->accessToken);
-        $this->assertResponseOk();
-        $result = json_decode((string)$this->_response->getBody());
-        $this->assertEquals('test data delete', $result->searchIndex->title);
-        $this->assertEquals('検索インデックス: test data delete を削除しました。', $result->message);
-
-        $this->get('/baser/api/bc-search-index/search_indexes/delete/3.json?token=' . $this->accessToken);
-        $this->assertResponseCode(405);
-
-        $this->post('/baser/api/bc-search-index/search_indexes/delete/0.json?token=' . $this->accessToken);
-        $this->assertResponseCode(404);
-        $result = json_decode((string)$this->_response->getBody());
-        $this->assertEquals('データが見つかりません。', $result->message);
-    }
-
-    /**
-     * test batch
-     * @return void
-     */
-    public function testBatch()
-    {
-        $this->post('/baser/api/bc-search-index/search_indexes/batch.json?token=' . $this->accessToken, []);
-        $this->assertResponseFailure();
-
-        SearchIndexFactory::make(['id' => 1, 'title' => 'test data Batch 1', 'type' => 'admin', 'site_id' => 10], 1)->persist();
-        SearchIndexFactory::make(['id' => 2, 'title' => 'test data Batch 2', 'type' => 'admin', 'site_id' => 10], 1)->persist();
-        SearchIndexFactory::make(['id' => 3, 'title' => 'test data Batch 3', 'type' => 'admin', 'site_id' => 10], 1)->persist();
-
-        $data = [
-            'batch' => 'delete',
-            'batch_targets' => [1, 2, 3],
-        ];
-
-        $this->post('/baser/api/bc-search-index/search_indexes/batch.json?token=' . $this->accessToken, $data);
-        $this->assertResponseSuccess();
-        $result = json_decode((string)$this->_response->getBody());
-        $this->assertEquals('一括処理が完了しました。', $result->message);
-
-        $searchIndexesService = new SearchIndexesService();
-        $searchIndexes = $searchIndexesService->getIndex(['site_id' => 10])->all();
-        $this->assertEquals(0, count($searchIndexes));
     }
 
 }

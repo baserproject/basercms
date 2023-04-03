@@ -80,7 +80,9 @@ class CustomLinksService implements CustomLinksServiceInterface
             'for' => null,
             'contain' => [
                 'CustomFields',
-                'CustomContents' => ['Contents']
+                'CustomTables' => [
+                    'CustomContents' => ['Contents']
+                ]
             ]
         ], $options);
 

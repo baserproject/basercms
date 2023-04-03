@@ -7,5 +7,5 @@
  * @since         5.0.0
  * @license       https://basercms.net/license/index.html MIT License
  */
-$((function(){var a=$("#AdminMailMessagesScript").attr("data-mailContentId");$.bcBatch.init({batchUrl:$.bcUtil.apiBaseUrl+"bc-mail/mail_messages/batch/"+a+".json"})}));
+$((function(){var a=$("#AdminMailMessagesScript").attr("data-mailContentId");$.bcBatch.init({batchUrl:$.bcUtil.apiAdminBaseUrl+"bc-mail/mail_messages/batch/"+a+".json"})}));
 //# sourceMappingURL=index.bundle.js.map

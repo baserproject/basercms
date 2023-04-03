@@ -36,7 +36,7 @@ $(function () {
                 break;
             case "2":
                 // 一括処理
-                $.bcBatch.init({batchUrl: $.bcUtil.apiBaseUrl + 'baser-core' + '/contents/batch.json'});
+                $.bcBatch.init({batchUrl: $.bcUtil.apiAdminBaseUrl + 'baser-core' + '/contents/batch.json'});
                 grpChangeTreeOpenClose.hide();
                 break;
         }
@@ -50,7 +50,7 @@ $(function () {
         if (e !== undefined && e.target.id === 'viewsetting-site-id') {
             $("#BtnSearchClear").click();
             $.ajax({
-                url: $.bcUtil.apiBaseUrl + 'baser-core/contents/get_content_folder_list/' + $(this).val(),
+                url: $.bcUtil.apiAdminBaseUrl + 'baser-core/contents/get_content_folder_list/' + $(this).val(),
                 headers: {
                     "Authorization": $.bcJwt.accessToken,
                 },
