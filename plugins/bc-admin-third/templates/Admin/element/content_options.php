@@ -33,9 +33,15 @@ $this->BcUpload->setTable('BaserCore.Contents');
 
 <section id="ContentsOptionSetting" class="bca-section" data-bca-section-type="form-group">
   <div class="bca-collapse__action">
-    <button type="button" class="bca-collapse__btn" data-bca-collapse="collapse"
-            data-bca-target="#formContentsOptionBody" aria-expanded="false" aria-controls="formOptionBody">オプション&nbsp;&nbsp;<i
-        class="bca-icon--chevron-down bca-collapse__btn-icon"></i></button>
+    <button type="button"
+      class="bca-collapse__btn"
+      data-bca-collapse="collapse"
+      data-bca-target="#formContentsOptionBody"
+      aria-expanded="false"
+      aria-controls="formOptionBody">
+        <?php echo __d('baser_core', 'オプション') ?>&nbsp;&nbsp;
+        <i class="bca-icon--chevron-down bca-collapse__btn-icon"></i>
+    </button>
   </div>
   <div class="bca-collapse" id="formContentsOptionBody" data-bca-state="">
     <table class="form-table bca-form-table" data-bca-table-type="type2">

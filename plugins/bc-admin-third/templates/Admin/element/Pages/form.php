@@ -50,7 +50,8 @@
         data-bca-target="#pageSettingBody"
         aria-expanded="false"
         aria-controls="pageSettingBody">
-        詳細設定&nbsp;&nbsp;<i class="bca-icon--chevron-down bca-collapse__btn-icon"></i>
+          <?php echo __d('baser_core', '詳細設定') ?>&nbsp;&nbsp;
+          <i class="bca-icon--chevron-down bca-collapse__btn-icon"></i>
       </button>
     </div>
     <div class="bca-collapse" id="pageSettingBody" data-bca-state="">

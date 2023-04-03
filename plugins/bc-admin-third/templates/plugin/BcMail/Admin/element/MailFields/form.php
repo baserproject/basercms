@@ -197,9 +197,16 @@
 
 <section class="bca-section" data-bca-section-type="form-group">
   <div class="bca-collapse__action">
-    <button type="button" class="bca-collapse__btn" data-bca-collapse="collapse"
-            data-bca-target="#mailFieldSettingBody" aria-expanded="false" aria-controls="mailFieldSettingBody">詳細設定&nbsp;&nbsp;<i
-        class="bca-icon--chevron-down bca-collapse__btn-icon"></i></button>
+    <button
+      type="button"
+      class="bca-collapse__btn"
+      data-bca-collapse="collapse"
+      data-bca-target="#mailFieldSettingBody"
+      aria-expanded="false"
+      aria-controls="mailFieldSettingBody">
+        <?php echo __d('baser_core', '詳細設定') ?>&nbsp;&nbsp;
+        <i class="bca-icon--chevron-down bca-collapse__btn-icon"></i>
+    </button>
   </div>
   <div class="bca-collapse" id="mailFieldSettingBody" data-bca-state="">
     <table class="form-table bca-form-table" id="formOptionBody">
