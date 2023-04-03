@@ -144,6 +144,29 @@ class PermissionGroupsServiceTest extends BcTestCase
     }
 
     /**
+     * Test buildAllowAllMethodByPlugin
+     *
+     * @return void
+     */
+    public function testBuildAllowAllMethodByPlugin(): void
+    {
+        $this->loadFixtureScenario(PermissionGroupsScenario::class);
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $userGroupId = 1;
+        $plugin = 'BaserCore';
+        $type = 'Nghiem';
+        $typeName = 'Nghiem';
+        $this->PermissionGroups->buildAllowAllMethodByPlugin($userGroupId, $plugin, $type, $typeName);
+        $pg = $this->PermissionGroups->getIndex(1, [])
+            ->where(['type' => $type, 'name like' => '%' . $typeName . '%'])
+            ->all()->toArray();
+        $this->assertCount(1, $pg);
+        $permissionsService = $this->getService(PermissionsServiceInterface::class);
+        $ps = $permissionsService->getIndex(['permission_group_id' => $pg[0]->id])->all();
+        $this->assertCount(1, $ps);
+    }
+
+    /**
      * Test get
      *
      * @return void
