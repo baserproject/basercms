@@ -342,6 +342,10 @@ class InstallationsService implements InstallationsServiceInterface
             $this->log(__d('baser_core', 'コンテンツの更新に失敗しました。'));
             $result = false;
         }
+        if (!$this->_updateBlogPosts()) {
+            $this->log(__d('baser_core', 'ブログ記事の更新に失敗しました。'));
+            $result = false;
+        }
         /** @var SearchIndexesServiceInterface $searchIndexesService */
         $searchIndexesService = $this->getService(SearchIndexesServiceInterface::class);
         $searchIndexesService->reconstruct();
@@ -363,6 +367,27 @@ class InstallationsService implements InstallationsServiceInterface
         foreach($contents as $content) {
             $content->created_date = new FrozenTime();
             if (!$contentsTable->save($content)) {
+                $result = false;
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * コンテンツの作成日を更新する
+     *
+     * @return bool
+     * @checked
+     * @noTodo
+     */
+    protected function _updateBlogPosts(): bool
+    {
+        $table = TableRegistry::getTableLocator()->get('BcBlog.BlogPosts');
+        $entities = $table->find()->all();
+        $result = true;
+        foreach($entities as $entity) {
+            $entity->posted = new FrozenTime();
+            if (!$table->save($entity)) {
                 $result = false;
             }
         }
