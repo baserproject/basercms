@@ -31,15 +31,17 @@ class BcApiUtil
      * @unitTest
      * @noTodo
      */
-    public static function createAccessToken($userId)
+    public static function createAccessToken(int $userId, string $prefix = 'Admin')
     {
         $algorithm = Configure::read('Jwt.algorithm');
         $privateKey = file_get_contents(Configure::read('Jwt.privateKeyPath'));
+        $sub = $userId;
+        if($prefix) $sub = $prefix . '_' . $sub;
         return [
             'access_token' => JWT::encode([
                     'token_type' => 'access_token',
                     'iss' => Configure::read('Jwt.iss'),
-                    'sub' => $userId,
+                    'sub' => $sub,
                     'exp' => time() + Configure::read('Jwt.accessTokenExpire'),
                 ],
                 $privateKey,
@@ -48,7 +50,7 @@ class BcApiUtil
             'refresh_token' => JWT::encode([
                     'token_type' => 'refresh_token',
                     'iss' => Configure::read('Jwt.iss'),
-                    'sub' => $userId,
+                    'sub' => $sub,
                     'exp' => time() + Configure::read('Jwt.refreshTokenExpire'),
                 ],
                 $privateKey,

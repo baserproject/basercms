@@ -19,6 +19,7 @@ use Cake\Event\EventInterface;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use Cake\Routing\Router;
 
 /**
  * Class BcApiController
@@ -38,7 +39,8 @@ class BcApiController extends AppController
     public function getAccessToken(ResultInterface $result): array
     {
         if ($result->isValid()) {
-            return BcApiUtil::createAccessToken($result->getData()->id);
+            $request = Router::getRequest();
+            return BcApiUtil::createAccessToken($result->getData()->id, $request->getParam('prefix')?? 'Admin');
         } else {
             return [];
         }
