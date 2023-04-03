@@ -202,7 +202,7 @@ class PagesTable extends AppTable
         } else {
             $site = $content->site;
         }
-        if ($site->useSubDomain) {
+        if ($site && $site->useSubDomain) {
             $host = $site->alias;
             if ($site->domainType == 1) {
                 $host .= '.' . BcUtil::getMainDomain();
