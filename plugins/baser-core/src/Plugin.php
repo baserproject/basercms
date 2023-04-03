@@ -422,7 +422,7 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
         ]);
         $service->loadIdentifier('Authentication.JwtSubject', [
             'resolver' => [
-                'className' => 'Authentication.Orm',
+                'className' => 'BaserCore.PrefixOrm',
                 'userModel' => $authSetting['userModel'],
                 'finder' => $authSetting['finder']?? 'available'
             ],
