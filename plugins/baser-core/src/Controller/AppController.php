@@ -230,7 +230,7 @@ class AppController extends BaseController
      */
     public function _blackHoleCallback($err, $exception)
     {
-        $message = __d('baser_core', '不正なリクエストと判断されました。') . "\n" . $exception->getMessage();
+        $message = __d('baser_core', '不正なリクエストと判断されました。もしくは、システムが受信できるデータ上限より大きなデータが送信された可能性があります') . "\n" . $exception->getMessage();
         throw new BadRequestException($message);
     }
 
