@@ -18,6 +18,7 @@ use BaserCore\Error\BcException;
 use BaserCore\Utility\BcContainerTrait;
 use BcMail\Model\Entity\MailField;
 use BcMail\Model\Table\MailFieldsTable;
+use Cake\Core\Configure;
 use Cake\Datasource\EntityInterface;
 use Cake\ORM\TableRegistry;
 use Throwable;
@@ -319,5 +320,39 @@ class MailFieldsService implements MailFieldsServiceInterface
         ]);
         return $result;
     }
+
+    /**
+     * オートコンプリートオプションを取得する
+     *
+     * @return array
+     * @checked
+     * @noTodo
+     */
+	public function getAutoCompleteOptions(): array
+	{
+		$autoCompleteDatas = Configure::read('BcMail.autoComplete');
+
+		$autoCompleteOptions = [];
+		foreach ($autoCompleteDatas as $data) {
+			$autoCompleteOptions[$data['name']] = $data['title'];
+			if (isset($data['child'])) {
+				foreach ($data['child'] as $dataChild1) {
+					$autoCompleteOptions[$dataChild1['name']] = '　└' . $dataChild1['title'];
+					if (isset($dataChild1['child'])) {
+						foreach ($dataChild1['child'] as $dataChild2) {
+							$autoCompleteOptions[$dataChild2['name']] = '　　└' . $dataChild2['title'];
+							if (isset($dataChild2['child'])) {
+								foreach ($dataChild2['child'] as $dataChild3) {
+									$autoCompleteOptions[$dataChild3['name']] = '　　　└' . $dataChild3['title'];
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		return $autoCompleteOptions;
+	}
 
 }

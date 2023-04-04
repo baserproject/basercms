@@ -70,7 +70,8 @@ class MailFieldsAdminService extends MailFieldsService implements MailFieldsAdmi
         return [
             'mailContent' => $mailContent,
             'mailField' =>  $mailField,
-            'publishLink' => $this->getPublishLink($mailContent)
+            'publishLink' => $this->getPublishLink($mailContent),
+            'autoCompleteOptions' => $this->getAutoCompleteOptions(),
         ];
     }
 
@@ -91,7 +92,8 @@ class MailFieldsAdminService extends MailFieldsService implements MailFieldsAdmi
         return [
             'mailContent' => $mailContent,
             'mailField' =>  $mailField,
-            'publishLink' => $this->getPublishLink($mailContent)
+            'publishLink' => $this->getPublishLink($mailContent),
+            'autoCompleteOptions' => $this->getAutoCompleteOptions(),
         ];
     }
 
