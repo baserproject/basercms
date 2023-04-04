@@ -55,11 +55,6 @@ $this->BcBaser->js(['BcUploader.admin/uploader_files/index_panel.bundle']);
 <!-- ファイルリスト -->
 <div id="FileList<?php echo $listId ?>" class="file-list"></div>
 
-<!-- list-num -->
-<?php if (!$isAjax): ?>
-  <?php $this->BcBaser->element('list_num') ?>
-<?php endif ?>
-
 <!-- 編集ダイアログ -->
 <div id="EditDialog" title="<?php echo __d('baser_core', 'ファイル情報編集') ?>">
     <?php $this->BcBaser->element('UploaderFiles/form', ['listId', $listId, 'popup' => true]) ?>
