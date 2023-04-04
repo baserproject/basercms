@@ -208,9 +208,9 @@ class BcContentsRoute extends Route
                 'action' => $action,
                 'pass' => $pass,
                 'named' => $named,
-                'entityId' => $entityId,
-                '_ext' => $ext
+                'entityId' => $entityId
             ];
+            if($ext) $params['_ext'] = $ext;
             if($prefix) $params['prefix'] = $prefix;
         }
         $params['_matchedRoute'] = $this->template;

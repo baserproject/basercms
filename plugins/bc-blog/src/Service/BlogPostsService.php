@@ -122,7 +122,7 @@ class BlogPostsService implements BlogPostsServiceInterface
             'contain' => [
                 'Users',
                 'BlogCategories',
-                'BlogContents' => ['Contents'],
+                'BlogContents',
                 'BlogComments',
                 'BlogTags',
             ]
@@ -241,6 +241,8 @@ class BlogPostsService implements BlogPostsServiceInterface
             if(empty($params['contain'])) {
                 $fields = $this->BlogPosts->getSchema()->columns();
                 $query = $this->BlogPosts->find()->contain(['BlogContents' => ['Contents']])->select($fields);
+            } elseif(!isset($params['contain']['BlogContents']['Contents'])) {
+                $query = $this->BlogPosts->find()->contain(array_merge_recursive($query->getContain(), ['BlogContents' => ['Contents']]));
             }
             $conditions = array_merge($conditions, $this->BlogPosts->BlogContents->Contents->getConditionAllowPublish());
         } elseif ((string)$params['status'] === '0') {
