@@ -25,7 +25,14 @@ use BaserCore\View\BcAdminAppView;
  * @unitTest
  */
 // JSの出力について、ツールバーはフロントエンドでも利用するため、inlineに出力する
-$this->BcBaser->js(['vendor/jquery.fixedMenu', 'vendor/outerClick', 'admin/toolbar.bundle']);
+$this->BcBaser->js([
+    'vendor/jquery.fixedMenu',
+    'vendor/outerClick',
+    'admin/toolbar.bundle'
+  ],
+  true,
+  ['defer']
+);
 ?>
 
 
