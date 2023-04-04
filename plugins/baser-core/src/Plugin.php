@@ -363,9 +363,7 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
     {
         if (!filter_var(env('USE_CORE_API', false), FILTER_VALIDATE_BOOLEAN)) {
             if ($prefix === 'Api/Admin') {
-                if (BcUtil::loginUser()) {
-                    return BcUtil::isSameReferrerAsCurrent();
-                }
+                return BcUtil::isSameReferrerAsCurrent();
             }
         } else {
             return true;
