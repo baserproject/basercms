@@ -105,6 +105,7 @@ class MailContentsController extends BcAdminApiController
     public function add(MailContentsServiceInterface $service)
     {
         $this->request->allowMethod(['post', 'put', 'patch']);
+        $entity = null;
         try {
             $entity = $service->create($this->request->getData());
             $message = __d('baser_core', 'メールフォーム「{0}」を追加しました。', $entity->content->title);
@@ -118,9 +119,9 @@ class MailContentsController extends BcAdminApiController
         }
         $this->set([
             'mailContent' => $entity,
-            'content' => $entity->content,
+            'content' => $entity?->content,
             'message' => $message,
-            'errors' => $entity->getErrors()
+            'errors' => $entity?->getErrors()
         ]);
         $this->viewBuilder()->setOption('serialize', ['message', 'mailContent', 'content', 'errors']);
     }
