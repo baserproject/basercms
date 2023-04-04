@@ -27,6 +27,7 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use Cake\Http\Exception\NotFoundException;
 use Cake\ORM\Exception\PersistenceFailedException;
+use Psr\Http\Message\ResponseInterface;
 use Throwable;
 
 /**
@@ -110,6 +111,7 @@ class BlogController extends BlogFrontAppController
      * @param BlogFrontService $service
      * @param BlogContentsService $blogContentsService
      * @param BlogPostsService $blogPostsService
+     * @return void|ResponseInterface
      * @checked
      */
     public function index(
@@ -117,46 +119,6 @@ class BlogController extends BlogFrontAppController
         BlogContentsServiceInterface $blogContentsService,
         BlogPostsServiceInterface $blogPostsService)
     {
-        // TODO ucmitz 未検証
-//        if ($this->BcContents->preview === 'default' && $this->request->getData()) {
-//            $this->blogContent['BlogContent'] = $this->request->getData('BlogContent');
-//            $this->request = $this->request->withParsedBody($this->Content->saveTmpFiles(
-//                $this->request->getData(), mt_rand(0, 99999999)
-//            ));
-//            $this->request->withParam('Content.eyecatch', $this->request->getData('Content.eyecatch'));
-//        }
-
-        if ($this->RequestHandler->prefers('rss')) {
-//            Configure::write('debug', 0);
-//            if ($this->blogContent) {
-//                $channel = [
-//                    'title' => h(
-//                        sprintf(
-//                            "%s｜%s",
-//                            $this->request->getAttribute('currentContent')->title, $this->siteConfigs['name']
-//                        )
-//                    ),
-//                    'description' => h(strip_tags($this->blogContent['BlogContent']['description']))
-//                ];
-//                $listCount = $this->blogContent['BlogContent']['feed_count'];
-//            } else {
-//                $channel = [
-//                    'title' => $this->siteConfigs['name'],
-//                    'description' => $this->siteConfigs['description']
-//                ];
-//                // TODO 暫定的に一番最初に登録したブログコンテンツの表示件数を利用
-//                // BlogConfig で設定できるようにする
-//                $blogContent = $this->BlogContent->find(
-//                    'first',
-//                    ['order' => 'BlogContent.id', 'recirsive' => -1]
-//                );
-//                $listCount = $blogContent['BlogContent']['feed_count'];
-//                $this->blogContent = $blogContent;
-//            }
-//            $this->set('channel', $channel);
-//            $this->layout = 'default';
-//            $template = 'index';
-        }
 
         $blogContentId = (int)$this->getRequest()->getAttribute('currentContent')->entity_id;
 
@@ -166,22 +128,37 @@ class BlogController extends BlogFrontAppController
             ['status' => 'publish']
         );
 
+        if ($this->RequestHandler->prefers('rss')) {
+            $listCount = $blogContent->feed_count;
+        } else {
+            $listCount = $blogContent->list_count;
+        }
+
         try {
             $entities = $this->paginate($blogPostsService->getIndex([
                 'blog_content_id' => $blogContentId,
-                'limit' => $blogContent->list_count,
+                'limit' => $listCount,
                 'status' => 'publish'
             ]));
         } catch (NotFoundException $e) {
             return $this->redirect(['action' => 'index']);
         }
 
-        $this->set($service->getViewVarsForIndex(
-            $this->getRequest(),
-            $blogContent,
-            $entities
-        ));
-        $this->render($service->getIndexTemplate($blogContent));
+        if ($this->RequestHandler->prefers('rss')) {
+            $this->set($service->getViewVarsForIndexRss(
+                $this->getRequest(),
+                $blogContent,
+                $entities
+            ));
+            $this->render('index');
+        } else {
+            $this->set($service->getViewVarsForIndex(
+                $this->getRequest(),
+                $blogContent,
+                $entities
+            ));
+            $this->render($service->getIndexTemplate($blogContent));
+        }
     }
 
     /**

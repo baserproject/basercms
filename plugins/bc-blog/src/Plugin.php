@@ -89,16 +89,6 @@ class Plugin extends BcPlugin
     public function routes($routes): void
     {
         /**
-         * RSS
-         */
-         // TODO ucmitz 未実装
-//        $routes->connect('/rss/index', [
-//            'plugin' => 'BcBlog',
-//            'controller' => 'blog',
-//            'action' => 'index'
-//        ]);
-
-        /**
          * Tag
          */
         $routes->connect('/tags/*', [

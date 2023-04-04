@@ -517,6 +517,14 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
         }
 
         /**
+         * フィード出力
+         * 拡張子rssの場合は、rssディレクトリ内のビューを利用する
+         */
+        if (!BcUtil::isAdminSystem()) {
+            $routes->setExtensions('rss');
+        }
+
+        /**
          * メンテナンス
          */
         $routes->connect('/maintenance', ['plugin' => 'BaserCore', 'controller' => 'Maintenance', 'action' => 'index']);
@@ -557,13 +565,6 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
             }
         );
 
-        /**
-         * フィード出力
-         * 拡張子rssの場合は、rssディレクトリ内のビューを利用する
-         */
-        if (!BcUtil::isAdminSystem()) {
-            $routes->setExtensions('rss');
-        }
         parent::routes($routes);
     }
 

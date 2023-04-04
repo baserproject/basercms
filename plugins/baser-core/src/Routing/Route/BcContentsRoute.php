@@ -142,6 +142,11 @@ class BcContentsRoute extends Route
      */
     public function getParams($requestUrl, $entryUrl, $plugin, $type, $entityId, $alias)
     {
+        $ext = '';
+        if(preg_match('/([^.]+)\.([^.]+)$/', $requestUrl, $matches)) {
+            $requestUrl = $matches[1];
+            $ext = $matches[2];
+        }
         $viewParams = Configure::read('BcContents.items.' . $plugin . '.' . $type . '.routes.view');
         if (!$viewParams) {
             if($requestUrl === '/') {
@@ -203,7 +208,8 @@ class BcContentsRoute extends Route
                 'action' => $action,
                 'pass' => $pass,
                 'named' => $named,
-                'entityId' => $entityId
+                'entityId' => $entityId,
+                '_ext' => $ext
             ];
             if($prefix) $params['prefix'] = $prefix;
         }

@@ -122,7 +122,7 @@ class BlogPostsService implements BlogPostsServiceInterface
             'contain' => [
                 'Users',
                 'BlogCategories',
-                'BlogContents',
+                'BlogContents' => ['Contents'],
                 'BlogComments',
                 'BlogTags',
             ]
@@ -238,9 +238,10 @@ class BlogPostsService implements BlogPostsServiceInterface
         // ステータス
         if (($params['status'] === 'publish' || (string)$params['status'] === '1') && !$params['preview']) {
             $conditions = $this->BlogPosts->getConditionAllowPublish();
-
-            $fields = $this->BlogPosts->getSchema()->columns();
-            $query = $this->BlogPosts->find()->contain(['BlogContents' => ['Contents']])->select($fields);
+            if(empty($params['contain'])) {
+                $fields = $this->BlogPosts->getSchema()->columns();
+                $query = $this->BlogPosts->find()->contain(['BlogContents' => ['Contents']])->select($fields);
+            }
             $conditions = array_merge($conditions, $this->BlogPosts->BlogContents->Contents->getConditionAllowPublish());
         } elseif ((string)$params['status'] === '0') {
             $conditions = ['BlogPosts.status' => false];
