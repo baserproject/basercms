@@ -125,6 +125,9 @@ class PermissionGroupsService implements PermissionGroupsServiceInterface
      *
      * @param int $userGroupId
      * @param array $queryParams
+     * @noTodo
+     * @unitTest
+     * @checked
      * @return Query
      * @notodo
      * @unitTest
