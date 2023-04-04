@@ -128,7 +128,7 @@ class BcAdminContentsService implements BcAdminContentsServiceInterface
         $templates = BcUtil::getTemplateList('layout', [$content->plugin, $theme]);
         $contentsService = $this->getService(ContentsAdminServiceInterface::class);
         if ($content->id != 1) {
-            $parentTemplate = $contentsService->getParentLayoutTemplate($content->id);
+            $parentTemplate = $contentsService->getParentLayoutTemplate($content->id, $content->parent_id);
             if (in_array($parentTemplate, $templates)) {
                 unset($templates[$parentTemplate]);
             }

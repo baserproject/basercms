@@ -236,13 +236,14 @@ interface ContentsServiceInterface extends CrudBaseServiceInterface
     /**
      * レイアウトテンプレートを取得する
      *
-     * @param $id
+     * @param int $id
+     * @param int|null $parentId
      * @return string $parentTemplate|false
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function getParentLayoutTemplate($id);
+    public function getParentLayoutTemplate(int $id, int $parentId = null);
 
     /**
      * コンテンツIDよりURLを取得する
