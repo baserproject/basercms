@@ -249,6 +249,19 @@
           <?php echo $this->BcAdminForm->error('options') ?>
         </td>
       </tr>
+      <tr id="RowAutoComplete">
+        <th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('autocomplete', __d('baser', 'オートコンプリート')) ?></th>
+        <td class="col-input bca-form-table__input">
+          <?php echo $this->BcAdminForm->control('autocomplete', ['type' => 'select', 'options' => $autoCompleteOptions]) ?>
+          <?php echo $this->BcAdminForm->error('autocomplete') ?>
+          <i class="bca-icon--question-circle bca-help"></i>
+          <div class="bca-helptext">
+            <ul>
+              <li><?php echo __d('baser_core', 'オートコンプリート属性については<a href="https://developer.mozilla.org/ja/docs/Web/HTML/Attributes/autocomplete" target="_blank">リファレンス</a>を参照してください。') ?></li>
+            </ul>
+          </div>
+        </td>
+      </tr>
       <tr id="RowClass">
         <th
           class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('class', __d('baser_core', 'クラス名')) ?></th>
