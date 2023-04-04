@@ -363,9 +363,7 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
     {
         if (!filter_var(env('USE_CORE_API', false), FILTER_VALIDATE_BOOLEAN)) {
             if ($prefix === 'Api/Admin') {
-                if (BcUtil::loginUser()) {
-                    return BcUtil::isSameReferrerAsCurrent();
-                }
+                return BcUtil::isSameReferrerAsCurrent();
             }
         } else {
             return true;
@@ -517,6 +515,14 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
         }
 
         /**
+         * フィード出力
+         * 拡張子rssの場合は、rssディレクトリ内のビューを利用する
+         */
+        if (!BcUtil::isAdminSystem()) {
+            $routes->setExtensions('rss');
+        }
+
+        /**
          * メンテナンス
          */
         $routes->connect('/maintenance', ['plugin' => 'BaserCore', 'controller' => 'Maintenance', 'action' => 'index']);
@@ -557,13 +563,6 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
             }
         );
 
-        /**
-         * フィード出力
-         * 拡張子rssの場合は、rssディレクトリ内のビューを利用する
-         */
-        if (!BcUtil::isAdminSystem()) {
-            $routes->setExtensions('rss');
-        }
         parent::routes($routes);
     }
 

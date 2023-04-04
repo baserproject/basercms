@@ -82,7 +82,7 @@ class MailMessagesControllerTest extends BcTestCase
         $mailMessageTable->save(new Entity(['id' => 2]));
 
         // 受信メール一覧のAPIを叩く
-        $this->get("/baser/api/admin/bc-mail/mail_messages/index/$mailContentId.json?token=" . $this->accessToken);
+        $this->get("/baser/api/admin/bc-mail/mail_messages/index.json?mail_content_id=1&token=" . $this->accessToken);
         // レスポンスコードを確認する
         $this->assertResponseOk();
         // レスポンスのメールメッセージデータを確認する
@@ -103,7 +103,7 @@ class MailMessagesControllerTest extends BcTestCase
         $mailMessageTable->save(new Entity(['id' => 2]));
 
         // 受信メール詳細のAPIを叩く
-        $this->get("/baser/api/admin/bc-mail/mail_messages/view/$mailContentId/2.json?token=" . $this->accessToken);
+        $this->get("/baser/api/admin/bc-mail/mail_messages/view/2.json?mail_content_id=1&token=" . $this->accessToken);
         // レスポンスのコードを確認する
         $this->assertResponseOk();
         // レスポンスのメールメッセージデータを確認する
@@ -132,7 +132,7 @@ class MailMessagesControllerTest extends BcTestCase
         $data = ['id' => 1, 'message' => 'test message'];
 
         // 受信メール追加のAPIを叩く
-        $this->post("/baser/api/admin/bc-mail/mail_messages/add/1.json?token=$this->accessToken", $data);
+        $this->post("/baser/api/admin/bc-mail/mail_messages/add.json?mail_content_id=1&token=$this->accessToken", $data);
         $result = json_decode((string)$this->_response->getBody());
         // レスポンスのコードを確認する
         $this->assertResponseOk();
@@ -143,7 +143,7 @@ class MailMessagesControllerTest extends BcTestCase
 
         // 無効なメールメッセージデータの場合、エラーになる
         $data = ['id' => 'text'];
-        $this->post("/baser/api/admin/bc-mail/mail_messages/add/1.json?token=$this->accessToken", $data);
+        $this->post("/baser/api/admin/bc-mail/mail_messages/add.json?mail_content_id=1&token=$this->accessToken", $data);
         $result = json_decode((string)$this->_response->getBody());
         // レスポンスのコードを確認する
         $this->assertResponseCode(500);
@@ -152,7 +152,7 @@ class MailMessagesControllerTest extends BcTestCase
 
         //404エラーテスト
         $data = ['id' => 2, 'message' => 'test message'];
-        $this->post("/baser/api/admin/bc-mail/mail_messages/add/22222.json?token=$this->accessToken", $data);
+        $this->post("/baser/api/admin/bc-mail/mail_messages/add.json?mail_content_id=1&token=$this->accessToken", $data);
         $result = json_decode((string)$this->_response->getBody());
         // レスポンスのコードを確認する
         $this->assertResponseCode(404);
@@ -186,7 +186,7 @@ class MailMessagesControllerTest extends BcTestCase
 
             // 受信メール追加のAPIを叩く
             $data = ['id' => 1, 'message' => 'message after'];
-            $this->post("/baser/api/admin/bc-mail/mail_messages/edit/1/1.json?token=$this->accessToken", $data);
+            $this->post("/baser/api/admin/bc-mail/mail_messages/edit/1.json?mail_content_id=1&token=$this->accessToken", $data);
             $result = json_decode((string)$this->_response->getBody());
             // レスポンスのコードを確認する
             $this->assertResponseOk();
@@ -197,7 +197,7 @@ class MailMessagesControllerTest extends BcTestCase
 
             // 無効なメールメッセージデータの場合、エラーになる
             $data = ['id' => 'text'];
-            $this->post("/baser/api/admin/bc-mail/mail_messages/edit/1/1.json?token=$this->accessToken", $data);
+            $this->post("/baser/api/admin/bc-mail/mail_messages/edit/1.json?mail_content_id=1&token=$this->accessToken", $data);
             $result = json_decode((string)$this->_response->getBody());
             // レスポンスのコードを確認する
             $this->assertResponseCode(500);
@@ -231,7 +231,7 @@ class MailMessagesControllerTest extends BcTestCase
         $mailMessageTable->save(new Entity(['id' => 1]));
 
         // 受信メール追加のAPIを叩く
-        $this->post("/baser/api/admin/bc-mail/mail_messages/delete/$mailContentId/1.json?token=$this->accessToken");
+        $this->post("/baser/api/admin/bc-mail/mail_messages/delete/1.json?mail_content_id=1&token=$this->accessToken");
         $result = json_decode((string)$this->_response->getBody());
         // レスポンスのコードを確認する
         $this->assertResponseOk();
@@ -268,7 +268,7 @@ class MailMessagesControllerTest extends BcTestCase
 
         // 受信メール一括削除のAPIを叩く
         $data = ['batch_targets' => [1, 2], 'batch' => 'delete'];
-        $this->post("/baser/api/admin/bc-mail/mail_messages/batch/$mailContentId/1.json?token=$this->accessToken", $data);
+        $this->post("/baser/api/admin/bc-mail/mail_messages/batch/1.json?token=$this->accessToken", $data);
         $result = json_decode((string)$this->_response->getBody());
         // レスポンスのコードを確認する
         $this->assertResponseOk();
@@ -286,7 +286,7 @@ class MailMessagesControllerTest extends BcTestCase
         // 一括削除が失敗の場合のテスト
         $data = ['batch_targets' => ['invalid id'], 'batch' => 'delete'];
         // 受信メール一括削除のAPIを叩く
-        $this->post("/baser/api/admin/bc-mail/mail_messages/batch/$mailContentId/1.json?token=$this->accessToken", $data);
+        $this->post("/baser/api/admin/bc-mail/mail_messages/batch/1.json?token=$this->accessToken", $data);
         // レスポンスのコードを確認する
         $this->assertResponseCode(400);
         // レスポンスのメッセージ内容を確認する

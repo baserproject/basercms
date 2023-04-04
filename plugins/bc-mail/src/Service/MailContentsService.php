@@ -235,11 +235,11 @@ class MailContentsService implements MailContentsServiceInterface
     public function copy($postData)
     {
         return $this->MailContents->copy(
-            $postData['entity_id'],
-            $postData['parent_id'],
-            $postData['title'],
+            $postData['entity_id'] ?? null,
+            $postData['parent_id'] ?? null,
+            $postData['title'] ?? null,
             BcUtil::loginUser()->id,
-            $postData['site_id']
+            $postData['site_id'] ?? null
         );
     }
 

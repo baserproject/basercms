@@ -1184,7 +1184,7 @@ SCRIPT_END;
                     if ($attributes['style'] === 'checkbox') {
                         $htmlOptions['value'] = $name;
 
-                        $tagName = $attributes['id'] . $this->domIdSuffix($name);
+                        $tagName = $attributes['id'] . $this->domIdSuffix($name, 'html5');
                         $htmlOptions['id'] = $tagName;
                         $label = ['for' => $tagName];
 
@@ -1499,7 +1499,9 @@ SCRIPT_END;
             $div = $attributes['div'];
             unset($attributes['div']);
         }
-        unset($label['label']);
+        if (isset($label['label'])) {
+            unset($label['label']);
+        }
 
         $this->_domIdSuffixes = [];
         foreach($options as $optValue => $optTitle) {
@@ -1521,7 +1523,7 @@ SCRIPT_END;
             if ($disabled && (!is_array($disabled) || in_array((string)$optValue, $disabled, !$isNumeric))) {
                 $optionsHere['disabled'] = true;
             }
-            $tagName = $attributes['id'] . $this->domIdSuffix($optValue);
+            $tagName = $attributes['id'] . $this->domIdSuffix($optValue, 'html5');
 
             if ($label) {
                 $labelOpts = is_array($label)? $label : [];

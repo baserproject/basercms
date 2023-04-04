@@ -90,6 +90,27 @@ class BlogFrontService implements BlogFrontServiceInterface
     }
 
     /**
+     * RSS用 の View 変数を取得
+     *
+     * @param ServerRequest $request
+     * @param BlogContent $blogContent
+     * @param ResultSet $posts
+     * @return array
+     */
+    public function getViewVarsForIndexRss(ServerRequest $request, BlogContent $blogContent, ResultSet $posts): array
+    {
+        $site = $request->getAttribute('currentSite');
+        return [
+            'blogContent' => $blogContent,
+            'posts' => $posts,
+            'channel' => [
+                'title' => h(sprintf("%s｜%s", $request->getAttribute('currentContent')->title, $site?->title)),
+                'description' => h(strip_tags($blogContent->description))
+            ]
+        ];
+    }
+
+    /**
      * プレビュー用のセットアップをする
      *
      * @param Controller $controller
