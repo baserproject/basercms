@@ -238,7 +238,7 @@ class MailFrontService implements MailFrontServiceInterface
             }
             // TODO ucmitz 未検証
             $mailMessagesTable = TableRegistry::getTableLocator()->get('BcMail.MailMessages');
-            $mailMessagesTable->getFileUploader()->deleteFiles($mailMessage);
+            $mailMessagesTable->getFileUploader()->deleteFiles($mailMessage, $mailMessage);
         } catch (\Throwable $e) {
             throw $e;
         }
@@ -373,7 +373,7 @@ class MailFrontService implements MailFrontServiceInterface
     {
         /** @var MailFieldsService $mailFieldsService */
         $mailFieldsService = $this->getService(MailFieldsServiceInterface::class);
-        return $mailFieldsService->getIndex($mailContentId, ['use_field' => true]);
+        return $mailFieldsService->getIndex($mailContentId, ['use_field' => true])->all();
     }
 
     /**

@@ -125,9 +125,6 @@ class MailMessagesService implements MailMessagesServiceInterface
             $this->MailMessages->convertToDb($mailFields, $entity);
             if ($mailContent->save_info) {
                 return $this->MailMessages->saveOrFail($entity);
-            } else {
-                // TODO ucmitz 未検証
-                return $this->MailMessages->getFileUploader()->saveFiles($entity);
             }
         }
         return $entity;
