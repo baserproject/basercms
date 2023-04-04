@@ -9,6 +9,8 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
+use Cake\Core\Configure;
+
 /**
  * @var \BaserCore\View\BcAdminAppView $this
  * @var \BcUploader\Model\Entity\UploaderFile $uploaderFile
@@ -17,13 +19,12 @@
  * @noTodo
  * @unitTest
  */
-$url = $this->BcBaser->getUrl($this->Uploader->getFileUrl($uploaderFile->name));
-$fulUrl = $this->BcBaser->getUrl($this->Uploader->getFileUrl($uploaderFile->name), true);
+$url = rtrim(Configure::read('BcEnv.siteUrl'), '/') . $this->BcBaser->getUrl($this->Uploader->getFileUrl($uploaderFile->name));
 ?>
 
 <div class="uploader-file-image-inner">
   <p class="url">
-    <a href="<?php echo h($url) ?>" target="_blank"><?php echo h($fulUrl) ?></a>
+    <a href="<?php echo h($url) ?>" target="_blank"><?php echo h($url) ?></a>
   </p>
   <p class="image">
     <a href="<?php echo h($url) ?>" target="_blank">

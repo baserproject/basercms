@@ -264,6 +264,8 @@ return [];
         $this->assertEquals([
             ROOT . DS . 'plugins' . DS . 'bc-front' . DS . 'templates' . DS,
             ROOT . DS . 'vendor' . DS . 'baserproject' . DS . 'bc-front' . DS . 'templates' . DS,
+            ROOT . DS . 'plugins' . DS . 'bc-admin-third' . DS . 'templates' . DS,
+            ROOT . DS . 'vendor' . DS . 'baserproject' . DS . 'bc-admin-third' . DS . 'templates' . DS,
             ROOT . DS . 'templates' . DS,
         ], Configure::read('App.paths.templates'));
     }

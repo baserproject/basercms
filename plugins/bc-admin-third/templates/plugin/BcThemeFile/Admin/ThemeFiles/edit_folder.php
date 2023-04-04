@@ -49,13 +49,14 @@ $this->BcAdmin->setTitle($pageTitle);
 <?php $this->BcBaser->element('ThemeFiles/form_folder') ?>
 
 <div class="submit bca-actions">
-  <div class="bca-actions__main">
+  <div class="bca-actions__before">
     <?php $this->BcBaser->link(__d('baser_core', '一覧に戻る'),
       array_merge(['action' => 'index', $theme, $plugin, $type], explode('/', $path)), [
         'class' => 'button bca-btn',
         'data-bca-btn-type' => 'back-to-list'
       ]); ?>
-    &nbsp;&nbsp;
+  </div>
+  <div class="bca-actions__main">
     <?php if ($isWritable): ?>
       <?php echo $this->BcAdminForm->button(__d('baser_core', '保存'), [
         'div' => false,

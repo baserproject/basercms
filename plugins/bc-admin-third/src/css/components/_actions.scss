@@ -19,7 +19,11 @@
   &__item {
     margin: 0 10px;
   }
-
+  &__before {
+    margin-right: 30px;
+    padding-right: 30px;
+    border-right: 1px solid #ccc;
+  }
   &[data-bca-type=type2] {
     display: block;
     .bca-actions {

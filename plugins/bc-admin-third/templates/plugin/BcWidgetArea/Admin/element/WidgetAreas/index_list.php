@@ -39,8 +39,6 @@ $this->BcListTable->setColumnNumber(6);
     </div>
   <?php endif ?>
   <div class="bca-data-list__sub">
-    <!-- list-num -->
-    <?php $this->BcBaser->element('list_num') ?>
     <!-- pagination -->
     <?php $this->BcBaser->element('pagination') ?>
   </div>
@@ -81,3 +79,12 @@ $this->BcListTable->setColumnNumber(6);
   <?php endif; ?>
   </tbody>
 </table>
+
+<div class="bca-data-list__bottom">
+	<div class="bca-data-list__sub">
+		<!-- pagination -->
+		<?php $this->BcBaser->element('pagination') ?>
+		<!-- list-num -->
+		<?php $this->BcBaser->element('list_num') ?>
+	</div>
+</div>

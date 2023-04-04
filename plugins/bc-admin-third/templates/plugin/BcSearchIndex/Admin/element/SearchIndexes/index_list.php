@@ -30,8 +30,10 @@ $this->BcListTable->setColumnNumber(9);
       <?php echo $this->BcAdminForm->button(__d('baser_core', '適用'), ['id' => 'BtnApplyBatch', 'disabled' => 'disabled', 'class' => 'bca-btn']) ?>
     </div>
   <?php endif ?>
-  <!-- pagination -->
-  <?php $this->BcBaser->element('pagination') ?>
+  <div class="bca-data-list__sub">
+    <!-- pagination -->
+    <?php $this->BcBaser->element('pagination') ?>
+  </div>
 </div>
 
 <!-- list -->
@@ -70,5 +72,11 @@ $this->BcListTable->setColumnNumber(9);
   </tbody>
 </table>
 
-<!-- list-num -->
-<?php $this->BcBaser->element('list_num') ?>
+<div class="bca-data-list__bottom">
+	<div class="bca-data-list__sub">
+		<!-- pagination -->
+		<?php $this->BcBaser->element('pagination') ?>
+		<!-- list-num -->
+		<?php $this->BcBaser->element('list_num') ?>
+	</div>
+</div>

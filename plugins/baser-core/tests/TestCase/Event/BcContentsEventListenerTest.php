@@ -94,7 +94,10 @@ class BcContentsEventListenerTest extends BcTestCase
     public function testFormAfterCreate()
     {
         // 正常系
-        $event = new Event("Helper.Form.afterCreate", $this->BcAdminAppView->set('content', $this->Content)); // content_fieldsの$contentが足りないため追加
+        $event = new Event("Helper.Form.afterCreate", $this->BcAdminAppView->set([
+            'content' => $this->Content,
+            'fullUrl' => 'etc'
+        ])); // content_fieldsの$contentが足りないため追加
         $event->setData('id', 'TestAdminEditForm')->setData('out', "testtest");
         // NOTE: 必要な要素があるかを判別するため、不要なエラーを制御
         $result = @$this->BcContentsEventListener->formAfterCreate($event);

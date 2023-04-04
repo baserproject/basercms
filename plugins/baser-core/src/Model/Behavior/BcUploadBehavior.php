@@ -88,15 +88,17 @@ class BcUploadBehavior extends Behavior
 
     /**
      * BcFileUploader
+     *
      * @var BcFileUploader[]
      */
     public $BcFileUploader = [];
 
     /**
      * Old Entity
-     * @var EntityInterface
+     *
+     * @var EntityInterface[]
      */
-    public $oldEntity = null;
+    public $oldEntity = [];
 
     /**
      * Initialize
@@ -126,7 +128,7 @@ class BcUploadBehavior extends Behavior
     {
         $this->BcFileUploader[$this->table()->getAlias()]->setupRequestData($data);
         $this->BcFileUploader[$this->table()->getAlias()]->setupTmpData($data);
-        $this->oldEntity = (!empty($data['id']))? $this->getOldEntity($data['id']) : null;
+        $this->oldEntity[$this->table()->getAlias()] = (!empty($data['id']))? $this->getOldEntity($data['id']) : null;
     }
 
     /**
@@ -156,12 +158,12 @@ class BcUploadBehavior extends Behavior
      */
     public function afterSave(EventInterface $event, EntityInterface $entity)
     {
-        if ($entity->id) {
+        if ($entity->id && !empty($this->oldEntity[$this->table()->getAlias()])) {
             $this->BcFileUploader[$this->table()->getAlias()]->deleteExistingFiles($entity);
         }
         $this->BcFileUploader[$this->table()->getAlias()]->saveFiles($entity);
-        if ($entity->id) {
-            $this->BcFileUploader[$this->table()->getAlias()]->deleteFiles($this->oldEntity, $entity);
+        if ($entity->id && !empty($this->oldEntity[$this->table()->getAlias()])) {
+            $this->BcFileUploader[$this->table()->getAlias()]->deleteFiles($this->oldEntity[$this->table()->getAlias()], $entity);
         }
         if ($this->BcFileUploader[$this->table()->getAlias()]->isUploaded()) {
             $this->BcFileUploader[$this->table()->getAlias()]->renameToBasenameFields($entity);
