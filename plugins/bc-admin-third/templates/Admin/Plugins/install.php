@@ -65,28 +65,33 @@ $this->BcAdmin->setHelp('plugins_install');
 
   <div class="bca-actions">
     <?php if ($plugin->db_init): ?>
-      <?php echo $this->BcAdminForm->submit(__d('baser_core', 'プラグインのデータを初期化する'), [
-        'div' => false,
-        'class' => 'button bca-btn bca-actions__item',
-        'id' => 'BtnReset'
-      ]) ?>
-      <?php echo $this->BcAdminForm->submit(__d('baser_core', '有効化'), [
-        'div' => false,
-        'class' => 'button bca-btn bca-actions__item',
-        'data-bca-btn-type' => 'save',
-        'data-bca-btn-size' => 'lg',
-        'data-bca-btn-width' => 'lg',
-        'id' => 'BtnSave'
-      ]) ?>&nbsp;&nbsp;
+      <div class="bca-actions__main">
+        <?php echo $this->BcAdminForm->submit(__d('baser_core', '有効化'), [
+          'div' => false,
+          'class' => 'button bca-btn bca-actions__item',
+          'data-bca-btn-type' => 'save',
+          'data-bca-btn-size' => 'lg',
+          'data-bca-btn-width' => 'lg',
+          'id' => 'BtnSave'
+        ]) ?>
+      <div class="bca-actions__sub">
+        <?php echo $this->BcAdminForm->submit(__d('baser_core', 'プラグインのデータを初期化する'), [
+          'div' => false,
+          'class' => 'button bca-btn bca-actions__item',
+          'id' => 'BtnReset'
+        ]) ?>
+      </div>
     <?php else: ?>
-      <?php echo $this->BcAdminForm->submit(__d('baser_core', 'インストール'), [
-        'div' => false,
-        'class' => 'button bca-btn bca-actions__item',
-        'data-bca-btn-type' => 'save',
-        'data-bca-btn-size' => 'lg',
-        'data-bca-btn-width' => 'lg',
-        'id' => 'BtnSave'
-      ]) ?>
+      <div class="bca-actions__main">
+        <?php echo $this->BcAdminForm->submit(__d('baser_core', 'インストール'), [
+          'div' => false,
+          'class' => 'button bca-btn bca-actions__item',
+          'data-bca-btn-type' => 'save',
+          'data-bca-btn-size' => 'lg',
+          'data-bca-btn-width' => 'lg',
+          'id' => 'BtnSave'
+        ]) ?>
+      </div>
     <?php endif; ?>
   </div>
 

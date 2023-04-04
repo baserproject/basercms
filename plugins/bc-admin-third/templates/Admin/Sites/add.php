@@ -34,21 +34,25 @@ $this->BcBaser->js('admin/sites/form.bundle', false);
 <?php echo $this->BcFormTable->dispatchAfter() ?>
 
 <div class="submit bca-actions">
-  <?php echo $this->BcHtml->link(__d('baser_core', '一覧に戻る'),
-    ['admin' => true, 'controller' => 'sites', 'action' => 'index'],
-    [
+  <div class="bca-actions__before">
+    <?php echo $this->BcHtml->link(__d('baser_core', '一覧に戻る'),
+      ['admin' => true, 'controller' => 'sites', 'action' => 'index'],
+      [
+        'class' => 'button bca-btn bca-actions__item',
+        'data-bca-btn-type' => 'back-to-list'
+      ]
+    ) ?>
+  </div>
+  <div class="bca-actions__main">
+    <?php echo $this->BcAdminForm->button(__d('baser_core', '保存'), [
+      'div' => false,
       'class' => 'button bca-btn bca-actions__item',
-      'data-bca-btn-type' => 'back-to-list'
-    ]
-  ) ?>
-  <?php echo $this->BcAdminForm->button(__d('baser_core', '保存'), [
-    'div' => false,
-    'class' => 'button bca-btn bca-actions__item',
-    'data-bca-btn-type' => 'save',
-    'data-bca-btn-size' => 'lg',
-    'data-bca-btn-width' => 'lg',
-    'id' => 'BtnSave'
-  ]) ?>
+      'data-bca-btn-type' => 'save',
+      'data-bca-btn-size' => 'lg',
+      'data-bca-btn-width' => 'lg',
+      'id' => 'BtnSave'
+    ]) ?>
+  </div>
 </div>
 
 <?php echo $this->BcAdminForm->end() ?>
