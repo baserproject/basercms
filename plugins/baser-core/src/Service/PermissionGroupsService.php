@@ -204,6 +204,9 @@ class PermissionGroupsService implements PermissionGroupsServiceInterface
      * ユーザーグループを指定してアクセスグループを構築する
      *
      * @param int $userGroupId
+     * @noTodo
+     * @unitTest
+     * @checked
      */
 	public function buildByUserGroup(int $userGroupId)
 	{
