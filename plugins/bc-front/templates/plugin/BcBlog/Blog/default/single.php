@@ -9,7 +9,6 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
-
 /**
  * ブログ記事詳細ページ
  * 呼出箇所：ブログ記事詳細ページ

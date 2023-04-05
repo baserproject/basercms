@@ -19,6 +19,7 @@
 $this->BcAdmin->setTitle(__d('baser_core', 'パスワードのリセット'));
 ?>
 
+
 <h2 class="bs-contents-title"><?php echo $this->BcBaser->getContentsTitle() ?></h2>
 
 <div class="section">

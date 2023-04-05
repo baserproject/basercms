@@ -1005,7 +1005,7 @@ class BlogHelper extends Helper
      * 同じタグの関連投稿を取得する
      *
      * @param array $post ブログ記事
-     * @param array $options オプション（初期値 : array()）
+     * @param EntityInterface $options オプション（初期値 : array()）
      *    - `recursive` : 関連データを取得する場合の階層（初期値 : -1）
      *    - `limit` : 件数（初期値 : 5）
      *    - `order` : 並び順指定（初期値 : BlogPost.posted DESC）
@@ -1014,7 +1014,7 @@ class BlogHelper extends Helper
      * @noTodo
      * @unitTest ラッパーメソッドのためユニットテストは不要
      */
-    public function getRelatedPosts($post, $options = [])
+    public function getRelatedPosts(EntityInterface $post, array $options = [])
     {
         $blogPostsService = $this->getService(BlogPostsServiceInterface::class);
         return $blogPostsService->getRelatedPosts($post, $options);

@@ -10,6 +10,7 @@
  */
 
 use Cake\Core\Configure;
+use Cake\Error\Debugger;
 
 /**
  * 400エラーページ

@@ -9,15 +9,12 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
-use BaserCore\View\AppView;
-
 /**
  * パンくずナビゲーション
  *
  * ページタイトルが直属のカテゴリ名と同じ場合は、直属のカテゴリ名を省略する
- * @var AppView $this
+ * @var \BaserCore\View\BcFrontAppView $this
  */
-
 if (!isset($separator)) {
 	$separator = '&nbsp;&gt;&nbsp;';
 }
@@ -41,6 +38,7 @@ if (!empty($crumbs)) {
 	}
 }
 ?>
+
 
 <div class="bs-crumbs">
 	<?php if (empty($onSchema)): ?>

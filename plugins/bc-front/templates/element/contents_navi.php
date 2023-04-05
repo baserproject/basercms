@@ -9,7 +9,6 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
-use BaserCore\View\AppView;
 /**
  * コンテンツナビ
  * 呼出箇所：固定ページ
@@ -17,7 +16,7 @@ use BaserCore\View\AppView;
  * BcBaserHelper::contentsNavi() で呼び出す
  * （例）<?php $this->BcBaser->contentsNavi() ?>
  *
- * @var AppView $this
+ * @var \BaserCore\View\BcFrontAppView $this
  */
 ?>
 

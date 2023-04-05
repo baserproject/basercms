@@ -9,11 +9,10 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
-use BaserCore\View\AppView;
 /**
  * レイアウト
  * 呼出箇所：全ページ
- * @var AppView $this
+ * @var \BaserCore\View\BcFrontAppView $this
  */
 $request = $this->getRequest();
 $attributes = $request->getAttributes();

@@ -9,11 +9,9 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
-use BaserCore\View\AppView;
-
 /**
  * login
- * @var AppView $this
+ * @var \BaserCore\View\BcAdminAppView $this
  * @var string $isEnableLoginCredit
  * @var bool $savedEnable
  * @checked
