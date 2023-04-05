@@ -366,10 +366,20 @@ return [
          */
         'reservedWords' => ['group', 'rows', 'option'],
 
-        // システムメッセージの言語につてサイト設定を利用する
-        // 	- false：ブラウザ
-        // 	- true：サイト設定
+        /**
+         * システムメッセージの言語につてサイト設定を利用する
+         *  - false：ブラウザ
+         *  - true：サイト設定
+         */
         'systemMessageLangFromSiteSetting' => true,
+
+        /**
+         * Web API のPOST送信において CSRF をスキップするURL
+         */
+        'skipCsrfUrlInPostApi' => [
+            ['plugin' => 'BaserCore', 'controller' => 'Users', 'action' => 'login', '_ext' => 'json'],
+            ['plugin' => 'BaserCore', 'controller' => 'Users', 'action' => 'refresh_token', '_ext' => 'json'],
+        ],
 
         /**
          * システムナビ

@@ -273,21 +273,53 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
         $ref = new ReflectionClass($middlewareQueue);
         $queue = $ref->getProperty('queue');
         $queue->setAccessible(true);
+
         foreach($queue->getValue($middlewareQueue) as $middleware) {
             if ($middleware instanceof CsrfProtectionMiddleware) {
+
                 $middleware->skipCheckCallback(function($request) {
-                    $authSetting = Configure::read('BcPrefixAuth.' . $request->getParam('prefix'));
-                    if (!empty($authSetting['isRestApi'])) {
-                        $authenticator = $request->getAttribute('authentication')->getAuthenticationProvider();
-//                        if($authenticator && !$authenticator instanceof SessionAuthenticator) return true;
+                    $prefix = $request->getParam('prefix');
+                    $authSetting = Configure::read('BcPrefixAuth.' . $prefix);
+
+                    // 領域が REST API でない場合はスキップしない
+                    if (empty($authSetting['isRestApi'])) return false;
+
+                    // 設定ファイルでスキップの定義がされている場合はスキップ
+                    if(in_array($request->getPath(), $this->getSkipCsrfUrl())) return true;
+
+                    $authenticator = $request->getAttribute('authentication')->getAuthenticationProvider();
+                    if($authenticator) {
+                        // 認証済の際、セッション認証以外はスキップ
                         if(!$authenticator instanceof SessionAuthenticator) return true;
+                    } else {
+                        // 認証できていない場合、領域がJwt認証前提の場合はスキップ
+                        if($authSetting['type'] === 'Jwt') return true;
                     }
                     return false;
                 });
+
             }
         }
 
         return $middlewareQueue;
+    }
+
+    /**
+     * Web API のPOST送信において CSRF をスキップするURLについて、
+     * Router で変換した上で取得
+     *
+     * @return array
+     * @noTodo
+     * @checked
+     */
+    protected function getSkipCsrfUrl(): array
+    {
+        $skipUrl = [];
+        $skipUrlSrc = Configure::read('BcApp.skipCsrfUrlInPostApi');
+        foreach($skipUrlSrc as $url) {
+            $skipUrl[] = Router::url($url);
+        }
+        return $skipUrl;
     }
 
     /**
