@@ -126,6 +126,9 @@ use BaserCore\Annotation\Doc;
  * @method bool isDisplayCustomField(CustomEntry $entry, string $fieldName)
  * @method string getCustomFieldTitle(mixed $entry, string $fieldName)
  * @method string|array getCustomFieldValue(mixed $entry, string $fieldName, array $options = [])
+ *
+ * ### TextHelper
+ * @method string truncateText(string $text, int $length = 100, array $options = [])
  */
 class BcBaserHelper extends Helper
 {
@@ -2882,6 +2885,31 @@ END_FLASH;
     public function isPluginLoaded(string $plugin): bool
     {
         return Plugin::isLoaded($plugin);
+    }
+
+    /**
+     * デバッグモードかどうか
+     *
+     * @return bool
+     * @checked
+     * @noTodo
+     */
+    public function isDebug(): bool
+    {
+        return BcUtil::isDebug();
+    }
+
+    /**
+     * フルURLに変換する
+     *
+     * @param string $url
+     * @return string
+     * @checked
+     * @noTodo
+     */
+    public function getFullUrl(string $url): string
+    {
+        return BcUtil::fullUrl($url);
     }
 
 }

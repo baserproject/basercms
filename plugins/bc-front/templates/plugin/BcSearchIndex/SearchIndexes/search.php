@@ -48,8 +48,8 @@ $this->BcBaser->setTitle(__d('baser_core', '検索結果一覧'));
 	<?php foreach ($searchIndexes as $searchIndex): ?>
 	<div class="bs-search-result__item">
 		<h3 class="bs-search-result__item-head"><?php $this->BcBaser->link($this->BcBaser->mark($query, $searchIndex->title), $searchIndex->url, ['escape' => false]) ?></h3>
-		<p class="bs-search-result__item-body"><?php echo $this->BcBaser->mark($query, $this->Text->truncate($searchIndex->detail, 100)) ?></p>
-		<p class="bs-search-result__item-link"><small><?php $this->BcBaser->link(\BaserCore\Utility\BcUtil::fullUrl(rawurldecode($searchIndex->url)), $searchIndex->url) ?></small></p>
+		<p class="bs-search-result__item-body"><?php echo $this->BcBaser->mark($query, $this->BcBaser->truncateText($searchIndex->detail, 100)) ?></p>
+		<p class="bs-search-result__item-link"><small><?php $this->BcBaser->link($this->BcBaser->getFullUrl(rawurldecode($searchIndex->url)), $searchIndex->url) ?></small></p>
 	</div>
 	<?php endforeach ?>
 <?php elseif (!isset($query['q'][0])): ?>

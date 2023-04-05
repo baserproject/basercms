@@ -1913,4 +1913,14 @@ class BcUtil
         return $prefix;
     }
 
+    /**
+     * デバッグモードかどうか
+     *
+     * @return bool
+     */
+    public static function isDebug(): bool
+    {
+        return Configure::read('debug');
+    }
+
 }
