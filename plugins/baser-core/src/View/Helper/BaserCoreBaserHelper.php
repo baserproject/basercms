@@ -31,6 +31,8 @@ class BaserCoreBaserHelper extends Helper implements BcPluginBaserHelperInterfac
         'BaserCore.BcContents',
         'BaserCore.BcForm',
         'BaserCore.BcUpload',
+        'Html',
+        'Text'
     ];
 
     public function methods(): array
