@@ -279,7 +279,8 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
                     $authSetting = Configure::read('BcPrefixAuth.' . $request->getParam('prefix'));
                     if (!empty($authSetting['isRestApi'])) {
                         $authenticator = $request->getAttribute('authentication')->getAuthenticationProvider();
-                        if($authenticator && !$authenticator instanceof SessionAuthenticator) return true;
+//                        if($authenticator && !$authenticator instanceof SessionAuthenticator) return true;
+                        if(!$authenticator instanceof SessionAuthenticator) return true;
                     }
                     return false;
                 });
