@@ -38,11 +38,11 @@ return [
             'plugin' => 'BcSearchIndex',
             'type' => 'Api/Admin',
             'items' => [
-                'Batch' => ['title' => __d('baser_core', '一括処理'), 'url' => '/baser/api/bc-search-index/search_indexes/batch.json', 'method' => 'POST', 'auth' => false],
-                'ChangePriority' => ['title' => __d('baser_core', '優先度変更'), 'url' => '/baser/api/bc-search-index/search_indexes/change_priority/*.json', 'method' => 'POST', 'auth' => false],
-                'Delete' => ['title' => __d('baser_core', '削除'), 'url' => '/baser/api/bc-search-index/search_indexes/delete/*.json', 'method' => 'POST', 'auth' => false],
-                'Index' => ['title' => __d('baser_core', '一覧取得'), 'url' => '/baser/api/bc-search-index/search_indexes/index.json', 'method' => 'GET', 'auth' => false],
-                'Reconstruct' => ['title' => __d('baser_core', '検索インデックス再構築'), 'url' => '/baser/api/bc-search-index/search_indexes/reconstruct.json', 'method' => 'POST', 'auth' => false],
+                'Batch' => ['title' => __d('baser_core', '一括処理'), 'url' => '/baser/api/admin/bc-search-index/search_indexes/batch.json', 'method' => 'POST', 'auth' => false],
+                'ChangePriority' => ['title' => __d('baser_core', '優先度変更'), 'url' => '/baser/api/admin/bc-search-index/search_indexes/change_priority/*.json', 'method' => 'POST', 'auth' => false],
+                'Delete' => ['title' => __d('baser_core', '削除'), 'url' => '/baser/api/admin/bc-search-index/search_indexes/delete/*.json', 'method' => 'POST', 'auth' => false],
+                'Index' => ['title' => __d('baser_core', '一覧取得'), 'url' => '/baser/api/admin/bc-search-index/search_indexes/index.json', 'method' => 'GET', 'auth' => false],
+                'Reconstruct' => ['title' => __d('baser_core', '検索インデックス再構築'), 'url' => '/baser/api/admin/bc-search-index/search_indexes/reconstruct.json', 'method' => 'POST', 'auth' => false],
             ]
         ],
     ]

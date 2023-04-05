@@ -15,7 +15,8 @@ return [
                             'prefix' => 'Api/Admin',
                             'plugin' => 'BcContentLink',
                             'controller' => 'ContentLinks',
-                            'action' => 'add'
+                            'action' => 'add',
+                            '_ext' => 'json'
                         ],
                         'edit' => [
                             'prefix' => 'Admin',

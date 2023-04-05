@@ -780,7 +780,8 @@ return [
                         'add' => [
                             'prefix' => 'Api/Admin',
                             'controller' => 'ContentFolders',
-                            'action' => 'add'
+                            'action' => 'add',
+                            '_ext' => 'json'
                         ],
                         'edit' => [
                             'prefix' => 'Admin',
@@ -804,7 +805,8 @@ return [
                         'add' => [
                             'prefix' => 'Api/Admin',
                             'controller' => 'Pages',
-                            'action' => 'add'
+                            'action' => 'add',
+                            '_ext' => 'json'
                         ],
                         'edit' => [
                             'prefix' => 'Admin',
@@ -818,7 +820,8 @@ return [
                         'copy' => [
                             'prefix' => 'Api/Admin',
                             'controller' => 'Pages',
-                            'action' => 'copy'
+                            'action' => 'copy',
+                            '_ext' => 'json'
                         ]
                     ]
                 ],
@@ -830,7 +833,8 @@ return [
                         'add' => [
                             'prefix' => 'Api/Admin',
                             'controller' => 'Contents',
-                            'action' => 'add_alias'
+                            'action' => 'add_alias',
+                            '_ext' => 'json'
                         ],
                         'edit' => [
                             'prefix' => 'Admin',

@@ -34,8 +34,7 @@ class BaserCoreBaserHelper extends Helper implements BcPluginBaserHelperInterfac
     public function methods(): array
     {
         return [
-            'getParentContent' => ['BcContents', 'getParent'],
-            'widgetArea' => ['BcWidgetArea', 'widgetArea']
+            'getParentContent' => ['BcContents', 'getParent']
         ];
     }
 

@@ -36,8 +36,8 @@ return [
             'plugin' => 'BcThemeConfig',
             'type' => 'Api/Admin',
             'items' => [
-                'View' => ['title' => __d('baser_core', '設定取得'), 'url' => '/baser/api/bc-theme-config/theme_configs/view.json', 'method' => 'GET', 'auth' => true],
-                'Edit' => ['title' => __d('baser_core', '編集'), 'url' => '/baser/api/bc-theme-config/theme_configs/edit.json', 'method' => 'POST', 'auth' => false],
+                'View' => ['title' => __d('baser_core', '設定取得'), 'url' => '/baser/api/admin/bc-theme-config/theme_configs/view.json', 'method' => 'GET', 'auth' => true],
+                'Edit' => ['title' => __d('baser_core', '編集'), 'url' => '/baser/api/admin/bc-theme-config/theme_configs/edit.json', 'method' => 'POST', 'auth' => false],
             ]
         ],
     ]
