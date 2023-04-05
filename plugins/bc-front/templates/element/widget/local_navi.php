@@ -26,7 +26,7 @@ if($request->getAttribute('currentContent')->type === 'ContentFolder') {
 	$parentId = $request->getAttribute('currentContent')->id;
 	$title = $request->getAttribute('currentContent')->title;
 } else {
-	$parent = $this->BcContents->getParent($request->getAttribute('currentContent')->id);
+	$parent = $this->BcBaser->getParentContent($request->getAttribute('currentContent')->id);
 	$parentId = $parent->id;
 	$title = $parent->title;
 	if($parent->site_root) {

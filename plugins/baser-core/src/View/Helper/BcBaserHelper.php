@@ -42,6 +42,29 @@ use BaserCore\Annotation\Doc;
  * @property BreadcrumbsHelper $Breadcrumbs
  * @property BcContentsHelper $BcContents
  * @property BcGoogleMapsHelper $BcGoogleMaps
+ * @method EntityInterface getParentContent(int $id = null, bool $direct = true) BcContentsHelper
+ * @method void mainImage(array $options = []) BcThemeConfigHelper
+ * @method void logo(array $options = []) BcThemeConfigHelper
+ * @method void widgetArea(int $no = null, array $options = []) BcWidgetAreaHelper
+ * @method string getWidgetArea(int $no = null, array $options = []) BcWidgetAreaHelper
+ * @method bool isMail() MailHelper
+ * @method void blogPosts(string $contentsName = [], int $num = 5, array $options = []) BlogHelper
+ * @method string getBlogPosts(string $contentsName = [], int $num = 5, array $options = []) BlogHelper
+ * @method bool isBlogCategory() BlogHelper
+ * @method bool isBlogTag() BlogHelper
+ * @method bool isBlogDate() BlogHelper
+ * @method bool isBlogMonth() BlogHelper
+ * @method bool isBlogYear() BlogHelper
+ * @method bool isBlogSingle() BlogHelper
+ * @method bool isBlogHome() BlogHelper
+ * @method array getBlogs(string $name = '', array $options = []) BlogHelper
+ * @method bool isBlog() BlogHelper
+ * @method array getBlogCategories(array $options = []) BlogHelper
+ * @method bool hasChildBlogCategory(int $id) BlogHelper
+ * @method array getBlogTagList(string $name, array $options = []) BlogHelper
+ * @method void blogTagList(string $name, array $options = []) BlogHelper
+ * @method string getBlogContentsUrl(int $blogContentId, $base = true) BlogHelper
+ * @method int getBlogPostCount() BlogHelper
  */
 class BcBaserHelper extends Helper
 {
@@ -82,25 +105,6 @@ class BcBaserHelper extends Helper
     ];
     // <<<
 
-
-    /**
-     * ページモデル
-     *
-     * 一度初期化した後に再利用し、処理速度を向上する為にコンストラクタでセットする。
-     *
-     * @var Page
-     */
-    protected $_Page = null;
-
-    /**
-     * アクセスルールモデル
-     *
-     * 一度初期化した後に再利用し、処理速度を向上する為にコンストラクタでセットする。
-     *
-     * @var Permission
-     */
-    protected $_Permission = null;
-
     /**
      * カテゴリタイトル設定
      *
@@ -138,21 +142,6 @@ class BcBaserHelper extends Helper
     public function __construct(View $View, $settings = [])
     {
         parent::__construct($View, $settings);
-
-        // モデルクラスをセット
-        // 一度初期化した後に再利用し、処理速度を向上する為にコンストラクタでセットしておく
-        // TODO 未実装のためコメントアウト
-        /* >>>
-        if ($this->_View && BcUtil::isInstalled() && !Configure::read('BcRequest.isUpdater') && !Configure::read('BcRequest.isMaintenance')) {
-            // DBに接続できない場合、CakePHPのエラーメッセージが表示されてしまう為、 try を利用
-            try {
-                $this->_Permission = ClassRegistry::init('Permission');
-                $this->_Page = ClassRegistry::init('Page');
-            } catch (Exception $ex) {
-
-            }
-        }
-        <<< */
 
         // サイト基本設定データをセット
         // TODO 未実装
@@ -1683,8 +1672,8 @@ EOD;
      * {プラグイン名}BaserHelper
      *
      * 《利用例》
-     * - Feedプラグインに FeedBaserHelper::feed() が定義されている場合
-     *        $this->BcBaser->feed(1);
+     * - BcBlogプラグインに BcBlogBaserHelper::blogPosts() が定義されている場合
+     *        $this->BcBaser->blogPosts('news');
      *
      * @return void
      */
@@ -1696,10 +1685,11 @@ EOD;
         foreach($plugins as $plugin) {
             $pluginName = Inflector::camelize($plugin);
             $className = $pluginName . '\\View\\Helper\\' . $pluginName . 'BaserHelper';
-            if (class_exists($className)) {
+            if (class_exists($className) && is_a($className, BcPluginBaserHelperInterface::class, true)) {
                 $this->_pluginBasers[$pluginName] = new $className($this->getView());
             }
         }
+        $this->_pluginBasers['BaserCore'] = new BaserCoreBaserHelper($this->getView());
     }
 
     /**
@@ -1710,16 +1700,22 @@ EOD;
      *
      * @param string $method メソッド名
      * @param array $params 引数
-     * @return mixed PluginBaserHelper の戻り値
+     * @return mixed|void PluginBaserHelper の戻り値
      */
     public function __call($method, $params)
     {
         foreach($this->_pluginBasers as $pluginBaser) {
-            if (method_exists($pluginBaser, $method)) {
-                return call_user_func_array([$pluginBaser, $method], $params);
+            $methods = $pluginBaser->methods();
+            if(!empty($methods[$method])) {
+                if(!isset($methods[$method][0])) continue;
+                if(!isset($methods[$method][1])) continue;
+                $helper = $methods[$method][0];
+                $target = $methods[$method][1];
+                if(method_exists($pluginBaser->{$helper}, $target)) {
+                    return call_user_func_array([$pluginBaser->{$helper}, $target], $params);
+                }
             }
         }
-        return null;
     }
 
     /**

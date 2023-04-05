@@ -9,27 +9,24 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
-namespace BcWidgetArea\View\Helper;
+namespace BcMail\View\Helper;
 
 use BaserCore\View\Helper\BcPluginBaserHelperInterface;
 use Cake\View\Helper;
-use BaserCore\Annotation\UnitTest;
-use BaserCore\Annotation\NoTodo;
-use BaserCore\Annotation\Checked;
 
 /**
- * BcWidgetAreaBaserHelper
+ * MailBaserHelper
  *
- * @property BcWidgetAreaHelper $BcWidgetArea
+ * BcBaserHelper より透過的に呼び出されるヘルパー
  */
-class BcWidgetAreaBaserHelper extends Helper implements BcPluginBaserHelperInterface
+class BcMailBaserHelper extends Helper implements BcPluginBaserHelperInterface
 {
 
     /**
-     * Helpers
-     * @var string[]
+     * ヘルパー
+     * @var array
      */
-    public $helpers = ['BcWidgetArea.BcWidgetArea'];
+    public $helpers = ['BcMail.Mail'];
 
     /**
      * メソッド一覧取得
@@ -39,8 +36,7 @@ class BcWidgetAreaBaserHelper extends Helper implements BcPluginBaserHelperInter
     public function methods(): array
     {
         return [
-            'widgetArea' => ['BcWidgetArea', 'widgetArea'],
-            'getWidgetArea' => ['BcWidgetArea', 'getWidgetArea']
+            'isMail' => ['Mail', 'isMail']
         ];
     }
 

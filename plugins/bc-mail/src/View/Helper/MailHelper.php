@@ -260,4 +260,17 @@ class MailHelper extends Helper
             $this->getView()->setRequest($request->withParam('_Token.unlockedFields', $this->getView()->get('unlockedFields')));
         }
     }
+
+    /**
+     * 現在のページがメールプラグインかどうかを判定する
+     *
+     * @return bool
+     */
+    public function isMail(): bool
+    {
+        $content = $this->getView()->getRequest()->getAttribute('currentContent');
+        if(!$content) return false;
+        return ($content->plugin === 'BcMail');
+    }
+
 }
