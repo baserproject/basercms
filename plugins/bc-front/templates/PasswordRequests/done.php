@@ -10,6 +10,8 @@
  */
 
 /**
+ * パスワードのリセット完了
+ *
  * @var \BaserCore\View\BcAdminAppView $this
  * @checked
  * @noTodo

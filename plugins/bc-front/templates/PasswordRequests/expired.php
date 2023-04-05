@@ -10,6 +10,8 @@
  */
 
 /**
+ * パスワードリセット有効期限切れ
+ *
  * @var \BaserCore\View\BcAdminAppView $this
  * @checked
  * @noTodo

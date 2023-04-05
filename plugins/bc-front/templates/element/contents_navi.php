@@ -11,8 +11,8 @@
 
 /**
  * コンテンツナビ
- * 呼出箇所：固定ページ
  *
+ * 呼出箇所：固定ページ
  * BcBaserHelper::contentsNavi() で呼び出す
  * （例）<?php $this->BcBaser->contentsNavi() ?>
  *

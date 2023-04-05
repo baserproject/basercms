@@ -8,7 +8,10 @@
  * @since         5.0.0
  * @license       https://basercms.net/license/index.html MIT License
  */
+
 /**
+ * カスタムコンテンツエントリー詳細
+ *
  * @var \BcCustomContent\View\CustomContentFrontAppView $this
  * @var \BcCustomContent\Model\Entity\CustomEntry $customEntry
  * @var \BcCustomContent\Model\Entity\CustomContent $customContent
@@ -18,6 +21,7 @@
  */
 $customLinks = $this->CustomContent->getLinks($customContent->custom_table_id);
 ?>
+
 
 <h2><?php $this->BcBaser->contentsTitle() ?></h2>
 

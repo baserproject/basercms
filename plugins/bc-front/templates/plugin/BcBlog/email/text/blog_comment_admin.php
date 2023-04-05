@@ -11,6 +11,7 @@
 
 /**
  * ブログコメント送信メール（管理者）
+ *
  * 呼出箇所：ブログコメント（コメント送信時）
  *
  * @var \BaserCore\View\BcFrontAppView $this

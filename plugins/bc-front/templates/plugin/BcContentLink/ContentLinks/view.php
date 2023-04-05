@@ -10,6 +10,8 @@
  */
 
 /**
+ * コンテンツリンク
+ *
  * @var \BaserCore\View\BcFrontAppView $this
  * @var \BcContentLink\Model\Entity\ContentLink $contentLink
  * @checked

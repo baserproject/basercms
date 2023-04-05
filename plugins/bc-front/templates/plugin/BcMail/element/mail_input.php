@@ -10,6 +10,7 @@
  */
 /**
  * メールフォーム入力欄
+ *
  * 呼出箇所：メールフォーム入力ページ、メールフォーム入力内容確認ページ
  *
  * @var \BcMail\View\MailFrontAppView $this

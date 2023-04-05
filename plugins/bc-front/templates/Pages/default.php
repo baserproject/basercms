@@ -13,6 +13,7 @@ use BaserCore\Model\Entity\Page;
 
 /**
  * 固定ページデフォルトテンプレート
+ *
  * @var BaserCore\View\BcAdminAppView $this
  * @var Page $page
  */

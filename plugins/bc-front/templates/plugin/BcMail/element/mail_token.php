@@ -10,6 +10,8 @@
  */
 
 /**
+ * トークン取得スクリプト
+ *
  * @var \BcMail\View\MailFrontAppView $this
  * @checked
  * @noTodo

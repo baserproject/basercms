@@ -10,6 +10,8 @@
  */
 
 /**
+ * ブログタグリスト
+ *
  * @var \BcBlog\View\BlogFrontAppView $this
  * @var int $blogContentId
  * @var bool $postCount

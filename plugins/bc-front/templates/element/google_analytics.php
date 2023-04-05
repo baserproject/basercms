@@ -11,10 +11,11 @@
 
 /**
  * Google Analytics トラッキングコード
- * 呼出箇所：全ページ
  *
+ * 呼出箇所：全ページ
  * $this->BcBaser->googleAnalytics() で呼び出す
  *
+ * @var \BaserCore\View\BcFrontAppView $this
  * @var string $googleAnalyticsId
  */
 if(!$googleAnalyticsId) return;

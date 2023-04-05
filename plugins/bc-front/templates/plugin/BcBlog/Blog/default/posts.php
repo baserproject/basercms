@@ -11,8 +11,8 @@
 
 /**
  * パーツ用ブログ記事一覧
- * 呼出箇所：トップページ
  *
+ * 呼出箇所：トップページ
  * BcBaserHelper::blogPosts( コンテンツ名, 件数 ) で呼び出す
  * （例）<?php $this->BcBaser->blogPosts('news', 3) ?>
  *

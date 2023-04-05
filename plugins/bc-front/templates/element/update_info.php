@@ -11,6 +11,7 @@
 
 /**
  * コンテンツ更新情報
+ *
  * @var \BaserCore\View\BcAdminAppView $this
  * @var string $createdDate
  * @var string $modifiedDate

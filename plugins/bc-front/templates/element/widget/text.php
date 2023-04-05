@@ -11,6 +11,7 @@
 
 /**
  * テキスト
+ *
  * 呼出箇所：ウィジェット
  *
  * @var \BaserCore\View\BcFrontAppView $this

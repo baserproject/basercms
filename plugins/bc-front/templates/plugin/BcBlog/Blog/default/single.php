@@ -11,6 +11,7 @@
 
 /**
  * ブログ記事詳細ページ
+ *
  * 呼出箇所：ブログ記事詳細ページ
  *
  * @var \BaserCore\View\BcFrontAppView $this

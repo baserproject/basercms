@@ -11,6 +11,7 @@
 
 /**
  * メールフォーム送信完了ページ
+ *
  * 呼出箇所：メールフォーム
  *
  * @var \BcMail\View\MailFrontAppView $this

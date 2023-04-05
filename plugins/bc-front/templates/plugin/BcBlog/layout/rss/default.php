@@ -10,6 +10,7 @@
  */
 
 /**
+ * RSSレイアウト
  * @var \BaserCore\View\BcFrontAppView $this
  */
 

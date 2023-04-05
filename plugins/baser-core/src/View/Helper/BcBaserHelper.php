@@ -2772,7 +2772,7 @@ END_FLASH;
     /**
      * IDがコンテンツ自身の親のIDかを判定する
      *
-     * @param int $id コンテンツ自身のID
+     * @param int|null $id コンテンツ自身のID
      * @param int $parentId 親として判定するID
      * @return bool
      */

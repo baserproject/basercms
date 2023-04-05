@@ -11,6 +11,7 @@
 
 /**
  * サイト内検索結果
+ *
  * @var \BaserCore\View\BcFrontAppView $this
  * @var array $query 検索キーワード
  * @var array $searchIndexes 検索結果リスト

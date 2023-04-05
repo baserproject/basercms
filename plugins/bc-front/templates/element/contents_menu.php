@@ -10,10 +10,12 @@
  */
 
 /**
- * [PUBLISH] サイトマップ
+ * サイトマップ
  *
  * カテゴリの階層構造を表現する為、再帰呼び出しを行う
  * $this->BcBaser->contentsMenu() で呼び出す
+ *
+ * @var \BaserCore\View\BcFrontAppView $this
  */
 
 if (!isset($level)) {

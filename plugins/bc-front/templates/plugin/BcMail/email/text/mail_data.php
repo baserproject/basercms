@@ -11,7 +11,9 @@
 
 /**
  * メールフォーム送信メール内容
+ *
  * 呼出箇所：送信メール
+ *
  * @var \BcMail\View\MailFrontEmailView $this
  * @var array $mailFields メールフィールドリスト
  * @checked

@@ -11,6 +11,7 @@
 
 /**
  * メールフォーム非公開時表示ページ
+ *
  * 呼出箇所：メールフォーム
  *
  * @var \BaserCore\View\BcFrontAppView $this

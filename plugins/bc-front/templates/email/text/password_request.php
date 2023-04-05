@@ -10,6 +10,9 @@
  */
 
 /**
+ * パスワード再発行完了メール
+ *
+ * @var \BaserCore\View\BcFrontAppView $this
  * @checked
  * @noTodo
  * @unitTest

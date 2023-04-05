@@ -8,7 +8,10 @@
  * @since         5.0.0
  * @license       https://basercms.net/license/index.html MIT License
  */
+
 /**
+ * カスタムコンテンツエントリー一覧
+ *
  * @var \BcCustomContent\View\CustomContentFrontAppView $this
  * @var \Cake\ORM\ResultSet $customEntries
  * @var \BcCustomContent\Model\Entity\CustomContent $customContent

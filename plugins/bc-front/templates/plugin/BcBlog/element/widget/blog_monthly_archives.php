@@ -8,8 +8,10 @@
  * @since         5.0.0
  * @license       https://basercms.net/license/index.html MIT License
  */
+
 /**
  * ブログ月別アーカイブ
+ *
  * 呼出箇所：ウィジェット
  *
  * @var \BcBlog\View\BlogFrontAppView $this

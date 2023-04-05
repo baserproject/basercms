@@ -10,7 +10,8 @@
  */
 
 /**
- * login
+ * ログインページ
+ *
  * @var \BaserCore\View\BcAdminAppView $this
  * @var string $isEnableLoginCredit
  * @var bool $savedEnable
@@ -18,7 +19,6 @@
  * @noTodo
  * @unitTest
  */
-
 $this->BcBaser->setTitle(__d('baser_core', 'ログイン'));
 ?>
 

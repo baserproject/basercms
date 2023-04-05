@@ -14,6 +14,8 @@ use Cake\Core\Plugin;
 use Cake\Utility\Inflector;
 
 /**
+ * コントローラーが見つからないエラー
+ *
  * @var string $controller
  */
 
@@ -49,6 +51,8 @@ $this->assign('title', 'Missing Controller');
 $this->assign('templateName', 'missing_controller.php');
 
 ?>
+
+
 <?php $this->start('subheading');?>
 <strong>Error</strong>
 <?php if ($incompleteInflection): ?>

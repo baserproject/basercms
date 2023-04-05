@@ -11,6 +11,8 @@
 
 /**
  * フラッシュメッセージ
+ *
+ * @var \BaserCore\View\BcFrontAppView $this
  * @var string $key
  * @var string $message
  */

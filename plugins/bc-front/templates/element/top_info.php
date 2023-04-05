@@ -11,6 +11,7 @@
 
 /**
  * トップページ NEWS 表示部分
+ *
  * 呼出箇所：トップページ
  *
  * @var \BaserCore\View\BcFrontAppView $this

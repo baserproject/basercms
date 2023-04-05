@@ -10,7 +10,8 @@
  */
 
 /**
- * [PUBLISH] RSS
+ * RSS
+ *
  * @var \BaserCore\View\BcFrontAppView $this
  * @var \Cake\ORM\ResultSet $posts
  */

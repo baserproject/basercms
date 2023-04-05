@@ -11,6 +11,7 @@
 
 /**
  * ブログ年別アーカイブ
+ *
  * 呼出箇所：ウィジェット
  *
  * @var \BcBlog\View\BlogFrontAppView $this

@@ -11,7 +11,6 @@
 
 /**
  * コンテンツフォルダ
- * 呼出箇所：コンテンツ一覧
  *
  * @var \BaserCore\View\BcFrontAppView $this
  * @var array $children 子コンテンツ

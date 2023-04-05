@@ -11,6 +11,7 @@
 
 /**
  * ブログトップ
+ *
  * 呼出箇所：ブログトップ
  *
  * @var \BcBlog\View\BlogFrontAppView $this

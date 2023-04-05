@@ -10,6 +10,8 @@
  */
 
 /**
+ * ヘッダー
+ *
  * @var \BaserCore\View\BcFrontAppView $this
  * @var array $query
  * @checked

@@ -10,6 +10,8 @@
  */
 
 /**
+ * パスワードのリセット実行
+ *
  * @var \BaserCore\View\BcAdminAppView $this
  * @var \BaserCore\Model\Entity\User $user
  * @checked

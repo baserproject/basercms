@@ -11,6 +11,7 @@
 
 /**
  * ブログ投稿者一覧
+ *
  * 呼出箇所：ウィジェット
  *
  * @var \BcBlog\View\BlogFrontAppView $this
@@ -21,7 +22,6 @@
  * @noTodo
  * @unitTest
  */
-
 if (empty($view_count)) {
 	$view_count = '0';
 }

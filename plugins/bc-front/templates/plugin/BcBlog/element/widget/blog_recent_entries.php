@@ -11,6 +11,7 @@
 
 /**
  * ブログ最近の投稿
+ *
  * 呼出箇所：ウィジェット
  *
  * @var \BcBlog\View\BlogFrontAppView $this

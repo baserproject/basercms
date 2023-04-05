@@ -11,7 +11,9 @@
 
 /**
  * レイアウト
+ *
  * 呼出箇所：全ページ
+ *
  * @var \BaserCore\View\BcFrontAppView $this
  */
 $request = $this->getRequest();

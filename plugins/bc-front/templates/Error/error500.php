@@ -14,8 +14,10 @@ use Cake\Error\Debugger;
 
 /**
  * 500エラーページ
+ *
  * 呼出箇所：エラー発生時
  *
+ * @var \BaserCore\View\BcFrontAppView $this
  * @var string $message エラーメッセージ
  * @var string $url URL
  */
@@ -27,6 +29,8 @@ if (Configure::read('debug')) :
 
     $this->start('file');
 ?>
+
+
 <?php if (!empty($error->queryString)) : ?>
     <p class="notice">
         <strong>SQL Query: </strong>
