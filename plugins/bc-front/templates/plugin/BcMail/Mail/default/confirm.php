@@ -18,9 +18,9 @@
  * @var bool $freezed 確認画面かどうか
  */
 if ($freezed) {
-	$this->Mailform->freeze();
+	$this->BcBaser->freezeMailForm();
 }
-$this->BcUpload->setTable('BcMail.MailMessages');
+$this->BcBaser->setTableToUpload('BcMail.MailMessages');
 ?>
 
 

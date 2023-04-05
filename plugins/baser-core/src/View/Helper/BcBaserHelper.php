@@ -12,8 +12,13 @@
 namespace BaserCore\View\Helper;
 
 use BaserCore\Utility\BcSiteConfig;
+use BcBlog\Model\Entity\BlogPost;
+use BcCustomContent\Model\Entity\CustomContent;
+use BcCustomContent\Model\Entity\CustomEntry;
+use BcCustomContent\Model\Entity\CustomLink;
 use Cake\Core\Plugin;
 use Cake\Datasource\EntityInterface;
+use Cake\ORM\ResultSet;
 use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
 use Cake\View\Helper\BreadcrumbsHelper;
@@ -35,6 +40,7 @@ use BaserCore\Annotation\Doc;
 
 /**
  * Class BcBaserHelper
+ *
  * @property BcHtmlHelper $BcHtml
  * @property UrlHelper $Url
  * @property FlashHelper $Flash
@@ -42,29 +48,84 @@ use BaserCore\Annotation\Doc;
  * @property BreadcrumbsHelper $Breadcrumbs
  * @property BcContentsHelper $BcContents
  * @property BcGoogleMapsHelper $BcGoogleMaps
- * @method EntityInterface getParentContent(int $id = null, bool $direct = true) BcContentsHelper
- * @method void mainImage(array $options = []) BcThemeConfigHelper
- * @method void logo(array $options = []) BcThemeConfigHelper
- * @method void widgetArea(int $no = null, array $options = []) BcWidgetAreaHelper
- * @method string getWidgetArea(int $no = null, array $options = []) BcWidgetAreaHelper
+ *
+ * ### BcContentsHelper
+ * @method EntityInterface getParentContent(int $id = null, bool $direct = true)
+ *
+ * ### BcThemeConfigHelper
+ * @method void mainImage(array $options = [])
+ * @method void logo(array $options = [])
+ *
+ * ### BcWidgetAreaHelper
+ * @method void widgetArea(int $no = null, array $options = [])
+ * @method string getWidgetArea(int $no = null, array $options = [])
  * @method bool isMail() MailHelper
- * @method void blogPosts(string $contentsName = [], int $num = 5, array $options = []) BlogHelper
- * @method string getBlogPosts(string $contentsName = [], int $num = 5, array $options = []) BlogHelper
- * @method bool isBlogCategory() BlogHelper
- * @method bool isBlogTag() BlogHelper
- * @method bool isBlogDate() BlogHelper
- * @method bool isBlogMonth() BlogHelper
- * @method bool isBlogYear() BlogHelper
- * @method bool isBlogSingle() BlogHelper
- * @method bool isBlogHome() BlogHelper
- * @method array getBlogs(string $name = '', array $options = []) BlogHelper
- * @method bool isBlog() BlogHelper
- * @method array getBlogCategories(array $options = []) BlogHelper
- * @method bool hasChildBlogCategory(int $id) BlogHelper
- * @method array getBlogTagList(string $name, array $options = []) BlogHelper
- * @method void blogTagList(string $name, array $options = []) BlogHelper
- * @method string getBlogContentsUrl(int $blogContentId, $base = true) BlogHelper
- * @method int getBlogPostCount() BlogHelper
+ *
+ * ### BlogHelper
+ * @method void blogPosts(string $contentsName = [], int $num = 5, array $options = [])
+ * @method string getBlogPosts(string $contentsName = [], int $num = 5, array $options = [])
+ * @method bool isBlogCategory()
+ * @method bool isBlogTag()
+ * @method bool isBlogDate()
+ * @method bool isBlogMonth()
+ * @method bool isBlogYear()
+ * @method bool isBlogSingle()
+ * @method bool isBlogHome()
+ * @method array getBlogs(string $name = '', array $options = [])
+ * @method bool isBlog()
+ * @method array getBlogCategories(array $options = [])
+ * @method bool hasChildBlogCategory(int $id)
+ * @method array getBlogTagList(string $name, array $options = [])
+ * @method void blogTagList(string $name, array $options = [])
+ * @method string getBlogContentsUrl(int $blogContentId, $base = true)
+ * @method int getBlogPostCount()
+ * @method string getBlogTitle()
+ * @method string getBlogPostLinkUrl(BlogPost $post, bool $base = true, bool $full = true)
+ * @method void blogPostEyeCatch(BlogPost $post, array $options = [])
+ * @method void blogPostDate(BlogPost $post, string $format = 'Y/m/d')
+ * @method void blogPostTitle(BlogPost $post, bool $link = true, array $options = [])
+ * @method void blogPostCategory(BlogPost $post, array $options = [])
+ * @method void blogPostContent(BlogPost $post, bool $moreText = true, bool $moreLink = false, bool $cut = false, bool $lastText = false)
+ * @method void blogDescription()
+ * @method bool blogDescriptionExists()
+ * @method string getBlogPostContent(BlogPost $post, bool $moreText = true, bool $moreLink = false, bool $cut = false, bool $lastText = false)
+ * @method void blogPostPrevLink(BlogPost $post, string $title = '', array $htmlAttributes = [])
+ * @method void blogPostNextLink(BlogPost $post, string $title = '', array $htmlAttributes = [])
+ *
+ * ### MailHelper
+ * @method bool mailFormDescriptionExists()
+ * @method void mailFormDescription()
+ *
+ * ### MailformHelper
+ * @method void freezeMailForm()
+ *
+ * ### BcUploadHelper
+ * @method void setTableToUpload(string $tableName)
+ *
+ * ### BcFormHelper
+ * @method string createForm($context = null, array $options = [])
+ * @method string formControl(string $fieldName, array $options = [])
+ * @method string formHidden(string $fieldName, array $options = [])
+ * @method string formSubmit(?string $caption = null, array $options = [])
+ * @method string formError(string $field, $text = null, array $options = [])
+ * @method string endForm(array $secureAttributes = [])
+ * @method string formLabel(string $fieldName, ?string $text = null, array $options = [])
+ *
+ * ### HtmlHelper
+ * @method scriptStart(array $options = [])
+ * @method string scriptEnd()
+ * @method string meta($type, $content = null, array $options = [])
+ *
+ * ### CustomContentHelper
+ * @method bool isDisplayCustomEntrySearch(CustomLink $customLink, string $type = 'front')
+ * @method string customSearchControl(CustomLink $customLink, array $options = [])
+ * @method void customContentDescription(CustomContent $content)
+ * @method void customEntryTitle(CustomEntry $entry, array $options = [])
+ * @method string customEntryPublished(CustomEntry $entry)
+ * @method ResultSet getCustomLinks(int $tableId, bool $isThreaded = true)
+ * @method bool isDisplayCustomField(CustomEntry $entry, string $fieldName)
+ * @method string getCustomFieldTitle(mixed $entry, string $fieldName)
+ * @method string|array getCustomFieldValue(mixed $entry, string $fieldName, array $options = [])
  */
 class BcBaserHelper extends Helper
 {

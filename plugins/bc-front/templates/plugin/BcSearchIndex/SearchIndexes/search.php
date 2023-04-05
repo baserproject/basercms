@@ -28,14 +28,14 @@ $this->BcBaser->setTitle(__d('baser_core', '検索結果一覧'));
 <h2 class="bs-search-title"><?php $this->BcBaser->contentsTitle() ?></h2>
 
 <div class="bs-search-form">
-    <?php echo $this->BcForm->create($searchIndexesFront, ['type' => 'get']) ?>
+    <?php echo $this->BcBaser->createForm($searchIndexesFront, ['type' => 'get']) ?>
     <?php if ($contentFolders): ?>
-        <?php echo $this->BcForm->control('f', ['type' => 'select', 'options' => $contentFolders, 'empty' => __d('baser_core', 'カテゴリ')]) ?>
+        <?php echo $this->BcBaser->formControl('f', ['type' => 'select', 'options' => $contentFolders, 'empty' => __d('baser_core', 'カテゴリ')]) ?>
     <?php endif ?>
-    <?php echo $this->BcForm->control('q', ['placeholder' => __d('baser_core', 'キーワード'), 'escape' => false, 'div' => false]) ?>
-    <?php echo $this->BcForm->hidden('s') ?>
-    <?php echo $this->BcForm->submit(__d('baser_core', '検索'), ['div' => false, 'class' => 'bs-button-small']) ?>
-    <?php echo $this->BcForm->end() ?>
+    <?php echo $this->BcBaser->formControl('q', ['placeholder' => __d('baser_core', 'キーワード'), 'escape' => false, 'div' => false]) ?>
+    <?php echo $this->BcBaser->formHidden('s') ?>
+    <?php echo $this->BcBaser->formSubmit(__d('baser_core', '検索'), ['div' => false, 'class' => 'bs-button-small']) ?>
+    <?php echo $this->BcBaser->endForm() ?>
 </div>
 
 <section class="bs-search-header">

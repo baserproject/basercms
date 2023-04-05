@@ -16,11 +16,10 @@
  *
  * @var \BaserCore\View\BcFrontAppView $this
  */
-$this->BcBaser->setTitle(__d('baser_core', 'メンテナンス中'));
 ?>
 
 
-<h2 class="bs-maintenance-title"><?php echo __d('baser_core', 'メンテナンス中') ?></h2>
+<h2 class="bs-maintenance-title"><?php $this->BcBaser->contentsTitle() ?></h2>
 <section class="bs-maintenance-body">
 	<p>
 		<?php echo __d('baser_core', 'ご迷惑をおかけしております。') ?><br>

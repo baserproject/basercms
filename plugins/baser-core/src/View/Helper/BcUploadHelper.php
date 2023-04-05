@@ -547,7 +547,7 @@ class BcUploadHelper  extends Helper
      * @noTodo
      * @unitTest
      */
-    public function setTable($tableName)
+    public function setTable(string $tableName)
     {
         $this->table = TableRegistry::getTableLocator()->get($tableName);
     }

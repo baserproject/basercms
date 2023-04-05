@@ -26,7 +26,10 @@ class BcMailBaserHelper extends Helper implements BcPluginBaserHelperInterface
      * ヘルパー
      * @var array
      */
-    public $helpers = ['BcMail.Mail'];
+    public $helpers = [
+        'BcMail.Mail',
+        'BcMail.Mailform'
+    ];
 
     /**
      * メソッド一覧取得
@@ -36,7 +39,10 @@ class BcMailBaserHelper extends Helper implements BcPluginBaserHelperInterface
     public function methods(): array
     {
         return [
-            'isMail' => ['Mail', 'isMail']
+            'isMail' => ['Mail', 'isMail'],
+            'mailFormDescriptionExists' => ['Mail', 'descriptionExists'],
+            'mailFormDescription' => ['Mail', 'description'],
+            'freezeMailForm' => ['Mailform' => 'freeze']
         ];
     }
 

@@ -17,8 +17,6 @@ use BaserCore\Model\Entity\Page;
  * @var BaserCore\View\BcAdminAppView $this
  * @var Page $page
  */
-$this->BcAdmin->setTitle($page['content']['title']);
-$this->BcBaser->setDescription($page['content']['description']);
 ?>
 
 

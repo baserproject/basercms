@@ -17,7 +17,6 @@
  * @noTodo
  * @unitTest
  */
-$this->BcAdmin->setTitle(__d('baser_core', 'Not Found'));
 ?>
 
 

@@ -12,7 +12,7 @@
 /**
  * RSS
  *
- * @var \BaserCore\View\BcFrontAppView $this
+ * @var \BcBlog\View\BlogFrontAppView $this
  * @var \Cake\ORM\ResultSet $posts
  */
 if (!$posts->count()) return;

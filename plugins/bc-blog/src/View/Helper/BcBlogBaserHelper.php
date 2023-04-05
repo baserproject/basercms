@@ -61,6 +61,19 @@ class BcBlogBaserHelper extends Helper implements BcPluginBaserHelperInterface
             'blogTagList' => ['Blog', 'tagList'],
             'getBlogContentsUrl' => ['Blog', 'getContentsUrl'],
             'getBlogPostCount' => ['Blog', 'getPostCount'],
+            'getBlogTitle' => ['Blog', 'getTitle'],
+            'getBlogPostLinkUrl' => ['Blog', 'getPostLinkUrl'],
+            'blogPostEyeCatch' => ['Blog', 'eyeCatch'],
+            'blogPostDate' => ['Blog', 'postDate'],
+            'blogPostTitle' => ['Blog', 'postTitle'],
+            'blogPostCategory' => ['Blog', 'category'],
+            'blogPostContent' => ['Blog', 'postContent'],
+            'blogDescriptionExists' => ['Blog', 'descriptionExists'],
+            'blogDescription' => ['Blog', 'description'],
+            'getBlogPostContent' => ['Blog', 'getPostContent'],
+            'blogPostPrevLink' => ['Blog', 'prevLink'],
+            'blogPostNextLink' => ['Blog', 'nextLink'],
+
         ];
     }
 

@@ -24,7 +24,7 @@
 use Cake\Core\Configure;
 
 if (Configure::read('debug') == 0 && $mailContent->redirect_url) {
-  $this->Html->meta(['http-equiv' => 'Refresh'], null, ['content' => '5;url=' . $mailContent->redirect_url, 'block' => true]);
+  $this->BcBaser->meta(['http-equiv' => 'Refresh'], null, ['content' => '5;url=' . $mailContent->redirect_url, 'block' => true]);
 }
 ?>
 

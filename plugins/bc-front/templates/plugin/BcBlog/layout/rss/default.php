@@ -11,7 +11,7 @@
 
 /**
  * RSSレイアウト
- * @var \BaserCore\View\BcFrontAppView $this
+ * @var \BcBlog\View\BlogFrontAppView $this
  */
 
 if (!isset($channel)) $channel = [];

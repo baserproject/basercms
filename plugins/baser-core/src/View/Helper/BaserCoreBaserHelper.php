@@ -28,13 +28,26 @@ class BaserCoreBaserHelper extends Helper implements BcPluginBaserHelperInterfac
      * @var string[]
      */
     public $helpers = [
-        'BaserCore.BcContents'
+        'BaserCore.BcContents',
+        'BaserCore.BcForm',
+        'BaserCore.BcUpload',
     ];
 
     public function methods(): array
     {
         return [
-            'getParentContent' => ['BcContents', 'getParent']
+            'getParentContent' => ['BcContents', 'getParent'],
+            'createForm' => ['BcForm', 'create'],
+            'formControl' => ['BcForm', 'control'],
+            'formHidden' => ['BcForm', 'hidden'],
+            'formSubmit' => ['BcForm', 'submit'],
+            'formError' => ['BcForm', 'error'],
+            'formLabel' => ['BcForm', 'label'],
+            'endForm' => ['BcForm', 'end'],
+            'scriptStart' => ['Html', 'scriptStart'],
+            'scriptEnd' => ['Html', 'scriptEnd'],
+            'meta' => ['Html', 'meta'],
+            'setTableToUpload' => ['BcUpload', 'setTable'],
         ];
     }
 
