@@ -125,6 +125,9 @@ class PermissionGroupsService implements PermissionGroupsServiceInterface
      *
      * @param int $userGroupId
      * @param array $queryParams
+     * @noTodo
+     * @unitTest
+     * @checked
      * @return Query
      * @notodo
      * @unitTest
@@ -201,6 +204,9 @@ class PermissionGroupsService implements PermissionGroupsServiceInterface
      * ユーザーグループを指定してアクセスグループを構築する
      *
      * @param int $userGroupId
+     * @noTodo
+     * @unitTest
+     * @checked
      */
 	public function buildByUserGroup(int $userGroupId)
 	{

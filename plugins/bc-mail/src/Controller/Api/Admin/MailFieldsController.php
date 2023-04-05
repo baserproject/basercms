@@ -15,6 +15,7 @@ use BaserCore\Controller\Api\Admin\BcAdminApiController;
 use BcMail\Service\MailFieldsService;
 use BcMail\Service\MailFieldsServiceInterface;
 use Cake\Datasource\Exception\RecordNotFoundException;
+use Cake\Http\Exception\BadRequestException;
 use Cake\ORM\Exception\PersistenceFailedException;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -102,32 +103,35 @@ class MailFieldsController extends BcAdminApiController
 
         $this->set([
             'message' => $message,
-            'mailFields' => $entity
+            'mailField' => $entity
         ]);
-        $this->viewBuilder()->setOption('serialize', ['mailFields', 'message', 'errors']);
+        $this->viewBuilder()->setOption('serialize', ['mailField', 'message']);
     }
 
     /**
      * [API] メールフィールド API 一覧取得
      *
      * @param MailFieldsServiceInterface $service
-     * @param int $mailContentId
      *
      * @checked
      * @noTodo
      */
-    public function index(MailFieldsServiceInterface $service, int $mailContentId)
+    public function index(MailFieldsServiceInterface $service)
     {
         $this->request->allowMethod(['get']);
 
         $queryParams = $this->getRequest()->getQueryParams();
+
+        if (empty($queryParams['mail_content_id'])) {
+            throw new BadRequestException(__d('baser_core', 'パラメーターに mail_content_id を指定してください。'));
+        }
 
         $mailFields = $message = null;
         try {
             $queryParams = array_merge([
                 'contain' => null,
             ], $queryParams);
-            $mailFields = $this->paginate($service->getIndex($mailContentId, $queryParams));
+            $mailFields = $this->paginate($service->getIndex($queryParams['mail_content_id'], $queryParams));
         } catch (RecordNotFoundException $e) {
             $this->setResponse($this->response->withStatus(404));
             $message = __d('baser_core', 'データが見つかりません。');

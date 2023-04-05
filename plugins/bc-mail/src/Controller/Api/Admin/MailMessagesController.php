@@ -18,6 +18,7 @@ use BcMail\Service\MailContentsServiceInterface;
 use BcMail\Service\MailMessagesService;
 use BcMail\Service\MailMessagesServiceInterface;
 use Cake\Datasource\Exception\RecordNotFoundException;
+use Cake\Http\Exception\BadRequestException;
 use Cake\ORM\Exception\PersistenceFailedException;
 use Cake\View\View;
 use BaserCore\Annotation\UnitTest;
@@ -34,17 +35,23 @@ class MailMessagesController extends BcAdminApiController
      * [API] 受信メール一覧
      *
      * @param MailMessagesService $service
-     * @param int $mailContentId
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function index(MailMessagesServiceInterface $service, int $mailContentId)
+    public function index(MailMessagesServiceInterface $service)
     {
         $this->request->allowMethod(['get']);
+
+        $queryParams = $this->getRequest()->getQueryParams();
+
+        if (empty($queryParams['mail_content_id'])) {
+            throw new BadRequestException(__d('baser_core', 'パラメーターに mail_content_id を指定してください。'));
+        }
+
         $mailMessages = $message = null;
         try {
-            $service->setup($mailContentId);
+            $service->setup($queryParams['mail_content_id']);
             $mailMessages = $this->paginate($service->getIndex($this->request->getQueryParams()));
         } catch (RecordNotFoundException $e) {
             $this->setResponse($this->response->withStatus(404));
@@ -65,18 +72,24 @@ class MailMessagesController extends BcAdminApiController
      * [API] 受信メール詳細
      *
      * @param MailMessagesService $service
-     * @param int $mailContentId
      * @param int $messageId
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function view(MailMessagesServiceInterface $service, int $mailContentId, int $messageId)
+    public function view(MailMessagesServiceInterface $service, int $messageId)
     {
         $this->request->allowMethod(['get']);
+
+        $queryParams = $this->getRequest()->getQueryParams();
+
+        if (empty($queryParams['mail_content_id'])) {
+            throw new BadRequestException(__d('baser_core', 'パラメーターに mail_content_id を指定してください。'));
+        }
+
         $mailMessage = $message = null;
         try {
-            $service->setup($mailContentId);
+            $service->setup($queryParams['mail_content_id']);
             $mailMessage = $service->get($messageId);
         } catch (RecordNotFoundException $e) {
             $this->setResponse($this->response->withStatus(404));
@@ -98,22 +111,27 @@ class MailMessagesController extends BcAdminApiController
      *
      * @param MailMessagesService $service
      * @param MailContentsServiceInterface $mailContentsService
-     * @param int $mailContentId
      * @checked
      * @noTodo
      * @unitTest
      */
     public function add(
         MailMessagesServiceInterface $service,
-        MailContentsServiceInterface $mailContentsService,
-        int $mailContentId
+        MailContentsServiceInterface $mailContentsService
     )
     {
         $this->request->allowMethod(['post']);
+
+        $queryParams = $this->getRequest()->getQueryParams();
+
+        if (empty($queryParams['mail_content_id'])) {
+            throw new BadRequestException(__d('baser_core', 'パラメーターに mail_content_id を指定してください。'));
+        }
+
         $mailMessage = null;
         try {
-            $service->setup($mailContentId);
-            $mailContent = $mailContentsService->get($mailContentId);
+            $service->setup($queryParams['mail_content_id']);
+            $mailContent = $mailContentsService->get($queryParams['mail_content_id']);
             $mailMessage = $service->create($mailContent, $this->request->getData());
             $message = __d('baser_core',
                 '{0} への受信データ NO「{1}」を追加しました。',
@@ -145,7 +163,6 @@ class MailMessagesController extends BcAdminApiController
      *
      * @param MailMessagesServiceInterface $service
      * @param MailContentsServiceInterface $mailContentsService
-     * @param int $mailContentId
      * @param int $id
      * @checked
      * @noTodo
@@ -154,17 +171,23 @@ class MailMessagesController extends BcAdminApiController
     public function edit(
         MailMessagesServiceInterface $service,
         MailContentsServiceInterface $mailContentsService,
-        int $mailContentId,
         int $id
     )
     {
         $this->request->allowMethod(['post', 'patch']);
+
+        $queryParams = $this->getRequest()->getQueryParams();
+
+        if (empty($queryParams['mail_content_id'])) {
+            throw new BadRequestException(__d('baser_core', 'パラメーターに mail_content_id を指定してください。'));
+        }
+
         $mailMessage = $errors = null;
         try {
-            $service->setup($mailContentId);
+            $service->setup($queryParams['mail_content_id']);
             $entity = $service->get($id);
             $mailMessage = $service->update($entity, $this->request->getData());
-            $mailContent = $mailContentsService->get($mailContentId);
+            $mailContent = $mailContentsService->get($queryParams['mail_content_id']);
             $message = __d('baser_core',
                 '{0} への受信データ NO「{1}」を更新しました。',
                 $mailContent->content->title,
@@ -195,7 +218,6 @@ class MailMessagesController extends BcAdminApiController
      *
      * @param MailMessagesService $service
      * @param MailContentsServiceInterface $mailContentsService,
-     * @param int $mailContentId
      * @param int $messageId
      * @checked
      * @noTodo
@@ -204,15 +226,21 @@ class MailMessagesController extends BcAdminApiController
     public function delete(
         MailMessagesServiceInterface $service,
         MailContentsServiceInterface $mailContentsService,
-        int $mailContentId,
         int $messageId
     )
     {
         $this->request->allowMethod(['post', 'put', 'delete']);
+
+        $queryParams = $this->getRequest()->getQueryParams();
+
+        if (empty($queryParams['mail_content_id'])) {
+            throw new BadRequestException(__d('baser_core', 'パラメーターに mail_content_id を指定してください。'));
+        }
+
         $mailMessage = $errors = null;
         try {
-            $service->setup($mailContentId);
-            $mailContent = $mailContentsService->get($mailContentId);
+            $service->setup($queryParams['mail_content_id']);
+            $mailContent = $mailContentsService->get($queryParams['mail_content_id']);
             $mailMessage = $service->delete($messageId);
             $message = __d('baser_core',
                 '{0} への受信データ NO「{1}」を削除しました。',

@@ -76,7 +76,7 @@ class MailFieldsControllerTest extends BcTestCase
         MailFieldsFactory::make([])->createFieldTypeText(1)->persist();
         MailFieldsFactory::make([])->createFieldTypeText(2)->persist();
 
-        $this->get("/baser/api/bc-mail/mail_fields/index/1.json?token=" . $this->accessToken);
+        $this->get("/baser/api/bc-mail/mail_fields/index.json?mail_content_id=1&token=" . $this->accessToken);
         // レスポンスコードを確認する
         $this->assertResponseOk();
         // レスポンスのメールメッセージデータを確認する

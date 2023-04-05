@@ -145,15 +145,15 @@ class MailFieldsService implements MailFieldsServiceInterface
      */
     public function create(array $postData)
     {
-        if (is_array($postData['valid_ex'])) $postData['valid_ex'] = implode(',', $postData['valid_ex']);
-        $postData['no'] = $this->MailFields->getMax('no', ['mail_content_id' => $postData['mail_content_id']]) + 1;
+        if (isset($postData['valid_ex']) && is_array($postData['valid_ex'])) $postData['valid_ex'] = implode(',', $postData['valid_ex']);
+        $postData['no'] = $this->MailFields->getMax('no', ['mail_content_id' => $postData['mail_content_id'] ?? '']) + 1;
         $postData['sort'] = $this->MailFields->getMax('sort') + 1;
-        $postData['source'] = $this->MailFields->formatSource($postData['source']);
+        $postData['source'] = $this->MailFields->formatSource($postData['source'] ?? null);
         $entity = $this->MailFields->patchEntity($this->MailFields->newEmptyEntity(), $postData);
         $this->MailFields->getConnection()->begin();
         try {
             if (!$entity->getErrors()) {
-                if (!$this->MailMessagesService->addMessageField($postData['mail_content_id'], $postData['field_name'])) {
+                if (!$this->MailMessagesService->addMessageField($postData['mail_content_id'], $postData['field_name'] ?? null)) {
                     $this->MailFields->getConnection()->rollback();
                     throw new BcException(__d('baser_core', 'データベースに問題があります。メール受信データ保存用テーブルの更新処理に失敗しました。'));
                 }
@@ -177,8 +177,8 @@ class MailFieldsService implements MailFieldsServiceInterface
     public function update(EntityInterface $entity, array $postData)
     {
         $oldFieldName = $entity->field_name;
-        if (is_array($postData['valid_ex'])) $postData['valid_ex'] = implode(',', $postData['valid_ex']);
-        $postData['source'] = $this->MailFields->formatSource($postData['source']);
+        if (isset($postData['valid_ex']) && is_array($postData['valid_ex'])) $postData['valid_ex'] = implode(',', $postData['valid_ex']);
+        $postData['source'] = $this->MailFields->formatSource($postData['source'] ?? '');
         $entity = $this->MailFields->patchEntity($entity, $postData);
         $this->MailFields->getConnection()->begin();
         if (!$entity->getErrors() && $entity->field_name !== $oldFieldName) {
