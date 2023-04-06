@@ -10,7 +10,8 @@
  */
 
 /**
- * @var \BaserCore\View\BcFrontAppView $this
+ * RSSレイアウト
+ * @var \BcBlog\View\BlogFrontAppView $this
  */
 
 if (!isset($channel)) $channel = [];

@@ -184,11 +184,11 @@ return [
             'plugin' => 'BaserCore',
             'type' => 'Api/Admin',
             'items' => [
-                'Index' => ['title' => __d('baser_core', '一覧取得'), 'url' => '/baser/api/baser-core/content_folders/index.json', 'method' => '*', 'auth' => true],
-                'View' => ['title' => __d('baser_core', '単一取得'), 'url' => '/baser/api/baser-core/content_folders/view/*.json', 'method' => '*', 'auth' => true],
-                'Add' => ['title' => __d('baser_core', '新規登録'), 'url' => '/baser/api/baser-core/content_folders/add.json', 'method' => 'POST', 'auth' => false],
-                'Edit' => ['title' => __d('baser_core', '編集'), 'url' => '/baser/api/baser-core/content_folders/edit/*.json', 'method' => 'POST', 'auth' => false],
-                'Delete' => ['title' => __d('baser_core', '削除'), 'url' => '/baser/api/baser-core/content_folders/delete/*.json', 'method' => 'POST', 'auth' => false]
+                'Index' => ['title' => __d('baser_core', '一覧取得'), 'url' => '/baser/api/admin/baser-core/content_folders/index.json', 'method' => '*', 'auth' => true],
+                'View' => ['title' => __d('baser_core', '単一取得'), 'url' => '/baser/api/admin/baser-core/content_folders/view/*.json', 'method' => '*', 'auth' => true],
+                'Add' => ['title' => __d('baser_core', '新規登録'), 'url' => '/baser/api/admin/baser-core/content_folders/add.json', 'method' => 'POST', 'auth' => false],
+                'Edit' => ['title' => __d('baser_core', '編集'), 'url' => '/baser/api/admin/baser-core/content_folders/edit/*.json', 'method' => 'POST', 'auth' => false],
+                'Delete' => ['title' => __d('baser_core', '削除'), 'url' => '/baser/api/admin/baser-core/content_folders/delete/*.json', 'method' => 'POST', 'auth' => false]
             ]
         ],
 
@@ -197,23 +197,23 @@ return [
             'plugin' => 'BaserCore',
             'type' => 'Api/Admin',
             'items' => [
-                'Index' => ['title' => __d('baser_core', '一覧取得'), 'url' => '/baser/api/baser-core/contents/index.json', 'method' => '*', 'auth' => true],
-                'View' => ['title' => __d('baser_core', '単一取得'), 'url' => '/baser/api/baser-core/contents/view/*.json', 'method' => '*', 'auth' => true],
-                'Add' => ['title' => __d('baser_core', '新規登録'), 'url' => '/baser/api/baser-core/contents/add.json', 'method' => 'POST', 'auth' => true],
-                'Edit' => ['title' => __d('baser_core', '編集'), 'url' => '/baser/api/baser-core/contents/edit/*.json', 'method' => 'POST', 'auth' => true],
-                'Delete' => ['title' => __d('baser_core', '削除'), 'url' => '/baser/api/baser-core/contents/delete.json', 'method' => 'POST', 'auth' => true],
-                'AddAlias' => ['title' => __d('baser_core', 'エイリアス登録'), 'url' => '/baser/api/baser-core/contents/add_alias.json', 'method' => 'POST', 'auth' => true],
-                'Batch' => ['title' => __d('baser_core', 'バッチ処理'), 'url' => '/baser/api/baser-core/contents/batch.json', 'method' => 'POST', 'auth' => true],
-                'ChangeStatus' => ['title' => __d('baser_core', '公開状態変更'), 'url' => '/baser/api/baser-core/contents/change_status.json', 'method' => 'POST', 'auth' => true],
-                'Exists' => ['title' => __d('baser_core', '存在確認'), 'url' => '/baser/api/baser-core/contents/exists/*.json', 'method' => 'GET', 'auth' => true],
-                'GetContentFolder_list' => ['title' => __d('baser_core', 'フォルダ一覧取得'), 'url' => '/baser/api/baser-core/contents/get_content_folder_list/*.json', 'method' => 'GET', 'auth' => true],
-                'GetFullUrl' => ['title' => __d('baser_core', 'フルURL取得'), 'url' => '/baser/api/baser-core/contents/get_full_url/*.json', 'method' => 'GET', 'auth' => true],
-                'IsUniqueContent' => ['title' => __d('baser_core', '一意性チェック'), 'url' => '/baser/api/baser-core/contents/is_unique_content.json', 'method' => 'POST', 'auth' => true],
-                'Move' => ['title' => __d('baser_core', '移動'), 'url' => '/baser/api/baser-core/contents/move.json', 'method' => 'POST', 'auth' => true],
-                'Rename' => ['title' => __d('baser_core', 'リネーム'), 'url' => '/baser/api/baser-core/contents/rename.json', 'method' => 'POST', 'auth' => true],
-                'TrashEmpty' => ['title' => __d('baser_core', 'ゴミ箱を空にする'), 'url' => '/baser/api/baser-core/contents/trash_empty.json', 'method' => 'POST', 'auth' => true],
-                'TrashReturn' => ['title' => __d('baser_core', 'ゴミ箱から戻す'), 'url' => '/baser/api/baser-core/contents/trash_return/*.json', 'method' => 'GET', 'auth' => true],
-                'ViewTrash' => ['title' => __d('baser_core', 'ゴミ箱内一覧'), 'url' => '/baser/api/baser-core/contents/view_trash/*.json', 'method' => '*', 'auth' => true],
+                'Index' => ['title' => __d('baser_core', '一覧取得'), 'url' => '/baser/api/admin/baser-core/contents/index.json', 'method' => '*', 'auth' => true],
+                'View' => ['title' => __d('baser_core', '単一取得'), 'url' => '/baser/api/admin/baser-core/contents/view/*.json', 'method' => '*', 'auth' => true],
+                'Add' => ['title' => __d('baser_core', '新規登録'), 'url' => '/baser/api/admin/baser-core/contents/add.json', 'method' => 'POST', 'auth' => true],
+                'Edit' => ['title' => __d('baser_core', '編集'), 'url' => '/baser/api/admin/baser-core/contents/edit/*.json', 'method' => 'POST', 'auth' => true],
+                'Delete' => ['title' => __d('baser_core', '削除'), 'url' => '/baser/api/admin/baser-core/contents/delete/*.json', 'method' => 'POST', 'auth' => true],
+                'AddAlias' => ['title' => __d('baser_core', 'エイリアス登録'), 'url' => '/baser/api/admin/baser-core/contents/add_alias.json', 'method' => 'POST', 'auth' => true],
+                'Batch' => ['title' => __d('baser_core', 'バッチ処理'), 'url' => '/baser/api/admin/baser-core/contents/batch.json', 'method' => 'POST', 'auth' => true],
+                'ChangeStatus' => ['title' => __d('baser_core', '公開状態変更'), 'url' => '/baser/api/admin/baser-core/contents/change_status.json', 'method' => 'POST', 'auth' => true],
+                'Exists' => ['title' => __d('baser_core', '存在確認'), 'url' => '/baser/api/admin/baser-core/contents/exists/*.json', 'method' => 'GET', 'auth' => true],
+                'GetContentFolder_list' => ['title' => __d('baser_core', 'フォルダ一覧取得'), 'url' => '/baser/api/admin/baser-core/contents/get_content_folder_list/*.json', 'method' => 'GET', 'auth' => true],
+                'GetFullUrl' => ['title' => __d('baser_core', 'フルURL取得'), 'url' => '/baser/api/admin/baser-core/contents/get_full_url/*.json', 'method' => 'GET', 'auth' => true],
+                'IsUniqueContent' => ['title' => __d('baser_core', '一意性チェック'), 'url' => '/baser/api/admin/baser-core/contents/is_unique_content.json', 'method' => 'POST', 'auth' => true],
+                'Move' => ['title' => __d('baser_core', '移動'), 'url' => '/baser/api/admin/baser-core/contents/move.json', 'method' => 'POST', 'auth' => true],
+                'Rename' => ['title' => __d('baser_core', 'リネーム'), 'url' => '/baser/api/admin/baser-core/contents/rename.json', 'method' => 'POST', 'auth' => true],
+                'TrashEmpty' => ['title' => __d('baser_core', 'ゴミ箱を空にする'), 'url' => '/baser/api/admin/baser-core/contents/trash_empty.json', 'method' => 'POST', 'auth' => true],
+                'TrashReturn' => ['title' => __d('baser_core', 'ゴミ箱から戻す'), 'url' => '/baser/api/admin/baser-core/contents/trash_return/*.json', 'method' => 'GET', 'auth' => true],
+                'ViewTrash' => ['title' => __d('baser_core', 'ゴミ箱内一覧'), 'url' => '/baser/api/admin/baser-core/contents/view_trash/*.json', 'method' => '*', 'auth' => true],
             ]
         ],
 
@@ -222,9 +222,9 @@ return [
             'plugin' => 'BaserCore',
             'type' => 'Api/Admin',
             'items' => [
-                'Index' => ['title' => __d('baser_core', '一覧取得'), 'url' => '/baser/api/baser-core/dblogs/index.json', 'method' => '*', 'auth' => true],
-                'Add' => ['title' => __d('baser_core', '新規登録'), 'url' => '/baser/api/baser-core/dblogs/add.json', 'method' => 'POST', 'auth' => true],
-                'DeleteAll' => ['title' => __d('baser_core', '削除'), 'url' => '/baser/api/baser-core/dblogs/delete_all.json', 'method' => 'POST', 'auth' => false]
+                'Index' => ['title' => __d('baser_core', '一覧取得'), 'url' => '/baser/api/admin/baser-core/dblogs/index.json', 'method' => '*', 'auth' => true],
+                'Add' => ['title' => __d('baser_core', '新規登録'), 'url' => '/baser/api/admin/baser-core/dblogs/add.json', 'method' => 'POST', 'auth' => true],
+                'DeleteAll' => ['title' => __d('baser_core', '削除'), 'url' => '/baser/api/admin/baser-core/dblogs/delete_all.json', 'method' => 'POST', 'auth' => false]
             ]
         ],
 
@@ -233,12 +233,12 @@ return [
             'plugin' => 'BaserCore',
             'type' => 'Api/Admin',
             'items' => [
-                'Index' => ['title' => __d('baser_core', '一覧取得'), 'url' => '/baser/api/baser-core/pages/index.json', 'method' => '*', 'auth' => true],
-                'View' => ['title' => __d('baser_core', '単一取得'), 'url' => '/baser/api/baser-core/pages/view/*.json', 'method' => '*', 'auth' => true],
-                'Add' => ['title' => __d('baser_core', '新規登録'), 'url' => '/baser/api/baser-core/pages/add.json', 'method' => 'POST', 'auth' => true],
-                'Edit' => ['title' => __d('baser_core', '編集'), 'url' => '/baser/api/baser-core/pages/edit/*.json', 'method' => 'POST', 'auth' => true],
-                'Delete' => ['title' => __d('baser_core', '削除'), 'url' => '/baser/api/baser-core/pages/delete/*.json', 'method' => 'POST', 'auth' => true],
-                'Copy' => ['title' => __d('baser_core', 'コピー'), 'url' => '/baser/api/baser-core/pages/copy.json', 'method' => 'POST', 'auth' => true]
+                'Index' => ['title' => __d('baser_core', '一覧取得'), 'url' => '/baser/api/admin/baser-core/pages/index.json', 'method' => '*', 'auth' => true],
+                'View' => ['title' => __d('baser_core', '単一取得'), 'url' => '/baser/api/admin/baser-core/pages/view/*.json', 'method' => '*', 'auth' => true],
+                'Add' => ['title' => __d('baser_core', '新規登録'), 'url' => '/baser/api/admin/baser-core/pages/add.json', 'method' => 'POST', 'auth' => true],
+                'Edit' => ['title' => __d('baser_core', '編集'), 'url' => '/baser/api/admin/baser-core/pages/edit/*.json', 'method' => 'POST', 'auth' => true],
+                'Delete' => ['title' => __d('baser_core', '削除'), 'url' => '/baser/api/admin/baser-core/pages/delete/*.json', 'method' => 'POST', 'auth' => true],
+                'Copy' => ['title' => __d('baser_core', 'コピー'), 'url' => '/baser/api/admin/baser-core/pages/copy.json', 'method' => 'POST', 'auth' => true]
             ]
         ],
 
@@ -247,14 +247,14 @@ return [
             'plugin' => 'BaserCore',
             'type' => 'Api/Admin',
             'items' => [
-                'Index' => ['title' => __d('baser_core', '一覧取得'), 'url' => '/baser/api/baser-core/permissions/index/*.json', 'method' => '*', 'auth' => false],
-                'View' => ['title' => __d('baser_core', '単一取得'), 'url' => '/baser/api/baser-core/permissions/view/*.json', 'method' => '*', 'auth' => false],
-                'Add' => ['title' => __d('baser_core', '新規登録'), 'url' => '/baser/api/baser-core/permissions/add.json', 'method' => 'POST', 'auth' => false],
-                'Edit' => ['title' => __d('baser_core', '編集'), 'url' => '/baser/api/baser-core/permissions/edit/*.json', 'method' => 'POST', 'auth' => false],
-                'Delete' => ['title' => __d('baser_core', '削除'), 'url' => '/baser/api/baser-core/permissions/delete/*.json', 'method' => 'POST', 'auth' => false],
-                'Copy' => ['title' => __d('baser_core', 'コピー'), 'url' => '/baser/api/baser-core/permissions/copy/*.json', 'method' => 'POST', 'auth' => false],
-                'Batch' => ['title' => __d('baser_core', '一括処理'), 'url' => '/baser/api/baser-core/permissions/batch.json', 'method' => 'POST', 'auth' => false],
-                'UpdateSort' => ['title' => __d('baser_core', '並び順変更'), 'url' => '/baser/api/baser-core/permissions/update_sort/*.json', 'method' => 'POST', 'auth' => false]
+                'Index' => ['title' => __d('baser_core', '一覧取得'), 'url' => '/baser/api/admin/baser-core/permissions/index/*.json', 'method' => '*', 'auth' => false],
+                'View' => ['title' => __d('baser_core', '単一取得'), 'url' => '/baser/api/admin/baser-core/permissions/view/*.json', 'method' => '*', 'auth' => false],
+                'Add' => ['title' => __d('baser_core', '新規登録'), 'url' => '/baser/api/admin/baser-core/permissions/add.json', 'method' => 'POST', 'auth' => false],
+                'Edit' => ['title' => __d('baser_core', '編集'), 'url' => '/baser/api/admin/baser-core/permissions/edit/*.json', 'method' => 'POST', 'auth' => false],
+                'Delete' => ['title' => __d('baser_core', '削除'), 'url' => '/baser/api/admin/baser-core/permissions/delete/*.json', 'method' => 'POST', 'auth' => false],
+                'Copy' => ['title' => __d('baser_core', 'コピー'), 'url' => '/baser/api/admin/baser-core/permissions/copy/*.json', 'method' => 'POST', 'auth' => false],
+                'Batch' => ['title' => __d('baser_core', '一括処理'), 'url' => '/baser/api/admin/baser-core/permissions/batch.json', 'method' => 'POST', 'auth' => false],
+                'UpdateSort' => ['title' => __d('baser_core', '並び順変更'), 'url' => '/baser/api/admin/baser-core/permissions/update_sort/*.json', 'method' => 'POST', 'auth' => false]
             ]
         ],
 
@@ -263,17 +263,17 @@ return [
             'plugin' => 'BaserCore',
             'type' => 'Api/Admin',
             'items' => [
-                'Add' => ['title' => __d('baser_core', '新規登録'), 'url' => '/baser/api/baser-core/plugins/add.json', 'method' => 'POST', 'auth' => false],
-                'Attach' => ['title' => __d('baser_core', '有効化'), 'url' => '/baser/api/baser-core/plugins/attach/*.json', 'method' => 'POST', 'auth' => false],
-                'Batch' => ['title' => __d('baser_core', '一括処理'), 'url' => '/baser/api/baser-core/plugins/batch.json', 'method' => 'POST', 'auth' => false],
-                'Detach' => ['title' => __d('baser_core', '無効化'), 'url' => '/baser/api/baser-core/plugins/detach/*.json', 'method' => 'POST', 'auth' => false],
-                'GetMarketPlugins' => ['title' => __d('baser_core', 'マーケットのプラグインを取得'), 'url' => '/baser/api/baser-core/plugins/get_market_plugins.json', 'method' => 'GET', 'auth' => false],
-                'Index' => ['title' => __d('baser_core', '一覧取得'), 'url' => '/baser/api/baser-core/plugins/index.json', 'method' => 'GET', 'auth' => false],
-                'Install' => ['title' => __d('baser_core', 'インストール'), 'url' => '/baser/api/baser-core/plugins/install/*.json', 'method' => 'POST', 'auth' => false],
-                'ResetDb' => ['title' => __d('baser_core', 'データベース初期化'), 'url' => '/baser/api/baser-core/plugins/reset_db/*.json', 'method' => 'POST', 'auth' => false],
-                'Uninstall' => ['title' => __d('baser_core', 'アンインストール'), 'url' => '/baser/api/baser-core/plugins/uninstall/*.json', 'method' => 'POST', 'auth' => false],
-                'UpdateSort' => ['title' => __d('baser_core', '並び順変更'), 'url' => '/baser/api/baser-core/plugins/update_sort.json', 'method' => 'POST', 'auth' => false],
-                'View' => ['title' => __d('baser_core', '単一取得'), 'url' => '/baser/api/baser-core/plugins/view/*.json', 'method' => 'GET', 'auth' => false]
+                'Add' => ['title' => __d('baser_core', '新規登録'), 'url' => '/baser/api/admin/baser-core/plugins/add.json', 'method' => 'POST', 'auth' => false],
+                'Attach' => ['title' => __d('baser_core', '有効化'), 'url' => '/baser/api/admin/baser-core/plugins/attach/*.json', 'method' => 'POST', 'auth' => false],
+                'Batch' => ['title' => __d('baser_core', '一括処理'), 'url' => '/baser/api/admin/baser-core/plugins/batch.json', 'method' => 'POST', 'auth' => false],
+                'Detach' => ['title' => __d('baser_core', '無効化'), 'url' => '/baser/api/admin/baser-core/plugins/detach/*.json', 'method' => 'POST', 'auth' => false],
+                'GetMarketPlugins' => ['title' => __d('baser_core', 'マーケットのプラグインを取得'), 'url' => '/baser/api/admin/baser-core/plugins/get_market_plugins.json', 'method' => 'GET', 'auth' => false],
+                'Index' => ['title' => __d('baser_core', '一覧取得'), 'url' => '/baser/api/admin/baser-core/plugins/index.json', 'method' => 'GET', 'auth' => false],
+                'Install' => ['title' => __d('baser_core', 'インストール'), 'url' => '/baser/api/admin/baser-core/plugins/install/*.json', 'method' => 'POST', 'auth' => false],
+                'ResetDb' => ['title' => __d('baser_core', 'データベース初期化'), 'url' => '/baser/api/admin/baser-core/plugins/reset_db/*.json', 'method' => 'POST', 'auth' => false],
+                'Uninstall' => ['title' => __d('baser_core', 'アンインストール'), 'url' => '/baser/api/admin/baser-core/plugins/uninstall/*.json', 'method' => 'POST', 'auth' => false],
+                'UpdateSort' => ['title' => __d('baser_core', '並び順変更'), 'url' => '/baser/api/admin/baser-core/plugins/update_sort.json', 'method' => 'POST', 'auth' => false],
+                'View' => ['title' => __d('baser_core', '単一取得'), 'url' => '/baser/api/admin/baser-core/plugins/view/*.json', 'method' => 'GET', 'auth' => false]
             ]
         ],
 
@@ -282,9 +282,9 @@ return [
             'plugin' => 'BaserCore',
             'type' => 'Api/Admin',
             'items' => [
-                'CheckSendmail' => ['title' => __d('baser_core', 'メール送信テスト'), 'url' => '/baser/api/baser-core/site_configs/check_sendmail.json', 'method' => 'POST', 'auth' => false],
-                'Edit' => ['title' => __d('baser_core', '編集'), 'url' => '/baser/api/baser-core/site_configs/edit.json', 'method' => 'POST', 'auth' => false],
-                'View' => ['title' => __d('baser_core', '設定取得'), 'url' => '/baser/api/baser-core/site_configs/view.json', 'method' => 'GET', 'auth' => true],
+                'CheckSendmail' => ['title' => __d('baser_core', 'メール送信テスト'), 'url' => '/baser/api/admin/baser-core/site_configs/check_sendmail.json', 'method' => 'POST', 'auth' => false],
+                'Edit' => ['title' => __d('baser_core', '編集'), 'url' => '/baser/api/admin/baser-core/site_configs/edit.json', 'method' => 'POST', 'auth' => false],
+                'View' => ['title' => __d('baser_core', '設定取得'), 'url' => '/baser/api/admin/baser-core/site_configs/view.json', 'method' => 'GET', 'auth' => true],
             ]
         ],
 
@@ -293,12 +293,12 @@ return [
             'plugin' => 'BaserCore',
             'type' => 'Api/Admin',
             'items' => [
-                'Add' => ['title' => __d('baser_core', '新規登録'), 'url' => '/baser/api/baser-core/sites/add.json', 'method' => 'POST', 'auth' => false],
-                'Delete' => ['title' => __d('baser_core', '削除'), 'url' => '/baser/api/baser-core/sites/delete/*.json', 'method' => 'POST', 'auth' => false],
-                'Edit' => ['title' => __d('baser_core', '編集'), 'url' => '/baser/api/baser-core/sites/edit/*.json', 'method' => 'POST', 'auth' => false],
-                'GetSelectableDevicesAndLang' => ['title' => __d('baser_core', '選択可能な言語とデバイス取得'), 'url' => '/baser/api/baser-core/sites/get_selectable_devices_and_lang/*.json', 'method' => 'GET', 'auth' => true],
-                'Index' => ['title' => __d('baser_core', '一覧取得'), 'url' => '/baser/api/baser-core/sites/index.json', 'method' => 'GET', 'auth' => true],
-                'View' => ['title' => __d('baser_core', '単一取得'), 'url' => '/baser/api/baser-core/sites/view/*.json', 'method' => 'GET', 'auth' => true],
+                'Add' => ['title' => __d('baser_core', '新規登録'), 'url' => '/baser/api/admin/baser-core/sites/add.json', 'method' => 'POST', 'auth' => false],
+                'Delete' => ['title' => __d('baser_core', '削除'), 'url' => '/baser/api/admin/baser-core/sites/delete/*.json', 'method' => 'POST', 'auth' => false],
+                'Edit' => ['title' => __d('baser_core', '編集'), 'url' => '/baser/api/admin/baser-core/sites/edit/*.json', 'method' => 'POST', 'auth' => false],
+                'GetSelectableDevicesAndLang' => ['title' => __d('baser_core', '選択可能な言語とデバイス取得'), 'url' => '/baser/api/admin/baser-core/sites/get_selectable_devices_and_lang/*.json', 'method' => 'GET', 'auth' => true],
+                'Index' => ['title' => __d('baser_core', '一覧取得'), 'url' => '/baser/api/admin/baser-core/sites/index.json', 'method' => 'GET', 'auth' => true],
+                'View' => ['title' => __d('baser_core', '単一取得'), 'url' => '/baser/api/admin/baser-core/sites/view/*.json', 'method' => 'GET', 'auth' => true],
             ]
         ],
 
@@ -307,14 +307,14 @@ return [
             'plugin' => 'BaserCore',
             'type' => 'Api/Admin',
             'items' => [
-                'Add' => ['title' => __d('baser_core', '新規登録'), 'url' => '/baser/api/baser-core/themes/add.json', 'method' => 'POST', 'auth' => false],
-                'Apply' => ['title' => __d('baser_core', '適用'), 'url' => '/baser/api/baser-core/themes/apply/*.json', 'method' => 'POST', 'auth' => false],
-                'Copy' => ['title' => __d('baser_core', 'コピー'), 'url' => '/baser/api/baser-core/themes/copy/*.json', 'method' => 'POST', 'auth' => false],
-                'Delete' => ['title' => __d('baser_core', '削除'), 'url' => '/baser/api/baser-core/themes/delete/*.json', 'method' => 'POST', 'auth' => false],
-                'GetMarketThemes' => ['title' => __d('baser_core', 'マーケットのテーマを取得'), 'url' => '/baser/api/baser-core/themes/get_market_themes.json', 'method' => 'GET', 'auth' => false],
-                'Index' => ['title' => __d('baser_core', '一覧取得'), 'url' => '/baser/api/baser-core/themes/index.json', 'method' => 'GET', 'auth' => false],
-                'LoadDefaultData' => ['title' => __d('baser_core', '初期データ読み込み'), 'url' => '/baser/api/baser-core/themes/load_default_data/*.json', 'method' => 'POST', 'auth' => false],
-                'View' => ['title' => __d('baser_core', '単一取得'), 'url' => '/baser/api/baser-core/themes/view/*.json', 'method' => 'GET', 'auth' => false],
+                'Add' => ['title' => __d('baser_core', '新規登録'), 'url' => '/baser/api/admin/baser-core/themes/add.json', 'method' => 'POST', 'auth' => false],
+                'Apply' => ['title' => __d('baser_core', '適用'), 'url' => '/baser/api/admin/baser-core/themes/apply/*.json', 'method' => 'POST', 'auth' => false],
+                'Copy' => ['title' => __d('baser_core', 'コピー'), 'url' => '/baser/api/admin/baser-core/themes/copy/*.json', 'method' => 'POST', 'auth' => false],
+                'Delete' => ['title' => __d('baser_core', '削除'), 'url' => '/baser/api/admin/baser-core/themes/delete/*.json', 'method' => 'POST', 'auth' => false],
+                'GetMarketThemes' => ['title' => __d('baser_core', 'マーケットのテーマを取得'), 'url' => '/baser/api/admin/baser-core/themes/get_market_themes.json', 'method' => 'GET', 'auth' => false],
+                'Index' => ['title' => __d('baser_core', '一覧取得'), 'url' => '/baser/api/admin/baser-core/themes/index.json', 'method' => 'GET', 'auth' => false],
+                'LoadDefaultData' => ['title' => __d('baser_core', '初期データ読み込み'), 'url' => '/baser/api/admin/baser-core/themes/load_default_data/*.json', 'method' => 'POST', 'auth' => false],
+                'View' => ['title' => __d('baser_core', '単一取得'), 'url' => '/baser/api/admin/baser-core/themes/view/*.json', 'method' => 'GET', 'auth' => false],
             ]
         ],
 
@@ -323,13 +323,13 @@ return [
             'plugin' => 'BaserCore',
             'type' => 'Api/Admin',
             'items' => [
-                'Add' => ['title' => __d('baser_core', '新規登録'), 'url' => '/baser/api/baser-core/user_groups/add.json', 'method' => 'POST', 'auth' => false],
-                'copy' => ['title' => __d('baser_core', 'コピー'), 'url' => '/baser/api/baser-core/user_groups/copy/*.json', 'method' => 'POST', 'auth' => false],
-                'delete' => ['title' => __d('baser_core', '削除'), 'url' => '/baser/api/baser-core/user_groups/delete/*.json', 'method' => 'POST', 'auth' => false],
-                'edit' => ['title' => __d('baser_core', '編集'), 'url' => '/baser/api/baser-core/user_groups/edit/*.json', 'method' => 'POST', 'auth' => false],
-                'index' => ['title' => __d('baser_core', '一覧取得'), 'url' => '/baser/api/baser-core/user_groups/index.json', 'method' => 'GET', 'auth' => false],
-                'list' => ['title' => __d('baser_core', 'リスト取得'), 'url' => '/baser/api/baser-core/user_groups/list.json', 'method' => 'GET', 'auth' => false],
-                'view' => ['title' => __d('baser_core', '単一取得'), 'url' => '/baser/api/baser-core/user_groups/view/*.json', 'method' => 'GET', 'auth' => false],
+                'Add' => ['title' => __d('baser_core', '新規登録'), 'url' => '/baser/api/admin/baser-core/user_groups/add.json', 'method' => 'POST', 'auth' => false],
+                'copy' => ['title' => __d('baser_core', 'コピー'), 'url' => '/baser/api/admin/baser-core/user_groups/copy/*.json', 'method' => 'POST', 'auth' => false],
+                'delete' => ['title' => __d('baser_core', '削除'), 'url' => '/baser/api/admin/baser-core/user_groups/delete/*.json', 'method' => 'POST', 'auth' => false],
+                'edit' => ['title' => __d('baser_core', '編集'), 'url' => '/baser/api/admin/baser-core/user_groups/edit/*.json', 'method' => 'POST', 'auth' => false],
+                'index' => ['title' => __d('baser_core', '一覧取得'), 'url' => '/baser/api/admin/baser-core/user_groups/index.json', 'method' => 'GET', 'auth' => false],
+                'list' => ['title' => __d('baser_core', 'リスト取得'), 'url' => '/baser/api/admin/baser-core/user_groups/list.json', 'method' => 'GET', 'auth' => false],
+                'view' => ['title' => __d('baser_core', '単一取得'), 'url' => '/baser/api/admin/baser-core/user_groups/view/*.json', 'method' => 'GET', 'auth' => false],
             ]
         ],
 
@@ -338,11 +338,11 @@ return [
             'plugin' => 'BaserCore',
             'type' => 'Api/Admin',
             'items' => [
-                'Index' => ['title' => __d('baser_core', '一覧取得'), 'url' => '/baser/api/baser-core/users/index.json', 'method' => 'GET', 'auth' => false],
-                'View' => ['title' => __d('baser_core', '単一取得'), 'url' => '/baser/api/baser-core/users/view/*.json', 'method' => 'GET', 'auth' => false],
-                'Add' => ['title' => __d('baser_core', '新規登録'), 'url' => '/baser/api/baser-core/users/add.json', 'method' => 'POST', 'auth' => false],
-                'Edit' => ['title' => __d('baser_core', '編集'), 'url' => '/baser/api/baser-core/users/edit/*.json', 'method' => 'POST', 'auth' => false],
-                'Delete' => ['title' => __d('baser_core', '削除'), 'method' => 'POST', 'url' => '/baser/api/baser-core/users/delete/*.json', 'auth' => false]
+                'Index' => ['title' => __d('baser_core', '一覧取得'), 'url' => '/baser/api/admin/baser-core/users/index.json', 'method' => 'GET', 'auth' => false],
+                'View' => ['title' => __d('baser_core', '単一取得'), 'url' => '/baser/api/admin/baser-core/users/view/*.json', 'method' => 'GET', 'auth' => false],
+                'Add' => ['title' => __d('baser_core', '新規登録'), 'url' => '/baser/api/admin/baser-core/users/add.json', 'method' => 'POST', 'auth' => false],
+                'Edit' => ['title' => __d('baser_core', '編集'), 'url' => '/baser/api/admin/baser-core/users/edit/*.json', 'method' => 'POST', 'auth' => false],
+                'Delete' => ['title' => __d('baser_core', '削除'), 'method' => 'POST', 'url' => '/baser/api/admin/baser-core/users/delete/*.json', 'auth' => false]
             ]
         ],
 
@@ -351,14 +351,14 @@ return [
             'plugin' => 'BaserCore',
             'type' => 'Api/Admin',
             'items' => [
-                'clear_cache' => ['title' => __d('baser_core', 'キャッシュクリア'), 'url' => '/baser/api/baser-core/utilities/clear_cache.json', 'method' => 'GET', 'auth' => true],
-                'delete_log' => ['title' => __d('baser_core', 'ログ削除'), 'url' => '/baser/api/baser-core/utilities/delete_log.json', 'method' => 'POST', 'auth' => false],
-                'download_backup' => ['title' => __d('baser_core', 'DBバックアップダウンロード'), 'url' => '/baser/api/baser-core/utilities/download_backup.json', 'method' => 'GET', 'auth' => false],
-                'download_log' => ['title' => __d('baser_core', 'ログダウンロード'), 'url' => '/baser/api/baser-core/utilities/download_log.json', 'method' => 'GET', 'auth' => false],
-                'reset_contents_tree' => ['title' => __d('baser_core', 'ツリー構造リセット'), 'url' => '/baser/api/baser-core/utilities/reset_contents_tree.json', 'method' => 'POST', 'auth' => false],
-                'restore_db' => ['title' => __d('baser_core', 'DBバックアップ復元'), 'url' => '/baser/api/baser-core/utilities/restore_db.json', 'method' => 'POST', 'auth' => false],
-                'save_search_opened' => ['title' => __d('baser_core', '検索ボックス開閉状態保存'), 'url' => '/baser/api/baser-core/utilities/save_search_opened/*.json', 'method' => 'POST', 'auth' => true],
-                'verity_contents_tree' => ['title' => __d('baser_core', 'ツリー構造チェック'), 'url' => '/baser/api/baser-core/utilities/verity_contents_tree.json', 'method' => 'POST', 'auth' => false],
+                'clear_cache' => ['title' => __d('baser_core', 'キャッシュクリア'), 'url' => '/baser/api/admin/baser-core/utilities/clear_cache.json', 'method' => 'GET', 'auth' => true],
+                'delete_log' => ['title' => __d('baser_core', 'ログ削除'), 'url' => '/baser/api/admin/baser-core/utilities/delete_log.json', 'method' => 'POST', 'auth' => false],
+                'download_backup' => ['title' => __d('baser_core', 'DBバックアップダウンロード'), 'url' => '/baser/api/admin/baser-core/utilities/download_backup.json', 'method' => 'GET', 'auth' => false],
+                'download_log' => ['title' => __d('baser_core', 'ログダウンロード'), 'url' => '/baser/api/admin/baser-core/utilities/download_log.json', 'method' => 'GET', 'auth' => false],
+                'reset_contents_tree' => ['title' => __d('baser_core', 'ツリー構造リセット'), 'url' => '/baser/api/admin/baser-core/utilities/reset_contents_tree.json', 'method' => 'POST', 'auth' => false],
+                'restore_db' => ['title' => __d('baser_core', 'DBバックアップ復元'), 'url' => '/baser/api/admin/baser-core/utilities/restore_db.json', 'method' => 'POST', 'auth' => false],
+                'save_search_opened' => ['title' => __d('baser_core', '検索ボックス開閉状態保存'), 'url' => '/baser/api/admin/baser-core/utilities/save_search_opened/*.json', 'method' => 'POST', 'auth' => true],
+                'verity_contents_tree' => ['title' => __d('baser_core', 'ツリー構造チェック'), 'url' => '/baser/api/admin/baser-core/utilities/verity_contents_tree.json', 'method' => 'POST', 'auth' => false],
             ]
         ],
 

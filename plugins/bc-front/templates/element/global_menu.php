@@ -1,24 +1,22 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @since           baserCMS v 4.4.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) NPO baser foundation
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       https://basercms.net/license/index.html MIT License
  */
 
 /**
  * サイトマップ
- * @var BcAppView $this
- */
-
-/**
+ *
  * カテゴリの階層構造を表現する為、再帰呼び出しを行う
  * $this->BcBaser->contentsMenu() で呼び出す
+ *
+ * @var \BaserCore\View\BcFrontAppView $this
  */
-
 if (!isset($level)) {
 	$level = 1;
 }

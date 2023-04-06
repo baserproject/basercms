@@ -11,6 +11,7 @@
 
 /**
  * サイト内検索結果
+ *
  * @var \BaserCore\View\BcFrontAppView $this
  * @var array $query 検索キーワード
  * @var array $searchIndexes 検索結果リスト
@@ -27,14 +28,14 @@ $this->BcBaser->setTitle(__d('baser_core', '検索結果一覧'));
 <h2 class="bs-search-title"><?php $this->BcBaser->contentsTitle() ?></h2>
 
 <div class="bs-search-form">
-    <?php echo $this->BcForm->create($searchIndexesFront, ['type' => 'get']) ?>
+    <?php echo $this->BcBaser->createForm($searchIndexesFront, ['type' => 'get']) ?>
     <?php if ($contentFolders): ?>
-        <?php echo $this->BcForm->control('f', ['type' => 'select', 'options' => $contentFolders, 'empty' => __d('baser_core', 'カテゴリ')]) ?>
+        <?php echo $this->BcBaser->formControl('f', ['type' => 'select', 'options' => $contentFolders, 'empty' => __d('baser_core', 'カテゴリ')]) ?>
     <?php endif ?>
-    <?php echo $this->BcForm->control('q', ['placeholder' => __d('baser_core', 'キーワード'), 'escape' => false, 'div' => false]) ?>
-    <?php echo $this->BcForm->hidden('s') ?>
-    <?php echo $this->BcForm->submit(__d('baser_core', '検索'), ['div' => false, 'class' => 'bs-button-small']) ?>
-    <?php echo $this->BcForm->end() ?>
+    <?php echo $this->BcBaser->formControl('q', ['placeholder' => __d('baser_core', 'キーワード'), 'escape' => false, 'div' => false]) ?>
+    <?php echo $this->BcBaser->formHidden('s') ?>
+    <?php echo $this->BcBaser->formSubmit(__d('baser_core', '検索'), ['div' => false, 'class' => 'bs-button-small']) ?>
+    <?php echo $this->BcBaser->endForm() ?>
 </div>
 
 <section class="bs-search-header">
@@ -47,8 +48,8 @@ $this->BcBaser->setTitle(__d('baser_core', '検索結果一覧'));
 	<?php foreach ($searchIndexes as $searchIndex): ?>
 	<div class="bs-search-result__item">
 		<h3 class="bs-search-result__item-head"><?php $this->BcBaser->link($this->BcBaser->mark($query, $searchIndex->title), $searchIndex->url, ['escape' => false]) ?></h3>
-		<p class="bs-search-result__item-body"><?php echo $this->BcBaser->mark($query, $this->Text->truncate($searchIndex->detail, 100)) ?></p>
-		<p class="bs-search-result__item-link"><small><?php $this->BcBaser->link(\BaserCore\Utility\BcUtil::fullUrl(rawurldecode($searchIndex->url)), $searchIndex->url) ?></small></p>
+		<p class="bs-search-result__item-body"><?php echo $this->BcBaser->mark($query, $this->BcBaser->truncateText($searchIndex->detail, 100)) ?></p>
+		<p class="bs-search-result__item-link"><small><?php $this->BcBaser->link($this->BcBaser->getFullUrl(rawurldecode($searchIndex->url)), $searchIndex->url) ?></small></p>
 	</div>
 	<?php endforeach ?>
 <?php elseif (!isset($query['q'][0])): ?>

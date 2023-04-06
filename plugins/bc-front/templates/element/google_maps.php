@@ -12,7 +12,7 @@
 /**
  * グールグルマップ
  *
- * @var \BaserCore\View\AppView $this
+ * @var \BaserCore\View\BcFrontAppView $this
  * @var string $mapId
  * @var string $width
  * @var string $height

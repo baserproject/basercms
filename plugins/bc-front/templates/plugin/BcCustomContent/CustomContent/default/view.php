@@ -8,7 +8,10 @@
  * @since         5.0.0
  * @license       https://basercms.net/license/index.html MIT License
  */
+
 /**
+ * カスタムコンテンツエントリー詳細
+ *
  * @var \BcCustomContent\View\CustomContentFrontAppView $this
  * @var \BcCustomContent\Model\Entity\CustomEntry $customEntry
  * @var \BcCustomContent\Model\Entity\CustomContent $customContent
@@ -16,41 +19,42 @@
  * @noTodo
  * @unitTest
  */
-$customLinks = $this->CustomContent->getLinks($customContent->custom_table_id);
+$customLinks = $this->BcBaser->getCustomLinks($customContent->custom_table_id);
 ?>
+
 
 <h2><?php $this->BcBaser->contentsTitle() ?></h2>
 
 <h3>
-  <?php $this->CustomContent->entryTitle($customEntry, ['link' => false]) ?>
+  <?php $this->BcBaser->customEntryTitle($customEntry, ['link' => false]) ?>
 </h3>
 
 <section class="bs-cc-entry">
 
   <span class="bs-cc-entry__date">
-    公開日：<?php $this->CustomContent->published($customEntry) ?>
+    公開日：<?php $this->BcBaser->customEntryPublished($customEntry) ?>
   </span>
 
   <?php if ($customLinks->count()): ?>
     <table>
       <?php foreach($customLinks as $customLink):
-        if (!$this->CustomContent->isDisplayField($customEntry, $customLink->name)) continue;
+        if (!$this->BcBaser->isDisplayCustomField($customEntry, $customLink->name)) continue;
         ?>
         <tr>
           <th>
-            <?php echo $this->CustomContent->getFieldTitle($customEntry, $customLink->name) ?>
+            <?php echo $this->BcBaser->getCustomFieldTitle($customEntry, $customLink->name) ?>
           </th>
           <td>
             <?php if (empty($customLink->children)): ?>
-              <?php echo $this->CustomContent->getFieldValue($customEntry, $customLink->name) ?>
+              <?php echo $this->BcBaser->getCustomFieldValue($customEntry, $customLink->name) ?>
             <?php else: ?>
               <?php if ($customLink->use_loop): ?>
                 <?php foreach($customEntry->{$customLink->name} as $childEntity): ?>
                   <ul class="bs-cc-entry__loop">
                     <?php foreach($customLink->children as $child): ?>
                       <li>
-                        <strong><?php echo $this->CustomContent->getFieldTitle($childEntity, $child->name) ?></strong><br>
-                        <?php echo $this->CustomContent->getFieldValue($childEntity, $child->name) ?>
+                        <strong><?php echo $this->BcBaser->getCustomFieldTitle($childEntity, $child->name) ?></strong><br>
+                        <?php echo $this->BcBaser->getCustomFieldValue($childEntity, $child->name) ?>
                       </li>
                     <?php endforeach ?>
                   </ul>
@@ -58,10 +62,10 @@ $customLinks = $this->CustomContent->getLinks($customContent->custom_table_id);
               <?php else: ?>
                 <ul>
                   <?php foreach($customLink->children as $child): ?>
-                    <?php if (!$this->CustomContent->isDisplayField($customEntry, $child->name)) continue; ?>
+                    <?php if (!$this->BcBaser->isDisplayCustomField($customEntry, $child->name)) continue; ?>
                     <li>
-                      <strong><?php echo $this->CustomContent->getFieldTitle($customEntry, $child->name) ?></strong><br>
-                      <?php echo $this->CustomContent->getFieldValue($customEntry, $child->name) ?>
+                      <strong><?php echo $this->BcBaser->getCustomFieldTitle($customEntry, $child->name) ?></strong><br>
+                      <?php echo $this->BcBaser->getCustomFieldValue($customEntry, $child->name) ?>
                     </li>
                   <?php endforeach ?>
                 </ul>

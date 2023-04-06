@@ -11,9 +11,13 @@
 
 /**
  * コンテンツ更新情報
+ *
  * @var \BaserCore\View\BcAdminAppView $this
+ * @var string $createdDate
+ * @var string $modifiedDate
  */
 ?>
+
 
 <?php if (!$this->BcBaser->isHome()): ?>
 	<div class="bc-update-info clearfix">

@@ -10,6 +10,10 @@
  */
 
 /**
+ * ブログタグアーカイブ
+ *
+ * 呼出箇所：ウィジェット
+ *
  * @var \BcBlog\View\BlogFrontAppView $this
  * @var string $name
  * @var bool $use_title

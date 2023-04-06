@@ -12,7 +12,7 @@
 /**
  * グールグルマップマーカー
  *
- * @var \BaserCore\View\AppView $this
+ * @var \BaserCore\View\BcFrontAppView $this
  * @var string $title
  * @var string $address
  */

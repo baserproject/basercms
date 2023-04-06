@@ -1,15 +1,13 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @since           baserCMS v 4.4.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) NPO baser foundation
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       https://basercms.net/license/index.html MIT License
  */
-
-use BaserCore\View\AppView;
 
 /**
  * ヘッダー
@@ -17,7 +15,7 @@ use BaserCore\View\AppView;
  * BcBaserHelper::header() で呼び出す
  * （例）<?php $this->BcBaser->header() ?>
  *
- * @var AppView $this
+ * @var \BaserCore\View\BcFrontAppView $this
  */
 $isSmartphone = $this->getRequest()->is('smartphone');
 ?>

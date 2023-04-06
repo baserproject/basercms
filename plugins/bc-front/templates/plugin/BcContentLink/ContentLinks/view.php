@@ -10,6 +10,8 @@
  */
 
 /**
+ * コンテンツリンク
+ *
  * @var \BaserCore\View\BcFrontAppView $this
  * @var \BcContentLink\Model\Entity\ContentLink $contentLink
  * @checked
@@ -20,7 +22,7 @@
 
 
 <?php if ($contentLink->url): ?>
-<?php $this->Html->scriptStart(['block' => true]); ?>
+<?php $this->BcBaser->scriptStart(['block' => true]); ?>
 window.location.href = "<?php echo $contentLink->url ?>";
-<?php $this->Html->scriptEnd(); ?>
+<?php $this->BcBaser->scriptEnd(); ?>
 <?php endif ?>

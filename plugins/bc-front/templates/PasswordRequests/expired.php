@@ -10,13 +10,15 @@
  */
 
 /**
+ * パスワードリセット有効期限切れ
+ *
  * @var \BaserCore\View\BcAdminAppView $this
  * @checked
  * @noTodo
  * @unitTest
  */
-$this->BcAdmin->setTitle(__d('baser_core', 'Not Found'));
 ?>
+
 
 <h2 class="bs-contents-title"><?php echo $this->BcBaser->getContentsTitle() ?></h2>
 

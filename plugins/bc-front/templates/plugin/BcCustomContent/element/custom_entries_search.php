@@ -11,6 +11,7 @@
 
 /**
  * カスタムエントリー一覧　検索ボックス
+ *
  * @var \BcCustomContent\View\CustomContentFrontAppView $this
  * @var \BcCustomContent\Model\Entity\CustomTable $customTable
  * @checked
@@ -22,23 +23,23 @@
 
 <div class="bs-search">
 
-<?php echo $this->BcForm->create(null, ['novalidate' => true, 'type' => 'get']) ?>
+<?php echo $this->BcBaser->createForm(null, ['novalidate' => true, 'type' => 'get']) ?>
 
 <div class="bs-search__input-list">
 
   <span class="bs-search__input-item">
-  <?php echo $this->BcForm->label('title', __d('baser_core', 'タイトル'), ['class' => 'bca-search__input-item-label']) ?>
-  <?php echo $this->BcForm->control('title', [
+  <?php echo $this->BcBaser->formLabel('title', __d('baser_core', 'タイトル'), ['class' => 'bca-search__input-item-label']) ?>
+  <?php echo $this->BcBaser->formControl('title', [
     'type' => 'text',
   ]) ?>
   </span>
 
   <?php if ($customTable->custom_links): ?>
     <?php foreach($customTable->custom_links as $customLink): ?>
-      <?php if ($this->CustomContent->isDisplayEntrySearch($customLink, 'front')): ?>
+      <?php if ($this->BcBaser->isDisplayCustomEntrySearch($customLink)): ?>
       <span class="bs-search__input-item">
-  <?php echo $this->BcForm->label($customLink->name, $customLink->title, ['class' => 'bca-search__input-item-label']) ?>
-  <?php echo $this->CustomContent->searchControl($customLink) ?>
+  <?php echo $this->BcBaser->formLabel($customLink->name, $customLink->title, ['class' => 'bca-search__input-item-label']) ?>
+  <?php echo $this->BcBaser->customSearchControl($customLink) ?>
       </span>
       <?php endif ?>
     <?php endforeach ?>
@@ -48,10 +49,10 @@
 
 <div class="button bs-search__btns">
   <div class="bs-search__btns-item">
-    <?php echo $this->BcForm->button(__d('baser_core', '検索'), ['id' => 'BtnSearchSubmit', 'class' => 'bs-button', 'data-bca-btn-type' => 'search']) ?>
+    <?php echo $this->BcBaser->formSubmit(__d('baser_core', '検索'), ['id' => 'BtnSearchSubmit', 'class' => 'bs-button', 'data-bca-btn-type' => 'search']) ?>
   </div>
 </div>
 
-<?php echo $this->BcForm->end() ?>
+<?php echo $this->BcBaser->endForm() ?>
 
 </div>

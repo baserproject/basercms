@@ -366,10 +366,20 @@ return [
          */
         'reservedWords' => ['group', 'rows', 'option'],
 
-        // システムメッセージの言語につてサイト設定を利用する
-        // 	- false：ブラウザ
-        // 	- true：サイト設定
+        /**
+         * システムメッセージの言語につてサイト設定を利用する
+         *  - false：ブラウザ
+         *  - true：サイト設定
+         */
         'systemMessageLangFromSiteSetting' => true,
+
+        /**
+         * Web API のPOST送信において CSRF をスキップするURL
+         */
+        'skipCsrfUrlInPostApi' => [
+            ['plugin' => 'BaserCore', 'controller' => 'Users', 'action' => 'login', '_ext' => 'json'],
+            ['plugin' => 'BaserCore', 'controller' => 'Users', 'action' => 'refresh_token', '_ext' => 'json'],
+        ],
 
         /**
          * システムナビ
@@ -770,7 +780,8 @@ return [
                         'add' => [
                             'prefix' => 'Api/Admin',
                             'controller' => 'ContentFolders',
-                            'action' => 'add'
+                            'action' => 'add',
+                            '_ext' => 'json'
                         ],
                         'edit' => [
                             'prefix' => 'Admin',
@@ -794,7 +805,8 @@ return [
                         'add' => [
                             'prefix' => 'Api/Admin',
                             'controller' => 'Pages',
-                            'action' => 'add'
+                            'action' => 'add',
+                            '_ext' => 'json'
                         ],
                         'edit' => [
                             'prefix' => 'Admin',
@@ -808,7 +820,8 @@ return [
                         'copy' => [
                             'prefix' => 'Api/Admin',
                             'controller' => 'Pages',
-                            'action' => 'copy'
+                            'action' => 'copy',
+                            '_ext' => 'json'
                         ]
                     ]
                 ],
@@ -820,7 +833,8 @@ return [
                         'add' => [
                             'prefix' => 'Api/Admin',
                             'controller' => 'Contents',
-                            'action' => 'add_alias'
+                            'action' => 'add_alias',
+                            '_ext' => 'json'
                         ],
                         'edit' => [
                             'prefix' => 'Admin',

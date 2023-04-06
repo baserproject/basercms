@@ -11,6 +11,7 @@
 
 namespace BcThemeConfig\View\Helper;
 
+use BaserCore\View\Helper\BcPluginBaserHelperInterface;
 use Cake\View\Helper;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -18,10 +19,8 @@ use BaserCore\Annotation\Checked;
 
 /**
  * BcThemeConfigBaserHelper
- *
- * @property BcThemeConfigHelper $BcThemeConfig
  */
-class BcThemeConfigBaserHelper extends Helper
+class BcThemeConfigBaserHelper extends Helper implements BcPluginBaserHelperInterface
 {
 
     /**
@@ -32,29 +31,16 @@ class BcThemeConfigBaserHelper extends Helper
     public $helpers = ['BcThemeConfig.BcThemeConfig'];
 
     /**
-     * メインイメージを出力する
+     * メソッド一覧取得
      *
-     * @param array $options
-     * @checked
-     * @noTodo
-     * @unitTest ラッパーメソッドのためユニットテストは実装しない
+     * @return array[]
      */
-    public function logo($options = [])
+    public function methods(): array
     {
-        $this->BcThemeConfig->logo($options);
-    }
-
-    /**
-     * ロゴを出力する
-     *
-     * @param array $options
-     * @checked
-     * @noTodo
-     * @unitTest ラッパーメソッドのためユニットテストは実装しない
-     */
-    public function mainImage($options = [])
-    {
-        $this->BcThemeConfig->mainImage($options);
+        return [
+            'logo' => ['BcThemeConfig', 'logo'],
+            'mainImage' => ['BcThemeConfig', 'mainImage']
+        ];
     }
 
 }

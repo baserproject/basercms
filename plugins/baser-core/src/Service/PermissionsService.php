@@ -468,7 +468,7 @@ class PermissionsService implements PermissionsServiceInterface
             if ($type === 1) return true;
         }
 
-        if($prefix === 'AdminApi') {
+        if($prefix === 'Api/Admin') {
             // 管理画面からAPIのURLを参照した場合は無条件に true
             if (BcUtil::isAdminSystem()) return true;
             // 管理画面から呼び出された API は無条件に true

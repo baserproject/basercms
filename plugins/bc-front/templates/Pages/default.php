@@ -13,13 +13,13 @@ use BaserCore\Model\Entity\Page;
 
 /**
  * 固定ページデフォルトテンプレート
+ *
  * @var BaserCore\View\BcAdminAppView $this
  * @var Page $page
  */
+?>
 
-$this->BcAdmin->setTitle($page['content']['title']);
-$this->BcBaser->setDescription($page['content']['description']);
 
-echo $page['contents'];
+<?php echo $page['contents'] ?>
 
-$this->BcBaser->updateInfo();
+<?php $this->BcBaser->updateInfo() ?>

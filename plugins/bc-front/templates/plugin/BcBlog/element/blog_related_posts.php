@@ -10,7 +10,8 @@
  */
 
 /**
- * [PUBLISH] 関連投稿一覧
+ * 関連投稿一覧
+ *
  * @var \BaserCore\View\BcFrontAppView $this
  * @var \BcBlog\Model\Entity\BlogPost $post
  * @checked

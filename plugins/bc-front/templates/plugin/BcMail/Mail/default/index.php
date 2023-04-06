@@ -11,6 +11,7 @@
 
 /**
  * メールフォーム
+ *
  * 呼出箇所：メールフォーム
  *
  * @var \BcMail\View\MailFrontAppView $this
@@ -18,7 +19,7 @@
  * @noTodo
  * @unitTest
  */
-$this->BcUpload->setTable('BcMail.MailMessages');
+$this->BcBaser->setTableToUpload('BcMail.MailMessages');
 ?>
 
 
@@ -26,8 +27,8 @@ $this->BcUpload->setTable('BcMail.MailMessages');
 
 <h3 class="bs-mail-title-sub"><?php echo __d('baser_core', '入力フォーム') ?></h3>
 
-<?php if ($this->Mail->descriptionExists()): ?>
-	<div class="bs-mail-description"><?php $this->Mail->description() ?></div>
+<?php if ($this->BcBaser->mailFormDescriptionExists()): ?>
+	<div class="bs-mail-description"><?php $this->BcBaser->mailFormDescription() ?></div>
 <?php endif ?>
 
 <div class="bs-mail-form">

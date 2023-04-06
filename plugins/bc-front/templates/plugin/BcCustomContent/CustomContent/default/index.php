@@ -8,7 +8,10 @@
  * @since         5.0.0
  * @license       https://basercms.net/license/index.html MIT License
  */
+
 /**
+ * カスタムコンテンツエントリー一覧
+ *
  * @var \BcCustomContent\View\CustomContentFrontAppView $this
  * @var \Cake\ORM\ResultSet $customEntries
  * @var \BcCustomContent\Model\Entity\CustomContent $customContent
@@ -19,10 +22,10 @@
 ?>
 
 
-<h2><?php $this->CustomContent->title() ?></h2>
+<h2><?php $this->BcBaser->contentsTitle() ?></h2>
 
 <div class="bs-cc-description">
-<?php $this->CustomContent->description($customContent) ?>
+<?php $this->BcBaser->customContentDescription($customContent) ?>
 </div>
 
 <?php $this->BcBaser->element('custom_entries_search') ?>
@@ -32,10 +35,10 @@
   <?php foreach($customEntries as $entry): ?>
   <article class="bs-cc-entries__item clearfix">
     <span class="bs-cc-entries__item-title">
-      <?php $this->CustomContent->entryTitle($entry) ?>
+      <?php $this->BcBaser->customEntryTitle($entry) ?>
     </span>
     <span class="bs-cc-entries__item-date">
-      公開日：<?php $this->CustomContent->published($entry) ?>
+      公開日：<?php $this->BcBaser->customEntryPublished($entry) ?>
     </span>
   </article>
   <?php endforeach ?>

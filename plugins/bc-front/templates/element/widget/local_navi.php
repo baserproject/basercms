@@ -1,17 +1,18 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @since           baserCMS v 4.4.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) NPO baser foundation
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       https://basercms.net/license/index.html MIT License
  */
 
 /**
  * ローカルナビ
  *
+ * 呼出箇所：ウィジェット
  * $this->BcBaser->widgetArea('ウィジェットエリアNO') で呼び出す
  * 管理画面で設定されたウィジェットエリアNOは、 $widgetArea で参照できる
  *
@@ -26,7 +27,7 @@ if($request->getAttribute('currentContent')->type === 'ContentFolder') {
 	$parentId = $request->getAttribute('currentContent')->id;
 	$title = $request->getAttribute('currentContent')->title;
 } else {
-	$parent = $this->BcContents->getParent($request->getAttribute('currentContent')->id);
+	$parent = $this->BcBaser->getParentContent($request->getAttribute('currentContent')->id);
 	$parentId = $parent->id;
 	$title = $parent->title;
 	if($parent->site_root) {

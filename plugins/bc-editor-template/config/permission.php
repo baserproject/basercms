@@ -40,12 +40,12 @@ return [
             'plugin' => 'BcEditorTemplate',
             'type' => 'Api/Admin',
             'items' => [
-                'Add' => ['title' => __d('baser_core', '新規登録'), 'url' => '/baser/api/bc-editor-template/editor_templates/add.json', 'method' => 'POST', 'auth' => true],
-                'Delete' => ['title' => __d('baser_core', '削除'), 'url' => '/baser/api/bc-editor-template/editor_templates/delete/*.json', 'method' => 'POST', 'auth' => true],
-                'Edit' => ['title' => __d('baser_core', '編集'), 'url' => '/baser/api/bc-editor-template/editor_templates/edit/*.json', 'method' => 'POST', 'auth' => true],
-                'Index' => ['title' => __d('baser_core', '一覧取得'), 'url' => '/baser/api/bc-editor-template/editor_templates/index.json', 'method' => 'GET', 'auth' => true],
-                'List' => ['title' => __d('baser_core', 'リスト取得'), 'url' => '/baser/api/bc-editor-template/editor_templates/list.json', 'method' => 'GET', 'auth' => true],
-                'View' => ['title' => __d('baser_core', '単一取得'), 'url' => '/baser/api/bc-editor-template/editor_templates/view/*.json', 'method' => 'GET', 'auth' => true],
+                'Add' => ['title' => __d('baser_core', '新規登録'), 'url' => '/baser/api/admin/bc-editor-template/editor_templates/add.json', 'method' => 'POST', 'auth' => true],
+                'Delete' => ['title' => __d('baser_core', '削除'), 'url' => '/baser/api/admin/bc-editor-template/editor_templates/delete/*.json', 'method' => 'POST', 'auth' => true],
+                'Edit' => ['title' => __d('baser_core', '編集'), 'url' => '/baser/api/admin/bc-editor-template/editor_templates/edit/*.json', 'method' => 'POST', 'auth' => true],
+                'Index' => ['title' => __d('baser_core', '一覧取得'), 'url' => '/baser/api/admin/bc-editor-template/editor_templates/index.json', 'method' => 'GET', 'auth' => true],
+                'List' => ['title' => __d('baser_core', 'リスト取得'), 'url' => '/baser/api/admin/bc-editor-template/editor_templates/list.json', 'method' => 'GET', 'auth' => true],
+                'View' => ['title' => __d('baser_core', '単一取得'), 'url' => '/baser/api/admin/bc-editor-template/editor_templates/view/*.json', 'method' => 'GET', 'auth' => true],
             ]
         ],
     ]

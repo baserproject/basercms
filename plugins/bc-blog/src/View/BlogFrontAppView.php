@@ -16,10 +16,12 @@ use BcBlog\View\Helper\BlogHelper;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use BcBlog\View\Helper\RssHelper;
 
 /**
  * Class BlogAppView
  * @property BlogHelper $Blog
+ * @property RssHelper $Rss
  */
 class BlogFrontAppView extends BcFrontAppView
 {
@@ -34,6 +36,7 @@ class BlogFrontAppView extends BcFrontAppView
     {
         parent::initialize();
         $this->loadHelper('BcBlog.Blog');
+        $this->loadHelper('BcBlog.Rss');
     }
 
 }

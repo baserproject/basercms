@@ -1,18 +1,18 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link      https://basercms.net baserCMS Project
- * @since           baserCMS v 4.4.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) NPO baser foundation
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       https://basercms.net/license/index.html MIT License
  */
 
 /**
  * パーツ用ブログ記事一覧
- * 呼出箇所：トップページ
  *
+ * 呼出箇所：トップページ
  * BcBaserHelper::blogPosts( コンテンツ名, 件数 ) で呼び出す
  * （例）<?php $this->BcBaser->blogPosts('news', 3) ?>
  *
@@ -35,20 +35,20 @@
       ?>
       <li class="<?php echo implode(' ', $class) ?>">
         <?php if ($post->eye_catch): ?>
-          <a href="<?php echo $this->Blog->getPostLinkUrl($post) ?>" class="bs-top-post__item-eye-catch">
-            <?php $this->Blog->eyeCatch($post, ['width' => 150, 'link' => false]) ?>
+          <a href="<?php echo $this->BcBaser->getBlogPostLinkUrl($post) ?>" class="bs-top-post__item-eye-catch">
+            <?php $this->BcBaser->blogPostEyeCatch($post, ['width' => 150, 'link' => false]) ?>
           </a>
         <?php endif ?>
-        <span class="bs-top-post__item-date"><?php $this->Blog->postDate($post, 'Y.m.d') ?></span>
-        <?php $this->Blog->category($post, ['class' => 'bs-top-post__item-category']) ?>
-        <a href="<?php echo $this->Blog->getPostLinkUrl($post) ?>" class="bs-top-post__item-title"><?php $this->Blog->postTitle($post, false) ?></a>
+        <span class="bs-top-post__item-date"><?php $this->BcBaser->blogPostDate($post, 'Y.m.d') ?></span>
+        <?php $this->BcBaser->blogPostCategory($post, ['class' => 'bs-top-post__item-category']) ?>
+        <a href="<?php echo $this->BcBaser->getBlogPostLinkUrl($post) ?>" class="bs-top-post__item-title"><?php $this->BcBaser->blogPostTitle($post, false) ?></a>
         <?php if (strip_tags($post->content . $post->detail)): ?>
-          <div class="bs-top-post__item-detail"><?php $this->Blog->postContent($post, true, false, 46) ?>...</div>
+          <div class="bs-top-post__item-detail"><?php $this->BcBaser->blogPostContent($post, true, false, 46) ?>...</div>
         <?php endif ?>
       </li>
     <?php endforeach ?>
   </ul>
-  <div class="bs-top-post-to-list"><?php $this->BcBaser->link('VIEW ALL', $this->Blog->getContentsUrl($post->blog_content_id, false)) ?></div>
+  <div class="bs-top-post-to-list"><?php $this->BcBaser->link('VIEW ALL', $this->BcBaser->getBlogContentsUrl($post->blog_content_id, false)) ?></div>
 <?php else: ?>
   <p class="bs-top-post-no-data"><?php echo __d('baser_core', '記事がありません。'); ?></p>
 <?php endif ?>

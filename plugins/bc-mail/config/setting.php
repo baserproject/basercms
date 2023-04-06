@@ -53,7 +53,8 @@ return [
                             'prefix' => 'Api/Admin',
                             'plugin' => 'BcMail',
                             'controller' => 'MailContents',
-                            'action' => 'add'
+                            'action' => 'add',
+                            '_ext' => 'json'
                         ],
                         'edit' => [
                             'prefix' => 'Admin',
@@ -70,7 +71,8 @@ return [
                             'prefix' => 'Api/Admin',
                             'plugin' => 'BcMail',
                             'controller' => 'MailContents',
-                            'action' => 'copy'
+                            'action' => 'copy',
+                            '_ext' => 'json'
                         ]
                     ]
                 ]

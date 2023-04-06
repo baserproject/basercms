@@ -23,6 +23,7 @@ class MaintenanceController extends BcFrontAppController
     public function index()
     {
         $this->getResponse()->withStatus(503);
+        $this->setTitle( __d('baser_core', 'メンテナンス中'));
     }
 
 }

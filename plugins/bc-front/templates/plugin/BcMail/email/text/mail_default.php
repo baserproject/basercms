@@ -11,6 +11,7 @@
 
 /**
  * メールフォーム送信メール本体
+ *
  * 呼出箇所：メールフォーム（メール送信時）
  *
  * @var \BcMail\View\MailFrontEmailView $this

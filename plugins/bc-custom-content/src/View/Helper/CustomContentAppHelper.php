@@ -130,7 +130,7 @@ class CustomContentAppHelper extends Helper
      * @param CustomLink $customLink
      * @return bool
      */
-    public function isDisplayEntrySearch(CustomLink $customLink, string $type)
+    public function isDisplayEntrySearch(CustomLink $customLink, string $type = 'front')
     {
         if($type === 'front') {
             $isTarget = $customLink->search_target_front;

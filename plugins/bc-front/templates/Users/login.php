@@ -9,18 +9,16 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
-use BaserCore\View\AppView;
-
 /**
- * login
- * @var AppView $this
+ * ログインページ
+ *
+ * @var \BaserCore\View\BcAdminAppView $this
  * @var string $isEnableLoginCredit
  * @var bool $savedEnable
  * @checked
  * @noTodo
  * @unitTest
  */
-
 $this->BcBaser->setTitle(__d('baser_core', 'ログイン'));
 ?>
 

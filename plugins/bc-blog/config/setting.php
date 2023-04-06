@@ -51,7 +51,8 @@ return [
                             'prefix' => 'Api/Admin',
                             'plugin' => 'BcBlog',
                             'controller' => 'BlogContents',
-                            'action' => 'add'
+                            'action' => 'add',
+                            '_ext' => 'json'
                         ],
                         'edit' => [
                             'prefix' => 'Admin',
@@ -74,7 +75,8 @@ return [
                             'prefix' => 'Api/Admin',
                             'plugin' => 'BcBlog',
                             'controller' => 'BlogContents',
-                            'action' => 'copy'
+                            'action' => 'copy',
+                            '_ext' => 'json'
                         ],
                         'dblclick' => [
                             'prefix' => 'Admin',

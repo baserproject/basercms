@@ -61,6 +61,7 @@ class PasswordRequestsController extends BcAdminAppController
     {
         $passwordRequest = $service->getNew();
         $this->set('passwordRequest', clone $passwordRequest);
+        $this->setTitle(__d('baser_core', 'パスワードのリセット'));
         if (!$this->request->is(['patch', 'post', 'put'])) return;
 
         try {
@@ -92,10 +93,12 @@ class PasswordRequestsController extends BcAdminAppController
     public function apply(PasswordRequestsServiceInterface $service, UsersServiceInterface $usersService, $key): void
     {
         $this->set('user', $usersService->getNew());
+        $this->setTitle(__d('baser_core', 'パスワードのリセット'));
         $passwordRequest = $service->getEnableRequestData($key);
 
         if (empty($passwordRequest)) {
             $this->response->withStatus(404);
+            $this->setTitle(__d('baser_core', 'Not Found'));
             $this->render('expired');
             return;
         }
@@ -123,6 +126,7 @@ class PasswordRequestsController extends BcAdminAppController
      */
     public function done()
     {
+        $this->setTitle(__d('baser_core', 'パスワードのリセット完了'));
     }
 
 }

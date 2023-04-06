@@ -276,7 +276,7 @@ class BlogHelper extends Helper
      * @checked
      * @noTodo
      */
-    public function postTitle($post, $link = true, $options = [])
+    public function postTitle(BlogPost $post, bool $link = true, array $options = []): void
     {
         echo $this->getPostTitle($post, $link, $options);
     }
@@ -369,7 +369,7 @@ class BlogHelper extends Helper
      * @noTodo
      * @unitTest
      */
-    public function getPostLinkUrl($post, $base = true, $full = true)
+    public function getPostLinkUrl(BlogPost $post, bool $base = true, bool $full = true)
     {
         $this->setContent($post->blog_content_id);
         if(!$this->currentContent) return '';
@@ -412,8 +412,13 @@ class BlogHelper extends Helper
      * @checked
      * @noTodo
      */
-    public function postContent($post, $moreText = true, $moreLink = false, $cut = false, $lastText = false)
-    {
+    public function postContent(
+    	BlogPost $post,
+    	bool $moreText = true,
+    	bool $moreLink = false,
+    	mixed $cut = false,
+    	bool $lastText = false
+	) {
         echo $this->getPostContent($post, $moreText, $moreLink, $cut, $lastText);
     }
 
@@ -431,8 +436,13 @@ class BlogHelper extends Helper
      * @checked
      * @noTodo
      */
-    public function getPostContent($post, $moreText = true, $moreLink = false, $cut = false, $lastText = false)
-    {
+    public function getPostContent(
+    	BlogPost $post,
+    	bool $moreText = true,
+    	bool $moreLink = false,
+    	mixed $cut = false,
+    	bool $lastText = false
+	) {
         if ($moreLink === true) {
             $moreLink = __d('baser_core', '≫ 続きを読む');
         }
@@ -507,7 +517,7 @@ class BlogHelper extends Helper
      * @checked
      * @noTodo
      */
-    public function category($post, $options = [])
+    public function category(BlogPost $post, array $options = [])
     {
         echo $this->getCategory($post, $options);
     }
@@ -669,14 +679,14 @@ class BlogHelper extends Helper
         }
     }
 
-    /**
-     * 記事の登録日を出力する
-     *
-     * @param array $post ブログ記事
-     * @param string $format 日付フォーマット（初期値 : Y/m/d）
-     * @return void
-     */
-    public function postDate($post, $format = 'Y/m/d')
+	/**
+	 * 記事の登録日を出力する
+	 *
+	 * @param BlogPost $post ブログ記事
+	 * @param string $format 日付フォーマット（初期値 : Y/m/d）
+	 * @return void
+	 */
+    public function postDate(BlogPost $post, string $format = 'Y/m/d')
     {
         echo $this->getPostDate($post, $format);
     }
@@ -778,7 +788,7 @@ class BlogHelper extends Helper
      * @checked
      * @noTodo
      */
-    public function prevLink(BlogPost $post, $title = '', $htmlAttributes = [])
+    public function prevLink(BlogPost $post, string $title = '', array $htmlAttributes = [])
     {
         $prevPost = $this->getPrevPost($post);
         $htmlAttributes = array_merge(['class' => 'prev-link', 'arrow' => '≪ '], $htmlAttributes);
@@ -818,7 +828,7 @@ class BlogHelper extends Helper
      * @checked
      * @noTodo
      */
-    public function nextLink($post, $title = '', $htmlAttributes = [])
+    public function nextLink(BlogPost $post, string $title = '', array $htmlAttributes = [])
     {
         $nextPost = $this->getNextPost($post);
         $htmlAttributes = array_merge(['class' => 'next-link', 'arrow' => ' ≫'], $htmlAttributes);
@@ -1005,7 +1015,7 @@ class BlogHelper extends Helper
      * 同じタグの関連投稿を取得する
      *
      * @param array $post ブログ記事
-     * @param array $options オプション（初期値 : array()）
+     * @param EntityInterface $options オプション（初期値 : array()）
      *    - `recursive` : 関連データを取得する場合の階層（初期値 : -1）
      *    - `limit` : 件数（初期値 : 5）
      *    - `order` : 並び順指定（初期値 : BlogPost.posted DESC）
@@ -1014,7 +1024,7 @@ class BlogHelper extends Helper
      * @noTodo
      * @unitTest ラッパーメソッドのためユニットテストは不要
      */
-    public function getRelatedPosts($post, $options = [])
+    public function getRelatedPosts(EntityInterface $post, array $options = [])
     {
         $blogPostsService = $this->getService(BlogPostsServiceInterface::class);
         return $blogPostsService->getRelatedPosts($post, $options);
@@ -1142,7 +1152,7 @@ class BlogHelper extends Helper
      *  ※ その他のオプションについては、リンクをつける場合、HtmlHelper::link() を参照、つけない場合、Html::image() を参照
      * @return void
      */
-    public function eyeCatch($post, $options = [])
+    public function eyeCatch(BlogPost $post, array $options = [])
     {
         echo $this->getEyeCatch($post, $options);
     }

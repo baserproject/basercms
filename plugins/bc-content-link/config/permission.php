@@ -36,10 +36,10 @@ return [
             'plugin' => 'BcContentLink',
             'type' => 'Api/Admin',
             'items' => [
-                'Add' => ['title' => __d('baser_core', '新規登録'), 'url' => '/baser/api/bc-content-link/content_links/add.json', 'method' => 'POST', 'auth' => true],
-                'Delete' => ['title' => __d('baser_core', '削除'), 'url' => '/baser/api/bc-content-link/content_links/delete/*.json', 'method' => 'POST', 'auth' => true],
-                'Edit' => ['title' => __d('baser_core', '編集'), 'url' => '/baser/api/bc-content-link/content_links/edit/*.json', 'method' => 'POST', 'auth' => true],
-                'View' => ['title' => __d('baser_core', '単一取得'), 'url' => '/baser/api/bc-content-link/content_links/view/*.json', 'method' => 'GET', 'auth' => true],
+                'Add' => ['title' => __d('baser_core', '新規登録'), 'url' => '/baser/api/admin/bc-content-link/content_links/add.json', 'method' => 'POST', 'auth' => true],
+                'Delete' => ['title' => __d('baser_core', '削除'), 'url' => '/baser/api/admin/bc-content-link/content_links/delete/*.json', 'method' => 'POST', 'auth' => true],
+                'Edit' => ['title' => __d('baser_core', '編集'), 'url' => '/baser/api/admin/bc-content-link/content_links/edit/*.json', 'method' => 'POST', 'auth' => true],
+                'View' => ['title' => __d('baser_core', '単一取得'), 'url' => '/baser/api/admin/bc-content-link/content_links/view/*.json', 'method' => 'GET', 'auth' => true],
             ]
         ],
     ]

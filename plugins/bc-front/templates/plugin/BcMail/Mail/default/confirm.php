@@ -1,25 +1,26 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright        Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @since            baserCMS v 4.4.0
- * @license            https://basercms.net/license/index.html
+ * @copyright     Copyright (c) NPO baser foundation
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       https://basercms.net/license/index.html MIT License
  */
 
 /**
  * メールフォーム確認ページ
+ *
  * 呼出箇所：メールフォーム
  *
- * @var BcAppView $this
+ * @var \BaserCore\View\BcFrontAppView $this
  * @var bool $freezed 確認画面かどうか
  */
 if ($freezed) {
-	$this->Mailform->freeze();
+	$this->BcBaser->freezeMailForm();
 }
-$this->BcUpload->setTable('BcMail.MailMessages');
+$this->BcBaser->setTableToUpload('BcMail.MailMessages');
 ?>
 
 
