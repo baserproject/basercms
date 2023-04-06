@@ -137,7 +137,7 @@ class PluginsService implements PluginsServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function install($name, bool $permission, $connection = 'default'): ?bool
+    public function install($name, bool $permission = true, $connection = 'default'): ?bool
     {
         $options = ['permission' => $permission];
         if ($connection) {

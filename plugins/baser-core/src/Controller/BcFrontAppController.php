@@ -58,7 +58,7 @@ class BcFrontAppController extends AppController
          * フロントページ用言語設定
          */
         $currentSite = $this->getRequest()->getAttribute('currentSite');
-        if ($currentSite) {
+        if ($currentSite && $currentSite->lang) {
             $lang = Configure::read('BcLang.' . $currentSite->lang);
         }
         if (Configure::read('BcApp.systemMessageLangFromSiteSetting') && isset($lang['langs'][0])) {
