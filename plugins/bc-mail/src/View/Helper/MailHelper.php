@@ -11,8 +11,6 @@
 
 namespace BcMail\View\Helper;
 
-use BaserCore\Service\SitesService;
-use BaserCore\Service\SitesServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;

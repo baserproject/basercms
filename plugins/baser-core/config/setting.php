@@ -382,6 +382,11 @@ return [
         ],
 
         /**
+         * generator のメタタグを出力するかどうか
+         */
+        'outputMetaGenerator' => true,
+
+        /**
          * システムナビ
          *
          * 初期状態で表示するメニューは、`Contents` キー配下に定義し、「設定」内に格納する場合は、`Systems` キー配下に定義する

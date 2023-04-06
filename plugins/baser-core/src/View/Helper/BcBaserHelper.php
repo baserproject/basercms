@@ -19,6 +19,7 @@ use BcCustomContent\Model\Entity\CustomLink;
 use Cake\Core\Plugin;
 use Cake\Datasource\EntityInterface;
 use Cake\ORM\ResultSet;
+use Cake\Routing\Router;
 use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
 use Cake\View\Helper\BreadcrumbsHelper;
@@ -617,13 +618,10 @@ class BcBaserHelper extends Helper
         $session = $this->_View->getRequest()->getSession();
         $sessionMessageList = $session->read('Flash');
         if ($sessionMessageList) {
-            echo '<div id="MessageBox" class="message-box">';
-            foreach($sessionMessageList as $messageKey => $sessionMessage) {
-                if ($key === $messageKey && $session->check('Flash.' . $messageKey)) {
-                    echo $this->Flash->render($messageKey, ['escape' => false]);
-                }
-            }
-            echo '</div>';
+            $this->element('wrap_flash', [
+                'key' => $key,
+                'sessionMessageList' => $sessionMessageList
+            ]);
         }
     }
 
@@ -1619,23 +1617,10 @@ class BcBaserHelper extends Helper
             }
             $out = implode($separator, $out);
         } else {
-            $counter = 1;
-            foreach($crumbs as $crumb) {
-                $options = ['itemprop' => 'item', 'escape' => false];
-                if (!empty($crumb['options'])) {
-                    $options = array_merge($options, $crumb['options']);
-                }
-                if (!empty($crumb['url'])) {
-                    $crumb = $this->getLink('<span itemprop="name">' . $crumb['title'] . '</span>', $crumb['url'], $options) . '<span class="separator">' . $separator . '</span>';
-                } else {
-                    $crumb = '<span itemprop="name">' . $crumb['title'] . '</span>';
-                }
-                $out[] = <<< EOD
-<li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">{$crumb}<meta itemprop="position" content="{$counter}" /></li>
-EOD;
-                $counter++;
-            }
-            $out = implode("\n", $out);
+            $out = $this->getElement('schema_crumbs', [
+                'crumbs' => $crumbs,
+                'separator' => $separator
+            ]);
         }
         echo $out;
     }

@@ -26,6 +26,7 @@ use BaserCore\View\Helper\BcTimeHelper;
 use BaserCore\View\Helper\BcUploadHelper;
 use BcBlog\Model\Entity\BlogPost;
 use BcBlog\Model\Entity\BlogTag;
+use BcBlog\Model\Table\BlogCategoriesTable;
 use BcBlog\Model\Table\BlogPostsTable;
 use BcBlog\Service\BlogContentsService;
 use BcBlog\Service\BlogContentsServiceInterface;
@@ -54,6 +55,7 @@ use BaserCore\Annotation\UnitTest;
  * @property BcBaserHelper $BcBaser BcBaserヘルパ
  * @property BcUploadHelper $BcUpload BcUploadヘルパ
  * @property BcContentsHelper $BcContents BcContentsヘルパ
+ * @property Helper\HtmlHelper $Html
  */
 class BlogHelper extends Helper
 {
@@ -439,34 +441,30 @@ class BlogHelper extends Helper
     public function getPostContent(
     	BlogPost $post,
     	bool $moreText = true,
-    	bool $moreLink = false,
+    	mixed $moreLink = false,
     	mixed $cut = false,
     	bool $lastText = false
 	) {
-        if ($moreLink === true) {
-            $moreLink = __d('baser_core', '≫ 続きを読む');
-        }
-        $out = '';
-        if ($this->currentBlogContent->use_content) {
-            $out .= '<div class="post-body">' . $post->content . '</div>';
-        }
-        if ($moreText && $post->detail) {
-            $out .= '<div id="post-detail">' . $post->detail . '</div>';
-        }
         if ($cut) {
-            $out = str_replace(["\r\n", "\r", "\n"], '', $out);
+            $out = str_replace(["\r\n", "\r", "\n"], '', $post->content . $post->detail);
             $out = html_entity_decode($out, ENT_QUOTES, 'UTF-8');
             if ($lastText && mb_strlen(strip_tags($out)) > $cut) {
                 $out = mb_substr(strip_tags($out), 0, $cut, 'UTF-8') . strip_tags($lastText);
             } else {
                 $out = mb_substr(strip_tags($out), 0, $cut, 'UTF-8');
             }
+        } else {
+            $out = $this->BcBaser->getElement('blog_post_content', [
+                'moreText' => $moreText,
+                'useContent' => $this->currentBlogContent->use_content,
+                'post' => $post
+            ]);
         }
-        if ($moreLink && trim($post->detail) && trim($post->detail) != "<br>") {
-            $out .= '<p class="more">' . $this->Html->link(
-                    $moreLink,
-                    $this->getContentsUrl($post->blog_content_id, false) . 'archives/' . $post->no . '#post-detail'
-                ) . '</p>';
+        if ($moreLink && trim($post->detail) != "<br>") {
+            $out .= $this->BcBaser->getElement('blog_post_content', [
+                'moreLink' => $moreLink,
+                'post' => $post
+            ]);
         }
         return $out;
     }
@@ -486,12 +484,12 @@ class BlogHelper extends Helper
     /**
      * 記事の詳細を取得する
      *
-     * @param array $post ブログ記事データ
+     * @param BlogPost $post ブログ記事データ
      * @param array $options オプション（初期値 : array()）
      *    - `cut` : 文字をカットするかどうかを真偽値で指定。カットする場合、文字数を数値で入力（初期値 : false）
      * @return string 記事本文
      */
-    public function getPostDetail($post, $options = [])
+    public function getPostDetail(BlogPost $post, array $options = [])
     {
         $options = array_merge([
             'cut' => false
@@ -535,7 +533,7 @@ class BlogHelper extends Helper
      * @noTodo
      * @unitTest
      */
-    public function getCategory($post, $options = [])
+    public function getCategory(BlogPost $post, array $options = [])
     {
         if (!empty($post->blog_category->name)) {
 
@@ -731,49 +729,19 @@ class BlogHelper extends Helper
      */
     public function getCategoryList($categories, $depth = 3, $count = false, $options = [])
     {
-        return $this->_getCategoryList($categories, $depth, 1, $count, $options);
-    }
-
-    /**
-     * カテゴリーリストを取得する
-     *
-     * @param array $categories カテゴリ一覧データ
-     * @param int $depth 階層（初期値 : 3）
-     * @param int $current 現在の階層（初期値 : 1）
-     * @param boolean $count 件数を表示するかどうか（初期値 : false）
-     * @param array $options オプション（初期値 : array()）
-     *    - `link` : リンクをつけるかどうか（初期値 : true）
-     *    ※ その他のオプションは、`link`オプションが`true`の場合に
-     *    生成されるa要素の属性設定となる。（HtmlHelper::link() を参照）
-     * @return string HTMLのカテゴリ一覧
-     */
-    protected function _getCategoryList($categories, $depth = 3, $current = 1, $count = false, $options = [])
-    {
-        if ($depth < $current) return '';
-
+        $options = array_merge([
+            'current' => 1
+        ], $options);
+        if ($depth < $options['current']) return '';
         if ($categories) {
-            $out = '<ul class="bc-blog-category-list depth-' . $current . '">';
-            $current++;
-            foreach($categories as $category) {
-                if ($count && isset($category->count)) $category->title .= '(' . $category->count . ')';
-                $url = $this->getCategoryUrl($category->id, ['base' => false]);
-                $url = preg_replace('/^\//', '', $url);
-                $class = ['bc-blog-category-list__item'];
-                if ($this->_View->getRequest()->getPath() == $url) {
-                    $class[] = 'current';
-                } elseif (!empty($this->_View->getRequest()->getQuery('category')) && $this->_View->getRequest()->getQuery('category') === $category->name) {
-                    $class[] = 'selected';
-                }
-                $out .= '<li class="' . implode(' ', $class) . '">' . $this->getCategory(new BlogPost(['blog_category' => $category]), $options);
-                if (!empty($category->children)) {
-                    $out .= $this->_getCategoryList($category->children, $depth, $current, $count, $options);
-                }
-                $out .= '</li>';
-            }
-            $out .= '</ul>';
-            return $out;
+            return $this->BcBaser->getElement('blog_category_list', [
+                'categories' => $categories,
+                'depth' => $depth,
+                'count' => $count,
+                'options' => $options
+            ]);
         } else {
-            return '';
+            return  '';
         }
     }
 
@@ -805,10 +773,10 @@ class BlogHelper extends Helper
     /**
      * 前の記事へのリンクがあるかチェックする
      *
-     * @param array $post ブログ記事
+     * @param BlogPost $post ブログ記事
      * @return bool
      */
-    public function hasPrevLink($post)
+    public function hasPrevLink(BlogPost $post)
     {
         $prevPost = $this->getPrevPost($post);
         if ($prevPost) {
@@ -845,7 +813,7 @@ class BlogHelper extends Helper
     /**
      * 次の記事へのリンクが存在するかチェックする
      *
-     * @param array $post ブログ記事
+     * @param BlogPost $post ブログ記事
      * @return bool
      */
     public function hasNextLink($post)
@@ -1315,7 +1283,7 @@ class BlogHelper extends Helper
         ], $options);
         $blogContentId = $options['blogContentId'];
         unset($options['blogContentId']);
-        /* @var BlogCategories $blogCategoriesTable */
+        /* @var BlogCategoriesTable $blogCategoriesTable */
         $blogCategoriesTable = TableRegistry::getTableLocator()->get('BcBlog.BlogCategories');
         return $blogCategoriesTable->getCategoryList($blogContentId, $options);
     }
