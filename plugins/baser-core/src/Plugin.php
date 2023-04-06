@@ -103,7 +103,7 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
          * 言語設定
          * ブラウザよりベースとなる言語を設定
          */
-        if(isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
+        if(isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) && !BcUtil::isTest()) {
             I18n::setLocale(BcLang::parseLang($_SERVER['HTTP_ACCEPT_LANGUAGE']));
         }
 
