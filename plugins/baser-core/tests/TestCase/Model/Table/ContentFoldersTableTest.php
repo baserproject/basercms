@@ -14,7 +14,6 @@ namespace BaserCore\Test\TestCase\Model\Table;
 use ArrayObject;
 use Cake\ORM\Entity;
 use BaserCore\TestSuite\BcTestCase;
-use BaserCore\Model\Entity\ContentFolder;
 
 /**
  * Class ContentFoldersTableTest
