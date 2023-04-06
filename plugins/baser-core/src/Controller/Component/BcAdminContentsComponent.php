@@ -134,7 +134,7 @@ class BcAdminContentsComponent extends Component
         $controller->setRequest($controller->getRequest()->withAttribute('currentSite', $content->site));
         Router::setRequest($controller->getRequest());
 
-        if (Configure::read('BcApp.autoUpdateContentCreatedDate')) {
+        if (Configure::read('BcContents.autoUpdateContentCreatedDate')) {
             $content->modified_date = date('Y-m-d H:i:s');
         }
         /* @var \BaserCore\Service\Admin\BcAdminContentsService $bcAdminContentsService */
