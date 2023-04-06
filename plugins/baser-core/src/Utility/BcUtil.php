@@ -635,7 +635,7 @@ class BcUtil
      */
     public static function getThemesPlugins($theme)
     {
-        $path = BcUtil::getPluginPath($theme) . 'Plugin';
+        $path = BcUtil::getPluginPath($theme) . 'plugins';
         if (!file_exists($path)) return [];
         $Folder = new Folder($path);
         $files = $Folder->read(true, true, false);

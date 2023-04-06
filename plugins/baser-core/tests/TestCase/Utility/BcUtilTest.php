@@ -453,15 +453,15 @@ class BcUtilTest extends BcTestCase
 
         $themePath = BcUtil::getPluginPath($theme);
         $pluginName = 'test';
-        mkdir($themePath . 'Plugin', 0777, true);
-        mkdir($themePath . 'Plugin/' . $pluginName, 0777, true);
+        mkdir($themePath . 'plugins', 0777, true);
+        mkdir($themePath . 'plugins/' . $pluginName, 0777, true);
 
         $plugins = BcUtil::getThemesPlugins($theme);
         $this->assertCount(1, $plugins);
         $this->assertEquals($pluginName, $plugins[0]);
 
         $folder = new Folder();
-        $folder->delete($themePath . 'Plugin');
+        $folder->delete($themePath . 'plugins');
     }
 
     /**
@@ -475,7 +475,7 @@ class BcUtilTest extends BcTestCase
         $themePath = BcUtil::getPluginPath($targetTheme);
         $pluginName = 'test';
         $folder = new Folder();
-        $folder->create($themePath . 'Plugin/' . $pluginName, 0777);
+        $folder->create($themePath . 'plugins/' . $pluginName, 0777);
         // プラグインが存在しているかどうか確認する
         $plugins = BcUtil::getCurrentThemesPlugins();
         $this->assertCount(1, $plugins);
@@ -489,7 +489,7 @@ class BcUtilTest extends BcTestCase
 
         // 作成したプラグインを削除する
         $folder = new Folder();
-        $folder->delete($themePath . 'Plugin');
+        $folder->delete($themePath . 'plugins');
     }
 
     /**

@@ -217,14 +217,14 @@ class ThemesServiceTest extends \BaserCore\TestSuite\BcTestCase
         $theme = 'BcFront';
         $themePath = BcUtil::getPluginPath($theme);
 
-        mkdir($themePath . 'Plugin', 0777);
-        mkdir($themePath . 'Plugin/test', 0777);
+        mkdir($themePath . 'plugins', 0777);
+        mkdir($themePath . 'plugins/test', 0777);
 
-        $file = new File($themePath . 'Plugin/test/test.txt');
+        $file = new File($themePath . 'plugins/test/test.txt');
         $file->write('test file plugin');
         $file->close();
 
-        $file = new File($themePath . 'Plugin/test2.txt');
+        $file = new File($themePath . 'plugins/test2.txt');
         $file->write('test file 2');
         $file->close();
 
@@ -244,7 +244,7 @@ class ThemesServiceTest extends \BaserCore\TestSuite\BcTestCase
         $this->assertEquals($expected, $rs);
 
         $folder = new Folder();
-        $folder->delete($themePath . 'Plugin');
+        $folder->delete($themePath . 'plugins');
     }
 
     /**
@@ -346,14 +346,14 @@ class ThemesServiceTest extends \BaserCore\TestSuite\BcTestCase
         $themePath = BcUtil::getPluginPath($theme);
         $pluginName = 'test';
         $folder = new Folder();
-        $folder->create($themePath . 'Plugin/' . $pluginName);
+        $folder->create($themePath . 'plugins/' . $pluginName);
 
         $pluginsInfo = $this->execPrivateMethod($this->ThemesService, 'getThemesPluginsInfo', [$theme]);
         $this->assertEquals('このテーマは下記のプラグインを同梱しています。', $pluginsInfo[0]);
         $this->assertEquals('	・' . $pluginName, $pluginsInfo[1]);
 
         $folder = new Folder();
-        $folder->delete($themePath . 'Plugin');
+        $folder->delete($themePath . 'plugins');
     }
 
     /**

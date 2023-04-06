@@ -233,7 +233,7 @@ class ThemesService implements ThemesServiceInterface
     {
         $info = [];
         $themePath = BcUtil::getPluginPath($theme);
-        $Folder = new Folder($themePath . 'Plugin');
+        $Folder = new Folder($themePath . 'plugins');
         $files = $Folder->read(true, true, false);
         if (!empty($files[0])) {
             $info = array_merge($info, [

@@ -12,6 +12,8 @@
 namespace BaserCore\Test\TestCase\Controller;
 
 use BaserCore\TestSuite\BcTestCase;
+use Cake\Core\Configure;
+use Cake\I18n\I18n;
 use Cake\TestSuite\IntegrationTestTrait;
 use BaserCore\Controller\ContentFoldersController;
 
@@ -83,6 +85,7 @@ class ContentFoldersControllerTest extends BcTestCase
     {
         $this->get("/en/");
         $this->assertResponseOk();
+        I18n::setLocale(Configure::read('App.defaultLocale'));
     }
 
 }
