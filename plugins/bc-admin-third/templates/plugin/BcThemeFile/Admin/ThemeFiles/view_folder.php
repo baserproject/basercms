@@ -36,7 +36,7 @@ $params = explode('/', $path);
 // - 現在利用しているテーマがデフォルトテーマではない
 // - 編集可能の設定となっている
 $isCopyable = ($isDefaultTheme &&
-  \Cake\Utility\Inflector::camelize(Cake\Core\Configure::read('BcApp.defaultFrontTheme'), '-') !== \BaserCore\Utility\BcUtil::getCurrentTheme() &&
+  \Cake\Utility\Inflector::camelize(Cake\Core\Configure::read('BcApp.coreFrontTheme'), '-') !== \BaserCore\Utility\BcUtil::getCurrentTheme() &&
   Cake\Core\Configure::read('BcThemeFile.allowedThemeEdit')
 );
 ?>

@@ -79,7 +79,7 @@ session_id('cli');
 if (!filter_var(env('USE_CORE_API'), FILTER_VALIDATE_BOOLEAN) ||
     !filter_var(env('USE_CORE_ADMIN_API'), FILTER_VALIDATE_BOOLEAN) ||
     !filter_var(env('DEBUG'), FILTER_VALIDATE_BOOLEAN)) {
-    exit(__d('baser', 'ユニットテストを実行する際は、bin/cake setup test を実行して .env の設定を変更してください。') . "\n");
+    exit(__d('baser_core', 'ユニットテストを実行する際は、bin/cake setup test を実行して .env の設定を変更してください。') . "\n");
 }
 
 // Use migrations to build test database schema.

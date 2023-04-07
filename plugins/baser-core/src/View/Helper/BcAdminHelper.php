@@ -478,7 +478,7 @@ class BcAdminHelper extends Helper
         if(BcUtil::isAdminSystem()) return;
         $content = $this->getView()->getRequest()->getAttribute('currentContent');
         if(!$content) return;
-        $this->BcBaser->link(__d('baser', '新規ページ追加'), [
+        $this->BcBaser->link(__d('baser_core', '新規ページ追加'), [
             'prefix' => 'Admin',
             'plugin' => 'BaserCore',
             'controller' => 'Pages',

@@ -16,6 +16,8 @@ use BaserCore\Utility\BcUtil;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use Cake\Core\Configure;
+use Cake\Utility\Inflector;
 
 /**
  * ThemesAdminService
@@ -36,6 +38,9 @@ class ThemesAdminService extends ThemesService implements ThemesAdminServiceInte
         $currentThemeName = BcUtil::getCurrentTheme();
         $currentTheme = null;
         foreach($themes as $key => $value) {
+            if($value['name'] === Inflector::camelize(Configure::read('BcApp.coreFrontTheme'), '-')) {
+                unset($themes[$key]);
+            }
             if ($value['name'] === $currentThemeName) {
                 $currentTheme = $value;
                 unset($themes[$key]);

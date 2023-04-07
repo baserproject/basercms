@@ -1,0 +1,15 @@
+id,mail_content_id,no,name,field_name,type,head,attention,before_attachment,after_attachment,source,size,rows,maxlength,options,class,delimiter,default_value,description,group_field,group_valid,valid,valid_ex,auto_convert,not_empty,use_field,no_send,sort,created,modified
+1,1,1,姓,name_1,text,お名前,,,,,,,255,placeholder|姓,,,,,name,name,1,,,1,1,,1,,
+2,1,2,名,name_2,text,お名前,,,,,,,255,placeholder|名,,,,,name,name,1,,,1,1,,2,,
+5,1,5,性別,sex,radio,性別,,,,男性|女性,0,0,0,,,,,,,,,,,,1,,5,,
+6,1,7,メールアドレス,email_1,email,メールアドレス,,,,,,,50,,,,,,email,email,,"VALID_EMAIL_CONFIRM,VALID_EMAIL",,1,1,,6,,
+7,1,8,メールアドレス確認,email_2,text,メールアドレス（確認）,,,,,,,50,placeholder|確認のためもう一度入力して下さい,,,,,email,email,,"VALID_EMAIL_CONFIRM,VALID_EMAIL",,1,1,1,7,,
+8,1,9,電話番号,tel,text,電話番号,,,,,,,11,placeholder|ハイフン抜きで入力して下さい,,,,,,,,,CONVERT_HANKAKU,,1,,8,,
+11,1,12,郵便番号,zip,autozip,住所,,,,"address_1
+address_2",,,8,placeholder|〒 郵便番号をハイフン抜きで入力してください,,,,,address,,,,CONVERT_HANKAKU,,1,,11,,
+12,1,13,都道府県,address_1,pref,住所,,,,,,,,,,,,,address,,,,,,1,,12,,
+13,1,14,市区町村・番地,address_2,text,住所,,,,,,,200,placeholder|市区町村・番地,,,,,address,,,,,,1,,13,,
+14,1,15,建物名,address_3,text,住所,,,,,,,200,placeholder|建物名,,,,,address,,,,,,1,,14,,
+15,1,16,お問い合わせ項目,category,multi_check,お問い合わせ項目,,,,資料請求|問い合わせ|その他,0,0,0,,,,,,,,,VALID_NOT_UNCHECKED,,1,1,,15,,
+16,1,17,お問い合わせ内容,message,textarea,お問い合わせ内容,,,,,48,12,,,,,,,,,,,,,1,,16,,
+17,1,18,ルート,root,select,どうやってこのサイトをお知りになりましたか？,,,<br>,検索エンジン|web広告|紙面広告|求人案内|その他,0,0,0,,,,,,root,,1,,,1,1,,17,,

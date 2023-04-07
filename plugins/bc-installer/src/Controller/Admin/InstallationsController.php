@@ -119,7 +119,7 @@ class InstallationsController extends BcAdminAppController
                         $service->constructionDb(
                             $service->readDbSetting($this->getRequest()),
                             $this->request->getData('dbDataPattern'),
-                            Configure::read('BcApp.defaultAdminTheme')
+                            Configure::read('BcApp.coreAdminTheme')
                         );
                         $this->BcMessage->setInfo(__d('baser_core', 'データベースの構築に成功しました。'));
                         return $this->redirect(['action' => 'step4']);

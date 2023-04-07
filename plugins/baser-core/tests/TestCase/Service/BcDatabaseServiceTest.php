@@ -343,7 +343,7 @@ class BcDatabaseServiceTest extends BcTestCase
         $userGroupTable = TableRegistry::getTableLocator()->get('BaserCore.UserGroups');
         $this->assertTrue($userGroupTable->find()->where(['UserGroups.name' => 'admins'])->count() > 0);
         // users_user_groups　テーブルにデータが登録されている事を確認
-        $corePath = BcUtil::getPluginPath(Inflector::camelize(Configure::read('BcApp.defaultFrontTheme'), '-')) . 'config' . DS . 'data' . DS . 'default' . DS . 'BaserCore';
+        $corePath = BcUtil::getPluginPath(Inflector::camelize(Configure::read('BcApp.coreFrontTheme'), '-')) . 'config' . DS . 'data' . DS . 'default' . DS . 'BaserCore';
         $usersUserGroups = $this->BcDatabaseService->loadCsvToArray($corePath . DS . 'users_user_groups.csv');
         $this->assertCount(UsersUserGroupFactory::count(), $usersUserGroups);
         // site_configs テーブルの email / google_analytics_id / first_access / admin_theme / version の設定状況を確認

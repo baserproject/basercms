@@ -94,7 +94,7 @@ class MailContentsController extends MailAdminAppController
         $theme = BcUtil::getCurrentTheme();
         $target = Plugin::templatePath($theme) . 'plugin' . DS . 'BcMail' . DS . $type . DS . $path;
         if (!file_exists($target)) {
-            $source = Plugin::templatePath(Configure::read('BcApp.defaultFrontTheme')) . DS . 'plugin' . DS . 'BcMail' . DS . $type . DS . $path;
+            $source = Plugin::templatePath(Configure::read('BcApp.coreFrontTheme')) . DS . 'plugin' . DS . 'BcMail' . DS . $type . DS . $path;
             if (file_exists($source)) {
                 $folder = new Folder();
                 $folder->create(dirname($target), 0777);
@@ -129,7 +129,7 @@ class MailContentsController extends MailAdminAppController
         $target = Plugin::templatePath($theme) . 'plugin' . DS . 'BcMail' . DS . $path;
         $ext = Configure::read('BcApp.templateExt');
         if (!file_exists($target . DS . 'index' . $ext)) {
-            $source = Plugin::templatePath(Configure::read('BcApp.defaultFrontTheme')) . DS . 'plugin' . DS . 'BcMail' . DS . $path;
+            $source = Plugin::templatePath(Configure::read('BcApp.coreFrontTheme')) . DS . 'plugin' . DS . 'BcMail' . DS . $path;
             if (is_dir($source)) {
                 $folder = new Folder();
                 $folder->create(dirname($target), 0777);

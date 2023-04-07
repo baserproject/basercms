@@ -238,12 +238,17 @@ return [
         /**
          * デフォルトフロントテーマ
          */
-        'defaultFrontTheme' => 'bc-front',
+        'coreFrontTheme' => 'bc-front',
 
         /**
          * デフォルト管理画面テーマ
          */
-        'defaultAdminTheme' => 'bc-admin-third',
+        'coreAdminTheme' => 'bc-admin-third',
+
+        /**
+         * デフォルトフロントテーマ
+         */
+        'defaultFrontTheme' => 'BcThemeSample',
 
         /**
          * 管理画面をカスタマイズするためのテーマ

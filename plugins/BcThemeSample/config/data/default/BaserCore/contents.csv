@@ -1,0 +1,11 @@
+id,name,plugin,type,entity_id,url,site_id,alias_id,main_site_content_id,parent_id,lft,rght,level,title,description,eyecatch,author_id,layout_template,status,publish_begin,publish_end,self_status,self_publish_begin,self_publish_end,exclude_search,created_date,modified_date,site_root,deleted_date,deleted,exclude_menu,blank_link,created,modified
+1,,BaserCore,ContentFolder,1,/,1,,,,1,20,0,baserCMSサンプル,,,1,default,1,,,1,,,0,,,1,,0,0,0,,
+4,index,BaserCore,Page,1,/index,1,,,1,2,3,1,トップページ,,,1,,1,,,1,,,0,,,0,,0,0,0,,
+5,about,BaserCore,Page,2,/about,1,,,1,6,7,1,会社案内,,,1,,1,,,1,,,0,,,0,,0,0,0,,
+6,service,BaserCore,ContentFolder,4,/service/,1,,,1,8,15,1,サービス,,,1,,1,,,1,,,0,,,0,,0,0,0,,
+7,sample,BaserCore,Page,5,/sample,1,,,1,18,19,1,サンプル,,,1,,1,,,1,,,0,,,0,,0,0,0,,
+9,contact,BcMail,MailContent,1,/contact/,1,,,1,16,17,1,お問い合わせ,,,1,,1,,,1,,,0,,,0,,0,0,0,,
+10,news,BcBlog,BlogContent,1,/news/,1,,,1,4,5,1,NEWS,,,1,,1,,,1,,,0,,,0,,0,0,0,,
+11,service1,BaserCore,Page,3,/service/service1,1,,,6,9,10,2,サービス１,,,1,,1,,,1,,,0,,,0,,0,0,0,,
+12,service2,BaserCore,Page,6,/service/service2,1,,,6,11,12,2,サービス２,,,1,,1,,,1,,,0,,,0,,0,0,0,,
+13,service3,BaserCore,Page,7,/service/service3,1,,,6,13,14,2,サービス３,,,1,,1,,,1,,,0,,,0,,0,0,0,,

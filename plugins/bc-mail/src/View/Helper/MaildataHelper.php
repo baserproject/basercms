@@ -106,7 +106,7 @@ class MaildataHelper extends BcTextHelper
 
             case 'date_time_calender':
 				if (is_array($value)) $value = $this->dateTime($value);
-				if ($value) $result = date(__d('baser', 'Y年 m月 d日'), strtotime($value));
+				if ($value) $result = date(__d('baser_core', 'Y年 m月 d日'), strtotime($value));
 				break;
 
             case 'date_time_wareki':

@@ -190,8 +190,8 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
      */
     public function addTheme(PluginApplicationInterface $application)
     {
-        $application->addPlugin(Inflector::camelize(Configure::read('BcApp.defaultAdminTheme'), '-'));
-        $application->addPlugin(Inflector::camelize(Configure::read('BcApp.defaultFrontTheme'), '-'));
+        $application->addPlugin(Inflector::camelize(Configure::read('BcApp.coreAdminTheme'), '-'));
+        $application->addPlugin(Inflector::camelize(Configure::read('BcApp.coreFrontTheme'), '-'));
         if (!BcUtil::isInstalled()) return;
         $sitesTable = TableRegistry::getTableLocator()->get('BaserCore.Sites');
         $sites = $sitesTable->find()->where(['Sites.status' => true]);
@@ -211,8 +211,8 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
      */
     public function setupDefaultTemplatesPath()
     {
-        $admin = Configure::read('BcApp.defaultAdminTheme');
-        $front = Configure::read('BcApp.defaultFrontTheme');
+        $admin = Configure::read('BcApp.coreAdminTheme');
+        $front = Configure::read('BcApp.coreFrontTheme');
         if (BcUtil::isAdminSystem() && empty($_REQUEST['preview'])) {
             Configure::write('App.paths.templates', array_merge([
                 ROOT . DS . 'plugins' . DS . $admin . DS . 'templates' . DS,

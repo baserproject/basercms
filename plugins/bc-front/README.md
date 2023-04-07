@@ -11,7 +11,6 @@ composer require baserproject/BcFront
 ```
 　
 ## Contributing
-- [ucmitz 開発への貢献方法](https://baserproject.github.io/5/ucmitz/)
 - [BcFront の開発](https://baserproject.github.io/5/ucmitz/development/frontend/bc-front)
 
 　
@@ -19,13 +18,6 @@ composer require baserproject/BcFront
 
 baserCMSの基本機能を全て実装しているテーマです。
 このテーマをベースにデザインを変更しやすいよう、極力シンプルなデザインとしています。
-
-　
-## 利用方法
-
-通常のテーマと同様に、テーマ管理にてテーマ適用し、必ず、初期データ読込を実行してください。
-- default : サンプルデータ入り
-- empty : サンプルデータなし
 
 　
 ## 各ファイルの説明
@@ -69,9 +61,9 @@ baserCMSの基本機能を全て実装しているテーマです。
 - bge_style.css --- 「BurgerEditor」プラグインを利用する場合に管理画面の表示を最適化するために利用
 - style.css --- フロントで参照する為に利用
 
-直接編集してもいいですが、scss ファイルを編集する場合は、 `/` フォルダ内で、sass 環境を作る必要があります。
+scss ファイルを編集する場合は、 `/` フォルダ内で、sass 環境を作る必要があります。
 
 ```
 npm install
-npm run dev
+npm run dev -w plugins/bc-front
 ```

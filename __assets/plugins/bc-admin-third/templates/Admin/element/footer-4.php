@@ -51,16 +51,16 @@
 
       <ul class="bca-footer__links">
         <li class="bca-footer__links__item"><a href="https://basercms.net/"
-                                               target="_blank"><?php echo __d('baser', 'baserCMS 公式サイト') ?></a>
+                                               target="_blank"><?php echo __d('baser_core', 'baserCMS 公式サイト') ?></a>
         </li>
         <li class="bca-footer__links__item"><a href="https://basercms.net/community/index"
-                                               target="_blank"><?php echo __d('baser', 'baserCMS ユーザーコミュニティ') ?></a>
+                                               target="_blank"><?php echo __d('baser_core', 'baserCMS ユーザーコミュニティ') ?></a>
         </li>
         <li class="bca-footer__links__item"><a href="https://forum.basercms.net/"
-                                               target="_blank"><?php echo __d('baser', 'baserCMS ユーザーズフォーラム') ?></a>
+                                               target="_blank"><?php echo __d('baser_core', 'baserCMS ユーザーズフォーラム') ?></a>
         </li>
         <li class="bca-footer__links__item"><a href="https://github.com/baserproject/basercms"
-                                               target="_blank"><?php echo __d('baser', 'baserCMS GitHub') ?></a>
+                                               target="_blank"><?php echo __d('baser_core', 'baserCMS GitHub') ?></a>
         </li>
       </ul>
 

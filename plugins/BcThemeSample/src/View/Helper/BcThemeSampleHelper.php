@@ -1,6 +1,6 @@
 <?php
 
-namespace BcFront\View\Helper;
+namespace BcThemeSample\View\Helper;
 
 use Cake\View\Helper;
 
@@ -12,8 +12,8 @@ use Cake\View\Helper;
  *
  * 利用例：<?php $this->BcSample->show() ?>
  */
-class BcSampleHelper extends Helper {
+class BcThemeSampleHelper extends Helper {
 	public function show() {
-		echo 'BcSample';
+		echo 'BcThemeSample';
 	}
 }

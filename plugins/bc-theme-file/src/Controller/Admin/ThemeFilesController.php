@@ -96,7 +96,7 @@ class ThemeFilesController extends BcAdminAppController
      */
     protected function isDefaultTheme()
     {
-        return (Inflector::camelize(Configure::read('BcApp.defaultFrontTheme'), '-') === $this->getRequest()->getParam('pass.0'));
+        return (Inflector::camelize(Configure::read('BcApp.coreFrontTheme'), '-') === $this->getRequest()->getParam('pass.0'));
     }
 
     /**

@@ -42,7 +42,7 @@ if(!isset($currentId)) {
 						$options['target'] = '_blank';
 					}
                     // トップページは HOME に変更
-                    if ($content['Content']['title'] == __d('baser', 'トップページ')) {
+                    if ($content['Content']['title'] == __d('baser_core', 'トップページ')) {
                         $content['Content']['title'] = 'HOME';
                     }
                     ?>

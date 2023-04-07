@@ -124,7 +124,7 @@ class BcContentsHelper extends Helper
                 }
             } else {
                 // 後方互換のため判定を入れる（v4.2.0）
-                if (Configure::read('BcSite.admin_theme') === Configure::read('BcApp.defaultAdminTheme')) {
+                if (Configure::read('BcSite.admin_theme') === Configure::read('BcApp.coreAdminTheme')) {
                     $item['icon'] = $item['icon'] = 'bca-icon--file';
                 } else {
                     $item['url']['icon'] = $this->_getIconUrl($item['plugin'], $item['type'], null);

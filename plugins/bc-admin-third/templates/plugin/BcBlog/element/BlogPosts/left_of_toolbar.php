@@ -17,7 +17,7 @@ if(!$content) return;
 
 
 <div class="bca-toolbar__tools-button bca-toolbar__tools-button-add">
-	<?php $this->BcBaser->link(__d('baser', '新規記事追加'), [
+	<?php $this->BcBaser->link(__d('baser_core', '新規記事追加'), [
 		'plugin' => 'BcBlog',
 		'prefix' => 'Admin',
 		'controller' => 'BlogPosts',

@@ -86,7 +86,7 @@ class InstallationsAdminService extends InstallationsService implements Installa
                 'dbPrefix' => '',
                 'dbPort' => '3306',
                 'dbName' => 'basercms',
-                'dbDataPattern' => Inflector::camelize(Configure::read('BcApp.defaultFrontTheme'), '-') . '.default'
+                'dbDataPattern' => Inflector::camelize(Configure::read('BcApp.coreFrontTheme'), '-') . '.default'
             ];
         }
         $setting = $this->readDbSetting($request);

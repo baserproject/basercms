@@ -11,7 +11,7 @@
 
 use Cake\Core\Configure;
 
-$defaultFrontTheme = \Cake\Utility\Inflector::camelize(Configure::read('BcApp.defaultFrontTheme'), '-');
+$coreFrontTheme = \Cake\Utility\Inflector::camelize(Configure::read('BcApp.coreFrontTheme'), '-');
 
 return [
 
@@ -30,7 +30,7 @@ return [
                     'menus' => [
                         'Themes' => [
                             // 通常のテーマ管理、または、デフォルトテーマ以外のテーマフォルダ管理
-                            'currentRegex' => '/(\/themes\/[^\/]+?|\/theme_files\/[^\/]+?\/(?!.*' . $defaultFrontTheme . '))/s'
+                            'currentRegex' => '/(\/themes\/[^\/]+?|\/theme_files\/[^\/]+?\/(?!.*' . $coreFrontTheme . '))/s'
                         ]
                     ]
                 ],
@@ -38,8 +38,8 @@ return [
                     'menus' => [
                         'ThemeFiles' => [
                             'title' => __d('baser_core', 'コアテンプレート確認'),
-                            'url' => ['prefix' => 'Admin', 'plugin' => 'BcThemeFile', 'controller' => 'ThemeFiles', 'action' => 'index', $defaultFrontTheme, 'BaserCore'],
-                            'currentRegex' => '/\/theme_files\/[^\/]+?\/' . $defaultFrontTheme . '/s'
+                            'url' => ['prefix' => 'Admin', 'plugin' => 'BcThemeFile', 'controller' => 'ThemeFiles', 'action' => 'index', $coreFrontTheme, 'BaserCore'],
+                            'currentRegex' => '/\/theme_files\/[^\/]+?\/' . $coreFrontTheme . '/s'
                         ]
                     ]
                 ]

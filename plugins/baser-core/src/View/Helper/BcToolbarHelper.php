@@ -341,8 +341,8 @@ class BcToolbarHelper extends Helper
         $texts = [
             'install' => __d('baser_core', 'インストールマニュアル'),
             'update' => __d('baser_core', 'アップデートマニュアル'),
-            'normal' => 'サイト表示',
-            'frontAdminAvailable' => 'ダッシュボード',
+            'normal' => __d('baser_core', 'サイト表示'),
+            'frontAdminAvailable' => __d('baser_core', 'ダッシュボード'),
             'frontAdminNotAvailable' => $this->BcAuth->getCurrentName(),
         ];
         return $texts[$this->getLogoType()];

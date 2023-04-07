@@ -250,7 +250,7 @@
         </td>
       </tr>
       <tr id="RowAutoComplete">
-        <th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('autocomplete', __d('baser', 'オートコンプリート')) ?></th>
+        <th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('autocomplete', __d('baser_core', 'オートコンプリート')) ?></th>
         <td class="col-input bca-form-table__input">
           <?php echo $this->BcAdminForm->control('autocomplete', ['type' => 'select', 'options' => $autoCompleteOptions]) ?>
           <?php echo $this->BcAdminForm->error('autocomplete') ?>

@@ -68,7 +68,7 @@ class WidgetAreasAdminService extends WidgetAreasService implements WidgetAreasA
         $widgetInfos = [0 => [
             'title' => __d('baser_core', 'コアウィジェット'),
             'plugin' => 'BaserCore',
-            'paths' => [Plugin::templatePath(Configure::read('BcApp.defaultAdminTheme')) . 'Admin' . DS . 'element' . DS . 'widget']
+            'paths' => [Plugin::templatePath(Configure::read('BcApp.coreAdminTheme')) . 'Admin' . DS . 'element' . DS . 'widget']
         ]];
         $plugins = BcUtil::getEnablePlugins();
         if (!$plugins) return $widgetInfos;

@@ -43,7 +43,7 @@ class ContentFoldersAdminService extends ContentFoldersService implements Conten
      */
     public function getViewVarsForEdit(EntityInterface $contentFolder): array
     {
-        $theme = [Inflector::camelize(Configure::read('BcApp.defaultFrontTheme'))];
+        $theme = [Inflector::camelize(Configure::read('BcApp.coreFrontTheme'))];
         $site = $this->getService(SitesServiceInterface::class)
             ->findById($contentFolder->content->site_id)
             ->first();

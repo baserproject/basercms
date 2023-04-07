@@ -87,11 +87,11 @@ class ThemesService implements ThemesServiceInterface
      */
     public function getDefaultDataPatterns($theme = '', $options = [])
     {
-        if (!$theme) $theme = Inflector::camelize(Configure::read('BcApp.defaultFrontTheme'), '-');
+        if (!$theme) $theme = Inflector::camelize(Configure::read('BcApp.coreFrontTheme'), '-');
         $options = array_merge(['useTitle' => true], $options);
         $dataPath = dirname(BcUtil::getDefaultDataPath($theme));
         if(!$dataPath) return [];
-        if ($theme !== Inflector::camelize(Configure::read('BcApp.defaultFrontTheme'), '-') &&
+        if ($theme !== Inflector::camelize(Configure::read('BcApp.coreFrontTheme'), '-') &&
             $dataPath === dirname(BcUtil::getDefaultDataPath())) {
             return [];
         }
@@ -535,7 +535,7 @@ class ThemesService implements ThemesServiceInterface
     {
         $path = BcUtil::getDefaultDataPath($theme, $pattern);
         if (!$path) return false;
-        $corePath = BcUtil::getDefaultDataPath(Configure::read('BcApp.defaultFrontTheme'), 'default');
+        $corePath = BcUtil::getDefaultDataPath(Configure::read('BcApp.coreFrontTheme'), 'default');
 
         $Folder = new Folder($corePath . DS . 'BaserCore');
         $files = $Folder->read(true, true);

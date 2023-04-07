@@ -177,7 +177,7 @@ class InstallationsService implements InstallationsServiceInterface
     public function constructionDb(array $dbConfig, string $dbDataPattern = '', string $adminTheme = ''): bool
     {
         if (!$dbDataPattern) {
-            $dbDataPattern = Configure::read('BcApp.defaultFrontTheme') . '.default';
+            $dbDataPattern = Configure::read('BcApp.coreFrontTheme') . '.default';
         }
         if (strpos($dbDataPattern, '.') === false) {
             throw new BcException(__d('baser_core', 'データパターンの形式が不正です。'));
@@ -632,7 +632,7 @@ class InstallationsService implements InstallationsServiceInterface
             $Folder = new Folder();
             $Folder->create($path, 0777);
         }
-        $pluginPath = BcUtil::getPluginPath(Configure::read('BcApp.defaultAdminTheme')) . DS;
+        $pluginPath = BcUtil::getPluginPath(Configure::read('BcApp.coreAdminTheme')) . DS;
         $src = $pluginPath . DS . 'webroot' . DS . 'img' . DS . 'admin' . DS . 'ckeditor' . DS;
         $Folder = new Folder($src);
         $files = $Folder->read(true, true);

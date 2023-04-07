@@ -320,24 +320,24 @@ class Asset
                 //}
                 // ---
                 } else {
-                    $defaultFrontTheme = Configure::read('BcApp.defaultFrontTheme');
-                    $theme = static::inflectString($defaultFrontTheme) . '/';
+                    $coreFrontTheme = Configure::read('BcApp.coreFrontTheme');
+                    $theme = static::inflectString($coreFrontTheme) . '/';
                     if (is_file(Configure::read('App.wwwRoot') . $theme . $file)) {
                         $webPath = $requestWebroot . $theme . $asset[0];
                     } else {
-                        $themePath = Plugin::path($defaultFrontTheme);
+                        $themePath = Plugin::path($coreFrontTheme);
                         $path = $themePath . 'webroot/' . $file;
                         if (is_file($path)) {
                             $webPath = $requestWebroot . $theme . $asset[0];
                         } else {
                             // フロントデフォルトテーマに存在しない場合、管理画面デフォルトテーマを確認
                             // ツールバーの場合に必要。※ ツールバーを iframe 化したら不要になる可能性あり
-                            $defaultAdminTheme = Configure::read('BcApp.defaultAdminTheme');
-                            $theme = static::inflectString($defaultAdminTheme) . '/';
+                            $coreAdminTheme = Configure::read('BcApp.coreAdminTheme');
+                            $theme = static::inflectString($coreAdminTheme) . '/';
                             if (is_file(Configure::read('App.wwwRoot') . $theme . $file)) {
                                 $webPath = $requestWebroot . $theme . $asset[0];
                             } else {
-                                $themePath = Plugin::path($defaultAdminTheme);
+                                $themePath = Plugin::path($coreAdminTheme);
                                 $path = $themePath . 'webroot/' . $file;
                                 if (is_file($path)) {
                                     $webPath = $requestWebroot . $theme . $asset[0];

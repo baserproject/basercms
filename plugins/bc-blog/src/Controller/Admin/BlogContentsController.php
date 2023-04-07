@@ -107,7 +107,7 @@ class BlogContentsController extends BlogAdminAppController
         $target = Plugin::templatePath($theme) . 'plugin' . DS . 'BcBlog' . DS . $path;
         $ext = Configure::read('BcApp.templateExt');
         if (!file_exists($target . DS . 'index' . $ext)) {
-            $source = Plugin::templatePath(Configure::read('BcApp.defaultFrontTheme')) . DS . 'plugin' . DS . 'BcBlog' . DS . $path;
+            $source = Plugin::templatePath(Configure::read('BcApp.coreFrontTheme')) . DS . 'plugin' . DS . 'BcBlog' . DS . $path;
             if (is_dir($source)) {
                 $folder = new Folder();
                 $folder->create(dirname($target), 0777);

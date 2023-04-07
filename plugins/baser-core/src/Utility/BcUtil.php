@@ -658,7 +658,7 @@ class BcUtil
      */
     public static function getDefaultDataPath($theme = null, $pattern = null)
     {
-        if (!$theme) $theme = Configure::read('BcApp.defaultFrontTheme');
+        if (!$theme) $theme = Configure::read('BcApp.coreFrontTheme');
         if (!$pattern) $pattern = 'default';
         $base = Plugin::path($theme);
         $paths = [
@@ -822,7 +822,7 @@ class BcUtil
         $themes = [$site->theme];
         $rootTheme = BcUtil::getRootTheme();
         if ($rootTheme !== $themes[0]) $themes[] = $rootTheme;
-        $defaultTheme = Configure::read('BcApp.defaultFrontTheme');
+        $defaultTheme = Configure::read('BcApp.coreFrontTheme');
         if (!in_array($defaultTheme, $themes)) $themes[] = $defaultTheme;
 
         $templatesPaths = [];
@@ -1172,7 +1172,7 @@ class BcUtil
      */
     public static function getCurrentTheme()
     {
-        $theme = Inflector::camelize(Inflector::underscore(Configure::read('BcApp.defaultFrontTheme')));
+        $theme = Inflector::camelize(Inflector::underscore(Configure::read('BcApp.coreFrontTheme')));
         if (!BcUtil::isInstalled()) return $theme;
         $request = Router::getRequest();
         $site = $request->getAttribute('currentSite');
@@ -1206,7 +1206,7 @@ class BcUtil
      */
     public static function getCurrentAdminTheme()
     {
-        $adminTheme = Inflector::camelize(Inflector::underscore(Configure::read('BcApp.defaultAdminTheme')));
+        $adminTheme = Inflector::camelize(Inflector::underscore(Configure::read('BcApp.coreAdminTheme')));
         if (BcUtil::isInstalled() && !empty(BcSiteConfig::get('admin_theme'))) {
             $adminTheme = BcSiteConfig::get('admin_theme');
         }

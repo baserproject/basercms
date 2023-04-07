@@ -325,8 +325,8 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         if (!$result) {
             $this->resetAllTables($excludes);
             // 指定したデータセットでの読み込みに失敗した場合、コアのデータ読み込みを試みる
-            if ($theme !== Configure::read('BcApp.defaultFrontTheme')) {
-                $theme = Configure::read('BcApp.defaultFrontTheme');
+            if ($theme !== Configure::read('BcApp.coreFrontTheme')) {
+                $theme = Configure::read('BcApp.coreFrontTheme');
                 foreach($plugins as $plugin) {
                     if (!$this->_loadDefaultDataPattern($pattern, $theme, $plugin, $excludes)) {
                         $result = false;
@@ -545,7 +545,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
             'theme' => null,
         ], $options);
 
-        $corePath = BcUtil::getPluginPath(Inflector::camelize(Configure::read('BcApp.defaultFrontTheme'), '-')) . 'config' . DS . 'data' . DS . 'default' . DS . 'BaserCore';
+        $corePath = BcUtil::getPluginPath(Inflector::camelize(Configure::read('BcApp.coreFrontTheme'), '-')) . 'config' . DS . 'data' . DS . 'default' . DS . 'BaserCore';
         $result = true;
 
         // user_groupsの初期データをチェック＆設定
