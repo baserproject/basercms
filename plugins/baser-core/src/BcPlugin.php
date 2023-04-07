@@ -406,6 +406,24 @@ class BcPlugin extends BasePlugin
         $plugin = $this->getName();
 
         /**
+         * プラグインのフロントエンド用ルーティング（プラグイン名がダッシュ区切りの場合）
+         *
+         * BcPrefixAuthより先に定義が必要
+         * 定義しない場合、CSRFトークン取得などの処理にて、BcPrefixAuthのルーティングに捕まり認証を求められてしまう場合がある。
+         * 例）認証付 MyPage の定義で、alias を '/' とした場合
+         */
+        $routes->plugin(
+            $plugin,
+            ['path' => '/' . Inflector::dasherize($plugin)],
+            function(RouteBuilder $routes) {
+                $routes->setExtensions(['json']);   // AnalyseController で利用
+                $routes->connect('/{controller}/index', ['sitePrefix' => ''], ['routeClass' => InflectedRoute::class]);
+                $routes->connect('/{controller}/{action}/*', ['sitePrefix' => ''], ['routeClass' => InflectedRoute::class]);
+                $routes->fallbacks(InflectedRoute::class);
+            }
+        );
+
+        /**
          * プラグインの管理画面用ルーティング
          * プラグイン名がダッシュ区切りの場合
          */
@@ -460,21 +478,6 @@ class BcPlugin extends BasePlugin
                 $routes->connect('/', []);
                 $routes->connect('/{controller}/index', []);
                 $routes->connect('/:controller/:action/*', []);
-            }
-        );
-
-        /**
-         * プラグインのフロントエンド用ルーティング
-         * プラグイン名がダッシュ区切りの場合
-         */
-        $routes->plugin(
-            $plugin,
-            ['path' => '/' . Inflector::dasherize($plugin)],
-            function(RouteBuilder $routes) {
-                $routes->setExtensions(['json']);   // AnalyseController で利用
-                $routes->connect('/{controller}/index', ['sitePrefix' => ''], ['routeClass' => InflectedRoute::class]);
-                $routes->connect('/{controller}/{action}/*', ['sitePrefix' => ''], ['routeClass' => InflectedRoute::class]);
-                $routes->fallbacks(InflectedRoute::class);
             }
         );
 
