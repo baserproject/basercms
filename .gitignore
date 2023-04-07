@@ -74,6 +74,7 @@ nbproject/*
 !/plugins/bc-custom-content
 !/plugins/BcSpaSample
 !/plugins/BcThemeSample
+!/plugins/BcColumn
 /plugins/*/vendor
 /plugins/*/composer.lock
 # vagrant

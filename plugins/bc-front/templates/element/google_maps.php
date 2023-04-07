@@ -56,8 +56,7 @@ if ($apiKey) {
       ])
     ) ?>
   </p>
-<?php else: ?>
-  <div id="<?php echo $mapId ?>" style="width: <?php echo $width ?>px; height:<?php echo $height ?>px">
-    <noscript>※ <?php echo __d('baser_core', 'JavaScript を有効にしてください。') ?></noscript>
-  </div>
 <?php endif ?>
+<div id="<?php echo $mapId ?>" style="width: <?php echo $width ?>px; height:<?php echo $height ?>px">
+  <noscript>※ <?php echo __d('baser_core', 'JavaScript を有効にしてください。') ?></noscript>
+</div>

@@ -280,17 +280,21 @@ class BlogContentsService implements BlogContentsServiceInterface
     {
         $options = array_merge([
             'template' => 'posts',
-            'contentsTemplate' => 'default',
+            'contentsTemplate' => '',
             'contentUrl' => ''
         ], $options);
 
         if (!$options['contentsTemplate']) {
             $conditions = array_merge(
-                ['Content.url' => $options['contentUrl']],
-                $this->BlogContents->getConditionAllowPublish()
+                ['Contents.url' => $options['contentUrl'][0]],
+                $this->BlogContents->Contents->getConditionAllowPublish()
             );
-            $blogContent = $this->BlogContents->find()->where($conditions)->first();
-            if ($blogContent) $options['contentsTemplate'] = $blogContent->template;
+            $blogContent = $this->BlogContents->find()->where($conditions)->contain(['Contents'])->first();
+            if ($blogContent) {
+                $options['contentsTemplate'] = $blogContent->template;
+            } else {
+                $options['contentsTemplate'] = 'default';
+            }
         }
 
         return 'BcBlog...' . DS . 'Blog' . DS . $options['contentsTemplate'] . DS . $options['template'];

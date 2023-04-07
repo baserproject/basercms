@@ -10,7 +10,6 @@
  */
 namespace BaserCore\View\Helper;
 
-use Cake\Core\Plugin as CakePlugin;
 use Cake\Datasource\EntityInterface;
 use Cake\Event\Event;
 use Cake\ORM\Table;

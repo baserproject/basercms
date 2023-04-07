@@ -692,13 +692,11 @@ class InstallationsService implements InstallationsServiceInterface
     public function getAllDefaultDataPatterns(): array
     {
         $themesService = $this->getService(ThemesServiceInterface::class);
-        // コア
-        $patterns = $themesService->getDefaultDataPatterns();
-        // 外部テーマ
         $paths = [
             BASER_THEMES,
             ROOT . DS . 'vendor' . DS . 'baserproject' . DS
         ];
+        $patterns = [];
         foreacH($paths as $path) {
             $Folder = new Folder($path);
             $files = $Folder->read(true, true, true);

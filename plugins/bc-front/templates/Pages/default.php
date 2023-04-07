@@ -20,6 +20,6 @@ use BaserCore\Model\Entity\Page;
 ?>
 
 
-<?php echo $page['contents'] ?>
+<?php echo $page->contents ?>
 
 <?php $this->BcBaser->updateInfo() ?>

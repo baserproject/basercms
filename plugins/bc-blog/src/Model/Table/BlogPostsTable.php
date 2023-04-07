@@ -807,7 +807,8 @@ class BlogPostsTable extends BlogAppTable
                 'BlogContents' => ['Contents' => ['Sites']],
                 'BlogCategories',
                 'BlogTags',
-                'BlogComments'
+                'BlogComments',
+                'Users'
             ])
             ->first();
     }

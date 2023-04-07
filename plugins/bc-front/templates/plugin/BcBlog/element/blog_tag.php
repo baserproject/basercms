@@ -19,8 +19,8 @@
 ?>
 
 
-<?php if (!empty($this->Blog->blogContent['tag_use'])): ?>
-	<?php if (!empty($post['BlogTag'])) : ?>
+<?php if (!empty($blogContent->tag_use)): ?>
+	<?php if (!empty($post->blog_tags)) : ?>
 		<div class="bs-blog-tag"><?php echo __d('baser_core', 'タグ') ?>：<?php $this->Blog->tag($post) ?></div>
 	<?php endif ?>
 <?php endif ?>

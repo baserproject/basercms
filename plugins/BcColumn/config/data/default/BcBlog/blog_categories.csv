@@ -1,0 +1,4 @@
+id,blog_content_id,no,name,title,status,parent_id,lft,rght,created,modified
+1,1,1,release,プレスリリース,1,,1,2,,
+2,3,1,test,テスト,,,3,4,,
+3,2,1,design,デザイン,,,5,6,,
