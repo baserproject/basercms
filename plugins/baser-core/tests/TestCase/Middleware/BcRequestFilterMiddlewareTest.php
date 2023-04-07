@@ -15,7 +15,6 @@ use BaserCore\Middleware\BcRequestFilterMiddleware;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
-use Cake\Http\ServerRequest;
 use ReflectionClass;
 
 /**
