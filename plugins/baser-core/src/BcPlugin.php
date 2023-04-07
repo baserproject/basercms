@@ -406,6 +406,21 @@ class BcPlugin extends BasePlugin
         $plugin = $this->getName();
 
         /**
+         * コンテンツ管理ルーティング
+         * リバースルーティングのために必要
+         */
+        $routes->plugin(
+            $plugin,
+            ['path' => '/'],
+            function(RouteBuilder $routes) {
+                $routes->setRouteClass('BaserCore.BcContentsRoute');
+                $routes->connect('/', []);
+                $routes->connect('/{controller}/index', []);
+                $routes->connect('/:controller/:action/*', []);
+            }
+        );
+
+        /**
          * プラグインのフロントエンド用ルーティング（プラグイン名がダッシュ区切りの場合）
          *
          * BcPrefixAuthより先に定義が必要
@@ -465,21 +480,6 @@ class BcPlugin extends BasePlugin
             parent::routes($routes);
             return;
         }
-
-        /**
-         * コンテンツ管理ルーティング
-         * リバースルーティングのために必要
-         */
-        $routes->plugin(
-            $plugin,
-            ['path' => '/'],
-            function(RouteBuilder $routes) {
-                $routes->setRouteClass('BaserCore.BcContentsRoute');
-                $routes->connect('/', []);
-                $routes->connect('/{controller}/index', []);
-                $routes->connect('/:controller/:action/*', []);
-            }
-        );
 
         /**
          * サブサイトのプラグイン用ルーティング
