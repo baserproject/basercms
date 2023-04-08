@@ -14,7 +14,9 @@ class CreateDblog extends BcMigration
      */
     public function up()
     {
-        $this->table('dblogs')
+        $this->table('dblogs', [
+            'collation' => 'utf8mb4_general_ci'
+         ])
             ->addColumn('message', 'text', [
                 'default' => null,
                 'limit' => null,

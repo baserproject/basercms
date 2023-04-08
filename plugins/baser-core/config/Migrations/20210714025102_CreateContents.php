@@ -14,7 +14,9 @@ class CreateContents extends BcMigration
      */
     public function up()
     {
-        $this->table('contents')
+        $this->table('contents', [
+            'collation' => 'utf8mb4_general_ci'
+         ])
             ->addColumn('name', 'text', ['null' => true, 'default' => null, 'limit' => null])
             ->addColumn('plugin', 'string', ['null' => true, 'default' => null, 'limit' => null])
             ->addColumn('type', 'string', ['null' => true, 'default' => null, 'limit' => null])

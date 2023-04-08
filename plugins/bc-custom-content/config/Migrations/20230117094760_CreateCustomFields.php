@@ -14,7 +14,9 @@ class CreateCustomFields extends BcMigration
      */
     public function up(): void
     {
-        $this->table('custom_fields')
+        $this->table('custom_fields', [
+            'collation' => 'utf8mb4_general_ci'
+         ])
             ->addColumn('name', 'string', [
                 'default' => null,
                 'limit' => 255,

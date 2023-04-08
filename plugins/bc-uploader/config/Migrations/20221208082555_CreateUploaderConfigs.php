@@ -14,7 +14,9 @@ class CreateUploaderConfigs extends BcMigration
      */
     public function up()
     {
-        $this->table('uploader_configs')
+        $this->table('uploader_configs', [
+            'collation' => 'utf8mb4_general_ci'
+         ])
             ->addColumn('name', 'string', [
                 'default' => null,
                 'limit' => 255,

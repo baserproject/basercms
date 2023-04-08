@@ -14,7 +14,9 @@ class CreateWidgetAreas extends BcMigration
      */
     public function up()
     {
-        $this->table('widget_areas')
+        $this->table('widget_areas', [
+            'collation' => 'utf8mb4_general_ci'
+         ])
             ->addColumn('name', 'string', [
                 'default' => null,
                 'limit' => 255,

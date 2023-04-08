@@ -15,7 +15,9 @@ class CreateMailMessage1 extends BcMigration
     public function up()
     {
 
-        $this->table('mail_message_1')
+        $this->table('mail_message_1', [
+            'collation' => 'utf8mb4_general_ci'
+         ])
             ->addColumn('modified', 'datetime', [
                 'default' => null,
                 'limit' => null,

@@ -14,7 +14,9 @@ class CreatePlugins extends BcMigration
      */
     public function up()
     {
-        $this->table('plugins')
+        $this->table('plugins', [
+            'collation' => 'utf8mb4_general_ci'
+         ])
             ->addColumn('name', 'string', [
                 'default' => null,
                 'limit' => 50,

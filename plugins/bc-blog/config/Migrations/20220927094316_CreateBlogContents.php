@@ -14,7 +14,9 @@ class CreateBlogContents extends BcMigration
      */
     public function up()
     {
-        $this->table('blog_contents')
+        $this->table('blog_contents', [
+            'collation' => 'utf8mb4_general_ci'
+         ])
             ->addColumn('description', 'text', [
                 'default' => null,
                 'limit' => null,

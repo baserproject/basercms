@@ -14,7 +14,9 @@ class CreateFavorites extends BcMigration
      */
     public function change()
     {
-        $table = $this->table('favorites');
+        $table = $this->table('favorites', [
+            'collation' => 'utf8mb4_general_ci'
+         ]);
         $table
             ->addColumn('user_id', 'integer', ['null' => true, 'default' => null, 'limit' => 8])
             ->addColumn('name', 'string', ['null' => true, 'default' => null, 'limit' => null])

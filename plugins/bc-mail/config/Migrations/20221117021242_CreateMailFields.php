@@ -14,7 +14,9 @@ class CreateMailFields extends BcMigration
      */
     public function up()
     {
-        $this->table('mail_fields')
+        $this->table('mail_fields', [
+            'collation' => 'utf8mb4_general_ci'
+         ])
             ->addColumn('mail_content_id', 'integer', [
                 'default' => null,
                 'limit' => null,

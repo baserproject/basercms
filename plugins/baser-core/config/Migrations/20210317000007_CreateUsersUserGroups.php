@@ -14,7 +14,9 @@ class CreateUsersUserGroups extends BcMigration
      */
     public function up()
     {
-        $this->table('users_user_groups')
+        $this->table('users_user_groups', [
+            'collation' => 'utf8mb4_general_ci'
+         ])
             ->addColumn('user_id', 'integer', [
                 'comment' => 'ユーザーID',
                 'default' => null,

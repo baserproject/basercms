@@ -14,7 +14,9 @@ class CreateBlogComments extends BcMigration
      */
     public function up()
     {
-        $this->table('blog_comments')
+        $this->table('blog_comments', [
+            'collation' => 'utf8mb4_general_ci'
+         ])
             ->addColumn('blog_content_id', 'integer', [
                 'default' => null,
                 'limit' => null,

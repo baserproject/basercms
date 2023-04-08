@@ -14,7 +14,9 @@ class CreateContentLinks extends BcMigration
      */
     public function up()
     {
-        $this->table('content_links')
+        $this->table('content_links', [
+            'collation' => 'utf8mb4_general_ci'
+         ])
             ->addColumn('url', 'text', [
                 'default' => null,
                 'limit' => null,

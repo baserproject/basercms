@@ -14,7 +14,9 @@ class CreateBlogTags extends BcMigration
      */
     public function up()
     {
-        $this->table('blog_tags')
+        $this->table('blog_tags', [
+            'collation' => 'utf8mb4_general_ci'
+         ])
             ->addColumn('name', 'string', [
                 'default' => null,
                 'limit' => 100,

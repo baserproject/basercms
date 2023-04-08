@@ -15,7 +15,9 @@ class CreateSites extends BcMigration
     public function up()
     {
 
-        $this->table('sites')
+        $this->table('sites', [
+            'collation' => 'utf8mb4_general_ci'
+         ])
             ->addColumn('main_site_id', 'integer', [
                 'default' => null,
                 'limit' => null,

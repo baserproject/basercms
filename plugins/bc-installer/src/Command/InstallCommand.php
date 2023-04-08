@@ -203,7 +203,7 @@ class InstallCommand extends Command
             'port' => '',
             'persistent' => false,
             'schema' => '',
-            'encoding' => 'utf8'
+            'encoding' => 'utf8mb4'
         ], $args->getOptions());
 
         $drivers = ['mysql', 'postgres', 'sqlite'];

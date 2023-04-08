@@ -14,7 +14,9 @@ class CreateSearchIndexes extends BcMigration
      */
     public function up()
     {
-        $this->table('search_indexes')
+        $this->table('search_indexes', [
+            'collation' => 'utf8mb4_general_ci'
+         ])
             ->addColumn('type', 'string', ['null' => true, 'default' => null, 'limit' => 100])
             ->addColumn('model', 'string', ['null' => true, 'default' => null, 'limit' => 50])
             ->addColumn('model_id', 'integer', ['null' => true, 'default' => null, 'limit' => 8])

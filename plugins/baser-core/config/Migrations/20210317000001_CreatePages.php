@@ -14,7 +14,9 @@ class CreatePages extends BcMigration
      */
     public function up()
     {
-         $this->table('pages')
+         $this->table('pages', [
+            'collation' => 'utf8mb4_general_ci'
+         ])
             ->addColumn('contents', 'text', [
                 'default' => null,
                 'limit' => 4294967295,

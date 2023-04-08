@@ -14,7 +14,9 @@ class CreateBlogCategories extends BcMigration
      */
     public function up()
     {
-        $this->table('blog_categories')
+        $this->table('blog_categories', [
+            'collation' => 'utf8mb4_general_ci'
+         ])
             ->addColumn('blog_content_id', 'integer', ['null' => true, 'default' => null, 'limit' => 8])
             ->addColumn('no', 'integer', ['null' => true, 'default' => null, 'limit' => 8])
             ->addColumn('name', 'string', ['null' => true, 'default' => null, 'limit' => 50])

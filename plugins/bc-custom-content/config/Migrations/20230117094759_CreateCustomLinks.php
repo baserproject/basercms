@@ -14,7 +14,9 @@ class CreateCustomLinks extends BcMigration
      */
     public function up(): void
     {
-        $this->table('custom_links')
+        $this->table('custom_links', [
+            'collation' => 'utf8mb4_general_ci'
+         ])
             ->addColumn('custom_table_id', 'integer', [
                 'default' => null,
                 'limit' => null,

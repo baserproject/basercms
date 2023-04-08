@@ -14,7 +14,9 @@ class CreateSiteConfigs extends BcMigration
      */
     public function up()
     {
-        $table = $this->table('site_configs');
+        $table = $this->table('site_configs', [
+            'collation' => 'utf8mb4_general_ci'
+         ]);
         $table->addColumn('name', 'string', [
             'default' => null,
             'limit' => 255,

@@ -14,7 +14,9 @@ class CreatePermissionGroups extends BcMigration
      */
     public function up()
     {
-        $this->table('permission_groups')
+        $this->table('permission_groups', [
+            'collation' => 'utf8mb4_general_ci'
+         ])
             ->addColumn('name', 'string', [
                 'default' => null,
                 'limit' => 100,

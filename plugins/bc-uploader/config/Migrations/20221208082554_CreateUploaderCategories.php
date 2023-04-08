@@ -14,7 +14,9 @@ class CreateUploaderCategories extends BcMigration
      */
     public function up()
     {
-        $this->table('uploader_categories')
+        $this->table('uploader_categories', [
+            'collation' => 'utf8mb4_general_ci'
+         ])
             ->addColumn('name', 'string', [
                 'default' => null,
                 'limit' => 50,

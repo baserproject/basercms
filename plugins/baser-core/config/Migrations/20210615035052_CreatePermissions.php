@@ -14,7 +14,9 @@ class CreatePermissions extends BcMigration
      */
     public function up()
     {
-        $table = $this->table('permissions');
+        $table = $this->table('permissions', [
+            'collation' => 'utf8mb4_general_ci'
+         ]);
         $table->addColumn('no', 'integer', [
             'default' => null,
             'limit' => 11,

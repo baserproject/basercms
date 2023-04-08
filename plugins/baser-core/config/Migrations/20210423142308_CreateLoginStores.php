@@ -14,7 +14,9 @@ class CreateLoginStores extends BcMigration
      */
     public function up()
     {
-        $this->table('login_stores')
+        $this->table('login_stores', [
+            'collation' => 'utf8mb4_general_ci'
+         ])
             ->addColumn('user_id', 'integer', [
                 'default' => null,
                 'limit' => 11,

@@ -14,7 +14,9 @@ class CreateMailContents extends BcMigration
      */
     public function up()
     {
-        $this->table('mail_contents')
+        $this->table('mail_contents', [
+            'collation' => 'utf8mb4_general_ci'
+         ])
             ->addColumn('description', 'text', [
                 'default' => null,
                 'limit' => null,

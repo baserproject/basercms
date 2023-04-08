@@ -14,7 +14,9 @@ class CreateThemeConfigs extends BcMigration
      */
     public function up()
     {
-        $this->table('theme_configs')
+        $this->table('theme_configs', [
+            'collation' => 'utf8mb4_general_ci'
+         ])
             ->addColumn('name', 'string', [
                 'default' => null,
                 'limit' => 255,

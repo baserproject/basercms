@@ -14,7 +14,9 @@ class CreateContentFolders extends BcMigration
      */
     public function up()
     {
-        $this->table('content_folders')
+        $this->table('content_folders', [
+            'collation' => 'utf8mb4_general_ci'
+         ])
             ->addColumn('folder_template', 'string', [
                 'default' => null,
                 'limit' => 255,

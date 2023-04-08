@@ -14,7 +14,9 @@ class CreateUsers extends BcMigration
      */
     public function up()
     {
-        $this->table('users')
+        $this->table('users', [
+            'collation' => 'utf8mb4_general_ci'
+         ])
             ->addColumn('name', 'string', [
                 'default' => null,
                 'limit' => 255,

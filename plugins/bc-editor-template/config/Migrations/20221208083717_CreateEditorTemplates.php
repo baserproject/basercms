@@ -14,7 +14,9 @@ class CreateEditorTemplates extends BcMigration
      */
     public function up()
     {
-        $this->table('editor_templates')
+        $this->table('editor_templates', [
+            'collation' => 'utf8mb4_general_ci'
+         ])
             ->addColumn('name', 'string', [
                 'default' => null,
                 'limit' => 50,
