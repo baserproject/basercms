@@ -67,7 +67,7 @@ $type = (isset($permissionGroupTypes[$permission->permission_group->type]))? $pe
       ['action' => 'unpublish', $permission->id],
       ['block' => true,
         'title' => __d('baser_core', '無効'),
-        'class' => 'btn-unpublish bca-btn-icon',
+        'class' => 'btn-unpublish bca-btn-icon bca-loading',
         'data-bca-btn-type' => 'unpublish',
         'data-bca-btn-size' => 'lg']
     ) ?>
@@ -77,7 +77,7 @@ $type = (isset($permissionGroupTypes[$permission->permission_group->type]))? $pe
       ['action' => 'publish', $permission->id],
       ['block' => true,
         'title' => __d('baser_core', '有効'),
-        'class' => 'btn-publish bca-btn-icon',
+        'class' => 'btn-publish bca-btn-icon bca-loading',
         'data-bca-btn-type' => 'publish',
         'data-bca-btn-size' => 'lg']
     ) ?>
@@ -98,7 +98,7 @@ $type = (isset($permissionGroupTypes[$permission->permission_group->type]))? $pe
       ['block' => true,
         'confirm' => __d('baser_core', "{0} を複製してもいいですか？", $permission->name),
         'title' => __d('baser_core', '複製'),
-        'class' => 'btn-copy bca-btn-icon',
+        'class' => 'btn-copy bca-btn-icon bca-loading',
         'data-bca-btn-type' => 'copy',
         'data-bca-btn-size' => 'lg']
     ) ?>
@@ -108,7 +108,7 @@ $type = (isset($permissionGroupTypes[$permission->permission_group->type]))? $pe
       [
         'confirm' => __d('baser_core', "{0} を本当に削除してもいいですか？", $permission->name),
         'title' => __d('baser_core', '削除'),
-        'class' => 'btn-delete bca-btn-icon',
+        'class' => 'btn-delete bca-btn-icon bca-loading',
         'data-bca-btn-type' => 'delete',
         'data-bca-btn-size' => 'lg']
     ) ?>

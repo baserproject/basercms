@@ -172,7 +172,7 @@ class UserGroupsTable extends AppTable
             if ($permissions) {
                 foreach($permissions as $permission) {
                     $permission->user_group_id = $result->id;
-                    $this->Permissions->copy(null, $permission->toArray());
+                    $this->Permissions->copy(null, $permission->toArray(), ['addSuffix' => false]);
                 }
             }
             return $result;

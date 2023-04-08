@@ -169,21 +169,22 @@ class PermissionsTable extends AppTable
      * @noTodo
      * @unitTest
      */
-    public function copy($id, $data = [])
+    public function copy(?int $id, $data = [], $options = [])
     {
-        if ($id) {
-            $data = $this->get($id)->toArray();
-        }
+        $options = array_merge([
+            'addSuffix' => true
+        ], $options);
+        if ($id) $data = $this->get($id)->toArray();
         if (empty($data['user_group_id']) || empty($data['name'])) {
             return false;
         }
         // $idが存在する場合アクセスルールをコピー
         $idExists = $this->find()->where([
             'Permissions.user_group_id' => $data['user_group_id'],
-            'Permissions.name' => $data['name'],
+            'Permissions.url' => $data['name'],
         ])->count();
         if ($idExists) {
-            $data['name'] .= '_copy';
+            if($options['addSuffix']) $data['name'] .= '_copy';
             return $this->copy(null, $data);
         }
         // $idがない場合新規でアクセスルールを作成

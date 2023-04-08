@@ -241,6 +241,7 @@ class PermissionsService implements PermissionsServiceInterface
         $permission->id = null;
         $permission->no = null;
         $permission->sort = null;
+        $permission->name .= '_copy';
         $data = $permission->toArray();
         $data = $this->autoFillRecord($data);
         try {

@@ -19,8 +19,7 @@ $(function () {
     /**
      * 一覧を初期化
      */
-    function initList()
-    {
+    function initList() {
         $('.btn-copy, .btn-delete, .btn-publish, .btn-unpublish').click(actionClickHandler);
         // 公開・非公開ボタンの表示設定
         $("#ListTable tbody tr .btn-publish").hide();
@@ -33,28 +32,29 @@ $(function () {
      * アクションボタンクリック時イベント
      * @returns {boolean}
      */
-    function actionClickHandler()
-    {
-        if($(this).attr('data-confirm-message') && !confirm($(this).attr('data-confirm-message'))) {
+    function actionClickHandler() {
+        if ($(this).attr('data-confirm-message') && !confirm($(this).attr('data-confirm-message'))) {
             return false;
         }
-        $.ajax({
-            url: $(this).attr('href'),
-            type: 'POST',
-            headers: {
-                'Authorization': $.bcJwt.accessToken
-            },
-            dataType: 'json',
-            data: $(this).parent().find('form').serialize(),
-            beforeSend: function () {
-                $.bcUtil.showLoader();
-            }
-        }).done(function () {
-            location.reload();
-        }).fail(function(XMLHttpRequest, textStatus, errorThrown){
-            $.bcUtil.showAjaxError(bcI18n.commonExecFailedMessage, XMLHttpRequest, errorThrown);
-            $.bcUtil.hideLoader();
-            location.href = '#Header';
+        $.bcToken.check(function () {
+            $.ajax({
+                url: $(this).attr('href'),
+                type: 'POST',
+                headers: {
+                    'X-CSRF-Token': $.bcToken.key
+                },
+                dataType: 'json',
+                // data: $(this).parent().find('form').serialize(),
+                beforeSend: function () {
+                    $.bcUtil.showLoader();
+                }
+            }).done(function () {
+                location.reload();
+            }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                $.bcUtil.showAjaxError(bcI18n.commonExecFailedMessage, XMLHttpRequest, errorThrown);
+                $.bcUtil.hideLoader();
+                location.href = '#Header';
+            });
         });
         return false;
     }
