@@ -19,6 +19,7 @@ use BaserCore\Utility\BcSiteConfig;
 use BaserCore\Utility\BcUpdateLog;
 use BaserCore\Utility\BcZip;
 use Cake\Cache\Cache;
+use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\Http\Client;
 use Cake\Http\Client\Exception\NetworkException;
 use Cake\ORM\TableRegistry;
@@ -555,7 +556,11 @@ class PluginsService implements PluginsServiceInterface
         $db = $this->Plugins->getConnection();
         $db->begin();
         foreach($ids as $id) {
-            $plugin = $this->Plugins->get($id);
+            try {
+                $plugin = $this->Plugins->get($id);
+            } catch (RecordNotFoundException $e) {
+                continue;
+            }
             if (!$this->$method($plugin->name)) {
                 $db->rollback();
                 throw new BcException(__d('baser_core', 'データベース処理中にエラーが発生しました。'));

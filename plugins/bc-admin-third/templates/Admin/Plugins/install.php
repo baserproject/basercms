@@ -74,6 +74,7 @@ $this->BcAdmin->setHelp('plugins_install');
           'data-bca-btn-width' => 'lg',
           'id' => 'BtnSave'
         ]) ?>
+      </div>
       <div class="bca-actions__sub">
         <?php echo $this->BcAdminForm->submit(__d('baser_core', 'プラグインのデータを初期化する'), [
           'div' => false,
