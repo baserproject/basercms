@@ -11,10 +11,6 @@
 
 namespace BaserCore\Test\TestCase\Model\Table;
 
-use BaserCore\Model\Entity\Permission;
-use Cake\ORM\Query;
-use Cake\Validation\Validator;
-use Cake\Core\Configure;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Model\Table\PermissionsTable;
 
@@ -245,7 +241,7 @@ class PermissionsTableTest extends BcTestCase
     {
         return [
             // id指定の場合
-            [1, [], 'システム管理_copy', 'id指定でデータをコピーできません'],
+            [1, [], 'システム管理', 'id指定でデータをコピーできません'],
             // フィールド指定の場合
             [
                 null,

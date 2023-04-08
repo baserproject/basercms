@@ -168,7 +168,7 @@ class PermissionsServiceTest extends BcTestCase
 
         $this->assertGreaterThan($permission->no, $copyPermission->no);
         $this->assertGreaterThan($permission->sort, $copyPermission->sort);
-        $this->assertEquals($permission->name, $copyPermission->name);
+        $this->assertEquals($permission->name . '_copy', $copyPermission->name);
         $this->assertEquals($permission->url, $copyPermission->url);
         $this->assertEquals($permission->auth, $copyPermission->auth);
         $this->assertEquals($permission->method, $copyPermission->method);
