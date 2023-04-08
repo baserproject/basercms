@@ -629,13 +629,11 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      */
     public function updateSequence()
     {
-        // TODO ucmitz 未実装
-        return;
-
         $db = ConnectionManager::get('default');
         $tables = $db->getSchemaCollection()->listTables();
         $result = true;
         foreach($tables as $table) {
+            if (preg_match('/_phinxlog$/', $table)) continue;
             $sql = 'select setval(\'' . $this->getSequence($table) . '\', (select max(id) from ' . $table . '));';
             if (!$db->execute($sql)) $result = false;
         }
@@ -647,17 +645,6 @@ class BcDatabaseService implements BcDatabaseServiceInterface
      */
     public function getSequence($table, $field = 'id')
     {
-        // TODO ucmitz 未実装
-        // CakePHP4系で存在しないので、CakePHP2系のPostgresクラスより持ってきた
-        if (is_object($table)) {
-            $table = $this->fullTableName($table, false, false);
-        }
-        if (!isset($this->_sequenceMap[$table])) {
-            $this->describe($table);
-        }
-        if (isset($this->_sequenceMap[$table][$field])) {
-            return $this->_sequenceMap[$table][$field];
-        }
         return "{$table}_{$field}_seq";
     }
 
