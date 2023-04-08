@@ -50,10 +50,10 @@ $(function () {
             $("#UploaderFileAlt" + listId).val($("#FileList" + listId + " .selected .alt").html());
 
             /* ダイアログ初期化時、hidden値が空になるため公開期間開始日時を取得して hidden値に入れ込む */
-            var publishBeginDate = $("#FileList" + listId + " .selected .publish-begin").html();
-            var publishBeginTime = $("#FileList" + listId + " .selected .publish-begin-time").html();
-            $("#UploaderFilePublishBeginDate").val(publishBeginDate);
-            $("#UploaderFilePublishBeginTime").val(publishBeginTime);
+            var publishBeginDate = $("#FileList" + listId + " .selected .publish-begin").html().trim();
+            var publishBeginTime = $("#FileList" + listId + " .selected .publish-begin-time").html().trim();
+            $("#UploaderFilePublishBegin-date").val(publishBeginDate);
+            $("#UploaderFilePublishBegin-time").val(publishBeginTime);
             var publishBeginDateTime = publishBeginDate;
             if (publishBeginTime) {
                 publishBeginDateTime += ' ' + publishBeginTime;
@@ -61,10 +61,10 @@ $(function () {
             $("#UploaderFilePublishBegin").val(publishBeginDateTime);
 
             /* ダイアログ初期化時、hidden値が空になるため公開期間終了日時を取得して hidden値に入れ込む */
-            var publishEndDate = $("#FileList" + listId + " .selected .publish-end").html();
-            var publishEndTime = $("#FileList" + listId + " .selected .publish-end-time").html();
-            $("#UploaderFilePublishEndDate").val(publishEndDate);
-            $("#UploaderFilePublishEndTime").val(publishEndTime);
+            var publishEndDate = $("#FileList" + listId + " .selected .publish-end").html().trim();
+            var publishEndTime = $("#FileList" + listId + " .selected .publish-end-time").html().trim();
+            $("#UploaderFilePublishEnd-date").val(publishEndDate);
+            $("#UploaderFilePublishEnd-time").val(publishEndTime);
             var publishEndDateTime = publishEndDate;
             if (publishEndTime) {
                 publishEndDateTime += ' ' + publishEndTime;

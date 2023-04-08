@@ -153,17 +153,14 @@ class UploaderFilesTable extends AppTable
      */
     public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
-        // TODO ucmitz 未実装
-        return true;
-        if (!empty($this->data['UploaderFile']['id'])) {
-
-            $savePath = WWW_ROOT . 'files' . DS . $this->actsAs['BcUpload']['saveDir'] . DS;
+        if ($entity->id) {
+            $savePath = $this->getBehavior('BcUpload')->getFileUploader()->getSaveDir();
             $sizes = ['large', 'midium', 'small', 'mobile_large', 'mobile_small'];
-            $pathinfo = pathinfo($this->data['UploaderFile']['name']);
+            $pathinfo = pathinfo($entity->name);
 
-            if (!empty($this->data['UploaderFile']['publish_begin']) || !empty($this->data['UploaderFile']['publish_end'])) {
-                if (file_exists($savePath . $this->data['UploaderFile']['name'])) {
-                    rename($savePath . $this->data['UploaderFile']['name'], $savePath . 'limited' . DS . $this->data['UploaderFile']['name']);
+            if (!empty($entity->publish_begin) || !empty($entity->publish_end)) {
+                if (file_exists($savePath . $entity->name)) {
+                    rename($savePath . $entity->name, $savePath . 'limited' . DS . $entity->name);
                 }
                 foreach ($sizes as $size) {
                     $file = $pathinfo['filename'] . '__' . $size . '.' . $pathinfo['extension'];
@@ -172,8 +169,8 @@ class UploaderFilesTable extends AppTable
                     }
                 }
             } else {
-                if (file_exists($savePath . 'limited' . DS . $this->data['UploaderFile']['name'])) {
-                    rename($savePath . 'limited' . DS . $this->data['UploaderFile']['name'], $savePath . $this->data['UploaderFile']['name']);
+                if (file_exists($savePath . 'limited' . DS . $entity->name)) {
+                    rename($savePath . 'limited' . DS . $entity->name, $savePath . $entity->name);
                 }
                 foreach ($sizes as $size) {
                     $file = $pathinfo['filename'] . '__' . $size . '.' . $pathinfo['extension'];

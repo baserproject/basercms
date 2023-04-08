@@ -1355,7 +1355,9 @@ class BcBaserHelper extends Helper
             $this->css('/files/theme_configs/config');
         }
 
-        $scripts = $this->_View->fetch('meta') . $this->_View->fetch('css') . $this->_View->fetch('script');
+        $scripts = $this->_View->fetch('meta') . "\n" .
+            $this->_View->fetch('css') . "\n" .
+            $this->_View->fetch('script');
 
         if (Configure::read('BcApp.outputMetaGenerator')) {
             $scripts = "\n<meta name=\"generator\" content=\"basercms\"/>" . $scripts;

@@ -61,16 +61,16 @@ $class = ' class="' . implode(' ', $classies) . ' bca-file-list__item"';
     </span>
 		<span class="user-id"><?php echo $uploaderFile->user_id ?></span>
 		<span class="publish-begin">
-		  <?php echo $this->BcTime->format($uploaderFile->publish_begin, 'yyyy-MM-dd') ?>
+		  <?php echo $this->BcTime->format($uploaderFile->publish_begin, 'yyyy/MM/dd') ?>
     </span>
 		<span class="publish-begin-time">
-		  <?php echo $this->BcTime->format($uploaderFile->publish_begin, 'H:i:s') ?>
+		  <?php echo $this->BcTime->format($uploaderFile->publish_begin, 'HH:mm:ss') ?>
     </span>
 		<span class="publish-end">
-		  <?php echo $this->BcTime->format($uploaderFile->publish_end, 'yyyy-MM-dd') ?>
+		  <?php echo $this->BcTime->format($uploaderFile->publish_end, 'yyyy/MM/dd') ?>
     </span>
 		<span class="publish-end-time">
-		  <?php echo $this->BcTime->format($uploaderFile->publish_end, 'H:i:s') ?>
+		  <?php echo $this->BcTime->format($uploaderFile->publish_end, 'HH:mm:ss') ?>
     </span>
 		<span class="uploader-category-id"><?php echo $uploaderFile->uploader_category_id ?></span>
 		<span class="alt"><?php echo h($uploaderFile->alt) ?></span>

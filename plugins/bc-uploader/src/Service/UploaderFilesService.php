@@ -79,6 +79,11 @@ class UploaderFilesService implements UploaderFilesServiceInterface
      */
     protected function createAdminIndexConditions(array $params)
     {
+        $conditionsTmp = [];
+        if(!empty($params['conditions'])) {
+            $conditionsTmp = $params['conditions'];
+            unset($params['conditions']);
+        }
         $conditions = [];
         if (!empty($params['uploader_category_id'])) {
             $conditions = ['UploaderFiles.uploader_category_id' => $params['uploader_category_id']];
@@ -109,7 +114,7 @@ class UploaderFilesService implements UploaderFilesServiceInterface
             $user = BcUtil::loginUser();
             if ($user) $conditions['UploaderFiles.user_id'] = $user->id;
         }
-        return $conditions;
+        return array_merge_recursive($conditionsTmp, $conditions);
     }
 
     /**
@@ -202,6 +207,12 @@ class UploaderFilesService implements UploaderFilesServiceInterface
     {
         if(!$this->isEditable($postData)) {
             throw new BcException(__d('baser_core', 'ファイルの変更権限がありません。' ));
+        }
+        if (!empty($postData['publish_begin'])) {
+            $postData['publish_begin'] = new FrozenTime($postData['publish_begin']);
+        }
+        if (!empty($postData['publish_end'])) {
+            $postData['publish_end'] = new FrozenTime($postData['publish_end']);
         }
         $entity = $this->UploaderFiles->patchEntity($entity, $postData);
         return $this->UploaderFiles->saveOrFail($entity);

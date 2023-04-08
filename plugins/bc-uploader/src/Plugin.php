@@ -18,6 +18,7 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BcUploader\ServiceProvider\BcUploaderServiceProvider;
 use Cake\Core\ContainerInterface;
+use Cake\Routing\Route\InflectedRoute;
 
 /**
  * plugin for BcUploader
@@ -55,6 +56,19 @@ class Plugin extends BcPlugin
     public function services(ContainerInterface $container): void
     {
         $container->addServiceProvider(new BcUploaderServiceProvider());
+    }
+
+    /**
+     * Routes
+     */
+    public function routes($routes): void
+    {
+        $routes->connect('/files/uploads/*', [
+            'plugin' => 'BcUploader',
+            'controller' => 'UploaderFiles',
+            'action' => 'view_limited_file'
+        ], ['routeClass' => InflectedRoute::class]);
+        parent::routes($routes);
     }
 
 }

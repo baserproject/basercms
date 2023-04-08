@@ -55,7 +55,8 @@ class BcUploaderViewEventListener extends BcViewEventListener
 
         if (isset($View->BcCkeditor)) {
             $output = $View->fetch('content');
-            if (preg_match_all("/\\\$\('#CkeditorSetting(.+?)'\)\.val\(\)/s", $output, $matches)) {
+//            if (preg_match_all("/\\\$\('#CkeditorSetting(.+?)'\)\.val\(\)/s", $output, $matches)) {
+            if(preg_match_all('/"ckeditorField":"editor_(.+?)"/', $output, $matches)) {
 
                 /* ckeditor_uploader.js を読み込む */
 
@@ -103,11 +104,11 @@ class BcUploaderViewEventListener extends BcViewEventListener
                 /* VIEWのCKEDITOR読込部分のコードを書き換える */
                 foreach($matches[1] as $match) {
                     $jscode = $this->__getCkeditorUploaderScript($match);
-                    $pattern = "/<script>(.*?let config.+?CkeditorSetting" . $match . "'\).+?)<\/script>/ms";
+                    $pattern = "/<script>(.*?let config.+?\"ckeditorField\":\"editor_" . $match . "\".+?)<\/script>/ms";
                     $matchOutput = preg_replace($pattern, $this->BcHtml->scriptBlock("$1\n" . $jscode . "\n"), $output);
                     if (!is_null($matchOutput)) $output = $matchOutput;
                     /* 通常の画像貼り付けダイアログを画像アップローダーダイアログに変換する */
-                    $pattern = '/(id="CkeditorSetting' . $match . '".+?value=".+?)Image(.+?")/';
+                    $pattern = '/("ckeditorField":"editor_' . $match . '".+?)Image(.+?")/';
                     preg_match($pattern, $output, $a);
                     $matchOutput = preg_replace($pattern, "$1BaserUploader$2", $output);
                     if (!is_null($matchOutput)) $output = $matchOutput;
