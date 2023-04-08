@@ -21,6 +21,7 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use Cake\Http\Exception\NotFoundException;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * Class SitesController
@@ -161,7 +162,7 @@ class SitesController extends BcAdminAppController
      *
      * @param SitesAdminServiceInterface $service
      * @param int $siteId
-     * @return void
+     * @return ResponseInterface
      * @checked
      * @noTodo
      * @unitTest
@@ -172,8 +173,7 @@ class SitesController extends BcAdminAppController
 
         if ($this->request->is(['patch', 'post', 'put'])) {
             if ($service->publish($siteId)) {
-                $this->BcMessage->setSuccess(sprintf(__d('baser_core', 'サイト「%s」を公開しました。'),
-                    $site->name));
+                $this->BcMessage->setSuccess(__d('baser_core', 'サイト「{0}」を公開しました。', $site->title));
             }
         }
         return $this->redirect(['action' => 'index']);
@@ -184,7 +184,7 @@ class SitesController extends BcAdminAppController
      *
      * @param SitesAdminServiceInterface $service
      * @param int $siteId
-     * @return void
+     * @return ResponseInterface
      * @checked
      * @noTodo
      * @unitTest
@@ -195,8 +195,7 @@ class SitesController extends BcAdminAppController
 
         if ($this->request->is(['patch', 'post', 'put'])) {
             if ($service->unpublish($siteId)) {
-                $this->BcMessage->setSuccess(sprintf(__d('baser_core', 'サイト「%s」を非公開にしました。'),
-                    $site->name));
+                $this->BcMessage->setSuccess(__d('baser_core', 'サイト「{0}」を非公開にしました。', $site->title));
             }
         }
         return $this->redirect(['action' => 'index']);
