@@ -17,7 +17,6 @@ use BaserCore\Utility\BcContainerTrait;
 use Cake\Datasource\EntityInterface;
 use Cake\Datasource\ResultSetInterface;
 use Cake\Event\EventInterface;
-use Cake\ORM\ResultSet;
 use Cake\Routing\Router;
 use Cake\Validation\Validator;
 use BaserCore\Annotation\NoTodo;
@@ -259,9 +258,9 @@ class BlogCategoriesTable extends BlogAppTable
         } else {
             if ($fields) {
                 if (is_array($fields)) {
-                    $distinct = $fields[0];
+                    $distinct = [$fields[0], 'BlogCategories.lft'];
                 } else {
-                    $distinct = $fields;
+                    $distinct = [$fields, 'BlogCategories.lft'];
                 }
             }
         }

@@ -453,14 +453,14 @@ class BlogPostsTable extends BlogAppTable
                 break;
             case Postgres::class:
                 if (!empty($year)) {
-                    $conditions["date_part('year', \"BlogPosts\".\"posted\") ="] = $year;
+                    $conditions["date_part('year', BlogPosts.posted) ="] = $year;
                 } else {
-                    $conditions["date_part('year', \"BlogPosts\".\"posted\") ="] = date('Y');
+                    $conditions["date_part('year', BlogPosts.posted) ="] = date('Y');
                 }
                 if (!empty($month)) {
-                    $conditions["date_part('month', \"BlogPosts\".\"posted\") ="] = $month;
+                    $conditions["date_part('month', BlogPosts.posted) ="] = $month;
                 } else {
-                    $conditions["date_part('month', \"BlogPosts\".\"posted\") ="] = date('m');
+                    $conditions["date_part('month', BlogPosts.posted) ="] = date('m');
                 }
                 break;
             case Sqlite::class:
