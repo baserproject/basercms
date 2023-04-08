@@ -17,6 +17,8 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\Note;
+use Cake\Routing\Route\Route;
+use Cake\Routing\Router;
 
 /**
  * BcFavoriteViewEventListener
@@ -72,9 +74,9 @@ class BcFavoriteViewEventListener extends \BaserCore\Event\BcViewEventListener
      */
     public function afterRender(EventInterface $event)
     {
-        if(!BcUtil::isAdminSystem()) {
-            return;
-        }
+        if(!BcUtil::isAdminSystem()) return;
+        $request = Router::getRequest();
+        if($request->getParam('controller') === 'PasswordRequests') return;
         $view = $event->getSubject();
         $view->set('currentPageName', h($view->BcAdmin->getTitle()));
         $view->set('currentPageUrl', h($view->getRequest()->getRequestTarget()));

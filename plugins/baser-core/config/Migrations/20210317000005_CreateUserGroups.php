@@ -29,7 +29,7 @@ class CreateUserGroups extends BcMigration
             ])
             ->addColumn('auth_prefix', 'string', [
                 'default' => null,
-                'limit' => 20,
+                'limit' => 255,
                 'null' => true,
             ])
            ->addColumn('use_move_contents', 'boolean', [
