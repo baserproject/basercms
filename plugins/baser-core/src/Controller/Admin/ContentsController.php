@@ -47,7 +47,10 @@ class ContentsController extends BcAdminAppController
     public function initialize(): void
     {
         parent::initialize();
-        $this->loadComponent('BaserCore.BcAdminContents', ['entityVarName' => 'content']);
+        $this->loadComponent('BaserCore.BcAdminContents', [
+            'entityVarName' => 'content',
+            'useForm' => true
+        ]);
     }
 
     /**
