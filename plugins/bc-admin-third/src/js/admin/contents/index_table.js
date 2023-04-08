@@ -33,18 +33,20 @@ $(function () {
      * @returns {boolean}
      */
     function actionClickHandler() {
-        if ($(this).attr('data-confirm-message') && !confirm($(this).attr('data-confirm-message'))) {
+        const $target = $(this);
+        if ($target.attr('data-confirm-message') && !confirm($target.attr('data-confirm-message'))) {
             return false;
         }
+        let targetUrl = $target.attr('href');
         $.bcToken.check(function () {
             $.ajax({
-                url: $(this).attr('href'),
+                url: targetUrl,
                 type: 'POST',
                 headers: {
                     'X-CSRF-Token': $.bcToken.key
                 },
                 dataType: 'json',
-                // data: $(this).parent().find('form').serialize(),
+                data: $target.parent().find('form').serialize(),
                 beforeSend: function () {
                     $.bcUtil.showLoader();
                 }
