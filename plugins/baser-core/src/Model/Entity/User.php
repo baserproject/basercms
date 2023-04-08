@@ -117,6 +117,7 @@ class User extends EntityAlias
      * 対象ユーザーに対して代理ログイン可能かどうか判定する
      *
      * 利用可能条件
+     * - 対象ユーザーのステータスが有効であること
      * - 自身がスーパーユーザーで対象がスーパーユーザーでない場合
      * - 自身がシステム管理ユーザーで対象がシステム管理ユーザーでない場合
      * @param EntityInterface|User $targetUser
@@ -124,6 +125,7 @@ class User extends EntityAlias
      */
     public function isEnableLoginAgent(EntityInterface $targetUser): bool
     {
+        if(!$targetUser->status) return false;
         return (($this->isSuper() && !$targetUser->isSuper()) ||
             ($this->isAdmin() && !$targetUser->isAdmin()));
     }
