@@ -33,8 +33,7 @@
     <?php echo $this->BcAdminForm->control('permission_group_type', [
       'type' => 'radio',
       'hiddenField' => false,
-      'options' => $this->BcAdminForm->getControlSource('Permissions.permission_group_type'),
-      'empty' => __d('baser_core', '指定なし')
+      'options' => $this->BcAdminForm->getControlSource('Permissions.permission_group_type')
     ]) ?>
   </span>
   <span class="bca-search__input-item">
