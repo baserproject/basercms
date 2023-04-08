@@ -15,6 +15,7 @@ use BaserCore\Model\Table\AppTable;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use Cake\Validation\Validator;
 
 /**
  * Class WidgetArea
@@ -26,27 +27,43 @@ class WidgetAreasTable extends AppTable
 {
 
     /**
-     * ビヘイビア
+     * Initialize
      *
-     * @var array
+     * @param array $config テーブル設定
+     * @return void
+     * @checked
+     * @noTodo
      */
-    public $actsAs = ['BcCache'];
+    public function initialize(array $config): void
+    {
+        parent::initialize($config);
+        $this->setTable('widget_areas');
+        $this->setDisplayField('name');
+        $this->setPrimaryKey('id');
+        $this->addBehavior('Timestamp');
+    }
 
     /**
-     * WidgetArea constructor.
+     * Validation Default
      *
-     * @param bool $id
-     * @param null $table
-     * @param null $ds
+     * @param Validator $validator
+     * @return Validator
+     * @checked
+     * @noTodo
      */
-    public function __construct($id = false, $table = null, $ds = null)
+    public function validationDefault(Validator $validator): Validator
     {
-        parent::__construct($id, $table, $ds);
-        $this->validate = [
-            'name' => [
-                'notBlank' => ['rule' => ['notBlank'], 'message' => __d('baser_core', 'ウィジェットエリア名を入力してください。')],
-                'maxLength' => ['rule' => ['maxLength', 255], 'message' => __d('baser_core', 'ウィジェットエリア名は255文字以内で入力してください。')]]
-        ];
+        $validator->setProvider('user', 'BaserCore\Model\Validation\UserValidation');
+
+        $validator
+            ->integer('id')
+            ->allowEmptyString('id', null, 'create');
+        $validator
+            ->scalar('name')
+            ->notEmptyString('name', __d('baser_core', 'ウィジェットエリア名を入力してください。'))
+            ->maxLength('name', 255, __d('baser_core', 'ウィジェットエリア名は255文字以内で入力してください。'));
+
+        return $validator;
     }
 
 }
