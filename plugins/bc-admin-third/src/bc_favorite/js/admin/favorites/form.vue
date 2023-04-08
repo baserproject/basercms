@@ -126,11 +126,11 @@ export default {
             let url = this.url;
             let favoriteForm = this
             $.bcToken.check(function () {
-                $('#FavoriteAjaxForm input[name="_csrfToken"]').val($.bcToken.key);
                 axios.post(apiUrl, {
                         user_id: userId,
                         name: name,
-                        url: url
+                        url: url,
+                        _csrfToken: $.bcToken.key
                     }, {
                         headers: {
                             "Authorization": $.bcJwt.accessToken,
