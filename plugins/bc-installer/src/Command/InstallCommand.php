@@ -203,11 +203,23 @@ class InstallCommand extends Command
             'port' => '',
             'persistent' => false,
             'schema' => '',
-            'encoding' => 'utf8mb4'
+            'encoding' => ''
         ], $args->getOptions());
 
         $drivers = ['mysql', 'postgres', 'sqlite'];
         if (!in_array($dbConfig['datasource'], $drivers)) return false;
+
+        switch ($dbConfig['datasource']) {
+            case 'mysql':
+                $dbConfig['encoding'] = 'utf8mb4';
+                break;
+            case 'postgres':
+            case 'sqlite':
+            default:
+                $dbConfig['encoding'] = 'utf8';
+                break;
+        }
+
         if ((!$dbConfig['username'] || !$dbConfig['password'] || !$dbConfig['host']) &&
             ($dbConfig['datasource'] == 'mysql' || $dbConfig['datasource'] == 'postgres')) {
             throw new BcException(__d('baser_core', '{0} の場合は、host / username / password をオプションで指定する必要があります。', $dbConfig['datasource']));
