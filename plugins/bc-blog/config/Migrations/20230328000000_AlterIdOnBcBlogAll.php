@@ -8,9 +8,6 @@ class AlterIdOnBcBlogAll extends BcMigration
 {
     /**
      * Up Method.
-     *
-     * More information on this method is available here:
-     * https://book.cakephp.org/phinx/0/en/migrations.html#the-up-method
      * @return void
      */
     public function up()

@@ -6,13 +6,10 @@ use BaserCore\Database\Migration\BcMigration;
 class AddStatusToUsers extends BcMigration
 {
     /**
-     * Change Method.
-     *
-     * More information on this method is available here:
-     * https://book.cakephp.org/phinx/0/en/migrations.html#the-change-method
+     * up
      * @return void
      */
-    public function change()
+    public function up()
     {
         $table = $this->table('users');
         $table->addColumn('status', 'boolean', [
@@ -20,5 +17,14 @@ class AddStatusToUsers extends BcMigration
             'null' => true,
         ]);
         $table->update();
+    }
+
+    /**
+     * down
+     * @return void
+     */
+    public function down()
+    {
+        // 何もしない
     }
 }

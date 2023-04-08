@@ -6,16 +6,22 @@ use BaserCore\Database\Migration\BcMigration;
 class RemoveCodeFromPages extends BcMigration
 {
     /**
-     * Change Method.
-     *
-     * More information on this method is available here:
-     * https://book.cakephp.org/phinx/0/en/migrations.html#the-change-method
+     * up
      * @return void
      */
-    public function change()
+    public function up()
     {
         $table = $this->table('pages');
         $table->removeColumn('code')
             ->save();
+    }
+
+    /**
+     * down
+     * @return void
+     */
+    public function down()
+    {
+        // 何もしない
     }
 }

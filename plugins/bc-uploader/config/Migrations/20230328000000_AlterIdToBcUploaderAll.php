@@ -7,13 +7,10 @@ use Phinx\Db\Adapter\PostgresAdapter;
 class AlterIdToBcUploaderAll extends BcMigration
 {
     /**
-     * Change Method.
-     *
-     * More information on this method is available here:
-     * https://book.cakephp.org/phinx/0/en/migrations.html#the-change-method
+     * up
      * @return void
      */
-    public function change()
+    public function up()
     {
         $this->table('uploader_files')
             ->changeColumn('id', 'integer', [
@@ -33,6 +30,15 @@ class AlterIdToBcUploaderAll extends BcMigration
                 'generated' => PostgresAdapter::GENERATED_BY_DEFAULT
             ])
             ->update();
+    }
+
+    /**
+     * down
+     * @return void
+     */
+    public function down()
+    {
+        // 何もしない
     }
 
 }

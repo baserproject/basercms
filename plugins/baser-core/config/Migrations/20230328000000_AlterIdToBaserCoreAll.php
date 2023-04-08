@@ -7,13 +7,10 @@ use Phinx\Db\Adapter\PostgresAdapter;
 class AlterIdToBaserCoreAll extends BcMigration
 {
     /**
-     * Change Method.
-     *
-     * More information on this method is available here:
-     * https://book.cakephp.org/phinx/0/en/migrations.html#the-change-method
+     * up
      * @return void
      */
-    public function change()
+    public function up()
     {
         $this->table('pages')
             ->changeColumn('id', 'integer', [
@@ -101,4 +98,12 @@ class AlterIdToBaserCoreAll extends BcMigration
             ->update();
     }
 
+    /**
+     * down
+     * @return void
+     */
+    public function down()
+    {
+        // 何もしない
+    }
 }
