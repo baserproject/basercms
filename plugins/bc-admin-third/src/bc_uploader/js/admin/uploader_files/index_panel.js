@@ -407,7 +407,8 @@ $(function () {
      * コンテキストメニューハンドラ
      */
     function contextMenuHander(action, el) {
-        let delUrl = $.bcUtil.apiAdminBaseUrl + 'bc-uploader/uploader_files/delete/' + $("#FileList" + listId + " .selected .id").html() + '.json';
+        let id = $("#FileList" + listId + " .selected .id").html().trim();
+        let delUrl = $.bcUtil.apiAdminBaseUrl + 'bc-uploader/uploader_files/delete/' + id + '.json';
 
         // IEの場合、action値が正常に取得できないので整形する
         let pos = action.indexOf("#");
@@ -421,20 +422,27 @@ $(function () {
             case 'delete':
                 if (confirm(bcI18n.uploaderConfirmMessage1)) {
                     $.bcToken.check(function () {
-                        $("#Waiting").show();
-                        return $.bcUtil.ajax(delUrl, function (res) {
-                            if (!res) {
-                                $("#Waiting").hide();
-                                alert(bcI18n.uploaderAlertMessage4);
-                            } else {
+                        $.ajax({
+                            url: delUrl,
+                            headers: {
+                                "X-CSRF-Token": $.bcToken.key,
+                            },
+                            type: 'post',
+                            dataType: 'json',
+                            beforeSend: function() {
+                                $("#Waiting").show();
+                            },
+                            success: function () {
                                 $("#FileList" + listId).trigger("deletecomplete");
                                 updateFileList();
+                            },
+                            error: function () {
+                                alert(bcI18n.uploaderAlertMessage4);
+                            },
+                            complete: function(){
+                                $("#Waiting").hide();
+                                $.bcToken.key = null;
                             }
-                            $.bcToken.key = null;
-                        }, {
-                            data: {
-                                _Token: {key: $.bcToken.key}
-                            }, hideLoader: false
                         });
                     }, {useUpdate: false, hideLoader: false});
                 }
