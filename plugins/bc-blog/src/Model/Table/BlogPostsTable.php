@@ -24,6 +24,7 @@ use Cake\Core\Plugin;
 use Cake\Database\Driver\Mysql;
 use Cake\Database\Driver\Postgres;
 use Cake\Database\Driver\Sqlite;
+use Cake\Datasource\EntityInterface;
 use Cake\Event\EventInterface;
 use Cake\I18n\FrozenTime;
 use Cake\ORM\Exception\PersistenceFailedException;
@@ -227,6 +228,27 @@ class BlogPostsTable extends BlogAppTable
                 ]
             ]);
         return $validator;
+    }
+
+    /**
+     * Before Save
+     *
+     * @param  EventInterface $event
+     * @param  EntityInterface $entity
+     * @param  ArrayObject $options
+     * @return void
+     * @checked
+     * @noTodo
+     */
+    public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
+    {
+        if (!Plugin::isLoaded('BcSearchIndex') || !$this->searchIndexSaving ) {
+            return;
+        }
+        // 検索用テーブルに登録
+        if (empty($entity->content) || !empty($entity->content->exclude_search)) {
+            $this->setExcluded();
+        }
     }
 
     /**
