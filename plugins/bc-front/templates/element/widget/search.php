@@ -18,6 +18,7 @@
  *
  * @var \BaserCore\View\BcFrontAppView $this
  * @var int $id ウィジェットID
+ * @var string $name
  */
 
 if ($this->getRequest()->is('maintenance')) return;
@@ -36,7 +37,7 @@ if(empty($searchIndexesFront)) $searchIndexesFront = null;
 
 
 <div class="bs-widget bs-widget-search-box bs-widget-search-box-<?php echo $id ?>">
-    <h2 class="bs-widget-head"><?php echo __d('baser_core', 'サイト内検索') ?></h2>
+    <h2 class="bs-widget-head"><?php echo $name ?></h2>
     <div class="bs-widget-form">
         <?php echo $this->BcForm->create($searchIndexesFront, ['type' => 'get', 'url' => $url]) ?>
         <?php if ($folders): ?>
