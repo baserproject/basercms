@@ -11,6 +11,7 @@
 
 namespace BcBlog\Service\Front;
 
+use BaserCore\Model\Entity\Content;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcSiteConfig;
 use BaserCore\Utility\BcUtil;
@@ -130,10 +131,10 @@ class BlogFrontService implements BlogFrontServiceInterface
             $controller->getRequest()->getData()
         );
         // ブログコンテンツのアップロードファイルをPOSTデータにより書き換え
-        $blogContent->content = $this->BlogContentsService->BlogContents->Contents->saveTmpFiles(
+        $blogContent->content = new Content($this->BlogContentsService->BlogContents->Contents->saveTmpFiles(
             $controller->getRequest()->getData('content'),
             mt_rand(0, 99999999)
-        );
+        )->toArray());
         // Request のカレンドコンテンツを書き換え
         $controller->setRequest($controller->getRequest()->withAttribute('currentContent', $blogContent->content));
         /* @var BlogContent $blogContent */
