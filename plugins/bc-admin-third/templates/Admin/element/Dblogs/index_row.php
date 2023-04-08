@@ -23,7 +23,7 @@
   <td class="bca-table-listup__tbody-td"><?php echo nl2br(h($dblog->message)) ?></td>
   <td class="bca-table-listup__tbody-td" style="width:140px;">
     <?php if ($dblog->user): ?>
-    <?php echo h($dblog->user->name) ?>
+    <?php echo h($dblog->user->getDisplayName()) ?>
     <?php endif ?>
   </td>
   <td class="bca-table-listup__tbody-td" style="width:200px;"><?php echo $this->BcTime->format($dblog->created, 'yyyy-MM-dd HH:mm:ss') ?></td>
