@@ -326,6 +326,7 @@ class BlogFrontService implements BlogFrontServiceInterface
         if (!$no) throw new NotFoundException();
         /* @var BlogPost $post */
         $post = $this->BlogPostsService->BlogPosts->getPublishByNo($blogContent->id, $no);
+        if (!$post) throw new NotFoundException();
 
         // ナビゲーションを設定
         if ($post->blog_category_id) {
