@@ -630,6 +630,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
     public function updateSequence()
     {
         $db = ConnectionManager::get('default');
+        if($db->config()['driver'] !== Postgres::class) return true;
         $tables = $db->getSchemaCollection()->listTables();
         $result = true;
         foreach($tables as $table) {
