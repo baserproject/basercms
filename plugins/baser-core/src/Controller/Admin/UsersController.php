@@ -225,6 +225,8 @@ class UsersController extends BcAdminAppController
             } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
                 $user = $e->getEntity();
                 $this->BcMessage->setError(__d('baser_core', '入力エラーです。内容を修正してください。'));
+            } catch (\Throwable $e) {
+                $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage()));
             }
         }
         $this->set($service->getViewVarsForAdd($user ?? $service->getNew()));

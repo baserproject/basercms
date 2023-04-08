@@ -133,7 +133,7 @@ class UsersService implements UsersServiceInterface
     {
         $loginUser = BcUtil::loginUser();
         if(empty($postData['user_groups']['_ids'])) {
-            throw new BcException(__d('baser_core', 'user_groups[_ids][] を指定してください。'));
+            throw new BcException(__d('baser_core', 'ユーザーグループを指定してください。'));
         }
         if(in_array(Configure::read('BcApp.adminGroupId'), $postData['user_groups']['_ids'])) {
             if(BcUtil::isInstalled() && !$loginUser->isAddableToAdminGroup()) {
