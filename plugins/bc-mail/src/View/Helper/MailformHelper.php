@@ -13,6 +13,7 @@ namespace BcMail\View\Helper;
 
 use BaserCore\View\Helper\BcBaserHelper;
 use BaserCore\View\Helper\BcFreezeHelper;
+use BcMail\Model\Entity\MailField;
 use Cake\ORM\ResultSet;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -289,7 +290,7 @@ class MailformHelper extends BcFreezeHelper
      * @checked
      * @noTodo
      */
-    public function getGroupValidErrors($mailFields, $groupValid, $options = [], $distinct = true)
+    public function getGroupValidErrors(array $mailFields, string $groupValid, array $options = [], bool $distinct = true)
     {
         $errors = [];
         foreach ($mailFields as $mailField) {
@@ -321,10 +322,10 @@ class MailformHelper extends BcFreezeHelper
      * - 次のフィールドがある、次のフィールドとグループが違うもの
      *
      * @param ResultSet $mailFields
-     * @param array $currentMailField
+     * @param MailField $currentMailField
      * @return bool
      */
-    public function isGroupLastField($mailFields, $currentMailField)
+    public function isGroupLastField(ResultSet $mailFields, MailField $currentMailField)
     {
         if (empty($currentMailField->group_field)) return false;
         $mailFields = clone $mailFields;

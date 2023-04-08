@@ -44,7 +44,7 @@ if (!empty($mailFields)) {
 				if ($field->type == 'hidden') {
 					echo ' style="display:none"';
 				}
-				echo '>' . "\n" . '        <th class="col-head" width="150">' . $this->Mailform->label("MailMessage." . $field->field_name . "", $field->head);
+				echo '>' . "\n" . '        <th class="col-head" width="150">' . $this->BcBaser->mailFormLabel("MailMessage." . $field->field_name . "", $field->head);
 				if ($field->not_empty) {
 					echo '<span class="required">' . __d('baser_core', '必須') . '</span>';
 				} else {
@@ -58,7 +58,7 @@ if (!empty($mailFields)) {
 				echo '<span class="bs-mail-description">' . $description . '</span>';
 			}
 			/* 入力欄 */
-			if (!$freezed || $this->Mailform->getSourceValue("MailMessage." . $field->field_name) !== '') {
+			if (!$freezed || $this->BcBaser->getMailFormSourceValue("MailMessage." . $field->field_name) !== '') {
 				echo '<span class="bs-mail-before-attachment">' . $field->before_attachment . '</span>';
 			}
 
@@ -70,7 +70,7 @@ if (!empty($mailFields)) {
 			// 後方互換のため残す
 			// =========================================================================================================
 			if ($freezed && $field->no_send) {
-				echo $this->Mailform->control(
+				echo $this->BcBaser->mailFormControl(
 				  $field->field_name,
 				  array_merge($this->Mailfield->getAttributes($field), [
 				    'type' => 'hidden',
@@ -78,7 +78,7 @@ if (!empty($mailFields)) {
           ])
 				);
 			} else {
-				echo $this->Mailform->control(
+				echo $this->BcBaser->mailFormControl(
 				  $field->field_name,
 				  array_merge($this->Mailfield->getAttributes($field), [
 				    'type' => $field->type,
@@ -87,7 +87,7 @@ if (!empty($mailFields)) {
 				) . (($freezed)? '&nbsp;' : '');
 			}
 
-			if (!$freezed || $this->Mailform->getSourceValue($field->field_name) !== '') {
+			if (!$freezed || $this->BcBaser->getMailFormSourceValue($field->field_name) !== '') {
 				echo '<span class="bs-mail-after-attachment">' . $field->after_attachment . '</span>';
 			}
 			if (!$freezed) {
@@ -97,20 +97,20 @@ if (!empty($mailFields)) {
 			/* 説明欄 */
 			$isGroupValidComplate = in_array('VALID_GROUP_COMPLATE', explode(',', $field->valid_ex));
 			if(!$isGroupValidComplate) {
-				echo $this->Mailform->error("MailMessage." . $field->field_name);
+				echo $this->BcBaser->mailFormError("MailMessage." . $field->field_name);
 			}
 			$isRequiredToClose = true;
-			if ($this->Mailform->isGroupLastField($mailFields, $field)) {
+			if ($this->BcBaser->isMailFormGroupLastField($mailFields, $field)) {
 				if($isGroupValidComplate) {
-					$groupValidErrors = $this->Mailform->getGroupValidErrors($mailFields, $field->group_valid);
+					$groupValidErrors = $this->BcBaser->getMailFormGroupValidErrors($mailFields, $field->group_valid);
 					if ($groupValidErrors) {
 						foreach($groupValidErrors as $groupValidError) {
 							echo $groupValidError;
 						}
 					}
 				}
-				echo $this->Mailform->error("MailMessage." . $field->group_valid . "_not_same", __d('baser_core', "入力データが一致していません。"));
-				echo $this->Mailform->error("MailMessage." . $field->group_valid . "_not_complate", __d('baser_core', "入力データが不完全です。"));
+				echo $this->BcBaser->mailFormError("MailMessage." . $field->group_valid . "_not_same", __d('baser_core', "入力データが一致していません。"));
+				echo $this->BcBaser->mailFormError("MailMessage." . $field->group_valid . "_not_complate", __d('baser_core', "入力データが不完全です。"));
 			} elseif(!empty($field->group_field)) {
 				$isRequiredToClose = false;
 			}

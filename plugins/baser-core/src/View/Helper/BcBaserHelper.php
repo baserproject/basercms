@@ -16,6 +16,8 @@ use BcBlog\Model\Entity\BlogPost;
 use BcCustomContent\Model\Entity\CustomContent;
 use BcCustomContent\Model\Entity\CustomEntry;
 use BcCustomContent\Model\Entity\CustomLink;
+use BcMail\Model\Entity\MailField;
+use BcMail\View\Helper\MailformHelper;
 use Cake\Core\Plugin;
 use Cake\Datasource\EntityInterface;
 use Cake\ORM\ResultSet;
@@ -99,6 +101,18 @@ use BaserCore\Annotation\Doc;
  *
  * ### MailformHelper
  * @method void freezeMailForm()
+ * @method string createMailForm($context = null, $options = [])
+ * @method string mailFormHidden($fieldName, $options = [])
+ * @method void mailFormAuthCaptcha(string $fieldName, array $options = [])
+ * @method string mailFormSubmit(string $caption = null, array $options = [])
+ * @method string endMailForm(array $secureAttributes = [])
+ * @method MailformHelper unlockMailFormField(string $name)
+ * @method mixed getMailFormSourceValue(string $fieldname, array $options = [])
+ * @method string mailFormError(string $field, $text = null, array $options = [])
+ * @method string mailFormControl(string $fieldName, array $options = [])
+ * @method array getMailFormGroupValidErrors(array $mailFields, string $groupValid, array $options = [], bool $distinct = true)
+ * @method bool isMailFormGroupLastField(ResultSet $mailFields, MailField $currentMailField)
+ * @method string mailFormLabel(string $fieldName, ?string $text = null, array $options = [])
  *
  * ### BcUploadHelper
  * @method void setTableToUpload(string $tableName)

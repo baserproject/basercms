@@ -42,7 +42,19 @@ class BcMailBaserHelper extends Helper implements BcPluginBaserHelperInterface
             'isMail' => ['Mail', 'isMail'],
             'mailFormDescriptionExists' => ['Mail', 'descriptionExists'],
             'mailFormDescription' => ['Mail', 'description'],
-            'freezeMailForm' => ['Mailform' => 'freeze']
+            'freezeMailForm' => ['Mailform', 'freeze'],
+            'createMailForm' => ['Mailform', 'create'],
+            'mailFormHidden' => ['Mailform', 'hidden'],
+            'mailFormAuthCaptcha' => ['Mailform', 'authCaptcha'],
+            'mailFormSubmit' => ['Mailform', 'submit'],
+            'endMailForm' => ['Mailform', 'end'],
+            'unlockMailFormField' => ['Mailform', 'unlockField'],
+            'getMailFormSourceValue' => ['Mailform', 'getSourceValue'],
+            'mailFormError' => ['Mailform', 'error'],
+            'mailFormControl' => ['Mailform', 'control'],
+            'getMailFormGroupValidErrors' => ['Mailform', 'getGroupValidErrors'],
+            'isMailFormGroupLastField' => ['Mailform', 'isGroupLastField'],
+            'mailFormLabel' => ['Mailform', 'label'],
         ];
     }
 
