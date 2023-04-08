@@ -151,16 +151,20 @@ class UserGroupsTable extends AppTable
             $userGroup = $this->get($id);
         }
 
-        $userGroup->name .= '_copy';
-        $userGroup->title .= '_copy';
-
         unset($userGroup->id, $userGroup->created, $userGroup->modified);
 
-        $entity = $this->newEntity($userGroup->toArray());
-        if ($errors = $entity->getErrors()) {
-            $exception = new CopyFailedException(__d('baser_core', '処理に失敗しました。'));
-            $exception->setErrors($errors);
-            throw $exception;
+        while(true) {
+            $userGroup->name .= '_copy';
+            $userGroup->title .= '_copy';
+            $entity = $this->newEntity($userGroup->toArray());
+            if ($errors = $entity->getErrors()) {
+                if(!empty($errors['name']['name_unique'])) continue;
+                $exception = new CopyFailedException(__d('baser_core', '処理に失敗しました。'));
+                $exception->setErrors($errors);
+                throw $exception;
+            } else {
+                break;
+            }
         }
 
         if ($result = $this->save($entity)) {
