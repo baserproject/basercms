@@ -322,14 +322,30 @@ class BlogFrontService implements BlogFrontServiceInterface
      */
     public function getViewVarsForSingle(ServerRequest $request, EntityInterface $blogContent, array $crumbs): array
     {
+        $isPreview = (bool)$request->getQuery('preview');
         $no = $request->getParam('pass.0');
-        if (!$no) throw new NotFoundException();
-        /* @var BlogPost $post */
-        $post = $this->BlogPostsService->BlogPosts->getPublishByNo($blogContent->id, $no);
-        if (!$post) throw new NotFoundException();
+        $post = $editLink = null;
+        if($isPreview) {
+            if($no) {
+                $post = $this->BlogPostsService->BlogPosts->getPublishByNo($blogContent->id, $no);
+            }
+        } else {
+            if (!$no) throw new NotFoundException();
+            $post = $this->BlogPostsService->BlogPosts->getPublishByNo($blogContent->id, $no);
+            /* @var BlogPost $post */
+            if (!$post) throw new NotFoundException();
+            $editLink = BcUtil::loginUser()? [
+                'prefix' => 'Admin',
+                'plugin' => 'BcBlog',
+                'controller' => 'BlogPosts',
+                'action' => 'edit',
+                $post->blog_content_id,
+                $post->id
+            ] : '';
+        }
 
         // ナビゲーションを設定
-        if ($post->blog_category_id) {
+        if ($post && $post->blog_category_id) {
             $crumbs = array_merge($crumbs, $this->getCategoryCrumbs(
                 $request->getAttribute('currentContent')->url,
                 $post->blog_category->id,
@@ -337,19 +353,10 @@ class BlogFrontService implements BlogFrontServiceInterface
             ));
         }
 
-        $isPreview = (bool)$request->getQuery('preview');
-
         return [
             'post' => $post,
             'blogContent' => $blogContent,
-            'editLink' => BcUtil::loginUser()? [
-                'prefix' => 'Admin',
-                'plugin' => 'BcBlog',
-                'controller' => 'BlogPosts',
-                'action' => 'edit',
-                $post->blog_content_id,
-                $post->id
-            ] : '',
+            'editLink' => $editLink,
             'commentUse' => ($isPreview)? false : $blogContent->comment_use,
             'single' => true,
             'crumbs' => $crumbs,
@@ -385,8 +392,8 @@ class BlogFrontService implements BlogFrontServiceInterface
             if ($request->getQuery('preview') === 'draft') {
                 $postArray['detail'] = $postArray['detail_draft'];
             }
-            $this->BlogPostsService->BlogPosts->patchEntity(
-                $vars['post'],
+            $vars['post'] = $this->BlogPostsService->BlogPosts->patchEntity(
+                $vars['post']?? $this->BlogPostsService->BlogPosts->newEmptyEntity(),
                 $this->BlogPostsService->BlogPosts->saveTmpFiles($postArray, mt_rand(0, 99999999))->toArray()
             );
             BcUtil::onEvent($this->BlogPostsService->BlogPosts->getEventManager(), 'Model.beforeMarshal', $events);
