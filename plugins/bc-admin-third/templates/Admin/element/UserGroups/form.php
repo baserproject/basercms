@@ -122,6 +122,7 @@ $authPrefixes = $this->BcAdminForm->getControlSource('BaserCore.UserGroups.auth_
               </tr>
             <?php endforeach ?>
           </table>
+          <?php $this->BcAdminForm->unlockField('auth_prefix') ?>
           <i class="bca-icon--question-circle bca-help"></i>
           <?php echo $this->BcAdminForm->error('auth_prefix') ?>
           <div class="bca-helptext">
