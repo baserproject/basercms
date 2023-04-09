@@ -200,7 +200,13 @@ class MailController extends MailFrontAppController
             )) {
                 // newEntity() だと配列が消えてしまうため、エンティティクラスで直接変換
                 $mailMessage = new MailMessage($this->getRequest()->getData(), ['source' => 'BcMail.MailMessages']);
-                $mailMessage->setError('auth_captcha', __d('baser_core', '画像の文字が間違っています。再度入力してください。'));
+
+                // 別途バリデーションを行い、キャプチャのエラーとマージしてセット
+                $validateEntity = $mailMessagesService->MailMessages->newEntity($this->getRequest()->getData());
+                $errors = $validateEntity->getErrors();
+                $errors['auth_captcha'] = __d('baser_core', '画像の文字が間違っています。再度入力してください。');
+                $mailMessage->setErrors($errors);
+
                 throw new PersistenceFailedException($mailMessage, __d('baser_core', '入力エラーです。内容を見直してください。'));
             }
             $mailMessage = $service->confirm($mailContent, $this->getRequest()->getData());
