@@ -1421,7 +1421,13 @@ class BcDatabaseService implements BcDatabaseServiceInterface
     public function constructionTable(string $plugin, string $dbConfigKeyName = 'default', array $dbConfig = [])
     {
         $db = $this->getDataSource($dbConfigKeyName, $dbConfig);
-        if (!$db->isConnected()) return false;
+        if (!$dbConfig) $dbConfig = ConnectionManager::getConfig($dbConfigKeyName);
+        $datasource = strtolower(str_replace('Cake\\Database\\Driver\\', '', $dbConfig['driver']));
+        if ($datasource === 'sqlite') {
+            $db->connect();
+        } elseif (!$db->isConnected()) {
+            return false;
+        }
         return $this->migrate($plugin, $dbConfigKeyName);
     }
 
