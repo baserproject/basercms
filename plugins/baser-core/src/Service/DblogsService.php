@@ -200,7 +200,7 @@ class DblogsService implements DblogsServiceInterface
      */
     public function deleteAll(): int
     {
-        return $this->Dblogs->deleteAll(['1']);
+        return $this->Dblogs->deleteAll([]);
     }
 
 }
