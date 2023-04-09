@@ -44,7 +44,7 @@ $this->BcBaser->js('BcMail.form-submit', true, ['defer'])
 </table>
 
 <?php if ($mailContent->auth_captcha): ?>
-	<?php $this->BcBaser->mailformAuthCaptcha('auth_captcha', ['helper' => $this->BcBaser]) ?>
+	<?php $this->BcBaser->mailFormAuthCaptcha('auth_captcha', ['helper' => $this->BcBaser]) ?>
 <?php endif ?>
 
 <div class="bs-mail-form-submit">
