@@ -187,6 +187,11 @@ class UploaderFilesService implements UploaderFilesServiceInterface
         }
         if (!empty($postData['publish_begin'])) $postData['publish_begin'] = new FrozenTime($postData['publish_begin']);
         if (!empty($postData['publish_end'])) $postData['publish_end'] = new FrozenTime($postData['publish_end']);
+
+        if (!isset($postData['file'])){
+            throw new BcException(__d('baser_core', 'ファイルが存在しません。'));
+        }
+
         $postData['file']['name'] = str_replace(['/', '&', '?', '=', '#', ':', '%', '+'], '_', h($postData['file']['name']));
         $postData['name'] = $postData['file'];
         $postData['alt'] = $postData['name']['name'];
