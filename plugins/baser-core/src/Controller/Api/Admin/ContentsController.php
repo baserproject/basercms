@@ -605,4 +605,5 @@ class ContentsController extends BcAdminApiController
         $this->set(['message' => $message, 'errors' => $errors]);
         $this->viewBuilder()->setOption('serialize', ['message', 'errors']);
     }
+
 }

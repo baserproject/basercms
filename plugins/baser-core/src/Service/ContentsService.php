@@ -1530,4 +1530,130 @@ class ContentsService implements ContentsServiceInterface
         return $request->withAttribute('currentContent', $content);
     }
 
+    /**
+     * 前のコンテンツを取得する
+     *
+     * @param int $id
+     * @return EntityInterface
+     * @checked
+     * @note
+     */
+    public function getPrev(int $id)
+    {
+        $current = $this->get($id);
+        $query = $this->Contents->find()->order(['Contents.lft DESC']);
+        $query->where([
+            'Contents.lft <' => $current->lft,
+            'Contents.site_id' => $current->site_id,
+            $this->Contents->getConditionAllowPublish()
+        ]);
+        if($current->level) {
+            $query->where(['Contents.level' => $current->level]);
+        } else {
+            $query->where(['Contents.level IS' => null]);
+        }
+        return $query->first();
+    }
+
+    /**
+     * 次のコンテンツを取得する
+     *
+     * @param int $id
+     * @return array|EntityInterface|null
+     * @checked
+     * @note
+     */
+    public function getNext(int $id)
+    {
+        $current = $this->get($id);
+        $query = $this->Contents->find()->order(['Contents.lft']);
+        $query->where([
+            'Contents.lft >' => $current->lft,
+            'Contents.site_id' => $current->site_id,
+            $this->Contents->getConditionAllowPublish()
+        ]);
+        if($current->level) {
+            $query->where(['Contents.level' => $current->level]);
+        } else {
+            $query->where(['Contents.level IS' => null]);
+        }
+        return $query->first();
+    }
+
+    /**
+     * グローバルナビ用のコンテンツ一覧を取得する
+     *
+     * @param int $id
+     * @return \Cake\Datasource\ResultSetInterface|false
+     * @checked
+     * @note
+     */
+    public function getGlobalNavi(int $id)
+    {
+        $current = $this->get($id);
+        $root = $this->Contents->find()->where([
+            'Contents.site_id' => $current->site_id,
+            'Contents.site_root' => true,
+            $this->Contents->getConditionAllowPublish()
+        ])->first();
+        if(!$root) return false;
+        $query = $this->Contents->find('children', ['for' => $root->id, 'direct' => true]);
+        return $query->where([
+            'Contents.exclude_menu' => false,
+            $this->Contents->getConditionAllowPublish()
+        ])->all();
+    }
+
+    /**
+     * パンくず用のコンテンツ一覧を取得する
+     *
+     * @param int $id
+     * @return \Cake\Datasource\ResultSetInterface
+     * @checked
+     * @note
+     */
+    public function getCrumbs(int $id)
+    {
+        $query = $this->Contents->find('path', ['for' => $id]);
+        return $query->where([
+            'Contents.exclude_menu' => false,
+            $this->Contents->getConditionAllowPublish()
+        ])->all();
+    }
+
+    /**
+     * ローカルナビ用のコンテンツ一覧を取得する
+     *
+     * @param int $id
+     * @return \Cake\Datasource\ResultSetInterface
+     * @checked
+     * @note
+     */
+    public function getLocalNavi(int $id)
+    {
+        $parent = $this->getParent($id);
+        $query = $this->Contents->find('children', ['for' => $parent->id, 'direct' => true]);
+        return $query->where([
+            'Contents.exclude_menu' => false,
+            $this->Contents->getConditionAllowPublish()
+        ])->all();
+    }
+
+    /**
+     * 親コンテンツを取得する
+     *
+     * @param int $id
+     * @return EntityInterface|false
+     * @checked
+     * @note
+     */
+    public function getParent(int $id)
+    {
+        $current = $this->get($id, ['status' => 'publish']);
+        if(!$current->parent_id) {
+            return false;
+        }
+        return $this->get($current->parent_id);
+    }
+
 }
