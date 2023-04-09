@@ -255,9 +255,9 @@ class CustomContentHelper extends CustomContentAppHelper
     public function getLinks(int $tableId, bool $isThreaded = true)
     {
         if ($isThreaded) {
-            $options = ['finder' => 'threaded'];
+            $options = ['finder' => 'threaded', 'contain' => ['CustomFields', 'CustomTables']];
         } else {
-            $options = ['finder' => 'all'];
+            $options = ['finder' => 'all', 'contain' => ['CustomFields', 'CustomTables']];
         }
         $options['status'] = true;
         /** @var CustomLinksService $linksService */

@@ -279,6 +279,6 @@ class CreateCustomEntries1 extends BcMigration
      */
     public function down()
     {
-        $this->table('custom_entries')->drop()->save();
+        $this->table('custom_entry_1_recruit')->drop()->save();
     }
 }

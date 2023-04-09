@@ -81,11 +81,15 @@ class CustomEntriesController extends CustomContentAdminAppController
                     'direction' => 'desc',
                 ]]]);
 
+        $params = array_merge([
+            'contain' => ['CustomTables' => ['CustomLinks']
+        ]], $this->getRequest()->getQueryParams());
+
         $table = $service->getTableWithLinksByAll($tableId);
         if($table->has_child) {
-            $entries = $service->getTreeIndex($this->getRequest()->getQueryParams());
+            $entries = $service->getTreeIndex($params);
         } else {
-            $entries = $this->paginate($service->getIndex($this->getRequest()->getQueryParams()));
+            $entries = $this->paginate($service->getIndex($params));
         }
 
         $this->set($service->getViewVarsForIndex($table, $entries));
@@ -131,7 +135,7 @@ class CustomEntriesController extends CustomContentAdminAppController
     public function edit(CustomEntriesAdminServiceInterface $service, int $tableId, int $id)
     {
         $service->setup($tableId, $this->getRequest()->getData());
-        $entity = $service->get($id);
+        $entity = $service->get($id, ['contain' => 'CustomTables']);
         if($this->getRequest()->is(['post', 'put'])) {
             try {
                 $entity = $service->update($entity, $this->getRequest()->getData());

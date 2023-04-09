@@ -26,6 +26,7 @@ use Cake\Core\PluginApplicationInterface;
 use Cake\Datasource\ConnectionManager;
 use Cake\Filesystem\Folder;
 use Cake\Http\ServerRequestFactory;
+use Cake\I18n\FrozenTime;
 use Cake\Log\LogTrait;
 use Cake\ORM\TableRegistry;
 use Cake\Routing\Route\InflectedRoute;
@@ -567,6 +568,31 @@ class BcPlugin extends BasePlugin
         $site->theme = $theme;
         $siteConfigsTable = TableRegistry::getTableLocator()->get('BaserCore.Sites');
         $siteConfigsTable->save($site);
+    }
+
+    /**
+     * 対象のフィールドを現在の日付に更新する
+     *
+     * @param string $table
+     * @param string $field
+     * @return void
+     * @checked
+     * @noTodo
+     */
+    public function updateDateNow(string $table, array $fields, array $conditions = []): void
+    {
+        $table = TableRegistry::getTableLocator()->get($table);
+        $entities = $table->find()->where($conditions)->all();
+        if($entities->count()) {
+            foreach($entities as $entity) {
+                $array = $entity->toArray();
+                foreach($fields as $field) {
+                    $array[$field] = FrozenTime::now();
+                }
+                $entity = $table->patchEntity($entity, $array);
+                $table->save($entity);
+            }
+        }
     }
 
 }

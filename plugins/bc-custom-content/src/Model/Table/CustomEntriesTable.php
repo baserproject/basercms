@@ -83,15 +83,17 @@ class CustomEntriesTable extends AppTable
      * 検索インデックスを生成する
      *
      * @param CustomEntry $entry
-     * @return array
+     * @return array|false
      */
     public function createSearchIndex(CustomEntry $entry)
     {
-        /** @var CustomTablesService $tablesService */
-        $tablesService = $this->getService(CustomTablesServiceInterface::class);
-        $contentId = $tablesService->getCustomContentId($entry->custom_table_id);
+        $customContent = $this->CustomTables->CustomContents->find()
+            ->where(['CustomContents.custom_table_id' => $entry->custom_table_id])
+            ->contain(['Contents'])
+            ->first();
         /** @var Content $content */
-        $content = $this->CustomTables->CustomContents->Contents->findByType('BcCustomContent.CustomContent', $contentId);
+        if(!$customContent) return false;
+        $content = $customContent->content;
         return [
             'type' => __d('baser_core', 'カスタムコンテンツ'),
             'model_id' => $entry->id,

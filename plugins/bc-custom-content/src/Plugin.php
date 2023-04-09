@@ -24,6 +24,7 @@ use Cake\Filesystem\Folder;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use Cake\ORM\TableRegistry;
 
 /**
  * plugin for BcCustomContent
@@ -41,7 +42,11 @@ class Plugin extends BcPlugin
     public function install($options = []) : bool
     {
         // ここに必要なインストール処理を記述
-        return parent::install($options);
+        $result = parent::install($options);
+        $table = TableRegistry::getTableLocator()->get('BcCustomContent.CustomEntries');
+        $table->setUp(1);
+        $this->updateDateNow('BcCustomContent.CustomEntries', ['published']);
+        return $result;
     }
 
     /**

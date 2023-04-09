@@ -130,7 +130,7 @@ class BcCcRelatedHelper extends Helper
         /** @var CustomEntriesServiceInterface $entriesService */
         $entriesService = $this->getService(CustomEntriesServiceInterface::class);
         $entriesService->setup($link->custom_field->meta['BcCcRelated']['custom_table_id']);
-        $entry = $entriesService->get($fieldValue);
+        $entry = $entriesService->get($fieldValue, ['contain' => 'CustomTables']);
         return $entry->{$entry->custom_table->display_field};
     }
 
