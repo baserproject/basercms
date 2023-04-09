@@ -12,11 +12,13 @@
 namespace BcMail\Model\Entity;
 
 use BaserCore\Model\Entity\Content;
+use BcMail\Model\Table\MailMessagesTable;
 use Cake\I18n\FrozenTime;
 use Cake\ORM\Entity;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use Cake\ORM\TableRegistry;
 
 /**
  * Class MailContent
@@ -51,5 +53,19 @@ class MailContent extends Entity
         '*' => true,
         'id' => false
     ];
+
+    /**
+     * メッセージ件数を取得する
+     *
+     * @return int
+     */
+    public function getNumberOfMessages()
+    {
+        if(!$this->id) return 0;
+        /** @var MailMessagesTable $messagesTable */
+        $messagesTable = TableRegistry::getTableLocator()->get('BcMail.MailMessages');
+        $messagesTable->setup($this->id);
+        return $messagesTable->find()->count();
+    }
 
 }

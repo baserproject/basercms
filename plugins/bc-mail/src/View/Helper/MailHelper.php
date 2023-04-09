@@ -13,6 +13,8 @@ namespace BcMail\View\Helper;
 
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
+use BcMail\Service\MailContentsService;
+use BcMail\Service\MailContentsServiceInterface;
 use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\Filesystem\Folder;
@@ -269,6 +271,18 @@ class MailHelper extends Helper
         $content = $this->getView()->getRequest()->getAttribute('currentContent');
         if(!$content) return false;
         return ($content->plugin === 'BcMail');
+    }
+
+    /**
+     * 公開状態のメールコンテンツを取得する
+     *
+     * @param int $siteId
+     * @return mixed
+     */
+    public function getPublishedMailContents(int $siteId)
+    {
+        $service = $this->getService(MailContentsServiceInterface::class);
+        return $service->getPublishedAll($siteId);
     }
 
 }

@@ -768,22 +768,26 @@ class BcUtil
         if (!$plugins) return [];
         if (!is_array($plugins)) $plugins = [$plugins];
 
-        $_templates = [];
+        $templates = [];
         foreach($plugins as $plugin) {
             if (is_null($plugin)) continue;
-            $templatePath = self::getTemplatePath($plugin);
-            $folder = new Folder($templatePath . $path . DS);
-            $files = $folder->read(true, true)[1];
-            if ($files) {
-                $_templates = array_merge($_templates, $files);
+            $templatePaths = [
+                self::getTemplatePath($plugin),
+                self::getTemplatePath(Inflector::camelize(Configure::read('BcApp.coreAdminTheme'), '-')) . 'plugin' . DS . $plugin . DS
+            ];
+            foreach($templatePaths as $templatePath) {
+                $folder = new Folder($templatePath . $path . DS);
+                $files = $folder->read(true, true)[1];
+                if ($files) {
+                    $templates = array_merge($templates, $files);
+                }
             }
         }
-        $templates = [];
-        foreach($_templates as $template) {
-            if ($template != 'installations.php') {
-                $template = basename($template, '.php');
-                $templates[$template] = $template;
-            }
+        foreach($templates as $key => $template) {
+            if ($template === 'installations.php') continue;
+            $template = basename($template, '.php');
+            unset($templates[$key]);
+            $templates[$template] = $template;
         }
         return $templates;
     }

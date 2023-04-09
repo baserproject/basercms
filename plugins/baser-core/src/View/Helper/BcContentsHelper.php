@@ -12,6 +12,9 @@
 namespace BaserCore\View\Helper;
 
 use BaserCore\Model\Entity\Content;
+use BaserCore\Model\Table\SitesTable;
+use BaserCore\Service\SitesService;
+use BaserCore\Service\SitesServiceInterface;
 use Cake\Datasource\EntityInterface;
 use Cake\Utility\Hash;
 use Exception;
@@ -895,4 +898,17 @@ class BcContentsHelper extends Helper
         ];
         return $this->ContentsService->getNeighbors($options);
     }
+
+    /**
+     * 公開状態のサイトを全て取得する
+     *
+     * @return \Cake\Datasource\ResultSetInterface
+     */
+    public function getPublishedSites()
+    {
+        /** @var SitesTable $sites */
+        $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
+        return $sites->getPublishedAll();
+    }
+
 }

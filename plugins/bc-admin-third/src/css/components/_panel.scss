@@ -1,16 +1,19 @@
 .bca-panel {
   display: flex;
-  flex-wrap: nowrap;
-  grid-gap: 30px;
+  flex-wrap: wrap;
+  row-gap: 20px;
+  column-gap: 20px;
+  justify-content:space-between;
   & > * {
     width: calc(33.33% - 20px);
   }
 
   &-box {
     padding: 25px 20px;
-    margin: 0 0 20px;
+    margin: 0;
     background: #fff;
     border: 1px solid $color_border;
+    min-width: 300px;
     &__title {
       margin: 0 0 30px 0;
       font-size: $label_font_size_large;

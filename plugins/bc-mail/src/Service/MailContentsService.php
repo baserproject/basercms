@@ -243,4 +243,19 @@ class MailContentsService implements MailContentsServiceInterface
         );
     }
 
+    /**
+     * 公開状態のメールコンテンツを全て取得する
+     *
+     * @param int|null $siteId
+     * @return \Cake\Datasource\ResultSetInterface
+     */
+    public function getPublishedAll(int $siteId = null)
+    {
+        $query = $this->getIndex(['status' => 'publish']);
+        if($siteId) {
+            $query = $query->where(['Contents.site_id' => $siteId]);
+        }
+        return $query->all();
+    }
+
 }
