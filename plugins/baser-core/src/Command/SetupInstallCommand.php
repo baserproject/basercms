@@ -16,6 +16,7 @@ use BaserCore\Utility\BcContainerTrait;
 use Cake\Command\Command;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
+use Cake\Filesystem\Folder;
 
 /**
  * SetupInstallCommand
@@ -41,6 +42,10 @@ class SetupInstallCommand extends Command
         $siteConfigsService->putEnv('INSTALL_MODE', 'true');
         if(file_exists(ROOT . DS . 'config' . DS . 'install.php')) {
             unlink(ROOT . DS . 'config' . DS . 'install.php');
+        }
+        if(is_dir(ROOT . DS . 'db' . DS . 'sqlite')) {
+            $folder = new Folder(ROOT . DS . 'db' . DS . 'sqlite');
+            $folder->delete();
         }
         $io->out(__d('baser_core', 'インストールの準備ができました。'));
     }

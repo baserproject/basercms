@@ -1174,6 +1174,12 @@ class BcDatabaseService implements BcDatabaseServiceInterface
             'prefix' => $config['prefix'],
             'encoding' => $config['encoding']
         ]);
+        if($config['datasource'] === 'sqlite') {
+            if(!is_dir(ROOT . DS . 'db' . DS . 'sqlite')) {
+                $folder = new Folder(ROOT . DS . 'db' . DS . 'sqlite');
+                $folder->create(ROOT . DS . 'db' . DS . 'sqlite', 0777);
+            }
+        }
         $db = ConnectionManager::get($name);
         $db->connect();
         return $db;
@@ -1415,14 +1421,7 @@ class BcDatabaseService implements BcDatabaseServiceInterface
     public function constructionTable(string $plugin, string $dbConfigKeyName = 'default', array $dbConfig = [])
     {
         $db = $this->getDataSource($dbConfigKeyName, $dbConfig);
-        if (!$dbConfig) $dbConfig = ConnectionManager::getConfig($dbConfigKeyName);
-        $datasource = strtolower(str_replace('Cake\\Database\\Driver\\', '', $dbConfig['driver']));
-        if ($datasource == 'sqlite') {
-            $db->connect();
-            chmod($dbConfig['database'], 0666);
-        } elseif (!$db->isConnected()) {
-            return false;
-        }
+        if (!$db->isConnected()) return false;
         return $this->migrate($plugin, $dbConfigKeyName);
     }
 

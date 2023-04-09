@@ -83,7 +83,7 @@ function initForm() {
         $('#liDbInfo').show(500);
         $('#BtnCheckDb').show();
         host = 'localhost';
-        dbName = 'baser';
+        dbName = 'basercms';
         port = '3306';
     } else if ($dbType.val() === 'postgres') {
         $('#liDbHost').show(500);
@@ -91,7 +91,7 @@ function initForm() {
         $('#liDbInfo').show(500);
         $('#BtnCheckDb').show();
         host = 'localhost';
-        dbName = 'baser';
+        dbName = 'basercms';
         port = '5432';
     } else if ($dbType.val() === 'sqlite') {
         $('#liDbHost').hide(500);
@@ -99,7 +99,7 @@ function initForm() {
         $('#liDbInfo').hide(500);
         $('#BtnCheckDb').hide();
         $btnNext.removeAttr("disabled").attr('data-bca-btn-size', 'lg').attr('data-bca-btn-width', 'lg');
-        dbName = 'baser';
+        dbName = 'basercms';
         port = '';
         $dbPrefix.val('');
     } else {

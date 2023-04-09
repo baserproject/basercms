@@ -235,6 +235,7 @@ class InstallCommand extends Command
         if ($dbConfig['datasource'] == 'postgres') $dbConfig['schema'] = 'public';
         /** @var InstallationsService $service */
         $service = $this->getService(InstallationsServiceInterface::class);
+        $dbConfig['database'] = $service->getRealDbName($dbConfig['datasource'], $dbConfig['database']);
         $dbConfig['driver'] = $service->BcDatabase->getDatasourceName($dbConfig['datasource']);
         return $dbConfig;
     }
