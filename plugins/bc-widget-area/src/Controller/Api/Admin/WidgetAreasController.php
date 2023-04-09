@@ -107,7 +107,7 @@ class WidgetAreasController extends BcAdminApiController
      */
     public function edit(WidgetAreasServiceInterface $service, $id)
     {
-        $this->request->allowMethod(['post', 'put']);
+        $this->request->allowMethod(['post', 'put', 'patch']);
 
         $widgetArea = $errors = null;
         try {

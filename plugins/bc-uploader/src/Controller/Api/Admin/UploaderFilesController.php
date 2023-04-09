@@ -125,7 +125,7 @@ class UploaderFilesController extends BcAdminApiController
      */
     public function delete(UploaderFilesServiceInterface $service, int $id)
     {
-        $this->request->allowMethod(['post', 'put']);
+        $this->request->allowMethod(['post', 'put', 'delete']);
         $entity = null;
         try {
             $entity = $service->get($id);
