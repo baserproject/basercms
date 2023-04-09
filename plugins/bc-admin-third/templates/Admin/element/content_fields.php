@@ -92,9 +92,14 @@ $editable = $this->BcContents->isEditable($content);
 <?php if($fullUrl): ?>
 <div class="bca-section bca-section__post-top">
   <span class="bca-post__url">
-	  <a href="<?php echo h($fullUrl) ?>" class="bca-text-url" target="_blank" data-toggle="tooltip"
-       data-placement="top" title="<?php echo __d('baser_core', '公開URLを開きます') ?>"><i
-        class="bca-icon--globe"></i><?php echo rawurldecode($fullUrl) ?></a>
+	  <a href="<?php echo h($fullUrl) ?>"
+	    class="bca-text-url"
+	    target="_blank"
+	    data-toggle="tooltip"
+      data-placement="top"
+      title="<?php echo __d('baser_core', '公開URLを開きます') ?>">
+      <i class="bca-icon--globe"></i><?php echo rawurldecode($fullUrl) ?>
+    </a>
 	  <?php echo $this->BcAdminForm->button('', [
       'id' => 'BtnCopyUrl',
       'class' => 'bca-btn',

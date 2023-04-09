@@ -95,7 +95,7 @@ class BcAdminContentsService implements BcAdminContentsServiceInterface
 
         /** @var ContentsServiceInterface $contentsService */
         $contentsService = $this->getService(ContentsServiceInterface::class);
-        $publishLink = $contentsService->isAllowPublish($content)? $contentsService->getUrl($content->url, false, $content->site->use_subdomain) : null;
+        $publishLink = $contentsService->isAllowPublish($content)? $contentsService->getUrl($content->url, true, $content->site->use_subdomain) : null;
 
         /* @var \BaserCore\Service\SitesService $sitesService */
         $sitesService = $this->getService(SitesServiceInterface::class);
