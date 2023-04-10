@@ -51,6 +51,7 @@ use Cake\Routing\Router;
 use Cake\Utility\Inflector;
 use Cake\Utility\Security;
 use Psr\Http\Message\ServerRequestInterface;
+use Cake\Core\Plugin as CorePlugin;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -152,7 +153,9 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
         if (BcUtil::isTest()) $application->addPlugin('CakephpFixtureFactories');
         $application->addPlugin('Authentication');
         $application->addPlugin('Migrations');
+
         $this->addTheme($application);
+
         if (!filter_var(env('USE_DEBUG_KIT', true), FILTER_VALIDATE_BOOLEAN)) {
             // 明示的に指定がない場合、DebugKitは重すぎるのでデバッグモードでも利用しない
             \Cake\Core\Plugin::getCollection()->remove('DebugKit');
@@ -184,6 +187,8 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
     /**
      * テーマを追加する
      *
+     * テーマ内のプラグインも追加する
+     *
      * @param PluginApplicationInterface $application
      * @noTodo
      * @checked
@@ -195,11 +200,22 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
         if (!BcUtil::isInstalled()) return;
         $sitesTable = TableRegistry::getTableLocator()->get('BaserCore.Sites');
         $sites = $sitesTable->find()->where(['Sites.status' => true]);
+        $path = [];
         foreach($sites as $site) {
             if ($site->theme) {
                 BcUtil::includePluginClass($site->theme);
                 $application->addPlugin($site->theme);
+                $pluginPath = CorePlugin::path($site->theme) . 'plugins' . DS;
+                if(!is_dir($pluginPath)) continue;
+                $path[] = $pluginPath;
             }
+        }
+        // テーマプラグインを追加
+        if($path) {
+            Configure::write('App.paths.plugins', array_merge(
+                Configure::read('App.paths.plugins'),
+                $path
+            ));
         }
     }
 
