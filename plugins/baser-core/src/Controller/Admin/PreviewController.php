@@ -94,7 +94,7 @@ class PreviewController extends BcAdminAppController
     private function _createPreviewRequest($request)
     {
         $query = $request->getQueryParams();
-        $url = $query['url'];
+        $url = $this->encodePath($query['url']);
         unset($query['url']);
         $params = [];
         foreach($query as $key => $value) {
@@ -146,6 +146,27 @@ class PreviewController extends BcAdminAppController
         $sessionProperty->setAccessible(true);
         $sessionProperty->setValue($request, $session);
         return $request;
+    }
+
+    /**
+     * URLのパス部分を urlencode する
+     *
+     * @param string $url
+     * @return string
+     */
+    public function encodePath(string $url) {
+        $parseUrl = parse_url($url);
+        $encoded = $parseUrl['scheme'] . '://' . $parseUrl['host'] . '/';
+        $lastSlash = preg_match('/\/$/', $parseUrl['path']);
+        $pathArray = explode('/', preg_replace('/^\//', '', $parseUrl['path']));
+        foreach($pathArray as $key => $path) {
+            $pathArray[$key] = urlencode($path);
+        }
+        $encoded .= implode('/', $pathArray) . (($lastSlash)? '/' : '');
+        if(!empty($parseUrl['query'])) {
+            $encoded .= '?' . $parseUrl['query'];
+        }
+        return $encoded;
     }
 
 }
