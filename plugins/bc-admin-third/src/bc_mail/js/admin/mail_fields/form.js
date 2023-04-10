@@ -113,7 +113,7 @@ $(function () {
                 $validRegex.show();
                 $("#RowSize").show();
                 $("#RowRows").show();
-                $("#RowMaxlength").hide();
+                $("#RowMaxlength").show();
                 $("#max-length").val('');
                 $("#RowSource").hide();
                 $("#source").val('');
