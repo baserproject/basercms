@@ -86,4 +86,6 @@ $this->BcAdmin->setHelp('blog_posts_form');
 
 <?php echo $this->BcAdminForm->end() ?>
 
+<?php $this->BcBaser->element('BlogPosts/popup_blog_category') ?>
+
 <?= $this->fetch('postLink') ?>

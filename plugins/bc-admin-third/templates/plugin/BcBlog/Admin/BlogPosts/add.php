@@ -49,3 +49,5 @@ $this->BcAdmin->setHelp('blog_posts_form');
 </section>
 
 <?php echo $this->BcAdminForm->end() ?>
+
+<?php $this->BcBaser->element('BlogPosts/popup_blog_category') ?>
