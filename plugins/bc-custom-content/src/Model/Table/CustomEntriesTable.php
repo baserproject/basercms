@@ -219,6 +219,8 @@ class CustomEntriesTable extends AppTable
             } else {
                 $validator->allowEmptyString($link->name);
             }
+            $validator->requirePresence('creator_id', true, __d('baser_core', '作成者は必須項目です。'))
+                ->notEmptyString('creator_id', __d('baser_core', '作成者は必須項目です。'));
             $validator = $this->setValidateRegex($validator, $link);
             $validator = $this->setValidateEmail($validator, $link);
             $validator = $this->setValidateNumber($validator, $link);

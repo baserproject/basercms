@@ -48,7 +48,7 @@ if(!empty($customTable->custom_content)) {
     <?php echo $this->BcTime->format($entity->published, 'yyyy/MM/dd HH:mm') ?>
     <br>
     <?php endif ?>
-    <?php echo $creators[$entity->creator_id] ?>
+    <?php echo (isset($creators[$entity->creator_id]))? $creators[$entity->creator_id] : ''  ?>
   </td>
 
   <?php if ($customTable->isContentTable()): ?>
