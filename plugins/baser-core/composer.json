@@ -6,7 +6,7 @@
     "license": "MIT",
     "vendor-dir": "../../vendor",
     "require": {
-        "php": ">=8.1",
+        "php": ">=8.0",
         "cakephp/cakephp": "4.4.*",
         "cakephp/authentication": "^2.9",
         "cakephp/migrations": "^3.2",
