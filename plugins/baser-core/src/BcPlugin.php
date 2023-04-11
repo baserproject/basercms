@@ -402,7 +402,7 @@ class BcPlugin extends BasePlugin
      * @unitTest
      * @noTodo
      */
-    public function routes($routes): void
+    public function routes(RouteBuilder $routes): void
     {
         $plugin = $this->getName();
 
