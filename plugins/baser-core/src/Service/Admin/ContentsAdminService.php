@@ -145,6 +145,7 @@ class ContentsAdminService extends ContentsService implements ContentsAdminServi
         $createdItems = BcUtil::getContentsItem();
         $types = [];
         foreach($createdItems as $key => $value) {
+            if($key === 'Default') continue;
             $types[$key] = $value['title'];
         }
         return $types;
