@@ -77,7 +77,6 @@ class ContentsAdminServiceTest extends \BaserCore\TestSuite\BcTestCase
     public function testGetType(): void
     {
         $expected = [
-            'Default' => '無所属コンテンツ',
             'ContentFolder' => 'フォルダー',
             'ContentAlias' => 'エイリアス',
             'Page' => '固定ページ',
