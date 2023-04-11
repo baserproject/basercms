@@ -43,9 +43,9 @@ use BaserCore\View\AppView;
 <table class="list-table sort-table bca-table-listup" id="ListTable">
   <thead class="bca-table-listup__thead">
   <tr class="list-tool">
-    <th class="list-tool bca-table-listup__thead-th bca-table-listup__thead-th--select">
+    <th class="list-tool bca-table-listup__thead-th bca-table-listup__thead-th--select" title="<?php echo __d('baser_core', '一括選択') ?>">
       <?php if ($this->BcBaser->isAdminUser()): ?>
-        <?php echo $this->BcAdminForm->control('checkall', ['type' => 'checkbox', 'label' => __d('baser_core', '一括選択')]) ?>
+        <?php echo $this->BcAdminForm->control('checkall', ['type' => 'checkbox', 'label' => ' ', 'title' => __d('baser_core', '一括選択')]) ?>
       <?php endif ?>
       <?php if (!$this->request->getQuery('sortmode')): ?>
         <?php $this->BcBaser->link('<i class="bca-btn-icon-text" data-bca-btn-type="draggable"></i>' . __d('baser_core', '並び替え'), ['?' => ['sortmode' => 1]], ['escape' => false]) ?>

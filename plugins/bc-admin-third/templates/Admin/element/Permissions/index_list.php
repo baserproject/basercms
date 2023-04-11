@@ -47,9 +47,9 @@ $this->BcListTable->setColumnNumber(8);
 <table class="list-table sort-table bca-table-listup" id="ListTable">
   <thead class="bca-table-listup__thead">
   <tr>
-    <th class="list-tool bca-table-listup__thead-th  bca-table-listup__thead-th--select"><?php // 一括選択 ?>
+    <th class="list-tool bca-table-listup__thead-th bca-table-listup__thead-th--select" title="<?php echo __d('baser_core', '一括選択') ?>">
       <?php if ($this->BcBaser->isAdminUser()): ?>
-        <?php echo $this->BcAdminForm->control('checkall', ['type' => 'checkbox', 'label' => __d('baser_core', '一括選択')]) ?>
+        <?php echo $this->BcAdminForm->control('checkall', ['type' => 'checkbox', 'label' => ' ', 'title' => __d('baser_core', '一括選択')]) ?>
       <?php endif; ?>
       <?php if ($this->request->getQuery('sortmode')): ?>
         <?php $this->BcBaser->link('<i class="bca-btn-icon-text" data-bca-btn-type="draggable"></i>' . __d('baser_core', 'ノーマル'), [$userGroupId, '?' => ['sortmode' => 0]], ['escape' => false]) ?>

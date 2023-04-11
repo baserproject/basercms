@@ -164,7 +164,9 @@ class AppController extends BaseController
             if ($prefix === 'Api/Admin') {
                 throw new ForbiddenException(__d('baser_core', '指定されたAPIエンドポイントへのアクセスは許可されていません。'));
             } else {
-                $this->BcMessage->setError(__d('baser_core', '指定されたページへのアクセスは許可されていません。'));
+                if (BcUtil::loginUser()) {
+                    $this->BcMessage->setError(__d('baser_core', '指定されたページへのアクセスは許可されていません。'));
+                }
                 return $this->redirect(Configure::read("BcPrefixAuth.{$prefix}.loginRedirect"));
             }
         }

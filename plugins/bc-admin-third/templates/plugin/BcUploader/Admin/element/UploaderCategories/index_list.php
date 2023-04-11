@@ -44,10 +44,10 @@ $this->BcBaser->js('BcUploader.admin/uploader_categories/index.bundle');
 <table class="list-table sort-table bca-table-listup" id="ListTable">
   <thead class="bca-table-listup__thead">
   <tr>
-    <th class="list-tool bca-table-listup__thead-th bca-table-listup__thead-th--select">
+    <th class="list-tool bca-table-listup__thead-th bca-table-listup__thead-th--select" title="<?php echo __d('baser_core', '一括選択') ?>">
       <?php if ($this->BcBaser->isAdminUser()): ?>
         <div>
-          <?php echo $this->BcAdminForm->control('checkall', ['type' => 'checkbox', 'label' => __d('baser_core', '一括選択')]) ?>
+          <?php echo $this->BcAdminForm->control('checkall', ['type' => 'checkbox', 'label' => ' ', 'title' => __d('baser_core', '一括選択')]) ?>
         </div>
       <?php endif ?>
     </th>
