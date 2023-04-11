@@ -118,7 +118,7 @@ class CustomTablesController extends BcAdminApiController
      */
     public function edit(CustomTablesServiceInterface $service, int $id)
     {
-        $this->request->allowMethod(['post', 'put']);
+        $this->request->allowMethod(['post', 'put', 'patch']);
         $customTable = $errors = null;
         try {
             $customTable = $service->update($service->get($id), $this->request->getData());

@@ -115,8 +115,8 @@ class CustomFieldsTable extends AppTable
         return $query->formatResults(function (\Cake\Collection\CollectionInterface $results) {
             return $results->map(function ($row) {
                 if(!$row) return $row;
-                if($row->meta) $row->meta = json_decode($row->meta, true);
-                if($row->validate) $row->validate = json_decode($row->validate, true);
+                if(isset($row->meta) && $row->meta) $row->meta = json_decode($row->meta, true);
+                if(isset($row->validate) &&  $row->validate) $row->validate = json_decode($row->validate, true);
                 return $row;
             });
         });

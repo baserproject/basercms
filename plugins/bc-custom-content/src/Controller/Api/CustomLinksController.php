@@ -14,6 +14,7 @@ namespace BcCustomContent\Controller\Api;
 use BaserCore\Controller\Api\BcApiController;
 use BcCustomContent\Service\CustomLinksServiceInterface;
 use Cake\Datasource\Exception\RecordNotFoundException;
+use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Exception\ForbiddenException;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -29,17 +30,21 @@ class CustomLinksController extends BcApiController
      * 一覧取得API
      *
      * @param CustomLinksServiceInterface $service
-     * @param int $id
      *
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function index(CustomLinksServiceInterface $service, int $id)
+    public function index(CustomLinksServiceInterface $service)
     {
         $this->request->allowMethod('get');
 
         $queryParams = $this->getRequest()->getQueryParams();
+
+        if (empty($queryParams['custom_table_id'])) {
+            throw new BadRequestException(__d('baser_core', 'パラメーターに custom_table_id を指定してください。'));
+        }
+
         if (isset($queryParams['status'])) {
             throw new ForbiddenException();
         }
@@ -51,7 +56,7 @@ class CustomLinksController extends BcApiController
 
         $this->set([
             'customLinks' => $this->paginate(
-                $service->getIndex($id, $queryParams)
+                $service->getIndex($queryParams['custom_table_id'], $queryParams)
             )
         ]);
         $this->viewBuilder()->setOption('serialize', ['customLinks']);

@@ -113,7 +113,6 @@ class CustomEntriesController extends BcAdminApiController
     /**
      * カスタムエントリー　追加
      * @param CustomEntriesServiceInterface $service
-     *
      * @checked
      * @noTodo
      * @unitTest

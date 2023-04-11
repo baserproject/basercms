@@ -59,6 +59,7 @@ class CustomContentsService implements CustomContentsServiceInterface
     public function getIndex(array $queryParams = []): Query
     {
         $queryParams = array_merge([
+            'status' => 'publish',
             'contain' => ['Contents']
         ], $queryParams);
 

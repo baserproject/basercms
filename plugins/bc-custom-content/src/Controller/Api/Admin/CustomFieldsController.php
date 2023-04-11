@@ -117,7 +117,7 @@ class CustomFieldsController extends BcAdminApiController
      */
     public function edit(CustomFieldsServiceInterface $service, int $id)
     {
-        $this->request->allowMethod(['post', 'put']);
+        $this->request->allowMethod(['post', 'put', 'patch']);
         $customField = $errors = null;
         try {
             $customField = $service->update($service->get($id), $this->request->getData());
