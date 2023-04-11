@@ -97,6 +97,7 @@ class BlogCommentsController extends BcAdminApiController
             $blogComment = $service->get($blogCommentId);
             $service->delete($blogCommentId);
             $message = __d('baser_core', 'ブログコメント「{0}」を削除しました。', $blogComment->no);
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (RecordNotFoundException $e) {
             $this->setResponse($this->response->withStatus(404));
             $message = __d('baser_core', 'データが見つかりません。');

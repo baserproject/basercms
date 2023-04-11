@@ -185,6 +185,7 @@ class BlogCategoriesController extends BcAdminApiController
         try {
             $blogCategory = $service->create($postData['blog_content_id'], $postData);
             $message = __d('baser_core', 'ブログカテゴリー「{0}」を追加しました。', $blogCategory->name);
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (PersistenceFailedException $e) {
             $errors = $e->getEntity()->getErrors();
             $message = __d('baser_core', "入力エラーです。内容を修正してください。");
@@ -219,6 +220,7 @@ class BlogCategoriesController extends BcAdminApiController
         try {
             $blogCategory = $service->update($service->get($id), $this->request->getData());
             $message = __d('baser_core', 'ブログカテゴリー「{0}」を更新しました。', $blogCategory->name);
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (PersistenceFailedException $e) {
             $errors = $e->getEntity()->getErrors();
             $message = __d('baser_core', "入力エラーです。内容を修正してください。");
@@ -255,6 +257,7 @@ class BlogCategoriesController extends BcAdminApiController
             $blogCategory = $service->get($blogCategoryId);
             if ($service->delete($blogCategoryId)) {
                 $message = __d('baser_core', 'ブログカテゴリー「{0}」を削除しました。', $blogCategory->name);
+                $this->BcMessage->setSuccess($message, true, false);
             } else {
                 $this->setResponse($this->response->withStatus(500));
                 $message = __d('baser_core', 'データベース処理中にエラーが発生しました。');

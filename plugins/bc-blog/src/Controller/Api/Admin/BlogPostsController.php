@@ -100,6 +100,7 @@ class BlogPostsController extends BcAdminApiController
         try {
             $blogPost = $service->create($this->request->getData());
             $message = __d('baser_core', '記事「{0}」を追加しました。', $blogPost->title);
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (PersistenceFailedException $e) {
             $this->setResponse($this->response->withStatus(400));
             $errors = $e->getEntity()->getErrors();
@@ -137,6 +138,7 @@ class BlogPostsController extends BcAdminApiController
         try {
             $blogPost = $service->update($service->get($id), $this->request->getData());
             $message = __d('baser_core', '記事「{0}」を更新しました。', $blogPost->title);
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (PersistenceFailedException $e) {
             $this->setResponse($this->response->withStatus(400));
             $errors = $e->getEntity()->getErrors();
@@ -177,6 +179,7 @@ class BlogPostsController extends BcAdminApiController
             $blogPost = $service->get($id);
             $blogPostCopied = $service->copy($id);
             $message = __d('baser_core', 'ブログ記事「{0}」をコピーしました。', $blogPost->title);
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (RecordNotFoundException $e) {
             $this->setResponse($this->response->withStatus(404));
             $message = __d('baser_core', 'データが見つかりません。');
@@ -210,6 +213,7 @@ class BlogPostsController extends BcAdminApiController
             $result = $service->publish($id);
             if ($result) {
                 $message = __d('baser_core', 'ブログ記事「{0}」を公開状態にしました。', $result->title);
+                $this->BcMessage->setSuccess($message, true, false);
             } else {
                 $this->setResponse($this->response->withStatus(400));
                 $message = __d('baser_core', 'データベース処理中にエラーが発生しました。');
@@ -243,6 +247,7 @@ class BlogPostsController extends BcAdminApiController
             $result = $service->unpublish($id);
             if ($result) {
                 $message = __d('baser_core', 'ブログ記事「{0}」を非公開状態にしました。', $result->title);
+                $this->BcMessage->setSuccess($message, true, false);
             } else {
                 $this->setResponse($this->response->withStatus(400));
                 $message = __d('baser_core', 'データベース処理中にエラーが発生しました。');
@@ -280,6 +285,7 @@ class BlogPostsController extends BcAdminApiController
             $blogPost = $service->get($id);
             $service->delete($id);
             $message = __d('baser_core', 'ブログ記事「{0}」を削除しました。', $blogPost->title);
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (RecordNotFoundException $e) {
             $this->setResponse($this->response->withStatus(404));
             $message = __d('baser_core', 'データが見つかりません。');

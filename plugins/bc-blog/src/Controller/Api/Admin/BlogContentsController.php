@@ -99,6 +99,7 @@ class BlogContentsController extends BcAdminApiController
         try {
             $blogContent = $service->create($this->request->getData());
             $message = __d('baser_core', 'ブログ「{0}」を追加しました。', $blogContent->content->title);
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (PersistenceFailedException $e) {
             $this->setResponse($this->response->withStatus(400));
             $errors = $e->getEntity()->getErrors();
@@ -132,6 +133,7 @@ class BlogContentsController extends BcAdminApiController
         try {
             $blogContent = $service->update($service->get($blogContentId), $this->request->getData());
             $message = __d('baser_core', 'ブログ「{0}」を更新しました。', $blogContent->content->title);
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (PersistenceFailedException $e) {
             $this->setResponse($this->response->withStatus(400));
             $errors = $e->getEntity()->getErrors();
@@ -168,6 +170,7 @@ class BlogContentsController extends BcAdminApiController
             $blogContent = $service->get($blogContentId);
             if ($service->delete($blogContentId)) {
                 $message = __d('baser_core', 'ブログコンテンツ「{0}」を削除しました。', $blogContent->description);
+                $this->BcMessage->setSuccess($message, true, false);
             } else {
                 $this->setResponse($this->response->withStatus(400));
                 $message = __d('baser_core', '入力エラーです。内容を修正してください。');
@@ -205,6 +208,7 @@ class BlogContentsController extends BcAdminApiController
             } else {
                 $content = $blogContent->content;
                 $message = __d('baser_core', 'ブログのコピー「{0}」を追加しました。', $blogContent->content->title);
+                $this->BcMessage->setSuccess($message, true, false);
             }
 
         } catch (RecordNotFoundException $e) {

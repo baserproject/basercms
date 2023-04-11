@@ -93,6 +93,7 @@ class BlogTagsController extends BcAdminApiController
             /* @var \BcBlog\Service\BlogTagsService $service */
             $blogTag = $service->create($this->request->getData());
             $message = __d('baser_core', 'ブログタグ「{0}」を追加しました。', $blogTag->name);
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (PersistenceFailedException $e) {
             $this->setResponse($this->response->withStatus(400));
             $errors = $e->getEntity()->getErrors();
@@ -125,6 +126,7 @@ class BlogTagsController extends BcAdminApiController
         try {
             $blogTag = $service->update($service->get($blogTagId), $this->request->getData());
             $message = __d('baser_core', 'ブログタグ「{0}」を更新しました。', $blogTag->name);
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (PersistenceFailedException $e) {
             $this->setResponse($this->response->withStatus(400));
             $errors = $e->getEntity()->getErrors();
@@ -161,6 +163,7 @@ class BlogTagsController extends BcAdminApiController
             $blogTag = $service->get($blogTagId);
             $service->delete($blogTagId);
             $message = __d('baser_core', 'ブログタグ「{0}」を削除しました。', $blogTag->name);
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (RecordNotFoundException $e) {
             $this->setResponse($this->response->withStatus(404));
             $message = __d('baser_core', 'データが見つかりません。');
