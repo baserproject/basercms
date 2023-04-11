@@ -47,6 +47,11 @@ class BcAdminMiddleware implements MiddlewareInterface
 
     /**
      * 現在の管理対象のサイトを設定する
+     *
+     * - 何もセットされていない場合はメインサイトを設定
+     * - セッションがあればそのまま利用
+     * - クエリパラメーターがあれば上書き
+     *
      * @param ServerRequestInterface $request
      * @checked
      * @noTodo
@@ -55,20 +60,24 @@ class BcAdminMiddleware implements MiddlewareInterface
     public function setCurrentSite($request): ServerRequestInterface
     {
         $session = $request->getSession();
-        $currentSiteId = 1;
+        $defaultSiteId = 1;
+
         $queryCurrentSiteId = $request->getQuery('site_id');
-        if (!$session->check('BcApp.Admin.currentSite') || $queryCurrentSiteId) {
-            $sitesTable = TableRegistry::getTableLocator()->get('BaserCore.Sites');
-            if ($queryCurrentSiteId) {
-                if($sitesTable->find()->where(['id' => $queryCurrentSiteId])->count()) {
-                    $currentSiteId = $queryCurrentSiteId;
-                } else {
-                    $request = $request->withQueryParams(['site_id' => 1]);
-                }
+        $sitesTable = TableRegistry::getTableLocator()->get('BaserCore.Sites');
+        if ($queryCurrentSiteId) {
+            if($sitesTable->find()->where(['id' => $queryCurrentSiteId])->count()) {
+                $currentSite = $sitesTable->find()->where(['id' => $queryCurrentSiteId])->first();
+            } else {
+                $request = $request->withQueryParams(['site_id' => $defaultSiteId]);
             }
+        } elseif($session->check('BcApp.Admin.currentSite')) {
+            $currentSite = $session->read('BcApp.Admin.currentSite');
+        } else {
+            $currentSite = $sitesTable->find()->where(['id' => $defaultSiteId])->first();
         }
-        $currentSite = TableRegistry::getTableLocator()->get('BaserCore.Sites')->find()->where(['id' => $currentSiteId])->first();
+
         $session->write('BcApp.Admin.currentSite', $currentSite);
-        return $request->withAttribute('currentSite', $session->read('BcApp.Admin.currentSite'));
+        return $request->withAttribute('currentSite', $currentSite);
     }
+
 }
