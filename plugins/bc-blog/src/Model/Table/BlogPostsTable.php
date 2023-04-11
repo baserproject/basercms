@@ -668,7 +668,7 @@ class BlogPostsTable extends BlogAppTable
         $eyeCatch = $data->eye_catch;
         $data->eye_catch = null;
         $arrayData = $data->toArray();
-        if (!empty($arrayData)) {
+        if (!empty($arrayData['blog_tags'])) {
             $blogTagIds = [];
             foreach($arrayData['blog_tags'] as $tag) {
                 $blogTagIds[] = $tag['id'];
