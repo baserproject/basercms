@@ -88,6 +88,7 @@ class ContentFoldersController extends BcAdminApiController
         try {
             $contentFolder = $service->create($this->request->getData());
             $message = __d('baser_core', 'コンテンツフォルダ「{0}」を追加しました。', $contentFolder->content->title);
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (PersistenceFailedException $e) {
             $errors = $e->getEntity()->getErrors();
             $message = __d('baser_core', "入力エラーです。内容を修正してください。");
@@ -128,6 +129,7 @@ class ContentFoldersController extends BcAdminApiController
             $contentFolder = $service->get($id);
             $service->delete($id);
             $message = __d('baser_core', 'コンテンツフォルダ: {0} を削除しました。', $contentFolder->content->title);
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (RecordNotFoundException $e) {
             $this->setResponse($this->response->withStatus(404));
             $message = __d('baser_core', 'データが見つかりません。');
@@ -160,6 +162,7 @@ class ContentFoldersController extends BcAdminApiController
         try {
             $contentFolder = $service->update($service->get($id), $this->request->getData());
             $message = __d('baser_core', 'フォルダー「{0}」を更新しました。', $contentFolder->content->title);
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (PersistenceFailedException $e) {
             $errors = $e->getEntity()->getErrors();
             $message = __d('baser_core', "入力エラーです。内容を修正してください。");

@@ -24,7 +24,6 @@ class DblogsControllerTest extends BcTestCase
      * @var array
      */
     protected $fixtures = [
-        'plugin.BaserCore.Dblogs',
         'plugin.BaserCore.Users',
         'plugin.BaserCore.UsersUserGroups',
         'plugin.BaserCore.UserGroups',

@@ -42,10 +42,10 @@ class UsersControllerTest extends BcTestCase
         'plugin.BaserCore.UsersUserGroups',
         'plugin.BaserCore.UserGroups',
         'plugin.BaserCore.LoginStores',
-        'plugin.BaserCore.Dblogs',
         'plugin.BaserCore.SiteConfigs',
         'plugin.BaserCore.Sites',
         'plugin.BaserCore.Controller/UsersController/UsersPagination',
+        'plugin.BaserCore.Dblogs',
     ];
 
     public $autoFixtures = false;

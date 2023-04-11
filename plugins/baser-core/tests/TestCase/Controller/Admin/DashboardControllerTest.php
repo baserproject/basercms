@@ -27,7 +27,6 @@ class DashboardControllerTest extends BcTestCase
      * @var array
      */
     public $fixtures = [
-        'plugin.BaserCore.Dblogs',
         'plugin.BaserCore.Users',
         'plugin.BaserCore.UsersUserGroups',
         'plugin.BaserCore.UserGroups',

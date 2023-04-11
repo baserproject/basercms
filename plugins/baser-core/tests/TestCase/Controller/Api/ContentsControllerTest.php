@@ -47,7 +47,6 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
         'plugin.BaserCore.Service/SearchIndexesService/ContentsReconstruct',
         'plugin.BaserCore.Service/SearchIndexesService/PagesReconstruct',
         'plugin.BaserCore.Service/SearchIndexesService/ContentFoldersReconstruct',
-        'plugin.BaserCore.Dblogs',
         'plugin.BcBlog.Factory/BlogContents'
     ];
 

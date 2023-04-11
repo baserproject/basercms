@@ -97,6 +97,7 @@ class PagesController extends BcAdminApiController
         try {
             $page = $service->create($this->request->getData());
             $message = __d('baser_core', '固定ページ「{0}」を追加しました。', $page->content->title);
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (PersistenceFailedException $e) {
             $errors = $e->getEntity()->getErrors();
             $message = __d('baser_core', "入力エラーです。内容を修正してください。");
@@ -135,6 +136,7 @@ class PagesController extends BcAdminApiController
             $page = $service->get($id);
             $service->delete($id);
             $message = __d('baser_core', '固定ページ: {0} をゴミ箱に移動しました。', $page->content->title);
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (RecordNotFoundException $e) {
             $this->setResponse($this->response->withStatus(404));
             $message = __d('baser_core', 'データが見つかりません');
@@ -165,6 +167,7 @@ class PagesController extends BcAdminApiController
         try {
             $page = $service->update($service->get($id), $this->request->getData());
             $message = __d('baser_core', '固定ページ 「{0}」を更新しました。', $page->content->title);
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (PersistenceFailedException $e) {
             $errors = $e->getEntity()->getErrors();
             $message = __d('baser_core', "入力エラーです。内容を修正してください。");
@@ -197,6 +200,7 @@ class PagesController extends BcAdminApiController
             /* @var PagesService $service */
             $page = $service->copy($this->request->getData());
             $message = __d('baser_core', '固定ページのコピー「%s」を追加しました。', $page->content->title);
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (PersistenceFailedException $e) {
             $errors = $e->getEntity()->getErrors();
             $message = __d('baser_core', "入力エラーです。内容を修正してください。");

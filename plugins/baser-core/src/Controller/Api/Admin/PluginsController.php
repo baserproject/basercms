@@ -90,6 +90,7 @@ class PluginsController extends BcAdminApiController
                 $this->request->getData('connection') ?? 'default'
             )) {
                 $message = sprintf(__d('baser_core', 'プラグイン「%s」をインストールしました。'), $name);
+                $this->BcMessage->setSuccess($message, true, false);
             } else {
                 $this->setResponse($this->response->withStatus(400));
                 $message = __d('baser_core', 'プラグインに問題がある為インストールを完了できません。プラグインの開発者に確認してください。');
@@ -125,6 +126,7 @@ class PluginsController extends BcAdminApiController
             $plugin = $service->getByName($name);
             if ($service->detach($name)) {
                 $message = sprintf(__d('baser_core', 'プラグイン「%s」を無効にしました。'), $name);
+                $this->BcMessage->setSuccess($message, true, false);
             } else {
                 $this->setResponse($this->response->withStatus(400));
                 $message = __d('baser_core', 'プラグインの無効化に失敗しました。');
@@ -159,6 +161,7 @@ class PluginsController extends BcAdminApiController
             $plugin = $service->getByName($name);
             if ($service->attach($name)) {
                 $message = sprintf(__d('baser_core', 'プラグイン「%s」を有効にしました。'), $name);
+                $this->BcMessage->setSuccess($message, true, false);
             } else {
                 $this->setResponse($this->response->withStatus(400));
                 $message = __d('baser_core', 'プラグインの有効化に失敗しました。');
@@ -194,6 +197,7 @@ class PluginsController extends BcAdminApiController
             $plugin = $service->getByName($name);
             $service->resetDb($name, $this->request->getData('connection'));
             $message = sprintf(__d('baser_core', '%s プラグインのデータを初期化しました。'), $plugin->title);
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (RecordNotFoundException $e) {
             $this->setResponse($this->response->withStatus(404));
             $message = __d('baser_core', 'データが見つかりません');
@@ -225,6 +229,7 @@ class PluginsController extends BcAdminApiController
             $plugin = $service->getByName($name);
             $service->uninstall($name, $this->request->getData('connection'));
             $message = sprintf(__d('baser_core', 'プラグイン「%s」を削除しました。'), $name);
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (RecordNotFoundException $e) {
             $this->setResponse($this->response->withStatus(404));
             $message = __d('baser_core', 'データが見つかりません');
@@ -253,6 +258,7 @@ class PluginsController extends BcAdminApiController
             $name = $service->add($this->getRequest()->getUploadedFiles());
             $plugin = $service->getByName($name);
             $message = sprintf(__d('baser_core', '新規プラグイン「%s」を追加しました。'), $name);
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (PersistenceFailedException $e) {
             $errors = $e->getEntity()->getErrors();
             $message = __d('baser_core', "入力エラーです。内容を修正してください。");
@@ -288,6 +294,7 @@ class PluginsController extends BcAdminApiController
                 $message = __d('baser_core', '一度リロードしてから再実行してみてください。');
             } else {
                 $message = sprintf(__d('baser_core', 'プラグイン「%s」の並び替えを更新しました。'), $plugin->name);
+                $this->BcMessage->setSuccess($message, true, false);
             }
         } catch (\Throwable $e) {
             $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());

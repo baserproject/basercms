@@ -34,7 +34,6 @@ class PasswordRequestsControllerTest extends BcTestCase
         'plugin.BaserCore.Users',
         'plugin.BaserCore.LoginStores',
         'plugin.BaserCore.Sites',
-        'plugin.BaserCore.Dblogs',
         'plugin.BaserCore.SiteConfigs'
     ];
 

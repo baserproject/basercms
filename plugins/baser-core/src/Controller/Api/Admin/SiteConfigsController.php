@@ -51,6 +51,7 @@ class SiteConfigsController extends BcAdminApiController
             $siteConfig = $service->update($this->request->getData());
             if (!$siteConfig->getErrors()) {
                 $message = __d('baser_core', 'システム基本設定を更新しました。');
+                $this->BcMessage->setSuccess($message, true, false);
             } else {
                 $this->setResponse($this->response->withStatus(400));
                 $message = __d('baser_core', '入力エラーです。内容を修正してください。');

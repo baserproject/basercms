@@ -81,6 +81,7 @@ class ThemesController extends BcAdminApiController
         try {
             $theme = $service->add($this->getRequest()->getUploadedFiles());
             $message = __d('baser_core', 'テーマファイル「' . $theme . '」を追加しました。');
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (\Throwable $e) {
             $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
             $this->setResponse($this->response->withStatus(500));
@@ -110,6 +111,7 @@ class ThemesController extends BcAdminApiController
             $themeDetail = $service->get($theme);
             $service->delete($themeDetail->name);
             $message = __d('baser_core', 'テーマ「{0}」を削除しました。', $themeDetail->name);
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (\Throwable $e) {
             $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
             $this->setResponse($this->response->withStatus(500));
@@ -141,6 +143,7 @@ class ThemesController extends BcAdminApiController
             $rs = $service->copy($theme);
             if ($rs) {
                 $message = __d('baser_core', 'テーマ「{0}」をコピーしました。', $theme);
+                $this->BcMessage->setSuccess($message, true, false);
             } else {
                 $this->setResponse($this->response->withStatus(400));
                 $message = __d('baser_core', 'テーマ「{0}」のコピーに失敗しました。', $theme);
@@ -178,6 +181,7 @@ class ThemesController extends BcAdminApiController
                     $message = __d('baser_core', '初期データの読み込みが完了しましたが、いくつかの処理に失敗しています。ログを確認してください。');
                 } else {
                     $message = __d('baser_core', '初期データの読み込みが完了しました。');
+                    $this->BcMessage->setSuccess($message, true, false);
                 }
             } catch (\Throwable $e) {
                 $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());
@@ -214,6 +218,7 @@ class ThemesController extends BcAdminApiController
             $message = [__d('baser_core', 'テーマ「{0}」を適用しました。', $theme->name)];
             if ($info) $message = array_merge($message, [''], $info);
             $message = implode("\n", $message);
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (RecordNotFoundException $e) {
             $this->setResponse($this->response->withStatus(404));
             $message = __d('baser_core', 'データが見つかりません。');

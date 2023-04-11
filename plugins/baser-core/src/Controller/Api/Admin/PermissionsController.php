@@ -89,6 +89,7 @@ class PermissionsController extends BcAdminApiController
         try {
             $permission = $service->create($this->request->getData());
             $message = __d('baser_core', '新規アクセスルール「{0}」を追加しました。', $permission->name);
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (PersistenceFailedException $e) {
             $errors = $e->getEntity()->getErrors();
             $message = __d('baser_core', "入力エラーです。内容を修正してください。");
@@ -122,6 +123,7 @@ class PermissionsController extends BcAdminApiController
             $permission = $service->get($permissionId);
             $service->delete($permissionId);
             $message = __d('baser_core', 'アクセスルール「{0}」を削除しました。', $permission->name);
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (RecordNotFoundException $e) {
             $this->setResponse($this->response->withStatus(404));
             $message = __d('baser_core', 'データが見つかりません。');
@@ -154,6 +156,7 @@ class PermissionsController extends BcAdminApiController
             $permission = $service->copy($id);
             if ($permission) {
                 $message = __d('baser_core', 'アクセスルール「{0}」をコピーしました。', $permission->name);
+                $this->BcMessage->setSuccess($message, true, false);
             } else {
                 $this->setResponse($this->response->withStatus(400));
                 $message = __d('baser_core', 'データベース処理中にエラーが発生しました。');
@@ -194,6 +197,7 @@ class PermissionsController extends BcAdminApiController
         try {
             $permission = $service->update($service->get($permissionId), $this->request->getData());
             $message = __d('baser_core', 'アクセスルール「{0}」を更新しました。', $permission->name);
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (PersistenceFailedException $e) {
             $errors = $e->getEntity()->getErrors();
             $message = __d('baser_core', "入力エラーです。内容を修正してください。");
@@ -281,6 +285,7 @@ class PermissionsController extends BcAdminApiController
                 $message = __d('baser_core', '一度リロードしてから再実行してみてください。');
             } else {
                 $message = sprintf(__d('baser_core', 'アクセスルール「%s」の並び替えを更新しました。'), $permission->name);
+                $this->BcMessage->setSuccess($message, true, false);
             }
         } catch (RecordNotFoundException $e) {
             $this->setResponse($this->response->withStatus(404));

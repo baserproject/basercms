@@ -60,6 +60,7 @@ class DblogsController extends BcAdminApiController
         try {
             $dblog = $service->create($this->request->getData());
             $message = __d('baser_core', 'ログを追加しました。');
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (PersistenceFailedException $e) {
             $errors = $e->getEntity()->getErrors();
             $message = __d('baser_core', "入力エラーです。内容を修正してください。");
@@ -90,6 +91,7 @@ class DblogsController extends BcAdminApiController
 
         if ($service->deleteAll()) {
             $message = __d('baser_core', '最近の動きのログを削除しました。');
+            $this->BcMessage->setSuccess($message, true, false);
         } else {
             $this->setResponse($this->response->withStatus(400));
             $message = __d('baser_core', '最近の動きのログ削除に失敗しました。');

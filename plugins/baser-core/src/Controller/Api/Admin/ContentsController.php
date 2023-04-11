@@ -167,6 +167,7 @@ class ContentsController extends BcAdminApiController
                     }
                 }
                 $message = __d('baser_core', $text);
+                $this->BcMessage->setSuccess($message, true, false);
             }
         } catch (RecordNotFoundException $e) {
             $this->setResponse($this->response->withStatus(404));
@@ -212,7 +213,7 @@ class ContentsController extends BcAdminApiController
             $this->dispatchLayerEvent('afterTrashEmpty', [
                 'data' => $result
             ]);
-
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (RecordNotFoundException $e) {
             $this->setResponse($this->response->withStatus(404));
             $message = __d('baser_core', 'データが見つかりません');
@@ -241,6 +242,7 @@ class ContentsController extends BcAdminApiController
         try {
             $content = $service->update($service->get($id), $this->request->getData());
             $message = __d('baser_core', 'コンテンツ「{0}」を更新しました。', $content->title);
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (PersistenceFailedException $e) {
             $errors = $e->getEntity()->getErrors();
             $message = __d('baser_core', "入力エラーです。内容を修正してください。");
@@ -275,6 +277,7 @@ class ContentsController extends BcAdminApiController
         try {
             if ($restored = $service->restore($id)) {
                 $message = __d('baser_core', 'ゴミ箱: {0} を元に戻しました。', $restored->title);
+                $this->BcMessage->setSuccess($message, true, false);
             } else {
                 $message = __d('baser_core', 'ゴミ箱の復元に失敗しました');
             }
@@ -319,10 +322,12 @@ class ContentsController extends BcAdminApiController
                     case 'publish':
                         $content = $service->publish($id);
                         $message = __d('baser_core', 'コンテンツ: {0} を公開しました。', $content->title);
+                        $this->BcMessage->setSuccess($message, true, false);
                         break;
                     case 'unpublish':
                         $content = $service->unpublish($id);
                         $message = __d('baser_core', 'コンテンツ: {0} を非公開にしました。', $content->title);
+                        $this->BcMessage->setSuccess($message, true, false);
                         break;
                 }
                 $result = true;
@@ -430,6 +435,7 @@ class ContentsController extends BcAdminApiController
                 $oldTitle,
                 $newContent->title
             );
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (PersistenceFailedException $e) {
             $errors = $e->getEntity()->getErrors();
             $message = __d('baser_core', "入力エラーです。内容を修正してください。");
@@ -463,6 +469,7 @@ class ContentsController extends BcAdminApiController
         try {
             $alias = $service->alias($this->request->getData('content'));
             $message = __d('baser_core', '{0} を作成しました。', $alias->title);
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (PersistenceFailedException $e) {
             $errors = $e->getEntity()->getErrors();
             $message = __d('baser_core', "入力エラーです。内容を修正してください。");
@@ -537,7 +544,7 @@ class ContentsController extends BcAdminApiController
                 $this->dispatchLayerEvent('afterMove', [
                     'data' => $content
                 ]);
-
+                $this->BcMessage->setSuccess($message, true, false);
             } catch (PersistenceFailedException $e) {
                 $errors = $e->getEntity()->getErrors();
                 $message = __d('baser_core', "入力エラーです。内容を修正してください。");

@@ -39,7 +39,6 @@ class ContentFoldersControllerTest extends BcTestCase
         'plugin.BaserCore.Users',
         'plugin.BaserCore.UserGroups',
         'plugin.BaserCore.UsersUserGroups',
-        'plugin.BaserCore.Dblogs',
         'plugin.BaserCore.Sites',
         'plugin.BaserCore.SiteConfigs',
     ];

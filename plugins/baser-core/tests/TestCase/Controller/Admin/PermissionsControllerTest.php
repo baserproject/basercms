@@ -37,7 +37,6 @@ class PermissionsControllerTest extends BcTestCase
         'plugin.BaserCore.Permissions',
         'plugin.BaserCore.SiteConfigs',
         'plugin.BaserCore.Sites',
-        'plugin.BaserCore.Dblogs',
         'plugin.BaserCore.Contents',
     ];
 

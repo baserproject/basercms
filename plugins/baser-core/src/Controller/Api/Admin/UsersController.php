@@ -154,6 +154,7 @@ class UsersController extends BcAdminApiController
         try {
             $user = $service->create($this->request->getData());
             $message = __d('baser_core', 'ユーザー「{0}」を追加しました。', $user->real_name_1);
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (PersistenceFailedException $e) {
             $errors = $e->getEntity()->getErrors();
             $message = __d('baser_core', "入力エラーです。内容を修正してください。");
@@ -186,6 +187,7 @@ class UsersController extends BcAdminApiController
         try {
             $user = $service->update($service->get($id), $this->request->getData());
             $message = __d('baser_core', 'ユーザー「{0}」を更新しました。', $user->real_name_1);
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (PersistenceFailedException $e) {
             $errors = $e->getEntity()->getErrors();
             $message = __d('baser_core', "入力エラーです。内容を修正してください。");
@@ -217,6 +219,7 @@ class UsersController extends BcAdminApiController
         try {
             if ($service->delete($id)) {
                 $message = __d('baser_core', 'ユーザー: {0} を削除しました。', $user->real_name_1);
+                $this->BcMessage->setSuccess($message, true, false);
             }
         } catch (Exception $e) {
             $this->setResponse($this->response->withStatus(400));

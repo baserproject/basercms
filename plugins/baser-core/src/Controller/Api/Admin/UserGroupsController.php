@@ -80,6 +80,7 @@ class UserGroupsController extends BcAdminApiController
         try {
             $userGroup = $service->create($this->request->getData());
             $message = __d('baser_core', 'ユーザーグループ「{0}」を追加しました。', $userGroup->name);
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (PersistenceFailedException $e) {
             $errors = $e->getEntity()->getErrors();
             $message = __d('baser_core', "入力エラーです。内容を修正してください。");
@@ -112,6 +113,7 @@ class UserGroupsController extends BcAdminApiController
         try {
             $userGroup = $service->update($service->get($id), $this->request->getData());
             $message = __d('baser_core', 'ユーザーグループ「{0}」を更新しました。', $userGroup->name);
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (PersistenceFailedException $e) {
             $errors = $e->getEntity()->getErrors();
             $message = __d('baser_core', "入力エラーです。内容を修正してください。");
@@ -148,6 +150,7 @@ class UserGroupsController extends BcAdminApiController
             $userGroup = $service->get($id);
             $service->delete($id);
             $message = __d('baser_core', 'ユーザー: {0} を削除しました。', $userGroup->name);
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (RecordNotFoundException $e) {
             $this->setResponse($this->response->withStatus(404));
             $message = __d('baser_core', 'データが見つかりません。');
@@ -197,6 +200,7 @@ class UserGroupsController extends BcAdminApiController
             if ($rs) {
                 $message = __d('baser_core', 'ユーザーグループ「{0}」をコピーしました。', $userGroup->name);
                 $userGroup = $rs;
+                $this->BcMessage->setSuccess($message, true, false);
             } else {
                 $this->setResponse($this->response->withStatus(400));
                 $message = __d('baser_core', 'データベース処理中にエラーが発生しました。');
