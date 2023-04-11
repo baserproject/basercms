@@ -236,7 +236,13 @@ class ContentsService implements ContentsServiceInterface
         // type
         if(!empty($params['id'])) $conditions['Contents.id'] = $params['id'];
         // type
-        if(!empty($params['type'])) $conditions['Contents.type'] = $params['type'];
+        if(!empty($params['type'])) {
+            if($params['type'] === 'ContentAlias') {
+                $conditions['Contents.alias_id IS NOT'] = null;
+            } else {
+                $conditions['Contents.type'] = $params['type'];
+            }
+        }
         if(!empty($params['type!'])) $conditions['Contents.type IS NOT'] = $params['type!'];
         // author_id
         if(!empty($params['parent_id'])) $conditions['Contents.parent_id'] = $params['parent_id'];
