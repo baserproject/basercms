@@ -62,6 +62,7 @@ class ContentLinksController extends BcAdminApiController
             $entity = $service->create($this->request->getData());
             $content = $entity->content;
             $message = __d('baser_core', 'リンク「{0}」を追加しました。', $entity->content->title);
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (PersistenceFailedException $e) {
             $this->setResponse($this->response->withStatus(400));
             $errors = $e->getEntity()->getErrors();
@@ -114,6 +115,7 @@ class ContentLinksController extends BcAdminApiController
         try {
             $contentLink = $service->update($service->get($id), $this->request->getData());
             $message = __d('baser_core', 'コンテンツリンク: 「{0}」を更新しました。', $contentLink->content->title);
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (PersistenceFailedException $e) {
             $this->setResponse($this->response->withStatus(400));
             $errors = $e->getEntity()->getErrors();
@@ -162,6 +164,7 @@ class ContentLinksController extends BcAdminApiController
             $contentLink = $service->get($id);
             if ($service->delete($id)) {
                 $message = __d('baser_core', 'コンテンツリンク: {0} を削除しました。', $contentLink->content->title);
+                $this->BcMessage->setSuccess($message, true, false);
             } else {
                 $this->setResponse($this->response->withStatus(400));
                 $message = __d('baser_core', 'データベース処理中にエラーが発生しました。');
