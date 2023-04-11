@@ -14,8 +14,10 @@ namespace BaserCore\Utility;
 use BaserCore\Middleware\BcAdminMiddleware;
 use BaserCore\Middleware\BcFrontMiddleware;
 use BaserCore\Middleware\BcRequestFilterMiddleware;
+use BaserCore\Model\Entity\Site;
 use BaserCore\Service\PluginsServiceInterface;
 use BaserCore\Service\SitesService;
+use BaserCore\Service\SitesServiceInterface;
 use Cake\Core\App;
 use Cake\Cache\Cache;
 use Cake\Core\Plugin;
@@ -1179,9 +1181,16 @@ class BcUtil
         $theme = Inflector::camelize(Inflector::underscore(Configure::read('BcApp.coreFrontTheme')));
         if (!BcUtil::isInstalled()) return $theme;
         $request = Router::getRequest();
+        /** @var Site $site */
         $site = $request->getAttribute('currentSite');
         if ($site) {
-            return $site->theme;
+            if($site->theme) {
+                return $site->theme;
+            } else {
+                $sitesService = BcContainer::get()->get(SitesServiceInterface::class);
+                $site = $sitesService->get($site->main_site_id);
+                return $site->theme;
+            }
         } elseif (self::getRootTheme()) {
             return self::getRootTheme();
         } else {

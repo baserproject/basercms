@@ -17,8 +17,10 @@ use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use Cake\Core\Configure;
 use Cake\Datasource\EntityInterface;
 use Cake\Routing\Router;
+use Cake\Utility\Inflector;
 
 /**
  * SitesAdminService
@@ -125,6 +127,10 @@ class SitesAdminService extends SitesService implements SitesAdminServiceInterfa
     public function getSelectableThemes($site): array
     {
         $themes = $this->getThemeList();
+        $coreTheme = Inflector::camelize(Configure::read('BcApp.coreFrontTheme'), '-');
+        foreach($themes as $key => $theme) {
+            if($theme === $coreTheme) unset($themes[$key]);
+        }
         if(!$this->isMainOnCurrentDisplay($site)) {
             $defaultThemeName = __d('baser_core', 'メインサイトに従う');
             $mainTheme = $this->Sites->getRootMain()->theme;
