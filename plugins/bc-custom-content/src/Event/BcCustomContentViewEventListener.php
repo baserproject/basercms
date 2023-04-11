@@ -95,7 +95,7 @@ class BcCustomContentViewEventListener extends \BaserCore\Event\BcViewEventListe
                 'siteId' => $customContent->content->site_id,
                 'title' => $customContent->content->title,
                 'type' => 'custom-content',
-                'icon' => 'bca-icon--blog',
+                'icon' => 'bca-icon--custom',
                 'menus' => $createMenu($customContent)
             ];
         }

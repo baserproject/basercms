@@ -83,8 +83,8 @@ class BcMailViewEventListener extends \BaserCore\Event\BcViewEventListener
             $contentMenus['MailContent' . $entity->id] = [
                 'siteId' => $entity->content->site_id,
                 'title' => $entity->content->title,
-                'type' => 'blog-content',
-                'icon' => 'bca-icon--blog',
+                'type' => 'mail-content',
+                'icon' => 'bca-icon--mail',
                 'menus' => $menus($entity)
             ];
         }
