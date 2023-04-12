@@ -479,14 +479,16 @@
   top: -32px;
 }
 
-
+#RelatedContentsSetting .bca-btn-icon {
+  display: inline;
+}
 #RelatedContentsSetting .icon-add-layerd {
   display: inline-block;
-  width: 32px;
-  height: 32px;
+  width: 24px;
+  height: 24px;
   background: url("../../img/admin/icon_add_layerd.png");
   position: absolute;
-  margin-left: -32px;
+  margin-left: -24px;
 }
 
 #ContentsFormTabs {
