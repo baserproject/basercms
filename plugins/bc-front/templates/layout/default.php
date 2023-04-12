@@ -20,7 +20,7 @@ $request = $this->getRequest();
 $attributes = $request->getAttributes();
 $base = $attributes['base'];
 ?>
-<?php $this->BcBaser->docType('html5') ?>
+<!DOCTYPE html>
 <html lang="ja">
 <head>
 	<?php $this->BcBaser->charset() ?>

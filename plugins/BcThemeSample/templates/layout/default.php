@@ -19,7 +19,7 @@ $request = $this->getRequest();
 $attributes = $request->getAttributes();
 $base = $attributes['base'];
 ?>
-<?php $this->BcBaser->docType('html5') ?>
+<!DOCTYPE html>
 <html>
 <head>
 	<?php $this->BcBaser->charset() ?>
@@ -55,6 +55,8 @@ $base = $attributes['base'];
 	<?php $this->BcBaser->googleAnalytics() ?>
 </head>
 <body id="<?php $this->BcBaser->contentsName() ?>">
+
+<?php $this->BcBaser->func() ?>
 
 <div class="bs-container">
 
@@ -96,6 +98,5 @@ $base = $attributes['base'];
 
 </div>
 
-<?php $this->BcBaser->func() ?>
 </body>
 </html>

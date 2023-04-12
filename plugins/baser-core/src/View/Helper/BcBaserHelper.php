@@ -1448,21 +1448,6 @@ class BcBaserHelper extends Helper
     }
 
     /**
-     * ドキュメントタイプを指定するタグを出力する
-     *
-     * @param string $type 出力ドキュメントタイプの文字列（初期値 : 'xhtml-trans'）
-     * @return void
-     * @note(value="docTypeメソッド自体が未実装なのでユニットテストをスキップ https://github.com/baserproject/ucmitz/issues/682")
-     */
-    public function docType($type = 'xhtml-trans')
-    {
-        // TODO ucmitz 未実装のためコメントアウト
-        // >>>
-//        echo $this->BcHtml->docType($type) . "\n";
-        // <<<
-    }
-
-    /**
      * CSS タグを出力する
      *
      * 《利用例》

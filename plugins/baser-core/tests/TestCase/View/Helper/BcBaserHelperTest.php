@@ -1281,29 +1281,6 @@ class BcBaserHelperTest extends BcTestCase
     }
 
     /**
-     * ドキュメントタイプを指定するタグを出力する
-     * @param string $docType ドキュメントタイプ
-     * @param string $expected ドキュメントタイプを指定するタグ
-     * @return void
-     * @dataProvider docTypeDataProvider
-     */
-    public function testDocType($docType, $expected)
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-
-        $this->expectOutputString($expected . "\n");
-        $this->BcBaser->docType($docType);
-    }
-
-    public function docTypeDataProvider()
-    {
-        return [
-            ['xhtml-trans', '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'],
-            ['html5', '<!DOCTYPE html>']
-        ];
-    }
-
-    /**
      * CSSの読み込みタグを出力する
      * @return void
      */
