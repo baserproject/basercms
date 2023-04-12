@@ -158,6 +158,8 @@ class SearchIndexesService implements SearchIndexesServiceInterface
 
         if($options['status'] === 'publish' || (string) $options['status'] === '1') {
             $conditions = $this->SearchIndexes->getConditionAllowPublish();
+        } elseif($options['status'] === '0') {
+            $conditions['status'] = false;
         } else {
             $conditions = [];
         }
