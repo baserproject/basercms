@@ -208,7 +208,6 @@ class BcFileUploader
             }
             if(isset($data[$name . '_delete'])) {
             	$file['delete'] = $data[$name . '_delete'];
-            	unset($data[$name . '_delete']);
             } else {
             	$file['delete'] = null;
             }
