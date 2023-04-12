@@ -75,7 +75,8 @@ $(function () {
         var targetUrl = $("#sites-target-url" + siteId).val();
         var data = {
             content: {
-                title: current.name,
+                name: current.name,
+                title: current.title,
                 plugin: current.plugin,
                 type: current.type,
                 site_id: siteId,
