@@ -13,7 +13,7 @@ $(function(){
 </script>
 
 <div class="blog works works-index">
-<?php if (!empty($posts)): ?>
+<?php if ($posts->count()): ?>
 	<?php foreach ($posts as $post): ?>
 		<div class="post clearfix">
 			<div class="category">

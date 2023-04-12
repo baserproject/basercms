@@ -45,7 +45,7 @@ $this->BcBaser->setTableToUpload('BcBlog.BlogPosts');
 <h3 class="bs-blog-category-title"><?php $this->BcBaser->contentsTitle() ?></h3>
 
 <section class="bs-blog-post">
-<?php if (!empty($posts)): ?>
+<?php if ($posts->count()): ?>
 	<?php foreach ($posts as $post): ?>
 	<article class="bs-blog-post__item clearfix">
 		<?php if(!empty($post->eye_catch)): ?>

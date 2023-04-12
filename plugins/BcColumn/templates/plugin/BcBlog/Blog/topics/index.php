@@ -13,7 +13,7 @@ $(function(){
 </script>
 
 <div class="blog topics topics-index">
-<?php if (!empty($posts)): ?>
+<?php if ($posts->count()): ?>
 	<?php foreach ($posts as $post): ?>
 		<div class="post">
 			<h2><?php $this->Blog->postTitle($post) ?></h2>

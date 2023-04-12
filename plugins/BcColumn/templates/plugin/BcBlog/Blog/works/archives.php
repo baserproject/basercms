@@ -15,7 +15,7 @@ $(function(){
 <div class="blog works works-archives">
 <h2><?php $this->BcBaser->contentsTitle() ?></h2>
 
-<?php if (!empty($posts)): ?>
+<?php if ($posts->count()): ?>
 	<?php foreach ($posts as $post): ?>
 		<div class="post clearfix">
 			<div class="category">

@@ -13,12 +13,12 @@ $(function(){
 </script>
 
 <div class="blog blog-index">
-<?php if (!empty($posts)): ?>
+<?php if ($posts->count()): ?>
 	<?php foreach ($posts as $post): ?>
 		<div class="post">
 			<h2><?php $this->Blog->postTitle($post) ?></h2>
 			<?php $this->Blog->postContent($post, false, __('詳細ページへ')) ?>
-			<div class="meta"> 
+			<div class="meta">
 				<span class="date">
 					<?php $this->Blog->postDate($post) ?>
 				</span>

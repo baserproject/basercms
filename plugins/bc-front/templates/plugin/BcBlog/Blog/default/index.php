@@ -33,7 +33,7 @@ $this->BcBaser->setTitle($this->BcBaser->getBlogTitle());
 <?php endif ?>
 
 <section class="bs-blog-post">
-<?php if (!empty($posts)): ?>
+<?php if ($posts->count()): ?>
 	<?php foreach ($posts as $post): ?>
 	<article class="bs-blog-post__item clearfix">
 		<?php if(!empty($post->eye_catch)): ?>
