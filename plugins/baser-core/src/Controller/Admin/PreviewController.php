@@ -158,7 +158,9 @@ class PreviewController extends BcAdminAppController
         $parseUrl = parse_url($url);
         $encoded = $parseUrl['scheme'] . '://' . $parseUrl['host'] . '/';
         $lastSlash = preg_match('/\/$/', $parseUrl['path']);
-        $pathArray = explode('/', preg_replace('/^\//', '', $parseUrl['path']));
+        $path = preg_replace('/^\//', '', $parseUrl['path']);
+        $path = preg_replace('/\/$/', '', $path);
+        $pathArray = explode('/', $path);
         foreach($pathArray as $key => $path) {
             $pathArray[$key] = urlencode($path);
         }

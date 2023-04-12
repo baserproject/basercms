@@ -34,6 +34,9 @@ $(function () {
         var previewMode = $("#ContentPreviewMode").val();
         var previewurl = previewurlBase;
 
+        if(previewMode === undefined) {
+            previewMode = 'publish';
+        }
         if ($("#ContentAliasId").val()) {
             previewMode = 'alias';
         }
