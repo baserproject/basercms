@@ -137,6 +137,10 @@ class BlogController extends BlogFrontAppController
         }
 
         try {
+            $this->setRequest($this->getRequest()->withQueryParams(array_merge(
+                ['limit' => $listCount],
+                $this->getRequest()->getQueryParams()
+            )));
             $entities = $this->paginate($blogPostsService->getIndex([
                 'blog_content_id' => $blogContentId,
                 'limit' => $listCount,
