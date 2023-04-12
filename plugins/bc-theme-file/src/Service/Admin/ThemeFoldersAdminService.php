@@ -65,7 +65,7 @@ class ThemeFoldersAdminService extends ThemeFoldersService implements ThemeFolde
         return [
             'themeFolderForm' => $form,
             'themeFolder' => $entity,
-            'currentPath' => str_replace(ROOT, '', dirname($args['fullpath'])) . DS . $args['type'] . DS,
+            'currentPath' => str_replace(ROOT, '', $args['fullpath']),
             'isWritable' => $this->isWritableDir($args['fullpath']),
             'theme' => $args['theme'],
             'plugin' => $args['plugin'],
