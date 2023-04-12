@@ -281,7 +281,7 @@ class UsersTable extends AppTable
             case 'id':
                 $controlSources['id'] = $this->find('list', [
                     'keyField' => 'id',
-                    'valueField' => 'name'
+                    'valueField' => 'real_name_1'
                 ]);
                 break;
             case 'user_group_id':
