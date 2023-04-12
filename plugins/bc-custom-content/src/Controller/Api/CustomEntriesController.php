@@ -42,7 +42,7 @@ class CustomEntriesController extends BcApiController
     {
         $this->request->allowMethod('get');
         $queryParams = $this->getRequest()->getQueryParams();
-        if (isset($queryParams['status']) || isset($queryParams['use_api'])) {
+        if (isset($queryParams['status']) || isset($queryParams['use_api']) || isset($queryParams['contain'])) {
             throw new ForbiddenException();
         }
         if (empty($queryParams['custom_table_id'])) {
@@ -87,7 +87,7 @@ class CustomEntriesController extends BcApiController
     {
         $this->request->allowMethod('get');
         $queryParams = $this->getRequest()->getQueryParams();
-        if (isset($queryParams['status']) || isset($queryParams['use_api'])) {
+        if (isset($queryParams['status']) || isset($queryParams['use_api']) || isset($queryParams['contain'])) {
             throw new ForbiddenException();
         }
         if (empty($queryParams['custom_table_id'])) {

@@ -37,7 +37,7 @@ class BlogPostsController extends BcApiController
         $this->request->allowMethod('get');
 
         $queryParams = $this->getRequest()->getQueryParams();
-        if (isset($queryParams['status'])) {
+        if (isset($queryParams['status']) || isset($queryParams['contain'])) {
             throw new ForbiddenException();
         }
 
@@ -70,7 +70,7 @@ class BlogPostsController extends BcApiController
     {
         $this->request->allowMethod('get');
         $queryParams = $this->getRequest()->getQueryParams();
-        if (isset($queryParams['status'])) {
+        if (isset($queryParams['status']) || isset($queryParams['contain'])) {
             throw new ForbiddenException();
         }
 

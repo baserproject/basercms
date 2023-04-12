@@ -16,6 +16,7 @@ use Cake\Datasource\Exception\RecordNotFoundException;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use Cake\Http\Exception\ForbiddenException;
 
 /**
  * BlogTagsController
@@ -34,6 +35,11 @@ class BlogTagsController extends BcApiController
     public function index(BlogTagsServiceInterface $service)
     {
         $this->request->allowMethod(['get']);
+
+        if (isset($queryParams['contain'])) {
+            throw new ForbiddenException();
+        }
+
         $queryParams = array_merge([
             'contain' => null,
         ], $this->getRequest()->getQueryParams());
@@ -55,6 +61,11 @@ class BlogTagsController extends BcApiController
     public function view(BlogTagsServiceInterface $service, $blogTagId)
     {
         $this->request->allowMethod(['get']);
+
+        if (isset($queryParams['contain'])) {
+            throw new ForbiddenException();
+        }
+
         $blogTag = $message = null;
         try {
             $blogTag = $service->get($blogTagId);
