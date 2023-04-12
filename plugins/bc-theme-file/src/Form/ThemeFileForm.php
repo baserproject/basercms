@@ -110,6 +110,12 @@ class ThemeFileForm extends Form
                     'provider' => 'form',
                     'rule' => ['duplicateThemeFile'],
                     'message' => __d('baser_core', '入力されたテーマファイル名は、同一階層に既に存在します。')
+                ]])
+            ->add('base_name', [
+                'nameAlphaNumericPlus' => [
+                    'rule' => ['alphaNumericPlus'],
+                    'provider' => 'bc',
+                    'message' => __d('baser_core', 'テーマファイル名は半角英数字とハイフン、アンダースコアのみが利用可能です。')
                 ]]);
         return $validator;
     }

@@ -166,7 +166,7 @@ class ThemeFilesController extends BcAdminAppController
             }
         }
 
-        $this->set($service->getViewVarsForEdit($entity, $form, $args));
+        $this->set($service->getViewVarsForAdd($entity, $form, $args));
     }
 
     /**

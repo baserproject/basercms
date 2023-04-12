@@ -15,14 +15,11 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Utility\BcContainerTrait;
-use BaserCore\Vendor\Imageresizer;
 use BcThemeFile\Form\ThemeFileForm;
 use BcThemeFile\Model\Entity\ThemeFile;
 use BcThemeFile\Service\ThemeFilesService;
 use BcThemeFile\Service\ThemeFoldersServiceInterface;
 use BcThemeFile\Utility\BcThemeFileUtil;
-use Cake\Filesystem\File;
-use Cake\Http\Exception\NotFoundException;
 use Cake\Utility\Inflector;
 
 /**
@@ -92,7 +89,7 @@ class ThemeFilesAdminService extends ThemeFilesService implements ThemeFilesAdmi
         return [
             'themeFileForm' => $form,
             'themeFile' => $entity,
-            'currentPath' => str_replace(ROOT, '', dirname($args['fullpath'])) . DS,
+            'currentPath' => str_replace(ROOT, '', $args['fullpath']),
             'isWritable' => is_writable($args['fullpath']),
             'theme' => $args['theme'],
             'plugin' => $args['plugin'],
