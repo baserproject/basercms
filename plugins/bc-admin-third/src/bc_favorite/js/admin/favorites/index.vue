@@ -257,7 +257,7 @@ export default {
                         $("#Waiting").show();
                         axios.post($.bcUtil.apiAdminBaseUrl + "bc-favorite/favorites/delete/" + id + ".json", {}, {
                             headers: {
-                                "Authorization": $.bcJwt.accessToken,
+                                "X-CSRF-Token": $.bcToken.key,
                             }
                         }).then(function (response) {
                             if (response.status === 200) {
