@@ -69,7 +69,11 @@ class EditorTemplatesTable extends AppTable
             ->allowEmptyString('id', null, 'create');
         $validator
             ->scalar('name')
+            ->maxLength('name', 50, __d('baser_core', 'テンプレート名は50文字以内で入力してください。'))
             ->notEmptyString('name', __d('baser_core', 'テンプレート名を入力してください。'));
+        $validator
+            ->scalar('description')
+            ->maxLength('description', 255, __d('baser_core', '説明文は255文字以内で入力してください。'));
         $validator
             ->allowEmptyString('image')
             ->add('image', [

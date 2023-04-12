@@ -14,6 +14,7 @@ namespace BaserCore;
 use BaserCore\Error\BcException;
 use BaserCore\Model\Entity\Site;
 use BaserCore\Model\Table\SitesTable;
+use BaserCore\Service\BcDatabaseServiceInterface;
 use BaserCore\Service\PermissionGroupsService;
 use BaserCore\Service\PermissionGroupsServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
@@ -121,6 +122,8 @@ class BcPlugin extends BasePlugin
                 }
                 if (is_dir($pluginPath . 'config' . DS . 'Seeds')) {
                     $this->migrations->seed($options);
+                    $dbService = $this->getService(BcDatabaseServiceInterface::class);
+                    $dbService->updateSequence();
                 }
             }
 

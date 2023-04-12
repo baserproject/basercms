@@ -69,7 +69,7 @@ class EditorTemplatesController extends BcAdminAppController
                 $entity = $e->getEntity();
                 $this->BcMessage->setError(__d('baser_core', '入力エラーです。内容を修正してください。'));
             } catch (\Throwable $e) {
-                $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。'));
+                $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
             }
         }
         $this->set([
