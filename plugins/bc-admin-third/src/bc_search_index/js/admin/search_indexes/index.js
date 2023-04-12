@@ -29,11 +29,10 @@ $(function () {
                 type: "POST",
                 url: $.bcUtil.apiAdminBaseUrl + 'bc-search-index' + '/search_indexes/change_priority/' + id + '.json',
                 headers: {
-                    "Authorization": $.bcJwt.accessToken,
+                    "X-CSRF-Token": $.bcToken.key,
                 },
                 data: {
-                    'priority': priority,
-                    '_Token[key]': $.bcToken.key
+                    'priority': priority
                 },
                 beforeSend: function () {
                     $.bcUtil.hideMessage();
