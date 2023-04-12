@@ -138,26 +138,32 @@ class BlogTagsService implements BlogTagsServiceInterface
             $conditions['Contents.site_id'] = $params['siteId'];
         }
         if ($params['contentId']) {
+            $contentId = $params['contentId'];
             $assocContent = true;
-            $conditions['Contents.entity_id'] = $params['contentId'];
+            $query->matching('BlogPosts.BlogContents.Contents', function ($q) use ($contentId) {
+                if(is_array($contentId)) {
+                    return $q->where(['Contents.entity_id IN' => $contentId]);
+                } else {
+                    return $q->where(['Contents.entity_id' => $contentId]);
+                }
+            });
         }
         if ($params['contentUrl']) {
             $assocContent = true;
             $conditions['Content.url'] = $params['contentUrl'];
         }
-        if (!empty($queryParams['name'])) {
-            $conditions['BlogTags.name LIKE'] = '%' . urldecode($queryParams['name']) . '%';
+        if (!empty($params['name'])) {
+            $conditions['BlogTags.name LIKE'] = '%' . urldecode($params['name']) . '%';
         }
 
         if($conditions) $query->where($conditions);
         if($assocContent) {
             $query->contain($params['contain']);
-            if ($query['fields']) {
+            if (!empty($params['fields'])) {
                 if (is_array($query['fields'])) {
-                    $query->distinct($query['fields'][0]);
-                    $query['fields'][0] = 'DISTINCT ' . $query['fields'][0];
+                    $query->distinct($params['fields'][0]);
                 } else {
-                    $query->distinct($query['fields']);
+                    $query->distinct($params['fields']);
                 }
             } else {
                 //============================================================
@@ -165,7 +171,7 @@ class BlogTagsService implements BlogTagsServiceInterface
                 // DISTINCT * と指定するとSQLの解析でけされてしまっていたので
                 // フィールドを明示的に指定
                 //============================================================
-                $query->distinct(['BlogTag.id', 'BlogTag.name']);
+                $query->distinct(['BlogTags.id', 'BlogTags.name']);
             }
         }
         return $query;

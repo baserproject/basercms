@@ -52,6 +52,7 @@ class ContentsTable extends AppTable
     public function initialize(array $config): void
     {
         parent::initialize($config);
+        $this->setTable('contents');
         $this->addBehavior('Tree', ['level' => 'level']);
         $this->addBehavior('BaserCore.BcUpload', [
             'saveDir' => "contents",
