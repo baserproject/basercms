@@ -67,8 +67,6 @@ class BcAdminMiddleware implements MiddlewareInterface
         if ($queryCurrentSiteId) {
             if($sitesTable->find()->where(['id' => $queryCurrentSiteId])->count()) {
                 $currentSite = $sitesTable->find()->where(['id' => $queryCurrentSiteId])->first();
-            } else {
-                $request = $request->withQueryParams(['site_id' => $defaultSiteId]);
             }
         } elseif($session->check('BcApp.Admin.currentSite')) {
             $currentSite = $session->read('BcApp.Admin.currentSite');
@@ -76,6 +74,7 @@ class BcAdminMiddleware implements MiddlewareInterface
             $currentSite = $sitesTable->find()->where(['id' => $defaultSiteId])->first();
         }
 
+        $request = $request->withQueryParams(['site_id' => $currentSite->id]);
         $session->write('BcApp.Admin.currentSite', $currentSite);
         return $request->withAttribute('currentSite', $currentSite);
     }

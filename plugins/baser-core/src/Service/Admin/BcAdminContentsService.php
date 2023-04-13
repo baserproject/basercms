@@ -99,7 +99,7 @@ class BcAdminContentsService implements BcAdminContentsServiceInterface
 
         /* @var \BaserCore\Service\SitesService $sitesService */
         $sitesService = $this->getService(SitesServiceInterface::class);
-
+        $mainSite = $sitesService->Sites->getRootMain();
         return [
             'content' => $content,
             'related' => $related,
@@ -111,7 +111,8 @@ class BcAdminContentsService implements BcAdminContentsServiceInterface
             'authorList' => $this->getService(UsersServiceInterface::class)->getList(),
             'sites' => $sitesService->getList(),
             'relatedContents' => $sitesService->getRelatedContents($content->id),
-            'layoutTemplates' => $this->getLayoutTemplates($content)
+            'layoutTemplates' => $this->getLayoutTemplates($content),
+            'mainSiteDisplayName' => $mainSite->display_name
         ];
     }
 

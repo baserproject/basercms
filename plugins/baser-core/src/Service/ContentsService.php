@@ -787,6 +787,7 @@ class ContentsService implements ContentsServiceInterface
      */
     public function getUrl($url, $full = false, $useSubDomain = false, $base = false)
     {
+        if(preg_match('/^http/', $url)) $full = false;
         if ($useSubDomain && !is_array($url)) {
             $subDomain = '';
             $site = $this->Sites->findByUrl($url);
