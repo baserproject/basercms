@@ -664,7 +664,7 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      */
     public function moveUp(int $id)
     {
-        return $this->CustomEntries->moveUp($this->get($id));
+        return $this->CustomEntries->moveUp($this->get($id, ['contain' => ['CustomTables']]));
     }
 
     /**
@@ -675,7 +675,7 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      */
     public function moveDown(int $id)
     {
-        return $this->CustomEntries->moveDown($this->get($id));
+        return $this->CustomEntries->moveDown($this->get($id, ['contain' => ['CustomTables']]));
     }
 
 }

@@ -192,7 +192,7 @@ class CustomEntriesController extends CustomContentAdminAppController
         $this->getRequest()->allowMethod(['post', 'put', 'delete']);
         $service->setup($tableId);
         try {
-            $entity = $service->get($id);
+            $entity = $service->get($id, ['contain' => ['CustomTables']]);
             if ($service->moveUp($id)) {
                 $this->BcMessage->setSuccess(__d('baser_core', 'エントリー「{0}」を上に移動しました。', $entity->title));
             }
@@ -218,7 +218,7 @@ class CustomEntriesController extends CustomContentAdminAppController
         $this->getRequest()->allowMethod(['post', 'put', 'delete']);
         $service->setup($tableId);
         try {
-            $entity = $service->get($id);
+            $entity = $service->get($id, ['contain' => ['CustomTables']]);
             if ($service->moveDown($id)) {
                 $this->BcMessage->setSuccess(__d('baser_core', 'エントリー「{0}」を下に移動しました。', $entity->title));
             }
