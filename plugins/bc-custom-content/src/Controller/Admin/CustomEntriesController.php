@@ -109,7 +109,7 @@ class CustomEntriesController extends CustomContentAdminAppController
         if($this->getRequest()->is(['post', 'put'])) {
             try {
                 $entity = $service->create($this->getRequest()->getData());
-                $entity = $service->get($entity->id);
+                $entity = $service->get($entity->id, ['contain' => ['CustomTables']]);
                 $this->BcMessage->setSuccess(__d('baser_core',
                     'エントリー「{0}」を追加しました。',
                     $entity->{$entity->custom_table->display_field}
