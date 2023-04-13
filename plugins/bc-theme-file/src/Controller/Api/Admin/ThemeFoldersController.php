@@ -124,6 +124,7 @@ class ThemeFoldersController extends BcAdminApiController
             $form = $service->create($data);
             $themeFolder = $service->get($form->getData('fullpath'));
             $message = __d('baser_core', 'フォルダ「{0}」を作成しました。', $themeFolder->name);
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (BcFormFailedException $e) {
             $this->setResponse($this->response->withStatus(400));
             $message = __d('baser_core', '入力エラーです。内容を修正してください。');
@@ -161,6 +162,7 @@ class ThemeFoldersController extends BcAdminApiController
             $form = $service->update($data);
             $themeFolder = $service->get($form->getData('fullpath'));
             $message = __d('baser_core', 'フォルダ名を「{0}」に変更しました。', $themeFolder->name);
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (BcFormFailedException $e) {
             $this->setResponse($this->response->withStatus(400));
             $message = __d('baser_core', '入力エラーです。内容を修正してください。');
@@ -197,6 +199,7 @@ class ThemeFoldersController extends BcAdminApiController
             $themeFolder = $service->get($data['fullpath']);
             if ($service->delete($data['fullpath'])) {
                 $message = __d('baser_core', 'フォルダ「{0}」を削除しました。', $data['path']);
+                $this->BcMessage->setSuccess($message, true, false);
             } else {
                 $message = __d('baser_core', 'フォルダ「{0}」の削除に失敗しました。', $data['path']);
             }
@@ -232,6 +235,7 @@ class ThemeFoldersController extends BcAdminApiController
             $entity = $service->copy($data['fullpath']);
             if ($entity) {
                 $message = __d('baser_core', 'フォルダ「{0}」をコピーしました。', $data['path']);
+                $this->BcMessage->setSuccess($message, true, false);
             } else {
                 $message = __d('baser_core', 'フォルダ「{0}」のコピーに失敗しました。上位フォルダのアクセス権限を見直してください。。', $data['path']);
             }
@@ -272,6 +276,7 @@ class ThemeFoldersController extends BcAdminApiController
                 $currentTheme,
                 $targetPath
             );
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (\Throwable $e) {
             $this->setResponse($this->response->withStatus(500));
             $message = __d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage());

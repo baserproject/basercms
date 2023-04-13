@@ -65,6 +65,7 @@ class UploaderCategoriesController extends BcAdminApiController
         try {
             $uploaderCategory = $service->create($this->request->getData());
             $message = __d('baser_core', '新規アップロードカテゴリ「{0}」を追加しました。', $uploaderCategory->name);
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (PersistenceFailedException $e) {
             $errors = $e->getEntity()->getErrors();
             $message = __d('baser_core', "入力エラーです。内容を修正してください。");
@@ -98,6 +99,7 @@ class UploaderCategoriesController extends BcAdminApiController
         try {
             $uploaderCategory = $service->update($service->get($id), $this->request->getData());
             $message = __d('baser_core', 'アップロードカテゴリ「{0}」を更新しました。', $uploaderCategory->name);
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (PersistenceFailedException $e) {
             $errors = $e->getEntity()->getErrors();
             $message = __d('baser_core', "入力エラーです。内容を修正してください。");
@@ -135,6 +137,7 @@ class UploaderCategoriesController extends BcAdminApiController
             $uploaderCategory = $service->get($id);
             if ($service->delete($id)) {
                 $message = __d('baser_core', 'アップロードカテゴリ「{0}」を削除しました。', $uploaderCategory->name);
+                $this->BcMessage->setSuccess($message, true, false);
             } else {
                 $this->setResponse($this->response->withStatus(500));
                 $message = __d('baser_core', 'データベース処理中にエラーが発生しました。');
@@ -171,6 +174,7 @@ class UploaderCategoriesController extends BcAdminApiController
             $uploaderCategory = $service->copy($id);
             if ($uploaderCategory) {
                 $message = __d('baser_core', 'アップロードカテゴリ「{0}」をコピーしました。', $uploaderCategory->name);
+                $this->BcMessage->setSuccess($message, true, false);
             } else {
                 $this->setResponse($this->response->withStatus(400));
                 $message = __d('baser_core', 'データベース処理中にエラーが発生しました。');

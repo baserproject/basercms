@@ -60,6 +60,7 @@ class UploaderFilesController extends BcAdminApiController
         try {
             $entity = $service->create($this->request->getData());
             $message = __d('baser_core', 'アップロードファイル「{0}」を追加しました。', $entity->name);
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (PersistenceFailedException $e) {
             $this->setResponse($this->response->withStatus(400));
             $errors = $e->getEntity()->getErrors();
@@ -94,6 +95,7 @@ class UploaderFilesController extends BcAdminApiController
         try {
             $entity = $service->update($service->get($id), $this->getRequest()->getData());
             $message = __d('baser_core', 'アップロードファイル「{0}」を更新しました。', $entity->name);
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (PersistenceFailedException $e) {
             $this->setResponse($this->response->withStatus(400));
             $errors = $e->getEntity()->getErrors();
@@ -131,6 +133,7 @@ class UploaderFilesController extends BcAdminApiController
             $entity = $service->get($id);
             $service->delete($id);
             $message = __d('baser_core', 'アップロードファイル「{0}」を削除しました。', $entity->name);
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (RecordNotFoundException $e) {
             $this->setResponse($this->response->withStatus(404));
             $message = __d('baser_core', 'データが見つかりません。');

@@ -56,6 +56,7 @@ class SearchIndexesController extends BcAdminApiController
                 $this->getRequest()->getData('priority')
             );
             $message = __d('baser_core', '検索インデックス「{0}」の優先度を変更しました。', $searchIndex->title);
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (RecordNotFoundException $e) {
             $this->setResponse($this->response->withStatus(404));
             $message = __d('baser_core', 'データが見つかりません。');
@@ -121,6 +122,7 @@ class SearchIndexesController extends BcAdminApiController
         try {
             if ($searchIndexesService->reconstruct()) {
                 $message = __d('baser_core', '検索インデックスの再構築に成功しました。');
+                $this->BcMessage->setSuccess($message, true, false);
             } else {
                 $this->setResponse($this->response->withStatus(400));
                 $message = __d('baser_core', '検索インデックスの再構築に失敗しました。');
@@ -189,6 +191,7 @@ class SearchIndexesController extends BcAdminApiController
             $searchIndex = $searchIndexesService->get($id);
             if ($searchIndexesService->delete($id)) {
                 $message = __d('baser_core', '検索インデックス: {0} を削除しました。', $searchIndex->title);
+                $this->BcMessage->setSuccess($message, true, false);
             } else {
                 $this->setResponse($this->response->withStatus(400));
                 $message = __d('baser_core', 'データベース処理中にエラーが発生しました。');

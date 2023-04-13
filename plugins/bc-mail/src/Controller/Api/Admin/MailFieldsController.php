@@ -95,6 +95,7 @@ class MailFieldsController extends BcAdminApiController
                 $message = __d('baser_core', '一度リロードしてから再実行してみてください。');
             } else {
                 $message = sprintf(__d('baser_core', 'メールフィールド「%s」の並び替えを更新しました。'), $entity->name);
+                $this->BcMessage->setSuccess($message, true, false);
             }
         } catch (\Throwable $e) {
             $this->setResponse($this->response->withStatus(500));
@@ -220,6 +221,7 @@ class MailFieldsController extends BcAdminApiController
         try {
             $mailField = $service->create($this->request->getData());
             $message = __d('baser_core', '新規メールフィールド「{0}」を追加しました。', $mailField->name);
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (PersistenceFailedException $e) {
             $errors = $e->getEntity()->getErrors();
             $message = __d('baser_core', "入力エラーです。内容を修正してください。");
@@ -259,6 +261,7 @@ class MailFieldsController extends BcAdminApiController
         try {
             $mailField = $service->update($service->get($id), $this->request->getData());
             $message = __d('baser_core', 'メールフィールド「{0}」を更新しました。', $mailField->name);
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (PersistenceFailedException $e) {
             $errors = $e->getEntity()->getErrors();
             $this->setResponse($this->response->withStatus(400));
@@ -298,6 +301,7 @@ class MailFieldsController extends BcAdminApiController
             $mailField = $service->get($id);
             if ($service->delete($id)) {
                 $message = __d('baser_core', 'メールフィールド「{0}」を削除しました。', $mailField->name);
+                $this->BcMessage->setSuccess($message, true, false);
             } else {
                 $message = __d('baser_core', 'データベース処理中にエラーが発生しました。');
             }
@@ -336,6 +340,7 @@ class MailFieldsController extends BcAdminApiController
             if ($service->copy($mailContentId, $id)) {
                 $mailField = $service->get($id);
                 $message = __d('baser_core', 'メールフィールド「{0}」をコピーしました。', $mailField->name);
+                $this->BcMessage->setSuccess($message, true, false);
             } else {
                 $message = __d('baser_core', 'データベース処理中にエラーが発生しました。');
             }

@@ -58,6 +58,7 @@ class UploaderConfigsController extends BcAdminApiController
         try {
             $uploaderConfig = $service->update($this->request->getData());
             $message = __d('baser_core', 'アップローダープラグインを保存しました。', );
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (PersistenceFailedException $e) {
             $errors = $e->getEntity()->getErrors();
             $message = __d('baser_core', "入力エラーです。内容を修正してください。");

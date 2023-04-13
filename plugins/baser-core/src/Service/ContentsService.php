@@ -1631,13 +1631,14 @@ class ContentsService implements ContentsServiceInterface
      * ローカルナビ用のコンテンツ一覧を取得する
      *
      * @param int $id
-     * @return \Cake\Datasource\ResultSetInterface
+     * @return \Cake\Datasource\ResultSetInterface|void
      * @checked
      * @noTodo
      */
     public function getLocalNavi(int $id)
     {
         $parent = $this->getParent($id);
+        if (!$parent) return;
         $query = $this->Contents->find('children', ['for' => $parent->id, 'direct' => true]);
         return $query->where([
             'Contents.exclude_menu' => false,
