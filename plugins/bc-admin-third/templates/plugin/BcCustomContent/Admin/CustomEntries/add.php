@@ -14,6 +14,7 @@
  * @var \BcCustomContent\Model\Entity\CustomTable $customTable
  * @var \BcCustomContent\Model\Entity\CustomEntry $entity
  * @var int $tableId
+ * @var bool $availablePreview
  * @checked
  * @noTodo
  * @unitTest
@@ -34,6 +35,14 @@ $this->BcAdmin->setTitle(__d('baser_core', '{0}｜新規エントリー登録', 
         'class' => 'button bca-btn',
         'data-bca-btn-type' => 'back-to-list'
       ]) ?>&nbsp;&nbsp;
+    <?php if($availablePreview): ?>
+    <?php echo $this->BcAdminForm->submit(__d('baser_core', 'プレビュー'), [
+        'id' => 'BtnPreview',
+        'div' => false,
+        'class' => 'button bca-btn bca-actions__item',
+        'data-bca-btn-type' => 'preview',
+      ]) ?>&nbsp;&nbsp;
+    <?php endif ?>
     <?php echo $this->BcAdminForm->submit(__d('baser_core', '保存'), [
       'div' => false,
       'class' => 'bca-btn bca-loading',

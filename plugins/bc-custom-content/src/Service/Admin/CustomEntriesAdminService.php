@@ -80,13 +80,16 @@ class CustomEntriesAdminService extends CustomEntriesService implements CustomEn
         $customTables = $this->getService(CustomTablesServiceInterface::class);
         if ($customTables->hasCustomContent($tableId)) {
             $customTable = $customTables->getWithContentAndLinks($tableId);
+            $availablePreview = true;
         } else {
             $customTable = $customTables->getWithLinks($tableId);
+            $availablePreview = false;
         }
         return [
             'entity' => $entity,
             'tableId' => $tableId,
-            'customTable' => $customTable
+            'customTable' => $customTable,
+            'availablePreview' => $availablePreview
         ];
     }
 
@@ -107,14 +110,17 @@ class CustomEntriesAdminService extends CustomEntriesService implements CustomEn
             $customTable = $customTables->getWithLinks($tableId);
         }
         $publishLink = null;
+        $availablePreview = false;
         if($customTable->isContentTable()) {
             $publishLink = $this->getPublishLinkForEdit($customTable->custom_content->content, $entity);
+            $availablePreview = true;
         }
         return [
             'entity' => $entity,
             'tableId' => $tableId,
             'customTable' => $customTable,
-            'publishLink' => $publishLink
+            'publishLink' => $publishLink,
+            'availablePreview' => $availablePreview
         ];
     }
 
