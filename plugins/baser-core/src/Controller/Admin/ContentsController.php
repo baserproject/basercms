@@ -77,17 +77,27 @@ class ContentsController extends BcAdminAppController
      */
     public function index(ContentsAdminServiceInterface $service, SiteConfigsServiceInterface $siteConfigService)
     {
+        $request = $this->getRequest();
+        if($request->getAttribute('currentSite')) {
+            $this->setRequest(
+                $request->withQueryParams(array_merge(
+                    $request->getQueryParams(),
+                    ['site_id' => $request->getAttribute('currentSite')->id]
+                ))
+            );
+        }
+
         $this->setViewConditions('Contents', ['default' => ['query' => [
             'limit' => BcSiteConfig::get('admin_list_num'),
-            'site_id' => $this->request->getAttribute('currentSite')? $this->request->getAttribute('currentSite')->id : 1,
-            'list_type' => $this->request->getQuery('list_type') ?? 1,
+            'site_id' => 1,
+            'list_type' => 1,
         ]]]);
 
         switch($this->getRequest()->getQuery('list_type')) {
             case 1:
                 // 並び替え最終更新時刻をリセット
                 $siteConfigService->resetValue('contents_sort_last_modified');
-                $contents = $service->getTreeIndex($this->request->getQueryParams());
+                $contents = $service->getTreeIndex($this->getRequest()->getQueryParams());
                 break;
             case 2:
                 $this->setViewConditions('Contents', ['default' => [
@@ -100,16 +110,16 @@ class ContentsController extends BcAdminAppController
 
                 // EVENT Contents.searchIndex
                 $event = $this->dispatchLayerEvent('searchIndex', [
-                    'request' => $this->request
+                    'request' => $this->getRequest()
                 ]);
                 if ($event !== false) {
-                    $this->request = ($event->getResult() === null || $event->getResult() === true)? $event->getData('request') : $event->getResult();
+                    $this->setRequest(($event->getResult() === null || $event->getResult() === true)? $event->getData('request') : $event->getResult());
                 }
                 try {
-                    $contents = $this->paginate($service->getTableIndex($this->request->getQueryParams()));
+                    $contents = $this->paginate($service->getTableIndex($this->getRequest()->getQueryParams()));
                 } catch(NotFoundException $e) {
                     // 1ページ目以外で最後のレコードを削除した際に発生するので1ページに戻す
-                    $paging = $this->request->getAttribute('paging');
+                    $paging = $this->getRequest()->getAttribute('paging');
                     if($paging['Contents']['requestedPage'] !== 1) {
                         return $this->redirect(['?' => array_merge($this->getRequest()->getQueryParams(), [
                             'page' => 1,
