@@ -74,8 +74,8 @@ class PermissionsAdminService extends PermissionsService implements PermissionsA
         return [
             'permissionGroups' => $permissionGroupsTable->find()->all(),
             'permission' => $entity,
-            'userGroupId' => $currentUserGroup?? "0",
-            'userGroupTitle' => __d('baser_core', 'ゲスト')
+            'userGroupId' => ($currentUserGroup)? $currentUserGroup->id :  "0",
+            'userGroupTitle' => ($currentUserGroup)? $currentUserGroup->title : __d('baser_core', 'ゲスト')
         ];
     }
 
@@ -97,7 +97,7 @@ class PermissionsAdminService extends PermissionsService implements PermissionsA
         return [
             'permissionGroups' => $permissionGroupsTable->find()->all(),
             'permission' => $entity,
-            'userGroupId' => $currentUserGroup?? "0",
+            'userGroupId' => ($currentUserGroup)? $currentUserGroup->id :  "0",
             'userGroupTitle' => ($currentUserGroup)? $currentUserGroup->title : __d('baser_core', 'ゲスト')
         ];
     }
