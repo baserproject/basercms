@@ -95,6 +95,7 @@ class CustomContentsController extends BcAdminApiController
         try {
             $entity = $service->create($this->request->getData());
             $message = __d('baser_core', 'カスタムコンテンツ「{0}」を追加しました。', $entity->content->title);
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (PersistenceFailedException $e) {
             $errors = $e->getEntity()->getErrors();
             $message = __d('baser_core', "入力エラーです。内容を修正してください。");
@@ -135,6 +136,7 @@ class CustomContentsController extends BcAdminApiController
         try {
             $customContent = $service->update($service->get($id), $this->request->getData());
             $message = __d('baser_core', 'カスタムコンテンツ「{0}」を更新しました。', $customContent->content->title);
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (PersistenceFailedException $e) {
             $errors = $e->getEntity()->getErrors();
             $message = __d('baser_core', "入力エラーです。内容を修正してください。");
@@ -178,6 +180,7 @@ class CustomContentsController extends BcAdminApiController
             $customContent = $service->get($id);
             $service->delete($id);
             $message = __d('baser_core', 'カスタムコンテンツ「{0}」を削除しました。', $customContent->content->title);
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (RecordNotFoundException $e) {
             $this->setResponse($this->response->withStatus(404));
             $message = __d('baser_core', 'データが見つかりません。');
