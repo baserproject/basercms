@@ -49,7 +49,9 @@ $this->BcBaser->js('admin/permissions/form.bundle', false);
     </tr>
 
     <tr>
-      <th class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('user_group_id', __d('baser_core', 'アクセスルールグループ')) ?></th>
+      <th class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('user_group_id', __d('baser_core', 'アクセスルールグループ')) ?>
+        &nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser_core', '必須') ?>
+      </th>
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('permission_group_type', ['type' => 'radio', 'options' => $this->BcAdminForm->getControlSource('Permissions.permission_group_type')]) ?>
         <?php echo $this->BcAdminForm->control('permission_group_id', ['type' => 'select', 'options' => $this->BcAdminForm->getControlSource('Permissions.permission_group_id'), 'empty' => __d('baser_core', 'アクセスルールグループを選択してください。')] ) ?>
