@@ -83,6 +83,7 @@ class FavoritesController extends BcAdminApiController
         try {
             $favorite = $service->create($this->request->getData());
             $message = __d('baser_core', 'お気に入り「{0}」を追加しました。', $favorite->name);
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (PersistenceFailedException $e) {
             $this->setResponse($this->response->withStatus(400));
             $errors = $e->getEntity()->getErrors();
@@ -113,6 +114,7 @@ class FavoritesController extends BcAdminApiController
         try {
             $favorite = $service->update($service->get($id), $this->request->getData());
             $message = __d('baser_core', 'お気に入り「{0}」を更新しました。', $favorite->name);
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (PersistenceFailedException $e) {
             $this->setResponse($this->response->withStatus(400));
             $errors = $e->getEntity()->getErrors();
@@ -147,6 +149,7 @@ class FavoritesController extends BcAdminApiController
             $favorite = $service->get($id);
             if ($service->delete($id)) {
                 $message = __d('baser_core', 'お気に入り: {0} を削除しました。', $favorite->name);
+                $this->BcMessage->setSuccess($message, true, false);
             }
         } catch (RecordNotFoundException $e) {
             $this->setResponse($this->response->withStatus(404));
