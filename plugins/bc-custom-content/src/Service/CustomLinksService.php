@@ -50,7 +50,7 @@ class CustomLinksService implements CustomLinksServiceInterface
      */
     public function get(int $id, array $options = [])
     {
-        $options = array_merge_recursive([
+        $options = array_merge([
             'status' => '',
             'contain' => [
                 'CustomFields',
@@ -165,6 +165,7 @@ class CustomLinksService implements CustomLinksServiceInterface
         $this->CustomLinks->getConnection()->begin();
         try {
             $oldName = $entity->name;
+            unset($postData['custom_field']);
             $entity = $this->CustomLinks->patchEntity($entity, $postData);
             $result = $this->CustomLinks->saveOrFail($entity);
             if($oldName !== $entity->name) {

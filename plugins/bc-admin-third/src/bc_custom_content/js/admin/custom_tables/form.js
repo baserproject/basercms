@@ -287,30 +287,36 @@ let customLinks = new Vue({
             this.hideError();
             $.bcUtil.showLoader();
             let url = $.bcUtil.apiAdminBaseUrl + 'bc-custom-content/custom_links/edit/' + this.link.id + '.json';
-            axios.post(url, this.link)
-                .then(response => {
-                    $.bcUtil.hideLoader();
-                    this.links[this.link.id] = this.link;
-                    this.$refs.modalCustomLinkDetail.closeModal();
-                })
-                .catch(error => {
-                    $.bcUtil.hideLoader();
-                    const errors = error.response.data.errors;
-                    if (error.response.status === 400) {
-                        $('.modal-content #MessageBox .alert-message').html(error.response.data.message);
-                        Object.keys(errors).forEach(function (name) {
-                            Object.keys(errors[name]).forEach(function (detail) {
-                                $('.error-' + name).append(errors[name][detail]).show();
+            const $this = this;
+            $.bcToken.check(function(){
+                axios.post(url, $this.link, {
+                        headers: {
+                            'X-CSRF-Token': $.bcToken.key
+                        }
+                    })
+                    .then(response => {
+                        $.bcUtil.hideLoader();
+                        $this.links[$this.link.id] = $this.link;
+                        $this.$refs.modalCustomLinkDetail.closeModal();
+                    })
+                    .catch(error => {
+                        $.bcUtil.hideLoader();
+                        const errors = error.response.data.errors;
+                        if (error.response.status === 400) {
+                            $('.modal-content #MessageBox .alert-message').html(error.response.data.message);
+                            Object.keys(errors).forEach(function (name) {
+                                Object.keys(errors[name]).forEach(function (detail) {
+                                    $('.error-' + name).append(errors[name][detail]).show();
+                                });
                             });
-                        });
-                    } else if (error.response.status === 500) {
-                        $('.modal-content #MessageBox .alert-message').html(error.response.data.message);
-                    } else {
-                        $('.modal-content #MessageBox .alert-message').html('予期せぬエラーが発生しました。システム管理者に連絡してください。');
-                    }
-                    $('.modal-content #MessageBox').show();
-                });
-
+                        } else if (error.response.status === 500) {
+                            $('.modal-content #MessageBox .alert-message').html(error.response.data.message);
+                        } else {
+                            $('.modal-content #MessageBox .alert-message').html('予期せぬエラーが発生しました。システム管理者に連絡してください。');
+                        }
+                        $('.modal-content #MessageBox').show();
+                    });
+            });
         },
 
         /**

@@ -130,7 +130,7 @@ class CustomLinksController extends BcAdminApiController
         $this->request->allowMethod(['post', 'put', 'patch']);
         $entity = null;
         try {
-            $entity = $service->update($service->get($id), $this->request->getData());
+            $entity = $service->update($service->get($id, ['contain' => null]), $this->request->getData());
             $message = __d('baser_core', 'カスタムリンク「{0}」を更新しました。', $entity->title);
             $this->BcMessage->setSuccess($message, true, false);
         } catch (PersistenceFailedException $e) {
