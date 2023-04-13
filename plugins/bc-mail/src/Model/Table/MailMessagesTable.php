@@ -219,6 +219,7 @@ class MailMessagesTable extends MailAppTable
                         $validator->requirePresence($mailField->field_name)
                             ->add($mailField->field_name, [
                                 'notFileEmpty' => [
+                                    'provider' => 'bc',
                                     'rule' => 'notFileEmpty',
                                     'message' => __d('baser_core', '必須項目です。')
                                 ]
