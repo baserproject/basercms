@@ -15,6 +15,7 @@ use BaserCore\Error\BcException;
 use BaserCore\Service\ContentsService;
 use BaserCore\Service\ContentsServiceInterface;
 use BaserCore\Utility\BcSiteConfig;
+use BaserCore\Utility\BcUtil;
 use BcMail\Service\Admin\MailMessagesAdminService;
 use BcMail\Service\Admin\MailMessagesAdminServiceInterface;
 use BcMail\Service\MailContentsServiceInterface;
@@ -23,6 +24,7 @@ use Cake\Event\EventInterface;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use Cake\Http\Response;
 
 /**
  * 受信メールコントローラー
@@ -119,7 +121,7 @@ class MailMessagesController extends MailAdminAppController
      * @param MailContentsServiceInterface $mailContentsService
      * @param int $mailContentId
      * @param int $id
-     * @return void
+     * @return void|Response
      * @checked
      * @noTodo
      */
@@ -150,14 +152,16 @@ class MailMessagesController extends MailAdminAppController
     /**
      * メールフォームに添付したファイルを開く
      */
-    public function attachment()
+    public function attachment(MailMessagesServiceInterface $service)
     {
         $args = func_get_args();
-        unset($args[0]);
+        $mailContentId = $args[1];
+        unset($args[0], $args[1]);
         $file = implode('/', $args);
-        $settings = $this->MailMessage->getBehavior('BcUpload')->BcUpload['MailMessage']->settings;
+        $service->MailMessages->setup($mailContentId);
+        $settings = $service->MailMessages->getBehavior('BcUpload')->getSettings();
         $filePath = WWW_ROOT . 'files' . DS . $settings['saveDir'] . DS . $file;
-        $ext = decodeContent(null, $file);
+        $ext = BcUtil::decodeContent(null, $file);
         $mineType = 'application/octet-stream';
         if ($ext !== 'gif' && $ext !== 'jpg' && $ext !== 'png') {
             Header("Content-disposition: attachment; filename=" . $file);

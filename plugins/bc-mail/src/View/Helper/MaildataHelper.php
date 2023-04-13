@@ -90,19 +90,19 @@ class MaildataHelper extends BcTextHelper
 					'admin' => true,
 					'controller' => 'mail_messages',
 					'action' => 'attachment',
-					$mailContent['MailContent']['id']
+					$mailContent->id
 				], $aryFile);
                 if (in_array($ext, ['gif', 'jpg', 'png'])) {
                     $result = $this->BcBaser->getLink(
                         $this->BcBaser->getImg($link, ['width' => 400]),
                         $link,
-                        ['target' => '_blank']
+                        ['target' => '_blank', 'escape' => false]
                     );
 				} else {
 					$result = $this->BcBaser->getLink($file, $link);
                 }
 
-                return $this->BcBaser->getLink($file, $link);
+                return $result;
 
             case 'date_time_calender':
 				if (is_array($value)) $value = $this->dateTime($value);
