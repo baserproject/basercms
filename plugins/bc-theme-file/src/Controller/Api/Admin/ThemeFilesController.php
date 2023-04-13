@@ -42,6 +42,7 @@ class ThemeFilesController extends BcAdminApiController
             $form = $service->create($data);
             $entity = $service->get($form->getData('fullpath'));
             $message = __d('baser_core', 'ファイル「{0}」を作成しました。', $entity->name);
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (BcFormFailedException $e) {
             $this->setResponse($this->response->withStatus(400));
             $message = __d('baser_core', '入力エラーです。内容を修正してください。');
@@ -77,6 +78,7 @@ class ThemeFilesController extends BcAdminApiController
             $themeFileForm = $service->update($data);
             $entity = $service->get($themeFileForm->getData('fullpath'));
             $message = __d('baser_core', 'ファイル「{0}」を更新しました。', $entity->name);
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (BcFormFailedException $e) {
             $this->setResponse($this->response->withStatus(400));
             $message = __d('baser_core', '入力エラーです。内容を修正してください。');
@@ -112,6 +114,7 @@ class ThemeFilesController extends BcAdminApiController
             $themeFile = $service->get($data['fullpath'])->toArray();
             if ($service->delete($data['fullpath'])) {
                 $message = __d('baser_core', 'ファイル「{0}」を削除しました。', $data['path']);
+                $this->BcMessage->setSuccess($message, true, false);
             } else {
                 $message = __d('baser_core', 'ファイル「{0}」の削除に失敗しました。', $data['path']);
             }
@@ -145,6 +148,7 @@ class ThemeFilesController extends BcAdminApiController
             $entity = $service->copy($data['fullpath']);
             if ($entity) {
                 $message = __d('baser_core', 'ファイル「{0}」をコピーしました。', $data['path']);
+                $this->BcMessage->setSuccess($message, true, false);
             } else {
                 $message = __d('baser_core', 'ファイル「{0}」のコピーに失敗しました。上位フォルダのアクセス権限を見直してください。', $data['path']);
             }
@@ -185,6 +189,7 @@ class ThemeFilesController extends BcAdminApiController
                 $currentTheme,
                 $targetPath
             );
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (\Throwable $e) {
             $this->setResponse($this->response->withStatus(500));
             $message = __d('baser_core', '処理中にエラーが発生しました。' . $e->getMessage());
@@ -305,6 +310,7 @@ class ThemeFilesController extends BcAdminApiController
             $data['fullpath'] = $service->getFullpath($data['theme'], $data['plugin'], $data['type'], $data['path']);
             $service->upload($data['fullpath'], $data);
             $message = __d('baser_core', 'アップロードに成功しました。');
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (\Throwable $e) {
             $this->setResponse($this->response->withStatus(500));
             $message = __d('baser_core', '処理中にエラーが発生しました。' . $e->getMessage());
