@@ -358,7 +358,7 @@ class ThemeFilesController extends BcAdminAppController
      * フォルダ追加
      *
      * @param ThemeFoldersAdminService $service
-     * @return void
+     * @return Response|void|null
      * @checked
      * @noTodo
      */
@@ -377,7 +377,7 @@ class ThemeFilesController extends BcAdminAppController
                 $this->BcMessage->setInfo(__d('baser_core', 'フォルダ「{0}」を作成しました。', $entity->name));
                 return $this->redirect(array_merge(
                     ['action' => 'index', $args['theme'], $args['plugin'], $args['type']],
-                    explode('/', dirname($args['path']))
+                    explode('/', $args['path'])
                 ));
             } catch (BcFormFailedException $e) {
                 $form = $e->getForm();
