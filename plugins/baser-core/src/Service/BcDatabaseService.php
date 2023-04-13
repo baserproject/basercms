@@ -736,7 +736,19 @@ class BcDatabaseService implements BcDatabaseServiceInterface
         );
 
         $appEncoding = $this->_dbEncToPhp($this->getEncoding());
-        $sql = 'SELECT `' . implode('`,`', $schema->columns()) . '` FROM ' . $table;
+
+        switch($db->config()['driver']) {
+            case Mysql::class:
+                $sql = 'SELECT `' . implode('`,`', $schema->columns()) . '` FROM ' . $table;
+                break;
+            case Postgres::class:
+                $sql = 'SELECT ' . implode(',', $schema->columns()) . ' FROM ' . $table;
+                break;
+            case Sqlite::class:
+                $sql = 'SELECT `' . implode('`,`', $schema->columns()) . '` FROM ' . $table;
+                break;
+        }
+
         $query = $db->query($sql);
         $records = $query->fetchAll('assoc');
 
