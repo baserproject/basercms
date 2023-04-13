@@ -78,7 +78,11 @@
         <?php echo $this->BcAdminForm->control('subject_user', ['type' => 'text', 'size' => 80, 'maxlength' => 255]) ?>
         <i class="bca-icon--question-circle bca-help"></i>
         <?php echo $this->BcAdminForm->error('subject_user') ?>
-        <div class="bca-helptext"><?php echo __d('baser_core', 'ユーザー宛の自動返信メールの件名に表示します。') ?></div>
+        <div class="bca-helptext"><?php
+           echo __d('baser_core', 'ユーザー宛の自動返信メールの件名に表示します。');
+           echo '<br>';
+           echo __d('baser_core', '{$フィールド名}といれると、フォームの入力内容を取り入れることができます');
+           ?></div>
       </td>
     </tr>
     <tr>
@@ -90,7 +94,11 @@
         <?php echo $this->BcAdminForm->control('subject_admin', ['type' => 'text', 'size' => 80, 'maxlength' => 255]) ?>
         <i class="bca-icon--question-circle bca-help"></i>
         <?php echo $this->BcAdminForm->error('subject_admin') ?>
-        <div class="bca-helptext"><?php echo __d('baser_core', '管理者宛の自動送信メールの件名に表示します。') ?></div>
+        <div class="bca-helptext"><?php
+           echo __d('baser_core', '管理者宛の自動送信メールの件名に表示します。');
+           echo '<br>';
+           echo __d('baser_core', '{$フィールド名}といれると、フォームの入力内容を取り入れることができます');
+           ?></div>
       </td>
     </tr>
     <tr>
