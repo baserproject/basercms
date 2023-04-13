@@ -53,14 +53,12 @@ $this->BcAdmin->setTitle(__d('baser_core', '{0}｜テーブル編集', $entity->
       ]) ?>
     </div>
     <div class="bca-actions__sub">
-      <?php echo $this->BcAdminForm->postLink(__d('baser_core', '削除'),
-        ['action' => 'delete', $entity->id], [
-          'block' => true,
-          'confirm' => __d('baser_core', "{0} を本当に削除してもいいですか？\n\n関連するエントリーやフィールドは全て削除されますのでご注意ください。", $entity->title),
-          'class' => 'bca-submit-token button bca-btn bca-actions__item',
+      <?php echo $this->BcAdminForm->button(__d('baser_core', '削除'), [
+          'class' => 'bca-btn bca-actions__item',
           'data-bca-btn-type' => 'delete',
           'data-bca-btn-size' => 'sm',
-          'data-bca-btn-color' => 'danger'
+          'data-bca-btn-color' => 'danger',
+          'v-on:click.prevent' => 'deleteTable'
         ]) ?>
     </div>
   </div>
@@ -82,4 +80,3 @@ $this->BcAdmin->setTitle(__d('baser_core', '{0}｜テーブル編集', $entity->
 
 </div>
 
-<?php echo $this->fetch('postLink') ?>

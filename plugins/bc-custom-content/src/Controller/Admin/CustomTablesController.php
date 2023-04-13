@@ -16,6 +16,7 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BcCustomContent\Service\Admin\CustomTablesAdminServiceInterface;
 use BcCustomContent\Service\CustomTablesServiceInterface;
+use Cake\Event\EventInterface;
 use Cake\ORM\Exception\PersistenceFailedException;
 
 /**
@@ -23,6 +24,25 @@ use Cake\ORM\Exception\PersistenceFailedException;
  */
 class CustomTablesController extends CustomContentAdminAppController
 {
+
+    /**
+     * before filter
+     *
+     * 削除処理について、レイアウト上の問題にて、vue.js のアプリケーション内に削除ボタンを配置する必要があるが、
+     * アプリケーション内では、FormHelper::postLink() の JS が無効化されてしまうため、vue.js 内で実装。
+     * _Token フィールドの生成が JS上で難しいため、validatePost を false にしている
+     * @see plugins/bc-admin-third/src/bc_custom_content/js/admin/custom_tables/form.js
+     *
+     * @param EventInterface $event
+     * @return \Cake\Http\Response|void|null
+     */
+    public function beforeFilter(EventInterface $event)
+    {
+        if ($this->request->getParam('action') === 'delete') {
+            $this->Security->setConfig('validatePost', false);
+        }
+        return parent::beforeFilter($event);
+    }
 
     /**
      * カスタムテーブルの一覧を表示

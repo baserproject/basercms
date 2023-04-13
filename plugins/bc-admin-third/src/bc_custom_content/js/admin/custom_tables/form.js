@@ -38,7 +38,8 @@ let customLinks = new Vue({
             parentList: {},
             enabledUseLoop: true,
             enabledGroupValid: true,
-            currentParentId: null
+            currentParentId: null,
+            tableId: script.attr('data-tableId')
         }
     },
 
@@ -348,6 +349,31 @@ let customLinks = new Vue({
             if((this.link.rght - this.link.lft) > 1) {
                 this.enabledUseLoop = false;
             }
+        },
+
+        /**
+         * 削除する
+         *
+         * レイアウト上の問題にて、vue.js のアプリケーション内に削除ボタンを配置する必要があるが、
+         * アプリケーション内では、FormHelper::postLink() の JS が無効化されてしまうため、vue.js 内で実装。
+         * API を利用していない理由は次の課題をクリアするため
+         * - 削除してそのまま一覧に画面遷移する
+         * - 遷移後、フラッシュメッセージを表示する
+         * _Token フィールドの生成が JS上で難しいため、コントローラーにて validatePost を false にしている
+         * @see Admin/CustomTablesController::beforeFilter
+         */
+        deleteTable() {
+            if(!confirm(bcI18n.confirmDeleteMessage)) return;
+            $.bcUtil.showLoader();
+            const $form = $('<form method="post"/>');
+            const $input = $('<input name="_csrfToken"/>');
+            $form.attr('action', $.bcUtil.adminBaseUrl + 'bc-custom-content/custom_tables/delete/' + this.tableId);
+            $form.append($input);
+            $.bcToken.check(function (){
+                $input.val($.bcToken.key);
+                $("body").append($form);
+                $form.submit();
+            }, {hideLoader: false});
         }
 
     }

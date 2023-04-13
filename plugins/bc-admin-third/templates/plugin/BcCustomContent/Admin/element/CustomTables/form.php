@@ -25,7 +25,11 @@ $this->BcBaser->js('BcCustomContent.admin/custom_tables/form.bundle', false, [
   'id' => 'AdminCustomTablesFormScript',
   'data-setting' => json_encode(\Cake\Core\Configure::read('BcCustomContent.fieldTypes')),
   'data-links' => json_encode($flatLinks),
+  'data-tableId' => $entity->id,
   'defer' => true
+]);
+$this->BcBaser->i18nScript([
+  'confirmDeleteMessage' =>  __d('baser_core', "{0} を本当に削除してもいいですか？\n\n関連するエントリーやフィールドは全て削除されますのでご注意ください。", $entity->title)
 ]);
 $this->BcAdminForm->unlockField("custom_links");
 ?>
