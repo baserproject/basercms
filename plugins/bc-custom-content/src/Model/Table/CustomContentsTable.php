@@ -16,6 +16,7 @@ use BaserCore\Model\Table\AppTable;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use Cake\Validation\Validator;
 
 /**
  * CustomContentsTable
@@ -44,6 +45,20 @@ class CustomContentsTable extends AppTable
         $this->addBehavior('Timestamp');
         $this->belongsTo('CustomTables', ['className' => 'BcCustomContent.CustomTables'])
             ->setForeignKey('custom_table_id');
+    }
+
+
+    /**
+     * デフォルトのバリデーションを設定する
+     *
+     * @param Validator $validator
+     * @return Validator
+     */
+    public function validationDefault(Validator $validator): Validator
+    {
+        $validator->requirePresence('list_count')
+            ->notEmptyString('list_count', __d('baser_core', '一覧表示件数は必須項目です。'));
+        return $validator;
     }
 
 }

@@ -137,8 +137,7 @@
 
       <tr>
         <th class="col-head bca-form-table__label">
-          <?php echo $this->BcAdminForm->label('template', __d('baser_core', 'コンテンツテンプレート名')) ?>&nbsp;
-          <span class="required bca-label" data-bca-label-type="required"><?php echo __d('baser_core', '必須') ?></span>
+          <?php echo $this->BcAdminForm->label('template', __d('baser_core', 'コンテンツテンプレート名')) ?>
         </th>
         <td class="col-input bca-form-table__input">
           <?php echo $this->BcAdminForm->control('template', [
@@ -158,8 +157,7 @@
       <?php if($this->BcBaser->isPluginLoaded('BcWidgetArea')): ?>
       <tr>
         <th class="col-head bca-form-table__label">
-          <?php echo $this->BcAdminForm->label('widget_area', __d('baser_core', 'ウィジェットエリア')) ?>&nbsp;
-          <span class="required bca-label" data-bca-label-type="required"><?php echo __d('baser_core', '必須') ?></span>
+          <?php echo $this->BcAdminForm->label('widget_area', __d('baser_core', 'ウィジェットエリア')) ?>
         </th>
         <td class="col-input bca-form-table__input">
           <?php echo $this->BcAdminForm->control('widget_area', [
