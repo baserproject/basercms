@@ -91,7 +91,7 @@ $(function () {
                 $("#RowSeparator").hide();
                 $("#delimiter").val('');
                 break;
-            case 'tell':
+            case 'tel':
                 $validEmail.hide();
                 $validNumber.show();
                 $("#RowSize").show();
