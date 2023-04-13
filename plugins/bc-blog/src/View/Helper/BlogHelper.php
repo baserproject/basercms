@@ -735,7 +735,7 @@ class BlogHelper extends Helper
         ], $options);
         if ($depth < $options['current']) return '';
         if ($categories) {
-            return $this->BcBaser->getElement('blog_category_list', [
+            return $this->BcBaser->getElement('BcBlog.blog_category_list', [
                 'categories' => $categories,
                 'depth' => $depth,
                 'count' => $count,

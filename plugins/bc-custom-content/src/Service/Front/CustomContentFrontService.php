@@ -87,7 +87,7 @@ class CustomContentFrontService extends BcFrontContentsService implements Custom
     {
 
         $this->entriesService->setup($customContent->custom_table_id);
-        $params = array_merge_recursive([
+        $params = array_merge([
             'contain' => ['CustomTables' => ['CustomContents' => ['Contents']]],
             'status' => 'publish',
             'order' => $customContent->list_order,
@@ -228,6 +228,13 @@ class CustomContentFrontService extends BcFrontContentsService implements Custom
         $customContent = $this->contentsService->get($request->getParam('entityId'));
         $customContent = $this->contentsService->CustomContents->patchEntity($customContent, $request->getData());
         $controller->setRequest($request->withAttribute('currentContent', $customContent->content));
+
+        $controller->setRequest($controller->getRequest()->withQueryParams(array_merge([
+            'limit' => $customContent->list_count,
+            'sort' => $customContent->list_order,
+            'direction' => $customContent->list_direction
+        ], $controller->getRequest()->getQueryParams())));
+
         $controller->set($this->getViewVarsForIndex(
             $customContent,
             $controller->paginate($this->getCustomEntries($customContent))

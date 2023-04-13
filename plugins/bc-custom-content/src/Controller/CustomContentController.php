@@ -56,6 +56,12 @@ class CustomContentController extends BcFrontAppController
             $this->notFound();
         }
 
+        $this->setRequest($this->getRequest()->withQueryParams(array_merge([
+            'limit' => $customContent->list_count,
+            'sort' => $customContent->list_order,
+            'direction' => $customContent->list_direction
+        ], $this->getRequest()->getQueryParams())));
+
         $this->set($service->getViewVarsForIndex(
             $customContent,
             $this->paginate($service->getCustomEntries($customContent, $this->getRequest()->getQueryParams()))
