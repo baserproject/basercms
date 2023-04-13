@@ -47,7 +47,7 @@
         &nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser_core', '必須') ?></span>
       </th>
       <td class="col-input bca-form-table__input">
-        <?php echo $this->BcAdminForm->control('sender_1_', [
+        <?php echo $this->BcAdminForm->control('sender_1_select', [
           'type' => 'radio',
           'options' => ['0' => __d('baser_core', '管理者用メールアドレスに送信する'), '1' => __d('baser_core', '別のメールアドレスに送信する')],
           'legend' => false,

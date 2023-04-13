@@ -115,7 +115,7 @@ class MailContentsService implements MailContentsServiceInterface
         if (BcUtil::isOverPostSize()) {
             throw new BcException(__d('baser_core', '送信できるデータ量を超えています。合計で {0} 以内のデータを送信してください。', ini_get('post_max_size')));
         }
-        if (empty($postData['sender_1_'])) {
+        if (empty($postData['sender_1_select'])) {
             $postData['sender_1'] = '';
         }
         $entity = $this->MailContents->patchEntity($entity, $postData);
