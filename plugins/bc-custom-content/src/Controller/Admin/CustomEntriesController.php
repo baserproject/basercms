@@ -167,7 +167,7 @@ class CustomEntriesController extends CustomContentAdminAppController
         $this->getRequest()->allowMethod(['post', 'put']);
         $service->setup($tableId);
         try {
-            $entity = $service->get($id);
+            $entity = $service->get($id, ['contain' => ['CustomTables']]);
             if ($service->delete($id)) {
                 $this->BcMessage->setSuccess(__d('baser_core',
                     'エントリー「{0}」を削除しました。',

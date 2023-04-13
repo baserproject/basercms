@@ -414,7 +414,7 @@ class CustomEntriesService implements CustomEntriesServiceInterface
      */
     public function delete(int $id)
     {
-        $entity = $this->get($id);
+        $entity = $this->get($id, ['contain' => 'CustomTables']);
         return $this->CustomEntries->delete($entity);
     }
 
