@@ -97,11 +97,7 @@ class BcCcPrefHelper extends Helper
      */
     public function get($fieldValue, CustomLink $link, array $options = [])
     {
-        $options = array_merge([
-            'novalue' => ''
-        ], $options);
-		$selector = $this->BcText->prefList();
-		return $this->arrayValue($fieldValue, $selector, $options['novalue']);
+		return h($fieldValue);
     }
 
 }

@@ -28,6 +28,7 @@ use BcCustomContent\Service\CustomTablesServiceInterface;
 use BcCustomContent\Utility\CustomContentUtil;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
+use Cake\Datasource\EntityInterface;
 use Cake\Event\EventInterface;
 use Cake\ORM\Query;
 use Cake\ORM\ResultSet;
@@ -537,15 +538,26 @@ class CustomEntriesTable extends AppTable
         return $query->formatResults(function(\Cake\Collection\CollectionInterface $results) {
             return $results->map(function($row) {
                 if(!is_object($row) || !method_exists($row, 'toArray')) return $row;
-                $rowArray = $row->toArray();
-                foreach($rowArray as $key => $value) {
-                    if (is_string($value) && $this->isJson($value)) {
-                        $row->{$key} = json_decode($value, true);
-                    }
-                }
-                return $row;
+                return $this->decodeRow($row);
             });
         });
+    }
+
+    /**
+     * エンティティのJSON化したフィールドをデコードして返す
+     *
+     * @param EntityInterface $row
+     * @return EntityInterface
+     */
+    public function decodeRow(EntityInterface $row)
+    {
+        $rowArray = $row->toArray();
+        foreach($rowArray as $key => $value) {
+            if (is_string($value) && $this->isJson($value)) {
+                $row->{$key} = json_decode($value, true);
+            }
+        }
+        return $row;
     }
 
     /**

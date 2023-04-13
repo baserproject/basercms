@@ -146,10 +146,15 @@ class CustomContentFrontService extends BcFrontContentsService implements Custom
      * @param int $entryId
      * @return array
      */
-    public function getViewVarsForView(EntityInterface $customContent, mixed $entryId)
+    public function getViewVarsForView(EntityInterface $customContent, mixed $entryId, bool $preview = false)
     {
         $this->entriesService->setup($customContent->custom_table_id);
-        $entity = $this->entriesService->get($entryId, ['status' => 'publish']);
+        if($preview) {
+            $options = [];
+        } else {
+            $options = ['status' => 'publish'];
+        }
+        $entity = $this->entriesService->get($entryId, $options);
         /** @var CustomContent $customContent */
         return [
             'customContent' => $customContent,
@@ -200,11 +205,12 @@ class CustomContentFrontService extends BcFrontContentsService implements Custom
         if(!$entryId) throw new NotFoundException();
 
         $customContent = $this->contentsService->get($request->getParam('entityId'));
-        $controller->set($this->getViewVarsForView($customContent, $entryId));
+        $controller->set($this->getViewVarsForView($customContent, $entryId, true));
         $entity = $this->entriesService->CustomEntries->patchEntity(
             $controller->viewBuilder()->getVar('customEntry'),
             $request->getData()
         );
+        $entity = $this->entriesService->CustomEntries->decodeRow($entity);
         $controller->set(['customEntry' => $entity]);
 
         // テンプレートの変更
