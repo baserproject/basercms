@@ -263,7 +263,8 @@ class PagesTable extends AppTable
 			'author_id' => $newAuthorId,
 			'site_id' => $newSiteId,
 			'description' => $page->content->description,
-			'eyecatch' => $page->content->eyecatch
+			'eyecatch' => $page->content->eyecatch,
+			'layout_template' => $page->content->layout_tmplate?? ''
         ]);
 
         if (!is_null($newSiteId) && $oldPage->content->site_id !== $newSiteId) {
