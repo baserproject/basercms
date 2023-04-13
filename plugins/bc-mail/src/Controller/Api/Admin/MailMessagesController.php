@@ -138,6 +138,7 @@ class MailMessagesController extends BcAdminApiController
                 $mailContent->content->title,
                 $mailMessage->id
             );
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (PersistenceFailedException $e) {
             $this->setResponse($this->response->withStatus(400));
             $mailMessage = $e->getEntity();
@@ -193,6 +194,7 @@ class MailMessagesController extends BcAdminApiController
                 $mailContent->content->title,
                 $mailMessage->id
             );
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (PersistenceFailedException $e) {
             $this->setResponse($this->response->withStatus(400));
             $mailMessage = $e->getEntity();
@@ -247,6 +249,7 @@ class MailMessagesController extends BcAdminApiController
                 $mailContent->content->title,
                 $messageId
             );
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (RecordNotFoundException $e) {
             $this->setResponse($this->response->withStatus(404));
             $message = __d('baser_core', 'データが見つかりません。');

@@ -61,6 +61,7 @@ class MailMessagesController extends BcApiController
                 $mailContent->content->title,
                 $mailMessage->id
             );
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (PersistenceFailedException $e) {
             $this->setResponse($this->response->withStatus(400));
             $mailMessage = $e->getEntity();

@@ -109,6 +109,7 @@ class MailContentsController extends BcAdminApiController
         try {
             $entity = $service->create($this->request->getData());
             $message = __d('baser_core', 'メールフォーム「{0}」を追加しました。', $entity->content->title);
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
             $entity = $e->getEntity();
             $message = __d('baser_core', "入力エラーです。内容を修正してください。");
@@ -142,6 +143,7 @@ class MailContentsController extends BcAdminApiController
         try {
             $entity = $service->update($service->get($id), $this->request->getData());
             $message = __d('baser_core', 'メールフォーム「{0}」を更新しました。', $entity->content->title);
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (PersistenceFailedException $e) {
             $entity = $e->getEntity();
             $message = __d('baser_core', "入力エラーです。内容を修正してください。");
@@ -181,6 +183,7 @@ class MailContentsController extends BcAdminApiController
             $mailContent = $service->get($id);
             if ($service->delete($id)) {
                 $message = __d('baser_core', 'メールフォーム「{0}」を削除しました。', $mailContent->content->title);
+                $this->BcMessage->setSuccess($message, true, false);
             } else {
                 $message = __d('baser_core', 'データベース処理中にエラーが発生しました。');
             }
@@ -218,6 +221,7 @@ class MailContentsController extends BcAdminApiController
                 $message = __d('baser_core', 'コピーに失敗しました。データが不整合となっている可能性があります。');
             } else {
                 $message = __d('baser_core', 'メールフォームのコピー「{0}」を追加しました。', $entity->content->title);
+                $this->BcMessage->setSuccess($message, true, false);
             }
 
         } catch (RecordNotFoundException $e) {
