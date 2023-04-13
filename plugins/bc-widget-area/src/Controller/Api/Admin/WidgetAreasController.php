@@ -78,6 +78,7 @@ class WidgetAreasController extends BcAdminApiController
         try {
             $widgetArea = $service->create($this->getRequest()->getData());
             $message = __d('baser_core', '新しいウィジェットエリアを保存しました。');
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (PersistenceFailedException $e) {
             $this->setResponse($this->response->withStatus(400));
             $errors = $e->getEntity()->getErrors();
@@ -113,6 +114,7 @@ class WidgetAreasController extends BcAdminApiController
         try {
             $widgetArea = $service->update($service->get($id), $this->request->getData());
             $message = __d('baser_core', 'ウィジェットエリア「{0}」を更新しました。', $widgetArea->name);
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (PersistenceFailedException $e) {
             $this->setResponse($this->response->withStatus(400));
             $errors = $e->getEntity()->getErrors();
@@ -152,6 +154,7 @@ class WidgetAreasController extends BcAdminApiController
             $widgetArea = $service->get($id);
             $service->delete($id);
             $message = __d('baser_core', 'ウィジェットエリア「{0}」を削除しました。', $widgetArea->name);
+            $this->BcMessage->setSuccess($message, true, false);
         } catch (RecordNotFoundException $e) {
             $this->setResponse($this->response->withStatus(404));
             $message = __d('baser_core', 'データが見つかりません。');
