@@ -22,6 +22,10 @@ use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
 use BcBlog\Model\Entity\BlogPost;
 use BcBlog\Model\Table\BlogPostsTable;
+use Cake\Database\Driver\Mysql;
+use Cake\Database\Driver\Postgres;
+use Cake\Database\Driver\Sqlite;
+use Cake\Datasource\ConnectionManager;
 use Cake\Datasource\EntityInterface;
 use Cake\Http\Exception\NotFoundException;
 use Cake\I18n\FrozenTime;
@@ -444,21 +448,19 @@ class BlogPostsService implements BlogPostsServiceInterface
      */
     public function createYearMonthDayCondition($conditions, $year, $month, $day)
     {
-        // TODO ucmitz 未実装
-        //$datasource = strtolower(preg_replace('/^Database\/Bc/', '', ConnectionManager::getDataSource($this->useDbConfig)->config['datasource']));
-        $datasource = 'mysql';
-        switch($datasource) {
-            case 'mysql':
+        $driver = ConnectionManager::get('default')->config()['driver'];
+        switch($driver) {
+            case Mysql::class:
                 if ($year) $conditions["YEAR(BlogPosts.posted)"] = $year;
                 if ($month) $conditions["MONTH(BlogPosts.posted)"] = $month;
                 if ($day) $conditions["DAY(BlogPosts.posted)"] = $day;
                 break;
-            case 'postgres':
+            case Postgres::class:
                 if ($year) $conditions["date_part('year',BlogPosts.posted) = "] = $year;
                 if ($month) $conditions["date_part('month',BlogPosts.posted) = "] = $month;
                 if ($day) $conditions["date_part('day',BlogPosts.posted) = "] = $day;
                 break;
-            case 'sqlite':
+            case Sqlite::class:
                 if ($year) $conditions["strftime('%Y',BlogPosts.posted)"] = (string)$year;
                 if ($month) $conditions["strftime('%m',BlogPosts.posted)"] = sprintf('%02d', $month);
                 if ($day) $conditions["strftime('%d',BlogPosts.posted)"] = sprintf('%02d', $day);

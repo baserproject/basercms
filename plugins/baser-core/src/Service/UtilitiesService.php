@@ -418,6 +418,9 @@ class UtilitiesService implements UtilitiesServiceInterface
             throw $e;
         }
 
+        $dbService = $this->getService(BcDatabaseServiceInterface::class);
+        $dbService->updateSequence();
+
         $this->resetTmpSchemaFolder();
         BcUtil::clearAllCache();
         return $result;
