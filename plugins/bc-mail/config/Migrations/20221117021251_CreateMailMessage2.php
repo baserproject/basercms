@@ -27,11 +27,6 @@ class CreateMailMessage2 extends BcMigration
                 'limit' => null,
                 'null' => true,
             ])
-            ->addColumn('aaa', 'text', [
-                'default' => null,
-                'limit' => null,
-                'null' => true,
-            ])
             ->create();
     }
 
