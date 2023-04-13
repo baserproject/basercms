@@ -43,7 +43,6 @@ let vm = new Vue({
             sourceMultiCheckbox: [],
             sourceRadio: [],
             sourceSelect: [],
-            checkboxLabel: ''
         }
     },
 
@@ -91,13 +90,13 @@ let vm = new Vue({
          * @returns {string|*}
          */
         checkboxLabel: {
-            getter: function () {
+            get: function () {
                 if(this.entity.meta && this.entity.meta.BcCcCheckbox !== undefined) {
                     return this.entity.meta.BcCcCheckbox.label;
                 }
                 return '';
             },
-            setter: function(value) {
+            set: function(value) {
                 if(this.entity.meta) {
                     if(this.entity.meta.BcCcCheckbox !== undefined) {
                         this.entity.meta.BcCcCheckbox.label = value;
