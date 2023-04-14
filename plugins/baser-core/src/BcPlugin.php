@@ -361,6 +361,8 @@ class BcPlugin extends BasePlugin
             'target' => 0,
         ], $options);
         $pluginName = $options['plugin'];
+        $pluginPath = BcUtil::getPluginPath($pluginName);
+        if (!is_dir($pluginPath . 'config' . DS . 'Migrations')) return true;
         try {
             $this->migrations->rollback($options);
 
