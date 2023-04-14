@@ -784,16 +784,19 @@ return [
                     'omitViewAction' => true,
                     'routes' => [
                         'add' => [
+                            'plugin' => 'BaserCore',
                             'prefix' => 'Admin',
                             'controller' => 'Contents',
                             'action' => 'add'
                         ],
                         'edit' => [
+                            'plugin' => 'BaserCore',
                             'prefix' => 'Admin',
                             'controller' => 'Contents',
                             'action' => 'edit'
                         ],
                         'view' => [
+                            'plugin' => 'BaserCore',
                             'controller' => 'Contents',
                             'action' => 'view'
                         ]
@@ -806,17 +809,20 @@ return [
                     'title' => __d('baser_core', 'フォルダー'),
                     'routes' => [
                         'add' => [
+                            'plugin' => 'BaserCore',
                             'prefix' => 'Api/Admin',
                             'controller' => 'ContentFolders',
                             'action' => 'add',
                             '_ext' => 'json'
                         ],
                         'edit' => [
+                            'plugin' => 'BaserCore',
                             'prefix' => 'Admin',
                             'controller' => 'ContentFolders',
                             'action' => 'edit'
                         ],
                         'view' => [
+                            'plugin' => 'BaserCore',
                             'controller' => 'ContentFolders',
                             'action' => 'view'
                         ]
@@ -831,21 +837,25 @@ return [
                     'omitViewAction' => true,
                     'routes' => [
                         'add' => [
+                            'plugin' => 'BaserCore',
                             'prefix' => 'Api/Admin',
                             'controller' => 'Pages',
                             'action' => 'add',
                             '_ext' => 'json'
                         ],
                         'edit' => [
+                            'plugin' => 'BaserCore',
                             'prefix' => 'Admin',
                             'controller' => 'Pages',
                             'action' => 'edit'
                         ],
                         'view' => [
+                            'plugin' => 'BaserCore',
                             'controller' => 'Pages',
                             'action' => 'view'
                         ],
                         'copy' => [
+                            'plugin' => 'BaserCore',
                             'prefix' => 'Api/Admin',
                             'controller' => 'Pages',
                             'action' => 'copy',
@@ -859,12 +869,14 @@ return [
                     'icon' => 'bca-icon--alias',
                     'routes' => [
                         'add' => [
+                            'plugin' => 'BaserCore',
                             'prefix' => 'Api/Admin',
                             'controller' => 'Contents',
                             'action' => 'add_alias',
                             '_ext' => 'json'
                         ],
                         'edit' => [
+                            'plugin' => 'BaserCore',
                             'prefix' => 'Admin',
                             'controller' => 'Contents',
                             'action' => 'edit_alias'

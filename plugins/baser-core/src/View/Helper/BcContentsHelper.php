@@ -137,7 +137,7 @@ class BcContentsHelper extends Helper
             // routes
             foreach(['manage', 'add', 'edit', 'delete', 'copy', 'dblclick'] as $method) {
                 if (empty($item['routes'][$method]) && !in_array($method, ['add', 'copy', 'manage', 'dblclick'])) {
-                    $item['routes'][$method] = ['admin' => true, 'controller' => 'contents', 'action' => $method];
+                    $item['routes'][$method] = ['prefix' => 'Admin', 'controller' => 'Contents', 'action' => $method];
                 }
                 if (!empty($item['routes'][$method])) {
                     $route = $item['routes'][$method];
