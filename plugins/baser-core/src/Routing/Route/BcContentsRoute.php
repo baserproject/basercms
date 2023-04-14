@@ -315,7 +315,7 @@ class BcContentsRoute extends Route
             $strUrl = preg_replace('/^\/' . preg_quote($site->alias, '/') . '\//', '/', $strUrl);
         }
         $pass = [];
-        $named = [];
+        $queryParams = [];
         $setting = Configure::read('BcContents.items.' . $plugin . '.' . $type);
         if (!$params) {
             if (empty($setting['omitViewAction']) && $setting['routes']['view']['action'] != $action) {
@@ -326,12 +326,12 @@ class BcContentsRoute extends Route
                 $strUrl .= '/' . $action;
             }
             foreach($params as $key => $param) {
-                if (!is_numeric($key)) {
-                    if ($key == 'page' && !$param) {
-                        $param = 1;
-                    }
-                    if (!is_array($param) && !is_object($param)) {
-                        $named[] = $key . ':' . $param;
+                if ($key === '?') {
+                    foreach($param as $query => $value) {
+                        if ($query == 'page' && !$value) {
+                            $value = 1;
+                        }
+                        $queryParams[] = $query . '=' . $value;
                     }
                 } else {
                     $pass[] = $param;
@@ -341,8 +341,8 @@ class BcContentsRoute extends Route
         if ($pass) {
             $strUrl .= '/' . implode('/', $pass);
         }
-        if ($named) {
-            $strUrl .= '/' . implode('/', $named);
+        if ($queryParams) {
+            $strUrl .= '?' . implode('&', $queryParams);
         }
         if ($type === 'ContentFolder') {
             $strUrl .= '/';
