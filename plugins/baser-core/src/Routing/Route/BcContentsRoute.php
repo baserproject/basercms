@@ -333,7 +333,7 @@ class BcContentsRoute extends Route
                         }
                         $queryParams[] = $query . '=' . $value;
                     }
-                } else {
+                } elseif (!is_array($param) && !is_object($param)) {
                     $pass[] = $param;
                 }
             }
