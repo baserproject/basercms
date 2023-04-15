@@ -388,12 +388,10 @@ class MailContentsTable extends MailAppTable
         $conditions[] = ['or' => [
             [$this->alias . '.publish_begin <=' => date('Y-m-d H:i:s')],
             [$this->alias . '.publish_begin' => null],
-            [$this->alias . '.publish_begin' => '0000-00-00 00:00:00']
         ]];
         $conditions[] = ['or' => [
             [$this->alias . '.publish_end >=' => date('Y-m-d H:i:s')],
             [$this->alias . '.publish_end' => null],
-            [$this->alias . '.publish_end' => '0000-00-00 00:00:00']
         ]];
         return $conditions;
     }

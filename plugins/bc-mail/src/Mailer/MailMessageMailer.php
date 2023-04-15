@@ -72,7 +72,7 @@ class MailMessageMailer extends BcMailer
         if (empty($options['toAdmin'])) return;
         foreach($options['toAdmin'] as $key => $value) {
             $method = 'set' . Inflector::camelize($key);
-            if (method_exists($this, $method)) continue;
+            if (!method_exists($this, $method) && !method_exists($this->message, $method)) continue;
             $this->{$method}($value);
         }
     }
@@ -116,7 +116,7 @@ class MailMessageMailer extends BcMailer
         if (empty($options['toUser'])) return;
         foreach($options['toUser'] as $key => $value) {
             $method = 'set' . Inflector::camelize($key);
-            if (!method_exists($this, $method)) continue;
+            if (!method_exists($this, $method) && !method_exists($this->message, $method)) continue;
             $this->{$method}($value);
         }
     }

@@ -84,12 +84,12 @@ class SearchIndexesTableTest extends BcTestCase
 	public function allowPublishDataProvider()
 	{
 		return [
-			['0000-00-00 00:00:00', '0000-00-00 00:00:00', false, false],
-			['0000-00-00 00:00:00', '0000-00-00 00:00:00', true, true],
-			['0000-00-00 00:00:00', date('Y-m-d H:i:s'), true, false],
-			['0000-00-00 00:00:00', date('Y-m-d H:i:s', strtotime("+1 hour")), true, true],
-			[date('Y-m-d H:i:s'), '0000-00-00 00:00:00', true, true],
-			[date('Y-m-d H:i:s', strtotime("+1 hour")), '0000-00-00 00:00:00', true, false],
+			[null, null, false, false],
+			[null, null, true, true],
+			[null, date('Y-m-d H:i:s'), true, false],
+			[null, date('Y-m-d H:i:s', strtotime("+1 hour")), true, true],
+			[date('Y-m-d H:i:s'), null, true, true],
+			[date('Y-m-d H:i:s', strtotime("+1 hour")), null, true, false],
 			[date('Y-m-d H:i:s'), date('Y-m-d H:i:s'), true, false]
 		];
 	}
