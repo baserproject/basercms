@@ -79,14 +79,6 @@ return [
                             'controller' => 'CustomContent',
                             'action' => 'index'
                         ],
-                        // コピー
-                        'copy' => [
-                            'prefix' => 'Api/Admin',
-                            'plugin' => 'BcCustomContent',
-                            'controller' => 'CustomContents',
-                            'action' => 'copy',
-                            '_ext' => 'json'
-                        ],
                         // ダブルクリック時の遷移先
                         // 定義がない場合は編集画面に遷移する
                         'dblclick' => [

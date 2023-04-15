@@ -54,7 +54,7 @@ class CustomContentsTable extends AppTable
      * @param Validator $validator
      * @return Validator
      */
-    public function validationDefault(Validator $validator): Validator
+    public function validationWithTable(Validator $validator): Validator
     {
         $validator->requirePresence('list_count', 'update')
             ->notEmptyString('list_count', __d('baser_core', '一覧表示件数は必須項目です。'));

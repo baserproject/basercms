@@ -24,6 +24,9 @@ $this->BcAdmin->setTitle(__d('baser_core', 'カスタムコンテンツ設定編
 
 <?php echo $this->BcAdminForm->create($entity, ['novalidate' => true]) ?>
 <?php echo $this->BcAdminForm->control('id', ['type' => 'hidden']) ?>
+<?php if(!$entity->custom_table_id): ?>
+  <?php echo $this->BcAdminForm->hidden('list_count') ?>
+<?php endif ?>
 
 <?php $this->BcBaser->element('CustomContents/form') ?>
 
