@@ -417,12 +417,12 @@ class MailFrontService implements MailFrontServiceInterface
     {
         $publishBegin = $mailContent->publish_begin;
         $publishEnd = $mailContent->publish_end;
-        if ($publishBegin && $publishBegin !== '0000-00-00 00:00:00') {
+        if ($publishBegin) {
             if ($publishBegin > date('Y-m-d H:i:s')) {
                 return false;
             }
         }
-        if ($publishEnd && $publishEnd !== '0000-00-00 00:00:00') {
+        if ($publishEnd) {
             if ($publishEnd < date('Y-m-d H:i:s')) {
                 return false;
             }
