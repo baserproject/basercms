@@ -179,6 +179,9 @@ class UtilitiesServiceTest extends BcTestCase
     public function test_verityContentsTree($dbSample, $expect, $logDataExpect)
     {
         $logPath = LOGS . 'cli-error.log';
+        if (!file_exists(LOGS)) {
+            mkdir(LOGS, 0777);
+        }
         if (file_exists($logPath)) {
             unlink($logPath);
         }

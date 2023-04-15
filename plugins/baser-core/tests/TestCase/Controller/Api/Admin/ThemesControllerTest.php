@@ -90,6 +90,7 @@ class ThemesControllerTest extends BcTestCase
         $this->get('/baser/api/admin/baser-core/themes/index.json?token=' . $this->accessToken);
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
+
         $this->assertCount(3, $result->themes);
         $this->assertEquals('BcColumn', $result->themes[0]->name);
         $this->assertEquals('BcThemeSample', $result->themes[1]->name);
