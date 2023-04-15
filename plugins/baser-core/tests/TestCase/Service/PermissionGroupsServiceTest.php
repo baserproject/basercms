@@ -96,7 +96,32 @@ class PermissionGroupsServiceTest extends BcTestCase
      */
     public function testBuild()
     {
-        $this->markTestIncomplete('このテストは未実装です。');
+        $this->loadFixtureScenario(PermissionGroupsScenario::class);
+        $plugin = 'BaserCore';
+        $this->PermissionGroups->build(0, $plugin);
+        $data = $this->PermissionGroups->getIndex(0, ['permission_amount' => true])
+            ->where(['plugin' => $plugin])
+            ->where(['Permissions.user_group_id' => 0])
+            ->all()->toArray();
+        $this->assertCount(0, $data);
+
+        $this->PermissionGroups->build(1, $plugin);
+        $data = $this->PermissionGroups->getIndex(1, [])->where(['plugin' => $plugin])->all()->toArray();
+        Configure::load($plugin . '.permission', 'baser');
+        $settings = Configure::read('permission');
+        Configure::delete('permission');
+        $this->assertCount(count($settings), $data);
+
+        $plugin = 'BcBlog';
+        $this->PermissionGroups->build(1, $plugin);
+        $data = $this->PermissionGroups->getIndex(1, [])->where(['plugin' => $plugin])->all()->toArray();
+        Configure::load($plugin . '.permission', 'baser');
+        $settings = Configure::read('permission');
+        Configure::delete('permission');
+        $this->assertCount(count($settings), $data);
+
+        $result = $this->PermissionGroups->build(1, 'Nghiem');
+        $this->assertFalse($result);
     }
 
     /**
