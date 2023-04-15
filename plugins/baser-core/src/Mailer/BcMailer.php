@@ -68,7 +68,9 @@ class BcMailer extends Mailer
             ];
             if ($siteConfig->smtp_port) $config['port'] = $siteConfig->smtp_port;
             if ($siteConfig->smtp_tls) $config['tls'] = $siteConfig->smtp_tls;
-            TransportFactory::setConfig($type, $config);
+            if (!TransportFactory::getConfig($type)) {
+                TransportFactory::setConfig($type, $config);
+            }
         } else {
             $type = 'default';
             if ($siteConfig->mail_additional_parameters) {
