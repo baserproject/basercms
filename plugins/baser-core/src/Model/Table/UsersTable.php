@@ -343,8 +343,8 @@ class UsersTable extends AppTable
     {
         $request = Router::getRequest();
         $prefix = $request->getParam('prefix');
-        $authenticator = $request->getAttribute('authentication')->getAuthenticationProvider();
-        if($prefix === 'Api/Admin' && $authenticator && $authenticator instanceof SessionAuthenticator) {
+        $authenticator = $request->getAttribute('authentication');
+        if($prefix === 'Api/Admin' && $authenticator && $authenticator->getAuthenticationProvider() instanceof SessionAuthenticator) {
             $prefix = 'Admin';
         }
         return $query->where([
