@@ -24,6 +24,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $parameters->set(Option::PACKAGE_DIRECTORIES_EXCLUDES, [
         __DIR__ . '/plugins/BcThemeSample',
+        __DIR__ . '/plugins/BcPluginSample',
     ]);
 
     // for "merge" command
