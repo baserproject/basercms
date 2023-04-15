@@ -330,10 +330,10 @@ class BcDatabaseServiceTest extends BcTestCase
             'first_access' => '2022-09-21',
             'version' => '1.0.0',
             'theme' => 'BcFront',
-            'adminTheme' => 'BcSpaSample'
+            'adminTheme' => 'BcPluginSample'
         ];
         // siteデータを作成する
-        SiteFactory::make(['id' => '1', 'theme' => 'BcSpaSample'])->persist();
+        SiteFactory::make(['id' => '1', 'theme' => 'BcPluginSample'])->persist();
         // userデータを作成する
         UserFactory::make(['name' => 'C. Le'])->persist();
 

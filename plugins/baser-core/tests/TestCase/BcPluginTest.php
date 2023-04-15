@@ -511,7 +511,7 @@ $table->save(new Entity([\'name\' => \'2022-06-26\']));');
         $site = $SiteService->get($targetId);
         $this->assertEquals($currentTheme, $site->theme);
 
-        $updateTheme = 'BcSpaSample';
+        $updateTheme = 'BcPluginSample';
         $this->BcPlugin->applyAsTheme($site, $updateTheme);
         $site = $SiteService->get($targetId);
         $this->assertEquals($updateTheme, $site->theme);

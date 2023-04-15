@@ -47,7 +47,7 @@ class ThemeFilesControllerTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        SiteFactory::make(['id' => 1, 'status' => true, 'theme' => 'BcSpaSample'])->persist();
+        SiteFactory::make(['id' => 1, 'status' => true, 'theme' => 'BcPluginSample'])->persist();
         UserFactory::make()->admin()->persist();
 
         $token = $this->apiLoginAdmin();
@@ -241,13 +241,13 @@ class ThemeFilesControllerTest extends BcTestCase
         //戻る値を確認
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals(
-            'コアファイル base_name_1.php を テーマ BcSpaSample の次のパスとしてコピーしました。\n/plugins/BcSpaSample/templates/layout/base_name_1.php。',
+            'コアファイル base_name_1.php を テーマ BcPluginSample の次のパスとしてコピーしました。\n/plugins/BcPluginSample/templates/layout/base_name_1.php。',
             $result->message
         );
         //実際にファイルが作成されいてるか確認すること
-        $this->assertTrue(file_exists(BASER_PLUGINS . 'BcSpaSample/templates/layout/base_name_1.php'));
+        $this->assertTrue(file_exists(BASER_PLUGINS . 'BcPluginSample/templates/layout/base_name_1.php'));
         //作成したファイルを削除する
-        unlink(BASER_PLUGINS . 'BcSpaSample/templates/layout/base_name_1.php');
+        unlink(BASER_PLUGINS . 'BcPluginSample/templates/layout/base_name_1.php');
         unlink($fullpath . 'base_name_1.php');
     }
 

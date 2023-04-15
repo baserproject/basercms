@@ -47,7 +47,7 @@ class ThemeFoldersControllerTest extends BcTestCase
     {
         parent::setUp();
         //現在のテーマを設定する
-        SiteFactory::make(['id' => 1, 'status' => true, 'theme' => 'BcSpaSample'])->persist();
+        SiteFactory::make(['id' => 1, 'status' => true, 'theme' => 'BcPluginSample'])->persist();
         UserFactory::make()->admin()->persist();
 
         $token = $this->apiLoginAdmin();
@@ -223,7 +223,7 @@ class ThemeFoldersControllerTest extends BcTestCase
     public function test_copy_to_theme()
     {
         //POSTデータを生成
-        $fullpath = BASER_PLUGINS . '/BcSpaSample/templates/';
+        $fullpath = BASER_PLUGINS . '/BcPluginSample/templates/';
         $data = [
             'theme' => 'BcFront',
             'type' => 'Pages',
@@ -238,7 +238,7 @@ class ThemeFoldersControllerTest extends BcTestCase
         //戻る値を確認
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals(
-            'コアフォルダ  を テーマ BcSpaSample の次のパスとしてコピーしました。\n/plugins/BcSpaSample/templates/Pages/。',
+            'コアフォルダ  を テーマ BcPluginSample の次のパスとしてコピーしました。\n/plugins/BcPluginSample/templates/Pages/。',
             $result->message
         );
         //実際にフォルダがコピーできるか確認すること

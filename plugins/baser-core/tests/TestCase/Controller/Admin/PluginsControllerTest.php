@@ -143,7 +143,7 @@ class PluginsControllerTest extends BcTestCase
     {
         $this->enableSecurityToken();
         $this->enableCsrfToken();
-        $this->post('/baser/admin/baser-core/plugins/detach/BcSpaSample');
+        $this->post('/baser/admin/baser-core/plugins/detach/BcPluginSample');
         $this->assertFlashMessage('プラグインの無効化に失敗しました。');
         $this->post('/baser/admin/baser-core/plugins/detach/BcBlog');
         $this->assertFlashMessage('プラグイン「BcBlog」を無効にしました。');
@@ -196,13 +196,13 @@ class PluginsControllerTest extends BcTestCase
     {
         $this->enableSecurityToken();
         $this->enableCsrfToken();
-        $path = Plugin::path('BcSpaSample');
+        $path = Plugin::path('BcPluginSample');
         rename($path . 'VERSION.txt', $path . 'VERSION.bak.txt');
         $file = new File($path . 'VERSION.txt');
         $file->write('0.0.2');
         $file->close();
-        PluginFactory::make(['name' => 'BcSpaSample', 'version' => '0.0.1'])->persist();
-        $this->put('/baser/admin/baser-core/plugins/update/BcSpaSample', [
+        PluginFactory::make(['name' => 'BcPluginSample', 'version' => '0.0.1'])->persist();
+        $this->put('/baser/admin/baser-core/plugins/update/BcPluginSample', [
             'connection' => 'test',
             'update' => 1
         ]);
@@ -211,7 +211,7 @@ class PluginsControllerTest extends BcTestCase
             'prefix' => 'Admin',
             'controller' => 'plugins',
             'action' => 'update',
-            'BcSpaSample'
+            'BcPluginSample'
         ]);
         $this->assertFlashMessage('アップデート処理が完了しました。画面下部のアップデートログを確認してください。');
         rename($path . 'VERSION.bak.txt', $path . 'VERSION.txt');
@@ -292,12 +292,12 @@ class PluginsControllerTest extends BcTestCase
         $this->enableSecurityToken();
         $this->enableCsrfToken();
 
-        $path = BASER_PLUGINS . 'BcSpaSample';
+        $path = BASER_PLUGINS . 'BcPluginSample';
         $zipSrcPath = TMP . 'zip' . DS;
         $folder = new Folder();
         $folder->create($zipSrcPath, 0777);
-        $folder->copy($zipSrcPath . 'BcSpaSample2', ['from' => $path, 'mode' => 0777]);
-        $plugin = 'BcSpaSample2';
+        $folder->copy($zipSrcPath . 'BcPluginSample2', ['from' => $path, 'mode' => 0777]);
+        $plugin = 'BcPluginSample2';
         $zip = new ZipArchiver();
         $testFile = $zipSrcPath . $plugin . '.zip';
         $zip->archive($zipSrcPath, $testFile, true);

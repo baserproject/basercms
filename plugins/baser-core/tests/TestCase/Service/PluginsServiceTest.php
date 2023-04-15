@@ -222,13 +222,13 @@ class PluginsServiceTest extends BcTestCase
     public function test_update()
     {
         // プラグイン
-        $this->Plugins->install('BcSpaSample', true, 'test');
-        $pluginPath = Plugin::path('BcSpaSample');
+        $this->Plugins->install('BcPluginSample', true, 'test');
+        $pluginPath = Plugin::path('BcPluginSample');
         rename($pluginPath . 'VERSION.txt', $pluginPath . 'VERSION.bak.txt');
         $file = new File($pluginPath . 'VERSION.txt');
         $file->write('10.0.0');
-        $this->Plugins->update('BcSpaSample', 'test');
-        $this->assertEquals('10.0.0', $this->Plugins->getVersion('BcSpaSample'));
+        $this->Plugins->update('BcPluginSample', 'test');
+        $this->assertEquals('10.0.0', $this->Plugins->getVersion('BcPluginSample'));
         rename($pluginPath . 'VERSION.bak.txt', $pluginPath . 'VERSION.txt');
 
         // コア

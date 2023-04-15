@@ -98,12 +98,12 @@ class ThemesServiceTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function test_add()
     {
-        $path = ROOT . DS . 'plugins' . DS . 'BcSpaSample';
+        $path = ROOT . DS . 'plugins' . DS . 'BcPluginSample';
         $zipSrcPath = TMP . 'zip' . DS;
         $folder = new Folder();
         $folder->create($zipSrcPath, 0777);
-        $folder->copy($zipSrcPath . 'BcSpaSample2', ['from' => $path, 'mode' => 0777]);
-        $theme = 'BcSpaSample2';
+        $folder->copy($zipSrcPath . 'BcPluginSample2', ['from' => $path, 'mode' => 0777]);
+        $theme = 'BcPluginSample2';
         $zip = new ZipArchiver();
         $testFile = $zipSrcPath . $theme . '.zip';
         $zip->archive($zipSrcPath, $testFile, true);
@@ -123,14 +123,14 @@ class ThemesServiceTest extends \BaserCore\TestSuite\BcTestCase
 
         //成功した場合の戻り値
         $rs = $this->ThemesService->add(["file" => $files]);
-        $this->assertEquals('BcSpaSample2', $rs);
+        $this->assertEquals('BcPluginSample2', $rs);
 
         // 成功した場合に plugins 配下に新しいディレクトリが存在する
         $this->assertTrue(is_dir(ROOT . DS . 'plugins' . DS . $theme));
 
         // 既に存在するテーマと同じテーマをアップロードした場合の戻り値の変化
         $folder->create($zipSrcPath, 0777);
-        $folder->copy($zipSrcPath . 'BcSpaSample2', ['from' => $path, 'mode' => 0777]);
+        $folder->copy($zipSrcPath . 'BcPluginSample2', ['from' => $path, 'mode' => 0777]);
         $zip = new ZipArchiver();
         $zip->archive($zipSrcPath, $testFile, true);
         $this->setUploadFileToRequest('file', $testFile);
@@ -143,12 +143,12 @@ class ThemesServiceTest extends \BaserCore\TestSuite\BcTestCase
         );
 
         $rs = $this->ThemesService->add(["file" => $files]);
-        $this->assertEquals('BcSpaSample22', $rs);
+        $this->assertEquals('BcPluginSample22', $rs);
 
         //テスト実行後不要ファイルを削除
         $folder = new Folder();
         $folder->delete(ROOT . DS . 'plugins' . DS . $theme);
-        $folder->delete(ROOT . DS . 'plugins' . DS . 'BcSpaSample22');
+        $folder->delete(ROOT . DS . 'plugins' . DS . 'BcPluginSample22');
         $folder->delete($zipSrcPath);
 
         // 失敗した場合の Exception メッセージ
@@ -402,7 +402,7 @@ class ThemesServiceTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function testApply()
     {
-        $beforeTheme = 'BcSpaSample';
+        $beforeTheme = 'BcPluginSample';
         $afterTheme = 'BcFront';
         SiteFactory::make(['id' => 1, 'title' => 'Test Title', 'name' => 'Test Site', 'theme'=> $beforeTheme, 'status' => 1])->persist();
         $site = SiteFactory::get(1);

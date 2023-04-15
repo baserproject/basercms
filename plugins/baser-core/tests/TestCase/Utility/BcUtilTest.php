@@ -447,7 +447,7 @@ class BcUtilTest extends BcTestCase
      */
     public function testGetThemesPlugins()
     {
-        $theme = 'BcSpaSample';
+        $theme = 'BcPluginSample';
         $plugins = BcUtil::getThemesPlugins($theme);
         $this->assertCount(0, $plugins);
 
@@ -482,7 +482,7 @@ class BcUtilTest extends BcTestCase
         $this->assertEquals($pluginName, $plugins[0]);
 
         // 現在のテーマを切り替える
-        $currentSite->theme = 'BcSpaSample';
+        $currentSite->theme = 'BcPluginSample';
         $plugins = BcUtil::getCurrentThemesPlugins();
         // プラグインが存在しないか確認する
         $this->assertCount(0, $plugins);
@@ -801,7 +801,7 @@ class BcUtilTest extends BcTestCase
     {
         $this->assertEquals(ROOT . '/plugins/baser-core/', BcUtil::getPluginPath('BaserCore'));
         $this->assertEquals(ROOT . '/plugins/bc-blog/', BcUtil::getPluginPath('BcBlog'));
-        $this->assertEquals(ROOT . '/plugins/BcSpaSample/', BcUtil::getPluginPath('BcSpaSample'));
+        $this->assertEquals(ROOT . '/plugins/BcPluginSample/', BcUtil::getPluginPath('BcPluginSample'));
     }
 
     /**
@@ -811,7 +811,7 @@ class BcUtilTest extends BcTestCase
     {
         $this->assertEquals('baser-core', BcUtil::getPluginDir('BaserCore'));
         $this->assertEquals('bc-blog', BcUtil::getPluginDir('BcBlog'));
-        $this->assertEquals('BcSpaSample', BcUtil::getPluginDir('BcSpaSample'));
+        $this->assertEquals('BcPluginSample', BcUtil::getPluginDir('BcPluginSample'));
     }
 
     /**

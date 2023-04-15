@@ -445,8 +445,8 @@ class UtilitiesServiceTest extends BcTestCase
      */
     public function test_resetData()
     {
-        SiteFactory::make(['id' => 100, 'title' => 'test title', 'display_name' => 'test display_name', 'theme' => 'BcSpaSample'])->persist();
-        SiteFactory::make(['id' => 101, 'title' => 'test title　101', 'display_name' => 'test display_name　101', 'theme' => 'BcSpaSample101'])->persist();
+        SiteFactory::make(['id' => 100, 'title' => 'test title', 'display_name' => 'test display_name', 'theme' => 'BcPluginSample'])->persist();
+        SiteFactory::make(['id' => 101, 'title' => 'test title　101', 'display_name' => 'test display_name　101', 'theme' => 'BcPluginSample101'])->persist();
         $this->getRequest();
 
         $rs = $this->UtilitiesService->resetData();
@@ -455,7 +455,7 @@ class UtilitiesServiceTest extends BcTestCase
         $siteService = new SitesService();
         $site = $siteService->getIndex([])->toArray();
         $this->assertCount(1, $site);
-        $this->assertEquals('BcSpaSample', $site[0]->theme);
+        $this->assertEquals('BcPluginSample', $site[0]->theme);
         $this->assertEquals('メインサイト', $site[0]->title);
         $this->assertEquals('メインサイト', $site[0]->display_name);
     }

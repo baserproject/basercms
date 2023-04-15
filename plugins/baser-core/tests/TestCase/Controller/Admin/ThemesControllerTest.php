@@ -79,12 +79,12 @@ class ThemesControllerTest extends BcTestCase
         $this->enableSecurityToken();
         $this->enableCsrfToken();
 
-        $path = ROOT . DS . 'plugins' . DS . 'BcSpaSample';
+        $path = ROOT . DS . 'plugins' . DS . 'BcPluginSample';
         $zipSrcPath = TMP . 'zip' . DS;
         $folder = new Folder();
         $folder->create($zipSrcPath, 0777);
-        $folder->copy($zipSrcPath . 'BcSpaSample2', ['from' => $path, 'mode' => 0777]);
-        $theme = 'BcSpaSample2';
+        $folder->copy($zipSrcPath . 'BcPluginSample2', ['from' => $path, 'mode' => 0777]);
+        $theme = 'BcPluginSample2';
         $zip = new ZipArchiver();
         $testFile = $zipSrcPath . $theme . '.zip';
         $zip->archive($zipSrcPath, $testFile, true);

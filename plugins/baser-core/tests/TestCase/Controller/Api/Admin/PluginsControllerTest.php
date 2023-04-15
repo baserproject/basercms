@@ -207,12 +207,12 @@ class PluginsControllerTest extends BcTestCase
         $this->get('/baser/api/admin/baser-core/themes/add.json?token=' . $this->accessToken);
         $this->assertResponseCode(405);
 
-        $path = BASER_PLUGINS . 'BcSpaSample';
+        $path = BASER_PLUGINS . 'BcPluginSample';
         $zipSrcPath = TMP . 'zip' . DS;
         $folder = new Folder();
         $folder->create($zipSrcPath, 0777);
-        $folder->copy($zipSrcPath . 'BcSpaSample2', ['from' => $path, 'mode' => 0777]);
-        $plugin = 'BcSpaSample2';
+        $folder->copy($zipSrcPath . 'BcPluginSample2', ['from' => $path, 'mode' => 0777]);
+        $plugin = 'BcPluginSample2';
         $zip = new ZipArchiver();
         $testFile = $zipSrcPath . $plugin . '.zip';
         $zip->archive($zipSrcPath, $testFile, true);

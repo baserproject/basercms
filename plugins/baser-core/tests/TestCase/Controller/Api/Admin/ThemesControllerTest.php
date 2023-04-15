@@ -104,12 +104,12 @@ class ThemesControllerTest extends BcTestCase
         $this->get('/baser/api/admin/baser-core/themes/add.json?token=' . $this->accessToken);
         $this->assertResponseCode(405);
 
-        $path = ROOT . DS . 'plugins' . DS . 'BcSpaSample';
+        $path = ROOT . DS . 'plugins' . DS . 'BcPluginSample';
         $zipSrcPath = TMP  . 'zip' . DS;
         $folder = new Folder();
         $folder->create($zipSrcPath, 0777);
-        $folder->copy($zipSrcPath . 'BcSpaSample2', ['from' => $path, 'mode' => 0777]);
-        $theme = 'BcSpaSample2';
+        $folder->copy($zipSrcPath . 'BcPluginSample2', ['from' => $path, 'mode' => 0777]);
+        $theme = 'BcPluginSample2';
         $zip = new ZipArchiver();
         $testFile = $zipSrcPath . $theme . '.zip';
         $zip->archive($zipSrcPath, $testFile, true);
@@ -131,17 +131,17 @@ class ThemesControllerTest extends BcTestCase
      */
     public function testDelete()
     {
-        $this->get('/baser/api/admin/baser-core/themes/delete/BcSpaSampleTest.json?token=' . $this->accessToken);
+        $this->get('/baser/api/admin/baser-core/themes/delete/BcPluginSampleTest.json?token=' . $this->accessToken);
         $this->assertResponseCode(405);
 
         $themeService = new ThemesService();
-        $themeService->copy('BcSpaSample');
-        $this->post('/baser/api/admin/baser-core/themes/delete/BcSpaSampleCopy.json?token=' . $this->accessToken);
+        $themeService->copy('BcPluginSample');
+        $this->post('/baser/api/admin/baser-core/themes/delete/BcPluginSampleCopy.json?token=' . $this->accessToken);
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
-        $this->assertEquals('テーマ「BcSpaSampleCopy」を削除しました。', $result->message);
+        $this->assertEquals('テーマ「BcPluginSampleCopy」を削除しました。', $result->message);
 
-        $this->post('/baser/api/admin/baser-core/themes/delete/BcSpaSampleCopy.json?token=' . $this->accessToken);
+        $this->post('/baser/api/admin/baser-core/themes/delete/BcPluginSampleCopy.json?token=' . $this->accessToken);
         $this->assertResponseCode(500);
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals('データベース処理中にエラーが発生しました。 に書込み権限がありません。', $result->message);
@@ -153,20 +153,20 @@ class ThemesControllerTest extends BcTestCase
      */
     public function testCopy()
     {
-        $this->get('/baser/api/admin/baser-core/themes/copy/BcSpaSample.json?token=' . $this->accessToken);
+        $this->get('/baser/api/admin/baser-core/themes/copy/BcPluginSample.json?token=' . $this->accessToken);
         $this->assertResponseCode(405);
 
-        $this->post('/baser/api/admin/baser-core/themes/copy/BcSpaSample2.json?token=' . $this->accessToken);
+        $this->post('/baser/api/admin/baser-core/themes/copy/BcPluginSample2.json?token=' . $this->accessToken);
         $this->assertResponseCode(400);
         $result = json_decode((string)$this->_response->getBody());
-        $this->assertEquals('テーマ「BcSpaSample2」のコピーに失敗しました。', $result->message);
+        $this->assertEquals('テーマ「BcPluginSample2」のコピーに失敗しました。', $result->message);
 
-        $this->post('/baser/api/admin/baser-core/themes/copy/BcSpaSample.json?token=' . $this->accessToken);
+        $this->post('/baser/api/admin/baser-core/themes/copy/BcPluginSample.json?token=' . $this->accessToken);
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
-        $this->assertEquals('テーマ「BcSpaSample」をコピーしました。', $result->message);
+        $this->assertEquals('テーマ「BcPluginSample」をコピーしました。', $result->message);
         $themeService = new ThemesService();
-        $themeService->delete('BcSpaSampleCopy');
+        $themeService->delete('BcPluginSampleCopy');
     }
 
     /**
@@ -176,7 +176,7 @@ class ThemesControllerTest extends BcTestCase
     {
         $this->enableSecurityToken();
         $this->enableCsrfToken();
-        $theme = 'BcSpaSample';
+        $theme = 'BcPluginSample';
         $this->post('/baser/api/admin/baser-core/themes/apply/1/'. $theme . '.json?token=' . $this->accessToken);
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
