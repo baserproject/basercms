@@ -315,7 +315,7 @@ class ContentFoldersService implements ContentFoldersServiceInterface
                     'site_id' => $site->id,
                     'name' => ($site->alias) ? : $site->name,
                     'parent_id' => $rootContentId,
-                    'title' => $site->title,
+                    'title' => $site->display_name,
                     'self_status' => $site->status,
                     'author_id' => BcUtil::loginUser()['id'],
                     'site_root' => true,
@@ -331,7 +331,7 @@ class ContentFoldersService implements ContentFoldersServiceInterface
                     'id' => $contentFolder->content->id,
                     'name' => ($site->alias) ? : $site->name,
                     'parent_id' => $rootContentId,
-                    'title' => $site->title,
+                    'title' => $site->display_name,
                     'self_status' => $site->status,
                 ]
             ];
