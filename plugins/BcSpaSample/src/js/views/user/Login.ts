@@ -50,7 +50,7 @@ export default Vue.extend({
                 email: this.name,
                 password: this.password
             };
-            axios.post('/baser/api/baser-core/users/login.json', postData)
+            axios.post('/baser/api/admin/baser-core/users/login.json', postData)
             .then((response) => {
                 if (response.data) {
                     this.$emit('set-login', response.data.access_token, response.data.refresh_token)

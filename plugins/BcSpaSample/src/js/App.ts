@@ -94,7 +94,7 @@ export default Vue.extend({
          * @param accessToken
          */
         setUser: function (accessToken: string): void {
-            axios.get('/baser/api/baser-core/users/view/1.json', {
+            axios.get('/baser/api/admin/baser-core/users/view/1.json', {
                 headers: {"Authorization": accessToken},
                 data: {}
             }).then((response) => {
@@ -120,7 +120,7 @@ export default Vue.extend({
          * @returns {Promise<void>}
          */
         getToken: async function (refreshToken: string) {
-            await axios.get('/baser/api/baser-core/users/refresh_token.json', {
+            await axios.get('/baser/api/admin/baser-core/users/refresh_token.json', {
                 headers: {"Authorization": refreshToken},
                 data: {}
             }).then((response) => {

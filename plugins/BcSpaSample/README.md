@@ -51,7 +51,7 @@ POST
 #### URL
 
 ```javascript
-/baser/api/baser-core/users/login.json
+/baser/api/admin/baser-core/users/login.json
 ```
 
 #### レスポンス
@@ -65,7 +65,7 @@ POST
 
 #### コード例
 ```javascript
-axios.post('/baser/api/baser-core/users/login.json', {
+axios.post('/baser/api/admin/baser-core/users/login.json', {
     email: this.name,
     password: this.password
 }).then(function (response) {
@@ -96,7 +96,7 @@ GET
 #### URL
 
 ```javascript
-/baser/api/baser-core/users/refresh_token.json
+/baser/api/admin/baser-core/users/refresh_token.json
 ```
 
 #### レスポンス
@@ -110,7 +110,7 @@ GET
 
 #### コード例
 ```javascript
-await axios.get('/baser/api/baser-core/users/refresh_token.json', {
+await axios.get('/baser/api/admin/baser-core/users/refresh_token.json', {
     headers: {"Authorization": refreshToken},
     data: {}
 }).then(function (response) {
@@ -139,7 +139,7 @@ GET
 #### URL
 
 ```javascript
-/baser/api/baser-core/users/index.json
+/baser/api/admin/baser-core/users/index.json
 ```
 
 #### リクエストパラメーター
@@ -179,7 +179,7 @@ GET
 
 #### コード例
 ```javascript
-axios.get('/baser/api/baser-core/users/index.json', {
+axios.get('/baser/api/admin/baser-core/users/index.json', {
     headers: {"Authorization": this.accessToken},
     data: {}
 }).then(function (response) {

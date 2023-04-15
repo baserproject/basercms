@@ -46,7 +46,7 @@ export default Vue.extend({
          * Get Users
          */
         getUsers: function ():void {
-            axios.get('/baser/api/baser-core/users/index.json', {
+            axios.get('/baser/api/admin/baser-core/users/index.json', {
                 headers: {"Authorization": this.accessToken},
                 data: {}
             }).then((response) => {

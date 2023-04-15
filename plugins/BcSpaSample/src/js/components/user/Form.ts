@@ -59,7 +59,7 @@ export default Vue.extend({
       */
     mounted() {
         if (this.accessToken) {
-            axios.get('/baser/api/baser-core/user_groups/list.json', {
+            axios.get('/baser/api/admin/baser-core/user_groups/list.json', {
                 headers: {"Authorization": this.accessToken}
             }).then((response) => {
                 this.userGroups = response.data.userGroups
@@ -78,7 +78,7 @@ export default Vue.extend({
           */
         load: function (id: number): void {
             if (id) {
-                axios.get('/baser/api/baser-core/users/view/' + id + '.json', {
+                axios.get('/baser/api/admin/baser-core/users/view/' + id + '.json', {
                     headers: {"Authorization": this.accessToken}
                 }).then((response) => {
                     this.user = response.data.user;
@@ -108,7 +108,7 @@ export default Vue.extend({
         save: function (id?: number): void {
             this.$emit('clear-message');
             this.errors = [];
-            let endPoint = '/baser/api/baser-core/users/';
+            let endPoint = '/baser/api/admin/baser-core/users/';
             let user: User = {
                 name:  this.user.name,
                 real_name_1: this.user.name,
@@ -154,7 +154,7 @@ export default Vue.extend({
             if(!confirm('ユーザー情報を削除します。本当によろしいですか？')) {
                 return;
             }
-            axios.post('/baser/api/baser-core/users/delete/' + id + '.json', {}, {
+            axios.post('/baser/api/admin/baser-core/users/delete/' + id + '.json', {}, {
                 headers: {"Authorization": this.accessToken}
             }).then((response) => {
                 this.$emit('set-message', response.data.message, false, true);
