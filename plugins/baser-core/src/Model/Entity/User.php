@@ -149,16 +149,18 @@ class User extends EntityAlias
      * 対象ユーザーに対して編集可能かどうか判定する
      *
      * 利用可能条件
-     * - 自身がスーパーユーザーで対象がスーパーユーザーでない場合
-     * - 自身がシステム管理ユーザーで対象がシステム管理ユーザーでない場合
+     * - 自身がスーパーユーザーの場合無条件に可
+     * - 自身に対しての変更は可
+     * - 相手がシステム管理ユーザーでない場合は可（アクセスルールで制御）
+     *
      * @param EntityInterface|User $targetUser
      * @return bool
      */
     public function isEditableUser(EntityInterface $targetUser): bool
     {
-        return ($this->isSuper() ||
-            ($this->id === $targetUser->id) ||
-            ($this->isAdmin() && !$targetUser->isAdmin()));
+        if($this->isSuper()) return true;
+        if($this->id === $targetUser->id) return true;
+        return !$targetUser->isAdmin();
     }
 
     /**

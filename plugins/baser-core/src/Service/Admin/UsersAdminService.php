@@ -81,7 +81,8 @@ class UsersAdminService extends UsersService implements UsersAdminServiceInterfa
     /**
      * ユーザーグループが更新可能かどうか
      *
-     * ログインユーザーがシステム管理ユーザーの場合のみ可
+     * - ログインユーザーがシステム管理ユーザーの場合可
+     * - 自身に対しての編集でない場合可
      *
      * @param $id
      * @return bool
@@ -91,7 +92,7 @@ class UsersAdminService extends UsersService implements UsersAdminServiceInterfa
      */
     public function isUserGroupEditable(?int $id): bool
     {
-        return ($id === null || BcUtil::isAdminUser());
+        return ($id === null || BcUtil::isAdminUser() || !$this->isSelf($id));
     }
 
     /**
