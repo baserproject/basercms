@@ -185,21 +185,6 @@ class MailformHelper extends BcFreezeHelper
                 $out = $this->datepicker($fieldName, $attributes);
                 break;
 
-            case 'date_time_wareki':
-                unset($attributes['size']);
-                unset($attributes['rows']);
-                unset($attributes['maxlength']);
-                unset($attributes['empty']);
-                $attributes['monthNames'] = false;
-                if (isset($attributes['minYear']) && $attributes['minYear'] === 'today') {
-                    $attributes['minYear'] = (int)date('Y');
-                }
-                if (isset($attributes['maxYear']) && $attributes['maxYear'] === 'today') {
-                    $attributes['maxYear'] = (int)date('Y');
-                }
-                $out = $this->dateTime($fieldName, 'WMD', null, $attributes);
-                break;
-
             case 'textarea':
                 $attributes['cols'] = $attributes['size'];
                 unset($attributes['empty']);

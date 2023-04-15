@@ -109,11 +109,6 @@ class MaildataHelper extends BcTextHelper
 				if ($value) $result = date(__d('baser_core', 'Y年 m月 d日'), strtotime($value));
 				break;
 
-            case 'date_time_wareki':
-				if (!is_array($value)) $value = $this->BcTime->convertToWarekiArray($value);
-				$result = $this->dateTimeWareki($value);
-				break;
-
             case 'autozip':
 				if (strlen($value) == 7) {
 					$result = substr($value, 0, 3) . '-' . substr($value, 3, 7);

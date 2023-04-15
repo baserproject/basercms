@@ -193,9 +193,6 @@ class MailMessagesTable extends MailAppTable
         $this->_validGroupComplete($entity);
         // バリデートグループエラーチェック
         $this->_validGroupErrorCheck($entity);
-        // TODO ucmitz 未実装
-        // 和暦不完全データチェック
-//        $this->_validWarekiComplate($entity);
     }
 
     /**
@@ -457,41 +454,6 @@ class MailMessagesTable extends MailAppTable
     }
 
     /**
-     * 和暦不完全データチェック
-     *
-     * @param array $data
-     * @return void
-     */
-    protected function _validWarekiComplate($data)
-    {
-        $dists = [];
-
-        // 対象フィールドを取得
-        foreach($this->mailFields as $mailField) {
-            if ($mailField->type !== 'date_time_wareki') {
-                continue;
-            }
-            $dists[] = [
-                'name' => $mailField->field_name,
-                'value' => $data['MailMessage'][$mailField->field_name]
-            ];
-        }
-
-        foreach($dists as $dist) {
-            $timeNames = ['year', 'month', 'day'];
-            $inputCount = 0;
-            foreach($timeNames as $timeName) {
-                if (!empty($data['MailMessage'][$dist['name']][$timeName])) {
-                    $inputCount++;
-                }
-            }
-            if ($inputCount !== 0 && $inputCount !== count($timeNames)) {
-                $this->invalidate($dist['name'] . '', __d('baser_core', '入力データが不完全です。'));
-            }
-        }
-    }
-
-    /**
      * データベース用のデータに変換する
      *
      * @param ResultSetInterface $mailFields
@@ -512,12 +474,6 @@ class MailMessagesTable extends MailAppTable
             // パスワードのデータをハッシュ化
             if ($mailField->type === 'password' && !empty($value)) {
                 $value = (new DefaultPasswordHasher())->hash($value);
-            }
-            // 和暦未入力時に配列をnullに変換
-            // - 和暦完全入力時は、lib/Baser/Model/BcAppModel->deconstruct にて日時に変換される
-            // - 一部のフィールドしか入力されていない場合は $this->_validWarekiComplate にてエラーになる
-            if ($mailField->type === 'date_time_wareki' && is_array($value)) {
-                $value = null;
             }
             // 機種依存文字を変換
             $mailMessage->{$mailField->field_name} = $this->replaceText($value);
