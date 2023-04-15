@@ -166,6 +166,8 @@ class BlogPostsAdminService extends BlogPostsService implements BlogPostsAdminSe
     public function getPublishLink(BlogPost $post)
     {
         if (!$this->allowPublish($post)) return '';
+        $contentsService = $this->getService(ContentsServiceInterface::class);
+        if(!$contentsService->isAllowPublish($post->blog_content->content)) return '';
         return $this->getUrl($post->blog_content->content, $post, true);
     }
 

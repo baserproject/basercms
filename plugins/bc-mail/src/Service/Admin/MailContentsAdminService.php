@@ -51,7 +51,7 @@ class MailContentsAdminService extends MailContentsService implements MailConten
      */
     public function getPublishLink(EntityInterface $entity) {
         $contentsService = $this->getService(ContentsServiceInterface::class);
-        if($entity->content->status) {
+        if($contentsService->isAllowPublish($entity->content)) {
             return $contentsService->getUrl(
                 $entity->content->url,
                 true,

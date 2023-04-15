@@ -33,7 +33,7 @@ class BlogCategoriesAdminService extends BlogCategoriesService implements BlogCa
 
     /**
      * ブログカテゴリ一覧用の view 変数取得
-     * 
+     *
      * @param int $blogContentId
      * @return array
      * @noTodo
@@ -51,7 +51,7 @@ class BlogCategoriesAdminService extends BlogCategoriesService implements BlogCa
 
     /**
      * ブログカテゴリー登録用の view 変数取得
-     * 
+     *
      * @return array
      * @noTodo
      * @checked
@@ -71,7 +71,7 @@ class BlogCategoriesAdminService extends BlogCategoriesService implements BlogCa
 
     /**
      * ブログカテゴリー編集用の view 変数取得
-     * 
+     *
      * @return array
      * @noTodo
      * @checked
@@ -82,7 +82,7 @@ class BlogCategoriesAdminService extends BlogCategoriesService implements BlogCa
         $contentsService = $this->getService(ContentsServiceInterface::class);
         $blogContentsService = $this->getService(BlogContentsServiceInterface::class);
         $blogContent = $blogContentsService->get($blogContentId);
-        $publishLink = $contentsService->getUrl(
+        $publishLink = $contentsService->isAllowPublish($blogContent->content)? $contentsService->getUrl(
             sprintf(
                 "%s/archives/category/%s",
                 rtrim($blogContent->content->url, '/'),
@@ -90,7 +90,7 @@ class BlogCategoriesAdminService extends BlogCategoriesService implements BlogCa
             ),
             true,
             $blogContent->content->site->use_subdomain
-        );
+        ) : null;
         return [
             'blogContent' => $blogContent,
             'blogCategory' => $blogCategory,

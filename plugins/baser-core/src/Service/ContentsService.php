@@ -11,6 +11,7 @@
 
 namespace BaserCore\Service;
 
+use BaserCore\Model\Entity\Site;
 use Cake\Core\Plugin;
 use Cake\Datasource\QueryInterface;
 use Exception;
