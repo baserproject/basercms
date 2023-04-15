@@ -124,7 +124,8 @@ class BlogCategoriesAdminServiceTest extends BcTestCase
                 'entity_id' => 50,
                 'title' => 'title test',
                 'site_id' => 50,
-                'url' => 'archives/category'
+                'url' => 'archives/category',
+                'status' => true
             ]
         )->persist();
         SiteFactory::make(['id' => 50, 'use_subdomain' => 0])->persist();
