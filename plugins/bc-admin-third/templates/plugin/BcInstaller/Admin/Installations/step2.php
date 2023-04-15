@@ -33,6 +33,7 @@
  * @var bool $phpVersionOk
  * @var bool $gdOk
  * @var bool $xmlOk
+ * @var bool $zipOk
  * @var bool $blRequirementsMet
  */
 $this->BcBaser->js('BcInstaller.admin/installations/step2.bundle', false);
@@ -196,6 +197,24 @@ $this->BcAdmin->setTitle(__d('baser_core', 'baserCMSのインストール｜ス�
         </li>
       </ul>
     </div>
+
+		<div class="panel-box bca-panel-box corner10">
+			<h3 class="bca-panel-box__title"><?php echo __d('baser', '拡張モジュール') ?></h3>
+			<ul class="section">
+				<li class='<?php echo $zipOk ? 'check' : 'failed'; ?>'>
+					<?php echo __d('baser', 'Zip') ?><br/>
+					<div class="check-result">
+						<?php if ($zipOk): ?>
+							<?php echo __d('baser', '利用可') ?>
+						<?php else: ?>
+							<?php echo __d('baser', '利用不可') ?><br/>
+							<small><?php echo __d('baser', 'テーマなどのzipダウンロードが制限されます。') ?></small>
+						<?php endif ?>
+					</div>
+				</li>
+			</ul>
+		</div>
+
   </div>
 
   <?php echo $this->BcAdminForm->create(null, ['url' => ['action' => 'step2'], 'type' => 'post', 'id' => 'CheckEnvForm']) ?>

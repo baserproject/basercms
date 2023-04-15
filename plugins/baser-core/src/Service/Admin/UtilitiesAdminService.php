@@ -80,11 +80,21 @@ class UtilitiesAdminService extends UtilitiesService implements UtilitiesAdminSe
     public function getViewVarsForLogMaintenance(): array
     {
         $fileSize = 0;
-        if (file_exists($this->logPath)) {
-            $fileSize = filesize($this->logPath);
+        if (file_exists(LOGS) === true) {
+            $files = new \RecursiveIteratorIterator(
+                new \RecursiveDirectoryIterator(LOGS,
+                        \FilesystemIterator::CURRENT_AS_FILEINFO |
+                        \FilesystemIterator::KEY_AS_PATHNAME |
+                        \FilesystemIterator::SKIP_DOTS
+                )
+            );
+            foreach($files as $file) {
+                $fileSize += $file->getSize();
+            }
         }
         return [
-            'fileSize' => $fileSize
+            'fileSize' => $fileSize,
+            'zipEnable' => extension_loaded('zip'),
         ];
     }
 

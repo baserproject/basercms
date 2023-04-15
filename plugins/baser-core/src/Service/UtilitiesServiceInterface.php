@@ -14,7 +14,6 @@ namespace BaserCore\Service;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
-use BaserCore\Vendor\Simplezip;
 
 /**
  * UtilitiesServiceInterface
@@ -24,7 +23,7 @@ interface UtilitiesServiceInterface
 
     /**
      * コンテンツツリーの構造をチェックする
-     * 
+     *
      * @return bool
      * @checked
      * @noTodo
@@ -34,7 +33,7 @@ interface UtilitiesServiceInterface
 
     /**
      * コンテンツツリーをリセットし全て同階層にする
-     * 
+     *
      * @checked
      * @noTodo
      * @unitTest
@@ -43,7 +42,7 @@ interface UtilitiesServiceInterface
 
     /**
      * クレジットを取得する
-     * 
+     *
      * @return mixed|null
      * @checked
      * @noTodo
@@ -53,17 +52,17 @@ interface UtilitiesServiceInterface
 
     /**
      * ログのZipファイルを作成する
-     * 
-     * @return Simplezip|false
+     *
+     * @return string|false
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function createLogZip();
+    public function createLogZip(): ?string;
 
     /**
      * ログを削除する
-     * 
+     *
      * @return bool
      * @checked
      * @noTodo
@@ -73,14 +72,14 @@ interface UtilitiesServiceInterface
 
     /**
      * DBバックアップを作成する
-     * 
+     *
      * @param $encoding
-     * @return Simplezip
+     * @return string|false
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function backupDb($encoding): ?Simplezip;
+    public function backupDb($encoding): ?string;
 
     /**
      * スキーマ用の一時フォルダをリセットする
@@ -94,7 +93,7 @@ interface UtilitiesServiceInterface
 
     /**
      * バックアップファイルよりレストアを行う
-     * 
+     *
      * @param array $postData
      * @return bool
      * @checked
