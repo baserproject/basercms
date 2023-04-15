@@ -14,6 +14,7 @@ namespace BcCustomContent\Service\Front;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use BaserCore\Error\BcException;
 use BaserCore\Service\Front\BcFrontContentsService;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcSiteConfig;
@@ -235,9 +236,17 @@ class CustomContentFrontService extends BcFrontContentsService implements Custom
             'direction' => $customContent->list_direction
         ], $controller->getRequest()->getQueryParams())));
 
+        if(!$customContent->custom_table_id) {
+            $controller->viewBuilder()->setTheme('BcThemeSample');
+             throw new NotFoundException(__d('baser_core', 'テーブルを指定してください。'));
+        }
+
         $controller->set($this->getViewVarsForIndex(
             $customContent,
-            $controller->paginate($this->getCustomEntries($customContent))
+            $controller->paginate($this->getCustomEntries($customContent, [
+                'status' => null,
+                'contain' => ['CustomTables']
+            ]))
         ));
 
         // テンプレートの変更
