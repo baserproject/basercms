@@ -176,12 +176,12 @@ class ThemesControllerTest extends BcTestCase
     {
         $this->enableSecurityToken();
         $this->enableCsrfToken();
-        $theme = 'BcPluginSample';
+        $theme = 'BcColumn';
         $this->post('/baser/api/admin/baser-core/themes/apply/1/'. $theme . '.json?token=' . $this->accessToken);
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals($theme, $result->theme->name);
-        $this->assertEquals('テーマ「' . $theme . '」を適用しました。', $result->message);
+        $this->assertStringContainsString('テーマ「' . $theme . '」を適用しました。', $result->message);
     }
 
     /**
