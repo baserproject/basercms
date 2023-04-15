@@ -48,4 +48,18 @@ class BlogContentFactory extends CakephpBaseFactory
         });
     }
 
+    /**
+     * アイキャッチコピー用
+     *
+     * @return BlogContentFactory
+     */
+    public function forCopyEyeCatch()
+    {
+        return $this->setField('id', '999')
+            ->setField('description', 'test999')
+            ->setField('template', 'default')
+            ->setField('list_count', '10')
+            ->setField('list_direction', 'DESC');
+    }
+
 }

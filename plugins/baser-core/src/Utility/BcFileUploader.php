@@ -660,7 +660,9 @@ class BcFileUploader
      */
     public function renameToBasenameFields($entity, $copy = false)
     {
-        $files = $this->getUploadingFiles();
+        if (!$copy) {
+            $files = $this->getUploadingFiles();
+        }
         foreach($this->settings['fields'] as $setting) {
 			if ($copy) {
 				$value = $this->renameToBasenameField($setting, ['name' => $entity->{$setting['name']}], $entity, $copy);
@@ -915,7 +917,7 @@ class BcFileUploader
         } else {
             $request = Router::getRequest();
             $site = $request->getAttribute('currentSite');
-            if ($site->theme) {
+            if ($site && $site->theme) {
                 $basePath = ROOT . DS . 'plugins' . DS . $site->theme . DS . 'webroot' . DS . 'files' . DS;
             } else {
                 $basePath = BcUtil::getViewPath() . 'files' . DS;
