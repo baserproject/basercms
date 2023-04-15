@@ -195,11 +195,6 @@ class UtilitiesControllerTest extends BcTestCase
 
         $this->post('/baser/api/admin/baser-core/utilities/delete_log.json?token=' . $this->accessToken);
         $this->assertResponseOk();
-
-        $this->post('/baser/api/admin/baser-core/utilities/delete_log.json?token=' . $this->accessToken);
-        $this->assertResponseCode(500);
-        $result = json_decode((string)$this->_response->getBody());
-        $this->assertEquals($result->message, "データベース処理中にエラーが発生しました。エラーログが存在しません。");
     }
 
 

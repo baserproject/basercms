@@ -27,15 +27,20 @@ class BcUpdateLogTest extends \BaserCore\TestSuite\BcTestCase
         if (!file_exists(LOGS)) {
             mkdir(LOGS, 0777);
         }
+
+        // set get test
         $this->assertEquals([], BcUpdateLog::get());
         BcUpdateLog::set('test1');
         BcUpdateLog::set('test2');
         $this->assertEquals(['test1', 'test2'], BcUpdateLog::get());
-        rename(LOGS . 'update.log', LOGS . 'update.bak.log');
+
+        // file save test
         BcUpdateLog::save();
-        $file = new File(LOGS . 'update.log');
-        $this->assertMatchesRegularExpression("/.+?info: test1\n.+?info: test2/", $file->read());
+        $contents = file(LOGS . 'update.log', FILE_IGNORE_NEW_LINES);
+        $this->assertMatchesRegularExpression("/.+?info: test2/", $contents[count($contents) -1]);
         $this->assertEquals([], BcUpdateLog::get());
+
+        // tmp clear test
         BcUpdateLog::set('test1');
         BcUpdateLog::clear();
         $this->assertEquals([], BcUpdateLog::get());

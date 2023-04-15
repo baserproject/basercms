@@ -180,6 +180,9 @@ class BcTestCaseTest extends BcTestCase
      */
     public function testTearDownAfterClass()
     {
+        if (!file_exists(LOGS)) {
+            mkdir(LOGS, 0777);
+        }
         touch(TMP . 'test');
         rename(LOGS . 'cli-debug.log', LOGS . 'cli-debug.bak.log');
         Log::write('debug', 'test');
