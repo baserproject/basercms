@@ -14,6 +14,7 @@ namespace BcMail\View\Helper;
 use BaserCore\View\Helper\BcBaserHelper;
 use BaserCore\View\Helper\BcFreezeHelper;
 use BcMail\Model\Entity\MailField;
+use Cake\Datasource\ResultSetInterface;
 use Cake\ORM\ResultSet;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -275,7 +276,7 @@ class MailformHelper extends BcFreezeHelper
     /**
      * 指定したgroup_validをもつフィールドのエラーを取得する
      *
-     * @param array $mailFields
+     * @param ResultSetInterface $mailFields
      * @param string $groupValid
      * @param array $options
      * @param bool $distinct 同じエラーメッセージをまとめる
@@ -283,7 +284,7 @@ class MailformHelper extends BcFreezeHelper
      * @checked
      * @noTodo
      */
-    public function getGroupValidErrors(array $mailFields, string $groupValid, array $options = [], bool $distinct = true)
+    public function getGroupValidErrors(ResultSetInterface $mailFields, string $groupValid, array $options = [], bool $distinct = true)
     {
         $errors = [];
         foreach ($mailFields as $mailField) {

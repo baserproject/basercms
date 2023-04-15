@@ -72,9 +72,9 @@ nbproject/*
 !/plugins/bc-search-index
 !/plugins/bc-content-link
 !/plugins/bc-custom-content
+!/plugins/bc-column
 !/plugins/BcPluginSample
 !/plugins/BcThemeSample
-!/plugins/BcColumn
 /plugins/*/vendor
 /plugins/*/composer.lock
 # vagrant
@@ -88,6 +88,7 @@ node_modules
 /webroot/files/*
 # plugin symbolic link
 /webroot/bc_front
+/webroot/bc_column
 /webroot/baser_core
 /webroot/bc_favorite
 /webroot/bc_theme_config
