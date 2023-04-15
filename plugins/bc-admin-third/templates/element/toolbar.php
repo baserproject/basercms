@@ -114,6 +114,13 @@ $this->BcBaser->js([
     <?php if ($this->BcAuth->isAdminLogin()): ?>
       <div id="UserMenu" class="bca-toolbar__users">
         <ul class="clearfix">
+          <?php
+          // EVENT rightOfToolbar
+          $event = $this->dispatchLayerEvent('rightOfToolbar', [], ['layer' => 'View', 'class' => '', 'plugin' => '']);
+          if ($event !== false) {
+            echo ($event->getResult() === null || $event->getResult() === true)? '' : $event->getResult();
+          }
+          ?>
           <li>
             <?php $this->BcBaser->link(
               h($this->BcBaser->getUserName($loginUser)) . ' ' .
@@ -167,13 +174,6 @@ $this->BcBaser->js([
               ) ?>
             </li>
           <?php endif ?>
-          <?php
-          // EVENT rightOfToolbar
-          $event = $this->dispatchLayerEvent('rightOfToolbar', [], ['layer' => 'View', 'class' => '', 'plugin' => '']);
-          if ($event !== false) {
-            echo ($event->getResult() === null || $event->getResult() === true)? '' : $event->getResult();
-          }
-          ?>
         </ul>
       </div>
     <?php endif ?>

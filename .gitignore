@@ -72,6 +72,7 @@ nbproject/*
 !/plugins/bc-search-index
 !/plugins/bc-content-link
 !/plugins/bc-custom-content
+!/plugins/BcPluginSample
 !/plugins/BcThemeSample
 !/plugins/BcColumn
 /plugins/*/vendor
@@ -97,6 +98,7 @@ node_modules
 /webroot/bc_mail
 /webroot/bc_uploader
 /webroot/bc_search_index
+/webroot/bc_plugin_sample
 /webroot/bc_theme_sample
 /webroot/bc_installer
 /webroot/bc_custom_content
