@@ -145,19 +145,22 @@ class CustomContentsService implements CustomContentsServiceInterface
      * カスタムコンテンツを更新する
      *
      * @param EntityInterface $entity
-     * @param array $pageData
+     * @param array $postData
      * @param array $options
      * @return EntityInterface
      * @throws \Cake\ORM\Exception\PersistenceFailedException
      * @checked
      * @noTodo
      */
-    public function update(EntityInterface $entity, array $pageData, $options = []): ?EntityInterface
+    public function update(EntityInterface $entity, array $postData, $options = []): ?EntityInterface
     {
         if (BcUtil::isOverPostSize()) {
             throw new BcException(__d('baser_core', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size')));
         }
-        $entity = $this->CustomContents->patchEntity($entity, $pageData, $options);
+        if($postData['custom_table_id']) {
+            $options['validate'] = 'withTable';
+        }
+        $entity = $this->CustomContents->patchEntity($entity, $postData, $options);
         return $this->CustomContents->saveOrFail($entity);
     }
 

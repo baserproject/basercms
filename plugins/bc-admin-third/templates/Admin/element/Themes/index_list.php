@@ -55,12 +55,18 @@ use Cake\Core\Configure;
       <div class="bca-current-theme__sub">
         <div class="theme-info">
           <h3 class="theme-name">
-            <strong><?php echo h($currentTheme->title) ?></strong>&nbsp;(&nbsp;<?php echo $currentTheme->name ?>
-            &nbsp;)</h3>
-          <p class="theme-version"><?php echo __d('baser_core', 'バージョン') ?>
-            ：<?php echo $currentTheme->version ?></p>
-          <p class="theme-author"><?php echo __d('baser_core', '制作者') ?>
-            ：<?php if (!empty($currentTheme->url) && !empty($currentTheme->author)): ?>
+            <strong>
+              <?php echo h($currentTheme->title) ?>
+            </strong>
+            &nbsp;(&nbsp;<?php echo h($currentTheme->name) ?>&nbsp;)
+          </h3>
+          <p class="theme-version">
+            <?php echo __d('baser_core', 'バージョン') ?>
+            ：<?php echo h($currentTheme->version) ?>
+          </p>
+          <p class="theme-author">
+            <?php echo __d('baser_core', '制作者') ?>：
+            <?php if (!empty($currentTheme->url) && !empty($currentTheme->author)): ?>
               <?php $this->BcBaser->link($currentTheme->author, $currentTheme->url, ['target' => '_blank', 'escape' => true]) ?>
             <?php else: ?>
               <?php echo h($currentTheme->author) ?>

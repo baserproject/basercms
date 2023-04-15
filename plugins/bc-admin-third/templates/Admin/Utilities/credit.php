@@ -44,14 +44,14 @@ $types = ['designers', 'developers', 'supporters', 'publishers'];
                 <?php endif ?>
                 <li>
                   <?php if (!empty($contributor->siteUrl)): ?>
-                    <?php $this->BcBaser->link($contributor->alphabet, $contributor->siteUrl, ['target' => '_blank']) ?>
+                    <?php $this->BcBaser->link($contributor->alphabet, $contributor->siteUrl, ['target' => '_blank', 'escape' => true]) ?>
                   <?php elseif (!empty($contributor->affiliationUrl)): ?>
-                    <?php $this->BcBaser->link($contributor->alphabet, $contributor->affiliationUrl, ['target' => '_blank']) ?>
+                    <?php $this->BcBaser->link($contributor->alphabet, $contributor->affiliationUrl, ['target' => '_blank', 'escape' => true]) ?>
                   <?php else: ?>
-                    <?php echo $contributor->alphabet ?>
+                    <?php echo h($contributor->alphabet) ?>
                   <?php endif ?>
                   <?php if (!empty($contributor->twitter)): ?>
-                    (<?php $this->BcBaser->link($contributor->twitter, 'http://twitter.com/' . $contributor->twitter, ['target' => '_blank']) ?>)
+                    (<?php $this->BcBaser->link($contributor->twitter, 'http://twitter.com/' . $contributor->twitter, ['target' => '_blank', 'escape' => true]) ?>)
                   <?php endif ?>
                 </li>
                 <?php if ($i % 6 == 0 || $this->BcArray->last($credits->{$type}, $key)): ?>

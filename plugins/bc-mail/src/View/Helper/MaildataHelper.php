@@ -12,6 +12,7 @@
 namespace BcMail\View\Helper;
 
 use BaserCore\Utility\BcUtil;
+use BaserCore\View\Helper\BcBaserHelper;
 use BaserCore\View\Helper\BcTextHelper;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -21,7 +22,6 @@ use BaserCore\Annotation\Checked;
  * メールデータヘルパー
  *
  * @property BcBaserHelper $BcBaser
- *
  */
 class MaildataHelper extends BcTextHelper
 {
@@ -60,6 +60,7 @@ class MaildataHelper extends BcTextHelper
             case 'select':
             case 'email':
             case 'tel':
+            case 'number':
             case 'password':
                 $result = $value;
 
@@ -107,11 +108,6 @@ class MaildataHelper extends BcTextHelper
             case 'date_time_calender':
 				if (is_array($value)) $value = $this->dateTime($value);
 				if ($value) $result = date(__d('baser_core', 'Y年 m月 d日'), strtotime($value));
-				break;
-
-            case 'date_time_wareki':
-				if (!is_array($value)) $value = $this->BcTime->convertToWarekiArray($value);
-				$result = $this->dateTimeWareki($value);
 				break;
 
             case 'autozip':

@@ -29,7 +29,7 @@ if (empty($data['authorUrl'])) {
   <p class="theme-screenshot">
     <a class="theme-popup" href="<?php echo '#Contents' . $key ?>">
       <?php if ($data['enclosure']['@url']): ?>
-        <?php $this->BcBaser->img($data['enclosure']['@url'], ['alt' => $data['title']]) ?>
+        <?php $this->BcBaser->img(h($data['enclosure']['@url']), ['alt' => $data['title']]) ?>
       <?php else: ?>
         <?php $this->BcBaser->img('admin/no-screenshot.png', ['alt' => $data['title']]) ?>
       <?php endif ?>
@@ -38,7 +38,7 @@ if (empty($data['authorUrl'])) {
   <p class="row-tools">
     <?php $this->BcBaser->link('', $data['link'], ['target' => '_blank', 'class' => 'bca-btn-icon', 'data-bca-btn-type' => 'download', 'data-bca-btn-size' => 'lg']) ?>
   </p>
-  <p class="theme-version"><?php echo __d('baser_core', 'バージョン') ?>：<?php echo $data['version'] ?></p>
+  <p class="theme-version"><?php echo __d('baser_core', 'バージョン') ?>：<?php echo h($data['version']) ?></p>
   <p class="theme-author"><?php echo __d('baser_core', '制作者') ?>：
     <?php if (!empty($data['authorLink']) && !empty($data['author'])): ?>
       <?php $this->BcBaser->link($data['author'], $data['authorLink'], ['target' => '_blank', 'escape' => true]) ?>
@@ -50,13 +50,13 @@ if (empty($data['authorUrl'])) {
     <div id="<?php echo 'Contents' . $key ?>" class="theme-popup-contents clearfix">
       <div class="theme-screenshot">
         <?php if ($data['enclosure']['@url']): ?>
-          <?php $this->BcBaser->img($data['enclosure']['@url'], ['alt' => $data['title'], 'width' => 300]) ?>
+          <?php $this->BcBaser->img(h($data['enclosure']['@url']), ['alt' => $data['title'], 'width' => 300]) ?>
         <?php else: ?>
           <?php $this->BcBaser->img('admin/no-screenshot.png', ['alt' => $data['title']]) ?>
         <?php endif ?>
       </div>
       <div class="theme-name"><strong><?php echo h($data['title']) ?></strong></div>
-      <div class="theme-version"><?php echo __d('baser_core', 'バージョン') ?>：<?php echo $data['version'] ?></div>
+      <div class="theme-version"><?php echo __d('baser_core', 'バージョン') ?>：<?php echo h($data['version']) ?></div>
       <div class="theme-author"><?php echo __d('baser_core', '制作者') ?>：
         <?php if (!empty($data['authorLink']) && !empty($data['author'])): ?>
           <?php $this->BcBaser->link($data['author'], $data['authorLink'], ['target' => '_blank', 'escape' => true]) ?>

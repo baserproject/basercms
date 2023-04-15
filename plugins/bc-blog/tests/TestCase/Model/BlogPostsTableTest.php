@@ -11,10 +11,13 @@
 
 namespace BcBlog\Test\TestCase\Model;
 
+use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcBlog\Model\Table\BlogPostsTable;
 use BcBlog\Test\Factory\BlogContentFactory;
 use BcBlog\Test\Factory\BlogPostFactory;
+use Cake\Filesystem\Folder;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class BlogPostsTableTest
@@ -23,6 +26,11 @@ use BcBlog\Test\Factory\BlogPostFactory;
  */
 class BlogPostsTableTest extends BcTestCase
 {
+
+    /**
+     * Trait
+     */
+    use ScenarioAwareTrait;
 
     public $fixtures = [
         'plugin.BcBlog.Factory/BlogPosts',
@@ -632,5 +640,83 @@ class BlogPostsTableTest extends BcTestCase
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
+
+	/**
+	 * アイキャッチアップロード
+	 */
+	public function testCopyEyeCatch()
+	{
+		if (is_dir(WWW_ROOT . '/files/blog/999')) {
+			$folder = new Folder();
+			$folder->delete(WWW_ROOT . '/files/blog/999');
+		}
+		copy(__DIR__ . '/../../Fixture/File/test1.png', __DIR__ . '/../../Fixture/File/test1_.png');
+		$this->loadFixtureScenario(InitAppScenario::class);
+		BlogContentFactory::make()->forCopyEyeCatch()->persist();
+
+		$this->loginAdmin($this->getRequest());
+
+		$this->BlogPostsTable->setupUpload(999);
+
+		$data = [
+		    'no' => 1,
+			'name' => 'test-name',
+			'blog_content_id' => 999,
+			'posts_date' => '2022-07-16 00:00:00',
+			'content' => 'test-content',
+			'detail' => 'test-detail',
+			'status' => 0,
+			'publish_begin' => null,
+			'publish_end' => null,
+			'user_id' => 1,
+			'eye_catch' => [
+				'name' => 'test.png',
+				'type' => 'image/png',
+				'tmp_name' => __DIR__ . '/../../Fixture/File/test1_.png',
+				'error' => 0,
+				'size' => 1,
+			],
+		];
+
+		// 作成
+		$blogPost1 = $this->BlogPostsTable->save($this->BlogPostsTable->newEntity($data));
+		$blogPost1no = $blogPost1->no;
+		$ym = date('Y/m');
+		$fileDir = WWW_ROOT . '/files/blog/999/blog_posts/' . $ym;
+
+		$this->assertEquals($ym . '/0000000' . $blogPost1no .  '_eye_catch.png', $blogPost1->eye_catch);
+		$this->assertTrue(is_file($fileDir . '/0000000' . $blogPost1no .  '_eye_catch.png'));
+		$this->assertTrue(is_file($fileDir . '/0000000' . $blogPost1no .  '_eye_catch__thumb.png'));
+		$this->assertTrue(is_file($fileDir . '/0000000' . $blogPost1no .  '_eye_catch__mobile_thumb.png'));
+
+		// コピー
+		$blogPost2 = $this->BlogPostsTable->copy(null, clone $blogPost1);
+		$blogPost2no = $blogPost2->no;
+
+		// 複製元が影響を受けていないか
+		$this->assertEquals($ym . '/0000000' . $blogPost1no .  '_eye_catch.png', $blogPost1->eye_catch);
+		$this->assertTrue(is_file($fileDir . '/0000000' . $blogPost1no .  '_eye_catch.png'));
+		$this->assertTrue(is_file($fileDir . '/0000000' . $blogPost1no .  '_eye_catch__thumb.png'));
+		$this->assertTrue(is_file($fileDir . '/0000000' . $blogPost1no .  '_eye_catch__mobile_thumb.png'));
+
+		// 複製できているか
+		$this->assertEquals($ym . '/0000000' . $blogPost2no .  '_eye_catch.png', $blogPost2->eye_catch);
+		$this->assertTrue(is_file($fileDir . '/0000000' . $blogPost2no .  '_eye_catch.png'));
+		$this->assertTrue(is_file($fileDir . '/0000000' . $blogPost2no .  '_eye_catch__thumb.png'));
+		$this->assertTrue(is_file($fileDir . '/0000000' . $blogPost2no .  '_eye_catch__mobile_thumb.png'));
+
+		// 削除
+		$this->BlogPostsTable->delete($blogPost2);
+		$blogPost2 = $this->BlogPostsTable->find()->where([
+            'BlogPosts.id' => $blogPost2->id
+		])->first();
+		$this->assertEmpty($blogPost2);
+		$this->assertFalse(is_file($fileDir . '/0000000' . $blogPost2no .  '_eye_catch.png'));
+		$this->assertFalse(is_file($fileDir . '/0000000' . $blogPost2no .  '_eye_catch__thumb.png'));
+		$this->assertFalse(is_file($fileDir . '/0000000' . $blogPost2no .  '_eye_catch__mobile_thumb.png'));
+
+		$dir = new Folder(WWW_ROOT . '/files/blog/999');
+		$dir->delete();
+	}
 
 }

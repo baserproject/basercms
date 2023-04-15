@@ -58,7 +58,6 @@ class BcCustomContentViewEventListener extends \BaserCore\Event\BcViewEventListe
         $customContentsTable = \Cake\ORM\TableRegistry::getTableLocator()->get('BcCustomContent.CustomContents');
         $customContents = $customContentsTable->find()
             ->contain(['Contents', 'CustomTables'])
-            ->where($customContentsTable->Contents->getConditionAllowPublish())
             ->order(['CustomContents.id'])
             ->all();
 

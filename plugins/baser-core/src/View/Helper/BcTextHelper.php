@@ -237,34 +237,6 @@ class BcTextHelper extends TextHelper
     }
 
     /**
-     * 配列形式の和暦データを文字列データに変換する
-     *
-     * FormHelper::dateTime() で取得した配列データを
-     * BcTimeHelper::convertToWarekiArray() で配列形式の和暦データに変換したものを利用する
-     *
-     * @param array $arrDate
-     *    − `wareki`:和暦に変換する場合は、trueを設定、設定しない場合何も返さない
-     *    - `year` :和暦のキーを付与した年。
-     *        r: 令和 / h: 平成 / s: 昭和 / t: 大正 / m: 明治
-     *        （例）h-27
-     *    - `month` : 月
-     *    - `day` : 日
-     * @return string 和暦（例）平成 27年 8月 11日
-     */
-    public function dateTimeWareki($arrDate)
-    {
-        if (!is_array($arrDate)) {
-            return;
-        }
-        if (!$arrDate['wareki'] || !$arrDate['year'] || !$arrDate['month'] || !$arrDate['day']) {
-            return;
-        }
-        [$w, $year] = explode('-', $arrDate['year']);
-        $wareki = $this->BcTime->nengo($w);
-        return $wareki . " " . $year . "年 " . $arrDate['month'] . "月 " . $arrDate['day'] . '日';
-    }
-
-    /**
      * 通貨表示
      *
      * @param int $value 通貨となる数値

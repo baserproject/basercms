@@ -37,6 +37,11 @@ trait BcEventDispatcherTrait
      */
     public function dispatchLayerEvent($name, $data = [], $options = [])
     {
+		$dbg = debug_backtrace();
+		if(!empty($dbg[1]['function']) && $dbg[1]['function'] === 'invokeAction') {
+			$this->notFound();
+		}
+
         $plugin = method_exists($this, 'getPlugin')? $this->getPlugin() : '';
         $class = method_exists($this, 'getName')? $this->getName() : get_class($this);
         $subject = $this;

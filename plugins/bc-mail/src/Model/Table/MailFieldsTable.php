@@ -163,10 +163,9 @@ class MailFieldsTable extends MailAppTable
             'file' => __d('baser_core', 'ファイル'),
             'autozip' => __d('baser_core', '自動補完郵便番号'),
             'pref' => __d('baser_core', '都道府県リスト'),
-            // TODO ucmitz 和暦未対応
-//            'date_time_wareki' => __d('baser_core', '和暦日付'),
             'date_time_calender' => __d('baser_core', 'カレンダー'),
             'tel' => __d('baser_core', '電話番号'),
+            'number' => __d('baser', '数値'),
             'password' => __d('baser_core', 'パスワード'),
             'hidden' => __d('baser_core', '隠しフィールド')
         ];

@@ -37,8 +37,8 @@ use BaserCore\View\AppView;
   <td class="bca-table-listup__tbody-td">
     <?php echo h($data['title']) ?>
   </td>
-  <td class="bca-table-listup__tbody-td"><?php echo $data['version'] ?></td>
-  <td class="bca-table-listup__tbody-td"><?php echo h($data['description']) ?></td>
+  <td class="bca-table-listup__tbody-td"><?php echo h($data['version']) ?></td>
+  <td class="bca-table-listup__tbody-td"><?php echo nl2br(h($data['description'])) ?></td>
   <td
     class="bca-table-listup__tbody-td"><?php $this->BcBaser->link($data['author'], $data['authorLink'], ['target' => '_blank', 'escape' => true]) ?></td>
   <td class="bca-table-listup__tbody-td" style="width:10%;white-space: nowrap">

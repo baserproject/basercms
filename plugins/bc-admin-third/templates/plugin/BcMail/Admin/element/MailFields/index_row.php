@@ -49,9 +49,13 @@ if (!$mailField->use_field) {
   </td>
   <td class="bca-table-listup__tbody-td"><?php echo $mailField->no ?></td>
   <td class="bca-table-listup__tbody-td">
-    <?php $this->BcBaser->link($mailField->field_name, ['action' => 'edit', $mailContent->id, $mailField->id]) ?>
+    <?php $this->BcBaser->link($mailField->field_name, [
+      'action' => 'edit',
+      $mailContent->id,
+      $mailField->id
+    ]) ?>
     <br>
-    <?php echo $mailField->name ?>
+    <?php echo h($mailField->name) ?>
   </td>
   <td class="bca-table-listup__tbody-td">
     <?php echo $this->BcText->listValue('MailFields.type', $mailField->type) ?>

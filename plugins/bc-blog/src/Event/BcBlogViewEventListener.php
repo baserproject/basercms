@@ -83,7 +83,6 @@ class BcBlogViewEventListener extends \BaserCore\Event\BcViewEventListener
         $blogContentTable = \Cake\ORM\TableRegistry::getTableLocator()->get('BcBlog.BlogContents');
         $blogContents = $blogContentTable->find()
             ->contain('Contents')
-            ->where($blogContentTable->Contents->getConditionAllowPublish())
             ->order(['Contents.lft'])
             ->all();
         $blogContentMenus = [];

@@ -41,7 +41,7 @@
       ['action' => 'edit', $blogContent->id, $blogCategory->id]
     ) ?>
   </td>
-  <td class="bca-table-listup__tbody-td"><?php echo html_entity_decode(h($blogCategory->layered_title)) ?></td>
+  <td class="bca-table-listup__tbody-td"><?php echo h($blogCategory->layered_title) ?></td>
   <?php echo $this->BcListTable->dispatchShowRow($blogCategory) ?>
   <td class="bca-table-listup__tbody-td">
     <?php echo $this->BcTime->format($blogCategory->created, 'yyyy-MM-dd'); ?>
