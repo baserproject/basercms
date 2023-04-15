@@ -49,14 +49,14 @@ class AssetTest extends BcTestCase
      */
     public function testWebroot()
     {
-        $result = Asset::webroot('css/style.css', ['theme' => 'BcPluginSample']);
+        $result = Asset::webroot('css/style.css', ['theme' => 'BcThemeSample']);
         $this->assertEquals('/bc_front/css/style.css', $result);
         $cssDir = ROOT . DS . 'plugins' . DS . 'BcPluginSample' . DS . 'webroot' . DS . 'css' . DS;
         $folder = new Folder();
         $folder->create($cssDir);
         touch($cssDir . 'style.css');
         $result = Asset::webroot('css/style.css', ['theme' => 'BcPluginSample']);
-        $this->assertEquals('/bc_spa_sample/css/style.css', $result);
+        $this->assertEquals('/bc_plugin_sample/css/style.css', $result);
         $folder->delete($cssDir);
     }
 
