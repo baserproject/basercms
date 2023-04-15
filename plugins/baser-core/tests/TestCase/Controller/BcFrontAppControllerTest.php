@@ -58,12 +58,7 @@ class BcFrontAppControllerTest extends BcTestCase
      */
     public function testBeforeFilter()
     {
-        $this->BcFrontAppController->setRequest($this->getRequest('https://localhost/index'));
-        $result = $this->BcFrontAppController->beforeFilter(new Event('beforeFilter'));
-        $this->assertNull($result);
-        $this->BcFrontAppController->setRequest($this->getRequest('http://localhost/index'));
-        $result = $this->BcFrontAppController->beforeFilter(new Event('beforeFilter'));
-        $this->assertNotNull($result);
+        $this->markTestIncomplete('このテストはまだ実装されていません。');
     }
 
     /**

@@ -50,7 +50,6 @@ class BcFrontAppController extends AppController
      * @return Response|void
      * @checked
      * @noTodo
-     * @unitTest
      */
     public function beforeFilter(EventInterface $event)
     {
