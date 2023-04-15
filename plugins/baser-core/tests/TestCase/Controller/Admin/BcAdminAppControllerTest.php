@@ -215,4 +215,20 @@ class BcAdminAppControllerTest extends BcTestCase
 //        $this->assertEquals('test', $this->BcAdminApp->viewBuilder()->getTheme());
 //    }
 
+    /**
+     * test redirectIfIsNotSameSite
+     */
+    public function testRedirectIfIsNotSameSite()
+    {
+        $this->BcAdminApp->setRequest($this->getRequest('https://localhost/index'));
+        $this->_response = $this->BcAdminApp->redirectIfIsNotSameSite();
+        $this->assertNull($this->_response);
+        $this->BcAdminApp->setRequest($this->getRequest('http://localhost/index'));
+        $this->_response = $this->BcAdminApp->redirectIfIsNotSameSite();
+        $this->assertRedirect('https://localhost/index');
+        $this->BcAdminApp->setRequest($this->getRequest('https://localhost/baser/admin'));
+        $this->_response = $this->BcAdminApp->redirectIfIsNotSameSite();
+        $this->assertNull($this->_response);
+    }
+
 }

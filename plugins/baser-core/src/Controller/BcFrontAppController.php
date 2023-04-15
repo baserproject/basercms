@@ -67,8 +67,6 @@ class BcFrontAppController extends AppController
 
         $response = parent::beforeFilter($event);
         if($response) return $response;
-        $response = $this->redirectIfIsNotSameSite();
-        if ($response) return $response;
     }
 
     /**
@@ -96,37 +94,4 @@ class BcFrontAppController extends AppController
         }
     }
 
-    /**
-     * siteUrlや、sslUrlと現在のURLが違う場合には、そちらのURLにリダイレクトを行う
-     * setting.php にて、cmsUrlとして、cmsUrlを定義した場合にはそちらを優先する
-     * @return Response|void|null
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function redirectIfIsNotSameSite()
-    {
-        if (Configure::read('BcEnv.cmsUrl')) {
-            $siteUrl = Configure::read('BcEnv.cmsUrl');
-        } elseif ($this->getRequest()->is('ssl')) {
-            $siteUrl = Configure::read('BcEnv.sslUrl');
-        } else {
-            $siteUrl = Configure::read('BcEnv.siteUrl');
-        }
-        if (!$siteUrl) {
-            return;
-        }
-        if (BcUtil::siteUrl() !== $siteUrl) {
-            $params = $this->getRequest()->getAttributes()['params'];
-            unset($params['Content']);
-            unset($params['Site']);
-            $url = Router::reverse($params, false);
-            $webroot = $this->request->getAttributes()['webroot'];
-            if($webroot) {
-                $webrootReg = '/^\/' . preg_quote($webroot, '/') . '/';
-                $url = preg_replace($webrootReg, '', $url);
-            }
-            return $this->redirect(preg_replace('/\/$/', '', $siteUrl) . $url);
-        }
-    }
 }

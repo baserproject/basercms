@@ -81,20 +81,4 @@ class BcFrontAppControllerTest extends BcTestCase
         <<< */
     }
 
-    /**
-     * test redirectIfIsNotSameSite
-     */
-    public function testRedirectIfIsNotSameSite()
-    {
-        $this->BcFrontAppController->setRequest($this->getRequest('https://localhost/index'));
-        $this->_response = $this->BcFrontAppController->redirectIfIsNotSameSite();
-        $this->assertNull($this->_response);
-        $this->BcFrontAppController->setRequest($this->getRequest('http://localhost/index'));
-        $this->_response = $this->BcFrontAppController->redirectIfIsNotSameSite();
-        $this->assertRedirect('https://localhost/index');
-        $this->BcFrontAppController->setRequest($this->getRequest('https://localhost/baser/admin'));
-        $this->_response = $this->BcFrontAppController->redirectIfIsNotSameSite();
-        $this->assertNull($this->_response);
-    }
-
 }
