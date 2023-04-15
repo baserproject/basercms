@@ -49,7 +49,10 @@ class MailfieldHelper extends Helper
             $attributes['multiple'] = true;
         } elseif ($data['type'] === 'tel') {
             $attributes['type'] = 'tel';
-        }
+		} elseif ($data['type'] === 'number') {
+			$attributes['type'] = 'number';
+		}
+
         if (!empty($data['options'])) {
             $options = BcUtil::pairToAssoc($data['options']);
             $attributes = array_merge($attributes, $options);
