@@ -110,7 +110,7 @@ class PluginsAdminService extends PluginsService implements PluginsAdminServiceI
      * @param int|false $scriptNum
      * @return bool
      */
-    public function isRequireUpdate(string $programVersion, string $dbVersion, ?string $availableVersion, $scriptNum)
+    public function isRequireUpdate(string $programVersion, ?string $dbVersion, ?string $availableVersion, $scriptNum)
     {
         $programVerPoint = BcUtil::verpoint($programVersion);
         $dbVerPoint = BcUtil::verpoint($dbVersion);
