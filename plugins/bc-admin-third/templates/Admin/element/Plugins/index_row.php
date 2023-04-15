@@ -59,7 +59,7 @@ $class = ' class="' . implode(' ', $classies) . '"';
     <?php endif ?>
     <?php echo h($plugin->name) ?><?php if ($plugin->title): ?>（<?php echo h($plugin->title) ?>）<?php endif ?>
   </td>
-  <td class="bca-table-listup__tbody-td"><?php echo $plugin->version ?></td>
+  <td class="bca-table-listup__tbody-td"><?php echo h($plugin->version) ?></td>
   <?php if(!$this->request->getQuery('sortmode')): ?>
   <td class="bca-table-listup__tbody-td" style="min-width:200px;"><?php echo h($plugin->description) ?></td>
   <td class="bca-table-listup__tbody-td">
@@ -67,7 +67,7 @@ $class = ' class="' . implode(' ', $classies) . '"';
       <?php if ($plugin->url): ?>
         <?php echo h($plugin->author) ?>
       <?php else: ?>
-        <?php $this->BcBaser->link($plugin->author, $plugin->url, ['target' => '_blank']) ?>
+        <?php $this->BcBaser->link($plugin->author, $plugin->url, ['target' => '_blank', 'escape' => true]) ?>
       <?php endif ?>
     <?php endif ?>
   </td>

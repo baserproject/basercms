@@ -54,7 +54,12 @@ if (!$blogComment->status) {
   </td>
   <td class="bca-table-listup__tbody-td">
     <strong>
-      <?php $this->BcBaser->link($blogComment->blog_post->name, ['controller' => 'blog_posts', 'action' => 'edit', $blogContent->id, $blogComment->blog_post->id]) ?>
+      <?php $this->BcBaser->link($blogComment->blog_post->name, [
+        'controller' => 'blog_posts',
+        'action' => 'edit',
+        $blogContent->id,
+        $blogComment->blog_post->id
+      ], ['escape' => true]) ?>
     </strong>
     <br>
     <?php echo nl2br($this->BcText->autoLinkUrls($blogComment->message)) ?>

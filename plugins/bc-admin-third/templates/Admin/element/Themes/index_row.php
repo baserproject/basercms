@@ -25,10 +25,10 @@ use Cake\Utility\Inflector;
 
 
 <li>
-  <p class="theme-name"><strong><?php echo h($theme->title) ?></strong>&nbsp;(&nbsp;<?php echo $theme->name ?>&nbsp;)
+  <p class="theme-name"><strong><?php echo h($theme->title) ?></strong>&nbsp;(&nbsp;<?php echo h($theme->name) ?>&nbsp;)
   </p>
   <p class="bca-current-theme__screenshot">
-    <a class="theme-popup" href="<?php echo '#Contents' . Inflector::camelize($theme->name) ?>">
+    <a class="theme-popup" href="<?php echo '#Contents' . Inflector::camelize(h($theme->name)) ?>">
       <?php if ($theme->screenshot): ?>
         <?php $this->BcBaser->img(['action' => 'screenshot', $theme->name], ['alt' => $theme->title]) ?>
       <?php else: ?>
@@ -67,7 +67,7 @@ use Cake\Utility\Inflector;
     $this->fetch('postLink');
     $this->reset('postLink');
   ?>
-  <p class="theme-version"><?php echo __d('baser_core', 'バージョン') ?>：<?php echo $theme->version ?></p>
+  <p class="theme-version"><?php echo __d('baser_core', 'バージョン') ?>：<?php echo h($theme->version) ?></p>
   <p class="theme-author"><?php echo __d('baser_core', '制作者') ?>：
     <?php if (!empty($theme->url) && !empty($theme->author)): ?>
       <?php $this->BcBaser->link($theme->author, $theme->url, ['target' => '_blank', 'escape' => true]) ?>
@@ -76,7 +76,7 @@ use Cake\Utility\Inflector;
     <?php endif ?>
   </p>
   <div style='display:none'>
-    <div id="<?php echo 'Contents' . Inflector::camelize($theme->name) ?>" class="theme-popup-contents clearfix">
+    <div id="<?php echo 'Contents' . Inflector::camelize(h($theme->name)) ?>" class="theme-popup-contents clearfix">
       <div class="bca-current-theme__screenshot">
         <?php if ($theme->screenshot): ?>
           <?php $this->BcBaser->img(['action' => 'screenshot', $theme->name], ['alt' => $theme->title]) ?>
@@ -85,9 +85,9 @@ use Cake\Utility\Inflector;
         <?php endif ?>
       </div>
       <div class="theme-name">
-        <strong><?php echo h($theme->title) ?></strong>&nbsp;(&nbsp;<?php echo $theme->name ?>&nbsp;)
+        <strong><?php echo h($theme->title) ?></strong>&nbsp;(&nbsp;<?php echo h($theme->name) ?>&nbsp;)
       </div>
-      <div class="theme-version"><?php echo __d('baser_core', 'バージョン') ?>：<?php echo $theme->version ?></div>
+      <div class="theme-version"><?php echo __d('baser_core', 'バージョン') ?>：<?php echo h($theme->version) ?></div>
       <div class="theme-author">
         <?php echo __d('baser_core', '制作者') ?>：
         <?php if (!empty($theme->url) && !empty($theme->author)): ?>

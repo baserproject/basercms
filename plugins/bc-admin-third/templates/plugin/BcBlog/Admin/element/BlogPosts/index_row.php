@@ -41,10 +41,15 @@ use Cake\Utility\Hash;
   <td class="bca-table-listup__tbody-td bca-table-listup__tbody-td--title"><?php // アイキャッチ＋タイトル ?>
     <div class="eye_catch-wrap">
       <?php if (!empty($post->eye_catch)): ?>
-        <div
-          class="eye_catch"><?php echo $this->BcUpload->uploadImage('eye_catch', $post, ['imgsize' => 'thumb']) ?></div>
+        <div class="eye_catch">
+          <?php echo $this->BcUpload->uploadImage('eye_catch', $post, ['imgsize' => 'thumb']) ?>
+        </div>
       <?php endif; ?>
-      <?php $this->BcBaser->link($post->title, ['action' => 'edit', $blogContent->id, $post->id]) ?>
+      <?php $this->BcBaser->link($post->title, [
+        'action' => 'edit',
+        $blogContent->id,
+        $post->id
+      ], ['escape' => true]) ?>
     </div>
   </td>
   <td class="bca-table-listup__tbody-td bca-table-listup__tbody-td--category"><?php // カテゴリ ?>
