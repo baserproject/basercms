@@ -65,7 +65,7 @@ class FavoritesController extends BcAdminApiController
     {
         $this->request->allowMethod(['get']);
         $this->set([
-            'favorites' => $this->paginate($service->getIndex($this->request->getQueryParams()))
+            'favorites' => $service->getIndex($this->request->getQueryParams())->all()
         ]);
         $this->viewBuilder()->setOption('serialize', ['favorites']);
     }
