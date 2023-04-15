@@ -283,7 +283,7 @@ class BcValidationTest extends BcTestCase
             ["test.jpg", "image/jpeg", true],
             ["test.png", "image/png", true],
             ["test.gif", "image/gif", false],
-            ["test", "image/png", true],
+            ["test", "image/png", false],
         ];
     }
 
