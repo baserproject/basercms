@@ -5,7 +5,7 @@
     "type": "cakephp-plugin",
     "license": "MIT",
     "require": {
-        "baserproject/baser-core": "^4.3"
+        "baserproject/baser-core": "^4.2.4"
     },
     "autoload": {
         "psr-4": {
