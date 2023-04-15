@@ -23,7 +23,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     ]);
 
     $parameters->set(Option::PACKAGE_DIRECTORIES_EXCLUDES, [
-        __DIR__ . '/plugins/BcSpaSample',
         __DIR__ . '/plugins/BcThemeSample',
     ]);
 
