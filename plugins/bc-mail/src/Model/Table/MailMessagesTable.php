@@ -317,12 +317,11 @@ class MailMessagesTable extends MailAppTable
                             break;
 
                         case 'VALID_NUMBER':
-                            $validator->add($mailField->field_name, [
-                                'alphaNumeric' => [
-                                    'rule' => 'alphaNumeric',
-                                    'message' => __d('baser_core', '数値形式で入力してください。')
-                                ]
-                            ]);
+                            $validator->regex(
+                                $mailField->field_name,
+                                '/^[0-9]+$/u',
+                                __d('baser_core', '数値形式で入力してください。')
+                            );
                             break;
 
                         case 'VALID_DATETIME':
