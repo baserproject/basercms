@@ -1,5 +1,5 @@
 {
-    "name": "baserproject/bc-content-link",
+    "name": "baserproject/bc-column",
     "description": "BcContentLink plugin for baserCMS",
     "homepage": "https://basercms.net",
     "type": "cakephp-plugin",
@@ -10,12 +10,7 @@
     },
     "autoload": {
         "psr-4": {
-            "BcContentLink\\": "src/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "BcContentLink\\Test\\": "tests/"
+            "BcColumn\\": "src/"
         }
     }
 }

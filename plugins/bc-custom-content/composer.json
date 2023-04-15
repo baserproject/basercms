@@ -6,7 +6,7 @@
     "license": "MIT",
     "vendor-dir": "../../vendor",
     "require": {
-        "baserproject/baser-core": "^4.3"
+        "baserproject/baser-core": "^4.2.5"
     },
     "autoload": {
         "psr-4": {
