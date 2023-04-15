@@ -35,6 +35,9 @@ class BlogPostsTableTest extends BcTestCase
     public $fixtures = [
         'plugin.BcBlog.Factory/BlogPosts',
         'plugin.BcBlog.Factory/BlogContents',
+        'plugin.BaserCore.Factory/Users',
+        'plugin.BaserCore.Factory/UsersUserGroups',
+        'plugin.BaserCore.Factory/UserGroups',
     ];
 
 

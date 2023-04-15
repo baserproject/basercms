@@ -80,6 +80,9 @@ class UsersAdminService extends UsersService implements UsersAdminServiceInterfa
 
     /**
      * ユーザーグループが更新可能かどうか
+     *
+     * ログインユーザーがシステム管理ユーザーの場合のみ可
+     *
      * @param $id
      * @return bool
      * @checked
@@ -88,7 +91,7 @@ class UsersAdminService extends UsersService implements UsersAdminServiceInterfa
      */
     public function isUserGroupEditable(?int $id): bool
     {
-        return ($id === null || $this->isEditable($id));
+        return ($id === null || BcUtil::isAdminUser());
     }
 
     /**

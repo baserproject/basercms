@@ -45,13 +45,13 @@ $type = (isset($permissionGroupTypes[$permission->permission_group->type]))? $pe
       <?php echo $this->BcAdminForm->control('id' . $permission->id, ['type' => 'hidden', 'class' => 'id', 'value' => $permission->id]) ?>
     <?php endif ?>
   </td>
-  <td class="bca-table-listup__tbody-td"><?php echo $permission->no; ?></td>
-  <td class="bca-table-listup__tbody-td" nowrap="nowrap"><?php echo $type ?></td>
+  <td class="bca-table-listup__tbody-td"><?php echo h($permission->no); ?></td>
+  <td class="bca-table-listup__tbody-td" nowrap="nowrap"><?php echo h($type) ?></td>
   <td class="bca-table-listup__tbody-td"><?php echo h($permission->permission_group->name) ?></td>
   <td class="bca-table-listup__tbody-td">
     <?php $this->BcBaser->link($permission->name, ['action' => 'edit', $userGroupId, $permission->id], ['escape' => true]) ?>
     <br>
-    <?php echo $permission->url; ?>
+    <?php echo h($permission->url); ?>
   </td>
   <td
     class="bca-table-listup__tbody-td"><?php echo $this->BcText->arrayValue($permission->auth, [0 => '×', 1 => '〇']) ?></td>

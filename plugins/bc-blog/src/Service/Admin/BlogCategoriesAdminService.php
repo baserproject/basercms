@@ -19,6 +19,7 @@ use BaserCore\Utility\BcContainerTrait;
 use BcBlog\Model\Entity\BlogCategory;
 use BcBlog\Service\BlogCategoriesService;
 use BcBlog\Service\BlogContentsServiceInterface;
+use Cake\Datasource\EntityInterface;
 
 /**
  * BlogCategoriesAdminService
@@ -72,6 +73,8 @@ class BlogCategoriesAdminService extends BlogCategoriesService implements BlogCa
     /**
      * ブログカテゴリー編集用の view 変数取得
      *
+     * @param int $blogContentId
+     * @param BlogCategory|EntityInterface $blogCategory
      * @return array
      * @noTodo
      * @checked
