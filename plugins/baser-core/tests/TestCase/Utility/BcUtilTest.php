@@ -571,10 +571,10 @@ class BcUtilTest extends BcTestCase
      * アンシリアライズ
      * base64_decode が前提
      */
-    public function testUnserialize()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
+    // public function testUnserialize()
+    // {
+    //     // testSerializeにて実装
+    // }
 
     /**
      * Test urlencode
