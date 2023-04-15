@@ -15,7 +15,7 @@ use BaserCore\Error\BcException;
 use BaserCore\Service\Admin\ThemesAdminServiceInterface;
 use BaserCore\Service\ThemesServiceInterface;
 use BaserCore\Utility\BcUtil;
-use BaserCore\Vendor\Simplezip;
+use BaserCore\Utility\BcZip;
 use Cake\Filesystem\Folder;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -184,12 +184,25 @@ class ThemesController extends BcAdminAppController
      */
     public function download_default_data_pattern(ThemesServiceInterface $service)
     {
+        if (!extension_loaded('zip')) {
+            $this->notFound();
+        }
+
         $this->autoRender = false;
         $tmpDir = $service->createDownloadDefaultDataPatternToTmp();
-        $Simplezip = new Simplezip();
-        $Simplezip->addFolder($tmpDir);
-        $Simplezip->download('default');
+        $distPath = TMP . 'default.zip';
+
+        $bcZip = new BcZip();
+        $bcZip->create($tmpDir, $distPath);
+        header("Cache-Control: no-store");
+        header("Content-Type: application/zip");
+        header("Content-Disposition: attachment; filename=" . basename($distPath) . ";");
+        header("Content-Length: " . filesize($distPath));
+        while (ob_get_level()) { ob_end_clean(); }
+        echo readfile($distPath);
+
         BcUtil::emptyFolder($tmpDir);
+        unlink($distPath);
     }
 
     /**
@@ -204,11 +217,20 @@ class ThemesController extends BcAdminAppController
         $this->autoRender = false;
         $theme = BcUtil::getCurrentTheme();
         $tmpDir = $service->createDownloadToTmp($theme);
-        $simplezip = new Simplezip();
-        $simplezip->addFolder($tmpDir);
-        $simplezip->download($theme);
-        $folder = new Folder();
-        $folder->delete($tmpDir);
+        $distPath = TMP . $theme . '.zip';
+
+        $bcZip = new BcZip();
+        $bcZip->create($tmpDir, $distPath);
+
+        header("Cache-Control: no-store");
+        header("Content-Type: application/zip");
+        header("Content-Disposition: attachment; filename=" . basename($distPath) . ";");
+        header("Content-Length: " . filesize($distPath));
+        while (ob_get_level()) { ob_end_clean(); }
+        echo readfile($distPath);
+
+        BcUtil::emptyFolder($tmpDir);
+        unlink($distPath);
     }
 
     /**

@@ -16,7 +16,6 @@ use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcSiteConfig;
 use BaserCore\Utility\BcUtil;
 use BcBlog\Model\Entity\BlogContent;
-use BcBlog\Model\Entity\BlogPost;
 use BcBlog\Service\BlogCategoriesService;
 use BcBlog\Service\BlogCategoriesServiceInterface;
 use BcBlog\Service\BlogContentsService;
@@ -32,6 +31,7 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use Cake\ORM\ResultSet;
 use Cake\ORM\TableRegistry;
+use Cake\I18n\FrozenTime;
 
 /**
  * BlogFrontService
@@ -392,10 +392,21 @@ class BlogFrontService implements BlogFrontServiceInterface
             if ($request->getQuery('preview') === 'draft') {
                 $postArray['detail'] = $postArray['detail_draft'];
             }
+            if (!empty($postArray['posted'])) $postArray['posted'] = new FrozenTime($postArray['posted']);
+
             $vars['post'] = $this->BlogPostsService->BlogPosts->patchEntity(
-                $vars['post']?? $this->BlogPostsService->BlogPosts->newEmptyEntity(),
+                $vars['post'] ?? $this->BlogPostsService->BlogPosts->newEmptyEntity(),
                 $this->BlogPostsService->BlogPosts->saveTmpFiles($postArray, mt_rand(0, 99999999))->toArray()
             );
+
+            $validationErrors = $vars['post']->getErrors();
+            if ($validationErrors) {
+                foreach($validationErrors as $columnsErros) {
+                    foreach($columnsErros as $error) {
+                        throw new NotFoundException(__d('baser_core', $error));
+                    }
+                }
+            }
             BcUtil::onEvent($this->BlogPostsService->BlogPosts->getEventManager(), 'Model.beforeMarshal', $events);
         }
 

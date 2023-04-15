@@ -105,9 +105,15 @@ class UtilitiesController extends BcAdminAppController
         switch($mode) {
             case 'backup':
                 $this->autoRender = false;
-                $result = $service->backupDb($this->request->getQuery('backup_encoding'));
-                $result->download('baserbackup_' . str_replace(' ', '_', BcUtil::getVersion()) . '_' . date('Ymd_His'));
-                $service->resetTmpSchemaFolder();
+                $distPath = $service->backupDb($this->request->getQuery('backup_encoding'));
+                header("Cache-Control: no-store");
+                header("Content-Type: application/zip");
+                header("Content-Disposition: attachment; filename=" . basename($distPath) . ";");
+                header("Content-Length: " . filesize($distPath));
+                while (ob_get_level()) { ob_end_clean(); }
+                echo readfile($distPath);
+
+                unlink($distPath);
                 return;
             case 'restore':
                 $this->request->allowMethod(['post']);
@@ -135,10 +141,20 @@ class UtilitiesController extends BcAdminAppController
     {
         switch($mode) {
             case 'download':
+                if (extension_loaded('zip') === false) {
+                    $this->notFound();
+                }
                 $this->autoRender = false;
-                $result = $service->createLogZip();
-                if ($result) {
-                    $result->download('basercms_logs_' . date('Ymd_His'));
+                $distPath = $service->createLogZip();
+                if ($distPath) {
+                    header("Cache-Control: no-store");
+                    header("Content-Type: application/zip");
+                    header("Content-Disposition: attachment; filename=" . basename($distPath) . ";");
+                    header("Content-Length: " . filesize($distPath));
+                    while (ob_get_level()) { ob_end_clean(); }
+                    echo readfile($distPath);
+
+                    unlink($distPath);
                     return;
                 }
                 $this->BcMessage->setInfo('エラーログが存在しません。');

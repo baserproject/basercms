@@ -107,6 +107,7 @@ class InstallationsService implements InstallationsServiceInterface
             'phpGd' => extension_loaded('gd'),
             'phpPdo' => extension_loaded('pdo'),
             'phpXml' => extension_loaded('xml'),
+            'phpZip' => extension_loaded('zip'),
             'apacheRewrite' => $rewriteInstalled
         ];
         $check = [
@@ -114,6 +115,7 @@ class InstallationsService implements InstallationsServiceInterface
             'gdOk' => $status['phpGd'],
             'pdoOk' => $status['phpPdo'],
             'xmlOk' => $status['phpXml'],
+            'zipOk' => $status['phpZip'],
             'phpVersionOk' => version_compare(preg_replace('/[a-z-]/', '', $status['phpVersion']), $info['requirePhpVersion'], '>='),
             'phpMemoryOk' => ((($status['phpMemory'] >= $info['requirePhpMemory']) || $status['phpMemory'] == -1) === true)
         ];

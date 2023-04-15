@@ -13,7 +13,6 @@ namespace BaserCore\Service;
 
 use BaserCore\Error\BcException;
 use BaserCore\Model\Entity\Site;
-use BaserCore\Model\Table\AppTable;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcSiteConfig;
 use BaserCore\Utility\BcUtil;
@@ -21,15 +20,12 @@ use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Utility\BcZip;
-use Cake\Cache\Cache;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Datasource\EntityInterface;
 use Cake\Filesystem\Folder;
-use Cake\Http\Client;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
-use Cake\Utility\Xml;
 use Laminas\Diactoros\UploadedFile;
 
 /**

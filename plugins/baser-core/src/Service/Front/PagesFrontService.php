@@ -11,7 +11,6 @@
 
 namespace BaserCore\Service\Front;
 
-use BaserCore\Model\Entity\Page;
 use BaserCore\Model\Validation\BcValidation;
 use BaserCore\Service\PagesService;
 use Cake\Controller\Controller;
@@ -63,10 +62,16 @@ class PagesFrontService extends PagesService implements PagesFrontServiceInterfa
             if ($request->getQuery('preview') === 'draft') {
                 $pageArray['contents'] = $pageArray['draft'];
             }
-            if (!empty($pageArray['contents']) && !BcValidation::containsScript($pageArray['contents'])) {
-                throw new NotFoundException(__d('baser_core', '本文欄でスクリプトの入力は許可されていません。'));
-            }
             $page = $this->Pages->patchEntity($page, $pageArray);
+
+            $validationErrors = $page->getErrors();
+            if ($validationErrors) {
+                foreach($validationErrors as $columnsErros) {
+                    foreach($columnsErros as $error) {
+                        throw new NotFoundException(__d('baser_core', $error));
+                    }
+                }
+            }
             $page->content = $this->Contents->saveTmpFiles($request->getData('content'), mt_rand(0, 99999999));
         }
         unset($vars['editLink']);
