@@ -55,7 +55,7 @@ $this->BcListTable->setColumnNumber(3);
       <?php endif ?>
 
       <?php if ($path): ?>
-        <?php $this->BcBaser->link('', ['action' => 'index', $theme, $plugin, $type, dirname($path)], [
+        <?php $this->BcBaser->link('', array_merge(['action' => 'index', $theme, $plugin, $type], explode('/', dirname($path))), [
           'title' => __d('baser_core', '上へ移動'),
           'class' => 'bca-btn-icon',
           'data-bca-btn-type' => 'up-directory',
