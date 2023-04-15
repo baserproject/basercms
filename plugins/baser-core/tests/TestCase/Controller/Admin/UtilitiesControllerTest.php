@@ -133,21 +133,7 @@ class UtilitiesControllerTest extends BcTestCase
             'action' => 'log_maintenance'
         ]);
         // 削除が成功の場合のメッセージを確認
-        $this->assertFlashMessage("エラーログを削除しました。");
-
-        // 削除がエラーのテスト
-        $this->post('/baser/admin/baser-core/utilities/log_maintenance/delete');
-        // ステータスを確認
-        $this->assertResponseCode(302);
-        // リダイレクトを確認
-        $this->assertRedirect([
-            'plugin' => 'BaserCore',
-            'prefix' => 'Admin',
-            'controller' => 'utilities',
-            'action' => 'log_maintenance'
-        ]);
-        // エラーの場合のメッセージを確認
-        $this->assertFlashMessage("エラーログが存在しません。");
+        $this->assertFlashMessage("ログを削除しました。");
         // ---- 引数 $mode が delete の場合 end ----
     }
 

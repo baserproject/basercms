@@ -272,16 +272,18 @@ class UtilitiesService implements UtilitiesServiceInterface
                         \FilesystemIterator::SKIP_DOTS
                 )
             );
+            $messages = [];
             foreach($files as $file) {
-                if (unlink($file)) {
-                    $messages[] = __d('baser_core', 'エラーログを削除しました。') . $file;
-                    return true;
+                if (unlink($file->getRealPath())) {
                 } else {
-                    $messages[] = __d('baser_core', 'エラーログが削除できませんでした。') . $file;
+                    $messages[] = __d('baser_core', 'ファイルが削除できませんでした。') . $file->getRealPath();
                 }
             }
+            if (count($messages) === 0) {
+                return true;
+            }
         } else {
-            $messages[] = __d('baser_core', 'エラーログが存在しません。');
+            $messages[] = __d('baser_core', 'ログフォルダが存在しません。');
         }
         throw new BcException(implode("\n", $messages));
     }
@@ -416,8 +418,8 @@ class UtilitiesService implements UtilitiesServiceInterface
         $tmpPath = TMP . 'schema' . DS;
         $name = $uploaded['backup']->getClientFileName();
         $uploaded['backup']->moveTo($tmpPath . $name);
-        $zip = new BcZip();
-        if (!$zip->extract($tmpPath . $name, $tmpPath)) {
+        $bcZip = new BcZip();
+        if (!$bcZip->extract($tmpPath . $name, $tmpPath)) {
             throw new BcException(__d('baser_core', 'アップロードしたZIPファイルの展開に失敗しました。'));
         }
         unlink($tmpPath . $name);

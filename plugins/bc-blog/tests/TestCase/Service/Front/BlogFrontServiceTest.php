@@ -596,10 +596,9 @@ class BlogFrontServiceTest extends BcTestCase
             'detail_draft' => 'preview detail_draft',
             'description' => 'test preview description',
             'template' => 'default-2',
-            'content' => [
-                'title' => 'preview title',
-                'url' => '/preview',
-            ]
+            'title' => 'preview title',
+            'url' => '/preview',
+            'content' => '<p>some string <p/>',
         ];
         $controller = new BcFrontAppController(
             $this->getRequest('/test')
@@ -623,7 +622,7 @@ class BlogFrontServiceTest extends BcTestCase
         $this->assertArrayHasKey('single', $vars);
         $this->assertArrayHasKey('crumbs', $vars);
         // ブログ記事がpostデータにより書き換えられているか確認
-        $this->assertEquals('blog post title', $vars['post']->title);
+        $this->assertEquals('preview title', $vars['post']->title);
         $this->assertEquals('default-2', $vars['post']->template);
         $this->assertEquals('test preview description', $vars['post']->description);
         $this->assertEquals('preview detail_draft', $vars['post']->detail);
