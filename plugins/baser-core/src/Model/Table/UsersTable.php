@@ -12,6 +12,8 @@
 namespace BaserCore\Model\Table;
 
 use ArrayObject;
+use Authentication\Authenticator\SessionAuthenticator;
+use BaserCore\Utility\BcUtil;
 use Cake\ORM\Query;
 use Cake\Event\Event;
 use Cake\ORM\TableRegistry;
@@ -328,7 +330,8 @@ class UsersTable extends AppTable
     /**
      * 利用可能なユーザーを取得する
      *
-     * プレフィックスが Api の場合は、Admin に対しての許可があるかどうかで判定する
+     * プレフィックスが Api/Admin の場合、かつ、セッション認証の場合は、
+     * 管理画面からのAjaxとみなし、Admin に対しての許可があるかどうかで判定する
      *
      * @param Query $query
      * @return Query
@@ -338,7 +341,12 @@ class UsersTable extends AppTable
      */
     public function findAvailable(Query $query)
     {
-        $prefix = Router::getRequest()->getParam('prefix');
+        $request = Router::getRequest();
+        $prefix = $request->getParam('prefix');
+        $authenticator = $request->getAttribute('authentication')->getAuthenticationProvider();
+        if($prefix === 'Api/Admin' && $authenticator && $authenticator instanceof SessionAuthenticator) {
+            $prefix = 'Admin';
+        }
         return $query->where([
                 'Users.status' => true
             ])
