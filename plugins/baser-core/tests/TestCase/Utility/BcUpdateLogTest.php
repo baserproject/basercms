@@ -24,6 +24,9 @@ class BcUpdateLogTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function test_setAndGetAndSaveAndClear()
     {
+        if (!file_exists(LOGS)) {
+            mkdir(LOGS, 0777);
+        }
         $this->assertEquals([], BcUpdateLog::get());
         BcUpdateLog::set('test1');
         BcUpdateLog::set('test2');

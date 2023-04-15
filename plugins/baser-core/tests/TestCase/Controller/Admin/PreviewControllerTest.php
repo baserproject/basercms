@@ -96,6 +96,10 @@ class PreviewControllerTest extends BcTestCase
         $pagesService = $this->getService(PagesServiceInterface::class);
         $page = $pagesService->get(1);
         $page->contents = "<p>test</p>";
+        $page->title = "testView title";
+        $page->content['title'] = "testView title";
+        $page->content['created_date'] = date('Y-m-d');
+
         $this->enableCsrfToken();
         $this->post('/baser/admin/baser-core/preview/view?url=https://localhost/&preview=default', $page->toArray());
         $this->assertResponseOk();

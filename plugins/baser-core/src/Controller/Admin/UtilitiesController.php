@@ -164,7 +164,7 @@ class UtilitiesController extends BcAdminAppController
                 $this->request->allowMethod(['post']);
                 try {
                     $service->deleteLog();
-                    $this->BcMessage->setInfo(__d('baser_core', 'エラーログを削除しました。'));
+                    $this->BcMessage->setInfo(__d('baser_core', 'ログを削除しました。'));
                 } catch (BcException $e) {
                     $this->BcMessage->setError($e->getMessage());
                 }
