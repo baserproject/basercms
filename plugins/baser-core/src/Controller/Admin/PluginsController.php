@@ -103,9 +103,9 @@ class PluginsController extends BcAdminAppController
 
 	/**
 	 * アップデート実行
-     * @param PluginsServiceInterface $service
+     * @param PluginsService $service
      * @param string $name
-     * @return void
+     * @return void|Response
      * @checked
      * @noTodo
      * @unitTest

@@ -22,6 +22,8 @@ $(function () {
     function toggleUpdate(){
         const btnUpdate = $("#BtnUpdate");
         const phpNotice = $(".php-notice");
+        const plugin = $("#AdminPluginsUpdateScript").attr('data-plugin');
+        if(plugin !== 'BaserCore') return;
         if($("#php").val()) {
             btnUpdate.removeAttr('disabled');
             phpNotice.hide();

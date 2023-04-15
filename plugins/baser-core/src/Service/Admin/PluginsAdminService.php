@@ -53,7 +53,6 @@ class PluginsAdminService extends PluginsService implements PluginsAdminServiceI
      */
     public function getViewVarsForUpdate(EntityInterface $entity): array
     {
-        $availableVersion = $this->getAvailableCoreVersion();
         $programVersion = BcUtil::getVersion($entity->name);
         $dbVersion = BcUtil::getDbVersion($entity->name);
         BcUtil::includePluginClass($entity->name);
@@ -62,11 +61,14 @@ class PluginsAdminService extends PluginsService implements PluginsAdminServiceI
         $scriptMessages = $plugin->getUpdateScriptMessages();
 
         if ($entity->name === 'BaserCore') {
+            $availableVersion = $this->getAvailableCoreVersion();
             $corePlugins = Configure::read('BcApp.corePlugins');
             foreach($corePlugins as $corePlugin) {
                 $scriptNum += count($plugin->getUpdaters($corePlugin));
                 $scriptMessages += $plugin->getUpdateScriptMessages($corePlugin);
             }
+        } else {
+            $availableVersion = null;
         }
 
         $programVerPoint = BcUtil::verpoint($programVersion);
@@ -108,7 +110,7 @@ class PluginsAdminService extends PluginsService implements PluginsAdminServiceI
      * @param int|false $scriptNum
      * @return bool
      */
-    public function isRequireUpdate(string $programVersion, string $dbVersion, string $availableVersion, $scriptNum)
+    public function isRequireUpdate(string $programVersion, string $dbVersion, ?string $availableVersion, $scriptNum)
     {
         $programVerPoint = BcUtil::verpoint($programVersion);
         $dbVerPoint = BcUtil::verpoint($dbVersion);

@@ -31,7 +31,10 @@ $this->BcAdmin->setTitle(sprintf(__d('baser_core', '%s｜データベースア�
 $this->BcBaser->i18nScript([
   'confirmMessage1' => __d('baser_core', 'アップデートを実行します。よろしいですか？'),
 ]);
-$this->BcBaser->js('admin/plugins/update.bundle', false);
+$this->BcBaser->js('admin/plugins/update.bundle', false, [
+  'id' => 'AdminPluginsUpdateScript',
+  'data-plugin' => $plugin->name
+]);
 ?>
 
 
@@ -114,6 +117,7 @@ $this->BcBaser->js('admin/plugins/update.bundle', false);
     <?php echo $this->BcAdminForm->control('update', ['type' => 'hidden', 'value' => true]) ?>
     <?php echo $this->BcAdminForm->control('currentVersion', ['type' => 'hidden', 'value' => $programVersion]) ?>
     <?php echo $this->BcAdminForm->control('targetVersion', ['type' => 'hidden', 'value' => $availableVersion]) ?>
+    <?php if($availableVersion): ?>
     <p>
       <?php echo __d('baser_core', 'PHP CLI の実行パス') ?>
       <?php echo $this->BcAdminForm->control('php', [
@@ -124,6 +128,7 @@ $this->BcBaser->js('admin/plugins/update.bundle', false);
       <br>
       <small class="php-notice"><?php echo __d('baser_core', 'PHPのパスが取得できないためアップデートを実行できません。確認の上、手動で入力してください。') ?></small>
     </p>
+    <?php endif ?>
     <div class="bca-actions">
       <?php echo $this->BcAdminForm->submit(__d('baser_core', 'アップデート実行'), [
         'class' => 'button bca-btn bca-actions__item',
