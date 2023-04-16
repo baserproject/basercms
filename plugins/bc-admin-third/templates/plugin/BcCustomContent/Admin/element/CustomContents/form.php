@@ -57,11 +57,13 @@
         <div class="bca-helptext">
           <?php echo __d('baser_core', 'コンテンツに紐付けるテーブルを選択します。') ?>
         </div>
+        <?php if($entity->custom_table_id): ?>
         &nbsp;&nbsp;<?php $this->BcBaser->link(__d('baser_core', 'テーブル設定に移動'), [
           'controller' => 'CustomTables',
           'action' => 'edit',
           $entity->custom_table_id
         ], ['class' => 'button-small']) ?>
+        <?php endif ?>
         <?php echo $this->BcAdminForm->error('custom_table_id') ?>
       </td>
     </tr>
