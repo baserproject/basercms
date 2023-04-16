@@ -1,0 +1,31 @@
+.theme-popup-contents {
+  font-size: 1.2rem;
+  .theme-name,
+  .theme-version,
+  .theme-author,
+  .theme-description {
+    padding:5px 20px;
+  }
+  .theme-description {
+    margin-bottom: 20px;
+  }
+  .theme-screenshot {
+    padding: 0;
+    border: 1px solid #ccc;
+    img {
+      display: block;
+      max-width: 100%;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+  .bca-current-theme__screenshot,
+  .theme-screenshot {
+    border:none;
+    background: #000;
+    margin-bottom: 20px;
+    padding-top: 50px;
+    padding-bottom: 50px;
+  }
+
+}

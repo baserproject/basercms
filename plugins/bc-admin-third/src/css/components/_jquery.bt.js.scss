@@ -1,0 +1,28 @@
+.bt-content {
+  line-height: 1.5em;
+}
+
+.bt-content ul {
+  margin: 0 0 10px 0 !important;
+  padding: 0 !important;
+}
+
+.bt-content ul li {
+  list-style-position: outside;
+  margin-left: 15px;
+  padding: 0 !important;
+  margin-bottom: 15px;
+  line-height: 1.3em;
+  margin-top: 10px;
+}
+
+.bt-content p {
+  margin-bottom: 10px;
+}
+
+.bt-content li .example-box {
+  border: 3px solid #DDD;
+  padding: 15px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}

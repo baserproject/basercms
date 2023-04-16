@@ -6,8 +6,7 @@ version: '3'
 services:
   bc-db:
     container_name: bc-db
-    platform: linux/x86_64
-    image: mysql:5.7
+    image: mysql:8.0
     volumes:
       - ./volumes/mysql:/var/lib/mysql
       # - db-volume:/var/lib/mysql # windowsの場合はコメントを外し、上の行をコメントアウトする
@@ -17,30 +16,37 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: "root"
       MYSQL_DATABASE: "basercms"
-    command: mysqld --character-set-server=utf8 --collation-server=utf8_general_ci --innodb-use-native-aio=0
+    command: mysqld --character-set-server=utf8 --collation-server=utf8_general_ci --innodb-use-native-aio=0 --default_authentication_plugin=mysql_native_password
+
   bc-php:
     container_name: bc-php
-    image: baserproject/basercms:php7.4
+    image: baserproject/basercms:php8.1
     volumes:
-      - ../:/var/www/shared:delegated
+      - ../:/var/www/html:delegated
+#      - ../:/var/www/shared:delegated
     environment:
       PHP_IDE_CONFIG: "serverName=localhost"
+      XDEBUG_MODE: "debug"
+      XDEBUG_SESSION: "1"
       COMPOSER_ALLOW_SUPERUSER: 1
     ports:
       - "80:80"
       - "443:443"
     depends_on:
       - bc-db
-    command: bash -c "/var/www/shared/docker/init.sh && apache2-foreground"
+    command: bash -c "/var/www/html/docker/bin/init.sh && apache2-foreground"
+#    command: bash -c "/var/www/shared/docker/bin/init_lsyncd.sh && /var/www/shared/docker/bin/init.sh && apache2-foreground"
+
   bc-smtp:
     container_name: bc-smtp
     image: schickling/mailcatcher
     ports:
       - "1080:1080"
       - "1025:1025"
+
   bc-pma:
     container_name: bc-pma
-    image: phpmyadmin/phpmyadmin
+    image: phpmyadmin
     environment:
       - PMA_ARBITRARY=1
       - PMA_HOST=bc-db
@@ -52,8 +58,9 @@ services:
      - 8080:80
     volumes:
        - ./phpmyadmin/sessions:/sessions
+
   bc-pg:
-    image: postgres:10.5
+    image: postgres:15.2
     container_name: bc-pg
     ports:
       - 5432:5432
@@ -67,12 +74,12 @@ services:
     user: root
 
   bc-pga:
-    image: dpage/pgadmin4:3.3
+    image: dpage/pgadmin4:6
     container_name: bc-pga
     ports:
       - 10080:80
     volumes:
       - ./pgadmin:/var/lib/pgadmin/storage
     environment:
-      PGADMIN_DEFAULT_EMAIL: root
+      PGADMIN_DEFAULT_EMAIL: foo@example.com
       PGADMIN_DEFAULT_PASSWORD: root

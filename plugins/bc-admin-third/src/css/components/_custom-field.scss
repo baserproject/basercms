@@ -1,0 +1,185 @@
+.custom-field-setting {
+  display: flex;
+
+  h2 {
+    font-size: 2rem;
+    font-weight: normal;
+  }
+
+  &__panel {
+    width: 50%;
+    min-height: 210px;
+    border: 1px solid #eeeeea;
+    padding: 20px;
+    margin: 10px;
+    min-width: 360px;
+  }
+
+  .template {
+    display: none;
+  }
+
+  .custom-field-content {
+    cursor: move;
+    background-color: #fff;
+    margin: 10px auto 10px;
+
+    &__head {
+      color: #535A62 !important;
+      border: 1px solid #eeeeea;
+      background: #f8f8f8;
+
+      &:hover {
+        background: -webkit-gradient(linear, left top, left bottom, from(#f4f4f4), color-stop(100%, #dfdfdf));
+      }
+
+      small {
+        font-weight: normal !important;
+      }
+
+      &-title {
+        padding: 8px 15px;
+        font-weight: bold;
+        font-size: 1.4rem;
+        white-space: nowrap;
+      }
+
+      &-delete {
+        padding: 8px 10px;
+        float: right;
+        font-weight: bold;
+        cursor: pointer;
+        text-align: center;
+        border-left: 1px solid #DFDFDF;
+      }
+
+      &-setting {
+        padding: 8px 10px;
+        float: right;
+        font-weight: bold;
+        cursor: pointer;
+        text-align: center;
+        border-left: 1px solid #DFDFDF;
+      }
+    }
+  }
+
+  &__body {
+    padding: 8px;
+    border: 1px solid #eeeeea;
+  }
+
+  .custom-field-group {
+    cursor: move;
+    background-color: #fff;
+    margin: 10px auto 10px;
+
+    .custom-field-content:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .placeholder {
+    height: 26px;
+    background: none;
+    border: 1px solid #FFFF00;
+    background-color: #FFFFFF;
+  }
+}
+
+#CustomFieldSettingTarget {
+  min-height: 400px;
+  height: 100%;
+}
+
+#CustomFieldPreview {
+  background-color: #fff;
+  border-top: 1px solid #CCC;
+  padding: 20px;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  z-index: 100;
+  box-shadow: 0 -5px 3px -3px #999;
+
+  .preview-icon {
+    background-color: #424f44;
+    color: #fff;
+    font-size: 8px;
+    padding: 1px 5px;
+    border-radius: 3px;
+    position: absolute;
+    right: 0;
+    margin-top: -10px;
+    margin-right: -10px;
+  }
+}
+
+.custom-field-preview-inner {
+  position: relative;
+  text-align: center;
+  font-size: 1.4rem;
+
+  .bca-textarea {
+    display: block;
+  }
+
+  span {
+    line-height: 2em;
+  }
+}
+
+#CustomLinkPreview {
+  margin-left: -20px;
+  background-color: #fff;
+  border-top: 1px solid #CCC;
+  padding: 20px;
+  position: fixed;
+  bottom: 56px;
+  width: 100%;
+  z-index: 100;
+  box-shadow: 0 -5px 3px -3px #999;
+
+  .preview-icon {
+    background-color: #424f44;
+    color: #fff;
+    font-size: 8px;
+    padding: 1px 5px;
+    border-radius: 3px;
+    position: absolute;
+    right: 0;
+    margin-top: -10px;
+    margin-right: -10px;
+  }
+}
+
+.custom-link-preview-inner {
+  position: relative;
+  font-size: 1.4rem;
+
+  span {
+    line-height: 2em;
+  }
+
+}
+
+.bca-cc-loop table {
+  border-bottom: 1px solid #eeeeea;
+}
+
+.bca-cc-loop-add {
+  padding-top: 20px;
+  padding-bottom: 10px;
+  text-align: center;
+}
+
+.bca-cc-loop-block {
+  position: relative;
+}
+
+.bca-cc-loop-block > button {
+  position: absolute;
+  right: 10px;
+  top: 20px;
+  display: block;
+}

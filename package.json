@@ -1,0 +1,19 @@
+{
+  "name": "ucmitz",
+  "version": "2.0.0",
+  "description": "Project to migrate baserCMS to CakePHP4",
+  "author": "NPO baser foundation",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/baserproject/ucmitz.git"
+  },
+  "bugs": {
+    "url": "https://github.com/baserproject/ucmitz/issues"
+  },
+  "homepage": "https://github.com/baserproject/ucmitz#readme",
+  "workspaces": [
+    "plugins/*"
+  ],
+  "private": true
+}

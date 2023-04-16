@@ -1,7 +1,0 @@
-Allow from all
-RewriteEngine on
-#RewriteBase /
-RewriteRule \.(ico|map)$ - [L]
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^(.*)$ index.php [QSA,L]

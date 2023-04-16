@@ -1,0 +1,6 @@
+id,mail_content_id,no,name,field_name,type,head,attention,before_attachment,after_attachment,source,size,rows,maxlength,options,class,delimiter,default_value,description,group_field,group_valid,valid,valid_ex,auto_convert,not_empty,use_field,no_send,sort,created,modified
+1,1,1,姓,name_1,text,お名前,,,,,,,255,placeholder|姓,,,,,name,name,1,,,1,1,,1,,
+2,1,2,名,name_2,text,お名前,,,,,,,255,placeholder|名,,,,,name,name,1,,,1,1,,2,,
+3,1,3,メールアドレス,email_1,email,メールアドレス,,,,,,,50,,,,,,email,email,,"VALID_EMAIL_CONFIRM,VALID_EMAIL",,1,1,,3,,
+4,1,4,メールアドレス確認,email_2,text,メールアドレス（確認）,,,,,,,50,placeholder|確認のためもう一度入力して下さい,,,,,email,email,,"VALID_EMAIL_CONFIRM,VALID_EMAIL",,1,1,1,4,,
+5,1,5,お問い合わせ内容,message,textarea,お問い合わせ内容,,,,,48,12,,,,,,,,,,,,,1,,5,,

@@ -1,0 +1,157 @@
+/* ==================================================================== */
+/*    Login
+/* ==================================================================== */
+
+.bs-login {
+  &,
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+  filter: drop-shadow(0 0 0.75rem #EEE);
+  font-family: Arial, Geneva, sans-serif, "メイリオ", Verdana, "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", "ＭＳ Ｐゴシック";
+  position: relative;
+  z-index: 100;
+  max-width: 500px;
+  margin: 30px auto;
+  padding: 40px 25px 25px;
+  border-radius: 5px;
+  background: #FFFFFFFF;
+  font-size: 14px;
+
+  &__title {
+    margin-top: 0;
+    margin-bottom: 40px;
+    text-align: center;
+    color: #424f44;
+    font-weight: bold;
+    font-size: 20px!important;
+  }
+
+  &__logo {
+    width: 230px;
+  }
+
+  &-form-item {
+    position: relative;
+    display: block;
+
+    label {
+      color: #424f44;
+      font-size: 0.9rem;
+      display: block;
+      position: absolute;
+      top: 50%;
+      right: 1.2em;
+      transform: translate(0, -50%);
+      pointer-events: none;
+    }
+
+    .bs-textbox__input {
+      display: block;
+      width: 100%;
+      height: 52px;
+      border: 1px solid #ccc!important;
+      border-radius: 3px!important;;
+      margin: 0 0 20px!important;;
+      padding: 0.69em 1em!important;;
+      color: #424f44;
+      font-size: 1rem!important;;
+      font-weight: bold;
+      line-height: 1!important;;
+      appearance: none;
+
+      &:focus {
+        border-color: #6FA83DFF;
+        border-width: 1px;
+        outline: none;
+      }
+    }
+  }
+
+
+  button.bs-btn--login {
+    font-size: 1rem;
+    line-height: 1;
+    display: block;
+    width: 100%;
+    height: 52px;
+    font-weight: bold;
+  }
+
+  .bs-login-form-ctrl {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: nowrap;
+
+    margin-top: 20px;
+    overflow: hidden;
+  }
+
+  .bs-login-form-checker {
+  }
+
+  .bs-login-forgot-pass {
+  }
+
+  .bs-login-form-checkbox {
+    //display: inline-block;
+    //vertical-align: middle;
+    //line-height: 1;
+  }
+}
+
+#AdminBaserCoreUsersLogin {
+  .bs-main {
+    &__contents {
+      border: none;
+      background: none;
+    }
+  }
+
+  #CreditScroller, #CreditScroller a {
+    color: #333 !important;
+  }
+
+  #Credit {
+    text-align: right;
+  }
+
+  #CreditScrollerInner {
+    margin-right: 0;
+  }
+
+  html {
+    margin-top: 0;
+  }
+
+  .bs-container {
+    height: auto !important;
+    background: #F4F5F1;
+  }
+
+  .bs-crumb,
+  .bs-main-body-header {
+    display: none;
+  }
+}
+.bs-btn[data-bs-btn-type=login] {
+    color: #fff;
+    border: 1px solid #000;
+    background-image: linear-gradient(#555 10%, #000 100%);
+    border-radius: 3px;
+    cursor: pointer;
+}
+#BaserCore {
+  .bs-main-contents {
+    width: 100%;
+  }
+  .bs-sub-contents {
+    display: none;
+  }
+}
+.bs-login-form-ctrl {
+  font-size:12px;
+}

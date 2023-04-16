@@ -1,0 +1,9 @@
+/var/www/html/bin/cake migrations dump -p BaserCore
+/var/www/html/bin/cake migrations dump -p BcBlog
+/var/www/html/bin/cake migrations dump -p BcContentLink
+/var/www/html/bin/cake migrations dump -p BcEditorTemplate
+/var/www/html/bin/cake migrations dump -p BcMail
+/var/www/html/bin/cake migrations dump -p BcSearchIndex
+/var/www/html/bin/cake migrations dump -p BcThemeConfig
+/var/www/html/bin/cake migrations dump -p BcUploader
+/var/www/html/bin/cake migrations dump -p BcWidgetArea

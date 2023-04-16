@@ -1,0 +1,3 @@
+"id","name","title","auth_prefix","auth_prefix_settings","use_move_contents","modified","created"
+"1","admins","システム管理","Admin,Api/Admin",,"1","",""
+"2","operators","サイト運営","Admin","{""Admin"":{""type"":""2""},""Api/Admin"":{""type"":""2""}}",,"",""

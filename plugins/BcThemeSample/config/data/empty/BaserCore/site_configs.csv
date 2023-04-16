@@ -1,0 +1,58 @@
+"﻿"id"","name","value","created","modified"
+"1","address","","",""
+"2","email","","",""
+"3","widget_area","1","",""
+"4","maintenance","0","",""
+"6","smtp_host","","",""
+"7","smtp_user","","",""
+"8","smtp_password","","",""
+"9","smtp_port","","",""
+"10","admin_list_num","10","",""
+"11","google_analytics_id","","",""
+"12","content_types","YToxOntzOjk6IuODmuODvOOCuCI7czo5OiLjg5rjg7zjgrgiO30=","",""
+"13","admin_theme","BcAdminThird","",""
+"14","login_credit","1","",""
+"15","first_access","","",""
+"16","editor","BaserCore.BcCkeditor","",""
+"17","editor_styles","#青見出し
+h3 {
+color:Blue;
+}
+#赤見出し
+h3 {
+color:Red;
+}
+#黄マーカー
+span {
+background-color:Yellow;
+}
+#緑マーカー
+span {
+background-color:Lime;
+}
+#大文字
+big {}
+#小文字
+small {}
+#コード
+code {}
+#削除文
+del {}
+#挿入文
+ins {}
+#引用
+cite {}
+#インライン
+q {}","",""
+"18","editor_enter_br","0","",""
+"19","admin_side_banner","1","",""
+"20","smtp_tls","0","",""
+"21","version","","",""
+"22","google_maps_api_key","","",""
+"23","use_site_device_setting","0","",""
+"24","use_site_lang_setting","0","",""
+"25","use_update_notice","1","",""
+"26","contents_sort_last_modified","","",""
+"27","mail_additional_parameters","","",""
+"28","outer_service_output_header","","",""
+"29","outer_service_output_footer","","",""

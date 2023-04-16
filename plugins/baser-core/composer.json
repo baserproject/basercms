@@ -1,0 +1,53 @@
+{
+    "name": "baserproject/baser-core",
+    "description": "baserCMS plugin for CakePHP",
+    "homepage": "https://basercms.net",
+    "type": "cakephp-plugin",
+    "license": "MIT",
+    "vendor-dir": "../../vendor",
+    "require": {
+        "php": ">=8.0",
+        "cakephp/cakephp": "4.4.*",
+        "cakephp/authentication": "^2.9",
+        "cakephp/migrations": "^3.2",
+        "doctrine/annotations": "^1.12",
+        "firebase/php-jwt": "6.1.0",
+        "josegonzalez/dotenv": "^3.2",
+        "mobiledetect/mobiledetectlib": "^2.8",
+        "ext-json": "*",
+        "baserproject/bc-admin-third": "^4.3",
+        "baserproject/bc-blog": "^4.3",
+        "baserproject/bc-content-link": "^4.3",
+        "baserproject/bc-custom-content": "^4.3",
+        "baserproject/bc-editor-template": "^4.3",
+        "baserproject/bc-favorite": "^4.3",
+        "baserproject/bc-front": "^4.3",
+        "baserproject/bc-installer": "^4.3",
+        "baserproject/bc-mail": "^4.3",
+        "baserproject/bc-search-index": "^4.3",
+        "baserproject/bc-theme-config": "^4.3",
+        "baserproject/bc-theme-file": "^4.3",
+        "baserproject/bc-uploader": "^4.3",
+        "baserproject/bc-widget-area": "^4.3",
+        "imo-tikuwa/cakephp-soft-delete": "^2.0",
+        "ext-mbstring": "*"
+    },
+    "require-dev": {
+        "cakephp/bake": "^2.6",
+        "cakephp/debug_kit": "^4.5",
+        "phpunit/phpunit": "^9.5",
+        "symplify/monorepo-builder": "^10.2",
+        "vierge-noire/cakephp-fixture-factories": "^2.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "BaserCore\\": "src",
+            "Cake\\Routing\\": "src/Routing"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "BaserCore\\Test\\": "tests/"
+        }
+    }
+}

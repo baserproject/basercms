@@ -1,0 +1,179 @@
+/* WidgetSetting
+----------------------------------------------- */
+
+#WidgetSetting #WidgetsType h3 {
+	padding-left: 30px;
+	border: 1px solid #eeeeea !important;
+	margin-top: 0;
+}
+#WidgetSetting #WidgetsType .WidgetsTypeSection {
+	margin: 0;
+	padding: 10px;
+}
+
+#WidgetSetting {
+  margin-top: 20px;
+}
+
+#WidgetSetting .ui-widget-content {
+  cursor: move;
+  margin: 10px auto 5px;
+  border: 0;
+  border-right: 1px solid #DDD;
+  border-left: 1px solid #DDD;
+  border-bottom: 1px solid #EDEDED;
+  padding: 0;
+}
+
+#WidgetSetting .ui-widget-content .head {
+  cursor: move;
+  margin: 10px auto 5px;
+  font-weight: normal;
+  color: #535A62;
+  font-size: $label_font_size_small;
+  border: 1px solid $color_border;
+  background: $color_background_primary;
+
+}
+
+#WidgetSetting .ui-widget-content .head:hover {
+  background: #f4f4f4;
+  background: -moz-linear-gradient(top, #f4f4f4, #dfdfdf 100%);
+  background: -webkit-gradient(linear, left top, left bottom, from(#f4f4f4), color-stop(100%, #dfdfdf));
+  background: -o-linear-gradient(top, #f4f4f4, #dfdfdf 100%);
+}
+
+#WidgetSetting .ui-widget-content .head:active {
+  background: #cdcdcd;
+  background: -moz-linear-gradient(top, #cdcdcd, #eee 100%);
+  background: -webkit-gradient(linear, left top, left bottom, from(#cdcdcd), color-stop(100%, #eee));
+  background: -o-linear-gradient(top, #cdcdcd, #eee 100%);
+}
+
+#WidgetSetting .ui-draggable-dragging {
+  /*width:100%;*/
+}
+
+#WidgetSetting .ui-widget-content .head {
+  padding: 8px 15px;
+  margin: 0;
+  font-weight: bold;
+}
+
+#WidgetSetting .setting .head {
+  color: #999;
+}
+
+#WidgetSetting .setting .del {
+  float: right;
+  font-weight: bold;
+  cursor: pointer;
+  text-align: center;
+  border-left: 1px solid #DFDFDF;
+  padding: 8px 10px;
+}
+
+#WidgetSetting .ui-widget-content .action {
+  padding: 8px 10px;
+  float: right;
+  font-weight: bold;
+  cursor: pointer;
+  text-align: center;
+  border-left: 1px solid #DFDFDF;
+}
+
+#WidgetSetting .ui-widget-content .content {
+  padding: 3px 10px 10px 10px;
+  clear: both;
+  display: none;
+}
+
+#WidgetSetting .ui-widget-content .content p {
+  margin: 0 !important;
+}
+
+#WidgetSetting #Source .ui-widget-content {
+  border-left: solid 1px #ddd;
+  border-right: solid 1px #ddd;
+  margin-bottom: 0;
+}
+
+#WidgetSetting #Source .description {
+  /*margin:0 12px 20px;*/
+  padding: 15px 15px;
+  width: 100%;
+  border-left: solid 1px $color_border;
+  border-right: solid 1px $color_border;
+  border-bottom: solid 1px $color_border;
+  margin: 0;
+}
+
+#WidgetSetting #SourceOuter,
+#WidgetSetting #TargetOuter {
+  width: 50%;
+  float: left;
+}
+
+#WidgetSetting #Source {
+  border: 1px solid $color_border;
+  padding: 20px;
+  margin: 10px;
+  /*-webkit-border-radius: 10px;*/
+  /*-moz-border-radius: 10px;*/
+  /*border-radius: 10px;*/
+}
+
+#WidgetSetting #Target {
+  min-height: 210px;
+  border: 1px solid $color_border;
+  padding: 20px;
+  margin: 10px;
+}
+
+#WidgetSetting #Target .enabled .head {
+  color: #535A62;
+}
+
+#WidgetSetting .topDrop {
+  background-color: #efefef;
+}
+
+#WidgetSetting .template {
+  display: none;
+}
+
+#WidgetSetting .placeholder {
+  height: 26px;
+  background: none;
+  border: 1px solid #FFFF00;
+  background-color: #FFFFFF;
+}
+
+#WidgetSetting #WidgetAreaUpdateTitleForm {
+  display: inline;
+}
+
+#WidgetSetting #Target .setting textarea {
+  width: 98%;
+  height: 310px;
+}
+
+#WidgetSetting #Source h3 {
+  border: none;
+  border-bottom: 1px solid $color_border;
+  padding-left: 0;
+  font-weight: normal;
+  font-size: $label_font_size_medium;
+  padding-bottom:10px;
+}
+
+#ListAjaxLoader {
+  display: none;
+  vertical-align: bottom;
+  padding: 6px;
+}
+
+#WidgetSetting h2 {
+  font-size:$label_font_size_large;
+  font-weight: normal;
+}

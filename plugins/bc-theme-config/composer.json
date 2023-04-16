@@ -1,0 +1,21 @@
+{
+    "name": "baserproject/bc-theme-config",
+    "description": "BcThemeConfig plugin for baserCMS",
+    "homepage": "https://basercms.net",
+    "type": "cakephp-plugin",
+    "license": "MIT",
+    "vendor-dir": "../../vendor",
+    "require": {
+        "baserproject/baser-core": "^4.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "BcThemeConfig\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "BcThemeConfig\\Test\\": "tests/"
+        }
+    }
+}

@@ -1,0 +1,166 @@
+# LANGUAGE translation of CakePHP Application
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2023-03-13 13:32+0900\n"
+"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: ./__assets/plugins/baser-core/config/theme/bccolumn/Blog/default/archives.php:5
+#: ./__assets/plugins/baser-core/config/theme/bccolumn/Blog/topics/archives.php:5
+#: ./__assets/plugins/baser-core/config/theme/bccolumn/Blog/works/archives.php:5
+#: ./__assets/plugins/baser-core/config/theme/nada-icons/Blog/default/archives.php:7
+#: ./__assets/plugins/baser-core/config/theme/nada-icons/Blog/tags.php:19
+msgid "のアーカイブ一覧です。"
+msgstr ""
+
+#: ./__assets/plugins/baser-core/config/theme/bccolumn/Blog/default/archives.php:39
+#: ./__assets/plugins/baser-core/config/theme/bccolumn/Blog/default/index.php:35
+#: ./__assets/plugins/baser-core/config/theme/bccolumn/Blog/default/posts.php:23
+#: ./__assets/plugins/baser-core/config/theme/bccolumn/Blog/topics/archives.php:46
+#: ./__assets/plugins/baser-core/config/theme/bccolumn/Blog/topics/index.php:43
+#: ./__assets/plugins/baser-core/config/theme/bccolumn/Blog/topics/posts.php:31
+#: ./__assets/plugins/baser-core/config/theme/bccolumn/Blog/works/archives.php:37
+#: ./__assets/plugins/baser-core/config/theme/bccolumn/Blog/works/index.php:35
+#: ./__assets/plugins/baser-core/config/theme/bccolumn/Blog/works/posts.php:31
+#: ./__assets/plugins/baser-core/config/theme/nada-icons/Blog/default/archives.php:44
+#: ./__assets/plugins/baser-core/config/theme/nada-icons/Blog/default/index.php:46
+#: ./__assets/plugins/baser-core/config/theme/nada-icons/Blog/tags.php:51
+msgid "記事がありません。"
+msgstr ""
+
+#: ./__assets/plugins/baser-core/config/theme/bccolumn/Blog/default/index.php:20
+#: ./__assets/plugins/baser-core/config/theme/bccolumn/Blog/topics/archives.php:29
+#: ./__assets/plugins/baser-core/config/theme/bccolumn/Blog/topics/index.php:27
+#: ./__assets/plugins/baser-core/config/theme/bccolumn/Blog/works/archives.php:33
+#: ./__assets/plugins/baser-core/config/theme/bccolumn/Blog/works/index.php:31
+msgid "詳細ページへ"
+msgstr ""
+
+#: ./__assets/plugins/baser-core/config/theme/bccolumn/Blog/default/single.php:39
+#: ./__assets/plugins/baser-core/config/theme/bccolumn/Blog/topics/single.php:39
+#: ./__assets/plugins/baser-core/config/theme/bccolumn/Blog/works/single.php:31
+msgid "前の記事"
+msgstr ""
+
+#: ./__assets/plugins/baser-core/config/theme/bccolumn/Blog/default/single.php:41
+#: ./__assets/plugins/baser-core/config/theme/bccolumn/Blog/topics/single.php:41
+#: ./__assets/plugins/baser-core/config/theme/bccolumn/Blog/works/single.php:33
+msgid "一覧へ"
+msgstr ""
+
+#: ./__assets/plugins/baser-core/config/theme/bccolumn/Blog/default/single.php:42
+#: ./__assets/plugins/baser-core/config/theme/bccolumn/Blog/topics/single.php:42
+#: ./__assets/plugins/baser-core/config/theme/bccolumn/Blog/works/single.php:35
+msgid "後の記事"
+msgstr ""
+
+#: ./__assets/plugins/baser-core/config/theme/bccolumn/Elements/blog_comments.php:32
+msgid "お名前"
+msgstr ""
+
+#: ./__assets/plugins/baser-core/config/theme/bccolumn/Elements/blog_comments.php:32
+msgid "ニックネーム"
+msgstr ""
+
+#: ./__assets/plugins/baser-core/config/theme/bccolumn/Elements/blog_comments.php:36
+msgid "Eメール"
+msgstr ""
+
+#: ./__assets/plugins/baser-core/config/theme/bccolumn/Elements/blog_comments.php:39
+msgid "Eメールは公開されません"
+msgstr ""
+
+#: ./__assets/plugins/baser-core/config/theme/bccolumn/Elements/blog_comments.php:47
+msgid "コメント"
+msgstr ""
+
+#: ./__assets/plugins/baser-core/config/theme/bccolumn/Elements/blog_comments.php:55
+msgid "認証画象"
+msgstr ""
+
+#: ./__assets/plugins/baser-core/config/theme/bccolumn/Elements/blog_comments.php:58
+msgid "画像の文字を入力してください"
+msgstr ""
+
+#: ./__assets/plugins/baser-core/config/theme/bccolumn/Elements/blog_comments.php:62
+msgid "送信する"
+msgstr ""
+
+#: ./__assets/plugins/baser-core/config/theme/bccolumn/Elements/crumbs.php:6
+#: ./__assets/plugins/baser-core/config/theme/bccolumn/Elements/crumbs.php:22
+#: ./__assets/plugins/baser-core/config/theme/nada-icons/Elements/crumbs.php:6
+#: ./__assets/plugins/baser-core/config/theme/nada-icons/Elements/crumbs.php:22
+msgid "ホーム"
+msgstr ""
+
+#: ./__assets/plugins/baser-core/config/theme/bccolumn/Elements/toppage.php:12
+msgid "実績"
+msgstr ""
+
+#: ./__assets/plugins/baser-core/config/theme/bccolumn/Mail/default/confirm.php:18
+#: ./__assets/plugins/baser-core/config/theme/nada-icons/Mail/default/confirm.php:16
+msgid "入力内容の確認"
+msgstr ""
+
+#: ./__assets/plugins/baser-core/config/theme/bccolumn/Mail/default/confirm.php:19
+#: ./__assets/plugins/baser-core/config/theme/nada-icons/Mail/default/confirm.php:17
+msgid "入力した内容に間違いがなければ「送信する」ボタンをクリックしてください。"
+msgstr ""
+
+#: ./__assets/plugins/baser-core/config/theme/bccolumn/Mail/default/confirm.php:21
+#: ./__assets/plugins/baser-core/config/theme/bccolumn/Mail/default/index.php:14
+#: ./__assets/plugins/baser-core/config/theme/nada-icons/Mail/default/confirm.php:19
+#: ./__assets/plugins/baser-core/config/theme/nada-icons/Mail/default/index.php:13
+msgid "入力フォーム"
+msgstr ""
+
+#: ./__assets/plugins/baser-core/config/theme/bccolumn/Mail/default/submit.php:14
+#: ./__assets/plugins/baser-core/config/theme/nada-icons/Mail/default/submit.php:13
+msgid "メール送信完了"
+msgstr ""
+
+#: ./__assets/plugins/baser-core/config/theme/bccolumn/Mail/default/submit.php:16
+#: ./__assets/plugins/baser-core/config/theme/nada-icons/Mail/default/submit.php:15
+msgid "お問い合わせ頂きありがとうございました。"
+msgstr ""
+
+#: ./__assets/plugins/baser-core/config/theme/bccolumn/Mail/default/submit.php:17
+#: ./__assets/plugins/baser-core/config/theme/nada-icons/Mail/default/submit.php:16
+msgid "確認次第、ご連絡させて頂きます。"
+msgstr ""
+
+#: ./__assets/plugins/baser-core/config/theme/bccolumn/Mail/default/submit.php:19
+#: ./__assets/plugins/baser-core/config/theme/nada-icons/Mail/default/submit.php:18
+msgid "%s 秒後にトップページへ自動的に移動します。"
+msgstr ""
+
+#: ./__assets/plugins/baser-core/config/theme/bccolumn/Mail/default/submit.php:20
+#: ./__assets/plugins/baser-core/config/theme/nada-icons/Mail/default/submit.php:19
+msgid "移動しない場合はコチラをクリックしてください。"
+msgstr ""
+
+#: ./__assets/plugins/baser-core/config/theme/nada-icons/Layouts/default.php:64
+msgid "ページトップへ戻る"
+msgstr ""
+
+#: ./templates/layout/error.php:40
+msgid "Back"
+msgstr ""
+
+#: ./vendor/cakephp/cakephp/src/View/Helper/PaginatorHelper.php:1260
+msgid "View"
+msgstr ""
+
+#: ./vendor/imo-tikuwa/cakephp-soft-delete/src/Model/Table/SoftDeleteTrait.php:27
+msgid "Configured field `{0}` is missing from the table `{1}`."
+msgstr ""
+

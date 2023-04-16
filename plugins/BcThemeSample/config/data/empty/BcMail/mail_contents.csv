@@ -1,0 +1,2 @@
+﻿"id","description","sender_1","sender_2","sender_name","subject_user","subject_admin","form_template","mail_template","redirect_url","auth_captcha","widget_area","ssl_on","save_info","auth_captcha","publish_begin","publish_end","created","modified"
+"1","","","","サンプル","お問い合わせ頂きありがとうございます。","お問い合わせを受け付けました","default","mail_default","/","","","","1","1","","","",""

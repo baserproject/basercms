@@ -1,0 +1,124 @@
+<?php
+/**
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
+ *
+ * @copyright     Copyright (c) NPO baser foundation
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       https://basercms.net/license/index.html MIT License
+ */
+/**
+ * メールフォーム入力欄
+ *
+ * 呼出箇所：メールフォーム入力ページ、メールフォーム入力内容確認ページ
+ *
+ * @var \BcMail\View\MailFrontAppView $this
+ * @var int $blockStart 表示するフィールドの開始NO
+ * @var int $blockEnd 表示するフィールドの終了NO
+ * @var bool $freezed 確認画面かどうか
+ * @var array $mailFields メールフィールドリスト
+ * @checked
+ * @noTodo
+ * @unitTest
+ */
+$group_field = null;
+$iteration = 0;
+if (!isset($blockEnd)) {
+	$blockEnd = 0;
+}
+
+if (!empty($mailFields)) {
+
+	foreach ($mailFields as $key => $field) {
+
+		$iteration++;
+		if ($field->use_field && ($blockStart && $iteration >= $blockStart) && (!$blockEnd || $iteration <= $blockEnd)) {
+
+			$next_key = $key + 1;
+			$description = $field->description;
+
+			/* 項目名 */
+			if ($group_field != $field->group_field || (!$group_field && !$field->group_field)) {
+				echo '    <tr id="RowMessage' . \Cake\Utility\Inflector::camelize($field->field_name) . '"';
+				if ($field->type == 'hidden') {
+					echo ' style="display:none"';
+				}
+				echo '>' . "\n" . '        <th class="col-head" width="150">' . $this->BcBaser->mailFormLabel("MailMessage." . $field->field_name . "", $field->head);
+				if ($field->not_empty) {
+					echo '<span class="required">' . __d('baser_core', '必須') . '</span>';
+				} else {
+					echo '<span class="normal">' . __d('baser_core', '任意') . '</span>';
+				}
+				echo '</th>' . "\n" . '        <td class="col-input">';
+			}
+
+			echo '<span id="FieldMessage' . \Cake\Utility\Inflector::camelize($field->field_name) . '">';
+			if (!$freezed && $description) {
+				echo '<span class="bs-mail-description">' . $description . '</span>';
+			}
+			/* 入力欄 */
+			if (!$freezed || $this->BcBaser->getMailFormSourceValue("MailMessage." . $field->field_name) !== '') {
+				echo '<span class="bs-mail-before-attachment">' . $field->before_attachment . '</span>';
+			}
+
+			// =========================================================================================================
+			// 2018/02/06 ryuring
+			// no_send オプションは、確認画面に表示しないようにするために利用されている可能性が高い
+			//（メールアドレスのダブル入力、プライバシーポリシーへの同意に利用されている）
+			// 本来であれば、not_display_confirm 等のオプションを別途準備し、そちらを利用するべきだが、
+			// 後方互換のため残す
+			// =========================================================================================================
+			if ($freezed && $field->no_send) {
+				echo $this->BcBaser->mailFormControl(
+				  $field->field_name,
+				  array_merge($this->Mailfield->getAttributes($field), [
+				    'type' => 'hidden',
+				    'options' => $this->Mailfield->getOptions($field)
+          ])
+				);
+			} else {
+				echo $this->BcBaser->mailFormControl(
+				  $field->field_name,
+				  array_merge($this->Mailfield->getAttributes($field), [
+				    'type' => $field->type,
+				    'options' => $this->Mailfield->getOptions($field)
+          ])
+				) . (($freezed)? '&nbsp;' : '');
+			}
+
+			if (!$freezed || $this->BcBaser->getMailFormSourceValue($field->field_name) !== '') {
+				echo '<span class="bs-mail-after-attachment">' . $field->after_attachment . '</span>';
+			}
+			if (!$freezed) {
+				echo '<span class="bs-mail-attention">' . $field->attention . '</span>';
+			}
+
+			/* 説明欄 */
+			$isGroupValidComplate = in_array('VALID_GROUP_COMPLATE', explode(',', $field->valid_ex));
+			if(!$isGroupValidComplate) {
+				echo $this->BcBaser->mailFormError("MailMessage." . $field->field_name);
+			}
+			$isRequiredToClose = true;
+			if ($this->BcBaser->isMailFormGroupLastField($mailFields, $field)) {
+				if($isGroupValidComplate) {
+					$groupValidErrors = $this->BcBaser->getMailFormGroupValidErrors($mailFields, $field->group_valid);
+					if ($groupValidErrors) {
+						foreach($groupValidErrors as $groupValidError) {
+							echo $groupValidError;
+						}
+					}
+				}
+				echo $this->BcBaser->mailFormError("MailMessage." . $field->group_valid . "_not_same", __d('baser_core', "入力データが一致していません。"));
+				echo $this->BcBaser->mailFormError("MailMessage." . $field->group_valid . "_not_complate", __d('baser_core', "入力データが不完全です。"));
+			} elseif(!empty($field->group_field)) {
+				$isRequiredToClose = false;
+			}
+			echo '</span>';
+			if($isRequiredToClose) {
+				echo "</td>\n    </tr>\n";
+			}
+			$group_field = $field->group_field;
+		}
+	}
+}

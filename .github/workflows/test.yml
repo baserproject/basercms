@@ -1,14 +1,20 @@
 #
 # test.yml
-#
-# コンテナ起動時に、composer install を実行するが、Github Actions では、非同期で処理が走るため
-# composer の処理が完了する前にテストが行われてしまい、テストが失敗する。
-# そのため、composer install を同期処理とするため、ジョブの steps に composer の処理を追加している
+# ユニットテストの実行
+# コンテナの初期化が完了する前にユニットテストを実行すると失敗してしまうので sleep で待つようにしている
+# /docker/init.sh に記載している sleep の秒数プラス 10秒を目安として設定する
 #
 
 name: Test
 
-on: [ push, pull_request ]
+on:
+  push:
+    tags-ignore:
+      - '**'
+    branches:
+      - '**'
+      - '!master'
+  pull_request:
 
 jobs:
   test:
@@ -18,39 +24,35 @@ jobs:
 
     strategy:
       matrix:
-        php-version: ['7.4']
+        php-version: ['8.1']
 
     steps:
 
-      - name: Setup PHP 7.4
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: 7.4
-
       - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Validate composer.json and composer.lock
-        run: composer validate
-
-      - name: Install dependencies
-        run: composer install --prefer-dist --no-progress --no-suggest
+        uses: actions/checkout@v3
 
       - name: Run compose
         run: |
           cd docker
           cp docker-compose.yml.default docker-compose.yml
+          sed -i -e "s/basercms:php8.1/basercms:php${{ matrix.php-version }}/g" docker-compose.yml
+          sed -i -e "s/XDEBUG_MODE: \"debug\"/XDEBUG_MODE: \"off\"/g" docker-compose.yml
           docker-compose up -d
 
       - name: Sleep for 20 seconds
         run: sleep 20
 
       - name: Compose log
-        run: |
+        run:  |
           cd docker
           docker-compose logs
 
+      - name: Install
+        run: |
+          cd docker
+          docker exec bc5-php composer run-script install
+
       - name: Run test suite
         run: |
-          docker exec bc-php composer run-script install
-          docker exec bc-php composer run-script test
+          cd docker
+          docker exec bc5-php composer run-script test

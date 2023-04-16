@@ -1,0 +1,2 @@
+({mounted:function(){this.registerEvents()},registerEvents:function(){$("#filter-user-group-id").change(this.changeList),$('input[name="list_type"]').click(this.changeList)},changeList:function(){$.bcUtil.showLoader();var t=$("#filter-user-group-id").val(),e=$('input[name="list_type"]:checked').val();"0"===t&&(e="Front"),location.href="".concat($.bcUtil.adminBaseUrl,"baser-core/permission_groups/index/").concat(t,"?list_type=").concat(e)}}).mounted();
+//# sourceMappingURL=index.bundle.js.map

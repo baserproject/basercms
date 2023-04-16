@@ -1,0 +1,16 @@
+{
+    "name": "baserproject/bc-column",
+    "description": "BcContentLink plugin for baserCMS",
+    "homepage": "https://basercms.net",
+    "type": "cakephp-plugin",
+    "license": "MIT",
+    "vendor-dir": "../../vendor",
+    "require": {
+        "baserproject/baser-core": "^4.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "BcColumn\\": "src/"
+        }
+    }
+}
