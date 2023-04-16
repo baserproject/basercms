@@ -452,4 +452,30 @@ class PermissionGroupsServiceTest extends BcTestCase
         $result = $this->PermissionGroups->getList();
         $this->assertCount(3, $result);
     }
+
+    /**
+     * Test buildByPlugin
+     *
+     * @return void
+     */
+    public function testBuildByPlugin(): void
+    {
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->loadFixtureScenario(PermissionGroupsScenario::class);
+        $plugin = 'BcBlog';
+        $this->PermissionGroups->buildByPlugin($plugin);
+        $data = $this->PermissionGroups->getIndex(0, [])->where(['plugin' => $plugin])->all()->toArray();
+        Configure::load($plugin . '.permission', 'baser');
+        $settings = Configure::read('permission');
+        Configure::delete('permission');
+        $this->assertCount(count($settings), $data);
+
+        $plugin = 'BaserCore';
+        $this->PermissionGroups->buildByPlugin($plugin);
+        $data = $this->PermissionGroups->getIndex(0, [])->where(['plugin' => $plugin])->all()->toArray();
+        Configure::load($plugin . '.permission', 'baser');
+        $settings = Configure::read('permission');
+        Configure::delete('permission');
+        $this->assertCount(count($settings), $data);
+    }
 }
