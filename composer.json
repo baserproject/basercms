@@ -9,7 +9,6 @@
         "ext-json": "*",
         "ext-mbstring": "*",
         "ext-pdo": "*",
-        "baserproject/baser-core": "4.2.5",
         "cakephp/authentication": "^2.9",
         "cakephp/cakephp": "4.4.*",
         "cakephp/migrations": "^3.2",
