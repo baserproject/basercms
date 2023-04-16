@@ -185,14 +185,6 @@ class SitesTable extends AppTable
             'status' => true
         ], $options);
 
-        // EVENT Sites.beforeGetSiteList
-        $event = $this->dispatchLayerEvent('beforeGetSiteList', [
-            'options' => $options
-        ]);
-        if ($event !== false) {
-            $options = $event->getResult() === true? $event->getData('options') : $event->getResult();
-        }
-
         $conditions = [];
         if (!is_null($options['status'])) {
             $conditions = ['status' => $options['status']];

@@ -210,17 +210,7 @@ class ContentsController extends BcAdminAppController
             $this->ajaxError(500, __d('baser_core', '無効な処理です。'));
         }
         $this->disableAutoRender();
-
-        // EVENT Contents.beforeTrashReturn
-        $this->dispatchLayerEvent('beforeTrashReturn', [
-            'data' => $id
-        ]);
-
         if ($restored = $service->restore($id)) {
-            // EVENT Contents.afterTrashReturn
-            $this->dispatchLayerEvent('afterTrashReturn', [
-                'data' => $id
-            ]);
             $this->BcMessage->setSuccess(sprintf(__d('baser_core', 'ゴミ箱「%s」を戻しました。'), $restored->title));
             return $this->redirect(['action' => 'index']);
         } else {
@@ -237,21 +227,9 @@ class ContentsController extends BcAdminAppController
 	{
         if ($this->request->is(['post', 'put', 'delete'])) {
             $id = $this->request->getData('content.id');
-
-            // EVENT Contents.beforeDelete
-            $this->dispatchLayerEvent('beforeDelete', [
-                'data' => $id
-            ]);
-
             /* @var \BaserCore\Model\Entity\Content $content */
             $content = $service->get($id);
             if ($service->deleteRecursive($id)) {
-
-                // EVENT Contents.afterDelete
-                $this->dispatchLayerEvent('afterDelete', [
-                    'data' => $id
-                ]);
-
                 $typeName = Configure::read('BcContents.items.' . $content->plugin . '.' . $content->type . '.title');
                 if(!$content->alias_id) {
                     $message = $typeName . sprintf(__d('baser_core', '「%s」をゴミ箱に移動しました。'), $content->title);

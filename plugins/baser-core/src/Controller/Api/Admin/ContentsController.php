@@ -147,18 +147,7 @@ class ContentsController extends BcAdminApiController
 
             $content = $service->get($id);
             $children = $service->getChildren($id);
-            // EVENT Contents.beforeDelete
-            $this->dispatchLayerEvent('beforeDelete', [
-                'data' => $id
-            ]);
-
             if ($service->deleteRecursive($id)) {
-
-                // EVENT Contents.afterDelete
-                $this->dispatchLayerEvent('afterDelete', [
-                    'data' => $id
-                ]);
-
                 $text = __d('baser_core', "コンテンツ: {0}を削除しました。", $content->title);
                 if ($children) {
                     $content = array_merge([$content], $children->toArray());
@@ -197,22 +186,10 @@ class ContentsController extends BcAdminApiController
         $this->request->allowMethod(['post', 'delete']);
         try {
             $trash = $service->getTrashIndex($this->request->getQueryParams())->order(['plugin', 'type']);
-
-            // EVENT Contents.beforeTrashEmpty
-            $this->dispatchLayerEvent('beforeTrashEmpty', [
-                'data' => $trash
-            ]);
-
-            $result = true;
             foreach ($trash as $entity) {
                 if (!$service->hardDeleteWithAssoc($entity->id)) $result = false;
             }
             $message = __d('baser_core', 'ゴミ箱を空にしました。');
-
-            // EVENT Contents.afterTrashEmpty
-            $this->dispatchLayerEvent('afterTrashEmpty', [
-                'data' => $result
-            ]);
             $this->BcMessage->setSuccess($message, true, false);
         } catch (RecordNotFoundException $e) {
             $this->setResponse($this->response->withStatus(404));
@@ -309,11 +286,6 @@ class ContentsController extends BcAdminApiController
         $id = $this->request->getData('id');
         $status = $this->request->getData('status');
 
-        // EVENT Contents.beforeChangeStatus
-        $this->dispatchLayerEvent('beforeChangeStatus', [
-            'id' => $id,
-            'status' => $status
-        ]);
         $content = $errors = $message = null;
         $result = false;
         if ($id && $status) {
@@ -343,12 +315,6 @@ class ContentsController extends BcAdminApiController
             $this->setResponse($this->response->withStatus(400));
             $message = __d('baser_core', '無効な処理です。') . __d('baser_core', "データが不足しています");
         }
-
-        // EVENT Contents.afterChangeStatus
-        $this->dispatchLayerEvent('afterChangeStatus', [
-            'id' => $id,
-            'result' => $result
-        ]);
 
         $this->set([
             'content' => $content,
@@ -521,14 +487,6 @@ class ContentsController extends BcAdminApiController
         $url = $content = $errors = null;
         if (!$service->isTreeModifiedByAnotherUser($this->getRequest()->getData('listDisplayed'))) {
             try {
-                // EVENT Contents.beforeMove
-                $event = $this->dispatchLayerEvent('beforeMove', [
-                    'data' => $this->getRequest()->getData()
-                ]);
-                if ($event !== false) {
-                    $this->getRequest()->withParsedBody($event->getResult() === true ? $event->getData('data') : $event->getResult());
-                }
-
                 $beforeContent = $service->get($this->request->getData('origin.id'));
                 $beforeUrl = $beforeContent->url;
                 $content = $service->move($this->request->getData('origin'), $this->request->getData('target'));
@@ -539,11 +497,6 @@ class ContentsController extends BcAdminApiController
                     rawurldecode($content->url)
                 );
                 $url = $service->getUrlById($content->id, true);
-
-                // EVENT Contents.afterMove
-                $this->dispatchLayerEvent('afterMove', [
-                    'data' => $content
-                ]);
                 $this->BcMessage->setSuccess($message, true, false);
             } catch (PersistenceFailedException $e) {
                 $errors = $e->getEntity()->getErrors();
