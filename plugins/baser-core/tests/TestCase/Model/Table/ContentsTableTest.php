@@ -1042,7 +1042,6 @@ class ContentsTableTest extends BcTestCase
     /**
      * URLからコンテンツを取得する
      *
-     * TODO sameUrl / useSubDomain のテストが書けていない
      * Siteのデータを用意する必要がある
      *
      * @param string $url
@@ -1052,6 +1051,7 @@ class ContentsTableTest extends BcTestCase
      * @param bool $useSubDomain
      * @param bool $expected
      * @dataProvider findByUrlDataProvider
+     * @TODO sameUrl / useSubDomain のテストが書けていない
      */
     public function testFindByUrl($expected, $url, $publish = true, $extend = false, $sameUrl = false, $useSubDomain = false)
     {

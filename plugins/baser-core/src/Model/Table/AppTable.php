@@ -185,7 +185,7 @@ class AppTable extends Table
      * @param array $fieldList List of fields to allow to be written
      * @return    mixed    On success Model::$data if its not empty or true, false on failure
      */
-    // TODO 未実装の為コメントアウト
+    // TODO ucmitz 未実装の為コメントアウト
     /* >>>
     public function save($data = null, $validate = true, $fieldList = [])
     {
@@ -214,12 +214,11 @@ class AppTable extends Table
     /**
      * 配列の文字コードを変換する
      *
-     * TODO GLOBAL グローバルな関数として再配置する必要あり
-     *
      * @param array $data 変換前のデータ
      * @param string $outenc 変換後の文字コード
      * @param string $inenc 変換元の文字コード
      * @return array 変換後のデータ
+     * @TODO GLOBAL グローバルな関数として再配置する必要あり
      */
     public function convertEncodingByArray($data, $outenc, $inenc)
     {
@@ -243,7 +242,7 @@ class AppTable extends Table
      */
     public function saveDbLog($message)
     {
-        // TODO 未実装の為コメントアウト
+        // TODO ucmitz 未実装の為コメントアウト
         /* >>>
         // ログを記録する
         $Dblog = ClassRegistry::init('Dblog');
@@ -276,7 +275,7 @@ class AppTable extends Table
      */
     public function getChildIdsList($id)
     {
-        // TODO 未実装の為コメントアウト
+        // TODO ucmitz 未実装の為コメントアウト
         /* >>>
         $ids = [];
         if ($this->childCount($id)) {
@@ -297,7 +296,7 @@ class AppTable extends Table
      *
      * @param string    変換対象文字列
      * @return    string    変換後文字列
-     * TODO AppExModeに移行すべきかも
+     * @TODO AppExModeに移行すべきかも
      */
     public function replaceText($str)
     {
@@ -387,7 +386,7 @@ class AppTable extends Table
      */
     public function loadSchema($dbConfigName, $path, $filterTable = '', $filterType = '', $excludePath = [], $dropField = true)
     {
-        // TODO 未実装の為コメントアウト
+        // TODO ucmitz 未実装の為コメントアウト
         /* >>>
         // テーブルリストを取得
         $db = ConnectionManager::get($dbConfigName);
@@ -459,7 +458,7 @@ class AppTable extends Table
      */
     public function loadCsv($dbConfigName, $path, $options = [])
     {
-        // TODO 未実装の為コメントアウト
+        // TODO ucmitz 未実装の為コメントアウト
         /* >>>
         $options = array_merge([
             'filterTable' => ''
@@ -536,7 +535,7 @@ class AppTable extends Table
     public function addField($options)
     {
         return true;
-        // TODO 未実装の為コメントアウト
+        // TODO ucmitz 未実装の為コメントアウト
         /* >>>
         extract($options);
 
@@ -566,7 +565,7 @@ class AppTable extends Table
      */
     public function editField($options)
     {
-        // TODO 未実装の為コメントアウト
+        // TODO ucmitz 未実装の為コメントアウト
         /* >>>
         extract($options);
 
@@ -597,7 +596,7 @@ class AppTable extends Table
     public function delField($options)
     {
         return true;
-        // TODO 未実装の為コメントアウト
+        // TODO ucmitz 未実装の為コメントアウト
         /* >>>
         extract($options);
 
@@ -628,7 +627,7 @@ class AppTable extends Table
      */
     public function renameField($options)
     {
-        // TODO 未実装の為コメントアウト
+        // TODO ucmitz 未実装の為コメントアウト
         /* >>>
         extract($options);
 
@@ -657,7 +656,7 @@ class AppTable extends Table
      */
     public function tableExists($tableName)
     {
-        // TODO 未実装の為コメントアウト
+        // TODO ucmitz ucmitz 未実装の為コメントアウト
         /* >>>
         $db = ConnectionManager::get($this->useDbConfig);
         $db->cacheSources = false;
@@ -998,7 +997,7 @@ class AppTable extends Table
     {
         $result = parent::deleteAll($conditions);
         if ($result) {
-            // TODO 未実装の為コメントアウト
+            // TODO ucmitz 未実装の為コメントアウト
             /* >>>
             if ($this->Behaviors->attached('BcCache') && $this->Behaviors->enabled('BcCache')) {
                 $this->delCache($this);
@@ -1015,7 +1014,7 @@ class AppTable extends Table
     {
         $result = parent::updateAll($fields, $conditions);
         if ($result) {
-            // TODO 未実装の為コメントアウト
+            // TODO ucmitz 未実装の為コメントアウト
             /* >>>
             if ($this->Behaviors->attached('BcCache') && $this->Behaviors->enabled('BcCache')) {
                 $this->delCache($this);
@@ -1113,7 +1112,7 @@ class AppTable extends Table
 
         return $this->callFinder($type, $query, $options);
 
-        // TODO 未実装の為コメントアウト
+        // TODO ucmitz 未実装の為コメントアウト
         /* >>>
         // CUSTOMIZE MODIFY 2012/04/23 ryuring
         // キャッシュビヘイビアが利用状態の場合、モデルデータキャッシュを読み込む
@@ -1172,7 +1171,7 @@ class AppTable extends Table
      */
     public function isPublish($status, $publishBegin, $publishEnd)
     {
-        // TODO 未実装の為コメントアウト
+        // TODO ucmitz 未実装の為コメントアウト
         /* >>>
         $Content = ClassRegistry::init('Content');
         return $Content->isPublish($status, $publishBegin, $publishEnd);
@@ -1186,7 +1185,7 @@ class AppTable extends Table
     {
         return parent::exists($conditions);
 
-        // TODO 未実装の為コメントアウト
+        // TODO ucmitz 未実装の為コメントアウト
         /* >>>
         if ($this->Behaviors->loaded('SoftDelete')) {
             return $this->existsAndNotDeleted($id);

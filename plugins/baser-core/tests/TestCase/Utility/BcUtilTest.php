@@ -28,7 +28,6 @@ use BaserCore\TestSuite\BcTestCase;
 use Cake\Http\Session;
 
 /**
- * TODO: $this->getRequest();などをsetupに統一する
  * Class BcUtilTest
  */
 class BcUtilTest extends BcTestCase

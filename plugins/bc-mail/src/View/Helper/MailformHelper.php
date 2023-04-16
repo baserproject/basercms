@@ -44,7 +44,7 @@ class MailformHelper extends BcFreezeHelper
      * @param array $attributes HTML属性
      * @return string フォームコントロールのHTMLタグ
      *
-     * TODO ucmitz 2022/09/08
+     * @TODO ucmitz 2022/09/08
      * FormHelper に control が追加になった事によりシグネチャが変わった
      * メソッド名を変える必要あり。
      * 以前のシグネチャは以下のとおり

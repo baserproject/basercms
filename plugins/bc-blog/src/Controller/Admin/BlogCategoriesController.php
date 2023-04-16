@@ -32,7 +32,7 @@ class BlogCategoriesController extends BlogAdminAppController
      * コンポーネント
      *
      * @var array
-     * TODO ucmits 未移行
+     * @TODO ucmitz 未移行
      */
 //    public $components = [
 //        'BcContents' => ['type' => 'BcBlog.BlogContent']

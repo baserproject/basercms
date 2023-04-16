@@ -70,7 +70,7 @@ class BcListTableHelper extends Helper
     public function dispatchShowHead()
     {
 
-        // TODO 未実装のため代替措置
+        // TODO ucmitz 未実装のため代替措置
         // >>>
         return '';
         // <<<

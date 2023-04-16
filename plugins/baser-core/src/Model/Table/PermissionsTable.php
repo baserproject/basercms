@@ -164,7 +164,7 @@ class PermissionsTable extends AppTable
      * @param int $id
      * @param array $data
      * @return mixed $permission | false
-     * TODO: copyをServiceに移行する
+     * @TODO: copyをServiceに移行する
      * @checked
      * @noTodo
      * @unitTest

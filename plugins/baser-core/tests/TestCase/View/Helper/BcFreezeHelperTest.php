@@ -348,7 +348,6 @@ class BcFreezeHelperTest extends BcTestCase
 
     /**
      * ファイルコントロール（画像）を表示する
-     * TODO 確認画面には未チェック
      *
      * @param boolean $freezed フォームを凍結させる
      * @param string $name $this->request->data[$model][$field]['name']に格納する値
@@ -358,6 +357,7 @@ class BcFreezeHelperTest extends BcTestCase
      * @param array $imageAttributes 画像属性
      * @param string $expexted 期待値
      * @dataProvider imageDataProvider
+     * @TODO 確認画面には未チェック
      */
     public function testImage($freezed, $name, $exist, $fieldName, $attributes, $imageAttributes, $expected)
     {
@@ -393,7 +393,6 @@ class BcFreezeHelperTest extends BcTestCase
 
     /**
      * JsonList
-     * TODO 確認画面用の実装は全くしてない
      *
      * @param boolean $freezed フォームを凍結させる
      * @param array $data 凍結させたjsonのデータ
@@ -401,6 +400,7 @@ class BcFreezeHelperTest extends BcTestCase
      * @param array $attributes html属性
      * @param string $expexted 期待値
      * @dataProvider jsonListDataProvider
+     * @TODO 確認画面用の実装は全くしてない
      */
     public function testJsonList($freezed, $data, $fieldName, $attributes, $expected)
     {

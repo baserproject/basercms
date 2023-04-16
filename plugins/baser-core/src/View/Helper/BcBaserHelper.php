@@ -175,7 +175,7 @@ class BcBaserHelper extends Helper
      *
      * @var array
      */
-    // TODO 取り急ぎ動作させるために追加
+    // TODO ucmitz 取り急ぎ動作させるために追加
     // >>>
 //    public $siteConfig = [];
     public $siteConfig = [
@@ -223,7 +223,7 @@ class BcBaserHelper extends Helper
         parent::__construct($View, $settings);
 
         // サイト基本設定データをセット
-        // TODO 未実装
+        // TODO ucmitz 未実装
         /* >>>
         if (BcUtil::isInstalled() || isConsole()) {
             $this->siteConfig = $this->_View->get('siteConfig', []);
@@ -2095,11 +2095,11 @@ END_FLASH;
      * @param array $params 固定ページに引き継ぐパラメータ（初期値 : array()）
      * @param array $options オプション（初期値 : array()）
      *    - `loadHelpers` : ヘルパーを読み込むかどうか（初期値 : false）
-     * todo loadHelpersが利用されていないのをなんとかする
      *    - `subDir` : テンプレートの配置場所についてプレフィックスに応じたサブフォルダを利用するかどうか（初期値 : true）
      *    - `recursive` : 固定ページ読み込みを再帰的に読み込むかどうか（初期値 : true）
      *    - `checkExists` : 固定ページの存在判定をするかどうか（初期値 : true）
      * @return void
+     * @todo ucmitz loadHelpersが利用されていないのをなんとかする
      */
     public function page($url, $params = [], $options = [])
     {
@@ -2623,7 +2623,7 @@ END_FLASH;
      */
     public function afterRender($viewFile)
     {
-        // TODO 未実装
+        // TODO ucmitz 未実装
         // >>>
         return;
         // <<<

@@ -10,7 +10,7 @@
 
 /**
  * ブラウザ判別用
- * TOOD ucmits 未検証
+ * TOOD ucmitz 未検証
  */
 // var _ua = (function () {
 //     return {

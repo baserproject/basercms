@@ -488,7 +488,7 @@ class MailMessagesTable extends MailAppTable
      *
      * @param string $str 変換対象文字列
      * @return string $str 変換後文字列
-     * TODO AppExModeに移行すべきかも
+     * @TODO AppExModeに移行すべきかも
      */
     public function replaceText($str)
     {
@@ -571,7 +571,7 @@ class MailMessagesTable extends MailAppTable
      *
      * @param array $dbDatas
      * @return array $dbDatas
-     * TODO ヘルパー化すべきかも
+     * @TODO ヘルパー化すべきかも
      */
     public function convertDatasToMail($data, $options)
     {

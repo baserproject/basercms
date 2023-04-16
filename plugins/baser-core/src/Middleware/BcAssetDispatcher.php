@@ -64,7 +64,7 @@ class BcAssetDispatcher implements MiddlewareInterface
      *
      * @param string $url URL
      * @return string|null Absolute path for asset file
-     * TODO ucmitz 一旦、スキップ
+     * @TODO ucmitz 一旦、スキップ
      */
 //    protected function _getAssetFile($url)
 //    {

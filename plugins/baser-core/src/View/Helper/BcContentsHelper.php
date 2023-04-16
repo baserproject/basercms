@@ -207,7 +207,7 @@ class BcContentsHelper extends Helper
                 }
             }
         }
-        // TODO: SoftDelete未実装
+        // TODO ucmitz SoftDelete未実装
         // $this->_Contents->Behaviors->unload('SoftDelete');
         $contents = $this->_Contents->find('all')->select(['plugin', 'type', 'title'])->where([$conditions]);
         // $this->_Contents->Behaviors->load('SoftDelete');

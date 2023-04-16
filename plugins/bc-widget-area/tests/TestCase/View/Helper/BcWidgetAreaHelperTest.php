@@ -86,13 +86,14 @@ class BcWidgetAreaHelperTest extends BcTestCase
 
     /**
      * ウィジェットエリアを出力する
-     * TODO: $noが指定されてない(null)場合のテストを記述する
+     *
      * $noを指定していない場合、ウィジェットが出力されません。
      *
      * @param string $url 現在のURL
      * @param int $no
      * @param string $expected 期待値
      * @dataProvider getWidgetAreaDataProvider
+     * @TODO: $noが指定されてない(null)場合のテストを記述する
      */
     public function testGetWidgetArea($url, $no, $expected)
     {

@@ -250,7 +250,7 @@ class ContentsTable extends AppTable
      */
     public function duplicateRelatedSiteContent($check)
     {
-        // TODO: 代替措置
+        // TODO ucmitz 代替措置
         // if (!$this->Sites->isMain($this->data['Content']['site_id'])) {
         //     return true;
         // }

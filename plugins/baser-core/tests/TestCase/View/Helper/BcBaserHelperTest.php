@@ -647,7 +647,7 @@ class BcBaserHelperTest extends BcTestCase
         ];
     }
 
-    /**************** TODO:下記basercms4系より移行 メソッドが準備され次第　調整して上記のテストコードに追加してください　********************/
+    /**************** TODO ucmitz :下記basercms4系より移行 メソッドが準備され次第　調整して上記のテストコードに追加してください　********************/
 
     /**
      * ログイン状態にする
@@ -1579,13 +1579,14 @@ class BcBaserHelperTest extends BcTestCase
 
     /**
      * サイトマップを出力する
-     * TODO : 階層($recursive)を指定した場合のテスト
+     *
      * @param mixed $pageCategoryId 固定ページカテゴリID（初期値 : null）
      *    - 0 : 仕様確認要
      *    - null : 仕様確認要
      * @param string $recursive 取得する階層
      * @param boolean $expected 期待値
      * @dataProvider getSitemapDataProvider
+     * @TODO : 階層($recursive)を指定した場合のテスト
      */
 
     public function testGetSitemap($siteId, $expected)
@@ -1964,10 +1965,11 @@ class BcBaserHelperTest extends BcTestCase
 
     /**
      * 表示件数設定機能を出力する
-     * TODO ryuring 現在の資料として、Contents テーブルで管理しているURLの場合、URLが解決できない
+     *
      * BcContentsRoute::match() に途中までの処理を記述している
      *
      * @return void
+     * @TODO 現在の仕様として、Contents テーブルで管理しているURLの場合、URLが解決できない
      */
     public function testListNum()
     {

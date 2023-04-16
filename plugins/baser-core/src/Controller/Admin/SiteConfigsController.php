@@ -30,7 +30,7 @@ class SiteConfigsController extends BcAdminAppController
      *
      * @var array
      */
-    // TODO 未実装のため代替措置
+    // TODO ucmitz 未実装のため代替措置
     /* >>>
     public $components = ['BcManager'];
     <<< */

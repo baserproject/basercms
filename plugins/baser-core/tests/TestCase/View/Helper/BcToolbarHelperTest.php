@@ -163,7 +163,8 @@ class BcToolbarHelperTest extends BcTestCase
 
     /**
      * test getAccountSettingUrl
-     * TODO プレフィックスを変更した場合のテスト追加要（mypageなど）
+     *
+     * @TODO プレフィックスを変更した場合のテスト追加要（mypageなど）
      */
     public function testGetAccountSettingUrl()
     {
@@ -174,7 +175,8 @@ class BcToolbarHelperTest extends BcTestCase
 
     /**
      * test getLoginUrl
-     * TODO プレフィックスを変更した場合のテスト追加要（mypageなど）
+     *
+     * @TODO プレフィックスを変更した場合のテスト追加要（mypageなど）
      */
     public function testGetLoginUrl()
     {

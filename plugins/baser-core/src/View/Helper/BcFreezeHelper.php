@@ -406,7 +406,6 @@ class BcFreezeHelper extends BcFormHelper
 
     /**
      * ファイルコントロール（画像）を表示する
-     * TODO 確認画面には未チェック
      *
      * @param string $fieldName フィールド文字列
      * @param array $attributes html属性
@@ -532,11 +531,11 @@ class BcFreezeHelper extends BcFormHelper
 
     /**
      * JsonList
-     * TODO 確認画面用の実装は全くしてない
      *
      * @param string $fieldName フィールド文字列
      * @param array $attributes html属性
      * @return string    htmlタグ
+     * @TODO ucmitz 確認画面用の実装は全くしてない
      */
     public function jsonList($fieldName, $attributes)
     {
