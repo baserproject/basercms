@@ -37,13 +37,14 @@ class BlogPostsController extends BcApiController
         $this->request->allowMethod('get');
 
         $queryParams = $this->getRequest()->getQueryParams();
-        if (isset($queryParams['status']) || isset($queryParams['contain'])) {
+        if (isset($queryParams['status']) || isset($queryParams['contain']) || isset($queryParams['draft'])) {
             throw new ForbiddenException();
         }
 
         $queryParams = array_merge([
             'contain' => null,
-            'status' => 'publish'
+            'status' => 'publish',
+            'draft' => false
         ], $queryParams);
         $this->set([
             'blogPosts' => $this->paginate($service->getIndex($queryParams))
@@ -70,12 +71,13 @@ class BlogPostsController extends BcApiController
     {
         $this->request->allowMethod('get');
         $queryParams = $this->getRequest()->getQueryParams();
-        if (isset($queryParams['status']) || isset($queryParams['contain'])) {
+        if (isset($queryParams['status']) || isset($queryParams['contain']) || isset($queryParams['draft'])) {
             throw new ForbiddenException();
         }
 
         $queryParams = array_merge([
-            'status' => 'publish'
+            'status' => 'publish',
+            'draft' => false
         ], $queryParams);
 
         $blogPost = $message = null;

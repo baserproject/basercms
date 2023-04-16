@@ -36,13 +36,14 @@ class PagesController extends BcApiController
     {
         $this->request->allowMethod('get');
         $queryParams = $this->getRequest()->getQueryParams();
-        if (isset($queryParams['status']) || isset($queryParams['contain'])) {
+        if (isset($queryParams['status']) || isset($queryParams['contain']) || isset($queryParams['draft'])) {
             throw new ForbiddenException();
         }
 
         $queryParams = array_merge([
             'status' => 'publish',
-            'contain' => null
+            'contain' => null,
+            'draft' => false
         ], $queryParams);
 
         $this->set([
@@ -69,12 +70,13 @@ class PagesController extends BcApiController
     {
         $this->request->allowMethod('get');
         $queryParams = $this->getRequest()->getQueryParams();
-        if (isset($queryParams['status']) || isset($queryParams['contain'])) {
+        if (isset($queryParams['status']) || isset($queryParams['contain']) || isset($queryParams['draft'])) {
             throw new ForbiddenException();
         }
 
         $queryParams = array_merge([
-            'status' => 'publish'
+            'status' => 'publish',
+            'draft' => false
         ], $queryParams);
 
         $page = $message = null;

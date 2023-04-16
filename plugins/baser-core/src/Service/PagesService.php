@@ -131,16 +131,21 @@ class PagesService implements PagesServiceInterface
     {
         $options = array_merge([
             'status' => '',
-            'contain' => ['Contents' => ['Sites']]
+            'contain' => ['Contents' => ['Sites']],
+            'draft' => false
         ], $options);
         $conditions = [];
         if ($options['status'] === 'publish') {
             $conditions = $this->Pages->Contents->getConditionAllowPublish();
         }
-        return $this->Pages->get($id, [
+        $entity = $this->Pages->get($id, [
             'contain' => $options['contain'],
-            'conditions' => $conditions
+            'conditions' => $conditions,
         ]);
+        if($options['draft'] === false) {
+            unset($entity->draft);
+        }
+        return $entity;
     }
 
     /**
@@ -178,11 +183,15 @@ class PagesService implements PagesServiceInterface
     {
         $options = array_merge([
             'status' => '',
-            'contain' => ['Contents']
+            'contain' => ['Contents'],
+            'draft' => null
         ], $queryParams);
 
         $fields = $this->Pages->getSchema()->columns();
-        if (is_null($options['contain'])) {
+        if (is_null($options['contain']) || $options['draft'] === false) {
+            if($options['draft'] === false) {
+                unset($fields[array_search('draft', $fields)]);
+            }
             $query = $this->Pages->find()->contain('Contents')->select($fields);
         } else {
             $query = $this->Pages->find()->contain($options['contain']);

@@ -90,16 +90,22 @@ class BlogPostsService implements BlogPostsServiceInterface
                 'BlogContents' => ['Contents' => ['Sites']],
                 'BlogCategories',
                 'BlogTags'
-            ]
+            ],
+            'draft' => null
         ], $options);
         $conditions = [];
         if ($options['status'] === 'publish') {
             $conditions = $this->BlogPosts->getConditionAllowPublish();
             $conditions = array_merge($conditions, $this->BlogPosts->BlogContents->Contents->getConditionAllowPublish());
         }
-        return $this->BlogPosts->get($id, [
+        $entity = $this->BlogPosts->get($id, [
             'conditions' => $conditions,
             'contain' => $options['contain']]);
+        if($options['draft'] === false) {
+            unset($entity->content_draft);
+            unset($entity->detail_draft);
+        }
+        return $entity;
     }
 
     /**
@@ -129,7 +135,8 @@ class BlogPostsService implements BlogPostsServiceInterface
                 'BlogContents',
                 'BlogComments',
                 'BlogTags',
-            ]
+            ],
+            'draft' => null
         ], $queryParams);
 
         if (!empty($options['num'])) $options['limit'] = $options['num'];
@@ -242,8 +249,12 @@ class BlogPostsService implements BlogPostsServiceInterface
         // ステータス
         if (($params['status'] === 'publish' || (string)$params['status'] === '1') && !$params['preview']) {
             $conditions = $this->BlogPosts->getConditionAllowPublish();
-            if(empty($params['contain'])) {
+            if(empty($params['contain']) || $params['draft'] === false) {
                 $fields = $this->BlogPosts->getSchema()->columns();
+                if($params['draft'] === false) {
+                    unset($fields[array_search('content_draft', $fields)]);
+                    unset($fields[array_search('detail_draft', $fields)]);
+                }
                 $query = $this->BlogPosts->find()->contain(['BlogContents' => ['Contents']])->select($fields);
             } elseif(!isset($params['contain']['BlogContents']['Contents'])) {
                 $query = $this->BlogPosts->find()->contain(array_merge_recursive($query->getContain(), ['BlogContents' => ['Contents']]));
