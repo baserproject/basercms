@@ -31,6 +31,16 @@ $this->BcBaser->css('admin/ckeditor/editor', true);
 
 <!-- button -->
 <div class="bca-actions">
+  <div class="bca-actions__before">
+    <?php echo $this->BcHtml->link(__d('baser_core', '一覧に戻る'), [
+      'plugin' => 'BcEditorTemplate',
+      'controller' => 'EditorTemplates',
+      'action' => 'index'
+    ], [
+      'class' => 'bca-btn bca-actions__item',
+      'data-bca-btn-type' => 'back-to-list'
+    ]) ?>
+  </div>
   <div class="bca-actions__main">
     <?php echo $this->BcAdminForm->button(__d('baser_core', '保存'), [
       'type' => 'submit',

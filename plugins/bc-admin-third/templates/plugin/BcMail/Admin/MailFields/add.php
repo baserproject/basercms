@@ -33,6 +33,17 @@ $this->BcAdmin->setHelp('mail_fields_form');
 <?php $this->BcBaser->element('MailFields/form') ?>
 
 <div class="submit bca-actions">
+  <div class="bca-actions__before">
+    <?php echo $this->BcHtml->link(__d('baser_core', '一覧に戻る'), [
+      'plugin' => 'BcMail',
+      'controller' => 'MailFields',
+      'action' => 'index',
+      $mailContent->id
+    ], [
+      'class' => 'bca-btn bca-actions__item',
+      'data-bca-btn-type' => 'back-to-list'
+    ]) ?>
+  </div>
   <div class="bca-actions__main">
     <?php echo $this->BcAdminForm->button(__d('baser_core', '保存'), [
       'div' => false,

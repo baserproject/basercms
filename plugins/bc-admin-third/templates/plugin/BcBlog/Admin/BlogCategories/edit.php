@@ -21,6 +21,10 @@ $this->BcAdmin->setTitle(sprintf(
   __d('baser_core', '%s｜カテゴリ編集'),
   $blogContent->content->title
 ));
+$this->BcAdmin->addAdminMainBodyHeaderLinks([
+  'url' => ['action' => 'add', $blogContent->id],
+  'title' => __d('baser_core', '新規追加'),
+]);
 $this->BcAdmin->setHelp('blog_categories_form');
 $this->BcBaser->js('BcBlog.admin/blog_categories/form.bundle', false);
 $fullUrl = $this->BcBaser->getContentsUrl(
@@ -67,6 +71,17 @@ $fullUrl = $this->BcBaser->getContentsUrl(
 <?php $this->BcBaser->element('BlogCategories/form') ?>
 
 <div class="bca-actions">
+  <div class="bca-actions__before">
+    <?php echo $this->BcHtml->link(__d('baser_core', '一覧に戻る'), [
+      'plugin' => 'BcBlog',
+      'controller' => 'BlogCategories',
+      'action' => 'index',
+      $blogContent->id
+    ], [
+      'class' => 'bca-btn bca-actions__item',
+      'data-bca-btn-type' => 'back-to-list'
+    ]) ?>
+  </div>
   <div class="bca-actions__main">
     <?php echo $this->BcAdminForm->button(__d('baser_core', '保存'), [
       'div' => false,

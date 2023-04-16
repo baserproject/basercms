@@ -64,6 +64,16 @@ $this->BcAdmin->setHelp('plugins_install');
 
 
   <div class="bca-actions">
+    <div class="bca-actions__before">
+      <?php echo $this->BcHtml->link(__d('baser_core', '一覧に戻る'), [
+        'plugin' => 'BaserCore',
+        'controller' => 'Plugins',
+        'action' => 'index',
+      ], [
+        'class' => 'bca-btn bca-actions__item',
+        'data-bca-btn-type' => 'back-to-list'
+      ]) ?>
+    </div>
     <?php if ($plugin->db_init): ?>
       <div class="bca-actions__main">
         <?php echo $this->BcAdminForm->submit(__d('baser_core', '有効化'), [

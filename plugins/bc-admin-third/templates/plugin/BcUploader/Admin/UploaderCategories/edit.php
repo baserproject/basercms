@@ -16,6 +16,10 @@
  * @noTodo
  * @unitTest
  */
+$this->BcAdmin->addAdminMainBodyHeaderLinks([
+  'url' => ['action' => 'add'],
+  'title' => __d('baser_core', '新規追加'),
+]);
 $this->BcAdmin->setTitle(__d('baser_core', 'アップロードカテゴリ編集'));
 ?>
 
@@ -26,8 +30,18 @@ $this->BcAdmin->setTitle(__d('baser_core', 'アップロードカテゴリ編集
 <?php $this->BcBaser->element('UploaderCategories/form') ?>
 
 <div class="submit bca-actions">
+  <div class="bca-actions__before">
+    <?php echo $this->BcHtml->link(__d('baser_core', '一覧に戻る'), [
+      'plugin' => 'BcUploader',
+      'controller' => 'UploaderCategories',
+      'action' => 'index'
+    ], [
+      'class' => 'bca-btn bca-actions__item',
+      'data-bca-btn-type' => 'back-to-list'
+    ]) ?>
+  </div>
   <div class="bca-actions__main">
-    <?php echo $this->BcAdminForm->button(__d('baser_core', '更新'), [
+    <?php echo $this->BcAdminForm->button(__d('baser_core', '保存'), [
       'div' => false,
       'class' => 'button bca-btn bca-actions__item',
       'data-bca-btn-type' =>

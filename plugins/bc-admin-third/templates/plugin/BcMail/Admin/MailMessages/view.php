@@ -62,7 +62,7 @@ $this->BcAdmin->setTitle(__d('baser_core',
             $mailMessage->{$field->field_name},
             $this->Mailfield->getOptions($field)
           );
-          if($body) {
+          if ($body) {
             $body = $this->BcText->autoLink($body, ['target' => '_blank']);
           }
           echo nl2br($body);
@@ -86,12 +86,25 @@ $this->BcAdmin->setTitle(__d('baser_core',
 
 <!-- button -->
 <div class="bca-actions">
-  <?php echo $this->BcAdminForm->postLink(__d('baser_core', '削除'),
-    ['action' => 'delete', $mailContent->id, $mailMessage->id], [
-      'confirm' => __d('baser_core', '受信メール No「{0}」を削除してもいいですか？', $mailMessage->id),
-      'class' => 'bca-submit-token button bca-btn bca-actions__item',
-      'data-bca-btn-type' => 'delete',
-      'data-bca-btn-size' => 'sm',
-      'data-bca-btn-color' => 'danger'
-  ]) ?>
+  <div class="bca-actions__main">
+    <?php echo $this->BcHtml->link(__d('baser_core', '一覧に戻る'), [
+      'plugin' => 'BcMail',
+      'controller' => 'MailMessages',
+      'action' => 'index',
+      $mailContent->id
+    ], [
+      'class' => 'bca-btn bca-actions__item',
+      'data-bca-btn-type' => 'back-to-list'
+    ]) ?>
+  </div>
+  <div class="bca-actions__sub">
+    <?php echo $this->BcAdminForm->postLink(__d('baser_core', '削除'),
+      ['action' => 'delete', $mailContent->id, $mailMessage->id], [
+        'confirm' => __d('baser_core', '受信メール No「{0}」を削除してもいいですか？', $mailMessage->id),
+        'class' => 'bca-submit-token button bca-btn bca-actions__item',
+        'data-bca-btn-type' => 'delete',
+        'data-bca-btn-size' => 'sm',
+        'data-bca-btn-color' => 'danger'
+      ]) ?>
+  </div>
 </div>

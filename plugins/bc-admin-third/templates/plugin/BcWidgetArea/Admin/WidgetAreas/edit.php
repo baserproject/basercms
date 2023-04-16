@@ -34,6 +34,10 @@ $this->BcBaser->js('BcWidgetArea.admin/widget_areas/form.bundle', false, [
 ]);
 $this->BcAdmin->setTitle(__d('baser_core', 'ウィジェットエリア編集'));
 $this->BcAdmin->setHelp('widget_areas_form');
+$this->BcAdmin->addAdminMainBodyHeaderLinks([
+  'url' => ['action' => 'add'],
+  'title' => __d('baser_core', '新規追加'),
+]);
 ?>
 
 
@@ -227,3 +231,16 @@ $this->BcAdmin->setHelp('widget_areas_form');
     </div>
   </div>
 <?php endif; ?>
+
+<div class="bca-actions">
+  <div class="bca-actions__main">
+    <?php echo $this->BcHtml->link(__d('baser_core', '一覧に戻る'), [
+      'plugin' => 'BcWidgetArea',
+      'controller' => 'WidgetAreas',
+      'action' => 'index'
+    ], [
+      'class' => 'bca-btn bca-actions__item',
+      'data-bca-btn-type' => 'back-to-list'
+    ]) ?>
+  </div>
+</div>

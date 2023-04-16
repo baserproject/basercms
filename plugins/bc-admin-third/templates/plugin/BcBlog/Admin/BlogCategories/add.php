@@ -35,6 +35,17 @@ $this->BcBaser->js('BcBlog.admin/blog_categories/form.bundle', false);
 <?php $this->BcBaser->element('BlogCategories/form') ?>
 
 <div class="bca-actions">
+  <div class="bca-actions__before">
+    <?php echo $this->BcHtml->link(__d('baser_core', '一覧に戻る'), [
+      'plugin' => 'BcBlog',
+      'controller' => 'BlogCategories',
+      'action' => 'index',
+      $blogContent->id
+    ], [
+      'class' => 'bca-btn bca-actions__item',
+      'data-bca-btn-type' => 'back-to-list'
+    ]) ?>
+  </div>
   <div class="bca-actions__main">
     <?php echo $this->BcAdminForm->button(__d('baser_core', '保存'), [
       'div' => false,

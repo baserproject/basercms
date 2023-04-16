@@ -21,6 +21,10 @@
  * @unitTest
  */
 $this->BcAdmin->setTitle(__d('baser_core', '{0}｜テーブル編集', $entity->title));
+$this->BcAdmin->addAdminMainBodyHeaderLinks([
+  'url' => ['action' => 'add'],
+  'title' => __d('baser_core', '新規追加'),
+]);
 ?>
 
 

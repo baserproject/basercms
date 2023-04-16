@@ -20,6 +20,10 @@
  */
 $this->BcAdmin->setTitle(sprintf(__d('baser_core', '%s｜記事編集'), $this->getRequest()->getAttribute('currentContent')->title));
 $this->BcAdmin->setHelp('blog_posts_form');
+$this->BcAdmin->addAdminMainBodyHeaderLinks([
+  'url' => ['action' => 'add', $blogContent->id],
+  'title' => __d('baser_core', '新規記事追加'),
+]);
 ?>
 
 
@@ -52,6 +56,17 @@ $this->BcAdmin->setHelp('blog_posts_form');
 
 <!-- button -->
 <section class="bca-actions">
+  <div class="bca-actions__before">
+    <?php echo $this->BcHtml->link(__d('baser_core', '一覧に戻る'), [
+      'plugin' => 'BcBlog',
+      'controller' => 'BlogPosts',
+      'action' => 'index',
+      $blogContent->id
+    ], [
+      'class' => 'bca-btn bca-actions__item',
+      'data-bca-btn-type' => 'back-to-list'
+    ]) ?>
+  </div>
   <div class="bca-actions__main">
     <?php echo $this->BcAdminForm->button(__d('baser_core', 'プレビュー'),
       [

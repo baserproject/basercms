@@ -21,6 +21,10 @@
 $this->BcBaser->js('BcMail.admin/mail_fields/form.bundle', false);
 $this->BcAdmin->setTitle(__d('baser_core', '{0}｜メールフィールド編集', $this->getRequest()->getAttribute('currentContent')->title));
 $this->BcAdmin->setHelp('mail_fields_form');
+$this->BcAdmin->addAdminMainBodyHeaderLinks([
+  'url' => ['action' => 'add', $this->request->getParam('pass.0')],
+  'title' => __d('baser_core', '新規フィールド追加'),
+]);
 ?>
 
 
@@ -36,6 +40,17 @@ $this->BcAdmin->setHelp('mail_fields_form');
 <?php $this->BcBaser->element('MailFields/form') ?>
 
 <div class="submit bca-actions">
+  <div class="bca-actions__before">
+    <?php echo $this->BcHtml->link(__d('baser_core', '一覧に戻る'), [
+      'plugin' => 'BcMail',
+      'controller' => 'MailFields',
+      'action' => 'index',
+      $mailContent->id
+    ], [
+      'class' => 'bca-btn bca-actions__item',
+      'data-bca-btn-type' => 'back-to-list'
+    ]) ?>
+  </div>
   <div class="bca-actions__main">
     <?php echo $this->BcAdminForm->button(__d('baser_core', '保存'), [
       'div' => false,

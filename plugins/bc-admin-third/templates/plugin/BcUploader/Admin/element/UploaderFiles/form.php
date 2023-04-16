@@ -179,6 +179,16 @@ if (!$popup) $users = $this->BcAdminForm->getControlSource("UploaderFiles.user_i
 
 <?php if (!$popup): ?>
   <div class="submit bca-actions">
+    <div class="bca-actions__before">
+      <?php echo $this->BcHtml->link(__d('baser_core', '一覧に戻る'), [
+        'plugin' => 'BcUploader',
+        'controller' => 'UploaderFiles',
+        'action' => 'index'
+      ], [
+        'class' => 'bca-btn bca-actions__item',
+        'data-bca-btn-type' => 'back-to-list'
+      ]) ?>
+    </div>
     <div class="bca-actions__main">
       <?php echo $this->BcAdminForm->submit(__d('baser_core', '保存'), [
         'div' => false,
@@ -194,7 +204,7 @@ if (!$popup) $users = $this->BcAdminForm->getControlSource("UploaderFiles.user_i
         'block' => true,
         'confirm' => __d('baser_core', '{0} を本当に削除してもいいですか？', $uploaderFile->name),
         'class' =>
-        'bca-btn', 'data-bca-btn-type' => 'delete'
+          'bca-btn', 'data-bca-btn-type' => 'delete'
       ]) ?>
     </div>
   </div>

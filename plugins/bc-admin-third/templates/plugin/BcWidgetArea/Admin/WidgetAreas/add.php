@@ -35,4 +35,16 @@ $this->BcAdmin->setHelp('widget_areas_form');
 <?php echo $this->BcAdminForm->error('name') ?>
 <?php echo $this->BcAdminForm->end() ?>
 
+<div class="bca-actions">
+  <div class="bca-actions__main">
+    <?php echo $this->BcHtml->link(__d('baser_core', '一覧に戻る'), [
+      'plugin' => 'BcWidgetArea',
+      'controller' => 'WidgetAreas',
+      'action' => 'index'
+    ], [
+      'class' => 'bca-btn bca-actions__item',
+      'data-bca-btn-type' => 'back-to-list'
+    ]) ?>
+  </div>
+</div>
 
