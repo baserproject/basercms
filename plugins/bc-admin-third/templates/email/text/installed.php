@@ -55,7 +55,7 @@ https://basercms.net/about/feature.html
 https://basercms.net/about/guide.html
 
 ■ <?php echo __d('baser_core', 'baserCMS公式ガイド') ?>　
-https://wiki.basercms.net/
+https://baserproject.github.io/5/
 
 ■ <?php echo __d('baser_core', 'baserCMSメールマガジン') ?>　
 https://member.basercms.net/magazine/regist
