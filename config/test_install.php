@@ -16,7 +16,7 @@ return [
     'Datasources.default' => [
         'className' => 'Cake\\Database\\Connection',
         'driver' => 'Cake\\Database\\Driver\\Mysql',
-        'host' => 'bc5-db',
+        'host' => 'bc-db',
         'port' => '3306',
         'username' => 'root',
         'password' => 'root',
@@ -29,7 +29,7 @@ return [
     'Datasources.test' => [
         'className' => 'Cake\\Database\\Connection',
         'driver' => 'Cake\\Database\\Driver\\Mysql',
-        'host' => 'bc5-db',
+        'host' => 'bc-db',
         'port' => '3306',
         'username' => 'root',
         'password' => 'root',

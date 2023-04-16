@@ -28,7 +28,7 @@ if [ ! -e '/var/www/html/docker_inited' ]; then
     TIMES=0
     LIMIT_TIMES=50
     CONNECTED=1
-    while [ "$(mysqladmin ping -h bc5-db -uroot -proot)" != "mysqld is alive" ]
+    while [ "$(mysqladmin ping -h bc-db -uroot -proot)" != "mysqld is alive" ]
     do
         echo "try connect $TIMES times"
         sleep 1
@@ -40,7 +40,7 @@ if [ ! -e '/var/www/html/docker_inited' ]; then
         fi
     done
     if [ $CONNECTED -eq 1 ]; then
-        mysql -h bc5-db -uroot -proot basercms -N -e 'show tables' | while read table; do mysql -h bc5-db -uroot -proot -e "drop table $table" basercms; done
+        mysql -h bc-db -uroot -proot basercms -N -e 'show tables' | while read table; do mysql -h bc-db -uroot -proot -e "drop table $table" basercms; done
     else
         echo "[$(date +"%Y/%m/%d %H:%M:%S")] Migration failed."
 	fi

@@ -663,7 +663,7 @@ class UserActionsSchema extends BcSchema
         $config = [
             "datasource" => "MySQL",
             "database" => "test_basercms",
-            "host" => "bc5-db",
+            "host" => "bc-db",
             "port" => "3306",
             "username" => "root",
             "password" => "root",
