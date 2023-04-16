@@ -433,7 +433,7 @@ class ContentsTable extends AppTable
      * @param EventInterface $event
      * @param EntityInterface $entity
      * @param ArrayObject $options
-     * @return bool
+     * @return void
      * @checked
      * @noTodo
      * @unitTest
@@ -446,7 +446,6 @@ class ContentsTable extends AppTable
         if (!empty($entity->name)) {
             $entity->name = $this->urlEncode(mb_substr(rawurldecode($entity->name), 0, 230, 'UTF-8'));
         }
-        return parent::beforeSave($event, $entity, $options);
     }
 
     /**

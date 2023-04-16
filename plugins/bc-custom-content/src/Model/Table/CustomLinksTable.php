@@ -128,7 +128,6 @@ class CustomLinksTable extends AppTable
      */
     public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
-        parent::beforeSave($event, $entity, $options);
         if ($entity->isNew()) {
             $entity->name = $this->getUniqueName($entity->name, $entity->custom_table_id);
         }

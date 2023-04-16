@@ -87,7 +87,7 @@ class ContentFoldersTable extends AppTable
      * @param EventInterface $event
      * @param EntityInterface $entity
      * @param ArrayObject $options
-     * @return bool
+     * @return void
      * @checked
      * @noTodo
      * @unitTest
@@ -99,7 +99,6 @@ class ContentFoldersTable extends AppTable
             $this->isMovableTemplate = false;
             $this->setBeforeRecord($entity->id);
         }
-        return parent::beforeSave($event, $entity, $options);
     }
 
     /**
