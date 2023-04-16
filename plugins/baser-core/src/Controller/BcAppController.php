@@ -87,6 +87,7 @@ class BcAppController extends AppController
      *
      * @checked
      * @note(value="マイルストーン２が終わってから確認する")
+     * @todo ucmitz 未確認
      */
     public function beforeFilter(EventInterface $event)
     {
@@ -166,27 +167,9 @@ class BcAppController extends AppController
     public function beforeRender(EventInterface $event): void
     {
         parent::beforeRender($event);
-
         // TODO ucmitz 未確認
         return;
-        // テンプレートの拡張子
-        // RSSの場合、RequestHandlerのstartupで強制的に拡張子を.ctpに切り替えられてしまう為、
-        // beforeRenderでも再設定する仕様にした
-        $this->ext = Configure::read('BcApp.templateExt');
-
-        // モバイルでは、mobileHelper::afterLayout をフックしてSJISへの変換が必要だが、
-        // エラーが発生した場合には、afterLayoutでは、エラー用のビューを持ったviewクラスを取得できない。
-        // 原因は、エラーが発生する前のcontrollerがviewを登録してしまっている為。
-        // エラー時のview登録にフックする場所はここしかないのでここでviewの登録を削除する
-        if ($this->name === 'CakeError') {
-            ClassRegistry::removeObject('view');
-            $this->response->disableCache();
-        }
-
         $this->__loadDataToView();
-        $this->set('isSSL', $this->request->is('ssl'));
-        $this->set('safeModeOn', ini_get('safe_mode'));
-        $this->set('baserVersion', BcUtil::getVersion());
     }
 
     /**
@@ -227,13 +210,6 @@ class BcAppController extends AppController
             $currentUserAuthPrefixes = explode(',', $this->Session->read('Auth.' . $sessionKey . '.UserGroup.auth_prefix'));
         }
         $this->set('currentUserAuthPrefixes', $currentUserAuthPrefixes);
-
-        /* 携帯用絵文字データの読込 */
-        // TODO 実装するかどうか検討する
-        /* if (isset($this->request->getParam('prefix')) && $this->request->getParam('prefix') == 'mobile' && !empty($this->EmojiData)) {
-          $emojiData = $this->EmojiData->find('all');
-          $this->set('emoji',$this->Emoji->EmojiData($emojiData));
-          } */
     }
 
     /**
@@ -626,34 +602,6 @@ class BcAppController extends AppController
         }
 
         return $this->BcAuth->authenticate['Form']['userModel'];
-    }
-
-    /**
-     * Redirects to given $url, after turning off $this->autoRender.
-     * Script execution is halted after the redirect.
-     *
-     * @param mixed $url A string or array-based URL pointing to another location within the app, or an absolute URL
-     * @param int $status Optional HTTP status code (eg: 404)
-     * @param bool $exit If true, exit() will be called after the redirect
-     * @return void if $exit = false. Terminates script if $exit = true
-     */
-    public function redirect($url, int $status = 302): ?Response
-    {
-        // TODO 未確認のため代替措置
-        /* >>>
-        $url = addSessionId($url, true);
-        <<< */
-
-        // 管理システムでのURLの生成が CakePHP の標準仕様と違っていたので調整
-        // ※ Routing.admin を変更した場合
-        if (is_array($url)) {
-            if (!isset($url['admin']) && $this->request->getParam('prefix') === "Admin") {
-                $url['admin'] = true;
-            } elseif (isset($url['admin']) && !$url['admin']) {
-                unset($url['admin']);
-            }
-        }
-        return parent::redirect($url, $status);
     }
 
     /**

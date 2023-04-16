@@ -49,12 +49,6 @@ class AppView extends View
     public function initialize(): void
     {
         parent::initialize();
-        // TODO ucmitz 未移行のため暫定措置
-        // >>>
-//        $this->loadHelper('BaserCore.BcHtml');
-//        $this->loadHelper('BaserCore.BcXml');
-//        $this->loadHelper('BaserCore.BcArray');
-        // <<<
         $this->loadHelper('BaserCore.BcTime');
         $this->loadHelper('BaserCore.BcForm', ['templates' => 'BaserCore.bc_form']);
         $this->loadHelper('BaserCore.BcAdmin');

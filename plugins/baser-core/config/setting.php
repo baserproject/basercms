@@ -502,8 +502,6 @@ return [
                             'title' => __d('baser_core', 'ログメンテナンス'),
                             'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'utilities', 'action' => 'log_maintenance']
                         ],
-//                        'UtilitiesWriteSchema' => ['title' => __d('baser_core', 'スキーマファイル生成'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'utilities', 'action' => 'write_schema']],
-//                        'UtilitiesLoadSchema' => ['title' => __d('baser_core', 'スキーマファイル読込'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'utilities', 'action' => 'load_schema']],
                     ]
                 ]
             ]

@@ -86,22 +86,6 @@ class BlogController extends BlogFrontAppController
             }
         }
 
-        // TODO ucmitz 未検証
-        /* >>>
-        if (!empty($this->blogContent['BlogContent']['id'])) {
-            $this->BlogPost->setupUpload($this->blogContent['BlogContent']['id']);
-        }
-
-        // ページネーションのリンク対策
-        // コンテンツ名を変更している際、以下の設定を行わないとプラグイン名がURLに付加されてしまう
-        // Viewで $paginator->options = array('url' => $this->passedArgs) を行う事が前提
-        if (!empty($this->request->getAttribute('currentContent'))) {
-            $this->passedArgs['controller'] = $this->request->getAttribute('currentContent')->name;
-            $this->passedArgs['plugin'] = $this->request->getAttribute('currentContent')->name;
-        }
-        $this->passedArgs['action'] = $this->action;
-        <<< */
-
         // コメント送信用のトークンを出力する為にセキュリティコンポーネントを利用しているが、
         // 表示用のコントローラーなのでポストデータのチェックは必要ない
         $this->Security->setConfig('validatePost', false);

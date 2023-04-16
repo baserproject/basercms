@@ -338,13 +338,6 @@ class AppController extends BaseController
         if ($this->getRequest()->is('admin')) return;
         if (BcUtil::isAdminUser()) return;
 
-        // TODO ucmitz 削除検討要
-        // CakePHP4 から requestAction がなくなっているので不要の可能性が高い
-        // cell 機能で呼び出された場合のスルーの処理を書いたら削除する
-        if (!empty($this->getRequest()->getParam('return')) && !empty($this->getRequest()->getParam('requested'))) {
-            return $this->getResponse();
-        }
-
         $redirectUrl = '/maintenance';
         if ($this->getRequest()->getAttribute('currentSite')->alias) {
             $redirectUrl = '/' . $this->getRequest()->getAttribute('currentSite')->alias . $redirectUrl;

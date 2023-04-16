@@ -206,8 +206,6 @@ class ThemesService implements ThemesServiceInterface
      */
     private function detachCurrentThemesPlugins()
     {
-        // TODO ucmitz 2022/09/03 ryuring
-        // テーマプラグインの仕組みを実装してからテストを作成する
         $plugins = BcUtil::getCurrentThemesPlugins();
         foreach($plugins as $plugin) {
             /* @var PluginsService $pluginsService */
@@ -276,8 +274,6 @@ class ThemesService implements ThemesServiceInterface
      */
     private function installThemesPlugins(string $theme)
     {
-        // TODO ucmitz 2022/09/03 ryuring
-        // テーマプラグインの仕組みを実装してからテストを作成する
         /* @var PluginsService $pluginsService */
         $pluginsService = $this->getService(PluginsServiceInterface::class);
         $plugins = BcUtil::getCurrentThemesPlugins();

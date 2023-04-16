@@ -554,45 +554,6 @@ class BcFormHelperTest extends BcTestCase
         ];
     }
 
-
-    /**
-     * JsonList
-     *
-     * @param string $field フィールド文字列
-     * @param string $attributes
-     * @param string $expected 期待値
-     * @dataProvider jsonListDataProvider
-     */
-    public function testJsonList($field, $attributes, $expected, $message)
-    {
-
-        // TODO ucmitz移行時に未実装のため代替措置
-        // >>>
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        // <<<
-
-        $attributes_default = [
-            'imgSrc' => null,
-            'ajaxAddAction' => null,
-            'ajaxDelAction' => null,
-        ];
-
-        $attributes = $attributes + $attributes_default;
-
-        $result = $this->BcForm->jsonList($field, $attributes);
-        $this->assertMatchesRegularExpression('/' . $expected . '/s', $result, $message);
-    }
-
-    public function jsonListDataProvider()
-    {
-        return [
-            ['test', [], 'id="JsonTestDb".*jQuery\(function\(\)', 'jsonList()を出力できません'],
-            ['test', ['imgSrc' => 'test'], '"deleteButtonSrc":"test"', 'imgSrc属性を付与できません'],
-            ['test', ['ajaxAddAction' => 'test'], '"ajaxAddAction":"test"', 'ajaxAddAction属性を付与できません'],
-            ['test', ['ajaxDelAction' => 'test'], '"ajaxDelAction":"test"', 'ajaxDelAction属性を付与できません'],
-        ];
-    }
-
     /**
      * 文字列保存用複数選択コントロール
      *

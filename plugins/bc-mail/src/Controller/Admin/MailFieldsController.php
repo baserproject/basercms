@@ -68,25 +68,6 @@ class MailFieldsController extends MailAdminAppController
         );
         if (!$request) throw new BcException(__d('baser_core', 'コンテンツデータが見つかりません。'));
         $this->setRequest($request);
-
-        // TODO ucmitz 以下、未精査
-        // >>>
-//        $mailContentId = $this->request->getParam('pass.0');
-//        $this->mailContent = $this->MailContent->read(null, $mailContentId);
-//        $this->request->getParam('Content', $this->BcContents->getContent($mailContentId)['Content']);
-//        if ($this->request->getParam('Content.status')) {
-//            $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
-//            $site = $sites->findById($this->request->getParam('Content.site_id'))->first();
-//            $this->set(
-//                'publishLink',
-//                $this->Content->getUrl(
-//                    $this->request->getParam('Content.url'),
-//                    true,
-//                    $site->useSubDomain
-//                )
-//            );
-//        }
-        // <<<
     }
 
     /**

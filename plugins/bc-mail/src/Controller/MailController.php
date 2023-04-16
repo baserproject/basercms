@@ -120,10 +120,7 @@ class MailController extends MailFrontAppController
     {
         parent::beforeRender($event);
         // TODO ucmitz 未実装
-        /*if ($this->dbDatas['mailContent']['MailContent']['widget_area']) {
-            $this->set('widgetArea', $this->dbDatas['mailContent']['MailContent']['widget_area']);
-        }
-
+        /*
         // キャッシュ対策
         if (!isConsole() && !$this->request->getParam('requested')) {
             header("Cache-Control: no-cache, no-store, must-revalidate");

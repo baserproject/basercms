@@ -29,30 +29,6 @@ class BlogCategoriesController extends BlogAdminAppController
 {
 
     /**
-     * コンポーネント
-     *
-     * @var array
-     * @TODO ucmitz 未移行
-     */
-//    public $components = [
-//        'BcContents' => ['type' => 'BcBlog.BlogContent']
-//    ];
-
-    /**
-     * beforeFilter
-     *
-     * @return void
-     * @checked
-     */
-    public function beforeFilter(EventInterface $event)
-    {
-        parent::beforeFilter($event);
-        // バリデーション設定
-        // TODO ucmitz 動作未確認のため、一旦、コメントアウト
-//        $this->BlogCategory->validationParams['blogContentId'] = $this->blogContent['BlogContent']['id'];
-    }
-
-    /**
      * [ADMIN] ブログカテゴリを一覧表示する
      *
      * @return void

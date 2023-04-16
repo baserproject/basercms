@@ -26,16 +26,6 @@ class SiteConfigsController extends BcAdminAppController
 {
 
     /**
-     * コンポーネント
-     *
-     * @var array
-     */
-    // TODO ucmitz 未実装のため代替措置
-    /* >>>
-    public $components = ['BcManager'];
-    <<< */
-
-    /**
      * 基本設定
      * @param SiteConfigsAdminServiceInterface $service
      * @return void|Response

@@ -504,10 +504,6 @@ class BcUtil
         Cache::clear('_bc_env_');
         Cache::clear('_bc_update_');
         Cache::clear('_bc_gmaps_');
-        //TODO ucmitz : viewキャッシュ削除
-        // clearCache();
-        //TODO ucmitz : dataキャッシュ削除
-        // clearDataCache();
     }
 
     /**

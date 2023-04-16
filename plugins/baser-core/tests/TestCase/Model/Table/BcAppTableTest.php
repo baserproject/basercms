@@ -196,29 +196,6 @@ class BcAppTest extends BaserTestCase
     }
 
     /**
-     * 子カテゴリのIDリストを取得する
-     *
-     * @dataProvider getChildIdsListDataProvider
-     */
-    public function testGetChildIdsList($id, $expects)
-    {
-        $result = $this->Content->getChildIdsList($id);
-        $this->assertEquals($expects, array_values($result));
-    }
-
-    public function getChildIdsListDataProvider()
-    {
-        return [
-            [1, [2, 9, 17, 19, 3, 10, 11, 12, 13, 14, 18, 20, 4, 5, 6, 7, 8, 15, 16]],    // PC
-            [2, [9, 17, 19]],    // モバイル
-            [3, [10, 11, 12, 13, 14, 18, 20]],    // スマホ
-            [4, []],    // 固定ページ
-            ['', [1, 2, 9, 17, 19, 3, 10, 11, 12, 13, 14, 18, 20, 4, 5, 6, 7, 8, 15, 16]],    // 全体
-            [false, [1, 2, 9, 17, 19, 3, 10, 11, 12, 13, 14, 18, 20, 4, 5, 6, 7, 8, 15, 16]],    // 異常系
-        ];
-    }
-
-    /**
      * 機種依存文字の変換処理
      *
      * @param string 変換対象文字列
@@ -265,28 +242,6 @@ class BcAppTest extends BaserTestCase
             ['', [], true],
             ['hoge', ['dbDataPattern' => true], 1]
         ];
-    }
-
-    /**
-     * スキーマファイルを利用してデータベース構造を変更する
-     */
-    public function testLoadSchema()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $path = BASER_CONFIGS . 'Schema';
-        $result = $this->BcApp->loadSchema('test', $path);
-        $expected = true;
-        var_dump($result);
-        $this->assertEquals($expected, $result);
-    }
-
-    /**
-     * CSVを読み込む
-     */
-    public function testLoadCsv()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $result = $this->BcApp->loadCsv('test', 'test');
     }
 
     /**

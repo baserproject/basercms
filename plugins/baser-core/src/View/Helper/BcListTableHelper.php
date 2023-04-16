@@ -69,12 +69,6 @@ class BcListTableHelper extends Helper
      */
     public function dispatchShowHead()
     {
-
-        // TODO ucmitz 未実装のため代替措置
-        // >>>
-        return '';
-        // <<<
-
         $request = $this->_View->request;
         $id = Inflector::camelize($request->getParam('controller')) . '.' . Inflector::camelize($request->getParam('action'));
         // EVENT BcListTable.showHead

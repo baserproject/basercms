@@ -392,51 +392,6 @@ class BcFreezeHelperTest extends BcTestCase
     }
 
     /**
-     * JsonList
-     *
-     * @param boolean $freezed フォームを凍結させる
-     * @param array $data 凍結させたjsonのデータ
-     * @param string $fieldName フィールド文字列
-     * @param array $attributes html属性
-     * @param string $expexted 期待値
-     * @dataProvider jsonListDataProvider
-     * @TODO 確認画面用の実装は全くしてない
-     */
-    public function testJsonList($freezed, $data, $fieldName, $attributes, $expected)
-    {
-
-        // 凍結させる
-        if ($freezed) {
-            $this->BcFreeze->freeze();
-            $this->BcFreeze->request->data[$fieldName] = $data;
-        }
-
-        // indexを作る
-        $attributes_default = [
-            'imgSrc' => null,
-            'ajaxAddAction' => null,
-            'ajaxDelAction' => null,
-        ];
-        $attributes = $attributes + $attributes_default;
-
-        $result = $this->BcFreeze->jsonList($fieldName, $attributes);
-        $this->assertMatchesRegularExpression('/' . $expected . '/s', $result);
-    }
-
-    public function jsonListDataProvider()
-    {
-        return [
-            [false, null, 'baser', [], 'id="JsonBaserDb".*jQuery\(function\(\)'],
-            [false, [], 'baser', ['ajaxAddAction' => 'test'], '"ajaxAddAction":"test"'],
-            [false, [], 'baser', ['ajaxDelAction' => 'test'], '"ajaxDelAction":"test"'],
-            [true, [['name' => 'test']], 'baser', [], '<li>test'],
-            [true, [['name' => 'test1'], ['name' => 'test2']], 'baser', [], '<li>test1.*<li>test2'],
-            [true, null, 'baser', [], '^$'],
-        ];
-    }
-
-
-    /**
      * カレンダーコントロール付きのテキストフィールド
      * jquery-ui-1.7.2 必須
      *

@@ -530,34 +530,6 @@ class BcFreezeHelper extends BcFormHelper
     }
 
     /**
-     * JsonList
-     *
-     * @param string $fieldName フィールド文字列
-     * @param array $attributes html属性
-     * @return string    htmlタグ
-     * @TODO ucmitz 確認画面用の実装は全くしてない
-     */
-    public function jsonList($fieldName, $attributes)
-    {
-
-        if ($this->freezed) {
-
-            $out = '';
-            if (!empty($this->request->data[$fieldName])) {
-                $out = '<div id="JsonTagView"><ul class="freezed">';
-                foreach($this->request->data[$fieldName] as $tag) {
-                    $out .= '<li>' . $tag['name'] . '</li>';
-                }
-                $out .= '</ul></div>';
-            }
-
-            return $out;
-        } else {
-            return parent::jsonList($fieldName, $attributes);
-        }
-    }
-
-    /**
      * カレンダーコントロール付きのテキストフィールド
      * jquery-ui-1.7.2 必須
      *
