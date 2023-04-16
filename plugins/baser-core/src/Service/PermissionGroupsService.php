@@ -188,10 +188,13 @@ class PermissionGroupsService implements PermissionGroupsServiceInterface
 	}
 
 	/**
-	 * プラグインを指定してアクセスルールを構築する
-	 *
-	 * @param string $plugin
-	 */
+     * プラグインを指定してアクセスルールを構築する
+     *
+     * @param string $plugin
+     * @noTodo
+     * @unitTest
+     * @checked
+     */
 	public function buildByPlugin(string $plugin)
 	{
 		$userGroups = $this->UserGroups->find()->where(['id <>' => Configure::read('BcApp.adminGroupId')])->all();
