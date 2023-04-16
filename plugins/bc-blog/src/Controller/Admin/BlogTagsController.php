@@ -20,6 +20,7 @@ use BcBlog\Model\Entity\BlogTag;
 use BcBlog\Service\BlogTagsService;
 use BcBlog\Service\BlogTagsServiceInterface;
 use Cake\Http\Exception\NotFoundException;
+use Cake\Http\Response;
 use Cake\ORM\Exception\PersistenceFailedException;
 
 /**
@@ -51,7 +52,7 @@ class BlogTagsController extends BlogAdminAppController
      * ページネーションによる遷移先でレコードがなければ１ページ目にリダイレクトする。
      *
      * @param BlogTagsService $service
-     * @return void
+     * @return void|Response
      * @checked
      * @noTodo
      * @unitTest
