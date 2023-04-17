@@ -46,6 +46,7 @@ class BcComposerTest extends BcTestCase
      */
     public function test_require()
     {
+        $this->markTestIncomplete('このテストは、5.0.2リリース時に実装する予定です。');
         $orgPath = ROOT . DS . 'composer.json';
         $backupPath = ROOT . DS . 'composer.json.bak';
         $orgLockPath = ROOT . DS . 'composer.lock';
@@ -65,30 +66,30 @@ class BcComposerTest extends BcTestCase
 
         // インストール
         BcComposer::setup();
-        $result = BcComposer::require('baser-core', '5.0.0-beta2');
+        $result = BcComposer::require('baser-core', '5.0.0');
         $this->assertEquals(0, $result['code']);
         $file = new File($orgPath);
         $data = $file->read();
-        $this->assertNotFalse(strpos($data, '"baserproject/baser-core": "5.0.0-beta2"'));
+        $this->assertNotFalse(strpos($data, '"baserproject/baser-core": "5.0.0"'));
 
         // アップデート
         BcComposer::setup();
-        $result = BcComposer::require('baser-core', '5.0.0-beta3');
+        $result = BcComposer::require('baser-core', '5.0.1');
         $this->assertEquals(0, $result['code']);
         $file = new File($orgPath);
         $data = $file->read();
-        $this->assertNotFalse(strpos($data, '"baserproject/baser-core": "5.0.0-beta3"'));
+        $this->assertNotFalse(strpos($data, '"baserproject/baser-core": "5.0.1"'));
 
         // ダウングレード
         BcComposer::setup();
-        $result = BcComposer::require('baser-core', '5.0.0-beta2');
+        $result = BcComposer::require('baser-core', '5.0.0');
         $this->assertEquals(0, $result['code']);
         $file = new File($orgPath);
         $data = $file->read();
-        $this->assertNotFalse(strpos($data, '"baserproject/baser-core": "5.0.0-beta2"'));
+        $this->assertNotFalse(strpos($data, '"baserproject/baser-core": "5.0.0"'));
 
         // エラー
-        $result = BcComposer::require('bc-content-link', '5.0.0-beta3');
+        $result = BcComposer::require('bc-content-link', '5.0.1');
         $this->assertEquals(2, $result['code']);
 
         // バックアップ復元

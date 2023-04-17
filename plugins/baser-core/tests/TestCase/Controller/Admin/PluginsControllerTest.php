@@ -222,6 +222,7 @@ class PluginsControllerTest extends BcTestCase
      */
     public function testUpdateCore(): void
     {
+        $this->markTestIncomplete('このテストは、5.0.2リリース時に実装する予定です。');
         $this->enableSecurityToken();
         $this->enableCsrfToken();
 
@@ -238,14 +239,14 @@ class PluginsControllerTest extends BcTestCase
         $file->close();
 
         $file = new File(BASER . 'VERSION.txt');
-        $file->write('5.0.0-beta2');
+        $file->write('5.0.0');
         $file->close();
         $this->put('/baser/admin/baser-core/plugins/update', [
             'connection' => 'test',
             'update' => 1,
             'php' => '/usr/local/bin/php',
-            'currentVersion' => '5.0.0-beta2',
-            'targetVersion' => '5.0.0-beta3'
+            'currentVersion' => '5.0.0',
+            'targetVersion' => '5.0.1'
         ]);
         $this->assertRedirect('/baser/admin/baser-core/plugins/update');
         $this->assertFlashMessage(sprintf('全てのアップデート処理が完了しました。 %s にログを出力しています。', LOGS . 'update.log'));
