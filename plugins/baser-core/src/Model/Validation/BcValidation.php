@@ -267,9 +267,8 @@ class BcValidation extends Validation
      * @noTodo
      * @unitTest
      */
-	public static function fileExt($check, $exts)
+	public static function fileExt($file, $exts)
 	{
-		$file = $check[key($check)];
 		if (!is_array($exts)) {
 			$exts = explode(',', $exts);
 		}
