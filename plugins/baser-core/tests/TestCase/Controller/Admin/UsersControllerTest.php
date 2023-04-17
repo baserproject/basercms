@@ -179,6 +179,36 @@ class UsersControllerTest extends BcTestCase
     }
 
     /**
+     * Test beforeAddEvent
+     */
+    public function testBeforeAddEvent()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $this->entryEventToMock(self::EVENT_LAYER_CONTROLLER, 'BaserCore.Users.beforeAdd', function (Event $event) {
+            $data = $event->getData('data');
+            $data['name'] = 'beforeAdd';
+            $event->setData('data', $data);
+        });
+        $data = [
+            'name' => 'Test_test_Man2',
+            'password_1' => 'Lorem ipsum dolor sit amet',
+            'password_2' => 'Lorem ipsum dolor sit amet',
+            'real_name_1' => 'Lorem ipsum dolor sit amet',
+            'real_name_2' => 'Lorem ipsum dolor sit amet',
+            'email' => 'test2@example.com',
+            'nickname' => 'Lorem ipsum dolor sit amet',
+            'user_groups' => [
+                '_ids' => [1]
+            ],
+        ];
+        $this->post('/baser/admin/baser-core/users/add', $data);
+        $users = $this->getTableLocator()->get('BaserCore.Users');
+        $query = $users->find()->where(['name' => 'beforeAdd']);
+        $this->assertEquals(1, $query->count());
+    }
+
+    /**
      * Test edit method
      *
      * @return void
