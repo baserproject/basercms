@@ -20,8 +20,6 @@ Documentation
 
 - See [baserCMS Users Manual](https://basercms.net/pdf/manual/usermanual.pdf)
 - See [baserCMS Official Guideline](https://baserproject.github.io/5/)
-- See [baserCMS Development Guideline](https://baserproject.github.io/5/ucmitz/index)
-- See [baserCMS Specifications](https://baserproject.github.io/5/ucmitz/specification/index)
 
 Some Handy Links
 -------------
@@ -41,7 +39,6 @@ Contributing
 -------------
 
 - See [CONTRIBUTING.md](.github/CONTRIBUTING.md)
-- See [Next baserCMS（ucmitz）](https://github.com/baserproject/ucmitz)
 
 License
 -------
