@@ -17,6 +17,7 @@ use Cake\Event\EventInterface;
 use Cake\ORM\Behavior;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
+use Cake\Datasource\ConnectionManager;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Error\BcException;
@@ -172,6 +173,12 @@ class BcSearchIndexManagerBehavior extends Behavior
         $searchIndex['model'] = Inflector::classify($this->table->getAlias());
         // タグ、空白を除外
         $searchIndex['detail'] = str_replace(["\r\n", "\r", "\n", "\t", "\s"], '', trim(strip_tags($searchIndex['detail'])));
+
+        // MySQLの場合、検索テーブル'detail'では半角65535以上の文字数は保存できないため、オーバーした分はカットする。※str_ends_with()は php8系~
+        $db = ConnectionManager::get('default')->config()['driver'];
+        if (str_ends_with($db, 'Mysql') && mb_strlen($data['SearchIndex']['detail']) >= 21845) {
+            $searchIndex['detail'] = mb_substr($searchIndex['detail'],0, 21844);
+        }
 
         // 検索用データとして保存
         $before = false;
