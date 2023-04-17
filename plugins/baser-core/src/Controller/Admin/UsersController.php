@@ -214,6 +214,16 @@ class UsersController extends BcAdminAppController
     public function add(UsersAdminServiceInterface $service)
     {
         if ($this->request->is('post')) {
+
+            // EVENT Users.beforeAdd
+            $event = $this->dispatchLayerEvent('beforeAdd', [
+                'data' => $this->getRequest()->getData()
+            ]);
+            if ($event !== false) {
+                $data = ($event->getResult() === null || $event->getResult() === true) ? $event->getData('data') : $event->getResult();
+                $this->setRequest($this->getRequest()->withParsedBody($data));
+            }
+
             try {
                 $user = $service->create($this->request->getData());
                 // EVENT Users.afterAdd
