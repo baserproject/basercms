@@ -305,6 +305,7 @@ return [
             '.gitattributes',
             '.gitignore',
             'monorepo-builder.php',
+            'phpdoc.dist.xml'.
             'phpstan.neon',
             'phpunit.xml.dist'
         ],
