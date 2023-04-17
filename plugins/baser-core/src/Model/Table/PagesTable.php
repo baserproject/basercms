@@ -112,7 +112,7 @@ class PagesTable extends AppTable
         $validator
         ->scalar('contents')
         ->allowEmptyString('contents', null)
-        ->maxLengthBytes('contents', 64000, __d('baser_core', '本稿欄に保存できるデータ量を超えています。'))
+        ->maxLengthBytes('contents', 16777215, __d('baser_core', '本稿欄に保存できるデータ量を超えています。'))
         ->add('contents', 'custom', [
             'rule' => ['phpValidSyntax'],
             'provider' => 'page',
@@ -129,7 +129,7 @@ class PagesTable extends AppTable
         $validator
         ->scalar('draft')
         ->allowEmptyString('draft', null)
-        ->maxLengthBytes('draft', 64000, __d('baser_core', '本稿欄に保存できるデータ量を超えています。'))
+        ->maxLengthBytes('draft', 16777215, __d('baser_core', '本稿欄に保存できるデータ量を超えています。'))
         ->add('draft', 'custom', [
             'rule' => ['phpValidSyntax'],
             'provider' => 'page',
