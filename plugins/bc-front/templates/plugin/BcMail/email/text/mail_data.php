@@ -22,6 +22,7 @@
  */
 $group_field = null;
 foreach ($mailFields as $field) {
+  if($field->type === 'hidden') continue;
 	if ($field->use_field && ($group_field != $field->group_field || (!$group_field && !$field->group_field))) {
 ?>
 
