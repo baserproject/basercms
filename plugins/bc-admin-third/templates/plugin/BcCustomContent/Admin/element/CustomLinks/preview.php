@@ -27,7 +27,7 @@
 <?php echo $this->CustomContentAdmin->BcAdminForm->create(null) ?>
 
   <div class="custom-link-preview-inner">
-    <span class="preview-icon">PREVIEW</span>
+    <span class="preview-icon" @click="hidePreview">PREVIEW</span>
     <table class="form-table bca-form-table" data-bca-table-type="type2">
     <?php foreach($flatLinks as $link): ?>
       <?php if ($link->custom_field->type === 'group') continue ?>

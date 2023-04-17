@@ -39,7 +39,8 @@ let customLinks = new Vue({
             enabledUseLoop: true,
             enabledGroupValid: true,
             currentParentId: null,
-            tableId: script.attr('data-tableId')
+            tableId: script.attr('data-tableId'),
+            displayPreview: true
         }
     },
 
@@ -231,11 +232,16 @@ let customLinks = new Vue({
                 if (bottom <= $modelWindow.scrollTop()) {
                     $preview.fadeOut(500);
                 } else {
-                    if ($preview.css('display') === 'none') {
+                    if (customLinks.displayPreview && $preview.css('display') === 'none') {
                         $preview.fadeIn(500);
                     }
                 }
             });
+        },
+
+        hidePreview() {
+            this.displayPreview = false;
+            $("#CustomLinkPreview").fadeOut(500);
         },
 
         loadParentList: function() {
@@ -254,6 +260,7 @@ let customLinks = new Vue({
          * 関連リンクモーダルを閉じる
          */
         closeLinkDetail: function () {
+            this.displayPreview = false;
             // プレビューを modal の外から持ってきているため、 modal を閉じるとなくなってしまうので、一旦、外部に退避
             $("#CustomLinkPreview").hide().appendTo('body');
         },
@@ -264,6 +271,7 @@ let customLinks = new Vue({
          * @param id
          */
         initPreview: function (id) {
+            this.displayPreview = true;
             this.showPreview['NonSupport'] = false;
             Object.keys(this.showPreview).forEach(function (key) {
                 this.showPreview[key] = false;

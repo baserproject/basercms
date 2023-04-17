@@ -322,7 +322,7 @@ $this->BcBaser->js('BcCustomContent.admin/custom_fields/form.bundle', false, [
 
 <div id="CustomFieldPreview">
   <div class="custom-field-preview-inner">
-  <span class="preview-icon">PREVIEW</span>
+  <span class="preview-icon" @click="hidePreview">PREVIEW</span>
   <?php foreach($fieldTypes as $key => $type): ?>
     <?php if($key === 'group' || $type['controlType'] === 'hidden') continue ?>
     <span v-show="showPreview['<?php echo $key ?>']">
