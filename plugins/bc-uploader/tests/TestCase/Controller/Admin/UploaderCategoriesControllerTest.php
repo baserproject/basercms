@@ -11,13 +11,8 @@
 
 namespace BcUploader\Test\TestCase\Controller\Admin;
 
-use BaserCore\Controller\Admin\PermissionGroupsController;
-use BaserCore\Service\DblogsServiceInterface;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
-use BcUploader\Test\Scenario\UploaderFilesScenario;
-use BcUploader\Service\UploaderCategoriesServiceInterface;
-use BcUploader\Test\Scenario\UploaderCategoriesScenario;
 use Cake\Datasource\ConnectionManager;
 use Cake\Event\Event;
 use Cake\ORM\TableRegistry;
