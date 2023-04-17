@@ -11,6 +11,7 @@
 
 namespace BaserCore\Controller\Api\Admin;
 
+use Authentication\Authenticator\JwtAuthenticator;
 use Authentication\Controller\Component\AuthenticationComponent;
 use BaserCore\Service\UsersServiceInterface;
 use Cake\Core\Exception\Exception;
@@ -86,6 +87,10 @@ class UsersController extends BcAdminApiController
     public function refresh_token()
     {
         $json = [];
+        $provider = $this->Authentication->getAuthenticationService()->getAuthenticationProvider();
+        if(!$provider instanceof JwtAuthenticator) {
+            return $this->response->withStatus(401);
+        }
         $payload = $this->Authentication->getAuthenticationService()->getAuthenticationProvider()->getPayload();
         if ($payload->token_type !== 'refresh_token' || !$json = $this->getAccessToken($this->Authentication->getResult())) {
             $this->setResponse($this->response->withStatus(401));
