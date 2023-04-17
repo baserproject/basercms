@@ -76,6 +76,18 @@ class PluginsControllerTest extends BcTestCase
         $this->truncateTable('blog_posts');
         $this->truncateTable('blog_tags');
         $this->truncateTable('blog_posts_blog_tags');
+        if(file_exists(ROOT . DS . 'composer.json.bak')) {
+            rename(ROOT . DS . 'composer.json.bak', ROOT . DS . 'composer.json');
+        }
+        if(file_exists(ROOT . DS . 'composer.lock.bak')) {
+            rename(ROOT . DS . 'composer.lock.bak', ROOT . DS . 'composer.lock');
+        }
+        if(file_exists(ROOT . DS . 'plugins' . DS . 'baser-core' . DS . 'VERSION.bak.txt')) {
+            rename(
+                ROOT . DS . 'plugins' . DS . 'baser-core' . DS . 'VERSION.bak.txt',
+                ROOT . DS . 'plugins' . DS . 'baser-core' . DS . 'VERSION.txt'
+            );
+        }
     }
 
     /**

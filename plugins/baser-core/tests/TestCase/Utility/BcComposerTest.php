@@ -23,6 +23,22 @@ class BcComposerTest extends BcTestCase
 {
 
     /**
+     * tear down
+     *
+     * @return void
+     */
+    public function tearDown(): void
+    {
+        parent::tearDown();
+        if(file_exists(ROOT . DS . 'composer.json.bak')) {
+            rename(ROOT . DS . 'composer.json.bak', ROOT . DS . 'composer.json');
+        }
+        if(file_exists(ROOT . DS . 'composer.lock.bak')) {
+            rename(ROOT . DS . 'composer.lock.bak', ROOT . DS . 'composer.lock');
+        }
+    }
+
+    /**
      * installComposer
      */
     public function test_installComposer()

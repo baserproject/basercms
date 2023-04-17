@@ -116,7 +116,7 @@ class PluginsAdminService extends PluginsService implements PluginsAdminServiceI
         $dbVerPoint = BcUtil::verpoint($dbVersion);
         $availableVerPoint = true;
         if ($availableVersion) {
-            $availableVerPoint = BcUtil::verpoint($dbVersion);
+            $availableVerPoint = BcUtil::verpoint($availableVersion);
         }
         if ($programVerPoint === false || $dbVerPoint === false || $availableVerPoint === false) {
             return false;
