@@ -154,7 +154,7 @@ class BcUploadHelper  extends Helper
         if ($sessionKey) {
             $tmp = true;
             $value = str_replace('/', '_', $sessionKey);
-            $basePath = '/uploads/tmp/';
+            $basePath = '/baser-core/uploads/tmp/';
         }
 
         /* ファイルのパスを取得 */

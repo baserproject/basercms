@@ -28,13 +28,11 @@ class UploadsController extends AppController
     /**
      * セッションに保存した一時ファイルを出力する
      * @param string $name
-     * @return void
+     * @return \Cake\Http\Response
      */
     public function tmp()
     {
-        echo $this->output(func_get_args(), func_num_args());
-        exit;
-        // return $this->response->withStringBody($this->output(func_get_args(), func_num_args()));
+        return $this->response->withStringBody($this->output(func_get_args(), func_num_args()));
     }
 
     /**
