@@ -65,30 +65,30 @@ class BcComposerTest extends BcTestCase
 
         // インストール
         BcComposer::setup();
-        $result = BcComposer::require('baser-core', '3.0.10');
+        $result = BcComposer::require('baser-core', '5.0.0-beta2');
         $this->assertEquals(0, $result['code']);
         $file = new File($orgPath);
         $data = $file->read();
-        $this->assertNotFalse(strpos($data, '"baserproject/baser-core": "3.0.10"'));
+        $this->assertNotFalse(strpos($data, '"baserproject/baser-core": "5.0.0-beta2"'));
 
         // アップデート
         BcComposer::setup();
-        $result = BcComposer::require('baser-core', '3.0.24');
+        $result = BcComposer::require('baser-core', '5.0.0-beta3');
         $this->assertEquals(0, $result['code']);
         $file = new File($orgPath);
         $data = $file->read();
-        $this->assertNotFalse(strpos($data, '"baserproject/baser-core": "3.0.24"'));
+        $this->assertNotFalse(strpos($data, '"baserproject/baser-core": "5.0.0-beta3"'));
 
         // ダウングレード
         BcComposer::setup();
-        $result = BcComposer::require('baser-core', '3.0.10');
+        $result = BcComposer::require('baser-core', '5.0.0-beta2');
         $this->assertEquals(0, $result['code']);
         $file = new File($orgPath);
         $data = $file->read();
-        $this->assertNotFalse(strpos($data, '"baserproject/baser-core": "3.0.10"'));
+        $this->assertNotFalse(strpos($data, '"baserproject/baser-core": "5.0.0-beta2"'));
 
         // エラー
-        $result = BcComposer::require('bc-content-link', '3.0.24');
+        $result = BcComposer::require('bc-content-link', '5.0.0-beta3');
         $this->assertEquals(2, $result['code']);
 
         // バックアップ復元

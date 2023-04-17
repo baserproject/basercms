@@ -238,14 +238,14 @@ class PluginsControllerTest extends BcTestCase
         $file->close();
 
         $file = new File(BASER . 'VERSION.txt');
-        $file->write('3.0.10');
+        $file->write('5.0.0-beta2');
         $file->close();
         $this->put('/baser/admin/baser-core/plugins/update', [
             'connection' => 'test',
             'update' => 1,
             'php' => '/usr/local/bin/php',
-            'currentVersion' => '3.0.10',
-            'targetVersion' => '3.0.24'
+            'currentVersion' => '5.0.0-beta2',
+            'targetVersion' => '5.0.0-beta3'
         ]);
         $this->assertRedirect('/baser/admin/baser-core/plugins/update');
         $this->assertFlashMessage(sprintf('全てのアップデート処理が完了しました。 %s にログを出力しています。', LOGS . 'update.log'));
