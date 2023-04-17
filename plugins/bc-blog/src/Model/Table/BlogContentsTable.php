@@ -169,6 +169,27 @@ class BlogContentsTable extends BlogAppTable
     }
 
     /**
+     * 関連するブログ記事の検索インデックスを作成する
+     *
+     * @param EntityInterface $entity
+     * @return void
+     */
+    public function createRelatedSearchIndexes(EntityInterface $entity)
+    {
+        /** @var BlogContent $entity */
+        $entities = $this->BlogPosts->find()
+            ->where(['BlogPosts.blog_content_id' => $entity->id])
+            ->contain(['BlogContents' => ['Contents']])
+            ->all();
+        if(!$entities->count()) return;
+        foreach($entities as $entity) {
+            // 保存するために強制的に dirty に設定
+            $entity->setDirty('id');
+            $this->BlogPosts->save($entity);
+        }
+    }
+
+    /**
      * ブログコンテンツをコピーする
      *
      * @param int $id ページID

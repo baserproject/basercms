@@ -279,6 +279,9 @@ class SearchIndexesService implements SearchIndexesServiceInterface
                 if ($entity && $entity->setNew(true) && !$tables[$tableName]->save($entity)) {
                     $result = false;
                 }
+                if(method_exists($tables[$tableName], 'createRelatedSearchIndexes')) {
+                    $tables[$tableName]->createRelatedSearchIndexes($entity);
+                }
             }
         }
         if ($result) {
