@@ -63,8 +63,20 @@ class ContentLinksController extends BcAdminAppController
     {
         $contentLink = $service->get($id);
         if ($this->request->is(['patch', 'post', 'put'])) {
+            // EVENT ContentLinks.beforeEdit
+            $event = $this->dispatchLayerEvent('beforeEdit', [
+                'data' => $this->getRequest()->getData()
+            ]);
+            if ($event !== false) {
+                $data = ($event->getResult() === null || $event->getResult() === true) ? $event->getData('data') : $event->getResult();
+                $this->setRequest($this->getRequest()->withParsedBody($data));
+            }
             try {
                 $contentLink = $service->update($contentLink, $this->request->getData());
+                // EVENT ContentLinks.afterEdit
+                $this->dispatchLayerEvent('afterEdit', [
+                    'data' => $contentLink
+                ]);
                 $this->BcMessage->setSuccess(sprintf(__d('baser_core', "リンク「%s」を更新しました。"), $contentLink->content->title));
                 return $this->redirect(['action' => 'edit', $id]);
             } catch (PersistenceFailedException $e) {

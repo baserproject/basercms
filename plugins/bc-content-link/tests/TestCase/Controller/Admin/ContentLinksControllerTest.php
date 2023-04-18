@@ -18,6 +18,8 @@ use BaserCore\Utility\BcContainerTrait;
 use BcContentLink\Controller\Admin\ContentLinksController;
 use BcContentLink\Service\ContentLinksServiceInterface;
 use BcContentLink\Test\Factory\ContentLinkFactory;
+use Cake\Event\Event;
+use Cake\ORM\TableRegistry;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
@@ -130,5 +132,78 @@ class ContentLinksControllerTest extends BcTestCase
         //エラーメッセージを確認
         $vars = $this->_controller->viewBuilder()->getVars();
         $this->assertEquals(['content' => ['_required' => "関連するコンテンツがありません"]], $vars['contentLink']->getErrors());
+    }
+
+    /**
+     * Test beforeAddEvent
+     */
+    public function testBeforeEditEvent()
+    {
+        ContentLinkFactory::make(['id' => 1, 'url' => '/test'])->persist();
+        ContentFactory::make([
+            'id' => 1,
+            'plugin' => 'BcContentLink',
+            'type' => 'ContentLink',
+            'site_id' => 1,
+            'title' => 'test delete link',
+            'lft' => 1,
+            'rght' => 2,
+            'entity_id' => 1,
+        ])->persist();
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $this->entryEventToMock(self::EVENT_LAYER_CONTROLLER, 'BcContentLink.ContentLinks.beforeEdit', function (Event $event) {
+            $data = $event->getData('data');
+            $data['url'] = '/beforeAdd';
+            $event->setData('data', $data);
+        });
+        $data = [
+            'id' => 1,
+            'url' => '/test-edit',
+            'content' => [
+                "title" => "更新 BcContentLink",
+            ]
+        ];
+        $this->post('/baser/admin/bc-content-link/content_links/edit/1', $data);
+        $contentLinks = $this->getTableLocator()->get('BcContentLink.ContentLinks');
+        $query = $contentLinks->find()->where(['url' => '/beforeAdd']);
+        $this->assertEquals(1, $query->count());
+    }
+
+    /**
+     * Test beforeAddEvent
+     */
+    public function testAfterEditEvent()
+    {
+        ContentLinkFactory::make(['id' => 1, 'url' => '/test'])->persist();
+        ContentFactory::make([
+            'id' => 1,
+            'plugin' => 'BcContentLink',
+            'type' => 'ContentLink',
+            'site_id' => 1,
+            'title' => 'test delete link',
+            'lft' => 1,
+            'rght' => 2,
+            'entity_id' => 1,
+        ])->persist();
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $this->entryEventToMock(self::EVENT_LAYER_CONTROLLER, 'BcContentLink.ContentLinks.afterEdit', function (Event $event) {
+            $data = $event->getData('data');
+            $contentLinks = TableRegistry::getTableLocator()->get('BcContentLink.ContentLinks');
+            $data->url = '/afterAdd';
+            $contentLinks->save($data);
+        });
+        $data = [
+            'id' => 1,
+            'url' => '/test-edit',
+            'content' => [
+                "title" => "更新 BcContentLink",
+            ]
+        ];
+        $this->post('/baser/admin/bc-content-link/content_links/edit/1', $data);
+        $contentLinks = $this->getTableLocator()->get('BcContentLink.ContentLinks');
+        $query = $contentLinks->find()->where(['url' => '/afterAdd']);
+        $this->assertEquals(1, $query->count());
     }
 }
