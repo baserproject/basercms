@@ -49,9 +49,23 @@ class UploaderCategoriesController extends BcAdminAppController
      */
     public function add(UploaderCategoriesServiceInterface $service)
     {
-        if($this->getRequest()->is(['post', 'put'])) {
+        if ($this->getRequest()->is(['post', 'put'])) {
+
+            // EVENT UploaderCategories.beforeAdd
+            $event = $this->dispatchLayerEvent('beforeAdd', [
+                'data' => $this->getRequest()->getData()
+            ]);
+            if ($event !== false) {
+                $data = ($event->getResult() === null || $event->getResult() === true) ? $event->getData('data') : $event->getResult();
+                $this->setRequest($this->getRequest()->withParsedBody($data));
+            }
+
             try {
                 $entity = $service->create($this->getRequest()->getData());
+                // EVENT UploaderCategories.afterAdd
+                $this->dispatchLayerEvent('afterAdd', [
+                    'data' => $entity
+                ]);
                 $this->BcMessage->setSuccess(__d('baser_core', 'アップロードカテゴリ「{0}」を追加しました。', $entity->name));
                 $this->redirect(['action' => 'index']);
             } catch (PersistenceFailedException $e) {
@@ -62,7 +76,7 @@ class UploaderCategoriesController extends BcAdminAppController
                 $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage()));
             }
         }
-        $this->set(['uploaderCategory' => $entity?? $service->getNew()]);
+        $this->set(['uploaderCategory' => $entity ?? $service->getNew()]);
     }
 
     /**
@@ -78,8 +92,20 @@ class UploaderCategoriesController extends BcAdminAppController
     {
         $entity = $service->get($id);
         if($this->getRequest()->is(['post', 'put'])) {
+            // EVENT UploaderCategories.beforeEdit
+            $event = $this->dispatchLayerEvent('beforeEdit', [
+                'data' => $this->getRequest()->getData()
+            ]);
+            if ($event !== false) {
+                $data = ($event->getResult() === null || $event->getResult() === true) ? $event->getData('data') : $event->getResult();
+                $this->setRequest($this->getRequest()->withParsedBody($data));
+            }
             try {
                 $entity = $service->update($entity, $this->getRequest()->getData());
+                // EVENT UploaderCategories.afterEdit
+                $this->dispatchLayerEvent('afterEdit', [
+                    'data' => $entity
+                ]);
                 $this->BcMessage->setSuccess(__d('baser_core', 'アップロードカテゴリ「{0}」を更新しました。', $entity->name));
                 $this->redirect(['action' => 'index']);
             } catch (PersistenceFailedException $e) {
