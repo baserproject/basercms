@@ -104,7 +104,7 @@ class UploaderCategoriesController extends BcAdminAppController
                 $entity = $service->update($entity, $this->getRequest()->getData());
                 // EVENT UploaderCategories.afterEdit
                 $this->dispatchLayerEvent('afterEdit', [
-                    'uploaderCategory' => $entity
+                    'data' => $entity
                 ]);
                 $this->BcMessage->setSuccess(__d('baser_core', 'アップロードカテゴリ「{0}」を更新しました。', $entity->name));
                 $this->redirect(['action' => 'index']);
