@@ -42,8 +42,20 @@ class CustomFieldsController extends CustomContentAdminAppController
     public function add(CustomFieldsAdminServiceInterface $service)
     {
         if($this->getRequest()->is(['post', 'put'])) {
+            // EVENT CustomFields.beforeAdd
+            $event = $this->dispatchLayerEvent('beforeAdd', [
+                'data' => $this->getRequest()->getData()
+            ]);
+            if ($event !== false) {
+                $data = ($event->getResult() === null || $event->getResult() === true) ? $event->getData('data') : $event->getResult();
+                $this->setRequest($this->getRequest()->withParsedBody($data));
+            }
             try {
                 $entity = $service->create($this->getRequest()->getData());
+                // EVENT CustomFields.afterAdd
+                $this->dispatchLayerEvent('afterAdd', [
+                    'data' => $entity
+                ]);
                 $this->BcMessage->setSuccess(__d('baser_core', 'フィールド「{0}」を追加しました', $entity->title));
                 $this->redirect(['action' => 'edit', $entity->id]);
             } catch (PersistenceFailedException $e) {
@@ -68,9 +80,21 @@ class CustomFieldsController extends CustomContentAdminAppController
     public function edit(CustomFieldsAdminServiceInterface $service, int $id)
     {
         $entity = $service->get($id);
-        if($this->getRequest()->is(['post', 'put'])) {
+        if ($this->getRequest()->is(['post', 'put'])) {
+            // EVENT CustomFields.beforeEdit
+            $event = $this->dispatchLayerEvent('beforeEdit', [
+                'data' => $this->getRequest()->getData()
+            ]);
+            if ($event !== false) {
+                $data = ($event->getResult() === null || $event->getResult() === true) ? $event->getData('data') : $event->getResult();
+                $this->setRequest($this->getRequest()->withParsedBody($data));
+            }
             try {
                 $entity = $service->update($entity, $this->getRequest()->getData());
+                // EVENT CustomFields.afterEdit
+                $this->dispatchLayerEvent('afterEdit', [
+                    'data' => $entity
+                ]);
                 $this->BcMessage->setSuccess(__d('baser_core', 'フィールド「{0}」を更新しました', $entity->title));
                 return $this->redirect(['action' => 'edit', $entity->id]);
             } catch (PersistenceFailedException $e) {
