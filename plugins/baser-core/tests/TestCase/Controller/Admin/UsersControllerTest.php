@@ -209,6 +209,29 @@ class UsersControllerTest extends BcTestCase
     }
 
     /**
+     * Test beforeEdit method
+     *
+     * @return void
+     */
+    public function testBeforeEditEvent(): void
+    {
+        $this->entryEventToMock(self::EVENT_LAYER_CONTROLLER, 'BaserCore.Users.beforeEdit', function (Event $event) {
+            $user = $event->getData('data');
+            $user['name'] = 'Nghiem';
+            $event->setData('data', $user);
+        });
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $data = [
+            'name' => 'testBeforeEditEvent'
+        ];
+        $this->post('/baser/admin/baser-core/users/edit/1', $data);
+        $users = $this->getTableLocator()->get('BaserCore.Users');
+        $query = $users->find()->where(['name' => 'Nghiem']);
+        $this->assertEquals(1, $query->count());
+    }
+
+    /**
      * Test edit method
      *
      * @return void
