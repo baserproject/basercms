@@ -19,6 +19,7 @@ use BaserCore\Utility\BcContainerTrait;
 use BcMail\Controller\Admin\MailContentsController;
 use BcMail\Service\MailContentsServiceInterface;
 use BcMail\Test\Factory\MailContentFactory;
+use BcMail\Test\Scenario\MailContentsScenario;
 use Cake\Event\Event;
 use Cake\ORM\TableRegistry;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -136,40 +137,7 @@ class MailContentsControllerTest extends BcTestCase
         //データーを生成
         $mailContentServices = $this->getService(MailContentsServiceInterface::class);
         //データを生成
-        MailContentFactory::make([
-            'id' => 1,
-            'description' => 'description test',
-            'sender_name' => 'baserCMSサンプル',
-            'subject_user' => '【baserCMS】お問い合わせ頂きありがとうございます。',
-            'subject_admin' => '【baserCMS】お問い合わせを受け付けました',
-            'form_template' => 'default',
-            'mail_template' => 'mail_default',
-            'redirect_url' => '/',
-            'publish_begin' => null,
-            'publish_end' => '2099-12-09 12:56:53',
-        ])->persist();
-        ContentFactory::make([
-            'id' => 1,
-            'parent_id' => null,
-            'created_date' => '2023-02-16 16:41:37',
-            'publish_begin' => null,
-            'publish_end' => '2099-12-09 12:56:53',
-        ])->persist();
-        ContentFactory::make([
-            'name' => 'name_test',
-            'plugin' => 'BcMail',
-            'type' => 'MailContent',
-            'url' => '/contact/',
-            'title' => 'お問い合わせ',
-            'entity_id' => 1,
-            'parent_id' => 1,
-            'rght' => 1,
-            'lft' => 2,
-            'site_id' => 1,
-            'created_date' => '2023-02-16 16:41:37',
-            'publish_begin' => null,
-            'publish_end' => '2099-12-09 12:56:53',
-        ])->persist();
+        $this->loadFixtureScenario(MailContentsScenario::class);
         //イベントをコル
         $this->entryEventToMock(self::EVENT_LAYER_CONTROLLER, 'BcMail.MailContents.beforeEdit', function (Event $event) {
             $data = $event->getData('data');
@@ -179,7 +147,6 @@ class MailContentsControllerTest extends BcTestCase
         //Postデータを生成
         $mailContent = $mailContentServices->get(1);
         $mailContent->description = 'this is api edit';
-        $mailContent->content->title = 'edited';
         //対象URLをコル
         $this->post('/baser/admin/bc-mail/mail_contents/edit/1', $mailContent->toArray());
         //イベントに入るかどうか確認
@@ -198,40 +165,7 @@ class MailContentsControllerTest extends BcTestCase
         //メールのコンテンツサービスをコル
         $mailContentServices = $this->getService(MailContentsServiceInterface::class);
         //データを生成
-        MailContentFactory::make([
-            'id' => 1,
-            'description' => 'description test',
-            'sender_name' => 'baserCMSサンプル',
-            'subject_user' => '【baserCMS】お問い合わせ頂きありがとうございます。',
-            'subject_admin' => '【baserCMS】お問い合わせを受け付けました',
-            'form_template' => 'default',
-            'mail_template' => 'mail_default',
-            'redirect_url' => '/',
-            'publish_begin' => null,
-            'publish_end' => '2099-12-09 12:56:53',
-        ])->persist();
-        ContentFactory::make([
-            'id' => 1,
-            'parent_id' => null,
-            'created_date' => '2023-02-16 16:41:37',
-            'publish_begin' => null,
-            'publish_end' => '2099-12-09 12:56:53',
-        ])->persist();
-        ContentFactory::make([
-            'name' => 'name_test',
-            'plugin' => 'BcMail',
-            'type' => 'MailContent',
-            'url' => '/contact/',
-            'title' => 'お問い合わせ',
-            'entity_id' => 1,
-            'site_id' => 1,
-            'parent_id' => 1,
-            'rght' => 1,
-            'lft' => 2,
-            'created_date' => '2023-02-16 16:41:37',
-            'publish_begin' => null,
-            'publish_end' => '2099-12-09 12:56:53',
-        ])->persist();
+        $this->loadFixtureScenario(MailContentsScenario::class);
         //イベントをコル
         $this->entryEventToMock(self::EVENT_LAYER_CONTROLLER, 'BcMail.MailContents.afterEdit', function (Event $event) {
             $data = $event->getData('data');
@@ -242,7 +176,6 @@ class MailContentsControllerTest extends BcTestCase
         //Postデータを生成
         $mailContent = $mailContentServices->get(1);
         $mailContent->description = 'this is api edit';
-        $mailContent->content->title = 'edited';
         //対象URLをコル
         $this->post('/baser/admin/bc-mail/mail_contents/edit/1', $mailContent->toArray());
         //イベントに入るかどうか確認
