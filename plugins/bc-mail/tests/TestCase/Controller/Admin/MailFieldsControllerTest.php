@@ -178,30 +178,9 @@ class MailFieldsControllerTest extends BcTestCase
         });
         //追加データを準備
         $data = [
-            'mail_content_id' => 10,
             'field_name' => 'name_add_1',
             'type' => 'text',
             'name' => '性',
-            'head' => 'お名前',
-            'valid' => 0,
-            'not_empty' => 0,
-            'valid_ex' => null,
-            'attention'=>null,
-            'before_attachment'=>null,
-            'after_attachment'=>null,
-            'description'=>null,
-            'source' => '',
-            'size' => null,
-            'text_rows' => null,
-            'maxlength' => 255,
-            'group_field' => null,
-            'group_valid' => null,
-            'options' => null,
-            'class' => null,
-            'default_value' => null,
-            'auto_convert' => null,
-            'use_field' => 1,
-            'no_send' => 0,
         ];
         //対象URLをコル
         $this->post('/baser/admin/bc-mail/mail_fields/add/10', $data);
@@ -235,30 +214,9 @@ class MailFieldsControllerTest extends BcTestCase
         });
         //Postデータを生成
         $data = [
-            'mail_content_id' => 10,
             'field_name' => 'name_add_1',
             'type' => 'text',
             'name' => '性',
-            'head' => 'お名前',
-            'valid' => 0,
-            'not_empty' => 0,
-            'valid_ex' => null,
-            'attention'=>null,
-            'before_attachment'=>null,
-            'after_attachment'=>null,
-            'description'=>null,
-            'source' => '',
-            'size' => null,
-            'text_rows' => null,
-            'maxlength' => 255,
-            'group_field' => null,
-            'group_valid' => null,
-            'options' => null,
-            'class' => null,
-            'default_value' => null,
-            'auto_convert' => null,
-            'use_field' => 1,
-            'no_send' => 0,
         ];
         //対象URLをコル
         $this->post('/baser/admin/bc-mail/mail_fields/add/10', $data);
