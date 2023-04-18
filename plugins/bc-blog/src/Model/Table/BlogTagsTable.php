@@ -17,6 +17,7 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Service\PermissionsService;
 use BaserCore\Service\PermissionsServiceInterface;
+use BaserCore\Utility\BcContainerTrait;
 use Cake\ORM\Exception\PersistenceFailedException;
 use Cake\Routing\Router;
 use Cake\Validation\Validator;
@@ -32,6 +33,8 @@ class BlogTagsTable extends BlogAppTable
      * Trait
      */
     use BcEventDispatcherTrait;
+
+    use BcContainerTrait;
 
     /**
      * Initialize method
