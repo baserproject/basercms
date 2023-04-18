@@ -176,7 +176,7 @@ class BcSearchIndexManagerBehavior extends Behavior
 
         // MySQLの場合、検索テーブル'detail'では半角65535以上の文字数は保存できないため、オーバーした分はカットする。※str_ends_with()は php8系~
         $db = ConnectionManager::get('default')->config()['driver'];
-        if (str_ends_with($db, 'Mysql') && mb_strlen($data['SearchIndex']['detail']) >= 21845) {
+        if (str_ends_with($db, 'Mysql') && mb_strlen($searchIndex['detail']) >= 21845) {
             $searchIndex['detail'] = mb_substr($searchIndex['detail'],0, 21844);
         }
 
