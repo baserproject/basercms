@@ -105,7 +105,7 @@ class CustomEntriesControllerTest extends BcTestCase
             $request = $event->getData('request');
             return $request->withQueryParams(['num' => 1]);
         });
-        $this->post('/baser/admin/bc-custom-content/custom_entries/1');
+        $this->get('/baser/admin/bc-custom-content/custom_entries/1');
         $this->CustomEntriesController->beforeFilter(new Event('beforeFilter'));
         $this->CustomEntriesController->index($this->getService(CustomEntriesAdminServiceInterface::class), 1);
         $this->assertEquals(1, $this->CustomEntriesController->getRequest()->getQuery('num'));
