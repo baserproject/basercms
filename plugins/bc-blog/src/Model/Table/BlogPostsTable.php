@@ -808,11 +808,12 @@ class BlogPostsTable extends BlogAppTable
      * @checked
      * @noTodo
      */
-    public function getPublishByNo($blogContentId, $no)
+    public function getPublishByNo(int $blogContentId, int $no, bool $preview = false)
     {
-        $conditions = array_merge([
-            'BlogPosts.blog_content_id' => $blogContentId,
-        ], $this->getConditionAllowPublish());
+        $conditions = ['BlogPosts.blog_content_id' => $blogContentId];
+        if(!$preview) {
+            $conditions = array_merge($conditions, $this->getConditionAllowPublish());
+        }
         if (is_numeric($no)) {
             $conditions = array_merge_recursive(
                 $conditions,

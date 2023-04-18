@@ -327,7 +327,7 @@ class BlogFrontService implements BlogFrontServiceInterface
         $post = $editLink = null;
         if($isPreview) {
             if($no) {
-                $post = $this->BlogPostsService->BlogPosts->getPublishByNo($blogContent->id, $no);
+                $post = $this->BlogPostsService->BlogPosts->getPublishByNo($blogContent->id, $no, true);
             }
         } else {
             if (!$no) throw new NotFoundException();
@@ -393,6 +393,8 @@ class BlogFrontService implements BlogFrontServiceInterface
                 $postArray['detail'] = $postArray['detail_draft'];
             }
             if (!empty($postArray['posted'])) $postArray['posted'] = new FrozenTime($postArray['posted']);
+            if (!empty($postArray['publish_begin'])) $postArray['publish_begin'] = new FrozenTime($postArray['publish_begin']);
+            if (!empty($postArray['publish_end'])) $postArray['publish_end'] = new FrozenTime($postArray['publish_end']);
 
             $vars['post'] = $this->BlogPostsService->BlogPosts->patchEntity(
                 $vars['post'] ?? $this->BlogPostsService->BlogPosts->newEmptyEntity(),
