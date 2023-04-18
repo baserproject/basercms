@@ -125,8 +125,20 @@ class MailFieldsController extends MailAdminAppController
     public function add(MailFieldsAdminServiceInterface $service, int $mailContentId)
     {
         if($this->getRequest()->is(['post', 'put'])) {
+            // EVENT MailFields.beforeAdd
+            $event = $this->dispatchLayerEvent('beforeAdd', [
+                'data' => $this->getRequest()->getData()
+            ]);
+            if ($event !== false) {
+                $data = ($event->getResult() === null || $event->getResult() === true) ? $event->getData('data') : $event->getResult();
+                $this->setRequest($this->getRequest()->withParsedBody($data));
+            }
             try {
                 $entity = $service->create($this->getRequest()->getData());
+                // EVENT MailFields.afterAdd
+                $this->dispatchLayerEvent('afterAdd', [
+                    'data' => $entity
+                ]);
                 $this->BcMessage->setSuccess(__d('baser_core', '新規メールフィールド「{0}」を追加しました。', $entity->name));
                 $this->redirect([
                     'controller' => 'mail_fields',
@@ -160,8 +172,20 @@ class MailFieldsController extends MailAdminAppController
     {
         $entity = $service->get($id);
         if($this->getRequest()->is(['post', 'put'])) {
+            // EVENT MailFields.beforeEdit
+            $event = $this->dispatchLayerEvent('beforeEdit', [
+                'data' => $this->getRequest()->getData()
+            ]);
+            if ($event !== false) {
+                $data = ($event->getResult() === null || $event->getResult() === true) ? $event->getData('data') : $event->getResult();
+                $this->setRequest($this->getRequest()->withParsedBody($data));
+            }
             try {
                 $entity = $service->update($entity, $this->getRequest()->getData());
+                // EVENT MailFields.afterEdit
+                $this->dispatchLayerEvent('afterEdit', [
+                    'data' => $entity
+                ]);
                 $this->BcMessage->setSuccess(__d('baser_core', 'メールフィールド「{0}」を更新しました。', $entity->name));
                 $this->redirect([
                     'controller' => 'mail_fields',
