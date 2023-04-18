@@ -10,12 +10,14 @@
  */
 
 namespace BcBlog\Model\Table;
+
+use BaserCore\Event\BcEventDispatcherTrait;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Service\PermissionsService;
 use BaserCore\Service\PermissionsServiceInterface;
-use BaserCore\Utility\BcContainerTrait;
+use Cake\ORM\Exception\PersistenceFailedException;
 use Cake\Routing\Router;
 use Cake\Validation\Validator;
 
@@ -29,7 +31,7 @@ class BlogTagsTable extends BlogAppTable
     /**
      * Trait
      */
-    use BcContainerTrait;
+    use BcEventDispatcherTrait;
 
     /**
      * Initialize method
@@ -122,5 +124,56 @@ class BlogTagsTable extends BlogAppTable
             'recursive' => -1,
             'callbacks' => false,
         ]);
+    }
+
+    /**
+     * コピーする
+     *
+     * @param int $id
+     * @param array $data
+     * @return mixed page Or false
+     * @checked
+     * @noTodo
+     */
+    public function copy($id = null, $entity = [])
+    {
+        if ($id) $entity = $this->find()->where(['BlogTags.id' => $id])->first();
+        $oldEntity = clone $entity;
+
+        // EVENT BlogTags.beforeCopy
+        $event = $this->dispatchLayerEvent('beforeCopy', [
+            'data' => $entity,
+            'id' => $id,
+        ]);
+        if ($event !== false) {
+            $entity = ($event->getResult() === null || $event->getResult() === true) ? $event->getData('data') : $event->getResult();
+        }
+
+        $entity->name .= '_copy';
+        unset($entity->id);
+        unset($entity->created);
+        unset($entity->modified);
+
+        try {
+            $entity = $this->saveOrFail($this->patchEntity($this->newEmptyEntity(), $entity->toArray()));
+
+            // EVENT BlogTags.afterCopy
+            $this->dispatchLayerEvent('afterCopy', [
+                'id' => $entity->id,
+                'data' => $entity,
+                'oldId' => $id,
+                'oldData' => $oldEntity,
+            ]);
+
+            return $entity;
+        } catch (PersistenceFailedException $e) {
+            $entity = $e->getEntity();
+            if ($entity->getError('name')) {
+                return $this->copy(null, $entity);
+            }
+            throw $e;
+        } catch (\Throwable $e) {
+            throw $e;
+        }
     }
 }
