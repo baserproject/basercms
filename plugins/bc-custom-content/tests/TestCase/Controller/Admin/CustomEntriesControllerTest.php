@@ -11,18 +11,13 @@
 
 namespace BcCustomContent\Test\TestCase\Controller\Admin;
 
-use BaserCore\Controller\Admin\UsersController;
 use BaserCore\Service\BcDatabaseServiceInterface;
-use BaserCore\Service\SiteConfigsServiceInterface;
-use BaserCore\Service\UsersServiceInterface;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BcCustomContent\Controller\Admin\CustomEntriesController;
 use BcCustomContent\Service\Admin\CustomEntriesAdminServiceInterface;
-use BcCustomContent\Service\CustomEntriesServiceInterface;
 use BcCustomContent\Service\CustomTablesServiceInterface;
-use BcCustomContent\Test\Factory\CustomFieldFactory;
 use BcCustomContent\Test\Scenario\CustomContentsScenario;
 use BcCustomContent\Test\Scenario\CustomEntriesScenario;
 use Cake\Core\Configure;
