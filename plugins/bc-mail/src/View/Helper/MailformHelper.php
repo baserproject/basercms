@@ -71,11 +71,16 @@ class MailformHelper extends BcFreezeHelper
         switch ($type) {
 
             case 'text':
-            case 'email':
                 unset($attributes['rows']);
                 unset($attributes['empty']);
                 $out = $this->text($fieldName, $attributes);
                 break;
+
+			case 'email':
+				unset($attributes['rows']);
+				unset($attributes['empty']);
+				$out = $this->email($fieldName, $attributes);
+				break;
 
             case 'radio':
                 unset($attributes['size']);
