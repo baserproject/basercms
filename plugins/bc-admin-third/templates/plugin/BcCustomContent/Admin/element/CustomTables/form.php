@@ -32,6 +32,7 @@ $this->BcBaser->i18nScript([
   'confirmDeleteMessage' =>  __d('baser_core', "{0} を本当に削除してもいいですか？\n\n関連するエントリーやフィールドは全て削除されますのでご注意ください。", $entity->title)
 ]);
 $this->BcAdminForm->unlockField("custom_links");
+$this->BcAdmin->setHelp('custom_tables_form');
 ?>
 
 

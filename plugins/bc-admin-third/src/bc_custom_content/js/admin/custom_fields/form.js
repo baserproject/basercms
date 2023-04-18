@@ -126,6 +126,8 @@ let vm = new Vue({
          * 表示を初期化する
          */
         initView() {
+            // テンプレート内のツールチップがリセットされてしまうため再度ヘルプのツールチップを設定
+            $.bcUtil.initTooltip();
             if(!this.entity.validate) {
                 this.entity.validate = [];
             }
@@ -143,6 +145,7 @@ let vm = new Vue({
                     }
                 }
             });
+            $preview.show();
         },
 
         /**

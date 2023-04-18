@@ -55,7 +55,8 @@ let customLinks = new Vue({
      * Mounted
      */
     mounted: function () {
-
+        // テンプレート内のツールチップがリセットされてしまうため再度ヘルプのツールチップを設定
+        $.bcUtil.initTooltip();
     },
 
     /**
