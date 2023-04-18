@@ -1,100 +1,158 @@
 <?php
-// TODO ucmitz  : コード確認要
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @since           baserCMS v 4.0.9
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) NPO baser foundation
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       https://basercms.net/license/index.html MIT License
  */
 
-App::uses('EditorTemplatesController', 'Controller');
+namespace BcEditorTemplate\Test\TestCase\Controller\Admin;
+
+use BaserCore\Test\Scenario\InitAppScenario;
+use BaserCore\TestSuite\BcTestCase;
+use BcEditorTemplate\Test\Scenario\EditorTemplatesScenario;
+use Cake\Datasource\ConnectionManager;
+use Cake\Event\Event;
+use Cake\ORM\TableRegistry;
+use Cake\TestSuite\IntegrationTestTrait;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class EditorTemplatesControllerTest
- *
- * @property  EditorTemplatesController $EditorTemplatesController
  */
 class EditorTemplatesControllerTest extends BcTestCase
 {
 
     /**
-     * set up
-     *
-     * @return void
+     * ScenarioAwareTrait
      */
-    public function setUp()
+    use ScenarioAwareTrait;
+    use IntegrationTestTrait;
+
+    /**
+     * Fixtures
+     *
+     * @var array
+     */
+    public $fixtures = [
+        'plugin.BaserCore.Factory/Sites',
+        'plugin.BaserCore.Factory/SiteConfigs',
+        'plugin.BaserCore.Factory/Users',
+        'plugin.BaserCore.Factory/UsersUserGroups',
+        'plugin.BaserCore.Factory/UserGroups',
+        'plugin.BcEditorTemplate.Factory/EditorTemplates',
+    ];
+
+    /**
+     * set up
+     */
+    public function setUp(): void
     {
+        $this->setFixtureTruncate();
         parent::setUp();
+        ConnectionManager::alias('test', 'default');
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $request = $this->getRequest('/baser/admin/baser-core/uploader_categories/');
+        $this->loginAdmin($request);
     }
 
     /**
-     * tearDown
+     * Tear Down
      *
-     * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
     }
 
     /**
-     * beforeFilter
+     * Test beforeAddEvent
      */
-    public function testBeforeFilter()
+    public function testBeforeAddEvent()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $this->entryEventToMock(self::EVENT_LAYER_CONTROLLER, 'BcEditorTemplate.EditorTemplates.beforeAdd', function (Event $event) {
+            $data = $event->getData('data');
+            $data['name'] = 'beforeAdd';
+            $event->setData('data', $data);
+        });
+        $data = [
+            'name' => 'japan'
+        ];
+        $this->post('/baser/admin/bc-editor-template/editor_templates/add', $data);
+        $editorTemplates = $this->getTableLocator()->get('BcEditorTemplate.EditorTemplates');
+        $query = $editorTemplates->find()->where(['name' => 'beforeAdd']);
+        $this->assertEquals(1, $query->count());
     }
 
     /**
-     * [ADMIN] 一覧
+     * Test beforeAddEvent
      */
-    public function testAdmin_index()
+    public function testAfterAddEvent()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $this->entryEventToMock(self::EVENT_LAYER_CONTROLLER, 'BcEditorTemplate.EditorTemplates.afterAdd', function (Event $event) {
+            $data = $event->getData('data');
+            $editorTemplates = TableRegistry::getTableLocator()->get('BcEditorTemplate.EditorTemplates');
+            $data->name = 'afterAdd';
+            $editorTemplates->save($data);
+        });
+        $data = [
+            'name' => 'japan2'
+        ];
+        $this->post('/baser/admin/bc-editor-template/editor_templates/add', $data);
+        $editorTemplates = $this->getTableLocator()->get('BcEditorTemplate.EditorTemplates');
+        $query = $editorTemplates->find()->where(['name' => 'afterAdd']);
+        $this->assertEquals(1, $query->count());
     }
 
     /**
-     * [ADMIN] 新規登録
+     * Test beforeAddEvent
      */
-    public function testAdmin_add()
+    public function testBeforeEditEvent()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loadFixtureScenario(EditorTemplatesScenario::class);
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $this->entryEventToMock(self::EVENT_LAYER_CONTROLLER, 'BcEditorTemplate.EditorTemplates.beforeEdit', function (Event $event) {
+            $data = $event->getData('data');
+            $data['name'] = 'beforeAdd';
+            $event->setData('data', $data);
+        });
+        $data = [
+            'name' => 'japan'
+        ];
+        $this->post('/baser/admin/bc-editor-template/editor_templates/edit/1', $data);
+        $editorTemplates = $this->getTableLocator()->get('BcEditorTemplate.EditorTemplates');
+        $query = $editorTemplates->find()->where(['name' => 'beforeAdd']);
+        $this->assertEquals(1, $query->count());
     }
 
     /**
-     * [ADMIN] 編集
+     * Test beforeAddEvent
      */
-    public function testAdmin_edit()
+    public function testAfterEditEvent()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loadFixtureScenario(EditorTemplatesScenario::class);
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $this->entryEventToMock(self::EVENT_LAYER_CONTROLLER, 'BcEditorTemplate.EditorTemplates.afterEdit', function (Event $event) {
+            $data = $event->getData('data');
+            $editorTemplates = TableRegistry::getTableLocator()->get('BcEditorTemplate.EditorTemplates');
+            $data->name = 'afterAdd';
+            $editorTemplates->save($data);
+        });
+        $data = [
+            'name' => 'japan2'
+        ];
+        $this->post('/baser/admin/bc-editor-template/editor_templates/edit/1', $data);
+        $editorTemplates = $this->getTableLocator()->get('BcEditorTemplate.EditorTemplates');
+        $query = $editorTemplates->find()->where(['name' => 'afterAdd']);
+        $this->assertEquals(1, $query->count());
     }
-
-    /**
-     * [ADMIN] 削除
-     */
-    public function testAdmin_delete()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
-    /**
-     * [ADMIN AJAX] 削除
-     */
-    public function testAdmin_ajax_delete()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
-    /**
-     * [ADMIN] CKEditor用テンプレート用のjavascriptを出力する
-     */
-    public function testAdmin_js()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
 }
