@@ -12,16 +12,12 @@
 
 namespace BcMail\Test\TestCase\Controller\Admin;
 
-use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use BcMail\Controller\Admin\MailFieldsController;
 use BcMail\Service\Admin\MailFieldsAdminServiceInterface;
-use BcMail\Service\MailContentsServiceInterface;
-use BcMail\Service\MailFieldsServiceInterface;
 use BcMail\Service\MailMessagesServiceInterface;
-use BcMail\Test\Factory\MailContentFactory;
 use BcMail\Test\Scenario\MailFieldsScenario;
 use Cake\Event\Event;
 use Cake\ORM\TableRegistry;
