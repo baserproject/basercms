@@ -60,13 +60,16 @@
     <tr>
       <th class="col-head bca-form-table__label">
         <?php echo $this->BcAdminForm->label('sender_name', __d('baser_core', '送信者名')) ?>
-        &nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser_core', '必須') ?></span>
       </th>
       <td class="col-input bca-form-table__input">
-        <?php echo $this->BcAdminForm->control('sender_name', ['type' => 'text', 'size' => 80, 'maxlength' => 255]) ?>
+        <?php echo $this->BcAdminForm->control('sender_name', [
+          'type' => 'text',
+          'size' => 80, 'maxlength' => 255,
+          'placeholder' => __d('baser_core', '送信先名を入力してください。')
+        ]) ?>
         <i class="bca-icon--question-circle bca-help"></i>
         <?php echo $this->BcAdminForm->error('sender_name') ?>
-        <div class="bca-helptext"><?php echo __d('baser_core', '自動返信メールの送信者に表示します。') ?></div>
+        <div class="bca-helptext"><?php echo __d('baser_core', '自動返信メールの送信者に表示します。入力がない場合、サイト名が設定されます。') ?></div>
       </td>
     </tr>
     <tr>

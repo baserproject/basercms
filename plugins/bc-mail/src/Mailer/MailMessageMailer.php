@@ -55,7 +55,7 @@ class MailMessageMailer extends BcMailer
         }
         $data['other']['mode'] = 'admin';
         $this->setTo($adminMail)
-            ->setFrom($fromAdmin, $mailContent->sender_name)
+            ->setFrom($fromAdmin, $this->getFrom($mailContent))
             ->setSubject($mailContent->subject_admin)
             ->setAttachments($attachments)
             ->viewBuilder()
@@ -106,7 +106,7 @@ class MailMessageMailer extends BcMailer
         }
         $data['other']['mode'] = 'user';
         $this->setTo($userMail)
-            ->setFrom($fromAdmin, $mailContent->sender_name)
+            ->setFrom($fromAdmin, $this->getFrom($mailContent))
             ->setReplyTo($fromAdmin)
             ->setSubject($mailContent->subject_user)
             ->viewBuilder()
@@ -119,6 +119,21 @@ class MailMessageMailer extends BcMailer
             if (!method_exists($this, $method) && !method_exists($this->message, $method)) continue;
             $this->{$method}($value);
         }
+    }
+
+    /**
+     * 送信元名を取得する
+     *
+     * sender_name が存在しない場合、サイト名を返却する
+     *
+     * @param EntityInterface $mailContent
+     * @return array|mixed
+     * @checked
+     * @noTodo
+     */
+    public function getFrom(EntityInterface $mailContent) {
+        if($mailContent->sender_name) return $mailContent->sender_name;
+        return $mailContent->content->site->display_name;
     }
 
 }
