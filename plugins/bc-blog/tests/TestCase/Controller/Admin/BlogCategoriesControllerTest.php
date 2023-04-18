@@ -99,7 +99,7 @@ class BlogCategoriesControllerTest extends BcTestCase
      */
     public function testBeforeAddEvent()
     {
-        $this->entryEventToMock(self::EVENT_LAYER_CONTROLLER, 'BaserCore.BlogCategories.beforeAdd', function (Event $event) {
+        $this->entryEventToMock(self::EVENT_LAYER_CONTROLLER, 'BcBlog.BlogCategories.beforeAdd', function (Event $event) {
             $data = $event->getData('data');
             $data['name'] = 'Nghiem';
             $event->setData('data', $data);
