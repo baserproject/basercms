@@ -13,6 +13,7 @@ namespace BcUploader\Test\TestCase\Controller\Admin;
 
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
+use BcUploader\Test\Scenario\UploaderCategoriesScenario;
 use Cake\Datasource\ConnectionManager;
 use Cake\Event\Event;
 use Cake\ORM\TableRegistry;
@@ -109,6 +110,51 @@ class UploaderCategoriesControllerTest extends BcTestCase
             'name' => 'japan2'
         ];
         $this->post('/baser/admin/bc-uploader/uploader_categories/add', $data);
+        $uploaderCategories = $this->getTableLocator()->get('BcUploader.UploaderCategories');
+        $query = $uploaderCategories->find()->where(['name' => 'afterAdd']);
+        $this->assertEquals(1, $query->count());
+    }
+
+    /**
+     * Test beforeAddEvent
+     */
+    public function testBeforeEditEvent()
+    {
+        $this->loadFixtureScenario(UploaderCategoriesScenario::class);
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $this->entryEventToMock(self::EVENT_LAYER_CONTROLLER, 'BcUploader.UploaderCategories.beforeEdit', function (Event $event) {
+            $data = $event->getData('data');
+            $data['name'] = 'beforeAdd';
+            $event->setData('data', $data);
+        });
+        $data = [
+            'name' => 'japan'
+        ];
+        $this->post('/baser/admin/bc-uploader/uploader_categories/edit/1', $data);
+        $uploaderCategories = $this->getTableLocator()->get('BcUploader.UploaderCategories');
+        $query = $uploaderCategories->find()->where(['name' => 'beforeAdd']);
+        $this->assertEquals(1, $query->count());
+    }
+
+    /**
+     * Test beforeAddEvent
+     */
+    public function testAfterEditEvent()
+    {
+        $this->loadFixtureScenario(UploaderCategoriesScenario::class);
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $this->entryEventToMock(self::EVENT_LAYER_CONTROLLER, 'BcUploader.UploaderCategories.afterEdit', function (Event $event) {
+            $UploaderCategory = $event->getData('data');
+            $UploaderCategories = TableRegistry::getTableLocator()->get('UploaderCategories');
+            $UploaderCategory->name = 'afterAdd';
+            $UploaderCategories->save($UploaderCategory);
+        });
+        $data = [
+            'name' => 'japan2'
+        ];
+        $this->post('/baser/admin/bc-uploader/uploader_categories/edit/1', $data);
         $uploaderCategories = $this->getTableLocator()->get('BcUploader.UploaderCategories');
         $query = $uploaderCategories->find()->where(['name' => 'afterAdd']);
         $this->assertEquals(1, $query->count());
