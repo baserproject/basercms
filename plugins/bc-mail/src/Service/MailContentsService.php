@@ -56,7 +56,6 @@ class MailContentsService implements MailContentsServiceInterface
     public function getNew()
     {
         return $this->MailContents->newEntity([
-            'sender_name' => __d('baser_core', '送信先名を入力してください'),
             'subject_user' => __d('baser_core', 'お問い合わせ頂きありがとうございます'),
             'subject_admin' => __d('baser_core', 'お問い合わせを頂きました'),
             'layout_template' => 'default',

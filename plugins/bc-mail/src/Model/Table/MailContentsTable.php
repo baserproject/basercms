@@ -105,16 +105,6 @@ class MailContentsTable extends MailAppTable
                     'message' => __d('baser_core', 'IDに不正な値が利用されています。')
                 ]
             ],
-            'sender_name' => [
-                [
-                    'rule' => ['notBlank'],
-                    'message' => __d('baser_core', '送信先名を入力してください。')
-                ],
-                [
-                    'rule' => ['maxLength', 255],
-                    'message' => __d('baser_core', '送信先名は255文字以内で入力してください。')
-                ]
-            ],
             'subject_user' => [
                 [
                     'rule' => ['notBlank'],

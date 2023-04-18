@@ -90,7 +90,6 @@ class MailContentTest extends BaserTestCase
         ]);
         $this->assertFalse($this->MailContent->validates());
         $expected = [
-            'sender_name' => ['送信先名を入力してください。'],
             'subject_user' => ['自動返信メール件名[ユーザー宛]を入力してください。'],
             'subject_admin' => ['自動送信メール件名[管理者宛]を入力してください。'],
             'form_template' => ['メールフォームテンプレート名は半角のみで入力してください。'],
