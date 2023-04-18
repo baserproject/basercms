@@ -17,6 +17,7 @@ use BaserCore\TestSuite\BcTestCase;
 use BcBlog\Controller\Admin\BlogCategoriesController;
 use BcBlog\Test\Factory\BlogCategoryFactory;
 use BcBlog\Test\Factory\BlogContentFactory;
+use Cake\Event\Event;
 use Cake\TestSuite\IntegrationTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
@@ -92,6 +93,57 @@ class BlogCategoriesControllerTest extends BcTestCase
         $this->get('/baser/admin/bc-blog/blog_categories/index/1');
         $this->assertResponseOk();
     }
+
+    /**
+     * test beforeAdd
+     */
+    public function testBeforeAddEvent()
+    {
+        $this->entryEventToMock(self::EVENT_LAYER_CONTROLLER, 'BaserCore.BlogCategories.beforeAdd', function (Event $event) {
+            $data = $event->getData('data');
+            $data['name'] = 'Nghiem';
+            $event->setData('data', $data);
+        });
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $data = ['name' => 'testName1', 'title' => 'testTitle1'];
+        ContentFactory::make([
+            'id' => '1',
+            'url' => '/blog/',
+            'name' => 'blog',
+            'plugin' => 'BcBlog',
+            'type' => 'BlogContent',
+            'site_id' => 1,
+            'parent_id' => 3,
+            'lft' => 7,
+            'rght' => 8,
+            'entity_id' => 1,
+            'site_root' => false,
+            'status' => true
+        ])->persist();
+        BlogContentFactory::make([
+            'id' => '1',
+            'description' => 'baserCMS inc. [デモ] の最新の情報をお届けします。',
+            'template' => 'default',
+            'list_count' => '10',
+            'list_direction' => 'DESC',
+            'feed_count' => '10',
+            'tag_use' => '1',
+            'comment_use' => '1',
+            'comment_approve' => '0',
+            'widget_area' => '2',
+            'eye_catch_size' => 'YTo0OntzOjExOiJ0aHVtYl93aWR0aCI7czozOiIzMDAiO3M6MTI6InRodW1iX2hlaWdodCI7czozOiIzMDAiO3M6MTg6Im1vYmlsZV90aHVtYl93aWR0aCI7czozOiIxMDAiO3M6MTk6Im1vYmlsZV90aHVtYl9oZWlnaHQiO3M6MzoiMTAwIjt9',
+            'use_content' => '1',
+            'created' => '2015-08-10 18:57:47',
+            'modified' => NULL,
+        ])->persist();
+        $blogContentId = 1;
+        $this->post("/baser/admin/bc-blog/blog_categories/add/$blogContentId", $data);
+        $blogCategories = $this->getTableLocator()->get('BaserCore.BlogCategories');
+        $query = $blogCategories->find()->where(['name' => 'Nghiem']);
+        $this->assertEquals(1, $query->count());
+    }
+
 
     /**
      * [ADMIN] 登録処理

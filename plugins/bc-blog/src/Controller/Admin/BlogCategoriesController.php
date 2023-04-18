@@ -57,6 +57,14 @@ class BlogCategoriesController extends BlogAdminAppController
     public function add(BlogCategoriesAdminServiceInterface $service, string $blogContentId)
     {
         if ($this->request->is('post')) {
+            // EVENT BlogCategories.beforeAdd
+            $event = $this->dispatchLayerEvent('beforeAdd', [
+                'data' => $this->getRequest()->getData()
+            ]);
+            if ($event !== false) {
+                $data = ($event->getResult() === null || $event->getResult() === true) ? $event->getData('data') : $event->getResult();
+                $this->setRequest($this->getRequest()->withParsedBody($data));
+            }
             try {
                 /* @var BlogCategory $blogCategory */
                 $blogCategory = $service->create($blogContentId, $this->request->getData());
