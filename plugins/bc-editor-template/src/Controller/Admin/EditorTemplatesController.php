@@ -55,7 +55,7 @@ class EditorTemplatesController extends BcAdminAppController
     public function add(EditorTemplatesServiceInterface $service)
     {
         if ($this->request->is(['post', 'put'])) {
-            // EVENT EditorTemplates.beforeEdit
+            // EVENT EditorTemplates.beforeAdd
             $event = $this->dispatchLayerEvent('beforeAdd', [
                 'data' => $this->getRequest()->getData()
             ]);
