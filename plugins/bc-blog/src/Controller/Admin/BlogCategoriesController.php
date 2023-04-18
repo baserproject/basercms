@@ -113,6 +113,10 @@ class BlogCategoriesController extends BlogAdminAppController
             try {
                 /* @var BlogCategory $blogCategory */
                 $blogCategory = $service->update($blogCategory, $this->request->getData());
+                // EVENT BlogCategory.afterEdit
+                $this->dispatchLayerEvent('afterEdit', [
+                    'blogCategory' => $blogCategory
+                ]);
                 $this->BcMessage->setSuccess(sprintf(
                     __d('baser_core', 'カテゴリー「%s」を更新しました。'),
                     $blogCategory->name
