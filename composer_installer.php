@@ -73,7 +73,7 @@ function command($phpPath)
     $command = "cd " . ROOT_DIR . "; export HOME={$composerDir} ; {$phpPath} {$composerDir}composer.phar self-update";
     exec($command, $out, $code);
     if ($code !== 0) throw new Exception('composer のアップデートに失敗しました。');
-    $command = "cd " . ROOT_DIR . "; export HOME={$composerDir} ; {$phpPath} {$composerDir}composer.phar install";
+    $command = "cd " . ROOT_DIR . "; export HOME={$composerDir} ; yes | {$phpPath} {$composerDir}composer.phar install";
     exec($command, $out, $code);
     if ($code !== 0) throw new Exception('ライブラリのインストールに失敗しました。<br>コマンド実行をお試しください<br>' . $command);
     if (!copy(ROOT_DIR . 'config' . DS . '.env.example', ROOT_DIR . 'config' . DS . '.env')) {
