@@ -255,9 +255,9 @@ class BlogPostsService implements BlogPostsServiceInterface
                     unset($fields[array_search('content_draft', $fields)]);
                     unset($fields[array_search('detail_draft', $fields)]);
                 }
-                $query = $this->BlogPosts->find()->contain(['BlogContents' => ['Contents']])->select($fields);
+                $query->contain(['BlogContents' => ['Contents']])->select($fields);
             } elseif(!isset($params['contain']['BlogContents']['Contents'])) {
-                $query = $this->BlogPosts->find()->contain(array_merge_recursive($query->getContain(), ['BlogContents' => ['Contents']]));
+                $query->contain(array_merge_recursive($query->getContain(), ['BlogContents' => ['Contents']]));
             }
             $conditions = array_merge($conditions, $this->BlogPosts->BlogContents->Contents->getConditionAllowPublish());
         } elseif ((string)$params['status'] === '0') {
