@@ -103,6 +103,7 @@ node_modules
 /webroot/bc_theme_sample
 /webroot/bc_installer
 /webroot/bc_custom_content
+/webroot/bc_spa_sample
 /webroot/debug_kit
 # jwt
 /config/jwt.key
