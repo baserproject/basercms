@@ -58,8 +58,20 @@ class MailContentsController extends MailAdminAppController
     {
         $entity = $service->get($id);
         if ($this->getRequest()->is(['post', 'PUT'])) {
+            // EVENT MailContents.beforeEdit
+            $event = $this->dispatchLayerEvent('beforeEdit', [
+                'data' => $this->getRequest()->getData()
+            ]);
+            if ($event !== false) {
+                $data = ($event->getResult() === null || $event->getResult() === true) ? $event->getData('data') : $event->getResult();
+                $this->setRequest($this->getRequest()->withParsedBody($data));
+            }
             try {
                 $entity = $service->update($entity, $this->getRequest()->getData());
+                // EVENT MailContents.afterEdit
+                $this->dispatchLayerEvent('afterEdit', [
+                    'data' => $entity
+                ]);
                 $this->BcMessage->setSuccess(__d('baser_core', 'メールフォーム「{0}」を更新しました。', $entity->content->title));
                 if ($this->getRequest()->getData('edit_mail_form') && Plugin::isLoaded('BcThemeFile')) {
                     return $this->redirectEditForm($this->getRequest()->getData('form_template'));
