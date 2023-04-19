@@ -102,7 +102,7 @@ class ContentLinksTable extends AppTable
             'name' => $entity->content->name,
             'parent_id' => $newParentId,
             'title' => $newTitle,
-            'site_id' => $entity->content->site_id,
+            'site_id' => $newSiteId,
         ]);
         if (!is_null($newSiteId) && $oldEntity->content->site_id !== $newSiteId) {
             $entity->content->parent_id = $this->Contents->copyContentFolderPath($entity->content->url, $newSiteId);
