@@ -70,16 +70,59 @@ class ThemeConfigsTable extends AppTable
      */
     public function validationKeyValue(Validator $validator): Validator
     {
-        // TODO ucmitz 未移行
-        /*
-        $this->validate = [
-            'logo' => [['rule' => ['fileExt', 'gif,jpg,jpeg,jpe,jfif,png'], 'message' => __d('baser_core', '許可されていないファイルです。')]],
-            'main_image_1' => [['rule' => ['fileExt', 'gif,jpg,jpeg,jpe,jfif,png'], 'message' => __d('baser_core', '許可されていないファイルです。')]],
-            'main_image_2' => [['rule' => ['fileExt', 'gif,jpg,jpeg,jpe,jfif,png'], 'message' => __d('baser_core', '許可されていないファイルです。')]],
-            'main_image_3' => [['rule' => ['fileExt', 'gif,jpg,jpeg,jpe,jfif,png'], 'message' => __d('baser_core', '許可されていないファイルです。')]],
-            'main_image_4' => [['rule' => ['fileExt', 'gif,jpg,jpeg,jpe,jfif,png'], 'message' => __d('baser_core', '許可されていないファイルです。')]],
-            'main_image_5' => [['rule' => ['fileExt', 'gif,jpg,jpeg,jpe,jfif,png'], 'message' => __d('baser_core', '許可されていないファイルです。')]]
-        ];*/
+        // logo
+        $validator->add('logo', [
+            'fileExt' => [
+                'rule' => ['fileExt', 'gif,jpg,jpeg,jpe,jfif,png'],
+                'provider' => 'bc',
+                'message' => __d('baser_core', '許可されていないファイルです。')
+            ]
+        ]);
+
+        // main_image_1
+        $validator->add('main_image_1', [
+            'fileExt' => [
+                'rule' => ['fileExt', 'gif,jpg,jpeg,jpe,jfif,png'],
+                'provider' => 'bc',
+                'message' => __d('baser_core', '許可されていないファイルです。')
+            ]
+        ]);
+
+        // main_image_2
+        $validator->add('main_image_2', [
+            'fileExt' => [
+                'rule' => ['fileExt', 'gif,jpg,jpeg,jpe,jfif,png'],
+                'provider' => 'bc',
+                'message' => __d('baser_core', '許可されていないファイルです。')
+            ]
+        ]);
+
+        // main_image_3
+        $validator->add('main_image_3', [
+            'fileExt' => [
+                'rule' => ['fileExt', 'gif,jpg,jpeg,jpe,jfif,png'],
+                'provider' => 'bc',
+                'message' => __d('baser_core', '許可されていないファイルです。')
+            ]
+        ]);
+
+        // main_image_4
+        $validator->add('main_image_4', [
+            'fileExt' => [
+                'rule' => ['fileExt', 'gif,jpg,jpeg,jpe,jfif,png'],
+                'provider' => 'bc',
+                'message' => __d('baser_core', '許可されていないファイルです。')
+            ]
+        ]);
+
+        // main_image_5
+        $validator->add('main_image_5', [
+            'fileExt' => [
+                'rule' => ['fileExt', 'gif,jpg,jpeg,jpe,jfif,png'],
+                'provider' => 'bc',
+                'message' => __d('baser_core', '許可されていないファイルです。')
+            ]
+        ]);
         return $validator;
     }
 
