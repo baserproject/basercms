@@ -83,9 +83,10 @@ class CreateReleaseCommand extends Command
         $data = preg_replace($regex, "$1$2", $data);
         $regex = '/^(.+?"cakephp\/cakephp": ".+?",)(.+?)$/s';
         $setupVersion = Configure::read('BcApp.setupVersion');
-        $replace = "$1\n        \"baserproject/basercms\": \"{$setupVersion}\",$2";
+        $replace = "$1\n        \"baserproject/baser-core\": \"{$setupVersion}\",$2";
         $data = preg_replace($regex, $replace, $data);
         $file->write($data);
+        unlink($packagePath . 'composer.lock');
     }
 
     /**
@@ -109,9 +110,11 @@ class CreateReleaseCommand extends Command
      */
     public function deletePlugins(string $packagePath)
     {
+        $excludes = ['BcThemeSample', 'BcPluginSample'];
         $folder = new Folder($packagePath . 'plugins');
         $files = $folder->read(true, true, true);
         foreach($files[0] as $path) {
+            if(in_array(basename($path), $excludes)) continue;
             $folder->delete($path);
         }
         new File($packagePath . 'plugins' . DS . '.gitkeep');

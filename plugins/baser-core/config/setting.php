@@ -315,7 +315,7 @@ return [
          * 配布用パッケージ作成に利用する
          * @see \BaserCore\Command\CreateReleaseCommand::clonePackage()
          */
-        'repositoryUrl' => 'https://github.com/baserproject/ucmitz.git',
+        'repositoryUrl' => 'https://github.com/baserproject/basercms.git',
 
         /**
          * パスワード再発行URLの有効時間(min) デフォルト24時間

@@ -4,6 +4,7 @@
     "homepage": "https://basercms.net",
     "type": "project",
     "license": "MIT",
+    "minimum-stability": "dev",
     "require": {
         "php": ">=8.0",
         "ext-json": "*",
