@@ -54,10 +54,13 @@ class BlogContentsControllerTest extends BcTestCase
      */
     public function setUp(): void
     {
-        parent::setUp();
         $this->setFixtureTruncate();
+        parent::setUp();
         $this->loadFixtureScenario(InitAppScenario::class);
         $this->Controller = new BlogContentsController($this->loginAdmin($this->getRequest()));
+        $request = $this->getRequest('/baser/admin/bc-blog/blog_contents/');
+        $request = $this->loginAdmin($request);
+        $this->BlogContentsController = new BlogContentsController($request);
     }
 
     /**
@@ -86,17 +89,17 @@ class BlogContentsControllerTest extends BcTestCase
      */
     public function testBeforeEditEvent(): void
     {
-        $this->entryEventToMock(self::EVENT_LAYER_CONTROLLER, 'BcBlog.BlogContents.beforeEdit', function (Event $event) {
-            $data = $event->getData('data');
-            $data['description'] = 'Nghiem';
-            $event->setData('data', $data);
-        });
         $this->enableSecurityToken();
         $this->enableCsrfToken();
         BlogContentFactory::make([
             'id' => '1',
             'description' => 'test'
         ])->persist();
+        $this->entryEventToMock(self::EVENT_LAYER_CONTROLLER, 'BcBlog.BlogContents.beforeEdit', function (Event $event) {
+            $data = $event->getData('data');
+            $data['description'] = 'Nghiem';
+            $event->setData('data', $data);
+        });
         $data = ['description' => 'editedName'];
         $this->post("/baser/admin/bc-blog/blog_contents/edit/1", $data);
         $blogContent = BlogContentFactory::get(1);
