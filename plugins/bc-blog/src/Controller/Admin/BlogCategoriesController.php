@@ -57,9 +57,21 @@ class BlogCategoriesController extends BlogAdminAppController
     public function add(BlogCategoriesAdminServiceInterface $service, string $blogContentId)
     {
         if ($this->request->is('post')) {
+            // EVENT BlogCategories.beforeAdd
+            $event = $this->dispatchLayerEvent('beforeAdd', [
+                'data' => $this->getRequest()->getData()
+            ]);
+            if ($event !== false) {
+                $data = ($event->getResult() === null || $event->getResult() === true) ? $event->getData('data') : $event->getResult();
+                $this->setRequest($this->getRequest()->withParsedBody($data));
+            }
             try {
                 /* @var BlogCategory $blogCategory */
                 $blogCategory = $service->create($blogContentId, $this->request->getData());
+                // EVENT BlogCategory.afterAdd
+                $this->dispatchLayerEvent('afterAdd', [
+                    'blogCategory' => $blogCategory
+                ]);
                 $this->BcMessage->setSuccess(sprintf(
                     __d('baser_core', 'カテゴリー「%s」を追加しました。'),
                     $blogCategory->name
@@ -91,9 +103,21 @@ class BlogCategoriesController extends BlogAdminAppController
     {
         $blogCategory = $service->get($id);
         if ($this->request->is('put')) {
+            // EVENT BlogCategories.beforeEdit
+            $event = $this->dispatchLayerEvent('beforeEdit', [
+                'data' => $this->getRequest()->getData()
+            ]);
+            if ($event !== false) {
+                $data = ($event->getResult() === null || $event->getResult() === true) ? $event->getData('data') : $event->getResult();
+                $this->setRequest($this->getRequest()->withParsedBody($data));
+            }
             try {
                 /* @var BlogCategory $blogCategory */
                 $blogCategory = $service->update($blogCategory, $this->request->getData());
+                // EVENT BlogCategory.afterEdit
+                $this->dispatchLayerEvent('afterEdit', [
+                    'blogCategory' => $blogCategory
+                ]);
                 $this->BcMessage->setSuccess(sprintf(
                     __d('baser_core', 'カテゴリー「%s」を更新しました。'),
                     $blogCategory->name
