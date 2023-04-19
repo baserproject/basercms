@@ -42,7 +42,7 @@ class CustomEntriesController extends CustomContentAdminAppController
         parent::beforeFilter($event);
 
         $tableId = $this->request->getParam('pass.0');
-        if(!$tableId) {
+        if (!$tableId) {
             $this->BcMessage->setWarning(__d('baser_core', 'カスタムコンテンツにカスタムテーブルが紐付けられていません。カスタムコンテンツの編集画面よりカスタムテーブルを選択してください。'));
             return $this->redirect(['plugin' => 'BaserCore', 'controller' => 'Contents', 'action' => 'index']);
         }
@@ -51,7 +51,7 @@ class CustomEntriesController extends CustomContentAdminAppController
         $tablesService = $this->getService(CustomTablesServiceInterface::class);
         $contentId = $tablesService->getCustomContentId($tableId);
 
-        if($contentId) {
+        if ($contentId) {
             /** @var ContentsService $contentsService */
             $contentsService = $this->getService(ContentsServiceInterface::class);
             $request = $contentsService->setCurrentToRequest(
@@ -80,13 +80,20 @@ class CustomEntriesController extends CustomContentAdminAppController
                     'sort' => 'id',
                     'direction' => 'desc',
                 ]]]);
+        // EVENT CustomEntries.searchIndex
+        $event = $this->dispatchLayerEvent('searchIndex', [
+            'request' => $this->getRequest()
+        ]);
+        if ($event !== false) {
+            $this->setRequest(($event->getResult() === null || $event->getResult() === true) ? $event->getData('request') : $event->getResult());
+        }
 
         $params = array_merge([
             'contain' => ['CustomTables' => ['CustomLinks']
-        ]], $this->getRequest()->getQueryParams());
+            ]], $this->getRequest()->getQueryParams());
 
         $table = $service->getTableWithLinksByAll($tableId);
-        if($table->has_child) {
+        if ($table->has_child) {
             $entries = $service->getTreeIndex($params);
         } else {
             $entries = $this->paginate($service->getIndex($params));
@@ -106,9 +113,21 @@ class CustomEntriesController extends CustomContentAdminAppController
     public function add(CustomEntriesAdminServiceInterface $service, int $tableId)
     {
         $service->setup($tableId, $this->getRequest()->getData());
-        if($this->getRequest()->is(['post', 'put'])) {
+        if ($this->getRequest()->is(['post', 'put'])) {
+            // EVENT CustomEntries.beforeAdd
+            $event = $this->dispatchLayerEvent('beforeAdd', [
+                'data' => $this->getRequest()->getData()
+            ]);
+            if ($event !== false) {
+                $data = ($event->getResult() === null || $event->getResult() === true) ? $event->getData('data') : $event->getResult();
+                $this->setRequest($this->getRequest()->withParsedBody($data));
+            }
             try {
                 $entity = $service->create($this->getRequest()->getData());
+                // EVENT CustomEntries.afterAdd
+                $this->dispatchLayerEvent('afterAdd', [
+                    'data' => $entity
+                ]);
                 $entity = $service->get($entity->id, ['contain' => ['CustomTables']]);
                 $this->BcMessage->setSuccess(__d('baser_core',
                     'エントリー「{0}」を追加しました。',
@@ -122,7 +141,7 @@ class CustomEntriesController extends CustomContentAdminAppController
                 $this->BcMessage->setError(__d('baser_core', 'データベース処理中にエラーが発生しました。' . $e->getMessage()));
             }
         }
-        $this->set($service->getViewVarsForAdd($tableId, $entity?? $service->getNew($tableId)));
+        $this->set($service->getViewVarsForAdd($tableId, $entity ?? $service->getNew($tableId)));
     }
 
     /**
@@ -136,9 +155,21 @@ class CustomEntriesController extends CustomContentAdminAppController
     {
         $service->setup($tableId, $this->getRequest()->getData());
         $entity = $service->get($id, ['contain' => 'CustomTables']);
-        if($this->getRequest()->is(['post', 'put'])) {
+        if ($this->getRequest()->is(['post', 'put'])) {
+            // EVENT CustomEntries.beforeEdit
+            $event = $this->dispatchLayerEvent('beforeEdit', [
+                'data' => $this->getRequest()->getData()
+            ]);
+            if ($event !== false) {
+                $data = ($event->getResult() === null || $event->getResult() === true) ? $event->getData('data') : $event->getResult();
+                $this->setRequest($this->getRequest()->withParsedBody($data));
+            }
             try {
                 $entity = $service->update($entity, $this->getRequest()->getData());
+                // EVENT CustomEntries.afterEdit
+                $this->dispatchLayerEvent('afterEdit', [
+                    'data' => $entity
+                ]);
                 $this->BcMessage->setSuccess(__d('baser_core',
                     'エントリー「{0}」を更新しました。',
                     $entity->{$entity->custom_table->display_field}
