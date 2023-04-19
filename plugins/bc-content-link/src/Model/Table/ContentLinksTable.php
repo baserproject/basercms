@@ -98,7 +98,6 @@ class ContentLinksTable extends AppTable
             $entity = ($event->getResult() === null || $event->getResult() === true) ? $event->getData('data') : $event->getResult();
         }
 
-        $entity->url .= '_copy';
         $entity->content = new Content([
             'name' => $entity->content->name,
             'parent_id' => $newParentId,

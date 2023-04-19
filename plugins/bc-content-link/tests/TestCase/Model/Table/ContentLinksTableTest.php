@@ -100,7 +100,7 @@ class ContentLinksTableTest extends BcTestCase
         $this->ContentLinks->copy(1, 1, 'new title', 1);
         //イベントに入るかどうか確認
         $contentLinks = $this->getTableLocator()->get('BcContentLink.ContentLinks');
-        $query = $contentLinks->find()->where(['url' => 'beforeCopy_copy']);
+        $query = $contentLinks->find()->where(['url' => 'beforeCopy']);
         $this->assertEquals(1, $query->count());
     }
 
