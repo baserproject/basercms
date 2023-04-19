@@ -55,6 +55,14 @@ class EditorTemplatesController extends BcAdminAppController
     public function add(EditorTemplatesServiceInterface $service)
     {
         if ($this->request->is(['post', 'put'])) {
+            // EVENT EditorTemplates.beforeAdd
+            $event = $this->dispatchLayerEvent('beforeAdd', [
+                'data' => $this->getRequest()->getData()
+            ]);
+            if ($event !== false) {
+                $data = ($event->getResult() === null || $event->getResult() === true) ? $event->getData('data') : $event->getResult();
+                $this->setRequest($this->getRequest()->withParsedBody($data));
+            }
             try {
                 $entity = $service->create($this->getRequest()->getData());
 
@@ -90,6 +98,14 @@ class EditorTemplatesController extends BcAdminAppController
     {
         $entity = $service->get($id);
         if ($this->request->is(['post', 'put'])) {
+            // EVENT EditorTemplates.beforeEdit
+            $event = $this->dispatchLayerEvent('beforeEdit', [
+                'data' => $this->getRequest()->getData()
+            ]);
+            if ($event !== false) {
+                $data = ($event->getResult() === null || $event->getResult() === true) ? $event->getData('data') : $event->getResult();
+                $this->setRequest($this->getRequest()->withParsedBody($data));
+            }
             try {
                 $entity = $service->update($entity, $this->getRequest()->getData());
 
