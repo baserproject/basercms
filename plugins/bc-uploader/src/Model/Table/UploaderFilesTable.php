@@ -14,8 +14,10 @@ namespace BcUploader\Model\Table;
 use ArrayObject;
 use BaserCore\Model\Table\AppTable;
 use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Utility\BcUtil;
 use BcUploader\Service\UploaderConfigsService;
 use BcUploader\Service\UploaderConfigsServiceInterface;
+use Cake\Core\Configure;
 use Cake\Datasource\EntityInterface;
 use Cake\Event\Event;
 use Cake\Event\EventInterface;
@@ -98,10 +100,10 @@ class UploaderFilesTable extends AppTable
      *
      * @return bool
      */
-    public function checkPeriod()
+    public function checkPeriod($value, $context = null)
     {
-        if (!empty($this->data['UploaderFile']['publish_begin']) && !empty($this->data['UploaderFile']['publish_end'])) {
-            if (strtotime($this->data['UploaderFile']['publish_begin']) > strtotime($this->data['UploaderFile']['publish_end'])) {
+        if (!empty($context['data']['publish_begin']) && !empty($context['data']['publish_end'])) {
+            if (strtotime($context['data']['publish_begin']) > strtotime($context['data']['publish_end'])) {
                 return false;
             }
         }
@@ -109,39 +111,57 @@ class UploaderFilesTable extends AppTable
     }
 
     /**
-     * MailField constructor.
+     * validationDefault
      *
-     * @param bool $id
-     * @param null $table
-     * @param null $ds
+     * @param Validator $validator
+     * @return Validator
      * @checked
      * @noTodo
      */
     public function validationDefault(Validator $validator): Validator
     {
-        // TODO ucmitz 未実装
-//        $this->validate = [
-//            'publish_begin' => [
-//                'checkPeriod' => [
-//                    'rule' => 'checkPeriod',
-//                    'message' => __d('baser_core', '公開期間が不正です。')
-//                ]
-//            ],
-//            'publish_end' => [
-//                'checkPeriod' => [
-//                    'rule' => 'checkPeriod',
-//                    'message' => __d('baser_core', '公開期間が不正です。')
-//                ]
-//            ]
-//        ];
-//        if (!BcUtil::isAdminUser() || !Configure::read('BcUploader.allowedAdmin')) {
-//            $this->validate['name'] = [
-//                'fileExt' => [
-//                    'rule' => ['fileExt', Configure::read('BcUploader.allowedExt')],
-//                    'message' => __d('baser_core', '許可されていないファイル形式です。')
-//                ]
-//            ];
-//        }
+        // id
+        $validator
+            ->integer('id')
+            ->allowEmptyString('id', null, 'create');
+
+        // name
+        $validator
+            ->allowEmptyString('name')
+            ->add('name', [
+                'fileCheck' => [
+                    'rule' => ['fileCheck', BcUtil::convertSize(ini_get('upload_max_filesize'))],
+                    'provider' => 'bc',
+                    'message' => __d('baser_core', 'ファイルのアップロード制限を超えています。')
+                ]
+            ]);
+        if (!BcUtil::isAdminUser() || !Configure::read('BcUploader.allowedAdmin')) {
+            $validator->add('name', [
+                'fileExt' => [
+                    'rule' => ['fileExt', Configure::read('BcUploader.allowedExt')],
+                    'provider' => 'bc',
+                    'message' => __d('baser_core', '許可されていないファイルです。')
+                ]
+            ]);
+        }
+
+        // publish_begin
+        $validator->add('publish_begin', [
+            'checkPeriod' => [
+                'rule' => 'checkPeriod',
+                'provider' => 'table',
+                'message' => __d('baser_core', '公開期間が不正です。')
+            ]
+        ]);
+
+        // publish_end
+        $validator->add('publish_end', [
+            'checkPeriod' => [
+                'rule' => 'checkPeriod',
+                'provider' => 'table',
+                'message' => __d('baser_core', '公開期間が不正です。')
+            ]
+        ]);
         return $validator;
     }
 
