@@ -108,35 +108,9 @@ class BlogCategoriesControllerTest extends BcTestCase
         $this->enableSecurityToken();
         $this->enableCsrfToken();
         $data = ['name' => 'testName1', 'title' => 'testTitle1'];
-        ContentFactory::make([
-            'id' => '1',
-            'url' => '/blog/',
-            'name' => 'blog',
-            'plugin' => 'BcBlog',
-            'type' => 'BlogContent',
-            'site_id' => 1,
-            'parent_id' => 3,
-            'lft' => 7,
-            'rght' => 8,
-            'entity_id' => 1,
-            'site_root' => false,
-            'status' => true
-        ])->persist();
         BlogContentFactory::make([
             'id' => '1',
-            'description' => 'baserCMS inc. [デモ] の最新の情報をお届けします。',
-            'template' => 'default',
-            'list_count' => '10',
-            'list_direction' => 'DESC',
-            'feed_count' => '10',
-            'tag_use' => '1',
-            'comment_use' => '1',
-            'comment_approve' => '0',
-            'widget_area' => '2',
-            'eye_catch_size' => 'YTo0OntzOjExOiJ0aHVtYl93aWR0aCI7czozOiIzMDAiO3M6MTI6InRodW1iX2hlaWdodCI7czozOiIzMDAiO3M6MTg6Im1vYmlsZV90aHVtYl93aWR0aCI7czozOiIxMDAiO3M6MTk6Im1vYmlsZV90aHVtYl9oZWlnaHQiO3M6MzoiMTAwIjt9',
-            'use_content' => '1',
-            'created' => '2015-08-10 18:57:47',
-            'modified' => NULL,
+            'description' => 'test',
         ])->persist();
         $blogContentId = 1;
         $this->post("/baser/admin/bc-blog/blog_categories/add/$blogContentId", $data);
@@ -159,35 +133,9 @@ class BlogCategoriesControllerTest extends BcTestCase
         $this->enableSecurityToken();
         $this->enableCsrfToken();
         $data = ['name' => 'testName1', 'title' => 'testTitle1'];
-        ContentFactory::make([
-            'id' => '1',
-            'url' => '/blog/',
-            'name' => 'blog',
-            'plugin' => 'BcBlog',
-            'type' => 'BlogContent',
-            'site_id' => 1,
-            'parent_id' => 3,
-            'lft' => 7,
-            'rght' => 8,
-            'entity_id' => 1,
-            'site_root' => false,
-            'status' => true
-        ])->persist();
         BlogContentFactory::make([
             'id' => '1',
-            'description' => 'baserCMS inc. [デモ] の最新の情報をお届けします。',
-            'template' => 'default',
-            'list_count' => '10',
-            'list_direction' => 'DESC',
-            'feed_count' => '10',
-            'tag_use' => '1',
-            'comment_use' => '1',
-            'comment_approve' => '0',
-            'widget_area' => '2',
-            'eye_catch_size' => 'YTo0OntzOjExOiJ0aHVtYl93aWR0aCI7czozOiIzMDAiO3M6MTI6InRodW1iX2hlaWdodCI7czozOiIzMDAiO3M6MTg6Im1vYmlsZV90aHVtYl93aWR0aCI7czozOiIxMDAiO3M6MTk6Im1vYmlsZV90aHVtYl9oZWlnaHQiO3M6MzoiMTAwIjt9',
-            'use_content' => '1',
-            'created' => '2015-08-10 18:57:47',
-            'modified' => NULL,
+            'description' => 'test',
         ])->persist();
         $blogContentId = 1;
         $this->post("/baser/admin/bc-blog/blog_categories/add/$blogContentId", $data);
@@ -262,45 +210,15 @@ class BlogCategoriesControllerTest extends BcTestCase
         });
         $this->enableSecurityToken();
         $this->enableCsrfToken();
-        ContentFactory::make([
-            'id' => '1',
-            'url' => '/blog/',
-            'name' => 'blog',
-            'plugin' => 'BcBlog',
-            'type' => 'BlogContent',
-            'site_id' => 1,
-            'parent_id' => 3,
-            'lft' => 7,
-            'rght' => 8,
-            'entity_id' => 1,
-            'site_root' => false,
-            'status' => true
-        ])->persist();
         BlogContentFactory::make([
             'id' => '1',
-            'description' => 'baserCMS inc. [デモ] の最新の情報をお届けします。',
-            'template' => 'default',
-            'list_count' => '10',
-            'list_direction' => 'DESC',
-            'feed_count' => '10',
-            'tag_use' => '1',
-            'comment_use' => '1',
-            'comment_approve' => '0',
-            'widget_area' => '2',
-            'eye_catch_size' => 'YTo0OntzOjExOiJ0aHVtYl93aWR0aCI7czozOiIzMDAiO3M6MTI6InRodW1iX2hlaWdodCI7czozOiIzMDAiO3M6MTg6Im1vYmlsZV90aHVtYl93aWR0aCI7czozOiIxMDAiO3M6MTk6Im1vYmlsZV90aHVtYl9oZWlnaHQiO3M6MzoiMTAwIjt9',
-            'use_content' => '1',
-            'created' => '2015-08-10 18:57:47',
-            'modified' => NULL,
+            'description' => 'test edit',
         ])->persist();
         BlogCategoryFactory::make([
             'id' => 1,
             'blog_content_id' => 1,
-            'no' => 1,
             'name' => 'release',
             'title' => 'プレスリリース',
-            'status' => 1,
-            'lft' => 1,
-            'rght' => 2,
         ])->persist();
         $data = ['name' => 'editedName', 'blog_content_id' => '1'];
         $this->put("/baser/admin/bc-blog/blog_categories/edit/1/1", $data);
@@ -321,45 +239,15 @@ class BlogCategoriesControllerTest extends BcTestCase
         });
         $this->enableSecurityToken();
         $this->enableCsrfToken();
-        ContentFactory::make([
-            'id' => '1',
-            'url' => '/blog/',
-            'name' => 'blog',
-            'plugin' => 'BcBlog',
-            'type' => 'BlogContent',
-            'site_id' => 1,
-            'parent_id' => 3,
-            'lft' => 7,
-            'rght' => 8,
-            'entity_id' => 1,
-            'site_root' => false,
-            'status' => true
-        ])->persist();
         BlogContentFactory::make([
             'id' => '1',
-            'description' => 'baserCMS inc. [デモ] の最新の情報をお届けします。',
-            'template' => 'default',
-            'list_count' => '10',
-            'list_direction' => 'DESC',
-            'feed_count' => '10',
-            'tag_use' => '1',
-            'comment_use' => '1',
-            'comment_approve' => '0',
-            'widget_area' => '2',
-            'eye_catch_size' => 'YTo0OntzOjExOiJ0aHVtYl93aWR0aCI7czozOiIzMDAiO3M6MTI6InRodW1iX2hlaWdodCI7czozOiIzMDAiO3M6MTg6Im1vYmlsZV90aHVtYl93aWR0aCI7czozOiIxMDAiO3M6MTk6Im1vYmlsZV90aHVtYl9oZWlnaHQiO3M6MzoiMTAwIjt9',
-            'use_content' => '1',
-            'created' => '2015-08-10 18:57:47',
-            'modified' => NULL,
+            'description' => 'test edit',
         ])->persist();
         BlogCategoryFactory::make([
             'id' => 1,
             'blog_content_id' => 1,
-            'no' => 1,
             'name' => 'release',
             'title' => 'プレスリリース',
-            'status' => 1,
-            'lft' => 1,
-            'rght' => 2,
         ])->persist();
         $data = ['name' => 'editedName', 'blog_content_id' => '1'];
         $this->put("/baser/admin/bc-blog/blog_categories/edit/1/1", $data);

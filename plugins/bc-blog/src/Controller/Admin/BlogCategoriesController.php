@@ -103,6 +103,7 @@ class BlogCategoriesController extends BlogAdminAppController
     {
         $blogCategory = $service->get($id);
         if ($this->request->is('put')) {
+            // EVENT BlogCategories.beforeEdit
             $event = $this->dispatchLayerEvent('beforeEdit', [
                 'data' => $this->getRequest()->getData()
             ]);
