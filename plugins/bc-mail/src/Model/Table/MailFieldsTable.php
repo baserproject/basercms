@@ -71,20 +71,19 @@ class MailFieldsTable extends MailAppTable
         $validator
             ->scalar('field_name')
             ->notEmptyString('field_name', __d('baser_core', 'フィールド名を入力してください。'))
-            ->maxLength('field_name', 50, __d('baser_core', 'フィールド名は50文字以内で入力してください。'));
-        // TODO ucmitz 未実装
-//            ->add('field_name', [
-//                'halfTextMailField' => [
-//                    'rule' => 'halfTextMailField',
-//                    'provider' => 'table',
-//                    'message' => __d('baser_core', 'フィールド名は半角英数字のみで入力してください。')
-//                ]])
-//            ->add('field_name', [
-//                'duplicateMailField' => [
-//                    'rule' => 'duplicateMailField',
-//                    'provider' => 'table',
-//                    'message' => __d('baser_core', '既に登録のあるフィールド名です。')
-//                ]]);
+            ->maxLength('field_name', 50, __d('baser_core', 'フィールド名は50文字以内で入力してください。'))
+            ->add('field_name', [
+                'halfTextMailField' => [
+                    'rule' => 'halfTextMailField',
+                    'provider' => 'table',
+                    'message' => __d('baser_core', 'フィールド名は半角英数字のみで入力してください。')
+                ]])
+            ->add('field_name', [
+                'duplicateMailField' => [
+                    'rule' => 'duplicateMailField',
+                    'provider' => 'table',
+                    'message' => __d('baser_core', '既に登録のあるフィールド名です。')
+                ]]);
         $validator
             ->scalar('type')
             ->notEmptyString('type', __d('baser_core', 'タイプを入力してください。'));
@@ -100,15 +99,14 @@ class MailFieldsTable extends MailAppTable
         $validator
             ->scalar('after_attachment')
             ->maxLength('after_attachment', 255, __d('baser_core', '後見出しは255文字以内で入力してください。'));
-        // TODO ucmitz 未実装
-//        $validator
-//            ->scalar('source')
-//            ->add('source', [
-//                'sourceMailField' => [
-//                    'rule' => 'sourceMailField',
-//                    'provider' => 'table',
-//                    'message' => __d('baser_core', '選択リストを入力してください。')
-//                ]]);
+        $validator
+            ->scalar('source')
+            ->add('source', [
+                'sourceMailField' => [
+                    'rule' => 'sourceMailField',
+                    'provider' => 'table',
+                    'message' => __d('baser_core', '選択リストを入力してください。')
+                ]]);
         $validator
             ->scalar('options')
             ->maxLength('options', 255, __d('baser_core', 'オプションは255文字以内で入力してください。'));
@@ -193,23 +191,22 @@ class MailFieldsTable extends MailAppTable
      * 同じ名称のフィールド名がないかチェックする
      * 同じメールコンテンツが条件
      *
-     * @param array $check
+     * @param string $value
+     * @param array $context
      * @return boolean
      */
-    public function duplicateMailField($check)
+    public function duplicateMailField(string $value, array $context)
     {
         $conditions = [
-            'MailField.' . key($check) => $check[key($check)],
-            'MailField.mail_content_id' => $this->data['MailField']['mail_content_id']
+            'MailFields.' . $context['field'] => $value,
+            'MailFields.mail_content_id' => $context['data']['mail_content_id']
         ];
-        if ($this->exists()) {
-            $conditions['NOT'] = ['MailField.id' => $this->id];
+        if (!$context['newRecord']) {
+            $conditions['NOT'] = ['MailFields.id' => $context['data']['id']];
         }
-        $ret = $this->find('first', ['conditions' => $conditions]);
-        if ($ret) {
+        if ($this->find()->where($conditions)->count()) {
             return false;
         }
-
         return true;
     }
 
@@ -217,32 +214,31 @@ class MailFieldsTable extends MailAppTable
      * メールフィールドの値として正しい文字列か検証する
      * 半角英数-_
      *
-     * @param array $check
+     * @param string $value
      * @return boolean
      */
-    public function halfTextMailField($check)
+    public function halfTextMailField(string $value)
     {
-        $subject = $check[key($check)];
         $pattern = "/^[a-zA-Z0-9-_]*$/";
-        return !!(preg_match($pattern, $subject) === 1);
+        return !!(preg_match($pattern, $value) === 1);
     }
 
     /**
      * 選択リストの入力チェック
      *
-     * @param integer $check
+     * @param string $value
+     * @param array $context
+     * @return bool
      */
-    public function sourceMailField($check)
+    public function sourceMailField(string $value, array $context)
     {
-        switch($this->data['MailField']['type']) {
+        switch($context['data']['type']) {
             case 'radio':        // ラジオボタン
             case 'select':        // セレクトボックス
             case 'multi_check':    // マルチチェックボックス
             case 'autozip':        // 自動保管郵便番号
-                // 選択リストのチェックを行う
-                return (!empty($check[key($check)]));
+                return !empty($value);
         }
-        // 選択リストが不要のタイプの時はチェックしない
         return true;
     }
 
