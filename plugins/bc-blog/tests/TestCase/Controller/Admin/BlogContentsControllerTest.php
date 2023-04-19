@@ -15,6 +15,7 @@ use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcBlog\Controller\Admin\BlogContentsController;
 use BcBlog\Test\Factory\BlogContentFactory;
+use BaserCore\Test\Factory\ContentFactory;
 use Cake\Event\Event;
 use Cake\TestSuite\IntegrationTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
@@ -91,6 +92,7 @@ class BlogContentsControllerTest extends BcTestCase
     {
         $this->enableSecurityToken();
         $this->enableCsrfToken();
+        ContentFactory::make(['plugin' => 'BcBlog', 'type' => 'BlogContent', 'entity_id' => 1, 'lft' => 1, 'rght' => 2])->persist();
         BlogContentFactory::make([
             'id' => '1',
             'description' => 'test'
@@ -100,7 +102,13 @@ class BlogContentsControllerTest extends BcTestCase
             $data['description'] = 'Nghiem';
             $event->setData('data', $data);
         });
-        $data = ['description' => 'editedName'];
+        $data = [
+            'id' => 1,
+            'description' => '更新した!',
+            'content' => [
+                "title" => "更新 ブログ",
+            ]
+        ];
         $this->post("/baser/admin/bc-blog/blog_contents/edit/1", $data);
         $blogContent = BlogContentFactory::get(1);
         $this->assertEquals('Nghiem', $blogContent['description']);
