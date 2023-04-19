@@ -11,8 +11,13 @@
 
 namespace BcBlog\Test\TestCase\Controller\Admin;
 
+use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcBlog\Controller\Admin\BlogContentsController;
+use BcBlog\Test\Factory\BlogContentFactory;
+use Cake\Event\Event;
+use Cake\TestSuite\IntegrationTestTrait;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class BlogContentsControllerTest
@@ -21,15 +26,38 @@ use BcBlog\Controller\Admin\BlogContentsController;
  */
 class BlogContentsControllerTest extends BcTestCase
 {
+    /**
+     * IntegrationTestTrait
+     */
+    use IntegrationTestTrait;
+    use ScenarioAwareTrait;
+
+    /**
+     * Fixtures
+     *
+     * @var array
+     */
+    public $fixtures = [
+        'plugin.BaserCore.Factory/Sites',
+        'plugin.BaserCore.Factory/Users',
+        'plugin.BaserCore.Factory/UserGroups',
+        'plugin.BaserCore.Factory/UsersUserGroups',
+        'plugin.BaserCore.Factory/Contents',
+        'plugin.BcBlog.Factory/BlogCategories',
+        'plugin.BcBlog.Factory/BlogContents',
+    ];
 
     /**
      * set up
      *
      * @return void
      */
-    public function setUp():void
+    public function setUp(): void
     {
         parent::setUp();
+        $this->setFixtureTruncate();
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->Controller = new BlogContentsController($this->loginAdmin($this->getRequest()));
     }
 
     /**
@@ -49,6 +77,30 @@ class BlogContentsControllerTest extends BcTestCase
     {
         $controller = new BlogContentsController($this->getRequest());
         $this->assertNotEmpty($controller->BcAdminContents);
+    }
+
+    /**
+     * Test beforeEdit method
+     *
+     * @return void
+     */
+    public function testBeforeEditEvent(): void
+    {
+        $this->entryEventToMock(self::EVENT_LAYER_CONTROLLER, 'BcBlog.BlogContents.beforeEdit', function (Event $event) {
+            $data = $event->getData('data');
+            $data['description'] = 'Nghiem';
+            $event->setData('data', $data);
+        });
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        BlogContentFactory::make([
+            'id' => '1',
+            'description' => 'test'
+        ])->persist();
+        $data = ['description' => 'editedName'];
+        $this->post("/baser/admin/bc-blog/blog_contents/edit/1", $data);
+        $blogContent = BlogContentFactory::get(1);
+        $this->assertEquals('Nghiem', $blogContent['description']);
     }
 
     /**
