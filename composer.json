@@ -91,6 +91,7 @@
         "baserproject/bc-widget-area": "5.0.0-beta4"
     },
     "scripts": {
+        "post-install-cmd": "App\\Console\\Installer::postInstall",
         "post-update-cmd": "App\\Console\\Installer::postInstall",
         "post-create-project-cmd": "App\\Console\\Installer::postInstall",
         "check": [
