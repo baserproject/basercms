@@ -46,6 +46,7 @@ class MailMessageValidation extends Validation
      * @return bool
      * @unitTest
      * @noTodo
+     * @checked
      */
     public static function dateArray($value)
     {
