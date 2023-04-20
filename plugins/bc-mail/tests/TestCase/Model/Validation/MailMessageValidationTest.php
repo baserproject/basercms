@@ -11,15 +11,10 @@
 
 namespace BcMail\Test\TestCase\Model\Validation;
 
+use BaserCore\Error\BcException;
 use BaserCore\TestSuite\BcTestCase;
-use BcMail\Model\Table\MailAppTable;
-use BcMail\Model\Table\MailConfigsTable;
-use BcMail\Model\Table\MailContentsTable;
-use BcMail\Model\Table\MailFieldsTable;
-use BcMail\Model\Table\MailMessagesTable;
 use BcMail\Model\Validation\MailMessageValidation;
-use BcMail\Test\Factory\MailContentFactory;
-use BcMail\Test\Factory\MailFieldsFactory;
+use Exception;
 
 /**
  * Class BlogCategoryTest
@@ -54,6 +49,37 @@ class MailMessageValidationTest extends BcTestCase
     public function tearDown(): void
     {
         parent::tearDown();
+    }
+
+    /**
+     * checkDate test
+     */
+    public function testCheckDate()
+    {
+        $date_time = '';
+        $result = $this->MailMessageValidation->checkdate($date_time);
+        $this->assertTrue($result);
+
+        $date_time = '2023-01-01 09:01';
+        $result = $this->MailMessageValidation->checkdate($date_time);
+        $this->assertTrue($result);
+
+        $date_time = '1970-01-01 09:00:00';
+        $result = $this->MailMessageValidation->checkdate($date_time);
+        $this->assertFalse($result);
+
+        $date_time = '1990-01-01 09';
+        $result = $this->MailMessageValidation->checkdate($date_time);
+        $this->assertFalse($result);
+
+        $date_time = '1990-01 09:00';
+        $result = $this->MailMessageValidation->checkdate($date_time);
+        $this->assertFalse($result);
+
+        $date_time = '20a10-01-01 09:00:00';
+        $this->expectExceptionMessage('checkdate(): Argument #3 ($year) must be of type int, string given');
+        $this->MailMessageValidation->checkdate($date_time);
+
     }
 
     /**
