@@ -29,6 +29,22 @@ class CreateReleaseCommand extends Command
 {
 
     /**
+     * buildOptionParser
+     *
+     * @param \Cake\Console\ConsoleOptionParser $parser
+     * @return \Cake\Console\ConsoleOptionParser
+     */
+    protected function buildOptionParser(\Cake\Console\ConsoleOptionParser $parser): \Cake\Console\ConsoleOptionParser
+    {
+        $parser->addArgument('branch', [
+            'help' => __d('baser_core', 'クローン対象ブランチ'),
+            'default' => 'master',
+            'required' => false
+        ]);
+        return $parser;
+    }
+
+    /**
      * execute
      *
      * @param Arguments $args
@@ -47,7 +63,7 @@ class CreateReleaseCommand extends Command
         $io->out();
 
         $io->out(__d('baser_core', '- {0} にパッケージをクローンします。', TMP));
-        $this->clonePackage($packagePath);
+        $this->clonePackage($packagePath, $args->getArgument('branch'));
 
         $io->out(__d('baser_core', '- composer.json をセットアップします。'));
         $this->setupComposer($packagePath);
@@ -94,12 +110,12 @@ class CreateReleaseCommand extends Command
      *
      * @param string $packagePath
      */
-    public function clonePackage(string $packagePath)
+    public function clonePackage(string $packagePath, string $branch)
     {
         $tmp = TMP;
         $repository = Configure::read('BcApp.repositoryUrl');
         exec("cd {$tmp}; git clone {$repository} basercms");
-        exec("cd {$packagePath}; git checktout master");
+        exec("cd {$packagePath}; git checktout {$branch}");
     }
 
     /**
