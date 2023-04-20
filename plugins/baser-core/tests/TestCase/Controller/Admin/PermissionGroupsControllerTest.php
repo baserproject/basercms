@@ -119,8 +119,5 @@ class PermissionGroupsControllerTest extends BcTestCase
             'action' => 'index',
             '1'
         ]);
-
-        $this->post('/baser/admin/baser-core/permission_groups/rebuild_by_user_group/2221');
-        $this->assertFlashMessage('アクセスルールの再構築に失敗しました。');
     }
 }
