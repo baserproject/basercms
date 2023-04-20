@@ -10,7 +10,4 @@
 - [開発への参加方法](https://baserproject.github.io/5/contribution_developer/participation)
 - [ローカル環境を構築して利用する](https://baserproject.github.io/5/introduce/build_local_env)
 
-## その他のドキュメント
-- [開発者として参加・貢献する](https://baserproject.github.io/5/contribution_developer/)
-- [開発以外の方法で参加・貢献する](https://baserproject.github.io/5/contribution_etc/)
-- [baserCMS設計書](https://baserproject.github.io/5/ucmitz/specification/index)
+その他、詳しくは、[参加・貢献ガイド](https://baserproject.github.io/5/contribution/) をご覧ください。
