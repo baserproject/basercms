@@ -11,10 +11,8 @@
 
 namespace BcMail\Test\TestCase\Model\Validation;
 
-use BaserCore\Error\BcException;
 use BaserCore\TestSuite\BcTestCase;
 use BcMail\Model\Validation\MailMessageValidation;
-use Exception;
 
 /**
  * Class BlogCategoryTest
@@ -103,6 +101,26 @@ class MailMessageValidationTest extends BcTestCase
 
         $date['year'] = '';
         $result = $this->MailMessageValidation->dateArray($date);
+        $this->assertFalse($result);
+    }
+
+    /**
+     * checkSame test
+     */
+    public function testCheckSame()
+    {
+        $value = 'a';
+        $target = 'name';
+        $context['data']['name'] = 'a';
+        $result = $this->MailMessageValidation->checkSame($value, $target, $context);
+        $this->assertTrue($result);
+
+        $value = 'b';
+        $result = $this->MailMessageValidation->checkSame($value, $target, $context);
+        $this->assertFalse($result);
+
+        $context = [];
+        $result = $this->MailMessageValidation->checkSame($value, $target, $context);
         $this->assertFalse($result);
     }
 }

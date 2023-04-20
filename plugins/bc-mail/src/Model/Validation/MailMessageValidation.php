@@ -106,6 +106,7 @@ class MailMessageValidation extends Validation
      * @param string $target
      * @param array $context
      * @return bool
+     * @checked
      */
     public static function checkSame(string $value, string $target, array $context)
     {
