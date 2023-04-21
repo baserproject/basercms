@@ -80,6 +80,7 @@ class MailFieldsController extends BcAdminApiController
      * @return bool|void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function update_sort(MailFieldsServiceInterface $service, int $mailContentId)
     {
