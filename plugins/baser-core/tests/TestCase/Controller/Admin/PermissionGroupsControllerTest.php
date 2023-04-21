@@ -54,7 +54,8 @@ class PermissionGroupsControllerTest extends BcTestCase
     {
         $this->setFixtureTruncate();
         parent::setUp();
-        $this->PermissionGroupsController = new PermissionGroupsController($this->getRequest());
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $this->PermissionGroupsController = new PermissionGroupsController($this->loginAdmin($this->getRequest()));
     }
 
     /**
@@ -81,7 +82,29 @@ class PermissionGroupsControllerTest extends BcTestCase
      */
     public function test_add()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $data = [
+            'name' => 'システム基本設定　テスト',
+            'type' => 'Admin',
+            'plugin' => 'BaserCore',
+            'status' => 1
+        ];
+        //APIをコール
+        $this->post('/baser/admin/baser-core/permission_groups/add/1/Admin.json', $data);
+        //フラッシュメッセージを確認
+        $this->assertFlashMessage('ルールグループ「システム基本設定　テスト」を登録しました。');
+        //ステータスを確認
+        $this->assertResponseCode(302);
+        //リダイレクトを確認
+        $this->assertRedirect([
+            'plugin' => 'BaserCore',
+            'prefix' => 'Admin',
+            'controller' => 'PermissionGroups',
+            'action' => 'edit',
+            '1',
+            '1'
+        ]);
     }
 
     /**
