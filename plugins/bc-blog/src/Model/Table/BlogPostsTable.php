@@ -491,21 +491,19 @@ class BlogPostsTable extends BlogAppTable
      */
     public function allowPublish($post)
     {
-        $allowPublish = (int)$post->status;
-        if ($post->publish_begin === '0000-00-00 00:00:00') {
-            $post->publish_begin = null;
-        }
-        if ($post->publish_end === '0000-00-00 00:00:00') {
-            $post->publish_end = null;
+        if (!$post->status) {
+            return false;
         }
 
         // 期限を設定している場合に条件に該当しない場合は強制的に非公開とする
-        if (($post->publish_begin && $post->publish_begin >= date('Y-m-d H:i:s')) ||
-            ($post->publish_end && $post->publish_end <= date('Y-m-d H:i:s'))
+        $currentTime = time();
+        if (($post->publish_begin && $post->publish_begin->getTimestamp() > $currentTime) ||
+            ($post->publish_end && $post->publish_end->getTimestamp() < $currentTime)
         ) {
-            $allowPublish = false;
+            return false;
         }
-        return $allowPublish;
+
+        return true;
     }
 
     /**
