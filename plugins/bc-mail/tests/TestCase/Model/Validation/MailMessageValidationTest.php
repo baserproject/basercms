@@ -123,4 +123,27 @@ class MailMessageValidationTest extends BcTestCase
         $result = $this->MailMessageValidation->checkSame($value, $target, $context);
         $this->assertFalse($result);
     }
+
+
+    /**
+     * dateString test
+     */
+    public function testDateString()
+    {
+        $date = '1970-01-01';
+        $result = $this->MailMessageValidation->dateString($date);
+        $this->assertFalse($result);
+
+        $date = '1990-01-01';
+        $result = $this->MailMessageValidation->dateString($date);
+        $this->assertTrue($result);
+
+        $date = '1999/01/01';
+        $result = $this->MailMessageValidation->dateString($date);
+        $this->assertTrue($result);
+
+        $date = '19a9/01/0a';
+        $result = $this->MailMessageValidation->dateString($date);
+        $this->assertFalse($result);
+    }
 }
