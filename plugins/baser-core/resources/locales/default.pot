@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2023-04-23 12:10+0900\n"
+"POT-Creation-Date: 2023-04-24 13:31+0900\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -14,121 +14,16 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: ./plugins/bc-column/templates/element/blog_comments.php:48
-msgid "お名前"
+#: ./templates/layout/error.php:40
+#: ./tmp/basercms/templates/layout/error.php:40
+msgid "Back"
 msgstr ""
 
-#: ./plugins/bc-column/templates/element/blog_comments.php:48
-msgid "ニックネーム"
+#: ./vendor/cakephp/cakephp/src/View/Helper/PaginatorHelper.php:1260
+msgid "View"
 msgstr ""
 
-#: ./plugins/bc-column/templates/element/blog_comments.php:53
-msgid "Eメール"
-msgstr ""
-
-#: ./plugins/bc-column/templates/element/blog_comments.php:57
-msgid "Eメールは公開されません"
-msgstr ""
-
-#: ./plugins/bc-column/templates/element/blog_comments.php:65
-msgid "コメント"
-msgstr ""
-
-#: ./plugins/bc-column/templates/element/blog_comments.php:73
-msgid "認証画象"
-msgstr ""
-
-#: ./plugins/bc-column/templates/element/blog_comments.php:76
-msgid "画像の文字を入力してください"
-msgstr ""
-
-#: ./plugins/bc-column/templates/element/blog_comments.php:80
-msgid "送信する"
-msgstr ""
-
-#: ./plugins/bc-column/templates/element/crumbs.php:6
-#: ./plugins/bc-column/templates/element/crumbs.php:22
-msgid "ホーム"
-msgstr ""
-
-#: ./plugins/bc-column/templates/element/toppage.php:12
-msgid "実績"
-msgstr ""
-
-#: ./plugins/bc-column/templates/plugin/BcBlog/Blog/default/archives.php:5
-#: ./plugins/bc-column/templates/plugin/BcBlog/Blog/topics/archives.php:5
-#: ./plugins/bc-column/templates/plugin/BcBlog/Blog/works/archives.php:5
-msgid "のアーカイブ一覧です。"
-msgstr ""
-
-#: ./plugins/bc-column/templates/plugin/BcBlog/Blog/default/archives.php:39
-#: ./plugins/bc-column/templates/plugin/BcBlog/Blog/default/index.php:35
-#: ./plugins/bc-column/templates/plugin/BcBlog/Blog/default/posts.php:23
-#: ./plugins/bc-column/templates/plugin/BcBlog/Blog/topics/archives.php:46
-#: ./plugins/bc-column/templates/plugin/BcBlog/Blog/topics/index.php:43
-#: ./plugins/bc-column/templates/plugin/BcBlog/Blog/topics/posts.php:31
-#: ./plugins/bc-column/templates/plugin/BcBlog/Blog/works/archives.php:37
-#: ./plugins/bc-column/templates/plugin/BcBlog/Blog/works/index.php:35
-#: ./plugins/bc-column/templates/plugin/BcBlog/Blog/works/posts.php:31
-msgid "記事がありません。"
-msgstr ""
-
-#: ./plugins/bc-column/templates/plugin/BcBlog/Blog/default/index.php:20
-#: ./plugins/bc-column/templates/plugin/BcBlog/Blog/topics/archives.php:29
-#: ./plugins/bc-column/templates/plugin/BcBlog/Blog/topics/index.php:27
-#: ./plugins/bc-column/templates/plugin/BcBlog/Blog/works/archives.php:33
-#: ./plugins/bc-column/templates/plugin/BcBlog/Blog/works/index.php:31
-msgid "詳細ページへ"
-msgstr ""
-
-#: ./plugins/bc-column/templates/plugin/BcBlog/Blog/default/single.php:39
-#: ./plugins/bc-column/templates/plugin/BcBlog/Blog/topics/single.php:39
-#: ./plugins/bc-column/templates/plugin/BcBlog/Blog/works/single.php:31
-msgid "前の記事"
-msgstr ""
-
-#: ./plugins/bc-column/templates/plugin/BcBlog/Blog/default/single.php:41
-#: ./plugins/bc-column/templates/plugin/BcBlog/Blog/topics/single.php:41
-#: ./plugins/bc-column/templates/plugin/BcBlog/Blog/works/single.php:33
-msgid "一覧へ"
-msgstr ""
-
-#: ./plugins/bc-column/templates/plugin/BcBlog/Blog/default/single.php:42
-#: ./plugins/bc-column/templates/plugin/BcBlog/Blog/topics/single.php:42
-#: ./plugins/bc-column/templates/plugin/BcBlog/Blog/works/single.php:35
-msgid "後の記事"
-msgstr ""
-
-#: ./plugins/bc-column/templates/plugin/BcMail/Mail/default/confirm.php:18
-msgid "入力内容の確認"
-msgstr ""
-
-#: ./plugins/bc-column/templates/plugin/BcMail/Mail/default/confirm.php:19
-msgid "入力した内容に間違いがなければ「送信する」ボタンをクリックしてください。"
-msgstr ""
-
-#: ./plugins/bc-column/templates/plugin/BcMail/Mail/default/confirm.php:21
-#: ./plugins/bc-column/templates/plugin/BcMail/Mail/default/index.php:14
-msgid "入力フォーム"
-msgstr ""
-
-#: ./plugins/bc-column/templates/plugin/BcMail/Mail/default/submit.php:14
-msgid "メール送信完了"
-msgstr ""
-
-#: ./plugins/bc-column/templates/plugin/BcMail/Mail/default/submit.php:16
-msgid "お問い合わせ頂きありがとうございました。"
-msgstr ""
-
-#: ./plugins/bc-column/templates/plugin/BcMail/Mail/default/submit.php:17
-msgid "確認次第、ご連絡させて頂きます。"
-msgstr ""
-
-#: ./plugins/bc-column/templates/plugin/BcMail/Mail/default/submit.php:19
-msgid "%s 秒後にトップページへ自動的に移動します。"
-msgstr ""
-
-#: ./plugins/bc-column/templates/plugin/BcMail/Mail/default/submit.php:20
-msgid "移動しない場合はコチラをクリックしてください。"
+#: ./vendor/imo-tikuwa/cakephp-soft-delete/src/Model/Table/SoftDeleteTrait.php:27
+msgid "Configured field `{0}` is missing from the table `{1}`."
 msgstr ""
 

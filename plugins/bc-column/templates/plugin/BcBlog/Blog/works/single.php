@@ -28,11 +28,11 @@ $(function(){
 	<?php $this->Blog->postContent($post) ?>
 	</div>
 	<div class="post-navi">
-		<?php $this->Blog->prevLink($post, "＜ ". __('前の記事')) ?>
+		<?php $this->Blog->prevLink($post, "＜ ". __d('baser_core', '前の記事')) ?>
 		&nbsp;  &nbsp;
-		<?php $this->BcBaser->link(__('一覧へ'), '/'.$this->request->getAttribute('currentContent')->name.'/index') ?>
+		<?php $this->BcBaser->link(__d('baser_core', '一覧へ'), '/'.$this->request->getAttribute('currentContent')->name.'/index') ?>
 		&nbsp;  &nbsp;
-		<?php $this->Blog->nextLink($post, __('後の記事'). " ＞") ?>
+		<?php $this->Blog->nextLink($post, __d('baser_core', '後の記事'). " ＞") ?>
 	</div>
 	<?php $this->BcBaser->element('blog_comments') ?>
 </div>
