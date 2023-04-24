@@ -11,6 +11,7 @@
 
 namespace BcWidgetArea\Test\TestCase\Controller\Api\Admin;
 
+use BaserCore\Service\DblogsServiceInterface;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcWidgetArea\Test\Factory\WidgetAreaFactory;
@@ -36,6 +37,7 @@ class WidgetAreasControllerTest extends BcTestCase
         'plugin.BaserCore.Factory/UsersUserGroups',
         'plugin.BaserCore.Factory/UserGroups',
         'plugin.BcWidgetArea.Factory/WidgetAreas',
+        'plugin.BaserCore.Factory/Dblogs',
     ];
 
     /**
@@ -234,7 +236,31 @@ class WidgetAreasControllerTest extends BcTestCase
      */
     public function testBatch()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // テストデータを作る
+        WidgetAreaFactory::make(['id' => 1, 'name' => 'test', 'widgets' => 'test'])->persist();
+        $data = [
+            'batch' => 'delete',
+            'batch_targets' => [1],
+        ];
+        //APIを呼ぶ
+        $this->post("/baser/api/admin/bc-widget-area/widget_areas/batch.json?token=" . $this->accessToken, $data);
+        // レスポンスコードを確認する
+        $this->assertResponseOk();
+        // 戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals($result->message, '一括処理が完了しました。');
+
+        // DBログに保存するかどうか確認する
+        $dbLogService = $this->getService(DblogsServiceInterface::class);
+        $dbLog = $dbLogService->getDblogs(1)->toArray()[0];
+        $this->assertEquals('ウィジェットエリア「test」を 削除 しました。', $dbLog->message);
+        $this->assertEquals(1, $dbLog->id);
+        $this->assertEquals('WidgetAreas', $dbLog->controller);
+        $this->assertEquals('batch', $dbLog->action);
+
+        //削除したメールフィルドが存在するか確認すること
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        WidgetAreaFactory::get(1);
     }
 
     /**

@@ -181,6 +181,7 @@ class WidgetAreasController extends BcAdminApiController
      * @param WidgetAreasServiceInterface $service
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function batch(WidgetAreasServiceInterface $service)
     {
