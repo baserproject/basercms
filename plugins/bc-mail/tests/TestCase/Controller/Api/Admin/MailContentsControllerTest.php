@@ -231,6 +231,22 @@ class MailContentsControllerTest extends BcTestCase
      */
     public function testCopy()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを生成
+        $this->loadFixtureScenario(MailContentsScenario::class);
+        $copyData = [
+            'entity_id' => 1,
+            'parent_id' => 1,
+            'title' => 'メールコンテンツコピー',
+            'site_id' => 1
+        ];
+        //APIを呼ぶ
+        $this->post("/baser/api/admin/bc-mail/mail_contents/copy.json?token=" . $this->accessToken, $copyData);
+        // レスポンスコードを確認する
+        $this->assertResponseOk();
+        // 戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        // 戻るメッセージを確認
+        $this->assertEquals($result->message, 'メールフォームのコピー「メールコンテンツコピー」を追加しました。');
+        $this->assertNotNull($result->mailContents);
     }
 }
