@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: baserCMS\n"
-"POT-Creation-Date: 2023-04-23 12:09+0900\n"
-"PO-Revision-Date: 2023-04-23 14:35+0900\n"
+"POT-Creation-Date: 2023-04-24 13:30+0900\n"
+"PO-Revision-Date: 2023-04-24 13:41+0900\n"
 "Last-Translator: ryuring\n"
 "Language-Team: baserCMS Users Community <info@basercms.net>\n"
 "Language: en\n"
@@ -3646,6 +3646,171 @@ msgstr "Cancel"
 msgid "保存"
 msgstr "Save"
 
+#: __assets/plugins/baser-core/src/Controller/Component/BcManagerComponent.php:78
+msgid ""
+"データベースの保存フォルダの作成に失敗しました。db フォルダの書き込み権限を見"
+"なおしてください。"
+msgstr ""
+"Failed creating database's saving folder. Please re-check db folder's write "
+"permission."
+
+#: __assets/plugins/baser-core/src/Controller/Component/BcManagerComponent.php:89
+msgid ""
+"インストールファイル生成に失敗しました。設定フォルダの書き込み権限を見なおし"
+"てください。"
+msgstr ""
+"Failed creating installation file. Please re-check write permission to "
+"setting folder."
+
+#: __assets/plugins/baser-core/src/Controller/Component/BcManagerComponent.php:95
+msgid ""
+"データベースの設定ファイル生成に失敗しました。設定フォルダの書き込み権限を見"
+"なおしてください。"
+msgstr ""
+"Failed creating database's setting file. Please re-check write permission to "
+"setting folder."
+
+#: __assets/plugins/baser-core/src/Controller/Component/BcManagerComponent.php:101
+msgid ""
+"データベースの初期化に失敗しました。データベースの設定を見なおしてください。"
+msgstr "Failed initializing database. Please re-check database's settings."
+
+#: __assets/plugins/baser-core/src/Controller/Component/BcManagerComponent.php:108
+msgid ""
+"サイト基本設定への管理者メールアドレスの設定処理が失敗しました。データベース"
+"の設定を見なおしてください。"
+msgstr ""
+"Failed setting admin mail address to Site Basic Settings. Please re-check "
+"database's settings."
+
+#: __assets/plugins/baser-core/src/Controller/Component/BcManagerComponent.php:114
+msgid ""
+"初期ユーザーの作成に失敗しました。データベースの設定を見なおしてください。"
+msgstr "Failed creating initial User. Please re-check database's settings."
+
+#: __assets/plugins/baser-core/src/Controller/Component/BcManagerComponent.php:121
+msgid ""
+"データベースのデータ更新に失敗しました。データベースの設定を見なおしてくださ"
+"い。"
+msgstr ""
+"Failed updating database's data. Please re-check the settings of database."
+
+#: __assets/plugins/baser-core/src/Controller/Component/BcManagerComponent.php:127
+#: plugins/bc-installer/src/Service/InstallationsService.php:194
+msgid "コアプラグインのインストールに失敗しました。"
+msgstr "Failed installing Core Plugin."
+
+#: __assets/plugins/baser-core/src/Controller/Component/BcManagerComponent.php:133
+msgid ""
+"テーマの配置に失敗しました。テーマフォルダの書き込み権限を確認してください。"
+msgstr ""
+"Failed to deploy theme. Check the write permission of the theme folder."
+
+#: __assets/plugins/baser-core/src/Controller/Component/BcManagerComponent.php:139
+msgid ""
+"管理システムのアセットファイルの配置に失敗しました。テーマフォルダの書き込み"
+"権限を確認してください。"
+msgstr ""
+"Failed placing Admin System's Asset File. Please check Theme Folder's write "
+"permission."
+
+#: __assets/plugins/baser-core/src/Controller/Component/BcManagerComponent.php:144
+msgid ""
+"アップロード用初期フォルダの作成に失敗しました。files フォルダの書き込み権限"
+"を確認してください。"
+msgstr ""
+"Failed creating initial folder for uploading. Please check files folder's "
+"write permission."
+
+#: __assets/plugins/baser-core/src/Controller/Component/BcManagerComponent.php:150
+msgid ""
+"エディタテンプレートイメージの配置に失敗しました。files フォルダの書き込み権"
+"限を確認してください。"
+msgstr ""
+"Failed placing Editor Template Image. Please check files folder's write "
+"permission."
+
+#: __assets/plugins/baser-core/src/Controller/Component/BcManagerComponent.php:269
+msgid "設定ファイルを正常に初期化できませんでした。"
+msgstr "Cound't initialize setting file correctly."
+
+#: __assets/plugins/baser-core/src/Controller/Component/BcManagerComponent.php:274
+msgid "データベースを正常に初期化できませんでした。"
+msgstr "Couldn't initialize database correctly."
+
+#: __assets/plugins/baser-core/src/Controller/Component/BcManagerComponent.php:281
+msgid "テーマフォルダを初期化できませんでした。"
+msgstr "Coudn't initialize Theme Folder."
+
+#: __assets/plugins/baser-core/src/Controller/Component/BcManagerComponent.php:287
+msgid "固定ページテンプレートを初期化できませんでした。"
+msgstr "Couldn't initialize Static Page Template."
+
+#: __assets/plugins/baser-core/src/Controller/Component/BcManagerComponent.php:293
+msgid "files フォルダを初期化できませんでした。"
+msgstr "Couldn't initialize files folder."
+
+#: __assets/plugins/baser-core/src/Controller/Component/BcManagerComponent.php:299
+msgid "img / css / js フォルダを初期化できませんでした。"
+msgstr "Couldn't initialize img / css / js folder."
+
+#: __assets/plugins/baser-core/src/basics.php:360
+msgid "baserCMSアップデート"
+msgstr "Update baserCMS"
+
+#: __assets/plugins/baser-core/src/basics.php:363
+msgid "下記のURLよりbaserCMSのアップデートを完了してください。"
+msgstr "Please complete the update of baserCMS from the URL below."
+
+#: __assets/plugins/baser-core/src/basics.php:482
+msgid "%s は、バージョン %s より非推奨となりました。"
+msgstr "%s is deprecated since version %s."
+
+#: __assets/plugins/baser-core/src/basics.php:484
+msgid "バージョン %s で削除される予定です。"
+msgstr "It's going to be deleted on version %s."
+
+#: __assets/plugins/bc-admin-third/templates/Admin/element/footer-4.php:54
+msgid "baserCMS 公式サイト"
+msgstr "baserCMS Official Site"
+
+#: __assets/plugins/bc-admin-third/templates/Admin/element/footer-4.php:57
+msgid "baserCMS ユーザーコミュニティ"
+msgstr "baserCMS User Community"
+
+#: __assets/plugins/bc-admin-third/templates/Admin/element/footer-4.php:60
+msgid "baserCMS ユーザーズフォーラム"
+msgstr "baserCMS Users Forum"
+
+#: __assets/plugins/bc-admin-third/templates/Admin/element/footer-4.php:63
+#: plugins/bc-admin-third/templates/email/text/installed.php:99
+msgid "baserCMS GitHub"
+msgstr "baserCMS GitHub"
+
+#: plugins/BcPluginSample/config.php:15
+msgid "サンプルプラグイン"
+msgstr "Sample Plugin"
+
+#: plugins/BcPluginSample/config.php:16
+msgid "ツールバーに少しの変化をもたらすだけのサンプルプラグインです。"
+msgstr "It’s just a sample plugin that makes some changes to the toolbar."
+
+#: plugins/BcSpaSample/config.php:14
+msgid "SPAサンプル"
+msgstr "SPA sample"
+
+#: plugins/BcSpaSample/config.php:15
+msgid "SPAのサンプルプラグインです"
+msgstr "This is a sample plug-in of SPA"
+
+#: plugins/BcThemeSample/config.php:14
+msgid "サンプルテーマ"
+msgstr "Sample Themes"
+
+#: plugins/BcThemeSample/config.php:15
+msgid "制作用のサンプルテーマです。"
+msgstr "This is a sample theme for production."
+
 #: plugins/bc-admin-third/config.php:14
 msgid "BcAdminThird"
 msgstr "BcAdminThird"
@@ -4750,6 +4915,7 @@ msgstr "User List"
 #: plugins/bc-admin-third/templates/plugin/BcMail/Admin/MailConfigs/index.php:56
 #: plugins/bc-admin-third/templates/plugin/BcThemeFile/Admin/element/ThemeFiles/submenus.php:22
 #: plugins/bc-admin-third/templates/plugin/BcThemeFile/Admin/element/help/theme_files_index.php:33
+#: plugins/bc-column/templates/element/blog_comments.php:53
 #: plugins/bc-custom-content/plugins/BcCcEmail/config/setting.php:27
 #: plugins/bc-front/templates/Users/login.php:35
 #: plugins/bc-mail/src/Model/Table/MailFieldsTable.php:159
@@ -5997,6 +6163,7 @@ msgstr "Please enter your first name"
 #: plugins/bc-admin-third/templates/Admin/element/Users/form.php:73
 #: plugins/bc-admin-third/templates/Admin/element/Users/index_list.php:62
 #: plugins/bc-admin-third/templates/Admin/element/Users/index_list.php:63
+#: plugins/bc-column/templates/element/blog_comments.php:48
 #: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:68
 msgid "ニックネーム"
 msgstr "Nickname"
@@ -6321,6 +6488,8 @@ msgid "ルール追加"
 msgstr "Add Rule"
 
 #: plugins/bc-admin-third/templates/Admin/element/crumbs.php:16
+#: plugins/bc-column/templates/element/crumbs.php:6
+#: plugins/bc-column/templates/element/crumbs.php:22
 #: plugins/bc-front/templates/element/crumbs.php:22
 msgid "ホーム"
 msgstr "Home"
@@ -7269,10 +7438,6 @@ msgstr "baserCMS Users Forum"
 msgid "不具合や改善報告はこちらよりどうぞ。"
 msgstr "Please send bugs or suggestions here."
 
-#: plugins/bc-admin-third/templates/email/text/installed.php:99
-msgid "baserCMS GitHub"
-msgstr "baserCMS GitHub"
-
 #: plugins/bc-admin-third/templates/email/text/installed.php:101
 msgid "baserCMSの開発状況や、今後の開発タスクなどが確認できます。"
 msgstr "You can check baserCMS’s developing status and tasks for future."
@@ -7679,6 +7844,7 @@ msgstr "Category"
 
 #: plugins/bc-admin-third/templates/plugin/BcBlog/Admin/element/BlogPosts/index_list.php:85
 #: plugins/bc-blog/src/Event/BcBlogViewEventListener.php:116
+#: plugins/bc-column/templates/element/blog_comments.php:65
 #: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:87
 msgid "コメント"
 msgstr "Comment"
@@ -8905,11 +9071,13 @@ msgstr "Use of GD"
 
 #: plugins/bc-admin-third/templates/plugin/BcInstaller/Admin/Installations/step2.php:127
 #: plugins/bc-admin-third/templates/plugin/BcInstaller/Admin/Installations/step2.php:141
+#: plugins/bc-admin-third/templates/plugin/BcInstaller/Admin/Installations/step2.php:208
 msgid "利用可"
 msgstr "Available"
 
 #: plugins/bc-admin-third/templates/plugin/BcInstaller/Admin/Installations/step2.php:129
 #: plugins/bc-admin-third/templates/plugin/BcInstaller/Admin/Installations/step2.php:143
+#: plugins/bc-admin-third/templates/plugin/BcInstaller/Admin/Installations/step2.php:210
 msgid "利用不可"
 msgstr "Not Available"
 
@@ -8992,6 +9160,18 @@ msgid ""
 "php.iniの設定変更が可能であれば、memory_limit の値を%s以上に設定してください"
 msgstr ""
 "Please set memory_limit value to over %s if you can change pho.ini settings."
+
+#: plugins/bc-admin-third/templates/plugin/BcInstaller/Admin/Installations/step2.php:202
+msgid "拡張モジュール"
+msgstr "Expansion module"
+
+#: plugins/bc-admin-third/templates/plugin/BcInstaller/Admin/Installations/step2.php:205
+msgid "Zip"
+msgstr "Zip"
+
+#: plugins/bc-admin-third/templates/plugin/BcInstaller/Admin/Installations/step2.php:211
+msgid "テーマなどのzipダウンロードが制限されます。"
+msgstr "zip downloads such as themes are restricted."
 
 #: plugins/bc-admin-third/templates/plugin/BcInstaller/Admin/Installations/step2.php:225
 msgid "再チェック"
@@ -9720,6 +9900,7 @@ msgid "メール送信"
 msgstr "Send Email"
 
 #: plugins/bc-admin-third/templates/plugin/BcMail/Admin/element/MailFields/form.php:316
+#: plugins/bc-column/templates/element/blog_comments.php:80
 #: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:113
 #: plugins/bc-front/templates/plugin/BcMail/element/mail_form.php:53
 msgid "送信する"
@@ -11038,6 +11219,152 @@ msgstr ""
 "Please specify Contents Template Name with contentsTemplate option when "
 "omitting $contentName."
 
+#: plugins/bc-column/templates/element/blog_comments.php:8
+#: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:23
+msgid "お名前を入力してください"
+msgstr "Please enter your name"
+
+#: plugins/bc-column/templates/element/blog_comments.php:9
+#: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:24
+msgid "コメントを入力してください"
+msgstr "Please enter comments"
+
+#: plugins/bc-column/templates/element/blog_comments.php:10
+#: plugins/bc-column/templates/element/blog_comments.php:76
+#: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:25
+#: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:108
+#: plugins/bc-front/templates/plugin/BcMail/element/auth_captcha.php:35
+msgid "画像の文字を入力してください"
+msgstr "Please enter the letters of the image"
+
+#: plugins/bc-column/templates/element/blog_comments.php:11
+#: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:26
+msgid "送信が完了しました。送信された内容は確認後公開させて頂きます。"
+msgstr ""
+"Submission has been completed. After confirming the contents we will make it "
+"public."
+
+#: plugins/bc-column/templates/element/blog_comments.php:12
+#: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:27
+msgid "コメントの送信に失敗しました。入力内容を見なおしてください。"
+msgstr "Failed to submit comment. Please check the input contents."
+
+#: plugins/bc-column/templates/element/blog_comments.php:48
+#: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:68
+msgid "お名前"
+msgstr "Name"
+
+#: plugins/bc-column/templates/element/blog_comments.php:57
+msgid "Eメールは公開されません"
+msgstr "Your email address will not be published"
+
+#: plugins/bc-column/templates/element/blog_comments.php:73
+#: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:97
+msgid "認証画象"
+msgstr "Authentication Image"
+
+#: plugins/bc-column/templates/element/contents_menu.php:45
+msgid "トップページ"
+msgstr "Top page"
+
+#: plugins/bc-column/templates/element/toppage.php:12
+msgid "実績"
+msgstr "Works"
+
+#: plugins/bc-column/templates/plugin/BcBlog/Blog/default/archives.php:5
+#: plugins/bc-column/templates/plugin/BcBlog/Blog/topics/archives.php:5
+#: plugins/bc-column/templates/plugin/BcBlog/Blog/works/archives.php:5
+#: plugins/bc-front/templates/plugin/BcBlog/Blog/default/archives.php:38
+msgid "のアーカイブ一覧です。"
+msgstr "Archive list."
+
+#: plugins/bc-column/templates/plugin/BcBlog/Blog/default/archives.php:39
+#: plugins/bc-column/templates/plugin/BcBlog/Blog/default/index.php:35
+#: plugins/bc-column/templates/plugin/BcBlog/Blog/default/posts.php:23
+#: plugins/bc-column/templates/plugin/BcBlog/Blog/topics/archives.php:46
+#: plugins/bc-column/templates/plugin/BcBlog/Blog/topics/index.php:43
+#: plugins/bc-column/templates/plugin/BcBlog/Blog/topics/posts.php:31
+#: plugins/bc-column/templates/plugin/BcBlog/Blog/works/archives.php:37
+#: plugins/bc-column/templates/plugin/BcBlog/Blog/works/index.php:35
+#: plugins/bc-column/templates/plugin/BcBlog/Blog/works/posts.php:31
+#: plugins/bc-front/templates/plugin/BcBlog/Blog/default/archives.php:65
+#: plugins/bc-front/templates/plugin/BcBlog/Blog/default/index.php:53
+#: plugins/bc-front/templates/plugin/BcBlog/Blog/default/posts.php:53
+#: plugins/bc-front/templates/plugin/BcBlog/Blog/tags.php:48
+msgid "記事がありません。"
+msgstr "Article not found."
+
+#: plugins/bc-column/templates/plugin/BcBlog/Blog/default/index.php:20
+#: plugins/bc-column/templates/plugin/BcBlog/Blog/topics/archives.php:29
+#: plugins/bc-column/templates/plugin/BcBlog/Blog/topics/index.php:27
+#: plugins/bc-column/templates/plugin/BcBlog/Blog/works/archives.php:33
+#: plugins/bc-column/templates/plugin/BcBlog/Blog/works/index.php:31
+msgid "詳細ページへ"
+msgstr "To detail page"
+
+#: plugins/bc-column/templates/plugin/BcBlog/Blog/default/single.php:39
+#: plugins/bc-column/templates/plugin/BcBlog/Blog/topics/single.php:39
+#: plugins/bc-column/templates/plugin/BcBlog/Blog/works/single.php:31
+msgid "前の記事"
+msgstr "Previous article"
+
+#: plugins/bc-column/templates/plugin/BcBlog/Blog/default/single.php:41
+#: plugins/bc-column/templates/plugin/BcBlog/Blog/topics/single.php:41
+#: plugins/bc-column/templates/plugin/BcBlog/Blog/works/single.php:33
+msgid "一覧へ"
+msgstr "To list"
+
+#: plugins/bc-column/templates/plugin/BcBlog/Blog/default/single.php:42
+#: plugins/bc-column/templates/plugin/BcBlog/Blog/topics/single.php:42
+#: plugins/bc-column/templates/plugin/BcBlog/Blog/works/single.php:35
+msgid "後の記事"
+msgstr "Next article"
+
+#: plugins/bc-column/templates/plugin/BcMail/Mail/default/confirm.php:18
+#: plugins/bc-front/templates/plugin/BcMail/Mail/default/confirm.php:30
+msgid "入力内容の確認"
+msgstr "Confirm"
+
+#: plugins/bc-column/templates/plugin/BcMail/Mail/default/confirm.php:19
+#: plugins/bc-front/templates/plugin/BcMail/Mail/default/confirm.php:31
+msgid ""
+"入力した内容に間違いがなければ「送信する」ボタンをクリックしてください。"
+msgstr ""
+"If there is no mistake in the contents entered, please click Submit button."
+
+#: plugins/bc-column/templates/plugin/BcMail/Mail/default/confirm.php:21
+#: plugins/bc-column/templates/plugin/BcMail/Mail/default/index.php:14
+#: plugins/bc-front/templates/plugin/BcMail/Mail/default/confirm.php:33
+#: plugins/bc-front/templates/plugin/BcMail/Mail/default/index.php:28
+msgid "入力フォーム"
+msgstr "Input form"
+
+#: plugins/bc-column/templates/plugin/BcMail/Mail/default/submit.php:14
+#: plugins/bc-front/templates/plugin/BcMail/Mail/default/submit.php:34
+msgid "メール送信完了"
+msgstr "Email sent completed"
+
+#: plugins/bc-column/templates/plugin/BcMail/Mail/default/submit.php:16
+#: plugins/bc-front/templates/plugin/BcMail/Mail/default/submit.php:37
+msgid "お問い合わせ頂きありがとうございました。"
+msgstr "Thank you for your inquiry."
+
+#: plugins/bc-column/templates/plugin/BcMail/Mail/default/submit.php:17
+#: plugins/bc-front/templates/plugin/BcMail/Mail/default/submit.php:38
+msgid "確認次第、ご連絡させて頂きます。"
+msgstr "As soon as we confirm it, we will contact you."
+
+#: plugins/bc-column/templates/plugin/BcMail/Mail/default/submit.php:19
+#: plugins/bc-front/templates/plugin/BcMail/Mail/default/submit.php:40
+msgid "{0} 秒後にトップページへ自動的に移動します。"
+msgstr ""
+"{0} After a second, the user is automatically redirected to the top page."
+
+#: plugins/bc-column/templates/plugin/BcMail/Mail/default/submit.php:20
+#: plugins/bc-front/templates/plugin/BcMail/Mail/default/submit.php:41
+msgid "移動しない場合はコチラをクリックしてください。"
+msgstr "If you can not move, please click here."
+
 #: plugins/bc-content-link/config.php:14
 msgid "コンテンツリンク"
 msgstr "Content Links"
@@ -11081,39 +11408,6 @@ msgstr "Content link: Deleted {0}."
 #: plugins/bc-content-link/src/Model/Table/ContentLinksTable.php:67
 msgid "リンク先URLを入力してください。"
 msgstr "Please enter linked URL."
-
-#: plugins/bc-column/templates/element/blog_comments.php:8
-#: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:23
-msgid "お名前を入力してください"
-msgstr "Please enter your name"
-
-#: plugins/bc-column/templates/element/blog_comments.php:9
-#: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:24
-msgid "コメントを入力してください"
-msgstr "Please enter comments"
-
-#: plugins/bc-column/templates/element/blog_comments.php:10
-#: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:25
-#: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:108
-#: plugins/bc-front/templates/plugin/BcMail/element/auth_captcha.php:35
-msgid "画像の文字を入力してください"
-msgstr "Please enter the letters of the image"
-
-#: plugins/bc-column/templates/element/blog_comments.php:11
-#: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:26
-msgid "送信が完了しました。送信された内容は確認後公開させて頂きます。"
-msgstr ""
-"Submission has been completed. After confirming the contents we will make it "
-"public."
-
-#: plugins/bc-column/templates/element/blog_comments.php:12
-#: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:27
-msgid "コメントの送信に失敗しました。入力内容を見なおしてください。"
-msgstr "Failed to submit comment. Please check the input contents."
-
-#: plugins/bc-column/templates/element/contents_menu.php:45
-msgid "トップページ"
-msgstr "Top page"
 
 #: plugins/bc-custom-content/config.php:14
 #: plugins/bc-custom-content/config/setting.php:21
@@ -11938,17 +12232,6 @@ msgstr "%s.%s"
 msgid "%s年"
 msgstr "%s"
 
-#: plugins/bc-front/templates/plugin/BcBlog/Blog/default/archives.php:38
-msgid "のアーカイブ一覧です。"
-msgstr "Archive list."
-
-#: plugins/bc-front/templates/plugin/BcBlog/Blog/default/archives.php:65
-#: plugins/bc-front/templates/plugin/BcBlog/Blog/default/index.php:53
-#: plugins/bc-front/templates/plugin/BcBlog/Blog/default/posts.php:53
-#: plugins/bc-front/templates/plugin/BcBlog/Blog/tags.php:48
-msgid "記事がありません。"
-msgstr "Article not found."
-
 #: plugins/bc-front/templates/plugin/BcBlog/Blog/tags.php:22
 msgid "%s のアーカイブ一覧です。"
 msgstr "%s's Archive List."
@@ -11961,10 +12244,6 @@ msgstr "Comment on this article"
 msgid "コメントを送る"
 msgstr "Send comments"
 
-#: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:68
-msgid "お名前"
-msgstr "Name"
-
 #: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:78
 msgid "メールアドレスは公開されません"
 msgstr "Your email address will not be published"
@@ -11973,10 +12252,6 @@ msgstr "Your email address will not be published"
 #: plugins/bc-front/templates/plugin/BcMail/element/mail_input.php:51
 msgid "任意"
 msgstr "Any"
-
-#: plugins/bc-front/templates/plugin/BcBlog/element/blog_comments.php:97
-msgid "認証画象"
-msgstr "Authentication Image"
 
 #: plugins/bc-front/templates/plugin/BcBlog/element/blog_related_posts.php:27
 msgid "関連記事"
@@ -12054,42 +12329,6 @@ msgstr "{0} commented on \"{1}\"."
 #: plugins/bc-front/templates/plugin/BcCustomContent/CustomContent/default/index.php:46
 msgid "エントリーが存在しません。"
 msgstr "The entry does not exist."
-
-#: plugins/bc-front/templates/plugin/BcMail/Mail/default/confirm.php:30
-msgid "入力内容の確認"
-msgstr "Confirm"
-
-#: plugins/bc-front/templates/plugin/BcMail/Mail/default/confirm.php:31
-msgid ""
-"入力した内容に間違いがなければ「送信する」ボタンをクリックしてください。"
-msgstr ""
-"If there is no mistake in the contents entered, please click Submit button."
-
-#: plugins/bc-front/templates/plugin/BcMail/Mail/default/confirm.php:33
-#: plugins/bc-front/templates/plugin/BcMail/Mail/default/index.php:28
-msgid "入力フォーム"
-msgstr "Input form"
-
-#: plugins/bc-front/templates/plugin/BcMail/Mail/default/submit.php:34
-msgid "メール送信完了"
-msgstr "Email sent completed"
-
-#: plugins/bc-front/templates/plugin/BcMail/Mail/default/submit.php:37
-msgid "お問い合わせ頂きありがとうございました。"
-msgstr "Thank you for your inquiry."
-
-#: plugins/bc-front/templates/plugin/BcMail/Mail/default/submit.php:38
-msgid "確認次第、ご連絡させて頂きます。"
-msgstr "As soon as we confirm it, we will contact you."
-
-#: plugins/bc-front/templates/plugin/BcMail/Mail/default/submit.php:40
-msgid "{0} 秒後にトップページへ自動的に移動します。"
-msgstr ""
-"{0} After a second, the user is automatically redirected to the top page."
-
-#: plugins/bc-front/templates/plugin/BcMail/Mail/default/submit.php:41
-msgid "移動しない場合はコチラをクリックしてください。"
-msgstr "If you can not move, please click here."
 
 #: plugins/bc-front/templates/plugin/BcMail/Mail/default/unpublish.php:24
 msgid "受付中止"
@@ -12392,10 +12631,6 @@ msgstr "Data pattern's format is illegal."
 #: plugins/bc-installer/src/Service/InstallationsService.php:188
 msgid "コアテーブルの構築に失敗しました。"
 msgstr "Failed constructing Core table."
-
-#: plugins/bc-installer/src/Service/InstallationsService.php:194
-msgid "コアプラグインのインストールに失敗しました。"
-msgstr "Failed installing Core Plugin."
 
 #: plugins/bc-installer/src/Service/InstallationsService.php:200
 #: plugins/bc-installer/src/Service/InstallationsService.php:203
@@ -12713,6 +12948,10 @@ msgstr "The maximum value should be no more than 9 characters."
 #: plugins/bc-mail/src/Model/Table/MailFieldsTable.php:164
 msgid "カレンダー"
 msgstr "Calendar"
+
+#: plugins/bc-mail/src/Model/Table/MailFieldsTable.php:166
+msgid "数値"
+msgstr "Numerical value"
 
 #: plugins/bc-mail/src/Model/Table/MailFieldsTable.php:173
 msgid "グループチェック"
@@ -13554,6 +13793,14 @@ msgstr "Core Widget"
 msgid "ウィジェット"
 msgstr "Widgets"
 
+#: tests/bootstrap.php:82
+msgid ""
+"ユニットテストを実行する際は、bin/cake setup test を実行して .env の設定を変"
+"更してください。"
+msgstr ""
+"When running unit tests, run “bin/cake setup test” to change your .env "
+"settings."
+
 #~ msgid "baser（コア）"
 #~ msgstr "baser (Core)"
 
@@ -13565,136 +13812,6 @@ msgstr "Widgets"
 
 #~ msgid "user_groups[_ids][] を指定してください。"
 #~ msgstr "Specify user_groups[_ids][]."
-
-#~ msgid ""
-#~ "データベースの保存フォルダの作成に失敗しました。db フォルダの書き込み権限"
-#~ "を見なおしてください。"
-#~ msgstr ""
-#~ "Failed creating database's saving folder. Please re-check db folder's "
-#~ "write permission."
-
-#~ msgid ""
-#~ "インストールファイル生成に失敗しました。設定フォルダの書き込み権限を見なお"
-#~ "してください。"
-#~ msgstr ""
-#~ "Failed creating installation file. Please re-check write permission to "
-#~ "setting folder."
-
-#~ msgid ""
-#~ "データベースの設定ファイル生成に失敗しました。設定フォルダの書き込み権限を"
-#~ "見なおしてください。"
-#~ msgstr ""
-#~ "Failed creating database's setting file. Please re-check write permission "
-#~ "to setting folder."
-
-#~ msgid ""
-#~ "データベースの初期化に失敗しました。データベースの設定を見なおしてくださ"
-#~ "い。"
-#~ msgstr "Failed initializing database. Please re-check database's settings."
-
-#~ msgid ""
-#~ "サイト基本設定への管理者メールアドレスの設定処理が失敗しました。データベー"
-#~ "スの設定を見なおしてください。"
-#~ msgstr ""
-#~ "Failed setting admin mail address to Site Basic Settings. Please re-check "
-#~ "database's settings."
-
-#~ msgid ""
-#~ "初期ユーザーの作成に失敗しました。データベースの設定を見なおしてください。"
-#~ msgstr "Failed creating initial User. Please re-check database's settings."
-
-#~ msgid ""
-#~ "データベースのデータ更新に失敗しました。データベースの設定を見なおしてくだ"
-#~ "さい。"
-#~ msgstr ""
-#~ "Failed updating database's data. Please re-check the settings of database."
-
-#, fuzzy
-#~| msgid ""
-#~| "管理システムのアセットファイルの配置に失敗しました。テーマフォルダの書き"
-#~| "込み権限を確認してください。"
-#~ msgid ""
-#~ "テーマの配置に失敗しました。テーマフォルダの書き込み権限を確認してくださ"
-#~ "い。"
-#~ msgstr ""
-#~ "Failed placing Admin System's Asset File. Please check Theme Folder's "
-#~ "write permission."
-
-#~ msgid ""
-#~ "管理システムのアセットファイルの配置に失敗しました。テーマフォルダの書き込"
-#~ "み権限を確認してください。"
-#~ msgstr ""
-#~ "Failed placing Admin System's Asset File. Please check Theme Folder's "
-#~ "write permission."
-
-#~ msgid ""
-#~ "アップロード用初期フォルダの作成に失敗しました。files フォルダの書き込み権"
-#~ "限を確認してください。"
-#~ msgstr ""
-#~ "Failed creating initial folder for uploading. Please check files folder's "
-#~ "write permission."
-
-#~ msgid ""
-#~ "エディタテンプレートイメージの配置に失敗しました。files フォルダの書き込み"
-#~ "権限を確認してください。"
-#~ msgstr ""
-#~ "Failed placing Editor Template Image. Please check files folder's write "
-#~ "permission."
-
-#~ msgid "設定ファイルを正常に初期化できませんでした。"
-#~ msgstr "Cound't initialize setting file correctly."
-
-#~ msgid "データベースを正常に初期化できませんでした。"
-#~ msgstr "Couldn't initialize database correctly."
-
-#~ msgid "テーマフォルダを初期化できませんでした。"
-#~ msgstr "Coudn't initialize Theme Folder."
-
-#~ msgid "固定ページテンプレートを初期化できませんでした。"
-#~ msgstr "Couldn't initialize Static Page Template."
-
-#~ msgid "files フォルダを初期化できませんでした。"
-#~ msgstr "Couldn't initialize files folder."
-
-#~ msgid "img / css / js フォルダを初期化できませんでした。"
-#~ msgstr "Couldn't initialize img / css / js folder."
-
-#~ msgid "baserCMSアップデート"
-#~ msgstr "Update baserCMS"
-
-#, fuzzy
-#~| msgid "アップデートを完了させてください"
-#~ msgid "下記のURLよりbaserCMSのアップデートを完了してください。"
-#~ msgstr "Please allow the update to complete"
-
-#~ msgid "%s は、バージョン %s より非推奨となりました。"
-#~ msgstr "%s is deprecated since version %s."
-
-#~ msgid "バージョン %s で削除される予定です。"
-#~ msgstr "It's going to be deleted on version %s."
-
-#~ msgid "baserCMS 公式サイト"
-#~ msgstr "baserCMS Official Site"
-
-#, fuzzy
-#~| msgid "baserCMS ユーザーズフォーラム"
-#~ msgid "baserCMS ユーザーコミュニティ"
-#~ msgstr "baserCMS Users Forum"
-
-#~ msgid "baserCMS ユーザーズフォーラム"
-#~ msgstr "baserCMS Users Forum"
-
-#~ msgid "SPAサンプル"
-#~ msgstr "SPA sample"
-
-#~ msgid "SPAのサンプルプラグインです"
-#~ msgstr "This is a sample plug-in of SPA"
-
-#~ msgid "サンプルテーマ"
-#~ msgstr "Sample Themes"
-
-#~ msgid "制作用のサンプルテーマです。"
-#~ msgstr "This is a sample theme for production."
 
 #~ msgid "管理画面に移動する"
 #~ msgstr "Go to the administration page"
