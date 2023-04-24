@@ -101,6 +101,7 @@ class MailContentsController extends BcAdminApiController
      *
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function add(MailContentsServiceInterface $service)
     {
