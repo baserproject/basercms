@@ -211,14 +211,14 @@ class PagesService implements PagesServiceInterface
      * @param array $options
      * @return Query
      */
-    protected function createIndexConditions(Query $query, $options = [])
+    public function createIndexConditions(Query $query, $options = [])
     {
         $conditions = [];
         if ($options['status'] === 'publish') {
             $conditions = $this->Pages->Contents->getConditionAllowPublish();
         }
         $queryList = ['contents', 'draft'];
-        foreach($options as $key => $value) {
+        foreach ($options as $key => $value) {
             if (in_array($key, $queryList)) {
                 $conditions["$key LIKE"] = '%' . $value . '%';
                 $query->where(["$key LIKE" => '%' . $value . '%']);

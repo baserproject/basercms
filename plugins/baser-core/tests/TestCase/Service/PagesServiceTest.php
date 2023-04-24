@@ -246,6 +246,44 @@ class PagesServiceTest extends BcTestCase
     }
 
     /**
+     * test createIndexConditions
+     */
+    public function test_createIndexConditions()
+    {
+        $pages = $this->Pages->find();
+        $query = $this->Pages->find();
+        $options = [];
+        $result = $this->PagesService->createIndexConditions($query, $options);
+        $this->assertEquals($pages->all()->count(), $result->all()->count());
+
+        $query = $this->Pages->find()->contain('Contents');
+        $options = [
+            'status' => 'publish',
+            'contain' => ['Contents'],
+            'draft' => null
+        ];
+        $result = $this->PagesService->createIndexConditions($query, $options)->all();
+        $this->assertEquals(8, $result->count());
+
+        $options = [
+            'status' => '',
+            'contents' => 'news',
+            'draft' => null
+        ];
+        $result = $this->PagesService->createIndexConditions($query, $options)->all();
+        $this->assertEquals(3, $result->count());
+
+        $options = [
+            'status' => '',
+            'contents' => 'Nghiem',
+            'draft' => null
+        ];
+        $result = $this->PagesService->createIndexConditions($query, $options)->all();
+        $this->assertEquals(1, $result->count());
+
+    }
+
+    /**
      * test getNew
      */
     public function test_getNew()
