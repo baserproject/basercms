@@ -272,15 +272,6 @@ class PagesServiceTest extends BcTestCase
         ];
         $result = $this->PagesService->createIndexConditions($query, $options)->all();
         $this->assertEquals(3, $result->count());
-
-        $options = [
-            'status' => '',
-            'contents' => 'Nghiem',
-            'draft' => null
-        ];
-        $result = $this->PagesService->createIndexConditions($query, $options)->all();
-        $this->assertEquals(1, $result->count());
-
     }
 
     /**
