@@ -324,6 +324,7 @@ class WidgetAreasController extends BcAdminApiController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function delete_widget(WidgetAreasServiceInterface $service, int $widgetAreaId, int $id)
     {
