@@ -14,6 +14,7 @@ namespace BcWidgetArea\Test\TestCase\Controller\Api\Admin;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcWidgetArea\Test\Factory\WidgetAreaFactory;
+use BcWidgetArea\Test\Scenario\WidgetAreasScenario;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 class WidgetAreasControllerTest extends BcTestCase
@@ -283,7 +284,18 @@ class WidgetAreasControllerTest extends BcTestCase
      */
     public function testUpdate_sort()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loadFixtureScenario(WidgetAreasScenario::class);
+        $data['sorted_ids'] = '4,2,3';
+        // APIを呼ぶ
+        $this->post("/baser/api/admin/bc-widget-area/widget_areas/update_sort/1.json?token=" . $this->accessToken, $data);
+        // レスポンスコードを確認する
+        $this->assertResponseOk();
+        // 戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        //メッセージを確認
+        $this->assertEquals('ウィジェットエリア「標準サイドバー」の並び順を更新しました。', $result->message);
+        //ウィジェットエリア名を更新できるか確認すること
+        $this->assertEquals('標準サイドバー', $result->widgetArea->name);
     }
 
     /**

@@ -290,6 +290,7 @@ class WidgetAreasController extends BcAdminApiController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function update_sort(WidgetAreasServiceInterface $service, int $widgetAreaId)
     {
