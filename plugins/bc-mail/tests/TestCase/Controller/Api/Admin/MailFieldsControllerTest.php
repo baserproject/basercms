@@ -253,6 +253,14 @@ class MailFieldsControllerTest extends BcTestCase
      */
     public function testUpdateSort()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        //データを生成
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+        //APIを呼ぶ
+        $this->post("/baser/api/admin/bc-mail/mail_fields/update_sort/1.json?token=" . $this->accessToken, ['id' => 1, 'offset' => 3]);
+        // レスポンスコードを確認する
+        $this->assertResponseOk();
+        // 戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals($result->message, 'メールフィールド「性」の並び替えを更新しました。。');
     }
 }
