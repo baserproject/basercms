@@ -132,7 +132,7 @@ class BlogTagsTable extends BlogAppTable
 
     /**
      * コピーする
-     * @param null $id
+     * @param $id
      * @return EntityInterface
      * @throws \Throwable
      * @checked
@@ -169,12 +169,6 @@ class BlogTagsTable extends BlogAppTable
             ]);
 
             return $entity;
-        } catch (PersistenceFailedException $e) {
-            $entity = $e->getEntity();
-            if ($entity->getError('name')) {
-                return $this->copy(null, $entity);
-            }
-            throw $e;
         } catch (\Throwable $e) {
             throw $e;
         }
