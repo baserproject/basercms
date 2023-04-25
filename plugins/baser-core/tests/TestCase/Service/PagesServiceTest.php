@@ -18,6 +18,7 @@ use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Factory\ContentFolderFactory;
 use BaserCore\Test\Factory\PageFactory;
 use BaserCore\TestSuite\BcTestCase;
+use Closure;
 
 /**
  * Class PagesServiceTest
@@ -250,11 +251,12 @@ class PagesServiceTest extends BcTestCase
      */
     public function test_createIndexConditions()
     {
-        $pages = $this->Pages->find();
         $query = $this->Pages->find();
         $options = [];
-        $result = $this->PagesService->createIndexConditions($query, $options);
-        $this->assertEquals($pages->all()->count(), $result->all()->count());
+        $result = Closure::bind(
+            fn($class) => $class->createIndexConditions($query, $options), null, get_class($this->PagesService)
+        )($this->PagesService);
+        $this->assertCount(9, $result->all());
 
         $query = $this->Pages->find()->contain('Contents');
         $options = [
@@ -262,16 +264,20 @@ class PagesServiceTest extends BcTestCase
             'contain' => ['Contents'],
             'draft' => null
         ];
-        $result = $this->PagesService->createIndexConditions($query, $options)->all();
-        $this->assertEquals(8, $result->count());
+        $result = Closure::bind(
+            fn($class) => $class->createIndexConditions($query, $options), null, get_class($this->PagesService)
+        )($this->PagesService);
+        $this->assertCount(8, $result->all());
 
         $options = [
             'status' => '',
             'contents' => 'news',
             'draft' => null
         ];
-        $result = $this->PagesService->createIndexConditions($query, $options)->all();
-        $this->assertEquals(3, $result->count());
+        $result = Closure::bind(
+            fn($class) => $class->createIndexConditions($query, $options), null, get_class($this->PagesService)
+        )($this->PagesService);
+        $this->assertCount(3, $result->all());
     }
 
     /**

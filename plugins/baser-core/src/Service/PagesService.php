@@ -211,7 +211,7 @@ class PagesService implements PagesServiceInterface
      * @param array $options
      * @return Query
      */
-    public function createIndexConditions(Query $query, $options = [])
+    protected function createIndexConditions(Query $query, $options = [])
     {
         $conditions = [];
         if ($options['status'] === 'publish') {
