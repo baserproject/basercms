@@ -38,6 +38,7 @@ class MailFieldsController extends BcAdminApiController
      * @param MailFieldsService $service
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function batch(MailFieldsServiceInterface $service)
     {
