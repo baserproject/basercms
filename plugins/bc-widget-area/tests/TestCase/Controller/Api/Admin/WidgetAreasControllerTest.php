@@ -14,6 +14,7 @@ namespace BcWidgetArea\Test\TestCase\Controller\Api\Admin;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\TestSuite\BcTestCase;
 use BcWidgetArea\Test\Factory\WidgetAreaFactory;
+use BcWidgetArea\Test\Scenario\WidgetAreasScenario;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 class WidgetAreasControllerTest extends BcTestCase
@@ -291,7 +292,26 @@ class WidgetAreasControllerTest extends BcTestCase
      */
     public function testDelete_widget()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loadFixtureScenario(WidgetAreasScenario::class);
+        // APIを呼ぶ
+        $this->post("/baser/api/admin/bc-widget-area/widget_areas/delete_widget/1/2.json?token=" . $this->accessToken);
+        // レスポンスコードを確認する
+        $this->assertResponseOk();
+        // 戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        //メッセージを確認
+        $this->assertEquals('ウィジェットを削除しました。', $result->message);
+        //ウィジェットエリア名を更新できるか確認すること
+        $this->assertEquals('標準サイドバー', $result->widgetArea->name);
+
+        //存在しないウィジェットエリアIDを指定した場合、
+        // APIを呼ぶ
+        $this->post("/baser/api/admin/bc-widget-area/widget_areas/delete_widget/11/12.json?token=" . $this->accessToken);
+        // レスポンスコードを確認する
+        $this->assertResponseCode(404);
+        // 戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('データが見つかりません。', $result->message);
     }
 
     /**
