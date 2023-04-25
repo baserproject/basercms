@@ -18,6 +18,7 @@ use BaserCore\Annotation\Checked;
 use BaserCore\Service\PermissionsService;
 use BaserCore\Service\PermissionsServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
+use Cake\Datasource\EntityInterface;
 use Cake\ORM\Exception\PersistenceFailedException;
 use Cake\Routing\Router;
 use Cake\Validation\Validator;
@@ -131,16 +132,15 @@ class BlogTagsTable extends BlogAppTable
 
     /**
      * コピーする
-     *
-     * @param int $id
-     * @param array $data
-     * @return mixed page Or false
+     * @param null $id
+     * @return EntityInterface
+     * @throws \Throwable
      * @checked
      * @noTodo
      */
-    public function copy($id = null, $entity = [])
+    public function copy($id)
     {
-        if ($id) $entity = $this->find()->where(['BlogTags.id' => $id])->first();
+        $entity = $this->find()->where(['BlogTags.id' => $id])->first();
         $oldEntity = clone $entity;
 
         // EVENT BlogTags.beforeCopy
