@@ -225,14 +225,14 @@ class BlogTagsControllerTest extends BcTestCase
         $this->enableSecurityToken();
         $this->enableCsrfToken();
         $this->entryEventToMock(self::EVENT_LAYER_CONTROLLER, 'BcBlog.BlogTags.afterAdd', function (Event $event) {
-            $UploaderCategory = $event->getData('data');
-            $BlogTags = TableRegistry::getTableLocator()->get('BlogTags');
-            $UploaderCategory->name = 'afterAdd';
-            $BlogTags->save($UploaderCategory);
+            $data = $event->getData('data');
+            $data->name = 'afterAdd';
+            $blogTags = TableRegistry::getTableLocator()->get('BlogTags');
+            $blogTags->save($data);
         });
         $this->post('/baser/admin/bc-blog/blog_tags/add', ['name' => 'new']);
-        $uploaderCategories = $this->getTableLocator()->get('BcBlog.BlogTags');
-        $query = $uploaderCategories->find()->where(['name' => 'afterAdd']);
+        $blogTags = $this->getTableLocator()->get('BcBlog.BlogTags');
+        $query = $blogTags->find()->where(['name' => 'afterAdd']);
         $this->assertEquals(1, $query->count());
     }
     /**
@@ -263,14 +263,14 @@ class BlogTagsControllerTest extends BcTestCase
         $this->enableSecurityToken();
         $this->enableCsrfToken();
         $this->entryEventToMock(self::EVENT_LAYER_CONTROLLER, 'BcBlog.BlogTags.afterEdit', function (Event $event) {
-            $UploaderCategory = $event->getData('data');
-            $BlogTags = TableRegistry::getTableLocator()->get('BlogTags');
-            $UploaderCategory->name = 'afterEdit';
-            $BlogTags->save($UploaderCategory);
+            $data = $event->getData('data');
+            $data->name = 'afterEdit';
+            $blogTags = TableRegistry::getTableLocator()->get('BlogTags');
+            $blogTags->save($data);
         });
         $this->post('/baser/admin/bc-blog/blog_tags/edit/1', ['name' => 'updated']);
-        $uploaderCategories = $this->getTableLocator()->get('BcBlog.BlogTags');
-        $query = $uploaderCategories->find()->where(['name' => 'afterEdit']);
+        $blogTags = $this->getTableLocator()->get('BcBlog.BlogTags');
+        $query = $blogTags->find()->where(['name' => 'afterEdit']);
         $this->assertEquals(1, $query->count());
     }
 }
