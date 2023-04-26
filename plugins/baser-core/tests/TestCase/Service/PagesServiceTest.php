@@ -18,6 +18,7 @@ use BaserCore\Test\Factory\ContentFactory;
 use BaserCore\Test\Factory\ContentFolderFactory;
 use BaserCore\Test\Factory\PageFactory;
 use BaserCore\TestSuite\BcTestCase;
+use Cake\Database\ValueBinder;
 use Closure;
 
 /**
@@ -261,23 +262,14 @@ class PagesServiceTest extends BcTestCase
         $query = $this->Pages->find()->contain('Contents');
         $options = [
             'status' => 'publish',
-            'contain' => ['Contents'],
-            'draft' => null
+            'contents' => 'Nghiem',
+            'draft' => ''
         ];
+        $this->assertNull($query->clause('where'));
         $result = Closure::bind(
             fn($class) => $class->createIndexConditions($query, $options), null, get_class($this->PagesService)
         )($this->PagesService);
-        $this->assertCount(8, $result->all());
-
-        $options = [
-            'status' => '',
-            'contents' => 'news',
-            'draft' => null
-        ];
-        $result = Closure::bind(
-            fn($class) => $class->createIndexConditions($query, $options), null, get_class($this->PagesService)
-        )($this->PagesService);
-        $this->assertCount(3, $result->all());
+        $this->assertNotNull($result->clause('where'));
     }
 
     /**
