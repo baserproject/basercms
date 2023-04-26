@@ -375,15 +375,16 @@ class BlogCategoriesTable extends BlogAppTable
     /**
      * コピーする
      *
-     * @param int|null $id
-     * @param array $data
-     * @return mixed page Or false
+     * @param $id
+     * @param null $newParentId
+     * @return EntityInterface page Or false
+     * @throws \Throwable
      * @checked
      * @noTodo
      */
-    public function copy($id = null, $newParentId = null, $entity = [])
+    public function copy($id, $newParentId = null)
     {
-        if ($id) $entity = $this->get($id);
+        $entity = $this->get($id);
         $oldEntity = clone $entity;
 
         // EVENT BlogCategories.beforeCopy
@@ -414,12 +415,6 @@ class BlogCategoriesTable extends BlogAppTable
             ]);
 
             return $entity;
-        } catch (PersistenceFailedException $e) {
-            $entity = $e->getEntity();
-            if ($entity->getError('name')) {
-                return $this->copy(null, null, $entity);
-            }
-            throw $e;
         } catch (\Throwable $e) {
             throw $e;
         }
