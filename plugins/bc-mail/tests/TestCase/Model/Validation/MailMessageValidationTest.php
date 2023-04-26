@@ -34,7 +34,6 @@ class MailMessageValidationTest extends BcTestCase
      */
     public function setUp(): void
     {
-        $this->setFixtureTruncate();
         parent::setUp();
         $this->MailMessageValidation = new MailMessageValidation();
     }
