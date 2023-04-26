@@ -97,7 +97,7 @@ class ContentLinksTableTest extends BcTestCase
             $data['url'] = 'beforeCopy';
             $event->setData('data', $data);
         });
-        $this->ContentLinks->copy(1, 1, 'new title', 1);
+        $this->ContentLinks->copy(1, 1, 'new title', 1, 1);
         //イベントに入るかどうか確認
         $contentLinks = $this->getTableLocator()->get('BcContentLink.ContentLinks');
         $query = $contentLinks->find()->where(['url' => 'beforeCopy']);
@@ -117,7 +117,7 @@ class ContentLinksTableTest extends BcTestCase
             $data->url = 'AfterCopy';
             $contentLinks->save($data);
         });
-        $this->ContentLinks->copy(1, 1, 'new title', 1);
+        $this->ContentLinks->copy(1, 1, 'new title', 1, 1);
         //イベントに入るかどうか確認
         $contentLinks = $this->getTableLocator()->get('BcContentLink.ContentLinks');
         $query = $contentLinks->find()->where(['url' => 'AfterCopy']);

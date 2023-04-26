@@ -78,13 +78,17 @@ class ContentLinksTable extends AppTable
     /**
      * コピーする
      *
-     * @param int|null $id
-     * @param array $data
+     * @param int $id
+     * @param $newParentId
+     * @param $newTitle
+     * @param $newAuthorId
+     * @param $newSiteId
      * @return mixed page Or false
+     * @throws \Throwable
      * @checked
      * @noTodo
      */
-    public function copy(int $id = null, $newParentId, $newTitle, $newSiteId= null)
+    public function copy(int $id, $newParentId, $newTitle, $newAuthorId, $newSiteId)
     {
         $entity = $this->get($id, ['contain' => ['Contents']]);
         $oldEntity = clone $entity;
@@ -102,7 +106,11 @@ class ContentLinksTable extends AppTable
             'name' => $entity->content->name,
             'parent_id' => $newParentId,
             'title' => $newTitle,
+            'author_id' => $newAuthorId,
             'site_id' => $newSiteId,
+            'description' => $entity->content->description,
+            'eyecatch' => $entity->content->eyecatch,
+            'layout_template' => $entity->content->layout_tmplate?? ''
         ]);
         if (!is_null($newSiteId) && $oldEntity->content->site_id !== $newSiteId) {
             $entity->content->parent_id = $this->Contents->copyContentFolderPath($entity->content->url, $newSiteId);
@@ -123,7 +131,7 @@ class ContentLinksTable extends AppTable
             ]);
 
             return $entity;
-        } catch (PersistenceFailedException|\Throwable $e) {
+        } catch (\Throwable $e) {
             throw $e;
         }
     }
