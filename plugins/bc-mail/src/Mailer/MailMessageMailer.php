@@ -63,7 +63,7 @@ class MailMessageMailer extends BcMailer
             ->setTemplate('BcMail.' . $mailContent->mail_template)
             ->setVars($data);
         if($mailContent->sender_2) {
-            $this->setBcc($mailContent->sender_2);
+            $this->setBcc(strpos($mailContent->sender_2, ',') === false? $mailContent->sender_2: explode(',', $mailContent->sender_2));
         }
         if($userMail) {
             // カンマ区切りで複数設定されていた場合先頭のアドレスをreplayToに利用
