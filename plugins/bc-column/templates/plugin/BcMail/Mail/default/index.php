@@ -11,7 +11,7 @@ $this->BcBaser->js(array('vendor/jquery-ui-1.11.4.min', 'vendor/i18n/ui.datepick
 
 	<h2><?php $this->BcBaser->contentsTitle() ?></h2>
 
-	<h3><?php echo __('入力フォーム') ?></h3>
+	<h3><?php echo __d('baser_core', '入力フォーム') ?></h3>
 
 	<div class="section mail-description">
 		<?php $this->Mail->description() ?>

@@ -3,7 +3,7 @@
  * パンくずナビゲーション
  */
 if ($this->BcBaser->isHome()) {
-	echo '<strong>'. __('ホーム'). '</strong>';
+	echo '<strong>'. __d('baser_core', 'ホーム'). '</strong>';
 } else {
 	$crumbs = $this->BcBaser->getCrumbs();
 	if (!empty($crumbs)) {
@@ -19,5 +19,5 @@ if ($this->BcBaser->isHome()) {
 			}
 		}
 	}
-	$this->BcBaser->crumbs(' &gt; ', __('ホーム'));
+	$this->BcBaser->crumbs(' &gt; ', __d('baser_core', 'ホーム'));
 }

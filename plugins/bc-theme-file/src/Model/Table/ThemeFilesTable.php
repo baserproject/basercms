@@ -12,25 +12,10 @@
 namespace BcThemeFile\Model\Table;
 
 use BaserCore\Model\Table\AppTable;
-use Cake\Validation\Validator;
 
 /**
  * Class ThemeFile
- *
- * テーマファイルモデル
  */
 class ThemeFilesTable extends AppTable
 {
-
-    /**
-     * Initialize
-     *
-     * @param array $config
-     */
-    public function initialize(array $config): void
-    {
-        parent::initialize($config);
-        $this->setTable('');
-    }
-
 }

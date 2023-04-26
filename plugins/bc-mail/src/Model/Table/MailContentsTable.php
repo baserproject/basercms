@@ -15,6 +15,7 @@ use BaserCore\Event\BcEventDispatcherTrait;
 use BaserCore\Model\Entity\Content;
 use BaserCore\Utility\BcContainerTrait;
 use BcMail\Service\MailMessagesServiceInterface;
+use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\ORM\Exception\PersistenceFailedException;
 use Cake\Validation\Validator;
@@ -94,86 +95,72 @@ class MailContentsTable extends MailAppTable
      */
     public function validationDefault(Validator $validator): Validator
     {
-        // TODO ucmitz 未実装
-        return $validator;
+        // id
+        $validator
+            ->integer('id')
+            ->allowEmptyString('id', null, 'create');
 
-        $this->validate = [
-            'id' => [
-                [
-                    'rule' => 'numeric',
-                    'on' => 'update',
-                    'message' => __d('baser_core', 'IDに不正な値が利用されています。')
-                ]
-            ],
-            'subject_user' => [
-                [
-                    'rule' => ['notBlank'],
-                    'message' => __d('baser_core', '自動返信メール件名[ユーザー宛]を入力してください。')
-                ],
-                [
-                    'rule' => ['maxLength', 255],
-                    'message' => __d('baser_core', '自動返信メール件名[ユーザー宛]は255文字以内で入力してください。')
-                ]
-            ],
-            'subject_admin' => [
-                [
-                    'rule' => ['notBlank'],
-                    'message' => __d('baser_core', '自動送信メール件名[管理者宛]を入力してください。')
-                ],
-                [
-                    'rule' => ['maxLength', 255],
-                    'message' => __d('baser_core', '自動返信メール件名[管理者宛]は255文字以内で入力してください。')
-                ]
-            ],
-            'form_template' => [
-                [
-                    'rule' => ['halfText'],
-                    'message' => __d('baser_core', 'メールフォームテンプレート名は半角のみで入力してください。'),
-                    'allowEmpty' => false
-                ],
-                [
-                    'rule' => ['maxLength', 20],
-                    'message' => __d('baser_core', 'フォームテンプレート名は20文字以内で入力してください。')
-                ]
-            ],
-            'mail_template' => [
-                [
-                    'rule' => ['halfText'],
-                    'message' => __d('baser_core', '送信メールテンプレートは半角のみで入力してください。'),
-                    'allowEmpty' => false
-                ],
-                [
-                    'rule' => ['maxLength', 20],
-                    'message' => __d('baser_core', 'メールテンプレート名は20文字以内で入力してください。')
-                ]
-            ],
-            'redirect_url' => [
-                [
-                    'rule' => ['maxLength', 255],
-                    'message' => __d('baser_core', 'リダイレクトURLは255文字以内で入力してください。')
-                ]
-            ],
-            'sender_1' => [
-                [
-                    'rule' => ['emails'],
-                    'allowEmpty' => true,
-                    'message' => __d('baser_core', '送信先メールアドレスの形式が不正です。')
-                ]
-            ],
-            'sender_2' => [
-                [
-                    'rule' => ['emails'],
-                    'allowEmpty' => true,
-                    'message' => __d('baser_core', '送信先メールアドレスの形式が不正です。')
-                ]
-            ],
-            'ssl_on' => [
-                [
+        // subject_user
+        $validator
+            ->scalar('subject_user')
+            ->notEmptyString('subject_user', __d('baser_core', '自動返信メール件名[ユーザー宛]を入力してください。'))
+            ->maxLength('subject_user', 255, __d('baser_core', '自動返信メール件名[ユーザー宛]は255文字以内で入力してください。'));
+
+        // subject_admin
+        $validator
+            ->scalar('subject_admin')
+            ->notEmptyString('subject_admin', __d('baser_core', '自動返信メール件名[管理者宛]を入力してください。'))
+            ->maxLength('subject_admin', 255, __d('baser_core', '自動返信メール件名[管理者宛]は255文字以内で入力してください。'));
+
+        // form_template
+        $validator
+            ->scalar('form_template')
+            ->maxLength('form_template', 20, __d('baser_core', 'フォームテンプレート名は20文字以内で入力してください。'))
+            ->add('form_template', [
+                'halfText' => [
+                    'rule' => 'halfText',
+                    'provider' => 'bc',
+                    'message' => __d('baser_core', 'メールフォームテンプレート名は半角のみで入力してください。')
+                ]]);
+
+        // mail_template
+        $validator
+            ->scalar('mail_template')
+            ->maxLength('mail_template', 20, __d('baser_core', '送信メールテンプレート名は20文字以内で入力してください。'))
+            ->add('mail_template', [
+                'halfText' => [
+                    'rule' => 'halfText',
+                    'provider' => 'bc',
+                    'message' => __d('baser_core', '送信メールテンプレートは半角のみで入力してください。')
+                ]]);
+
+        // redirect_url
+        $validator
+            ->scalar('redirect_url')
+            ->maxLength('redirect_url', 255, __d('baser_core', 'リダイレクトURLは255文字以内で入力してください。'));
+
+        // sender_1
+        $validator
+            ->scalar('sender_1')
+            ->allowEmptyString('sender_1')
+            ->email('sender_1', true, __d('baser_core', '送信先メールアドレスのEメールの形式が不正です。'));
+
+        // sender_2
+        $validator
+            ->scalar('sender_2')
+            ->allowEmptyString('sender_2')
+            ->email('sender_2', true, __d('baser_core', '送信先メールアドレスのEメールの形式が不正です。'));
+
+        // ssl_on
+        $validator
+            ->add('ssl_on', [
+                'checkSslUrl' => [
                     'rule' => 'checkSslUrl',
-                    "message" => __d('baser_core', 'SSL通信を利用するには、システム設定で、事前にSSL通信用のWebサイトURLを指定してください。')
-                ]
-            ]
-        ];
+                    'provider' => 'table',
+                    'message' => __d('baser_core', 'SSL通信を利用するには、システム設定で、事前にSSL通信用のWebサイトURLを指定してください。')
+                ]]);
+
+        return $validator;
     }
 
     /**
@@ -182,12 +169,11 @@ class MailContentsTable extends MailAppTable
      * @param array $check チェック対象文字列
      * @return boolean
      */
-    public function checkSslUrl($check)
+    public function checkSslUrl($value)
     {
-        if ($check[key($check)] && !Configure::read('BcEnv.sslUrl')) {
+        if ($value && !Configure::read('BcEnv.sslUrl')) {
             return false;
         }
-
         return true;
     }
 

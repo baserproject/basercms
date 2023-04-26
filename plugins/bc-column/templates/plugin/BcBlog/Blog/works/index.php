@@ -28,11 +28,11 @@ $(function(){
 				</a>
 			</div>
 			<?php $this->Blog->postContent($post, true, false, 100) ?>...
-			<p class="more"><a href="<?php echo $uri ?>" class="btn btn-more"><?php echo __('詳細ページへ') ?></a></p>
+			<p class="more"><a href="<?php echo $uri ?>" class="btn btn-more"><?php echo __d('baser_core', '詳細ページへ') ?></a></p>
 		</div>
 	<?php endforeach; ?>
 <?php else: ?>
-	<p class="no-data"><?php echo __('記事がありません。') ?></p>
+	<p class="no-data"><?php echo __d('baser_core', '記事がありません。') ?></p>
 <?php endif; ?>
 <!-- pagination -->
 <?php $this->BcBaser->pagination('simple'); ?>

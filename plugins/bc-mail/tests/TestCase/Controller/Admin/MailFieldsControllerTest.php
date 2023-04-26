@@ -1,6 +1,5 @@
 <?php
-// TODO ucmitz  : コード確認要
-return;
+
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
@@ -11,19 +10,56 @@ return;
  * @license         https://basercms.net/license/index.html
  */
 
-App::uses('MailFieldsController', 'BcMail.Controller');
+namespace BcMail\Test\TestCase\Controller\Admin;
 
-class MailFieldsControllerTest extends BaserTestCase
+use BaserCore\Test\Scenario\InitAppScenario;
+use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcContainerTrait;
+use BcMail\Controller\Admin\MailFieldsController;
+use BcMail\Service\Admin\MailFieldsAdminServiceInterface;
+use BcMail\Service\MailMessagesServiceInterface;
+use BcMail\Test\Scenario\MailFieldsScenario;
+use Cake\Event\Event;
+use Cake\ORM\TableRegistry;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
+
+class MailFieldsControllerTest extends BcTestCase
 {
+
+    /**
+     * ScenarioAwareTrait
+     */
+    use ScenarioAwareTrait;
+    use BcContainerTrait;
+
+    /**
+     * Fixtures
+     *
+     * @var array
+     */
+    public $fixtures = [
+        'plugin.BaserCore.Factory/Sites',
+        'plugin.BaserCore.Factory/SiteConfigs',
+        'plugin.BaserCore.Factory/Users',
+        'plugin.BaserCore.Factory/UsersUserGroups',
+        'plugin.BaserCore.Factory/UserGroups',
+        'plugin.BaserCore.Factory/Contents',
+        'plugin.BcMail.Factory/MailFields',
+    ];
 
     /**
      * set up
      *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
+        $this->setFixtureTruncate();
+        $this->loadFixtureScenario(InitAppScenario::class);
+        $request = $this->getRequest('/baser/admin/bc-mail/mail_fields/');
+        $request = $this->loginAdmin($request);
+        $this->MailFieldsController = new MailFieldsController($request);
     }
 
     /**
@@ -31,7 +67,7 @@ class MailFieldsControllerTest extends BaserTestCase
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
     }
@@ -122,5 +158,126 @@ class MailFieldsControllerTest extends BaserTestCase
     public function testAdmin_ajax_publish()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+    /**
+     * Test beforeAddEvent
+     */
+    public function testBeforeAddEvent()
+    {
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        //テストデータベースを生成
+        $MailMessagesService->createTable(10);
+
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        //イベントをコル
+        $this->entryEventToMock(self::EVENT_LAYER_CONTROLLER, 'BcMail.MailFields.beforeAdd', function (Event $event) {
+            $data = $event->getData('data');
+            $data['name'] = 'beforeAdd';
+            $event->setData('data', $data);
+        });
+        //追加データを準備
+        $data = [
+            'field_name' => 'name_add_1',
+            'type' => 'text',
+            'name' => '性',
+        ];
+        //対象URLをコル
+        $this->post('/baser/admin/bc-mail/mail_fields/add/10', $data);
+        //イベントに入るかどうか確認
+        $mailFields = $this->getTableLocator()->get('BcMail.MailFields');
+        $query = $mailFields->find()->where(['name' => 'beforeAdd']);
+        $this->assertEquals(1, $query->count());
+
+        //テストデータベースを削除
+        $MailMessagesService->dropTable(10);
+    }
+
+    /**
+     * Test beforeAddEvent
+     */
+    public function testAfterAddEvent()
+    {
+        $MailMessagesService = $this->getService(MailMessagesServiceInterface::class);
+        //テストデータベースを生成
+        $MailMessagesService->createTable(10);
+
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        //イベントをコル
+        $this->entryEventToMock(self::EVENT_LAYER_CONTROLLER, 'BcMail.MailFields.afterAdd', function (Event $event) {
+            $data = $event->getData('data');
+            $contentLinks = TableRegistry::getTableLocator()->get('BcMail.MailFields');
+            $data->name = 'afterAdd';
+            $contentLinks->save($data);
+        });
+        //Postデータを生成
+        $data = [
+            'field_name' => 'name_add_1',
+            'type' => 'text',
+            'name' => '性',
+        ];
+        //対象URLをコル
+        $this->post('/baser/admin/bc-mail/mail_fields/add/10', $data);
+        //イベントに入るかどうか確認
+        $mailFields = $this->getTableLocator()->get('BcMail.MailFields');
+        $query = $mailFields->find()->where(['name' => 'afterAdd']);
+        $this->assertEquals(1, $query->count());
+        //テストデータベースを削除
+        $MailMessagesService->dropTable(10);
+    }
+
+    /**
+     * Test beforeAddEvent
+     */
+    public function testBeforeEditEvent()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        //データを生成
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+        //イベントをコル
+        $this->entryEventToMock(self::EVENT_LAYER_CONTROLLER, 'BcMail.MailFields.beforeEdit', function (Event $event) {
+            $data = $event->getData('data');
+            $data['name'] = 'beforeEdit';
+            $event->setData('data', $data);
+        });
+        //メールのコンテンツサービスをコル
+        $mailFieldsService = $this->getService(MailFieldsAdminServiceInterface::class);
+        $data = $mailFieldsService->get(1);
+       //対象URLをコル
+        $this->post('/baser/admin/bc-mail/mail_fields/edit/1/1', $data->toArray());
+        //イベントに入るかどうか確認
+        $mailFields = $this->getTableLocator()->get('BcMail.MailFields');
+        $query = $mailFields->find()->where(['name' => 'beforeEdit']);
+        $this->assertEquals(1, $query->count());
+    }
+
+    /**
+     * Test beforeAddEvent
+     */
+    public function testAfterEditEvent()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        //データを生成
+        $this->loadFixtureScenario(MailFieldsScenario::class);
+        //イベントをコル
+        $this->entryEventToMock(self::EVENT_LAYER_CONTROLLER, 'BcMail.MailFields.afterEdit', function (Event $event) {
+            $data = $event->getData('data');
+            $mailFields = TableRegistry::getTableLocator()->get('BcMail.MailFields');
+            $data->name = 'afterEdit';
+            $mailFields->save($data);
+        });
+        //メールのコンテンツサービスをコル
+        $mailFieldsService = $this->getService(MailFieldsAdminServiceInterface::class);
+        $data = $mailFieldsService->get(1);
+        //対象URLをコル
+        $this->post('/baser/admin/bc-mail/mail_fields/edit/1/1', $data->toArray());
+        //イベントに入るかどうか確認
+        $mailFields = $this->getTableLocator()->get('BcMail.MailFields');
+        $query = $mailFields->find()->where(['name' => 'afterEdit']);
+        $this->assertEquals(1, $query->count());
     }
 }

@@ -20,14 +20,11 @@
  * ロゴと jQuery 以外は、このファイルだけで完結させる。
  */
 define('DS', DIRECTORY_SEPARATOR);
-define('ROOT_DIR', dirname(dirname(__DIR__)) . DS);
+define('ROOT_DIR', __DIR__ . DS);
+
 $url = $_SERVER['REQUEST_URI'];
 $phpPath = whichPhp();
-if (preg_match('/\/logo\.png$/', $url)) {
-    header('Content-Type: image/png; charset=utf-8');
-    echo file_get_contents(ROOT_DIR . 'plugins' . DS . 'bc-admin-third' . DS . 'webroot' . DS . 'img' . DS . 'admin' . DS . 'logo_large.png');
-    return;
-} elseif (preg_match('/\/install_composer$/', $url) && $_SERVER['REQUEST_METHOD'] === 'POST') {
+if (preg_match('/\/install_composer$/', $url) && $_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         command($_POST['php_path']);
         echo json_encode([
@@ -76,7 +73,7 @@ function command($phpPath)
     $command = "cd " . ROOT_DIR . "; export HOME={$composerDir} ; {$phpPath} {$composerDir}composer.phar self-update";
     exec($command, $out, $code);
     if ($code !== 0) throw new Exception('composer のアップデートに失敗しました。');
-    $command = "cd " . ROOT_DIR . "; export HOME={$composerDir} ; {$phpPath} {$composerDir}composer.phar install";
+    $command = "cd " . ROOT_DIR . "; export HOME={$composerDir} ; yes | {$phpPath} {$composerDir}composer.phar update";
     exec($command, $out, $code);
     if ($code !== 0) throw new Exception('ライブラリのインストールに失敗しました。<br>コマンド実行をお試しください<br>' . $command);
     if (!copy(ROOT_DIR . 'config' . DS . '.env.example', ROOT_DIR . 'config' . DS . '.env')) {
@@ -349,7 +346,7 @@ function command($phpPath)
                     <div id="Login" class="bca-login">
                         <div id="LoginInner">
                             <h1 class="bca-login__title">
-                                <img src="./logo.png" alt="ライブラリのインストール" class="bca-login__logo"/>
+                                <img src="./img/basercms.png" alt="ライブラリのインストール" class="bca-login__logo"/>
                             </h1>
                             <form id="AdminInstallerForm" method="POST">
                                 <p>baserCMSのインストールを開始する前にライブラリのインストールが必要です。

@@ -17,6 +17,8 @@ use BaserCore\TestSuite\BcTestCase;
 use BcBlog\Controller\Admin\BlogCategoriesController;
 use BcBlog\Test\Factory\BlogCategoryFactory;
 use BcBlog\Test\Factory\BlogContentFactory;
+use Cake\Event\Event;
+use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
@@ -94,6 +96,56 @@ class BlogCategoriesControllerTest extends BcTestCase
     }
 
     /**
+     * test beforeAdd
+     */
+    public function testBeforeAddEvent()
+    {
+        $this->entryEventToMock(self::EVENT_LAYER_CONTROLLER, 'BcBlog.BlogCategories.beforeAdd', function (Event $event) {
+            $data = $event->getData('data');
+            $data['name'] = 'Nghiem';
+            $event->setData('data', $data);
+        });
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $data = ['name' => 'testName1', 'title' => 'testTitle1'];
+        BlogContentFactory::make([
+            'id' => '1',
+            'description' => 'test',
+        ])->persist();
+        $blogContentId = 1;
+        $this->post("/baser/admin/bc-blog/blog_categories/add/$blogContentId", $data);
+        $blogCategories = $this->getTableLocator()->get('BaserCore.BlogCategories');
+        $query = $blogCategories->find()->where(['name' => 'Nghiem']);
+        $this->assertEquals(1, $query->count());
+    }
+
+    /**
+     * test afterAdd
+     */
+    public function testAfterAddEvent()
+    {
+        $this->entryEventToMock(self::EVENT_LAYER_CONTROLLER, 'BcBlog.BlogCategories.afterAdd', function (Event $event) {
+            $blogCategory = $event->getData('blogCategory');
+            $blogCategories = TableRegistry::getTableLocator()->get('BaserCore.BlogCategories');
+            $blogCategory->name = 'etc';
+            $blogCategories->save($blogCategory);
+        });
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $data = ['name' => 'testName1', 'title' => 'testTitle1'];
+        BlogContentFactory::make([
+            'id' => '1',
+            'description' => 'test',
+        ])->persist();
+        $blogContentId = 1;
+        $this->post("/baser/admin/bc-blog/blog_categories/add/$blogContentId", $data);
+        $blogCategories = $this->getTableLocator()->get('BaserCore.BlogCategories');
+        $query = $blogCategories->find()->where(['name' => 'etc']);
+        $this->assertEquals(1, $query->count());
+    }
+
+
+    /**
      * [ADMIN] 登録処理
      */
     public function testAdmin_add()
@@ -142,6 +194,66 @@ class BlogCategoriesControllerTest extends BcTestCase
         $data['name'] = 'test name';
         $this->post("/baser/admin/bc-blog/blog_categories/add/$blogContentId", $data);
         $this->assertResponseContains('入力エラーです。内容を修正してください。');
+    }
+
+    /**
+     * Test beforeEdit method
+     *
+     * @return void
+     */
+    public function testBeforeEditEvent(): void
+    {
+        $this->entryEventToMock(self::EVENT_LAYER_CONTROLLER, 'BcBlog.BlogCategories.beforeEdit', function (Event $event) {
+            $data = $event->getData('data');
+            $data['name'] = 'Nghiem';
+            $event->setData('data', $data);
+        });
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        BlogContentFactory::make([
+            'id' => '1',
+            'description' => 'test edit',
+        ])->persist();
+        BlogCategoryFactory::make([
+            'id' => 1,
+            'blog_content_id' => 1,
+            'name' => 'release',
+            'title' => 'プレスリリース',
+        ])->persist();
+        $data = ['name' => 'editedName', 'blog_content_id' => '1'];
+        $this->put("/baser/admin/bc-blog/blog_categories/edit/1/1", $data);
+        $blogCategory = BlogCategoryFactory::get(1);
+        $this->assertEquals('Nghiem', $blogCategory['name']);
+    }
+
+    /**
+     * test afterEdit
+     */
+    public function testAfterEditEvent()
+    {
+        $this->entryEventToMock(self::EVENT_LAYER_CONTROLLER, 'BcBlog.BlogCategories.afterEdit', function (Event $event) {
+            $blogCategory = $event->getData('blogCategory');
+            $blogCategories = TableRegistry::getTableLocator()->get('BaserCore.BlogCategories');
+            $blogCategory->name = 'Nghiem';
+            $blogCategories->save($blogCategory);
+        });
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        BlogContentFactory::make([
+            'id' => '1',
+            'description' => 'test edit',
+        ])->persist();
+        BlogCategoryFactory::make([
+            'id' => 1,
+            'blog_content_id' => 1,
+            'name' => 'release',
+            'title' => 'プレスリリース',
+        ])->persist();
+        $data = ['name' => 'editedName', 'blog_content_id' => '1'];
+        $this->put("/baser/admin/bc-blog/blog_categories/edit/1/1", $data);
+        $blogCategory = BlogCategoryFactory::get(1);
+        $this->assertEquals('Nghiem', $blogCategory['name']);
+
     }
 
     /**
