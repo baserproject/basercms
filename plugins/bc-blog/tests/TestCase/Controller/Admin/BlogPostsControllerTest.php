@@ -70,7 +70,6 @@ class BlogPostsControllerTest extends BcTestCase
         $this->setFixtureTruncate();
         parent::setUp();
         $this->loadFixtureScenario(InitAppScenario::class);
-        SiteConfigFactory::make(['editor'=>'BaserCore.BcCkeditor'])->persist();
         $this->BlogPostsController = new BlogPostsController($this->loginAdmin($this->getRequest()));
     }
 
