@@ -62,7 +62,7 @@ class BcControllerEventDispatcher implements EventListenerInterface
      */
     public function initialize(Event $event)
     {
-        if ($event->getSubject()->getName() != 'CakeError' && $event->getSubject()->getName() !== '') {
+        if ($event->getSubject()->getName() != 'Error' && $event->getSubject()->getName() !== '') {
             if (!method_exists($event->getSubject(), 'dispatchLayerEvent')) {
                 return;
             }
@@ -81,7 +81,7 @@ class BcControllerEventDispatcher implements EventListenerInterface
      */
     public function startup(Event $event)
     {
-        if ($event->getSubject()->getName() != 'CakeError' && $event->getSubject()->getName() != '') {
+        if ($event->getSubject()->getName() != 'Error' && $event->getSubject()->getName() != '') {
             if (!method_exists($event->getSubject(), 'dispatchLayerEvent')) {
                 return;
             }
@@ -100,7 +100,7 @@ class BcControllerEventDispatcher implements EventListenerInterface
      */
     public function beforeRender(Event $event)
     {
-        if ($event->getSubject()->getName() != 'CakeError' && $event->getSubject()->getName() != '') {
+        if ($event->getSubject()->getName() != 'Error' && $event->getSubject()->getName() != '') {
             if (!method_exists($event->getSubject(), 'dispatchLayerEvent')) {
                 return;
             }
@@ -119,7 +119,7 @@ class BcControllerEventDispatcher implements EventListenerInterface
      */
     public function beforeRedirect(Event $event)
     {
-        if ($event->getSubject()->getName() != 'CakeError' && $event->getSubject()->getName() != '') {
+        if ($event->getSubject()->getName() != 'Error' && $event->getSubject()->getName() != '') {
             if (!method_exists($event->getSubject(), 'dispatchLayerEvent')) {
                 return null;
             }
@@ -144,7 +144,7 @@ class BcControllerEventDispatcher implements EventListenerInterface
      */
     public function shutdown(Event $event)
     {
-        if ($event->getSubject()->getName() != 'CakeError' && $event->getSubject()->getName() != '') {
+        if ($event->getSubject()->getName() != 'Error' && $event->getSubject()->getName() != '') {
             if (!method_exists($event->getSubject(), 'dispatchLayerEvent')) {
                 return;
             }
