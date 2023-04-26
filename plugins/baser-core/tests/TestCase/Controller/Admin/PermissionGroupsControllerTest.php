@@ -11,7 +11,6 @@
 
 namespace BaserCore\Test\TestCase\Controller\Admin;
 
-use BaserCore\Controller\Admin\PermissionGroupsController;
 use BaserCore\Test\Scenario\InitAppScenario;
 use BaserCore\Test\Scenario\PermissionGroupsScenario;
 use BaserCore\TestSuite\BcTestCase;
@@ -22,7 +21,6 @@ use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 /**
  * PermissionGroupsControllerTest
  *
- * @property  PermissionGroupsController $PermissionGroupsController
  */
 class PermissionGroupsControllerTest extends BcTestCase
 {
@@ -52,10 +50,9 @@ class PermissionGroupsControllerTest extends BcTestCase
      */
     public function setUp(): void
     {
-        $this->setFixtureTruncate();
         parent::setUp();
         $this->loadFixtureScenario(InitAppScenario::class);
-        $this->PermissionGroupsController = new PermissionGroupsController($this->loginAdmin($this->getRequest()));
+        $this->loginAdmin($this->getRequest());
     }
 
     /**
