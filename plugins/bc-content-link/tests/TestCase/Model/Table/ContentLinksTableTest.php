@@ -11,8 +11,14 @@
 
 namespace BcContentLink\Test\TestCase\Model\Table;
 
+use BcContentLink\Test\Factory\BlogTagFactory;
 use BcContentLink\Model\Table\ContentLinksTable;
 use BaserCore\TestSuite\BcTestCase;
+use BcContentLink\Test\Factory\ContentLinkFactory;
+use BcContentLink\Test\Scenario\ContentLinksServiceScenario;
+use Cake\Event\Event;
+use Cake\ORM\TableRegistry;
+use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 /**
  * Class ContentLinksTableTest
@@ -20,6 +26,16 @@ use BaserCore\TestSuite\BcTestCase;
  */
 class ContentLinksTableTest extends BcTestCase
 {
+    /**
+     * Trait
+     */
+    use ScenarioAwareTrait;
+
+    public $fixtures = [
+        'plugin.BaserCore.Factory/Sites',
+        'plugin.BaserCore.Factory/Contents',
+        'plugin.BcContentLink.Factory/ContentLinks',
+    ];
 
     /**
      * Set Up
@@ -69,4 +85,42 @@ class ContentLinksTableTest extends BcTestCase
         ], $contentLink->getErrors());
     }
 
+    /**
+     * test beforeCopyEvent
+     */
+    public function testBeforeCopyEvent()
+    {
+        $this->loadFixtureScenario(ContentLinksServiceScenario::class);
+        //イベントをコル
+        $this->entryEventToMock(self::EVENT_LAYER_MODEL, 'BcContentLink.ContentLinks.beforeCopy', function (Event $event) {
+            $data = $event->getData('data');
+            $data['url'] = 'beforeCopy';
+            $event->setData('data', $data);
+        });
+        $this->ContentLinks->copy(1, 1, 'new title', 1, 1);
+        //イベントに入るかどうか確認
+        $contentLinks = $this->getTableLocator()->get('BcContentLink.ContentLinks');
+        $query = $contentLinks->find()->where(['url' => 'beforeCopy']);
+        $this->assertEquals(1, $query->count());
+    }
+
+    /**
+     * test AfterCopyEvent
+     */
+    public function testAfterCopyEvent()
+    {
+        $this->loadFixtureScenario(ContentLinksServiceScenario::class);
+        //イベントをコル
+        $this->entryEventToMock(self::EVENT_LAYER_MODEL, 'BcContentLink.ContentLinks.afterCopy', function (Event $event) {
+            $data = $event->getData('data');
+            $contentLinks = TableRegistry::getTableLocator()->get('BcContentLink.ContentLinks');
+            $data->url = 'AfterCopy';
+            $contentLinks->save($data);
+        });
+        $this->ContentLinks->copy(1, 1, 'new title', 1, 1);
+        //イベントに入るかどうか確認
+        $contentLinks = $this->getTableLocator()->get('BcContentLink.ContentLinks');
+        $query = $contentLinks->find()->where(['url' => 'AfterCopy']);
+        $this->assertEquals(1, $query->count());
+    }
 }
