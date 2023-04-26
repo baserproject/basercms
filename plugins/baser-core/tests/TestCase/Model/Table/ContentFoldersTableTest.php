@@ -174,7 +174,7 @@ class ContentFoldersTableTest extends BcTestCase
             $data['folder_template'] = 'beforeCopy';
             $event->setData('data', $data);
         });
-        $this->ContentFolders->copy(1, 1, 'new title', 1);
+        $this->ContentFolders->copy(1, 1, 'new title', 1, 1);
         //イベントに入るかどうか確認
         $contentFolders = $this->getTableLocator()->get('BaserCore.ContentFolders');
         $query = $contentFolders->find()->where(['folder_template' => 'beforeCopy']);
@@ -193,7 +193,7 @@ class ContentFoldersTableTest extends BcTestCase
             $data->folder_template = 'AfterCopy';
             $contentFolders->save($data);
         });
-        $this->ContentFolders->copy(1, 1, 'new title', 1);
+        $this->ContentFolders->copy(1, 1, 'new title', 1, 1);
         //イベントに入るかどうか確認
         $contentFolders = $this->getTableLocator()->get('BaserCore.ContentFolders');
         $query = $contentFolders->find()->where(['folder_template' => 'AfterCopy']);

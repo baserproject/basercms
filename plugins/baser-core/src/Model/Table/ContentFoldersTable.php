@@ -147,13 +147,16 @@ class ContentFoldersTable extends AppTable
     /**
      * コピーする
      *
-     * @param int|null $id
-     * @param array $data
+     * @param int $id
+     * @param $newParentId
+     * @param $newTitle
+     * @param $newAuthorId
+     * @param $newSiteId
      * @return mixed page Or false
      * @checked
      * @noTodo
      */
-    public function copy(int $id = null, $newParentId, $newTitle, $newSiteId= null)
+    public function copy(int $id, $newParentId, $newTitle, $newAuthorId, $newSiteId)
     {
         $entity = $this->get($id, ['contain' => ['Contents']]);
         $oldEntity = clone $entity;
@@ -171,7 +174,11 @@ class ContentFoldersTable extends AppTable
             'name' => $entity->content->name,
             'parent_id' => $newParentId,
             'title' => $newTitle,
+            'author_id' => $newAuthorId,
             'site_id' => $newSiteId,
+            'description' => $entity->content->description,
+            'eyecatch' => $entity->content->eyecatch,
+            'layout_template' => $entity->content->layout_tmplate?? ''
         ]);
         if (!is_null($newSiteId) && $oldEntity->content->site_id !== $newSiteId) {
             $entity->content->parent_id = $this->Contents->copyContentFolderPath($entity->content->url, $newSiteId);
@@ -180,20 +187,17 @@ class ContentFoldersTable extends AppTable
         unset($entity->created);
         unset($entity->modified);
 
-        try {
-            $entity = $this->saveOrFail($this->patchEntity($this->newEmptyEntity(), $entity->toArray()));
+        $entity = $this->saveOrFail($this->patchEntity($this->newEmptyEntity(), $entity->toArray()));
 
-            // EVENT ContentFolders.afterCopy
-            $this->dispatchLayerEvent('afterCopy', [
-                'id' => $entity->id,
-                'data' => $entity,
-                'oldId' => $id,
-                'oldData' => $oldEntity,
-            ]);
+        // EVENT ContentFolders.afterCopy
+        $this->dispatchLayerEvent('afterCopy', [
+            'id' => $entity->id,
+            'data' => $entity,
+            'oldId' => $id,
+            'oldData' => $oldEntity,
+        ]);
 
-            return $entity;
-        } catch (PersistenceFailedException|\Throwable $e) {
-            throw $e;
-        }
+        return $entity;
+
     }
 }
