@@ -17,6 +17,7 @@ use BcBlog\Controller\Admin\BlogContentsController;
 use BcBlog\Test\Factory\BlogContentFactory;
 use BaserCore\Test\Factory\ContentFactory;
 use Cake\Event\Event;
+use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestTrait;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
@@ -55,13 +56,9 @@ class BlogContentsControllerTest extends BcTestCase
      */
     public function setUp(): void
     {
-        $this->setFixtureTruncate();
         parent::setUp();
         $this->loadFixtureScenario(InitAppScenario::class);
-        $this->Controller = new BlogContentsController($this->loginAdmin($this->getRequest()));
-        $request = $this->getRequest('/baser/admin/bc-blog/blog_contents/');
-        $request = $this->loginAdmin($request);
-        $this->BlogContentsController = new BlogContentsController($request);
+        $this->loginAdmin($this->getRequest('/baser/admin/bc-blog/blog_contents/'));
     }
 
     /**
@@ -120,6 +117,44 @@ class BlogContentsControllerTest extends BcTestCase
     public function test_edit()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * Test afterEdit method
+     *
+     * @return void
+     */
+    public function testAfterEditEvent(): void
+    {
+        $this->entryEventToMock(self::EVENT_LAYER_CONTROLLER, 'BcBlog.BlogContents.afterEdit', function (Event $event) {
+            $blogContent = $event->getData('data');
+            $blogContents = TableRegistry::getTableLocator()->get('BaserCore.BlogContents');
+            $blogContent->description = 'Nghiem';
+            $blogContents->save($blogContent);
+        });
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        ContentFactory::make(['plugin' => 'BcBlog', 'type' => 'BlogContent', 'entity_id' => 1, 'lft' => 1, 'rght' => 2])->persist();
+        BlogContentFactory::make([
+            'id' => '1',
+            'description' => 'test'
+        ])->persist();
+        $data = [
+            'id' => 1,
+            'description' => '更新した!',
+            'content' => [
+                "title" => "更新 ブログ",
+            ]
+        ];
+        $this->post("/baser/admin/bc-blog/blog_contents/edit/1", $data);
+        $this->entryEventToMock(self::EVENT_LAYER_CONTROLLER, 'BcBlog.BlogContents.afterEdit', function (Event $event) {
+            $blogContent = $event->getData('data');
+            $blogContents = $this->getTableLocator()->get('BaserCore.BlogContents');
+            $blogContent->description = 'Nghiem';
+            $blogContents->save($blogContent);
+        });
+        $blogContent = BlogContentFactory::get(1);
+        $this->assertEquals('Nghiem', $blogContent['description']);
     }
 
     /**

@@ -75,7 +75,7 @@ class BlogContentsController extends BlogAdminAppController
                 $blogContent = $service->update($blogContent, $this->getRequest()->getData());
                 // EVENT BlogContents.afterEdit
                 $this->dispatchLayerEvent('afterEdit', [
-                    'blogContent' => $blogContent
+                    'data' => $blogContent
                 ]);
                 $message = __d('baser_core', 'ブログ「{0}」を更新しました。', $blogContent->content->title);
                 if ($service->checkRequireSearchIndexReconstruction($oldContent, $blogContent->content)) {
