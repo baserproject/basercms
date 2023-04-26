@@ -62,15 +62,27 @@ class BlogContentsController extends BlogAdminAppController
     {
         $blogContent = $service->get($id);
         if ($this->request->is(['post', 'put'])) {
+            // EVENT BlogContents.beforeEdit
+            $event = $this->dispatchLayerEvent('beforeEdit', [
+                'data' => $this->getRequest()->getData()
+            ]);
+            if ($event !== false) {
+                $data = ($event->getResult() === null || $event->getResult() === true) ? $event->getData('data') : $event->getResult();
+                $this->setRequest($this->getRequest()->withParsedBody($data));
+            }
             try {
                 $oldContent = clone $blogContent->content;
                 $blogContent = $service->update($blogContent, $this->getRequest()->getData());
+                // EVENT BlogContents.afterEdit
+                $this->dispatchLayerEvent('afterEdit', [
+                    'data' => $blogContent
+                ]);
                 $message = __d('baser_core', 'ブログ「{0}」を更新しました。', $blogContent->content->title);
-                if($service->checkRequireSearchIndexReconstruction($oldContent, $blogContent->content)) {
+                if ($service->checkRequireSearchIndexReconstruction($oldContent, $blogContent->content)) {
                     $message .= "\n\n" . __d('baser_core',
-                        'URL、または、公開状態を変更したので、検索インデックスの再構築が必要です。
+                            'URL、または、公開状態を変更したので、検索インデックスの再構築が必要です。
                         設定 > ユーティリティ > 検索インデックス より、検索インデックスの再構築を行ってください。'
-                    );
+                        );
                 }
                 $this->BcMessage->setSuccess($message);
                 // BcThemeFileプラグインの利用状況をチェックした上でリダイレクトする
