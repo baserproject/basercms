@@ -110,7 +110,7 @@ class ContentLinksTable extends AppTable
             'site_id' => $newSiteId,
             'description' => $entity->content->description,
             'eyecatch' => $entity->content->eyecatch,
-            'layout_template' => $entity->content->layout_tmplate?? ''
+            'layout_template' => $entity->content->layout_tmplate ?? ''
         ]);
         if (!is_null($newSiteId) && $oldEntity->content->site_id !== $newSiteId) {
             $entity->content->parent_id = $this->Contents->copyContentFolderPath($entity->content->url, $newSiteId);
@@ -119,20 +119,16 @@ class ContentLinksTable extends AppTable
         unset($entity->created);
         unset($entity->modified);
 
-        try {
-            $entity = $this->saveOrFail($this->patchEntity($this->newEmptyEntity(), $entity->toArray()));
+        $entity = $this->saveOrFail($this->patchEntity($this->newEmptyEntity(), $entity->toArray()));
 
-            // EVENT ContentLinks.afterCopy
-            $this->dispatchLayerEvent('afterCopy', [
-                'id' => $entity->id,
-                'data' => $entity,
-                'oldId' => $id,
-                'oldData' => $oldEntity,
-            ]);
+        // EVENT ContentLinks.afterCopy
+        $this->dispatchLayerEvent('afterCopy', [
+            'id' => $entity->id,
+            'data' => $entity,
+            'oldId' => $id,
+            'oldData' => $oldEntity,
+        ]);
 
-            return $entity;
-        } catch (\Throwable $e) {
-            throw $e;
-        }
+        return $entity;
     }
 }
