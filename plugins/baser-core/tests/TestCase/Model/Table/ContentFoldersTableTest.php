@@ -12,8 +12,11 @@
 namespace BaserCore\Test\TestCase\Model\Table;
 
 use ArrayObject;
+use BcContentLink\Test\Scenario\ContentLinksServiceScenario;
+use Cake\Event\Event;
 use Cake\ORM\Entity;
 use BaserCore\TestSuite\BcTestCase;
+use Cake\ORM\TableRegistry;
 
 /**
  * Class ContentFoldersTableTest
@@ -125,9 +128,9 @@ class ContentFoldersTableTest extends BcTestCase
     public function testAfterSave(): void
     {
         $this->loadFixtures(
-	        'Service\SearchIndexesService\ContentsReconstruct',
-	        'Service\SearchIndexesService\PagesReconstruct',
-	        'Service\SearchIndexesService\ContentFoldersReconstruct',
+            'Service\SearchIndexesService\ContentsReconstruct',
+            'Service\SearchIndexesService\PagesReconstruct',
+            'Service\SearchIndexesService\ContentFoldersReconstruct',
         );
         $contentFolder = $this->ContentFolders->get(1, ['contain' => ['Contents']]);
         $this->SearchIndexes->deleteAll([]);
@@ -158,5 +161,42 @@ class ContentFoldersTableTest extends BcTestCase
     {
         $this->execPrivateMethod($this->ContentFolders, "setBeforeRecord", [1]);
         $this->assertTrue($this->ContentFolders->beforeStatus);
+    }
+
+    /**
+     * test beforeCopyEvent
+     */
+    public function testBeforeCopyEvent()
+    {
+        //イベントをコル
+        $this->entryEventToMock(self::EVENT_LAYER_MODEL, 'BaserCore.ContentFolders.beforeCopy', function (Event $event) {
+            $data = $event->getData('data');
+            $data['folder_template'] = 'beforeCopy';
+            $event->setData('data', $data);
+        });
+        $this->ContentFolders->copy(1, 1, 'new title', 1, 1);
+        //イベントに入るかどうか確認
+        $contentFolders = $this->getTableLocator()->get('BaserCore.ContentFolders');
+        $query = $contentFolders->find()->where(['folder_template' => 'beforeCopy']);
+        $this->assertEquals(1, $query->count());
+    }
+
+    /**
+     * test AfterCopyEvent
+     */
+    public function testAfterCopyEvent()
+    {
+        //イベントをコル
+        $this->entryEventToMock(self::EVENT_LAYER_MODEL, 'BaserCore.ContentFolders.afterCopy', function (Event $event) {
+            $data = $event->getData('data');
+            $contentFolders = TableRegistry::getTableLocator()->get('BaserCore.ContentFolders');
+            $data->folder_template = 'AfterCopy';
+            $contentFolders->save($data);
+        });
+        $this->ContentFolders->copy(1, 1, 'new title', 1, 1);
+        //イベントに入るかどうか確認
+        $contentFolders = $this->getTableLocator()->get('BaserCore.ContentFolders');
+        $query = $contentFolders->find()->where(['folder_template' => 'AfterCopy']);
+        $this->assertEquals(1, $query->count());
     }
 }
